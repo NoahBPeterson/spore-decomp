@@ -1,8 +1,11 @@
-0092abb0 EA::Clipboard::Clipboard::SetClipboardData  # pdb_names gap-align
-0092acb0 EA::Clipboard::SetClipboardText  # pdb_names gap-align
-0092ad50 EA::Clipboard::GetClipboard  # pdb_names callee-scored
-0092adb0 EA::Clipboard::Win32Clipboard::WindowProcedure  # pdb_names gap-align
-0092afb0 EA::Clipboard::Win32Clipboard::Win32Clipboard  # pdb_names anchor
+0092abb0 ?SetClipboardData@Clipboard_s0092_abb0@@QAE_NPAUIData_s0092_abb0@@_N@Z  # Clipboard_s0092_abb0::SetClipboardData migrated from s0092abb0 (verbatim, slice spelling)
+0092ac90 ?FUN_0092ac90@@YAPAXPAX@Z  # FUN_0092ac90 migrated from s0092abb0 (verbatim, slice spelling)
+0092acb0 ?SetClipboardText@@YA_NPAUClipboard_s0092_abb0@@PB_WH@Z  # SetClipboardText migrated from s0092abb0 (verbatim, slice spelling)
+0092ad10 ?DestroyPlatform@Clipboard_s0092_abb0@@QAE_NXZ  # Clipboard_s0092_abb0::DestroyPlatform migrated from s0092abb0 (verbatim, slice spelling)
+0092ad50 ?FUN_0092ad50@@YAPAX_N@Z  # FUN_0092ad50 migrated from s0092abb0 (verbatim, slice spelling)
+0092adb0 ?WindowProcedure@Win32Clipboard_s0092_abb0@@QAE_NPAUWString@@@Z  # Win32Clipboard_s0092_abb0::WindowProcedure migrated from s0092abb0 (verbatim, slice spelling)
+0092afb0 ??0Win32Clipboard_s0092_abb0@@QAE@PAUClipboard_s0092_abb0@@@Z  # Win32Clipboard_s0092_abb0::Win32Clipboard migrated from s0092abb0 (verbatim, slice spelling)
+0092b0b0 ?Clipboard_EnablePlatform@Clipboard_s0092_abb0@@QAE_NXZ  # Clipboard_s0092_abb0::Clipboard_EnablePlatform migrated from s0092abb0 (verbatim, slice spelling)
 0092b300 EA::CommandLine::FindSwitch  # pdb_names callee-single
 0092b5f0 `anonymous namespace'::GetCurrentAppPath  # pdb_names anchor
 0092b700 eastl::vector<eastl::basic_string<wchar_t,eastl::allocator>,eastl::sp_vector_allocator>::erase  # pdb_names gap-align

@@ -1,3 +1,6 @@
+00922150 ?Init@Mutex@Thread@EA@@QAE_NPBUMutexParameters@23@@Z  # EA::Thread::Mutex::Init (callee of s00929a70, named from the dev publics; slice address comment)
+00922940 ?WaitForEnd@Thread@1EA@@QAE?AW4Status@112@ABIPAH@Z  # EA::Thread::Thread::WaitForEnd (callee of s00929a70, named from the dev publics; slice address comment)
+00922d10 ?Wake@Thread@1EA@@QAEXXZ  # EA::Thread::Thread::Wake (callee of s00929a70, named from the dev publics; slice address comment)
 00929a70 EA::IO::MultiStreamWriter::Write  # splits writes across 1 GiB streams (name inferred)
 00929bd0 EA::CallbackSystem::Update  # calls vtbl slot 1 (Run) of the polled processor
 00929bf0 EA::CallbackSystem::CallbackProcessor::Remove  # nulls the matching entry's Callback* under the mutex
@@ -16,9 +19,9 @@
 0092a7a0 EA::CallbackSystem::Callback::Schedule  # Add to processor if not active
 0092a7d0 EA::CallbackSystem::Callback::SetProcessor  # re-schedule on another processor
 0092a860 RefHolder::Release  # delete this when refcount would reach 0 (vtbl slot 0 with 1)
-0092a880 EA::Clipboard::Clipboard::Clipboard  # PDB: Clipboard 0x150 bytes
-0092a8d0 EA::Clipboard::Clipboard::GetClipboardData  # PDB
-0092a940 EA::Clipboard::Clipboard::Clear  # PDB
-0092aa20 EA::Clipboard::Win32Clipboard::WriteText  # CF_UNICODETEXT (0xd) via GlobalAlloc
-0092aae0 EA::Clipboard::DataText16::DataText16  # type 3, vtbl 0x143e3bc
-0092ab60 EA::Clipboard::CreateTextData  # pool alloc + AddRef
+0092a880 ??0Clipboard@0EA@@QAE@XZ  # Clipboard::Clipboard migrated from s00929a70 (verbatim, slice spelling)
+0092a8d0 ?GetClipboardData@Clipboard@1EA@@QAE_NIPAPAUIData@12@@Z  # Clipboard::GetClipboardData migrated from s00929a70 (verbatim, slice spelling)
+0092a940 ?Clear@Clipboard@1EA@@QAEHI@Z  # Clipboard::Clear migrated from s00929a70 (verbatim, slice spelling)
+0092aa20 ?WriteText@Win32Clipboard@Clipboard@EA@@QAE_NPB_WH@Z  # Win32Clipboard::WriteText migrated from s00929a70 (verbatim, slice spelling)
+0092aae0 ??0DataText16@Clipboard@EA@@QAE@PB_WH@Z  # DataText16::DataText16 migrated from s00929a70 (verbatim, slice spelling)
+0092ab60 ?CreateTextData@Clipboard@EA@@YAPAUDataText16@12@PB_WH@Z  # CreateTextData migrated from s00929a70 (verbatim, slice spelling)

@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+0092a940 142 Clipboard::Clear: complete; loop/branch layout and register use differ
+0092aa20 102 Win32Clipboard::WriteText: complete; original keeps ok in a stack byte and shrink-wraps pushes
+0092aae0 49 DataText16 ctor: complete; store order (vtbl late) and esi/edi roles differ
+0092ab60 1 CreateTextData: complete; null-branch target one mov shorter
+0092acb0 76 SetClipboardText: alloc/ctor vtable call schedule differs
+0092ad50 29 GetClipboard: operator_new path / returned old pointer schedule differs
+0092afb0 155 Win32Clipboard ctor: WNDCLASS layout + RegisterClass/CreateWindow schedule differs
+0092b0b0 14 Clipboard platform-enable: alloc/ctor schedule differs; difftest WEAK (1198 valid, 44.0% coverage)

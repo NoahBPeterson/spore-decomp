@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0092abb0  0  Clipboard::SetClipboardData: data-info search present but OS writeback path approximated.
+0092adb0  0  Win32Clipboard::WindowProcedure: only the GetClipboardData(CF_UNICODETEXT) read path is written; the message-pump/window-proc arms (WM_*) are omitted.
