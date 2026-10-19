@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00a41010 263 cAudioPreferences::Init: complete; EH prolog + vtable/field initialization; original uses scalar SSE (movss) float stores which this cl 15.00.30729.01 cannot emit for scalar float (x87 only), plus scheduling differs. difftest WEAK. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a411b0 50 cAudioPreferences::GetVolume: complete; original copies the float out-param with scalar SSE `movss`; this cl emits x87 fld/fstp for scalar float even with /arch:SSE (unproducible here); single-END-return layout also differs. difftest WEAK. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a412c0 239 cAudioPreferences::SetVolume: complete; original is EH-guarded with scalar-SSE float stores (movss); ours is 256B vs original 332B (no like-sized symbol in the obj: EH prolog + float codegen differ). difftest WEAK. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a41410 146 cAudioPreferences::SetSpeakerMode: complete; EH prolog + virtual call + vtable array update; scheduling/register allocation differ. difftest WEAK. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a41500 150 cAudioPreferences::SetSoundQuality: complete; EH prolog + virtual call + field store; scheduling differs. difftest WEAK. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a415f0 138 cAudioPreferences::Mute: complete; EH prolog + virtual call + byte flag store; scheduling differs. difftest WEAK. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

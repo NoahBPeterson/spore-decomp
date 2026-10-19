@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPAudio/SPAudioPreferences.cpp  ?GetSpeakerMode@cAudioPreferences_s00a4_0cd0@Audio@SP@@SAHXZ  00a41200  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioPreferences.cpp  ?GetSoundQuality@cAudioPreferences_s00a4_0cd0@Audio@SP@@SAHXZ  00a41240  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioPreferences.cpp  ?IsMuted@cAudioPreferences_s00a4_0cd0@Audio@SP@@SAEXZ  00a41280  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
