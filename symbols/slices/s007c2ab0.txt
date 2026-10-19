@@ -1,2 +1,3 @@
-007c2ab0 SP::ConvertDXT3ToARGB8888  # card annotation (PDB name)
-007c3410 SP::WriteAnimatedCSAGIF  # card annotation (PDB name)
+007c2ab0 ?ConvertDXT3ToARGB8888@@YAXPAEHPBEHHH@Z  # ConvertDXT3ToARGB8888 migrated from s007c2ab0 (verbatim, slice spelling)
+007c2ee0 ?ConvertDXT5ToARGB8888@@YAXPAEHPBEHHH@Z  # ConvertDXT5ToARGB8888 migrated from s007c2ab0 (verbatim, slice spelling)
+007c3410 ?WriteAnimatedCSAGIF@@YA_NPAUBitmapSrc@@IPBDPBIIM_N3@Z  # WriteAnimatedCSAGIF migrated from s007c2ab0 (verbatim, slice spelling)

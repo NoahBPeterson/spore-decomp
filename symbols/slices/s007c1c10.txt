@@ -1,6 +1,7 @@
 007c1b70 cSplatJob::Init  # thiscall ret 0x24: 9-arg setter, last arg optional filter chain
 007c1c10 ?SetupSplat@cThumbnailManagerSplat@SPL@@QAEXHPBURectID_s007c_1c10@2@HHHHHHH00H@Z  # cThumbnailManagerSplat::SetupSplat migrated from s007c1c10 (verbatim, slice spelling)
-007c24a0 SP::cBumpMapTable::cBumpMapTable  # card annotation (PDB name)
-007c2730 `anonymous namespace'::expand_2_32  # card annotation (PDB name)
+007c24a0 ??0cBumpMapTable@@QAE@M@Z  # cBumpMapTable::cBumpMapTable migrated from s007c1c10 (verbatim, slice spelling)
+007c2540 ?FUN_007c2540@@YAXPAX@Z  # FUN_007c2540 migrated from s007c1c10 (verbatim, slice spelling)
+007c2730 ?expand_2_32@@YAXPAIHI0@Z  # expand_2_32 migrated from s007c1c10 (verbatim, slice spelling)
 007c2790 SP::ColorReduce  # card annotation (PDB name)
 007c2880 SP::ConvertDXT1ToARGB8888  # card annotation (PDB name)

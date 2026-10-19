@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+007c24a0 93 cBumpMapTable ctor: complete; the float→int reinterpret is kept in registers (no `push ecx` spill) and the FP expression association differs
+007c2730 76 expand_2_32: complete; cl keeps the table index as (src&0xc)>>2 with a scale-4 load instead of folding it into a scale-1 load, and assigns the loop registers differently
+007c2ab0 930 complete DXT3->ARGB8888 decode (alpha nibbles + colour interp); different loop/register scheduling
+007c2ee0 1187 complete DXT5->ARGB8888 decode (interpolated alpha, 8/6-level); different loop/register scheduling
+007c3410 1030 complete WriteAnimatedCSAGIF (SEH, string, GIF writer, message post); frame/layout differences; difftest WEAK (149 valid, 14% coverage: the bitmap path needs the FileStream ctor, which calls the unemulated MultiByteToWideChar; GetSaveArea key 0x011ac198 is now passed as a value)
