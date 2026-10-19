@@ -1,13 +1,13 @@
 00836910  RawFixed::Assign  # range copy into fixed buffer; DoInsertValue + tail shift
-00836990  cDataURI::~cDataURI  # frees the two SSO fixed strings (PDB: cDataURI::GetStream, same body)
+00836990 ??1cDataURI@@QAE@XZ  # cDataURI::~cDataURI migrated from s00836910 (verbatim, slice spelling)
 008369e0  RawFixed::AssignCStr  # assign(const wchar_t*): reset + scan + AssignStr
-00836a30  RawFixed::SubstrInto  # builds a 256-wide fixed string from a substring (WideFixedBuf::append)
+00836a30 ?SubstrInto@RawFixed@@QAEPAU1@PAU1@II@Z  # RawFixed::SubstrInto migrated from s00836910 (verbatim, slice spelling)
 00836a90  RawFixed::Swap  # swap layout of two fixed strings, copy+assign on the non-inline path
 00836bd0 ?FUN_00836bd0@@YAHHH@Z  # FUN_00836bd0 migrated from s00836910 (verbatim, slice spelling)
-00836d50  cDataURI::init  # parses data: URI scheme/charset, sets mEncoding/mbBase64
-00837020  RawFixed::Reserve  # allocate n bytes, copy, free old (with SSO buffer sentinel check)
-008371e0  cDataURI::cDataURI  # sets up both SSO buffers then calls init
-00837230  RawFixed::Reserve2  # max_alt(size,n)+1 capacity check then Reserve
-00837270  RawFixed::AppendN  # append(count, byte) growth rule
-00837310  RawFixed::Resize  # shrink via memmove or grow via AppendN
-00837360  cSPUIXHTMLDataURIHandler::PackDataIntoURIString  # percent-encodes or base64-encodes payload
+00836d50 ?init@cDataURI@@QAEXH@Z  # cDataURI::init migrated from s00836910 (verbatim, slice spelling)
+00837020 ?Reserve@RawFixed@@QAEXI@Z  # RawFixed::Reserve migrated from s00836910 (verbatim, slice spelling)
+008371e0 ??0cDataURI@@QAE@H@Z  # cDataURI::cDataURI migrated from s00836910 (verbatim, slice spelling)
+00837230 ?Reserve2@RawFixed@@QAEXI@Z  # RawFixed::Reserve2 migrated from s00836910 (verbatim, slice spelling)
+00837270 ?AppendN@RawFixed@@QAEXIE@Z  # RawFixed::AppendN migrated from s00836910 (verbatim, slice spelling)
+00837310 ?Resize@RawFixed@@QAEXI@Z  # RawFixed::Resize migrated from s00836910 (verbatim, slice spelling)
+00837360 ?FUN_00837360@@YAPAHPAHPAXI1HD@Z  # FUN_00837360 migrated from s00836910 (verbatim, slice spelling)

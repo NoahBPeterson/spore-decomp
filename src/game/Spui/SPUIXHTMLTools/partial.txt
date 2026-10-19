@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00836d50  -  partial: cDataURI::init - URI scheme/charset parsing summarised (string setup + codec resets reproduced)
+00837360  -  partial: cSPUIXHTMLDataURIHandler::PackDataIntoURIString - percent/base64 encoder body summarised
+00837820  -  partial: cDataURI stream builder (percent/base64 -> memory stream) - body summarised

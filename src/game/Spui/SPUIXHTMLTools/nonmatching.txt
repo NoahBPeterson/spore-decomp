@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00836a30 69 RawFixed::SubstrInto - complete substr into a 256-wide fixed buffer; capacity lea folding / scheduling differs
+00837020 2 RawFixed::Reserve - complete allocate-and-grow; register allocation / temp construction differs
+008371e0 8 cDataURI::cDataURI - complete; the second SSO capacity lea is scheduled one slot early
+00837270 112 RawFixed::AppendN - complete append(count,char); memset loop shape and register choice differ
+00837310 42 RawFixed::Resize - complete; register assignment (edi vs esi for this) differs

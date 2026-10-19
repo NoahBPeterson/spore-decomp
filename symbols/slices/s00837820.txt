@@ -1,4 +1,4 @@
-00837820  cDataURI stream builder  # builds a memory stream from percent/base64 decoded URI payload
+00837820 ?FUN_00837820@@YAHPAH@Z  # FUN_00837820 migrated from s00837820 (verbatim, slice spelling)
 00837c90  cSPUIXHTMLDataURIHandler::ProcessRequest  # PDB candidate (caller-single)
 00837ed0  cArguments::Advance  # decrement main-arg window
 00837ee0  cArguments::HasArgument  # _stricmp over mOptionArguments names
