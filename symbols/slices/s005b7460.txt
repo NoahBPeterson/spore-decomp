@@ -5,11 +5,18 @@
 005b7720 SP::cSPEditorManipulationSpine::DoOnMouseMove  # dev PDB method
 005b7880 eastl::insertion_sort<float*>  # called by quick_sort<float*>
 005b78d0 eastl::insertion_sort_simple<float*>  # called by quick_sort<float*>
-005b7a40 SP::cSPEditorManipulationSpineResize::GetNextVertebra  # dev PDB, 37 bytes
-005b7a70 SP::cSPEditorManipulationSpineResize::Init  # dev PDB
+005b7920 ?OnMouseUp@cSPEditorManipulationSpineResize@SP@@QAE_NHMMH@Z  # cSPEditorManipulationSpineResize::OnMouseUp migrated from s005b7460 (verbatim, slice spelling)
+005b7a40 ?GetNextVertebra@cSPEditorManipulationSpineResize@SP@@QAEPAVcSPEditorBlock_s005b_7460@2@XZ  # cSPEditorManipulationSpineResize::GetNextVertebra migrated from s005b7460 (verbatim, slice spelling)
+005b7a70 ?Init@cSPEditorManipulationSpineResize@SP@@QAEXPAVcSPEditorBlock_s005b_7460@2@UcSPVector3_s005b_7460@@PAVcSPEditorSpine_s005b_7460@2@PAVcSPEditorSkinManager_s005b_7460@2@PAVcSPEditorAppEconomy_s005b_7460@2@@Z  # cSPEditorManipulationSpineResize::Init migrated from s005b7460 (verbatim, slice spelling)
 005b7af0 eastl::adjust_heap<float*,int,float>  # EASTL heap.h shape, byte-exact
-005b7cf0 SP::cSPEditorManipulationSpineResize::RepinSimple  # dev PDB method (526 bytes in dev)
+005b7b80 ?UpdatePlanePoint@cSPEditorManipulationSpineResize@SP@@QAEXMM@Z  # cSPEditorManipulationSpineResize::UpdatePlanePoint migrated from s005b7460 (verbatim, slice spelling)
+005b7cf0 ?RepinSimple@cSPEditorManipulationSpineResize@SP@@QAEXXZ  # cSPEditorManipulationSpineResize::RepinSimple migrated from s005b7460 (verbatim, slice spelling)
+005b7f70 ?SetBlockHighlight@cSPEditorManipulationSpineResize@SP@@QAEXPAVcSPEditorBlock_s005b_7460@2@_N@Z  # cSPEditorManipulationSpineResize::SetBlockHighlight migrated from s005b7460 (verbatim, slice spelling)
+005b8070 ?DoInsertValueImpl@BlockLimbMap@eastl@@QAE?AUrbtree_iterator_s005b_7460@2@PAUrbtree_node_base_s005b_7460@2@ABU?$pair_s005b_7460@QAVcSPEditorBlock_s005b_7460@SP@@V?$AutoRefCount_s005b_7460@VcSPEditorSkinPart_s005b_7460@SP@@@EA@@@2@_N@Z  # BlockLimbMap::DoInsertValueImpl migrated from s005b7460 (verbatim, slice spelling)
 005b81a0 eastl::make_heap<float*>  # byte-exact
 005b81e0 eastl::sort_heap<float*>  # byte-exact
-005b8310 eastl::rbtree<SP::cSPEditorBlock*,...>::clear  # DoNukeSubtree + reset, byte-exact
+005b8230 ?DoOnMouseDown@cSPEditorManipulationSpineResize@SP@@QAE_NMMH@Z  # cSPEditorManipulationSpineResize::DoOnMouseDown migrated from s005b7460 (verbatim, slice spelling)
+005b8250 ?DoNukeSubtree@BlockLimbMap@eastl@@QAEXPAUrbtree_node_s005b_7460@2@@Z  # BlockLimbMap::DoNukeSubtree migrated from s005b7460 (verbatim, slice spelling)
+005b8310 ?clear@BlockLimbMap@eastl@@QAEXXZ  # BlockLimbMap::clear migrated from s005b7460 (verbatim, slice spelling)
+005b84f0 ??1cSPEditorManipulationSpineResize@SP@@UAE@XZ  # cSPEditorManipulationSpineResize::~cSPEditorManipulationSpineResize migrated from s005b7460 (verbatim, slice spelling)
 005b8560 eastl::quick_sort<float*>  # byte-exact

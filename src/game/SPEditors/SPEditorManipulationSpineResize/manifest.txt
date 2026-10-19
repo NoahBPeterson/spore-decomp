@@ -1,0 +1,13 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorManipulationSpineResize.cpp  ?OnMouseUp@cSPEditorManipulationSpineResize@SP@@QAE_NHMMH@Z  005b7920  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationSpineResize.cpp  ?GetNextVertebra@cSPEditorManipulationSpineResize@SP@@QAEPAVcSPEditorBlock_s005b_7460@2@XZ  005b7a40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationSpineResize.cpp  ?Init@cSPEditorManipulationSpineResize@SP@@QAEXPAVcSPEditorBlock_s005b_7460@2@UcSPVector3_s005b_7460@@PAVcSPEditorSpine_s005b_7460@2@PAVcSPEditorSkinManager_s005b_7460@2@PAVcSPEditorAppEconomy_s005b_7460@2@@Z  005b7a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationSpineResize.cpp  ?SetBlockHighlight@cSPEditorManipulationSpineResize@SP@@QAEXPAVcSPEditorBlock_s005b_7460@2@_N@Z  005b7f70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationSpineResize.cpp  ?DoInsertValueImpl@BlockLimbMap@eastl@@QAE?AUrbtree_iterator_s005b_7460@2@PAUrbtree_node_base_s005b_7460@2@ABU?$pair_s005b_7460@QAVcSPEditorBlock_s005b_7460@SP@@V?$AutoRefCount_s005b_7460@VcSPEditorSkinPart_s005b_7460@SP@@@EA@@@2@_N@Z  005b8070  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationSpineResize.cpp  ?DoOnMouseDown@cSPEditorManipulationSpineResize@SP@@QAE_NMMH@Z  005b8230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationSpineResize.cpp  ?DoNukeSubtree@BlockLimbMap@eastl@@QAEXPAUrbtree_node_s005b_7460@2@@Z  005b8250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationSpineResize.cpp  ?clear@BlockLimbMap@eastl@@QAEXXZ  005b8310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationSpineResize.cpp  ??1cSPEditorManipulationSpineResize@SP@@UAE@XZ  005b84f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationSpineResize.cpp  ?HighlightDeleteBlockers@cSPEditorManipulationSpineResize_s005b_85d0@SP@@QAE_NPAVcSPEditorBlock_s005b_85d0@2@@Z  005b8f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationSpineResize.cpp  ?Update@cSPEditorManipulationSpineResize_s005b_85d0@SP@@QAEXM@Z  005b9430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationSpineResize.cpp  ?GetPileList@cSPEditorManipulationSpineResize_s005b_ccc0@SP@@QAE?AUcSPEditorPileList@@XZ  005bdc80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
