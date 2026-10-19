@@ -224,14 +224,14 @@ void AudioSetEvent1(void* p, int v)
 // ================================================================== @ 0x009fbd70
 
 // @ 0x009fbd70
-void AudioSetListener2(int v)
+void AudioSetListener2(int p2, char v)
 {
     void* s = EA_Audio_GetSystemAT();
     if (!s)
         return;
     ((vt_v_i)VT(s, 0x38))(s, 0x347536b);
-    ((vt_v_i)VT(s, 0x40))(s, 0x3475385);
-    ((vt_v_i)VT(s, 0x40))(s, 0x34753a0);
+    ((vt_v_ii)VT(s, 0x40))(s, 0x3475385, p2);
+    ((vt_v_ii)VT(s, 0x40))(s, 0x34753a0, v == 0);
     ((vt_v0)VT(s, 0x58))(s);
 }
 
@@ -257,10 +257,12 @@ void AudioQueryB(int x)
 // @ 0x009fbe20
 float AudioQueryC(int x)
 {
-    if (!SP_AudioSystem())
-        return 0.0f;
-    void* s = SP_AudioSystem();
-    return ((vt_f_i)VT(s, 0x44))(s, x);
+    float r;
+    if (SP_AudioSystem()) {
+        void* s = SP_AudioSystem();
+        r = ((vt_f_i)VT(s, 0x44))(s, x);
+    } else r = 0.0f;
+    return r;
 }
 
 // @ 0x009fbe50
@@ -363,17 +365,20 @@ uint32 PackFourCC(const char* p)
 
 // ================================================================== @ 0x009fc0f0
 
+struct RBFind { void find(uint32* out, const uint32* key); };   // 0x00e5c780 (thiscall, ret 8)
+
 // @ 0x009fc0f0
 int FeedbackLookupName(const char* name)
 {
     if (!name)
         return 0;
+    uint32 out;
     uint32 h = EA_Hash_FNV1_String8(name, 0x811c9dc5, 1);
-    void* tree = g_166c074;
-    void* node = eastl_rbtree_find(tree, &h, (char*)tree + 4);
-    if (node == (char*)tree + 4)
-        return 0;
-    return *(int*)((char*)node + 0x14);
+    RBFind* tree = (RBFind*)g_166c074;
+    tree->find(&out, &h);
+    if ((void*)out != (char*)tree + 4)
+        return *(int*)(out + 0x14);
+    return 0;
 }
 
 // ================================================================== @ 0x009fc140
@@ -461,38 +466,53 @@ void BehaviorTableDedup(int self)
 int BehaviorLookup(uint32* p)
 {
     uint32 key = p[0] & 0x100003;
+    uint32 sel = p[0] & 0x801c00;
     if (key == 0) {
         key = p[1];
-    } else if (key != 1) {
-        return (int)(size_t)g_166c07c;
-    } else {
+    } else if (key == 1) {
         key = 0x746f6f72;
+    } else {
+        return (int)(size_t)g_166c07c;
     }
-    uint32 sel = p[0] & 0x801c00;
     if (sel == 0x1800 || sel == 0x1c00 || sel == 0x800400)
         key = p[2];
-    if (key) {
-        void* tree = g_166c078;
-        void* node = eastl_rbtree_find(tree, &key, (char*)tree + 4);
-        if (node != (char*)tree + 4)
-            return *(int*)((char*)node + 0x14);
-    }
-    return (int)(size_t)g_166c07c;
+    if (!key)
+        return (int)(size_t)g_166c07c;
+    uint32 out;
+    RBFind* tree = (RBFind*)g_166c078;
+    tree->find(&out, &key);
+    if ((void*)out == (char*)tree + 4)
+        return (int)(size_t)g_166c07c;
+    return *(int*)(out + 0x14);
 }
 
 // ================================================================== @ 0x009fc3e0
 
+extern void FUN_0083c780(int, int);           // 0x0083c780
+
+struct CmdNew { void mctor(); };              // 0x0083c800 cCommandBase::cCommandBase
+
+struct cCmdObj {
+    void** vtbl;
+    char pad[0x2c];
+    int f30;
+    void SetAB(int a, int b);                 // 0x0083c780 (thiscall, ret 8)
+    void InitDeform(int a, int b);
+};
+
 // @ 0x009fc3e0
-void cCommandBase_InitDeform(void* self, int a, int b)
+void cCmdObj::InitDeform(int a, int b)
 {
-    *(int*)((char*)self + 0x30) = b;
-    // FUN_0083c780(a, b)
-    extern void FUN_0083c780(int, int);      // 0x0083c780
-    FUN_0083c780(a, b);
+    this->f30 = b;
+    this->SetAB(a, b);
     void* cmd = operator_new(0x10, "ArgScript/Deform", 0, 0, 0, 0);
-    if (cmd)
+    if (cmd) {
+        ((CmdNew*)cmd)->mctor();
         *(void**)cmd = &g_14487f4;
-    ((vt_v_ii)VT(self, 0x18))(self, (int)(size_t)g_1551774, (int)(size_t)cmd);
+    } else {
+        cmd = 0;
+    }
+    ((vt_v_ii)this->vtbl[0x18 / 4])(this, (int)(size_t)g_1551774, (int)(size_t)cmd);
 }
 
 // ================================================================== @ 0x009fc440
@@ -505,36 +525,21 @@ struct Elem14 {
     uint32 val;
     void assign(void* begin, void* end);   // 0x00454cb0
     void RangeInitialize(int n);           // 0x00475ab0
+    Elem14* ElemCopy(const Elem14* src);
 };
 
-static void construct14(Elem14* d, const Elem14* s)
-{
-    d->b = d->e = d->c = 0;
-    int n = (int)((char*)s->e - (char*)s->b);
-    int n1 = n + 1;
-    if (n1 < 2) {
-        d->b = &g_1667bac;
-        d->e = &g_1667bac;
-        d->c = (char*)&g_1667bac + 1;
-    } else {
-        char* buf = (char*)operator_new((uint32)n1, "Anim/partscaps/untagged", 0, 0, 0, 0xd1);
-        d->b = buf;
-        d->e = buf;
-        d->c = buf + n1;
-    }
-    char* dst = (char*)d->b;
-    for (int i = 0; i < n; ++i)
-        dst[i] = ((char*)s->b)[i];
-    dst[n] = 0;
-    d->e = dst + n;
-    d->val = s->val;
-}
-
 // @ 0x009fc440
-Elem14* ElemCtor(Elem14* self, const Elem14* src)
+Elem14* Elem14::ElemCopy(const Elem14* src)
 {
-    construct14(self, src);
-    return self;
+    this->b = this->e = this->c = 0;
+    int n = (int)((char*)src->e - (char*)src->b);
+    this->RangeInitialize(n + 1);
+    char* dst = (char*)this->b;
+    DoInsertValue(dst, src->b, n);
+    this->e = dst + n;
+    *(dst + n) = 0;
+    this->val = src->val;
+    return this;
 }
 
 // ================================================================== @ 0x009fc4a0
@@ -559,7 +564,7 @@ void ElemConstructRange(Elem14** out, Elem14* begin, Elem14* end, Elem14* dst0)
 {
     Elem14* d = dst0;
     for (Elem14* s = begin; s != end; s = (Elem14*)((char*)s + 0x14))
-        construct14(d, s), d = (Elem14*)((char*)d + 0x14);
+        d->ElemCopy(s), d = (Elem14*)((char*)d + 0x14);
     *out = d;
 }
 
@@ -581,7 +586,7 @@ void ElemAssignFrom(Elem14* a, Elem14* b, Elem14* c)
 void ElemFill(Elem14* dst, int n, Elem14* src)
 {
     for (int i = 0; i < n; ++i)
-        construct14((Elem14*)((char*)dst + i * 0x14), src);
+        ((Elem14*)((char*)dst + i * 0x14))->ElemCopy(src);
 }
 
 // ================================================================== @ 0x009fc8b0
@@ -590,7 +595,7 @@ void ElemFill(Elem14* dst, int n, Elem14* src)
 Elem14* ElemCopyRange(Elem14* a, Elem14* b, Elem14* c)
 {
     for (; a != b; a = (Elem14*)((char*)a + 0x14), c = (Elem14*)((char*)c + 0x14))
-        construct14(c, a);
+        c->ElemCopy(a);
     return c;
 }
 

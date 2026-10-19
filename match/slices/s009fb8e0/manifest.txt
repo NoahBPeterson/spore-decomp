@@ -4,9 +4,13 @@ slices/s009fb8e0/s009fb8e0.cpp  ?AudioSetEvent10@@YAXPAXH@Z  009fbcf0  /O2 /MD /
 slices/s009fb8e0/s009fb8e0.cpp  ?AudioSetFlag@@YAXPAXD@Z  009fbd10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009fb8e0/s009fb8e0.cpp  ?AudioSetEvent5@@YAXPAXH@Z  009fbd30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009fb8e0/s009fb8e0.cpp  ?AudioSetEvent1@@YAXPAXH@Z  009fbd50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009fb8e0/s009fb8e0.cpp  ?AudioSetListener2@@YAXHD@Z  009fbd70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009fb8e0/s009fb8e0.cpp  ?AudioQueryA@@YADH@Z  009fbdd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009fb8e0/s009fb8e0.cpp  ?AudioQueryB@@YAXH@Z  009fbe00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009fb8e0/s009fb8e0.cpp  ?AudioQueryC@@YAMH@Z  009fbe20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009fb8e0/s009fb8e0.cpp  ?AudioSetListener3@@YAXHMMM@Z  009fbc50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009fb8e0/s009fb8e0.cpp  ?AudioSetListener3v@@YAXHPAM@Z  009fbe50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009fb8e0/s009fb8e0.cpp  ?FeedbackLookupName@@YAHPBD@Z  009fc0f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009fb8e0/s009fb8e0.cpp  ?InitDeform@cCmdObj@@QAEXHH@Z  009fc3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009fb8e0/s009fb8e0.cpp  ?ElemAssignFrom@@YAXPAUElem14@@00@Z  009fc680  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009fb8e0/s009fb8e0.cpp  ?ElemMove@@YAPAUElem14@@PAU1@00@Z  009fc970  /O2 /MD /Gy /TP /arch:SSE /fp:fast
