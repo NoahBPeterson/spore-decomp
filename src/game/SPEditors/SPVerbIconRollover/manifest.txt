@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPVerbIconRollover.cpp  ??0cSPVerbIconRollover_s0060_4890@@QAE@XZ  006051d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPVerbIconRollover.cpp  ??0cSPVerbIconRollover_s0060_4890@@QAE@I@Z  00605220  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPVerbIconRollover.cpp  ?Shutdown@cSPVerbIconRollover_s0060_4890@@QAEXXZ  00605270  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPVerbIconRollover.cpp  ?SetVisibility@cSPVerbIconRollover_s0060_4890@@QAEXII@Z  006052c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPVerbIconRollover.cpp  ?Init@cSPVerbIconRollover_s0060_4890@@QAE_NXZ  00605340  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
