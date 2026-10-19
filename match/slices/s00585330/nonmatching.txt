@@ -1,1 +1,5 @@
+00585330 631 complete but not byte-exact (block ordering + register allocation differ; equivalence WEAK)
+005855b0 517 complete but not byte-exact (register allocation differs; equivalence FAIL on zeroish input)
+005858f0 797 complete but not byte-exact (complex control flow; equivalence WEAK)
+00585c10 155 complete but not byte-exact (dec/sub and store ordering differ; equivalence PASS)
 00585890 21 complete but not byte-exact (compiler combined the key range check into sub/cmp)
