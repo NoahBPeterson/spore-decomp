@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /Od /Ob1 /arch:SSE; free fastcall wrappers stand in for thiscall members, so counts are inflated)
+00454b10 40 VariantTypeTraits<Key>::GetTPTR
