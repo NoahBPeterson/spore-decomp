@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorComplexityMeter.cpp  ??0cSPEditorComplexityMeter_s005a_6e60@SP@@QAE@XZ  005a6e60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
