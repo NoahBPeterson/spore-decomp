@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPAudio/eapdcanvas.cpp  ?FUN_00a4b3a0@@YAXPAUcCanvas@@HHHPAUcAtom@@@Z  00a4b3a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
