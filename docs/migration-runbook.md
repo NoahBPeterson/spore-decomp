@@ -753,3 +753,36 @@ body did not compile 214, no unique canonical method 188, other 82. Tables: `scr
 - Follow-up: per-object compile flags. Each slice's flags come from its own matching, but one set fits whole objects
   (OTDB 42/42 with `/Od /Ob1 ... /fp:fast`, AMEB without /EHsc, EMU 21/23 with one /Od set). Normalising each module to
   one flag set through module_flags.json is open.
+
+### 8h. Fix pass 6, part A (2026-10-18, after round 7, batch mig7): data safety and speed
+
+Round 7 (29 objects, commits 60a260fb..46e5d89a) is landed, byte-exact and asm-clean. Its 29 reports
+(`work/claude/mig7_reports/`) and the plan built from them (`work/claude/fixpass6_plan.md`) drive this pass. Part A:
+
+- **No more silent data loss on re-apply.** `prune_unemitted` (a run that emits nothing) now prunes only the VAs the
+  batch lists for this slice; before, it deleted every earlier-landed block and the items section of the slice
+  (EditorManipulationUtilities fell to 0/24; AppModeEditorBase and ThumbnailManager were hit too). A function that only
+  failed to compile in this run keeps its earlier block, in `apply` as well (`failed_vas`); only a deliberate hold
+  (`leave_in_slice`, `exclude`, asm, layout guard) removes a landed function. The items section stays while any block
+  of the slice remains.
+- **Auto-union.** With `--batch`, the slice's functions already in the module TU join the batch (note `union`), except
+  VAs the batch gives to another slice. Hand-made union batch files are no longer needed. On mig7 this covers 41
+  slices; re-applying s00575270 with `--batch mig7` (3 listed VAs) keeps the 5 mig5 functions and 82/82 rows.
+- **Conversion guard** (`conversion_loses_behaviour`): a slice constructor or destructor is never converted into a plain
+  method or the other special member, and a converted body is never empty when the slice's had statements; the function
+  lands verbatim with a "conversion refused" note. s006068c0 0x606f30 (`cAuthMessage::~cAuthMessage() {}`, the scalar
+  deleting destructor) had become an empty `slot_22`; equiv said FAIL before and after, so only a structural check
+  catches this class of damage. A plain function becoming a ctor/dtor stays allowed (report 05).
+- **Atomic shared files.** `headers.dump_json_atomic` (temp file + `os.replace`) for the Undname cache (which also merges
+  concurrent additions and treats a truncated file as empty), the vtable cache, modmap output and `od_name_rank.json`.
+- **No-marker slices** exit 0 with "no reconstructed functions" (was an IndexError in `parse_slice`).
+- **Probe fix and cache.** The VC9 layout probe reads each offset from a compile error, and cl stops at 100 errors
+  (C1003). Paths that do not compile add errors of their own, so chunks stopped early and the nodes after the cap were
+  reported as "does not compile" (s00627d50: 9 of 16 chunks capped); which nodes were lost depended on chunk
+  composition. Unreached nodes are now requeued (a chunk that reached nothing is retried in halves). With results
+  independent of chunking, they are cached per class in `work/migrate/probe_cache/` keyed by class + a fingerprint of
+  `src/game/include` (any header change invalidates; `RW_NO_PROBE_CACHE=1` bypasses). A dry run of s006068c0 went from
+  11.4 s to 2.4 s; a dry sweep of all 253 mig7 entries (6 parallel) from 393 s uncached to 118 s; an apply from 38 s to
+  28 s. The cached sweep's output is identical to the uncached one for all 253 entries; versus the pre-fix probe, one
+  layout-guard message gained a member (s0048c0f0, same decision).
+- Known cosmetic: each re-apply adds blank lines to the TU (s00575270: +153 blank lines, no other change). Part C.

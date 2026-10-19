@@ -352,10 +352,28 @@ class Types:
 
 
 # ---- demangling -------------------------------------------------------------------------------
+def dump_json_atomic(obj, path, **kw):
+    """json.dump to a temp file in the same directory, then os.replace: a concurrent reader sees the old or the new file,
+    never a truncated one (mig7, reports 04 and 12: JSONDecodeError on undname_cache.json while another agent wrote it)."""
+    import tempfile
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path) or ".", prefix=".tmp")
+    with os.fdopen(fd, "w") as f:
+        json.dump(obj, f, **kw)
+    os.replace(tmp, path)
+
+
+def load_json_cache(path):
+    try:
+        return json.load(open(path)) if os.path.exists(path) else {}
+    except ValueError:              # a file truncated by a pre-atomic writer: start over, it is a cache
+        return {}
+
+
 class Undname:
     def __init__(self):
         self.path = W("work/migrate/undname_cache.json")
-        self.cache = json.load(open(self.path)) if os.path.exists(self.path) else {}
+        self.cache = load_json_cache(self.path)
 
     def many(self, names):
         todo = [n for n in dict.fromkeys(names) if n not in self.cache]
@@ -370,8 +388,11 @@ class Undname:
                     i += 2
                 else:
                     i += 1
-            os.makedirs(os.path.dirname(self.path), exist_ok=True)
-            json.dump(self.cache, open(self.path, "w"))
+            # merge with what concurrent runs added since we read it, so their entries are not lost
+            merged = load_json_cache(self.path)
+            merged.update(self.cache)
+            self.cache = merged
+            dump_json_atomic(self.cache, self.path)
         return {n: self.cache.get(n) for n in names}
 
 

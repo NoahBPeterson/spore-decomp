@@ -40,7 +40,7 @@ Rules (all of them are applied to the function bodies, nothing else is touched):
   6. externs       callees and globals with a retail address comment: named from pdb_names / names.txt /
                    KNOWN_EXTERNS; the rest stay as extern declarations with their address.
 """
-import argparse, collections, copy, difflib, hashlib, json, os, re, subprocess, sys
+import argparse, collections, copy, difflib, hashlib, json, os, re, subprocess, sys, tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
@@ -627,6 +627,10 @@ def parse_slice(sid, variant=""):
             elif _defines(later[0], nxt):
                 banner.add(i)
     marks = [i for i in marks if i not in banner]
+    if not marks:
+        # mig7 report 24 (s0081e070, s0081f0e0, s00820cc0, s008219a0, s008268b0, s006eed00): a slice without a single
+        # `// @ 0x` function marker has nothing to migrate; this was an IndexError
+        raise NoFunctions("%s: no reconstructed functions (no `// @ 0x` markers)" % sid)
     pre = lines[:marks[0]]
     chunks = []
     ns_at = enclosing_namespaces(lines)
@@ -1564,6 +1568,18 @@ class Rewrite:
             self._probed = set()
             self._nprobe = 0
         todo = [c for c in classes if c not in self._probed and Canon.get(c).exists]
+        # per-class cache (work/migrate/probe_cache, keyed by class + include-tree stamp): every slice of a module probes the
+        # same canonical classes, each chunk is a 1.5 s VC9 compile under wine (2026-10-18 profile: 7.4 of 11.4 s of a dry
+        # run).  RW_NO_PROBE_CACHE=1 bypasses it
+        for c in list(todo):
+            hit = self.probe_cache_get(c)
+            if hit is not None:
+                for path, v in hit["got"]:
+                    self.probe[(c, path)] = tuple(v)
+                for path in hit["missing"]:
+                    self.notes.append(("probe", "no VC9 offset for %s::%s (path does not compile)" % (c, path)))
+                todo.remove(c)
+                self._probed.add(c)
         if not todo:
             return
         incs = ["#include <stddef.h>"] + ['#include "%s"' % H.include_path(c) for c in todo]
@@ -1575,8 +1591,13 @@ class Rewrite:
                     seen.add(path)
                     nodes.append((c, path))
             nodes.append((c, ""))
-        for k in range(0, len(nodes), 90):
-            chunk = nodes[k:k + 90]
+        # cl stops at 100 errors (C1003).  A path that does not compile adds errors of its own (up to 25 extra in one chunk of
+        # s00627d50), so a chunk can stop before its last lines: the nodes it never reached go back into the queue, and a
+        # chunk that reached nothing is retried in halves.  Before (2026-10-18), those nodes were reported as "does not
+        # compile", and which ones depended on how the classes happened to share chunks
+        pending, size, incomplete = list(nodes), 90, set()
+        while pending:
+            chunk, pending = pending[:size], pending[size:]
             lines = []
             for i, (c, path) in enumerate(chunk):
                 if path:
@@ -1595,10 +1616,62 @@ class Rewrite:
                     v = int(m.group(2)) - 1
                     self.probe[(c, path)] = (v >> 16, v & 0xffff) if path else (0, v)
                     got.add(ln)
-            for i, (c, path) in enumerate(chunk):
+            reached = len(chunk) - 1
+            if "C1003" in out:
+                reached = max(got) if got else -1
+                if reached < 0:
+                    if size > 1:
+                        size = max(1, size // 2)
+                        pending = chunk + pending
+                        continue
+                    incomplete.add(chunk[0][0])     # one node alone exceeds 100 errors: its header does not compile
+                    reached = 0
+                else:
+                    pending = chunk[reached + 1:] + pending
+            for i, (c, path) in enumerate(chunk[:reached + 1]):
                 if i not in got:
                     self.notes.append(("probe", "no VC9 offset for %s::%s (path does not compile)" % (c, path)))
+        for c in todo:
+            mine = [(path, self.probe[(c, path)]) for cc, path in nodes if cc == c and (c, path) in self.probe]
+            if c not in incomplete and any(path == "" for path, _v in mine):   # its sizeof compiled: cacheable
+                self.probe_cache_put(c, mine, [path for cc, path in nodes if cc == c and (c, path) not in self.probe])
         self._probed.update(todo)
+
+    _inc_stamp = None
+
+    @classmethod
+    def include_stamp(cls):
+        """Fingerprint of src/game/include (path, size, mtime of every file; ~10 ms): a probe's result is reused only while
+        no header changed."""
+        if cls._inc_stamp is None:
+            h = hashlib.sha1()
+            for d, _dirs, fs in sorted(os.walk(INC)):
+                for f in sorted(fs):
+                    st = os.stat(os.path.join(d, f))
+                    h.update(("%s %d %d\n" % (os.path.join(d, f), st.st_size, st.st_mtime_ns)).encode())
+            cls._inc_stamp = h.hexdigest()
+        return cls._inc_stamp
+
+    def _probe_cache_path(self, c):
+        return W("work", "migrate", "probe_cache", hashlib.sha1((self.include_stamp() + "\n" + c).encode()).hexdigest() + ".json")
+
+    def probe_cache_get(self, c):
+        if os.environ.get("RW_NO_PROBE_CACHE"):
+            return None
+        try:
+            return json.load(open(self._probe_cache_path(c)))
+        except (OSError, ValueError):
+            return None
+
+    def probe_cache_put(self, c, got, missing):
+        if os.environ.get("RW_NO_PROBE_CACHE"):
+            return
+        cp = self._probe_cache_path(c)
+        os.makedirs(os.path.dirname(cp), exist_ok=True)
+        fd, tmp = tempfile.mkstemp(dir=os.path.dirname(cp), prefix=".tmp")
+        with os.fdopen(fd, "w") as f:
+            json.dump({"class": c, "got": [[p, list(v)] for p, v in got], "missing": missing}, f)
+        os.replace(tmp, cp)
 
     def cl(self, path, extra):
         w = lambda p: "Z:" + p.replace("/", "\\")
@@ -3028,7 +3101,44 @@ class Rewrite:
                 continue
             self.rewrite_body(c)
             c.defline = self.definition_line(c)
+            lost = self.conversion_loses_behaviour(c)
+            if lost:
+                self.make_verbatim(c)
+                self.notes.append(("verbatim", "0x%08x %s: conversion refused: %s" % (c.va, c.name, lost)))
             self.fns.append(c)
+
+    @staticmethod
+    def _special_kind(text):
+        """'dtor' / 'ctor' when a definition line defines a destructor / constructor (`X::~X(`, `X::X(`), else None."""
+        m = re.search(r"(?<!\w)(\w+)\s*::\s*(~?)\s*(\w+)\s*\(", mask(re.sub(r"(?m)//.*$", "", text or "")))
+        if not m or m.group(1) != m.group(3):
+            return None
+        return "dtor" if m.group(2) else "ctor"
+
+    @staticmethod
+    def _statements(body):
+        """The body without comments, braces and whitespace ('' for `{}`)."""
+        s = re.sub(r"(?s)/\*.*?\*/", "", body or "")
+        s = re.sub(r"(?m)//.*$", "", s)
+        return re.sub(r"[\s{};]", "", s)
+
+    def conversion_loses_behaviour(self, c):
+        """Why a converted function must stay verbatim, or None (fix pass 6, mig7 report 23: s006068c0 0x606f30, the
+        slice's `cAuthMessage::~cAuthMessage() {}`, whose meaning is the compiler-generated scalar deleting destructor
+        (`delete this`), became the empty `cSPPaletteItemUIOneClickPaint::slot_22() {}`; equiv said FAIL before and after,
+        so only a structural check catches it)."""
+        if getattr(c, "implicit", None):
+            return None
+        sig = re.sub(r"(?m)^\s*//.*$", "", c.sig_text or "")
+        sig = sig.rsplit(";", 1)[-1] if ";" in mask(sig) else sig      # the definition, not the stub struct in front of it
+        was, now = self._special_kind(sig), self._special_kind(c.defline)
+        # a plain function becoming a ctor/dtor (report 05: cSPPlayMode_ctor -> the dev ctor) is a mapping equiv judges;
+        # losing a ctor/dtor, or swapping one for the other, changes what the compiler generates around the body
+        if was and was != now:
+            return "the slice defines a %s, the canonical declaration a %s" % (was or "plain function", now or "plain function")
+        if self._statements(c.body) and not self._statements(c.out_body):
+            return "the converted body is empty but the slice's is not"
+        return None
 
     def slice_exact_vas(self):
         """VAs of the slice's manifest.txt rows (byte-exact in the slice)."""
@@ -3628,9 +3738,10 @@ class Rewrite:
                     emitted = {c.va for c in fns}
                     for b in parts[1:]:
                         va = int(re.match(r"// @ 0x([0-9a-fA-F]+)", b).group(1), 16)
-                        if va in mine and va not in emitted:
+                        if va in mine and va not in emitted and va not in getattr(self, "failed_vas", ()):
                             # an earlier run of this slice emitted it, this one does not (a rule or a header changed its class):
-                            # the TU must not keep a function the slice now holds back
+                            # the TU must not keep a function the slice now holds back.  A function that only failed to
+                            # compile in this run keeps its old block (fix pass 6)
                             self.notes.append(("pruned", "0x%08x removed from the module TU: not emitted by this run" % va))
                             continue
                         blocks.setdefault(va, b if b.endswith("\n") else b + "\n")
@@ -4666,6 +4777,13 @@ class Rewrite:
         mods = {c.module for c in self.chunks if c.module and (not getattr(self, "module_filter", None) or
                                                                self.module_filter.lower() in c.module.lower())}
         mine = {c.va for c in self.chunks}
+        bv = getattr(self, "batch_vas", None)
+        if bv:
+            # fix pass 6 (mig7, reports 01/21/22): only what the batch lists for this slice; the rest of the slice's landed
+            # blocks belong to earlier batches.  The unfiltered set emptied EditorManipulationUtilities to 0/24
+            mine = {va for va in mine if "%08x" % va in bv[1]}
+        mine -= getattr(self, "failed_vas", set())      # failed to compile this run: the earlier block stays
+        allmine = {c.va for c in self.chunks}
         for module in sorted(mods):
             d, obj = os.path.split(module)
             tu = W("src", "game", d, obj[:-4] + ".cpp")
@@ -4674,7 +4792,9 @@ class Rewrite:
             old = open(tu).read()
             parts = re.split(r"(?m)^(?=// @ 0x[0-9a-fA-F]+$)", old)
             keep = [b for b in parts[1:] if int(re.match(r"// @ 0x([0-9a-fA-F]+)", b).group(1), 16) not in mine]
-            pre = re.sub(r"(?s)\n?// ---- items of slice %s begin.*?// ---- items of slice %s end\n?" % (self.bid, self.bid), "\n", parts[0])
+            left = [b for b in keep if int(re.match(r"// @ 0x([0-9a-fA-F]+)", b).group(1), 16) in allmine]
+            pre = parts[0] if left else re.sub(
+                r"(?s)\n?// ---- items of slice %s begin.*?// ---- items of slice %s end\n?" % (self.bid, self.bid), "\n", parts[0])
             new = pre + "".join(keep)
             if new != old:
                 open(tu, "w").write(new)
@@ -4688,6 +4808,9 @@ class Rewrite:
         if getattr(c, "verbatim", False):
             if c in self.fns:
                 self.fns.remove(c)
+            # fix pass 6: an earlier run's block of this function stays in the TU (prune skips it); only a deliberate hold
+            # (leave_in_slice, exclude, asm, layout guard) removes a landed function
+            self.failed_vas = getattr(self, "failed_vas", set()) | {c.va}
             self.notes.append(("dropped", "0x%08x %s stays in the slice: %s" % (c.va, c.name, why)))
             self.stats["dropped_to_slice"] += 1
             return
@@ -4952,6 +5075,10 @@ class Rewrite:
         return False, log or "still failing after %d rounds" % rounds
 
 
+class NoFunctions(Exception):
+    pass
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("slice")
@@ -4968,7 +5095,11 @@ def main():
     a = ap.parse_args()
     if not a.scratch:
         a.scratch = W("work", "migrate", "scratch_%s" % a.slice)
-    rw = Rewrite(a.slice, a.scratch, a.variant)
+    try:
+        rw = Rewrite(a.slice, a.scratch, a.variant)
+    except NoFunctions as e:
+        print(e)
+        return
     if a.batch:
         ents = json.load(open(W("work", "batches", a.batch + ".json")))
         listed = {va.lower() for e in ents if e["id"] == a.slice and (not a.module or a.module.lower() in e["module"].lower())
@@ -4998,6 +5129,25 @@ def main():
         listed = {va for va in listed if var_of.get(va, "") == a.variant}
         rw.batch_vas = (a.batch, listed)
     rw.assign_chunks(a.module)
+    if a.batch:
+        # fix pass 6 auto-union (mig7 reports 01, 02, 21, 22): this slice's functions that an earlier batch already put in the
+        # module TU belong to this run too, so a re-apply that lists only new VAs neither prunes them nor leaves their items out
+        # of the merged preamble.  A VA the batch gives to another slice stays that slice's (fix pass 5, s007ca950)
+        other = {va.lower() for e in ents if e["id"] != a.slice for va in e["vas"]}
+        added = []
+        for module in sorted({c.module for c in rw.chunks if c.module and (not a.module or a.module.lower() in c.module.lower())}):
+            d, obj = os.path.split(module)
+            tu = W("src", "game", d, obj[:-4] + ".cpp")
+            if not os.path.exists(tu):
+                continue
+            have = {m.lower().zfill(8) for m in re.findall(r"(?m)^// @ 0x([0-9a-fA-F]+)$", open(tu).read())}
+            for c in rw.chunks:
+                v = "%08x" % c.va
+                if c.module == module and v in have and v not in listed and v not in other and var_of.get(v, "") == a.variant:
+                    listed.add(v)
+                    added.append(v)
+        if added:
+            rw.notes.append(("union", "%d function(s) already in the module TU added to the batch: %s" % (len(added), " ".join(sorted(added)))))
     rw.map_structs()
     rw.build(a.module)
     if not a.quiet:

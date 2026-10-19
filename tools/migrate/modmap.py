@@ -456,9 +456,8 @@ def main():
         report(out)
     if a.holdout:
         return
-    os.makedirs(os.path.dirname(a.out), exist_ok=True)
-    with open(a.out, "w") as f:
-        json.dump(out, f, indent=0)
+    from headers import dump_json_atomic   # concurrent rewrite.py runs read this file
+    dump_json_atomic(out, a.out, indent=0)
     if not a.quiet:
         print("wrote", os.path.relpath(a.out, ROOT))
     if a.module:

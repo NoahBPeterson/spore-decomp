@@ -78,8 +78,9 @@ def make_cache():
             if j >= 0 and va < order[j] + ret["%08x" % order[j]]["size"]:
                 refs[v].add(order[j])
     out = {v: {"slots": vt[v], "refs": ["%08x" % x for x in sorted(refs[v])]} for v in vt}
-    os.makedirs(os.path.dirname(CACHE), exist_ok=True)
-    json.dump(out, open(CACHE, "w"))
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from headers import dump_json_atomic
+    dump_json_atomic(out, CACHE)
 
 
 def load_vtables():

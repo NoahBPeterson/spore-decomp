@@ -45,7 +45,8 @@ def rank():
         if ins.mnemonic == "ret":
             break
     order = sorted(slot, key=lambda n: -slot[n])  # highest address (closest to ebp) first
-    json.dump({"order": order, "slot": slot}, open(CACHE, "w"), indent=0)
+    from imgcache import _atomic_write   # concurrent readers never see a truncated file
+    _atomic_write(CACHE, json.dumps({"order": order, "slot": slot}, indent=0).encode())
     print("ranked %d names; highest slot first: %s ..." % (len(order), " ".join(order[:12])))
 
 def load():
