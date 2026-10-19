@@ -1,5 +1,5 @@
 00962ff0 FUN_00962ff0 # unnamed GetResourceDescriptor + index-buffer factory helper
-00963060 FUN_00963060 # card name EA::UTFWin::CreateIndexBuffer<cMallocAlloc>
+00963060 ?FUN_00963060@@YAHHHHHHH@Z  # FUN_00963060 migrated from s00962ff0 (verbatim, slice spelling)
 009630e0 FUN_009630e0 # unnamed index-buffer append/copy path
 009634c0 ?GetEventMask@Btn@@QAEHXZ  # Btn::GetEventMask migrated from s00962ff0 (verbatim, slice spelling)
 009634f0 ?Ease@EaseFx@@QAEOM@Z  # EaseFx::Ease migrated from s00962ff0 (verbatim, slice spelling)
