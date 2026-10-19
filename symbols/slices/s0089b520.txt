@@ -10,6 +10,7 @@
 0089b900 ?Justify@Typesetter@Text@EA@@QAEXXZ  # EA::Text::Typesetter::Justify migrated from s0089b520
 0089ba90 ?UIntVec_assign@@YIAAU?$cvec@I@Text@EA@@PAU123@HABU123@@Z  # UIntVec_assign migrated from s0089b520 (verbatim, slice spelling)
 0089bc80 ?UShortVec_assign@@YIAAU?$cvec@G@Text@EA@@PAU123@HABU123@@Z  # UShortVec_assign migrated from s0089b520 (verbatim, slice spelling)
+0089bdb0 ?GlyphLayoutInfoVec_resize@@YIXPAU?$ResizableVec@UGlyphLayoutInfo_s0089_b520@Text@EA@@@@HI@Z  # GlyphLayoutInfoVec_resize migrated from s0089b520 (verbatim, slice spelling)
 0089be20 ?resize@FixedRunVec@Text@EA@@QAEXI@Z  # FixedRunVec::resize migrated from s0089b520 (verbatim, slice spelling)
 0089bea0 ?AddRectangleToRectangleSet@@YAXPAURectangle@Text@EA@@PAURectSet@23@@Z  # AddRectangleToRectangleSet migrated from s0089b520 (verbatim, slice spelling)
 0089bf70 ??0LineLayout_s0089_b520@Text@EA@@QAE@ABU012@@Z  # LineLayout_s0089_b520::LineLayout migrated from s0089b520 (verbatim, slice spelling)

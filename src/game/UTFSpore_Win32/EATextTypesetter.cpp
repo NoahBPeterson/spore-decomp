@@ -295,6 +295,26 @@ struct Typesetter_s0089_b520 {
 }
 }
 unsigned CharTypeStringRFindFirstNotOf(const wchar_t* pEnd, const wchar_t* pBegin, const wchar_t* pSet, const wchar_t* pSetEnd);   // 0x00897a60 (cdecl)
+template <typename T>
+struct ResizableVec {
+    T* mpBegin; T* mpEnd; T* mpCapacity;
+    void insert(T* pos, unsigned n, const T& v);   // fill-insert (out of line)
+    void erase(T* first, T* last);                 // out of line
+    void resize(unsigned n) { DoResize(n); }
+    // resize body; force-inlined so the 0x0089bdb0 wrapper below carries it
+    __forceinline void DoResize(unsigned n)
+    {
+        T* b = mpBegin;
+        if (n > (unsigned)(mpEnd - b)) {
+            T v;
+            memset_zero(&v);
+            insert(mpEnd, n - (mpEnd - b), v);
+            return;
+        }
+        erase(b + n, mpEnd);
+    }
+    static void memset_zero(T* p) { unsigned* q = (unsigned*)p; for (unsigned i = 0; i < sizeof(T) / 4; ++i) q[i] = 0; }
+};
 void EA::Text::FixedRunVec::erase(EA::Text::RunInfo_s0089_b520* first, EA::Text::RunInfo_s0089_b520* last)
 {
     extern EA::Text::RunInfo_s0089_b520* RunInfoCopy(EA::Text::RunInfo_s0089_b520* a, EA::Text::RunInfo_s0089_b520* b, EA::Text::RunInfo_s0089_b520* c);   // 0x00705250 (cdecl do_copy)
@@ -736,6 +756,10 @@ EA::Text::cvec<uint32_t>& __fastcall UIntVec_assign(EA::Text::cvec<uint32_t>* se
 // @ 0x0089bc80
 EA::Text::cvec<uint16_t>& __fastcall UShortVec_assign(EA::Text::cvec<uint16_t>* self, int, const EA::Text::cvec<uint16_t>& x)
 { return self->DoAssign(x); }
+
+// @ 0x0089bdb0
+void __fastcall GlyphLayoutInfoVec_resize(ResizableVec<EA::Text::GlyphLayoutInfo_s0089_b520>* self, int, unsigned n)
+{ self->DoResize(n); }
 
 // @ 0x0089be20
 void EA::Text::FixedRunVec::resize(unsigned n)
