@@ -27,7 +27,8 @@ extern "C" int   __cdecl ReadBigEndian(void*, int);       // 0x0092c270
 extern "C" int   __cdecl DecodeUnchecked(int, int, void*);// 0x0092c340
 extern "C" void* __cdecl EastlInsert(void*, const void*, unsigned); // 0x011e0744
 void* __cdecl op_delete(void*);                            // 0x00f47380
-void* __cdecl op_new__(void*, int, unsigned);              // 0x011e073e
+void* __cdecl memset_thunk(void*, int, unsigned);          // 0x011e073e (memset)
+void* __cdecl operator_new_named(unsigned int size, const char* name, int a, int b, int c, int d); // 0x00f473a0
 
 // ---------------------------------------------------------------- refpack glue
 // @ 0x0092c9f0
@@ -277,47 +278,312 @@ void UInt64ToStrW2(int lo, int hi, uint16_t* out, int base)
     *o = 0;
 }
 
-// @ 0x0092cd20  (character-bitmask substring matcher - approximated)
+// @ 0x0092cd20
 uint8_t* BitmaskFind(uint8_t* s, uint8_t* sub, uint32_t** out)
 {
-    unsigned mask = 0, len = 0;
-    uint8_t* n = sub;
-    while (*n) { mask |= 0x80000000u >> (*n & 0x1f); ++len; ++n; }
-    uint8_t* p = s;
-    while (*p) {
-        if ((int)(mask << (*p & 0x1f)) < 0) {
-            for (unsigned i = 0; i < len; ++i) {
-                if (sub[i] == *p) {
-                    *out = 0;
-                    return 0;
-                }
-            }
-        }
-        ++p;
+    if (s == 0) {
+        s = (uint8_t*)*out;
+        if (s == 0)
+            return 0;
     }
-    *out = 0;
-    return 0;
+    uint32_t mask = 0;
+    uint32_t n = 0;
+    for (uint8_t* d = sub; *d != 0; ++d) {
+        mask |= 0x80000000u >> (*d & 0x1f);
+        ++n;
+    }
+    for (;;) {
+        if (*s == 0) {
+            *out = 0;
+            return 0;
+        }
+        if ((int32_t)(mask << (*s & 0x1f)) >= 0)
+            break;
+        uint32_t i;
+        for (i = 0; i < n && sub[i] != *s; ++i) { }
+        if (i >= n)
+            break;
+        ++s;
+    }
+    uint8_t* token = s;
+    for (;;) {
+        if (*s == 0) {
+            *out = 0;
+            return token;
+        }
+        if ((int32_t)(mask << (*s & 0x1f)) < 0 && n != 0) {
+            uint32_t i = 0;
+            do {
+                if (sub[i] == *s) {
+                    *s = 0;
+                    *out = (uint32_t*)(s + 1);
+                    return token;
+                }
+                ++i;
+            } while (i < n);
+        }
+        ++s;
+    }
 }
 
 // ---------------------------------------------------------------- large cores (partial)
+int __cdecl Refpack_iCompress(int, int, int, int, int, int);
+void __cdecl WriteToBigEndian(void* dst, unsigned value, int size); // 0x0092c2d0
+void* operator new[](unsigned int size, const char* name, int a, int b, int c, int d); // 0x00f473a0
+void operator delete[](void*);                                      // 0x00f47380
 // @ 0x0092c8e0
-__declspec(noinline) int Refpack_DeflateBuf(int dst, int dstEnd, int src, int srcLen, int flag)
+int __cdecl Refpack_DeflateBuf(int dst, int dstEnd, int src, int srcLen, int flag)
 {
-    (void)dst; (void)dstEnd; (void)src; (void)srcLen; (void)flag;
-    return 0;
+    (void)dstEnd;
+    unsigned int hdr = 0x10fb;
+    int hsize = 3;
+    int maxOff = 0x1ffff;
+    if (srcLen >= 0x1000000) { hdr = 0x90fb; hsize = 4; }
+    if ((flag & 1) == 0) { hdr |= 0x4000; maxOff = 0x3fff; }
+    uint32_t* hash = new("EACompression/HashTable/uint[]", 0, 0, 0, 0) uint32_t[0x10000];
+    uint32_t* link = new("EACompression/Link/uint[]", 0, 0, 0, 0) uint32_t[maxOff + 1];
+    int r;
+    if (dst != 0) {
+        *(unsigned short*)dst = _byteswap_ushort((unsigned short)hdr);
+        WriteToBigEndian((void*)(dst + 2), srcLen, hsize);
+        r = Refpack_iCompress(dst + 2 + hsize, src, srcLen, maxOff, (int)hash, (int)link);
+    } else {
+        r = Refpack_iCompress(0, src, srcLen, maxOff, (int)hash, (int)link);
+    }
+    operator delete[](hash);
+    operator delete[](link);
+    return r + hsize + 2;
 }
 
 // @ 0x0092c510
-__declspec(noinline) int Refpack_iCompress(int a1, int a2, int a3, int a4, int a5, int a6)
+int __cdecl Refpack_iCompress(int dst, int src, int srcLen, int maxOff, int hash, int link)
 {
-    (void)a1; (void)a2; (void)a3; (void)a4; (void)a5; (void)a6;
-    return 0;
+    uint8_t* _Src = (uint8_t*)src;
+    uint8_t* cur = (uint8_t*)src;
+    uint8_t* out = (uint8_t*)dst;
+    uint32_t* hashT = (uint32_t*)hash;
+    uint32_t* linkT = (uint32_t*)link;
+    uint32_t uMaxOff = (uint32_t)maxOff;
+    uint32_t lit = 0;
+    uint32_t remain = (uint32_t)(srcLen - 4);
+
+    memset_thunk(hashT, -1, 0x40000);
+    for (;;) {
+        if ((int)remain < 0) {
+            uint32_t n = lit + 4 + remain;
+            while (3 < n) {
+                uint32_t chunk = n & 0xfffffffc;
+                if (0x70 < (int)chunk) chunk = 0x70;
+                n -= chunk;
+                if (dst != 0) {
+                    *out = (uint8_t)((chunk >> 2) - 0x21);
+                    EastlInsert(out + 1, _Src, chunk);
+                }
+                _Src += chunk;
+                out += chunk + 1;
+            }
+            if (dst != 0) *out = (uint8_t)(n - 4);
+            out += 1;
+            if (n != 0) {
+                if (dst != 0) EastlInsert(out, _Src, n);
+                out += n;
+            }
+            return (int)(out - (uint8_t*)dst);
+        }
+
+        uint32_t bestOff = 0;
+        uint32_t bestLen = 2;
+        uint32_t bestCode = 2;
+        uint32_t maxCmp = remain;
+        if (0x403 < (int)remain) maxCmp = 0x404;
+        uint32_t h = ((uint32_t)cur[0] << 8 | cur[2]) ^ ((uint32_t)cur[1] << 4);
+        uint32_t cand = hashT[h];
+        uint32_t pos = (uint32_t)(cur - (uint8_t*)src);
+        int32_t d = (int32_t)(pos - uMaxOff);
+        uint32_t start = d < 1 ? 0 : (uint32_t)d;
+        uint32_t uVar11 = cand;
+
+        if ((int)start <= (int)cand) {
+            do {
+                uint8_t* p = (uint8_t*)src + uVar11;
+                if (cur[bestLen] == p[bestLen] && maxCmp != 0) {
+                    uint32_t off = (uint32_t)(cur - p);
+                    uint32_t i = 0;
+                    do {
+                        uint8_t* q = p + off;
+                        uint8_t c = *p;
+                        p++;
+                        if (*q != c) break;
+                        i++;
+                    } while (i < maxCmp);
+                    if (bestLen < i) {
+                        uint32_t off1 = off - 1;
+                        uint32_t code;
+                        if (off1 < 0x400 && i < 0xb) code = 2;
+                        else if (0x3fff < off1 || (code = 3, 0x43 < i)) code = 4;
+                        if ((bestLen - bestCode) + 4 < (i - code) + 4) {
+                            bestLen = i;
+                            bestCode = code;
+                            bestOff = off1;
+                            if (0x403 < i) break;
+                        }
+                    }
+                }
+                uVar11 = linkT[uVar11 & uMaxOff];
+            } while ((int)start <= (int)uVar11);
+
+            if ((bestCode < bestLen) && (3 < (int)remain)) {
+                while (3 < lit) {
+                    uint32_t chunk = lit & 0xfffffffc;
+                    if (0x70 < (int)chunk) chunk = 0x70;
+                    lit -= chunk;
+                    if (dst != 0) {
+                        *out = (uint8_t)((chunk >> 2) - 0x21);
+                        EastlInsert(out + 1, _Src, chunk);
+                    }
+                    _Src += chunk;
+                    out += chunk + 1;
+                }
+                uint8_t cLen = (uint8_t)bestLen;
+                uint8_t cLit = (uint8_t)lit;
+                uint8_t cOff = (uint8_t)bestOff;
+                if (bestCode == 2) {
+                    if (dst == 0) out += 2;
+                    else {
+                        *out = (uint8_t)(((bestOff >> 3) & 0xe0) + (cLen - 3) * 4 + cLit);
+                        out[1] = cOff;
+                        out += 2;
+                    }
+                } else {
+                    uint8_t cOffHi = (uint8_t)(bestOff >> 8);
+                    if (bestCode == 3) {
+                        if (dst == 0) out += 3;
+                        else {
+                            *out = (uint8_t)(cLen + 0x7c);
+                            out[1] = (uint8_t)(cOffHi + cLit * 0x40);
+                            out[2] = cOff;
+                            out += 3;
+                        }
+                    } else if (dst == 0) {
+                        out += 4;
+                    } else {
+                        *out = (uint8_t)(((bestLen - 5 >> 6) & 0xfc) + ((bestOff >> 0xc) & 0xf0) + cLit - 0x40);
+                        out[1] = cOffHi;
+                        out[2] = cOff;
+                        out[3] = (uint8_t)(bestLen - 5);
+                        out += 4;
+                    }
+                }
+                if (lit != 0) {
+                    if (dst != 0) EastlInsert(out, _Src, lit);
+                    out += lit;
+                }
+                lit = 0;
+                uint32_t cnt = bestLen;
+                if (0 < (int)cnt) {
+                    do {
+                        h = ((uint32_t)cur[0] << 8 | cur[2]) ^ ((uint32_t)cur[1] << 4);
+                        cur++;
+                        linkT[pos & uMaxOff] = hashT[h];
+                        hashT[h] = pos;
+                        pos++;
+                        cnt--;
+                    } while (cnt != 0);
+                }
+                remain -= bestLen;
+                _Src = cur;
+                continue;
+            }
+        }
+        lit++;
+        linkT[pos & uMaxOff] = cand;
+        cur++;
+        remain -= 1;
+        hashT[h] = pos;
+    }
 }
 
 // @ 0x0092d120
-__declspec(noinline) unsigned long long ParseInt64(uint8_t* s, uint8_t** end, unsigned base, char clamp)
+unsigned long long ParseInt64(uint8_t* s, uint8_t** end, unsigned base, char clamp)
 {
-    (void)s; (void)base; (void)clamp;
-    if (end) *end = s;
-    return 0;
+    uint8_t* p = s;
+    uint8_t c = *p;
+    uint8_t sign = '+';
+    bool anyDigit = false;
+    bool overflow = false;
+    unsigned long long number = 0;
+
+    while (isspace(c))
+        c = *++p;
+    if (c == '-' || c == '+') {
+        sign = c;
+        c = *++p;
+    }
+    if ((int)base < 0 || base == 1 || base > 0x24) {
+        if (end) *end = s;
+        return 0;
+    }
+    if (base == 0) {
+        if (c != '0') {
+            base = 10;
+        } else if (p[1] == 'x' || p[1] == 'X') {
+            base = 16;
+        } else {
+            base = 8;
+        }
+    }
+    if (base == 16 && c == '0' && (p[1] == 'x' || p[1] == 'X')) {
+        c = p[2];
+        p += 2;
+    }
+
+    unsigned long long limit = 0xFFFFFFFFFFFFFFFFull / base;
+    unsigned long long rem = 0xFFFFFFFFFFFFFFFFull % base;
+    for (;;) {
+        unsigned digit;
+        if (isdigit(c)) {
+            digit = (unsigned)(int)(char)c - 0x30;
+        } else if (isalpha(c)) {
+            digit = (unsigned)toupper(c) - 0x37;
+        } else {
+            break;
+        }
+        if (digit >= base)
+            break;
+        anyDigit = true;
+        if (number < limit || (number == limit && digit <= rem))
+            number = number * base + digit;
+        else
+            overflow = true;
+        c = *++p;
+    }
+
+    if (!anyDigit) {
+        p = s;
+    } else if (overflow) {
+        if (clamp != 0)
+            number = 0xFFFFFFFFFFFFFFFFull;
+        else if (sign == '-')
+            number = 0x8000000000000000ull;
+        else
+            number = 0x7FFFFFFFFFFFFFFFull;
+        *_errno() = 0x22;
+    } else if (clamp == 0) {
+        if (sign == '-') {
+            if (number > 0x8000000000000000ull) {
+                number = 0x8000000000000000ull;
+                *_errno() = 0x22;
+            }
+        } else if (sign == '+') {
+            if (number > 0x7FFFFFFFFFFFFFFFull) {
+                number = 0x7FFFFFFFFFFFFFFFull;
+                *_errno() = 0x22;
+            }
+        }
+    }
+
+    if (end) *end = p;
+    if (sign == '-')
+        number = (unsigned long long)(-(long long)number);
+    return number;
 }

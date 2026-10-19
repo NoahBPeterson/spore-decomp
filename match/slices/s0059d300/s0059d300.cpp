@@ -3,6 +3,7 @@
 #include "types.h"
 #include <intrin.h>
 #include <string.h>
+#include <math.h>
 
 typedef unsigned int size_t;
 void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
@@ -73,6 +74,7 @@ public:
     void Init(void* pModelWorld, bool flag);          // 0x0059c060
     bool HandleAnimatedEvent(void* e);                // 0x0059d300
     void Update(unsigned int msec);                   // 0x0059d610
+    bool IsPlayingAnimation(unsigned int id);         // 0x0059cd20
     char pad_10[0x48 - 0x10];
 };
 
@@ -217,21 +219,306 @@ cSPEditorAnimatedEventInfo::cSPEditorAnimatedEventInfo()
 }
 
 // ===========================================================================
+// Support types for the three large bodies below (retail layouts).
+namespace SP {
+
+// Object stored at CreatureData::mpModelObj (+0x08); the +0x170 field is the
+// "current animation sequence" slot written by HandleAnimatedEvent.
+struct AnimModelObj {
+    virtual void  v0(); virtual void  v1();
+    virtual void* v2(unsigned int, int);      // +0x08
+    virtual void  v3(void*, int);             // +0x0c
+    virtual void  v4(); virtual void  v5();
+    virtual void  v6(void*);                  // +0x18
+    virtual void  v7();
+    virtual void  v8(void*, int);             // +0x20
+    virtual void  v9(void*, float);           // +0x24
+    virtual void  vA(); virtual void  vB(); virtual void vC(); virtual void vD();
+    virtual void  vE(void*, float);           // +0x38
+};
+
+// cSPEditorAnimatedCreatureData: the per-creature entry stored in the map.
+struct CreatureData {
+    char pad0[8];
+    AnimModelObj* mpModelObj;                 // +0x08
+    char pad0c[0x20 - 0x0c];
+    float mTimer;                             // +0x20
+    char pad24[0x54 - 0x24];
+    int   mField54;                           // +0x54
+    char pad58[0x170 - 0x58];
+    int   mField170;                          // +0x170
+    bool  HasAnyAnimation();                  // 0x0059ae80
+    void  SetPlayState(unsigned int);         // 0x0059aca0
+    void  SetLastAnimationPlayed(unsigned int); // 0x007cd950
+};
+
+// The red-black map living at this+0x08 (its anchor sentinel is this+0x0c).
+struct CreatureTree {
+    char  pad0[4];
+    void* mpAnchor;                           // +0x04
+    void** Find(void** outIt, const void* key);   // 0x00e5c780
+    void** Index(const void* key);                // 0x0059c740
+};
+
+// Output of cSPEditorAnimationManager::GetAnimation.
+struct AnimResultOut { unsigned int mID; unsigned int mFourCC; bool mFlag; };
+
+struct RBNode {
+    void* mpLeft;   // +0x00
+    void* mpParent; // +0x04
+    void* mpRight;  // +0x08
+    char  mColor;   // +0x0c
+    char  pad0d[3];
+    void* mpValue;  // +0x10
+};
+
+extern bool  IsPlayingAnimationImpl(void* self, unsigned int id);     // 0x0059cd20
+extern void  RBTreeIncrement(void* node);                             // 0x00921580
+extern void  CopyRange(void* first, void* last, void* dst);           // 0x0062ffd0
+extern void  Matrix3FromQuaternion(void* out, const void* quat);      // 0x0059c190
+extern void  CreatureDataUpdate(void* c, unsigned int msec);          // 0x0059b4b0
+extern float kFOne;       // 0x01485720
+extern float kFSlow;      // 0x013f5698
+extern float kFNegOne_;   // 0x013eb1bc
+extern float kF2Pi;       // 0x0150dff4
+extern float kFPi;        // 0x013f64d4
+extern float kFMinDelta;  // 0x013ec480
+extern const double kD2To32;      // 0x013f6050
+extern const double kDMilli;      // 0x013f6560
+extern float kFMilli;             // 0x013f9428
+extern float kF2To32;             // 0x013f4fd0
+extern void* GetManagerImpl();                                    // 0x0067dcd0
+extern void* PropertyManagerImpl();                               // 0x0067de30
+extern void  DoInsertValueImpl(void* end, const void* value);     // 0x004b6000
+extern void  FreeAllocImpl(void* p);                              // 0x00f47380
+extern unsigned int kResFilterField4;   // 0x00b1b104
+extern unsigned int kResFilterGroup;    // 0x0150e79c
+
+}  // namespace SP
+
+// ===========================================================================
 // @ 0x0059d300
 bool SP::cSPEditorAnimatedCreatureManager::HandleAnimatedEvent(void* e)
 {
-    (void)e;
-    return false;
+    unsigned int creatureID = *(unsigned int*)((char*)e + 0x0c);
+    CreatureData* cr = 0;
+
+    if (*(void**)((char*)this + 0x38) != 0) {
+        CreatureTree* tree = (CreatureTree*)((char*)this + 0x08);
+        void* it = 0;
+        void** found = tree->Find(&it, &creatureID);
+        if (*found != (void*)((char*)this + 0x0c))
+            cr = *(CreatureData**)tree->Index(&creatureID);
+    }
+    if (*(void**)((char*)this + 0x3c) == 0) return false;
+    if (cr == 0) return false;
+    if (cr->mpModelObj == 0) return false;
+
+    AnimResultOut res;
+    res.mID = 0;
+    res.mFourCC = 0;
+    float speed = SP::kFOne;      // kFOne = 1.0f
+    res.mFlag = true;
+
+    unsigned int event = *(unsigned int*)((char*)e + 0x18);
+    bool bForced = false;
+    switch (event) {
+    case 0x0eef6cd0: case 0xb3a731ca: case 0x89d6008b: case 0x8b2f58fe:
+    case 0xc1339ba9: case 0xc4b6e6e0: case 0xd0c86c9a: case 0xe646113d:
+    case 0xe7782027: case 0xf10ff9fd: case 0xf77c2e23: case 0x06035c10:
+    case 0x4f21fc3b: case 0x2949954d: case 0x22b31636: case 0x167d2885:
+    case 0x43773b7b: case 0x6820bfd9: case 0x5c4d694c: case 0x622c20c4:
+    case 0x70842ef6: case 0x7f034f46:
+        speed = SP::kFSlow;
+        // fall through: these events also force the animation
+    case 0xe12a2ae7: case 0xbd989484: case 0xbac2d74f: case 0xed65cbf6:
+    case 0xe5025cd9: case 0x1d9547b2: case 0x248dca26: case 0x3088ceca:
+    case 0x3bd9a6f8: case 0x6581b78e: case 0x6df196fd:
+        bForced = true;
+        break;
+    default:
+        break;
+    }
+
+    bool hasAnim = cr->HasAnyAnimation();
+    if (!hasAnim && !bForced) {
+        if (IsPlayingAnimation(creatureID)) return false;
+    }
+
+    cSPEditorAnimationManager* mgr =
+        *(cSPEditorAnimationManager**)((char*)this + 0x3c);
+    bool got = mgr->GetAnimation((SP::AnimRequest*)e, (SP::AnimResult*)&res, (SP::AnimContext*)cr);
+
+    bool force =
+        (*(unsigned int*)((char*)e + 0x18) == 0x04878ee8) &&
+        (*(unsigned int*)((char*)e + 0x28) != 0xffffffff);
+
+    unsigned int animID;
+    bool bPlay;
+    if (!got) {
+        if (!force) return false;
+        animID = *(unsigned int*)((char*)e + 0x28);
+        bPlay = true;
+    } else {
+        animID = res.mID;
+        bPlay = res.mFlag;
+    }
+
+    cr->SetLastAnimationPlayed(animID);
+    cr->SetPlayState(bPlay ? 1u : 0u);
+
+    AnimModelObj* obj = cr->mpModelObj;
+    cr->mField170 = (int)res.mFourCC;
+
+    void* h = obj->v2(animID, 0);
+    obj->v3(h, 1);
+    obj->v6(h);
+    obj->vE(h, speed);
+    if (*(unsigned char*)((char*)e + 0x24) != 0) {
+        obj->v8(h, 1);
+        obj->v9(h, SP::kFNegOne_);
+    }
+    return h != 0;
 }
 
 // @ 0x0059d610
 void SP::cSPEditorAnimatedCreatureManager::Update(unsigned int msec)
 {
-    (void)msec;
+    // Two independent msec->seconds conversions (float and double) as emitted.
+    float step = (float)msec * SP::kFMilli;
+    float dt   = (float)((double)msec * SP::kDMilli);
+    if (dt < SP::kFMinDelta) dt = SP::kFMinDelta;
+
+    if (*(void**)((char*)this + 0x38) == 0) return;
+
+    // --- Phase 1: advance each creature timer; fire + erase when it expires.
+    CreatureData** it  = *(CreatureData***)((char*)this + 0x24);
+    CreatureData** end = *(CreatureData***)((char*)this + 0x28);
+    while (it != end) {
+        CreatureData* c = *it;
+        float t = c->mTimer - step;
+        c->mTimer = t;
+        if (t <= 0.0f) {
+            c->mTimer = 0.0f;
+            HandleAnimatedEvent(c);
+            if (it + 1 < end) SP::CopyRange(it + 1, end, it);
+            end = (CreatureData**)((char*)end - 4);
+            *(CreatureData***)((char*)this + 0x28) = end;
+            CreatureData* last = *end;
+            if (last != 0) {
+                // AutoRefCount<CreatureData>::Release (virtual slot 0x08).
+                (*(int(__thiscall**)(void*))((*(char**)last) + 0x08))(last);
+            }
+        } else {
+            ++it;
+        }
+    }
+
+    // --- Phase 2: step each live creature's inner animation.
+    for (SP::RBNode* n = *(SP::RBNode**)((char*)this + 0x10);
+         n != (SP::RBNode*)((char*)this + 0x0c);
+         SP::RBTreeIncrement(n)) {
+        if (n->mpValue == 0) continue;
+        CreatureData* c = (CreatureData*)n->mpValue;
+        if (c->mpModelObj == 0) continue;
+        c->mField54 = 2;
+        SP::CreatureDataUpdate(c, msec);
+    }
+
+    // --- Phase 3: push the time step into the animation manager.
+    {
+        void* mgr = *(void**)((char*)this + 0x38);
+        (*(void(__thiscall**)(void*, float, int))((*(char**)mgr) + 0x24))(mgr, dt, 0);
+    }
+
+    // --- Phase 4: recompute each creature's yaw from its transform.
+    for (SP::RBNode* n = *(SP::RBNode**)((char*)this + 0x10);
+         n != (SP::RBNode*)((char*)this + 0x0c);
+         SP::RBTreeIncrement(n)) {
+        if (n->mpValue == 0) continue;
+        CreatureData* c = (CreatureData*)n->mpValue;
+        if (c->mpModelObj == 0) continue;
+        char* x = (char*)c->mpModelObj;
+        if (*(void**)(x + 0x08) == 0) continue;
+
+        char* dst = (char*)c;
+        *(unsigned int*)(dst + 0x38) = *(unsigned int*)(x + 0x04);
+        *(unsigned int*)(dst + 0x3c) = *(unsigned int*)(x + 0x08);
+        *(unsigned int*)(dst + 0x40) = *(unsigned int*)(x + 0x0c);
+
+        float m[3];
+        SP::Matrix3FromQuaternion(m, x + 0x10);
+        float yaw = *(float*)(dst + 0x48);
+        float ang = (float)atan2((double)m[0], (double)yaw);
+        ang = (float)fmod((double)ang, (double)SP::kF2Pi);
+        if (ang >= SP::kFPi) ang -= SP::kF2Pi;
+        ang = (float)fmod((double)(ang), (double)SP::kF2Pi);
+        if (ang >= SP::kFPi) ang -= SP::kF2Pi;
+        *(float*)(dst + 0x48) = ang + yaw;
+    }
 }
 
 // @ 0x0059db40
-void cSPEditorAnimationManager::Init() {}
+void cSPEditorAnimationManager::Init()
+{
+    void* rm = GetManagerImpl();
+
+    // Output vector of ResourceKeys (12 bytes each) filled by the manager.
+    void* outBegin = 0;
+    void* outEnd = 0;
+    void* outCap = 0;
+
+    // Resource-list filter argument (vptr + two fields).
+    struct ResFilter {
+        void* mpVtbl;
+        unsigned int m4;
+        unsigned int m8;
+    } filter;
+    filter.m8 = SP::kResFilterGroup;
+    filter.m4 = SP::kResFilterField4;
+    filter.mpVtbl = (void*)&outBegin;   // placeholder; see note below
+
+    // rm->v38(res&, filter&, 0) -- fill outBegin/outEnd.
+    typedef void (__thiscall *V38)(void*, void**, void*, int);
+    ((V38)(*(void***)rm)[0x38 / 4])(rm, &outBegin, &filter, 0);
+
+    int count = (int)((char*)outEnd - (char*)outBegin) / 0x0c;
+    for (int i = 0; i < count; ++i) {
+        char* elem = (char*)outBegin + i * 0x0c;
+        unsigned int key0 = *(unsigned int*)(elem + 0x00);
+        unsigned int key2 = *(unsigned int*)(elem + 0x08);
+
+        void* temp = 0;
+        void* pm = PropertyManagerImpl();
+        typedef char (__thiscall *V2C)(void*, unsigned int, unsigned int, void**);
+        char ok = ((V2C)(*(void***)pm)[0x2c / 4])(pm, key0, key2, &temp);
+        if (ok != 0) {
+            // mAnimations.push_back(AutoRefCount(temp))
+            void** pend = (void**)((char*)this + 0x10);
+            if (*pend < *(void**)((char*)this + 0x14)) {
+                void** slot = (void**)*pend;
+                *(void**)((char*)this + 0x10) =
+                    (void*)((char*)slot + 4);
+                if (slot != 0) {
+                    *slot = temp;
+                    if (temp != 0) {
+                        (*(int(__thiscall**)(void*))(*(char**)temp))(temp);
+                    }
+                }
+            } else {
+                DoInsertValueImpl(*pend, &temp);
+            }
+        }
+        if (temp != 0) {
+            (*(int(__thiscall**)(void*))((*(char**)temp) + 0x04))(temp);
+        }
+    }
+
+    // ~SpVector: free the allocation if it owns one.
+    if (outBegin != 0 && *((void**)outBegin - 1) != 0) {
+        FreeAllocImpl(outBegin);
+    }
+}
 
 // @ 0x0059dc70
 // ---------------------------------------------------------------------------

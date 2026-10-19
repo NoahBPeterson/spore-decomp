@@ -1,3 +1,0 @@
-0059d300  782  cSPEditorAnimatedCreatureManager::HandleAnimatedEvent: skeleton (event switch body omitted)
-0059d610  553  cSPEditorAnimatedCreatureManager::Update: skeleton
-0059db40  298  cSPEditorAnimationManager::Init: skeleton (resource-list iteration omitted)

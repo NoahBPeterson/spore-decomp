@@ -2,6 +2,7 @@
 // /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast module.
 #include "types.h"
 #include <xmmintrin.h>
+#include <math.h>
 
 struct Float4 { float x, y, z, w; };
 
@@ -164,6 +165,15 @@ void* cSPEditorBudget::AsInterface(unsigned int id) {
 // ---------------------------------------------------------------------------
 extern void  FUN_00811ad0(void* layout, int one);   // cSPUILayout::Shutdown
 extern void* SP_MessageServer();                    // 0x0067dcc0
+extern void  __fastcall FUN_00425990(void* vec);    // 0x00425990 (SimpleVectorU free)
+extern void  __fastcall FUN_004b5440(void* list);   // 0x004b5440 (WinList dtor)
+extern void  __fastcall EA_RefCount_Release(void* o); // 0x00453540 (RefCountTemplate<int>::Release)
+extern int   FUN_00458b80(int id);                  // 0x00458b80
+
+// absolute vtable / constant addresses (relocations are masked by the checker)
+extern char V_013eb394[], V_013eb384[], V_013eb938[], V_013f1ab0[];
+extern char V_013ec458[], V_013ec584[], V_013ec574[], V_013ec564[];
+extern float kOne;                                  // 0x01485720
 
 struct MessageServer {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
@@ -191,24 +201,112 @@ void cSPEditorBudget::Shutdown() {
     ms->Send(this, 0x3150c27, 0xffffd8f1);
 }
 
-// @ 0x004575d0, 0x00457840, 0x004579a0, 0x00457af0: large bodies
-// (construct/blow-away/Init) only approximated.
-void* FUN_004575d0(int* self) {
-    (void)self;
-    return 0;
-}
-void FUN_00457840(int* self) {
-    self[0] = 0x13ec584;
-    self[1] = 0x13ec574;
-    self[2] = 0x13ec564;
-    for (unsigned int it = (unsigned int)self[0x16]; it < (unsigned int)self[0x17]; it += 4) {
+// @ 0x004575d0
+void* __fastcall FUN_004575d0(int* self) {
+    self[0] = (int)V_013eb394;
+    self[0] = (int)V_013eb384;
+    self[1] = (int)V_013eb938;
+    self[1] = (int)V_013f1ab0;
+    self[2] = (int)V_013ec458;
+    self[3] = 0;
+    self[0] = (int)V_013ec584;
+    self[1] = (int)V_013ec574;
+    self[2] = (int)V_013ec564;
+    self[4] = 0x3f800000;
+    *(unsigned short*)(self + 5) = 0;
+    self[6] = 0;
+    *(float*)(self + 7) = kBudgetColor[0];
+    *(float*)(self + 8) = kBudgetColor[1];
+    *(float*)(self + 9) = kBudgetColor[2];
+    *(float*)(self + 10) = kBudgetColor[0];
+    *(float*)(self + 11) = kBudgetColor[1];
+    *(float*)(self + 12) = kBudgetColor[2];
+    self[0xd] = 0;
+    if (self[0xd]) {
+        void* o = (void*)self[0xd];
+        (*(void(__thiscall**)(void*))((*(char**)o) + 4))(o);
     }
-    self[2] = 0x13ec458;
-    self[1] = 0x13eb938;
-    self[0] = 0x13eb394;
+    self[0xe] = 0;
+    if (self[0xe]) {
+        int* o = (int*)self[0xe];
+        int r = o[1] + 1;
+        o[1] = o[1] + 1;
+        (void)r;
+    }
+    self[0xf] = 0;
+    if (self[0xf]) {
+        void* o = (void*)self[0xf];
+        (*(void(__thiscall**)(void*))((*(char**)o) + 0))(o);
+    }
+    self[0x10] = 0;
+    self[0x11] = 0;
+    self[0x12] = 0;
+    self[0x13] = 0;
+    self[0x16] = 0;
+    self[0x17] = 0;
+    self[0x18] = 0;
+    self[0x1b] = 0;
+    *((unsigned char*)self + 0x70) = 0;
+    *((unsigned char*)self + 0x71) = 0;
+    return self;
 }
-void FUN_004579a0(int* self) {
-    (void)self;
+
+// @ 0x00457840
+void __fastcall FUN_00457840(int* self) {
+    self[0] = (int)V_013ec584;
+    self[1] = (int)V_013ec574;
+    self[2] = (int)V_013ec564;
+    unsigned int it = (unsigned int)self[0x16];
+    for (; it < (unsigned int)self[0x17]; it += 4) {
+    }
+    FUN_00425990(self + 0x16);
+    FUN_004b5440(self + 0x11);
+    if (self[0x10] != 0) {
+        void* o = (void*)self[0x10];
+        (*(void(__thiscall**)(void*))((*(char**)o) + 4))(o);
+    }
+    if (self[0xf] != 0) {
+        void* o = (void*)self[0xf];
+        (*(void(__thiscall**)(void*))((*(char**)o) + 4))(o);
+    }
+    if (self[0xe] != 0) {
+        EA_RefCount_Release((void*)self[0xe]);
+    }
+    if (self[0xd] != 0) {
+        void* o = (void*)self[0xd];
+        (*(void(__thiscall**)(void*))((*(char**)o) + 8))(o);
+    }
+    self[2] = (int)V_013ec458;
+    self[1] = (int)V_013eb938;
+    self[0] = (int)V_013eb394;
+}
+
+// @ 0x004579a0
+char __fastcall FUN_004579a0(int* self, int, int msg, int* data) {
+    switch (msg) {
+    case 0x3150c27:
+        if (data[4] == *(int*)((char*)self + 0x38)) {
+            void* o = (void*)self[0xe];
+            int r = (*(int(__thiscall**)(void*, int))((*(char**)o) + 4))(o, 0);
+            *(int*)((char*)self + 0x18) = r;
+            float d = (float)(*(int*)((char*)self + 0x58) - r);
+            *(float*)((char*)self + 0x10) = fabsf(d) / kOne;
+        }
+        return 1;
+    case 0x522f9cd: {
+        int r = FUN_00458b80(*data);
+        if (r != 0) {
+            void* o = (void*)self[0xe];
+            int q = (*(int(__thiscall**)(void*, int*, int))((*(char**)o) + 0x10))(o, (int*)(r + 0x40), 0);
+            *((unsigned char*)self + 0x70) = (q == 2) ? 1 : 0;
+        }
+        return 1;
+    }
+    case 0x522f9ce:
+        *((unsigned char*)self + 0x70) = 0;
+        return 1;
+    }
+    return 0;
 }
 // @ 0x00457af0
 void cSPEditorBudget::Init(const void* key, cSPEditorEconomy* economy, unsigned short currency, IWinX* parent, const wchar_t* tooltipText) {

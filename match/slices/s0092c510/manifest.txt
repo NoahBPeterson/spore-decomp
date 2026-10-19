@@ -4,3 +4,4 @@ slices/s0092c510/s0092c510.cpp  ?Refpack_Decompress@@YGIPAGHHIH@Z    0092ca60  /
 slices/s0092c510/s0092c510.cpp  ?Memset32@@YAPAIPAIIH@Z             0092cb00  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0092c510/s0092c510.cpp  ?EcvtCopy@@YAPADNHPAH0PAD@Z         0092ce00  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0092c510/s0092c510.cpp  ?FcvtCopy@@YAPADNHPAH0PAD@Z         0092ce40  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0092c510/s0092c510.cpp  ?Refpack_DeflateBuf@@YAHHHHHH@Z     0092c8e0  /O2 /MD /Gy /EHsc /TP /GS-

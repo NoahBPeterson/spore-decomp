@@ -1,4 +1,0 @@
-00a459d0  628   large constructor; skeleton
-00a45d10  499   large EH destructor; not reconstructed
-00a45f30  111   EH operator_new ctor wrapper; not reconstructed
-00a466d0  139   EH object allocator; not reconstructed

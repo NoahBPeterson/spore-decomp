@@ -9,3 +9,6 @@
 0092d040  16  base-N unsigned formatter wrapper; static-helper eax convention differs
 0092d060  96  signed formatter to UTF-16; static-helper eax convention differs
 0092d0d0  79  unsigned formatter to UTF-16; static-helper eax convention differs
+0092cd20  171  BitmaskFind bitmask tokenizer complete; compiler rotates our leading-delimiter skip loop to a bottom-test do-while where the original keeps the top-test form; flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: PASS]
+0092d120  586  ParseInt64 strtoull-style parser complete (isspace/isdigit/isalpha/toupper via IAT, aulldvrm/allmul overflow logic, clamp + ERANGE); register allocation and loop/branch shape differ; flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: PASS]
+0092c510  936  EA::Refpack::iCompress LZ77/refpack compressor complete: all paths (pending-literal flush, match search with hash-chain walk, 2/3/4-byte match encoding, hash insert), calls memset 0x11e073e + memcpy 0x11e0744 present; frame/regalloc and instruction scheduling differ (/O2); flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: UNSUPPORTED (0/400 valid, fault=400: pointer args hash/link are not set up by the harness)]

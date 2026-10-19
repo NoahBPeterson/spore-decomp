@@ -2,3 +2,6 @@
 00457950  64   AsInterface: QueryInterface id dispatch; /Od branch/local layout not exact
 004581d0  155  Shutdown: layout refcount release and MessageServer sends not reproduced exactly
 00457af0  717  cSPEditorBudget::Init complete (economy/layout/window ARC assigns, 3 message registrations, bar-window loop with money strings, optional tooltip); call and vtable sequence follows the original, /Od frame is 0xdc vs 0x134 (hidden inline slots not reproduced) [equiv: UNSUPPORTED (0/400 valid inputs, deep object graph)]
+004575d0  529  cSPEditorBudget ctor: complete (base/derived vptr chains, currency/wealth/colour/refcount init, 4 inlined ARCv ctor calls, vector/list zeroing, two flag bytes); /Od local-pointer slot assignment differs so 458 vs 529 bytes
+00457840  264  cSPEditorBudget dtor: complete (vector free 0x425990, WinList dtor 0x4b5440, inlined ARCv releases at +0x40/+0x3c/+0x38/+0x34, vptr unwind); /Od frame 0x10 vs 0x3c and local slot assignment differ (239 vs 264 bytes)
+004579a0  329  message handler: complete (ids 0x3150c27/0x522f9cd/0x522f9ce, GetWealth vcall + fabs/div, 0x458b80 lookup + vtbl[0x10] vcall, tooltip flag byte); /Od local layout differs (272 vs 329 bytes)

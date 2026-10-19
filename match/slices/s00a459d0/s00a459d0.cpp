@@ -524,11 +524,206 @@ bool SPAudioVoiceManagerEAPD::StartVoice(int a, int unused, double time, EvPropL
     return result;
 }
 
-// ---- remaining functions (not reconstructed) -------------------------------
-extern "C" int __cdecl Placeholder_459d0() { return 0; }
-extern "C" int __cdecl Placeholder_45d10() { return 0; }
-extern "C" int __cdecl Placeholder_45f30() { return 0; }
-extern "C" int __cdecl Placeholder_466d0() { return 0; }
+// ---- SPAudioSystem (EA::Audio::System) construction / destruction -----------
+// External helper entry points, each reached through its own symbol.  The
+// compiler-generated EH frames of the ctor/dtor are driven by the fact that the
+// 0x15bf58-byte object owns sub-objects with destructors; the source below
+// writes every store and call the original performs.
+extern "C" void __fastcall Base_System_ctor(void*);                    // 0x00a33600
+extern "C" void __fastcall Sub_44fc0(void*, void*, void*);             // 0x00a44fc0
+extern "C" void __fastcall Sub_43c90(void*, void*, void*);             // 0x00a43c90
+extern "C" void __fastcall Sub_42fe0(void*, void*, void*);             // 0x00a42fe0
+extern "C" void __fastcall SystemDtor_Destroy(void*);                  // 0x00a32550
+extern "C" void __cdecl    Msg_RemoveHandler(int, int, int, int, int); // 0x00571db0
+extern "C" void __fastcall Sub_a19d60(void*);                          // 0x00a19d60
+extern "C" int* __cdecl    Eapd_Debug_ObjectError();                   // 0x008de1a0
+
+void* operator new(unsigned, const char*, int, int, int, int);         // 0x00f473a0
+void  operator delete(void*, const char*, int, int, int, int);         // 0x00f47410
+
+extern char DAT_01453e60[], DAT_01453eac[], DAT_01454028[], DAT_01454014[];
+extern char DAT_01453fc8[], DAT_01453fb4[], DAT_01452a18[], DAT_01667bac[];
+extern char DAT_01667bae[], DAT_01403934[], DAT_0145433c[];
+extern float DAT_0166f130, DAT_0166f134, DAT_0166f138, DAT_013eb960;
+extern float DAT_01485720, DAT_01470f1c;
+
+static inline void VCall0(void* p, int off) {
+    typedef void (__thiscall *F)(void*);
+    (*(F*)(*(char**)p + off))(p);
+}
+static inline void VCallN(void* p, int off, int a) {
+    typedef void (__thiscall *F)(void*, int);
+    (*(F*)(*(char**)p + off))(p, a);
+}
+
+struct ASys {
+    ASys();
+    ~ASys();
+    char m_pad[0x15bf58];
+};
+
+// @ 0x00a459d0
+ASys::ASys()
+{
+    char* s = (char*)this;
+    Base_System_ctor(this);
+    *(void**)(s + 0x15bc18) = DAT_01453e60;
+    *(void**)(s + 0x15bc1c) = DAT_01453eac;
+    *(void**)(s + 0x00)      = DAT_01454028;
+    *(void**)(s + 0x04)      = DAT_01454014;
+    *(void**)(s + 0x15bc18) = DAT_01453fc8;
+    *(void**)(s + 0x15bc1c) = DAT_01453fb4;
+    *(unsigned*)(s + 0x15bc20) = 0;
+    *(unsigned*)(s + 0x15bc24) = 0;
+    *(unsigned*)(s + 0x15bc28) = 0;
+    *(unsigned*)(s + 0x15bc2c) = 0;
+    *(unsigned*)(s + 0x15bc30) = 0;
+    *(void**)(s + 0x15bc34) = DAT_01452a18;
+    *(unsigned*)(s + 0x15bc38) = 0;
+    *(unsigned*)(s + 0x15bc3c) = 0;
+    *(unsigned char*)(s + 0x15bc40) = 1;
+    *(unsigned char*)(s + 0x15bc41) = 1;
+    *(unsigned char*)(s + 0x15bc42) = 0;
+    *(float*)(s + 0x15bc44) = DAT_0166f130;
+    *(float*)(s + 0x15bc48) = DAT_0166f134;
+    *(float*)(s + 0x15bc4c) = DAT_0166f138;
+    *(float*)(s + 0x15bc50) = DAT_0166f130;
+    *(float*)(s + 0x15bc54) = DAT_0166f134;
+    *(float*)(s + 0x15bc58) = DAT_0166f138;
+    *(float*)(s + 0x15bc5c) = DAT_0166f130;
+    *(float*)(s + 0x15bc60) = DAT_0166f134;
+    *(float*)(s + 0x15bc64) = DAT_0166f138;
+    *(float*)(s + 0x15bc68) = DAT_0166f130;
+    *(float*)(s + 0x15bc6c) = DAT_0166f134;
+    *(float*)(s + 0x15bc70) = DAT_0166f138;
+    *(unsigned*)(s + 0x15bc74) = 0;
+    *(unsigned*)(s + 0x15bc78) = 0;
+    *(unsigned*)(s + 0x15bc7c) = 0;
+    *(unsigned*)(s + 0x15bc80) = 0;
+    *(float*)(s + 0x15bcd8) = 0.0f;
+    *(unsigned*)(s + 0x15bc84) = 0;
+    *(unsigned*)(s + 0x15bc88) = 0;
+    *(unsigned*)(s + 0x15bc8c) = 0;
+    *(unsigned*)(s + 0x15bc90) = 0;
+    *(unsigned*)(s + 0x15bc94) = 0xffffffffu;
+    *(unsigned*)(s + 0x15bc98) = 0xffffffffu;
+    *(unsigned*)(s + 0x15bc9c) = 0xffffffffu;
+    *(unsigned*)(s + 0x15bca0) = 0xffffffffu;
+    *(float*)(s + 0x15bcdc) = DAT_013eb960;
+    *(unsigned*)(s + 0x15bce0) = 0;
+    *(unsigned*)(s + 0x15bce4) = 0;
+    *(unsigned*)(s + 0x15bce8) = 0;
+    *(unsigned*)(s + 0x15bcec) = 0;
+    {
+        char tmp;
+        Sub_44fc0(s + 0x15bcf0, &tmp, &tmp);
+    }
+    *(unsigned*)(s + 0x15bf24) = 0;
+    *(void**)(s + 0x15bf28) = DAT_01667bac;
+    *(void**)(s + 0x15bf2c) = DAT_01667bac;
+    *(void**)(s + 0x15bf30) = DAT_01667bae;
+    *(float*)(s + 0x15bf48) = DAT_01485720;
+    *(float*)(s + 0x15bf4c) = DAT_01470f1c;
+    *(unsigned*)(s + 0x15bf44) = 0;
+    *(unsigned*)(s + 0x15bf50) = 0;
+    *(unsigned*)(s + 0x15bf40) = 1;
+    *(void**)(s + 0x15bf3c) = (void*)gEmptyBucketArray;
+}
+
+// @ 0x00a45d10
+ASys::~ASys()
+{
+    char* s = (char*)this;
+    Sub_43c90(s + 0x15bf38, *(void**)(s + 0x15bf3c), (void*)*(unsigned*)(s + 0x15bf40));
+    *(unsigned*)(s + 0x15bf44) = 0;
+    if (*(unsigned*)(s + 0x15bf40) > 1)
+        EASTL_deallocate(*(void**)(s + 0x15bf3c));
+    int nBegin = *(int*)(s + 0x15bf28);
+    if (((*(int*)(s + 0x15bf30) - nBegin) & 0xfffffffe) > 2 && nBegin != 0)
+        EASTL_deallocate((void*)nBegin);
+    Sub_42fe0(s + 0x15bcf0, *(void**)(s + 0x15bcf4), (void*)*(unsigned*)(s + 0x15bcf8));
+    void* d = *(void**)(s + 0x15bcf4);
+    *(unsigned*)(s + 0x15bcfc) = 0;
+    if (*(unsigned*)(s + 0x15bcf8) > 1 && d != *(void**)(s + 0x15bd20)) {
+        if (d < *(void**)(s + 0x15bd14) || *(void**)(s + 0x15bd18) <= d) {
+            EASTL_deallocate(d);
+        } else {
+            *(void**)d = *(void**)(s + 0x15bd0c);
+            *(void**)(s + 0x15bd0c) = d;
+        }
+    }
+    if (*(void**)(s + 0x15bcec))
+        VCall0(*(void**)(s + 0x15bcec), 4);
+    if (*(void**)(s + 0x15bce8))
+        VCall0(*(void**)(s + 0x15bce8), 8);
+    {
+        void* r = *(void**)(s + 0x15bce4);
+        if (r) {
+            int c = *(int*)((char*)r + 4) - 1;
+            *(int*)((char*)r + 4) = c;
+            if (c == 0) {
+                *(int*)((char*)r + 4) = 1;
+                VCallN(r, 0, 1);
+            }
+        }
+    }
+    {
+        void* q = *(void**)(s + 0x15bce0);
+        if (q)
+            VCall0(*(void**)((char*)q + 8), 4);
+    }
+    if (*(void**)(s + 0x15bc80))
+        VCall0(*(void**)(s + 0x15bc80), 0x28);
+    if (*(void**)(s + 0x15bc7c))
+        VCall0(*(void**)(s + 0x15bc7c), 8);
+    if (*(void**)(s + 0x15bc78))
+        VCall0(*(void**)(s + 0x15bc78), 8);
+    if (*(void**)(s + 0x15bc74))
+        VCall0(*(void**)(s + 0x15bc74), 4);
+    *(void**)(s + 0x15bc34) = DAT_01403934;
+    {
+        int h = *(int*)(s + 0x15bc20);
+        if (h) {
+            *(unsigned*)(s + 0x15bc20) = 0;
+            Msg_RemoveHandler(h, *(int*)(s + 0x15bc24), *(int*)(s + 0x15bc28),
+                              *(int*)(s + 0x15bc2c), *(int*)(s + 0x15bc30));
+        }
+    }
+    SystemDtor_Destroy(this);
+}
+
+// @ 0x00a45f30
+extern "C" void* __cdecl AudioSystem_Create()
+{
+    ASys* o = new("Audio", 0, 0, 0, 0) ASys;
+    if (!o)
+        return 0;
+    return (void*)((char*)o + 0x15bc18);
+}
+struct ErrHost {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(int, void*, int);
+};
+
+// @ 0x00a466d0
+struct ErrBase { ErrBase(); virtual void v0(); };                // 0x00a19d60
+struct ErrObj : ErrBase {
+    static void* operator new(unsigned, const char*, int, int, int, int);   // 0x00926020
+    static void  operator delete(void*, const char*, int, int, int, int);   // 0x00926060
+    char m_pad[0x70 - 4];
+};
+extern "C" bool __cdecl Audio_RegisterErrorHandler()
+{
+    int* p = Eapd_Debug_ObjectError();
+    if (p) {
+        ErrObj* obj = new("Audio", 0, 0, 0, 0) ErrObj;
+        ((ErrHost*)p)->v17(1, obj, 0);
+    }
+    return p != 0;
+}
 // --- equivalence checker address annotations
 
 // --- equivalence checker address annotations (dummy declarations) ---
