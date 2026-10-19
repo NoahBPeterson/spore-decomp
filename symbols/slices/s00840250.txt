@@ -6,17 +6,17 @@
 00840810 int table lookup (stride 8)
 00840840 enum/name table lookup (stride 0xc)
 00840890 tokenizer helper (strspn/strcspn)
-008409b0 EA::ArgScript::MakeCaseInsensitive  # PDB
-008409f0 UTF/string conversion helper
-00840bb0 EA::ArgScript::ParseEnum  # PDB
-00840c20 EA::ArgScript::Sprintf  # PDB
-00840c70 EA::ArgScript::SprintfAppend  # PDB
-00840cc0 EA::ArgScript::MakeCaseInsensitive  # PDB (char*,string8)
-00840d50 EA::ArgScript::ParseRangedFloat  # PDB
-00840dc0 EA::ArgScript::ParseRangedInt  # PDB
-00840e10 EA::ArgScript::ParseRangedVector3  # PDB
-00840ec0 EA::ArgScript::StripCommentsAndWhiteSpace  # PDB
-00841000 EA::ArgScript::Output  # PDB
+008409b0 ?MakeCaseInsensitive@@YAXPAUstring8_s0084_0250@eastl@@@Z  # MakeCaseInsensitive migrated from s00840250 (verbatim, slice spelling)
+008409f0 ?StringConvert@@YAHPAH0PAD@Z  # StringConvert migrated from s00840250 (verbatim, slice spelling)
+00840bb0 ?ParseEnum@@YAHPBDPAH@Z  # ParseEnum migrated from s00840250 (verbatim, slice spelling)
+00840c20 ?Sprintf@@YAXPAUstring8_s0084_0250@eastl@@PBDZZ  # Sprintf migrated from s00840250 (verbatim, slice spelling)
+00840c70 ?SprintfAppend@@YAXPAUstring8_s0084_0250@eastl@@PBDZZ  # SprintfAppend migrated from s00840250 (verbatim, slice spelling)
+00840cc0 ?MakeCaseInsensitiveChars@@YAXPADPAH@Z  # MakeCaseInsensitiveChars migrated from s00840250 (verbatim, slice spelling)
+00840d50 ?ParseRangedFloat@@YAMPAHMM@Z  # ParseRangedFloat migrated from s00840250 (verbatim, slice spelling)
+00840dc0 ?ParseRangedInt@@YAHPAHHH@Z  # ParseRangedInt migrated from s00840250 (verbatim, slice spelling)
+00840e10 ?ParseRangedVector3@@YAPAMPAMPAHHMM@Z  # ParseRangedVector3 migrated from s00840250 (verbatim, slice spelling)
+00840ec0 ?StripCommentsAndWhiteSpace@@YA_NPAEPAH1@Z  # StripCommentsAndWhiteSpace migrated from s00840250 (verbatim, slice spelling)
+00841000 ?Output@@YAXPAHPBDZZ  # Output migrated from s00840250 (verbatim, slice spelling)
 00841130 ?ParserCall1ToFloat@@YIMPAHHHH@Z  # ParserCall1ToFloat migrated from s00840250 (verbatim, slice spelling)
 00841150 ?ParserArg1c@@YIHPAHHPAPBDPAX@Z  # ParserArg1c migrated from s00840250 (verbatim, slice spelling)
 00841190 ?ParserArg20@@YIHPAHHPAPBDPAX@Z  # ParserArg20 migrated from s00840250 (verbatim, slice spelling)

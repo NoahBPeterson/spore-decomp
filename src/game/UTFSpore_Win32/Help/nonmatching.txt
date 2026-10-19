@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+008409b0 47 complete: MakeCaseInsensitive(string8); tolower loop register allocation differs
+00840bb0 58 complete: ParseEnum; table walk + throw frame differ
+00840c20 18 complete: Sprintf; buf scan loop shape differs
+00840c70 18 complete: SprintfAppend; buf scan loop shape differs
+00840d50 64 complete: ParseRangedFloat; x87 range compare + throw frame differ
+00840dc0 39 complete: ParseRangedInt; range compare + throw frame differ
+00840e10 156 complete: ParseRangedVector3; aligned frame + SSE range compare differ
