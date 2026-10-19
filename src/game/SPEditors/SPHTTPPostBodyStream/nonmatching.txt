@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+0060c4e0 23 basic_string::append(const char*): complete; original keeps this in ecx (loop char in dl), cl is chosen here | equiv: PASS (906 valid, 100% cov) after symbol fix; byte diff is register-only
+0060c510 168 HTTPMultipartRelatedPostBodyStream ctor: complete; identical apart from list/string base registers (edi/ebp swapped) and push order
+0060c6d0 80 SetBoundary: complete; same this-in-ecx register allocation difference as append
+0060c780 454 HTTPMultipartRelatedPostBodyStream::AddFormData(name, stream, type, file, encoding): complete; same shape but ebx/ebp/edi allocation is rotated and the stream-ref copy differs
+0060c9c0 145 AddFormDataVideo: complete; same register rotation as AddFormData (edi/ebp/ebx), success block layout otherwise matches
+0060cb90 249 CommitTextSegment (vtable slot 0x68): complete; original uses one ref variable (edi) where cl keeps two (ebx/edi)

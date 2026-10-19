@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPHTTPPostBodyStream.cpp  ?GetPosition@HTTPMultipartRelatedPostBodyStream@Internet@EA@@UBEJW4PositionType@IO@3@@Z  0060c0b0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPHTTPPostBodyStream.cpp  ?Flush@HTTPMultipartRelatedPostBodyStream@Internet@EA@@UAE_NXZ  0060c140  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPHTTPPostBodyStream.cpp  ?Write@HTTPMultipartRelatedPostBodyStream@Internet@EA@@UAE_NPBXI@Z  0060c150  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPHTTPPostBodyStream.cpp  ?Finalize@HTTPMultipartRelatedPostBodyStream_s0060_b730@Internet@EA@@UAE_NXZ  0060c160  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPHTTPPostBodyStream.cpp  ?AddFormData@HTTPMultipartRelatedPostBodyStream_s0060_b730@Internet@EA@@UAE_NPBD0@Z  0060c1b0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPHTTPPostBodyStream.cpp  ?AddFormDataXML@HTTPMultipartRelatedPostBodyStream_s0060_b730@Internet@EA@@UAE_NPBD@Z  0060c290  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPHTTPPostBodyStream.cpp  ?WriteEndBoundary@HTTPMultipartRelatedPostBodyStream_s0060_b730@Internet@EA@@UAE_NXZ  0060c360  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPHTTPPostBodyStream.cpp  ?Read@HTTPMultipartRelatedPostBodyStream_s0060_b730@Internet@EA@@UAEIPAXI@Z  0060c3f0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPHTTPPostBodyStream.cpp  ??1HTTPMultipartRelatedPostBodyStream_s0060_b730@Internet@EA@@UAE@XZ  0060c660  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

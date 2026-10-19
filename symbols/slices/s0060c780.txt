@@ -1,6 +1,6 @@
-0060c780 EA::Internet::HTTPMultipartRelatedPostBodyStream::AddFormData  # 5-arg overload (name, stream, content type, file name, transfer encoding), vtable +0x50
-0060c9c0 EA::Internet::HTTPMultipartRelatedPostBodyStream::AddFormDataVideo  # vtable +0x5c
-0060cb90 EA::Internet::HTTPMultipartRelatedPostBodyStream::CommitTextSegment  # vtable +0x68; wraps the buffered text as a sub-stream and queues it
+0060c780 ?AddFormData@HTTPMultipartRelatedPostBodyStream_s0060_c780@Internet@EA@@UAE_NPBDPAVIStream_s0060_c780@IO@3@000@Z  # HTTPMultipartRelatedPostBodyStream_s0060_c780::AddFormData migrated from s0060c780 (verbatim, slice spelling)
+0060c9c0 ?AddFormDataVideo@HTTPMultipartRelatedPostBodyStream_s0060_c780@Internet@EA@@UAE_NPBD0PAVIStream_s0060_c780@IO@3@@Z  # HTTPMultipartRelatedPostBodyStream_s0060_c780::AddFormDataVideo migrated from s0060c780 (verbatim, slice spelling)
+0060cb90 ?CommitTextSegment@HTTPMultipartRelatedPostBodyStream_s0060_c780@Internet@EA@@UAE_NXZ  # HTTPMultipartRelatedPostBodyStream_s0060_c780::CommitTextSegment migrated from s0060c780 (verbatim, slice spelling)
 0060ccc0 ??0UploadEntry@SP@@QAE@ABUResourceKey@1@_N1@Z  # UploadEntry::UploadEntry migrated from s0060c780 (verbatim, slice spelling)
 0060ccf0 ?GetTypeFromName@SP@@YA_NPBDPAI@Z  # GetTypeFromName migrated from s0060c780 (verbatim, slice spelling)
 0060ce10 ?ClassifyCommand@SP@@YAHFPAUcAchievementSource@1@@Z  # ClassifyCommand migrated from s0060c780 (verbatim, slice spelling)
