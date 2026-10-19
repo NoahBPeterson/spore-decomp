@@ -13,7 +13,7 @@
 00675ff0 FUN_00675FF0  # save-area streaming
 00676140 FUN_00676140
 006761f0 FUN_006761F0
-00676370 eastl::vector<eastl::pair<wchar_t const*,eastl::mem_fun_t<void,SP::Pollen::cServerResponse>>,eastl::allocator>::insert  # PDB name
+00676370 ?insert@PollenResponsePairsVector@@QAEPAXPAXPBX@Z  # PollenResponsePairsVector::insert migrated from s006755c0 (verbatim, slice spelling)
 006763e0 FUN_006763E0
 00676490 FUN_00676490
 006764f0 FUN_006764F0

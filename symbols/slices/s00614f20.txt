@@ -1,11 +1,14 @@
-00615180 SP::Pollen::cServerResponse::DefaultEndTag  # PDB name; trims text and inserts (tag, text) into mFieldDict
-00615330 SP::Pollen::cServerResponse::EndElementHandler  # PDB name; dispatches via gEndHandlers else DefaultEndTag
+00614f20 ?DoInsertValue@StrMap_s0061_4f20@@QAE?AUStrInsertResult@@ABUStrPair_s0061_4f20@@UTrueTag@@@Z  # StrMap_s0061_4f20::DoInsertValue migrated from s00614f20 (verbatim, slice spelling)
+00615080 ?insert@HandlerMap_s0061_4f20@@QAE?AUHandlerInsertResult@@ABUHandlerPair_s0061_4f20@@@Z  # HandlerMap_s0061_4f20::insert migrated from s00614f20 (verbatim, slice spelling)
+00615110 ?DoNukeSubtree@StrMap_s0061_4f20@@QAEXPAUStrNode_s0061_4f20@@@Z  # StrMap_s0061_4f20::DoNukeSubtree migrated from s00614f20 (verbatim, slice spelling)
+00615180 ?DefaultEndTag@cServerResponse_s0061_4f20@Pollen@SP@@QAEXPB_W@Z  # cServerResponse_s0061_4f20::DefaultEndTag migrated from s00614f20 (verbatim, slice spelling)
+00615330 ?EndElementHandler@cServerResponse_s0061_4f20@Pollen@SP@@SAXPAV123@PB_W@Z  # cServerResponse_s0061_4f20::EndElementHandler migrated from s00614f20 (verbatim, slice spelling)
 00615380 SP::Pollen::cServerResponse::~cServerResponse  # PDB name
-00615430 SP::Pollen::cServerResponse::Read  # returns -1, stream is write-only
-00615450 SP::Pollen::cServerResponse::Open  # XML_ParserCreate_MM + handlers
-006154c0 SP::Pollen::cServerResponse::SetPosition  # Begin: reopen the parser when rewinding to 0
-00615520 SP::Pollen::cServerResponse::IDListElement  # PDB name; push_back(trimmed text) into mAssetList
-006155f0 SP::Pollen::cServerResponse::SetupDict  # PDB name; fills the static start/end handler vector_maps
+00615430 ?Read@cServerResponse@Pollen@SP@@UAEIPAXI@Z  # SP::Pollen::cServerResponse::Read migrated from s00614f20
+00615450 ?Open@cServerResponse_s0061_4f20@Pollen@SP@@QAE_NXZ  # cServerResponse_s0061_4f20::Open migrated from s00614f20 (verbatim, slice spelling)
+006154c0 ?SetPosition@cServerResponse@Pollen@SP@@UAE_NJW4PositionType@IO@EA@@@Z  # SP::Pollen::cServerResponse::SetPosition migrated from s00614f20
+00615520 ?IDListElement@cServerResponse_s0061_4f20@Pollen@SP@@QAEXXZ  # cServerResponse_s0061_4f20::IDListElement migrated from s00614f20 (verbatim, slice spelling)
+006155f0 ?SetupDict@cServerResponse_s0061_4f20@Pollen@SP@@SAXXZ  # cServerResponse_s0061_4f20::SetupDict migrated from s00614f20 (verbatim, slice spelling)
 00615790 SP::Pollen::cServerResponse::cServerResponse  # PDB name
 00615ed0 ?HandleResult@cModelUploadTransaction_s0061_4f20@@UAE_NHPAUcHttpResult@@PAUcTransactionQueue_s0061_4f20@@@Z  # cModelUploadTransaction_s0061_4f20::HandleResult migrated from s00614f20 (verbatim, slice spelling)
 00616160 ?Init@cTripleObj@@QAEPAU1@XZ  # cTripleObj::Init migrated from s00614f20 (verbatim, slice spelling)

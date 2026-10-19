@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00614dc0 6 StrMap::DoInsertValueImpl: complete; only the load order of key pointers in the inlined compare differs
+00614f20 4 StrMap::DoInsertValue (rbtree insert-unique): complete; only the order of two spill reloads after the loop differs
+00615330 22 cServerResponse::EndElementHandler: complete; cl keeps one shared epilogue instead of the original tail jump
+006155f0 144 cServerResponse::SetupDict: complete; handler pair construction/store order and clear() load order differ
