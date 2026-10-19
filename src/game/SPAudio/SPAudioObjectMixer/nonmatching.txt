@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a3d380 66 SP::Audio::Mixer::Register: complete; Eapd gensym/class_new/class_addmethod registration re-expressed in C++. difftest UNSUPPORTED (unresolved Eapd globals s_mixer/spMixerClass/class_new/class_addmethod). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
