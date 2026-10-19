@@ -3,3 +3,5 @@
 0073a820 Release                  # RefPtr::Release at +0
 0073abb0 ?GetAnimationMoveToTimes@cModelInstance_s0073_a110@SP@@QAEHHPAHD@Z  # cModelInstance_s0073_a110::GetAnimationMoveToTimes migrated from s0073a110 (verbatim, slice spelling)
 0073ac20 SetActive                # SP::cModelInstance; PDB name
+0073aa70 AbilityB::AbilityB  # inlined base ctor (GmeRefCount + AddRef'd holder), sets two vtables
+0073af20 SP::cModelInstance::AdvanceBinding  # advance blender by dt, clamp at animation end when looping

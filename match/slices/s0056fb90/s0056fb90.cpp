@@ -1,6 +1,7 @@
 // Slice s0056fb90: SP::Traits cRigBlockTag BlockKey/vector_set hashtable helpers.
 // Unoptimized module: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
+#include <new>
 
 typedef unsigned int size_t;
 template <int N> inline void ScratchSlots() { uint32_t s[N]; }
@@ -11,11 +12,68 @@ extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 void* EASTL_Allocate(void* allocator, size_t size, int align, int flags);
 
 // ---------------------------------------------------------------- hashtable/vector helpers
-struct UnkClass_0056fb90 { void Method(void* a, void* b); };          // @ 0x0056fb90
-void UnkClass_0056fb90::Method(void*, void*) { /* partial */ }
-
-struct UnkClass_0056fee0 { void Method(void* a); };                   // @ 0x0056fee0
-void UnkClass_0056fee0::Method(void*) { /* partial */ }
+// ---------------------------------------------------------------- vector<12-byte POD>::DoAssign
+struct Vec12 { uint32_t a, b, c; };
+struct Vec12Alloc {
+    uint32_t mpName;
+    void deallocate(void* p, uint32_t n) { void* q = p; EASTL_allocator_deallocate(q); }
+};
+struct FalseTag { FalseTag() {} };
+Vec12* UninitCopy12(const Vec12* first, const Vec12* last, Vec12* dst);        // 0x00475ef0 (cdecl)
+inline Vec12* CopyImpl12(const Vec12* first, const Vec12* last, Vec12* result)
+{
+    for (; first != last; ++result, ++first)
+        *result = *first;
+    return result;
+}
+inline Vec12* Copy12(const Vec12* first, const Vec12* last, Vec12* result)
+{
+    const bool bA = false, bC = false, bB = false;
+    return CopyImpl12(first, last, result);
+}
+struct Vec12Vector {
+    Vec12* mpBegin;                     // +0
+    Vec12* mpEnd;                       // +4
+    Vec12* mpCapacity;                  // +8
+    Vec12Alloc mAllocator;              // +0xc
+    Vec12* DoRealloc(uint32_t n, const Vec12* first, const Vec12* last);   // 0x00475fa0 (thiscall, ret 0xc)
+    void DoFree(Vec12* p, uint32_t n)
+    {
+        if (p && ((int*)p)[-1] != 0)
+            mAllocator.deallocate(p, n * sizeof(Vec12));
+    }
+    void DestroyFrom(Vec12* first)
+    {
+        for (Vec12* p = first; p < mpEnd; ++p)
+            ;
+    }
+    void DoAssign(const Vec12* first, const Vec12* last, const FalseTag& tag);
+};
+// @ 0x0056fee0
+void Vec12Vector::DoAssign(const Vec12* first, const Vec12* last, const FalseTag& tag)
+{
+    const uint32_t n = (uint32_t)(last - first);
+    if (n > (uint32_t)(mpCapacity - mpBegin)) {
+        Vec12* const pNewData = DoRealloc(n, first, last);
+        ScratchSlots<10>();
+        DestroyFrom(mpBegin);
+        DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+        mpBegin = pNewData;
+        mpEnd = mpBegin + n;
+        mpCapacity = mpEnd;
+    }
+    else if (n <= (uint32_t)(mpEnd - mpBegin)) {
+        Vec12* const pNewEnd = Copy12(first, last, mpBegin);
+        DestroyFrom(pNewEnd);
+        mpEnd = pNewEnd;
+    }
+    else {
+        const Vec12* const pMid = first + (mpEnd - mpBegin);
+        Copy12(first, pMid, mpBegin);
+        mpEnd = UninitCopy12(pMid, last, mpEnd);
+        ScratchSlots<12>();
+    }
+}
 
 struct Key { uint32_t a; uint32_t b; };
 struct WStr {
@@ -38,6 +96,93 @@ struct StreamElem {
 StreamElem::StreamElem(const StreamElem& src) : key(src.key), meta(src.meta)
 {
 }
+
+// ---------------------------------------------------------------- vector<StreamElem>::DoInsertValue
+struct Str16 {                          // eastl::basic_string<wchar_t> (16 bytes with allocator)
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; uint32_t mAlloc;
+    Str16(const Str16& x);              // 0x0056e2d0
+};
+struct MetaI {                          // float weight + description string
+    float f;
+    Str16 str;
+    MetaI(const MetaI& s) : f(s.f), str(s.str) {}
+};
+struct MetaO {                          // same layout; copy ctor is the out-of-line one
+    float f;
+    Str16 str;
+    MetaO(const MetaO& s);              // 0x0056b020 (thiscall, ret 4)
+};
+struct ElemO {
+    Key key;
+    MetaO meta;
+    ElemO(const ElemO& s) : key(s.key), meta(s.meta) {}
+};
+struct ElemI {                          // 0x1c-byte vector element
+    Key key;                            // +0
+    MetaI meta;                         // +8
+    ElemI(const ElemI& s) : key(s.key), meta(s.meta) {}
+    ElemI& operator=(const ElemI& s);   // 0x00570140 (assign)
+};
+ElemI* UninitCopy(ElemI* first, ElemI* last, ElemI* dst);                 // 0x00570330 (cdecl)
+inline ElemI* CopyBackwardImpl(ElemI* first, ElemI* last, ElemI* result)
+{
+    while (last != first)
+        *--result = *--last;
+    return result;
+}
+inline ElemI* CopyBackward(ElemI* first, ElemI* last, ElemI* result)
+{
+    const bool bA = false, bC = false, bB = false;
+    ScratchSlots<4>();
+    return CopyBackwardImpl(first, last, result);
+}
+struct ElemAlloc {
+    uint32_t mpName;
+    void deallocate(void* p, uint32_t n) { void* q = p; EASTL_allocator_deallocate(q); }
+};
+struct ElemVec {
+    ElemI* mpBegin;                     // +0
+    ElemI* mpEnd;                       // +4
+    ElemI* mpCapacity;                  // +8
+    ElemAlloc mAllocator;               // +0xc
+    ElemI* DoAllocate(uint32_t n)
+    {
+        return n ? (ElemI*)EASTL_Allocate(&mAllocator, n * sizeof(ElemI), 4, 0) : 0;
+    }
+    void DoFree(ElemI* p, uint32_t n)
+    {
+        if (p)
+            mAllocator.deallocate(p, n * sizeof(ElemI));
+    }
+    void DoInsertValue(ElemI* position, const ElemI& value);
+};
+// @ 0x0056fb90
+void ElemVec::DoInsertValue(ElemI* position, const ElemI& value)
+{
+    if (mpEnd != mpCapacity) {
+        const ElemI* pValue = &value;
+        if ((pValue >= position) && (pValue < mpEnd))
+            ++pValue;
+        ::new(mpEnd) ElemI(*(mpEnd - 1));
+        CopyBackward(position, mpEnd - 1, mpEnd);
+        *position = *pValue;
+        ++mpEnd;
+    }
+    else {
+        const uint32_t nPrevSize = (uint32_t)(mpEnd - mpBegin);
+        const uint32_t nNewSize = (nPrevSize > 0) ? (2 * nPrevSize) : 1;
+        ElemI* const pNewData = DoAllocate(nNewSize);
+        ElemI* pNewEnd = UninitCopy(mpBegin, position, pNewData);
+        ::new(pNewEnd) ElemO(*(const ElemO*)&value);
+        pNewEnd = UninitCopy(position, mpEnd, ++pNewEnd);
+        ScratchSlots<28>();
+        DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCapacity = pNewData + nNewSize;
+    }
+}
+
 
 struct Pair8 { uint32_t a; uint32_t b; };
 inline bool LessU32(uint32_t a, uint32_t b) { return a < b; }
@@ -90,8 +235,44 @@ Elem1c* LowerBound1c(Elem1c* first, Elem1c* last, Key1c* key)
     return first;
 }
 
-struct UnkClass_00570230 { void Method(void* a); };                   // @ 0x00570230
-void UnkClass_00570230::Method(void*) { /* partial */ }
+// hashtable<BlockKey, pair<const BlockKey, vector_set<uint>>>::DoFreeNodes
+struct OuterVec {                       // eastl::vector<pair<uint, vector_set<uint>>>
+    void* mpBegin; void* mpEnd; void* mpCapacity; uint32_t mAlloc;
+    void DoDestroyValues();             // 0x00553fb0
+};
+struct HashNode {
+    Key mKey;                           // +0
+    OuterVec mValue;                    // +8
+    char pad18[8];                      // +0x18
+    HashNode* mpNext;                   // +0x20
+    ~HashNode() { mValue.DoDestroyValues(); }
+};
+struct NodeAlloc {
+    void deallocate(void* p, uint32_t n) { void* q = p; EASTL_allocator_deallocate(q); }
+};
+struct HashTable {
+    NodeAlloc mAllocator;
+    void DoFreeNode(HashNode* pNode)
+    {
+        pNode->~HashNode();
+        ScratchSlots<4>();
+        mAllocator.deallocate(pNode, sizeof(HashNode));
+    }
+    void DoFreeNodes(HashNode** pNodeArray, uint32_t n);
+};
+// @ 0x00570230
+void HashTable::DoFreeNodes(HashNode** pNodeArray, uint32_t n)
+{
+    for (uint32_t i = 0; i < n; ++i) {
+        HashNode* pNode = pNodeArray[i];
+        while (pNode) {
+            HashNode* pTempNode = pNode;
+            pNode = pNode->mpNext;
+            DoFreeNode(pTempNode);
+        }
+        pNodeArray[i] = 0;
+    }
+}
 
 void* MoveDestroyRange(void* first, void* last, void* dst);           // @ 0x005702c0
 void* MoveDestroyRange(void* first, void* last, void* dst)

@@ -125,31 +125,85 @@ struct cAnimGroupInfo {
     short mAnimOffset;      // +6
 };
 
+struct cAnimDef { char pad0[8]; int mId; char pad0c[0x14]; float mLength; };   // KeyframeAnimation (id +8, length +0x20)
+struct cIdObj { char pad0[0x10]; int mId; };           // +0x10 id
+struct cBindInfo {
+    char pad0[0xc];
+    cIdObj* m0c;                                       // +0x0c
+    cIdObj* m10;                                       // +0x10
+    char pad14[4];
+    int m18;                                           // +0x18
+};
+struct cBlender {                                      // cMultiBlender-like player
+    char pad0[4];
+    void** mVptr4;                                     // +0x04 (vtable of the played interface)
+    char pad8[0x14];
+    cAnimDef* mDef;                                    // +0x1c
+    float mTime;                                       // +0x20
+    bool AnyAnimating();                               // 0x0075a6e0 cMultiBlender::AnyAnimating
+    void SetAnimating(cAnimDef* a, bool v);            // 0x0075b6e0 cMultiBlender::SetAnimating
+    void SetLooping(bool v);                           // 0x0075a770 (byte at +0x50)
+    void SetAnim(cAnimDef* a, float start);            // 0x011fdba0
+};
+struct cBinding {                                      // 12-byte binding record
+    cBlender* mBlender;                                // +0
+    bool mActive;                                      // +4
+    bool mLoop;                                        // +5
+    short pad6;
+    cBindInfo* mInfo;                                  // +8
+};
+struct cMaterial {                                     // 0xc4-byte record, same prefix as cBinding
+    cBlender* mBlender;
+    bool mActive;
+    bool mLoop;
+    short pad6;
+    cBindInfo* mInfo;
+    char pad0c[0xc4 - 0xc];
+};
+struct cCtrlEntry { int mKey; cAnimDef* mDef; };       // 8 bytes
+
+struct AnimGroupVec {
+    cAnimGroupInfo* mpBegin;
+    cAnimGroupInfo* mpEnd;
+    cAnimGroupInfo* mpCapacity;
+    int size() const { return (int)(mpEnd - mpBegin); }
+    cAnimGroupInfo& operator[](int i) { return mpBegin[i]; }
+};
+
 class cModelInstance {
 public:
-    char pad0[0xc];                 // +0x00
+    char pad0[8];                   // +0x00
+    unsigned mFlags8;               // +0x08 (bit 0x20: multi-blender mode)
     int  mFieldC;                   // +0x0c
     int  mField10;                  // +0x10
-    cAnimGroupInfo* mAnimGroupBegin;// +0x14
-    cAnimGroupInfo* mAnimGroupEnd;  // +0x18
-    char pad1c[0x78 - 0x1c];
+    AnimGroupVec mAnimGroups;       // +0x14 (begin/end/cap; size() and operator[] stay inline calls)
+    char pad20[0x28 - 0x20];
+    cMaterial* mMaterials;          // +0x28
+    cMaterial* mMaterialsEnd;       // +0x2c
+    char pad30[0x3c - 0x30];
+    cBinding* mBindABegin;          // +0x3c
+    cBinding* mBindAEnd;            // +0x40
+    char pad44[0x50 - 0x44];
+    cBinding* mBindCBegin;          // +0x50
+    cBinding* mBindCEnd;            // +0x54
+    char pad58[0x78 - 0x58];
     int* mControllers;              // +0x78
     char pad7c[0x154 - 0x7c];
 public:
     // @ 0x0073ABB0
     int GetAnimationMoveToTimes(int animID, int* dst, char bEnd);
-    // @ 0x0073AC20
-    void SetActive(int index, int value);
+    bool SetActive(int key, int groupIdx, bool animating, float t, bool loop);
+    bool AdvanceBinding(cBinding* b, float dt);
+    bool IsValidGroup(int i) {
+        return i >= 0 && i < mAnimGroups.size();
+    }
 };
 
 int cModelInstance::GetAnimationMoveToTimes(int animID, int* dst, char bEnd)
 {
-    if (animID < 0)
+    if (!IsValidGroup(animID))
         return 0;
-    const int nGroups = (int)((char*)mAnimGroupEnd - (char*)mAnimGroupBegin) >> 3;
-    if (animID >= nGroups)
-        return 0;
-    cAnimGroupInfo* e = &mAnimGroupBegin[animID];
+    cAnimGroupInfo* e = &mAnimGroups[animID];
     int start = e->mAnimOffset;
     int n = e->mAnimCount;
     if (bEnd) {
@@ -171,13 +225,76 @@ int cModelInstance::GetAnimationMoveToTimes(int animID, int* dst, char bEnd)
 } // namespace SP
 
 // ---------------------------------------------------------------------------
-// @ 0x0073AC20 — SP::cModelInstance::SetActive (large; behavior reconstructed below).
-// ---------------------------------------------------------------------------
+// SP::cModelInstance::SetActive: activate / deactivate every binding whose controller matches `key`.
 namespace SP {
-void cModelInstance::SetActive(int index, int value)
+static __forceinline void ApplyBinding(cModelInstance* mi, cBinding* b, cAnimDef* target, bool animating, float t, bool loop)
 {
-    (void)index; (void)value;
-    // Large activate/animate dispatch; body summarised (see partial.txt).
+    if (mi->mFlags8 & 0x20) {
+        cBlender* bl = b->mBlender;
+        bl->SetAnimating(target, animating);
+        bl->SetLooping(!loop);
+        b->mActive = true;
+    } else {
+        cBlender* bl = b->mBlender;
+        if (animating) {
+            if (target != bl->mDef || !b->mActive) {
+                if (target != bl->mDef)
+                    bl->SetAnim(target, t);
+                b->mActive = true;
+            }
+        } else if (target == bl->mDef) {
+            b->mActive = false;
+        }
+    }
+}
+
+// @ 0x0073AC20
+bool cModelInstance::SetActive(int key, int groupIdx, bool animating, float t, bool loop)
+{
+    if (!IsValidGroup(groupIdx))
+        return false;
+    cAnimGroupInfo* g = &mAnimGroups[groupIdx];
+    const int start = g->mAnimOffset;
+    const int end = start + g->mAnimCount;
+    const int bidx = g->mBindingIdx;
+    int bend;
+    if (g->mBindingIdx != (char)-1)
+        bend = bidx + 1;
+    else
+        bend = bidx;
+    bool result = false;
+    for (int i = start; i < end; ++i) {
+        if (((cCtrlEntry*)mControllers)[i].mKey == key) {
+        cAnimDef* target = ((cCtrlEntry*)mControllers)[i].mDef;
+        const int nA = (int)(mBindAEnd - mBindABegin);
+        for (int k = 0; k < nA; ++k) {
+            cBinding* b = &mBindABegin[k];
+            b->mLoop = loop;
+            if (b->mInfo->m10->mId == target->mId) {
+                ApplyBinding(this, b, target, animating, t, loop);
+                result = true;
+            }
+        }
+        for (int j = bidx; j < bend; ++j) {
+            cBinding* b = (cBinding*)&mMaterials[j];
+            b->mLoop = loop;
+            if (b->mInfo->m0c->mId == target->mId) {
+                ApplyBinding(this, b, target, animating, t, loop);
+                result = true;
+            }
+        }
+        const int nC = (int)(mBindCEnd - mBindCBegin);
+        for (int k = 0; k < nC; ++k) {
+            cBinding* b = &mBindCBegin[k];
+            b->mLoop = loop;
+            if (b->mInfo->m18 == target->mId) {
+                ApplyBinding(this, b, target, animating, t, loop);
+                result = true;
+            }
+        }
+        }
+    }
+    return result;
 }
 } // namespace SP
 
@@ -258,10 +375,30 @@ void AbilityDtorBase(void* self)
     (void)self;
 }
 
-// @ 0x0073AA70 — ability-object constructor setting two vtables (81 bytes).
-void AbilityCtorB(void* self, void* a, void* b, void* c, void* d)
+// Ability object constructor setting two vtables (81 bytes).
+struct AbIface { virtual void ifn0(); };
+struct AbRC { AbRC() : mRC(0) {} virtual void rcfn0(); virtual void rcfn1(); int mRC; };
+struct AbHeld { virtual void dtor(int) = 0; int mnRefCount; };
+struct AbilityA : AbIface, AbRC {
+    AbilityA(AbHeld* h, int v) { mHeld = h; if (h) ++h->mnRefCount; mVal = v; }
+    virtual void a0();
+    virtual void a1();
+    AbHeld* mHeld;      // +0xc
+    int mVal;           // +0x10
+};
+struct AbPtr { AbHeld* p; AbPtr() : p(0) {} };
+struct AbilityB : AbilityA {
+    AbilityB(AbHeld* h, int v, int a, int b);
+    virtual void b0();
+    virtual void b1();
+    AbPtr mHeld2;       // +0x14
+    int mB18;           // +0x18
+    int mB1c;           // +0x1c
+};
+
+// @ 0x0073AA70
+AbilityB::AbilityB(AbHeld* h, int v, int a, int b) : AbilityA(h, v), mB18(a), mB1c(b)
 {
-    (void)self; (void)a; (void)b; (void)c; (void)d;
 }
 
 // @ 0x0073AAE0 — ability-object destructor (95 bytes).
@@ -304,8 +441,29 @@ void CtrlHolder::SetController(CtrlObj* p)
     mCounter2 = p->mCounter - 1;
 }
 
-// @ 0x0073AF20 — small model helper (134 bytes).
-void ModelHelper(void* self)
+// Advance one binding's blender by dt (clamped at the animation end for looping bindings).
+namespace SP {
+// @ 0x0073AF20
+bool cModelInstance::AdvanceBinding(cBinding* b, float dt)
 {
-    (void)self;
+    cBlender* bl = b->mBlender;
+    if (bl != 0 && b->mActive) {
+        if (mFlags8 & 0x20) {
+            if (bl->AnyAnimating()) {
+                cBlender* c = b->mBlender;
+                ((void(__thiscall*)(cBlender*, float))c->mVptr4[0])(c, dt);
+                return true;
+            }
+        } else {
+            float len = bl->mDef->mLength;
+            if (b->mLoop && len <= bl->mTime + dt) {
+                dt = len - bl->mTime;
+                b->mActive = false;
+            }
+            ((void(__thiscall*)(cBlender*, float))bl->mVptr4[0])(bl, dt);
+            return true;
+        }
+    }
+    return false;
 }
+} // namespace SP

@@ -1,3 +1,5 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00741210/s00741210.cpp  ?ConstructFromArenaResource@cMI_Construct@@QAE_NPAUResBase@@@Z  00741a40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00741210/s00741210.cpp  ?insert@Vec8@@QAEPAURefPair8@@PAU2@PBU2@@Z  00741aa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00741210/s00741210.cpp  ?DoInsertValue@Vec8@@QAEXPAURefPair8@@PBU2@@Z  007418f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00741210/s00741210.cpp  ?StallUntilLoaded@cLoadQueueS@@QAEXPAUUIntVec@@@Z  00741710  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

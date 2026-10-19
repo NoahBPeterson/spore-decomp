@@ -2,3 +2,6 @@
 005701b0 ?LowerBoundPair@@YAPAUPair8@@PAU1@0PBU1@@Z  # LowerBoundPair migrated from s0056fb90 (verbatim, slice spelling)
 005702c0 vector<...>::DoDestroyValues range  # destroys+deallocates stride 0x1c
 00570870 Big::Init  # two sub-inits + zero 3-float vector + flag/value
+0056fb90 eastl::vector<12+16-byte {Key,float,wstring}>::DoInsertValue  # insert one element (grow x2 path + shift path), vector element 0x1c
+0056fee0 eastl::vector<12-byte POD>::DoAssign  # DoAssign(first,last,false_type): realloc / copy+destroy / copy+uninitialized_copy
+00570230 eastl::hashtable<BlockKey,pair<const BlockKey,vector_set>>::DoFreeNodes  # frees node chains, calls vector DoDestroyValues (PDB name)

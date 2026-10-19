@@ -1,4 +1,5 @@
 0073a6e0  n/a  BigObj::Ctor: complete reconstruction; 16-byte-aligned frame not reproduced [equiv: PASS 1200 inputs 100% cov, after marker fix]
 0073a7a0  24   MatOwner::GetMat: complete; copy addressing/schedule differs
 0073a850  113  ScaleMat: complete; register scheduling of the 3x3 scale differs
-0073abb0  101  cModelInstance::GetAnimationMoveToTimes: complete; regalloc/schedule differs
+0073abb0  37   cModelInstance::GetAnimationMoveToTimes: complete; regalloc/schedule differs
+0073af20  127  AdvanceBinding: complete; original keeps a zero in ebx (xor ebx,ebx) that cannot be reproduced [equiv: PASS 395 inputs 100% cov]

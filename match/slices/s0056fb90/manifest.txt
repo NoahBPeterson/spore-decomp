@@ -1,3 +1,6 @@
 # source  symbol  original VA  [cl flags override]
 slices/s0056fb90/s0056fb90.cpp  ?Init@Big@@  00570870  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s0056fb90/s0056fb90.cpp  ?LowerBoundPair@@  005701b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056fb90/s0056fb90.cpp  ?DoFreeNodes@HashTable@@QAEXPAPAUHashNode@@I@Z  00570230  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056fb90/s0056fb90.cpp  ?DoInsertValue@ElemVec@@QAEXPAUElemI@@ABU2@@Z  0056fb90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056fb90/s0056fb90.cpp  ?DoAssign@Vec12Vector@@QAEXPBUVec12@@0ABUFalseTag@@@Z  0056fee0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
