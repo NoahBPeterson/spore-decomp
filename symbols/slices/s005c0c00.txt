@@ -1,8 +1,16 @@
-005c0c80 SP::cSPEditorPaintLikeThis::OnRollover  # dev PDB method; forwards to OneClickPaint::OnRollover when mModelChosen
-005c0c90 SP::cSPEditorPaintLikeThis::OffRollover  # same pattern, OffRollover
-005c0ca0 SP::cSPEditorPaintLikeThis::OnLeftMouseUp  # dev PDB method list
-005c0d20 SP::cSPEditorPaintLikeThis::DoMessage  # IWinProc override (this = +0xc)
-005c0f40 SP::cSPEditorPaintLikeThis::cSPEditorPaintLikeThis  # vtables + field init
-005c1340 SP::cSPEditorPaintLikeThis::OnAssetBrowserSelection  # cSPUIAssetBrowserCallback override (this = +0x78), byte-exact
+005c0c00 ?OnPaintThemeSelected@cSPEditorPaintLikeThis_s005c_0c00@SP@@QAEXIHPAVIWindow_s005c_0c00@UTFWin@EA@@@Z  # cSPEditorPaintLikeThis_s005c_0c00::OnPaintThemeSelected migrated from s005c0c00 (verbatim, slice spelling)
+005c0c60 ?OnSelected@cSPEditorPaintLikeThis_s005c_0c00@SP@@QAEXXZ  # cSPEditorPaintLikeThis_s005c_0c00::OnSelected migrated from s005c0c00 (verbatim, slice spelling)
+005c0c80 ?OnRollover@cSPEditorPaintLikeThis@SP@@UAEXXZ  # SP::cSPEditorPaintLikeThis::OnRollover migrated from s005c0c00
+005c0c90 ?OffRollover@cSPEditorPaintLikeThis@SP@@UAEXXZ  # SP::cSPEditorPaintLikeThis::OffRollover migrated from s005c0c00
+005c0ca0 ?OnLeftMouseUp@cSPEditorPaintLikeThis_s005c_0c00@SP@@QAEXXZ  # cSPEditorPaintLikeThis_s005c_0c00::OnLeftMouseUp migrated from s005c0c00 (verbatim, slice spelling)
+005c0cd0 ?LaunchSporepedia@cSPEditorPaintLikeThis_s005c_0c00@SP@@QAEXXZ  # cSPEditorPaintLikeThis_s005c_0c00::LaunchSporepedia migrated from s005c0c00 (verbatim, slice spelling)
+005c0d20 ?HandleUIMessage@cSPEditorPaintLikeThis_s005c_0c00@SP@@UAE_NPAVIWindow_s005c_0c00@UTFWin@EA@@PBX@Z  # cSPEditorPaintLikeThis_s005c_0c00::HandleUIMessage migrated from s005c0c00 (verbatim, slice spelling)
+005c0e40 ??1cSPPaletteItemUIOneClickPaint_s005c_0c00@SP@@UAE@XZ  # cSPPaletteItemUIOneClickPaint_s005c_0c00::~cSPPaletteItemUIOneClickPaint migrated from s005c0c00 (verbatim, slice spelling)
+005c0f40 ??0cSPEditorPaintLikeThis_s005c_0c00@SP@@QAE@I@Z  # cSPEditorPaintLikeThis_s005c_0c00::cSPEditorPaintLikeThis migrated from s005c0c00 (verbatim, slice spelling)
+005c1050 ??1cSPEditorPaintLikeThis_s005c_0c00@SP@@UAE@XZ  # cSPEditorPaintLikeThis_s005c_0c00::~cSPEditorPaintLikeThis migrated from s005c0c00 (verbatim, slice spelling)
+005c1130 ?Shutdown@cSPEditorPaintLikeThis_s005c_0c00@SP@@QAEXXZ  # cSPEditorPaintLikeThis_s005c_0c00::Shutdown migrated from s005c0c00 (verbatim, slice spelling)
+005c1340 ?OnAssetBrowserSelection@cSPEditorPaintLikeThis_s005c_0c00@SP@@UAEXABUKey_s005c_0c00@ResourceMan@EA@@@Z  # cSPEditorPaintLikeThis_s005c_0c00::OnAssetBrowserSelection migrated from s005c0c00 (verbatim, slice spelling)
+005c13b0 ?SendPaletteItemMessage@cSPEditorPaintLikeThis_s005c_0c00@SP@@QAEXXZ  # cSPEditorPaintLikeThis_s005c_0c00::SendPaletteItemMessage migrated from s005c0c00 (verbatim, slice spelling)
+005c14f0 ?SendPaintMessage@cSPEditorPaintLikeThis_s005c_0c00@SP@@QAEXXZ  # cSPEditorPaintLikeThis_s005c_0c00::SendPaintMessage migrated from s005c0c00 (verbatim, slice spelling)
 005c1570 SP::cSPEditorPaintLikeThis::SetModel  # dev PDB method
 005c1870 SP::cSPEditorPaintLikeThis::HandleMessage  # IHandlerRC override (this = +0x20)

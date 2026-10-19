@@ -1,1 +1,4 @@
 # va  diff-bytes  reason
+005c0c00 80 OnPaintThemeSelected: themeID kept in edi instead of reloaded from the stack
+005c0d20 59 cSPEditorPaintLikeThis::HandleUIMessage (IWinProc): early-return block placement
+005c14f0 78 SendPaintMessage: message object layout/ctor (UI::BehaviorMessage) approximated

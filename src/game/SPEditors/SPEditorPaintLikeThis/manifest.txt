@@ -1,2 +1,13 @@
 # source  symbol  va  flags
 ../src/game/SPEditors/SPEditorPaintLikeThis.cpp  ?SetImage@cSPEditorPaintLikeThis_s005b_fb90@SP@@QAEXUKey_s005b_fb90@ResourceMan@EA@@@Z  005c0ba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaintLikeThis.cpp  ?OnSelected@cSPEditorPaintLikeThis_s005c_0c00@SP@@QAEXXZ  005c0c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaintLikeThis.cpp  ?OnRollover@cSPEditorPaintLikeThis@SP@@UAEXXZ  005c0c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaintLikeThis.cpp  ?OffRollover@cSPEditorPaintLikeThis@SP@@UAEXXZ  005c0c90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaintLikeThis.cpp  ?OnLeftMouseUp@cSPEditorPaintLikeThis_s005c_0c00@SP@@QAEXXZ  005c0ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaintLikeThis.cpp  ?LaunchSporepedia@cSPEditorPaintLikeThis_s005c_0c00@SP@@QAEXXZ  005c0cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaintLikeThis.cpp  ??1cSPPaletteItemUIOneClickPaint_s005c_0c00@SP@@UAE@XZ  005c0e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaintLikeThis.cpp  ??0cSPEditorPaintLikeThis_s005c_0c00@SP@@QAE@I@Z  005c0f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaintLikeThis.cpp  ??1cSPEditorPaintLikeThis_s005c_0c00@SP@@UAE@XZ  005c1050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaintLikeThis.cpp  ?Shutdown@cSPEditorPaintLikeThis_s005c_0c00@SP@@QAEXXZ  005c1130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaintLikeThis.cpp  ?OnAssetBrowserSelection@cSPEditorPaintLikeThis_s005c_0c00@SP@@UAEXABUKey_s005c_0c00@ResourceMan@EA@@@Z  005c1340  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaintLikeThis.cpp  ?SendPaletteItemMessage@cSPEditorPaintLikeThis_s005c_0c00@SP@@QAEXXZ  005c13b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
