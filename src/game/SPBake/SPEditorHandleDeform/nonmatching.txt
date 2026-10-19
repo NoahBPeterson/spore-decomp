@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+0047fa30 135 Deform ctor; /O2 compile, original /Od
+0047fcb0 25 Deform shutdown; /O2 compile, original /Od
+0047fce0 38 interface-id switch; /O2 compile, original /Od [equiv PASS after ecx fix]
+00480280 103 tuning vec by pinning type; /O2 compile, original /Od
+00481fa0 109 GetHandlePos: transform/vector helper shapes and /Od slots differ

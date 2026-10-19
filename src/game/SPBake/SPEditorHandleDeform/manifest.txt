@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPEditorHandleDeform.cpp  ?Update@RingHandle@@QAEXXZ  00480320  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include

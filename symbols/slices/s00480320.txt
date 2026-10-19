@@ -1,3 +1,3 @@
-00480320  RingHandle::Update  # places attached handle objects (+0x14, +0x18) at the ring end and queues property messages; byte-exact
+00480320 ?Update@RingHandle@@QAEXXZ  # RingHandle::Update migrated from s00480320 (verbatim, slice spelling)
 004809c0  Ring_Rotate  # __thiscall (ret 4); bounding-box transform + normalized basis
 00480cf0  Ring_Reset  # __thiscall; GetLocalTransform (0x436380), Normalize (0x436ce0), Ring_Rotate (0x4809c0)
