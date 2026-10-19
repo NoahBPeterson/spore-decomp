@@ -433,6 +433,7 @@ struct cSwatch3DView {
   void* mCamera;                                            // +0x28
   cSwatchTexture* mTexture;                                 // +0x2c
   void RemoveModel(cMWModel* model);                        // 0x005f4eb0
+  cMWModel* AddModel(uint32_t imageID, int flags);          // 0x005f59b0
   void RemoveAllModels();                                   // 0x005f5aa0
   void Shutdown();                                          // 0x005f67d0
   ~cSwatch3DView();                                         // 0x005f6b40
@@ -503,7 +504,10 @@ class cSPSwatch : public IWinProc, public EA::RefCountVTemplate<int>, public EA:
   void InitInternal(IWindow* base, IWindow* modelWindow, uint32_t a3, uint32_t a4,
                     uint32_t b5, uint32_t b6, uint32_t a7, uint32_t a8);  // 0x005f3b20
   void InitAdditionalModels();            // 0x005f6090
-  void SetEditorCameraController();       // 0x005f6500
+  void SetEditorCameraController(bool enable);  // 0x005f6500
+  void SetModel(Key* key);                // 0x005f5f20
+  void LoadModel(Key& key);               // 0x005f5b40
+  void InitStaticEffects();               // 0x005f6260
   void OnModelLoad();                     // 0x005f69a0
   void ShutDownModel();                   // 0x005f5df0
   void Shutdown();                        // 0x005f68a0
@@ -615,6 +619,68 @@ void* FUN_006c10e0();                // 0x006c10e0
 void FUN_00803bd0(void* a);          // 0x00803bd0
 void* FUN_0113ae10();                // 0x0113ae10
 void* cSPBoundingBox_AddBoundingBox2(int, int, int);  // 0x0067cad0
+
+// ---- extra externs used by the s005f5f20 targets ----
+bool  FUN_00401d90(const void* a);                          // 0x00401d90
+void* FUN_00401010();                                       // 0x00401010
+void* ResourceManGetManager();                              // 0x0067dcd0
+void  SetWindowAlpha(IWindow* w, float a);                  // 0x00804fc0
+uint32_t GetThumbnailCameraID(uint32_t a, uint32_t b);      // 0x005f36d0
+void* PropertyManager();                                    // 0x0067de30
+bool  GetPropertyAsVector3(void* list, uint32_t id, void* out);   // 0x006a1110
+void* Matrix33FromEulerXYZ(void* out, const void* euler);   // 0x00453920
+void  GetPropertyAsTransformArray(void* list, uint32_t id, void* a, void* b);  // 0x006a0c30
+void  FUN_006a0ae0(void* a, uint32_t b, void* c, void* d);  // 0x006a0ae0
+void  GetPropertyAsKeyInstance(void* list, uint32_t id, void* out);  // 0x006a12a0
+bool  GetPropertyAsKey(void* list, uint32_t id, void* out); // 0x006a1250
+void* GetPropertyT_int(void* list, uint32_t id, void* out); // 0x0040cf10
+bool  GetBoolProperty(void* list, uint32_t id, void* out);  // 0x00407190
+void* FUN_0093b6c0(void* a);                                // 0x0093b6c0
+void* FUN_0080d5f0(void* a);                                // 0x0080d5f0
+void* FUN_0080db90(void* a);                                // 0x0080db90
+void* FUN_0080dc50(void* a);                                // 0x0080dc50
+void* FUN_01137690(void* mgr);                              // 0x01137690
+void  FUN_010171e0(void* a, float f);                       // 0x010171e0
+void  FUN_005a2370(void* a);                                // 0x005a2370
+void* FUN_005a2000(void* a, bool b);                        // 0x005a2000
+void  FUN_0040ce80(void* dst, const void* src);             // 0x0040ce80
+void* FUN_005f4e10(void* a, void* b, void* c);              // 0x005f4e10
+void* FUN_00572790(void* a);                                // 0x00572790
+void* FUN_0067cad0_box(void* box);                          // 0x0067cad0
+void* FUN_00a16f40(void* self);                             // 0x00a16f40
+void  MatrixFromQuaternion(void* out, const void* quat);    // 0x00698650
+void  FUN_00537dc0(void* a, const void* b);                 // 0x00537dc0
+void  ComposeTransforms(void* a, const void* b);            // 0x0040ccb0
+
+struct SwatchMatrix3 { float m[9]; void Assign(const void* src); };  // 0x0041cb40
+
+// thiscall helpers reached through an explicit ecx (member-style call).
+struct ThisCallExterns {
+  void FUN_005f5080();                       // 0x005f5080
+  void FUN_005f40b0();                       // 0x005f40b0
+  void FUN_005f2ee0();                       // 0x005f2ee0
+  void FUN_005f3cf0();                       // 0x005f3cf0
+  void FUN_005f5970();                       // 0x005f5970
+  void FUN_005f5930();                       // 0x005f5930
+  int  FUN_005f2740();                       // 0x005f2740
+  void FUN_005f58f0(const void* key);        // 0x005f58f0
+  void FUN_005f4eb0(void* model);            // 0x005f4eb0
+  void FUN_005f3680(void* a, void* b);       // 0x005f3680
+  void FUN_00423c40(void* pos, void* value); // 0x00423c40
+  void FUN_00423960(void* a, void* b);       // 0x00423960
+};
+
+// eastl::vector<AutoRefCount<cMWModel> > and eastl::vector<Key> (3-pointer form).
+struct ModelPtrVec {
+  cMWModel** mpBegin;
+  cMWModel** mpEnd;
+  cMWModel** mpCapacity;
+};
+struct KeyVec {
+  Key* mpBegin;
+  Key* mpEnd;
+  Key* mpCapacity;
+};
 
 class cRefVt {
  public:
@@ -742,21 +808,434 @@ void cSPPaletteSwatch::OnRolloverEnd2() {
 }
 
 // @ 0x005F5F20
-void FUN_005f5f20() { /* partial */ }
+void cSPSwatch::SetModel(Key* key) {
+  char* const s = (char*)this;
+  if (mModelKey == *key)
+    return;
+
+  ShutDownModel();
+  ((void(__thiscall*)(void*, void*))((*(void***)s)[0x28 / 4]))(s, key);
+  *(uint8_t*)(s + 0x163) = 0;
+  *(uint8_t*)(s + 0x161) = 0;
+  *(uint8_t*)(s + 0x162) = 0;
+  if (*(uint32_t*)(s + 0x60) != 0) {
+    bool baked;
+    if (!FUN_00401d90(key)) {
+      void* mgr = FUN_00401010();
+      if (((bool(__thiscall*)(void*, void*, int))((*(void***)mgr)[0x1c / 4]))(mgr, key, 1))
+        baked = true;
+      else
+        baked = false;
+    } else {
+      baked = false;
+    }
+    Key res = *key;
+    res.mType = 0x2f7d0004;
+    void* rm = ResourceManGetManager();
+    bool ok = ((bool(__thiscall*)(void*, Key*, int, int, int, int, int))
+                   ((*(void***)rm)[0xc / 4]))(rm, &res, 0, 0, 0, 0, 0);
+    if (ok && *(uint8_t*)(s + 0x16c) == 0)
+      SPUIHelpers::SetWindowImage(*(IWindow**)(s + 0x60), &res, -1);
+    bool noCam = (*(uint8_t*)(s + 0x16c) != 0);
+    *(float*)(s + 0xc4) = 0.0f;
+    *(float*)(s + 0xc0) = 1.0f;
+    if (!noCam)
+      SetWindowAlpha(*(IWindow**)(s + 0x60), 0.0f);
+    if (baked)
+      *(uint8_t*)(s + 0x163) = 1;
+  }
+  if (*(uint8_t*)(s + 0xe8) == 0 && *(uint8_t*)(s + 0xe9) == 0)
+    LoadModel(mModelKey);
+  uint32_t cam = GetThumbnailCameraID(*(uint32_t*)(s + 0x50), 0);
+  *(uint8_t*)(s + 0x169) = 0;
+  *(uint32_t*)(s + 0x174) = cam;
+  *(uint8_t*)(s + 0x160) = 0;
+}
 
 // @ 0x005F6090
-void cSPSwatch::InitAdditionalModels() { /* partial */ }
+void cSPSwatch::InitAdditionalModels() {
+  char* const s = (char*)this;
+  ModelPtrVec* models = (ModelPtrVec*)(s + 0x104);
+  uint32_t count = (uint32_t)(models->mpEnd - models->mpBegin);
+  for (uint32_t i = 0; i < count; i++)
+    m3DView.RemoveModel(models->mpBegin[i]);
+
+  cMWModel** first = models->mpBegin;
+  cMWModel** last = models->mpEnd;
+  cMWModel** res = (cMWModel**)FUN_005f4e10(last, last, first);
+  ((ThisCallExterns*)models)->FUN_005f3680(res, models->mpEnd);
+  models->mpEnd -= (uint32_t)(last - first);
+
+  KeyVec* keys = (KeyVec*)(s + 0x148);
+  uint32_t n = (uint32_t)(keys->mpEnd - keys->mpBegin);
+  if (n != 0) {
+    for (uint32_t i = 0; i < (uint32_t)(keys->mpEnd - keys->mpBegin); i++) {
+      Key* e = keys->mpBegin + i;
+      if (e->mInstance == 0)
+        continue;
+      cMWModel* m = m3DView.AddModel(e->mInstance, e->mGroup);
+      if (m == 0)
+        continue;
+      ++*(int*)((char*)m + 0x40);
+      if (models->mpEnd < models->mpCapacity) {
+        cMWModel** slot = models->mpEnd;
+        models->mpEnd = models->mpEnd + 1;
+        if (slot) {
+          *slot = m;
+          ++*(int*)((char*)m + 0x40);
+        }
+      } else {
+        ((ThisCallExterns*)models)->FUN_00423c40(models->mpEnd, &m);
+      }
+      if (m) {
+        if (*(int*)((char*)m + 0x40) > 1)
+          --*(int*)((char*)m + 0x40);
+        else
+          ((void(__thiscall*)(void*, int))((*(void***)m)[0x170 / 4]))(
+              m, (*(uint32_t*)((char*)m + 4) >> 31) & 1);
+      }
+    }
+  }
+
+  // keys.clear() : eastl::vector::erase(begin(), end())
+  {
+    Key* kfirst = keys->mpBegin;
+    Key* klast = keys->mpEnd;
+    Key* d = kfirst;
+    for (Key* p = klast; p != klast; ++p, ++d)
+      *d = *p;
+    keys->mpEnd -= (uint32_t)(klast - kfirst);
+  }
+}
 
 // @ 0x005F6260
-void FUN_005f6260() { /* partial */ }
+void cSPSwatch::InitStaticEffects() {
+  char* const s = (char*)this;
+  if (*(uint8_t*)(s + 0x165) == 0)
+    return;
+  void* model = *(void**)(s + 0x118);
+  if (model == 0)
+    return;
+  void* list = *(void**)((char*)model + 0x90);
+  if (list == 0)
+    return;
+  void** vt = *(void***)list;
+  if (!((bool(__thiscall*)(void*, uint32_t))vt[0x1c / 4])(list, 0x2a907b6))
+    return;
+  model = *(void**)(s + 0x118);
+  vt = *(void***)(*(void**)((char*)model + 0x90));
+  if (!((bool(__thiscall*)(void*, uint32_t))vt[0x1c / 4])(
+          *(void**)((char*)model + 0x90), 0x4ff954a))
+    return;
+
+  void* list2 = *(void**)((char*)(*(void**)(s + 0x118)) + 0x90);
+  uint32_t cnt = 0;
+  void* tr;
+  GetPropertyAsTransformArray(list2, 0x2a907b6, &cnt, &tr);
+  uint32_t cnt2 = 0;
+  void* tr2;
+  FUN_006a0ae0(list2, 0x4ff954a, &cnt2, &tr2);
+
+  int n = (*(int*)(s + 0x120) - *(int*)(s + 0x11c)) >> 2;
+  for (int i = 0; i < n; i++)
+    m3DView.RemoveModel((cMWModel*)*(void**)(*(int*)(s + 0x11c) + i * 4));
+
+  ((ThisCallExterns*)(s + 0x11c))->FUN_005f5970();
+  ((ThisCallExterns*)(s + 0x130))->FUN_005f5930();
+
+  uint32_t total = *(uint32_t*)&tr;
+  for (uint32_t i = 0; i < total; i++) {
+    char* e = (char*)tr + i * 0xc;
+    if (*(void**)e == 0)
+      continue;
+    SwatchMatrix3 basis;
+    basis.Assign((const void*)0x15f1e14);
+    cMWModel* m = m3DView.AddModel(*(uint32_t*)e, *(int*)(e + 8));
+    if (m)
+      ++*(int*)((char*)m + 0x40);
+    char* trs = (char*)tr2 + i * 0x38;
+    SwatchMatrix3 rot;
+    rot.Assign(trs + 0x14);
+    SwatchMatrix3 local;
+    local = rot;
+    MatrixFromQuaternion(&local, (void*)(s + 0x30));
+    float w = *(float*)(e + 0x10);
+    for (int k = 0; k < 9; k++)
+      basis.m[k] = local.m[k];
+    basis.m[0] = w;
+    basis.m[5] = 6;
+    basis.m[6] = 3;
+    FUN_00537dc0((char*)s + 0x24, (const void*)&basis);
+    ComposeTransforms((char*)s + 0x24, (const void*)&local);
+    ModelPtrVec* vec = (ModelPtrVec*)(s + 0x11c);
+    if (vec->mpEnd < vec->mpCapacity) {
+      cMWModel** slot = vec->mpEnd;
+      vec->mpEnd = vec->mpEnd + 1;
+      if (slot) {
+        *slot = m;
+        if (m)
+          ++*(int*)((char*)m + 0x40);
+      }
+    } else {
+      ((ThisCallExterns*)vec)->FUN_00423c40(vec->mpEnd, &m);
+    }
+    ModelPtrVec* tvec = (ModelPtrVec*)(s + 0x130);
+    if (tvec->mpEnd < tvec->mpCapacity) {
+      char* slot = (char*)tvec->mpEnd;
+      tvec->mpEnd = tvec->mpEnd + 1;
+      if (slot)
+        FUN_0040ce80(slot, &local);
+    } else {
+      ((ThisCallExterns*)tvec)->FUN_00423960(tvec->mpEnd, &local);
+    }
+    if (m) {
+      if (*(int*)((char*)m + 0x40) > 1)
+        --*(int*)((char*)m + 0x40);
+      else
+        ((void(__thiscall*)(void*, int))((*(void***)m)[0x170 / 4]))(
+            m, (*(uint32_t*)((char*)m + 4) >> 31) & 1);
+    }
+  }
+}
 
 // @ 0x005F6500
-void cSPSwatch::SetEditorCameraController() { /* partial */ }
+void cSPSwatch::SetEditorCameraController(bool enable) {
+  char* const s = (char*)this;
+  void* propList = 0;
+  if (!((bool(__thiscall*)(void*, void**))((*(void***)s)[0x78 / 4]))(s, &propList))
+    goto release;
+
+  {
+    uint32_t* cam = (uint32_t*)(s + 0x174);
+    *cam = 0;
+    GetPropertyAsKeyInstance(propList, 0xb4a08d14, cam);
+
+    void* ctrl;
+    if (*(void**)(s + 0x14) != 0)
+      ctrl = ((void*(__thiscall*)(void*))FUN_0093b6c0)(*(void**)(s + 0x14));
+    else {
+      void* tex = *(void**)(s + 0x3c);
+      if (tex == 0)
+        goto release;
+      ctrl = ((void*(__thiscall*)(void*))FUN_0080d5f0)(tex);
+    }
+    if (ctrl == 0)
+      goto release;
+    if (*cam == 0)
+      goto release;
+    if (SwatchManager() == 0)
+      goto release;
+
+    {
+      void* camMgr = SwatchManager()->GetCameraManager();
+      if (camMgr == 0)
+        goto release;
+
+      int buf = ((ThisCallExterns*)(s + 0x10))->FUN_005f2740();
+      void* sm = SwatchManager();
+      ((void(__thiscall*)(void*, int))FUN_005f0320)(sm, buf);
+      sm = SwatchManager();
+      void* cmgr = FUN_01137690(sm);
+      ((void(__thiscall*)(void*, uint32_t))((*(void***)cmgr)[0x34 / 4]))(cmgr, *cam);
+      sm = SwatchManager();
+      cmgr = FUN_01137690(sm);
+      void* camera = ((void*(__thiscall*)(void*))((*(void***)cmgr)[0x38 / 4]))(cmgr);
+      if (camera == 0)
+        goto success;
+
+      {
+        float f = *(float*)0x13f9dd4;
+        GetPropertyT_int(propList, 0x700db77d, &f);
+        void* sm2 = SwatchManager();
+        void* cm2 = FUN_01137690(sm2);
+        void* cam2 = ((void*(__thiscall*)(void*))((*(void***)cm2)[0x38 / 4]))(cm2);
+        void* c = FUN_00572790(cam2);
+        FUN_010171e0(c, f);
+        if (c)
+          ((void(__thiscall*)(void*))((*(void***)c)[0x50 / 4]))(c);
+        ((void(__thiscall*)(void*))FUN_005a2370)(c);
+        bool b = false;
+        GetBoolProperty(propList, 0x937e6619, &b);
+        ((void(__thiscall*)(void*, bool))FUN_005a2000)(c, b);
+
+        uint32_t box = 0;
+        GetPropertyAsKeyInstance(propList, 0xb00db8c8, &box);
+        if (box != 0) {
+          void* r = FUN_0067cad0_box((void*)box);
+          ((void(__thiscall*)(void*))FUN_0080dc50)(r);
+        }
+
+        Key km1;
+        Key km2;
+        if (GetPropertyAsKey(propList, 0x149c4d75, &km1)) {
+          km1.mGroup = *(uint32_t*)0x151c630;
+          ((ThisCallExterns*)s)->FUN_005f58f0(&km1);
+        }
+        if (GetPropertyAsKey(propList, 0x149c4d69, &km2)) {
+          km2.mGroup = *(uint32_t*)0x151c630;
+          ((ThisCallExterns*)s)->FUN_005f58f0(&km2);
+        }
+        ((void(__thiscall*)(void*))((*(void***)s)[0x7c / 4]))(s);
+        InitAdditionalModels();
+
+        uint32_t effect = 0;
+        GetPropertyAsKeyInstance(propList, 0x35383c76, &effect);
+        if (effect != 0) {
+          void** slot = (void**)(s + 0x144);
+          void* old = *slot;
+          if (old != 0) {
+            *slot = 0;
+            ((void(__thiscall*)(void*))((*(void***)old)[4 / 4]))(old);
+          }
+          void* tex = *(void**)(s + 0x3c);
+          void* texObj = (tex != 0) ? ((void*(__thiscall*)(void*))FUN_0080db90)(tex) : 0;
+          void* pp = ((void*(__thiscall*)(void*))FUN_00a16f40)(s + 0x144);
+          if (texObj)
+            ((void(__thiscall*)(void*, uint32_t, int, void*))(
+                ((void**)(*(void***)texObj))[2]))(texObj, effect, 0, pp);
+          void* nv = *slot;
+          if (nv != 0)
+            ((void(__thiscall*)(void*, int))((*(void***)nv)[2]))(nv, 0);
+        }
+      }
+    }
+  }
+success:
+  *(uint32_t*)(s + 0x16d) = 0;
+  *(uint8_t*)(s + 0x171) = 0;
+  *(uint8_t*)(s + 0x16c) = enable ? 1 : 0;
+
+release:
+  if (propList)
+    ((void(__thiscall*)(void*))((*(void***)propList)[4 / 4]))(propList);
+}
 
 // @ 0x005F69A0
-void cSPSwatch::OnModelLoad() { /* partial */ }
+void cSPSwatch::OnModelLoad() {
+  char* const s = (char*)this;
+  *(uint8_t*)(s + 0x161) = 1;
+  *(uint8_t*)(s + 0x162) = 0;
+  *(float*)(s + 0xdc) = 0.0f;
+  ((ThisCallExterns*)s)->FUN_005f5080();
+
+  void* list = 0;
+  void* pm = PropertyManager();
+  if (list) {
+    list = 0;
+    ((void(__thiscall*)(void*))((*(void***)list)[4 / 4]))(list);
+  }
+  bool ok = ((bool(__thiscall*)(void*, uint32_t, uint32_t, void**))
+                 ((*(void***)pm)[0x2c / 4]))(pm, *(uint32_t*)(s + 0x4c),
+                                             *(uint32_t*)(s + 0x54), &list);
+  if (!ok)
+    goto release;
+
+  {
+    float vec[3];
+    if (GetPropertyAsVector3(list, 0x72a87cc2, vec)) {
+      SwatchMatrix3 tmp;
+      float mat[9];
+      const float d2r = *(float*)0x13f9d60;
+      vec[0] *= d2r;
+      vec[1] *= d2r;
+      vec[2] *= d2r;
+      Matrix33FromEulerXYZ(mat, vec);
+      tmp.Assign(mat);
+      for (int i = 0; i < 9; i++)
+        ((float*)(s + 0x98))[i] = tmp.m[i];
+    }
+  }
+  if (*(uint8_t*)(s + 0x163)) {
+    if (*(uint8_t*)(s + 0x16c))
+      ((ThisCallExterns*)s)->FUN_005f40b0();
+    InitStaticEffects();
+    ((ThisCallExterns*)s)->FUN_005f2ee0();
+  }
+  if (*(uint8_t*)(s + 0x160) == 0)
+    ((ThisCallExterns*)s)->FUN_005f3cf0();
+
+release:
+  if (list)
+    ((void(__thiscall*)(void*))((*(void***)list)[4 / 4]))(list);
+}
 
 // @ 0x005F6BD0
-cSPSwatch::cSPSwatch() { /* partial */ }
+cSPSwatch::cSPSwatch() {
+  char* const s = (char*)this;
+  *(uint8_t*)(s + 0x10) = 0;
+  *(uint32_t*)(s + 0x14) = 0;
+  *(uint32_t*)(s + 0x18) = 0;
+  *(uint32_t*)(s + 0x1c) = 0;
+  *(uint32_t*)(s + 0x20) = 0;
+  *(uint32_t*)(s + 0x2c) = 0;
+  *(uint32_t*)(s + 0x30) = 0;
+  *(uint32_t*)(s + 0x34) = 0;
+  *(uint32_t*)(s + 0x38) = 0;
+  *(uint32_t*)(s + 0x3c) = 0;
+  *(uint32_t*)(s + 0x40) = 0;
+  *(uint32_t*)(s + 0x44) = 0;
+  *(uint32_t*)(s + 0x48) = 0;
+  *(uint32_t*)(s + 0x4c) = 0;
+  *(uint32_t*)(s + 0x50) = 0;
+  *(uint32_t*)(s + 0x54) = 0;
+  ((SwatchMatrix3*)(s + 0x98))->Assign((const void*)0x15f1e14);
+  *(float*)(s + 0x64) = 1.0f;
+  *(float*)(s + 0x68) = 0.0f;
+  *(float*)(s + 0x6c) = 0.0f;
+  *(float*)(s + 0x70) = 1.0f;
+  *(float*)(s + 0x94) = 1.0f;
+  const uint32_t def = *(const uint32_t*)0x151c424;
+  *(uint32_t*)(s + 0xd0) = def;
+  *(uint32_t*)(s + 0xd4) = def;
+  *(uint32_t*)(s + 0xe4) = def;
+  *(float*)(s + 0xc0) = 1.0f;
+  *(float*)(s + 0xc4) = 1.0f;
+  *(uint8_t*)(s + 0xbc) = 0;
+  *(float*)(s + 0xd8) = 0.0f;
+  *(float*)(s + 0xdc) = 0.0f;
+  *(uint8_t*)(s + 0xe9) = 0;
+  *(uint8_t*)(s + 0xeb) = 0;
+  *(uint8_t*)(s + 0xec) = 0;
+  *(uint32_t*)(s + 0xc8) = 0xffffffff;
+  *(uint32_t*)(s + 0xcc) = 0xffffffff;
+  *(uint32_t*)(s + 0xe0) = 0xffffffff;
+  *(uint8_t*)(s + 0xe8) = 1;
+  *(uint8_t*)(s + 0xea) = 1;
+  *(uint32_t*)(s + 0xf0) = 0;
+  *(uint32_t*)(s + 0xf4) = 2;
+  *(uint32_t*)(s + 0xf8) = 0;
+  *(uint8_t*)(s + 0xfc) = 1;
+  *(uint8_t*)(s + 0xfd) = 0;
+  *(uint32_t*)(s + 0x100) = 0x71fa7d3f;
+  *(uint32_t*)(s + 0x104) = 0;
+  *(uint32_t*)(s + 0x108) = 0;
+  *(uint32_t*)(s + 0x10c) = 0;
+  *(uint32_t*)(s + 0x118) = 0;
+  *(uint32_t*)(s + 0x11c) = 0;
+  *(uint32_t*)(s + 0x120) = 0;
+  *(uint32_t*)(s + 0x124) = 0;
+  *(uint32_t*)(s + 0x130) = 0;
+  *(uint32_t*)(s + 0x134) = 0;
+  *(uint32_t*)(s + 0x138) = 0;
+  *(uint32_t*)(s + 0x144) = 0;
+  *(uint32_t*)(s + 0x148) = 0;
+  *(uint32_t*)(s + 0x14c) = 0;
+  *(uint32_t*)(s + 0x150) = 0;
+  *(float*)(s + 0x15c) = 0.0f;
+  *(uint8_t*)(s + 0x160) = 0;
+  *(uint8_t*)(s + 0x165) = 1;
+  *(uint8_t*)(s + 0x166) = 1;
+  *(uint8_t*)(s + 0x16a) = 1;
+  *(uint8_t*)(s + 0x16b) = 1;
+  *(uint8_t*)(s + 0x161) = 0;
+  *(uint8_t*)(s + 0x162) = 0;
+  *(uint8_t*)(s + 0x163) = 0;
+  *(uint8_t*)(s + 0x164) = 0;
+  *(uint8_t*)(s + 0x167) = 0;
+  *(uint8_t*)(s + 0x169) = 0;
+  *(uint8_t*)(s + 0x16c) = 0;
+  *(uint32_t*)(s + 0x174) = 0;
+  *(uint32_t*)(s + 0x178) = 0;
+}
 
 }  // namespace SP
