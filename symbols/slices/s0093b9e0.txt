@@ -22,7 +22,7 @@
 0093c320 EA::IO::MemoryStream::Clear  # no PDB name
 0093c370 EA::IO::MemoryStream::SetSize  # no PDB name
 0093c3f0 EA::IO::MemoryStream::Release  # no PDB name
-0093c420 trivial return-b thunk  # no PDB name
+0093c420 ?FUN_0093c420@@YAHHH@Z  # FUN_0093c420 migrated from s0093b9e0 (verbatim, slice spelling)
 0093c430 small ctor  # no PDB name
 0093c440 ?ConvertToString8Impl@EA@@YAXPAXPB_WI@Z  # ConvertToString8Impl migrated from s0093b9e0 (verbatim, slice spelling)
 0093c570 ?ConvertToString8@EA@@YAPAXPAXPBH@Z  # ConvertToString8 migrated from s0093b9e0 (verbatim, slice spelling)
