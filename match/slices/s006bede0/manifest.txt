@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+slices/s006bede0/s006bede0.cpp  ?Validate@PFIndex@@QAE_N_K0@Z  006bede0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s006bede0/s006bede0.cpp  ?ValidateFreeSpace@PFIndex@@QAE_N_K0@Z  006beeb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s006bede0/s006bede0.cpp  ?FUN_006bef70@PFHoleTable@@QAEXII@Z  006bef70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s006bede0/s006bede0.cpp  ?DoInsertValueImpl@HoleTree@@QAE?AUHoleIter@@PAUHoleNodeBase@@ABUHoleValue@@_N@Z  006bf140  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s006bede0/s006bede0.cpp  ??$get_partition@PAPAUHoleNode@@PAU1@UHoleLess@@@@YAPAPAUHoleNode@@PAPAU0@0PAU0@UHoleLess@@@Z  006bf1e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s006bede0/s006bede0.cpp  ?partial_sort@@YAXPAPAUHoleNode@@00UHoleLess@@@Z  006bf240  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s006bede0/s006bede0.cpp  ?DoInsertValue@HoleTree@@QAE?AUHolePairIB@@ABUHoleValue@@Utrue_type@@@Z  006bf2c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

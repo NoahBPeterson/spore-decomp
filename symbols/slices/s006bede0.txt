@@ -1,13 +1,13 @@
-006bede0 ?Validate@PFIndexModifiable@ResourceMan@EA@@UBE_NII@Z  # EA::ResourceMan::PFIndexModifiable::Validate migrated from s006bede0
-006beeb0 ?ValidateFreeSpace@PFIndexModifiable@ResourceMan@EA@@UBE_NII@Z  # EA::ResourceMan::PFIndexModifiable::ValidateFreeSpace migrated from s006bede0
+006bede0 ?Validate@PFIndex@@QAE_N_K0@Z  # PFIndexModifiable::Validate (arity-correct view, slice spelling s006bede0)
+006beeb0 ?ValidateFreeSpace@PFIndex@@QAE_N_K0@Z  # PFIndexModifiable::ValidateFreeSpace (arity-correct view, slice spelling s006bede0)
 006bef70 ?FUN_006bef70@PFHoleTable@@QAEXII@Z  # PFHoleTable::FUN_006bef70 migrated from s006bede0 (verbatim, slice spelling)
-006bf030 ?FUN_006bf030@@YAXPAX0@Z  # FUN_006bf030 migrated from s006bede0 (verbatim, slice spelling)
-006bf140 ?FUN_006bf140@@YAXPAX0@Z  # FUN_006bf140 migrated from s006bede0 (verbatim, slice spelling)
-006bf1e0 ?FUN_006bf1e0@@YAXPAX@Z  # FUN_006bf1e0 migrated from s006bede0 (verbatim, slice spelling)
-006bf240 ?FUN_006bf240@@YAXPAX0@Z  # FUN_006bf240 migrated from s006bede0 (verbatim, slice spelling)
-006bf2c0 ?FUN_006bf2c0@@YAXPAX00@Z  # FUN_006bf2c0 migrated from s006bede0 (verbatim, slice spelling)
-006bf370 ??0PFIndexModifiable@ResourceMan@EA@@QAE@PAVICoreAllocator@Allocator@2@@Z  # EA::ResourceMan::PFIndexModifiable::PFIndexModifiable migrated from s006bede0
-006bf430 ?FUN_006bf430@@YAXPAX@Z  # FUN_006bf430 migrated from s006bede0 (verbatim, slice spelling)
+006bf030 ?DoInsertValue@PFItemsMap@@QAE?AUInsertRet@@ABUHashValue@@Utrue_type@@@Z  # PFIndexModifiable items-map hashtable find-or-insert (slice spelling s006bede0)
+006bf140 ?DoInsertValueImpl@HoleTree@@QAE?AUHoleIter@@PAUHoleNodeBase@@ABUHoleValue@@_N@Z  # PFHoleTable rbtree insert (slice spelling s006bede0)
+006bf1e0 ??$get_partition@PAPAUHoleNode@@PAU1@UHoleLess@@@@YAPAPAUHoleNode@@PAPAU0@0PAU0@UHoleLess@@@Z  # eastl::get_partition<HoleNode**> (slice spelling s006bede0)
+006bf240 ?partial_sort@@YAXPAPAUHoleNode@@00UHoleLess@@@Z  # eastl::partial_sort<HoleNode**, HoleLess> (slice spelling s006bede0)
+006bf2c0 ?DoInsertValue@HoleTree@@QAE?AUHolePairIB@@ABUHoleValue@@Utrue_type@@@Z  # PFHoleTable rbtree insert-or-find (slice spelling s006bede0)
+006bf370 ?Ctor@PFIndex@@QAEXPAX@Z  # PFIndexModifiable ctor (view, slice spelling s006bede0)
+006bf430 ?Dtor@PFIndex@@QAEXXZ  # PFIndexModifiable dtor (view, slice spelling s006bede0)
 006bf4e0 ?FindRecord@PFIndexModifiable@ResourceMan@EA@@UAEPAUPFRecordInfo@23@ABVKey@23@@Z  # EA::ResourceMan::PFIndexModifiable::FindRecord migrated from s006bede0
 006bf520 ?DeleteRecord@PFIndexModifiable@ResourceMan@EA@@UAE_NABVKey@23@AAUPFRecordInfo@23@@Z  # EA::ResourceMan::PFIndexModifiable::DeleteRecord migrated from s006bede0
 006bf5a0 ?FUN_006bf5a0@PFHoleTable@@QAEXXZ  # PFHoleTable::FUN_006bf5a0 migrated from s006bede0 (verbatim, slice spelling)
