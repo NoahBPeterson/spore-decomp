@@ -1,1 +1,3 @@
-004c3230 SP::cSPEditorSkinManager::UpdateTorso  # PDB name
+004accf0 ?GetBlockCount@cSPEditorModel@SP@@QBEIXZ  # SP::cSPEditorModel::GetBlockCount (callee of s004c3230, named from the dev publics; slice address comment)
+004c3230 ?UpdateTorso@cSPEditorSkinManager_s004c_3230@SP@@QAEXUTorsoFlags@2@H@Z  # cSPEditorSkinManager_s004c_3230::UpdateTorso migrated from s004c3230 (verbatim, slice spelling)
+004cc540 ?Update@cSPEditorSkinPart@SP@@QAEXAAV?$vector@PAVcSPEditorBlock@SP@@Usp_vector_allocator@eastl@@@eastl@@_N@Z  # SP::cSPEditorSkinPart::Update (callee of s004c3230, named from the dev publics; slice address comment)

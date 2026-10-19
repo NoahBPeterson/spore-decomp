@@ -1,3 +1,3 @@
-004c38e0 SP::cSPEditorSkinManager::Update  # PDB name
-004c4290 SP::cSPEditorSkinManager::UpdatePaintedSkin  # PDB name
+004c38e0 ?Update@cSPEditorSkinManager_s004c_38e0@SP@@QAEXIDII@Z  # cSPEditorSkinManager_s004c_38e0::Update migrated from s004c38e0 (verbatim, slice spelling)
+004c4290 ?cSPEditorSkinManager_UpdatePaintedSkin@SP@@YAXPAXIII@Z  # cSPEditorSkinManager_UpdatePaintedSkin migrated from s004c38e0 (verbatim, slice spelling)
 004c45d0 SP::cSPEditorSkinManager::GetSceneObject  # switch on skin id, field +0xe0

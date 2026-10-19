@@ -2,3 +2,4 @@
 004c2520 eastl::adjust_heap<Elem18*,int,Elem18,Compare18>  # MATCH; value passed by value
 004c26d0 eastl::basic_string<wchar_t,256>::ensure-capacity  # near-match
 004c3030 SP::cSPEditorSkinManager::AsInterface  # near-match
+004c3070 ?create_ui_raster@@YAXPAX000@Z  # create_ui_raster migrated from s004c2100 (verbatim, slice spelling)
