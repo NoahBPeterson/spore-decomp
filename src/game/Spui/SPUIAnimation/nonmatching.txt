@@ -28,3 +28,4 @@
 007f8140 78 complete Rotation wrapper; cl materializes vector temp in frame (original builds it in the outgoing arg area)
 007f8350 73 complete vector copy-ctor; allocator tag/calling-convention codegen differs; equiv: FAIL (5/239 mismatched, ecx fixed via Vec8c member)
 007f8400 150 complete vector operator=; allocation/copy call scheduling differs; equiv: FAIL (5/5 mismatched, ecx fixed via Vec8c member)
+007f8d10 343 cSPUIAnimator::AddAnimation: complete (find/append default element/assign); search-loop register allocation and size() reloads differ [equiv: WEAK 228 valid, 7.6% coverage]

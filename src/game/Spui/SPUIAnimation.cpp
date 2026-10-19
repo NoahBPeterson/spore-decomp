@@ -181,9 +181,12 @@ extern "C" void* __cdecl FUN_007f79d0(int n, AInfo8c* first, AInfo8c* last);
 // ---- items of slice s007f7530 end
 
 // ---- items of slice s007f8540 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* g_013f6400;   // animation vtable (temp element +8)
+extern void* g_013f63fc;   // timer vtable (temp element +0x10)
 extern "C" void* __cdecl eastl_alloc(int n, void* a, int b, int c, const char* file, int line);
 extern "C" void  __cdecl eastl_free(void* p);
 extern "C" void  __cdecl anim_copy_body(void* dst, void* src);     // FUN_007f6ff0
+extern "C" void* __cdecl EA_operator_new(unsigned int size, const char* name, int a, int b, int c, int d);
 struct AInfo8c_s007f_8540 {                 // cSPUIAnimationSequence::cAnimInfo, size 0x8c
     void* vf;                    // +0
     void* animVf;                // +4
@@ -194,11 +197,51 @@ struct AInfo8c_s007f_8540 {                 // cSPUIAnimationSequence::cAnimInfo
     void* mpObject;              // +0x84
     uint32_t mType;              // +0x88
 };
+struct IRef {                   // intrusive-refcounted interface: slot 0 AddRef, slot 1 Release
+    virtual void AddRef();
+    virtual void Release();
+};
+typedef void (__cdecl *AnimActionFn)(void* self, float a, float b, int c, int d);
+struct AInfo88_s007f_8540 {                 // cSPUIAnimator::cAnimationInfo, size 0x88
+    IRef* mpObject;              // +0
+    uint32_t mType;              // +4
+    void* animVf;                // +8
+    AnimActionFn animAction;     // +0xc
+    void* timerVf;               // +0x10
+    IRef* mpTimeFunction;        // +0x14
+    uint32_t mData[(0x88 - 0x18) / 4];  // +0x18
+
+    void CopyFrom(const AInfo88_s007f_8540* src);  // 0x007f6d90 (copy-construct in place)
+    void AssignBody(const void* src);   // 0x007f6ff0 (called on &animVf)
+};
+struct Vec88 {                   // eastl::vector<cAnimationInfo, sp_vector_allocator>: size 0x10
+    AInfo88_s007f_8540* mpBegin;
+    AInfo88_s007f_8540* mpEnd;
+    AInfo88_s007f_8540* mpCapacity;
+    void*    mAlloc;
+    Vec88() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    void DoDestroy(AInfo88_s007f_8540* first, AInfo88_s007f_8540* last);          // 0x007f78c0
+    void PushBackSlow(AInfo88_s007f_8540* end, const AInfo88_s007f_8540* value);  // 0x007f8820
+    int size() const { return (int)((char*)mpEnd - (char*)mpBegin) / 0x88; }
+};
+struct AInfo88T : AInfo88_s007f_8540 {      // default-constructed temporary element
+    AInfo88T() {
+        mpObject = 0;
+        animVf = &g_013f6400;
+        timerVf = &g_013f63fc;
+        mpTimeFunction = 0;
+    }
+    ~AInfo88T() {
+        if (mpTimeFunction) mpTimeFunction->Release();
+        if (mpObject) mpObject->Release();
+    }
+};
 extern "C" void* __cdecl vec_uninit_copy(void** srcOut, AInfo8c_s007f_8540* first, AInfo8c_s007f_8540* last, AInfo8c_s007f_8540* dst, void** srcIn);
 extern "C" void  __cdecl vec_clear_range(AInfo8c_s007f_8540* first, AInfo8c_s007f_8540* last);
 extern "C" AInfo8c_s007f_8540* __cdecl vec_move_backward(AInfo8c_s007f_8540* first, AInfo8c_s007f_8540* last, AInfo8c_s007f_8540* dst);
 extern "C" void  __cdecl vec_fill(AInfo8c_s007f_8540* first, AInfo8c_s007f_8540* last, AInfo8c_s007f_8540* src);
 extern "C" AInfo8c_s007f_8540* __cdecl cAnimInfo_ctor(AInfo8c_s007f_8540* p);             // FUN_007f8970
+void* operator new(size_t, const char* name, int a, int b, int c, int d);
 struct Vec8c_s007f_8540 {
     AInfo8c_s007f_8540* mpBegin;            // +0
     AInfo8c_s007f_8540* mpEnd;              // +4
@@ -210,6 +253,35 @@ struct Vec8c_s007f_8540 {
 
     AInfo8c_s007f_8540* erase(AInfo8c_s007f_8540* first, AInfo8c_s007f_8540* last);
     AInfo8c_s007f_8540* erase(AInfo8c_s007f_8540* pos);
+    void reserve(uint32_t n);        // 0x007f90f0
+};
+struct cSPUIAnimator_s007f_8540 {
+    // vptr at +0 (virtual destructor, slot 0)
+    Vec88    mAnimationInfos;    // +4 (begin, end, capacity, allocator)
+    float    mLastUpdate;        // +0x14
+    float    mF18;               // +0x18
+    bool     mB1c;               // +0x1c
+
+    cSPUIAnimator_s007f_8540() : mF18(0.0f), mB1c(false) {}
+    virtual ~cSPUIAnimator_s007f_8540();
+
+    int size()  const { return (int)((char*)mAnimationInfos.mpEnd - (char*)mAnimationInfos.mpBegin) / 0x88; }
+    int cap()   const { return (int)((char*)mAnimationInfos.mpCapacity - (char*)mAnimationInfos.mpBegin) / 0x88; }
+
+    void callAction(int i, int a, int b, int c, int d) {
+        AInfo88_s007f_8540* e = mAnimationInfos.mpBegin + i;
+        ((void(__thiscall*)(void*, int, int, int, int))(e->animAction))((char*)e + 8, a, b, c, d);
+    }
+
+    bool Empty();                // 0x007f6340
+    void Update();               // 0x007f63b0
+    void AddAnimation(void* anim, IRef* obj, int type);  // 0x007f8d10 (cSPUIAnimator::AddAnimation)
+    void ClearAll();
+    void InsertEnd(int anim, void* obj, int type);
+
+    static void* operator new(size_t n, const char* name, int a, int b, int c, int d) {
+        return EA_operator_new((unsigned int)n, name, a, b, c, d);
+    }
 };
 // ---- items of slice s007f8540 end
 
@@ -1285,4 +1357,50 @@ static void vec_resize(Vec8c_s007f_8540* v, uint32_t n)
     } else {
         v->erase((AInfo8c_s007f_8540*)((char*)first + n * 0x8c), end);
     }
+}
+
+// @ 0x007f8d10
+void cSPUIAnimator_s007f_8540::AddAnimation(void* anim, IRef* obj, int type)
+{
+    if (obj == 0) return;
+    if (*(int*)((char*)anim + 4) == 0) return;
+    Vec88* v = &mAnimationInfos;
+    uint32_t n = (uint32_t)v->size();
+    uint32_t idx = n;
+    uint32_t i = 0;
+    if (v->size() != 0) {
+        AInfo88_s007f_8540* e = v->mpBegin;
+        IRef* o;
+        while (o = e->mpObject, idx = i, o != 0) {
+            if (o == obj && e->mType == (uint32_t)type) {
+                if (o != 0) e->animAction((char*)e + 8, 0.0f, 0.0f, 1, 0);
+                break;
+            }
+            ++i;
+            ++e;
+            idx = n;
+            if ((uint32_t)v->size() <= i) break;
+        }
+    }
+    if (idx == (uint32_t)v->size()) {
+        AInfo88_s007f_8540* end = v->mpEnd;
+        AInfo88T tmp;
+        if (end < v->mpCapacity) {
+            v->mpEnd = end + 1;
+            if (end != 0) end->CopyFrom(&tmp);
+        } else {
+            v->PushBackSlow(end, &tmp);
+        }
+    }
+    AInfo88_s007f_8540* e = v->mpBegin + idx;
+    IRef* old = e->mpObject;
+    if (obj != old) {
+        obj->AddRef();
+        e->mpObject = obj;
+        if (old) old->Release();
+    }
+    e->mType = (uint32_t)type;
+    e->AssignBody(anim);
+    e->animAction((char*)e + 8, 0.0f, 0.0f, 0, 0);
+    mB1c = true;
 }
