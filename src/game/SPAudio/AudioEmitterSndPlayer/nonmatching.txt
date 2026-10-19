@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00a10f70  7  complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original)
+00a112c0 33 complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original)
+00a11310 19 complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original)
+00a11380 52 complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original)
+00a113c0 173 complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original)

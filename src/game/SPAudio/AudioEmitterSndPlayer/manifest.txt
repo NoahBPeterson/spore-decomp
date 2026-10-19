@@ -1,0 +1,13 @@
+# source  symbol  va  flags
+../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?SetFlag@EmitterSndPlayer@@QAEIID@Z  00a10fe0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?Init@EmitterSndPlayer@@QAE_NXZ  00a11010  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?q11050@EmitterSndPlayer@@QAE_NXZ  00a11050  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?q11080@EmitterSndPlayer@@QAE_ND@Z  00a11080  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?q110c0@EmitterSndPlayer@@QAEXPBI@Z  00a110c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?SetData@EmitterSndPlayer@@QAE_NIII@Z  00a11100  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?Tick@EmitterSndPlayer@@QAEXXZ  00a11190  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?FinalStop@EmitterSndPlayer@@QAE_NM@Z  00a111c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?q11210@EmitterSndPlayer@@QAE_NM@Z  00a11210  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?q11270@EmitterSndPlayer@@QAE_NM@Z  00a11270  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?q11350@EmitterSndPlayer@@QAEPAU1@XZ  00a11350  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?q11370@EmitterSndPlayer@@QAEXXZ  00a11370  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
