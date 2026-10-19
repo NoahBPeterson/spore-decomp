@@ -5,10 +5,10 @@
 005f58f0 ?AddModelKey@cSPSwatch_s005f_5080@SP@@QAEXABUKey_s005f_5080@ResourceMan@EA@@@Z  # cSPSwatch_s005f_5080::AddModelKey migrated from s005f5080 (verbatim, slice spelling)
 005f5930 ?ShrinkTransformVector@SP@@YAXXZ  # ShrinkTransformVector migrated from s005f5080 (verbatim, slice spelling)
 005f5970 ?clear@RefVec@SP@@QAEXXZ  # RefVec::clear migrated from s005f5080 (verbatim, slice spelling)
-005f59b0 SP::cSwatch3DView::AddModel  # PDB caller-single candidate
-005f5aa0 SP::cSwatch3DView::RemoveAllModels  # PDB name on card
+005f59b0 ?AddModel@cSwatch3DView_s005f_5080@SP@@QAEPAVcMWModel_s005f_5080@2@II@Z  # cSwatch3DView_s005f_5080::AddModel migrated from s005f5080 (verbatim, slice spelling)
+005f5aa0 ?RemoveAllModels@cSwatch3DView@SP@@QAEXXZ  # SP::cSwatch3DView::RemoveAllModels migrated from s005f5080
 005f5b40 ?LoadModel@cSPSwatch@SP@@QAEXAAVKey@ResourceMan@EA@@@Z  # SP::cSPSwatch::LoadModel migrated from s005f5080
-005f5df0 SP::cSPSwatch::ShutDownModel  # PDB name on card
+005f5df0 ?ShutDownModel@cSPSwatch_s005f_5080@SP@@QAEXXZ  # cSPSwatch_s005f_5080::ShutDownModel migrated from s005f5080 (verbatim, slice spelling)
 006c10e0 ?StartTime@Sound@Audio@EA@@UAENXZ  # EA::Audio::Sound::StartTime (callee of s005f5080, named from the dev publics; slice address comment)
 0080d7c0 ?SetViewerDirty@cSPUILayeredObject@@QAEX_N@Z  # cSPUILayeredObject::SetViewerDirty (callee of s005f5080, named from the dev publics; slice address comment)
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005f5080, named from the dev publics; slice address comment)

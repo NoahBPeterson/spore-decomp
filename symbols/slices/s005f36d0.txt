@@ -1,11 +1,12 @@
 005ed6c0 ?Hide@cSPPaletteItemRollover@SP@@QAEXXZ  # SP::cSPPaletteItemRollover::Hide (callee of s005f36d0, named from the dev publics; slice address comment)
+005f24e0 ?Init@cSwatch3DView@SP@@QAEXPAVIWindow@UTFWin@EA@@_N1@Z  # SP::cSwatch3DView::Init (callee of s005f36d0, named from the dev publics; slice address comment)
 005f36d0 ?GetThumbnailCameraID@SP@@YAIII@Z  # GetThumbnailCameraID migrated from s005f36d0 (verbatim, slice spelling)
 005f3810 ?RenderFrame@cSwatch3DView_s005f_36d0@SP@@QAEXH@Z  # cSwatch3DView_s005f_36d0::RenderFrame migrated from s005f36d0 (verbatim, slice spelling)
-005f3930 SP::cSwatch3DView::AddCreature  # PDB name on card
-005f3b20 SP::cSPSwatch::InitInternal  # decompiler PDB candidate; ret 0x20, 8 args
+005f3930 ?AddCreature@cSwatch3DView_s005f_36d0@SP@@QAEPAVcISPCreatureAnimWorld@2@IPAXH@Z  # cSwatch3DView_s005f_36d0::AddCreature migrated from s005f36d0 (verbatim, slice spelling)
+005f3b20 ?InitInternal@cSPSwatch_s005f_36d0@SP@@QAEXPAVIWindow_s005f_36d0@UTFWin@EA@@0II_N1II@Z  # cSPSwatch_s005f_36d0::InitInternal migrated from s005f36d0 (verbatim, slice spelling)
 005f3cf0 ?FrameModel@cSPSwatch_s005f_36d0@SP@@QAEXXZ  # cSPSwatch_s005f_36d0::FrameModel migrated from s005f36d0 (verbatim, slice spelling)
 005f4080 ?SetModelKey@cSPSwatch_s005f_36d0@SP@@QAEXPAUKey_s005f_36d0@ResourceMan@EA@@@Z  # cSPSwatch_s005f_36d0::SetModelKey migrated from s005f36d0 (verbatim, slice spelling)
-005f40b0 SP::cSPSwatch::UpdateBakingTransform  # cSPSwatch method, mUseEditorCameraController-gated
+005f40b0 ?UpdateBakingTransform@cSPSwatch_s005f_36d0@SP@@QAEXXZ  # cSPSwatch_s005f_36d0::UpdateBakingTransform migrated from s005f36d0 (verbatim, slice spelling)
 005f42d0 ?OnBakingIsDone@cSPSwatch_s005f_36d0@SP@@QAEXXZ  # cSPSwatch_s005f_36d0::OnBakingIsDone migrated from s005f36d0 (verbatim, slice spelling)
 006c10e0 ?StartTime@Sound@Audio@EA@@UAENXZ  # EA::Audio::Sound::StartTime (callee of s005f36d0, named from the dev publics; slice address comment)
 0080d7c0 ?SetViewerDirty@cSPUILayeredObject@@QAEX_N@Z  # cSPUILayeredObject::SetViewerDirty (callee of s005f36d0, named from the dev publics; slice address comment)

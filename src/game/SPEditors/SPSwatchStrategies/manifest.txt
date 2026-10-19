@@ -24,4 +24,6 @@
 ../src/game/SPEditors/SPSwatchStrategies.cpp  ?DoDestroyValues@?$vector_s005f_2780@V?$AutoRefCount_s005f_2780@VcMWModel_s005f_2780@SP@@@EA@@@eastl@@QAEXPAV?$AutoRefCount_s005f_2780@VcMWModel_s005f_2780@SP@@@EA@@0@Z  005f3680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSwatchStrategies.cpp  ?SetModelKey@cSPSwatch_s005f_36d0@SP@@QAEXPAUKey_s005f_36d0@ResourceMan@EA@@@Z  005f4080  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSwatchStrategies.cpp  ?OnBakingIsDone@cSPSwatch_s005f_36d0@SP@@QAEXXZ  005f42d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?EndDrag@cSPPaletteSwatch_s005f_4310@SP@@QAEXXZ  005f46c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?RemoveModel@cSwatch3DView_s005f_4310@SP@@QAEXPAVcMWModel_s005f_4310@2@@Z  005f4eb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSwatchStrategies.cpp  ?AddModelKey@cSPSwatch_s005f_5080@SP@@QAEXABUKey_s005f_5080@ResourceMan@EA@@@Z  005f58f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

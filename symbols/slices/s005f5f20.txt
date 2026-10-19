@@ -1,9 +1,9 @@
 005ed6c0 ?Hide@cSPPaletteItemRollover@SP@@QAEXXZ  # SP::cSPPaletteItemRollover::Hide (callee of s005f5f20, named from the dev publics; slice address comment)
-005f5f20 SP::cSPSwatch::unknown_5f5f20  # unnamed 355-byte routine
+005f5f20 ?FUN_005f5f20@SP@@YAXXZ  # FUN_005f5f20 migrated from s005f5f20 (verbatim, slice spelling)
 005f6090 ?InitAdditionalModels@cSPSwatch@SP@@QAEXXZ  # SP::cSPSwatch::InitAdditionalModels migrated from s005f5f20
-005f6260 SP::cSPSwatch::unknown_5f6260  # unnamed 671-byte routine
+005f6260 ?FUN_005f6260@SP@@YAXXZ  # FUN_005f6260 migrated from s005f5f20 (verbatim, slice spelling)
 005f6500 ?SetEditorCameraController@cSPSwatch@SP@@QAEX_N@Z  # SP::cSPSwatch::SetEditorCameraController migrated from s005f5f20
-005f67d0 SP::cSwatch3DView::Shutdown  # PDB caller-single candidate
+005f67d0 ?Shutdown@cSwatch3DView_s005f_5f20@SP@@QAEXXZ  # cSwatch3DView_s005f_5f20::Shutdown migrated from s005f5f20 (verbatim, slice spelling)
 005f68a0 SP::cSPSwatch::Shutdown  # PDB caller-single candidate
 005f69a0 ?OnModelLoad@cSPSwatch@SP@@QAEXXZ  # SP::cSPSwatch::OnModelLoad migrated from s005f5f20
 005f6ae0 SP::cSPPaletteSwatch::OnRolloverEnd  # RemoveHandler + rollover Hide + Shutdown

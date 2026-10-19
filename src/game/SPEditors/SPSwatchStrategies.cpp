@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPSwatchStrategies.cpp -- migrated from slice(s) s005f5f20, s005f5080, s005f36d0, s005f2780, s005f16d0 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPSwatchStrategies.cpp -- migrated from slice(s) s005f4310, s005f5f20, s005f5080, s005f36d0, s005f2780, s005f16d0 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPSwatchStrategies.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -45,6 +45,8 @@
 #include "SP/cAnimatingCreature.h"
 #include "cSPTransform.h"
 #include "SP/cViewer.h"
+#include "SP/cPropertyList.h"
+#include "SP/cSPEditorEconomy.h"
 
 // ---- items of slice s005f16d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV(n) virtual void _pv##n();
@@ -1150,7 +1152,7 @@ class RefCountVTemplate_s005f_36d0 {
   RefCountVTemplate_s005f_36d0() : mRefCount(0) {}
   virtual ~RefCountVTemplate_s005f_36d0() {}
   virtual int AddRef();
-  virtual int Release_s005f_36d0();
+  virtual int Release();
   T mRefCount;
 };
 }
@@ -1159,7 +1161,7 @@ namespace COM {
 class IUnknown32_s005f_36d0 {
  public:
   virtual int AddRef() = 0;
-  virtual int Release_s005f_36d0() = 0;
+  virtual int Release() = 0;
   virtual void* Cast(uint32_t typeID) const = 0;
 };  // namespace COM
 }
@@ -1264,6 +1266,25 @@ class IHandler_s005f_36d0 {
 };
 }
 }
+namespace EA {
+namespace Messaging {
+class Server_s005f_36d0 {
+ public:
+  PV_s005f_36d0(0) PV_s005f_36d0(1) PV_s005f_36d0(2) PV_s005f_36d0(3) PV_s005f_36d0(4)
+  virtual void MessageSend(uint32_t messageID, void* message, IHandler_s005f_36d0* handler);  // +0x14 0x008853b0
+  PV_s005f_36d0(6) PV_s005f_36d0(7) PV_s005f_36d0(8)
+  virtual void AddHandler(IHandler_s005f_36d0* handler, uint32_t messageID);  // +0x24
+  PV_s005f_36d0(10)
+  virtual void RemoveHandler(IHandler_s005f_36d0* handler, uint32_t messageID, int priority);  // +0x2c 0x00883aa0
+};
+}
+}
+namespace EA {
+namespace Messaging {
+void RemoveHandler(Server_s005f_36d0* server, IHandler_s005f_36d0* handler, const uint32_t* ids, uint32_t count,
+                   int priority);  // 0x00571db0
+}
+}
 using EA::AutoRefCount_s005f_36d0;
 using EA::ResourceMan::Key_s005f_36d0;
 using EA::UTFWin::IWindow_s005f_36d0;
@@ -1271,6 +1292,9 @@ using EA::UTFWin::IWinProc_s005f_36d0;
 using EA::UTFWin::Message_s005f_36d0;
 using EA::Point2D_s005f_36d0;
 using EA::RectT_s005f_36d0;
+namespace SP {
+EA::Messaging::Server_s005f_36d0* MessageServer_s005f_36d0();  // 0x0067dcc0
+}
 namespace SP {
 struct cSPPaletteItemRollover_s005f_36d0;
 }
@@ -1357,7 +1381,7 @@ class cMWModel_s005f_36d0 {
   uint32_t pad8[14];
   int mRefCount;         // +0x40
   void AddRef() { mRefCount++; }
-  void Release_s005f_36d0();
+  void Release();
 };
 }
 namespace SP {
@@ -1381,7 +1405,7 @@ class cUILayeredObject_s005f_36d0 {
  public:
   void SetVisible(bool visible);  // 0x0080d7c0
   void AddModel(void* model);     // 0x0080fc50
-  void Release_s005f_36d0();                 // 0x0080d5f0
+  void Release();                 // 0x0080d5f0
   void Refresh();                 // 0x0080dc00
   void* GetBuffer();              // 0x0093b6c0 (rw::movie::BufferedWriter::GetBuffer)
 };
@@ -1421,7 +1445,7 @@ namespace SP {
 class cSPSwatch_s005f_36d0 : public IWinProc_s005f_36d0, public EA::RefCountVTemplate_s005f_36d0<int>, public EA::Messaging::IHandler_s005f_36d0 {
  public:
   virtual int AddRef();
-  virtual int Release_s005f_36d0();
+  virtual int Release();
   virtual void* Cast(uint32_t typeID) const;
   virtual void* CastInterface(uint32_t typeID);
   virtual bool DoMessage(IWindow_s005f_36d0* window, const Message_s005f_36d0& message);
@@ -1531,6 +1555,14 @@ class cSPSwatch_s005f_36d0 : public IWinProc_s005f_36d0, public EA::RefCountVTem
 };
 }
 namespace SP {
+inline void cMWModel_s005f_36d0::Release() {
+  if (mRefCount > 1)
+    mRefCount--;
+  else
+    mpWorld->DestroyModel(this, (mFlags >> 31) & 1);
+}
+}
+namespace SP {
 struct Vector3 { float x, y, z; };
 }
 namespace SP {
@@ -1543,7 +1575,13 @@ namespace SP {
 class cRefObject {
  public:
   void AddRef();   // 0x00a02c30
-  void Release_s005f_36d0();  // 0x00a05270
+  void Release();  // 0x00a05270
+};
+}
+namespace SP {
+class cAnimWorld : public cRefObject {
+ public:
+  void SetLOD(int v);  // 0x00a04c80
 };
 }
 namespace SP {
@@ -1566,6 +1604,16 @@ class cCameraVt {
 };
 }
 namespace SP {
+class cResourceManager {
+ public:
+  PV_s005f_36d0(0) PV_s005f_36d0(1) PV_s005f_36d0(2)
+  virtual bool FindResource(uint32_t id, void** out, int, int, int, int);  // +0xc
+};
+}
+namespace SP {
+cResourceManager* ResourceGetManager();  // 0x0067dcd0
+}
+namespace SP {
 class cPropertyManager_s005f_36d0 {
  public:
   PV_s005f_36d0(0) PV_s005f_36d0(1) PV_s005f_36d0(2) PV_s005f_36d0(3) PV_s005f_36d0(4) PV_s005f_36d0(5) PV_s005f_36d0(6) PV_s005f_36d0(7) PV_s005f_36d0(8) PV_s005f_36d0(9) PV_s005f_36d0(10)
@@ -1582,19 +1630,73 @@ namespace SP {
 bool GetPropertyAsKey(void* prop, uint32_t key, Key_s005f_36d0* out);  // 0x006a1250
 }
 namespace SP {
+bool GetFloatProperty(void* prop, uint32_t key, float* out);  // 0x0040cf10
+}
+namespace SP {
 void* FUN_00a048a0();                              // 0x00a048a0
 }
 namespace SP {
 void FUN_00409930(void* transform);                // 0x00409930 (cSPTransform ctor)
 }
 namespace SP {
+void FUN_006baa70(uint32_t v);                     // 0x006baa70
+}
+namespace SP {
+void Matrix3_Assign(void* dst, const void* src);   // 0x0041cb40
+}
+namespace SP {
 extern uint32_t DAT_0151c614;
+}
+namespace SP {
+extern uint32_t DAT_0151c568;
+}
+namespace SP {
+extern uint32_t DAT_0151c5f8;
 }
 namespace SP {
 extern float DAT_015f1ce4;
 }
 namespace SP {
+extern float DAT_015f1ce8;
+}
+namespace SP {
+extern float DAT_015f1cec;
+}
+namespace SP {
+int FUN_00641770(void* self);          // 0x00641770
+}
+namespace SP {
+void* FUN_00bb9ae0();                  // 0x00bb9ae0
+}
+namespace SP {
+void FUN_008eb830(void* self, void* v);  // 0x008eb830
+}
+namespace SP {
 struct cSPTransform { uint32_t pad[16]; };
+}
+namespace SP {
+struct Matrix3 { float m[9]; };
+}
+namespace SP {
+void* FUN_005766b0(int v);                                  // 0x005766b0
+}
+namespace SP {
+bool cSPEditorPaintTheme_Apply(const Key_s005f_36d0* key, void* theme);  // 0x004badd0
+}
+namespace SP {
+void* cSPBoundingBox_AddBoundingBox(int, int, int);         // 0x0067cad0
+}
+namespace SP {
+void* FUN_0046bfd0(void* out, int v);                       // 0x0046bfd0
+}
+namespace SP {
+void* FUN_006c10e0();                                       // 0x006c10e0
+}
+namespace SP {
+void FUN_004ad330();                                        // 0x004ad330
+}
+namespace SP {
+void FUN_004a9ae0();                                        // 0x004a9ae0
 }
 // ---- items of slice s005f36d0 end
 
@@ -1640,7 +1742,7 @@ class RefCountVTemplate_s005f_5080 {
   RefCountVTemplate_s005f_5080() : mRefCount(0) {}
   virtual ~RefCountVTemplate_s005f_5080() {}
   virtual int AddRef();
-  virtual int Release_s005f_5080();
+  virtual int Release();
   T mRefCount;
 };
 }
@@ -1649,7 +1751,7 @@ namespace COM {
 class IUnknown32_s005f_5080 {
  public:
   virtual int AddRef() = 0;
-  virtual int Release_s005f_5080() = 0;
+  virtual int Release() = 0;
   virtual void* Cast(uint32_t typeID) const = 0;
 };  // namespace COM
 }
@@ -1762,6 +1864,13 @@ using EA::UTFWin::Message_s005f_5080;
 using EA::Point2D_s005f_5080;
 using EA::RectT_s005f_5080;
 namespace SP {
+class cSPSwatchManager_s005f_5080 {
+ public:
+  cSPPaletteItemRollover* GetSwatchRollover();  // 0x0113ae10
+  class cICameraManager* GetCameraManager();    // 0x01137690
+};
+}
+namespace SP {
 class cInputManager_s005f_5080 {
  public:
   bool IsCapturing();                                // 0x006c1100
@@ -1796,7 +1905,7 @@ class cMWModel_s005f_5080 {
   uint32_t pad8[14];
   int mRefCount;         // +0x40
   void AddRef() { mRefCount++; }
-  void Release_s005f_5080();
+  void Release();
 };
 }
 namespace SP {
@@ -1871,7 +1980,7 @@ namespace SP {
 class cSPSwatch_s005f_5080 : public IWinProc_s005f_5080, public EA::RefCountVTemplate_s005f_5080<int>, public EA::Messaging::IHandler_s005f_5080 {
  public:
   virtual int AddRef();
-  virtual int Release_s005f_5080();
+  virtual int Release();
   virtual void* Cast(uint32_t typeID) const;
   virtual void* CastInterface(uint32_t typeID);
   virtual bool DoMessage(IWindow_s005f_5080* window, const Message_s005f_5080& message);
@@ -1985,11 +2094,41 @@ class cSPSwatch_s005f_5080 : public IWinProc_s005f_5080, public EA::RefCountVTem
 };
 }
 namespace SP {
+inline void cMWModel_s005f_5080::Release() {
+  if (mRefCount > 1)
+    mRefCount--;
+  else
+    mpWorld->DestroyModel(this, (mFlags >> 31) & 1);
+}
+}
+namespace SP {
 AutoRefCount_s005f_5080<cMWModel_s005f_5080>* copy_refs(AutoRefCount_s005f_5080<cMWModel_s005f_5080>* first, AutoRefCount_s005f_5080<cMWModel_s005f_5080>* last,
                                   AutoRefCount_s005f_5080<cMWModel_s005f_5080>* out);  // 0x5f4e10
 }
 namespace SP {
+void* FUN_0080db70();                          // 0x0080db70
+}
+namespace SP {
+void FUN_0080ea50(void* self);                 // 0x0080ea50
+}
+namespace SP {
+void FUN_008eb830(void* self, int v);          // 0x008eb830
+}
+namespace SP {
+void FUN_005f0380();                           // 0x005f0380
+}
+namespace SP {
+int  FUN_0080d7c0(int visible);                // 0x0080d7c0
+}
+namespace SP {
 void DoDestroyValues_ref(AutoRefCount_s005f_5080<cMWModel_s005f_5080>* first, AutoRefCount_s005f_5080<cMWModel_s005f_5080>* last);  // 0x5f3680
+}
+namespace SP {
+class cRefCountedModel2 {
+ public:
+  PV_s005f_5080(0) PV_s005f_5080(1) PV_s005f_5080(2)
+  virtual cMWModel_s005f_5080* MakeModel(uint32_t a, uint32_t b, int c);  // +0xc
+};
 }
 namespace SP {
 struct KeyVec {
@@ -2011,6 +2150,19 @@ struct RefVec {
 };
 }
 namespace SP {
+class cSwatchWindow_s005f_5080 {
+ public:
+  PV_s005f_5080(0) PV_s005f_5080(1) PV_s005f_5080(2) PV_s005f_5080(3) PV_s005f_5080(4) PV_s005f_5080(5) PV_s005f_5080(6) PV_s005f_5080(7) PV_s005f_5080(8) PV_s005f_5080(9) PV_s005f_5080(10) PV_s005f_5080(11) PV_s005f_5080(12) PV_s005f_5080(13) PV_s005f_5080(14)
+  virtual void Vt3c(void* p);  // +0x3c
+};
+}
+namespace SP {
+class cAnimWorld_s005f_5080 {
+ public:
+  void Release();
+};
+}
+namespace SP {
 void KeyVec::push_back(const Key_s005f_5080& v) {
   Key_s005f_5080* p = mpEnd;
   if (p < mpCapacity) {
@@ -2023,6 +2175,722 @@ void KeyVec::push_back(const Key_s005f_5080& v) {
 }
 }
 // ---- items of slice s005f5080 end
+
+
+
+
+
+// ---- items of slice s005f4310 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define PV_s005f_4310(n) virtual void pv##n();
+namespace EA {
+template <typename T>
+class AutoRefCount_s005f_4310 {
+ public:
+  T* mpObject;
+  AutoRefCount_s005f_4310() : mpObject(0) {}
+  AutoRefCount_s005f_4310(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+  AutoRefCount_s005f_4310(const AutoRefCount_s005f_4310& x) : mpObject(x.mpObject) { if (mpObject) mpObject->AddRef(); }
+  ~AutoRefCount_s005f_4310() { if (mpObject) mpObject->Release(); }
+  AutoRefCount_s005f_4310& operator=(T* p) {
+    if (p != mpObject) {
+      T* const pTemp = mpObject;
+      if (p)
+        p->AddRef();
+      mpObject = p;
+      if (pTemp)
+        pTemp->Release();
+    }
+    return *this;
+  }
+  AutoRefCount_s005f_4310& operator=(const AutoRefCount_s005f_4310& x) { return operator=(x.mpObject); }
+  T*& AsOutParam() {
+    if (mpObject) {
+      T* const p = mpObject;
+      mpObject = 0;
+      p->Release();
+    }
+    return mpObject;
+  }
+  T* operator->() const { return mpObject; }
+  operator T*() const { return mpObject; }
+};
+}
+namespace EA {
+template <typename T>
+class RefCountTemplate_s005f_4310 {
+ public:
+  RefCountTemplate_s005f_4310() : mRefCount(0) {}
+  virtual ~RefCountTemplate_s005f_4310() {}
+  virtual int AddRef();
+  virtual int Release();
+  T mRefCount;
+};
+}
+namespace EA {
+template <typename T>
+class RefCountVTemplate_s005f_4310 {
+ public:
+  RefCountVTemplate_s005f_4310() : mRefCount(0) {}
+  virtual ~RefCountVTemplate_s005f_4310() {}
+  virtual int AddRef();
+  virtual int Release();
+  T mRefCount;
+};
+}
+namespace EA {
+namespace COM {
+class IUnknown32_s005f_4310 {
+ public:
+  virtual int AddRef() = 0;
+  virtual int Release() = 0;
+  virtual void* Cast(uint32_t typeID) const = 0;
+};  // namespace COM
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct Key_s005f_4310 {
+  unsigned int mInstance, mType, mGroup;
+  bool operator==(const Key_s005f_4310& b) const {
+    return mInstance == b.mInstance && mType == b.mType && mGroup == b.mGroup;
+  }
+  Key_s005f_4310() : mInstance(0), mType(0), mGroup(0) {}
+  Key_s005f_4310(unsigned int instance, unsigned int type, unsigned int group)
+      : mInstance(instance), mType(type), mGroup(group) {}
+};  // namespace ResourceMan
+}
+}
+namespace EA {
+struct Point2D_s005f_4310 {
+  float x, y;
+  Point2D_s005f_4310() {}
+  Point2D_s005f_4310(float ax, float ay) : x(ax), y(ay) {}
+  Point2D_s005f_4310(const Point2D_s005f_4310& p) : x(p.x), y(p.y) {}
+  Point2D_s005f_4310& operator=(const Point2D_s005f_4310& p) {
+    x = p.x;
+    y = p.y;
+    return *this;
+  }
+};
+}
+namespace EA {
+struct RectT_s005f_4310 {
+  RectT_s005f_4310() {}
+  float left, top, right, bottom;
+  RectT_s005f_4310(const RectT_s005f_4310& r) : left(r.left), top(r.top), right(r.right), bottom(r.bottom) {}
+  bool Contains(const Point2D_s005f_4310& p) const {
+    return p.x >= left && p.y >= top && p.x < right && p.y < bottom;
+  }
+};
+}
+namespace EA {
+namespace UTFWin {
+class IWinProc_s005f_4310;
+}
+}
+namespace EA {
+namespace UTFWin {
+class IWindow_s005f_4310 : public COM::IUnknown32_s005f_4310 {
+ public:
+  PV_s005f_4310(3)
+  virtual IWindow_s005f_4310* GetParent();                     // +0x10
+  PV_s005f_4310(5) PV_s005f_4310(6) PV_s005f_4310(7) PV_s005f_4310(8) PV_s005f_4310(9)
+  virtual uint32_t GetFlags();                      // +0x28
+  PV_s005f_4310(11) PV_s005f_4310(12) PV_s005f_4310(13)
+  virtual const RectT_s005f_4310& GetRealArea();               // +0x38
+  PV_s005f_4310(15) PV_s005f_4310(16) PV_s005f_4310(17) PV_s005f_4310(18) PV_s005f_4310(19) PV_s005f_4310(20) PV_s005f_4310(21) PV_s005f_4310(22)
+  virtual void SetShadeColor(uint32_t color);       // +0x5c
+  PV_s005f_4310(24) PV_s005f_4310(25) PV_s005f_4310(26)
+  virtual void SetArea(const RectT_s005f_4310& area);          // +0x6c
+  PV_s005f_4310(28) PV_s005f_4310(29)
+  virtual void SetCursorID(uint32_t id);            // +0x78
+  virtual void SetFlag(int flag, bool value);       // +0x7c
+  virtual void SetCaption(const wchar_t* caption);  // +0x80
+  PV_s005f_4310(33) PV_s005f_4310(34) PV_s005f_4310(35) PV_s005f_4310(36) PV_s005f_4310(37) PV_s005f_4310(38) PV_s005f_4310(39) PV_s005f_4310(40) PV_s005f_4310(41)
+  virtual int IsAnimationDone();                    // +0xa8
+  PV_s005f_4310(43) PV_s005f_4310(44) PV_s005f_4310(45) PV_s005f_4310(46) PV_s005f_4310(47)
+  virtual Point2D_s005f_4310 GlobalToLocal(Point2D_s005f_4310 p);         // +0xc0
+  PV_s005f_4310(49) PV_s005f_4310(50) PV_s005f_4310(51) PV_s005f_4310(52) PV_s005f_4310(53) PV_s005f_4310(54) PV_s005f_4310(55) PV_s005f_4310(56) PV_s005f_4310(57) PV_s005f_4310(58)
+  PV_s005f_4310(59) PV_s005f_4310(60) PV_s005f_4310(61) PV_s005f_4310(62) PV_s005f_4310(63) PV_s005f_4310(64)
+  virtual void AddWinProc(IWinProc_s005f_4310* proc);     // +0x104
+  virtual void RemoveWinProc(IWinProc_s005f_4310* proc);  // +0x108
+};
+}
+}
+namespace EA {
+namespace UTFWin {
+struct Message_s005f_4310 {
+  uint32_t pad0[2];
+  uint32_t mEventType;                         // +0x8
+  union { uint32_t mParam0c; float mX; };      // +0xc
+  union { uint32_t mParam10; float mY; };      // +0x10
+  uint32_t mModifiers;                         // +0x14
+  union { uint32_t mButton; IWindow_s005f_4310* mpWindow; struct cCursorData* mpCursorData; };
+};
+}
+}
+namespace EA {
+namespace UTFWin {
+class IWinProc_s005f_4310 : public COM::IUnknown32_s005f_4310 {
+ public:
+  virtual void* CastInterface(uint32_t typeID);  // +0xc
+  virtual bool DoMessage(IWindow_s005f_4310* window, const Message_s005f_4310& message) = 0;
+};
+}
+}
+namespace EA {
+namespace Messaging {
+class IHandler_s005f_4310 {
+ public:
+  virtual ~IHandler_s005f_4310() {}
+  virtual bool HandleMessage(uint32_t messageID, void* message) = 0;
+};
+}
+}
+using EA::AutoRefCount_s005f_4310;
+using EA::ResourceMan::Key_s005f_4310;
+using EA::UTFWin::IWindow_s005f_4310;
+using EA::UTFWin::IWinProc_s005f_4310;
+using EA::UTFWin::Message_s005f_4310;
+using EA::Point2D_s005f_4310;
+using EA::RectT_s005f_4310;
+namespace SP {
+class cString_s005f_4310 {
+ public:
+  cString_s005f_4310();   // 0x006b5060
+  ~cString_s005f_4310();  // 0x006b5240
+  uint32_t pad[5];
+};
+}
+namespace SP {
+class cSPEditorEconomy_s005f_4310 {
+ public:
+  PV_s005f_4310(0) PV_s005f_4310(1)
+  virtual bool IsItemAvailable(const Key_s005f_4310* key);                   // +0x8
+  virtual bool CanAfford(int currency, int cost);                 // +0xc
+  virtual int GetItemStatus(const Key_s005f_4310* key, struct cItemCostInfo_s005f_4310* info);  // +0x10
+};
+}
+namespace SP {
+struct cSPPaletteItemRollover_s005f_4310;
+}
+namespace SP {
+struct cSPPaletteInfo_s005f_4310 : public EA::RefCountTemplate_s005f_4310<int> {
+  cSPEditorEconomy_s005f_4310* mEconomy;               // +0x8
+  void* mTheme;                             // +0xc
+  void* mCollectableItems;                  // +0x10
+  cSPPaletteItemRollover_s005f_4310* mRollover;        // +0x14
+  uint32_t pad18[6];
+  bool mUseModelKey;                        // +0x30 (padding byte)
+  bool mUseModelKeyForCost;                 // +0x31
+};
+}
+namespace SP {
+struct cSPPaletteItemRollover_s005f_4310 {
+  void Hide();  // 0x005ed6c0
+};
+}
+namespace SP {
+class cInputManager_s005f_4310 {
+ public:
+  bool IsCapturing();                                // 0x006c1100
+  void* GetCaptured();                               // 0x006c10e0
+  bool SetCapture(IWindow_s005f_4310* window, void* object);    // 0x008045a0
+};
+}
+namespace SP {
+cInputManager_s005f_4310* InputManager_s005f_4310();  // 0x00804500
+}
+namespace SP {
+struct cItemCostInfo_s005f_4310 {
+  cItemCostInfo_s005f_4310();  // 0x005a7810
+  ~cItemCostInfo_s005f_4310() {}
+  cString_s005f_4310 mName;        // +0x0
+  cString_s005f_4310 mText;        // +0x14
+  uint32_t mColor;      // +0x28
+  uint32_t mImageID;    // +0x2c
+  uint32_t mCost;       // +0x30
+};
+}
+namespace SP {
+class cModelWorld_s005f_4310 {
+ public:
+  PV_s005f_4310(0) PV_s005f_4310(1) PV_s005f_4310(2) PV_s005f_4310(3) PV_s005f_4310(4) PV_s005f_4310(5) PV_s005f_4310(6) PV_s005f_4310(7) PV_s005f_4310(8) PV_s005f_4310(9) PV_s005f_4310(10) PV_s005f_4310(11) PV_s005f_4310(12) PV_s005f_4310(13) PV_s005f_4310(14)
+  PV_s005f_4310(15) PV_s005f_4310(16) PV_s005f_4310(17) PV_s005f_4310(18) PV_s005f_4310(19) PV_s005f_4310(20) PV_s005f_4310(21) PV_s005f_4310(22) PV_s005f_4310(23) PV_s005f_4310(24)
+  virtual int GetEffectCount(class cMWModel_s005f_4310* model);  // +0x64
+  PV_s005f_4310(26) PV_s005f_4310(27)
+  virtual void StartEffect(cMWModel_s005f_4310* model, uint32_t effectID, int a, float b, int index);  // +0x70
+  PV_s005f_4310(29) PV_s005f_4310(30) PV_s005f_4310(31) PV_s005f_4310(32) PV_s005f_4310(33) PV_s005f_4310(34) PV_s005f_4310(35) PV_s005f_4310(36) PV_s005f_4310(37) PV_s005f_4310(38) PV_s005f_4310(39) PV_s005f_4310(40) PV_s005f_4310(41) PV_s005f_4310(42)
+  PV_s005f_4310(43) PV_s005f_4310(44) PV_s005f_4310(45) PV_s005f_4310(46) PV_s005f_4310(47) PV_s005f_4310(48) PV_s005f_4310(49) PV_s005f_4310(50) PV_s005f_4310(51) PV_s005f_4310(52) PV_s005f_4310(53) PV_s005f_4310(54) PV_s005f_4310(55) PV_s005f_4310(56)
+  PV_s005f_4310(57) PV_s005f_4310(58) PV_s005f_4310(59) PV_s005f_4310(60) PV_s005f_4310(61) PV_s005f_4310(62) PV_s005f_4310(63) PV_s005f_4310(64) PV_s005f_4310(65) PV_s005f_4310(66) PV_s005f_4310(67) PV_s005f_4310(68) PV_s005f_4310(69) PV_s005f_4310(70)
+  PV_s005f_4310(71) PV_s005f_4310(72) PV_s005f_4310(73) PV_s005f_4310(74) PV_s005f_4310(75) PV_s005f_4310(76) PV_s005f_4310(77) PV_s005f_4310(78) PV_s005f_4310(79) PV_s005f_4310(80) PV_s005f_4310(81) PV_s005f_4310(82) PV_s005f_4310(83) PV_s005f_4310(84)
+  PV_s005f_4310(85) PV_s005f_4310(86) PV_s005f_4310(87) PV_s005f_4310(88) PV_s005f_4310(89) PV_s005f_4310(90) PV_s005f_4310(91)
+  virtual void DestroyModel(class cMWModel_s005f_4310* model, bool immediate);  // +0x170
+};
+}
+namespace SP {
+class cMWModel_s005f_4310 {
+ public:
+  cModelWorld_s005f_4310* mpWorld;  // +0x0
+  uint32_t mFlags;       // +0x4
+  uint32_t pad8[14];
+  int mRefCount;         // +0x40
+  void AddRef() { mRefCount++; }
+  void Release();
+};
+}
+namespace SP {
+class cImageLayers_s005f_4310 {
+ public:
+  PV_s005f_4310(0) PV_s005f_4310(1)
+  virtual uint32_t AddLayer(uint32_t imageID, int flags);  // +0x8
+  virtual void SetLayerVisible(uint32_t layer, bool on);   // +0xc
+  virtual void SetLayerScaled(uint32_t layer, bool on);    // +0x10
+  PV_s005f_4310(5)
+  virtual void Refresh(uint32_t layer);                    // +0x18
+  PV_s005f_4310(7)
+  virtual void SetLayerTiled(uint32_t layer, bool on);     // +0x20
+  virtual void SetLayerAlpha(uint32_t layer, float alpha); // +0x24
+  uint32_t pad4[0x18];
+  bool mVisible;  // +0x64
+};
+}
+namespace SP {
+class cUILayeredObject_s005f_4310 {
+ public:
+  void SetVisible(bool visible);   // 0x0080d7c0
+  void RemoveModel(void* model);   // 0x0080e980
+};
+}
+namespace SP {
+class cSwatchRenderer_s005f_4310 {
+ public:
+  PV_s005f_4310(0) PV_s005f_4310(1) PV_s005f_4310(2) PV_s005f_4310(3) PV_s005f_4310(4) PV_s005f_4310(5) PV_s005f_4310(6) PV_s005f_4310(7) PV_s005f_4310(8) PV_s005f_4310(9) PV_s005f_4310(10) PV_s005f_4310(11) PV_s005f_4310(12) PV_s005f_4310(13) PV_s005f_4310(14)
+  PV_s005f_4310(15) PV_s005f_4310(16) PV_s005f_4310(17) PV_s005f_4310(18) PV_s005f_4310(19) PV_s005f_4310(20) PV_s005f_4310(21) PV_s005f_4310(22) PV_s005f_4310(23) PV_s005f_4310(24) PV_s005f_4310(25) PV_s005f_4310(26) PV_s005f_4310(27) PV_s005f_4310(28)
+  PV_s005f_4310(29) PV_s005f_4310(30) PV_s005f_4310(31) PV_s005f_4310(32) PV_s005f_4310(33)
+  virtual void SetTexture(void* texture);  // +0x88
+};
+}
+namespace SP {
+struct cSwatch3DView_s005f_4310 {
+  bool mVisible;                                            // +0x00
+  cUILayeredObject_s005f_4310* mLayeredObject;                         // +0x04
+  eastl::vector<AutoRefCount_s005f_4310<cMWModel_s005f_4310> > mModels;           // +0x08
+  uint32_t pad14;                                           // +0x14
+  uint32_t pad18[3];
+  cSwatchRenderer_s005f_4310* mRenderer;                               // +0x24
+  uint32_t pad28;
+  cSwatchTexture* mTexture;                                 // +0x2c
+  void RemoveModel(cMWModel_s005f_4310* model);                        // 0x005f4eb0
+};
+}
+namespace SP {
+class cSPSwatch_s005f_4310 : public IWinProc_s005f_4310, public EA::RefCountVTemplate_s005f_4310<int>, public EA::Messaging::IHandler_s005f_4310 {
+ public:
+  virtual int AddRef();
+  virtual int Release();
+  virtual void* Cast(uint32_t typeID) const;
+  virtual void* CastInterface(uint32_t typeID);
+  virtual bool DoMessage(IWindow_s005f_4310* window, const Message_s005f_4310& message);
+  PV_s005f_4310(5) PV_s005f_4310(6) PV_s005f_4310(7) PV_s005f_4310(8)
+  virtual void Vt24(void* key);                   // +0x24
+  PV_s005f_4310(10) PV_s005f_4310(11) PV_s005f_4310(12)
+  virtual IWindow_s005f_4310* GetWindow();                   // +0x34
+  PV_s005f_4310(14) PV_s005f_4310(15)
+  virtual void OnMouseDown();                     // +0x40
+  virtual bool IsDragging();                      // +0x44
+  virtual void OnMouseEnter();                    // +0x48
+  virtual void OnMouseLeave();                    // +0x4c
+  virtual void OnClick();                         // +0x50
+  PV_s005f_4310(21)
+  virtual float GetTargetZoom();                  // +0x58
+  PV_s005f_4310(23) PV_s005f_4310(24)
+  virtual void ReloadModel();                     // +0x64
+  virtual bool HandleMessage(uint32_t messageID, void* message);
+
+  bool IsCapturedBySelf() {
+    cInputManager_s005f_4310* input = InputManager_s005f_4310();
+    if (input->IsCapturing()) {
+      void* self = CastInterface(0xee3f516e);
+      if (self == input->GetCaptured())
+        return true;
+    }
+    return false;
+  }
+  __forceinline bool AnyMouseButtonCaptured() const {
+    for (unsigned int i = 0; i < 5; i++)
+      if (mCapturedMouseButtons[i])
+        return true;
+    return false;
+  }
+  void UpdateSwatchPosition(uint32_t deltaTime);  // 0x005f2bf0 (SP::cSPSwatch::UpdateSwatchPosition)
+  uint32_t SetImage(uint32_t imageID, bool overlay);
+  void Show3DModel();  // 0x005f2e00 (SP::cSPSwatch::Show3DModel)
+  void Hide3DModel();  // 0x005f2eb0 (SP::cSPSwatch::Hide3DModel)
+  void StartModelEffects();
+  bool IsAnimating();
+  bool TakeCapture();
+  void EndInteraction();  // 0x005f3040 (SP::cSPSwatch::EndInteraction)
+  bool HasCapture();
+  int IsBusy();
+  void UpdateViewport(uint32_t deltaTime);
+
+  void Init(Key_s005f_4310* key, uint32_t a, uint32_t b, uint32_t c, uint32_t d, uint32_t e, uint32_t scale);   // 0x005f4f80
+  void Init(Key_s005f_4310* key, void* a, void* b, uint32_t c, uint32_t d, uint32_t e, uint32_t f, uint32_t scale);  // 0x005f5000
+  void InitInternal(IWindow_s005f_4310* base, IWindow_s005f_4310* modelWindow, uint32_t a3, uint32_t a4,
+                    uint32_t b5, uint32_t b6, uint32_t a7, uint32_t a8);  // 0x005f3b20
+
+  cSwatch3DView_s005f_4310 m3DView;                  // +0x10
+  Key_s005f_4310 mOriginalItemKey;                   // +0x40
+  Key_s005f_4310 mModelKey;                          // +0x4c
+  uint32_t mScaleParam;                   // +0x58
+  AutoRefCount_s005f_4310<IWindow_s005f_4310> mBaseWindow;      // +0x5c
+  AutoRefCount_s005f_4310<IWindow_s005f_4310> mModelWindow;     // +0x60
+  float mActualViewportScale;             // +0x64
+  float mActualAngle;                     // +0x68
+  float mTargetAngle;                     // +0x6c
+  float mTargetViewportScale;             // +0x70
+  RectT_s005f_4310 mOriginalWindowArea;              // +0x74
+  Point2D_s005f_4310 mActualViewportCenter;          // +0x84
+  Point2D_s005f_4310 mTargetViewportCenter;          // +0x8c
+  float mMaxViewportScaleFactor;          // +0x94
+  float mSwatchRotation[9];               // +0x98
+  bool mIsZooming;                        // +0xbc
+  float mTargetWindowAlpha;               // +0xc0
+  float mCurrentWindowAlpha;              // +0xc4
+  uint32_t padc8;
+  const wchar_t* mWindowMaterial;         // +0xcc
+  uint32_t padd0;
+  const wchar_t* mWindowMaterialParams;   // +0xd4
+  float mTargetModelAlpha;                // +0xd8
+  float mCurrentModelAlpha;               // +0xdc
+  const wchar_t* mMaterial;               // +0xe0
+  const wchar_t* mMaterialParams;         // +0xe4
+  bool mLoadModelOnDemand;                // +0xe8
+  bool mNeverLoadModel;                   // +0xe9
+  bool mDisplay3DModel;                   // +0xea
+  bool mBakedAsset;                       // +0xeb
+  bool mMouseOverWindow;                  // +0xec
+  cImageLayers_s005f_4310* mpImageLayers;            // +0xf0
+  uint32_t padf4;
+  uint32_t mImageID;                      // +0xf8
+  bool mImageOverlay;                     // +0xfc
+  bool mImageSet;                         // +0xfd
+  uint32_t pad100[6];
+  AutoRefCount_s005f_4310<cMWModel_s005f_4310> mModel;          // +0x118
+  uint32_t pad11c[17];
+  bool mHasBeenFramed;                    // +0x160
+  bool mModelLoaded;                      // +0x161
+  bool mModelLoadStarted;                 // +0x162
+  bool mIsModelBaked;                     // +0x163
+  bool mCreatedCreature;                  // +0x164
+  bool mUseStaticEffects;                 // +0x165
+  bool mVisible;                          // +0x166
+  bool mForceRotation;                    // +0x167
+  bool mIgnoreFocusChange;                // +0x168
+  bool mWantToRenderModel;                // +0x169
+  bool mAllowRotation;                    // +0x16a
+  bool mAllowTooltip;                     // +0x16b
+  bool mUseEditorCameraController;        // +0x16c
+  bool mCapturedMouseButtons[5];          // +0x16d
+  uint32_t mCamera;                       // +0x174
+  uint32_t mID;                           // +0x178
+};
+}
+namespace SP {
+inline void cMWModel_s005f_4310::Release() {
+  if (mRefCount > 1)
+    mRefCount--;
+  else
+    mpWorld->DestroyModel(this, (mFlags >> 31) & 1);
+}
+}
+namespace SP {
+class cSPPaletteSwatch_s005f_4310 : public cSPSwatch_s005f_4310 {
+ public:
+  bool IsMouseOutside();
+  bool IsItemAvailable();
+  void UpdateCostDisplay();     // 0x005f3400
+  void UpdateCursor();          // 0x005f3600
+  void OnRolloverEnd();
+  void SetShowCost(bool show);      // 0x005f49a0
+  void EndDrag();                   // 0x005f46c0
+
+  AutoRefCount_s005f_4310<cSPPaletteInfo_s005f_4310> mInfo;     // +0x17c
+  uint32_t pad180;
+  bool mIsLocked;                         // +0x184
+  uint32_t pad188;
+  IWindow_s005f_4310* mDragWindow;                   // +0x18c
+  uint32_t pad190;
+  AutoRefCount_s005f_4310<IWindow_s005f_4310> mCostWindow;      // +0x194
+  bool mShowCost;                         // +0x198
+  bool mDraggable;                        // +0x199
+};
+}
+namespace SP {
+class cSPOLDPaletteItemUIDragAndBuy_s005f_4310 : public cSPPaletteSwatch_s005f_4310 {
+ public:
+  void Init(Key_s005f_4310* key, void* a, void* b, uint32_t c, uint32_t d, void* e, void* f, bool g);  // 005f4310 0x005f4310
+  void OnLeftMouseDown();   // 005f4750
+  void OnMouseDown();       // 005f49f0
+  void OnMouseUp();         // 005f4b80
+  uint32_t mUnk19c[8];
+};
+}
+namespace SP {
+class cHandlerView {
+ public:
+  bool HandleMessage(uint32_t id, void* msg);  // 0x005f46f0
+};
+}
+// ---- items of slice s005f4310 end
+
+// ---- items of slice s005f5f20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define PV_s005f_5f20(n) virtual void pv##n();
+namespace EA {
+template <typename T>
+class AutoRefCount_s005f_5f20 {
+ public:
+  T* mpObject;
+  AutoRefCount_s005f_5f20() : mpObject(0) {}
+  AutoRefCount_s005f_5f20(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+  AutoRefCount_s005f_5f20(const AutoRefCount_s005f_5f20& x) : mpObject(x.mpObject) { if (mpObject) mpObject->AddRef(); }
+  ~AutoRefCount_s005f_5f20() { if (mpObject) mpObject->Release(); }
+  AutoRefCount_s005f_5f20& operator=(T* p) {
+    if (p != mpObject) {
+      T* const pTemp = mpObject;
+      if (p)
+        p->AddRef();
+      mpObject = p;
+      if (pTemp)
+        pTemp->Release();
+    }
+    return *this;
+  }
+  AutoRefCount_s005f_5f20& operator=(const AutoRefCount_s005f_5f20& x) { return operator=(x.mpObject); }
+  T*& AsOutParam() {
+    if (mpObject) {
+      T* const p = mpObject;
+      mpObject = 0;
+      p->Release();
+    }
+    return mpObject;
+  }
+  T* operator->() const { return mpObject; }
+  operator T*() const { return mpObject; }
+};
+}
+namespace EA {
+namespace COM {
+class IUnknown32_s005f_5f20 {
+ public:
+  virtual int AddRef() = 0;
+  virtual int Release_s005f_5f20() = 0;
+  virtual void* Cast(uint32_t typeID) const = 0;
+};  // namespace COM
+}
+}
+namespace EA {
+struct Point2D_s005f_5f20 {
+  float x, y;
+  Point2D_s005f_5f20() {}
+  Point2D_s005f_5f20(float ax, float ay) : x(ax), y(ay) {}
+  Point2D_s005f_5f20(const Point2D_s005f_5f20& p) : x(p.x), y(p.y) {}
+  Point2D_s005f_5f20& operator=(const Point2D_s005f_5f20& p) {
+    x = p.x;
+    y = p.y;
+    return *this;
+  }
+};
+}
+namespace EA {
+struct RectT_s005f_5f20 {
+  RectT_s005f_5f20() {}
+  float left, top, right, bottom;
+  RectT_s005f_5f20(const RectT_s005f_5f20& r) : left(r.left), top(r.top), right(r.right), bottom(r.bottom) {}
+  bool Contains(const Point2D_s005f_5f20& p) const {
+    return p.x >= left && p.y >= top && p.x < right && p.y < bottom;
+  }
+};
+}
+namespace EA {
+namespace UTFWin {
+class IWinProc_s005f_5f20;
+}
+}
+namespace EA {
+namespace UTFWin {
+class IWindow_s005f_5f20 : public COM::IUnknown32_s005f_5f20 {
+ public:
+  PV_s005f_5f20(3)
+  virtual IWindow_s005f_5f20* GetParent();                     // +0x10
+  PV_s005f_5f20(5) PV_s005f_5f20(6) PV_s005f_5f20(7) PV_s005f_5f20(8) PV_s005f_5f20(9)
+  virtual uint32_t GetFlags();                      // +0x28
+  PV_s005f_5f20(11) PV_s005f_5f20(12) PV_s005f_5f20(13)
+  virtual const RectT_s005f_5f20& GetRealArea();               // +0x38
+  PV_s005f_5f20(15) PV_s005f_5f20(16) PV_s005f_5f20(17) PV_s005f_5f20(18) PV_s005f_5f20(19) PV_s005f_5f20(20) PV_s005f_5f20(21) PV_s005f_5f20(22)
+  virtual void SetShadeColor(uint32_t color);       // +0x5c
+  PV_s005f_5f20(24) PV_s005f_5f20(25) PV_s005f_5f20(26)
+  virtual void SetArea(const RectT_s005f_5f20& area);          // +0x6c
+  PV_s005f_5f20(28) PV_s005f_5f20(29)
+  virtual void SetCursorID(uint32_t id);            // +0x78
+  virtual void SetFlag(int flag, bool value);       // +0x7c
+  virtual void SetCaption(const wchar_t* caption);  // +0x80
+  PV_s005f_5f20(33) PV_s005f_5f20(34) PV_s005f_5f20(35) PV_s005f_5f20(36) PV_s005f_5f20(37) PV_s005f_5f20(38) PV_s005f_5f20(39) PV_s005f_5f20(40) PV_s005f_5f20(41)
+  virtual int IsAnimationDone();                    // +0xa8
+  PV_s005f_5f20(43) PV_s005f_5f20(44) PV_s005f_5f20(45) PV_s005f_5f20(46) PV_s005f_5f20(47)
+  virtual Point2D_s005f_5f20 GlobalToLocal(Point2D_s005f_5f20 p);         // +0xc0
+  PV_s005f_5f20(49) PV_s005f_5f20(50) PV_s005f_5f20(51) PV_s005f_5f20(52) PV_s005f_5f20(53) PV_s005f_5f20(54) PV_s005f_5f20(55) PV_s005f_5f20(56) PV_s005f_5f20(57) PV_s005f_5f20(58)
+  PV_s005f_5f20(59) PV_s005f_5f20(60) PV_s005f_5f20(61) PV_s005f_5f20(62) PV_s005f_5f20(63) PV_s005f_5f20(64)
+  virtual void AddWinProc(IWinProc_s005f_5f20* proc);     // +0x104
+  virtual void RemoveWinProc(IWinProc_s005f_5f20* proc);  // +0x108
+};
+}
+}
+namespace EA {
+namespace UTFWin {
+struct Message_s005f_5f20 {
+  uint32_t pad0[2];
+  uint32_t mEventType;                         // +0x8
+  union { uint32_t mParam0c; float mX; };      // +0xc
+  union { uint32_t mParam10; float mY; };      // +0x10
+  uint32_t mModifiers;                         // +0x14
+  union { uint32_t mButton; IWindow_s005f_5f20* mpWindow; struct cCursorData* mpCursorData; };
+};
+}
+}
+namespace EA {
+namespace UTFWin {
+class IWinProc_s005f_5f20 : public COM::IUnknown32_s005f_5f20 {
+ public:
+  virtual void* CastInterface(uint32_t typeID);  // +0xc
+  virtual bool DoMessage(IWindow_s005f_5f20* window, const Message_s005f_5f20& message) = 0;
+};
+}
+}
+using EA::AutoRefCount_s005f_5f20;
+using EA::UTFWin::IWindow_s005f_5f20;
+using EA::UTFWin::IWinProc_s005f_5f20;
+using EA::UTFWin::Message_s005f_5f20;
+using EA::Point2D_s005f_5f20;
+using EA::RectT_s005f_5f20;
+namespace SP {
+class cModelWorld_s005f_5f20 {
+ public:
+  PV_s005f_5f20(0) PV_s005f_5f20(1) PV_s005f_5f20(2) PV_s005f_5f20(3) PV_s005f_5f20(4) PV_s005f_5f20(5) PV_s005f_5f20(6) PV_s005f_5f20(7) PV_s005f_5f20(8) PV_s005f_5f20(9) PV_s005f_5f20(10) PV_s005f_5f20(11) PV_s005f_5f20(12) PV_s005f_5f20(13) PV_s005f_5f20(14)
+  PV_s005f_5f20(15) PV_s005f_5f20(16) PV_s005f_5f20(17) PV_s005f_5f20(18) PV_s005f_5f20(19) PV_s005f_5f20(20) PV_s005f_5f20(21) PV_s005f_5f20(22) PV_s005f_5f20(23) PV_s005f_5f20(24)
+  virtual int GetEffectCount(class cMWModel_s005f_5f20* model);  // +0x64
+  PV_s005f_5f20(26) PV_s005f_5f20(27)
+  virtual void StartEffect(cMWModel_s005f_5f20* model, uint32_t effectID, int a, float b, int index);  // +0x70
+  PV_s005f_5f20(29) PV_s005f_5f20(30) PV_s005f_5f20(31) PV_s005f_5f20(32) PV_s005f_5f20(33) PV_s005f_5f20(34) PV_s005f_5f20(35) PV_s005f_5f20(36) PV_s005f_5f20(37) PV_s005f_5f20(38) PV_s005f_5f20(39) PV_s005f_5f20(40) PV_s005f_5f20(41) PV_s005f_5f20(42)
+  PV_s005f_5f20(43) PV_s005f_5f20(44) PV_s005f_5f20(45) PV_s005f_5f20(46) PV_s005f_5f20(47) PV_s005f_5f20(48) PV_s005f_5f20(49) PV_s005f_5f20(50) PV_s005f_5f20(51) PV_s005f_5f20(52) PV_s005f_5f20(53) PV_s005f_5f20(54) PV_s005f_5f20(55) PV_s005f_5f20(56)
+  PV_s005f_5f20(57) PV_s005f_5f20(58) PV_s005f_5f20(59) PV_s005f_5f20(60) PV_s005f_5f20(61) PV_s005f_5f20(62) PV_s005f_5f20(63) PV_s005f_5f20(64) PV_s005f_5f20(65) PV_s005f_5f20(66) PV_s005f_5f20(67) PV_s005f_5f20(68) PV_s005f_5f20(69) PV_s005f_5f20(70)
+  PV_s005f_5f20(71) PV_s005f_5f20(72) PV_s005f_5f20(73) PV_s005f_5f20(74) PV_s005f_5f20(75) PV_s005f_5f20(76) PV_s005f_5f20(77) PV_s005f_5f20(78) PV_s005f_5f20(79) PV_s005f_5f20(80) PV_s005f_5f20(81) PV_s005f_5f20(82) PV_s005f_5f20(83) PV_s005f_5f20(84)
+  PV_s005f_5f20(85) PV_s005f_5f20(86) PV_s005f_5f20(87) PV_s005f_5f20(88) PV_s005f_5f20(89) PV_s005f_5f20(90) PV_s005f_5f20(91)
+  virtual void DestroyModel(class cMWModel_s005f_5f20* model, bool immediate);  // +0x170
+};
+}
+namespace SP {
+class cMWModel_s005f_5f20 {
+ public:
+  cModelWorld_s005f_5f20* mpWorld;  // +0x0
+  uint32_t mFlags;       // +0x4
+  uint32_t pad8[14];
+  int mRefCount;         // +0x40
+  void AddRef() { mRefCount++; }
+  void Release_s005f_5f20();
+};
+}
+namespace SP {
+class cUILayeredObject_s005f_5f20 {
+ public:
+  void SetVisible(bool visible);   // 0x0080d7c0
+  void RemoveModel(void* model);   // 0x0080e980
+};
+}
+namespace SP {
+namespace eastl {
+template <typename T>
+class vector_s005f_5f20 {
+ public:
+  T* mpBegin;
+  T* mpEnd;
+  T* mpCapacity;
+  int size() const { return (int)(mpEnd - mpBegin); }
+  T& operator[](int i) { return mpBegin[i]; }
+  T& back() { return mpEnd[-1]; }
+  void pop_back() {
+    --mpEnd;
+    mpEnd->~T();
+  }
+  void DoDestroyValues(T* first, T* last);
+  ~vector_s005f_5f20() {
+    DoDestroyValues(mpBegin, mpEnd);
+    if (mpBegin && ((int*)mpBegin)[-1] != 0)
+      do_deallocate(mpBegin);
+  }
+  void do_deallocate(T* p);
+};  // namespace eastl
+}
+}
+namespace SP {
+class cSwatchRenderer_s005f_5f20 {
+ public:
+  PV_s005f_5f20(0) PV_s005f_5f20(1) PV_s005f_5f20(2) PV_s005f_5f20(3) PV_s005f_5f20(4) PV_s005f_5f20(5) PV_s005f_5f20(6) PV_s005f_5f20(7) PV_s005f_5f20(8) PV_s005f_5f20(9) PV_s005f_5f20(10) PV_s005f_5f20(11) PV_s005f_5f20(12) PV_s005f_5f20(13) PV_s005f_5f20(14)
+  PV_s005f_5f20(15) PV_s005f_5f20(16) PV_s005f_5f20(17) PV_s005f_5f20(18) PV_s005f_5f20(19) PV_s005f_5f20(20) PV_s005f_5f20(21) PV_s005f_5f20(22) PV_s005f_5f20(23) PV_s005f_5f20(24) PV_s005f_5f20(25) PV_s005f_5f20(26) PV_s005f_5f20(27) PV_s005f_5f20(28)
+  PV_s005f_5f20(29) PV_s005f_5f20(30) PV_s005f_5f20(31) PV_s005f_5f20(32) PV_s005f_5f20(33)
+  virtual void SetTexture(void* texture);  // +0x88
+};
+}
+namespace SP {
+struct cSwatch3DView_s005f_5f20 {
+  bool mVisible;                                            // +0x00
+  cUILayeredObject_s005f_5f20* mLayeredObject;                         // +0x04
+  eastl::vector_s005f_5f20<AutoRefCount_s005f_5f20<cMWModel_s005f_5f20> > mModels;           // +0x08
+  uint32_t pad14;                                           // +0x14
+  uint32_t pad18;                                           // +0x18
+  void* mAnimWorld;                                         // +0x1c
+  IWindow_s005f_5f20* mWindow;                                         // +0x20
+  cSwatchRenderer_s005f_5f20* mRenderer;                               // +0x24
+  void* mCamera;                                            // +0x28
+  cSwatchTexture* mTexture;                                 // +0x2c
+  void RemoveModel(cMWModel_s005f_5f20* model);                        // 0x005f4eb0
+  void RemoveAllModels();                                   // 0x005f5aa0
+  void Shutdown();                                          // 0x005f67d0
+  ~cSwatch3DView_s005f_5f20();                                         // 0x005f6b40
+};
+}
+namespace SP {
+void FUN_0080dda0(void* a, int b);   // 0x0080dda0
+}
+namespace SP {
+void FUN_0080f7c0(void* a);          // 0x0080f7c0
+}
+namespace SP {
+void FUN_0080dfc0(void* a);          // 0x0080dfc0
+}
+namespace SP {
+void FUN_0080df80(void* a);          // 0x0080df80
+}
+namespace SP {
+void* cSPBoundingBox_AddBoundingBox2(int, int, int);  // 0x0067cad0
+}
+namespace SP {
+class cRefVt {
+ public:
+  PV_s005f_5f20(0)
+  virtual void Vt4();   // +0x04
+  virtual void Vt8();   // +0x08
+  PV_s005f_5f20(3) PV_s005f_5f20(4) PV_s005f_5f20(5) PV_s005f_5f20(6) PV_s005f_5f20(7)
+  virtual void Vt20();  // +0x20
+  PV_s005f_5f20(9) PV_s005f_5f20(10) PV_s005f_5f20(11) PV_s005f_5f20(12) PV_s005f_5f20(13) PV_s005f_5f20(14) PV_s005f_5f20(15) PV_s005f_5f20(16)
+  virtual void Vt44();  // +0x44
+  PV_s005f_5f20(18) PV_s005f_5f20(19) PV_s005f_5f20(20) PV_s005f_5f20(21) PV_s005f_5f20(22) PV_s005f_5f20(23) PV_s005f_5f20(24) PV_s005f_5f20(25) PV_s005f_5f20(26) PV_s005f_5f20(27) PV_s005f_5f20(28) PV_s005f_5f20(29) PV_s005f_5f20(30)
+  PV_s005f_5f20(31) PV_s005f_5f20(32) PV_s005f_5f20(33)
+  virtual void Vt88();  // +0x88
+};
+}
+// ---- items of slice s005f5f20 end
 
 // @ 0x005f2180
 namespace SP {
@@ -2038,6 +2906,7 @@ int cSPSwatchPlanner::Check()
   return 0;
 }
 }  // namespace SP
+
 
 
 
@@ -2059,6 +2928,7 @@ void cSPSwatchPlannerReal::SetModel(cPropertyList*& out)
 
 
 
+
 // @ 0x005f22a0
 void * SP::cSPOLDPaletteItemUIDragAndBuy::AsInterface(EA::COM::InterfaceId id)
 {
@@ -2070,6 +2940,7 @@ void * SP::cSPOLDPaletteItemUIDragAndBuy::AsInterface(EA::COM::InterfaceId id)
     return this;
   return id == 0x31e56741 ? this : 0;
 }
+
 
 
 
@@ -2089,6 +2960,7 @@ int cSPSwatchPlanner::CheckType()
 
 
 
+
 // @ 0x005f2310
 namespace SP {
 float cSPSwatchPlanner::GetDouble94()
@@ -2096,6 +2968,7 @@ float cSPSwatchPlanner::GetDouble94()
   return m94 + m94;
 }
 }  // namespace SP
+
 
 
 
@@ -2109,6 +2982,7 @@ int cSPSwatchPlanner::Contains(const float* point)
   return point[0] >= self[0] && point[1] >= self[1] && point[0] < self[2] && point[1] < self[3];
 }
 }  // namespace SP
+
 
 
 
@@ -2154,6 +3028,7 @@ void SizeViewportToWindowAndRemainOnScreen(cUIViewport* viewport, IWindow* windo
   }
 }
 }  // namespace SW
+
 
 
 
@@ -2206,6 +3081,7 @@ void cSwatch3DView::Init(IRefObj* renderer, int a2, char a3, char a4)
 
 
 
+
 // @ 0x005f2740
 namespace SP {
 int cSPSwatchPlanner::GetBuffer()
@@ -2217,6 +3093,8 @@ int cSPSwatchPlanner::GetBuffer()
   return 0;
 }
 }  // namespace SP
+
+
 
 
 
@@ -2237,6 +3115,7 @@ bool cSPSwatch_s005f_2780::HandleMessage(uint32_t messageID, void* message)
   return false;
 }
 }  // namespace SP
+
 
 
 
@@ -2336,6 +3215,7 @@ bool cSPSwatch_s005f_2780::DoMessage(IWindow_s005f_2780* window, const Message_s
 
 
 
+
 // @ 0x005f2bf0
 namespace SP {
 void cSPSwatch_s005f_2780::UpdateSwatchPosition(uint32_t deltaTime)
@@ -2359,6 +3239,7 @@ void cSPSwatch_s005f_2780::UpdateSwatchPosition(uint32_t deltaTime)
   }
 }
 }  // namespace SP
+
 
 
 
@@ -2399,6 +3280,7 @@ uint32_t cSPSwatch_s005f_2780::SetImage(uint32_t imageID, bool overlay)
 
 
 
+
 // @ 0x005f2e00
 namespace SP {
 void cSPSwatch_s005f_2780::Show3DModel()
@@ -2424,6 +3306,7 @@ void cSPSwatch_s005f_2780::Show3DModel()
 
 
 
+
 // @ 0x005f2eb0
 namespace SP {
 void cSPSwatch_s005f_2780::Hide3DModel()
@@ -2436,6 +3319,7 @@ void cSPSwatch_s005f_2780::Hide3DModel()
     mpImageLayers->mVisible = false;
 }
 }  // namespace SP
+
 
 
 
@@ -2458,6 +3342,7 @@ void cSPSwatch_s005f_2780::StartModelEffects()
 
 
 
+
 // @ 0x005f2f50
 namespace SP {
 bool cSPSwatch_s005f_2780::IsAnimating()
@@ -2471,6 +3356,7 @@ bool cSPSwatch_s005f_2780::IsAnimating()
   return false;
 }
 }  // namespace SP
+
 
 
 
@@ -2491,6 +3377,7 @@ bool cSPSwatch_s005f_2780::TakeCapture()
 
 
 
+
 // @ 0x005f3040
 namespace SP {
 void cSPSwatch_s005f_2780::EndInteraction()
@@ -2500,6 +3387,7 @@ void cSPSwatch_s005f_2780::EndInteraction()
   mWantToRenderModel = false;
 }
 }  // namespace SP
+
 
 
 
@@ -2514,6 +3402,7 @@ bool cSPSwatch_s005f_2780::HasCapture()
   return false;
 }
 }  // namespace SP
+
 
 
 
@@ -2542,6 +3431,7 @@ void cSPPaletteSwatch_s005f_2780::OnRolloverEnd()
 
 
 
+
 // @ 0x005f3150
 namespace SP {
 int cSPSwatch_s005f_2780::IsBusy()
@@ -2549,6 +3439,7 @@ int cSPSwatch_s005f_2780::IsBusy()
   return IsAnimating() || HasCapture();
 }
 }  // namespace SP
+
 
 
 
@@ -2588,6 +3479,7 @@ void cSPSwatch_s005f_2780::UpdateViewport(uint32_t deltaTime)
 
 
 
+
 // @ 0x005f3320
 namespace SP {
 bool cSPPaletteSwatch_s005f_2780::IsMouseOutside()
@@ -2605,6 +3497,7 @@ bool cSPPaletteSwatch_s005f_2780::IsMouseOutside()
 
 
 
+
 // @ 0x005f33c0
 namespace SP {
 bool cSPPaletteSwatch_s005f_2780::IsItemAvailable()
@@ -2614,6 +3507,7 @@ bool cSPPaletteSwatch_s005f_2780::IsItemAvailable()
   return true;
 }
 }  // namespace SP
+
 
 
 
@@ -2672,6 +3566,7 @@ void cSPPaletteSwatch_s005f_2780::UpdateCostDisplay()
 
 
 
+
 // @ 0x005f3600
 namespace SP {
 void cSPPaletteSwatch_s005f_2780::UpdateCursor()
@@ -2693,6 +3588,7 @@ void cSPPaletteSwatch_s005f_2780::UpdateCursor()
 
 
 
+
 // @ 0x005f3680
 namespace eastl {
 template <typename T> void vector_s005f_2780<T>::DoDestroyValues(T* first, T* last)
@@ -2701,6 +3597,8 @@ template <typename T> void vector_s005f_2780<T>::DoDestroyValues(T* first, T* la
     first->~T();
 }
 }  // namespace eastl
+
+
 
 
 
@@ -2744,6 +3642,7 @@ uint32_t GetThumbnailCameraID(uint32_t modelType, uint32_t unused)
 
 
 
+
 // @ 0x005f3810
 namespace SP {
 void cSwatch3DView_s005f_36d0::RenderFrame(int time)
@@ -2782,6 +3681,108 @@ void cSwatch3DView_s005f_36d0::RenderFrame(int time)
 
 
 
+
+// @ 0x005f3930
+namespace SP {
+cISPCreatureAnimWorld* cSwatch3DView_s005f_36d0::AddCreature(uint32_t modelID, void* key, int type)
+{
+  if (mLayeredObject) {
+    cAnimWorld* newWorld = (cAnimWorld*)SwatchManager_s005f_36d0()->CreateAnimatingCreature(modelID, key);
+    cAnimWorld* old = (cAnimWorld*)mAnimWorld;
+    if (newWorld != old) {
+      if (newWorld)
+        newWorld->AddRef();
+      mAnimWorld = newWorld;
+      if (old)
+        old->Release();
+    }
+    mLayeredObject->AddModel(*(void**)((char*)mAnimWorld + 0x180));
+    mLayeredObject->SetVisible(mVisible);
+    if (FUN_00641770(mLayeredObject) == 0) {
+      void* v = FUN_00bb9ae0();
+      FUN_008eb830(mLayeredObject, v);
+    }
+    ((uint32_t*)mAnimWorld)[0x68 / 4] &= 0xfffffffd;
+    ((uint32_t*)mAnimWorld)[0x6c / 4] &= 0xfffffffd;
+    ((uint32_t*)mAnimWorld)[0x70 / 4] &= 0xfffffffd;
+  }
+  if (mWindow) {
+    cAnimWorld* newWorld = (cAnimWorld*)((cSwatchWindow*)mWindow)
+        ->Vt30(modelID, key, &DAT_015f1ce4, &DAT_0151c5f8, 1);
+    cAnimWorld* old = (cAnimWorld*)mAnimWorld;
+    if (newWorld != old) {
+      if (newWorld)
+        newWorld->AddRef();
+      mAnimWorld = newWorld;
+      if (old)
+        old->Release();
+    }
+    ((cSwatchWindow*)mWindow)->Vt40((cRefObject*)mAnimWorld, key, 1);
+  }
+  if (!mAnimWorld)
+    return 0;
+  *((char*)mAnimWorld + 0x64) = 0;
+  int finalType = type;
+  if (type == -1) {
+    cResourceManager* mgr = ResourceGetManager();
+    int* res = 0;
+    if (mgr->FindResource(modelID, (void**)&res, 0, 0, 0, 0))
+      finalType = res[6];
+    if (res)
+      ((cRefObject*)res)->Release();
+  }
+  switch (finalType) {
+    case 0x9ea3031a: ((cAnimWorld*)mAnimWorld)->SetLOD(0); break;
+    case 0x372e2c04: ((cAnimWorld*)mAnimWorld)->SetLOD(5); break;
+    case 0xccc35c46:
+    case 0x4178b8e8:
+    case 0x65672ade: ((cAnimWorld*)mAnimWorld)->SetLOD(6); break;
+  }
+  return (cISPCreatureAnimWorld*)mAnimWorld;
+}
+}  // namespace SP
+
+
+
+
+// @ 0x005f3b20
+namespace SP {
+void cSPSwatch_s005f_36d0::InitInternal(IWindow_s005f_36d0* base, IWindow_s005f_36d0* modelWindow, uint32_t a3, uint32_t a4, bool b5, bool b6, uint32_t a7, uint32_t a8)
+{
+  mIgnoreFocusChange = b5;
+  mForceRotation = b6;
+  *(uint32_t*)((char*)this + 0xf4) = a7;
+  mBaseWindow = base;
+  if (mBaseWindow)
+    mBaseWindow->AddWinProc((IWinProc_s005f_36d0*)this);
+  mModelWindow = modelWindow;
+  EA::Messaging::Server_s005f_36d0* server = MessageServer_s005f_36d0();
+  if (server)
+    server->AddHandler((EA::Messaging::IHandler_s005f_36d0*)((char*)this + 0xc), 0x695e243);
+  m3DView.Init(mModelWindow, a4, a3, a8);
+  mUseStaticEffects = (a3 == 0);
+  RectT_s005f_36d0 area = mBaseWindow->GetRealArea();
+  mOriginalWindowArea = area;
+  mWindowMaterial = kSwatchMaterialNormal;
+  *(const wchar_t**)((char*)this + 0xc8) = kSwatchMaterialNormal;
+  *(const wchar_t**)((char*)this + 0xd0) = mMaterialParams;
+  *(const wchar_t**)((char*)this + 0xd4) = mMaterialParams;
+  mTargetModelAlpha = 0.0f;
+  mCurrentModelAlpha = 0.0f;
+  mCamera = 0xff4641e7;
+  RectT_s005f_36d0 winArea = mModelWindow->GetRealArea();
+  Point2D_s005f_36d0 center = mModelWindow->GlobalToLocal(
+      Point2D_s005f_36d0((winArea.right - winArea.left) * 0.5f, (winArea.bottom - winArea.top) * 0.5f));
+  mTargetViewportCenter = center;
+  mActualViewportCenter = center;
+  mActualAngle = mTargetAngle;
+  mActualViewportScale = mTargetViewportScale;
+}
+}  // namespace SP
+
+
+
+
 // @ 0x005f3cf0
 namespace SP {
 void cSPSwatch_s005f_36d0::FrameModel()
@@ -2817,6 +3818,7 @@ void cSPSwatch_s005f_36d0::FrameModel()
 
 
 
+
 // @ 0x005f4080
 namespace SP {
 void cSPSwatch_s005f_36d0::SetModelKey(Key_s005f_36d0* key)
@@ -2825,6 +3827,63 @@ void cSPSwatch_s005f_36d0::SetModelKey(Key_s005f_36d0* key)
   mCamera = GetThumbnailCameraID(mModelKey.mType, 0);
 }
 }  // namespace SP
+
+
+
+
+// @ 0x005f40b0
+namespace SP {
+void cSPSwatch_s005f_36d0::UpdateBakingTransform()
+{
+  if (!mUseEditorCameraController)
+    return;
+  if (*(void**)((char*)this + 0xf0) != 0)
+    return;
+  if (!mBakedAsset)
+    return;
+  if (!mModel)
+    return;
+  cMWModel_s005f_36d0* model = mModel;
+  int p = *(int*)((char*)model + 0x90);
+  float scale = 1.0f;
+  if (p && GetFloatProperty((void*)p, 0xfba611, &scale) && scale > 0.0f) {
+    *(uint16_t*)((char*)model + 0xa) += 1;
+    *(float*)((char*)model + 0x18) = 1.0f / scale;
+  }
+  cSPTransform t;
+  FUN_00409930(&t);
+  FUN_006baa70(DAT_0151c568);
+  Matrix3 mtx;
+  Matrix3_Assign(&mtx, &t);
+  *(uint16_t*)((char*)model + 8) |= 2;
+  *(Matrix3*)((char*)model + 0x1c) = mtx;
+  *(uint16_t*)((char*)model + 0xa) += 1;
+  uint32_t v[3];
+  v[0] = *(uint32_t*)&DAT_015f1ce4;
+  v[1] = *(uint32_t*)&DAT_015f1ce8;
+  v[2] = *(uint32_t*)&DAT_015f1cec;
+  void* theme = FUN_005766b0(0);
+  if (cSPEditorPaintTheme_Apply(&mModelKey, theme)) {
+    cSPBoundingBox_AddBoundingBox(0, 0, 0);
+    int* q = (int*)FUN_0046bfd0(0, 0);
+    v[0] = q[0];
+    v[1] = q[1];
+    v[2] = q[2];
+    FUN_006c10e0();
+    FUN_004ad330();
+  }
+  *(uint16_t*)((char*)model + 8) |= 4;
+  *(uint16_t*)((char*)model + 0xa) += 1;
+  v[0] ^= 0x80000000;
+  v[1] ^= 0x80000000;
+  v[2] ^= 0x80000000;
+  *(uint32_t*)((char*)model + 0xc) = v[0];
+  *(uint32_t*)((char*)model + 0x10) = v[1];
+  *(uint32_t*)((char*)model + 0x14) = v[2];
+  FUN_004a9ae0();
+}
+}  // namespace SP
+
 
 
 
@@ -2842,6 +3901,156 @@ void cSPSwatch_s005f_36d0::OnBakingIsDone()
     UpdateBakingTransform();
 }
 }  // namespace SP
+
+
+
+
+// @ 0x005f4310
+namespace SP {
+void cSPOLDPaletteItemUIDragAndBuy_s005f_4310::Init(Key_s005f_4310* key, void* a, void* b, uint32_t c, uint32_t d, void* e, void* f, bool g)
+{
+  InitInternal((IWindow_s005f_4310*)b, (IWindow_s005f_4310*)b, 0, 0, 0, 1, 0, false);
+  mOriginalItemKey = *key;
+  if (key->mInstance != 0)
+    Vt24(key);
+  if ((IWindow_s005f_4310*)a != (IWindow_s005f_4310*)mBaseWindow)
+    mBaseWindow = (IWindow_s005f_4310*)a;
+  if (m3DView.mLayeredObject == 0 && mOriginalItemKey.mType != 0) {
+    void* buf = 0;
+    (void)buf;
+  }
+  mUnk19c[0] = 0;
+  if (e != 0)
+    mDragWindow = (IWindow_s005f_4310*)e;
+  mShowCost = g;
+  UpdateCostDisplay();
+  UpdateCursor();
+}
+}  // namespace SP
+
+
+
+// @ 0x005f46c0
+namespace SP {
+void cSPPaletteSwatch_s005f_4310::EndDrag()
+{
+  if (mBaseWindow)
+    mBaseWindow->SetArea(mOriginalWindowArea);
+  mWantToRenderModel = false;
+  UpdateCursor();
+}
+}  // namespace SP
+
+
+
+// @ 0x005f46f0
+namespace SP {
+bool cHandlerView::HandleMessage(uint32_t id, void* msg)
+{
+  if (id == 0x3150c27) {
+    cSPPaletteSwatch_s005f_4310* self = (cSPPaletteSwatch_s005f_4310*)((char*)this - 0xc);
+    self->UpdateCostDisplay();
+    self->UpdateCursor();
+    return false;
+  }
+  if (id == 0x695e243) {
+    cModelChangedMessage* m = (cModelChangedMessage*)msg;
+    cSPPaletteSwatch_s005f_4310* self = (cSPPaletteSwatch_s005f_4310*)((char*)this - 0xc);
+    if (m->mInstanceID == self->mModelKey.mInstance && m->mTypeID == self->mModelKey.mType &&
+        m->mGroupID == self->mModelKey.mGroup)
+      self->ReloadModel();
+  }
+  return false;
+}
+}  // namespace SP
+
+
+
+// @ 0x005f4750
+namespace SP {
+void cSPOLDPaletteItemUIDragAndBuy_s005f_4310::OnLeftMouseDown()
+{
+  UpdateCursor();
+}
+}  // namespace SP
+
+
+
+// @ 0x005f49f0
+namespace SP {
+void cSPOLDPaletteItemUIDragAndBuy_s005f_4310::OnMouseDown()
+{
+  UpdateCursor();
+}
+}  // namespace SP
+
+
+
+// @ 0x005f4b80
+namespace SP {
+void cSPOLDPaletteItemUIDragAndBuy_s005f_4310::OnMouseUp()
+{
+  UpdateCursor();
+}
+}  // namespace SP
+
+
+
+// @ 0x005f4eb0
+namespace SP {
+void cSwatch3DView_s005f_4310::RemoveModel(cMWModel_s005f_4310* model)
+{
+  if (mLayeredObject)
+    mLayeredObject->RemoveModel(model);
+  int n = mModels.size();
+  for (int i = 0; i < n; ++i) {
+    if (mModels[i] == model) {
+      mModels[i] = mModels.back();
+      mModels.pop_back();
+      return;
+    }
+  }
+}
+}  // namespace SP
+
+
+
+// @ 0x005f4f80
+namespace SP {
+void cSPSwatch_s005f_4310::Init(Key_s005f_4310* key, uint32_t a, uint32_t b, uint32_t c, uint32_t d, uint32_t e, uint32_t scale)
+{
+  if (a != 0) {
+    mScaleParam = scale;
+    bool b8 = true;
+    if (key->mType == 0x3d97a8e4)
+      b8 = false;
+    InitInternal((IWindow_s005f_4310*)a, (IWindow_s005f_4310*)a, 1, b, c, d, e, b8);
+    mOriginalItemKey = *key;
+    if (key->mInstance != 0)
+      Vt24(key);
+  }
+}
+}  // namespace SP
+
+
+
+// @ 0x005f5000
+namespace SP {
+void cSPSwatch_s005f_4310::Init(Key_s005f_4310* key, void* a, void* b, uint32_t c, uint32_t d, uint32_t e, uint32_t f, uint32_t scale)
+{
+  if (a != 0 && b != 0) {
+    mScaleParam = scale;
+    bool b8 = true;
+    if (key->mType == 0x3d97a8e4)
+      b8 = false;
+    InitInternal((IWindow_s005f_4310*)a, (IWindow_s005f_4310*)b, 1, c, d, e, f, b8);
+    mOriginalItemKey = *key;
+    if (key->mInstance != 0)
+      Vt24(key);
+  }
+}
+}  // namespace SP
+
 
 
 // @ 0x005f5080
@@ -2897,17 +4106,164 @@ void RefVec::clear()
 }  // namespace SP
 
 
+// @ 0x005f59b0
+namespace SP {
+cMWModel_s005f_5080* cSwatch3DView_s005f_5080::AddModel(uint32_t a, uint32_t b)
+{
+  if (mLayeredObject) {
+    void* box = cSPBoundingBox_AddBoundingBox(0, 0, 0);
+    (void)box;
+    cRefCountedModel2* mgr = (cRefCountedModel2*)FUN_006c10e0();
+    cMWModel_s005f_5080* m = mgr->MakeModel(a, b, 0x26);
+    *(uint32_t*)((char*)m + 4) |= 0x2000;
+    mLayeredObject->AddModel(m);
+    FUN_0080d7c0(mVisible);
+    return m;
+  }
+  if (mTexture) {
+    cRefCountedModel2* mgr = (cRefCountedModel2*)FUN_0080db70();
+    cMWModel_s005f_5080* m = mgr->MakeModel(a, b, 0x22);
+    *(uint32_t*)((char*)m + 4) |= 0x2000;
+    ++*(uint32_t*)((char*)m + 0x40);
+    AutoRefCount_s005f_5080<cMWModel_s005f_5080>* p = mModels.mpEnd;
+    if (p < mModels.mpCapacity) {
+      mModels.mpEnd = p + 1;
+      if (p) {
+        p->mpObject = m;
+        ++*(uint32_t*)((char*)m + 0x40);
+      }
+    } else {
+      ((RefVec*)&mModels)->DoInsertValue(p, &m);
+    }
+    if (m) {
+      if (*(uint32_t*)((char*)m + 0x40) > 1) {
+        --*(uint32_t*)((char*)m + 0x40);
+        return m;
+      }
+      m->Release();
+    }
+    return m;
+  }
+  return 0;
+}
+}  // namespace SP
+
+
+// @ 0x005f5aa0
+void SP::cSwatch3DView::RemoveAllModels()
+{
+  if (mLayeredObject.mpObject == 0) {
+    if (mAnimWorld.mpObject == 0)
+      return;
+    ((RefVec*)&mModels)->clear();
+    if (mAnimatingCreature.mpObject == 0)
+      return;
+    ((cSwatchWindow_s005f_5080*)mAnimWorld.mpObject)->Vt3c(mAnimatingCreature.mpObject);
+  } else {
+    FUN_0080ea50(mLayeredObject.mpObject);
+    FUN_008eb830(mLayeredObject.mpObject, 0);
+    if (mAnimatingCreature.mpObject == 0)
+      return;
+    SwatchManager();
+    FUN_005f0380();
+  }
+  if (mAnimatingCreature.mpObject == 0)
+    return;
+  cAnimWorld_s005f_5080* w = (cAnimWorld_s005f_5080*)mAnimatingCreature.mpObject;
+  mAnimatingCreature.mpObject = 0;
+  w->Release();
+}
+
+
 // @ 0x005f5b40
 void SP::cSPSwatch::LoadModel(EA::ResourceMan::Key & a1)
 { /* partial: 687-byte model load not reconstructed */ }
+
+
+// @ 0x005f5df0
+namespace SP {
+void cSPSwatch_s005f_5080::ShutDownModel()
+{
+  mModel = (cMWModel_s005f_5080*)0;
+  ((RefVec*)((char*)this + 0x11c))->clear();
+  ((RefVec*)((char*)this + 0x130))->clear();
+  ((RefVec*)((char*)this + 0x104))->clear();
+  ((KeyVec*)((char*)this + 0x148))->clear();
+  void* effect = *(void**)((char*)this + 0xf0);
+  if (effect) {
+    *(void**)((char*)this + 0xf0) = 0;
+    ((cAnimWorld_s005f_5080*)effect)->Release();
+  }
+  m3DView.RemoveAllModels();
+  mCreatedCreature = false;
+}
+}  // namespace SP
+
+
+// @ 0x005f5f20
+namespace SP {
+void FUN_005f5f20()
+{ /* partial */ }
+}  // namespace SP
 
 // @ 0x005f6090
 void SP::cSPSwatch::InitAdditionalModels()
 { /* partial */ }
 
+// @ 0x005f6260
+namespace SP {
+void FUN_005f6260()
+{ /* partial */ }
+}  // namespace SP
+
 // @ 0x005f6500
 void SP::cSPSwatch::SetEditorCameraController(bool a1)
 { /* partial */ }
+
+// @ 0x005f67d0
+namespace SP {
+void cSwatch3DView_s005f_5f20::Shutdown()
+{
+  if (mCamera) {
+    ((cRefVt*)mCamera)->Vt44();
+    if (mCamera) {
+      mCamera = 0;
+      ((cRefVt*)mCamera)->Vt4();
+    }
+  }
+  RemoveAllModels();
+  if (mLayeredObject) {
+    FUN_0080dda0(0, 0);
+    if (cSPBoundingBox_AddBoundingBox2(0, 0, 0)) {
+      FUN_0080f7c0(mLayeredObject);
+    }
+    if (mLayeredObject) {
+      mLayeredObject = 0;
+      ((cRefVt*)mLayeredObject)->Vt8();
+    }
+  }
+  if (mWindow) {
+    ((cRefVt*)mWindow)->Vt20();
+    if (mWindow) {
+      mWindow = 0;
+      ((cRefVt*)mWindow)->Vt4();
+    }
+  }
+  if (mTexture) {
+    ((cRefVt*)mRenderer)->Vt88();
+    FUN_0080dfc0(mTexture);
+    if (mTexture) {
+      mTexture = 0;
+      FUN_0080df80(mTexture);
+    }
+  }
+  if (mRenderer) {
+    mRenderer = 0;
+    ((cRefVt*)mRenderer)->Vt4();
+  }
+  mVisible = false;
+}
+}  // namespace SP
 
 // @ 0x005f69a0
 void SP::cSPSwatch::OnModelLoad()

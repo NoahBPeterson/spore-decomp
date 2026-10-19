@@ -5,4 +5,13 @@
 005f2d00 204 SetImage: retail zeroes eax up front (overlay loaded into al) and keeps imageID in edx; mine swaps registers, shifting all offsets by 1 byte
 005f3400 4 UpdateCostDisplay: default case loads both material globals before storing (mine interleaves load/store)
 005f36d0 241 GetThumbnailCameraID: complete (model-type switch + Editor::GetConfigFromModelType + manager property lookup); tail AutoRefCount/out-param schedule and property-id select differ
+005f3930 273 cSwatch3DView::AddCreature: complete (both anim-world assignments, layered obj bind, LOD switch, resource fallback); register/schedule differences
+005f3b20 381 cSPSwatch::InitInternal: complete (field stores, window binds, MessageServer AddHandler, cSwatch3DView::Init, viewport init); register/schedule differences
+005f46f0 46 cSPOLDPaletteItemUIDragAndBuy::HandleMessage (IHandler subobject view): complete (test-then-reload message key compare + ReloadModel vcall); compiler folds outer-pointer arithmetic instead of [ecx+0x40] form
+005f4f80 84 cSPSwatch::Init (7-arg): complete (mScaleParam store, InitInternal call, Key copy, Vt24); bool/arg scheduling differs
+005f5000 87 cSPSwatch::Init (8-arg): complete (two non-null guards, mScaleParam store, InitInternal call, Key copy, Vt24); bool/arg scheduling differs
 005f5970 43 vector<AutoRefCount<cMWModel>>::clear (erase path): complete (do_copy + DoDestroyValues + end adjustment); compiler emits sub instead of neg/add schedule
+005f59b0 207 cSwatch3DView::AddModel: complete (both layered-object/model-texture paths, flag OR, refcounted vector push); register/schedule differences
+005f5aa0 107 cSwatch3DView::RemoveAllModels: complete (layered clear vs vector clear + anim-world release); schedule differences
+005f5df0 239 cSPSwatch::ShutDownModel: complete (mModel release, four vector clears, effect release, RemoveAllModels, flag clear); vector clear scheduling differs
+005f67d0 161 cSwatch3DView::Shutdown: complete (camera/window/layered-object/texture/renderer teardown + RemoveAllModels); register/schedule differences
