@@ -855,11 +855,14 @@ struct Key { uint32_t a; uint32_t b; };
 struct Str16 {                          // eastl::basic_string<wchar_t> (16 bytes with allocator)
     wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; uint32_t mAlloc;
     Str16(const Str16& x);              // 0x0056e2d0
+    void FreeBuffer();                  // 0x004237d0 (thiscall ret 0)
 };
 struct MetaI {                          // float weight + description string
     float f;
     Str16 str;
     MetaI(const MetaI& s) : f(s.f), str(s.str) {}
+    void* CopyInit(const MetaI* src);   // 0x0056b020 (thiscall ret 4)
+    void  FreeBuffer();                 // 0x004237d0 (thiscall ret 0, frees str's buffer)
 };
 struct MetaO {                          // same layout; copy ctor is the out-of-line one
     float f;
@@ -876,6 +879,7 @@ struct ElemI {                          // 0x1c-byte vector element
     MetaI meta;                         // +8
     ElemI(const ElemI& s) : key(s.key), meta(s.meta) {}
     ElemI& operator=(const ElemI& s);   // 0x00570140 (assign)
+    ~ElemI() { meta.str.FreeBuffer(); }
 };
 ElemI* UninitCopy(ElemI* first, ElemI* last, ElemI* dst);                 // 0x00570330 (cdecl)
 inline ElemI* CopyBackwardImpl(ElemI* first, ElemI* last, ElemI* result)

@@ -10,3 +10,6 @@
 005704c0 ?Intersect@TraitData@@QAEMPAUFeatureVector@@0@Z  # TraitData::Intersect (float, ret 8)
 00570870 Big::Init  # two sub-inits + zero 3-float vector + flag/value
 005708d0 ?Blend@TraitData@@QAEX_NPAUFeatureVector@@I@Z  # TraitData::Blend
+00571680 ?clear@cFeatureVector@Traits@SP@@QAEXXZ  # SP::Traits::cFeatureVector::clear (callee of s0056fb90, named from the dev publics; slice address comment)
+005716c0 ?begin@cFeatureVector@Traits@SP@@QBEPBU?$pair@VcID@Traits@SP@@M@eastl@@XZ  # SP::Traits::cFeatureVector::begin (callee of s0056fb90, named from the dev publics; slice address comment)
+005716e0 ?end@cFeatureVector@Traits@SP@@QBEPBU?$pair@VcID@Traits@SP@@M@eastl@@XZ  # SP::Traits::cFeatureVector::end (callee of s0056fb90, named from the dev publics; slice address comment)
