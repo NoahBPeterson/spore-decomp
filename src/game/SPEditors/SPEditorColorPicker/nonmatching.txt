@@ -5,4 +5,5 @@
 005a4e20 349 cSPEditorColorPicker::SetColor: complete; sret/register allocation across the swatch scan differs
 005a5000 44 cSPColorSwatch::cSPColorSwatch: complete; final base-color float store scheduled after the Stopwatch ctor call
 005a51c0 1592 Init: complete; zero-reg/test-vs-cmp ebp schedule and param-slot reuse differ
+005a5960 13 MainColorSelected complete (picker query, SetDefault/SetColor, heap MessageBasicRC<5> build+send+Release); lea reg eax vs ecx and store schedule after SetIRefCount [equiv: WEAK (8% coverage)]
 005a5ec0 949 cSPEditorColorPicker::Init: complete (swatch creation, custom/default swatches, colour/HSL); frame 0x30 vs 0x1c, scheduling differs
