@@ -1,4 +1,0 @@
-006a25a0  154  SP::cPropertyList::GetDescription - skeleton; string/description lookup path not reconstructed
-006a2f60  251  SP::cPropertyList::Read - partial; IO/PropertyManager path and map resize are approximated
-006a2660  137  SP::cDirectPropertyList::GetIntProperty - incomplete: ours is 31 bytes vs original's 176/192-byte extent (>5x apart); original's inlined map lookup path not reconstructed, so equivalence cannot be tested (UNSUPPORTED: symbol size rejected)
-006a2710  159  SP::cDirectPropertyList::GetFloatProperty - incomplete: ours is 31 bytes vs original's 176/192-byte extent (>5x apart); original's inlined map lookup path not reconstructed, so equivalence cannot be tested (UNSUPPORTED: symbol size rejected)

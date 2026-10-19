@@ -19,3 +19,7 @@
 006a30c0  123  SP::cDirectPropertyList::SetProperty - complete
 006a3180  246  SP::cDirectPropertyList::GetPropertyIDs - complete
 006a2a40  2  complete; eax vs ecx for the SetParent arg load [equiv: WEAK]
+006a25a0  136  SP::cDirectPropertyList::GetDescription - complete; inlined lower_bound + string-Variant accessor (hashtable find 0x6a19b0, Destruct 0x93db80); register allocation and block layout differ [equiv: PASS]
+006a2660  129  SP::cDirectPropertyList::GetIntProperty - complete; inlined lower_bound + VariantT<int> conversion (0x60d990); register allocation differs [equiv: WEAK]
+006a2710  139  SP::cDirectPropertyList::GetFloatProperty - complete; inlined lower_bound + VariantT<float> conversion (0x6a1a10); register allocation differs [equiv: WEAK]
+006a2f60  221  SP::cPropertyList::Read - complete; IO/PropertyManager/vtable+0x2c/resize path reproduced [equiv: WEAK]

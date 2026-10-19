@@ -9,12 +9,35 @@ void* PropertyManager();            // 0x0067de30
 void* Property_GetBool(void* prop); // 0x0041e920
 void* Property_GetInt(void* prop);
 void* Property_GetFloat(void* prop);
-bool WriteVariant(EA::IO::IStream* stream, EA::Variant* value, int flags);
+bool WriteVariant(EA::IO::IStream* stream, EA::Variant* value, int flags);  // 0x00694440
 
 namespace EA {
 namespace IO {
-bool ReadInt32(IStream* stream, void* pData, unsigned int count, int flags);
+bool ReadInt32(IStream* stream, void* pData, unsigned int count, int flags);  // 0x0093a780
 }
+}
+
+// Variant-shaped scratch used by the inlined property getters.
+struct VariantBytes {
+  unsigned int mData[4];   // +0x00
+  unsigned short mFlags;   // +0x10
+  unsigned short mTypeId;  // +0x12
+};
+struct VariantOps {
+  void* ToStr(const void* src);    // 0x006a19b0
+  void* ToInt(const void* src);    // 0x0060d990
+  void* ToFloat(const void* src);  // 0x006a1a10
+};
+
+static const void* VariantData(const VariantBytes* v, unsigned short tA,
+                               unsigned short tB, unsigned int emptyAddr) {
+  unsigned short t = v->mTypeId;
+  if (t == tA || t == tB) {
+    if ((v->mFlags & 0x30) == 0)
+      return (const void*)(-(unsigned)(t != 0) & (unsigned)(size_t)v);
+    return *(const void**)(const void*)v;
+  }
+  return (const void*)(size_t)emptyAddr;
 }
 
 // ---------------------------------------------------------------------------
@@ -110,22 +133,48 @@ bool SP::cDirectPropertyList::GetDescription(unsigned int key) const {
   else if (it == it + 1)
     it = end;
   if (it == end) return false;
-  EA::Variant* v = &it->second;
-  return v->mTypeId != 0;
+  VariantBytes v;
+  const VariantBytes* rv = (const VariantBytes*)((VariantOps*)&v)->ToStr(&it->second);
+  const void* p = VariantData(rv, 1, 0x10, 0x15d115d);
+  bool res = *(const bool*)p;
+  if (v.mFlags & 4) ((EA::Variant*)&v)->Destruct(0);
+  return res;
 }
 
 // @ 0x006A2660
 int SP::cDirectPropertyList::GetIntProperty(unsigned int index) const {
   if (index < mNumDirectProps) return mDirectProps[index];
-  EA::Variant* v = GetPropertyValue(index);
-  return v->mData[0];
+  VariantPair* end = mPropertyMap.mpEnd;
+  VariantPair* it = eastl::lower_bound(mPropertyMap.mpBegin, end, &index, mPropertyMap.mCompare);
+  if (it == end || index < it->first)
+    it = end;
+  else if (it == it + 1)
+    it = end;
+  if (it == end) return 0;
+  VariantBytes v;
+  const VariantBytes* rv = (const VariantBytes*)((VariantOps*)&v)->ToInt(&it->second);
+  const void* p = VariantData(rv, 9, 0x10, 0x15d1160);
+  int r = *(const int*)p;
+  if (v.mFlags & 4) ((EA::Variant*)&v)->Destruct(0);
+  return r;
 }
 
 // @ 0x006A2710
 float SP::cDirectPropertyList::GetFloatProperty(unsigned int index) const {
   if (index < mNumDirectProps) return ((float*)mDirectProps)[index];
-  EA::Variant* v = GetPropertyValue(index);
-  return *(float*)&v->mData[0];
+  VariantPair* end = mPropertyMap.mpEnd;
+  VariantPair* it = eastl::lower_bound(mPropertyMap.mpBegin, end, &index, mPropertyMap.mCompare);
+  if (it == end || index < it->first)
+    it = end;
+  else if (it == it + 1)
+    it = end;
+  if (it == end) return 0.0f;
+  VariantBytes v;
+  const VariantBytes* rv = (const VariantBytes*)((VariantOps*)&v)->ToFloat(&it->second);
+  const void* p = VariantData(rv, 0xd, 0x10, 0x15d1168);
+  float r = *(const float*)p;
+  if (v.mFlags & 4) ((EA::Variant*)&v)->Destruct(0);
+  return r;
 }
 
 // ---------------------------------------------------------------------------
@@ -399,7 +448,7 @@ unsigned int SP::cDirectPropertyList::GetPropertyIDs(unsigned int* ids) {
 // ---------------------------------------------------------------------------
 // @ 0x006A2F60
 bool SP::cPropertyList::Read(EA::IO::IStream* stream) {
-  int nCount = 0;
+  int nCount;
   bool bResult = EA::IO::ReadInt32(stream, &nCount, 1, 0);
   if (bResult && nCount < 0) {
     int key[3] = {0, 0, 0};
@@ -414,10 +463,7 @@ bool SP::cPropertyList::Read(EA::IO::IStream* stream) {
                                                              (void**)&mParent);
   }
   unsigned int want = (unsigned int)nCount & 0x7fffffff;
-  while ((unsigned int)(mPropertyMap.mpEnd - mPropertyMap.mpBegin) < want) {
-    VariantPair v;
-    mPropertyMap.insert_pos(mPropertyMap.mpEnd, v);
-  }
+  ((eastl::pvector*)&mPropertyMap)->resize(want);
   for (VariantPair* it = mPropertyMap.mpBegin; it != mPropertyMap.mpEnd; ++it) {
     if (!bResult) break;
     bResult = EA::IO::ReadInt32(stream, &it->first, 1, 0);

@@ -7,3 +7,7 @@
 0068e3b0  210  Coder::Read: buffer/external paths and GetManager loop present; scheduling/regalloc differ
 0068da70  29   name-callback thunk: forwards 4 args correctly, but cl emits a sibling tail-call where the original reorders args and returns
 0068d840  409  SPKeyFromName: complete (goto-based '!' path, real map/assign thiscalls); register allocation differs (name in ebx not edi) [equiv: WEAK 43% coverage, no mismatch]
+0068db70  18   vftable-0x1403594 constructor: complete; vtable + two embedded rb-tree anchors (head node self-linked) + CRT time import at &mUptime; member dtors modelled so the EH frame is emitted, but cl folds the original's redundant anchor-zero stores (113 vs 131 bytes -> outside chk's size window) [equiv: UNSUPPORTED (import _mktime64, all inputs discarded)]
+0068df00  198  Coder::Flush: complete; full flush path (normalisation loop, hash*0x1000193 fold, mask bit injection, dead dl accumulator); volatile saved/dl locals reproduce the original's memory-resident stack slots and keep ecx=this [equiv: WEAK 80% coverage, no mismatch]
+0068e1a0  438  Coder::Serialize: complete; mode/version mapping, memset of the 0x2a70 stack scratch, cf40/cf60/d2a0/d030/cff0/d260 helper calls, CRC32 tag+payload, io vtable+0x28/+0x38 and WriteUint32 write path [equiv: WEAK 42% coverage, no mismatch]
+0068e490  313  Coder::Verify: complete; header size/EH-mode checks, CRC32 trailer compare, padding-skip Read loop, magic 0x2450d16 + f28/f2c trailer validation and DecodeFinish [equiv: WEAK 13% coverage, no mismatch]
