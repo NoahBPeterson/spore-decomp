@@ -8,7 +8,7 @@
 0075a8c0 ?F8c0@cMultiBlender@@QAEXUB4@@@Z  # cMultiBlender::F8c0 migrated from s0075a550 (verbatim, slice spelling)
 0075a900 ?F900@cMultiBlender@@QAEHPAX@Z  # cMultiBlender::F900 migrated from s0075a550 (verbatim, slice spelling)
 0075ac40 ?FUN_0075ac40@@YIXPAUcMultiBlender@@PAX1@Z  # FUN_0075ac40 migrated from s0075a550 (verbatim, slice spelling)
-0075b190 SP::cMultiBlender::GetResourceDescriptor  # dev-PDB callee-scored anchor
+0075b190 ?GetResourceDescriptor@cMultiBlender@@SA?AUResourceDescriptor@@HUB4@@HHH@Z  # cMultiBlender::GetResourceDescriptor migrated from s0075a550 (verbatim, slice spelling)
 0075b2c0 ?FUN_0075b2c0@@YIXPAUcMultiBlender@@PAX@Z  # FUN_0075b2c0 migrated from s0075a550 (verbatim, slice spelling)
 0075b410 ?Fb410@cMultiBlender@@QAEXXZ  # cMultiBlender::Fb410 migrated from s0075a550 (verbatim, slice spelling)
 0075b440 ?Fb440@cMultiBlender@@QAEHM@Z  # cMultiBlender::Fb440 migrated from s0075a550 (verbatim, slice spelling)

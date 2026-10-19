@@ -11,10 +11,19 @@ extern "C" void FUN_011fe730();
 #include <intrin.h>
 #include <xmmintrin.h>
 #include "SP/cRenderer.h"
+#include "rw/oldanimation/Controller.h"
+#include "rw/oldanimation/Interpolator.h"
 
 // ---- items of slice s0075a550 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void  __stdcall FUN_011fda40(int arg);
 struct Controller { char pad[0x1c]; };
+struct B4 { unsigned char b[4]; };
+struct BaseResourceDescriptor {
+    unsigned mSize;
+    unsigned mAlign;
+    BaseResourceDescriptor();            // 0x006c0fa0
+    ~BaseResourceDescriptor();           // 0x00c2e4e0
+};
+struct ResourceDescriptor { BaseResourceDescriptor d[4]; };
 struct InterpBase { int dummy; };
 struct Interp : InterpBase {
     virtual void v0();
@@ -28,8 +37,8 @@ struct Interp : InterpBase {
     float mf20;      // +0x20
     void Fb220();
     void Fb600(float);
+    static ResourceDescriptor GetResourceDescriptor(int n, B4 flags, int x);   // 0x011fe550
 };
-struct B4 { unsigned char b[4]; };
 struct cMultiBlender : Controller {
     unsigned m_maxNumQuats;         // +0x1c
     void*    m_BlendCallBack;       // +0x20
@@ -60,10 +69,9 @@ struct cMultiBlender : Controller {
     void  F980(void* a, unsigned char* b, int c, int d);  // 0075a980
     void  Fb410();                  // 0075b410
     int   Fb440(float arg);         // 0075b440
+    static ResourceDescriptor GetResourceDescriptor(int n, B4 flags, int count, int addA, int addB);  // 0075b190
 };
 typedef void (__thiscall *InterpFn)(void*, float);
-extern "C" void FUN_011ff090();
-extern "C" void FUN_011fe730();
 // ---- items of slice s0075a550 end
 
 // ---- items of slice s0075b520 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -333,6 +341,33 @@ int cMultiBlender::F900(void* arg)
 void __fastcall FUN_0075ac40(cMultiBlender* self, void* a, void* b)
 {
     (void)self; (void)a; (void)b;
+}
+
+// @ 0x0075b190
+ResourceDescriptor cMultiBlender::GetResourceDescriptor(int n, B4 flags, int count, int addA, int addB)
+{
+    ResourceDescriptor base = Interp::GetResourceDescriptor(n, flags, 0);
+    unsigned size = (unsigned)((count * 3 + 0x2a) * 2);
+    unsigned align = base.d[0].mAlign;
+    if (align > 1)
+        size = (size + (align - 1)) & ~(align - 1);
+    int rowBytes = ((flags.b[1] + flags.b[0] * 4 + flags.b[2]) * 4) + 4;
+    int a1 = 4;
+    if (flags.b[0] != 0) a1 = 0x10;
+    int total = (int)size;
+    total += (int)base.d[0].mSize * count;
+    total += ((((unsigned)a1 - 1) + rowBytes) & ~((unsigned)a1 - 1)) * n;
+    if (addA != 0) {
+        int a2 = 4;
+        if (flags.b[0] != 0) a2 = 0x10;
+        total = total + ((((unsigned)a2 - 1) + rowBytes) & ~((unsigned)a2 - 1)) * n;
+    }
+    if (addB != 0)
+        total = ((total + 3) & 0xfffffffc) + 0x10 + n * 8;
+    ResourceDescriptor result;
+    result.d[0].mSize = (unsigned)total;
+    result.d[0].mAlign = align;
+    return result;
 }
 
 // @ 0x0075b2c0
