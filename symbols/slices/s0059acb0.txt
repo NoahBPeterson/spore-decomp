@@ -5,7 +5,7 @@
 0059ae80 SP::cSPEditorAnimatedEventInfo getter  # FUN_00a02b20(0) ? true : field+0x70
 0059aea0 ?FUN_0059aea0@cAnimatedData@Simulator@@QAEXD@Z  # cAnimatedData::FUN_0059aea0 migrated from s0059acb0 (verbatim, slice spelling)
 0059b0b0 SP::cSPEditorAnimatedEventInfo scalar deleting dtor  # vtables 0x13f64b4/0x13ef094
-0059b0f0 SP::cSPEditorAnimatedCreatureData::SetTargetPosition  # PDB name
+0059b0f0 ?SetTargetPosition@cSPEditorAnimatedCreatureData@SP@@QAEXUcSPVector3@@_N1@Z  # SP::cSPEditorAnimatedCreatureData::SetTargetPosition migrated from s0059acb0
 0059b390 target-position refresh helper  # uses FUN_0059aed0
 0059b420 target-position state setter  # fields +0x154, +0x164
 00a02c30 ?AddRef@cAnimatingCreature@SP@@QAEHXZ  # SP::cAnimatingCreature::AddRef (callee of s0059acb0, named from the dev publics; slice address comment)

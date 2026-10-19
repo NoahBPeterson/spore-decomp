@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0059b0f0 - PARTIAL: cSPEditorAnimatedCreatureData::SetTargetPosition 503 B; skeleton only
