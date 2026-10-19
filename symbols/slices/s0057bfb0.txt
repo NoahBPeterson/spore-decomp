@@ -11,4 +11,5 @@
 0057c590 ?ExportPaintTheme@cAppModeEditorBase_s0057_bfb0@SP@@QAE_N_N@Z  # cAppModeEditorBase_s0057_bfb0::ExportPaintTheme migrated from s0057bfb0 (verbatim, slice spelling)
 0057c770 WriteTypedValue@_K::WriteTypedValue  # SP::WriteTypedValue<unsigned __int64> explicit instantiation (qualifier selects ??$WriteTypedValue@_K)
 0057c940 WriteTypedValue@M::WriteTypedValue  # SP::WriteTypedValue<float> explicit instantiation (qualifier selects ??$WriteTypedValue@M)
+0057cb80 ??1?$fixed_string@_W$0BA@$00@eastl@@QAE@XZ  # fixed_string migrated from s0057bfb0 (verbatim, slice spelling)
 005dd4a0 ?Show@cSPEditorUI@SP@@QAEXXZ  # SP::cSPEditorUI::Show (callee of s0057bfb0, named from the dev publics; slice address comment)

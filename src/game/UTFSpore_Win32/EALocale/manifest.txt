@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EALocale.cpp  ??1?$fixed_string@_W$0BA@$00@eastl@@QAE@XZ  0057cb80  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EALocale.cpp  ?FUN_0087d690@@YAHHPB_W_W@Z  0087d690  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EALocale.cpp  ?Locale_FindInCht@@YAHPB_WPA_WH@Z  0087db80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EALocale.cpp  ?Assign@LocBuf@@QAEPAU1@PB_W@Z  0087e080  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EALocale.cpp  ?FUN_0087e8f0@@YIXPAULangPrefixObj@@@Z  0087e8f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EALocale.cpp  ?FUN_0087f350@@YAPAXPAU?$LocT@$0BA@@@PAPA_W@Z  0087f350  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EALocale.cpp  ?Clear@LocaleTree@@QAEXPAURbtNode@@@Z  0087fe10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EALocale.cpp  ?FUN_00881ea0@@YAXNHHH@Z  00881ea0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

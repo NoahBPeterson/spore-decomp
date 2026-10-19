@@ -1,10 +1,9 @@
-# va  name  # evidence
 00881730  FUN_00881730                  # locale/format helper (unconfirmed)
 00881ae0  EA::Locale::SetNumberString
 00881c50  eastl::fixed_string<wchar_t,16,1>::operator=
-00881ea0  EA::Locale::SetNumberString    # wrapper with L"%N%?p%?2F"; byte-exact
-00881ed0  EA::Locale::SetNumberString    # wrapper with global format DAT_01650540
-00881f00  EA::Locale::SetNumberString    # wrapper with global format DAT_01650574
+00881ea0 ?FUN_00881ea0@@YAXNHHH@Z  # FUN_00881ea0 migrated from s00881730 (verbatim, slice spelling)
+00881ed0 ?FUN_00881ed0@@YAXNHHH@Z  # FUN_00881ed0 migrated from s00881730 (verbatim, slice spelling)
+00881f00 ?FUN_00881f00@@YAXNHHH@Z  # FUN_00881f00 migrated from s00881730 (verbatim, slice spelling)
 00881f30  EA::Locale::SetMoneyStringLocal
-008822e0  EA::Locale::SetMoneyString
+008822e0 ?FUN_008822e0@@YAXNHHHH@Z  # FUN_008822e0 migrated from s00881730 (verbatim, slice spelling)
 00882380  EA::Locale::`anonymous_namespace'::GetLocaleTraits

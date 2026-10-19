@@ -1,0 +1,21 @@
+# va  diff-bytes  reason
+0087d620 64 register-allocation difference (pointer=eax/char=ecx vs pointer=ecx/char=eax); equiv PASS 378/378; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087d9a0 99 wide-vector equality; register assignment and byte-tail loop shape differ
+0087dc40 106 short-name prefix match; inline compare loop shape differs
+0087e510 254 register schedule in the 0x112c-byte ctor (now returns `this` in eax like the original, fixing the caller-visible eax); equiv PASS 400/400 (218/218 insns); flags /O2 /MD /Gy /EHsc /TP /GS-
+0087ed70 46 register-allocation difference (original begin/end in ecx/eax, this in eax; mine swaps); equiv UNSUPPORTED (external AppendElement unresolved); flags /O2 /MD /Gy /EHsc /TP /GS-
+0087edd0 53 register-allocation difference; equiv UNSUPPORTED (external AppendElement unresolved); flags /O2 /MD /Gy /EHsc /TP /GS-
+0087ee50 429 size/register mismatch (541B vs 681B) - eastl rbtree find + prefix search loop; equiv UNSUPPORTED (4 unresolved externals); flags /O2 /MD /Gy /EHsc /TP /GS-
+0087f100 127 register-allocation difference (now returns `this` in eax like the original); equiv PASS 400/400 (58/58 insns); flags /O2 /MD /Gy /EHsc /TP /GS-
+0087f210 198 register-allocation difference; equiv UNSUPPORTED (iswctype/wcsncpy/_wcslwr/AppendElement unresolved); flags /O2 /MD /Gy /EHsc /TP /GS-
+0087f370 302 register schedule / code layout in the large format-string loop (371B); equiv WEAK 175 valid 9.0% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087f4f0 13 single store reorder: original keeps `mov [esi+0x10],eax` (f10=buf) before the `lea ecx,[eax+0x20]` (end) emission; MSVC hoists the end `lea` above the f10 store; proven not fixable by source ordering; equiv WEAK 172 valid 100% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087f580 16 same buf/end-store scheduling as 0087f4f0 (93B); equiv WEAK 151 valid 100% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087f5e0 189 register allocation / instruction selection in IsLocaleAvailable (274B); equiv WEAK 316 valid 48.5% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087fbe0 233 eastl rbtree FindOrInsert (295B, mine 387B) size/schedule mismatch; character-for-character semantics match; equiv PASS 219 valid 81.5% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087fe90 124 double-branch formatter (251B) schedule/register mismatch; equiv WEAK 149 valid 72.4% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087ff90 120 numeric formatter (173B, mine 144B) size/schedule mismatch; equiv PASS 262 valid 71% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
+00880040 240 eastl rbtree AddOrFind (292B, mine 287B) register/schedule mismatch; semantics match; equiv WEAK 194 valid 63.4% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
+00881ed0 6 Locale number formatter with a global format string: complete; cl loads the b/c/d arguments into different registers than the original
+00881f00 6 Locale number formatter with a global format string: same register schedule
+008822e0 153 EA::Locale::SetMoneyString: complete translation (FtoaEnglish16 + sign/digit skip + SetMoneyStringLocal); the 128-entry buffer frame and the iswctype IAT hoist differ
