@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a3ac40 30 complete (FootTypeBase::ModifyEventWithFootName); frame and float order match; cl emits cmov for the default-name select where the original branches; difftest PASS (484 valid at --inputs 1200, 98% coverage; GetFloat mapped to 0xa0fa70, which symbols call GetBool)
