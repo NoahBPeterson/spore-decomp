@@ -1,3 +1,4 @@
 0073c3b0 DestroyElems  # release refcounted pointer at element+0xc (0xc4-byte elements)
 0073c410 CopyPairs     # copy 8-byte {int,RefObj*} pairs with InterlockedIncrement
 0073c450 ReleasePairs  # release 8-byte {int,RefObj*} pairs atomically
+0073cb40 ??0AbilityD@@QAE@PAURefObjV@@HH@Z  # AbilityD::AbilityD migrated from s0073bf20 (verbatim, slice spelling)

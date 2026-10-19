@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPGraphicsModelInstance.cpp -- migrated from slice(s) s00742b30, s00741b10, s00741210, s007403c0, s0073f320, s0073e410, s0073d6b0, s0073cdf0, s0073afb0, s0073a110 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsModelInstance.cpp -- migrated from slice(s) s0073bf20, s00742b30, s00741b10, s00741210, s007403c0, s0073f320, s0073e410, s0073d6b0, s0073cdf0, s0073afb0, s0073a110 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsModelInstance.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -320,6 +320,7 @@ static __forceinline void StepBinding(cModelInstance_s0073_afb0* self, cBinding_
 // ---- items of slice s0073afb0 end
 
 // ---- items of slice s0073cdf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float* __cdecl OrthogonalVector(float* out, const float* v);   // 0x006985b0
 struct ArenaResource {
     virtual void  v0();
     virtual void  v1();
@@ -341,9 +342,62 @@ struct cModelInstance_GetArenaResource {
     ArenaResource* mResource;   // +0xc4
     int GetArenaResource();
 };
+struct BaseResourceDescriptor {
+    uint32_t m_size, m_alignment;
+    BaseResourceDescriptor();         // 0x006c0fa0
+    ~BaseResourceDescriptor();        // 0x00c2e4e0
+};
+struct RwResource { uint32_t a, b, c, d; };
+struct ExportedObj {
+    uint32_t  type;    // +0x0  (0xff0000 == exported mesh)
+    void*     data;    // +0x4
+    RwResource resource;               // +0x8
+    BaseResourceDescriptor desc[4];    // +0x18
+    ExportedObj() {
+        resource.a = 0; resource.b = 0; resource.c = 0; resource.d = 0;
+        type = 0; data = 0;
+        desc[0].m_size = 0; desc[0].m_alignment = 1;
+    }
+};
+struct Arena_s0073_cdf0 {
+    int  GetNumExportedObjects();                                  // 0x011e23a0
+    void GetExportedObjectByIndex(int index, ExportedObj* out);   // 0x011e28e0
+};
+struct ExportedMesh {
+    uint32_t id;           // +0x0
+    uint32_t pad4;
+    double   d[6];         // +0x8 .. +0x30
+    float    f38;          // +0x38
+};
+struct DeformHandle {
+    int       mZero;       // +0x0
+    uint16_t  mFlags;      // +0x4
+    uint16_t  mVersion;    // +0x6
+    float     mPos[3];     // +0x8
+    uint32_t  pad14;
+    float     mRot[9];     // +0x18
+    uint32_t  mId;         // +0x3c
+    float     mP0[3];      // +0x40
+    float     mP1[3];      // +0x4c
+    float     mF58;        // +0x58
+};
+struct cModelInstance_Deform {
+    char pad14[0x14];
+    void* m14;              // +0x14
+    void* m18;              // +0x18
+    int*  m1c;              // +0x1c
+    char pad1c[0xd0];
+    void* mDynamicDraw;     // +0xf0
+    char pad2[4];
+
+    int GetArenaResource();                       // 0x73d160
+    bool  FillTransform(float* out);              // 0x73cdf0
+    int   GetDeformationHandles(DeformHandle* dst, int maxCount);  // 0x73d1e0
+};
 // ---- items of slice s0073cdf0 end
 
 // ---- items of slice s0073d6b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float kOne;                                              // _DAT_01485720
 struct __declspec(align(16)) Mat4 {
     __m128 r[4];        // rows; rows 0-2 are the 3x3 part, row 3 the translation
     Mat4() {}
@@ -416,6 +470,7 @@ struct cSPTransformP {
     float    mTranslation[3];
     float    mScale;
     float    mRotation[9];
+    void BackTransformPoint(__m128* p);                    // 0x004ff6d0 (thiscall)
 };
 static __forceinline float Lane(__m128 v, int k) { return ((const float*)&v)[k]; }
 struct BoneRow {
@@ -441,9 +496,52 @@ struct cModelInstance_Pose {
     // @ 0x0073d6b0  SP::cModelInstance::GetPoseTransforms
     int GetPoseTransforms(cMDBoneTransform* dst, bool original);
 
-    // @ 0x0073e080  SP::cModelInstance::PickLineWithHit (PDB candidate)
-    int PickLineWithHit(uint32_t* pLine, uint32_t* pDir, cSPTransformP* pTransform,
-                        float* pOut);
+    // SP::cModelInstance::PickLineWithHit (PDB candidate; marker at the definition below)
+    bool PickLineWithHit(const float* pLine, const float* pDir, cSPTransformP* pTransform,
+                         float* pOut);
+};
+struct BaseResDesc {                     // rw::BaseResourceDescriptor {size, alignment}
+    unsigned mSize, mAlign;
+    BaseResDesc();                       // 0x006c0fa0
+    ~BaseResDesc();                      // 0x00c2e4e0
+};
+struct ResDesc4 { BaseResDesc d[4]; };
+struct ResDescCombined { unsigned raw[4]; };
+extern ResDesc4 FUN_01201660_t(int a, int b);                         // 0x01201660 (cdecl, hidden return)
+extern void*    FUN_006c1c80_t(ResDescCombined* out, ResDesc4* in);   // 0x006c1c80 (cdecl)
+extern void*    FUN_012016d0_t(ResDescCombined* desc, int a, int b);  // 0x012016d0 (cdecl)
+struct HitRec_s0073_d6b0 {                          // 0xd0-byte ray-hit record
+    char  pad0[0x40];
+    float mDist;                         // +0x40
+    char  pad44[0xd0 - 0x44];
+};
+struct PickCtx {                         // cached pick/traversal context (global singleton)
+    char     pad0[0x10];
+    HitRec_s0073_d6b0*  mpHits;                     // +0x10
+    int      mnHits;                     // +0x14
+    char     pad18[0xe8 - 0x18];
+    int      mE8;                        // +0xe8
+    char     padec[0x100 - 0xec];
+    int      mMode;                      // +0x100
+    void Init(void** ppBuf, int a, int b, const __m128* pOrigin, const __m128* pDir);   // 0x0073a6e0 (thiscall)
+};
+extern PickCtx* g_pPickCtx;              // 0x0162eaec
+struct XformBlock {                      // three scaled rotation rows + translation row
+    float r0[4], r1[4], r2[4];
+    float t[4];
+};
+struct Vec3S {
+    float x, y, z;
+    Vec3S() {}
+    Vec3S(float a, float b, float c) : x(a), y(b), z(c) {}
+    Vec3S operator*(float s) const { return Vec3S(x * s, y * s, z * s); }
+};
+struct DbObj {                           // result of GetAllocator(): object with a vtable pointer at +0x20
+    char pad[0x20];
+    void** mpVtbl2;
+};
+struct DatabasePackedFileT {
+    DbObj* GetAllocator();                                            // 0x007f54d0 (thiscall)
 };
 // ---- items of slice s0073d6b0 end
 
@@ -1515,6 +1613,28 @@ struct ArrHolder {
 static inline const float& MaxRef_s0074_2b30(const float& a, const float& b) { return (a < b) ? b : a; }
 // ---- items of slice s00742b30 end
 
+// ---- items of slice s0073bf20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct RefObjV {
+    void** vftable;                 // +0
+    int mnRefCount;                 // +4
+};
+struct AbilityP0 { virtual void p0(); };
+struct AbilityGmeRC { virtual void g0(); int rc; AbilityGmeRC() : rc(0) {} };
+struct AbilityBase : AbilityP0, AbilityGmeRC {
+    RefObjV* m; int x;
+    AbilityBase(RefObjV* a, int b) : m(a) { if (a) ++a->mnRefCount; x = b; }
+virtual void p0();
+virtual void g0();
+};
+struct AbilityD : AbilityBase {
+    int pad[(0x98 - 0x14) / 4];
+    int y;
+    AbilityD(RefObjV* a, int b, int c);
+virtual void p0();
+virtual void g0();
+};
+// ---- items of slice s0073bf20 end
+
 // @ 0x0073aa70
 AbilityB::AbilityB(AbHeld* h, int v, int a, int b)
 : AbilityA(h, v), mB18(a), mB1c(b)
@@ -1913,6 +2033,10 @@ void cModelInstance_s0073_afb0::Notify(cNotifyOther* other)
 }
 }  // namespace SP
 
+// @ 0x0073cb40
+AbilityD::AbilityD(RefObjV* a, int b, int c)
+: AbilityBase(a, b), y(c) {}
+
 // @ 0x0073d160
 int cModelInstance_GetArenaResource::GetArenaResource()
 {
@@ -1932,6 +2056,78 @@ int cModelInstance_GetArenaResource::GetArenaResource()
         }
     }
     return result;
+}
+
+// @ 0x0073d1e0
+int cModelInstance_Deform::GetDeformationHandles(DeformHandle* dst, int maxCount)
+{
+    if ((((uint8_t*)mDynamicDraw)[8] & 8) == 0)
+        return 0;
+    int p = GetArenaResource();
+    if (p == 0)
+        return 0;
+    Arena_s0073_cdf0* arena = *(Arena_s0073_cdf0**)(p + 0x18);
+    int count = 0;
+    int num = arena->GetNumExportedObjects();
+    for (int i = 0; i < num; ++i) {
+        ExportedObj obj;
+        arena->GetExportedObjectByIndex(i, &obj);
+        if (obj.type != 0xff0000)
+            continue;
+        ExportedMesh* m = (ExportedMesh*)obj.data;
+        int j = 0;
+        for (; j < count; ++j)
+            if (dst[j].mId == m->id)
+                break;
+        if (j < count)
+            continue;
+        if (count >= maxCount)
+            continue;
+        DeformHandle* h = &dst[j];
+        h->mId = m->id;
+        h->mZero = 0;
+        struct V3 { float x, y, z; };
+        V3 a0; a0.x = (float)m->d[0]; a0.y = (float)m->d[1]; a0.z = (float)m->d[2];
+        *(V3*)h->mP0 = a0;
+        V3 a1; a1.x = (float)m->d[3]; a1.y = (float)m->d[4]; a1.z = (float)m->d[5];
+        *(V3*)h->mP1 = a1;
+        h->mF58 = m->f38;
+
+        float org[3] = { h->mP0[0], h->mP0[1], h->mP0[2] };
+        float vx = h->mP1[0] - h->mP0[0];
+        float vy = h->mP1[1] - h->mP0[1];
+        float vz = h->mP1[2] - h->mP0[2];
+        if (vx * vx + vy * vy + vz * vz < 0.001f) {
+            vx = 1.0f; vy = 0.0f; vz = 0.0f;
+        }
+        float len = (float)sqrt((double)(vz * vz + (vx * vx + vy * vy)));
+        float inv = 1.0f / len;
+        float n[3] = { vx * inv, vy * inv, vz * inv };
+
+        float tmp[3];
+        float* o = OrthogonalVector(tmp, n);
+        float ux = o[0], uy = o[1], uz = o[2];
+        float ulen = (float)sqrt((double)((ux * ux + uy * uy) + uz * uz));
+        float uinv = 1.0f / ulen;
+        ux *= uinv; uy *= uinv; uz *= uinv;
+
+        float rot[9];
+        rot[0] = n[0]; rot[1] = n[1]; rot[2] = n[2];
+        rot[3] = ux;   rot[4] = uy;   rot[5] = uz;
+        rot[6] = n[1] * uz - n[2] * uy;
+        rot[7] = n[2] * ux - uz * n[0];
+        rot[8] = uy * n[0] - n[1] * ux;
+
+        h->mFlags |= 4;
+        h->mVersion += 1;
+        h->mPos[0] = org[0]; h->mPos[1] = org[1]; h->mPos[2] = org[2];
+        h->mFlags |= 2;
+        h->mVersion += 1;
+        for (int k = 0; k < 9; ++k)
+            h->mRot[k] = rot[k];
+        ++count;
+    }
+    return count;
 }
 
 // @ 0x0073d6b0
@@ -1964,6 +2160,72 @@ int cModelInstance_Pose::GetPoseTransforms(cMDBoneTransform* dst, bool original)
         }
     }
     return materials[2]->mpSkin->mnBones;
+}
+
+// @ 0x0073e080
+bool cModelInstance_Pose::PickLineWithHit(const float* pLine, const float* pDir, cSPTransformP* pTransform, float* pOut)
+{
+    if (*(void**)((char*)this + 0xcc) == 0)
+        return false;
+
+    __m128 origin = _mm_set_ps(pLine[0], pLine[2], pLine[1], pLine[0]);
+    __m128 dir    = _mm_set_ps(pDir[0], pDir[2], pDir[1], pDir[0]);
+    cModelInstance_Pose* self = this;
+    XformBlock xf;
+    if (pTransform->mScale != kOne) {
+        pTransform->BackTransformPoint(&origin);
+        pTransform->BackTransformPoint(&dir);
+        _mm_store_ps(xf.t, _mm_setzero_ps());
+        _mm_store_ps(xf.r2, _mm_set_ps(0.0f, kOne, 0.0f, 0.0f));
+        _mm_store_ps(xf.r1, _mm_set_ps(0.0f, 0.0f, kOne, 0.0f));
+        _mm_store_ps(xf.r0, _mm_set_ps(0.0f, 0.0f, 0.0f, kOne));
+    } else {
+        float s = pTransform->mScale;
+        *(Vec3S*)xf.t = *(Vec3S*)pTransform->mTranslation;
+        xf.r0[0] = pTransform->mRotation[0] * s; xf.r0[1] = pTransform->mRotation[1] * s; xf.r0[2] = pTransform->mRotation[2] * s;
+        xf.r1[0] = pTransform->mRotation[3] * s; xf.r1[1] = pTransform->mRotation[4] * s; xf.r1[2] = pTransform->mRotation[5] * s;
+        xf.r2[0] = pTransform->mRotation[6] * s; xf.r2[1] = pTransform->mRotation[7] * s; xf.r2[2] = pTransform->mRotation[8] * s;
+    }
+
+    PickCtx* ctx = g_pPickCtx;
+    if (ctx == 0) {
+        ResDescCombined desc;
+        {
+            ResDesc4 tmp = FUN_01201660_t(4, 4);
+            FUN_006c1c80_t(&desc, &tmp);
+        }
+        ctx = (PickCtx*)FUN_012016d0_t(&desc, 4, 4);
+        g_pPickCtx = ctx;
+    }
+    uint32_t scratch[25];
+    void* pScratch = scratch;
+    ctx->Init(&pScratch, 0, 1, &origin, &dir);
+    ctx->mMode = 2;
+    float minDist = kFltMax;
+    int n;
+    bool miss;
+    do {
+        ctx->mnHits = 0;
+        ctx->mE8 = 0;
+        DbObj* db = (*(DatabasePackedFileT**)((char*)self + 0xcc))->GetAllocator();
+        typedef int (__thiscall *TraverseFn)(DbObj*, PickCtx*, XformBlock*);
+        int r = ((TraverseFn)db->mpVtbl2[5])(db, ctx, &xf);
+        ctx = g_pPickCtx;
+        n = ctx->mnHits;
+        miss = (r == 0);
+        for (int i = 0; i < n; i++) {
+            float d = ctx->mpHits[i].mDist;
+            if (d < minDist)
+                minDist = d;
+        }
+    } while (pOut != 0 && (unsigned)n > 0u && miss);
+
+    if (kFltMax > minDist) {
+        if (pOut != 0)
+            *pOut = minDist;
+        return true;
+    }
+    return false;
 }
 
 // @ 0x0073e410

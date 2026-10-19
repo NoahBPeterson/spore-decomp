@@ -8,7 +8,9 @@
 0073b840 90 cModelInstance::SetBoneCallback: complete; arg-load/register schedule differs
 0073bab0 47 cModelInstance::Notify: complete; ecx/eax use in the second loop and epilogue sharing differ  [equiv: WEAK (234 valid, 31% cov, no mismatch)]
 0073d160 86 complete; result register (edi) lifetime differs from original (compiler folds the always-zero fall-through), otherwise identical control flow/calls
+0073d1e0 790 GetDeformationHandles complete (all paths: dedupe, double->float, normalize/OrthogonalVector basis, flags/version stamps); Vec3-temp/register schedule differs, flags /GS- [equiv: WEAK (16% coverage)]
 0073d6b0 2135 COMPLETE SP::cModelInstance::GetPoseTransforms(dst, original): per-bone 4x4 copy, SIMD affine cofactor inverse when !original (singular -> the uninitialized result local is stored, as in the original), transposed 3x4 store; returns bone count or 0. SSE register allocation/temp layout differ (frame 0x444 vs ~0x2a0).
+0073e080 869 SP::cModelInstance::PickLineWithHit: complete (ray setup, pick-context creation, hit loop with 4x-unrolled min scan); needs /GS-; register allocation (ebx/edi swap), SIMD scheduling and GetAllocator call shape differ [equiv: PASS 250 valid, 63.6% coverage with /GS-]
 0073e410 1241 complete: all paths/calls reconstructed; not byte-exact (register allocation/EH layout/x87-vs-SSE copies)
 0073eb90 162 complete: all paths/calls reconstructed; not byte-exact (register allocation/EH layout/x87-vs-SSE copies)
 0073eca0 206 complete: all paths/calls reconstructed; not byte-exact (register allocation/EH layout/x87-vs-SSE copies); difftest PASS after fixing the checker symbol pick (the in-class "// @0x73eca0" comment made it test GetMeshes; added SetDrawTransform to symbols/slices/s0073e410.txt)

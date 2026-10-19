@@ -1,2 +1,2 @@
 0073d6b0 ?GetPoseTransforms@cModelInstance_Pose@@QAEHPAUcMDBoneTransform@@_N@Z  # cModelInstance_Pose::GetPoseTransforms migrated from s0073d6b0 (verbatim, slice spelling)
-0073e080 SP::cModelInstance::PickLineWithHit  # PDB candidate (caller-scored, dev 00ec2b10)
+0073e080 ?PickLineWithHit@cModelInstance_Pose@@QAE_NPBM0PAUcSPTransformP@@PAM@Z  # cModelInstance_Pose::PickLineWithHit migrated from s0073d6b0 (verbatim, slice spelling)

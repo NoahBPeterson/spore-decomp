@@ -4,6 +4,7 @@
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?MoveToTime@cModelInstance_s0073_afb0@SP@@QAEXHHM@Z  0073b190  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?GetNumBones@cModelInstance_s0073_afb0@SP@@QAEHXZ  0073b7e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?SetDynamicDraw@cModelInstance_s0073_afb0@SP@@QAEXPAX_N@Z  0073b8e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelInstance.cpp  ??0AbilityD@@QAE@PAURefObjV@@HH@Z  0073cb40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ??0PartTransform@@QAE@ABU0@@Z  0073f1c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?ReleaseRange@@YGXPAURCItem@@0@Z  0073f2e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?Dispatch@ModelInstanceDispatch@@QAEHHH@Z  0073fd20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
