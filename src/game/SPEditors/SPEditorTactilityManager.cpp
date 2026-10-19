@@ -19,10 +19,6 @@ inline void* operator new(unsigned int, void* p) throw() { return p; }
 void* operator new[](unsigned int n, const char* pName, int flags, unsigned int debugFlags, const char* pFile, int line);   // 0x00F473A0
 void operator delete(void* p) throw();     // 0x00F47380
 void operator delete[](void* p) throw();   // 0x00F47380
-extern "C" void* __cdecl memcpy(void* dst, const void* src, unsigned int n);
-extern "C" double __cdecl asin(double);
-extern "C" double __cdecl sin(double);
-extern "C" double __cdecl fabs(double);
 inline float fabsf(float x) { return (float)fabs((double)x); }
 inline float asinf_(float x) { return (float)asin((double)x); }
 struct cSPVector3_s005d_87a0 {
@@ -427,6 +423,7 @@ template struct pair_s005d_87a0<float* const, SP::ComponentList>;
 namespace eastl {
  template class map_s005d_87a0<float*, SP::ComponentList>; 
 }
+extern const cSPVector3_s005d_87a0 kZeroVector3;              // 0x015EF03C
 // ---- items of slice s005d87a0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
@@ -438,7 +435,6 @@ bool SP::cSPEditorTactilityManager::Init()
     mCursorAnimation.mType = SP::kTactileTypeNone;
     return true;
 }
-
 
 // @ 0x005d87b0
 bool __stdcall SP::cSPEditorTactilityManager::UpdateComponent(SP::cSPEditorTactileComponent* pComponent, float* pValue, float currentValue, float deltaTime)
@@ -471,7 +467,6 @@ bool __stdcall SP::cSPEditorTactilityManager::UpdateComponent(SP::cSPEditorTacti
         return bDone;
     }
 }
-
 
 // @ 0x005d88b0
 void SP::cSPEditorTactilityManager::LerpCursor(SP::eEditorTactileType type, float finalValue, float time, SP::eEditorTactileLerp lerp)
@@ -512,7 +507,6 @@ void SP::cSPEditorTactilityManager::LerpCursor(SP::eEditorTactileType type, floa
     mCursorAnimation.mAnimationID = 0;
 }
 
-
 // @ 0x005d8b20
 bool SP::cSPEditorTactilityManager::Shutdown()
 {
@@ -540,7 +534,6 @@ bool SP::cSPEditorTactilityManager::Shutdown()
     return true;
 }
 
-
 // @ 0x005d8c20
 void __stdcall SP::cSPEditorTactilityManager::InitComponent(SP::cSPEditorTactileTransform* pComponent, SP::eEditorTactileType type, SP::eEditorTactileLerp lerp, cSPTransform_s005d_87a0 historyValue, cSPTransform_s005d_87a0 finalValue, float time, unsigned int animationID)
 {
@@ -558,7 +551,6 @@ void __stdcall SP::cSPEditorTactilityManager::InitComponent(SP::cSPEditorTactile
     pComponent->mAnimationID = animationID;
 }
 
-
 // @ 0x005d8cc0
 SP::cSPEditorTactileTransform::cSPEditorTactileTransform()
 {
@@ -566,7 +558,6 @@ SP::cSPEditorTactileTransform::cSPEditorTactileTransform()
     mUnknownC0[1] = 0;
     mUnknownC0[2] = 0;
 }
-
 
 // @ 0x005d8df0
 namespace eastl {
@@ -583,7 +574,6 @@ template <class K, class T> typename map_s005d_87a0<K, T>::iterator map_s005d_87
     return iterator(pNodeNew);
 }
 }  // namespace eastl
-
 
 // @ 0x005d8f10
 bool __stdcall SP::cSPEditorTactilityManager::UpdateComponent(SP::cSPEditorTactileTransform* pComponent, cSPTransform_s005d_87a0* pValue, const cSPTransform_s005d_87a0& currentValue)
@@ -605,7 +595,6 @@ bool __stdcall SP::cSPEditorTactilityManager::UpdateComponent(SP::cSPEditorTacti
     pValue->SetTranslation(pos);
     return bDone;
 }
-
 
 // @ 0x005d96d0
 SP::cSPEditorTactilityManager::cSPEditorTactilityManager()
