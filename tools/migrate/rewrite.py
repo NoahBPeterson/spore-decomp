@@ -909,6 +909,20 @@ def parse_preamble(pre):
             pre[k:k + 1] = parts
             k += len(parts)
             continue
+        # several prototypes on one line (`void __cdecl FUN_00f63170(); void __cdecl FUN_00fc5480();`, mig12 s00fc10d0) are
+        # one item each too: the line was keyed by its first name and dropped, and the caller of the second hit C2065
+        code = ms.strip()
+        if code.count(";") > 1 and not re.search(r"[{}]", code) and code.count("(") == code.count(")") and code.endswith(";") \
+                and not code.startswith(("#", "extern", "typedef", "return", "using")) \
+                and all(re.search(r"\w\s*\([^;]*\)\s*$", x) for x in code.split(";") if x.strip()):
+            cut = [i for i, ch in enumerate(ms) if ch == ";"]
+            parts, st = [], 0
+            for i in cut:
+                parts.append(pre[k][st:i + 1].strip())
+                st = i + 1
+            pre[k:k + 1] = [x for x in parts if x != ";"]
+            k += len(parts)
+            continue
         k += 1
     i, n = 0, len(pre)
     while i < n:
@@ -4143,7 +4157,8 @@ class Rewrite:
             if c.va in emitted or c.cls or not c.name or getattr(c, "inst", False) or getattr(c, "implicit", None):
                 continue
             name = str(c.name)
-            if not re.search(r"(?<![\w:.>])%s\s*\(" % re.escape(name), texts):
+            # a call, or the function's address (`VisitTree(a, (void*)FUN_0080d6b0, local)`, mig13 s0080d670: C2065)
+            if not re.search(r"(?<![\w:.>])%s\b(?!\s*::)" % re.escape(name), texts):
                 continue
             if re.search(r"\b%s\s*\(" % re.escape(name), mp) or re.search(r"(?m)^(?![\s{}])(?!if\b|while\b|for\b|return\b)[^\n;]*\b%s\s*\([^;{]*\)\s*\{" % re.escape(name), mb):
                 continue            # declared or defined in the TU already
