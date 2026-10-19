@@ -3,3 +3,10 @@
 00765980 ?grow@HVec@@QAEXI@Z  # HVec::grow migrated from s00764df0 (verbatim, slice spelling)
 00765ac0 ??1D765ac0@@QAE@XZ  # D765ac0::~D765ac0 migrated from s00764df0 (verbatim, slice spelling)
 00765f10 ??0D765f10@@QAE@PAX@Z  # D765f10::D765f10 migrated from s00764df0 (verbatim, slice spelling)
+00764df0 ?CreateRasterFromArena@cGraphicsResourceFactory@SP@@QAE_NPAUCreateRasterIn@@PAXPAUCreateRasterOut@@@Z  # SP::cGraphicsResourceFactory::CreateRasterFromArena (dev PDB name)
+00764f60 ?FUN_764f60@@YG_NPAUGameMeshes@@PAUIStream_@@@Z  # SP::cGraphicsResourceFactory::WriteResourceGameMeshes (dev PDB name)
+007650f0 ?Fn7650f0@LoaderF0@@QAE_NH@Z  # async arena finish wrapper
+007655f0 ?Fn7655f0@cGraphicsResourceFactory@SP@@QAE_NPAX00@Z  # resource-manager async load wrapper
+007656c0 ?FUN_7656c0@@YG_NPAUWStream7@@PAUMeshVec@@@Z  # game-mesh record stream writer
+00765b30 ?Start@AsyncReqB@@QAE_NPAUJobRefL@@@Z  # async arena request start (two chained cJobs)
+00765d30 ?Start@AsyncReqC@@QAE_NPAUJobRefL@@@Z  # ResourceManagerHasTexture-style async request (one cJob)
