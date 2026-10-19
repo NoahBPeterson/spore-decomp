@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00a44e80  172  approximate; hashtable find + primitive-record build/insert body stubbed (54 vs 226 bytes); difftest FAIL
+00a45130  702  approximate; cSystem audio build-up (InitAT, event modifier, emitter map, sockets) partially stubbed (531 vs 1233 bytes); difftest UNSUPPORTED (unresolved)
+00a45780  249  approximate; DoCommandMainThread dispatch with cEapdMessage stubbed; difftest FAIL

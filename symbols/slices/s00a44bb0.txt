@@ -1,12 +1,15 @@
-00a44bb0 SP::Audio::cSystem::HandleMessage  # PDB candidate (caller-single); cSystem vtable 0x01453418
-00a45780 SP::Audio::cSystem::DoCommandMainThread  # PDB candidate (caller-scored)
-00a426f0 SP::Audio::cSystem::SetCurrentContext  # pdb_names anchor
-00a43580 SP::Audio::cSystem::AddSymbolList  # pdb_names caller-scored
 00a31170 SP::Audio::cSystem::InitAT  # pdb_names anchor
-00a43d30 SP::Audio::cSystem::Init  # pdb_names anchor
 00a34dc0 SP::Audio::cEapdMessage::Init  # pdb_names caller-scored
-00a3a180 SP::Audio::cEventModifier::Init  # pdb_names anchor
-00a67c60 EA::Audio::Eapd::ISystem::GetSingletonPtr  # pdb_names callee-single
+00a3a180 ?Init@cEventModifier@Audio@SP@@QAE_NXZ  # SP::Audio::cEventModifier::Init (callee of s00a44bb0, named from the dev publics; slice address comment)
 00a420d0 SP::Audio::`anonymous namespace'::ConstructcEmitterSndPlayer  # pdb_candidates caller-single
 00a42190 SP::Audio::`anonymous namespace'::ConstructcEmitterModelSound  # pdb_candidates gap-align
 00a42200 SP::Audio::StaticConvertSymbolToId  # pdb_candidates gap-align
+00a426f0 SP::Audio::cSystem::SetCurrentContext  # pdb_names anchor
+00a43580 SP::Audio::cSystem::AddSymbolList  # pdb_names caller-scored
+00a43d30 SP::Audio::cSystem::Init  # pdb_names anchor
+00a44bb0 SP::Audio::cSystem::HandleMessage  # PDB candidate (caller-single); cSystem vtable 0x01453418
+00a44e80 ?FUN_00a44e80@cSystem@@QAEXI@Z  # cSystem::FUN_00a44e80 migrated from s00a44bb0 (verbatim, slice spelling)
+00a45130 ?FUN_00a45130@cSystem@@QAE_NXZ  # cSystem::FUN_00a45130 migrated from s00a44bb0 (verbatim, slice spelling)
+00a45780 ?DoCommandMainThread@cSystem@@QAEXPAX@Z  # cSystem::DoCommandMainThread migrated from s00a44bb0 (verbatim, slice spelling)
+00a458b0 ?FUN_00a458b0@cSystem@@QAEXPAD0@Z  # cSystem::FUN_00a458b0 migrated from s00a44bb0 (verbatim, slice spelling)
+00a67c60 EA::Audio::Eapd::ISystem::GetSingletonPtr  # pdb_names callee-single

@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPAudio/SPAudioSystem.cpp  ?ReadTuningValues@cSystemTuning@SP@@QAE_NPBUResourceKey@2@@Z  00a43a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

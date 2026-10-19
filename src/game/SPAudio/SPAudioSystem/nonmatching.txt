@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a458b0 271 complete; socket send path (strchr/atol/IPAddress::LookupName/0x1c send), register schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (19.5% cov)
