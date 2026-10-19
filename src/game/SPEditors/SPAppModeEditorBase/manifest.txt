@@ -61,8 +61,10 @@
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ??0BoundingBox_s0057_6140@@QAE@XZ  00576b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?ParseLine@cEditorBudgetCheat@?A0xf460b2ad@@QAEXABVcArguments_s0057_6140@ArgScript@EA@@@Z  00576bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?Execute@cEditorAddDNACheat@?A0xf460b2ad@@QAEXABVcArguments_s0057_6140@ArgScript@EA@@@Z  00576c10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPAppModeEditorBase.cpp  ?PreloadResources@cAppModeEditorBase_s0057_7130@SP@@QAEXH@Z  00577310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?SetTorsoBlock@cAppModeEditorBase_s0057_7130@SP@@QAEXPAXD@Z  00577580  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?HasSkin@cAppModeEditorBase_s0057_7130@SP@@QAE_NXZ  00577620  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPAppModeEditorBase.cpp  ?SomeLoader@cAppModeEditorBase_s0057_7130@SP@@QAEXXZ  00577dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ??4cString8@@QAEAAU0@ABU0@@Z  00579c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?GetEditorSaveability@cAppModeEditorBase_s0057_9e20@SP@@QAEHXZ  0057aaa0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?UpdateAnimatedCreature@cAppModeEditorBase@@QAEXXZ  0057ae10  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
