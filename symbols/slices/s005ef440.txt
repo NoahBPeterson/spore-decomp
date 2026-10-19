@@ -16,6 +16,7 @@
 005effa0 SP::SPSpineCollisionFilter::disableCollisionsUsingBitfield  # hkpGroupFilter body
 005effe0 SP::SPSpineCollisionFilter::SPSpineCollisionFilter  # table filled with -1, m_nextFreeSystemGroup=0
 005f00f0 hkCollisionFilter::`scalar deleting destructor'  # hkMemory deallocateChunk(p, m_memSizeAndFlags, 0x24)
+005f0140 ?Init@cSPSwatchManager@SP@@QAEXXZ  # cSPSwatchManager::Init migrated from s005ef440 (verbatim, slice spelling)
 005f0390 eastl::rbtree<unsigned_int,pair<unsigned_int_const,AutoRefCount<SP::cSPSwatch>>>::DoInsertValueImpl  # mIDToSwatchMap node insert
 005f4f80 ?Init@cSPSwatch@SP@@QAEXABVKey@ResourceMan@EA@@PAVIWindow@UTFWin@5@_N2W4eLODType@cAnimatingCreature@2@2@Z  # SP::cSPSwatch::Init (callee of s005ef440, named from the dev publics; slice address comment)
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005ef440, named from the dev publics; slice address comment)

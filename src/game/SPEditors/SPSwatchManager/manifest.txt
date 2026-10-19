@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPSwatchManager.cpp  ?Init@cSPSwatchManager@SP@@QAEXXZ  005f0140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
