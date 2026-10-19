@@ -23,11 +23,8 @@ struct Matrix3 {
     void Assign(const Matrix3& o);   // 0x0041cb40 thiscall
 };
 static float g_1485720 = 1.0f;
-extern const float g_1636ef4, g_1636ef8, g_1636efc;
 static void* s_vt_1411f04[1];
 static void* s_vt_1411f48[1];
-extern char g_empty1[];   // 0x01667bac (equiv t3)
-extern char g_empty2[];   // 0x01667bad (equiv t3)
 struct SVec {
     float* b; float* e; float* c; char alloc[4];
     SVec& operator=(const SVec& o);   // external
@@ -420,7 +417,7 @@ struct cGameModelDescription_s007d_2a30 {
     Vec<cSplitController> mSplitControllers; // +0x58
     Vec<float> mGroups;                      // +0x6c
     uint32_t mFlagsToSet; uint8_t mPickLevel, mOverrideSet, pad86[2]; uint32_t field88;
-    cGameModelDescription_s007d_2a30* Assign(cGameModelDescription_s007d_2a30* src);
+    cGameModelDescription_s007d_2a30* Assign(cGameModelDescription_s007d_2a30* src);  // 0x007d35b0 (cGameModelDescription::Assign)
 };
 void  AnimRangeDtor(cAnimationCurve* first, cAnimationCurve* last);              // 0x7d08e0
 cAnimationCurve* AnimRangeCopyCtor(cAnimationCurve* dst, cAnimationCurve* first, cAnimationCurve* last); // 0x7d1230
@@ -517,9 +514,6 @@ cGameModelDescription::cGameModelDescription()
     a88 = 0;
 }
 
-
-
-
 // @ 0x007d1140
 S1140::S1140(const S1140& o)
 {
@@ -531,9 +525,6 @@ S1140::S1140(const S1140& o)
     f24 = o.f24;
     f28 = o.f28;
 }
-
-
-
 
 // @ 0x007d12c0
 S2C* CopyRange12C0(S2C* first, S2C* last, S2C* dst)
@@ -551,9 +542,6 @@ S2C* CopyRange12C0(S2C* first, S2C* last, S2C* dst)
     }
     return dst;
 }
-
-
-
 
 // @ 0x007d1320
 char* CopyRange1320(char* first, char* last, char* dst)
@@ -574,9 +562,6 @@ char* CopyRange1320(char* first, char* last, char* dst)
     return dst;
 }
 
-
-
-
 // @ 0x007d1380
 void AssignRange1380(S2C* first, S2C* last, S2C* src)
 {
@@ -591,9 +576,6 @@ void AssignRange1380(S2C* first, S2C* last, S2C* src)
         first = (S2C*)((char*)first + 0x2c);
     }
 }
-
-
-
 
 // @ 0x007d1450
 S2C* CopyBack1450(S2C* first, S2C* last, S2C* dst)
@@ -612,9 +594,6 @@ S2C* CopyBack1450(S2C* first, S2C* last, S2C* dst)
     return dst;
 }
 
-
-
-
 // @ 0x007d14b0
 void AssignRange14B0(char* first, char* last, char* src)
 {
@@ -631,9 +610,6 @@ void AssignRange14B0(char* first, char* last, char* src)
         first += 0x68;
     }
 }
-
-
-
 
 // @ 0x007d1510
 char* CopyBack1510(char* first, char* last, char* dst)
@@ -654,17 +630,11 @@ char* CopyBack1510(char* first, char* last, char* dst)
     return dst;
 }
 
-
-
-
 // @ 0x007d1570
 void FUN_007d1570(int self, int a, int b)
 {
     (void)self; (void)a; (void)b;
 }
-
-
-
 
 // @ 0x007d18c0
 GameModelEffect::GameModelEffect()
@@ -678,17 +648,11 @@ GameModelEffect::GameModelEffect()
     pd0 = &g_empty2;
 }
 
-
-
-
 // @ 0x007d1910
 void FUN_007d1910(int self, void* args)
 {
     (void)self; (void)args;
 }
-
-
-
 
 // @ 0x007d1970
 void CmdBase::Execute(cArguments* args)
@@ -700,15 +664,11 @@ void CmdBase::Execute(cArguments* args)
     *(V3*)(*(int*)(self + 0xc) + 0x18) = v;
 }
 
-
-
 // @ 0x007d19c0
 void cGameModelAlphaCommand::Execute(EA::ArgScript::cArguments_s007d_19c0& args)
 {
     mState->mDesc.mAlpha = mParser->v38(args.MainArguments(1)[0]);
 }
-
-
 
 // @ 0x007d19f0
 void cGameModelVisibleCommand::Execute(EA::ArgScript::cArguments_s007d_19c0& args)
@@ -718,8 +678,6 @@ void cGameModelVisibleCommand::Execute(EA::ArgScript::cArguments_s007d_19c0& arg
     uint32_t* p = &mState->mDesc.mFlags;
     if (b) *p |= 8; else *p &= ~8u;
 }
-
-
 
 // @ 0x007d1a30
 void cGameModelFlagsCommand::Execute(EA::ArgScript::cArguments_s007d_19c0& args)
@@ -732,8 +690,6 @@ void cGameModelFlagsCommand::Execute(EA::ArgScript::cArguments_s007d_19c0& args)
             mState->mDesc.mFlagsToSet |= 1u << (e & 0x1f);
     }
 }
-
-
 
 // @ 0x007d1ac0
 void SP::cTransform::RotateZ(float angle)
@@ -751,8 +707,6 @@ void SP::cTransform::RotateZ(float angle)
     mRotation.m[4] = -m1 * s + m4 * c;
     mRotation.m[5] = -m2 * s + m5 * c;
 }
-
-
 
 // @ 0x007d1cc0
 void cGameModelNameCommand::Execute(EA::ArgScript::cArguments_s007d_19c0& args)
@@ -779,8 +733,6 @@ void cGameModelNameCommand::Execute(EA::ArgScript::cArguments_s007d_19c0& args)
         mState->mDesc.mFlags |= 0x20;
 }
 
-
-
 // @ 0x007d1e40
 void cGameModelWorldCommand::Execute(EA::ArgScript::cArguments_s007d_19c0& args)
 {
@@ -789,8 +741,6 @@ void cGameModelWorldCommand::Execute(EA::ArgScript::cArguments_s007d_19c0& args)
     EA::SPKeyFromName(&key, s.c_str(), 0, 0);
     mState->mDesc.mWorldID = key.a;
 }
-
-
 
 // @ 0x007d23d0
 void cGameModelSplitterCommand::Execute(EA::ArgScript::cArguments_s007d_19c0& args)
@@ -815,14 +765,10 @@ void cGameModelSplitterCommand::Execute(EA::ArgScript::cArguments_s007d_19c0& ar
     }
 }
 
-
-
 // @ 0x007d2490
 cGameModelEffectCommand::~cGameModelEffectCommand()
 {
 }
-
-
 
 // @ 0x007d2580
 void* CopySplitControllerVector(void* self, void* src)
@@ -835,8 +781,6 @@ void* CopySplitControllerVector(void* self, void* src)
     return self;
 }
 
-
-
 // @ 0x007d2740
 void* CopyAnimationCurveVector(void* self, void* src)
 {
@@ -847,8 +791,6 @@ void* CopyAnimationCurveVector(void* self, void* src)
     ((void**)self)[1] = tmp;
     return self;
 }
-
-
 
 // @ 0x007d27d0
 void* ReadIntVector(void* stream, void* vec)
@@ -862,15 +804,12 @@ void* ReadIntVector(void* stream, void* vec)
     return stream;
 }
 
-
-
 // @ 0x007d2830
 void* CopyGameModelState(void* self, void* src)
 {
     (void)self; (void)src;
     return self;
 }
-
 
 // @ 0x007d2a30
 void AnimDoInsertValue(Vec<cAnimationCurve>* v, cAnimationCurve* pos, unsigned n, cAnimationCurve* value)
@@ -896,7 +835,6 @@ void AnimDoInsertValue(Vec<cAnimationCurve>* v, cAnimationCurve* pos, unsigned n
     v->mpBegin = buf; v->mpEnd = end; v->mpCapacity = buf + newCap;
 }
 
-
 // @ 0x007d2c70
 void SplitDoInsertValue(Vec<cSplitController>* v, cSplitController* pos, unsigned n, cSplitController* value)
 {
@@ -921,7 +859,6 @@ void SplitDoInsertValue(Vec<cSplitController>* v, cSplitController* pos, unsigne
     v->mpBegin = buf; v->mpEnd = end; v->mpCapacity = buf + newCap;
 }
 
-
 // @ 0x007d2ee0
 void cGameModelEffectCommand_s007d_2a30::OnEndBlock(char b)
 {
@@ -936,7 +873,6 @@ void cGameModelEffectCommand_s007d_2a30::OnEndBlock(char b)
         mStringEnd = mStringBegin;
     }
 }
-
 
 // @ 0x007d2f90
 Vec<cAnimationCurve>* AnimVecAssign(Vec<cAnimationCurve>* self, Vec<cAnimationCurve>* src)
@@ -964,7 +900,6 @@ Vec<cAnimationCurve>* AnimVecAssign(Vec<cAnimationCurve>* self, Vec<cAnimationCu
     return self;
 }
 
-
 // @ 0x007d30d0
 Vec<cSplitController>* SplitVecAssign(Vec<cSplitController>* self, Vec<cSplitController>* src)
 {
@@ -991,7 +926,6 @@ Vec<cSplitController>* SplitVecAssign(Vec<cSplitController>* self, Vec<cSplitCon
     return self;
 }
 
-
 // @ 0x007d3210
 void AnimVecInsert(Vec<cAnimationCurve>* v, cAnimationCurve* pos, cAnimationCurve* value)
 {
@@ -1014,7 +948,6 @@ void AnimVecInsert(Vec<cAnimationCurve>* v, cAnimationCurve* pos, cAnimationCurv
     if (v->mpBegin) operator delete[](v->mpBegin);
     v->mpBegin = buf; v->mpEnd = end; v->mpCapacity = buf + newCap;
 }
-
 
 // @ 0x007d33e0
 void SplitVecInsert(Vec<cSplitController>* v, cSplitController* pos, cSplitController* value)
@@ -1041,7 +974,6 @@ void SplitVecInsert(Vec<cSplitController>* v, cSplitController* pos, cSplitContr
     v->mpBegin = buf; v->mpEnd = end; v->mpCapacity = buf + newCap;
 }
 
-
 // @ 0x007d35b0
 cGameModelDescription_s007d_2a30* cGameModelDescription_s007d_2a30::Assign(cGameModelDescription_s007d_2a30* src)
 {
@@ -1065,7 +997,6 @@ cGameModelDescription_s007d_2a30* cGameModelDescription_s007d_2a30::Assign(cGame
     return self;
 }
 
-
 // @ 0x007d3770
 void AnimVecResize(Vec<cAnimationCurve>* v, unsigned n)
 {
@@ -1081,7 +1012,6 @@ void AnimVecResize(Vec<cAnimationCurve>* v, unsigned n)
         tmp.mCurve.destroy();
     }
 }
-
 
 // @ 0x007d3860
 void SplitVecResize(Vec<cSplitController>* v, unsigned n)
