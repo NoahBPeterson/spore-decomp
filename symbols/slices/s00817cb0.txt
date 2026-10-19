@@ -1,13 +1,13 @@
+00817e20 ?Init@PieMenuInit@@QAEXPAX00000@Z  # PieMenuInit::Init migrated from s00817cb0 (verbatim, slice spelling)
 00817eb0 cSPUIPieMenuItem::SetPos  # stores +0x64/+0x68, returns true
-00817fa0 cSPUIPieMenuItem::SetIconColor  # recolours RHS + icon windows
-00818330 UI::cSPUIPieMenuItemWinProc::Hide  # hides window + releases +0xb0, updates mouse focus
-00818370 UI::cSPUIPieMenuItemWinProc::ContainsWindow  # [this+0x24]->vt[0xf8] test
-00818950 cSPUIPieMenuItem::MarkUnused  # clears id/icon and sets flags=3
-00817e20 cSPUIPieMenu::Init  # PDB candidate; builds keys then vtable+0x20
-008188d0 cSPUIPieMenuItem::SetId  # PDB name
-00817ee0 cSPUIPieMenuItem::SetTextColor  # PDB name
-008182c0 FUN_008182c0  # item position assign loop (stride 0x4c)
-00818250 cSPUIPieMenu::SetItemTextColor  # PDB candidate
-008181e0 FUN_008181e0  # item colour-by-id loop
+00817ee0 ?SetTextColor@cSPUIPieMenuItem@@QAEXH@Z  # cSPUIPieMenuItem::SetTextColor migrated from s00817cb0 (verbatim, slice spelling)
+00817fa0 ?sub817fa0@cSPUIPieMenuItem@@QAEXH@Z  # cSPUIPieMenuItem::sub817fa0 migrated from s00817cb0 (verbatim, slice spelling)
 00818000 cSPUIPieMenuItem::SetIcon  # PDB name
+008181e0 ?setColor@PieMenu03@@QAEXIH@Z  # PieMenu03::setColor migrated from s00817cb0 (verbatim, slice spelling)
+00818250 ?setTextColor@PieMenu04@@QAE_NIH@Z  # PieMenu04::setTextColor migrated from s00817cb0 (verbatim, slice spelling)
+008182c0 ?assign@PieMenu02@@QAE_NHH@Z  # PieMenu02::assign migrated from s00817cb0 (verbatim, slice spelling)
+00818330 ?teardown@Holder2@@QAEXXZ  # Holder2::teardown migrated from s00817cb0 (verbatim, slice spelling)
+00818370 ?has@WinProcHolder@@QAE_NPAUIWindow@@@Z  # WinProcHolder::has migrated from s00817cb0 (verbatim, slice spelling)
 00818500 cSPUIPieMenu::disjoin_items  # PDB name
+008188d0 ?SetId@cSPUIPieMenuItem@@QAEXI@Z  # cSPUIPieMenuItem::SetId migrated from s00817cb0 (verbatim, slice spelling)
+00818950 ?MarkUnused@cSPUIPieMenuItem@@QAEXXZ  # cSPUIPieMenuItem::MarkUnused migrated from s00817cb0 (verbatim, slice spelling)

@@ -1,0 +1,10 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+00817e20 27 cSPUIPieMenu::Init: resource-key build + 5-arg vtable dispatch shape differs
+00817ee0 134 cSPUIPieMenuItem::SetTextColor: nested window/property vtable sequence differs
+008181e0 97 item loop colour set: register allocation / pointer increment differs
+00818250 97 item loop text-colour set: register allocation / pointer increment differs
+008182c0 93 item loop position assign: register allocation / pointer increment differs
+008188d0 123 cSPUIPieMenuItem::SetId: branch/flag schedule differs
+008191b0 8 member release loop: mpRHSWindowSet load scheduled before mpCurrentWindow clear (behaviour equivalent)
+00819e00 79 copy-range helper (FUN_00818650 + 5-field tail copy): schedule differs
+00819e60 124 destroy-range helper: bulk destroy loop scheduling differs

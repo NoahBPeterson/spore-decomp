@@ -1,7 +1,7 @@
-00818c80 cSPUIPieMenu::RemoveItem  # PDB name; stride-0x4c loop calling MarkUnused
-008192e0 cSPUIPieMenuItem::SetOrientation  # PDB name; swaps +0x20/+0x24 orientation window
-00819880 cSPUIPieMenuItem::~cSPUIPieMenuItem  # vtbl 0x1418ef8, releases members, tail-jump
-008191b0 cSPUIPieMenuItem::Destroy  # MarkUnused + release all window refs
 008189a0 cSPUIPieMenuItem::Update  # PDB name
+00818c80 ?RemoveItem@cSPUIPieMenu@@QAEXXZ  # cSPUIPieMenu::RemoveItem migrated from s008189a0 (verbatim, slice spelling)
 00818d20 cSPUIPieMenu::DoMessage  # PDB name
+008191b0 ?sub8191b0@cSPUIPieMenuItem_s0081_89a0@@QAE_NXZ  # cSPUIPieMenuItem_s0081_89a0::sub8191b0 migrated from s008189a0 (verbatim, slice spelling)
 00819220 cSPUIPieMenuItem::SetText  # PDB name
+008192e0 ?SetOrientation@cSPUIPieMenuItem_s0081_89a0@@QAEX_N0@Z  # cSPUIPieMenuItem_s0081_89a0::SetOrientation migrated from s008189a0 (verbatim, slice spelling)
+00819880 ?dtor819880@cSPUIPieMenuItem_s0081_89a0@@QAEXXZ  # cSPUIPieMenuItem_s0081_89a0::dtor819880 migrated from s008189a0 (verbatim, slice spelling)

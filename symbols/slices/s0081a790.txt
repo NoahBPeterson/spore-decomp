@@ -1,3 +1,5 @@
+0081a790 ?get_unused_item@cSPUIPieMenu_s0081_a790@@QAEPAUcSPUIPieMenuItem_s0081_a790@@XZ  # cSPUIPieMenu_s0081_a790::get_unused_item migrated from s0081a790 (verbatim, slice spelling)
+0081a940 ?AddItem@cSPUIPieMenu_s0081_a790@@QAEHHHHH@Z  # cSPUIPieMenu_s0081_a790::AddItem migrated from s0081a790 (verbatim, slice spelling)
 0081aa80 cSPUIPopupMenuScrollButton::OnFocusLost  # PDB name; vcall+0xc/OnChar tail call
 0081aad0 cSPUIPopupMenuWin::Reset  # clears 4 flags at +0x8c0..+0x8c3, centered := selected
 0081ad50 cSPUIPopupMenuItemWin::OnAttach  # PDB name
