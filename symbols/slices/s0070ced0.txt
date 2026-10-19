@@ -2,5 +2,6 @@
 0070d080 ?DoInsertValues@ConfigVec@@QAEXPAUcLightingConfig@@IABU2@@Z  # ConfigVec::DoInsertValues migrated from s0070ced0 (verbatim, slice spelling)
 0070d2c0 ??0cLightingWorld_s0070_ced0@@QAE@PAD@Z  # cLightingWorld_s0070_ced0::cLightingWorld migrated from s0070ced0 (verbatim, slice spelling)
 0070d6d0 ??1cLightingWorld_s0070_ced0@@QAE@XZ  # cLightingWorld_s0070_ced0::~cLightingWorld migrated from s0070ced0 (verbatim, slice spelling)
+0070d850 ?cLightingWorld_AddLight@@YAIPAUcLightingWorld_s0070_ced0@@PBM1MM@Z  # cLightingWorld_AddLight migrated from s0070ced0 (verbatim, slice spelling)
 0070dc90 ?MakeWorld@cLightingManager@@QAEPAUcLightingWorld_s0070_ced0@@HHPAX@Z  # cLightingManager::MakeWorld migrated from s0070ced0 (verbatim, slice spelling)
 0070ddd0 ?Shutdown@cLightingManager@SP@@UAE_NXZ  # SP::cLightingManager::Shutdown migrated from s0070ced0

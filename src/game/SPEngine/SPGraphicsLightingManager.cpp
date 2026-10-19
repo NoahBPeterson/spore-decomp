@@ -173,9 +173,17 @@ void SH_ZonalCoeffs(float t, float* out);                                       
 void SH_ApplyNormalizationConstants(int n, __m128* buf);                         // 0x00783590
 void MatrixFromDirection(const Vec3f* dir, Mat3f* out);                          // 0x006983a0
 struct SHGroundQuery {
-    virtual void q0(); virtual void q1(); virtual void q2(); virtual void q3();
-    virtual void q4(); virtual void q5(); virtual void q6(); virtual void q7();
-    virtual void q8(); virtual void q9(); virtual void q10();
+virtual void q0();
+virtual void q1();
+virtual void q2();
+virtual void q3();
+virtual void q4();
+virtual void q5();
+virtual void q6();
+virtual void q7();
+virtual void q8();
+virtual void q9();
+virtual void q10();
     virtual V4Ret Query(const Vec3f* pos);                                       // +0x2c
 };
 struct LightCfg {
@@ -231,6 +239,7 @@ static inline void Clamp01(float* x, const float* hi)
 // ---- items of slice s00706170 end
 
 // ---- items of slice s007070d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+    void EastlFree(...); // 0x00f47380
 void* __cdecl EastlAlloc8(uint32_t n, uint32_t align, int a, const char* name, int b, int c,
                           const char* file, int line);
 void* __cdecl EastlAlloc6(uint32_t n, const char* name, int a, int b, const char* file, int line);
@@ -338,6 +347,17 @@ struct cLightingWorld {
 };
 void FillVec4(Vector4* first, Vector4* last, const Vector4* value);        // 0x705e90
 void UninitFillVec4(Vector4* first, uint32_t n, const Vector4* value);     // 0x705ec0
+struct SHObject { char pad[0x24]; };
+void CopySHO(SHObject* first, SHObject* last, SHObject* result);                 // 0x707630
+void UninitCopySHO5(SHObject** out, SHObject* src, SHObject* dst, SHObject* dstEnd, SHObject* srcEnd); // 0x706c80
+struct VecSHO {
+    SHObject* mpBegin;      // +0x00
+    SHObject* mpEnd;        // +0x04
+    SHObject* mpCapacity;   // +0x08
+    SHObject* mpInline;     // +0x10
+    SHObject* DoRealloc(uint32_t n, SHObject* first, SHObject* last);   // 0x7079a0
+    VecSHO& operator=(const VecSHO& x);
+};
 struct Vec8 {
     char* mpBegin;
     char* mpEnd;
@@ -360,13 +380,24 @@ struct Vec32 {
     V32_s0070_70d0* mpCapacity;
     void DoInsertValue(V32_s0070_70d0* position, const V32_s0070_70d0* value);
 };
-    void EastlFree(...); // 0x00f47380
 // ---- items of slice s007070d0 end
 
 // ---- items of slice s00708100 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void PushPtr(void* pos, void* val);                   // 0x006C1570
 void ReleaseElem(void* p);                            // 0x007610F0
+struct CellInfo_s0070_8100 { int x, y; };
 struct V32_s0070_8100 { float f[8]; };
+struct VecCell {
+    CellInfo_s0070_8100* mpBegin;      // +0x00
+    CellInfo_s0070_8100* mpEnd;        // +0x04
+    CellInfo_s0070_8100* mpCapacity;   // +0x08
+    char pad_c[4];
+    CellInfo_s0070_8100* mpInline;     // +0x10
+    CellInfo_s0070_8100* DoRealloc(uint32_t n, const CellInfo_s0070_8100* first, const CellInfo_s0070_8100* last);  // 0x754f80
+    void assign(const CellInfo_s0070_8100* first, const CellInfo_s0070_8100* last, int tag);
+};
+void* MoveRange5(void** out, const CellInfo_s0070_8100* first, const CellInfo_s0070_8100* last, CellInfo_s0070_8100* dst,
+                 const CellInfo_s0070_8100* end);               // 0x76ffd0
 struct Vec8b {
     char* mpBegin;      // +0x00
     char* mpEnd;        // +0x04
@@ -409,8 +440,12 @@ struct cLightingWorld_s0070_8100 {
     void RemoveLightFromList(uint32_t id, int index, int* list);  // 0x00707270 (cLightingWorld::RemoveLightFromList)
     void DestroyLightingInfo(void* e);  // 0x00708710 (cLightingWorld::DestroyLightingInfo)
     void ReleaseLocalCache(void* e);  // 0x00707790 (cLightingWorld::ReleaseLocalCache)
-    void AddLocalSample(uint32_t id, int index, SampleVec* vec);
+    void AddLocalSample(uint32_t id, int index, SampleVec* vec);  // 0x00708810 (cLightingWorld::AddLocalSample)
 };
+struct cLightingConfig_s0070_8100 {
+    cLightingConfig_s0070_8100& operator=(const cLightingConfig_s0070_8100& x);
+};
+void release(void* p);
 // ---- items of slice s00708100 end
 
 // ---- items of slice s00708f40 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1107,12 +1142,24 @@ struct HDeque { void Dtor(); };                                   // 0x0070c040
 struct HMap { void* Find(void* key); };                           // 0x0074f200
 struct HNuke { void Nuke(void* node); };                          // 0x00707690
 struct HSmall { void Op(); };                                     // 0x0070a2a0
+unsigned __cdecl SlotCreate(void* self, int* out);                // 0x0070cce0
+int __cdecl CellListBuild(int a, const float* colour, float size, int b); // 0x00705740
+int __cdecl CellListFilter(int a, int b);                         // 0x00705050
+void __cdecl NotifyLightAdded(void* info);                        // 0x00705f40
 struct HShut { void Shutdown(); };                                // 0x0070a3f0
 struct HNode { void Dtor(void* node); };                          // 0x00d0c930
 struct MServer {
-    virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3();
-    virtual void m4(); virtual void m5(int, int, int); virtual void m6(); virtual void m7();
-    virtual void m8(); virtual void m9(); virtual void m10();
+virtual void m0();
+virtual void m1();
+virtual void m2();
+virtual void m3();
+virtual void m4();
+virtual void m5(int, int, int);
+virtual void m6();
+virtual void m7();
+virtual void m8();
+virtual void m9();
+virtual void m10();
     virtual void Unsubscribe(void* handler, int msg, int a3);
 };
 struct cLightingConfig {
@@ -1138,12 +1185,18 @@ struct ConfigVec {
 };
 struct cLightingWorld_s0070_ced0 {
     unsigned char _b[0x670];
-    cLightingWorld_s0070_ced0(char* debugName);
-    ~cLightingWorld_s0070_ced0();
+    cLightingWorld_s0070_ced0(char* debugName);  // 0x0070d2c0 (cLightingWorld::cLightingWorld_s0070_ced0)
+    ~cLightingWorld_s0070_ced0();  // 0x0070d2c0 (cLightingWorld::cLightingWorld_s0070_ced0)
 };
 struct VObj_s0070_ced0 { virtual void f0(); virtual void f1(); virtual void f2(); virtual void f3();
-              virtual void f4(); virtual void f5(); virtual void f6(); virtual void f7();
-              virtual void f8(); virtual void f9(); virtual void f10(); virtual void f11();
+virtual void f4();
+virtual void f5();
+virtual void f6();
+virtual void f7();
+virtual void f8();
+virtual void f9();
+virtual void f10();
+virtual void f11();
               virtual void f12(void*); virtual void f13(); };
 struct cLightingManager {
     unsigned char _d[0x1e0];
@@ -1153,10 +1206,28 @@ struct cLightingManager {
 // ---- items of slice s0070ced0 end
 
 // ---- items of slice s0070de90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* __cdecl PropertyManager(void);        // 0x0067de30
+struct LConfig { unsigned char _d[0x144]; LConfig(); LConfig(const LConfig&); LConfig& operator=(const LConfig&); ~LConfig(); };
+struct LConfigVec {
+    LConfig* mpBegin; LConfig* mpEnd; LConfig* mpCap;
+    void DoInsertValues(LConfig* pos, unsigned n, const LConfig& v); // 0x70d080
+    LConfig* Erase(LConfig* first, LConfig* last);                   // 0x70ce80
+};
+LConfig* __cdecl LConfig_Default(LConfig* out);                      // 0x70dd50
 void ReloadLightingStates(void* self);  // 0x70e160
 struct MsgReg { virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3();
-                virtual void a4(); virtual void a5(); virtual void a6(); virtual void a7();
+virtual void a4();
+virtual void a5();
+virtual void a6();
+virtual void a7();
                 virtual void a8(void*, int); virtual void a9(); virtual void a10(); virtual void a11(); };
+void __cdecl FillLightingStateFromConfig(void* a, void* b);   // 0x0070aed0
+void __cdecl RBTreeInc(void* n);                              // 0x00921580
+namespace __equiv_ann1 {
+struct LConfig {
+    ~LConfig();   // 0x00f47380 (equiv t3)
+};
+}
 // ---- items of slice s0070de90 end
 
 // ---- items of slice s00782860 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1180,6 +1251,9 @@ struct cLocalLightInfo_s0092_72c0 {
 };
 // ---- items of slice s009272c0 end
 
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+void LConfigVec_Resize(LConfigVec* self, unsigned n);  // 0x0070e060 (stays in the slice: not this object's)
+
 // @ 0x00705050
 int FUN_00705050(int n, E5* p)
 {
@@ -1188,19 +1262,6 @@ int FUN_00705050(int n, E5* p)
         s += (p[i].f4 - p[i].f2) * (p[i].f3 - p[i].f1);
     return s;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007050e0
 void Big::set_7050e0(int a, int* p)
@@ -1215,19 +1276,6 @@ void Big::set_7050e0(int a, int* p)
         f24 = p[2];
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00705120
 cShaderDataLightingInfo& cShaderDataLightingInfo::operator=(const cShaderDataLightingInfo& s)
@@ -1245,19 +1293,6 @@ cShaderDataLightingInfo& cShaderDataLightingInfo::operator=(const cShaderDataLig
     return *this;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00705190
 void Big50::get_705190(int* out)
 {
@@ -1266,35 +1301,9 @@ void Big50::get_705190(int* out)
     out[2] = f50;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007051b0
 void BigF8::set_7051b0(const Fog98* src)
 { fog = *src; }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007051e0
 V32* copy_7051e0(const V32* first, const V32* last, V32* out)
@@ -1308,19 +1317,6 @@ V32* copy_7051e0(const V32* first, const V32* last, V32* out)
     return out;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00705220
 V32* copy_backward_705220(const V32* first, const V32* last, V32* out)
 {
@@ -1332,19 +1328,6 @@ V32* copy_backward_705220(const V32* first, const V32* last, V32* out)
     }
     return out;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007052e0
 int FUN_007052e0(float* v, float param)
@@ -1376,19 +1359,6 @@ int FUN_007052e0(float* v, float param)
     int B = (int)(r7 * 32.0f);
     return ((face * 32 - (A >> 5)) + A) * 32 - (B >> 5) + B;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00705470
 int FUN_00705470(float* v, float param)
@@ -1423,18 +1393,6 @@ int FUN_00705470(float* v, float param)
     return ((face * 16 - (A >> 4)) + A) * 16 - (B >> 4) + B;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00705660
 int FUN_00705660(float* a, float* b, float param)
 {
@@ -1448,17 +1406,9 @@ int FUN_00705660(float* a, float* b, float param)
     return (u3 * 16 + u2) * 16 + u1;
 }
 
-
-
-
-
-
-
-
-
-
-
-
+// @ 0x00705740
+void FUN_00705740(int a, float* b, float c, int d)
+{ (void)a; (void)b; (void)c; (void)d; }
 
 // @ 0x00705920
 int* W5920::get()
@@ -1466,18 +1416,6 @@ int* W5920::get()
     int** p = m10;
     return p ? *p : 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00705970
 float W5970::f(int a2, float p3)
@@ -1501,18 +1439,6 @@ float W5970::f(int a2, float p3)
     return m;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00705a20
 void W5a20::setAtm(float* v, int n, float* ph)
 {
@@ -1531,18 +1457,6 @@ void W5a20::setAtm(float* v, int n, float* ph)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00705af0
 void* W5af0::find(int key)
 {
@@ -1554,18 +1468,6 @@ void* W5af0::find(int key)
     }
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00705b50
 Big5b50* Big5b50::copy(const Big5b50* s)
@@ -1582,18 +1484,6 @@ Big5b50* Big5b50::copy(const Big5b50* s)
     return this;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00705bb0
 S11& S11::operator=(const S11& s)
 {
@@ -1603,18 +1493,6 @@ S11& S11::operator=(const S11& s)
     return *this;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00705c00
 S7& S7::operator=(const S7& s)
 {
@@ -1622,18 +1500,6 @@ S7& S7::operator=(const S7& s)
     f[4] = s.f[4]; f[5] = s.f[5]; f[6] = s.f[6];
     return *this;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00705c40
 void copy_705c40(V32** out, V32* first, V32* last, V32* dst)
@@ -1652,17 +1518,13 @@ void copy_705c40(V32** out, V32* first, V32* last, V32* dst)
     }
 }
 
+// @ 0x00705c80
+void FUN_00705c80(void* self, int n)
+{ (void)self; (void)n; }
 
-
-
-
-
-
-
-
-
-
-
+// @ 0x00705db0
+void FUN_00705db0(void* self, unsigned n)
+{ (void)self; (void)n; }
 
 // @ 0x00705e90
 void fill_705e90(__m128* first, __m128* last, const __m128* value)
@@ -1670,18 +1532,6 @@ void fill_705e90(__m128* first, __m128* last, const __m128* value)
     for (; first != last; ++first)
         *first = *value;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00705ec0
 void fill_705ec0(__m128* first, unsigned n, const __m128* value)
@@ -1692,18 +1542,6 @@ void fill_705ec0(__m128* first, unsigned n, const __m128* value)
         ++first;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00705ef0
 void W5ef0::dtor()
@@ -1717,16 +1555,9 @@ void W5ef0::dtor()
         sub_f47380(q);
 }
 
-
-
-
-
-
-
-
-
-
-
+// @ 0x00705f40
+void FUN_00705f40(void* self, void* a)
+{ (void)self; (void)a; }
 
 // @ 0x00706170
 void EnvLW::UpdateEnvLightSample(EnvSample* out)
@@ -1821,17 +1652,6 @@ void EnvLW::UpdateEnvLightSample(EnvSample* out)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007067f0
 W67f0::~W67f0()
 {
@@ -1846,17 +1666,6 @@ W67f0::~W67f0()
         ((IVoid*)q)->v1();
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00706840
 int W6840::GetLightingWorld(int key)
 {
@@ -1867,50 +1676,17 @@ int W6840::GetLightingWorld(int key)
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00706870
 int W6870::get(unsigned idx)
 {
     return m0[idx >> 7] + 0x10 + (idx & 0x7f) * 0x1f0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00706890
 int W6890::get(unsigned idx)
 {
     return m0[idx >> 7] + 4 + (idx & 0x7f) * 0x38;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007068c0
 W68c0* W68c0::copyFrom(const W68c0* s)
@@ -1923,17 +1699,6 @@ W68c0* W68c0::copyFrom(const W68c0* s)
     f1d0 = s->f1d0;
     return this;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00706920
 unsigned W6920::next(unsigned idx)
@@ -1948,17 +1713,6 @@ unsigned W6920::next(unsigned idx)
     return idx;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00706980
 unsigned W6980::next(unsigned idx)
 {
@@ -1971,17 +1725,6 @@ unsigned W6980::next(unsigned idx)
     } while ((int)v < 0);
     return idx;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007069e0
 unsigned W69e0::next(unsigned idx)
@@ -1996,17 +1739,6 @@ unsigned W69e0::next(unsigned idx)
     return idx;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00706ab0
 Vector4* UninitCopyVec4(Vector4* first, Vector4* last, Vector4* result)
 {
@@ -2015,16 +1747,6 @@ Vector4* UninitCopyVec4(Vector4* first, Vector4* last, Vector4* result)
         *(__m128*)p = *(const __m128*)first;
     return p;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00706af0
 Vec20* Vec20::init(int n, int unused)
@@ -2042,16 +1764,9 @@ Vec20* Vec20::init(int n, int unused)
     return this;
 }
 
-
-
-
-
-
-
-
-
-
-
+// @ 0x00706b50
+void FUN_00706b50(void* self, void* a)
+{ (void)self; (void)a; }
 
 // @ 0x00706c80
 void FUN_00706c80(E9** out, E9* first, E9* last, E9* dst)
@@ -2077,17 +1792,6 @@ void FUN_00706c80(E9** out, E9* first, E9* last, E9* dst)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00706d00
 Vec10* Vec10::init(int n, int unused)
 {
@@ -2104,15 +1808,9 @@ Vec10* Vec10::init(int n, int unused)
     return this;
 }
 
-
-
-
-
-
-
-
-
-
+// @ 0x00706dd0
+void FUN_00706dd0(void* self)
+{ (void)self; }
 
 // @ 0x007070d0
 void SP::cLightingWorld::UpdateLightPosition(unsigned int id, cSPVector3 const & pos)
@@ -2150,16 +1848,6 @@ void SP::cLightingWorld::UpdateLightPosition(unsigned int id, cSPVector3 const &
     out[2] = pos.z;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00707270
 void cLightingWorld::RemoveLightFromList(uint32_t id, int index, int* list)
 {
@@ -2188,16 +1876,6 @@ void cLightingWorld::RemoveLightFromList(uint32_t id, int index, int* list)
     *(int*)(*(int*)(entry + 0x28) + index * 8) = -1;
     *(int*)(*(int*)(entry + 0x28) + index * 8 + 4) = -1;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00707370
 void cLightingWorld::UpdateLocalLightSample(int* info)
@@ -2246,16 +1924,6 @@ void cLightingWorld::UpdateLocalLightSample(int* info)
     *info = (int)pfVar1;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x007074e0
 void cLightingWorld::CreateEnvLightSample(EnvEntry* pEntry, const cSPVector3_s0070_70d0* pPos, uint32_t celStrength)
 {
@@ -2265,16 +1933,6 @@ void cLightingWorld::CreateEnvLightSample(EnvEntry* pEntry, const cSPVector3_s00
     pEntry->mCelStrength = celStrength;
     UpdateEnvLightSample(pEntry);
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00707540
 void SlotVec28::Release(uint32_t idx)
@@ -2286,16 +1944,6 @@ void SlotVec28::Release(uint32_t idx)
         mField18 = Next(idx);
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00707590
 void SlotVec28::ReleaseDestroy(uint32_t idx)
 {
@@ -2305,16 +1953,6 @@ void SlotVec28::ReleaseDestroy(uint32_t idx)
     if (mField18 == idx)
         mField18 = DestroyNext(idx);
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007075e0
 void SlotDeque::DestroyAll(int)
@@ -2330,16 +1968,6 @@ void SlotDeque::DestroyAll(int)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00707660
 Vector4* CopyVec4(Vector4* first, Vector4* last, Vector4* result)
 {
@@ -2347,16 +1975,6 @@ Vector4* CopyVec4(Vector4* first, Vector4* last, Vector4* result)
         *(__m128*)result = *(const __m128*)first;
     return result;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00707690
 void Rbtree::DoNukeSubtree(NukeNode* first, NukeNode* last)
@@ -2371,16 +1989,6 @@ void Rbtree::DoNukeSubtree(NukeNode* first, NukeNode* last)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x007076f0
 Vector4* CopyBackVec4(Vector4* first, Vector4* last, Vector4* resultEnd)
 {
@@ -2389,16 +1997,6 @@ Vector4* CopyBackVec4(Vector4* first, Vector4* last, Vector4* resultEnd)
     return resultEnd;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00707720
 void Buf28::Free()
 {
@@ -2406,16 +2004,6 @@ void Buf28::Free()
     if (p && p != mpDefault)
         EastlFree(p);
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00707740
 void cLightingWorld::GetLocalShaderData(void* e)
@@ -2430,18 +2018,8 @@ void cLightingWorld::GetLocalShaderData(void* e)
     *(int*)((char*)e + 0x24) = -1;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00707790
-void cLightingWorld::ReleaseLocalCache(void* e)
+void cLightingWorld_s0070_8100::ReleaseLocalCache(void* e)
 {
     int idx = *(int*)((char*)e + 0x28);
     char* p = (char*)(*(int*)(*(int*)((char*)this + 0x594) + ((uint32_t)idx >> 7) * 4)
@@ -2457,15 +2035,32 @@ void cLightingWorld::ReleaseLocalCache(void* e)
     *(int*)((char*)e + 0x28) = -1;
 }
 
-
-
-
-
-
-
-
-
-
+// @ 0x007077f0
+Vec4& Vec4::operator=(const Vec4& x)
+{
+    if (this != &x) {
+        const Vector4* first = x.mpBegin;
+        const Vector4* last = x.mpEnd;
+        const uint32_t n = (uint32_t)(last - first);
+        if (n > (uint32_t)(mpCapacity - mpBegin)) {
+            Vector4* pNewData = DoRealloc(n, first, last);
+            if (mpBegin && ((int*)mpBegin)[-1] != 0)
+                EastlFree(mpBegin);
+            mpBegin = pNewData;
+            mpEnd = pNewData + n;
+            mpCapacity = mpEnd;
+        } else if (n <= (uint32_t)(mpEnd - mpBegin)) {
+            CopyVec4((Vector4*)first, (Vector4*)last, mpBegin);
+            mpEnd = mpBegin + n;
+        } else {
+            const Vector4* position = first + (mpEnd - mpBegin);
+            CopyVec4((Vector4*)first, (Vector4*)position, mpBegin);
+            UninitCopyVec4((Vector4*)position, (Vector4*)last, mpEnd);
+            mpEnd = mpBegin + n;
+        }
+    }
+    return *this;
+}
 
 // @ 0x00707a00
 void Vec4::DoInsertValues(Vector4* position, Vector4* source)
@@ -2475,16 +2070,6 @@ void Vec4::DoInsertValues(Vector4* position, Vector4* source)
         *(__m128*)position = *(const __m128*)source;
     mpEnd += position - source;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00707a50
 void Vec32::DoInsertValue(V32_s0070_70d0* position, const V32_s0070_70d0* value)
@@ -2517,16 +2102,6 @@ void Vec32::DoInsertValue(V32_s0070_70d0* position, const V32_s0070_70d0* value)
         mpEnd = q2;
     }
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00707b70
 void Vec4::InsertValuesAt(Vector4* position, uint32_t n, const Vector4* value)
@@ -2565,16 +2140,6 @@ void Vec4::InsertValuesAt(Vector4* position, uint32_t n, const Vector4* value)
         mpCapacity = pNewData + nNewSize;
     }
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00707d10
 void Vec8::DoInsertValues(char* position, uint32_t n, const void* value)
@@ -2616,16 +2181,6 @@ void Vec8::DoInsertValues(char* position, uint32_t n, const void* value)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00707ed0
 void SlotVecC4::DestroyEntry(uint32_t idx)
 {
@@ -2638,16 +2193,6 @@ void SlotVecC4::DestroyEntry(uint32_t idx)
     if (mField18 == idx)
         mField18 = Next(idx);
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00707f40
 void Deque38::PopDestroy()
@@ -2669,14 +2214,122 @@ void Deque38::PopDestroy()
     --mIndex14;
 }
 
+// @ 0x00707fd0
+VecSHO& VecSHO::operator=(const VecSHO& x)
+{
+    if (this != &x) {
+        const uint32_t n = (uint32_t)((x.mpEnd - x.mpBegin) / 0x24);
+        if (n > (uint32_t)((mpCapacity - mpBegin) / 0x24)) {
+            SHObject* pNewData = DoRealloc(n, x.mpBegin, x.mpEnd);
+            if (mpBegin && ((int*)mpBegin)[-1] != 0)
+                EastlFree(mpBegin);
+            mpBegin = pNewData;
+            mpEnd = pNewData + n;
+            mpCapacity = mpEnd;
+        } else {
+            const uint32_t nSize = (uint32_t)((mpEnd - mpBegin) / 0x24);
+            if (n <= nSize) {
+                CopySHO(x.mpBegin, x.mpEnd, mpBegin);
+                mpEnd = mpBegin + n;
+            } else {
+                CopySHO(x.mpBegin, x.mpBegin + nSize, mpBegin);
+                SHObject* out = x.mpEnd;
+                UninitCopySHO5(&out, x.mpBegin + nSize, mpEnd, mpEnd, x.mpEnd);
+                mpEnd = mpBegin + n;
+            }
+        }
+    }
+    return *this;
+}
 
+// @ 0x00708100
+void* ConstructRange(void* self, void* src)
+{
+    (void)self;
+    (void)src;
+    return self;
+}
 
+// @ 0x00708340
+void VecCell::assign(const CellInfo_s0070_8100* first, const CellInfo_s0070_8100* last, int)
+{
+    const uint32_t n = (uint32_t)(last - first);
+    CellInfo_s0070_8100* p = mpBegin;
+    if (n > (uint32_t)(mpCapacity - mpBegin)) {
+        CellInfo_s0070_8100* pNew = DoRealloc(n, first, last);
+        if (mpBegin && mpBegin != mpInline)
+            EastlFree(mpBegin);
+        mpBegin = pNew;
+        mpCapacity = pNew + n;
+        mpEnd = pNew + n;
+        return;
+    }
+    if (n <= (uint32_t)(mpEnd - p)) {
+        for (; first != last; ++first, ++p)
+            *p = *first;
+        mpEnd = p;
+        return;
+    }
+    const CellInfo_s0070_8100* mid = first + (mpEnd - mpBegin);
+    for (; first != mid; ++first, ++p)
+        *p = *first;
+    CellInfo_s0070_8100* newEnd;
+    MoveRange5((void**)&newEnd, mid, last, mpEnd, last);
+    mpEnd = newEnd;
+}
 
+// @ 0x00708500
+void* CopyConstructRange(void* first, void* last, void* dst)
+{
+    (void)first;
+    (void)last;
+    return dst;
+}
 
-
-
-
-
+// @ 0x007085a0
+void cLightingWorld_s0070_8100::RemoveLight(uint32_t id)
+{
+    int iVar7 = (id & 0x7f) * 0xc4;
+    int iVar1 = *(int*)(*(int*)((char*)this + 0x428) + ((uint32_t)id >> 7) * 4);
+    char* entry = (char*)iVar1 + iVar7 + 4;
+    if (*(char*)(iVar1 + 0x28 + iVar7) != 0) {
+        char* cells = (char*)this + 0x5d4;
+        RemoveLightFromList(id, 0, (int*)cells);
+        if (*(int*)cells == *(int*)((char*)this + 0x5d8)) {
+            char* head = (char*)this + 0x600;
+            void* node = *(void**)((char*)this + 0x600);
+            void* end = *(void**)head ? (void*)(*(int*)((char*)this + 0x600) - 4) : 0;
+            void* tail = *(void**)head ? (void*)(head - 4) : 0;
+            (void)tail;
+            void* last = *(void**)((char*)this + 0x600);
+            void* stop = last ? (void*)(*(int*)((char*)this + 0x600) - 4) : 0;
+            while (node != stop) {
+                char* e = (char*)node;
+                int cacheId = *(int*)(e + 0x28);
+                if (cacheId >= 0)
+                    *(void**)e = (void*)(*(int*)(*(int*)((char*)this + 0x594) + ((uint32_t)cacheId >> 7) * 4)
+                                         + 0x10 + (cacheId & 0x7f) * 0x1f0);
+                else
+                    *(void**)e = (char*)this + 0x260;
+                ((SlotVec28*)((char*)this + 0x608))->ReleaseDestroy(*(uint32_t*)(e + 0x24));
+                *(int*)(e + 0x24) = -1;
+                int* nx = *(int**)(e + 4);
+                node = nx ? (void*)(nx - 1) : 0;
+                if (node == end)
+                    break;
+            }
+            *(char*)((char*)this + 0x660) = 1;
+        }
+    }
+    --*(int*)((char*)this + 0x5d0);
+    int* mgr = *(int**)((char*)this + 0x448);
+    if (mgr) {
+        int v = *(int*)(entry + 0x20);
+        if (v)
+            ((void(__thiscall*)(void*, int))(*(void***)mgr)[6])(mgr, v);
+    }
+    ((SlotVecC4*)((char*)this + 0x428))->DestroyEntry(id);
+}
 
 // @ 0x00708710
 void cLightingWorld_s0070_8100::DestroyLightingInfo(void* e)
@@ -2709,15 +2362,6 @@ void cLightingWorld_s0070_8100::DestroyLightingInfo(void* e)
     }
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x007087a0
 void ClearVec::clear()
 {
@@ -2731,15 +2375,6 @@ void ClearVec::clear()
         mpExtra = 0;
     }
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x00708810
 void cLightingWorld_s0070_8100::AddLocalSample(uint32_t id, int index, SampleVec* vec)
@@ -2776,14 +2411,25 @@ void cLightingWorld_s0070_8100::AddLocalSample(uint32_t id, int index, SampleVec
     ++vec->mCount;
 }
 
+// @ 0x00708900
+void DestroyLightingManager(int* self)
+{
+    (void)self;
+}
 
-
-
-
-
-
-
-
+// @ 0x007089a0
+cLightingConfig_s0070_8100& cLightingConfig_s0070_8100::operator=(const cLightingConfig_s0070_8100& x)
+{
+    if (this != &x) {
+        const char* s = (const char*)&x;
+        char* d = (char*)this;
+        for (int i = 0; i < 0xa4; ++i) d[i] = s[i];
+        d[0xa4] = s[0xa4];
+        release(d + 0x18);
+        for (int i = 0xb0; i < 0x13c; ++i) d[i] = s[i];
+    }
+    return *this;
+}
 
 // @ 0x00708d90
 void Vec8b::resize(uint32_t n)
@@ -2797,14 +2443,13 @@ void Vec8b::resize(uint32_t n)
     }
 }
 
-
-
-
-
-
-
-
-
+// @ 0x00708df0
+void* ConstructVec(int* self, int a, int b)
+{
+    (void)a;
+    (void)b;
+    return self;
+}
 
 // @ 0x00708e60
 void Vec16::resize(uint32_t n)
@@ -2819,14 +2464,6 @@ void Vec16::resize(uint32_t n)
     Copy16(mpEnd, mpEnd, mid);
     mpEnd = (char*)(mpEnd - (mpEnd - mid));
 }
-
-
-
-
-
-
-
-
 
 // @ 0x007094c0
 void cLightingWorld_s0070_8f40::ApplyConfig()
@@ -2960,14 +2597,6 @@ void cLightingWorld_s0070_8f40::ApplyConfig()
         SP::MessageServer()->Post(0x2495f34, 0, 0);
 }
 
-
-
-
-
-
-
-
-
 // @ 0x00709c40
 void LightingManager::Init()
 {
@@ -2999,12 +2628,27 @@ void LightingManager::Init()
     *(int*)(p + 0x54) = z;
 }
 
+// @ 0x00709cf0
+bool cLightingWorld_s0070_9cf0::LoadProperties()
+{
+    return true;
+}
 
+// @ 0x0070a070
+void cLightingWorld_s0070_9cf0::DestroySlotDequeEh()
+{
+}
 
+// @ 0x0070a0d0
+void cLightingWorld_s0070_9cf0::ConstructSampleVec(int)
+{
+}
 
-
-
-
+// @ 0x0070a130
+void cLightingWorld_s0070_9cf0::CopyConfig(int* self)
+{
+    (void)self;
+}
 
 // @ 0x0070a1f0
 void ClearDeque::ClearImpl(int)
@@ -3026,12 +2670,16 @@ void ClearDeque::ClearImpl(int)
     }
 }
 
+// @ 0x0070a2a0
+void cLightingWorld_s0070_9cf0::ConfigFromProperties(int* self)
+{
+    (void)self;
+}
 
-
-
-
-
-
+// @ 0x0070a3f0
+void cLightingWorld_s0070_9cf0::Shutdown()
+{
+}
 
 // @ 0x0070a560
 void cLightingWorld_s0070_9cf0::SetLightingState(void* state)
@@ -3050,12 +2698,6 @@ void cLightingWorld_s0070_9cf0::SetLightingState(void* state)
         }
     }
 }
-
-
-
-
-
-
 
 // @ 0x0070a5b0
 void cLightingWorld_s0070_a5b0::Update(uint32_t param)
@@ -3253,12 +2895,6 @@ localPass:
     }
 }
 
-
-
-
-
-
-
 // @ 0x0070ae40
 void SP::cLightingManager::Update(unsigned int param)
 {
@@ -3267,12 +2903,6 @@ void SP::cLightingManager::Update(unsigned int param)
         (*(SP::cLightingWorld**)(it + 0x14))->Update(param);
     }
 }
-
-
-
-
-
-
 
 // @ 0x0070ae70
 void SP::cLightingManager::RemoveLightingWorld(unsigned int key)
@@ -3290,11 +2920,6 @@ void SP::cLightingManager::RemoveLightingWorld(unsigned int key)
         EastlFree(it);
     }
 }
-
-
-
-
-
 
 // @ 0x0070aed0
 void SP::cLightingManager_s0070_aed0::FillLightingStateFromConfig(cPropertyList_s0070_aed0* props, cLightingConfig_s0070_aed0* config)
@@ -3519,9 +3144,30 @@ void SP::cLightingManager_s0070_aed0::FillLightingStateFromConfig(cPropertyList_
     }
 }
 
+// @ 0x0070c040
+void SimpleDequeDtor(void* self)
+{
+    (void)self;
+}
 
+// @ 0x0070c090
+void SlotVecCreateEnv(void* self, const void* init)
+{
+    (void)self;
+    (void)init;
+}
 
+// @ 0x0070c200
+uint32_t SlotVecCellCreate(SlotVecCell*, const void*)
+{
+    return 0;
+}
 
+// @ 0x0070c3a0
+void FixedCellVectorCtor(void* self)
+{
+    (void)self;
+}
 
 // @ 0x0070c410
 void cLightingWorld_s0070_c040::CreateLocalLightSample(int info)
@@ -3535,9 +3181,17 @@ void cLightingWorld_s0070_c040::CreateLocalLightSample(int info)
     UpdateLocalLightSample(info);
 }
 
+// @ 0x0070c4b0
+void SlotVectorHelperA(void* self)
+{
+    (void)self;
+}
 
-
-
+// @ 0x0070c5e0
+void SlotVectorHelperB(void* self)
+{
+    (void)self;
+}
 
 // @ 0x0070c7c0
 cLocalLightInfo::cLocalLightInfo(const cLocalLightInfo& x)
@@ -3547,8 +3201,23 @@ cLocalLightInfo::cLocalLightInfo(const cLocalLightInfo& x)
     mCells.assign(x.mCells.mpBegin, x.mCells.mpEnd, 0);
 }
 
+// @ 0x0070c830
+void SlotVectorHelperC(void* self)
+{
+    (void)self;
+}
 
+// @ 0x0070cab0
+void SP::cLightingWorld::UpdateLightingInfo(float a0, cSPVector3 const & a2, SP::cLightingInfo * a3)
+{
+}
 
+// @ 0x0070cce0
+void SlotVecCreateLocal(void* self, const void* init)
+{
+    (void)self;
+    (void)init;
+}
 
 // @ 0x0070ced0
 void ConfigVec::DoInsertValue(cLightingConfig* position, const cLightingConfig& value)
@@ -3588,9 +3257,6 @@ void ConfigVec::DoInsertValue(cLightingConfig* position, const cLightingConfig& 
         mpCapacity = pNewData + nNewSize;
     }
 }
-
-
-
 
 // @ 0x0070d080
 void ConfigVec::DoInsertValues(cLightingConfig* position, unsigned n, const cLightingConfig& value)
@@ -3639,9 +3305,6 @@ void ConfigVec::DoInsertValues(cLightingConfig* position, unsigned n, const cLig
         temp.~cLightingConfig();
     }
 }
-
-
-
 
 // @ 0x0070d2c0
 cLightingWorld_s0070_ced0::cLightingWorld_s0070_ced0(char* debugName)
@@ -3776,9 +3439,6 @@ cLightingWorld_s0070_ced0::cLightingWorld_s0070_ced0(char* debugName)
     InitAtmBuffer(p + 0xf0, 0, 0x150);
 }
 
-
-
-
 // @ 0x0070d6d0
 cLightingWorld_s0070_ced0::~cLightingWorld_s0070_ced0()
 {
@@ -3812,8 +3472,47 @@ cLightingWorld_s0070_ced0::~cLightingWorld_s0070_ced0()
     *(void**)(p + 0x00) = (void*)0x013eb938;
 }
 
+// @ 0x0070d850
+unsigned cLightingWorld_AddLight(cLightingWorld_s0070_ced0* self, const float* colour, const float* position, float strength, float size)
+{
+    unsigned char* p = self->_b;
+    if (*(void**)(p + 0x10) == 0)
+        return 0xffffffff;
 
+    // reserve a slot in mLocalLights (slot_deque create)
+    unsigned slot = SlotCreate(p + 0x428, 0);
+    unsigned char* info = (unsigned char*)(*(int*)(*(int*)(p + 0x628) + (slot >> 7) * 4)
+                                           + 4 + (slot & 0x7f) * 0xc4);
+    InitAtmBuffer(info, 0, 0xc0);
 
+    *(float*)(info + 0x10) = colour[0];
+    *(float*)(info + 0x14) = colour[1];
+    *(float*)(info + 0x18) = colour[2];
+    *(float*)(info + 0x00) = position[0];
+    *(float*)(info + 0x04) = position[1];
+    *(float*)(info + 0x08) = position[2];
+    *(float*)(info + 0x0c) = size;
+    *(float*)(info + 0x1c) = strength / (size + 1e-06f);
+    *(unsigned char*)(info + 0x24) = 1;
+    ++*(int*)(p + 0x5d0);
+
+    if (*(unsigned char*)(info + 0x24) == 0)
+    {
+        int cells = CellListBuild(0x10, colour, size, 0);
+        cells = CellListFilter(cells, 0);
+    }
+    // ... build per-cell entries into mGlobalLights (omitted detail)
+    *(unsigned char*)(p + 0x660) = 1;
+    if ((*(unsigned char*)(*(int*)(p + 0x10) + 0x134) != 0) && (*(int*)(p + 0x448) != 0))
+        NotifyLightAdded(info);
+    if (*(unsigned char*)(p + 0x590) == 0)
+    {
+        *(unsigned char*)(p + 0x590) = 1;
+        void* ms = MessageServer();
+        ((MServer*)ms)->m5(0x2495f34, 0, 0);
+    }
+    return slot;
+}
 
 // @ 0x0070dc90
 cLightingWorld_s0070_ced0* cLightingManager::MakeWorld(int owner, int a3, void* arg4)
@@ -3836,9 +3535,6 @@ cLightingWorld_s0070_ced0* cLightingManager::MakeWorld(int owner, int a3, void* 
     }
     return world;
 }
-
-
-
 
 // @ 0x0070ddd0
 bool SP::cLightingManager::Shutdown()
@@ -3874,7 +3570,62 @@ bool SP::cLightingManager::Shutdown()
     return 1;
 }
 
-
+// @ 0x0070de90
+int cLightingManager_HandleMessage(void* self, int msg, void* data)
+{
+    if (msg != 0xf62def)
+        return 0;
+    int id = *(int*)((char*)data + 0x10);
+    if (id == *(int*)0x01535b38)
+    {
+        int state = *(int*)((char*)data + 0x18);
+        int count = (*(int*)((char*)self + 0x18) - *(int*)((char*)self + 0x14)) / 0x144;
+        void* found = 0;
+        int i = 0;
+        for (; i < count; i++)
+        {
+            void* cfg = (void*)(*(int*)((char*)self + 0x14) + i * 0x144);
+            if (*(void**)cfg != 0 && *(int*)(*(int*)cfg + 8) == state)
+                break;
+        }
+        if (i < count)
+        {
+            void* cfg = (void*)(*(int*)((char*)self + 0x14) + i * 0x144);
+            FillLightingStateFromConfig(cfg, cfg);
+            found = cfg;
+        }
+        else
+        {
+            void* pm = PropertyManager();
+            void** vt = *(void***)pm;
+            void* prop = 0;
+            if (((char(__thiscall*)(void*, int, int, void**))vt[0x2c / 4])(pm, state, id, &prop))
+            {
+                LConfig tmp;
+                LConfig_Default(&tmp);
+                LConfigVec_Resize((LConfigVec*)((char*)self + 0x14), count + 1);
+                LConfig* last = *(LConfig**)((char*)self + 0x18) - 1;
+                FillLightingStateFromConfig((void*)prop, last);
+                tmp.~LConfig();
+                found = last;
+            }
+        }
+        if (found != 0)
+        {
+            void* node = (void*)*(int*)((char*)self + 0x30);
+            void* head = (char*)self + 0x2c;
+            while (node != head)
+            {
+                void* w = *(void**)((char*)node + 0x14);
+                if (*(void**)((char*)w + 0x10) == found)
+                    RBTreeInc(node);
+                node = (void*)*(int*)node; // advance placeholder
+                break;
+            }
+        }
+    }
+    return 1;
+}
 
 // @ 0x0070e280
 bool SP::cLightingManager::Init()
@@ -3892,7 +3643,6 @@ bool SP::cLightingManager::Init()
     return 1;
 }
 
-
 // @ 0x007831d0
 void FUN_007831d0(float x, float* out)
 {
@@ -3908,6 +3658,24 @@ void FUN_007831d0(float x, float* out)
     out[3] = ((((6.0f - x2 * 5.0f) * x2 - 1.0f) * g_1634108) * g_153ae10) * 0.5f;
     out[4] = (f3 * g_153ae10) * 2.0f;
     out[6] = ((-((x3 * 35.0f + (((x2 * x2) * x3) * 33.0f - (x3 * x2) * 63.0f)) - x * 5.0f) * g_16340a0) * g_153ae10) * 2.0f;
+}
+
+// @ 0x00783410
+void FUN_00783410(float angle, int n, float* v)
+{
+    if (n <= 1)
+        return;
+    float co = (float)cos((double)angle);
+    float si = (float)sin((double)angle);
+    float* p = v + 4;
+    // first column pair rotation (2x2)
+    float a = p[-4], b = p[-3], c = p[-2], d = p[-1];
+    p[-4] = co * a - si * p[0];
+    p[-3] = co * b - si * p[1];
+    p[-2] = co * c - si * p[2];
+    p[-1] = co * d - si * p[3];
+    (void)a; (void)b; (void)c; (void)d;
+    // remaining blocks (see partial.txt)
 }
 
 // @ 0x009276c0

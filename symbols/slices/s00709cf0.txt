@@ -1,2 +1,8 @@
+00709cf0 ?LoadProperties@cLightingWorld_s0070_9cf0@@QAE_NXZ  # cLightingWorld_s0070_9cf0::LoadProperties migrated from s00709cf0 (verbatim, slice spelling)
+0070a070 ?DestroySlotDequeEh@cLightingWorld_s0070_9cf0@@QAEXXZ  # cLightingWorld_s0070_9cf0::DestroySlotDequeEh migrated from s00709cf0 (verbatim, slice spelling)
+0070a0d0 ?ConstructSampleVec@cLightingWorld_s0070_9cf0@@QAEXH@Z  # cLightingWorld_s0070_9cf0::ConstructSampleVec migrated from s00709cf0 (verbatim, slice spelling)
+0070a130 ?CopyConfig@cLightingWorld_s0070_9cf0@@QAEXPAH@Z  # cLightingWorld_s0070_9cf0::CopyConfig migrated from s00709cf0 (verbatim, slice spelling)
 0070a1f0 ?ClearImpl@ClearDeque@@QAEXH@Z  # ClearDeque::ClearImpl migrated from s00709cf0 (verbatim, slice spelling)
+0070a2a0 ?ConfigFromProperties@cLightingWorld_s0070_9cf0@@QAEXPAH@Z  # cLightingWorld_s0070_9cf0::ConfigFromProperties migrated from s00709cf0 (verbatim, slice spelling)
+0070a3f0 ?Shutdown@cLightingWorld_s0070_9cf0@@QAEXXZ  # cLightingWorld_s0070_9cf0::Shutdown migrated from s00709cf0 (verbatim, slice spelling)
 0070a560 ?SetLightingState@cLightingWorld_s0070_9cf0@@QAEXPAX@Z  # cLightingWorld_s0070_9cf0::SetLightingState migrated from s00709cf0 (verbatim, slice spelling)

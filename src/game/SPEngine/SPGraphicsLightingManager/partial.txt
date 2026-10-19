@@ -1,1 +1,31 @@
 # va  diff-bytes  reason
+00705740  -  skeleton only (477-byte light-sample projection not reconstructed)
+00705c80  -  skeleton only (EASTL vector DoInsertValue for bit-packed vector)
+00705db0  -  skeleton only (EASTL vector reserve/init for bit-packed vector)
+00705f40  -  skeleton only (556-byte lighting update not reconstructed)
+00706b50  -  skeleton only (289-byte vector push_back of 0xb0-byte records)
+00706dd0  -  skeleton only (756-byte SP::cLightingConfig constructor)
+00708100 563 EH construct-range helper: only a skeleton, EH funclets and sub-object construction not reproduced
+00708500 128 EH uninitialized-copy helper: skeleton, EH cleanup path and element construct not reproduced
+007085a0 365 cLightingWorld::RemoveLight: approximate; linked-list of cell samples and manager virtual dispatch not fully reconstructed
+00708900 81 cLightingManager::~cLightingManager: skeleton; three vtable stores and sub-object dtors not reproduced
+007089a0 558 cLightingConfig::operator=: approximate field copy; nested container assignments and float fld/fstp schedule not reconstructed
+00708df0 87 vector ctor: skeleton; inline 0x400-byte buffer wiring and range-construct call not reproduced
+00709cf0 838 cLightingWorld property loader: not reconstructed (skeleton only)
+0070a070 93 EH destructor loop: skeleton, EH funclets not reproduced
+0070a0d0 84 inline-buffer vector ctor: skeleton, EH cleanup path not reproduced
+0070a130 183 config copy ctor: skeleton, nested container copies and EH state not reproduced
+0070a2a0 325 property-driven config: skeleton, app-property virtual calls and vector fills not reconstructed
+0070a3f0 353 cLightingWorld::Shutdown: skeleton, many container clears and EH not reproduced
+0070c040 78 simple_deque dtor: skeleton, EH funclets not reproduced
+0070c090 360 slot_vector_base<cEnvLightingCacheEntry>::create: not reconstructed (skeleton only)
+0070c200 411 slot_vector_base<cLocalLightCell>::create: not reconstructed (skeleton only)
+0070c3a0 97 fixed_vector<cCellInfo>::copy ctor: skeleton, EH cleanup not reproduced
+0070c4b0 304 slot-vector helper: not reconstructed (skeleton only)
+0070c5e0 476 slot-vector helper: not reconstructed (skeleton only)
+0070c830 633 slot-vector helper: not reconstructed (skeleton only)
+0070cab0 554 cLightingWorld::UpdateLightingInfo: not reconstructed (skeleton only)
+0070cce0 401 slot_vector_base<cLocalLightInfo>::create: not reconstructed (skeleton only)
+0070d850  999   SP::cLightingWorld::AddLight; slot/cell bookkeeping omitted (assembly-free outline only)
+0070de90  364   cLightingManager message handler; RBTree notify loop omitted
+00783410  n/a  PARTIAL: only the first 2x2 column rotation is translated; the remaining block loops are omitted

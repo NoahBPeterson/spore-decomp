@@ -1,2 +1,11 @@
+0070c040 ?SimpleDequeDtor@@YAXPAX@Z  # SimpleDequeDtor migrated from s0070c040 (verbatim, slice spelling)
+0070c090 ?SlotVecCreateEnv@@YAXPAXPBX@Z  # SlotVecCreateEnv migrated from s0070c040 (verbatim, slice spelling)
+0070c200 ?SlotVecCellCreate@@YAIPAUSlotVecCell@@PBX@Z  # SlotVecCellCreate migrated from s0070c040 (verbatim, slice spelling)
+0070c3a0 ?FixedCellVectorCtor@@YAXPAX@Z  # FixedCellVectorCtor migrated from s0070c040 (verbatim, slice spelling)
 0070c410 ?CreateLocalLightSample@cLightingWorld_s0070_c040@@QAEXH@Z  # cLightingWorld_s0070_c040::CreateLocalLightSample migrated from s0070c040 (verbatim, slice spelling)
+0070c4b0 ?SlotVectorHelperA@@YAXPAX@Z  # SlotVectorHelperA migrated from s0070c040 (verbatim, slice spelling)
+0070c5e0 ?SlotVectorHelperB@@YAXPAX@Z  # SlotVectorHelperB migrated from s0070c040 (verbatim, slice spelling)
 0070c7c0 ??0cLocalLightInfo@@QAE@ABU0@@Z  # cLocalLightInfo::cLocalLightInfo migrated from s0070c040 (verbatim, slice spelling)
+0070c830 ?SlotVectorHelperC@@YAXPAX@Z  # SlotVectorHelperC migrated from s0070c040 (verbatim, slice spelling)
+0070cab0 ?UpdateLightingInfo@cLightingWorld@SP@@UAEXMABUcSPVector3@@PAUcLightingInfo@2@@Z  # SP::cLightingWorld::UpdateLightingInfo migrated from s0070c040
+0070cce0 ?SlotVecCreateLocal@@YAXPAXPBX@Z  # SlotVecCreateLocal migrated from s0070c040 (verbatim, slice spelling)

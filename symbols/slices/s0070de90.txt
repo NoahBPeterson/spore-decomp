@@ -1,3 +1,4 @@
+0070de90 ?cLightingManager_HandleMessage@@YAHPAXH0@Z  # cLightingManager_HandleMessage migrated from s0070de90 (verbatim, slice spelling)
 0070e280 ?Init@cLightingManager@SP@@UAE_NXZ  # SP::cLightingManager::Init migrated from s0070de90
 0070e2c0 ?GetIDFromMaterial@cMaterialManager@@QAEHPAUMat@@@Z  # cMaterialManager::GetIDFromMaterial migrated from s0070de90 (verbatim, slice spelling)
 0070e2d0 ?GetIDsFromMaterials@cMaterialManager@@QAEXHPAPAUMat@@PAI@Z  # cMaterialManager::GetIDsFromMaterials migrated from s0070de90 (verbatim, slice spelling)
