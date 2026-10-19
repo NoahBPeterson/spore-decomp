@@ -42,11 +42,17 @@ struct ExprStub { void EvalRealParentheses4(const char** p, float* a, float* b);
 // ---- items of slice s0083c900 end
 
 // ---- items of slice s0083d3d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void  __cdecl FUN_00f47380(void* p);                          // operator delete(void*)
 extern "C" __declspec(dllimport) int __cdecl isdigit(int);
 extern "C" __declspec(dllimport) int __cdecl isalpha(int);
 extern "C" __declspec(dllimport) int __cdecl isalnum(int);
 extern "C" double __cdecl floor(double);
+double __cdecl ParseReal(const char* s, const char** end);     // 0x0092dc50 (strtod-style)
+float  __cdecl CeilF(float x);                                  // 0x0083ce70
+float  __cdecl ExpF(float x);                                   // 0x00571cc0
+static const float kPi = 3.1415927f;
+static const float kDegToRad = 0.0055555557f;                   // 1/180
+static const float kRadToDeg = 180.0f;
+extern "C" void  __cdecl FUN_00f47380(void* p);                          // operator delete(void*)
 extern "C" double __cdecl asin(double);
 extern "C" double __cdecl acos(double);
 extern "C" double __cdecl atan(double);
@@ -60,6 +66,7 @@ extern "C" double __cdecl log(double);
 extern "C" double __cdecl fabs(double);
 extern "C" double __cdecl pow(double, double);
 #pragma intrinsic(asin, acos, atan, atan2, sin, cos, tan, sqrt, exp, log, fabs, pow)
+typedef unsigned int   uint32;
 namespace eastl {
 struct allocator_s0083_d3d0 { unsigned char pad[4]; };
 }
@@ -79,21 +86,9 @@ void  __cdecl DiscardWhiteSpace(const char** p);            // 0x0083ce90
 void  __cdecl DoFreeNodesExpr(void* bucketArray, int n);    // 0x0083dd00
 int   __cdecl EvalIntExpression(void* self, const char** p); // 0x0083eb00
 void  __cdecl EvalExpectChar(const char** p, char c);       // 0x0083d240
-double __cdecl ParseReal(const char* s, const char** end);     // 0x0092dc50 (strtod-style)
-float  __cdecl CeilF(float x);                                  // 0x0083ce70
-float  __cdecl ExpF(float x);                                   // 0x00571cc0
 namespace EA {
 namespace ArgScript {
 struct cExprFunction_s0083_d3d0 { virtual float Eval(const char** p, void* expr) = 0; };
-}
-}
-namespace EA {
-namespace ArgScript {
-struct cError_s0083_d3d0 {
-    char mMessage[16];
-    cError_s0083_d3d0(const char* fmt, ...);                               // 0x0052df30
-    cError_s0083_d3d0(const cError_s0083_d3d0& o);
-};
 }
 }
 namespace EA {
@@ -118,9 +113,28 @@ struct cExpression_s0083_d3d0 {
 namespace eastl {
  bool operator==(const string8_s0083_d3d0& a, const char* b);   // 0x00555020
 }
-static const float kPi = 3.1415927f;
-static const float kDegToRad = 0.0055555557f;                   // 1/180
-static const float kRadToDeg = 180.0f;
+struct ExprNode { eastl::string8_s0083_d3d0 key; int* fn; ExprNode* next; };
+struct ExprPair {                                               // pair<const string8, AutoRefCount<cExprFunction> >
+    char* mpBegin; char* mpEnd; char* mpCapacity; unsigned mAlloc; int* fn;   // string8 layout, no ctor
+    ExprPair* Ctor(const eastl::string8_s0083_d3d0* k, int** ref);         // 0x0083cef0
+    ~ExprPair() {
+        if (fn && --fn[1] == 0) FUN_00f47380(fn);
+        if ((mpCapacity - mpBegin) > 1 && mpBegin) FUN_00f47380(mpBegin);
+    }
+};
+bool __cdecl StrEqS(const eastl::string8_s0083_d3d0& a, const eastl::string8_s0083_d3d0& b);    // 0x00554fb0
+struct InsTag { bool b; };                                                 // eastl bool tag, passed by value
+struct ExprTable {
+    void* mAlloc;
+    ExprNode** mpBucketArray;
+    unsigned mnBucketCount;
+    unsigned mnElementCount;
+    void find(ExprNode** out, const eastl::string8_s0083_d3d0& key);                 // 0x007e2ea0
+    void insert(ExprNode** out, ExprPair* v, InsTag tag);                     // 0x0083d140
+    int** IndexRef(const eastl::string8_s0083_d3d0& key);                            // 0x0083ddb0
+    int   erase(const eastl::string8_s0083_d3d0& key);                               // 0x0083dea0
+    void  Register(const char* name, int* ref);                           // 0x0083df90
+};
 extern "C" long double __cdecl CIpow();
 // ---- items of slice s0083d3d0 end
 
@@ -251,9 +265,6 @@ void DiscardWhiteSpace(const char** p)
         ++*p;
 }
 
-
-
-
 // @ 0x0083ced0
 void ReleaseRefCount(int** p)
 {
@@ -263,9 +274,6 @@ void ReleaseRefCount(int** p)
             EASTL_allocator_deallocate(obj);
     }
 }
-
-
-
 
 // @ 0x0083cef0
 void PairCtorStub::CtorA(const eastl::string8_s0083_c900* s, int** ref)
@@ -282,9 +290,6 @@ void PairCtorStub::CtorA(const eastl::string8_s0083_c900* s, int** ref)
     *(int**)((char*)self + 0x10) = obj;
     if (obj) ++obj[1];
 }
-
-
-
 
 // @ 0x0083d020
 void PairCtorStub::CtorB(const void* src)
@@ -303,9 +308,6 @@ void PairCtorStub::CtorB(const void* src)
     if (obj) ++obj[1];
 }
 
-
-
-
 // @ 0x0083d080
 void __cdecl PairStringExprDtor(void* self)
 {
@@ -319,9 +321,6 @@ void __cdecl PairStringExprDtor(void* self)
         EASTL_allocator_deallocate(str->mpBegin);
 }
 
-
-
-
 // @ 0x0083d240
 void EvalExpectCharThrow(const char** p, char c)
 {
@@ -333,9 +332,6 @@ void EvalExpectCharThrow(const char** p, char c)
     }
     ++*p;
 }
-
-
-
 
 // @ 0x0083d290
 unsigned char EvalContinueChar(const char** p, char c)
@@ -353,9 +349,6 @@ unsigned char EvalContinueChar(const char** p, char c)
     return 1;
 }
 
-
-
-
 // @ 0x0083d2f0
 void ExprStub::EvalRealParentheses4(const char** p, float* a, float* b)
 {
@@ -366,8 +359,6 @@ void ExprStub::EvalRealParentheses4(const char** p, float* a, float* b)
     *b = EvalRealExpression(self, p);
     EvalExpectCharThrow(p, ')');
 }
-
-
 
 // @ 0x0083d3d0
 float EA::ArgScript::cExpression_s0083_d3d0::EvalRealNumber(const char** p)
@@ -382,7 +373,7 @@ float EA::ArgScript::cExpression_s0083_d3d0::EvalRealNumber(const char** p)
     if (**p == '(')
         return EvalRealParentheses2(p);
     if (!isalpha((unsigned char)**p))
-        throw cError_s0083_d3d0("Bad real expression");
+        throw EA::ArgScript::cError("Bad real expression");
     const char* start = *p;
     ++*p;
     for (;;) {
@@ -418,11 +409,9 @@ float EA::ArgScript::cExpression_s0083_d3d0::EvalRealNumber(const char** p)
     Node* it;
     Node** r = find(&it, name);
     if (*r == mpBucketArray[mnBucketCount])
-        throw cError_s0083_d3d0("Unknown function '%s'", name.mpBegin);
+        throw EA::ArgScript::cError("Unknown function '%s'", name.mpBegin);
     return (*r)->fn->Eval(p, this);
 }
-
-
 
 // @ 0x0083db70
 int EA::ArgScript::cExpression_s0083_d3d0::EvalIntParentheses(const char** p)
@@ -442,8 +431,6 @@ int EA::ArgScript::cExpression_s0083_d3d0::EvalIntParentheses(const char** p)
     ++*p;
     return v;
 }
-
-
 
 // @ 0x0083dc00
 void EA::ArgScript::cExpression::EvalString(char const *& p, eastl::basic_string<char, eastl::allocator> * out)
@@ -482,8 +469,6 @@ void EA::ArgScript::cExpression::EvalString(char const *& p, eastl::basic_string
     out->assign(start, p);
 }
 
-
-
 // @ 0x0083dd00
 void __cdecl DoFreeNodesExpr(void* bucketArray, int bucketCount)
 {
@@ -503,8 +488,6 @@ void __cdecl DoFreeNodesExpr(void* bucketArray, int bucketCount)
     }
 }
 
-
-
 // @ 0x0083dd70
 float EA::ArgScript::cExpression::EvalSignedRealNumber(char const *& p)
 {
@@ -522,7 +505,54 @@ float EA::ArgScript::cExpression::EvalSignedRealNumber(char const *& p)
     return -v;
 }
 
+// @ 0x0083ddb0
+int** ExprTable::IndexRef(const eastl::string8_s0083_d3d0& key)
+{
+    ExprNode* it;
+    find(&it, key);
+    if (it != mpBucketArray[mnBucketCount])
+        return &it->fn;
+    int* dflt = 0;
+    ExprPair v;
+    ExprPair* pv = v.Ctor(&key, &dflt);
+    InsTag tag;
+    tag.b = false;
+    insert(&it, pv, tag);
+    return &it->fn;
+}
 
+// @ 0x0083dea0
+int ExprTable::erase(const eastl::string8_s0083_d3d0& key)
+{
+    const unsigned char* p = (const unsigned char*)key.mpBegin;
+    uint32 h = 0x811c9dc5;
+    uint32 c = *p;
+    while (c) { ++p; h = h * 0x1000193 ^ c; c = *p; }
+    unsigned n = h % mnBucketCount;
+    unsigned saved = mnElementCount;
+    ExprNode** slot = &mpBucketArray[n];
+    if (*slot) {
+        ExprNode* node;
+        do {
+            node = *slot;
+            if (StrEqS(key, node->key)) break;
+            slot = &node->next;
+        } while (node->next);
+        while (*slot) {
+            ExprNode* nd = *slot;
+            if (!StrEqS(key, nd->key)) break;
+            *slot = nd->next;
+            int* r = nd->fn;
+            if (r && --r[1] == 0) FUN_00f47380(r);
+            char* sb = nd->key.mpBegin;
+            if ((nd->key.mpCapacity - sb) > 1 && sb)
+                FUN_00f47380(sb);
+            FUN_00f47380(nd);
+            --mnElementCount;
+        }
+    }
+    return saved - mnElementCount;
+}
 
 // @ 0x0083e140
 void __fastcall ExprTableClear(void* self)
@@ -530,8 +560,6 @@ void __fastcall ExprTableClear(void* self)
     DoFreeNodesExpr(*(void**)((char*)self + 4), *(int*)((char*)self + 8));
     *(int*)((char*)self + 0xc) = 0;
 }
-
-
 
 // @ 0x0083e160
 float EA::ArgScript::cExpression::EvalRealFactor(char const *& p)
@@ -546,7 +574,6 @@ float EA::ArgScript::cExpression::EvalRealFactor(char const *& p)
     (void)base;
     return base;
 }
-
 
 // @ 0x0083e1c0
 float EA::ArgScript::cExpression::EvalRealTerm(char const *& p)
@@ -604,7 +631,6 @@ float EA::ArgScript::cExpression::EvalRealTerm(char const *& p)
     }
 }
 
-
 // @ 0x0083e430
 cExpression::cExpression()
 : mfMaxLoadFactor(gOne), mfGrowthFactor(gTwo) {
@@ -613,7 +639,6 @@ cExpression::cExpression()
     mnElementCount = 0;
     pad18 = 0;
 }
-
 
 // @ 0x0083e470
 float EA::ArgScript::cExpression::EvalRealExpression(char const *& p)
@@ -637,7 +662,6 @@ float EA::ArgScript::cExpression::EvalRealExpression(char const *& p)
     }
 }
 
-
 // @ 0x0083e4f0
 float EA::ArgScript::cExpression::ParseReal(char const * s)
 {
@@ -648,7 +672,6 @@ float EA::ArgScript::cExpression::ParseReal(char const * s)
         throw EA::ArgScript::cError("Garbage at end of real expression");
     return v;
 }
-
 
 // @ 0x0083e560
 float cExpression::EvalRealParentheses2(const char** p)
@@ -664,7 +687,6 @@ float cExpression::EvalRealParentheses2(const char** p)
     ++*p;
     return v;
 }
-
 
 // @ 0x0083e5f0
 ulong32 cExpression::EvalIntNumber(const char** p)
@@ -722,7 +744,6 @@ ulong32 cExpression::EvalIntNumber(const char** p)
     throw cError("Unknown int function '%s'", name.mpBegin);
 }
 
-
 // @ 0x0083e9d0
 #pragma inline_depth(0)
 int EA::ArgScript::cExpression::EvalSignedIntNumber(char const *& p)
@@ -743,7 +764,6 @@ int EA::ArgScript::cExpression::EvalSignedIntNumber(char const *& p)
 }
 #pragma inline_depth()
 
-
 // @ 0x0083ea10
 int EA::ArgScript::cExpression::EvalIntFactor(char const *& p)
 {
@@ -761,7 +781,6 @@ int EA::ArgScript::cExpression::EvalIntFactor(char const *& p)
     }
     return result;
 }
-
 
 // @ 0x0083ea70
 int EA::ArgScript::cExpression::EvalIntTerm(char const *& p)
@@ -789,7 +808,6 @@ int EA::ArgScript::cExpression::EvalIntTerm(char const *& p)
     }
 }
 
-
 // @ 0x0083eb00
 int EA::ArgScript::cExpression::EvalIntExpression(char const *& p)
 {
@@ -811,7 +829,6 @@ int EA::ArgScript::cExpression::EvalIntExpression(char const *& p)
         }
     }
 }
-
 
 // @ 0x0083eb70
 unsigned char cExpression::EvalBool(const char** p)
@@ -837,7 +854,6 @@ unsigned char cExpression::EvalBool(const char** p)
     return (unsigned char)EvalIntExpression(p);
 }
 
-
 // @ 0x0083edc0
 int EA::ArgScript::cExpression::ParseInt(char const * s)
 {
@@ -848,7 +864,6 @@ int EA::ArgScript::cExpression::ParseInt(char const * s)
         throw EA::ArgScript::cError("Garbage at end of integer expression");
     return v;
 }
-
 
 // @ 0x0083ee30
 int EA::ArgScript::cExpression::EvalRelExpression(char const *& p)
@@ -895,7 +910,6 @@ int EA::ArgScript::cExpression::EvalRelExpression(char const *& p)
         }
     }
 }
-
 
 // @ 0x0083efd0
 unsigned cExpression::EvalBoolFactor(const char** p)
