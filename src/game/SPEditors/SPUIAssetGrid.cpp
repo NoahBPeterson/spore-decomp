@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPUIAssetGrid.cpp -- migrated from slice(s) s006553b0, s006525d0, s006515a0, s00650630, s0064fa20, s0064dbd0, s00647f40 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPUIAssetGrid.cpp -- migrated from slice(s) s0064eb60, s006553b0, s006525d0, s006515a0, s00650630, s0064fa20, s0064dbd0, s00647f40 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPUIAssetGrid.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -13,6 +13,10 @@
 #include "EA/Stopwatch.h"
 #include "SP/cString.h"
 #include <math.h>
+#include "cSPUIAnimator.h"
+#define __PLACEMENT_NEW_INLINE   // the slices' own placement new/delete win over <new>'s (rewrite.py)
+#include <new>
+inline void operator delete(void*, void*) {}   // placement delete (<new>'s is skipped, rewrite.py)
 
 // ---- items of slice s00647f40 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Primary {
@@ -921,15 +925,80 @@ struct cSPUIAssetGrid_s0065_53b0 : GB0, GB1, GB2, GB3 {
 };
 // ---- items of slice s006553b0 end
 
+// ---- items of slice s0064eb60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+template <typename T>
+struct AutoRefCount_s0064_eb60 {
+    T* mpObject;
+    AutoRefCount_s0064_eb60() : mpObject(0) {}
+    AutoRefCount_s0064_eb60(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    AutoRefCount_s0064_eb60(const AutoRefCount_s0064_eb60& o) : mpObject(o.mpObject) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCount_s0064_eb60() { if (mpObject) mpObject->Release(); }
+    AutoRefCount_s0064_eb60& operator=(const AutoRefCount_s0064_eb60& o) {
+        T* p = o.mpObject;
+        T* old = mpObject;
+        if (p != old) {
+            if (p)
+                p->AddRef();
+            mpObject = p;
+            if (old)
+                old->Release();
+        }
+        return *this;
+    }
+};  // namespace EA
+}
+namespace SP {
+struct AssetPrimary {
+    virtual void slot0();
+    virtual void slot1();
+    char pad[0x0c];
+};
+}
+namespace SP {
+struct AssetDataRef {
+    virtual void AddRef();
+    virtual void Release();
+};
+}
+namespace SP {
+struct cSPAssetData_s0064_eb60 : AssetPrimary, AssetDataRef {};
+}
+namespace SP {
+struct cSPAssetView {
+    virtual void AddRef();
+    virtual void Release();
+};
+}
+namespace SP {
+struct ResourceKey_s0064_eb60 {
+    unsigned int mTypeID;       // +0x00
+    unsigned int mInstanceID;   // +0x04
+    unsigned int mGroupID;      // +0x08
+};
+}
+namespace SP {
+struct cSPAssetGridEntry_s0064_eb60 {
+    ResourceKey_s0064_eb60 mAssetKey;                                  // +0x00
+    EA::AutoRefCount_s0064_eb60<cSPAssetData_s0064_eb60> mAssetData;              // +0x0c
+    EA::AutoRefCount_s0064_eb60<cSPAssetView> mAssetView;              // +0x10
+    float mPosX;                                            // +0x14
+    float mPosY;                                            // +0x18
+    bool mFlag1C;                                           // +0x1c
+    bool mFlag1D;                                           // +0x1d
+};
+}
+namespace SP {
+struct TypeGridEntrySort {
+    char pad0[0x0c];
+    bool operator()(const cSPAssetGridEntry_s0064_eb60& a, const cSPAssetGridEntry_s0064_eb60& b);
+};
+}
+// ---- items of slice s0064eb60 end
+
 // @ 0x00648aa0
 void __cdecl sub_648b40()
 {}
-
-
-
-
-
-
 
 // @ 0x00648af0
 Entry14* GridVec::EraseAt(Entry14* pos)
@@ -947,12 +1016,6 @@ Entry14* GridVec::EraseAt(Entry14* pos)
     return pos;
 }
 
-
-
-
-
-
-
 // @ 0x00648b40
 Entry14* GridVec::Insert(Entry14* pos, const Entry14& v)
 {
@@ -968,31 +1031,15 @@ Entry14* GridVec::Insert(Entry14* pos, const Entry14& v)
     return mpBegin + idx;
 }
 
-
-
-
-
-
-
 // @ 0x00648bb0
 void __cdecl sub_648bb0()
 {}
-
-
-
-
-
 
 // @ 0x0064e5b0
 void Outer168::Do()
 {
     sub.method(0x80000000, 0xffffffff);
 }
-
-
-
-
-
 
 // @ 0x0064e5d0
 void CellCalc::Compute(int index, float* out)
@@ -1008,11 +1055,6 @@ void CellCalc::Compute(int index, float* out)
     }
 }
 
-
-
-
-
-
 // @ 0x0064e680
 bool SP::cSPUIAssetGrid_s0064_dbd0::HandleMessage(unsigned msg, unsigned)
 {
@@ -1025,11 +1067,6 @@ bool SP::cSPUIAssetGrid_s0064_dbd0::HandleMessage(unsigned msg, unsigned)
     }
     return true;
 }
-
-
-
-
-
 
 // @ 0x0064e7d0
 bool R7d0::Test(uint32_t idx)
@@ -1050,73 +1087,65 @@ bool R7d0::Test(uint32_t idx)
     return false;
 }
 
+// @ 0x0064f730
+SP::cSPAssetGridEntry_s0064_eb60** UninitCopyOut(SP::cSPAssetGridEntry_s0064_eb60** pOut, SP::cSPAssetGridEntry_s0064_eb60* first, SP::cSPAssetGridEntry_s0064_eb60* last, SP::cSPAssetGridEntry_s0064_eb60* initial)
+{
+    *pOut = initial;
+    if (first != last) {
+        do {
+            SP::cSPAssetGridEntry_s0064_eb60* d = *pOut;
+            if (d)
+                ::new (d) SP::cSPAssetGridEntry_s0064_eb60(*first);
+            *pOut = d + 1;
+            ++first;
+        } while (first != last);
+    }
+    return pOut;
+}
 
-
-
+// @ 0x0064f990
+void PromoteHeapEntries(SP::cSPAssetGridEntry_s0064_eb60* first, int topPosition, int position, SP::cSPAssetGridEntry_s0064_eb60 value, SP::TypeGridEntrySort* compare)
+{
+    for (int parentPosition = (position - 1) >> 1;
+         (position > topPosition) && (*compare)(first[parentPosition], value);
+         parentPosition = (position - 1) >> 1) {
+        first[position] = first[parentPosition];
+        position = parentPosition;
+    }
+    first[position] = value;
+}
 
 // @ 0x0064fa20
 void __fastcall sub_64fa20(void*)
 {}
 
-
-
-
-
 // @ 0x0064fc40
 void __fastcall sub_64fc40(void*)
 {}
-
-
-
-
 
 // @ 0x0064fd00
 void __fastcall sub_64fd00(void*)
 {}
 
-
-
-
-
 // @ 0x0064fde0
 void __fastcall sub_64fde0(void*)
 {}
-
-
-
-
 
 // @ 0x0064ff90
 void __fastcall sub_64ff90(void*)
 {}
 
-
-
-
-
 // @ 0x00650020
 void __fastcall sub_650020(void*)
 {}
-
-
-
-
 
 // @ 0x00650190
 void __fastcall sub_650190(void*)
 {}
 
-
-
-
-
 // @ 0x00650470
 void __fastcall sub_650470(void*)
 {}
-
-
-
-
 
 // @ 0x006505d0
 GridEntry* Grid::Find(uint32_t id)
@@ -1137,9 +1166,6 @@ GridEntry* Grid::Find(uint32_t id)
         return 0;
     return &mpBegin[index];
 }
-
-
-
 
 // @ 0x00650630
 void ReloadCallback(cSPUIAssetGrid* self, void* unused, bool bLoad)
@@ -1329,9 +1355,6 @@ void ReloadCallback(cSPUIAssetGrid* self, void* unused, bool bLoad)
     }
 }
 
-
-
-
 // @ 0x006511b0
 namespace eastl {
 template <typename It, typename Compare> void insertion_sort(It first, It last, Compare compare)
@@ -1348,9 +1371,6 @@ template <typename It, typename Compare> void insertion_sort(It first, It last, 
     }
 }
 }  // namespace eastl
-
-
-
 
 // @ 0x00651390
 namespace eastl {
@@ -1370,8 +1390,6 @@ template <typename It, typename Compare> void insertion_sort_unguarded(It first,
 }
 }  // namespace eastl
 
-
-
 // @ 0x006515a0
 namespace eastl {
 template <typename T, typename Compare> __declspec(noinline) const T& median(const T& a, const T& b, const T& c, Compare compare)
@@ -1385,8 +1403,6 @@ template <typename T, typename Compare> __declspec(noinline) const T& median(con
     return b;
 }
 }  // namespace eastl
-
-
 
 // @ 0x006516a0
 namespace eastl {
@@ -1407,8 +1423,6 @@ template <typename It, typename Distance, typename T, typename Compare> __declsp
 }
 }  // namespace eastl
 
-
-
 // @ 0x006517c0
 namespace eastl {
 template <typename It, typename Distance, typename T, typename Compare> __declspec(noinline) void promote_heap(It first, Distance topPosition, Distance position, T value, Compare compare)
@@ -1423,8 +1437,6 @@ template <typename It, typename Distance, typename T, typename Compare> __declsp
 }
 }  // namespace eastl
 
-
-
 // @ 0x00651910
 namespace eastl {
 template <typename It, typename Compare> __declspec(noinline) void pop_heap_ref(It first, It last, Compare& compare)
@@ -1435,8 +1447,6 @@ template <typename It, typename Compare> __declspec(noinline) void pop_heap_ref(
                                                         tempBottom, compare);
 }
 }  // namespace eastl
-
-
 
 // @ 0x00651990
 cSPUIAssetGrid_s0065_15a0::cSPUIAssetGrid_s0065_15a0()
@@ -1452,8 +1462,6 @@ cSPUIAssetGrid_s0065_15a0::cSPUIAssetGrid_s0065_15a0()
 {
 }
 
-
-
 // @ 0x00651c80
 cSPUIAssetGrid_s0065_15a0::~cSPUIAssetGrid_s0065_15a0()
 {
@@ -1462,8 +1470,6 @@ cSPUIAssetGrid_s0065_15a0::~cSPUIAssetGrid_s0065_15a0()
         m10c = false;
     }
 }
-
-
 
 // @ 0x00651f30
 float GridSub8::ContentHeight(float width)
@@ -1490,8 +1496,6 @@ float GridSub8::ContentHeight(float width)
     g->FUN_64e5d0(rows, t);
     return m120 + m114 + m100 + t[1];
 }
-
-
 
 // @ 0x00651ff0
 void cSPUIAssetGrid_s0065_15a0::SetupWindows(IWindow_s0065_15a0* a, IWindow_s0065_15a0* b, IWindow_s0065_15a0* c)
@@ -1566,8 +1570,6 @@ void cSPUIAssetGrid_s0065_15a0::SetupWindows(IWindow_s0065_15a0* a, IWindow_s006
     }
 }
 
-
-
 // @ 0x006524a0
 void cSPUIAssetGrid_s0065_15a0::UpdateScrollRegion()
 {
@@ -1587,7 +1589,6 @@ void cSPUIAssetGrid_s0065_15a0::UpdateScrollRegion()
     UpdateScrolling(0);
     FUN_650470();
 }
-
 
 // @ 0x006528f0
 void StatsGrid::UpdateStatsText()
