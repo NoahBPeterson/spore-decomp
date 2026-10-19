@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorDataSummarizer.cpp  ?GetResType@cVehicleModelSummarizer@SP@@QAEIH@Z  005567c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorDataSummarizer.cpp  ?GetResType@cBuildingModelSummarizer@SP@@QAEIH@Z  00556e10  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorDataSummarizer.cpp  ??0c557c90@W1G2_57@SP@@QAE@XZ  005570d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorDataSummarizer.cpp  ?GetResType@c557c90@W1G2_57@SP@@QAEIH@Z  00557c90  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorDataSummarizer.cpp  ?IsAllowed@c557c90@W1G2_57@SP@@QAE_NABUResourceKey@@H@Z  00557cf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorDataSummarizer.cpp  ??0cContentValidationSummarizer@SP@@QAE@XZ  00557fc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorDataSummarizer.cpp  ?GetResType@cContentValidationSummarizer@SP@@QAEIH@Z  00558080  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorDataSummarizer.cpp  ?ExtractParameters@cContentValidationSummarizer_s0055_80e0@SP@@QAE_NABUResourceKey_s0055_80e0@@AAV?$vector_s0055_80e0@UDeclareParam_s0055_80e0@FunctionalMatch@SP@@Usp_vector_allocator_s0055_80e0@eastl@@@eastl@@@Z  005582a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

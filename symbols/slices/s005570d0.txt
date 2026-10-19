@@ -1,3 +1,5 @@
-005570d0 W1G2_57::c557c90::c557c90  # ctor: base vtable chain 13ec458/13f0958, vtbl 13f4250, 8 resource keys from property list 0x280852f1
-00557cf0 W1G2_57::c557c90::IsAllowed  # true unless key matches one of the 9 stored keys
-00557fc0 SP::cContentValidationSummarizer::cContentValidationSummarizer  # PDB name
+005570d0 ??0c557c90@W1G2_57@SP@@QAE@XZ  # c557c90::c557c90 migrated from s005570d0 (verbatim, slice spelling)
+00557c90 ?GetResType@c557c90@W1G2_57@SP@@QAEIH@Z  # c557c90::GetResType migrated from s005570d0 (verbatim, slice spelling)
+00557cf0 ?IsAllowed@c557c90@W1G2_57@SP@@QAE_NABUResourceKey@@H@Z  # c557c90::IsAllowed migrated from s005570d0 (verbatim, slice spelling)
+00557fc0 ??0cContentValidationSummarizer@SP@@QAE@XZ  # cContentValidationSummarizer::cContentValidationSummarizer migrated from s005570d0 (verbatim, slice spelling)
+00558080 ?GetResType@cContentValidationSummarizer@SP@@QAEIH@Z  # cContentValidationSummarizer::GetResType migrated from s005570d0 (verbatim, slice spelling)
