@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00838020  -  partial: cArguments::MainArguments(count,min,max) - count/bounds logic present, cError throw construction approximated
+008380b0  -  partial: cArguments::HasFlag - flag logic present, cError throw construction approximated
+00838130  -  partial: cArguments::OptionArguments(label,count,min,max) - logic present, cError throw construction approximated
+00838350  -  partial: cArguments::GatherUnprocessed - vector append loop summarised

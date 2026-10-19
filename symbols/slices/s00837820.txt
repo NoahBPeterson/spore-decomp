@@ -2,17 +2,17 @@
 00837c90  cSPUIXHTMLDataURIHandler::ProcessRequest  # PDB candidate (caller-single)
 00837ed0  cArguments::Advance  # decrement main-arg window
 00837ee0  cArguments::HasArgument  # _stricmp over mOptionArguments names
-00837f40  cArguments::FindUnprocessed  # scan mOptionArguments while mProcessed set
-00837f60  cArguments::MarkAllProcessed  # set mProcessed on all options
-00837f80  cArguments::GetArguments  # returns count + begin of mArguments
-00837fa0  cArguments::~cArguments  # frees the three sp_vectors (with -4 header check)
-00837ff0  cArguments::cArguments  # default ctor, zeroes the three vectors
-00838020  cArguments::MainArguments  # count bounds + throw; returns main window
-008380b0  cArguments::HasFlag  # option flag lookup, throws if arguments unexpected
-00838130  cArguments::OptionArguments  # option lookup with min/max arg bounds + throw
-00838320  cArguments::MainArguments(int)  # wrapper -> MainArguments(0,n,n)
-00838330  cArguments::OptionArguments(const char*,int)  # wrapper -> OptionArguments(l,0,n,n)
-00838350  cArguments::GatherUnprocessed  # collect pointers of unprocessed options
+00837f40 ?FindUnprocessed@cArguments@@QAEXXZ  # cArguments::FindUnprocessed migrated from s00837820 (verbatim, slice spelling)
+00837f60 ?MarkAllProcessed@cArguments@@QAEXXZ  # cArguments::MarkAllProcessed migrated from s00837820 (verbatim, slice spelling)
+00837f80 ?GetArguments@cArguments@@QAEXPAHPAPAPAD@Z  # cArguments::GetArguments migrated from s00837820 (verbatim, slice spelling)
+00837fa0 ??1cArguments@@QAE@XZ  # cArguments::~cArguments migrated from s00837820 (verbatim, slice spelling)
+00837ff0 ??0cArguments@@QAE@XZ  # cArguments::cArguments migrated from s00837820 (verbatim, slice spelling)
+00838020 ?MainArguments@cArguments@@QAEPAPADPAHHH@Z  # cArguments::MainArguments migrated from s00837820 (verbatim, slice spelling)
+008380b0 ?HasFlag@cArguments@ArgScript@EA@@QAE_NPBD@Z  # EA::ArgScript::cArguments::HasFlag migrated from s00837820
+00838130 ?OptionArguments@cArguments@@QAEPAPADPBDPAHHH@Z  # cArguments::OptionArguments migrated from s00837820 (verbatim, slice spelling)
+00838320 ?MainArguments@cArguments@@QAEXH@Z  # cArguments::MainArguments migrated from s00837820 (verbatim, slice spelling)
+00838330 ?OptionArguments@cArguments@@QAEXPBDH@Z  # cArguments::OptionArguments migrated from s00837820 (verbatim, slice spelling)
+00838350 ?FUN_00838350@@YAXHPAX@Z  # FUN_00838350 migrated from s00837820 (verbatim, slice spelling)
 008383c0  cArguments::SplitIntoArguments  # tokenises a command line into arguments
 008386d0  cArguments::cArguments(text)  # ctor -> SplitIntoArguments(text)
 00838740  helper(int)  # forwards to FUN_0092dc50 with a local
