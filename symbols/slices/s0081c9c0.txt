@@ -8,3 +8,10 @@
 0081dce0 ?Shutdown@cSPUIPropertyEditor@SP@@QAEXXZ  # SP::cSPUIPropertyEditor::Shutdown migrated from s0081c9c0
 0081ddd0 ?Init@D3@@QAEPAU1@H@Z  # D3::Init migrated from s0081c9c0 (verbatim, slice spelling)
 0081de30 ?Init2@D3@@QAEPAU1@H@Z  # D3::Init2 migrated from s0081c9c0 (verbatim, slice spelling)
+0081c9c0 cSPUIPopupMenuWin::OnAttach  # PDB candidate (caller-scored); byte-exact
+0081ca60 cSPUIPopupMenuWin::OnMouseUp  # PDB candidate (caller-scored); byte-exact
+0081cbe0 cSPUIPopupMenuWin::OnChar  # PDB candidate (caller-single); byte-exact
+0081cc60 cSPUIPopupMenuWin::OnScrollButtonClicked  # PDB name
+0081cdb0 cSPUIPopupMenuWin::OnMouseWheel  # PDB name
+0081ce80 cSPUIPopupMenuScrollButton::OnTick  # PDB candidate (caller-single); byte-exact
+0081df10 SP::cPropertyUI::FindPropertyUIWindow  # PDB name

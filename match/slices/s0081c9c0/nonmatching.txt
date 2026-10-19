@@ -4,3 +4,6 @@
 0081da30  71  Variant setter (type 0x20): same flag-test / register issues  [equiv UNSUPPORTED (unresolved callees Destruct/Call5)]
 0081ddd0  9   short-field init: constant 2/0x33 register roles swapped (eax/ecx)  [equiv PASS (367 valid, 100% cov)]
 0081de30  9   short-field init: constant 2/0x34 register roles swapped (eax/ecx)  [equiv PASS (399 valid, 100% cov)]
+0081cc60  33  OnScrollButtonClicked: cl hoists the shared push 0/mov ecx before the up/down branch (orig keeps them per arm)  [equiv WEAK: 206 valid, 52% cov]
+0081cdb0  15  OnMouseWheel: bool up held in cl (orig al) and push order of tail  [equiv WEAK: 240 valid, 56% cov]
+0081df10  230  FindPropertyUIWindow: cl merges the AutoRefCount copy (ebx) with w (esi); loop rotation differs  [equiv PASS (239 valid, 75% cov)]

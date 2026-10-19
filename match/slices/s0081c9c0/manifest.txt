@@ -2,3 +2,7 @@
 slices/s0081c9c0/s0081c9c0.cpp  ?ScrollButtonSelected@SB@@QAEXH@Z  0081cd50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s0081c9c0/s0081c9c0.cpp  ?OnButtonClicked2@ScrollBtn2@@QAEXH@Z  0081ce60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s0081c9c0/s0081c9c0.cpp  ?Shutdown@cSPUIPropertyEditor@@QAEXXZ  0081dce0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0081c9c0/s0081c9c0.cpp  ?OnAttach@PMW@@QAEXXZ  0081c9c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0081c9c0/s0081c9c0.cpp  ?OnMouseUp@PMW@@QAEXMMHH@Z  0081ca60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0081c9c0/s0081c9c0.cpp  ?OnChar@PMW@@QAEXHI@Z  0081cbe0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0081c9c0/s0081c9c0.cpp  ?OnTick@PSB@@QAEEXZ  0081ce80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
