@@ -14,9 +14,6 @@ extern void*   g_16f6dac;
 
 // ---- items of slice s006fd520 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* __cdecl FUN_006fcb90(int n, void* first, int b);
-extern char*** g_namesBegin_1628b14;
-extern char*** g_namesEnd_1628b18;
-extern void*   g_16f6dac;
 struct V1c { char* begin; char* end; };
 // ---- items of slice s006fd520 end
 
@@ -105,6 +102,163 @@ struct cVertexFragmentInfo {
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 void __cdecl FUN_006fe8f0(int a, int b);  // 0x006fe8f0 (stays in the slice: not this object's)
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+__declspec(noinline) char* __cdecl SP_TextCopy(char* d, const char* s);  // 0x006fd9a0 (stays in the slice: not this object's)
+
+// @ 0x006fdb90
+void __cdecl GenerateInputStruct(char* d, unsigned flags)
+{
+    d = SP_TextCopy(d, "\nstruct cVertIn\n{\n");
+    if ((flags & 3) != 0)
+        d = SP_TextCopy(d, "float4 position : POSITION0;\n");
+    if ((flags & 4) != 0)
+        d = SP_TextCopy(d, "float4 normal : NORMAL0;\n");
+    if ((flags & 0x18) != 0)
+        d = SP_TextCopy(d, "float4 color : COLOR0;\n");
+    for (unsigned i = 0; i < 8; i++) {
+        if ((flags & (1u << (i + 6))) != 0) {
+            d += sprintf(d, "float4 texcoord%d : TEXCOORD%d;\n", i, i);
+        }
+    }
+    if ((flags & 0x4000) != 0)
+        d = SP_TextCopy(d, "int4 indices : BLENDINDICES0;\n");
+    if ((flags & 0x8000) != 0)
+        d = SP_TextCopy(d, "float4 weights : BLENDWEIGHT0;\n");
+    if ((flags & 0x20000) != 0)
+        d = SP_TextCopy(d, "float4 position2 : POSITION1;\n");
+    if ((flags & 0x40000) != 0)
+        d = SP_TextCopy(d, "float4 normal2 : NORMAL1;\n");
+    if ((flags & 0x400000) != 0)
+        d = SP_TextCopy(d, "int4 indices2 : BLENDINDICES1;\n");
+    if ((flags & 0x800000) != 0)
+        d = SP_TextCopy(d, "float4 weights2 : BLENDWEIGHT1;\n");
+    if ((flags & 0x80000) != 0)
+        d = SP_TextCopy(d, "float4 tangent : TANGENT0;\n");
+    if ((flags & 0x100000) != 0)
+        d = SP_TextCopy(d, "float4 binormal : BINORMAL0;\n");
+    if ((flags & 0x20) != 0)
+        d = SP_TextCopy(d, "float4 color1 : COLOR1;\n");
+    if ((flags & 0x200000) != 0)
+        d = SP_TextCopy(d, "float fog : FOG;\n");
+    if ((flags & 0x10000) != 0)
+        d = SP_TextCopy(d, "float pointSize : PSIZE;\n");
+    SP_TextCopy(d, "};\n\n");
+}
+
+// @ 0x006fdd50
+void __cdecl GenerateCurrentStruct(char* d, unsigned flags, unsigned ntex, const unsigned char* sizes)
+{
+    d = SP_TextCopy(d, "struct cVertCurrent\n{\n");
+    d = SP_TextCopy(d, "float4 position;\n");
+    if ((flags & 4) != 0)
+        d = SP_TextCopy(d, "float4 normal;\n");
+    if ((flags & 0x18) != 0)
+        d = SP_TextCopy(d, "float4 color;\n");
+    for (unsigned i = 0; i < ntex; i++) {
+        d += sprintf(d, "float%d texcoord%d;\n", sizes[i], i);
+    }
+    if ((flags & 0x4000) != 0)
+        d = SP_TextCopy(d, "int4 indices;\n");
+    if ((flags & 0x8000) != 0)
+        d = SP_TextCopy(d, "float4 weights;\n");
+    if ((flags & 0x20000) != 0)
+        d = SP_TextCopy(d, "float4 position2;\n");
+    if ((flags & 0x40000) != 0)
+        d = SP_TextCopy(d, "float4 normal2;\n");
+    if ((flags & 0x400000) != 0)
+        d = SP_TextCopy(d, "int4 indices2;\n");
+    if ((flags & 0x800000) != 0)
+        d = SP_TextCopy(d, "float4 weights2;\n");
+    if ((flags & 0x80000) != 0)
+        d = SP_TextCopy(d, "float4 tangent;\n");
+    if ((flags & 0x100000) != 0)
+        d = SP_TextCopy(d, "float4 binormal;\n");
+    if ((flags & 0x20) != 0)
+        d = SP_TextCopy(d, "float4 color1;\n");
+    if ((flags & 0x200000) != 0)
+        d = SP_TextCopy(d, "float fog;\n");
+    if ((flags & 0x10000) != 0)
+        d = SP_TextCopy(d, "float pointSize;\n");
+    SP_TextCopy(d, "};\n\n");
+}
+
+// @ 0x006fdef0
+void __cdecl GenerateOutputStruct(char* d, unsigned flags, unsigned ntex, const unsigned char* sizes)
+{
+    d = SP_TextCopy(d, "struct cVertOut\n{\n");
+    d = SP_TextCopy(d, "float4 position : POSITION;\n");
+    if ((flags & 0x18) != 0)
+        d = SP_TextCopy(d, "float4 diffuse : COLOR0;\n");
+    for (unsigned i = 0; i < ntex; i++) {
+        d += sprintf(d, "float%d texcoord%d : TEXCOORD%d;\n", sizes[i], i, i);
+    }
+    if ((flags & 0x20) != 0)
+        d = SP_TextCopy(d, "float4 color1 : COLOR1;\n");
+    if ((flags & 0x200000) != 0)
+        d = SP_TextCopy(d, "float fog : FOG;\n");
+    if ((flags & 0x10000) != 0)
+        d = SP_TextCopy(d, "float pointSize : PSIZE;\n");
+    SP_TextCopy(d, "};\n\n");
+}
+
+// @ 0x006fdfc0
+char* __cdecl GenerateFillCurrentStruct(char* d, unsigned flags, int ntex)
+{
+    if ((flags & 3) != 0)
+        d = SP_TextCopy(d, "Current.position = In.position;\n");
+    if ((flags & 4) != 0)
+        d = SP_TextCopy(d, "Current.normal = In.normal;\n");
+    if ((flags & 0x18) != 0)
+        d = SP_TextCopy(d, "Current.color = In.color;\n");
+    for (int i = 0; i < ntex; i++) {
+        if ((flags & (1u << (i + 6))) == 0)
+            break;
+        d += sprintf(d, "Current.texcoord%d = In.texcoord%d;\n", i, i);
+    }
+    if ((flags & 0x4000) != 0)
+        d = SP_TextCopy(d, "Current.indices = In.indices;\n");
+    if ((flags & 0x8000) != 0)
+        d = SP_TextCopy(d, "Current.weights = In.weights;\n");
+    if ((flags & 0x20000) != 0)
+        d = SP_TextCopy(d, "Current.position2 = In.position2;\n");
+    if ((flags & 0x40000) != 0)
+        d = SP_TextCopy(d, "Current.normal2 = In.normal2;\n");
+    if ((flags & 0x400000) != 0)
+        d = SP_TextCopy(d, "Current.indices2 = In.indices2;\n");
+    if ((flags & 0x800000) != 0)
+        d = SP_TextCopy(d, "Current.weights2 = In.weights2;\n");
+    if ((flags & 0x80000) != 0)
+        d = SP_TextCopy(d, "Current.tangent = In.tangent;\n");
+    if ((flags & 0x100000) != 0)
+        d = SP_TextCopy(d, "Current.binormal = In.binormal;\n");
+    if ((flags & 0x20) != 0)
+        d = SP_TextCopy(d, "Current.color1 = In.color1;\n");
+    if ((flags & 0x200000) != 0)
+        d = SP_TextCopy(d, "Current.fog = In.fog;\n");
+    if ((flags & 0x10000) != 0)
+        d = SP_TextCopy(d, "Current.pointSize = In.pointSize;\n");
+    return d;
+}
+
+// @ 0x006fe170
+char* __cdecl GenerateFillOutputStruct(char* d, unsigned flags, unsigned ntex)
+{
+    d = SP_TextCopy(d, "\n");
+    d = SP_TextCopy(d, "Out.position = Current.position;\n");
+    if ((flags & 0x18) != 0)
+        d = SP_TextCopy(d, "Out.diffuse = Current.color;\n");
+    for (unsigned i = 0; i < ntex; i++) {
+        d += sprintf(d, "Out.texcoord%d = Current.texcoord%d;\n", i, i);
+    }
+    if ((flags & 0x20) != 0)
+        d = SP_TextCopy(d, "Out.color1 = Current.color1;\n");
+    if ((flags & 0x200000) != 0)
+        d = SP_TextCopy(d, "Out.fog = Current.fog;\n");
+    if ((flags & 0x10000) != 0)
+        d = SP_TextCopy(d, "Out.pointSize = Current.pointSize;\n");
+    return d;
+}
 
 // @ 0x006fe350
 bool __cdecl FUN_006fe350(void* name)

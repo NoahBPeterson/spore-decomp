@@ -1,4 +1,9 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsFragmentVS.cpp  ?GenerateInputStruct@@YAXPADI@Z  006fdb90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentVS.cpp  ?GenerateCurrentStruct@@YAXPADIIPBE@Z  006fdd50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentVS.cpp  ?GenerateOutputStruct@@YAXPADIIPBE@Z  006fdef0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentVS.cpp  ?GenerateFillCurrentStruct@@YAPADPADIH@Z  006fdfc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentVS.cpp  ?GenerateFillOutputStruct@@YAPADPADII@Z  006fe170  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsFragmentVS.cpp  ?FUN_006fe350@@YA_NPAX@Z  006fe350  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsFragmentVS.cpp  ?FUN_006fe3c0@@YAXHH@Z  006fe3c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsFragmentVS.cpp  ?FUN_006fef70@@YAXH@Z  006fef70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

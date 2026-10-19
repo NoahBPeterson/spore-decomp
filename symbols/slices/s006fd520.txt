@@ -4,11 +4,11 @@
 006fd9a0 ?TextCopy@SP@@YAPADPADPBD@Z  # SP::TextCopy migrated from s006fd520
 006fd9c0 ?SP_TextCopySubstitute@@YAPADPADPBDHHHH@Z  # __declspec migrated from s006fd520 (verbatim, slice spelling)
 006fdab0 ?BinaryFindPixelShader@@YAHPBDPBUShaderBlob@@I@Z  # BinaryFindPixelShader migrated from s006fd520 (verbatim, slice spelling)
-006fdb90  `anonymous namespace'::GenerateInputStruct  # PDB name
-006fdd50  `anonymous namespace'::GenerateCurrentStruct  # PDB name
-006fdef0  `anonymous namespace'::GenerateOutputStruct  # PDB name
-006fdfc0  `anonymous namespace'::GenerateFillCurrentStruct  # PDB name
-006fe170  `anonymous namespace'::GenerateFillOutputStruct  # PDB name
+006fdb90 ?GenerateInputStruct@@YAXPADI@Z  # GenerateInputStruct migrated from s006fd520 (verbatim, slice spelling)
+006fdd50 ?GenerateCurrentStruct@@YAXPADIIPBE@Z  # GenerateCurrentStruct migrated from s006fd520 (verbatim, slice spelling)
+006fdef0 ?GenerateOutputStruct@@YAXPADIIPBE@Z  # GenerateOutputStruct migrated from s006fd520 (verbatim, slice spelling)
+006fdfc0 ?GenerateFillCurrentStruct@@YAPADPADIH@Z  # GenerateFillCurrentStruct migrated from s006fd520 (verbatim, slice spelling)
+006fe170 ?GenerateFillOutputStruct@@YAPADPADII@Z  # GenerateFillOutputStruct migrated from s006fd520 (verbatim, slice spelling)
 006fe230  FUN_006fe230  # shader-state dispatcher via 0x1624568 manager and 0x16fa604 function table
 006fe310  FUN_006fe310  # eastl::copy_backward of 0x130-byte blocks (returns dest)
 006fe350 ?FUN_006fe350@@YA_NPAX@Z  # FUN_006fe350 migrated from s006fd520 (verbatim, slice spelling)
