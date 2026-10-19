@@ -1,1 +1,1 @@
-009f2a00 ?IKSolveParticles@@YGXPAUIKContext@@PAUIKParticle@@@Z  # IK per-frame orientation/position pass over the particle array (name guessed); __stdcall (ctx, root particle), ret 8
+009f2a00 ?IKSolveParticles@@YGXPAUIKContext_s009f_2970@@PAUIKParticle_s009f_2970@@@Z  # IKSolveParticles migrated from s009f2970 (verbatim, slice spelling)
