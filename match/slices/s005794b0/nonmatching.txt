@@ -1,2 +1,4 @@
 00579a20  57  complete mask compare; cl schedules the 4 loads/stores differently (no esi temp)
 00579a90  73  complete eastl wstring RangeInitialize; s/this live in different saved registers (ebp vs esi)
+005794b0  218  complete UpdateRenderSettings; cl CSEs the [esi+0x270] loads and reorders the 128-bit OR; plist reg eax vs edx [equiv: UNSUPPORTED]
+005798f0  120  complete SwitchToEditorCamera; original saves ebx/ebp/esi/edi at entry (no shrink-wrap) and this=ebx, pm=edi [equiv: UNSUPPORTED]
