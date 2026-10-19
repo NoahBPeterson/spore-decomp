@@ -4,7 +4,8 @@
   .venv/bin/python tools/progress.py            # coverage + components
   .venv/bin/python tools/progress.py --groups    # also live opencode wave groups
   .venv/bin/python tools/progress.py --plot [out.png]  # chart of progress over time (default work/progress.png;
-                                                       # one point per committed docs/STATUS.md; needs matplotlib)
+                                                       # one point per committed docs/STATUS.md and one per day of
+                                                       # --plot runs, kept in docs/progress_history.json; needs matplotlib)
   .venv/bin/python tools/progress.py --no-refresh # reuse docs/STATUS.md-derived cache? (still recomputes)
 
 Coverage is computed with the exact logic of tools/status.py (reused via runpy), so numbers
@@ -536,9 +537,25 @@ def plot_history(path):
         if p:
             pts.append((datetime.datetime.fromisoformat(when), p))
     now = datetime.datetime.now().astimezone()
-    pts.append((now, {"exact": 100.0 * len(byte_exact) / G, "comp": 100.0 * len(exact_total) / G,
-                      "exact_sz": pctb_f(byte_exact), "comp_sz": pctb_f(exact_total),
-                      "mig": 100.0 * len(migrated) / G, "mig_sz": pctb_f(migrated)}))
+    live = {"exact": 100.0 * len(byte_exact) / G, "comp": 100.0 * len(exact_total) / G,
+            "exact_sz": pctb_f(byte_exact), "comp_sz": pctb_f(exact_total),
+            "mig": 100.0 * len(migrated) / G, "mig_sz": pctb_f(migrated)}
+    # One saved point per day (docs/progress_history.json): each run overwrites today's entry with
+    # its live numbers, so a day keeps its latest figure and earlier days stay on the chart.
+    hist_path = W("docs", "progress_history.json")
+    try:
+        hist = json.load(open(hist_path))
+    except (OSError, ValueError):
+        hist = {}
+    today = now.date().isoformat()
+    hist[today] = dict(live, when=now.isoformat(timespec="seconds"))
+    with open(hist_path, "w") as f:
+        json.dump(dict(sorted(hist.items())), f, indent=1)
+        f.write("\n")
+    for day, p in hist.items():
+        if day != today:      # today is the live point below
+            pts.append((datetime.datetime.fromisoformat(p["when"]), p))
+    pts.append((now, live))
     pts.sort(key=lambda t: t[0])
 
     BLUE, ORANGE, GREEN = "#2a78d6", "#eb6834", "#2e9e5b"   # dataviz reference palette, slots 1-3
@@ -571,10 +588,10 @@ def plot_history(path):
     axes[0].legend(loc="upper left", frameon=False, fontsize=9, labelcolor=INK)
     fig.suptitle("Spore decompilation progress (game functions; third-party libraries excluded)",
                  x=0.01, ha="left", fontsize=12, color=INK)
-    fig.text(0.01, 0.01, "One point per committed docs/STATUS.md, plus now. Equivalent = complete compilable source, "
+    fig.text(0.01, 0.01, "One point per committed docs/STATUS.md, one per day of --plot runs (latest run that day), plus now.\nEquivalent = complete compilable source, "
              "not yet byte-identical. Size shares only exist in later snapshots; the migrated line starts with Phase B "
              "(Oct 2026).", fontsize=8, color=MUTED)
-    fig.tight_layout(rect=(0, 0.04, 1, 0.95))
+    fig.tight_layout(rect=(0, 0.07, 1, 0.95))
     fig.savefig(path)
     print("wrote %s (%d snapshots)" % (os.path.relpath(path, ROOT), len(pts)))
 
