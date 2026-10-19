@@ -1,2 +1,6 @@
 0073b800  2    cModelInstance::SetBoneTable: complete; only the scratch register for arg2 differs
 0073b840  92   cModelInstance::SetBoneCallback: complete; arg-load/register schedule differs
+0073afb0  67  cModelInstance::Animate: complete; only this/index register assignment (esi vs edi) differs  [equiv: WEAK (313 valid, 29% cov, no mismatch)]
+0073b530  298  cModelInstance::SetWeight: complete; group-array base reload / register schedule differs (loop A uses ecx/edx swapped)  [equiv: WEAK (400 valid, 40% cov, no mismatch)]
+0073b6d0  206  cModelInstance::GetAnimationRange: complete (4x unrolled loop reproduced); prologue register allocation (esi vs eax for grp) differs  [equiv: PASS (373 valid, 98% cov)]
+0073bab0  50  cModelInstance::Notify: complete; ecx/eax use in the second loop and epilogue sharing differ  [equiv: WEAK (234 valid, 31% cov, no mismatch)]

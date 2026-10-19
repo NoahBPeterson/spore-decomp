@@ -7,3 +7,4 @@
 0073b840 ?SetBoneCallback@cModelInstance_s0073_afb0@SP@@QAEXHPAX00@Z  # cModelInstance_s0073_afb0::SetBoneCallback migrated from s0073afb0 (verbatim, slice spelling)
 0073b8e0 ?SetDynamicDraw@cModelInstance_s0073_afb0@SP@@QAEXPAX_N@Z  # cModelInstance_s0073_afb0::SetDynamicDraw migrated from s0073afb0 (verbatim, slice spelling)
 0073bdc0 Release              # release refcounted object at this+0xc
+0073bab0 Notify  # SP::cModelInstance binding-list notify (behaviour name)

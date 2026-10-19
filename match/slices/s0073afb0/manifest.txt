@@ -2,3 +2,4 @@
 slices/s0073afb0/s0073afb0.cpp  ?GetNumBones@cModelInstance@SP@@QAEHXZ              0073b7e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s0073afb0/s0073afb0.cpp  ?SetDynamicDraw@cModelInstance@SP@@QAEXPAX_N@Z      0073b8e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s0073afb0/s0073afb0.cpp  ?Release@RefHolderC@@QAEXXZ                        0073bdc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0073afb0/s0073afb0.cpp  ?MoveToTime@cModelInstance@SP@@QAEXHHM@Z      0073b190  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

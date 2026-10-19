@@ -1,3 +1,7 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
 0081bce0  43  key/flag dispatch: register allocation of the pointer arg differs (ecx vs eax)  [equiv UNSUPPORTED (0/1200 valid, fake-arity)]
 0081bd50  76  event dispatch: vcall+0x30/+0x38 arg passing schedule differs  [equiv PASS (1200 valid, 100% cov)]
+0081b990  215  GetVisibleIndex: complete; only `mov eax,1` vs `lea eax,[edi+1]` for the "return 1" path differs (shifts later bytes)  [equiv: UNSUPPORTED (0/400 valid)]
+0081bbe0  13  GetItemIndexFromChar: complete; final return-block order (return best before return last) differs  [equiv: UNSUPPORTED (0/400 valid)]
+0081be20  149  OnKeyDown (Escape closes menu): complete; HideMenuItems reuses ecx after Reset in the original (LTCG-style), IWindow null-check/ebx scheduling differs  [equiv: WEAK (400 valid, 25% cov, no mismatch)]
+0081c370  932  DisplayMenuItems: complete; lo/hi spill slots swapped, vtable-load order at the +0xc0 call and float operand order differ (rest shifted)  [equiv: UNSUPPORTED (0/400 valid)]

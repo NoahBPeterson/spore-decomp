@@ -5,3 +5,6 @@
 0081bef0 ?OnMenuItemSelected@Menu2@@QAEXPAU1@0@Z  # Menu2::OnMenuItemSelected migrated from s0081b990 (verbatim, slice spelling)
 0081bfb0 ?Update@cAutoPropertyBaseLink@@QAEXPAX@Z  # cAutoPropertyBaseLink::Update migrated from s0081b990 (verbatim, slice spelling)
 0081c900 ?OnMouseUp@ItemMouseUp@@QAEDMMHH@Z  # ItemMouseUp::OnMouseUp migrated from s0081b990 (verbatim, slice spelling)
+0081be20 cSPUIPopupMenuWin::OnKeyDown  # Escape (0x1b) closes menu, else falls through to WinButton::OnKeyDown 0x009642d0
+0081c030 cSPUIPopupMenuWin::CreateChildren  # builds background window, two scroll buttons and key winproc (behaviour name)
+0081c370 cSPUIPopupMenuWin::DisplayMenuItems  # PDB candidate (caller-scored) in card
