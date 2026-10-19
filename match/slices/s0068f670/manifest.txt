@@ -1,3 +1,4 @@
-slices/s0068f670/s0068f670.cpp  ??0IntrusiveList@@QAE@XZ  0068fa50
-slices/s0068f670/s0068f670.cpp  ?AddRef@cJob@@QAEHXZ  0068f950
-slices/s0068f670/s0068f670.cpp  ?Init@cJobManager@@QAE_NIH@Z  00690330
+slices/s0068f670/s0068f670.cpp  ??0IntrusiveList@@QAE@XZ  0068fa50  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0068f670/s0068f670.cpp  ?AddRef@cJob@@QAEHXZ  0068f950  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0068f670/s0068f670.cpp  ?Init@cJobManager@@QAE_NIH@Z  00690330  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0068f670/s0068f670.cpp  ??0cJobManager@@QAE@XZ  00690210  /O2 /MD /Gy /EHsc /TP /GS-

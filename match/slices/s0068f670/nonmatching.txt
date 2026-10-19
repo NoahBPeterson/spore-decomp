@@ -1,12 +1,49 @@
-0068f670  124  complete; ready-list bit-scan register/scheduling near-miss
-0068f970  27   complete; extra mov eax,edi after the base-to-derived cast
-0068f9f0  59   complete; register allocation near-miss on the mutex-guarded store
-0068fff0  49   complete; priority-insert loop register allocation near-miss
-00690050  77   complete; head-pop list idiom near-miss
-006900b0  86   complete; wrapper call shape near-miss (FreeJobUnderLock args)
-00690120  -    complete; Release refcount decrement shape differs
-0068fed0  186  complete; IsAffinityInUse scan ordering near-miss
-0068ffb0  33   complete; cmov max-priority near-miss
-0068fd40  50   complete; PreShutdown loop shape near-miss
-0068f700  134  complete; GetFreeWaitNode list pop + alloc near-miss
-00690540  195  complete; ScheduleJob signalling shape near-miss
+0068f670  124  complete, not byte-exact: ready-list bit-scan register/scheduling near-miss
+                                   (renders "WEAK": 44.8% original coverage, no mismatch)
+0068f700  134  complete, not byte-exact: GetFreeWaitNode list pop + alloc near-miss
+0068f7c0  252  complete, not byte-exact: FreeJobUnderLock — see below
+0068f970  27   complete, not byte-exact: extra mov eax,edi after the base-to-derived cast
+0068f9f0  59   complete, not byte-exact: register allocation near-miss on the mutex-guarded store
+0068fad0  135  complete, not byte-exact: DoRehash same algorithm (allocate buckets, rehash chains,
+                                   out-of-pool free-list push); the target keeps `this` in a register
+                                   across the whole function while mine reloads it from the stack and
+                                   rotates the loops differently.
+0068fbe0  25   complete, not byte-exact: real cJobData::cJobData() reproduces the retail shape
+                                   (member-ctor base phase, both list anchors, mRefCount xchg,
+                                   sz_13ec47c, conditional AutoRef release, mpReturnValue /
+                                   mpCleanupReturnValue). Residual diffs: EH state byte (1 vs 2 —
+                                   the retail numbering has one extra unwindable subobject) and a
+                                   two-instruction scheduling difference of the extra-object load
+                                   relative to the mpDebugName store.
+0068fc60  185  complete, not byte-exact: real cJobManager::~cJobManager() performs the exact
+              (+functor)     destruction order (vptr, mFreeWaitNodes, mFreeLinks, mWaitingPriorities,
+                                   mWaitingThreads, mThreads, mReadyList iterator, mJobs iterator,
+                                   mJobReadyCondition, mJobReadyOrSyncCondition, Mutex dtor, base
+                                   vptr). Not byte-exact because MSVC numbers one EH state per member
+                                   (9..0) where the retail coalesces to the ctor-side regions (4,3,0),
+                                   and because the target's 221-byte extent includes the inline
+                                   __ehhandler functor while the object emits it as a separate symbol
+                                   (so chk.py cannot observe the match even though the emitted
+                                   sequence is identical modulo the state bytes).
+0068fd40  50   complete, not byte-exact: PreShutdown loop shape near-miss
+0068fda0  205  complete, not byte-exact: GetFreeJob(cJob** ppOut) locked pop-front of mJobs[0] (or
+                                   EAAllocate + placement cJobData), AddRef inlined, full field reset,
+                                   append to mJobs[1], *ppOut assignment before the setne result and
+                                   Unlock. Differs in EH frame layout (0xc vs 8 bytes) and the pop-front
+                                   null-guard idiom (cmov-style vs branch).
+0068fed0  186  complete, not byte-exact: IsAffinityInUse scan ordering near-miss
+                                   (renders "WEAK": 54.4% original coverage, no mismatch)
+0068ffb0  33   complete, not byte-exact: cmov max-priority near-miss
+0068fff0  49   complete, not byte-exact: priority-insert loop register allocation near-miss
+00690050  77   complete, not byte-exact: head-pop list idiom near-miss
+006900b0  86   complete, not byte-exact: wrapper call shape near-miss (FreeJobUnderLock args)
+00690120  -    complete, not byte-exact: Release refcount decrement shape differs
+                                   (renders "WEAK": 44.8% original coverage, no mismatch)
+006903c0  316  complete, not byte-exact: Shutdown drains mJobs[0..8] (extra release, dependency list
+                                   clears, deallocate), then mFreeLinks, then mFreeWaitNodes with the
+                                   Semaphore dtor; differs only in loop/register shapes.
+00690540  195  complete, not byte-exact: ScheduleJob signalling shape near-miss
+00690630  344  complete, not byte-exact: FailJobDependents walks the dependent chain and splits into
+                                   strong (FailJob) / weak-free (mFreeLinks + conditional ScheduleJob) /
+                                   weak-kept, then moves kept nodes back and clears the local list;
+                                   differs in register allocation and the possibly-null link idiom.

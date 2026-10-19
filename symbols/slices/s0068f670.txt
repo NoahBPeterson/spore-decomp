@@ -19,3 +19,26 @@
 006903c0 ?Shutdown@cJobManager@@QAEXXZ  # cJobManager::Shutdown migrated from s0068f670 (verbatim, slice spelling)
 00690540 ?ScheduleJob@cJobManager_s0069_07e0@@QAEXPAUcJobData_s0069_07e0@@@Z  # cJobManager::ScheduleJob migrated from s0068f670 (verbatim, slice spelling)
 00690630 ?FailJobDependents@cJobManager@@QAEXPAUcJobData@@_N@Z  # cJobManager::FailJobDependents migrated from s0068f670 (verbatim, slice spelling)
+014037b8 ??_7cJobManager@@6B@  # cJobManager primary vtable stored by its ctor/dtor (compiler-generated, no declaration to annotate)
+01403758 ??_7cIJobManager@@6B@  # cIJobManager base vtable stored by ~cJobManager / the base-phase of the ctor
+01403750 ?g_MutexFlags@@3IA  # global mutex lock flags passed to Mutex::Lock
+013ec47c ?sz_13ec47c@@3PADA  # default mpDebugName string ("untitled"?), stored by the cJobData ctor
+014037fc ?sz_14037fc@@3PADA  # "App/cJobManager/cJob" allocation tag
+00f473a0 ?EAAllocate@@YAPAXIPBDHHHH@Z  # EASTL-style allocator used by GetFreeJob / GetFreeWaitNode / GetFreeLink
+00f47380 ?EADeallocate@@YAXPAX@Z  # matching deallocator
+00f47380 ??3@YAXPAX@Z  # operator delete (same address as EADeallocate)
+00690f60 ?FailJob@cJobManager@@QAEXPAUcJobData@@@Z  # cJobManager::FailJob
+0068fa50 ??0IntrusiveList@@QAE@XZ  # in-place IntrusiveList ctor (member ctors of cJobManager/cJobData)
+0068fa60 ?DoAllocateBuckets@ProfHashTable@@QAEPAPAUProfHashNode@@I@Z  # ProfHashTable::DoAllocateBuckets
+0068fb70 ?FreeBuckets@ProfHashTable@@QAEXPAUProfHashNode@@I@Z  # ProfHashTable::FreeBuckets
+00620230 ??1IntrusiveList@@QAE@XZ  # eastl::intrusive_list_base destructor (single-list member dtors call it)
+00a65a90 ??_EIntrusiveList@@UAEPAXI@Z  # element-destructor thunk used by the array dtor iterators (jmp 0x620230)
+11e0b22 ??_M@YGXPAXIHP6EX0@Z@Z  # _eh_vector_destructor_iterator_
+11e0b85 ??_L@YGXPAXIHP6EX0@Z1@Z  # _eh_vector_constructor_iterator_
+009222a0 ??0Mutex@Thread@EA@@QAE@PBX_N@Z  # EA::Thread::Mutex::Mutex
+00922130 ??1Mutex@Thread@EA@@QAE@XZ  # EA::Thread::Mutex::~Mutex
+009221b0 ?Lock@Mutex@Thread@EA@@QAEXI@Z  # EA::Thread::Mutex::Lock
+00922270 ?Unlock@Mutex@Thread@EA@@QAEXXZ  # EA::Thread::Mutex::Unlock
+00922880 ??0Semaphore@Thread@EA@@QAE@H@Z  # EA::Thread::Semaphore::Semaphore
+00922610 ??1Semaphore@Thread@EA@@QAE@XZ  # EA::Thread::Semaphore::~Semaphore
+00922740 ?Post@Semaphore@Thread@EA@@QAEXH@Z  # EA::Thread::Semaphore::Post(int count = 1)

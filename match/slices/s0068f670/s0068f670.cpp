@@ -7,8 +7,8 @@
 // ---------------------------------------------------------------------------
 // External helpers (addresses are masked relocations; bodies never inline).
 // ---------------------------------------------------------------------------
-__declspec(noinline) void* EAAllocate(size_t size, const char* name, int, int, int, int);
-__declspec(noinline) void  EADeallocate(void* p);
+__declspec(noinline) void* EAAllocate(size_t size, const char* name, int, int, int, int);  // 0x00f473a0
+__declspec(noinline) void  EADeallocate(void* p);   // 0x00f47380
 // EAAllocate / EADeallocate are external; bodies are not defined here.
 
 // ---------------------------------------------------------------------------
@@ -18,12 +18,53 @@ struct IntrusiveList {
     IntrusiveList* mpNext;   // +0
     IntrusiveList* mpPrev;   // +4
     IntrusiveList();
+    ~IntrusiveList();        // out of line in the image (0x00620230)
 };
 
 IntrusiveList::IntrusiveList() {
     mpPrev = this;
     mpNext = this;
 }
+
+// Append a node at the tail of an intrusive list.
+inline void AppendTail(IntrusiveList* pList, IntrusiveList* pNode) {
+    pNode->mpPrev = pList->mpPrev;
+    pNode->mpNext = pList;
+    pList->mpPrev = pNode;
+    pNode->mpPrev->mpNext = pNode;
+}
+
+// Detach and zero every node of a list, then zero the anchor itself.
+inline void ClearList(IntrusiveList* pAnchor) {
+    IntrusiveList* p = pAnchor->mpNext;
+    if (p != pAnchor) {
+        for (;;) {
+            IntrusiveList* pNext = p->mpNext;
+            p->mpPrev = 0;
+            p->mpNext = 0;
+            p = pNext;
+            if (pNext == pAnchor) break;
+        }
+    }
+    pAnchor->mpPrev = 0;
+    pAnchor->mpNext = 0;
+}
+
+// Reference-counted pointer that releases on scope exit (used for the extra
+// object a finished job hands back).
+template <class T>
+struct AutoRef {
+    T* mpObject;
+    AutoRef() : mpObject(0) {}
+    ~AutoRef() { if (mpObject != 0) mpObject->Release(); }
+    void Release() {
+        if (mpObject != 0) {
+            T* p = mpObject;
+            mpObject = 0;
+            p->Release();
+        }
+    }
+};
 
 // ---------------------------------------------------------------------------
 // EA::Thread
@@ -33,27 +74,54 @@ namespace EA { namespace Thread {
 class Mutex {
 public:
     char mData[0x30];
-    void Lock(unsigned int flags);
-    void Unlock();
+    Mutex(const void* pParams, bool bInit); // 0x009222a0
+    ~Mutex();                               // 0x00922130
+    void Lock(unsigned int flags);          // 0x009221b0
+    void Unlock();                          // 0x00922270
 };
 
 class Semaphore {
 public:
     char mData[0x10];
     Semaphore(int initial); // 0x00922880
-    void Post(int count);
-    void Post();
+    ~Semaphore();           // 0x00922610
+    void Post(int count = 1);                       // 0x00922740
 };
 
 }} // namespace EA::Thread
 
 extern unsigned int g_MutexFlags;   // 0x01403750
+extern char sz_13ec47c[];           // 0x013ec47c
+
+// ---------------------------------------------------------------------------
+// Reference-counted payload held by cJob::mpExtraObject.
+// ---------------------------------------------------------------------------
+struct IUnknown32 {
+    virtual int AddRef();           // +0
+    virtual int Release();          // +4
+};
+
+// EA vector: the allocation carries a leading refcount word in the image, so
+// the destructor only frees the buffer when that word is zero.
+template <class T>
+struct EAVector {
+    T* mpBegin;                     // +0
+    T* mpEnd;                       // +4
+    T* mpCap;                       // +8
+
+    EAVector() : mpBegin(0), mpEnd(0), mpCap(0) {}
+    ~EAVector() {
+        if (mpBegin != 0 && ((int*)mpBegin)[-1] != 0)
+            EADeallocate(mpBegin);
+    }
+};
 
 // ---------------------------------------------------------------------------
 // SP job classes (offsets from disassembly).
 // ---------------------------------------------------------------------------
 struct AutoRefCount {
     void* mpPtr;                    // +0
+    AutoRefCount() : mpPtr(0) {}
 };
 
 struct cJobData;
@@ -97,9 +165,14 @@ struct cJob {
 };
 
 // SP::cJobData (0x50 bytes) : intrusive_list_node, cJob
-struct cJobDataNode { void* mpNext; void* mpPrev; };
+struct cJobDataNode {
+    void* mpNext; void* mpPrev;
+    cJobDataNode() { mpPrev = 0; mpNext = 0; }
+};
 
 struct cJobData : cJobDataNode, cJob {
+    cJobData();
+
     cJobManager* mpManager;         // +0x30
     bool mbSynchronousWait;         // +0x34
     char mPad35[3];
@@ -129,8 +202,23 @@ struct cJobLink : JobDependencyNode {
     char mPad19[3];
 };
 
+// SP::cIJobManager — the interface base of cJobManager (vftable 0x01403758).
+// Its virtual destructor is trivial and inlined, so a cJobManager destructor
+// ends with nothing but the base vftable store.
+struct cIJobManager {
+    virtual void slot0();
+    virtual void slot1();
+    virtual void slot2();
+    virtual void slot3();
+    virtual void slot4();
+    virtual cJobThread* CreateThread(unsigned int affinity, int a, int b);
+    virtual void RemoveThread(cJobThread* pThread);
+    virtual bool EndThread(cJobThread* pThread, int a, int b);
+    virtual ~cIJobManager() {}
+};
+
 // SP::cJobManager
-class cJobManager {
+class cJobManager : public cIJobManager {
 public:
     virtual void slot0();
     virtual void slot1();
@@ -141,16 +229,23 @@ public:
     virtual void RemoveThread(cJobThread* pThread);                        // slot6 (+0x18)
     virtual bool EndThread(cJobThread* pThread, int a, int b);             // slot7 (+0x1c)
 
+    cJobManager();
+    ~cJobManager();
+
     unsigned int mPad04;            // +0x04
     EA::Thread::Mutex mMutex;       // +0x08
-    int mUnknown38;                 // +0x38
+    int mnLockCount;                // +0x38
     IntrusiveList mJobReadyCondition;       // +0x3c
     IntrusiveList mJobReadyOrSyncCondition; // +0x44
     IntrusiveList mJobs[9];         // +0x4c
     IntrusiveList mReadyList[32];   // +0x94
     unsigned int mValidAffinities;  // +0x194
     IntrusiveList mThreads;         // +0x198
-    char mPad1a0[0x2c];             // +0x1a0
+    int mUnknown1a0;                // +0x1a0
+    EAVector<void*> mWaitingThreads;    // +0x1a4
+    char mPad1b0[8];                // +0x1b0
+    EAVector<void*> mWaitingPriorities; // +0x1b8
+    char mPad1c4[8];                // +0x1c4
     cJobThread* mpSyncThread;       // +0x1cc
     IntrusiveList mFreeLinks;       // +0x1d0
     IntrusiveList mFreeWaitNodes;   // +0x1d8
@@ -159,7 +254,7 @@ public:
     cJobData* GetRunnableJob(cJobThread* pThread, int minPriority);
     JobWaitNode* GetFreeWaitNode();
     __declspec(noinline) void FreeJobUnderLock(EA::Thread::Mutex** ppMutex, cJobData* pJob);
-    bool GetFreeJob(cJobData** ppOut);
+    bool GetFreeJob(cJob** ppOut);
     bool IsAffinityInUse(unsigned int affinity);
     __declspec(noinline) void InsertJobByPriority(IntrusiveList* pList, cJobData* job);
     cJobLink* GetFreeLink();
@@ -169,13 +264,29 @@ public:
     void ScheduleJob(cJobData* job);
     void FailJobDependents(cJobData* job, bool weakOnly);
     void PreShutdown();
-    void FailJob(cJobData* job);
+    void FailJob(cJobData* job);                                    // 0x00690f60
 };
 
-cJobData* cJobData_Construct(cJobData* p);
-cJobManager* cJobManager_Construct(cJobManager* p);
-void cJobManager_Destruct(cJobManager* p);
-void* ProfHashTable_DoRehash(void* self, unsigned int nNewBucket);
+// SP::ProfHashTable — open hash table of (key, next) nodes.
+struct ProfHashNode {
+    const void* mKey;               // +0
+    ProfHashNode* mpNext;           // +4
+};
+
+class ProfHashTable {
+public:
+    ProfHashNode** DoAllocateBuckets(unsigned int nCount);  // 0x0068fa60
+    void DoRehash(unsigned int nNewBucketCount);            // 0x0068fad0
+
+    ProfHashNode** mpBuckets;       // +0x00
+    unsigned int mnBuckets;         // +0x04
+    unsigned int mnEntries;         // +0x08
+    ProfHashNode** mpFreeList;      // +0x0c
+    ProfHashNode** mpFixedBuckets;  // +0x10
+    ProfHashNode** mpPoolBegin;     // +0x14
+    ProfHashNode** mpPoolEnd;       // +0x18
+    float mfLoadFactor;             // +0x1c
+};
 
 // ===========================================================================
 // cJob methods (cJobManager is complete now)
@@ -283,43 +394,39 @@ JobWaitNode* cJobManager::GetFreeWaitNode() {
 // ===========================================================================
 void cJobManager::FreeJobUnderLock(EA::Thread::Mutex** ppMutex, cJobData* pJob) {
     FailJob(pJob);
-    void* pOldRelease = pJob->mpReturnValue;
-    pJob->mpReturnValue = 0;
-    void* pOldCleanup = pJob->mpCleanupReturnValue;
+    void (*pCleanup)(void*) = (void (*)(void*))pJob->mpCleanupReturnValue;
     pJob->mpCleanupReturnValue = 0;
-    EA::Thread::Mutex* pWaitMutex = *ppMutex;
-    void* pOldExtra = pJob->mpExtraObject.mpPtr;
+    void* pReturn = pJob->mpReturnValue;
+    pJob->mpReturnValue = 0;
+    AutoRef<IUnknown32> oldExtra;
+    oldExtra.mpObject = (IUnknown32*)pJob->mpExtraObject.mpPtr;
     pJob->mpExtraObject.mpPtr = 0;
     IntrusiveList* pNode = (IntrusiveList*)pJob;
     pNode->mpPrev->mpNext = pNode->mpNext;
     pNode->mpNext->mpPrev = pNode->mpPrev;
     pNode->mpPrev = 0;
     pNode->mpNext = 0;
-    IntrusiveList* pList1 = &mJobs[1];
-    pJob->mpPrev = pList1->mpPrev;
-    pJob->mpNext = pList1;
-    pList1->mpPrev->mpNext = pNode;
-    pList1->mpPrev = pNode;
+    AppendTail(&mJobs[0], pNode);
     pJob->mSlot = 0;
-    IntrusiveList* pReady = &mJobReadyCondition;
-    int nWait = (int)pReady->mpPrev;
-    pReady->mpPrev = 0;
-    if (pWaitMutex) {
-        for (int i = 0; i < nWait; ++i) pWaitMutex->Unlock();
+    int nWait = mnLockCount;
+    mnLockCount = 0;
+    if (ppMutex != 0) {
+        for (int i = 0; i < nWait; ++i) (*ppMutex)->Unlock();
+        (*ppMutex)->Unlock();
     } else {
         for (int i = 0; i < nWait; ++i) mMutex.Unlock();
+        mMutex.Unlock();
     }
-    mMutex.Unlock();
-    if (pOldRelease) ((void(*)(void*))pOldRelease)(pOldCleanup);
-    if (pOldExtra) ((void(*)(void))pOldExtra)();
-    if (pWaitMutex) {
-        pWaitMutex->Lock((unsigned int)&g_MutexFlags);
-        for (int i = 1; i < nWait; ++i) pWaitMutex->Lock((unsigned int)&g_MutexFlags);
+    if (pCleanup != 0) pCleanup(pReturn);
+    oldExtra.Release();
+    if (ppMutex != 0) {
+        (*ppMutex)->Lock((unsigned int)&g_MutexFlags);
+        for (int i = 0; i < nWait; ++i) (*ppMutex)->Lock((unsigned int)&g_MutexFlags);
     } else {
         mMutex.Lock((unsigned int)&g_MutexFlags);
-        for (int i = 1; i < nWait; ++i) mMutex.Lock((unsigned int)&g_MutexFlags);
+        for (int i = 0; i < nWait; ++i) mMutex.Lock((unsigned int)&g_MutexFlags);
     }
-    mJobReadyCondition.mpPrev = (IntrusiveList*)nWait;
+    mnLockCount = nWait;
 }
 
 // ===========================================================================
@@ -344,46 +451,46 @@ done:
 // ===========================================================================
 // @ 0x0068fda0  cJobManager::GetFreeJob
 // ===========================================================================
-bool cJobManager::GetFreeJob(cJobData** ppOut) {
+bool cJobManager::GetFreeJob(cJob** ppOut) {
     mMutex.Lock((unsigned int)&g_MutexFlags);
     cJobData* pJob;
     IntrusiveList* pFree = &mJobs[0];
     if (pFree->mpPrev == pFree) {
-        pJob = (cJobData*)EAAllocate(0x50, "App/cJobManager/cJob", 0, 0, 0, 0);
-        if (pJob) cJobData_Construct(pJob);
+        void* pMem = EAAllocate(0x50, "App/cJobManager/cJob", 0, 0, 0, 0);
+        pJob = pMem ? new (pMem) cJobData : 0;
     } else {
         IntrusiveList* pNode = pFree->mpNext;
         pNode->mpNext->mpPrev = pFree;
         pFree->mpNext = pNode->mpNext;
         pJob = (pNode != pFree) ? (cJobData*)pNode : 0;
-        if (pJob) {
+        if (pJob != 0) {
             pNode->mpPrev = 0;
             pNode->mpNext = 0;
         }
     }
-    if (pJob) {
-        pJob->mpCallback = 0;
-        pJob->mpCallbackData = 0;
+    cJob* pOut = 0;
+    if (pJob != 0) {
+        pOut = pJob;
+        pOut->AddRef();
+        pOut->mpCallback = 0;
+        pOut->mpCallbackData = 0;
         if (pJob->mpExtraObject.mpPtr) {
-            void* p = pJob->mpExtraObject.mpPtr;
+            IUnknown32* pExtra = (IUnknown32*)pJob->mpExtraObject.mpPtr;
             pJob->mpExtraObject.mpPtr = 0;
-            ((void(*)(void))p)();
+            pExtra->Release();
         }
         pJob->mpDebugName = 0;
         pJob->mPriority = 0;
         pJob->mRealPriority = 0;
         pJob->mStatus = 1;
         pJob->mThreadAffinity = 0xffffffff;
-        pJob->mSlot = -1;
+        pJob->mSlot = 0xffffffff;
         pJob->mpManager = this;
         pJob->mbSynchronousWait = false;
-        IntrusiveList* pList = &mJobs[1];
-        ((IntrusiveList*)pJob)->mpPrev = pList->mpPrev;
-        ((IntrusiveList*)pJob)->mpNext = pList;
-        pList->mpPrev->mpNext = (IntrusiveList*)pJob;
-        pList->mpPrev = (IntrusiveList*)pJob;
+        IntrusiveList* pReady = &mJobs[1];
+        AppendTail(pReady, (IntrusiveList*)pJob);
     }
-    *ppOut = pJob;
+    *ppOut = pOut;
     bool ok = (pJob != 0);
     mMutex.Unlock();
     return ok;
@@ -505,7 +612,7 @@ void cJobManager::GetJobStatus(cJobData* pJob) {
 // ===========================================================================
 bool cJobManager::Init(unsigned int affinities, int threadCount) {
     mInitThreadFunc = (void*)threadCount;
-    mUnknown38 = 0;
+    mnLockCount = 0;
     if (mpSyncThread == 0) {
         mpSyncThread = CreateThread(0x80000000, 0, -1);
         mpSyncThread->mThreadId = 0;
@@ -539,30 +646,43 @@ void cJobManager::Shutdown() {
         IntrusiveList* pList = &mJobs[i];
         while (pList->mpPrev != pList) {
             IntrusiveList* pNode = pList->mpPrev;
-            pNode->mpNext->mpPrev = pList;
-            pList->mpPrev = pNode->mpNext;
+            pNode->mpPrev->mpNext = pList;
+            pList->mpPrev = pNode->mpPrev;
             if (pNode != pList) {
                 pNode->mpPrev = 0;
                 pNode->mpNext = 0;
             }
-            EADeallocate(pNode);
+            cJobData* pJob = (cJobData*)pNode;
+            if (pJob->mpExtraObject.mpPtr != 0) {
+                IUnknown32* pExtra = (IUnknown32*)pJob->mpExtraObject.mpPtr;
+                pJob->mpExtraObject.mpPtr = 0;
+                pExtra->Release();
+            }
+            if (pJob != 0) {
+                ClearList(&pJob->mDependents);
+                ClearList(&pJob->mDependencies);
+                EADeallocate(pJob);
+            }
         }
     }
     IntrusiveList* pList = &mFreeLinks;
     while (pList->mpPrev != pList) {
         IntrusiveList* pNode = pList->mpPrev;
-        pNode->mpNext->mpPrev = pList;
-        pList->mpPrev = pNode->mpNext;
+        pNode->mpPrev->mpNext = pList;
+        pList->mpPrev = pNode->mpPrev;
         if (pNode != pList) { pNode->mpPrev = 0; pNode->mpNext = 0; }
         EADeallocate(pNode);
     }
     pList = &mFreeWaitNodes;
     while (pList->mpPrev != pList) {
         IntrusiveList* pNode = pList->mpPrev;
-        pNode->mpNext->mpPrev = pList;
-        pList->mpPrev = pNode->mpNext;
+        pNode->mpPrev->mpNext = pList;
+        pList->mpPrev = pNode->mpPrev;
         if (pNode != pList) { pNode->mpPrev = 0; pNode->mpNext = 0; }
-        EADeallocate(pNode);
+        if (pNode != 0) {
+            ((JobWaitNode*)pNode)->mSemaphore.~Semaphore();
+            EADeallocate(pNode);
+        }
     }
 }
 
@@ -630,17 +750,53 @@ void cJobManager::ScheduleJob(cJobData* job) {
 // @ 0x00690630  SP::cJobManager::FailJobDependents
 // ===========================================================================
 void cJobManager::FailJobDependents(cJobData* job, bool weakOnly) {
-    IntrusiveList* pList = (IntrusiveList*)((char*)job + 0x40);
-    for (IntrusiveList* it = pList->mpNext; it != pList; ) {
-        IntrusiveList* next = it->mpNext;
-        cJobLink* link = (cJobLink*)((char*)it - 8);
-        cJobData* dep = link->mpDependent;
-        it->mpPrev->mpNext = it->mpNext;
-        it->mpNext->mpPrev = it->mpPrev;
-        it->mpNext = 0;
-        it->mpPrev = 0;
-        (void)dep;
-        it = next;
+    IntrusiveList keep;
+    IntrusiveList* pList = &job->mDependents;
+    while (pList->mpPrev != pList) {
+        IntrusiveList* pNode = pList->mpPrev;
+        cJobData* pDep = (cJobData*)((char*)pNode - 8);
+        cJobLink* pLink = (cJobLink*)pDep;
+        cJobData* dep = pLink->mpDependent;
+        pNode->mpPrev->mpNext = pNode->mpNext;
+        pNode->mpNext->mpPrev = pNode->mpPrev;
+        pNode->mpNext = 0;
+        pNode->mpPrev = 0;
+        if (!pLink->isWeak) {
+            pLink->mpPrev->mpNext = pLink->mpNext;
+            pLink->mpNext->mpPrev = pLink->mpPrev;
+            pLink->mpPrev = 0;
+            pLink->mpNext = 0;
+            AppendTail(&mFreeLinks, (IntrusiveList*)pLink);
+            if (weakOnly) {
+                if (dep->mDependencies.mpPrev == &dep->mDependencies && dep->mStatus == 2)
+                    ScheduleJob(dep);
+            } else {
+                FailJob(dep);
+            }
+        } else if (!weakOnly) {
+            pLink->mpPrev->mpNext = pLink->mpNext;
+            pLink->mpNext->mpPrev = pLink->mpPrev;
+            pLink->mpPrev = 0;
+            pLink->mpNext = 0;
+            AppendTail(&mFreeLinks, (IntrusiveList*)pLink);
+            FailJob(dep);
+        } else {
+            AppendTail(&keep, pNode);
+        }
+    }
+    while (keep.mpPrev != &keep) {
+        IntrusiveList* pNode = keep.mpPrev;
+        pNode->mpPrev->mpNext = pNode->mpNext;
+        pNode->mpNext->mpPrev = pNode->mpPrev;
+        pNode->mpNext = 0;
+        pNode->mpPrev = 0;
+        AppendTail(pList, pNode);
+    }
+    for (IntrusiveList* p = keep.mpNext; p != &keep; ) {
+        IntrusiveList* pNext = p->mpNext;
+        p->mpPrev = 0;
+        p->mpNext = 0;
+        p = pNext;
     }
 }
 
@@ -649,43 +805,65 @@ void cJobManager::FailJobDependents(cJobData* job, bool weakOnly) {
 // ===========================================================================
 
 // @ 0x0068fbe0  SP::cJobData::cJobData
-cJobData* cJobData_Construct(cJobData* p) {
-    p->mpNext = 0;
-    p->mpPrev = 0;
-    p->mpExtraObject.mpPtr = 0;
-    p->mDependencies.mpNext = (IntrusiveList*)&p->mDependencies;
-    p->mDependencies.mpPrev = (IntrusiveList*)&p->mDependencies;
-    p->mDependents.mpNext = (IntrusiveList*)&p->mDependents;
-    p->mDependents.mpPrev = (IntrusiveList*)&p->mDependents;
-    p->mRefCount = 0;
-    p->mpDebugName = (char*)&g_MutexFlags;
-    if (p->mpExtraObject.mpPtr) {
-        void* q = p->mpExtraObject.mpPtr;
-        p->mpExtraObject.mpPtr = 0;
-        ((void(*)(void))q)();
+cJobData::cJobData()
+{
+    _InterlockedExchange((volatile long*)&mRefCount, 0);
+    mpDebugName = sz_13ec47c;
+    if (mpExtraObject.mpPtr) {
+        IUnknown32* pExtra = (IUnknown32*)mpExtraObject.mpPtr;
+        mpExtraObject.mpPtr = 0;
+        pExtra->Release();
     }
-    p->mpReturnValue = 0;
-    p->mpCleanupReturnValue = 0;
-    return p;
+    mpReturnValue = 0;
+    mpCleanupReturnValue = 0;
 }
 
-// @ 0x0068fad0  eastl prof hashtable DoRehash (complete, not byte-exact)
-void* ProfHashTable_DoRehash(void* self, unsigned int nNewBucket) {
-    (void)self; (void)nNewBucket;
-    return 0;
+// @ 0x0068fad0  eastl::hashtable DoRehash
+void ProfHashTable::DoRehash(unsigned int nNewBucketCount) {
+    ProfHashNode** pNew = DoAllocateBuckets(nNewBucketCount);
+    for (unsigned int i = 0; i < mnBuckets; ++i) {
+        ProfHashNode* pNode = mpBuckets[i];
+        while (pNode != 0) {
+            unsigned int idx = (unsigned int)pNode->mKey % nNewBucketCount;
+            mpBuckets[i] = pNode->mpNext;
+            pNode->mpNext = pNew[idx];
+            pNew[idx] = pNode;
+            pNode = mpBuckets[i];
+        }
+    }
+    ProfHashNode** pOld = mpBuckets;
+    if (mnBuckets > 1 && pOld != mpFixedBuckets) {
+        if (pOld >= mpPoolBegin && pOld < mpPoolEnd) {
+            *pOld = (ProfHashNode*)mpFreeList;
+            mpFreeList = pOld;
+        } else {
+            EADeallocate(pOld);
+        }
+    }
+    mpBuckets = pNew;
+    mnBuckets = nNewBucketCount;
 }
 
 // @ 0x00690210  SP::cJobManager::cJobManager
-cJobManager* cJobManager_Construct(cJobManager* p) {
-    return p;
+cJobManager::cJobManager()
+    : mMutex(0, true), mnLockCount(0), mValidAffinities(0),
+      mUnknown1a0(0), mpSyncThread(0), mInitThreadFunc(0)
+{
 }
 
 // @ 0x0068fc60  SP::cJobManager::~cJobManager
-void cJobManager_Destruct(cJobManager* p) {
-    (void)p;
+cJobManager::~cJobManager() {
 }
 
 // ---- virtual stubs ----
+void cIJobManager::slot0() {}
+void cIJobManager::slot1() {}
+void cIJobManager::slot2() {}
+void cIJobManager::slot3() {}
+void cIJobManager::slot4() {}
+cJobThread* cIJobManager::CreateThread(unsigned int, int, int) { return 0; }
+void cIJobManager::RemoveThread(cJobThread*) {}
+bool cIJobManager::EndThread(cJobThread*, int, int) { return false; }
 void cJobManager::slot0() {}
 void cJobManager::slot1() {}
 void cJobManager::slot2() {}
@@ -694,15 +872,4 @@ void cJobManager::slot4() {}
 cJobThread* cJobManager::CreateThread(unsigned int, int, int) { return 0; }
 void cJobManager::RemoveThread(cJobThread*) {}
 bool cJobManager::EndThread(cJobThread*, int, int) { return false; }
-// --- equivalence checker address annotations
-    void EAAllocate(...); // 0x00f473a0
 
-// --- equivalence checker address annotations (dummy declarations) ---
-namespace __equiv_ann {
-struct EA {
-    void Post(); // 0x00922740
-};
-struct Semaphore {
-    Semaphore(int); // 0x00922880
-};
-}
