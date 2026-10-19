@@ -1,0 +1,12 @@
+# va diff reason
+007eb360 38 vector assign-from-other complete; FUN_007eb000 call arg/register schedule differs
+007eb3b0 47 copyDown complete; register allocation (edi/esi/eax) differs
+007eb720 55 eastl list-node allocate+copy - inlined ctor/AutoRefCount schedule differs
+007eb7d0 109 eastl list range transfer - register/loop schedule differs
+007eb820 63 eastl::vector<int>::resize - tail erase call shape differs
+007eb870 27 eastl list copy-ctor - inlined range copy schedule differs
+007eb8d0 96 eastl hash-node allocate - placement-new/list ctor inlining differs
+007eb950 69 eastl hashtable::DoFreeNodes - inlined list dtor differs
+007eb9e0 107 eastl hashtable::erase - inlined list dtor/loop differs
+007ebe70 106 SP::cTelemetry::~cTelemetry - EH frame + vtable store schedule differs
+007ebf20 12 RefCountTemplate Release - `add r,-N` vs `sub r,N` encoding + load/store order

@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPAppTelemetry.cpp  ?Cast@ObjAF@@QAEPAXH@Z  007eaf30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?Reset@cTelemetry_s007e_b430@SP@@QAEXH@Z  007ebb60  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?Shutdown@cTelemetry_s007e_b430@SP@@QAE_NXZ  007ebf90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

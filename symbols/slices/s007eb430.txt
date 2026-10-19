@@ -1,7 +1,15 @@
-007eb600 SP::cTelemetry::FileDump  # PDB name
-007ebb60 SP::cTelemetry::Reset  # PDB name
-007ebba0 SP::cTelemetry::PrepareFlush  # PDB candidate (caller-single)
-007ebce0 SP::cTelemetry::Flush  # inferred from stream-swap body
-007ebe70 SP::cTelemetry::~cTelemetry  # PDB-derived layout
-007ec0a0 SP::cTelemetry::cTelemetry  # writes cTelemetry vtables + mStats/mSession
+007eb600 ?FileDump@cTelemetry@SP@@QAEXXZ  # SP::cTelemetry::FileDump migrated from s007eb430
+007eb720 ?AllocNode@TItemList@SP@@QAEPAUTItemListNode@2@ABUcTelemetryItem_s007e_b430@2@@Z  # TItemList::AllocNode migrated from s007eb430 (verbatim, slice spelling)
+007eb7d0 ?CopyRange@TItemList@SP@@QAEXPAUTItemListNode@2@0PAU12@@Z  # TItemList::CopyRange migrated from s007eb430 (verbatim, slice spelling)
+007eb820 ?resize@IntVector@SP@@QAEXI@Z  # IntVector::resize migrated from s007eb430 (verbatim, slice spelling)
+007eb870 ??0TItemList@SP@@QAE@ABU01@@Z  # TItemList::TItemList migrated from s007eb430 (verbatim, slice spelling)
+007eb950 ?DoFreeNodes@TItemMap@SP@@QAEXPAPAUTItemMapNode@2@I@Z  # TItemMap::DoFreeNodes migrated from s007eb430 (verbatim, slice spelling)
+007eb9e0 ?erase@TItemMap@SP@@QAEIABI@Z  # TItemMap::erase migrated from s007eb430 (verbatim, slice spelling)
+007ebb60 ?Reset@cTelemetry_s007e_b430@SP@@QAEXH@Z  # cTelemetry_s007e_b430::Reset migrated from s007eb430 (verbatim, slice spelling)
+007ebba0 ?PrepareFlush@cTelemetry_s007e_b430@SP@@QAEXII@Z  # cTelemetry_s007e_b430::PrepareFlush migrated from s007eb430 (verbatim, slice spelling)
+007ebce0 ?Flush@cTelemetry_s007e_b430@SP@@QAEXI@Z  # cTelemetry_s007e_b430::Flush migrated from s007eb430 (verbatim, slice spelling)
+007ebe70 ??1cTelemetry_s007e_b430@SP@@UAE@XZ  # cTelemetry_s007e_b430::~cTelemetry migrated from s007eb430 (verbatim, slice spelling)
+007ebf20 ?TelemetryRelease@@YIHPAH@Z  # TelemetryRelease migrated from s007eb430 (verbatim, slice spelling)
+007ebf90 ?Shutdown@cTelemetry_s007e_b430@SP@@QAE_NXZ  # cTelemetry_s007e_b430::Shutdown migrated from s007eb430 (verbatim, slice spelling)
 007ebfd0 ?ATItemMap  # SP::TItemMap::operator[]
+007ec0a0 SP::cTelemetry::cTelemetry  # writes cTelemetry vtables + mStats/mSession

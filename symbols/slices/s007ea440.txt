@@ -1,11 +1,11 @@
 007ea440 ?FUN_007ea440@@YAXPAX@Z  # FUN_007ea440 migrated from s007ea440 (verbatim, slice spelling)
 007eaa10 ?cAppSystemInitGraphics@@YAHPAX@Z  # cAppSystemInitGraphics migrated from s007ea440 (verbatim, slice spelling)
 007eaef0 FUN_007eaef0  # EA::DateTime Set(2) init
-007eaf30 Cast/QueryInterface (id 0x45a9b42 -> this-8)  # disasm
+007eaf30 ?Cast@ObjAF@@QAEPAXH@Z  # ObjAF::Cast migrated from s007ea440 (verbatim, slice spelling)
 007eb060 eastl copy int range  # decompile
 007eb090 rbtree node count  # decompile
 007eb100 hashtable find wrapper  # entity from type
-007eb140 FUN_007eb140  # unnamed serialization
-007eb360 vector assign-from-other  # decompile
-007eb3b0 vector copyDown  # decompile
+007eb140 ?FUN_007eb140@@YAXPAX0@Z  # FUN_007eb140 migrated from s007ea440 (verbatim, slice spelling)
+007eb360 ?FUN_007eb360@ObjB3@@QAEPAU1@PAUVecB@@@Z  # ObjB3::FUN_007eb360 migrated from s007ea440 (verbatim, slice spelling)
+007eb3b0 ?copyDown@ObjB3b@@QAEXPAH0@Z  # ObjB3b::copyDown migrated from s007ea440 (verbatim, slice spelling)
 007eb3f0 list free-nodes  # decompile
