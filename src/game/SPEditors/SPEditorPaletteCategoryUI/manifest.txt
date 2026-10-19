@@ -26,4 +26,10 @@
 ../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ?HandleMessage@cSPPaletteCategoryUI_s005c_2d30@SP@@QAE_NIPAX@Z  005c36f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ?SetPageIndex@cSPPaletteCategoryUI_s005c_2d30@SP@@QAE_NH@Z  005c3bd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ?CyclePage@cSPPaletteCategoryUI_s005c_2d30@SP@@QAE_NH@Z  005c3c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ??0cSPPaletteCategoryUI_s005c_3cb0@SP@@QAE@XZ  005c3e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ??1cSPPaletteCategoryUI_s005c_3cb0@SP@@UAE@XZ  005c3f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ?HandleUIMessage@cSPPaletteCategoryUI_s005c_3cb0@SP@@UAE_NPAVIWindow_s005c_3cb0@UTFWin@EA@@ABUMessage_s005c_3cb0@45@@Z  005c40b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ?erase@PaintLikeThisVec@SP@@QAEPAV?$AutoRefPtr_s005c_3cb0@VcSPEditorPaintLikeThis_s005c_3cb0@SP@@@EA@@PAV34@0@Z  005c41b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ?erase@PageUIVec@SP@@QAEPAUPageUIEntry_s005c_3cb0@2@PAU32@0@Z  005c4330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ?insert@PageUIVec@SP@@QAEXPAUPageUIEntry_s005c_3cb0@2@ABU32@@Z  005c4390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ?ClearPalettes@cSPPaletteCategoryUI_s005c_4500@SP@@QAEXXZ  005c4df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

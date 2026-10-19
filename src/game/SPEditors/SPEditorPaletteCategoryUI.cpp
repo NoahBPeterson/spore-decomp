@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPEditorPaletteCategoryUI.cpp -- migrated from slice(s) s005c53c0, s005c4500, s005c2d30, s005c1d70 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPEditorPaletteCategoryUI.cpp -- migrated from slice(s) s005c3cb0, s005c53c0, s005c4500, s005c2d30, s005c1d70 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPEditorPaletteCategoryUI.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -32,6 +32,7 @@ extern "C" void* EASTL_memmove(void* dst, const void* src, unsigned int n);  // 
 #include "SP/cTribePlanner.h"
 #include "SP/cSPEditorPaintLikeThis.h"
 #include "SP/cGonzagoSimulator.h"
+#include "EA/UTFWin/Message.h"
 
 // ---- items of slice s005c1d70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
@@ -1509,6 +1510,372 @@ class cSPPaletteCategoryUI_s005c_53c0 {
 }
 // ---- items of slice s005c53c0 end
 
+// ---- items of slice s005c3cb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern int gChildLinkOffset;  // 0x01440aec
+void* __cdecl EASTL_allocator_allocate(unsigned sz, const char* name, int a, int b, const char* file, int line);  // 0x00f473a0
+struct ChildLink { ChildLink* mpNext; };
+struct ChildIter { ChildLink* mpLink; };
+namespace EA {
+template <typename T>
+class AutoRefCount_s005c_3cb0 {
+ public:
+  T* mpObject;
+  AutoRefCount_s005c_3cb0() : mpObject(0) {}
+  ~AutoRefCount_s005c_3cb0() { if (mpObject) mpObject->Release(); }
+};
+}
+namespace EA {
+template <typename T>
+class AutoRefPtr_s005c_3cb0 {
+ public:
+  T* mpObject;
+  __forceinline AutoRefPtr_s005c_3cb0(const AutoRefPtr_s005c_3cb0& x) : mpObject(x.mpObject) { if (mpObject) mpObject->AddRef(); }
+  ~AutoRefPtr_s005c_3cb0() { if (mpObject) mpObject->Release(); }
+};
+}
+namespace EA {
+namespace Messaging {
+class Server_s005c_3cb0;
+}
+}
+namespace EA {
+namespace Messaging {
+class IHandler_s005c_3cb0;
+}
+}
+namespace EA {
+namespace Messaging {
+void RemoveHandler(Server_s005c_3cb0* server, IHandler_s005c_3cb0* handler, const uint32_t* ids, uint32_t count, int priority);  // 0x00571db0 (cdecl)
+}
+}
+namespace EA {
+namespace Messaging {
+struct AutoHandler_s005c_3cb0 {
+  Server_s005c_3cb0* mpServer;
+  IHandler_s005c_3cb0* mpHandler;
+  const uint32_t* mpIdArray;
+  uint32_t mnIdArrayCount;
+  int mnPriority;
+  AutoHandler_s005c_3cb0() : mpServer(0), mpHandler(0), mpIdArray(0), mnIdArrayCount(0), mnPriority(0) {}
+  ~AutoHandler_s005c_3cb0() {
+    if (mpServer) {
+      Server_s005c_3cb0* const pServer = mpServer;
+      mpServer = 0;
+      RemoveHandler(pServer, mpHandler, mpIdArray, mnIdArrayCount, mnPriority);
+    }
+  }
+};
+}
+}
+namespace EA {
+namespace Audio {
+class IAudioSystem_s005c_3cb0 {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7)
+  virtual uint32_t GetState();  // +0x20
+};
+}
+}
+namespace EA {
+namespace Audio {
+IAudioSystem_s005c_3cb0* GetSystemAT_s005c_3cb0();  // 0x00a206f0
+}
+}
+namespace EA {
+namespace UTFWin {
+class IWindow_s005c_3cb0;
+}
+}
+namespace EA {
+namespace UTFWin {
+struct Message_s005c_3cb0 {
+  IWindow_s005c_3cb0* mpSource;  // +0x0
+  uint32_t pad4;
+  uint32_t mType;     // +0x8
+  uint32_t mID;       // +0xc
+};
+}
+}
+namespace EA {
+namespace UTFWin {
+class IWindow_s005c_3cb0 {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6)
+  virtual uint32_t GetCommandID();  // +0x1c (slot 7)
+  virtual uint32_t GetControlID();  // +0x20 (slot 8)
+  PV(9) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19) PV(20)
+  PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28) PV(29) PV(30) PV(31) PV(32)
+  PV(33) PV(34) PV(35) PV(36) PV(37) PV(38) PV(39) PV(40) PV(41) PV(42) PV(43) PV(44)
+  PV(45) PV(46) PV(47) PV(48) PV(49) PV(50)
+  virtual void GetChildBegin(ChildIter* result);       // +0xcc (slot 51)
+  virtual ChildIter* GetChildEnd(ChildIter* result);  // +0xd0 (slot 52)
+};
+}
+}
+using EA::UTFWin::IWindow_s005c_3cb0;
+using EA::UTFWin::Message_s005c_3cb0;
+class IWindowQI {
+ public:
+  PV(0) PV(1) PV(2)
+  virtual IWindow_s005c_3cb0* QueryInterface(uint32_t iid);  // +0x0c
+};
+namespace SP {
+class cSPPalettePageUI_s005c_3cb0 {
+ public:
+  virtual int AddRef();
+  virtual int Release();
+  uint32_t GetPackID();  // FUN_005c8fc0
+};
+}
+namespace SP {
+class cSPEditorPaintLikeThis_s005c_3cb0 : public cSPEditorPaintLikeThisBase, public cSPEditorPaintLikeThisRef {};
+}
+namespace SP {
+struct PageUIEntry_s005c_3cb0 {
+  EA::AutoRefPtr_s005c_3cb0<cSPPalettePageUI_s005c_3cb0> mpPageUI;  // +0x0
+  bool mVisible;                              // +0x4
+  bool mShown;                                // +0x5
+  bool mDisabled;                             // +0x6
+  __forceinline PageUIEntry_s005c_3cb0(const PageUIEntry_s005c_3cb0& x)
+      : mpPageUI(x.mpPageUI), mVisible(x.mVisible), mShown(x.mShown), mDisabled(x.mDisabled) {}
+};
+}
+namespace SP {
+struct PageUIEntryAssign_s005c_3cb0 : PageUIEntry_s005c_3cb0 {
+  PageUIEntryAssign_s005c_3cb0& operator=(const PageUIEntryAssign_s005c_3cb0& x);  // 0x005c35c0
+};
+}
+namespace SP {
+typedef EA::AutoRefPtr_s005c_3cb0<cSPEditorPaintLikeThis_s005c_3cb0> PaintLikeThisRef_s005c_3cb0;
+}
+namespace SP {
+template <typename T>
+struct copy_impl_do_s005c_3cb0 {
+  static T* do_copy(T* first, T* last, T* result);
+};
+}
+namespace SP {
+template <typename T>
+inline T* copy_s005c_3cb0(T* first, T* last, T* result) {
+  return copy_impl_do_s005c_3cb0<T>::do_copy(first, last, result);
+}
+}
+namespace SP {
+PageUIEntry_s005c_3cb0* copy_backward(PageUIEntry_s005c_3cb0* first, PageUIEntry_s005c_3cb0* last, PageUIEntry_s005c_3cb0* resultEnd);           // 0x005c3680
+}
+namespace SP {
+PageUIEntry_s005c_3cb0* uninitialized_copy_ptr(PageUIEntry_s005c_3cb0* first, PageUIEntry_s005c_3cb0* last, PageUIEntry_s005c_3cb0* result);     // 0x005c2ef0
+}
+namespace SP {
+PageUIEntry_s005c_3cb0* destroy_range(PageUIEntry_s005c_3cb0* first, PageUIEntry_s005c_3cb0* last, PageUIEntry_s005c_3cb0* result);              // 0x00f9ae40 (cdecl)
+}
+namespace SP {
+template <typename T>
+inline void destruct(T* first, T* last) {
+  for (; first < last; ++first)
+    first->~T();
+}
+}
+namespace SP {
+__forceinline PageUIEntry_s005c_3cb0* uninitialized_move_ptr(PageUIEntry_s005c_3cb0* first, PageUIEntry_s005c_3cb0* last, PageUIEntry_s005c_3cb0* result) {
+  PageUIEntry_s005c_3cb0* const end = SP::uninitialized_copy_ptr(first, last, result);
+  SP::destroy_range(first, last, result);
+  return end;
+}
+}
+namespace SP {
+class PaintLikeThisVec {
+ public:
+  PaintLikeThisRef_s005c_3cb0* mpBegin;
+  PaintLikeThisRef_s005c_3cb0* mpEnd;
+  PaintLikeThisRef_s005c_3cb0* mpCapacity;
+  PaintLikeThisRef_s005c_3cb0* erase(PaintLikeThisRef_s005c_3cb0* first, PaintLikeThisRef_s005c_3cb0* last);
+};
+}
+namespace SP {
+class PageUIVec {
+ public:
+  PageUIEntry_s005c_3cb0* mpBegin;
+  PageUIEntry_s005c_3cb0* mpEnd;
+  PageUIEntry_s005c_3cb0* mpCapacity;
+  int mAllocator[2];
+  PageUIEntry_s005c_3cb0* erase(PageUIEntry_s005c_3cb0* first, PageUIEntry_s005c_3cb0* last);
+  void insert(PageUIEntry_s005c_3cb0* position, const PageUIEntry_s005c_3cb0& value);
+};
+}
+namespace EA {
+template <typename T>
+class RefCountVTemplate_s005c_3cb0 {
+ public:
+  RefCountVTemplate_s005c_3cb0() : mRefCount(0) {}
+  virtual ~RefCountVTemplate_s005c_3cb0() {}
+  virtual int AddRef();
+  virtual int Release();
+  T mRefCount;
+};  // namespace EA
+}
+namespace SP {
+class IHandlerRC {
+ public:
+  ~IHandlerRC() {}
+  virtual bool HandleMessage(uint32_t messageID, void* message);
+};
+}
+namespace SP {
+class IWinProc {
+ public:
+  ~IWinProc() {}
+  virtual int AddRef();
+  virtual int Release();
+  PV(2) PV(3)
+  virtual bool HandleUIMessage(EA::UTFWin::IWindow_s005c_3cb0* window, const EA::UTFWin::Message_s005c_3cb0& msg);
+};
+}
+namespace SP {
+class cRefA { public: virtual ~cRefA(); virtual int AddRef(); virtual int Release(); };
+}
+namespace SP {
+class cRefB { public: virtual int AddRef(); virtual int Release(); };
+}
+namespace SP {
+class cSPUILayout_s005c_3cb0 : public cRefA {};
+}
+namespace SP {
+class cSPEditorColorPicker_s005c_3cb0 : public cRefA {};
+}
+namespace SP {
+class cSPPaletteCategory_s005c_3cb0 : public cRefA {};
+}
+namespace SP {
+class cSPSwatch_s005c_3cb0 : public cRefB {};
+}
+namespace SP {
+class cSPEditorPageControls_s005c_3cb0 : public cRefB {};
+}
+namespace SP {
+class cSPPaletteSubCategoryUI_s005c_3cb0 : public cRefB {};
+}
+namespace SP {
+class IWinButton_s005c_3cb0 : public cRefB {
+ public:
+  PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
+  virtual void SetState(int state, bool value);  // +0x28
+};
+}
+namespace SP {
+struct cSPColorRGB_s005c_3cb0 {
+  float r, g, b;
+  cSPColorRGB_s005c_3cb0() {}
+  cSPColorRGB_s005c_3cb0(const cSPColorRGB_s005c_3cb0& c) : r(c.r), g(c.g), b(c.b) {}
+};
+}
+namespace SP {
+extern cSPColorRGB_s005c_3cb0 kSwatchColor_s005c_3cb0;  // 0x01514eb8
+}
+namespace SP {
+class cRefVector {
+ public:
+  void** mpBegin;
+  void** mpEnd;
+  void** mpCapacity;
+  int mAllocator[2];
+  cRefVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+  ~cRefVector();  // 0x005c8fd0
+};
+}
+namespace SP {
+class IWindowPtrVec {
+ public:
+  IWindow_s005c_3cb0** mpBegin;
+  IWindow_s005c_3cb0** mpEnd;
+  IWindow_s005c_3cb0** mpCapacity;
+  int mAllocator[2];
+  void Grow(IWindow_s005c_3cb0** position, IWindow_s005c_3cb0* const& value);  // 0x00630b30 (DoInsertValue)
+  void push_back(IWindow_s005c_3cb0* value) {
+    if (mpEnd < mpCapacity)
+      ::new (mpEnd++) IWindow_s005c_3cb0*(value);
+    else
+      Grow(mpEnd, value);
+  }
+};
+}
+namespace SP {
+class ButtonVec_s005c_3cb0 {  // vector<IWinButton*>
+ public:
+  IWinButton_s005c_3cb0** mpBegin;
+  IWinButton_s005c_3cb0** mpEnd;
+  IWinButton_s005c_3cb0** mpCapacity;
+  int mAllocator[2];
+  ButtonVec_s005c_3cb0() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+  ~ButtonVec_s005c_3cb0();  // 0x00ae6970
+  unsigned int size() const { return (unsigned int)(mpEnd - mpBegin); }
+  bool NotEmpty() const { return size() > 0; }
+  IWinButton_s005c_3cb0*& operator[](unsigned int i) { return mpBegin[i]; }
+};
+}
+namespace SP {
+class PageUIVecOwner : public PageUIVec {
+ public:
+  PageUIVecOwner() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; }
+  ~PageUIVecOwner();  // 0x005c3dc0
+};
+}
+namespace SP {
+void KillSeti(int id);                                  // 0x004a88d0 (cdecl)
+}
+namespace SP {
+namespace cSPUISpace {
+ void KillSetiEffects(uint32_t id, uint32_t state);   // 0x00435ed0 (cdecl)
+}
+}
+namespace SP {
+class cSPPaletteCategoryUI_s005c_3cb0 : public IHandlerRC, public IWinProc, public EA::RefCountVTemplate_s005c_3cb0<int> {
+ public:
+  EA::AutoRefCount_s005c_3cb0<cSPUILayout_s005c_3cb0> mLayout;                    // +0x10
+  EA::AutoRefCount_s005c_3cb0<cSPUILayout_s005c_3cb0> mExpansionPackLayout;       // +0x14
+  EA::AutoRefCount_s005c_3cb0<cRefB> mWinCategory;                     // +0x18
+  EA::AutoRefCount_s005c_3cb0<cRefB> mWinPageButtons;                  // +0x1c
+  EA::AutoRefCount_s005c_3cb0<cRefB> mWinEPUIHolder;                   // +0x20
+  EA::AutoRefCount_s005c_3cb0<cRefB> mWinColorPickerHolder;            // +0x24
+  EA::AutoRefCount_s005c_3cb0<cRefB> mWinPalettePage;                  // +0x28
+  EA::AutoRefCount_s005c_3cb0<cRefB> mWinFullPalettePage;              // +0x2c
+  EA::AutoRefCount_s005c_3cb0<cSPEditorColorPicker_s005c_3cb0> mColorPicker1;     // +0x30
+  EA::AutoRefCount_s005c_3cb0<cSPEditorColorPicker_s005c_3cb0> mColorPicker2;     // +0x34
+  float mRects[(0x68 - 0x38) / 4];                                // +0x38 (uninitialised by the ctor)
+  EA::AutoRefCount_s005c_3cb0<cSPSwatch_s005c_3cb0> mPreviewSwatch;               // +0x68
+  EA::AutoRefCount_s005c_3cb0<cSPPaletteCategory_s005c_3cb0> mData;               // +0x6c
+  EA::AutoRefCount_s005c_3cb0<cSPEditorPageControls_s005c_3cb0> mPageControls;    // +0x70
+  ButtonVec_s005c_3cb0 mPackButtons;                                   // +0x74
+  PageUIVecOwner mPageUIs;                                  // +0x88
+  EA::AutoRefCount_s005c_3cb0<cSPPaletteSubCategoryUI_s005c_3cb0> mSubCategoryUI; // +0x9c
+  int mCurrentPageIndex;                                    // +0xa0
+  int mFilterSetId;                                         // +0xa4
+  int mExpansionPackChunkIndex;                             // +0xa8
+  uint32_t mCurrentPackID;                                  // +0xac
+  int mExpansionPacksPerPage;                               // +0xb0
+  EA::Messaging::AutoHandler_s005c_3cb0 mAutoMsgHandler;               // +0xb4
+  uint32_t mSelectedItemID;                                 // +0xc8
+  cSPColorRGB_s005c_3cb0 mSelectedColor1;                              // +0xcc
+  cSPColorRGB_s005c_3cb0 mSelectedColor2;                              // +0xd8
+  bool mIsColor1Default;                                    // +0xe4
+  bool mIsColor2Default;                                    // +0xe5
+  cRefVector mPaintLikeThisWidgets;                         // +0xe8
+
+  cSPPaletteCategoryUI_s005c_3cb0();
+  virtual ~cSPPaletteCategoryUI_s005c_3cb0();
+  virtual bool HandleUIMessage(EA::UTFWin::IWindow_s005c_3cb0* window, const EA::UTFWin::Message_s005c_3cb0& msg);
+
+  void SetVisibleChunk(int chunkIndex);                    // 0x005c2590
+  int GetPageIndexForPackID(uint32_t packID);              // 0x005c29e0
+  int GetChunkIndexForPackID(uint32_t packID);             // 0x005c2a30
+  cSPPalettePageUI_s005c_3cb0* GetPageUI(int index);                  // 0x005c2e50
+  bool SetPageIndex(int index);                            // 0x005c3bd0
+  void SetSelectedPack(uint32_t packID);
+  void GetWindowsWithMatchingID(EA::UTFWin::IWindow_s005c_3cb0* window, uint32_t id, IWindowPtrVec* out);  // 0x005c4210 (SP::cSPPaletteCategoryUI::GetWindowsWithMatchingID)
+};
+}
+// ---- items of slice s005c3cb0 end
+
 // @ 0x005c2590
 namespace SP {
 void cSPPaletteCategoryUI_s005c_1d70::SetVisibleChunk(int chunkIndex)
@@ -1529,9 +1896,6 @@ void cSPPaletteCategoryUI_s005c_1d70::SetVisibleChunk(int chunkIndex)
   }
 }
 }  // namespace SP
-
-
-
 
 // @ 0x005c2660
 namespace SP {
@@ -1578,9 +1942,6 @@ void cSPPaletteCategoryUI_s005c_1d70::SetButtonPositions()
 }
 }  // namespace SP
 
-
-
-
 // @ 0x005c28b0
 namespace SP {
 void cSPPaletteCategoryUI_s005c_1d70::Update(int deltaTime)
@@ -1601,9 +1962,6 @@ void cSPPaletteCategoryUI_s005c_1d70::Update(int deltaTime)
 }
 }  // namespace SP
 
-
-
-
 // @ 0x005c2940
 namespace SP {
 bool cSPPaletteCategoryUI_s005c_1d70::IsVisible()
@@ -1614,9 +1972,6 @@ bool cSPPaletteCategoryUI_s005c_1d70::IsVisible()
   return false;
 }
 }  // namespace SP
-
-
-
 
 // @ 0x005c2960
 namespace SP {
@@ -1634,9 +1989,6 @@ void cSPPaletteCategoryUI_s005c_1d70::SetVisibility(bool visible)
 }
 }  // namespace SP
 
-
-
-
 // @ 0x005c29a0
 namespace SP {
 void cSPPaletteCategoryUI_s005c_1d70::SetPageVisible(int index, bool visible)
@@ -1645,9 +1997,6 @@ void cSPPaletteCategoryUI_s005c_1d70::SetPageVisible(int index, bool visible)
 }
 }  // namespace SP
 
-
-
-
 // @ 0x005c29c0
 namespace SP {
 bool cSPPaletteCategoryUI_s005c_1d70::IsPageVisible(int index)
@@ -1655,9 +2004,6 @@ bool cSPPaletteCategoryUI_s005c_1d70::IsPageVisible(int index)
   return mPageUIs[index].mVisible;
 }
 }  // namespace SP
-
-
-
 
 // @ 0x005c29e0
 namespace SP {
@@ -1671,9 +2017,6 @@ int cSPPaletteCategoryUI_s005c_1d70::GetPageIndexForPackID(uint32_t packID)
   return -1;
 }
 }  // namespace SP
-
-
-
 
 // @ 0x005c2a30
 namespace SP {
@@ -1692,9 +2035,6 @@ int cSPPaletteCategoryUI_s005c_1d70::GetChunkIndexForPackID(uint32_t packID)
   return -1;
 }
 }  // namespace SP
-
-
-
 
 // @ 0x005c2aa0
 int SP::cSPPaletteCategoryUI::GetNumPages()
@@ -1715,9 +2055,6 @@ int SP::cSPPaletteCategoryUI::GetNumPages()
   return numUnique;
 }
 
-
-
-
 // @ 0x005c2bc0
 namespace SP {
 bool cSPPaletteCategoryUI_s005c_1d70::IsPackUnique(int index)
@@ -1737,9 +2074,6 @@ bool cSPPaletteCategoryUI_s005c_1d70::IsPackUnique(int index)
 }
 }  // namespace SP
 
-
-
-
 // @ 0x005c2cd0
 bool SP::cSPPaletteCategoryUI::IsPaintByNumber()
 {
@@ -1747,9 +2081,6 @@ bool SP::cSPPaletteCategoryUI::IsPaintByNumber()
     return mData.mpObject->mPaintByNumber;
   return false;
 }
-
-
-
 
 // @ 0x005c2ce0
 namespace SP {
@@ -1765,8 +2096,6 @@ uint32_t cSPPaletteCategoryUI_s005c_1d70::GetRegionFilterID()
 }
 }  // namespace SP
 
-
-
 // @ 0x005c2d30
 namespace SP {
 tSPEditorPaint_s005c_2d30 cSPPaletteCategoryUI_s005c_2d30::GetSelectedPaint()
@@ -1780,8 +2109,6 @@ tSPEditorPaint_s005c_2d30 cSPPaletteCategoryUI_s005c_2d30::GetSelectedPaint()
   return paint;
 }
 }  // namespace SP
-
-
 
 // @ 0x005c2e00
 namespace SP {
@@ -1797,8 +2124,6 @@ uint32_t cSPPaletteCategoryUI_s005c_2d30::GetSkinPaintIndex()
 }
 }  // namespace SP
 
-
-
 // @ 0x005c2e80
 namespace SP {
 bool cSPPaletteCategoryUI_s005c_2d30::IsColor1Default()
@@ -1808,8 +2133,6 @@ bool cSPPaletteCategoryUI_s005c_2d30::IsColor1Default()
   return mIsColor1Default;
 }
 }  // namespace SP
-
-
 
 // @ 0x005c2ec0
 namespace SP {
@@ -1821,8 +2144,6 @@ void cSPPaletteCategoryUI_s005c_2d30::SetPackPaneVisible(bool visible)
 }
 }  // namespace SP
 
-
-
 // @ 0x005c2ef0
 namespace SP {
 PageUIEntry_s005c_2d30* uninitialized_copy_ptr(PageUIEntry_s005c_2d30* first, PageUIEntry_s005c_2d30* last, PageUIEntry_s005c_2d30* result)
@@ -1832,8 +2153,6 @@ PageUIEntry_s005c_2d30* uninitialized_copy_ptr(PageUIEntry_s005c_2d30* first, Pa
   return result;
 }
 }  // namespace SP
-
-
 
 // @ 0x005c2f40
 namespace SP {
@@ -1845,8 +2164,6 @@ PaintLikeThisRef* copy(PaintLikeThisRef* first, PaintLikeThisRef* last, PaintLik
 }
 }  // namespace SP
 
-
-
 // @ 0x005c2fa0
 namespace SP {
 PaintLikeThisRef* copy_backward(PaintLikeThisRef* first, PaintLikeThisRef* last, PaintLikeThisRef* resultEnd)
@@ -1856,8 +2173,6 @@ PaintLikeThisRef* copy_backward(PaintLikeThisRef* first, PaintLikeThisRef* last,
   return resultEnd;
 }
 }  // namespace SP
-
-
 
 // @ 0x005c3000
 namespace SP {
@@ -1901,8 +2216,6 @@ void cSPPaletteCategoryUI_s005c_2d30::SetWindowPositions()
   }
 }
 }  // namespace SP
-
-
 
 // @ 0x005c31c0
 namespace SP {
@@ -1952,8 +2265,6 @@ void cSPPaletteCategoryUI_s005c_2d30::UpdatePreviewSwatch()
 }
 }  // namespace SP
 
-
-
 // @ 0x005c34e0
 namespace SP {
 void cSPPaletteCategoryUI_s005c_2d30::SetSelectedPaint(const tSPEditorPaint_s005c_2d30& paint)
@@ -1974,8 +2285,6 @@ void cSPPaletteCategoryUI_s005c_2d30::SetSelectedPaint(const tSPEditorPaint_s005
 }
 }  // namespace SP
 
-
-
 // @ 0x005c35c0
 namespace SP {
 PageUIEntryAssign& PageUIEntryAssign::operator=(const PageUIEntryAssign& x)
@@ -1988,8 +2297,6 @@ PageUIEntryAssign& PageUIEntryAssign::operator=(const PageUIEntryAssign& x)
 }
 }  // namespace SP
 
-
-
 // @ 0x005c3610
 namespace SP {
 PageUIEntry_s005c_2d30* copy(PageUIEntry_s005c_2d30* first, PageUIEntry_s005c_2d30* last, PageUIEntry_s005c_2d30* result)
@@ -2000,8 +2307,6 @@ PageUIEntry_s005c_2d30* copy(PageUIEntry_s005c_2d30* first, PageUIEntry_s005c_2d
 }
 }  // namespace SP
 
-
-
 // @ 0x005c3680
 namespace SP {
 PageUIEntry_s005c_2d30* copy_backward(PageUIEntry_s005c_2d30* first, PageUIEntry_s005c_2d30* last, PageUIEntry_s005c_2d30* resultEnd)
@@ -2011,8 +2316,6 @@ PageUIEntry_s005c_2d30* copy_backward(PageUIEntry_s005c_2d30* first, PageUIEntry
   return resultEnd;
 }
 }  // namespace SP
-
-
 
 // @ 0x005c36f0
 namespace SP {
@@ -2093,8 +2396,6 @@ bool cSPPaletteCategoryUI_s005c_2d30::HandleMessage(uint32_t messageID, void* me
 }
 }  // namespace SP
 
-
-
 // @ 0x005c3a50
 namespace SP {
 void cSPPaletteCategoryUI_s005c_2d30::OnPageChanged(int oldIndex, int newIndex)
@@ -2125,8 +2426,6 @@ void cSPPaletteCategoryUI_s005c_2d30::OnPageChanged(int oldIndex, int newIndex)
 }
 }  // namespace SP
 
-
-
 // @ 0x005c3bd0
 namespace SP {
 bool cSPPaletteCategoryUI_s005c_2d30::SetPageIndex(int index)
@@ -2142,8 +2441,6 @@ bool cSPPaletteCategoryUI_s005c_2d30::SetPageIndex(int index)
   return false;
 }
 }  // namespace SP
-
-
 
 // @ 0x005c3c20
 namespace SP {
@@ -2168,6 +2465,145 @@ bool cSPPaletteCategoryUI_s005c_2d30::CyclePage(int direction)
 }
 }  // namespace SP
 
+// @ 0x005c3cb0
+namespace SP {
+void cSPPaletteCategoryUI_s005c_3cb0::SetSelectedPack(uint32_t packID)
+{
+  const uint32_t oldPack = mCurrentPackID;
+  const int oldIndex = GetChunkIndexForPackID(oldPack);
+  const int newIndex = GetChunkIndexForPackID(packID);
+  mCurrentPackID = packID;
+  if (newIndex >= 0 && newIndex < (int)mPackButtons.size()) {
+    if (mPackButtons.NotEmpty()) {
+      if (oldIndex != -1)
+        mPackButtons[oldIndex]->SetState(4, false);
+      mPackButtons[newIndex]->SetState(4, true);
+    }
+    if (oldPack != mCurrentPackID) {
+      SetVisibleChunk(newIndex / mExpansionPacksPerPage);
+      KillSeti(0x38eb66f8);
+      const uint32_t current = mCurrentPackID;
+      if (GetPageUI(mCurrentPageIndex)->GetPackID() != current)
+        SetPageIndex(GetPageIndexForPackID(current));
+    }
+  }
+}
+}  // namespace SP
+
+// @ 0x005c3e00
+namespace SP {
+cSPPaletteCategoryUI_s005c_3cb0::cSPPaletteCategoryUI_s005c_3cb0()
+: mCurrentPageIndex(0), mFilterSetId(0), mExpansionPackChunkIndex(0), mCurrentPackID(0),
+      mExpansionPacksPerPage(6), mSelectedItemID(0), mSelectedColor1(kSwatchColor_s005c_3cb0),
+      mSelectedColor2(kSwatchColor_s005c_3cb0), mIsColor1Default(true), mIsColor2Default(true) {}
+}  // namespace SP
+
+// @ 0x005c3f60
+namespace SP {
+cSPPaletteCategoryUI_s005c_3cb0::~cSPPaletteCategoryUI_s005c_3cb0()
+{}
+}  // namespace SP
+
+// @ 0x005c40b0
+namespace SP {
+bool cSPPaletteCategoryUI_s005c_3cb0::HandleUIMessage(EA::UTFWin::IWindow_s005c_3cb0* window, const EA::UTFWin::Message_s005c_3cb0& msg)
+{
+  if (msg.mType == 0x287259f6) {
+    if (msg.mID == 0x5d1ad44) {
+      int numChunks = (int)((mPackButtons.size() + mExpansionPacksPerPage - 1) / mExpansionPacksPerPage);
+      SetVisibleChunk((mExpansionPackChunkIndex - 1 + numChunks) % numChunks);
+      return true;
+    }
+    if (msg.mID == 0x5d1ad3f) {
+      int numChunks = (int)((mPackButtons.size() + mExpansionPacksPerPage - 1) / mExpansionPacksPerPage);
+      SetVisibleChunk((mExpansionPackChunkIndex + 1) % numChunks);
+      return true;
+    }
+    EA::Audio::IAudioSystem_s005c_3cb0* audio = EA::Audio::GetSystemAT_s005c_3cb0();
+    cSPUISpace::KillSetiEffects(0x38eb66f8, audio ? audio->GetState() : 0);
+    SetSelectedPack(msg.mpSource->GetControlID());
+    return true;
+  }
+  return false;
+}
+}  // namespace SP
+
+// @ 0x005c41b0
+namespace SP {
+PaintLikeThisRef_s005c_3cb0* PaintLikeThisVec::erase(PaintLikeThisRef_s005c_3cb0* first, PaintLikeThisRef_s005c_3cb0* last)
+{
+  PaintLikeThisRef_s005c_3cb0* const position = SP::copy_s005c_3cb0(last, mpEnd, first);
+  destruct(position, mpEnd);
+  mpEnd -= (last - first);
+  return first;
+}
+}  // namespace SP
+
+// @ 0x005c4210
+namespace SP {
+void cSPPaletteCategoryUI_s005c_3cb0::GetWindowsWithMatchingID(EA::UTFWin::IWindow_s005c_3cb0* window, uint32_t id, IWindowPtrVec* out)
+{
+  if (window) {
+    ChildIter it, tmp;
+    window->GetChildBegin(&it);
+    if (it.mpLink != window->GetChildEnd(&tmp)->mpLink) {
+      do {
+        IWindowQI* node = (IWindowQI*)((char*)it.mpLink + gChildLinkOffset);
+        IWindow_s005c_3cb0* child = node ? node->QueryInterface(0xeeee8218) : 0;
+        if (child->GetCommandID() == id)
+          out->push_back(child);
+        GetWindowsWithMatchingID(child, id, out);
+        it.mpLink = it.mpLink->mpNext;
+      } while (it.mpLink != window->GetChildEnd(&tmp)->mpLink);
+    }
+  }
+}
+}  // namespace SP
+
+// @ 0x005c4330
+namespace SP {
+PageUIEntry_s005c_3cb0* PageUIVec::erase(PageUIEntry_s005c_3cb0* first, PageUIEntry_s005c_3cb0* last)
+{
+  PageUIEntry_s005c_3cb0* const position = SP::copy_s005c_3cb0(last, mpEnd, first);
+  destruct(position, mpEnd);
+  mpEnd -= (last - first);
+  return first;
+}
+}  // namespace SP
+
+// @ 0x005c4390
+namespace SP {
+void PageUIVec::insert(PageUIEntry_s005c_3cb0* position, const PageUIEntry_s005c_3cb0& value)
+{
+  if (mpEnd != mpCapacity) {
+    const PageUIEntry_s005c_3cb0* pValue = &value;
+    if (pValue >= position && pValue < mpEnd)
+      ++pValue;
+    if (mpEnd)
+      ::new (mpEnd) PageUIEntry_s005c_3cb0(mpEnd[-1]);
+    SP::copy_backward(position, mpEnd - 1, mpEnd);
+    *(PageUIEntryAssign_s005c_3cb0*)position = *(const PageUIEntryAssign_s005c_3cb0*)pValue;
+    ++mpEnd;
+    return;
+  }
+  unsigned int prevSize = (unsigned int)(mpEnd - mpBegin);
+  unsigned int newSize = (prevSize > 0) ? prevSize * 2 : 1;
+  PageUIEntry_s005c_3cb0* newData = newSize ? (PageUIEntry_s005c_3cb0*)EASTL_allocator_allocate(
+                                       newSize * sizeof(PageUIEntry_s005c_3cb0), "Editor", 0, 0,
+                                       "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+                                       0xd1)
+                                 : 0;
+  PageUIEntry_s005c_3cb0* newPosition = uninitialized_move_ptr(mpBegin, position, newData);
+  if (newPosition)
+    ::new (newPosition) PageUIEntry_s005c_3cb0(value);
+  PageUIEntry_s005c_3cb0* newEnd = uninitialized_move_ptr(position, mpEnd, newPosition + 1);
+  if (mpBegin && ((int*)mpBegin)[-1] != 0)
+    EASTL_allocator_deallocate(mpBegin);
+  mpBegin = newData;
+  mpEnd = newEnd;
+  mpCapacity = newData + newSize;
+}
+}  // namespace SP
 
 // @ 0x005c4500
 namespace SP {
@@ -2229,7 +2665,6 @@ void cSPPaletteCategoryUI_s005c_4500::PopulateExpansionPackPane(cSPPaletteCatego
 }
 }  // namespace SP
 
-
 // @ 0x005c4df0
 namespace SP {
 void cSPPaletteCategoryUI_s005c_4500::ClearPalettes()
@@ -2242,7 +2677,6 @@ void cSPPaletteCategoryUI_s005c_4500::ClearPalettes()
   mUnkA0 = 0;
 }
 }  // namespace SP
-
 
 // @ 0x005c4e40
 namespace SP {
@@ -2315,7 +2749,6 @@ void cSPPaletteCategoryUI_s005c_4500::Shutdown()
 }
 }  // namespace SP
 
-
 // @ 0x005c50b0
 namespace SP {
 bool cSPPaletteCategoryUI_s005c_4500::SelectPalette(int index)
@@ -2358,7 +2791,6 @@ bool cSPPaletteCategoryUI_s005c_4500::SelectPalette(int index)
   return true;
 }
 }  // namespace SP
-
 
 // @ 0x005c51e0
 namespace SP {
