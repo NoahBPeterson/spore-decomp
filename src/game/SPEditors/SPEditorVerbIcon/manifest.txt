@@ -1,0 +1,18 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?Init@cVerbIconInterpolationValue_s005e_16c0@SP@@QAEXMMMMM@Z  005e1c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?IsAtTarget@cVerbIconInterpolationValue_s005e_16c0@SP@@QAEHXZ  005e1cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?SetFlag@cSPEditorVerbIcon_s005e_16c0@SP@@QAEXD@Z  005e1fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?LayoutInit@cSPEditorVerbIcon_s005e_2470@SP@@UAEXUKey_s005e_2470@ResourceMan@EA@@@Z  005e2470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?GetLevel@cSPEditorVerbIcon_s005e_2470@SP@@QAEM_N@Z  005e2860  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?GetWidth@cSPEditorVerbIcon_s005e_2470@SP@@QAEM_N@Z  005e28c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?GetHeight@cSPEditorVerbIcon_s005e_2470@SP@@QAEM_N@Z  005e2910  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?LayoutShutdown@cSPEditorVerbIcon_s005e_2470@SP@@QAEXXZ  005e2a80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?IsChargeReady@cSPEditorVerbIcon_s005e_2470@SP@@QAE_NXZ  005e2be0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?OnClick@cSPEditorVerbIcon_s005e_2470@SP@@QAEXXZ  005e2c30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?SetEnabled@cSPEditorVerbIcon_s005e_2470@SP@@QAEX_N@Z  005e2cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?Hide@cSPEditorVerbIcon_s005e_2470@SP@@QAEXXZ  005e2ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?SetIconData@cSPEditorVerbIcon_s005e_2470@SP@@QAEXPAVcSPEditorVerbIconData_s005e_2470@2@@Z  005e2d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?EndCharge@cSPEditorVerbIcon_s005e_2470@SP@@QAEXXZ  005e2e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?SetLevel@cSPEditorVerbIcon_s005e_2470@SP@@UAEXM@Z  005e2ec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?EndFlashing@cSPEditorVerbIcon_s005e_2470@SP@@QAEXXZ  005e3180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?Init@cSPEditorVerbIcon_s005e_2470@SP@@QAEXPAVIWindow_s005e_2470@UTFWin@EA@@UKey_s005e_2470@ResourceMan@5@II_NH22@Z  005e31e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

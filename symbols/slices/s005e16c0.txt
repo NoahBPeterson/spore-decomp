@@ -1,11 +1,10 @@
-# va  Name  # evidence
 005e16c0  SP::cSPEditorVerbIcon_Update  # card
 005e1b70  SP::cSPEditorVerbIcon_Helper_005e1b70  # card
-005e1c80  SP::cSPEditorVerbIcon::cVerbIconInterpolationValue::Init  # card
-005e1cd0  SP::cSPEditorVerbIcon::cVerbIconInterpolationValue::IsAtTarget  # card
-005e1d00  SP::cSPEditorVerbIcon_Helper_005e1d00  # card
-005e1e90  SP::cSPEditorVerbIcon_Helper_005e1e90  # card
-005e1fa0  SP::cSPEditorVerbIcon::SetFlag  # card
-005e2000  UI::TimelineEventEditorVerbIcon::TimelineEventEditorVerbIcon  # card
-005e2280  SP::cSPEditorVerbIcon_Helper_005e2280  # card
-005e23b0  SP::cSPEditorVerbIcon_Helper_005e23b0  # card
+005e1c80 ?Init@cVerbIconInterpolationValue_s005e_16c0@SP@@QAEXMMMMM@Z  # cVerbIconInterpolationValue_s005e_16c0::Init migrated from s005e16c0 (verbatim, slice spelling)
+005e1cd0 ?IsAtTarget@cVerbIconInterpolationValue_s005e_16c0@SP@@QAEHXZ  # cVerbIconInterpolationValue_s005e_16c0::IsAtTarget migrated from s005e16c0 (verbatim, slice spelling)
+005e1d00 ?FUN_005e1d00@@YAXPAX@Z  # FUN_005e1d00 migrated from s005e16c0 (verbatim, slice spelling)
+005e1e90 ?FUN_005e1e90@@YAXPAX@Z  # FUN_005e1e90 migrated from s005e16c0 (verbatim, slice spelling)
+005e1fa0 ?SetFlag@cSPEditorVerbIcon_s005e_16c0@SP@@QAEXD@Z  # cSPEditorVerbIcon_s005e_16c0::SetFlag migrated from s005e16c0 (verbatim, slice spelling)
+005e2000 ?FUN_005e2000@@YAXPAX@Z  # FUN_005e2000 migrated from s005e16c0 (verbatim, slice spelling)
+005e2280 ?FUN_005e2280@@YAXPAX@Z  # FUN_005e2280 migrated from s005e16c0 (verbatim, slice spelling)
+005e23b0 ?FUN_005e23b0@@YAXPAX@Z  # FUN_005e23b0 migrated from s005e16c0 (verbatim, slice spelling)
