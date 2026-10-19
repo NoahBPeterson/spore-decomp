@@ -1,4 +1,4 @@
-0048c0f0 SP::cSPEditorLimbStructure::BuildJoints  # allocates cSPEditorLimbJoint, sets block/upper/positions, recurses symmetric blocks (partial)
+0048c0f0 SP::cSPEditorLimbStructure::BuildJoints  # allocates cSPEditorLimbJoint, sets block/upper/positions, joint-type flags, recurses symmetric blocks
 0048c610 SP::cSPEditorLimbStructure::GetLimbOriginalPosition  # mEndBlock->mPosition else mLastBone->mPosition+F_43e080 else zero
 0048c720 vector<cSPEditorLimbJoint*>::eraseOne  # single-element vector erase
 0048c790 SP::BuildPileList  # recursive symmetric-block pile collection, optional 0x4956b0

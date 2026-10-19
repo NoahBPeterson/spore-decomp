@@ -1,8 +1,9 @@
-0048c610  196  /Od; complete. GetLimbOriginalPosition: mEndBlock/mLastBone cases; /Od frame slot layout differs
-0048c720  74  /Od; complete. vector<cSPEditorLimbJoint*>::eraseOne; frame/temp layout differs
-0048c790  61  /Od; complete. BuildPileList recursion; frame ~61 bytes off and iterator temps differ
-0048c8d0  84  /Od; complete. GetSymmetricBlocks AddRef/push/Release; frame ~84 bytes off
-0048ca10  465  /Od; complete. CalculateModelSize; hash-flag checks and bbox AXBXC sum; frame slot layout differs
-0048cc20  121  /Od; complete. CountModelParts; extra /Od resource-id temp slot differs
-0048ccf0  505  /Od; complete. CollectPartsRec flag walk; frame slot layout and bitset temps differ
-0048cf00  217  /Od; complete. GetModelMinZ; frame slot layout differs
+0048c0f0  1010  /Od; complete. BuildJoints: EA_alloc(0x6c)+VSet ctor, pos from F_4513e0/F_4513a0(ptr-out) else block+0x48, flag 0x2d/0x2c -> type 0/1 + mFeet/mHands push_back, foot limb-type (-(int)b2&2)+{3,2}, symmetric-block recursion; /Od frame slot layout differs. difftest UNSUPPORTED: 1 unresolved reference ?push_back@?$SimpleVector@I@SP@@QAEXABI@Z (the original vector members are SP::SimpleVector<unsigned>; ours is a local vector<T> template, whose mangled name has no VA entry)
+0048c610  138  /Od; complete. GetLimbOriginalPosition: mEndBlock/mLastBone cases; /Od frame slot layout differs
+0048c720  62  /Od; complete. vector<cSPEditorLimbJoint*>::eraseOne; frame/temp layout differs
+0048c790  220  /Od; complete. BuildPileList recursion; iterator temps and frame slot layout differ
+0048c8d0  196  /Od; complete. GetSymmetricBlocks AddRef/push/Release; frame slot layout differs
+0048ca10  464  /Od; complete. CalculateModelSize; hash-flag checks and bbox AXBXC sum; frame slot layout differs
+0048cc20  117  /Od; complete. CountModelParts; extra /Od resource-id temp slot differs
+0048ccf0  422  /Od; complete. CollectPartsRec flag walk; frame slot layout and bitset temps differ
+0048cf00  195  /Od; complete. GetModelMinZ; frame slot layout differs

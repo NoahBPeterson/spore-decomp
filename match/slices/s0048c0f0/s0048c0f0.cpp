@@ -2,6 +2,8 @@
 // Module flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include "types.h"
 
+inline void* operator new(unsigned int, void* p) { return p; }
+
 template<int N> inline void ScratchSlots() { uint32_t s[N]; }
 
 struct Vector3T {
@@ -64,7 +66,7 @@ struct cSPEditorBlock {
     virtual void _v0();
     virtual void AddRef();                      // vtable slot 1
     virtual void Release();                     // vtable slot 2
-    char pad0[0x48 - 8];
+    char pad0[0x48 - 4];
     cSPVector3 mPosition;                       // +0x48
     char pad1[0x33c - 0x54];
     cSPEditorBlock* mLink33c;                   // +0x33c
@@ -75,7 +77,7 @@ struct cSPEditorBlock {
     cSPVector3 F_43e080();                      // @ 0x43e080
     void GetBBox(cSPBoundingBox* out, int a, int b, int c); // @ 0x44ae00
     bool F_4513e0();                            // @ 0x4513e0
-    cSPVector3 F_4513a0();                      // @ 0x4513a0
+    cSPVector3* F_4513a0(cSPVector3* out);      // @ 0x4513a0
     bool F_44c030();                            // @ 0x44c030
 };
 
@@ -86,7 +88,9 @@ struct cSPEditorLimbJoint {
     cSPVector3 mTargetPosition;                 // +0x1c
     cSPVector3 mOriginalPosition;               // +0x28
     cSPVector3 mPositionAtCreation;             // +0x34
-    int mJointType;                             // +0x40
+    char pad40[0x64 - 0x40];                    // +0x40
+    int mJointType;                             // +0x64
+    char pad68[0x6c - 0x68];                    // +0x68
 };
 
 struct cSPEditorModel {
@@ -111,6 +115,11 @@ struct cSPEditorLimbStructure {
     void GetLimbOriginalPosition(cSPVector3* out);   // @ 0x48c610
 };
 
+void* EA_alloc(unsigned size, const char* name, int a, int b, int c, int d); // @ 0xf473a0
+extern const char kEditorAllocName[];                           // @ 0x13eb430
+struct VAlloc {};
+struct VSet { char pad[0x14]; VSet(const VAlloc& a); };          // @ 0x540470
+
 cSPEditorBlock* GetFirstFootBlock(cSPEditorBlock* block);       // @ 0x4a9840
 cSPEditorBlock* FUN_004a9920(cSPEditorBlock* block);            // @ 0x4a9920
 bool FUN_004a7e60(cSPEditorBlock* block);                       // @ 0x4a7e60
@@ -132,14 +141,28 @@ float GetModelMinZ(cSPEditorModel* model);                     // @ 0x48cf00
 cSPEditorLimbJoint* cSPEditorLimbStructure::BuildJoints(cSPEditorBlock* block, cSPEditorLimbJoint* upper, bool b)
 {
     if (block == 0) return 0;
-    cSPEditorLimbJoint* joint = new cSPEditorLimbJoint();
+
+    void* mem = EA_alloc(0x6c, kEditorAllocName, 0, 0, 0, 0);
+    cSPEditorLimbJoint* joint;
+    if (mem != 0) {
+        VAlloc alloc;
+        new ((char*)mem + 8) VSet(alloc);
+        joint = (cSPEditorLimbJoint*)mem;
+    } else {
+        joint = 0;
+    }
+
     joint->mJointBlock = block;
     joint->mUpperJoint = upper;
     cSPVector3 pos;
-    if (!b || !block->F_4513e0())
-        pos = block->mPosition;
-    else
-        pos = block->F_4513a0();
+    cSPVector3* src;
+    if (b && block->F_4513e0()) {
+        cSPVector3 tmp;
+        src = block->F_4513a0(&tmp);
+    } else {
+        src = (cSPVector3*)((char*)block + 0x48);
+    }
+    pos = *src;
     joint->mTargetPosition = pos;
     joint->mOriginalPosition = pos;
     joint->mPositionAtCreation = pos;
@@ -152,20 +175,26 @@ cSPEditorLimbJoint* cSPEditorLimbStructure::BuildJoints(cSPEditorBlock* block, c
     if (block->mFlags.test(0x2d)) {
         joint->mJointType = 0;
         flagged = true;
+        mFeet.push_back(joint);
     }
     if (block->mFlags.test(0x2c)) {
-        if (!flagged) joint->mJointType = 1;
-        flagged = true;
+        mHands.push_back(joint);
+        if (!flagged) {
+            joint->mJointType = 1;
+            flagged = true;
+        }
     }
     if (!flagged) {
-        bool b2 = (block->mLink33c == 0 || !block->mLink33c->mFlags.test(0xb));
+        bool b2 = !(block->mLink33c != 0 && block->mLink33c->mFlags.test(0xb));
         cSPEditorBlock* foot = GetFirstFootBlock(block);
         if (foot == 0) foot = FUN_004a9920(block);
         if (foot == 0) foot = FUN_004a9920(block);
-        if (foot == 0) joint->mJointType = b2 ? 3 : 1;
-        else if (!foot->mFlags.test(0xc))
-            joint->mJointType = foot->mFlags.test(0x2d) ? (b2 ? 2 : 0) : (b2 ? 2 : 0);
-        else joint->mJointType = b2 ? 3 : 1;
+        if (foot == 0)
+            joint->mJointType = (-(int)b2 & 2) + 3;
+        else if (foot->mFlags.test(0x2c))
+            joint->mJointType = (-(int)b2 & 2) + 3;
+        else if (foot->mFlags.test(0x2d))
+            joint->mJointType = (-(int)b2 & 2) + 2;
     }
 
     for (int i = 0, n = block->mSymmetricBlocks.size(); i < n; i++) {

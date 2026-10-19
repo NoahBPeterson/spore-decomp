@@ -239,15 +239,78 @@ bool Base64DecodeString(int* srcStr, int* dstStr) {
     return true;
 }
 
-// @ 0x00941790  (partial: strict base64 decode table/-1 validation not fully reconstructed)
+// @ 0x00941790
+extern "C" const unsigned char g_base64DecodeTable[256];   // 0x143EE70
+
 bool DecodeBase64Core(const uint8_t* src, int len, char* dst, int* outLen) {
-    int out = 0;
-    int i = 0;
-    (void)src;
-    (void)len;
+    unsigned n = len;
+    int needed = ((n + 3) >> 2) * 3;
+    if ((unsigned)*outLen < (unsigned)needed)
+        return false;
+    unsigned i = 0;
+    unsigned out = 0;
+    bool invalid = false;
+    bool padding = false;
+    if (n > 0) {
+        for (;;) {
+            uint32_t group[4] = { 0, 0, 0, 0 };
+            unsigned m = 4;
+            uint32_t* p = group;
+            do {
+                while (i < n) {
+                    unsigned c = src[i++];
+                    *p = c;
+                    if (c < 0x80 && g_base64DecodeTable[c] != 0xff)
+                        break;
+                    if (c == '=') {
+                        padding = true;
+                        break;
+                    }
+                    if (c != '\r' && c != '\n' && c != ' ' && c != '\t')
+                        invalid = true;
+                }
+                p++;
+            } while (--m);
+
+            unsigned c0 = group[0], c1 = group[1], c2 = group[2], c3 = group[3];
+            if (c0 < 0x80 && g_base64DecodeTable[c0] != 0xff &&
+                c1 < 0x80 && g_base64DecodeTable[c1] != 0xff &&
+                c2 < 0x80 && g_base64DecodeTable[c2] != 0xff &&
+                c3 < 0x80 && g_base64DecodeTable[c3] != 0xff) {
+                unsigned a0 = g_base64DecodeTable[c0], a1 = g_base64DecodeTable[c1];
+                unsigned a2 = g_base64DecodeTable[c2], a3 = g_base64DecodeTable[c3];
+                dst[out]     = (char)(((a0 & 0x3f) << 2) | ((a1 >> 4) & 3));
+                dst[out + 1] = (char)(((a1 & 0xf) << 4) | ((a2 >> 2) & 0xf));
+                dst[out + 2] = (char)(((a2 & 3) << 6) | (a3 & 0x3f));
+                out += 3;
+                if (padding || i >= n)
+                    break;
+                continue;
+            }
+            if (c0 < 0x80 && g_base64DecodeTable[c0] != 0xff &&
+                c1 < 0x80 && g_base64DecodeTable[c1] != 0xff &&
+                c2 < 0x80 && g_base64DecodeTable[c2] != 0xff &&
+                c3 == '=') {
+                unsigned a0 = g_base64DecodeTable[c0], a1 = g_base64DecodeTable[c1];
+                unsigned a2 = g_base64DecodeTable[c2];
+                dst[out]     = (char)(((a0 & 0x3f) << 2) | ((a1 >> 4) & 3));
+                dst[out + 1] = (char)(((a1 & 0xf) << 4) | ((a2 >> 2) & 0xf));
+                out += 2;
+                break;
+            }
+            if (c0 < 0x80 && g_base64DecodeTable[c0] != 0xff &&
+                c1 < 0x80 && g_base64DecodeTable[c1] != 0xff &&
+                c2 == '=' && c3 == '=') {
+                unsigned a0 = g_base64DecodeTable[c0], a1 = g_base64DecodeTable[c1];
+                dst[out] = (char)(((a0 & 0x3f) << 2) | ((a1 >> 4) & 3));
+                out += 1;
+                break;
+            }
+            break;
+        }
+    }
     *outLen = out;
-    (void)i;
-    return true;
+    return !invalid;
 }
 
 // ===========================================================================
@@ -359,6 +422,7 @@ void EncodeFormURL(const char* s, void* out) {
 struct HTTPClient {
     bool AllocBuffer();
     bool FindHeader(char* name, void* out, int index);
+    bool FindHeaderByField(int field, void* out, int index);
     void SetNotificationTarget(void* target, void* ctx);
     void Pump(int* stream);
 };
@@ -441,12 +505,9 @@ bool HTTPClient::FindHeader(char* name, void* out, int index) {
 }
 
 // @ 0x009420E0
-void HTTPClientFindHeaderByField(int field, void* name, void* out) {
-    const char* s = HeaderFieldToFieldString(field);
-    (void)name;
-    (void)out;
-    (void)s;
-    (void)0;
+bool HTTPClient::FindHeaderByField(int field, void* out, int index) {
+    const char* name = HeaderFieldToFieldString(field);
+    return FindHeader((char*)name, out, index);
 }
 
 // @ 0x00942110

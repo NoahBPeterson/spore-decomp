@@ -1,3 +1,18 @@
 # <va>  <diff-bytes>  <reason>   (partial: source present and compilable, but not a faithful/complete reconstruction)
-0096f3f0  2573  EA::UTFWinControls::FrameDrawable::CreateRenderables (/O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast): 2620-byte 2D frame/outline render pass (Begin2D, per-edge border segments, corner handling, outline color).  Body reduced to the RenderContext::Begin2D frame + FUN_0096f280 call (our symbol 47 bytes, so difftest reports UNSUPPORTED: no marker/name matched an object symbol within the size-plausibility window).  The bulk of the geometry drawing is not reconstructed.
-00970460  164  EA::UTFWinControls::WinGrid::OnMouseMove (/O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast): 215-byte row-extra-data hit test + EASTL hash-map rehash/update keyed on the (row,col,flags) triple, ending in two hook virtual calls (+0x114, +0x90).  Body approximated to the sub-object vtable(+0x19c) hit call and the early-out (our symbol 51 bytes).  difftest reports UNSUPPORTED: 0/400 valid inputs (398 fake-arity discards) -- the original walks heap-allocated row data the replay harness cannot satisfy.
+0096f3f0  2573  EA::UTFWinControls::FrameDrawable::CreateRenderables (/O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast):
+                   2620-byte 2D frame/outline render pass.  Only the prologue frame is reconstructed here
+                   (our symbol 47 bytes, so difftest reports UNSUPPORTED: no marker/name matched an
+                   object symbol within the size-plausibility window).  Decoded structure, for a future pass:
+                   - esi = RenderContext::Begin2D(ctx, 0) (0x95bc10); esi->vtbl[+4](-1) = SetColor(-1)
+                     (slot +4, thiscall, one dword arg); s = FUN_0096f280(this, *(int*)pRect) (0x96f280)
+                     returns the frame style: mStyle int at s+0, mColor at s+4 (slots up to s+0x5c).
+                   - border widths this+0x4c/0x50/0x54/0x58; clip/transform floats ctx+0/ctx+4/ctx+8;
+                     the border/clip clamp uses `iat_floor(x * 0.5)` (0.5f at 0x1471064, _floor at 0x11e0906).
+                   - four outline colours: Color::Lerp (0x7f5eb0) = (c, c&0xff000000, 0.2f), (c, c&0xff000000, 0.6f),
+                     (c, c|0xffffff, 0.2f), (c, c|0xffffff, 0.6f); 0.2f at 0x13ec480, 0.6f at 0x13ec4b0.
+                   - switch (s->mStyle) 0..10 through the 11-entry jump table at 0x96fe00 (default 0x96fdf4):
+                     cases 0..4 do SetColor(vtbl+4) + DrawRect(vtbl+0x38)(l,t,r,b) — 0/2 four edge rects,
+                     3/4 four stepper loops advancing 2*borderWidth per segment; cases 5..10 do SetColor +
+                     Drawing::GradientBox (0x95d540, `void(Canvas*, const float*, const float*, const float*)`);
+                     9/10 additionally call FUN_0096f1b0(..., 1.0f) (0x3f800000) and use s+0x5c; 7/8 differ
+                     only in the order of the two GradientBox calls.

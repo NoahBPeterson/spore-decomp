@@ -1,2 +1,1 @@
-004b2bb0  651  ReadFromProp: prop decoding ported behaviorally but the EA::Variant/value
-                   accessor paths and inline-helper frames are not fully reproduced
+# <va>  <diff-bytes>  <reason>   (partial: source present and compilable, but not a faithful/complete reconstruction)

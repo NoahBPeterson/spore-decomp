@@ -1,6 +1,12 @@
 // Slice s004b2320: SP::cSPEditorPaintTheme (editor paint-theme resource) construction, teardown,
 // prop (de)serialization and application. Editor region: unoptimized /Od /Ob1, /arch:SSE, no /EHsc.
 //
+// ReadFromProp (0x004b2bb0) note: the original copies the 0xc-stride prop colours with x87
+// `fld/fstp` (module built without /arch:SSE for that TU) and returns a 1-byte value in `al`
+// (`QAE_NI@Z` = bool). It is reconstructed here as `bool ReadFromProp(uint32_t)`; compiling this
+// file with `/Od /Ob1 /MD /Gy /TP /GS- /fp:fast` (no /arch:SSE) gives the closest match (724
+// diff bytes of 970, vs 731 with /arch:SSE).
+//
 // Retail layout:
 //   +0x00 vtable (Editor::cEditorResource)
 //   +0x04 vtable (RefCountVTemplate)
@@ -11,6 +17,8 @@
 //   +0x150 closestRegions (vector) / +0x164 skinEffects[3] / +0x170 skinEffectSeeds[3]
 //   +0x17c skinColors[3]
 #include "types.h"
+
+inline void* operator new(unsigned int, void* p) { return p; }
 
 template<int N> inline void ScratchSlots() { uint32_t s[N]; }
 
@@ -65,6 +73,18 @@ struct PropMgr {
     virtual char GetPropertyList(int id, uint32_t type, void** out);   // 11 (+0x2c)
 };
 
+// ReadFromProp value plumbing: 0xc-stride prop colour entry, the 0x1c-byte map payload,
+// the vector copy-ctor helper and the EA::AutoRefCount<PropList> guard used around the lookup.
+struct PropEntry { uint32_t v; float x, y, z; };
+struct Vec3 { float x, y, z; Vec3(const Vec3& v); };            // 0x004098a0
+struct Trans { uint32_t f0; float a[3]; float b[3]; };
+struct PaintPropRef {
+    PropObj* mpRef;                                             // +0
+    PaintPropRef() : mpRef(0) { if (mpRef) mpRef->v0(); }
+    ~PaintPropRef() { if (mpRef) mpRef->Release(); }
+    void* AsPPVoidParam();                                      // 0x0041d870
+};
+
 namespace SP {
 
 struct PaintVector {
@@ -112,7 +132,7 @@ public:
     void  Reset2();
     uint32_t ReadFromAsset(Asset* asset);
     uint32_t ReadFromProp2(int prop, char useColors);
-    uint32_t ReadFromProp(int prop);
+    bool ReadFromProp(uint32_t prop);
     void  WriteToProp(Asset* asset, int resourceType);
     void  ApplyToAsset(int asset, int view);
     void  Apply(int a, int b, int c, int d);
@@ -307,76 +327,71 @@ uint32_t cSPEditorPaintTheme::ReadFromProp2(int prop, char useColors)
 }
 
 // @ 0x004b2bb0
-uint32_t cSPEditorPaintTheme::ReadFromProp(int prop)
+bool cSPEditorPaintTheme::ReadFromProp(uint32_t prop)
 {
+    PaintPropRef ref;
+
+    void* colors = 0;
+    void* colorA = 0;
+    void* colorB = 0;
+    int count = 0;
+
     mModelTheme.Nuke(*(void**)((char*)&mModelTheme + 0xc));
     mModelTheme.ResetFast();
     mPropTheme.Erase(mPropTheme.mpBegin, mPropTheme.mpEnd);
 
     PropMgr* mgr = (PropMgr*)SP_PropertyManager();
-    PropObj* list = 0;
-    void* key = 0;
-    mgr->GetPropertyList(prop, DAT_015d6cc8, (void**)&key);
-    list = (PropObj*)key;
-    if (list == 0)
-        return 0;
+    mgr->GetPropertyList(prop, DAT_015d6cc8, (void**)ref.AsPPVoidParam());
+    if (ref.mpRef == 0)
+        return false;
 
-    void* colors = 0;
-    int count = 0;
-    if (list->Has(0xb0e066a7)) {
-        void* p = list->Get(0xb0e066a7);
-        if ((*(uint16_t*)((char*)p + 0x10) & 0x30) == 0) {
-            count = (*(int16_t*)((char*)p + 0x12) != 0) ? 1 : 0;
-        } else {
-            count = *(int*)((char*)p + 8);
-        }
-        colors = p;
+    if (ref.mpRef->Has(0xb0e066a7)) {
+        void* p = ref.mpRef->Get(0xb0e066a7);
+        count = (*(uint16_t*)((char*)p + 0x10) & 0x30)
+                    ? *(int*)((char*)p + 8)
+                    : ((*(int16_t*)((char*)p + 0x12) != 0) ? 1 : 0);
+        colors = (*(uint16_t*)((char*)p + 0x10) & 0x30)
+                     ? *(void**)p
+                     : ((*(int16_t*)((char*)p + 0x12) != 0) ? p : 0);
     }
-    void* colorA = 0;
-    void* colorB = 0;
-    if (list->Has(0xb0e066a8)) {
-        void* p = list->Get(0xb0e066a8);
-        colorA = p;
-        if ((*(uint16_t*)((char*)p + 0x10) & 0x30) == 0) {
-            if (*(int16_t*)((char*)p + 0x12) == 0)
-                colorA = 0;
-        } else {
-            colorA = *(void**)p;
-        }
+    if (ref.mpRef->Has(0xb0e066a8)) {
+        void* p = ref.mpRef->Get(0xb0e066a8);
+        colorA = (*(uint16_t*)((char*)p + 0x10) & 0x30)
+                     ? *(void**)p
+                     : ((*(int16_t*)((char*)p + 0x12) != 0) ? p : 0);
     }
-    if (list->Has(0xb0e066a9)) {
-        void* p = list->Get(0xb0e066a9);
-        colorB = p;
-        if ((*(uint16_t*)((char*)p + 0x10) & 0x30) == 0) {
-            if (*(int16_t*)((char*)p + 0x12) == 0)
-                colorB = 0;
-        } else {
-            colorB = *(void**)p;
-        }
+    if (ref.mpRef->Has(0xb0e066a9)) {
+        void* p = ref.mpRef->Get(0xb0e066a9);
+        colorB = (*(uint16_t*)((char*)p + 0x10) & 0x30)
+                     ? *(void**)p
+                     : ((*(int16_t*)((char*)p + 0x12) != 0) ? p : 0);
     }
-    (void)colors;
-    for (int i = 0; i < count; i++) {
-        int v = *(int*)((char*)colorA + i * 0xc);
-        if (v != 0 && v != (int)0xe960add1) {
-            uint32_t out[7];
-            out[0] = v;
-            uint32_t* cb = (uint32_t*)colorB + i * 3;
-            out[1] = cb[0];
-            out[2] = cb[1];
-            out[3] = cb[2];
-            cSPColorRGB col;
-            FUN_004098a0(&col, (char*)colorA + i * 0xc + 4);
-            (void)col;
-            uint32_t* dst = (uint32_t*)mPropTheme.Insert(out);
-            for (int k = 0; k < 7; k++)
-                dst[k] = out[k];
+
+    int i = 0;
+    while (i < count) {
+        uint32_t v = *(uint32_t*)((char*)colors + i * 0xc);
+        if (v == 0 || v == 0xe960add1) {
+            i++;
+            continue;
         }
+        // colorB is evaluated first and the payload's second vector is constructed in place:
+        // that is the original's evaluation order (see the 0x004b2bb0 disassembly).
+        PropEntry* eb = (PropEntry*)((char*)colorB + i * 0xc);
+        PropEntry* ea = (PropEntry*)((char*)colorA + i * 0xc);
+        Trans t;
+        t.f0 = v;
+        t.a[0] = ea->x;
+        t.a[1] = ea->y;
+        t.a[2] = ea->z;
+        new ((void*)&t.b) Vec3(*(Vec3*)&eb->x);
+        uint32_t* dst = (uint32_t*)mPropTheme.Insert(&i);
+        *(Trans*)dst = t;
+        i++;
     }
+
     mPropThemeID = (uint32_t)prop;
     InitClosestRegions((void*)mSourceRef, (void*)mSourceRef);
-    if (list)
-        list->Release();
-    return 1;
+    return true;
 }
 
 // @ 0x004b2f80

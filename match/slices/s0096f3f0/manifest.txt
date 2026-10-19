@@ -8,4 +8,5 @@ slices/s0096f3f0/s0096f3f0.cpp  ??0CellFormat@IWinGrid@UTFWinControls@EA@@QAE@XZ
 slices/s0096f3f0/s0096f3f0.cpp  ?InitInvalid@CellFormat@IWinGrid@UTFWinControls@EA@@QAEPAU1234@XZ  009701c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s0096f3f0/s0096f3f0.cpp  ?InitFrom@CellFormat@IWinGrid@UTFWinControls@EA@@QAEPAU1234@PBX@Z  00970210  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s0096f3f0/s0096f3f0.cpp  ?SetDefaultFormatting@WinGrid@UTFWinControls@EA@@QAEXXZ  009702b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096f3f0/s0096f3f0.cpp  ?OnMouseMove@WinGrid@UTFWinControls@EA@@UAE_NMMI@Z  00970460  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s0096f3f0/s0096f3f0.cpp  ?OnMouseWheel@WinGrid@UTFWinControls@EA@@QAEXHHHH@Z  00970540  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
