@@ -3,9 +3,13 @@
 007b1de0 ?PreloadTextureList@TexPreload@@QAEXPAX@Z  # TexPreload::PreloadTextureList migrated from s007b19c0 (verbatim, slice spelling)
 007b1e70 ?f@W1e70@@QAEXPAX0@Z  # W1e70::f migrated from s007b19c0 (verbatim, slice spelling)
 007b1e90 ?PreloadTextureList@TexPreload@@QAEXPAUPropKey@@@Z  # TexPreload::PreloadTextureList migrated from s007b19c0 (verbatim, slice spelling)
-007b2600 ?FUN_007b2600@@YAXPAX@Z  # FUN_007b2600 migrated from s007b19c0 (verbatim, slice spelling)
+007b1f40 ?FUN_007b1f40@@YAPAXPAURasterHdr@@@Z  # raster->ARGB8888 dispatch (DXT1/3/5 + raw)
+007b2270 ?FUN_007b2270@@YAXPAEHHHHPBEHH@Z  # 32bpp row blit with dst pitch
+007b2320 ?FUN_007b2320@@YAXPAEHHHHPBEHH@Z  # 8bpp row blit with dst pitch
+007b2380 ?FUN_007b2380@@YA_NPAXPAURasterFace@@@Z  # thumbnail raster build (per-face mip blit)
+007b2600 ?FUN_007b2600@@YAXMMMPAM00@Z  # spherical angles + length from direction vector
 007b2680 ?GetThumbRectID@cThumbnailManager@SP@@UAEXAAUcRenderTargetRectID@2@@Z  # SP::cThumbnailManager::GetThumbRectID migrated from s007b19c0
-007b26a0 ?FUN_007b26a0@@YAXPAX@Z  # FUN_007b26a0 migrated from s007b19c0 (verbatim, slice spelling)
+007b26a0 ?SetupThumbnailRTTs@ThumbMgr2@@QAEXPAXD@Z  # SP::cThumbnailManager::SetupThumbnailRTTs (thiscall)
 007b27a0 ?f@W27a0@@QAEXHHHH@Z  # W27a0::f migrated from s007b19c0 (verbatim, slice spelling)
 007b27e0 ?f@W27e0@@QAEXHHHHH@Z  # W27e0::f migrated from s007b19c0 (verbatim, slice spelling)
 007b2820 ?set@W2820@@QAEXPAUPair@@000M@Z  # W2820::set migrated from s007b19c0 (verbatim, slice spelling)
