@@ -1,1 +1,1 @@
-009344b0 EA::IO::IniFile::WriteEntry  # writes "[section]"/"key = value" lines with "\r\n", rbtree section maps at +0x444/+0x460
+009344b0 ?WriteEntry@IniFile_s0093_4260@@QAE_NPB_W00@Z  # IniFile_s0093_4260::WriteEntry migrated from s00934260 (verbatim, slice spelling)

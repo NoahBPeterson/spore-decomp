@@ -1,7 +1,7 @@
-009350f0 EA::IO::IniFile::LoadSectionNames  # PDB name
-00935450 EA::IO::IniFile::IniFile  # PDB name; PDB layout differs from retail by +4 in the tail
-00935510 EA::IO::IniFile::`scalar_deleting_destructor'  # PDB name
-00935560 EA::IO::IniFile::EnumEntries  # PDB name
+009350f0 ?IniFile_LoadSectionNames@@YAHPAVEA_IO_IniFile_s0093_50f0@@H@Z  # IniFile_LoadSectionNames migrated from s009350f0 (verbatim, slice spelling)
+00935450 ?ctor@EA_IO_IniFile_s0093_50f0@@QAEPAV1@HE@Z  # EA_IO_IniFile_s0093_50f0::ctor migrated from s009350f0 (verbatim, slice spelling)
+00935510 ?scalar_deleting_destructor@EA_IO_IniFile_s0093_50f0@@QAEPAV1@E@Z  # EA_IO_IniFile_s0093_50f0::scalar_deleting_destructor migrated from s009350f0 (verbatim, slice spelling)
+00935560 ?IniFile_EnumEntries@@YAHPAVEA_IO_IniFile_s0093_50f0@@HPAXH@Z  # IniFile_EnumEntries migrated from s009350f0 (verbatim, slice spelling)
 00935a30 `anonymous namespace'::CreateOSGlobalManager  # PDB name; custom 0x37-byte aligned allocation
 00935a70 `anonymous namespace'::ShutdownOSGlobalSystem  # PDB name
 00935ad0 EA::ReleaseOSGlobal  # PDB candidate name

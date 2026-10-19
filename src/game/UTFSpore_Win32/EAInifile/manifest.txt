@@ -1,0 +1,12 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAInifile.cpp  ?GetOption@EA_IO_IniFile@@QAEHH@Z  00932ff0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAInifile.cpp  ?SetOption@EA_IO_IniFile@@QAEXHH@Z  00933010  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAInifile.cpp  ?SetPath@EA_IO_IniFile@@QAE_NPB_W@Z  00933040  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAInifile.cpp  ?SetStream@EA_IO_IniFile@@QAE_NPAX@Z  009330c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAInifile.cpp  ?GetEncoding@EA_IO_IniFile@@QAEHXZ  00933250  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAInifile.cpp  ?Init@StackArrayChar256@@QAEPADPADH@Z  009332d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAInifile.cpp  ?Resize@?$StackArray@_W$0BAA@@@QAEXI@Z  00933320  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAInifile.cpp  ?DeallocateSelf@WString@@QAEXXZ  00933960  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAInifile.cpp  ?eastl_do_move_commit@@YAPAXPAUWString@@00@Z  00933a90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAInifile.cpp  ?DestroyPairRange@@YGXPAUWString@@0@Z  00933df0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAInifile.cpp  ?scalar_deleting_destructor@EA_IO_IniFile_s0093_50f0@@QAEPAV1@E@Z  00935510  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

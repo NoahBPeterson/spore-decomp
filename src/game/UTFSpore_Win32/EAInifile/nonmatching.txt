@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00933120 251 IniFile::Open: complete; the 3s time-retry loop register/stack layout and the vtable-slot calls differ
+009333f0 177 complete; WriteEntryFormatted (Vsnprintf16 twice, vtable +0x2c) - stack-array scheduling differs
+00933700 221 complete; ConvertAndWriteStream (GetCharacterSize/ConvertEncoding + vtable +0x38)
+009337f0 60 complete; WString copy-ctor (AllocateSelf + block copy); allocator field handling differs
+00933b00 82 complete; eastl copy_backward_impl do_copy pair<WString,WString>; cl strength-reduces the +0x10 high pointers
+009341b0 144 complete; IniFile::SectionExists (RangeInitialize/make_lower/rbtree::find)
+00935450 116 IniFile ctor: complete reconstruction, but EASTL rbtree reset stores and `and al,1` scheduling differ
