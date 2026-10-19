@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+007c5f50  305  IsVistaKB940105Required; Windows version-check path differs
