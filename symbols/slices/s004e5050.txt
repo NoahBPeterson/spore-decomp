@@ -1,2 +1,6 @@
-004e58c0 SP::EditorUtils::GetVerbCategory  # PDB
-004e5910 SP::EditorUtils::IsDietCategory  # PDB
+004e5050 ?GetVerbIconKeyForModelType@@YAXPAX0@Z  # GetVerbIconKeyForModelType migrated from s004e5050 (verbatim, slice spelling)
+004e5180 ?VerbIconBody5180@@YAXPAX00@Z  # VerbIconBody5180 migrated from s004e5050 (verbatim, slice spelling)
+004e5410 ?VerbIconBody5410@@YAXPAX00@Z  # VerbIconBody5410 migrated from s004e5050 (verbatim, slice spelling)
+004e57f0 ?VerbIconPredicate57f0@@YA_NPAX@Z  # VerbIconPredicate57f0 migrated from s004e5050 (verbatim, slice spelling)
+004e58c0 ?GetVerbCategory@@YAHPAUVerbObject@@@Z  # GetVerbCategory migrated from s004e5050 (verbatim, slice spelling)
+004e5910 ?IsDietCategory@EditorUtils@SP@@YA_NW4eVerbIconCategory@2@@Z  # SP::EditorUtils::IsDietCategory migrated from s004e5050

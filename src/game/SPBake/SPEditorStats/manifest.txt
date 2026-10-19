@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPEditorStats.cpp  ?GetVerbCategory@@YAHPAUVerbObject@@@Z  004e58c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorStats.cpp  ?IsDietCategory@EditorUtils@SP@@YA_NW4eVerbIconCategory@2@@Z  004e5910  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
