@@ -59,5 +59,6 @@
 ../src/game/Spui/SPUIBehavior.cpp  ??0Holder7fbd50@@QAE@XZ  007fbd50  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?GetClassId@C_7fbe70@@QAEHXZ  007fbe70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?OnMessage@Handler7fc4b0@@QAE_NHPAX@Z  007fc4b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIBehavior.cpp  ?Dispatch@EvD@@QAE_NHPAX@Z  007fc880  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?Factory@@YAXPAPAUBehaviorMessage@@H@Z  007fcc40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?init_154279c@@YAXXZ  012f6e50  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include

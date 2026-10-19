@@ -433,6 +433,80 @@ struct Obj7fc600 { unsigned f_7fc600(int a, int b); };
 // ---- items of slice s007fc880 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct BehaviorMessage { char pad[0x48]; BehaviorMessage(); };
 void* operator new(size_t, const char*, int, int, int, int);
+struct DispIface;
+struct DispReceiver {
+    virtual void v0();
+    virtual void OnMessage(int msg, void* arg);                // +0x04
+};
+struct DispSlot {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+    virtual bool IsActive();                                   // +0x18
+    virtual void v1c();
+    virtual int GetFlags();                                    // +0x20
+    virtual void v24();
+    virtual void Detach(DispIface* iface);                     // +0x28
+    virtual DispReceiver* GetReceiver();                       // +0x2c
+    virtual void Attach(DispIface* iface);                     // +0x30
+};
+struct DispIface {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+    virtual void SetActive(int v);                             // +0x3c
+};
+struct DispCont {
+    char pad0[0x10];
+    DispSlot** SlotC(int i);        // 0x007f93c0
+    DispSlot** SlotD(int i);        // 0x007f93d0
+};
+struct DispHandleObj {
+    virtual int AddRef();                                      // +0x00
+    virtual int Release();                                     // +0x04
+};
+template <class T>
+struct DispARC {
+    T* mpObject;
+    DispARC& operator=(T* pObject)
+    {
+        if (pObject != mpObject) {
+            T* const pTemp = mpObject;
+            if (pObject)
+                pObject->AddRef();
+            mpObject = pObject;
+            if (pTemp)
+                pTemp->Release();
+        }
+        return *this;
+    }
+};
+#define DISP_CONT() ((DispCont*)((char*)this - 0x10))
+#define DISP_IFACE() (DISP_CONT() ? (DispIface*)((char*)DISP_CONT() + 0x18) : (DispIface*)0)
+struct EvD {
+    char pad0[8];
+    char pad1[0x44];                // +0x8 .. +0x4b
+    bool mbActive;                  // +0x4c
+    char pad2[0x1b];                // +0x4d .. +0x67
+    DispARC<DispHandleObj> mHandle; // +0x68
+    unsigned BaseHandle(int msg, void* arg);   // @ 0x007fc4b0
+    bool Dispatch(int msg, void* arg);         // @ 0x007fc880
+};
 // ---- items of slice s007fc880 end
 
 // @ 0x007f93f0
@@ -1473,6 +1547,66 @@ int f_7fc790(void* self, void* param)
   }
   f_7fbce0_dtor(msg);
   return 1;
+}
+
+// @ 0x007fc880
+bool EvD::Dispatch(int msg, void* arg)
+{
+    BaseHandle(msg, arg);
+    switch (msg) {
+    case 0x11:
+        for (int i = 0; i < 4; ++i) {
+            if (*DISP_CONT()->SlotC(i) != 0)
+                (*DISP_CONT()->SlotC(i))->Attach(DISP_IFACE());
+        }
+        for (int i = 0; i < 4; ++i) {
+            if (*DISP_CONT()->SlotD(i) != 0)
+                (*DISP_CONT()->SlotD(i))->Detach(DISP_IFACE());
+        }
+        break;
+    case 0x12:
+        for (int i = 0; i < 4; ++i) {
+            if (*DISP_CONT()->SlotC(i) != 0)
+                (*DISP_CONT()->SlotC(i))->Attach(0);
+        }
+        for (int i = 0; i < 4; ++i) {
+            if (*DISP_CONT()->SlotD(i) != 0)
+                (*DISP_CONT()->SlotD(i))->Detach(0);
+        }
+        mHandle = 0;
+        break;
+    case 0xc:
+        if (mbActive) {
+            int cnt = 0;
+            for (int i = 0; i < 4; ++i) {
+                DispSlot** slot = DISP_CONT()->SlotD(i);
+                if (*slot != 0 && (*slot)->IsActive()) {
+                    ++cnt;
+                    if ((*slot)->IsActive() && ((*slot)->GetFlags() & 0x80)) {
+                        DispReceiver* o = (*slot)->GetReceiver();
+                        if (o != 0)
+                            o->OnMessage(msg, arg);
+                    }
+                }
+            }
+            if (cnt == 0)
+                ((DispIface*)((char*)this + 8))->SetActive(0);
+        }
+        break;
+    case 0x15:
+        if (mbActive) {
+            for (int i = 0; i < 4; ++i) {
+                DispSlot** slot = DISP_CONT()->SlotD(i);
+                if (*slot != 0 && ((*slot)->GetFlags() & 0x100)) {
+                    DispReceiver* o = (*slot)->GetReceiver();
+                    if (o != 0)
+                        o->OnMessage(msg, arg);
+                }
+            }
+        }
+        break;
+    }
+    return false;
 }
 
 // @ 0x007fcc40
