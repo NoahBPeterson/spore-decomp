@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+005db150  -  feedback-event registration (rbtree find + vector push, inlined); not reconstructed
+005db270  -  editor settings-tab registration (variant); not reconstructed
+005db390  -  editor subsystem registration (485-byte inlined rbtree/vector); not reconstructed
+005db650  -  editor subsystem registration (1276-byte inlined rbtree/vector/Eastl); not reconstructed

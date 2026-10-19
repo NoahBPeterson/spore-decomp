@@ -1,9 +1,14 @@
-005d87b0 SP::cSPEditorTactilityManager::UpdateComponent  # static float tactile lerp (linear/spring/overshoot), reads cSPEditorTactileComponent fields
-005d8f10 SP::cSPEditorTactilityManager::UpdateComponent  # transform overload: slerp of two cSPTransform rotations + translation lerp
-005d8cc0 SP::cSPEditorTactileTransform::cSPEditorTactileTransform  # two inline cSPTransform ctors (+0x38, +0x70)
-005d96d0 SP::cSPEditorTactilityManager::cSPEditorTactilityManager  # vtable 0x13F9120 + five eastl::map ctors at PDB offsets
-005d9770 SP::cSPEditorTactilityManager::`scalar deleting destructor'  # destroys the five maps in reverse member order
+005d87a0 ?Init@cSPEditorTactilityManager@SP@@UAE_NXZ  # cSPEditorTactilityManager::Init migrated from s005d87a0 (verbatim, slice spelling)
+005d87b0 ?UpdateComponent@cSPEditorTactilityManager@SP@@SG_NPAUcSPEditorTactileComponent@2@PAMMM@Z  # cSPEditorTactilityManager::UpdateComponent migrated from s005d87a0 (verbatim, slice spelling)
+005d88b0 ?LerpCursor@cSPEditorTactilityManager@SP@@QAEXW4eEditorTactileType@2@MMW4eEditorTactileLerp@2@@Z  # cSPEditorTactilityManager::LerpCursor migrated from s005d87a0 (verbatim, slice spelling)
+005d8b20 ?Shutdown@cSPEditorTactilityManager@SP@@UAE_NXZ  # cSPEditorTactilityManager::Shutdown migrated from s005d87a0 (verbatim, slice spelling)
+005d8c20 ?InitComponent@cSPEditorTactilityManager@SP@@SGXPAUcSPEditorTactileTransform@2@W4eEditorTactileType@2@W4eEditorTactileLerp@2@UcSPTransform_s005d_87a0@@3MI@Z  # cSPEditorTactilityManager::InitComponent migrated from s005d87a0 (verbatim, slice spelling)
+005d8cc0 ??0cSPEditorTactileTransform@SP@@QAE@XZ  # cSPEditorTactileTransform::cSPEditorTactileTransform migrated from s005d87a0 (verbatim, slice spelling)
+005d8df0 ?DoInsertValueImpl@?$map_s005d_87a0@U?$AutoRefCount_s005d_87a0@UcMWModel_s005d_87a0@SP@@@EA@@U?$AutoRefCount_s005d_87a0@UcIModelWorld_s005d_87a0@SP@@@2@@eastl@@QAE?AU?$rbtree_iterator_s005d_87a0@U?$pair_s005d_87a0@$$CBU?$AutoRefCount_s005d_87a0@UcMWModel_s005d_87a0@SP@@@EA@@U?$AutoRefCount_s005d_87a0@UcIModelWorld_s005d_87a0@SP@@@2@@eastl@@@2@PAU?$rbtree_node_s005d_87a0@U?$pair_s005d_87a0@$$CBU?$AutoRefCount_s005d_87a0@UcMWModel_s005d_87a0@SP@@@EA@@U?$AutoRefCount_s005d_87a0@UcIModelWorld_s005d_87a0@SP@@@2@@eastl@@@2@ABU?$pair_s005d_87a0@$$CBU?$AutoRefCount_s005d_87a0@UcMWModel_s005d_87a0@SP@@@EA@@U?$AutoRefCount_s005d_87a0@UcIModelWorld_s005d_87a0@SP@@@2@@2@_N@Z  # DoInsertValueImpl migrated from s005d87a0 (verbatim, slice spelling)
+005d8f10 ?UpdateComponent@cSPEditorTactilityManager@SP@@SG_NPAUcSPEditorTactileTransform@2@PAUcSPTransform_s005d_87a0@@ABU4@@Z  # cSPEditorTactilityManager::UpdateComponent migrated from s005d87a0 (verbatim, slice spelling)
 005d9560 ?$pair::?$pair  # pair<const AutoRefCount<cSPEditorBlock>, ComponentList> copy ctor
 005d95c0 ?$pair::?$pair  # pair<const AutoRefCount<cMWModel>, ComponentList> copy ctor
 005d9620 ?$pair::?$pair  # pair<const AutoRefCount<IWindow>, ComponentList> copy ctor
+005d96d0 ??0cSPEditorTactilityManager@SP@@QAE@XZ  # cSPEditorTactilityManager::cSPEditorTactilityManager migrated from s005d87a0 (verbatim, slice spelling)
+005d9770 SP::cSPEditorTactilityManager::`scalar deleting destructor'  # destroys the five maps in reverse member order
 005d9800 map@U?$AutoRefCount@UcMWModel@SP@@@EA@@U?$AutoRefCount@UcIModelWorld::?A?$map  # map<AutoRefCount<cMWModel>, AutoRefCount<cIModelWorld>>::operator[] (class part disambiguates the four map instances)
