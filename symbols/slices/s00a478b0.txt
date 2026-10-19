@@ -1,1 +1,1 @@
-00a48100 EA::Audio::Eapd::pd_typedmess  # Pd m_class.c pd_typedmess; byte-exact /O2; t_symbol passed by value (hash,name), method entries 0x24 bytes
+00a48100 ?pd_typedmess@Eapd@Audio@EA@@YAXPAPAUt_class@123@Ut_symbol@123@HPAUt_atom@123@@Z  # pd_typedmess migrated from s00a478b0 (verbatim, slice spelling)
