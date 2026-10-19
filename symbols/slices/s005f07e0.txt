@@ -1,9 +1,21 @@
+00596e10 ?Lock@cCollectableItems@SP@@QAE_N_K@Z  # SP::cCollectableItems::Lock (callee of s005f07e0, named from the dev publics; slice address comment)
+005c6ca0 ?Init@cSPPaletteItemUI@SP@@UAEXPAVcSPPaletteItem@2@PAVIWindow@UTFWin@EA@@1PAUcSPPaletteInfo@2@@Z  # SP::cSPPaletteItemUI::Init (callee of s005f07e0, named from the dev publics; slice address comment)
+005ed6c0 ?Hide@cSPPaletteItemRollover@SP@@QAEXXZ  # SP::cSPPaletteItemRollover::Hide (callee of s005f07e0, named from the dev publics; slice address comment)
 005f07e0 SP::cSPSwatchManager::~cSPSwatchManager  # member dtors match PDB members (maps, rollover, anim world, camera manager)
 005f0850 SP::cSPSwatchManager::Shutdown  # removes grab cursors, clears maps, shuts down members
 005f0940 SP::cSPSwatchManager::Update  # deltaTime*0.001, swatch timeout map, anim world step clamped to 0.2
 005f0ac0 SP::cSPSwatchManager::cSPSwatchManager  # same vtable as dtor, map anchors
 005f0ca0 SP::cSPSwatchManager::CreateSwatch  # new cSPSwatch (0x17c), mIDToSwatchMap[mCurrentID++]
 005f0d80 SP::cSPSwatchPlanner::cSPSwatchPlanner  # vtables shared with PDB-named dtor 0x5f0e30
-005f0ef0 SP::cSPSwatchPlanner::Shutdown  # tail-calls cSPPaletteItemUI::Shutdown, tooltips removed
-005f1430 SP::cSPSwatchPlanner::OffRollover  # tail-calls cSPPaletteItemUI::OffRollover
-005f1630 SP::cSPSwatchPlanner::HandleMessage  # IHandler thunk at +0x20
+005f0e30 ??1cSPSwatchPlanner@SP@@UAE@XZ  # cSPSwatchPlanner::~cSPSwatchPlanner migrated from s005f07e0 (verbatim, slice spelling)
+005f0ef0 ?Shutdown@cSPSwatchPlanner@SP@@UAEXXZ  # cSPSwatchPlanner::Shutdown migrated from s005f07e0 (verbatim, slice spelling)
+005f10b0 ?UpdateCost@cSPSwatchPlanner@SP@@QAEXXZ  # cSPSwatchPlanner::UpdateCost migrated from s005f07e0 (verbatim, slice spelling)
+005f1110 ?UpdateButtonStatus@cSPSwatchPlanner@SP@@QAEXXZ  # cSPSwatchPlanner::UpdateButtonStatus migrated from s005f07e0 (verbatim, slice spelling)
+005f1240 ?OnRollover@cSPSwatchPlanner@SP@@UAEXXZ  # cSPSwatchPlanner::OnRollover migrated from s005f07e0 (verbatim, slice spelling)
+005f1430 ?OffRollover@cSPSwatchPlanner@SP@@UAEXXZ  # cSPSwatchPlanner::OffRollover migrated from s005f07e0 (verbatim, slice spelling)
+005f1460 ?CanDrag@cSPSwatchPlanner@SP@@QAE_NXZ  # cSPSwatchPlanner::CanDrag migrated from s005f07e0 (verbatim, slice spelling)
+005f14a0 ?GetImageWindow@cSPSwatchPlanner@SP@@QAEPAVIWindow_s005f_07e0@UTFWin@EA@@XZ  # cSPSwatchPlanner::GetImageWindow migrated from s005f07e0 (verbatim, slice spelling)
+005f1500 ?SetImage@cSPSwatchPlanner@SP@@QAEXABUKey_s005f_07e0@ResourceMan@EA@@@Z  # cSPSwatchPlanner::SetImage migrated from s005f07e0 (verbatim, slice spelling)
+005f1630 ?HandleMessage@cSPSwatchPlanner@SP@@UAE_NIPAX@Z  # cSPSwatchPlanner::HandleMessage migrated from s005f07e0 (verbatim, slice spelling)
+005f4f80 ?Init@cSPSwatch@SP@@QAEXABVKey@ResourceMan@EA@@PAVIWindow@UTFWin@5@_N2W4eLODType@cAnimatingCreature@2@2@Z  # SP::cSPSwatch::Init (callee of s005f07e0, named from the dev publics; slice address comment)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005f07e0, named from the dev publics; slice address comment)

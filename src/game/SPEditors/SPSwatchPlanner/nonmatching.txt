@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+005f1240 333 OnRollover: switch compare subtrees laid out after the default block (shifts all offsets); data kept in memory instead of edi
+005f16d0 249 complete DoMessage; cSPMessage ctor inlined in one arm and out-of-line in the other, item null check kept in original; difftest WEAK (16.5% coverage: message-type/ID guards rarely hit by random inputs)
+005f1960 1570 complete Init; local frame sharing (sym/spill slot at esp+0x10) and tooltip block scheduling differ; difftest WEAK (1.2% coverage: inputs past the null-parent early return fault in the runtime allocator/singletons)

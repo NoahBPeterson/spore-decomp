@@ -1,4 +1,6 @@
 005c6ca0 ?Init@cSPPaletteItemUI@SP@@UAEXPAVcSPPaletteItem@2@PAVIWindow@UTFWin@EA@@1PAUcSPPaletteInfo@2@@Z  # SP::cSPPaletteItemUI::Init (callee of s005f16d0, named from the dev publics; slice address comment)
+005f16d0 ?HandleUIMessage@cSPSwatchPlannerReal@SW@@UAE_NPAVIWindow@2@PBUUIMessage@2@@Z  # cSPSwatchPlannerReal::HandleUIMessage migrated from s005f16d0 (verbatim, slice spelling)
+005f1960 ?Init@cSPSwatchPlannerReal@SW@@QAEXPAVcSwatchItemInfo@2@PAVIWindow@2@HPAVcSPPaletteInfo@2@@Z  # cSPSwatchPlannerReal::Init migrated from s005f16d0 (verbatim, slice spelling)
 005f2180 ?Check@cSPSwatchPlanner@SP@@QAEHXZ  # cSPSwatchPlanner::Check migrated from s005f16d0 (verbatim, slice spelling)
 005f21d0 ?SetModel@cSPSwatchPlannerReal@SW@@QAEXAAPAVcPropertyList@2@@Z  # cSPSwatchPlannerReal::SetModel migrated from s005f16d0 (verbatim, slice spelling)
 005f22a0 ?AsInterface@cSPOLDPaletteItemUIDragAndBuy@SP@@UAEPAXW4InterfaceId@COM@EA@@@Z  # SP::cSPOLDPaletteItemUIDragAndBuy::AsInterface migrated from s005f16d0
