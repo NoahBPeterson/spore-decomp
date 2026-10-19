@@ -1,4 +1,5 @@
 # va  diff-bytes  reason
+005288f0 585 cRTTBuffer::cRTTBuffer complete (camera setup, viewport, projection matrix rows, StateBits::Set); inline-setter argument order, `this` temps and the sAppProperties accessor temp differ; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oy /GS-; equiv: WEAK (113 valid inputs, 100% cov, no FAIL)
 00528e20 53 cRTTBuffer::Destroy: complete; fixed missing vtable dereference (device->vtbl[5](pageID,allocID)); equiv PASS (317 valid, 100% coverage); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 005291f0 37 cEffectsModel::Dispatch; complete; original uses aligned SSE (and esp,-16) 4xmovaps copy
 005292d0 64 thiscall draw helper; complete but /Od layout differs
