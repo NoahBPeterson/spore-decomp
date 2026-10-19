@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00a40cd0 184 trixie_use: complete; large EH-guarded string-conversion + error-object dispatch; instruction scheduling and register allocation differ throughout. difftest WEAK. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a40dd0 11 trixie_new: complete; only the hoisting of `mov edx,<addr>` for the two repeated &DAT_01667bac stores differs (our scheduler places the load 4 instructions earlier than the original). difftest UNSUPPORTED (only 0/400 inputs valid; fault(read) on every input). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a40e80 44 SP_Audio_Trixie_Register: complete; 8x gensym(buf,name) through a single reused int[2] buffer (matches `sub esp,8` + shifting lea [esp+off]); remaining diff is instruction scheduling of the DAT_0166efXX stores relative to the next gensym call's argument setup. difftest UNSUPPORTED (0/400 inputs valid; fault(read)). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
