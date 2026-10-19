@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPID.cpp  ?insert@?$basic_string_s005f_7da0@_W@eastl@@QAEXPA_WPB_W1@Z  005f7da0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEngine/SPID.cpp  ?InvalidEditorModelKey@@YAPAUResKey@@PAU1@I@Z  0068c700  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPID.cpp  ?FindLastCharW@@YAPA_WPA_W0PB_W@Z  0068c720  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPID.cpp  ?FindLastCharA@@YAPADPAD0PBD@Z  0068c750  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPID.cpp  ?SPNameFromKeyThunk@@YAXPBUResKey@@PAXHHPBD@Z  0068d1a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

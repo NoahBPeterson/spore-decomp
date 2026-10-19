@@ -1,8 +1,14 @@
 0068c6d0  SP::SetKeyKind  # Ghidra PDB symbol
-0068c700  `anonymous namespace'::InvalidEditorModelKey  # Ghidra PDB symbol
-0068c770  `anonymous namespace'::GetExplicitIdStart  # Ghidra PDB symbol
-0068c820  `anonymous namespace'::GetExplicitIdStart  # Ghidra PDB symbol (narrow)
-0068d0d0  SPNameFromKey  # Ghidra PDB symbol (wide)
-0068d290  SPNameFromKey  # Ghidra PDB symbol (narrow)
+0068c700 ?InvalidEditorModelKey@@YAPAUResKey@@PAU1@I@Z  # InvalidEditorModelKey migrated from s0068c330 (verbatim, slice spelling)
+0068c720 ?FindLastCharW@@YAPA_WPA_W0PB_W@Z  # FindLastCharW migrated from s0068c330 (verbatim, slice spelling)
+0068c750 ?FindLastCharA@@YAPADPAD0PBD@Z  # FindLastCharA migrated from s0068c330 (verbatim, slice spelling)
+0068c770 ?GetExplicitIdStartW@@YAPA_WPA_W0EE@Z  # GetExplicitIdStartW migrated from s0068c330 (verbatim, slice spelling)
+0068c820 ?GetExplicitIdStartA@@YAPADPAD0EE@Z  # GetExplicitIdStartA migrated from s0068c330 (verbatim, slice spelling)
+0068c9e0 ?Insert@PackStr@@QAEXPADPBD1@Z  # PackStr::Insert migrated from s0068c330 (verbatim, slice spelling)
+0068cd40 ?InsertCStr@PackStr@@QAEPAU1@IPBD@Z  # PackStr::InsertCStr migrated from s0068c330 (verbatim, slice spelling)
+0068d0d0 ?SPNameFromKeyW@@YAXPBUResKey@@PAXPB_W@Z  # SPNameFromKeyW migrated from s0068c330 (verbatim, slice spelling)
+0068d1a0 ?SPNameFromKeyThunk@@YAXPBUResKey@@PAXHHPBD@Z  # SPNameFromKeyThunk migrated from s0068c330 (verbatim, slice spelling)
+0068d1c0 ?PackStrSwap@@YAXPAUPackStr@@0@Z  # PackStrSwap migrated from s0068c330 (verbatim, slice spelling)
+0068d290 ?SPNameFromKeyA@@YAXPBUResKey@@PAXPBD@Z  # SPNameFromKeyA migrated from s0068c330 (verbatim, slice spelling)
 0068d340 ?HashMapOp@@YAPAXPAXI0@Z  # HashMapOp migrated from s0068c330 (verbatim, slice spelling)
-0068d5a0  SPKeyFromName  # Ghidra PDB symbol
+0068d5a0 ?SPKeyFromName@@YA_NPAUResKey@@PBDII@Z  # SPKeyFromName migrated from s0068c330 (verbatim, slice spelling)
