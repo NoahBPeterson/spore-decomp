@@ -1,2 +1,3 @@
 00709c40 111 cLightingManager init: complete field/vtable initialisation; store order and vptr sequence reordered by cl
 007094c0 1439 cLightingWorld::ApplyConfig: complete (config ambient/dir-light/sun packing, light-list copy, effect ref, env/local sample refresh, message); call sequence identical (18 calls), regalloc/spill schedule differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+00708f40  1049  cLightingWorld::ApplyGlobalState complete (ambient/origin copy, transform diff, normalization-constant rebuild, sun/dir-light vectors, light-slot dirty bits, shader-data pushes); SSE register allocation and local layout differ [equiv: PASS 341 valid, 93.6% cov]

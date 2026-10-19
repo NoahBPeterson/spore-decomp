@@ -14,3 +14,4 @@
 008027e0 58   pick + apply cursor (complete)
 00802850 8    CheckEntry; lea/tail-call shape (complete)
 00802890 49   find console child window (complete)
+00801d80  5  SaveCursorToFile complete (temp file, FileStream open/write/close, load cursor, remove, free); data/vtable load order differs [equiv: WEAK (12% coverage)]

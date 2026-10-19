@@ -2,6 +2,7 @@
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 #include <new>
 #include <xmmintrin.h>
+#include <intrin.h>
 #include "types.h"
 
 extern int g_lm_vtbl0;
@@ -112,13 +113,14 @@ struct U32Vec {                                                 // eastl::vector
     }
 };
 
+struct IConfigOwner;
 struct DirLight {                                               // 0x1c bytes at Config+8
     float px, py, pz;       // +0x00
     float k;                // +0x0c
     float dx, dy, dz;       // +0x10
 };
 struct Config {                                                 // object at cLightingWorld+0x10
-    char pad00[4];
+    IConfigOwner* mOwner;   // +0x00
     uint32_t mFlags;        // +0x04 (bits 0-3: DirLight present, 4: ambient override, 5: sun)
     DirLight mLights[4];    // +0x08
     float m78, m7c, m80;    // +0x78
@@ -126,7 +128,8 @@ struct Config {                                                 // object at cLi
     float m88;              // +0x88
     float vx, vy, vz;       // +0x8c
     uint32_t mAmbient[3];   // +0x98
-    char padA4[0x18];
+    bool mCopyXform;        // +0xa4
+    char padA5[0x17];
     Vector4* mAddBegin;     // +0xbc
     Vector4* mAddEnd;       // +0xc0
     char padC4[0xc];
@@ -159,6 +162,68 @@ struct LightingInfo {                                           // at cLightingW
     Vector4 mCoeffs[25];        // +0x30
 };
 
+
+// --------------------------------------------------------------------------- global-state helpers
+extern uint32_t g_softDirty;            // 0x016f9528 (GlobalState soft-state dirty bits)
+extern float g_gsAmbient[3];            // 0x016f9598
+extern void* g_gsLights[8];             // 0x016f9574
+extern float g_kOrigin[3];              // 0x01629858
+extern float g_kIdentity[9];            // 0x016299ac
+void __cdecl SetShaderData(unsigned short id, const void* data, char force);   // 0x00777ae0
+void __cdecl EAFreeLw(void* p);                                                 // 0x00f47380
+void __cdecl RemoveNormalizationConstants(int n, float* coeffs);               // 0x00783830
+void __cdecl ApplyNormalizationConstants(int n, float* coeffs);                // 0x00783590
+void __cdecl ConvolveCoefficients(float* a, int n, float* b, float* out);      // 0x00795eb0 (thunk of 0x007864c0)
+bool __cdecl Mat33NotEqual(const float* a, const float* b);                    // 0x0041dd90
+struct RGB3 { float r, g, b; };
+struct LoopState { unsigned off; unsigned i; };
+
+struct Mat33 {                                                  // rw::math::fpu::Matrix33Template<float,0>
+    float m[9];
+    Mat33(const float* src);                                    // 0x0041cb40 (Matrix3::Assign, ret 4)
+};
+struct Xform {                                                  // SP::cSPTransform
+    uint16_t mFlags;        // +0x00 (bit 1: rotation present, bit 2: position)
+    uint16_t mVersion;      // +0x02
+    float mPos[3];          // +0x04
+    float mScale;           // +0x10
+    Mat33 mRot;             // +0x14
+    Xform() : mRot(g_kIdentity)
+    {
+        mVersion = 0;
+        mPos[0] = g_kOrigin[0];
+        mPos[1] = g_kOrigin[1];
+        mFlags = 0;
+        mPos[2] = g_kOrigin[2];
+        mScale = 1.0f;
+    }
+    Xform& operator=(const Xform& o);                           // 0x00537dc0 (ret 4)
+};
+struct XformSource {                                            // owner of the matrix + origin fetched by 0x007c40f0
+    void GetTransform(Xform* out);                              // 0x007c40f0 (ret 4)
+};
+struct Light {
+    char pad00[0x20];
+    Vector4 mDir;           // +0x20
+    Vector4 mPos;           // +0x30
+};
+struct ScratchCoeffs {                                          // eastl::fixed_vector<float,256> on the stack
+    float* mpBegin;
+    float* mpEnd;
+    float* mpCap;
+    uint32_t pad0c;
+    float* mpPoolBegin;
+    uint32_t pad14[3];
+    float mBuf[256];
+    ScratchCoeffs(const Vector4* first, const Vector4* last);   // 0x00708df0 (ret 8)
+    ~ScratchCoeffs() { if (mpBegin && mpBegin != mpPoolBegin) EAFreeLw(mpBegin); }
+};
+struct IConfigOwner {                                           // object at Config+0
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8();
+    virtual void Query(uint32_t id, void* out);                 // +0x24
+};
+
 template <class T> static inline const T& MinRef(const T& a, const T& b) { return (a < b) ? a : b; }
 
 extern float g_defAmbient[3];                                   // 0x015359f8
@@ -179,7 +244,8 @@ struct cLightingWorld {
     float mPos[3];                  // +0x68
     float mScale;                   // +0x74
     float m[9];                     // +0x78
-    char pad9c[0x44];
+    char pad9c[0x38];
+    float mAtmPos[3];               // +0xd4
     bool mDirty;                    // +0xe0
     char pade1[0x16b];
     IEffect* mEffect;               // +0x24c
@@ -198,14 +264,131 @@ struct cLightingWorld {
     void PreUpdate();                                           // 0x007087a0
     void UpdateEnvLightSample(void* sample);                    // 0x00706170
     void UpdateLocalLightSample(int handle);                    // 0x00707370
-    void ApplyGlobalState(int* state);
+    void ApplyGlobalState(XformSource* src);
+    Xform& Cur() { return *(Xform*)&mFlags; }
+    Xform& Prev() { return *(Xform*)pad9c; }
     void ApplyConfig();
 };
 
 // @ 0x00708f40
-void cLightingWorld::ApplyGlobalState(int* state)
+void cLightingWorld::ApplyGlobalState(XformSource* src)
 {
-    (void)state;
+    LoopState st;                       // doubles as the Query out-parameter at the end
+    RGB3 amb;
+    amb.r = mAmbient[0];
+    amb.g = mAmbient[1];
+    amb.b = mAmbient[2];
+    g_softDirty |= 0x20;
+    *(RGB3*)g_gsAmbient = amb;
+
+    Xform t;
+    src->GetTransform(&t);
+    mAtmPos[0] = t.mPos[0];
+    mAtmPos[1] = t.mPos[1];
+    mAtmPos[2] = t.mPos[2];
+
+    Config* cfg = mCfg;
+    if (cfg) {
+        if (cfg->mCopyXform)
+            Cur() = t;
+        Xform* xf = &Cur();
+        Xform& prev = Prev();
+        if (prev.mScale != xf->mScale || prev.mPos[0] != xf->mPos[0] || prev.mPos[1] != xf->mPos[1] ||
+            prev.mPos[2] != xf->mPos[2] || Mat33NotEqual(prev.mRot.m, xf->mRot.m)) {
+            if (mInfo.mNumBands != 0 && !mEnabled) {
+                Config* c = mCfg;
+                ScratchCoeffs coeffs(c->mAddBegin, c->mAddBegin + (c->mAddEnd - c->mAddBegin));
+                int n = *(int*)((char*)this + 0x34);
+                RemoveNormalizationConstants(n, coeffs.mpBegin);
+                ConvolveCoefficients(xf->mRot.m, n, coeffs.mpBegin, &mInfo.mCoeffs[0].x);
+                ApplyNormalizationConstants(n, &mInfo.mCoeffs[0].x);
+            }
+            cfg = mCfg;
+            if (Bit(cfg->mFlags, 5)) {
+                float vx = cfg->vx, vy = cfg->vy, vz = cfg->vz;
+                float ox = vx, oy = vy, oz = vz;
+                if (xf->mFlags & 2) {
+                    ox = (xf->mRot.m[6] * vz + xf->mRot.m[3] * vy) + xf->mRot.m[0] * vx;
+                    oy = (xf->mRot.m[1] * vx + xf->mRot.m[7] * vz) + xf->mRot.m[4] * vy;
+                    oz = (xf->mRot.m[2] * vx + xf->mRot.m[8] * vz) + xf->mRot.m[5] * vy;
+                }
+                float s = xf->mScale;
+                float px = xf->mPos[0] + ox * s;
+                float py = xf->mPos[1] + oy * s;
+                float pz = xf->mPos[2] + oz * s;
+                ((Light*)mSunLight)->mPos = Vector4(px, py, pz, px);
+            }
+            {
+                st.off = 0;
+                st.i = 0;
+                unsigned mask = 1;
+                for (int off = 0; off < 0x70; off += 0x1c, st.i++, mask = (mask << 1) | (mask >> 31)) {
+                    if (st.i < 7 && FlagSet(mCfg->mFlags, mask)) {
+                        Config* c = mCfg;
+                        float n1 = -*(float*)((char*)c + off + 0x18);
+                        float n2 = -*(float*)((char*)c + off + 0x1c);
+                        float n3 = -*(float*)((char*)c + off + 0x20);
+                        float ox = n1, oy = n2, oz = n3;
+                        if (xf->mFlags & 2) {
+                            ox = (xf->mRot.m[6] * n3 + xf->mRot.m[3] * n2) + n1 * xf->mRot.m[0];
+                            oy = (xf->mRot.m[1] * n1 + xf->mRot.m[7] * n3) + xf->mRot.m[4] * n2;
+                            oz = (xf->mRot.m[2] * n1 + xf->mRot.m[8] * n3) + xf->mRot.m[5] * n2;
+                        }
+                        Light* l = *(Light**)((char*)mDirLights.mpBegin + st.off);
+                        st.off += 4;
+                        l->mDir = Vector4(ox, oy, oz, ox);
+                    }
+                }
+            }
+            Prev() = *xf;
+        }
+    }
+
+    int count = (int)(mDirLights.mpEnd - mDirLights.mpBegin);
+    unsigned mask = 1;
+    int n = 0;
+    for (int i = 0; i < count; i++) {
+        void* l = (void*)mDirLights.mpBegin[i];
+        g_softDirty |= _rotl(mask, 6);
+        g_gsLights[i] = l;
+        mask = _rotl(mask, 1);
+        n = count;
+    }
+    if (mSunLight) {
+        g_gsLights[n] = (void*)mSunLight;
+        g_softDirty |= 1 << ((n + 6) & 31);
+        n++;
+    }
+    unsigned bit = _rotl(1, n);
+    if (n < 8) {
+        int rest = 8 - n;
+        for (int k = 0; k < rest; k++)
+            g_gsLights[n + k] = 0;
+        do {
+            g_softDirty |= _rotl(bit, 6);
+            bit = _rotl(bit, 1);
+            rest--;
+        } while (rest != 0);
+    }
+
+    cfg = mCfg;
+    if (!cfg) {
+        SetShaderData(0x219, 0, 0);
+        SetShaderData(0x224, 0, 0);
+        return;
+    }
+    SetShaderData(0x300, 0, 0);
+    if (mInfo.mNumBands != 0)
+        SetShaderData(0x219, &mInfo, 1);
+    else
+        SetShaderData(0x219, 0, 0);
+    if (!mEnabled) {
+        SetShaderData(0x224, 0, 0);
+        return;
+    }
+    if (cfg->mOwner)
+        cfg->mOwner->Query(0x2478ee4, &st);
+    SetShaderData(0x224, *(char**)((char*)this + 0xc) + 0xf8, 1);
 }
 
 // @ 0x007094c0

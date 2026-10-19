@@ -4,7 +4,6 @@
 00926c20  396  partial: allocator core teardown skeleton
 00926db0  350  partial: allocator rehash/move skeleton
 00926f10  181  partial: allocator node init skeleton
-00926fd0  364  partial: allocator bulk free skeleton
 00927140  381  partial: allocator statistics skeleton
 00926840  -  block-list insert (ecx=this, ret 8): empty stub, original 84 bytes; equiv UNSUPPORTED (stub too small for symbol lookup)
 009268b0  -  block init (ecx=this, ret 8): empty stub, original 57 bytes; equiv UNSUPPORTED (stub too small for symbol lookup)

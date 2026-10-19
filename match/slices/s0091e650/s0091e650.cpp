@@ -456,36 +456,45 @@ int __stdcall GetComputerNameHelper(char* buf, unsigned n) {
     return (int)strlen(buf);
 }
 
+struct PeSectionHeader {            // IMAGE_SECTION_HEADER (0x28 bytes)
+    char Name[8];
+    unsigned VirtualSize;           // +0x08
+    unsigned VirtualAddress;        // +0x0c
+    unsigned rest[6];
+};
+struct PeNtHeaders {                // IMAGE_NT_HEADERS prefix
+    unsigned Signature;
+    unsigned short Machine, NumberOfSections;
+    unsigned TimeDateStamp, PointerToSymbolTable, NumberOfSymbols;
+    unsigned short SizeOfOptionalHeader, Characteristics;
+};
+
 // @ 0x0091ed80
 int ReportWriter::GetAddressLocation(void* addr, char* buf, unsigned n, int* a, int* b) {
     buf[0] = 0;
     MEMORY_BASIC_INFORMATION mbi;
-    if (VirtualQuery(addr, &mbi, 0x1c) == 0)
-        return 0;
-    char fname[512];
-    fname[0] = 0;
-    if (mbi.AllocationBase == 0)
-        return 0;
-    if (GetModuleFileNameA((HMODULE)mbi.AllocationBase, fname, 0x1ff) == 0)
-        return 0;
-    // walk the PE export directory looking for the section containing addr
-    char* base = (char*)mbi.AllocationBase;
-    unsigned peOff = *(unsigned*)(base + 0x3c);
-    unsigned numSections = *(unsigned short*)(base + peOff + 6);
-    unsigned optOff = peOff + 0x18;
-    unsigned sizeOpt = *(unsigned short*)(base + peOff + 0x14);
-    unsigned secOff = optOff + sizeOpt;
-    unsigned rva = (unsigned)((char*)addr - base);
-    for (unsigned i = 0; i < numSections; ++i) {
-        char* sec = base + secOff + i * 0x28;
-        unsigned va = *(unsigned*)(sec + 0xc);
-        unsigned vsize = *(unsigned*)(sec + 8) + va;
-        if (rva >= va && rva < vsize) {
-            strncpy(buf, fname, n);
-            buf[n - 1] = 0;
-            *a = i + 1;
-            *b = 0;
-            return (int)strlen(buf);
+    if (VirtualQuery(addr, &mbi, 0x1c) != 0) {
+        char fname[512];
+        fname[511] = 0;
+        fname[0] = 0;
+        char* base = (char*)mbi.AllocationBase;
+        if (base != 0) {
+            if (GetModuleFileNameA((HMODULE)base, fname, 0x1ff) != 0) {
+                // walk the PE section table for the section containing addr
+                PeNtHeaders* nt = (PeNtHeaders*)(base + *(int*)(base + 0x3c));
+                PeSectionHeader* sec = (PeSectionHeader*)((char*)nt + 0x18 + nt->SizeOfOptionalHeader);
+                unsigned rva = (unsigned)addr - (unsigned)base;
+                for (unsigned short i = 0; i < nt->NumberOfSections; ++i, ++sec) {
+                    unsigned va = sec->VirtualAddress;
+                    if (rva >= va && rva < sec->VirtualSize + va) {
+                        strncpy(buf, fname, n);
+                        buf[n - 1] = 0;
+                        *a = i + 1;
+                        *b = rva - va;
+                        return (int)strlen(buf);
+                    }
+                }
+            }
         }
     }
     return 0;

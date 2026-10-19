@@ -5,3 +5,4 @@
 007dc5e0  65   cSmoothCameraController::ConstrainDistanceAlongCurve; minss/maxss asm helper not reproduced
 007dca30  155  cSmoothCameraController::OnUpdateTargetSet; constant/field-copy schedule differs
 007dcb00  242  FUN_007dcb00 quaternion multiply; SSE expression schedule differs; equiv FAIL (1 ulp float-rounding mismatch at input 5)
+007dc630  1  ~cSmoothCameraController: complete; EH unwind-state byte 0 vs original 1 (second unwind entry not reproduced) [equiv: UNSUPPORTED (vtable address mapping)]

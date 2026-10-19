@@ -12,3 +12,4 @@ slices/s0091e650/s0091e650.cpp  Seek@ReportWriter                   0091ec80  /O
 slices/s0091e650/s0091e650.cpp  GetTimeString@ReportWriter          0091eca0  /O2 /MD /Gy /EHsc /TP
 slices/s0091e650/s0091e650.cpp  GetDateString@ReportWriter          0091ecf0  /O2 /MD /Gy /EHsc /TP
 slices/s0091e650/s0091e650.cpp  GetComputerNameHelper               0091ed40  /O2 /MD /Gy /EHsc /TP
+slices/s0091e650/s0091e650.cpp  ?GetAddressLocation@ReportWriter@@QAEHPAXPADIPAH2@Z  0091ed80  /O2 /MD /Gy /EHsc /TP /GS-

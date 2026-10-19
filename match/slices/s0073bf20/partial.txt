@@ -5,5 +5,4 @@
 0073c4b0  674  SkinCollect: large skinning/collect pass, skeleton only
 0073c780  822  AnimCollect: large animation/collect pass, skeleton only
 0073cac0  66   AbilityCtorC: MI vtable constructor, skeleton only
-0073cb40  76   AbilityCtorD: MI vtable constructor, skeleton only
 0073cbc0  515  AbilityMethodE: large ability method, skeleton only

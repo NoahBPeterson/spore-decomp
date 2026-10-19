@@ -416,40 +416,57 @@ int C_801ac0::f(void* param_2, void* param_3, int param_4, int param_5) {
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00801d80  save a cursor to a temporary file
+// 0x00801d80  save a cursor to a temporary file (helpers below)
 // ---------------------------------------------------------------------------
+// EA::IO::FileStream (0x22c bytes: vtable, state, the path buffer inline)
 struct FileStream {
-  void Ctor(void* path);                  // 0x00??????
-  int  Open(int a, int b, int c, int d);
-  void Write(void* data, int n);
-  void Close();
-  void Dtor();
+  uint32_t mData[0x22c / 4];
+  FileStream(const wchar_t* path);        // 0x00931e10 (ret 4)
+  ~FileStream();                          // 0x00931e70
+  bool Open(int access, int disposition, int sharing, int usage);   // 0x009318f0 (ret 0x10)
+  bool Write(const void* data, unsigned n);                          // 0x00931d30 (ret 8)
+  bool Close();                           // 0x00931a70
 };
-int  __cdecl f_932580(void* p, int a, int b, int c);
-void __cdecl File_Remove(const wchar_t*);
-int  __cdecl f_686430(void*, void*);
-struct C_801d80 { uint8_t f(void* param_2, int param_3, int param_4); };
-uint8_t C_801d80::f(void* param_2, int param_3, int param_4) {
+void __cdecl CreateTempFile(wchar_t* path, int a, int b, int c);   // 0x00932580
+bool __cdecl FileRemove(const wchar_t* path);                       // 0x00931fd0
+// growable byte vector with a heap buffer (begin, end, capacity, allocator)
+struct VecBuf {
+  int* mpBegin; int* mpEnd; int* mpCapacity; int mAlloc[2];
+  int* Init(unsigned n, void* tag);       // 0x00686430 (ret 8)
+};
+struct IRecordSrc { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+                    virtual struct IRecordObj* GetRecord(); };      // +0x18
+struct IRecordObj { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6();
+                    virtual unsigned GetSize();                      // +0x1c
+                    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+                    virtual void Read(void* dst, unsigned n); };    // +0x30
+struct EmptyTag801d80 {};
+struct C_801d80 {
+  bool SetCursor(const wchar_t* path, void* info);   // 0x008026b0 (ret 8; ecx unused)
+  uint8_t f(IRecordSrc* src, void* info, int c, int type);
+};
+// @ 0x00801d80
+uint8_t C_801d80::f(IRecordSrc* src, void* info, int c, int type) {
   uint8_t result = 0;
-  if (param_4 == 0x2393756) {
-    char pathbuf[520];
-    char fs[0x100];
-    f_932580(pathbuf, 0, 0, 0);
-    ((FileStream*)fs)->Ctor(pathbuf);
-    if (((FileStream*)fs)->Open(2, 6, 1, 0)) {
-      void* a = ((void* (__thiscall*)(void*))((*(void***)this)[0x18 / 4]))(this);
-      int n = ((int(__thiscall*)(void*))((*(void***)a)[0x1c / 4]))(a);
-      char buf[5];
-      f_686430((void*)n, buf);
-      ((void(__thiscall*)(void*, int, int))((*(void***)a)[0x30 / 4]))(a, n, n);
-      ((FileStream*)fs)->Write((void*)n, n);
-      ((FileStream*)fs)->Close();
-      result = (uint8_t)Sub_8026b0((wchar_t*)pathbuf, param_2);
-      File_Remove((wchar_t*)pathbuf);
-      if (n && *(int*)(n - 4))
-        operator_delete((void*)n);
+  if (type == 0x2393756) {
+    uint32_t pathbuf[0x208 / 4];
+    CreateTempFile((wchar_t*)pathbuf, 0, 0, 0);
+    FileStream fs((const wchar_t*)pathbuf);
+    if (fs.Open(2, 6, 1, 0)) {
+      IRecordObj* rec = src->GetRecord();
+      unsigned n = rec->GetSize();
+      EmptyTag801d80 tag;
+      VecBuf vec;
+      vec.Init(n, &tag);
+      int* data = vec.mpBegin;
+      rec->Read(data, n);
+      fs.Write(data, n);
+      fs.Close();
+      result = (uint8_t)SetCursor((const wchar_t*)pathbuf, info);
+      FileRemove((const wchar_t*)pathbuf);
+      if (data && data[-1])
+        operator_delete(data);
     }
-    ((FileStream*)fs)->Dtor();
   }
   return result;
 }

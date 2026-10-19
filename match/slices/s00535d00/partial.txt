@@ -1,4 +1,3 @@
-00535e40  -  RegisterPaintEvalCommands<...>: 851-byte ArgScript registration, stub only
 005361a0  -  PaintVariable ParseLine (1039 bytes): stub only
 005365b0  -  paint-variable command (822 bytes): stub only
 00536910  -  paint-variable command (492 bytes): stub only

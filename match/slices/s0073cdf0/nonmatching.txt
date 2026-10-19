@@ -1,1 +1,2 @@
 0073d160  94  complete; result register (edi) lifetime differs from original (compiler folds the always-zero fall-through), otherwise identical control flow/calls
+0073d1e0  818  GetDeformationHandles complete (all paths: dedupe, double->float, normalize/OrthogonalVector basis, flags/version stamps); Vec3-temp/register schedule differs, flags /GS- [equiv: WEAK (16% coverage)]

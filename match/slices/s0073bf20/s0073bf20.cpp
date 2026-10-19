@@ -105,7 +105,22 @@ void SkinCollect() {}
 void AnimCollect() {}
 // @ 0x0073CAC0 — Simulator ability constructor (66 bytes)
 void AbilityCtorC() {}
-// @ 0x0073CB40 — Simulator ability constructor (76 bytes)
-void AbilityCtorD() {}
+// Ctor 0x0073CB40: Simulator ability constructor (76 bytes): multiple-inheritance chain
+// (GmeRefCount sub-object at +4, refcount at +8; ability base holds a counted ref at +0xc).
+struct AbilityP0 { virtual void p0(); };
+struct AbilityGmeRC { virtual void g0(); int rc; AbilityGmeRC() : rc(0) {} };
+struct AbilityBase : AbilityP0, AbilityGmeRC {
+    RefObjV* m; int x;
+    AbilityBase(RefObjV* a, int b) : m(a) { if (a) ++a->mnRefCount; x = b; }
+    virtual void p0(); virtual void g0();
+};
+struct AbilityD : AbilityBase {
+    int pad[(0x98 - 0x14) / 4];
+    int y;
+    AbilityD(RefObjV* a, int b, int c);
+    virtual void p0(); virtual void g0();
+};
+// @ 0x0073CB40
+AbilityD::AbilityD(RefObjV* a, int b, int c) : AbilityBase(a, b), y(c) {}
 // @ 0x0073CBC0 — large ability method (515 bytes)
 void AbilityMethodE() {}

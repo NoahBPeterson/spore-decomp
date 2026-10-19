@@ -467,7 +467,70 @@ void cSPColorSwatch::Init(cPropertyList* config, ColorPOD color,
     mRespondToInput = true;
 }
 
-// @ 0x005a5960  SP::cSPColorSwatch::MainColorSelected  (complex message path: partial, external)
+// MainColorSelected helpers: the color-picker object found through mOwner, and the heap-built
+// MessageBasicRC<5> (vtable pair 0x013eb90c base / 0x013eb844 final, 0x40 bytes) it posts.
+struct SwatchRC { virtual int AddRef(); virtual int Release(); };
+struct SwatchPicker {
+    char pad0[8];
+    SwatchRC mRC;                                // +0x8 (IRefCount sub-object)
+    char pad10[0x4c - 0xc];
+    uint32_t mField4c;                           // +0x4c
+    void SetDefault();                           // 0x005a4fb0
+    void SetColor(const ColorPOD& c);            // 0x005a4e20
+};
+extern void* vtbl_SwatchMsgBase[];               // 0x013eb90c
+extern void* vtbl_SwatchMsg[];                   // 0x013eb844
+struct SwatchMsg5 {
+    void* vptr;                                  // +0x00
+    long  refcount;                              // +0x04
+    uint32_t mData[5][2];                        // +0x08
+    uint32_t mId;                                // +0x30
+    uint32_t pad34;
+    uint32_t mRCFlags;                           // +0x38
+    uint32_t pad3c;
+    SwatchMsg5() {
+        mId = 0;
+        vptr = vtbl_SwatchMsgBase;
+        _InterlockedExchange(&refcount, 0);
+        vptr = vtbl_SwatchMsg;
+        mRCFlags = 0;
+    }
+    int AddRef()  { return ((int(__thiscall*)(SwatchMsg5*))((void**)vptr)[1])(this); }
+    int Release() { return ((int(__thiscall*)(SwatchMsg5*))((void**)vptr)[2])(this); }
+    void SetIRefCount(int idx, SwatchRC* p);     // 0x005726e0 (ret 8)
+};
+struct SwatchMsgServer {
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
+    virtual void MessageSend(uint32_t id, SwatchMsg5* msg, int flag);   // +0x14
+};
+SwatchMsgServer* MessageServer();                // 0x0067dcc0
+
+// @ 0x005a5960  SP::cSPColorSwatch::MainColorSelected
+void cSPColorSwatch::MainColorSelected() {
+    UnkCast* owner = (UnkCast*)mOwner.mpObject;
+    if (!owner)
+        return;
+    SwatchPicker* picker = (SwatchPicker*)owner->Cast(0xd0d22119);
+    if (!picker)
+        return;
+    if (mIsDefaultColor)
+        picker->SetDefault();
+    else
+        picker->SetColor(mDisplayColor);
+    SwatchMsg5* msg = new("UI", 0, 0, 0, 0) SwatchMsg5;
+    if (!msg)
+        return;
+    msg->AddRef();
+    msg->mId = 0x90e08f60;
+    msg->mData[0][0] = ColorRGBToU32((const cSPColorRGB*)&mDisplayColor);
+    _ReadWriteBarrier();
+    msg->SetIRefCount(1, &picker->mRC);
+    msg->mData[2][0] = picker->mField4c;
+    msg->mData[3][0] = mIsDefaultColor != 0;
+    msg->mData[4][0] = mSwatchIndex;
+    MessageServer()->MessageSend(msg->mId, msg, 0);
+    msg->Release();
+}
 
 // @ 0x005a5a50
 cX::cX() : mPtr10(0), mFloat14(0.0f), mFloat18(0.0f),

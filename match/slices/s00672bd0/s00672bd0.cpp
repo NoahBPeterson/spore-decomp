@@ -420,6 +420,7 @@ class cStringDetokenizer {
 public:
     virtual ~cStringDetokenizer();
     char mBasePad[0x58];
+    void Detokenize(const wchar_t* text, void* out);   // 0x006b5bd0 (ProcessString, ret 8)
 };
 }
 
@@ -462,6 +463,8 @@ public:
     cVar::cAction*                                        mpCurrentAction; // +0x9c
     eastl::fixed_vector<cVar, 16, true>                   mVars;           // +0xa0
     eastl::fixed_vector<cVar, 16, true>                   mListVars;       // +0x6478
+
+    void token_action_replace(cVar* var, const wchar_t* const* args);   // 0x00672f70
 };
 
 } // anonymous namespace
@@ -545,6 +548,60 @@ void force_cAction(const cActionT& x)
 {
     cActionT y(x);
     (void)y;
+}
+
+// ---------------------------------------------------------------------------
+// token_action_replace: var.mValue = Detokenize(args[0]); then the pending text is detokenized.
+// ---------------------------------------------------------------------------
+extern wchar_t gEmptyString[];                  // 0x01667bac (shared empty-string storage)
+
+// basic_string<wchar_t> with the retail default ctor (begin = end = shared empty string, cap = +1 char)
+struct EmptyStr {
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    int      mAllocator;
+    EmptyStr()
+    {
+        mpBegin    = gEmptyString;
+        mpEnd      = gEmptyString;
+        mpCapacity = gEmptyString + 1;
+    }
+    ~EmptyStr()
+    {
+        wchar_t* pBegin = mpBegin;
+        int n = (int)((char*)mpCapacity - (char*)pBegin);
+        if (((n & ~1) > 2) && pBegin)
+            EAFree(pBegin);
+    }
+};
+
+// the string at cVar+0x58 (basic_string<wchar_t> layout); append(first, last) is 0x00672750 (ret 8)
+struct VarStr {
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    void append(const wchar_t* first, const wchar_t* last);   // 0x00672750
+};
+
+// @ 0x00672f70
+void cBuildXHTMLDetokenizer::token_action_replace(cVar* var, const wchar_t* const* args)
+{
+    EmptyStr s;
+    Detokenize(*args, &s);
+    VarStr* d = (VarStr*)((char*)var + 0x58);
+    const wchar_t* sb = s.mpBegin;
+    if (d->mpBegin != sb) {
+        if (d->mpBegin != d->mpEnd) {
+            *d->mpBegin = 0;
+            d->mpEnd = d->mpBegin;
+        }
+        const wchar_t* p = sb;
+        while (*p)
+            ++p;
+        d->append(sb, sb + (p - sb));
+    }
+    Detokenize(mText.mpBegin, mpTextResult);
 }
 
 void force_detok()

@@ -316,7 +316,117 @@ void FUN_00926af0(void* self, void* a, int b, uint32 c, int d, int e, char f)
 void FUN_00926c20(void* self) { (void)self; }
 void FUN_00926db0(void* self) { (void)self; }
 void FUN_00926f10(void* self) { (void)self; }
-void FUN_00926fd0(void* self) { (void)self; }
 void FUN_00927140(void* self) { (void)self; }
+
+// ===========================================================================
+// 0x00926fd0: the heap's free(): fast-bin push, boundary-tag coalescing, top handling,
+// mmap'd (VirtualAlloc) chunk release and trim (dlmalloc layout; sizes in the low bits of head).
+// ===========================================================================
+struct FreeChunk {
+    uint32 prev_size;   // +0x00
+    uint32 head;        // +0x04 (size | flags: 1 = prev in use, 2 = mapped)
+    FreeChunk* fd;      // +0x08
+    FreeChunk* bk;      // +0x0c
+};
+
+static inline void UnlinkChunk(FreeChunk* c)
+{
+    FreeChunk* fd = c->fd;
+    FreeChunk* bk = c->bk;
+    fd->bk = bk;
+    c->bk->fd = c->fd;
+}
+
+struct FreePool {
+    uint32 bins0;                 // +0x00 (fast bins are indexed by chunk size >> 3)
+    uint32 mMaxFast;              // +0x04
+    char pad8[0x30 - 8];
+    FreeChunk mUnsorted;          // +0x30 (list sentinel: fd +0x38, bk +0x3c)
+    char pad40[0x440 - 0x40];
+    FreeChunk* mTop;              // +0x440
+    char pad444[0x468 - 0x444];
+    FreeChunk* mLimit;            // +0x468
+    char pad46c[0x488 - 0x46c];
+    int mMapCount;                // +0x488
+    int mMapBytes;                // +0x48c
+    char pad490[0x4c8 - 0x490];
+    uint32 mTrimThreshold;        // +0x4c8
+    uint32 mTrimArg;              // +0x4cc
+
+    void Free(void* mem);                       // 0x00926fd0 (ret 4)
+    void SetTop(FreeChunk* p, uint32 size);     // 0x009268b0 (ret 8)
+    bool Contains(unsigned p);                  // 0x00926ab0
+    void Trim(uint32 arg);                      // 0x00926db0 (ret 4)
+};
+
+// @ 0x00926fd0
+void FreePool::Free(void* mem)
+{
+    if (mem == 0)
+        return;
+    char* m = (char*)mem;
+    uint32 head = *(uint32*)(m - 4);
+    uint32 maxFast = mMaxFast;
+    m -= 8;
+    FreeChunk* p = (FreeChunk*)m;
+    uint32 size = head & 0x7ffffff8;
+    if (size <= maxFast) {
+        bool inRange = true;
+        if (mLimit != 0)
+            inRange = p < mLimit;
+        if (inRange) {
+            mMaxFast |= 1;
+            FreeChunk** bin = (FreeChunk**)this + (size >> 3);
+            FreeChunk* old = *bin;
+            p->head |= 0x80000004;
+            p->bk = old;
+            *bin = p;
+            return;
+        }
+    }
+    if ((head & 2) == 0) {
+        FreeChunk* next = (FreeChunk*)((char*)p + size);
+        uint32 nextSize = next->head & 0x7ffffff8;
+        if ((head & 1) == 0) {
+            uint32 prevSize = p->prev_size;
+            size += prevSize;
+            p = (FreeChunk*)((char*)p - prevSize);
+            p->head = size | 1;
+            next->prev_size = size;
+            UnlinkChunk(p);
+        }
+        if (((char*)next)[nextSize + 4] & 1) {
+            next->head &= ~1u;
+            next->prev_size = size;
+        } else {
+            UnlinkChunk(next);
+            size += nextSize;
+            p->head = size | 1;
+            *(uint32*)((char*)p + size) = size;
+        }
+        if (p == mTop || next == mTop) {
+            mTop = p;
+            SetTop(p, size);
+        } else {
+            FreeChunk* last = mUnsorted.bk;
+            p->fd = &mUnsorted;
+            p->bk = last;
+            mUnsorted.bk = p;
+            last->fd = p;
+        }
+        if (size >= 0x10000 && Contains((unsigned)((char*)p + size)) && size >= mTrimThreshold)
+            Trim(mTrimArg);
+    } else {
+        uint32 offset = p->prev_size;
+        FreeChunk* link = (FreeChunk*)((char*)p + size + 8);
+        FreeChunk* nx = ((FreeChunk**)link)[0];
+        FreeChunk* pv = ((FreeChunk**)link)[1];
+        nx->bk = pv;
+        pv->fd = nx;
+        mMapBytes -= offset + 0x10 + size;
+        mMapCount -= 1;
+        VirtualFree((char*)p - offset, 0, 0x8000);
+    }
+}
 
 }}

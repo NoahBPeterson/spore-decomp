@@ -9,3 +9,4 @@ slices/s00672bd0/s00672bd0.cpp  ??1cVar@cBuildXHTMLDetokenizer@?A0x  00673360  /
 slices/s00672bd0/s00672bd0.cpp  ??4?$fixed_vector@V?$fixed_string  006736b0  /O2 /MD /Gy /TP
 slices/s00672bd0/s00672bd0.cpp  ??4?$fixed_vector@VcAction  00673810  /O2 /MD /Gy /TP
 slices/s00672bd0/s00672bd0.cpp  ??4cVar@cBuildXHTMLDetokenizer@?A0x  00673940  /O2 /MD /Gy /TP
+slices/s00672bd0/s00672bd0.cpp  ?token_action_replace@cBuildXHTMLDetokenizer@?A0xc6ee3fde@@QAEXPAVcVar@12@PBQB_W@Z  00672f70  /O2 /MD /Gy /TP

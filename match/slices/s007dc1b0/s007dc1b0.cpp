@@ -4,6 +4,7 @@
 #include "types.h"
 #include <math.h>
 
+void EFreeCam(void*);   // 0x00f47380
 struct cSPVector3 { float x, y, z; };
 struct cSPQuaternion { float x, y, z, w; };
 struct tLerpAngle   { float mCurrent; float mTarget; uint32_t mSteps; float mMinChange; };
@@ -17,8 +18,20 @@ struct tSavedCameraPosition {
 };
 struct Vec16 { void* mpBegin; void* mpEnd; void* mpCapacity; void* mAlloc; };
 
-struct cSmoothCameraController {
-    void* mVtbl; char mPad04[0xc]; void* mConfig;
+// Three-vptr base chain of cSmoothCameraController: GmeEditorResBase (vptr +0, IMsgHandler
+// vptr +4, GmeRefCount vptr +8 / refcount +0xc).  Its user dtor re-stores the three base vptrs.
+struct SmP0 { virtual ~SmP0() {} };
+struct SmP1 { virtual ~SmP1() {} };
+struct SmRC { virtual ~SmRC() {} int mnRefCount; };
+struct SmBase : SmP0, SmP1, SmRC { };
+// intrusive pointer (vtable slot 1 = Release); released at the end of ~cSmoothCameraController
+struct SmTag { ~SmTag() {} };   // empty-dtor member: gives the destructor its second EH unwind state
+struct SmCfgPtr {
+    void* mp;
+};
+
+struct cSmoothCameraController : SmBase {
+    SmCfgPtr mConfig;
     Vec16 mEdgeConstraints; int mCurrentZoomLevel; float mContinuousZoomDistance;
     Vec16 mZoomLevels; Vec16 mNearClipPlanes; Vec16 mFarClipPlanes;
     Vec16 mMinPitches; Vec16 mMaxPitches; float mViewSlope;
@@ -46,7 +59,7 @@ struct cSmoothCameraController {
     void ZoomInterpolationParamsFromDistanceAlongCurve
         (uint32_t* a, uint32_t* b, float* t, float d);  // 007dc510
     float ConstrainDistanceAlongCurve(float d);     // 007dc5e0
-    ~cSmoothCameraController();                     // 007dc630
+    virtual ~cSmoothCameraController();             // 007dc630
     void OnUpdateTargetSet();                       // 007dca30
     void ViewerPositionAndOrientationFromDistanceAlongCurve
         (float* pos, float* quat, float d, int flag);  // 007dcc30
@@ -205,7 +218,6 @@ float cSmoothCameraController::ConstrainDistanceAlongCurve(float d)
 // ===========================================================================
 // 0x007dc630  ~cSmoothCameraController
 // ===========================================================================
-void EFreeCam(void*);   // 0x00f47380
 
 // ===========================================================================
 // 0x007dc7b0  ViewerOrientationFromPositionAndLookAt  (partial)
@@ -234,25 +246,16 @@ void cSmoothCameraController::ViewerPositionAndOrientationFromDistanceAlongCurve
     (void)d;
 }
 
+// @ 0x007dc630
 cSmoothCameraController::~cSmoothCameraController()
 {
+    // Retail vector blocks (begin pointers at +0x14, +0x30, +0x44, +0x58, +0x6c, +0x80, +0x138, +0x14c).
     void* v;
-    v = mFOVLevels.mpCapacity;
-    if (v && ((int*)v)[-1]) EFreeCam(v);
-    v = mOrientations.mpCapacity;
-    if (v && ((int*)v)[-1]) EFreeCam(v);
-    v = mEdgeConstraints.mpBegin;
-    if (v && ((int*)v)[-1]) EFreeCam(v);
-    v = mMaxPitches.mpBegin;
-    if (v && ((int*)v)[-1]) EFreeCam(v);
-    v = mFarClipPlanes.mpBegin;
-    if (v && ((int*)v)[-1]) EFreeCam(v);
-    v = mNearClipPlanes.mpBegin;
-    if (v && ((int*)v)[-1]) EFreeCam(v);
-    v = mZoomLevels.mpBegin;
-    if (v && ((int*)v)[-1]) EFreeCam(v);
-    v = mConfig;
-    if (v) ((void(__thiscall*)(void*))(((void**)*(void**)v)[1]))(v);
+#define SM_FREE(off) v = *(void**)((char*)this + (off)); if (v && ((int*)v)[-1]) EFreeCam(v);
+    SM_FREE(0x14c) SM_FREE(0x138) SM_FREE(0x80) SM_FREE(0x6c)
+    SM_FREE(0x58) SM_FREE(0x44) SM_FREE(0x30) SM_FREE(0x14)
+#undef SM_FREE
+    if (mConfig.mp) ((void(__thiscall*)(void*))(((void**)*(void**)mConfig.mp)[1]))(mConfig.mp);
 }
 
 // ===========================================================================
