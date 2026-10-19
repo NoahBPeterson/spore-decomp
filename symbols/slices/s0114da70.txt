@@ -14,6 +14,6 @@
 0114e400 ?LoadDistributionCalc@FastFirEngine@core@audio@rw@@QAEXHH@Z  # FastFirEngine::LoadDistributionCalc migrated from s0114da70 (verbatim, slice spelling)
 0114e580 ?Reset@FastFirEngine@core@audio@rw@@QAEXXZ  # FastFirEngine::Reset migrated from s0114da70 (verbatim, slice spelling)
 0114e5e0 ?Configure@FastFirEngine@core@audio@rw@@QAEHHHHHHHPAF@Z  # FastFirEngine::Configure migrated from s0114da70 (verbatim, slice spelling)
-0114e780 InterpRamp  # fixed-point ramp/fill helper (position in EAX, dest in EDX)
-0114e860 Resample::SetResampleIncrement  # descriptor 'Rsp0' PreProcess helper
+0114e780 ?InterpRamp@core@audio@rw@@YA?AUPosDst@123@IHIPBMPAM@Z  # InterpRamp migrated from s0114da70 (verbatim, slice spelling)
+0114e860 ?SetResampleIncrement@Resample@core@audio@rw@@QAEXM@Z  # Resample::SetResampleIncrement migrated from s0114da70 (verbatim, slice spelling)
 0114e8f0 Resample::PreProcess  # descriptor record guid 'Rsp0' (0x52737030): PreProcess slot

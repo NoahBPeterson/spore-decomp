@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0114e780 190 InterpRamp: fixed-point ramp/fill helper; the tap index is taken unsigned (pos >> 16) so the output buffer matches the original, and the PosDst {pos,dst} return is EAX:EDX. Flags /vc71 /O2 /MD /Gy /TP /arch:SSE. difftest PASS (389 valid, 100% coverage). Fixed 2026-10-18: the fraction bias is a static volatile const added as `kFracBias + cv.f`, so the SSE write set is xmm0-2 only (no xmm3); the LTCG caller's live xmm3 is preserved. Register footprint verified on the rebuilt obj.
+0114e860 89 Resample::SetResampleIncrement: complete (leaf; clamp ratio to [0,4], cvtss2si round-to-nearest increment, voice-latency min(1/ratio,10000) foldback). Flags /vc71 /O2 /MD /Gy /TP /arch:SSE. difftest PASS (400 valid, 100% coverage).
