@@ -16,6 +16,7 @@
 00a20d10 ?Tick119b@Sys@@QAEXXZ  # Sys::Tick119b migrated from s00a20060 (verbatim, slice spelling)
 00a20d20 ?SlotA@Sys@@QAEPAXH@Z  # Sys::SlotA migrated from s00a20060 (verbatim, slice spelling)
 00a20d40 ?SlotB@Sys@@QAEPAXH@Z  # Sys::SlotB migrated from s00a20060 (verbatim, slice spelling)
+00a20d60 ?MakeSound@@YG_NPAPAUSound2@@@Z  # MakeSound migrated from s00a20060 (verbatim, slice spelling)
 00a20df0 ?Less1@@YA_NPAUSoundOrd@@_NPAUOrdInfo@@@Z  # Less1 migrated from s00a20060 (verbatim, slice spelling)
 00a20eb0 ?Less2@@YA_NPAUSoundOrd@@0@Z  # Less2 migrated from s00a20060 (verbatim, slice spelling)
 00a21080 ?WithinRange@Sys@@QAE_NPAXH@Z  # Sys::WithinRange migrated from s00a20060 (verbatim, slice spelling)

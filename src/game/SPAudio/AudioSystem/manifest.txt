@@ -13,6 +13,7 @@
 ../src/game/SPAudio/AudioSystem.cpp  ?Tick119b@Sys@@QAEXXZ  00a20d10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?SlotA@Sys@@QAEPAXH@Z  00a20d20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?SlotB@Sys@@QAEPAXH@Z  00a20d40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?MakeSound@@YG_NPAPAUSound2@@@Z  00a20d60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?Less1@@YA_NPAUSoundOrd@@_NPAUOrdInfo@@@Z  00a20df0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?WithinRange@Sys@@QAE_NPAXH@Z  00a21080  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?LockB8@Sys@@QAEXXZ  00a210d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

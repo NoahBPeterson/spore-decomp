@@ -62,6 +62,7 @@ extern int g_166d9f4;
 extern int g_166d9f8;
 typedef unsigned char u8;
 typedef unsigned int  u32;
+void* operator new(unsigned int size, const char* name, int a, int b, int c, int d);   // 0xf473a0
 unsigned int __cdecl FNV1_String8(const void* s, unsigned int basis, int flag);
 struct Mutex {
     void Lock(void* tag);   // 0x9221b0 (EA::Thread::Mutex::Lock)
@@ -129,6 +130,12 @@ struct Sys {
 };
 struct V3 { u32 a, b, c; };
 struct Big9 { u32 v[9]; };
+struct Sound2 {                           // Audio::Sound, 0x1e10 bytes
+    Sound2();                             // 0xa1fbb0
+    virtual void s0();
+    virtual void s1();
+    char data[0x1e10 - 4];
+};
 struct PropSet {
     virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3();
     virtual void GetFloat(u32 key, float* out);   // +0x10
@@ -154,7 +161,10 @@ struct OrdInfo {
     float dist;
     float key;
 };
+    void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
 // ---- items of slice s00a20060 end
+
+
 
 // ---- items of slice s00a22220 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(__int64*);
@@ -553,6 +563,7 @@ struct RDD {
     bool    Tick3(void* a, void* b, void* c);   // 0x00a24930
 };
 // ---- items of slice s00a23360 end
+
 
 // forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
 RBNode_s00a2_3360* __cdecl RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent);   // defined at 0x00a245e0, called earlier in the TU
@@ -1403,261 +1414,6 @@ struct FixedVec11b {
 };
 // ---- items of slice s00a30460 end
 
-// ---- items of slice s00a31170 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern void* g_vtRefBase[];             // 0x013effa8
-extern void* g_vtFactoryA[];            // 0x01452a44
-extern void* g_vtFactoryB[];            // 0x01452a78
-extern void* g_vtFactoryC[];            // 0x01452ac0
-extern const char g_audioName[];        // 0x0140a5a0 "Audio"
-extern int g_FsAllocatorManager;                            // 0x016f4b10
-extern char g_1552da0[];                // 0x01552da0
-extern const char g_systemName[];       // 0x01452d1c "system"
-#define V1(n) virtual void n();
-#define V4(n) V1(n##a) V1(n##b) V1(n##c) V1(n##d)
-#define V16(n) V4(n##a) V4(n##b) V4(n##c) V4(n##d)
-void __cdecl operator_delete_array(void* p);                       // 0x00f47380 operator delete[]
-struct ResKey { uint32_t instance, type, group; };
-struct ListNode_s00a3_1170 {
-    ListNode_s00a3_1170* mpNext;
-    ListNode_s00a3_1170* mpPrev;
-    void* mpData;                       // +0x08
-};
-struct DbList {                         // eastl::list<AutoRefCount<Database>> with an allocator
-    ListNode_s00a3_1170 mAnchor;                   // next/prev only used
-    void* mpAllocator;                  // +0x08
-    uint32_t mFlags;                    // +0x0c
-};
-struct CoreAlloc {
-    virtual void v0();
-    virtual void v4();
-    virtual void v8();
-    virtual void Free(void* p, unsigned size);                              // +0x0c
-};
-CoreAlloc* __cdecl GetDefaultAllocator_s00a3_1170();                                   // 0x00925cb0
-struct ByteVec {
-    uint8_t* mpBegin;
-    uint8_t* mpEnd;
-    uint8_t* mpCapacity;
-    ByteVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
-    ~ByteVec()
-    {
-        if (mpBegin && ((int*)mpBegin)[-1] != 0)
-            operator_delete_array(mpBegin);
-    }
-    void resize(unsigned n);            // 0x004c0410
-};
-struct FactoryObj {
-    void** vt;
-    long ref;
-    __forceinline FactoryObj* Init(void** derived)
-    {
-        vt = g_vtRefBase;
-        _InterlockedExchange(&ref, 0);
-        vt = derived;
-        return this;
-    }
-};
-class IFactory {
-public:
-    virtual void v0();
-    virtual int AddRef();               // +0x04
-    virtual int Release();              // +0x08
-};
-void* __cdecl ZoneAlloc(unsigned size, const char* name, int a, int b, int c, int d);   // 0x00926020
-class IStream {
-public:
-    virtual void v0(); virtual void v4(); virtual void v8(); virtual void vc();
-    virtual void v10(); virtual void v14();
-    virtual void Close();                                   // +0x18
-    virtual uint32_t GetSize();                             // +0x1c
-    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
-    virtual uint32_t Read(void* buf, uint32_t size);        // +0x30
-};
-class IResource {
-public:
-    virtual void v0(); virtual void v4();
-    virtual int Release();                                  // +0x08
-    virtual void vc(); virtual void v10(); virtual void v14();
-    virtual IStream* OpenStream();                          // +0x18
-    virtual uint32_t GetTypeID();                           // +0x1c
-};
-class IDatabase {
-public:
-    V4(d0) V4(d1) V4(d2) V1(d3)
-    virtual bool GetResource(const ResKey* key, IResource** out, int a, int b, int c, int d);   // +0x34
-};
-class IResourceType {                    // result of the manager's +0x58 lookup
-public:
-    virtual void v0(); virtual void v4(); virtual void v8();
-    virtual uint32_t GetTypeID();                           // +0x0c
-};
-class IResourceManager {
-public:
-    V16(m1)
-    V1(m40)
-    virtual void RegisterFactory(int kind, IFactory* factory, int flags);   // +0x44
-    virtual void m48(); virtual void m4c(); virtual void m50(); virtual void m54();
-    virtual IResourceType* GetResourceType(const ResKey* key);              // +0x58
-    virtual void GetDatabases(DbList* out, const ResKey* key);              // +0x5c
-};
-IResourceManager* __cdecl GetResourceManager();             // 0x008de1a0 (EA::Audio::Eapd::Debug::ObjectError)
-class IPluginParam {
-public:
-    void SetParam(int index, const void* value);            // 0x0112ccc0 (merged thunk: jmp [vtbl+4])
-};
-struct VoiceContainer_s00a3_1170 {
-    IPluginParam* FindPlugin(uint32_t id);                  // 0x00a34230
-};
-struct RWSystem {
-    uint32_t pad[0xa8 / 4];
-    void* mpCallback;                                       // +0xa8
-    void SetCallback(void* fn);                             // 0x0112c870
-    void AddPlugin(IPluginParam* p);                        // 0x009879d0
-};
-struct StreamPool;
-RWSystem* __cdecl CreateInstance(void* allocator, uint32_t size);                      // 0x0112c9e0
-StreamPool* __cdecl ReleaseHandler(uint32_t id, uint32_t a, uint32_t b, uint32_t c,
-                                   RWSystem* rw, void* allocator, int d);              // 0x0112e290
-struct FsParams {
-    void* mpChannel;
-    void* mpAllocator2;
-    uint32_t mA;
-    uint32_t mB;
-    FsParams();                                             // 0x011e64c0
-};
-void __cdecl FsInit(FsParams* p);                           // 0x011e5cd0
-struct FsManager {
-    void SetDriver(void* driver, int a);                    // 0x011e59b0
-};
-FsManager* __cdecl GetFsManager();                          // 0x011e58f0
-struct AudioLock {                      // global mutex wrapper (thiscall, ecx = lock)
-    void Lock();                        // 0x0112c600
-    void Unlock();                      // 0x0112c620
-};
-extern AudioLock* g_pAudioLock;         // 0x016e61a8
-struct AutoAudioLock {
-    __forceinline AutoAudioLock()
-    {
-        if (g_pAudioLock)
-            g_pAudioLock->Lock();
-    }
-    __forceinline ~AutoAudioLock()
-    {
-        if (g_pAudioLock)
-            g_pAudioLock->Unlock();
-    }
-};
-struct HashIter_s00a3_1170 {
-    void* mpNode;
-    void** mpBucket;
-};
-struct PolyPair {
-    uint32_t first;
-    uint32_t second;
-};
-struct HashInsertResult {
-    HashIter_s00a3_1170 it;
-    bool inserted;
-};
-struct PolyphonyMap {                   // eastl::hash_map<uint32_t, int>
-    uint32_t mAllocator;
-    void** mpBucketArray;               // +0x04
-    uint32_t mnBucketCount;             // +0x08
-    HashIter_s00a3_1170* find(HashIter_s00a3_1170* out, const uint32_t& key);                      // 0x00645ed0
-    void insert(HashInsertResult* out, const PolyPair* value, bool b);       // 0x00a26ce0
-};
-struct EmitterMap {                     // fixed_hash_map<uint32_t, IEmitter*(*)()>
-    uint32_t mData;
-    void*& At(const uint32_t& key);     // 0x00a2a510 operator[]
-};
-struct IdRing {                         // ring buffer of ids
-    uint32_t mData;
-    void push_back(const uint32_t& id); // 0x00a21d30
-};
-struct IdPool {
-    uint32_t mData[0xf0 / 4];
-    void Init(unsigned capacity);       // 0x00a102a0
-};
-void* __cdecl ConstructEmitterSndPlayer();                  // 0x00a20700
-struct IntArrayRef {                    // {int* base; int index} at +0x118a20
-    int* mpBase;
-    int mIndex;
-};
-template<int N> struct Gap { uint32_t pad[N]; };
-class cSystem {
-public:
-    V16(a)                              // slots 0x00..0x3c
-    V16(b)                              // 0x40..0x7c
-    V16(c)                              // 0x80..0xbc
-    V4(d)                               // 0xc0..0xcc
-    V4(e)                               // 0xd0..0xdc
-    V4(f)                               // 0xe0..0xec
-    V1(g)                               // 0xf0
-    virtual uint32_t HashName(const char* name);                // +0xf4
-    V1(h)                               // 0xf8
-    virtual void SetTuning(uint32_t key, float value);          // +0xfc
-    V16(i)                              // 0x100..0x13c
-    V4(j) V4(k) V4(l)                   // 0x140..0x16c
-    V1(m) V1(n) V1(o)                   // 0x170..0x178
-    virtual VoiceContainer_s00a3_1170* GetVoiceHolder(uint32_t id);        // +0x17c (object with a container at +0x10)
-    V4(p) V4(q) V4(r)                   // 0x180..0x1ac
-    V1(s)                               // 0x1b0
-    virtual void Hook1b4();                                     // +0x1b4
-    V1(t)                               // 0x1b8
-    virtual void Hook1bc(const char* p);                        // +0x1bc
-    V1(u)                               // 0x1c0
-    virtual void Hook1c4();                                     // +0x1c4
-    virtual void Hook1c8();                                     // +0x1c8
-    V4(v) V4(w) V1(x)                   // 0x1cc..0x1ec
-    virtual void Hook1f0();                                     // +0x1f0
-
-    Gap<(0x90 - 4) / 4> pad04;
-    uint32_t mCommandBufferSize;        // +0x90
-    uint8_t pad94[2];
-    bool mbMutedForSilence;             // +0x96
-    bool mbMutedForFocus;               // +0x97
-    bool mbMutedByProperty;             // +0x98
-    bool mbMuted;                       // +0x99
-    bool mbMuteApplied;                 // +0x9a
-    uint8_t pad9b;
-    uint32_t mAllocator;                // +0x9c
-    uint32_t mAllocator2;               // +0xa0
-    RWSystem* mpRWAC;                   // +0xa4
-    float mDacOutputMode;               // +0xa8
-    float mDacOutputSampleRate;         // +0xac
-    Gap<(0xe8 - 0xb0) / 4> padb0;
-    StreamPool* mpStreamPoolDefault;    // +0xe8
-    uint32_t mStreamPoolNumStreams;     // +0xec
-    uint32_t mStreamPoolBufferSize;     // +0xf0
-    uint32_t mStreamPoolMaxRequests;    // +0xf4
-    Gap<(0x198 - 0xf8) / 4> mDebugChannel;      // +0xf8
-    Gap<(0x200 - 0x198) / 4> mResourceDeviceDriver;   // +0x198
-    int mPerformanceLevel;              // +0x200
-    Gap<(0x2b4 - 0x204) / 4> pad204;
-    IdPool mPoolA;                      // +0x2b4
-    IdPool mPoolB;                      // +0x3a4
-    Gap<(0x118a20 - 0x494) / 4> pad494;
-    IntArrayRef mIdArray;               // +0x118a20
-    Gap<(0x118a78 - 0x118a28) / 4> pad118a28;
-    EmitterMap mEmitterMap;             // +0x118a78
-    Gap<(0x131840 - 0x118a7c) / 4> pad118a7c;
-    IdRing mIdRing;                     // +0x131840
-    Gap<(0x137fe8 - 0x131844) / 4> pad131844;
-    PolyphonyMap mPolyphonyMap;         // +0x137fe8
-    Gap<(0x15b750 - 0x137ff4) / 4> pad137ff4;
-    uint32_t mIterValue;                // +0x15b750
-    void* mIterPos;                     // +0x15b754
-    uint32_t mIter8, mIterC, mIter10;   // +0x15b758..0x15b760
-    Gap<(0x15b778 - 0x15b764) / 4> pad15b764;
-    IFactory* mpFactoryB;               // +0x15b778
-
-    void MuteAll(bool mute, bool immediate);        // 0x00a233b0
-    void PreloadConfigurations();                   // 0x00a30940
-    void FUN_a2ef60();                              // 0x00a2ef60
-    void FUN_a2da30();                              // 0x00a2da30
-    bool InitAT();
-};
-// ---- items of slice s00a31170 end
 
 // ---- items of slice s00a31f20 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern char vt_0140de80[];
@@ -1716,7 +1472,7 @@ struct ListB {
     void Push(uint32_t* key);                             // 0x00a21d30
 };
 struct System_s00a3_1f20 {
-    bool DoCommandMainThread(EA::Audio::Command_s00a3_1f20* cmd);
+    bool DoCommandMainThread(EA::Audio::Command_s00a3_1f20* cmd);  // 0x00a31f20 (System::DoCommandMainThread)
 };
 struct fixed_pool_base {
     uint32_t mpHead;
@@ -1989,9 +1745,9 @@ struct Vec3p { Vec3p() : a(0), b(0), c(0) {} ~Vec3p(); uint32_t a, b, c, pad[2];
 #define PAD(name, from, to) uint32_t name[((to) - (from)) / 4]
 class System_s00a3_2f20 : public ISystem_s00a3_2f20, public IHandlerRC_s00a3_2f20 {
 public:
-    System_s00a3_2f20();
+    System_s00a3_2f20();  // 0x00a33600 (System::System_s00a3_2f20)
     virtual void Init();
-    virtual ~System_s00a3_2f20();
+    virtual ~System_s00a3_2f20();  // 0x00a33600 (System::System_s00a3_2f20)
     virtual void HandleMsg();
 
     AutoHandler       mAutoMsg;          // +0x08
@@ -2131,6 +1887,262 @@ public:
 };
 // ---- items of slice s00a32f20 end
 
+// ---- items of slice s00a31170 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* g_vtRefBase[];             // 0x013effa8
+extern void* g_vtFactoryA[];            // 0x01452a44
+extern void* g_vtFactoryB[];            // 0x01452a78
+extern void* g_vtFactoryC[];            // 0x01452ac0
+extern const char g_audioName[];        // 0x0140a5a0 "Audio"
+extern int g_FsAllocatorManager;                            // 0x016f4b10
+extern char g_1552da0[];                // 0x01552da0
+extern const char g_systemName[];       // 0x01452d1c "system"
+#define V1(n) virtual void n();
+#define V4(n) V1(n##a) V1(n##b) V1(n##c) V1(n##d)
+#define V16(n) V4(n##a) V4(n##b) V4(n##c) V4(n##d)
+void __cdecl operator_delete_array(void* p);                       // 0x00f47380 operator delete[]
+struct ResKey { uint32_t instance, type, group; };
+struct ListNode_s00a3_1170 {
+    ListNode_s00a3_1170* mpNext;
+    ListNode_s00a3_1170* mpPrev;
+    void* mpData;                       // +0x08
+};
+struct DbList {                         // eastl::list<AutoRefCount<Database>> with an allocator
+    ListNode_s00a3_1170 mAnchor;                   // next/prev only used
+    void* mpAllocator;                  // +0x08
+    uint32_t mFlags;                    // +0x0c
+};
+struct CoreAlloc {
+    virtual void v0();
+    virtual void v4();
+    virtual void v8();
+    virtual void Free(void* p, unsigned size);                              // +0x0c
+};
+CoreAlloc* __cdecl GetDefaultAllocator_s00a3_1170();                                   // 0x00925cb0
+struct ByteVec {
+    uint8_t* mpBegin;
+    uint8_t* mpEnd;
+    uint8_t* mpCapacity;
+    ByteVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~ByteVec()
+    {
+        if (mpBegin && ((int*)mpBegin)[-1] != 0)
+            operator_delete_array(mpBegin);
+    }
+    void resize(unsigned n);            // 0x004c0410
+};
+struct FactoryObj {
+    void** vt;
+    long ref;
+    __forceinline FactoryObj* Init(void** derived)
+    {
+        vt = g_vtRefBase;
+        _InterlockedExchange(&ref, 0);
+        vt = derived;
+        return this;
+    }
+};
+class IFactory {
+public:
+    virtual void v0();
+    virtual int AddRef();               // +0x04
+    virtual int Release();              // +0x08
+};
+void* __cdecl ZoneAlloc(unsigned size, const char* name, int a, int b, int c, int d);   // 0x00926020
+class IStream {
+public:
+    virtual void v0(); virtual void v4(); virtual void v8(); virtual void vc();
+    virtual void v10(); virtual void v14();
+    virtual void Close();                                   // +0x18
+    virtual uint32_t GetSize();                             // +0x1c
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual uint32_t Read(void* buf, uint32_t size);        // +0x30
+};
+class IResource {
+public:
+    virtual void v0(); virtual void v4();
+    virtual int Release();                                  // +0x08
+    virtual void vc(); virtual void v10(); virtual void v14();
+    virtual IStream* OpenStream();                          // +0x18
+    virtual uint32_t GetTypeID();                           // +0x1c
+};
+class IDatabase {
+public:
+    V4(d0) V4(d1) V4(d2) V1(d3)
+    virtual bool GetResource(const ResKey* key, IResource** out, int a, int b, int c, int d);   // +0x34
+};
+class IResourceType {                    // result of the manager's +0x58 lookup
+public:
+    virtual void v0(); virtual void v4(); virtual void v8();
+    virtual uint32_t GetTypeID();                           // +0x0c
+};
+class IResourceManager {
+public:
+    V16(m1)
+    V1(m40)
+    virtual void RegisterFactory(int kind, IFactory* factory, int flags);   // +0x44
+    virtual void m48(); virtual void m4c(); virtual void m50(); virtual void m54();
+    virtual IResourceType* GetResourceType(const ResKey* key);              // +0x58
+    virtual void GetDatabases(DbList* out, const ResKey* key);              // +0x5c
+};
+IResourceManager* __cdecl GetResourceManager();             // 0x008de1a0 (EA::Audio::Eapd::Debug::ObjectError)
+class IPluginParam {
+public:
+    void SetParam(int index, const void* value);            // 0x0112ccc0 (merged thunk: jmp [vtbl+4])
+};
+struct VoiceContainer_s00a3_1170 {
+    IPluginParam* FindPlugin(uint32_t id);                  // 0x00a34230
+};
+struct RWSystem {
+    uint32_t pad[0xa8 / 4];
+    void* mpCallback;                                       // +0xa8
+    void SetCallback(void* fn);                             // 0x0112c870
+    void AddPlugin(IPluginParam* p);                        // 0x009879d0
+};
+struct StreamPool;
+RWSystem* __cdecl CreateInstance(void* allocator, uint32_t size);                      // 0x0112c9e0
+StreamPool* __cdecl ReleaseHandler(uint32_t id, uint32_t a, uint32_t b, uint32_t c,
+                                   RWSystem* rw, void* allocator, int d);              // 0x0112e290
+struct FsParams {
+    void* mpChannel;
+    void* mpAllocator2;
+    uint32_t mA;
+    uint32_t mB;
+    FsParams();                                             // 0x011e64c0
+};
+void __cdecl FsInit(FsParams* p);                           // 0x011e5cd0
+struct FsManager {
+    void SetDriver(void* driver, int a);                    // 0x011e59b0
+};
+FsManager* __cdecl GetFsManager();                          // 0x011e58f0
+struct AudioLock {                      // global mutex wrapper (thiscall, ecx = lock)
+    void Lock();                        // 0x0112c600
+    void Unlock();                      // 0x0112c620
+};
+extern AudioLock* g_pAudioLock;         // 0x016e61a8
+struct AutoAudioLock {
+    __forceinline AutoAudioLock()
+    {
+        if (g_pAudioLock)
+            g_pAudioLock->Lock();
+    }
+    __forceinline ~AutoAudioLock()
+    {
+        if (g_pAudioLock)
+            g_pAudioLock->Unlock();
+    }
+};
+struct HashIter_s00a3_1170 {
+    void* mpNode;
+    void** mpBucket;
+};
+struct PolyPair {
+    uint32_t first;
+    uint32_t second;
+};
+struct HashInsertResult {
+    HashIter_s00a3_1170 it;
+    bool inserted;
+};
+struct PolyphonyMap {                   // eastl::hash_map<uint32_t, int>
+    uint32_t mAllocator;
+    void** mpBucketArray;               // +0x04
+    uint32_t mnBucketCount;             // +0x08
+    HashIter_s00a3_1170* find(HashIter_s00a3_1170* out, const uint32_t& key);                      // 0x00645ed0
+    void insert(HashInsertResult* out, const PolyPair* value, bool b);       // 0x00a26ce0
+};
+struct EmitterMap {                     // fixed_hash_map<uint32_t, IEmitter*(*)()>
+    uint32_t mData;
+    void*& At(const uint32_t& key);     // 0x00a2a510 operator[]
+};
+struct IdRing {                         // ring buffer of ids
+    uint32_t mData;
+    void push_back(const uint32_t& id); // 0x00a21d30
+};
+struct IdPool {
+    uint32_t mData[0xf0 / 4];
+    void Init(unsigned capacity);       // 0x00a102a0
+};
+void* __cdecl ConstructEmitterSndPlayer();                  // 0x00a20700
+struct IntArrayRef {                    // {int* base; int index} at +0x118a20
+    int* mpBase;
+    int mIndex;
+};
+template<int N> struct Gap { uint32_t pad[N]; };
+class cSystem {
+public:
+    V16(a)                              // slots 0x00..0x3c
+    V16(b)                              // 0x40..0x7c
+    V16(c)                              // 0x80..0xbc
+    V4(d)                               // 0xc0..0xcc
+    V4(e)                               // 0xd0..0xdc
+    V4(f)                               // 0xe0..0xec
+    V1(g)                               // 0xf0
+    virtual uint32_t HashName(const char* name);                // +0xf4
+    V1(h)                               // 0xf8
+    virtual void SetTuning(uint32_t key, float value);          // +0xfc
+    V16(i)                              // 0x100..0x13c
+    V4(j) V4(k) V4(l)                   // 0x140..0x16c
+    V1(m) V1(n) V1(o)                   // 0x170..0x178
+    virtual VoiceContainer_s00a3_1170* GetVoiceHolder(uint32_t id);        // +0x17c (object with a container at +0x10)
+    V4(p) V4(q) V4(r)                   // 0x180..0x1ac
+    V1(s)                               // 0x1b0
+    virtual void Hook1b4();                                     // +0x1b4
+    V1(t)                               // 0x1b8
+    virtual void Hook1bc(const char* p);                        // +0x1bc
+    V1(u)                               // 0x1c0
+    virtual void Hook1c4();                                     // +0x1c4
+    virtual void Hook1c8();                                     // +0x1c8
+    V4(v) V4(w) V1(x)                   // 0x1cc..0x1ec
+    virtual void Hook1f0();                                     // +0x1f0
+
+    Gap<(0x90 - 4) / 4> pad04;
+    uint32_t mCommandBufferSize;        // +0x90
+    uint8_t pad94[2];
+    bool mbMutedForSilence;             // +0x96
+    bool mbMutedForFocus;               // +0x97
+    bool mbMutedByProperty;             // +0x98
+    bool mbMuted;                       // +0x99
+    bool mbMuteApplied;                 // +0x9a
+    uint8_t pad9b;
+    uint32_t mAllocator;                // +0x9c
+    uint32_t mAllocator2;               // +0xa0
+    RWSystem* mpRWAC;                   // +0xa4
+    float mDacOutputMode;               // +0xa8
+    float mDacOutputSampleRate;         // +0xac
+    Gap<(0xe8 - 0xb0) / 4> padb0;
+    StreamPool* mpStreamPoolDefault;    // +0xe8
+    uint32_t mStreamPoolNumStreams;     // +0xec
+    uint32_t mStreamPoolBufferSize;     // +0xf0
+    uint32_t mStreamPoolMaxRequests;    // +0xf4
+    Gap<(0x198 - 0xf8) / 4> mDebugChannel;      // +0xf8
+    Gap<(0x200 - 0x198) / 4> mResourceDeviceDriver;   // +0x198
+    int mPerformanceLevel;              // +0x200
+    Gap<(0x2b4 - 0x204) / 4> pad204;
+    IdPool mPoolA;                      // +0x2b4
+    IdPool mPoolB;                      // +0x3a4
+    Gap<(0x118a20 - 0x494) / 4> pad494;
+    IntArrayRef mIdArray;               // +0x118a20
+    Gap<(0x118a78 - 0x118a28) / 4> pad118a28;
+    EmitterMap mEmitterMap;             // +0x118a78
+    Gap<(0x131840 - 0x118a7c) / 4> pad118a7c;
+    IdRing mIdRing;                     // +0x131840
+    Gap<(0x137fe8 - 0x131844) / 4> pad131844;
+    PolyphonyMap mPolyphonyMap;         // +0x137fe8
+    Gap<(0x15b750 - 0x137ff4) / 4> pad137ff4;
+    uint32_t mIterValue;                // +0x15b750
+    void* mIterPos;                     // +0x15b754
+    uint32_t mIter8, mIterC, mIter10;   // +0x15b758..0x15b760
+    Gap<(0x15b778 - 0x15b764) / 4> pad15b764;
+    IFactory* mpFactoryB;               // +0x15b778
+
+    void MuteAll(bool mute, bool immediate);        // 0x00a233b0
+    void PreloadConfigurations();                   // 0x00a30940
+    void FUN_a2ef60();                              // 0x00a2ef60
+    void FUN_a2da30();                              // 0x00a2da30
+    bool InitAT();
+};
+// ---- items of slice s00a31170 end
+
 // @ 0x00432ad0
 void* Queryable::Cast(unsigned id)
 {
@@ -2142,6 +2154,7 @@ void* Queryable::Cast(unsigned id)
     }
     return 0;
 }
+
 
 
 
@@ -2523,6 +2536,28 @@ void* Sys::SlotB(int idx)
 
 
 
+// @ 0x00a20d60
+bool __stdcall MakeSound(Sound2** out)
+{
+    if (out == 0)
+        return false;
+    Sound2* p = new ("Audio/Sound", 0, 0, 0, 0) Sound2();
+    *out = p;
+    p->s0();
+    return true;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00a20df0
 bool Less1(SoundOrd* s, bool flag, OrdInfo* info)
 {
@@ -2686,6 +2721,7 @@ bool Sys::HasLocation()
 
 
 
+
 // @ 0x00a22220
 void HTable28::Rehash(u32 n)
 {
@@ -2725,6 +2761,19 @@ void HTable28::Rehash(u32 n)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00a222c0
 void PoolList::FreeNodes()
 {
@@ -2740,6 +2789,19 @@ void PoolList::FreeNodes()
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2779,6 +2841,19 @@ void HTable20::Rehash(u32 n)
     buckets = nb;
     bucketCount = n;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2834,6 +2909,19 @@ void SList::merge(SList& x, bool (__cdecl* compare)(Snd*, Snd*))
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00a225d0
 AR* __cdecl ARUninitCopy(AR* first, AR* last, AR* dst)
 {
@@ -2841,6 +2929,19 @@ AR* __cdecl ARUninitCopy(AR* first, AR* last, AR* dst)
         ::new((void*)dst) AR(*first);
     return dst;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2873,6 +2974,19 @@ AR* __cdecl ARCopyBackward(AR* first, AR* last, AR* dst)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00a22730
 AR* __cdecl ARCopy(AR* first, AR* last, AR* dst)
 {
@@ -2880,6 +2994,19 @@ AR* __cdecl ARCopy(AR* first, AR* last, AR* dst)
         *dst = *first;
     return dst;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2905,9 +3032,35 @@ DrvBA22::DrvBA22(void* arg)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00a227d0
 ResourceDeviceDriver* MakeRDD()
 { return new ResourceDeviceDriver; }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2938,6 +3091,19 @@ void Subscription::UpdateOutput(Builder* b)
         } while (n != &anchor);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3000,6 +3166,19 @@ int __cdecl WorkerThread(WorkerCtx* self)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00a22b00
 int __stdcall MakeKeyPair(int* out, int)
 {
@@ -3009,6 +3188,19 @@ int __stdcall MakeKeyPair(int* out, int)
     }
     return 2;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3058,6 +3250,19 @@ bool __stdcall LoadShared(IStream_* stream, Item* item, int, int)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00a23360
 float System::GetPosDist(float* p)
 {
@@ -3068,6 +3273,7 @@ float System::GetPosDist(float* p)
     float dz = pos[2] - p[2];
     return (float)sqrt((double)(dy * dy + (dz * dz + dx * dx)));
 }
+
 
 
 
@@ -3134,6 +3340,7 @@ void System::MuteAll(bool bMute, bool bParam)
 
 
 
+
 // @ 0x00a23830
 EInsertRes* EHTable::DoInsertKey(EInsertRes* out, const int* pkey, u32 unused)
 {
@@ -3184,6 +3391,7 @@ EInsertRes* EHTable::DoInsertKey(EInsertRes* out, const int* pkey, u32 unused)
 
 
 
+
 // @ 0x00a23920
 void RefVec::Destroy()
 {
@@ -3200,6 +3408,7 @@ void RefVec::Destroy()
             operator_delete__(begin);
     }
 }
+
 
 
 
@@ -3252,6 +3461,7 @@ int PHTable::Erase(const int* pkey)
 
 
 
+
 // @ 0x00a23db0
 PHNode** PHTable::EraseNode(PHNode** out, PHNode* n, PHNode** pb)
 {
@@ -3293,6 +3503,7 @@ PHNode** PHTable::EraseNode(PHNode** out, PHNode* n, PHNode** pb)
 
 
 
+
 // @ 0x00a24210
 void RBTree::Assign(void* arg)
 {
@@ -3302,6 +3513,7 @@ void RBTree::Assign(void* arg)
     sub_00a21310();
     sub_00a22410();
 }
+
 
 
 
@@ -3344,6 +3556,7 @@ void* RBTree::AllocNode2(const void* src, void* parent)
 
 
 
+
 // @ 0x00a24480
 void PHTable::FreeBuckets(PHNode** buckets, u32 count)
 {
@@ -3367,6 +3580,7 @@ void PHTable::FreeBuckets(PHNode** buckets, u32 count)
         buckets[i] = 0;
     }
 }
+
 
 
 
@@ -3415,6 +3629,7 @@ RBNode_s00a2_3360* __thiscall RBTree::CloneNode(RBNode_s00a2_3360* src, RBNode_s
 
 
 
+
 // @ 0x00a245e0
 RBNode_s00a2_3360* __cdecl RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent)
 {
@@ -3429,6 +3644,7 @@ RBNode_s00a2_3360* __cdecl RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00
     n->color = src->color;
     return n;
 }
+
 
 
 
@@ -3469,6 +3685,7 @@ Elem20* __cdecl CopyElems20(Elem20** out, Elem20* first, Elem20* last)
 
 
 
+
 // @ 0x00a247f0
 void RDD::Construct()
 {
@@ -3479,6 +3696,7 @@ void RDD::Construct()
     mpCapacity = 0;
     mMutex.ctor(0, 1);
 }
+
 
 
 
@@ -3517,6 +3735,7 @@ u32 __cdecl ParseResman(const char* param_1, u8* param_2)
 
 
 
+
 // @ 0x00a248a0
 ProfileTimer::ProfileTimer(void* acc)
 {
@@ -3545,6 +3764,7 @@ ProfileTimer::ProfileTimer(void* acc)
 
 
 
+
 // @ 0x00a24900
 void ProfileTimer::Accumulate()
 {
@@ -3552,6 +3772,7 @@ void ProfileTimer::Accumulate()
     float* acc = (float*)mpAccumulator;
     *acc = (float)e * sw.mfCyclesToUnitsCoefficient + *acc;
 }
+
 
 
 
@@ -3581,6 +3802,8 @@ bool __thiscall RDD::Tick3(void* a, void* b, void* c)
 
 
 
+
+
 // @ 0x00a25090
 bool Factory::MakeProps(const char* a, Obj_s00a2_4e10** out, int c, int d)
 {
@@ -3597,6 +3820,7 @@ bool Factory::MakeProps(const char* a, Obj_s00a2_4e10** out, int c, int d)
     }
     return ok;
 }
+
 
 
 
@@ -3633,6 +3857,7 @@ bool Factory::MakeAudio(const char* a, ARC* out, int c, int id)
     }
     return ok;
 }
+
 
 
 
@@ -3730,6 +3955,7 @@ bool System_s00a2_4e10::Init()
 
 
 
+
 // @ 0x00a25980
 void Namer::Convert(const char* s, int a, int b, double c)
 {
@@ -3737,6 +3963,7 @@ void Namer::Convert(const char* s, int a, int b, double c)
     g_pfnString(&out, (int)ConvertToString16(s, -1).b, 0, 0, 0, 0); // 0x0154c464
     Dispatch((wchar_t*)out.a, a, b, c);
 }
+
 
 
 
@@ -3756,6 +3983,7 @@ bool AudioSys::CallPrim(unsigned id, int a, float b, int c)
     it.node->val->Update(a, b, c);
     return true;
 }
+
 
 
 
@@ -3785,12 +4013,14 @@ void AudioSys::CallAll(int a, float b, int c)
 
 
 
+
 // @ 0x00a25b20
 bool AudioSys::HasPrim(unsigned id)
 {
     PNode* end = mPrims.end();
     return mPrims.find(id).node != end;
 }
+
 
 
 
@@ -3822,6 +4052,7 @@ void AudioSys::UpdateOutput()
 
 
 
+
 // @ 0x00a25bd0
 bool AudioSys::GetFloat(unsigned k1, unsigned k2, float* out)
 {
@@ -3836,6 +4067,8 @@ bool AudioSys::GetFloat(unsigned k1, unsigned k2, float* out)
     }
     return false;
 }
+
+
 
 
 
@@ -3886,6 +4119,7 @@ bool SysLike::ConnectSubmixTree()
 
 
 
+
 // @ 0x00a2a150
 int SmallStubs::GetOrInsert(int* key)
 {
@@ -3900,6 +4134,7 @@ int SmallStubs::GetOrInsert(int* key)
     FUN_00a136f0(local_18, &k, 0);
     return local_18[0] + 4;
 }
+
 
 
 
@@ -3934,6 +4169,7 @@ void SmallStubs::Dtor()
 
 
 
+
 // @ 0x00a2ae90
 int SmallStubs::EraseRange(int param_2, int param_3)
 {
@@ -3953,6 +4189,8 @@ int SmallStubs::EraseRange(int param_2, int param_3)
     *(int*)((char*)this + 4) += ((param_3 - param_2) / 0x14) * 0x14;
     return param_2;
 }
+
+
 
 
 
@@ -4343,6 +4581,8 @@ done:
 
 
 
+
+
 // @ 0x00a2d790
 bool EA::Audio::System::RegisterPrimitive(EA::Audio::IPrimitive * p)
 {
@@ -4374,6 +4614,7 @@ bool EA::Audio::System::RegisterPrimitive(EA::Audio::IPrimitive * p)
 
 
 
+
 // @ 0x00a2d880
 void* AudioSystem::FUN_00a2d880(uint key, void* out)
 {
@@ -4395,6 +4636,7 @@ void* AudioSystem::FUN_00a2d880(uint key, void* out)
 
 
 
+
 // @ 0x00a2d940
 void* AudioSystem::FUN_00a2d940(void* arg)
 {
@@ -4402,6 +4644,7 @@ void* AudioSystem::FUN_00a2d940(void* arg)
     ((XF*)((uchar*)this + 4))->FUN_00a26fa0(arg);
     return this;
 }
+
 
 
 
@@ -4425,6 +4668,7 @@ int AudioSystem::FUN_00a2d990(void* arg)
 
 
 
+
 // @ 0x00a2d9d0
 void* AudioSystem::FUN_00a2d9d0(uchar flags)
 {
@@ -4433,6 +4677,7 @@ void* AudioSystem::FUN_00a2d9d0(uchar flags)
     if (flags & 1) operator_delete(this);
     return this;
 }
+
 
 
 
@@ -4452,11 +4697,13 @@ void AudioSystem::FUN_00a2da30()
 
 
 
+
 // @ 0x00a2dc40
 void EA::Audio::System::SetupPropertyAggregationRules()
 {
     return;
 }
+
 
 
 
@@ -4501,6 +4748,7 @@ bool EA::Audio::System::DestroySubmixes()
 
 
 
+
 // @ 0x00a2dfe0
 void AudioSystem::FUN_00a2dfe0(void* p)
 {
@@ -4517,6 +4765,7 @@ void AudioSystem::FUN_00a2dfe0(void* p)
         ((XF*)vec)->FUN_00a2ac20(cur, p);
     }
 }
+
 
 
 
@@ -4546,6 +4795,7 @@ uint& AudioSystem::FUN_00a2e060(const uint& k)
     else cand->right = n;
     return n->value;
 }
+
 
 
 
@@ -4583,6 +4833,7 @@ int AudioSystem::FUN_00a2e0e0(uint* p)
 
 
 
+
 // @ 0x00a2e1b0
 void* AudioSystem::FUN_00a2e1b0(void* out, void* node, void* parent)
 {
@@ -4614,6 +4865,7 @@ void* AudioSystem::FUN_00a2e1b0(void* out, void* node, void* parent)
 
 
 
+
 // @ 0x00a2e260
 void AudioSystem::FUN_00a2e260(void* p)
 {
@@ -4637,12 +4889,14 @@ void AudioSystem::FUN_00a2e260(void* p)
 
 
 
+
 // @ 0x00a2e2f0
 AudioSystem* AudioSystem::FUN_00a2e2f0(void* p)
 {
     (void)p;
     return this;
 }
+
 
 
 
@@ -4673,12 +4927,15 @@ void* AudioSystem::FUN_00a2e420(void* p)
 
 
 
+
 // @ 0x00a2e4c0
 void* AudioSystem::FUN_00a2e4c0(void* p)
 {
     (void)p;
     return p;
 }
+
+
 
 
 
@@ -4849,12 +5106,14 @@ bool MgrBase::Create(unsigned name, unsigned id, void* existing, float* pos, voi
 
 
 
+
 // @ 0x00a2ee40
 void MgrBase::PostEvent(unsigned a, unsigned b, unsigned c, unsigned d, void* ref)
 {
     EventMsg m(a, b, c, d, ref);
     AT(EventQueue, this, 0x15b77c).Push(m);
 }
+
 
 
 
@@ -4874,6 +5133,7 @@ bool MgrBase::RemoveEntry(void* obj)
     it = m->erase(it);
     return true;
 }
+
 
 
 
@@ -4919,11 +5179,13 @@ void MgrBase::Rebuild()
 
 
 
+
 // @ 0x00a2f180
 void cTypeMapHolder::SetTypePriority(uint32_t type, uint32_t priority)
 {
     mMap[type] = (int)priority;
 }
+
 
 
 
@@ -4936,6 +5198,8 @@ void cTypeMapHolder::InitDefaultPriorities()
     mMap[0x2b9f662] = 1;
     mMap[0x1a527db] = 2;
 }
+
+
 
 
 
@@ -5005,6 +5269,7 @@ void EA::Audio::System::SetProperty(unsigned int key, float value)
 
 
 
+
 // @ 0x00a30790
 int __cdecl FUN_00a30790(void)
 {
@@ -5012,6 +5277,7 @@ int __cdecl FUN_00a30790(void)
     (void)obj;
     return 0;
 }
+
 
 
 
@@ -5034,6 +5300,7 @@ void EA::Audio::System::PreloadConfigurations()
 
 
 
+
 // @ 0x00a30e10
 int FixedMap30e10::ctor(void* a2, void* a3)
 {
@@ -5051,6 +5318,7 @@ int FixedMap30e10::ctor(void* a2, void* a3)
         ((HashBaseCD*)this)->rehash(u);
     return (int)this;
 }
+
 
 
 
@@ -5082,6 +5350,7 @@ int NodeMap::eraseKey(u32* key)
 
 
 
+
 // @ 0x00a31040
 FixedVec11* FixedVec11::ctor(int param_2)
 {
@@ -5100,6 +5369,7 @@ FixedVec11* FixedVec11::ctor(int param_2)
 
 
 
+
 // @ 0x00a310b0
 FixedVec11b* FixedVec11b::ctor(u32* param_2)
 {
@@ -5111,6 +5381,8 @@ FixedVec11b* FixedVec11b::ctor(u32* param_2)
     InitRange(param_2[0], param_2[1], param_2);
     return this;
 }
+
+
 
 
 
@@ -5278,7 +5550,6 @@ bool cSystem::InitAT()
     return true;
 }
 
-
 // @ 0x00a31f20
 bool System_s00a3_1f20::DoCommandMainThread(EA::Audio::Command_s00a3_1f20* cmd)
 {
@@ -5358,6 +5629,7 @@ bool System_s00a3_1f20::DoCommandMainThread(EA::Audio::Command_s00a3_1f20* cmd)
 }
 
 
+
 // @ 0x00a32220
 FixedHashMap::FixedHashMap(uint a, uint b)
 {
@@ -5381,6 +5653,7 @@ FixedHashMap::FixedHashMap(uint a, uint b)
 }
 
 
+
 // @ 0x00a32320
 void FUN_00a32320(uint32_t* x, uint32_t* y)
 {
@@ -5396,6 +5669,7 @@ void FUN_00a32320(uint32_t* x, uint32_t* y)
     }
     ((HashTmp*)&tmp.t0)->Dtor();
 }
+
 
 
 // @ 0x00a323e0
@@ -5428,6 +5702,7 @@ uint32_t* OuterMap::operator_index(uint32_t* key)
     }
     return r;
 }
+
 
 
 // @ 0x00a32550
@@ -5521,6 +5796,7 @@ void SystemDtor::Destroy()
 }
 
 
+
 // @ 0x00a32ea0
 void SystemProps::SetOutputProperty(uint32_t id, uint32_t prop, float value)
 {
@@ -5539,6 +5815,8 @@ void SystemProps::SetOutputProperty(uint32_t id, uint32_t prop, float value)
     char out[12];
     ((InnerInsert*)m)->Insert((uint32_t*)out, kv, prop);
 }
+
+
 
 // @ 0x00a33600
 System_s00a3_2f20::System_s00a3_2f20()
