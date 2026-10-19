@@ -1,9 +1,10 @@
+005b51b0 ?SetRotation@cTransform@Swarm@EA@@QAEXABV?$Matrix33Template@M$0A@@fpu@math@rw@@@Z  # EA::Swarm::cTransform::SetRotation (callee of s007da2d0, named from the dev publics; slice address comment)
 007da2d0  SP::cMouseCameraController::ApplyMotion  # switch on modifier class, updates lerp targets
 007da5f0  SP::cMouseCameraController::BuildTransform  # writes a cTransform from camera state
 007da790  SP_CreateMouseCameraController  # PDB caller-single (ours is a free function)
 007da800  SP::cMouseCameraController::ProcessInput  # modifier -> motion scaling, tracks last 3 modifiers
-007da910  SP::cMouseCameraController::StartDrag  # snapshots camera state, starts fov lerp
-007da9f0  SP::cMouseCameraController::Update  # per-frame lerp/wrap + clip planes
+007da910 ?StartDrag@cMouseCameraController_s007d_a2d0@SP@@QAE_NHHHH@Z  # cMouseCameraController_s007d_a2d0::StartDrag migrated from s007da2d0 (verbatim, slice spelling)
+007da9f0 ?Update@cMouseCameraController_s007d_a2d0@SP@@QAEXHPAX@Z  # cMouseCameraController_s007d_a2d0::Update migrated from s007da2d0 (verbatim, slice spelling)
 007dad80  SP::CreateOfflineEffect  # virtual lookup of "OfflineEffects" effect object
 007dade0  SP::SetEffectSeed  # PDB name
 007dae20  SP::RunOfflineWorld  # PDB caller-scored

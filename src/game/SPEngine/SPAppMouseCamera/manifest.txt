@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPAppMouseCamera.cpp  ?Handle@cAppToggleHandler@@QAE_NHH@Z  007d9350  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include

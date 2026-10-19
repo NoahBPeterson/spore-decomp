@@ -1,2 +1,3 @@
-007d9460 SP::cMouseCameraController::ConfigUpdated  # pdb_names anchor
+007d9460 ?ConfigUpdated@cMouseCameraController@@QAEXXZ  # cMouseCameraController::ConfigUpdated migrated from s007d9460 (verbatim, slice spelling)
+007d9bd0 ?Begin@cMouseCameraController@@QAE_NHMMH@Z  # cMouseCameraController::Begin migrated from s007d9460 (verbatim, slice spelling)
 007d9fb0 SP::cMouseCameraController::cMouseCameraController  # pdb_candidates caller-single

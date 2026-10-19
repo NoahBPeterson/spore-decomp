@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+007d9460 800 SP::cMouseCameraController::ConfigUpdated; complete (all ~20 property lookups into zoom/pan/rotate/offset/angle/pitch/clip fields), property-extraction scheduling/register allocation differs
+007d9bd0 99 SP::cMouseCameraController::Begin (capture start state); complete, float load/store interleave and Vec3 integer-copy scheduling differ; equiv PASS (1200 inputs, 100% coverage)
+007da910 145 cMouseCameraController::StartDrag; x87 exp inline and field-copy flavour differ
+007da9f0 572 cMouseCameraController::Update; large float lerp/wrap schedule differs
