@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00fc8660 268 COMPLETE rw::movie::EventLogger::Dump (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-). Same calls/strings/order; remaining diff is stack-slot assignment (tag vs minDur slots swapped) and one entry-pointer CSE in the per-tag listing loop.

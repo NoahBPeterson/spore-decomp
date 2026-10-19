@@ -1,1 +1,1 @@
-00fc8660 rw::movie::EventLogger::Dump  # PDB name; strings EventLog.txt / EVENT LOGGER DUMP
+00fc8660 ?Dump@EventLogger@movie@rw@@QAEXXZ  # EventLogger::Dump migrated from s00fc8450 (verbatim, slice spelling)
