@@ -114,9 +114,6 @@ struct cSPUILayout {
 // EA::Messaging / SPUIHelpers
 void __cdecl EA_RemoveHandler(void* h, uint32_t a, uint32_t b, uint32_t c, uint32_t d);  // 0x00571db0
 IWindow* __cdecl SPUIHelpers_SetWindowAreaToParent(IWindow* w);                          // 0x00806bf0
-float __cdecl SPUIHelpers_GetElapsedSeconds(float t, int a, void* w, int b);             // 0x00805080
-void __cdecl SPUIHelpers_SetWindowScale(IWindow* w, float s);                            // 0x00808210
-void __cdecl SPUIHelpers_SetWindowAlpha(IWindow* w, float a);                            // 0x00804fc0
 
 // ---------------------------------------------------------------------------------------------
 // 0x0065f970 / 0x0065f9e0 : class holding a counter, a selected index, a root pointer and four
@@ -599,138 +596,154 @@ void FeedFilterD::Clear() {
 }
 
 // ---------------------------------------------------------------------------------------------
-// 0x006600c0 : cSPUIFeedFilter::GetSupportedFilterTypes (behavioural reconstruction).
+// 0x006600c0 : cSPUIFeedFilter::GetSupportedFilterTypes(int propListID)
 // ---------------------------------------------------------------------------------------------
-struct GeneralProperty {
-    virtual void p00();
-    virtual void p01();
-    virtual void p02();
-    virtual void p03();
-    virtual void p04();
-    virtual void p05();
-    virtual void p06();
-    virtual void p07();
-    virtual void p08();
-    virtual void p09();
-    virtual void p10();
-    virtual void p11();
-    virtual void GetProperty(int* out, uint32_t key, uint32_t type);   // +0x2c
+struct PropVal {                  // value record returned by IProp::Get
+    char*    mpData;              // +0x00 (out-of-line data when flags & 0x30)
+    char     pad04[0x0c];
+    uint16_t mFlags;              // +0x10
+    uint16_t mKind;               // +0x12
+};
+struct IProp {
+    virtual void p0();
+    virtual void Release();                              // +0x04
+    virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5();
+    virtual void p6(); virtual void p7(); virtual void p8();
+    virtual bool Get(uint32_t key, PropVal** out);       // +0x24
+};
+struct IPropManager {
+    virtual void m00(); virtual void m01(); virtual void m02(); virtual void m03();
+    virtual void m04(); virtual void m05(); virtual void m06(); virtual void m07();
+    virtual void m08(); virtual void m09(); virtual void m10();
+    virtual void GetProperty(int listID, uint32_t key, IProp** out);   // +0x2c
+};
+struct FilterButton {
+    virtual void b0();
+    virtual void AddRef();       // +0x04
+    virtual void Release();      // +0x08
+    char    pad04[0x1d];
+    uint8_t mB21;                // +0x21
+    char    pad22[2];
+    int     mState;              // +0x24
+};
+struct FilterSet {               // 0x20 bytes: 24 per-filter flags + key + byte
+    uint8_t  mFlags[24];
+    uint32_t mKey;
+    uint8_t  mB;
+    char     pad1d[3];
+    FilterSet* Init(uint32_t v, uint32_t key);           // 0x0066a5e0 (thiscall, ret 8, returns this)
+};
+struct PropRef {
+    IProp* p;
+    PropRef() : p(0) {}
+    IProp** operator&() {                                // reset-and-address (out parameter)
+        if (p) { IProp* t = p; p = 0; t->Release(); }
+        return &p;
+    }
+    ~PropRef() { if (p) p->Release(); }
 };
 
-GeneralProperty* __cdecl SP_PropertyManager();                                   // 0x0067de30
-void  __cdecl SP_GetPropertyAsKeyInstance(void* a, uint32_t b, void* c);         // 0x006a12a0
-void* __cdecl MakeFilterValue(void* self, int a, uint32_t b);                 // 0x0066a5e0
-void* __cdecl GetFilterButton(int index);                                        // 0x0066a800
-bool  __cdecl FilterVecReserve(void* vec, uint32_t key, void* a, void* b);       // 0x006a0ae0
+IPropManager* __cdecl SP_PropertyManager();                                      // 0x0067de30
+void  __cdecl SP_GetPropertyAsKeyInstance(IProp* prop, uint32_t key, uint32_t* out);   // 0x006a12a0
+FilterButton* __cdecl GetFilterButton(int index);                                // 0x0066a800
+bool  __cdecl GetArrayProperty(IProp* prop, uint32_t key, int* pCount, uint32_t** pItems);   // 0x006a0ae0
 
 extern uint32_t g_feedKey1;   // 0x0140042c
 extern uint32_t g_feedKey2;   // 0x0140041c
-extern void*    g_feedTable[24];  // 0x01400480
+extern uint32_t g_feedTable[24];  // 0x01400480
 
-struct FilterValue {
-    int      gap0;       // +0x00
-    uint16_t kind12;     // +0x12
-    uint8_t  flags10;    // +0x10
-    uint8_t  value21;    // +0x21
-    uint8_t  isOne24;    // +0x24
-    int      state9;     // +0x24
+struct cSPUIFeedFilter {
+    char      pad00[0x18];
+    int       mSelectedID;          // +0x18
+    char      pad1c[0x44 - 0x1c];
+    FilterSet mFilters;             // +0x44 (key at +0x5c)
+    void GetSupportedFilterTypes(int param);   // 0x006600c0 (ret 4)
 };
 
 // @ 0x006600c0
-void __cdecl cSPUIFeedFilter_GetSupportedFilterTypes(char* self, int param) {
-    void* local = 0;
-    GeneralProperty* pm = SP_PropertyManager();
-    pm->GetProperty((int*)&local, 0xcc489c6f, param);
-    if (!local) return;
-    if (*(int*)(self + 0x18) == param) {
-        void* src = MakeFilterValue(&local, 1, 0x4543c5ec);
-        int* dst = (int*)(self + 0x44);
-        for (int i = 0; i < 8; ++i) dst[i] = ((int*)src)[i];
-        for (int off = 0; off < 0x18; ++off) {
-            void* btn = GetFilterButton(off);
+void cSPUIFeedFilter::GetSupportedFilterTypes(int param) {
+    PropRef prop;
+    uint32_t* items;
+    PropVal* v;
+    FilterSet fs;
+    int count;
+    IPropManager* pm = SP_PropertyManager();
+    pm->GetProperty(param, 0xcc489c6f, &prop);
+    if (!prop.p) return;
+    if (mSelectedID == param) {
+        FilterSet tmp;
+        mFilters = *tmp.Init(1, g_feedKey1);
+        uint8_t* fp = mFilters.mFlags;
+        do {
+            FilterButton* btn = GetFilterButton((int)(fp - (uint8_t*)this) - 0x44);
             if (!btn) {
-                dst[off] = 0;
+                *fp = 0;
             } else {
-                ((void(__thiscall*)(void*))((*(void***)btn)[1]))(btn);
-                *(char*)((char*)dst + off) = (*(int*)((char*)btn + 0x24) != 1);
-                ((void(__thiscall*)(void*))((*(void***)btn)[2]))(btn);
+                btn->AddRef();
+                *fp = (btn->mState != 1);
+                btn->Release();
             }
-        }
-        SP_GetPropertyAsKeyInstance(local, 0xb39914fa, self + 0x5c);
+            ++fp;
+        } while ((int)(fp - (uint8_t*)this) - 0x44 < 24);
+        SP_GetPropertyAsKeyInstance(prop.p, g_feedKey2, &mFilters.mKey);
     }
-    MakeFilterValue(&local, 1, 0x4543c5ec);
-    int count = 0;
-    char* stack = 0;
-    bool ok = FilterVecReserve(local, 0x7435a2d3, &count, &stack);
-    char* base = (char*)&count;
-    if (ok) {
-        for (int i = 0; i < 0x18; ++i) {
-            void* btn = GetFilterButton(i);
-            if (!btn) continue;
-            ((void(__thiscall*)(void*))((*(void***)btn)[1]))(btn);
-            *((char*)&local + i) = *(char*)((char*)btn + 0x21);
-            if (local) {
-                bool c = ((bool(__thiscall*)(void*, void*, void*))((*(void***)local)[9]))(
-                    local, g_feedTable[i], base);
-                if (c && *(uint16_t*)(base + 0x12) == 1) {
-                    void* v = base;
-                    if ((*(uint8_t*)(base + 0x10) & 0x30) != 0) v = *(void**)base;
-                    *((char*)&local + i) = *(char*)v;
-                }
-            }
-            int st = *(int*)((char*)btn + 0x24);
-            if (st == 0) {
-                if (*(char*)(self + 0x44 + i) != 0 && *((char*)&local + i) != 0)
-                    *(char*)(self + 0x44 + i) = 1;
-                else
-                    *(char*)(self + 0x44 + i) = 0;
-            } else if (st == 1) {
-                if (*(char*)(self + 0x44 + i) == 0 && *((char*)&local + i) != 0)
-                    *(char*)(self + 0x44 + i) = 1;
-                else
-                    *(char*)(self + 0x44 + i) = 0;
-            }
-            ((void(__thiscall*)(void*))((*(void***)btn)[2]))(btn);
-        }
-    } else {
-        for (int i = 0; i < 0x18; ++i) {
-            if (local) {
-                bool c = ((bool(__thiscall*)(void*, void*, void*))((*(void***)local)[9]))(
-                    local, g_feedTable[i], base);
-                if (c && *(uint16_t*)(base + 0x12) == 1) {
-                    void* v = base;
-                    if ((*(uint8_t*)(base + 0x10) & 0x30) != 0) v = *(void**)base;
-                    *((char*)&local + i) = *(char*)v;
-                    void* btn = GetFilterButton(i);
+    fs.Init(1, g_feedKey1);
+    count = 0;
+    items = 0;
+    if (GetArrayProperty(prop.p, 0x7435a2d3, &count, &items)) {
+        for (int i = 0; i < 24; ++i) {
+            if (prop.p) {
+                if (prop.p->Get(g_feedTable[i], &v) && v->mKind == 1) {
+                    char* d = (char*)v;
+                    if (v->mFlags & 0x30) d = v->mpData;
+                    fs.mFlags[i] = *d;
+                    FilterButton* btn = GetFilterButton(i);
                     if (btn) {
-                        ((void(__thiscall*)(void*))((*(void***)btn)[1]))(btn);
-                        int st = *(int*)((char*)btn + 0x24);
+                        btn->AddRef();
+                        int st = btn->mState;
                         if (st == 0) {
-                            if (*(char*)(self + 0x44 + i) != 0 && *((char*)&local + i) != 0)
-                                *(char*)(self + 0x44 + i) = 1;
-                            else
-                                *(char*)(self + 0x44 + i) = 0;
+                            if (mFilters.mFlags[i] != 0 && fs.mFlags[i] != 0) mFilters.mFlags[i] = 1;
+                            else mFilters.mFlags[i] = 0;
                         } else if (st == 1) {
-                            if (*(char*)(self + 0x44 + i) == 0 && *((char*)&local + i) != 0)
-                                *(char*)(self + 0x44 + i) = 1;
-                            else
-                                *(char*)(self + 0x44 + i) = 0;
+                            if (mFilters.mFlags[i] != 0 || fs.mFlags[i] != 0) mFilters.mFlags[i] = 1;
+                            else mFilters.mFlags[i] = 0;
                         }
-                        ((void(__thiscall*)(void*))((*(void***)btn)[2]))(btn);
+                        btn->Release();
                     }
                 }
             }
         }
-        for (int i = 0; i < count; ++i) {
-            void* entry = *(void**)((char*)base + i * 0xc);
-            cSPUIFeedFilter_GetSupportedFilterTypes(self, (int)entry);
+        for (int i = 0; i < count; ++i)
+            GetSupportedFilterTypes(items[i * 3]);
+    } else {
+        for (int i = 0; i < 24; ++i) {
+            FilterButton* btn = GetFilterButton(i);
+            if (btn) {
+                btn->AddRef();
+                fs.mFlags[i] = btn->mB21;
+                if (prop.p) {
+                        if (prop.p->Get(g_feedTable[i], &v) && v->mKind == 1) {
+                        char* d = (char*)v;
+                        if (v->mFlags & 0x30) d = v->mpData;
+                        fs.mFlags[i] = *d;
+                    }
+                }
+                int st = btn->mState;
+                if (st == 0) {
+                    if (mFilters.mFlags[i] != 0 && fs.mFlags[i] != 0) mFilters.mFlags[i] = 1;
+                    else mFilters.mFlags[i] = 0;
+                } else if (st == 1) {
+                    if (mFilters.mFlags[i] != 0 || fs.mFlags[i] != 0) mFilters.mFlags[i] = 1;
+                    else mFilters.mFlags[i] = 0;
+                }
+                btn->Release();
+            }
         }
     }
-    if (local) ((void(__thiscall*)(void*))((*(void***)local)[1]))(local);
 }
 
 // ---------------------------------------------------------------------------------------------
-// 0x0065fd30 : cSPUIEventLog::DoMessage (behavioural reconstruction of the animation sweep).
+// 0x0065fd30 : cSPUIEventLog::DoMessage (animation sweep over the event map). Built with /fp:fast (addss/movss).
 // ---------------------------------------------------------------------------------------------
 struct EventNode {
     char pad00[0x14];
@@ -748,28 +761,37 @@ struct EventLog {
     void DoMessage();
 };
 
-struct cSPUIAnimator {
-    void RemoveAnimation(IWindow* w, int idx);   // 0x007f6210
-    void AddAnimation(void* target);             // 0x007f8d10
+extern char g_animTargetVtbl[];                 // 0x013f6400
+extern char g_animTargetVtbl2[];                // 0x013f63fc
+struct AnimTarget {    // temporary animation target; its inlined dtor resets two vptrs and releases a window ref
+    void* vtbl;
+    int pad;
+    void* vtbl2;
+    IWindow* pWin;
+    ~AnimTarget() { vtbl = g_animTargetVtbl; vtbl2 = g_animTargetVtbl2; if (pWin) pWin->Release(); }
 };
-cSPUIAnimator* __cdecl GetAnimator();            // 0x00401030 + [0x14]
-void* __cdecl CreateTargetPosition(void* p, IWindow* w);      // 0x007f80d0
-void* __cdecl CreateTargetScale(void* p, IWindow* w);         // 0x007f81d0
-void* __cdecl CreateTargetShadeAlpha(void* p, IWindow* w);    // 0x007f8290
+struct cSPUIAnimator {
+    void __thiscall RemoveAnimation(IWindow* win, int channel);                  // 0x007f6210
+    void __thiscall AddAnimation(AnimTarget* t, IWindow* win, int channel);      // 0x007f8d10
+};
+cSPUIAnimator** __cdecl GetAnimatorOwner();                                      // 0x00401030 (browser; animator at +0x14)
+float __cdecl GetElapsedSeconds(float duration, int zero);                       // 0x00805080
+AnimTarget* __cdecl CreatePositionTarget(AnimTarget* out, IWindow* win, float x, float y, float dur);   // 0x007f80d0
+AnimTarget* __cdecl CreateScaleTarget(AnimTarget* out, IWindow* win, float scale, float dur);           // 0x007f81d0
+AnimTarget* __cdecl CreateShadeAlphaTarget(AnimTarget* out, IWindow* win, int alpha, float dur);        // 0x007f8290
+void  __cdecl SetWindowScale(IWindow* w, float s);                               // 0x00808210
+void  __cdecl SetWindowAlpha(IWindow* w, float a);                               // 0x00804fc0
 
-static cSPUIAnimator* CurrentAnimator() {
-    char* browser = (char*)GetAnimator();
-    if (!browser) return 0;
-    return *(cSPUIAnimator**)(browser + 0x14);
+static __forceinline cSPUIAnimator* CurrentAnimator() {
+    return GetAnimatorOwner() ? *(cSPUIAnimator**)((char*)GetAnimatorOwner() + 0x14) : 0;
 }
 
 // @ 0x0065fd30
 void EventLog::DoMessage() {
     for (EventNode* it = mBegin; it != (EventNode*)&mEnd; it = (EventNode*)RBTreeIncrement(it)) {
-        IWindow* win = it->mWin;
         if (it->b18) {
-            if (!win) continue;
-            IButton* btn = (IButton*)win->FindWindow(0x8ed27e7a);
+            if (!it->mWin) continue;
+            IButton* btn = (IButton*)it->mWin->FindWindow(0x8ed27e7a);
             if (btn) {
                 if (it->b19) {
                     btn->SetStateFlag(4, true);
@@ -778,75 +800,81 @@ void EventLog::DoMessage() {
                     btn->SetStateFlag(4, false);
                 }
             }
-            float x = it->f24 + it->f1c;
             float y = it->f28 + it->f20;
+            float x = it->f24 + it->f1c;
             cSPUIAnimator* anim = CurrentAnimator();
             if (!anim) {
-                SPUIHelpers_SetWindowScale(win, 1.0f);
-                SPUIHelpers_SetWindowAlpha(win, 1.0f);
-                win->SetLocation(x, y);
+                SetWindowScale(it->mWin, 1.0f);
+                SetWindowAlpha(it->mWin, 1.0f);
+                it->mWin->SetLocation(x, y);
             } else {
-                anim->RemoveAnimation(win, -1);
-                if (!(win->GetFlags() & 0x10)) {
-                    float t = SPUIHelpers_GetElapsedSeconds(0.5f, 3, win, 1);
-                    float pos[3] = { x, y, t };
-                    anim->AddAnimation(CreateTargetPosition(pos, win));
+                anim->RemoveAnimation(it->mWin, -1);
+                if (!(it->mWin->GetFlags() & 0x10)) {
+                    AnimTarget t;
+                    anim->AddAnimation(CreatePositionTarget(&t, it->mWin, x, y, GetElapsedSeconds(0.5f, 3)), it->mWin, 1);
                 } else {
-                    win->SetLocation(x, y);
+                    it->mWin->SetLocation(x, y);
                 }
-                float t2 = SPUIHelpers_GetElapsedSeconds(0.5f, 2, win, 0);
-                float sc[3] = { 1.0f, 0.0f, t2 };
-                anim->AddAnimation(CreateTargetScale(sc, win));
-                float t3 = SPUIHelpers_GetElapsedSeconds(0.5f, 0, win, 2);
-                float sh[3] = { 255.0f, 0.0f, t3 };
-                anim->AddAnimation(CreateTargetShadeAlpha(sh, win));
+                { AnimTarget t;
+                  anim->AddAnimation(CreateScaleTarget(&t, it->mWin, 1.0f, GetElapsedSeconds(0.5f, 2)), it->mWin, 0); }
+                { AnimTarget t;
+                  anim->AddAnimation(CreateShadeAlphaTarget(&t, it->mWin, 0xff, GetElapsedSeconds(0.5f, 0)), it->mWin, 2); }
             }
-            win->SetFlag(0x10, false);
+            it->mWin->SetFlag(0x10, false);
         } else {
-            if (!win) continue;
-            win->SetFlag(0x10, true);
+            if (!it->mWin) continue;
+            it->mWin->SetFlag(0x10, true);
             cSPUIAnimator* anim = CurrentAnimator();
             if (!anim) {
-                SPUIHelpers_SetWindowScale(win, 0.0078125f);
-                SPUIHelpers_SetWindowAlpha(win, 0.0f);
+                SetWindowScale(it->mWin, 1.52587890625e-05f);
+                SetWindowAlpha(it->mWin, 0.0f);
             } else {
-                anim->RemoveAnimation(win, -1);
-                float t = SPUIHelpers_GetElapsedSeconds(0.5f, 1, win, 0);
-                float sc[3] = { 0.0078125f, 0.0f, t };
-                anim->AddAnimation(CreateTargetScale(sc, win));
-                float t2 = SPUIHelpers_GetElapsedSeconds(0.5f, 0, win, 2);
-                float sh[3] = { 0.0f, 0.0f, t2 };
-                anim->AddAnimation(CreateTargetShadeAlpha(sh, win));
+                anim->RemoveAnimation(it->mWin, -1);
+                { AnimTarget t;
+                  anim->AddAnimation(CreateScaleTarget(&t, it->mWin, 1.52587890625e-05f, GetElapsedSeconds(0.5f, 1)), it->mWin, 0); }
+                { AnimTarget t;
+                  anim->AddAnimation(CreateShadeAlphaTarget(&t, it->mWin, 0, GetElapsedSeconds(0.5f, 0)), it->mWin, 2); }
             }
-            win->SetFlag(0x10, false);
         }
     }
 }
 
 // ---------------------------------------------------------------------------------------------
-// 0x00660c10 : texture-instance map find-or-insert (behavioural reconstruction).
+// 0x00660c10 : hash_map<ResourceKey, cTextureInstanceInternal*>::operator[] (find, else insert).
 // ---------------------------------------------------------------------------------------------
-void  __cdecl HashFind(void* self, void* out, const void* key);       // 0x00833840
-void  __cdecl HashInsertKey(void* self, void* a, void* b, void* c);   // 0x00660570
-
-struct HashCtx {
-    char pad04[4];
-    void** mBuckets;   // +0x04
-    int    mBucket;    // +0x08
-    void* find(void* out, const Key* key) {
-        char findResult[0x0c];
-        HashFind(this, findResult, key);
-        void* it = *(void**)findResult;
-        if (it != mBuckets[mBucket])
-            return (char*)it + 0x0c;
-        Key tmp = *key;
-        int isNew = 0;
-        HashInsertKey(this, &tmp, (void*)&isNew, 0);
-        return (char*)it + 0x0c;
-    }
+struct TexObj {
+    virtual void t0();
+    virtual void t1();
+    virtual void Release();       // +0x08
+};
+struct TexTag { bool b; };        // eastl bool flag (false), passed by value
+struct TexPair {                  // pair<const Key, intrusive_ptr<cTextureInstanceInternal> >
+    Key      key;
+    TexObj*  p;
+    ~TexPair() { if (p) p->Release(); }
+};
+struct TexNode;
+struct TexInsRes { TexNode* node; void* bucket; bool inserted; };   // pair<iterator, bool>
+struct TexTable {
+    void*     mAlloc;                   // +0x00
+    TexNode** mBuckets;                 // +0x04
+    uint32_t  mBucketCount;             // +0x08
+    void find(TexInsRes* out, const Key* key);                 // 0x00833840 (ret 8)
+    void insert(TexInsRes* out, TexPair* v, TexTag tag);       // 0x00660570 (ret 12)
+    TexNode* Index(const Key* key);                           // 0x00660c10 (ret 4)
 };
 
 // @ 0x00660c10
-void* __cdecl TexMapFindOrInsert(HashCtx* self, const Key* key) {
-    return self->find(0, key);
+TexNode* TexTable::Index(const Key* key) {
+    TexInsRes it;
+    find(&it, key);
+    if (it.node != mBuckets[mBucketCount])
+        return (TexNode*)((char*)it.node + 0x0c);
+    TexPair v;
+    v.key = *key;
+    TexTag tag;
+    tag.b = false;
+    v.p = 0;
+    insert(&it, &v, tag);
+    return (TexNode*)((char*)it.node + 0x0c);
 }

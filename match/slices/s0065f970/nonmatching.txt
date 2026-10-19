@@ -6,3 +6,5 @@
 006609a0  266  eastl vector<Key>::operator=; param held in eax instead of ebx, whole schedule differs; equiv FAIL (5/87 inputs mismatched; ours faults on unmapped read at 0x00b84c91 where original returns)
 00660ad0  83  vector range construct; out/first/last register assignment differs
 00660b90  96  map clear; keeps w in a register and uses ebx, original reloads and uses ebp for the end anchor
+006600c0  505  cSPUIFeedFilter::GetSupportedFilterTypes: complete (flag-set rebuild, array property, per-button AND/OR merge, recursion); loop induction variable and frame-slot assignment differ [equiv: WEAK 398 valid, 12.9% coverage]
+0065fd30  692  cSPUIEventLog::DoMessage: complete (show/hide sweep with animation targets); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; frame is 0x34 bytes larger in the original (unused AnimTarget temp slots) and register roles differ [equiv: UNSUPPORTED 0/400 valid]

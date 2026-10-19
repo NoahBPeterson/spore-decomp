@@ -9,3 +9,4 @@ slices/s0065f970/s0065f970.cpp  AssignChecked  006603d0  /O2 /MD /Gy /TP /arch:S
 slices/s0065f970/s0065f970.cpp  FeedDestroyRange  00660510  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s0065f970/s0065f970.cpp  FeedUninitCopy  00660b30  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s0065f970/s0065f970.cpp  FeedRangeAssign  00660d70  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0065f970/s0065f970.cpp  ?Index@TexTable@@QAEPAUTexNode@@PBUKey@@@Z  00660c10  /O2 /MD /Gy /TP /arch:SSE /GS-

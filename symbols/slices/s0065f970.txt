@@ -17,3 +17,4 @@
 00660b30 ?FeedUninitCopy@@YAPAUFeedEntry@@PAU1@00@Z  # FeedUninitCopy migrated from s0065f970 (verbatim, slice spelling)
 00660b90 ?Clear@FeedFilterD@@QAEXXZ  # FeedFilterD::Clear migrated from s0065f970 (verbatim, slice spelling)
 00660d70 ?FeedRangeAssign@@YAPAUFeedEntry@@PAU1@00@Z  # FeedRangeAssign migrated from s0065f970 (verbatim, slice spelling)
+00660c10 ?Index@TexTable@@QAEPAUTexNode@@PBUKey@@@Z  # hash_map<ResourceMan::Key, cTextureInstanceInternal*>::operator[] (find, else insert pair), byte-exact

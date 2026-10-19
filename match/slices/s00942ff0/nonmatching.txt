@@ -6,3 +6,6 @@
 00943d70  93  CellHolder::AddCell: complete; vector pointer caching + register roles differ; difftest WEAK (174 valid inputs, 95% coverage)
 00943de0  131  HTTPRequest ctor: complete; SSO blob capacity folded from base + scheduling order differs; difftest PASS (400 valid inputs, 100% coverage)
 00943ea0  121  HTTPRequest dtor: complete; missing thiscall ecx setup before range destroy + inline free schedule differs; difftest UNSUPPORTED (unresolved _operator_delete__)
+00942ff0  928  HTTPClient::ConnectToServer: complete (URL host/port/scheme, socket reuse or allocate, resolve, buffer tuning loops, connect); register allocation and stack-slot assignment differ, string copy-ctor schedule differs [equiv: UNSUPPORTED 0/400 valid]
+00943910  10  HTTPClient::CancelJob: complete; only unlink register choice differs (iterator reload through next->prev) [equiv: WEAK 49 valid, 63.2% coverage]
+00943a30  38  HTTPClient::CancelAllJobs: complete; else-branch placement of the infinite-timeout wait and mutex-this hoist differ [equiv: UNSUPPORTED 0/400 valid]

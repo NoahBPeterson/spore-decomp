@@ -38,9 +38,6 @@ void  __cdecl DiscardWhiteSpace(const char** p);            // 0x0083ce90
 void  __cdecl ThrowCError(void* out, const char* fmt, ...); // 0x0052df30
 void  __cdecl DoFreeNodesExpr(void* bucketArray, int n);    // 0x0083dd00
 void* __cdecl HashFindExprNode(const void* key, void* node);// 0x007e2ea0
-void* __cdecl MakeExprNode(const void* key, int* refOut);   // 0x0083ddb0
-void* __cdecl HashInsertExpr(void* self, void* out, const void* key);  // 0x0083dea0
-int*  __cdecl ExprFindOrInsert(void* self, const void* key);           // 0x0083ddb0
 int   __cdecl ExprFind(int* out, const void* key);          // 0x007e2ea0
 int   __cdecl EvalIntExpression(void* self, const char** p); // 0x0083eb00
 void  __cdecl EvalExpectChar(const char** p, char c);       // 0x0083d240
@@ -257,54 +254,124 @@ long double EA::ArgScript::cExpression::EvalSignedRealNumber(const char** p) {
 }
 
 // ===========================================================================
-// 0x0083ddb0  expr table lookup-or-create under key
+// ExprTable: the hash_map<string8, AutoRefCount<cExprFunction>> inside cExpression
 // ===========================================================================
+struct ExprNode { eastl::string8 key; int* fn; ExprNode* next; };
+struct AutoRef {
+    int* p;
+    AutoRef() : p(0) {}
+    ~AutoRef() { if (p && --p[1] == 0) FUN_00f47380(p); }
+};
+struct ExprPair {                                               // pair<const string8, AutoRefCount<cExprFunction> >
+    char* mpBegin; char* mpEnd; char* mpCapacity; unsigned mAlloc; int* fn;   // string8 layout, no ctor
+    ExprPair* Ctor(const eastl::string8* k, int** ref);         // 0x0083cef0
+    ~ExprPair() {
+        if (fn && --fn[1] == 0) FUN_00f47380(fn);
+        if ((mpCapacity - mpBegin) > 1 && mpBegin) FUN_00f47380(mpBegin);
+    }
+};
+bool __cdecl StrEqS(const eastl::string8& a, const eastl::string8& b);    // 0x00554fb0
+void* __cdecl MemMoveS(void* dst, const void* src, unsigned n);           // 0x011e0744
+extern char gEmptyBuf[];                                                  // 0x01667bac
+
+struct KeyBuf {                                                           // string8 layout without its ctor
+    char* mpBegin; char* mpEnd; char* mpCapacity; unsigned mAlloc;
+    __forceinline KeyBuf(const char* first, const char* last) {
+        unsigned n = last - first;
+        if (n + 1 > 1) {
+            mpBegin = (char*)EASTL_allocator_allocate(n + 1, g_allocName, 0, 0, g_allocFile, 0xd1);
+            mpCapacity = mpBegin + n + 1;
+        } else {
+            mpBegin = gEmptyBuf; mpCapacity = gEmptyBuf + 1;
+        }
+        MemMoveS(mpBegin, first, n);
+        mpEnd = mpBegin + n;
+        *mpEnd = 0;
+    }
+    ~KeyBuf() { if ((mpCapacity - mpBegin) > 1 && mpBegin) FUN_00f47380(mpBegin); }
+};
+__forceinline const char* StrEndS(const char* s) { const char* p = s; do {} while (*p++); return p - 1; }
+struct InsTag { bool b; };                                                 // eastl bool tag, passed by value
+struct ExprTable {
+    void* mAlloc;
+    ExprNode** mpBucketArray;
+    unsigned mnBucketCount;
+    unsigned mnElementCount;
+    void find(ExprNode** out, const eastl::string8& key);                 // 0x007e2ea0
+    void insert(ExprNode** out, ExprPair* v, InsTag tag);                     // 0x0083d140
+    int** IndexRef(const eastl::string8& key);                            // 0x0083ddb0
+    int   erase(const eastl::string8& key);                               // 0x0083dea0
+    void  Register(const char* name, int* ref);                           // 0x0083df90
+};
+
 // @ 0x0083ddb0
-int* __cdecl ExprFindOrInsert(void* self, const void* key) {
-    (void)self; (void)key;
-    return 0;
+int** ExprTable::IndexRef(const eastl::string8& key) {
+    ExprNode* it;
+    find(&it, key);
+    if (it != mpBucketArray[mnBucketCount])
+        return &it->fn;
+    int* dflt = 0;
+    ExprPair v;
+    ExprPair* pv = v.Ctor(&key, &dflt);
+    InsTag tag;
+    tag.b = false;
+    insert(&it, pv, tag);
+    return &it->fn;
 }
 
 // ===========================================================================
 // 0x0083dea0  hashtable<...cExprFunction...>::erase(key)
 // ===========================================================================
 // @ 0x0083dea0
-int __cdecl HashEraseExpr(void* self, const void** keyPtr) {
-    const unsigned char* p = (const unsigned char*)*keyPtr;
+int ExprTable::erase(const eastl::string8& key) {
+    const unsigned char* p = (const unsigned char*)key.mpBegin;
     uint32 h = 0x811c9dc5;
-    unsigned char c = *p;
+    uint32 c = *p;
     while (c) { ++p; h = h * 0x1000193 ^ c; c = *p; }
-    unsigned n = h % *(unsigned*)((char*)self + 8);
-    int prevCount = *(int*)((char*)self + 0xc);
-    char** slot = (char**)(*(char**)((char*)self + 4) + n * 4);
+    unsigned n = h % mnBucketCount;
+    unsigned saved = mnElementCount;
+    ExprNode** slot = &mpBucketArray[n];
     if (*slot) {
+        ExprNode* node;
+        do {
+            node = *slot;
+            if (StrEqS(key, node->key)) break;
+            slot = &node->next;
+        } while (node->next);
         while (*slot) {
-            char* node = *slot;
-            if (HashFindExprNode(keyPtr[1], node)) {
-                *slot = *(char**)(node + 0x14);
-                int* ref = *(int**)(node + 0x10);
-                if (ref) { if (--ref[1] == 0) EASTL_allocator_deallocate(ref); }
-                eastl::string8* s = (eastl::string8*)node;
-                if ((s->mpCapacity - s->mpBegin) > 1 && s->mpBegin)
-                    EASTL_allocator_deallocate(s->mpBegin);
-                EASTL_allocator_deallocate(node);
-                --*(int*)((char*)self + 0xc);
-            } else {
-                slot = (char**)(node + 0x14);
-            }
+            ExprNode* nd = *slot;
+            if (!StrEqS(key, nd->key)) break;
+            *slot = nd->next;
+            int* r = nd->fn;
+            if (r && --r[1] == 0) FUN_00f47380(r);
+            char* sb = nd->key.mpBegin;
+            if ((nd->key.mpCapacity - sb) > 1 && sb)
+                FUN_00f47380(sb);
+            FUN_00f47380(nd);
+            --mnElementCount;
         }
     }
-    return prevCount - *(int*)((char*)self + 0xc);
+    return saved - mnElementCount;
 }
 
 // ===========================================================================
-// 0x0083df90  `anonymous namespace'::cIfCommand::cIfCommand  (partial)
+// 0x0083df90  `anonymous namespace'::cIfCommand::cIfCommand: table[name] = ref, or erase(name) when ref is null
 // ===========================================================================
 // @ 0x0083df90
-// 417-byte command ctor building the "if" command table. Kept as a compiling
-// stub; see partial.txt.
-void __cdecl cIfCommand_ctor(int* self, const char* name, int cmd) {
-    (void)self; (void)name; (void)cmd;
+void ExprTable::Register(const char* name, int* ref) {
+    if (ref) {
+        KeyBuf key(name, StrEndS(name));
+        int** slot = IndexRef(*(eastl::string8*)&key);
+        int* old = *slot;
+        if (ref != old) {
+            ++ref[1];
+            *slot = ref;
+            if (old && --old[1] == 0) FUN_00f47380(old);
+        }
+    } else {
+        KeyBuf key(name, StrEndS(name));
+        erase(*(eastl::string8*)&key);
+    }
 }
 
 // ===========================================================================

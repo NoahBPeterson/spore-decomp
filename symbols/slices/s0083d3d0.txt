@@ -7,3 +7,5 @@
 0083df90 `anonymous namespace'::cIfCommand::cIfCommand  # PDB
 0083e140 ?ExprTableClear@@YIXPAX@Z  # ExprTableClear migrated from s0083d3d0 (verbatim, slice spelling)
 0083e160 ?EvalRealFactor@cExpression@ArgScript@EA@@QAEMAAPBD@Z  # EA::ArgScript::cExpression::EvalRealFactor migrated from s0083d3d0
+0083ddb0 ?IndexRef@ExprTable@@QAEPAPAHABUstring8@eastl@@@Z  # hash_map<string,AutoRefCount<cExprFunction>>::operator[] (find then insert pair); callee of cIfCommand ctor 0x83df90
+0083dea0 ?erase@ExprTable@@QAEHABUstring8@eastl@@@Z  # hashtable<..cExprFunction..>::erase(key), byte-exact
