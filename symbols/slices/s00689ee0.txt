@@ -7,19 +7,18 @@
 0068a2e0 _FUN_0068a2e0  # FUN_0068a2e0 migrated from s00689ee0 (verbatim, slice spelling)
 0068a320  (anonymous)::FixupCommandString  # assign + char1/char9 scan + insert/append literal at 0x1403308
 0068a3f0 ?GetCommandInfo@cCommandServer@@QAE_NIPAUWStr@@0@Z  # cCommandServer::GetCommandInfo migrated from s00689ee0 (verbatim, slice spelling)
-0068a460  eastl::vector<16-byte>::insert  # 0x555c40/0x7c7a40 calls with 16-byte stride
+0068a460 ??0vector@@QAE@IABUEmptyAlloc@@@Z  # vector::vector migrated from s00689ee0 (verbatim, slice spelling)
 0068a720 ??1cCommandParameterSet@@QAE@XZ  # cCommandParameterSet::~cCommandParameterSet migrated from s00689ee0 (verbatim, slice spelling)
-0068a7a0  SP::cCommandParameterSet::AdjustParameterCount  # uses vtable +0x24 to append and RBTreeDecrement/Erase to drop
+0068a7a0 ?AdjustParameterCount@cCommandParameterSet@@QAEXI@Z  # cCommandParameterSet::AdjustParameterCount migrated from s00689ee0 (verbatim, slice spelling)
 0068a870 ?RemoveParameter@cCommandParameterSet@@QAEXI@Z  # cCommandParameterSet::RemoveParameter migrated from s00689ee0 (verbatim, slice spelling)
 0068a8d0 ??1cStringCommandGenerator@@QAE@XZ  # cStringCommandGenerator::~cStringCommandGenerator migrated from s00689ee0 (verbatim, slice spelling)
 0068a970 ?RegisterCommandParameterInfo@cCommandServer@SP@@UAE_NIPB_W@Z  # SP::cCommandServer::RegisterCommandParameterInfo migrated from s00689ee0
-0068a9e0  SP::cCommandServer::GetCommandIDFromCommandString  # PDB; parse command string then vtable +0x34
+0068a9e0 ?GetCommandIDFromCommandString@cCommandServer@SP@@UBEIPBV?$basic_string@_WVallocator@eastl@@@eastl@@I@Z  # SP::cCommandServer::GetCommandIDFromCommandString migrated from s00689ee0
 0068aae0 ?RegisterCommandGenerator@cCommandServer@@QAE_NPAX@Z  # cCommandServer::RegisterCommandGenerator migrated from s00689ee0 (verbatim, slice spelling)
 0068abb0 ?UnregisterCommandGenerator@cCommandServer@@QAE_NPAX@Z  # cCommandServer::UnregisterCommandGenerator migrated from s00689ee0 (verbatim, slice spelling)
 0068ac60 ?ExecuteCommandFormatted@cCommandServer@@QAAHPB_WZZ  # cCommandServer::ExecuteCommandFormatted migrated from s00689ee0 (verbatim, slice spelling)
 0068ad30 ??0cCommandParameterSet@@QAE@XZ  # cCommandParameterSet::cCommandParameterSet migrated from s00689ee0 (verbatim, slice spelling)
 0068ad90 ?ExecuteCommand@cCommandParameterSet@@QAE_NHPAX0@Z  # cCommandParameterSet::ExecuteCommand migrated from s00689ee0 (verbatim, slice spelling)
 0068af10 ??0cStringCommandGenerator@@QAE@XZ  # cStringCommandGenerator::cStringCommandGenerator migrated from s00689ee0 (verbatim, slice spelling)
-0068b000  SP::cCommandParameterSet::SetParameterCount  # PDB; parse then build parameter set
+0068b000 ?SetParameterCount@cStringCommandGenerator@@QAE_NPAUWStr@@PAIPAPAUcCommandParameterSet@@@Z  # cStringCommandGenerator::SetParameterCount migrated from s00689ee0 (verbatim, slice spelling)
 0093dd80 ??0Variant@EA@@QAE@PBXII_NG@Z  # EA::Variant::Variant (callee of s00689ee0, named from the dev publics; slice address comment)
-0068b000 ?SetParameterCount@cStringCommandGenerator@@QAE_NPAUWStr@@PAIPAPAUcCommandParameterSet@@@Z  # this+0xc is the token vector filled by ParseCmd (cStringCommandGenerator layout), not the parameter-set map the PDB candidate suggests

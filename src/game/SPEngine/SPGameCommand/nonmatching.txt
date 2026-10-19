@@ -6,13 +6,16 @@
 0068a040 99 find-by-name loop: begin iteration + case-insensitive compare correct, but loop/compare scheduling and register use differ; equiv: FAIL (5/15 valid inputs mismatched at import call #0 tolower)
 0068a250  95   map node allocator: new-expression body correct, original keeps an EH frame + cleanup around operator new/Variant assign
 0068a320  148  command-string fixup: control flow reproduced with gotos, but cl folds the length>>1 to test and lays blocks out differently
+0068a460 110 vector<WStr>::vector(n, alloc) (thiscall ret 8, returns this): base ctor 0x7c7a40 + uninitialized_fill_n(0x555c40) with an empty-string temp; original drops the temp's destructor from the normal path (EH funclet only), cl keeps it [equiv: PASS 271 valid inputs, 100% coverage]
 0068a720 26 ~cCommandParameterSet: vtable stores + DoNukeSubtree correct, EH state table from real base-class dtors not reproduced
+0068a7a0 72 AdjustParameterCount: add loop through vtable +0x24 with a Variant local (inline dtor), shrink loop via RBTreeDecrement/Increment/Erase; original holds two separate copies of the map anchor in ebx/ebp, which spills n to the stack [equiv: WEAK 98 valid inputs, 68.7% coverage]
 0068a870 65 RemoveParameter: find/erase sequence correct, but cl uses an extra callee-saved reg and reads the iterator from a different slot
 0068a8d0 49 ~cStringCommandGenerator: members destroyed correctly, EH frame/state from base-class dtors not reproduced
 0068a970 63 RegisterCommandParameterInfo: find/assign/format paths present, block layout and assign argument setup differ
+0068a9e0 193 GetCommandIDFromCommandString: vector<WStr> local, ParseCmd, vtable +0x34; original keeps the str parameter in a register across the vector ctor call (empty allocator argument is the parameter slot address) [equiv: WEAK 183 valid inputs, 96.6% coverage]
 0068aae0 120 RegisterCommandGenerator: refcount, set-find/insert and info loop present, EH states/temporaries differ
 0068abb0 106 UnregisterCommandGenerator: set-find/erase + release present, EH states/temporaries differ
 0068ac60 182 ExecuteCommandFormatted: Format + virtual dispatch + string cleanup present, EH frame and va_list forwarding differ
 0068ad30 25 cCommandParameterSet ctor: vtable stores and map anchor init correct, cl reorders/CSEs the zero stores
 0068ad90 290 ExecuteCommand: variant type selection, locale path and cleanup present, scheduling/regalloc differ throughout
-0068af10 63 cStringCommandGenerator ctor: vtable stores + parameter-set new correct, EH frame around new-expression differs
+0068af10 45 cStringCommandGenerator ctor: vtable stores + parameter-set new correct, EH frame around new-expression differs

@@ -71,6 +71,7 @@ extern "C" void  EASTL_dealloc(void* p);                                     // 
 extern "C" void* EASTL_alloc6(unsigned sz, const char* name, unsigned a,
                               unsigned b, const char* file, unsigned line);  // 0x0f473a0
 extern "C" void  RBTreeErase(void* node, void* anchor);                      // 0x0921880
+extern "C" unsigned ParseCmd(void* s, int n, int ch, void* out, unsigned f); // 0x093d740
 extern "C" int   MakeLocaleAvailable(void* a, void* b);                      // 0x087d9a0
 extern "C" void  VecDestroyValues(void* first, void* last);                  // 0x084aad0
 extern "C" void  Sub689dc0(void* a, int b, void* c);                         // 0x0689dc0
@@ -78,6 +79,7 @@ extern "C" void  Sub689e80(void* a);                                         // 
 extern "C" void  Sub68a140(void* a, void* b, void* c);                       // 0x068a140
 extern "C" char gAllocTag[];               // 0x13ebc58 "App"
 extern "C" char gEASTLFile[];              // 0x13ebb38 allocator.h path
+extern "C" void* gCommandServer;           // 0x15ff660
 extern "C" void* vtbl_cCommandParameterSet;   // 0x1403310
 extern "C" void* vtbl_cCommandParameterSet2;  // 0x140330c
 extern "C" void* vtbl_cStringCommandGenerator; // 0x1403354
@@ -89,7 +91,11 @@ typedef unsigned int   u32;
 typedef unsigned short u16;
 typedef unsigned char  u8;
 typedef wchar_t        wch;
+void* operator new(size_t sz, const char* name, unsigned a, unsigned b, const char* file, unsigned line);   // 0x0f473a0
 extern "C" int   WMemCmp(const wch* a, const wch* b, unsigned n);            // 0x0572930
+struct WStr;
+struct EmptyAlloc {};
+void __cdecl Ins16(void* a, void* b, const WStr& c, const EmptyAlloc& d);                  // 0x0555c40
 extern "C" wch  gEmptyWStr[];              // 0x1667bac empty string buffer
 extern "C" wch  gLiteral1403308[];         // 0x1403308 wide literal
 struct WStr {
@@ -135,6 +141,11 @@ struct Variant {
     void Destruct(int b);                               // 0x093db80 (thiscall)
     void Init(int a, int b, int c, int d, int e);       // 0x093dd80 (thiscall)
 };
+struct VariantL : Variant {
+    VariantL() { mFlags = 0; mTypeId = 0; }
+    VariantL(int a, int b, int c, int d, int e) { mFlags = 0; mTypeId = 0; Init(a, b, c, d, e); }
+    ~VariantL() { if (mFlags & 4) Destruct(0); }
+};
 struct PairUV { u32 key; Variant val; };
 struct VMapNode {
     VMapNode* mpNodeRight;   // +0x00
@@ -169,6 +180,7 @@ struct VMap {
     u32 mAlloc;              // +0x18
 
     VMapNode* endNode() { return (VMapNode*)&aRight; }
+    u32 size() const { return mnSize; }
     VIter find(const u32& k);                       // out-of-slice
     void DoNukeSubtree(VMapNode* p) {
         while (p) {
@@ -199,6 +211,33 @@ struct CInfoNode {
     u32 mKey;                // +0x10
     cCommandInfo mValue;     // +0x14
 };
+struct ICmdSrv {   // cCommandServer interface (vtable slot +0x34)
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+    virtual u32 GetCommandIDFromTokens(const wch* first);   // +0x34
+};
+struct IParamSetV {   // cCommandParameterSet virtual interface
+    virtual void AddRef();                                  // +0x00
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+    virtual void SetParameter(u32 index, Variant* v);       // +0x20
+};
 struct cCommandParameterSet {
     void* vtbl0;             // +0x00
     void* vtbl1;             // +0x04
@@ -206,13 +245,12 @@ struct cCommandParameterSet {
     VMap mParameterMap;      // +0x0c
     Variant mDefaultVariant; // +0x28
 
-    cCommandParameterSet();
+    __declspec(noinline) cCommandParameterSet();
     ~cCommandParameterSet();
     u32 GetNextParameterID(u32 id);
     void RemoveParameter(u32 id);
     void AdjustParameterCount(u32 n);
     bool ExecuteCommand(int cmd, void* a, void* b);
-    bool SetParameterCount(void* a, void* b, void* out);
 };
 struct cStringCommandGenerator {
     void* vtbl0;             // +0x00
@@ -227,6 +265,7 @@ struct cStringCommandGenerator {
 
     ~cStringCommandGenerator();
     cStringCommandGenerator();
+    bool SetParameterCount(WStr* str, u32* outId, cCommandParameterSet** outSet);   // 0x0068B000
 };
 struct CGenNode {
     CGenNode* mpNodeRight;   // +0x00
@@ -265,13 +304,35 @@ struct cCommandServer {
     u32 FindCommandInfoByName(const wch* name);
     bool GetCommandInfo(u32 id, WStr* name, WStr* param);
     bool RegisterCommandParameterInfo(u32 id, const wch* param);
-    u32  GetCommandIDFromCommandString(WStr* str, int len);
+    u32  GetCommandIDFromCommandString(WStr* const str, int len);
     bool RegisterCommandGenerator(void* gen);
     bool UnregisterCommandGenerator(void* gen);
     int  ExecuteCommandFormatted(const wch* fmt, ...);
 };
 void* operator new(size_t, const char* name, unsigned a, unsigned b,
                    const char* file, unsigned line);
+struct VBase16 {
+    WStr* mpBegin;
+    WStr* mpEnd;
+    WStr* mpEndCap;
+    VBase16(u32 n, const EmptyAlloc& a);                       // 0x007c7a40 (thiscall, ret 8)
+    ~VBase16();                                          // 0x00554b10
+};
+struct vector : VBase16 {
+    __declspec(noinline) vector(u32 n, const EmptyAlloc& a);   // 0x0068a460
+};
+struct WVec16L {   // vector<WStr>: 3 pointers, inline destructor
+    WStr* mpBegin;
+    WStr* mpEnd;
+    WStr* mpEndCap;
+    WVec16L(u32 n, const EmptyAlloc& a);                 // 0x0068A460 (thiscall, ret 8)
+    void DoDestroyValues(WStr* first, WStr* last);       // 0x0084AAD0 (thiscall, ret 8)
+    ~WVec16L() {
+        DoDestroyValues(mpBegin, mpEnd);
+        if (mpBegin && ((int*)mpBegin)[-1] != 0)
+            EASTL_dealloc(mpBegin);
+    }
+};
 extern "C" wch  gLiteral1403384[];         // 0x1403384 format literal
 // ---- items of slice s00689ee0 end
 
@@ -283,7 +344,6 @@ bool SP::cCommandParameterSet::ValidateParameter(unsigned int a, unsigned int b)
         return true;
     return false;
 }
-
 
 // @ 0x006896a0
 bool CommandServer::RegisterCommands(CmdEntry* e, int count)
@@ -303,7 +363,6 @@ bool CommandServer::RegisterCommands(CmdEntry* e, int count)
     return true;
 }
 
-
 // @ 0x006896f0
 bool CommandServer::UnregisterCommands(uint32* e, int count)
 {
@@ -319,7 +378,6 @@ bool CommandServer::UnregisterCommands(uint32* e, int count)
     return true;
 }
 
-
 // @ 0x00689730
 bool SP::cStringCommandGenerator::Shutdown()
 {
@@ -331,7 +389,6 @@ bool SP::cStringCommandGenerator::Shutdown()
     return true;
 }
 
-
 // @ 0x00689810
 EditorResDerived::~EditorResDerived()
 {
@@ -340,7 +397,6 @@ EditorResDerived::~EditorResDerived()
     if (m20 != 0)
         ((void(__thiscall*)(void*))(*(void***)m20)[1])(m20);
 }
-
 
 // @ 0x00689920
 bool DispShutdown::Shutdown()
@@ -368,7 +424,6 @@ bool DispShutdown::Shutdown()
     return true;
 }
 
-
 // @ 0x00689980
 bool DispTeardown::Teardown()
 {
@@ -387,7 +442,6 @@ bool DispTeardown::Teardown()
     return true;
 }
 
-
 // @ 0x00689b00
 bool SP::cCommandServer::SetCommandDispatcher(SP::cICommandDispatcher * p)
 {
@@ -404,7 +458,6 @@ bool SP::cCommandServer::SetCommandDispatcher(SP::cICommandDispatcher * p)
     return true;
 }
 
-
 // @ 0x00689b40
 int SP::cCommandServer::ExecuteCommand(unsigned int a, SP::cICommandParameterSet * b, SP::cICommandParameterSet * c)
 {
@@ -416,7 +469,6 @@ int SP::cCommandServer::ExecuteCommand(unsigned int a, SP::cICommandParameterSet
             (*(void***)p)[0x1c / 4])(p, a, b_v, c_v);
     return 2;
 }
-
 
 // @ 0x00689b60
 int SP::cCommandServer::ExecuteCommand(eastl::basic_string<wchar_t, eastl::allocator> const * a, SP::cICommandParameterSet * b)
@@ -430,7 +482,6 @@ int SP::cCommandServer::ExecuteCommand(eastl::basic_string<wchar_t, eastl::alloc
     return 2;
 }
 
-
 // @ 0x00689be0
 void* ParamSet::operator[](uint32 key)
 {
@@ -440,7 +491,6 @@ void* ParamSet::operator[](uint32 key)
         return (char*)it + 0x14;
     return (char*)this + 0x28;
 }
-
 
 // @ 0x00689c20
 void* ParamSet::GetParameter(uint32 key)
@@ -452,7 +502,6 @@ void* ParamSet::GetParameter(uint32 key)
     return 0;
 }
 
-
 // @ 0x00689c50
 void ParamSet::AppendParameter(uint32 v)
 {
@@ -462,7 +511,6 @@ void ParamSet::AppendParameter(uint32 v)
     ((void(__thiscall*)(void*, uint32, uint32))(*(void***)this)[0x20 / 4])(this, id, v);
 }
 
-
 // @ 0x00689d00
 unsigned int SP::cCommandParameterSet::GetFirstParameterID() const
 {
@@ -470,7 +518,6 @@ unsigned int SP::cCommandParameterSet::GetFirstParameterID() const
         return *(uint32*)(*(char**)((char*)this + 0x14) + 0x10);
     return 0xffffffff;
 }
-
 
 // @ 0x00689dc0
 bool ParamWalker::Walk(char* node, uint32 flags, void* sink)
@@ -631,6 +678,14 @@ bool cCommandServer::GetCommandInfo(u32 id, WStr* name, WStr* param)
     return false;
 }
 
+// @ 0x0068a460
+vector::vector(u32 n, const EmptyAlloc& a)
+: VBase16(n, a) {
+    const WStr tmp;
+    Ins16(mpBegin, (void*)n, tmp, a);
+    mpEnd = (WStr*)((char*)mpBegin + n * 0x10);
+}
+
 // @ 0x0068a720
 cCommandParameterSet::~cCommandParameterSet()
 {
@@ -641,6 +696,25 @@ cCommandParameterSet::~cCommandParameterSet()
     mParameterMap.DoNukeSubtree(mParameterMap.aParent);
     vtbl1 = &vtbl_Base1;
     vtbl0 = &vtbl_Base0;
+}
+
+// @ 0x0068a7a0
+void cCommandParameterSet::AdjustParameterCount(u32 n)
+{
+    while (mParameterMap.size() < n) {
+        VariantL v;
+        ((void(__thiscall*)(cCommandParameterSet*, Variant*))VFN(this, 0x24))(this, &v);
+    }
+    while (mParameterMap.size() > n) {
+        VMapNode* node = (VMapNode*)RBTreeDecrement((char*)this + 0x10);
+        mParameterMap.mnSize -= 1;
+        RBTreeIncrement(node);
+        RBTreeErase(node, &mParameterMap.aRight);
+        Variant* pv = &node->mValue;
+        if (pv->mFlags & 4)
+            pv->Destruct(0);
+        EASTL_dealloc(node);
+    }
 }
 
 // @ 0x0068a870
@@ -688,6 +762,22 @@ bool SP::cCommandServer::RegisterCommandParameterInfo(unsigned int id, wchar_t c
         node->mValue.msParam.Format(gLiteral1403384, node->mValue.msName.mpBegin);
     }
     return true;
+}
+
+// @ 0x0068a9e0
+unsigned int SP::cCommandServer::GetCommandIDFromCommandString(eastl::basic_string<wchar_t, eastl::allocator> const * str, unsigned int len) const
+{
+    if (str) {
+        if (len == -1)
+            len = (int)(str->mpEnd - str->mpBegin);
+        const wch* b = str->mpBegin;
+        WVec16L vec(1, *(const EmptyAlloc*)&str);
+        if (ParseCmd((void*)b, len, 0x20, &vec, 0xffffffffu)) {
+            const wch* first = vec.mpBegin->mpBegin;
+            return ((ICmdSrv*)this)->GetCommandIDFromTokens(first);
+        }
+    }
+    return 0;
 }
 
 // @ 0x0068aae0
@@ -831,4 +921,31 @@ cStringCommandGenerator::cStringCommandGenerator()
     mpEmptySet = p;
     if (p)
         ((void(__thiscall*)(cCommandParameterSet*))VFN(p, 0))(p);
+}
+
+// @ 0x0068b000
+bool cStringCommandGenerator::SetParameterCount(WStr* str, u32* outId, cCommandParameterSet** outSet)
+{
+    ICmdSrv* srv = (ICmdSrv*)gCommandServer;
+    if (srv) {
+        const wch* b = str->mpBegin;
+        int len = (int)(str->mpEnd - b);
+        u32 n = ParseCmd((void*)b, len, 0x20, &mArrBegin, 0xffffffffu);
+        if (n >= 1) {
+            const wch* first = mArrBegin->mpBegin;
+            u32 id = srv->GetCommandIDFromTokens(first);
+            *outId = id;
+            if (id) {
+                cCommandParameterSet* p = new ("App/cCommandParameterSet", 0, 0, 0, 0) cCommandParameterSet();
+                *outSet = p;
+                ((IParamSetV*)p)->AddRef();
+                for (u32 i = 1; i < n; i++) {
+                    VariantL var(0x13, 9, (int)((char*)mArrBegin + i * 0x10), 0x10, 1);
+                    ((IParamSetV*)*outSet)->SetParameter(i - 1, &var);
+                }
+                return true;
+            }
+        }
+    }
+    return false;
 }
