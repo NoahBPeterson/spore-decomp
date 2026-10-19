@@ -1,12 +1,3 @@
 # va  diff-bytes  reason
-00f2e7d0  818  incomplete: 0x2cb0 Editor::cPropertyList-derived ctor (stores past +0x2ca8 not reconstructed)
-00f2eb30   73  incomplete: V238::PushConst (in-place construct 0x80000000 / grow path temp destroy)
-00f2ecd0   78  incomplete: V238::Clear (move/destroy end segment + sentinel writes)
-00f2ed20  302  incomplete: V238 element assignment by index (bit-flag juggling not fully reproduced)
-00f2f050  337  incomplete: V534 insert (inlined generic insert growth path)
-00f2f1b0  291  incomplete: V238 deserialize loop (temp construct + insert)
-00f2f4f0  231  incomplete: V534 deserialize loop (cVarListSerializer + insert)
-00f2f5e0  212  incomplete: 0x27e0 container deserialize stub
-00f2f6c0  357  incomplete: 0x27e8 container deserialize stub
-00f2f2e0  77  eastl::vector<E27e0>::erase; stub body (empty), real logic not recovered; equiv UNSUPPORTED: our function is under 1/5 of the original size, so it is not a complete definition
-00f2f340  77  eastl::vector<E27e8>::erase; stub body (empty), real logic not recovered; equiv UNSUPPORTED: our function is under 1/5 of the original size, so it is not a complete definition
+# All 14 slice targets are complete definitions; see manifest.txt (2 byte-exact)
+# and nonmatching.txt (12 complete-inexact).
