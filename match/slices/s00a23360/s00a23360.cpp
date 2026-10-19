@@ -46,6 +46,7 @@ struct AutoMsg { u32 w0; u32 w1; };
 struct MutexLike { u32 a, b; };
 
 struct System : ISystem {
+    u8       pad_04[4];                // +0x04
     void*    mAutoMsg;                 // +0x08 (IHandlerRC subobject)
     u8       pad_0c[0x9a - 0x0c];
     u8       mbMuted;                  // +0x9a
@@ -64,68 +65,77 @@ struct System : ISystem {
 
 extern float g_1485720;
 extern int   g_16e61a8;
+extern const char g_lockName[];   // 0x01452970
 
 void __cdecl sub_112c600();                     // 0x0112c600
 void __cdecl sub_112c620();                     // 0x0112c620
-void __stdcall sub_112ccc0(int a, void* b);     // 0x0112ccc0
+struct MuteParams { double d0; float fParam; float fMute; float f3; };
+struct PluginIface { void Call112ccc0(int a, void* b); };    // 0x0112ccc0 (thiscall)
 struct VoiceContainer { void* FindPlugin(u32 id); };         // 0x00a34230
 
 // @ 0x00a23360
 float System::GetPosDist(float* p)
 {
-    if (!b15bbf0)
-        return 0.0f;
-    float dx = pos[0] - p[0];
-    float dy = pos[1] - p[1];
-    float dz = pos[2] - p[2];
-    return (float)sqrt((double)(dy * dy + (dz * dz + dx * dx)));
+    float result;
+    if (b15bbf0) {
+        double dx = pos[0] - p[0];
+        double dy = pos[1] - p[1];
+        double dz = pos[2] - p[2];
+        double d = dx * dx;
+        d = d + dz * dz;
+        d = d + dy * dy;
+        result = (float)sqrt(d);
+    } else {
+        result = 0.0f;
+    }
+    return result;
 }
 
 // @ 0x00a233b0
 void System::MuteAll(bool bMute, bool bParam)
 {
-    if (mbMuted != bMute) {
-        // Walk the intrusive list anchored at &listNext (link parked at +0x10).
-        u8* head = (u8*)listNext;
-        u8* anchor = (u8*)&listNext;
-        u8* it = head ? head - 0x10 : 0;
-        u8* end = anchor - 0x10;
-        while (it != end) {
-            bool bFlag = false;
-            void* obj = vc<void*>(it, 0x30);
-            bool ok = vc<bool>(obj, 0x24, (u32)0x9d554d95, &bFlag);
-            if (ok && bFlag)
-                vc<void>(it, 0x1c, bMute, 0, 0, 1);
-            u8* nxt = *(u8**)(it + 0x10);
-            it = nxt ? nxt - 0x10 : 0;
-        }
+    if (mbMuted == bMute)
+        return;
 
-        void* container = vc<void*>(this, 0x17c, (u32)0xf1cc1687);
-        if (container) {
-            mbMuted = bMute;
-            void* vcp = (u8*)container + 0x10;
-            void* plugin = ((VoiceContainer*)vcp)->FindPlugin(0x47614630);
-            if (plugin) {
-                float f1 = bMute ? 0.0f : g_1485720;
-                float f2 = bParam ? 0.0f : s400;
-                u32 d = 0;
-                if (g_16e61a8)
-                    sub_112c600();
-                int stackStuff = 0;
-                sub_112ccc0((int)bMute, &stackStuff);
-                (void)f1; (void)f2; (void)d;
-            } else {
-                void* plugin2 = ((VoiceContainer*)vcp)->FindPlugin(0x44616330);
-                if (plugin2) {
-                    if (g_16e61a8)
-                        sub_112c600();
-                    sub_112ccc0(bMute ? 5 : 3, 0);
-                }
-            }
-            if (g_16e61a8)
-                sub_112c620();
-        }
+    // Walk the intrusive list anchored at &listNext (link parked at +0x10).
+    u8* head = (u8*)listNext;
+    u8* anchor = (u8*)&listNext;
+    u8* it = head ? head - 0x10 : 0;
+    u8* end = anchor ? anchor - 0x10 : 0;
+    while (it != end) {
+        bool bFlag = false;
+        void* obj = vc<void*>(it, 0x30);
+        if (vc<bool>(obj, 0x24, (u32)0x9d554d95, &bFlag) && bFlag)
+            vc<void>(it, 0x1c, bMute, 0, 0.0f, (void*)1);
+        u8* nxt = *(u8**)(it + 0x10);
+        it = nxt ? nxt - 0x10 : 0;
     }
+
+    void* container = vc<void*>(this, 0x17c, (u32)0xf1cc1687);
+    if (!container)
+        return;
+    mbMuted = bMute;
+    void* vcp = (u8*)container + 0x10;
+    void* plugin = ((VoiceContainer*)vcp)->FindPlugin(0x47614630);
+    if (plugin) {
+        MuteParams params;
+        params.d0 = 0.0;
+        params.fParam = bParam ? 0.0f : s400;
+        params.fMute = bMute ? 0.0f : g_1485720;
+        params.f3 = 0.0f;
+        if (g_16e61a8)
+            sub_112c600();
+        ((PluginIface*)plugin)->Call112ccc0(0, &params);
+    } else {
+        void* plugin2 = ((VoiceContainer*)vcp)->FindPlugin(0x44616330);
+        if (!plugin2)
+            return;
+        if (g_16e61a8)
+            sub_112c600();
+        ((PluginIface*)plugin2)->Call112ccc0(bMute ? 5 : 3, 0);
+    }
+    if (g_16e61a8)
+        sub_112c620();
 }
 
 // ---------------------------------------------------------------------------
@@ -310,22 +320,24 @@ PHNode** PHTable::EraseNode(PHNode** out, PHNode* n, PHNode** pb)
 // @ 0x00a24480
 void PHTable::FreeBuckets(PHNode** buckets, u32 count)
 {
+    struct FNode { u32 freeLink; void* value; FNode* next; };
     for (u32 i = 0; i < count; ++i) {
-        PHNode* p = buckets[i];
-        while (p) {
-            PHNode* nxt = p->next;
-            if (p->key || p->next) {
-                // release the value pointer stored at +0 (the value is the node payload)
-            }
-            if (p != (PHNode*)mpInline) {
-                if ((void*)p < mpPoolBegin || (void*)p >= mpPoolEnd) {
-                    operator_delete__(p);
+        FNode* c;
+        FNode* n = (FNode*)buckets[i];
+        while (n) {
+            c = n;
+            n = c->next;
+            void* val = c->value;
+            if (val)
+                vc<void>(val, 4);
+            if (c != (FNode*)mpInline) {
+                if ((void*)c < mpPoolBegin || (void*)c >= mpPoolEnd) {
+                    operator_delete__(c);
                 } else {
-                    p->key = (int)mpFreeList;
-                    mpFreeList = p;
+                    c->freeLink = (u32)mpFreeList;
+                    mpFreeList = (PHNode*)c;
                 }
             }
-            p = nxt;
         }
         buckets[i] = 0;
     }
@@ -345,8 +357,12 @@ struct RBNode {
 };
 
 struct RBTree {
+    u8      pad00[0x1c];
+    void*   mpFreeList;                 // +0x1c
+    u8      pad20[0x2c - 0x20];
+    u32     mAllocator;                 // +0x2c
     void   Assign(void* arg);                   // 0x00a24210 (opaque rbtree assignment)
-    void*  AllocNode2(const void* src, void* parent); // 0x00a243e0
+    void*  AllocNode2(const void* src);         // 0x00a243e0
     RBNode* CloneNode(RBNode* src, RBNode* parent);   // 0x00a24530
 };
 
@@ -365,35 +381,38 @@ void RBTree::Assign(void* arg)
 }
 
 // @ 0x00a243e0
-void* RBTree::AllocNode2(const void* src, void* parent)
+void* RBTree::AllocNode2(const void* src)
 {
-    (void)parent;
     struct Node20 { u32 d[5]; };
-    Node20* n = (Node20*)operator new(0x14, "EASTL", 0, 0, EA_FILE, 0xd1);
+    Node20* n;
+    if (mpFreeList) {
+        n = (Node20*)mpFreeList;
+        mpFreeList = (void*)n->d[0];
+    } else {
+        n = (Node20*)operator new(mAllocator, "EASTL", 0, 0, EA_FILE, 0xd1);
+    }
     if (n) {
         const u32* s = (const u32*)src;
         n->d[0] = s[0];
         n->d[1] = s[1];
         n->d[2] = s[2];
-        n->d[3] = s[3];
-        void* v = (void*)s[4];
-        n->d[4] = (u32)v;
-        if (v) {
-            void*** vt = (void***)v;
-            vc<void>(v, 0);
-            (void)vt;
-        }
+        void* v = (void*)s[3];
+        n->d[3] = (u32)v;
+        if (v)
+            vc<void>((char*)v + 4, 0);
     }
+    n->d[4] = 0;
     return n;
 }
 
 // @ 0x00a245e0  (free function: src, parent) -> new 0x18 node
-RBNode* __cdecl RB_AllocNode(const RBNode* src, RBNode* parent)
+RBNode* __stdcall RB_AllocNode(const RBNode* src, RBNode* parent)
 {
     RBNode* n = (RBNode*)operator new(0x18, "EASTL", 0, 0, EA_FILE, 0xd1);
-    if (n) {
-        n->key0 = src->key0;
-        n->key1 = src->key1;
+    u32* kv = (u32*)((char*)n + 0x10);
+    if (kv) {
+        kv[0] = src->key0;
+        kv[1] = src->key1;
     }
     n->left = 0;
     n->right = 0;
@@ -464,9 +483,15 @@ struct DeviceDriver { void ctor(const char* name); };           // 0x011e5d80
 
 struct Mutex {
     u32 a;
-    void ctor(int a, int b);     // 0x009222a0
-    int  Lock(void* p);          // 0x009221b0
-    int  Unlock();               // 0x00922270
+    void ctor(int a, int b);           // 0x009222a0
+    int  Lock(const char* name);       // 0x009221b0
+    int  Unlock();                     // 0x00922270
+};
+
+struct MutexGuard {
+    Mutex* m;
+    MutexGuard(Mutex* mm, const char* n) : m(mm) { m->Lock(n); }
+    ~MutexGuard() { m->Unlock(); }
 };
 
 struct Stopwatch {
@@ -485,6 +510,17 @@ struct ProfileTimer {
     void Accumulate();             // 0x00a24900
 };
 
+// scoped stopwatch: on destruction folds the elapsed time into the accumulator.
+struct ScopedTimer {
+    Stopwatch sw;                  // +0
+    float*    acc;                 // +0x18
+    ScopedTimer(float* a);         // 0x00a248a0
+    ~ScopedTimer()
+    {
+        *acc = (float)sw.GetElapsedTimeFloat() * sw.mfCyclesToUnitsCoefficient + *acc;
+    }
+};
+
 struct RDD {
     void*   vftable;               // +0
     u8      pad04[0x14 - 4];
@@ -498,10 +534,10 @@ struct RDD {
     ProfileTimer mTimer;           // +0x5c
 
     void    Construct();           // 0x00a247f0
-    void*   FindById(void* id, void* a, void* b, void* c);  // 0x00a24970
+    void*   FindById(void* id);                              // 0x00a24970
     void*   FindAndCall1(void* id, void* a, void* b, void* c, void* d); // 0x00a24a90
-    bool    FindAndCall2(void* id, void* a, void* b, void* c, void* d); // 0x00a24b40
-    int     FindAndCall3(void* id, void* a, void* b, void* c, void* d); // 0x00a24bf0
+    int     FindAndCall2(void* id, void* a, void* b, void* c, void* d); // 0x00a24b40
+    long long FindAndCall3(void* id, void* a, void* b, void* c, void* d, void* e); // 0x00a24bf0
     void*   FindAndCall4(void* id);  // 0x00a24cb0
     long long FindAndCall5(void* id); // 0x00a24d60
 
@@ -577,73 +613,60 @@ bool __thiscall RDD::Tick3(void* a, void* b, void* c)
 }
 
 // @ 0x00a24970
-void* __thiscall RDD::FindById(void* id, void* a, void* b, void* c)
+void* __thiscall RDD::FindById(void* id)
 {
-    (void)a; (void)b; (void)c;
-    ProfileTimer local((void*)&this->mTimer);
-    (void)local;
-    mMutex.Lock(0);
-    long long e = mTimer.sw.GetElapsedTimeFloat();
-    mfAccum = (float)e * mTimer.sw.mfCyclesToUnitsCoefficient + mfAccum;
+    ScopedTimer timer((float*)((char*)this + 0x5c));
+    MutexGuard guard(&mMutex, g_lockName);
+    mfAccum = (float)timer.sw.GetElapsedTimeFloat() * timer.sw.mfCyclesToUnitsCoefficient + mfAccum;
     void** it = mpBegin;
     void** end = mpEnd;
-    while (it != end) {
-        if (*it == id) {
-            mMutex.Unlock();
-            return *it;
-        }
+    void* r;
+    for (;;) {
+        if (it == end)
+            return 0;
+        r = *it;
+        if (id == r)
+            break;
         ++it;
     }
-    mMutex.Unlock();
-    return 0;
+    return r;
 }
 
 // @ 0x00a24a90
 void* __thiscall RDD::FindAndCall1(void* id, void* a, void* b, void* c, void* d)
 {
-    (void)b; (void)c; (void)d;
-    ProfileTimer local((void*)&this->mTimer);
-    (void)local;
-    void* p = FindById(id, 0, 0, 0);
-    void* r = 0;
-    if (p) {
-        void* q = vc<void*>(p, 0x18);
-        if (q)
-            r = vc<void*>(q, 0x30, a, b);
-    }
-    return r;
+    (void)c; (void)d;
+    ScopedTimer timer((float*)((char*)this + 0x5c));
+    void* p = FindById(id);
+    if (p != 0 && vc<void*>(p, 0x18) != 0)
+        p = vc<void*>(vc<void*>(p, 0x18), 0x30, a, b);
+    else
+        p = 0;
+    return p;
 }
 
 // @ 0x00a24b40
-bool __thiscall RDD::FindAndCall2(void* id, void* a, void* b, void* c, void* d)
+int __thiscall RDD::FindAndCall2(void* id, void* a, void* b, void* c, void* d)
 {
-    (void)b; (void)c; (void)d;
-    ProfileTimer local((void*)&this->mTimer);
-    (void)local;
-    void* p = FindById(id, 0, 0, 0);
-    bool r = false;
-    if (p) {
-        void* q = vc<void*>(p, 0x18);
-        if (q)
-            r = vc<bool>(q, 0x38, a, b);
-    }
+    (void)c; (void)d;
+    ScopedTimer timer((float*)((char*)this + 0x5c));
+    void* p = FindById(id);
+    int r;
+    if (p != 0 && vc<void*>(p, 0x18) != 0)
+        r = vc<bool>(vc<void*>(p, 0x18), 0x38, a, b);
+    else
+        r = 0;
     return r;
 }
 
 // @ 0x00a24bf0
-int __thiscall RDD::FindAndCall3(void* id, void* a, void* b, void* c, void* d)
+long long __thiscall RDD::FindAndCall3(void* id, void* a, void* b, void* c, void* d, void* e)
 {
-    (void)b; (void)c; (void)d;
-    ProfileTimer local((void*)&this->mTimer);
-    (void)local;
-    void* p = FindById(id, 0, 0, 0);
-    int r = 0;
-    if (p) {
-        void* q = vc<void*>(p, 0x18);
-        if (q)
-            r = (int)vc<bool>(q, 0x28, a, b);
-    }
-    return r;
+    (void)b; (void)d; (void)e;
+    ScopedTimer timer((float*)((char*)this + 0x5c));
+    void* p = FindById(id);
+    return (p != 0 && vc<void*>(p, 0x18) != 0)
+        ? vc<bool>(vc<void*>(p, 0x18), 0x28, a, c) : 0;
 }
 
 // @ 0x00a24cb0
@@ -651,7 +674,7 @@ void* __thiscall RDD::FindAndCall4(void* id)
 {
     ProfileTimer local((void*)&this->mTimer);
     (void)local;
-    void* p = FindById(id, 0, 0, 0);
+    void* p = FindById(id);
     void* r = 0;
     if (p) {
         void* q = vc<void*>(p, 0x18);
@@ -666,7 +689,7 @@ long long __thiscall RDD::FindAndCall5(void* id)
 {
     ProfileTimer local((void*)&this->mTimer);
     (void)local;
-    void* p = FindById(id, 0, 0, 0);
+    void* p = FindById(id);
     int r = 0;
     if (p) {
         void* q = vc<void*>(p, 0x18);

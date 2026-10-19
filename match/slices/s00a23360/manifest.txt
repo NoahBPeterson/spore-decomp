@@ -1,3 +1,9 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00a23360/s00a23360.cpp  ?Erase@PHTable@@QAEHPBH@Z  00a23d20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a23360/s00a23360.cpp  ?Tick3@RDD@@QAE_NPAX00@Z  00a24930  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a23360/s00a23360.cpp  ?GetPosDist@System@@QAEMPAM@Z  00a23360  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a23360/s00a23360.cpp  ?FreeBuckets@PHTable@@QAEXPAPAUPHNode@@I@Z  00a24480  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a23360/s00a23360.cpp  ?RB_AllocNode@@YGPAURBNode@@PBU1@PAU1@@Z  00a245e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a23360/s00a23360.cpp  ?FindById@RDD@@QAEPAXPAX@Z  00a24970  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a23360/s00a23360.cpp  ?FindAndCall1@RDD@@QAEPAXPAX0000@Z  00a24a90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a23360/s00a23360.cpp  ?FindAndCall2@RDD@@QAEHPAX0000@Z  00a24b40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
