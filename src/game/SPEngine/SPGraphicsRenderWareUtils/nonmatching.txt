@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00761420 127 SP::CreateRaster: EH frame not emitted in one TU
+00761650 86 CreateVertexDescriptor wrapper: EH frame not emitted in one TU
+007616f0 93 CreateVertexBuffer wrapper: EH frame not emitted in one TU
+007617a0 87 CreateCompiledState wrapper: EH frame not emitted in one TU
+00761840 83 CreateMesh wrapper: EH frame not emitted in one TU
