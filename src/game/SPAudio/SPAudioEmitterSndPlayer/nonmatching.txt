@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00a38e40 6 cEmitterSndPlayer::ComputeGainAttenuation: complete; identical logic, differs only in xmm operand/register assignment of the c<=a test (comiss c,a vs a,c) and the parallel constant load. difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a38fe0 122 cEmitterSndPlayer::GetProperty: complete; special-key path + optional global-lock + rw::System::GetLevel call scheduling and register allocation differ. difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
