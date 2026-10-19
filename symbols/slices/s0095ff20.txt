@@ -5,19 +5,19 @@
 00960050 ?Set1E4@Window_s0095_ff20@@QAEXPAX@Z  # Window_s0095_ff20::Set1E4 migrated from s0095ff20 (verbatim, slice spelling)
 009600a0 ?OnPaint2@Window_s0095_ff20@@QAEXXZ  # Window_s0095_ff20::OnPaint2 migrated from s0095ff20 (verbatim, slice spelling)
 009600d0 ?InvalidateTransform@Window@UTFWin@EA@@UAEXXZ  # EA::UTFWin::Window::InvalidateTransform migrated from s0095ff20
-00960100 EA::UTFWin::Window::TransformPoint  # dc: mMat +0x148 * point
-00960180 EA::UTFWin::Window::ScreenToLocal  # dc: vtable +0xc8
-009601e0 EA::UTFWin::Window::GetChild  # dc: child list lookup
-00960230 EA::UTFWin::Window::RemoveChild  # dc: vtable +0xdc detach
+00960100 ?TransformPoint@Window_s0095_ff20@@QAEXMMPAM@Z  # Window_s0095_ff20::TransformPoint migrated from s0095ff20 (verbatim, slice spelling)
+00960180 ?ScreenToLocal@Window_s0095_ff20@@QAEXMMPAM@Z  # Window_s0095_ff20::ScreenToLocal migrated from s0095ff20 (verbatim, slice spelling)
+009601e0 ?GetChild@Window_s0095_ff20@@QAEXPAX0@Z  # Window_s0095_ff20::GetChild migrated from s0095ff20 (verbatim, slice spelling)
+00960230 ?RemoveChild@Window_s0095_ff20@@QAEXPAX@Z  # Window_s0095_ff20::RemoveChild migrated from s0095ff20 (verbatim, slice spelling)
 00960280 ?ClearChildren@Window_s0095_ff20@@QAEXXZ  # Window_s0095_ff20::ClearChildren migrated from s0095ff20 (verbatim, slice spelling)
 009602c0 ?Dispatch14@Window_s0095_ff20@@QAEHPAX@Z  # Window_s0095_ff20::Dispatch14 migrated from s0095ff20 (verbatim, slice spelling)
 009602f0 ?Dispatch@Window_s0095_ff20@@QAEHPAX@Z  # Window_s0095_ff20::Dispatch migrated from s0095ff20 (verbatim, slice spelling)
-00960310 EA::UTFWin::Window::OnPaint  # pdb gap-align
-00960410 EA::UTFWin::Window::DoMessage  # pdb gap-align
+00960310 ?OnPaint@Window_s0095_ff20@@QAEXXZ  # Window_s0095_ff20::OnPaint migrated from s0095ff20 (verbatim, slice spelling)
+00960410 ?DoMessage@Window_s0095_ff20@@QAEXXZ  # Window_s0095_ff20::DoMessage migrated from s0095ff20 (verbatim, slice spelling)
 00960550 ?AllocPair@@YGPAXPAX@Z  # AllocPair migrated from s0095ff20 (verbatim, slice spelling)
-009605a0 HashTable::rehash  # dc: bucket relink
-00960650 EA::UTFWin::WindowListMarshaller::Read  # pdb gap-align
-009608c0 EA::UTFWin::Window::SetPhysicalArea  # pdb gap-align
-009609b0 EA::UTFWin::Window::InvalidateLayout  # pdb callee-single
-00960ae0 FUN_00960ae0  # dc: vtable dispatch
-00960b40 FUN_00960b40  # dc: vtable dispatch
+009605a0 ?Rehash@@YAXPAXI@Z  # Rehash migrated from s0095ff20 (verbatim, slice spelling)
+00960650 ?WindowListMarshaller_Read@@YAHPAX00@Z  # WindowListMarshaller_Read migrated from s0095ff20 (verbatim, slice spelling)
+009608c0 ?SetPhysicalArea@Window@UTFWin@EA@@UAEXABV?$RectT@M@3@@Z  # EA::UTFWin::Window::SetPhysicalArea migrated from s0095ff20
+009609b0 ?InvalidateLayout@Window@UTFWin@EA@@UAEXXZ  # EA::UTFWin::Window::InvalidateLayout migrated from s0095ff20
+00960ae0 ?FUN_00960AE0@@YAHPAX@Z  # FUN_00960AE0 migrated from s0095ff20 (verbatim, slice spelling)
+00960b40 ?FUN_00960B40@@YAHPAX@Z  # FUN_00960B40 migrated from s0095ff20 (verbatim, slice spelling)

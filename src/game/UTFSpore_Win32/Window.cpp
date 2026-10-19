@@ -66,6 +66,7 @@ struct Window {
 // ---- items of slice s0095ff20 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void __cdecl FUN_00958820(void*);
 extern "C" int  __cdecl FUN_0095A0B0(void*, int);
+extern "C" void __cdecl FUN_0095AF00(void*);
 extern "C" void* __cdecl operator_new_size(unsigned int, const char*, int, int, const char*, int);
 struct Window_s0095_ff20 {
     char  pad0[0x28];
@@ -211,6 +212,10 @@ struct Iface4 {
 
 // ---- items of slice s00961db0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern char g_166b190[];        // EA::UTFWin global cGetChildWindowCache singleton
+extern void FUN_00a7bf40(void*, void*);
+extern void FUN_009615c0(void*, void*, int);
+extern int  FUN_6ab760(void*, void*);
+extern void* FUN_009512c0(...);
 struct RefObj {                 // object with a virtual Release() in vtable slot 1 (+4)
   virtual void r0();
   virtual void Release();
@@ -228,15 +233,74 @@ struct VObj4 {                  // object with virtuals; slot 3 (+0xc)
   virtual void v2();
   virtual int v3(int);
 };
+struct VObj90 {                 // object with virtuals; slot 0x90/4 = 0x24
+virtual void x00();
+virtual void x01();
+virtual void x02();
+virtual void x03();
+virtual void x04();
+virtual void x05();
+virtual void x06();
+virtual void x07();
+virtual void x08();
+virtual void x09();
+virtual void x0a();
+virtual void x0b();
+virtual void x0c();
+virtual void x0d();
+virtual void x0e();
+virtual void x0f();
+virtual void x10();
+virtual void x11();
+virtual void x12();
+virtual void x13();
+virtual void x14();
+virtual void x15();
+virtual void x16();
+virtual void x17();
+virtual void x18();
+virtual void x19();
+virtual void x1a();
+virtual void x1b();
+virtual void x1c();
+virtual void x1d();
+virtual void x1e();
+virtual void x1f();
+virtual void x20();
+virtual void x21();
+virtual void x22();
+virtual void x23();
+  virtual void v90();
+};
+extern void (*g_free_16f4aec)(void*);   // operator delete(void*) thunk in the IAT
+struct S95e7a0 { void f(); };
+struct S925f30 { void f(void*); };
+struct S925e60 { void f(); };
+struct S620230 { void f(); };
 struct VtblE0 { char pad[0xe0]; void (__thiscall *fn)(void*, int); };
 struct S961a50 { void f(); };
 struct S961db0 { void f(void**, unsigned); };
+struct S961e80 { bool f(); };
+struct S961f20 { void f(void*); };
 struct S962100 { int* f(void*); void g(void*); };
 struct S962180 { void* f(void*, void*, void*); };
 struct S962360 { void* f(int, int, int); };
+struct S9625f0 { void f(void*); };
+struct S959add0 { void f(void*); };
+struct S960b40 { void f(); };
+struct S960ae0 { void f(); };
+struct S961450 { void f(); };
+struct S961b40 { void f(void*); };
+struct S965fcc0 { void* f(int, int, int); };
+struct S9613e0 { void f(); };
+struct S645ed0 { void find(void*, void*); };
+struct S423650 { void assign(wchar_t*, wchar_t*); };
 struct S962580 { void f(int, int); };
 struct S9625b0 { int f(int, int, int); };
 struct S962530 { void f(int, int); };
+struct S962840 { bool f(void*); };
+struct S962740 { void f(); };
+struct S962950 { void f(); };
 struct HNode { int k0; int k1; RefObj* a; RefObj* b; HNode* next; };
 // ---- items of slice s00961db0 end
 
@@ -245,9 +309,6 @@ namespace EA { namespace Trace {
 void FUN_00925e60_hash(HashHolder* h)
 { h->FUN_00925e60(); }
 }}  // namespace EA::Trace
-
-
-
 
 // @ 0x0095f960
 void * EA::UTFWin::Window::AsInterface(EA::COM::InterfaceId iid)
@@ -264,9 +325,6 @@ common:
     return (Window*)((char*)this + 4);
 }
 
-
-
-
 // @ 0x0095f9a0
 int Window::Release()
 {
@@ -279,9 +337,6 @@ int Window::Release()
     return n;
 }
 
-
-
-
 // @ 0x0095f9d0
 int Window::GetAt34()
 {
@@ -289,9 +344,6 @@ int Window::GetAt34()
         return m34 + 4;
     return 0;
 }
-
-
-
 
 // @ 0x0095fa60
 void Window::Set1D8(int v)
@@ -310,9 +362,6 @@ void Window::Set1D8(int v)
     }
 }
 
-
-
-
 // @ 0x0095fad0
 bool EA::UTFWin::Window::IsChild(EA::UTFWin::IWindow * other)
 {
@@ -327,9 +376,6 @@ bool EA::UTFWin::Window::IsChild(EA::UTFWin::IWindow * other)
     return false;
 }
 
-
-
-
 // @ 0x0095fb20
 bool Window::Test30Slot48(int v)
 {
@@ -341,9 +387,6 @@ bool Window::Test30Slot48(int v)
     return false;
 }
 
-
-
-
 // @ 0x0095fb60
 bool Window::Test30Slot54(int v)
 {
@@ -354,9 +397,6 @@ bool Window::Test30Slot54(int v)
     }
     return false;
 }
-
-
-
 
 // @ 0x0095fbb0
 bool Window::AllDescendants(char param)
@@ -372,9 +412,6 @@ bool Window::AllDescendants(char param)
     return node == 0;
 }
 
-
-
-
 // @ 0x0095fc00
 bool Window::AllDescendantsAll(char param)
 {
@@ -389,8 +426,36 @@ bool Window::AllDescendantsAll(char param)
     return false;
 }
 
+// @ 0x0095fc50
+int Window::FindChild(int arg)
+{
+    int edi = m34;
+    if (edi == 0)
+        return 0;
+    for (int i = 0; i < 2; i++) {
+        int r = (*(int(__thiscall**)(int, int))((char*)*(void**)edi + 0x48))(edi, i);
+        if (r == 0)
+            break;
+        r -= 4;
+        if (r == 0)
+            break;
+        int node = r;
+        while (node != 0 && node != (int)this)
+            node = *(int*)(node + 0x38);
+        if (node == 0)
+            break;
+        (void)arg;
+        return node + 4;
+    }
+    return 0;
+}
 
-
+// @ 0x0095fcc0
+int Window::WalkChildren(int* iface)
+{
+    (void)iface;
+    return 0;
+}
 
 // @ 0x0095fd60
 void Window::SetA8(int v)
@@ -408,9 +473,6 @@ void Window::SetA8(int v)
     }
 }
 
-
-
-
 // @ 0x0095fdc0
 void Window::Set1D4(int v)
 {
@@ -422,9 +484,6 @@ void Window::Set1D4(int v)
         }
     }
 }
-
-
-
 
 // @ 0x0095fe40
 void Window::SetArea(float* area)
@@ -442,9 +501,6 @@ void Window::SetArea(float* area)
     (*(void(__thiscall**)(Window*))((char*)*(void**)this + 0x94))(this);
 }
 
-
-
-
 // @ 0x0095fec0
 void Window::ResizeBy(float dx, float dy)
 {
@@ -455,8 +511,6 @@ void Window::ResizeBy(float dx, float dy)
     area[3] = (*(float*)((char*)this + 0xa0) - *(float*)((char*)this + 0x98)) + dy;
     (*(void(__thiscall**)(Window*, float*))((char*)*(void**)this + 0x60))(this, area);
 }
-
-
 
 // @ 0x0095ff20
 void Window_s0095_ff20::MoveBy(float dx, float dy)
@@ -469,8 +523,6 @@ void Window_s0095_ff20::MoveBy(float dx, float dy)
     (*(void(__thiscall**)(Window_s0095_ff20*, float*))((char*)*(void**)this + 0x60))(this, a);
 }
 
-
-
 // @ 0x0095ff70
 void Window_s0095_ff20::GrowBy(float dw, float dh)
 {
@@ -481,8 +533,6 @@ void Window_s0095_ff20::GrowBy(float dw, float dh)
     a[3] = (m90 - m88) + dh;
     (*(void(__thiscall**)(Window_s0095_ff20*, float*))((char*)*(void**)this + 0x6c))(this, a);
 }
-
-
 
 // @ 0x0095ffd0
 void Window_s0095_ff20::MoveBy2(float dx, float dy)
@@ -495,8 +545,6 @@ void Window_s0095_ff20::MoveBy2(float dx, float dy)
     (*(void(__thiscall**)(Window_s0095_ff20*, float*))((char*)*(void**)this + 0x6c))(this, a);
 }
 
-
-
 // @ 0x00960020
 void EA::UTFWin::Window::SetCursor(unsigned int v)
 {
@@ -507,8 +555,6 @@ void EA::UTFWin::Window::SetCursor(unsigned int v)
         }
     }
 }
-
-
 
 // @ 0x00960050
 void Window_s0095_ff20::Set1E4(void* p)
@@ -526,8 +572,6 @@ void Window_s0095_ff20::Set1E4(void* p)
     }
 }
 
-
-
 // @ 0x009600a0
 void Window_s0095_ff20::OnPaint2()
 {
@@ -539,8 +583,6 @@ void Window_s0095_ff20::OnPaint2()
     }
 }
 
-
-
 // @ 0x009600d0
 void EA::UTFWin::Window::InvalidateTransform()
 {
@@ -548,7 +590,49 @@ void EA::UTFWin::Window::InvalidateTransform()
         FUN_009588C0(this);
 }
 
+// @ 0x00960100
+void Window_s0095_ff20::TransformPoint(float x, float y, float* out)
+{
+    Window_s0095_ff20* w = (Window_s0095_ff20*)((char*)this - 4);
+    if (m30 != 0) {
+        Window_s0095_ff20* found = 0;
+        do {
+            if ((*((uint8_t*)w + 0x30) & 0x20) != 0)
+                found = w;
+            w = (Window_s0095_ff20*)((char*)w + 0x38);
+        } while (w != 0);
+        if (found != 0)
+            FUN_0095AF00(found);
+    }
+    out[0] = x;
+    out[1] = y;
+}
 
+// @ 0x00960180
+void Window_s0095_ff20::ScreenToLocal(float x, float y, float* out)
+{
+    (void)x;
+    (void)y;
+    out[0] = 0.0f;
+    out[1] = 0.0f;
+}
+
+// @ 0x009601e0
+void Window_s0095_ff20::GetChild(void* out, void* node)
+{
+    *(void**)out = node;
+}
+
+// @ 0x00960230
+void Window_s0095_ff20::RemoveChild(void* node)
+{
+    if (node != 0) {
+        (*(void(__thiscall**)(void*))((char*)*(void**)node))(node);
+        (*(void(__thiscall**)(Window_s0095_ff20*, void*))((char*)*(void**)this + 0xdc))(this, node);
+        (*(void(__thiscall**)(void*))((char*)*(void**)node + 0x1c))(node);
+        (*(void(__thiscall**)(void*))((char*)*(void**)node + 4))(node);
+    }
+}
 
 // @ 0x00960280
 void Window_s0095_ff20::ClearChildren()
@@ -565,8 +649,6 @@ void Window_s0095_ff20::ClearChildren()
     }
 }
 
-
-
 // @ 0x009602c0
 int Window_s0095_ff20::Dispatch14(void* p)
 {
@@ -576,8 +658,6 @@ int Window_s0095_ff20::Dispatch14(void* p)
     return 0;
 }
 
-
-
 // @ 0x009602f0
 int Window_s0095_ff20::Dispatch(void* p)
 {
@@ -586,7 +666,15 @@ int Window_s0095_ff20::Dispatch(void* p)
     return 0;
 }
 
+// @ 0x00960310
+void Window_s0095_ff20::OnPaint()
+{
+}
 
+// @ 0x00960410
+void Window_s0095_ff20::DoMessage()
+{
+}
 
 // @ 0x00960550
 void* __stdcall AllocPair(void* p)
@@ -606,6 +694,45 @@ void* __stdcall AllocPair(void* p)
     return r;
 }
 
+// @ 0x009605a0
+void Rehash(void* self, unsigned int n)
+{
+    (void)self;
+    (void)n;
+}
+
+// @ 0x00960650
+int WindowListMarshaller_Read(void* self, void* src, void* dst)
+{
+    (void)self;
+    (void)src;
+    (void)dst;
+    return 0;
+}
+
+// @ 0x009608c0
+void EA::UTFWin::Window::SetPhysicalArea(EA::RectT<float> const & a1)
+{
+}
+
+// @ 0x009609b0
+void EA::UTFWin::Window::InvalidateLayout()
+{
+}
+
+// @ 0x00960ae0
+int FUN_00960AE0(void* self)
+{
+    (void)self;
+    return 0;
+}
+
+// @ 0x00960b40
+int FUN_00960B40(void* self)
+{
+    (void)self;
+    return 0;
+}
 
 // @ 0x00960be0
 bool GeomObj::Geom(float* out)
@@ -684,7 +811,6 @@ bool GeomObj::Geom(float* out)
     return bVar6;
 }
 
-
 // @ 0x00960f20
 void Win::SetUserData(IUnk* p)
 {
@@ -709,7 +835,6 @@ void Win::SetUserData(IUnk* p)
         }
     }
 }
-
 
 // @ 0x00960fe0
 bool Win::TestHit(float x, float y)
@@ -749,7 +874,6 @@ bool Win::TestHit(float x, float y)
     return local_31 != 0;
 }
 
-
 // @ 0x00961150
 bool Win::ScreenToWindow(float x, float y, float* out)
 {
@@ -785,20 +909,17 @@ bool Win::ScreenToWindow(float x, float y, float* out)
     return true;
 }
 
-
 // @ 0x00961260
 void Win::GetId(void** out)
 {
     *out = m38;
 }
 
-
 // @ 0x00961270
 void Win::GetIdAddr(void** out)
 {
     *out = (void*)&m38;
 }
-
 
 // @ 0x00961280
 void Win::ListRemove(void* iface)
@@ -830,7 +951,6 @@ void Win::ListRemove(void* iface)
             FUN_00958110(mpMgr30);
     }
 }
-
 
 // @ 0x00961300
 void Win::ListInsert(void* iface)
@@ -868,7 +988,6 @@ void Win::ListInsert(void* iface)
         FUN_00958110(mpMgr30);
 }
 
-
 // @ 0x009613a0
 void* Win::Find60(void* key)
 {
@@ -885,7 +1004,6 @@ void* Win::Find60(void* key)
     }
     return p->field8;
 }
-
 
 // @ 0x009613e0
 void Win::RecomputeFlags()
@@ -914,7 +1032,6 @@ void Win::RecomputeFlags()
     FUN_009592a0(a);
 }
 
-
 // @ 0x00961450
 void Win::NotifyTree()
 {
@@ -927,7 +1044,6 @@ void Win::NotifyTree()
             ((Win*)q)->NotifyTree();
     }
 }
-
 
 // @ 0x009614a0
 void Win::SerUpdate()
@@ -971,7 +1087,6 @@ lab:
         m34, a + 4, a + 4, local, 0);
 }
 
-
 // @ 0x00961680
 void* Win::CloneNode(int unused)
 {
@@ -995,7 +1110,6 @@ void* Win::CloneNode(int unused)
     return obj;
 }
 
-
 // @ 0x009616f0
 bool FUN_009616f0(unsigned* param_1, void* param_2, char* param_3, void* param_4)
 {
@@ -1018,7 +1132,6 @@ bool FUN_009616f0(unsigned* param_1, void* param_2, char* param_3, void* param_4
     }
     return true;
 }
-
 
 // @ 0x00961760
 void Win::SetFlag(unsigned flag, unsigned char on)
@@ -1068,7 +1181,6 @@ lab:
     }
 }
 
-
 // @ 0x00961860
 void Win::Show()
 {
@@ -1090,7 +1202,6 @@ void Win::Show()
     }
 }
 
-
 // @ 0x009618e0
 void Win::Hide()
 {
@@ -1110,7 +1221,6 @@ void Win::Hide()
             mpMgr30, self, self, local, 0);
     }
 }
-
 
 // @ 0x00961990
 void Win::DestroyProc(void* proc)
@@ -1141,7 +1251,6 @@ void Win::DestroyProc(void* proc)
     p->fieldc = 0;
 }
 
-
 // @ 0x00961a30
 void Iface4::DestroyProcAndRecompute(int proc)
 {
@@ -1149,7 +1258,6 @@ void Iface4::DestroyProcAndRecompute(int proc)
     w->DestroyProc((void*)proc);
     w->RecomputeFlags();
 }
-
 
 // @ 0x00961a50
 void Win::ClearProcs()
@@ -1180,7 +1288,6 @@ void Win::ClearProcs()
     RecomputeFlags();
 }
 
-
 // @ 0x00961ae0
 void EA::UTFWin::Window::RemoveAllProcs()
 {
@@ -1201,7 +1308,6 @@ void EA::UTFWin::Window::RemoveAllProcs()
     }
 }
 
-
 // @ 0x00961b30
 bool Win::SerUpdateTrue(int unused)
 {
@@ -1209,7 +1315,6 @@ bool Win::SerUpdateTrue(int unused)
     SerUpdate();
     return true;
 }
-
 
 // @ 0x00961b40
 unsigned* ListCopy::Copy(unsigned* src)
@@ -1263,7 +1368,6 @@ unsigned* ListCopy::Copy(unsigned* src)
     dst[6] = 0;
     return dst;
 }
-
 
 // @ 0x00961d50
 bool FUN_00961d50(Win* p)
@@ -1330,14 +1434,93 @@ bool EA::UTFWin::Window::Shutdown()
       ((VtblE0*)*(void**)base)->fn(base, (int)(size_t)adj);
     } while (lst[1] != (int)lst);
   }
-  EA::ArgScript::cIParser* p;
-  p = *(EA::ArgScript::cIParser**)(self + 0x1e0);
+  RefObj* p;
+  p = *(RefObj**)(self + 0x1e0);
   if (p) { *(void**)(self + 0x1e0) = 0; p->Release(); }
-  p = *(EA::ArgScript::cIParser**)(self + 0x1e8);
+  p = *(RefObj**)(self + 0x1e8);
   if (p) { *(void**)(self + 0x1e8) = 0; p->Release(); }
-  p = *(EA::ArgScript::cIParser**)(self + 0x1e4);
+  p = *(RefObj**)(self + 0x1e4);
   if (p) { *(void**)(self + 0x1e4) = 0; p->Release(); }
   return true;
+}
+
+// @ 0x00961f20
+void S961f20::f(void* key)
+{
+  char* self = (char*)this;
+  if (FUN_6ab760(self + 0xac, key)) return;
+  wchar_t* k = (wchar_t*)key;
+  wchar_t* e = k;
+  while (*e) e++;
+  ((S423650*)(self + 0xac))->assign(k, e);
+  ((VObj90*)self)->v90();
+  int* m = *(int**)(self + 0x30);
+  if (m) {
+    void* base = self;
+    int tmp[2];
+    tmp[0] = 0xe; tmp[1] = 2;
+    ((void(__thiscall*)(void*, int, int, void*, int))((void**)(*(void***)m))[4])(
+        m, (int)(uint32_t)(size_t)base, (int)(uint32_t)(size_t)base, tmp, 0);
+  }
+}
+
+// @ 0x00961fc0
+void EA::UTFWin::Window::AddProc(EA::UTFWin::IWinProc * win)
+{
+  char* self = (char*)static_cast<EA::UTFWin::IWindow *>(this);
+  int* head = (int*)(self + 0x60);
+  int* it = *(int**)head;
+  int best = (int)0x80000000;
+  int* bestIt = head;
+  int prio = ((int(__thiscall*)(void*))((void**)(*(void***)win))[4])(win);
+  if (it != head) {
+    do {
+      void* n = *(void**)((char*)it + 8);
+      if (n != (void*)0x154ef48) {
+        if (n == win) {
+          int old = *(int*)((char*)it + 0xc);
+          int v = ((int(__thiscall*)(void*))((void**)(*(void***)win))[5])(win);
+          *(int*)((char*)it + 0xc) = v;
+          if (((v ^ old) & 2) == 0) return;
+          ((S9613e0*)self)->f();
+          return;
+        }
+        int p = ((int(__thiscall*)(void*))((void**)(*(void***)n))[4])(n);
+        if (p <= prio && best < p) { bestIt = it; best = p; }
+      }
+      it = *(int**)it;
+    } while (it != head);
+  }
+  ((void(__thiscall*)(void*))((void**)(*(void***)win))[0])(win);
+  int v = ((int(__thiscall*)(void*))((void**)(*(void***)win))[5])(win);
+  void* b = *(void**)(self + 0x68);
+  int* node = (int*)((void*(__thiscall*)(void*, int, int, int))((void**)(*(void***)b))[2])(
+      b, 0x10, 0, *(int*)(self + 0x6c));
+  if (node + 2) { node[2] = (int)(size_t)win; node[3] = v; }
+  *node = (int)(size_t)bestIt;
+  node[1] = bestIt[1];
+  *(int*)bestIt[1] = (int)(size_t)node;
+  bestIt[1] = (int)(size_t)node;
+  ((S9613e0*)self)->f();
+  ((void(__thiscall*)(void*, int, int))((void**)(*(void***)win))[6])(win, (int)(uint32_t)(size_t)self, 0);
+  if (*(int*)(self + 0x30) != 0)
+    ((void(__thiscall*)(void*, int, int))((void**)(*(void***)win))[6])(win, (int)(uint32_t)(size_t)self, 0);
+}
+
+// @ 0x00962100
+int* S962100::f(void* key)
+{
+  char* self = (char*)this;
+  int found;
+  ((S645ed0*)self)->find(&found, key);
+  int cnt = *(int*)(self + 8);
+  int* buckets = *(int**)(self + 4);
+  if ((void*)(uint32_t)found != (void*)buckets[cnt])
+    return (int*)((char*)(uint32_t)found + 4);
+  int k = *(int*)key;
+  int local[3];
+  FUN_009615c0(local, &k, 0);
+  return (int*)((char*)(uint32_t)local[0] + 4);
 }
 
 // @ 0x00962180
@@ -1370,6 +1553,30 @@ void* S962180::f(void* a_, void* b_, void* c_)
   ((AllocObj*)*(void**)((char*)this + 0x1c))->deallocate(b, 0x18);
   *(int*)((char*)this + 0xc) -= 1;
   return a_;
+}
+
+// @ 0x00962360
+void* S962360::f(int a, int b, int c)
+{
+  char* self = (char*)this;
+  int local_1c = a;
+  unsigned local_20 = (unsigned)b;
+  FUN_00a7bf40(&local_1c, &local_1c);
+  while ((void*)(uint32_t)local_1c != (void*)*(int*)(*(int*)(self + 4) + *(int*)(self + 8) * 4)) {
+    void* node = (void*)(uint32_t)local_1c;
+    int v = *(int*)((char*)node + 0xc);
+    int id = ((int(__thiscall*)(void*))((void**)(*(void***)*(void**)((char*)node + 8))[4]))(*(void**)((char*)node + 8));
+    if (id == v) return *(void**)((char*)node + 8);
+    if (*(RefObj**)((char*)node + 8)) ((RefObj*)*(void**)((char*)node + 8))->r0();
+    if (*(RefObj**)((char*)node + 0xc)) ((RefObj*)*(void**)((char*)node + 0xc))->r0();
+    int tmp[1];
+    ((S962180*)self)->f(tmp, node, (void*)(size_t)local_20);
+    if (*(RefObj**)((char*)node + 0xc)) ((RefObj*)*(void**)((char*)node + 0xc))->Release();
+    if (*(RefObj**)((char*)node + 8)) ((RefObj*)*(void**)((char*)node + 8))->Release();
+    FUN_00a7bf40(&local_1c, &local_1c);
+  }
+  void* found = ((S965fcc0*)self)->f(a, b, c);
+  return found;
 }
 
 // @ 0x00962530
@@ -1405,4 +1612,186 @@ int S9625b0::f(int a, int b, int c)
   void* p = ((S962360*)g_166b190)->f(adj, a, c);
   if (p) return ((VObj4*)p)->v3(b);
   return 0;
+}
+
+// @ 0x009625f0
+void EA::UTFWin::cGetChildWindowCache::Remove(EA::UTFWin::IWindow * win)
+{
+  char* self = (char*)this;
+  int local_vec[64];
+  int* vecBegin = local_vec;
+  int* vecEnd = local_vec;
+  int** buckets = *(int***)(self + 4);
+  int* it = *buckets;
+  int** bit = buckets;
+  if (!it) {
+    bit = buckets + 1;
+    it = buckets[1];
+    while (!it) { bit++; it = *bit; }
+  }
+  int count = *(int*)(self + 8);
+  if ((void*)it != (void*)buckets[count]) {
+    do {
+      int* next = *(int**)((char*)it + 0x10);
+      int** bit2 = bit;
+      while (!next) { bit2++; next = *(int**)bit2; }
+      char* ci = (char*)it + 8;
+      if (*(void**)it == win || *(void**)(ci + 0) == win || *(void**)(ci + 4) == win) {
+        int w = *(int*)(ci + 0);
+        if (vecEnd < local_vec + 64) { *vecEnd++ = w; if (w) ((RefObj*)(uint32_t)w)->r0(); }
+        else { int tmp[2]; tmp[0] = w; ((S9613e0*)self)->f(); }
+        int wp = *(int*)(ci + 4);
+        if (vecEnd < local_vec + 64) { *vecEnd++ = wp; if (wp) ((RefObj*)(uint32_t)wp)->r0(); }
+        else { int tmp[2]; tmp[0] = wp; ((S9613e0*)self)->f(); }
+        ((S962180*)self)->f(0, it, bit2);
+      }
+      bit = bit2;
+      it = next;
+    } while ((void*)it != (void*)buckets[count]);
+  }
+  volatile int dummy = 0; (void)dummy;
+}
+
+// @ 0x00962740
+void S962740::f()
+{
+  int* self = (int*)this;
+  *self = (int)0x1440b44;
+  *(int*)((char*)self + 4) = (int)0x14431f8;
+  ((S961e80*)self)->f();
+  ((S961db0*)((char*)self + 0x1ec))->f((void**)*(void**)((char*)self + 0x1f0), *(unsigned*)((char*)self + 0x1f4));
+  *(int*)((char*)self + 0x1f8) = 0;
+  if (*(unsigned*)((char*)self + 0x1f4) > 1) g_free_16f4aec(*(void**)((char*)self + 0x1f0));
+  RefObj* p;
+  p = *(RefObj**)((char*)self + 0x1e8); if (p) p->Release();
+  p = *(RefObj**)((char*)self + 0x1e4); if (p) p->Release();
+  p = *(RefObj**)((char*)self + 0x1e0); if (p) p->Release();
+  int b = *(int*)((char*)self + 0xb0);
+  if ((2 < (*(int*)((char*)self + 0xb8) - b)) && b) g_free_16f4aec((void*)b);
+  char* head = (char*)self + 0x64;
+  char* it = *(char**)((char*)self + 0x64);
+  while (it != head) {
+    char* nx = *(char**)it;
+    void* b = *(void**)((char*)self + 0x6c);
+    ((void(__thiscall*)(void*, void*, int))((void**)(*(void***)b))[3])(b, it, 0x10);
+    it = nx;
+  }
+  ((S925e60*)((char*)self + 0x44))->f();
+  ((S620230*)((char*)self + 0x3c))->f();
+  *(int*)((char*)self + 4) = (int)0x13eb938;
+  *self = (int)0x13eb938;
+}
+
+// @ 0x00962840
+bool S962840::f(void* win)
+{
+  char* self = (char*)this;
+  ((S9625f0*)g_166b190)->f(win);
+  char* obj;
+  if (win) obj = (char*)win - 4; else obj = 0;
+  ((void(__thiscall*)(void*))((void**)(*(void***)obj))[0])(obj);
+  *(int*)(obj + 0x38) = (int)((char*)self - 4);
+  int* it = *(int**)(self + 0x38);
+  int* head = (int*)(self + 0x38);
+  while (it != head) {
+    int* n = it ? it - 2 : 0;
+    if ((*(unsigned char*)((char*)n + 0x2c) & 0x40) == 0) break;
+    it = *(int**)it;
+  }
+  int* p2 = (int*)it[1];
+  int* p4 = (int*)(obj + 8);
+  it[1] = (int)(size_t)p4;
+  *p2 = (int)(size_t)p4;
+  *(int*)(obj + 0xc) = (int)(size_t)p2;
+  *p4 = (int)(size_t)it;
+  int mgr = *(int*)(self + 0x30);
+  if (mgr) ((S959add0*)mgr)->f(obj);
+  if (((bool(__thiscall*)(void*))((void**)(*(void***)obj))[6])(obj)) {
+    ((S960b40*)((char*)self - 4))->f();
+    ((S960ae0*)((char*)self - 4))->f();
+    ((S961450*)((char*)self - 4))->f();
+    return true;
+  }
+  ((void(__thiscall*)(void*, int))((void**)(*(void***)self))[0x38])(self, (int)(size_t)p4 + 4);
+  return false;
+}
+
+// @ 0x00962950
+void S962950::f()
+{
+  char* self = (char*)this;
+  int tmp[8];
+  ((S961b40*)tmp)->f(self);
+  ((S961db0*)self)->f((void**)*(void**)(self + 4), *(unsigned*)(self + 8));
+  *(int*)(self + 0xc) = 0;
+  if (*(unsigned*)(self + 8) > 1) {
+    void* alloc = *(void**)(self + 0x1c);
+    ((void(__thiscall*)(void*, void*, int))((void**)(*(void***)alloc))[3])(alloc, *(void**)(self + 4),
+                                                                            *(int*)(self + 8) * 4 + 4);
+  }
+  *(void**)(self + 0x1c) = FUN_009512c0();
+  *(int*)(self + 0x10) = 0x3f800000;
+  *(int*)(self + 0x14) = 0x40000000;
+  *(int*)(self + 0x20) = 0;
+  *(int*)(self + 8) = 1;
+  *(int*)(self + 4) = (int)0x154df28;
+  *(int*)(self + 0xc) = 0;
+  *(int*)(self + 0x18) = 0;
+  unsigned n = *(unsigned*)((char*)tmp + 8);
+  if (n > 1) {
+    void* alloc = *(void**)((char*)tmp + 0x10);
+    ((void(__thiscall*)(void*, void*, unsigned))((void**)(*(void***)alloc))[3])(
+        alloc, *(void**)((char*)tmp + 4), n * 4 + 4);
+  }
+}
+
+// @ 0x00962a10
+EA::UTFWin::Window::Window()
+{
+  char* self = (char*)this;
+  *(int*)(self + 0xc) = 0; *(int*)(self + 8) = 0;
+  *(int*)(self + 0x14) = 0; *(int*)(self + 0x10) = 0;
+  *(int*)(self + 0x1c) = 0; *(int*)(self + 0x18) = 0;
+  *(int*)(self + 0x24) = 0; *(int*)(self + 0x20) = 0;
+  *(int*)(self + 4) = (int)0x13f1ab0;
+  *(int*)(self) = (int)0x1440b44;
+  *(int*)(self + 4) = (int)0x14431f8;
+  *(int*)(self + 0x28) = 0;
+  *(unsigned char*)(self + 0x31) &= 0xf0;
+  *(int*)(self + 0x2c) = 3;
+  *(unsigned char*)(self + 0x30) = 0;
+  *(int*)(self + 0x34) = 0;
+  *(int*)(self + 0x38) = 0;
+  *(int*)(self + 0x40) = (int)(self + 0x3c);
+  *(int*)(self + 0x3c) = (int)(self + 0x3c);
+  void* t = FUN_009512c0(0x10, 0x10);
+  ((S925f30*)(self + 0x44))->f(t);
+  *(int*)(self + 0x70) = 0;
+  *(int*)(self + 0x6c) = (int)(self + 0x44);
+  *(int*)(self + 0x64) = (int)(self + 0x64);
+  *(int*)(self + 0x68) = (int)(self + 0x64);
+  *(int*)(self + 0x74) = 0; *(int*)(self + 0x78) = 0; *(int*)(self + 0x7c) = 0;
+  *(int*)(self + 0x80) = 0; *(int*)(self + 0x84) = 0;
+  for (int i = 0; i < 8; i++) *(float*)(self + 0x88 + i * 4) = 0.0f;
+  *(int*)(self + 0xa8) = 0; *(int*)(self + 0xac) = 0;
+  *(int*)(self + 0xb8) = (int)0x1667bae;
+  *(int*)(self + 0xb0) = (int)0x1667bac;
+  *(int*)(self + 0xb4) = (int)0x1667bac;
+  *(int*)(self + 0x1d4) = 0; *(int*)(self + 0x1dc) = 0;
+  *(int*)(self + 0x1d8) = -1;
+  *(int*)(self + 0xc0) = 1;
+  *(int*)(self + 0x1e0) = 0; *(int*)(self + 0x1e4) = 0; *(int*)(self + 0x1e8) = 0;
+  *(float*)(self + 0x1fc) = 1.0f;
+  *(float*)(self + 0x200) = 2.0f;
+  *(int*)(self + 0x1f8) = 0;
+  *(int*)(self + 0x204) = 0;
+  *(int*)(self + 0x1f4) = 1;
+  *(int*)(self + 0x1f0) = (int)0x154df28;
+  ((S95e7a0*)(self + 0xc4))->f();
+  for (int i = 0; i < 0x11; i++) {
+    *(int*)(self + 0x108 + i * 4) = *(int*)(self + 0xc4 + i * 4);
+    *(int*)(self + 0x14c + i * 4) = *(int*)(self + 0xc4 + i * 4);
+    *(int*)(self + 0x190 + i * 4) = *(int*)(self + 0xc4 + i * 4);
+  }
+  return;
 }

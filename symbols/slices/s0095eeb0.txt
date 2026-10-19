@@ -18,8 +18,8 @@
 0095fb60 ?Test30Slot54@Window@@QAE_NH@Z  # Window::Test30Slot54 migrated from s0095eeb0 (verbatim, slice spelling)
 0095fbb0 ?AllDescendants@Window@@QAE_ND@Z  # Window::AllDescendants migrated from s0095eeb0 (verbatim, slice spelling)
 0095fc00 ?AllDescendantsAll@Window@@QAE_ND@Z  # Window::AllDescendantsAll migrated from s0095eeb0 (verbatim, slice spelling)
-0095fc50 EA::UTFWin::Window::FindChild  # dc: child list search
-0095fcc0 EA::UTFWin::Window::WalkChildren  # dc: recursive child walk
+0095fc50 ?FindChild@Window@@QAEHH@Z  # Window::FindChild migrated from s0095eeb0 (verbatim, slice spelling)
+0095fcc0 ?WalkChildren@Window@@QAEHPAH@Z  # Window::WalkChildren migrated from s0095eeb0 (verbatim, slice spelling)
 0095fd60 ?SetA8@Window@@QAEXH@Z  # Window::SetA8 migrated from s0095eeb0 (verbatim, slice spelling)
 0095fdc0 ?Set1D4@Window@@QAEXH@Z  # Window::Set1D4 migrated from s0095eeb0 (verbatim, slice spelling)
 0095fe40 ?SetArea@Window@@QAEXPAM@Z  # Window::SetArea migrated from s0095eeb0 (verbatim, slice spelling)

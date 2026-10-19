@@ -1,14 +1,18 @@
 00961db0 ?f@S961db0@@QAEXPAPAXI@Z  # S961db0::f migrated from s00961db0 (verbatim, slice spelling)
 00961e20 ?FUN_00961e20@@YA_NPAX0@Z  # FUN_00961e20 migrated from s00961db0 (verbatim, slice spelling)
 00961e80 ?Shutdown@Window@UTFWin@EA@@UAE_NXZ  # EA::UTFWin::Window::Shutdown migrated from s00961db0
-00962100 eastl::hash_map<unsigned int,EA::AutoRefCount<EA::Swarm::cEffectsWorld> >::operator[]  # PDB pdb_names.json (dev 0149ef80)
+00961f20 ?f@S961f20@@QAEXPAX@Z  # S961f20::f migrated from s00961db0 (verbatim, slice spelling)
+00961fc0 ?AddProc@Window@UTFWin@EA@@UAEXPAVIWinProc@23@@Z  # EA::UTFWin::Window::AddProc migrated from s00961db0
+00962100 ?f@S962100@@QAEPAHPAX@Z  # S962100::f migrated from s00961db0 (verbatim, slice spelling)
 00962180 ?f@S962180@@QAEPAXPAX00@Z  # S962180::f migrated from s00961db0 (verbatim, slice spelling)
+00962360 ?f@S962360@@QAEPAXHHH@Z  # S962360::f migrated from s00961db0 (verbatim, slice spelling)
 00962530 ?f@S962530@@QAEXHH@Z  # S962530::f migrated from s00961db0 (verbatim, slice spelling)
 00962580 ?f@S962580@@QAEXHH@Z  # S962580::f migrated from s00961db0 (verbatim, slice spelling)
 009625b0 ?f@S9625b0@@QAEHHHH@Z  # S9625b0::f migrated from s00961db0 (verbatim, slice spelling)
-009625f0 EA::UTFWin::cGetChildWindowCache::Remove  # PDB pdb_names.json (dev 0104b380)
-00962740 EA::UTFWin::Window::~Window  # Ghidra PDB candidate (caller-scored)
-00962840 EA::UTFWin::Window::ChildAdd  # PDB candidate (caller-single)
+009625f0 ?Remove@cGetChildWindowCache@UTFWin@EA@@QAEXPAVIWindow@23@@Z  # EA::UTFWin::cGetChildWindowCache::Remove migrated from s00961db0
+00962740 ?f@S962740@@QAEXXZ  # S962740::f migrated from s00961db0 (verbatim, slice spelling)
+00962840 ?f@S962840@@QAE_NPAX@Z  # S962840::f migrated from s00961db0 (verbatim, slice spelling)
 009628f0 EA::UTFWin::Window::ChildRemove  # PDB pdb_names.json (dev 0104b760)
-00962a10 EA::UTFWin::Window::Window  # PDB pdb_names.json (dev 0104b9b0)
+00962950 ?f@S962950@@QAEXXZ  # S962950::f migrated from s00961db0 (verbatim, slice spelling)
+00962a10 ??0Window@UTFWin@EA@@QAE@XZ  # EA::UTFWin::Window::Window migrated from s00961db0
 00962f00 EA::UTFWin::ImmediateModeEx::EndBatch  # Ghidra PDB candidate (caller-scored)
