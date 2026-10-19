@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+007ce500 2015 complete behavioural translation of GroundCoverCirclePhysics (SSE vector math); not byte-exact; equiv: UNSUPPORTED (unresolved ref RandomLinearCongruential::RandomDoubleUniform)
