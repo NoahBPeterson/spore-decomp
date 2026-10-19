@@ -1,7 +1,7 @@
-00840250 EA::ArgScript::cFileParser::~cFileParser  # PDB candidate
-00840340 EA::ArgScript::cFileParser::ClearFilePaths  # PDB
-00840420 EA::ArgScript::cFileParser::AddFilePath  # PDB candidate
-00840700 EA::ArgScript::cFileParser::cFileParser  # PDB
+00840250 ?FileParser_dtor@@YIXPAH@Z  # FileParser_dtor migrated from s00840250 (verbatim, slice spelling)
+00840340 ?FileParser_ClearFilePaths@@YIXPAH@Z  # FileParser_ClearFilePaths migrated from s00840250 (verbatim, slice spelling)
+00840420 ?FileParser_AddFilePath@@YIXPAHHPADH@Z  # FileParser_AddFilePath migrated from s00840250 (verbatim, slice spelling)
+00840700 ?FileParser_ctor@@YIXPAH@Z  # FileParser_ctor migrated from s00840250 (verbatim, slice spelling)
 008407c0 enum/name table lookup (stride 8)
 00840810 int table lookup (stride 8)
 00840840 enum/name table lookup (stride 0xc)

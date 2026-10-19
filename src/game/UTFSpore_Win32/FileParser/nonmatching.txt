@@ -1,0 +1,15 @@
+# va  diff-bytes  reason
+0083f630 25 complete: cFileParser::Init; base-subobject adjust and call shape differ
+0083f680 42 complete: cFileParser::Shutdown; secondary-base vtable slots differ
+0083f6f0 70 complete: cFileParser::SetParser; AutoRefCount vtable call sequence differs
+0083f740 43 complete: cFileParser::Parser; AutoRefCount vtable call sequence differs
+0083f8f0 24 complete: AutoRefCount<RefCounted<FileChangeNotification>>::release; slot/register differ
+0083f940 25 complete: AutoRefCount<RefCounted<FileChangeNotification>>::operator=; refcount scheduling differs
+0083fa00 53 complete: hashtable hash_node dtor; refcount/EH frame differ
+0083fbc0 120 complete: uninitialized_copy<cInputFileSpec*>; string copy loop scheduling differs
+0083fcd0 48 complete: copy_backward<cInputFileSpec*>; assign scheduling differs
+0083fd20 58 complete: copy_backward (reverse); assign scheduling differs
+0083fde0 195 complete: hashtable<FileChangeNotification>::DoInsertValue; hash walk/EH differ
+0083fee0 86 complete: hashtable<FileChangeNotification>::DoFreeNodes; node dtor scheduling differs
+0083ff30 76 complete: hash_map<FileChangeNotification>::operator[]; insert/find scheduling differ
+0092fbe0 67 complete; Arm(): notify-filter bit composition and dispatch to Worker/Watch

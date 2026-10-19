@@ -1,4 +1,7 @@
 0092f220 EA::IO::DirectoryIterator::ReadRecursive  # pdb_candidates caller-scored + DirectoryIterator layout (mnListSize/mnRecursionIndex/mpBaseDirectory/mBaseDirectoryLength)
+0092fac0 ?SetShareMode@FileWatcher@@QAE_NI@Z  # FileWatcher::SetShareMode migrated from s0092f220 (verbatim, slice spelling)
+0092fbe0 ?Arm@FileWatcher@@QAEII@Z  # FileWatcher::Arm migrated from s0092f220 (verbatim, slice spelling)
+0092fc50 ?Destroy@FileWatcher@@QAEXXZ  # FileWatcher::Destroy migrated from s0092f220 (verbatim, slice spelling)
 0092fcd0 ?SafeReplace@FilePath@IO@EA@@QAE_NPBG000GG@Z  # FilePath::SafeReplace migrated from s0092f220 (verbatim, slice spelling)
 0092fe00 ?EnsureTrailingPathSeparator@@YA_NPAGH@Z  # EnsureTrailingPathSeparator migrated from s0092f220 (verbatim, slice spelling)
 0092fe60 ?ConcatenatePathComponents@@YAHPAGPBG1@Z  # ConcatenatePathComponents migrated from s0092f220 (verbatim, slice spelling)

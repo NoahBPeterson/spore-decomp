@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+0083f790  311  partial: cFileParser::ParseFiles; loop/timer/message payload approximated, not fully reconstructed
+0083fff0  -    partial: vector<cInputFileSpec>::insert; element relocate/destroy pass approximated
+00840250  -    partial: cFileParser::~cFileParser; member teardown (hash_map/vector free) stubbed
+00840340  -    partial: cFileParser::ClearFilePaths; watcher-map iteration/reset stubbed
+00840420  -    partial: cFileParser::AddFilePath; path canonicalisation / dir-watch insert stubbed
+00840700  -    partial: cFileParser::cFileParser; hash_map ctor and vtable stores approximated

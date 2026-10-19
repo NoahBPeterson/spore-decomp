@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/FileParser.cpp  ?FileParser_Release@@YIHPAH@Z  0083f5e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/FileParser.cpp  ?FileParser_HandleMessage@@YIEPAHHHH@Z  0083f600  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/FileParser.cpp  ?SetShareMode@FileWatcher@@QAE_NI@Z  0092fac0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/FileParser.cpp  ?Destroy@FileWatcher@@QAEXXZ  0092fc50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

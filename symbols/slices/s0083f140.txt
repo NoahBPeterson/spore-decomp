@@ -3,23 +3,23 @@
 0083f480 ?EvalChar@cExpression_s0083_f140@ArgScript@EA@@QAEHPAPBD@Z  # cExpression_s0083_f140::EvalChar migrated from s0083f140 (verbatim, slice spelling)
 0083f510 ?ParseBool@@YA_NPBD@Z  # ParseBool migrated from s0083f140 (verbatim, slice spelling)
 0083f580 `anonymous namespace'::FileMessageCallback  # PDB candidate
-0083f5e0 EA::ArgScript::cFileParser::Release  # PDB
-0083f600 EA::ArgScript::cFileParser::HandleMessage  # PDB
-0083f630 EA::ArgScript::cFileParser::Init  # PDB
-0083f680 EA::ArgScript::cFileParser::Shutdown  # PDB candidate
-0083f6f0 EA::ArgScript::cFileParser::SetParser  # PDB
-0083f740 EA::ArgScript::cFileParser::Parser  # PDB
-0083f790 EA::ArgScript::cFileParser::ParseFiles  # PDB
-0083f8f0 EA::AutoRefCount<EA::RefCounted<EA::IO::FileChangeNotification,int,0>>::release helper
-0083f940 EA::AutoRefCount<EA::RefCounted<EA::IO::FileChangeNotification,int,0>>::operator=
+0083f5e0 ?FileParser_Release@@YIHPAH@Z  # FileParser_Release migrated from s0083f140 (verbatim, slice spelling)
+0083f600 ?FileParser_HandleMessage@@YIEPAHHHH@Z  # FileParser_HandleMessage migrated from s0083f140 (verbatim, slice spelling)
+0083f630 ?FileParser_Init@@YIHPAH@Z  # FileParser_Init migrated from s0083f140 (verbatim, slice spelling)
+0083f680 ?FileParser_Shutdown@@YIHPAH@Z  # FileParser_Shutdown migrated from s0083f140 (verbatim, slice spelling)
+0083f6f0 ?FileParser_SetParser@@YIXPAHHPAUcIParser@@@Z  # FileParser_SetParser migrated from s0083f140 (verbatim, slice spelling)
+0083f740 ?FileParser_Parser@@YIPAUcIParser@@PAH@Z  # FileParser_Parser migrated from s0083f140 (verbatim, slice spelling)
+0083f790 ?FileParser_ParseFiles@@YI_NPAH@Z  # FileParser_ParseFiles migrated from s0083f140 (verbatim, slice spelling)
+0083f8f0 ?RefRelease@@YIXPAPAH@Z  # RefRelease migrated from s0083f140 (verbatim, slice spelling)
+0083f940 ?RefAssign@@YIPAPAHPAPAHH0@Z  # RefAssign migrated from s0083f140 (verbatim, slice spelling)
 0083f990 eastl::pair<string,AutoRefCount<RefCounted>>::pair (from RefCounted*)
-0083fa00 eastl::hash_node<pair<string,AutoRefCount<RefCounted>>,0>::~hash_node
+0083fa00 ?HashNodeDtorRef@@YIXPAH@Z  # HashNodeDtorRef migrated from s0083f140 (verbatim, slice spelling)
 0083fa80 eastl::pair<string,AutoRefCount<RefCounted>>::pair (string, RefCounted*)
 0083fae0 EA::ArgScript::cFileParser::cInputFileSpec copy ctor
-0083fbc0 eastl::uninitialized_copy<cInputFileSpec*>
-0083fcd0 eastl::copy_backward_impl<0>::do_copy<cInputFileSpec*>
-0083fd20 reverse copy_backward of cInputFileSpec
-0083fde0 eastl::hashtable<...FileChangeNotification...>::DoInsertValue  # PDB
-0083fee0 eastl::hashtable<...FileChangeNotification...>::DoFreeNodes  # PDB
-0083ff30 eastl::hash_map<...FileChangeNotification...>::operator[]  # PDB
-0083fff0 eastl::vector<cInputFileSpec>::insert (position)
+0083fbc0 ?UninitCopySpecs@@YAPAHPAH00@Z  # UninitCopySpecs migrated from s0083f140 (verbatim, slice spelling)
+0083fcd0 ?CopyBackwardSpecs@@YAPAHPAH00@Z  # CopyBackwardSpecs migrated from s0083f140 (verbatim, slice spelling)
+0083fd20 ?CopyBackwardSpecsRev@@YAPAHPAH00@Z  # CopyBackwardSpecsRev migrated from s0083f140 (verbatim, slice spelling)
+0083fde0 ?HashInsertFileNotify@@YIXPAHH00@Z  # HashInsertFileNotify migrated from s0083f140 (verbatim, slice spelling)
+0083fee0 ?DoFreeNodesFileNotify@@YAXPAPADI@Z  # DoFreeNodesFileNotify migrated from s0083f140 (verbatim, slice spelling)
+0083ff30 ?HashmapFileNotifyLookup@@YIHPAHHH@Z  # HashmapFileNotifyLookup migrated from s0083f140 (verbatim, slice spelling)
+0083fff0 ?VectorSpecInsert@@YIPAXPAHHPAX1@Z  # VectorSpecInsert migrated from s0083f140 (verbatim, slice spelling)
