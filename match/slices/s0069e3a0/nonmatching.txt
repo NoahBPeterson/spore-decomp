@@ -6,3 +6,9 @@
 0069ec20  21  decode one huge-blob entry through a virtual IO object; complete behaviour, but the this+0x54 member and register scheduling differ; equiv FAIL: esp after return differs (orig +0x10, ours +0xc; stack-arg count)
 0069f0b0  61  cCOMSerializer destructor body: complete behaviour (2 vptr stores, buffer free, smart-ref release, 2 tree nukes), but the compiler EH frame/state layout differs; equiv PASS: 669 valid inputs, 100% coverage
 0069f160  12  cCOMSerializer::reset: complete behaviour (nuke+reanchor both trees, clear flags, release p50), but store ordering / the anchor-at-+4 layout differs; equiv FAIL: memory pool differs at store ordering/anchor
+0069e3a0  142  cObjectDatabase::OpenIStream complete (alloc+inline ctor, AddRef guard, virtual open, release); frame/regalloc differ: orig keeps `out` in memory with zero in ebx, ours enregisters out [equiv: PASS: 204 valid inputs, 90.8% coverage]
+0069e470  146  cObjectDatabase::OpenOStream complete, same shape as OpenIStream; regalloc/frame differ [equiv: WEAK: 193 valid inputs, 90.9% coverage]
+0069e5d0  97  cObjectDatabase::HasKey complete (vector GetKeys via db vslot 12, eastl::find, free buffer); orig caches vector begin/end in esi/edi across find, ours reloads [equiv: UNSUPPORTED: 0/400 inputs valid, db vtable chain faults]
+0069e9e0  241  cCOMSerializer::onGetSPSerializable complete (class find, id find, factory create, DoInsertValue, AutoRef assign); frame layout and temp AutoRef dtor elision differ [equiv: WEAK: 369 valid inputs, 25.6% coverage]
+0069eb60  69  eastl::map<uint,cIDInfo>::operator[] complete (lower_bound + hinted DoInsertValue 0x69e8f0); one extra `mov [esp+0x38],esp` unwind store and call target [equiv: PASS: 318 valid inputs, 100% coverage]
+0069f1d0  1408  cCOMSerializer::LoadClassObjects complete (header read, class-map build, per-class instance loop with CRC check, progress); regalloc/frame differ (1705 vs 1503 bytes) [equiv: WEAK: 268 valid inputs, 4.4% coverage]
