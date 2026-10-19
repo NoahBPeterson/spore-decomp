@@ -12,3 +12,6 @@ slices/s007f9550/s007f9550_od.cpp  ?SetGlobal@Ev@@QAEPAU1@XZ  007fa350  /Od /Ob1
 slices/s007f9550/s007f9550_od.cpp  ?ClearGlobal@Ev@@QAEXXZ  007fa370  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s007f9550/s007f9550_od.cpp  _FUN_007fa4c0  007fa4c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s007f9550/s007f9550_od.cpp  _FUN_007fa4f0  007fa4f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f9550/s007f9550_od.cpp  ?AddPredicate@CB@@  007f9d90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f9550/s007f9550_od.cpp  ?AddAction@CB@@  007f9e20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f9550/s007f9550_od.cpp  ?SerUpdate@CB@@  007fa1d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

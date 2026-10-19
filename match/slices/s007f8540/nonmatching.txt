@@ -1,1 +1,4 @@
 007f8540 89  complete erase(first,last); register assignment / code schedule differs from original
+007f8c20  25  cSPUIAnimator::~cSPUIAnimator: complete (action calls, erase-all, destruct, free); arg load order of the second DoDestroy differs [equiv: WEAK 236 valid, 52% coverage]
+007f8d10  423  cSPUIAnimator::AddAnimation: complete (find/append default element/assign); search-loop register allocation and size() reloads differ [equiv: WEAK 228 valid, 7.6% coverage]
+007f9230  88  AnimatorAdvance: complete; inline cSPUIAnimator ctor store order and false-return block layout differ [equiv: PASS]

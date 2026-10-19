@@ -19,7 +19,6 @@ struct Ev {
     Ev*   SetGlobal();      // @ 0x007fa350
     void  ClearGlobal();    // @ 0x007fa370
     bool  Eval();           // @ 0x007f9550
-    void  SerUpdate();      // @ 0x007fa1d0
     int** SlotB(int i);     // FUN_007f93b0
     int** SlotC(int i);     // FUN_007f93c0
     int** SlotD(int i);     // FUN_007f93d0
@@ -29,8 +28,6 @@ struct EvSub { void M(); uint32_t ExtFlags(); };
 
 struct Cont;
 struct Iface {                 // cISPUIBehaviorEvent subobject at container+0x18
-    bool AddPredicate(void* pred);   // @ 0x007f9d90
-    bool AddAction(void* act);       // @ 0x007f9e20
     bool RemovePredicate(void* pred); // @ 0x007f9ee0
     bool RemoveAction(void* act);     // @ 0x007f9f60
     bool RemoveAllPredicates();       // @ 0x007f9fe0
@@ -120,40 +117,7 @@ bool Cont::RemoveAllB() {
     }
     return true;
 }
-// @ 0x007f9d90
-bool Iface::AddPredicate(void* pred) {
-    for (int i = 0; i < 4; ++i) {
-        int** slot = ((Cont*)((char*)this - 0x18))->SlotC(i);
-        if (*slot == 0) {
-            *slot = (int*)pred;
-            VCallR(pred, 0);
-            void* base = ((char*)this - 0x18) ? (void*)this : 0;
-            VCall1(pred, 0x30, base);
-            return true;
-        }
-    }
-    return false;
-}
 
-// @ 0x007f9e20
-bool Iface::AddAction(void* act) {
-    for (int i = 0; i < 4; ++i) {
-        int** slot = ((Cont*)((char*)this - 0x18))->SlotD(i);
-        if (*slot == 0) {
-            *slot = (int*)act;
-            VCallR(act, 0);
-            void* base = ((char*)this - 0x18) ? (void*)this : 0;
-            VCall1(act, 0x28, base);
-            if (*(char*)((char*)this + 0x44) != 0) {
-                if (!(char)(int)VCallR(act, 0x18)) {
-                    VCall1(act, 0x1c, (void*)1);
-                }
-            }
-            return true;
-        }
-    }
-    return false;
-}
 
 // @ 0x007f9ee0
 bool Iface::RemovePredicate(void* pred) {
@@ -370,31 +334,6 @@ bool Ev::Eval() {
     return true;
 }
 
-// @ 0x007fa1d0
-void Ev::SerUpdate() {
-    void* want = this ? (void*)((char*)this + 0x18) : 0;
-    for (int i = 0; i < 4; ++i) {
-        int** slot = SlotC(i);
-        if (*slot != 0) {
-            void* cur = VCallR(*slot, 0x2c);
-            if (cur != want) VCall1(*slot, 0x30, want);
-        }
-    }
-    for (int i = 0; i < 4; ++i) {
-        int** slot = SlotD(i);
-        if (*slot != 0) {
-            void* cur = VCallR(*slot, 0x24);
-            if (cur != want) {
-                VCall1(*slot, 0x28, want);
-                if (*(char*)((char*)this + 0x3a) != 0) {
-                    if (!(char)(int)VCallR(*slot, 0x18)) VCall1(*slot, 0x1c, (void*)1);
-                }
-            }
-        }
-    }
-    *(int*)((char*)this + 0x34) = -1;
-}
-
 // @ 0x007fa390
 extern "C" void* __cdecl EA_Messaging_GetServer();
 extern "C" void __cdecl FUN_00e4a9c0(void*);
@@ -420,3 +359,78 @@ int __cdecl FUN_007fa390(uint32_t msg, void* data, char flag) {
     return 1;
 }
 
+// Complete cSPUIBehaviorEventBase model (MI: primary base 0x18 bytes, cISPUIBehaviorEvent at +0x18).
+struct B0 { virtual void b0(); uint32_t pad[5]; };
+struct IfB;
+struct PredO { virtual void AddRef(); virtual void Release();
+  virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+  virtual void v8(); virtual void v9(); virtual void v10(); virtual void* GetOwner(); virtual void SetOwner(IfB*); };
+struct ActO { virtual void AddRef(); virtual void Release();
+  virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual bool IsStarted(); virtual void SetStarted(bool);
+  virtual void v8(); virtual void* GetOwner(); virtual void SetOwner(IfB*); };
+struct IfB { virtual bool AddPredicate(PredO*) = 0; virtual bool AddAction(ActO*) = 0; };
+struct CB : B0, IfB {
+    PredO** SlotC(int i);
+    ActO** SlotD(int i);
+    bool AddPredicate(PredO* pred);
+    bool AddAction(ActO* act);
+    void SerUpdate();
+    char fill[0x5c - 0x1c];
+    bool mActive;
+    int mLast;
+};
+
+// @ 0x007f9d90
+bool CB::AddPredicate(PredO* pred) {
+    for (int i = 0; i < 4; ++i) {
+        PredO** slot = SlotC(i);
+        if (*slot == 0) {
+            *slot = pred;
+            (*slot)->AddRef();
+            (*slot)->SetOwner(this);
+            return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x007f9e20
+bool CB::AddAction(ActO* act) {
+    for (int i = 0; i < 4; ++i) {
+        ActO** slot = SlotD(i);
+        if (*slot == 0) {
+            *slot = act;
+            act->AddRef();
+            act->SetOwner(this);
+            if (mActive) {
+                if (!act->IsStarted()) act->SetStarted(true);
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x007fa1d0
+void CB::SerUpdate() {
+    for (int i = 0; i < 4; ++i) {
+        PredO** slot = SlotC(i);
+        if (*slot != 0) {
+            if ((*slot)->GetOwner() != (IfB*)this) {
+                (*slot)->SetOwner(this);
+            }
+        }
+    }
+    for (int j = 0; j < 4; ++j) {
+        ActO** slot = SlotD(j);
+        if (*slot != 0) {
+            if ((*slot)->GetOwner() != (IfB*)this) {
+                (*slot)->SetOwner(this);
+                if (mActive) {
+                    if (!(*slot)->IsStarted()) (*slot)->SetStarted(true);
+                }
+            }
+        }
+    }
+    mLast = -1;
+}

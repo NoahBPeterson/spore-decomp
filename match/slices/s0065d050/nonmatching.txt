@@ -6,3 +6,5 @@
 0065d9f0  196  cSPUIFeedEdit::SetActive: complete; wstring temp + vcall schedule differs
 0065dc60  180  cSPUIFeedEdit::TranslateToken: complete; wide-string assign/dtor schedule differs
 0065ded0  27   vector<UFOCollisionEffectInfo>::erase: complete; prologue/refcount register allocation differs
+0065daa0  82  cSPUIFeedEdit::cSPUIFeedEdit: complete (bases + members as typed model); store schedule of the 2nd/3rd hashtable policy fields and 0x138-0x140 string differs [equiv: UNSUPPORTED - vtable mapping]
+0065dd30  200  resource-request helper: complete (url build, StrtoU6416/wcstoul, request object, provider call); register allocation (s in esi vs edi, zero reg ebx) differs [equiv: UNSUPPORTED - 0/400 valid inputs]

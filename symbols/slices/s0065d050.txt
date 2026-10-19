@@ -13,3 +13,4 @@
 0065daa0 SP::cSPUIFeedEdit::cSPUIFeedEdit  # PDB name
 0065dc60 ?TranslateToken@cSPUIFeedEdit_s0065_d050@@QAE_NPB_WPAX@Z  # cSPUIFeedEdit_s0065_d050::TranslateToken migrated from s0065d050 (verbatim, slice spelling)
 0065ded0 ?erase@VecUFO@@QAEPAUUFOCollisionEffectInfo@@PAU2@0@Z  # VecUFO::erase migrated from s0065d050 (verbatim, slice spelling)
+00623f40 _FUN_00623f40  # LAB_00623f40 callback code address (cSPUIFeedEdit ctor passes it to cXHTMLFrameSet)

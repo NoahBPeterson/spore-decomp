@@ -7,7 +7,8 @@ extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* EASTL_allocator_allocate(unsigned int size, const char* tag, int a, int b, int c,
                                           int d);
 extern "C" void* operator_new_ea(unsigned int size, const char* tag, int, int, int, int);
-extern "C" unsigned long __cdecl wcstoul(const wchar_t* s, wchar_t** end, int base);
+extern "C" __declspec(dllimport) unsigned long __cdecl wcstoul(const wchar_t* s, wchar_t** end, int base);
+unsigned long long __cdecl StrtoU6416(const wchar_t* s, wchar_t** end, int base);  // 0x0092d710
 
 typedef void(__thiscall* FnP)(void*);
 typedef void(__thiscall* FnP2)(void*, int, int);
@@ -33,10 +34,10 @@ struct cXHTMLFrameSet {
 void* MessageServer();
 unsigned int __cdecl FNVHash16(const wchar_t* s, unsigned int seed, int n);
 float __cdecl GetElapsedSeconds();
-void GetURL(unsigned int id, void* out);
+void GetURL(unsigned int id, void* out);  // 0x006214c0
 void SetNumberString(int value, int a, wchar_t* buf, int n);
 void StrtoU6416_ret(const wchar_t*, int, int);  // returns edx:eax
-void* GetResourceProvider();
+void* GetResourceProvider();  // 0x008fe480
 void* CopyImpl(void* first, void* last, void* dest);
 void DoFreeNodes(void* a, void* b);
 void DeallocateVector65cd30();
@@ -46,11 +47,8 @@ void FUN_005725a0();
 
 extern const wchar_t* g_user;
 extern uint32_t g_1526cb0;
-extern wchar_t g_str_1667bac;
-extern wchar_t g_str_1667bae;
-extern void* g_vt_13ec458;
-extern void* g_vt_13fff3c;
-extern void* g_vt_13fff2c;
+extern wchar_t g_01667bac;
+extern wchar_t g_01667bae;
 
 // ===========================================================================
 // cSPUIFeedEditAssetView
@@ -464,9 +462,9 @@ void cSPUIFeedEdit::SetActive(bool b) {
     (*(FnP2)Vslot(*(void**)(p + 0x80), 0x7c))(*(void**)(p + 0x80), 1, b ? 1 : 0);
     if (b) {
       wchar_t* tmp[3];
-      tmp[0] = &g_str_1667bac;
-      tmp[1] = &g_str_1667bac;
-      tmp[2] = &g_str_1667bae;
+      tmp[0] = &g_01667bac;
+      tmp[1] = &g_01667bac;
+      tmp[2] = &g_01667bae;
       *(int*)(p + 0x8c) = 0;
       GetURL(0x5908ef2, tmp);
       ((cXHTMLFrameSet*)(p + 0x18))->HandleLocationChange(*(void**)(p + 0x84), tmp[0], 0, 0);
@@ -499,17 +497,221 @@ bool cSPUIFeedEdit::TranslateToken(const wchar_t* token, void* out) {
   return true;
 }
 
-// @ 0x0065dd30
-void ResourceLoadHelper(cSPUIFeedEdit* self, unsigned int id) {
-  (void)self;
-  (void)id;
-}
+// ---------------------------------------------------------------------------
+// Constructor / destructor / resource-request helper
+// ---------------------------------------------------------------------------
+struct WStr3 {  // eastl::basic_string<wchar_t> head: begin, end, capacity
+  wchar_t* b;
+  wchar_t* e;
+  wchar_t* c;
+  unsigned int mAlloc;
+  void Append(const wchar_t* first, const wchar_t* last);  // 0x00429580
+};
+
+extern void* g_0154df28;
+extern "C" void FUN_00623f40();  // 0x00623f40 (LAB_00623f40 callback)
+extern const wchar_t* g_0152694c;
+
+struct FEPolicy {  // eastl::prime_rehash_policy
+  float mfMaxLoadFactor, mfGrowthFactor;
+  unsigned int mnNextResize;
+};
+struct FEHashTab {  // eastl::hashtable<uint64> after the allocator word
+  void* mpAlloc;
+  void* mpBucketArray;
+  unsigned int mnBucketCount;
+  unsigned int mnElementCount;
+  FEPolicy mRehashPolicy;
+  unsigned int mpad;
+  void DoFreeNodes(void* a, unsigned int n);  // 0x005687d0
+  FEHashTab() {
+    mRehashPolicy.mfMaxLoadFactor = 1.0f;
+    mRehashPolicy.mfGrowthFactor = 2.0f;
+    mnElementCount = 0;
+    mRehashPolicy.mnNextResize = 0;
+    mnBucketCount = 1;
+    mpBucketArray = &g_0154df28;
+  }
+  ~FEHashTab() {
+    DoFreeNodes(mpBucketArray, mnBucketCount);
+    mnElementCount = 0;
+    if (mnBucketCount > 1)
+      EASTL_allocator_deallocate(mpBucketArray);
+  }
+};
+
+struct FEI { virtual void a0(); virtual void Release(); };
+struct FELay { virtual void a0(); virtual void a1(); virtual void Release(); };
+struct FERef {
+  FEI* p;
+  FERef() : p(0) {}
+  ~FERef() {
+    if (p)
+      p->Release();
+  }
+};
+struct FELayRef {
+  FELay* p;
+  FELayRef() : p(0) {}
+  ~FELayRef() {
+    if (p)
+      p->Release();
+  }
+};
+struct FEVecA {
+  void* b; void* e; void* c; void* n;
+  FEVecA() : b(0), e(0), c(0) {}
+  ~FEVecA();  // 0x0065cd30
+};
+struct FEVecB {
+  void* b; void* e; void* c; void* n;
+  FEVecB() : b(0), e(0), c(0) {}
+  ~FEVecB();  // 0x00ae6970
+};
+struct FEStr {
+  wchar_t* b; wchar_t* e; wchar_t* c; unsigned int pad;
+  FEStr() {
+    b = &g_01667bac;
+    e = &g_01667bac;
+    c = (wchar_t*)((char*)&g_01667bac + 1);
+  }
+  ~FEStr() {
+    if (((char*)c - (char*)b) > 1 && b)
+      EASTL_allocator_deallocate(b);
+  }
+};
+struct FEFrameSet {
+  unsigned int d[25];
+  FEFrameSet(void* fn);  // 0x00996cc0
+  ~FEFrameSet();         // 0x009968a0
+};
+
+// Model of the class with its real base list so the compiler emits the vptr stores itself
+// (a vptr store is never reordered or eliminated; raw stores are).
+struct FETok {                     // cStringTokenTranslator: vptr +0, refcount +4
+  FETok();                         // 0x006b5870
+  ~FETok();                        // 0x005725a0
+  virtual void t0();
+  int mRefCount;
+};
+struct FEWinProc { FEWinProc() {} ~FEWinProc() {} virtual void w0(); };          // +8 (IWinProc)
+struct __declspec(novtable) FEModalCB { virtual void m0() = 0; };  // +0xc (no vptr store in base ctor)
+struct FEHandler { FEHandler() {} ~FEHandler() {} virtual void h0(); };          // +0x10 (IHandlerRC)
+
+struct FeedEditObj : FETok, FEWinProc, FEModalCB, FEHandler {
+  FELayRef mpLayout;        // +0x14
+  FEFrameSet mFrameSet;     // +0x18 .. 0x7b (cXHTMLFrameSet)
+  FERef mpRef7c;
+  FERef mpRef80;
+  FERef mpRef84;
+  FERef mpRef88;
+  int m8c;
+  bool mb90;
+  bool mb91;
+  float mf94;
+  float mf98;
+  unsigned int m9c, ma0, ma4, ma8;
+  int mac;
+  FEVecB mViewList;         // +0xb0
+  unsigned int mc0;
+  FEVecA mAssetList;        // +0xc4
+  unsigned int md4;
+  FEHashTab mExisting;      // +0xd8
+  FEHashTab mNew;           // +0xf8
+  FEHashTab mDelete;        // +0x118
+  FEStr mStr;               // +0x138
+  bool mb148, mb149, mb14a;
+  FeedEditObj();   // 0x0065daa0
+  ~FeedEditObj();  // 0x0065d860
+  virtual void t0();
+  virtual void w0();
+  virtual void m0();
+  virtual void h0();
+};
 
 // @ 0x0065daa0
-cSPUIFeedEdit* cSPUIFeedEdit_ctor(cSPUIFeedEdit* self) { return self; }
+FeedEditObj::FeedEditObj()
+    : mFrameSet((void*)&FUN_00623f40), m8c(0), mb90(false), mb91(false), mf94(0.0f), mf98(0.0f),
+      m9c(0), ma0(0), ma4(0), ma8(0), mac(-1), mb148(false), mb149(false), mb14a(false) {
+  (*(FnP)Vslot(&mFrameSet, 0))(&mFrameSet);
+}
 
 // @ 0x0065d860
-cSPUIFeedEdit* cSPUIFeedEdit_dtor(cSPUIFeedEdit* self) { return self; }
+FeedEditObj::~FeedEditObj() {}
+
+struct ResProvider {
+  void Request(void* out, const wchar_t* url, void* cb, void* obj, int a, int b);  // vslot 1 (+4)
+};
+
+// Asset request object created by FUN_0065dd30 (32 bytes: iface vptr, refcounted base at +4).
+struct __declspec(novtable) ReqI { virtual void q0(); virtual void AddRef(); };
+struct ReqRC {
+  virtual void r0();
+  int mRefCount;
+  ReqRC() : mRefCount(0) {}
+};
+struct ReqObj : ReqI, ReqRC {
+  unsigned long long mId;  // +0x10
+  unsigned long mNum;      // +0x18
+  void* mpData;            // +0x1c
+  ReqObj(unsigned long long id, unsigned long num) : mId(id), mNum(num), mpData(0) {}
+  virtual void q0();
+  virtual void AddRef();
+  virtual void r0();
+  static void* operator new(unsigned int n, const char* name, int a, int b, int c, int d) {
+    return operator_new_ea(n, name, a, b, c, d);
+  }
+};
+
+static inline unsigned int WLen(const wchar_t* p, const wchar_t* e) { return (unsigned int)(e - p); }
+
+// @ 0x0065dd30
+void __stdcall FUN_0065dd30(const wchar_t* s) {
+  WStr3 url;
+  url.b = &g_01667bac;
+  url.e = &g_01667bac;
+  url.c = &g_01667bae;
+  GetURL(0x55192fa, &url);
+  const wchar_t* t = s;
+  const wchar_t* t1 = s + 1;
+  while (*t++) {
+  }
+  const wchar_t* end = s + (t - t1);
+  const wchar_t* dot = s;
+  while (dot != end && *dot != L'.')
+    ++dot;
+  unsigned int n = (unsigned int)(dot - s);
+  unsigned int i = 0;
+  const wchar_t* q = s;
+  unsigned int rem = n;
+  while (rem > 3) {
+    url.Append(q, q + 3);
+    const wchar_t* sep = L"/";
+    const wchar_t* se = sep;
+    while (*++se) {
+    }
+    url.Append(sep, sep + (se - sep));
+    i += 3;
+    q += 3;
+    rem = n - i;
+  }
+  url.Append(s, s + n);
+  const wchar_t* g = g_0152694c;
+  const wchar_t* ge = g;
+  while (*ge)
+    ++ge;
+  url.Append(g, g + (ge - g));
+  unsigned long long id = StrtoU6416(s, 0, 10);
+  unsigned long num = wcstoul(s + n + 1, 0, 10);
+  ReqObj* obj = new ("Sporepedia", 0, 0, 0, 0) ReqObj(id, num);
+  (*(FnP)Vslot(obj, 4))(obj);
+  ResProvider* rp = (ResProvider*)GetResourceProvider();
+  char res[4];
+  (*(void(__thiscall*)(void*, void*, const wchar_t*, void*, void*, int, int))Vslot(rp, 4))(
+      rp, res, url.b, (void*)&AssetRequestCallBack, obj, 0, 0);
+  if (((int)((char*)url.c - (char*)url.b) & ~1) > 2 && url.b)
+    EASTL_allocator_deallocate(url.b);
+}
 
 // @ 0x0065ded0
 struct UFOCollisionEffectInfo { int a, b, c; int ref; };
