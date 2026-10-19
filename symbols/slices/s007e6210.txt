@@ -6,6 +6,6 @@
 007e6690 ?del@PtrDel@@QAEXXZ  # PtrDel::del migrated from s007e6210 (verbatim, slice spelling)
 007e66a0 ?Check@PropWatcher@@QAE_NXZ  # PropWatcher::Check migrated from s007e6210 (verbatim, slice spelling)
 007e6720 ?Read@PropWatcher@@QAEXPAX@Z  # PropWatcher::Read migrated from s007e6210 (verbatim, slice spelling)
-007e67a0 SP::cAppSystem::Init  # PDB name
+007e67a0 ?Init@cAppSystemEx@@QAE_NPAUCommandLine_s007e_6210@AppInit@@@Z  # cAppSystemEx::Init migrated from s007e6210 (verbatim, slice spelling)
 0094f080 ?RegisterFileSystem@SSLManager@SSL@EA@@QAEXPAVFileSystem@23@_N@Z  # EA::SSL::SSLManager::RegisterFileSystem (callee of s007e6210, named from the dev publics; slice address comment)
 0094fed0 ?Init@SSLManager@SSL@EA@@QAE_NXZ  # EA::SSL::SSLManager::Init (callee of s007e6210, named from the dev publics; slice address comment)

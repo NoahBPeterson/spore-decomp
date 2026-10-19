@@ -216,6 +216,9 @@ extern "C" void operator_delete__(void* p);
 extern int32_t gDefaultWatcherValue;
 extern void* gPTR_DAT_0153f85c;
 extern void* gPTR_DAT_0153f860;
+extern bool gCanvasHighFlag;                               // 0x0153fb34
+extern unsigned int gPrefsVersion;                         // 0x0141390c
+extern char gSSLGlobal[];                                  // 0x0153fb2c
 struct PropListBase {
   virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
   virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
@@ -259,8 +262,266 @@ typedef void (__thiscall *VF3)(void*, void*, int, int);
 __forceinline void VC0(void* o, int off) { ((VF0)*(void**)((char*)*(void**)o + off))(o); }
 __forceinline void VC1(void* o, int off, int a) { ((VF1)*(void**)((char*)*(void**)o + off))(o, a); }
 __forceinline void VC3(void* o, int off, void* a, int b, int c) { ((VF3)*(void**)((char*)*(void**)o + off))(o, a, b, c); }
+#define CAT2_(a, b) a##b
+#define CAT_(a, b) CAT2_(a, b)
+#define PADV CAT_(vpad, __COUNTER__)
+#define P1_s007e_6210 virtual void PADV();
+#define P2 P1_s007e_6210 P1_s007e_6210
+#define P4_s007e_6210 P2 P2
+#define P8 P4_s007e_6210 P4_s007e_6210
+#define P16 P8 P8
+inline void* operator new(unsigned int, void* p) { return p; }
+void* operator new(unsigned size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
+namespace AppInit {
+struct CommandLine_s007e_6210 {
+    int FindSwitch(const wchar_t* name, int a, int b, int c);                   // 0x0092b300 (ret 0x10)
+};
+}
+namespace AppInit {
+struct cLocaleManager {
+    P1_s007e_6210 virtual void AddRef(); virtual void Release();
+    char pad4[0x6c];
+    cLocaleManager();                                                           // 0x00696420
+    void Init(CommandLine_s007e_6210* cmd, const wchar_t* dir);                            // 0x006964c0
+};
+}
+namespace AppInit {
+struct NameMap {                                                                // id generator, 0x40 bytes
+    char pad[0x40];
+    NameMap();                                                                  // 0x0068db70
+};
+}
+namespace AppInit {
+struct cCommandServer {
+    P4_s007e_6210 virtual void Start();                                                    // +0x10
+};
+}
+namespace AppInit {
+struct cTelemetry {
+    P1_s007e_6210 virtual void Method1();                                                  // +4
+    uint32_t pad4;
+    struct RefSub { virtual void AddRef(); virtual void Release(); } mRef;      // +8
+    char padc[0x40 - 0xc];
+    cTelemetry();                                                               // 0x007ec0a0
+    void Configure(bool dump);                                                  // 0x007eaf20 (ret 4)
+    void AddRef() { mRef.AddRef(); }
+    void Release() { mRef.Release(); }
+};
+}
+namespace AppInit {
+struct cPropertyManager {
+    virtual void AddRef(); virtual void Release();
+    virtual void SetFlag(bool b);                                               // +8
+    virtual void Start();                                                       // +0xc
+    P4_s007e_6210 P2 P1_s007e_6210
+    virtual bool GetPropertyList(uint32_t id, uint32_t group, void* out);       // +0x2c
+};
+}
+namespace AppInit {
+struct Property {
+    char pad[0x12];
+    short mType;                                                                // +0x12
+    uint32_t* GetUInt();                                                        // 0x0041ea00
+    bool* GetBool();                                                            // 0x0041e920
+};
+}
+namespace AppInit {
+struct Variant {
+    uint32_t mData[4];
+    uint16_t mFlags;                                                            // +0x10
+    uint16_t mType;                                                             // +0x12
+    uint16_t mSize;                                                             // +0x14
+    uint16_t mExtra;                                                            // +0x16
+    Variant() { mFlags = 0; mExtra = 0; }
+    ~Variant() { if (mFlags & 4) Destruct(0); }
+    void SetInt(const unsigned int* v);                                         // 0x00427fd0
+    void Destruct(int a);                                                       // 0x0093db80
+};
+}
+namespace AppInit {
+struct ResourceKey { uint32_t a, b, c; };
+}
+namespace AppInit {
+struct cPropertyList {                                                          // 0x38 bytes
+    virtual void AddRef(); virtual void Release();
+    P2 P1_s007e_6210
+    virtual void SetProperty(uint32_t id, Variant* v);                          // +0x14
+    virtual void RemoveProperty(uint32_t id);                                   // +0x18
+    P2
+    virtual bool GetProperty(uint32_t id, Property** out);                      // +0x24
+    P1_s007e_6210
+    virtual void CopyFrom(cPropertyList* other);                                // +0x2c
+    uint32_t pad4;
+    ResourceKey mKey;                                                           // +8
+    char pad14[0x38 - 0x14];
+    cPropertyList();                                                            // 0x006a1c40
+};
+}
+namespace AppInit {
+struct PropListRef {                                                            // EA::AutoRefCount<cPropertyList>
+    cPropertyList* mpObject;
+    PropListRef() : mpObject(0) {}
+    ~PropListRef() { if (mpObject) mpObject->Release(); }
+};
+}
+namespace AppInit {
+struct cResourceHolder {                                                        // release at +8
+    P1_s007e_6210 virtual void AddRef(); virtual void Release();
+    P4_s007e_6210 P2
+    virtual void Close();                                                       // +0x24
+};
+}
+namespace AppInit {
+struct ResHolderRef {
+    cResourceHolder* mpObject;
+    ResHolderRef() : mpObject(0) {}
+    ~ResHolderRef() { if (mpObject) mpObject->Release(); }
+};
+}
+namespace AppInit {
+struct cResourceReader {                                                        // returned by resmgr+0x48
+    P4_s007e_6210 P2 P1_s007e_6210
+    virtual void Read(cResourceHolder* src, void* outRef, int a, uint32_t typeID);   // +0x1c
+};
+}
+namespace AppInit {
+struct cResourceManager {
+    P16 P2
+    virtual cResourceReader* GetReader(uint32_t typeID, int a);                 // +0x48
+};
+}
+namespace AppInit {
+struct cSaveArea {
+    P8 P4_s007e_6210 P1_s007e_6210
+    virtual bool Open(const ResourceKey* key, ResHolderRef* out, int a, int b, int c, int d);   // +0x34
+};
+}
+namespace AppInit {
+struct cPackManager {
+    char pad[0x14];
+    cPackManager();                                                             // 0x00b7d170
+    void Init();                                                                // 0x007db650
+};
+}
+namespace AppInit {
+struct InputMan {
+    P1_s007e_6210 virtual void AddRef();
+    char pad[0x37c - 8];
+    InputMan();                                                                 // 0x008d32f0
+};
+}
+namespace AppInit {
+struct AppCanvas {
+    P1_s007e_6210 virtual void AddRef();
+    P4_s007e_6210 P2
+    virtual void SetX(int v);                                                   // +0x20
+    P1_s007e_6210
+    virtual void SetFlags(uint32_t flags);                                      // +0x28
+    P8 P4_s007e_6210 P2 P1_s007e_6210
+    virtual void SetMessageServer(void* server);                                // +0x68
+    P8 P2
+    virtual void* GetDropTarget();                                              // +0x94
+    char pad[0x98 - 4];
+    AppCanvas();                                                                // 0x00849a40
+};
+}
+namespace AppInit {
+struct cGraphicsSystem {
+    virtual void AddRef(); virtual void Release();
+    virtual bool Start();                                                       // +8
+};
+}
+namespace AppInit {
+struct cAppStateManager {
+    virtual void AddRef(); virtual void Release();
+    P2
+    virtual void Init(int a);                                                   // +0x10
+};
+}
+namespace AppInit {
+struct cConfigManager {
+    virtual void AddRef(); virtual void Release();
+    P1_s007e_6210
+    virtual void Setup(CommandLine_s007e_6210* cmd, bool needDefaults);                    // +0xc
+    P2 P1_s007e_6210
+    virtual void SetCurrent(uint32_t id, int a);                                // +0x1c
+};
+}
+namespace AppInit {
+struct SocketsManager { char pad[0x1cc]; SocketsManager(); };                   // 0x0094c260
+}
+namespace AppInit {
+struct SocketsGlobal { P1_s007e_6210 virtual void Start(); };                              // +4
+}
+namespace AppInit {
+struct SSLManager {
+    char pad[0x190];
+    SSLManager(void* allocator);                                                // 0x0094fc40
+    void Init();                                                                // 0x0094fed0
+    void SetLoading(const void* a, int b);                                      // 0x0094f080 (ret 8)
+    void SetCAFile(const wchar_t* path);                                        // 0x0094f0b0 (ret 4)
+};
+}
+namespace AppInit {
+struct AppProps {
+    virtual void Start();                                                       // +0
+    void SetBoolProperty(uint32_t id, bool v);                                  // 0x006a17e0
+};
+}
+namespace AppInit {
+struct SSLFileSystemGlobal { const wchar_t* GetCAFileName(); };                 // 0x007c78a0
+}
+void __cdecl FUN_0067e080(void*);   // register id generator
+void __cdecl FUN_0067e060(void*);   // register locale manager
+void* __cdecl FUN_0068c0d0();       // creates the command server
+void __cdecl FUN_006895c0(void*);
+void __cdecl FUN_0067e0b0(void*);   // register telemetry
+void __cdecl FUN_006bae50();
+void* __cdecl FUN_006ab650();       // creates the property manager
+void __cdecl FUN_0067e040(void*);
+void __cdecl InitAppEffects();      // 0x007cec80
+void __cdecl FUN_0094cd50(void*);
+AppInit::SocketsGlobal* __cdecl FUN_0094cd40();
+void __cdecl FUN_0094f0e0(void*);
+AppInit::SSLManager* __cdecl GetSSLManager();                       // 0x0094f0d0
+void* __cdecl GetDefaultAllocator();                       // 0x00925cb0
+void __cdecl FUN_006b1d40(bool);
+void __cdecl CreateDefaultSaveAreas();                     // 0x006b37d0
+AppInit::cSaveArea* __cdecl GetSaveArea(uint32_t id);               // 0x006b1f90
+void __cdecl FUN_006b2400(uint32_t id);
+void __cdecl SaveNamedResource(AppInit::cPropertyList* prefs, const wchar_t* name, AppInit::cResourceHolder* area);   // 0x006b4010
+void __cdecl FUN_0067df10(void*);
+void __cdecl FUN_0067e0d0(void*);
+void __cdecl FUN_008d3120(void*);
+void __cdecl FUN_0067ded0(void*);
+void __cdecl FUN_0067dee0(void*);
+void __cdecl FUN_006bbb60(void* dropTarget, void* slot);
+AppInit::cGraphicsSystem* __cdecl FUN_007a67e0();
+void __cdecl FUN_006bb1c0(const char* msg, int code, int a, int b);
+void __cdecl FUN_006894d0();
+void __cdecl FUN_00689510(int);
+AppInit::cAppStateManager* __cdecl FUN_007e57c0();
 void __cdecl FUN_0067df30(void*);
+AppInit::cConfigManager* __cdecl FUN_007cc390();
+void __cdecl FUN_0067df40(void*);
+void __cdecl FUN_006b4730();
+void __cdecl FUN_0067def0(void*);
+extern AppInit::SSLFileSystemGlobal gSSLFileSystem_s007e_6210;                 // 0x0153fb2c
+#define MF(T, off) (*(T*)((char*)this + (off)))
+template <class T> __forceinline void SetRef(T*& slot, T* p)
+{
+    T* old = slot;
+    if (p != old) {
+        if (p) p->AddRef();
+        slot = p;
+        if (old) old->Release();
+    }
+}
+struct cAppSystemEx : cAppSystem {
+    bool Init(AppInit::CommandLine_s007e_6210* cmd);
+};
 // ---- items of slice s007e6210 end
+
 
 // ---- items of slice s007e70b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" long __cdecl atol(const char*);
@@ -679,6 +940,7 @@ void LockToSingleCore()
 
 
 
+
 // @ 0x007e5e10
 void FUN_007e5e10()
 {
@@ -701,11 +963,13 @@ void FUN_007e5e10()
 
 
 
+
 // @ 0x007e5e80
 int cAppSystem::FUN_007e5e80()
 {
     return --mURLCount;
 }
+
 
 
 
@@ -720,6 +984,7 @@ void cAppSystem::DeactivateApp()
     if (mLockCount)
         SP_MessageServer()->SendMessage(0x462dde3, 0, 0, 0);
 }
+
 
 
 
@@ -742,6 +1007,7 @@ void cAppSystem::ToggleFullscreen()
 
 
 
+
 // @ 0x007e5f30
 void cAppSystem::ToggleDisplay()
 {
@@ -750,6 +1016,7 @@ void cAppSystem::ToggleDisplay()
     if (locked)
         SP_MessageServer()->SendMessage(0x462dde3, 0, 0, 0);
 }
+
 
 
 
@@ -779,6 +1046,7 @@ LRESULT __stdcall SuppressAppSwitchProc(int code, WPARAM wParam, LPARAM lParam)
 
 
 
+
 // @ 0x007e5fd0
 void cAppSystem::LockToDevice()
 {
@@ -788,6 +1056,7 @@ void cAppSystem::LockToDevice()
                                                        GetModuleHandleA(0), 0);
     }
 }
+
 
 
 
@@ -810,6 +1079,7 @@ void cAppSystem::UnlockFromDevice()
 
 
 
+
 // @ 0x007e6050
 void cAppSystem::SetEffectCollectionIDs(uint32_t* ids, void* collections)
 {
@@ -817,6 +1087,7 @@ void cAppSystem::SetEffectCollectionIDs(uint32_t* ids, void* collections)
     if (collections)
         mEffectCollections = collections;
 }
+
 
 
 
@@ -840,17 +1111,13 @@ void cAppSystem::LoaderCommandHandler()
 
 
 
+
 // @ 0x007e6210
 void LoadGameInfoProperties(void* data)
 {
     // Reads "game info" AppProperties; incomplete (see partial.txt).
     (void)data;
 }
-
-
-
-
-
 
 // @ 0x007e6470
 int cAppSystem::PreShutdown()
@@ -889,11 +1156,6 @@ int cAppSystem::PreShutdown()
     return 1;
 }
 
-
-
-
-
-
 // @ 0x007e65d0
 void cAppSystem::FUN_007e65d0(bool add)
 {
@@ -906,22 +1168,12 @@ void cAppSystem::FUN_007e65d0(bool add)
     }
 }
 
-
-
-
-
-
 // @ 0x007e6630
 bool cAppSystem::FUN_007e6630()
 {
     long old = _InterlockedExchangeAdd((volatile long*)&mJobRefCount, 0);
     return old > 0;
 }
-
-
-
-
-
 
 // @ 0x007e6650
 void cAppSystem::RunJobs(int timeLimit)
@@ -933,21 +1185,11 @@ void cAppSystem::RunJobs(int timeLimit)
     jm->vf7(mBaseThread, &sw, 1);
 }
 
-
-
-
-
-
 // @ 0x007e6690
 void PtrDel::del()
 {
     operator_delete__(p);
 }
-
-
-
-
-
 
 // @ 0x007e66a0
 bool PropWatcher::Check()
@@ -971,11 +1213,6 @@ bool PropWatcher::Check()
     }
     return false;
 }
-
-
-
-
-
 
 // @ 0x007e6720
 void PropWatcher::Read(void* p2)
@@ -1003,9 +1240,163 @@ void PropWatcher::Read(void* p2)
     fc = (int)w[0xd];
 }
 
+// @ 0x007e67a0
+bool cAppSystemEx::Init(AppInit::CommandLine_s007e_6210* cmd)
+{
+    AppInit::NameMap* idgen = new("App", 0, 0, 0, 0) AppInit::NameMap();
+    MF(AppInit::NameMap*, 0x28) = idgen;
+    FUN_0067e080(idgen);
 
+    AppInit::cLocaleManager* locale = new("App", 0, 0, 0, 0) AppInit::cLocaleManager();
+    SetRef(MF(AppInit::cLocaleManager*, 0x24), locale);
+    MF(AppInit::cLocaleManager*, 0x24)->Init(cmd, (MF(wchar_t*, 0x128) == MF(wchar_t*, 0x12c)) ? 0 : MF(wchar_t*, 0x128));
+    FUN_0067e060(MF(AppInit::cLocaleManager*, 0x24));
 
+    MF(AppInit::cCommandServer*, 0x38) = (AppInit::cCommandServer*)FUN_0068c0d0();
+    FUN_006895c0(MF(AppInit::cCommandServer*, 0x38));
+    MF(AppInit::cCommandServer*, 0x38)->Start();
 
+    bool dumpTelemetry = cmd->FindSwitch(L"dumptelemetry", 0, 0, 0) != -1;
+    AppInit::cTelemetry* tele = new("App", 0, 0, 0, 0) AppInit::cTelemetry();
+    SetRef(MF(AppInit::cTelemetry*, 0x48), tele);
+    MF(AppInit::cTelemetry*, 0x48)->Method1();
+    FUN_0067e0b0(MF(AppInit::cTelemetry*, 0x48));
+    MF(AppInit::cTelemetry*, 0x48)->Configure(dumpTelemetry);
+
+    ((AppInit::AppProps*)gAppProperties)->Start();
+    FUN_006bae50();
+    SetRef(MF(AppInit::cPropertyManager*, 0x2c), (AppInit::cPropertyManager*)FUN_006ab650());
+    FUN_0067e040(MF(AppInit::cPropertyManager*, 0x2c));
+    MF(AppInit::cPropertyManager*, 0x2c)->SetFlag(MF(bool, 0x159));
+    MF(AppInit::cPropertyManager*, 0x2c)->Start();
+    InitAppEffects();
+
+    FUN_0094cd50(new("App", 0, 0, 0, 0) AppInit::SocketsManager());
+    FUN_0094cd40()->Start();
+
+    AppInit::SSLManager* ssl = new("App", 0, 0, 0, 0) AppInit::SSLManager(GetDefaultAllocator());
+    FUN_0094f0e0(ssl);
+    GetSSLManager()->SetLoading(gSSLGlobal, 1);
+    GetSSLManager()->Init();
+    GetSSLManager()->SetCAFile(gSSLFileSystem_s007e_6210.GetCAFileName());
+
+    FUN_006b1d40(MF(bool, 0x159) == false);
+    CreateDefaultSaveAreas();
+    AppInit::cSaveArea* area = GetSaveArea(0x11ac192);
+    AppInit::ResourceKey key;
+    key.a = 0xd9bd3ca1;
+    key.b = 0xb1b104;
+    key.c = 0x11ac192;
+    AppInit::cResourceReader* reader = MF(AppInit::cResourceManager*, 0x1c)->GetReader(0xb1b104, -1);
+
+    bool safe = cmd->FindSwitch(L"safe", 0, 0, 0) != -1;
+    if (!safe && area && reader) {
+        AppInit::ResHolderRef holder;
+        if (area->Open(&key, &holder, 1, 3, 1, 0)) {
+            AppInit::cPropertyList*& prefsSlot = MF(AppInit::cPropertyList*, 0xcc);
+            if (prefsSlot) {
+                prefsSlot = 0;
+            }
+            reader->Read(holder.mpObject, &MF(AppInit::cPropertyList*, 0xcc), 0, key.b);
+            holder.mpObject->Close();
+        }
+    }
+
+    AppInit::cPropertyList* prefs = MF(AppInit::cPropertyList*, 0xcc);
+    if (prefs) {
+        AppInit::Property* prop;
+        if (!prefs->GetProperty(0x4754439, &prop) || prop->mType != 10 || *prop->GetUInt() != 9) {
+            AppInit::cPropertyList* old = MF(AppInit::cPropertyList*, 0xcc);
+            if (old) {
+                MF(AppInit::cPropertyList*, 0xcc) = 0;
+                old->Release();
+            }
+        }
+    }
+    bool needDefaults = MF(AppInit::cPropertyList*, 0xcc) == 0;
+
+    if (MF(AppInit::cPropertyList*, 0xcc)) {
+        AppInit::Property* prop;
+        if (!MF(AppInit::cPropertyList*, 0xcc)->GetProperty(0x43f2ae3, &prop) || prop->mType != 1 || !*prop->GetBool())
+            goto afterPrefs;
+        FUN_006b2400(0x11ac1ac);
+        MF(AppInit::cPropertyList*, 0xcc)->RemoveProperty(0x43f2ae3);
+    } else {
+        AppInit::cPropertyList* fresh = new("App", 0, 0, 0, 0) AppInit::cPropertyList();
+        SetRef(MF(AppInit::cPropertyList*, 0xcc), fresh);
+        AppInit::cPropertyList* cur = MF(AppInit::cPropertyList*, 0xcc);
+        cur->mKey.a = key.a;
+        cur->mKey.b = key.b;
+        cur->mKey.c = key.c;
+        AppInit::PropListRef defaults;
+        if (MF(AppInit::cPropertyManager*, 0x2c)->GetPropertyList(0x4483e856, 0, &defaults.mpObject))
+            MF(AppInit::cPropertyList*, 0xcc)->CopyFrom(defaults.mpObject);
+        else
+            FUN_006bb1c0("Could not find the default preferences.\n\nThe data directory is missing or corrupt.", 0x3ec, 0, 0);
+        AppInit::Variant v;
+        v.SetInt(&gPrefsVersion);
+        MF(AppInit::cPropertyList*, 0xcc)->SetProperty(0x4754439, &v);
+    }
+    if (area)
+        SaveNamedResource(MF(AppInit::cPropertyList*, 0xcc), L"Preferences", (AppInit::cResourceHolder*)area);
+afterPrefs:
+    FUN_0067df10(MF(AppInit::cPropertyList*, 0xcc));
+
+    AppInit::cPackManager* packs = new("App", 0, 0, 0, 0) AppInit::cPackManager();
+    MF(AppInit::cPackManager*, 0x4c) = packs;
+    packs->Init();
+    FUN_0067e0d0(MF(AppInit::cPackManager*, 0x4c));
+
+    AppInit::InputMan* input = new("App", 0, 0, 0, 0) AppInit::InputMan();
+    MF(AppInit::InputMan*, 0x18) = input;
+    input->AddRef();
+    FUN_008d3120(MF(AppInit::InputMan*, 0x18));
+    FUN_0067ded0(MF(AppInit::InputMan*, 0x18));
+
+    AppInit::AppCanvas* canvas = new("App", 0, 0, 0, 0) AppInit::AppCanvas();
+    MF(AppInit::AppCanvas*, 0x10) = canvas;
+    canvas->SetMessageServer(MF(void*, 0x14));
+    MF(AppInit::AppCanvas*, 0x10)->AddRef();
+    uint32_t flags = 0x2a;
+    if (gCanvasHighFlag)
+        flags = 0x6a;
+    if (cmd->FindSwitch(L"flock", 0, 0, 0) != -1)
+        flags |= 0x80;
+    MF(AppInit::AppCanvas*, 0x10)->SetFlags(flags);
+    MF(AppInit::AppCanvas*, 0x10)->SetX(0xe);
+    FUN_0067dee0(MF(AppInit::AppCanvas*, 0x10));
+    FUN_006bbb60(MF(AppInit::AppCanvas*, 0x10)->GetDropTarget(), &MF(void*, 0x54));
+
+    SetRef(MF(AppInit::cGraphicsSystem*, 0x5c), FUN_007a67e0());
+    if (!MF(AppInit::cGraphicsSystem*, 0x5c)->Start()) {
+        FUN_006bb1c0("Could not start the renderer.\nPlease ensure your display is set to 32 bits.", 0x3e9, 2, 0);
+        return false;
+    }
+
+    MF(float, 0xb8) = 0.0f;
+    MF(float, 0xbc) = 0.0f;
+    FUN_006894d0();
+    FUN_00689510(0);
+
+    SetRef(MF(AppInit::cAppStateManager*, 0x34), FUN_007e57c0());
+    if (MF(AppInit::cAppStateManager*, 0x34)) {
+        MF(AppInit::cAppStateManager*, 0x34)->Init(0);
+        FUN_0067df30(MF(AppInit::cAppStateManager*, 0x34));
+    }
+
+    SetRef(MF(AppInit::cConfigManager*, 0x3c), FUN_007cc390());
+    MF(AppInit::cConfigManager*, 0x3c)->Setup(cmd, needDefaults);
+    FUN_0067df40(MF(AppInit::cConfigManager*, 0x3c));
+    MF(AppInit::cConfigManager*, 0x3c)->SetCurrent(0x9a06678c, 0);
+
+    if (cmd->FindSwitch(L"vSync", 0, 0, 0) != -1)
+        ((AppInit::AppProps*)gAppProperties)->SetBoolProperty(0xd77e97, true);
+    if (cmd->FindSwitch(L"noVSync", 0, 0, 0) != -1)
+        ((AppInit::AppProps*)gAppProperties)->SetBoolProperty(0xd77e97, false);
+    FUN_006b4730();
+    FUN_0067def0(this);
+    return true;
+}
 
 // @ 0x007e70b0
 int cAppSystemHandleMessage(cAppSystem* self, uint32_t msg, int data)
@@ -1014,6 +1405,7 @@ int cAppSystemHandleMessage(cAppSystem* self, uint32_t msg, int data)
     (void)self; (void)msg; (void)data;
     return 0;
 }
+
 
 
 
@@ -1032,6 +1424,7 @@ PropWatcher32* PropWatcher32::ctor(void* list, void* owner, uint32_t value)
         Read(list);
     return this;
 }
+
 
 
 
@@ -1063,12 +1456,14 @@ void QuitCheat::Execute(Arguments* args)
 
 
 
+
 // @ 0x007e7380
 int cAppSystemConfigure(void* self, void* a, int b)
 {
     (void)self; (void)a; (void)b;
     return 0;
 }
+
 
 
 
@@ -1082,6 +1477,7 @@ void cAppSystemCtor(void* self, void* a)
 
 
 
+
 // @ 0x007e78d0
 void cAppSystemDtor(void* self)
 { (void)self; }
@@ -1090,9 +1486,11 @@ void cAppSystemDtor(void* self)
 
 
 
+
 // @ 0x007e7b50
 void FUN_007e7b50(void* self)
 { (void)self; }
+
 
 
 
@@ -1238,6 +1636,7 @@ void cAppSystem_s007e_7d00::SetupDirectories(CommandLine_s007e_7d00* cmd)
 
 
 
+
 // @ 0x007e8760
 bool cAppSystem_s007e_7d00::LoadPlugins()
 {
@@ -1256,6 +1655,7 @@ bool cAppSystem_s007e_7d00::LoadPlugins()
     }
     return true;
 }
+
 
 
 
@@ -1298,6 +1698,7 @@ void RCVec::DoInsertValue(RCObj** position, RCObj* const* value)
     mpBegin = p;
     mpCapacity = p + newCap;
 }
+
 
 
 
@@ -1449,6 +1850,7 @@ bool cAppSystem_s007e_8ba0::PreInit(CommandLine* cmd, int unused)
 
 
 
+
 // @ 0x007e9300
 bool cAppSystem_s007e_8ba0::InitPlugins(void* cmd)
 {
@@ -1460,6 +1862,7 @@ bool cAppSystem_s007e_8ba0::InitPlugins(void* cmd)
     }
     return false;
 }
+
 
 
 
@@ -1480,12 +1883,14 @@ void cAppSystem_s007e_8ba0::SetUserDirNames(wchar_t* publicDir, wchar_t* private
 
 
 
+
 // @ 0x007e9450
 void cAppSystemShutdown(void* self)
 {
     // 1453-byte shutdown sequence not reconstructed; see partial.txt.
     (void)self;
 }
+
 
 
 // @ 0x007e9a00
@@ -1495,6 +1900,7 @@ int cAppSystemLoadEffectCollections(void* self)
     (void)self;
     return 0;
 }
+
 
 
 // @ 0x007e9d00
@@ -1509,6 +1915,7 @@ void cAppSystem::OpenURL(const wchar_t* url)
 }
 
 
+
 // @ 0x007e9db0
 void cAppSystemUpdate(void* self)
 {
@@ -1517,13 +1924,16 @@ void cAppSystemUpdate(void* self)
 }
 
 
+
 // @ 0x007ea2f0
 void FUN_007ea2f0(void* self)
 { (void)self; }
 
+
 // @ 0x007ea440
 void FUN_007ea440(void* self)
 { (void)self; }
+
 
 // @ 0x007eaa10
 int cAppSystemInitGraphics(void* self)
