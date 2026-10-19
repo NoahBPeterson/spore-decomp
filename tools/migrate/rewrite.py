@@ -370,6 +370,9 @@ class Chunk:
         if not mm:
             fs = sig.rsplit(";", 1)[-1].strip()
             fs = re.sub(r'^extern\s+"C"\s*', "", fs)
+            # `__declspec(noinline) void* GetDefaultAllocatorX() {` (s00925770 0x925cb0) is GetDefaultAllocatorX, not a
+            # function named __declspec: its held-callee prototype was never emitted and ZoneObject's callers hit C3861
+            fs = re.sub(r"__declspec\s*\([^()]*\)\s*", "", fs)
             fm = re.match(r"^(?P<ret>.*?)\s*(?:(?P<cc>__cdecl|__stdcall|__fastcall)\s+)?(?P<name>[A-Za-z_]\w*)\s*\((?P<params>.*)\)\s*$", fs)
             if fm:
                 self.free = True
