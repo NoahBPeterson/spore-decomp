@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+0093a1a0 168 Stopwatch::SetUnits: complete; unit-1 frequency-ratio branch uses a different int64->float divide sequence
+0093a2e0 110 cDirectPropertyList::SetBoolProperty: complete; timing/refcount bookkeeping cl form differs
+0093a480 103 LimitStopwatch::SetTimeLimit: complete; x87 double rounding dance (fstp/fld/fistp) not reproduced
+0093a510 43 cSPUILayerManager::GetDelta: complete; cl emits an inline fistp instead of the original's stored double round-trip

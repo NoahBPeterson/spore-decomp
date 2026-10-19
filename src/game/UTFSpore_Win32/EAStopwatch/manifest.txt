@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAStopwatch.cpp  ?SetElapsedCycles@Stopwatch@@QAEX_J@Z  0093a380  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStopwatch.cpp  ?GetCyclesToUnitsCoefficient@@YAMH@Z  0093a420  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStopwatch.cpp  ?GetStopwatchFrequency@@YA_KXZ  0093a470  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStopwatch.cpp  ??0Stopwatch@EA@@QAE@H_N@Z  0093a560  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStopwatch.cpp  ?GetElapsedTime@Stopwatch@@QAE_JXZ  0093a5e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

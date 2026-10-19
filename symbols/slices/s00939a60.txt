@@ -1,15 +1,15 @@
 00939a60 ?ParseFormatToken@@YAHPBDPAD@Z  # ParseFormatToken migrated from s00939a60 (verbatim, slice spelling)
 00939d40 FUN_00939d40  # formatter, calls 0x939a60
-0093a1a0 EA::Stopwatch::SetUnits  # PDB name
-0093a2e0 SP::cDirectPropertyList::SetBoolProperty  # PDB name
-0093a380 EA::Stopwatch::`unnamed setter'  # writes mnTotalElapsedTime from cycles/coeff
+0093a1a0 ?SetUnits@Stopwatch@EA@@QAEXH@Z  # EA::Stopwatch::SetUnits migrated from s00939a60
+0093a2e0 ?SetBoolProperty@cDirectPropertyList@@QAEXXZ  # cDirectPropertyList::SetBoolProperty migrated from s00939a60 (verbatim, slice spelling)
+0093a380 ?SetElapsedCycles@Stopwatch@@QAEX_J@Z  # Stopwatch::SetElapsedCycles migrated from s00939a60 (verbatim, slice spelling)
 0093a3a0 EA::Stopwatch::GetElapsedTimeFloat  # PDB name; returns accumulated cycles
-0093a420 GetCyclesToUnitsCoefficient  # switch over units 2..6
-0093a470 GetStopwatchFrequency  # returns mnStopwatchFrequency (0x154eae8)
-0093a480 EA::LimitStopwatch::SetTimeLimit  # PDB name
-0093a510 cSPUILayerManager::GetDelta  # QPC delta * coeff
-0093a560 EA::Stopwatch::Stopwatch  # PDB name
-0093a5e0 EA::Stopwatch::GetElapsedTime  # PDB name
+0093a420 ?GetCyclesToUnitsCoefficient@@YAMH@Z  # GetCyclesToUnitsCoefficient migrated from s00939a60 (verbatim, slice spelling)
+0093a470 ?GetStopwatchFrequency@@YA_KXZ  # GetStopwatchFrequency migrated from s00939a60 (verbatim, slice spelling)
+0093a480 ?SetTimeLimit@LimitStopwatch@EA@@QAEXI_N@Z  # EA::LimitStopwatch::SetTimeLimit migrated from s00939a60
+0093a510 ?GetDelta@cSPUILayerManager@@QAE_JXZ  # cSPUILayerManager::GetDelta migrated from s00939a60 (verbatim, slice spelling)
+0093a560 ??0Stopwatch@EA@@QAE@H_N@Z  # EA::Stopwatch::Stopwatch migrated from s00939a60
+0093a5e0 ?GetElapsedTime@Stopwatch@@QAE_JXZ  # Stopwatch::GetElapsedTime migrated from s00939a60 (verbatim, slice spelling)
 0093a610 StreamCopy  # chunked stream copy
 0093a6c0 WriteExact  # v14 guard, then v30 exact-length write
 0093a700 ReadUInt16  # big-endian swap read
