@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+00950080 40 SSLSocketBIOShutdown: complete (notify socket, clear flags/obj); regalloc differ; difftest PASS (331 valid, 100% coverage)
+009500c0 202 SSLSocketBIOControl: complete (switch cmd 1/8/9/0xb/0xc/0x68/0x69); regalloc/jump-table layout differ; difftest WEAK (395 valid, 48.8% coverage)
+00950450 31 Sock::Read (StreamSSLSocket::Read): complete (SSL_read, on error map SSL_get_error + curve flag to state); regalloc differs; difftest PASS (381 valid, 100% coverage)
+009504d0 32 Sock::Write (StreamSSLSocket::Write): complete (SSL_write, on error map SSL_get_error + curve flag to state); regalloc differs; difftest PASS (353 valid, 100% coverage)
+00950540 36 Fn00950540 (SSLSocketBIO::Write): complete (b!=0 -> inner e3a0(b,c,0), BIO_clear_flags); regalloc differs; difftest PASS (290 valid, 100% coverage)
+00950580 36 Fn00950580 (SSLSocketBIO::Read): complete (b!=0 -> inner e3f0(b,c,0), BIO_clear_flags); regalloc differs; difftest PASS (251 valid, 100% coverage)
+009505c0 52 Fn009505c0 (SSLSocketBIO::Puts): complete (strlen then inner e3f0(str,len,0), BIO_clear_flags); strlen idiom/regalloc differ; difftest PASS (269 valid, 90.9% coverage)
+00950650 187 Sock::Sprintf (fixed_string::sprintf): complete (Vsnprintf8 grow-on-demand into fixed_string buffer); large control flow, regalloc differ; difftest PASS (273 valid, 60.8% coverage)
+00950740 29 StreamSSLSocket::~StreamSSLSocket: complete (reset 4 vtables, free name buffer, base dtor); regalloc/order differ; difftest PASS (289 valid, 100% coverage)
+00950870 77 StreamSSLSocket::StreamSSLSocket (ctor): complete (base ctor, 4 vtables, fields +0x8c..0x9c, inline name buffer); regalloc differ; difftest PASS (400 valid, 100% coverage)
+00950ad0 18 Sock::SetStr (fixed_string::assign): complete (if begin!=str: reset then copy [str,str+len) via 0x45f430); strlen idiom/regalloc differ; difftest PASS (397 valid, 100% coverage)

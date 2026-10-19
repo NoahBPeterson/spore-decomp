@@ -6,24 +6,24 @@
 0094fe70 ?DeletingDtor@SSLManager_s0094_fb80@@QAEPAXD@Z  # SSLManager_s0094_fb80::DeletingDtor migrated from s0094fb80 (verbatim, slice spelling)
 0094fed0 ?SSLManager_Init@@YIDPAX@Z  # SSLManager_Init migrated from s0094fb80 (verbatim, slice spelling)
 00950060 Fn00950060  # BIO reset: flags=1/clear fields, return 1
-00950080 SSLSocketBIOShutdown  # BIO shutdown: notify socket, clear flags/obj
-009500c0 SSLSocketBIOControl  # BIO ctrl: cmd 1/8/9/0xb/0xc/0x68/0x69
-00950200 Sock::QueryInterface  # return inner IID iface pointer (+0x80) or delegate AsInterface
-00950280 StreamSSLSocket::InitConnection  # reset state, create SSL+BIO, SSL_set_bio, ctrl 0x21
-00950330 Sock::SetConnectState  # one-shot set of connect state at +0xcc
-00950350 StreamSSLSocket::ReleaseConnection  # shutdown/free SSL, clear BIO, reset base
-009503c0 StreamSSLSocket::Accept  # e650 accept, SSL_accept, verify; on fail teardown
-00950450 StreamSSLSocket::Read  # SSL_read, on error map SSL_get_error+curve flag to state
-009504d0 StreamSSLSocket::Write  # SSL_write, on error map SSL_get_error+curve flag to state
-00950540 SSLSocketBIO::Write  # b!=0 -> inner e3a0(b,c,0), clear BIO flags
-00950580 SSLSocketBIO::Read  # b!=0 -> inner e3f0(b,c,0), clear BIO flags
-009505c0 SSLSocketBIO::Puts  # strlen then inner e3f0(str,len,0), clear BIO flags
-00950610 StreamSSLSocket::ReleaseRef  # refcount dec; at 1 call slot0x30 + vdtor(1)
-00950650 fixed_string::sprintf  # Vsnprintf8 grow-on-demand into fixed_string buffer
-00950740 StreamSSLSocket::~StreamSSLSocket  # reset 4 vtables, free name buffer, base dtor
-00950870 UTFSSL::StreamSSLSocket::StreamSSLSocket  # ctor: base, 4 vtables, fields, inline name buffer
-00950920 UTFSSL::StreamSSLSocket::GetSessionName  # "host:port" from peer name vcall + be16 port
+00950080 ?SSLSocketBIOShutdown@@YAHPAX@Z  # SSLSocketBIOShutdown migrated from s0094fb80 (verbatim, slice spelling)
+009500c0 ?SSLSocketBIOControl@@YAIPAXHHPAH@Z  # SSLSocketBIOControl migrated from s0094fb80 (verbatim, slice spelling)
+00950200 ?QueryInterface@Sock@@QAEPAXI@Z  # Sock::QueryInterface migrated from s0094fb80 (verbatim, slice spelling)
+00950280 ?Fn00950280@@YIDPAX@Z  # Fn00950280 migrated from s0094fb80 (verbatim, slice spelling)
+00950330 ?Shutdown@Socket@Sockets@EA@@UAE_NW4ShutdownMode@23@@Z  # EA::Sockets::Socket::Shutdown migrated from s0094fb80
+00950350 ?Fn00950350@@YIXPAX@Z  # Fn00950350 migrated from s0094fb80 (verbatim, slice spelling)
+009503c0 ?Accept@Sock@@QAEIHHH@Z  # Sock::Accept migrated from s0094fb80 (verbatim, slice spelling)
+00950450 ?Read@Sock@@QAEHHHE@Z  # Sock::Read migrated from s0094fb80 (verbatim, slice spelling)
+009504d0 ?Write@Sock@@QAEHHHE@Z  # Sock::Write migrated from s0094fb80 (verbatim, slice spelling)
+00950540 ?Fn00950540@@YAHPAXHH@Z  # Fn00950540 migrated from s0094fb80 (verbatim, slice spelling)
+00950580 ?Fn00950580@@YAHPAXHH@Z  # Fn00950580 migrated from s0094fb80 (verbatim, slice spelling)
+009505c0 ?Fn009505c0@@YAHPAXPAD@Z  # Fn009505c0 migrated from s0094fb80 (verbatim, slice spelling)
+00950610 ?Fn00950610@@YIHPAH@Z  # Fn00950610 migrated from s0094fb80 (verbatim, slice spelling)
+00950650 ?Sprintf@Sock@@QAEPAHPBDPAX@Z  # Sock::Sprintf migrated from s0094fb80 (verbatim, slice spelling)
+00950740 ?Fn00950740@@YIXPAX@Z  # Fn00950740 migrated from s0094fb80 (verbatim, slice spelling)
+00950870 ?StreamSSLSocket_ctor@@YIPAXPAX@Z  # StreamSSLSocket_ctor migrated from s0094fb80 (verbatim, slice spelling)
+00950920 ?GetSessionName@Sock@@QAEDPAX@Z  # Sock::GetSessionName migrated from s0094fb80 (verbatim, slice spelling)
 00950970 UTFSSL::StreamSSLSocket::Connect  # if session: get name, RestoreClientSession, free session
 00950a20 UTFSSL::StreamSSLSocket::SaveClientSession  # if session: find+release stored session, SSL_set_session
-00950ad0 fixed_string::assign  # if begin!=str: reset then copy [str,str+len) via 0x45f430
-00950b10 UTFSSL::StreamSSLSocket::DoPostConnectionCheck  # save session, SSL_connect, verify; teardown on fail
+00950ad0 ?SetStr@Sock@@QAEXPAD@Z  # Sock::SetStr migrated from s0094fb80 (verbatim, slice spelling)
+00950b10 ?DoPostConnectionCheck@Sock@@QAEDPADH@Z  # Sock::DoPostConnectionCheck migrated from s0094fb80 (verbatim, slice spelling)
