@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPSubModeBase.cpp  ?Init@cSPPlayModeSubModeBase@SP@@UAEXPAUSubModeParams_t@2@@Z  0063b270  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
