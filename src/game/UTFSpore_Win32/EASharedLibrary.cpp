@@ -135,13 +135,11 @@ extern "C" long _InterlockedExchange(volatile long*, long);
 // ---- items of slice s008dd0d0 end
 
 // ---- items of slice s00936090 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" unsigned __int64 __rdtsc(void);
-extern "C" const char kDefaultSharedLibraryVersionInfo[];   // 0x0143e990
-#pragma intrinsic(__rdtsc)
 namespace EA {
 extern void* gpRegistryMutexName;   // 0x0143e98c
 }
 extern "C" void* gpSharedLibraryRegistry;   // 0x01669948
+extern "C" const char kDefaultSharedLibraryVersionInfo[];   // 0x0143e990
 extern "C" __declspec(dllimport) void* __stdcall LoadLibraryW(const wchar_t*);
 extern "C" __declspec(dllimport) void* __stdcall GetProcAddress(void*, const char*);
 extern "C" __declspec(dllimport) int   __stdcall FreeLibrary(void*);
@@ -158,7 +156,6 @@ template <typename T> EA::AutoRefCount_s005c_1d70<T>* sp_ref_vector<T>::erase(va
 }
 template EA::AutoRefCount_s005c_1d70<SP::cSPPalettePage_s005c_1d70>* sp_ref_vector<SP::cSPPalettePage_s005c_1d70>::erase(EA::AutoRefCount_s005c_1d70<SP::cSPPalettePage_s005c_1d70>*, EA::AutoRefCount_s005c_1d70<SP::cSPPalettePage_s005c_1d70>*);
 }  // namespace eastl
-
 
 // @ 0x008dd1c0
 int EA::SharedLibrary::Release()
@@ -316,7 +313,28 @@ bool EA::SharedLibrary::ExecuteCommand(char const * name, void * a, void * b, vo
 // @ 0x00936740
 EA::SharedLibraryRegistry::~SharedLibraryRegistry()
 {
-    
+    (void)0;
+}
+
+// @ 0x00936950
+bool EA::SharedLibrary::SetPath(wchar_t const * path, bool flag)
+{
+    if (path == 0)
+        return false;
+    if (!CanUnload())
+        return false;
+    void* h = LoadLibraryW(path);
+    if (h == 0)
+        return false;
+    void* fn = GetProcAddress(h, "EASharedLibraryStartupFunction");
+    FreeLibrary(h);
+    if (fn == 0)
+        return false;
+    mPath.mpBegin = 0;
+    mPath.mpEnd = 0;
+    mPath.mpCapacity = 0;
+    (void)flag;
+    return true;
 }
 
 // @ 0x00936e10

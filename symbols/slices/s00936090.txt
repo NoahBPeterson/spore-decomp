@@ -23,7 +23,7 @@
 00936820 EA::SharedLibraryRegistry::GetLibraries  # pdb gap-align
 009368f0 EA::SharedLibraryRegistry::SharedLibraryRegistry  # dc: vtable + Mutex(0,1)
 00936920 EA::SharedLibraryRegistry::scalar_deleting_destructor  # pdb gap-align
-00936950 EA::SharedLibrary::SetPath  # pdb candidate caller-scored
+00936950 ?SetPath@SharedLibrary@EA@@UAE_NPB_W_N@Z  # EA::SharedLibrary::SetPath migrated from s00936090
 00936b70 EA::SharedLibrary::Unload  # pdb anchor
 00936c00 EA::SharedLibrary::Register  # pdb callee-single
 00936c80 EA::SharedLibrary::SharedLibrary  # pdb gap-align
