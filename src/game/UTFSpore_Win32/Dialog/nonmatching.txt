@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0096b600 8 EA::UTFWinControls::WinDialog::OnMouseUp (/O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast): difftest equiv PASS (384 valid inputs, 400 run, 77.8% coverage).  Only difference is register allocation of the SetCapture2 virtual call -- the original keeps the vtable fn in eax after computing `lea eax,[esi+4]`, ours loads it into eax before the lea and uses edx for the this-arg.  Source body matches the disassembly statement-for-statement.

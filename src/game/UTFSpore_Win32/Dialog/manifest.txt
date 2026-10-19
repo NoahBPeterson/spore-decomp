@@ -1,0 +1,25 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/Dialog.cpp  ?Sub_b380@@YIXPAUWinDialog@@@Z  0096b380  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?WinDialog_Init@@YI_NPAUWinDialog@@@Z  0096b3a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?SetFlags@DlgSub20c@@QAEXH@Z  0096b400  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?WinDialog_OnTick@@YI_NPAUWinDialog@@@Z  0096b660  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?InvalidateAndLayout@DlgSub4@@QAEXXZ  0096b680  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?SetRefreshFlag@WinDialog@@QAEXI@Z  0096b6a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?SetLocalBorder@DlgSub20c@@QAEXMMMM@Z  0096b710  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?SetTitleTextStyle@DlgSub20c@@QAEXH@Z  0096b770  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?SetTitleBorder@DlgSub20c@@QAEXMMMM@Z  0096b7b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?SetCloseBorder@DlgSub20c@@QAEXMMMM@Z  0096b850  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?SetTitleTextColor@DlgSub20c@@QAEXH@Z  0096b900  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?SetMinSize@DlgSub20c@@QAEXMM@Z  0096b930  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?SetMaxSize@DlgSub20c@@QAEXMM@Z  0096b990  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?AsInterface@DialogDrawable@@QAEPAXI@Z  0096ba00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?GetNaturalSize@DialogDrawable@@QAE_NPAUVec2@EA@@HH@Z  0096ba30  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?SetImage@ImageTable@@QAEXIPAX@Z  0096bb10  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?GetBackground@ImageTable@@QAEXPAPAX@Z  0096bb50  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?SetBlitMode@ImageTable@@QAEXI@Z  0096bb60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?GetBlitMode@ImageTable@@QAEXPAPAX@Z  0096bb70  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?WinDialog_Shutdown@@YIXPAUWinDialog@@@Z  0096bd00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?SetValue@DialogState@@QAEXPAX@Z  0096bd60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?GetValue@DialogState@@QAEPAXXZ  0096bdb0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?Refresh@WinDialog_s0096_c6f0@UTFWinControls@EA@@QAE_NXZ  0096c6f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?init_154f4dc@@YAXXZ  01300950  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include

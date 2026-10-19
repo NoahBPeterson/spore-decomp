@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0096b460  222  EA::UTFWinControls::WinDialog::OnMouseDown (/O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast): 414-byte WM_LBUTTONDOWN hit-test; the selection-flag switch and capture logic are approximated (our symbol 192 bytes) and difftest reports FAIL (first mismatch: eax return value; 5/7 valid inputs).  The exact component-rect vs cursor-offset arithmetic (jump table 0x96b5d0/0x96b5e4) is not reproduced.
