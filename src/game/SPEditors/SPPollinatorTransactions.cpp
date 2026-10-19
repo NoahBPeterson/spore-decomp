@@ -2942,9 +2942,6 @@ class cFeedStateTransaction : public cITransaction_s0061_c350 {
 }
 // ---- items of slice s0061c350 end
 
-
-
-
 // ---- items of slice s0061d240 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #pragma intrinsic(memmove)
 namespace EA {
@@ -3064,18 +3061,6 @@ fail:
     return result;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00616160
 cTripleObj* cTripleObj::Init()
 {
@@ -3094,35 +3079,11 @@ cTripleObj* cTripleObj::Init()
     return this;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00616220
 bool cTimeGreater::operator()(unsigned a, unsigned b) const
 {
     return mpOwner->mpTable[a].mTime > mpOwner->mpTable[b].mTime;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x006162a0
 bool cHandlerStub::HandleResult(int err, cHttpResult* r, void* unused)
@@ -3135,18 +3096,6 @@ bool cHandlerStub::HandleResult(int err, cHttpResult* r, void* unused)
     if (err == 0) result = true;
     return result;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00616300
 cSmallC* cSmallC::Init(const sTriple* t, int* obj, int c)
@@ -3161,18 +3110,6 @@ cSmallC* cSmallC::Init(const sTriple* t, int* obj, int c)
     m20 = 0;
     return this;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00616360
 void cTxC::Dtor()
@@ -3195,17 +3132,6 @@ void cTxC::Dtor()
     vtbl = kBaseVtbl;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x006163e0
 cTxD* cTxD::Init(ResourceKey_s0061_6360 key, IAddRef* ref, RCObj* counted, unsigned n, bool b)
 {
@@ -3223,17 +3149,6 @@ cTxD* cTxD::Init(ResourceKey_s0061_6360 key, IAddRef* ref, RCObj* counted, unsig
     mpRel = 0;
     return this;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00616460
 void cTxD::Dtor()
@@ -3263,17 +3178,6 @@ void cTxD::Dtor()
     vtbl = kBaseVtbl;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00616500
 void cTxE::Dtor()
 {
@@ -3301,17 +3205,6 @@ void cTxE::Dtor()
     vtbl = kBaseVtbl;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00616580
 bool cTxF::HandleResult(int err, void* a, void* b)
 {
@@ -3334,17 +3227,6 @@ bool cTxF::HandleResult(int err, void* a, void* b)
     return ok;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00616610
 bool cTxG::HandleResult(int err, cHttpResult_s0061_6360* r, void* unused)
 {
@@ -3357,17 +3239,6 @@ bool cTxG::HandleResult(int err, cHttpResult_s0061_6360* r, void* unused)
         GetPollinatorLite()->Notify(0x3cf0359, mp8);
     return b;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x006166b0
 bool cTxI::HandleResult(int err, cHttpResult_s0061_6360* r, void* unused)
@@ -3382,17 +3253,6 @@ bool cTxI::HandleResult(int err, cHttpResult_s0061_6360* r, void* unused)
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x006166e0
 cTxJ* cTxJ::Init(IAddRef1* a, IAddRef1* b)
 {
@@ -3404,17 +3264,6 @@ cTxJ* cTxJ::Init(IAddRef1* a, IAddRef1* b)
     if (b) b->AddRef1();
     return this;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00616730
 bool cTxK::HandleResult(int err, cHttpResult2* r, void* unused)
@@ -3436,17 +3285,6 @@ bool cTxK::HandleResult(int err, cHttpResult2* r, void* unused)
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x006167a0
 void insertion_sort(unsigned* first, unsigned* last, cTimeGreaterInl compare)
 {
@@ -3462,17 +3300,6 @@ void insertion_sort(unsigned* first, unsigned* last, cTimeGreaterInl compare)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00616820
 void insertion_sort_unguarded(unsigned* first, unsigned* last, cTimeGreaterInl compare)
 {
@@ -3484,17 +3311,6 @@ void insertion_sort_unguarded(unsigned* first, unsigned* last, cTimeGreaterInl c
         *end = value;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x006168a0
 inline const unsigned& median(const unsigned& a, const unsigned& b, const unsigned& c, cTimeGreaterInl compare)
@@ -3513,17 +3329,6 @@ inline const unsigned& median(const unsigned& a, const unsigned& b, const unsign
     return b;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00616960
 string8& string8::append(size_type n, char c)
 {
@@ -3540,17 +3345,6 @@ string8& string8::append(size_type n, char c)
     return *this;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00616a00
 void promote_heap(unsigned* first, int topPosition, int position, const unsigned value, cTimeGreaterInl compare)
 {
@@ -3562,17 +3356,6 @@ void promote_heap(unsigned* first, int topPosition, int position, const unsigned
     }
     *(first + position) = value;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00616aa0
 void string8::AllocateSelf(size_type n)
@@ -3588,17 +3371,6 @@ void string8::AllocateSelf(size_type n)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00616b00
 void* cPoolTxA::Destroy(unsigned flags)
 {
@@ -3610,17 +3382,6 @@ void* cPoolTxA::Destroy(unsigned flags)
     return this;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00616b20
 void* cPoolTxB::Destroy(unsigned flags)
 {
@@ -3631,17 +3392,6 @@ void* cPoolTxB::Destroy(unsigned flags)
     }
     return this;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00616b40
 void* cTxUp1::Destroy(unsigned flags)
@@ -3656,17 +3406,6 @@ void* cTxUp1::Destroy(unsigned flags)
     }
     return this;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00616b80
 bool cTxUpload::HandleResult(int err, cHttpResult_s0061_6360* r, cTransactionQueue* q)
@@ -3718,17 +3457,6 @@ retry:
     return result;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00616d20
 void* cTxUp2::Destroy(unsigned flags)
 {
@@ -3742,17 +3470,6 @@ void* cTxUp2::Destroy(unsigned flags)
     }
     return this;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00616d60
 void CreateDownloadJob(IAddRef* pDb, SubOwner_s0061_6360* pOwner, const ResourceKey_s0061_6360* pKey)
@@ -3796,17 +3513,6 @@ void CreateDownloadJob(IAddRef* pDb, SubOwner_s0061_6360* pOwner, const Resource
     if (job) job->Release();
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00616ed0
 bool cTxDownload::HandleResult(int err, void* a, void* b)
 {
@@ -3842,17 +3548,6 @@ bool cTxDownload::HandleResult(int err, void* a, void* b)
     }
     return false;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00617010
 bool cTxThumbnail::ConstructRequest(char** ppOut)
@@ -3891,17 +3586,6 @@ bool cTxThumbnail::ConstructRequest(char** ppOut)
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00617450
 void* cTelemetryUploadTransaction::Destroy(unsigned flags)
 {
@@ -3915,16 +3599,6 @@ void* cTelemetryUploadTransaction::Destroy(unsigned flags)
     }
     return this;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00617490
 void* cPollenTxTwoRefs::Destroy(unsigned flags)
@@ -3940,16 +3614,6 @@ void* cPollenTxTwoRefs::Destroy(unsigned flags)
     }
     return this;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00617530
 void adjust_heap(unsigned* first, int topPosition, int heapSize, int position, unsigned value, cTimeGreaterInl compare)
@@ -3968,16 +3632,6 @@ void adjust_heap(unsigned* first, int topPosition, int heapSize, int position, u
     }
     promote_heap(first, topPosition, position, value, compare);
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x006175c0
 void __cdecl RemoveFeedFromAll(cPendingAssetSet* self, const string8_s0061_7130* uri)
@@ -4014,16 +3668,6 @@ void __cdecl RemoveFeedFromAll(cPendingAssetSet* self, const string8_s0061_7130*
     }
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x006177b0
 void RemoveFeedByName(const string8_s0061_7130* name)
 {
@@ -4050,16 +3694,6 @@ void RemoveFeedByName(const string8_s0061_7130* name)
     FreeCountedArray(results.mpBegin);
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00617a40
 void cGetAssetFeedTransaction::Dtor()
 {
@@ -4081,43 +3715,13 @@ void cGetAssetFeedTransaction::Dtor()
     vtbl = kBaseVtbl;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00617b10
 bool cFeedGetTx::ConstructRequestA(HTTPRequest** ppOut)
 { return BuildGetRequest(this, 0x539f69d, ppOut); }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00617c90
 bool cFeedGetTx::ConstructRequestB(HTTPRequest** ppOut)
 { return BuildGetRequest(this, 0x539f705, ppOut); }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00617e00
 bool cFeedUnsubscribeTransaction::HandleResult(int err, cHttpResult_s0061_7130* r, void* unused)
@@ -4143,16 +3747,6 @@ bool cFeedUnsubscribeTransaction::HandleResult(int err, cHttpResult_s0061_7130* 
     return ok;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00617e80
 void cSnapshotUploadTransaction::Dtor()
 {
@@ -4163,16 +3757,6 @@ void cSnapshotUploadTransaction::Dtor()
     mMyEmailAddress.~string8_s0061_7130();
     vtbl = kBaseVtbl;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00617f10
 bool cSnapshotUploadTransaction::ConstructRequest(HTTPRequest** ppOut)
@@ -4228,30 +3812,11 @@ bool cSnapshotUploadTransaction::ConstructRequest(HTTPRequest** ppOut)
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00618150
 namespace SP { namespace Pollen {
 cYouTubeAuthenticationTransaction_s0061_8150::~cYouTubeAuthenticationTransaction_s0061_8150()
 {}
 }}  // namespace SP::Pollen
-
-
-
-
-
-
-
-
-
 
 // @ 0x006181c0
 namespace SP { namespace Pollen {
@@ -4280,44 +3845,17 @@ bool cYouTubeAuthenticationTransaction_s0061_8150::ConstructRequest(void** ppReq
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
-
-
 // @ 0x00618370
 namespace SP { namespace Pollen {
 cYouTubeVideoUploadTransaction_s0061_8150::~cYouTubeVideoUploadTransaction_s0061_8150()
 {}
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
-
-
 // @ 0x00618430
 namespace SP { namespace Pollen {
 cYouTubeVideoURLTransaction_s0061_8150::~cYouTubeVideoURLTransaction_s0061_8150()
 {}
 }}  // namespace SP::Pollen
-
-
-
-
-
-
-
-
-
 
 // @ 0x006184c0
 namespace SP { namespace Pollen {
@@ -4345,15 +3883,6 @@ bool cYouTubeVideoURLTransaction_s0061_8150::ConstructRequest(void** ppRequest)
   return false;
 }
 }}  // namespace SP::Pollen
-
-
-
-
-
-
-
-
-
 
 // @ 0x00618670
 namespace SP { namespace Pollen {
@@ -4398,15 +3927,6 @@ bool cUploadTransactionRetail::ConstructRequest(void** ppRequest)
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
-
-
 // @ 0x00618890
 namespace eastl {
 string8_s0061_8150 operator+(const string8_s0061_8150& a, const string8_s0061_8150& b)
@@ -4417,15 +3937,6 @@ string8_s0061_8150 operator+(const string8_s0061_8150& a, const string8_s0061_81
   return result;
 }
 }  // namespace eastl
-
-
-
-
-
-
-
-
-
 
 // @ 0x006188f0
 namespace eastl {
@@ -4452,15 +3963,6 @@ template <> string8_s0061_8150& string8_s0061_8150::append_sprintf_va_list(const
 }
 }  // namespace eastl
 
-
-
-
-
-
-
-
-
-
 // @ 0x006189e0
 namespace SP { namespace Pollen {
 unsigned int* UnguardedPartition(unsigned int* first, unsigned int* last, unsigned int pivot, EntryKeyGreater cmp)
@@ -4478,15 +3980,6 @@ unsigned int* UnguardedPartition(unsigned int* first, unsigned int* last, unsign
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
-
-
 // @ 0x00618a60
 namespace SP { namespace Pollen {
 void make_heap(unsigned int* first, unsigned int* last, EntryKeyGreater cmp)
@@ -4503,15 +3996,6 @@ void make_heap(unsigned int* first, unsigned int* last, EntryKeyGreater cmp)
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
-
-
 // @ 0x00618aa0
 namespace SP { namespace Pollen {
 void sort_heap(unsigned int* first, unsigned int* last, EntryKeyGreater cmp)
@@ -4524,15 +4008,6 @@ void sort_heap(unsigned int* first, unsigned int* last, EntryKeyGreater cmp)
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
-
-
 // @ 0x00618af0
 namespace SP { namespace Pollen {
 string8N::string8N(const string8N& x)
@@ -4541,29 +4016,11 @@ string8N::string8N(const string8N& x)
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
-
-
 // @ 0x00618b90
 namespace SP { namespace Pollen {
 cMsgString8::~cMsgString8()
 {}
 }}  // namespace SP::Pollen
-
-
-
-
-
-
-
-
-
 
 // @ 0x00618c70
 namespace SP { namespace Pollen {
@@ -4586,30 +4043,12 @@ void FillFeedInfo(const FeedSource* src, FeedInfo* dst)
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
-
-
 // @ 0x00618d40
 namespace SP { namespace Pollen {
 cFeedTransactionBase::cFeedTransactionBase(uint32_t type, uint32_t intParam, uint32_t count, uint32_t unk18)
 : mpFeed(0), mFeedType(type), mnIntParam(intParam), mnCount(count), mUnk18(unk18), mFlag(0) {
 }
 }}  // namespace SP::Pollen
-
-
-
-
-
-
-
-
-
 
 // @ 0x00618da0
 namespace SP { namespace Pollen {
@@ -4620,44 +4059,17 @@ cFeedTransactionBase::cFeedTransactionBase(uint32_t type, const char* str, uint3
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
-
-
 // @ 0x00618e30
 namespace SP { namespace Pollen {
 cGetAssetFeedTransactionEx::~cGetAssetFeedTransactionEx()
 {}
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
-
-
 // @ 0x00618e70
 namespace SP { namespace Pollen {
 cEditFeedTransaction_s0061_8150::~cEditFeedTransaction_s0061_8150()
 { mpFeed.reset(); }
 }}  // namespace SP::Pollen
-
-
-
-
-
-
-
-
-
 
 // @ 0x00618f60
 namespace SP { namespace Pollen {
@@ -4694,42 +4106,17 @@ bool cFeedEntryAssetTransaction::ConstructRequest(void** ppRequest)
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
-
-
 // @ 0x00619150
 namespace SP { namespace Pollen {
 cDeleteMyFeedTransaction_s0061_9150::cDeleteMyFeedTransaction_s0061_9150(const char* uri)
 : mURI(uri) {}
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
-
 // @ 0x006191d0
 namespace SP { namespace Pollen {
 cFeedUnsubscribeTransaction_s0061_9150::cFeedUnsubscribeTransaction_s0061_9150(const char* uri)
 : mURI(uri) {}
 }}  // namespace SP::Pollen
-
-
-
-
-
-
-
-
 
 // @ 0x00619250
 namespace SP { namespace Pollen {
@@ -4741,27 +4128,11 @@ cSnapshotUploadTransaction_s0061_9150::cSnapshotUploadTransaction_s0061_9150(con
       mLocale(locale) {}
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
-
 // @ 0x00619300
 namespace SP { namespace Pollen {
 cYouTubeAuthenticationTransaction_s0061_9150::cYouTubeAuthenticationTransaction_s0061_9150(const char* username, const char* password, const char* source, bool check)
 : mUsername(username), mPassword(password), mSource(source), mCheckRegistration(check) {}
 }}  // namespace SP::Pollen
-
-
-
-
-
-
-
-
 
 // @ 0x00619390
 namespace SP { namespace Pollen {
@@ -4775,14 +4146,6 @@ cYouTubeVideoUploadTransaction_s0061_9150::cYouTubeVideoUploadTransaction_s0061_
       mXMLRequest(xmlRequest) {}
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
-
 // @ 0x00619470
 namespace SP { namespace Pollen {
 cYouTubeVideoURLTransaction_s0061_9150::cYouTubeVideoURLTransaction_s0061_9150(const char* myEmail, const char* destEmail, const char* message, const char* locale)
@@ -4791,14 +4154,6 @@ cYouTubeVideoURLTransaction_s0061_9150::cYouTubeVideoURLTransaction_s0061_9150(c
       mMessageText(message),
       mLocale(locale) {}
 }}  // namespace SP::Pollen
-
-
-
-
-
-
-
-
 
 // @ 0x00619530
 void partial_sort(unsigned int* first, unsigned int* middle, unsigned int* last, TimeGreater compare)
@@ -4814,14 +4169,6 @@ void partial_sort(unsigned int* first, unsigned int* middle, unsigned int* last,
   SortHeap(first, middle, compare);
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006195d0
 FeedDescription** uninitialized_copy_rev(FeedDescription** ppResult, FeedDescription* last, FeedDescription* first, FeedDescription* dest)
 {
@@ -4834,14 +4181,6 @@ FeedDescription** uninitialized_copy_rev(FeedDescription** ppResult, FeedDescrip
   return ppResult;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x00619650
 FeedDescription* copy_rev(FeedDescription* first, FeedDescription* last, FeedDescription* dest)
 {
@@ -4853,14 +4192,6 @@ FeedDescription* copy_rev(FeedDescription* first, FeedDescription* last, FeedDes
   } while (first != last);
   return dest;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006196c0
 namespace SP { namespace Pollen {
@@ -5068,13 +4399,6 @@ bool cModelUploadTransaction_s0061_96c0::ConstructRequest(EA::Internet::HTTPRequ
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
 // @ 0x0061a650
 namespace SP { namespace Pollen {
 bool AssetFeedGetRequest(void** ppRequest)
@@ -5083,12 +4407,6 @@ bool AssetFeedGetRequest(void** ppRequest)
   return false;
 }
 }}  // namespace SP::Pollen
-
-
-
-
-
-
 
 // @ 0x0061a810
 namespace SP { namespace Pollen {
@@ -5099,12 +4417,6 @@ cGetAssetFeedTransaction_s0061_a650::cGetAssetFeedTransaction_s0061_a650(uint32_
   mFlag = 1;
 }
 }}  // namespace SP::Pollen
-
-
-
-
-
-
 
 // @ 0x0061a8b0
 namespace SP { namespace Pollen {
@@ -5119,23 +4431,11 @@ cGetAssetFeedTransactionEx_s0061_a650::cGetAssetFeedTransactionEx_s0061_a650(uin
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
 // @ 0x0061a970
 namespace SP { namespace Pollen {
 cEditFeedTransaction_s0061_a650::cEditFeedTransaction_s0061_a650(int opType)
 : mpFeed(0), mOpType(opType), mFeedURI(), mFeedDescription(), mAssetsToAdd(), mAssetsToRemove() {}
 }}  // namespace SP::Pollen
-
-
-
-
-
-
 
 // @ 0x0061aa00
 namespace SP { namespace Pollen {
@@ -5146,12 +4446,6 @@ bool cUserMatchTransaction_s0061_a650::ConstructRequest(void** ppRequest)
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
 // @ 0x0061abf0
 namespace SP { namespace Pollen {
 bool UserMatchGetRequest(void** ppRequest)
@@ -5160,12 +4454,6 @@ bool UserMatchGetRequest(void** ppRequest)
   return false;
 }
 }}  // namespace SP::Pollen
-
-
-
-
-
-
 
 // @ 0x0061ad70
 namespace SP { namespace Pollen {
@@ -5176,24 +4464,12 @@ bool cHandshakeTransaction_s0061_a650::ConstructRequest(void** ppRequest)
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
 // @ 0x0061b0e0
 bool SP::Pollen::cTelemetryUploadTransaction::ConstructRequest(EA::Internet::HTTPRequest ** ppRequest)
 {
   (void)ppRequest;
   return false;
 }
-
-
-
-
-
-
 
 // @ 0x0061b3b0
 bool SP::Pollen::cYouTubeAuthenticationTransaction::HandleResult(unsigned int ppRequest, EA::Internet::HTTPResponse * a2, SP::Pollen::cTransactionQueue & a3)
@@ -5202,22 +4478,12 @@ bool SP::Pollen::cYouTubeAuthenticationTransaction::HandleResult(unsigned int pp
   return false;
 }
 
-
-
-
-
-
 // @ 0x0061b620
 bool SP::Pollen::cYouTubeVideoUploadTransaction::ConstructRequest(EA::Internet::HTTPRequest ** ppRequest)
 {
   (void)ppRequest;
   return false;
 }
-
-
-
-
-
 
 // @ 0x0061b9a0
 namespace SP { namespace Pollen {
@@ -5228,11 +4494,6 @@ bool PollenRequestHelper(void* self, void* arg)
   return false;
 }
 }}  // namespace SP::Pollen
-
-
-
-
-
 
 // @ 0x0061bbc0
 namespace SP { namespace Pollen {
@@ -5248,11 +4509,6 @@ void quick_sort_impl(unsigned int* first, unsigned int* last, int kRecursionCoun
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
 // @ 0x0061bcf0
 namespace SP { namespace Pollen {
 void WritePropertyListAndPNG(void* self, void* a, void* b, void* c)
@@ -5264,11 +4520,6 @@ void WritePropertyListAndPNG(void* self, void* a, void* b, void* c)
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
 // @ 0x0061c1c0
 namespace SP { namespace Pollen {
 void* AllocateAndCopy70(unsigned int n, void* a, void* b)
@@ -5279,11 +4530,6 @@ void* AllocateAndCopy70(unsigned int n, void* a, void* b)
   return EASTL_allocator_allocate(n * 0x70, "Editor", 0, 0, "EASTL/allocator.h", 0xd1);
 }
 }}  // namespace SP::Pollen
-
-
-
-
-
 
 // @ 0x0061c350
 namespace SP { namespace Pollen {
@@ -5487,9 +4733,6 @@ void* AssetHelper288(void* self, void* a)
 }
 }}  // namespace SP::Pollen
 
-
-
-
 // @ 0x0061d380
 namespace SP { namespace Pollen {
 bool GetAssetFeedConstructRequest(void* self, void* ppRequest)
@@ -5500,9 +4743,6 @@ bool GetAssetFeedConstructRequest(void* self, void* ppRequest)
 }
 }}  // namespace SP::Pollen
 
-
-
-
 // @ 0x0061d960
 namespace SP { namespace Pollen {
 bool EditFeedConstructRequest(void* self, void* ppRequest)
@@ -5512,9 +4752,6 @@ bool EditFeedConstructRequest(void* self, void* ppRequest)
   return false;
 }
 }}  // namespace SP::Pollen
-
-
-
 
 // @ 0x0061de00
 namespace SP { namespace Pollen {
