@@ -3353,6 +3353,14 @@ class Rewrite:
                     c.va, c.name)))
                 for sec in ("exclude", "leave_in_slice"):
                     self.manual.get(sec, {}).pop("%08x" % c.va, None)
+            why = self.manual.get("leave_in_slice", {}).get("%08x" % c.va, "")
+            if why.startswith("PARTIAL skeleton") and "%08x" % c.va not in self.slice_partial_vas():
+                # a hold written while the function was a partial skeleton; the slice has since completed it (its partial.txt
+                # row moved to manifest.txt or nonmatching.txt: dec1 wave 2026-10-19, SPGraphicsTextureUtilities held 15
+                # completed functions this way). The usual verdict gates of the landing apply
+                self.notes.append(("hold-ignored", "0x%08x %s: stale PARTIAL hold ignored, the slice no longer lists it as partial" % (
+                    c.va, c.name)))
+                self.manual["leave_in_slice"].pop("%08x" % c.va)
             if "%08x" % c.va in self.manual.get("exclude", {}):
                 # manual `exclude` {va: why}: modmap puts the function in this module on evidence the slice contradicts
                 # (a wrong xmatch anchor name); it stays in the slice
@@ -3465,6 +3473,18 @@ class Rewrite:
         if self._statements(c.body) and not self._statements(c.out_body):
             return "the converted body is empty but the slice's is not"
         return None
+
+    def slice_partial_vas(self):
+        """VAs of the slice's partial.txt rows (still skeletons in the slice)."""
+        if not hasattr(self, "_slice_partial"):
+            self._slice_partial = set()
+            pp = os.path.join(SLICES, self.sid, "partial.txt")
+            if os.path.exists(pp):
+                for line in open(pp):
+                    p = line.split("#", 1)[0].split()
+                    if p and re.fullmatch(r"(?:0x)?[0-9a-fA-F]{6,8}", p[0]):
+                        self._slice_partial.add("%08x" % int(p[0], 16))
+        return self._slice_partial
 
     def slice_exact_vas(self):
         """VAs of the slice's manifest.txt rows (byte-exact in the slice)."""
