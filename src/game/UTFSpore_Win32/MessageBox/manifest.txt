@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/MessageBox.cpp  ?init_154f94c@@YAXXZ  01300b20  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include

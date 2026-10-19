@@ -1,1 +1,1 @@
-0097f390 EA::UTFWinControls::WinMessageBox::Refresh  # existing name (card); lays out message text and buttons
+0097f390 ?Refresh@WinMessageBox@@QAE_NXZ  # WinMessageBox::Refresh migrated from s0097f390 (verbatim, slice spelling)
