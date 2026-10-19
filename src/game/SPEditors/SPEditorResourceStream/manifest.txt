@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorResourceStream.cpp  ?GetState@cBufferedStream@@UAEHXZ  005cbca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorResourceStream.cpp  ?GetSize@cBufferedStream@@UAEHXZ  005cbcb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorResourceStream.cpp  ?GetValue@cBufferedStream@@UAEHH@Z  005cbcd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorResourceStream.cpp  ?Matches@cBufferedStream@@UAEHHH@Z  005cbd00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorResourceStream.cpp  ?Write@cBufferedStream@@UAE_NPBXH@Z  005cbd90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorResourceStream.cpp  ?Close@cBufferedStream@@UAE_NXZ  005cbdd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
