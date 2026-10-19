@@ -9,6 +9,7 @@
 #include "EA/Swarm/cDescription.h"
 #include "EA/ArgScript/cError.h"
 #include "EA/ArgScript/cIParser.h"
+#include <string.h>
 
 // ---- items of slice s007df780 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct cSPVector3_s007d_f780 { float x, y, z; };
@@ -25,6 +26,7 @@ struct cSafeDynamicKernelStorage {
     void SetDirection(const cSPVector3_s007d_f780& a, const cSPVector3_s007d_f780& b);// 007e0570
     cSafeDynamicKernelStorage& operator=(const cSafeDynamicKernelStorage& o);  // 007e05e0
 };
+void EFree2(void*);   // 0x00f47380
 void cSafeDynamicKernelStorage::SetNormal(const cSPVector3_s007d_f780& a, const cSPVector3_s007d_f780& b)
 {
     if (mKernelType != 0)
@@ -62,8 +64,13 @@ void cSafeDynamicKernelStorage::SetDirection(const cSPVector3_s007d_f780& a, con
     *(cSPVector3_s007d_f780*)((char*)mKernelData + 0xc) = a;
     *(cSPVector3_s007d_f780*)((char*)mKernelDataVariation + 0xc) = b;
 }
-cSafeDynamicKernelStorage& cSafeDynamicKernelStorage::operator=(
-    const cSafeDynamicKernelStorage&) { /* 193B */ return *this; }  // 007e05e0
+void* __cdecl EAllocSwarm(int size, const char* name, int a, int b, int c, int d);  // 0x00f473a0
+struct KernelData16 { uint32_t v[4]; };
+struct cKernelError {
+    uint32_t pad[4];
+    cKernelError(const char* fmt, ...);        // 0x0052df30 (cdecl, `this` pushed)
+    cKernelError(const cKernelError&);
+};
 // ---- items of slice s007df780 end
 
 // ---- items of slice s007e06b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -259,35 +266,99 @@ struct cSplitModelKernelEffectCommand : EA::ArgScript::cBlockCommandBase {
 void FUN_007dfed0()
 { /* 564B */ }
 
-
 // @ 0x007e0110
 void FUN_007e0110()
 { /* 80B  ctor */ }
-
 
 // @ 0x007e0160
 void FUN_007e0160()
 { /* 49B */ }
 
-
 // @ 0x007e01a0
 void FUN_007e01a0()
 { /* 90B */ }
-
 
 // @ 0x007e0200
 void FUN_007e0200()
 { /* 126B */ }
 
-
 // @ 0x007e0280
 void FUN_007e0280()
 { /* 112B */ }
 
-
 // @ 0x007e02f0
-void cSafeDynamicKernelStorage::SetKernelType(int)
-{ /* 224B */ }
+void FUN_007e02f0()
+{ /* 65B  deleting dtor */ }
+
+// @ 0x007e0340
+void cSafeDynamicKernelStorage::SetKernelType(int type)
+{
+    if (mKernelData != 0) {
+        EFree2(mKernelData);
+        mKernelData = 0;
+    }
+    if (mKernelDataVariation != 0) {
+        EFree2(mKernelDataVariation);
+        mKernelDataVariation = 0;
+    }
+    switch (type) {
+    case 0:
+    case 1:
+        mKernelData = EAllocSwarm(0x10, "App", 0, 0, 0, 0);
+        mKernelDataVariation = EAllocSwarm(0x10, "App", 0, 0, 0, 0);
+        break;
+    case 2:
+        mKernelData = EAllocSwarm(0x1c, "App", 0, 0, 0, 0);
+        mKernelDataVariation = EAllocSwarm(0x1c, "App", 0, 0, 0, 0);
+        break;
+    default:
+        if (type < 0) {
+            mKernelType = type;
+            mKernelData = 0;
+            return;
+        }
+        throw cKernelError("Unknown split model kernel type.");
+    }
+    mKernelType = type;
+}
+
+// @ 0x007e05e0
+cSafeDynamicKernelStorage& cSafeDynamicKernelStorage::operator=(const cSafeDynamicKernelStorage& o)
+{
+    SetKernelType(o.mKernelType);
+    int t = o.mKernelType;
+    if (t != 0 && t != 1) {
+        if (t != 2) {
+            if (mKernelData != 0) {
+                EFree2(mKernelData);
+                mKernelData = 0;
+            }
+            if (mKernelDataVariation != 0) {
+                EFree2(mKernelDataVariation);
+                mKernelDataVariation = 0;
+            }
+            mKernelData = 0;
+            mKernelType = -1;
+            return *this;
+        }
+        memcpy(mKernelData, o.mKernelData, 0x1c);
+        memcpy(mKernelDataVariation, o.mKernelDataVariation, 0x1c);
+        return *this;
+    }
+    KernelData16* d = (KernelData16*)mKernelData;
+    KernelData16* s = (KernelData16*)o.mKernelData;
+    d->v[0] = s->v[0];
+    d->v[1] = s->v[1];
+    d->v[2] = s->v[2];
+    d->v[3] = s->v[3];
+    d = (KernelData16*)mKernelDataVariation;
+    s = (KernelData16*)o.mKernelDataVariation;
+    d->v[0] = s->v[0];
+    d->v[1] = s->v[1];
+    d->v[2] = s->v[2];
+    d->v[3] = s->v[3];
+    return *this;
+}
 
 // @ 0x007e06b0
 void cSafeDynamicKernelStorage_s007e_06b0::Read(EA::IO::IStream_s007e_06b0* stream)

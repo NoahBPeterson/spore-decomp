@@ -11,10 +11,10 @@
 007e01a0 ?FUN_007e01a0@@YAXXZ  # FUN_007e01a0 migrated from s007df780 (verbatim, slice spelling)
 007e0200 ?FUN_007e0200@@YAXXZ  # FUN_007e0200 migrated from s007df780 (verbatim, slice spelling)
 007e0280 ?FUN_007e0280@@YAXXZ  # FUN_007e0280 migrated from s007df780 (verbatim, slice spelling)
-007e02f0  cSplitModelKernelEffectCommand scalar deleting dtor  # (the earlier SetKernelType spelling on this line was the wrong VA)
-007e0340 ?SetKernelType@cSafeDynamicKernelStorage@@QAEXH@Z  # SP::cSplitModelKernelDescription::cSafeDynamicKernelStorage::SetKernelType (PDB name; exact decorated slice spelling)
+007e02f0 ?FUN_007e02f0@@YAXXZ  # FUN_007e02f0 migrated from s007df780 (verbatim, slice spelling)
+007e0340 ?SetKernelType@cSafeDynamicKernelStorage@@QAEXH@Z  # cSafeDynamicKernelStorage::SetKernelType migrated from s007df780 (verbatim, slice spelling)
 007e0420  SP::cSplitModelKernelDescription::cSafeDynamicKernelStorage::SetNormal  # PDB name
 007e0480  SP::cSplitModelKernelDescription::cSafeDynamicKernelStorage::SetOrigin  # PDB name
 007e04f0  SP::cSplitModelKernelDescription::cSafeDynamicKernelStorage::SetRadius  # PDB name
 007e0570  SP::cSplitModelKernelDescription::cSafeDynamicKernelStorage::SetDirection  # PDB name
-007e05e0 ??4cSafeDynamicKernelStorage@@QAEAAU0@ABU0@@Z  # SP::cSplitModelKernelDescription::cSafeDynamicKernelStorage::operator= (PDB name; exact decorated slice spelling)
+007e05e0 ??4cSafeDynamicKernelStorage@@QAEAAU0@ABU0@@Z  # cSafeDynamicKernelStorage::operator= migrated from s007df780 (verbatim, slice spelling)
