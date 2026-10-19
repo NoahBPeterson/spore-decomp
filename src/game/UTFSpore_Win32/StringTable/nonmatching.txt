@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00999820 6 complete UI::StringMan ctor; only vptr-store scheduling order differs; difftest PASS
+00999850 9 complete UI::StringMan deleting dtor; base-vptr store position differs
+00999890 19 complete finder-compare helper; add ecx,4 placement differs

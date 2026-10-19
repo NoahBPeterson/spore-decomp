@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/StringTable.cpp  ??0StringTable@@QAE@XZ  009997e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
