@@ -1,7 +1,8 @@
-0083c900 ?Insert@HashCmdTable string,AutoRefCount<cICommand>>>::insert  # inferred
-0083ca00 eastl::hashtable<string,pair<const string,AutoRefCount<cExprFunction>>>::find  # inferred
-0083cad0 eastl::hashtable<string,...cICommand...>::DoFreeNodes  # PDB
-0083cb70 eastl::hash_map<string,AutoRefCount<cICommand>>::operator[]  # PDB
+0083c900 ?Insert@HashCmdTable@@QAEPAXPAXPAPBX@Z  # HashCmdTable::Insert migrated from s0083c900 (verbatim, slice spelling)
+0083ca00 ?HashFindExprValue@@YAPAXPAXPBD@Z  # HashFindExprValue migrated from s0083c900 (verbatim, slice spelling)
+0083cad0 ?DoFreeNodesTable@@YAXPAXH@Z  # DoFreeNodesTable migrated from s0083c900 (verbatim, slice spelling)
+0083cb70 ?HashmapCommandLookup@@YAPAXPAXPBX@Z  # HashmapCommandLookup migrated from s0083c900 (verbatim, slice spelling)
+0083cc30 ?HashmapSetCommand@@YAXPAXPBDPAH@Z  # HashmapSetCommand migrated from s0083c900 (verbatim, slice spelling)
 0083cd90 EA::ArgScript::cBlockCommandBase::~cBlockCommandBase  # PDB
 0083cdd0 ArgScript::AppProps::AppProps  # PDB
 0083ce90 ?DiscardWhiteSpace@@YAXPAPBD@Z  # DiscardWhiteSpace migrated from s0083c900 (verbatim, slice spelling)
