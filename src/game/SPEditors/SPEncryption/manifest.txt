@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEncryption.cpp  ?assign@?$basic_string_s0060_b730@DUallocator_s0060_b730@eastl@@@eastl@@QAEAAU12@PBDI@Z  0060bcd0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPEncryption.cpp  ?Encrypt@@YAXABU?$basic_string_s0060_b730@DUallocator_s0060_b730@eastl@@@eastl@@AAU12@@Z  0060bcf0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
