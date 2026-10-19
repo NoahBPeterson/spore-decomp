@@ -4,4 +4,4 @@
 011467f0 ?Imdct36X4@CMpegLayer3Base@core@audio@rw@@QAEXHHPAM@Z  # CMpegLayer3Base::Imdct36X4 migrated from s01145d10 (verbatim, slice spelling)
 01146940 rw::audio::core::HELPER_SignFlip  # multiply 8 blocks x 9 groups by [1,-1,1,-1]; called from 0x115cf11
 01146a10 rw::audio::core::HELPER_GatherHistories  # gather 8 hybrid planes; called from 0x115cf1c
-01146a90 rw::audio::core::CMpegLayer3Base::InitHuffTables  # fills mHuffTables[0..31] at +0x50; called by ctor 0x1146ca0
+01146a90 ?InitHuffTables@CMpegLayer3Base@core@audio@rw@@QAEXXZ  # CMpegLayer3Base::InitHuffTables migrated from s01145d10 (verbatim, slice spelling)
