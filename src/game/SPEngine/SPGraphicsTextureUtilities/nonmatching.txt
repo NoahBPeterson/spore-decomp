@@ -17,6 +17,7 @@
 007b07e0 75 SP::cTexturePreload ctor: EH state + burn/final vptr ordering differs
 007b0980 164 eastl vector assignment: helper call arg order/scheduling differs
 007b0a70 315 eastl::vector<T20>::grow/DoInsertValue: allocation + move helpers, scheduling differs
-007b0da0 100 eastl::vector<Ref4>::assign: copy/destroy call ordering differs
-007b1040 93 eastl::vector<T20>::resize: grow path uses DoInsert helper, not byte-exact
+007b0da0 99 eastl::vector<Ref4>::assign: copy/destroy call ordering differs
+007b1040 36 eastl::vector<T20>::resize: grow path uses DoInsert helper, not byte-exact
 007b10a0 30 slot allocator (free-list pop else resize+index): register scheduling differs
+007b1bb0 399 PackTree::Place - complete, loop rotation/register allocation differs; equiv WEAK (32% coverage)

@@ -19,6 +19,7 @@ extern "C" void* memcpy(void* dst, const void* src, unsigned int n);
 #include "SP/cJob.h"
 #include "SP/cDXTCompressJobData.h"
 #include "SP/cImageDataRaw.h"
+#include <new>
 
 // ---- items of slice s004e01d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 template <int N> inline void ScratchSlots() { uint32_t s[N]; }
@@ -576,6 +577,7 @@ struct VecReserve {
 // ---- items of slice s007af8b0 end
 
 // ---- items of slice s007b0a70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma intrinsic(_InterlockedExchange)
 void* __cdecl EAAlloc(unsigned n, const char* name, int a, int b, const char* f, int l); // 0x00F473A0
 void  __cdecl DestroyElems(void* first, void* last);              // 0x00B007F0
 void  __cdecl RemoveIf(void* a, void* b, void* c);                // 0x0076DE80
@@ -583,25 +585,45 @@ void* __cdecl MoveNodes(void* a, void* b, void* c);               // 0x007AF5D0
 void  __cdecl MoveNodes2(void* a, void* b, void* c);              // 0x007AF6D0
 void* __cdecl DoCopy4(void* first, void* last, void* dest);       // 0x006782C0
 void** CopyRefRange4(void** first, void** last, void** dest);     // 0x007B0040
+struct PVec { void** b; void** e; void DestroyRange(void* first, void* last); }; // 0x0070F520 __thiscall
+struct UVec {
+    unsigned* b; unsigned* e; unsigned* c;
+    void DoInsertValue(unsigned* pos, const unsigned& v);          // 0x004558A0 __thiscall
+    void reserve(unsigned n);                                      // 0x004E0880 __thiscall
+    void push_back(const unsigned& v) {
+        unsigned* p = e;
+        if (p < c) { e = p + 1; if (p) *p = v; }
+        else DoInsertValue(p, v);
+    }
+    void push_val(unsigned v) {
+        unsigned* p = e;
+        if (p < c) { e = p + 1; if (p) *p = v; }
+        else DoInsertValue(p, v);
+    }
+};
 struct T20 {
     int a,b,c,d,e,f,g; char h;
     T20& operator=(const T20& o) { a=o.a;b=o.b;c=o.c;d=o.d;e=o.e;f=o.f;g=o.g;h=o.h; return *this; }
 };
 struct C20;
-void C20_InsertTail(C20* self, T20* pos, int count, void* value); // 0x007B0BE0
 struct C20 {
     T20* begin;  T20* end;  T20* cap;                             // +0x0
-    char pad0[8];                                                 // +0xc
-    int* freeBegin;  int* freeEnd;  int* freeCap;                 // +0x14
+    PVec v0;                                                      // +0xc
+    UVec fv;                                                      // +0x14 free list
+    PVec v2;                                                      // +0x20
     void grow(T20* p, const T20& v);                              // 0x007b0a70
     void push_back(const T20& v);                                 // 0x007b0f40
     void resize(int n);                                           // 0x007b1040
     int  Alloc();                                                 // 0x007b10a0
     void clear();                                                 // 0x007b1950
+    void InsertN(T20* pos, unsigned n, const T20* v);             // 0x007b0be0
+    void Reap(int idx);                                           // 0x007b0e60
+    void AddNode(int a, int b);                                   // 0x007b0fa0
+    void Reserve(unsigned n);                                     // 0x007b0890
 };
 struct C4 {
     void** begin; void** end; void** cap;
-    void assign(void** first, void** last);                       // 0x007b0da0
+    void assign(void** first, void** last, void* tag);            // 0x007b0da0 (ret 0xc; tag unused)
 };
 // ---- items of slice s007b0a70 end
 
@@ -625,6 +647,22 @@ struct W1e70 {
 struct W1da0 {
     void Handler(void* r);                          // 0x007B1AF0 __thiscall
     void f(S3* p);
+};
+struct Span_s007b_19c0 {  // 0x007AE920
+    int d[8];
+    Span_s007b_19c0* Init(int, int, int, int, int);  // 0x007ae920 (Span::Init)
+};
+struct PackNode {                                   // 0x20 bytes
+    int x0, y0, x1, y1;
+    int unk;
+    int c1, c2;
+    unsigned char used; char padn[3];
+    void Set(Span_s007b_19c0*);                                // 0x0076D9A0
+};
+struct PackTree {
+    PackNode* nodes;
+    int Alloc();                                    // 0x007B10A0
+    int Place(int idx, int w, int h);               // 0x007B1BB0
 };
 // ---- items of slice s007b19c0 end
 
@@ -1463,7 +1501,7 @@ void C20::grow(T20* pos, const T20& v)
 }
 
 // @ 0x007b0da0
-void C4::assign(void** first, void** last)
+void C4::assign(void** first, void** last, void* tag)
 {
     int n = (int)((char*)last - (char*)first) >> 2;
     if ((int)((char*)cap - (char*)begin) >> 2 < n) {
@@ -1506,8 +1544,8 @@ void C20::resize(int n)
 {
     int cnt = (int)(end - begin);
     if (n > cnt) {
-        char tmp[0x20];
-        C20_InsertTail(this, end, n - cnt, tmp);
+        T20 tmp;
+        InsertN(end, n - cnt, &tmp);
     } else {
         T20* ne = begin + n;
         RemoveIf(end, end, ne);
@@ -1518,14 +1556,60 @@ void C20::resize(int n)
 // @ 0x007b10a0
 int C20::Alloc()
 {
-    if (freeBegin != freeEnd) {
-        int v = freeEnd[-1];
-        freeEnd--;
+    if (fv.b != fv.e) {
+        int v = fv.e[-1];
+        fv.e--;
         return v;
     }
     int n = (int)(end - begin);
     resize(n + 1);
     return n;
+}
+
+// @ 0x007b1bb0
+int PackTree::Place(int idx, int w, int h)
+{
+    PackNode* n = &nodes[idx];
+    if (n->x1 - n->x0 >= w) {
+        while (n->y1 - n->y0 >= h) {
+            if (n->c1 >= 0) {
+                int r = Place(nodes[idx].c1, w, h);
+                if (r < 0)
+                    r = Place(nodes[idx].c2, w, h);
+                return r;
+            }
+            if (n->used)
+                return -1;
+            if (n->x1 - n->x0 == w && n->y1 - n->y0 == h) {
+                nodes[idx].used = 1;
+                return idx;
+            }
+            int a = Alloc();
+            int b = Alloc();
+            nodes[idx].c1 = a;
+            nodes[idx].c2 = b;
+            PackNode* base = nodes;
+            int dw = (base[idx].x1 - base[idx].x0) - w;
+            int dh = (base[idx].y1 - base[idx].y0) - h;
+            Span_s007b_19c0 sp;
+            int ex, ey, ew, eh;
+            if (dh < dw) {
+                base[a].Set(sp.Init(base[idx].x0, base[idx].y0, w, base[idx].y1 - base[idx].y0, idx));
+                base = nodes;
+                ex = base[idx].x0 + w; ey = base[idx].y0; ew = dw; eh = base[idx].y1 - base[idx].y0;
+            } else {
+                base[a].Set(sp.Init(base[idx].x0, base[idx].y0, base[idx].x1 - base[idx].x0, h, idx));
+                base = nodes;
+                ex = base[idx].x0; ey = base[idx].y0 + h; ew = base[idx].x1 - base[idx].x0; eh = dh;
+            }
+            base[b].Set(sp.Init(ex, ey, ew, eh, idx));
+            idx = nodes[idx].c1;
+            n = &nodes[idx];
+            if (n->x1 - n->x0 < w)
+                return -1;
+        }
+    }
+    return -1;
 }
 
 // @ 0x007b1da0
