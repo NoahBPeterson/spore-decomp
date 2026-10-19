@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SporeApp/SporeApp.cpp  ?Shutdown@cSporeApp@@QAE_NXZ  00f47700  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

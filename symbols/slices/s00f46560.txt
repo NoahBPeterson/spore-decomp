@@ -1,5 +1,3 @@
-# Slice s00f46560 names. UI handlers are caller-scored dev-PDB candidates; the tail is
-# the shared-allocator / OS-global plumbing.
 00f46560 SP::cSPUIAssetComments::DoMessage_candidate  # caller-scored PDB candidate
 00f468c0 SP::cSPUIAssetComments::DoMessage  # caller-scored PDB candidate
 00f46920 SP::cOnlineTab::Shutdown  # caller-scored PDB candidate
@@ -12,4 +10,4 @@
 00f474d0 EA::Allocator::InitSharedAllocator  # PDB name
 00f47550 app-wide frame resync / teardown fan-out
 00f47580 CanvasProc::Run  # while flag: Canvas()->vfunc(0x84) loop
-00f475b0 Timer::Elapsed  # QueryPerformanceCounter delta * freq (int)
+00f475b0 ?Elapsed@Timer@@QAEHXZ  # Timer::Elapsed migrated from s00f46560 (verbatim, slice spelling)

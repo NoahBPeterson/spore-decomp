@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00f47d80  242  approximate: command-line driven ship-data-dir setup; EASTL string temporaries and the second Format path are not reproduced faithfully
+00f48850  n/a  EAMain: EA threading/exception/IO runtime types not reconstructed (partial source)

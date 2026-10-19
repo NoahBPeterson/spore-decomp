@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00f475b0 5 complete; cl uses an out-of-line float->int helper where the original inlines cvttss2si
+00f47680 15 complete cSporeApp destructor; cl schedules the entry vptr stores after the first member load and tail-jumps the last release instead of emitting the base-vptr restore
+00f47930 352 complete frame/timer update; register allocation and call scheduling differ
+00f47b10 187 complete message handler; vtable release blocks outlined differently
+00f47c20 69 complete resource-key predicate + string assign; size/reloc shape differ
+00f47ca0 165 complete string translator/detokenizer setup; stack frame and EASTL string shape differ
+00f47ed0 6 complete; flags /O2 /MD /Gy /TP /GS- : call/vtable sequence identical (151 calls), size 2429 = original; 6 bytes differ only in register choice of the inlined 10-byte string copy

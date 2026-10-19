@@ -1,4 +1,5 @@
-00f47ed0 SP::cSporeApp::Init  # 2008 dev-build PDB name
-00f48850 EAMain  # 2008 dev-build PDB / card name
+006a17e0 ?SetBoolProperty@cDirectPropertyList@SP@@QAEXI_N@Z  # SP::cDirectPropertyList::SetBoolProperty (callee of s00f47ed0, named from the dev publics; slice address comment)
+00f47ed0 ?Init@cSporeApp_s00f4_7ed0@@QAE_NPAUCommandLine@@@Z  # cSporeApp_s00f4_7ed0::Init migrated from s00f47ed0 (verbatim, slice spelling)
+00f48850 ?EAMain@@YAHPAUCommandLine@@@Z  # EAMain migrated from s00f47ed0 (verbatim, slice spelling)
 00f48a20 FUN_00f48a20  # __stdcall(4): constructs CommandLine, calls EAMain
 00f48b00 `anonymous_namespace'::cTerrainBrushState::~cTerrainBrushState  # 2008 dev-build PDB name
