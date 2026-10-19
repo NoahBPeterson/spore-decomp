@@ -1,4 +1,4 @@
-// src/game/Spui/SPUIAnimation.cpp -- migrated from slice(s) s007f8540, s007f7530, s007f64d0 by tools/migrate/rewrite.py
+// src/game/Spui/SPUIAnimation.cpp -- migrated from slice(s) s007f5300, s007f8540, s007f7530, s007f64d0 by tools/migrate/rewrite.py
 // Object file: Spui/SPUIAnimation.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -6,6 +6,7 @@
 #include "cSPUIAnimator.h"
 #include <new>
 #include <string.h>
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void _ReadWriteBarrier();
@@ -185,8 +186,9 @@ extern void* g_013f6400;   // animation vtable (temp element +8)
 extern void* g_013f63fc;   // timer vtable (temp element +0x10)
 extern "C" void* __cdecl eastl_alloc(int n, void* a, int b, int c, const char* file, int line);
 extern "C" void  __cdecl eastl_free(void* p);
-extern "C" void  __cdecl anim_copy_body(void* dst, void* src);     // FUN_007f6ff0
+extern "C" void    __cdecl anim_assign(void* dst, void* src);         // 0x007f7970 operator=
 extern "C" void* __cdecl EA_operator_new(unsigned int size, const char* name, int a, int b, int c, int d);
+extern char VtblCAnimInfo;                  // 0x014153bc: cAnimInfo's own vtable
 struct AInfo8c_s007f_8540 {                 // cSPUIAnimationSequence::cAnimInfo, size 0x8c
     void* vf;                    // +0
     void* animVf;                // +4
@@ -200,6 +202,7 @@ struct AInfo8c_s007f_8540 {                 // cSPUIAnimationSequence::cAnimInfo
 struct IRef {                   // intrusive-refcounted interface: slot 0 AddRef, slot 1 Release
     virtual void AddRef();
     virtual void Release();
+    IRef* AddRefChain() { AddRef(); return this; }   // chained at the call site
 };
 typedef void (__cdecl *AnimActionFn)(void* self, float a, float b, int c, int d);
 struct AInfo88_s007f_8540 {                 // cSPUIAnimator::cAnimationInfo, size 0x88
@@ -236,12 +239,28 @@ struct AInfo88T : AInfo88_s007f_8540 {      // default-constructed temporary ele
         if (mpObject) mpObject->Release();
     }
 };
-extern "C" void* __cdecl vec_uninit_copy(void** srcOut, AInfo8c_s007f_8540* first, AInfo8c_s007f_8540* last, AInfo8c_s007f_8540* dst, void** srcIn);
-extern "C" void  __cdecl vec_clear_range(AInfo8c_s007f_8540* first, AInfo8c_s007f_8540* last);
-extern "C" AInfo8c_s007f_8540* __cdecl vec_move_backward(AInfo8c_s007f_8540* first, AInfo8c_s007f_8540* last, AInfo8c_s007f_8540* dst);
-extern "C" void  __cdecl vec_fill(AInfo8c_s007f_8540* first, AInfo8c_s007f_8540* last, AInfo8c_s007f_8540* src);
-extern "C" AInfo8c_s007f_8540* __cdecl cAnimInfo_ctor(AInfo8c_s007f_8540* p);             // FUN_007f8970
+extern "C" AInfo8c_s007f_8540* __cdecl eastl_uninit_copy(AInfo8c_s007f_8540* first, AInfo8c_s007f_8540* last, AInfo8c_s007f_8540* dst);   // 0x007f6ea0
+extern "C" void    __cdecl eastl_destroy_range(AInfo8c_s007f_8540* first, AInfo8c_s007f_8540* last, void* alloc);   // 0x007f5fa0
+extern "C" AInfo8c_s007f_8540* __cdecl eastl_uninit_fill_n(AInfo8c_s007f_8540* dst, uint32_t n, const void* value);  // 0x007f7a30
+extern "C" void    __cdecl eastl_fill(AInfo8c_s007f_8540* first, AInfo8c_s007f_8540* last, const void* value);      // 0x007f7ce0
+extern "C" void    __cdecl eastl_move_backward(AInfo8c_s007f_8540* first, AInfo8c_s007f_8540* last, AInfo8c_s007f_8540* dst);  // 0x007f7db0
+extern "C" void    __cdecl eastl_move_range(void* out, AInfo8c_s007f_8540* first, AInfo8c_s007f_8540* last, AInfo8c_s007f_8540* dst, void* value);  // 0x007f6e60
 void* operator new(size_t, const char* name, int a, int b, int c, int d);
+struct AInfo8cCtor { void build(const void* value); };   // 0x007f6df0 (ecx = element)
+inline AInfo8c_s007f_8540* InfoCtor(AInfo8c_s007f_8540* p, const void* value) {
+    ((AInfo8cCtor*)p)->build(value);
+    return p;
+}
+struct AInfo8cBuf { void* w[0x8c / 4]; };   // 0x8c-byte element-sized scratch buffer
+inline void InfoDefault(AInfo8c_s007f_8540* p) {
+    void** w = (void**)p;
+    w[0] = &VtblCAnimInfo;
+    w[1] = (void*)0x13f6400;
+    w[3] = (void*)0x13f63fc;
+    w[4] = 0;
+    w[0x84 / 4] = 0;
+}
+struct Vec8c_s007f_8540;
 struct Vec8c_s007f_8540 {
     AInfo8c_s007f_8540* mpBegin;            // +0
     AInfo8c_s007f_8540* mpEnd;              // +4
@@ -253,7 +272,10 @@ struct Vec8c_s007f_8540 {
 
     AInfo8c_s007f_8540* erase(AInfo8c_s007f_8540* first, AInfo8c_s007f_8540* last);
     AInfo8c_s007f_8540* erase(AInfo8c_s007f_8540* pos);
-    void reserve(uint32_t n);        // 0x007f90f0
+    void     insert(AInfo8c_s007f_8540* pos, uint32_t n, const AInfo8c_s007f_8540* value);   // 0x007f85b0
+    AInfo8c_s007f_8540* insert(AInfo8c_s007f_8540* pos, const AInfo8c_s007f_8540* value);               // 0x007f89f0
+    void     resize(uint32_t n);                                       // 0x007f8b50
+    void     reserve(uint32_t n);                                      // 0x007f90f0
 };
 struct cSPUIAnimator_s007f_8540 {
     // vptr at +0 (virtual destructor, slot 0)
@@ -277,13 +299,160 @@ struct cSPUIAnimator_s007f_8540 {
     void Update();               // 0x007f63b0
     void AddAnimation(void* anim, IRef* obj, int type);  // 0x007f8d10 (cSPUIAnimator::AddAnimation)
     void ClearAll();
-    void InsertEnd(int anim, void* obj, int type);
 
     static void* operator new(size_t n, const char* name, int a, int b, int c, int d) {
         return EA_operator_new((unsigned int)n, name, a, b, c, d);
     }
 };
 // ---- items of slice s007f8540 end
+
+// ---- items of slice s007f5300 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float g_c01;
+#define VTOBJ(p) (*(void***)(p))
+void* __cdecl FUN_009512c0();
+void* __cdecl FUN_009512d0(int size, int align, const char* name, void* caller);
+struct Callee {
+    void  f();   // 0x0095bb20 (equiv t3)
+    void  f(int);
+    void  f(void*);
+    void  f(void*, int);
+    void  f(int, int);
+    void  f(void*, int, int);
+    void  f(void*, void*, int, int);
+    void  f(float);
+    void  f(float, float);
+    void  f(float, float, float);
+    void  f6(float, float, float, float, float, float);   // 0x007fd650 (equiv t3)
+    void  resize(int);
+    void* ctor();   // 0x00804e20 (equiv t3)
+    void* ctor2(int, int);   // 0x0093a560 (equiv t3)
+    void* ctorff(float, float);
+    void* ctorf(float);   // 0x007fd610 (equiv t3)
+    bool  b();
+    bool  b(void*);
+    void* p();
+    void* p(int);   // 0x0095bc10 (equiv t3)
+    int64_t i64();   // 0x0093a3a0 (equiv t3)
+};
+struct AnimatorS {
+    char pad0[4];
+    char* mBegin;   // +4
+    char* mEnd;     // +8
+    char pad1[0xc];
+    float mLast;    // +0x18
+    bool  mActive;  // +0x1c
+    bool RemoveAnimation(void* obj, int type);
+    bool HasAnimation(void* obj, int type);
+    bool Empty();
+    void Update();
+};
+typedef void (__cdecl *AnimFn1)(void*, float, float, int, int);
+typedef bool (__cdecl *AnimFn2)(void*, float, float, int, int);
+// ---- items of slice s007f5300 end
+
+// @ 0x007f6170
+void* __cdecl CreateTimeDamped(void* out, float a2, float a3, float a4, float a5, float a6, float a7, float a8)
+{
+    *(void**)out = &g_vt_013f63fc;
+    *(void**)((char*)out + 4) = 0;
+    void* caller = FUN_009512c0();
+    void* mem = FUN_009512d0(0x50, 4, "cSPUIBehaviorTimeFunctionDampedPeriodic", caller);
+    void* obj = mem ? ((Callee*)mem)->ctorf(a5) : 0;
+    void* old = *(void**)((char*)out + 4);
+    if (obj != old) {
+        if (obj)
+            ((FV0)VTOBJ(obj)[0])(obj);
+        *(void**)((char*)out + 4) = obj;
+        if (old)
+            ((FV0)VTOBJ(old)[4 / 4])(old);
+    }
+    ((Callee*)obj)->f6(a2, a7, a8, a3, a4, a6);
+    return out;
+}
+
+// @ 0x007f6210
+bool AnimatorS::RemoveAnimation(void* obj, int type)
+{
+    if (obj == 0)
+        return false;
+    uint32_t n = (uint32_t)((mEnd - mBegin) / 0x88);
+    for (uint32_t i = 0; i < n; ++i) {
+        char* e = mBegin + i * 0x88;
+        if (*(void**)e == obj && (*(int*)(e + 4) == type || type == -1)) {
+            ((AnimFn1)*(void**)(e + 0xc))(e + 8, 0.0f, 0.0f, 1, 0);
+            void* r = *(void**)e;
+            if (r) {
+                *(void**)e = 0;
+                ((FV0)VTOBJ(r)[4 / 4])(r);
+            }
+        }
+    }
+    return false;
+}
+
+// @ 0x007f62c0
+bool cSPUIAnimator::HasAnimation(EA::COM::IRefCount * obj, unsigned int type)
+{
+    if (obj == 0)
+        return false;
+    for (uint32_t i = 0; ; ++i) {
+        _ReadWriteBarrier();
+        if (i >= (uint32_t)((((char *)mAnimationInfos.mpEnd) - ((char *)mAnimationInfos.mpBegin)) / 0x88))
+            break;
+        char* e = ((char *)mAnimationInfos.mpBegin) + i * 0x88;
+        if (*(void**)e == obj && (*(int*)(e + 4) == type || type == -1))
+            return true;
+    }
+    return false;
+}
+
+// @ 0x007f6340
+bool cSPUIAnimator::Empty()
+{
+    uint32_t n = (uint32_t)((((char *)mAnimationInfos.mpEnd) - ((char *)mAnimationInfos.mpBegin)) / 0x88);
+    for (uint32_t i = 0; i < n; ++i) {
+        char* e = ((char *)mAnimationInfos.mpBegin) + i * 0x88;
+        if (*(void**)e != 0) {
+            void* p = *(void**)(e + 0x14);
+            if (p == 0)
+                return false;
+            if (!((FPC0)VTOBJ(p)[0x3c / 4])(p))
+                return false;
+        }
+    }
+    return true;
+}
+
+// @ 0x007f63b0
+void AnimatorS::Update()
+{
+    float now = SPUIHelpers_GetElapsedSeconds();
+    if (mActive) {
+        float dt = now - mLast;
+        if (dt > g_c01)
+            dt = g_c01;
+        uint32_t n = (uint32_t)((mEnd - mBegin) / 0x88);
+        bool any = false;
+        for (uint32_t i = 0; i < n; ++i) {
+            char* e = mBegin + i * 0x88;
+            if (*(void**)e) {
+                bool r = ((AnimFn2)*(void**)(e + 0xc))(e + 8, now, dt, 2, 0);
+                if (!r) {
+                    ((AnimFn1)*(void**)(e + 0xc))(e + 8, 0.0f, 0.0f, 1, 0);
+                    void* p = *(void**)e;
+                    if (p) {
+                        *(void**)e = 0;
+                        ((FV0)VTOBJ(p)[4 / 4])(p);
+                    }
+                } else {
+                    any = true;
+                }
+            }
+        }
+        mActive = any;
+    }
+    mLast = now;
+}
 
 // @ 0x007f64d0
 bool F64D0(void* self, int a2, float a3, int phase)
@@ -1273,87 +1442,112 @@ Vec8c* Vec8c::assign(Vec8c* src)
 }
 
 // @ 0x007f85b0
-static void vec_insert_n(Vec8c_s007f_8540* v, AInfo8c_s007f_8540* pos, uint32_t n, const AInfo8c_s007f_8540* value)
+void Vec8c_s007f_8540::insert(AInfo8c_s007f_8540* pos, uint32_t n, const AInfo8c_s007f_8540* value)
 {
-    if ((uint32_t)v->capacity() < n) {
-        int oldSize = v->size();
-        uint32_t newCap = (oldSize == 0) ? 1u : (uint32_t)oldSize * 2u;
-        if (oldSize + n > (int)newCap) newCap = (uint32_t)oldSize + n;
-        AInfo8c_s007f_8540* mem = 0;
+    Vec8c_s007f_8540* v = this;
+    char* begin = (char*)v->mpBegin;
+    char* end   = (char*)v->mpEnd;
+    if ((uint32_t)(((char*)v->mpCapacity - end) / 0x8c) < n) {
+        /* reallocate: newCap = max(size + n, size == 0 ? 1 : size * 2) */
+        int      oldSize = (int)((end - begin) / 0x8c);
+        uint32_t newCap  = (oldSize == 0) ? 1u : (uint32_t)oldSize * 2u;
+        uint32_t want    = (uint32_t)oldSize + n;
+        if (want > newCap) newCap = want;
+        char* mem = 0;
         if (newCap != 0)
-            mem = (AInfo8c_s007f_8540*)eastl_alloc((int)(newCap * 0x8c), v->mAlloc, 0, 0, "alloc", 0xd1);
-        AInfo8c_s007f_8540* oldBegin = v->mpBegin;
-        void* mid = vec_uninit_copy((void**)&oldBegin, oldBegin, pos, mem, &v->mAlloc);
-        vec_clear_range(oldBegin, pos);
-        AInfo8c_s007f_8540* p = (AInfo8c_s007f_8540*)mid;
-        vec_fill(p, p + n, (AInfo8c_s007f_8540*)value);
-        AInfo8c_s007f_8540* tail = (AInfo8c_s007f_8540*)((char*)p + n * 0x8c);
-        void* endp = vec_uninit_copy((void**)&pos, pos, (AInfo8c_s007f_8540*)((char*)oldBegin + (oldSize) * 0), tail, &v->mAlloc);
-        if (oldBegin != 0 && *(int*)((char*)oldBegin - 4) != 0) eastl_free(oldBegin);
-        v->mpBegin = mem;
-        v->mpEnd = (AInfo8c_s007f_8540*)endp;
-        v->mpCapacity = (AInfo8c_s007f_8540*)((char*)mem + newCap * 0x8c);
+            mem = (char*)eastl_alloc((int)(newCap * 0x8c), v->mAlloc, 0, 0,
+                                     "EASTL/allocator.h", 0xd1);
+        char* oldBegin = (char*)v->mpBegin;
+        char* mid = (char*)eastl_uninit_copy((AInfo8c_s007f_8540*)oldBegin, pos, (AInfo8c_s007f_8540*)mem);
+        eastl_destroy_range((AInfo8c_s007f_8540*)oldBegin, pos, v->mAlloc);
+        char* afterFill = (char*)eastl_uninit_fill_n((AInfo8c_s007f_8540*)mid, n, value);
+        char* oldEnd = (char*)v->mpEnd;
+        char* newEnd = (char*)eastl_uninit_copy(pos, (AInfo8c_s007f_8540*)oldEnd, (AInfo8c_s007f_8540*)afterFill);
+        eastl_destroy_range(pos, (AInfo8c_s007f_8540*)oldEnd, v->mAlloc);
+        if (oldBegin != 0 && *(int*)(oldBegin - 4) != 0) eastl_free(oldBegin);
+        v->mpBegin    = (AInfo8c_s007f_8540*)mem;
+        v->mpEnd      = (AInfo8c_s007f_8540*)newEnd;
+        v->mpCapacity = (AInfo8c_s007f_8540*)(mem + newCap * 0x8c);
     } else if (n != 0) {
-        AInfo8c_s007f_8540* oldEnd = v->mpEnd;
-        uint32_t tail = (uint32_t)((char*)v->mpEnd - (char*)pos) / 0x8c;
+        AInfo8cBuf tmp;
+        InfoCtor((AInfo8c_s007f_8540*)&tmp, value);
+        char* oldEnd = (char*)v->mpEnd;
+        uint32_t tail = (uint32_t)((oldEnd - (char*)pos) / 0x8c);
+        char* fillEnd;
+        char* scratch = (char*)&tmp;
         if (n < tail) {
-            AInfo8c_s007f_8540* mid = (AInfo8c_s007f_8540*)((char*)v->mpEnd - n * 0x8c);
-            vec_uninit_copy((void**)&v->mpEnd, mid, v->mpEnd, v->mpEnd, &v->mAlloc);
-            v->mpEnd = (AInfo8c_s007f_8540*)((char*)v->mpEnd + n * 0x8c);
-            vec_move_backward(pos, mid, oldEnd);
-            vec_fill(pos, (AInfo8c_s007f_8540*)((char*)pos + n * 0x8c), (AInfo8c_s007f_8540*)value);
+            char* mid = oldEnd - n * 0x8c;
+            eastl_move_range(scratch, (AInfo8c_s007f_8540*)mid, (AInfo8c_s007f_8540*)oldEnd, (AInfo8c_s007f_8540*)oldEnd, scratch);
+            v->mpEnd = (AInfo8c_s007f_8540*)(oldEnd + n * 0x8c);
+            eastl_move_backward(pos, (AInfo8c_s007f_8540*)mid, (AInfo8c_s007f_8540*)oldEnd);
+            fillEnd = (char*)pos + n * 0x8c;
         } else {
-            AInfo8c_s007f_8540* extra = (AInfo8c_s007f_8540*)((char*)v->mpEnd + (n - tail) * 0x8c);
-            vec_fill(v->mpEnd, extra, (AInfo8c_s007f_8540*)value);
-            v->mpEnd = extra;
-            vec_uninit_copy((void**)&v->mpEnd, pos, oldEnd, v->mpEnd, &v->mAlloc);
+            eastl_uninit_fill_n((AInfo8c_s007f_8540*)oldEnd, n - tail, &tmp);
+            v->mpEnd = (AInfo8c_s007f_8540*)(oldEnd + (n - tail) * 0x8c);
+            eastl_move_range(scratch, pos, (AInfo8c_s007f_8540*)oldEnd, v->mpEnd, scratch);
             v->mpEnd = (AInfo8c_s007f_8540*)((char*)v->mpEnd + tail * 0x8c);
+            fillEnd = oldEnd;
         }
-        vec_fill(pos, oldEnd, (AInfo8c_s007f_8540*)value);
+        eastl_fill(pos, (AInfo8c_s007f_8540*)fillEnd, &tmp);
+        IRef* a = *(IRef**)((char*)&tmp + 0x10);
+        if (a != 0) a->Release();
+        IRef* b = *(IRef**)((char*)&tmp + 0x84);
+        if (b != 0) b->Release();
     }
 }
 
 // @ 0x007f89f0
-static AInfo8c_s007f_8540* vec_insert_one(Vec8c_s007f_8540* v, AInfo8c_s007f_8540* pos, const AInfo8c_s007f_8540* value)
+AInfo8c_s007f_8540* Vec8c_s007f_8540::insert(AInfo8c_s007f_8540* pos, const AInfo8c_s007f_8540* value)
 {
-    if (v->mpEnd != v->mpCapacity) {
-        AInfo8c_s007f_8540* oldEnd = v->mpEnd;
-        vec_move_backward(pos, oldEnd - 1, oldEnd);
-        if (oldEnd - 1 >= pos) {
-            AInfo8c_s007f_8540* t = pos;
-            t->animAction = value->animAction;
-            /* timer/refcount/data copy through the element assignment */
-            anim_copy_body(t, (void*)value);
-        }
-        v->mpEnd = oldEnd + 1;
+    Vec8c_s007f_8540* v = this;
+    char* end = (char*)v->mpEnd;
+    if (end != (char*)v->mpCapacity) {
+        char* src = (char*)value;
+        if ((char*)value >= (char*)pos && (char*)value < end) src += 0x8c;
+        /* a temporary is built at end-0x8c, then the tail is shifted right by one slot */
+        InfoCtor((AInfo8c_s007f_8540*)(end - 0x8c), value);
+        eastl_move_backward(pos, (AInfo8c_s007f_8540*)(end - 0x8c), (AInfo8c_s007f_8540*)end);
+        anim_assign(pos, src);
+        v->mpEnd = (AInfo8c_s007f_8540*)(end + 0x8c);
         return pos;
     }
-    int oldSize = v->size();
-    uint32_t newCap = (oldSize == 0) ? 1u : (uint32_t)oldSize * 2u;
-    AInfo8c_s007f_8540* mem = 0;
-    if (newCap != 0) mem = (AInfo8c_s007f_8540*)eastl_alloc((int)(newCap * 0x8c), v->mAlloc, 0, 0, "alloc", 0xd1);
-    AInfo8c_s007f_8540* oldBegin = v->mpBegin;
-    void* mid = vec_uninit_copy((void**)&oldBegin, oldBegin, pos, mem, &v->mAlloc);
-    AInfo8c_s007f_8540* p = (AInfo8c_s007f_8540*)mid;
-    if (p != 0) anim_copy_body(p, (void*)value);
-    void* endp = vec_uninit_copy((void**)&v->mpEnd, pos, v->mpEnd, p + 1, &v->mAlloc);
-    if (oldBegin != 0 && *(int*)((char*)oldBegin - 4) != 0) eastl_free(oldBegin);
-    v->mpBegin = mem;
-    v->mpEnd = (AInfo8c_s007f_8540*)endp + 1;
-    v->mpCapacity = (AInfo8c_s007f_8540*)((char*)mem + newCap * 0x8c);
-    return p;
+    int      oldSize = (int)((end - (char*)v->mpBegin) / 0x8c);
+    uint32_t newCap  = (oldSize == 0) ? 1u : (uint32_t)oldSize * 2u;
+    char* mem = 0;
+    if (newCap != 0)
+        mem = (char*)eastl_alloc((int)(newCap * 0x8c), v->mAlloc, 0, 0, "EASTL/allocator.h", 0xd1);
+    char* oldBegin = (char*)v->mpBegin;
+    char* mid = (char*)eastl_uninit_copy((AInfo8c_s007f_8540*)oldBegin, pos, (AInfo8c_s007f_8540*)mem);
+    eastl_destroy_range((AInfo8c_s007f_8540*)oldBegin, pos, v->mAlloc);
+    if (mid != 0) InfoCtor((AInfo8c_s007f_8540*)mid, value);
+    char* oldEnd = (char*)v->mpEnd;
+    char* newEnd = (char*)eastl_uninit_copy(pos, (AInfo8c_s007f_8540*)oldEnd, (AInfo8c_s007f_8540*)(mid + 0x8c));
+    eastl_destroy_range(pos, (AInfo8c_s007f_8540*)oldEnd, v->mAlloc);
+    if (oldBegin != 0 && *(int*)(oldBegin - 4) != 0) eastl_free(oldBegin);
+    v->mpBegin    = (AInfo8c_s007f_8540*)mem;
+    v->mpEnd      = (AInfo8c_s007f_8540*)newEnd;
+    v->mpCapacity = (AInfo8c_s007f_8540*)(mem + newCap * 0x8c);
+    return (AInfo8c_s007f_8540*)mid;
 }
 
 // @ 0x007f8b50
-static void vec_resize(Vec8c_s007f_8540* v, uint32_t n)
+void Vec8c_s007f_8540::resize(uint32_t n)
 {
+    Vec8c_s007f_8540* v = this;
     AInfo8c_s007f_8540* first = v->mpBegin;
-    AInfo8c_s007f_8540* end = v->mpEnd;
-    if ((uint32_t)((char*)end - (char*)first) / 0x8c < n) {
-        AInfo8c_s007f_8540 tmp;
-        memset(&tmp, 0, sizeof(tmp));
-        cAnimInfo_ctor(&tmp);
-        vec_insert_n(v, end, n - (uint32_t)((char*)end - (char*)first) / 0x8c, &tmp);
+    AInfo8c_s007f_8540* end   = v->mpEnd;
+    uint32_t have  = (uint32_t)(((char*)end - (char*)first) / 0x8c);
+    if (have < n) {
+        AInfo8cBuf tmp;
+        InfoDefault((AInfo8c_s007f_8540*)&tmp);
+        v->insert(end, n - have, (const AInfo8c_s007f_8540*)&tmp);
+        IRef* b = *(IRef**)((char*)&tmp + 0x84);
+        IRef* a = *(IRef**)((char*)&tmp + 0x10);
+        if (b != 0) b->Release();
+        if (a != 0) {
+            a->Release();
+            return;
+        }
     } else {
         v->erase((AInfo8c_s007f_8540*)((char*)first + n * 0x8c), end);
     }
@@ -1395,7 +1589,7 @@ void cSPUIAnimator_s007f_8540::AddAnimation(void* anim, IRef* obj, int type)
     AInfo88_s007f_8540* e = v->mpBegin + idx;
     IRef* old = e->mpObject;
     if (obj != old) {
-        obj->AddRef();
+        obj = obj->AddRefChain();
         e->mpObject = obj;
         if (old) old->Release();
     }

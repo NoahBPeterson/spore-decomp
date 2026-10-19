@@ -11,8 +11,8 @@
 007f5f70 array destroy loop, stride 0x8c
 007f6040 SPUICreateAnimationTimerRamp
 007f60d0 cSPUIBehaviorTimeFunctionSmoothRamp factory
-007f6170 cSPUIBehaviorTimeFunctionDampedPeriodic factory
-007f6210 cSPUIAnimator::RemoveAnimation
-007f62c0 cSPUIAnimator::HasAnimation
-007f6340 cSPUIAnimator::Empty
-007f63b0 cSPUIAnimator::Update
+007f6170 ?CreateTimeDamped@@YAPAXPAXMMMMMMM@Z  # CreateTimeDamped migrated from s007f5300 (verbatim, slice spelling)
+007f6210 ?RemoveAnimation@AnimatorS@@QAE_NPAXH@Z  # AnimatorS::RemoveAnimation migrated from s007f5300 (verbatim, slice spelling)
+007f62c0 ?HasAnimation@cSPUIAnimator@@QAE_NPAVIRefCount@COM@EA@@I@Z  # cSPUIAnimator::HasAnimation migrated from s007f5300
+007f6340 ?Empty@cSPUIAnimator@@QAE_NXZ  # cSPUIAnimator::Empty migrated from s007f5300
+007f63b0 ?Update@AnimatorS@@QAEXXZ  # AnimatorS::Update migrated from s007f5300 (verbatim, slice spelling)
