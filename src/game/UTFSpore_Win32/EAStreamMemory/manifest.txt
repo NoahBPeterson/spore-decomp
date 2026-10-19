@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAStreamMemory.cpp  ?SetSizeEx@MemoryStream_s0093_b9e0@IO@EA@@QAE_NI@Z  0093c130  /O2 /MD /Gy /TP /Isrc/game/include

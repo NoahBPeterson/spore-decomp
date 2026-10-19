@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+0093bd50 31 complete: GraphicsFactoryAsyncRequest ctor, field order differs
+0093be30 278 complete: MemoryStream::SetData, intrusive_ptr/alloc schedule differs
+0093c000 164 complete: MemoryStream grow/copy, refcount schedule differs
+0093c0c0 97 complete: MemoryStream position arithmetic, branch layout differs
+0093c150 188 complete: MemoryStream resize-on-write, float path scheduling differs
+0093c210 48 complete: scalar deleting dtor, refcount schedule differs
