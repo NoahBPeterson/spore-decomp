@@ -1,3 +1,4 @@
+008de0c0 ?ReadKey@ResourceMan@EA@@YA_NPB_WAAVKey@12@@Z  # EA::ResourceMan::ReadKey migrated from s008de020
 008de1e0 ??RChangeNotificationInfoCompare_s008d_e020@ResourceMan@EA@@QBE_NABUChangeNotificationInfo_s008d_e020@12@0@Z  # ChangeNotificationInfoCompare_s008d_e020::operator() migrated from s008de020 (verbatim, slice spelling)
 008de230 ?Fn8de230@Manager_s008d_e020@ResourceMan@EA@@QAEDHHHH@Z  # Manager_s008d_e020::Fn8de230 migrated from s008de020 (verbatim, slice spelling)
 008de280 ?GetLoadedResource@Manager_s008d_e020@ResourceMan@EA@@QAE_NHH@Z  # Manager_s008d_e020::GetLoadedResource migrated from s008de020 (verbatim, slice spelling)
