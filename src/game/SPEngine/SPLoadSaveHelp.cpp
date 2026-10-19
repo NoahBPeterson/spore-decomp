@@ -204,12 +204,148 @@ struct Big2 {
 extern "C" void* EASTL_alloc6(unsigned sz, const char* name, int a, int b, const char* file, int line); // 0xf473a0
 extern "C" void  FUN_00694320(char* first, char* last, char* dst);   // 0x694320
 extern "C" char* FUN_00694e00(char* first, char* last, char* out);  // 0x694e00
+extern char gEmptyString[];                     // @ 0x1667bac
+extern "C" char g_bTextFlag;                        // 0x01600c5c
 struct Sorter {
     void* run(char* first);
 };
 struct Vec60 {
     char* begin; char* end; char* cap;
     void reserve(unsigned int n);
+};
+namespace eastl {
+inline size_t CharStrlen(const char* p)
+{
+    const char* pCurrent = p;
+    while (*pCurrent++) {}
+    return (size_t)(pCurrent - p - 1);
+}
+}
+namespace eastl {
+struct allocator_s0069_5140 {
+    void deallocate(void* p, size_t) { delete[] (char*)p; }
+};
+}
+namespace eastl {
+struct basic_string_s0069_5140 {
+    char* mpBegin;
+    char* mpEnd;
+    char* mpCapacity;
+    allocator_s0069_5140 mAllocator;
+    basic_string_s0069_5140() : mpBegin(0), mpEnd(0), mpCapacity(0) { AllocateSelf(); }
+    ~basic_string_s0069_5140() { DeallocateSelf(); }
+    void AllocateSelf() { mpBegin = gEmptyString; mpEnd = mpBegin; mpCapacity = mpBegin + 1; }
+    void DeallocateSelf() {
+        if ((mpCapacity - mpBegin) > 1)
+            DoFree(mpBegin, mpCapacity - mpBegin);
+    }
+    void DoFree(char* p, size_t n) { if (p) mAllocator.deallocate(p, n); }
+    basic_string_s0069_5140& assign(const char* pBegin, const char* pEnd);          // @ 0x454cb0
+    basic_string_s0069_5140& assign(const char* p)
+    {
+        return assign(p, p + CharStrlen(p));
+    }
+};
+}
+namespace SP {
+struct cDataSerializerGeneric_s0069_5140 {
+    const char* mpStaticFieldName;      // +0x00
+    unsigned int mId;                   // +0x04
+    unsigned int mData[4];              // +0x08
+    void* mpBinderContext;              // +0x18
+    void* mpSetDefaultValueFunc;        // +0x1c
+    void* (*mpDataBinderFunc)(cDataSerializerGeneric_s0069_5140*);   // +0x20
+    void* mpReadFunc;                   // +0x24
+    void* mpWriteFunc;                  // +0x28
+    void* mpReadStringFunc;             // +0x2c
+    void (*mpWriteStringFunc)(eastl::basic_string_s0069_5140*, void*);   // +0x30
+    void (*mpWriteWideFunc)(void*, void*);   // +0x34
+    void* mpPad38;                      // +0x38
+};
+}
+namespace SP {
+struct cDataSerializationInfo_s0069_5140 {
+    unsigned int mId;                   // +0x0
+    unsigned int mDataSize;             // +0x4
+    bool mbSerialized;                  // +0x8
+    void* mpBinderContext;              // +0xc
+    cDataSerializerGeneric_s0069_5140* mpSerializer;   // +0x10
+};
+}
+void* DefaultDataBinder(SP::cDataSerializerGeneric_s0069_5140*);   // 0x011874d0
+struct FieldEntryBase : SP::cDataSerializerGeneric_s0069_5140 {
+    FieldEntryBase()
+    {
+        mpStaticFieldName = "field_name";
+        mId = 0xffffffff;
+        mData[0] = 0;
+        mpBinderContext = 0;
+        mpSetDefaultValueFunc = 0;
+        mpDataBinderFunc = (void* (*)(SP::cDataSerializerGeneric_s0069_5140*))DefaultDataBinder;
+        mpReadFunc = 0; mpWriteFunc = 0; mpReadStringFunc = 0; mpWriteStringFunc = 0;
+        mpWriteWideFunc = 0; mpPad38 = 0;
+    }
+};
+struct FieldEntry : FieldEntryBase {
+    void* mpObject;                     // +0x3c
+    eastl::basic_string_s0069_5140 mName;          // +0x40
+    eastl::basic_string_s0069_5140 mValue;         // +0x50
+};
+struct FieldVec {
+    FieldEntry* mpBegin; FieldEntry* mpEnd; FieldEntry* mpCapacity;
+    void reserve(unsigned n);                       // 0x00695490 (thiscall)
+    void push_back(const FieldEntry& e);            // 0x006956f0 (thiscall, ret 4)
+};
+struct WStrTmp {
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; eastl::allocator_s0069_5140 mAllocator;
+    WStrTmp() {}
+    ~WStrTmp()
+    {
+        if ((int)(((unsigned)((char*)mpCapacity - (char*)mpBegin)) & 0xfffffffeu) > 2 && mpBegin)
+            mAllocator.deallocate(mpBegin, 0);
+    }
+};
+struct CharString : eastl::basic_string_s0069_5140 {
+    CharString& sprintf(const char* fmt, ...);      // 0x00472fe0 (cdecl, this pushed)
+};
+WStrTmp ConvertToString16(const eastl::basic_string_s0069_5140& s);       // 0x0093c6d0 (cdecl, sret first)
+struct WStrTmpVec { void push_back(const WStrTmp& s); };          // 0x00553f10 (thiscall, ret 4)
+struct SubA { void Reserve(int n); };                       // 0x006b58c0 (thiscall, ret 4)
+struct SubB { void Reserve(int n); };                       // 0x006953b0 (thiscall, ret 4)
+struct FieldReport {
+    char pad0[4];
+    SubA mFields;                       // +0x04
+    char pad1[0x5c - 0x04 - 1];
+    SubB mTexts;                        // +0x5c
+};
+namespace SP {
+struct cVarListSerializer_s0069_5140 {
+    cDataSerializationInfo_s0069_5140 mDataSerializationInfos[128];   // +0x0
+    int mSerializableVarCount;                              // +0xa00
+    int mSerializedVarCount;                                // +0xa04
+    unsigned int mSignature;                                // +0xa08
+    void* mpObject;                                         // +0xa0c
+    cDataSerializerGeneric_s0069_5140* mpSerializerList;               // +0xa10
+    int GetFields(FieldVec& out);  // 0x00695960 (SP::cVarListSerializer::GetFields)
+    int Execute(FieldReport* report);
+};
+}
+struct Obj60_s0069_5140 {
+    char d[0x60];
+    Obj60_s0069_5140(const Obj60_s0069_5140& o);                                          // 0x006940d0 (thiscall, ret 4)
+    Obj60_s0069_5140& operator=(const Obj60_s0069_5140& o);                               // 0x006941c0 (thiscall, ret 4)
+};
+Obj60_s0069_5140* UninitCopy60(Obj60_s0069_5140* first, Obj60_s0069_5140* last, Obj60_s0069_5140* dst);         // 0x00694320 (cdecl)
+Obj60_s0069_5140* UninitFill60(Obj60_s0069_5140* first, Obj60_s0069_5140* last, Obj60_s0069_5140* dst);         // 0x00694e00 (cdecl)
+void   CopyBackward60(Obj60_s0069_5140* first, Obj60_s0069_5140* last, Obj60_s0069_5140* dstEnd);    // 0x006943b0 (cdecl)
+struct Vec60b {
+    Obj60_s0069_5140* mpBegin; Obj60_s0069_5140* mpEnd; Obj60_s0069_5140* mpCapacity;
+    Obj60_s0069_5140* DoAllocate(unsigned n)
+    {
+        return n ? (Obj60_s0069_5140*)EASTL_alloc6(n * 0x60, "App", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+    }
+    void DoInsertValue(Obj60_s0069_5140* position, const Obj60_s0069_5140& value);
 };
 // ---- items of slice s00695140 end
 
@@ -234,9 +370,6 @@ void cVarListSerializer::Init(void* obj, cDataSerializerGeneric* list, unsigned 
     }
 }
 
-
-
-
 // @ 0x00692c50
 void cVarListSerializer::Unload()
 {
@@ -254,17 +387,11 @@ void cVarListSerializer::Unload()
     }
 }
 
-
-
-
 // @ 0x00692ca0
 int Info_AddOffset(void* p)
 {
     return *(int*)((char*)p + 0x18) + *(int*)((char*)p + 8);
 }
-
-
-
 
 // @ 0x00692cb0
 void SortRecords_A(void* first, void* last)
@@ -281,9 +408,6 @@ void SortRecords_A(void* first, void* last)
     }
 }
 
-
-
-
 // @ 0x00692e00
 unsigned char WriteBlob32(void* writer, BlobRange* range)
 {
@@ -294,9 +418,6 @@ unsigned char WriteBlob32(void* writer, BlobRange* range)
     return 1;
 }
 
-
-
-
 // @ 0x00692e50
 unsigned char WriteBlob16(void* writer, BlobRange* range)
 {
@@ -306,9 +427,6 @@ unsigned char WriteBlob16(void* writer, BlobRange* range)
     if (size != 0) return (unsigned char)EA_IO_WriteUint16(writer, range->mpBegin, size, 1);
     return 1;
 }
-
-
-
 
 // @ 0x00692ee0
 void RegList_Resolve()
@@ -325,9 +443,6 @@ void RegList_Resolve()
     }
 }
 
-
-
-
 // @ 0x00692f20
 void RegList_Release()
 {
@@ -343,9 +458,6 @@ void RegList_Release()
     }
 }
 
-
-
-
 // @ 0x00692f60
 cRegNode* cRegNode::Construct(void* data)
 {
@@ -358,18 +470,12 @@ cRegNode* cRegNode::Construct(void* data)
     return this;
 }
 
-
-
-
 // @ 0x00692f90
 cVarListSerializer* cVarListSerializer_Construct(cVarListSerializer* self, void* obj, cDataSerializerGeneric* list, unsigned int sig)
 {
     self->Init(obj, list, sig);
     return self;
 }
-
-
-
 
 // @ 0x00692fb0
 void ClearBuffer(signed char** p)
@@ -380,9 +486,6 @@ void ClearBuffer(signed char** p)
     }
 }
 
-
-
-
 // @ 0x00692fd0
 void ParseInt64(const char** src, long long* out)
 {
@@ -390,50 +493,29 @@ void ParseInt64(const char** src, long long* out)
     out[0] = FUN_0092d6f0(s, 0, 10);
 }
 
-
-
-
 // @ 0x00692ff0
 void ParseLong(const char** src, long* out)
 { const char* s = src[0]; out[0] = atol(s); }
-
-
-
 
 // @ 0x00693010
 void ParseShort(const char** src, short* out)
 { const char* s = src[0]; out[0] = (short)atol(s); }
 
-
-
-
 // @ 0x00693030
 void ParseUShort(const char** src, unsigned short* out)
 { const char* s = src[0]; out[0] = (unsigned short)strtoul(s, 0, 10); }
-
-
-
 
 // @ 0x00693050
 void ParseChar(const char** src, signed char* out)
 { const char* s = src[0]; out[0] = (signed char)atol(s); }
 
-
-
-
 // @ 0x00693070
 void ParseUChar(const char** src, unsigned char* out)
 { const char* s = src[0]; out[0] = (unsigned char)strtoul(s, 0, 10); }
 
-
-
-
 // @ 0x00693090
 void ParseULong(const char** src, unsigned long* out)
 { const char* s = src[0]; out[0] = strtoul(s, 0, 10); }
-
-
-
 
 // @ 0x006930b0
 void ParseFloat(const char** src, float* out)
@@ -443,37 +525,23 @@ void ParseFloat(const char** src, float* out)
     out[0] = (float)v;
 }
 
-
-
-
 // @ 0x006930d0
 void ParseVector2(const char** src, float* out)
 { sscanf(*src, "%f,%f", out, out + 1); }
-
-
-
 
 // @ 0x006930f0
 void ParseVector3(const char** src, float* out)
 { sscanf(*src, "%f,%f,%f", out, out + 1, out + 2); }
 
-
-
-
 // @ 0x00693120
 void ParseVector4(const char** src, float* out)
 { sscanf(*src, "%f,%f,%f", out, out + 1, out + 2, out + 3); }
-
-
-
 
 // @ 0x00693150
 void ParseColorRGB(const char** src, unsigned int* out)
 {
     sscanf(*src, "0x%08x,0x%08x,0x%08x", out, out + 2, out + 1);
 }
-
-
 
 // @ 0x00693320
 extern "C" void FUN_00693280(Elem* first, int topPosition, int heapSize, int position, Elem value, int cmp);
@@ -484,8 +552,6 @@ extern "C" __declspec(noinline) void FUN_00693320(Elem* first, Elem* last, int c
     int n = (int)((char*)last - (char*)first) / 60 - 1;
     FUN_00693280(first, 0, n, 0, value, cmp);
 }
-
-
 
 // @ 0x00693900
 extern "C" void __fastcall FUN_00693900(C3* self)
@@ -509,8 +575,6 @@ extern "C" void __fastcall FUN_00693900(C3* self)
         vcall4(t);
     }
 }
-
-
 
 // @ 0x006939b0
 int C3::bindA(void* obj, void* a, void* b, void* c)
@@ -541,8 +605,6 @@ int C3::bindA(void* obj, void* a, void* b, void* c)
     return (p4 != 0 && p8 != 0) ? 1 : 0;
 }
 
-
-
 // @ 0x00693aa0
 int C3::bindB(void* obj, void* a, void* b, void* c)
 {
@@ -572,8 +634,6 @@ int C3::bindB(void* obj, void* a, void* b, void* c)
     return (p4 != 0 && p8 != 0) ? 1 : 0;
 }
 
-
-
 // @ 0x00693b90
 extern "C" void FUN_00693b90(Elem* first, Elem* last, int cmp)
 {
@@ -589,8 +649,6 @@ extern "C" void FUN_00693b90(Elem* first, Elem* last, int cmp)
     } while (parent != 0);
 }
 
-
-
 // @ 0x00693c10
 extern "C" void FUN_00693c10(Elem* first, Elem* last, int cmp)
 {
@@ -602,8 +660,6 @@ extern "C" void FUN_00693c10(Elem* first, Elem* last, int cmp)
         count = (int)((char*)last - (char*)first) / 60;
     }
 }
-
-
 
 // @ 0x00693c70
 extern "C" bool FUN_00693c70(void* io, CString* str)
@@ -625,8 +681,6 @@ extern "C" bool FUN_00693c70(void* io, CString* str)
     return true;
 }
 
-
-
 // @ 0x00693cd0
 C3* C3::ctorA(void* a, void* b, void* c, void* d)
 {
@@ -636,8 +690,6 @@ C3* C3::ctorA(void* a, void* b, void* c, void* d)
     bindA(a, b, d, c);
     return this;
 }
-
-
 
 // @ 0x00693d60
 C3* C3::ctorB(void* a, void* b, void* c, void* d)
@@ -649,14 +701,11 @@ C3* C3::ctorB(void* a, void* b, void* c, void* d)
     return this;
 }
 
-
-
 // @ 0x006940d0
 Obj::Obj(const Obj& src)
 : h(src.h), x(src.x), s1(src.s1), s2(src.s2)
 {
 }
-
 
 // @ 0x00694210
 Elem* FUN_00694210(Elem* first, Elem* last, Elem value)
@@ -676,7 +725,6 @@ Elem* FUN_00694210(Elem* first, Elem* last, Elem value)
     return first;
 }
 
-
 // @ 0x00694270
 void FUN_00694270(Elem* first, Elem* mid, Elem* last, int cmp)
 {
@@ -694,7 +742,6 @@ void FUN_00694270(Elem* first, Elem* mid, Elem* last, int cmp)
     FUN_00693c10(first, mid, cmp);
 }
 
-
 // @ 0x006943b0
 extern "C" Obj60* FUN_006943b0(Obj60* first, Obj60* last, Obj60* out)
 {
@@ -711,7 +758,6 @@ extern "C" Obj60* FUN_006943b0(Obj60* first, Obj60* last, Obj60* out)
     }
     return out;
 }
-
 
 // @ 0x00694440
 bool FUN_00694440(VStream* io, Variant* v, int endian)
@@ -896,14 +942,12 @@ bool FUN_00694440(VStream* io, Variant* v, int endian)
     return false;
 }
 
-
 // @ 0x00694bf0
 extern "C" void FUN_00694bf0(CString_s0069_4210* dst, CString_s0069_4210* src)
 {
     if (src != dst)
         dst->assign(src->begin, src->end);
 }
-
 
 // @ 0x00694c10
 extern "C" void FUN_00694c10(StrBuf* dst, void* v)
@@ -917,7 +961,6 @@ extern "C" void FUN_00694c10(StrBuf* dst, void* v)
         dst->assign(r->begin, r->end);
     tmp.dtor();
 }
-
 
 // @ 0x00694d00
 void FUN_00694d00(Elem* first, Elem* last, int depth, int cmp)
@@ -948,7 +991,6 @@ void FUN_00694d00(Elem* first, Elem* last, int depth, int cmp)
     }
 }
 
-
 // @ 0x00694e00
 extern "C" char* FUN_00694e00(char* first, char* last, char* out)
 {
@@ -965,7 +1007,6 @@ extern "C" char* FUN_00694e00(char* first, char* last, char* out)
     }
     return out;
 }
-
 
 // @ 0x00694e60
 void Big2::init(void* a)
@@ -986,71 +1027,57 @@ void Big2::init(void* a)
     f70 = 0;
 }
 
-
 // @ 0x00694ec0
 extern "C" void FUN_00694ec0(void* dst, unsigned __int64* p)
 { EA_sprintf(dst, "%I64u", *p); }
-
 
 // @ 0x00694ee0
 extern "C" void FUN_00694ee0(void* dst, unsigned int* p)
 { EA_sprintf(dst, "%u", *p); }
 
-
 // @ 0x00694f00
 extern "C" void FUN_00694f00(void* dst, int* p)
 { EA_sprintf(dst, "%d", *p); }
-
 
 // @ 0x00694f20
 extern "C" void FUN_00694f20(void* dst, short* p)
 { EA_sprintf(dst, "%d", (int)*p); }
 
-
 // @ 0x00694f40
 extern "C" void FUN_00694f40(void* dst, unsigned short* p)
 { EA_sprintf(dst, "%d", (int)*p); }
-
 
 // @ 0x00694f60
 extern "C" void FUN_00694f60(void* dst, signed char* p)
 { EA_sprintf(dst, "%d", (int)*p); }
 
-
 // @ 0x00694f80
 extern "C" void FUN_00694f80(void* dst, unsigned char* p)
 { EA_sprintf(dst, "%d", (int)*p); }
-
 
 // @ 0x00694fa0
 extern "C" void FUN_00694fa0(void* dst, unsigned char* p)
 { EA_sprintf(dst, "%d", (int)*p); }
 
-
 // @ 0x00694fc0
 extern "C" void FUN_00694fc0(void* dst, float* p)
 { EA_sprintf(dst, "%f", (double)*p); }
-
 
 // @ 0x00694fe0
 extern "C" void FUN_00694fe0(void* dst, float* p)
 { EA_sprintf(dst, "%f,%f", (double)p[0], (double)p[1]); }
 
-
 // @ 0x00695010
 extern "C" void FUN_00695010(void* dst, float* p)
 { EA_sprintf(dst, "%f,%f,%f", (double)p[0], (double)p[1], (double)p[2]); }
-
 
 // @ 0x00695040
 extern "C" void FUN_00695040(void* dst, float* p)
 { EA_sprintf(dst, "%f,%f,%f,%f", (double)p[0], (double)p[1], (double)p[2], (double)p[3]); }
 
-
 // @ 0x00695080
 extern "C" void FUN_00695080(void* dst, unsigned int* p)
 { EA_sprintf(dst, "0x%08x,0x%08x,0x%08x", p[0], p[2], p[1]); }
-
 
 // @ 0x006950b0
 void FUN_006950b0(Elem* first, Elem* last, int cmp)
@@ -1108,4 +1135,83 @@ void Vec60::reserve(unsigned int n)
         end = ((end - oldbegin) / 0x60) * 0x60 + p;
         cap = n * 0x60 + p;
     }
+}
+
+// @ 0x00695550
+void Vec60b::DoInsertValue(Obj60_s0069_5140* position, const Obj60_s0069_5140& value)
+{
+    if (mpEnd != mpCapacity) {
+        const Obj60_s0069_5140* pValue = &value;
+        if ((&value >= position) && (&value < mpEnd))
+            ++pValue;
+        ::new(mpEnd) Obj60_s0069_5140(*(mpEnd - 1));
+        CopyBackward60(position, mpEnd - 1, mpEnd);
+        *position = *pValue;
+        ++mpEnd;
+    } else {
+        unsigned nPrevSize = (unsigned)(mpEnd - mpBegin);
+        unsigned nNewSize = nPrevSize ? 2 * nPrevSize : 1;
+        Obj60_s0069_5140* const pNewData = DoAllocate(nNewSize);
+        Obj60_s0069_5140* pNewPosition = UninitCopy60(mpBegin, position, pNewData);
+        UninitFill60(mpBegin, position, pNewData);
+        ::new(pNewPosition) Obj60_s0069_5140(value);
+        Obj60_s0069_5140* pNewEnd = UninitCopy60(position, mpEnd, pNewPosition + 1);
+        UninitFill60(position, mpEnd, pNewPosition + 1);
+        if (mpBegin && ((int*)mpBegin)[-1])
+            operator_delete_arr(mpBegin);
+        mpEnd = pNewEnd;
+        mpBegin = pNewData;
+        mpCapacity = pNewData + nNewSize;
+    }
+}
+
+// @ 0x00695770
+int SP::cVarListSerializer_s0069_5140::Execute(FieldReport* report)
+{
+    if (g_bTextFlag)
+        report->mTexts.Reserve(mSerializableVarCount);
+    report->mFields.Reserve(mSerializableVarCount);
+    for (int i = 0; i < mSerializableVarCount; ++i) {
+        cDataSerializationInfo_s0069_5140& info = mDataSerializationInfos[i];
+        cDataSerializerGeneric_s0069_5140* ser = info.mpSerializer;
+        if (ser->mpBinderContext == 0)
+            ser->mpBinderContext = mpObject;
+        if (ser->mpWriteWideFunc && ser->mpDataBinderFunc)
+            ser->mpWriteWideFunc(report, ser->mpDataBinderFunc(ser));
+        if (g_bTextFlag) {
+            const char* name = ser->mpStaticFieldName;
+            CharString value;
+            if (ser->mpWriteStringFunc && ser->mpDataBinderFunc) {
+                ser->mpWriteStringFunc(&value, ser->mpDataBinderFunc(ser));
+                if (value.mpBegin != value.mpEnd) {
+                    CharString tagged;
+                    tagged.sprintf("<%s>%s</%s>", name, value.mpBegin, name);
+                    ((WStrTmpVec*)&report->mTexts)->push_back(ConvertToString16(tagged));
+                }
+            }
+        }
+        ser->mpBinderContext = info.mpBinderContext;
+    }
+    return mSerializableVarCount;
+}
+
+// @ 0x00695960
+int SP::cVarListSerializer_s0069_5140::GetFields(FieldVec& out)
+{
+    out.reserve(mSerializableVarCount);
+    for (int i = 0; i < mSerializableVarCount; ++i) {
+        cDataSerializationInfo_s0069_5140& info = mDataSerializationInfos[i];
+        cDataSerializerGeneric_s0069_5140* ser = info.mpSerializer;
+        if (ser->mpBinderContext == 0)
+            ser->mpBinderContext = mpObject;
+        FieldEntry entry;
+        entry.mName.assign(ser->mpStaticFieldName);
+        entry.mpObject = mpObject;
+        *static_cast<cDataSerializerGeneric_s0069_5140*>(&entry) = *ser;
+        if (ser->mpWriteStringFunc && ser->mpDataBinderFunc)
+            ser->mpWriteStringFunc(&entry.mValue, ser->mpDataBinderFunc(ser));
+        ser->mpBinderContext = info.mpBinderContext;
+        out.push_back(entry);
+    }
+    return mSerializableVarCount;
 }
