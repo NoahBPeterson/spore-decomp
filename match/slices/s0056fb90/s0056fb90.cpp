@@ -97,6 +97,58 @@ StreamElem::StreamElem(const StreamElem& src) : key(src.key), meta(src.meta)
 {
 }
 
+// ---------------------------------------------------------------- rig block-key set (0x015e4a1c)
+struct SetPair { void* first; void* second; };
+struct VectorSetU32 {
+    void*    mpBegin;                   // +0
+    void*    mpEnd;                     // +4  (0x015e4a20)
+    void*    mpCapacity;                // +8
+    uint32_t mAllocator;                // +0xc
+    void  insert(void* position, const void* value);      // 0x00554020
+    void  eraseKey(const void* value);                    // 0x005540d0
+    void  equal_range(SetPair* out, const void* value);   // 0x00555980
+};
+VectorSetU32 g_rigBlockSet;             // 0x015e4a1c
+
+struct Elem1cB {                        // 0x1c-byte element: 4-byte key + 0x18-byte payload
+    uint32_t key;                       // +0
+    struct Payload {
+        char b[0x18];
+        void DoDestroyValues();         // 0x00553fb0 (thiscall ret 0)
+        void AssignFrom(const void* src);  // 0x0050d440 (thiscall ret 4)
+    } body;                            // +4
+};
+Elem1cB* UninitCopyB(Elem1cB* first, Elem1cB* last, Elem1cB* dst);   // 0x00570400 (cdecl)
+
+struct Key1c {
+    uint32_t a; uint32_t b;
+    bool operator<(const Key1c& k) const;    // @ 0x005715d0
+    bool operator==(const Key1c& k) const;   // @ 0x00571610
+};
+
+// ---------------------------------------------------------------- cFeatureVector (0x1c bytes)
+struct FeatureVector {
+    void*    mpBegin;                   // +0
+    void*    mpEnd;                     // +4
+    void*    mpCapacity;                // +8
+    uint32_t mAllocator;                // +0xc
+    void* begin();                      // 0x005716c0
+    void* end();                        // 0x005716e0
+    void  clear();                      // 0x00571680
+    float add(const void* key, float weight);   // 0x00571790 (thiscall ret 8)
+};
+struct Elem12 {                         // entry of a cFeatureVector: 8-byte key + float
+    Key1c key;                          // +0
+    float f;                            // +8
+};
+struct TraitData {                      // object holding two cFeatureVector members
+    FeatureVector mBase;                // +0
+    char          pad[0x1c - 0x10];     // +0x10
+    FeatureVector mExtra;               // +0x1c
+    float Intersect(FeatureVector* lhs, FeatureVector* rhs);   // 0x005704c0 (ret 8)
+    void  Blend(bool positive, FeatureVector* src, uint32_t amount);   // 0x005708d0 (ret 0xc)
+};
+
 // ---------------------------------------------------------------- vector<StreamElem>::DoInsertValue
 struct Str16 {                          // eastl::basic_string<wchar_t> (16 bytes with allocator)
     wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; uint32_t mAlloc;
@@ -106,6 +158,8 @@ struct MetaI {                          // float weight + description string
     float f;
     Str16 str;
     MetaI(const MetaI& s) : f(s.f), str(s.str) {}
+    void* CopyInit(const MetaI* src);   // 0x0056b020 (thiscall ret 4)
+    void  FreeBuffer();                 // 0x004237d0 (thiscall ret 0, frees str's buffer)
 };
 struct MetaO {                          // same layout; copy ctor is the out-of-line one
     float f;
@@ -207,7 +261,6 @@ Pair8* LowerBoundPair(Pair8* first, Pair8* last, const Pair8* key)
     return first;
 }
 
-struct Key1c { uint32_t a; uint32_t b; };
 struct Elem1c {
     char pad[0x1c];
     bool operator<(const Key1c& k) const;   // @ 0x005715d0
@@ -274,31 +327,174 @@ void HashTable::DoFreeNodes(HashNode** pNodeArray, uint32_t n)
     }
 }
 
-void* MoveDestroyRange(void* first, void* last, void* dst);           // @ 0x005702c0
-void* MoveDestroyRange(void* first, void* last, void* dst)
+// @ 0x005702c0
+// Copy the 0x1c-byte elements [first,last) into dst, then tear down the source
+// range: destroy each element's payload object, and (debug allocator path, dead
+// here) hand the raw storage back to operator delete[].
+void* CopyDestroyRange1c(void* first, void* last, void* dst)
 {
-    void* r = 0;
-    for (char* p = (char*)first; p != last; p += 0x1c)
-        dst = (char*)dst + 0x1c;
-    return r;
+    void* result = UninitCopyB((Elem1cB*)first, (Elem1cB*)last, (Elem1cB*)dst);
+    const bool bBlocks = false;
+    ScratchSlots<18>();
+    char* src = (char*)first;
+    char* out = (char*)dst;
+    for (; src != last; src += 0x1c, out += 0x1c) {
+        ((Elem1cB*)src)->body.DoDestroyValues();
+        if (bBlocks) {
+            ScratchSlots<4>();
+            ::operator delete[](src);
+        }
+    }
+    return result;
 }
 
-struct UnkClass_00570330 { void Method(void* a); };                   // @ 0x00570330
-void UnkClass_00570330::Method(void*) { /* partial */ }
-
-struct UnkClass_00570400 { void Method(void* a, void* b, void* c); }; // @ 0x00570400
-void UnkClass_00570400::Method(void*, void*, void*) { /* partial */ }
-
-extern void* g_015e4a1c;
-void UnkInsert_00570480(int key, bool flag);                          // @ 0x00570480
-void UnkInsert_00570480(int key, bool flag)
+// @ 0x00570330
+// Uninitialized copy of the 0x1c-byte {Key,MetaI} elements [first,last) to dst,
+// destroying the source MetaI strings afterwards.
+ElemI* UninitCopy(ElemI* first, ElemI* last, ElemI* dst)
 {
-    /* partial: dispatches to one of two global-singleton methods */
-    (void)key; (void)flag;
+    const bool bUnused = false;
+    ScratchSlots<2>();
+    ElemI* src = first;
+    ElemI* out = dst;
+    for (; src != last; ++src, ++out) {
+        ElemI* pElem = out;
+        ElemI* pCreated;
+        if (pElem != 0) {
+            pElem->key = src->key;
+            pElem->meta.CopyInit(&src->meta);
+            pCreated = pElem;
+        } else {
+            pCreated = 0;
+        }
+        (void)pCreated;
+    }
+    ElemI* result = out;
+    const bool bBlocks = false;
+    ElemI* freeSrc = first;
+    ElemI* freeDst = dst;
+    for (; freeSrc != last; ++freeSrc, ++freeDst) {
+        freeSrc->meta.FreeBuffer();
+        if (bBlocks) {
+            ScratchSlots<4>();
+            ::operator delete[](freeSrc);
+        }
+    }
+    (void)bUnused;
+    return result;
 }
 
-struct UnkClass_005704c0 { void Method(void* a); };                   // @ 0x005704c0
-void UnkClass_005704c0::Method(void*) { /* partial */ }
+// @ 0x00570400
+// Uninitialized copy of the 0x1c-byte {uint32,payload} elements [first,last) to dst.
+Elem1cB* UninitCopyB(Elem1cB* first, Elem1cB* last, Elem1cB* dst)
+{
+    const bool bUnused = false;
+    Elem1cB* out = dst;
+    Elem1cB* src;
+    for (src = first; src != last; src = src + 1) {
+        Elem1cB* pElem = out;
+        Elem1cB* pCreated;
+        if (pElem != 0) {
+            pElem->key = src->key;
+            pElem->body.AssignFrom(&src->body);
+            pCreated = pElem;
+        } else {
+            pCreated = 0;
+        }
+        (void)pCreated;
+        out = out + 1;
+    }
+    (void)bUnused;
+    return out;
+}
+
+// @ 0x00570480
+// Insert (or drop) one rig-block key in the global block-key set.
+void RigBlockSetInsert(uint32_t key, bool bInsert)
+{
+    SetPair stack;
+    ScratchSlots<22>();
+    if (bInsert) {
+        g_rigBlockSet.insert(&stack, &key);
+    } else {
+        g_rigBlockSet.eraseKey(&key);
+    }
+}
+
+// @ 0x005704c0
+// Weighted intersection of two cFeatureVector maps: the weight of every key that
+// is also present in the global rig-block set, summed with a greedy merge of the
+// two sorted key runs.
+float TraitData::Intersect(FeatureVector* lhs, FeatureVector* rhs)
+{
+    // Declaration order chosen to reproduce the original /Od slot order.
+    ScratchSlots<17>();
+    Elem12* itA = (Elem12*)lhs->begin();
+    Elem12* endA;
+    Elem12* endB;
+    Elem12* itB = (Elem12*)rhs->begin();
+    endA = (Elem12*)lhs->end();
+    endB = (Elem12*)rhs->end();
+    float sum = 0.0f;
+    while (itA != endA && itB != endB) {
+        while (itA != endA && itB != endB && itA->key < itB->key) {
+            Elem12* saved1 = itA;
+            SetPair pair1;
+            g_rigBlockSet.equal_range(&pair1, saved1);
+            Elem12* found1 = (pair1.first == pair1.second) ? (Elem12*)g_rigBlockSet.mpEnd : (Elem12*)pair1.first;
+            if (found1 != (Elem12*)g_rigBlockSet.mpEnd) {
+                sum += saved1->f;
+            }
+            itA += 1;
+        }
+        while (itA != endA && itB != endB && itB->key < itA->key) {
+            Elem12* saved2 = itB;
+            SetPair pair2;
+            g_rigBlockSet.equal_range(&pair2, saved2);
+            Elem12* found2 = (pair2.first == pair2.second) ? (Elem12*)g_rigBlockSet.mpEnd : (Elem12*)pair2.first;
+            if (found2 != (Elem12*)g_rigBlockSet.mpEnd) {
+                sum += saved2->f;
+            }
+            itB += 1;
+        }
+        while (itA->key == itB->key && itA != endA && itB != endB) {
+            Elem12* saved3 = itA;
+            float w3 = itB->f;
+            SetPair pair3;
+            g_rigBlockSet.equal_range(&pair3, saved3);
+            Elem12* found3 = (pair3.first == pair3.second) ? (Elem12*)g_rigBlockSet.mpEnd : (Elem12*)pair3.first;
+            if (found3 != (Elem12*)g_rigBlockSet.mpEnd) {
+                if (w3 > saved3->f) {
+                    sum += w3 - saved3->f;
+                } else {
+                    sum += saved3->f - w3;
+                }
+            }
+            itA += 1;
+            itB += 1;
+        }
+    }
+    while (itA != endA && itB == endB) {
+        Elem12* saved4 = itA;
+        SetPair pair4;
+        g_rigBlockSet.equal_range(&pair4, saved4);
+        Elem12* found4 = (pair4.first == pair4.second) ? (Elem12*)g_rigBlockSet.mpEnd : (Elem12*)pair4.first;
+        if (found4 != (Elem12*)g_rigBlockSet.mpEnd) {
+            sum += saved4->f;
+        }
+        itA += 1;
+    }
+    for (; itA == endA && itB != endB; itB += 1) {
+        Elem12* saved5 = itB;
+        SetPair pair5;
+        g_rigBlockSet.equal_range(&pair5, saved5);
+        Elem12* found5 = (pair5.first == pair5.second) ? (Elem12*)g_rigBlockSet.mpEnd : (Elem12*)pair5.first;
+        if (found5 != (Elem12*)g_rigBlockSet.mpEnd) {
+            sum += saved5->f;
+        }
+    }
+    return sum;
+}
 
 // ---------------------------------------------------------------- object with two sub-inits
 struct Sub { void Init(); };                                          // @ 0x00571640
@@ -329,5 +525,26 @@ Big* Big::Init()
     return this;
 }
 
-struct UnkClass_005708d0 { void Method(void* a); };                   // @ 0x005708d0
-void UnkClass_005708d0::Method(void*) { /* partial */ }
+// @ 0x005708d0
+// Copy every key of src into mBase scaled by +-1, then rebuild mExtra with each
+// mBase weight renormalised by `amount` over the original weight.
+// Local names chosen via tools/matching/od_names.py to reproduce the /Od slot order.
+void TraitData::Blend(bool positive, FeatureVector* vec, uint32_t amount)
+{
+    float n30 = 1.0f;
+    if (!positive) {
+        n30 = -n30;
+    }
+    Elem12* p30 = (Elem12*)vec->begin();
+    Elem12* v = (Elem12*)vec->end();
+    for (; p30 != v; p30 += 1) {
+        mBase.add(p30, n30);
+    }
+    mExtra.clear();
+    Elem12* t32 = (Elem12*)mBase.begin();
+    Elem12* t21 = (Elem12*)mBase.end();
+    for (; t32 != t21; t32 += 1) {
+        Elem12* b = t32;
+        mExtra.add(b, amount / (double)b->f);
+    }
+}
