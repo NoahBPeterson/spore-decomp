@@ -1217,6 +1217,11 @@ class Rewrite:
         self.manual = {}
         if os.path.exists(self.renames_path):
             self.manual = json.load(open(self.renames_path)).get("manual", {})
+        # VA keys are 8 lowercase hex digits; `"0x00931e10"` / `"00931E10"` were silently ignored (mig10 EAFileStream's hold)
+        for sec, v in list(self.manual.items()):
+            if isinstance(v, dict):
+                self.manual[sec] = {(k.lower()[2:] if k.lower().startswith("0x") else k.lower()).zfill(8)
+                                    if re.fullmatch(r"(?:0[xX])?[0-9a-fA-F]{5,8}", k) else k: w for k, w in v.items()}
         self.notes = []          # (kind, text) for the report
         self.explicit_this_methods()
         self.class_map = {}      # slice struct -> canonical class
