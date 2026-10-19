@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPSaveAreas.cpp  ?SP_SaveResource@@YAXPAXID@Z  006b1d50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPSaveAreas.cpp  ?IsSaveArea@SP@@YA_NPBVDatabase@ResourceMan@EA@@@Z  006b1f60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPSaveAreas.cpp  ?SP_GetSaveArea@@YAPAXI@Z  006b1f90  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPSaveAreas.cpp  ?FlushAllSaveAreas@SP@@YAXXZ  006b1fc0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPSaveAreas.cpp  ?SP_UpdateSaveAreas@@YAPAXPAX@Z  006b22a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPSaveAreas.cpp  ?FUN_006b22f0@@YAPAXPAX@Z  006b22f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPSaveAreas.cpp  ?SP_SomethingAllSaveAreas@@YAXXZ  006b2350  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPSaveAreas.cpp  ?FUN_006b3610@@YAXXZ  006b3610  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPSaveAreas.cpp  ?SP_RegisterSaveArea@@YAXIPAX0@Z  006b3760  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

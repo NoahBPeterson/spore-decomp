@@ -1,0 +1,4 @@
+# Incomplete / skeleton.
+006b2110  387  ReadExtensionMappingsFromPropFile; skeleton only
+006b2400  176  save-area helper; skeleton only
+006b2620  454  SP::CreateDirectorySave; skeleton only

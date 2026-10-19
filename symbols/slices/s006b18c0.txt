@@ -1,7 +1,16 @@
-006b1d50 SP::SaveResource  # work/xmatch/matches.json dev-name match
-006b1f60 SP::IsSaveArea  # work/xmatch/matches.json dev-name match
-006b1f90 SP::GetSaveArea  # work/xmatch/matches.json dev-name match
-006b1fc0 SP::FlushAllSaveAreas  # work/xmatch/matches.json dev-name match
-006b2110 ReadExtensionMappingsFromPropFile  # work/xmatch/matches.json dev-name match
-006b22a0 SP::UpdateSaveAreas  # work/xmatch/matches.json dev-name match
-006b2620 SP::CreateDirectorySave  # work/xmatch/matches.json dev-name match
+006b1d50 ?SP_SaveResource@@YAXPAXID@Z  # SP_SaveResource migrated from s006b18c0 (verbatim, slice spelling)
+006b1dc0 ?Ctor@RefPair@@QAEPAU1@PAURefA@@PAURefB@@@Z  # RefPair::Ctor migrated from s006b18c0 (verbatim, slice spelling)
+006b1e20 ?Dtor@RefPair@@QAEXXZ  # RefPair::Dtor migrated from s006b18c0 (verbatim, slice spelling)
+006b1e90 ?CtorCopy@RefPair@@QAEPAU1@PBU1@@Z  # RefPair::CtorCopy migrated from s006b18c0 (verbatim, slice spelling)
+006b1ef0 ?Assign@RefPair@@QAEPAU1@PBU1@@Z  # RefPair::Assign migrated from s006b18c0 (verbatim, slice spelling)
+006b1f60 ?IsSaveArea@SP@@YA_NPBVDatabase@ResourceMan@EA@@@Z  # SP::IsSaveArea migrated from s006b18c0
+006b1f90 ?SP_GetSaveArea@@YAPAXI@Z  # SP_GetSaveArea migrated from s006b18c0 (verbatim, slice spelling)
+006b1fc0 ?FlushAllSaveAreas@SP@@YAXXZ  # SP::FlushAllSaveAreas migrated from s006b18c0
+006b2000 ?FUN_006b2000@@YA_NPAXD@Z  # FUN_006b2000 migrated from s006b18c0 (verbatim, slice spelling)
+006b2090 ?FUN_006b2090@@YA_NPAXD@Z  # FUN_006b2090 migrated from s006b18c0 (verbatim, slice spelling)
+006b2110 ?ReadExtensionMappingsFromPropFile@@YAXXZ  # ReadExtensionMappingsFromPropFile migrated from s006b18c0 (verbatim, slice spelling)
+006b22a0 ?SP_UpdateSaveAreas@@YAPAXPAX@Z  # SP_UpdateSaveAreas migrated from s006b18c0 (verbatim, slice spelling)
+006b22f0 ?FUN_006b22f0@@YAPAXPAX@Z  # FUN_006b22f0 migrated from s006b18c0 (verbatim, slice spelling)
+006b2350 ?SP_SomethingAllSaveAreas@@YAXXZ  # SP_SomethingAllSaveAreas migrated from s006b18c0 (verbatim, slice spelling)
+006b2400 ?FUN_006b2400@@YAXXZ  # FUN_006b2400 migrated from s006b18c0 (verbatim, slice spelling)
+006b2620 ?FUN_006b2620@@YAXXZ  # FUN_006b2620 migrated from s006b18c0 (verbatim, slice spelling)

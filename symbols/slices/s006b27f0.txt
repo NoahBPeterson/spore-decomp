@@ -1,8 +1,11 @@
-006b27f0 SP::cAppSystem::CreateHTTPServer  # work/xmatch/matches.json dev-name match
-006b2b30 OpenPreCommitFile  # work/xmatch/matches.json dev-name match
-006b2dc0 SP::CreateCachedDirectorySave  # work/xmatch/matches.json dev-name match
-006b3050 `anonymous namespace'::cDirectoriesCheat::Execute  # work/xmatch/matches.json dev-name match
-006b3240 SP::CreatePackageSave  # work/xmatch/matches.json dev-name match
-006b3430 SP::CreateLocationSave  # work/xmatch/matches.json dev-name match
-006b3680 eastl::map<unsigned int,`anonymous namespace'::cSPSaveArea,eastl::less<unsigned int>,allocator::allocator>::operator[]  # work/xmatch/matches.json dev-name match
-006b3760 SP::RegisterSaveArea  # work/xmatch/matches.json dev-name match
+006b27f0 ?SP_cAppSystem_CreateHTTPServer@@YA_NIPB_WPAPAUIRef6@@1II@Z  # SP_cAppSystem_CreateHTTPServer migrated from s006b27f0 (verbatim, slice spelling)
+006b2aa0 ?Nuke@SaveMap5@@QAEXPAURBNode5@@@Z  # SaveMap5::Nuke migrated from s006b27f0 (verbatim, slice spelling)
+006b2b30 ?OpenPreCommitFile@@YA_NIPB_W0PAPAUIRef6@@1I@Z  # OpenPreCommitFile migrated from s006b27f0 (verbatim, slice spelling)
+006b2dc0 ?SP_CreateCachedDirectorySave@@YA_NIPB_W0PAPAUIRef6@@1I@Z  # SP_CreateCachedDirectorySave migrated from s006b27f0 (verbatim, slice spelling)
+006b3050 ?cDirectoriesCheat_Execute@@YA_NIPB_W0PAPAUIRef6@@@Z  # cDirectoriesCheat_Execute migrated from s006b27f0 (verbatim, slice spelling)
+006b3240 ?SP_CreatePackageSave@@YA_NIPB_W0PAPAUIRef6@@@Z  # SP_CreatePackageSave migrated from s006b27f0 (verbatim, slice spelling)
+006b3430 ?SP_CreateLocationSave@@YA_NIPB_WPAPAUIRef6@@PAX_N@Z  # SP_CreateLocationSave migrated from s006b27f0 (verbatim, slice spelling)
+006b3610 ?FUN_006b3610@@YAXXZ  # FUN_006b3610 migrated from s006b27f0 (verbatim, slice spelling)
+006b3680 ?Index@SaveMap5@@QAEAAURefPair5@@ABI@Z  # SaveMap5::Index migrated from s006b27f0 (verbatim, slice spelling)
+006b3760 ?SP_RegisterSaveArea@@YAXIPAX0@Z  # SP_RegisterSaveArea migrated from s006b27f0 (verbatim, slice spelling)
+008d8530 ?SetHoleUse@DatabasePackedFile@ResourceMan@EA@@QAE_NHM@Z  # EA::ResourceMan::DatabasePackedFile::SetHoleUse (callee of s006b27f0, named from the dev publics; slice address comment)
