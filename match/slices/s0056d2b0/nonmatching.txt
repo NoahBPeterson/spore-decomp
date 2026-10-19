@@ -1,0 +1,3 @@
+0056d2b0  6  cRegionColorClassifier::DescribeTraits (texture describe): /Od frame-slot puzzle, hidden 16-byte temp block sits above the Alloc temp (lea 0x71 vs 0x61) and inline-ctor temp -0x78 vs -0x7c; code otherwise identical [equiv: WEAK]
+0056d810  1  cBaseColorClassifier::DescribeTraits: only the Alloc temp slot (lea [ebp-0x6d] vs [ebp-0x65]); 8 hidden bytes between new-ptr temp and Alloc temp not reproduced [equiv: WEAK]
+0056dbe0  23  cTextureClassifier::DescribeTraits: all inline-ctor/copy temps 4 bytes lower than original (one hidden 4-byte temp above the first ctor temp not reproduced) [equiv: WEAK]
