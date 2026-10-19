@@ -18,6 +18,7 @@
 #include "EA/Allocator/ZoneObject.h"
 #include "SP/cJob.h"
 #include "EA/DateTime/DateTime.h"
+#include "EA/IO/IStream.h"
 
 // ---- items of slice s0054afe0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct cAssetMetadata;
@@ -1280,6 +1281,227 @@ struct WString {
 };
 // ---- items of slice s00849f70 end
 
+// ---- items of slice s0054c780 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+namespace IO {
+class IStream_s0054_c780 {
+public:
+    virtual int  AddRef();
+    virtual int  Release();
+    virtual void slot08();
+    virtual void slot0C();
+    virtual void slot10();
+    virtual void slot14();
+    virtual void slot18();
+    virtual uint32_t GetSize();
+    virtual void slot20();
+    virtual void slot24();
+    /* 28h */ virtual bool SetPosition(int position, int positionType);
+    virtual void slot2C();
+    /* 30h */ virtual uint32_t Read(void* pData, uint32_t nSize);
+};
+}
+}
+namespace EA {
+namespace IO {
+bool ReadInt32(IStream_s0054_c780* pIS, uint32_t* p, uint32_t n, int endian);    // 0x0093a780
+}
+}
+namespace EA {
+namespace IO {
+bool ReadUInt64(IStream_s0054_c780* pIS, uint64_t* p, uint32_t n, int endian);   // 0x0093a800
+}
+}
+namespace EA {
+namespace IO {
+enum { kPositionTypeCurrent_s0054_c780 = 1 };
+}
+}
+namespace EA {
+namespace IO {
+enum { kEndianBig = 0 };
+}
+}
+namespace eastl {
+struct allocator_s0054_c780 { uint32_t mName; };
+}
+namespace eastl {
+struct sp_vector_allocator_s0054_c780 { uint32_t mName; uint32_t mFlags; };
+}
+namespace eastl {
+template <typename T>
+struct basic_string_s0054_c780 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    allocator_s0054_c780 mAllocator;
+
+    void resize(uint32_t n, T c);                          // 0x00552800 / 0x005527a0
+    basic_string_s0054_c780& assign(const T* pBegin, const T* pEnd);  // 0x00423650 (wchar_t)
+
+    T* data() { return mpBegin; }
+    T& operator[](uint32_t n) { return mpBegin[n]; }
+    static uint32_t CharStrlen(const T* p)
+    {
+        const T* pCurrent = p;
+        while (*pCurrent)
+            ++pCurrent;
+        return (uint32_t)(pCurrent - p);
+    }
+    basic_string_s0054_c780& operator=(const T* p) { return assign(p, p + CharStrlen(p)); }
+};
+}
+namespace eastl {
+typedef basic_string_s0054_c780<char>    string8_s0054_c780;
+}
+namespace eastl {
+typedef basic_string_s0054_c780<wchar_t> string16_s0054_c780;
+}
+namespace eastl {
+template <typename T>
+struct vector_s0054_c780 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    sp_vector_allocator_s0054_c780 mAllocator;
+
+    void resize(uint32_t n);                 // 0x00553be0 / 0x00553e60
+    T* erase(T* first, T* last);             // 0x00554b60
+    T* begin() { return mpBegin; }
+    T* end() { return mpEnd; }
+    T& front() { return *mpBegin; }
+    void clear() { erase(mpBegin, mpEnd); }
+};
+}
+namespace eastl {
+struct InsertResult {                        // pair<iterator, bool>
+    uint32_t* first;
+    bool second;
+    InsertResult() {}
+};
+}
+namespace eastl {
+struct vector_set_u32 {
+    uint32_t* mpBegin;
+    uint32_t* mpEnd;
+    uint32_t* mpCapacity;
+    sp_vector_allocator_s0054_c780 mAllocator;
+    InsertResult insert(const uint32_t& value);   // 0x00554020
+};
+}
+namespace SP {
+class cString_s0054_c780 {
+public:
+    cString_s0054_c780();                                                                  // 0x006b5060
+    ~cString_s0054_c780();                                                                 // 0x006b5240
+    bool Load(uint32_t tableID, uint32_t instanceID, const wchar_t* pDefault);  // 0x006b54b0
+    const wchar_t* GetText();                                                   // 0x006b55c0
+private:
+    uint32_t mData[6];
+};
+}
+class ResourceObject_s0054_c780 {
+public:
+    virtual int AddRef();
+    virtual int Release();
+    virtual void slot08();
+    virtual void* Cast(uint32_t type);
+};
+class IRecord {
+public:
+    virtual void slot00();
+    virtual void slot04();
+    virtual void slot08();
+    virtual void slot0C();
+    virtual void slot10();
+    virtual void slot14();
+    /* 18h */ virtual EA::IO::IStream_s0054_c780* GetStream();
+};
+struct ResourceKey_s0054_c780 { uint32_t instanceID, typeID, groupID; };
+namespace SP {
+namespace Pollen {
+class cAssetMetadata_s0054_c780 : public ResourceObject_s0054_c780 {
+public:
+    enum { TYPE = 0x30BDEE3 };
+    bool SetTags(const wchar_t* pTags);       // 0x00550bd0
+
+    /* 04h */ uint32_t mPad04[5];
+    /* 18h */ uint64_t mAssetID;
+    /* 20h */ ResourceKey_s0054_c780 mAssetKey;
+    /* 2Ch */ ResourceKey_s0054_c780 mParentAssetKey;
+    /* 38h */ uint64_t mParentAssetID;
+    /* 40h */ uint64_t mOriginalParentAssetID;
+    /* 48h */ uint64_t mTimeCreated;
+    /* 50h */ uint64_t mTimeDownloaded;
+    /* 58h */ eastl::string16_s0054_c780 mAuthorName;
+    /* 68h */ int64_t mAuthorID;
+    /* 70h */ int mUseLocale;
+    /* 74h */ bool mIsShareable;
+    /* 78h */ eastl::string16_s0054_c780 mName;
+    /* 88h */ eastl::string16_s0054_c780 mDescription;
+    /* 98h */ eastl::vector_s0054_c780<eastl::string8_s0054_c780> mAuthors;
+    /* ACh */ eastl::vector_s0054_c780<eastl::string16_s0054_c780> mTags;
+    /* C0h */ eastl::vector_set_u32 mConsequenceTraits;
+};
+}
+}
+namespace SP {
+namespace Pollen {
+class IAuthManager {
+public:
+    virtual void slot00(); virtual void slot04(); virtual void slot08(); virtual void slot0C();
+    virtual void slot10(); virtual void slot14(); virtual void slot18(); virtual void slot1C();
+    virtual void slot20(); virtual void slot24(); virtual void slot28(); virtual void slot2C();
+    virtual void slot30(); virtual void slot34(); virtual void slot38(); virtual void slot3C();
+    /* 40h */ virtual int64_t GetUserID();
+};
+}
+}
+namespace SP {
+namespace Pollen {
+IAuthManager* AuthManager();                  // 0x00607a60
+}
+}
+namespace SP {
+namespace Pollen {
+class cAssetMetadataResourceFactory_s0054_c780 {
+public:
+    virtual void slot00();
+    bool ReadResource(IRecord* pRecord, ResourceObject_s0054_c780* pResource, void* pExtraData, uint32_t typeID);  // 0x0054c780 (SP::Pollen::cAssetMetadataResourceFactory::ReadResource)
+};
+}
+}
+namespace EA {
+template <typename T>
+class AutoRefCount_s0054_c780 {
+public:
+    AutoRefCount_s0054_c780(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCount_s0054_c780() { if (mpObject) mpObject->Release(); }
+    T* operator->() const { return mpObject; }
+    T* mpObject;
+};
+}
+template <typename T>
+T* object_cast_s0054_c780(ResourceObject_s0054_c780* p)             // 0x00554140 (cAssetMetadata instance)
+{
+    return p ? (T*)p->Cast(T::TYPE) : 0;
+}
+class cDirectPropertyList_s0054_c780 {
+public:
+    uint32_t mPad[15];
+    /* 3Ch */ int* mpValues;
+    bool GetBool(int index) { return mpValues[index] != 0; }
+};
+extern cDirectPropertyList_s0054_c780* sAppProperties;   // 0x015fd918
+inline cDirectPropertyList_s0054_c780* AppProperties() { return sAppProperties; }
+enum { kAppPropLegacyTimeDownloaded = 0x46 };   // property slot 0x46 (meaning not recovered)
+namespace SP {
+namespace Pollen {
+const int64_t kLocalAuthorID = -2;
+}
+}
+// ---- items of slice s0054c780 end
+
 // @ 0x0054b6f0
 bool IHost::cAssetMetadataFactory_Create(IObj10* param2, IMeta** out, int param4, int param5)
 {
@@ -1302,15 +1524,6 @@ bool IHost::cAssetMetadataFactory_Create(IObj10* param2, IMeta** out, int param4
     }
     return ok;
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x0054b7b0
 bool Stub0054b7b0::FUN_0054b7b0(int param_1, IObj* param_2, int* param_3, int param_4)
@@ -1398,13 +1611,230 @@ bool Stub0054b7b0::FUN_0054b7b0(int param_1, IObj* param_2, int* param_3, int pa
     }
 }
 
+// @ 0x0054c780
+namespace SP { namespace Pollen {
+bool cAssetMetadataResourceFactory_s0054_c780::ReadResource(IRecord* pRecord, ResourceObject_s0054_c780* pResource, void* pExtraData, uint32_t typeID)
+{
+    using namespace EA::IO;
+    if (typeID != cAssetMetadata_s0054_c780::TYPE)
+        return false;
 
+    EA::AutoRefCount_s0054_c780<cAssetMetadata_s0054_c780> pMeta = object_cast_s0054_c780<cAssetMetadata_s0054_c780>(pResource);
+    IStream_s0054_c780* pStream = pRecord->GetStream();
 
+    uint32_t version;
+    bool ok = ReadInt32(pStream, &version, 1, kEndianBig) && (version >= 7 || version <= 13);
+    if (!ok)
+        return false;
 
+    ok = ok && ReadUInt64(pStream, &pMeta->mAssetID, 1, kEndianBig);
+    if (!ok)
+        return false;
 
+    ok = ok && ReadInt32(pStream, &pMeta->mAssetKey.typeID, 1, kEndianBig);
+    ok = ok && ReadInt32(pStream, &pMeta->mAssetKey.groupID, 1, kEndianBig);
+    ok = ok && ReadInt32(pStream, &pMeta->mAssetKey.instanceID, 1, kEndianBig);
+    ok = ok && ReadInt32(pStream, &pMeta->mParentAssetKey.typeID, 1, kEndianBig);
+    ok = ok && ReadInt32(pStream, &pMeta->mParentAssetKey.groupID, 1, kEndianBig);
+    ok = ok && ReadInt32(pStream, &pMeta->mParentAssetKey.instanceID, 1, kEndianBig);
 
+    if (version >= 10)
+        ok = ok && ReadUInt64(pStream, &pMeta->mParentAssetID, 1, kEndianBig);
+    if (version >= 12)
+        ok = ok && ReadUInt64(pStream, &pMeta->mOriginalParentAssetID, 1, kEndianBig);
+    ok = ok && ReadUInt64(pStream, &pMeta->mTimeCreated, 1, kEndianBig);
 
+    if (version >= 9)
+    {
+        if (AppProperties()->GetBool(kAppPropLegacyTimeDownloaded) && version == 10)
+        {
+            // Version 10 files written by an older build stored the download time as two
+            // 32-bit halves; anything else is rewound and treated as "same as created".
+            uint32_t high;
+            ok = ok && ReadInt32(pStream, &high, 1, kEndianBig);
+            if (ok && high != 0 && high != 0xffffffff)
+            {
+                uint32_t low;
+                ok = ok && ReadInt32(pStream, &low, 1, kEndianBig);
+                pMeta->mTimeDownloaded = (uint64_t)high;
+                pMeta->mTimeDownloaded <<= 32;
+                pMeta->mTimeDownloaded |= (uint64_t)low;
+            }
+            else
+            {
+                pMeta->mTimeDownloaded = pMeta->mTimeCreated;
+                if (ok)
+                    ok = pStream->SetPosition(-4, kPositionTypeCurrent_s0054_c780);
+            }
+        }
+        else
+            ok = ok && ReadUInt64(pStream, &pMeta->mTimeDownloaded, 1, kEndianBig);
+    }
+    else
+        pMeta->mTimeDownloaded = pMeta->mTimeCreated;
 
+    uint32_t isLocalized;
+    uint32_t length;
+    ok = ok && ReadInt32(pStream, &isLocalized, 1, kEndianBig);
+
+    if (isLocalized == 0)
+    {
+        ok = ok && ReadUInt64(pStream, (uint64_t*)&pMeta->mAuthorID, 1, kEndianBig);
+
+        ok = ok && ReadInt32(pStream, &length, 1, kEndianBig);
+        ok = ok && length < 0x100;
+        pMeta->mAuthorName.resize(length, 0);
+        ok = ok && pStream->Read(&pMeta->mAuthorName[0], length * 2);
+        pMeta->mUseLocale = -1;
+
+        ok = ok && ReadInt32(pStream, &length, 1, kEndianBig);
+        ok = ok && length < 0x100;
+        pMeta->mName.resize(length, 0);
+        ok = ok && pStream->Read(&pMeta->mName[0], length * 2);
+
+        ok = ok && ReadInt32(pStream, &length, 1, kEndianBig);
+        ok = ok && length < 0x1000;
+        pMeta->mDescription.resize(length, 0);
+        if (length != 0)
+            ok = ok && pStream->Read(&pMeta->mDescription[0], length * 2);
+    }
+    else
+    {
+        uint32_t tableID, authorID, nameID, descriptionID;
+        ok = ok && ReadInt32(pStream, &tableID, 1, kEndianBig);
+        ok = ok && ReadInt32(pStream, &authorID, 1, kEndianBig);
+        ok = ok && ReadInt32(pStream, &nameID, 1, kEndianBig);
+        ok = ok && ReadInt32(pStream, &descriptionID, 1, kEndianBig);
+
+        SP::cString_s0054_c780 author;
+        ok = authorID != 0xffffffff && author.Load(tableID, authorID, L"Error Author");
+        if (ok)
+        {
+            pMeta->mUseLocale = 1;
+            pMeta->mAuthorName = author.GetText();
+            pMeta->mAuthorID = -1;
+            pMeta->mIsShareable = false;
+        }
+        else
+            return false;
+
+        SP::cString_s0054_c780 name;
+        ok = nameID != 0xffffffff && name.Load(tableID, nameID, L"Error Name");
+        if (ok)
+            pMeta->mName = name.GetText();
+        else
+            return false;
+
+        if (descriptionID != 0xffffffff)
+        {
+            SP::cString_s0054_c780 description;
+            ok = description.Load(tableID, descriptionID, L"");
+            if (ok)
+                pMeta->mDescription = description.GetText();
+            else
+                return false;
+        }
+    }
+
+    if (version >= 1)
+    {
+        if (version >= 2)
+        {
+            ok = ok && ReadInt32(pStream, &length, 1, kEndianBig);
+            if (!ok)
+                return false;
+            pMeta->mAuthors.resize(length);
+            for (eastl::string8_s0054_c780* it = pMeta->mAuthors.begin(), *itEnd = pMeta->mAuthors.end();
+                 ok && it != itEnd; ++it)
+            {
+                eastl::string8_s0054_c780& author = *it;
+                ok = ok && ReadInt32(pStream, &length, 1, kEndianBig);
+                if (ok)
+                {
+                    author.resize(length, 0);
+                    if (length != 0)
+                        ok = ok && pStream->Read(author.data(), length);
+                }
+            }
+        }
+        else
+        {
+            ok = ok && ReadInt32(pStream, &length, 1, kEndianBig);
+            if (ok)
+            {
+                pMeta->mAuthors.resize(1);
+                eastl::string8_s0054_c780& author = pMeta->mAuthors.front();
+                author.resize(length, 0);
+                ok = ok && pStream->Read(author.data(), length);
+            }
+        }
+    }
+
+    isLocalized = 0;
+    if (version >= 13)
+        ok = ok && ReadInt32(pStream, &isLocalized, 1, kEndianBig);
+
+    if (isLocalized == 0)
+    {
+        ok = ok && ReadInt32(pStream, &length, 1, kEndianBig);
+        if (!ok)
+            return false;
+        pMeta->mTags.resize(length);
+        for (eastl::string16_s0054_c780* it = pMeta->mTags.begin(), *itEnd = pMeta->mTags.end();
+             ok && it != itEnd; ++it)
+        {
+            eastl::string16_s0054_c780& tag = *it;
+            ok = ok && ReadInt32(pStream, &length, 1, kEndianBig);
+            if (ok && length != 0)
+            {
+                tag.resize(length, 0);
+                ok = ok && pStream->Read(&tag[0], length * 2);
+            }
+        }
+    }
+    else
+    {
+        uint32_t tagTableID, tagInstanceID;
+        ok = ok && ReadInt32(pStream, &tagTableID, 1, kEndianBig);
+        ok = ok && ReadInt32(pStream, &tagInstanceID, 1, kEndianBig);
+        if (tagInstanceID != 0xffffffff)
+        {
+            SP::cString_s0054_c780 tags;
+            ok = tags.Load(tagTableID, tagInstanceID, L"");
+            if (ok)
+            {
+                pMeta->mTags.clear();
+                ok = ok && pMeta->SetTags(tags.GetText());
+            }
+            else
+                return false;
+        }
+    }
+
+    if (ok && version >= 8)
+    {
+        uint32_t isShareable;
+        ok = ok && ReadInt32(pStream, &isShareable, 1, kEndianBig);
+        pMeta->mIsShareable = isShareable != 0;
+
+        uint32_t traitCount;
+        ok = ok && ReadInt32(pStream, &traitCount, 1, kEndianBig);
+        for (uint32_t i = 0; ok && i < traitCount; ++i)
+        {
+            uint32_t trait;
+            ok = ok && ReadInt32(pStream, &trait, 1, kEndianBig);
+            pMeta->mConsequenceTraits.insert(trait);
+        }
+    }
+    else
+    {
+        pMeta->mIsShareable = pMeta->mAuthorID == kLocalAuthorID ||
+                              pMeta->mAuthorID == AuthManager()->GetUserID();
+    }
+
+    return ok;
+}
+}}  // namespace SP::Pollen
 
 // @ 0x0054dd30
 namespace SP { namespace Pollen {
@@ -1414,13 +1844,6 @@ cAssetMetadataResourceFactory_s0054_dd30* CreateMetadataFactory(cAssetDirectory_
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
 // @ 0x0054ddc0
 unsigned int SP::Pollen::cAssetMetadataResourceFactory::GetSupportedTypes(unsigned int * pTypes, unsigned int count)
 {
@@ -1428,13 +1851,6 @@ unsigned int SP::Pollen::cAssetMetadataResourceFactory::GetSupportedTypes(unsign
         pTypes[0] = 0x030BDEE3;
     return 1;
 }
-
-
-
-
-
-
-
 
 // @ 0x0054ddf0
 namespace SP { namespace Pollen {
@@ -1444,24 +1860,10 @@ cAssetDirectory_s0054_dd30::cAssetDirectory_s0054_dd30()
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
 // @ 0x0054def0
 SP::Pollen::cAssetDirectory::~cAssetDirectory()
 {
 }
-
-
-
-
-
-
-
 
 // @ 0x0054df60
 namespace SP { namespace Pollen {
@@ -1485,13 +1887,6 @@ bool cAssetDirectory_s0054_dd30::Init()
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
 // @ 0x0054e020
 namespace SP { namespace Pollen {
 bool cAssetDirectory_s0054_dd30::Shutdown()
@@ -1508,13 +1903,6 @@ bool cAssetDirectory_s0054_dd30::Shutdown()
     return true;
 }
 }}  // namespace SP::Pollen
-
-
-
-
-
-
-
 
 // @ 0x0054e0b0
 namespace SP { namespace Pollen {
@@ -1545,13 +1933,6 @@ bool cAssetDirectory_s0054_dd30::HandleMessage(uint32_t messageId, void* pMessag
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
 // @ 0x0054e250
 namespace SP { namespace Pollen {
 bool cAssetDirectory_s0054_dd30::AddMapping(uint64_t serverId, const Key_s0054_dd30& key)
@@ -1571,13 +1952,6 @@ bool cAssetDirectory_s0054_dd30::AddMapping(uint64_t serverId, const Key_s0054_d
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
 // @ 0x0054e460
 namespace SP { namespace Pollen {
 bool cAssetDirectory_s0054_dd30::GetLocalKey(uint64_t serverId, Key_s0054_dd30* pKey) const
@@ -1594,13 +1968,6 @@ bool cAssetDirectory_s0054_dd30::GetLocalKey(uint64_t serverId, Key_s0054_dd30* 
     return false;
 }
 }}  // namespace SP::Pollen
-
-
-
-
-
-
-
 
 // @ 0x0054e530
 namespace SP { namespace Pollen {
@@ -1631,13 +1998,6 @@ bool cAssetDirectory_s0054_dd30::GetServerId(const Key_s0054_dd30& key, uint64_t
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
 // @ 0x0054e740
 namespace SP { namespace Pollen {
 bool cAssetDirectory_s0054_dd30::IsPending(uint64_t id) const
@@ -1645,13 +2005,6 @@ bool cAssetDirectory_s0054_dd30::IsPending(uint64_t id) const
     return mPendingAssets.find(id) != mPendingAssets.end();
 }
 }}  // namespace SP::Pollen
-
-
-
-
-
-
-
 
 // @ 0x0054e7b0
 namespace SP { namespace Pollen {
@@ -1664,13 +2017,6 @@ void cAssetDirectory_s0054_dd30::SetPending(uint64_t id, bool bPending)
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
 // @ 0x0054e800
 namespace SP { namespace Pollen {
 bool cAssetDirectory_s0054_dd30::IsPending2(uint64_t id) const
@@ -1678,13 +2024,6 @@ bool cAssetDirectory_s0054_dd30::IsPending2(uint64_t id) const
     return mPendingAssets2.find(id) != mPendingAssets2.end();
 }
 }}  // namespace SP::Pollen
-
-
-
-
-
-
-
 
 // @ 0x0054e870
 namespace SP { namespace Pollen {
@@ -1695,13 +2034,6 @@ void cAssetDirectory_s0054_dd30::AddPending2(uint64_t id)
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
 // @ 0x0054e8c0
 namespace SP { namespace Pollen {
 void cAssetDirectory_s0054_dd30::SetAuthorA(uint32_t id, uint64_t v)
@@ -1709,13 +2041,6 @@ void cAssetDirectory_s0054_dd30::SetAuthorA(uint32_t id, uint64_t v)
     mAuthorMapA[id] = v;
 }
 }}  // namespace SP::Pollen
-
-
-
-
-
-
-
 
 // @ 0x0054e8f0
 namespace SP { namespace Pollen {
@@ -1728,13 +2053,6 @@ uint64_t cAssetDirectory_s0054_dd30::GetAuthorA(uint32_t id)
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
 // @ 0x0054e970
 namespace SP { namespace Pollen {
 void cAssetDirectory_s0054_dd30::SetAuthorB(uint32_t id, uint64_t v)
@@ -1742,13 +2060,6 @@ void cAssetDirectory_s0054_dd30::SetAuthorB(uint32_t id, uint64_t v)
     mAuthorMapB[id] = v;
 }
 }}  // namespace SP::Pollen
-
-
-
-
-
-
-
 
 // @ 0x0054e9a0
 namespace SP { namespace Pollen {
@@ -1760,13 +2071,6 @@ uint64_t cAssetDirectory_s0054_dd30::GetAuthorB(uint32_t id)
     return 0;
 }
 }}  // namespace SP::Pollen
-
-
-
-
-
-
-
 
 // @ 0x0054ea20
 namespace SP { namespace Pollen {
@@ -1783,13 +2087,6 @@ bool cAssetDirectory_s0054_dd30::SetAuthorFlag(uint32_t id, bool b)
 }
 }}  // namespace SP::Pollen
 
-
-
-
-
-
-
-
 // @ 0x0054eac0
 namespace SP { namespace Pollen {
 bool cAssetDirectory_s0054_dd30::GetAuthorFlag(uint32_t id)
@@ -1797,13 +2094,6 @@ bool cAssetDirectory_s0054_dd30::GetAuthorFlag(uint32_t id)
     return (GetAuthorB(id) & 0x8000000000000000ULL) == 0x8000000000000000ULL;
 }
 }}  // namespace SP::Pollen
-
-
-
-
-
-
-
 
 // @ 0x0054eb10
 bool Dir::FUN_0054eb10(int param2, char param3)
@@ -1839,12 +2129,6 @@ bool Dir::FUN_0054eb10(int param2, char param3)
     mtx->Unlock();
     return r;
 }
-
-
-
-
-
-
 
 // @ 0x0054ed50
 bool Dir::FUN_0054ed50(int param2, int param3, char param4)
@@ -1883,12 +2167,6 @@ bool Dir::FUN_0054ed50(int param2, int param3, char param4)
     return r;
 }
 
-
-
-
-
-
-
 // @ 0x0054efb0
 char Dir::FUN_0054efb0()
 {
@@ -1911,12 +2189,6 @@ char Dir::FUN_0054efb0()
     return *(char*)(s + 0x38);
 }
 
-
-
-
-
-
-
 // @ 0x0054f0f0
 int Dir::FUN_0054f0f0()
 {
@@ -1937,12 +2209,6 @@ int Dir::FUN_0054f0f0()
     if (job != 0) ((CJob*)job)->GetStatus();
     return 1;
 }
-
-
-
-
-
-
 
 // @ 0x0054f1a0
 bool AssetDir::Save()
@@ -1998,11 +2264,6 @@ bool AssetDir::Save()
     return false;
 }
 
-
-
-
-
-
 // @ 0x00550450
 Meta::Meta()
 {
@@ -2046,10 +2307,6 @@ Meta::Meta()
     *(int*)(s + 0xc0) = 0; *(int*)(s + 0xc4) = 0; *(int*)(s + 0xc8) = 0;
 }
 
-
-
-
-
 // @ 0x005506c0
 void Meta::FUN_005506c0()
 {
@@ -2065,10 +2322,6 @@ void Meta::FUN_005506c0()
     *(void**)s = (void*)vtbl_cEditorResource;
 }
 
-
-
-
-
 // @ 0x00550740
 void * SP::Pollen::cAssetMetadata::AsInterface(EA::COM::InterfaceId param_2)
 {
@@ -2078,19 +2331,11 @@ void * SP::Pollen::cAssetMetadata::AsInterface(EA::COM::InterfaceId param_2)
     return 0;
 }
 
-
-
-
-
 // @ 0x005508a0
 int64_t Meta::FUN_005508a0()
 {
     return *(int64_t*)((char*)this + 0x68);
 }
-
-
-
-
 
 // @ 0x00550910
 void* Meta::FUN_00550910(unsigned idx)
@@ -2106,10 +2351,6 @@ void* Meta::FUN_00550910(unsigned idx)
     return result;
 }
 
-
-
-
-
 // @ 0x005509e0
 unsigned Meta::FUN_005509e0(unsigned idx)
 {
@@ -2122,10 +2363,6 @@ unsigned Meta::FUN_005509e0(unsigned idx)
     return 0;
 }
 
-
-
-
-
 // @ 0x00550a60
 unsigned Meta::FUN_00550a60(unsigned idx)
 {
@@ -2135,10 +2372,6 @@ unsigned Meta::FUN_00550a60(unsigned idx)
     }
     return 0;
 }
-
-
-
-
 
 // @ 0x00550aa0
 bool Meta::FUN_00550aa0(void* key)
@@ -2156,10 +2389,6 @@ bool Meta::FUN_00550aa0(void* key)
     return local_2c != *(int*)(s + 0xc4);
 }
 
-
-
-
-
 // @ 0x00550b00
 void Meta::FUN_00550b00(int key)
 {
@@ -2168,20 +2397,12 @@ void Meta::FUN_00550b00(int key)
     ((Map5*)(s + 0xc0))->F4020(local_8, &key);
 }
 
-
-
-
-
 // @ 0x00550b30
 void Meta::FUN_00550b30(int key)
 {
     char* s = (char*)this;
     ((Map5*)(s + 0xc0))->F40d0(&key);
 }
-
-
-
-
 
 // @ 0x00550b60
 char Meta::FUN_00550b60(int key)
@@ -2195,10 +2416,6 @@ char Meta::FUN_00550b60(int key)
     }
     return 0;
 }
-
-
-
-
 
 // @ 0x00550bd0
 char Meta_s0055_0bd0::FUN_00550bd0(uint16_t* param_1)
@@ -2229,9 +2446,6 @@ char Meta_s0055_0bd0::FUN_00550bd0(uint16_t* param_1)
     return 1;
 }
 
-
-
-
 // @ 0x00550cf0
 void Meta_s0055_0bd0::FUN_00550cf0(WStr* out)
 {
@@ -2249,9 +2463,6 @@ void Meta_s0055_0bd0::FUN_00550cf0(WStr* out)
         first = false;
     }
 }
-
-
-
 
 // @ 0x00550da0
 char Meta_s0055_0bd0::FUN_00550da0(int* param_2, int* param_3, int* param_4)
@@ -2332,9 +2543,6 @@ char Meta_s0055_0bd0::FUN_00550da0(int* param_2, int* param_3, int* param_4)
     return result;
 }
 
-
-
-
 // @ 0x00551240
 char Meta_s0055_0bd0::FUN_00551240(int* param_2, uint16_t* param_3, uint16_t* param_4, int param_5, int* param_6, char param_7)
 {
@@ -2402,9 +2610,6 @@ char Meta_s0055_0bd0::FUN_00551240(int* param_2, uint16_t* param_3, uint16_t* pa
     return 1;
 }
 
-
-
-
 // @ 0x00551620
 char Meta_s0055_0bd0::SetMetadata(uint32_t* param_2, int param_3, int param_4, int param_5, void* param_6, uint16_t* param_7, void* param_8, uint16_t* param_9, uint16_t* param_10, uint16_t* param_11, int param_12, void* param_13, char param_14)
 {
@@ -2468,9 +2673,6 @@ char Meta_s0055_0bd0::SetMetadata(uint32_t* param_2, int param_3, int param_4, i
     return 1;
 }
 
-
-
-
 // @ 0x005519d0
 void Meta_s0055_0bd0::FUN_005519d0(uint16_t* param_2, uint16_t* param_3, int param_4)
 {
@@ -2493,9 +2695,6 @@ void Meta_s0055_0bd0::FUN_005519d0(uint16_t* param_2, uint16_t* param_3, int par
     }
 }
 
-
-
-
 // @ 0x00551af0
 void Meta_s0055_0bd0::FUN_00551af0(int a, int b)
 {
@@ -2507,9 +2706,6 @@ void Meta_s0055_0bd0::FUN_00551af0(int a, int b)
     *(int64_t*)((char*)this + 0x68) = ((int64_t(__thiscall*)(void*))((*(void***)am)[0x40 / 4]))(am);
 }
 
-
-
-
 // @ 0x00551b60
 namespace SP { namespace Pollen {
 void cAssetMetadata_s0055_1b60::SetParentAssetID(uint64_t id)
@@ -2518,8 +2714,6 @@ void cAssetMetadata_s0055_1b60::SetParentAssetID(uint64_t id)
 }
 }}  // namespace SP::Pollen
 
-
-
 // @ 0x00551b80
 namespace SP { namespace Pollen {
 void cAssetMetadata_s0055_1b60::SetOriginalParentAssetID(uint64_t id)
@@ -2527,8 +2721,6 @@ void cAssetMetadata_s0055_1b60::SetOriginalParentAssetID(uint64_t id)
     mnOriginalParentAssetID = id;
 }
 }}  // namespace SP::Pollen
-
-
 
 // @ 0x00551ba0
 namespace SP { namespace Pollen {
@@ -2569,8 +2761,6 @@ bool cAssetMetadata_s0055_1b60::UpdateFromEntry(const Feed::AtomEntry_s0055_1b60
 }
 }}  // namespace SP::Pollen
 
-
-
 // @ 0x00551ff0
 namespace SP { namespace Pollen {
 bool cAssetMetadata_s0055_1b60::RemoveFeedURI(const eastl::string& feedURI)
@@ -2584,8 +2774,6 @@ bool cAssetMetadata_s0055_1b60::RemoveFeedURI(const eastl::string& feedURI)
     return removed;
 }
 }}  // namespace SP::Pollen
-
-
 
 // @ 0x00552080
 namespace SP { namespace Pollen {
@@ -2640,8 +2828,6 @@ bool GetParentServerID(cAssetMetadata_s0055_1b60* pMetadata, uint64_t* pParentID
 }
 }}  // namespace SP::Pollen
 
-
-
 // @ 0x005687d0
 void HashFreeStub::DoFreeNodes(void** pArr, unsigned n)
 {
@@ -2654,7 +2840,6 @@ void HashFreeStub::DoFreeNodes(void** pArr, unsigned n)
         }
     }
 }
-
 
 // @ 0x0084ab40
 WString* CopyWStrings(const WString* first, const WString* last, WString* dst)

@@ -1,6 +1,7 @@
 # va  diff-bytes  reason
 0054b6f0 134 complete; /Od factory vtable/new schedule differs; equiv FAIL pool mismatch at 40030000 (now thiscall member of IHost)
 0054b7b0 1994 complete; /Od serialization chain reordered into loops/guards (same write sequence); equiv WEAK (1% coverage, member-this fix)
+0054c780 2179 complete; instruction stream and registers identical, only /Od frame-slot offsets differ (frame 0x25c vs 0x2ec: missing inline-callee holes)
 0054def0 24 ~cAssetDirectory: original omits the derived vptr store at destructor entry (only IHandler vptr restored at end)
 0054e8c0 3 SetAuthorA: frame 0x7c vs 0x74 (hole left by declined inline hash_map::operator[] is 2 dwords too big)
 0054e970 3 SetAuthorB: same frame-size difference as SetAuthorA
