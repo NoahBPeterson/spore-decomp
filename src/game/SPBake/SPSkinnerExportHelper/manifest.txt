@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPSkinnerExportHelper.cpp  ?ExportMeshAdd@cExportHelper@@QAEXHHPAM00PAIIIHHH@Z  00500ef0  /Od /Ob1 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

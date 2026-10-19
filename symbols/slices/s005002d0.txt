@@ -1,5 +1,5 @@
-005002d0 nSPSkinner::cExportHelper::ExportSkeleton  # PDB name; writes "<name>.xsf" with one <BONE> per export joint
+005002d0 ?ExportSkeleton@cExportHelper@@QAEXXZ  # cExportHelper::ExportSkeleton migrated from s005002d0 (verbatim, slice spelling)
 00500880 ?ExportMeshBegin@cExportHelper@@QAEXI_N@Z  # cExportHelper::ExportMeshBegin migrated from s005002d0 (verbatim, slice spelling)
 00500920 nSPSkinner::cExportHelper::ExportSubmesh  # writes one <SUBMESH> from a mesh and per-vertex skin weights (4 bone ids + 4 weights, 0x14 bytes/vertex)
-00500ef0 nSPSkinner::cExportHelper::ExportMeshAdd  # PDB name; writes one <SUBMESH> from raw vertex/normal/uv/index arrays
+00500ef0 ?ExportMeshAdd@cExportHelper@@QAEXHHPAM00PAIIIHHH@Z  # cExportHelper::ExportMeshAdd migrated from s005002d0 (verbatim, slice spelling)
 00501200 ?ExportMeshEnd@cExportHelper@@QAEXXZ  # cExportHelper::ExportMeshEnd migrated from s005002d0 (verbatim, slice spelling)
