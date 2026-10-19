@@ -1,1 +1,17 @@
 # va  diff-bytes  reason
+004e9500 223-byte /Od body skeleton
+004e95e0  -  incomplete: 868-byte /Od vector-math composer, skeleton only
+004e9ca0  -  incomplete: 792-byte /Od palette enumerator, skeleton only
+004ea310  -  incomplete: 1031-byte /Od validity-key builder, skeleton only
+004eba00  -  incomplete: 1051-byte /Od validity loader, skeleton only
+004ecec0  -  incomplete: 1111-byte /Od entry compactor, skeleton only
+004ed320  -  incomplete: 1218-byte /Od entry reorderer, skeleton only
+004ed7f0  -  incomplete: 575-byte /Od entry deduplicator, skeleton only
+004ef880  -  incomplete: 671-byte validity entry helper, skeleton only
+004f1ff0  -  incomplete: 488-byte /Od float metric, skeleton only
+004f2210  -  incomplete: 1017-byte /Od validity helper, skeleton only
+004f2610  -  incomplete: 1827-byte /Od validity helper, skeleton only
+004f2d40  -  incomplete: 1146-byte /Od validity helper, skeleton only
+004f31c0  -  incomplete: 1165-byte /Od validity helper, skeleton only
+004f3650  -  incomplete: 1253-byte /Od validity helper, skeleton only
+004f3c50  -  incomplete: 266-byte resource/mask test, skeleton only

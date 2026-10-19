@@ -1,4 +1,4 @@
-// src/game/SPBake/SPEditorValidity.cpp -- migrated from slice(s) s00f3b0c0, s004f6630, s004f56f0, s004f3de0, s004f3c50, s004f2d40, s004f1ff0, s004f1350, s004f01f0, s004ef880, s004ee9b0, s004eda30, s004ebe20, s004eb270, s004ea310, s004e95e0 by tools/migrate/rewrite.py
+// src/game/SPBake/SPEditorValidity.cpp -- migrated from slice(s) s004ecec0, s004e88a0, s00f3b0c0, s004f6630, s004f56f0, s004f3de0, s004f3c50, s004f2d40, s004f1ff0, s004f1350, s004f01f0, s004ef880, s004ee9b0, s004eda30, s004ebe20, s004eb270, s004ea310, s004e95e0 by tools/migrate/rewrite.py
 // Object file: SPBake/SPEditorValidity.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -19,16 +19,34 @@
 #include "SP/cPropertyList.h"
 #include "SP/cPropertyManager.h"
 #include "SP/cSPEditorModelValidity.h"
+#include "SP/eModelType.h"
+#include "eastl/vector.h"
 
 // ---- items of slice s004e95e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct DeclareParam { int key; int a; int b; };
 struct Manager {
-    virtual void m00(); virtual void m01(); virtual void m02(); virtual void m03();
-    virtual void m04(); virtual void m05(); virtual void m06(); virtual void m07();
-    virtual void m08(); virtual void m09(); virtual void m10(); virtual void m11();
-    virtual void m12(); virtual void m13(); virtual void m14(); virtual void m15();
-    virtual void m16(); virtual void m17(); virtual void m18(); virtual void m19();
-    virtual void m20(); virtual void m21();
+virtual void m00();
+virtual void m01();
+virtual void m02();
+virtual void m03();
+virtual void m04();
+virtual void m05();
+virtual void m06();
+virtual void m07();
+virtual void m08();
+virtual void m09();
+virtual void m10();
+virtual void m11();
+virtual void m12();
+virtual void m13();
+virtual void m14();
+virtual void m15();
+virtual void m16();
+virtual void m17();
+virtual void m18();
+virtual void m19();
+virtual void m20();
+virtual void m21();
     virtual void* Find(int a, int b); // +0x58
 };
 struct Vec { void push_back(const DeclareParam& v); };
@@ -67,6 +85,8 @@ struct ResourceMgr {
 extern DeclareParam g_15dacc8;
 extern DeclareParam g_15dabcc;
 void FUN_004e9ca0(Vec* out);
+extern DeclareParam g_15dacc8;
+extern DeclareParam g_15dabcc;
 // ---- items of slice s004e95e0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
@@ -74,6 +94,10 @@ extern DeclareParam g_15dacc8;
 extern DeclareParam g_15dabcc;
 
 // ---- items of slice s004ea310 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* PropertyManager();                 // 0x0067de30
+namespace eastl {
+ class sp_vector_allocator; 
+}
 extern int g_15daa00;
 struct FlagWord {
     unsigned int a : 8;
@@ -117,17 +141,28 @@ struct VSet : VectorBase {
     ResourceKey* end() { ResourceKey* it = mpEnd; return it; }
     ResourceKey* erase(ResourceKey* first, ResourceKey* last);   // 0x0050f740
 };
-struct Iface_s004e_a310 { virtual void v0(); virtual void Release(); }; // Release at +4
+struct Iface_s004e_a310 {  // Release at +4
+    virtual void v0();
+    virtual void Release();
+};
 struct PaletteMgr {
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
-    virtual void v08(); virtual void v09(); virtual void v10();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
     virtual void GetConfig(int cfg, int key, int* out); // +0x2c
     virtual void v12();                                 // +0x30
     virtual void StoreProperties(void* list, int instance, uint32_t group); // +0x34
 };
 int GetConfigFromModelType(int id);      // 0x00432f10
-void* PropertyManager();                 // 0x0067de30
+void* PropertyManager_s004e_a310();                 // 0x0067de30
 struct Variant {
     uint32_t mData[4];
     unsigned short mnFlags;
@@ -148,7 +183,9 @@ struct Variant {
 struct cPropertyList {
     virtual void AddRef();     // +0x00
     virtual void Release();    // +0x04
-    virtual void v08(); virtual void v0c(); virtual void v10();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
     virtual void AddProperty(uint32_t id, const Variant* v);   // +0x14
     char pad[0x38 - 4];
     cPropertyList();           // Editor::cPropertyList::cPropertyList, 0x006a1c40
@@ -169,8 +206,14 @@ struct ListRef {
     cPropertyList* operator->() { return mpObject; }
 };
 struct ResMgr {
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
-    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
     virtual void Write(cPropertyList* list, int a, int area, int b, int c);   // +0x20
 };
 ResMgr* GetResourceMgr();                       // 0x0067dcd0
@@ -558,8 +601,13 @@ struct Property_s004e_f880 {
     bool* GetBool();                // @ 0x0041e920
 };
 struct cPropertyList_s004e_f880 : RefCounted {
-    virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6();
-    virtual void v7(); virtual void v8();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
     virtual bool GetProperty(uint32_t id, Property_s004e_f880*& out);   // +0x24
 };
 uint32_t GetConfigFromModelType(uint32_t modelType); // @ 0x00432f10 (RemapTypeId)
@@ -1292,6 +1340,18 @@ inline bool operator==(const PriorityEntry& e, const TypeKey& k) { return e.mTyp
 inline bool operator==(const PriorityEntry& e, const GroupTypeKey& k) { return (e.mGroup == k.mGroup) && (e.mType == k.mType); }
 // ---- items of slice s004f6630 end
 
+// @ 0x004e9500
+void Body9500(void* a, void* b, void* c)
+{
+    (void)a; (void)b; (void)c;
+}
+
+// @ 0x004e95e0
+void FUN_004e95e0(int* self, void* out1, void* out2)
+{
+    (void)self; (void)out1; (void)out2;
+}
+
 // @ 0x004e9950
 void Collect9950(DeclareParam param, Vec* out)
 {
@@ -1333,21 +1393,6 @@ void Collect9950(DeclareParam param, Vec* out)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004e9b40
 void AddPaintKeys(DeclareParam param, Vec* out)
 {
@@ -1383,21 +1428,6 @@ void AddPaintKeys(DeclareParam param, Vec* out)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004e9c40
 void UpgradeParts(DeclareParam param, Vec* out)
 {
@@ -1414,20 +1444,11 @@ void UpgradeParts(DeclareParam param, Vec* out)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// @ 0x004e9ca0
+void FUN_004e9ca0(Vec* out)
+{
+    (void)out;
+}
 
 // @ 0x004e9fc0
 void FUN_004e9fc0(int modelType, Vec* out, int kind)
@@ -1460,21 +1481,6 @@ void FUN_004e9fc0(int modelType, Vec* out, int kind)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004ea190
 void FUN_004ea190(int id, Vec* out, int flag)
 {
@@ -1503,19 +1509,15 @@ void FUN_004ea190(int id, Vec* out, int flag)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+// @ 0x004ea310
+namespace SP {
+namespace EditorValidity {
+void AddSpecialPaints(SP::eModelType a, eastl::vector<EA::ResourceMan::Key, eastl::sp_vector_allocator> & b, unsigned int c)
+{
+    (void)a; (void)b; (void)c;
+}
+}
+}  // namespace SP::EditorValidity
 
 // @ 0x004ea720
 FlagWord FUN_004ea720(int p1, int p2)
@@ -1526,20 +1528,6 @@ FlagWord FUN_004ea720(int p1, int p2)
     f.b = p2;
     return f;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004ea780
 void FUN_004ea780(int id, int tag, VSet* out, int param4)
@@ -1563,7 +1551,7 @@ void FUN_004ea780(int id, int tag, VSet* out, int param4)
     v22 = GetConfigFromModelType(id);
     if (param4 != 0)
         v22 = param4;
-    n32 = PropertyManager();
+    n32 = PropertyManager_s004e_a310();
     if (v14)
         ((Iface_s004e_a310*)v14)->Release();
     ((PaletteMgr*)n32)->GetConfig(v22, g_15daa00, &v14);
@@ -1578,20 +1566,6 @@ void FUN_004ea780(int id, int tag, VSet* out, int param4)
     if (v14)
         ((Iface_s004e_a310*)v14)->Release();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004ea920
 void FUN_004ea920(int modelType, int instance, int param3)
@@ -1632,7 +1606,7 @@ void FUN_004ea920(int modelType, int instance, int param3)
     int other = GetConfigFromModelType(modelType);
     if (param3 != 0)
         other = param3;
-    ((PaletteMgr*)PropertyManager())->GetConfig(other, g_15daa00, (int*)&src);
+    ((PaletteMgr*)PropertyManager_s004e_a310())->GetConfig(other, g_15daa00, (int*)&src);
     ResourceKey t15;
     if (src.mpObject)
         GetPropertyAsKey(src.mpObject, 0xf5cbe065, &t15);
@@ -1651,24 +1625,11 @@ void FUN_004ea920(int modelType, int instance, int param3)
     uint32_t result = MakeFlags(t15.instance, 0x7b, 0x6b);
     uint32_t n8 = MakeFlags(buf.instance, 0x7b, 0x6b);
     int p19 = instance;
-    ((PaletteMgr*)PropertyManager())->StoreProperties(v39.mpObject, p19, result);
-    ((PaletteMgr*)PropertyManager())->StoreProperties(p29.mpObject, p19, n8);
+    ((PaletteMgr*)PropertyManager_s004e_a310())->StoreProperties(v39.mpObject, p19, result);
+    ((PaletteMgr*)PropertyManager_s004e_a310())->StoreProperties(p29.mpObject, p19, n8);
     GetResourceMgr()->Write(v39.get(), 0, GetSaveArea(0x11ac19e), 0, 0);
     GetResourceMgr()->Write(p29.get(), 0, GetSaveArea(0x11ac19e), 0, 0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004eb930
 bool FUN_004eb930(const DeclareParam& a, const DeclareParam& b)
@@ -1680,19 +1641,6 @@ bool FUN_004eb930(const DeclareParam& a, const DeclareParam& b)
         r = 0;
     return *(bool*)&r;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004eb980
 void FUN_004eb980(void)
@@ -1706,17 +1654,11 @@ void FUN_004eb980(void)
     FUN_004ea920(0x9ea3031a, 1, 0xe46c381e);
 }
 
-
-
-
-
-
-
-
-
-
-
-
+// @ 0x004eba00
+void FUN_004eba00(void* a, void* b, void* c)
+{
+    (void)a; (void)b; (void)c;
+}
 
 // @ 0x004ebe20
 namespace SP {
@@ -1894,16 +1836,23 @@ void InitializeValidityData()
 }
 }  // namespace SP::EditorValidity
 
+// @ 0x004ecec0
+void FUN_004ecec0(void* a)
+{
+    (void)a;
+}
 
+// @ 0x004ed320
+void FUN_004ed320(void* a, void* b)
+{
+    (void)a; (void)b;
+}
 
-
-
-
-
-
-
-
-
+// @ 0x004ed7f0
+void FUN_004ed7f0(void* a, void* b)
+{
+    (void)a; (void)b;
+}
 
 // @ 0x004eda30
 bool FUN_004eda30(char* res, int need, Flags128* flags)
@@ -1948,17 +1897,6 @@ bool FUN_004eda30(char* res, int need, Flags128* flags)
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004edeb0
 bool FUN_004edeb0(int unused, Flags128* flags)
 {
@@ -1967,17 +1905,6 @@ bool FUN_004edeb0(int unused, Flags128* flags)
         flags->set(16, false);
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004edf40
 bool FUN_004edf40(const wchar_t* name, Flags128* flags)
@@ -2008,17 +1935,6 @@ bool FUN_004edf40(const wchar_t* name, Flags128* flags)
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004ee3b0
 bool FUN_004ee3b0(char* res, Flags128* flags)
 {
@@ -2037,17 +1953,6 @@ bool FUN_004ee3b0(char* res, Flags128* flags)
     if (flags) flags->set(14, false);
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004ee560
 bool FUN_004ee560(char* res, Flags128* flags)
@@ -2088,17 +1993,6 @@ bool FUN_004ee560(char* res, Flags128* flags)
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004ee930
 int FUN_004ee930(unsigned int index, int res)
 {
@@ -2111,16 +2005,6 @@ int FUN_004ee930(unsigned int index, int res)
     v18 = *(int*)p15 + (int)index * 0x1d8;
     return (int)((Manager*)n35)->Find(*(int*)(v18 + 4), *(int*)p12);
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004ee9b0
 bool TestLimbs(Model* model, ValidityBits_s004e_e9b0* flags)
@@ -2210,16 +2094,6 @@ bool TestLimbs(Model* model, ValidityBits_s004e_e9b0* flags)
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x004ef190
 bool TestBounds(Model* model, ValidityBits_s004e_e9b0* flags)
 {
@@ -2283,14 +2157,11 @@ bool TestBounds(Model* model, ValidityBits_s004e_e9b0* flags)
     return true;
 }
 
-
-
-
-
-
-
-
-
+// @ 0x004ef880
+void FUN_004ef880(void* a, void* b)
+{
+    (void)a; (void)b;
+}
 
 // @ 0x004efb20
 struct PMgr_s004ef880 {
@@ -2359,14 +2230,6 @@ bool CheckRequiredParts(cEditorModel* model, uint32_t key, ValidityBits_s004e_f8
         validity->set(0x12, !p13);
     return p13;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x004f01f0
 enum {
@@ -2472,13 +2335,6 @@ bool TestSize(cEditorModel_s004f_01f0* model, ValidityBits_s004f_01f0* validity)
     }
     return true;
 }
-
-
-
-
-
-
-
 
 // @ 0x004f1350
 enum { kValidityTooComplex = 0 };
@@ -2603,11 +2459,12 @@ bool TestComplexity(cEditorModel_s004f_1350* model, ValidityBits_s004f_1350* val
     return true;
 }
 
-
-
-
-
-
+// @ 0x004f1ff0
+float FUN_004f1ff0(int a)
+{
+    (void)a;
+    return 0.0f;
+}
 
 // @ 0x004f21e0
 bool FUN_004f21e0(int a, int b)
@@ -2618,10 +2475,35 @@ bool FUN_004f21e0(int a, int b)
     return false;
 }
 
+// @ 0x004f2210
+void FUN_004f2210(void* a, void* b, void* c)
+{
+    (void)a; (void)b; (void)c;
+}
 
+// @ 0x004f2610
+void FUN_004f2610(void* a, void* b, void* c)
+{
+    (void)a; (void)b; (void)c;
+}
 
+// @ 0x004f2d40
+void FUN_004f2d40(void* a, void* b, void* c)
+{
+    (void)a; (void)b; (void)c;
+}
 
+// @ 0x004f31c0
+void FUN_004f31c0(void* a, void* b, void* c)
+{
+    (void)a; (void)b; (void)c;
+}
 
+// @ 0x004f3650
+void FUN_004f3650(void* a, void* b, void* c)
+{
+    (void)a; (void)b; (void)c;
+}
 
 // @ 0x004f3b40
 int FUN_004f3b40(Bits128 a, Bits128 b)
@@ -2653,20 +2535,18 @@ int FUN_004f3b40(Bits128 a, Bits128 b)
     return 0x1c;
 }
 
-
-
-
-
-
 // @ 0x004f3c40
 int FUN_004f3c40(int i)
 {
     return g_150c920[i].a;
 }
 
-
-
-
+// @ 0x004f3c50
+bool FUN_004f3c50(int a, int b, int c, int d, int e)
+{
+    (void)a; (void)b; (void)c; (void)d; (void)e;
+    return false;
+}
 
 // @ 0x004f3d60
 bool FUN_004f3d60(Bits128 a, Bits128 b)
@@ -2676,9 +2556,6 @@ bool FUN_004f3d60(Bits128 a, Bits128 b)
         a.w[i] &= b.w[i];
     return !AnyBit(a);
 }
-
-
-
 
 // @ 0x004f3de0
 namespace EA { namespace ResourceMan {
@@ -2824,8 +2701,6 @@ ValidityBits_s004f_3de0 SP::cSPEditorModelValidity_s004f_3de0::CalculateValidity
     return validity;
 }
 
-
-
 // @ 0x004f56f0
 bool FUN_004f56f0(wchar_t c)
 {
@@ -2833,8 +2708,6 @@ bool FUN_004f56f0(wchar_t c)
         return false;
     return true;
 }
-
-
 
 // @ 0x004f5720
 bool FUN_004f5720(Model_s004f_56f0* model, UIntVec* out)
@@ -2906,8 +2779,6 @@ bool FUN_004f5720(Model_s004f_56f0* model, UIntVec* out)
         return false;
     }
 }
-
-
 
 // @ 0x004f5c60
 bool GetListOfUnknownPartsAndPaints(const Key* modelKey, KeyVec* parts, KeyVec* paints)
@@ -3002,15 +2873,11 @@ bool GetListOfUnknownPartsAndPaints(const Key* modelKey, KeyVec* parts, KeyVec* 
     return true;
 }
 
-
-
 // @ 0x004f64d0
 bool Obj::Compare(const Key* k)
 {
     return k->c == f0 && k->a == f1;
 }
-
-
 
 // @ 0x004f6510
 void wstring::push_back(wchar_t c)
@@ -3025,8 +2892,6 @@ void wstring::push_back(wchar_t c)
     *mpEnd = 0;
 }
 
-
-
 // @ 0x004f65d0
 Bits* Bits::Flip()
 {
@@ -3035,7 +2900,6 @@ Bits* Bits::Flip()
         w[i] = ~w[i];
     return this;
 }
-
 
 // @ 0x004f6720
 Elem16Vector& UIntMap::operator[](const uint32_t& key)
@@ -3046,7 +2910,6 @@ Elem16Vector& UIntMap::operator[](const uint32_t& key)
     }
     return (*itLower).second;
 }
-
 
 // @ 0x004f68f0
 template <class T>

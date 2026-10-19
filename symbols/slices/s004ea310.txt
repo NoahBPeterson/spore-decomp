@@ -1,3 +1,4 @@
+004ea310 ?AddSpecialPaints@EditorValidity@SP@@YAXW4eModelType@2@AAV?$vector@VKey@ResourceMan@EA@@Vsp_vector_allocator@eastl@@@eastl@@I@Z  # SP::EditorValidity::AddSpecialPaints migrated from s004ea310
 004ea720 ?FUN_004ea720@@YA?AUFlagWord@@HH@Z  # FUN_004ea720 migrated from s004ea310 (verbatim, slice spelling)
 004ea780 ?FUN_004ea780@@YAXHHPAUVSet@@H@Z  # FUN_004ea780 migrated from s004ea310 (verbatim, slice spelling)
 004ea920 ?FUN_004ea920@@YAXHHH@Z  # FUN_004ea920 migrated from s004ea310 (verbatim, slice spelling)

@@ -1,1 +1,2 @@
+004ef880 ?FUN_004ef880@@YAXPAX0@Z  # FUN_004ef880 migrated from s004ef880 (verbatim, slice spelling)
 004efb20 ?CheckRequiredParts@@YA_NPAUcEditorModel@@IPAUValidityBits_s004e_f880@@@Z  # CheckRequiredParts migrated from s004ef880 (verbatim, slice spelling)

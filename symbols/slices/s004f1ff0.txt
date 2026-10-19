@@ -1,1 +1,4 @@
+004f1ff0 ?FUN_004f1ff0@@YAMH@Z  # FUN_004f1ff0 migrated from s004f1ff0 (verbatim, slice spelling)
 004f21e0 ?FUN_004f21e0@@YA_NHH@Z  # FUN_004f21e0 migrated from s004f1ff0 (verbatim, slice spelling)
+004f2210 ?FUN_004f2210@@YAXPAX00@Z  # FUN_004f2210 migrated from s004f1ff0 (verbatim, slice spelling)
+004f2610 ?FUN_004f2610@@YAXPAX00@Z  # FUN_004f2610 migrated from s004f1ff0 (verbatim, slice spelling)

@@ -1,2 +1,5 @@
+004f2d40 ?FUN_004f2d40@@YAXPAX00@Z  # FUN_004f2d40 migrated from s004f2d40 (verbatim, slice spelling)
+004f31c0 ?FUN_004f31c0@@YAXPAX00@Z  # FUN_004f31c0 migrated from s004f2d40 (verbatim, slice spelling)
+004f3650 ?FUN_004f3650@@YAXPAX00@Z  # FUN_004f3650 migrated from s004f2d40 (verbatim, slice spelling)
 004f3b40 ?FUN_004f3b40@@YAHUBits128@@0@Z  # FUN_004f3b40 migrated from s004f2d40 (verbatim, slice spelling)
 004f3c40 ?FUN_004f3c40@@YAHH@Z  # FUN_004f3c40 migrated from s004f2d40 (verbatim, slice spelling)

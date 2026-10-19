@@ -1,3 +1,4 @@
 004eb270 FUN_004eb270  # SP::EditorValidity::ReadKeysFromFile (pdb_names); collects validity key records from property lists
 004eb930 ?FUN_004eb930@@YA_NABUDeclareParam@@0@Z  # FUN_004eb930 migrated from s004eb270 (verbatim, slice spelling)
 004eb980 ?FUN_004eb980@@YAXXZ  # FUN_004eb980 migrated from s004eb270 (verbatim, slice spelling)
+004eba00 ?FUN_004eba00@@YAXPAX00@Z  # FUN_004eba00 migrated from s004eb270 (verbatim, slice spelling)
