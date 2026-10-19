@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPEditorPaintTheme.cpp  ?AsInterface@cSPEditorPaintTheme_s004b_2320@SP@@QAEPAXH@Z  004b26a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorPaintTheme.cpp  ?SetSource@cSPEditorPaintTheme_s004b_2320@SP@@QAEXH@Z  004b26e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorPaintTheme.cpp  ?Reset2@cSPEditorPaintTheme_s004b_2320@SP@@QAEXXZ  004b27c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorPaintTheme.cpp  ?ApplyToAsset@cSPEditorPaintTheme_s004b_2320@SP@@QAEXHH@Z  004b3190  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorPaintTheme.cpp  ?Release@C70@@QAEXXZ  004b4f70  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorPaintTheme.cpp  ?Reset@Tree@@QAEXXZ  004b5030  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorPaintTheme.cpp  ?FUN_004bbe90@@YA_NI@Z  004bbe90  /Od /Ob1 /MD /Gy /TP /Isrc/game/include

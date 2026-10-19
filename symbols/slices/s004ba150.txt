@@ -5,4 +5,4 @@
 004bac80  SP::cRuntimeCreatureResource::AsInterface  # PDB caller-scored
 004bacc0  FUN_004bacc0  # runtime-creature ctor / zero-init
 004bad50  FUN_004bad50  # resource destructor
-004badd0  SP::cSPEditorPaintTheme::Apply  # second overload
+004badd0 ?FUN_004badd0@@YAHPAXPAH0@Z  # FUN_004badd0 migrated from s004ba150 (verbatim, slice spelling)

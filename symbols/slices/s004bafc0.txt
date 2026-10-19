@@ -2,4 +2,4 @@
 004bb860 ?FUN_004bb860@@YAII@Z  # FUN_004bb860 migrated from s004bafc0 (verbatim, slice spelling)
 004bbd20 SP::EditorEntityToResourceType  # PDB (callee-scored); editor code -> model-type hash
 004bbe20 SP::cSPAssetDataList::SetAssetData  # PDB (callee-scored); model-type predicate
-004bbe90 SP::cSPEditorPaintTheme::ExtractSkinPaintData  # PDB (callee-scored); model-type predicate
+004bbe90 ?FUN_004bbe90@@YA_NI@Z  # FUN_004bbe90 migrated from s004bafc0 (verbatim, slice spelling)

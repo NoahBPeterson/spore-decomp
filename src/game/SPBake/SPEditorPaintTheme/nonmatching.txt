@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+004b4930 1317 ExtractRegionPaintData: complete (45/46 calls, size 1.03x, call targets in order); /Od frame-slot layout differs and cl inlines the vector/PropListRef dtors at the success-path exit where the original calls them out of line
+004b4fa0 62 vector emplace/append of 0x11c-byte elements; full branches present, frame layout differs [equiv: PASS 677 valid inputs, 100% coverage]

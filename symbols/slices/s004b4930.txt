@@ -1,8 +1,8 @@
-004b4930  SP::cSPEditorPaintTheme::ExtractRegionPaintData  # PDB anchor
-004b4f70  C70::Release  # intrusive ref release (vtable +8)
-004b4fa0  FUN_004b4fa0  # vector emplace 0x11c-byte
-004b5030  Tree::Reset  # rbtree reset/nuke
-004b5080  FUN_004b5080  # hashtable find/insert (4)
+004b4930 ?ExtractRegionPaintData@PaintTheme@@QAE_NPAUAssetView@@PAXI@Z  # PaintTheme::ExtractRegionPaintData migrated from s004b4930 (verbatim, slice spelling)
+004b4f70 ?Release@C70@@QAEXXZ  # C70::Release migrated from s004b4930 (verbatim, slice spelling)
+004b4fa0 ?FUN_004b4fa0@RecVec11c@@QAEXPAURec11c@@@Z  # RecVec11c::FUN_004b4fa0 migrated from s004b4930 (verbatim, slice spelling)
+004b5030 ?Reset@Tree@@QAEXXZ  # Tree::Reset migrated from s004b4930 (verbatim, slice spelling)
+004b5080 ?FUN_004b5080@@YIHPAXPAI@Z  # FUN_004b5080 migrated from s004b4930 (verbatim, slice spelling)
 004b5160  FUN_004b5160  # hashtable find/insert (0x1c)
 004b5210  FUN_004b5210  # rbtree lower_bound
 004b52b0  FUN_004b52b0  # float triple comparator

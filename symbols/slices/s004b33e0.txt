@@ -1,5 +1,5 @@
-004b33e0  FUN_004b33e0  # per-block paint accumulation (EASTL map)
-004b3660  FUN_004b3660  # model prop lookup
+004b33e0 ?FUN_004b33e0@@YAHPAH0H@Z  # FUN_004b33e0 migrated from s004b33e0 (verbatim, slice spelling)
+004b3660 ?FUN_004b3660@@YAHHPAHH@Z  # FUN_004b3660 migrated from s004b33e0 (verbatim, slice spelling)
 004b3730  SP::cSPEditorPaintTheme::InitClosestRegions  # PDB anchor
 004b3910  FUN_004b3910  # region lookup by key
 004b3a50  FUN_004b3a50  # region scan / apply dispatch
