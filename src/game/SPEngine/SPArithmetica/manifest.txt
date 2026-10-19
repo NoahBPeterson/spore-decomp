@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPArithmetica.cpp  ?ArithmeticaKeyRead@@YGHPAPAXI@Z  007f1600  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPArithmetica.cpp  ?ArithmeticaFactoryWrite@@YGXPAX0HH@Z  007f1870  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPArithmetica.cpp  ?CreateResDerived@@YAPAUResDerived@@XZ  007f18e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPArithmetica.cpp  ??0cArithmeticaProgram@@QAE@XZ  007f1e60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPArithmetica.cpp  ?Create@VFactory@@QAE_NPAX000@Z  007f1ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPArithmetica.cpp  ?ArithReadWrapper@@YGXPAX0HH@Z  007f29e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,11 +1,16 @@
-007f1600 EA::Resource::ReadKey  # __stdcall read callback storing ResourceKey id 0x472329b
-007f1630 cArithmeticaProgram::CompileToByteCode  # Ghidra name
-007f1820 cArithmeticaFactory::WriteResource  # Ghidra name
-007f1890 eastl::uninitialized_copy  # 16-byte element copy helper
-007f18e0 ResDerived factory  # operator_new(8,"App") + atomic refcount
-007f1ac0 eastl::vector<cArithmeticaProgram::tLabel>::assign  # 8-byte elements
-007f1d90 cArithmeticaProgram::~cArithmeticaProgram  # six buffer deallocations
-007f1e60 cArithmeticaProgram::cArithmeticaProgram  # PDB name, size 0x94
-007f1ed0 cArithmeticaFactory::Create  # operator_new(0x94,"App/cArithmeticaFactory")
-007f21d0 cArithmeticaProgram::Copy  # per-member vector copies
-007f2240 LoadArithmeticaFile  # Ghidra name
+007f1600 ?ArithmeticaKeyRead@@YGHPAPAXI@Z  # ArithmeticaKeyRead migrated from s007f1220 (verbatim, slice spelling)
+007f1630 ?CompileToByteCode@cArithmeticaProgram@@QAEPAXPAX@Z  # cArithmeticaProgram::CompileToByteCode migrated from s007f1220 (verbatim, slice spelling)
+007f1820 ?ArithmeticaWriteResource@@YA_NPAX0@Z  # ArithmeticaWriteResource migrated from s007f1220 (verbatim, slice spelling)
+007f1870 ?ArithmeticaFactoryWrite@@YGXPAX0HH@Z  # ArithmeticaFactoryWrite migrated from s007f1220 (verbatim, slice spelling)
+007f1890 ?UninitCopy16@@YAPAPAUE16@@PAPAU1@PAU1@11@Z  # UninitCopy16 migrated from s007f1220 (verbatim, slice spelling)
+007f18e0 ?CreateResDerived@@YAPAUResDerived@@XZ  # CreateResDerived migrated from s007f1220 (verbatim, slice spelling)
+007f1ac0 ?ArithmeticaAssignLabels@@YAXPAX0@Z  # ArithmeticaAssignLabels migrated from s007f1220 (verbatim, slice spelling)
+007f1bf0 ?ArithmeticaVec16Insert@@YAXPAX0I0@Z  # ArithmeticaVec16Insert migrated from s007f1220 (verbatim, slice spelling)
+007f1d90 ?Destroy@cArithmeticaProgram@@QAEXXZ  # cArithmeticaProgram::Destroy migrated from s007f1220 (verbatim, slice spelling)
+007f1e60 ??0cArithmeticaProgram@@QAE@XZ  # cArithmeticaProgram::cArithmeticaProgram migrated from s007f1220 (verbatim, slice spelling)
+007f1ed0 ?Create@VFactory@@QAE_NPAX000@Z  # VFactory::Create migrated from s007f1220 (verbatim, slice spelling)
+007f1f60 ?ArithmeticaVecResize@@YAXPAXI@Z  # ArithmeticaVecResize migrated from s007f1220 (verbatim, slice spelling)
+007f1fe0 ?ArithmeticaVec16Assign@@YAXPAX0@Z  # ArithmeticaVec16Assign migrated from s007f1220 (verbatim, slice spelling)
+007f20d0 ?ArithmeticaLookupRun@@YAXPAX0@Z  # ArithmeticaLookupRun migrated from s007f1220 (verbatim, slice spelling)
+007f21d0 ?Copy@cArithmeticaProgram@@QAEXABU1@@Z  # cArithmeticaProgram::Copy migrated from s007f1220 (verbatim, slice spelling)
+007f2240 ?LoadArithmeticaFile@@YA_NPAX0@Z  # LoadArithmeticaFile migrated from s007f1220 (verbatim, slice spelling)
