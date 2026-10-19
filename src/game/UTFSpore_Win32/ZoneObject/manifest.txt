@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/ZoneObject.cpp  ?ZoneObject_new@Trace@EA@@YAPAXHHH@Z  00926020  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
