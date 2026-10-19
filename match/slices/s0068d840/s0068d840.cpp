@@ -43,155 +43,111 @@ extern "C" u32  gHMNameMagic;        // 0x152ca8c
 // =====================================================================
 extern "C" wch* GetExplicitIdStart(wch*, wch*, char, char);
 extern "C" wch* FindCharRev(wch*, wch*, const wch*);
-extern "C" void  HashInsertString(u32* node, const wch* b, const wch* e); // 0x68d340+assign
 extern "C" void  FUN_0068d1a0();
 extern "C" void  Nuke_9a9600(void*, void*);
 extern "C" void  MemcpyT2(void*, const void*, unsigned);
 
+struct NameWString {
+    void Assign(const wch* b, const wch* e);   // 0x00423650
+};
+struct NameStrMap {
+    NameWString* Index(u32* key);              // 0x0068d340
+};
+extern NameStrMap gNameStrMap;                                      // 0x0152c864
+
 // @ 0x0068d840
-extern "C" bool SPKeyFromName(u32* out, const wch* name, u32 a, u32 b) {
-    if (name == 0 || *name == 0)
+extern "C" bool SPKeyFromName(u32* param_1, wch* param_2, u32 param_3, u32 param_4) {
+    wch* pwVar4 = param_2;
+    wch* pwVar2;
+    wch* pwVar3;
+    wch* pwVar8;
+    wch* local_4;
+    wch wVar1;
+    int iVar7;
+    u32* puVar9;
+
+    if (param_2 == 0 || *param_2 == 0)
         return false;
-
-    out[1] = a;
-    wch* local4 = 0;
-
-    wch* pw2 = wcschr((wch*)name, L'.');
-    if (pw2 == 0) {
-        wch* p = (wch*)name;
-        wch c;
-        do { c = *p; p += 1; } while (c != 0);
-        pw2 = (wch*)name + (((int)p - (int)((wch*)name + 1)) >> 1);
+    param_1[1] = param_3;
+    local_4 = 0;
+    pwVar2 = wcschr(param_2, L'.');
+    if (pwVar2 == 0) {
+        pwVar2 = pwVar4;
+        do {
+            wVar1 = *pwVar2;
+            pwVar2 = pwVar2 + 1;
+        } while (wVar1 != 0);
+        pwVar2 = pwVar4 + (pwVar2 - (pwVar4 + 1));
     } else {
-        local4 = pw2 + 1;
+        local_4 = pwVar2 + 1;
     }
-
-    int iVar7 = ((int)pw2 - (int)name) >> 1;
-    wch* pw8 = (wch*)name;
-
+    iVar7 = pwVar2 - pwVar4;
+    pwVar8 = pwVar4;
     for (;;) {
         if (iVar7 == 0) {
-            out[2] = b;
-            wch* pw3 = (wch*)name;
-            pw8 = (wch*)name;
-            u32* puVar9 = out + 2;
-            if (pw3 == pw2) {
-                *out = 0xffffffff;
+            param_1[2] = param_4;
+            pwVar3 = pwVar4;
+            pwVar8 = pwVar4;
+        LAB_0068d8cc:
+            puVar9 = param_1 + 2;
+            if (pwVar3 == pwVar2) {
+                *param_1 = 0xffffffff;
             } else {
-                wch* q = GetExplicitIdStart(pw3, pw2, 1, 1);
-                if (q == 0)
-                    *out = HashName((const wch*)name, iVar7);
+                pwVar3 = GetExplicitIdStart(pwVar3, pwVar2, 1, 1);
+                if (pwVar3 == 0)
+                    *param_1 = HashName(param_2, pwVar2 - param_2);
                 else
-                    *out = (u32)wcstoul(q, 0, 16);
+                    *param_1 = (u32)wcstoul(pwVar3, 0, 16);
             }
-
-            if ((const wch*)name != pw8) {
-                wch ch = 0x40;
-                int r = (int)FindCharRev((wch*)name, pw8, &ch);
-                if (r == 0) {
-                    ch = 0x5f;
-                    int r2 = (int)FindCharRev((wch*)name, pw8, &ch);
-                    wch* q = (wch*)name;
-                    if (r2 != 0)
-                        q = (wch*)(r2 + 2);
-                    q = GetExplicitIdStart(q, pw8, 0, 0);
-                    if (q == 0) {
-                        u32 h = HashName((const wch*)name, ((int)pw8 - (int)name) >> 1);
-                        *puVar9 = h;
-                        HashInsertString(puVar9, (const wch*)name, pw8);
+            if (pwVar4 != pwVar8) {
+                param_2 = (wch*)0x40;
+                iVar7 = (int)FindCharRev(pwVar4, pwVar8, (const wch*)&param_2);
+                if (iVar7 == 0) {
+                    param_2 = (wch*)0x5f;
+                    iVar7 = (int)FindCharRev(pwVar4, pwVar8, (const wch*)&param_2);
+                    pwVar2 = pwVar4;
+                    if (iVar7 != 0)
+                        pwVar2 = (wch*)(iVar7 + 2);
+                    pwVar2 = GetExplicitIdStart(pwVar2, pwVar8, 0, 0);
+                    if (pwVar2 == 0) {
+                        *puVar9 = HashName(pwVar4, pwVar8 - pwVar4);
+                        gNameStrMap.Index(puVar9)->Assign(pwVar4, pwVar8);
                     } else {
-                        *puVar9 = (u32)wcstoul(q, 0, 16);
+                        *puVar9 = (u32)wcstoul(pwVar2, 0, 16);
                     }
                 } else {
                     *puVar9 = 0;
                 }
             }
-
-            if (local4 != 0) {
-                out[1] = 0xffffffff;
-                if (*local4 != 0) {
-                    wch* p = local4;
-                    wch c;
-                    do { c = *p; p += 1; } while (c != 0);
-                    wch* q = GetExplicitIdStart(
-                        local4, local4 + (((int)p - (int)(local4 + 1)) >> 1), 0, 0);
-                    if (q != 0) {
-                        out[1] = (u32)wcstoul(q, 0, 16);
+            if (local_4 != 0) {
+                param_1[1] = 0xffffffff;
+                if (*local_4 != 0) {
+                    pwVar4 = local_4;
+                    do {
+                        wVar1 = *pwVar4;
+                        pwVar4 = pwVar4 + 1;
+                    } while (wVar1 != 0);
+                    pwVar2 = GetExplicitIdStart(local_4, local_4 + (pwVar4 - (local_4 + 1)), 0, 0);
+                    if (pwVar2 != 0) {
+                        param_1[1] = (u32)wcstoul(pwVar2, 0, 16);
                         return true;
                     }
                     void* mgr = GetResourceManager();
-                    int id = ((int(__thiscall*)(void*, wch*))VFN(mgr, 0x88))(mgr, local4);
-                    if (id == -1)
-                        id = (int)HashName(local4, ((int)p - (int)(local4 + 1)) >> 1);
-                    out[1] = (u32)id;
+                    iVar7 = ((int(__thiscall*)(void*, wch*))VFN(mgr, 0x88))(mgr, local_4);
+                    if (iVar7 == -1)
+                        iVar7 = (int)HashName(local_4, (local_4 + (pwVar4 - (local_4 + 1))) - local_4);
+                    param_1[1] = (u32)iVar7;
                 }
             }
             return true;
         }
-
-        if (*pw8 == L'!') {
-            out[2] = 0xffffffff;
-            pw8 = pw8 + 1;
-            // fall through to the LAB body with pw3 = pw8+1; re-enter with
-            // the same block as above (handled by iVar7 == 0 path next iter)
-            // Reproduce by directly executing the block:
-            {
-                wch* pw3 = pw8;
-                u32* puVar9 = out + 2;
-                if (pw3 == pw2) {
-                    *out = 0xffffffff;
-                } else {
-                    wch* q = GetExplicitIdStart(pw3, pw2, 1, 1);
-                    if (q == 0)
-                        *out = HashName((const wch*)name, iVar7);
-                    else
-                        *out = (u32)wcstoul(q, 0, 16);
-                }
-                if ((const wch*)name != pw8) {
-                    wch ch = 0x40;
-                    int r = (int)FindCharRev((wch*)name, pw8, &ch);
-                    if (r == 0) {
-                        ch = 0x5f;
-                        int r2 = (int)FindCharRev((wch*)name, pw8, &ch);
-                        wch* q = (wch*)name;
-                        if (r2 != 0)
-                            q = (wch*)(r2 + 2);
-                        q = GetExplicitIdStart(q, pw8, 0, 0);
-                        if (q == 0) {
-                            u32 h = HashName((const wch*)name, ((int)pw8 - (int)name) >> 1);
-                            *puVar9 = h;
-                            HashInsertString(puVar9, (const wch*)name, pw8);
-                        } else {
-                            *puVar9 = (u32)wcstoul(q, 0, 16);
-                        }
-                    } else {
-                        *puVar9 = 0;
-                    }
-                }
-                if (local4 != 0) {
-                    out[1] = 0xffffffff;
-                    if (*local4 != 0) {
-                        wch* p = local4;
-                        wch c;
-                        do { c = *p; p += 1; } while (c != 0);
-                        wch* q = GetExplicitIdStart(
-                            local4, local4 + (((int)p - (int)(local4 + 1)) >> 1), 0, 0);
-                        if (q != 0) {
-                            out[1] = (u32)wcstoul(q, 0, 16);
-                            return true;
-                        }
-                        void* mgr = GetResourceManager();
-                        int id = ((int(__thiscall*)(void*, wch*))VFN(mgr, 0x88))(mgr, local4);
-                        if (id == -1)
-                            id = (int)HashName(local4, ((int)p - (int)(local4 + 1)) >> 1);
-                        out[1] = (u32)id;
-                    }
-                }
-                return true;
-            }
+        if (*pwVar8 == L'!') {
+            pwVar3 = pwVar8 + 1;
+            param_1[2] = 0xffffffff;
+            param_2 = pwVar3;
+            goto LAB_0068d8cc;
         }
-
-        pw8 = pw8 + 1;
+        pwVar8 = pwVar8 + 1;
         iVar7 = iVar7 - 1;
     }
 }
@@ -201,7 +157,7 @@ extern "C" bool SPKeyFromName(u32* out, const wch* name, u32 a, u32 b) {
 // =====================================================================
 // @ 0x0068da70
 extern "C" void FUN_0068da70(void* p1, void* p2, void* p3, void* p4) {
-    SPKeyFromName((u32*)p1, (const wch*)p2, (u32)p3, (u32)p4);
+    SPKeyFromName((u32*)p1, (wch*)p2, (u32)p3, (u32)p4);
 }
 
 // =====================================================================

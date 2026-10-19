@@ -276,10 +276,58 @@ void* ProfTable_DoInsertValue(void* self, void* result, void* key) {
 }
 
 // ===========================================================================
-// @ 0x00690b80 / 0x00690c90  eastl vector insert (candidate lists)
+// eastl vector insert (waiting lists)
 // ===========================================================================
+// @ 0x00690b80
 void WaitingList1_Insert(void* vec, void* pos, void* value) {
     (void)vec; (void)pos; (void)value;
+}
+
+// eastl::vector<cJob*, fixed_vector_allocator<4,N,4,0,true> >::DoInsertValue (waiting list 2).
+#include <string.h>
+void* operator new(size_t, const char* name, int, unsigned, const char* file, int line);   // 0x00f473a0
+void  EASTL_allocator_deallocate(void* p);   // 0x00f47380
+#define EASTL_ALLOC_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
+struct WaitingList2 {
+    cJob** mpBegin;          // +0
+    cJob** mpEnd;            // +4
+    cJob** mpCapacity;       // +8
+    int mOverflowAllocator;  // +0xc
+    void* mpPoolBegin;       // +0x10
+    cJob** DoAllocate(const size_t& n) {
+        if (n)
+            return (cJob**)::operator new(n * sizeof(cJob*), "App", 0, 0, EASTL_ALLOC_FILE, 0xd1);
+        return 0;
+    }
+    void DoFree(cJob** p) {
+        if (p && p != mpPoolBegin)
+            EASTL_allocator_deallocate(p);
+    }
+    void DoInsertValue(cJob** position, cJob* const& value);
+};
+// @ 0x00690c90
+void WaitingList2::DoInsertValue(cJob** position, cJob* const& value) {
+    if (mpEnd != mpCapacity) {
+        cJob* const* pValue = &value;
+        if ((pValue >= position) && (pValue < mpEnd))
+            ++pValue;
+        ::new (mpEnd) cJob*(*(mpEnd - 1));
+        memmove(mpEnd - ((mpEnd - 1) - position), position, (size_t)((char*)(mpEnd - 1) - (char*)position));
+        *position = *pValue;
+        ++mpEnd;
+    } else {
+        const size_t nPrevSize = (size_t)(mpEnd - mpBegin);
+        const size_t nNewSize = (nPrevSize > 0) ? (2 * nPrevSize) : 1;
+        cJob** const pNewData = DoAllocate(nNewSize);
+        cJob** pNewEnd = (cJob**)memcpy(pNewData, mpBegin, (size_t)((char*)position - (char*)mpBegin)) + (position - mpBegin);
+        ::new (pNewEnd) cJob*(value);
+        ++pNewEnd;
+        pNewEnd = (cJob**)memcpy(pNewEnd, position, (size_t)((char*)mpEnd - (char*)position)) + (mpEnd - position);
+        DoFree(mpBegin);
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCapacity = pNewData + nNewSize;
+    }
 }
 
 // ===========================================================================

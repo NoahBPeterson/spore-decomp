@@ -6,3 +6,4 @@
 0068e0c0  203  DecodeFinish: full path reproduced; register/scheduling differences throughout
 0068e3b0  210  Coder::Read: buffer/external paths and GetManager loop present; scheduling/regalloc differ
 0068da70  29   name-callback thunk: forwards 4 args correctly, but cl emits a sibling tail-call where the original reorders args and returns
+0068d840  409  SPKeyFromName: complete (goto-based '!' path, real map/assign thiscalls); register allocation differs (name in ebx not edi) [equiv: WEAK 43% coverage, no mismatch]

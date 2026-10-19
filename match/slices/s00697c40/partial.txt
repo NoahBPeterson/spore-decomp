@@ -1,4 +1,3 @@
-00697c40  439  skeleton only; EA::Trace::Server default filter/formatter bootstrap (AutoRefCount assignments + vtable calls) not reconstructed
 00697e00  145  skeleton only; EA::Trace::LogManager ctor (base ctor + 3 empty WStrings at +0x68/+0x78/+0x88 + vtable stores) not reconstructed
 00697ee0  188  skeleton only; EA::Trace::LogManager dtor (inline vector deallocates + Server base dtor) not reconstructed
 00697fa0  110  skeleton only; EA::Trace::GetLogManager singleton (operator new 0xf8 + ctor + vtable slots +0x14/+0x10) not reconstructed

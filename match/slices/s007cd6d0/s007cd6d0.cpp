@@ -10,6 +10,9 @@ namespace EA { namespace CommandLine {
 int FindSwitch(void* pThis, const wchar_t* pName, int a, int b, int c);
 }}
 
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+
 typedef eastl::pair<uint64, EA::AutoRefCount<SP::cPropertyList> > PropPair;
 
 // ---------------------------------------------------------------- eastl pair helpers
@@ -17,7 +20,24 @@ namespace eastl {
 // @ 0x007cd9d0
 template PropPair* uninitialized_copy_ptr<PropPair>(const PropPair*, const PropPair*, PropPair*);
 // @ 0x007cde80
-template PropPair* copy_backward_impl<0, std::random_access_iterator_tag>::do_copy<PropPair*, PropPair*>(PropPair*, PropPair*, PropPair*);
+template <> template <>
+PropPair* copy_backward_impl<0, std::random_access_iterator_tag>::do_copy<PropPair*, PropPair*>(PropPair* first, PropPair* last, PropPair* result) {
+    while (last != first) {
+        --last;
+        --result;
+        ((uint32*)result)[0] = ((const uint32*)last)[0];
+        ((uint32*)result)[1] = ((const uint32*)last)[1];
+        SP::cPropertyList* pNew = last->second.mpObject;
+        _ReadWriteBarrier();
+        SP::cPropertyList* pOld = result->second.mpObject;
+        if (pNew != pOld) {
+            if (pNew) pNew->AddRef();
+            result->second.mpObject = pNew;
+            if (pOld) pOld->Release();
+        }
+    }
+    return result;
+}
 }  // namespace eastl
 
 // ---------------------------------------------------------------- bespoke config startup (partial)

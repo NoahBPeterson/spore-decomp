@@ -3,36 +3,110 @@
 
 namespace SP {
 
-struct Elem { void* p; char pad[0x1C]; };   // 0x20-byte element
-
-struct Property;      // property object (type field at +0x12)
-struct PropertyList {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
-    virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();
-    virtual void s8();
-    virtual bool GetProperty(int id, Property** out);   // vtbl +0x24
+struct Property {
+    void* mpData;
+    uint32_t pad04;
+    int mnItemCount;
+    uint32_t pad0c;
+    uint16_t mnFlags;     // +0x10
+    uint16_t mnType;      // +0x12
+    const bool* GetBool();                       // 0x0041E920
+    const float* GetFloat();                     // 0x0041EA70
+};
+struct ResourceKey { uint32_t instanceID; uint32_t typeID; uint32_t groupID; };
+class cPropertyList {
+public:
+    virtual int AddRef();
+    virtual int Release();
+    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14(); virtual void v18();
+    virtual bool HasProperty(uint32_t id);                       // +0x1c
+    virtual bool GetPropertyAlt(uint32_t id, Property*& result); // +0x20
+    virtual bool GetProperty(uint32_t id, Property*& result);    // +0x24
+};
+template <class T>
+struct AutoRefCount {
+    T* mpObject;
+    AutoRefCount& operator=(T* pObject)
+    {
+        if (pObject != mpObject) {
+            T* const pTemp = mpObject;
+            if (pObject)
+                pObject->AddRef();
+            mpObject = pObject;
+            if (pTemp)
+                pTemp->Release();
+        }
+        return *this;
+    }
+    T* operator->() const { return mpObject; }
+    operator T*() const { return mpObject; }
+};
+class IModelManager;
+class cSPEditorBlock;
+class cSPEditorHandleRotationRing {
+public:
+    virtual int AddRef();
+    virtual int Release();
+    char pad[0x92 - 4];
+    bool mField92;                               // +0x92
+    void SetField92(bool v) { mField92 = v; }
+    cSPEditorHandleRotationRing* Construct();    // 0x00483D40
+    void Resume(IModelManager* modelMgr, cSPEditorBlock* block, uint32_t modelKey, uint32_t axisID,
+                uint32_t placement, float angleDeg, float offset, float scale, bool hidden, bool loadProps); // 0x004849E0
 };
 
+__declspec(noinline) bool GetBoolProperty(cPropertyList* list, uint32_t id, bool& value)       // 0x00407190
+{
+    Property* prop;
+    if (list && list->GetProperty(id, prop) && prop->mnType == 1) {
+        value = *prop->GetBool();
+        return true;
+    }
+    return false;
+}
+__declspec(noinline) bool GetFloatProperty(cPropertyList* list, uint32_t id, float& value)     // 0x0040CF10
+{
+    Property* prop;
+    if (list && list->GetProperty(id, prop) && prop->mnType == 0xd) {
+        value = *prop->GetFloat();
+        return true;
+    }
+    return false;
+}
+bool GetPropertyAsKey(cPropertyList* list, uint32_t id, ResourceKey& value);      // 0x006A1250
+bool GetPropertyAsKeyInstance(cPropertyList* list, uint32_t id, uint32_t& value); // 0x006A12A0
+IModelManager* ModelManager();                                                    // 0x0067DD80
+void* OperatorNewEditor(int size, const char* tag, int, int, int, int);           // 0x00F473A0
+
+// Inline copy of the helper for the one call site where the original did inline it.
+inline bool GetBoolPropertyIL(cPropertyList* list, uint32_t id, bool& value)
+{
+    Property* prop;
+    if (list && list->GetProperty(id, prop) && prop->mnType == 1) {
+        value = *prop->GetBool();
+        return true;
+    }
+    return false;
+}
+template <int N> inline void ScratchSlots() { uint32_t s[N]; }
+
+struct Elem { void* p; char pad[0x1C]; };   // 0x20-byte element
+
 struct cSPEditorBlock {
-    char  pad0[0x4C8];
+    char  pad0[0xC];
+    AutoRefCount<cPropertyList> mpPropList;        // +0xC
+    char  pad10[0x154 - 0x10];
+    AutoRefCount<cSPEditorHandleRotationRing> mRotationRingHandles[3];   // +0x154
+    char  pad160[0x4C8 - 0x160];
     Elem* begin48;     // +0x4C8
     Elem* end4cc;      // +0x4CC
 
     void F41080();                                     // 0441080
     void F40e60(void* p);                              // 0440E60
-    void F410d0(int idx, int a3, int a4, int a5, int a6, int a7, int a8, int a9,
-                int a10, int a11);                      // 04410D0
+    void CreateRotationRingHandle(int index, uint32_t axisID, uint32_t useDefaultPropID, uint32_t keyPropID,
+                                  uint32_t anglePropID, uint32_t offsetPropID, uint32_t scalePropID,
+                                  uint32_t hiddenPropID, uint32_t tagPropID, uint32_t instancePropID);  // 04410D0
 };
-
-bool  GetBoolProperty(void* props, int id, uint8_t* out);     // 00407190
-void  GetFloatProperty(void* props, int id, float* out);      // 0040CF10
-void  GetPropertyAsKey(void* props, int id, void* out);       // 006A1250
-void  GetPropertyAsKeyInstance(void* props, int id, void* out); // 006A12A0
-uint8_t Property_GetBool(Property* p);                        // 0041E920
-void* OperatorNewEditor(int size, const char* tag, int, int, int, int);  // 00F473A0
-void* Sub_483D40(void* p);                                    // 00483D40
-int   Sub_67DD80(void* a, int b, int c, int d, int e, int f, int g, int h, int i); // 0067DD80 (ModelManager)
-void  Sub_4849E0(void* a, int b, int c, int d, int e, int f, int g, int h, int i); // 004849E0
 
 // @ 0x00441080
 void cSPEditorBlock::F41080()
@@ -45,49 +119,62 @@ void cSPEditorBlock::F41080()
 }
 
 // @ 0x004410D0
-void cSPEditorBlock::F410d0(int idx, int a3, int a4, int a5, int a6, int a7, int a8,
-                            int a9, int a10, int a11)
+void cSPEditorBlock::CreateRotationRingHandle(int index, uint32_t axisID, uint32_t useDefaultPropID, uint32_t keyPropID,
+                                              uint32_t anglePropID, uint32_t offsetPropID, uint32_t scalePropID,
+                                              uint32_t hiddenPropID, uint32_t tagPropID, uint32_t instancePropID)
 {
-    PropertyList* props = *(PropertyList**)((char*)this + 0x0C);
-    uint8_t hasProp = (uint8_t)(props->GetProperty(a5, 0) ? 1 : 0);
-    uint8_t useDefault = 1;
-    GetBoolProperty(props, a4, &useDefault);
-    if (hasProp == 0 && useDefault == 0) return;
+    float v22;
+    float v14;
+    uint32_t v3;
+    bool v1;
+    float p20;
+    bool idx;
+    bool t33;
+    bool t28;
+    cSPEditorHandleRotationRing* n36;
+    ResourceKey m;
+    uint32_t n32;
 
-    float f0 = 0.0f, f1 = 0.0f, f2 = 1.0f;
-    uint8_t flag = 0;
-    uint8_t tag = 1;
-    int key0 = (int)0xA659762B, key1 = 0x0C1EF506;
-    GetPropertyAsKeyInstance(props, a11, &key1);
-    if (hasProp != 0) {
-        int k[3] = {0, 0, 0};
-        GetPropertyAsKey(props, a5, k);
-        if (k[0] != 0x2CA33BDB && k[0] != 0) {
-            key1 = k[0];
-            if (k[1] != 0) key0 = k[1];
-            GetFloatProperty(props, a6, &f0);
-            GetFloatProperty(props, a7, &f1);
-            GetFloatProperty(props, a8, &f2);
-            GetBoolProperty(props, a9, &flag);
-            tag = 0;
-            Property* prop = 0;
-            if (props != 0 && props->GetProperty(a10, &prop) && *(short*)((char*)prop + 0x12) == 1) {
-                tag = Property_GetBool(prop);
-            }
+    idx = mpPropList->HasProperty(keyPropID);
+    t28 = true;
+    GetBoolProperty(mpPropList, useDefaultPropID, t28);
+    ScratchSlots<3>();
+    if (idx == 0 && t28 == 0)
+        return;
+    p20 = 0.0f;
+    v14 = 0.0f;
+    v22 = 1.0f;
+    t33 = false;
+    v1 = true;
+    v3 = 0xA659762B;
+    n32 = 0x0C1EF506;
+    GetPropertyAsKeyInstance(mpPropList, instancePropID, n32);
+    if (idx) {
+        m.instanceID = 0;
+        m.typeID = 0;
+        m.groupID = 0;
+        GetPropertyAsKey(mpPropList, keyPropID, m);
+        if (m.instanceID != 0x2CA33BDB && m.instanceID != 0) {
+            n32 = m.instanceID;
+            if (m.typeID != 0)
+                v3 = m.typeID;
+            GetFloatProperty(mpPropList, anglePropID, p20);
+            ScratchSlots<3>();
+            GetFloatProperty(mpPropList, offsetPropID, v14);
+            ScratchSlots<3>();
+            GetFloatProperty(mpPropList, scalePropID, v22);
+            ScratchSlots<3>();
+            GetBoolProperty(mpPropList, hiddenPropID, t33);
+            ScratchSlots<3>();
+            v1 = false;
+            GetBoolPropertyIL(mpPropList, tagPropID, v1);
+            ScratchSlots<1>();
         }
     }
-    void* obj = OperatorNewEditor(0x9C, "Editor", 0, 0, 0, 0);
-    void* model = obj ? Sub_483D40(obj) : 0;
-    int* slot = (int*)((char*)this + 0x154 + idx * 4);
-    if (model != (void*)*slot) {
-        void* old = (void*)*slot;
-        if (model != 0) { }
-        *slot = (int)model;
-        if (old != 0) { }
-    }
-    int mm = Sub_67DD80(this, key1, a3, key0, (int)f0, (int)f1, (int)f2, flag, 1);
-    Sub_4849E0((void*)mm, (int)this, key1, a3, key0, (int)f0, (int)f1, (int)f2, flag);
-    *(uint8_t*)(*(int*)((char*)this + 0x154 + idx * 4) + 0x92) = tag;
+    n36 = (cSPEditorHandleRotationRing*)OperatorNewEditor(0x9C, "Editor", 0, 0, 0, 0);
+    mRotationRingHandles[index] = n36 ? n36->Construct() : 0;
+    mRotationRingHandles[index]->Resume(ModelManager(), this, n32, axisID, v3, p20, v14, v22, t33, true);
+    mRotationRingHandles[index]->SetField92(v1);
 }
 
 } // namespace SP

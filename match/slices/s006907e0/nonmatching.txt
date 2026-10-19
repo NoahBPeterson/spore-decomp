@@ -6,3 +6,4 @@
 00691380  30   complete; AddDependency wrapper shape near-miss
 006913c0  32   complete; AddWeakDependency wrapper shape near-miss
 00691260  -    complete; AddJobDependency (deps/dependents list splice) near-miss
+00690c90  195  eastl vector DoInsertValue (waiting list 2): complete; register allocation differs (original spills nNewSize to [esp+0x10] and keeps pNewData in ebp) [equiv: WEAK 61.8% coverage, no mismatch]

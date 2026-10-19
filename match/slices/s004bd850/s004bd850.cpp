@@ -1,5 +1,6 @@
 // Slice s004bd850 (cEditorModelParser XML callbacks + cSPEditorUI type map).
 // Module flags: /Od /Ob1 /MD /Gy /TP (unoptimized; no C++ EH, no SSE).
+#include <wchar.h>
 #include "types.h"
 
 // ---------------------------------------------------------------------------
@@ -132,10 +133,67 @@ void cEditorModelParser::FUN_004bdae0() {
 // ---------------------------------------------------------------------------
 extern uint32_t EA_Hash_FNV1_String16(const void* s, uint32_t seed, int);  // 0x932f30
 
-// 004bdcd0 SP::cEditorModelParser::StartElement  (PARTIAL skeleton)
-bool cEditorModelParser_StartElement(void* self, const void* name, const void* atts) {
-    (void)self; (void)name; (void)atts;
-    return false;
+__declspec(dllimport) unsigned long __cdecl wcstoul(const wchar_t*, wchar_t**, int);
+
+// The original expands wcscmp inline (compiler intrinsic: two characters per pass, sbb result).
+#pragma intrinsic(wcscmp)
+
+extern void FUN_00903550(void* parser, int arg);   // 0x903550 (XML_StopParser-style, cdecl)
+struct ParserBlockOps {
+    void AddBlock(int index);                      // 0x004be420 (thiscall, ret 4)
+};
+struct ParserModelBlocks {
+    void Reserve(uint32_t count);                  // 0x004c0250 (thiscall, ret 4)
+};
+
+// 004bdcd0 SP::cEditorModelParser::StartElement (expat start-element callback)
+// @ 0x004bdcd0
+void cEditorModelParser_StartElement(void* userData, const wchar_t* name, const wchar_t** atts) {
+    cEditorModelParser* nCount = (cEditorModelParser*)userData;
+    unsigned long p15;
+    const wchar_t** hi;
+    const wchar_t* t22;
+    const wchar_t* t26;
+    const wchar_t** item;
+
+    nCount->mBuffer[0] = 0;
+    nCount->mLength = 0;
+    nCount->mCursor = 0;
+    if (wcscmp(name, L"blockref") == 0) {
+        if (nCount->m3aa8 < 0x100) {
+            nCount->m3aa4 = nCount->m3aa8;
+            nCount->m3aa8 = nCount->m3aa8 + 1;
+            ((ParserBlockOps*)nCount)->AddBlock(nCount->m3aa4);
+        } else {
+            FUN_00903550(nCount->mpXMLParser, 0);
+        }
+    } else if (wcscmp(name, L"blocks") == 0) {
+        t22 = L"0";
+        do {
+            for (hi = atts; hi[0] && hi[1]; hi += 2) {
+                if (wcscmp(hi[0], L"p15") == 0) {
+                    t22 = hi[1];
+                    break;
+                }
+            }
+        } while (0);
+        p15 = wcstoul(t22, 0, 0);
+        if (p15 <= 0x100)
+            ((ParserModelBlocks*)((char*)nCount->m3aa0 + 0x98))->Reserve(p15);
+        else
+            FUN_00903550(nCount->mpXMLParser, 0);
+    } else if (wcscmp(name, L"weight") == 0) {
+        t26 = L"0";
+        do {
+            for (item = atts; item[0] && item[1]; item += 2) {
+                if (wcscmp(item[0], L"channel") == 0) {
+                    t26 = item[1];
+                    break;
+                }
+            }
+        } while (0);
+        nCount->m3aac = wcstoul(t26, 0, 0);
+    }
 }
 
 // 004be100  (PARTIAL skeleton)

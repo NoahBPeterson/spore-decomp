@@ -11,3 +11,4 @@ slices/s007fc880/s007fc880_o2.cpp  ?v12@cSPUIBehaviorTimeFunctionDampedPeriodic@
 slices/s007fc880/s007fc880_o2.cpp  ?v15@cSPUIBehaviorTimeFunctionDampedPeriodic@@UAE_NXZ  007fd700  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s007fc880/s007fc880.cpp  ?Factory@@YAXPAPAUBehaviorMessage@@H@Z  007fcc40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s007fc880/s007fc880.cpp  ?ReadSerItem@@YA_NPAUSerBuffer@@PAUC53@@PAUSerItem14@@@Z  007fd430  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fc880/s007fc880.cpp  ?Dispatch@EvD@@QAE_NHPAX@Z  007fc880  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

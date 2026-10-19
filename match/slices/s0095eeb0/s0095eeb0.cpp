@@ -13,7 +13,10 @@ extern "C" void __cdecl FUN_009580E0(void*);
 extern "C" void __cdecl MatMulVec(void*, const void*, const void*);     // 0x0095E040
 extern "C" char __cdecl MatInvertFull(void*, void*);                    // 0x0095E0B0
 extern "C" void __cdecl FUN_0045EAC0(void* out, const void* a, const void* b); // 0x0045EAC0
-extern "C" void __cdecl Inv3(float* out, float* in, float* det);        // 0x0095F490
+struct CM;
+struct CMV { void BuildMat33V(const float* src); };  // 0x0095F0F0 (callee result unused by Inv3)
+extern "C" double __cdecl Det33(const float* m);                          // 0x0095E040
+extern "C" CM* __cdecl Inv3(CM* out, const float* in, float* det);       // 0x0095F490
 
 extern "C" long _InterlockedExchangeAdd(volatile long*, long);
 #pragma intrinsic(_InterlockedExchangeAdd)
@@ -27,7 +30,7 @@ struct CM {
     void  TransformPoint3(float* out, const float* v);
     void  TransformPoint3B(float* out, const float* v);
     float* TransformPoint4(float* out, const float* v);
-    void* BuildMat33(const float* src);
+    __declspec(noinline) void* BuildMat33(const float* src);
     void  SetRotationAtLeast2(float* axis, float angle);
     void  Invert();
     void  Multiply(const float* o);
@@ -65,6 +68,30 @@ void* CM::BuildMat33(const float* src) {
     m[4] = src[4]; m[5] = src[5]; m[6] = src[6];
     m[8] = src[8]; m[9] = src[9]; m[10] = src[10];
     return this;
+}
+
+// @ 0x0095F490
+extern "C" CM* __cdecl Inv3(CM* out, const float* in, float* det) {
+    double d = *det = (float)Det33(in);
+    if (d == 0.0)
+        return out;
+    float inv = 1.0f / *det;
+    __declspec(align(16)) float tmp[12];
+    float* p = tmp;
+    volatile int i = 2;
+    volatile int n = 3;
+    do {
+        int a = (i - 1) % 3;
+        int b = i % 3;
+        p[0] = (in[a * 4 + 1] * in[b * 4 + 2] - in[a * 4 + 2] * in[b * 4 + 1]) * inv;
+        p[4] = (in[a * 4 + 2] * in[b * 4] - in[b * 4 + 2] * in[a * 4]) * inv;
+        p[8] = (in[b * 4 + 1] * in[a * 4] - in[a * 4 + 1] * in[b * 4]) * inv;
+        i++;
+        n--;
+        p++;
+    } while (n != 0);
+    ((CMV*)out)->BuildMat33V(tmp);
+    return out;
 }
 
 // @ 0x0095F1C0
@@ -143,7 +170,7 @@ void CM::Invert() {
         ((CM*)axes)->SetAxes(m + 8, m + 4, m);
         float inv[12];
         float det;
-        Inv3(inv, axes, &det);
+        Inv3((CM*)inv, axes, &det);
         for (int i = 0; i < 12; i++)
             m[i] = inv[i];
         m[3] = 0.0f; m[7] = 0.0f; m[11] = 0.0f;

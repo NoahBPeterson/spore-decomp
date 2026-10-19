@@ -7,3 +7,4 @@ slices/s004bd850/s004bd850.cpp  ?FUN_004bdc60@cEditorModelParser@@QAE_NHHE@Z  00
 slices/s004bd850/s004bd850.cpp  ?FUN_004be070@@YAXPAXPBXH@Z  004be070  /Od /Ob1 /MD /Gy /TP
 slices/s004bd850/s004bd850.cpp  ?ReadFloat@cEditorModelParser@@QAE_NPAM@Z  004be2e0  /Od /Ob1 /MD /Gy /TP
 slices/s004bd850/s004bd850.cpp  ?ReadULong@cEditorModelParser@@QAE_NPAK@Z  004be380  /Od /Ob1 /MD /Gy /TP
+slices/s004bd850/s004bd850.cpp  ?cEditorModelParser_StartElement@@YAXPAXPB_WPAPB_W@Z  004bdcd0  /Od /Ob1 /MD /Gy /TP

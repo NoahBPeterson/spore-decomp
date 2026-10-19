@@ -8,10 +8,18 @@ extern "C" long _InterlockedExchangeAdd(volatile long* Addend, long Value);
 // ---------------------------------------------------------------------------
 // 004c0190  Resource::ResourceObject::GetReferenceCount
 // ---------------------------------------------------------------------------
+struct SPMemPoolStub {
+    void* LockedAlloc(uint32_t size, int a, int b, int c, int d, int e);                      // 0x009289f0 (ret 0x18)
+    void* LockedAligned(uint32_t size, uint32_t align, int a, int b, int c, int d, int e, int f);  // 0x00928a30 (ret 0x20)
+};
+extern SPMemPoolStub* g_pSPMemPool;     // 0x016c8b44
+
 struct FixedBufferAllocatorStub {
     struct buffer_info { int32_t mSignature, mSize, mSizeFree; void* mpFirstFree; };
+    struct block_header { uint32_t mSize; block_header* mpPrev; };
     buffer_info* mpBufferInfo;
-    void* Malloc(void* p, int n);       // 0x4bfc40
+    bool IsInitialized() const { return mpBufferInfo != 0; }
+    void* Malloc(uint32_t nSize, uint32_t nAlignment);   // 0x4bfc40
     void Free(void* p);                 // 0x4bcab0
 };
 __declspec(thread) void* g_tls_current;
@@ -26,9 +34,87 @@ int ResourceObject::GetReferenceCount() {
     return _InterlockedExchangeAdd((volatile long*)&mnRefCount, 0);
 }
 
-void* FixedBufferAllocatorStub::Malloc(void* p, int n) {
-    (void)p; (void)n;
-    return 0;
+#define FBA_MASK 0x3fffffff
+#define FBA_INUSE 0x80000000
+#define FBA_TRAILER 0x40000000
+// @ 0x004bfc40
+void* FixedBufferAllocatorStub::Malloc(uint32_t nSize, uint32_t nAlignment) {
+    char* i;
+    int n40;
+    block_header* n1;
+    int n16;
+    block_header* v40;
+    block_header* list;
+    block_header* g;
+    int p23;
+    int owner;
+    uint32_t t33;
+    int node;
+    block_header* alloc;
+
+    n40 = ((nSize + 3) & 0xfffffffc) + 8 + ((mpBufferInfo[1].mSignature & FBA_TRAILER) ? 4 : 0);
+    if (IsInitialized() && mpBufferInfo->mSizeFree >= n40) {
+        i = (char*)mpBufferInfo + 0x10 + mpBufferInfo->mSize;
+        if (n40 > 8) {
+            n1 = (block_header*)mpBufferInfo->mpFirstFree;
+            n16 = 0;
+            while ((char*)n1 < i && n16 + n40 < mpBufferInfo->mSizeFree) {
+                if ((int)n1->mSize >= 0) {
+                    list = (block_header*)((char*)n1 + (n1->mSize & FBA_MASK));
+                    if ((char*)list < i && (int)list->mSize >= 0) {
+                        g = (block_header*)((char*)list + (list->mSize & FBA_MASK));
+                        if ((char*)g < i)
+                            g->mpPrev = n1;
+                        n1->mSize = n1->mSize + list->mSize;
+                        continue;
+                    }
+                    n16 = (n1->mSize & FBA_MASK) + n16;
+                    v40 = (block_header*)(((uint32_t)n1 + nAlignment + 7 & ~(nAlignment - 1)) - 8);
+                    if ((char*)v40 + n40 < (char*)n1 + (n1->mSize & FBA_MASK)) {
+                        owner = (int)((char*)v40 - (char*)n1);
+                        if (owner > 0) {
+                            if (!(mpBufferInfo[1].mSignature & FBA_TRAILER)) {
+                                v40->mpPrev = n1->mpPrev;
+                                v40->mSize = (n1->mSize & FBA_MASK) - owner;
+                                v40->mpPrev->mSize = (v40->mpPrev->mSize & 0xc0000000) | (((v40->mpPrev->mSize & FBA_MASK) + owner) & FBA_MASK);
+                            } else {
+                                t33 = (n1->mpPrev->mSize & FBA_TRAILER)
+                                    ? *(uint32_t*)((n1->mpPrev->mSize & FBA_MASK) + (char*)n1->mpPrev - 4) : 0;
+                                v40->mpPrev = n1->mpPrev;
+                                v40->mSize = (n1->mSize & FBA_MASK) - owner;
+                                v40->mpPrev->mSize = (v40->mpPrev->mSize & 0xc0000000) | (((v40->mpPrev->mSize & FBA_MASK) + owner) & FBA_MASK);
+                                if ((int)v40->mpPrev->mSize < 0 || v40->mpPrev == (block_header*)(mpBufferInfo + 1))
+                                    mpBufferInfo->mSizeFree = mpBufferInfo->mSizeFree - owner;
+                                *(uint32_t*)((v40->mpPrev->mSize & FBA_MASK) + (char*)v40->mpPrev - 4) = t33;
+                            }
+                        }
+                        p23 = (v40->mSize & FBA_MASK) - n40;
+                        if (p23 >= 0x28) {
+                            v40->mSize = (v40->mSize & 0xc0000000) | ((uint32_t)n40 & FBA_MASK);
+                            alloc = (block_header*)((char*)v40 + (v40->mSize & FBA_MASK));
+                            alloc->mSize = p23;
+                            alloc->mpPrev = v40;
+                        }
+                        if (mpBufferInfo->mpFirstFree == n1)
+                            mpBufferInfo->mpFirstFree = (char*)v40 + (v40->mSize & FBA_MASK);
+                        mpBufferInfo->mSizeFree = mpBufferInfo->mSizeFree - (v40->mSize & FBA_MASK);
+                        v40->mSize = v40->mSize | FBA_INUSE;
+                        if (mpBufferInfo[1].mSignature & FBA_TRAILER) {
+                            v40->mSize = v40->mSize | FBA_TRAILER;
+                            *(FixedBufferAllocatorStub**)((char*)v40 + (v40->mSize & FBA_MASK) - 4) = this;
+                        }
+                        return (char*)v40 + 8;
+                    }
+                }
+                n1 = (block_header*)((char*)n1 + (n1->mSize & FBA_MASK));
+            }
+        } else {
+            return (char*)mpBufferInfo + 0x18;
+        }
+    }
+    if (nAlignment < 8)
+        return g_pSPMemPool->LockedAlloc(n40, 0, 0, 0, 0, 0);
+    return g_pSPMemPool->LockedAligned(n40, nAlignment, 0, 0, 0, 0, 0, 0);
 }
 void FixedBufferAllocatorStub::Free(void* p) {
     (void)p;
@@ -38,7 +124,7 @@ void FixedBufferAllocatorStub::Free(void* p) {
 // @ 0x004bfc10
 void FUN_004bfc10(void* p) {
     FixedBufferAllocatorStub* fba = (FixedBufferAllocatorStub*)g_tls_current;
-    fba->Malloc(p, 4);
+    fba->Malloc((uint32_t)p, 4);
 }
 
 extern void* FUN_00928a80(void* p, uint32_t size, int zero);   // 0x928a80
@@ -50,7 +136,7 @@ void* FUN_004c0020(void* p, uint32_t size) {
     FixedBufferAllocatorStub* fba = (FixedBufferAllocatorStub*)g_tls_current;
     if (p >= (void*)(fba->mpBufferInfo + 1) &&
         p < (void*)((char*)&fba->mpBufferInfo[1] + fba->mpBufferInfo->mSize)) {
-        void* dst = fba->Malloc(p, 4);
+        void* dst = fba->Malloc((uint32_t)p, 4);
         uint32_t oldSize = *(uint32_t*)((char*)p - 8) & 0x3fffffff;
         uint32_t n = size < oldSize ? size : oldSize;
         memcpy_impl(dst, p, n);

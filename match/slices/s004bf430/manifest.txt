@@ -2,3 +2,4 @@
 slices/s004bf430/s004bf430.cpp  ?FUN_004c0130@@YAPAUFactoryObject@@XZ  004c0130  /Od /Ob1 /MD /Gy /TP
 slices/s004bf430/s004bf430.cpp  ?GetReferenceCount@ResourceObject@@QAEHXZ  004c0190  /Od /Ob1 /MD /Gy /TP
 slices/s004bf430/s004bf430.cpp  ?Init@XmlTextWriter@@QAEPAHXZ  004c01b0  /Od /Ob1 /MD /Gy /TP
+slices/s004bf430/s004bf430.cpp  ?Malloc@FixedBufferAllocatorStub@@QAEPAXII@Z  004bfc40  /Od /Ob1 /MD /Gy /TP

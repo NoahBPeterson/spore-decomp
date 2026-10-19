@@ -59,10 +59,103 @@ void Server::SetNames(const wchar_t* a, const wchar_t* b, const wchar_t* c) {
 }  // namespace EA
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x00697c40 (partial: skeleton) — EA::Trace::Server default filter/formatter bootstrap.
+// EA::Trace::Server default filter/formatter bootstrap.
+namespace EA {
+template <class T>
+struct AutoRefCount {
+  T* mpObject;
+  AutoRefCount() : mpObject(0) {}
+  AutoRefCount(T* p) : mpObject(p) {
+    if (mpObject)
+      mpObject->AddRef();
+  }
+  ~AutoRefCount() {
+    if (mpObject)
+      mpObject->Release();
+  }
+  AutoRefCount& operator=(T* p) {
+    if (p != mpObject) {
+      T* const pTemp = mpObject;
+      if (p)
+        p->AddRef();
+      mpObject = p;
+      if (pTemp)
+        pTemp->Release();
+    }
+    return *this;
+  }
+  T* operator->() const { return mpObject; }
+  operator T*() const { return mpObject; }
+};
+namespace Trace {
+struct IObj {
+  virtual int AddRef();     // +0x00
+  virtual int Release();    // +0x04
+  virtual void v2();
+  virtual void* Cast(unsigned id);
+};
+struct ILogFilter : IObj {
+  virtual void v4();
+  virtual void v5();
+  virtual void v6();
+};
+struct ILogFormatter : IObj {
+  virtual void v4();
+  virtual void v5();
+  virtual void v6();
+};
+struct LogFilterGroupLevels : ILogFilter {
+  char pad[0x3c - 4];
+  LogFilterGroupLevels(const char* name);   // 0x00923f30
+};
+struct LogFormatterFancy : ILogFormatter {
+  char pad[0xa58 - 4];
+  LogFormatterFancy(const char* name);      // 0x009244d0
+  void SetFlags(unsigned short flags);      // 0x009233e0
+};
+struct ILogReporter : IObj {
+  virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8();
+  virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
+  virtual ILogFormatter* GetFormatter();    // +0x38
+};
+struct ServerDefaults {
+  virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
+  virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
+  virtual void s10();
+  virtual void GetReporter(const char* name, AutoRefCount<ILogReporter>* out);   // +0x2c
+  virtual void SetGroupLevel(const char* group, int a, int level);               // +0x30
+  unsigned pad04[10];
+  AutoRefCount<ILogFilter> mDefaultFilter;        // +0x2c
+  AutoRefCount<ILogFormatter> mDefaultFormatter;  // +0x30
+  void Init();                                    // 0x00924790
+  void InitDefaults();
+};
+}  // namespace Trace
+}  // namespace EA
+void* operator new(size_t, const char* name, int, unsigned, const char* file, int line);   // 0x00f473a0
+void operator delete(void*, const char* name, int, unsigned, const char* file, int line);   // 0x00f47380
+
 namespace EA {
 namespace Trace {
-void ServerBootstrap(void* self) { (void)self; }
+// @ 0x00697c40
+void ServerDefaults::InitDefaults() {
+  if (mDefaultFilter == 0)
+    mDefaultFilter = new ("Debug/EATrace/Server/DefaultFilter/LogFilterGroupLevels", 0, 0, 0, 0)
+        LogFilterGroupLevels("DefaultFilter");
+  if (mDefaultFormatter == 0)
+    mDefaultFormatter = new ("Debug/EATrace/Server/DefaultFormatter/LogFormatterSimple", 0, 0, 0, 0)
+        LogFormatterFancy("DefaultFormatter");
+  Init();
+  SetGroupLevel(0, 0, 0xfb);
+  SetGroupLevel("AppDebugger", 0, 0x19);
+  SetGroupLevel("AppAlertDialog", 0, 0x32);
+  AutoRefCount<ILogReporter> reporter;
+  GetReporter("AppDebugger", &reporter);
+  {
+    AutoRefCount<ILogFormatter> formatter(reporter->GetFormatter());
+    ((LogFormatterFancy*)formatter.mpObject)->SetFlags(0x15);
+  }
+}
 }  // namespace Trace
 }  // namespace EA
 

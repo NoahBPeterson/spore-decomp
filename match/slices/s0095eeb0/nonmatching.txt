@@ -19,3 +19,4 @@
 0095fdc0  26   Window::Set1D4: complete; this-4 arguments differ
 0095fe40  33   Window::SetArea: complete; float compare/set order differs
 0095fec0  54   Window::ResizeBy: complete; area composition order differs
+0095f490  268  rw::math::fpu::Inverse (Inv3) complete; scheduling hoists SSE loads (uses xmm3-7, original xmm0-2) and folds the %3 into imul where the original keeps idiv [equiv: FAIL xmm3 clobber only]

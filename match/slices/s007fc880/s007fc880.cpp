@@ -360,69 +360,118 @@ bool Vec8CopyFrom(VecSrc* src, void* a) {
 // BehaviorMessage dispatch (this points 0x10 into the event base).
 // ===========================================================================
 
-// @ 0x007fc880
-bool Ev::Dispatch(int msg, void* arg) {
-    BaseHandle((void*)msg, arg);
-    Cont* c = (Cont*)((char*)this - 0x10);
-    switch (msg) {
-    case 0xc: {
-        if (!mbActive)
-            break;
-        int cnt = 0;
-        for (int i = 0; i < 4; ++i) {
-            void** slot = c->SlotD(i);
-            if (*slot != 0) {
-                if (VCallB(*slot, 0x18)) {
-                    ++cnt;
-                    if (VCallB(*slot, 0x18) && (VCallI(*slot, 0x20) & 0x80)) {
-                        void* o = VCallR(*slot, 0x2c);
-                        if (o)
-                            VCall2(o, 4, (void*)msg, arg);
-                    }
-                }
-            }
+struct DispIface;
+struct DispReceiver {
+    virtual void v0();
+    virtual void OnMessage(int msg, void* arg);                // +0x04
+};
+struct DispSlot {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14();
+    virtual bool IsActive();                                   // +0x18
+    virtual void v1c();
+    virtual int GetFlags();                                    // +0x20
+    virtual void v24();
+    virtual void Detach(DispIface* iface);                     // +0x28
+    virtual DispReceiver* GetReceiver();                       // +0x2c
+    virtual void Attach(DispIface* iface);                     // +0x30
+};
+struct DispIface {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38();
+    virtual void SetActive(int v);                             // +0x3c
+};
+struct DispCont {
+    char pad0[0x10];
+    DispSlot** SlotC(int i);        // 0x007f93c0
+    DispSlot** SlotD(int i);        // 0x007f93d0
+};
+struct DispHandleObj {
+    virtual int AddRef();                                      // +0x00
+    virtual int Release();                                     // +0x04
+};
+template <class T>
+struct DispARC {
+    T* mpObject;
+    DispARC& operator=(T* pObject)
+    {
+        if (pObject != mpObject) {
+            T* const pTemp = mpObject;
+            if (pObject)
+                pObject->AddRef();
+            mpObject = pObject;
+            if (pTemp)
+                pTemp->Release();
         }
-        if (cnt == 0)
-            VCall1(iface, 0x3c, 0);
-        break;
+        return *this;
     }
+};
+#define DISP_CONT() ((DispCont*)((char*)this - 0x10))
+#define DISP_IFACE() (DISP_CONT() ? (DispIface*)((char*)DISP_CONT() + 0x18) : (DispIface*)0)
+
+struct EvD {
+    char pad0[8];
+    char pad1[0x44];                // +0x8 .. +0x4b
+    bool mbActive;                  // +0x4c
+    char pad2[0x1b];                // +0x4d .. +0x67
+    DispARC<DispHandleObj> mHandle; // +0x68
+    unsigned BaseHandle(int msg, void* arg);   // @ 0x007fc4b0
+    bool Dispatch(int msg, void* arg);         // @ 0x007fc880
+};
+
+// @ 0x007fc880
+bool EvD::Dispatch(int msg, void* arg) {
+    BaseHandle(msg, arg);
+    switch (msg) {
     case 0x11:
         for (int i = 0; i < 4; ++i) {
-            void** slot = c->SlotC(i);
-            if (*slot != 0)
-                VCall1(*slot, 0x30, iface);
+            if (*DISP_CONT()->SlotC(i) != 0)
+                (*DISP_CONT()->SlotC(i))->Attach(DISP_IFACE());
         }
         for (int i = 0; i < 4; ++i) {
-            void** slot = c->SlotD(i);
-            if (*slot != 0)
-                VCall1(*slot, 0x28, iface);
+            if (*DISP_CONT()->SlotD(i) != 0)
+                (*DISP_CONT()->SlotD(i))->Detach(DISP_IFACE());
         }
         break;
     case 0x12:
         for (int i = 0; i < 4; ++i) {
-            void** slot = c->SlotC(i);
-            if (*slot != 0)
-                VCall1(*slot, 0x30, 0);
+            if (*DISP_CONT()->SlotC(i) != 0)
+                (*DISP_CONT()->SlotC(i))->Attach(0);
         }
         for (int i = 0; i < 4; ++i) {
-            void** slot = c->SlotD(i);
-            if (*slot != 0)
-                VCall1(*slot, 0x28, 0);
+            if (*DISP_CONT()->SlotD(i) != 0)
+                (*DISP_CONT()->SlotD(i))->Detach(0);
         }
-        if (handle != 0) {
-            void* h = handle;
-            handle = 0;
-            VCallV(h, 4);
+        mHandle = 0;
+        break;
+    case 0xc:
+        if (mbActive) {
+            int cnt = 0;
+            for (int i = 0; i < 4; ++i) {
+                DispSlot** slot = DISP_CONT()->SlotD(i);
+                if (*slot != 0 && (*slot)->IsActive()) {
+                    ++cnt;
+                    if ((*slot)->IsActive() && ((*slot)->GetFlags() & 0x80)) {
+                        DispReceiver* o = (*slot)->GetReceiver();
+                        if (o != 0)
+                            o->OnMessage(msg, arg);
+                    }
+                }
+            }
+            if (cnt == 0)
+                ((DispIface*)((char*)this + 8))->SetActive(0);
         }
         break;
     case 0x15:
         if (mbActive) {
             for (int i = 0; i < 4; ++i) {
-                void** slot = c->SlotD(i);
-                if (*slot != 0 && (VCallI(*slot, 0x20) & 0x100)) {
-                    void* o = VCallR(*slot, 0x2c);
-                    if (o)
-                        VCall2(o, 4, (void*)msg, arg);
+                DispSlot** slot = DISP_CONT()->SlotD(i);
+                if (*slot != 0 && ((*slot)->GetFlags() & 0x100)) {
+                    DispReceiver* o = (*slot)->GetReceiver();
+                    if (o != 0)
+                        o->OnMessage(msg, arg);
                 }
             }
         }
