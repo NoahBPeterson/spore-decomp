@@ -1,5 +1,5 @@
 008fc670 TextStyle::Update  # resolves font sizes vs parent, GetFontServer metrics, merges string tables into parent
-008fcab0 EA::XHTML::Resource::DocumentFactory::CreateResource  # strcmp mime "text/html", new Document, XmlParser::Parse
+008fcab0 ?DocumentFactory_CreateResource@@YGHPAPAUDomDoc@@PAHPAUDocRequest@@@Z  # DocumentFactory_CreateResource migrated from s008fc670 (verbatim, slice spelling)
 008fcbd0 ?StripLeadingDotComponents@@YAXPAUWStr@@@Z  # StripLeadingDotComponents migrated from s008fc670 (verbatim, slice spelling)
 008fce50 ?ProcessRequest@FileHandler@@QAE_NPAUFileReq@@H@Z  # FileHandler::ProcessRequest migrated from s008fc670 (verbatim, slice spelling)
 008fd080 ?GetProtocolName@@YGPB_WH@Z  # GetProtocolName migrated from s008fc670 (verbatim, slice spelling)

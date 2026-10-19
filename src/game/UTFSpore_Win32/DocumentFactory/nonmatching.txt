@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+008fcab0 8 DocumentFactory::CreateResource: vcall eax/edx register choice differs; difftest WEAK (3000 valid inputs, 21.4% coverage: random mime strings never equal "text/html") after annotating operator_new, DomDoc ctor and XmlParser ctor/Parse/dtor addresses
