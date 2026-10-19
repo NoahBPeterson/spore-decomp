@@ -2,9 +2,9 @@
 007db2a0  AutomateRunner::ListCommands2
 007db3a0  CommandRunner::Run  # parses -openautomate
 007db570  SP_AutomateEntry  # atexit registration + run
-007db5b0  PtrVec::Contains
+007db5b0 ?Contains@PtrVec@@QAE_NH@Z  # PtrVec::Contains migrated from s007db1b0 (verbatim, slice spelling)
 007db5e0  PtrVec::Find
-007db620  PtrVec::At
+007db620 ?At@PtrVec@@QAEPAXH@Z  # PtrVec::At migrated from s007db1b0 (verbatim, slice spelling)
 007db650  SP::cPackManager::Init  # PDB name
 007db8b0  cPackInfoVec::Clear
 007db920 ?Init@cSmoothCameraController@@QAE_NH@Z  # cPackManager::Init migrated from s007db1b0 (verbatim, slice spelling)

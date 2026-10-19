@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPAppPackManager.cpp  ?Contains@PtrVec@@QAE_NH@Z  007db5b0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppPackManager.cpp  ?At@PtrVec@@QAEPAXH@Z  007db620  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
