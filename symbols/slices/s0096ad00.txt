@@ -1,6 +1,6 @@
-0096ad00  EA::UTFWinControls::ConsoleWindow::OnRebuild  # PDB candidate; renders the console background/border via RenderContext; complex, not reconstructed (partial)
-0096b0b0  EA::UTFWinControls::ConsoleWindow::ConsoleWindow  # ctor; calls Window::Window 0x962a10, sets vtables 0x1441c18/0x1441af8, builds Typesetter+LineLayout (partial)
-0096b2d0  EA::UTFWinControls::BasicFactory_ConsoleWindow::CreateInstance  # allocates 0x870 bytes and runs the ctor; byte-exact
+0096ad00 ?OnRebuild@ConsoleWindow@@QAEHPAURenderContext_s0096_ad00@UTFWin@EA@@@Z  # ConsoleWindow::OnRebuild migrated from s0096ad00 (verbatim, slice spelling)
+0096b0b0 ??0ConsoleWindow@@QAE@_N@Z  # ConsoleWindow::ConsoleWindow migrated from s0096ad00 (verbatim, slice spelling)
+0096b2d0 ?Factory_ConsoleWindow_CreateInstance@@YGPAXHPAX@Z  # Factory_ConsoleWindow_CreateInstance migrated from s0096ad00 (verbatim, slice spelling)
 0096b380 ?Sub_b380@@YIXPAUWinDialog@@@Z  # Sub_b380 migrated from s0096ad00 (verbatim, slice spelling)
 0096b3a0 ?WinDialog_Init@@YI_NPAUWinDialog@@@Z  # WinDialog_Init migrated from s0096ad00 (verbatim, slice spelling)
 0096b400 ?SetFlags@DlgSub20c@@QAEXH@Z  # DlgSub20c::SetFlags migrated from s0096ad00 (verbatim, slice spelling)
