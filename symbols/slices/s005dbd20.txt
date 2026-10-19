@@ -2,6 +2,7 @@
 00585830 ?OnKeyDown@cAppModeEditorBase@SP@@UAE_NII@Z  # SP::cAppModeEditorBase::OnKeyDown (callee of s005dbd20, named from the dev publics; slice address comment)
 00585860 ?OnKeyUp@cAppModeEditorBase@SP@@UAE_NII@Z  # SP::cAppModeEditorBase::OnKeyUp (callee of s005dbd20, named from the dev publics; slice address comment)
 0058a350 ?ExitEditor@cAppModeEditorBase@SP@@QAEXW4eEditorExitType@12@W4eEditorActionAfterSave@12@_N@Z  # SP::cAppModeEditorBase::ExitEditor (callee of s005dbd20, named from the dev publics; slice address comment)
+005dbd20 ?LoadTuningValues@cSPEditorTuning_s005d_bd20@SP@@QAEXPAVPropertyList@App@@@Z  # cSPEditorTuning_s005d_bd20::LoadTuningValues migrated from s005dbd20 (verbatim, slice spelling)
 005dbf80 SP::cSPEditorInputWinProc::HandleUIMessage  # Claude-named class; IWinProc slot, forwards mouse events to listener at +0xc
 005dc190 ?OnPaletteDrop@cSPEditorUI_s005d_bd20@SP@@QAE_NUcRect16@2@0UKey_s005d_bd20@ResourceMan@EA@@@Z  # cSPEditorUI_s005d_bd20::OnPaletteDrop migrated from s005dbd20 (verbatim, slice spelling)
 005dc250 ?IsLoadDialog@cSPEditorUI_s005d_bd20@SP@@QAE_NI@Z  # cSPEditorUI_s005d_bd20::IsLoadDialog migrated from s005dbd20 (verbatim, slice spelling)
