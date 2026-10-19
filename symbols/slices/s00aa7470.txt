@@ -24,6 +24,7 @@
 00a9a8d0 _FUN_00a9a8d0  # IO read helper (cdecl: stream, dst)
 00aa32f0 _FUN_00aa32f0  # cParticlesDescription destructor (thiscall)
 00aa3460 _FUN_00aa3460  # cParticleEffectCommand constructor (thiscall, returns this)
+00aa7a80 ?FUN_00aa7a80@Self@@QAEXPAX@Z  # Self::FUN_00aa7a80 migrated from s00aa7470 (verbatim, slice spelling)
 00f47380 _FUN_00f47380  # operator delete
 014119cc _DAT_014119cc  # "reset" string literal
 01457d54 _DAT_01457d54  # float constant
