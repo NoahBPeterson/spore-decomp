@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00922570 50 EASemaphoreData::UpdateCancelCount: complete; CAS loop schedule differs
+00922620 65 Semaphore::Init: complete; CreateSemaphoreA arg/register schedule differs
+00922690 114 Semaphore::Wait: complete; intra-process fast path schedule differs
+00922740 70 Semaphore::Post: complete; cancel-count exchange schedule differs

@@ -1,9 +1,10 @@
 00922500 ?FUN_00922500@@YAXPAX0D@Z  # FUN_00922500 migrated from s00922500 (verbatim, slice spelling)
-00922570 EA::Thread::EASemaphoreData::UpdateCancelCount  # 2008 dev PDB name
-009225d0 EA::Thread::SemaphoreData::SemaphoreData  # PDB name (count/intra/name descriptor)
-00922620 EA::Thread::Semaphore::Init  # 2008 dev PDB name (CreateSemaphoreA)
-00922690 EA::Thread::Semaphore::Wait  # 2008 dev PDB name (WaitForSingleObject)
-00922740 EA::Thread::Semaphore::Post  # 2008 dev PDB name (ReleaseSemaphore)
+00922570 ?UpdateCancelCount@EASemaphoreData@@QAEXH@Z  # EASemaphoreData::UpdateCancelCount migrated from s00922500
+009225d0 ??0SemaphoreData@Thread@EA@@QAE@H_NPBD@Z  # SemaphoreData::SemaphoreData migrated from s00922500 (verbatim, slice spelling)
+00922610 ?FUN_00922610@@YIXPAPAX@Z  # FUN_00922610 migrated from s00922500 (verbatim, slice spelling)
+00922620 ?Init@Semaphore_s0092_2500@Thread@EA@@QAE_NPAH@Z  # Semaphore_s0092_2500::Init migrated from s00922500 (verbatim, slice spelling)
+00922690 ?Wait@Semaphore@Thread@EA@@QAEHABI@Z  # EA::Thread::Semaphore::Wait migrated from s00922500
+00922740 ?Post@Semaphore@Thread@EA@@QAEHH@Z  # EA::Thread::Semaphore::Post migrated from s00922500
 00922b30 EA::Thread::Thread::SetName  # 2008 dev PDB name (RaiseException 0x406d1388)
 009233e0 ?Set@C233e0@@QAEXG@Z  # C233e0::Set migrated from s00922500 (verbatim, slice spelling)
 009233f0 ?Call@C233f0@@QAEXPAX@Z  # C233f0::Call migrated from s00922500 (verbatim, slice spelling)

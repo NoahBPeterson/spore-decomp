@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/eathread_semaphore.cpp  ??0SemaphoreData@Thread@EA@@QAE@H_NPBD@Z  009225d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/eathread_semaphore.cpp  ?FUN_00922610@@YIXPAPAX@Z  00922610  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
