@@ -28,7 +28,7 @@ public:
     basic_string() : mpBegin(EmptyStr<T>::Get()), mpEnd(EmptyStr<T>::Get()), mpCapacity(EmptyStr<T>::Get() + 1) {}
     ~basic_string() { DeallocateSelf(); }
     const T* c_str() const { return mpBegin; }
-    void DeallocateSelf() { if ((mpCapacity - mpBegin) > 1) DoFree(mpBegin); }
+    void DeallocateSelf() { if ((char*)mpCapacity - (char*)mpBegin > 1) DoFree(mpBegin); }
     void DoFree(T* p) { if (p) mAllocator.deallocate(p); }
 };
 typedef basic_string<wchar_t> string16;
@@ -83,8 +83,28 @@ bool ReadInt32(IStream* s, int32_t* p, unsigned n, int endian);   // 0x93a780
 }}
 
 // -------------------------------------------------------------- game model
+// eastl-vector copy helpers (each is a distinct T instantiation)
+// vector::Init-style helpers are __thiscall (ecx = vector, two stack args, ret 8).
+struct VecOps {
+    void InitSplit(unsigned n, void* alloc);        // 0x7d1c60
+    void InitCurve(unsigned n, void* alloc);        // 0x7d1c00
+    void InitSplitter(unsigned n, void* alloc);     // 0x6a40a0
+    void InitGroup(unsigned n, void* alloc);        // 0x4aa350
+};
+void* VecAssignSplit(void* out, void* a, void* b, void* c, void* d);  // 0x7d0dd0
+void* VecAssignCurve(void* out, void* a, void* b, void* c, void* d);  // 0x7d11b0
+void* VecAssignSplitter(void* out, void* a, void* b, void* c, void* d); // 0x76ffd0
+void* VecInsertGroup(void* pos, void* first, unsigned bytes); // 0x11e0744
+
 namespace SP {
-struct Vec20 { void* p0; void* p1; void* p2; void* p3; void* p4; };
+struct Vec20 {
+    void* p0; void* p1; void* p2; void* p3; void* p4;
+    Vec20* CopySplitControllerVector(const Vec20* src);   // 0x7d2580
+    Vec20* CopyAnimationCurveVector(const Vec20* src);    // 0x7d2740
+};
+
+extern char g_vtblDescBase[];      // 0x13ef094
+extern char g_vtblDescDerived[];   // 0x1411f04
 
 struct cGameModelDescription {
     void*    vtbl;            // +0x00
@@ -108,6 +128,9 @@ struct cGameModelDescription {
     uint8_t  mOverrideSet;    // +0x85
     uint8_t  pad86[2];        // +0x86
     uint32_t field88;         // +0x88
+    uint32_t field8c;         // +0x8c
+    cGameModelDescription(const cGameModelDescription* src);  // 0x7d2830
+    ~cGameModelDescription();                                  // 0x7d0f60
 };
 
 struct cGameModelState {
@@ -153,7 +176,9 @@ struct SVec {
 int  FindModelKernel(const char* name, int type);        // 0xa6ebd0
 void EffectCommandInit(void* self, void* a, void* b);    // 0x83c780
 void SetUserData(void* self, void* p);                   // 0xfd9450
-void EchoError(const char* fmt, ...);                    // 0x52df30 (cError ctor)
+struct cError {
+    cError(const char* fmt, ...);                            // 0x52df30 (cdecl ctor)
+};
 
 extern const char* kVisibleCommands[];                   // 0x153d728
 extern const char* kDeformHandleCommands[];              // 0x153d678
@@ -343,10 +368,8 @@ void cGameModelDeformCommand::Execute(EA::ArgScript::cArguments& args) {
 void cGameModelSplitterCommand::Execute(EA::ArgScript::cArguments& args) {
     const char** av = args.MainArguments(3);
     int kernel = FindModelKernel(av[0], 0x10);
-    if (kernel < 0) {
-        EchoError("Unknown split model kernel: %s", av[0]);
-        return;
-    }
+    if (kernel < 0)
+        throw cError("Unknown split model kernel: %s", av[0]);
     SP::cSplitController sc;
     sc.mKernel = kernel;
     sc.mType  = (uint8_t)EA::ArgScript::ParseEnum(av[1], kModelSplitterTypeCommands);
@@ -355,28 +378,17 @@ void cGameModelSplitterCommand::Execute(EA::ArgScript::cArguments& args) {
     void* end = v->mpEnd;
     if (end < v->mpCapacity) {
         v->mpEnd = (char*)end + 8;
-        if (end) { *(uint32_t*)end = sc.mKernel; *((uint32_t*)end + 1) = *(uint32_t*)&sc; }
+        if (end) { *(uint32_t*)end = sc.mKernel; *((uint32_t*)end + 1) = ((uint32_t*)&sc)[1]; }
     } else {
         v->DoInsertValue(end, &sc);
     }
 }
 
+void* GetCommandState(void* self);                       // 0x83cd90
+void DestroyGameModelStatePtr(void* s);                  // 0x7d0f60
+
 // @ 0x007d2490
 cGameModelEffectCommand::~cGameModelEffectCommand() {
-}
-
-// vector helpers used by the description copy paths
-void VecInit(void* dst, unsigned n, void* alloc);            // 0x7d1c60 / 0x7d1c00
-void* VecAssignRange(void* out, void* a, void* b, void* c, void* d);  // 0x7d0dd0
-
-// @ 0x007d2580
-void* CopySplitControllerVector(void* self, void* src) {
-    if (src == self) return self;
-    VecInit(self, (unsigned)(((char*)((void**)src)[1] - (char*)((void**)src)[0]) / 0x68), (char*)src + 0xc);
-    void* tmp = 0;
-    VecAssignRange(&tmp, ((void**)src)[0], ((void**)src)[1], *(void**)self, src);
-    ((void**)self)[1] = tmp;
-    return self;
 }
 
 void AddGameModelCommands(void* server, void* childState, void* parser);  // fwd
@@ -392,14 +404,69 @@ void SWARM_GameModelAddCommands(void* unused, void* server, int* parserVtbl) {
     ((void(__thiscall*)(void*, void*, void*))((*(void***)server)[0x18 / 4]))(server, g_cmdGameModel, group);
 }
 
-// @ 0x007d2740
-void* CopyAnimationCurveVector(void* self, void* src) {
-    if (src == self) return self;
-    VecInit(self, (unsigned)(((char*)((void**)src)[1] - (char*)((void**)src)[0]) / 0x2c), (char*)src + 0xc);
+// @ 0x007d2580
+SP::Vec20* SP::Vec20::CopySplitControllerVector(const Vec20* src) {
+    ((VecOps*)this)->InitSplit(
+        (unsigned)(((char*)((const void**)src)[1] - (char*)((const void**)src)[0]) / 0x68),
+        (char*)src + 0xc);
     void* tmp = 0;
-    VecAssignRange(&tmp, ((void**)src)[0], ((void**)src)[1], *(void**)self, src);
-    ((void**)self)[1] = tmp;
-    return self;
+    VecAssignSplit(&tmp, ((void**)src)[0], ((void**)src)[1], *(void**)this, (void*)src);
+    *(void**)((char*)this + 4) = tmp;
+    return this;
+}
+
+// @ 0x007d2740
+SP::Vec20* SP::Vec20::CopyAnimationCurveVector(const Vec20* src) {
+    ((VecOps*)this)->InitCurve(
+        (unsigned)(((char*)((const void**)src)[1] - (char*)((const void**)src)[0]) / 0x2c),
+        (char*)src + 0xc);
+    void* tmp = 0;
+    VecAssignCurve(&tmp, ((void**)src)[0], ((void**)src)[1], *(void**)this, (void*)src);
+    *(void**)((char*)this + 4) = tmp;
+    return this;
+}
+
+// @ 0x007d2830
+SP::cGameModelDescription::cGameModelDescription(const cGameModelDescription* src) {
+    vtbl = SP::g_vtblDescBase;
+    mRefCount = 0;
+    mStateID = *(int*)(src ? (const char*)src + 8 : 0);
+    vtbl = SP::g_vtblDescDerived;
+    mFlags = src->mFlags;
+    mSize = src->mSize;
+    mColourX = src->mColourX;
+    mColourY = src->mColourY;
+    mColourZ = src->mColourZ;
+    mAlpha = src->mAlpha;
+    mInstanceID = src->mInstanceID;
+    mGroupID = src->mGroupID;
+    mWorldID = src->mWorldID;
+    mAnimationCurves.CopyAnimationCurveVector(&src->mAnimationCurves);
+    ((VecOps*)&mModelSplitters)->InitSplitter(
+        (unsigned)(((char*)((const void**)&src->mModelSplitters)[1] -
+                    (char*)((const void**)&src->mModelSplitters)[0]) >> 3),
+        (char*)&src->mModelSplitters + 0xc);
+    {
+        void* tmp = 0;
+        VecAssignSplitter(&tmp, ((void**)&src->mModelSplitters)[0], ((void**)&src->mModelSplitters)[1],
+                          *(void**)&mModelSplitters, (void*)src);
+        *(void**)((char*)&mModelSplitters + 4) = tmp;
+    }
+    mSplitControllers.CopySplitControllerVector(&src->mSplitControllers);
+    ((VecOps*)&mGroups)->InitGroup(
+        (unsigned)(((char*)((const void**)&src->mGroups)[1] -
+                    (char*)((const void**)&src->mGroups)[0]) >> 2),
+        (char*)&src->mGroups + 0xc);
+    {
+        unsigned bytes = (unsigned)((char*)((const void**)&src->mGroups)[1] -
+                                    (char*)((const void**)&src->mGroups)[0]);
+        void* end = VecInsertGroup(*(void**)&mGroups, ((void**)&src->mGroups)[0], bytes);
+        *(void**)((char*)&mGroups + 4) = (char*)end + ((int)bytes >> 2) * 4;
+    }
+    mFlagsToSet = src->mFlagsToSet;
+    mPickLevel = src->mPickLevel;
+    mOverrideSet = src->mOverrideSet;
+    field88 = src->field88;
 }
 
 // @ 0x007d27d0
@@ -411,10 +478,4 @@ void* ReadIntVector(void* stream, void* vec) {
     for (unsigned i = 0; i < (unsigned)count; ++i)
         EA::IO::ReadInt32((EA::IO::IStream*)stream, (int32_t*)&v->mpBegin[i], 1, 0);
     return stream;
-}
-
-// @ 0x007d2830
-void* CopyGameModelState(void* self, void* src) {
-    (void)self; (void)src;
-    return self;
 }
