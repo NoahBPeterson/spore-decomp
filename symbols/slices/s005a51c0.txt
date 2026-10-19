@@ -1,7 +1,7 @@
-005a51c0 SP::cSPColorSwatch::Init  # PDB anchor
+005a51c0 ?Init@cSPColorSwatch_s005a_51c0@@QAEXPAUcPropertyList_s005a_51c0@@UColorPOD@@MMMMPAVIWindow_s005a_51c0@UTFWin@EA@@PAVIUnknown32_s005a_51c0@COM@6@@Z  # cSPColorSwatch_s005a_51c0::Init migrated from s005a51c0 (verbatim, slice spelling)
 005a5960 SP::cSPColorSwatch::MainColorSelected  # reads mOwner(0x64), mIsDefaultColor(0x12), mBaseColor(0x30), mSwatchIndex(0xa0)
-005a5a50 cX::cX  # cEditorResource/ContentValidationSummarizer-derived ctor
-005a5ae0 SP::cSPColorSwatch::SetFromSwatch  # calls SetColor(other->mBaseColor), CollapseExpansion, MainColorSelected
-005a5b10 cX scalar deleting destructor  # restores cEditorResource/ContentValidationSummarizer vtables
-005a5b70 SP::cSPColorSwatch::DoMessage  # PDB candidate caller-single
-005a5db0 SP::cSPColorSwatch::Cleanup  # recursive sub-swatch teardown + window removal
+005a5a50 ??0cX@@QAE@XZ  # cX::cX migrated from s005a51c0 (verbatim, slice spelling)
+005a5ae0 ?SetFromSwatch@cSPColorSwatch_s005a_51c0@@QAEXPAV1@@Z  # cSPColorSwatch_s005a_51c0::SetFromSwatch migrated from s005a51c0 (verbatim, slice spelling)
+005a5b10 ??1cX@@UAE@XZ  # cX::~cX migrated from s005a51c0 (verbatim, slice spelling)
+005a5b70 ?DoMessage@cSPColorSwatch@SP@@UAE_NPAVIWindow@UTFWin@EA@@ABVMessage@45@@Z  # SP::cSPColorSwatch::DoMessage migrated from s005a51c0
+005a5db0 ?Cleanup@cSPColorSwatch_s005a_51c0@@QAEXXZ  # cSPColorSwatch_s005a_51c0::Cleanup migrated from s005a51c0 (verbatim, slice spelling)

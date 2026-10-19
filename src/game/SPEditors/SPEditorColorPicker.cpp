@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPEditorColorPicker.cpp -- migrated from slice(s) s005a4250, s005a5ec0 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPEditorColorPicker.cpp -- migrated from slice(s) s005a51c0, s005a4250, s005a5ec0 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPEditorColorPicker.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -14,6 +14,8 @@
 #include "EA/UTFWin/IWinProc.h"
 #include "EA/Stopwatch.h"
 #include "SP/cString.h"
+#include "SP/cEditorResource.h"
+#include <intrin.h>
 #pragma intrinsic(sqrt)
 
 // ---- items of slice s005a5ec0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -534,6 +536,343 @@ public:
 };
 // ---- items of slice s005a4250 end
 
+// ---- items of slice s005a51c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void  operator delete[](void* p);
+struct Property_s005a_51c0 {
+    char pad[0x10];
+    uint32_t mFlags;             // +0x10
+    unsigned short mType;        // +0x12
+    int* GetInt();               // 0x0041e990
+    uint32_t* GetUInt();         // 0x0041ea00
+    float* GetFloat();           // 0x0041ea70
+    bool* GetBool();             // 0x0041e920
+};
+union LARGE_INTEGER_ { struct { unsigned long LowPart; long HighPart; }; __int64 QuadPart; };
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(LARGE_INTEGER_*);
+struct IDrawable_s005a_51c0;
+namespace EA {
+template <typename T>
+class AutoRefCount_s005a_51c0 {
+public:
+    T* mpObject;
+    AutoRefCount_s005a_51c0() : mpObject(0) {}
+    AutoRefCount_s005a_51c0(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    AutoRefCount_s005a_51c0(const AutoRefCount_s005a_51c0& x) : mpObject(x.mpObject) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCount_s005a_51c0() { if (mpObject) mpObject->Release(); }
+    AutoRefCount_s005a_51c0& operator=(T* pObject) {
+        if (pObject != mpObject) {
+            T* const pTemp = mpObject;
+            if (pObject) pObject->AddRef();
+            mpObject = pObject;
+            if (pTemp) pTemp->Release();
+        }
+        return *this;
+    }
+    AutoRefCount_s005a_51c0& operator=(const AutoRefCount_s005a_51c0& x) { return operator=(x.mpObject); }
+    T*& AsOutParam() {
+        if (mpObject) { T* const p = mpObject; mpObject = 0; p->Release(); }
+        return mpObject;
+    }
+    T* operator->() const { return mpObject; }
+    operator T*() const { return mpObject; }
+};
+}
+namespace EA {
+template <typename T>
+class AutoRefCountOOL : public AutoRefCount_s005a_51c0<T> {
+public:
+    __declspec(noinline) AutoRefCountOOL& operator=(T* pObject);
+};
+}
+namespace EA {
+template <typename T>
+class RefCountVTemplate_s005a_51c0 {
+public:
+    RefCountVTemplate_s005a_51c0() : mnRefCount(0) {}
+    virtual ~RefCountVTemplate_s005a_51c0() {}
+    virtual int AddRef() { return ++mnRefCount; }
+    virtual int Release() {
+        int n = (*(volatile int*)&mnRefCount += -1);
+        if (n == 0) { mnRefCount = 1; delete this; return 0; }
+        return mnRefCount;
+    }
+    T mnRefCount;
+};
+}
+namespace EA {
+namespace COM {
+class IUnknown32_s005a_51c0 {
+public:
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+};
+}
+}
+namespace EA {
+struct RectT_s005a_51c0 {
+    float left, top, right, bottom;
+    RectT_s005a_51c0() {}
+    RectT_s005a_51c0(float l, float t, float r, float b) : left(l), top(t), right(r), bottom(b) {}
+    float Width() const { return right - left; }
+    float Height() const { return bottom - top; }
+};
+}
+namespace EA {
+class Stopwatch_s005a_51c0 {
+public:
+    Stopwatch_s005a_51c0(int, int);
+    uint32_t GetElapsedTime();  // 0x0093a5e0 (EA::Stopwatch::GetElapsedTime)
+    void Start() {
+        if (mStartTime == 0) {
+            if (mUnits == 1) {
+                mStartTime = __rdtsc();
+            } else {
+                LARGE_INTEGER_ t;
+                QueryPerformanceCounter(&t);
+                mStartTime = t.QuadPart;
+            }
+        }
+    }
+    unsigned __int64 mStartTime;   // +0x00
+    uint32_t pad8[2];
+    uint32_t mUnits;               // +0x10
+    uint32_t pad14;
+};
+}
+namespace EA {
+namespace UTFWin {
+class IWindow_s005a_51c0 {
+public:
+    virtual int AddRef();                         // +0x00
+    virtual int Release();                        // +0x04
+    PV(2) PV(3)
+    virtual IWindow_s005a_51c0* GetParent();                 // +0x10
+    PV(5) PV(6) PV(7) PV(8) PV(9)
+    virtual uint32_t GetFlags();                  // +0x28
+    PV(11) PV(12)
+    virtual const EA::RectT_s005a_51c0& GetRealArea();       // +0x34
+    virtual const EA::RectT_s005a_51c0& GetArea();           // +0x38
+    PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22)
+    virtual void pv23(uint32_t color);            // +0x5c
+    virtual void SetArea(EA::RectT_s005a_51c0 area);         // +0x60
+    PV(25) PV(26)
+    virtual void pv27(const EA::RectT_s005a_51c0* area);     // +0x6c
+    PV(28) PV(29) PV(30)
+    virtual void SetFlag(int flag, bool value);   // +0x7c
+    PV(32) PV(33) PV(34) PV(35) PV(36) PV(37) PV(38) PV(39)
+    PV(40) PV(41)
+    virtual ::IDrawable_s005a_51c0* GetDrawable();           // +0xa8
+    virtual void SetFillColor(uint32_t color);    // +0xac
+    PV(44) PV(45) PV(46) PV(47)
+    virtual EA::Point ToClient(float, float);     // +0xc0
+    virtual EA::Point ToScreen(float, float);     // +0xc4
+    PV(50) PV(51) PV(52) PV(53)
+    virtual void AddWindow(IWindow_s005a_51c0*);             // +0xd8
+    PV(55) PV(56) PV(57)
+    virtual void pv58(void*);                     // +0xe8
+    PV(59) PV(60) PV(61) PV(62) PV(63) PV(64)
+    virtual void AddWinProc(struct IWinProc_s005a_51c0*);    // +0x104
+    virtual void pv66(void*);                     // +0x108
+};
+}
+}
+namespace EA {
+namespace UTFWin {
+class IWinProc_s005a_51c0 : public EA::COM::IUnknown32_s005a_51c0 {
+public:
+    virtual ~IWinProc_s005a_51c0() {}
+};
+}
+}
+using EA::UTFWin::IWindow_s005a_51c0;
+using EA::UTFWin::IWinProc_s005a_51c0;
+struct IDrawableCast {
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
+    virtual void SetMode(int mode);               // +0x28
+};
+struct IDrawable_s005a_51c0 {
+    virtual int AddRef();
+    virtual int Release();
+    PV(2)
+    virtual IDrawableCast* Cast(uint32_t id);     // +0x0c
+};
+struct Key3 {
+    uint32_t mInstance, mType, mGroup;
+    Key3() {}
+    Key3(uint32_t instance, uint32_t type, uint32_t group) { mType = type; mGroup = group; mInstance = instance; }
+};
+struct Pt2 { float x, y; Pt2(float a, float b) : x(a), y(b) {} };
+namespace SPUIHelpers {
+IWindow_s005a_51c0* CreateImageWindow(const Key3& image, Pt2 pos, IWindow_s005a_51c0* parent);   // 0x00807880 (cdecl)
+}
+struct cPropertyList_s005a_51c0;
+bool GetPropertyAsKeyInstance(const cPropertyList_s005a_51c0* list, uint32_t id, uint32_t* out);   // 0x006a12a0 (cdecl)
+void* __cdecl FUN_009512c0();
+void* __cdecl FUN_009512d0(unsigned size, unsigned align, const char* name, void* alloc);
+struct WindowRaw { WindowRaw* Ctor(); };            // 0x00962a10 EA::UTFWin::Window::Window
+struct LayoutMgr { IWindow_s005a_51c0* GetWorldMainWindow(); };   // 0x00810620
+LayoutMgr* __stdcall GetLayoutManager(unsigned id);   // 0x00805070
+struct EffectSub {
+    PV(0) PV(1) PV(2) PV(3)
+    virtual IWinProc_s005a_51c0* GetWinProc();               // +0x10
+    PV(5)
+    virtual void SetDuration(float);              // +0x18
+    PV(7)
+    virtual void SetFlagA(bool);                  // +0x20
+    PV(9)
+    virtual void SetRange(float, float);          // +0x28
+    PV(11)
+    virtual void SetFlagB(bool);                  // +0x30
+};
+struct InflateEffect {
+    virtual int AddRef();
+    virtual int Release();
+    uint32_t pad[1];
+    EffectSub mCtl;                               // +0x0c
+    uint32_t pad2[(0x60 - 0x10) / 4];
+    EffectSub mCtl2;                              // +0x60
+    InflateEffect* Ctor();                        // 0x0097e690
+};
+struct FadeEffect {
+    virtual int AddRef();
+    virtual int Release();
+    uint32_t pad[1];
+    EffectSub mCtl;                               // +0x0c
+    FadeEffect* Ctor();                           // 0x0096f060
+};
+struct UnkCast { virtual int AddRef(); virtual int Release(); PV(2) virtual void* Cast(uint32_t id); };
+namespace eastl {
+struct sp_vector_allocator_s005a_51c0 {
+    uint32_t mData[2];
+    sp_vector_allocator_s005a_51c0() {}
+    void deallocate(void* p, size_t) { if (((uint32_t*)p)[-1]) operator delete[]((char*)p); }
+};
+}
+namespace eastl {
+template <typename T>
+class sp_vector_s005a_51c0 {
+public:
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    sp_vector_allocator_s005a_51c0 mAllocator;
+    sp_vector_s005a_51c0() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~sp_vector_s005a_51c0();
+    unsigned int size() const { return (unsigned int)(mpEnd - mpBegin); }
+    T* begin() { return mpBegin; }
+    T* end() { return mpEnd; }
+    T& operator[](unsigned int i) { return mpBegin[i]; }
+};
+}
+namespace eastl {
+template <typename T>
+__declspec(noinline) sp_vector_s005a_51c0<T>::~sp_vector_s005a_51c0() {
+    if (mpBegin) mAllocator.deallocate(mpBegin, (char*)mpCapacity - (char*)mpBegin);
+}
+}
+struct cPropertyList_s005a_51c0 {
+    virtual int AddRef();
+    virtual int Release();
+    PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8)
+    virtual bool GetProperty(uint32_t id, Property_s005a_51c0*& result);  // +0x24
+};
+namespace SP {
+struct cSPColorRGB_s005a_51c0 {
+    float r, g, b;
+    cSPColorRGB_s005a_51c0() {}
+    cSPColorRGB_s005a_51c0(const cSPColorRGB_s005a_51c0& c) : r(c.r), g(c.g), b(c.b) {}
+    bool operator!=(const cSPColorRGB_s005a_51c0& c) const { return r != c.r || g != c.g || b != c.b; }
+};
+}
+namespace SP {
+extern cSPColorRGB_s005a_51c0 gDefaultPaintColor_s005a_51c0;  // 0x0150f470
+}
+using SP::cSPColorRGB_s005a_51c0;
+struct ColorPOD { float r, g, b; };
+uint32_t ColorRGBToU32(const cSPColorRGB_s005a_51c0* c);  // 0x00458a40
+class cSPColorSwatch_s005a_51c0 : public EA::UTFWin::IWinProc_s005a_51c0, public EA::RefCountVTemplate_s005a_51c0<int> {
+public:
+    bool mRespondToInput;   // +0xc
+    bool mRolledOver;       // +0xd
+    bool mMouseDown;        // +0xe
+    bool mExpanded;         // +0xf
+    bool mBecomingOwner;    // +0x10
+    bool mCustomColor;      // +0x11
+    bool mIsDefaultColor;   // +0x12
+    char pad13[1];
+    float mRollOverTimer;   // +0x14
+    float mFadeTimer;       // +0x18
+    float mMouseDownTimer;  // +0x1c
+    float mSelectedTimer;   // +0x20
+    ColorPOD mBaseColor;     // +0x24
+    ColorPOD mDisplayColor;  // +0x30
+    EA::RectT_s005a_51c0 mOriginalArea;    // +0x3c
+    EA::AutoRefCount_s005a_51c0<IWindow_s005a_51c0> mWinFrame;      // +0x4c
+    EA::AutoRefCount_s005a_51c0<IWindow_s005a_51c0> mWinFrameGlow;  // +0x50
+    EA::AutoRefCount_s005a_51c0<IWindow_s005a_51c0> mWinShine;      // +0x54
+    EA::AutoRefCount_s005a_51c0<IWindow_s005a_51c0> mWinColor;      // +0x58
+    EA::AutoRefCount_s005a_51c0<IWindow_s005a_51c0> mWinRoot;       // +0x5c
+    EA::AutoRefCountOOL<IWindow_s005a_51c0> mWinExpansion;  // +0x60
+    EA::AutoRefCount_s005a_51c0<EA::COM::IUnknown32_s005a_51c0> mOwner;  // +0x64
+    eastl::sp_vector_s005a_51c0<EA::AutoRefCount_s005a_51c0<cSPColorSwatch_s005a_51c0> > mExpansionSwatches;  // +0x68
+    EA::AutoRefCount_s005a_51c0<cPropertyList_s005a_51c0> mColorPickerConfig;  // +0x7c
+    EA::Stopwatch_s005a_51c0 mTimerDoubleClick;  // +0x80
+    uint32_t mCurrMouseDownTime;      // +0x98
+    uint32_t mLastMouseDownTime;      // +0x9c
+    uint32_t mSwatchIndex;            // +0xa0
+    uint32_t mExpansionIndex;         // +0xa4
+
+    virtual int AddRef() { return EA::RefCountVTemplate_s005a_51c0<int>::AddRef(); }
+    virtual int Release() { return EA::RefCountVTemplate_s005a_51c0<int>::Release(); }
+
+    void SetColor(const ColorPOD& color);        // 0x005a45d0
+    void CollapseExpansion();                       // 0x005a4630
+    void SetExpansionArea(bool b);                  // 0x005a4990
+    void SetSelectedColor(void* param);             // 0x005a4b80
+    __declspec(noinline) void MainColorSelected();  // 0x005a5960
+    void SetFromSwatch(cSPColorSwatch_s005a_51c0* other);      // 0x005a5ae0
+    int  DoMessage(uint32_t wParam, void* message); // 0x005a5b70
+    void Cleanup();                                 // 0x005a5db0
+    void SetArea(EA::RectT_s005a_51c0 area, bool b);          // 0x005a4500
+    void Init(cPropertyList_s005a_51c0* config, ColorPOD color,
+              float l, float t, float rr, float bb,
+              IWindow_s005a_51c0* parent, EA::COM::IUnknown32_s005a_51c0* owner);
+};
+namespace SP {
+class cContentValidationSummarizer {
+public:
+    virtual int v0();
+    virtual int v1();
+};
+}
+namespace SP {
+class cEditorResource_s005a_51c0 : public cContentValidationSummarizer {
+public:
+    cEditorResource_s005a_51c0() : mField4(0) {}
+    virtual int v0();
+    virtual int v1();
+    int mField4;   // +0x4
+};
+}
+class cXBase { public: virtual int v0(); };
+class cX : public SP::cEditorResource_s005a_51c0, public cXBase {
+public:
+    EA::AutoRefCount_s005a_51c0<EA::COM::IUnknown32_s005a_51c0> mPtrC;  // +0xc
+    void* mPtr10;     // +0x10
+    float mFloat14;   // +0x14
+    float mFloat18;   // +0x18
+    cSPColorRGB_s005a_51c0 mColor1c;  // +0x1c
+    uint32_t mInt28;  // +0x28
+    uint32_t mInt2c;  // +0x2c
+    eastl::sp_vector_s005a_51c0<void*> mVec30;  // +0x30
+    void* mPtr44;     // +0x44
+    EA::AutoRefCount_s005a_51c0<EA::COM::IUnknown32_s005a_51c0> mPtr48;  // +0x48
+    void* mPtr4c;     // +0x4c
+    cX();
+    virtual ~cX();
+};
+// ---- items of slice s005a51c0 end
+
 // @ 0x005a4250
 void cSPColorSwatch_s005a_4250::GetExpansionColor(float* out, float a, float b, float c, int d, int e)
 {
@@ -776,6 +1115,172 @@ cSPColorSwatch_s005a_4250::cSPColorSwatch_s005a_4250()
 // @ 0x005a5100
 cSPColorSwatch_s005a_4250::~cSPColorSwatch_s005a_4250()
 {
+}
+
+// @ 0x005a51c0
+void cSPColorSwatch_s005a_51c0::Init(cPropertyList_s005a_51c0* config, ColorPOD color, float l, float t, float rr, float bb, IWindow_s005a_51c0* parent, EA::COM::IUnknown32_s005a_51c0* owner)
+{
+    mTimerDoubleClick.Start();
+    mOriginalArea.left = l; mOriginalArea.top = t; mOriginalArea.right = rr; mOriginalArea.bottom = bb;
+    mBaseColor = color;
+    mDisplayColor = color;
+    mOwner = owner;
+    mColorPickerConfig = config;
+    mSwatchIndex = 0xffffffff;
+    mExpansionIndex = 0xffffffff;
+
+    uint32_t keyGroup = 0, key1 = 0, key2 = 0, key3 = 0, key4 = 0, key5 = 0;
+    bool hasExpansion = true;
+    GetPropertyAsKeyInstance(mColorPickerConfig, 0xd29675e0, &keyGroup);
+    GetPropertyAsKeyInstance(mColorPickerConfig, 0xd29675e1, &key1);
+    GetPropertyAsKeyInstance(mColorPickerConfig, 0xd29675e2, &key2);
+    GetPropertyAsKeyInstance(mColorPickerConfig, 0xd29675e3, &key3);
+    GetPropertyAsKeyInstance(mColorPickerConfig, 0xd29675e4, &key4);
+    GetPropertyAsKeyInstance(mColorPickerConfig, 0xd29675e5, &key5);
+    if (mIsDefaultColor) {
+        GetPropertyAsKeyInstance(mColorPickerConfig, 0x5adcd71, &key1);
+        GetPropertyAsKeyInstance(mColorPickerConfig, 0x5adcd72, &key2);
+        GetPropertyAsKeyInstance(mColorPickerConfig, 0x5adcd73, &key3);
+        GetPropertyAsKeyInstance(mColorPickerConfig, 0x5adcd6f, &key5);
+    }
+    {
+        Property_s005a_51c0* prop;
+        if (mColorPickerConfig && mColorPickerConfig->GetProperty(0x55aa173, prop) && prop->mType == 1)
+            hasExpansion = *prop->GetBool();
+    }
+
+    WindowRaw* wr = 0;
+    void* mem = FUN_009512d0(0x20c, 4, "UI/Window", FUN_009512c0());
+    IWindow_s005a_51c0* root = 0;
+    if (mem) {
+        wr = ((WindowRaw*)mem)->Ctor();
+        if (wr) root = (IWindow_s005a_51c0*)((char*)wr + 4);
+    }
+    mWinRoot = root;
+    if (mWinRoot) {
+        parent->AddWindow(mWinRoot);
+        parent->pv58(mWinRoot);
+        mWinRoot->pv23(0xffffffff);
+        mWinRoot->SetFillColor(0xffffff);
+        mWinRoot->AddWinProc(this);
+
+        mWinColor = SPUIHelpers::CreateImageWindow(Key3(key5, 0x2f7d0004, keyGroup), Pt2(0.0f, 0.0f), mWinRoot);
+        if (mWinColor) {
+            mWinColor->pv23(ColorRGBToU32((const cSPColorRGB_s005a_51c0*)&mBaseColor));
+            IDrawableCast* d = mWinColor->GetDrawable()->Cast(0xef3c47cf);
+            if (d) d->SetMode(2);
+            mWinColor->SetFlag(2, false);
+            mWinColor->SetFlag(0x10, true);
+        }
+        mWinFrame = SPUIHelpers::CreateImageWindow(Key3(key1, 0x2f7d0004, keyGroup), Pt2(0.0f, 0.0f), mWinRoot);
+        if (mWinFrame) {
+            IDrawableCast* d = mWinFrame->GetDrawable()->Cast(0xef3c47cf);
+            if (d) d->SetMode(2);
+            mWinFrame->SetFlag(2, false);
+            mWinFrame->SetFlag(0x10, true);
+        }
+        mWinFrameGlow = SPUIHelpers::CreateImageWindow(Key3(key2, 0x2f7d0004, keyGroup), Pt2(0.0f, 0.0f), mWinRoot);
+        if (mWinFrameGlow) {
+            IDrawableCast* d = mWinFrameGlow->GetDrawable()->Cast(0xef3c47cf);
+            if (d) d->SetMode(2);
+            mWinFrameGlow->pv23(0);
+            mWinFrameGlow->SetFlag(2, false);
+            mWinFrameGlow->SetFlag(0x10, true);
+        }
+        mWinShine = SPUIHelpers::CreateImageWindow(Key3(key3, 0x2f7d0004, keyGroup), Pt2(0.0f, 0.0f), mWinRoot);
+        if (mWinShine) {
+            mWinShine->SetFlag(2, false);
+            mWinShine->SetFlag(0x10, true);
+        }
+        SetArea(mOriginalArea, false);
+
+        if (hasExpansion && mOwner && ((UnkCast*)(EA::COM::IUnknown32_s005a_51c0*)mOwner)->Cast(0xd0d22119)) {
+            IWindow_s005a_51c0* world = GetLayoutManager(0x5b598fa)->GetWorldMainWindow();
+            mWinExpansion = SPUIHelpers::CreateImageWindow(Key3(key4, 0x2f7d0004, keyGroup), Pt2(0.0f, 0.0f), world);
+            if (mWinExpansion) {
+                SetExpansionArea(false);
+                InflateEffect* inflate = 0;
+                {
+                    void* m = FUN_009512d0(0xb8, 8, "UI/InflateEffect", FUN_009512c0());
+                    if (m) inflate = ((InflateEffect*)m)->Ctor();
+                }
+                if (inflate) {
+                    inflate->AddRef();
+                    inflate->mCtl.SetDuration(0.3f);
+                    inflate->mCtl.SetRange(0.5f, 0.5f);
+                    inflate->mCtl.SetFlagB(true);
+                    inflate->mCtl.SetFlagA(true);
+                    inflate->mCtl2.SetDuration(0.0001f);
+                    mWinExpansion->AddWinProc(inflate->mCtl.GetWinProc());
+                }
+                FadeEffect* fade = 0;
+                {
+                    void* m = FUN_009512d0(0x60, 8, "UI/FadeEffect", FUN_009512c0());
+                    if (m) fade = ((FadeEffect*)m)->Ctor();
+                }
+                if (fade) {
+                    fade->AddRef();
+                    fade->mCtl.SetDuration(0.3f);
+                    fade->mCtl.SetRange(0.0f, 0.0f);
+                    fade->mCtl.SetFlagB(false);
+                    fade->mCtl.SetFlagA(true);
+                    mWinExpansion->AddWinProc(fade->mCtl.GetWinProc());
+                    fade->Release();
+                }
+                if (inflate) inflate->Release();
+            }
+        }
+    }
+    mRespondToInput = true;
+}
+
+// @ 0x005a5a50
+cX::cX()
+: mPtr10(0), mFloat14(0.0f), mFloat18(0.0f),
+           mColor1c(SP::gDefaultPaintColor_s005a_51c0), mInt28(0xffffffff), mInt2c(0xffffffff),
+           mPtr44(0), mPtr4c(0) {}
+
+// @ 0x005a5ae0
+void cSPColorSwatch_s005a_51c0::SetFromSwatch(cSPColorSwatch_s005a_51c0* other)
+{
+    if (other) {
+        SetColor(other->mBaseColor);
+        CollapseExpansion();
+        MainColorSelected();
+    }
+}
+
+// @ 0x005a5b10
+cX::~cX()
+{}
+
+// @ 0x005a5b70
+bool SP::cSPColorSwatch::DoMessage(EA::UTFWin::IWindow * a0, EA::UTFWin::Message const & a1)
+{
+    return 0;
+}
+
+// @ 0x005a5db0
+void cSPColorSwatch_s005a_51c0::Cleanup()
+{
+    int n = (int)(mExpansionSwatches.mpEnd - mExpansionSwatches.mpBegin);
+    for (int i = 0; i < n; i++)
+        mExpansionSwatches.mpBegin[i]->Cleanup();
+    if (mWinRoot) {
+        mWinRoot->pv58(0);
+        IWindow_s005a_51c0* p = mWinRoot->GetParent();
+        if (p) {
+            if (mWinExpansion)
+                mWinExpansion->GetParent()->pv58(mWinExpansion);
+            mWinRoot->GetParent()->pv58(mWinRoot);
+        }
+    }
+    mWinRoot = (IWindow_s005a_51c0*)0;
+    mWinShine = (IWindow_s005a_51c0*)0;
+    mWinFrame = (IWindow_s005a_51c0*)0;
+    mWinFrameGlow = (IWindow_s005a_51c0*)0;
+    mWinExpansion = (IWindow_s005a_51c0*)0;
+    mExpansionSwatches.mpEnd = mExpansionSwatches.mpBegin;
 }
 
 // @ 0x005a5ec0
