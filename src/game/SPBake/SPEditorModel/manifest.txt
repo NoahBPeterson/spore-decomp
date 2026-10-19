@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPEditorModel.cpp  ??1BlockVector@eastl@@QAE@XZ  00453eb0  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
+../src/game/SPBake/SPEditorModel.cpp  ?SetName@cSPEditorModel_s004a_d550@SP@@UAEXPB_W@Z  004add60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorModel.cpp  ?SetDescription@cSPEditorModel_s004a_d550@SP@@UAEXPB_W@Z  004adf20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

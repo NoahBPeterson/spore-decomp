@@ -1,2 +1,3 @@
 00453250 ?GetHavokTransformFromMatrix@EditorUtils@SP@@YIPAUHavokTransform@@PAU3@@Z  # GetHavokTransformFromMatrix migrated from s00453250 (verbatim, slice spelling)
+00453eb0 ??1BlockVector@eastl@@QAE@XZ  # BlockVector::~BlockVector migrated from s00453250 (verbatim, slice spelling)
 00453f20 ?4BlockVector  # eastl::BlockVector::operator= (??4BlockVector@eastl@@QAEAAU01@ABU01@@Z; base identifier so the matcher finds it)
