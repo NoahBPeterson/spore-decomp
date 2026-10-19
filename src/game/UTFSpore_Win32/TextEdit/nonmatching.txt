@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+0098ab40 259 SelectWordAt: complete (word/sentence helpers 98a4b0/570/660/730 are other functions); ordering/regalloc differ
+0098ad40 1716 OnKeyDown: complete (all VK cases); case-body layout/register allocation differ, and the original's (int)(float)len uses cvttss2si from memory where cl emits _ftol2_sse
+0098b700 226 eastl::DequeBase<void*,..,64>::DoReallocPtrArray: complete; original recomputes the used-pointer byte count instead of hoisting it
+0098e3a0 474 GetCursorPoint: complete; x87/SSE mix, typesetter-loop frame layout differ; difftest still UNSUPPORTED: 0/400 valid, a callee hits the unemulated import _decode_pointer (UpperBound* annotated 0x98b650/0x98b6b0/0x9212c0)
+0098e690 178 SetTextStyle: complete; original uses SSE subss/cvttss2si, cl here emits x87 + ftol2 for the (int) cast
+0098e8d0 32 GetParagraphAtTextIndex: complete; original folds -0x18-begin before the add, ours subtracts after
+0098e930 32 GetParagraphAtPosition: complete; same final-subtract ordering difference

@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/TextEdit.cpp  ?FUN_0096f320@@YA_NPAXPAD1@Z  0096f320  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TextEdit.cpp  ?SetScrollbar@IWinTextEdit_s0098_a820@UTFWinControls@EA@@QAEXHPAUIUnk@23@@Z  0098acb0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/TextEdit.cpp  ?SetScrollbarEnabled@IWinTextEdit_s0098_a820@UTFWinControls@EA@@QAEXHH@Z  0098ad10  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/TextEdit.cpp  ?GetParagraphCount@IWinTextEdit_s0098_e3a0@UTFWinControls@EA@@QAEHXZ  0098e7b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TextEdit.cpp  ?GetParagraphTextIndex@IWinTextEdit_s0098_e3a0@UTFWinControls@EA@@QAEII@Z  0098e7e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TextEdit.cpp  ?GetParagraphYPos@IWinTextEdit_s0098_e3a0@UTFWinControls@EA@@QAEMI@Z  0098e830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TextEdit.cpp  ?GetParagraphLength@IWinTextEdit_s0098_e3a0@UTFWinControls@EA@@QAEII@Z  0098e880  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TextEdit.cpp  ?GetTextExtent@IWinTextEdit_s0098_e3a0@UTFWinControls@EA@@QAEXPAUPoint2@23@@Z  0098e9a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
