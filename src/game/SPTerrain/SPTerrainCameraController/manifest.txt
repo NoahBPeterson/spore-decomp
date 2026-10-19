@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPTerrain/SPTerrainCameraController.cpp  ?SetFloats5@cTerrainCameraController@SP@@QAEXMMMMM@Z  00b0f720  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

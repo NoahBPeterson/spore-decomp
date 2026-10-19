@@ -1,8 +1,8 @@
-# va  Name  # evidence
-00b108b0  SP::cTerrainCameraController::ReloadZoomProgram  # PDB symbol name shown on card.py
-00b10200  SP::cTerrainCameraController::GetAnchorDirection0  # m54/m58/m5c * m28 -> global lazy-init vector
-00b10260  SP::cTerrainCameraController::GetAnchorDirection1  # m6c/m70/m74 * m30 -> global lazy-init vector
-00b102c0  SP::cTerrainCameraController::UpdateCurrentHeight  # DebugDrawGrid + GetHeightAt into m30
+00b10200 ?FUN_00b10200@cTerrainCameraController_s00b1_0200@@QAEPAMXZ  # cTerrainCameraController_s00b1_0200::FUN_00b10200 migrated from s00b10200 (verbatim, slice spelling)
+00b10260 ?FUN_00b10260@cTerrainCameraController_s00b1_0200@@QAEPAMXZ  # cTerrainCameraController_s00b1_0200::FUN_00b10260 migrated from s00b10200 (verbatim, slice spelling)
+00b102c0 ?FUN_00b102c0@cTerrainCameraController_s00b1_0200@@QAEXXZ  # cTerrainCameraController_s00b1_0200::FUN_00b102c0 migrated from s00b10200 (verbatim, slice spelling)
 00b10470  SP::cTerrainCameraController::SetYaw  # sets m15c from the yaw block
-00b104c0  SP::cTerrainCameraController::SetDistance  # floors at 0.1 and seeds m108..m11c
-00b10760  SP::cTerrainCameraController::ResetInterpolation  # hard reset of all three blocks
+00b104c0 ?FUN_00b104c0@cTerrainCameraController_s00b1_0200@@QAEXM@Z  # cTerrainCameraController_s00b1_0200::FUN_00b104c0 migrated from s00b10200 (verbatim, slice spelling)
+00b10540 ?FUN_00b10540@cTerrainCameraController_s00b1_0200@@QAEXMMM@Z  # cTerrainCameraController_s00b1_0200::FUN_00b10540 migrated from s00b10200 (verbatim, slice spelling)
+00b10760 ?FUN_00b10760@cTerrainCameraController_s00b1_0200@@QAEXMMM@Z  # cTerrainCameraController_s00b1_0200::FUN_00b10760 migrated from s00b10200 (verbatim, slice spelling)
+00b108b0 ?ReloadZoomProgram@cTerrainCameraController_s00b1_0200@@QAEXXZ  # cTerrainCameraController_s00b1_0200::ReloadZoomProgram migrated from s00b10200 (verbatim, slice spelling)
