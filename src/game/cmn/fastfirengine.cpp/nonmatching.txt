@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0114e400 315 FastFirEngine::LoadDistributionCalc: complete (leaf; per-pass FFT/MAC/IFFT work distribution). Flags /vc71 /O2 /MD /Gy /TP /arch:SSE. difftest PASS (292 valid, 93.2% coverage).
+0114e580 60 FastFirEngine::Reset: complete (frees + nulls the buffer and FFT handle, clears the running state). Flags /vc71 /O2 /MD /Gy /TP /arch:SSE. difftest PASS (270 valid, 87.9% coverage).
+0114e5e0 355 FastFirEngine::Configure: reference-based reconstruction (partition counts, 16-rounded FFT length, single scratch block layout, the mix-frame memset through the real import, unsigned out-part byte span, FFT_Alloc/Init, LoadDistributionCalc). Flags /vc71 /O2 /MD /Gy /TP /arch:SSE. difftest PASS (217 valid, 100% coverage).
