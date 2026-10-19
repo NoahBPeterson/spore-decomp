@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+004bc300 297 SP::cSPEditorResourceFactory::CreateResource: complete (bakeable -> 0xac ctor, resource -> 0x128 ctor, vcall +0x24, field copy); stub object model diverges
+004bc540 203 SP::cSPEditorResourceFactory::ReadResource: complete; stream vtable slot types guessed
+004bc620 147 SP::cSPEditorResourceFactory::WriteResource: complete; stream vtable slot types guessed
+004bc6d0 308 SP::cSPEditorResourceFactory::ReadResourceFromStream: complete (chkstk frame + FixedBufferAllocator + read loop); our allocator/frame differs
+004bca10 118 EA::Allocator::FixedBufferAllocator::destroy_shared: complete transcription; original frame keeps 3 extra reserved slots and orders locals differently
+004bcab0 360 EA::Allocator::FixedBufferAllocator::Free: complete transcription; original frame/locals differ
+004bcc50 207 complete (flags /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast, no EH); instruction-for-instruction identical (721/721) except stack offsets: our cl 8-aligns the 0x418-byte fixed_vector `next` and the writer (-0x840/-0x860 vs -0x83c/-0x85c), shifting every lower slot by 4-8 bytes
+004bf9f0 222 ReadBinaryEditorModel: complete (header validation + 2 read segments); stream object model / frame differ; equiv: WEAK 29.3% cov
+004bfb20 185 WriteBinaryEditorModel path: complete (header + 2 write segments); stream object model / frame differ; equiv: WEAK 78.8% cov
+004bfc10 25 LocalExpatMalloc wrapper: complete; original reserves a 0x34-byte frame (inlined helper slots) vs our push ecx; equiv: UNSUPPORTED __tls_index/__tls_array

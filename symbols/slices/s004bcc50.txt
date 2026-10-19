@@ -1,1 +1,1 @@
-004bcc50 SP::cSPEditorResourceFactory::WriteResourceToStream  # card name; cdecl static, writes <sporemodel> XML (blocks, paint, childlist, handles)
+004bcc50 ?WriteResourceToStream@cSPEditorResourceFactory_s004b_cc50@SP@@SA_NPAUIStream@@HH@Z  # cSPEditorResourceFactory_s004b_cc50::WriteResourceToStream migrated from s004bcc50 (verbatim, slice spelling)

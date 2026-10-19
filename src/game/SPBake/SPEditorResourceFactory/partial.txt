@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+004be420  2  cEditorModelParser array-grow: partial skeleton (model block growth loop not reproduced)
+004bf430  4  ReadRuntimeCreatureData: partial skeleton (830-byte serializer/deserializer not reproduced)
+004bf770  4  WriteRuntimeCreatureData: partial skeleton (629-byte serializer not reproduced)
