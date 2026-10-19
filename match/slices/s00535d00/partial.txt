@@ -1,4 +1,0 @@
-005361a0  -  PaintVariable ParseLine (1039 bytes): stub only
-005365b0  -  paint-variable command (822 bytes): stub only
-00536910  -  paint-variable command (492 bytes): stub only
-00536b00  -  paint-variable command (561 bytes): stub only

@@ -1,1 +1,5 @@
 00585d40 1337 complete; shared 'wait' block (FUN_0067dd50()->vfn84) is placed at the end instead of mid-function, regalloc differs
+00586410  567  complete; /O2 register allocation differs (this in ebp vs ebx) and the AutoRefCount/EASTL inline traffic differs; logic reconstructed from disassembly. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: UNSUPPORTED]
+00586700  171  complete; /O2 register allocation differs (this in ebp vs ebx) so byte encoding of the two inlined bit-vector resets differs; behaviour verified equivalent. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: PASS]
+00586800  349  complete; /O2 register allocation + inlined eastl::vector<bool> traffic differ; logic reconstructed from disassembly. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: UNSUPPORTED]
+00586960  336  complete; /O2 register allocation + limb-rebuild inline differs; logic reconstructed from disassembly. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: UNSUPPORTED]

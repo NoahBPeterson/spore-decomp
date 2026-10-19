@@ -78,6 +78,10 @@ struct cPedestalModel {
 struct cEditorModelStub {
     char pad0[0x58];
     uint32_t mNameHash;         // +0x58
+    bool UsingSymmetry() const;             // 0x004adc40
+    void FUN_004adc20(int a);               // 0x004adc20
+    bool SaveResource(void* save);          // 0x004af260
+    void FUN_004adfc0(int a);               // 0x004adfc0
 };
 
 struct cEditorLaunchData {
@@ -204,6 +208,8 @@ public:
     bool mCaptureBusy;                   // +0x430
     char pad431[0x4d8 - 0x431];
 
+    void GetState(void* state);                             // 0x00574080
+    void BuildPartMask(void* out, void* a, void* b, int c); // 0x0057ac00
     void InitializeUndoList();                              // 0x00586690
     __declspec(noinline) void FUN_00586410(char a, void* b); // 0x00586410
     void FUN_00586700();                                    // 0x00586700
@@ -220,6 +226,28 @@ public:
     void SaveSomething();                                   // 0x00577650
     void FUN_00585c10();
     void FUN_00573f70(char a);
+};
+
+// ---- types touched by the undo / limb-rebuild helpers (offsets from the disassembly) ----
+struct cIntVec { void Resize(unsigned n); };                     // 0x00584160
+struct cSPEditorHandle { void* GetEditorBlock(); };              // 0x0047e6c0
+struct cSpine75 { void SetFlag(bool a, int b); };                // 0x005d1600
+
+// eastl::vector<bool> as laid out in this build: begin/end at +0/+4, fill-insert helper at 0x5151b0.
+struct EastlBitVector {
+    void* mpBegin;      // +0
+    void* mpEnd;        // +4
+    void* mpCap;        // +8
+    void DoFillInsert(void* pos, int n, void* value);            // 0x005151b0
+};
+
+struct cSPEditorLimbStructure {
+    uint8_t pad[0x54];
+    cSPEditorLimbStructure();                                    // 0x00488850
+    ~cSPEditorLimbStructure();                                   // 0x00488900
+    void* BuildLimb(void* block, void* parent, bool b);          // 0x004891a0
+    void FUN_0048a4c0();                                         // 0x0048a4c0
+    void FUN_00488980();                                         // 0x00488980
 };
 
 }  // namespace SP
@@ -242,8 +270,51 @@ uint32_t GetSaveArea(uint32_t id);                          // 0x006b1f90
 uint32_t WriteAnimatedCSAGIF(void* gif, int a, const char* s, uint32_t x1, uint32_t x2, float f, int one, int zero);  // 0x007c3410
 void shader(int id, const void* p, int n);                  // 0x00777ae0
 void FUN_006b2350();
+void VectorResize(void* vec, int n);                             // 0x005e77e0
+void FUN_005c8480(void* vec, void* end, void* src);              // 0x005c8480
+void FUN_006650c0(void* vec, void* end, void* src);              // 0x006650c0
+void* FUN_004b9c70(void* p);                                     // 0x004b9c70
+void* GetSetting6();                                             // 0x00401060
+void DeleteInvalidBlocks(void* block, int a);                    // 0x004a6f10
+void GetAllLimbs(void* block, void* limbVec, bool b);            // 0x004a0020
+void FUN_0057e340(void* a, int b);                               // 0x0057e340
+void EastlVectorBoolDoInsertValue(void* a, void* b, int c);      // 0x011e0744
+void* cVarListSerializer_Construct(void* self, void* owner, void* ds, unsigned id);  // 0x00692f90
+bool cVarListSerializer_Serialize(void* self, void* stream);     // 0x00693e10
 
 using namespace SP;
+
+// Grow/insert a bit vector to 0x23 elements (eastl::vector<bool> fixed-allocator path), then zero it.
+static __forceinline void ResetBitsTo(EastlBitVector* v)
+{
+    void* begin = v->mpBegin;
+    void* end = v->mpEnd;
+    if ((uint32_t)((char*)end - (char*)begin) < 0x23) {
+        uint8_t zero = 0;
+        v->DoFillInsert(end, (int)((char*)begin - (char*)end) + 0x23, &zero);
+    } else {
+        void* pos = (char*)begin + 0x23;
+        EastlVectorBoolDoInsertValue(pos, end, 0);
+        v->mpEnd = (char*)v->mpEnd + ((char*)pos - (char*)end);
+    }
+    for (int i = 0; i < 0x23; ++i)
+        ((uint8_t*)v->mpBegin)[i] = 0;
+}
+
+// Same, but without the trailing zero fill (used by the serialise-then-normalise path).
+static __forceinline void ResizeBitsTo(EastlBitVector* v)
+{
+    void* begin = v->mpBegin;
+    void* end = v->mpEnd;
+    if ((uint32_t)((char*)end - (char*)begin) < 0x23) {
+        uint8_t zero = 0;
+        v->DoFillInsert(end, (int)((char*)begin - (char*)end) + 0x23, &zero);
+    } else {
+        void* pos = (char*)begin + 0x23;
+        EastlVectorBoolDoInsertValue(pos, end, 0);
+        v->mpEnd = (char*)v->mpEnd + ((char*)pos - (char*)end);
+    }
+}
 
 
 // @ 0x00586690
@@ -262,52 +333,231 @@ void cAppModeEditorBase::InitializeUndoList()
 }
 
 // @ 0x00586410
-// PARTIAL: pushes a new editor resource onto the undo list.  Only the entry sequence is modelled;
-// the EASTL vector<bool> / refcount traffic is stubbed.
+// Pushes a new editor resource onto the undo list: trims the list to mUndosLeft, creates or adds a
+// reference to the resource, snapshots it via GetState, creates the save object, then refreshes the
+// UI and the part mask.  (Reconstructed from the disassembly; /O2 codegen differs.)
 void cAppModeEditorBase::FUN_00586410(char a, void* b)
 {
-    (void)a;
-    (void)b;
-    mUndoLocalStateList.erase(mUndoLocalStateList.mpBegin, mUndoLocalStateList.mpEnd);
-    mUndoList.erase(mUndoList.mpBegin, mUndoList.mpEnd);
+    int count = (int)((char*)mUndoList.mpEnd - (char*)mUndoList.mpBegin) >> 2;
+    if (mUndosLeft < count) {
+        VectorResize(&mUndoList, mUndosLeft);                                   // 0x005e77e0
+        ((cIntVec*)((char*)this + 0x160))->Resize((unsigned)mUndosLeft);        // 0x00584160
+    }
+    if (mUndosLeft > 0)
+        *(bool*)((char*)this + 0x4b3) = true;
+
+    void* state = 0;                                                            // AutoRefCount local
+    if (b != 0) {
+        (*(void(__thiscall**)(void*, int))(*(uint32_t*)b + 4))(b, 0);           // AddRef
+        state = b;
+    } else {
+        void* obj = operator new(0x2c, "Editor", 0, 0, 0, 0);                   // 0x00f473a0
+        if (obj != 0) {
+            *(uint32_t*)((char*)obj + 4) = 0;
+            *(uint32_t*)obj = 0x14774b0;
+            *(uint32_t*)((char*)obj + 8) = 0;
+            *(uint32_t*)((char*)obj + 0xc) = 0;
+            *(uint32_t*)((char*)obj + 0x10) = 0;
+            *(uint8_t*)((char*)obj + 0x14) = 0;
+            *(uint8_t*)((char*)obj + 0x15) = 0;
+            *(uint32_t*)((char*)obj + 0x18) = 0;
+            *(uint32_t*)((char*)obj + 0x1c) = 0;
+            *(uint32_t*)((char*)obj + 0x20) = 0;
+            *(uint32_t*)((char*)obj + 0x24) = 0;
+            *(uint32_t*)((char*)obj + 0x28) = 0;
+            (*(void(__thiscall**)(void*))(*(uint32_t*)obj + 4))(obj);
+            state = obj;
+        }
+        GetState(state);                                                        // 0x00574080
+    }
+
+    {   // push_back(state) into mUndoLocalStateList (+0x160)
+        UndoVector& v = mUndoLocalStateList;
+        if ((char*)v.mpEnd < (char*)v.mpCapacity) {
+            void* slot = v.mpEnd;
+            v.mpEnd = (char*)v.mpEnd + 4;
+            if (slot != 0) {
+                *(void**)slot = state;
+                if (state)
+                    (*(void(__thiscall**)(void*))(*(uint32_t*)state + 4))(state);
+            }
+        } else {
+            FUN_005c8480(&v, v.mpEnd, &state);                                  // 0x005c8480
+        }
+    }
+
+    void* save = 0;
+    {
+        void* p = operator new(0xac, "Editor", 0, 0, 0, 0);
+        if (p != 0)
+            save = FUN_004b9c70(p);                                             // 0x004b9c70
+    }
+    b = save;
+    if (save != 0)
+        (*(void(__thiscall**)(void*))(*(uint32_t*)save + 0))(save);
+    mEditorSaveModel->SaveResource(save);                                       // 0x004af260
+
+    {   // push_back(save) into mUndoList (+0x174)
+        UndoVector& v = mUndoList;
+        if ((char*)v.mpEnd < (char*)v.mpCapacity) {
+            void* slot = v.mpEnd;
+            v.mpEnd = (char*)v.mpEnd + 4;
+            if (slot != 0) {
+                *(void**)slot = save;
+                if (save)
+                    (*(void(__thiscall**)(void*))(*(uint32_t*)save + 0))(save);
+            }
+        } else {
+            FUN_006650c0(&v, v.mpEnd, &save);                                   // 0x006650c0
+        }
+    }
+
+    cSPEditorUI* ui = mDevUI;
+    mUndosLeft += 1;
+    if (ui != 0) {
+        ui->EnableRedoButton(0);
+        ui->EnableUndoButton(mUndosLeft > 1);
+    }
+    mEditorSaveModel->FUN_004adfc0(0);                                          // 0x004adfc0
+    if (a != 0)
+        SetAnimCaptureOn(0);                                                    // 0x00583c50
+
+    if (*(int*)((char*)this + 0x31c) == 0) {
+        if (*(int*)((char*)this + 0x360) != 0 && *(int*)((char*)this + 0x364) != 0) {
+            if (*(uint8_t*)((char*)this + 0x385) != 0)
+                FUN_0057e340(this, 0);                                          // 0x0057e340
+            ((cAnimCreatureMgr*)*(void**)((char*)this + 0x360))
+                ->RemoveCreature(*(void**)((char*)this + 0x364));               // 0x0059c6e0
+            *(uint32_t*)((char*)this + 0x364) = 0;
+        }
+        *(uint8_t*)((char*)this + 0x39a) = 1;
+    }
+
+    {
+        void* last = *(void**)((char*)mUndoList.mpEnd - 4);
+        uint32_t r = (*(uint32_t(__thiscall**)(void*))(*(uint32_t*)mEditorSaveModel + 4))(mEditorSaveModel);
+        uint32_t mask[4];
+        BuildPartMask(mask, last, (void*)r, 1);                                 // 0x0057ac00
+        *(uint32_t*)((char*)this + 0x48) = mask[0];
+        *(uint32_t*)((char*)this + 0x4c) = mask[1];
+        *(uint32_t*)((char*)this + 0x50) = mask[2];
+        *(uint32_t*)((char*)this + 0x54) = mask[3];
+    }
+    if (mDevUI)
+        mDevUI->UpdateUIBasedOnModelSaveability();                              // 0x005dd7a0
+
+    if (save != 0)
+        (*(void(__thiscall**)(void*))(*(uint32_t*)save + 4))(save);
+    if (state != 0)
+        (*(void(__thiscall**)(void*))(*(uint32_t*)state + 8))(state);
 }
 
 // @ 0x00586700
-// PARTIAL: resets per-slot bit vectors to 0x23 bytes each.
+// Resets the main bit vector (+0x4d8) and the six per-slot bit vectors (+0x508, stride 0x14) to
+// 0x23 zero bytes each, clearing the slot counters at +0x4f0 and the word at +0x4ec.
 void cAppModeEditorBase::FUN_00586700()
 {
-    uint8_t* bitsA = (uint8_t*)this + 0x4d8;
-    for (int i = 0; i < 0x23; ++i)
-        bitsA[i] = 0;
+    ResetBitsTo((EastlBitVector*)((char*)this + 0x4d8));
+    *(uint32_t*)((char*)this + 0x4ec) = 0;
     for (int s = 0; s < 6; ++s) {
-        *(int*)((char*)this + 0x4f0 + s * 4) = 0;
-        uint8_t* slot = (uint8_t*)this + 0x50c + s * 0x14;
-        for (int i = 0; i < 0x23; ++i)
-            slot[i] = 0;
+        *(uint32_t*)((char*)this + 0x4f0 + s * 4) = 0;
+        ResetBitsTo((EastlBitVector*)((char*)this + 0x508 + s * 0x14));
     }
 }
 
 // @ 0x00586800
-// PARTIAL: serialises the editor state through cVarListSerializer and normalises the bit vectors.
+// Appends one zero element to every bit vector, serialises the editor state through
+// cVarListSerializer, then normalises every bit vector back to 0x23 elements.  Returns the
+// serialiser's success flag.
 uint8_t cAppModeEditorBase::FUN_00586800(void* a)
 {
-    (void)a;
-    for (int s = 0; s < 6; ++s) {
-        *(int*)((char*)this + 0x4f0 + s * 4) = 0;
-        uint8_t* slot = (uint8_t*)this + 0x50c + s * 0x14;
-        for (int i = 0; i < 0x23; ++i)
-            slot[i] = 0;
+    {
+        EastlBitVector* v = (EastlBitVector*)((char*)this + 0x4d8);
+        void* begin = v->mpBegin;
+        void* end = v->mpEnd;
+        EastlVectorBoolDoInsertValue(begin, end, 0);                            // 0x011e0744
+        v->mpEnd = (char*)v->mpEnd + ((char*)begin - (char*)end);
     }
-    return 0;
+    for (int s = 0; s < 6; ++s) {
+        EastlBitVector* v = (EastlBitVector*)((char*)this + 0x508 + s * 0x14);
+        void* begin = v->mpBegin;
+        void* end = v->mpEnd;
+        EastlVectorBoolDoInsertValue(begin, end, 0);
+        v->mpEnd = (char*)v->mpEnd + ((char*)begin - (char*)end);
+    }
+
+    uint8_t ser[0xa14];
+    cVarListSerializer_Construct(ser, this, (void*)0x150d100, 0x1a80d26);       // 0x00692f90
+    bool ok = cVarListSerializer_Serialize(ser, a);                             // 0x00693e10
+
+    {
+        EastlBitVector* v = (EastlBitVector*)((char*)this + 0x4d8);
+        if ((uint32_t)((char*)v->mpEnd - (char*)v->mpBegin) != 0x23)
+            ResizeBitsTo(v);
+    }
+    for (int s = 0; s < 6; ++s) {
+        EastlBitVector* v = (EastlBitVector*)((char*)this + 0x508 + s * 0x14);
+        if ((uint32_t)((char*)v->mpEnd - (char*)v->mpBegin) != 0x23)
+            ResizeBitsTo(v);
+    }
+    return ok ? 1 : 0;
 }
 
 // @ 0x00586960
-// PARTIAL: resets the current selection/block state and refreshes the editor.
+// SP::cAppModeEditorBase::ScaleBlock.  Clears the current block, rebuilds the limb structure from
+// the surviving limbs (respecting the symmetry mode), resets the block handles and re-initialises
+// the undo state.
 void cAppModeEditorBase::FUN_00586960()
 {
-    *(bool*)((char*)this + 0x472) = 0;
+    *(uint8_t*)((char*)this + 0x472) = 0;
+    {
+        void* s = GetSetting6();                                                // 0x00401060
+        if (s != 0)
+            (*(void(__thiscall**)(void*, unsigned, float, float, int))(*(uint32_t*)s + 0x1c))
+                (s, 0x1002u, 0.0f, 0.0f, 1);
+    }
+
+    bool doRebuild;
+    void* block = *(void**)((char*)this + 0x48c);
+    if (block != 0) {
+        DeleteInvalidBlocks(block, 0);                                          // 0x004a6f10
+        uint32_t flags = *(uint32_t*)((char*)block + 0xdc8);
+        doRebuild = ((flags >> 7) & 1) != 0 || ((flags >> 0xb) & 1) != 0;
+    } else if (*(void**)((char*)this + 0x490) != 0) {
+        void* b2 = ((cSPEditorHandle*)*(void**)((char*)this + 0xe4))->GetEditorBlock();  // 0x0047e6c0
+        if (b2 != 0)
+            DeleteInvalidBlocks(b2, 0);
+        void* o = *(void**)((char*)this + 0x490);
+        uint32_t id = (*(uint32_t(__thiscall**)(void*))(*(uint32_t*)o + 0x10))(o);
+        doRebuild = (id == 0x50e8e23);
+    } else {
+        doRebuild = false;
+    }
+
+    if (doRebuild) {
+        bool sym = mEditorSaveModel->UsingSymmetry();                           // 0x004adc40
+        mEditorSaveModel->FUN_004adc20(0);                                      // 0x004adc20
+        void* limbs[3] = { 0, 0, 0 };
+        GetAllLimbs(*(void**)((char*)*(void**)((char*)this + 0x14c) + 0xec), limbs, sym);  // 0x004a0020
+        int n;
+        {
+            cSPEditorLimbStructure ls;                                          // 0x00488850
+            n = (int)((char*)limbs[1] - (char*)limbs[0]) >> 2;
+            for (int i = 0; i < n; ++i) {
+                ls.BuildLimb(*(void**)((char*)limbs[0] + i * 4), 0, false);     // 0x004891a0
+                ls.FUN_0048a4c0();                                              // 0x0048a4c0
+                ls.FUN_00488980();                                              // 0x00488980
+            }
+            mEditorSaveModel->FUN_004adc20(sym ? 1 : 0);
+        }                                                                       // ~cSPEditorLimbStructure
+        if (limbs[0] != 0 && *(int*)((char*)limbs[0] - 4) != 0)
+            operator delete[](limbs[0]);                                        // 0x00f47380
+    }
+
     *(void**)((char*)this + 0x48c) = 0;
     *(void**)((char*)this + 0x490) = 0;
+    if (*(void**)((char*)this + 0x14c) != 0)
+        ((cSpine75*)*(void**)((char*)this + 0x14c))->SetFlag(0, 1);             // 0x005d1600
     FUN_00586410(1, 0);
 }
 

@@ -1,1 +1,5 @@
 00535d00  113  vector<16-byte>::copy ctor: uninitialized_copy helper frame/call shape differs
+005361a0  681  cPaintVariableCommand::Execute complete; /Od local-frame layout (frame 0x34 vs 0x80) and Entry/argv slot offsets differ, logic matches decompile. flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- [equiv: UNSUPPORTED]
+005365b0  566  cPaintAddVariableCommand::Execute complete; /Od frame/slot offsets + Vector3T sret-temporary placement differ, logic matches decompile. flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- [equiv: UNSUPPORTED]
+00536910  273  cPaintComparePositionCommand::Execute complete; /Od frame 0x50 vs 0x7c and local slot offsets differ; logic+size() forms match decompile. flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- [equiv: UNSUPPORTED]
+00536b00  497  cPaintCompareNormalCommand::Execute complete; /Od frame and sret-temporary slot offsets differ, logic matches decompile. flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- [equiv: UNSUPPORTED]
