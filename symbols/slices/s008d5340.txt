@@ -1,1 +1,1 @@
-008d5340 EA::Input::TriggerConfigParser::Parse  # PDB name; trigger config text parser
+008d5340 ?Parse@TriggerConfigParser@Input@EA@@QAE_NPBD0@Z  # TriggerConfigParser::Parse migrated from s008d5340 (verbatim, slice spelling)
