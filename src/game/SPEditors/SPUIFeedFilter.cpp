@@ -10,6 +10,9 @@
 #include "SP/cSPUIFeedFilter.h"
 #include "SP/cSPEditorVerbIconTray.h"
 #include "EA/Messaging/IHandler.h"
+#include "cSPUIAnimator.h"
+#include "SP/FunctionalMatch/Constraint.h"
+#include <new>
 
 // ---- items of slice s0065ea00 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef void(__thiscall* FnP)(void*);
@@ -45,6 +48,11 @@ struct WindowSet4 {
 // ---- items of slice s0065ea00 end
 
 // ---- items of slice s0065f970 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern uint32_t g_feedKey1;   // 0x0140042c
+extern uint32_t g_feedKey2;   // 0x0140041c
+extern uint32_t g_feedTable[24];  // 0x01400480
+extern char g_animTargetVtbl[];                 // 0x013f6400
+extern char g_animTargetVtbl2[];                // 0x013f63fc
 void* __cdecl EASTL_allocator_allocate(uint32_t size, const char* name, int flags, int debugFlags, const char* file, int line); // 0x00f473a0
 void  __cdecl EASTL_allocator_deallocate(void* p);                                                                                 // 0x00f47380
 #define EASTL_ALLOCATOR_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
@@ -224,11 +232,20 @@ struct FeedEntry {
     char     pad2c[8];
 };
 struct KeyProvider {
-    virtual void     k00(); virtual void k01(); virtual void k02(); virtual void k03();
-    virtual void     k04(); virtual void k05(); virtual void k06(); virtual void k07();
+virtual void     k00();
+virtual void k01();
+virtual void k02();
+virtual void k03();
+virtual void     k04();
+virtual void k05();
+virtual void k06();
+virtual void k07();
     virtual uint32_t k08();                       // +0x20
     virtual uint32_t k09();                       // +0x24
-    virtual void     k10(); virtual void k11(); virtual void k12(); virtual void k13();
+virtual void     k10();
+virtual void k11();
+virtual void k12();
+virtual void k13();
     virtual void     k14();
     virtual uint32_t k15();                       // +0x3c
     virtual uint32_t k16();                       // +0x40
@@ -262,6 +279,130 @@ struct FeedFilterD {
     uint32_t mB0;          // +0xb0
     void Clear();
 };
+struct PropVal {                  // value record returned by IProp::Get
+    char*    mpData;              // +0x00 (out-of-line data when flags & 0x30)
+    char     pad04[0x0c];
+    uint16_t mFlags;              // +0x10
+    uint16_t mKind;               // +0x12
+};
+struct IProp {
+    virtual void p0();
+    virtual void Release();                              // +0x04
+virtual void p2();
+virtual void p3();
+virtual void p4();
+virtual void p5();
+virtual void p6();
+virtual void p7();
+virtual void p8();
+    virtual bool Get(uint32_t key, PropVal** out);       // +0x24
+};
+struct IPropManager {
+virtual void m00();
+virtual void m01();
+virtual void m02();
+virtual void m03();
+virtual void m04();
+virtual void m05();
+virtual void m06();
+virtual void m07();
+virtual void m08();
+virtual void m09();
+virtual void m10();
+    virtual void GetProperty(int listID, uint32_t key, IProp** out);   // +0x2c
+};
+struct FilterButton {
+    virtual void b0();
+    virtual void AddRef();       // +0x04
+    virtual void Release();      // +0x08
+    char    pad04[0x1d];
+    uint8_t mB21;                // +0x21
+    char    pad22[2];
+    int     mState;              // +0x24
+};
+struct FilterSet {               // 0x20 bytes: 24 per-filter flags + key + byte
+    uint8_t  mFlags[24];
+    uint32_t mKey;
+    uint8_t  mB;
+    char     pad1d[3];
+    FilterSet* Init(uint32_t v, uint32_t key);           // 0x0066a5e0 (thiscall, ret 8, returns this)
+};
+struct PropRef {
+    IProp* p;
+    PropRef() : p(0) {}
+    IProp** operator&() {                                // reset-and-address (out parameter)
+        if (p) { IProp* t = p; p = 0; t->Release(); }
+        return &p;
+    }
+    ~PropRef() { if (p) p->Release(); }
+};
+IPropManager* __cdecl SP_PropertyManager_s0065_f970();                                      // 0x0067de30
+void  __cdecl SP_GetPropertyAsKeyInstance(IProp* prop, uint32_t key, uint32_t* out);   // 0x006a12a0
+FilterButton* __cdecl GetFilterButton(int index);                                // 0x0066a800
+bool  __cdecl GetArrayProperty(IProp* prop, uint32_t key, int* pCount, uint32_t** pItems);   // 0x006a0ae0
+struct cSPUIFeedFilter_s0065_f970 {
+    char      pad00[0x18];
+    int       mSelectedID;          // +0x18
+    char      pad1c[0x44 - 0x1c];
+    FilterSet mFilters;             // +0x44 (key at +0x5c)
+    void GetSupportedFilterTypes(int param);   // 0x006600c0 (ret 4)
+};
+struct EventNode {
+    char pad00[0x14];
+    IWindow_s0065_f970* mWin;   // +0x14
+    bool b18;        // +0x18
+    bool b19;        // +0x19
+    char pad1a[2];
+    float f1c, f20, f24, f28;
+};
+struct EventLog {
+    char pad[0xa0];
+    EventNode* mEnd;    // +0xa0
+    EventNode* mBegin;  // +0xa4
+    void DoMessage();
+};
+struct AnimTarget {    // temporary animation target; its inlined dtor resets two vptrs and releases a window ref
+    void* vtbl;
+    int pad;
+    void* vtbl2;
+    IWindow_s0065_f970* pWin;
+    ~AnimTarget() { vtbl = g_animTargetVtbl; vtbl2 = g_animTargetVtbl2; if (pWin) pWin->Release(); }
+};
+struct cSPUIAnimator_s0065_f970 {
+    void __thiscall RemoveAnimation(IWindow_s0065_f970* win, int channel);                  // 0x007f6210
+    void __thiscall AddAnimation(AnimTarget* t, IWindow_s0065_f970* win, int channel);      // 0x007f8d10
+};
+cSPUIAnimator_s0065_f970** __cdecl GetAnimatorOwner();                                      // 0x00401030 (browser; animator at +0x14)
+float __cdecl GetElapsedSeconds(float duration, int zero);                       // 0x00805080
+AnimTarget* __cdecl CreatePositionTarget(AnimTarget* out, IWindow_s0065_f970* win, float x, float y, float dur);   // 0x007f80d0
+AnimTarget* __cdecl CreateScaleTarget(AnimTarget* out, IWindow_s0065_f970* win, float scale, float dur);           // 0x007f81d0
+AnimTarget* __cdecl CreateShadeAlphaTarget(AnimTarget* out, IWindow_s0065_f970* win, int alpha, float dur);        // 0x007f8290
+void  __cdecl SetWindowScale(IWindow_s0065_f970* w, float s);                               // 0x00808210
+void  __cdecl SetWindowAlpha(IWindow_s0065_f970* w, float a);                               // 0x00804fc0
+static __forceinline cSPUIAnimator_s0065_f970* CurrentAnimator() {
+    return GetAnimatorOwner() ? *(cSPUIAnimator_s0065_f970**)((char*)GetAnimatorOwner() + 0x14) : 0;
+}
+struct TexObj {
+    virtual void t0();
+    virtual void t1();
+    virtual void Release();       // +0x08
+};
+struct TexTag { bool b; };        // eastl bool flag (false), passed by value
+struct TexPair {                  // pair<const Key, intrusive_ptr<cTextureInstanceInternal> >
+    Key      key;
+    TexObj*  p;
+    ~TexPair() { if (p) p->Release(); }
+};
+struct TexNode;
+struct TexInsRes { TexNode* node; void* bucket; bool inserted; };   // pair<iterator, bool>
+struct TexTable {
+    void*     mAlloc;                   // +0x00
+    TexNode** mBuckets;                 // +0x04
+    uint32_t  mBucketCount;             // +0x08
+    void find(TexInsRes* out, const Key* key);                 // 0x00833840 (ret 8)
+    void insert(TexInsRes* out, TexPair* v, TexTag tag);       // 0x00660570 (ret 12)
+    TexNode* Index(const Key* key);                           // 0x00660c10 (ret 4)
+};
 // ---- items of slice s0065f970 end
 
 // ---- items of slice s00660dd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -289,7 +430,7 @@ struct E34 {
     char     pad1d[3];
     Blob14   e;          // 0x20
 };
-struct Vec34 { E34* begin; E34* end; E34* cap; void FUN_00661670(); void FUN_00661700(); };
+struct Vec34 { E34* begin; E34* end; E34* cap; void FUN_00661670(); void FUN_00661700(); void DestroyRange(E34* first, E34* last); };   // DestroyRange: 0x00646d70
 struct MapRoot34 { void* FUN_006612b0(void* key); };
 struct SubD8 { void FUN_0065f9e0(); };
 struct cSPUIFeedFilter {
@@ -334,8 +475,100 @@ struct cSPUIFeedFilter {
     char  mb10c;                       // 0x10c
     void* ctor();
     void dtor();
+    bool HasAnyAsset(unsigned key);                    // 0x00661a10
+    bool AllHaveAssets(unsigned key);                  // 0x00661b10
+    bool MatchRecursive(unsigned key, int* pCount);    // 0x00661c00
 };
 struct Key3 { uint32_t a, b, c; };
+uint32_t* __cdecl LowerBoundU32(uint32_t* first, uint32_t* last, const uint32_t* val, unsigned char flag);   // 0x00555a20
+struct PropertyList {
+    virtual void AddRef();
+    virtual void Release();                          // +4
+};
+struct PropertyMgr {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+    virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, PropertyList** ppList);   // +0x2c
+};
+struct PropRef_s0066_0dd0 {
+    PropertyList* p;
+    PropRef_s0066_0dd0() : p(0) {}
+    ~PropRef_s0066_0dd0() { if (p) p->Release(); }
+    PropertyList** Out() {
+        if (p) { PropertyList* t = p; p = 0; t->Release(); }
+        return &p;
+    }
+};
+struct PElem { uint32_t a; int b; uint32_t c; };      // 12-byte property array element
+bool __cdecl GetPropArray(PropertyList* list, uint32_t id, int* count, PElem** data);   // 0x006A0AE0
+struct FMConstraint;
+struct FMConstraintVec {                             // eastl::vector<Constraint, sp_vector_allocator>
+    FMConstraint* mpBegin;
+    FMConstraint* mpEnd;
+    FMConstraint* mpCapacity;
+    uint32_t mAllocator[2];
+    FMConstraintVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    void DoInsertValue(FMConstraint* pos, const FMConstraint& c);              // 0x004E39D0
+    __forceinline void push_back(const FMConstraint& c);
+    void DoDestroyValues(FMConstraint* first, FMConstraint* last);             // 0x004E39A0
+    ~FMConstraintVec() {
+        DoDestroyValues(mpBegin, mpEnd);
+        if (mpBegin && ((int*)mpBegin)[-1]) EASTL_allocator_deallocate(mpBegin);
+    }
+};
+enum FMEqual { kEquals = 0 };
+enum FMTolerance { kWithin = 0 };
+struct FMConstraint {                                // 0x24 bytes
+    uint32_t mParameter, mType;
+    int mMin, mMax;
+    FMConstraintVec mConstraints;
+    FMConstraint(uint32_t param, FMEqual, int value);                          // 0x00558960
+    FMConstraint(uint32_t param, FMTolerance, float value, float tolerance);   // 0x00558880
+    FMConstraint(const FMConstraint& x);                                       // 0x00606880
+    ~FMConstraint();                                                           // 0x006066F0
+};
+__forceinline void FMConstraintVec::push_back(const FMConstraint& c)
+{
+    if (mpEnd < mpCapacity) {
+        FMConstraint* p = mpEnd;
+        mpEnd = p + 1;
+        if (p) new (p) FMConstraint(c);
+    } else
+        DoInsertValue(mpEnd, c);
+}
+struct KeyRange { uint32_t k[3]; };
+struct KeyVecE {                                     // eastl::vector<ResourceKey>
+    KeyRange* mpBegin; KeyRange* mpEnd; KeyRange* mpCapacity;
+    KeyRange* erase(KeyRange* first, KeyRange* last);                          // 0x0050F740
+};
+void __cdecl SortKeys(KeyRange* first, KeyRange* last);                        // 0x004F6B70
+struct IObjectTemplateDB {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0C();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1C();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2C();
+virtual void v30();
+virtual void v34();
+    virtual void FindTemplates(KeyVecE* out, FMConstraintVec* pConstraints);   // 0x38
+};
+IObjectTemplateDB* __cdecl ObjectTemplateDB();       // 0x0067CB40
 namespace __equiv_ann1 {
 struct Blob14 {
     void Assign();   // 0x006606a0 (equiv t3)
@@ -559,9 +792,6 @@ char* ModeViewGetter::Get(bool b)
     return r;
 }
 
-
-
-
 // @ 0x0065f820
 void WindowSet4::Set(IWindow* parent)
 {
@@ -596,8 +826,6 @@ void WindowSet4::Set(IWindow* parent)
     }
 }
 
-
-
 // @ 0x0065f970
 void FeedFilterA::Update4()
 {
@@ -612,8 +840,6 @@ void FeedFilterA::Update4()
     }
 }
 
-
-
 // @ 0x0065f9e0
 FeedFilterA::~FeedFilterA()
 {
@@ -626,8 +852,6 @@ FeedFilterA::~FeedFilterA()
     IWindow_s0065_f970* z = m8;
     if (z) z->Release();
 }
-
-
 
 // @ 0x0065fa20
 void FeedFilterB::Shutdown()
@@ -644,8 +868,6 @@ void FeedFilterB::Shutdown()
         EA_RemoveHandler(h, a, b, c, d);
     }
 }
-
-
 
 // @ 0x0065faa0
 void __cdecl cSPUIFeedFilter_ReloadCallback(FeedFilterB* self, void* a, char b)
@@ -690,8 +912,6 @@ void __cdecl cSPUIFeedFilter_ReloadCallback(FeedFilterB* self, void* a, char b)
     }
 }
 
-
-
 // @ 0x0065fbc0
 Node14* __stdcall CloneNode14(const Node14* src)
 {
@@ -706,8 +926,6 @@ Node14* __stdcall CloneNode14(const Node14* src)
     p->e = 0;
     return p;
 }
-
-
 
 // @ 0x0065fcd0
 AreaRec::AreaRec(const AreaRec& o)
@@ -725,7 +943,142 @@ AreaRec::AreaRec(const AreaRec& o)
     m20 = o.m20;
 }
 
+// @ 0x0065fd30
+void EventLog::DoMessage()
+{
+    for (EventNode* it = mBegin; it != (EventNode*)&mEnd; it = (EventNode*)RBTreeIncrement(it)) {
+        if (it->b18) {
+            if (!it->mWin) continue;
+            IButton* btn = (IButton*)it->mWin->FindWindow(0x8ed27e7a);
+            if (btn) {
+                if (it->b19) {
+                    btn->SetStateFlag(4, true);
+                    btn->SetStateFlag(0x20, true);
+                } else {
+                    btn->SetStateFlag(4, false);
+                }
+            }
+            float y = it->f28 + it->f20;
+            float x = it->f24 + it->f1c;
+            cSPUIAnimator_s0065_f970* anim = CurrentAnimator();
+            if (!anim) {
+                SetWindowScale(it->mWin, 1.0f);
+                SetWindowAlpha(it->mWin, 1.0f);
+                it->mWin->SetLocation(x, y);
+            } else {
+                anim->RemoveAnimation(it->mWin, -1);
+                if (!(it->mWin->GetFlags() & 0x10)) {
+                    AnimTarget t;
+                    anim->AddAnimation(CreatePositionTarget(&t, it->mWin, x, y, GetElapsedSeconds(0.5f, 3)), it->mWin, 1);
+                } else {
+                    it->mWin->SetLocation(x, y);
+                }
+                { AnimTarget t;
+                  anim->AddAnimation(CreateScaleTarget(&t, it->mWin, 1.0f, GetElapsedSeconds(0.5f, 2)), it->mWin, 0); }
+                { AnimTarget t;
+                  anim->AddAnimation(CreateShadeAlphaTarget(&t, it->mWin, 0xff, GetElapsedSeconds(0.5f, 0)), it->mWin, 2); }
+            }
+            it->mWin->SetFlag(0x10, false);
+        } else {
+            if (!it->mWin) continue;
+            it->mWin->SetFlag(0x10, true);
+            cSPUIAnimator_s0065_f970* anim = CurrentAnimator();
+            if (!anim) {
+                SetWindowScale(it->mWin, 1.52587890625e-05f);
+                SetWindowAlpha(it->mWin, 0.0f);
+            } else {
+                anim->RemoveAnimation(it->mWin, -1);
+                { AnimTarget t;
+                  anim->AddAnimation(CreateScaleTarget(&t, it->mWin, 1.52587890625e-05f, GetElapsedSeconds(0.5f, 1)), it->mWin, 0); }
+                { AnimTarget t;
+                  anim->AddAnimation(CreateShadeAlphaTarget(&t, it->mWin, 0, GetElapsedSeconds(0.5f, 0)), it->mWin, 2); }
+            }
+        }
+    }
+}
 
+// @ 0x006600c0
+void cSPUIFeedFilter_s0065_f970::GetSupportedFilterTypes(int param)
+{
+    PropRef prop;
+    uint32_t* items;
+    PropVal* v;
+    FilterSet fs;
+    int count;
+    IPropManager* pm = SP_PropertyManager_s0065_f970();
+    pm->GetProperty(param, 0xcc489c6f, &prop);
+    if (!prop.p) return;
+    if (mSelectedID == param) {
+        FilterSet tmp;
+        mFilters = *tmp.Init(1, g_feedKey1);
+        uint8_t* fp = mFilters.mFlags;
+        do {
+            FilterButton* btn = GetFilterButton((int)(fp - (uint8_t*)this) - 0x44);
+            if (!btn) {
+                *fp = 0;
+            } else {
+                btn->AddRef();
+                *fp = (btn->mState != 1);
+                btn->Release();
+            }
+            ++fp;
+        } while ((int)(fp - (uint8_t*)this) - 0x44 < 24);
+        SP_GetPropertyAsKeyInstance(prop.p, g_feedKey2, &mFilters.mKey);
+    }
+    fs.Init(1, g_feedKey1);
+    count = 0;
+    items = 0;
+    if (GetArrayProperty(prop.p, 0x7435a2d3, &count, &items)) {
+        for (int i = 0; i < 24; ++i) {
+            if (prop.p) {
+                if (prop.p->Get(g_feedTable[i], &v) && v->mKind == 1) {
+                    char* d = (char*)v;
+                    if (v->mFlags & 0x30) d = v->mpData;
+                    fs.mFlags[i] = *d;
+                    FilterButton* btn = GetFilterButton(i);
+                    if (btn) {
+                        btn->AddRef();
+                        int st = btn->mState;
+                        if (st == 0) {
+                            if (mFilters.mFlags[i] != 0 && fs.mFlags[i] != 0) mFilters.mFlags[i] = 1;
+                            else mFilters.mFlags[i] = 0;
+                        } else if (st == 1) {
+                            if (mFilters.mFlags[i] != 0 || fs.mFlags[i] != 0) mFilters.mFlags[i] = 1;
+                            else mFilters.mFlags[i] = 0;
+                        }
+                        btn->Release();
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < count; ++i)
+            GetSupportedFilterTypes(items[i * 3]);
+    } else {
+        for (int i = 0; i < 24; ++i) {
+            FilterButton* btn = GetFilterButton(i);
+            if (btn) {
+                btn->AddRef();
+                fs.mFlags[i] = btn->mB21;
+                if (prop.p) {
+                        if (prop.p->Get(g_feedTable[i], &v) && v->mKind == 1) {
+                        char* d = (char*)v;
+                        if (v->mFlags & 0x30) d = v->mpData;
+                        fs.mFlags[i] = *d;
+                    }
+                }
+                int st = btn->mState;
+                if (st == 0) {
+                    if (mFilters.mFlags[i] != 0 && fs.mFlags[i] != 0) mFilters.mFlags[i] = 1;
+                    else mFilters.mFlags[i] = 0;
+                } else if (st == 1) {
+                    if (mFilters.mFlags[i] != 0 || fs.mFlags[i] != 0) mFilters.mFlags[i] = 1;
+                    else mFilters.mFlags[i] = 0;
+                }
+                btn->Release();
+            }
+        }
+    }
+}
 
 // @ 0x00660360
 void FeedFilterC::LockFilterUI(bool locked)
@@ -742,8 +1095,6 @@ void FeedFilterC::LockFilterUI(bool locked)
         }
     }
 }
-
-
 
 // @ 0x006603d0
 AreaRec* AreaRec::AssignChecked(const uint32_t* head, const void* innerPtr)
@@ -762,8 +1113,6 @@ AreaRec* AreaRec::AssignChecked(const uint32_t* head, const void* innerPtr)
     m20 = o->m1c;
     return this;
 }
-
-
 
 // @ 0x00660430
 Key* __cdecl KeyLowerBound(Key* first, Key* last, const Key* key)
@@ -788,8 +1137,6 @@ Key* __cdecl KeyLowerBound(Key* first, Key* last, const Key* key)
     return first;
 }
 
-
-
 // @ 0x00660510
 FeedEntry* __cdecl FeedDestroyRange(FeedEntry* first, FeedEntry* last, FeedEntry* out)
 {
@@ -806,8 +1153,6 @@ FeedEntry* __cdecl FeedDestroyRange(FeedEntry* first, FeedEntry* last, FeedEntry
     return out;
 }
 
-
-
 // @ 0x00660650
 bool __cdecl KeyContains(Key* first, Key* last, const Key* key)
 {
@@ -821,8 +1166,6 @@ bool __cdecl KeyContains(Key* first, Key* last, const Key* key)
     }
     return !less;
 }
-
-
 
 // @ 0x00660880
 bool FeedOwner::Matches(KeyProvider* p, char useOther)
@@ -853,8 +1196,6 @@ bool FeedOwner::Matches(KeyProvider* p, char useOther)
     return true;
 }
 
-
-
 // @ 0x006609a0
 KeyVec& KeyVec::operator=(const KeyVec& o)
 {
@@ -884,8 +1225,6 @@ KeyVec& KeyVec::operator=(const KeyVec& o)
     return *this;
 }
 
-
-
 // @ 0x00660ad0
 FeedEntry* __cdecl FeedRangeConstruct(FeedEntry** out, FeedEntry* first, FeedEntry* last, FeedEntry* p)
 {
@@ -904,8 +1243,6 @@ FeedEntry* __cdecl FeedRangeConstruct(FeedEntry** out, FeedEntry* first, FeedEnt
     return *out;
 }
 
-
-
 // @ 0x00660b30
 FeedEntry* __cdecl FeedUninitCopy(FeedEntry* first, FeedEntry* last, FeedEntry* dest)
 {
@@ -922,8 +1259,6 @@ FeedEntry* __cdecl FeedUninitCopy(FeedEntry* first, FeedEntry* last, FeedEntry* 
     }
     return dest;
 }
-
-
 
 // @ 0x00660b90
 void FeedFilterD::Clear()
@@ -943,7 +1278,21 @@ void FeedFilterD::Clear()
     *(FeedTreeNode**)mEnd = mEnd;
 }
 
-
+// @ 0x00660c10
+TexNode* TexTable::Index(const Key* key)
+{
+    TexInsRes it;
+    find(&it, key);
+    if (it.node != mBuckets[mBucketCount])
+        return (TexNode*)((char*)it.node + 0x0c);
+    TexPair v;
+    v.key = *key;
+    TexTag tag;
+    tag.b = false;
+    v.p = 0;
+    insert(&it, &v, tag);
+    return (TexNode*)((char*)it.node + 0x0c);
+}
 
 // @ 0x00660d70
 FeedEntry* __cdecl FeedRangeAssign(FeedEntry* first, FeedEntry* last, FeedEntry* dest)
@@ -960,7 +1309,6 @@ FeedEntry* __cdecl FeedRangeAssign(FeedEntry* first, FeedEntry* last, FeedEntry*
     return dest;
 }
 
-
 // @ 0x00660dd0
 E34* CopyBackward34(E34* first, E34* last, E34* dest)
 {
@@ -974,7 +1322,6 @@ E34* CopyBackward34(E34* first, E34* last, E34* dest)
     }
     return dest;
 }
-
 
 // @ 0x00660e30
 void cSPUIFeedFilter::dtor()
@@ -1008,7 +1355,6 @@ void cSPUIFeedFilter::dtor()
     *(void**)(p + 4) = (void*)0x13eb394;
     *(void**)(p + 0) = (void*)0x13eb938;
 }
-
 
 // @ 0x00661020
 void* cSPUIFeedFilter::ctor()
@@ -1048,7 +1394,6 @@ void* cSPUIFeedFilter::ctor()
     return this;
 }
 
-
 // @ 0x00661180
 char FUN_00661180(void* vec, void* key)
 {
@@ -1065,7 +1410,6 @@ char FUN_00661180(void* vec, void* key)
     }
     return r;
 }
-
 
 // @ 0x006612b0
 void* MapRoot34::FUN_006612b0(void* key)
@@ -1085,7 +1429,6 @@ void* MapRoot34::FUN_006612b0(void* key)
     }
     return found;
 }
-
 
 // @ 0x00661390
 void* FUN_00661390(void* self, void* other)
@@ -1116,7 +1459,6 @@ void* FUN_00661390(void* self, void* other)
     }
     return self;
 }
-
 
 // @ 0x006614d0
 void* FUN_006614d0(void* self, void* pos, void* value)
@@ -1156,7 +1498,6 @@ void* FUN_006614d0(void* self, void* pos, void* value)
     return pos;
 }
 
-
 // @ 0x00661670
 void Vec34::FUN_00661670()
 {
@@ -1176,7 +1517,6 @@ void Vec34::FUN_00661670()
     FUN_006614d0(self, e, &tmp);
 }
 
-
 // @ 0x00661700
 void Vec34::FUN_00661700()
 {
@@ -1186,6 +1526,137 @@ void Vec34::FUN_00661700()
     Fun0066_0d70(end, end, begin);
     FUN_00646d70(begin, end);
     v->end = (E34*)((char*)v->end - 0x34);
+}
+
+// @ 0x00661740
+char FUN_00661740(unsigned key, KeyVecE* out)
+{
+    out->erase(out->mpBegin, out->mpEnd);
+    PropRef_s0066_0dd0 list;
+    PropertyMgr* mgr = (PropertyMgr*)SP_PropertyManager();
+    mgr->GetPropertyList(key, 0xcc489c6f, list.Out());
+    if (!list.p)
+        return 0;
+    int count = 0;
+    PElem* data = 0;
+    if (!GetPropArray(list.p, 0x60c9e55, &count, &data) || count <= 0)
+        return 0;
+    FMConstraintVec cons;
+    for (int i = 0; i < count; i++) {
+        PElem* e = &data[i];
+        uint32_t pa = e->a;
+        int pb = e->b;
+        if (e->c == 0x4edcd7a9)
+            cons.push_back(FMConstraint(pa, kWithin, (float)pb, *(float*)0x14000b8));
+        else
+            cons.push_back(FMConstraint(pa, kEquals, pb));
+    }
+    ObjectTemplateDB()->FindTemplates(out, &cons);
+    SortKeys(out->mpBegin, out->mpEnd);
+    return 1;
+}
+
+// @ 0x00661900
+void FUN_00661900(unsigned key, Vec34* out)
+{
+    PropRef_s0066_0dd0 list;
+    PropertyMgr* mgr = (PropertyMgr*)SP_PropertyManager();
+    mgr->GetPropertyList(key, 0xcc489c6f, list.Out());
+    if (list.p) {
+        {
+            uint32_t k = 0;
+            if (FUN_006a12a0(list.p, 0x7435a2d2, &k)) {
+                out->FUN_00661670();
+                E34* e = out->end - 1;
+                e->a = k;
+                e->b = FUN_00661180((void*)key, &e->c);
+                e->d = FUN_00661740(key, (KeyVecE*)&e->e);
+            }
+        }
+        int count = 0;
+        PElem* data = 0;
+        if (GetPropArray(list.p, 0x7435a2d3, &count, &data)) {
+            for (int i = 0; i < count; i++)
+                FUN_00661900(data[i].a, out);
+        }
+    }
+}
+
+// @ 0x00661a10
+bool cSPUIFeedFilter::HasAnyAsset(unsigned key)
+{
+    if (mVf4.begin == mVf4.end)
+        return true;
+    bool found = false;
+    Vec34 keys;
+    keys.begin = 0; keys.end = 0; keys.cap = 0;
+    FUN_00661900(key, &keys);
+    int n = (int)(keys.end - keys.begin);
+    key = 0;                                         // the original reuses the dead key slot as the counter
+    if (n) {
+        E34* cur = keys.begin;
+        uint32_t* last = (uint32_t*)mVf4.end;
+        do {
+            uint32_t* r = LowerBoundU32((uint32_t*)mVf4.begin, last, &cur->a, (unsigned char)mb108);
+            if (r == last || cur->a < *r || r == r + 1)
+                r = last;
+            if (r != last) { found = true; break; }
+            key++;
+            cur++;
+        } while (key < (unsigned)n);
+    }
+    keys.DestroyRange(keys.begin, keys.end);
+    if (keys.begin && ((int*)keys.begin)[-1])
+        EASTL_allocator_deallocate(keys.begin);
+    return found;
+}
+
+// @ 0x00661b10
+bool cSPUIFeedFilter::AllHaveAssets(unsigned key)
+{
+    PropRef_s0066_0dd0 list;
+    PropertyMgr* mgr = (PropertyMgr*)SP_PropertyManager();
+    mgr->GetPropertyList(key, 0xcc489c6f, list.Out());
+    if (!list.p)
+        return false;
+    int& count = (int&)key;                          // the original reuses the dead key slot
+    count = 0;
+    PElem* data = 0;
+    if (GetPropArray(list.p, 0x7435a2d3, &count, &data) && count > 0) {
+        for (int i = 0; i < count; i++) {
+            if (!HasAnyAsset(data[i].a))
+                return false;
+        }
+        return true;
+    }
+    return false;
+}
+
+// @ 0x00661c00
+bool cSPUIFeedFilter::MatchRecursive(unsigned key, int* pCount)
+{
+    if (!HasAnyAsset(key))
+        return false;
+    if (key == (unsigned)mpWinParent)
+        return true;
+    PropRef_s0066_0dd0 list;
+    PropertyMgr* mgr = (PropertyMgr*)SP_PropertyManager();
+    mgr->GetPropertyList(key, 0xcc489c6f, list.Out());
+    if (!list.p)
+        return false;
+    int count = 0;
+    PElem* data = 0;
+    if (GetPropArray(list.p, 0x7435a2d3, &count, &data)) {
+        bool r = false;
+        for (int i = 0; i < count; i++) {
+            if (r || MatchRecursive(data[i].a, pCount))
+                r = true;
+        }
+        if (r && pCount)
+            ++*pCount;
+        return r;
+    }
+    return false;
 }
 
 // @ 0x00661d10

@@ -7,3 +7,8 @@
 006614d0 ?FUN_006614d0@@YAPAXPAX00@Z  # FUN_006614d0 migrated from s00660dd0 (verbatim, slice spelling)
 00661670 ?FUN_00661670@Vec34@@QAEXXZ  # Vec34::FUN_00661670 migrated from s00660dd0 (verbatim, slice spelling)
 00661700 ?FUN_00661700@Vec34@@QAEXXZ  # Vec34::FUN_00661700 migrated from s00660dd0 (verbatim, slice spelling)
+00661740 ?FUN_00661740@@YADIPAUKeyVecE@@@Z  # FUN_00661740 migrated from s00660dd0 (verbatim, slice spelling)
+00661900 ?FUN_00661900@@YAXIPAUVec34@@@Z  # FUN_00661900 migrated from s00660dd0 (verbatim, slice spelling)
+00661a10 ?HasAnyAsset@cSPUIFeedFilter@@QAE_NI@Z  # cSPUIFeedFilter::HasAnyAsset migrated from s00660dd0 (verbatim, slice spelling)
+00661b10 ?AllHaveAssets@cSPUIFeedFilter@@QAE_NI@Z  # cSPUIFeedFilter::AllHaveAssets migrated from s00660dd0 (verbatim, slice spelling)
+00661c00 ?MatchRecursive@cSPUIFeedFilter@@QAE_NIPAH@Z  # cSPUIFeedFilter::MatchRecursive migrated from s00660dd0 (verbatim, slice spelling)

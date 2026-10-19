@@ -9,6 +9,11 @@
 ../src/game/SPEditors/SPUIFeedFilter.cpp  ?AssignChecked@AreaRec@@QAEPAU1@PBIPBX@Z  006603d0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedFilter.cpp  ?FeedDestroyRange@@YAPAUFeedEntry@@PAU1@00@Z  00660510  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedFilter.cpp  ?FeedUninitCopy@@YAPAUFeedEntry@@PAU1@00@Z  00660b30  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIFeedFilter.cpp  ?Index@TexTable@@QAEPAUTexNode@@PBUKey@@@Z  00660c10  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedFilter.cpp  ?FeedRangeAssign@@YAPAUFeedEntry@@PAU1@00@Z  00660d70  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedFilter.cpp  ?CopyBackward34@@YAPAUE34@@PAU1@00@Z  00660dd0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedFilter.cpp  ?FUN_00661740@@YADIPAUKeyVecE@@@Z  00661740  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedFilter.cpp  ?FUN_00661900@@YAXIPAUVec34@@@Z  00661900  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedFilter.cpp  ?AllHaveAssets@cSPUIFeedFilter@@QAE_NI@Z  00661b10  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedFilter.cpp  ?MatchRecursive@cSPUIFeedFilter@@QAE_NIPAH@Z  00661c00  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedFilter.cpp  ?FUN_006627d0@FeedList@@QAE_NPAXPAH@Z  006627d0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

@@ -4,8 +4,8 @@
 0065faa0 ?cSPUIFeedFilter_ReloadCallback@@YAXPAUFeedFilterB@@PAXD@Z  # cSPUIFeedFilter_ReloadCallback migrated from s0065f970 (verbatim, slice spelling)
 0065fbc0 ?CloneNode14@@YGPAUNode14@@PBU1@@Z  # CloneNode14 migrated from s0065f970 (verbatim, slice spelling)
 0065fcd0 ??0AreaRec@@QAE@ABU0@@Z  # AreaRec::AreaRec migrated from s0065f970 (verbatim, slice spelling)
-0065fd30 SP::cSPUIEventLog::DoMessage  # PDB caller-scored
-006600c0 SP::cSPUIFeedFilter::GetSupportedFilterTypes  # PDB caller-scored
+0065fd30 ?DoMessage@EventLog@@QAEXXZ  # EventLog::DoMessage migrated from s0065f970 (verbatim, slice spelling)
+006600c0 ?GetSupportedFilterTypes@cSPUIFeedFilter_s0065_f970@@QAEXH@Z  # cSPUIFeedFilter_s0065_f970::GetSupportedFilterTypes migrated from s0065f970 (verbatim, slice spelling)
 00660360 ?LockFilterUI@FeedFilterC@@QAEX_N@Z  # FeedFilterC::LockFilterUI migrated from s0065f970 (verbatim, slice spelling)
 006603d0 ?AssignChecked@AreaRec@@QAEPAU1@PBIPBX@Z  # AreaRec::AssignChecked migrated from s0065f970 (verbatim, slice spelling)
 00660430 ?KeyLowerBound@@YAPAUKey@@PAU1@0PBU1@@Z  # KeyLowerBound migrated from s0065f970 (verbatim, slice spelling)
@@ -16,5 +16,5 @@
 00660ad0 ?FeedRangeConstruct@@YAPAUFeedEntry@@PAPAU1@PAU1@11@Z  # FeedRangeConstruct migrated from s0065f970 (verbatim, slice spelling)
 00660b30 ?FeedUninitCopy@@YAPAUFeedEntry@@PAU1@00@Z  # FeedUninitCopy migrated from s0065f970 (verbatim, slice spelling)
 00660b90 ?Clear@FeedFilterD@@QAEXXZ  # FeedFilterD::Clear migrated from s0065f970 (verbatim, slice spelling)
+00660c10 ?Index@TexTable@@QAEPAUTexNode@@PBUKey@@@Z  # TexTable::Index migrated from s0065f970 (verbatim, slice spelling)
 00660d70 ?FeedRangeAssign@@YAPAUFeedEntry@@PAU1@00@Z  # FeedRangeAssign migrated from s0065f970 (verbatim, slice spelling)
-00660c10 ?Index@TexTable@@QAEPAUTexNode@@PBUKey@@@Z  # hash_map<ResourceMan::Key, cTextureInstanceInternal*>::operator[] (find, else insert pair), byte-exact
