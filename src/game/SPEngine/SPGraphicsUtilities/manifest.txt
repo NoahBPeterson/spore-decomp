@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsUtilities.cpp  ?ColorReduce@@YAXPAE0PAUColorReduceDst@@HIH@Z  007c2790  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
