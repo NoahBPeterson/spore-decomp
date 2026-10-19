@@ -1,0 +1,1 @@
+slices/s009c4a30/s009c4a30.cpp  ??1creature_instance_data@nSPCreatureAnim@@QAE@XZ  009c4bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

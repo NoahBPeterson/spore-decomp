@@ -1,1 +1,2 @@
 005e4c90  64  UpdateLevelDisplay: float->int conversion is a _ftol2 helper call in mine but inlined fnstcw/fistp in the original; frame is 0x10 vs 0x18 (eastl::wstring slot at +4 vs +0xc)
+005e4190  509  cSPEditorVerbIcon::InitData; complete (icon data refcount swap, 2 property reads, rollover creation, level interpolation, highlight flag, image/text/shade-colour setup); push-ebp placement around the rollover allocation and x87 vs SSE float copy differ [equiv: WEAK]

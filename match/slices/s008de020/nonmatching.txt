@@ -24,3 +24,5 @@
 008def20  79  AutoRefCount vector constructor; register allocation differs (equiv WEAK)
 008def80  66  AutoRefCount range release; interlocked sequence codegen differs
 008defe0  101 AutoRefCount range-assign; interlocked sequence codegen differs
+008de9d0  164  Manager::CheckCacheInternal complete; param-slot reuse for the ref and register allocation differ (equiv UNSUPPORTED: fake-arity)
+008dead0  252  Manager::Fn8dead0 complete (vf34 6 args, vf28 4 args, tmp reuses param slot); register allocation differs (equiv FAIL only on ah of char return)

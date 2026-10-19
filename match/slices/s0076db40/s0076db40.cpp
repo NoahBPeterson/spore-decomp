@@ -115,19 +115,31 @@ bool cRTTManager::GetAB(int i, int* a, int* b)
     return true;
 }
 
+struct RTTRaster {
+    unsigned D3D9GetMipLevelSize(unsigned char level);          // 0x011f0000, ret 4
+    void FillSpriteTexture(int a, unsigned size, int z);        // 0x011f0440, ret 0xc
+};
+struct RTTTexRef;
+struct IRTTResolver {
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
+    virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();
+    virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11();
+    virtual void s12();
+    virtual void Resolve(RTTTexRef* t);                         // +0x34
+};
+struct RTTTexRef {
+    RTTRaster* mRaster;     // +0
+    unsigned   mFlags;      // +4, bit 0 = raster resolved
+};
+IRTTResolver* GetRTTResolver();                                 // 0x0067dd60 (cdecl)
 // @ 0x0076dd60
-extern int RasterFill(void* raster, int a);
-extern int FillSpriteTexture(void* dst, int a);
 bool cRTTManager::FillSprite(int i, int a, int b)
 {
-    void* tex = mTexturePages.mBegin[i].mTexture;
-    if (((unsigned char*)tex)[4] & 1)
-        ;
-    else {
-        // lazily create the raster on first use
-    }
-    int r = RasterFill(*(void**)tex, 0);
-    FillSpriteTexture((void*)b, r);
+    RTTTexRef* t = (RTTTexRef*)mTexturePages.mBegin[i].mTexture;
+    if (!(t->mFlags & 1))
+        GetRTTResolver()->Resolve(t);
+    RTTRaster* r = t->mRaster;
+    r->FillSpriteTexture(b, r->D3D9GetMipLevelSize(0), 0);
     return true;
 }
 
@@ -271,6 +283,39 @@ struct BigRec {
 };
 void CopyBigRec(BigRec* dst, BigRec* src);        // 0x0076e4b0
 void AssignFloatVec(void* dst, void* src);        // 0x0050d4e0
+
+// 0x0076e610  0x2c-byte object factory (three vtables: +0, +4 and +8; RefCount at +0xc).
+// The base-class constructors' vtable stores (GB1 at +4, RefCountVTemplate at +8) are kept as volatile
+// stores: the original does not elide them before the final vtables are written.
+struct Obj2c {
+    void* vt0;          // +0x00
+    void* vt4;          // +0x04
+    void* vt8;          // +0x08
+    int   mRefCount;    // +0x0c
+    char  mFlag;        // +0x10
+    int   mSize;        // +0x14
+    int   f18, f1c, f20;
+};
+// @ 0x0076e610
+Obj2c* __cdecl CreateObj2c()
+{
+    volatile Obj2c* p = (volatile Obj2c*)EASTL_allocator_allocate(0x2c, "Graphics", 0, 0, 0, 0);
+    if (p) {
+        p->vt4 = (void*)0x13eb384;
+        p->mRefCount = 0;
+        p->vt8 = (void*)0x13ec458;
+        p->mFlag = 0;
+        p->vt0 = (void*)0x140e398;
+        p->vt4 = (void*)0x140e384;
+        p->vt8 = (void*)0x140e374;
+        p->mSize = 0x200;
+        p->f18 = 0;
+        p->f1c = 0;
+        p->f20 = 0;
+        return (Obj2c*)p;
+    }
+    return 0;
+}
 
 // @ 0x0076e670  (skeleton; see partial.txt)
 struct BigRecOps {

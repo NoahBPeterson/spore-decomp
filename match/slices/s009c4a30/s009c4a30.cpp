@@ -55,7 +55,7 @@ void FUN_009b6b10(float* mn, float* mx, creature_static_data* c);   // 0x009b6b1
 void FUN_009b5ce0(creature_static_data* c);                 // 0x009b5ce0
 void FUN_009bf5c0(void* first, void* last, void* out);      // 0x009bf5c0
 void FUN_009b4a20(void* first, void* last, void* out);      // 0x009b4a20
-void FUN_0099ce40(void* self);                              // 0x0099ce40
+struct M3 { float f[9]; void FUN_0099ce40(); };             // 0x0099ce40
 void FUN_009e3f70(void* self, int a, int b);                // 0x009e3f70
 void FUN_009bd340(creature_instance_data* c);               // 0x009bd340
 void* FUN_011e073e(void* p, int a, int b);                  // 0x011e073e
@@ -108,6 +108,17 @@ struct ik_vec {                                             // object at instanc
 };
 
 struct instance_hashtable {                                 // object at instance+0x17a0
+    uint32 mAllocator0;                                     // +0x00
+    void*  mpBucketArray;                                   // +0x04
+    uint32 mnBucketCount;                                   // +0x08
+    uint32 mnElementCount;                                  // +0x0c
+    uint32 pad10[3];                                        // +0x10
+    void*  mpFreeList;                                      // +0x1c  (fixed allocator free list)
+    uint32 pad20;                                           // +0x20
+    void*  mpPoolBegin;                                     // +0x24
+    void*  mpPoolEnd;                                       // +0x28
+    uint32 pad2c;
+    void*  mpFixedBuffer;                                   // +0x30
     void DoFreeNodes(void* a, void* b);                     // 0x00a1b6c0
 };
 
@@ -115,7 +126,7 @@ struct creature_instance_data {
     uint8 blob[0x17b0];
 
     void Clear(bool flag);                                  // 0x009c4d40
-    int  Release();                                         // 0x009c4cc0
+    __declspec(noinline) int Release();                     // 0x009c4cc0
     ~creature_instance_data();                              // 0x009c4bf0
     void InitWiggles();                                     // 0x009c2c20
     void BuildBodyList();                                   // 0x009c20e0
@@ -183,16 +194,16 @@ creature_instance_data::~creature_instance_data()
 {
     char* b = (char*)this;
     instance_hashtable* ht = (instance_hashtable*)(b + 0x17a0);
-    ht->DoFreeNodes(*(void**)(b + 0x17a4), *(void**)(b + 0x17a8));
-    *(uint32*)(b + 0x17ac) = 0;
+    ht->DoFreeNodes(ht->mpBucketArray, (void*)ht->mnBucketCount);
     {
-        void* e = *(void**)(b + 0x17a4);
-        if (*(uint32*)(b + 0x17a8) > 1 && e != *(void**)(b + 0x17d4)) {
-            if (e < *(void**)(b + 0x17c8) || e >= *(void**)(b + 0x17cc))
+        void* e = ht->mpBucketArray;
+        ht->mnElementCount = 0;
+        if (ht->mnBucketCount > 1 && e != ht->mpFixedBuffer) {
+            if (e < ht->mpPoolBegin || e >= ht->mpPoolEnd)
                 operator delete[](e);
             else {
-                *(void**)e = *(void**)(b + 0x17c0);
-                *(void**)(b + 0x17c0) = e;
+                *(void**)e = ht->mpFreeList;
+                ht->mpFreeList = e;
             }
         }
     }
@@ -247,6 +258,16 @@ void creature_instance_data::FUN_009c4d10()
 
 // ------------------------------------------------------------------ @ 0x009c4d40
 
+#define F(o) (*(float*)(b + (o)))
+struct V2 { float x, y; V2& operator=(const V2& o) { x = o.x; y = o.y; return *this; } };
+struct V3 { float x, y, z; V3& operator=(const V3& o) { x = o.x; y = o.y; z = o.z; return *this; } };
+#define V2AT(o) (*(V2*)(b + (o)))
+#define V3AT(o) (*(V3*)(b + (o)))
+struct Elem2bc { uint8 d[0x2bc]; };
+struct Elem2c  { uint8 d[0x2c]; };
+struct vec2bc { Elem2bc* mpBegin; Elem2bc* mpEnd; };
+struct vec2c  { Elem2c*  mpBegin; Elem2c*  mpEnd; };
+
 // @ 0x009c4d40
 void creature_instance_data::Clear(bool flag)
 {
@@ -268,59 +289,86 @@ void creature_instance_data::Clear(bool flag)
 
     // Bodies.clear()
     {
-        void* be = *(void**)(b + 0x2e4);
-        void* en = *(void**)(b + 0x2e8);
-        FUN_009bf5c0(be, en, be);
-        *(void**)(b + 0x2e8) = be;
+        vec2bc* v = (vec2bc*)(b + 0x2e4);
+        Elem2bc* be = v->mpBegin;
+        Elem2bc* en = v->mpEnd;
+        FUN_009bf5c0(en, en, be);
+        v->mpEnd += (en - be);
     }
     *(uint32*)(b + 0x10) = (uint32)this >> 4;
     *(uint8*)(b + 0xc) = 0;
     FUN_009cb4f0();
 
-    *(float*)(b + 0x34) = 0.0f;  *(float*)(b + 0x38) = 0.0f;
-    *(float*)(b + 0x30) = 0.0f;  *(float*)(b + 0x18) = 0.0f;
-    *(float*)(b + 0x1c) = 0.0f;  *(float*)(b + 0x20) = 0.0f;
-    *(float*)(b + 0x24) = 0.0f;  *(float*)(b + 0x28) = 0.0f;
-    *(float*)(b + 0x2c) = 0.0f;
-    *(float*)(b + 0x60) = 0.0f;  *(float*)(b + 0x64) = 0.0f;
-    *(float*)(b + 0x68) = 1.0f;  *(float*)(b + 0x5c) = 0.0f;
-    *(float*)(b + 0x3c) = 0.0f;  *(float*)(b + 0x40) = 0.0f;
-    *(float*)(b + 0x44) = 0.0f;  *(float*)(b + 0x48) = 1.0f;
-    *(float*)(b + 0x4c) = 0.0f;  *(float*)(b + 0x50) = 0.0f;
-    *(float*)(b + 0x54) = 0.0f;  *(float*)(b + 0x58) = 1.0f;
-    *(float*)(b + 0x6c) = 1.0f;  *(float*)(b + 0x70) = 1.0f;
+    F(0x34) = 0.0f;  F(0x38) = 0.0f;  F(0x30) = 0.0f;  F(0x18) = 0.0f;
+    V2AT(0x1c) = V2AT(0x34);
+    F(0x24) = 0.0f;
+    V2AT(0x28) = V2AT(0x1c);
+    F(0x60) = 0.0f;  F(0x64) = 0.0f;  F(0x68) = 1.0f;  F(0x5c) = 0.0f;  F(0x3c) = 0.0f;
+    V3AT(0x40) = V3AT(0x60);
+    F(0x4c) = 0.0f;
+    V3AT(0x50) = V3AT(0x40);
+    F(0x6c) = 1.0f;  F(0x70) = 1.0f;
+    F(0xb4) = 0.0f;  F(0xb8) = 0.0f;  F(0xb0) = 0.0f;  F(0x98) = 0.0f;
+    V2AT(0x9c) = V2AT(0xb4);
+    F(0x8c) = 0.0f;
+    V2AT(0x90) = V2AT(0x9c);
+    F(0x80) = 0.0f;
+    V2AT(0x84) = V2AT(0x90);
+    F(0x74) = 0.0f;
+    V2AT(0x78) = V2AT(0x84);
+    F(0xc8) = 0.0f;  F(0xcc) = 0.0f;  F(0xd0) = 0.0f;  F(0xd4) = 1.0f;
+    F(0xa4) = 0.0f;  F(0xa8) = 0.0f;  F(0xac) = 0.0f;
+    F(0xbc) = 0.0f;  F(0xc0) = 0.0f;  F(0xc4) = 0.0f;
+    F(0xd8) = 0.0f;  F(0xdc) = 0.0f;  F(0xe0) = 0.0f;  F(0xe4) = 0.0f;
+    F(0x110) = 0.0f; F(0x114) = 0.0f;
+    {
+        M3* mm = (M3*)(b + 0x118);
+        float* m = mm->f;
+        m[0] = 0.0f;
+        m[1] = 0.0f;
+        m[2] = 0.0f;
+        m[3] = 0.0f;
+        m[4] = 0.0f;
+        m[5] = 0.0f;
+        m[6] = 0.0f;
+        m[7] = 0.0f;
+        m[8] = 0.0f;
+        mm->FUN_0099ce40();
+    }
 
-    *(float*)(b + 0xb4) = 0.0f;  *(float*)(b + 0xb8) = 0.0f;
-    *(float*)(b + 0xb0) = 0.0f;  *(float*)(b + 0x98) = 0.0f;
-    *(float*)(b + 0x9c) = 0.0f;  *(float*)(b + 0xa0) = 0.0f;
-    *(float*)(b + 0x8c) = 0.0f;  *(float*)(b + 0x90) = 0.0f;
-    *(float*)(b + 0x94) = 0.0f;  *(float*)(b + 0x80) = 0.0f;
-    *(float*)(b + 0x84) = 0.0f;  *(float*)(b + 0x88) = 0.0f;
-    *(float*)(b + 0x74) = 0.0f;  *(float*)(b + 0x78) = 0.0f;
-    *(float*)(b + 0x7c) = 0.0f;
-    *(float*)(b + 0xc8) = 0.0f;  *(float*)(b + 0xcc) = 0.0f;
-    *(float*)(b + 0xd0) = 0.0f;  *(float*)(b + 0xd4) = 1.0f;
-    *(float*)(b + 0xa4) = 0.0f;  *(float*)(b + 0xa8) = 0.0f;
-    *(float*)(b + 0xac) = 0.0f;  *(float*)(b + 0xbc) = 0.0f;
-    *(float*)(b + 0xc0) = 0.0f;  *(float*)(b + 0xc4) = 0.0f;
-    *(float*)(b + 0xd8) = 0.0f;  *(float*)(b + 0xdc) = 0.0f;
-    *(float*)(b + 0xe0) = 0.0f;  *(float*)(b + 0xe4) = 0.0f;
-    *(float*)(b + 0x110) = 0.0f; *(float*)(b + 0x114) = 0.0f;
-    for (int i = 0; i < 9; ++i)
-        *(float*)(b + 0x118 + i * 4) = 0.0f;
-    FUN_0099ce40(b + 0x118);
-
-    for (int i = 0; i < 9; ++i)
-        *(float*)(b + 0x13c + i * 4) = 0.0f;
-    for (int i = 0; i < 18; ++i)
-        *(float*)(b + 0x160 + i * 4) = 0.0f;
+    F(0x13c) = 0.0f;
+    F(0x140) = 0.0f;
+    F(0x144) = 0.0f;
+    F(0x148) = 0.0f;
+    F(0x14c) = 0.0f;
+    F(0x150) = 0.0f;
+    F(0x154) = 0.0f;
+    F(0x158) = 0.0f;
+    F(0x15c) = 0.0f;
+    F(0x160) = 0.0f;
+    F(0x164) = 0.0f;
+    F(0x168) = 0.0f;
+    F(0x16c) = 0.0f;
+    F(0x170) = 0.0f;
+    F(0x174) = 0.0f;
+    F(0x178) = 0.0f;
+    F(0x17c) = 0.0f;
+    F(0x180) = 0.0f;
+    F(0x184) = 0.0f;
+    F(0x188) = 0.0f;
+    F(0x18c) = 0.0f;
+    F(0x190) = 0.0f;
+    F(0x194) = 0.0f;
+    F(0x198) = 0.0f;
+    F(0x19c) = 0.0f;
+    F(0x1a0) = 0.0f;
+    F(0x1a4) = 0.0f;
 
     *(uint32*)(b + 0x274) = 0;
-    *(float*)(b + 0x27c) = -10.0f;
-    *(float*)(b + 0x280) = 2.0f;
-    *(float*)(b + 0x278) = 0.0f;
-    *(float*)(b + 0x284) = 0.0f;  *(float*)(b + 0x288) = 0.0f;
-    *(float*)(b + 0x28c) = 0.0f;  *(float*)(b + 0x290) = 1.0f;
+    F(0x27c) = -10.0f;
+    F(0x280) = 2.0f;
+    F(0x278) = 0.0f;
+    F(0x284) = 0.0f;  F(0x288) = 0.0f;  F(0x28c) = 0.0f;  F(0x290) = 1.0f;
 
     if (*(void**)(b + 0x294)) {
         void* p = *(void**)(b + 0x294);
@@ -336,25 +384,24 @@ void creature_instance_data::Clear(bool flag)
     *(uint32*)(b + 0x2ac) = 0xffffffffu;
     *(uint8*)(b + 0x260) = 1;  *(uint8*)(b + 0x261) = 0;
     *(uint8*)(b + 0x262) = 1;  *(uint8*)(b + 0x263) = 0;
-    *(float*)(b + 0x26c) = 0.0f; *(float*)(b + 0x264) = 0.0f;
-    *(float*)(b + 0x268) = 0.0f;
+    F(0x26c) = 0.0f;  F(0x264) = 0.0f;  F(0x268) = 0.0f;
     ((sub_2f8*)(b + 0x2f8))->FUN_009e3f70(6, 4);
 
     *(uint32*)(b + 0x1640) = 0;
-    *(float*)(b + 0x1650) = 0.0f; *(float*)(b + 0x1654) = 0.0f;
-    *(float*)(b + 0x1658) = 0.0f; *(float*)(b + 0x165c) = 1.0f;
+    F(0x1650) = 0.0f; F(0x1654) = 0.0f; F(0x1658) = 0.0f; F(0x165c) = 1.0f;
     *(uint8*)(b + 0x168c) = 1;  *(uint8*)(b + 0x168d) = 1;
-    *(uint8*)(b + 0x168e) = 1;  *(float*)(b + 0x1690) = 0.0f;
+    *(uint8*)(b + 0x168e) = 1;  F(0x1690) = 0.0f;
 
     // mWiggles.clear()
     {
-        void* be = *(void**)(b + 0x1694);
-        void* en = *(void**)(b + 0x1698);
-        FUN_009b4a20(be, en, be);
-        *(void**)(b + 0x1698) = be;
+        vec2c* v = (vec2c*)(b + 0x1694);
+        Elem2c* be = v->mpBegin;
+        Elem2c* en = v->mpEnd;
+        FUN_009b4a20(en, en, be);
+        v->mpEnd += (en - be);
     }
     *(uint8*)(b + 0x1704) = 0;  *(uint8*)(b + 0x176c) = 0;
-    *(uint8*)(b + 0x1794) = 1;  *(float*)(b + 0x1798) = 0.0f;
+    *(uint8*)(b + 0x1794) = 1;  F(0x1798) = 0.0f;
     *(uint8*)(b + 0x179c) = 0;  *(uint8*)(b + 0x1680) = 1;
     *(uint32*)(b + 0x1684) = 0;
     *(uint32*)(b + 0x2d0) = 0xffffffffu;
@@ -364,12 +411,13 @@ void creature_instance_data::Clear(bool flag)
     *(uint32*)(b + 0x1ac) = 0;
     ((ik_vec*)(b + 0x24c))->resize(0);
 
-    *(float*)(b + 0x238) = 0.0f; *(float*)(b + 0x23c) = 0.0f;
-    *(float*)(b + 0x240) = 0.0f; *(float*)(b + 0x244) = 1.0f;
-    *(float*)(b + 0x248) = 1.0f;
+    F(0x238) = 0.0f; F(0x23c) = 0.0f;
+    F(0x240) = 0.0f; F(0x244) = 1.0f;
+    F(0x248) = 1.0f;
     FUN_011e073e(b + 0x1f8, 0xaa, 0x40);
     FUN_011e073e(b + 0x1b8, 0, 0x40);
 }
+#undef F
 
 // ------------------------------------------------------------------ @ 0x009c52a0
 

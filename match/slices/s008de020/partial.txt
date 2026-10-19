@@ -1,2 +1,0 @@
-008de9d0  229  Manager::CheckCacheInternal approximated; AutoRefCount cache path not fully reconstructed (equiv UNSUPPORTED: fake-arity)
-008dead0  265  Manager::Fn8dead0 approximated; complex virtual/param-marshal path not fully reconstructed (equiv FAIL: garbage virtual call)

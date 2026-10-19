@@ -1,0 +1,5 @@
+0041e920 ?GetBool@cProperty@@QAEPA_NXZ  # Property::GetBool (thiscall, returns bool*)
+00f473a0 ??2@YAPAXIPBDHI0H@Z  # 6-arg operator new (size, name, flags, debugFlags, file, line)
+00605220 ??0cSPVerbIconRollover@SP@@QAE@I@Z  # cSPVerbIconRollover(uint32) ctor, called from InitData 0x5e4190
+006051d0 ??0cSPVerbIconRollover@SP@@QAE@XZ  # cSPVerbIconRollover() ctor, called from InitData 0x5e4190
+013eb430 ?kEditorAllocName@@3QBDB  # "Editor" allocation-name string

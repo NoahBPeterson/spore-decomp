@@ -97,6 +97,7 @@ struct ChangeNotificationInfoCompare {
 // Manager
 // ---------------------------------------------------------------------------
 struct Compression;
+struct CacheRes;
 
 struct Manager {
     void** vftable;                 // +0x00
@@ -118,7 +119,7 @@ struct Manager {
     void* Fn8de360(int a);
     bool Fn8de3b0(int a, int b);
     void Fn8de400(void* p, int a);
-    char CheckCacheInternal(void* p1, void* p2, void** ppOut, char flag);
+    char CheckCacheInternal(CacheRes* p1, void* p2, void** ppOut, char flag);
     char Fn8dead0(void* pArg2, int a3, void* pArg4, void* pArg5, void* pArg6);
     void DoDatabaseChanged(int a, void* pList);
 };
@@ -683,121 +684,144 @@ void EA::ResourceMan::InternalDatabaseList::Add(void* pDatabase, int a)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x008de9d0
 // ---------------------------------------------------------------------------
-extern "C" void* AsPPTypeParam_impl(void**); // 0x00a16f40
+namespace EA { namespace ResourceMan {
+// Cache objects: vtable slot 1 (+4) is the virtual Release, slot 5 (+0x14) the lookup/convert call.
+struct CacheRes {
+    virtual void v0();
+    virtual void Release();                 // +0x04
+    virtual void v2();
+    virtual void v3();
+    virtual void v4();
+    virtual char Convert(CacheRes** ppOut); // +0x14
+};
+struct CacheSrc {
+    virtual void v0();
+    virtual void Release();
+    virtual void v2();
+    virtual void v3();
+    virtual void v4();
+    virtual char Lookup(void* pKey, CacheRes** ppOut); // +0x14
+};
+struct CacheRef {   // AutoRefCount<T> wrapper
+    CacheRes* mp;
+    CacheRes** AsPPTypeParam();             // 0x00a16f40
+};
+extern CacheSrc* Fn8d5d00_src();            // 0x008d5d00 (cdecl, returns CacheSrc*)
+}}
+using namespace EA::ResourceMan;
 
-char EA::ResourceMan::Manager::CheckCacheInternal(void* p1, void* p2, void** ppOut, char flag)
+// @ 0x008de9d0
+char EA::ResourceMan::Manager::CheckCacheInternal(CacheRes* p1, void* p2, void** ppOut, char flag)
 {
-    char bl;
-    {
-        void** vt = *(void***)this;
-        typedef char (__thiscall *Fn)(void*, void*, void*);
-        bl = ((Fn)vt[0x14 / 4])(this, p1, p2);
-    }
-    if (bl) return bl;
-    char* obj = (char*)Fn8d5d00();
-    void* found = 0;
-    if (!obj) return bl;
-    {
-        void** ovt = *(void***)obj;
-        typedef char (__thiscall *Fn)(void*, void*, void**);
-        bl = ((Fn)ovt[0x14 / 4])(obj, p1, &found);
-    }
-    if (!bl) goto release_found;
-    bl = 1;
-    if (ppOut) { *ppOut = found; return bl; }
-    if (!p2) goto release_found;
-    if (flag) mNameMutex.Unlock();
-    {
-        char* fo = (char*)found;
-        void* local2 = 0;
-        void** vf = (void**)(*(void***)fo + (0x14 / 4));
-        void* tp = AsPPTypeParam_impl(&local2);
-        typedef char (__thiscall *Fn)(void*, void*);
-        bl = ((Fn)*vf)(fo, tp);
-        if (bl) {
-            *(void**)p2 = local2;
-            local2 = 0;
-        } else {
-            /* local2 released below */
+    typedef char (__thiscall *Slot5)(void*, void*, void*);
+    CacheRes* key = p1;
+    char bl = ((Slot5)(*(void***)this)[0x14 / 4])(this, key, p2);
+    if (!bl) {
+        CacheSrc* src = Fn8d5d00_src();
+        CacheRes* found = 0;
+        if (src) {
+            if (src->Lookup(key, &found)) {
+                bl = 1;
+                if (ppOut) {
+                    *ppOut = found;
+                    return bl;
+                }
+                if (p2) {
+                    if (flag) mNameMutex.Unlock();
+                    CacheRef& ref = *(CacheRef*)&p1;
+                    ref.mp = 0;
+                    bl = found->Convert(ref.AsPPTypeParam());
+                    if (bl) {
+                        *(CacheRes**)p2 = ref.mp;
+                        ref.mp = 0;
+                    }
+                    if (flag) mNameMutex.Lock((const char*)0x1436ab8);
+                    if (ref.mp) ref.mp->Release();
+                }
+            }
+            if (found) found->Release();
         }
-        if (flag) {
-            mNameMutex.Lock((const char*)0x1436ab8);
-        }
-        if (local2) {
-            void** lvt = *(void***)local2;
-            typedef void (__thiscall *Fn2)(void*);
-            ((Fn2)lvt[1])(local2);
-        }
-    }
-release_found:
-    if (found) {
-        void** fvt = *(void***)found;
-        typedef void (__thiscall *Fn)(void*);
-        ((Fn)fvt[1])(found);
     }
     return bl;
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x008dead0
 // ---------------------------------------------------------------------------
+namespace EA { namespace ResourceMan {
+struct Key3 { uint32 v0, v1, v2; };
+struct ResObj {                       // vtable slots used: 2 (+8), 9 (+0x24), 10 (+0x28)
+    virtual void p0();
+    virtual void p1();
+    virtual void Release();           // +0x08
+    virtual void p3();
+    virtual void p4();
+    virtual void p5();
+    virtual void p6();
+    virtual void p7();
+    virtual void p8();
+    virtual void Vf24();              // +0x24
+    virtual char Vf28(void* a, ResObj* b, int c, uint32 d); // +0x28
+};
+struct DbObj {                        // slots used: 13 (+0x34), 16 (+0x40)
+    virtual void p0();
+    virtual void p1();
+    virtual void p2();
+    virtual void p3();
+    virtual void p4();
+    virtual void p5();
+    virtual void p6();
+    virtual void p7();
+    virtual void p8();
+    virtual void p9();
+    virtual void p10();
+    virtual void p11();
+    virtual void p12();
+    virtual char Vf34(Key3* pKey, ResObj** ppOut, int a, int b, int c, int d); // +0x34
+    virtual void p14();
+    virtual void p15();
+    virtual void Vf40(Key3* pKey);    // +0x40
+};
+}}
+
+// @ 0x008dead0
 char EA::ResourceMan::Manager::Fn8dead0(void* pArg2, int a3, void* pArg4, void* pArg5, void* pArg6)
 {
     char result = 0;
-    if (!pArg2) return 0;
-    uint32 v0, v1, v2;
-    if (pArg6) {
-        v0 = ((uint32*)pArg6)[0];
-        v1 = ((uint32*)pArg6)[1];
-        v2 = ((uint32*)pArg6)[2];
-    } else {
-        v0 = *(uint32*)((char*)pArg2 + 8);
-        v1 = *(uint32*)((char*)pArg2 + 0xc);
-        v2 = *(uint32*)((char*)pArg2 + 0x10);
-    }
-    void** vtThis = *(void***)this;
-    if (!pArg4) {
-        typedef void* (__thiscall *Fn)(void*, uint32*);
-        pArg4 = ((Fn)vtThis[0x58 / 4])(this, &v0);
-        if (!pArg4) return 0;
-    }
-    if (!pArg5) {
-        typedef void* (__thiscall *Fn)(void*, int, uint32);
-        pArg5 = ((Fn)vtThis[0x48 / 4])(this, -1, v1);
-        if (!pArg5) return 0;
-    }
-    void** vt4 = *(void***)pArg4;
-    void* tmp = 0;
-    uint32 st0 = 0, st1 = 1;
-    char ok;
-    {
-        typedef char (__thiscall *Fn)(void*, uint32*, void**, int, int);
-        ok = ((Fn)vt4[0x34 / 4])(pArg4, &v0, &tmp, 3, 2);
-    }
-    if (ok) {
-        void** vt5 = *(void***)pArg5;
-        typedef char (__thiscall *Fn)(void*, uint32, uint32, uint32);
-        result = ((Fn)vt5[0x28 / 4])(pArg5, st0, st1, v2);
-        void** vt5b = *(void***)pArg5;
-        typedef void (__thiscall *Fn2)(void*);
-        ((Fn2)vt5b[0x24 / 4])(pArg5);
-        if (!result) {
-            void** vt4b = *(void***)pArg4;
-            typedef void (__thiscall *Fn3)(void*, uint32*);
-            ((Fn3)vt4b[0x40 / 4])(pArg4, &st0);
+    if (pArg2) {
+        Key3 k;
+        if (pArg6) {
+            k = *(Key3*)pArg6;
+        } else {
+            k.v0 = *(uint32*)((char*)pArg2 + 8);
+            k.v1 = *(uint32*)((char*)pArg2 + 0xc);
+            k.v2 = *(uint32*)((char*)pArg2 + 0x10);
         }
-    }
-    if (v2) {
-        void** vt2 = *(void***)v2;
-        typedef void (__thiscall *Fn)(void*);
-        ((Fn)vt2[0x08 / 4])((void*)v2);
+        DbObj* db = (DbObj*)pArg4;
+        ResObj* res = (ResObj*)pArg5;
+        if (!db) {
+            typedef DbObj* (__thiscall *Fn)(void*, Key3*);
+            db = ((Fn)(*(void***)this)[0x58 / 4])(this, &k);
+        }
+        if (db) {
+            if (!res) {
+                typedef ResObj* (__thiscall *Fn)(void*, uint32, int);
+                res = ((Fn)(*(void***)this)[0x48 / 4])(this, k.v1, -1);
+            }
+            if (res) {
+                ResObj* tmp = 0;
+                if (db->Vf34(&k, &tmp, 3, 2, 1, 0)) {
+                    result = res->Vf28(pArg2, tmp, a3, k.v1);
+                    tmp->Vf24();
+                    if (!result) db->Vf40(&k);
+                }
+                if (tmp) tmp->Release();
+            }
+        }
     }
     return result;
 }
 
-// ---------------------------------------------------------------------------
 // @ 0x008debf0
 // ---------------------------------------------------------------------------
 void EA::ResourceMan::Manager::DoDatabaseChanged(int a, void* pList)

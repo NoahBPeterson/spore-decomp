@@ -357,92 +357,107 @@ char** VecOps::FUN_00680a50(char** src) {
   return dst;
 }
 
-// ================================================================ cheat name map (partial)
-extern unsigned short gEmptyString;                                        // 0x01667bac
-extern "C" void  FUN_0067e5c0(void* pThis, void** ppOut, void** pKey);     // lower_bound
-extern "C" void* FUN_0067ee60(void** pKey, void** ppNode);                 // node alloc/ctor
-extern "C" void  FUN_0067f790(void* pTree, void* pNode, void* pValue, void* tag);
-extern "C" void  FUN_0067e830(void* pValue);                               // PairB dtor
-extern "C" void  FUN_0067f0c0(void* pTree, void** pKeyOut, void* pNode);
+// ================================================================ cheat name map
 extern "C" int   _stricmp(const char*, const char*);
+extern "C" void  CopyBytes(char* dst, const char* src, unsigned n);        // 0x011e0744 (cdecl)
+extern "C" void  FUN_0067f0c0_dummy();
+extern unsigned short gEmptyString;                                        // 0x01667bac
 
-// @ 0x0067fb80
-void** __fastcall FUN_0067fb80(char* pThis, void** pKey) {
-  void* pNode = 0;
-  FUN_0067e5c0(pThis, &pNode, pKey);
-  if (pNode != (void*)(pThis + 4)) {
-    if (_stricmp((const char*)*pKey, *(const char**)((char*)pNode + 0x10)) >= 0)
-      return (void**)((char*)pNode + 0x20);
-  }
-  void* pNew = 0;
-  void* pValue = FUN_0067ee60(pKey, &pNew);
-  void* pTree = 0;
-  FUN_0067f790(&pTree, pNode, pValue, 0);
-  FUN_0067e830(pValue);
-  return (void**)((char*)pValue + 0x20);
-}
-
-// @ 0x0067fc50
-char* __fastcall FUN_0067fc50(char* pThis, char* pName, void* pCmd, char pFlag) {
-  void* pParser = *(void**)(pThis + 0x44);
-  if (pParser) {
-    typedef void (__thiscall *RegFn)(void*, char*, void*);
-    (*(RegFn*)((char*)*(void**)pParser + 0x14))(pParser, pName, pCmd);
-  }
-  char* pBegin;
-  char* pCap;
-  int nLen = 0;
-  while (pName[nLen] != 0) ++nLen;
-  if (nLen + 1 < 2) {
-    pBegin = (char*)&gEmptyString;
-    pCap = pBegin + 1;
-  } else {
-    pBegin = (char*)EAAlloc(
-        nLen + 1, "App", 0, 0,
-        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
-        0xd1);
-    pCap = pBegin + nLen + 1;
-  }
-  for (int i = 0; i < nLen; ++i) pBegin[i] = pName[i];
-  pBegin[nLen] = 0;
-  void* key[3] = {pBegin, pBegin + nLen, pCap};
-  void** pValue = FUN_0067fb80(pThis, key);
-  void* pOld = *pValue;
-  if (pCmd != pOld) {
-    if (pCmd) {
-      typedef void (__thiscall *AddRefFn)(void*);
-      (*(AddRefFn*)((char*)*(void**)pCmd + 0xc))(pCmd);
-    }
-    *pValue = pCmd;
-    if (pOld) {
-      typedef void (__thiscall *RelFn)(void*);
-      (*(RelFn*)((char*)*(void**)pOld + 0x10))(pOld);
-    }
-  }
-  if ((pCap - pBegin) > 1 && pBegin) EAFree(pBegin);
-  if (pFlag) {
-    char* qBegin;
-    char* qCap;
-    int n = 0;
-    while (pName[n] != 0) ++n;
+// eastl::string (begin, end, capacity, allocator); the allocator dword is never written here.
+struct CheatName {
+  char* b; char* e; char* cap; void* al;
+  __forceinline CheatName(const char* s) {
+    const char* q = s;
+    while (*q++) {}
+    unsigned n = (unsigned)(q - 1 - s);
     if (n + 1 < 2) {
-      qBegin = (char*)&gEmptyString;
-      qCap = qBegin + 1;
+      b = (char*)&gEmptyString;
+      cap = b + 1;
     } else {
-      qBegin = (char*)EAAlloc(
-          n + 1, "App", 0, 0,
+      b = (char*)EAAlloc(n + 1, "App", 0, 0,
           "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
           0xd1);
-      qCap = qBegin + n + 1;
+      cap = b + n + 1;
     }
-    for (int i = 0; i < n; ++i) qBegin[i] = pName[i];
-    qBegin[n] = 0;
-    void* key2[3] = {qBegin, qBegin + n, qCap};
-    void* pNode = 0;
-    FUN_0067f0c0((void*)(pThis + 0x28), key2, pNode);
-    if ((qCap - qBegin) > 1 && qBegin) EAFree(qBegin);
+    CopyBytes(b, s, n);
+    e = b + n;
+    *e = 0;
   }
-  return pBegin;
+  __forceinline ~CheatName() { if (cap - b > 1 && b) EAFree(b); }
+};
+
+struct ICheatCmd {            // cICommand: AddRef at +0xc, Release at +0x10
+  virtual void s0(); virtual void s1(); virtual void s2();
+  virtual void AddRef();
+  virtual void Release();
+};
+
+// pair<const string, AutoRefCount<cICommand>>
+struct CheatNamePair {
+  char* kb; char* ke; char* kcap; void* kal;
+  ICheatCmd* val;
+  CheatNamePair* Make(const CheatName* k, ICheatCmd** pVal);   // 0x0067ee60, ret 8, returns this
+  ~CheatNamePair();                                    // 0x0067e830
+};
+
+struct CheatMapNode { void* link[4]; CheatName key; ICheatCmd* val; };   // key +0x10, value +0x20
+
+struct CheatCmdMap {
+  void* hdr;                                     // +0
+  CheatMapNode anchor_;                               // +4 header node
+  void LowerBound(CheatMapNode** ppOut, const CheatName* k);                       // 0x0067e5c0, ret 8
+  CheatMapNode** Insert(CheatMapNode** ppOut, CheatMapNode* hint, CheatNamePair* v, bool tag);  // 0x0067f790, ret 0x10
+  void InsertKey(void* pOut, const CheatName* k, bool tag);                   // 0x0067f0c0, ret 0xc
+  ICheatCmd** AddCheat(const CheatName* k);                                        // 0x0067fb80
+};
+
+// @ 0x0067fb80
+ICheatCmd** CheatCmdMap::AddCheat(const CheatName* k) {
+  CheatMapNode* it;
+  LowerBound(&it, k);
+  CheatMapNode* pos = it;
+  if (pos != (CheatMapNode*)((char*)this + 4)) {
+    if (_stricmp(k->b, pos->key.b) >= 0)
+      return &pos->val;
+  }
+  ICheatCmd* zero = 0;
+  CheatNamePair pair;
+  bool tag = false;
+  CheatMapNode* res;
+  Insert(&res, pos, pair.Make(k, &zero), tag);
+  CheatMapNode* n = res;
+  return &n->val;
+}
+
+struct CheatMgr {
+  char pad0[0xc];
+  char mapA[0x1c];       // +0x0c  CheatCmdMap (name -> command)
+  char mapB[0x1c];       // +0x28  CheatCmdMap/set of names
+  void* pParser;         // +0x44
+  void AddCheat(const char* pName, ICheatCmd* pCmd, bool pFlag);   // 0x0067fc50, ret 0xc
+};
+
+// @ 0x0067fc50
+void CheatMgr::AddCheat(const char* pName, ICheatCmd* pCmd, bool pFlag) {
+  if (pParser) {
+    typedef void (__thiscall *RegFn)(void*, const char*, ICheatCmd*);
+    (*(RegFn*)((char*)*(void**)pParser + 0x14))(pParser, pName, pCmd);
+  }
+  {
+    CheatName key(pName);
+    ICheatCmd** pValue = ((CheatCmdMap*)mapA)->AddCheat(&key);
+    ICheatCmd* pOld = *pValue;
+    if (pCmd != pOld) {
+      if (pCmd) pCmd->AddRef();
+      *pValue = pCmd;
+      if (pOld) pOld->Release();
+    }
+  }
+  if (pFlag) {
+    CheatName key2(pName);
+    bool tag = false;
+    ((CheatCmdMap*)mapB)->InsertKey(&pName, &key2, tag);
+  }
 }
 
 // ================================================================ colour conversion

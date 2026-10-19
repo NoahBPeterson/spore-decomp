@@ -13,3 +13,5 @@
 00680890  n/a  large aggregate zero-init; complete, store scheduling differs.
 00680930  n/a  cCheatManager record destructor chain; complete (tail call to 0x00680730), register layout differs.
 006809f0  n/a  destructor with EH frame; complete, missing compiler EH prolog/state stores.
+0067fb80  157  CheatCmdMap::AddCheat (map operator[]); complete, EH state/temp slot sharing and register allocation differ (equiv UNSUPPORTED)
+0067fc50  349  CheatMgr::AddCheat; complete (parser vcall, 2 key-string builds, map insert, AddRef/Release), EH state and regalloc differ (equiv UNSUPPORTED)
