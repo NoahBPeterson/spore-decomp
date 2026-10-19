@@ -18,6 +18,16 @@ void FUN_00738610(int, int, void*);
 void* RBTreeIncrement(void*);
 void FUN_0074fea0(void*);
 void FUN_0093dd80_754250(int, int, int, int, int);
+void __cdecl operator_delete__(void* p);   // 0x00f47380 (CRT operator delete)
+struct cSPTransform { uint32_t m[12]; cSPTransform& operator=(const cSPTransform& o); };
+namespace SP { struct MWGroupDtorStub { void F(); }; }   // 0x00751d00 `MWGroupDtorStub::F`
+extern void* g_mwFreeList_162ed38;      // 0x0162ed38 (clip-map node free list)
+extern void* g_mwFreeList_162ed18;      // 0x0162ed18 (model free list)
+struct FixedAllocatorBase_00926650 { bool AddCore(void* core, unsigned n); };   // 0x00926650
+extern FixedAllocatorBase_00926650 g_fixedAlloc_162ed28;                        // 0x0162ed28
+void* __cdecl operator_new_753d10(unsigned size, const char* name, int, int, int, int); // 0x00f473a0
+struct CompactMap_74f200 { void** Subscript(const uint32_t& key); };            // 0x0074f200
+struct Ctor753900 { void* ctor(void* a, void* b); };                            // 0x00753900
 
 // @ 0x00753270  (708 bytes) large cModelWorld helper; skeleton
 void FUN_00753270(void* self) { (void)self; }
@@ -45,32 +55,216 @@ void TreeWalker_00753540::ForEach(float a, float b) {
   }
 }
 
-// @ 0x00753580  (79 bytes) cMWGroupInternal teardown/scalar-deleting dtor
-void cMWGroupInternal_00753580(void* self) { (void)self; }
+// @ 0x00753580  (79 bytes) cMWGroupInternal teardown: run the group dtor stub, free the pool
+struct cMWGroupInternal_00753580 {
+  char pad_0[0x4c];
+  void* m4c;                             // +0x4c
+  char pad_50[0xc];
+  void* m5c;                             // +0x5c
+  __declspec(noinline) ~cMWGroupInternal_00753580();
+};
+cMWGroupInternal_00753580::~cMWGroupInternal_00753580() {
+  ((SP::MWGroupDtorStub*)this)->F();
+  void* p = m4c;
+  if (p != 0 && p != m5c)
+    operator_delete__(p);
+}
 
 // @ 0x00753630  (316 bytes) job queue lookup; skeleton
 void FUN_00753630(void* self, int* p) { (void)self; (void)p; }
 
-// @ 0x00753770  (126 bytes) element constructor (inlined cSPTransform ctor)
-void* FUN_00753770(void* self, void* a, void* b) { (void)a; (void)b; return self; }
+// @ 0x00753770  (126 bytes) model-info element constructor (inlined cSPTransform/Matrix ctor)
+struct Matrix3_41cb40 { float m[9]; void Assign(const void* src); };   // 0x0041cb40
+struct ArrayHolder_7535d0 { void* mArray; void Init(int count); };     // 0x007535d0
+extern float g_f162eb0c, g_f162eb10, g_f162eb14, g_f1485720;
+extern char  g_m162ec4c[];
+struct CspElem_753770 {
+  void*        mpObject;    // +0x00
+  uint32_t     mFlags;      // +0x04
+  uint16_t     m8;          // +0x08
+  uint16_t     ma;          // +0x0a
+  float        m0c;         // +0x0c
+  float        m10;         // +0x10
+  float        m14;         // +0x14
+  float        m18;         // +0x18
+  Matrix3_41cb40 m1c;       // +0x1c
+  uint32_t     m40;         // +0x40
+  ArrayHolder_7535d0 m44;   // +0x44
+  void* Init(void* p0, void* p1);
+};
+void* CspElem_753770::Init(void* p0, void* p1) {
+  mpObject = p0;
+  mFlags = 0;
+  m8 = 0;
+  ma = 0;
+  m0c = g_f162eb0c;
+  m10 = g_f162eb10;
+  m14 = g_f162eb14;
+  m18 = g_f1485720;
+  m1c.Assign(&g_m162ec4c);
+  m40 = 0;
+  m44.Init((int)p1);
+  mFlags |= 0x80000000u;
+  return this;
+}
 
 // @ 0x00753810  (108 bytes) vector-of-model-info constructor
-void* FUN_00753810(void* self, void* a, int n, void* src) { (void)a; (void)n; (void)src; return self; }
+struct CspVec_753810 {
+  uint32_t       m0;      // +0x00
+  uint32_t       m4;      // +0x04
+  CspElem_753770 m8;      // +0x08
+  void* Init(void* p0, int count, void** arr);
+};
+void* CspVec_753810::Init(void* p0, int count, void** arr) {
+  m4 = 0;
+  m0 = 0;
+  m8.Init(p0, (void*)count);
+  for (int i = 0; i < count; i++) {
+    void* p = arr[i];
+    *(void**)((char*)m8.m44.mArray + i * 0x3c) = p;
+    if (p != 0) {
+      *(cSPTransform*)((char*)m8.m44.mArray + i * 0x3c + 4) = *(cSPTransform*)((char*)p + 8);
+      ++*(int*)((char*)p + 0x40);
+    }
+  }
+  return this;
+}
 
-// @ 0x00753880  (127 bytes) cLoadQueue constructor (EH)
-void cLoadQueue_ctor_00753880(void* self) { (void)self; }
+// @ 0x00753880  (127 bytes) cLoadQueue constructor: EH-vector-construct 8 cLoadingModel entries, init deque
+struct CLoadingModel_73880 { uint8_t m[0x50]; CLoadingModel_73880(); ~CLoadingModel_73880(); };
+struct Deque_7458d0 { uint32_t m[10]; void Init(int n); };   // 0x007458d0
+struct cLoadQueue_00753880 {
+  uint32_t           m0;       // +0x000
+  CLoadingModel_73880 mArr[8]; // +0x004 (8 x cLoadingModel; compiler emits the EH vector ctor)
+  Deque_7458d0       mDeque;   // +0x284
+  uint32_t           m2ac;     // +0x2ac
+  uint32_t           m2b0;     // +0x2b0
+  cLoadQueue_00753880();
+};
+cLoadQueue_00753880::cLoadQueue_00753880() : m0(0) {
+  mDeque.m[0] = 0; mDeque.m[1] = 0; mDeque.m[2] = 0; mDeque.m[3] = 0; mDeque.m[4] = 0;
+  mDeque.m[5] = 0; mDeque.m[6] = 0; mDeque.m[7] = 0; mDeque.m[8] = 0; mDeque.m[9] = 0;
+  mDeque.Init(0);
+  m2b0 = 0;
+}
 
 // @ 0x00753900  (678 bytes) cModelWorld constructor (EH); skeleton
 void cModelWorld_ctor_00753900(void* self) { (void)self; }
 
-// @ 0x00753bb0  (155 bytes) fixed-allocator + node insert (EH)
-void* FUN_00753bb0(void* self, void* a, void* b) { (void)a; (void)b; return 0; }
+// @ 0x00753bb0  (155 bytes) fixed-allocator node acquire + intrusive circular-list push
+struct MwOwner_753bb0 {
+  char  pad_0[0x1ac];
+  void* m1ac;   // +0x1ac (list head.prev / sentinel)
+  void* m1b0;   // +0x1b0 (list head.next)
+  void* Register(void* a, void* b);
+};
+void* MwOwner_753bb0::Register(void* a, void* b) {
+  CspVec_753810* node;
+  for (;;) {
+    node = (CspVec_753810*)g_mwFreeList_162ed38;
+    if (node != 0) {
+      g_mwFreeList_162ed38 = *(void**)node;
+      break;
+    }
+    if (!g_fixedAlloc_162ed28.AddCore(0, 0))
+      break;
+  }
+  CspVec_753810* obj;
+  if (node != 0)
+    obj = (CspVec_753810*)node->Init(this, (int)a, (void**)b);
+  else
+    obj = 0;
+  void* next = *(void**)((char*)this + 0x1b0);
+  *(void**)((char*)obj + 0) = (char*)this + 0x1ac;
+  *(void**)((char*)obj + 4) = next;
+  *(void**)((char*)this + 0x1b0) = obj;
+  *(void**)next = obj;
+  return (char*)obj + 8;
+}
 
 // @ 0x00753c50  (187 bytes) SP::cModelWorld::FinalRelease
-void cModelWorld_FinalRelease_00753c50(void* self) { (void)self; }
+struct List_753c50 { void erase(void* key); };            // 0x0074be40
+struct MwNode_753c50 { MwNode_753c50* mpPrev; MwNode_753c50* mpNext; };
+struct NodeFc_753c50 { void F746fc0(); };                 // 0x00746fc0
+struct cModelWorld_753c50 {
+  virtual void cv0();
+  virtual void cv1();
+  char     pad_4[0x1c - 4];
+  uint8_t  m1c;                       // +0x1c mWorldType
+  char     pad_1d[0x314 - 0x1d];
+  List_753c50 mList;                  // +0x314
+  char     pad_318[0x894 - 0x318];
+  uint32_t m894;                      // +0x894
+  uint32_t m898;                      // +0x898
+  void FinalRelease(void** p2, char p3);
+  void ShutdownModel753c50(void* p);
+};
+void cModelWorld_753c50::FinalRelease(void** p2, char p3) {
+  *p2 = 0;
+  MwNode_753c50* node = (MwNode_753c50*)((char*)p2 - 8);
+  if (p3 != 0) {
+    if (m1c != 0) {
+      MwNode_753c50* mpN = node->mpNext;
+      MwNode_753c50* mpP = node->mpPrev;
+      mpN->mpPrev = mpP;
+      mpP->mpNext = mpN;
+      node->mpPrev = 0;
+      node->mpNext = 0;
+    } else {
+      cv1();
+    }
+    ((cMWGroupInternal_00753580*)node)->~cMWGroupInternal_00753580();
+    node->mpPrev = (MwNode_753c50*)g_mwFreeList_162ed38;
+    g_mwFreeList_162ed38 = node;
+    return;
+  }
+  if (m1c != 0) {
+    MwNode_753c50* mpN = node->mpNext;
+    MwNode_753c50* mpP = node->mpPrev;
+    mpN->mpPrev = mpP;
+    mpP->mpNext = mpN;
+    node->mpPrev = 0;
+    node->mpNext = 0;
+    void* tmp = (char*)node + 8;
+    mList.erase(&tmp);
+    ShutdownModel753c50(node);
+    m894 += 0xffffffffu;
+    if ((*(uint32_t*)((char*)node + 0x138) & 0x80000010u) == 0)
+      m898 += 0xffffffffu;
+  } else {
+    cv1();
+  }
+  ((NodeFc_753c50*)node)->F746fc0();
+  node->mpPrev = (MwNode_753c50*)g_mwFreeList_162ed18;
+  g_mwFreeList_162ed18 = node;
+}
 
-// @ 0x00753d10  (174 bytes) operator new + ctor + assign (EH)
-void* FUN_00753d10(void* self, void* a, void* b, void* c) { (void)a; (void)b; (void)c; return 0; }
+// @ 0x00753d10  (174 bytes) operator new + cModelWorld ctor + CompactMap insert
+struct IEventObject_753d10 { virtual void ev0(); virtual void ev1(); };
+struct MwOwner_753d10 {
+  virtual void ov0();
+  char              pad_4[0xc - 4];
+  CompactMap_74f200 mMap;         // +0x0c
+  void* Create(uint32_t key, void* unused, void* a2);
+};
+void* MwOwner_753d10::Create(uint32_t key, void* unused, void* a2) {
+  (void)unused;
+  void* mem = operator_new_753d10(0x8b8, "Graphics", 0, 0, 0, 0);
+  IEventObject_753d10* obj = 0;
+  if (mem != 0)
+    obj = (IEventObject_753d10*)((Ctor753900*)mem)->ctor(this, a2);
+  typedef void (__thiscall *Fn174)(void*);
+  (*(Fn174*)((char*)(*(void***)obj) + 0x174))(obj);
+  void** slot = mMap.Subscript(key);
+  IEventObject_753d10* old = (IEventObject_753d10*)*slot;
+  if (obj != old) {
+    obj->ev0();
+    *slot = obj;
+    if (old != 0)
+      old->ev1();
+  }
+  return obj;
+}
 
 // @ 0x00753dc0  (59 bytes)
 void FUN_00753dc0(int param_1, unsigned char param_2) {

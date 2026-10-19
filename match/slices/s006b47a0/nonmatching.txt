@@ -1,1 +1,7 @@
-006b5240  15  ~cString: complete; only register allocation in the string-free block (p/cap eax-ecx) and the erase temp (edx vs ecx) differ
+006b48d0  127  complete; async-save request ctor (MI: primary+secondary vptr, inlined GraphicsFactoryAsyncRequest at +0x20) - cl schedules the two vptr stores / nested-ctor EH state differently. flags /O2 /MD /Gy /EHsc /GS- /TP [equiv: UNSUPPORTED]
+006b4a10  203  complete; async-save commit (Finish) - provider vtable dispatch plus EH frame layout differ. flags /O2 /MD /Gy /EHsc /GS- /TP [equiv: UNSUPPORTED]
+006b4b60  270  complete; async-save submit - LTCG register ABI (arg0 arrives in a register, not on the stack) plus zone-alloc/EH framing differ. flags /O2 /MD /Gy /EHsc /GS- /TP [equiv: PASS]
+006b4ce0  363  complete; async-save completion - secondary-base `this` (base+4) and the job-status switch EH region differ. flags /O2 /MD /Gy /EHsc /GS- /TP [equiv: WEAK]
+006b51a0   89  complete; alloc_placeholder - eastl string local (16-byte string, inlined dtor) EH prologue/state scheduling differ. flags /O2 /MD /Gy /EHsc /GS- /TP [equiv: UNSUPPORTED]
+006b5240   15  ~cString: complete; only register allocation in the string-free block (p/cap eax-ecx) and the erase temp (edx vs ecx) differ
+006b53a0   90  complete; basic_string concat helper - hidden return slot ctor plus EH frame (state/local flag) differ. flags /O2 /MD /Gy /EHsc /GS- /TP [equiv: UNSUPPORTED]

@@ -417,63 +417,362 @@ const wchar16* cString::GetText()
 } // namespace SP
 
 // ---------------------------------------------------------------------------
-// Async-save cluster (behavioural reconstruction; see nonmatching.txt).
+// Async-save cluster: SP save-queue job holder + App/AsyncSave job.
 // ---------------------------------------------------------------------------
+namespace EA { namespace Thread {
+class Mutex {
+public:
+    char mData[0x30];
+    int Lock(unsigned* pTimeout);   // 0x009221b0
+    int Unlock();                   // 0x00922270
+};
+}} // namespace EA::Thread
+
+extern EA::Thread::Mutex g_saveMutex;      // 0x01604b50
+extern unsigned          g_lockTimeout;    // 0x014099b8
+extern int               g_saveJobReady;   // 0x01604b80
+
 struct cJob {
-    char pad0[0x40];
-    int  mRefCount;          // +0x40
-    void FUN_006913c0(cJob* other);
-    void FUN_0068f950();
-    void FUN_006909b0();
-    void GetStatus();
-    void FUN_006926b0();
-    static cJob* Get();
+    void*    mpCallback;        // +0x00
+    void*    mpCallbackData;    // +0x04
+    void*    mpExtraObject;     // +0x08
+    void*    mpDebugName;       // +0x0c
+    int      mPriority;         // +0x10
+    int      mStatus;           // +0x14
+    uint32_t mThreadAffinity;   // +0x18
+    int      mSlot;             // +0x1c
+    void*    mpReturnValue;     // +0x20
+    void*    mpCleanupValue;    // +0x24
+
+    int  AddRef();                          // 0x0068f950
+    int  Release();                         // 0x00690120
+    void Wait();                            // 0x006926b0
+    void AddWeakDependency(cJob* pOther);   // 0x006913c0
+    void AddDependency(cJob* pOther);       // 0x00691380
+    int  GetStatus();                       // 0x006909b0
+    void SetResult(void* pValue);           // 0x0068f9b0
+};
+
+extern cJob* g_saveJob;   // 0x01604b48
+
+struct MutexScopedLock {
+    EA::Thread::Mutex* mpMutex;
+    MutexScopedLock(EA::Thread::Mutex* m) : mpMutex(m) { m->Lock(&g_lockTimeout); }
+    ~MutexScopedLock() { mpMutex->Unlock(); }
+};
+
+inline void* operator new(uint32_t, void* p) { return p; }
+
+void* __cdecl FUN_0067dcd0();      // 0x0067dcd0 EA::ResourceMan::GetManager
+void* __cdecl FUN_0068f4d0();      // 0x0068f4d0 cJobManager getter
+void* __cdecl ZoneObject_new(uint32_t nSize, const char* pName, int, int, int, int);  // 0x00926020
+int   __cdecl FUN_00695cf0(void* p);   // 0x00695cf0
+int   __cdecl FUN_006b4390(void** p);  // 0x006b4390
+void  __cdecl FUN_006b4710();      // 0x006b4710
+void  __cdecl FUN_006b4720();      // 0x006b4720
+void  __cdecl FUN_006b4b50();      // 0x006b4b50
+
+struct IRefC {                 // refcounted interface (slot 0 = AddRef, slot 1 = Release)
+    virtual void v0();         // +0x00
+    virtual void v1();         // +0x04
+    virtual void v2();         // +0x08
+    virtual void v3();         // +0x0c
+    virtual void v4();         // +0x10
+    virtual void v5();         // +0x14
+    virtual void v6();         // +0x18
+    virtual void v7();         // +0x1c
+};
+
+struct ResMgr {                // EA::ResourceMan manager (0x0067dcd0)
+    virtual void m00(); virtual void m01(); virtual void m02(); virtual void m03();
+    virtual void m04(); virtual void m05(); virtual void m06(); virtual void m07();
+    virtual void m08(); virtual void m09(); virtual void m10(); virtual void m11();
+    virtual void m12(); virtual void m13(); virtual void m14(); virtual void m15();
+    virtual void m16(); virtual void m17();
+    virtual void* FindResource(uint32_t a, uint32_t b);      // slot 0x12 / +0x48
+    virtual void m19(); virtual void m20(); virtual void m21();
+    virtual void* GetByKey(void* key);                       // slot 0x16 / +0x58
+};
+
+struct JobMgr {                // SP::cJobManager (0x0068f4d0)
+    virtual void j0(); virtual void j1(); virtual void j2(); virtual void j3();
+    virtual bool BeginJob(cJob** pOut);      // slot 4  / +0x10
+    virtual void j5(); virtual void j6(); virtual void j7();
+    virtual void Lock();                     // slot 8  / +0x20
+    virtual void Unlock();                   // slot 9  / +0x24
+};
+
+struct Key3 { uint32_t inst, type, group; };
+
+struct ILocal2 {               // object returned by ILocal::Get
+    virtual void n0(); virtual void n1(); virtual void n2(); virtual void n3();
+    virtual void n4(); virtual void n5(); virtual void n6(); virtual void n7();
+    virtual void n8(); virtual void n9(); virtual void nA(); virtual void nB();
+    virtual void nC(); virtual void nD();
+    virtual bool Write(void* pData, int nSize);   // slot 0xe / +0x38
+};
+
+struct ILocal {                // object produced by the resource provider
+    virtual void l0();         // +0x00
+    virtual void l1();         // +0x04
+    virtual void Release();    // +0x08 (slot 2)
+    virtual void l3();         // +0x0c
+    virtual void l4();         // +0x10
+    virtual void l5();         // +0x14
+    virtual ILocal2* Get();    // +0x18 (slot 6)
+    virtual void l7();         // +0x1c
+    virtual void l8();         // +0x20
+    virtual bool Check();      // +0x24 (slot 9)
+};
+
+struct IProv {                 // provider object at +0x1c
+    virtual void p0(); virtual void p1(); virtual void p2();
+    virtual uint32_t GetKind();                       // slot 3 / +0x0c
+    virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7();
+    virtual void p8(); virtual void p9(); virtual void pA(); virtual void pB();
+    virtual void pC();
+    virtual bool Make(void* pKey, void** ppOut);      // slot 0xd / +0x34
+};
+
+struct IResProv {              // param_3 in FUN_006b4b60
+    virtual void q0(); virtual void q1(); virtual void q2(); virtual void q3();
+    virtual void q4(); virtual void q5(); virtual void q6(); virtual void q7();
+    virtual void q8(); virtual void q9();
+    virtual bool Run(void* pA, void* pB, int c, uint32_t d);   // slot 0xa / +0x28
+};
+
+struct GfarStream {            // EA::IO::GraphicsFactoryAsyncRequest at +0x20 (size 0x24)
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
+    virtual void s4(); virtual void s5();
+    virtual void Flush();      // slot 6 / +0x18
+    virtual int  Size();       // slot 7 / +0x1c
+    GfarStream(void* pData, void* pUnused, const char* pName);  // 0x0093c270
+    void* GetData();                                            // 0x0093ba70
+    void  SetProperty(int index, float value);                  // 0x0093bb40
+    char mData[0x20];
+};
+
+struct JobBaseA {              // primary base (cILayer)
+    virtual void AddRef();     // slot 0
+    virtual void Release();    // slot 1
+    virtual void a2(); virtual void a3(); virtual void a4(); virtual void a5();
+};
+struct AsyncSave;
+
+struct JobBaseB {              // secondary base at +4 (BG6)
+    virtual void b0(); virtual void b1(); virtual void b2();
+    virtual void b3(); virtual void b4(); virtual void b5();
+    virtual void b6(); virtual void b7(); virtual void b8();
+    virtual bool Complete();       // slot 9 / +0x24; `this` is the +4 subobject
+};
+
+struct AsyncSave : JobBaseA, JobBaseB {
+    uint32_t   m8;         // +0x08
+    IRefC*     m0c;        // +0x0c
+    Key3       m10;        // +0x10
+    IProv*     m1c;        // +0x1c (provider, secondary interface at +4)
+    GfarStream mStrm;      // +0x20
+    uint32_t   m44;        // +0x44 (refcount)
+    uint32_t   m48;        // +0x48
+    uint32_t   m4c;        // +0x4c
+    uint32_t   m50;        // +0x50
+    uint16_t   m54;        // +0x54
+    AsyncSave(IRefC* pTarget, void* pProvider, Key3* pKey);
+    bool     Finish(cJob* c);
 };
 
 // @ 0x006b47a0
 void __cdecl FUN_006b47a0(cJob* p)
 {
-    // complete structure requires the EA::Thread scoped mutex; stubbed body.
-    (void)p;
+    if (g_saveJobReady == 1) {
+        MutexScopedLock lock(&g_saveMutex);
+        p->AddWeakDependency(g_saveJob);
+        if (p != g_saveJob) {
+            cJob* old = g_saveJob;
+            if (p)
+                p->AddRef();
+            g_saveJob = p;
+            if (old)
+                old->Release();
+        }
+    }
 }
+
+struct AutoRef {
+    cJob* mpObject;
+    AutoRef(cJob* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRef() { if (mpObject) mpObject->Release(); }
+};
 
 // @ 0x006b4840
 void __cdecl FUN_006b4840()
 {
+    if (g_saveJobReady == 1) {
+        g_saveMutex.Lock(&g_lockTimeout);
+        AutoRef ref(g_saveJob);
+        g_saveMutex.Unlock();
+        if (ref.mpObject)
+            ref.mpObject->Wait();
+    }
 }
 
-struct AsyncSave : cJob {
-    void* FUN_006b48d0(cJob* p, int a, void* key);
-    bool  FUN_006b4a10(int arg);
-    bool  FUN_006b4ce0();
-    void* Init(cJob* p, int a, void* key) { return FUN_006b48d0(p, a, key); }
-};
-
 // @ 0x006b48d0
-void* AsyncSave::FUN_006b48d0(cJob* p, int a, void* key)
+AsyncSave::AsyncSave(IRefC* pTarget, void* pProvider, Key3* pKey)
+    : mStrm(0, 0, "UTF/MemoryStream")
 {
-    (void)p; (void)a; (void)key;
-    return this;
+    m8 = 0;
+    m0c = pTarget;
+    if (pTarget != 0)
+        pTarget->v0();
+    m10 = *pKey;
+    m1c = (IProv*)pProvider;
+    if (pProvider != 0)
+        ((IRefC*)((char*)pProvider + 4))->v0();
+    m54 = 0;
+    m44 = 1;
+    m48 = 0;
+    m4c = 0;
+    m50 = 0;
+    mStrm.s1();
+    mStrm.SetProperty(1, 1.0f);
+    mStrm.SetProperty(2, 2.0f);
+    mStrm.SetProperty(3, 15000.0f);
 }
 
 // @ 0x006b4a10
-bool AsyncSave::FUN_006b4a10(int arg)
+bool AsyncSave::Finish(cJob* c)
 {
-    (void)arg;
-    return false;
+    void* data = mStrm.GetData();
+    int   size = mStrm.Size();
+    ILocal* obj = 0;
+    if (!m1c->Make(&m10, (void**)&obj)) {
+        if (obj)
+            obj->Release();
+        return false;
+    }
+    ILocal2* p = obj->Get();
+    bool w = p->Write(data, size);
+    bool chk = obj->Check();
+    bool res = (chk && w);
+    mStrm.Flush();
+    if (obj) {
+        obj->Release();
+        obj = 0;
+    }
+    if (m0c) {
+        IRefC* t = m0c;
+        m0c = 0;
+        t->v1();
+    }
+    if (m1c) {
+        IRefC* t = (IRefC*)((char*)m1c + 4);
+        m1c = 0;
+        t->v1();
+    }
+    c->SetResult(0);
+    return res;
 }
 
 // @ 0x006b4b60
-char __cdecl FUN_006b4b60(int a, int b, int c, void* d)
+char __cdecl FUN_006b4b60(void* pArg0, void* pArg1, IResProv* pArg2, Key3* pArg3)
 {
-    (void)a; (void)b; (void)c; (void)d;
-    return 0;
+    char result = 0;
+    ResMgr* mgr = (ResMgr*)FUN_0067dcd0();
+    if (pArg0 != 0) {
+        Key3 key;
+        if (pArg3 == 0) {
+            key.inst  = *(uint32_t*)((char*)pArg0 + 8);
+            key.type  = *(uint32_t*)((char*)pArg0 + 0xc);
+            key.group = *(uint32_t*)((char*)pArg0 + 0x10);
+        } else {
+            key = *pArg3;
+        }
+        if (pArg1 == 0) {
+            pArg1 = mgr->GetByKey(&key);
+            if (pArg1 == 0)
+                return 0;
+        }
+        if (pArg2 == 0) {
+            pArg2 = (IResProv*)mgr->FindResource(key.type, *(uint32_t*)((char*)pArg0 + 0xc));
+            if (pArg2 == 0)
+                return 0;
+        }
+        AsyncSave* mem = (AsyncSave*)ZoneObject_new(0x58, "App/AsyncSave", 0, 0, 0, 0);
+        AsyncSave* job = 0;
+        if (mem != 0)
+            job = new (mem) AsyncSave((IRefC*)pArg0, pArg1, &key);
+        if (job != 0)
+            job->AddRef();
+        void* jsec = (job == 0) ? 0 : (void*)((char*)job + 4);
+        result = pArg2->Run(pArg0, jsec, 0, key.type);
+        if (result == 0)
+            job->m44 = 0;
+        else if (job != 0)
+            job->Complete();
+        job->Release();
+    }
+    return result;
 }
 
 // @ 0x006b4ce0
-bool AsyncSave::FUN_006b4ce0()
+bool JobBaseB::Complete()
 {
-    return false;
+    AsyncSave* self = (AsyncSave*)((char*)this - 4);
+    if (self->m44 == 0)
+        return false;
+    if (--self->m44 != 0)
+        return true;
+    JobMgr* mgr = (JobMgr*)FUN_0068f4d0();
+    mgr->Lock();
+    cJob* job1 = 0;
+    if (!mgr->BeginJob(&job1)) {
+        if (job1)
+            job1->Release();
+        mgr->Unlock();
+        return false;
+    }
+    uint32_t kind = self->m1c->GetKind();
+    bool pair;
+    if (kind == 0x2a43bd44 || kind == 0x6492c68)
+        pair = true;
+    else if (kind == 0x498d9c1)
+        pair = (FUN_00695cf0(&self->m1c) != 0 || FUN_006b4390((void**)&self->m1c) != 0);
+    else
+        pair = false;
+    if (pair) {
+        cJob* job2 = 0;
+        if (!mgr->BeginJob(&job2)) {
+            if (job2)
+                job2->Release();
+            if (job1)
+                job1->Release();
+            mgr->Unlock();
+            return false;
+        }
+        job2->mThreadAffinity = 0x80000000;
+        job2->mpCallback = (void*)&FUN_006b4710;
+        job2->mpCallbackData = self;
+        job2->SetResult(self);
+        job1->AddDependency(job2);
+        job1->mThreadAffinity = 4;
+        job1->mpCallback = (void*)&FUN_006b4720;
+        job1->mpCallbackData = self;
+        job1->SetResult(self);
+        job1->GetStatus();
+        if (job2)
+            job2->Release();
+    } else {
+        job1->mThreadAffinity = 4;
+        job1->mpCallback = (void*)&FUN_006b4b50;
+        job1->mpCallbackData = self;
+        job1->SetResult(self);
+    }
+    FUN_006b47a0(job1);
+    job1->GetStatus();
+    if (job1)
+        job1->Release();
+    mgr->Unlock();
+    return true;
 }
 
 // @ 0x006b56d0
