@@ -7,10 +7,12 @@
 005aa5b0 ?Update@cPinning@@QAEXH@Z  # cPinning::Update migrated from s005a9d40 (verbatim, slice spelling)
 005aa5d0 ?ClampToPinned@@YGXPAUVec3@@MMMPAVcBlockSet@@@Z  # ClampToPinned migrated from s005a9d40 (verbatim, slice spelling)
 005aa740 ?RemoveCopyBlocks@@YAPAV?$AutoRef@VcBlock@@@@PAV1@00PBV1@@Z  # RemoveCopyBlocks migrated from s005a9d40 (verbatim, slice spelling)
-005aa7a0 SP::cSPEditorManipulationCellPinning::CalculateInflatedMesh  # PDB candidate
-005aa9c0 manipulation helper  # unnamed
-005aab00 manipulation helper  # unnamed
+005aa7a0 ?CalculateInflatedMesh@cCellPinning@@QAEXXZ  # cCellPinning::CalculateInflatedMesh migrated from s005a9d40 (verbatim, slice spelling)
+005aa9c0 ?GetPlacement@cCellPinning@@QAE_NUVec3@@0PAU2@PAUMat3@@1@Z  # cCellPinning::GetPlacement migrated from s005a9d40 (verbatim, slice spelling)
+005aab00 ?Setup@cCellPinning@@QAEXABV?$AutoRef@VcBlock@@@@MMMV?$AutoRef@VcSkinMgrIface@@@@_N2@Z  # cCellPinning::Setup migrated from s005a9d40 (verbatim, slice spelling)
 005aac30 ??0cCellPinning@@QAE@XZ  # cCellPinning::cCellPinning migrated from s005a9d40 (verbatim, slice spelling)
+004a89e0  ?BuildOrientation@@YAXPAUMat3@@PBUVec3@@1@Z  # cdecl helper declared inside the slice's extern "C++" block; needed by migrated verbatim 005aa7a0/005aa9c0
+004a5bd0  ?VecLength@@YAMPAX@Z  # cdecl helper declared inside the slice's extern "C++" block; needed by migrated verbatim 005aab00
 013ec458  ??_7cRC@@6B@  # refcount base vtable (same as ??_7BaseB2@@6B@), stored first by both ctors
 013f7028  ??_7cManipTactile@@6BcRC@@@  # cRC-subobject vtable (+0x14) stored by ctor 005aa420
 013f7038  ??_7cManipTactile@@6BcManipBase@@@  # primary vtable stored by ctor 005aa420 / dtor 005aa4e0

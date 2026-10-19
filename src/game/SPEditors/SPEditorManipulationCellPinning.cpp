@@ -39,6 +39,7 @@ struct Mat3 {
     Mat3(const Mat3& o);   // out-of-line copy ctor (Matrix3::Assign at 0x0041cb40)
     Mat3() {}
 };
+extern Vec3 g_up2;           // 0x015e88dc
 class cCamObj { public: char pad[0xc]; Vec3 pos; };
 class cBlockInfo {
 public:
@@ -103,19 +104,34 @@ public:
     char pad1[0xdc8 - 0x54];
     uint32_t mFlags;             // +0xdc8
 };
-extern const float g_lowInit;    // 0x013f70b0 (FLT_MAX)
-extern const float g_highInit;   // 0x013f70ac (FLT_MIN)
 class cSkinMgrIface {
 public:
     virtual void AddRef();
     virtual void Release();
 };
+class cMeshData {
+public:
+    char pad0[8];
+    Vec3* mPositions;      // +8
+    char pad1[0x1c - 0xc];
+    Vec3* mNormals;        // +0x1c
+    void F490(Vec3 v, Vec3* out);   // 0x0050c490, thiscall ret 0x10
+    void F5a0(Vec3 v, Vec3* out);   // 0x0050c5a0, thiscall ret 0x10
+};
+class cSkin { public: char pad[0x34]; cMeshData* mMesh; };
+class cSkinMgr { public: cSkin* GetSkin(int idx); };   // SP::cSPEditorSkinManager::GetSkin 0x004c49e0
 class cEdgeObj {
 public:
     char pad0[8];
     Vec3* mVerts;          // +8
     Vec3* mVertsEnd;       // +0xc
     bool F50bd90(const Vec3* a, const Vec3* b, int one, float* p5, float* p4, float* p3, float* p2, float* p1);   // 0x0050bd90 thiscall ret 0x20
+};
+class cPosObj { public: char pad[0x48]; float x, y; };      // helper objects with pos
+class cPosHolder {
+public:
+    cPosObj* F4ac610();        // 0x004ac610
+    cPosObj* F4ac710();        // 0x004ac710
 };
 class cCellPinning : public cManipBase, public cRC {
 public:
@@ -628,6 +644,94 @@ AutoRef<cBlock>* RemoveCopyBlocks(AutoRef<cBlock>* first, AutoRef<cBlock>* last,
         }
     }
     return dest;
+}
+
+// @ 0x005aa7a0
+void cCellPinning::CalculateInflatedMesh()
+{
+    void BuildOrientation(Mat3* out, const Vec3* dir, const Vec3* up);
+    cSkinMgr* skinMgr = (cSkinMgr*)mSkinRef.p;
+    cMeshData* mesh = skinMgr->GetSkin(0)->mMesh;
+    cEdgeObj* eo = mEdges;
+    if (eo && mesh) {
+        int n = (int)(eo->mVertsEnd - eo->mVerts);
+        if (n > 0) {
+            int off = 0;
+            do {
+                Vec3 nrm = *(Vec3*)((char*)mesh->mNormals + off);
+                Vec3 pos = *(Vec3*)((char*)mesh->mPositions + off);
+                Vec3 negN;
+                negN.x = -nrm.x;
+                negN.y = -nrm.y;
+                negN.z = -nrm.z;
+                Mat3 m;
+                BuildOrientation(&m, &negN, &g_up2);
+                float az = nrm.z < 0 ? -nrm.z : nrm.z;
+                float f = 1.0f;
+                if (az < 0.5f)
+                    f = (1.0f - az) * 0.5f + 1.0f;
+                if (sqrtf((mOffX * mOffX + mOffY * mOffY) + mOffZ * mOffZ) < 0.1f)
+                    f = f * 1.5f;
+                float a = mOffX * f;
+                float b = mOffY * f;
+                float c = mOffZ * f;
+                Vec3* dst = (Vec3*)((char*)mEdges->mVerts + off);
+                dst->x = ((m.m[6] * c + m.m[3] * b) + m.m[0] * a) + pos.x;
+                dst->y = ((m.m[1] * a + m.m[4] * b) + m.m[7] * c) + pos.y;
+                dst->z = ((m.m[8] * c + m.m[5] * b) + m.m[2] * a) + pos.z;
+                off += 12;
+                n--;
+            } while (n != 0);
+        }
+    }
+}
+
+// @ 0x005aa9c0
+bool cCellPinning::GetPlacement(Vec3 a, Vec3 b, Vec3* o7, Mat3* o8, Vec3* o9)
+{
+    void BuildOrientation(Mat3* out, const Vec3* dir, const Vec3* up);
+    float buf[20];
+    bool ok = mEdges->F50bd90(&a, &b, 1, &buf[1], &buf[0], &buf[2], &buf[5], &buf[15]);
+    cSkin* skin = ((cSkinMgr*)mSkinRef.p)->GetSkin(0);
+    cMeshData* mesh = skin->mMesh;
+    if (!ok || !mesh)
+        return false;
+    *o9 = *(Vec3*)&buf[5];
+    Vec3 A = *(Vec3*)&buf[1];
+    Vec3 out1, out2;
+    mesh->F490(A, &out1);
+    mesh->F5a0(A, &out2);
+    Mat3 m;
+    BuildOrientation(&m, &out2, &g_up2);
+    *o7 = out1;
+    *o8 = m;
+    return true;
+}
+
+// @ 0x005aab00
+void cCellPinning::Setup(const AutoRef<cBlock>& blk, float x, float y, float, AutoRef<cSkinMgrIface> skin, bool b1, bool b2)
+{
+    float VecLength(void* obj);
+    mBlockRef = blk;
+    mOffX = x;
+    mOffY = y;
+    mOffZ = 0.0f;
+    mSkinRef = skin;
+    m148 = b1;
+    mFlag44 = b2;
+    cPosHolder* h = (cPosHolder*)mBlockRef.p->mInfo;
+    cPosObj* p1 = h->F4ac610();
+    cPosObj* p2 = h->F4ac710();
+    mV1.x = p1->x;
+    mV1.y = p1->y;
+    mV1.x = 0.0f;
+    mV1.z = 0.0f;
+    mV1.y = mV1.y - VecLength(p1);
+    mV2.x = p2->x;
+    mV2.y = p2->y;
+    mV2.x = 0.0f;
+    mV2.z = 0.0f;
+    mV2.y = VecLength(p2) + mV2.y;
 }
 
 // @ 0x005aac30
