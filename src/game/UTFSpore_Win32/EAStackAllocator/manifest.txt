@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAStackAllocator.cpp  ?Init@StackAllocator_s0092_8b00@Allocator@EA@@QAEXPAUBlock_s0092_8b00@23@IP6APAXIPAIPAX@ZP6AX22@Z2@Z  00928b00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

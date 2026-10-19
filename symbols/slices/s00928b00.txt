@@ -1,5 +1,6 @@
-00928b00 EA::Allocator::StackAllocator::Init  # 2008 dev PDB name
+00928b00 ?Init@StackAllocator_s0092_8b00@Allocator@EA@@QAEXPAUBlock_s0092_8b00@23@IP6APAXIPAIPAX@ZP6AX22@Z2@Z  # StackAllocator_s0092_8b00::Init migrated from s00928b00 (verbatim, slice spelling)
 00928ba0 EA::Allocator::StackAllocator::AllocateNewBlock  # 2008 dev PDB (previous name); block alloc + grow
-00928cd0 EA::Allocator::StackAllocator::StackAllocator  # 2008 dev PDB name
+00928c40 ?Reset@StackAllocator_s0092_8b00@Allocator@EA@@QAEXPAX@Z  # StackAllocator_s0092_8b00::Reset migrated from s00928b00 (verbatim, slice spelling)
+00928cd0 ??0StackAllocator_s0092_8b00@Allocator@EA@@QAE@PAXIP6APAXIPAI0@ZP6AX00@Z0@Z  # StackAllocator_s0092_8b00::StackAllocator migrated from s00928b00 (verbatim, slice spelling)
 00928d40 EA::Allocator::StackAllocator::MallocAligned  # 2008 dev PDB name
 00928dc0 EA::Allocator::StackAllocator::Reset  # tail-call thunk to 0x00928c40
