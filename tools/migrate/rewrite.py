@@ -5293,7 +5293,7 @@ def main():
         if n[0] != "probe":
             print("note", n[0], n[1][:200])
     if a.batch:
-        other_vars = sorted({var_of[va] for va in listed_all if var_of.get(va, "") != a.variant})
+        other_vars = sorted({var_of.get(va, "") for va in listed_all if var_of.get(va, "") != a.variant})
         for v in other_vars:
             vv = sorted(va for va in listed_all if var_of.get(va, "") == v)
             print("VARIANT SOURCE: %d batch function(s) of this slice live in %s%s.cpp (%s): after this entry, run the same "
