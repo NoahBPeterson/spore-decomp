@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/CoreAllocatorGeneral.cpp  ?GetDefaultAllocatorX@Trace@EA@@YAPAXXZ  00925cb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

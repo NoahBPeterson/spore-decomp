@@ -1,4 +1,5 @@
 00925770 ?CreateTracerPtr@Trace@EA@@YAPAXXZ  # CreateTracerPtr migrated from s00925770 (verbatim, slice spelling)
+00925cb0 ?GetDefaultAllocatorX@Trace@EA@@YAPAXXZ  # GetDefaultAllocatorX migrated from s00925770 (verbatim, slice spelling)
 00925e60 ?FUN_00925e60@HashHolder@Trace@EA@@QAEXXZ  # FUN_00925e60_hash migrated from s00925770 (verbatim, slice spelling)
 00925f30 ?F@C25f30@Trace@EA@@QAEXHHH@Z  # C25f30::F migrated from s00925770 (verbatim, slice spelling)
 00926020 ?ZoneObject_new@Trace@EA@@YAPAXHHH@Z  # ZoneObject_new migrated from s00925770 (verbatim, slice spelling)
