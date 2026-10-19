@@ -4094,8 +4094,11 @@ class Rewrite:
                 old = open(tu).read()
                 parts = re.split(r"(?m)^(?=// @ 0x[0-9a-fA-F]+$)", old)
                 old_vas = {int(re.match(r"// @ 0x([0-9a-fA-F]+)", b).group(1), 16) for b in parts[1:]}
-                if old_vas and not old_vas <= {c.va for c in self.chunks}:
-                    # functions of other slices live in this TU: keep them, merge preamble and blocks
+                if old_vas and (not old_vas <= {c.va for c in self.chunks} or old_vas - {c.va for c in fns}):
+                    # functions of other slices live in this TU, or a function of this slice that this run does not emit
+                    # (mig17 ZoneObject 2026-10-19: a TU of only s00925770 was rewritten from this run's output and the
+                    # committed, byte-exact 0x926020, dropped this run on an unrelated C3861, vanished): keep them, merge
+                    # preamble and blocks; the prune below still removes what the slice deliberately holds back
                     old_pre = parts[0]
                     mine = {c.va for c in self.chunks}
                     bv = getattr(self, "batch_vas", None)
