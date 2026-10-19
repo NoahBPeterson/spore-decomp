@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+005bc860 126 ctor: all zero-stores present; base-ctor call/register schedule differ (compiled shorter)
+005bc930 61 dtor: member destruction present; eastl::sp_vector destructor shape differs
+005bccc0 1978 cSPEditorManipulationStackingSimple::DoOnMouseMove; complete (all calls in order), /O2 SSE scheduling and register allocation differ

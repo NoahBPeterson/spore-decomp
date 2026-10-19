@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorManipulationStackingSimple.cpp  ?Init@cSPEditorManipulationStackingSimple@SP@@QAEXPAPAVcSPEditorBlock_s005b_c0f0@2@UcSPVector3_s005b_c0f0@@@Z  005bc7f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
