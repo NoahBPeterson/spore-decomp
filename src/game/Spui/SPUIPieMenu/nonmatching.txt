@@ -1,10 +1,18 @@
-# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+# va  diff-bytes  reason
 00817e20 27 cSPUIPieMenu::Init: resource-key build + 5-arg vtable dispatch shape differs
 00817ee0 134 cSPUIPieMenuItem::SetTextColor: nested window/property vtable sequence differs
+00818000 82 cSPUIPieMenuItem::SetIcon: complete; SSE operand folding/schedule in rect centring differs (fast-math pragma) [equiv: WEAK 6.9% coverage]
 008181e0 97 item loop colour set: register allocation / pointer increment differs
 00818250 97 item loop text-colour set: register allocation / pointer increment differs
 008182c0 93 item loop position assign: register allocation / pointer increment differs
+008183a0 281 FUN_008183a0 (pie ray quad/tri draw): complete; xmm allocation differs around inline fsqrt [equiv: UNSUPPORTED fake-arity]
+00818500 58 FUN_00818500 (disjoin_items): complete; store/add interleave of 4 rect floats differs [equiv: PASS]
 008188d0 123 cSPUIPieMenuItem::SetId: branch/flag schedule differs
+008189a0 255 cSPUIPieMenuItem::Update: complete; needs /fp:fast; frame 0x28 vs 0x24 (ra/offx/offy slot sharing), cast=0 branch layout, anchor store schedule [equiv: WEAK 5% coverage]
+00818d20 717 cSPUIPieMenu::DoMessage: complete; needs /fp:fast; arg-temp scheduling and register allocation (ebx handle vs spilled), rect expansion order [equiv: WEAK 18% coverage]
 008191b0 8 member release loop: mpRHSWindowSet load scheduled before mpCurrentWindow clear (behaviour equivalent)
+00819360 1096 cSPUIPieMenu::rebuild_layout: complete; needs /fp:fast (inline fsin/fcos); frame matches, register allocation of cnt/idx loop and extents min/max differ [equiv: WEAK 7% coverage]
+00819ad0 74 cSPUIPieMenu::Show: complete; SSE scheduling of the clamp temporaries and the v=pos copy register pairing differ [equiv: UNSUPPORTED (0 valid inputs)] flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00819e00 79 copy-range helper (FUN_00818650 + 5-field tail copy): schedule differs
 00819e60 124 destroy-range helper: bulk destroy loop scheduling differs
+00819f90 372 cSPUIPieMenu::reload_icons: complete; register allocation (this=esi vs edi) and AutoRefCount temp reload differ [equiv: WEAK (no mismatch, 29% cov)] flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

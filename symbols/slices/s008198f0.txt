@@ -1,10 +1,12 @@
-008198f0 cSPUIPieMenuItem::Init  # PDB name
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s008198f0, named from the dev publics; slice address comment)
+008198f0 ?Init@cSPUIPieMenuItem_s0081_98f0@@QAE_NPAXPBUKey@@DIDHH_N@Z  # cSPUIPieMenuItem_s0081_98f0::Init migrated from s008198f0 (verbatim, slice spelling)
+00819ad0 ?Show@cSPUIPieMenu_s0081_98f0@@QAEXUPoint2@@PAXH@Z  # cSPUIPieMenu_s0081_98f0::Show migrated from s008198f0 (verbatim, slice spelling)
 00819e00 ?FUN_00819e00@@YAHPAD00@Z  # FUN_00819e00 migrated from s008198f0 (verbatim, slice spelling)
 00819e60 ?FUN_00819e60@@YAHPAD0H@Z  # FUN_00819e60 migrated from s008198f0 (verbatim, slice spelling)
 00819f10 ?FUN_00819f10@@YGXPAD0@Z  # FUN_00819f10 migrated from s008198f0 (verbatim, slice spelling)
-00819f90 cSPUIPieMenu::reload_icons  # PDB name
-0081a1f0 UI::cSPUIPieMenu::cSPUIPieMenu  # vtbl 0x1418fa4/0x1418f94
-0081a2b0 cSPUIPieMenu::~cSPUIPieMenu  # PDB name
-0081a6d0 cSPUIPieMenu::Shutdown  # PDB name
-00819ad0 cSPUIPieMenu::Show  # PDB candidate (caller-single); body: clamps menu rect to parent, positions icons
-0081a510 eastl::vector<cSPUIPieMenu::cItemInfo,eastl::sp_vector_allocator>::DoInsertValue  # 0x4c-byte element insert/grow
+00819f90 ?reload_icons@cSPUIPieMenu_s0081_98f0@@QAEXXZ  # cSPUIPieMenu_s0081_98f0::reload_icons migrated from s008198f0 (verbatim, slice spelling)
+0081a1f0 ??0cSPUIPieMenu_s0081_98f0@@QAE@XZ  # cSPUIPieMenu_s0081_98f0::cSPUIPieMenu migrated from s008198f0 (verbatim, slice spelling)
+0081a2b0 ??1cSPUIPieMenu_s0081_98f0@@QAE@XZ  # cSPUIPieMenu_s0081_98f0::~cSPUIPieMenu migrated from s008198f0 (verbatim, slice spelling)
+0081a350 ?Init@cSPUIPieMenu_s0081_98f0@@QAE_NPBUKey@@0DPAXD@Z  # cSPUIPieMenu_s0081_98f0::Init migrated from s008198f0 (verbatim, slice spelling)
+0081a510 ?DoInsertValue@ItemVec@@QAEXPADPBD@Z  # ItemVec::DoInsertValue migrated from s008198f0 (verbatim, slice spelling)
+0081a6d0 ?Shutdown@cSPUIPieMenu_s0081_98f0@@QAE_NXZ  # cSPUIPieMenu_s0081_98f0::Shutdown migrated from s008198f0 (verbatim, slice spelling)

@@ -2,8 +2,20 @@
 ../src/game/Spui/SPUIPieMenu.cpp  ?sub817fa0@cSPUIPieMenuItem@@QAEXH@Z  00817fa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/Spui/SPUIPieMenu.cpp  ?teardown@Holder2@@QAEXXZ  00818330  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/Spui/SPUIPieMenu.cpp  ?has@WinProcHolder@@QAE_NPAUIWindow@@@Z  00818370  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Spui/SPUIPieMenu.cpp  ??0PieItemFull@@QAE@ABU0@@Z  00818650  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Spui/SPUIPieMenu.cpp  ?assign@PieItemFull@@QAEAAU1@ABU1@@Z  008186f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Spui/SPUIPieMenu.cpp  ??0PieItemFull@@QAE@XZ  00818820  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/Spui/SPUIPieMenu.cpp  ?MarkUnused@cSPUIPieMenuItem@@QAEXXZ  00818950  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/Spui/SPUIPieMenu.cpp  ?RemoveItem@cSPUIPieMenu@@QAEXXZ  00818c80  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Spui/SPUIPieMenu.cpp  ?CopyItemsFwd@@YAPAUItemInfo@@PAU1@00@Z  008190f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Spui/SPUIPieMenu.cpp  ?CopyItemsBack@@YAPAUItemInfo@@PAU1@00@Z  00819150  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Spui/SPUIPieMenu.cpp  ?SetText@cSPUIPieMenuItem_s0081_89a0@@QAEXPB_W_N@Z  00819220  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/Spui/SPUIPieMenu.cpp  ?SetOrientation@cSPUIPieMenuItem_s0081_89a0@@QAEX_N0@Z  008192e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/Spui/SPUIPieMenu.cpp  ?dtor819880@cSPUIPieMenuItem_s0081_89a0@@QAEXXZ  00819880  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Spui/SPUIPieMenu.cpp  ?Init@cSPUIPieMenuItem_s0081_98f0@@QAE_NPAXPBUKey@@DIDHH_N@Z  008198f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPieMenu.cpp  ?FUN_00819f10@@YGXPAD0@Z  00819f10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Spui/SPUIPieMenu.cpp  ??0cSPUIPieMenu_s0081_98f0@@QAE@XZ  0081a1f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPieMenu.cpp  ??1cSPUIPieMenu_s0081_98f0@@QAE@XZ  0081a2b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPieMenu.cpp  ?Init@cSPUIPieMenu_s0081_98f0@@QAE_NPBUKey@@0DPAXD@Z  0081a350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPieMenu.cpp  ?DoInsertValue@ItemVec@@QAEXPADPBD@Z  0081a510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPieMenu.cpp  ?Shutdown@cSPUIPieMenu_s0081_98f0@@QAE_NXZ  0081a6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

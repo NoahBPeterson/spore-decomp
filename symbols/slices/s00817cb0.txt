@@ -2,15 +2,16 @@
 00817eb0 cSPUIPieMenuItem::SetPos  # stores +0x64/+0x68, returns true
 00817ee0 ?SetTextColor@cSPUIPieMenuItem@@QAEXH@Z  # cSPUIPieMenuItem::SetTextColor migrated from s00817cb0 (verbatim, slice spelling)
 00817fa0 ?sub817fa0@cSPUIPieMenuItem@@QAEXH@Z  # cSPUIPieMenuItem::sub817fa0 migrated from s00817cb0 (verbatim, slice spelling)
-00818000 cSPUIPieMenuItem::SetIcon  # PDB name
+00818000 ?SetIcon@cSPUIPieMenuItem@@QAEXH@Z  # cSPUIPieMenuItem::SetIcon migrated from s00817cb0 (verbatim, slice spelling)
 008181e0 ?setColor@PieMenu03@@QAEXIH@Z  # PieMenu03::setColor migrated from s00817cb0 (verbatim, slice spelling)
 00818250 ?setTextColor@PieMenu04@@QAE_NIH@Z  # PieMenu04::setTextColor migrated from s00817cb0 (verbatim, slice spelling)
 008182c0 ?assign@PieMenu02@@QAE_NHH@Z  # PieMenu02::assign migrated from s00817cb0 (verbatim, slice spelling)
 00818330 ?teardown@Holder2@@QAEXXZ  # Holder2::teardown migrated from s00817cb0 (verbatim, slice spelling)
 00818370 ?has@WinProcHolder@@QAE_NPAUIWindow@@@Z  # WinProcHolder::has migrated from s00817cb0 (verbatim, slice spelling)
-00818500 cSPUIPieMenu::disjoin_items  # PDB name
+008183a0 ?FUN_008183a0@@YGXPAUIPieDraw@@PAM1HHMH@Z  # FUN_008183a0 migrated from s00817cb0 (verbatim, slice spelling)
+00818500 ?FUN_00818500@@YG_NPAM0MM@Z  # FUN_00818500 migrated from s00817cb0 (verbatim, slice spelling)
+00818650 ??0PieItemFull@@QAE@ABU0@@Z  # PieItemFull::PieItemFull migrated from s00817cb0 (verbatim, slice spelling)
+008186f0 ?assign@PieItemFull@@QAEAAU1@ABU1@@Z  # PieItemFull::assign migrated from s00817cb0 (verbatim, slice spelling)
+00818820 ??0PieItemFull@@QAE@XZ  # PieItemFull::PieItemFull migrated from s00817cb0 (verbatim, slice spelling)
 008188d0 ?SetId@cSPUIPieMenuItem@@QAEXI@Z  # cSPUIPieMenuItem::SetId migrated from s00817cb0 (verbatim, slice spelling)
 00818950 ?MarkUnused@cSPUIPieMenuItem@@QAEXXZ  # cSPUIPieMenuItem::MarkUnused migrated from s00817cb0 (verbatim, slice spelling)
-00818650 cSPUIPieMenuItem::copy_ctor  # copy ctor: vptr 0x1418ef8, AddRef x6 smart-pointer fields (+0x1c..+0x30)
-008186f0 cSPUIPieMenuItem::operator=  # AutoRefCount assign x6, returns this
-00818820 cSPUIPieMenuItem::ctor  # default ctor, allocs "UI/ItemWinProc" cSPUIPieMenuItemWinProc

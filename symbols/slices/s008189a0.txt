@@ -1,10 +1,10 @@
-008189a0 cSPUIPieMenuItem::Update  # PDB name
+008189a0 ?Update@cSPUIPieMenuItem_s0081_89a0@@QAEXXZ  # cSPUIPieMenuItem_s0081_89a0::Update migrated from s008189a0 (verbatim, slice spelling)
 00818c80 ?RemoveItem@cSPUIPieMenu@@QAEXXZ  # cSPUIPieMenu::RemoveItem migrated from s008189a0 (verbatim, slice spelling)
-00818d20 cSPUIPieMenu::DoMessage  # PDB name
+00818d20 ?DoMessage@cSPUIPieMenu@@QAE_NPAXPAUMsg@@@Z  # cSPUIPieMenu::DoMessage migrated from s008189a0 (verbatim, slice spelling)
+008190f0 ?CopyItemsFwd@@YAPAUItemInfo@@PAU1@00@Z  # CopyItemsFwd migrated from s008189a0 (verbatim, slice spelling)
+00819150 ?CopyItemsBack@@YAPAUItemInfo@@PAU1@00@Z  # CopyItemsBack migrated from s008189a0 (verbatim, slice spelling)
 008191b0 ?sub8191b0@cSPUIPieMenuItem_s0081_89a0@@QAE_NXZ  # cSPUIPieMenuItem_s0081_89a0::sub8191b0 migrated from s008189a0 (verbatim, slice spelling)
-00819220 cSPUIPieMenuItem::SetText  # PDB name
+00819220 ?SetText@cSPUIPieMenuItem_s0081_89a0@@QAEXPB_W_N@Z  # cSPUIPieMenuItem_s0081_89a0::SetText migrated from s008189a0 (verbatim, slice spelling)
 008192e0 ?SetOrientation@cSPUIPieMenuItem_s0081_89a0@@QAEX_N0@Z  # cSPUIPieMenuItem_s0081_89a0::SetOrientation migrated from s008189a0 (verbatim, slice spelling)
+00819360 ?rebuild_layout@cSPUIPieMenu@@QAEXXZ  # cSPUIPieMenu::rebuild_layout migrated from s008189a0 (verbatim, slice spelling)
 00819880 ?dtor819880@cSPUIPieMenuItem_s0081_89a0@@QAEXXZ  # cSPUIPieMenuItem_s0081_89a0::dtor819880 migrated from s008189a0 (verbatim, slice spelling)
-008190f0 CopyItemsFwd  # cSPUIPieMenu::cItemInfo range copy forward (calls item operator= 008186f0), byte-exact
-00819150 CopyItemsBack  # cSPUIPieMenu::cItemInfo range copy backward, byte-exact
-00819360 cSPUIPieMenu::rebuild_layout  # PDB candidate name from Ghidra card
