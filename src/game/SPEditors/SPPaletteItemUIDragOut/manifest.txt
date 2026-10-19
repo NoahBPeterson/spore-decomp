@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPPaletteItemUIDragOut.cpp  ?Cast@cSPPaletteItemUIDrag@SP@@UBEPAXI@Z  005ee500  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIDragOut.cpp  ??0cSPPaletteItemUIDrag@SP@@QAE@XZ  005ee540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIDragOut.cpp  ?Init@cSPPaletteItemUIDrag@SP@@UAEXPAVcSPPaletteItem_s005e_e480@2@PAVIWindow_s005e_e480@UTFWin@EA@@HPAUcSPPaletteInfo_s005e_e480@2@@Z  005ee5e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIDragOut.cpp  ?Shutdown@cSPPaletteItemUIDrag@SP@@UAEXXZ  005ee660  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIDragOut.cpp  ?OnSelected@cSPPaletteItemUIDrag@SP@@UAEXXZ  005ee6a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIDragOut.cpp  ?OnDeselected@cSPPaletteItemUIDrag@SP@@UAEXXZ  005ee6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

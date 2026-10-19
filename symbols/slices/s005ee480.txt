@@ -3,10 +3,13 @@
 005c6b10 ?HandleMessage@cSPPaletteItemUISelectable@SP@@MAE_NIPAX@Z  # SP::cSPPaletteItemUISelectable::HandleMessage (callee of s005ee480, named from the dev publics; slice address comment)
 005c6ca0 ?Init@cSPPaletteItemUI@SP@@UAEXPAVcSPPaletteItem@2@PAVIWindow@UTFWin@EA@@1PAUcSPPaletteInfo@2@@Z  # SP::cSPPaletteItemUI::Init (callee of s005ee480, named from the dev publics; slice address comment)
 005ee480 cSPUIPropertyLayout::SetItem  # byte-exact; called from palette rollovers with (item, paletteInfo, content, show)
-005ee500 SP::cSPPaletteItemUIDrag::Cast  # in cSPPaletteItemUIDrag IWinProc vtable slot 3 (0x13f98dc+0xc), byte-exact
+005ee500 ?Cast@cSPPaletteItemUIDrag@SP@@UBEPAXI@Z  # cSPPaletteItemUIDrag::Cast migrated from s005ee480 (verbatim, slice spelling)
+005ee540 ??0cSPPaletteItemUIDrag@SP@@QAE@XZ  # cSPPaletteItemUIDrag::cSPPaletteItemUIDrag migrated from s005ee480 (verbatim, slice spelling)
 005ee590 SP::cSPPaletteItemUIDrag::`scalar deleting destructor'  # vtable 0x13f98f8 slot 0, byte-exact
-005ee660 SP::cSPPaletteItemUIDrag::Shutdown  # vtable 0x13f98f8 slot 2, byte-exact
-005ee6d0 SP::cSPPaletteItemUIDrag::OnDeselected  # vtable 0x13f98f8 slot 0x34 (pairs with OnSelected at 0x30)
+005ee5e0 ?Init@cSPPaletteItemUIDrag@SP@@UAEXPAVcSPPaletteItem_s005e_e480@2@PAVIWindow_s005e_e480@UTFWin@EA@@HPAUcSPPaletteInfo_s005e_e480@2@@Z  # cSPPaletteItemUIDrag::Init migrated from s005ee480 (verbatim, slice spelling)
+005ee660 ?Shutdown@cSPPaletteItemUIDrag@SP@@UAEXXZ  # cSPPaletteItemUIDrag::Shutdown migrated from s005ee480 (verbatim, slice spelling)
+005ee6a0 ?OnSelected@cSPPaletteItemUIDrag@SP@@UAEXXZ  # cSPPaletteItemUIDrag::OnSelected migrated from s005ee480 (verbatim, slice spelling)
+005ee6d0 ?OnDeselected@cSPPaletteItemUIDrag@SP@@UAEXXZ  # cSPPaletteItemUIDrag::OnDeselected migrated from s005ee480 (verbatim, slice spelling)
 005ee710 ?SetIsSelected@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEX_N@Z  # cSPPaletteItemUIOneClickPaint_s005e_e480::SetIsSelected migrated from s005ee480 (verbatim, slice spelling)
 005ee740 ?Trigger@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  # cSPPaletteItemUIOneClickPaint_s005e_e480::Trigger migrated from s005ee480 (verbatim, slice spelling)
 005ee760 ?OnPaintThemeSelected@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXIIH@Z  # cSPPaletteItemUIOneClickPaint_s005e_e480::OnPaintThemeSelected migrated from s005ee480 (verbatim, slice spelling)
