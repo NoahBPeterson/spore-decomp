@@ -11,6 +11,7 @@
 0083cef0 ?CtorA@PairCtorStub@@QAEXPBUstring8_s0083_c900@eastl@@PAPAH@Z  # PairCtorStub::CtorA migrated from s0083c900 (verbatim, slice spelling)
 0083d020 ?CtorB@PairCtorStub@@QAEXPBX@Z  # PairCtorStub::CtorB migrated from s0083c900 (verbatim, slice spelling)
 0083d080 ?PairStringExprDtor@@YAXPAX@Z  # PairStringExprDtor migrated from s0083c900 (verbatim, slice spelling)
+0083d140 ?insert@ExprHashtable@@QAE?AUExprInsertResult@@ABUstring8_s0083_c900@eastl@@UTrueTag@@@Z  # ExprHashtable::insert migrated from s0083c900 (verbatim, slice spelling)
 0083d240 ?EvalExpectCharThrow@@YAXPAPBDD@Z  # EvalExpectCharThrow migrated from s0083c900 (verbatim, slice spelling)
 0083d290 ?EvalContinueChar@@YAEPAPBDD@Z  # EvalContinueChar migrated from s0083c900 (verbatim, slice spelling)
 0083d2f0 ?EvalRealParentheses4@ExprStub@@QAEXPAPBDPAM1@Z  # ExprStub::EvalRealParentheses4 migrated from s0083c900 (verbatim, slice spelling)

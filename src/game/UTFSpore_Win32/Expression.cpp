@@ -18,9 +18,6 @@ extern "C" __declspec(dllimport) int   __cdecl isspace(int);
 extern char gEmptyString[];
 
 // ---- items of slice s0083c900 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
-extern "C" __declspec(dllimport) int   __cdecl isspace(int);
-extern char gEmptyString[];
 namespace eastl {
 struct allocator_s0083_c900 { unsigned char pad[4]; };
 }
@@ -38,6 +35,34 @@ struct string8_s0083_c900 {
 void  __cdecl ThrowCError(void* out, const char* fmt, ...);                // 0x0052df30
 float __cdecl EvalRealExpression(void* self, const char** p);              // 0x0083e470
 struct PairCtorStub { void CtorA(const eastl::string8_s0083_c900* s, int** ref); void CtorB(const void* src); };
+struct TrueTag {};                       // eastl::true_type (an empty by-value argument still takes a stack slot)
+struct ExprNode_s0083_c900 {
+    eastl::string8_s0083_c900 mFirst;               // +0x00  key
+    int*           mpObj;                // +0x10  AutoRefCount<cExprFunction>
+    ExprNode_s0083_c900*      mpNext;               // +0x14
+};
+struct ExprIterator { ExprNode_s0083_c900* mpNode; ExprNode_s0083_c900** mpBucket; };
+struct ExprInsertResult {                // 12 bytes, returned through a hidden pointer
+    ExprIterator first; bool second;
+    ExprInsertResult(ExprNode_s0083_c900* n, ExprNode_s0083_c900** b, bool r) { first.mpNode = n; first.mpBucket = b; second = r; }
+};
+struct RehashRequest { bool first; unsigned second; };
+struct RehashPolicy {
+    unsigned pad[2];
+    RehashRequest GetRehashRequired(unsigned nBucketCount, unsigned nElementCount, unsigned nElementAdd);  // 0x00921440
+};
+bool __cdecl StrEqual(const eastl::string8_s0083_c900& a, const eastl::string8_s0083_c900& b);   // 0x00554fb0
+struct ExprHashtable {
+    unsigned     pad0;                   // +0x00
+    ExprNode_s0083_c900**   mpBucketArray;          // +0x04
+    unsigned     mnBucketCount;          // +0x08
+    unsigned     mnElementCount;         // +0x0c
+    RehashPolicy mRehashPolicy;          // +0x10
+    ExprNode_s0083_c900* DoAllocateNode(const eastl::string8_s0083_c900& value);       // 0x0083d0c0
+    void      DoRehash(unsigned nBucketCount);                   // 0x0083cf50
+    ExprInsertResult insert(const eastl::string8_s0083_c900& value, TrueTag);   // 0x0083d140
+    static unsigned bucket_index(const eastl::string8_s0083_c900& k, unsigned c, unsigned n) { (void)k; return (unsigned)(c % n); }
+};
 struct ExprStub { void EvalRealParentheses4(const char** p, float* a, float* b); };
 // ---- items of slice s0083c900 end
 
@@ -319,6 +344,39 @@ void __cdecl PairStringExprDtor(void* self)
     eastl::string8_s0083_c900* str = (eastl::string8_s0083_c900*)self;
     if ((str->mpCapacity - str->mpBegin) > 1 && str->mpBegin)
         EASTL_allocator_deallocate(str->mpBegin);
+}
+
+// @ 0x0083d140
+ExprInsertResult ExprHashtable::insert(const eastl::string8_s0083_c900& value, TrueTag)
+{
+    const unsigned char* p = (const unsigned char*)value.mpBegin;
+    unsigned c = 0x811c9dc5;
+    unsigned ch = *p;
+    while (ch != 0) {
+        ++p;
+        c = c * 0x1000193 ^ ch;
+        ch = *p;
+    }
+    unsigned n = bucket_index(value, c, (unsigned)mnBucketCount);
+    ExprNode_s0083_c900* pNode = mpBucketArray[n];
+    ExprNode_s0083_c900** pBucket = mpBucketArray + n;
+    for (; pNode; pNode = pNode->mpNext) {
+        if (StrEqual(value, pNode->mFirst))
+            break;
+    }
+    if (pNode == 0) {
+        RehashRequest bRehash = mRehashPolicy.GetRehashRequired(mnBucketCount, mnElementCount, 1);
+        ExprNode_s0083_c900* pNodeNew = DoAllocateNode(value);
+        if (bRehash.first) {
+            n = bucket_index(value, c, bRehash.second);
+            DoRehash(bRehash.second);
+        }
+        pNodeNew->mpNext = mpBucketArray[n];
+        mpBucketArray[n] = pNodeNew;
+        ++mnElementCount;
+        return ExprInsertResult(pNodeNew, mpBucketArray + n, true);
+    }
+    return ExprInsertResult(pNode, pBucket, false);
 }
 
 // @ 0x0083d240

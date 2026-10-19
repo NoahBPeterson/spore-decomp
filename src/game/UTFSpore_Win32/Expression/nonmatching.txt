@@ -1,11 +1,11 @@
 # va  diff-bytes  reason
-0083ce90 25 complete: DiscardWhiteSpace; isspace loop register allocation differs
 0083ced0 21 complete: AutoRefCount release; branch layout differs
 0083cef0 93 complete: pair<string,AutoRefCount> ctor; string copy loop scheduling differs; equiv: FAIL (import call #0 mismatch)
 0083d020 89 complete: pair<string,AutoRefCount> copy ctor; scheduling differs; equiv: FAIL (import call #0 mismatch)
 0083d080 43 complete: pair<string,cExprFunction> dtor; branch layout differs
-0083d240 81 complete: EvalBoolParentheses (expect char + throw)
-0083d290 96 complete: EvalContinueChar (expect char + throw)
+0083d140 53 hashtable<string, pair<string,AutoRefCount<cExprFunction>>>::insert(value, true_type): complete, EASTL-shaped; div operand form (mov ecx,[esi+8] first) and node-link store scheduling differ [equiv: UNSUPPORTED, 0/400 valid: pointer-chasing inputs fault]
+0083d240 58 complete: EvalBoolParentheses (expect char + throw)
+0083d290 75 complete: EvalContinueChar (expect char + throw)
 0083d2f0 39 complete: EvalRealParentheses; float returns and throw frames differ; equiv: UNSUPPORTED (0/1200 valid: _CxxThrowException discards)
 0083d3d0 1199 complete: cExpression::EvalRealNumber (literal, parens, pi/e, 22 math builtins, user functions); EH frame/stack temps and inline string dtor placement differ; size 1801 vs 1942; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast
 0083db70 37 complete: EvalIntParentheses; calling convention/throw frame differ; difftest UNSUPPORTED (0/1200 valid inputs; all throw/fault) after ECX member fix
