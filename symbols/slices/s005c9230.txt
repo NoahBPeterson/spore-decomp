@@ -3,4 +3,4 @@
 005c9830  ?GetCurrent@cUIMissionCard@@QAEPAVcFeedCategory@@XZ  # bounds-check mSelectedIndex @+0x14 against vector @+0x6c
 005c9c70  ??0cUIMissionCard@@QAE@XZ  # ctor: 3 base vtables + 5 vectors (+0x30/+0x44/+0x58/+0x6c/+0x80)
 005c9d10  ??1cUIMissionCard@@UAE@XZ  # dtor: free vectors, release mWindow, reset base vtables
-005c9dd0  ?DoMessage@cUIMissionCard@@UAE_NHPAX@Z  # behavior message build + MessageServer send (approx)
+005c9dd0 ?cUIMissionCardDoMessageStub@@YA_NHPAX@Z  # cUIMissionCardDoMessageStub migrated from s005c9230 (verbatim, slice spelling)

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+005c9dd0  325   cUIMissionCard::DoMessage: message build/send body not reconstructed (stub)

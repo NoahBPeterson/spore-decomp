@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+005ca070 1367 cSPPaletteSubCategoryUI::Init: complete (call/vtable sequence identical, 1815 vs 1842 bytes); loop counter kept in a register by us, in memory ([esp+0x10]) by the original; btn copy temp for push_back
