@@ -1,4 +1,4 @@
-00939a60 FUN_00939a60  # printf-style tokenizer (jump table at 0x939ce4, cases ' '-'=')
+00939a60 ?ParseFormatToken@@YAHPBDPAD@Z  # ParseFormatToken migrated from s00939a60 (verbatim, slice spelling)
 00939d40 FUN_00939d40  # formatter, calls 0x939a60
 0093a1a0 EA::Stopwatch::SetUnits  # PDB name
 0093a2e0 SP::cDirectPropertyList::SetBoolProperty  # PDB name

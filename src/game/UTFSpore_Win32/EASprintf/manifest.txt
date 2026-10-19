@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EASprintf.cpp  ?Sprintf8@@YAHPADPBDZZ  00938470  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EASprintf.cpp  ?Snprintf8@@YAHPADIPBDZZ  009384e0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EASprintf.cpp  ?WriteInteger64_16@@YAPAFPAUFormatData16@@_JPAF@Z  00938bc0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EASprintf.cpp  ?Vsnprintf16@@YAHPAFIPB_WPAD@Z  00939950  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EASprintf.cpp  ?Sprintf16@@YAHPAFPB_WZZ  009399c0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EASprintf.cpp  ?Snprintf16@@YAHPAFIPB_WZZ  00939a30  /O2 /MD /Gy /TP /GS- /Isrc/game/include
