@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPAudio/eapdatom.cpp  ?atom_getfloat@@YAMPAUAtom@@@Z  00a46760  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

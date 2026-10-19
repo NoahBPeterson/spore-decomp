@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00a46770 8 float-to-int uses x87 instead of cvttss2si
+00a46790 13 symbol copy register allocation; original returns Sym2* (out) in eax, now returned too; difftest PASS under flags /O2 /MD /Gy /EHsc /TP (400 valid, 100% coverage)
+00a467c0 105 sprintf/gensym helper shape differs
+00a46830 165 snprintf loop shape differs
+00a468f0 23 condition orientation / array indexing
+00a46920 25 condition orientation / array indexing
+00a46950 15 duplicated default branch reordered; original returns Sym2* (out) in eax, now returned too; difftest PASS under flags /O2 /MD /Gy /EHsc /TP (394 valid, 100% coverage)

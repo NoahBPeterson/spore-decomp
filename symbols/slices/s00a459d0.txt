@@ -6,7 +6,11 @@
 00a46080 ?AudioFuncA8@@YG_NHHHHH@Z  # AudioFuncA8 migrated from s00a459d0 (verbatim, slice spelling)
 00a460b0 ?AudioFuncB4@@YAXXZ  # AudioFuncB4 migrated from s00a459d0 (verbatim, slice spelling)
 00a46690 ?AtomCheckPtr@@YGHPAHI@Z  # AtomCheckPtr migrated from s00a459d0 (verbatim, slice spelling)
-00a46760 EA::Audio::Eapd::atom_getfloat  # PDB name
-00a46790 EA::Audio::Eapd::atom_getsymbol  # PDB name
-00a467c0 EA::Audio::Eapd::atom_gensym  # PDB name
-00a46830 EA::Audio::Eapd::atom_vectorgensym  # PDB name
+00a46760 ?atom_getfloat@@YAMPAUAtom@@@Z  # atom_getfloat migrated from s00a459d0 (verbatim, slice spelling)
+00a46770 ?atom_getint@@YAHPAUAtom@@@Z  # atom_getint migrated from s00a459d0 (verbatim, slice spelling)
+00a46790 ?atom_getsymbol@@YAPAUSym2@@PAU1@PAUAtom@@@Z  # atom_getsymbol migrated from s00a459d0 (verbatim, slice spelling)
+00a467c0 ?atom_gensym@@YAPAUSym2@@PAU1@PAUAtom@@@Z  # atom_gensym migrated from s00a459d0 (verbatim, slice spelling)
+00a46830 ?atom_vectorgensym@@YAPAUSym2@@PAU1@HPAUAtom@@@Z  # atom_vectorgensym migrated from s00a459d0 (verbatim, slice spelling)
+00a468f0 ?atom_getfloat_at@@YAMHHPAUAtom@@@Z  # atom_getfloat_at migrated from s00a459d0 (verbatim, slice spelling)
+00a46920 ?atom_getint_at@@YAHHHPAUAtom@@@Z  # atom_getint_at migrated from s00a459d0 (verbatim, slice spelling)
+00a46950 ?atom_getsymbol_at@@YAPAUSym2@@PAU1@HHPAUAtom@@@Z  # atom_getsymbol_at migrated from s00a459d0 (verbatim, slice spelling)
