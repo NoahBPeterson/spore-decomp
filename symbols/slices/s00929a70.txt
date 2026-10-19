@@ -11,9 +11,9 @@
 00929da0 EA::CallbackSystem::Callback::Set  # fn/ctx/refcounted object
 00929e00 EA::CallbackSystem::Callback::Callback  # period 1000, jitter 500
 00929e70 EA::CallbackSystem::Callback::Callback(7 args)  # fn,ctx,period,jitter,proc,timeType,obj
-00929f80 EA::CallbackSystem::CallbackProcessor::CallbackProcessor  # PDB-derived name from card
-0092a020 EA::CallbackSystem::Init  # creates Stopwatch + 2 processors (threaded / polled)
-0092a220 EA::CallbackSystem::CallbackProcessor::Run  # IRunnable::Run, vtbl slot 1
+00929f80 ??0CallbackProcessor@CallbackSystem@EA@@QAE@PAH0PAUStopwatch_s0092_9a70@2@_N@Z  # CallbackProcessor::CallbackProcessor migrated from s00929a70 (verbatim, slice spelling)
+0092a020 ?Init@CallbackSystem@EA@@YA_NXZ  # Init migrated from s00929a70 (verbatim, slice spelling)
+0092a220 ?Run@CallbackProcessor@CallbackSystem@EA@@UAEHPAX@Z  # CallbackProcessor::Run migrated from s00929a70 (verbatim, slice spelling)
 0092a4c0 EA::CallbackSystem::CallbackProcessor::~CallbackProcessor  # sets base vtbl 0x13fc474 last
 0092a5d0 EA::CallbackSystem::CallbackProcessor::Add  # schedules a callback, starts thread "CallbackProcessor"
 0092a7a0 EA::CallbackSystem::Callback::Schedule  # Add to processor if not active
