@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/Socket_imp.cpp  ?RefCount_AddRef_M4@@YIHPAH@Z  0094ea80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

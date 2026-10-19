@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0094ea90 33 RefCount_Release_M8: complete (adjustor thunk, add ecx,-8; refcount at this-4; vcall slot0 with arg 1); register allocation differs; difftest PASS (389 valid, 100% coverage)

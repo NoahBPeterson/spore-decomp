@@ -1,5 +1,5 @@
-0094ea80 RefCount_AddRef_M4  # MI adjustor: InterlockedIncrement refcount at this-4
-0094ea90 RefCount_Release_M8  # MI adjustor: InterlockedExchangeAdd refcount at this-4; at 0 -> xchg 1 + virtual Destroy(1) on object base this-8
+0094ea80 ?RefCount_AddRef_M4@@YIHPAH@Z  # RefCount_AddRef_M4 migrated from s0094ea80 (verbatim, slice spelling)
+0094ea90 ?RefCount_Release_M8@@YIHPAH@Z  # RefCount_Release_M8 migrated from s0094ea80 (verbatim, slice spelling)
 0094eae0 ResObj94::Destroy   # destructor: rewrites vtables at +0/+8/+0x80, frees subobjects
 0094eb50 Fn0094eb50  # mutex init (flag&1 -> Lock(&arg) else Unlock)
 0094eb70 ?tmp_dh_callback@@YAPAXHHH@Z  # tmp_dh_callback migrated from s0094ea80 (verbatim, slice spelling)
