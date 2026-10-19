@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0071e390 368 SP::WriteMesh: complete stream writer; frame/local layout (byte buffer slot) differs from original
+0071ee10 41 SP::FindPrimitives: complete; register allocation of the count (edx vs ecx) differs

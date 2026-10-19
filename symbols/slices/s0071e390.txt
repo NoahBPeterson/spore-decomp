@@ -1,8 +1,8 @@
+0071e390 ?WriteMesh@@YA_NPAUIStream@@PAUMesh@@@Z  # WriteMesh migrated from s0071e390 (verbatim, slice spelling)
 0071e5e0  FillInt  # byte-exact; fills [first,last) with *value (element 4 bytes)
 0071e7a0  FillNInt  # fill n elements with a null guard
-0071ef50  vector<int>::resize  # grow via DoInsertValues 0x71e870, shrink via erase 0x4ce270
 0071ecc0  index collector  # appends matching indices (entry @0xc == key) via DoInsertValue 0x4558a0
-0071e390  SP::WriteMesh
-0071ee10  SP::FindPrimitives
-0071efa0  eastl::vector<cFaceCluster,sp_vector_allocator>::resize
 0071ed30  MergeKeys  # merge sorted keys into {short,short} vector (slice source name)
+0071ee10 ?FindPrimitives@@YAXPAUMeshPrims@@PAUVecInt@@HHH@Z  # FindPrimitives migrated from s0071e390 (verbatim, slice spelling)
+0071ef50  vector<int>::resize  # grow via DoInsertValues 0x71e870, shrink via erase 0x4ce270
+0071efa0  eastl::vector<cFaceCluster,sp_vector_allocator>::resize
