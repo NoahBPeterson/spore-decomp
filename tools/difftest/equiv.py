@@ -86,6 +86,12 @@ def prepare(sid, va, flags_override=None, log=print, src=None):
     t.flags, t.flags_how = S.choose_flags(sid, va, flags_override)
     src = src or S.source_path(sid)
     t.src = src
+    # a module TU (src/game/<dir>/<Stem>.cpp) includes `game/types.h` and the canonical headers: without /Isrc/game/include
+    # (an agent passing the slice's flags, or none) the compile failed C1083 and the row read UNSUPPORTED (mig10 papercut)
+    if os.path.normpath(src).replace(os.sep, "/").split("/src/game/")[-1] != os.path.normpath(src) or \
+            os.path.normpath(src).replace(os.sep, "/").startswith("src/game/"):
+        if not any(f.replace("\\", "/").rstrip("/").endswith("src/game/include") for f in t.flags if f.startswith("/I")):
+            t.flags = list(t.flags) + ["/Isrc/game/include"]
     if not os.path.exists(src):
         return unsupported(t, "no source %s" % src)
     t.orig_lo, t.orig_hi = img.func_extent(va)
