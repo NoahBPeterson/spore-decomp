@@ -1,6 +1,9 @@
 00448e90 ?SetPosition@cSPEditorBlock@SP@@QAEXABUcSPVector3@@_N@Z  # SP::cSPEditorBlock::SetPosition (callee of s005b4170, named from the dev publics; slice address comment)
 00449420 ?SetOrientation@cSPEditorBlock@SP@@QAEXABUcSPMatrix3@@_N@Z  # SP::cSPEditorBlock::SetOrientation (callee of s005b4170, named from the dev publics; slice address comment)
+005b4170 ?Stub_005b4170@@YAXXZ  # Stub_005b4170 migrated from s005b4170 (verbatim, slice spelling)
+005b4340 ?DoOnMouseMove@PlanarInter@@QAE_NMMH@Z  # PlanarInter::DoOnMouseMove migrated from s005b4170 (verbatim, slice spelling)
 005b4ad0 PlanarInter::SetBlock  # mBlock +0x1c, mMouseOffset +0x38, bools +0x44/+0x45
 005b4b40 SP::cSPEditorManipulationPlanarInterpenetration  # Ghidra names the ctor (vtable 013f757c)
+005b4bf0 ?Stub_005b4bf0@@YAXXZ  # Stub_005b4bf0 migrated from s005b4170 (verbatim, slice spelling)
 005b4fa0 ?Stub_005b4fa0@@YAXXZ  # Stub_005b4fa0 migrated from s005b4170 (verbatim, slice spelling)
 005b50a0 ?DoOnMouseMove@SPin50@@QAE_NMMH@Z  # SPin50::DoOnMouseMove migrated from s005b4170 (verbatim, slice spelling)

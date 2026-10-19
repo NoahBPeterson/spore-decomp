@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+005b4340 1419 PlanarInter::DoOnMouseMove: complete; x87 vs SSE scheduling of the normalize/dot math and register allocation differ
