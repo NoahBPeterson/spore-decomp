@@ -1,9 +1,12 @@
 # source  symbol  va  flags
 ../src/game/SPEditors/TraitClassifier.cpp  ?AddPoint@Box3@@QAEPAU1@ABUV3@@@Z  0056aba0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/TraitClassifier.cpp  ?DescribeTraits@cTallnessClassifier@@QAE_NPAUCreature@@PAPAMPAUcAnnotatedFeatureVector@@@Z  0056ad20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/TraitClassifier.cpp  ?InitEmpty@WStrHolder@@QAEPAU1@XZ  0056afc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/TraitClassifier.cpp  ?CopyInit@WStrSrc@@QAEPAU1@PAU1@@Z  0056b020  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEditors/TraitClassifier.cpp  ?ExtractTraits@cBlockTypePercentClassifier@@QAE_NPAUCreature_s0056_a7b0@@PAPAMPAUcFeatureVector_s0056_a7b0@@@Z  0056b080  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEditors/TraitClassifier.cpp  ?ExtractTraits@cEditorRigBlockType@@QAE_NPAUCreature_s0056_a7b0@@PAPAMPAUcFeatureVector_s0056_a7b0@@@Z  0056b2e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/TraitClassifier.cpp  ?ExtractTraits@cBlockTypePercentClassifier@@QAE_NPAUCreature@@PAPAMPAUcFeatureVector_s0056_a7b0@@@Z  0056b080  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/TraitClassifier.cpp  ?DescribeTraits@cBlockTypePercentClassifier@@QAE_NPAUCreature@@PAPAMPAUcAnnotatedFeatureVector@@@Z  0056b120  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/TraitClassifier.cpp  ?ExtractTraits@cEditorRigBlockType@@QAE_NPAUCreature@@PAPAMPAUcFeatureVector_s0056_a7b0@@@Z  0056b2e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/TraitClassifier.cpp  ?DescribeTraits@cEditorRigBlockType@@QAE_NPAUCreature@@PAPAMPAUcAnnotatedFeatureVector@@@Z  0056b440  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/TraitClassifier.cpp  ?ExtractTraits@cEditorPartCount@@QAE_NPAUCreature@@PAPAMPAUcFeatureVector@@@Z  0056b680  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/TraitClassifier.cpp  ?DescribeTraits@cEditorPartCount@@QAE_NPAUCreature@@PAPAMPAUcFeatureVector@@@Z  0056b7d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/TraitClassifier.cpp  ?ExtractTraits@cAuthorClassifier@@QAE_NPAX0PAUcFeatureVector_s0056_c570@@@Z  0056c570  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

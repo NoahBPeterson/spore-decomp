@@ -19,32 +19,22 @@ inline void operator delete(void*, void*) {}   // placement delete (<new>'s is s
 extern wchar_t g_emptyWStr[];   // 0x01667bac
 
 // ---- items of slice s0056a7b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct WStr {
-    wchar_t* mpBegin;
-    wchar_t* mpEnd;
-    wchar_t* mpCapacity;
-    void AllocateSelf(wchar_t* p, wchar_t* q);   // @ 0x00423820
-};
-struct WStrSrc {
-    float value;
-    WStr str;
-    WStrSrc* CopyInit(WStrSrc* src);   // @ 0x0056b020
-};
 extern "C" double __cdecl fabs(double);
 #pragma intrinsic(fabs)
-struct PList_s0056_a7b0 {                       // cPropertyList (refcounted)
+template <int N> inline void ScratchSlots() { uint32_t s[N]; }
+struct PList {                       // cPropertyList (refcounted)
     virtual void AddRef();           // 0x00
     virtual void Release();          // 0x04
 };
-struct PListRefInline_s0056_a7b0 {
-    PList_s0056_a7b0* mpObject;
-    PListRefInline_s0056_a7b0() : mpObject(0) { if (mpObject) mpObject->AddRef(); }
-    ~PListRefInline_s0056_a7b0() { if (mpObject) mpObject->Release(); }
-    PList_s0056_a7b0* get() const { return mpObject; }
-    PList_s0056_a7b0** AsPointer()
+struct PListRefInline {
+    PList* mpObject;
+    PListRefInline() : mpObject(0) { if (mpObject) mpObject->AddRef(); }
+    ~PListRefInline() { if (mpObject) mpObject->Release(); }
+    PList* get() const { return mpObject; }
+    PList** AsPointer()
     {
         if (mpObject) {
-            PList_s0056_a7b0* t = mpObject;
+            PList* t = mpObject;
             mpObject = 0;
             t->Release();
         }
@@ -64,8 +54,18 @@ virtual void v1c();
 virtual void v20();
 virtual void v24();
 virtual void v28();
-    virtual bool GetPropertyList(uint32_t instance, uint32_t group, PList_s0056_a7b0** ppList);   // 0x2c
+    virtual bool GetPropertyList(uint32_t instance, uint32_t group, PList** ppList);   // 0x2c
 };
+namespace SP {
+class cString_s0056_a7b0 {
+public:
+    cString_s0056_a7b0();                         // 0x006b5060
+    ~cString_s0056_a7b0();                        // 0x006b5240
+    const wchar_t* GetText();          // 0x006b55c0
+private:
+    uint32_t mData[5];
+};
+}
 struct WString {
     wchar_t* mpBegin;
     wchar_t* mpEnd;
@@ -102,13 +102,16 @@ namespace SP {
     cPropertyManager_s0056_a7b0* PropertyManager_s0056_a7b0();                                              // 0x0067de30
 }
 namespace SP {
-    bool GetPropertyAsKey(PList_s0056_a7b0* p, uint32_t id, uint32_t* out3);                     // 0x006a1250
+    bool GetPropertyAsKey(PList* p, uint32_t id, uint32_t* out3);                     // 0x006a1250
 }
-struct Block_s0056_a7b0 { char pad[0x1d8]; };
-struct Creature_s0056_a7b0 {
+namespace SP {
+    bool GetPropertyAsText(PList* p, uint32_t id, cString_s0056_a7b0* out);                      // 0x006a1360
+}
+struct Block { char pad[0x1d8]; };
+struct Creature {
     char pad[0x98];
-    Block_s0056_a7b0* mpBegin;       // +0x98
-    Block_s0056_a7b0* mpEnd;         // +0x9c
+    Block* mpBegin;       // +0x98
+    Block* mpEnd;         // +0x9c
 };
 struct cID { uint32_t cls; uint32_t type; };
 struct FVEntry { cID id; float weight; };
@@ -143,8 +146,8 @@ virtual void v3();
 virtual void v4();
 virtual void v5();
     virtual const wchar_t* GetName();                                               // 0x18
-    bool ExtractTraits(Creature_s0056_a7b0* c, float** weights, cFeatureVector_s0056_a7b0* fv);            // @ 0x0056b080
-    bool DescribeTraits(Creature_s0056_a7b0* c, float** weights, cAnnotatedFeatureVector* out);  // @ 0x0056b120
+    bool ExtractTraits(Creature* c, float** weights, cFeatureVector_s0056_a7b0* fv);            // @ 0x0056b080
+    bool DescribeTraits(Creature* c, float** weights, cAnnotatedFeatureVector* out);  // @ 0x0056b120
 };
 struct V3 {
     float x, y, z;
@@ -152,6 +155,9 @@ struct V3 {
     V3(const V3& v) : x(v.x), y(v.y), z(v.z) {}
     float& operator[](int i) { return (&x)[i]; }
     const float& operator[](int i) const { return (&x)[i]; }
+};
+struct V3C : V3 {                    // Vector3 with an out-of-line copy ctor
+    V3C(const V3& v);                // @ 0x004098a0
 };
 V3 operator-(const V3& a, const V3& b);   // @ 0x0041db10
 struct M3 { float f[9]; };           // rw::math::fpu::Matrix33Template<float>: plain copy (rep movsd)
@@ -174,7 +180,58 @@ struct Box3 {
     Box3* AddPoint(const V3& p);          // @ 0x0056aba0
     void Transform(const Xf& t);          // @ 0x00409dd0
 };
-struct WStr_s0056_a7b0 {
+struct Sizer {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+    virtual void v14();
+    virtual void Vfn54(unsigned inst, unsigned group, float* data, int count, V3* mn, V3* mx);   // +0x54
+};
+Sizer* GetSizer();                                  // 0x00401010
+struct SizedPart {                   // 0x1d8-byte creature part
+    uint32_t group;                  // +0
+    uint32_t instance;               // +4
+    char pad8[8];
+    float scale;                     // +0x10
+    V3 pos;                          // +0x14
+    char pad20[0x38 - 0x20];
+    M3 rotA;                         // +0x38
+    M3 rotB;                         // +0x5c
+    char pad80[0x90 - 0x80];
+    int count;                       // +0x90
+    float data[1];                   // +0x94
+    char padEnd[0x1d8 - 0x98];
+};
+template <class T> inline const T& max_(const T& a, const T& b) { return (a < b) ? b : a; }
+struct cTallnessClassifier {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual const wchar_t* GetName();                                                       // 0x18
+    virtual bool ExtractTraits(Creature* c, float** weights, cFeatureVector_s0056_a7b0* fv);      // @ 0x0056a7b0 (0x1c)
+    bool DescribeTraits(Creature* c, float** weights, cAnnotatedFeatureVector* out);        // @ 0x0056ad20
+};
+struct WStr {
     wchar_t* mpBegin;
     wchar_t* mpEnd;
     wchar_t* mpCapacity;
@@ -183,8 +240,13 @@ struct WStr_s0056_a7b0 {
 };
 struct WStrHolder {
     uint32_t pad0;
-    WStr_s0056_a7b0 str;
+    WStr str;
     WStrHolder* InitEmpty();   // @ 0x0056afc0
+};
+struct WStrSrc {
+    float value;
+    WStr str;
+    WStrSrc* CopyInit(WStrSrc* src);   // @ 0x0056b020
 };
 struct cEditorRigBlockType {
 virtual void v0();
@@ -194,35 +256,17 @@ virtual void v3();
 virtual void v4();
 virtual void v5();
     virtual const wchar_t* GetName();                                                       // 0x18
-    bool ExtractTraits(Creature_s0056_a7b0* c, float** weights, cFeatureVector_s0056_a7b0* fv);                   // @ 0x0056b2e0
-    bool DescribeTraits(Creature_s0056_a7b0* c, float** weights, cAnnotatedFeatureVector* out);        // @ 0x0056b440
+    bool ExtractTraits(Creature* c, float** weights, cFeatureVector_s0056_a7b0* fv);                   // @ 0x0056b2e0
+    bool DescribeTraits(Creature* c, float** weights, cAnnotatedFeatureVector* out);        // @ 0x0056b440
 };
 // ---- items of slice s0056a7b0 end
 
 // ---- items of slice s0056b680 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern const float kPartCountWeight;     // 0x01473c70 (10.0f)
 extern uint32_t gTextureGroup;           // 0x015e45a4
-template <int N> inline void ScratchSlots() { uint32_t s[N]; }
+
 struct Alloc { Alloc() {} };
-struct PList {                       // cPropertyList (refcounted)
-    virtual void AddRef();           // 0x00
-    virtual void Release();          // 0x04
-};
-struct PListRefInline {
-    PList* mpObject;
-    PListRefInline() : mpObject(0) { if (mpObject) mpObject->AddRef(); }
-    ~PListRefInline() { if (mpObject) mpObject->Release(); }
-    PList* get() const { return mpObject; }
-    PList** AsPointer()
-    {
-        if (mpObject) {
-            PList* t = mpObject;
-            mpObject = 0;
-            t->Release();
-        }
-        return &mpObject;
-    }
-};
+
 struct PListRefCall {
     PList* mpObject;
     PListRefCall() : mpObject(0) { if (mpObject) mpObject->AddRef(); }
@@ -264,9 +308,7 @@ struct cFeatureVector {
 namespace SP {
     cPropertyManager_s0056_b680* PropertyManager();                                              // 0x0067de30
 }
-namespace SP {
-    bool GetPropertyAsKey(PList* p, uint32_t id, uint32_t* out3);                     // 0x006a1250
-}
+
 namespace SP {
     bool GetPropertyAsString16(PList* p, uint32_t id, WStr_s0056_b680* out);                     // 0x006a1400
 }
@@ -278,12 +320,7 @@ inline wchar_t* wfind(wchar_t* first, wchar_t* last, const char& value)
         ++first;
     return first;
 }
-struct Block { char pad[0x1d8]; };
-struct Creature {
-    char pad[0x98];
-    Block* mpBegin;       // +0x98
-    Block* mpEnd;         // +0x9c
-};
+
 struct TextureBlock {     // element with +0xd4 key count, +0xf8 key array
     char pad[0xd4];
     uint32_t mnKeys;
@@ -1251,6 +1288,47 @@ virtual void v5();
 };
 // ---- items of slice s0056d2b0 end
 
+// @ 0x0056a7b0
+bool cTallnessClassifier::ExtractTraits(Creature* c, float** weights, cFeatureVector_s0056_a7b0* fv)
+{
+    bool i = false;
+    if (c) {
+        Box3 offset;
+        SizedPart* x = (SizedPart*)c->mpBegin;
+        SizedPart* count = (SizedPart*)c->mpEnd;
+        for (; x != count; x++) {
+            SizedPart* g = x;
+            Box3 left;
+            GetSizer()->Vfn54(g->instance, g->group, g->data, g->count, &left.mn, &left.mx);
+            Xf list;
+            list.SetTranslation(g->pos);
+            list.SetRotation(g->rotB * g->rotA);
+            list.SetScale(g->scale);
+            left.Transform(list);
+            offset.AddPoint(left.mn);
+            offset.AddPoint(left.mx);
+            i = true;
+        }
+        ScratchSlots<36>();
+        V3C item = offset.mx - offset.mn;
+        float right = max_(item.x, 0.5f);
+        float data = max_(item.y, 0.5f);
+        float d = max_(item.z, 0.5f);
+        float part, s;
+        if (right > data) { part = right; s = data; }
+        else { part = data; s = right; }
+        cID begin;
+        begin.cls = 0x227f195;
+        begin.type = 0;
+        fv->add(begin, d * 100.0f / part);
+        begin.type = 1;
+        fv->add(begin, d * 100.0f / s);
+        begin.type = 2;
+        fv->add(begin, s * 100.0f / part);
+    }
+    return i;
+}
+
 // @ 0x0056aba0
 Box3* Box3::AddPoint(const V3& p)
 {
@@ -1263,10 +1341,43 @@ Box3* Box3::AddPoint(const V3& p)
     return this;
 }
 
+// @ 0x0056ad20
+bool cTallnessClassifier::DescribeTraits(Creature* c, float** weights, cAnnotatedFeatureVector* out)
+{
+    cFeatureVector_s0056_a7b0 fv;
+    ScratchSlots<32>();
+    if (ExtractTraits(c, weights, &fv)) {
+        FVEntry* it = fv.mpBegin;
+        FVEntry* end = fv.mpEnd;
+        for (; it != end; it++) {
+            FVEntry* e = it;
+            Annot desc;
+            switch (e->id.type) {
+            case 0:
+                WStr_Format(&desc.str, L"(%ls) tall/wide", GetName());
+                break;
+            case 1:
+                WStr_Format(&desc.str, L"(%ls) tall/thin", GetName());
+                break;
+            case 2:
+                WStr_Format(&desc.str, L"(%ls) thin/wide", GetName());
+                break;
+            default:
+                WStr_Format(&desc.str, L"(%ls) Error", GetName());
+                break;
+            }
+            desc.value = it->weight;
+            out->Add(e->id, desc);
+        }
+        return true;
+    }
+    return false;
+}
+
 // @ 0x0056afc0
 WStrHolder* WStrHolder::InitEmpty()
 {
-    WStr_s0056_a7b0* pStr = &str;
+    WStr* pStr = &str;
     int tmp;
     pStr->mpBegin = 0;
     pStr->mpEnd = 0;
@@ -1291,14 +1402,14 @@ WStrSrc* WStrSrc::CopyInit(WStrSrc* src)
 }
 
 // @ 0x0056b080
-bool cBlockTypePercentClassifier::ExtractTraits(Creature_s0056_a7b0* c, float** weights, cFeatureVector_s0056_a7b0* fv)
+bool cBlockTypePercentClassifier::ExtractTraits(Creature* c, float** weights, cFeatureVector_s0056_a7b0* fv)
 {
     bool p30 = false;
     if (c) {
         p30 = true;
-        Block_s0056_a7b0* begin = c->mpBegin;
-        Block_s0056_a7b0* t32 = begin;
-        Block_s0056_a7b0* n10 = c->mpEnd;
+        Block* begin = c->mpBegin;
+        Block* t32 = begin;
+        Block* n10 = c->mpEnd;
         for (; t32 != n10 && p30; t32++) {
             uint32_t* block = (uint32_t*)t32;
             cID buf;
@@ -1310,18 +1421,49 @@ bool cBlockTypePercentClassifier::ExtractTraits(Creature_s0056_a7b0* c, float** 
     return p30;
 }
 
-// @ 0x0056b2e0
-bool cEditorRigBlockType::ExtractTraits(Creature_s0056_a7b0* c, float** weights, cFeatureVector_s0056_a7b0* fv)
+// @ 0x0056b120
+bool cBlockTypePercentClassifier::DescribeTraits(Creature* c, float** weights, cAnnotatedFeatureVector* out)
 {
     bool p30 = false;
     if (c) {
         p30 = true;
-        Block_s0056_a7b0* begin = c->mpBegin;
-        Block_s0056_a7b0* t32 = begin;
-        Block_s0056_a7b0* n10 = c->mpEnd;
+        Block* self = c->mpBegin;
+        Block* pl = self;
+        Block* num = c->mpEnd;
+        for (; pl != num && p30; pl++) {
+            uint32_t* j = (uint32_t*)pl;
+            cID w;
+            w.cls = 0x1f71e85;
+            w.type = j[1];
+            PListRefInline weight;
+            bool t = SP::PropertyManager_s0056_a7b0()->GetPropertyList(j[1], j[0], weight.AsPointer());
+            if (t) {
+                SP::cString_s0056_a7b0 left;
+                if (SP::GetPropertyAsText(weight.get(), 0x8f6fc401, &left)) {
+                    Annot buf;
+                    ScratchSlots<25>();
+                    WStr_Format(&buf.str, L"(%ls) %ls", GetName(), left.GetText());
+                    buf.value = (*weights)[pl - self];
+                    out->Add(w, buf);
+                }
+            }
+        }
+    }
+    return p30;
+}
+
+// @ 0x0056b2e0
+bool cEditorRigBlockType::ExtractTraits(Creature* c, float** weights, cFeatureVector_s0056_a7b0* fv)
+{
+    bool p30 = false;
+    if (c) {
+        p30 = true;
+        Block* begin = c->mpBegin;
+        Block* t32 = begin;
+        Block* n10 = c->mpEnd;
         for (; t32 != n10 && p30; t32++) {
             uint32_t* n30 = (uint32_t*)t32;
-            PListRefInline_s0056_a7b0 t25;
+            PListRefInline t25;
             bool p32 = SP::PropertyManager_s0056_a7b0()->GetPropertyList(n30[1], n30[0], t25.AsPointer());
             if (p32) {
                 uint32_t n37[3] = { 0, 0, 0 };
@@ -1330,6 +1472,42 @@ bool cEditorRigBlockType::ExtractTraits(Creature_s0056_a7b0* c, float** weights,
                     buf.cls = 0x4ea801f;
                     buf.type = n37[0];
                     fv->add(buf, (*weights)[t32 - begin]);
+                }
+            }
+        }
+    }
+    return p30;
+}
+
+// @ 0x0056b440
+bool cEditorRigBlockType::DescribeTraits(Creature* c, float** weights, cAnnotatedFeatureVector* out)
+{
+    bool p30 = false;
+    if (c) {
+        p30 = true;
+        Block* begin = c->mpBegin;
+        Block* t32 = begin;
+        Block* n10 = c->mpEnd;
+        for (; t32 != n10 && p30; t32++) {
+            uint32_t* n30 = (uint32_t*)t32;
+            ScratchSlots<1>();
+            PListRefInline t25;
+            bool p32 = SP::PropertyManager_s0056_a7b0()->GetPropertyList(n30[1], n30[0], t25.AsPointer());
+            if (p32) {
+                WString n37;
+                uint32_t buf[3] = { 0, 0, 0 };
+                if (SP::GetPropertyAsKey(t25.get(), 0x186609d, buf)) {
+                    cID owner;
+                    owner.cls = 0x4ea801f;
+                    owner.type = buf[0];
+                    if (n37.empty())
+                        WStr_Format(&n37, L"0x%08x", buf[0]);
+                    ScratchSlots<1>();
+                    AnnotN n6;
+                    WStr_Format(&n6.str, L"(%ls) %ls", GetName(), n37.c_str());
+                    n6.value = (*weights)[t32 - begin];
+                    ScratchSlots<25>();
+                    out->Add(owner, n6);
                 }
             }
         }
