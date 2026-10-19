@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EATextEncoding.cpp  ?ConvertEncoding@Text@EA@@YAIPB_WIIPAUWStr@12@@Z  0093cfb0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

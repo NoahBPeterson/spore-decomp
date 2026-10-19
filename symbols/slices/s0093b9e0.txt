@@ -29,7 +29,7 @@
 0093c5a0 EA::ConvertToString16  # dev-PDB EA::ConvertToString16
 0093c6d0 EA::ConvertToString16  # dev-PDB EA::ConvertToString16 (range wrapper)
 0093c6f0 FUN_0093c6f0  # no PDB name; fputs to stderr
-0093c710 EA::Text::Strlen32  # dev-PDB EA::Text::`anonymous namespace'::Strlen32
-0093c730 EA::Text::DetectEncoding  # no PDB name
-0093c850 EA::Text::ConvertEncoding_via_UTF16  # dev-PDB EA::Text::ConvertEncoding_via_UTF16
-0093c920 EA::Text::GetCharacterSize  # dev-PDB EA::Text::GetCharacterSize
+0093c710 ?Strlen32@Text@EA@@YAHPBH@Z  # Strlen32 migrated from s0093b9e0 (verbatim, slice spelling)
+0093c730 ?DetectEncoding@Text@EA@@YAHPBEI@Z  # DetectEncoding migrated from s0093b9e0 (verbatim, slice spelling)
+0093c850 ?ConvertEncoding_via_UTF16@Text@EA@@YAHPBXHHPAXPAHH@Z  # ConvertEncoding_via_UTF16 migrated from s0093b9e0 (verbatim, slice spelling)
+0093c920 ?GetCharacterSize@Text@EA@@YAIH@Z  # EA::Text::GetCharacterSize migrated from s0093b9e0
