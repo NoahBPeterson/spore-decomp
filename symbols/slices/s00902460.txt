@@ -1,15 +1,16 @@
-00902460 EA::XML::TokenIOContext::ClearStrings  # PDB name (card)
-00902590 EA::XML::TokenIOContext::AddString  # PDB candidate
-00902640 `anonymous namespace'::sWriteString  # PDB candidate (caller-single)
-009027b0 `anonymous namespace'::sReadString  # PDB candidate (caller-single)
-00902950 EA::XML::ReadToken  # PDB candidate
-00902c20 `anonymous namespace'::sWriteToken  # inferred writer for EA::XML::ReadToken
-00902d40 EA::XML::ReadTokenList  # PDB candidate (caller-single)
-00902fc0 `anonymous namespace'::sWriteTokenList  # inferred writer for EA::XML::ReadTokenList
-009030b0 EA::XML::TokenIOContext::TokenIOContext  # PDB name (card)
+00902460 ?ClearStrings@TokenIOContext_s0090_2460@XML@EA@@QAEXXZ  # TokenIOContext_s0090_2460::ClearStrings migrated from s00902460 (verbatim, slice spelling)
+00902590 ?AddString@TokenIOContext_s0090_2460@XML@EA@@QAEIPB_WI@Z  # TokenIOContext_s0090_2460::AddString migrated from s00902460 (verbatim, slice spelling)
+00902640 ?WriteString@XML@EA@@YA_NPAUIStream@@PB_WPAUTokenIOContext_s0090_2460@12@@Z  # WriteString migrated from s00902460 (verbatim, slice spelling)
+009027b0 ?ReadString@XML@EA@@YA_NPAUIStream@@PAUFixedWStr256@@PAUTokenIOContext_s0090_2460@12@@Z  # ReadString migrated from s00902460 (verbatim, slice spelling)
+00902950 ?ReadToken@XML@EA@@YA_NPAUIStream@@PAPAUTokenNode@12@PAUTokenIOContext_s0090_2460@12@@Z  # ReadToken migrated from s00902460 (verbatim, slice spelling)
+00902c20 ?WriteToken@XML@EA@@YAHPAUIStream@@PAUTokenNode@12@PAUTokenIOContext_s0090_2460@12@@Z  # WriteToken migrated from s00902460 (verbatim, slice spelling)
+00902d40 ?ReadTokenList@XML@EA@@YA_NPAUIStream@@PAPAUTokenNode@12@IPAUTokenIOContext_s0090_2460@12@@Z  # ReadTokenList migrated from s00902460 (verbatim, slice spelling)
+00902fc0 ?WriteTokenList@XML@EA@@YA_NPAUIStream@@PAUTokenNode@12@IPAUTokenIOContext_s0090_2460@12@@Z  # WriteTokenList migrated from s00902460 (verbatim, slice spelling)
+009030b0 ??0TokenIOContext_s0090_2460@XML@EA@@QAE@PAUICoreAllocator_s0090_2460@Allocator@2@@Z  # TokenIOContext_s0090_2460::TokenIOContext migrated from s00902460 (verbatim, slice spelling)
 00903120 EA::XML::TokenIOContext::~TokenIOContext  # clears both hashtables + StackAllocator::Reset x2
-009031a0 EA::XML::XmlTokenReader::XmlTokenReader  # constructs XmlReader + TokenIOContext at +0x6c
+009031a0 ??0XmlTokenReader@XML@EA@@QAE@PAUICoreAllocator_s0090_2460@Allocator@2@@Z  # XmlTokenReader::XmlTokenReader migrated from s00902460 (verbatim, slice spelling)
 009031d0 EA::XML::XmlTokenReader::~XmlTokenReader  # resets TokenIOContext, tail to XmlReader dtor
-009031f0 EA::XML::XmlTokenReader::Read  # BeginRead + ReadTokenList
-00903230 EA::XML::XmlTokenReader::Read2  # BeginRead2(3 args) + ReadTokenList
+009031f0 ?Read@XmlTokenReader@XML@EA@@QAE_NPB_W0@Z  # XmlTokenReader::Read migrated from s00902460 (verbatim, slice spelling)
+00903230 ?Read2@XmlTokenReader@XML@EA@@QAE_NPB_W00@Z  # XmlTokenReader::Read2 migrated from s00902460 (verbatim, slice spelling)
 009032b0 EA::XML::FreeTokenList  # static helper, eax=list head ebx=owner
+0093c0c0 ?SetPosition@MemoryStream@IO@EA@@UAE_NJW4PositionType@23@@Z  # EA::IO::MemoryStream::SetPosition (callee of s00902460, named from the dev publics; slice address comment)

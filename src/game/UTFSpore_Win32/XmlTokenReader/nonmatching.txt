@@ -1,0 +1,13 @@
+# va  diff-bytes  reason
+00901f90 93 FUN_00901f90(pHead,key,h): hashtable node-chain find; cmp16 uses 'cmp si,word' scheduling and loop-tail layout differ from ours. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (382/400 valid, 100% coverage)
+009020b0 104 FUN_009020b0(key): hashtable find-node; hash-loop scheduling / register allocation differ. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (179 valid, 100% coverage)
+00902140 154 FUN_00902140(rehash policy): eastl prime_rehash_policy result; instruction scheduling / register allocation differ. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (198 valid, 100% coverage)
+00902380 191 sStrDup(str,ctx): lookup in mStringsA/mStringsB then dup via StackAllocator::Allocate(len*2+2) + char copy; original keeps str in ebx and dst in eax (esi=dst-str) while MSVC uses ebp, and the inlined Allocate() register allocation differs. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (142 valid, 85.1% coverage)
+00902460 108 TokenIOContext::ClearStrings: complete; hashtable re-init store schedule differs (InitEmpty field write order); difftest PASS (after mapping Hashtable::g_emptyBucket 0x154df28)
+00902590 143 AddString: complete; hashtable find/insert temp (pair/iterator) stack layout and ebx/ebp roles differ
+00902640 297 sWriteString: complete; returns bool (!stream->v05()), GetString is a thiscall TokenIOContext method, wide flag set by any char > 0xff, narrow chunks written through vtable +0x38, shared length/id write; register/branch layout differs; difftest WEAK after fixing void return, cdecl GetString call, inverted wide-char loop, read-slot (+0x30) used for narrow writes and a /GS cookie on the char buffer (int buffer now, original has no cookie)
+009027b0 358 sReadString: complete; register roles (stream/out) and in-place widen loop schedule differ
+00902950 550 ReadToken: complete; register roles and local slot layout differ (alloc failure faithfully not checked)
+00902c20 189 sWriteToken: complete; switch tail / dup-call schedule differs (int vs bool return)
+00902d40 528 ReadTokenList: complete; local slot order for header words differs
+00902fc0 125 sWriteTokenList: complete; frame slot reuse for the marker differs; difftest PASS after fixing int-0 return (original returns !stream->v05()), version word written from the 0x143a2bc constant (1, not 0) and the missing IsBlank(name)/IsBlank(value) skip test

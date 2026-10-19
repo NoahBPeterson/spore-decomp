@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/XmlTokenReader.cpp  ?FUN_00901e60@@YA_NPB_W@Z  00901e60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlTokenReader.cpp  ?GetString@TokenIOContext_s0090_13e0@XML@EA@@QAEHPB_W@Z  00902250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlTokenReader.cpp  ??0TokenIOContext_s0090_2460@XML@EA@@QAE@PAUICoreAllocator_s0090_2460@Allocator@2@@Z  009030b0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlTokenReader.cpp  ??0XmlTokenReader@XML@EA@@QAE@PAUICoreAllocator_s0090_2460@Allocator@2@@Z  009031a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlTokenReader.cpp  ?Read@XmlTokenReader@XML@EA@@QAE_NPB_W0@Z  009031f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlTokenReader.cpp  ?Read2@XmlTokenReader@XML@EA@@QAE_NPB_W00@Z  00903230  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

@@ -16,3 +16,9 @@
 00901c60 ?WriteComment@XmlTextWriter@XML@EA@@UAE_NPB_W_N@Z  # EA::XML::XmlTextWriter::WriteComment migrated from s009013e0
 00901d30 ?SetOutputStream@XmlTextWriter@XML@EA@@QAEXPAVIStream@IO@3@_N@Z  # EA::XML::XmlTextWriter::SetOutputStream migrated from s009013e0
 00901d90 ?WriteText@XmlTextWriter@XML@EA@@UAE_NPB_WI@Z  # EA::XML::XmlTextWriter::WriteText migrated from s009013e0
+00901e60 ?FUN_00901e60@@YA_NPB_W@Z  # FUN_00901e60 migrated from s009013e0 (verbatim, slice spelling)
+00901f90 ?FUN_00901f90@HashA@@QAEPAUHashNode@@PAU2@ABQB_WI@Z  # HashA::FUN_00901f90 migrated from s009013e0 (verbatim, slice spelling)
+009020b0 ?FUN_009020b0@HashA@@QAE?AUHIter@@ABQB_W@Z  # HashA::FUN_009020b0 migrated from s009013e0 (verbatim, slice spelling)
+00902140 ?FUN_00902140@HashA@@QAE?AUInsertRet@@ABUStrIdPair@@H@Z  # HashA::FUN_00902140 migrated from s009013e0 (verbatim, slice spelling)
+00902250 ?GetString@TokenIOContext_s0090_13e0@XML@EA@@QAEHPB_W@Z  # TokenIOContext_s0090_13e0::GetString migrated from s009013e0 (verbatim, slice spelling)
+00902380 ?sStrDup@XML@EA@@YAPA_WPB_WPAUTokenIOContext_s0090_13e0@12@@Z  # sStrDup migrated from s009013e0 (verbatim, slice spelling)
