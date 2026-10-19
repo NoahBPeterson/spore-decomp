@@ -42,7 +42,7 @@ struct ZoneAllocWrap {
 // ---- items of slice s00925770 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
-namespace EA { namespace Trace { void* GetDefaultAllocatorX(); }}  // 0x00925cb0 (stays in the slice: not this object's)
+namespace EA { namespace Trace { __declspec(noinline) void* GetDefaultAllocatorX(); }}  // 0x00925cb0 (stays in the slice: not this object's)
 
 // @ 0x00925f30
 namespace EA { namespace Trace {
@@ -68,14 +68,14 @@ void* ZoneAllocWrap::Alloc(unsigned size, int a, int b)
 }
 }}  // namespace EA::Trace
 
-// @ 0x00926060
+// @ 0x00925fe0
 namespace EA { namespace Trace {
-void ZoneObject_delete(void* p)
+void* ZoneAlloc_Named(int size, ICoreAlloc* alloc, int flags)
 {
-    if (p) {
-        void* base = (char*)p - 8;
-        ((void (__thiscall*)(void*, int))(*(void***)*(void**)base)[3])(base, 0);
-    }
+    if (!alloc) alloc = (ICoreAlloc*)GetDefaultAllocatorX();
+    int* r = (int*)alloc->Alloc(size + 8, flags, 0, 4, 0);
+    if (r) { *r = (int)alloc; return r + 2; }
+    return 0;
 }
 }}  // namespace EA::Trace
 
@@ -88,5 +88,16 @@ void* ZoneObject_new(int a1, int a2, int a3)
         (alloc, a1 + 8, a2, a3, 4, 0);
     if (r) { *r = (int)alloc; return r + 2; }
     return 0;
+}
+}}  // namespace EA::Trace
+
+// @ 0x00926060
+namespace EA { namespace Trace {
+void ZoneObject_delete(void* p)
+{
+    if (p) {
+        void* base = (char*)p - 8;
+        ((void (__thiscall*)(void*, int))(*(void***)*(void**)base)[3])(base, 0);
+    }
 }
 }}  // namespace EA::Trace
