@@ -1,2 +1,8 @@
 # source  symbol  original VA  [flags override]
 slices/s008198f0/s008198f0.cpp  ?FUN_00819f10@@YGXPAD0@Z  00819f10  /O2 /MD /Gy /EHsc /TP
+slices/s008198f0/s008198f0.cpp  ?Init@cSPUIPieMenuItem@@  008198f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008198f0/s008198f0.cpp  ??0cSPUIPieMenu@@QAE@XZ  0081a1f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008198f0/s008198f0.cpp  ??1cSPUIPieMenu@@QAE@XZ  0081a2b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008198f0/s008198f0.cpp  ?Init@cSPUIPieMenu@@  0081a350  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008198f0/s008198f0.cpp  ?DoInsertValue@ItemVec@@  0081a510  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008198f0/s008198f0.cpp  ?Shutdown@cSPUIPieMenu@@  0081a6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

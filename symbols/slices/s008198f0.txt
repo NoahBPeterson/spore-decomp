@@ -6,3 +6,5 @@
 0081a1f0 UI::cSPUIPieMenu::cSPUIPieMenu  # vtbl 0x1418fa4/0x1418f94
 0081a2b0 cSPUIPieMenu::~cSPUIPieMenu  # PDB name
 0081a6d0 cSPUIPieMenu::Shutdown  # PDB name
+00819ad0 cSPUIPieMenu::Show  # PDB candidate (caller-single); body: clamps menu rect to parent, positions icons
+0081a510 eastl::vector<cSPUIPieMenu::cItemInfo,eastl::sp_vector_allocator>::DoInsertValue  # 0x4c-byte element insert/grow

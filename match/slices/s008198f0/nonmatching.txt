@@ -1,2 +1,4 @@
 00819e00  82   copy-range helper (FUN_00818650 + 5-field tail copy): schedule differs
 00819e60  128  destroy-range helper: bulk destroy loop scheduling differs
+00819ad0  74  cSPUIPieMenu::Show: complete; SSE scheduling of the clamp temporaries and the v=pos copy register pairing differ [equiv: UNSUPPORTED (0 valid inputs)] flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00819f90  378  cSPUIPieMenu::reload_icons: complete; register allocation (this=esi vs edi) and AutoRefCount temp reload differ [equiv: WEAK (no mismatch, 29% cov)] flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
