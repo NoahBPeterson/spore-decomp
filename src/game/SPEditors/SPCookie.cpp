@@ -31,18 +31,9 @@ extern char gEmptyString[];  // 0x01667bac
 #pragma intrinsic(_InterlockedExchange)
 
 // ---- items of slice s0060a720 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
-extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags, unsigned debugFlags,
-                                          const char* file, int line);
-extern "C" __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
-extern "C" long __cdecl _InterlockedExchange(long volatile*, long);
-extern "C" __declspec(dllimport) void __stdcall EnterCriticalSection(void* cs);
-extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(void* cs);
-extern "C" __declspec(dllimport) void __stdcall InitializeCriticalSection(void* cs);
 void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);
 void operator delete(void*);
 inline void* operator new(unsigned int, void* p) { return p; }
-extern char gEmptyString[];  // 0x01667bac
 namespace eastl {
 struct allocator_s0060_a720 {
   allocator_s0060_a720() {}
@@ -177,7 +168,6 @@ struct cURLParts {
 };
 }
 }
-extern "C" long __cdecl _InterlockedExchange(long volatile*, long);
 struct ListNodeBase {
   ListNodeBase* mpNext;
   ListNodeBase* mpPrev;
@@ -475,6 +465,9 @@ class cCookie_s0060_9790 : public EA::COM::RefCountTemplate_s0060_9790<int> {
 }
 }
 // ---- items of slice s00609790 end
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+namespace SP { namespace Pollen { __declspec(noinline) bool DomainMatches(const string8& domain, const string8& host); }}  // 0x0060a100 (stays in the slice: not this object's)
 
 // @ 0x0060a040
 namespace SP { namespace Pollen {
