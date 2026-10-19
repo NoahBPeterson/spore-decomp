@@ -1,5 +1,6 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/HTTPClient.cpp  ?AllocBuffer@HTTPClient@@QAE_NXZ  00941f20  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/HTTPClient.cpp  ?Pump@HTTPClient@@QAEXPAH@Z  009421b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/HTTPClient.cpp  ??0Cookie40@@QAE@ABU0@@Z  00942ce0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/HTTPClient.cpp  ??4Cookie40@@QAEAAU0@ABU0@@Z  00942d70  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/HTTPClient.cpp  ?SetURL@UrlHolder@@QAEXPBD@Z  00942f70  /O2 /MD /Gy /TP /GS- /Isrc/game/include

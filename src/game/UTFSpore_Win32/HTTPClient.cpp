@@ -17,15 +17,13 @@ extern "C" __declspec(dllimport) __int64 __cdecl _time64(__int64*);
 extern "C" __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
 
 // ---- items of slice s009413d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" __declspec(dllimport) __int64 __cdecl _time64(__int64*);
-extern "C" __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
 void* __cdecl operator_new_6(unsigned int, const char*, int, int, int, int);
 struct HTTPClient {
     bool AllocBuffer();
     bool FindHeader(char* name, void* out, int index);
     void SetNotificationTarget(void* target, void* ctx);
+    void Pump(int* stream);
 };
-void* __cdecl operator_new_6(unsigned int, const char*, int, int, int, int);
 // ---- items of slice s009413d0 end
 
 // ---- items of slice s00942290 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -211,7 +209,7 @@ struct UrlHolder {
     eastl::FixedStub mString;   // +0xe0
     void  SetURL(const char* url);
 };
-extern "C" unsigned int __cdecl strlen(const char*);
+
 // ---- items of slice s00942290 end
 
 // ---- items of slice s00942ff0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1503,6 +1501,39 @@ void EA::Internet::HTTPClient::SetNotificationTarget(void (__cdecl *target)(void
         typedef void (__cdecl* Fn)(void*, int, unsigned, int, int);
         ((Fn)target)(ctx, self, 0x700af200, 0, 0);
     }
+}
+
+// @ 0x009421b0
+#pragma intrinsic(strlen)
+void HTTPClient::Pump(int* stream)
+{
+    if (stream == 0)
+        return;
+    int* sub = (int*)(*(int*(__thiscall**)(int*))(*stream + 0x10))(stream);
+    if ((*(char(__thiscall**)(int*))(*sub + 0x20))(sub) == 0)
+        return;
+    (*(void(__thiscall**)(int*, int))(*stream + 0x18))(stream, 1);
+    if ((*(int(__thiscall**)(int*))(*stream + 0x2c))(stream) == 2) {
+        do {
+            sub = (int*)(*(int*(__thiscall**)(int*))(*stream + 0x10))(stream);
+            if ((*(char(__thiscall**)(int*, int))(*sub + 0x64))(sub, 0) == 0)
+                break;
+            int n = (*(int(__thiscall**)(int*, int, int, int))(*stream + 0x44))(
+                stream, *(int*)((char*)this + 0x140), *(int*)((char*)this + 0x144), 0);
+            if (n <= 0)
+                break;
+            const char* buf = *(const char**)((char*)this + 0x140);
+            int m = n;
+            if (n == -1)
+                m = (int)strlen(buf);
+            if (*(int*)((char*)this + 0x30) > 0) {
+                void* log = *(void**)((char*)this + 0x54);
+                (*(void(__thiscall**)(void*, const char*, int))((char*)*(void**)log + 0x38))(log, buf, m);
+            }
+            *(unsigned __int64*)((char*)this + 0x138) += (unsigned)n;
+        } while ((*(int(__thiscall**)(int*))(*stream + 0x2c))(stream) == 2);
+    }
+    (*(void(__thiscall**)(int*))(*stream + 0x14))(stream);
 }
 
 // @ 0x00942290
