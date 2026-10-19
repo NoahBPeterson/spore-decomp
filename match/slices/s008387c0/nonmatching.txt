@@ -2,7 +2,13 @@
 00838a60  67  RawStr::Find - complete substring find; call arg setup / register choice differs
 00838ab0  -  Ent copy-ctor - complete string copy + field copies; register allocation differs; equiv: PASS (member CopyFrom, 533 valid, 100% cov)
 00838b90  46  CopyVec2 - complete eastl copy for a 2-float element with user operator=; offset-loop shape differs
-00838de0  43  RawStr sub-range assign - complete; min_alt reference + call setup differs
 00838f20  3  CopyEntsFwd - complete; only the order of the four pointer increments differs
 00838f80  3  CopyEntsBwd - complete; argument register assignment (arg1/arg2) swapped
 00839040  2  CopyEnts2Bwd - complete; argument register assignment swapped
+00838de0  40  RawStr::AssignSub (thiscall ret 0xc, this=ecx forwarded to Assign) - complete; min_alt reference + call setup differs; equiv: WEAK (95.5% cov, no mismatch)
+008387c0  150  cArgumentSpec::ArgTypeFromName - complete; only name/this register swap (ebx/edi); equiv: WEAK (53% cov, no mismatch, /EHsc /GS-)
+00838cd0  142  uninitialized_copy of Ent2 (EH, /EHsc /GS- flags) - complete; string-copy register allocation + spill differs; equiv: UNSUPPORTED (random inputs fault)
+00839090  358  cFileParser::AddFilePath (token split, EH, /EHsc /GS- flags) - complete; register allocation and one-store scheduling differ; equiv: WEAK (57% cov, no mismatch)
+008392b0  65  AddDocString (EH, /EHsc /GS- flags) - complete; ecx/edx pick in dtor tails + extra trylevel store; equiv: WEAK (74% cov, no mismatch)
+00839540  457  cArgumentSpec::FindNameAndTypeFromOption (EH, /EHsc /GS- flags) - complete; `this` spilled instead of held in ebp; equiv: WEAK (15% cov, no mismatch)
+008397a0  104  cArgumentSpec::NameFromArgType - complete; edi/ebp for type + vector base hoisted (CSE) vs reload; equiv: WEAK (67% cov, no mismatch)

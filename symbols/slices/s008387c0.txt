@@ -4,7 +4,7 @@
 00838ab0 ?CopyFrom@Ent@@QAEPAU1@PBU1@@Z  # Ent::CopyFrom migrated from s008387c0 (verbatim, slice spelling)
 00838b90 ?CopyVec2@@YAPAUVec2@@PAU1@00@Z  # CopyVec2 migrated from s008387c0 (verbatim, slice spelling)
 00838cd0  string element copy loop  # allocates + copies each element's string
-00838de0 ?FUN_00838de0@@YAXPAURawStr@@II@Z  # FUN_00838de0 migrated from s008387c0 (verbatim, slice spelling)
+00838de0 ?AssignSub@RawStr@@QAEXABU1@II@Z  # RawStr::assign(const RawStr&,pos,n); thiscall ret 0xc, this forwarded to Assign
 00838e80 ?DestroyEnts@@YAPAUEnt@@PAU1@00@Z  # DestroyEnts migrated from s008387c0 (verbatim, slice spelling)
 00838f20 ?CopyEntsFwd@@YAPAUEnt@@PAU1@00@Z  # CopyEntsFwd migrated from s008387c0 (verbatim, slice spelling)
 00838f80 ?CopyEntsBwd@@YAPAUEnt@@PAU1@00@Z  # CopyEntsBwd migrated from s008387c0 (verbatim, slice spelling)
