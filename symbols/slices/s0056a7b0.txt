@@ -1,10 +1,10 @@
 0056a7b0 SP::Traits::cTallnessClassifier::ExtractTraits  # pdb_names.json anchor
-0056aba0 Box3::AddPoint  # AABB expand over float[3] min/max (offsets 0/0xc); returns this
+0056aba0 ?AddPoint@Box3@@QAEPAU1@ABUV3@@@Z  # Box3::AddPoint migrated from s0056a7b0 (verbatim, slice spelling)
 0056ad20 SP::Traits::cTallnessClassifier::DescribeTraits  # pdb_names.json anchor
 0056aec0 SP::Traits::cAnnotatedFeatureVector::Add  # fabsf>eps, vector_map<cID,cAnnotation>::insert (0x56e580), += mfLen at +0x18; param cAnnotation by value (callee frees its string)
 0056afc0 ?InitEmpty@WStrHolder@@QAEPAU1@XZ  # WStrHolder::InitEmpty migrated from s0056a7b0 (verbatim, slice spelling)
 0056b020 ?CopyInit@WStrSrc@@QAEPAU1@PAU1@@Z  # WStrSrc::CopyInit migrated from s0056a7b0 (verbatim, slice spelling)
-0056b080 SP::Traits::cBlockTypePercentClassifier::ExtractTraits  # pdb vtable-slot name
+0056b080 ?ExtractTraits@cBlockTypePercentClassifier@@QAE_NPAUCreature_s0056_a7b0@@PAPAMPAUcFeatureVector_s0056_a7b0@@@Z  # cBlockTypePercentClassifier::ExtractTraits migrated from s0056a7b0 (verbatim, slice spelling)
 0056b120 SP::Traits::cBlockTypePercentClassifier::DescribeTraits  # pdb candidate
-0056b2e0 SP::Traits::cEditorRigBlockType::ExtractTraits  # pdb caller-scored name
+0056b2e0 ?ExtractTraits@cEditorRigBlockType@@QAE_NPAUCreature_s0056_a7b0@@PAPAMPAUcFeatureVector_s0056_a7b0@@@Z  # cEditorRigBlockType::ExtractTraits migrated from s0056a7b0 (verbatim, slice spelling)
 0056b440 SP::Traits::cEditorRigBlockType::DescribeTraits  # pdb caller-scored name

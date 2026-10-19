@@ -3,3 +3,6 @@
 0056bd30 2 cRigBlockTag::DescribeTraits; complete, 2-byte near-miss: wfind const char& temp slot at -0x59 vs -0x5a
 0056bfa0 602 cTextureTag::ExtractTraits; complete, /Od slot layout (vector_map insert temps) differs; difftest WEAK (206 valid, 11% coverage, same loop-bounds limit; no mismatch) after mapping the VSet ctors by mangled name
 0056c2d0 2 cTextureTag::DescribeTraits; complete, 2-byte near-miss: wfind const char& temp slot at -0x59 vs -0x5a
+0056d2b0 6 cRegionColorClassifier::DescribeTraits (texture describe): /Od frame-slot puzzle, hidden 16-byte temp block sits above the Alloc temp (lea 0x71 vs 0x61) and inline-ctor temp -0x78 vs -0x7c; code otherwise identical [equiv: WEAK]
+0056d810 1 cBaseColorClassifier::DescribeTraits: only the Alloc temp slot (lea [ebp-0x6d] vs [ebp-0x65]); 8 hidden bytes between new-ptr temp and Alloc temp not reproduced [equiv: WEAK]
+0056dbe0 23 cTextureClassifier::DescribeTraits: all inline-ctor/copy temps 4 bytes lower than original (one hidden 4-byte temp above the first ctor temp not reproduced) [equiv: WEAK]

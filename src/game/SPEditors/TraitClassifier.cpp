@@ -1,9 +1,19 @@
-// src/game/SPEditors/TraitClassifier.cpp -- migrated from slice(s) s0056fb90, s0056df80, s0056b680, s0056a7b0 by tools/migrate/rewrite.py
+// src/game/SPEditors/TraitClassifier.cpp -- migrated from slice(s) s0056d2b0, s0056c570, s0056fb90, s0056df80, s0056b680, s0056a7b0 by tools/migrate/rewrite.py
 // Object file: SPEditors/TraitClassifier.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include "SP/Traits/cFeatureVector.h"
+#include "SP/Traits/cID.h"
+#include "SP/cPropertyManager.h"
+#include "SP/cString.h"
+#include <math.h>
+#include <xmmintrin.h>   // switches /arch:SSE scalar float codegen to SSE at /Od
+#include "SP/Traits/cAuthorClassifier.h"
+#include <string.h>
+#define __PLACEMENT_NEW_INLINE   // the slices' own placement new/delete win over <new>'s (rewrite.py)
+#include <new>
+inline void operator delete(void*, void*) {}   // placement delete (<new>'s is skipped, rewrite.py)
 
 // unnamed retail callees and globals (address in the comment)
 extern wchar_t g_emptyWStr[];   // 0x01667bac
@@ -15,16 +25,177 @@ struct WStr {
     wchar_t* mpCapacity;
     void AllocateSelf(wchar_t* p, wchar_t* q);   // @ 0x00423820
 };
-extern wchar_t g_emptyWStr[];   // 0x01667bac
-struct WStrHolder {
-    uint32_t pad0;
-    WStr str;
-    WStrHolder* InitEmpty();   // @ 0x0056afc0
-};
 struct WStrSrc {
     float value;
     WStr str;
     WStrSrc* CopyInit(WStrSrc* src);   // @ 0x0056b020
+};
+extern "C" double __cdecl fabs(double);
+#pragma intrinsic(fabs)
+struct PList_s0056_a7b0 {                       // cPropertyList (refcounted)
+    virtual void AddRef();           // 0x00
+    virtual void Release();          // 0x04
+};
+struct PListRefInline_s0056_a7b0 {
+    PList_s0056_a7b0* mpObject;
+    PListRefInline_s0056_a7b0() : mpObject(0) { if (mpObject) mpObject->AddRef(); }
+    ~PListRefInline_s0056_a7b0() { if (mpObject) mpObject->Release(); }
+    PList_s0056_a7b0* get() const { return mpObject; }
+    PList_s0056_a7b0** AsPointer()
+    {
+        if (mpObject) {
+            PList_s0056_a7b0* t = mpObject;
+            mpObject = 0;
+            t->Release();
+        }
+        return &mpObject;
+    }
+};
+class cPropertyManager_s0056_a7b0 {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual bool GetPropertyList(uint32_t instance, uint32_t group, PList_s0056_a7b0** ppList);   // 0x2c
+};
+struct WString {
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    uint32_t mAllocator;
+    WString() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; mpBegin = kEmpty; mpEnd = mpBegin; mpCapacity = mpBegin + 1; }
+    ~WString() { FreeBuffer(); }
+    bool empty() const { return mpBegin == mpEnd; }
+    const wchar_t* c_str() const { const wchar_t* p0 = mpBegin; return p0; }
+    void FreeBuffer();                // @ 0x004237d0
+    static wchar_t kEmpty[];          // 0x01667bac
+};
+struct WStrB {
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; uint32_t mAllocator;
+    WStrB() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; Init(); }
+    ~WStrB() { FreeBuffer(); }
+    void Init();                      // @ 0x0045dac0
+    void FreeBuffer();                // @ 0x004237d0
+};
+struct AnnotN {                       // cAnnotation with the inline default ctor
+    float value;
+    WStrB str;
+    AnnotN() {}
+};
+struct Annot {
+    float value;
+    WString str;
+    Annot() { InitEmpty(); }
+    Annot(AnnotN& src);               // @ 0x0056b020 (copy)
+    void InitEmpty();                 // @ 0x0056afc0
+    Annot(Annot& src);                // @ 0x0056b020 (copy)
+};
+namespace SP {
+    cPropertyManager_s0056_a7b0* PropertyManager_s0056_a7b0();                                              // 0x0067de30
+}
+namespace SP {
+    bool GetPropertyAsKey(PList_s0056_a7b0* p, uint32_t id, uint32_t* out3);                     // 0x006a1250
+}
+struct Block_s0056_a7b0 { char pad[0x1d8]; };
+struct Creature_s0056_a7b0 {
+    char pad[0x98];
+    Block_s0056_a7b0* mpBegin;       // +0x98
+    Block_s0056_a7b0* mpEnd;         // +0x9c
+};
+struct cID { uint32_t cls; uint32_t type; };
+struct FVEntry { cID id; float weight; };
+struct cFeatureVector_s0056_a7b0 {
+    FVEntry* mpBegin;
+    FVEntry* mpEnd;
+    FVEntry* mpCapacity;
+    uint32_t mAllocator;
+    uint32_t mPad[2];
+    float mLen;                                  // +0x18
+    cFeatureVector_s0056_a7b0();                            // @ 0x00571640
+    ~cFeatureVector_s0056_a7b0();                           // @ 0x00564470
+    float add(const cID& id, float weight);      // @ 0x00571790
+};
+struct AnnotPair {
+    cID first;
+    Annot second;
+    AnnotPair(const cID& id, Annot& a) : first(id), second(a) {}
+};
+struct AnnotInsRes { AnnotPair* first; bool second; AnnotInsRes() {} };
+struct cAnnotatedFeatureVector {
+    char mMap[0x18];
+    float mLen;                                                  // +0x18
+    AnnotInsRes insert(const AnnotPair& p);                      // @ 0x0056e580
+    float Add(const cID& id, Annot a);                           // @ 0x0056aec0
+};
+struct cBlockTypePercentClassifier {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual const wchar_t* GetName();                                               // 0x18
+    bool ExtractTraits(Creature_s0056_a7b0* c, float** weights, cFeatureVector_s0056_a7b0* fv);            // @ 0x0056b080
+    bool DescribeTraits(Creature_s0056_a7b0* c, float** weights, cAnnotatedFeatureVector* out);  // @ 0x0056b120
+};
+struct V3 {
+    float x, y, z;
+    V3() {}
+    V3(const V3& v) : x(v.x), y(v.y), z(v.z) {}
+    float& operator[](int i) { return (&x)[i]; }
+    const float& operator[](int i) const { return (&x)[i]; }
+};
+V3 operator-(const V3& a, const V3& b);   // @ 0x0041db10
+struct M3 { float f[9]; };           // rw::math::fpu::Matrix33Template<float>: plain copy (rep movsd)
+M3 operator*(const M3& a, const M3& b);   // @ 0x0041de20
+struct Xf {                          // cSPTransform
+    uint16_t mFlags;
+    uint16_t mModificationCount;
+    V3 mTranslation;
+    float mScale;
+    M3 mRotation;
+    Xf();                                                            // @ 0x00409930
+    void SetTranslation(const V3& v) { mTranslation = v; mFlags |= 4; mModificationCount++; }
+    void SetRotation(M3 m) { mRotation = m; mFlags |= 2; mModificationCount++; }
+    void SetScale(float s) { mScale = s; mModificationCount++; }
+};
+struct Box3 {
+    V3 mn;   // +0
+    V3 mx;   // +0xc
+    Box3();                               // @ 0x00409c00 (BoundingBox reset)
+    Box3* AddPoint(const V3& p);          // @ 0x0056aba0
+    void Transform(const Xf& t);          // @ 0x00409dd0
+};
+struct WStr_s0056_a7b0 {
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    uint32_t mAllocator;
+    void AllocateSelf(wchar_t* p, wchar_t* q);   // @ 0x00423820
+};
+struct WStrHolder {
+    uint32_t pad0;
+    WStr_s0056_a7b0 str;
+    WStrHolder* InitEmpty();   // @ 0x0056afc0
+};
+struct cEditorRigBlockType {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual const wchar_t* GetName();                                                       // 0x18
+    bool ExtractTraits(Creature_s0056_a7b0* c, float** weights, cFeatureVector_s0056_a7b0* fv);                   // @ 0x0056b2e0
+    bool DescribeTraits(Creature_s0056_a7b0* c, float** weights, cAnnotatedFeatureVector* out);        // @ 0x0056b440
 };
 // ---- items of slice s0056a7b0 end
 
@@ -604,18 +775,498 @@ typedef eastl::vector_s0056_df80<eastl::pair_s0056_df80<uint32_t, SP::Traits::Ta
 template eastl::pair_s0056_df80<SP::Traits::FactoryMap::iterator, SP::Traits::FactoryMap::iterator> SP::Traits::FactoryMap::equal_range(const uint32_t&);
 // ---- items of slice s0056df80 end
 
-
-
 // ---- items of slice s0056fb90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
+void* EASTL_Allocate(void* allocator, size_t size, int align, int flags);
+struct Vec12 { uint32_t a, b, c; };
+struct Vec12Alloc {
+    uint32_t mpName;
+    void deallocate(void* p, uint32_t n) { void* q = p; EASTL_allocator_deallocate(q); }
+};
+struct FalseTag { FalseTag() {} };
+Vec12* UninitCopy12(const Vec12* first, const Vec12* last, Vec12* dst);        // 0x00475ef0 (cdecl)
+inline Vec12* CopyImpl12(const Vec12* first, const Vec12* last, Vec12* result)
+{
+    for (; first != last; ++result, ++first)
+        *result = *first;
+    return result;
+}
+inline Vec12* Copy12(const Vec12* first, const Vec12* last, Vec12* result)
+{
+    const bool bA = false, bC = false, bB = false;
+    return CopyImpl12(first, last, result);
+}
+struct Vec12Vector {
+    Vec12* mpBegin;                     // +0
+    Vec12* mpEnd;                       // +4
+    Vec12* mpCapacity;                  // +8
+    Vec12Alloc mAllocator;              // +0xc
+    Vec12* DoRealloc(uint32_t n, const Vec12* first, const Vec12* last);   // 0x00475fa0 (thiscall, ret 0xc)
+    void DoFree(Vec12* p, uint32_t n)
+    {
+        if (p && ((int*)p)[-1] != 0)
+            mAllocator.deallocate(p, n * sizeof(Vec12));
+    }
+    void DestroyFrom(Vec12* first)
+    {
+        for (Vec12* p = first; p < mpEnd; ++p)
+            ;
+    }
+    void DoAssign(const Vec12* first, const Vec12* last, const FalseTag& tag);
+};
+struct Key { uint32_t a; uint32_t b; };
+struct Str16 {                          // eastl::basic_string<wchar_t> (16 bytes with allocator)
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; uint32_t mAlloc;
+    Str16(const Str16& x);              // 0x0056e2d0
+};
+struct MetaI {                          // float weight + description string
+    float f;
+    Str16 str;
+    MetaI(const MetaI& s) : f(s.f), str(s.str) {}
+};
+struct MetaO {                          // same layout; copy ctor is the out-of-line one
+    float f;
+    Str16 str;
+    MetaO(const MetaO& s);              // 0x0056b020 (thiscall, ret 4)
+};
+struct ElemO {
+    Key key;
+    MetaO meta;
+    ElemO(const ElemO& s) : key(s.key), meta(s.meta) {}
+};
+struct ElemI {                          // 0x1c-byte vector element
+    Key key;                            // +0
+    MetaI meta;                         // +8
+    ElemI(const ElemI& s) : key(s.key), meta(s.meta) {}
+    ElemI& operator=(const ElemI& s);   // 0x00570140 (assign)
+};
+ElemI* UninitCopy(ElemI* first, ElemI* last, ElemI* dst);                 // 0x00570330 (cdecl)
+inline ElemI* CopyBackwardImpl(ElemI* first, ElemI* last, ElemI* result)
+{
+    while (last != first)
+        *--result = *--last;
+    return result;
+}
+inline ElemI* CopyBackward(ElemI* first, ElemI* last, ElemI* result)
+{
+    const bool bA = false, bC = false, bB = false;
+    ScratchSlots<4>();
+    return CopyBackwardImpl(first, last, result);
+}
+struct ElemAlloc {
+    uint32_t mpName;
+    void deallocate(void* p, uint32_t n) { void* q = p; EASTL_allocator_deallocate(q); }
+};
+struct ElemVec {
+    ElemI* mpBegin;                     // +0
+    ElemI* mpEnd;                       // +4
+    ElemI* mpCapacity;                  // +8
+    ElemAlloc mAllocator;               // +0xc
+    ElemI* DoAllocate(uint32_t n)
+    {
+        return n ? (ElemI*)EASTL_Allocate(&mAllocator, n * sizeof(ElemI), 4, 0) : 0;
+    }
+    void DoFree(ElemI* p, uint32_t n)
+    {
+        if (p)
+            mAllocator.deallocate(p, n * sizeof(ElemI));
+    }
+    void DoInsertValue(ElemI* position, const ElemI& value);
+};
 struct Pair8 { uint32_t a; uint32_t b; };
 inline bool LessU32(uint32_t a, uint32_t b) { return a < b; }
 Pair8* LowerBoundPair(Pair8* first, Pair8* last, const Pair8* key);   // @ 0x005701b0
+struct OuterVec {                       // eastl::vector<pair<uint, vector_set<uint>>>
+    void* mpBegin; void* mpEnd; void* mpCapacity; uint32_t mAlloc;
+    void DoDestroyValues();             // 0x00553fb0
+};
+struct HashNode {
+    Key mKey;                           // +0
+    OuterVec mValue;                    // +8
+    char pad18[8];                      // +0x18
+    HashNode* mpNext;                   // +0x20
+    ~HashNode() { mValue.DoDestroyValues(); }
+};
+struct NodeAlloc {
+    void deallocate(void* p, uint32_t n) { void* q = p; EASTL_allocator_deallocate(q); }
+};
+struct HashTable {
+    NodeAlloc mAllocator;
+    void DoFreeNode(HashNode* pNode)
+    {
+        pNode->~HashNode();
+        ScratchSlots<4>();
+        mAllocator.deallocate(pNode, sizeof(HashNode));
+    }
+    void DoFreeNodes(HashNode** pNodeArray, uint32_t n);
+};
 // ---- items of slice s0056fb90 end
+
+// ---- items of slice s0056c570 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" __declspec(dllimport) int __cdecl wcsncmp(const wchar_t*, const wchar_t*, unsigned int);
+extern "C" int __cdecl wcscmp(const wchar_t*, const wchar_t*);
+#pragma intrinsic(wcscmp)
+struct Feature_s0056_c570 { uint32_t field0; uint32_t field1; };
+struct WStrSrc_s0056_c570;
+struct cFeatureVector_s0056_c570 {  // @ 0x00571790 / 0x0056aec0
+    float add(const Feature_s0056_c570& f, float weight);  // 0x00571790 (cFeatureVector::add)
+    float addDescribed(const Feature_s0056_c570& f, WStrSrc_s0056_c570 d);
+};
+struct PListRefInline_s0056_c570 {
+    PList* mpObject;
+    PListRefInline_s0056_c570() : mpObject(0) {}
+    ~PListRefInline_s0056_c570() { if (mpObject) mpObject->Release(); }
+    PList* get() const { return mpObject; }
+    PList** AsPointer()
+    {
+        if (mpObject) {
+            PList* t = mpObject;
+            mpObject = 0;
+            t->Release();
+        }
+        return &mpObject;
+    }
+};
+struct ResKey { uint32_t instance; uint32_t type; uint32_t group; };
+struct IObjectService {              // returned by 0x008de1a0
+virtual void v0();
+virtual void v1();
+virtual void v2();
+    virtual bool GetResource(ResKey* key, PList** out, int a, int b, int c, int d);   // 0x0c
+};
+IObjectService* ObjectError();       // 0x008de1a0 (cdecl)
+struct Meta {
+    int64_t GetAssetKey();           // @ 0x005508a0 (thiscall, edx:eax)
+    const wchar_t* GetName();        // @ 0x00550880 (thiscall)
+    unsigned GetTagCount();          // @ 0x005509b0 (thiscall)
+    unsigned GetCount2();            // @ 0x005508e0 (thiscall)
+    const char* GetItem(unsigned i); // @ 0x00550910 (thiscall, ret 4)
+    const wchar_t* GetTag(unsigned i);   // @ 0x005509e0 (thiscall, ret 4)
+};
+uint32_t FNV1_String8(const char* s, uint32_t seed, int caseSens);                    // 0x00932e80
+struct WStr_s0056_c570 {                         // eastl::basic_string<wchar_t>, 16 bytes
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    uint32_t mAllocator;
+    WStr_s0056_c570() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; mpBegin = kEmpty; mpEnd = mpBegin; mpCapacity = mpBegin + 1; }
+    ~WStr_s0056_c570() { FreeBuffer(); }
+    bool empty() const { return mpBegin == mpEnd; }
+    const wchar_t* c_str() const { const wchar_t* p0 = mpBegin; return p0; }
+    void FreeBuffer();                // @ 0x004237d0
+    static wchar_t kEmpty[];          // 0x01667bac
+};
+struct WStrSrc_s0056_c570 {                      // weight + description string (by-value arg of cFeatureVector::AddDescribed)
+    float value;
+    WStr_s0056_c570 str;
+    WStrSrc_s0056_c570() { InitEmpty(); }
+    WStrSrc_s0056_c570(WStrSrc_s0056_c570& src);            // @ 0x0056b020 (copy)
+    void InitEmpty();                 // @ 0x0056afc0
+};
+int WStr_Format(WStr_s0056_c570* s, const wchar_t* fmt, ...);                                    // 0x0041e050
+Meta* GetModelInfo(PListRefInline_s0056_c570* r);   // 0x00421f60 (cdecl)
+uint32_t FNV1Hash(const void* data, uint32_t length, uint32_t hash);  // 0x00932E50
+struct cAuthorClassifier {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual const wchar_t* GetName();                                             // 0x18
+    bool ExtractTraits(void* creature, void* weights, cFeatureVector_s0056_c570* features);  // @ 0x0056c570
+    bool DescribeTraits(void* creature, void* weights, cFeatureVector_s0056_c570* features);   // @ 0x0056c670
+};
+struct cMetadataSummarizer {
+    bool ExtractParameters(void* a, void* b, cFeatureVector_s0056_c570* features);  // @ 0x0056c7d0
+};
+struct cAssetMetadata {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual const wchar_t* GetName();                                             // 0x18
+    bool SetMetadata(void* creature, void* weights, cFeatureVector_s0056_c570* features);   // @ 0x0056c910
+};
+struct cFeedClassifier {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual const wchar_t* GetName();                                             // 0x18
+    bool ExtractTraits(void* creature, void* weights, cFeatureVector_s0056_c570* features);  // @ 0x0056cb30
+    bool DescribeTraits(void* creature, void* weights, cFeatureVector_s0056_c570* features); // @ 0x0056cc50
+};
+struct cPropertyManager {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual bool GetPropertyList(uint32_t instance, uint32_t group, struct PropListA** ppList);   // 0x2c
+};
+cPropertyManager* PropertyManager_s0056_c570();   // 0x0067de30
+struct Vec3c { float x, y, z; };
+struct Prop {                          // cProperty header
+    void* mpData;                      // +0x00
+    uint32_t pad4;
+    uint32_t mCount;                   // +0x08
+    uint32_t pad0c;
+    uint16_t mFlags;                   // +0x10
+    uint16_t mInline;                  // +0x12
+    unsigned Count()
+    {
+        if (mFlags & 0x30) {
+            return mCount;
+        } else if (mInline) {
+            return 1;
+        }
+        return 0;
+    }
+    struct Vec3c* Data();
+};
+struct PropListA {
+    virtual void AddRef();             // 0x00
+    virtual void Release();            // 0x04
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+    virtual bool HasProperty(uint32_t id);        // 0x1c
+virtual void v20();
+virtual void v24();
+    virtual Prop* GetProperty(uint32_t id);       // 0x28
+};
+struct PropListRefA {
+    PropListA* mpObject;
+    PropListRefA() : mpObject(0) { if (mpObject) mpObject->AddRef(); }
+    ~PropListRefA() { if (mpObject) mpObject->Release(); }
+    PropListA* get() const { return mpObject; }
+    PropListA** AsPointer()
+    {
+        if (mpObject) {
+            PropListA* t = mpObject;
+            mpObject = 0;
+            t->Release();
+        }
+        return &mpObject;
+    }
+};
+struct TagE { TagE() {} };
+inline Vec3c* Prop::Data()
+{
+    if (mFlags & 0x30) {
+        return (Vec3c*)mpData;
+    } else if (mInline) {
+        return (Vec3c*)this;
+    }
+    return 0;
+}
+struct SpVecV3 {
+    Vec3c* mpBegin; Vec3c* mpEnd; Vec3c* mpCapacity; unsigned int mAlloc[2];
+    Vec3c* erase(Vec3c* first, Vec3c* last);                  // 0x0050f740
+    void assign(Vec3c* first, Vec3c* last, TagE tag);         // 0x0056fee0
+    void clear() { erase(mpBegin, mpEnd); }
+    void assign(Vec3c* first, Vec3c* last) { TagE e; TagE t; TagE m; TagE j; uint32_t s[6]; assign(first, last, j); }
+};
+struct cSwatchColorLookup {
+    SpVecV3 mTabColors;
+    cSwatchColorLookup() { mTabColors.mpBegin = 0; mTabColors.mpEnd = 0; mTabColors.mpCapacity = 0; }
+    bool Init();   // @ 0x0056cde0
+};
+struct VecFloat {
+    float* mpBegin;
+    float* mpEnd;
+    float* mpCapacity;
+    unsigned GetAllocated(const void* a);   // @ 0x0056cf70 (index of nearest colour)
+};
+struct Vec3 {
+    float x, y, z;
+    Vec3() {}
+    Vec3(const Vec3& o) : x(o.x), y(o.y), z(o.z) {}
+};
+const Vec3& Vec3Sub(Vec3* out, const Vec3* a, const Vec3* b);   // @ 0x0041db10 cdecl
+float VectorLength(const Vec3* v);            // @ 0x0040ae50 cdecl, x87 return
+struct Block_s0056_c570 {                       // creature part, 0x1d8 bytes
+    char pad0[0xd4];
+    uint32_t mnKeys;                 // +0xd4
+    uint32_t mKeys[16];              // +0xd8
+    Vec3 mColors[1];                 // +0x118
+    char pad2[0x1d8 - 0x124];
+};
+struct Creature_s0056_c570 {
+    char pad0[0x0c];
+    uint32_t mType;                  // +0x0c
+    char pad1[0x38 - 0x10];
+    Vec3 mColor0;                    // +0x38
+    Vec3 mColor1;                    // +0x44
+    Vec3 mColor2;                    // +0x50
+    char pad3[0x98 - 0x5c];
+    Block_s0056_c570* mpBegin;                  // +0x98
+    Block_s0056_c570* mpEnd;                    // +0x9c
+};
+extern cSwatchColorLookup* gSwatchColors;   // 0x015e4468
+struct cTextureClassifier {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual const wchar_t* GetName();                                             // 0x18
+    bool ExtractTraits(Creature_s0056_c570* creature, float** weights, cFeatureVector_s0056_c570* features);  // @ 0x0056d080
+};
+// ---- items of slice s0056c570 end
+
+// ---- items of slice s0056d2b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cFeatureVector_s0056_d2b0 { float add(const cID& id, float weight); };   // @ 0x00571790
+struct Alloc_s0056_d2b0 { char pad[1]; Alloc_s0056_d2b0() {} };
+struct Alloc17 { char pad[1]; Alloc17() {} };
+struct Vec3_s0056_d2b0 { float x, y, z; };
+struct Block_s0056_d2b0 {                       // creature part, 0x1d8 bytes
+    char pad0[0xd4];
+    uint32_t mnKeys;                 // +0xd4
+    uint32_t mKeys[16];              // +0xd8
+    Vec3_s0056_d2b0 mColors[1];                 // +0x118
+    char pad2[0x1d8 - 0x124];
+};
+struct Creature_s0056_d2b0 {
+    char pad0[0x0c];
+    uint32_t mType;                  // +0x0c
+    char pad1[0x20 - 0x10];
+    uint32_t mKey0, mKey1, mKey2;    // +0x20
+    char pad2[0x38 - 0x2c];
+    Vec3_s0056_d2b0 mColor0;                    // +0x38
+    Vec3_s0056_d2b0 mColor1;                    // +0x44
+    Vec3_s0056_d2b0 mColor2;                    // +0x50
+    char pad3[0x98 - 0x5c];
+    Block_s0056_d2b0* mpBegin;                  // +0x98
+    Block_s0056_d2b0* mpEnd;                    // +0x9c
+};
+struct SwatchVecBase {
+    Vec3_s0056_d2b0* mpBegin; Vec3_s0056_d2b0* mpEnd; Vec3_s0056_d2b0* mpCapacity; uint32_t mAlloc[2];
+    SwatchVecBase() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; }
+    SwatchVecBase(const Alloc_s0056_d2b0& a);   // 0x00540470
+    SwatchVecBase(const Alloc17& a);   // 0x00540470
+};
+struct cSwatchColorLookupB {
+    SwatchVecBase mTabColors;
+    cSwatchColorLookupB() {}
+    cSwatchColorLookupB(const Alloc_s0056_d2b0& a) : mTabColors(a) {}
+    cSwatchColorLookupB(const Alloc17& a) : mTabColors(a) {}
+    bool Init();                     // @ 0x0056cde0
+    unsigned GetAllocated(const void* a);   // @ 0x0056cf70
+};
+extern cSwatchColorLookupB* gSwatchColors_s0056_d2b0;   // 0x015e4468
+struct WStrB_s0056_d2b0 {                       // eastl::basic_string<wchar_t>; ctor body out of line (0x0045dac0)
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; uint32_t mAllocator;
+    WStrB_s0056_d2b0() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; Init(); }
+    WStrB_s0056_d2b0(WStrB_s0056_d2b0& o);                 // 0x0056e2d0 (copy)
+    ~WStrB_s0056_d2b0() { FreeBuffer(); }
+    void Init();                     // @ 0x0045dac0
+    void FreeBuffer();               // @ 0x004237d0
+};
+struct DescSrc {                     // weight + description (by-value arg of cAnnotatedFeatureVector::Add)
+    float value;
+    WStrB_s0056_d2b0 str;
+    DescSrc() {}
+    DescSrc(DescSrc& src);           // @ 0x0056b020 (copy)
+};
+struct DescSrcI {                    // same layout, implicit copy inlined
+    float value;
+    WStrB_s0056_d2b0 str;
+    DescSrcI(DescSrcI& src) : value(src.value), str(src.str) {}
+};
+struct WString_s0056_d2b0 {
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; uint32_t mAllocator;
+    WString_s0056_d2b0() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; mpBegin = kEmpty; mpEnd = mpBegin; mpCapacity = mpBegin + 1; }
+    ~WString_s0056_d2b0() { FreeBuffer(); }
+    void FreeBuffer();               // @ 0x004237d0
+    static wchar_t kEmpty[];         // 0x01667bac
+};
+struct Annot_s0056_d2b0 {
+    float value;
+    WString_s0056_d2b0 str;
+    Annot_s0056_d2b0() { InitEmpty(); }
+    Annot_s0056_d2b0(Annot_s0056_d2b0& src);               // @ 0x0056b020 (copy)
+    void InitEmpty();                // @ 0x0056afc0
+};
+int WStr_Format(void* s, const wchar_t* fmt, ...);   // 0x0041e050
+struct cAnnotatedFeatureVector_s0056_d2b0 {
+    float Add(const cID& id, DescSrc a);   // @ 0x0056aec0
+    float Add(const cID& id, DescSrcI a);   // @ 0x0056aec0
+    float Add(const cID& id, Annot_s0056_d2b0 a);     // @ 0x0056aec0
+};
+struct cRegionColorClassifier {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual const wchar_t* GetName();                                                       // 0x18
+    bool DescribeTraits(Creature_s0056_d2b0* c, float** weights, cAnnotatedFeatureVector_s0056_d2b0* out);   // 0x0056d2b0
+};
+struct cBaseColorClassifier {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual const wchar_t* GetName();                                                       // 0x18
+    bool ExtractTraits(Creature_s0056_d2b0* c, float** weights, cFeatureVector_s0056_d2b0* fv);   // 0x0056d650
+    bool DescribeTraits(Creature_s0056_d2b0* c, float** weights, cAnnotatedFeatureVector_s0056_d2b0* out);   // 0x0056d810
+};
+struct cRegionKeyClassifier {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual const wchar_t* GetName();                                                       // 0x18
+    bool ExtractTraits(Creature_s0056_d2b0* c, float** weights, cFeatureVector_s0056_d2b0* fv);   // 0x0056da90
+};
+struct cTextureClassifier_s0056_d2b0 {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual const wchar_t* GetName();                                                       // 0x18
+    bool DescribeTraits(Creature_s0056_d2b0* c, float** weights, cAnnotatedFeatureVector_s0056_d2b0* out);   // 0x0056dbe0
+};
+// ---- items of slice s0056d2b0 end
+
+// @ 0x0056aba0
+Box3* Box3::AddPoint(const V3& p)
+{
+    if (mn[0] > p[0]) mn[0] = p[0];
+    else if (mx[0] < p[0]) mx[0] = p[0];
+    if (mn[1] > p[1]) mn[1] = p[1];
+    else if (mx[1] < p[1]) mx[1] = p[1];
+    if (mn[2] > p[2]) mn[2] = p[2];
+    else if (mx[2] < p[2]) mx[2] = p[2];
+    return this;
+}
 
 // @ 0x0056afc0
 WStrHolder* WStrHolder::InitEmpty()
 {
-    WStr* pStr = &str;
+    WStr_s0056_a7b0* pStr = &str;
     int tmp;
     pStr->mpBegin = 0;
     pStr->mpEnd = 0;
@@ -625,11 +1276,6 @@ WStrHolder* WStrHolder::InitEmpty()
     pStr->mpCapacity = pStr->mpBegin + 1;
     return this;
 }
-
-
-
-
-
 
 // @ 0x0056b020
 WStrSrc* WStrSrc::CopyInit(WStrSrc* src)
@@ -644,9 +1290,52 @@ WStrSrc* WStrSrc::CopyInit(WStrSrc* src)
     return this;
 }
 
+// @ 0x0056b080
+bool cBlockTypePercentClassifier::ExtractTraits(Creature_s0056_a7b0* c, float** weights, cFeatureVector_s0056_a7b0* fv)
+{
+    bool p30 = false;
+    if (c) {
+        p30 = true;
+        Block_s0056_a7b0* begin = c->mpBegin;
+        Block_s0056_a7b0* t32 = begin;
+        Block_s0056_a7b0* n10 = c->mpEnd;
+        for (; t32 != n10 && p30; t32++) {
+            uint32_t* block = (uint32_t*)t32;
+            cID buf;
+            buf.cls = 0x1f71e85;
+            buf.type = block[1];
+            fv->add(buf, (*weights)[t32 - begin]);
+        }
+    }
+    return p30;
+}
 
-
-
+// @ 0x0056b2e0
+bool cEditorRigBlockType::ExtractTraits(Creature_s0056_a7b0* c, float** weights, cFeatureVector_s0056_a7b0* fv)
+{
+    bool p30 = false;
+    if (c) {
+        p30 = true;
+        Block_s0056_a7b0* begin = c->mpBegin;
+        Block_s0056_a7b0* t32 = begin;
+        Block_s0056_a7b0* n10 = c->mpEnd;
+        for (; t32 != n10 && p30; t32++) {
+            uint32_t* n30 = (uint32_t*)t32;
+            PListRefInline_s0056_a7b0 t25;
+            bool p32 = SP::PropertyManager_s0056_a7b0()->GetPropertyList(n30[1], n30[0], t25.AsPointer());
+            if (p32) {
+                uint32_t n37[3] = { 0, 0, 0 };
+                if (SP::GetPropertyAsKey(t25.get(), 0x186609d, n37)) {
+                    cID buf;
+                    buf.cls = 0x4ea801f;
+                    buf.type = n37[0];
+                    fv->add(buf, (*weights)[t32 - begin]);
+                }
+            }
+        }
+    }
+    return p30;
+}
 
 // @ 0x0056b680
 bool cEditorPartCount::ExtractTraits(Creature* c, float** weights, cFeatureVector* fv)
@@ -674,10 +1363,6 @@ bool cEditorPartCount::ExtractTraits(Creature* c, float** weights, cFeatureVecto
     }
     return p30;
 }
-
-
-
-
 
 // @ 0x0056b7d0
 bool cEditorPartCount::DescribeTraits(Creature* c, float** weights, cFeatureVector* fv)
@@ -714,10 +1399,6 @@ bool cEditorPartCount::DescribeTraits(Creature* c, float** weights, cFeatureVect
     }
     return p30;
 }
-
-
-
-
 
 // @ 0x0056b9e0
 bool cRigBlockTag::ExtractTraits(Creature* c, float** weights, cFeatureVector* fv)
@@ -775,10 +1456,6 @@ bool cRigBlockTag::ExtractTraits(Creature* c, float** weights, cFeatureVector* f
     return result;
 }
 
-
-
-
-
 // @ 0x0056bd30
 bool cRigBlockTag::DescribeTraits(Creature* c, float** weights, cFeatureVector* fv)
 {
@@ -821,10 +1498,6 @@ bool cRigBlockTag::DescribeTraits(Creature* c, float** weights, cFeatureVector* 
     }
     return p30;
 }
-
-
-
-
 
 // @ 0x0056bfa0
 bool cTextureTag::ExtractTraits(Creature* c, float** weights, cFeatureVector* fv)
@@ -883,10 +1556,6 @@ bool cTextureTag::ExtractTraits(Creature* c, float** weights, cFeatureVector* fv
     return result;
 }
 
-
-
-
-
 // @ 0x0056c2d0
 bool cTextureTag::DescribeTraits(Creature* c, float** weights, cFeatureVector* fv)
 {
@@ -933,8 +1602,459 @@ bool cTextureTag::DescribeTraits(Creature* c, float** weights, cFeatureVector* f
     return p30;
 }
 
+// @ 0x0056c570
+bool cAuthorClassifier::ExtractTraits(void* creature, void*, cFeatureVector_s0056_c570* features)
+{
+    ResKey key = *(ResKey*)((char*)creature + 8);
+    key.type = 0x30bdee3;
+    PListRefInline_s0056_c570 ref;
+    if (ObjectError()->GetResource(&key, ref.AsPointer(), 0, 0, 0, 0)) {
+        Meta* p = GetModelInfo(&ref);
+        if (p) {
+            Feature_s0056_c570 f;
+            f.field0 = 0x518af1d;
+            int64_t k = p->GetAssetKey();
+            f.field1 = FNV1Hash(&k, 8, 0x811c9dc5);
+            features->add(f, 100.0f);
+        }
+    }
+    return true;
+}
 
+// @ 0x0056c670
+bool cAuthorClassifier::DescribeTraits(void* creature, void*, cFeatureVector_s0056_c570* features)
+{
+    ResKey key = *(ResKey*)((char*)creature + 8);
+    key.type = 0x30bdee3;
+    PListRefInline_s0056_c570 ref;
+    if (ObjectError()->GetResource(&key, ref.AsPointer(), 0, 0, 0, 0)) {
+        Meta* p = GetModelInfo(&ref);
+        if (p) {
+            Feature_s0056_c570 f;
+            f.field0 = 0x518af1d;
+            int64_t k = p->GetAssetKey();
+            f.field1 = FNV1Hash(&k, 8, 0x811c9dc5);
+            WStrSrc_s0056_c570 d;
+            ScratchSlots<28>();
+            WStr_Format(&d.str, L"(%ls) %ls", GetName(), p->GetName());
+            d.value = 100.0f;
+            features->addDescribed(f, d);
+        }
+    }
+    return true;
+}
 
+// @ 0x0056c7d0
+bool cMetadataSummarizer::ExtractParameters(void* creature, void*, cFeatureVector_s0056_c570* features)
+{
+    ResKey key = *(ResKey*)((char*)creature + 8);
+    key.type = 0x30bdee3;
+    PListRefInline_s0056_c570 ref;
+    if (ObjectError()->GetResource(&key, ref.AsPointer(), 0, 0, 0, 0)) {
+        Meta* p = GetModelInfo(&ref);
+        if (p) {
+            Feature_s0056_c570 f;
+            f.field0 = 0x68375d7;
+            unsigned count = p->GetTagCount();
+            for (unsigned i = 0; i < count; i++) {
+                const wchar_t* str = p->GetTag(i);
+                if (wcsncmp(str, L"set:", 4) == 0) {
+                    f.field1 = FNV1_String16(str, 0x811c9dc5, 0);
+                    features->add(f, 100.0f);
+                    break;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+// @ 0x0056c910
+bool cAssetMetadata::SetMetadata(void* creature, void*, cFeatureVector_s0056_c570* features)
+{
+    ResKey key = *(ResKey*)((char*)creature + 8);
+    key.type = 0x30bdee3;
+    PListRefInline_s0056_c570 ref;
+    if (ObjectError()->GetResource(&key, ref.AsPointer(), 0, 0, 0, 0)) {
+        Meta* p = GetModelInfo(&ref);
+        if (p) {
+            Feature_s0056_c570 f;
+            f.field0 = 0x68375d7;
+            unsigned count = p->GetTagCount();
+            for (unsigned i = 0; i < count; i++) {
+                const wchar_t* str = p->GetTag(i);
+                if (wcscmp(str, L"set:") == 0) {
+                    f.field1 = FNV1_String16(str, 0x811c9dc5, 0);
+                    WStrSrc_s0056_c570 d;
+                    ScratchSlots<28>();
+                    WStr_Format(&d.str, L"(%ls) %ls", GetName(), str);
+                    d.value = 100.0f;
+                    features->addDescribed(f, d);
+                    break;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+// @ 0x0056cb30
+bool cFeedClassifier::ExtractTraits(void* creature, void*, cFeatureVector_s0056_c570* features)
+{
+    ResKey key = *(ResKey*)((char*)creature + 8);
+    key.type = 0x30bdee3;
+    PListRefInline_s0056_c570 ref;
+    if (ObjectError()->GetResource(&key, ref.AsPointer(), 0, 0, 0, 0)) {
+        Meta* p = GetModelInfo(&ref);
+        if (p) {
+            Feature_s0056_c570 f;
+            f.field0 = 0x518b883;
+            unsigned count = p->GetCount2();
+            for (unsigned i = 0; i < count; i++) {
+                f.field1 = FNV1_String8(p->GetItem(i), 0x811c9dc5, 0);
+                features->add(f, 100.0f);
+            }
+        }
+    }
+    return true;
+}
+
+// @ 0x0056cc50
+bool cFeedClassifier::DescribeTraits(void* creature, void*, cFeatureVector_s0056_c570* features)
+{
+    ResKey key = *(ResKey*)((char*)creature + 8);
+    key.type = 0x30bdee3;
+    PListRefInline_s0056_c570 ref;
+    if (ObjectError()->GetResource(&key, ref.AsPointer(), 0, 0, 0, 0)) {
+        Meta* p = GetModelInfo(&ref);
+        if (p) {
+            Feature_s0056_c570 f;
+            f.field0 = 0x518b883;
+            unsigned count = p->GetCount2();
+            for (unsigned i = 0; i < count; i++) {
+                f.field1 = FNV1_String8(p->GetItem(i), 0x811c9dc5, 0);
+                WStrSrc_s0056_c570 d;
+                ScratchSlots<28>();
+                WStr_Format(&d.str, L"(%ls) %hs", GetName(), p->GetItem(i));
+                d.value = 100.0f;
+                features->addDescribed(f, d);
+            }
+        }
+    }
+    return true;
+}
+
+// @ 0x0056cde0
+bool cSwatchColorLookup::Init()
+{
+    PropListRefA tmp;
+    bool t14 = PropertyManager_s0056_c570()->GetPropertyList(0x2ab48add, 0x97097e36, tmp.AsPointer());
+    if (t14 && tmp.get()->HasProperty(0xd29675ec)) {
+        Prop* v33 = tmp.get()->GetProperty(0xd29675ec);
+        Vec3c* n40;
+        unsigned len;
+        len = v33->Count();
+        n40 = v33->Data();
+        if (len > 0) {
+            mTabColors.clear();
+            mTabColors.assign(n40, n40 + len);
+            return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x0056cf70
+unsigned VecFloat::GetAllocated(const void* a)
+{
+    // @ 0x0056cf70: index of the element (stride 12) whose distance to the query is smallest
+    int value = 0;
+    float v18;
+    Vec3* left;
+    Vec3* v8;
+    Vec3* mem;
+    float j;
+    left = (Vec3*)mpBegin;
+    mem = (Vec3*)mpEnd;
+    v8 = left;
+    {
+        Vec3 t14;
+        Vec3 tmp = Vec3Sub(&t14, (const Vec3*)a, left);
+        v18 = VectorLength(&tmp);
+    }
+    for (++left; left != mem; ++left) {
+        ScratchSlots<1>();
+        Vec3 t14;
+        Vec3 tmp = Vec3Sub(&t14, (const Vec3*)a, left);
+        j = VectorLength(&tmp);
+        if (v18 > j)
+            value = (int)(left - v8);
+    }
+    ScratchSlots<1>();
+    return value;
+}
+
+// @ 0x0056d080
+bool cTextureClassifier::ExtractTraits(Creature_s0056_c570* creature, float** weights, cFeatureVector_s0056_c570* features)
+{
+    bool result = false;
+    if (creature) {
+        if (!gSwatchColors) {
+            ScratchSlots<1>();
+            cSwatchColorLookup* lookup = new ("OTDB", 0, 0, 0, 0) cSwatchColorLookup();
+            if (lookup->Init())
+                gSwatchColors = lookup;
+            else
+                return true;
+        }
+        result = true;
+        if (creature->mType == 0x2b978c46) {
+            Feature_s0056_c570 f;
+            f.field0 = 0x52b27b5;
+            f.field1 = ((VecFloat*)gSwatchColors)->GetAllocated(&creature->mColor0);
+            features->add(f, 33.333f);
+            f.field1 = ((VecFloat*)gSwatchColors)->GetAllocated(&creature->mColor1) | 0x10000;
+            features->add(f, 33.333f);
+            f.field1 = ((VecFloat*)gSwatchColors)->GetAllocated(&creature->mColor2) | 0x20000;
+            features->add(f, 33.333f);
+        } else {
+            Block_s0056_c570* p15 = creature->mpBegin;
+            Block_s0056_c570* n35 = p15;
+            Block_s0056_c570* p12 = creature->mpEnd;
+            Feature_s0056_c570 v18;
+            v18.field0 = 0x52b27b5;
+            for (; n35 != p12 && result; n35++) {
+                Block_s0056_c570* t14 = n35;
+                unsigned tmp = t14->mnKeys;
+                for (unsigned i = 0; i < tmp; i++) {
+                    Vec3* col = &t14->mColors[i];
+                    v18.field1 = (t14->mKeys[i] << 16) | ((VecFloat*)gSwatchColors)->GetAllocated(col);
+                    features->add(v18, (*weights)[n35 - p15]);
+                }
+            }
+        }
+    }
+    return result;
+}
+
+// @ 0x0056d2b0
+bool cRegionColorClassifier::DescribeTraits(Creature_s0056_d2b0* c, float** weights, cAnnotatedFeatureVector_s0056_d2b0* out)
+{
+    bool result = false;
+    if (c) {
+        if (!gSwatchColors_s0056_d2b0) {
+            ScratchSlots<1>();
+            cSwatchColorLookupB* lookup = new ("OTDB", 0, 0, 0, 0) cSwatchColorLookupB(Alloc17());
+            if (lookup->Init())
+                gSwatchColors_s0056_d2b0 = lookup;
+            else
+                return true;
+        }
+        result = true;
+        if (c->mType == 0x2b978c46) {
+            cID id;
+            id.cls = 0x52b27b5;
+            DescSrc d;
+            ScratchSlots<75>();
+            d.value = 33.333f;
+            id.type = gSwatchColors_s0056_d2b0->GetAllocated(&c->mColor0);
+            WStr_Format(&d.str, L"(%ls) %d: swatch %d", GetName(), 0, c->mColor0);
+            out->Add(id, d);
+            id.type = gSwatchColors_s0056_d2b0->GetAllocated(&c->mColor1) | 0x10000;
+            WStr_Format(&d.str, L"(%ls) %d: swatch %d", GetName(), 1, gSwatchColors_s0056_d2b0->GetAllocated(&c->mColor1));
+            out->Add(id, d);
+            id.type = gSwatchColors_s0056_d2b0->GetAllocated(&c->mColor2) | 0x20000;
+            WStr_Format(&d.str, L"(%ls) %d: swatch %d", GetName(), 2, gSwatchColors_s0056_d2b0->GetAllocated(&c->mColor2));
+            out->Add(id, d);
+        } else {
+            Block_s0056_d2b0* p15 = c->mpBegin;
+            Block_s0056_d2b0* n35 = p15;
+            Block_s0056_d2b0* p12 = c->mpEnd;
+            cID v18;
+            v18.cls = 0x52b27b5;
+            for (; n35 != p12 && result; n35++) {
+                Block_s0056_d2b0* t14 = n35;
+                unsigned tmp = t14->mnKeys;
+                for (unsigned i = 0; i < tmp; i++) {
+                    Vec3_s0056_d2b0* j = &t14->mColors[i];
+                    v18.type = (t14->mKeys[i] << 16) | gSwatchColors_s0056_d2b0->GetAllocated(j);
+                    Annot_s0056_d2b0 desc;
+                    WStr_Format(&desc.str, L"(%ls) %d: swatch %d", GetName(), t14->mKeys[i], gSwatchColors_s0056_d2b0->GetAllocated(j));
+                    desc.value = (*weights)[n35 - p15];
+                    out->Add(v18, desc);
+                }
+            }
+        }
+    }
+    return true;
+}
+
+// @ 0x0056d650
+bool cBaseColorClassifier::ExtractTraits(Creature_s0056_d2b0* c, float** weights, cFeatureVector_s0056_d2b0* fv)
+{
+    bool result = false;
+    if (c) {
+        if (!gSwatchColors_s0056_d2b0) {
+            ScratchSlots<1>();
+            cSwatchColorLookupB* lookup = new ("OTDB", 0, 0, 0, 0) cSwatchColorLookupB();
+            if (lookup->Init())
+                gSwatchColors_s0056_d2b0 = lookup;
+            else
+                return true;
+        }
+        result = true;
+        if (c->mType == 0x2b978c46) {
+            Vec3_s0056_d2b0* col = &c->mColor0;
+            cID id;
+            id.cls = 0x52c812a;
+            id.type = gSwatchColors_s0056_d2b0->GetAllocated(col);
+            fv->add(id, 100.0f);
+        } else {
+            Block_s0056_d2b0* p15 = c->mpBegin;
+            Block_s0056_d2b0* n35 = p15;
+            Block_s0056_d2b0* p12 = c->mpEnd;
+            cID v18;
+            v18.cls = 0x52c812a;
+            for (; n35 != p12 && result; n35++) {
+                Block_s0056_d2b0* t14 = n35;
+                unsigned tmp = t14->mnKeys;
+                for (unsigned i = 0; i < tmp; i++) {
+                    Vec3_s0056_d2b0* col = &t14->mColors[i];
+                    v18.type = gSwatchColors_s0056_d2b0->GetAllocated(col);
+                    fv->add(v18, (*weights)[n35 - p15]);
+                }
+            }
+        }
+    }
+    return result;
+}
+
+// @ 0x0056d810
+bool cBaseColorClassifier::DescribeTraits(Creature_s0056_d2b0* c, float** weights, cAnnotatedFeatureVector_s0056_d2b0* out)
+{
+    bool result = false;
+    if (c) {
+        if (!gSwatchColors_s0056_d2b0) {
+                        cSwatchColorLookupB* lookup = new ("OTDB", 0, 0, 0, 0) cSwatchColorLookupB(Alloc_s0056_d2b0());
+            if (lookup->Init())
+                gSwatchColors_s0056_d2b0 = lookup;
+            else
+                return true;
+        }
+        result = true;
+        if (c->mType == 0x2b978c46) {
+            cID v18;
+            v18.cls = 0x52c812a;
+            Vec3_s0056_d2b0* j = &c->mColor0;
+            v18.type = gSwatchColors_s0056_d2b0->GetAllocated(j);
+            DescSrc item;
+            ScratchSlots<42>();
+            WStr_Format(&item.str, L"(%ls) swatch %d", GetName(), v18.type);
+            item.value = 100.0f;
+            out->Add(v18, item);
+        } else {
+            Block_s0056_d2b0* p15 = c->mpBegin;
+            Block_s0056_d2b0* n35 = p15;
+            Block_s0056_d2b0* p12 = c->mpEnd;
+            cID v18;
+            v18.cls = 0x52c812a;
+            for (; n35 != p12 && result; n35++) {
+                Block_s0056_d2b0* t14 = n35;
+                unsigned tmp = t14->mnKeys;
+                for (unsigned i = 0; i < tmp; i++) {
+                    Vec3_s0056_d2b0* j = &t14->mColors[i];
+                    v18.type = gSwatchColors_s0056_d2b0->GetAllocated(j);
+                    Annot_s0056_d2b0 desc;
+                    WStr_Format(&desc.str, L"(%ls) swatch %d", GetName(), v18.type);
+                    desc.value = (*weights)[n35 - p15];
+                    out->Add(v18, desc);
+                }
+            }
+        }
+    }
+    return true;
+}
+
+// @ 0x0056da90
+bool cRegionKeyClassifier::ExtractTraits(Creature_s0056_d2b0* c, float** weights, cFeatureVector_s0056_d2b0* fv)
+{
+    bool result = false;
+    if (c) {
+        result = true;
+        if (c->mType == 0x2b978c46) {
+            cID id;
+            id.cls = 0x52c8ca5;
+            id.type = c->mKey0;
+            fv->add(id, 100.0f);
+            id.type = c->mKey1;
+            fv->add(id, 100.0f);
+            id.type = c->mKey2;
+            fv->add(id, 100.0f);
+        } else {
+            Block_s0056_d2b0* p15 = c->mpBegin;
+            Block_s0056_d2b0* n35 = p15;
+            Block_s0056_d2b0* p12 = c->mpEnd;
+            cID v18;
+            v18.cls = 0x52c8ca5;
+            for (; n35 != p12 && result; n35++) {
+                Block_s0056_d2b0* t14 = n35;
+                unsigned tmp = t14->mnKeys;
+                for (unsigned i = 0; i < tmp; i++) {
+                    v18.type = t14->mKeys[8 + i];
+                    fv->add(v18, (*weights)[n35 - p15]);
+                }
+            }
+        }
+    }
+    return result;
+}
+
+// @ 0x0056dbe0
+bool cTextureClassifier_s0056_d2b0::DescribeTraits(Creature_s0056_d2b0* c, float** weights, cAnnotatedFeatureVector_s0056_d2b0* out)
+{
+    bool result = false;
+    if (c) {
+        result = true;
+        if (c->mType == 0x2b978c46) {
+            DescSrc d;
+            ScratchSlots<32>();
+            cID id;
+            id.cls = 0x52c8ca5;
+            id.type = c->mKey0;
+            WStr_Format(&d.str, L"(%ls) 0x%08x", GetName(), id.type);
+            d.value = 33.333f;
+            out->Add(id, d);
+            id.type = c->mKey1;
+            WStr_Format(&d.str, L"(%ls) 0x%08x", GetName(), id.type);
+            d.value = 33.333f;
+            out->Add(id, d);
+            id.type = c->mKey2;
+            WStr_Format(&d.str, L"(%ls) 0x%08x", GetName(), id.type);
+            d.value = 33.333f;
+            out->Add(id, *(DescSrcI*)&d);
+            ScratchSlots<18>();
+        } else {
+            Block_s0056_d2b0* p15 = c->mpBegin;
+            Block_s0056_d2b0* n35 = p15;
+            Block_s0056_d2b0* p12 = c->mpEnd;
+            cID v18;
+            v18.cls = 0x52c8ca5;
+            for (; n35 != p12 && result; n35++) {
+                Block_s0056_d2b0* t14 = n35;
+                unsigned tmp = t14->mnKeys;
+                for (unsigned i = 0; i < tmp; i++) {
+                    v18.type = t14->mKeys[8 + i];
+                    DescSrc d;
+                    ScratchSlots<19>();
+                    WStr_Format(&d.str, L"(%ls) 0x%08x", GetName(), v18.type);
+                    d.value = (*weights)[n35 - p15];
+                    out->Add(v18, d);
+                }
+            }
+        }
+    }
+    return true;
+}
 
 // @ 0x0056ee90
 template SP::Traits::cIClassifier_s0056_df80* SP::Traits::tClassifierFactory<SP::Traits::cRigBlockTag_s0056_df80>::Create()
@@ -1003,6 +2123,59 @@ template TexTagsVector::iterator TexTagsVector::insert(TexTagsVector::iterator, 
 template void TexTagsVector::DoInsertValue(TexTagsVector::iterator, const TexTagsVector::value_type&)
 ;
 
+// @ 0x0056fb90
+void ElemVec::DoInsertValue(ElemI* position, const ElemI& value)
+{
+    if (mpEnd != mpCapacity) {
+        const ElemI* pValue = &value;
+        if ((pValue >= position) && (pValue < mpEnd))
+            ++pValue;
+        ::new(mpEnd) ElemI(*(mpEnd - 1));
+        CopyBackward(position, mpEnd - 1, mpEnd);
+        *position = *pValue;
+        ++mpEnd;
+    }
+    else {
+        const uint32_t nPrevSize = (uint32_t)(mpEnd - mpBegin);
+        const uint32_t nNewSize = (nPrevSize > 0) ? (2 * nPrevSize) : 1;
+        ElemI* const pNewData = DoAllocate(nNewSize);
+        ElemI* pNewEnd = UninitCopy(mpBegin, position, pNewData);
+        ::new(pNewEnd) ElemO(*(const ElemO*)&value);
+        pNewEnd = UninitCopy(position, mpEnd, ++pNewEnd);
+        ScratchSlots<28>();
+        DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCapacity = pNewData + nNewSize;
+    }
+}
+
+// @ 0x0056fee0
+void Vec12Vector::DoAssign(const Vec12* first, const Vec12* last, const FalseTag& tag)
+{
+    const uint32_t n = (uint32_t)(last - first);
+    if (n > (uint32_t)(mpCapacity - mpBegin)) {
+        Vec12* const pNewData = DoRealloc(n, first, last);
+        ScratchSlots<10>();
+        DestroyFrom(mpBegin);
+        DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+        mpBegin = pNewData;
+        mpEnd = mpBegin + n;
+        mpCapacity = mpEnd;
+    }
+    else if (n <= (uint32_t)(mpEnd - mpBegin)) {
+        Vec12* const pNewEnd = Copy12(first, last, mpBegin);
+        DestroyFrom(pNewEnd);
+        mpEnd = pNewEnd;
+    }
+    else {
+        const Vec12* const pMid = first + (mpEnd - mpBegin);
+        Copy12(first, pMid, mpBegin);
+        mpEnd = UninitCopy12(pMid, last, mpEnd);
+        ScratchSlots<12>();
+    }
+}
+
 // @ 0x005701b0
 Pair8* LowerBoundPair(Pair8* first, Pair8* last, const Pair8* key)
 {
@@ -1022,4 +2195,18 @@ Pair8* LowerBoundPair(Pair8* first, Pair8* last, const Pair8* key)
         }
     }
     return first;
+}
+
+// @ 0x00570230
+void HashTable::DoFreeNodes(HashNode** pNodeArray, uint32_t n)
+{
+    for (uint32_t i = 0; i < n; ++i) {
+        HashNode* pNode = pNodeArray[i];
+        while (pNode) {
+            HashNode* pTempNode = pNode;
+            pNode = pNode->mpNext;
+            DoFreeNode(pTempNode);
+        }
+        pNodeArray[i] = 0;
+    }
 }
