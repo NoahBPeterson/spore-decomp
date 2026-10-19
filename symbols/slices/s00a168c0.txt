@@ -1,4 +1,11 @@
-00a16d00 EA::Audio::PrimitiveAggregate::PrimitiveAggregate  # PDB callee-scored
+00a16a40 ?SetEnabled@PAgg@@QAEX_N@Z  # PAgg::SetEnabled migrated from s00a168c0 (verbatim, slice spelling)
+00a16b80 ?RemoveElement@Agg@@QAE_NPAUIPrimitive@@@Z  # Agg::RemoveElement migrated from s00a168c0 (verbatim, slice spelling)
+00a16bc0 ?UpdateValueFromChildren@PAgg@@QAE_NXZ  # PAgg::UpdateValueFromChildren migrated from s00a168c0 (verbatim, slice spelling)
+00a16be0 ?SetModificationSource@PAgg@@QAEXMH@Z  # PResp::SetModificationSource migrated from s00a168c0 (verbatim, slice spelling)
+00a16ca0 ?Destroy@PAgg@@QAEPAXE@Z  # PAgg::Destroy migrated from s00a168c0 (verbatim, slice spelling)
+00a16d00 ??0PAggC@@QAE@H@Z  # PAggC::PAggC migrated from s00a168c0 (verbatim, slice spelling)
+00a16da0 ?UpdatePrimitives@PAgg@@QAE_NXZ  # PAgg::UpdatePrimitives migrated from s00a168c0 (verbatim, slice spelling)
+00a16e20 ?PushBack@Agg@@QAE_NPAUIPrimitive@@@Z  # Agg::PushBack migrated from s00a168c0 (verbatim, slice spelling)
 00a16e70 EA::Audio::PrimitiveBase::Shutdown  # PDB caller-scored
 00a16f60 EA::Audio::PrimitiveBase::Init  # PDB caller-scored
 00a174d0 ?GetPropertyAsKey@RC@@QAE_NIPAUKey@@@Z  # RC::GetPropertyAsKey migrated from s00a168c0 (verbatim, slice spelling)

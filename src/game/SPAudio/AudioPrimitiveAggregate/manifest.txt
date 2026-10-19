@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPAudio/AudioPrimitiveAggregate.cpp  ?SetEnabled@PAgg@@QAEX_N@Z  00a16a40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioPrimitiveAggregate.cpp  ?UpdateValueFromChildren@PAgg@@QAE_NXZ  00a16bc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioPrimitiveAggregate.cpp  ?SetModificationSource@PAgg@@QAEXMH@Z  00a16be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioPrimitiveAggregate.cpp  ?Destroy@PAgg@@QAEPAXE@Z  00a16ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
