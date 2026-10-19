@@ -1,2 +1,10 @@
 00743950  13  complete SetTimeScale; null path writes the global through a zeroed base (xor eax,eax; [eax+0x11c]) which cl folds to an absolute address
 007439b0  9   complete; null path carries a dead xor eax,eax before mov eax,0xe4 that cl drops
+00742b30  110  complete; register allocation (original reloads the incoming argument from its stack slot for the 4th insert_range arg instead of using esi) [equiv: WEAK (no mismatch, 769 valid, 50% cov)]
+00742cf0  8    complete; only the E8 push_back copy schedule differs (edx loaded before the pops) [equiv: WEAK (no mismatch, 173 valid, 94% cov)]
+00742db0  366  complete; register allocation (original keeps this/src/old in esi/edi/ebp and spills the loop count) [equiv: PASS]
+00742f60  116  complete; register allocation (key pointer in ebp, end in edi) and EH epilogue merging [equiv: PASS]
+00743030  247  complete; original omits the final state=-1 store before the inline FixedVec64 dtor and reloads info after the null test [equiv: PASS]
+00743150  84   complete; load scheduling and register allocation of the slot loop [equiv: WEAK (no mismatch, 193 valid, 50% cov)]
+00743270  509  complete; frame is 12 bytes smaller (original spills loop index/count) and cl inlines the mesh-vector dtor at both exits [equiv: WEAK (no mismatch, 304 valid, 17% cov)]
+007434b0  817  complete; frame 4 bytes smaller (original keeps the DynArr pointer in a stack slot), register allocation [equiv: WEAK (no mismatch, 293 valid, 41% cov)]

@@ -8,3 +8,6 @@
 00743a60 ?SetCurveRange@cModelWorld56@@QAEXHHH@Z  # cModelWorld56::SetCurveRange migrated from s00742b30 (verbatim, slice spelling)
 00743a80 ?GetCurveRange@cModelWorld56@@QAEXHPAH0@Z  # cModelWorld56::GetCurveRange migrated from s00742b30 (verbatim, slice spelling)
 00743b00 ?ResetHighlightCurve@cModelWorld@SP@@UAEXXZ  # SP::cModelWorld::ResetHighlightCurve migrated from s00742b30
+00742ca0 Map8::MapInsert  # lower_bound + Vec8::insert on the (int key, AutoRefCount) sorted-vector map; byte-exact
+00742f60 Map8::GetOrAdd  # map operator[] (lower_bound, insert default pair); equiv PASS
+00743150 SP::cModelInstance::SetMaterialForTag  # name is Claude-coined: assigns a material ref to the slots whose shader-data tag matches

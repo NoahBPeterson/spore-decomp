@@ -7,3 +7,4 @@ slices/s00742b30/s00742b30.cpp  ?GetCurveSegment@cModelWorld56@@QAEXPAH0H@Z  007
 slices/s00742b30/s00742b30.cpp  ?SetCurveRange@cModelWorld56@@QAEXHHH@Z  00743a60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00742b30/s00742b30.cpp  ?GetCurveRange@cModelWorld56@@QAEXHPAH0@Z  00743a80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00742b30/s00742b30.cpp  ?ResetHighlightCurve@cModelWorld56@@QAEXXZ  00743b00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00742b30/s00742b30.cpp  ?MapInsert@Map8@@QAEPAURefPair8@@PAU2@0@Z  00742ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
