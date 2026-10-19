@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+007db650 440 cPackManager::Init complete (flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast); stack-slot order (keys/filter/key temp) and local spill layout differ [equiv: WEAK 22.9% coverage]

@@ -5,7 +5,7 @@
 007db5b0 ?Contains@PtrVec@@QAE_NH@Z  # PtrVec::Contains migrated from s007db1b0 (verbatim, slice spelling)
 007db5e0  PtrVec::Find
 007db620 ?At@PtrVec@@QAEPAXH@Z  # PtrVec::At migrated from s007db1b0 (verbatim, slice spelling)
-007db650  SP::cPackManager::Init  # PDB name
+007db650 ?Init@cPackManager@@QAE_NXZ  # cPackManager::Init migrated from s007db1b0 (verbatim, slice spelling)
 007db8b0  cPackInfoVec::Clear
 007db920 ?Init@cSmoothCameraController@@QAE_NH@Z  # cPackManager::Init migrated from s007db1b0 (verbatim, slice spelling)
 007db950 ?HandleMessage@cSmoothCameraController@@QAE_NHPAX@Z  # cSmoothCameraController::HandleMessage migrated from s007db1b0 (verbatim, slice spelling)
