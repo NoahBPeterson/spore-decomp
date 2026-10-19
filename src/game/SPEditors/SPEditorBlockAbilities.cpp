@@ -67,7 +67,7 @@ public:
         if (mpEnd < mpCapacity)
             ::new (mpEnd++) T(value);
         else
-            DoInsertValue(mpEnd, value);
+            DoInsertValue(mpEnd, value);  // 0x00621fc0 (eastl::vector::DoInsertValue)
     }
 };
 }
@@ -248,7 +248,7 @@ public:
         for (; first < last; ++first)
             first->~T();
     }
-    T* erase(T* first, T* last);
+    T* erase(T* first, T* last);  // 0x00621f50 (eastl::vector::erase)
 };
 }
 namespace eastl {
@@ -358,11 +358,19 @@ template SP::cSPUILayout* eastl::vector_s0059_e360__b<SP::cSPUILayout>::erase(SP
 // ---- items of slice s0059e360_b end
 
 // ---- items of slice s0059f510 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char vtbl_BlockAbilities0[];      // 0x013f6914
+extern char vtbl_BlockAbilities1[];      // 0x013f6910
+extern char vtbl_BlockAbilitiesBase0[];  // 0x013f68c4
+extern char vtbl_BlockAbilitiesBase1[];  // 0x013ef094
+void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
+void  EASTL_deallocate(void* p);   // 0x00f47380
 struct cSPUILayout_s0059_f510 {
     char pad[0x18];
-    cSPUILayout_s0059_f510();                 // 0x00810000
-    ~cSPUILayout_s0059_f510();                // 0x00811fe0
-    void Shutdown(int flag);       // 0x00811ad0
+    cSPUILayout_s0059_f510();                          // 0x00810000
+    cSPUILayout_s0059_f510(const cSPUILayout_s0059_f510& x);      // 0x00810020
+    ~cSPUILayout_s0059_f510();                         // 0x00811fe0
+    cSPUILayout_s0059_f510& operator=(const cSPUILayout_s0059_f510& x);  // 0x00810050
+    void Shutdown(int flag);                // 0x00811ad0
 };
 struct UILayoutVector {
     cSPUILayout_s0059_f510* mpBegin;
@@ -372,11 +380,32 @@ struct UILayoutVector {
     uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
     cSPUILayout_s0059_f510* erase(cSPUILayout_s0059_f510* first, cSPUILayout_s0059_f510* last);   // 0x0059f4a0
     void resize(uint32_t newSize);                               // 0x0059f950
+    void insert(cSPUILayout_s0059_f510* position, uint32_t n, const cSPUILayout_s0059_f510& value);  // 0x0059f510
+    ~UILayoutVector();                                           // 0x0059ee80
 };
-struct cSPEditorBlockAbilities {
+struct RBNodeBase {
+    RBNodeBase* mpNodeRight;
+    RBNodeBase* mpNodeLeft;
+    RBNodeBase* mpNodeParent;
+    char        mColor;
+};
+namespace SP {
+ struct VerbIconVec; 
+}
+struct VerbCategoryMap_s0059_f510 {
+    uint32_t    mCompare;       // +0
+    RBNodeBase  mAnchor;        // +4
+    int* Find(const int& key);  // 0x004e88a0
+    void FreeNodes(void* p);    // 0x004e8a30
+    ~VerbCategoryMap_s0059_f510() { FreeNodes(mAnchor.mpNodeParent); }
+};
+struct cSPEditorBlockAbilities_s0059_f510 {
     char          pad[0x24];
-    UILayoutVector mLayouts;    // +0x24
-    void ShutdownLayouts();     // 0x0059f900
+    UILayoutVector mLayouts;            // +0x24
+    VerbCategoryMap_s0059_f510 mVerbCategoryMap;   // +0x38
+    void ShutdownLayouts();             // 0x0059f900
+    void SortAbilities(SP::VerbIconVec* abilities, VerbCategoryMap_s0059_f510* categories);   // 0x0059f7c0
+    void* ScalarDeletingDtor(unsigned char flags);   // 0x0059fa50
 };
 struct AbilityRec {
     void* mpObject;     // +0x0
@@ -390,7 +419,13 @@ struct AbilityVector {
     int EraseRange(AbilityRec* first, AbilityRec* last);   // 0x0059faa0
 };
 cSPUILayout_s0059_f510* ConstructLayout(cSPUILayout_s0059_f510* p, int arg);   // 0x00810020
-void VectorInsertFill(UILayoutVector* v, cSPUILayout_s0059_f510* pos, uint32_t count, cSPUILayout_s0059_f510* value);  // 0x0059f510
+cSPUILayout_s0059_f510* UninitCopy(cSPUILayout_s0059_f510* first, cSPUILayout_s0059_f510* last, cSPUILayout_s0059_f510* dest);       // 0x0059ed60
+cSPUILayout_s0059_f510* RelocateCommit(cSPUILayout_s0059_f510* first, cSPUILayout_s0059_f510* last, cSPUILayout_s0059_f510* dest);   // 0x0059eda0
+cSPUILayout_s0059_f510* CopyBackward(cSPUILayout_s0059_f510* first, cSPUILayout_s0059_f510* last, cSPUILayout_s0059_f510* dLast);    // 0x0059ee20
+void FillLayouts(cSPUILayout_s0059_f510* first, cSPUILayout_s0059_f510* last, const cSPUILayout_s0059_f510* value);       // 0x0059ef00
+cSPUILayout_s0059_f510* UninitMove(cSPUILayout_s0059_f510** out, cSPUILayout_s0059_f510* first, cSPUILayout_s0059_f510* last,
+                        cSPUILayout_s0059_f510* dest, const cSPUILayout_s0059_f510* tag);                      // 0x0059ef30
+cSPUILayout_s0059_f510* UninitFillN(cSPUILayout_s0059_f510* first, uint32_t n, const cSPUILayout_s0059_f510* value);      // 0x0059ef70
 AbilityRec* FindAbilitySlot(AbilityRec* a, AbilityRec* b, AbilityRec* c);  // 0x0059f740
 struct VehicleAbilities {
     void* vptr0;      // +0x0
@@ -402,6 +437,149 @@ struct VehicleAbilities {
     int   m6c;        // +0x6c
     VehicleAbilities();
 };
+namespace EA {
+namespace COM {
+class IUnknown32_s0059_f510 {
+public:
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+    virtual ~IUnknown32_s0059_f510() {}
+};
+}
+}
+namespace EA {
+template <typename T>
+class RefCountVTemplate_s0059_f510 {
+public:
+    RefCountVTemplate_s0059_f510() : mRefCount(0) {}
+    RefCountVTemplate_s0059_f510(const RefCountVTemplate_s0059_f510&) : mRefCount(0) {}
+    RefCountVTemplate_s0059_f510& operator=(const RefCountVTemplate_s0059_f510&) { return *this; }
+    virtual ~RefCountVTemplate_s0059_f510() {}
+    T mRefCount;
+};
+}
+namespace SP {
+struct Property {
+    void* mpData;        // +0x00 (array data, or the inline value itself)
+    uint32_t pad04;
+    int mnItemCount;     // +0x08
+    uint32_t pad0c;
+    uint16_t mnFlags;    // +0x10 (0x30 = array)
+    uint16_t mnType;     // +0x12
+};
+}
+namespace SP {
+class cPropertyList_s0059_f510 {
+public:
+    virtual int AddRef();
+    virtual int Release();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+    virtual bool HasProperty(uint32_t id);                       // +0x1c 0x006a2470
+    virtual bool GetPropertyAlt(uint32_t id, Property*& result); // +0x20
+    virtual bool GetProperty(uint32_t id, Property*& result);    // +0x24
+};
+}
+namespace SP {
+template <class T> struct AutoRefCount {
+    T* mpObject;
+    AutoRefCount() : mpObject(0) {}
+    ~AutoRefCount() { if (mpObject) mpObject->Release(); }
+    T** GetAddress()
+    {
+        if (mpObject) {
+            T* p = mpObject;
+            mpObject = 0;
+            p->Release();
+        }
+        return &mpObject;
+    }
+};
+}
+namespace SP {
+class cString_s0059_f510 {
+public:
+    cString_s0059_f510(uint32_t tableID, uint32_t instanceID, const wchar_t* pFallback);   // 0x006b5770
+    ~cString_s0059_f510();                              // 0x006b5240
+    cString_s0059_f510& operator=(const cString_s0059_f510& x);    // 0x006b5430
+    uint32_t pad[5];
+};
+}
+namespace SP {
+namespace eastl_ {
+struct wstring16 {
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    uint32_t mAllocator;
+    ~wstring16()
+    {
+        if ((mpCapacity - mpBegin) > 1 && mpBegin)
+            operator delete[](mpBegin);
+    }
+};
+}
+}
+namespace SP {
+class cSPEditorVerbIconData_s0059_f510 : public EA::COM::IUnknown32_s0059_f510, public EA::RefCountVTemplate_s0059_f510<int> {
+public:
+    cSPEditorVerbIconData_s0059_f510();                                // 0x005e5a70
+    cSPEditorVerbIconData_s0059_f510(const cSPEditorVerbIconData_s0059_f510&);    // 0x0059f2a0
+    cSPEditorVerbIconData_s0059_f510& operator=(const cSPEditorVerbIconData_s0059_f510&);  // 0x0059f0e0
+    virtual int AddRef();
+    virtual int Release();
+    virtual ~cSPEditorVerbIconData_s0059_f510() {}
+    void Init(cPropertyList_s0059_f510* pList);                        // 0x005e5470
+
+    bool        mUseDescription;      // +0xc
+    bool        mShowLevel;           // +0xd
+    bool        mShowHotKey;          // +0xe
+    bool        mShowZeroLevel;       // +0xf
+    bool        mb10;                 // +0x10
+    bool        mb11;                 // +0x11
+    int         mHotKeyProp;          // +0x14
+    float       mLevel;               // +0x18
+    float       mMaxLevel;            // +0x1c
+    float       mf20;                 // +0x20
+    int         mType;                // +0x24
+    uint32_t    mAnimation;           // +0x28
+    float       mColor[4];            // +0x2c
+    uint32_t    m3c, m40, m44, m48;
+    bool        mb4c;                 // +0x4c
+    bool        mb4d;                 // +0x4d
+    uint32_t    mHotKeyID;            // +0x50
+    cString_s0059_f510     mName;                // +0x54
+    eastl_::wstring16 mHotKeyString;  // +0x68
+    int         mArrayIndex;              // +0x78
+    int         mPreSpecifiedArrayIndex;  // +0x7c
+    uint32_t    mKeys[12];                // +0x80..0xb0
+    uint32_t    mB0, mB4, mB8, mBC;
+    AutoRefCount<cPropertyList_s0059_f510> mPropList;    // +0xc0
+};
+}
+namespace SP {
+struct VerbIconVec {
+    cSPEditorVerbIconData_s0059_f510* mpBegin;
+    cSPEditorVerbIconData_s0059_f510* mpEnd;
+    cSPEditorVerbIconData_s0059_f510* mpCapacity;
+    uint32_t mAlloc[2];
+    void DoInsertValue(cSPEditorVerbIconData_s0059_f510* pos, const cSPEditorVerbIconData_s0059_f510& v);   // 0x0059fb10
+    void push_back(const cSPEditorVerbIconData_s0059_f510& v)
+    {
+        if (mpEnd < mpCapacity) {
+            cSPEditorVerbIconData_s0059_f510* p = mpEnd;
+            mpEnd = p + 1;
+            if (p) new (p) cSPEditorVerbIconData_s0059_f510(v);
+        } else {
+            DoInsertValue(mpEnd, v);
+        }
+    }
+    int EraseRange(cSPEditorVerbIconData_s0059_f510* first, cSPEditorVerbIconData_s0059_f510* last);   // 0x0059faa0
+};
+}
 // ---- items of slice s0059f510 end
 
 // ---- items of slice s005a0510 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -638,12 +816,7 @@ struct cSPUILayoutVector {   // eastl::vector<cSPUILayout, sp_vector_allocator>
     void resize(unsigned n);                                             // 0x0059f950
     cSPUILayout_s005a_0510& operator[](int i) { return mpBegin[i]; }
 };
-struct RBNodeBase {
-    RBNodeBase* mpNodeRight;
-    RBNodeBase* mpNodeLeft;
-    RBNodeBase* mpNodeParent;
-    char mColor;
-};
+
 struct RBIterator {
     RBNodeBase* mpNode;
     RBIterator() : mpNode(0) {}
@@ -743,20 +916,82 @@ template <typename T> T* vector_s0059_e360__b<T>::erase(T* first, T* last)
 }  // namespace eastl
 
 // @ 0x0059f510
-void VectorInsertFill(UILayoutVector* v, cSPUILayout_s0059_f510* pos, uint32_t count, cSPUILayout_s0059_f510* value)
+void UILayoutVector::insert(cSPUILayout_s0059_f510* position, uint32_t n, const cSPUILayout_s0059_f510& value)
 {
-    (void)v; (void)pos; (void)count; (void)value;
+    if (n <= (uint32_t)(mpCapacity - mpEnd)) {
+        if (n > 0) {
+            cSPUILayout_s0059_f510 temp(value);
+            const uint32_t nExtra = (uint32_t)(mpEnd - position);
+            cSPUILayout_s0059_f510* const pEnd = mpEnd;
+            if (n < nExtra) {
+                cSPUILayout_s0059_f510* out;
+                UninitMove(&out, mpEnd - n, mpEnd, mpEnd, position);
+                mpEnd += n;
+                CopyBackward(position, pEnd - n, pEnd);
+                FillLayouts(position, position + n, &temp);
+            } else {
+                cSPUILayout_s0059_f510* out;
+                UninitFillN(mpEnd, n - nExtra, &temp);
+                mpEnd += n - nExtra;
+                UninitMove(&out, position, pEnd, mpEnd, position);
+                mpEnd += nExtra;
+                FillLayouts(position, pEnd, &temp);
+            }
+        }
+    } else {
+        const uint32_t nPrevSize = (uint32_t)(mpEnd - mpBegin);
+        const uint32_t nGrowSize = nPrevSize ? nPrevSize * 2 : 1;
+        const uint32_t nNewSize  = nGrowSize > (nPrevSize + n) ? nGrowSize : (nPrevSize + n);
+        cSPUILayout_s0059_f510* const pNewData = nNewSize
+            ? (cSPUILayout_s0059_f510*)operator new(nNewSize * 0x18, "Editor", 0, 0,
+                  "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1)
+            : 0;
+        cSPUILayout_s0059_f510* pNewEnd = UninitCopy(mpBegin, position, pNewData);
+        RelocateCommit(mpBegin, position, pNewData);
+        UninitFillN(pNewEnd, n, &value);
+        pNewEnd = pNewEnd + n;
+        cSPUILayout_s0059_f510* const pNewEnd2 = UninitCopy(position, mpEnd, pNewEnd);
+        RelocateCommit(position, mpEnd, pNewEnd);
+        if (mpBegin && ((uint32_t*)mpBegin)[-1])
+            EASTL_deallocate(mpBegin);
+        mpBegin = pNewData;
+        mpEnd = pNewEnd2;
+        mpCapacity = pNewData + nNewSize;
+    }
 }
 
 // @ 0x0059f7c0
-int SortAbilities(void* a, void* b)
+void cSPEditorBlockAbilities_s0059_f510::SortAbilities(SP::VerbIconVec* abilities, VerbCategoryMap_s0059_f510* categories)
 {
-    (void)a; (void)b;
-    return 0;
+    int count = (int)(abilities->mpEnd - abilities->mpBegin) - 1;
+    if (count >= 0) {
+        bool bSwapped;
+        while (bSwapped = false, count > 0) {
+            int n = count;
+            int i = 0;
+            do {
+                SP::cSPEditorVerbIconData_s0059_f510* a = abilities->mpBegin + i;
+                int v1 = *categories->Find(a->mType);
+                int v2 = *categories->Find(a[1].mType);
+                if (v2 < v1) {
+                    SP::cSPEditorVerbIconData_s0059_f510 temp(*a);
+                    *a = a[1];
+                    a[1] = temp;
+                    bSwapped = true;
+                }
+                i++;
+            } while (--n != 0);
+            if (!bSwapped)
+                return;
+            if (--count < 0)
+                return;
+        }
+    }
+    return;
 }
 
 // @ 0x0059f900
-void cSPEditorBlockAbilities::ShutdownLayouts()
+void cSPEditorBlockAbilities_s0059_f510::ShutdownLayouts()
 {
     UILayoutVector* v = &mLayouts;
     int n = (int)(((char*)v->mpEnd - (char*)v->mpBegin) / 0x18);
@@ -777,7 +1012,7 @@ void UILayoutVector::resize(uint32_t newSize)
     if (cur < newSize) {
         char tmp[0x18];
         ConstructLayout((cSPUILayout_s0059_f510*)tmp, 0);
-        VectorInsertFill(this, mpEnd, newSize - cur, (cSPUILayout_s0059_f510*)tmp);
+        insert(mpEnd, newSize - cur, *(cSPUILayout_s0059_f510*)tmp);
         ((cSPUILayout_s0059_f510*)tmp)->~cSPUILayout_s0059_f510();
     } else {
         erase(mpBegin + newSize, mpEnd);
@@ -796,10 +1031,18 @@ VehicleAbilities::VehicleAbilities()
 }
 
 // @ 0x0059fa50
-void* ScalarDeletingDtor(void* p, unsigned char flags)
+void* cSPEditorBlockAbilities_s0059_f510::ScalarDeletingDtor(unsigned char flags)
 {
-    (void)flags;
-    return p;
+    *(void**)this = vtbl_BlockAbilities0;
+    *(void**)((char*)this + 4) = vtbl_BlockAbilities1;
+    ShutdownLayouts();
+    mVerbCategoryMap.~VerbCategoryMap_s0059_f510();
+    mLayouts.~UILayoutVector();
+    *(void**)((char*)this + 4) = vtbl_BlockAbilitiesBase1;
+    *(void**)this = vtbl_BlockAbilitiesBase0;
+    if (flags & 1)
+        EASTL_deallocate(this);
+    return this;
 }
 
 // @ 0x0059faa0

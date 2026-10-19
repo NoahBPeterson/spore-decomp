@@ -1,9 +1,9 @@
-0059f510 ?VectorInsertFill@@YAXPAUUILayoutVector@@PAUcSPUILayout_s0059_f510@@I1@Z  # VectorInsertFill migrated from s0059f510 (verbatim, slice spelling)
-0059f7c0 ?SortAbilities@@YAHPAX0@Z  # SortAbilities migrated from s0059f510 (verbatim, slice spelling)
-0059f900 ?ShutdownLayouts@cSPEditorBlockAbilities@@QAEXXZ  # cSPEditorBlockAbilities::ShutdownLayouts migrated from s0059f510 (verbatim, slice spelling)
+0059f510 ?insert@UILayoutVector@@QAEXPAUcSPUILayout_s0059_f510@@IABU2@@Z  # UILayoutVector::insert migrated from s0059f510 (verbatim, slice spelling)
+0059f7c0 ?SortAbilities@cSPEditorBlockAbilities_s0059_f510@@QAEXPAUVerbIconVec@SP@@PAUVerbCategoryMap_s0059_f510@@@Z  # cSPEditorBlockAbilities_s0059_f510::SortAbilities migrated from s0059f510 (verbatim, slice spelling)
+0059f900 ?ShutdownLayouts@cSPEditorBlockAbilities_s0059_f510@@QAEXXZ  # cSPEditorBlockAbilities_s0059_f510::ShutdownLayouts migrated from s0059f510 (verbatim, slice spelling)
 0059f950 ?resize@UILayoutVector@@QAEXI@Z  # UILayoutVector::resize migrated from s0059f510 (verbatim, slice spelling)
 0059f9e0 ??0VehicleAbilities@@QAE@XZ  # VehicleAbilities::VehicleAbilities migrated from s0059f510 (verbatim, slice spelling)
-0059fa50 ?ScalarDeletingDtor@@YAPAXPAXE@Z  # ScalarDeletingDtor migrated from s0059f510 (verbatim, slice spelling)
+0059fa50 ?ScalarDeletingDtor@cSPEditorBlockAbilities_s0059_f510@@QAEPAXE@Z  # cSPEditorBlockAbilities_s0059_f510::ScalarDeletingDtor migrated from s0059f510 (verbatim, slice spelling)
 0059faa0 ?EraseRange@AbilityVector@@QAEHPAUAbilityRec@@0@Z  # AbilityVector::EraseRange migrated from s0059f510 (verbatim, slice spelling)
 0059fc60 SP::BlockGetAbilities  # PDB name
 005e5470 ?Init@cSPEditorVerbIconData@SP@@UAEXPAVcPropertyList@2@@Z  # SP::cSPEditorVerbIconData::Init (callee of s0059f510, named from the dev publics; slice address comment)
