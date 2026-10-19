@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/ListItem.cpp  ?UpdateThrottle@@YG_NPAUcThrottleOwner@@@Z  00615c70  /O2 /MD /Gy /TP /Isrc/game/include

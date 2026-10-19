@@ -10,6 +10,7 @@
 00615520 ?IDListElement@cServerResponse_s0061_4f20@Pollen@SP@@QAEXXZ  # cServerResponse_s0061_4f20::IDListElement migrated from s00614f20 (verbatim, slice spelling)
 006155f0 ?SetupDict@cServerResponse_s0061_4f20@Pollen@SP@@SAXXZ  # cServerResponse_s0061_4f20::SetupDict migrated from s00614f20 (verbatim, slice spelling)
 00615790 SP::Pollen::cServerResponse::cServerResponse  # PDB name
+00615c70 ?UpdateThrottle@@YG_NPAUcThrottleOwner@@@Z  # UpdateThrottle migrated from s00614f20 (verbatim, slice spelling)
 00615ed0 ?HandleResult@cModelUploadTransaction_s0061_4f20@@UAE_NHPAUcHttpResult@@PAUcTransactionQueue_s0061_4f20@@@Z  # cModelUploadTransaction_s0061_4f20::HandleResult migrated from s00614f20 (verbatim, slice spelling)
 00616160 ?Init@cTripleObj@@QAEPAU1@XZ  # cTripleObj::Init migrated from s00614f20 (verbatim, slice spelling)
 00616220 ??RcTimeGreater@@QBE_NII@Z  # cTimeGreater::operator() migrated from s00614f20 (verbatim, slice spelling)
