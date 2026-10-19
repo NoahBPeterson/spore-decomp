@@ -725,6 +725,7 @@ def parse_slice(sid, variant=""):
         raise NoFunctions("%s: no reconstructed functions (no `// @ 0x` markers)" % sid)
     pre = lines[:marks[0]]
     chunks = []
+    carry_lead = []         # `#pragma optimize(..)` in front of the NEXT marker (see below)
     ns_at = enclosing_namespaces(lines)
     for k, i in enumerate(marks):
         j = marks[k + 1] if k + 1 < len(marks) else len(lines)
@@ -781,6 +782,9 @@ def parse_slice(sid, variant=""):
             own_ns.append(mo.group(2))
             body = body[mo.end():]
         ch = Chunk(va, body.rstrip() + "\n")
+        if carry_lead:
+            ch.lead = carry_lead + list(ch.lead)
+            carry_lead = []
         if own_ns:
             aft = ch.after
             for _n in own_ns:
@@ -799,6 +803,16 @@ def parse_slice(sid, variant=""):
             l0 = aft.pop(0)
             if l0.strip():
                 keep.append(l0)
+        # ... and `#pragma optimize("gt", off)` in front of the NEXT function's marker (only comments after it) sets up that
+        # function: it is the next chunk's lead, not a preamble line (mig11 s009feb30 UpdateGoalWeight: hoisted without its
+        # restore, it compiled the whole queued_blender TU unoptimized and all 6 functions were dropped as DIFF)
+        k = len(aft)
+        while k > 0 and (not aft[k - 1].strip() or aft[k - 1].lstrip().startswith("//") or re.match(r"^\s*#\s*pragma\b", aft[k - 1])):
+            k -= 1
+        tail_prag = [l for l in aft[k:] if re.match(r"^\s*#\s*pragma\b", l)]
+        if tail_prag:
+            carry_lead = tail_prag
+            aft = [l for l in aft[:k]] + [l for l in aft[k:] if not re.match(r"^\s*#\s*pragma\b", l)]
         pre += aft
         ch.after = "\n".join(keep)
         chunks.append(ch)
