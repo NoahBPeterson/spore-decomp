@@ -24,14 +24,8 @@ extern int g_devCapsDword; // @ 0x016f9448
 
 // ---- items of slice s0075cf20 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* SP_MessageServer();   // @ 0x0067dcc0
-extern int* g_deviceGlobal;   // @ 0x0162f9c8
-extern int* g_paintDevice;   // @ 0x016f89d0
 struct MONITORINFO { unsigned int cbSize; long rc[4]; long rcWork[4]; unsigned int dwFlags; };
 extern "C" __declspec(dllimport) int __stdcall GetMonitorInfoA(void*, MONITORINFO*);  // @ user32
-extern "C" __declspec(dllimport) void* __stdcall CreateDCA(const char*, const char*, const char*, void*);
-extern "C" __declspec(dllimport) int __stdcall GetDeviceCaps(void*, int);
-extern "C" __declspec(dllimport) int __stdcall DeleteDC(void*);
-extern int* g_d3d9DeviceB;   // @ 0x016f89c8
 namespace EA {
 namespace Thread {
  struct Mutex_s0075_cf20 {
@@ -56,21 +50,15 @@ struct cRenderer {
     void NumLayers(int* out);                // @ 0x0075db70
     void LayerAtIndex(int v);                // @ 0x0075dbb0
 };
-extern "C" void __cdecl D3D9AdapterInfo_GetAdapterString(int);   // @ 0x011f8310
-extern int GetDeviceReady();   // @ 0x011f8160
 struct DevLatch {
     bool CheckDeviceReady();
     void MaybeReleaseDevice();
 };
-extern int* g_d3d9DeviceC;   // @ 0x016f89d0
-extern "C" float CIpow_stub(float, float);   // @ 0x011e08f0
 struct D3DCAPS9;
 extern D3DCAPS9* DevCapsManager_GetD3DCAPS9();   // @ 0x011f8af0
-extern "C" int FUN_006a17e0(int, int);           // @ 0x006a17e0
-extern "C" int FUN_011fd770();                   // @ 0x011fd770
-extern int* g_d3d9State;   // @ 0x016f89c8
-extern int* g_devCaps;     // @ 0x016fa39c
-extern int g_devCapsDword; // @ 0x016f9448
+extern "C" __declspec(dllimport) int __stdcall GetMonitorInfoA(void*, MONITORINFO*);  // @ user32
+extern void ReleaseDevice();   // @ 0x011f81d0
+extern D3DCAPS9* DevCapsManager_GetD3DCAPS9();   // @ 0x011f8af0
 // ---- items of slice s0075cf20 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
@@ -159,8 +147,6 @@ void DeviceRelease()
     ((void (__thiscall*)(void*, int, int, int))*(void**)(*p + 0x14))(p, 0x44edd9b, 0, 0);
 }
 
-
-
 // @ 0x0075d990
 void PaintSystemInit()
 {
@@ -172,8 +158,6 @@ void PaintSystemInit()
     int* p = (int*)SP_MessageServer();
     ((void (__thiscall*)(void*, int, int, int))*(void**)(*p + 0x14))(p, 0x44edd9c, 0, 0);
 }
-
-
 
 // @ 0x0075d9e0
 float ScreenAspectRatio(float param_1)
@@ -197,15 +181,11 @@ float ScreenAspectRatio(float param_1)
     return result;
 }
 
-
-
 // @ 0x0075da90
 void __stdcall GetDisplayName(int param_1)
 {
     D3D9AdapterInfo_GetAdapterString(param_1);
 }
-
-
 
 // @ 0x0075daa0
 void cRenderer::SetViewer(int idx, void* viewer)
@@ -214,8 +194,6 @@ void cRenderer::SetViewer(int idx, void* viewer)
     mViewers[idx] = viewer;
     mMutex.Unlock();
 }
-
-
 
 // @ 0x0075dad0
 void* cRenderer::GetRenderStats(int idx)
@@ -226,7 +204,15 @@ void* cRenderer::GetRenderStats(int idx)
     return r;
 }
 
-
+// @ 0x0075db70
+void cRenderer::NumLayers(int* out)
+{
+    cRenderer* self = this;
+    self->mMutex.Lock((const void*)0x140dca0);
+    for (int i = 0; i != 0xb; i++)
+        out[i] = self->mStats[i];
+    self->mMutex.Unlock();
+}
 
 // @ 0x0075dbb0
 void cRenderer::LayerAtIndex(int v)
@@ -236,8 +222,6 @@ void cRenderer::LayerAtIndex(int v)
     self->mRenderJobBudget = v;
     self->mMutex.Unlock();
 }
-
-
 
 // @ 0x0075dbe0
 bool DevLatch::CheckDeviceReady()
@@ -252,8 +236,6 @@ bool DevLatch::CheckDeviceReady()
     return r;
 }
 
-
-
 // @ 0x0075dc10
 void SP::cRenderer::slot_35()
 {
@@ -261,8 +243,6 @@ void SP::cRenderer::slot_35()
     if (*(char*)(param_1 + 0x1b) == 0)
         ReleaseDevice();
 }
-
-
 
 // @ 0x0075dc20
 void BuildPaletteTable(float param_1)
@@ -279,8 +259,6 @@ void BuildPaletteTable(float param_1)
     int vt = *(int*)dev;
     ((void (__thiscall*)(void*, int, int, void*))*(void**)(vt + 0x54))((void*)vt, 0, 0, table);
 }
-
-
 
 // @ 0x0075dca0
 bool cRenderer_InitShaders()
@@ -305,7 +283,6 @@ bool cRenderer_InitShaders()
     FUN_006a17e0(0x668d4fa1, local);
     return FUN_011fd770() != 0;
 }
-
 
 // @ 0x0075de80
 void cRenderer_s0075_de80::RenderSettings(char useProps)
@@ -343,7 +320,6 @@ tail:
     *(float*)((char*)self + 0x78) = 1.0f;
 }
 
-
 // @ 0x0075df60
 void SP::cRenderer::Render(unsigned char a1)
 {
@@ -363,7 +339,6 @@ void SP::cRenderer::Render(unsigned char a1)
         *(int*)(param_1 + 0x68) = (g_screenH * dy) / h;
     }
 }
-
 
 // @ 0x0075dff0
 void cRenderer_s0075_de80::SubRender(int a, int lo, int hi, void* extra, char flag, unsigned orbits)
@@ -388,7 +363,6 @@ void cRenderer_s0075_de80::SubRender(int a, int lo, int hi, void* extra, char fl
     }
 }
 
-
 // @ 0x0075e090
 void* cRenderer_s0075_de80::Layer(unsigned id)
 {
@@ -410,7 +384,6 @@ void* cRenderer_s0075_de80::Layer(unsigned id)
     mMutex.Unlock();
     return 0;
 }
-
 
 // @ 0x0075e130
 unsigned cRenderer_s0075_de80::SetInfoFlags(unsigned id, unsigned f)
@@ -435,7 +408,6 @@ unsigned cRenderer_s0075_de80::SetInfoFlags(unsigned id, unsigned f)
     return 0;
 }
 
-
 // @ 0x0075e1e0
 unsigned cRenderer_s0075_de80::ClearInfoFlags(unsigned id, unsigned f)
 {
@@ -459,7 +431,6 @@ unsigned cRenderer_s0075_de80::ClearInfoFlags(unsigned id, unsigned f)
     return 0;
 }
 
-
 // @ 0x0075e290
 unsigned cRenderer_s0075_de80::GetInfoFlags(unsigned id)
 {
@@ -482,7 +453,6 @@ unsigned cRenderer_s0075_de80::GetInfoFlags(unsigned id)
     return 0;
 }
 
-
 // @ 0x0075e330
 int cRenderer_s0075_de80::NumLayers()
 {
@@ -492,7 +462,6 @@ int cRenderer_s0075_de80::NumLayers()
     return n;
 }
 
-
 // @ 0x0075e370
 void* cRenderer_s0075_de80::LayerInfoAt(int idx)
 {
@@ -501,7 +470,6 @@ void* cRenderer_s0075_de80::LayerInfoAt(int idx)
     mMutex.Unlock();
     return r;
 }
-
 
 // @ 0x0075e3b0
 void* cRenderer_s0075_de80::LayerInfoAtIndex(int idx)

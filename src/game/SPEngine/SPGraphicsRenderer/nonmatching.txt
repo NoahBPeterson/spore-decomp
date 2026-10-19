@@ -2,6 +2,7 @@
 0075d990 46 complete; two d3d9 device calls through [vtbl+0x1d8] + MessageServer vcall, argument/reg layout differs
 0075d9e0 131 complete; monitor/aspect helper (GetMonitorInfoA/CreateDCA/GetDeviceCaps/DeleteDC via dllimport), size/frame differs
 0075da90 3 complete; cdecl callee cleanup emitted as `pop ecx` where the original used `add esp,4`
+0075db70 45 complete; cRenderer::NumLayers rep-movsd copy under mutex, register/allocation differs; equiv: PASS
 0075dc20 133 complete; palette table build (pow loop + d3d9 SetPalette via [vtbl+0x54]), frame/reg layout differs; equiv: UNSUPPORTED (ecx read is only a nop lea ecx,[ecx] pad; fn is stdcall ret 4, left as is)
 0075dca0 74 complete; cRenderer::InitShaders caps check + state flags, frame/allocation differs
 0075de80 173 complete; render-settings property lookup (sAppProperties) + ScreenAspectRatio fallback, property/EH layout differs; equiv: FAIL (ours faults at eip=3000008e) after making it cRenderer member
