@@ -1,1 +1,4 @@
 slices/s00600e80/s00600e80.cpp  ??4SettingsRecord@@QAEAAU0@ABU0@@Z  00601c50  /O2 /MD /Gy /TP /arch:SSE
+slices/s00600e80/s00600e80.cpp  ?CloseWindow@SPUISettingsStub@@QAEXXZ  00601f00  /O2 /MD /Gy /TP /arch:SSE
+slices/s00600e80/s00600e80.cpp  ?ScalarDtor@cGraphicsTabD@@QAEPAXE@Z  006016c0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00600e80/s00600e80.cpp  ?Dtor@cOnlineTabD@@QAEXXZ  00601730  /O2 /MD /Gy /TP /arch:SSE
