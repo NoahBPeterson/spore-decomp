@@ -1,1 +1,5 @@
 # va  diff-bytes  reason
+00a37a10 1 EmitterSub::SetPropertyEx: complete; MSVC merged the two equal return epilogues into one (original keeps two). difftest WEAK. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a37b90 15 EmitterSub::Shutdown: complete; MSVC hoists the mpPatch load above the two field clears (original does not). difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a37c40 31 cEmitterEAPD::~cEmitterEAPD: complete; original has a base-with-destructor EH prolog, ours is flat. difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a37cc0 134 cEmitterEAPD::Load: complete; large body, call scheduling and register allocation differ. difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -9,20 +9,15 @@
 #include "SP/Audio/cEAPDVoiceManager.h"
 
 // unnamed retail callees and globals (address in the comment)
-extern "C" long _InterlockedExchange(volatile long*, long);
 extern "C" char  g_gme_refcount;  // 0x013ef094  (GmeRefCount base)
 extern "C" float g_se_one;     // 0x01485720
 extern "C" char  g_eapdTick_vtbl;   // 0x01453344
 extern "C" char  g_eapdEmit_vtbl;   // 0x014532f8
 extern "C" char  g_eapdRC_vtbl;     // 0x014532f0
-extern "C" char  g_sound_vtbl;      // 0x0144934c
-extern "C" char  g_eapdSound_vtbl1; // 0x01453e60
 
 // ---- items of slice s00a36d60 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned char  u8;
-typedef unsigned short u16;
 typedef unsigned int   u32;
-extern "C" long _InterlockedExchange(volatile long*, long);
 struct AudioSystem;    // EA::Audio::System (vtable)
 struct EapdSystem;     // EA::Audio::Eapd::ISystem
 struct SASystem;       // SP::Audio::cSystem
@@ -30,7 +25,6 @@ AudioSystem* GetSystemAT();                 // 0x00a206f0
 EapdSystem*  EapdGetSingletonPtr();         // 0x00a67c60
 SASystem*    SPGetSystem();                 // 0x00a421f0
 void FUN_00572020(void*, int);              // 0x00572020
-void FUN_009fbc50(void* p, float x, float y, float z); // 0x009fbc50
 extern "C" char  g_gme_refcount;  // 0x013ef094  (GmeRefCount base)
 extern "C" float g_se_one;     // 0x01485720
 struct SoundEffect {
@@ -58,39 +52,6 @@ struct SoundEffect {
     void ApplyEffect(float dt, int x, void* ctx); // 0xa37480
     void SetLocation(void* t, void* loc);       // 0xa376f0
 };
-bool SoundEffect::SetFloatParams(int which, float* val, int)
-{
-    if (which == 1) {
-        if (!m20)
-            return true;
-        AudioSystem* s = GetSystemAT();
-        if (!s)
-            return true;
-        ((void (__thiscall*)(void*, u32))((*(void***)s)[0x38 / 4]))(s, 0x3475376);
-        ((void (__thiscall*)(void*, u32, void*))((*(void***)s)[0x40 / 4]))(s, 0x3475385, m20);
-        ((void (__thiscall*)(void*, u32, int))((*(void***)s)[0x40 / 4]))(s, 0x34753a7, 0x70e47545);
-        ((void (__thiscall*)(void*, u32, float))((*(void***)s)[0x3c / 4]))(s, 0x34753aa, *val);
-        ((void (__thiscall*)(void*))((*(void***)s)[0x58 / 4]))(s);
-        return true;
-    }
-    if (which == 0xf) {
-        m2c = *val;
-        return true;
-    }
-    if (which != 0x15)
-        return false;
-    if (!m20)
-        return true;
-    AudioSystem* s = GetSystemAT();
-    if (!s)
-        return true;
-    ((void (__thiscall*)(void*, u32))((*(void***)s)[0x38 / 4]))(s, 0x3475376);
-    ((void (__thiscall*)(void*, u32, void*))((*(void***)s)[0x40 / 4]))(s, 0x3475385, m20);
-    ((void (__thiscall*)(void*, u32, int))((*(void***)s)[0x40 / 4]))(s, 0x34753a7, 0xc57f4567);
-    ((void (__thiscall*)(void*, u32, float))((*(void***)s)[0x3c / 4]))(s, 0x34753aa, *val);
-    ((void (__thiscall*)(void*))((*(void***)s)[0x58 / 4]))(s);
-    return true;
-}
 void SoundEffect::Stop(int a)
 {
     if (b1f) {
@@ -104,88 +65,9 @@ void SoundEffect::Stop(int a)
         m20 = 0;
     }
 }
-void SetSoundGain(void* handle, float gain);  // 0x00a37240 (defined below; used by a stub's inline body)
-void SoundEffect::ApplyEffect(float dt, int, void* ctx)
-{
-    m24 = m24 + dt;
-    AudioSystem* s = GetSystemAT();
-    if (b1e && b1c) {
-        b1e = false;
-        if (!s)
-            return;
-        void* d = m0c;
-        if ((*(u32*)((char*)d + 8) >> 4) & 1)
-            m20 = *(void**)((char*)d + 0x18);
-        else
-            m20 = ((void* (__thiscall*)(void*))((*(void***)s)[0x24 / 4]))(s);
-        ((void (__thiscall*)(void*, u32))((*(void***)s)[0x38 / 4]))(s, 0x3475365);
-        ((void (__thiscall*)(void*, u32, void*))((*(void***)s)[0x40 / 4]))(s, 0x3475381, *(void**)((char*)d + 0x10));
-        ((void (__thiscall*)(void*, u32, void*))((*(void***)s)[0x40 / 4]))(s, 0x3475385, m20);
-        ((void (__thiscall*)(void*, u32, int))((*(void***)s)[0x40 / 4]))(s, 0x3475389, *(u8*)((char*)d + 8) & 1);
-        ((void (__thiscall*)(void*, u32, u32))((*(void***)s)[0x40 / 4]))(s, 0x347538c, (*(u32*)((char*)d + 8) >> 1) & 1);
-        ((void (__thiscall*)(void*, u32, float))((*(void***)s)[0x3c / 4]))(s, 0x3475391, m10);
-        ((void (__thiscall*)(void*, u32, float))((*(void***)s)[0x3c / 4]))(s, 0x3475395, m14);
-        ((void (__thiscall*)(void*, u32, float))((*(void***)s)[0x3c / 4]))(s, 0x3475398, m18);
-        ((void (__thiscall*)(void*))((*(void***)s)[0x58 / 4]))(s);
-        return;
-    }
-    if (!b1f)
-        return;
-    if (b1d && *(float*)((char*)m0c + 0x1c) > 0.0f && m24 > m28) {
-        m28 = *(float*)((char*)m0c + 0x1c) + m24;
-        FUN_009fbc50(m20, m10, m14, m18);
-        b1d = false;
-    }
-    if (m30 != m2c) {
-        float v = m2c;
-        m30 = v;
-        SetSoundGain(m20, v);
-    }
-    ((int*)ctx)[0xb] += 1;
-    if (s) {
-        if (!((bool (__thiscall*)(void*, void*))((*(void***)s)[0x28 / 4]))(s, m20)) {
-            ((void (__thiscall*)(void*, int))((*(void***)this)[0xc / 4]))(this, 1);
-        }
-    }
-    if (*(float*)((char*)m0c + 0x20) > 0.0f && *(float*)((char*)m0c + 0x20) < m24) {
-        ((void (__thiscall*)(void*, int))((*(void***)this)[0xc / 4]))(this, 1);
-    }
-}
-struct Matrix3 { float f0,f1,f2,f3,f4,f5,f6,f7,f8; void Assign(const void*); }; // 0x0041cb40
-struct cTransform {                                   // 0x38 bytes
-    u16    w0;                                        // +0x00
-    u16    w2;                                        // +0x02
-    float  x;                                         // +0x04
-    float  y;                                         // +0x08
-    float  z;                                         // +0x0c
-    float  w10;                                       // +0x10
-    Matrix3 mat;                                      // +0x14
-    void PreTransformBy(const void*);                 // 0x00537f40
-};
-void SoundEffect::SetLocation(void* t, void* loc)
-{
-    u8* src = (u8*)loc;
-    cTransform m;
-    m.w0  = *(u16*)(src + 0);
-    m.x   = *(float*)(src + 4);
-    m.y   = *(float*)(src + 8);
-    m.z   = *(float*)(src + 0xc);
-    m.w10 = *(float*)(src + 0x10);
-    m.w2  = *(u16*)(src + 2);
-    m.mat.Assign(src + 0x14);
-    m.PreTransformBy(t);
-    if (m.x != m10 || m.y != m14 || m.z != m18)
-        b1d = true;
-    m10 = m.x;
-    m14 = m.y;
-    m18 = m.z;
-    b1c = true;
-}
 extern "C" char  g_eapdTick_vtbl;   // 0x01453344
 extern "C" char  g_eapdEmit_vtbl;   // 0x014532f8
 extern "C" char  g_eapdRC_vtbl;     // 0x014532f0
-extern "C" char  g_sound_vtbl;      // 0x0144934c
-extern "C" char  g_eapdSound_vtbl1; // 0x01453e60
 struct cEAPDVoiceMgr {
     void UnregisterInstanceGroup(u32 id);   // 0x00a46150
 };
@@ -230,102 +112,6 @@ struct EmitterSub {
     bool  SetProperty(int key, float value, int extra); // 0xa37960
     bool  SetPropertyEx(int a, int b, int c);           // 0xa37a10
 };
-cEmitterEAPD::cEmitterEAPD()
-{
-    vtbl0 = &g_sound_vtbl;
-    vtbl1 = &g_eapdSound_vtbl1;
-    vtbl2 = &g_gme_refcount;
-    _InterlockedExchange((volatile long*)&mRefCount, 0);
-    vtbl0 = &g_eapdTick_vtbl;
-    vtbl1 = &g_eapdEmit_vtbl;
-    vtbl2 = &g_eapdRC_vtbl;
-    mKey[0] = 0; mKey[1] = 0; mKey[2] = 0;
-    mhInstance = 0;
-    mpPatch = 0;
-    mId = 0;
-    mGroupId = 0;
-    mFlags = 0;
-    mConfig = 0;
-    mPaused = 0;
-}
-bool EmitterSub::SetPropertyEx(int a, int b, int c)
-{
-    EapdSystem* e = EapdGetSingletonPtr();
-    if (e == 0)
-        return true;
-    if (!((bool (__thiscall*)(void*, u32, int, int))((*(void***)e)[0x34 / 4]))(
-            e, mKey18, a, b)) {
-        AudioSystem* s = GetSystemAT();
-        ((void (__thiscall*)(void*, u32, int, int, int))((*(void***)s)[0xa8 / 4]))(
-            s, mGroupId, a, b, c);
-    }
-    return true;
-}
-bool cEmitterEAPD::Load()
-{
-    void* local = 0;
-    AudioSystem* s = GetSystemAT();
-    if (local) {
-        void* t = local;
-        local = 0;
-        ((void (__thiscall*)(void*))((*(void***)t)[0 / 4]))(t);
-    }
-    bool ok = ((bool (__thiscall*)(void*, void*, void**))((*(void***)s)[0x18c / 4]))(
-        s, &mKey[0], &local);
-    if (ok) {
-        void* old = mpPatch;
-        void* cur = local;
-        if (cur != old) {
-            if (cur)
-                ((void (__thiscall*)(void*))((*(void***)cur)[0 / 4]))(cur);
-            mpPatch = cur;
-            if (old)
-                ((void (__thiscall*)(void*))((*(void***)old)[4 / 4]))(old);
-        }
-        if (local)
-            ((void (__thiscall*)(void*))((*(void***)local)[4 / 4]))(local);
-        return true;
-    }
-    if (local)
-        ((void (__thiscall*)(void*))((*(void***)local)[4 / 4]))(local);
-    return false;
-}
-bool EmitterSub::Shutdown()
-{
-    if (mFlags & 1) {
-        ((void (__thiscall*)(void*))((*(void***)this)[0x18 / 4]))(this);
-        mFlags &= ~1u;
-        EapdSystem* e = EapdGetSingletonPtr();
-        if (e)
-            ((void (__thiscall*)(void*, u32))((*(void***)e)[0x28 / 4]))(e, mKey18);
-        SASystem* sys = SPGetSystem();
-        if (*(void**)((char*)sys + 0x15bc80))
-            ((cEAPDVoiceMgr*)*(void**)((char*)sys + 0x15bc80))->UnregisterInstanceGroup(mKey18);
-        ((void (__thiscall*)(void*, u32))((*(void***)sys)[0x124 / 4]))(sys, mGroupId);
-        mKey18 = 0;
-        mGroupId = 0;
-        if (mpPatch) {
-            void* p = mpPatch;
-            mpPatch = 0;
-            ((void (__thiscall*)(void*))((*(void***)p)[4 / 4]))(p);
-        }
-    }
-    return true;
-}
-cEmitterEAPD::~cEmitterEAPD()
-{
-    vtbl0 = &g_eapdTick_vtbl;
-    vtbl1 = &g_eapdEmit_vtbl;
-    vtbl2 = &g_eapdRC_vtbl;
-    ((EmitterSub*)((char*)this + 4))->Shutdown();
-    if (mConfig) {
-        void* c = (void*)mConfig;
-        ((void (__thiscall*)(void*))((*(void***)c)[4 / 4]))(c);
-    }
-    if (mpPatch)
-        ((void (__thiscall*)(void*))((*(void***)mpPatch)[4 / 4]))(mpPatch);
-    vtbl2 = &g_gme_refcount;
-}
 // ---- items of slice s00a36d60 end
 
 // @ 0x00a377b0
@@ -440,4 +226,90 @@ u32 cEmitterEAPD::SetPropertyInternal(int a, float f)
             return 1;
     }
     return 0;
+}
+
+// @ 0x00a37a10
+bool EmitterSub::SetPropertyEx(int a, int b, int c)
+{
+    EapdSystem* e = EapdGetSingletonPtr();
+    if (e == 0)
+        return true;
+    if (!((bool (__thiscall*)(void*, u32, int, int))((*(void***)e)[0x34 / 4]))(
+            e, mKey18, a, b)) {
+        AudioSystem* s = GetSystemAT();
+        ((void (__thiscall*)(void*, u32, int, int, int))((*(void***)s)[0xa8 / 4]))(
+            s, mGroupId, a, b, c);
+    }
+    return true;
+}
+
+// @ 0x00a37b90
+bool EmitterSub::Shutdown()
+{
+    if (mFlags & 1) {
+        ((void (__thiscall*)(void*))((*(void***)this)[0x18 / 4]))(this);
+        mFlags &= ~1u;
+        EapdSystem* e = EapdGetSingletonPtr();
+        if (e)
+            ((void (__thiscall*)(void*, u32))((*(void***)e)[0x28 / 4]))(e, mKey18);
+        SASystem* sys = SPGetSystem();
+        if (*(void**)((char*)sys + 0x15bc80))
+            ((cEAPDVoiceMgr*)*(void**)((char*)sys + 0x15bc80))->UnregisterInstanceGroup(mKey18);
+        ((void (__thiscall*)(void*, u32))((*(void***)sys)[0x124 / 4]))(sys, mGroupId);
+        mKey18 = 0;
+        mGroupId = 0;
+        if (mpPatch) {
+            void* p = mpPatch;
+            mpPatch = 0;
+            ((void (__thiscall*)(void*))((*(void***)p)[4 / 4]))(p);
+        }
+    }
+    return true;
+}
+
+// @ 0x00a37c40
+cEmitterEAPD::~cEmitterEAPD()
+{
+    vtbl0 = &g_eapdTick_vtbl;
+    vtbl1 = &g_eapdEmit_vtbl;
+    vtbl2 = &g_eapdRC_vtbl;
+    ((EmitterSub*)((char*)this + 4))->Shutdown();
+    if (mConfig) {
+        void* c = (void*)mConfig;
+        ((void (__thiscall*)(void*))((*(void***)c)[4 / 4]))(c);
+    }
+    if (mpPatch)
+        ((void (__thiscall*)(void*))((*(void***)mpPatch)[4 / 4]))(mpPatch);
+    vtbl2 = &g_gme_refcount;
+}
+
+// @ 0x00a37cc0
+bool cEmitterEAPD::Load()
+{
+    void* local = 0;
+    AudioSystem* s = GetSystemAT();
+    if (local) {
+        void* t = local;
+        local = 0;
+        ((void (__thiscall*)(void*))((*(void***)t)[0 / 4]))(t);
+    }
+    bool ok = ((bool (__thiscall*)(void*, void*, void**))((*(void***)s)[0x18c / 4]))(
+        s, &mKey[0], &local);
+    if (ok) {
+        void* old = mpPatch;
+        void* cur = local;
+        if (cur != old) {
+            if (cur)
+                ((void (__thiscall*)(void*))((*(void***)cur)[0 / 4]))(cur);
+            mpPatch = cur;
+            if (old)
+                ((void (__thiscall*)(void*))((*(void***)old)[4 / 4]))(old);
+        }
+        if (local)
+            ((void (__thiscall*)(void*))((*(void***)local)[4 / 4]))(local);
+        return true;
+    }
+    if (local)
+        ((void (__thiscall*)(void*))((*(void***)local)[4 / 4]))(local);
+    return false;
 }
