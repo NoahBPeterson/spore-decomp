@@ -1,4 +1,3 @@
-# va <Name>  # evidence
 007ffc70 cSPUIBehaviorPredicateWinState::Evaluate  # vtable 0x14165B0 slot 6; switch on cSPUIBehaviorPredicateWinState::mWinStateQuery (+0x18)
 00800060 cSPUIBehaviorPredicateWinState::~cSPUIBehaviorPredicateWinState  # vtable 0x14165B0 slot 2; resets IWinProc/RefCount vptrs, releases mpQueryWindow, base dtor
 008005f0 UTFWin::RegisterUIBehaviors  # one-time init guarded by g_164BBD9; registers 29 handler globals with the messaging server
@@ -10,14 +9,14 @@
 008011f0 cSPUICursorAttachmentLayout::~cSPUICursorAttachmentLayout  # PDB name; vtable 0x1416EC4
 00801210 cSPUICursorAttachmentLayout::FindWindowByIDAdjustor  # vtable 0x1416EC4 slot 6; adjusts this by -0x6C then calls cSPUILayout::FindWindowByID
 00801280 cSPUICursorAttachmentLayout::cSPUICursorAttachmentLayout  # PDB type cSPUICursorAttachmentLayout; vtable 0x1416EC4 at +0x78
-00801330 ResKey_Init  # writes 0x2393756 into a key object
-00801360 cSPUILayoutCollection::Show  # refcount at +0x58, calls AppSystem vtable +0x40
-00801380 cSPUILayoutCollection::Hide  # refcount at +0x58
-008013d0 CanvasVisibilitySetter  # bool at +0x40; calls SP::Canvas vtable +0x78
-00801420 ScreenToWindowInt  # converts two ints to float and calls SPUIHelpers (0x804F10)
-00801450 ScreenToWindowInt2  # calls 0x804ED0 then truncates two floats to int*
-008014c0 cSPUICursorAttachmentLayout::Initialize  # creates "UI/UI/Cursor info parent window", sets flags, adds to world main window
-008016e0 CursorAttachmentLayout::SetPosition  # offsets +0x48/+0x4C, clamps into world main window rect
-008017f0 CursorAttachmentLayout::SetWindow  # offsets +0x48/+0x4C, refcount swap
-00801950 CursorAttachmentLayout::IsSomething  # offsets +0x50/+0x54, calls 0x806A60(x,y,arg,-1)
-00801980 CursorAttachmentLayout::SetEnabled  # bool at +0x44, window at +0x50
+00801330 ?f_801330@@YGHPAXI@Z  # f_801330 migrated from s007ffc70 (verbatim, slice spelling)
+00801360 ?Show@C_801360@@QAEXXZ  # C_801360::Show migrated from s007ffc70 (verbatim, slice spelling)
+00801380 ?Hide@C_801360@@QAEXXZ  # C_801360::Hide migrated from s007ffc70 (verbatim, slice spelling)
+008013d0 ?Set40@C_8013d0@@QAE_NE@Z  # C_8013d0::Set40 migrated from s007ffc70 (verbatim, slice spelling)
+00801420 ?f_801420@@YGXHH@Z  # f_801420 migrated from s007ffc70 (verbatim, slice spelling)
+00801450 ?f_801450@@YGXPAH0@Z  # f_801450 migrated from s007ffc70 (verbatim, slice spelling)
+008014c0 ?Init@C_8014c0@@QAEHXZ  # C_8014c0::Init migrated from s007ffc70 (verbatim, slice spelling)
+008016e0 ?Move@C_8016e0@@QAEXMM@Z  # C_8016e0::Move migrated from s007ffc70 (verbatim, slice spelling)
+008017f0 ?Set@C_8017f0@@QAE_NPAX@Z  # C_8017f0::Set migrated from s007ffc70 (verbatim, slice spelling)
+00801950 ?Run@C_801950@@QAE_NH@Z  # C_801950::Run migrated from s007ffc70 (verbatim, slice spelling)
+00801980 ?Set@C_801980@@QAEX_N@Z  # C_801980::Set migrated from s007ffc70 (verbatim, slice spelling)

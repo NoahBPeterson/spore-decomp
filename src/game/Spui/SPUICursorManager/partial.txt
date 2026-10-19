@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+008014c0 -  partial skeleton: initializes the parent cursor window and root child only; child-window / drop-cursor-icon creation paths omitted
+008019f0 -  approximate property-database reads (subobject/variant layout unknown)
+00802050 -  AddCursor: map insert tail approximated, node fields not written
+00802160 -  AddStandardCursors drives the partial AddCursor

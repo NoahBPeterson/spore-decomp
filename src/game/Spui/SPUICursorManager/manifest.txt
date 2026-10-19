@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/Spui/SPUICursorManager.cpp  ?f_801330@@YGHPAXI@Z  00801330  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUICursorManager.cpp  ?Show@C_801360@@QAEXXZ  00801360  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUICursorManager.cpp  ?Hide@C_801360@@QAEXXZ  00801380  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUICursorManager.cpp  ?Set40@C_8013d0@@QAE_NE@Z  008013d0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUICursorManager.cpp  ?f_801420@@YGXHH@Z  00801420  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUICursorManager.cpp  ?Run@C_801950@@QAE_NH@Z  00801950  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUICursorManager.cpp  ?FindCanvasAdj@CurMgr@@QAE_NI@Z  00801c70  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUICursorManager.cpp  ?NukeSubtree@MapBase@@QAEXPAX@Z  00801ef0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUICursorManager.cpp  ?Shutdown@CurMgr@@QAE_NXZ  00802680  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include

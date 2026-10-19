@@ -1,25 +1,25 @@
-# va <Name>  # evidence
-008019f0 cSPUICursorManager::ReadCursorOffsets  # reads property 0x1BAE779/0x1BAE783 into g_15435BC/g_15435C0
-00801ac0 cSPUICursorManagerFactory::Create  # alloc 0x18 "App/cSPUICursorManager", vtable 0x1416FA8
-00801b60 cSPUICursorManager::SetGlobalCursor  # map find, writes +0x30, calls 0x8027E0
-00801bb0 cSPUICursorManager::SetLocalCursor   # map find, writes +0x2C
-00801c10 cSPUICursorManager::SetCanvasCursor  # map find, writes +0x34
-00801c70 cSPUICursorManager::SetCanvasCursorAdjustor  # add ecx,-8; jmp 0x801C10
-00801c80 eastl::rbtree<unsigned,cCursorInfo>::DoCreateNode  # Ghidra name; string+value copy into node
+008019f0 ?Sub_8019f0@@YAXXZ  # Sub_8019f0 migrated from s008019f0 (verbatim, slice spelling)
+00801ac0 ?f@C_801ac0@@QAEHPAX0HH@Z  # C_801ac0::f migrated from s008019f0 (verbatim, slice spelling)
+00801b60 ?FindGlobal@CurMgr@@QAE_NI@Z  # CurMgr::FindGlobal migrated from s008019f0 (verbatim, slice spelling)
+00801bb0 ?FindLocal@CurMgr@@QAE_NI@Z  # CurMgr::FindLocal migrated from s008019f0 (verbatim, slice spelling)
+00801c10 ?FindCanvas@CurMgr@@QAE_NI@Z  # CurMgr::FindCanvas migrated from s008019f0 (verbatim, slice spelling)
+00801c70 ?FindCanvasAdj@CurMgr@@QAE_NI@Z  # CurMgr::FindCanvasAdj migrated from s008019f0 (verbatim, slice spelling)
+00801c80 ?DoCreateNode@RbtreeNode@@QAEPAXPAX@Z  # RbtreeNode::DoCreateNode migrated from s008019f0 (verbatim, slice spelling)
 00801d80 cSPUICursorManager::SaveCursorToFile  # FileStream open/write of a cursor bitmap
-00801e90 eastl::rbtree<unsigned,cCursorInfo>::erase  # Ghidra name
-00801ef0 eastl::rbtree<unsigned,cCursorInfo>::DoNukeSubtree  # Ghidra name
-00801fd0 cSPUICursorManager::~cSPUICursorManager  # resets vtables 0x1416FE8/0x1416FD4
-00802050 cSPUICursorManager::AddCursor  # Ghidra name; map insert + fields +0x24/+0x28/+0x2C/+0x30
-00802160 cSPUICursorManager::AddStandardCursors  # Ghidra name; 36 AddCursor calls with STD_ names
-008024e0 cSPUICursorManager::RemoveCursor  # map find + erase + clears current pointers
-00802580 cSPUICursorManager::ClearCursors  # walks count at +0x20
-008025e0 cSPUICursorManager::cSPUICursorManager  # sets vtables 0x13EFFA8/0x1416FE8/0x1416FD4
-008026b0 cSPUICursorManager::LoadCursorFromFile  # LoadImageW(IMAGE_CURSOR, LR_LOADFROMFILE)
+00801e90 ?Erase@MapBase@@QAEXPAPAXPAX@Z  # MapBase::Erase migrated from s008019f0 (verbatim, slice spelling)
+00801ef0 ?NukeSubtree@MapBase@@QAEXPAX@Z  # MapBase::NukeSubtree migrated from s008019f0 (verbatim, slice spelling)
+00801fd0 ?Sub_801fd0@@YIXPAX@Z  # Sub_801fd0 migrated from s008019f0 (verbatim, slice spelling)
+00802050 ?AddCursor@CursorTable@@QAEIPAXIPB_WDHH@Z  # CursorTable::AddCursor migrated from s008019f0 (verbatim, slice spelling)
+00802160 ?AddStandardCursors@CursorTable@@QAEHXZ  # CursorTable::AddStandardCursors migrated from s008019f0 (verbatim, slice spelling)
+008024e0 ?Remove@CurMgr@@QAE_NI@Z  # CurMgr::Remove migrated from s008019f0 (verbatim, slice spelling)
+00802580 ?Clear@CurMgr@@QAE_NXZ  # CurMgr::Clear migrated from s008019f0 (verbatim, slice spelling)
+008025e0 ?Sub_8025e0@@YIPAXPAX@Z  # Sub_8025e0 migrated from s008019f0 (verbatim, slice spelling)
+00802680 ?Shutdown@CurMgr@@QAE_NXZ  # CurMgr::Shutdown migrated from s008019f0 (verbatim, slice spelling)
+008026b0 ?Sub_8026b0@@YG_NPB_WPAX@Z  # Sub_8026b0 migrated from s008019f0 (verbatim, slice spelling)
 008026e0 cSPUICursorManager::ResolveCursor  # GetIconInfo; writes hotspots +0x10/+0x14 and handle +0x18
 008027a0 cSPUICursorManager::DestroyCursorEntry  # DestroyCursor on +0x2C
 008027e0 cSPUICursorManager::ApplyCursor  # picks a cursor and calls SP::Canvas +0x80
-00802850 cSPUICursorManager::ResolveEntryCursor  # tail into 0x8026E0
+00802850 ?CheckEntry@CurMgr@@QAE_NPAX@Z  # CurMgr::CheckEntry migrated from s008019f0 (verbatim, slice spelling)
 00802870 cSPUICursorManager::QueryCursorId  # id 0x2F009DD0 -> this unless 4
 00802890 cSPUICursorManager::FindConsoleWindow  # FindWindowByID(0x14A4606)
 008028e0 cSPUICursorManager::ShutdownAttachment  # cSPUILayout::Shutdown + release +0x28
