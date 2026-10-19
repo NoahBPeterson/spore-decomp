@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00999590 139 complete add-plugin/bind path (thiscall member; fast path AddRefs the stored copy); register allocation (this in edi vs ebx) and casted-temp slot differ; difftest PASS (fixed: was a cdecl free function with cdecl DoInsertValue calls and a missing AddRef on the fast path)
+00999640 176 complete SerializationService::RemovePlugin; register allocation differs

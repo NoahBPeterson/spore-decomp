@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/SerializationService.cpp  ?Read@SerializationService@@QAEIIIII@Z  009994a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/SerializationService.cpp  ?GetReader@SerializationService@@QAEPAXPAX@Z  009994f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/SerializationService.cpp  ??_GSerializationService@@UAEPAXI@Z  00999550  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/SerializationService.cpp  ?ClearAll@SerializationService@@QAEXXZ  00999720  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
