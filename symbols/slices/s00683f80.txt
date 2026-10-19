@@ -6,10 +6,10 @@
 00684330 rbtree insert-or-assign (0x226a1de-style key compare)
 006844a0 rbtree insert wrapper (int-key map at +0xc)
 00684500 rbtree find-or-insert (int-key map)
-00684610 map operator[] (int key)
+00684610 MapB::Idx  # map operator[] (int key), renamed from operator[] so the harness can parse it
 00684740 read records
 00684890 rbtree insert-or-assign
-00684980 map operator[] (int key)
+00684980 MapC::Idx  # map operator[] (int key), renamed from operator[] so the harness can parse it
 00684a90 read records
 00684b40 App::cConversationFactory serializer entry (alt path, lookups 0x226a1de/0x355d6f5)
 00684be0 float->int truncation helper

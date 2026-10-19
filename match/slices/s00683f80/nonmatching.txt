@@ -1,5 +1,16 @@
 # va  diff-bytes  reason
-006842c0  75  complete: serializer entry; vtable/get-object calls reconstructed but convention/register scheduling differs; equiv: UNSUPPORTED (0 valid inputs, faults); now FactSer member
-006844a0  8  complete: rbtree insert wrapper; only the load/store order after RBTreeInsert differs (frame slot and register choice)
-00684bf0  63  complete: SP::CoordToIndex; cl keeps the float->int conversion in a register while the original spills to a stack temp
-00684c50  46  complete: index->coordinate helper; SSE operand/register selection differs
+00683f80  58  complete: ~Factory EH teardown of the +0x6c/+0x50/+0x34/+0x18 members; bodies match but it emits 4 EH states (3,2,1,0) where the original has 3 (2,1,0) because the modelled base-class dtor adds one unwind level  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: PASS 201 valid, 100% coverage]
+00684040  95  complete: Factory::Create; pool ctor/_new/init reproduced but _EASTL_alloc6 and CPropList::ctor are unresolved externals in the slice TU  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: UNSUPPORTED (2 unresolved refs)]
+006841a0  169  complete: Factory::WriteMapC; per-node ObjY copy + 4 stream writes reproduced, but the original walks a real heap tree we cannot synthesise (0/400 inputs valid)  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: UNSUPPORTED (0/400 valid)]
+006842c0  83  complete: FactSer::ser_6842c0; vt[0xc] + 4 sub-serializer calls reconstructed, register scheduling differs (0/400 inputs valid)  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: UNSUPPORTED (0/400 valid)]
+00684330  209  complete: MapB::InsertHint; only callee-arg noise — the unique path passes a stack flag (orig 0x40040000, ours 0) to InsertUnique, of which only the low byte is read  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: FAIL (eax, uninitialised flag)]
+00684500  175  complete: MapC::InsertUnique; rbtree find-or-insert logic verified correct but node construction/rotation codegen differs  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: PASS 252 valid, 72% coverage]
+00684610  244  complete: MapB::Idx (operator[]); traversal + insert condition verified correct, node/alloc codegen differs  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: FAIL (memory pool @4cc00034, alloc-init byte)]
+00684740  104  complete: Factory::ReadMapB; per-field stream reads reproduced, original walks a real heap tree (0/400 inputs valid)  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: UNSUPPORTED (0/400 valid)]
+00684890  209  complete: MapC::InsertHint; same uninitialised stack-flag callee-arg noise as 00684330  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: FAIL (eax, uninitialised flag)]
+00684980  227  complete: MapC::Idx (operator[]); traversal + insert condition verified correct, node/alloc codegen differs; _EASTL_dealloc unresolved as an external  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: UNSUPPORTED (1 unresolved ref)]
+006844a0  8  complete (out-of-slice): rbtree insert wrapper; only the load/store order after RBTreeInsert differs  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: not run (out of slice)]
+00684b40  91  complete (out-of-slice): factory serializer alt path; original reads a register argument at entry (custom/LTCG ABI) our declaration does not model  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: UNSUPPORTED (entry register arg)]
+00684bf0  76  complete (out-of-slice): SP::CoordToIndex; cl keeps the float->int conversion in a register while the original spills it to a stack temp; behaviourally equal (only -0.0 vs 0.0 in a discarded slot)  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: FAIL (register spill only)]
+00684c50  42  complete (out-of-slice): IndexToCoord; with /fp:fast it is PASS/400; without it cl contracts to SSE2 and 1-ulp rounding differs  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-  [equiv: PASS with /fp:fast (400 valid, 100%); FAIL (1 ulp) without]
+00684ca0  513  complete (out-of-slice): SP::WrapCubeFace; face-wrap table indexing/logic reconstructed but codegen differs  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: PASS 277 valid, 100% coverage]
