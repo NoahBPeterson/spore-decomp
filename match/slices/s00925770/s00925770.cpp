@@ -29,7 +29,7 @@ extern char  g_0154df88;
 extern void* g_0154df8c;
 extern void* g_0154df90;
 extern void* g_016c8b44;
-void* GetDefaultAllocatorX() {
+__declspec(noinline) void* GetDefaultAllocatorX() {
     if (!g_01668eac) {
         if (!g_0154df84) {
             g_0154df84 = g_016c8b44;
@@ -134,24 +134,308 @@ void C25f30::F(int a2, int a3, int a4) {
 
 }} // namespace EA::Trace
 
+
+// ================================================================== completed (formerly skeletons)
+#include <new>
+#include <intrin.h>
+namespace EA { namespace Trace {
+
+struct Mutex {
+    char d[0x30];
+    Mutex* Init(const char* name, bool b);    // 0x009222a0 (Mutex::Mutex)
+    void Destroy();                           // 0x00922130 (~Mutex)
+    void Lock(const void* ctx);               // 0x009221b0
+    int  Unlock();                            // 0x00922270
+};
+
+struct TraceHelper {
+    char pad0;
+    bool mIsFiltered;
+    bool mIsFilterEvaluated;
+    char pad3[0x1d];
+    void* mTracer;
+};
+
+TraceHelper** __cdecl vec_move(void* dst, void* src, int bytes);                                    // 0x011e0744
+void* __cdecl eastl_new(unsigned size, const char* name, int, int, const char* file, int line);    // 0x00f473a0
+void __cdecl eastl_delete(void* p);                                                                // 0x00f47380
+
+struct HelperVec {
+    TraceHelper** mpBegin;
+    TraceHelper** mpEnd;
+    TraceHelper** mpCapacity;
+    void DoInsertValue(TraceHelper** pos, TraceHelper* const* val);   // 0x009257e0
+    __forceinline TraceHelper** find(TraceHelper* v) {
+        TraceHelper** last = mpEnd; TraceHelper** first = mpBegin;
+        while (first != last && *first != v) ++first;
+        return first;
+    }
+    __forceinline void erase(TraceHelper** it) {
+        TraceHelper** next = it + 1;
+        if (next < mpEnd) vec_move(it, next, (int)((char*)mpEnd - (char*)next));
+        --mpEnd;
+    }
+    __forceinline void Zero() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; }
+    void Reserve(int n);                                              // 0x009256a0
+    inline void push_back(TraceHelper* v) {
+        if (mpEnd < mpCapacity) {
+            TraceHelper** e = mpEnd++;
+            if (e) *e = v;
+        } else {
+            DoInsertValue(mpEnd, &v);
+        }
+    }
+};
+
+// 0x009257e0
+// @ 0x009257e0
+void HelperVec::DoInsertValue(TraceHelper** pos, TraceHelper* const* val) {
+    if (mpEnd != mpCapacity) {
+        TraceHelper** e0 = mpEnd;
+        TraceHelper* const* v = val;
+        if (v >= pos && v < e0) ++v;
+        if (e0) *e0 = e0[-1];
+        TraceHelper** last = mpEnd - 1;
+        size_t bytes = (size_t)((char*)last - (char*)pos);
+        memmove(mpEnd - (last - pos), pos, bytes);
+        *pos = *v;
+        ++mpEnd;
+        return;
+    }
+    unsigned cap = (unsigned)(mpEnd - mpBegin);
+    cap = (cap > 0u) ? cap * 2 : 1;
+    TraceHelper** buf = cap ? (TraceHelper**)eastl_new(cap * 4, "EATrace", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+    int off = (int)((char*)pos - (char*)mpBegin);
+    TraceHelper** p = vec_move(buf, mpBegin, off);
+    p = p + (off >> 2);
+    if (p) *p = *val;
+    int tail = (int)((char*)mpEnd - (char*)pos);
+    TraceHelper** e = vec_move(p + 1, pos, tail);
+    e = e + (tail >> 2);
+    if (mpBegin && ((int*)mpBegin)[-1]) eastl_delete(mpBegin);
+    mpBegin = buf;
+    mpEnd = e;
+    mpCapacity = buf + cap;
+}
+
+struct TraceHelperTable {
+    virtual void AddRef();
+    virtual void Release();
+    void* mTracer;
+    HelperVec mVec;
+    char pad14[0xc];
+    Mutex mMutex;
+    long mFlag;
+    char pad54[4];
+    void RegisterHelper(TraceHelper* h);      // 0x00925b50
+    void UnregisterHelper(TraceHelper* h);    // 0x00925960
+};
+
+// 0x00925b50
+// @ 0x00925b50
+void TraceHelperTable::RegisterHelper(TraceHelper* h) {
+    mMutex.Lock((const void*)0x143dffc);
+    h->mTracer = mTracer;
+    h->mIsFiltered = true;
+    h->mIsFilterEvaluated = false;
+    mVec.push_back(h);
+    mMutex.Unlock();
+}
+
+// 0x00925960
+// @ 0x00925960
+void TraceHelperTable::UnregisterHelper(TraceHelper* h) {
+    mMutex.Lock((const void*)0x143dffc);
+    h->mTracer = 0;
+    h->mIsFiltered = true;
+    h->mIsFilterEvaluated = false;
+    TraceHelper** it = mVec.find(h);
+    if (it != mVec.mpEnd) mVec.erase(it);
+    mMutex.Unlock();
+}
+
+// 0x009258f0  EATraceHelperTablePtr::EATraceHelperTablePtr
+// @ 0x009258f0
+TraceHelperTable* CreateHelperTable() {
+    TraceHelperTable* t = (TraceHelperTable*)eastl_new(0x58, "EATrace/TraceHelperTable", 0, 0, 0, 0);
+    if (t) {
+        *(void**)t = (void*)0x143e050;
+        t->mTracer = 0;
+        t->mVec.Zero();
+        t->mMutex.Init(0, true);
+        _InterlockedExchange(&t->mFlag, 0);
+        t->mVec.Reserve(0x1000);
+        return t;
+    }
+    return 0;
+}
+
+struct HelperTablePtr {
+    int w0, w4, w8, wc;
+    TraceHelperTable* mpTable;
+    HelperTablePtr* Init();                   // 0x00925b00
+    __forceinline void setTable(TraceHelperTable* n) {
+        TraceHelperTable* old = mpTable;
+        if (n != old) {
+            if (n) n->AddRef();
+            mpTable = n;
+            if (old) old->Release();
+        }
+    }
+};
+// @ 0x00925b00
+HelperTablePtr* HelperTablePtr::Init() {
+    w4 = w0 = 0;
+    mpTable = 0;
+    setTable(CreateHelperTable());
+    return this;
+}
+
+// ---- 0x009257a0  TempTraceHelperMap::~TempTraceHelperMap and 0x009259d0 ctor
+extern const float g_01485720;
+extern const float g_01470f1c;
+struct TempMapHT {
+    void* vt;
+    void* mpBuckets;
+    unsigned mBucketCount;
+    unsigned mElementCount;
+    float mMaxLoad;
+    float mGrowth;
+    volatile int mNextResize;
+    int   w1c;
+    char  mbEnable;
+    void DoFreeNodes(void* buckets, unsigned n);   // 0x007611f0
+    __forceinline void Clear() {
+        DoFreeNodes(mpBuckets, mBucketCount);
+        mElementCount = 0;
+        if (mBucketCount > 1) eastl_delete(mpBuckets);
+    }
+};
+struct TempTraceHelperMap {
+    Mutex mMutex;
+    TempMapHT ht;
+    TempTraceHelperMap* Init();                    // 0x009259d0
+    void Destroy();                                // 0x009257a0 (~TempTraceHelperMap)
+    void ReleaseHelpers();                         // 0x009255f0
+};
+// @ 0x009257a0
+void TempTraceHelperMap::Destroy() {
+    ReleaseHelpers();
+    ht.Clear();
+    mMutex.Destroy();
+}
+// @ 0x009259d0
+TempTraceHelperMap* TempTraceHelperMap::Init() {
+    mMutex.Init(0, true);
+    ht.mMaxLoad = g_01485720;
+    ht.mGrowth = g_01470f1c;
+    ht.mNextResize = 0;
+    ht.mBucketCount = 1;
+    ht.mpBuckets = (void*)0x154df28;
+    ht.mElementCount = 0;
+    ht.mNextResize = 0;
+    ht.mbEnable = 1;
+    return this;
+}
+
+// ---- 0x00925a30  TraceHashtable ctor (fixed-pool backed)
+extern const float g_013f0620;
+struct FixedPool {
+    void* mpHead;
+    int   w4;
+    void* mBuf;
+    void* mBufEnd;
+    int   mNodeSize;
+    void* mAlloc;
+    void init(void* buf, unsigned size, unsigned nodeSize, unsigned align, unsigned off);   // 0x00921260
+};
+struct RehashPolicy {
+    float mMaxLoad, mGrowth;
+    int   mNextResize;
+    unsigned GetBucketCount(unsigned n);       // 0x009213c0
+};
+unsigned __cdecl policy_prime(unsigned n);     // 0x00921340
+struct TraceHashtable {
+    int w0, w4;
+    unsigned mBucketCount;
+    unsigned mElementCount;
+    RehashPolicy mPolicy;
+    char pad1c[0x18];
+    char mNodes[1];
+    TraceHashtable* Init(unsigned a1, unsigned a2);
+    void Init7(unsigned b, unsigned a1, const unsigned& r1, const unsigned& r2, unsigned v, const unsigned& r3, FixedPool* pool);  // 0x00925490
+    void DoRehash(unsigned n);                 // 0x00925370
+};
+// @ 0x00925a30
+TraceHashtable* TraceHashtable::Init(unsigned a1, unsigned a2) {
+    char* self = (char*)this;
+    union { FixedPool pool; RehashPolicy tmp; } u;
+    FixedPool& pool = u.pool;
+    {
+        pool.mpHead = 0;
+        char* buf = self + 0x138;
+        pool.init(buf, 0x2f4, 0xc, 4, 0);
+        pool.mBuf = buf;
+        char* alloc = self + 0x34;
+        buf += 0x2f4;
+        pool.mBufEnd = buf;
+        pool.mNodeSize = 0xc;
+        pool.mAlloc = alloc;
+        unsigned nb = policy_prime(0x40);
+        Init7(nb, a1, a2, a2, a2, a2, &pool);
+    }
+    RehashPolicy& tmp = u.tmp;
+    tmp.mMaxLoad = g_013f0620;
+    tmp.mGrowth = g_01470f1c;
+    tmp.mNextResize = 0;
+    *(int*)&mPolicy.mMaxLoad = *(int*)&tmp.mMaxLoad;
+    *(int*)&mPolicy.mGrowth = *(int*)&tmp.mGrowth;
+    mPolicy.mNextResize = tmp.mNextResize;
+    unsigned n = tmp.GetBucketCount(mElementCount);
+    if (n > mBucketCount) DoRehash(n);
+    return this;
+}
+
+// ---- 0x00925f90 / 0x00925fe0
+struct ICoreAlloc {
+    virtual void v0();
+    virtual void* Alloc(unsigned size, int a, int b, int c, int d);
+};
+struct ZoneAllocWrap {
+    int w0;
+    ICoreAlloc* mpFallback;
+    int w8, wc, w10;
+    unsigned mLimit;
+    int w18;
+    int mFallbackCount;
+    void* Inner(unsigned size, int a, int b, int c, int d);    // 0x00925dc0
+    void* Alloc(unsigned size, int a, int b);                  // 0x00925f90
+};
+// @ 0x00925f90
+void* ZoneAllocWrap::Alloc(unsigned size, int a, int b) {
+    if (size <= mLimit) return Inner(size, a, b, 0, 0);
+    ++mFallbackCount;
+    return mpFallback->Alloc(size, a, b, 0, 0);
+}
+// @ 0x00925fe0
+void* ZoneAlloc_Named(int size, ICoreAlloc* alloc, int flags) {
+    if (!alloc) alloc = (ICoreAlloc*)GetDefaultAllocatorX();
+    int* r = (int*)alloc->Alloc(size + 8, flags, 0, 4, 0);
+    if (r) { *r = (int)alloc; return r + 2; }
+    return 0;
+}
+
+}} // namespace EA::Trace
+
 // ================================================================== skeletons (partial)
 extern "C" {
-void sk_009257a0() {}
-void sk_009257e0() {}
-void sk_009258f0() {}
-void sk_00925960() {}
-void sk_009259d0() {}
-void sk_00925a30() {}
-void* __fastcall ctor_00925b00(void* p) { return p; }
-void sk_00925b50() {}
 void sk_00925c40() {}
 void sk_00925c70() {}
 void sk_00925ca0() {}
 void sk_00925dc0() {}
 void sk_00925e70() {}
 void sk_00925eb0() {}
-void sk_00925f90() {}
-void sk_00925fe0() {}
 void sk_00926080() {}
 void sk_009260c0() {}
 void sk_00926160() {}
