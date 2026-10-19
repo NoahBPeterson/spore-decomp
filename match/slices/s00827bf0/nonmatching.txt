@@ -3,3 +3,8 @@
 008284a0  6   pair element operator=: first-member store scheduled after push edi  [equiv PASS (1142 valid, 100% cov)]
 00828410  7   vector::DoDestroyValues: &mVariant lea scheduled after the flag test  [equiv WEAK (637 valid, 37.5% cov)]
 00828350  7   destroy-range helper: &mVariant lea scheduled after the flag test  [equiv WEAK (120 valid, 31.2% cov)]
+00827bf0  678  cPropertyUI::DoMessage: original keeps msg->type in ebx and the hash-map pointer in ebp; ours reloads type from memory [equiv: WEAK (398 valid, 10.6% cov)]
+00828110  45  ForceVisibleLocation: SSE load/spill scheduling of the inlined point copies and frame size 0x20 vs 0x1c [equiv: WEAK (286 valid, 34.0% cov)]
+008284f0  90  eastl do_move_start: original strength-reduces src+0x1c / dst+0x1a pointers (compared without /EHsc) [equiv: WEAK (110 valid, 15.2% cov)]
+00828560  98  eastl copy do_copy: original keeps first in its arg slot and src+0x1c as induction pointer [equiv: UNSUPPORTED (harness 0/400 valid)]
+008285e0  98  eastl copy_backward do_copy: same induction-pointer difference as 00828560 [equiv: UNSUPPORTED (harness 0/400 valid)]

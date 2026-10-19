@@ -5,3 +5,6 @@ slices/s00827bf0/s00827bf0.cpp  ?GetEventMask@CPL@@UAEIXZ  00828070  /O2 /MD /Gy
 slices/s00827bf0/s00827bf0.cpp  ?DoMessage@CPL@@UAE_NHPAX@Z  00828080  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00827bf0/s00827bf0.cpp  ?GetRootWindow@CPL@@QAEPAXXZ  00828100  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00827bf0/s00827bf0.cpp  ?SetPositionAndOffset@CPL@@QAEXMMMM@Z  008283a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00827bf0/s00827bf0.cpp  ?Init@CPL@@UAE_NXZ  00828250  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00827bf0/s00827bf0.cpp  ??1CPL@@QAE@XZ  00828670  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00827bf0/s00827bf0.cpp  ??0CPL@@QAE@XZ  008286d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
