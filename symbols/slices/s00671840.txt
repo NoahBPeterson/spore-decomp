@@ -8,9 +8,10 @@
 006720e0 SP::cSPUISearchBox  # clears mSearchString and pushes to mWinSearchBox
 00672120 SP::cSPUISearchBox::DoMessage  # card PDB candidate (caller-scored)
 00672200 `anonymous namespace'::cTextureCheat::Execute  # card PDB candidate (caller-scored)
-00672480 SP::cSPUISporeGuidePage::Init  # card PDB name
-00672880 eastl::basic_string<wchar_t,eastl::allocator>::operator=  # string copy/assign
-00672910 eastl::copy_impl<0,std::random_access_iterator_tag>::do_copy  # card PDB name
+00672480 ?Init@GuidePage@@QAE_NPAX@Z  # GuidePage::Init migrated from s00671840 (verbatim, slice spelling)
+006725a0 ?OnRelease@GuidePage@@QAE_NXZ  # GuidePage::OnRelease migrated from s00671840 (verbatim, slice spelling)
+00672880 ?AssignFrom@EString@@QAEPAU1@PAU1@@Z  # EString::AssignFrom migrated from s00671840 (verbatim, slice spelling)
+00672910 ?FUN_00672910@@YAPAXPAX00@Z  # FUN_00672910 migrated from s00671840 (verbatim, slice spelling)
 00672960 App::cStringDetokenizer::~cStringDetokenizer  # vtable 0x1400f40, 4 fixed strings
-006729d0 `anonymous namespace'::cBuildXHTMLDetokenizer::detokenize  # card PDB name
-00672b50 `anonymous namespace'::cBuildXHTMLDetokenizer::token_action_copy  # card PDB name
+006729d0 ?detokenize@Detokenizer@@QAE_NXZ  # Detokenizer::detokenize migrated from s00671840 (verbatim, slice spelling)
+00672b50 ?token_action_copy@Detokenizer@@QAEXPAXPAG@Z  # Detokenizer::token_action_copy migrated from s00671840 (verbatim, slice spelling)

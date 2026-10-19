@@ -1,6 +1,7 @@
-00674d30 `anonymous namespace'::cBuildXHTMLDetokenizer::Detokenize  # PDB gap-align
-00674dc0 `anonymous namespace'::sBuildXHTMLDocument  # PDB anchor; takes (doc, wchar_t** out)
-00675080 SP::cSPUISporeGuidePage::LoadSporeGuidePage  # PDB anchor
+00674640 ?TranslateToken@Detokenizer_s0067_4640@@QAE_NPB_WAAUTWStr@@@Z  # Detokenizer_s0067_4640::TranslateToken migrated from s00674640 (verbatim, slice spelling)
+00674d30 ?Detokenize@Detok2@@QAEXPBGPAX@Z  # Detok2::Detokenize migrated from s00674640 (verbatim, slice spelling)
+00674dc0 ?sBuildXHTMLDocument@@YAXPAX0@Z  # sBuildXHTMLDocument migrated from s00674640 (verbatim, slice spelling)
+00675080 ?LoadSporeGuidePage@cSPUISporeGuidePage@SP@@QAEXI@Z  # SP::cSPUISporeGuidePage::LoadSporeGuidePage migrated from s00674640
 006751a0 PropertyManager setter wrapper (0x5befd27)  # unnamed; SP::PropertyManager vcall
 006751c0 cVar comparison predicate  # switch on (header>>8)&7; returns relational result
 00675260 eastl::vector<16-byte>::Serialize  # writes count + pairs via EA::IO::WriteUint32
@@ -9,4 +10,3 @@
 00675440 vector<cVar>::Deserialize  # read-vcall loop
 006754d0 object-database loader for achievement_test  # GetSaveArea + cObjectDatabase
 00675590 reset-flag pass over 0x10-stride vector  # unnamed
-00674640 `anonymous namespace'::cBuildXHTMLDetokenizer::TranslateToken  # PDB anchor

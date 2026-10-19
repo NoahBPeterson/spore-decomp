@@ -1,10 +1,10 @@
-00674170 eastl::fill_n<wchar_t*>  # not PDB-named; fill of 16-bit values with rep stosd/stosw
-006741b0 eastl::hashtable/find helper  # 0x63c-stride walk + wcscmp; unnamed
-00674230 eastl::vector<cVar>::DoFillInsert  # fill-insert with memmove tail
-006742f0 eastl::move_backward / destroy range  # copies cVar strings backward
-00674340 eastl::uninitialized_copy<cVar*>  # construct-forward with assign
-006743a0 eastl::vector<cVar>::DoDestroyValues  # delete heap strings, advance dst
-006743f0 cBuildXHTMLDetokenizer::cVar::cVar(wchar_t const*)  # string ctor from C string
-00674440 eastl::vector<cVar>::DoInsertValue  # reallocation insert
-006745d0 eastl::vector<cVar>::push_back  # fast path + DoInsertValue tail
-00673c50 `anonymous namespace'::cBuildXHTMLDetokenizer::cBuildXHTMLDetokenizer  # PDB callee-scored
+00673c50 ?Ctor@Detokenizer_s0067_3c50@@QAEXXZ  # Detokenizer_s0067_3c50::Ctor migrated from s00673c50 (verbatim, slice spelling)
+00674170 ?FillN@@YAPAXPAGIG@Z  # FillN migrated from s00673c50 (verbatim, slice spelling)
+006741b0 ?FindRange@@YAHPAHPAG@Z  # FindRange migrated from s00673c50 (verbatim, slice spelling)
+00674230 ?FillInsert@FillVec@@QAEPAIII@Z  # FillVec::FillInsert migrated from s00673c50 (verbatim, slice spelling)
+006742f0 ?MoveAssignBackward@@YAPAUEStr@@PAU1@00@Z  # MoveAssignBackward migrated from s00673c50 (verbatim, slice spelling)
+00674340 ?UninitCopy@@YAPAUEStr@@PAU1@00@Z  # UninitCopy migrated from s00673c50 (verbatim, slice spelling)
+006743a0 ?DestroyValues@@YAPAUEStr@@PAU1@00@Z  # DestroyValues migrated from s00673c50 (verbatim, slice spelling)
+006743f0 ?Construct@EStr@@QAEPAU1@PBG@Z  # EStr::Construct migrated from s00673c50 (verbatim, slice spelling)
+00674440 ?DoInsertValueSkeleton@EStrVec@@QAEXPAUEStr@@PBU2@@Z  # EStrVec::DoInsertValueSkeleton migrated from s00673c50 (verbatim, slice spelling)
+006745d0 ?push_back@EStrVec@@QAEXABUEStr@@@Z  # EStrVec::push_back migrated from s00673c50 (verbatim, slice spelling)
