@@ -1,4 +1,4 @@
-005beaf0 SP::cSPEditorManipulationTranslateCreature::DoOnMouseDown  # dev PDB method (622 bytes), same body
+005beaf0 ?DoOnMouseDown@cSPEditorManipulationTranslateCreature_s005b_eaf0@SP@@QAE_NHMMH@Z  # cSPEditorManipulationTranslateCreature_s005b_eaf0::DoOnMouseDown migrated from s005beaf0 (verbatim, slice spelling)
 005bf0a0 ?HasEditorPropertyList@@YAHABVKey_s005b_eaf0@ResourceMan@EA@@@Z  # HasEditorPropertyList migrated from s005beaf0 (verbatim, slice spelling)
 005bf0e0 ?GetEditorPropertyList@@YAHABVKey_s005b_eaf0@ResourceMan@EA@@AAPAVPropertyList_s005b_eaf0@App@@@Z  # GetEditorPropertyList migrated from s005beaf0 (verbatim, slice spelling)
 005bf120 ?SaveEditorPropertyList@@YA_NABVKey_s005b_eaf0@ResourceMan@EA@@PAVPropertyList_s005b_eaf0@App@@HPAVIDatabase@23@@Z  # SaveEditorPropertyList migrated from s005beaf0 (verbatim, slice spelling)
