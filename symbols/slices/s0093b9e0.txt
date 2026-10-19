@@ -24,10 +24,10 @@
 0093c3f0 EA::IO::MemoryStream::Release  # no PDB name
 0093c420 trivial return-b thunk  # no PDB name
 0093c430 small ctor  # no PDB name
-0093c440 EA::ConvertToString8  # dev-PDB EA::ConvertToString8
-0093c570 EA::ConvertToString8  # dev-PDB EA::ConvertToString8 (range wrapper)
-0093c5a0 EA::ConvertToString16  # dev-PDB EA::ConvertToString16
-0093c6d0 EA::ConvertToString16  # dev-PDB EA::ConvertToString16 (range wrapper)
+0093c440 ?ConvertToString8Impl@EA@@YAXPAXPB_WI@Z  # ConvertToString8Impl migrated from s0093b9e0 (verbatim, slice spelling)
+0093c570 ?ConvertToString8@EA@@YAPAXPAXPBH@Z  # ConvertToString8 migrated from s0093b9e0 (verbatim, slice spelling)
+0093c5a0 ?ConvertToString16Impl@EA@@YAXPAXPBDI@Z  # ConvertToString16Impl migrated from s0093b9e0 (verbatim, slice spelling)
+0093c6d0 ?ConvertToString16@EA@@YAPAXPAXPBH@Z  # ConvertToString16 migrated from s0093b9e0 (verbatim, slice spelling)
 0093c6f0 FUN_0093c6f0  # no PDB name; fputs to stderr
 0093c710 ?Strlen32@Text@EA@@YAHPBH@Z  # Strlen32 migrated from s0093b9e0 (verbatim, slice spelling)
 0093c730 ?DetectEncoding@Text@EA@@YAHPBEI@Z  # DetectEncoding migrated from s0093b9e0 (verbatim, slice spelling)
