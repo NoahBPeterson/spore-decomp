@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00a0f9a0 68 CmdQueue::ReadNext: complete; compiler caches mReadIndex/mNumCmds instead of reloading
+00a0f9f0 76 CmdQueue::BeginRead: complete; original keeps Command* in eax via lea

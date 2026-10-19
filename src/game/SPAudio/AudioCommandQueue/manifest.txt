@@ -1,0 +1,17 @@
+# source  symbol  va  flags
+../src/game/SPAudio/AudioCommandQueue.cpp  ?EnumParameter@Command@Audio@EA@@QBEPBXAAIPAI11@Z  00a0f880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioCommandQueue.cpp  ?Find@Command@Audio@EA@@QBEPAXIPAI0@Z  00a0f8e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioCommandQueue.cpp  ?FinishCommand@CmdQueue@@QAEXXZ  00a0f940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioCommandQueue.cpp  ?CancelCommand@CmdQueue@@QAEXXZ  00a0f960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioCommandQueue.cpp  ?SetT1@Command_s00a0_f350@Audio@EA@@QAE_NHPAH0@Z  00a0fa50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioCommandQueue.cpp  ?GetFloat@Command_s00a0_f350@Audio@EA@@QAE_NHPAM@Z  00a0fa70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioCommandQueue.cpp  ?GetUint32@Command_s00a0_f350@Audio@EA@@QAE_NHPAI@Z  00a0fab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioCommandQueue.cpp  ?GetString8@Command_s00a0_f350@Audio@EA@@QAE_NHPADPAI@Z  00a0faf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioCommandQueue.cpp  ?GetString8@Command_s00a0_f350@Audio@EA@@QAEPBDH@Z  00a0fb60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioCommandQueue.cpp  ?GetVoidPtr@Command_s00a0_f350@Audio@EA@@QAE_NHPAPAX@Z  00a0fb90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioCommandQueue.cpp  ?GetData@Command_s00a0_f350@Audio@EA@@QAEPAXHPAPAX@Z  00a0fbd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioCommandQueue.cpp  ?GetVector3@Command_s00a0_f350@Audio@EA@@QAE_NHPAM@Z  00a0fc10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioCommandQueue.cpp  ?GetMatrix33@Command_s00a0_f350@Audio@EA@@QAE_NHPAM@Z  00a0fc60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioCommandQueue.cpp  ?SetUint64@Command_s00a0_f350@Audio@EA@@QAE_NHI@Z  00a0fcf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioCommandQueue.cpp  ?SetFloat@Command_s00a0_f350@Audio@EA@@QAE_NHM@Z  00a0fd30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioCommandQueue.cpp  ?DeleteParameter@Command@Audio@EA@@QAEXI@Z  00a0fd70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
