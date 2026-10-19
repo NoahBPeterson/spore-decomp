@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+0115a710 1832 DecodeHuffman: type-pun zero store (*(int*)&out[idx]=0) eliminates xmm3 clobber; WEAK at default inputs (118/400 valid, 82.2% coverage, 0 mismatches); original regalloc differs (n and idx kept in registers vs original stack slots), no ebp frame

@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/ealayer30/helper_lbmpeg_ealayer3.cpp.cpp  ?GetScaleFactors@HELPER_CEALayer3@core@audio@rw@@QAEXHH@Z  01159cc0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
