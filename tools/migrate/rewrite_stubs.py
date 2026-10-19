@@ -553,6 +553,12 @@ def rename_word(text, old, new, ns=(), qualified_only=False):
     q = ""
     for n in ns:
         q = "(?:%s)?%s\\s*::\\s*" % (q, re.escape(n)) if q else re.escape(n) + r"\s*::\s*"
+    # a leading part of the path (`EA::Key` for EA::ResourceMan::Key, made valid by the slice's `namespace EA { using
+    # ResourceMan::Key; }` and spelled so in `using EA::Key;`, mig14 s0060d860: kept as Key, pruned, C4430 at every
+    # `Key_s0060_d860` outside EA) is the same class too
+    lead = ["".join(re.escape(n) + r"\s*::\s*" for n in ns[:k]) for k in range(1, len(ns))]
+    if q and lead:
+        q = "|".join([q] + lead)
     pat = re.compile(r"(?<![\w.>:])(?:%s)?%s\b" % (q, re.escape(old))) if q else re.compile(r"(?<![\w.>:])%s\b" % re.escape(old))
     if qualified_only and ns:
         # only the fully qualified spelling (an item of ANOTHER namespace that defines its own class of this name: s007cb590's
