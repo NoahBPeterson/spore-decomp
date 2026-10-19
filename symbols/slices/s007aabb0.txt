@@ -1,14 +1,15 @@
 00692400 ?Cancel@cJob@SP@@QAE_N_N@Z  # SP::cJob::Cancel (callee of s007aabb0, named from the dev publics; slice address comment)
 006926b0 ?Wait@cJob@SP@@QAEXXZ  # SP::cJob::Wait (callee of s007aabb0, named from the dev publics; slice address comment)
+007aabb0 ?CreateTextureRaster@cTextureManager_s007a_abb0@@QAEHPAXH_NH@Z  # cTextureManager_s007a_abb0::CreateTextureRaster migrated from s007aabb0 (verbatim, slice spelling)
 007aaf90 ?UnregisterArena@cTextureManager_s007a_abb0@@QAEXPAX@Z  # cTextureManager_s007a_abb0::UnregisterArena migrated from s007aabb0 (verbatim, slice spelling)
-007aafc0 SP::cTextureManager::StallFinishBackgroundLoad  # PDB gap-align
+007aafc0 ?StallFinishBackgroundLoad@cTextureManager_s007a_abb0@@QAE_NPAUResourceKey@@@Z  # cTextureManager_s007a_abb0::StallFinishBackgroundLoad migrated from s007aabb0 (verbatim, slice spelling)
 007ab090 ?ClearEntries@cLoadQueue@@QAEXXZ  # cLoadQueue::ClearEntries migrated from s007aabb0 (verbatim, slice spelling)
 007ab0d0 ?DoInsertValue@TextureInstanceMap@@QAE?AUInsertResult@1@ABUTextureValue@1@Utrue_type@1@@Z  # TextureInstanceMap::DoInsertValue migrated from s007aabb0 (verbatim, slice spelling)
 007ab2f0 SP::cTextureManager::~cTextureManager  # PDB gap-align
-007ab460 SP::cTextureManager::Shutdown  # PDB vtable-slot
+007ab460 ?Shutdown@cTextureManager@SP@@UAE_NXZ  # SP::cTextureManager::Shutdown migrated from s007aabb0
 007ab5f0 ?HasTexture@cTextureManager_s007a_abb0@@QAE_NUResourceKey@@@Z  # cTextureManager_s007a_abb0::HasTexture migrated from s007aabb0 (verbatim, slice spelling)
 007ab6c0 ?ReloadTexture@cTextureManager_s007a_abb0@@QAEIUResourceKey@@@Z  # cTextureManager_s007a_abb0::ReloadTexture migrated from s007aabb0 (verbatim, slice spelling)
-007ab730 SP::cTextureManager::RegisterArenaContents  # PDB vtable-slot
-007ab860 SP::cTextureAsyncInfo::Setup  # PDB gap-align
-007aba40 SP::cLoadQueue<SP::cTextureManager,SP::cTextureAsyncQueueEntry,SP::cTextureAsyncInfo,SP::cTextureInstanceInternal *,4>::Update  # PDB gap-align
-007abae0 SP::cLoadQueue<SP::cTextureManager,SP::cTextureAsyncQueueEntry,SP::cTextureAsyncInfo,SP::cTextureInstanceInternal *,4>::Schedule  # PDB callee-single
+007ab730 ?RegisterArenaContents@cTextureManager@SP@@UAEXPAVcArenaResource@2@@Z  # SP::cTextureManager::RegisterArenaContents migrated from s007aabb0
+007ab860 ?Setup@cTextureAsyncInfo@@QAEIPAUResourceKey@@@Z  # cTextureAsyncInfo::Setup migrated from s007aabb0 (verbatim, slice spelling)
+007aba40 ?Update@cLoadQueue@@QAEXXZ  # cLoadQueue::Update migrated from s007aabb0 (verbatim, slice spelling)
+007abae0 ?Schedule@cLoadQueue@@QAEXPAUResourceKey@@@Z  # cLoadQueue::Schedule migrated from s007aabb0 (verbatim, slice spelling)

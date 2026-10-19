@@ -1,7 +1,11 @@
 007a9d70 ?FUN_007a9d70@@YAXPAPAHPAH10110@Z  # FUN_007a9d70 migrated from s007a9ae0 (verbatim, slice spelling)
 007a9eb0 ?FUN_007a9eb0@@YAXPAH@Z  # FUN_007a9eb0 migrated from s007a9ae0 (verbatim, slice spelling)
-007aa0d0 SP::cTextureManager::AddTextureLoadDependency  # pdb_names.json
-007aa200 SP::cTextureManager::ReloadTexture  # pdb_names.json
+007a9f30 ?FUN_007a9f30@@YAHPAH@Z  # FUN_007a9f30 migrated from s007a9ae0 (verbatim, slice spelling)
+007aa0d0 ?FUN_007aa0d0@@YAHPAH@Z  # FUN_007aa0d0 migrated from s007a9ae0 (verbatim, slice spelling)
+007aa200 ?FUN_007aa200@@YAHPAH@Z  # FUN_007aa200 migrated from s007a9ae0 (verbatim, slice spelling)
 007aa3a0 ?Transfer@JobSlots@@QAEHH@Z  # JobSlots::Transfer migrated from s007a9ae0 (verbatim, slice spelling)
+007aa530 ?FUN_007aa530@@YAHHHHHH@Z  # FUN_007aa530 migrated from s007a9ae0 (verbatim, slice spelling)
+007aa710 ?FUN_007aa710@@YAXPAH@Z  # FUN_007aa710 migrated from s007a9ae0 (verbatim, slice spelling)
 007aa800 ?Create@cNodeAllocator@@QAEPAUChunk@@XZ  # cNodeAllocator::Create migrated from s007a9ae0 (verbatim, slice spelling)
 007aa850 ?PushBack@DequeMap@@QAEXPAH@Z  # DequeMap::PushBack migrated from s007a9ae0 (verbatim, slice spelling)
+007aaa00 ?FUN_007aaa00@@YAHPAH@Z  # FUN_007aaa00 migrated from s007a9ae0 (verbatim, slice spelling)

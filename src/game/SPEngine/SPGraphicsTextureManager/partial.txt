@@ -1,1 +1,28 @@
 # va  diff-bytes  reason
+007a9f30  402  skeleton: placeholder-texture initialization body omitted
+007aa0d0  302  skeleton: AddTextureLoadDependency body omitted
+007aa200  279  skeleton: ReloadTexture body omitted
+007aa530  239  stub: body not reconstructed
+007aa710  226  PARTIAL stub: only releases one member, original is a 226 B function (not reconstructed)
+007aaa00  429  stub: body not reconstructed
+007aabb0  978  PARTIAL texture-raster factory: format switch + async job dispatch skeleton only.
+007aafc0  206  PARTIAL StallFinishBackgroundLoad: EH job-wait path skeleton only.
+007ab2f0  341  PARTIAL ~cTextureManager: EH + refcount teardown skeleton only.
+007ab460  390  PARTIAL Shutdown: full teardown path skeleton only.
+007ab730  298  PARTIAL RegisterArenaContents: arena export iteration skeleton only.
+007ab860  480  PARTIAL cTextureAsyncInfo::Setup: async job setup skeleton only.
+007aba40  153  PARTIAL cLoadQueue::Update: drain-queue skeleton only.
+007abae0  151  PARTIAL cLoadQueue::Schedule: enqueue skeleton only.
+007abc90 1001  PARTIAL large texture-creation EH routine skeleton only.
+007ac0f0  121  PARTIAL cLoadQueue::cLoadQueue (EH member construction) skeleton only.
+007ac2f0  280  PARTIAL cTextureManager::CreateInstance skeleton only.
+007ac480  381  PARTIAL eastl::deque<cTextureAsyncQueueEntry>::erase skeleton only.
+007ac600  331  PARTIAL cTextureManager::RegisterBuiltInGameTexture skeleton only.
+007ac750  253  PARTIAL cTextureManager::GetTextureSync skeleton only.
+007ac850  116  PARTIAL cTextureManager::GetTextureAsync skeleton only.
+007ac8d0  290  PARTIAL cTextureManager::StallUntilLoadedUnderLock skeleton only.
+007aca00  210  PARTIAL create-instance-from-serializer skeleton only.
+007acae0  196  PARTIAL create-instance-from-raw-params skeleton only.
+007acbb0  467  PARTIAL cTextureManager::GetTexture (EH map lookup + sync/async load) skeleton only.
+007acd90  174  PARTIAL cTextureManager::StallUntilLoaded (EH) skeleton only.
+00833af0  -  hashtable find/insert wrapper: translation incomplete (helpers modelled opaquely)

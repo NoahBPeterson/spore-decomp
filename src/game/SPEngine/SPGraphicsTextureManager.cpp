@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPGraphicsTextureManager.cpp -- migrated from slice(s) s007abc90, s007aabb0, s007a9ae0, s007a8a50 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsTextureManager.cpp -- migrated from slice(s) s008337d0, s007acbb0, s007abc90, s007aabb0, s007a9ae0, s007a8a50 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsTextureManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -22,12 +22,6 @@ extern "C" char  FUN_006b4b60();
 #include "EA/Thread/Mutex.h"
 
 // ---- items of slice s007a8a50 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void* g_D3D9Device;                 // 0x016f89d0
-extern "C" void* FUN_0067de60_IDGenerator();
-extern "C" void* FUN_0067dcd0_GetManager();
-extern "C" void  FUN_00690_120_GetStatus(void*);
-extern "C" void* SP_CreateRaster(int, int, int, unsigned int, int);
-extern "C" char  FUN_006b4b60();
 struct TextureKey { int mKey; unsigned int mType; int mExtra; };
 struct cTextureManager {
     void* vtbl;               // +0x00
@@ -66,6 +60,8 @@ struct DequeIter2 {
 // ---- items of slice s007a9ae0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags,
                                           unsigned debugFlags, const char* file, int line); // 0x00f473a0
+extern "C" void  FUN_00761b40();
+extern "C" void  FUN_00761c00();
 extern "C" char VT_ArenaResource[];
 struct DequeMap {
     int*  mpBegin;      // +0x00
@@ -251,6 +247,17 @@ public:
 // ---- items of slice s007aabb0 end
 
 // ---- items of slice s007abc90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+namespace Thread {
+class Mutex_s007a_bc90 {
+public:
+    bool Lock(void* pAttribute);  // 0x009221b0 (EA::Thread::Mutex::Lock)
+    void Unlock();  // 0x00922270 (EA::Thread::Mutex::Unlock)
+private:
+    char mData[0x30];
+};
+}
+}
 struct TextureNode_s007a_bc90;
 struct TextureValue {
     ResourceKey first;   // +0x00
@@ -286,7 +293,49 @@ public:
     RehashPolicy    mRehashPolicy; // +0x10
     char            mRest[4];      // +0x1c
 };
+class cLoadQueue_s007a_bc90 {
+public:
+    cLoadQueue_s007a_bc90();                                   // 0x007ac0f0
+    void Schedule(void* pEntry);                    // 0x007abae0
+    void*           mpManager;    // +0x00
+    char            mEntry[0x40]; // +0x04
+    char            mQueue[0x30]; // +0x44
+};
+class cTextureManager_s007a_bc90 {
+public:
+    cTextureManager_s007a_bc90();                              // 0x007ac1e0
+    void* CreateInstance(ResourceKey* key, void* pResource, int a, uint32_t flags, char b, ...); // 0x007ac2f0
+    void* GetTextureSync(ResourceKey key, int flags);   // 0x007ac750
+    void* GetTextureAsync(ResourceKey key, int flags);  // 0x007ac850
+    void* StallUntilLoadedUnderLock(ResourceKey* key);  // 0x007ac8d0
+    void* RegisterBuiltInGameTexture(void* p1, uint32_t flags); // 0x007ac600
+
+    char            mPad00[0x0c]; // +0x00
+    bool            mIsInitialized;
+    char            mPad0d[3];
+    void*           mInvalidRaster; // +0x10
+    void*           mLoadingRaster; // +0x14
+    char            mPad18[8];
+    EA::Thread::Mutex_s007a_bc90 mMutex;       // +0x20
+    char            mPad50[8];
+    TextureInstanceMap_s007a_bc90 mTextureInstanceMap; // +0x58
+    char            mPad78[0x20];
+    EA::Thread::Mutex_s007a_bc90 mArenaMutex;  // +0x98
+    int             mNumCacheFrames;      // +0xc8
+    int             mCurrentMipLodSetting; // +0xcc
+    void*           mUnknownD0;     // +0xd0
+    cLoadQueue_s007a_bc90      mLoadQueue;     // +0xd4
+    char            mTail[0x14];
+};
 // ---- items of slice s007abc90 end
+
+// ---- items of slice s008337d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  FUN_00833840(void);
+extern "C" void  FUN_008338c0(void);
+#pragma intrinsic(_InterlockedExchange)
+typedef void   (__thiscall *VFv)(void*);
+static inline void** VT(void* o) { return *(void***)o; }
+// ---- items of slice s008337d0 end
 
 // @ 0x007a93b0
 void FUN_007a93b0()
@@ -294,9 +343,6 @@ void FUN_007a93b0()
     void* d = g_D3D9Device;
     ((void(__thiscall*)(void*))((void**)d)[0x14 / 4])(d);
 }
-
-
-
 
 // @ 0x007a93c0
 void cTextureManager::GetTexture(int a, int b, int c)
@@ -308,9 +354,6 @@ void cTextureManager::GetTexture(int a, int b, int c)
     ((void(__thiscall*)(void*, TextureKey, int))((void**)this->vtbl)[0x1c / 4])(this, key, c);
 }
 
-
-
-
 // @ 0x007a93f0
 void cTextureManager::HasTexture(int a, int b)
 {
@@ -321,9 +364,6 @@ void cTextureManager::HasTexture(int a, int b)
     ((void(__thiscall*)(void*, TextureKey))((void**)this->vtbl)[0x24 / 4])(this, key);
 }
 
-
-
-
 // @ 0x007a9420
 void cTextureManager::GetKeyFromTexture(int* out, int tex)
 {
@@ -333,17 +373,11 @@ void cTextureManager::GetKeyFromTexture(int* out, int tex)
     out[2] = *(int*)(base + 0x20);
 }
 
-
-
-
 // @ 0x007a9450
 bool SP::cTextureManager::StallUntilLoaded(SP::cTextureInstance const * tex)
 {
     return tex ? *(void**)((char*)tex + 0x1c) : *(void**)((char*)tex + 0x24);
 }
-
-
-
 
 // @ 0x007a9470
 void cTextureManager::CreateTexture()
@@ -358,9 +392,6 @@ void cTextureManager::CreateTexture()
         (this, 0x2f4e681c, 0, 0, 0, buf[0], buf[1], buf[2], 0);
 }
 
-
-
-
 // @ 0x007a94f0
 void cTextureManager::CreateTextureEx(int a, int b, int c, int d, int e, unsigned int flags, int f, int g)
 {
@@ -370,9 +401,6 @@ void cTextureManager::CreateTextureEx(int a, int b, int c, int d, int e, unsigne
     ((void(__thiscall*)(void*, int, int, void*, int))((void**)this->vtbl)[0x4c / 4])
         (this, a, b, raster, g);
 }
-
-
-
 
 // @ 0x007a9540
 void cTextureManager::RegisterGameTexture(int a, int b)
@@ -390,9 +418,6 @@ void cTextureManager::RegisterGameTexture(int a, int b)
         (this, buf[0], buf[2], a, b);
 }
 
-
-
-
 // @ 0x007a95b0
 void FUN_007a95b0(int tex, char flag)
 {
@@ -402,9 +427,6 @@ void FUN_007a95b0(int tex, char flag)
     else
         *(unsigned char*)(base + 0xc) &= 0xf7;
 }
-
-
-
 
 // @ 0x007a95e0
 void cTextureManager::ReloadTexture(int a, int b)
@@ -416,9 +438,6 @@ void cTextureManager::ReloadTexture(int a, int b)
     ((void(__thiscall*)(void*, TextureKey))((void**)this->vtbl)[0x60 / 4])(this, key);
 }
 
-
-
-
 // @ 0x007a9620
 void cTextureManager::CleanupJob()
 {
@@ -427,9 +446,6 @@ void cTextureManager::CleanupJob()
     if (this->mJob)
         ((void(__thiscall*)(void*))((void**)this->mJob)[1])(this->mJob);
 }
-
-
-
 
 // @ 0x007a9680
 void FUN_007a9680(int** out, int* begin, int* end, int** map, int** mapFirst, int** mapLast)
@@ -456,9 +472,6 @@ void FUN_007a9680(int** out, int* begin, int* end, int** map, int** mapFirst, in
     out[3] = (int*)m;
 }
 
-
-
-
 // @ 0x007a9730
 char cTextureManager::WriteTexture(int tex, char async)
 {
@@ -479,9 +492,6 @@ char cTextureManager::WriteTexture(int tex, char async)
         *(unsigned char*)(base + 0xc) &= 0xf7;
     return ok;
 }
-
-
-
 
 // @ 0x007a9840
 void DequeOwner::RemoveMatching(int* value)
@@ -506,9 +516,6 @@ void DequeOwner::RemoveMatching(int* value)
     }
 }
 
-
-
-
 // @ 0x007a9880
 #include <intrin.h>
 void RefPtrSlot::Clear()
@@ -523,9 +530,6 @@ void RefPtrSlot::Clear()
             _InterlockedExchangeAdd(rc, 0);
     }
 }
-
-
-
 
 // @ 0x007a98b0
 void StallUntilLoaded(int** out, int* begin, int* first, int* end, int** map, int* mapEnd)
@@ -548,9 +552,6 @@ void StallUntilLoaded(int** out, int* begin, int* first, int* end, int** map, in
     out[1] = chunk;
 }
 
-
-
-
 // @ 0x007a9a80
 DequeIter2& DequeIter2::operator+=(int n)
 {
@@ -570,8 +571,6 @@ DequeIter2& DequeIter2::operator+=(int n)
     return *it;
 }
 
-
-
 // @ 0x007a9d70
 void FUN_007a9d70(int** out, int* end, int* first, int** map, int* mfirst, int* mlast, int** map2)
 {
@@ -585,8 +584,6 @@ void FUN_007a9d70(int** out, int* end, int* first, int** map, int* mfirst, int* 
     out[0] = d; out[1] = mlast; out[2] = *map2; out[3] = (int*)map2;
 }
 
-
-
 // @ 0x007a9eb0
 void FUN_007a9eb0(int* self)
 {
@@ -597,7 +594,24 @@ void FUN_007a9eb0(int* self)
     *(void**)self = (void*)VT_ArenaResource;
 }
 
+// @ 0x007a9f30
+int FUN_007a9f30(int* self)
+{
+    // behavioural skeleton
+    if (*(char*)((char*)self + 0xc)) return 0;
+    *(unsigned char*)((char*)self + 0xc) = 1;
+    *(void**)((char*)self + 0x10) = (void*)FUN_00761b40;
+    *(void**)((char*)self + 0x14) = (void*)FUN_00761c00;
+    return 1;
+}
 
+// @ 0x007aa0d0
+int FUN_007aa0d0(int* self)
+{ (void)self; return 0; }
+
+// @ 0x007aa200
+int FUN_007aa200(int* self)
+{ (void)self; return 0; }
 
 // @ 0x007aa3a0
 int JobSlots::Transfer(int param_2)
@@ -623,7 +637,15 @@ int JobSlots::Transfer(int param_2)
     return 0;
 }
 
+// @ 0x007aa530
+int FUN_007aa530(int self, int a2, int a3, int a4, int a5)
+{ (void)self;a2;a3;a4;a5; return 0; }
 
+// @ 0x007aa710
+void FUN_007aa710(int* self)
+{
+    if (self[3]) { void* p = (void*)self[3]; self[3] = 0; ((void(__thiscall*)(void*))((void**)p)[1])(p); }
+}
 
 // @ 0x007aa800
 Chunk* cNodeAllocator::Create()
@@ -647,8 +669,6 @@ Chunk* cNodeAllocator::Create()
     return p;
 }
 
-
-
 // @ 0x007aa850
 void DequeMap::PushBack(int* value)
 {
@@ -669,6 +689,18 @@ void DequeMap::PushBack(int* value)
     self[6] = self[7];
 }
 
+// @ 0x007aaa00
+int FUN_007aaa00(int* self)
+{ (void)self; return 0; }
+
+// @ 0x007aabb0
+int cTextureManager_s007a_abb0::CreateTextureRaster(void* a, int b, bool c, int d)
+{
+    // PARTIAL: 978-byte EH raster factory with a format switch and a job
+    // dispatch; only the control skeleton is recovered here.
+    (void)a; (void)b; (void)c; (void)d;
+    return 0;
+}
 
 // @ 0x007aaf90
 void cTextureManager_s007a_abb0::UnregisterArena(void* pArena)
@@ -679,6 +711,13 @@ void cTextureManager_s007a_abb0::UnregisterArena(void* pArena)
     mtx.Unlock();
 }
 
+// @ 0x007aafc0
+bool cTextureManager_s007a_abb0::StallFinishBackgroundLoad(ResourceKey* pKey)
+{
+    // PARTIAL: EH job-completion path.
+    (void)pKey;
+    return false;
+}
 
 // @ 0x007ab090
 void cLoadQueue::ClearEntries()
@@ -696,7 +735,6 @@ void cLoadQueue::ClearEntries()
     } while (--n != 0);
     mQueue.clear();
 }
-
 
 // @ 0x007ab0d0
 TextureInstanceMap::InsertResult TextureInstanceMap::DoInsertValue(const TextureValue& value, true_type)
@@ -738,6 +776,18 @@ TextureInstanceMap::InsertResult TextureInstanceMap::DoInsertValue(const Texture
     return added;
 }
 
+// @ 0x007ab2f0
+extern "C" void FUN_007ab2f0(void)
+{
+    // PARTIAL: ~cTextureManager with EH frame and refcount releases.
+}
+
+// @ 0x007ab460
+bool SP::cTextureManager::Shutdown()
+{
+    // PARTIAL: full teardown path.
+    return false;
+}
 
 // @ 0x007ab5f0
 bool cTextureManager_s007a_abb0::HasTexture(ResourceKey key)
@@ -760,7 +810,6 @@ bool cTextureManager_s007a_abb0::HasTexture(ResourceKey key)
     return b != 0;
 }
 
-
 // @ 0x007ab6c0
 uint32_t cTextureManager_s007a_abb0::ReloadTexture(ResourceKey key)
 {
@@ -775,6 +824,40 @@ uint32_t cTextureManager_s007a_abb0::ReloadTexture(ResourceKey key)
     return ((TextureManagerVfn68)(*(void***)this)[0x68 / 4])(this, 0);
 }
 
+// @ 0x007ab730
+void SP::cTextureManager::RegisterArenaContents(SP::cArenaResource * pArena)
+{
+    (void)pArena;
+    // PARTIAL: arena export iteration.
+}
+
+// @ 0x007ab860
+uint32_t cTextureAsyncInfo::Setup(ResourceKey* pKey)
+{
+    (void)pKey;
+    // PARTIAL: async job setup.
+    return 0;
+}
+
+// @ 0x007aba40
+void cLoadQueue::Update()
+{
+    // PARTIAL: drain load queue.
+}
+
+// @ 0x007abae0
+void cLoadQueue::Schedule(ResourceKey* pKey)
+{
+    (void)pKey;
+    // PARTIAL: enqueue load request.
+}
+
+// @ 0x007abc90
+extern "C" void FUN_007abc90(void)
+{
+    // PARTIAL: large texture-creation EH routine.
+}
+
 // @ 0x007ac080
 void*& TextureInstanceMap_s007a_bc90::operator[](const ResourceKey& key)
 {
@@ -782,4 +865,98 @@ void*& TextureInstanceMap_s007a_bc90::operator[](const ResourceKey& key)
     if (it.mpNode == mpBucketArray[mnBucketCount])
         it = DoInsertValue(TextureValue(key, 0), true_type()).it;
     return ((TextureNode_s007a_bc90*)it.mpNode)->second;
+}
+
+// @ 0x007ac0f0
+cLoadQueue_s007a_bc90::cLoadQueue_s007a_bc90()
+{
+    // PARTIAL: EH member construction (entry vector + deque).
+    mpManager = 0;
+}
+
+// @ 0x007ac2f0
+void* cTextureManager_s007a_bc90::CreateInstance(ResourceKey* key, void* pResource, int a, uint32_t flags, char b, ...)
+{
+    (void)key; (void)pResource; (void)a; (void)flags; (void)b;
+    // PARTIAL: texture-instance allocation + map insert.
+    return 0;
+}
+
+// @ 0x007ac480
+extern "C" void FUN_007ac480(void)
+{
+    // PARTIAL: eastl::deque<cTextureAsyncQueueEntry>::erase.
+}
+
+// @ 0x007ac600
+void* cTextureManager_s007a_bc90::RegisterBuiltInGameTexture(void* p1, uint32_t flags)
+{
+    (void)p1; (void)flags;
+    // PARTIAL: lookup-or-create built-in texture.
+    return 0;
+}
+
+// @ 0x007ac750
+SP::cTextureInstance * SP::cTextureManager::GetTextureSync(EA::ResourceMan::Key key, SP::cITextureManager::tUseFlags flags)
+{
+    (void)key; (void)flags;
+    // PARTIAL: synchronous resource load.
+    return 0;
+}
+
+// @ 0x007ac850
+SP::cTextureInstance * SP::cTextureManager::GetTextureAsync(EA::ResourceMan::Key key, SP::cITextureManager::tUseFlags flags)
+{
+    (void)key; (void)flags;
+    // PARTIAL: asynchronous resource load + queue schedule.
+    return 0;
+}
+
+// @ 0x007ac8d0
+bool SP::cTextureManager::StallUntilLoadedUnderLock(SP::cTextureInstanceInternal * key)
+{
+    (void)key;
+    // PARTIAL: wait for the queued load of the requested key.
+    return 0;
+}
+
+// @ 0x007aca00
+extern "C" void FUN_007aca00(void)
+{
+    // PARTIAL: create texture-instance from a serializer object.
+}
+
+// @ 0x007acae0
+extern "C" void FUN_007acae0(void)
+{
+    // PARTIAL: create texture-instance from raw parameters.
+}
+
+// @ 0x007acbb0
+extern "C" void FUN_007acbb0(void)
+{
+    // PARTIAL: cTextureManager::GetTexture (EH, map find + sync/async load).
+}
+
+// @ 0x007acd90
+extern "C" void FUN_007acd90(void)
+{
+    // PARTIAL: cTextureManager::StallUntilLoaded (EH).
+}
+
+// @ 0x00833af0
+void* FUN_00833af0(void* self, void* key)
+{
+    int local_1c[3];
+    ((void (__cdecl*)(int*, void*))FUN_00833840)(local_1c, key);
+    if (local_1c[0] != *(int*)(*(int*)((char*)self + 4) + *(int*)((char*)self + 8) * 4))
+        return (char*)local_1c[0] + 0xc;
+    int local_10 = *(int*)key;
+    int local_c  = *(int*)((char*)key + 4);
+    int local_8  = *(int*)((char*)key + 8);
+    int* local_4 = 0;
+    ((void (__cdecl*)(int*, int*, int*))FUN_008338c0)(local_1c, &local_10, (int*)((uint32_t)key & 0xffffff00));
+    if (local_4)
+        ((VFv)VT(local_4)[4 / 4])(local_4);
+    return (char*)local_1c[0] + 0xc;
 }

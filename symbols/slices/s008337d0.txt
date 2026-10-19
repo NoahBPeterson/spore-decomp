@@ -1,7 +1,7 @@
 008337d0 eastl::hashtable<ResourceMan::Key,cTextureInstance*>::create_node  # alloc +0x1c, 0x14-byte node
 00833a20 eastl::hashtable<ResourceMan::Key,cTextureInstance*>::DoFreeNodes  # frees nodes via allocator slot 0xc
 00833a80 cTextureManager::~cTextureManager  # vtables 0x141aabc/0x141aab8, clears 2 global maps
-00833af0 cTextureManager::GetOrCreate  # map find + insert, keys 0x1547f54/0x1547f78
+00833af0 ?FUN_00833af0@@YAPAXPAX0@Z  # FUN_00833af0 migrated from s008337d0 (verbatim, slice spelling)
 00833ba0 cTextureManager::LoadTexture  # "image/..." texture-instance loader (1105B)
 00834000 cTextureManager::LoadTextureThunk  # __stdcall, forwards (-1,-1)
 00834020 UTFWin::cSPUITextWin::cSPUITextWin  # vtables 0x141ac90/0x141ab70/+0x20c
