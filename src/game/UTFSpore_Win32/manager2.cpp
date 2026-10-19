@@ -409,7 +409,9 @@ struct Xform { float m[17]; };
 struct IRenderMode;
 struct IRenderer {
     virtual void AddRef();                                         // +0
-    virtual void Release(); virtual void r2(); virtual void r3();
+virtual void Release();
+virtual void r2();
+virtual void r3();
     virtual void* CreateData(IWin* w);                             // +0x10
 };
 struct Base2D { Base2D(void*); virtual ~Base2D(); u32 d[8]; };      // ctor 0x9520a0 dtor 0x951ba0
@@ -667,19 +669,11 @@ void W::PostAPC(int a, void* b)
     ((VTab*)this)->v18(0, 0, &d);
 }
 
-
-
-
-
 // @ 0x00957d90
 void W::d90(void* a)
 {
     ((VTab*)this)->v18(0, 0, a);
 }
-
-
-
-
 
 // @ 0x00957db0
 char* W::db0(int idx)
@@ -688,10 +682,6 @@ char* W::db0(int idx)
     if (p) return p + 4;
     return 0;
 }
-
-
-
-
 
 // @ 0x00957dd0
 unsigned W::dd0(void* target)
@@ -712,10 +702,6 @@ unsigned W::dd0(void* target)
     return result;
 }
 
-
-
-
-
 // @ 0x00957e70
 char* W::e70(int idx)
 {
@@ -723,10 +709,6 @@ char* W::e70(int idx)
     if (p) return p + 4;
     return 0;
 }
-
-
-
-
 
 // @ 0x00957e90
 void W::e90(int idx, void* arg)
@@ -738,20 +720,12 @@ void W::e90(int idx, void* arg)
     }
 }
 
-
-
-
-
 // @ 0x00957ed0
 void W::ed0(unsigned mask, char set)
 {
     U32(this, 0xd0) = U32(this, 0xd0) & ~mask;
     if (set) U32(this, 0xd0) = U32(this, 0xd0) | mask;
 }
-
-
-
-
 
 // @ 0x00957f50
 void* __fastcall Fn00957f50(void* self)
@@ -760,10 +734,6 @@ void* __fastcall Fn00957f50(void* self)
     if (p) return (char*)p + 4;
     return 0;
 }
-
-
-
-
 
 // @ 0x00957fa0
 void __fastcall Fn00957fa0(void* self)
@@ -784,10 +754,6 @@ void __fastcall Fn00957fa0(void* self)
     }
 }
 
-
-
-
-
 // @ 0x00957ff0
 void EA::UTFWin::WindowMgr::SetCanvasCallback(EA::UTFWin::ICanvasCallback * obj)
 {
@@ -802,10 +768,6 @@ void EA::UTFWin::WindowMgr::SetCanvasCallback(EA::UTFWin::ICanvasCallback * obj)
     }
 }
 
-
-
-
-
 // @ 0x00958070
 void W::x070(float* pt)
 {
@@ -816,10 +778,6 @@ void W::x070(float* pt)
         ((VTab*)o)->v10(a, b);
     }
 }
-
-
-
-
 
 // @ 0x009580b0
 void W::x0b0(void* target)
@@ -832,10 +790,6 @@ void W::x0b0(void* target)
         } while (n != 0);
     }
 }
-
-
-
-
 
 // @ 0x009580e0
 void W::x0e0(char* node)
@@ -851,10 +805,6 @@ void W::x0e0(char* node)
         *(char**)c = node;
     }
 }
-
-
-
-
 
 // @ 0x00958110
 void __fastcall Fn00958110(void* self)
@@ -877,10 +827,6 @@ void __fastcall Fn00958110(void* self)
         *(void**)(esi + 4) = 0;
     }
 }
-
-
-
-
 
 // @ 0x00958150
 void W::ComputeClip(float* out, void* node)
@@ -933,10 +879,6 @@ void W::ComputeClip(float* out, void* node)
     out[3] = ymax;
 }
 
-
-
-
-
 // @ 0x00958500
 char W::x500(void* obj, int a)
 {
@@ -954,10 +896,6 @@ char W::x500(void* obj, int a)
     if (obj) ((VTab*)obj)->v04();
     return result;
 }
-
-
-
-
 
 // @ 0x00958570
 void __cdecl Fn00958570(void* pa, int* b, int* c)
@@ -1017,10 +955,6 @@ void __cdecl Fn00958570(void* pa, int* b, int* c)
     }
 }
 
-
-
-
-
 // @ 0x00958640
 void __fastcall DumpDisplayList(void* self)
 {
@@ -1053,10 +987,6 @@ void __fastcall DumpDisplayList(void* self)
     }
 }
 
-
-
-
-
 // @ 0x009586f0
 void W::Plot(int param)
 {
@@ -1073,10 +1003,6 @@ void W::Plot(int param)
     ((Ext*)(local + 0x60))->iba0();
 }
 
-
-
-
-
 // @ 0x00958780
 void __fastcall DebugDumpDisplayList(void* self)
 {
@@ -1091,10 +1017,6 @@ void __fastcall DebugDumpDisplayList(void* self)
     Mutex_Unlock(B(self) + 0x70);
     Mutex_Unlock(B(self) + 0x28);
 }
-
-
-
-
 
 // @ 0x009587d0
 void W::m7d0(char* node)
@@ -1121,10 +1043,6 @@ void W::m7d0(char* node)
     *(void**)(node + 0x1c) = 0;
 }
 
-
-
-
-
 // @ 0x00958820
 void W::m820(char* node)
 {
@@ -1144,10 +1062,6 @@ void W::m820(char* node)
         *c = p;
     }
 }
-
-
-
-
 
 // @ 0x00958860
 void W::m860(char* node)
@@ -1172,10 +1086,6 @@ void W::m860(char* node)
     }
 }
 
-
-
-
-
 // @ 0x009588c0
 void W::m8c0(char* node)
 {
@@ -1198,10 +1108,6 @@ void W::m8c0(char* node)
         }
     }
 }
-
-
-
-
 
 // @ 0x00958920
 char __cdecl Fn00958920(int* self, void* p2, char* p3, char p4, unsigned p5)
@@ -1240,10 +1146,6 @@ char __cdecl Fn00958920(int* self, void* p2, char* p3, char p4, unsigned p5)
     }
 }
 
-
-
-
-
 // @ 0x009589f0
 void W::DispatchMsgToWindow(int p2, char* p3, int p4)
 {
@@ -1260,10 +1162,6 @@ void W::DispatchMsgToWindow(int p2, char* p3, int p4)
     Fn00958920((int*)p2, p3, (char*)&local, local.f10, (unsigned)uVar1);
     PTR(this, 0x688) = local.f0;
 }
-
-
-
-
 
 // @ 0x00958a70
 Win* __thiscall WM::HitTest(Win* w, V2* pt, const V2& p3, V2* outLocal)
@@ -1291,9 +1189,6 @@ Win* __thiscall WM::HitTest(Win* w, V2* pt, const V2& p3, V2* outLocal)
     return w;
 }
 
-
-
-
 // @ 0x00958b60
 void __thiscall WM::MarkTree(Win* w)
 {
@@ -1305,9 +1200,6 @@ void __thiscall WM::MarkTree(Win* w)
     for (; n != head; n = n->next)
         MarkTree(NodeToWin(n));
 }
-
-
-
 
 // @ 0x00958bb0
 void __thiscall WM::DestroyDisplayList(Node* head)
@@ -1337,9 +1229,6 @@ void __thiscall WM::DestroyDisplayList(Node* head)
     FreeDisplayListEntries(head);
 }
 
-
-
-
 // @ 0x00958c60
 bool __thiscall WM::IsFocusWindow(IWin* w)
 {
@@ -1355,9 +1244,6 @@ bool __thiscall WM::IsFocusWindow(IWin* w)
     return false;
 }
 
-
-
-
 // @ 0x00958ca0
 Iter __thiscall MsgList::EraseRange(Iter first, Iter last)
 {
@@ -1371,9 +1257,6 @@ Iter __thiscall MsgList::EraseRange(Iter first, Iter last)
     }
     return last;
 }
-
-
-
 
 // @ 0x00958cf0
 WM::WM()
@@ -1423,9 +1306,6 @@ WM::WM()
     W_s0095_8a70(0x808) = 0;
 }
 
-
-
-
 // @ 0x00958fa0
 bool __thiscall WM::SendModifiedMsg(IWin* w, IWin* src, Msg* m)
 {
@@ -1445,9 +1325,6 @@ bool __thiscall WM::SendModifiedMsg(IWin* w, IWin* src, Msg* m)
     return r;
 }
 
-
-
-
 // @ 0x00959230
 IWin* __thiscall WM::FindWindowAt(const V2* pt)
 {
@@ -1461,9 +1338,6 @@ IWin* __thiscall WM::FindWindowAt(const V2* pt)
         return hit;
     return 0;
 }
-
-
-
 
 // @ 0x009594b0
 bool __thiscall WM::PopFocus(IWin* w, IWin* arg)
@@ -1517,9 +1391,6 @@ bool __thiscall WM::PopFocus(IWin* w, IWin* arg)
     return true;
 }
 
-
-
-
 // @ 0x009595e0
 void __thiscall MsgList::InsertRange(Node* where, Iter first, Iter last, int tag)
 {
@@ -1536,9 +1407,6 @@ void __thiscall MsgList::InsertRange(Node* where, Iter first, Iter last, int tag
         first.n = first.n->next;
     } while (first.n != last.n);
 }
-
-
-
 
 // @ 0x00959b70
 int W_s0095_9780::b70(int p2, int p3)
@@ -1595,8 +1463,6 @@ int W_s0095_9780::b70(int p2, int p3)
     return 1;
 }
 
-
-
 // @ 0x00959cf0
 void W_s0095_9780::cf0(int p2, int p3)
 {
@@ -1632,8 +1498,6 @@ void W_s0095_9780::cf0(int p2, int p3)
         }
     }
 }
-
-
 
 // @ 0x00959e00
 void W_s0095_9780::DetachWindow(void* win)
@@ -1749,8 +1613,6 @@ void W_s0095_9780::DetachWindow(void* win)
     I32(win, 0x34) = 0;
 }
 
-
-
 // @ 0x00959fe0
 void W_s0095_9780::fe0(int win)
 {
@@ -1775,8 +1637,6 @@ void W_s0095_9780::fe0(int win)
     dst[3] = t3;
 }
 
-
-
 // @ 0x0095a0b0
 void W_s0095_9780::a0b0(int p2, int* p3)
 {
@@ -1795,8 +1655,6 @@ void W_s0095_9780::a0b0(int p2, int* p3)
     TH(this)->Fn009592e0(local, 1);
     I32(this, 0x688) = saved;
 }
-
-
 
 // @ 0x0095a140
 void W_s0095_9780::UpdateRenderState(int win, char p3, char p4)
@@ -1903,8 +1761,6 @@ void W_s0095_9780::UpdateRenderState(int win, char p3, char p4)
     }
 }
 
-
-
 // @ 0x0095a510
 void W_s0095_9780::RenderWindow(int win, void* ctx)
 {
@@ -1920,8 +1776,6 @@ void W_s0095_9780::RenderWindow(int win, void* ctx)
     GV(0, win + 4, ev, 0, 0);
     TH(ctx)->End2D();
 }
-
-
 
 // @ 0x0095a580
 void __thiscall WindowMgr::BuildDisplayList(Node* out, Win* w, void* info_)
@@ -1988,7 +1842,6 @@ void __thiscall WindowMgr::BuildDisplayList(Node* out, Win* w, void* info_)
     }
 }
 
-
 // @ 0x0095a820
 void __thiscall FocusListX::InsertFront(const void* value)
 {
@@ -2005,13 +1858,11 @@ void __thiscall FocusListX::InsertFront(const void* value)
     first->prev = (Node*)n;
 }
 
-
 // @ 0x0095a980
 bool __thiscall WindowMgr::SendMsg(IWin* src, IWin* win, Msg* m, bool a4)
 {
     return SendMsgFull(src, win, m, a4, false);
 }
-
 
 // @ 0x0095aa80
 void __thiscall WindowMgr::ProcessMessages()
@@ -2097,7 +1948,6 @@ void __thiscall WindowMgr::ProcessMessages()
     f688 = saved;
 }
 
-
 // @ 0x0095add0
 void __thiscall WindowMgr::AttachWindow(Win* w)
 {
@@ -2154,13 +2004,11 @@ void __thiscall WindowMgr::AttachWindow(Win* w)
     SendMsgFull(iw, iw, &m, false, false);
 }
 
-
 // @ 0x0095af00
 void EA::UTFWin::WindowMgr::UpdateWindowCachedTransforms(EA::UTFWin::Window & w)
 {
     UpdateRenderState(w, 0, 0);
 }
-
 
 // @ 0x0095af20
 bool __thiscall WindowMgr::SetFocusWindow(IWin* w, ICb* cb)
@@ -2186,7 +2034,6 @@ bool __thiscall WindowMgr::SetFocusWindow(IWin* w, ICb* cb)
     return false;
 }
 
-
 // @ 0x0095afd0
 void __thiscall MsgListX::Swap(MsgListX& other)
 {
@@ -2209,7 +2056,6 @@ void __thiscall MsgListX::Swap(MsgListX& other)
         tmp.alloc->Free(n, 0x24);
     }
 }
-
 
 // @ 0x0095b080
 bool __thiscall WindowMgr::SetMainWindow(IWin* w, char release)
@@ -2263,7 +2109,6 @@ bool __thiscall WindowMgr::SetMainWindow(IWin* w, char release)
     return true;
 }
 
-
 // @ 0x0095b290
 void __thiscall WindowMgr::FlushMessageQueue()
 {
@@ -2288,7 +2133,6 @@ void __thiscall WindowMgr::FlushMessageQueue()
     q1.anchor.prev = &q1.anchor;
     q1.anchor.next = &q1.anchor;
 }
-
 
 // @ 0x0095b310
 void __thiscall WM::UpdateVisuals()
