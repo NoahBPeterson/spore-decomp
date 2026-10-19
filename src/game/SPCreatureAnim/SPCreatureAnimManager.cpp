@@ -955,12 +955,23 @@ extern EntryMap gEntryMap;                                // 0x01551a68
 typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
+void* __cdecl operator new(size_t, const char*, int, int, int, int);   // 0xf473a0
 struct AnimMgr;
 struct IServer {                 // EA::Messaging::Server
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
     virtual void v8();
     virtual void AddHandler(void* handler, u32 msgId);          // +0x24
+};
+struct IMaterialMgr {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9();
+    virtual void* GetMaterial(u32 id);                           // +0x28
+};
+struct IRefObj {
+    virtual void v0();
+    virtual void Release();                                      // +4
 };
 struct IPropData {               // property value
     u32* mData;                  // +0
@@ -974,6 +985,22 @@ struct IPropList {
     virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
     virtual void v8(); virtual void v9();
     virtual IPropData* GetProperty(u32 id);                      // +0x28
+};
+struct IPropMgr {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9(); virtual void v10();
+    virtual void GetPropertyList(u32 id, int, IRefObj** out);    // +0x2c
+};
+struct ICheatMgr {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5();
+    virtual void AddCommand(const char* name, void* cmd, int);   // +0x18
+};
+struct IResMgr {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void* GetResource(u32 id, int, int);                 // +0x20
 };
 struct PtrVec {
     u32** mBegin;
@@ -989,15 +1016,55 @@ struct AnimRefHolder {           // object at [mgr+0x84], vector at +8
     u8 pad[8];
     PtrVec mVec;
 };
+struct RefA {
+    RefA();                                            // 0x77d1d0
+    u8 pad[0x1c];
+};
+struct RefB {
+    RefB();                                            // 0x40d010
+    void InsertResource(int, void*);                   // 0x77cb10
+    u8 pad[0x70];
+};
+struct RefC {
+    RefC();                                            // 0x432cf0
+    u8 pad[0xc];
+    u8 mKind; u8 pad1[3];
+    float mA, mB, mC, mD;
+};
+struct CmdBase {
+    CmdBase();                                         // 0x83c800
+    virtual void Run() = 0;
+    u8 pad[0xc];
+};
+struct BlocksModeCmd : CmdBase {
+    AnimMgr* mMgr;
+    virtual void Run() {}
+};
 struct AutoHandlerRec {
     IServer* mServer; void* mHandler; const u32* mIds; u32 mCount; u32 mFlag;
+};
+extern u32 g_animMsgIds[2];            // 0x155182c
+extern u32 g_defaultPropVal[];         // 0x15d1164
+extern AnimMgr* g_animMgr;             // 0x166cc08
+struct SomeObj {
+    bool Prep();                                       // 0x9a9920
 };
 struct SomeObj2 {
     void Fn(void*, int);                               // 0x9ab540
 };
+extern SomeObj g_obj_166c058;
 extern SomeObj2* g_obj_166c084;
+IMaterialMgr* GetMaterialManager();       // 0x67dd70
+IResMgr*      GetResMgr();                // 0x67dd60
+IPropMgr*     GetPropertyManager();       // 0x67de30
+IServer*      GetMessageServer();         // 0x67dcc0
+ICheatMgr*    GetCheatManager();          // 0x67de20
+void          FUN_00a059d0(AnimMgr*);
 void*         FUN_009a37a0(void*);
 void          FUN_009a4020(void*, int);
+struct RefSlot {
+    void Assign(void* p);                              // 0x41d8b0
+};
 struct AnimMgr {
     u8     pad0[0x4c];
     IPropList* mPropertyList;    // +0x50
@@ -1021,6 +1088,7 @@ struct AnimHandler {
     void Do08ba0();                                    // 0xa08ba0
     bool HandleMessage(u32 id, Msg* m);
 };
+    void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
 // ---- items of slice s00a0f350 end
 
 // @ 0x00a01b50
@@ -1044,14 +1112,6 @@ bool qb_enable(anim_qb* qb, int animID)
     return false;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x00a02710
 bool cAnimatingCreature::IsOrientStartAnim(uint32_t animID) // @ 0xa02710
 {
@@ -1059,14 +1119,6 @@ bool cAnimatingCreature::IsOrientStartAnim(uint32_t animID) // @ 0xa02710
         return true;
     return false;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x00a02740
 bool cAnimatingCreature::IsOrientStopAnim(uint32_t animID) // @ 0xa02740
@@ -1077,13 +1129,6 @@ bool cAnimatingCreature::IsOrientStopAnim(uint32_t animID) // @ 0xa02740
         return true;
     return false;
 }
-
-
-
-
-
-
-
 
 // @ 0x00a02da0
 void BuildBoxVertices_00a02da0(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5, float param_6)
@@ -1424,12 +1469,6 @@ void BuildBoxVertices_00a02da0(float *param_1,float *param_2,float *param_3,floa
   return;
 }
 
-
-
-
-
-
-
 // @ 0x00a03f50
 void DrawBodyBoxes_00a03f50(DebugTarget* target, DebugBody* body, uint32_t color3, uint32_t color4, int arg5)
 {
@@ -1491,11 +1530,6 @@ void DrawBodyBoxes_00a03f50(DebugTarget* target, DebugBody* body, uint32_t color
 	}
 	UnlockVertices_006ddd40(3, target, arg5);
 }
-
-
-
-
-
 
 // @ 0x00a06d50
 void cAnimDebugDraw::Draw(uint8_t pass, int colorMode, ViewerRef& viewer, int flags)
@@ -1747,10 +1781,6 @@ void cAnimDebugDraw::Draw(uint8_t pass, int colorMode, ViewerRef& viewer, int fl
     }
 }
 
-
-
-
-
 // @ 0x00a099e0
 void SL71::v099e0(void* pos, unsigned count, void* val)
 {
@@ -1806,10 +1836,6 @@ void SL71::v099e0(void* pos, unsigned count, void* val)
     }
 }
 
-
-
-
-
 // @ 0x00a09cf0
 void SL71::v09cf0(void** out, void* where, unsigned* key, char flag)
 {
@@ -1834,10 +1860,6 @@ void SL71::v09cf0(void** out, void* where, unsigned* key, char flag)
     *(int*)(self + 0x14) += 1;
     *out = node;
 }
-
-
-
-
 
 // @ 0x00a09e70
 void* SL71::v09e70(void* a2, void* a3)
@@ -1890,10 +1912,6 @@ void* SL71::v09e70(void* a2, void* a3)
     return self;
 }
 
-
-
-
-
 // @ 0x00a09f90
 void SL71::v09f90()
 {
@@ -1914,10 +1932,6 @@ void SL71::v09f90()
     *(void**)(self + 4) = (void*)0x13ec458;
     *(void**)(self + 0) = (void*)0x13eb938;
 }
-
-
-
-
 
 // @ 0x00a0a020
 void SL71::v0a020()
@@ -1943,10 +1957,6 @@ void SL71::v0a020()
         ((vt_v)vfn(r, 4))(r);
 }
 
-
-
-
-
 // @ 0x00a0a0b0
 unsigned SL71::v0a0b0(void* a1, unsigned a2, unsigned a3)
 {
@@ -1960,10 +1970,6 @@ unsigned SL71::v0a0b0(void* a1, unsigned a2, unsigned a3)
     FUN_009c26a0((void*)(size_t)a3);
     return a2 & 0xff;
 }
-
-
-
-
 
 // @ 0x00a0a120
 unsigned f0a120()
@@ -1983,10 +1989,6 @@ unsigned f0a120()
     (void)local_3c;
     return 0;
 }
-
-
-
-
 
 // @ 0x00a0a360
 void SL71::v0a360(void* a2, void* a3)
@@ -2043,10 +2045,6 @@ void SL71::v0a360(void* a2, void* a3)
     (void)bytes;
 }
 
-
-
-
-
 // @ 0x00a0a520
 void* SL71::v0a520(void* a2)
 {
@@ -2058,10 +2056,6 @@ void* SL71::v0a520(void* a2)
     *(void**)(self + 4) = out;
     return self;
 }
-
-
-
-
 
 // @ 0x00a0a580
 int f0a580(unsigned* a1, unsigned* a2, int a3)
@@ -2086,10 +2080,6 @@ int f0a580(unsigned* a1, unsigned* a2, int a3)
     } while (a1 != a2);
     return a3;
 }
-
-
-
-
 
 // @ 0x00a0a600
 unsigned SL71::v0a600()
@@ -2128,10 +2118,6 @@ unsigned SL71::v0a600()
     }
     return 1;
 }
-
-
-
-
 
 // @ 0x00a0a6d0
 void SL71::v0a6d0(void* a2)
@@ -2219,10 +2205,6 @@ void SL71::v0a6d0(void* a2)
     FUN_00a05270(c);
 }
 
-
-
-
-
 // @ 0x00a0a930
 void SL71::v0a930()
 {
@@ -2274,10 +2256,6 @@ void SL71::v0a930()
     } while (it != self + 0x1c);
 }
 
-
-
-
-
 // @ 0x00a0aa20
 void SL71::v0aa20(unsigned key)
 {
@@ -2301,10 +2279,6 @@ void SL71::v0aa20(unsigned key)
         FUN_00f47380(n);
     }
 }
-
-
-
-
 
 // @ 0x00a0aaa0
 void SL71::v0aaa0()
@@ -2335,10 +2309,6 @@ void SL71::v0aaa0()
     *(void**)(self + 0) = (void*)0x13eb938;
 }
 
-
-
-
-
 // @ 0x00a0ab90
 void* SL71::v0ab90(void* a2)
 {
@@ -2360,10 +2330,6 @@ void* SL71::v0ab90(void* a2)
     return (char*)r + 0x18;
 }
 
-
-
-
-
 // @ 0x00a0ac10
 void SL71::v0ac10(unsigned n)
 {
@@ -2382,9 +2348,6 @@ void SL71::v0ac10(unsigned n)
     }
     FUN_009e0480(begin + n * 0xc, end);
 }
-
-
-
 
 // @ 0x00a0b260
 anim_creature* AnimWorld::CreateCreatureController(const ResourceKey* key, ResourceObject** pObj, const char* name, uint32_t userData, const vector_3* pos, const vector_4* rot, bool useCache)
@@ -2553,8 +2516,6 @@ anim_creature* AnimWorld::CreateCreatureController(const ResourceKey* key, Resou
     if (csdRef.mp) csdRef.mp->Release();
     return ac;
 }
-
-
 
 // @ 0x00a0c690
 void cSPCreatureAnimWorld::Update(float dt, cViewer_s00a0_c690* viewer)
@@ -2748,7 +2709,6 @@ void cSPCreatureAnimWorld::Update(float dt, cViewer_s00a0_c690* viewer)
     }
 }
 
-
 // @ 0x00a0ea10
 bool __stdcall ReadAnimTable(IFile* f)
 {
@@ -2878,6 +2838,77 @@ bool __stdcall ReadAnimTable(IFile* f)
     return true;
     }
     return false;
+}
+
+// @ 0x00a0f350
+bool AnimMgr::Init(bool flag)
+{
+    g_animMgr = this;
+    if (!g_obj_166c058.Prep())
+        return false;
+    ReadAnimList(1);
+    if (!mMaterial && GetMaterialManager())
+        mMaterial = GetMaterialManager()->GetMaterial(0xb660f636);
+    if (!mHolder && GetResMgr()) {
+        RefA* a = new("Anim", 0, 0, 0, 0) RefA();
+        ((RefSlot*)&mHolder)->Assign(a);
+        RefB* b = new("Anim", 0, 0, 0, 0) RefB();
+        b->InsertResource(0, GetResMgr()->GetResource(0xbd77bb98, 0, 0));
+        RefC* c = new("Anim", 0, 0, 0, 0) RefC();
+        c->mA = 20.0f;
+        c->mKind = 6;
+        c->mB = 0.0f;
+        c->mC = 1.0f;
+        c->mD = 0.0f;
+        u32* tv = (u32*)b;
+        mHolder->mVec.push_back(tv);
+        tv = (u32*)c;
+        mHolder->mVec.push_back(tv);
+    }
+    IPropMgr* pm = GetPropertyManager();
+    if (mPropertyList) {
+        IPropList* old = mPropertyList;
+        mPropertyList = 0;
+        ((IRefObj*)old)->Release();
+    }
+    pm->GetPropertyList(0x1347ba4d, 0, (IRefObj**)&mPropertyList);
+    IServer* srv = GetMessageServer();
+    u32 off = 0;
+    if (srv) {
+        void* handler = (u8*)this + 4;
+        mAuto.mServer = srv;
+        mAuto.mHandler = handler;
+        mAuto.mIds = g_animMsgIds;
+        mAuto.mCount = 2;
+        mAuto.mFlag = 0;
+        if (handler) {
+            do {
+                srv->AddHandler(handler, *(u32*)((u8*)g_animMsgIds + off));
+                off += 4;
+            } while (off < 8);
+        }
+    }
+    if (flag)
+        FUN_00a059d0(this);
+    IPropData* pd = mPropertyList->GetProperty(0x213eb74f);
+    u16 type = pd->mType;
+    u32* v;
+    if (type == 10 || type == 16) {
+        if (pd->mFlags & 0x30)
+            v = pd->mData;
+        else
+            v = (u32*)(-(u32)(type != 0) & (u32)pd);
+    } else {
+        v = g_defaultPropVal;
+    }
+    SetAppMode(*v);
+    ICheatMgr* cm = GetCheatManager();
+    if (cm) {
+        BlocksModeCmd* cmd = new("Anim", 0, 0, 0, 0) BlocksModeCmd();
+        if (cmd) cmd->mMgr = this;
+        cm->AddCommand("blocksmode", cmd, 0);
+    }
+    return true;
 }
 
 // @ 0x00a0f610
