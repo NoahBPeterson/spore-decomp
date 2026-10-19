@@ -824,3 +824,11 @@ Round 7 (29 objects, commits 60a260fb..46e5d89a) is landed, byte-exact and asm-c
 - **run_all --manifest** (F26) uses its own object dir, lock and results file per manifest: module runs no longer wait.
 - **Reports**: name them `work/migrate/report_<slice>_<Obj>.md` (one slice can feed several objects).
 - Agents: start every shell command with `cd <repo root> &&` (the session's working directory can move).
+- **`#pragma` restores stay with their function** (571d681d): a slice's `#pragma inline_depth(0)` .. function ..
+  `#pragma inline_depth()` lost its restore to the preamble, so every later function of the module TU compiled without
+  inlining. That was the main cause of "byte-exact in the slice, DIFF in the module TU" drops (s005d61b0: 9 -> 21 exact).
+- **Explicit instantiations** that reach the preamble outside their `namespace X {` block are wrapped in it again (s004e01d0).
+- **A second definition under one VA** (two classes' folded `HandleResult`) goes to the preamble instead of crashing qual_of.
+- **A namespace after a marker** is the function's own only when the function is its first item (s004b8af0).
+- **Holds on re-apply**: never add `leave_in_slice` for a function already in the TU (a hold removes it), and an equiv
+  UNSUPPORTED caused by an unresolved callee or a compile error of the module TU in the harness is not a regression.
