@@ -20,3 +20,4 @@
 00a34c90 ?Reconnect@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NXZ  # VoiceContainer_s00a3_3ee0::Reconnect migrated from s00a33ee0 (verbatim, slice spelling)
 00a34cb0 EA::Audio::VoiceContainer::AddPropertyBinding  # card PDB candidate; HasPropertyBinding then push_back of a tBinding
 00a34dc0 SP::Audio::cEapdMessage::Init  # card PDB candidate; sibling of cEapdMessage::GetNextFloat
+00a34e30 ?GetNextFloat@cEapdMessage@Audio@SP@@QAE_NPAM@Z  # cEapdMessage::GetNextFloat migrated from s00a33ee0 (verbatim, slice spelling)
