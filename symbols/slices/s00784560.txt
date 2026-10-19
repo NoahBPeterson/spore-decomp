@@ -1,1 +1,1 @@
-00784560 SH accumulation helper  # unnamed; float* out, int order, two float* inputs
+00784560 ?SHEvalBands@@YAXPBMHPBT__m128@@PAT1@@Z  # SHEvalBands migrated from s00784560 (verbatim, slice spelling)

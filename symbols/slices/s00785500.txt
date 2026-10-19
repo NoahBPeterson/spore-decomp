@@ -1,1 +1,1 @@
-00785500 SP::RotateZHToSHAdd<rw::math::vpu::Vector4,rw::math::vpu::Vector4>  # Ghidra template instance name
+00785500 ?SP_RotateZHToSHAdd@@YAPAMPAMH00@Z  # SP_RotateZHToSHAdd migrated from s00785500 (verbatim, slice spelling)

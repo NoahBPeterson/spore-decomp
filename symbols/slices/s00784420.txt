@@ -1,1 +1,1 @@
-00784420 SP::AddGroundBounce  # PDB name; ground-bounce SH term
+00784420 ?SP_AddGroundBounce@@YAXHPAMPBM1@Z  # SP_AddGroundBounce migrated from s00784420 (verbatim, slice spelling)

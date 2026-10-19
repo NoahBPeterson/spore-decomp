@@ -1,0 +1,15 @@
+# va  diff-bytes  reason
+00783590 1109 complete: full SH normalisation apply for degrees 0..4; original vectorises each 4-float group into SIMD
+00783830 1431 complete: full SH normalisation remove for degrees 0..4; same vectorisation difference
+00783b20 1590 complete: diffuse-reflection application for degrees 0..4 including the 7x and 9x block loops
+00783cf0 570 complete: SH basis multiply; the three basis-triple cases were folded into one loop, which changes the emitted shape
+00784330 101 complete: Henyey-Greenstein phase term loop (SSE broadcast + x87 scale); cl keeps the __m128 values on the stack and emits a sqrt call instead of fsqrt
+007843a0 105 complete: additive variant of the same loop
+00784420 233 complete: full ground-bounce flow (7 SH constants, diagonal basis, basis multiply switch, copy, Z mirror, diffuse reflection, SIMD accumulate); only register allocation (order/n held in ebx/esi swapped) and the SSE broadcast idiom differ
+00784560 2967 complete (SH basis eval to 8 bands), flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; schedule/frame differs, not chased; difftest PASS after fixing band 2 precision (2.0f float literal so bands 1-4 stay single-precision SSE like the original; 2.0 promoted them to double) and recording the /arch:SSE /fp:fast flags
+00785500 5687 COMPLETE: unrolled ZH->SH rotation (orders 1-8); the original leaves the output cursor in eax at every ret (callerdeps: eax result DEPENDS), so we return it as float* (out+0/+4/+16/+36/+64/+100/+144/+256 per band); our build 6810 vs 4022 bytes (loop-based bands vs the original's fully unrolled Vector4 SSE), so chk.py's size filter finds no candidate - matched by symbol ?SP_RotateZHToSHAdd@@YAPAMPAMH00@Z; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv PASS 400 valid inputs, 100.0% coverage (all 1018 insns)
+007864c0  54197  complete (bands 0-7, all 237 sqrt coefficients; numerically verified) but 57 KB of x87/SSE scheduling and frame layout differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00794e80 3053 compiler-generated SSE/x87 template expansion (SP::RotateZHToSHAdd); transcribed complete from Ghidra but vectorization/instruction scheduling not reproducible
+00795ec0 500 complete Ghidra transcription of SP::FindSHCoeffsFromHDRCubeMap; float10/x87 normalization prevents byte match
+007961d0 245 complete behavioral transcription of SP::AddSphereLighting; compiler shrinks SSE body
+00796420 350 complete behavioral transcription of SP::CalcAtmosphereZH; constant/switch schedule differs

@@ -1,1 +1,1 @@
-00794e80 SP::RotateZHToSHAdd  # dev PDB 00f79d50; card header; callee of AddSphereLighting
+00794e80 ?RotateZHToSHAdd@@YAXPAMH000@Z  # RotateZHToSHAdd migrated from s00794e80 (verbatim, slice spelling)

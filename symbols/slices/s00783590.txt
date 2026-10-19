@@ -1,9 +1,9 @@
-00783590 SP::ApplyNormalizationConstants  # PDB name; multiply each SH coefficient by kSH_Y_* (degrees 0..4)
-00783830 SP::RemoveNormalizationConstants  # PDB name; divide each SH coefficient by kSH_Y_* (degrees 0..4)
-00783b20 SP::ApplyDiffuseReflection  # PDB name; (lit+diff)-weighted SH scaling per degree
-00783c90 SP::MirrorSHInZ  # PDB name; negate odd (l+m) SH terms; byte-exact
-00783cf0 SP::MultiplySH  # PDB name; multiply two SH sets through the basis triples
-00783f40 SH multiply dispatch  # PDB candidate SP::MultiplySH; picks 9/16/25 coefficients; byte-exact
-00783fb0 SP::FindSHCoeffsFromHemiEnvMap  # PDB name; project a hemisphere env map onto SH
-00784330 `anonymous namespace'::CalcHGPhaseZH  # Henyey-Greenstein phase term
-007843a0 `anonymous namespace'::CalcHGPhaseZHAdd  # additive Henyey-Greenstein phase term
+00783590 ?ApplyNormalizationConstants@@YAXHPAM@Z  # ApplyNormalizationConstants migrated from s00783590 (verbatim, slice spelling)
+00783830 ?RemoveNormalizationConstants@@YAXHPAM@Z  # RemoveNormalizationConstants migrated from s00783590 (verbatim, slice spelling)
+00783b20 ?ApplyDiffuseReflection@@YAXHPBM0PAM@Z  # ApplyDiffuseReflection migrated from s00783590 (verbatim, slice spelling)
+00783c90 ?MirrorSHInZ@@YAXHPAM@Z  # MirrorSHInZ migrated from s00783590 (verbatim, slice spelling)
+00783cf0 ?SP_MultiplySH@@YAXHHHPAXPAD@Z  # SP_MultiplySH migrated from s00783590 (verbatim, slice spelling)
+00783f40 ?FUN_00783f40@@YAXHHHPAX@Z  # FUN_00783f40 migrated from s00783590 (verbatim, slice spelling)
+00783fb0 ?FindSHCoeffsFromHemiEnvMap@SP@@YAXPBUcImageData32@1@HPAVVector4@vpu@math@rw@@@Z  # SP::FindSHCoeffsFromHemiEnvMap migrated from s00783590
+00784330 ?CalcHGPhaseZH@@YAXMPBMHPAM@Z  # CalcHGPhaseZH migrated from s00783590 (verbatim, slice spelling)
+007843a0 ?CalcHGPhaseZHAdd@@YAXMPBMHPAM@Z  # CalcHGPhaseZHAdd migrated from s00783590 (verbatim, slice spelling)

@@ -1,2 +1,2 @@
-00794610 SP::MultiplyZH<float,rw::math::vpu::Vector4>  # Ghidra template instance name
-007948d0 SP::AddColourSample  # Ghidra name
+00794610 ?SP_MultiplyZH@@YAXHHHPAXPAD@Z  # SP_MultiplyZH migrated from s00794610 (verbatim, slice spelling)
+007948d0 ?SP_AddColourSample@@YAXPAMH00@Z  # SP_AddColourSample migrated from s00794610 (verbatim, slice spelling)
