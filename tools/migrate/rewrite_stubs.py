@@ -106,6 +106,39 @@ def mangled_path(sym):
 LOCAL_TYPES = re.compile(r'^\s*#\s*include\s+"(?:\.\./)*(?:include/|game/)?types\.h"\s*$')
 
 
+def drop_if0(lines):
+    """Lines without `#if 0 .. #endif` blocks (nesting-aware; an `#else` of an `#if 0` keeps its branch).  mig8 s007de7d0: the
+    header's `#if 0` block of equivalence-checker annotations re-declared `struct FloatVec`, which the preamble parser took as a
+    second definition (C2011; the slice's six functions were held)."""
+    out, stack = [], []          # stack of (dead?, is_if0) per open conditional
+    for l in lines:
+        s = l.strip()
+        dead = any(d for d, _z in stack)
+        if re.match(r"#\s*if(?:n?def)?\b", s):
+            stack.append((bool(re.match(r"#\s*if\s+0\s*(?://.*|/\*.*)?$", s)), bool(re.match(r"#\s*if\s+0\b", s))))
+            if not stack[-1][1] and not dead:
+                out.append(l)
+            continue
+        if re.match(r"#\s*else\b", s) and stack:
+            d, z = stack[-1]
+            if z:
+                stack[-1] = (not d, z)
+                continue
+            if not dead:
+                out.append(l)
+            continue
+        if re.match(r"#\s*elif\b", s) and stack and stack[-1][1]:
+            continue
+        if re.match(r"#\s*endif\b", s) and stack:
+            _d, z = stack.pop()
+            if not z and not any(d for d, _z in stack):
+                out.append(l)
+            continue
+        if not dead:
+            out.append(l)
+    return out
+
+
 def slice_lines(sid, text):
     """The slice text with its own header expanded in place and the slice-local types.h includes removed."""
     out = []
@@ -125,7 +158,7 @@ def slice_lines(sid, text):
                     out.append(hl)
                 continue
         out.append(l)
-    return out
+    return drop_if0(out)
 
 
 # ---------------------------------------------------------------------------------------------
