@@ -15,7 +15,25 @@
 
 // ---- items of slice s0059d300 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
+void  operator delete(void* p);
 inline void* operator new(size_t, void* p) { return p; }
+namespace EA {
+template <typename T>
+class RefCountVTemplate_s0059_d300 {
+public:
+    RefCountVTemplate_s0059_d300() : mnRefCount(0) {}
+    virtual ~RefCountVTemplate_s0059_d300() {}
+    virtual int AddRef() { return ++mnRefCount; }
+    virtual int Release()
+    {
+        int n = (*(volatile int*)&mnRefCount += -1);
+        if (n == 0) { mnRefCount = 1; delete this; return 0; }
+        return mnRefCount;
+    }
+protected:
+    T mnRefCount;   // +0x8 when preceded by one vptr
+};  // namespace EA
+}
 namespace SP {
 struct AnimRequest;
 }
@@ -26,12 +44,27 @@ namespace SP {
 struct AnimContext;
 }
 namespace SP {
-class cSPEditorAnimationManager_s0059_d300 {
+struct IUnknown32S {
+    virtual int AddRef();
+    virtual int Release();
+    ~IUnknown32S() {}
+};
+}
+namespace SP {
+struct AnimVecS {
+    void* mpBegin; void* mpEnd; void* mpCapacity;
+    AnimVecS() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~AnimVecS();                                      // 0x004b5440
+};
+}
+namespace SP {
+class cSPEditorAnimationManager_s0059_d300 : public EA::RefCountVTemplate_s0059_d300<int>, public IUnknown32S {
 public:
     __declspec(noinline) cSPEditorAnimationManager_s0059_d300(); // 0x0059dac0
+    // scalar deleting destructor ??_G is emitted from this inline destructor
     void Init();                                      // 0x0059db40
     bool GetAnimation(AnimRequest* req, AnimResult* out, AnimContext* ctx);  // 0x0059dc70
-    char pad[0x20];
+    AnimVecS mAnimations;                             // +0xc
 };
 }
 struct RandomLinearCongruential { double RandomDoubleUniform(); };
@@ -92,7 +125,11 @@ class cPropertyList_s0059_d300 {
 public:
     virtual int AddRef();
     virtual int Release();
-    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14(); virtual void v18();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
     virtual bool HasProperty(uint32_t id);                       // +0x1c 0x006a2470
     virtual bool GetPropertyAlt(uint32_t id, Property*& result); // +0x20
     virtual bool GetProperty(uint32_t id, Property*& result);    // +0x24
@@ -223,6 +260,10 @@ double RandomRange(float range)
         return result;
     return 0.0;
 }
+
+// @ 0x0059dac0
+SP::cSPEditorAnimationManager_s0059_d300::cSPEditorAnimationManager_s0059_d300()
+{}
 
 // @ 0x0059db40
 void SP::cSPEditorAnimationManager::Init()

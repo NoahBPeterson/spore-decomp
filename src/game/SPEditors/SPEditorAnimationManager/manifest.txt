@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPEditors/SPEditorAnimationManager.cpp  ??0cSPEditorAnimationManager_s0059_d300@SP@@QAE@XZ  0059dac0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
