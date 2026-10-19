@@ -5,3 +5,5 @@
 0052eb40 cSPSkinPaintDistributeDescription::~cSPSkinPaintDistributeDescription  # EH dtor of the same members, byte-exact
 0052ec40 ?OnRegister@cSPSkinPaintDistributeEffectCommand@?A0x5d0c430c@@QAEXPAUcIParser_s0052_e1f0@ArgScript@EA@@PAUcState_s0052_e1f0@45@@Z  # OnRegister migrated from s0052e1f0 (verbatim, slice spelling)
 0052ef40 `anonymous namespace'::cSPSkinPaintDistributeParticleCommand::Execute  # card PDB candidate; writes mDesc.mParticleDescId
+0052efc0 ?Execute@cSPSkinPaintDistributeParticlesCommand@?A0x5d0c430c@@UAEXAAUcArguments_s0052_e1f0@ArgScript@EA@@@Z  # Execute migrated from s0052e1f0 (verbatim, slice spelling)
+0052f040 ?Parse@cSPSkinPaintDistributeParticlesCommand@?A0x5d0c430c@@UAE_NABULine@ArgScript@EA@@@Z  # Parse migrated from s0052e1f0 (verbatim, slice spelling)

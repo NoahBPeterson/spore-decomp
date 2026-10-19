@@ -22,18 +22,20 @@ extern const char* kDistributeLimitKeyword;         // "limit"
 extern const char* kDistributeRegionKeyword;        // "region"
 
 // ---- items of slice s0052e1f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" __declspec(dllimport) int __cdecl sscanf(const char* buffer, const char* format, ...);
 template <int N> inline void ScratchSlots() { uint32_t slots[N]; }
 template <> inline void ScratchSlots<0>() {}
-inline void* operator new(unsigned int, void* p) { return p; }
 inline void operator delete(void*, void*) {}
-void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags,
-                   const char* file, int line);                            // 0x00f473a0
 void operator delete(void* p, const char* name, int flags, unsigned debugFlags,
                      const char* file, int line);
 void operator delete(void* p);                                             // 0x00f47380
-struct sp_vector_allocator {
+// renamed by hand from `sp_vector_allocator`: the emitted `namespace eastl` block below is inside namespace eastl, where
+// the canonical 4-byte `eastl::sp_vector_allocator` (src/game/include/eastl/allocator.h) hides this global 8-byte stub, so
+// `eastl::vector_s0052_e1f0<pair_s0052_e1f0<int, float> >` was 0x10 instead of the retail 0x14 (mParticleSelectIndependent
+// at +0x4c instead of +0x50: 0052efc0/0052f040 DIFF 1 byte, `mov byte ptr [edx + 0x84]` vs `+0x88`).
+struct sp_vector_allocator_s0052_e1f0 {
     uint32_t mFlags[2];
-    sp_vector_allocator() {}
+    sp_vector_allocator_s0052_e1f0() {}
 };
 namespace eastl {
 template <typename T1, typename T2> struct pair_s0052_e1f0 {
@@ -87,7 +89,7 @@ template <typename T> struct VectorBase_s0052_e1f0 {
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
-    sp_vector_allocator mAllocator;
+    sp_vector_allocator_s0052_e1f0 mAllocator;
     VectorBase_s0052_e1f0() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
     ~VectorBase_s0052_e1f0();                  // 0x0045daf0 (declined inline)
 };
@@ -105,7 +107,7 @@ template <typename T> struct vector_s0052_e1f0 : VectorBase_s0052_e1f0<T> {
     void clear()
     {
         ScratchSlots<6>();      // frame of the declined erase() expansion
-        erase(mpBegin, mpEnd);
+        erase(mpBegin, mpEnd);  // 0x00621f50 (eastl::vector::erase)
     }
     void push_back(const T& value); // 0x005402c0
 };
@@ -155,15 +157,42 @@ struct cSPSkinPaintDistributeDescription : EA::Swarm::cDescription_s0052_e1f0 { 
 namespace EA {
 namespace ArgScript {
 struct cIParser_s0052_e1f0 {
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
-    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
-    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
-    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
-    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
-    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
-    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
-    virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+virtual void v25();
+virtual void v26();
+virtual void v27();
+virtual void v28();
+virtual void v29();
+virtual void v30();
+virtual void v31();
+virtual void v32();
+virtual void v33();
+virtual void v34();
+virtual void v35();
     virtual void PushMetaCommand(void* command, const char* endKeyword);   // +0x90
 };
 }
@@ -191,6 +220,16 @@ namespace ArgScript {
 struct cArguments_s0052_e1f0 {
     const char** MainArguments(int count);      // 0x00838320
     bool HasFlag(const char* flag);             // 0x008380b0
+};
+}
+}
+namespace EA {
+namespace ArgScript {
+struct cError_s0052_e1f0 {
+    uint32_t mMessage[4];   // eastl::basic_string<char>
+    cError_s0052_e1f0(const char* fmt, ...);               // 0x0052df30
+    cError_s0052_e1f0(const cError_s0052_e1f0& x);
+    ~cError_s0052_e1f0();
 };
 }
 }
@@ -241,7 +280,9 @@ struct cBlockCommandBase : cIBlockCommand_s0052_e1f0 {
     uint32_t mCommands[8];                      // +0x10 hash_map
     void OnRegister(cIParser_s0052_e1f0* parser, cState_s0052_e1f0* state);   // 0x0083c780
     void SetChildState(cState_s0052_e1f0* state);          // 0x00fd9450
-    virtual void v03(); virtual void v04(); virtual void v05();
+virtual void v03();
+virtual void v04();
+virtual void v05();
     virtual void AddCommand(const char* name, cICommand_s0052_e1f0* command);      // +0x18
 };
 }
@@ -313,11 +354,6 @@ struct cSPSkinPaintDistributeRegionCommand : EA::ArgScript::cCommandT<cSPSkinPai
     virtual void Execute(EA::ArgScript::cArguments_s0052_e1f0& args);
 };
 }  // namespace
-extern const char* kDistributeParticleKeyword;      // "particle"
-extern const char* kDistributeParticlesKeyword;     // "particleSelect"
-extern const char* kDistributeSpacingKeyword;       // "spacing"
-extern const char* kDistributeLimitKeyword;         // "limit"
-extern const char* kDistributeRegionKeyword;        // "region"
 // ---- items of slice s0052e1f0 end
 
 // ---- items of slice s0052f170 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -550,6 +586,34 @@ void cSPSkinPaintDistributeEffectCommand::OnRegister(EA::ArgScript::cIParser_s00
                new ("ArgScript/SPSkinPaintDistributeLimit", 0, 0, 0, 0) cSPSkinPaintDistributeLimitCommand());
     AddCommand(kDistributeRegionKeyword,
                new ("ArgScript/SPSkinPaintDistributeRegion", 0, 0, 0, 0) cSPSkinPaintDistributeRegionCommand());
+}
+
+// @ 0x0052efc0
+void cSPSkinPaintDistributeParticlesCommand::Execute(EA::ArgScript::cArguments_s0052_e1f0& args)
+{
+    args.MainArguments(0);
+    mState->mDesc.mParticleSelect.clear();
+    mState->mDesc.mParticleSelectIndependent = args.HasFlag("all");
+    mParser->PushMetaCommand(this, "end");
+}
+
+// @ 0x0052f040
+bool cSPSkinPaintDistributeParticlesCommand::Parse(const EA::ArgScript::Line& line)
+{
+    char name[128];
+    name[0] = 0;
+    float prob = mState->mDesc.mParticleSelectIndependent ? 1.0f : -1.0f;
+    sscanf(line.GetText(), " %127s -prob %f", name, &prob);
+    if (name[0]) {
+        EA::Swarm::cEffectsParser* parser = mState->mState;
+        int index = parser->FindComponent(name, 0x26);
+        if (index >= 0) {
+            ScratchSlots<2>();      // frame of the declined push_back() expansion
+            mState->mDesc.mParticleSelect.push_back(eastl::pair_s0052_e1f0<int, float>(index, prob));
+        } else
+            throw EA::ArgScript::cError_s0052_e1f0("unknown particle type '%s'\n", name);
+    }
+    return true;
 }
 
 // @ 0x0052f170
