@@ -1,8 +1,10 @@
 0097cea0 EA::UTFWinControls::WinGrid::SetCellWindow  # pdb_candidates caller-single
 0097d080 EA::UTFWinControls::WinGrid::Refresh  # pdb_names vtable-slot
-0097d170 EA::UTFWinControls::ImageDrawable::GetNaturalSize  # pdb_names vtable-slot
-0097d270 EA::UTFWinControls::ImageDrawable::CreateRenderables  # pdb_names gap-align
-0097d950 EA::UTFWinControls::ImageDrawable::`scalar deleting destructor'  # pdb_names gap-align
+0097d100 ?SetIntrusive18@IntrusiveHolder@@QAEXPAX@Z  # IntrusiveHolder::SetIntrusive18 migrated from s0097cea0 (verbatim, slice spelling)
+0097d170 ?GetNaturalSize@NaturalSizeHolder@@QAE_NPAH0H@Z  # NaturalSizeHolder::GetNaturalSize migrated from s0097cea0 (verbatim, slice spelling)
+0097d1a0 ?ImageDrawable_GetWidth@@YAHPAX@Z  # ImageDrawable_GetWidth migrated from s0097cea0 (verbatim, slice spelling)
+0097d270 ?DrawTiling@@YAXPAUImageDrawable@Cr@@PAUTarget2D@2@PBM2@Z  # DrawTiling migrated from s0097cea0 (verbatim, slice spelling)
+0097d950 ?DestroyScalar@ImageDrawable@@QAEPAU1@E@Z  # ImageDrawable::DestroyScalar migrated from s0097cea0 (verbatim, slice spelling)
 0097da40 EA::UTFWin::CustomWinProc::Release  # pdb_names vtable-slot
 0097da60 ?AsInterface@ImageCursorProvider@@QAEPAXI@Z  # ImageCursorProvider::AsInterface migrated from s0097cea0 (verbatim, slice spelling)
 0097dad0 ?CursorWindow_ctor@@YAXPAX@Z  # CursorWindow_ctor migrated from s0097cea0 (verbatim, slice spelling)

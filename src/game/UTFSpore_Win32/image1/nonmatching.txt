@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0097d170 6 complete; ImageDrawable::GetNaturalSize - image-object vtable branch approximated but all paths present; equiv: FAIL (member fixed; body still approximated, does not write out sizes)
+0097d1a0 15 complete; ImageDrawable size/flag accessor
+0097d270 165 complete; ImageDrawable::CreateRenderables (draw image + drop-shadow loop); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; 1292B vs 1626B, original has ebp-aligned frame; alpha quantisation now rounds to nearest (+0.5f) since the original's FISTP rounds (was truncating, gave 127 vs 128 at a*255=127.5); equiv: WEAK (259 valid inputs, 79.6% coverage, no value mismatches)
