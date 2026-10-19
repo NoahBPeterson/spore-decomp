@@ -2,3 +2,7 @@
 00538380 RefCount secondary-base AddRef adjustor  # this = object+8; returns old refcount+1
 005383c0 RefCount secondary-base Release adjustor  # this = object+8; calls 0x453540 on object
 00538420 Wrapper538420  # tail call to 0x53aea0 with swapped args
+00538440 cSPSkinPaintParticleEffectBlockCommand::OnRegister  # registers 14 line commands via vtable+0x18, pdb-style name from card
+00538a00 cSPSkinPaintParticlebrushCommand::Execute  # card/pdb name
+00538af0 cSPSkinPaintParticlechainCommand::Execute  # command name string "chain" at 0x13f2f10, FindComponent(name,0x26)
+00538b80 cSPSkinPaintParticlediffuseColorCommand::Execute  # pdb candidate on card

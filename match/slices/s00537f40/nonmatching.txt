@@ -1,3 +1,6 @@
 00538000  117  cSPTransform copy ctor: field/Matrix3 assign schedule differs
 00538380  33   Host::AddRef adjustor: /Od pointer-adjust temp slots differ
 005383c0  17   Host::Release adjustor: /Od frame differs
+00538a00  29  cSPSkinPaintParticlebrushCommand::Execute complete; /Od slot order (A/pDesc/this temps) differs [equiv: WEAK 116/200 valid, 61.8% cov]
+00538af0  7  cSPSkinPaintParticlechainCommand::Execute complete; only this/pDesc slot swap [equiv: UNSUPPORTED 0/400 valid, MainArguments throws on random input]
+00538b80  85  cSPSkinPaintParticlediffuseColorCommand::Execute complete; /Od slot order (index/color/hsv temps vs A) differs [equiv: UNSUPPORTED 0/400 valid, MainArguments throws]

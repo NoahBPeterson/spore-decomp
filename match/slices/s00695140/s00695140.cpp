@@ -1,5 +1,6 @@
 #include "types.h"
 #include <wchar.h>
+#include <new>
 
 #define VFN(o,off) (*(void***)(o))[(off)/4]
 
@@ -316,20 +317,354 @@ extern "C" void __fastcall FUN_00695fa0(void* self)
 }
 
 // =====================================================================
-// Remaining bodies are large serializer/EH routines; recorded as partial.
+// Serializer / text-report bodies (EH heavy, /O2 /GS-).
+extern char gEmptyString[];                     // @ 0x1667bac
+typedef unsigned int size_t;
 // =====================================================================
-// @ 0x00695140
-extern "C" void FUN_00695140() { /* cVarListSerializer field walk: summarised */ }
+namespace eastl {
+inline size_t CharStrlen(const char* p)
+{
+    const char* pCurrent = p;
+    while (*pCurrent++) {}
+    return (size_t)(pCurrent - p - 1);
+}
+struct allocator {
+    void deallocate(void* p, size_t) { delete[] (char*)p; }
+};
+struct basic_string {
+    char* mpBegin;
+    char* mpEnd;
+    char* mpCapacity;
+    allocator mAllocator;
+    basic_string() : mpBegin(0), mpEnd(0), mpCapacity(0) { AllocateSelf(); }
+    ~basic_string() { DeallocateSelf(); }
+    void AllocateSelf() { mpBegin = gEmptyString; mpEnd = mpBegin; mpCapacity = mpBegin + 1; }
+    void DeallocateSelf() {
+        if ((mpCapacity - mpBegin) > 1)
+            DoFree(mpBegin, mpCapacity - mpBegin);
+    }
+    void DoFree(char* p, size_t n) { if (p) mAllocator.deallocate(p, n); }
+    basic_string& assign(const char* pBegin, const char* pEnd);          // @ 0x454cb0
+    basic_string& assign(const char* p)
+    {
+        return assign(p, p + CharStrlen(p));
+    }
+};
+}
+
+namespace SP {
+struct cDataSerializerGeneric {
+    const char* mpStaticFieldName;      // +0x00
+    unsigned int mId;                   // +0x04
+    unsigned int mData[4];              // +0x08
+    void* mpBinderContext;              // +0x18
+    void* mpSetDefaultValueFunc;        // +0x1c
+    void* (*mpDataBinderFunc)(cDataSerializerGeneric*);   // +0x20
+    void* mpReadFunc;                   // +0x24
+    void* mpWriteFunc;                  // +0x28
+    void* mpReadStringFunc;             // +0x2c
+    void (*mpWriteStringFunc)(eastl::basic_string*, void*);   // +0x30
+    void (*mpWriteWideFunc)(void*, void*);   // +0x34
+    void* mpPad38;                      // +0x38
+};
+struct cDataSerializationInfo {
+    unsigned int mId;                   // +0x0
+    unsigned int mDataSize;             // +0x4
+    bool mbSerialized;                  // +0x8
+    void* mpBinderContext;              // +0xc
+    cDataSerializerGeneric* mpSerializer;   // +0x10
+};
+}
+
+void* DefaultDataBinder(SP::cDataSerializerGeneric*);   // 0x011874d0
+struct FieldEntryBase : SP::cDataSerializerGeneric {
+    FieldEntryBase()
+    {
+        mpStaticFieldName = "field_name";
+        mId = 0xffffffff;
+        mData[0] = 0;
+        mpBinderContext = 0;
+        mpSetDefaultValueFunc = 0;
+        mpDataBinderFunc = (void* (*)(SP::cDataSerializerGeneric*))DefaultDataBinder;
+        mpReadFunc = 0; mpWriteFunc = 0; mpReadStringFunc = 0; mpWriteStringFunc = 0;
+        mpWriteWideFunc = 0; mpPad38 = 0;
+    }
+};
+struct FieldEntry : FieldEntryBase {
+    void* mpObject;                     // +0x3c
+    eastl::basic_string mName;          // +0x40
+    eastl::basic_string mValue;         // +0x50
+};
+
+struct FieldVec {
+    FieldEntry* mpBegin; FieldEntry* mpEnd; FieldEntry* mpCapacity;
+    void reserve(unsigned n);                       // 0x00695490 (thiscall)
+    void push_back(const FieldEntry& e);            // 0x006956f0 (thiscall, ret 4)
+};
+extern "C" char g_bTextFlag;                        // 0x01600c5c
+
+struct WStrTmp {
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; eastl::allocator mAllocator;
+    WStrTmp() {}
+    ~WStrTmp()
+    {
+        if ((int)(((unsigned)((char*)mpCapacity - (char*)mpBegin)) & 0xfffffffeu) > 2 && mpBegin)
+            mAllocator.deallocate(mpBegin, 0);
+    }
+};
+struct CharString : eastl::basic_string {
+    CharString& sprintf(const char* fmt, ...);      // 0x00472fe0 (cdecl, this pushed)
+};
+WStrTmp ConvertToString16(const eastl::basic_string& s);       // 0x0093c6d0 (cdecl, sret first)
+struct WStrTmpVec { void push_back(const WStrTmp& s); };          // 0x00553f10 (thiscall, ret 4)
+struct SubA { void Reserve(int n); };                       // 0x006b58c0 (thiscall, ret 4)
+struct SubB { void Reserve(int n); };                       // 0x006953b0 (thiscall, ret 4)
+
+struct FieldReport {
+    char pad0[4];
+    SubA mFields;                       // +0x04
+    char pad1[0x5c - 0x04 - 1];
+    SubB mTexts;                        // +0x5c
+};
+
+namespace SP {
+struct cVarListSerializer {
+    cDataSerializationInfo mDataSerializationInfos[128];   // +0x0
+    int mSerializableVarCount;                              // +0xa00
+    int mSerializedVarCount;                                // +0xa04
+    unsigned int mSignature;                                // +0xa08
+    void* mpObject;                                         // +0xa0c
+    cDataSerializerGeneric* mpSerializerList;               // +0xa10
+    int GetFields(FieldVec& out);
+    int Execute(FieldReport* report);
+};
+}
+
+void* DefaultDataBinder(SP::cDataSerializerGeneric*);   // 0x011874d0
+
+struct Obj60 {
+    char d[0x60];
+    Obj60(const Obj60& o);                                          // 0x006940d0 (thiscall, ret 4)
+    Obj60& operator=(const Obj60& o);                               // 0x006941c0 (thiscall, ret 4)
+};
+Obj60* UninitCopy60(Obj60* first, Obj60* last, Obj60* dst);         // 0x00694320 (cdecl)
+Obj60* UninitFill60(Obj60* first, Obj60* last, Obj60* dst);         // 0x00694e00 (cdecl)
+void   CopyBackward60(Obj60* first, Obj60* last, Obj60* dstEnd);    // 0x006943b0 (cdecl)
+
+struct Vec60b {
+    Obj60* mpBegin; Obj60* mpEnd; Obj60* mpCapacity;
+    Obj60* DoAllocate(unsigned n)
+    {
+        return n ? (Obj60*)EASTL_alloc6(n * 0x60, "App", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+    }
+    void DoInsertValue(Obj60* position, const Obj60& value);
+};
+
+
+void* EASTL_alloc(size_t sz, const char* name, int a, int b, const char* file, int line);  // 0xf473a0
+
+struct WStr {                                       // eastl::basic_string<wchar_t> (16 bytes)
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; eastl::allocator mAllocator;
+    WStr() { mpBegin = (wchar_t*)gEmptyString; mpEnd = mpBegin; mpCapacity = (wchar_t*)(gEmptyString + 2); }
+    ~WStr()
+    {
+        if ((int)(((unsigned)((char*)mpCapacity - (char*)mpBegin)) & 0xfffffffeu) > 2 && mpBegin)
+            mAllocator.deallocate(mpBegin, 0);
+    }
+    WStr& sprintf(const wchar_t* fmt, ...);         // 0x0041e050 (cdecl, this pushed)
+    WStr& assign(const wchar_t* b, const wchar_t* e);   // 0x00423650 (thiscall, ret 8)
+    WStr& operator=(const WStr& x)
+    {
+        if (&x != this)
+            assign(x.mpBegin, x.mpEnd);
+        return *this;
+    }
+};
+struct cWString {                                   // RangeInitialize-constructed copy
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity;
+    cWString(const wchar_t* s) : mpBegin(0), mpEnd(0), mpCapacity(0) { RangeInitialize(s); }
+    ~cWString()
+    {
+        if ((int)(((unsigned)((char*)mpCapacity - (char*)mpBegin)) & 0xfffffffeu) > 2 && mpBegin)
+            delete[] (char*)mpBegin;
+    }
+    void RangeInitialize(const wchar_t* s);         // 0x00579a90 (thiscall, ret 4)
+};
+WStr WStrConcat(const cWString& a, const WStr& b);   // 0x00688f00 (cdecl, sret first)
+
+struct Node;
+struct NodePtrVec {                                 // eastl::vector<T*>
+    Node** mpBegin; Node** mpEnd; Node** mpCapacity;
+    void DoInsertValue(Node** pos, Node*& value);    // 0x00690b80 (thiscall, ret 8)
+    void push_back(Node* const& value)
+    {
+        if (mpEnd < mpCapacity)
+            ::new(mpEnd++) Node*(value);
+        else
+            DoInsertValue(mpEnd, (Node*&)value);
+    }
+};
+struct Parent;
+struct ParentPtrVec {
+    Parent** mpBegin; Parent** mpEnd; Parent** mpCapacity;
+    void DoInsertValue(Parent** pos, Parent*& value);    // 0x00690b80 (thiscall, ret 8)
+    void push_back(Parent* const& value)
+    {
+        if (mpEnd < mpCapacity)
+            ::new(mpEnd++) Parent*(value);
+        else
+            DoInsertValue(mpEnd, (Parent*&)value);
+    }
+};
+
+struct Node {                                       // 0x74 bytes
+    char pad0[0x18];
+    ParentPtrVec mParents;                          // +0x18
+    char pad1[0x2c - 0x24];
+    WStr mName;                                     // +0x2c
+    WStr mOpenTag;                                  // +0x3c
+    WStr mCloseTag;                                 // +0x4c
+    char pad2[0x74 - 0x5c];
+    Node* init(unsigned key);                       // 0x00694e60 (thiscall, ret 4)
+};
+
+struct Parent {
+    char pad0[4];
+    NodePtrVec mChildren;                           // +0x04
+    Node* GetOrCreate(unsigned key, const wchar_t* name);
+};
+
+struct HashIter {
+    void* mpNode; void** mpBucket;
+    bool operator==(const HashIter& x) const { return mpNode == x.mpNode; }
+};
+struct HashPair { unsigned first; Node* second; };
+struct HashResult { HashIter mIter; bool mbInserted; };
+struct NodeTable {
+    void* pad0;
+    void** mpBucketArray;                           // +4
+    unsigned mnBucketCount;                         // +8
+    HashIter end() const { HashIter i; i.mpNode = mpBucketArray[mnBucketCount]; i.mpBucket = mpBucketArray + mnBucketCount; return i; }
+    HashIter find(const unsigned& key) const;       // 0x00645ed0 (thiscall, ret 8)
+    HashResult insert(const HashPair& value, bool b);   // 0x007c3990 (thiscall, ret 0xc)
+};
+extern NodeTable gNodeTable;                        // 0x0152d69c
+
 
 // @ 0x00695550
-extern "C" void FUN_00695550() { /* vector emplace with reallocation: summarised */ }
-
-// @ 0x00695770
-extern "C" void FUN_00695770() { /* cAnimNameCommand::Execute: summarised */ }
+void Vec60b::DoInsertValue(Obj60* position, const Obj60& value)
+{
+    if (mpEnd != mpCapacity) {
+        const Obj60* pValue = &value;
+        if ((&value >= position) && (&value < mpEnd))
+            ++pValue;
+        ::new(mpEnd) Obj60(*(mpEnd - 1));
+        CopyBackward60(position, mpEnd - 1, mpEnd);
+        *position = *pValue;
+        ++mpEnd;
+    } else {
+        unsigned nPrevSize = (unsigned)(mpEnd - mpBegin);
+        unsigned nNewSize = nPrevSize ? 2 * nPrevSize : 1;
+        Obj60* const pNewData = DoAllocate(nNewSize);
+        Obj60* pNewPosition = UninitCopy60(mpBegin, position, pNewData);
+        UninitFill60(mpBegin, position, pNewData);
+        ::new(pNewPosition) Obj60(value);
+        Obj60* pNewEnd = UninitCopy60(position, mpEnd, pNewPosition + 1);
+        UninitFill60(position, mpEnd, pNewPosition + 1);
+        if (mpBegin && ((int*)mpBegin)[-1])
+            operator_delete_arr(mpBegin);
+        mpEnd = pNewEnd;
+        mpBegin = pNewData;
+        mpCapacity = pNewData + nNewSize;
+    }
+}
 
 // @ 0x00695960
-extern "C" void FUN_00695960() { /* cVarListSerializer::GetFields: summarised */ }
+int SP::cVarListSerializer::GetFields(FieldVec& out)
+{
+    out.reserve(mSerializableVarCount);
+    for (int i = 0; i < mSerializableVarCount; ++i) {
+        cDataSerializationInfo& info = mDataSerializationInfos[i];
+        cDataSerializerGeneric* ser = info.mpSerializer;
+        if (ser->mpBinderContext == 0)
+            ser->mpBinderContext = mpObject;
+        FieldEntry entry;
+        entry.mName.assign(ser->mpStaticFieldName);
+        entry.mpObject = mpObject;
+        *static_cast<cDataSerializerGeneric*>(&entry) = *ser;
+        if (ser->mpWriteStringFunc && ser->mpDataBinderFunc)
+            ser->mpWriteStringFunc(&entry.mValue, ser->mpDataBinderFunc(ser));
+        ser->mpBinderContext = info.mpBinderContext;
+        out.push_back(entry);
+    }
+    return mSerializableVarCount;
+}
 
+// @ 0x00695770
+int SP::cVarListSerializer::Execute(FieldReport* report)
+{
+    if (g_bTextFlag)
+        report->mTexts.Reserve(mSerializableVarCount);
+    report->mFields.Reserve(mSerializableVarCount);
+    for (int i = 0; i < mSerializableVarCount; ++i) {
+        cDataSerializationInfo& info = mDataSerializationInfos[i];
+        cDataSerializerGeneric* ser = info.mpSerializer;
+        if (ser->mpBinderContext == 0)
+            ser->mpBinderContext = mpObject;
+        if (ser->mpWriteWideFunc && ser->mpDataBinderFunc)
+            ser->mpWriteWideFunc(report, ser->mpDataBinderFunc(ser));
+        if (g_bTextFlag) {
+            const char* name = ser->mpStaticFieldName;
+            CharString value;
+            if (ser->mpWriteStringFunc && ser->mpDataBinderFunc) {
+                ser->mpWriteStringFunc(&value, ser->mpDataBinderFunc(ser));
+                if (value.mpBegin != value.mpEnd) {
+                    CharString tagged;
+                    tagged.sprintf("<%s>%s</%s>", name, value.mpBegin, name);
+                    ((WStrTmpVec*)&report->mTexts)->push_back(ConvertToString16(tagged));
+                }
+            }
+        }
+        ser->mpBinderContext = info.mpBinderContext;
+    }
+    return mSerializableVarCount;
+}
+
+// @ 0x00695140
+Node* Parent::GetOrCreate(unsigned key, const wchar_t* name)
+{
+    HashIter it = gNodeTable.find(key);
+    Node* node;
+    if (it == gNodeTable.end()) {
+        Node* mem = (Node*)EASTL_alloc(0x74, "Simulator", 0, 0, 0, 0);
+        node = mem ? mem->init(key) : 0;
+        WStr suffix;
+        suffix.sprintf(L" @ 0x%08x", key);
+        {
+            cWString full(name);
+            node->mName = WStrConcat(full, suffix);
+        }
+        mChildren.push_back(node);
+        node->mParents.push_back(this);
+        HashPair pair; pair.first = key; pair.second = node;
+        gNodeTable.insert(pair, false);
+        if (g_bTextFlag) {
+            node->mOpenTag.sprintf(L"<%s>", name);
+            node->mCloseTag.sprintf(L"</%s>", name);
+        }
+    } else {
+        node = ((HashPair*)it.mpNode)->second;
+        mChildren.push_back(node);
+        node->mParents.push_back(this);
+    }
+    return node;
+}
+
+
+// =====================================================================
+// Remaining body recorded as partial.
+// =====================================================================
 // @ 0x00695b40
 extern "C" void FUN_00695b40() { /* serializer helper: summarised */ }
 // --- equivalence checker address annotations

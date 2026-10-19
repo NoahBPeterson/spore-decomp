@@ -7,3 +7,6 @@
 00695e80  92  summarizer destructor: vtable stores, two list clears, buffer free condition present; EH frame differs
 00695f00  139  intrusive-list destroy with object probe: full path present; EH frame and register allocation differ; equiv UNSUPPORTED: only 0/1200 inputs valid (faults on pointer-chasing list walk)
 00695fa0  271  pooled sub-vector teardown: all walks/frees present; EH frame and register allocation differ; equiv WEAK: 796 valid inputs, 35.7% coverage
+00695140  464  Parent::GetOrCreate complete (hashtable find, node create/name, two vector push_backs, insert, tag strings); register allocation and EH slot layout differ [equiv: FAIL only on call #9 third stack arg of 0x7c3990 = uninitialised high bytes of a reused arg slot in the original, callee ignores it]
+00695550  231  vector<Obj60>::DoInsertValue complete (in-place shift and reallocating path); original spills pData/nNewSize to the frame (3 locals vs 2) and the EH state slots differ [equiv: UNSUPPORTED 0/400 valid inputs (faults)]
+00695960  291  cVarListSerializer::GetFields complete; register assignment differs (this in esi, zero in ebx in the original) and loop induction anchors at info+0xc [equiv: PASS 274 valid, 83.8% coverage]

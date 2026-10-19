@@ -3,3 +3,4 @@ slices/s00695140/s00695140.cpp  @FUN_00695c30@4  00695c30
 slices/s00695140/s00695140.cpp  _FUN_00695c70  00695c70
 slices/s00695140/s00695140.cpp  @FUN_00695cd0@4  00695cd0
 slices/s00695140/s00695140.cpp  ?check@Ctl@@QAE_NPAX@Z  00695d70
+slices/s00695140/s00695140.cpp  ?Execute@cVarListSerializer@SP@@QAEHPAUFieldReport@@@Z  00695770  /O2 /MD /Gy /EHsc /TP /GS-

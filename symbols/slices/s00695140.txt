@@ -3,3 +3,7 @@
 00695c70 _FUN_00695c70  # FUN_00695c70 migrated from s00695140 (verbatim, slice spelling)
 00695cd0 @FUN_00695cd0@4  # FUN_00695cd0 migrated from s00695140 (verbatim, slice spelling)
 00695d10 ?addThing@Ctl@@QAEXPAX0@Z  # Ctl::addThing migrated from s00695140 (verbatim, slice spelling)
+00695140 Parent::GetOrCreate  # hashtable find at 0x152d69c, node 0x74 "Simulator", name suffix " @ 0x%08x"
+00695550 Vec60b::DoInsertValue  # eastl::vector DoInsertValue for 0x60 byte records
+00695770 SP::cVarListSerializer::Execute  # pdb candidate cAnimNameCommand::Execute on card; walks serializers, writes field text
+00695960 SP::cVarListSerializer::GetFields  # pdb name on card
