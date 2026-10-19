@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00675d70  198  ctor resetting four 0x20-byte uint hash maps: skeleton only (layout undetermined)
+006763e0  166  FUN_006763E0: skeleton only
+006764f0  78   FUN_006764F0: skeleton only
+0067a1b0  991  property UI update: skeleton only (x87 easing + property reads not reconstructed)

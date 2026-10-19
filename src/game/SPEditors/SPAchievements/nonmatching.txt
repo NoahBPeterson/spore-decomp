@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00675260 181 cVar-list serialize: complete behaviour; writer vcall/WriteUint32 scheduling and cVarListSerializer construction differ
+0067a090 116 SP::Achievements::Controller::Shutdown: complete behaviour; cl shrink-wraps the epilogue (pops edi/esi early) shifting the local by 8 bytes
+0067a120 124 destroy-every-element: complete behaviour; same early-epilogue shrink-wrap plus FUN_00679e50 call scheduling differs
+0067a590 122 complete: register/frame scheduling and temp-slot placement differ (cl used a different loop/temp layout)

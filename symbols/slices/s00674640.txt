@@ -3,8 +3,8 @@
 00674dc0 ?sBuildXHTMLDocument@@YAXPAX0@Z  # sBuildXHTMLDocument migrated from s00674640 (verbatim, slice spelling)
 00675080 ?LoadSporeGuidePage@cSPUISporeGuidePage@SP@@QAEXI@Z  # SP::cSPUISporeGuidePage::LoadSporeGuidePage migrated from s00674640
 006751a0 PropertyManager setter wrapper (0x5befd27)  # unnamed; SP::PropertyManager vcall
-006751c0 cVar comparison predicate  # switch on (header>>8)&7; returns relational result
-00675260 eastl::vector<16-byte>::Serialize  # writes count + pairs via EA::IO::WriteUint32
+006751c0 ?FUN_006751c0@@YG_NPAI@Z  # FUN_006751c0 migrated from s00674640 (verbatim, slice spelling)
+00675260 ?Serialize@CVarList@@QAEXPAH@Z  # CVarList::Serialize migrated from s00674640 (verbatim, slice spelling)
 00675370 accessor: returns +0x28 or *(int*)(p+8)+0x3c  # unnamed
 006753a0 achievement_test cheat teardown  # PDB string "achievement_test ..."
 00675440 vector<cVar>::Deserialize  # read-vcall loop

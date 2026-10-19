@@ -1,8 +1,8 @@
-0067a590 UI::HintManager::PossiblyStartSpiceTutorial  # PDB candidate (caller-scored); thiscall member, 2 byte args
-0067a680 UI::HintManager::StartTutorialCallback  # __stdcall callback; calls FUN_0067caf0 then PossiblyStart(_,1)
-0067a6a0 UI::HintManager::HandleMessage  # compares msg id 0x670eccd; secondary subobject (this-0xc)
+0067a590 ?possibly@HM590@@QAEXDD@Z  # HM590::possibly migrated from s0067a590 (verbatim, slice spelling)
+0067a680 ?cb_67a680@@YGXPAX0@Z  # cb_67a680 migrated from s0067a590 (verbatim, slice spelling)
+0067a6a0 ?handle@C_a6a0@@QAE_NHPAX@Z  # HM6e0::handle migrated from s0067a590 (verbatim, slice spelling)
 0067a6e0 UI::HintManager::HandleHintMessage  # PDB cUIHints::UpdateVisibleHint-adjacent; handles types 6/8/0x287259f6
-0067a850 UI::HintManager::ResetCallback  # registered via FUN_00929da0; releases + PossiblyStart(0,0)
+0067a850 ?cb_67a850@@YAXPAX@Z  # cb_67a850 migrated from s0067a590 (verbatim, slice spelling)
 0067a880 UI::HintManager::Init  # sets up CalloutTimer smooth-ramp timers + MessageServer handler
 0067aae0 UI::HintManager::AddHint  # inserts a 0x134-byte hint element
 0067ac80 EA::Color::PackARGB  # cdecl pack (a<<24)|(r<<16)|(g<<8)|b

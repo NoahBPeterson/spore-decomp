@@ -3,6 +3,6 @@
 00679c90 SP::cPropertyUI::cElem operator=  # unnamed
 00679e50 SP::cPropertyUI container reset  # unnamed
 00679ff0 SP::cPropertyUI::PushElem  # unnamed
-0067a090 SP::Achievements::Controller::Shutdown  # PDB callee-scored
-0067a120 SP::cPropertyUI::DestroyAllElems  # unnamed
-0067a1b0 SP::cPropertyUI::Update  # unnamed
+0067a090 ?Shutdown@Container@@QAEXXZ  # Container::Shutdown migrated from s00679630 (verbatim, slice spelling)
+0067a120 ?FUN_0067a120@@YIXPAD@Z  # FUN_0067a120 migrated from s00679630 (verbatim, slice spelling)
+0067a1b0 ?Update@PropUI2@@QAEDPAD@Z  # PropUI2::Update migrated from s00679630 (verbatim, slice spelling)

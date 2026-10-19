@@ -7,14 +7,14 @@
 00675990 SP::cTypedValueToStringT<short>::Write caller + property streaming
 00675b90 eastl::vector<Simulator::cCreatureAbility,...>::DoInsertValue  # 0x10-byte elements
 00675cc0 FourHashMaps::~FourHashMaps  # four 0x20-byte uint hash maps at +0,+0x20,+0x40,+0x60
-00675d70 ctor resetting four 0x20-byte uint hash maps at +0x3c,+0x5c,+0x7c,+0x9c
+00675d70 ?FUN_00675D70@@YAXXZ  # FUN_00675D70 migrated from s006755c0 (verbatim, slice spelling)
 00675e80 hash-map find wrapper  # calls FUN_00555A20
 00675ed0 FUN_00675ED0  # save-area streaming
 00675ff0 FUN_00675FF0  # save-area streaming
 00676140 FUN_00676140
 006761f0 FUN_006761F0
 00676370 ?insert@PollenResponsePairsVector@@QAEPAXPAXPBX@Z  # PollenResponsePairsVector::insert migrated from s006755c0 (verbatim, slice spelling)
-006763e0 FUN_006763E0
+006763e0 ?FUN_006763E0@@YAXXZ  # FUN_006763E0 migrated from s006755c0 (verbatim, slice spelling)
 00676490 FUN_00676490
-006764f0 FUN_006764F0
+006764f0 ?FUN_006764F0@@YAXXZ  # FUN_006764F0 migrated from s006755c0 (verbatim, slice spelling)
 00676540 FUN_00676540

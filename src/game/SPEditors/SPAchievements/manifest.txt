@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPAchievements.cpp  ?FUN_006751c0@@YG_NPAI@Z  006751c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPAchievements.cpp  ?cb_67a680@@YGXPAX0@Z  0067a680  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPAchievements.cpp  ?handle@C_a6a0@@QAE_NHPAX@Z  0067a6a0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPAchievements.cpp  ?cb_67a850@@YAXPAX@Z  0067a850  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
