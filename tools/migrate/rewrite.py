@@ -3344,6 +3344,15 @@ class Rewrite:
             if module_filter and (not c.module or not mod_match(module_filter, c.module)):
                 self.notes.append(("skipped", "0x%08x %s::%s belongs to %s" % (c.va, c.cls, c.name, c.module)))
                 continue
+            if ("%08x" % c.va in self.manual.get("exclude", {}) or "%08x" % c.va in self.manual.get("leave_in_slice", {})) \
+                    and self._landed_in_tu(c):
+                # a hold on a function that is already in the module TU would remove it, and no later re-apply restores it
+                # unless a batch lists it again (mig14: SPAppConfigManager 0x7ca060 by an exclude, SPJobManager 0x68f950 by a
+                # stale leave_in_slice; both re-inserted by hand).  A landed function is never taken out by a manual hold
+                self.notes.append(("hold-ignored", "0x%08x %s: manual hold ignored, the function is already in the module TU" % (
+                    c.va, c.name)))
+                for sec in ("exclude", "leave_in_slice"):
+                    self.manual.get(sec, {}).pop("%08x" % c.va, None)
             if "%08x" % c.va in self.manual.get("exclude", {}):
                 # manual `exclude` {va: why}: modmap puts the function in this module on evidence the slice contradicts
                 # (a wrong xmatch anchor name); it stays in the slice
@@ -4144,6 +4153,19 @@ class Rewrite:
         self.notes.append(("forward-proto", ", ".join(p.split("(")[0].split()[-1] for p in protos)))
         return pre.rstrip("\n") + "\n\n// forward declarations: helpers defined later in VA order (rewrite.py forward_protos)\n" + \
             "\n".join(protos) + "\n"
+
+    def _landed_in_tu(self, c):
+        """The COMMITTED module TU (git HEAD) carries a `// @ 0x<va>` marker for chunk c.  HEAD, not the working copy: an
+        agent holds a function that its first apply landed with a worse verdict and re-applies, and that hold must work."""
+        if not c.module:
+            return False
+        d, obj = os.path.split(c.module)
+        rel = "src/game/%s/%s.cpp" % (d, obj[:-4] if obj.endswith(".obj") else obj)
+        cache = self.__dict__.setdefault("_tu_marks", {})
+        if rel not in cache:
+            r = subprocess.run(["git", "-C", W(), "show", "HEAD:" + rel], capture_output=True, text=True, errors="replace")
+            cache[rel] = {int(m, 16) for m in re.findall(r"(?m)^// @ 0x([0-9a-fA-F]+)", r.stdout)} if r.returncode == 0 else set()
+        return c.va in cache[rel]
 
     def held_callee_protos(self, pre, body, fns):
         """A free function this slice defines but does not emit (another object's, or held back) that an emitted function of the
