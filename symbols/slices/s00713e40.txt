@@ -1,5 +1,5 @@
-00713e40 `anonymous namespace'::InvalidMaterialDispatchCallback  # PDB name; invalid-material shader constant update
-00713f20 SP::RegisterInvalidShader  # PDB name
+00713e40 ?InvalidMaterialDispatchCallback@@YAHXZ  # InvalidMaterialDispatchCallback migrated from s00713e40 (verbatim, slice spelling)
+00713f20 ?RegisterInvalidShader@SP@@YAXXZ  # SP::RegisterInvalidShader migrated from s00713e40
 00713f90 SP::cMaterialManager resource-adapter init  # vtable/field init
 00713fd0 SP::cMaterialManager resource-adapter dtor  # vtable reset + member dtor
 00714050 SP::cAutoListRC::Remove  # list remove-by-value

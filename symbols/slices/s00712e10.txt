@@ -5,5 +5,5 @@
 00713780 ??1cMaterialManager_s0071_2e10@@QAE@XZ  # cMaterialManager_s0071_2e10::~cMaterialManager migrated from s00712e10 (verbatim, slice spelling)
 007138f0 ??0cMaterialScriptState@@QAE@XZ  # cMaterialScriptState::cMaterialScriptState migrated from s00712e10 (verbatim, slice spelling)
 00713a80 ??0cMaterialManager_s0071_2e10@@QAE@XZ  # cMaterialManager_s0071_2e10::cMaterialManager migrated from s00712e10 (verbatim, slice spelling)
-00713cb0 `anonymous namespace'::CompileVertexAndPixelShaders  # PDB name; D3DX shader compile
-00713e20 SP::MaterialManager thunk  # forwards 3 args to manager vtable slot 15
+00713cb0 ?CompileVertexAndPixelShaders@@YA_NXZ  # CompileVertexAndPixelShaders migrated from s00712e10 (verbatim, slice spelling)
+00713e20 ?ForwardToMaterialManager@@YAXIII@Z  # ForwardToMaterialManager migrated from s00712e10 (verbatim, slice spelling)
