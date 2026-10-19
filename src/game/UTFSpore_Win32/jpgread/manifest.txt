@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/jpgread.cpp  ?JPG_about@@YAPAEXZ  00863e60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/jpgread.cpp  ?JPG_is@@YGHPAX@Z  00863f90  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/jpgread.cpp  _FUN_00864910@4  00864910  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

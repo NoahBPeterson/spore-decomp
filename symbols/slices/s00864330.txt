@@ -1,7 +1,7 @@
-00864330 FUN_00864330   # JPG_read: Spore JPEG decode glue (jpeg_create_decompress/save_markers/read_header/start_decompress/read_scanlines/finish_decompress + scanline reorder); complete nonmatching
+00864330 ?FUN_00864330@@YGHHHPAEH@Z  # FUN_00864330 migrated from s00864330 (verbatim, slice spelling)
 008644f0 FUN_008644f0   # Spore scanline layout converter (mode 0/1/2: packed<->planar, palette/A/RGB); complete nonmatching
 00864680 FUN_00864680   # JPG_write: error_exit wrapper (00864680) + encode body (create_compress/set_defaults/set_quality/start_compress/write_marker/write_scanlines/finish_compress); complete nonmatching
-00864910 FUN_00864910   # free-buffer helper: 0 for null, else gfree(p); byte-exact
+00864910 _FUN_00864910@4  # FUN_00864910 migrated from s00864330 (verbatim, slice spelling)
 00864930 FUN_00864930   # libjpeg jquant1.c select_ncolors; byte-exact
 00864a20 FUN_00864a20   # libjpeg jquant1.c create_colormap; complete nonmatching (regalloc tie-break)
 00864b90 FUN_00864b90   # libjpeg jquant1.c create_colorindex; byte-exact

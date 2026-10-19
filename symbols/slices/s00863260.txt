@@ -9,7 +9,7 @@
 00863c50 FUN_00863c50   # APP0/GIMEX marker reader; complete nonmatching
 00863d50 FUN_00863d50   # COM (comment) marker reader; complete nonmatching
 00863e40 FUN_00863e40   # jpeg error_exit -> longjmp; byte-exact
-00863e60 JPG_about       # build the 0x100-byte JPEG format descriptor; byte-exact
-00863f90 JPG_is          # validate a JPEG SOI/APPn magic; byte-exact
+00863e60 ?JPG_about@@YAPAEXZ  # JPG_about migrated from s00863260 (verbatim, slice spelling)
+00863f90 ?JPG_is@@YGHPAX@Z  # JPG_is migrated from s00863260 (verbatim, slice spelling)
 00864000 FUN_00864000    # JPG_open: allocate + init a 0x18-byte handle; complete nonmatching
-00864050 FUN_00864050    # JPG_info: decode a JPEG into a GIMEX descriptor; complete nonmatching
+00864050 ?FUN_00864050@@YGPAXPAXH@Z  # FUN_00864050 migrated from s00863260 (verbatim, slice spelling)

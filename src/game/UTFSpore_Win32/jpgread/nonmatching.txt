@@ -1,0 +1,4 @@
+# va  diff-bytes  reason   [equivalence verdict]
+00864000  50 FUN_00864000 (JPG_open): complete; cl keeps the live zero in ecx/esi in a different order than the original [equiv PASS, 336 inputs]
+00864050 593 FUN_00864050 (JPG_info): complete; decodes the JPEG then builds the GIMEX descriptor; uses setjmp3, large-frame regalloc differs [equiv UNSUPPORTED: setjmp3 import not simulatable]
+00864330 376 FUN_00864330 (JPG_read): complete; Spore JPEG decode glue (create_decompress/save_markers/read_header/start_decompress/read_scanlines/finish_decompress + scanline reorder); cl regalloc, string layout and inlined-callee choices differ [equiv UNSUPPORTED: setjmp3 import not simulatable]
