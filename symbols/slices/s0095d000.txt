@@ -1,6 +1,6 @@
-0095d000 EA::UTFWin::Drawing::BltEdgeStretch # card name; called from StdDrawable::draw_with_image (s009873a0)
-0095d540 FUN_0095d540 # unnamed two-colour gradient ring helper
-0095d780 EA::UTFWin::Drawing::DrawStdButton # card name
+0095d000 ?BltEdgeStretch@Drawing@UTFWin@EA@@YAXPAUCanvas@23@PBM1PAUImage_s0095_d000@23@1MM@Z  # BltEdgeStretch migrated from s0095d000 (verbatim, slice spelling)
+0095d540 ?GradientBox@Drawing@UTFWin@EA@@YAXPAUCanvas@23@PBM111@Z  # GradientBox migrated from s0095d000 (verbatim, slice spelling)
+0095d780 ?DrawStdButton@Drawing@UTFWin@EA@@YAXPAUCanvas@23@PBMIIM@Z  # DrawStdButton migrated from s0095d000 (verbatim, slice spelling)
 0095da40 FUN_0095da40 # unnamed bevel frame helper
 0095db50 FUN_0095db50 # unnamed SerPropertyInfo property walk (calls Commit)
 0095dbd0 EA::UTFWinTools::SerPropertyInfo::Build # invoked as PropInfo::Build in s0099afe0

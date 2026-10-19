@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/RenderUtils.cpp  ?DrawClippedRect@@YAXPAUIRenderer@@PBURectF@@11@Z  0095c0d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
