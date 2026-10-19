@@ -5,6 +5,6 @@
 01148c00 rw::audio::core::CMpegBase::ReadHeader  # reads a big-endian frame header and advances mBufPtr/mBufPtrNext
 01148c60 rw::audio::core::CMpegBase::PeekHeader  # ParseHeader on the current buffer without advancing
 01148cf0 rw::audio::core::CMpegBase::AllocateSynth  # PDB caller-scored name; System::Alloc("PolySynthHistoryF")
-01148da0 rw::audio::core::ScaleSamples  # PDB callee-single name
-01148eb0 rw::audio::core::HELPER_CEALayer3DecF::Feed  # PDB anchor name
 01148d60 ?_GCMpegBase  # scalar deleting destructor of CMpegBase (compiler-generated ??_GCMpegBase@core@audio@rw@@UAEPAXI@Z)
+01148da0 rw::audio::core::ScaleSamples  # PDB callee-single name
+01148eb0 ?Feed@HELPER_CEALayer3DecF@core@audio@rw@@QAEHPAEHI@Z  # HELPER_CEALayer3DecF::Feed migrated from s01148050 (verbatim, slice spelling)
