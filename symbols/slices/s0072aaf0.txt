@@ -1,4 +1,6 @@
-0072ace0  SP::StreamMeshToRw  # PDB name from card.py
-0072b560  SP::cTriToRegionMap::AddRegion  # PDB name from card.py
 006c1570 ?DoInsertValue@?$fixed_vector@H$0BA@@@QAEXPAHABH@Z  # int fixed_vector insert
-0072aaf0 ?DoInsertValue@?$fixed_vector@UElementRef@@$0BA@@@QAEXPAUElementRef@@ABU2@@Z  # ElementRef fixed_vector insert
+0072aaf0 ?FUN_0072aaf0@@YAXPAX00@Z  # FUN_0072aaf0 migrated from s0072aaf0 (verbatim, slice spelling)
+0072ac10 ?FUN_0072ac10@@YAXPAX0@Z  # FUN_0072ac10 migrated from s0072aaf0 (verbatim, slice spelling)
+0072ac60 ?FUN_0072ac60@@YAXPAXH@Z  # FUN_0072ac60 migrated from s0072aaf0 (verbatim, slice spelling)
+0072ace0 ?StreamMeshToRw@SP@@YAXPAUSourceMesh@@PAUDrawStats@@PAUShaderDataItem@@PAUShaderMap@@HPAUEmbeddedState@@@Z  # StreamMeshToRw migrated from s0072aaf0 (verbatim, slice spelling)
+0072b560 ?AddRegion@cTriToRegionMap_s0072_aaf0@@QAEXHHH@Z  # cTriToRegionMap_s0072_aaf0::AddRegion migrated from s0072aaf0 (verbatim, slice spelling)

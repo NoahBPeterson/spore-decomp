@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+0072aa80  109   PARTIAL: EA vector ctor skeleton.
+0072aaf0  285   PARTIAL: vector insert skeleton (EH).
+0072ac10  66    PARTIAL: span copy ctor skeleton.
+0072ac60  120   PARTIAL: refcounted ctor skeleton (EH/vtable).
