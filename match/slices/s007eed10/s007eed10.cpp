@@ -30,7 +30,7 @@ struct CTrack {
   float mMin;        // +0x2c
   float mMax;        // +0x30
 
-  void Slot0(void* a, void* b);
+  void Slot0(void* a, void* b, int);
   void Slot1();
   void Slot2(int);
   void Slot3(int);
@@ -39,13 +39,35 @@ struct CTrack {
 };
 
 // @ 0x007EF2A0
-void CTrack::Slot0(void* a, void* b) {
+void CTrack::Slot0(void* a, void* b, int) {
   mpIface = ((void*(__thiscall*)(void*))VSLOT(a, 0x20))(a);
   mOther = ((int(__thiscall*)(void*))VSLOT(b, 0xa0))(b);
   if (mpIface) {
-    char loc[0x24] = {0};
-    ((void(__thiscall*)(void*, void*, void*))VSLOT(mpIface, 0x18))(mpIface, loc, &mIndex);
-    ((void(__thiscall*)(void*, int, void*))VSLOT(mpIface, 0x10))(mpIface, 7, &m20);
+    int* md = (int*)mDataOffset;
+    struct Slot0Arg {
+      int f0;
+      int f4;
+      unsigned char b8, b9, ba, bb;
+      unsigned short wc;
+      unsigned short padE;
+      float f10;
+      int f14;
+      int f18;
+    };
+    Slot0Arg t;
+    t.f0 = md[0x28 / 4];
+    t.f4 = md[0x2c / 4];
+    t.b8 = 7;
+    t.b9 = 0xf;
+    t.ba = 0;
+    t.bb = 0;
+    t.wc = 0;
+    t.f10 = 0.0f;
+    t.f14 = -1;
+    t.f18 = -1;
+    ((void(__thiscall*)(void*, void*, void*, void*))VSLOT(mpIface, 0x18))
+        (mpIface, (char*)this + 0xc, &t, (char*)this + 0x1c);
+    ((void(__thiscall*)(void*, int, void*))VSLOT(mpIface, 0x10))(mpIface, 7, (char*)this + 0x20);
   }
 }
 
@@ -158,19 +180,19 @@ struct Matrix3 {
   Matrix3() {}
 };
 
-struct VBaseA { virtual void va(); };
-struct VBaseB { virtual void vb(); int mB; VBaseB() : mB(0) {} };
-struct VBaseC { virtual void vc(); };
+struct VBaseA { virtual void va(); virtual ~VBaseA() throw() {} };
+struct VBaseB { virtual void vb(); virtual ~VBaseB() throw() {} int mB; VBaseB() : mB(0) {} };
+struct VBaseC { virtual void vc(); virtual ~VBaseC() throw() {} };
 
 extern float g_v2c, g_v30, g_v38, g_v3c, g_v40;
 extern const float g_mat3[9];
-extern void BufDealloc(void* p);
+
 
 struct Buf {
   void* begin;  // +0
   void* end;    // +4
   void* cap;    // +8
-  ~Buf() { if (begin != 0 && ((int*)begin)[-1] != 0) BufDealloc(begin); }
+  ~Buf() { if (begin != 0 && ((int*)begin)[-1] != 0) operator delete[](begin); }
 };
 
 struct VolState : VBaseA, VBaseB, VBaseC {
@@ -186,14 +208,12 @@ struct VolState : VBaseA, VBaseB, VBaseC {
   float m38, m3c, m40, m44;  // +0x38
   Matrix3 m48;         // +0x48
   uint32_t mSamples[0x30];   // +0x6c .. +0x12c
-  void* vA_begin;      // +0x12c
-  void* vA_end;        // +0x130
-  void* vA_cap;        // +0x134
+  Buf vA;              // +0x12c
   int g138, g13c;      // +0x138
-  void* vB_begin;      // +0x140
-  void* vB_end;        // +0x144
-  void* vB_cap;        // +0x148
+  Buf vB;              // +0x140
   VolState(int a);
+  ~VolState() throw();
+  void UpdateFromFrame(int a, void* frame);
 };
 
 // @ 0x007EF630
@@ -213,18 +233,16 @@ VolState::VolState(int a) {
   m40 = g_v40;
   m44 = 1.0f;
   m48.Assign(g_mat3);
-  vA_begin = 0;
-  vA_end = 0;
-  vA_cap = 0;
-  vB_begin = 0;
-  vB_end = 0;
-  vB_cap = 0;
+  vA.begin = 0;
+  vA.end = 0;
+  vA.cap = 0;
+  vB.begin = 0;
+  vB.end = 0;
+  vB.cap = 0;
 }
 
 // @ 0x007EF560
-void VolStateDestroy(VolState* self) {
-  if (self->vB_begin != 0 && ((int*)self->vB_begin)[-1] != 0) BufDealloc(self->vB_begin);
-  if (self->vA_begin != 0 && ((int*)self->vA_begin)[-1] != 0) BufDealloc(self->vA_begin);
+VolState::~VolState() throw() {
 }
 
 // ---------------------------------------------------------------------------
@@ -232,14 +250,14 @@ void VolStateDestroy(VolState* self) {
 // base + cVolumeState + an EASTL string.  0x007EF220 is its scalar deleting
 // destructor.
 // ---------------------------------------------------------------------------
-extern void EAllocDealloc(void* p) throw();   // 0x00f47380
+
 
 struct EString {
   char* mpBegin;  // +0
   char* mpEnd;    // +4
   char* mpCap;    // +8
   ~EString() {
-    if (mpCap - mpBegin > 1 && mpBegin != 0) EAllocDealloc(mpBegin);
+    if (mpCap - mpBegin > 1 && mpBegin != 0) operator delete[](mpBegin);
   }
 };
 
@@ -254,6 +272,7 @@ struct cBlockCommandBase {
 struct cVolumeStateLite {
   char pad[8];
   cVolumeDescLite mDesc;   // +0x40 in the derived object
+  void InitDesc(const void* src);   // 0x007ee7f0
   char pad2[0x130 - 0x48];
 };
 struct cVolumeEffectCommand : cBlockCommandBase {
@@ -279,91 +298,281 @@ void PQ::Push(const HeapNode& v) {
 }
 
 // ===========================================================================
-// Remaining slice functions.  These are behaviourally approximate (the exact
-// ArgScript/SSE scheduling was not reproduced); see partial.txt.
+// Remaining slice functions.
 // ===========================================================================
-extern void* ArgMainArguments(void* args, void* out, int a, int b);
-extern int ArgParseEnum(void* s, const char* name);
-extern void ArgThrow(void* err, const char* msg);
-extern void* GetInherited(void* parser, void* args, int n, int size);
+extern void  cErrorCtor(void* buf, const char* msg);   // 0x0052df30
+extern void  CxxThrow(void* obj, void* info);          // 0x011e0912
+extern char  TypeInfo_cError;                          // 0x014f9174
+struct ArgErrBuf { void* m[4]; };
+#define ARG_THROW(msg) do { ArgErrBuf _eb; cErrorCtor(&_eb, (msg)); CxxThrow(&_eb, (void*)&TypeInfo_cError); } while (0)
+extern void* operator new(unsigned size, const char* name, int, int, const char*, int);  // 0x00f473a0
+extern void* UninitCopy24(void* first, void* last, void* dst);   // 0x00a88250
+extern void  CopyBack24(void* first, void* last, void* dst);     // 0x00cc8b50
+
+// Callees that live in other object files.  They are declared under their real
+// qualified names so both the matcher and the equivalence resolver can tie each
+// call site back to the original function.
+namespace EA { namespace ArgScript {
+  int ParseEnum(void* s, const char* name);                      // 0x00840bb0
+  struct cArguments {
+    void* MainArguments(int* out, int a, int b);                 // 0x00838020
+  };
+  struct cCommandBase {
+    cCommandBase();                                              // 0x0083c800
+  };
+}}
+namespace EA { namespace Swarm {
+  struct cEffectsParser {
+    void* GetInheritedDescription(void* args, int n, int size);  // 0x00a6f090
+  };
+}}
+namespace SP {
+  struct cVolumeDescription {
+    cVolumeDescription();                                        // 0x007ee540
+    char pad[0x24];
+  };
+}
+struct EStringLite {
+  void assign(const char* first, const char* last);              // 0x00454cb0
+};
+struct AppPropsFields {
+  AppPropsFields();                                              // 0x0083cdd0
+};
+struct SPTLite {
+  void PreTransformBy(int a);                                    // 0x00537f40
+  void AssignFrom(const void* src);                              // 0x00537dc0
+};
+extern char VtblVolumeEffect;    // 0x01414744
+extern char VtblGroupVolume;     // 0x0141472c
+extern char Data1667bac;         // 0x01667bac
+extern const char* g_sVolume;    // 0x0154038c  pointer to "volume"
+extern float g_v15407b4;         // 0x015407b4  FLT_MAX
+
+struct cVolumeSetCommand {
+  virtual void Execute(EA::ArgScript::cArguments* args);
+};
 
 // @ 0x007EED10  cVolumeSetCommand::Execute
-void VolumeSetExecute(void* self, void* args) {
-  int count = 0;
-  void** a = (void**)ArgMainArguments(args, &count, 2, 8);
-  int sel = ArgParseEnum(a[0], "corner");
+void cVolumeSetCommand::Execute(EA::ArgScript::cArguments* args) {
+  int count;
+  char** a = (char**)args->MainArguments(&count, 2, 8);
+  int sel = EA::ArgScript::ParseEnum(a[0], "corner");
+  void* mgr = *(void**)((char*)this + 4);
+  char* data = *(char**)((char*)this + 0xc);
   switch (sel) {
-    case 0: {
-      if (count < 5) ArgThrow(0, "Wrong number of arguments.");
-      int* dst = *(int**)((char*)self + 0xc);
-      dst[0] = 0;  // corner 0
-      break;
+  case 0: {
+    if (count < 5) ARG_THROW("Wrong number of arguments.");
+    unsigned n = ((unsigned(__thiscall*)(void*, void*))VSLOT(mgr, 0xa0))(mgr, a[1]);
+    unsigned m = n;
+    if ((int)n > 8) {
+      m = 0;
+      if (n & 1) m = 1;
+      if (((int)n / 10) & 1) m |= 2;
+      if ((int)n >= 100) m |= 4;
     }
-    case 1:
-    case 2:
-    case 3:
-      if (count < 2) ArgThrow(0, "Wrong number of arguments.");
-      break;
-    default:
-      break;
+    float f4 = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[4]);
+    float f3 = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[3]);
+    float f2 = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[2]);
+    unsigned off = m * 0x18;
+    *(float*)(data + off + 0x38) = f2;
+    *(float*)(data + off + 0x3c) = f3;
+    *(float*)(data + off + 0x40) = f4;
+    if (count >= 8) {
+      float g7 = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[7]);
+      float g6 = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[6]);
+      float g5 = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[5]);
+      *(float*)(data + off + 0x44) = g5;
+      *(float*)(data + off + 0x48) = g7;
+      *(float*)(data + off + 0x4c) = g6;
+    }
+    break;
+  }
+  case 1: {
+    if (count < 2) ARG_THROW("Wrong number of arguments.");
+    float v = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[1]);
+    *(float*)(data + 0x40) = v;
+    *(float*)(data + 0x58) = v;
+    *(float*)(data + 0x70) = v;
+    *(float*)(data + 0x88) = v;
+    if (count >= 3) {
+      float w = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[2]);
+      *(float*)(data + 0x4c) = w;
+      *(float*)(data + 0x64) = w;
+      *(float*)(data + 0x7c) = w;
+      *(float*)(data + 0x94) = w;
+    }
+    break;
+  }
+  case 2: {
+    if (count < 2) ARG_THROW("Wrong number of arguments.");
+    float v = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[1]);
+    *(float*)(data + 0xa0) = v;
+    *(float*)(data + 0xb8) = v;
+    *(float*)(data + 0xd0) = v;
+    *(float*)(data + 0xe8) = v;
+    if (count >= 3) {
+      float w = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[2]);
+      *(float*)(data + 0xac) = w;
+      *(float*)(data + 0xc4) = w;
+      *(float*)(data + 0xdc) = w;
+      *(float*)(data + 0xf4) = w;
+    }
+    break;
+  }
+  case 3: {
+    if (count < 2) ARG_THROW("Wrong number of arguments.");
+    float h = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[1]) * 0.5f;
+    *(float*)(data + 0x38) = -h;
+    *(float*)(data + 0x3c) = -h;
+    *(float*)(data + 0x50) = h;
+    *(float*)(data + 0x54) = -h;
+    *(float*)(data + 0x68) = -h;
+    *(float*)(data + 0x6c) = h;
+    *(float*)(data + 0x80) = h;
+    *(float*)(data + 0x84) = h;
+    *(float*)(data + 0x98) = -h;
+    *(float*)(data + 0x9c) = -h;
+    *(float*)(data + 0xb0) = h;
+    *(float*)(data + 0xb4) = -h;
+    *(float*)(data + 0xc8) = -h;
+    *(float*)(data + 0xcc) = h;
+    *(float*)(data + 0xe0) = h;
+    *(float*)(data + 0xe4) = h;
+    break;
+  }
+  default:
+    break;
   }
 }
 
 // @ 0x007EF080  cVolumeEffectCommand::Execute
-void VolumeEffectExecute(void* self, void* args) {
+void cVolumeEffectCommand::Execute(void* args) {
   int count = 0;
-  void** a = (void**)ArgMainArguments(args, &count, 1, 3);
-  const char* name = (const char*)a[0];
-  int n = 0;
-  while (name[n] != 0) ++n;
-  ((void(__thiscall*)(void*, const char*, int))VSLOT((char*)self + 0x130, 0))(0, name, n);
+  char** a = (char**)((EA::ArgScript::cArguments*)args)->MainArguments(&count, 1, 3);
+  const char* s = a[0];
+  const char* e = s;
+  while (*e != 0) ++e;
+  ((EStringLite*)((char*)this + 0x130))->assign(s, e);
+  SP::cVolumeDescription tmp;
+  void* t = &tmp;
+  mVolumeState.InitDesc(t);
   if (count > 1) {
-    void* inh = GetInherited(*(void**)((char*)self + 0x30), a, count, 0x28);
-    (void)inh;
+    void* inh = ((EA::Swarm::cEffectsParser*)(*(void**)((char*)this + 0x30)))->GetInheritedDescription(a, count, 0x28);
+    if (inh) mVolumeState.InitDesc(inh);
   }
-  ((void(__thiscall*)(void*))VSLOT(*(void**)((char*)self + 4), 0x8c))(self);
+  void* mgr = *(void**)((char*)this + 4);
+  ((void(__thiscall*)(void*, void*))VSLOT(mgr, 0x8c))(mgr, this);
 }
 
 // @ 0x007EF120  CommandManager::RegisterVolumeCommands
-extern void* EAAlloc6(unsigned size, const char* name, int, int, const char*, int);
 void RegisterVolumeCommands(void* unused, void* mgr) {
-  void* cmd = EAAlloc6(0x140, "ArgScript/VolumeEffect", 0, 0, 0, 0);
+  void* cmd = operator new(0x140, "ArgScript/VolumeEffect", 0, 0, 0, 0);
   if (cmd) {
-    // ... base + cVolumeState + string construction elided
+    new (cmd) AppPropsFields();
+    *(void**)cmd = &VtblVolumeEffect;
+    *(int*)((char*)cmd + 0x38) = 0x2cf2626;
+    new ((void*)((char*)cmd + 0x40)) SP::cVolumeDescription();
+    *(void**)((char*)cmd + 0x130) = &Data1667bac;
+    *(void**)((char*)cmd + 0x134) = &Data1667bac;
+    *(void**)((char*)cmd + 0x138) = (void*)0x1667bad;
   }
-  ((void(__thiscall*)(void*, void*, void*))VSLOT(*(void**)mgr, 0x14))(mgr, cmd, "volume");
-  void* grp = EAAlloc6(0x10, "ArgScript/GroupVolume", 0, 0, 0, 0);
-  ((void(__thiscall*)(void*, void*, void*))VSLOT(*(void**)mgr, 0x18))(mgr, grp, "volume");
+  ((void(__thiscall*)(void*, const char*, void*))VSLOT(mgr, 0x14))(mgr, g_sVolume, cmd);
+  void* grp = operator new(0x10, "ArgScript/GroupVolume", 0, 0, 0, 0);
+  if (grp) {
+    new (grp) EA::ArgScript::cCommandBase();
+    *(void**)grp = &VtblGroupVolume;
+  }
+  ((void(__thiscall*)(void*, const char*, void*))VSLOT(mgr, 0x18))(mgr, g_sVolume, grp);
 }
 
 // @ 0x007EF730  VolState::UpdateFromFrame
-void VolStateUpdate(VolState* self, int arg, unsigned short* frame) {
-  // Approximate: apply the frame transform to the 8 sample points, accumulate
-  // their bounding box and hand it to the interface.
-  float lo[3] = { 0, 0, 0 }, hi[3] = { 0, 0, 0 };
+void VolState::UpdateFromFrame(int a, void* frame) {
+  char loc[0x3c];
+  *(short*)(loc + 0x00) = *(short*)((char*)frame + 0);
+  *(short*)(loc + 0x02) = *(short*)((char*)frame + 2);
+  *(float*)(loc + 0x04) = *(float*)((char*)frame + 4);
+  *(float*)(loc + 0x08) = *(float*)((char*)frame + 8);
+  *(float*)(loc + 0x0c) = *(float*)((char*)frame + 0xc);
+  *(float*)(loc + 0x10) = *(float*)((char*)frame + 0x10);
+  ((Matrix3*)(loc + 0x14))->Assign((char*)frame + 0x14);
+  ((SPTLite*)loc)->PreTransformBy(a);
+  ((SPTLite*)((char*)this + 0x34))->AssignFrom(loc);
+
+  float* s = (float*)(char*)this;
+  float lo0 = g_v15407b4, lo1 = g_v15407b4, lo2 = g_v15407b4;
+  float hi0 = -g_v15407b4, hi1 = -g_v15407b4, hi2 = -g_v15407b4;
+  int base = *(int*)((char*)this + 0x10);
   for (int i = 0; i < 8; ++i) {
-    float* p = (float*)((char*)self + 0x74 + i * 0x18 - 8);
-    for (int k = 0; k < 3; ++k) {
-      if (p[k] < lo[k]) lo[k] = p[k];
-      if (p[k] > hi[k]) hi[k] = p[k];
+    float* src = (float*)(base + 0x30 + i * 0x18);
+    float* dst = (float*)((char*)this + 0x6c + i * 0x18);
+    dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2];
+    dst[3] = src[3]; dst[4] = src[4]; dst[5] = src[5];
+    if (*(short*)((char*)this + 0x34) & 2) {
+      float x = dst[0], y = dst[1], z = dst[2];
+      dst[0] = s[0x54 / 4] * y + s[0x60 / 4] * z + x * s[0x48 / 4];
+      dst[1] = s[0x4c / 4] * x + s[0x58 / 4] * y + s[0x64 / 4] * z;
+      dst[2] = s[0x50 / 4] * x + s[0x5c / 4] * y + s[0x68 / 4] * z;
     }
+    float k = s[0x44 / 4];
+    dst[0] = dst[0] * k + s[0x38 / 4];
+    dst[1] = dst[1] * k + s[0x3c / 4];
+    dst[2] = dst[2] * k + s[0x40 / 4];
+    if (dst[0] < lo0) lo0 = dst[0];
+    if (hi0 < dst[0]) hi0 = dst[0];
+    if (dst[1] < lo1) lo1 = dst[1];
+    if (hi1 < dst[1]) hi1 = dst[1];
+    if (dst[2] < lo2) lo2 = dst[2];
+    if (hi2 < dst[2]) hi2 = dst[2];
   }
-  (void)arg;
-  (void)frame;
-  ((void(__thiscall*)(void*, int, void*, int))VSLOT(self->m14, 0x20))(self->m14, self->m1c, lo, 0);
+  float box[6] = { lo0, lo1, lo2, hi0, hi1, hi2 };
+  void* iface = *(void**)((char*)this + 0x14);
+  ((void(__thiscall*)(void*, int, void*, int))VSLOT(iface, 0x20))(iface, *(int*)((char*)this + 0x1c), box, 0);
 }
 
 // @ 0x007EFA20  vector<T(24)>::insert
-extern void* EAAlloc6v2(unsigned size, const char* tag, int, int, const char* file, int line);
-extern void MoveRange24(void* dst, void* src, void* end);
-extern void MoveConstruct(void* dst, void* src);
-void Vec24Insert(void* self, void* position, void* value) {
-  char* end = *(char**)((char*)self + 4);
-  char* cap = *(char**)((char*)self + 8);
-  if (end == cap) return;  // reallocation path elided
-  if (position <= value && value < end) value = (char*)value + 0x18;
-  if (end) MoveConstruct(end, end - 0x18);
-  MoveRange24(position, end - 0x18, end);
-  *(void**)position = *(void**)value;  // 24-byte copy
-  *(char**)((char*)self + 4) = end + 0x18;
+struct Vec24 {
+  char* begin;   // +0
+  char* end;     // +4
+  char* cap;     // +8
+  void insert(char* pos, const char* value);
+};
+void Vec24::insert(char* pos, const char* value) {
+  char* e = end;
+  if (e == cap) {
+    int n = (int)((e - begin) / 0x18);
+    n = (n == 0) ? 1 : n * 2;
+    char* nb = (char*)operator new(n * 0x18, "App", 0, 0, 0, 0);
+    char* p = (char*)UninitCopy24(begin, pos, nb);
+    if (p) {
+      *(void**)(p + 0) = *(void**)(value + 0);
+      *(void**)(p + 4) = *(void**)(value + 4);
+      *(void**)(p + 8) = *(void**)(value + 8);
+      *(void**)(p + 0xc) = *(void**)(value + 0xc);
+      *(void**)(p + 0x10) = *(void**)(value + 0x10);
+      *(void**)(p + 0x14) = *(void**)(value + 0x14);
+    }
+    char* p2 = (char*)UninitCopy24(pos, e, p + 0x18);
+    if (begin) operator delete[](begin);
+    begin = nb;
+    end = p2;
+    cap = nb + n * 0x18;
+  } else {
+    if (pos <= value && value < e) value += 0x18;
+    if (e) {
+      *(void**)(e + 0) = *(void**)(e - 0x18 + 0);
+      *(void**)(e + 4) = *(void**)(e - 0x18 + 4);
+      *(void**)(e + 8) = *(void**)(e - 0x18 + 8);
+      *(void**)(e + 0xc) = *(void**)(e - 0x18 + 0xc);
+      *(void**)(e + 0x10) = *(void**)(e - 0x18 + 0x10);
+      *(void**)(e + 0x14) = *(void**)(e - 0x18 + 0x14);
+    }
+    CopyBack24(pos, e - 0x18, e);
+    *(void**)(pos + 0) = *(void**)(value + 0);
+    *(void**)(pos + 4) = *(void**)(value + 4);
+    *(void**)(pos + 8) = *(void**)(value + 8);
+    *(void**)(pos + 0xc) = *(void**)(value + 0xc);
+    *(void**)(pos + 0x10) = *(void**)(value + 0x10);
+    *(void**)(pos + 0x14) = *(void**)(value + 0x14);
+    end = e + 0x18;
+  }
 }
