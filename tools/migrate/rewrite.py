@@ -735,6 +735,17 @@ def parse_slice(sid, variant=""):
         pre += ch.after.split("\n")
         ch.after = ""
         chunks.append(ch)
+    # two definitions under one VA (mig7 s0061c350 0x61d0d0: cGetAssetFeedTransaction::HandleResult and
+    # cEditFeedTransaction::HandleResult, one folded retail body): the first one is the function, a later one keeps its text in
+    # the preamble as a definition of its own class's member (KeyError in qual_of / compile_symbols before)
+    seen_va, kept = set(), []
+    for ch in chunks:
+        if ch.va in seen_va and not getattr(ch, "inst", False):
+            pre += ["// (second definition under 0x%08x; the retail body is folded)" % ch.va] + ch.body.split("\n")
+            continue
+        seen_va.add(ch.va)
+        kept.append(ch)
+    chunks = kept
     # an explicit instantiation the slice wrote inside `namespace X {` that reached the preamble outside that block (mig7r
     # s004e01d0 0x4e0600: its marker's chunk became a template definition, the statement landed after the block's `}`:
     # `template class hash_map<..>;` at global scope, C2059; the slice's three functions were held) gets its namespaces back
