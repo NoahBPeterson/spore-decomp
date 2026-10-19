@@ -1,7 +1,7 @@
-009873a0 UTFWin::EA::UTFWinControls::WinSpinner::WinSpinner  # 2008 dev-PDB name (ctor)
-00987470 EA::UTFWinControls::WinSpinner::`scalar deleting destructor'  # 2008 dev-PDB name
-00987530 EA::UTFWinControls::BasicFactory_SpinnerDrawable::CreateInstance  # 2008 dev-PDB name
-00987590 EA::UTFWinControls::WinSpinner::Refresh  # 2008 dev-PDB name
+009873a0 ?Ctor@WinSpinner@@QAEPAXXZ  # WinSpinner::Ctor migrated from s009873a0 (verbatim, slice spelling)
+00987470 ?ScalarDtor@WinSpinner@@QAEPAXI@Z  # WinSpinner::ScalarDtor migrated from s009873a0 (verbatim, slice spelling)
+00987530 ?BasicFactory_SpinnerDrawable_CreateInstance@@YGPAXHH@Z  # BasicFactory_SpinnerDrawable_CreateInstance migrated from s009873a0 (verbatim, slice spelling)
+00987590 ?Refresh@WinSpinner@@QAEXXZ  # WinSpinner::Refresh migrated from s009873a0 (verbatim, slice spelling)
 00987900 UI::StdDrawable method  # vtable statics (SetSerializer/SetMode)
 00987970 ?SetImageAt@StdDrawable@@QAEXIPAX@Z  # StdDrawable::SetImageAt migrated from s009873a0 (verbatim, slice spelling)
 009879b0 ?GetImageAt@StdDrawable@@QAEPAXI@Z  # StdDrawable::GetImageAt migrated from s009873a0 (verbatim, slice spelling)

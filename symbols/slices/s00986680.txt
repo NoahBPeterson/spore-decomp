@@ -1,1 +1,1 @@
-00986680 EA::UTFWinControls::SpinnerDrawable::CreateRenderables  # PDB candidate (caller-scored) on card; same body shape as SliderDrawable 0x984a70
+00986680 ?CreateRenderables@SpinnerDrawable@UTFWinControls@EA@@QAEXPAURenderContext_s0098_6680@UTFWin@3@PBMPBUDrawState@23@@Z  # SpinnerDrawable::CreateRenderables migrated from s00986680 (verbatim, slice spelling)

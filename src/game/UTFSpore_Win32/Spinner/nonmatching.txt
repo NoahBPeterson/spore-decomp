@@ -1,0 +1,6 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+00986680 2344 complete SpinnerDrawable::CreateRenderables (image strip / XP bevel frames / arrow triangles, all 4 arrow cases); original keeps every quad Point unshared (0x25c frame vs 0x34), cl tail-merges two arrow FillQuad call sites; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+009873a0 118 WinSpinner::Ctor: vtable init and member-store scheduling differ; difftest PASS after annotating Stopwatch::SetUnits (0x93a1a0) and Window::SetFlag (0x961760)
+00987470 16 WinSpinner scalar deleting dtor: member load hoisted before vtable stores
+00987530 33 BasicFactory_SpinnerDrawable::CreateInstance: vtable/member store order differs
+00987590 680 WinSpinner::Refresh: complete; register choice for vtable ptr (edx vs eax) and 0x20 vs 0x1c frame differ
