@@ -140,6 +140,31 @@ public:
     void ApplyAnimTime();          // 0x00485550
 };
 
+// +0x3EC object: only vtable slot 0x20 is used here
+struct IScale {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void SetScale(float f);   // 0x20
+};
+
+// Trans with operator=-style Vec3 copies (F40c40 element store)
+struct V3 { uint32_t x, y, z; };
+struct TransB { uint32_t flag; V3 a; V3 b; };
+struct Range { void* a; void* b; };
+struct Vec4Ptr {
+    void** mpBegin; void** mpEnd; void** mpCap;
+    void** At(int i) { return mpBegin + i; }
+    int Size() { return (int)(mpEnd - mpBegin); }
+    void Free();                                   // 0x00425990
+};
+// map at block+0x4C8: [0] begin, [1] end; nodes are {key, Trans}
+struct TransMap {
+    void* mpBegin; void* mpEnd;
+    char* end() const { char* e = (char*)mpEnd; return e; }
+    void   Find(Range* out, const uint32_t* key);  // 0x004553B0 (ret 8)
+    TransB* Index(const int* key);                 // 0x00454420 (ret 4)
+};
+
 struct cSPEditorBlock {
     char        pad00[0xC];
     AutoRefCount<IPropList> mPropList;  // +0x0C
@@ -169,10 +194,13 @@ struct cSPEditorBlock {
     char        pad1dc[4];
     float       mMinUniformScale; // +0x1E0
     float       mMaxUniformScale; // +0x1E4
-    char        pad1e8[0x33C - 0x1E8];
-    cSPEditorBlock* link33c; // +0x33C
+    char        pad1e8[0x218 - 0x1E8];
+    float       mMinScale218;    // +0x218
+    float       mMaxScale21c;    // +0x21C
+    char        pad220[0x33C - 0x220];
+    AutoRefCount<cSPEditorBlock> link33c; // +0x33C
     char        pad340[0x3EC - 0x340];
-    void*       p3ec;        // +0x3EC
+    AutoRefCount<IScale> p3ec;        // +0x3EC
     AutoRefCount<cMWModel> mpSocketConnectorModel; // +0x3F0
     char        pad3f4[0x40C - 0x3F4];
     char        pad40c[0x4C8 - 0x40C];
@@ -188,9 +216,13 @@ struct cSPEditorBlock {
     void  F40bc0(const Vec3* v);                // 00440BC0
     void  F40c00(float f);                      // 00440C00
     void  F40c40(void* item, int flag);         // 00440C40
-    bool  F40d80(void* out);                    // 00440D80
+    bool  F40d80(void* out, uint32_t key);      // 00440D80
     void  F40e00(cSPEditorBlock* o);            // 00440E00
-    void  F40e60(void* key);                    // 00440E60
+    void  F40e60(uint32_t key);                 // 00440E60
+    bool  F43ebc0();                            // 0043EBC0
+    bool  F43ecb0();                            // 0043ECB0
+    void  F4a070();                             // 0044A070
+    TransMap* Map() { return (TransMap*)&list4c8; }
     void  F40390(float f);                      // 00440390
     void  F40420(float f, char b);              // 00440420
     void  F404f0(Matrix3 m);                    // 004404F0
@@ -199,15 +231,9 @@ struct cSPEditorBlock {
     void  SetFlag(int a, int b);                // 00435A10
 };
 
-void* Sub_454420(void* p);
-void  Sub_4525990(void* p);
-void* Sub_4553b0(void* out, void* key);        // map find (thiscall on vec)
-void  Sub_4B8750(void* a, void* b, void* out, int flag);
-void  Sub_4B8180(void* p);
+void  Sub_4B8750(cMWModel* a, IModelWorld* b, Vec4Ptr* out, int flag);     // 0x004B8750 (cdecl)
+void  Sub_4B8180(Trans t, void* world, void* model, uint32_t key);   // 0x004B8180 (cdecl)
 void  Sub_698650(void* m);
-void  Sub_4A070();
-bool  Sub_43EBC0();
-bool  Sub_43ECB0();
 
 extern const Vec3 g_v3_241c;   // 015D241C
 
@@ -292,13 +318,39 @@ Trans::Trans(const Trans& o)
 // @ 0x00440C40
 void cSPEditorBlock::F40c40(void* item, int flag)
 {
-    (void)item; (void)flag;
+    Vec4Ptr found = { 0, 0, 0 };
+    Sub_4B8750(mpModel, mpModelWorld, &found, flag);
+    int n = found.Size();
+    for (int i = 0; i < n; i++) {
+        int* key = (int*)found.At(i);
+        TransB* dst = Map()->Index(key);
+        dst->flag = ((TransB*)item)->flag;
+        dst->a = ((TransB*)item)->a;
+        dst->b = ((TransB*)item)->b;
+        F40e60((uint32_t)found.mpBegin[i]);
+    }
+    for (void** p = found.mpBegin; p < found.mpEnd; p++) {
+    }
+    found.Free();
 }
 
 // @ 0x00440D80
-bool cSPEditorBlock::F40d80(void* out)
+bool cSPEditorBlock::F40d80(void* out, uint32_t key)
 {
-    (void)out;
+    Range r;
+    ScratchSlots<5>();
+    TransMap* m = Map();
+    m->Find(&r, &key);
+    char* it;
+    if (r.a != r.b)
+        it = (char*)r.a;
+    else
+        it = m->end();
+    if (it != Map()->end()) {
+        if (out)
+            *(Trans*)out = *(Trans*)(it + 4);
+        return true;
+    }
     return false;
 }
 
@@ -313,15 +365,50 @@ void cSPEditorBlock::F40e00(cSPEditorBlock* o)
 }
 
 // @ 0x00440E60
-void cSPEditorBlock::F40e60(void* key)
+void cSPEditorBlock::F40e60(uint32_t key)
 {
-    (void)key;
+    static Trans sDefault;
+    TransMap* m = Map();
+    Range r;
+    m->Find(&r, &key);
+    char* it;
+    if (r.a != r.b)
+        it = (char*)r.a;
+    else
+        it = m->end();
+    Trans* t = (it == Map()->end()) ? &sDefault : (Trans*)(it + 4);
+    Trans* t2 = t;
+    if (mpModel && mpModelWorld) {
+        void* model = mpModel;
+        void* world = mpModelWorld;
+        Sub_4B8180(*t2, world, model, key);
+    }
 }
 
 // @ 0x00440110
 void cSPEditorBlock::F40110(float f)
 {
-    (void)f;
+    if (mMinScale218 > f)
+        f = mMinScale218;
+    else if (f > mMaxScale21c)
+        f = mMaxScale21c;
+    if (f != mDefaultMouseOffset) {
+        mDefaultMouseOffset = f;
+        if (mBooleanAttributes.test(10))
+            SetFlag(9, 1);
+        if (link33c && link33c->mBooleanAttributes.test(11) && link33c->mBooleanAttributes.test(10))
+            link33c->SetFlag(9, 1);
+        if (p3ec)
+            p3ec->SetScale(mDefaultMouseOffset);
+        bool a = F43ebc0();
+        if (a)
+            F4a070();
+        if (link33c && link33c->p3ec) {
+            bool b = link33c->F43ecb0();
+            if (b)
+                link33c->F4a070();
+        }
+    }
 }
 
 // @ 0x00440520

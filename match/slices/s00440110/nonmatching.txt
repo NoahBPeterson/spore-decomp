@@ -5,3 +5,6 @@
 004404f0  80   F404f0 - bone matrix set; matrix copy flavour differs
 00440f60  47   Trans::Trans() - constant pool copy flavour differs
 00440ff0  79   Trans::Trans(copy) - x87 field copy shape differs
+00440c40  263  F40c40 - complete (map store + F40e60 per key); /Od frame holes (vec at -0x14 under 2-dword hole, 0xa0 frame) not reproduced [equiv: PASS]
+00440d80  5  F40d80 - complete; /Od slot order only (5-dword find hole above the container temp) [equiv: PASS]
+00440e60  32  F40e60 - complete; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; /Od frame holes (0x60 frame) differ [equiv: FAIL only on static-init guard word 015d2170 (harness maps our local static guard elsewhere); no other difference]

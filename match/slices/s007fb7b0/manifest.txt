@@ -6,3 +6,6 @@ slices/s007fb7b0/s007fb7b0.cpp  ?Ctor@C_7fbb20@@QAEPAXXZ   007fbb20  /Od /Ob1 /M
 slices/s007fb7b0/s007fb7b0.cpp  ?Dtor@C_7fbce0@@QAEXXZ     007fbce0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s007fb7b0/s007fb7b0.cpp  ?GetClassId@C_7fbe70@@QAEHXZ  007fbe70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s007fb7b0/s007fb7b0.cpp  ?f@C_7fc860@@QAEXHH@Z      007fc860  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fb7b0/s007fb7b0.cpp  ?f_7fb7b0@@YAXPAUIWorldHost@@@Z  007fb7b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fb7b0/s007fb7b0.cpp  ??0Holder7fbd50@@QAE@XZ  007fbd50  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fb7b0/s007fb7b0.cpp  ?OnMessage@Handler7fc4b0@@QAE_NHPAX@Z  007fc4b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

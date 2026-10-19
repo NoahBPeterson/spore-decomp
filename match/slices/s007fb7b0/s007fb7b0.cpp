@@ -32,10 +32,42 @@ void  wstring_freebuffer(void* p);
 void* string_ctor_copy(void* s, void* other);
 void** GetActSlot(void* self, int i);
 void  f_7fc330(void* p);
-void  f_7fb7b0(void* p);
 void  f_7fc2a0_ctor(void* p);
 void  f_7fbce0_dtor(void* p);
 void  f_7fba80_init(void* p);
+
+
+// ---- f_7fb7b0 types (vtable-based) ----
+struct Ev7f93 {
+  void ClearGlobal();                 // 0x007fa370
+  ~Ev7f93() { ClearGlobal(); }
+};
+Ev7f93* GetEv7f93();                  // 0x007f93e0
+struct IMsgServer {
+  virtual ~IMsgServer();              // slot 0
+  virtual void s1();
+  virtual void Shutdown();            // slot 2 (+8)
+};
+IMsgServer* GetMsgServer();           // 0x00883860
+void SetMsgServer(IMsgServer* s);     // 0x00883870
+struct IModelWorld7fb {
+  virtual void s0(); virtual void s1();
+  virtual void s02(); virtual void s03(); virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
+  virtual void s08(); virtual void s09(); virtual void s0a(); virtual void s0b(); virtual void s0c(); virtual void s0d(); virtual void s0e(); virtual void s0f();
+  virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15(); virtual void s16(); virtual void s17();
+  virtual void s18(); virtual void s19(); virtual void s1a(); virtual void s1b(); virtual void s1c(); virtual void s1d(); virtual void s1e(); virtual void s1f();
+  virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23(); virtual void s24(); virtual void s25(); virtual void s26(); virtual void s27();
+  virtual void s28(); virtual void s29(); virtual void s2a(); virtual void s2b(); virtual void s2c(); virtual void s2d(); virtual void s2e(); virtual void s2f();
+  virtual void s30(); virtual void s31(); virtual void s32(); virtual void s33(); virtual void s34(); virtual void s35(); virtual void s36(); virtual void s37();
+  virtual void s38(); virtual void s39(); virtual void s3a(); virtual void s3b(); virtual void s3c(); virtual void s3d(); virtual void s3e(); virtual void s3f();
+  virtual void s40(); virtual void s41(); 
+  virtual void SetCurrent(void* p);   // +0x108
+};
+struct IWorldHost {
+  virtual void s0();
+  virtual IModelWorld7fb* GetWorld();  // +4
+};
+void f_7fb7b0(IWorldHost* param);
 
 // ===========================================================================
 // Byte-exact functions.
@@ -201,50 +233,55 @@ void C_7fbed0::f(SerItem* p) {
 }
 
 // @ 0x007fb7b0
-void f_7fb7b0(void* param) {
-  void* q = f_7f93e0();
-  if (q) {
-    f_7fa370(q);
-    eastl_deallocate(q);
-  }
+void f_7fb7b0(IWorldHost* param) {
+  delete GetEv7f93();
   if (g_164b1f0) {
-    void** pv = *(void***)param;
-    void* r = ((void* (__thiscall*)(void*, int))pv[1])(param, 0);
-    void** vt = *(void***)r;
-    ((void (__thiscall*)(void*, void*))vt[0x108 / 4])(r, g_164b410);
-    void* srv = f_883860();
-    f_883870(0);
-    void** svt = *(void***)srv;
-    ((void (__thiscall*)(void*))svt[2])(srv);
-    if (srv) ((void (__thiscall*)(void*, int))svt[0])(srv, 1);
+    IModelWorld7fb* ptr = param->GetWorld();
+    ptr->SetCurrent(g_164b410);
+    IMsgServer* w = GetMsgServer();
+    SetMsgServer(0);
+    w->Shutdown();
+    delete w;
   }
 }
 
+struct Alloc7fbd50 {
+  Alloc7fbd50(const char* name);                 // 0x00e5cac0 (ret 4, returns this; the copy ctor is the same body)
+  Alloc7fbd50(const Alloc7fbd50& o);             // 0x00e5cac0
+  void set_name(const char* name);               // 0x010829f0 (ret 4)
+};
+void* operator new(size_t n, void* p);           // 0x008ac360 (cdecl placement new)
+struct VecMap7fbd50 {
+  void* mBegin; void* mEnd; void* mCap; Alloc7fbd50 mAlloc;
+  VecMap7fbd50(const Alloc7fbd50& a = Alloc7fbd50("UI/vector"))
+    : mBegin(0), mEnd(0), mCap(0), mAlloc(a) { mAlloc.set_name("UI/vector_map"); }
+};
+struct Holder7fbd50 {
+  VecMap7fbd50 v;
+  Holder7fbd50();
+};
 // @ 0x007fbd50
-void* f_7fbd50(void* self) {
-  void* t = f_e5cac0("UI/vector");
-  *(void**)((char*)self + 0) = 0;
-  *(void**)((char*)self + 4) = 0;
-  *(void**)((char*)self + 8) = 0;
-  f_e5cac0((const char*)t);
-  f_10829f0((char*)self + 0xc);
-  return self;
-}
+Holder7fbd50::Holder7fbd50() {}
 
+struct Pair8 { unsigned first; unsigned second; };
 // @ 0x007fbdb0
-void* f_7fbdb0(void** begin, void** end, void* out) {
-  void** it = begin;
-  char* p = (char*)out;
-  for (; it != end; it += 2, p += 8) {
-    void* m = f_8ac360(8, it);
-    if (m) {
-      *(void**)m = it[0];
-      *((void**)m + 1) = it[1];
+Pair8* f_7fbdb0(Pair8* first, Pair8* last, Pair8* dest) {
+  Pair8* result;
+  {
+    bool bSuccess = false;
+    Pair8* d = dest;
+    for (Pair8* it = first; it != last; ++it, ++d) {
+      new (d) Pair8(*it);
+    }
+    result = d;
+  }
+  {
+    bool b2 = false;
+    Pair8* d2 = dest;
+    for (Pair8* it2 = first; it2 != last; ++it2, ++d2) {
     }
   }
-  void** q = begin;
-  for (; q != end; q += 2) {}
-  return p;
+  return result;
 }
 
 // @ 0x007fbf40
@@ -348,40 +385,48 @@ void f_7fc330(void* param_1) {
   f_7fa350_init(0);
 }
 
-// @ 0x007fc4b0
-unsigned f_7fc4b0(void* self, int* msg, void* arg) {
-  if (msg == (int*)0x11) {
-    void* p = f_11b7240(arg);
-    RCObj** slot = (RCObj**)((char*)self + 4);
-    if (p != *slot) {
-      RCObj* old = *slot;
-      if (p) ((void (__thiscall*)(void*))**(void***)p)(p);
-      *slot = (RCObj*)p;
-      if (old) old->Release();
+struct IRefHost {
+  virtual void AddRef();                   // 0x00
+  virtual void Release();                  // 0x04
+  virtual void s2(); virtual void s3(); virtual void s4();
+  virtual IWorldHost* GetHost();           // 0x14
+};
+IRefHost* f_11b7240_ref(void* arg);        // 0x011b7240 (cdecl)
+template <class T>
+struct RefPtr7fc4b0 {
+  T* mpObject;
+  T* operator->() const { return mpObject; }
+  operator T*() const { return mpObject; }
+  RefPtr7fc4b0& operator=(T* p) {
+    if (p != mpObject) {
+      T* pOld = mpObject;
+      if (p) p->AddRef();
+      mpObject = p;
+      if (pOld) pOld->Release();
     }
-    int n = g_164b1f4;
-    g_164b1f4 = n + 1;
-    if (n == 0) {
-      void* o = *(void**)((char*)self + 4);
-      void* r = (void*)((void* (__thiscall*)(void*, int))(*(void***)o)[5])(o, 0);
-      f_7fc330(r);
-    }
-  } else if (msg == (int*)0x12) {
-    int n = g_164b1f4 - 1;
-    g_164b1f4 = n;
-    if (n == 0 && *(void**)((char*)self + 4) != 0) {
-      void* o = *(void**)((char*)self + 4);
-      void* r = (void*)((void* (__thiscall*)(void*, int))(*(void***)o)[5])(o, 0);
-      f_7fb7b0(r);
-    }
-    RCObj** slot = (RCObj**)((char*)self + 4);
-    if (*slot) {
-      RCObj* old = *slot;
-      *slot = 0;
-      if (old) old->Release();
-    }
+    return *this;
   }
-  return 0;
+};
+struct Handler7fc4b0 {
+  char pad[4];
+  RefPtr7fc4b0<IRefHost> mpHost;           // +4
+  bool OnMessage(int msg, void* arg);
+};
+// @ 0x007fc4b0
+bool Handler7fc4b0::OnMessage(int msg, void* arg) {
+  switch (msg) {
+    case 0x11:
+      mpHost = f_11b7240_ref(arg);
+      if (g_164b1f4++ == 0)
+        f_7fc330(mpHost->GetHost());
+      break;
+    case 0x12:
+      if (--g_164b1f4 == 0 && mpHost)
+        f_7fb7b0(mpHost->GetHost());
+      mpHost = 0;
+      break;
+  }
+  return false;
 }
 
 // @ 0x007fc600

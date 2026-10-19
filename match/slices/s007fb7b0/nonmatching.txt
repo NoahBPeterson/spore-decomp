@@ -7,3 +7,4 @@
 007fc600 81 BehaviorMessage dispatch — complete; the local message buffer and vtable dispatch schedule differ; equiv: FAIL (5/5 mismatched on eax, ecx fixed via member)
 007fc690 196 cSPUIBehaviorEventBase::SetStateString — complete; eastl string temporaries / inlined helper frames differ
 007fc790 156 cSPUIBehaviorEventBase::SetStateInt — complete; action slot vcalls and message temporaries differ
+007fbdb0  13  uninitialized_copy of 8-byte pairs — complete (placement-new copy loop + trivial destroy loop); /Od slot order of the new-expression temp differs [equiv: PASS]
