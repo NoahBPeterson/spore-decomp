@@ -3587,6 +3587,9 @@ class Rewrite:
             lines.append(VA_GUARD)
         for inc in self.collect_includes():
             lines.append('#include "%s"' % inc)
+        if re.search(r"\bNULL\b", text):
+            # the slice's NULL came from its own includes (mig11 tgaread TGA_about/TGA_info: C2065 'NULL')
+            lines += ["#ifndef NULL", "#define NULL 0", "#endif"]
         # classes a namespace function's signature names that have no generated header (only pointers/references to
         # them are needed): forward declarations
         fwd = set()
