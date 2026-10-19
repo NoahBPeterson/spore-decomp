@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPCookie.cpp  ?Clear@CookieHandler_s0060_a720@Pollen@SP@@QAEXXZ  0060a960  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPCookie.cpp  ??0CookieHandler_s0060_a720@Pollen@SP@@QAE@GI@Z  0060a990  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPCookie.cpp  ?Filter@CookieHandler_s0060_a720@Pollen@SP@@UAE_NPAUHTTPResponse@23@@Z  0060afa0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

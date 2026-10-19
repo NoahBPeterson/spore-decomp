@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0060aa40 653 CookieHandler::Filter(request): complete; fixed_vector/fixed_string frame is 4 bytes off and DomainMatches inline body scheduled differently
+0060ada0 401 AddCookie: complete; original keeps constant 1 in ebp (add [m],ebp) where cl emits inc; ref-holder slot layout differs

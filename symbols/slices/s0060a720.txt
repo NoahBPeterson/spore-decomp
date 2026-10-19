@@ -1,11 +1,16 @@
 0060a720 SP::Pollen::CookieHandler::ApplyURLDefaults  # fills cookie domain/path defaults from the request URL parts and validates them (called from 0060ada0)
-0060ada0 SP::Pollen::CookieHandler::AddCookie  # parses a Set-Cookie header and inserts/replaces/removes it in mCookies
+0060a960 ?Clear@CookieHandler_s0060_a720@Pollen@SP@@QAEXXZ  # CookieHandler_s0060_a720::Clear migrated from s0060a720 (verbatim, slice spelling)
+0060a990 ??0CookieHandler_s0060_a720@Pollen@SP@@QAE@GI@Z  # CookieHandler_s0060_a720::CookieHandler migrated from s0060a720 (verbatim, slice spelling)
+0060aa40 ?Filter@CookieHandler_s0060_a720@Pollen@SP@@UAE_NPAUHTTPRequest@23@@Z  # CookieHandler_s0060_a720::Filter migrated from s0060a720 (verbatim, slice spelling)
+0060ada0 ?AddCookie@CookieHandler_s0060_a720@Pollen@SP@@QAEXPBD0@Z  # CookieHandler_s0060_a720::AddCookie migrated from s0060a720 (verbatim, slice spelling)
+0060afa0 ?Filter@CookieHandler_s0060_a720@Pollen@SP@@UAE_NPAUHTTPResponse@23@@Z  # CookieHandler_s0060_a720::Filter migrated from s0060a720 (verbatim, slice spelling)
 0060b050 UI::cDBCheckDialog::Init  # layout init, AddWinProc(this)
-0060b180 UI::cDBCheckDialog::Close  # EndModal + RemoveWinProc + layout shutdown
 0060b110 UI::DBCheck::Init  # vtable slot 4; AddListener(msg 0x238de9c)
+0060b180 UI::cDBCheckDialog::Close  # EndModal + RemoveWinProc + layout shutdown
 0060b290 UI::DBCheck::Shutdown  # vtable slot 5; RemoveListener + release dialog
 0060b2e0 UI::DBCheck::Show  # vtable slot 6; creates cDBCheckDialog and BeginModal
 0060b390 UI::DBCheck::OnWinProcEvent  # releases dialog when control 0x431e538 closes
 0060b4f0 UI::DBCheck::HandleMessage  # msg 0x238de9c -> Shutdown
 0060b550 UI::cInsertDiscDialog::Init  # layout key 0x5b9f6852
 0060b5e0 UI::cInsertDiscDialog::Show  # sets caption string then BeginModal
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s0060a720, named from the dev publics; slice address comment)
