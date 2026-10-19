@@ -1,4 +1,4 @@
-009265f0 EA::Allocator::FixedAllocatorBase::SplitCore  # PDB fields align; builds the free chunk list
-00926650 EA::Allocator::FixedAllocatorBase::AddCore  # 2008 dev PDB name
-009266b0 EA::Allocator::FixedAllocatorBase::Init  # 2008 dev PDB name
-00926720 EA::Allocator::FixedAllocatorBase::FixedAllocatorBase  # 2008 dev PDB name
+009265f0 ?SplitCore@FixedAllocatorBase_s0092_6410@Allocator@EA@@QAE_NPAUCoreBlock_s0092_6410@23@@Z  # FixedAllocatorBase_s0092_6410::SplitCore migrated from s00926410 (verbatim, slice spelling)
+00926650 ?AddCore@FixedAllocatorBase_s0092_6410@Allocator@EA@@QAE_NPAUCoreBlock_s0092_6410@23@I@Z  # FixedAllocatorBase_s0092_6410::AddCore migrated from s00926410 (verbatim, slice spelling)
+009266b0 ?Init@FixedAllocatorBase_s0092_6410@Allocator@EA@@QAE_NIIIPAUCoreBlock_s0092_6410@23@IP6APAXIPAX@ZP6AX11@Z1@Z  # FixedAllocatorBase_s0092_6410::Init migrated from s00926410 (verbatim, slice spelling)
+00926720 ??0FixedAllocatorBase_s0092_6410@Allocator@EA@@QAE@IIIPAUCoreBlock_s0092_6410@12@IP6APAXIPAX@ZP6AX11@Z1@Z  # FixedAllocatorBase_s0092_6410::FixedAllocatorBase migrated from s00926410 (verbatim, slice spelling)

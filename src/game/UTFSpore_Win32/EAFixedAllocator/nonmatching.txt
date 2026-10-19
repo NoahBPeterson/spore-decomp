@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00926650 54 FixedAllocatorBase::AddCore: complete; the `while (nSize==0)` gets cl's loop-inversion (test at bottom) vs original top-test/jmp

@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAFixedAllocator.cpp  ?SplitCore@FixedAllocatorBase_s0092_6410@Allocator@EA@@QAE_NPAUCoreBlock_s0092_6410@23@@Z  009265f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFixedAllocator.cpp  ?Init@FixedAllocatorBase_s0092_6410@Allocator@EA@@QAE_NIIIPAUCoreBlock_s0092_6410@23@IP6APAXIPAX@ZP6AX11@Z1@Z  009266b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFixedAllocator.cpp  ??0FixedAllocatorBase_s0092_6410@Allocator@EA@@QAE@IIIPAUCoreBlock_s0092_6410@12@IP6APAXIPAX@ZP6AX11@Z1@Z  00926720  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
