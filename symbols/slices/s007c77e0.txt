@@ -1,5 +1,5 @@
-007c77e0 SP::cRandom::Seed  # string-seeded LFSR setup; FNVHash(name,0x811c9dc5,0)
-007c7870 SP::cRandom::GetInstance  # returns &global 0x153cf9c after Init(0x1410708,0x6d5)
+007c77e0 ?Seed@cRandom@@QAE_NPBD@Z  # cRandom::Seed migrated from s007c77e0 (verbatim, slice spelling)
+007c7870 ?GetRandom@@YGPAUcRandom@@PBDHH@Z  # GetRandom migrated from s007c77e0 (verbatim, slice spelling)
 007c78c0 SP::cRandom::GetState  # returns 0/-2 from buffer presence
 007c78e0 SP::cRandom::GetLen  # returns pos/0/size-pos/-1 switch
 007c7910 SP::cRandom::ReadBytes  # LFSR byte stream from table

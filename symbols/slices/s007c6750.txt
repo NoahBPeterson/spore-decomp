@@ -7,4 +7,4 @@
 007c7270 ?RegisterController@@YAXPAUcCameraManager_s007c_6750@@HPAX1@Z  # RegisterController migrated from s007c6750 (verbatim, slice spelling)
 007c74a0 SP::cCameraManager::~cCameraManager  # PDB gap-align
 007c75e0 ??0cCameraManager_s007c_6750@@QAE@XZ  # cCameraManager_s007c_6750::cCameraManager migrated from s007c6750 (verbatim, slice spelling)
-007c7770 BitLengthInit  # fills a bit-length lookup struct (not a manager method)
+007c7770 ?BitLengthInit@cBitLength@@QAEXHI@Z  # cBitLength::BitLengthInit migrated from s007c6750 (verbatim, slice spelling)

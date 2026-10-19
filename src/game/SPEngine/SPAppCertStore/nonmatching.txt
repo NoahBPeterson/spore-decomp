@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+007c7770 84 bit-length/lookup-table initializer; codegen differs -- equiv FAIL after making it a cBitLength member (ECX this): 5/7 inputs mismatch (shift steps in the bit-length ladder missing)
+007c77e0 7 inc ecx scheduled after the two field stores instead of right after the table load

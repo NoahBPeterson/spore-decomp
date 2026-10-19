@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPAppCertStore.cpp  ?GetRandom@@YGPAUcRandom@@PBDHH@Z  007c7870  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
