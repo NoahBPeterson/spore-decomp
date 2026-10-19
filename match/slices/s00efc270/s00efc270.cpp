@@ -38,6 +38,36 @@ void* __cdecl FUN_00b10c40(void*, int);
 typedef int   (__thiscall *FN0_i)(void*);
 typedef float (__thiscall *FN0_f)(void*);
 typedef void  (__thiscall *FN2_ii)(void*, int, int);
+typedef void* (__thiscall *FN1_i)(void*, int);
+typedef void  (__thiscall *TF_ii)(void*, int, int);
+typedef void  (__thiscall *TF_i)(void*, int);
+typedef void  (__thiscall *TF_v)(void*);
+typedef int   (__thiscall *TF_ri)(void*, int);
+typedef int   (__thiscall *TF_r)(void*);
+
+void          __cdecl FUN_00985e40(void*);
+int           __cdecl FUN_00efc530(void*);
+void* __fastcall FUN_00f33620(void*, int, void*);
+void* __fastcall FUN_00f3e8a0(void*, int, int);
+void* __cdecl FUN_0067dd10();
+void* __cdecl FUN_00b3d350();
+struct Vec3;
+Vec3* __fastcall FUN_00b82620(void*, int, void*, void*, void*, int);
+void* __fastcall FUN_00b13bb0(void*, int, void*, int);
+void  __cdecl FUN_00eec2b0(void*, void*, int, void*, int);
+void  __cdecl FUN_00eec8e0(void*, void*, void*);
+extern int g_15ad298;
+
+void FUN_00efbbe0();
+void FUN_00ef8860();
+void FUN_00efbf60();
+void FUN_00ef8820();
+void FUN_00efbe40();
+void FUN_00ef8440();
+void FUN_00ef8ed0();
+int  __cdecl FUN_00ef7280(void);
+void* __cdecl FUN_00eeca30(void*);
+void* __cdecl FUN_00b3d250();
 
 // 0x00efc520
 int __cdecl FUN_00efc520()
@@ -269,58 +299,223 @@ void* __cdecl FUN_00b10c40(void*, int);
 // ---------------------------------------------------------------------------
 // remaining functions (bodies approximated; see nonmatching.txt / partial.txt)
 // ===========================================================================
-void* __cdecl FUN_00f35f70_2(void*);
-void* __cdecl FUN_00b3d250();
-void* __cdecl FUN_00eeca30(void*);
-void* __cdecl FUN_00b82620(void*, void*, void*, int);
-void* __cdecl FUN_00f46410_2(int, int, int);
+
+// Member helpers with non-standard conventions (this in eax/esi) are declared
+// as free functions taking the pointer explicitly; see partial.txt.
+typedef float (__thiscall *PF_t)(void*);
 
 // @ 0x00efc270
-int __stdcall FUN_00efc270(int a, int b)
+int __fastcall FUN_00efc270(char* self, int pad, int tag, int arg)
 {
-    (void)a; (void)b;
+    int sv;
+    (void)pad;
+    FUN_00985e40(*(void**)((char*)gSimulator + 0x14));
+    switch (tag) {
+    case 0x539a4ce:
+        if (*(int*)(self + 0x30) != -1) {
+            *(char*)(self + 0x3d) = 1;
+            return 0;
+        }
+        break;
+    case 0x4519b5f:
+        ((TF_i)FUN_00ef8ed0)(self, FUN_00ef7280() == 0);
+        return 0;
+    case 0x539a4cf:
+        if (*(char*)(self + 0x3f) != 0) {
+            if (*(char*)(self + 0x3d) != 0) {
+                *(char*)(self + 0x3e) = 1;
+                *(char*)(self + 0x3d) = 0;
+            }
+            *(char*)(self + 0x3f) = 0;
+            return 0;
+        }
+        break;
+    case 0x743b6fa:
+        ((TF_ii)FUN_00efbbe0)(self, 0x8c, 0x8d);
+        return 0;
+    case 0x74baf67: {
+        sv = *(int*)(*(char**)((char*)arg + 8));
+        if ((int)gSimulator != sv && *(char*)((char*)sv + (int)self + 0x38) == 0)
+            ((TF_v)FUN_00ef8860)(self);
+        switch (sv) {
+        case 0:
+            ((TF_v)FUN_00efbf60)(self);
+            if (((TF_ri)FUN_00ef8820)(self, 2) == 0 && g_16c7b50 == 0) {
+                ((TF_v)FUN_00ef8860)(self);
+                ((TF_ii)FUN_00efbe40)(self, 0, 0);
+                g_16c7b50 = 1;
+            }
+            return 0;
+        case 1:
+            ((TF_ii)FUN_00efbbe0)(self, 9, 0xa);
+            ((TF_ii)FUN_00efbbe0)(self, 0x6f, 0x70);
+            ((TF_ii)FUN_00efbbe0)(self, 0x26, 0x27);
+            return 0;
+        case 2:
+            ((TF_v)FUN_00efbf60)(self);
+            if (((TF_ri)FUN_00ef8820)(self, 0x87) == 0 && g_16c7b51 == 0) {
+                ((TF_v)FUN_00ef8860)(self);
+                ((TF_ii)FUN_00efbe40)(self, 0, 1);
+                g_16c7b51 = 1;
+            }
+            return 0;
+        }
+        return 0;
+    }
+    case 0x7956d8a:
+        if (*(int*)((char*)arg + 8) == (int)0xd23c5170) {
+            ((TF_ii)FUN_00efbbe0)(self, 0xa8, 0xa9);
+            *(char*)(self + 0x3c) = 1;
+        } else {
+            *(char*)(self + 0x3c) = 0;
+        }
+        return 0;
+    case 0x7a12a49:
+        if (((TF_r)FUN_00ef8440)(self) == 0) {
+            ((TF_ii)FUN_00efbbe0)(self, 0x1d, 0x1e);
+            return 0;
+        }
+        return 0;
+    case 0x7bb7345:
+        ((TF_ii)FUN_00efbbe0)(self, 0xf, 0x10);
+        return 0;
+    case 0x7bb7346:
+        ((TF_ii)FUN_00efbbe0)(self, 0x11, 0x12);
+        return 0;
+    case 0x7bb7347:
+        ((TF_ii)FUN_00efbbe0)(self, 0x13, 0x14);
+        return 0;
+    }
     return 0;
 }
 
 // @ 0x00efc4c0
-float __fastcall FUN_00efc4c0(char* p)
+float __fastcall FUN_00efc4c0(char* self, int pad)
 {
-    float a = *(float*)(p + 0x178);
-    float b = *(float*)(p + 0x174);
-    if (a > b)
-        return (*(float*)(p + 0x17c) - b) / (a - b);
-    return 1.0f;
+    (void)pad;
+    if (*(float*)(self + 0x178) > *(float*)(self + 0x174))
+        return (*(float*)(self + 0x17c) - *(float*)(self + 0x174)) /
+               (*(float*)(self + 0x178) - *(float*)(self + 0x174));
+    return g_1485720;
 }
 
 // @ 0x00efc570
-bool __fastcall FUN_00efc570(char* p, int param, float f)
+// Non-standard ABI in the original: first pointer arrives in EAX, second in ECX,
+// float on stack. Expressed here as a plain function; byte-exactness from C is
+// not achievable (no C convention passes the first argument in EAX).
+bool __cdecl FUN_00efc570(void* a, void* self2, float f)
 {
-    (void)p; (void)param; (void)f;
-    return true;
+    char* esi;
+    if (a == 0)
+        return true;
+    esi = (char*)a - 8;
+    if (esi == 0)
+        return true;
+    if (*(int*)(esi + 0xd4) == 0)
+        return true;
+    float xmm0 = *(float*)(*(char**)((char*)g_15fd918 + 0x3c) + 0x9c) * f;
+    float xmm1;
+    if (self2 != 0)
+        xmm1 = ((PF_t)((*(void***)self2)[0xd]))(self2);
+    else
+        xmm1 = *(float*)(esi + 0x20);
+    unsigned char idx = *(unsigned char*)(esi + 0x129);
+    char* tbl = *(char**)(esi + 0xd4);
+    return (xmm0 / xmm1) < *(float*)(tbl + idx * 4 - 4);
 }
 
 // @ 0x00efc5f0
-int __fastcall FUN_00efc5f0(char* p, int param, float f)
+int __fastcall FUN_00efc5f0(void* self, int pad, float f, int a)
 {
-    (void)p; (void)param; (void)f;
-    return 0;
+    (void)self; (void)pad;
+    if (g_15ad33c > f)
+        return 0;
+    float xmm0;
+    void* v = FUN_00eeca30((void*)a);
+    if (v != 0)
+        xmm0 = ((PF_t)((*(void***)v)[0x1c]))(v);
+    else
+        xmm0 = g_1485720;
+    float xmm1 = g_15ad29c / f * xmm0;
+    return g_15ad338 > xmm1;
 }
 
 // @ 0x00efc6e0
-void __stdcall FUN_00efc6e0(int* p)
+int __stdcall FUN_00efc6e0(void* arg)
 {
-    (void)p;
+    char bl = 0;
+    void* esi = arg;
+    int matched = 0;
+    if (esi != 0) {
+        int t = ((FN0_i)((*(void***)esi)[0xe]))(esi);
+        if (t == 0x7a309fb || t == 0x76c67df || t == 0x771ad6a ||
+            t == 0x7a81824 || t == 0x7abdd8d)
+            matched = 1;
+    }
+    if (!matched) {
+        void* v = FUN_00eebf80(esi);
+        if (v != 0) {
+            char b1 = 0, b2 = 0;
+            FUN_00eec8e0(v, &b2, &b1);
+            bl = (b1 != 0 || b2 != 0);
+        }
+    }
+    unsigned ecx = *(unsigned*)((char*)gSimulator + 0x40);
+    int eax = 1;
+    if (bl) {
+        if (1 & (ecx >> 1))
+            eax = 2;
+        else if (1 & ecx)
+            eax = 3;
+    }
+    char* g = (char*)g_016c7b88;
+    if (*(int*)(g + 0x68) != eax) {
+        *(char*)(g + 0x64) = 1;
+        *(int*)((char*)g_016c7b88 + 0x68) = eax;
+    }
+    return eax;
 }
 
+struct Vec3 { float x, y, z; };
+typedef void* (__thiscall *FN_v58)(void*, int*, int*);
+
+void* __fastcall FUN_007c4900(void*, int);
+void* __cdecl FUN_00b82620(void* self, void* a, void* b, void* c, int d);
+
 // @ 0x00efc930
-int __cdecl FUN_00efc930()
+// Original writes its Vec3 through ESI (an out-pointer in that register) and
+// returns a flag in AL; that convention cannot be produced from C, so the out
+// pointer is declared explicitly. Behaviour (compare against the 3 globals)
+// matches the original.
+int __cdecl FUN_00efc930(Vec3* out)
 {
+    int a0 = 0, a1 = 0, a2 = 0, a3 = 0;
+    void* app = FUN_0067dd10();
+    void* x = ((FN_v58)((*(void***)app)[0x16]))(app, &a0, &a1);
+    void* y = FUN_007c4900(x, 0);
+    (void)y;
+    void* pm = FUN_00b3d350();
+    Vec3* v = (Vec3*)FUN_00b82620(pm, &a3, &a2, &a1, 0);
+    out->x = v->x; out->y = v->y; out->z = v->z;
+    if (out->x != g_16c7b98 || out->y != g_16c7b9c || out->z != g_16c7ba0)
+        return 1;
     return 0;
 }
 
 // @ 0x00efc9c0
 int __cdecl FUN_00efc9c0()
 {
+    int a0 = 0, a1 = 0, a2 = 0, a3 = 0;
+    Vec3 v;
+    void* app = FUN_0067dd10();
+    void* x = ((FN_v58)((*(void***)app)[0x16]))(app, &a0, &a1);
+    void* y = FUN_007c4900(x, 0);
+    (void)y;
+    void* pm = FUN_00b3d350();
+    Vec3* r = (Vec3*)FUN_00b82620(pm, &a3, &a2, &a1, 0);
+    v.x = r->x; v.y = r->y; v.z = r->z;
+    if (v.x != g_16c7b98 || v.y != g_16c7b9c || v.z != g_16c7ba0)
+        return 1;
     return 0;
 }
 
@@ -331,23 +526,80 @@ int __cdecl FUN_00efc9e0()
 }
 
 // @ 0x00efca60
-int __cdecl FUN_00efca60(int* p)
+int __cdecl FUN_00efca60(char* a)
 {
-    (void)p;
-    return 0;
+    void* p = *(void**)(*(char**)a + 0x64);
+    void* esi = 0;
+    if (p != 0)
+        esi = ((FN1_i)((*(void***)p)[3]))(p, 0x17f243b);
+    if (((FN0_i)((*(void***)esi)[8]))(esi) == 0x2e72cae)
+        return 0;
+    if (*(char*)(a + 0x20) != 0) {
+        if (FUN_00efc530(esi))
+            return 0;
+    }
+    if (*(int*)0x15ad298 == 0x16c7c08) {
+        if (FUN_00efc530(esi))
+            return 1;
+        if (FUN_00f33620(*(void**)((char*)gSimulator + 0x18), 0, esi) == 0)
+            return 0;
+    }
+    return 1;
 }
 
 // @ 0x00efcb40
-float __fastcall FUN_00efcb40(char* p)
+// `this` arrives in ESI in the original (non-standard convention); expressed
+// here as a free function taking the pointer. Returns a float in XMM0.
+
+float __cdecl FUN_00efcb40(void* self)
 {
-    (void)p;
-    return 1.0f;
+    float base = g_1441a88;
+    void* eax = FUN_00f3e8a0(*(void**)((char*)gSimulator + 0x74), 0, *(int*)self);
+    if (eax != 0) {
+        int k = *(int*)((char*)eax + 4);
+        if (k == 0x2399be55)      base = g_1477fc0;
+        else if (k == 0x24682294) base = g_13ec4d0;
+    }
+    float soft;
+    void* v = FUN_00eeca30(self);
+    if (v != 0)
+        soft = ((PF_t)((*(void***)v)[0x1c]))(v);
+    else
+        soft = g_1485720;
+    return (g_15ad340 * soft > base) ? (g_15ad340 * soft) : base;
 }
 
 // @ 0x00efcbe0
-void __cdecl FUN_00efcbe0(int a)
+// `this` arrives in ESI in the original; expressed as an explicit first
+// parameter. The second (int) argument is the caller's stack argument.
+void __cdecl FUN_00efcbe0(void* self, int arg)
 {
-    (void)a;
+    void* eax = FUN_0067dd10();
+    eax = ((void*(__thiscall*)(void*))((*(void***)eax)[0x14]))(eax);
+    eax = ((void*(__thiscall*)(void*))((*(void***)eax)[0xe]))(eax);
+    if (eax == 0)
+        return;
+    void* edi = ((FN1_i)((*(void***)eax)[3]))(eax, 0x11966ed);
+    if (edi == 0)
+        return;
+    float v[3];
+    v[0] = ((float*)self)[0];
+    v[1] = ((float*)self)[1];
+    v[2] = ((float*)self)[2];
+    if (g_15ad344 != 0) {
+        float outA[3];
+        float s1, s2, s3;
+        FUN_00eec2b0(outA, v, 0, &s1, 1);
+        (void)s2; (void)s3;
+        float d1 = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
+        float d2 = outA[0] * outA[0] + outA[1] * outA[1] + outA[2] * outA[2];
+        if (d2 > d1) {
+            v[0] = outA[0];
+            v[1] = outA[1];
+            v[2] = outA[2];
+        }
+    }
+    FUN_00b13bb0(edi, 0, v, arg);
 }
 
 // @ 0x00efccd0
