@@ -1,5 +1,12 @@
 007fdab0 UTFWin::cSPUIBehaviorActionWinInterpolator::cSPUIBehaviorActionWinInterpolator  # vtable ctor 0x1415f18
+007fdb60 ?SetTimeFunction@Interp@@QAEXPAUIObj@@@Z  # Interp::SetTimeFunction migrated from s007fd840 (verbatim, slice spelling)
+007fdb90 ?SetValueInterp@Interp@@QAEXPAUIObj@@@Z  # Interp::SetValueInterp migrated from s007fd840 (verbatim, slice spelling)
+007fdbc0 ?HandleMessage@Interp@@QAE_NHPAX@Z  # Interp::HandleMessage migrated from s007fd840 (verbatim, slice spelling)
+007fdd10 ?SetEnabled@Interp@@QAEDH@Z  # Interp::SetEnabled migrated from s007fd840 (verbatim, slice spelling)
+007fdfa0 ?SetAllocatorObj@State@@QAEXXZ  # State::SetAllocatorObj migrated from s007fd840 (verbatim, slice spelling)
+007fdfe0 ?InitWith@State@@QAE_NH@Z  # State::InitWith migrated from s007fd840 (verbatim, slice spelling)
 007fe070 UTFWin::cSPUIBehaviorActionWinState::cSPUIBehaviorActionWinState  # vtable ctor 0x1415fe8
+007fe330 ?DeletingDtor@Interp@@QAEPAXE@Z  # Interp::DeletingDtor migrated from s007fd840 (verbatim, slice spelling)
 007fe7a0 ?IsThisType@WinEvent@@QAE_NXZ  # WinEvent::IsThisType migrated from s007fd840 (verbatim, slice spelling)
 007fe7d0 ?Pred@BoolEvent@@QAE_NDD@Z  # BoolEvent::Pred migrated from s007fd840 (verbatim, slice spelling)
 007fe8c0 ?BoolActivate@@YAXPAXH@Z  # BoolActivate migrated from s007fd840 (verbatim, slice spelling)

@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+007fdfa0 31 complete; SList allocator propagation; vcall schedule differs
+007fdfe0 49 complete; SetValue + SList allocator; schedule differs
+007fe330 34 complete; interpolator deleting-dtor; vtable/base-dtor schedule differs; equiv: FAIL (vtable stores not reproduced)

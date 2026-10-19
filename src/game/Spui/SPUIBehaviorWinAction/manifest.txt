@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/Spui/SPUIBehaviorWinAction.cpp  ?SetTimeFunction@Interp@@QAEXPAUIObj@@@Z  007fdb60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIBehaviorWinAction.cpp  ?SetValueInterp@Interp@@QAEXPAUIObj@@@Z  007fdb90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIBehaviorWinAction.cpp  ?init_1542c44@@YAXXZ  012f7570  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
