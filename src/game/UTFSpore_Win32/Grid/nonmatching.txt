@@ -1,4 +1,4 @@
-# va  diff-bytes  reason
+# <va>  <diff-bytes>  <reason>   (nonmatching: complete + behaviourally equivalent, but not byte-exact)
 00972e90 543 DoArrowKey: complete (both key switches, selection clear, notify, scrollbar update); regalloc/frame differ, uninitialized msg fields left as-is; flags /arch:SSE /fp:fast (original uses movss/cvtsi2ss/comiss/cvttss2si); col/row now one CellCoordinates struct (msg.pCur points at both, as in the original)
 00973200 42 ClearSelection: complete; 64-bit compare of +0x84 reproduced, store zeroing/-1 constants scheduled differently
 00973490 238 AddScrollBar: complete (vertical+horizontal creation, drawable hookup, add to window, dirty); diverges in call/arg ordering

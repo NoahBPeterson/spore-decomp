@@ -1,2 +1,1 @@
-# va  diff-bytes  reason
-00970460  164  EA::UTFWinControls::WinGrid::OnMouseMove (/O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast): 215-byte row-extra-data hit test + EASTL hash-map rehash/update keyed on the (row,col,flags) triple, ending in two hook virtual calls (+0x114, +0x90).  Body approximated to the sub-object vtable(+0x19c) hit call and the early-out (our symbol 51 bytes).  difftest reports UNSUPPORTED: 0/400 valid inputs (398 fake-arity discards) -- the original walks heap-allocated row data the replay harness cannot satisfy.
+# <va>  <diff-bytes>  <reason>   (partial: source present and compilable, but not a faithful/complete reconstruction)

@@ -24,10 +24,186 @@ namespace UTFWinControls {
 namespace EA {
 namespace UTFWinControls {
 struct WinGridSub {
-    PV(0);PV(1);PV(2);PV(3);PV(4);PV(5);PV(6);PV(7);PV(8);PV(9);
-    PV(10);PV(11);PV(12);PV(13);PV(14);PV(15);PV(16);PV(17);PV(18);PV(19);
-    PV(20);PV(21);PV(22);PV(23);PV(24);PV(25);PV(26);PV(27);PV(28);PV(29);
+PV(0);
+PV(1);
+PV(2);
+PV(3);
+PV(4);
+PV(5);
+PV(6);
+PV(7);
+PV(8);
+PV(9);
+PV(10);
+PV(11);
+PV(12);
+PV(13);
+PV(14);
+PV(15);
+PV(16);
+PV(17);
+PV(18);
+PV(19);
+PV(20);
+PV(21);
+PV(22);
+PV(23);
+PV(24);
+PV(25);
+PV(26);
+PV(27);
+PV(28);
+PV(29);
     virtual void OnWheel(int delta);   // +0x78
+PV(31);
+PV(32);
+PV(33);
+PV(34);
+PV(35);
+PV(36);
+PV(37);
+PV(38);
+PV(39);
+PV(40);
+PV(41);
+PV(42);
+PV(43);
+PV(44);
+PV(45);
+PV(46);
+PV(47);
+PV(48);
+PV(49);
+PV(50);
+PV(51);
+PV(52);
+PV(53);
+PV(54);
+PV(55);
+PV(56);
+PV(57);
+PV(58);
+PV(59);
+PV(60);
+PV(61);
+PV(62);
+PV(63);
+PV(64);
+PV(65);
+PV(66);
+PV(67);
+PV(68);
+PV(69);
+PV(70);
+PV(71);
+PV(72);
+PV(73);
+PV(74);
+PV(75);
+PV(76);
+PV(77);
+PV(78);
+PV(79);
+PV(80);
+PV(81);
+PV(82);
+PV(83);
+PV(84);
+PV(85);
+PV(86);
+PV(87);
+PV(88);
+PV(89);
+PV(90);
+PV(91);
+PV(92);
+PV(93);
+PV(94);
+PV(95);
+PV(96);
+PV(97);
+PV(98);
+PV(99);
+PV(100);
+PV(101);
+PV(102);
+    virtual bool OnHitTest(float x, float y, float* py, void* out);   // +0x19c
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct WinGridVt {
+PV(0);
+PV(1);
+PV(2);
+PV(3);
+PV(4);
+PV(5);
+PV(6);
+PV(7);
+PV(8);
+PV(9);
+PV(10);
+PV(11);
+PV(12);
+PV(13);
+PV(14);
+PV(15);
+PV(16);
+PV(17);
+PV(18);
+PV(19);
+PV(20);
+PV(21);
+PV(22);
+PV(23);
+PV(24);
+PV(25);
+PV(26);
+PV(27);
+PV(28);
+PV(29);
+PV(30);
+PV(31);
+PV(32);
+PV(33);
+PV(34);
+PV(35);
+    virtual void OnSelChanged();          // +0x90
+PV(37);
+PV(38);
+PV(39);
+PV(40);
+PV(41);
+PV(42);
+PV(43);
+PV(44);
+PV(45);
+PV(46);
+PV(47);
+PV(48);
+PV(49);
+PV(50);
+PV(51);
+PV(52);
+PV(53);
+PV(54);
+PV(55);
+PV(56);
+PV(57);
+PV(58);
+PV(59);
+PV(60);
+PV(61);
+PV(62);
+PV(63);
+PV(64);
+PV(65);
+PV(66);
+PV(67);
+PV(68);
+    virtual void OnInsert(void* iter);    // +0x114
 };
 }
 }
@@ -36,9 +212,9 @@ namespace UTFWinControls {
 struct WinGrid_s0096_f3f0 {
     char sub20c[0x20c];
 
-    void SetDefaultFormatting();                            // 0x009702b0
-    void OnMouseWheel(int, int, int, int delta);            // 0x00970540
-    int  OnMouseMove(int, float x, float y);                // 0x00970460
+    void SetDefaultFormatting();                                    // 0x009702b0
+    void OnMouseWheel(int, int, int, int delta);                    // 0x00970540
+    virtual bool OnMouseMove(float x, float y, unsigned int param); // 0x00970460
 };
 }
 }
@@ -884,18 +1060,49 @@ void EA::UTFWinControls::WinGrid::SetDefaultFormatting()
 }
 
 // @ 0x00970460
-bool EA::UTFWinControls::WinGrid::OnMouseMove(float a0, float x, unsigned int y)
+bool EA::UTFWinControls::WinGrid::OnMouseMove(float x, float y, unsigned int param)
 {
-    char* esi = (char*)this;
-    void* vt = *(void**)(esi + 0x20c);
-    float area[3];
-    int hit;
-    typedef int(__fastcall* Fn)(void*, void*, float, float);
-    Fn fn = (Fn)((char*)vt + 0x19c);
-    hit = fn((char*)esi + 0x20c, 0, x, y);
-    if ((hit & 0xff) == 0)
-        return 0;
-    return 1;
+    char* base = (char*)this;
+
+    // 0x30-byte scratch frame: first the hit-test output, then the row-extra-data
+    // key / node passed to the inlined hashtable insert.
+    struct Row {
+        unsigned k0, k1;             // +0x00 .. +0x04  (hit-test output)
+        unsigned key0, key1, key2;   // +0x08 .. +0x10  (map key)
+        unsigned it0, it1;           // +0x14 .. +0x18  (insert iterator result)
+        unsigned hash;               // +0x1c
+        void*    value;              // +0x20
+        unsigned pad0, pad1;         // +0x24 .. +0x28
+        void*    keyPtr;             // +0x2c
+    } row;
+
+    WinGridSub* sub = (WinGridSub*)(base + 0x20c);
+    if (!sub->OnHitTest(x, y, &y, &row))
+        return false;
+
+    unsigned a = *(unsigned*)&y;
+    unsigned b = row.k0;
+    unsigned c = row.k1;
+    if (a == *(unsigned*)(base + 0x3a8) &&
+        b == *(unsigned*)(base + 0x3ac) &&
+        c == *(unsigned*)(base + 0x3b0))
+        return true;
+
+    row.key0 = a;
+    *(unsigned*)(base + 0x3a8) = a;
+    row.key1 = b;
+    row.key2 = c;
+    *(unsigned*)(base + 0x3ac) = b;
+    *(unsigned*)(base + 0x3b0) = c;
+    row.hash = 0x9a1552d6;
+    void* v = *(void**)(base + 0x84);
+    row.value = v ? v : *(void**)(base + 0x80);
+    row.keyPtr = &row.key0;
+
+    WinGridVt* vt = (WinGridVt*)(base + 4);
+    vt->OnInsert(&row.it0);
+    vt->OnSelChanged();
+    return true;
 }
 
 // @ 0x00970540
