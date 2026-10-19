@@ -49,6 +49,9 @@ static int byteType(const void* enc, const char* p) {
 // ---- items of slice s00911480 end
 
 // ---- items of slice s009159b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#ifndef NULL
+#define NULL 0
+#endif
 #define PTRCALL
 #define PTRFASTCALL
 #define FASTCALL
