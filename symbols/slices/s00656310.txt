@@ -1,11 +1,13 @@
 006563c0  C563c0::C563c0  # retail helper object ctor; disasm stores f0=0,f4..f6=0,f8=1,fc=0
-00656410  SP::cSPUIAssetVerbs::~cSPUIAssetVerbs  # vtable stores + field releases match the ctor layout
-006566f0  SP::cSPUIAssetVerbs::Shutdown  # PDB-named in card; releases mLayout/AutoHandler
-00656740  SP::cSPUIAssetVerbs::IsVerb  # PDB-named in card
+00656410 ?cSPUIAssetVerbs_dtor@@YIXPAUcSPUIAssetVerbs@@@Z  # cSPUIAssetVerbs_dtor migrated from s00656310 (verbatim, slice spelling)
+00656510 ?UpdatePos@cSPUIAssetVerbs@@QAEXPAX@Z  # cSPUIAssetVerbs::UpdatePos migrated from s00656310 (verbatim, slice spelling)
+006566f0 ?Shutdown@cSPUIAssetVerbs@@QAEXXZ  # cSPUIAssetVerbs::Shutdown migrated from s00656310 (verbatim, slice spelling)
+00656740 ?IsVerb@cSPUIAssetVerbs@@QAE_NH@Z  # cSPUIAssetVerbs::IsVerb migrated from s00656310 (verbatim, slice spelling)
+00656770 ?Update@cSPUIAssetVerbs@SP@@QAEXI@Z  # SP::cSPUIAssetVerbs::Update migrated from s00656310
 00656830  SP::cSPUIAssetVerbs::SetVerbButtonEnabled  # PDB-named in card
-00656890  SP::cSPUIAssetVerbs::ReloadCallback  # PDB candidate (caller-scored) in card
-00656b00  SP::cSPUIAssetVerbs::cSPUIAssetVerbs  # ctor stores 3 vtables + fields; dtor restores base vtables
-00656b80  SP::cSPUIAssetVerbs::Init  # PDB-named "SP::cSPUIAssetVerbs::Init" in card
+00656890 ?ReloadCallback@@YAXPAUcSPUIAssetVerbs@@PAX_N@Z  # ReloadCallback migrated from s00656310 (verbatim, slice spelling)
+00656b00 ?cSPUIAssetVerbs_ctor@@YIPAUcSPUIAssetVerbs@@PAU1@@Z  # cSPUIAssetVerbs_ctor migrated from s00656310 (verbatim, slice spelling)
+00656b80 ?Init@cSPUIAssetVerbs@@QAEXPAX@Z  # cSPUIAssetVerbs::Init migrated from s00656310 (verbatim, slice spelling)
 00657460 ?m57460@cSPUIAssetView@@QAEX_N@Z  # cSPUIAssetView::m57460 migrated from s00656310 (verbatim, slice spelling)
 00657640 ?m57640@cSPUIAssetView@@QAEXPAX00H00PAPAX@Z  # cSPUIAssetView::m57640 migrated from s00656310 (verbatim, slice spelling)
 006577a0 ?IsAnimTargetDifferent@cSPUIAssetView@@QAEHXZ  # cSPUIAssetView::IsAnimTargetDifferent migrated from s00656310 (verbatim, slice spelling)

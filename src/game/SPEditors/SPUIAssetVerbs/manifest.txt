@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPUIAssetVerbs.cpp  ?cSPUIAssetVerbs_dtor@@YIXPAUcSPUIAssetVerbs@@@Z  00656410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetVerbs.cpp  ?Shutdown@cSPUIAssetVerbs@@QAEXXZ  006566f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetVerbs.cpp  ?IsVerb@cSPUIAssetVerbs@@QAE_NH@Z  00656740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetVerbs.cpp  ?cSPUIAssetVerbs_ctor@@YIPAUcSPUIAssetVerbs@@PAU1@@Z  00656b00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
