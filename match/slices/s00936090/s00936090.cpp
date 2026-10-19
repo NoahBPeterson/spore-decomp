@@ -185,6 +185,27 @@ struct SharedLibraryVector {
     void* mpCapacity;   // +0x08
 };
 
+extern "C" void FreeMem(void*);
+
+// eastl::basic_string<wchar_t, EAIOPathStringCoreAllocator> as laid out in the
+// original (three pointers; the stateless allocator shares the +0x0c slot of the
+// enclosing object).
+struct WPathString {
+    wchar_t* mpBegin;     // +0x00
+    wchar_t* mpEnd;       // +0x04
+    wchar_t* mpCapacity;  // +0x08
+    uint32_t mAllocator;  // +0x0c (stateless EAIOPathStringCoreAllocator)
+    WPathString(const WPathString& other);          // 0x0056e2d0
+    WPathString& append(const wchar_t* s);          // 0x005c3d90
+    WPathString& operator=(const WPathString& o);   // 0x0057cb60
+    void DeallocateSelf();                          // 0x00933960
+    __forceinline void DeallocateSelfInline() {
+        wchar_t* b = mpBegin;
+        if ((int)((int)mpCapacity - (int)b & 0xfffffffeU) > 2 && b)
+            FreeMem(b);
+    }
+};
+
 class SharedLibrary : public ILibraryCommand {
 public:
     int    mnRefCount;      // +0x04  (atomic)
@@ -212,7 +233,7 @@ public:
     bool Register(void* fn, void* user);          // 0x00936C00
     SharedLibrary(uint32_t a, uint32_t b);        // 0x00936C80
     ~SharedLibrary();                             // 0x00936CE0
-    bool SetPath(const wchar_t* path, char flag); // 0x00936950
+    bool SetPath(const wchar_t* path, bool flag);  // 0x00936950
 };
 
 }  // namespace EA
@@ -483,23 +504,28 @@ int EA::SharedLibraryRegistry::GetLibraries(void** out, unsigned int n) {
 }
 
 // @ 0x00936950
-bool EA::SharedLibrary::SetPath(const wchar_t* path, char flag) {
+bool EA::SharedLibrary::SetPath(const wchar_t* path, bool flag) {
     if (path == 0)
         return false;
-    if (!CanReload())
-        return false;
-    void* h = LoadLibraryW(path);
-    if (h == 0)
-        return false;
-    void* fn = GetProcAddress(h, "EASharedLibraryStartupFunction");
-    FreeLibrary(h);
-    if (fn == 0)
-        return false;
-    mpPathBegin = 0;
-    mpPathEnd = 0;
-    mpPathCap = 0;
-    (void)flag;
-    return true;
+    if (CanReload()) {
+        void* h = LoadLibraryW(path);
+        if (h != 0) {
+            bool ok = GetProcAddress(h, "EASharedLibraryStartupFunction") != 0;
+            FreeLibrary(h);
+            if (ok) {
+                WPathString& p = *(WPathString*)&mpPathBegin;
+                WPathString temp(p);
+                p.append(path);
+                if (flag == 0 || v14(0)) {
+                    temp.DeallocateSelfInline();
+                    return true;
+                }
+                p = temp;
+                temp.DeallocateSelf();
+            }
+        }
+    }
+    return false;
 }
 
 // @ 0x00936C80

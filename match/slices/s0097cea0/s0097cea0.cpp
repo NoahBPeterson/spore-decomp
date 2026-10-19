@@ -709,6 +709,44 @@ bool CursorListMarshaller_Read(ReadOwner* self, ReadList* list) {
 }  // namespace Cur
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x0097DAD0  ImageCursorProvider::CursorWindow::CursorWindow  (ctor; still a stub, not in this pass)
+// @ 0x0097DAD0
+//   EA::UTFWinControls::ImageCursorProvider::CursorWindow::CursorWindow (constructor):
+//   Window base ctor (0x962a10), the two derived vptrs, three zeroed fields (mpCursor/mMouseX/
+//   mMouseY at +0x20c/+0x210/+0x214), then SetFlag(0x40/0x10/0x200, 1) on the Win subobject (+4).
 // ---------------------------------------------------------------------------------------------
-void CursorWindow_ctor(void* self) { (void)self; }
+namespace Cur {
+struct Win {
+    virtual void w0();                                       // 0x7f31d0
+    virtual void w1();                                       // 0x7f31c0
+    void SetFlag(unsigned int flag, unsigned char value);    // 0x961760
+};
+struct IWindow {
+    virtual void i0();                                       // 0x95f990
+    virtual void i1();                                       // 0x95f9a0
+};
+struct Window : IWindow, Win {                               // IWindow +0, Win +4
+    Window();                                                // 0x962a10
+    char pad[0x20c - 8];
+};
+struct CursorWindowCtor : Window {
+    virtual void cw0();                                      // 0x962bc0
+    virtual void cw1();                                      // 0x95f960
+    virtual void cw2();                                      // 0x960520
+    virtual void cw3();                                      // 0x7f3190
+    virtual void cw4();                                      // 0xb1fbf0
+    virtual void cw5();                                      // 0x961e80
+    virtual void cw6();                                      // 0x950bb0
+    ImageCursor* mpCursor;   // +0x20c
+    int          mMouseX;    // +0x210
+    int          mMouseY;    // +0x214
+    CursorWindowCtor();
+};
+CursorWindowCtor::CursorWindowCtor() {
+    mpCursor = 0;
+    mMouseX = 0;
+    mMouseY = 0;
+    SetFlag(0x40, 1);
+    SetFlag(0x10, 1);
+    SetFlag(0x200, 1);
+}
+}  // namespace Cur

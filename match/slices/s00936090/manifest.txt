@@ -9,3 +9,4 @@ slices/s00936090/s00936090.cpp  ?GetFirst@SharedLibraryRegistry@EA@@QAEPAXXZ  00
 slices/s00936090/s00936090.cpp  ?ExecuteCmd@SharedLibrary@EA@@QAE_NPBDPAXHHH@Z  00936710  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00936090/s00936090.cpp  ??1SharedLibraryRegistry@EA@@QAE@XZ  00936740  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00936090/s00936090.cpp  ?Shutdown@SharedLibraryRegistry@EA@@QAE_NXZ  00936e10  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00936090/s00936090.cpp  ?SetPath@SharedLibrary@EA@@QAE_NPB_W_N@Z  00936950  /O2 /MD /Gy /EHsc /TP /GS-

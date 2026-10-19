@@ -6,8 +6,6 @@
 // stubs
 // ---------------------------------------------------------------------------
 struct S99d060 { void f(); };                 // release a reference (0x99d060)
-struct S99ed90 { int f(void*, char*, int); }; // ReadAnimationStaticDataFromStreamWrapper (external)
-extern int FUN_0099ed90();                    // skeleton body for the standalone VA
 extern void FUN_f47380(void*);                 // operator delete(void*) cdecl
 extern int FUN_00a088e0(int);
 extern void FUN_11e073e(void*, int, int);
@@ -399,9 +397,121 @@ S99ece0* S99ece0::f() {
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0099ed90  ReadAnimationStaticDataFromStreamWrapper  (skeleton body for the VA)
+// @ 0x0099ED90
+//   nSPCreatureAnim::ReadAnimationStaticDataFromStreamWrapper
+//   Reads a whole animation blob through the stream_wrapper (persistent load 0x0099cf70,
+//   read 0x0099cf90/ftell, fill 0x0099cfb0/fread, refill 0x0099cfe0/fread), checks the
+//   magic ("Anim"/"grou"/"uorg" -> versioned load), validates the version (6..0x19) and the
+//   size against ComputeAnimationStaticDataSizeBytesForVersion, copies the buffer when it is
+//   oversized, fixes up the internal pointer table, runs UpdateAnimationStaticDataVersion and
+//   DisableUnusedDeforms, then tags the asset. Every failure path logs through sys_gui and
+//   frees the buffers. External callees are the real image routines.
 // ---------------------------------------------------------------------------
-int FUN_0099ed90() { return 0; }
+extern "C" __declspec(dllimport) unsigned int __cdecl ftell(void*);
+extern "C" __declspec(dllimport) unsigned int __cdecl fread(void*, unsigned int, unsigned int, void*);
+extern "C" __declspec(dllimport) int __cdecl fseek(void*, unsigned int, unsigned int);
+
+void* EAAllocate(unsigned int size, const char* name, int a, int b, int c, int d);  // 0xf473a0
+void operator delete(void* p);                                                        // 0xf47380
+void EA_Log(const char* fmt, ...);                                                    // 0xc2e4e0
+unsigned int ComputeAnimationStaticDataSizeBytesForVersion(void* data);                // 0x9a8670
+char UpdateAnimationStaticDataVersion(void* data, unsigned int size);                   // 0x9a86b0
+void DisableUnusedDeforms(void* data);                                                  // 0x99d2e0
+void VecBoolInsert(void* dst, const void* src, unsigned int n);                         // 0x11e0744
+
+struct stream_wrapper {
+    virtual void vt0();                                      // 0x0099cf70
+    virtual void vt1();                                      // 0x0099cf90
+    virtual void vRead(char* buf, unsigned int n);           // 0x0099cfb0 (slot 2)
+    virtual void vt3();                                      // 0x0099cfe0
+    virtual int  vSize();                                    // 0x0099d010 (slot 4)
+};
+
+void* __cdecl ReadAnimationStaticDataFromStreamWrapper(stream_wrapper* s, const char* name,
+                                                       unsigned int instanceId)
+{
+    void* data = 0;
+    int size = s->vSize();
+    if (size <= 0)
+        return 0;
+    void* src = EAAllocate((unsigned int)size, "Anim/Anim", 0, 0, 0, 0);
+    s->vRead((char*)src, (unsigned int)size);
+
+    unsigned int magic = *(unsigned int*)src;
+    if (magic != 0x4d494e41) {
+        if (magic == 0x67726f75 || magic == 0x756f7267) {
+            operator delete(src);
+            return data;
+        }
+        const char* who = name ? name : "";
+        EA_Log("Unknown magic value (0x%08x) in animation, instance id: 0x%08x (\"%s\")\n", magic,
+               instanceId, who);
+        operator delete(src);
+        return data;
+    }
+
+    unsigned int version = *(unsigned int*)((char*)src + 8);
+    if (version > 0x19)
+        goto badver;
+    if (version < 6)
+        goto badver;
+
+    data = src;
+    {
+        unsigned int need = ComputeAnimationStaticDataSizeBytesForVersion(src);
+        if ((unsigned int)size != need) {
+            data = EAAllocate(need, "Anim/Anim", 0, 0, 0, 0);
+            VecBoolInsert(data, src, (unsigned int)size);
+        } else {
+            src = 0;
+        }
+
+        if (data && *(unsigned int*)((char*)data + 4) &&
+            *(unsigned int*)((char*)data + 0x14c)) {
+            unsigned int n = *(unsigned int*)((char*)data + 0x14c);
+            int* tbl = (int*)((char*)data + *(unsigned int*)((char*)data + 0x150));
+            for (unsigned int i = 0; i < n; i++) {
+                int* p = (int*)((char*)data + tbl[i]);
+                int off = *p;
+                if (off > (int)*(unsigned int*)((char*)data + 4))
+                    goto corrupt;
+                *p = off + (int)data;
+            }
+            if (UpdateAnimationStaticDataVersion(data, need)) {
+                *(unsigned int*)((char*)data + 0x118) &= ~2u;
+                *(unsigned int*)((char*)data + 4) = need;
+                *(unsigned int*)((char*)data + 0x110) = instanceId;
+                *(unsigned int*)((char*)data + 0x114) = 0;
+                unsigned int tag = *(unsigned int*)0x166b260;
+                *(unsigned int*)((char*)data + 0x12c) = tag;
+                *(unsigned int*)0x166b260 = tag + 1;
+                *(unsigned int*)((char*)data + 0x130) = version;
+                DisableUnusedDeforms(data);
+                operator delete(src);
+                return data;
+            }
+        }
+
+    corrupt:
+        {
+            const char* who = name ? name : "";
+            EA_Log("reading corrupt animation, instance id: 0x%08x (\"%s\")\n", instanceId, who);
+        }
+        if (data)
+            operator delete(data);
+        operator delete(src);
+        return 0;
+
+    badver:
+        {
+            const char* who = name ? name : "";
+            EA_Log("Bad version (%d) in animation, instance id: 0x%08x (\"%s\")\n", version,
+                   instanceId, who);
+        }
+        operator delete(src);
+        return data;
+    }
+}
 
 // ---------------------------------------------------------------------------
 // @ 0x0099efa0  uninitialized_copy of 8-byte pairs
@@ -436,7 +546,7 @@ int FUN_0099efd0(char* name, int arg) {
   struct { void* vt; void* fp; } local;
   local.vt = (void*)0x1446dd8;
   local.fp = file;
-  int r = ((S99ed90*)&local)->f(&local, name, arg);
+  int r = (int)(size_t)ReadAnimationStaticDataFromStreamWrapper((stream_wrapper*)&local, name, arg);
   fclose(file);
   return r;
 }
