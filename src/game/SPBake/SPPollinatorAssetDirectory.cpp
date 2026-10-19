@@ -790,16 +790,16 @@ void WStr_Format(void* out, const void* fmt, int arg);   // 0x41e050 cdecl
 struct Meta_s0055_0bd0 {
     char pad[0x400];
     char FUN_00550b60(int key);  // 0x00550b60 (Meta::FUN_00550b60)
-    char FUN_00550bd0(uint16_t* str);
-    void FUN_00550cf0(WStr* out);
-    char FUN_00550da0(int* param_2, int* param_3, int* param_4);
+    char FUN_00550bd0(uint16_t* str);  // 0x00550bd0 (Meta::FUN_00550bd0)
+    void FUN_00550cf0(WStr* out);  // 0x00550cf0 (Meta::FUN_00550cf0)
+    char FUN_00550da0(int* param_2, int* param_3, int* param_4);  // 0x00550da0 (Meta::FUN_00550da0)
     char FUN_00551240(int* param_2, uint16_t* param_3, uint16_t* param_4, int param_5,
                       int* param_6, char param_7);
     char SetMetadata(uint32_t* param_2, int param_3, int param_4, int param_5, void* param_6,
                      uint16_t* param_7, void* param_8, uint16_t* param_9, uint16_t* param_10,
                      uint16_t* param_11, int param_12, void* param_13, char param_14);
-    void FUN_005519d0(uint16_t* a, uint16_t* b, int c);
-    void FUN_00551af0(int a, int b);
+    void FUN_005519d0(uint16_t* a, uint16_t* b, int c);  // 0x005519d0 (Meta::FUN_005519d0)
+    void FUN_00551af0(int a, int b);  // 0x00551af0 (Meta::FUN_00551af0)
 };
 // ---- items of slice s00550bd0 end
 
@@ -1804,6 +1804,7 @@ bool cAssetDirectory_s0054_dd30::GetAuthorFlag(uint32_t id)
 
 
 
+
 // @ 0x0054eb10
 bool Dir::FUN_0054eb10(int param2, char param3)
 {
@@ -1942,6 +1943,7 @@ int Dir::FUN_0054f0f0()
 
 
 
+
 // @ 0x0054f1a0
 bool AssetDir::Save()
 {
@@ -1995,6 +1997,7 @@ bool AssetDir::Save()
     }
     return false;
 }
+
 
 
 
@@ -2192,6 +2195,7 @@ char Meta::FUN_00550b60(int key)
     }
     return 0;
 }
+
 
 
 
@@ -2505,6 +2509,7 @@ void Meta_s0055_0bd0::FUN_00551af0(int a, int b)
 
 
 
+
 // @ 0x00551b60
 namespace SP { namespace Pollen {
 void cAssetMetadata_s0055_1b60::SetParentAssetID(uint64_t id)
@@ -2636,6 +2641,7 @@ bool GetParentServerID(cAssetMetadata_s0055_1b60* pMetadata, uint64_t* pParentID
 }}  // namespace SP::Pollen
 
 
+
 // @ 0x005687d0
 void HashFreeStub::DoFreeNodes(void** pArr, unsigned n)
 {
@@ -2648,6 +2654,7 @@ void HashFreeStub::DoFreeNodes(void** pArr, unsigned n)
         }
     }
 }
+
 
 // @ 0x0084ab40
 WString* CopyWStrings(const WString* first, const WString* last, WString* dst)
