@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+006b65d0  80   hash/stream iterator helper: stubbed
+006b6620  108  stream reader helper: stubbed
+006b6740  109  eastl hashtable erase(key): stubbed
+006b67b0  226  eastl hashtable operator[]/insert: stubbed
+006b68a0  69   eastl hashtable<SP::cString*>::~hashtable scalar deleting: stubbed

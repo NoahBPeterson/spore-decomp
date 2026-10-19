@@ -1,19 +1,19 @@
-006b6920 SP::cStringManager destructor body  # vtbl 0x1409c40; releases factory/detokenizer, DoFreeNodes
-006b69e0 SP::cStringManager::RemoveString  # hash-set erase(&p), return true (vtable slot 2)
-006b6a00 cStringManager string-list iteration helper  # calls cString::Load over buckets
-006b6a70 SP::cStringManager::~cStringManager  # PDB
+006b6920 ??1cStringManager@SP@@UAE@XZ  # cStringManager::~cStringManager migrated from s006b6920 (verbatim, slice spelling)
+006b69e0 ?RemoveString@cStringManager@SP@@UAE_NPAUcString_s006b_6920@2@@Z  # cStringManager::RemoveString migrated from s006b6920 (verbatim, slice spelling)
+006b6a00 ?LoadAll@cStringManager@SP@@QAE_NXZ  # cStringManager::LoadAll migrated from s006b6920 (verbatim, slice spelling)
+006b6a70 ?reserve@?$SPVector@UPair8@SP@@@SP@@QAEXI@Z  # reserve migrated from s006b6920 (verbatim, slice spelling)
 006b6af0 cStringManager helper
 006b6b70 cStringManager helper
-006b6bf0 SP::cStringTableResourceFactory::Create  # creates + reads a StringTable (type 0x2fac0b6)
+006b6bf0 ?Create@cStringTableResourceFactory_s006b_6920@SP@@QAE_NPAUIResKeySrc@2@PAPAUStringTable@2@II@Z  # cStringTableResourceFactory_s006b_6920::Create migrated from s006b6920 (verbatim, slice spelling)
 006b6d10 App::cStringManager::cStringManager  # vtable_names.txt
-006b6e50 SP::cStringManager::AddString  # hash-set insert(&p), return true (vtable slot 1)
+006b6e50 ?AddString@cStringManager@SP@@UAE_NPAUcString_s006b_6920@2@@Z  # cStringManager::AddString migrated from s006b6920 (verbatim, slice spelling)
 006b6e80 cStringManager helper
 006b6f80 byte-vector grow helper
 006b7180 byte-vector grow helper
-006b7320 lower_bound over vector<pair<uint,WinXHTML_*>>
+006b7320 ?GetString@StringTable@SP@@QAEPBGI@Z  # StringTable::GetString migrated from s006b6920 (verbatim, slice spelling)
 006b7380 byte-vector resize/append
 006b73e0 byte-vector resize/append
-006b7430 SP::cStringTableResourceFactory::ReadResource  # vtable_names/PDB
-01409c40 ??_7cStringManager@SP@@6B@  # cStringManager vtable (vtbl_App::cStringManager), stored by ~cStringManager 006b6920
-01409c20 ??_7StringTable@SP@@6B@  # StringTable vtable, stored by the inlined ctor in Create 006b6bf0
+006b7430 ?ReadResource@cStringTableResourceFactory_s006b_6920@SP@@UAE_NPAUIKeyStream@2@PAUStringTable@2@II@Z  # cStringTableResourceFactory_s006b_6920::ReadResource migrated from s006b6920 (verbatim, slice spelling)
 013ebcdc ??_7RefObj@SP@@6B@  # refcounted base vtable (shared with Editor::cPropertyList base), Create 006b6bf0
+01409c20 ??_7StringTable@SP@@6B@  # StringTable vtable, stored by the inlined ctor in Create 006b6bf0
+01409c40 ??_7cStringManager@SP@@6B@  # cStringManager vtable (vtbl_App::cStringManager), stored by ~cStringManager 006b6920

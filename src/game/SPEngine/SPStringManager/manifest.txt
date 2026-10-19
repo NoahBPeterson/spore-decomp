@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPStringManager.cpp  ?GetSupportedTypes@cStringTableResourceFactory@SP@@UAEHPAIH@Z  006b6540  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPStringManager.cpp  ?RemoveString@cStringManager@SP@@UAE_NPAUcString_s006b_6920@2@@Z  006b69e0  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
+../src/game/SPEngine/SPStringManager.cpp  ?reserve@?$SPVector@UPair8@SP@@@SP@@QAEXI@Z  006b6a70  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
+../src/game/SPEngine/SPStringManager.cpp  ?AddString@cStringManager@SP@@UAE_NPAUcString_s006b_6920@2@@Z  006b6e50  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include

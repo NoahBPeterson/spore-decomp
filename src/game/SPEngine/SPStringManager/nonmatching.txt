@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+004554f0 102 DoFreeNodes: uninitialized_copy + destroy loop shape not reproduced
+006b6920 69 ~cStringManager complete; vcall method load scheduled before pushes; difftest PASS (cStringManager vtable mapped in symbols/slices/s006b6920.txt)
+006b6a00 45 LoadAll complete; mpBucketArray reloaded for end sentinel in original
+006b6bf0 6 StringTableResourceFactory::Create complete; only the inlined RefObj ctor's xchg register pair (eax/ecx) differs; difftest PASS with --inputs 2000 (WEAK at 400: type==0x2fac0b6 rarely generated) (operator new annotated 0x00f473a0, AddRef moved to AutoRefCount assignment, ResourceObjectST base + ResourceKey copy)
+006b7320 29 StringTable::GetString complete; find() jump threading differs
+006b7430 938 ReadResource complete; register allocation / scheduling differs; difftest WEAK (3000 valid, 6.6% coverage: random inputs never pass the type==0x2fac0b6 check; operator new annotated 0x00f473a0)
