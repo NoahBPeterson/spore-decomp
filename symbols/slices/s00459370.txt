@@ -1,1 +1,1 @@
-00459370 SP::CapabilityManager::GetPropIDForAbility  # PDB anchor name (symbols/pdb_names.json), byte-exact
+00459370 ?GetPropIDForAbility@CapabilityManager@SP@@SAIIH@Z  # CapabilityManager::GetPropIDForAbility migrated from s00459370 (verbatim, slice spelling)

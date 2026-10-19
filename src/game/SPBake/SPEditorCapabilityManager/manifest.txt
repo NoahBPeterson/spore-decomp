@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPEditorCapabilityManager.cpp  ?GetPropIDForAbility@CapabilityManager@SP@@SAIIH@Z  00459370  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
