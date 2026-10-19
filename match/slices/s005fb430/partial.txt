@@ -1,1 +1,1 @@
-005fb430  -  cImportExport::UpdateExportThumb: only the signature / a false return are reconstructed; the image-update pipeline is not reproduced.
+# va  diff-bytes  reason

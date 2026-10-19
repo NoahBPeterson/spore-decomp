@@ -10,3 +10,4 @@
 0065cd70  54  intrusive vector element assign: complete; refcount register schedule; equiv PASS (1164 valid, 100% cov)
 0065cec0  97  DoMessage: complete; vcall arg packing differs
 0065cf30  282  SetAsset: complete; vcall/refcount schedule differs
+0065bf20  1176  cSPUIFeedEdit message handler (0x3326e8a/0x3326e8b/0x43b0aee dispatch: sporecast:unsubscribe:/:asset/ vs spore: vs sporeprofile: paths, ExtractFeedPath+clip+CalloutMessageBox, directory key/pending/resource-manager checks, FrameSet location/submit) complete: same globals/counts, same wcsncmp/wcsstr branches, same callees, same constants; not byte-exact: 762 B vs 1176 B (original duplicates the /O2 epilogue per exit and inlines wcslen; ours uses single-exit style + direct calls to the annotated externs/files dllimport wcsncmp/wcsstr); flags /O2 /MD /Gy /TP; equiv gate WEAK (400/400 valid, 6.4% coverage, no mismatch)

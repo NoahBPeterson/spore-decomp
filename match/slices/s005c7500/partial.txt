@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-005c7ff0  1104  cSPPalettePage::ProcessPagePart: body not reconstructed (signature-only stub)

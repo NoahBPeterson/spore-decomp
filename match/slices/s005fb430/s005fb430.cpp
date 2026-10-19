@@ -1,6 +1,21 @@
-// Slice s005fb430 - cImportExport retail destructor + UpdateExportThumb, and the embedded-image import-info reader at 0x005fbb00.
+// Slice s005fb430 - cImportExport retail destructor + UpdateExportThumb, and the embedded-image
+// import-info reader at 0x005fbb00.
 // Flags: /O2 /MD /Gy /TP
 #include "../s005fa8d0/s005fa8d0.h"
+
+// Addresses of the two free functions the EASTL hashtable instantiations reach through the key.
+namespace EA {
+namespace ResourceMan {
+inline bool operator==(const Key& a, const Key& b) {
+  return a.instanceID == b.instanceID && a.typeID == b.typeID && a.groupID == b.groupID;
+}
+inline uint32_t KeyHash::operator()(const Key& k) const { return k.instanceID ^ k.groupID; }
+}  // namespace ResourceMan
+}  // namespace EA
+
+namespace eastl {
+extern wchar_t gEmptyString16[2];  // 0x01667BAC
+}
 
 // A refcounted-buffer vector: freed only when the buffer's header refcount is non-zero.
 struct RefVec {
@@ -17,8 +32,13 @@ struct IHandlerBase {
   virtual ~IHandlerBase() {}
 };
 
-// Retail cImportExport: same map block as the dev PDB, but 8 string16 members after the
-// embedding image. Layout used by the destructor at 0x005fb900.
+namespace ImportRead {
+struct Coder;
+}
+
+// Retail cImportExport: the map block at +0x04..+0x88 matches the dev PDB, but the range coder of the
+// image-embedding member sits at +0x88 (its byte at +0x55 is the "opened" flag) and the 8 folder-path
+// string16s run from +0x104 to +0x184. Layout used by the destructor at 0x005fb900.
 struct cImportExportRetail : IHandlerBase {
   eastl::NameKeyMap mNameToKeyMap;   // +0x04
   eastl::KeyNameMap mKeyToNameMap;   // +0x24
@@ -26,25 +46,26 @@ struct cImportExportRetail : IHandlerBase {
   SP::Thumbnail::GuidKeyMap mGuidToKeyMap;  // +0x48
   SP::Thumbnail::KeyGuidMap mKeyToGuidMap;  // +0x68
   RefVec mVec88;                     // +0x88
-  char pad8c[0xe0 - 0x8c];           // +0x8c
+  char pad8c[0xdd - 0x8c];           // +0x8c
+  bool mEmbed55;                     // +0xdd  (Coder::Open's success byte, +0x88+0x55)
+  char padDe[0xe0 - 0xde];           // +0xde
   RefVec mVecE0;                     // +0xe0
-  char padE4[0x104 - 0xe4];          // +0xe4
+  char padE4[0xf8 - 0xe4];           // +0xe4
+  EA::ResourceMan::Key mCurImage;    // +0xf8
   eastl::string16 s104, s114, s124, s134, s144, s154, s164, s174;
-  ~cImportExportRetail();
 
+  ImportRead::Coder* Coder() { return (ImportRead::Coder*)((char*)this + 0x88); }
+
+  bool GetFolderForType(uint32_t typeID, eastl::string16* out);      // 0x005f9230
+  bool WriteAssetDataToImage(void* pAssetMetadata, void* pImage, int flags);  // 0x005f9920
+  bool ImportFromFolder(const Key& key, void* pArg);                 // 0x005fafb0
+
+  ~cImportExportRetail();
   unsigned char UpdateExportThumb(void* param_2);   // 0x005fb430
 };
 
 // @ 0x005fb900
 cImportExportRetail::~cImportExportRetail() {}
-
-// @ 0x005fb430
-unsigned char cImportExportRetail::UpdateExportThumb(void* param_2)
-{
-  // Reconstructed (behavioural) form of the multi-step image-update routine.
-  (void)param_2;
-  return 0;
-}
 
 // ---------------------------------------------------------------------------------------------
 // 0x005fbb00: reads the import info (and, optionally, the opened stream) out of an exported
@@ -152,11 +173,12 @@ struct Ref {                                               // EA::AutoRefCount
 };
 
 // The range decoder of the embedded data (member of cImportExport at +0x88).
-struct RangeCoder {
+struct Coder {
     bool Open(const void* data);                           // 0x0068eb50
     bool GetSize(uint32_t* pSize);                         // 0x0068e670
     int  Read(void* dst, unsigned n);                      // 0x0068e3b0 ((anonymous)::RangeCoder::Read)
     bool Verify(int flags);                                // 0x0068e490 ((anonymous)::RangeCoder::Verify)
+    bool Serialize(void* stream, int a2);                  // 0x0068e1a0
 };
 
 static __forceinline bool ReadBytes(IStream* s, void* dst, unsigned n)
@@ -171,7 +193,7 @@ using namespace ImportRead;
 
 struct cImportExportEmbedded {
     char pad[0x88];
-    RangeCoder mCoder;                                     // +0x88
+    Coder mCoder;                                          // +0x88
     bool ReadImportInfo(const void* data, ImportInfoData* pOutInfo, IStream** ppOutStream);   // 0x005fbb00
 };
 
@@ -351,4 +373,273 @@ bool cImportExportEmbedded::ReadImportInfo(const void* data, ImportInfoData* pOu
         }
     }
     return ok;
+}
+
+// =============================================================================================
+// Helper types only UpdateExportThumb (0x005fb430) reads. The destination object's layout is the
+// one just defined for cImportExportRetail (same member offsets from +0x04 through the 8 folder
+// paths), but the routine reaches the +0x88 range coder and the two data fields through
+// cImportExportView, which spells those out so no accessor is needed.
+// =============================================================================================
+namespace UpdateThumb {
+
+struct RefObject {                       // objects returned by Manager::Find / RefObject::GetSub
+    virtual int AddRef();                // +0x00
+    virtual int Release();               // +0x04
+    virtual void s2();                   // +0x08
+    virtual void* GetSub(uint32_t type); // +0x0c
+};
+
+struct ImageObject {                     // the opened image resource
+    virtual void s0();                   // +0x00
+    virtual void s1();                   // +0x04
+    virtual int Release();               // +0x08
+    virtual void s3(); virtual void s4(); virtual void s5();  // +0x0c +0x10 +0x14
+    virtual void* GetBuffer();           // +0x18
+    virtual void s7(); virtual void s8();  // +0x1c +0x20
+    virtual void Finish();               // +0x24
+};
+
+struct ResourceObject {                  // image resource record
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12)
+    virtual bool Open(void** ppOut1, void* pOut2, int a3, int a4, int a5, int a6);  // +0x34
+};
+
+class ResourceManager {
+ public:
+    PV(0) PV(1) PV(2)
+    virtual bool Find(const Key& key, void** ppOut, int a3, int a4, int a5, int a6);  // +0x0c
+    PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15)
+    PV(16) PV(17) PV(18) PV(19) PV(20) PV(21)
+    virtual ResourceObject* GetResource(const Key& key);                            // +0x58
+};
+ResourceManager* GetManager();           // 0x0067dcd0
+
+// EA::IO::FileStream: the ctor writes real fields out to +0x228, so the storage is explicit.
+class FileStream {
+ public:
+    char mStorage[0x238];
+    FileStream(const wchar_t* place);    // 0x00931e10, ret 4
+    int  AddRef();                       // 0x009317b0
+    bool Open(int a, int b, int c, int d);  // 0x009318f0, ret 0x10
+    void Close();                        // 0x00931a70
+    ~FileStream();                       // 0x00931e70
+};
+
+struct PathBuilder {                     // thiscall(0) at 0x00414e10
+    int GetField78();                    // 0x00414e10, [this+0x78]
+};
+
+struct WideString {
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    void AllocateSelf() {
+        wchar_t* e = eastl::GetEmptyStringW();
+        mpBegin = e; mpEnd = e; mpCapacity = e + 1;
+    }
+    void DeallocateSelf() {
+        if ((((uintptr_t)mpCapacity - (uintptr_t)mpBegin) & ~(uintptr_t)1) > 2 && mpBegin)
+            operator delete(mpBegin);
+    }
+    void RangeInitialize(const wchar_t* src);   // 0x00579a90, ret 4
+};
+
+struct SlotReset {                       // thiscall(0) at 0x00c463d0: release *this and return this
+    void* mp;
+    void* Reset();
+};
+
+// The 12 bytes the routine splats 0xffffffff into (the destructor reads them as the +0xe0 RefVec).
+struct Key3 {
+    uint32_t instanceID;
+    uint32_t typeID;
+    uint32_t groupID;
+};
+
+}  // namespace UpdateThumb
+
+using namespace UpdateThumb;
+
+// Retail cImportExport as UpdateExportThumb sees it. Same object as cImportExportRetail (identical
+// member offsets through +0x184).
+class cImportExportView {
+ public:
+    virtual int AddRef();                  // +0x00
+    virtual int Release();                 // +0x04
+    virtual void s2();                     // +0x08
+    virtual void s3();                     // +0x0c
+    eastl::NameKeyMap mNameToKeyMap;       // +0x04
+    eastl::KeyNameMap mKeyToNameMap;       // +0x24
+    int pad44;                             // +0x44
+    char pad48[0x40];                      // +0x48 .. +0x87
+    char padCoder[0x55];                   // +0x88 range coder; +0xdd is its Open success byte
+    bool mEmbed55;                         // +0xdd
+    char padDe[0xe4 - 0xde];               // +0xde
+    void* mE0;                             // +0xe0
+    char padE4[0xf8 - 0xe4];               // +0xe4
+    Key3 mCurImage;                        // +0xf8
+    eastl::string16 mPaths[8];             // +0x104 .. +0x184
+
+    bool GetFolderForType(uint32_t typeID, WideString* out);   // 0x005f9230, ret 8
+    bool ImportFromFolder(const Key& key, void* pArg);         // 0x005fafb0
+    bool WriteAssetDataToImage(void* pAssetMetadata, void* pImage, int flags);  // 0x005f9920
+
+    unsigned char UpdateExportThumb(void* param_2);            // 0x005fb430
+};
+
+// @ 0x005fb430
+unsigned char cImportExportView::UpdateExportThumb(void* param_2)
+{
+    // Reconstructed from 0x005fb430. The key names the asset metadata record and, once its image
+    // resource (type 0x2f7d0004) has been located, the routine re-codes the export thumbnail: the
+    // range coder at +0x88 is opened onto the image buffer, the asset data is written into it, every
+    // entry of the key-to-name map is serialized out through a FileStream, the folder is re-imported
+    // and finally the image is re-opened at 0x2f7d0004 and serialized a second time.
+    // cImportExportView and cImportExportRetail are the same object.
+    cImportExportRetail* self = (cImportExportRetail*)this;
+
+    Key* key = (Key*)param_2;
+    RefObject* refAsset = 0;      // +0x14 the record found through the "asset metadata" sub object
+    RefObject* refCell = 0;       // +0x18 the record found at the key itself
+    RefObject* refSub = 0;        // +0x1c GetSub(0x30bdee3) of the +0x18 record
+    RefObject* refImage = 0;      // +0x20 the opened image resource
+    unsigned char result = 0;     // +0x13
+    unsigned char embed = 0;      // +0x34 low byte, mEmbed55 copied once the coder is open
+    WideString name;              // +0x44 the folder path returned by GetFolderForType
+
+    if (!GetManager()->Find(*key, (void**)&refCell, 0, 0, 0, 0))
+        goto FAIL_CELL;
+
+    {
+        Key keyMeta;
+        keyMeta.instanceID = key->instanceID;
+        keyMeta.typeID = 0x30bdee3;
+        keyMeta.groupID = key->groupID;
+        if (!GetManager()->Find(keyMeta, (void**)&refSub, 0, 0, 0, 0))
+            goto FAIL_SUB;
+
+        if (refSub) {
+            refAsset = (RefObject*)refSub->GetSub(0x30bdee3);
+            if (refAsset)
+                refAsset->AddRef();
+        }
+
+        name.AllocateSelf();
+        ((cImportExportView*)this)->GetFolderForType(key->typeID, &name);
+
+        eastl::pair<eastl::KeyNameMap::iterator, eastl::KeyNameMap::iterator> range;
+        self->mKeyToNameMap.equal_range(&range, *key);
+        if (range.first.mpNode == range.second.mpNode)
+            goto FAIL_ASSET_SUB_CELL;
+
+        self->mCurImage.instanceID = (uint32_t)-1;
+        self->mCurImage.typeID = (uint32_t)-1;
+        self->mCurImage.groupID = (uint32_t)-1;
+
+        {
+            Key keyImage;
+            keyImage.instanceID = key->instanceID;
+            keyImage.typeID = 0x2f7d0004;
+            keyImage.groupID = key->groupID;
+            ResourceObject* resource = GetManager()->GetResource(keyImage);
+            if (!resource)
+                goto FAIL_ASSET_SUB_CELL;
+
+            void* cellInfo = 0;
+            refImage = 0;
+            if (resource->Open(&cellInfo, &refImage, 1, 6, 1, 0)) {
+                if (self->Coder()->Open(((ImageObject*)refImage)->GetBuffer())) {
+                    self->mCurImage.instanceID = key->instanceID;   // the key's 12 bytes land on +0xf8
+                    self->mCurImage.typeID = key->typeID;
+                    self->mCurImage.groupID = key->groupID;
+                    embed = self->mEmbed55;
+                    result = 1;
+                }
+                ((ImageObject*)refImage)->Finish();
+            }
+            if (!result) {
+                if (refImage)
+                    refImage->Release();
+                goto FAIL_ASSET_SUB_CELL;
+            }
+        }
+
+        if (refImage)
+            refImage->Release();
+
+        if (!self->WriteAssetDataToImage(refAsset, refCell, embed))
+            goto FAIL_ASSET;
+
+        {
+            eastl::KeyNameMap::iterator it = range.first;
+            do {
+                FileStream fs((const wchar_t*)((char*)it.mpNode->mValue.second.mpBegin));
+                fs.AddRef();
+                if (fs.Open(2, 2, 1, 0)) {
+                    result = (unsigned char)self->Coder()->Serialize(&fs, 0);
+                    fs.Close();
+                }
+                fs.~FileStream();
+                ++it;
+            } while (it.mpNode != range.second.mpNode);
+        }
+
+        {
+            WideString w;
+            w.mpBegin = 0;
+            w.mpEnd = 0;
+            w.mpCapacity = 0;
+            w.RangeInitialize((const wchar_t*)(uintptr_t)((PathBuilder*)refAsset)->GetField78());
+            self->ImportFromFolder(*key, &w);
+            if ((((uintptr_t)w.mpCapacity - (uintptr_t)w.mpBegin) & ~(uintptr_t)1) > 2 && w.mpBegin != 0)
+                operator delete(w.mpBegin);
+        }
+
+        {
+            Key keyImage2;
+            keyImage2.instanceID = key->instanceID;
+            keyImage2.typeID = 0x2f7d0004;
+            keyImage2.groupID = key->groupID;
+            ResourceObject* resource2 = GetManager()->GetResource(keyImage2);
+            if (resource2) {
+                SlotReset slot;
+                slot.mp = 0;
+                void* pSlot = slot.Reset();
+                void* cellInfo2 = 0;
+                if (resource2->Open(&cellInfo2, pSlot, 2, 2, 1, 0)) {
+                    result = (unsigned char)self->Coder()->Serialize(((ImageObject*)slot.mp)->GetBuffer(), 0);
+                    ((ImageObject*)slot.mp)->Finish();
+                }
+                if (slot.mp)
+                    ((ImageObject*)slot.mp)->Release();
+            }
+        }
+    }
+
+    name.DeallocateSelf();
+    if (refAsset)
+        refAsset->Release();
+    if (refSub)
+        refSub->Release();
+    if (refCell)
+        refCell->Release();
+    return result;
+
+FAIL_ASSET:
+    name.DeallocateSelf();
+    if (refAsset)
+        refAsset->Release();
+    goto FAIL_SUB;
+FAIL_ASSET_SUB_CELL:
+    name.DeallocateSelf();
+    if (refAsset)
+        refAsset->Release();
+FAIL_SUB:
+    if (refSub)
+        refSub->Release();
+FAIL_CELL:
+    if (refCell)
+        refCell->Release();
+    return 0;
 }

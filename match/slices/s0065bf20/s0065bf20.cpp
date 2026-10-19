@@ -5,9 +5,9 @@
 #include <intrin.h>
 
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
-extern "C" unsigned int __cdecl strlen(const char* p);
-extern "C" int wcsncmp(const wchar_t*, const wchar_t*, unsigned int);
-extern "C" wchar_t* wcsstr(const wchar_t*, const wchar_t*);
+extern "C" __declspec(dllimport) unsigned int __cdecl strlen(const char* p);
+extern "C" __declspec(dllimport) int wcsncmp(const wchar_t*, const wchar_t*, unsigned int);
+extern "C" __declspec(dllimport) wchar_t* wcsstr(const wchar_t*, const wchar_t*);
 
 typedef void(__thiscall* FnP)(void*);
 typedef void(__thiscall* FnP2)(void*, int, int);
@@ -16,6 +16,29 @@ typedef void(__thiscall* FnPi)(void*, int);
 typedef void*(__thiscall* FnRetP)(void*);
 typedef void*(__thiscall* FnRetPi)(void*, unsigned int);
 typedef int(__thiscall* FnRetI)(void*);
+
+// extra calling-convention shapes used by the 0x0065bf20 message handler
+typedef void(__thiscall* FnTh1)(void*, void*);
+typedef void(__thiscall* FnTh2)(void*, int, int);
+typedef void(__thiscall* FnTh2p)(void*, void*, int);
+typedef void(__thiscall* FnTh3v)(void*, int, void*, int);
+typedef void(__thiscall* FnTh3)(void*, int, void*, int);
+typedef bool(__thiscall* FnThKeyOut)(void*, unsigned long long, void*);
+typedef bool(__thiscall* FnThKey)(void*, unsigned long long);
+typedef bool(__thiscall* FnThKeyIB)(void*, unsigned long long, int);
+typedef bool(__thiscall* FnThMgr)(void*, void*, int, int, int, int, int);
+typedef unsigned int(__thiscall* FnThRfind)(void*, const char*, unsigned int, unsigned int);
+typedef void(__thiscall* FnThErase)(void*, unsigned int);
+typedef void(__thiscall* FnThDtor)(void*);
+typedef void*(__cdecl* FnRetP0)();
+typedef bool(__cdecl* FnCallout)(void*, void*);
+typedef char(__cdecl* FnExtract)(const wchar_t*, void*);
+typedef int(__cdecl* FnSprintf)(void*, const char*, const wchar_t*);
+typedef unsigned long long(__cdecl* FnStrto)(const wchar_t*, int, int);
+
+// 12-byte scratch records passed to the extracted helpers.
+struct WStr3 { void* a; void* b; void* c; };
+struct Key12 { int a; int b; int c; };
 
 // Load virtual slot `off` from object `o`: [o] is the vtable pointer.
 static inline void* Vslot(void* o, int off) { return ((void**)(*(void**)o))[off / 4]; }
@@ -26,44 +49,91 @@ struct cSPUILayout {
 };
 struct cXHTMLFrameSet {
   void* GetFrame(uint32_t id);
-  bool HandleLocationChange(void* win, const wchar_t* url, void* a, int b);
-  bool HandleFormSubmit(void* win, void* form);
+  bool HandleLocationChange(void* win, const wchar_t* url, void* a, int b);   // 0x00997730
+  bool HandleFormSubmit(void* win, void* form);                              // 0x009978b0
   void FUN_00997140();
 };
 
 // ---- external callees / globals ----
 void* GetElapsedSeconds(); // 0x00805080
 void SetWindowImage(void* w, uint32_t* key, int flags);
-void* FUN_0067de40();
-void* MessageServer();
-void MessageServer_Unsub(void* h, uint32_t id, int y);   // 0x0067dcc0 (equiv t2)
+void* FUN_0067de40();                                  // 0x0067de40
+void* MessageServer();                                 // 0x0067dcc0
+void MessageServer_Unsub(void* h, uint32_t id, int y); // 0x0067dcc0 (equiv t2)
 void MessageServer_Post(uint32_t id, void* p, int n);
-void FUN_005ff180(void* p);
-void FUN_0065b440(void* v);
-void FUN_0054e460();
-void FUN_0054e740();
-void FUN_0054ed50();
-void FUN_006108a0();
-void FUN_005feea0();
-void* FUN_005feff0();
-void FUN_00809db0(int a, void* b);
-void GetURL(int a, void* b); // 0x006214c0
+void* FUN_0067cb30();                                  // 0x0067cb30
+void* GetManager();                                    // 0x0067dcd0
+void GetURL(int a, void* b);                           // 0x006214c0
 void FormatI64(void* out, const wchar_t* fmt, int a, int b);
-unsigned long long StrtoU64(const void* p, int a, int b);
-void QualifyNameWithGroup();
-void FUN_0067cb30();
-void FUN_0067cb30b();
-extern const wchar_t* g_sporecast;
-extern const wchar_t* g_unsubscribe;
-extern const wchar_t* g_asset;
-extern const wchar_t* g_spore;
-extern const wchar_t* g_sporeprofile;
+char FUN_0065be20(const wchar_t* path, void* out);     // 0x0065be20
+int FUN_00472fe0(void* str, const char* fmt, const wchar_t* w); // 0x00472fe0
+bool UI_CalloutMessageBox(void* owner, void* text);    // 0x00809db0
+unsigned long long StrtoU64(const void* p, int a, int b); // 0x0092d710
+
+// thiscall externals modelled as members so the ABI matches exactly.
+struct WString {                                       // 12-byte eastl wstring
+  void* a; void* b; void* c;
+  void DeallocateSelf();                               // 0x00933960
+};
+struct eastl_cstring_h {                               // eastl::basic_string<char>
+  unsigned int rfind(const char* s, unsigned int pos, unsigned int n); // 0x0065bcb0
+  void erase(unsigned int pos);                        // 0x0061e200
+};
+struct FeedDir {                                       // SP::Pollen::cAssetDirectory
+  bool GetLocalKey(unsigned long long key, void* out); // 0x0054e460
+  bool IsPending(unsigned long long key);              // 0x0054e740
+  bool FUN_0054ed50(int lo, int hi, char one);         // 0x0054ed50
+};
+struct FeedResMgr {                                    // EA::ResourceMan manager
+  bool FUN_0067dcd0out(void* out, int, int, int, int, int); // 0x0067dcd0 vtbl slot
+};
+struct FeedBrowser {                                   // SP::cSPUIAssetWebBrowser
+  void FUN_005ff180(void* p);                          // 0x005ff180
+  void FUN_0065b440(int lo, int hi);                   // 0x0065b440
+};
+struct FeedDir3 {                                      // Dir
+  void FUN_006108a0(int lo, int hi);                   // 0x006108a0
+};
+extern const wchar_t* g_sporecast;            // 0x01526580
+extern const wchar_t* g_unsubscribe;          // 0x01526584
+extern const wchar_t* g_asset;                // 0x01526588
+extern const wchar_t* g_spore;                // 0x01526594
+extern const wchar_t* g_sporeprofile;         // 0x01526590
 extern const wchar_t* g_blank;
-extern unsigned int g_nSporecast, g_nUnsub, g_nAsset, g_nSpore, g_nProfile;
+extern unsigned int g_nSporecast;             // 0x015fa2b8
+extern unsigned int g_nUnsub;                 // 0x015fa22c
+extern unsigned int g_nAsset;                 // 0x015fa2a0
+extern unsigned int g_nSpore;                 // 0x015fa2b4
+extern unsigned int g_nProfile;               // 0x015fa3f4
 extern int g_15fa6e4;
 extern void* g_vt_13fff3c;
 extern void* g_vt_13fff2c;
 extern void* g_vt_13ec458;
+
+// --- globals referenced by 0x0065bf20 (address = symbol) ---
+extern wchar_t g_01667bac;                 // empty wstring begin        @ 0x01667bac
+extern wchar_t g_01667bae;                 // empty wstring capacity     @ 0x01667bae
+extern char g_015268fc;                    // CalloutMessageBox text     @ 0x015268fc
+extern char g_01526908;                    // CalloutMessageBox text     @ 0x01526908
+extern char g_01526914;                    // CalloutMessageBox text     @ 0x01526914
+extern char g_01526920;                    // CalloutMessageBox text     @ 0x01526920
+extern char g_0152692c;                    // CalloutMessageBox text     @ 0x0152692c
+extern char g_01526938;                    // CalloutMessageBox text     @ 0x01526938
+
+// inline wcslen equivalent used by the handler (original inlines the loop)
+static inline unsigned int wcslen_(const wchar_t* s) {
+  const wchar_t* e = s;
+  while (*e) ++e;
+  return (unsigned int)(e - s);
+}
+// clear an eastl::cstring (begin/end/capacity triple) in place
+static inline void clear_str(void* cstr) {
+  char** f = (char**)cstr;
+  if (f[0] != f[1]) {
+    *f[0] = 0;
+    f[1] = f[0];
+  }
+}
 
 namespace eastl {
 template <typename T>
@@ -432,38 +502,109 @@ bool cSPUIFeedEdit::FUN_0065bf20(void* msg, int* data) {
   if (data[0] == *(int*)(p + 0x9c)) {
     int kind = data[2];
     if (kind == 0x3326e8a) {
-      wchar_t* s = *(wchar_t**)data[6];
+      int* arg = (int*)data[6];
+      wchar_t* s = (wchar_t*)*arg;
       if (!s) return false;
       if (wcsncmp(s, g_sporecast, g_nSporecast) == 0) {
-        if (wcsncmp(s + g_nSporecast, g_unsubscribe, g_nUnsub) == 0) {
-          *(int*)(p + 0xa8) = 2;
-          return false;
-        }
-        wchar_t* a = wcsstr(s + g_nSporecast, g_asset);
-        if (a) {
-          unsigned long long vv = StrtoU64(a + g_nAsset, 0, 10);
-          FUN_005ff180(a + g_nAsset);
-          FUN_0065b440((void*)vv);
-          return false;
+        if (wcslen_(s) > g_nSporecast) {
+          if (wcsncmp(s + g_nSporecast, g_unsubscribe, g_nUnsub) == 0) {
+            wchar_t* dst = s + (g_nUnsub + g_nSporecast);
+            clear_str(p + 0x84);
+            FUN_00472fe0(p + 0x84, "%ls", dst);
+            WString tmp;
+            tmp.a = &g_01667bac; tmp.b = &g_01667bac; tmp.c = &g_01667bae;
+            *(int*)(p + 0xa8) = 2;
+            if (!FUN_0065be20(dst, &tmp)) {
+              bool r = UI_CalloutMessageBox(p + 4, &g_01526914);
+              tmp.DeallocateSelf();
+              return r;
+            }
+            unsigned int pos = ((eastl_cstring_h*)(p + 0x84))->rfind("/", 0xffffffff, 0xffffffff);
+            ((eastl_cstring_h*)(p + 0x84))->erase(pos);
+            void* q = FUN_0067de40();
+            q = (*(FnRetP)Vslot(q, 0x20))(q);
+            (*(FnTh2p)Vslot(q, 0x34))(q, &tmp, 0);
+            UI_CalloutMessageBox(p + 4, &g_0152692c);
+            tmp.DeallocateSelf();
+            return false;
+          }
+          wchar_t* a = wcsstr(s + g_nSporecast, g_asset);
+          if (a) {
+            if (wcslen_(a) > g_nAsset) {
+              unsigned long long v = StrtoU64(a + g_nAsset, 0, 10);
+              ((FeedBrowser*)*(void**)(p + 0xa0))->FUN_005ff180((void*)(a + g_nAsset));
+              ((FeedBrowser*)this)->FUN_0065b440((int)v, (int)(v >> 32));
+            }
+            return false;
+          }
+          wchar_t* rest = s + g_nSporecast;
+          clear_str(p + 0x84);
+          FUN_00472fe0(p + 0x84, "%ls", rest);
+          WString tmp;
+          tmp.a = &g_01667bac; tmp.b = &g_01667bac; tmp.c = &g_01667bae;
+          *(int*)(p + 0xa8) = 1;
+          if (!FUN_0065be20(rest, &tmp)) {
+            bool r = UI_CalloutMessageBox(p + 4, &g_01526908);
+            tmp.DeallocateSelf();
+            return r;
+          }
+          unsigned int pos = ((eastl_cstring_h*)(p + 0x84))->rfind("/", 0xffffffff, 0xffffffff);
+          ((eastl_cstring_h*)(p + 0x84))->erase(pos);
+          void* q = FUN_0067de40();
+          q = (*(FnRetP)Vslot(q, 0x20))(q);
+          (*(FnTh2p)Vslot(q, 0x34))(q, &tmp, 0);
+          bool r = UI_CalloutMessageBox(p + 4, &g_01526920);
+          tmp.DeallocateSelf();
+          return r;
         }
       } else if (wcsncmp(s, g_spore, g_nSpore) == 0) {
-        return false;
+        wchar_t* q = s + g_nSpore;
+        if (q) {
+          unsigned long long v = ((FnStrto)0x0092d710)(q, 0, 10);
+          Key12 key; key.a = 0; key.b = 0; key.c = 0;
+          FeedDir* dir = (FeedDir*)((char*)FUN_0067cb30() + 0x58);
+          if (!dir->GetLocalKey(v, &key)) {
+            void* ms = MessageServer();
+            (*(FnTh3v)Vslot(ms, 0x14))(ms, 0x66fcce4, 0, 0);
+            ((FeedDir3*)FUN_0067cb30())->FUN_006108a0((int)v, (int)(v >> 32));
+            return false;
+          }
+          FeedDir* dir2 = (FeedDir*)((char*)FUN_0067cb30() + 0x58);
+          if (!dir2->IsPending(v)) {
+            void* mgr = GetManager();
+            if (!(*(FnThMgr)Vslot(mgr, 0xc))(mgr, &key, 0, 0, 0, 0, 0)) {
+              FeedDir* d3 = (FeedDir*)((char*)FUN_0067cb30() + 0x58);
+              d3->FUN_0054ed50((int)v, (int)(v >> 32), 1);
+              void* ms = MessageServer();
+              (*(FnTh3v)Vslot(ms, 0x14))(ms, 0x66fcce4, 0, 0);
+              ((FeedDir3*)FUN_0067cb30())->FUN_006108a0((int)v, (int)(v >> 32));
+              return false;
+            }
+          }
+          UI_CalloutMessageBox(0, &g_01526938);
+          return false;
+        }
       } else if (wcsncmp(s, g_sporeprofile, g_nProfile) == 0) {
-        unsigned long long vv = StrtoU64(s + g_nProfile, 0, 10);
-        MessageServer_Post(0x6299932, &vv, 0);
-        return false;
+        wchar_t* q = s + g_nProfile;
+        if (q) {
+          unsigned long long v = StrtoU64(q, 0, 10);
+          void* ms = MessageServer();
+          (*(FnTh3v)Vslot(ms, 0x14))(ms, 0x6299932, &v, 0);
+          return false;
+        }
       } else {
-        ((cXHTMLFrameSet*)(p + 0x20))->HandleLocationChange((void*)data[0], s, (void*)data[6], 0);
-        return false;
+        return ((cXHTMLFrameSet*)(p + 0x20))->HandleLocationChange(
+            (void*)data[0], s, (void*)arg[1], 0);
       }
     } else if (kind == 0x3326e8b) {
-      ((cXHTMLFrameSet*)(p + 0x20))->HandleFormSubmit((void*)data[0], (void*)data[6]);
-      return false;
+      return ((cXHTMLFrameSet*)(p + 0x20))->HandleFormSubmit((void*)data[0], (void*)data[6]);
     } else if (kind == 0x43b0aee) {
+      UI_CalloutMessageBox(0, &g_015268fc);
       return true;
     }
   } else if (data[2] == 0x287259f6 && data[3] == 0x629c188) {
-    MessageServer_Post(0x62d7860, 0, 0);
+    void* ms = MessageServer();
+    (*(FnTh3v)Vslot(ms, 0x14))(ms, 0x62d7860, 0, 0);
     return true;
   }
   return false;
