@@ -1,12 +1,12 @@
-0084be00 GIF_about
-0084bf30 GIF_is
-0084bfa0 DGifGetScreenDesc
-0084c0a0 DGifGetImageDesc
-0084c1f0 DGifDecompressInput
-0084c2b0 DGifOpenFileHandle
-0084c400 DGifDecompressLine
-0084c680 DGifGetLine
-0084c710 LoadImage
+0084be00 ?GIF_about@@YAPAXXZ  # GIF_about migrated from s0084be00 (verbatim, slice spelling)
+0084bf30 ?GIF_is@@YGHPAX@Z  # GIF_is migrated from s0084be00 (verbatim, slice spelling)
+0084bfa0 ?DGifGetScreenDesc@@YAHPAUGifFileType@@@Z  # DGifGetScreenDesc migrated from s0084be00 (verbatim, slice spelling)
+0084c0a0 ?DGifGetImageDesc@@YAHPAUGifFileType@@@Z  # DGifGetImageDesc migrated from s0084be00 (verbatim, slice spelling)
+0084c1f0 ?DGifDecompressInput@@YAHPAUGifFileType@@PAI@Z  # DGifDecompressInput migrated from s0084be00 (verbatim, slice spelling)
+0084c2b0 ?DGifOpenFileHandle@@YAPAUGifFileType@@PAX@Z  # DGifOpenFileHandle migrated from s0084be00 (verbatim, slice spelling)
+0084c400 ?DGifDecompressLine@@YAHPAUGifFileType@@HH@Z  # DGifDecompressLine migrated from s0084be00 (verbatim, slice spelling)
+0084c680 ?DGifGetLine@@YAHPAUGifFileType@@PAEH@Z  # DGifGetLine migrated from s0084be00 (verbatim, slice spelling)
+0084c710 ?LoadImage@@YAHPAUGifFileType@@HH@Z  # LoadImage migrated from s0084be00 (verbatim, slice spelling)
 0084c7d0 GIFgetinfo
 0084cad0 GIF_open
 0084cb50 GIF_info

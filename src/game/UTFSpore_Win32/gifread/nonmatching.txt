@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+0084bf30 54 giflib GIF_is (/O2 /MD /Gy /TP /GS-): semantic reconstruction; original materialises the constant 0 in EDI across the gseek/gread/strncmp calls (reused for the failure return), ours emits immediate `push 0`. difftest equiv: UNSUPPORTED (unresolved reference _strncmp)
+0084bfa0 206 giflib DGifGetScreenDesc (/O2 /MD /Gy /TP /GS-): giflib internal built with a LTCG custom register ABI (GifFile passed in ESI); plain C++ takes it as a stack parameter, so every field access differs. difftest equiv: UNSUPPORTED (0/400 inputs valid - custom ABI)
+0084c0a0 284 giflib DGifGetImageDesc (/O2 /MD /Gy /TP /GS-): LTCG custom register ABI (GifFile in ESI). difftest equiv: UNSUPPORTED (0/400 inputs valid - custom ABI)
+0084c1f0 181 giflib DGifDecompressInput (/O2 /MD /Gy /TP /GS-): LTCG custom register ABI (GifFile in ESI, output pointer on stack). difftest equiv: UNSUPPORTED (0/400 inputs valid - custom ABI)
+0084c2b0 227 giflib DGifOpenFileHandle (/O2 /MD /Gy /TP /GS-): standard entry, but the two strcmp's are expanded as inline byte loops and the tail calls DGifGetScreenDesc through the ESI ABI. difftest equiv: UNSUPPORTED (unresolved reference _strncmp)
+0084c400 494 giflib DGifDecompressLine (/O2 /MD /Gy /TP /GS-): standard entry, but the LZW core (DGifDecompressInput/DGifGetPrefixChar) is invoked through the custom ESI ABI and the private stack/prefix offsets differ. difftest equiv: FAIL (first: execution)
+0084c680 111 giflib DGifGetLine (/O2 /MD /Gy /TP /GS-): LTCG custom register ABI (GifFile in EDI, length in EAX). difftest equiv: UNSUPPORTED (original reads eax at entry; custom ABI)
+0084c710 165 giflib LoadImage (/O2 /MD /Gy /TP /GS-): LTCG custom register ABI (GifFile in EAX). difftest equiv: UNSUPPORTED (original reads eax at entry; custom ABI)
