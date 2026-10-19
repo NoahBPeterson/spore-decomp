@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPLocalInputState.cpp  ?Reset@cLocalInputState@SP@@QAEXXZ  00697980  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPLocalInputState.cpp  ?UpdateModifiers@cLocalInputState@SP@@QAEXXZ  006979c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPLocalInputState.cpp  ?ResetIf@cLocalInputState_s0069_6c80@SP@@QAEX_N@Z  00697a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPLocalInputState.cpp  ?OnKeyDown@cLocalInputState@SP@@QAEXII@Z  00697a50  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPLocalInputState.cpp  ?OnKeyUp@cLocalInputState@SP@@QAEXII@Z  00697a80  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPLocalInputState.cpp  ?OnMouseDown@cLocalInputState@SP@@QAEXIMMI@Z  00697ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPLocalInputState.cpp  ?OnMouseUp@cLocalInputState@SP@@QAEXIMMI@Z  00697af0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
