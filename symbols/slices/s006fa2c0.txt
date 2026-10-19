@@ -3,15 +3,15 @@
 006fa730  eastl::sp_vector_allocator::allocate<cFragmentDecl>   # n*0x1c
 006fa770  eastl::vector<SP::cFragmentDecl>::DoAllocate
 006fa850  SP::cFragmentDecl::cFragmentDecl(const char*)        # RangeInitialize + scalar copy
-006fabd0  eastl::fill_imp<0>::do_fill<SP::cFragmentDecl*>       # PDB
-006fac30  eastl::copy_impl<0>::do_copy<SP::cFragmentDecl*>      # PDB
-006faca0  eastl::copy_backward_impl<0>::do_copy<SP::cFragmentDecl*>  # PDB
-006fad40  eastl::vector<SP::cFragmentDecl>::vector(const vector&)    # PDB
-006fae30  eastl::vector<PS::0x130elem>::copy
-006faea0  eastl::vector<0x130elem>::DoInsertValue
-006fafe0  `anonymous namespace'::cPixelFragmentInfo::cPixelFragmentInfo
-006fb040  `anonymous namespace'::cPixelFragmentInfo::~cPixelFragmentInfo  # PDB
-006fb0e0  `anonymous namespace'::cPixelFragmentInfo::push_back
-006fb150  RegisterShaderTable
-006fb1b0  `anonymous namespace'::AddPixelFragmentDeclarations  # PDB
-006fb310  `anonymous namespace'::GeneratePixelShader           # PDB candidate
+006fabd0 ?do_fill28@@YAXPAUFragDecl@@0ABU1@@Z  # do_fill28 migrated from s006fa2c0 (verbatim, slice spelling)
+006fac30 ?do_copy28@@YAPAUFragDecl@@PAU1@00@Z  # do_copy28 migrated from s006fa2c0 (verbatim, slice spelling)
+006faca0 ?do_copy_backward28@@YAPAUFragDecl@@PAU1@00@Z  # do_copy_backward28 migrated from s006fa2c0 (verbatim, slice spelling)
+006fad40 ??0Vec28@@QAE@PBX@Z  # Vec28::Vec28 migrated from s006fa2c0 (verbatim, slice spelling)
+006fae30 ?CopyTail@Vec28@@QAEXPBX0@Z  # Vec28::CopyTail migrated from s006fa2c0 (verbatim, slice spelling)
+006faea0 ?InsertGrow@Vec28@@QAEXPBX0@Z  # Vec28::InsertGrow migrated from s006fa2c0 (verbatim, slice spelling)
+006fafe0 ??0PixelFrag@@QAE@XZ  # PixelFrag::PixelFrag migrated from s006fa2c0 (verbatim, slice spelling)
+006fb040 ??1PixelFrag@@QAE@XZ  # PixelFrag::~PixelFrag migrated from s006fa2c0 (verbatim, slice spelling)
+006fb0e0 ?PushBack@PixelFrag@@QAEXXZ  # PixelFrag::PushBack migrated from s006fa2c0 (verbatim, slice spelling)
+006fb150 ?RegisterShaderTable@@YAXXZ  # RegisterShaderTable migrated from s006fa2c0 (verbatim, slice spelling)
+006fb1b0 ?AddPixelFragmentDeclarations@@YAXHPAD@Z  # AddPixelFragmentDeclarations migrated from s006fa2c0 (verbatim, slice spelling)
+006fb310 ?GeneratePixelShader@@YAXPAX0@Z  # GeneratePixelShader migrated from s006fa2c0 (verbatim, slice spelling)

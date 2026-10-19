@@ -1,0 +1,15 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ?GenerateInputStruct@@YAPADPADIII@Z  006f9f00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ?GenerateCurrentStruct@@YAPADPADI@Z  006fa010  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ?GenerateOutputStruct@@YAPADPADI@Z  006fa0a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ?GenerateFillOutputStruct@@YAPADPADI@Z  006fa130  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ?do_fill28@@YAXPAUFragDecl@@0ABU1@@Z  006fabd0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ?do_copy28@@YAPAUFragDecl@@PAU1@00@Z  006fac30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ?do_copy_backward28@@YAPAUFragDecl@@PAU1@00@Z  006faca0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentPS.cpp  _LoadAndSelectPS  006fb860  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentPS.cpp  _DispatchCB  006fb8f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentPS.cpp  _UnregisterShaders  006fb920  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentPS.cpp  _ClearFragments  006fb960  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ?swap@Vec28_s006f_b5c0@@QAEXAAU1@@Z  006fbb30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ??4PixelFrag_s006f_b5c0@@QAEAAU0@ABU0@@Z  006fbed0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ?BinaryFindPixelShader@@YAHPBDPBUShaderBlob@@I@Z  006fdab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

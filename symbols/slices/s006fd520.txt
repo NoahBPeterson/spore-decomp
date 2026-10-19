@@ -3,7 +3,7 @@
 006fd990  ActiveState_InstallFlushCB  # stores &FUN_006fd7d0 at +0x14
 006fd9a0  SP::TextCopy  # PDB name
 006fd9c0  SP::TextCopySubstitute  # PDB name, isalpha/isdigit
-006fdab0  `anonymous namespace'::BinaryFindPixelShader  # PDB name, strcmp binary search over 0x130 stride
+006fdab0 ?BinaryFindPixelShader@@YAHPBDPBUShaderBlob@@I@Z  # BinaryFindPixelShader migrated from s006fd520 (verbatim, slice spelling)
 006fdb90  `anonymous namespace'::GenerateInputStruct  # PDB name
 006fdd50  `anonymous namespace'::GenerateCurrentStruct  # PDB name
 006fdef0  `anonymous namespace'::GenerateOutputStruct  # PDB name

@@ -10,9 +10,9 @@
 006f9ac0  SP::cFilterChain::UpdateParams            # hashtable/param update
 006f9cf0  SP::cFilterChain::Shutdown                # teardown (MessageServer)
 006f9e20  SP::cFilterChain::Notify                  # three-arg virtual notify
-006f9f00  `anonymous namespace'::GenerateInputStruct       # PDB candidate
-006fa010  `anonymous namespace'::GenerateCurrentStruct     # PDB candidate
-006fa0a0  `anonymous namespace'::GenerateOutputStruct      # PDB candidate
-006fa130  `anonymous namespace'::GenerateFillOutputStruct  # PDB candidate
+006f9f00 ?GenerateInputStruct@@YAPADPADIII@Z  # GenerateInputStruct migrated from s006f9250 (verbatim, slice spelling)
+006fa010 ?GenerateCurrentStruct@@YAPADPADI@Z  # GenerateCurrentStruct migrated from s006f9250 (verbatim, slice spelling)
+006fa0a0 ?GenerateOutputStruct@@YAPADPADI@Z  # GenerateOutputStruct migrated from s006f9250 (verbatim, slice spelling)
+006fa130 ?GenerateFillOutputStruct@@YAPADPADI@Z  # GenerateFillOutputStruct migrated from s006f9250 (verbatim, slice spelling)
 006fa1b0  SetShaderDirty                            # global dirty-mask propagation
-006fa250  ShaderNameMatches                         # inline strcmp over shader-name list
+006fa250 ?ShaderNameMatches@@YA_NPBX@Z  # ShaderNameMatches migrated from s006f9250 (verbatim, slice spelling)
