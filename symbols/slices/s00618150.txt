@@ -14,7 +14,7 @@
 00618bd0 SP::Pollen::SetMessageString8  # PDB name
 00618c70 ?FillFeedInfo@Pollen@SP@@YAXPBUFeedSource@12@PAUFeedInfo@12@@Z  # FillFeedInfo migrated from s00618150 (verbatim, slice spelling)
 00618d40 ??0cFeedTransactionBase@Pollen@SP@@QAE@IIII@Z  # cFeedTransactionBase::cFeedTransactionBase migrated from s00618150 (verbatim, slice spelling)
-00618da0 ??0cFeedTransactionBase@Pollen@SP@@QAE@IPBDI@Z  # cFeedTransactionBase::cFeedTransactionBase migrated from s00618150 (verbatim, slice spelling)
+00618da0 ??0cFeedTransactionBase_s0061_a650@Pollen@SP@@QAE@IPBDI@Z  # cFeedTransactionBase::cFeedTransactionBase migrated from s00618150 (verbatim, slice spelling)
 00618e30 ??_GcGetAssetFeedTransactionEx@Pollen@SP@@UAEPAXI@Z  # cGetAssetFeedTransactionEx::~cGetAssetFeedTransactionEx migrated from s00618150 (verbatim, slice spelling)
 00618e70 ??1cEditFeedTransaction_s0061_8150@Pollen@SP@@UAE@XZ  # cEditFeedTransaction_s0061_8150::~cEditFeedTransaction migrated from s00618150 (verbatim, slice spelling)
 00618f60 ?ConstructRequest@cFeedEntryAssetTransaction@Pollen@SP@@QAE_NPAPAX@Z  # cFeedEntryAssetTransaction::ConstructRequest migrated from s00618150 (verbatim, slice spelling)
