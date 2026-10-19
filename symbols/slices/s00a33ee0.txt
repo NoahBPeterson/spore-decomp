@@ -1,4 +1,22 @@
-00a347f0 EA::Audio::VoiceContainer::DisconnectFromSubmix  # card PDB candidate; calls Submix::DisconnectSendFromSubmix / DisconnectFromMasteringVoice, clears mbConnected
-00a34bf0 EA::Audio::VoiceContainer::Connect  # card PDB candidate (caller-single); loops send plugins calling ConnectToSubmix, sets mbConnected
+00a33ee0 ?SetProperty@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NIM@Z  # VoiceContainer_s00a3_3ee0::SetProperty migrated from s00a33ee0 (verbatim, slice spelling)
+00a33fd0 ?GetProperty@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NIPAM@Z  # VoiceContainer_s00a3_3ee0::GetProperty migrated from s00a33ee0 (verbatim, slice spelling)
+00a340b0 ?MaskPluginBindings@VoiceContainer_s00a3_3ee0@Audio@EA@@QAEXPBIH@Z  # VoiceContainer_s00a3_3ee0::MaskPluginBindings migrated from s00a33ee0 (verbatim, slice spelling)
+00a341e0 ?FindPluginIndex@VoiceContainer_s00a3_3ee0@Audio@EA@@QAEHI@Z  # VoiceContainer_s00a3_3ee0::FindPluginIndex migrated from s00a33ee0 (verbatim, slice spelling)
+00a34230 ?FindPlugin@VoiceContainer_s00a3_3ee0@Audio@EA@@QAEPAUPlugIn_s00a3_3ee0@core@audio@rw@@I@Z  # VoiceContainer_s00a3_3ee0::FindPlugin migrated from s00a33ee0 (verbatim, slice spelling)
+00a34260 ?FindPluginIndexById@VoiceContainer_s00a3_3ee0@Audio@EA@@QAEPAUPlugIn_s00a3_3ee0@core@audio@rw@@I@Z  # VoiceContainer_s00a3_3ee0::FindPluginIndexById migrated from s00a33ee0 (verbatim, slice spelling)
+00a342c0 ?Create@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NE@Z  # VoiceContainer_s00a3_3ee0::Create migrated from s00a33ee0 (verbatim, slice spelling)
+00a343e0 ?Destroy@VoiceContainer_s00a3_3ee0@Audio@EA@@QAEXXZ  # VoiceContainer_s00a3_3ee0::Destroy migrated from s00a33ee0 (verbatim, slice spelling)
+00a34440 ?ConnectToMasteringVoice@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NPAUPlugIn_s00a3_3ee0@core@audio@rw@@@Z  # VoiceContainer_s00a3_3ee0::ConnectToMasteringVoice migrated from s00a33ee0 (verbatim, slice spelling)
+00a34530 ?DisconnectFromMasteringVoice@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NPAUPlugIn_s00a3_3ee0@core@audio@rw@@@Z  # VoiceContainer_s00a3_3ee0::DisconnectFromMasteringVoice migrated from s00a33ee0 (verbatim, slice spelling)
+00a34620 ?DtorTail@VoiceContainer_s00a3_3ee0@Audio@EA@@QAEXXZ  # VoiceContainer_s00a3_3ee0::DtorTail migrated from s00a33ee0 (verbatim, slice spelling)
+00a34660 ?DisconnectSendFromSubmix@Submix_s00a3_3ee0@Audio@EA@@QAE_NPAUPlugIn_s00a3_3ee0@core@audio@rw@@@Z  # Submix_s00a3_3ee0::DisconnectSendFromSubmix migrated from s00a33ee0 (verbatim, slice spelling)
+00a34760 ??0VoiceContainer_s00a3_3ee0@Audio@EA@@QAE@XZ  # VoiceContainer_s00a3_3ee0::VoiceContainer migrated from s00a33ee0 (verbatim, slice spelling)
+00a347f0 ?DisconnectFromSubmix@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NIPAUPlugIn_s00a3_3ee0@core@audio@rw@@@Z  # VoiceContainer_s00a3_3ee0::DisconnectFromSubmix migrated from s00a33ee0 (verbatim, slice spelling)
+00a34890 ?Disconnect@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NXZ  # VoiceContainer_s00a3_3ee0::Disconnect migrated from s00a33ee0 (verbatim, slice spelling)
+00a34930 ?DoInsertValue@BindingVector@Audio@EA@@QAEXPAUtBinding_s00a3_3ee0@23@ABU423@@Z  # BindingVector::DoInsertValue migrated from s00a33ee0 (verbatim, slice spelling)
+00a34a10 ?ConnectSendToSubmix@Submix_s00a3_3ee0@Audio@EA@@QAE_NPAUPlugIn_s00a3_3ee0@core@audio@rw@@@Z  # Submix_s00a3_3ee0::ConnectSendToSubmix migrated from s00a33ee0 (verbatim, slice spelling)
+00a34b50 ?ConnectToSubmix@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NIPAUPlugIn_s00a3_3ee0@core@audio@rw@@@Z  # VoiceContainer_s00a3_3ee0::ConnectToSubmix migrated from s00a33ee0 (verbatim, slice spelling)
+00a34bf0 ?Connect@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NXZ  # VoiceContainer_s00a3_3ee0::Connect migrated from s00a33ee0 (verbatim, slice spelling)
+00a34c90 ?Reconnect@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NXZ  # VoiceContainer_s00a3_3ee0::Reconnect migrated from s00a33ee0 (verbatim, slice spelling)
 00a34cb0 EA::Audio::VoiceContainer::AddPropertyBinding  # card PDB candidate; HasPropertyBinding then push_back of a tBinding
 00a34dc0 SP::Audio::cEapdMessage::Init  # card PDB candidate; sibling of cEapdMessage::GetNextFloat
