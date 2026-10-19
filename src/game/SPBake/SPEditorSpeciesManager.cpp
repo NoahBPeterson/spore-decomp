@@ -1,7 +1,8 @@
-// src/game/SPBake/SPEditorSpeciesManager.cpp -- migrated from slice(s) s005beaf0, s004df2d0, s004dc660, s004db6e0, s004db1b0, s004da440, s004da330, s004d92b0, s004d8c10, s004d44e0, s004d34f0, s004d2450, s004d2200, s004d15c0, s004d06e0 by tools/migrate/rewrite.py
+// src/game/SPBake/SPEditorSpeciesManager.cpp -- migrated from slice(s) s004e01d0, s005beaf0, s004df2d0, s004dc660, s004db6e0, s004db1b0, s004da440, s004da330, s004d92b0, s004d8c10, s004d44e0, s004d34f0, s004d2450, s004d2200, s004d15c0, s004d06e0 by tools/migrate/rewrite.py
 // Object file: SPBake/SPEditorSpeciesManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#define _VA_LIST_DEFINED   // the slices' own va_list typedef wins over <vadefs.h> (rewrite.py)
 #include "game/types.h"
 #include "EA/Audio/ConfigurationAggregate.h"
 #include "SP/FunctionalMatch/DeclareParam.h"
@@ -1734,6 +1735,442 @@ uint64_t MakeItemID(uint32_t group, uint32_t instance);       // FUN_00593980
 }
 // ---- items of slice s005beaf0 end
 
+// ---- items of slice s004e01d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define _VA_LIST_DEFINED   // the slices' own va_list typedef wins over <vadefs.h> (rewrite.py)
+extern "C" void* memcpy(void* dst, const void* src, unsigned int n);
+#pragma intrinsic(memcpy)
+void EASTLFree(void* p);                                                         // 0x00F47380
+void* EASTLAlloc(void* allocator_s004e_01d0, uint32_t n, uint32_t align, uint32_t offset);  // 0x0042DEE0
+namespace EA {
+template <class T> class RefCountTemplate_s004e_01d0 {
+public:
+    virtual ~RefCountTemplate_s004e_01d0();
+    int AddRef() { return mnRefCount++ + 1; }
+    int Release();   // 0x00453540
+    T mnRefCount;
+};
+}
+namespace EA {
+template <class T> class AutoRefCount_s004e_01d0 {
+public:
+    AutoRefCount_s004e_01d0(T* p = 0) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    AutoRefCount_s004e_01d0(const AutoRefCount_s004e_01d0& x) : mpObject(x.mpObject) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCount_s004e_01d0() { if (mpObject) mpObject->Release(); }
+    T* mpObject;
+};
+}
+namespace EA {
+namespace ResourceMan {
+struct Key_s004e_01d0 {
+    uint32_t mInstance;
+    uint32_t mType;
+    uint32_t mGroup;
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+inline bool operator==(const Key_s004e_01d0& a, const Key_s004e_01d0& b) { return a.mInstance == b.mInstance && a.mType == b.mType && a.mGroup == b.mGroup; }
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct KeyHash_s004e_01d0 { uint32_t operator()(const Key_s004e_01d0& k) const { return k.mInstance ^ k.mGroup; } };
+}
+}
+using EA::ResourceMan::Key_s004e_01d0;
+namespace eastl {
+struct sp_vector_allocator_s004e_01d0 {
+    const char* mpName;
+    uint32_t mFlags;
+};
+}
+namespace eastl {
+template <class T> struct vector_s004e_01d0 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    sp_vector_allocator_s004e_01d0 mAllocator;
+
+    T* DoAllocate(uint32_t n) { return n ? (T*)EASTLAlloc(&mAllocator, n * sizeof(T), 4, 0) : 0; }
+    void DoFree(T* p, uint32_t n) { if (p) deallocate(p, n * sizeof(T)); }
+    static void deallocate(void* p, uint32_t) { if (*((uint32_t*)p - 1)) FreeBlock(p); }
+    static void FreeBlock(void* p) { void* pBlock = p; EASTLFree(pBlock); }
+    void DoInsertValue(T* position, const T& value);
+    void reserve(uint32_t n);
+    void push_back(const T& value);
+};
+}
+namespace eastl {
+template <class T> struct equal_to_s004e_01d0 { bool operator()(const T& a, const T& b) const { return a == b; } };
+}
+namespace eastl {
+template <class T> struct hash_s004e_01d0 { uint32_t operator()(T val) const { return (uint32_t)val; } };
+}
+namespace eastl {
+struct mod_range_hashing { uint32_t operator()(uint32_t r, uint32_t n) const { return r % n; } };
+}
+namespace eastl {
+struct default_ranged_hash {};
+}
+namespace eastl {
+template <class P> struct use_first_s004e_01d0 {};
+}
+namespace eastl {
+struct true_type {};
+}
+namespace eastl {
+struct prime_rehash_policy_s004e_01d0 {
+    float mfMaxLoadFactor;
+    float mfGrowthFactor;
+    uint32_t mnNextResize;
+    prime_rehash_policy_s004e_01d0(float fMaxLoadFactor = 1.f) : mfMaxLoadFactor(fMaxLoadFactor), mfGrowthFactor(2.f), mnNextResize(0) {}
+    static uint32_t GetPrevBucketCountOnly(uint32_t nBucketCountHint);   // 0x00921340
+    uint32_t GetNextBucketCount(uint32_t nBucketCountHint) const;        // 0x00921360
+    uint32_t GetBucketCount(uint32_t nElementCount) const;               // 0x009213C0
+};
+}
+namespace eastl {
+template <class Node> struct hashtable_iterator_base_s004e_01d0 {
+    Node* mpNode;
+    Node** mpBucket;
+    hashtable_iterator_base_s004e_01d0(Node* pNode, Node** pBucket) : mpNode(pNode), mpBucket(pBucket) {}
+    void increment() {
+        mpNode = mpNode->mpNext;
+        while (mpNode == 0)
+            mpNode = *++mpBucket;
+    }
+};
+}
+namespace eastl {
+template <class Node> struct hashtable_iterator_s004e_01d0 : public hashtable_iterator_base_s004e_01d0<Node> {
+    hashtable_iterator_s004e_01d0(Node* pNode = 0, Node** pBucket = 0) : hashtable_iterator_base_s004e_01d0<Node>(pNode, pBucket) {}
+    hashtable_iterator_s004e_01d0(Node** pBucket) : hashtable_iterator_base_s004e_01d0<Node>(*pBucket, pBucket) {}
+    hashtable_iterator_s004e_01d0(const hashtable_iterator_s004e_01d0& x) : hashtable_iterator_base_s004e_01d0<Node>(x.mpNode, x.mpBucket) {}
+    hashtable_iterator_s004e_01d0& operator++() { this->increment(); return *this; }
+};
+}
+namespace eastl {
+template <class Node> struct hashtable_const_iterator_s004e_01d0 : public hashtable_iterator_base_s004e_01d0<Node> {
+    hashtable_const_iterator_s004e_01d0(Node* pNode = 0, Node** pBucket = 0) : hashtable_iterator_base_s004e_01d0<Node>(pNode, pBucket) {}
+    hashtable_const_iterator_s004e_01d0(Node** pBucket) : hashtable_iterator_base_s004e_01d0<Node>(*pBucket, pBucket) {}
+};
+}
+namespace eastl {
+template <class Node> inline bool operator!=(const hashtable_iterator_base_s004e_01d0<Node>& a, const hashtable_iterator_base_s004e_01d0<Node>& b) { return a.mpNode != b.mpNode; }
+}
+namespace eastl {
+template <class Node> struct insert_return_type {
+    hashtable_iterator_s004e_01d0<Node> first;
+    bool second;
+};
+}
+namespace eastl {
+struct allocator_s004e_01d0 {
+    void deallocate(void* p, uint32_t) { void* const pMemory = p; EASTLFree(pMemory); }
+};
+}
+namespace eastl {
+extern void* gpEmptyBucketArray[2];                  // 0x0154DF28
+}
+namespace eastl {
+struct Link { Link* mpNext; };
+}
+namespace eastl {
+struct fixed_pool_base {
+    Link* mpHead;
+    Link* mpNext;
+    void init(void* pMemory, uint32_t memorySize, uint32_t nodeSize, uint32_t alignment, uint32_t alignmentOffset); // 0x00921260
+};
+}
+namespace eastl {
+struct fixed_pool_with_overflow : public fixed_pool_base {
+    void* mpPoolBegin;
+    void* mpCapacity;
+    uint32_t mnNodeSize;
+    static void OverflowFree(void* p, uint32_t n) { (void)&n; void* const pMemory = p; EASTLFree(pMemory); }
+};
+}
+namespace eastl {
+struct fixed_hashtable_allocator {
+    fixed_pool_with_overflow mPool;
+    void* mpBucketBuffer;
+    fixed_hashtable_allocator(void* pNodeBuffer, uint32_t nodeBufferSize, uint32_t nodeSize, void* pBucketBuffer) {
+        mPool.mpHead = 0;
+        mPool.init(pNodeBuffer, nodeBufferSize, nodeSize, 4, 0);
+        mPool.mpPoolBegin = pNodeBuffer;
+        mPool.mpCapacity = (char*)pNodeBuffer + nodeBufferSize;
+        mPool.mnNodeSize = nodeSize;
+        mpBucketBuffer = pBucketBuffer;
+    }
+    fixed_hashtable_allocator(const fixed_hashtable_allocator& x);   // 0x004E2F20
+    void deallocate(void* p, uint32_t) {
+        if (p != mpBucketBuffer) {
+            if ((p >= mPool.mpPoolBegin) && (p < mPool.mpCapacity)) {
+                ((Link*)p)->mpNext = mPool.mpHead;
+                mPool.mpHead = (Link*)p;
+            } else
+                fixed_pool_with_overflow::OverflowFree(p, mPool.mnNodeSize);
+        }
+    }
+};
+}
+namespace eastl {
+template <class K, class V> struct pair_s004e_01d0 {
+    K first;
+    V second;
+    pair_s004e_01d0(const K& x, const V& y) : first(x), second(y) {}
+};
+}
+namespace eastl {
+template <class K, class V> struct hash_node_s004e_01d0 {
+    pair_s004e_01d0<K, V> mValue;
+    hash_node_s004e_01d0* mpNext;
+};
+}
+namespace eastl {
+template <class K, class V, class H, class A> class hashtable_s004e_01d0 {
+public:
+    typedef hash_node_s004e_01d0<K, V> node_type;
+    typedef hashtable_iterator_s004e_01d0<node_type> iterator;
+    typedef hashtable_const_iterator_s004e_01d0<node_type> const_iterator;
+    typedef pair_s004e_01d0<K, V> value_type;
+
+    hashtable_s004e_01d0(uint32_t nBucketCount, const H& h1, const mod_range_hashing& h2, const default_ranged_hash& h,
+              const equal_to_s004e_01d0<K>& eq, const use_first_s004e_01d0<value_type>& ek, const A& allocator_s004e_01d0);
+    ~hashtable_s004e_01d0();
+
+    iterator end() { return iterator(mpBucketArray + mnBucketCount); }
+    iterator find(const K& k);
+    const_iterator find_const(const K& k);
+    insert_return_type<node_type> DoInsertValue(const value_type& value, true_type);
+    insert_return_type<node_type> insert(const value_type& value) { return DoInsertValue(value, true_type()); }
+    uint32_t erase(const K& k);
+    iterator erase(iterator i);
+    void set_max_load_factor(float fMaxLoadFactor);
+    void rehash_policy(const prime_rehash_policy_s004e_01d0& rehashPolicy) {
+        mRehashPolicy = rehashPolicy;
+        const uint32_t nBuckets = rehashPolicy.GetBucketCount((uint32_t)mnElementCount);
+        if (nBuckets > mnBucketCount)
+            DoRehash(nBuckets);
+    }
+    void reset() {
+        ScratchSlots<1>();
+        mnBucketCount = 1;
+        mpBucketArray = (node_type**)&gpEmptyBucketArray[0];
+        mnElementCount = 0;
+        mRehashPolicy.mnNextResize = 0;
+    }
+    void clear() {
+        DoFreeNodes(mpBucketArray, mnBucketCount);
+        mnElementCount = 0;
+    }
+    void DoFreeBuckets(node_type** pBucketArray, uint32_t n) {
+        if (n > 1)
+            mAllocator.deallocate(pBucketArray, (n + 1) * sizeof(node_type*));
+    }
+    void DoFreeNode(node_type* pNode) { mAllocator.deallocate(pNode, sizeof(node_type)); }
+    void DoFreeNodes(node_type** pBucketArray, uint32_t n);
+    node_type** DoAllocateBuckets(uint32_t n);
+    void DoRehash(uint32_t nBucketCount);
+    uint32_t get_hash_code(const K& key) const { return (uint32_t)m_h1(key); }
+    uint32_t bucket_index(const K&, uint32_t c, uint32_t n) const { return (uint32_t)m_h2(c, n); }
+    bool compare(const K& k, uint32_t, node_type* pNode) const { return m_equal(k, pNode->mValue.first); }
+    node_type* DoFindNode(node_type* pNode, const K& k, uint32_t c) const {
+        for (; pNode; pNode = pNode->mpNext) {
+            if (compare(k, c, pNode))
+                return pNode;
+        }
+        return 0;
+    }
+
+    use_first_s004e_01d0<value_type> m_extract;   // 0x00
+    equal_to_s004e_01d0<K> m_equal;               // 0x01
+    H m_h1;                            // 0x02
+    mod_range_hashing m_h2;            // 0x03
+    node_type** mpBucketArray;         // 0x04
+    uint32_t mnBucketCount;            // 0x08
+    uint32_t mnElementCount;           // 0x0C
+    prime_rehash_policy_s004e_01d0 mRehashPolicy; // 0x10
+    A mAllocator;                      // 0x1C
+};
+}
+namespace eastl {
+template <class K, class V, class H, class A>
+typename hashtable_s004e_01d0<K, V, H, A>::iterator hashtable_s004e_01d0<K, V, H, A>::find(const K& k)
+{
+    const uint32_t c = get_hash_code(k);
+    const uint32_t n = (uint32_t)bucket_index(k, c, (uint32_t)mnBucketCount);
+    node_type* const pNode = DoFindNode(mpBucketArray[n], k, c);
+    return pNode ? iterator(pNode, mpBucketArray + n) : iterator(mpBucketArray + mnBucketCount);
+}
+}
+namespace eastl {
+template <class K, class V, class H, class A>
+uint32_t hashtable_s004e_01d0<K, V, H, A>::erase(const K& k)
+{
+    const uint32_t c = get_hash_code(k);
+    const uint32_t n = (uint32_t)bucket_index(k, c, (uint32_t)mnBucketCount);
+    const uint32_t nElementCountSaved = mnElementCount;
+    node_type** pBucketArray = mpBucketArray + n;
+    while (*pBucketArray && !compare(k, c, *pBucketArray))
+        pBucketArray = &(*pBucketArray)->mpNext;
+    while (*pBucketArray && compare(k, c, *pBucketArray)) {
+        node_type* const pNode = *pBucketArray;
+        *pBucketArray = pNode->mpNext;
+        DoFreeNode(pNode);
+        --mnElementCount;
+    }
+    return nElementCountSaved - mnElementCount;
+}
+}
+namespace eastl {
+template <class K, class V, class H, class A>
+typename hashtable_s004e_01d0<K, V, H, A>::iterator hashtable_s004e_01d0<K, V, H, A>::erase(iterator i)
+{
+    iterator iNext(i);
+    ++iNext;
+    node_type* pNode = i.mpNode;
+    node_type* pNodeCurrent = *i.mpBucket;
+    if (pNodeCurrent == pNode)
+        *i.mpBucket = pNodeCurrent->mpNext;
+    else {
+        node_type* pNodeNext = pNodeCurrent->mpNext;
+        while (pNodeNext != pNode) {
+            pNodeCurrent = pNodeNext;
+            pNodeNext = pNodeCurrent->mpNext;
+        }
+        pNodeCurrent->mpNext = pNodeNext->mpNext;
+    }
+    DoFreeNode(pNode);
+    --mnElementCount;
+    return iNext;
+}
+}
+namespace eastl {
+template <class K, class V, class H, class A>
+hashtable_s004e_01d0<K, V, H, A>::hashtable_s004e_01d0(uint32_t nBucketCount, const H& h1, const mod_range_hashing& h2, const default_ranged_hash& h,
+                                 const equal_to_s004e_01d0<K>& eq, const use_first_s004e_01d0<value_type>& ek, const A& allocator_s004e_01d0)
+    : mnBucketCount(0), mnElementCount(0), mRehashPolicy(), mAllocator(allocator_s004e_01d0)
+{
+    if (nBucketCount < 2)
+        reset();
+    else {
+        mnBucketCount = (uint32_t)mRehashPolicy.GetNextBucketCount((uint32_t)nBucketCount);
+        mpBucketArray = DoAllocateBuckets(mnBucketCount);
+    }
+}
+}
+namespace eastl {
+template <class K, class V, class H, class A>
+hashtable_s004e_01d0<K, V, H, A>::~hashtable_s004e_01d0()
+{
+    clear();
+    DoFreeBuckets(mpBucketArray, mnBucketCount);
+}
+}
+namespace eastl {
+template <class K, class V, class H, class A> class hash_map_s004e_01d0 : public hashtable_s004e_01d0<K, V, H, A> {
+public:
+    typedef hashtable_s004e_01d0<K, V, H, A> base_type;
+    typedef typename base_type::iterator iterator;
+    typedef typename base_type::value_type value_type;
+    hash_map_s004e_01d0(uint32_t nBucketCount, const H& hashFunction, const equal_to_s004e_01d0<K>& predicate, const A& allocator_s004e_01d0)
+        : base_type(nBucketCount, hashFunction, mod_range_hashing(), default_ranged_hash(), predicate,
+                    use_first_s004e_01d0<value_type>(), allocator_s004e_01d0) {}
+    V& operator[](const K& key);
+};
+}
+namespace eastl {
+template <class V> struct OperatorIndexSlots { enum { N = 13 }; };
+}
+namespace eastl {
+template <class V> struct OperatorIndexSlots<V*> { enum { N = 12 }; };
+}
+namespace eastl {
+template <class K, class V, class H, class A>
+V& hash_map_s004e_01d0<K, V, H, A>::operator[](const K& key)
+{
+    ScratchSlots<OperatorIndexSlots<V>::N>();
+    iterator it = base_type::find(key);
+    if (it != base_type::end())
+        return (*it.mpNode).mValue.second;
+    return (*base_type::insert(value_type(key, V())).first.mpNode).mValue.second;
+}
+}
+struct PartLayout {   // 0x14-byte value of a fixed_hash_map<uint32_t, PartLayout, 32, 33>
+    uint32_t mFields[3];
+    float mScale;
+    float mWeight;
+    PartLayout() { mFields[0] = 0; mFields[1] = 0; mFields[2] = 0; mScale = 1.0f; mWeight = 1.0f; }
+};
+namespace SP {
+class cSpeciesProfile_s004e_01d0;
+}
+namespace SP {
+class cSpeciesArchetype_s004e_01d0 {
+public:
+    cSpeciesArchetype_s004e_01d0();                               // 0x004DA440
+    cSpeciesArchetype_s004e_01d0(const cSpeciesArchetype_s004e_01d0& x);     // 0x004E1CB0
+    ~cSpeciesArchetype_s004e_01d0();                              // 0x004DB1B0
+    uint32_t mData[0x110];
+};
+}
+namespace SP {
+class cTextureInstance_s004e_01d0;
+}
+namespace SP {
+class cEditorEvent : public EA::RefCountTemplate_s004e_01d0<int> {
+public:
+    uint32_t mSubType;   // 0x08
+    uint32_t mType;      // 0x0C
+    uint32_t pad10[0x29];
+    uint32_t mValue;     // 0xB4
+};
+}
+namespace eastl {
+typedef hashtable_s004e_01d0<uint32_t, PartLayout, hash_s004e_01d0<uint32_t>, fixed_hashtable_allocator> PartLayoutTable;
+}
+namespace eastl {
+typedef hash_map_s004e_01d0<uint32_t, PartLayout, hash_s004e_01d0<uint32_t>, fixed_hashtable_allocator> PartLayoutMap;
+}
+namespace eastl {
+typedef hash_map_s004e_01d0<Key_s004e_01d0, SP::cSpeciesProfile_s004e_01d0*, EA::ResourceMan::KeyHash_s004e_01d0, allocator_s004e_01d0> SpeciesMap_s004e_01d0;
+}
+namespace eastl {
+typedef hash_map_s004e_01d0<uint32_t, SP::cSpeciesArchetype_s004e_01d0, hash_s004e_01d0<uint32_t>, allocator_s004e_01d0> ArchetypeMap_s004e_01d0;
+}
+namespace eastl {
+template class hashtable_s004e_01d0<uint32_t, PartLayout, hash_s004e_01d0<uint32_t>, fixed_hashtable_allocator>;
+}
+namespace eastl {
+template class hash_map_s004e_01d0<uint32_t, PartLayout, hash_s004e_01d0<uint32_t>, fixed_hashtable_allocator>;
+}
+namespace eastl {
+template class hash_map_s004e_01d0<Key_s004e_01d0, SP::cSpeciesProfile_s004e_01d0*, EA::ResourceMan::KeyHash_s004e_01d0, allocator_s004e_01d0>;
+}
+namespace eastl {
+template class hashtable_s004e_01d0<Key_s004e_01d0, SP::cSpeciesProfile_s004e_01d0*, EA::ResourceMan::KeyHash_s004e_01d0, allocator_s004e_01d0>;
+}
+namespace eastl {
+ template class hash_map_s004e_01d0<uint32_t, SP::cSpeciesArchetype_s004e_01d0, hash_s004e_01d0<uint32_t>, allocator_s004e_01d0>; 
+}
+template void eastl::vector_s004e_01d0<EA::AutoRefCount_s004e_01d0<SP::cTextureInstance_s004e_01d0> >::reserve(uint32_t);
+template void eastl::vector_s004e_01d0<EA::AutoRefCount_s004e_01d0<SP::cEditorEvent> >::push_back(const EA::AutoRefCount_s004e_01d0<SP::cEditorEvent>&);
+namespace SP {
+class cEditorEventQueue {
+public:
+    void QueueEvent(cEditorEvent* pEvent);
+    uint32_t pad0[0x544 / 4];
+    uint32_t mLastValue;                                          // 0x544
+    uint32_t pad548[(0x6D4 - 0x548) / 4];
+    eastl::vector_s004e_01d0<EA::AutoRefCount_s004e_01d0<cEditorEvent> > mEvents;       // 0x6D4
+    uint32_t pad6E8[(0x73C - 0x6E8) / 4];
+    eastl::vector_s004e_01d0<EA::AutoRefCount_s004e_01d0<cEditorEvent> > mLateEvents;   // 0x73C
+};
+}
+// ---- items of slice s004e01d0 end
+
 // @ 0x004d1470
 bool GetPaintUV(cSkinPaintTable* table, uint32_t id, float* u, float* v)
 {
@@ -1748,6 +2185,7 @@ bool GetPaintUV(cSkinPaintTable* table, uint32_t id, float* u, float* v)
     *u = 0.0f;
     return false;
 }
+
 
 
 
@@ -1917,12 +2355,14 @@ void BuildParameters(cCreatureSummary* pSummary, eastl::sp_vector<DeclareParam_s
 
 
 
+
 // @ 0x004d2200
 int GetMatchingCreatureKeys(uint32_t* self, uint32_t manager, int maxCount, uint32_t filter, char useAll, uint32_t* outParams)
 {
     (void)self; (void)manager; (void)maxCount; (void)filter; (void)useAll; (void)outParams;
     return 0;
 }
+
 
 
 
@@ -2044,11 +2484,13 @@ void LoadSpeciesTuning(bool force)
 
 
 
+
 // @ 0x004d34f0
 void InitStatics()
 {
     LoadSpeciesTuning(0);
 }
+
 
 
 
@@ -2080,6 +2522,7 @@ float Blend(float, float, float a, float, float b, float c, float d)
 
 
 
+
 // @ 0x004d3570
 uint32_t MapGetFieldC(SpeciesMap* m, uint32_t key)
 {
@@ -2088,6 +2531,7 @@ uint32_t MapGetFieldC(SpeciesMap* m, uint32_t key)
     if (it != e) return it.mpNode->v[2];
     return 0;
 }
+
 
 
 
@@ -2118,6 +2562,7 @@ uint32_t MapGetClamped(SpeciesMap* m, uint32_t key)
 
 
 
+
 // @ 0x004d3640
 uint32_t MapGetField4(SpeciesMap* m, uint32_t key)
 {
@@ -2126,6 +2571,7 @@ uint32_t MapGetField4(SpeciesMap* m, uint32_t key)
     if (it != e) return it.mpNode->v[0];
     return 0;
 }
+
 
 
 
@@ -2146,6 +2592,7 @@ void* MapGetPtr(SpeciesMap* m, uint32_t key)
     static MapDefault def;
     return &def;
 }
+
 
 
 
@@ -2195,9 +2642,11 @@ CreatureAbility::CreatureAbility()
 
 
 
+
 // @ 0x004d3b80
 CreatureAbility::~CreatureAbility()
 {}
+
 
 
 
@@ -2229,6 +2678,7 @@ uint32_t TuningObj::GetAt(uint32_t index)
 
 
 
+
 // @ 0x004d3d40
 int TuningObj::GetActive()
 {
@@ -2237,6 +2687,7 @@ int TuningObj::GetActive()
     else
         return m70;
 }
+
 
 
 
@@ -2267,12 +2718,14 @@ float TuningObj::GetBound(bool which)
 
 
 
+
 // @ 0x004d3da0
 void TuningObj::SetBounds(float lo, float hi)
 {
     mMin = lo;
     mMax = hi;
 }
+
 
 
 
@@ -2384,9 +2837,11 @@ cSpeciesProfile::cSpeciesProfile(const ResKey& key, bool flag)
 
 
 
+
 // @ 0x004d44e0
 void SpeciesDB_Op1(void* self)
 { (void)self; }
+
 
 
 
@@ -2402,6 +2857,7 @@ float SpeciesDB::GetScale()
 {
     return mScale * 0.025f * 100.0f;
 }
+
 
 
 
@@ -2436,6 +2892,7 @@ uint32_t SpeciesDB::FindField8(int id)
 
 
 
+
 // @ 0x004d4750
 uint32_t SpeciesDB::FindField10(int id)
 {
@@ -2460,9 +2917,11 @@ uint32_t SpeciesDB::FindField10(int id)
 
 
 
+
 // @ 0x004d47d0
 void SpeciesDB_Op2(void* self)
 { (void)self; }
+
 
 
 
@@ -2486,9 +2945,11 @@ void SpeciesDB_Op3(void* self)
 
 
 
+
 // @ 0x004d4f10
 void SpeciesDB_Op4(void* self)
 { (void)self; }
+
 
 
 
@@ -2511,12 +2972,14 @@ void SpeciesProfile_Update(void* a, int b)
 
 
 
+
 // @ 0x004d8ee0
 int SpeciesProfile::GetVariantA(void* p)
 {
     Update(p, 0);
     return (int)((char*)this + 0x810);
 }
+
 
 
 
@@ -2549,6 +3012,7 @@ int SpeciesProfile::GetVariantB(void* p)
 
 
 
+
 // @ 0x004d8f90
 int SpeciesProfile::GetVariantC(void* p)
 {
@@ -2572,9 +3036,11 @@ int SpeciesProfile::GetVariantC(void* p)
 
 
 
+
 // @ 0x004d90a0
 void cSpeciesProfile_FillInProfileValues(void* self)
 { (void)self; }
+
 
 
 
@@ -2765,6 +3231,7 @@ bool ReadAbilityData(cCreatureAbility_s004d_92b0* ability, PropertyList_s004d_92
 
 
 
+
 // @ 0x004da330
 void cSpeciesProfile_s004d_a330::GetUiName(WString* out)
 {
@@ -2774,6 +3241,7 @@ void cSpeciesProfile_s004d_a330::GetUiName(WString* out)
     if (out->empty())
         out->sprintf(L"Species %d", mInstance);
 }
+
 
 
 
@@ -2798,6 +3266,7 @@ uint32_t* GetValidatedSpeciesKey(uint32_t* out, uint32_t instance, bool flora)
     out[2] = keyType;
     return out;
 }
+
 
 
 
@@ -2891,6 +3360,7 @@ cSpeciesArchetype_s004d_a440::cSpeciesArchetype_s004d_a440()
 
 
 
+
 // @ 0x004db1b0
 void SpeciesCheat_Op1(void* self)
 { (void)self; }
@@ -2899,9 +3369,11 @@ void SpeciesCheat_Op1(void* self)
 
 
 
+
 // @ 0x004db2c0
 void SpeciesCheat_Op2(void* self)
 { (void)self; }
+
 
 
 
@@ -2928,9 +3400,11 @@ void PaintSystem::Destroy()
 
 
 
+
 // @ 0x004db470
 void SpeciesCheat_Op3(void* self)
 { (void)self; }
+
 
 
 
@@ -2955,6 +3429,7 @@ void Connector::Init(void* pObj, int b, int c, uint32_t n)
 
 
 
+
 // @ 0x004db6b0
 char const * SP::cSpeciesCheat::Description(EA::ArgScript::tHelpType param) const
 {
@@ -2971,6 +3446,7 @@ char const * SP::cSpeciesCheat::Description(EA::ArgScript::tHelpType param) cons
            "-poseCapRange <min> <max>\n-glideCapRange <min> <max>\n-stealthCapRange <min> <max>\n"
            "-sprintCapRange <min> <max>\n-senseCapRange <min> <max>\n-healthCapRange <min> <max>\n";
 }
+
 
 
 
@@ -3195,6 +3671,7 @@ void cSpeciesCheat_s004d_b6e0::Execute(cArguments* pArguments)
 
 
 
+
 // @ 0x004dc660
 void SP::cSpeciesCheat::GetFullPath(EA::ResourceMan::Key const & key, eastl::basic_string<wchar_t, eastl::allocator> & out)
 {
@@ -3203,11 +3680,13 @@ void SP::cSpeciesCheat::GetFullPath(EA::ResourceMan::Key const & key, eastl::bas
 
 
 
+
 // @ 0x004dc730
 unsigned int SP::cPlantSummarizer::GetVersion() const
 {
     return g_plantStaticType;
 }
+
 
 
 
@@ -3221,6 +3700,7 @@ unsigned int SP::cPlantSummarizer::GetResType(unsigned int p) const
 
 
 
+
 // @ 0x004dc760
 bool SP::cPlantSummarizer::ExtractParameters(EA::ResourceMan::Key const & desc, eastl::vector<SP::FunctionalMatch::DeclareParam, eastl::sp_vector_allocator> & out) const
 {
@@ -3230,11 +3710,13 @@ bool SP::cPlantSummarizer::ExtractParameters(EA::ResourceMan::Key const & desc, 
 
 
 
+
 // @ 0x004dc920
 unsigned int SP::cSpeciesSummarizer::GetVersion() const
 {
     return g_speciesStaticType;
 }
+
 
 
 
@@ -3248,6 +3730,7 @@ unsigned int SP::cSpeciesSummarizer::GetResType(unsigned int p) const
 
 
 
+
 // @ 0x004dc950
 bool SP::cSpeciesSummarizer::ExtractParameters(EA::ResourceMan::Key const & desc, eastl::vector<SP::FunctionalMatch::DeclareParam, eastl::sp_vector_allocator> & out) const
 {
@@ -3257,10 +3740,12 @@ bool SP::cSpeciesSummarizer::ExtractParameters(EA::ResourceMan::Key const & desc
 
 
 
+
 // @ 0x004dcaa0
 void SP::cSPEditorSpeciesManager_s004d_c660::Teardown()
 {
 }
+
 
 
 
@@ -3273,6 +3758,7 @@ bool SP::cSPEditorSpeciesManager_s004d_c660::HandleMessage(int msgId, void* payl
 
 
 
+
 // @ 0x004df2d0
 namespace SP {
 float RandomInRange(const Vector2_s004d_f2d0& range)
@@ -3280,6 +3766,7 @@ float RandomInRange(const Vector2_s004d_f2d0& range)
     return (float)RandomRange(&sMathRandom, range[0], range[1]);
 }
 }  // namespace SP
+
 
 
 // @ 0x004df310
@@ -3300,6 +3787,7 @@ void cSPEditorSpeciesManager_s004d_f2d0::SetAvatarSpecies(const Key_s004d_f2d0& 
 }  // namespace SP
 
 
+
 // @ 0x004df3e0
 namespace SP {
 void cSPEditorSpeciesManager_s004d_f2d0::SetAvatarProfile(cSpeciesProfile_s004d_f2d0* pProfile)
@@ -3309,6 +3797,7 @@ void cSPEditorSpeciesManager_s004d_f2d0::SetAvatarProfile(cSpeciesProfile_s004d_
 }  // namespace SP
 
 
+
 // @ 0x004df420
 namespace SP {
 cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::GetAvatarProfile()
@@ -3316,6 +3805,7 @@ cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::GetAvatarProfile
     return GetProfile(mAvatarSpeciesKey);
 }
 }  // namespace SP
+
 
 
 // @ 0x004df440
@@ -3338,6 +3828,7 @@ cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::GetPlantProfile(
     return pProfile;
 }
 }  // namespace SP
+
 
 
 // @ 0x004df550
@@ -3370,6 +3861,7 @@ cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::GetProfile(const
 }  // namespace SP
 
 
+
 // @ 0x004df6d0
 namespace SP {
 cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::FindProfile(eastl::SpeciesMap_s004d_f2d0& map, const Key_s004d_f2d0& key)
@@ -3390,6 +3882,7 @@ cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::FindProfile(east
 }  // namespace SP
 
 
+
 // @ 0x004df790
 namespace SP {
 bool cSPEditorSpeciesManager_s004d_f2d0::GetDefaultReplacementKey(const Key_s004d_f2d0& key, Key_s004d_f2d0& outKey)
@@ -3400,6 +3893,7 @@ bool cSPEditorSpeciesManager_s004d_f2d0::GetDefaultReplacementKey(const Key_s004
     return false;
 }
 }  // namespace SP
+
 
 
 // @ 0x004df7d0
@@ -3414,6 +3908,7 @@ bool cSPEditorSpeciesManager_s004d_f2d0::GetReplacementKey(const Key_s004d_f2d0&
     return false;
 }
 }  // namespace SP
+
 
 
 // @ 0x004dfb50
@@ -3447,6 +3942,42 @@ bool cSPEditorSpeciesManager_s004d_f2d0::UpdateProfile(cSpeciesProfile_s004d_f2d
 }  // namespace SP
 
 
+
+// @ 0x004e01d0
+namespace SP {
+void cEditorEventQueue::QueueEvent(cEditorEvent* pEvent)
+{
+    switch (pEvent->mType) {
+    case 0: {
+        EA::AutoRefCount_s004e_01d0<cEditorEvent> ref(pEvent);
+        ScratchSlots<6>();
+        mEvents.push_back(ref);
+        break;
+    }
+    case 1: {
+        EA::AutoRefCount_s004e_01d0<cEditorEvent> ref(pEvent);
+        ScratchSlots<6>();
+        mEvents.push_back(ref);
+        break;
+    }
+    case 2: {
+        if (pEvent->mSubType == 0xe)
+            mLastValue = pEvent->mValue;
+        EA::AutoRefCount_s004e_01d0<cEditorEvent> ref(pEvent);
+        ScratchSlots<3>();
+        mEvents.push_back(ref);
+        break;
+    }
+    case 3: {
+        EA::AutoRefCount_s004e_01d0<cEditorEvent> ref(pEvent);
+        ScratchSlots<2>();
+        mLateEvents.push_back(ref);
+        break;
+    }
+    }
+}
+}  // namespace SP
+
 // @ 0x005bf0a0
 int HasEditorPropertyList(const EA::ResourceMan::Key_s005b_eaf0& key)
 {
@@ -3456,6 +3987,7 @@ int HasEditorPropertyList(const EA::ResourceMan::Key_s005b_eaf0& key)
   return 0;
 }
 
+
 // @ 0x005bf0e0
 int GetEditorPropertyList(const EA::ResourceMan::Key_s005b_eaf0& key, App::PropertyList_s005b_eaf0*& result)
 {
@@ -3464,6 +3996,7 @@ int GetEditorPropertyList(const EA::ResourceMan::Key_s005b_eaf0& key, App::Prope
     return 1;
   return 0;
 }
+
 
 // @ 0x005bf1e0
 bool LoadCollectableItems(App::PropertyList_s005b_eaf0* list, Simulator::cCollectableItems** result)
@@ -3500,6 +4033,7 @@ bool LoadCollectableItems(App::PropertyList_s005b_eaf0* list, Simulator::cCollec
   }
   return ok;
 }
+
 
 // @ 0x005bf500
 bool __stdcall GetBoolParams(const EA::ResourceMan::Key_s005b_eaf0& key, eastl::sp_vector_s005b_eaf0<SP::FunctionalMatch::DeclareParam_s005b_eaf0>& params)

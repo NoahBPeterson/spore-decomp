@@ -1,3 +1,4 @@
+004e01d0 ?QueueEvent@cEditorEventQueue@SP@@QAEXPAVcEditorEvent@2@@Z  # cEditorEventQueue::QueueEvent migrated from s004e01d0 (verbatim, slice spelling)
 004e0560 eastl::hash_map<ResourceKey,cSpeciesProfile*>::operator[]  # find/end/insert(value_type(k, T())) shape; byte-exact
 004e0600 eastl::hash_map<uint32_t,SP::cSpeciesArchetype>::operator[]  # same shape, cSpeciesArchetype ctor/copy/dtor calls
 004e0700 eastl::hash_map<uint32_t,T,hash,fixed_hashtable_allocator>::hash_map  # forwards to hashtable ctor with tag temps
