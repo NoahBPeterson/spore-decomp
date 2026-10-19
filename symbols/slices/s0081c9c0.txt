@@ -1,12 +1,12 @@
-0081c9c0 cSPUIPopupMenuWin::OnAttach  # PDB candidate (caller-scored); byte-exact
-0081ca60 cSPUIPopupMenuWin::OnMouseUp  # PDB candidate (caller-scored); byte-exact
-0081cbe0 cSPUIPopupMenuWin::OnChar  # PDB candidate (caller-single); byte-exact
-0081cc60 cSPUIPopupMenuWin::OnScrollButtonClicked  # PDB name
+0081c9c0 ?OnAttach@PMW@@QAEXXZ  # PMW::OnAttach migrated from s0081c9c0 (verbatim, slice spelling)
+0081ca60 ?OnMouseUp@PMW@@QAEXMMHH@Z  # PMW::OnMouseUp migrated from s0081c9c0 (verbatim, slice spelling)
+0081cbe0 ?OnChar@PMW@@QAEXHI@Z  # PMW::OnChar migrated from s0081c9c0 (verbatim, slice spelling)
+0081cc60 ?OnScrollButtonClicked@PMW@@QAEXDH@Z  # PMW::OnScrollButtonClicked migrated from s0081c9c0 (verbatim, slice spelling)
 0081cce0 ?Reset@MB@@QAEXXZ  # MB::Reset migrated from s0081c9c0 (verbatim, slice spelling)
 0081cd50 ?ScrollButtonSelected@SB@@QAEXH@Z  # SB::ScrollButtonSelected migrated from s0081c9c0 (verbatim, slice spelling)
-0081cdb0 cSPUIPopupMenuWin::OnMouseWheel  # PDB name
+0081cdb0 ?OnMouseWheel@PMW@@QAEXMMHH@Z  # PMW::OnMouseWheel migrated from s0081c9c0 (verbatim, slice spelling)
 0081ce60 ?OnButtonClicked2@ScrollBtn2@@QAEXH@Z  # ScrollBtn2::OnButtonClicked2 migrated from s0081c9c0 (verbatim, slice spelling)
-0081ce80 cSPUIPopupMenuScrollButton::OnTick  # PDB candidate (caller-single); byte-exact
+0081ce80 ?OnTick@PSB@@QAEEXZ  # PSB::OnTick migrated from s0081c9c0 (verbatim, slice spelling)
 0081d020 UTFWin::cSPUIProgressBarGradientWin::cSPUIProgressBarGradientWin  # PDB name
 0081d510 UTFWin::cSPUIProgressBarWin::cSPUIProgressBarWin  # PDB name
 0081d7a0 ?Reset@Variant@@QAEPAU1@H@Z  # Variant::Reset migrated from s0081c9c0 (verbatim, slice spelling)

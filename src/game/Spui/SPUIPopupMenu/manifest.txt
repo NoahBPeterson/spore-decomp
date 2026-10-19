@@ -9,6 +9,10 @@
 ../src/game/Spui/SPUIPopupMenu.cpp  ?HideMenuItems@cSPUIPopupMenuWin@@QAEX_N0@Z  0081b8b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPopupMenu.cpp  ?OnMenuItemSelected@Menu2@@QAEXPAU1@0@Z  0081bef0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPopupMenu.cpp  ?Update@cAutoPropertyBaseLink@@QAEXPAX@Z  0081bfb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPopupMenu.cpp  ?OnAttach@PMW@@QAEXXZ  0081c9c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPopupMenu.cpp  ?OnMouseUp@PMW@@QAEXMMHH@Z  0081ca60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPopupMenu.cpp  ?OnChar@PMW@@QAEXHI@Z  0081cbe0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPopupMenu.cpp  ?ScrollButtonSelected@SB@@QAEXH@Z  0081cd50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPopupMenu.cpp  ?OnButtonClicked2@ScrollBtn2@@QAEXH@Z  0081ce60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPopupMenu.cpp  ?OnTick@PSB@@QAEEXZ  0081ce80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPopupMenu.cpp  ?init_1546064@@YAXXZ  012fc2b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include

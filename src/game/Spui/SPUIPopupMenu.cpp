@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <wchar.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" double ceil(double);
@@ -147,6 +148,10 @@ struct ItemMouseUp {
 
 // ---- items of slice s0081c9c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern int g_13ec468;
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(long long*);
+extern unsigned int g_164dd9c;
+extern void* PropertyManager();
+extern void UpdateMouseFocus(int);
 struct LimitStopwatch2 { void SetTimeLimit(int, int); };
 struct SB {
   char pad00[0x888];
@@ -172,6 +177,47 @@ struct MB {
   void Do030();
   void Reset();
 };
+struct PMLink { void Update(void*); };
+struct CopyHelper { void DoCopy(void*); };
+extern CopyHelper g_1546030;
+struct VO2 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+             virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual unsigned char Flags(); };
+struct VO { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual VO2* Get(); };
+struct PBtn { char pad[0x20c]; VO sub; };
+struct PMW {
+  char pad00[0x898];
+  char* upBtn;             // +0x898
+  char* downBtn;           // +0x89c
+  char pad01[0x8a4 - 0x8a0];
+  void* f8a4;              // +0x8a4
+  int bgImage;             // +0x8a8
+  int upDrawable;          // +0x8ac
+  int curIndex;            // +0x8b0
+  int f8b4;                // +0x8b4
+  char pad02[0x8c0 - 0x8b8];
+  unsigned char b8c0, b8c1, b8c2, b8c3;
+  void Do030();
+  void SelectItem(int);                  // 0x0081c370
+  void HideMenuItems(int, int);          // 0x0081b8b0
+  int GetItemIndexFromChar(unsigned);    // 0x0081bbe0
+  void BaseOnMouseUp(float, float, int, int);   // 0x00964450
+  void BaseOnMouseWheel(float, float, int, int);  // 0x006f2f20
+  void BaseOnChar(int, unsigned);               // 0x00950ea0
+  void OnAttach();
+  void OnMouseUp(float, float, int, int);
+  void OnChar(int, unsigned);
+  void OnScrollButtonClicked(char, int);
+  void OnMouseWheel(float, float, int, int);
+};
+struct PSB {
+  char pad00[0x8a0];
+  long long limit;         // +0x8a0
+  unsigned char active;    // +0x8a8 (byte at +0x8a9 tested below)
+  unsigned char flag;      // +0x8a9
+  void ScrollButtonSelected(int);
+  unsigned char BaseOnTick();   // 0x009645a0
+  unsigned char OnTick();
+};
 // ---- items of slice s0081c9c0 end
 
 // @ 0x0081aa80
@@ -181,18 +227,12 @@ void cSPUIPopupMenuScrollButton::OnFocusLost(int a, int b)
   OnFocusLostBase(a, b);
 }
 
-
-
-
 // @ 0x0081aad0
 void cSPUIPopupMenuWin::Reset()
 {
   mbF0 = 0; mbF1 = 0; mbF2 = 0; mbF3 = 0;
   mCenteredItemIndex = mSelectedItemIndex;
 }
-
-
-
 
 // @ 0x0081ad50
 void cSPUIPopupMenuItemWin::OnAttach()
@@ -219,9 +259,6 @@ void cSPUIPopupMenuItemWin::OnAttach()
   }
 }
 
-
-
-
 // @ 0x0081ae40
 void cSPUIPopupMenuItemWin::SomeFunc()
 {
@@ -230,9 +267,6 @@ void cSPUIPopupMenuItemWin::SomeFunc()
   ((void (__thiscall*)(void*, int, int))((void**)vt)[0x7c / 4])(self, 1, 0);
   OnAttach();
 }
-
-
-
 
 // @ 0x0081ae90
 void ScrollBtnCtor::Ctor()
@@ -245,9 +279,6 @@ void ScrollBtnCtor::Ctor()
   b0 = 0;
   b1 = 0;
 }
-
-
-
 
 // @ 0x0081af30
 void cSPUIPopupMenuScrollButton::OnMouseWheel(float a1, float a2, int a3, int a4)
@@ -264,9 +295,6 @@ void cSPUIPopupMenuScrollButton::OnMouseWheel(float a1, float a2, int a3, int a4
   OnMouseWheelBase(a1, a2, a3, a4);
 }
 
-
-
-
 // @ 0x0081afb0
 void cSPUIPopupMenuScrollButton::OnFocusAcquired(int a, int b)
 {
@@ -276,9 +304,6 @@ void cSPUIPopupMenuScrollButton::OnFocusAcquired(int a, int b)
   }
   OnFocusAcquiredBase(a, b);
 }
-
-
-
 
 // @ 0x0081b000
 void PopupWinCtor::Ctor()
@@ -292,17 +317,11 @@ void PopupWinCtor::Ctor()
   d0 = 0;
 }
 
-
-
-
 // @ 0x0081b100
 static void ReleaseRef(void* p)
 {
   ((void (__thiscall*)(void*))((void**)*(void**)p)[1])(p);
 }
-
-
-
 
 // @ 0x0081b510
 void PopupWinDetach::OnDetach()
@@ -331,9 +350,6 @@ void PopupWinDetach::OnDetach()
   if (m4) { void* q = m4; m4 = 0; ReleaseRef(q); }
 }
 
-
-
-
 // @ 0x0081b650
 void cSPUIPopupMenuWin::AddMenuItem2(cSPUIPopupMenuItemWin* item, bool attach)
 {
@@ -349,9 +365,6 @@ void cSPUIPopupMenuWin::AddMenuItem2(cSPUIPopupMenuItemWin* item, bool attach)
   ((void (__thiscall*)(void*, void*))((void**)mvt)[0xd8 / 4])(mself, iself);
   if (attach) item->OnAttach();
 }
-
-
-
 
 // @ 0x0081b6a0
 void* cSPUIPopupMenuWin2::AddMenuItem3(int id, int styleId, int parent, bool attach)
@@ -378,9 +391,6 @@ void* cSPUIPopupMenuWin2::AddMenuItem3(int id, int styleId, int parent, bool att
   return result;
 }
 
-
-
-
 // @ 0x0081b750
 void* cSPUIPopupMenuWin::FindChild(int idx)
 {
@@ -399,9 +409,6 @@ void* cSPUIPopupMenuWin::FindChild(int idx)
   }
   return 0;
 }
-
-
-
 
 // @ 0x0081b7d0
 void cSPUIPopupMenuWin::RemoveChild(int idx)
@@ -437,9 +444,6 @@ void cSPUIPopupMenuWin::RemoveChild(int idx)
   }
 }
 
-
-
-
 // @ 0x0081b8b0
 void cSPUIPopupMenuWin::HideMenuItems(bool a, bool b)
 {
@@ -474,8 +478,6 @@ void cSPUIPopupMenuWin::HideMenuItems(bool a, bool b)
   }
 }
 
-
-
 // @ 0x0081bce0
 bool C1::Method(int* arg)
 {
@@ -495,8 +497,6 @@ bool C1::Method(int* arg)
   return false;
 }
 
-
-
 // @ 0x0081bd50
 bool C2::Method2(int unused, Evt* e)
 {
@@ -510,8 +510,6 @@ bool C2::Method2(int unused, Evt* e)
   if (mFieldC == 0) return false;
   return ((bool (__thiscall*)(void*, int, int))VTSLOT(mFieldC, 0x38))(mFieldC, e->a, *(unsigned short*)&e->b);
 }
-
-
 
 // @ 0x0081bef0
 void Menu2::OnMenuItemSelected(Menu2* b, Menu2* a)
@@ -546,8 +544,6 @@ void Menu2::OnMenuItemSelected(Menu2* b, Menu2* a)
   }
 }
 
-
-
 // @ 0x0081bfb0
 void cAutoPropertyBaseLink::Update(void* except)
 {
@@ -567,8 +563,6 @@ void cAutoPropertyBaseLink::Update(void* except)
     it = *(void**)it;
   }
 }
-
-
 
 // @ 0x0081c900
 char ItemMouseUp::OnMouseUp(float a1, float a2, int a3, int a4)
@@ -590,6 +584,105 @@ char ItemMouseUp::OnMouseUp(float a1, float a2, int a3, int a4)
   return r;
 }
 
+// @ 0x0081c9c0
+void PMW::OnAttach()
+{
+  Do030();
+  void* self = (char*)this + 4;
+  void* o = ((void* (__thiscall*)(void*))VTSLOT(self, 0x10))(self);
+  if (o != 0) {
+    char* q = (char*)((void* (__thiscall*)(void*, int))VTSLOT(o, 0xc))(o, 0x4c058d5);
+    if (q != 0) {
+      ((void (__thiscall*)(void*, int, int))VTSLOT(self, 0x7c))(self, 1, 0);
+      f8b4 = *(int*)(q + 0x8a8);
+      (*(int*)(q + 0x8a8))++;
+    }
+  }
+  void* pm = PropertyManager();
+  void* old = f8a4;
+  if (old != 0) {
+    f8a4 = 0;
+    ((void (__thiscall*)(void*))VTSLOT(old, 4))(old);
+  }
+  if (((char (__thiscall*)(void*, int, void*))VTSLOT(pm, 0x30))(pm, 0x5c770db7, &f8a4))
+    g_1546030.DoCopy(f8a4);
+}
+
+// @ 0x0081ca60
+void PMW::OnMouseUp(float x, float y, int c, int d)
+{
+  if (bgImage != 0) {
+    void* self = (char*)this + 4;
+    float* r = ((float* (__thiscall*)(void*))VTSLOT(self, 0x38))(self);
+    bool inside = true;
+    if (x < 0.0f || y < 0.0f || r[2] - r[0] < x || r[3] - r[1] < y) inside = false;
+    void* o = ((void* (__thiscall*)(void*))VTSLOT(self, 0x10))(self);
+    if (o != 0) {
+      curIndex = upDrawable;
+      b8c0 = 0; b8c1 = 0; b8c2 = 0; b8c3 = 0;
+      PMLink* l = ((PMLink* (__thiscall*)(void*, int))VTSLOT(o, 0xc))(o, 0x4c058d5);
+      if (inside) {
+        if (l != 0) l->Update(this);
+        SelectItem(1);
+      } else {
+        HideMenuItems(0, 1);
+        EndModal(self, 0, 0);
+        if (l != 0)
+          ((void (__thiscall*)(void*, float, float, int, int))VTSLOT(l, 0x40))(l, -1.0f, -1.0f, c, d);
+      }
+    }
+  } else {
+    void* o = ((void* (__thiscall*)(void*))VTSLOT((char*)this + 4, 0x10))((char*)this + 4);
+    if (o != 0) {
+      curIndex = upDrawable;
+      b8c0 = 0; b8c1 = 0; b8c2 = 0; b8c3 = 0;
+      PMLink* l = ((PMLink* (__thiscall*)(void*, int))VTSLOT(o, 0xc))(o, 0x4c058d5);
+      if (l != 0) l->Update(this);
+    }
+  }
+  BaseOnMouseUp(x, y, c, d);
+}
+
+// @ 0x0081cbe0
+void PMW::OnChar(int a, unsigned b)
+{
+  int idx;
+  if ((unsigned short)(b - 0x30) <= 9) {
+    idx = GetItemIndexFromChar(b);
+  } else {
+    unsigned w = (wint_t)towlower((wint_t)b);
+    if ((unsigned short)(w - 0x61) > 0x19) goto done;
+    idx = GetItemIndexFromChar(w);
+  }
+  if (idx >= 0 && idx != curIndex) {
+    b8c2 = 0; b8c3 = 0; b8c0 = 0; b8c1 = 0;
+    curIndex = idx;
+    SelectItem(0);
+  }
+done:
+  BaseOnChar(a, b);
+}
+
+// @ 0x0081cc60
+void PMW::OnScrollButtonClicked(char down, int p3)
+{
+  char** pb = &upBtn;
+  if (!down) pb = &downBtn;
+  PBtn* bt = (PBtn*)*pb;
+  unsigned char f = bt->sub.Get()->Flags();
+  if ((f & 1) && (f & 2)) {
+    HideMenuItems(0, p3);
+    if (down) {
+      curIndex--;
+      b8c3 = 0;
+      SelectItem(0);
+      return;
+    }
+    curIndex++;
+    b8c2 = 0;
+    SelectItem(0);
+  }
+}
 
 // @ 0x0081cce0
 void MB::Reset()
@@ -608,7 +701,6 @@ void MB::Reset()
   f8ac = 0;
 }
 
-
 // @ 0x0081cd50
 void SB::ScrollButtonSelected(int arg)
 {
@@ -623,12 +715,45 @@ void SB::ScrollButtonSelected(int arg)
   timer.SetTimeLimit(g_164dd8c, 1);
 }
 
+// @ 0x0081cdb0
+void PMW::OnMouseWheel(float a, float b, int c, int delta)
+{
+  bool up = delta > 0;
+  char** pb = &upBtn;
+  if (!up) pb = &downBtn;
+  PBtn* btn = (PBtn*)*pb;
+  unsigned i = 0;
+  if (g_164dd9c > 0) {
+    do {
+      unsigned char f = btn->sub.Get()->Flags();
+      if (!(f & 1) || !(f & 2)) break;
+      OnScrollButtonClicked(up, 0);
+      i++;
+    } while (i < g_164dd9c);
+  }
+  UpdateMouseFocus(1);
+  BaseOnMouseWheel(a, b, c, delta);
+}
 
 // @ 0x0081ce60
 void ScrollBtn2::OnButtonClicked2(int arg)
 {
   ScrollButtonSelected(1);
   OnButtonClicked(arg);
+}
+
+// @ 0x0081ce80
+unsigned char PSB::OnTick()
+{
+  if (flag) {
+    long long now;
+    QueryPerformanceCounter(&now);
+    if (limit - now < 0) ScrollButtonSelected(0);
+  }
+  unsigned char r = BaseOnTick();
+  void* self = (char*)this + 4;
+  ((void (__thiscall*)(void*, int, int))VTSLOT(self, 0x7c))(self, 8, 1);
+  return r;
 }
 
 // @ 0x012fc2b0

@@ -1,4 +1,4 @@
-# va  diff-bytes  reason
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
 0081ad50 102 OnAttach: rect/ceil + multiple interface vcalls; scheduling differs
 0081ae90 35 ctor cSPUIPopupMenuScrollButton: vptr stores + Stopwatch/LimitStopwatch calls
 0081b000 134 ctor cSPUIPopupMenuWin: 12 pointer + float + flag initialisers, vptr stores
@@ -8,4 +8,6 @@
 0081b6a0 175 AddMenuItem(layout): cSPUILayout local frame + Init/FindWindowByID not exact
 0081bce0 36 key/flag dispatch: register allocation of the pointer arg differs (ecx vs eax)  [equiv UNSUPPORTED (0/1200 valid, fake-arity)]
 0081bd50 74 event dispatch: vcall+0x30/+0x38 arg passing schedule differs  [equiv PASS (1200 valid, 100% cov)]
+0081cc60 29 OnScrollButtonClicked: cl hoists the shared push 0/mov ecx before the up/down branch (orig keeps them per arm)  [equiv WEAK: 206 valid, 52% cov]
 0081cce0 27 list clear loop: this/list-head register roles swapped (edi/esi)  [equiv UNSUPPORTED (0/201 valid, fault(fetch))]
+0081cdb0 15 OnMouseWheel: bool up held in cl (orig al) and push order of tail  [equiv WEAK: 240 valid, 56% cov]
