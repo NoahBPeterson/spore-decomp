@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/eatrace_imp.cpp  ?MessageBoxThreadStart@Trace@EA@@YGHPAI@Z  00925000  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/eatrace_imp.cpp  ?UpdateTracerV@TraceHelperTable@Trace@EA@@QAEXXZ  009250b0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/eatrace_imp.cpp  ?SetTraceDialogEnabled@Trace@EA@@YAX_N@Z  009250c0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/eatrace_imp.cpp  ?UpdateTracer@TraceHelperTable@Trace@EA@@QAEXPAUITracer_s0092_45b0@23@@Z  009251d0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/eatrace_imp.cpp  ?ReserveHelper@TraceHelperTable@Trace@EA@@QAEPAUTraceHelper_s0092_45b0@23@IPBDHPBH@Z  00925420  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/eatrace_imp.cpp  ??_GTraceHelperTable@Trace@EA@@UAEPAXI@Z  009255a0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/eatrace_imp.cpp  ?CreateEnabledValue@Trace@EA@@YAPAXXZ  00925730  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/eatrace_imp.cpp  ?CreateTracerPtr@Trace@EA@@YAPAXXZ  00925770  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00925060 32 TraceHelperTable::Release: complete; xadd then `dec` vs `sub eax,1` and esi/edx pointer copies
+00925100 113 DisplayTraceDialog: complete; original re-reads msg from the stack instead of keeping it in ebp
+00925220 11 TraceHelper::TraceHelper: complete; arg load order (type/level in edx/ecx) and switch table placement
+00925370 106 hashtable::DoRehash: complete; ebp used for both bucket count and node temp in the original
+00925540 8 TraceLogManagerRef ctor: complete; push edi placement
+009255f0 133 TempTraceHelperMap::ReleaseHelpers: complete; iterator/register allocation differs

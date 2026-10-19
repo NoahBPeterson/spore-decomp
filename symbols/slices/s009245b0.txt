@@ -8,4 +8,17 @@
 00924c60 ?push_back@FString@Trace@EA@@QAEXD@Z  # FString::push_back migrated from s009245b0 (verbatim, slice spelling)
 00924d10 ?FormatRecord@LogFormatterSimple_s0092_45b0@Trace@EA@@QAEPBDPAUILogRecord@23@@Z  # LogFormatterSimple_s0092_45b0::FormatRecord migrated from s009245b0 (verbatim, slice spelling)
 00924d90 ?FormatRecord@LogFormatterFancy_s0092_45b0@Trace@EA@@QAEPBDPAUILogRecord@23@@Z  # LogFormatterFancy_s0092_45b0::FormatRecord migrated from s009245b0 (verbatim, slice spelling)
+00925000 ?MessageBoxThreadStart@Trace@EA@@YGHPAI@Z  # MessageBoxThreadStart migrated from s009245b0 (verbatim, slice spelling)
+00925060 ?Release@TraceHelperTable@Trace@EA@@QAEHXZ  # TraceHelperTable::Release migrated from s009245b0 (verbatim, slice spelling)
+009250b0 ?UpdateTracerV@TraceHelperTable@Trace@EA@@QAEXXZ  # TraceHelperTable::UpdateTracerV migrated from s009245b0 (verbatim, slice spelling)
+009250c0 ?SetTraceDialogEnabled@Trace@EA@@YAX_N@Z  # EA::Trace::SetTraceDialogEnabled migrated from s009245b0
+00925100 ?DisplayTraceDialog@Trace@EA@@YAHPBD0@Z  # EA::Trace::DisplayTraceDialog migrated from s009245b0
+009251d0 ?UpdateTracer@TraceHelperTable@Trace@EA@@QAEXPAUITracer_s0092_45b0@23@@Z  # TraceHelperTable::UpdateTracer migrated from s009245b0 (verbatim, slice spelling)
+00925220 ??0TraceHelper_s0092_45b0@Trace@EA@@QAE@IPBDHPBH@Z  # TraceHelper_s0092_45b0::TraceHelper migrated from s009245b0 (verbatim, slice spelling)
+00925370 ?DoRehash@TraceHashtable@Trace@EA@@QAEXI@Z  # TraceHashtable::DoRehash migrated from s009245b0 (verbatim, slice spelling)
+00925420 ?ReserveHelper@TraceHelperTable@Trace@EA@@QAEPAUTraceHelper_s0092_45b0@23@IPBDHPBH@Z  # TraceHelperTable::ReserveHelper migrated from s009245b0 (verbatim, slice spelling)
+00925540 ??0TraceLogManagerRef@Trace@EA@@QAE@XZ  # TraceLogManagerRef::TraceLogManagerRef migrated from s009245b0 (verbatim, slice spelling)
+009255a0 ??_GTraceHelperTable@Trace@EA@@UAEPAXI@Z  # TraceHelperTable::TraceHelperTable migrated from s009245b0 (verbatim, slice spelling)
+009255f0 ?ReleaseHelpers@TempTraceHelperMap@Trace@EA@@QAEXXZ  # TempTraceHelperMap::ReleaseHelpers migrated from s009245b0 (verbatim, slice spelling)
+00925730 ?CreateEnabledValue@Trace@EA@@YAPAXXZ  # CreateEnabledValue migrated from s009245b0 (verbatim, slice spelling)
 013eb938  ??_7ITracerBase@Trace@EA@@6B@
