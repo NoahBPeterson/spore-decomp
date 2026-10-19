@@ -2,6 +2,9 @@
 005ff1a0 ?GetElapsedTimeFloat@Stopwatch@EA@@QBEMXZ  # EA::Stopwatch::GetElapsedTimeFloat (callee of s0063aa90, named from the dev publics; slice address comment)
 0063aa90 ?HandleButton@cSPPlayModeSubModeAction_s0063_aa90@@QAE_NH@Z  # cSPPlayModeSubModeAction_s0063_aa90::HandleButton migrated from s0063aa90 (verbatim, slice spelling)
 0063b210 ??0cSPPlayModeSubModeAction_s0063_aa90@@QAE@XZ  # cSPPlayModeSubModeAction_s0063_aa90::cSPPlayModeSubModeAction migrated from s0063aa90 (verbatim, slice spelling)
+0063b290 ?Init@cSPPlayModeSubModeDance@@QAEXPAX@Z  # cSPPlayModeSubModeDance::Init migrated from s0063aa90 (verbatim, slice spelling)
+0063b330 ?HandleButton@cSPPlayModeSubModeDance@@QAE_NI@Z  # cSPPlayModeSubModeDance::HandleButton migrated from s0063aa90 (verbatim, slice spelling)
+0063b570 ?IsDancingAnim@cSPPlayModeSubModeDance@@QAE_NI_N@Z  # cSPPlayModeSubModeDance::IsDancingAnim migrated from s0063aa90 (verbatim, slice spelling)
 0063b5a0 SP::cSPPlayModeSubModeDance::cSPPlayModeSubModeDance  # stores vtbl, zeroes 4 fields
 0063b5c0 SP::cConnectingDialog::Init  # CardLayout init with key 834b03af/510a95b/40464100 then AddWinProc
 0063b640 ?SetDialogText@cConnectingDialog@?A0x879eca64@@QAEXH@Z  # SetDialogText migrated from s0063aa90 (verbatim, slice spelling)
