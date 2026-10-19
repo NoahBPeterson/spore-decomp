@@ -5292,7 +5292,7 @@ def main():
     for n in rw.notes:
         if n[0] != "probe":
             print("note", n[0], n[1][:200])
-    if a.batch:
+    if a.batch and not a.variant:             # a variant run never points back (an agent would loop)
         other_vars = sorted({var_of.get(va, "") for va in listed_all if var_of.get(va, "") != a.variant})
         for v in other_vars:
             vv = sorted(va for va in listed_all if var_of.get(va, "") == v)
