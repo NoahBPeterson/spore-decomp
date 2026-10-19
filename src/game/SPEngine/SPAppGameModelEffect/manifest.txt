@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPAppGameModelEffect.cpp  ?UnknownStore@cEffectParams@@QAEXHPAUIUnknown32@@@Z  007d4620  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelEffect.cpp  ?SetVisible@EffOwner@@QAEXH@Z  007d4820  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelEffect.cpp  ?Allocate@VecOut@@QAEPAU1@IPAX@Z  007d48e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

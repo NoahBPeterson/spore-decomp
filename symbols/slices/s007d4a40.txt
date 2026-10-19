@@ -1,4 +1,4 @@
-007d4a40  transform/description element init
+007d4a40 ?Init@TransformInit@@QAEPAXPBXPAXD@Z  # TransformInit::Init migrated from s007d4a40 (verbatim, slice spelling)
 007d4ae0  EA::Swarm::cEffectParams::~cEffectParams
 007d4b60  cEffectParams::Handle  # key change (kind 6) + component notify
 007d4c60  cEffectParams::Handle2  # kinds 1/3/6 + component notify

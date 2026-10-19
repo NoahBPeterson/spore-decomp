@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+007d4980  -  cSPTransform-vector assign loop: skeleton (per-label loop not reproduced)

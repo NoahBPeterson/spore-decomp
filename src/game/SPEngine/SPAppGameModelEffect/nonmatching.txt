@@ -1,0 +1,4 @@
+# <va>  <diff-bytes>  <reason>
+007d4670 88 effect tick: component loop + singleton release + message dispatch present; the exact vtable slots and guard shape differ [equiv: FAIL (5/199 mismatched; ours faults at vtable call)]
+007d4730 127 effect parameter dispatch: 4/5/0x101 cases + per-component notify present; compare tree and float scheduling differ [equiv: WEAK (56.2% cov)]
+007d4a40 74 transform init: field/matrix/float copies present; the Matrix3::Assign and ElemHelper call shapes differ; equiv: FAIL (now a member so this arrives in ecx; 5/5 inputs mismatch, ours faults in ElemCtor callee)

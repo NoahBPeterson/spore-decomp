@@ -7,9 +7,9 @@
 007d44c0  make a fresh cGameModelDescription and read it from a stream
 007d4540  key-presence test writing a 0x102-tagged key
 007d45d0  RandomRange  # random double in [min,max]
-007d4620  EA::Swarm::cEffectParams::UnknownStore  # AutoRefCount assign
-007d4670  effect tick/activate
-007d4730  effect parameter kind dispatch (4/5/0x101) + component notify
-007d4820  visibility setter (0x15 byte + per-component + singleton)
-007d48e0  vector storage allocation (element size 0x78)
-007d4980  cSPTransform vector assign loop
+007d4620 ?UnknownStore@cEffectParams@@QAEXHPAUIUnknown32@@@Z  # cEffectParams::UnknownStore migrated from s007d3930 (verbatim, slice spelling)
+007d4670 ?Tick@cEffectNode@@QAEXPAX@Z  # cEffectNode::Tick migrated from s007d3930 (verbatim, slice spelling)
+007d4730 ?HandleParam@cEffectNode@@QAEDHPAMPAX@Z  # cEffectNode::HandleParam migrated from s007d3930 (verbatim, slice spelling)
+007d4820 ?SetVisible@EffOwner@@QAEXH@Z  # EffOwner::SetVisible migrated from s007d3930 (verbatim, slice spelling)
+007d48e0 ?Allocate@VecOut@@QAEPAU1@IPAX@Z  # VecOut::Allocate migrated from s007d3930 (verbatim, slice spelling)
+007d4980 ?AssignTransforms@@YAXPAX0@Z  # AssignTransforms migrated from s007d3930 (verbatim, slice spelling)
