@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/ResourceRequest.cpp  ?SetEncoding@ResourceRequest@@QAE_NHH@Z  009002f0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
