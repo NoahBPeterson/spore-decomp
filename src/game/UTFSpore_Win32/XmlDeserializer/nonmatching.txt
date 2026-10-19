@@ -3,7 +3,7 @@
 0099a940 66 EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::StrDup  (thiscall, const wchar_t* -> void*; wide-string duplicate through the StackAllocator at this+4).  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast.  Functionally complete (length scan, 8-byte-rounded size, allocator grow check, end-pointer bump, copy), but MSVC's register allocation differs (this/length/base land in different callee-saved slots and the length loop loads via movzx rather than the original's 16-bit mov).  difftest equiv: PASS (230/400 valid inputs, 95.3% coverage, 41/43 insns).
 0099afe0 217 complete Fixup (recursive LazyReference id resolution); residual is register allocation and find() iterator temps
 0099b110 197 complete CreateLazyReference (stack-allocator pool); residual is register allocation around the zero-fill
-0099b1f0 19 complete ReadProperty (all type paths: object array, struct array, value array, key ref, plain value); CheckType (0x99a3f0) takes eax/ecx, a register convention not expressible here
+0099b1f0 654 complete ReadProperty (all type paths: object array, struct array, value array, key ref, plain value); CheckType (0x99a3f0) takes eax/ecx, a register convention not expressible here
 0099b660 102 complete XmlReaderState ctor; interleaving of the two StackAllocator calls and field stores differs; difftest PASS
 0099b730 175 complete ReadPropertyList; residual is shrink-wrapped registers and block order
 0099b8a0 177 complete ReadObject; residual is this/obj register swap (esi/edi) and error-block placement; difftest WEAK

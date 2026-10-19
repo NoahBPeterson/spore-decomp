@@ -327,82 +327,10 @@ struct XmlReaderState_s0099_afe0 {
   bool ReadGraph();                                                 // 0x0099bac0
   uint32_t Read();                                                  // 0x0099bc00
 };
-bool XmlReaderState_s0099_afe0::ReadProperty(SerItem* base, LazyReference** outRef)
+static inline void ReleaseTemp(StackAlloc* a, char* p)
 {
-  const wchar_t* propid = mReader->GetAttribute(L"propid");
-  const wchar_t* typeStr = mReader->GetAttribute(L"type");
-  const wchar_t* valueStr = mReader->GetAttribute(L"value");
-  const wchar_t* countStr = mReader->GetAttribute(L"count");
-  const wchar_t* keyStr = mReader->GetAttribute(L"key");
-  if (propid == 0) { Report(0x2fc50003); return false; }
-  int typeCode = 0;
-  if (typeStr == 0 || (typeCode = ParseTypeName(typeStr)) == 0) { Report(0x2fc50004); return false; }
-  SerItem prop;
-  PropInfo* info = base->FindProp(&prop, wcstoul(propid, 0, 0), this);
-  if (info) {
-    if (!CheckType(typeCode, info->flags & 0xfff)) {
-      Report(0x2fc50005);
-    } else {
-      uint32_t count = countStr ? wcstoul(countStr, 0, 0) : 1;
-      if (!((info->flags >> 15) & 1) && count != info->count) {
-        Report(0x2fc50007);
-      } else {
-        SerItem val;
-        if (!info->Build(&val, &prop, count, this, 0)) {
-          Report(3);
-          return false;
-        }
-        if (typeCode == 0x13) {
-          LazyReference* lr = CreateLazyReference(&prop, info, &val, count);
-          *outRef = lr;
-          if (!ReadObjectArray(lr))
-            return false;
-          goto done;
-        }
-        if (typeCode == 0x14) {
-          IList list;
-          if (!ReadStructArray(&val, &list))
-            return false;
-          if (list.anchor.prev == &list.anchor) {
-            if (!info->Commit(&prop, &val, this)) {
-              Report(0x2fc5000a);
-              mReader->EndElement();
-              return true;
-            }
-          } else {
-            LazyReference* lr = CreateLazyReference(base, info, &val, 0);
-            *outRef = lr;
-            MoveChildren(&list, &lr->children);
-          }
-          mReader->EndElement();
-          return true;
-        }
-        if (countStr != 0) {
-          if (!ReadPropertyValueArray(&val))
-            return false;
-        } else if (keyStr != 0) {
-          ResKey key = { 0, 0, 0 };
-          if (ReadResKey(keyStr, &key)) {
-            IDataBinder** it = mBinders->begin;
-            for (; it != mBinders->end; ++it) {
-              if ((*it)->BindKey(&val, typeCode, &key))
-                goto commit;
-            }
-            Report(0x2fc50009);
-          }
-        } else if (valueStr != 0) {
-          if (!ParsePropertyValue(val.w[1], typeCode, valueStr))
-            return false;
-        }
-      commit:
-        if (!info->Commit(&prop, &val, this))
-          Report(0x2fc5000a);
-      }
-    }
-  }
-done:
-  mReader->EndElement();
-  return true;
+  if (p > a->blk && p < a->blkEnd) { a->objBegin = p; a->objEnd = p; }
+  else a->Free(p);
 }
 struct IStreamX {
   virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
@@ -667,10 +595,82 @@ have_obj:
 }
 
 // @ 0x0099b1f0
-static inline void ReleaseTemp(StackAlloc* a, char* p)
+bool XmlReaderState_s0099_afe0::ReadProperty(SerItem* base, LazyReference** outRef)
 {
-  if (p > a->blk && p < a->blkEnd) { a->objBegin = p; a->objEnd = p; }
-  else a->Free(p);
+  const wchar_t* propid = mReader->GetAttribute(L"propid");
+  const wchar_t* typeStr = mReader->GetAttribute(L"type");
+  const wchar_t* valueStr = mReader->GetAttribute(L"value");
+  const wchar_t* countStr = mReader->GetAttribute(L"count");
+  const wchar_t* keyStr = mReader->GetAttribute(L"key");
+  if (propid == 0) { Report(0x2fc50003); return false; }
+  int typeCode = 0;
+  if (typeStr == 0 || (typeCode = ParseTypeName(typeStr)) == 0) { Report(0x2fc50004); return false; }
+  SerItem prop;
+  PropInfo* info = base->FindProp(&prop, wcstoul(propid, 0, 0), this);
+  if (info) {
+    if (!CheckType(typeCode, info->flags & 0xfff)) {
+      Report(0x2fc50005);
+    } else {
+      uint32_t count = countStr ? wcstoul(countStr, 0, 0) : 1;
+      if (!((info->flags >> 15) & 1) && count != info->count) {
+        Report(0x2fc50007);
+      } else {
+        SerItem val;
+        if (!info->Build(&val, &prop, count, this, 0)) {
+          Report(3);
+          return false;
+        }
+        if (typeCode == 0x13) {
+          LazyReference* lr = CreateLazyReference(&prop, info, &val, count);
+          *outRef = lr;
+          if (!ReadObjectArray(lr))
+            return false;
+          goto done;
+        }
+        if (typeCode == 0x14) {
+          IList list;
+          if (!ReadStructArray(&val, &list))
+            return false;
+          if (list.anchor.prev == &list.anchor) {
+            if (!info->Commit(&prop, &val, this)) {
+              Report(0x2fc5000a);
+              mReader->EndElement();
+              return true;
+            }
+          } else {
+            LazyReference* lr = CreateLazyReference(base, info, &val, 0);
+            *outRef = lr;
+            MoveChildren(&list, &lr->children);
+          }
+          mReader->EndElement();
+          return true;
+        }
+        if (countStr != 0) {
+          if (!ReadPropertyValueArray(&val))
+            return false;
+        } else if (keyStr != 0) {
+          ResKey key = { 0, 0, 0 };
+          if (ReadResKey(keyStr, &key)) {
+            IDataBinder** it = mBinders->begin;
+            for (; it != mBinders->end; ++it) {
+              if ((*it)->BindKey(&val, typeCode, &key))
+                goto commit;
+            }
+            Report(0x2fc50009);
+          }
+        } else if (valueStr != 0) {
+          if (!ParsePropertyValue(val.w[1], typeCode, valueStr))
+            return false;
+        }
+      commit:
+        if (!info->Commit(&prop, &val, this))
+          Report(0x2fc5000a);
+      }
+    }
+  }
+done:
+  mReader->EndElement();
+  return true;
 }
 
 // @ 0x0099b5a0

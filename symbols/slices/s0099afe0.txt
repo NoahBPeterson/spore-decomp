@@ -1,6 +1,6 @@
 0099afe0 ?Fixup@XmlReaderState_s0099_afe0@@QAE_NPAUIList@@@Z  # XmlReaderState_s0099_afe0::Fixup migrated from s0099afe0 (verbatim, slice spelling)
 0099b110 ?CreateLazyReference@XmlReaderState_s0099_afe0@@QAEPAULazyReference@@PAUSerItem@@PAUPropInfo@@0H@Z  # XmlReaderState_s0099_afe0::CreateLazyReference migrated from s0099afe0 (verbatim, slice spelling)
-0099b1f0 ?ReleaseTemp@@YAXPAUStackAlloc@@PAD@Z  # ReleaseTemp migrated from s0099afe0 (verbatim, slice spelling)
+0099b1f0 ?ReadProperty@XmlReaderState_s0099_afe0@@QAE_NPAUSerItem@@PAPAULazyReference@@@Z  # XmlReaderState_s0099_afe0::ReadProperty migrated from s0099afe0 (verbatim, slice spelling)
 0099b5a0 ?f@S99b5a0@@QAEXHH@Z  # S99b5a0::f migrated from s0099afe0 (verbatim, slice spelling)
 0099b5e0 ?f@S99b5e0@@QAEXXZ  # S99b5e0::f migrated from s0099afe0 (verbatim, slice spelling)
 0099b660 ?f@S99b660@@QAEPAU1@HHHHH@Z  # S99b660::f migrated from s0099afe0 (verbatim, slice spelling)
