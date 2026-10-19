@@ -15,4 +15,5 @@
 00951a80 eastl_vector_Vector3_DoAssignFromIterator  # EASTL assign shape, 12-byte elements
 00951b60 ?SetPoints@AnimationCurve@UTFWin@@UAEXPBUCurvePoint@@H@Z  # AnimationCurve::SetPoints migrated from s009515e0 (verbatim, slice spelling)
 00951b80 ?SetPoints@AnimationPath2D@UTFWin@@UAEXPBUVector3@Math@@H@Z  # AnimationPath2D::SetPoints migrated from s009515e0 (verbatim, slice spelling)
+00951bf0 ?copy_Rec20@@YAPAURec20@@PBU1@0PAU1@@Z  # copy_Rec20 migrated from s009515e0 (verbatim, slice spelling)
 00951c30 ?uninitialized_copy_Rec40@@YAPAURec40@@PBU1@0PAU1@@Z  # uninitialized_copy_Rec40 migrated from s009515e0 (verbatim, slice spelling)

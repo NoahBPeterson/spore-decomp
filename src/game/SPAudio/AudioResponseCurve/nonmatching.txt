@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00a1a110 66 complete; EA::Audio::ResponseCurve::GetOutputValue binary search; cl folds the `lo <= 0` fallthrough into an early return so the cold-path layout differs
+00a1a1e0 313 complete; eastl::vector<float>::insert (reallocating insert); original uses a different insertion idiom (DoInsertValue + memmove) than the reconstructed form
+00a1a2f0 361 complete; eastl::vector<ResponseCurveData>::insert(pos,n,value); in-place branch reproduced, realloc branch needs the original container builtins
+00a1a500 106 complete; eastl::vector<ResponseCurveData>::resize; branch/loop layout differs (the original arithmetic shape is not reproducible in plain C++ here)

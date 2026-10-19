@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPAudio/AudioResponseCurve.cpp  ?copy_Rec20@@YAPAURec20@@PBU1@0PAU1@@Z  00951bf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPAudio/AudioResponseCurve.cpp  ?GetMaxInput@ResponseCurve@@QAE_NPAM@Z  00a1a1a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResponseCurve.cpp  ?GetMinInput@ResponseCurve@@QAE_NPAM@Z  00a1a1c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResponseCurve.cpp  ?pushBack@FloatVec@@QAEXABM@Z  00a1a4d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
