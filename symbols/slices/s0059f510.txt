@@ -1,8 +1,9 @@
-0059f510 eastl::vector<cSPUILayout,eastl::sp_vector_allocator>::insert-fill  # vector fill-insert 0x18 records
-0059f7c0 SP::cSPEditorBlockAbilities::SortAbilities  # PDB name
-0059f900 SP::cSPEditorBlockAbilities layout-vector shutdown  # calls cSPUILayout::Shutdown(,1) then vector::erase
-0059f950 eastl::vector<cSPUILayout,eastl::sp_vector_allocator>::resize  # PDB candidate
-0059f9e0 SP::cSPEditorVehicleAbilities ctor  # sets vptrs + vehicle key fields
-0059fa50 SP::cSPEditorBlockAbilities scalar deleting destructor  # PDB candidate
-0059faa0 ability-vector erase-range  # virtual slot 8 calls
+0059f510 ?VectorInsertFill@@YAXPAUUILayoutVector@@PAUcSPUILayout_s0059_f510@@I1@Z  # VectorInsertFill migrated from s0059f510 (verbatim, slice spelling)
+0059f7c0 ?SortAbilities@@YAHPAX0@Z  # SortAbilities migrated from s0059f510 (verbatim, slice spelling)
+0059f900 ?ShutdownLayouts@cSPEditorBlockAbilities@@QAEXXZ  # cSPEditorBlockAbilities::ShutdownLayouts migrated from s0059f510 (verbatim, slice spelling)
+0059f950 ?resize@UILayoutVector@@QAEXI@Z  # UILayoutVector::resize migrated from s0059f510 (verbatim, slice spelling)
+0059f9e0 ??0VehicleAbilities@@QAE@XZ  # VehicleAbilities::VehicleAbilities migrated from s0059f510 (verbatim, slice spelling)
+0059fa50 ?ScalarDeletingDtor@@YAPAXPAXE@Z  # ScalarDeletingDtor migrated from s0059f510 (verbatim, slice spelling)
+0059faa0 ?EraseRange@AbilityVector@@QAEHPAUAbilityRec@@0@Z  # AbilityVector::EraseRange migrated from s0059f510 (verbatim, slice spelling)
 0059fc60 SP::BlockGetAbilities  # PDB name
+005e5470 ?Init@cSPEditorVerbIconData@SP@@UAEXPAVcPropertyList@2@@Z  # SP::cSPEditorVerbIconData::Init (callee of s0059f510, named from the dev publics; slice address comment)

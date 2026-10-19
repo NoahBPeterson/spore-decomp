@@ -1,1 +1,2 @@
-005a0510 SP::cSPEditorBlockAbilities::LayoutAbilities  # PDB caller-scored; 5132-byte body
+005a0510 ?LayoutAbilities@cSPEditorBlockAbilities_s005a_0510@SP@@QAEXPAUIWindow@@_N@Z  # cSPEditorBlockAbilities_s005a_0510::LayoutAbilities migrated from s005a0510 (verbatim, slice spelling)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005a0510, named from the dev publics; slice address comment)
