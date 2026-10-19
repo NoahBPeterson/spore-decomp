@@ -831,6 +831,46 @@ The workflow is `matching.md` "Workflow"; the lessons that keep recurring:
 
 ---
 
+## 15. Levers found in the 2026-10-19 overnight waves
+
+The dec1 and mig waves (reports in `work/claude/dec1_reports/`, requests in `work/claude/mig8_requests.md`) found these. Each one made at least one function byte-exact or removed a named diff. They are not yet folded into the sections above.
+
+**Frame and stack slots**
+- MSVC reuses a dead parameter's stack slot for a later local. Reusing the parameter in source (`int& count = (int&)key;`) reproduces it (0x661b10).
+- An empty-class temporary, such as an empty allocator argument, is passed as the address of an existing parameter slot. Passing `&param` reproduces the reload after the call (s00689ee0).
+- An output dword local must be `uint32_t`, not a 12-byte struct, or the frame grows (s00660dd0).
+- Local order is not plain declaration order. In 0x91fca0 the locals sorted by size ascending, then by declaration. Shrinking an array (`char q1[0x105]`) was the only way to move it below another.
+- For `/Od` slot order, see `tools/matching/od_names.py`. A hill-climbing probe prototype that found a 14-local order in one run is at `work/match/scratch_s0056a7b0_probe.py`.
+
+**Calls, EH and inlining**
+- Declaring a dealloc helper (`EastlFree`) `throw()` removes the extra EH state store before an inlined vector destructor (0x711490).
+- A six-argument placement `new` gets its EH state stores only when a matching placement `operator delete` is declared (0x697c40).
+- MSVC drops a call to an empty function in the same file even when it is `noinline`. Give the stub a `volatile` store (0x5e4560 and its caller 0x5e49c0).
+- MSVC elides `mLayout(Tmp())` copies. Use a distinct temporary type with its own constructor and destructor, and put the member in a base class so the derived vptr store comes after the member copy (s008087f0).
+- `delete f()` and `delete p` produce the inlined scalar-deleting-destructor block, and a default-argument allocator temporary inside an inlined vector constructor gives the temp-then-stores order (`/Od`, s00440110).
+- A class-level `operator new` reproduces a null-checked allocation (0x6b5c50).
+- A function whose original has no unwind frames around its refcount temporaries must be compiled without `/EHsc`. Several property-UI functions need `/O2 /MD /Gy /TP /arch:SSE /fp:fast`.
+- Functions with an old-style EH frame often match only under `/GS-`.
+
+**Types and layout**
+- Model `cSPUIBehaviorEventBase` with real multiple inheritance (a 0x18-byte primary base, the interface at +0x18). The container null-check then comes from the upcast; this flipped three functions in s007f9550.
+- An EASTL bool tag passed by value is a `struct { bool b; }` local set to false. The compiler stores a 0 byte into a dead parameter slot and pushes the dword (0x660c10).
+- In `insert(&it, v.Ctor(...), tag)` the `Ctor` call is evaluated before the tag store.
+- A hinted map insert, an iterator passed by value, and `__assume(p == 0)` on null `AutoRefCount` temporaries took 0x69eb60 from 134 to 69 diff bytes.
+- Pass the raw pointer to the inlined `AutoRefCount` copy to get the original's register-held refcount pointer (s00660dd0).
+
+**Intrinsics and floating point**
+- An unrolled two-character compare ending in `sbb eax,eax; sbb eax,-1` is the `wcscmp` intrinsic (`#pragma intrinsic(wcscmp)` with `<wchar.h>`). Use `wcslen` the same way.
+- `fabsf` without `/Oi`: declare `extern "C" double __cdecl fabs(double); #pragma intrinsic(fabs)` before including `math.h` and `xmmintrin.h`.
+- `if (fabsf(x) > kGlobalConst)` gives the SSE compare through a stack temporary. A literal gives x87 `fcompi` (s0056a7b0).
+- `/arch:SSE2` turns 0x24-byte by-value copies into `movq`, where the original uses `rep movsd`. Use `/arch:SSE` for such functions (0x65ef30).
+- `_ReadWriteBarrier()` also pins a load after earlier stores (0x7cde80, 15 diff bytes to 0).
+
+**Still without a lever**
+- the `sub eax,N / je` dispatch chain (0x7e0340, 0x7e05e0), where switch, if-chain and unsigned switch all give range compares;
+- the property-UI `Modify*` frame of 0x60 against the original's 0x4c (nine functions);
+- a callee's ABI that is custom register arguments.
+
 ## Appendix: where to look
 
 | Need | Tool / doc |
