@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+0096f080 29 BiStateEffect_func84h: float temp kept in register and 0xffffff add folded to a subtract
