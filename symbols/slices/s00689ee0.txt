@@ -22,3 +22,4 @@
 0068af10 ??0cStringCommandGenerator@@QAE@XZ  # cStringCommandGenerator::cStringCommandGenerator migrated from s00689ee0 (verbatim, slice spelling)
 0068b000  SP::cCommandParameterSet::SetParameterCount  # PDB; parse then build parameter set
 0093dd80 ??0Variant@EA@@QAE@PBXII_NG@Z  # EA::Variant::Variant (callee of s00689ee0, named from the dev publics; slice address comment)
+0068b000 ?SetParameterCount@cStringCommandGenerator@@QAE_NPAUWStr@@PAIPAPAUcCommandParameterSet@@@Z  # this+0xc is the token vector filled by ParseCmd (cStringCommandGenerator layout), not the parameter-set map the PDB candidate suggests

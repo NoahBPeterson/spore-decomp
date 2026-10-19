@@ -12,3 +12,6 @@
 0068ad30  20   cCommandParameterSet ctor: vtable stores and map anchor init correct, cl reorders/CSEs the zero stores
 0068ad90  380  ExecuteCommand: variant type selection, locale path and cleanup present, scheduling/regalloc differ throughout
 0068af10  133  cStringCommandGenerator ctor: vtable stores + parameter-set new correct, EH frame around new-expression differs
+0068a460  104  vector<WStr>::vector(n, alloc) (thiscall ret 8, returns this): base ctor 0x7c7a40 + uninitialized_fill_n(0x555c40) with an empty-string temp; original drops the temp's destructor from the normal path (EH funclet only), cl keeps it [equiv: PASS 271 valid inputs, 100% coverage]
+0068a7a0  79  AdjustParameterCount: add loop through vtable +0x24 with a Variant local (inline dtor), shrink loop via RBTreeDecrement/Increment/Erase; original holds two separate copies of the map anchor in ebx/ebp, which spills n to the stack [equiv: WEAK 98 valid inputs, 68.7% coverage]
+0068a9e0  208  GetCommandIDFromCommandString: vector<WStr> local, ParseCmd, vtable +0x34; original keeps the str parameter in a register across the vector ctor call (empty allocator argument is the parameter slot address) [equiv: WEAK 183 valid inputs, 96.6% coverage]

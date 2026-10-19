@@ -3,3 +3,4 @@ slices/s0063caf0/s0063caf0.cpp  ?CheckYouTubeRegistration@cSPPlayModeSubModeMovi
 slices/s0063caf0/s0063caf0.cpp  ?FUN_0063cf90@cSPPlayModeSubModeMovie@@QAEXXZ  0063cf90  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s0063caf0/s0063caf0.cpp  ?ConstructYouTubeVideoUploadXMLRequest@cSPPlayModeSubModeMovie@@QAEXPAV  0063d050  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s0063caf0/s0063caf0.cpp  ?ToggleRecordingIndicator@cSPPlayModeSubModeMovie@@QAEXD@Z  0063d910  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063caf0/s0063caf0.cpp  ?FUN_0063cd30@cSPPlayModeSubModeMovie@@QAEXXZ  0063cd30  /O2 /MD /Gy /TP /arch:SSE /GS-
