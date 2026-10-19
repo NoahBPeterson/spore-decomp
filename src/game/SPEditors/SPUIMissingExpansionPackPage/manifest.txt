@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPUIMissingExpansionPackPage.cpp  ?Destroy@MissingPage@@QAEPAU1@I@Z  00671630  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUIMissingExpansionPackPage.cpp  ?DoMessage@MissingPage@@QAE_NHPAH@Z  00671760  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUIMissingExpansionPackPage.cpp  ?SetVisibility@MissingPage@@QAEXH@Z  006717e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
