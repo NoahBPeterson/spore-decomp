@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/Draw2D.cpp  ?uninitialized_copy_Rec40@@YAPAURec40@@PBU1@0PAU1@@Z  00951c30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Draw2D.cpp  ?GetBounds@Bounds@@QAEDPAM@Z  00952100  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Draw2D.cpp  ?SetBounds@Bounds@@QAEXDPBM@Z  00952130  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Draw2D.cpp  ?InternalInit2DSystem@@YA_NPAUI2DSystem@@@Z  009568c0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Draw2D.cpp  ?FUN_00956af0@@YIHPAX@Z  00956af0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include

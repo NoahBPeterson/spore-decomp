@@ -1,1 +1,1 @@
-00954a00 EA::UTFWin::Draw2D::FillQuadGrad  # inferred: follows dev-PDB Draw2D::FillGradH/FillGradV/FillTriGrad, 4 (point,color) pairs, Draw2D layout (mpRenderable/mColor/mbClip/mClipRect)
+00954a00 ?FillQuadGrad@Draw2D_s0095_4a00@UTFWin@EA@@QAEXABUPoint2D@23@I0I0I0I@Z  # Draw2D_s0095_4a00::FillQuadGrad migrated from s00954a00 (verbatim, slice spelling)

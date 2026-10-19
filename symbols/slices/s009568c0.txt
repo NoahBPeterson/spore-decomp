@@ -1,5 +1,6 @@
-009568c0 EA::UTFWin::InternalInit2DSystem  # card (real PDB name), byte-exact
+009568c0 ?InternalInit2DSystem@@YA_NPAUI2DSystem@@@Z  # InternalInit2DSystem migrated from s009568c0 (verbatim, slice spelling)
 00956a30 EA::UTFWin::InternalShutdown2DSystem  # mirror of Init: refcount dec, font mgr release, pool/memory manager delete
+00956af0 ?FUN_00956af0@@YIHPAX@Z  # FUN_00956af0 migrated from s009568c0 (verbatim, slice spelling)
 00956b30 EA::UTFWin::GlyphRenderer::DrawText  # LayoutTextLine into a fixed_vector<GlyphDisplayEntry,256>, then vslot 13 draws the glyphs
 00956c40 EA::UTFWin::GlyphRenderer::DrawText  # 4-float overload (FUN_00890830 layout variant)
 00956f30 EA::UTFWin::FreeAllPooledLists  # drains display-list pool and renderable list chunk pool
