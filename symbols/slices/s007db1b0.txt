@@ -7,7 +7,7 @@
 007db620 ?At@PtrVec@@QAEPAXH@Z  # PtrVec::At migrated from s007db1b0 (verbatim, slice spelling)
 007db650 ?Init@cPackManager@@QAE_NXZ  # cPackManager::Init migrated from s007db1b0 (verbatim, slice spelling)
 007db8b0  cPackInfoVec::Clear
-007db920 ?Init@cSmoothCameraController@@QAE_NH@Z  # cPackManager::Init migrated from s007db1b0 (verbatim, slice spelling)
+007db920 ?Init@cSmoothCameraController@@QAE_NH@Z  # cSmoothCameraController::Init migrated from s007db1b0 (verbatim, slice spelling)
 007db950 ?HandleMessage@cSmoothCameraController@@QAE_NHPAX@Z  # cSmoothCameraController::HandleMessage migrated from s007db1b0 (verbatim, slice spelling)
 007dbc30 ?OnKeyDown@cSmoothCameraController@@QAE_NHH@Z  # cSmoothCameraController::OnKeyDown migrated from s007db1b0 (verbatim, slice spelling)
 007dbcb0 ?SetFocus@cSmoothCameraController@@QAEXH@Z  # cSmoothCameraController::SetFocus migrated from s007db1b0 (verbatim, slice spelling)
@@ -16,6 +16,6 @@
 007dbdf0 ?SetSavedCamera@cSmoothCameraController@@QAEXPAM@Z  # cSmoothCameraController::SetSavedCamera migrated from s007db1b0 (verbatim, slice spelling)
 007dbe50  SP::cSmoothCameraController::StopMotion  # PDB name
 007dbea0  SP::cSmoothCameraController::SaveCameraPosition  # PDB name
-007dbf20  SP::cSmoothCameraController::RestoreCameraPosition  # PDB name
-007dbfe0  SP::cSmoothCameraController::SetCurrentZoomLevel  # PDB name
+007dbf20 ?RestoreCameraPosition@cSmoothCameraController@@QAEXH@Z  # cSmoothCameraController::RestoreCameraPosition migrated from s007db1b0 (verbatim, slice spelling)
+007dbfe0 ?SetCurrentZoomLevel@cSmoothCameraController@@QAEXH@Z  # cSmoothCameraController::SetCurrentZoomLevel migrated from s007db1b0 (verbatim, slice spelling)
 007dc140  SP::cSmoothCameraController::SetCurrentDiscreteOrientation  # PDB name

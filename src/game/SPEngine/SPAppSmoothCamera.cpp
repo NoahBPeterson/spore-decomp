@@ -12,6 +12,7 @@ extern int g_16389d0;
 #include <math.h>
 #include "SP/cViewer.h"
 #include "SP/cPropertyList.h"
+#include "SP/cString.h"
 
 // ---- items of slice s007db1b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct cSPVector3_s007d_b1b0 { float x, y, z; };
@@ -107,13 +108,7 @@ struct cSmoothCameraController {
     void SetCurrentZoomLevel(int level);             // 007dbfe0
     void SetCurrentDiscreteOrientation(int orient);  // 007dc140
 };
-extern int g_16389dc, g_16389e0, g_16389e4;
-extern int g_16389d0;
-bool cSmoothCameraController::Init(int)
-{
-    ((void(__thiscall*)(void*))(((void**)*(void**)this)[0x60 / 4]))(this);
-    return false;
-}
+extern bool g_16389d0_s007d_b1b0;
 void cSmoothCameraController::StopMotion()
 {
     mBufferedDistanceAlongCurve.mSteps = (uint32_t)mBufferedDistanceAlongCurve.mMinChange;
@@ -147,38 +142,12 @@ void cSmoothCameraController::SaveCameraPosition(int index)
     p->mFloorLevel = 0;
     p->mWallMode = 0;
 }
-void cSmoothCameraController::RestoreCameraPosition(int index)
-{
-    if (index >= 7)
-        return;
-    SP2::tSavedCameraPosition* p = &mCameraPositions[index];
-    if (!p->mValid)
-        return;
-    void** vt = *(void***)this;
-    ((void(__thiscall*)(void*, int))vt[0x74 / 4])(this, p->mCurrentZoomLevel);
-    ((void(__thiscall*)(void*, float))vt[0xd4 / 4])(this, p->mDistance);
-    ((void(__thiscall*)(void*, int))vt[0x88 / 4])(this, p->mCurrentOrientation);
-    ((void(__thiscall*)(void*, float))vt[0xb8 / 4])(this, p->mNearClip);
-    ((void(__thiscall*)(void*, void*))vt[0x68 / 4])(this, (void*)0);
-}
-void cSmoothCameraController::SetCurrentZoomLevel(int level)
-{
-    mCurrentZoomLevel = level;
-    if (level < 0) {
-        mCurrentZoomLevel = 0;
-    } else if (level >= (int)(((char*)mZoomLevels.mpEnd - (char*)mZoomLevels.mpBegin) >> 2)) {
-        mCurrentZoomLevel =
-            (int)(((char*)mZoomLevels.mpEnd - (char*)mZoomLevels.mpBegin) >> 2) - 1;
-    }
-    float t = ((float*)mZoomLevels.mpBegin)[mCurrentZoomLevel];
-    void** vt = *(void***)this;
-    ((void(__thiscall*)(void*, float))vt[0xd4 / 4])(this, t);
-    (void)vt;
-    mBufferedNearClip.mMinChange = t;
-    mBufferedFarClip.mMinChange = t;
-    mBufferedFOV.mMinChange = t;
-    mBufferedPitchParam.mMinChange = t;
-}
+#define CF(T, off) (*(T*)((char*)this + (off)))
+#define CVT(off, R, ...) ((R(__thiscall*)(void*, ##__VA_ARGS__))(*(void***)this)[(off) / 4])
+struct FVec_s007d_b1b0 {                                 // eastl::vector<float, sp_vector_allocator>
+    float* mpBegin; float* mpEnd; float* mpCapacity; void* mAlloc;
+    int size() const { return (int)(mpEnd - mpBegin); }
+};
 void cSmoothCameraController::SetCurrentDiscreteOrientation(int orient)
 {
     mxyzSubjectOffset.z = (float)orient;
@@ -190,12 +159,6 @@ void cSmoothCameraController::SetCurrentDiscreteOrientation(int orient)
     while ((int)mxyzSubjectOffset.z >= n)
         mxyzSubjectOffset.z -= (float)n;
 }
-struct cPackManager {
-    char mPad00[0xc];
-    void* mAvailablePacks[3];  // +0xc
-    char mPad18[0xc];
-    bool Init();
-};
 // ---- items of slice s007db1b0 end
 
 // ---- items of slice s007dc1b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -752,94 +715,99 @@ void* __cdecl operator new(size_t size, const char* pName, int flags, int dbgFla
 // ---- items of slice s007de7d0 end
 
 // @ 0x007db920
-bool cPackManager::Init()
+bool cSmoothCameraController::Init(int)
 {
-    // Collects all pack property lists from the resource manager and builds the
-    // available-pack list, sorted by sequence number.
-    return true;
+    ((void(__thiscall*)(void*))(((void**)*(void**)this)[0x60 / 4]))(this);
+    return false;
 }
 
 // @ 0x007db950
 bool cSmoothCameraController::HandleMessage(int msg, void* data)
 {
-    float* d = (float*)data;
-    switch (msg) {
-    case 0x101d51f:
-        *(float*)&mTracking = d[0];
-        mStartMouseWheelLevel = (int)d[1];
-        mKeyboardRotation.mCurrent = d[2];
-        mKeyboardRotation.mTarget = d[3];
-        mRelativeOrientation.mCurrent.w = d[0];
-        mRelativeOrientation.mSteps = (uint32_t)d[1];
-        mRelativeOrientation.mMinChange = d[2];
-        mHeadingRelative = d[3];
-        break;
-    case 0x101b542:
-        mBufferedLookAtPosition.mTarget.z = d[0];
-        mBufferedLookAtPosition.mSteps = (uint32_t)d[1];
-        mBufferedLookAtPosition.mMinChange = d[2];
-        mFOVLevels.mpBegin = *(void**)&d[0];
-        mFOVLevels.mpEnd = *(void**)&d[1];
-        mFOVLevels.mpCapacity = *(void**)&d[2];
-        g_16389d0 = 1;
-        break;
-    case 0x101b534:
-        mBufferedLookAtPosition.mCurrent.x = d[0];
-        mBufferedLookAtPosition.mCurrent.y = d[1];
-        mBufferedLookAtPosition.mCurrent.z = d[2];
-        break;
-    case 0x101b537:
-        mBufferedSubjectPosition.mTarget.z = d[0];
-        mBufferedSubjectPosition.mSteps = (uint32_t)d[1];
-        mBufferedSubjectPosition.mMinChange = d[2];
-        mBufferedLookAtPosition.mCurrent.x = d[0];
-        mBufferedLookAtPosition.mCurrent.y = d[1];
-        mBufferedLookAtPosition.mCurrent.z = d[2];
-        break;
+    unsigned int* p = (unsigned int*)data;
+    switch ((unsigned int)msg) {
+    case 0x101b534:                                   // buffered look-at current
+        *(unsigned int*)((char*)this + 0x100) = p[0];
+        *(unsigned int*)((char*)this + 0x104) = p[1];
+        *(unsigned int*)((char*)this + 0x108) = p[2];
+        return false;
+    case 0x101b537:                                   // subject target + look-at current
+        *(unsigned int*)((char*)this + 0x0f4) = p[0];
+        *(unsigned int*)((char*)this + 0x0f8) = p[1];
+        *(unsigned int*)((char*)this + 0x0fc) = p[2];
+        *(unsigned int*)((char*)this + 0x100) = p[0];
+        *(unsigned int*)((char*)this + 0x104) = p[1];
+        *(unsigned int*)((char*)this + 0x108) = p[2];
+        return false;
+    case 0x101b541:                                   // look-at target
+        *(unsigned int*)((char*)this + 0x114) = p[0];
+        *(unsigned int*)((char*)this + 0x118) = p[1];
+        *(unsigned int*)((char*)this + 0x11c) = p[2];
+        g_16389d0_s007d_b1b0 = 1;
+        return false;
+    case 0x101b542:                                   // look-at target + FOV levels
+        *(unsigned int*)((char*)this + 0x114) = p[0];
+        *(unsigned int*)((char*)this + 0x118) = p[1];
+        *(unsigned int*)((char*)this + 0x11c) = p[2];
+        *(unsigned int*)((char*)this + 0x120) = p[0];
+        *(unsigned int*)((char*)this + 0x124) = p[1];
+        *(unsigned int*)((char*)this + 0x128) = p[2];
+        g_16389d0_s007d_b1b0 = 1;
+        return false;
     case 0x101b543:
-        *(float*)&mTracking = d[0];
-        mStartMouseWheelLevel = (int)d[1];
-        mKeyboardRotation.mCurrent = d[2];
-        mKeyboardRotation.mTarget = d[3];
-        break;
-    case 0x101d445:
-        mContinuousZoomDistance = d[0];
-        mBufferedNearClip.mTarget = d[0];
-        break;
+    case 0x101d576:                                   // orientation (4 words)
+        *(unsigned int*)((char*)this + 0x190) = p[0];
+        *(unsigned int*)((char*)this + 0x194) = p[1];
+        *(unsigned int*)((char*)this + 0x198) = p[2];
+        *(unsigned int*)((char*)this + 0x19c) = p[3];
+        return false;
+    case 0x101d445:                                   // continuous zoom distance + near clip
+        *(float*)((char*)this + 0x28) = *(float*)data;
+        *(float*)((char*)this + 0xa4) = *(float*)data;
+        return false;
     case 0x101d4c7:
-        mContinuousZoomDistance = d[0];
-        break;
+        *(float*)((char*)this + 0x28) = *(float*)data;
+        return false;
+    case 0x101d51f:                                   // tracking + buffered look-at
+        *(unsigned int*)((char*)this + 0x190) = p[0];
+        *(unsigned int*)((char*)this + 0x194) = p[1];
+        *(unsigned int*)((char*)this + 0x198) = p[2];
+        *(unsigned int*)((char*)this + 0x19c) = p[3];
+        *(unsigned int*)((char*)this + 0x180) = p[0];
+        *(unsigned int*)((char*)this + 0x184) = p[1];
+        *(unsigned int*)((char*)this + 0x188) = p[2];
+        *(unsigned int*)((char*)this + 0x18c) = p[3];
+        return false;
     case 0x109d1af:
-        if (d[0] > 0.0f) mBufferedFOV.mSteps = (uint32_t)d[0];
-        break;
-    case 0x109d174:
-        if (d[0] > 0.0f) mBufferedPitchParam.mSteps = (uint32_t)d[0];
-        break;
-    case 0x109d1aa:
-        if (d[0] > 0.0f) mBufferedFarClip.mSteps = (uint32_t)d[0];
-        break;
+        if (*(float*)data > 0.0f) *(float*)((char*)this + 0xc8) = *(float*)data;
+        return false;
+    case 0x109d574:
+        if (*(float*)data > 0.0f) *(float*)((char*)this + 0xd8) = *(float*)data;
+        return false;
+    case 0x109d5aa:
+        if (*(float*)data > 0.0f) *(float*)((char*)this + 0xb8) = *(float*)data;
+        return false;
     case 0x109d352:
-        if (d[0] > 0.0f) {
-            mBufferedPitchParam.mTarget = d[0];
-            mBufferedPitchParam.mSteps = (uint32_t)d[0];
+        if (*(float*)data > 0.0f) {
+            *(float*)((char*)this + 0xd4) = *(float*)data;
+            *(float*)((char*)this + 0xd8) = *(float*)data;
         }
-        break;
+        return false;
     case 0x109d372:
-        if (d[0] > 0.0f) {
-            mBufferedFarClip.mSteps = (uint32_t)d[0];
-            mBufferedFarClip.mTarget = d[0];
+        if (*(float*)data > 0.0f) {
+            *(float*)((char*)this + 0xb8) = *(float*)data;
+            *(float*)((char*)this + 0xb4) = *(float*)data;
         }
-        break;
+        return false;
     case 0x109d375:
-        if (d[0] > 0.0f) {
-            mBufferedFOV.mSteps = (uint32_t)d[0];
-            mBufferedFOV.mTarget = d[0];
+        if (*(float*)data > 0.0f) {
+            *(float*)((char*)this + 0xc8) = *(float*)data;
+            *(float*)((char*)this + 0xc4) = *(float*)data;
         }
-        break;
+        return false;
     default:
-        break;
+        return false;
     }
-    return false;
 }
 
 // @ 0x007dbc30
@@ -908,6 +876,66 @@ void cSmoothCameraController::SetSavedCamera(float* src)
     void** vt = *(void***)this;
     memcpy(&mCameraPositions[0].mPitchParam, src, 0x38);
     ((void(__thiscall*)(void*, int))vt[0xcc / 4])(this, 0);
+}
+
+// @ 0x007dbf20
+void cSmoothCameraController::RestoreCameraPosition(int index)
+{
+    if ((unsigned)index > 6)
+        return;
+    char* p = (char*)this + index * 56 + 0x208;
+    if (!*p)
+        return;
+    CVT(0x74, void, int)(this, *(int*)(p + 4));
+    float r = CVT(0xd4, float, float)(this, *(float*)(p + 8));
+    CF(float, 0x2c) = r;
+    CVT(0x88, void, int)(this, *(int*)(p + 0xc));
+    CF(float, 0x9c) = *(float*)(p + 0x10);
+    void (__thiscall* setPos)(void*, void*) = CVT(0xb8, void, void*);
+    CF(float, 0xbc) = *(float*)(p + 0x14);
+    CF(float, 0xcc) = *(float*)(p + 0x18);
+    CF(float, 0xdc) = *(float*)(p + 0x1c);
+    CF(float, 0xec) = *(float*)(p + 0x20);
+    CF(float, 0xac) = r;
+    setPos(this, p + 0x24);
+    CVT(0x68, void, int)(this, 0);
+}
+
+// @ 0x007dbfe0
+void cSmoothCameraController::SetCurrentZoomLevel(int level)
+{
+    FVec_s007d_b1b0& zoom = CF(FVec_s007d_b1b0, 0x30);
+    FVec_s007d_b1b0& nearP = CF(FVec_s007d_b1b0, 0x44);
+    FVec_s007d_b1b0& farP = CF(FVec_s007d_b1b0, 0x58);
+    FVec_s007d_b1b0& fovL = CF(FVec_s007d_b1b0, 0x138);
+    CF(int, 0x28) = level;
+    if (level < 0) {
+        CF(int, 0x28) = 0;
+    } else if (level >= zoom.size()) {
+        CF(int, 0x28) = zoom.size() - 1;
+    }
+    float t = zoom.mpBegin[CF(int, 0x28)];
+    float r = CVT(0xd4, float, float)(this, t);
+    CF(float, 0xac) = r;
+    int idx, idx2;
+    float& frac = *(float*)&level;
+    CVT(0xd0, void, int*, int*, float*, float)(this, &idx, &idx2, &frac, r);
+    float nearc = 1.0f;
+    float farc = 100.0f;
+    if (nearP.size() == zoom.size() && zoom.size() == farP.size()) {
+        float n0 = nearP.mpBegin[idx];
+        float f0 = farP.mpBegin[idx];
+        nearc = (nearP.mpBegin[idx + 1] - n0) * frac + n0;
+        farc = (farP.mpBegin[idx + 1] - f0) * frac + f0;
+    }
+    CF(float, 0xbc) = nearc;
+    CF(float, 0xcc) = farc;
+    float fov = 1.0471976f;
+    if (zoom.size() == fovL.size()) {
+        float o0 = fovL.mpBegin[idx];
+        fov = (fovL.mpBegin[idx + 1] - o0) * frac + o0;
+    }
+    CF(float, 0xdc) = fov;
 }
 
 // @ 0x007dc1b0

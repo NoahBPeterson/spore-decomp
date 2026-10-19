@@ -1,4 +1,7 @@
 # va  diff-bytes  reason
+007db950 325 cSmoothCameraController::HandleMessage complete (flags /O2 /MD /Gy /TP /arch:SSE2 /fp:fast); 15-case tree matches, per-case FP copy form (x87 vs movss) and branch displacements differ [equiv: WEAK 400 valid inputs, 13.5% coverage (need 60%)]
+007dbf20 5 RestoreCameraPosition complete (retail offsets); only vtable fn-pointer register swap (eax/edx) [equiv: PASS]
+007dbfe0 252 SetCurrentZoomLevel complete (retail offsets); size() CSE and lea residue differ [equiv: UNSUPPORTED fake-arity]
 007dc1b0 158 cSmoothCameraController::Zoom; x87 compare/branch schedule differs
 007dc230 28 cSmoothCameraController::ZoomRange; comparison operand order and reload schedule differ
 007dc260 226 cSmoothCameraController::UpdateSubjectMotion; x87 sqrt/normalise schedule differs
