@@ -1,3 +1,6 @@
 0092d3e0 ?StrtoU64Common16@@YA_KPB_WPAPB_WID@Z  # StrtoU64Common16 migrated from s0092d3e0 (verbatim, slice spelling)
 0092d730 FUN_0092d730
 0092d9b0 FtoaEnglish16
+0092df40 ?FUN_0092df40@@YAHI@Z  # FUN_0092df40 migrated from s0092d3e0 (verbatim, slice spelling)
+0092df80 ?Lo@@YAH_J@Z  # Lo migrated from s0092d3e0 (verbatim, slice spelling)
+0092e200 ?SetDate@DateTime@@QAEXIIHHHI@Z  # DateTime::SetDate migrated from s0092d3e0 (verbatim, slice spelling)

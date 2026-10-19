@@ -1,3 +1,4 @@
+0092e3d0 ?Set@DateTime_s0092_e3d0@@QAEXH@Z  # DateTime_s0092_e3d0::Set migrated from s0092e3d0 (verbatim, slice spelling)
 0092e440 SetDateFromTm  # forwards tm fields to DateTime::SetDate
 0092e470 EA::DateTime::DateTime::Add  # switch on unit (year/month/week/day/hour/min/sec)
 0092e5a0 GetLocalTimeBias  # localtime vs gmtime hour difference * 3600
