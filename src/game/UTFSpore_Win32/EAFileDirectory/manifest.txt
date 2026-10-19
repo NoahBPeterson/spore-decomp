@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAFileDirectory.cpp  ?EntryFindFinish@@YAXPAUEntryFindData@@@Z  0092e9b0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFileDirectory.cpp  ??YDequeIter@@QAEAAU0@H@Z  0092e9f0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFileDirectory.cpp  ?DoPushBack@Deque@@QAEXABUEntry@@@Z  0092ee20  /O2 /MD /Gy /TP /GS- /Isrc/game/include

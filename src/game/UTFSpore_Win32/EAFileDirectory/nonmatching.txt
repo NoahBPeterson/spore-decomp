@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+0092ea70 20 deque::back: original loads cur/begin/array-ptr before compare; difftest PASS
+0092ea90 364 basic_string::insert(p,n,c): register allocation differs; difftest WEAK (5.9% coverage; memcpy/fault discards)
+0092ec60 147 deque::DoReallocPtrArray: register allocation / spill order; difftest WEAK (185 valid, 61% coverage)
+0092ed90 94 Entry copy ctor: one src spill ordering
