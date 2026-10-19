@@ -613,7 +613,8 @@ def relocate_named_markers(lines):
     marks = [i for i, l in enumerate(lines) if MARKER.match(l)]
     moves = []
     for k, i in enumerate(marks):
-        mn = re.match(r"^\s*(?:[A-Za-z_]\w*::)*(~?[A-Za-z_]\w*)\s*$", MARKER.match(lines[i]).group(2))
+        # the name may carry a note after it (`// @ 0x0097CEA0  EA::..::WinGrid::SetCellWindow  (465 bytes)`, s0097cea0)
+        mn = re.match(r"^\s*(?:[A-Za-z_]\w*::)*(~?[A-Za-z_]\w*)(?:\s*$|\s{2,}|\s+\()", MARKER.match(lines[i]).group(2))
         if not mn:
             continue
         name = mn.group(1)
@@ -638,7 +639,9 @@ def relocate_named_markers(lines):
             if defre.match(l):
                 target = j
                 break
-        if first is not None and first != name and target is not None:
+        # also when only non-function items (structs, macros) come first: the chunk would take a struct as the
+        # function (s0097cea0: struct CellData cut as SetCellWindow, which lost its ';' -> C2143)
+        if first != name and target is not None:
             moves.append((i, target))
     if not moves:
         return lines
