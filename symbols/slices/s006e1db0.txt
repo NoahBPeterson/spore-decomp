@@ -2,4 +2,4 @@
 006e20f0 CRAPI_diffuseerror  # PDB name
 006e22d0 ?CRAPI_getcolour@@YAEIHPAEI@Z  # CRAPI_getcolour migrated from s006e1db0 (verbatim, slice spelling)
 006e25f0 ?CRAPI_remap@@YAXPAEHH0HHIHII@Z  # CRAPI_remap migrated from s006e1db0 (verbatim, slice spelling)
-006e2ae0 4x4 (16-dword) block copy  # thiscall, ret 0x10, returns this
+006e2ae0 ?Set@Block16@@QAEAAU1@PBH000@Z  # Block16::Set migrated from s006e1db0 (verbatim, slice spelling)

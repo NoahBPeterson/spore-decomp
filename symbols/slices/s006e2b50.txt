@@ -1,2 +1,2 @@
-006e2b50 SP::PrefilterCube  # PDB name at 0x6e2b50
-006e3000 SP::cViewer::UpdateTransforms  # PDB name; mCameraToWorldTransform at +0
+006e2b50 ?PrefilterCube@SP@@YAXPAVVector4@vpu@math@rw@@HHPBEMMM_N@Z  # SP::PrefilterCube migrated from s006e2b50
+006e3000 ?UpdateTransforms@cViewer@@QAEXPAM@Z  # cViewer::UpdateTransforms migrated from s006e2b50 (verbatim, slice spelling)

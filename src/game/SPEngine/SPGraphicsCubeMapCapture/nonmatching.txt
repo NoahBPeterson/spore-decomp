@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+006e2b50 732 SP::PrefilterCube; all six cube faces, the size*size weight, the specular boost and AddColourSample call translated, x87/SSE sqrt schedule and helper ABI differ
+006e3000 97 SP::cViewer::UpdateTransforms; all 12 float stores + zero w components present, the original reads an undefined 4th stack slot per axis
+006e3100 2808 complete (six-face camera setup, message/pipeline build and submit); /O2 scheduling and x87/SSE mix of the vector math not reproduced
+006e3f70 216 4x4 matrix multiply; all 16 output products and the Set(row0,row1,row2,row3) call translated, cl vectorises the float arithmetic differently from the original scalar x87/SSE sequence
+006e4210 2995 complete SSE2 source (all paths/calls, refcounted msgs as Ref<T>); inlined vector math scheduling and EH state layout not byte-exact; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest UNSUPPORTED: 0/400 inputs valid (the render-queue/device singleton getters return null image globals, so the original faults at once)
+006e51b0 565 SP::SHFromCubeMap complete (6 face prefilter, renderer/model-manager calls, coefficient dump); stack frame/EH layout and fprintf arg proxy differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- (original has no stack cookie); sqrt now summed in double as the original does on x87

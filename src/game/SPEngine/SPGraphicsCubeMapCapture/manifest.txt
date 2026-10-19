@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsCubeMapCapture.cpp  ?Set@Block16@@QAEAAU1@PBH000@Z  006e2ae0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

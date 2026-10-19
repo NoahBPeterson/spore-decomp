@@ -1,1 +1,1 @@
-006e3100 SP::CaptureSceneViews  # PDB candidate (caller-scored) at 0x6e3100
+006e3100 ?CaptureSceneViews@@YAXHPAPAUcFaceCamera@@MMMMGDHHH@Z  # CaptureSceneViews migrated from s006e3100 (verbatim, slice spelling)

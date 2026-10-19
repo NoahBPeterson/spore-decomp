@@ -1,1 +1,1 @@
-006e3f70 Matrix44::Multiply  # 4x4 * 4x4, assembles rows via 0x6e2ae0 Set, returns this
+006e3f70 ?Multiply@Matrix44_s006e_3f70@@QAEPAU1@PBM0@Z  # Matrix44_s006e_3f70::Multiply migrated from s006e3f70 (verbatim, slice spelling)
