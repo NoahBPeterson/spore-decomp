@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+007dfed0  -  FUN_007dfed0; skeleton only
+007e0110  -  FUN_007e0110 MapDescription ctor; skeleton only
+007e0160  -  FUN_007e0160; skeleton only
+007e01a0  -  FUN_007e01a0; skeleton only
+007e0200  -  cSplitModelKernelEffectCommand::OnEndBlock; skeleton only
+007e0280  -  FUN_007e0280 command factory; skeleton only
+007e02f0  -  cSplitModelKernelEffectCommand scalar deleting dtor; skeleton only

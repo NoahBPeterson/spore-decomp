@@ -1,16 +1,16 @@
-007e06b0 SP::cSplitModelKernelDescription::cSafeDynamicKernelStorage::Read  # PDB name
-007e07a0 SP::SplitModelKernelRead  # PDB name
-007e07f0 `anonymous namespace'::cSplitControllerEffectCommand::Execute  # PDB name
-007e0850 `anonymous namespace'::SplitControllerAddCommands  # PDB caller-scored
+007e06b0 ?Read@cSafeDynamicKernelStorage_s007e_06b0@@QAEXPAUIStream_s007e_06b0@IO@EA@@@Z  # cSafeDynamicKernelStorage_s007e_06b0::Read migrated from s007e06b0 (verbatim, slice spelling)
+007e07a0 ?SplitModelKernelRead@@YAPAUcSplitModelKernelDescription@@PAUIStream_s007e_06b0@IO@EA@@@Z  # SplitModelKernelRead migrated from s007e06b0 (verbatim, slice spelling)
+007e07f0 ?Execute@cSplitControllerEffectCommand@@QAEXAAVcArguments_s007e_06b0@ArgScript@EA@@@Z  # cSplitControllerEffectCommand::Execute migrated from s007e06b0 (verbatim, slice spelling)
+007e0850 ?SplitControllerAddCommands@@YAXPAX0@Z  # SplitControllerAddCommands migrated from s007e06b0 (verbatim, slice spelling)
 007e0950 ?_GcSplitControllerEffectCommand  # = ??_GcSplitControllerEffectCommand@@UAEPAXI@Z scalar deleting dtor (inline dtor)
-007e09a0 SplitModelKernel/Controller command registration  # stores tables at 0x1675c3c/0x16763d4
-007e0a00 `anonymous namespace'::cSplitModelKernelTypeCommand::Execute  # PDB/string "Type already specified."
-007e0a60 `anonymous namespace'::cSplitModelKernelOffsetCommand::Execute  # PDB caller + offset stores
-007e0b50 `anonymous namespace'::cSplitModelKernelRadiusCommand::Execute  # PDB caller-single
-007e0bc0 `anonymous namespace'::cSplitModelKernelNormalCommand::Execute  # PDB caller-single
-007e0c90 `anonymous namespace'::cSplitModelKernelOriginCommand::Execute  # PDB caller-single
-007e0d60 `anonymous namespace'::cSplitModelKernelDirectionCommand::Execute  # PDB caller-single
-007e0e30 `anonymous namespace'::cSplitModelKernelEffectCommand::Execute  # PDB caller-single
+007e09a0 ?FUN_007e09a0@@YAXXZ  # FUN_007e09a0 migrated from s007e06b0 (verbatim, slice spelling)
+007e0a00 ?Execute@cSplitModelKernelTypeCommand@@QAEXAAVcArguments_s007e_06b0@ArgScript@EA@@@Z  # cSplitModelKernelTypeCommand::Execute migrated from s007e06b0 (verbatim, slice spelling)
+007e0a60 ?Execute@cSplitModelKernelOffsetCommand@@QAEXAAVcArguments_s007e_06b0@ArgScript@EA@@@Z  # cSplitModelKernelOffsetCommand::Execute migrated from s007e06b0 (verbatim, slice spelling)
+007e0b50 ?Execute@cSplitModelKernelRadiusCommand@@QAEXAAVcArguments_s007e_06b0@ArgScript@EA@@@Z  # cSplitModelKernelRadiusCommand::Execute migrated from s007e06b0 (verbatim, slice spelling)
+007e0bc0 ?Execute@cSplitModelKernelNormalCommand@@QAEXAAVcArguments_s007e_06b0@ArgScript@EA@@@Z  # cSplitModelKernelNormalCommand::Execute migrated from s007e06b0 (verbatim, slice spelling)
+007e0c90 ?Execute@cSplitModelKernelOriginCommand@@QAEXAAVcArguments_s007e_06b0@ArgScript@EA@@@Z  # cSplitModelKernelOriginCommand::Execute migrated from s007e06b0 (verbatim, slice spelling)
+007e0d60 ?Execute@cSplitModelKernelDirectionCommand@@QAEXAAVcArguments_s007e_06b0@ArgScript@EA@@@Z  # cSplitModelKernelDirectionCommand::Execute migrated from s007e06b0 (verbatim, slice spelling)
+007e0e30 ?Execute@cSplitModelKernelEffectCommand@@QAEXAAVcArguments_s007e_06b0@ArgScript@EA@@@Z  # cSplitModelKernelEffectCommand::Execute migrated from s007e06b0 (verbatim, slice spelling)
 007e0f00 SP::cSplitControllerEffect::finalize instances  # touches +0x14/0x18/0x1c
 007e0f70 SP::cSplitControllerEffect::~cSplitControllerEffect  # two vptrs, frees +0x1c, releases +0x18
 007e1010 SP::cSplitControllerEffect::cSplitControllerEffect  # inits +0x30 transform
