@@ -1,3 +1,4 @@
+006b1b80 ?Update@CacheMgr@@QAEXXZ  # CacheMgr::Update migrated from s006b18c0 (verbatim, slice spelling)
 006b1d50 ?SP_SaveResource@@YAXPAXID@Z  # SP_SaveResource migrated from s006b18c0 (verbatim, slice spelling)
 006b1dc0 ?Ctor@RefPair@@QAEPAU1@PAURefA@@PAURefB@@@Z  # RefPair::Ctor migrated from s006b18c0 (verbatim, slice spelling)
 006b1e20 ?Dtor@RefPair@@QAEXXZ  # RefPair::Dtor migrated from s006b18c0 (verbatim, slice spelling)

@@ -1,4 +1,7 @@
 006b0c00 App::LRUCache::LRUCache  # symbols/vtable_names.txt:006b0c00 vtbl_App::LRUCache
+006b0ce0 ?A@Cache@@QAEXPAUKey12@@H@Z  # Cache::A migrated from s006b09b0 (verbatim, slice spelling)
+006b0d20 ?B@Cache@@QAEXPAUKey12@@@Z  # Cache::B migrated from s006b09b0 (verbatim, slice spelling)
+006b0d60 ?C@Cache@@QAEXPAUKey12@@@Z  # Cache::C migrated from s006b09b0 (verbatim, slice spelling)
 006b0ed0 App::LRUCache::Create  # factory; "App/LRUCache" EA-new tag at 0x0130967c
-006b17a0 App::LRUCache::Init  # "App/LRUCache/MemoryStream" EA-new tag
-006b1860 App::LRUCache::Shutdown  # tears down stream/job/cache; matched byte-exact
+006b17a0 ?Init@Cache@@QAEXXZ  # Cache::Init migrated from s006b09b0 (verbatim, slice spelling)
+006b1860 ?Shutdown@Cache@@QAEXXZ  # Cache::Shutdown migrated from s006b09b0 (verbatim, slice spelling)
