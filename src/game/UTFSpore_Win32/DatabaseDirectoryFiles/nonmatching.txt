@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+008d7220 162 reconstruction (eastl::rbtree<Key,pair<const Key,DDFRecordListData>>::DoInsertValue); flags /O2 /MD /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc; difftest UNSUPPORTED (original is a __thiscall rbtree member reading ecx at entry; our static reconstruction passes the tree on the stack)
+008d72f0 81 reconstruction (DatabaseDirectoryFiles::Close); flags as above; difftest UNSUPPORTED (0/400 valid inputs: retail CloseOpenRecords/DoNukeSubtree path diverges)
+008d7350 113 reconstruction (DatabaseDirectoryFiles::DeleteRecord); flags as above; difftest FAIL (harness "fake-arity: no call site before 00000010" on 5/100 valid inputs; original coverage 59.3%, no genuine byte mismatch observed)
+008d7400 393 reconstruction (DatabaseDirectoryFiles ctor); flags as above; difftest UNSUPPORTED (unresolved FixPoolInit / Thread::Mutex ctor helpers)
+008d7610 183 reconstruction (eastl::rbtree<Key,pair<const Key,DDFRecordListData>>::DoCreateNode); flags as above; difftest FAIL (5/5 valid inputs mismatched; ours faults reading at 0x009215c7 where original returns) after ECX member fix
