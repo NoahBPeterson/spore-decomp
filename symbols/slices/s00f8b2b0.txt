@@ -1,1 +1,1 @@
-00f8b2b0 SP::UpdateNormalMap  # PDB candidate (caller-scored); xmatch matches.json
+00f8b2b0 ?FUN_00f8b2b0@@YAHHHHMMMMMMM@Z  # FUN_00f8b2b0 migrated from s00f8b2b0 (verbatim, slice spelling)

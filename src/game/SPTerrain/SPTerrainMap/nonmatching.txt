@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00f7d9d0 31700 flags /O2 /MD /Gy /TP /GS- /arch:SSE; complete reconstruction of the 41 KB hand-pipelined SSE normal-map builder (3 loop shapes x 3 cube axes inlined); verified behaviourally identical to the original on 1,200 random inputs (all 9 bodies, NaN/inf params) with a unicorn differential test (work/match/scratch_s00f7d9d0_diff.py); register allocation, pipelining and shuffle sequences differ (ours 39,906 B)
+00f8b2b0 6276 complete behavioural transcription of the Ghidra decompile (clamped rect, 4 edge-cube normal loops, 6 corner texels); not byte-exact, different code size (6634 vs 9072); format tables/sign axis decoded from asm
+00f8e6c0 1504 complete (ray vs terrain shell, march+bisect; min/max via reference select as orig); 1956 vs 1962 B, 5 vs 5 calls; equiv PASS; p=n*t+o computed in x87 here vs SSE+spill in orig, stack slot layout differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00f8fe60 4492 complete (6-face cube-map edge/corner blend + border copy-back); 5648 vs 6759 B: x87/SSE scheduling of the inline Direction4c unpack, frame/loop-pointer layout differ
