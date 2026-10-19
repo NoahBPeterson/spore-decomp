@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPUIAssetGrid.cpp  ?EraseAt@GridVec@@QAEPAUEntry14@@PAU2@@Z  00648af0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ?Insert@GridVec@@QAEPAUEntry14@@PAU2@ABU2@@Z  00648b40  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ?Do@Outer168@@QAEXXZ  0064e5b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ?HandleMessage@cSPUIAssetGrid_s0064_dbd0@SP@@QAE_NII@Z  0064e680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ??1cSPUIAssetGrid_s0065_15a0@@UAE@XZ  00651c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

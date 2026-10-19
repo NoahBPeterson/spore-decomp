@@ -1,3 +1,7 @@
-00650630 SP::cSPUIAssetGrid::ReloadCallback  # anchor PDB name (card.py)
+00650630 ?ReloadCallback@@YAXPAUcSPUIAssetGrid@@PAX_N@Z  # ReloadCallback migrated from s00650630 (verbatim, slice spelling)
 006511b0 eastl::insertion_sort<SP::cSPAssetGridEntry*,CompareA>  # inner loop shifts entries, comparator by value (0x64ff90)
 00651390 eastl::insertion_sort_unguarded<SP::cSPAssetGridEntry*,CompareA>  # no lower-bound check
+0065fa20 ?Shutdown@cSPUIFeedFilter@SP@@QAEXXZ  # SP::cSPUIFeedFilter::Shutdown (callee of s00650630, named from the dev publics; slice address comment)
+006625f0 ?Init@cSPUIFeedFilter@SP@@QAEXPAVIWindow@UTFWin@EA@@I@Z  # SP::cSPUIFeedFilter::Init (callee of s00650630, named from the dev publics; slice address comment)
+00671da0 ?Init@cSPUISearchBox@SP@@QAEXPAVIWindow@UTFWin@EA@@@Z  # SP::cSPUISearchBox::Init (callee of s00650630, named from the dev publics; slice address comment)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00650630, named from the dev publics; slice address comment)

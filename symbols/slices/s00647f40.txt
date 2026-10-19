@@ -1,5 +1,5 @@
-00648aa0 SP::cSPUIAssetGrid::ClearAssetViews                       # anchor PDB name (card.py)
-00648af0 eastl::vector<SP::cSPAssetGridEntry,eastl::sp_vector_allocator>::erase  # 0x14-stride vector erase
-00648b40 eastl::vector<SP::cSPAssetGridEntry,eastl::sp_vector_allocator>::insert_at  # vector insert
-00648bb0 eastl::make_heap<SP::cSPAssetGridEntry *,SP::TypeGridEntrySort>  # anchor PDB name (card.py)
+00648aa0 ?sub_648b40@@YAXXZ  # sub_648b40 migrated from s00647f40 (verbatim, slice spelling)
+00648af0 ?EraseAt@GridVec@@QAEPAUEntry14@@PAU2@@Z  # GridVec::EraseAt migrated from s00647f40 (verbatim, slice spelling)
+00648b40 ?Insert@GridVec@@QAEPAUEntry14@@PAU2@ABU2@@Z  # GridVec::Insert migrated from s00647f40 (verbatim, slice spelling)
+00648bb0 ?sub_648bb0@@YAXXZ  # sub_648bb0 migrated from s00647f40 (verbatim, slice spelling)
 00648ce0 ?sub_648ce0@@YAXXZ  # sub_648ce0 migrated from s00647f40 (verbatim, slice spelling)

@@ -1,7 +1,7 @@
 006525d0  eastl::adjust_heap<SP::cSPAssetGridEntry*,int,SP::cSPAssetGridEntry,CompareA>  # MATCH; comparator 0x64ff90 (two entries by value)
 006527b0  eastl::make_heap<SP::cSPAssetGridEntry*,SP::TypeGridEntrySort>  # PDB name; 15-byte copy-ctor base-anchor diff
 00652850  eastl::pop_heap<SP::cSPAssetGridEntry*,CompareA>  # MATCH; calls adjust_heap 0x6525d0
-006528f0  SP::cSPUIAssetGrid::UpdateStatsText  # PDB name (card)
+006528f0 ?UpdateStatsText@StatsGrid@@QAEXXZ  # StatsGrid::UpdateStatsText migrated from s006525d0 (verbatim, slice spelling)
 00652ba0  ?4GridVec  # shape; realloc/grow/shrink
 00652c90  eastl::vector<SP::cSPAssetGridEntry,eastl::sp_vector_allocator>::DoInsertValues  # shape; ret 0xc
 00652e70  eastl::get_partition<SP::cSPAssetGridEntry*,SP::cSPAssetGridEntry,CompareA>  # MATCH; comparator 0x64ff90 by value
