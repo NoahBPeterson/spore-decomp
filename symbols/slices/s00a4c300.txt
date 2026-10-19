@@ -8,6 +8,7 @@
 00a4c940 ?canvas_setcursor@Eapd@Audio@EA@@YAXPAUt_glist@123@I@Z  # canvas_setcursor migrated from s00a4c300 (verbatim, slice spelling)
 00a4c990 ?canvas_hitbox@Eapd@Audio@EA@@YAHPAUt_glist@123@PAUt_gobj@123@HHPAH222@Z  # canvas_hitbox migrated from s00a4c300 (verbatim, slice spelling)
 00a4ca40 ?canvas_setgraph@Eapd@Audio@EA@@YAXPAUt_glist@123@H@Z  # canvas_setgraph migrated from s00a4c300 (verbatim, slice spelling)
+00a4cb50 ?canvas_properties@Eapd@Audio@EA@@YAXPAUt_glist@123@@Z  # canvas_properties migrated from s00a4c300 (verbatim, slice spelling)
 00a4cc30 ?canvas_stowconnections@Eapd@Audio@EA@@YAXPAUt_glist@123@@Z  # canvas_stowconnections migrated from s00a4c300 (verbatim, slice spelling)
 00a4ce00 ?canvas_restoreconnections@Eapd@Audio@EA@@YAXPAUt_glist@123@@Z  # canvas_restoreconnections migrated from s00a4c300 (verbatim, slice spelling)
 00a4ce30 ?canvas_connect@Eapd@Audio@EA@@YAXPAUt_glist@123@MMMM@Z  # canvas_connect migrated from s00a4c300 (verbatim, slice spelling)

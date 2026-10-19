@@ -395,6 +395,20 @@ void glist_checkgraph(t_glist* x);   // 0xa4e560
 namespace EA {
 namespace Audio {
 namespace Eapd {
+double glist_dpixtody(t_glist* x, float f);   // 0xa4e2a0
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+double glist_dpixtodx(t_glist* x, float f);   // 0xa4e260
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
 void rtext_gettext(void* rtext, char** buf, int* bufsize);   // 0xa4e9a0
 }
 }
@@ -544,6 +558,9 @@ inline int glist_getindex(t_glist* x, t_gobj* y) {
 }
 }
 // ---- items of slice s00a4c300 end
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+namespace EA { namespace Audio { namespace Eapd { void gfxstub_new(t_gobj* owner, void* key, const char* cmd); }}}  // 0x00a4c470 (stays in the slice: not this object's)
 
 // @ 0x00a4c630
 namespace EA { namespace Audio { namespace Eapd {
@@ -701,6 +718,24 @@ void canvas_setgraph(t_glist* x, int flag)
             canvas_fixlinesfor(x->gl_owner, x);
         }
     }
+}
+}}}  // namespace EA::Audio::Eapd
+
+// @ 0x00a4cb50
+namespace EA { namespace Audio { namespace Eapd {
+void canvas_properties(t_glist* x)
+{
+    char buf[200];
+    if (glist_isgraph(x)) {
+        sprintf(buf, "pdtk_canvas_dialog %%s %g %g %d %g %g %g %g %d %d %d %d\n", 0.0, 0.0, 1,
+                x->gl_x1, x->gl_y1, x->gl_x2, x->gl_y2, x->gl_pixwidth,
+                x->gl_pixheight, x->gl_xmargin, x->gl_ymargin);
+    } else {
+        sprintf(buf, "pdtk_canvas_dialog %%s %g %g %d %g %g %g %g %d %d %d %d\n", glist_dpixtodx(x, 1.0f),
+                -glist_dpixtody(x, 1.0f), 0, 0.0, -1.0, 1.0, 1.0, x->gl_pixwidth, x->gl_pixheight,
+                x->gl_xmargin, x->gl_ymargin);
+    }
+    gfxstub_new(x, x, buf);
 }
 }}}  // namespace EA::Audio::Eapd
 
