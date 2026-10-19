@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/manager1.cpp  ?GetMaxSockets@Manager@Sockets@EA@@UAEHXZ  0094c380  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/manager1.cpp  ?Init@Manager@Sockets@EA@@UAE_NXZ  0094c3c0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/manager1.cpp  ?Shutdown@Manager@Sockets@EA@@UAE_NXZ  0094c420  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/manager1.cpp  ?GetAutoDialEnabled@Manager@Sockets@EA@@UAE_NXZ  0094c510  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/manager1.cpp  ?SetAutoDialEnabled@Manager@Sockets@EA@@UAE_N_N@Z  0094c580  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/manager1.cpp  ?GetManualDialupNameAndPassword@Manager@@QAE_NPAD00I@Z  0094c620  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/manager1.cpp  ?SetManualDialupResult@Manager@@QAE_NH@Z  0094ca60  /O2 /MD /Gy /TP /GS- /Isrc/game/include
