@@ -5,3 +5,4 @@
 0081ebe0 SP::cPropertyUI::PopulatePropsGrid  # PDB name
 0081ed10 SP::cPropertyUI::ModifyBool  # PDB name
 0081f020 SP::cPropertyUI::ProcessToggleButton  # PDB name
+0081e070 SP::cPropertyUI::UpdateVisible  # name chosen from the body: hides property rows scrolled out of the holder window (no PDB name)

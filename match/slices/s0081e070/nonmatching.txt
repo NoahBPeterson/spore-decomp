@@ -1,1 +1,8 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+0081e070  7  two adjacent float stack slots swapped (lo/tmp) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: UNSUPPORTED]
+0081e230  28  vptr-store order / register for new object flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: UNSUPPORTED]
+0081e6c0  979  AutoRefCount temp slots and register allocation differ flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: WEAK]
+0081eb10  172  this/PropMgr callee-saved registers swapped flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: PASS]
+0081ebe0  36  stack-slot order of filter/vector/string differs flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: WEAK]
+0081ed10  704  AutoRefCount temp slots and register allocation differ flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: UNSUPPORTED]
+0081f020  37  register allocation (w in ebx, not edi) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: UNSUPPORTED]
