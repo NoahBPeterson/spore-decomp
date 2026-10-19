@@ -5,15 +5,15 @@
 006b5880 ?FindTokenTranslation@cStringDetokenizer@App@@UAE_NPBGAAUstring16_s006b_5770@eastl@@@Z  # cStringDetokenizer::FindTokenTranslation migrated from s006b5770 (verbatim, slice spelling)
 006b5950 ?func34h@cStringDetokenizer@App@@UAEXPBGI@Z  # cStringDetokenizer::func34h migrated from s006b5770 (verbatim, slice spelling)
 006b5990 ?erase@TranslatorVector@App@@QAEPAUintrusive_ptr@2@PAU32@@Z  # TranslatorVector::erase migrated from s006b5770 (verbatim, slice spelling)
-006b59d0 App::TranslatorVector::DoInsertValue  # eastl vector grow/relocate
+006b59d0 ?DoInsertValue@TranslatorVector@App@@QAEXPAUintrusive_ptr@2@PBU32@@Z  # TranslatorVector::DoInsertValue migrated from s006b5770 (verbatim, slice spelling)
 006b5b80 ?RemoveTranslator@cStringDetokenizer@App@@UAEXPAUITokenTranslator@2@@Z  # cStringDetokenizer::RemoveTranslator migrated from s006b5770 (verbatim, slice spelling)
-006b5bd0 App::cStringDetokenizer::ProcessString  # vtable slot 0x2c
-006b5c50 App::cStringDetokenizer::func30h  # vtable slot 0x30
-006b5d20 App::cStringDetokenizer::ProcessStringEx  # vtable slot 0x38
+006b5bd0 ?ProcessString@cStringDetokenizer@App@@UAE_NPBGAAUstring16_s006b_5770@eastl@@@Z  # cStringDetokenizer::ProcessString migrated from s006b5770 (verbatim, slice spelling)
+006b5c50 ?func30h@cStringDetokenizer@App@@UAE_NPAUSPCString@2@PAUTokenEntry@2@I@Z  # cStringDetokenizer::func30h migrated from s006b5770 (verbatim, slice spelling)
+006b5d20 ?ProcessStringEx@cStringDetokenizer@App@@UAE_NPBGAAUstring16_s006b_5770@eastl@@PAUTokenEntry@2@I@Z  # cStringDetokenizer::ProcessStringEx migrated from s006b5770 (verbatim, slice spelling)
 006b5f80 ?TranslatorVector_pushback_stub@@YAXXZ  # TranslatorVector_pushback_stub migrated from s006b5770 (verbatim, slice spelling)
-006b6000 App::cStringDetokenizer::func18h  # erase all + push self
-006b6080 App::cStringDetokenizer::AddTranslator  # vtable slot 0x1c
-006b6160 App::ITokenTranslator::TranslateToken  # vtable slot 0x10
+006b6000 ?func18h@cStringDetokenizer@App@@UAEXXZ  # cStringDetokenizer::func18h migrated from s006b5770 (verbatim, slice spelling)
+006b6080 ?AddTranslator@cStringDetokenizer@App@@UAEXPAUITokenTranslator@2@@Z  # cStringDetokenizer::AddTranslator migrated from s006b5770 (verbatim, slice spelling)
+006b6160 ?TranslateToken@cStringDetokenizer@App@@UAE_NPBGAAUstring16_s006b_5770@eastl@@@Z  # cStringDetokenizer::TranslateToken migrated from s006b5770 (verbatim, slice spelling)
 006b6490 App::cStringDetokenizer::cStringDetokenizer  # vtbl 0x1400f40; vector + 4 generic tokens at +0x1c
 006b6540 ?GetSupportedTypes@cStringTableResourceFactory@SP@@UAEHPAIH@Z  # cStringTableResourceFactory::GetSupportedTypes migrated from s006b5770 (verbatim, slice spelling)
 006b65d0 ?FUN_006b65d0@@YAXXZ  # FUN_006b65d0 migrated from s006b5770 (verbatim, slice spelling)
