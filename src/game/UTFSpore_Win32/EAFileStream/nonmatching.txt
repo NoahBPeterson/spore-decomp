@@ -1,3 +1,4 @@
 # va  diff-bytes  reason
 009318f0 297 FileStream::Open: register allocation of the access/share/attribute temporaries
 00931c10 1 GetPosition: tail layout 2 bytes
+00931e10 21 FileStream(const wchar_t*) ctor: -1/0 register assignment order

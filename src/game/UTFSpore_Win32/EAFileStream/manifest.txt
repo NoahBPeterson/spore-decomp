@@ -8,9 +8,9 @@
 ../src/game/UTFSpore_Win32/EAFileStream.cpp  ?GetSize@FileStream@@UAEHXZ  00931b70  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAFileStream.cpp  ?SetSize@FileStream@@UAE_NH@Z  00931bc0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAFileStream.cpp  ?SetPosition@FileStream@@UAE_NHH@Z  00931c70  /O2 /MD /Gy /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/EAFileStream.cpp  ?GetAvailable@FileStream@@UAEHXZ  00931cd0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFileStream.cpp  ?GetAvailable@FileStream@IO@EA@@UBEIXZ  00931cd0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAFileStream.cpp  ?Read@FileStream@@UAEIPAXI@Z  00931ce0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAFileStream.cpp  ?Write@FileStream@@UAE_NPBXI@Z  00931d30  /O2 /MD /Gy /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/EAFileStream.cpp  ?Flush@FileStream@IO@EA@@UAE_NXZ  00931d70  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFileStream.cpp  ?Flush@FileStream@@UAE_NXZ  00931d70  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAFileStream.cpp  ??0FileStream@@QAE@PBD@Z  00931da0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAFileStream.cpp  ??1FileStream@@UAE@XZ  00931e70  /O2 /MD /Gy /TP /GS- /Isrc/game/include

@@ -4,6 +4,7 @@
 
 #include "game/types.h"
 #include "EA/IO/FileStream.h"
+#include "EA/IO/PositionType.h"
 #include <windows.h>
 #include <string.h>
 #include <wchar.h>
@@ -268,9 +269,9 @@ bool FileStream::SetPosition(int pos, int type)
 }
 
 // @ 0x00931cd0
-int FileStream::GetAvailable()
+unsigned int EA::IO::FileStream::GetAvailable() const
 {
-    return -GetPosition(2);
+    return -GetPosition((EA::IO::PositionType)2);
 }
 
 // @ 0x00931ce0
@@ -296,7 +297,7 @@ bool FileStream::Write(const void* src, unsigned size)
 }
 
 // @ 0x00931d70
-bool EA::IO::FileStream::Flush()
+bool FileStream::Flush()
 {
     bool ok = false;
     if (mhFile != INVALID_HANDLE_VALUE) {
@@ -320,6 +321,21 @@ FileStream::FileStream(const char* path)
     mnSize = -1;
     if (path)
         MultiByteToWideChar(65001, 0, path, -1, mpPath16, 260);
+}
+
+// @ 0x00931e10
+FileStream::FileStream(const wchar_t* path)
+{
+    mhFile = INVALID_HANDLE_VALUE;
+    mnSize = -1;
+    mnRefCount = 0;
+    mnAccessFlags = 0;
+    mnCD = 0;
+    mnSharing = 0;
+    mnUsageHints = 0;
+    mnLastError = 0;
+    if (path)
+        wcsncpy(mpPath16, path, 260);
 }
 
 // @ 0x00931e70
