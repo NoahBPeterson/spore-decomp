@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+0096e3a0 339 CopyWithQualityAdjustment: branch layout / float clamp schedule differs (399 vs 338 bytes)
