@@ -13,7 +13,7 @@
 0068f1d0 JobLock::JobLock    # job-lock ctor
 0068f2b0 JobLock::~JobLock   # job-lock dtor (refcount release + job release)
 0068f350 TryLockJobs         # try-lock two jobs, create a JobLock
-0068f450 ?GetHighestBitPowerOf2@EA@@YAHI@Z  # None migrated from s0068e670 (verbatim, slice spelling)
+0068f450 ?GetHighestBitPowerOf2@EA@@YAII@Z  # EA::GetHighestBitPowerOf2 migrated from s0068e670
 0068f4a0 ?Reset@ClsF4A0@@QAEXXZ  # ClsF4A0::Reset migrated from s0068e670 (verbatim, slice spelling)
 0068f4e0 mutex_ctor_helper   # mutex/semaphore member ctor helper
 0068f540 ?Acquire@ClsF540@@QAEXXZ  # ClsF540::Acquire migrated from s0068e670 (verbatim, slice spelling)

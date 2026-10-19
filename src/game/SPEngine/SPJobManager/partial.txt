@@ -1,5 +1,21 @@
 # va  diff-bytes  reason
+0068f350  204  try-lock two jobs + create JobLock: body omitted
+0068f4e0  91   mutex/semaphore member ctor helper: only field zeroing present
+0068f5d0  46   list drain / semaphore post: body approximated
+0068f600  109  semaphore-list container ctor: mutex/semaphore init omitted
 0068f7c0  386  partial; FreeJobUnderLock rewritten behaviourally but not verified
+0068fad0  159  partial; EASTL cJobProfZone hashtable DoRehash left as stub
+0068fbe0  121  partial; cJobData constructor approximated (mpExtraObject release)
+0068fc60  221  partial; cJobManager destructor left as stub
 0068fda0  292  partial; GetFreeJob approximated
+00690210  243  partial; cJobManager constructor left as stub
 006903c0  373  partial; Shutdown approximated
 00690630  420  partial; FailJobDependents approximated
+006909e0  242  partial; eastl prof hashtable DoInsertValue left as skeleton
+00690b80  269  partial; eastl vector insert (waiting list 1) left as skeleton
+00690da0  445  partial; CreateJobThread left as stub
+00690f60  312  partial; FailJob approximated as stub
+006910a0  436  partial; FailNonRunnableJobs left as stub
+00691400  250  partial; eastl fixed_hash_set constructor left as stub
+00691500  188  partial; waiting-list fill left as stub
+006915c0  182  partial; waiting-list drain left as stub

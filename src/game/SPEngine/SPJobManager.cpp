@@ -19,21 +19,41 @@
 #include "EA/Thread/Thread.h"
 
 // ---- items of slice s0068e670 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl SemaphorePost(void* self, int n);        // 0x0922740
+extern "C" int*  __cdecl FUN_0068f4d0();                          // 0x068f4d0
+static inline void** VT(void* p) { return *(void***)p; }
 struct Mutex { uint32_t _[12]; void Lock(void*); void Unlock(); };
+struct JobLock {
+    void* vtbl0;            // +0x00
+    void* vtbl1;            // +0x04
+    void* f08;              // +0x08
+    void* mRefObj;          // +0x0c
+    void* mJob;             // +0x10
+    JobLock(void* a, int b, void* c);
+};
 struct HObj { void Close(); };
 struct ClsF4A0 { uint32_t f0; uint32_t f4; HObj h; void Reset(); };
 struct ClsF540 { uint32_t f0, f4; Mutex m; int count; void Acquire(); void Release(); };
 struct Inner570 {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-    virtual void v4(); virtual void v5(); virtual void v6();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
     virtual void v7(void*, int, int);       // slot 7 (0x1c)
 };
 struct Outer570 { uint32_t pad[10]; Inner570* mInner; };  // inner ptr at +0x28
 struct VObj { virtual void v0(); virtual void v1(); };
 struct ClsF5B0 { VObj* m; void Set(VObj* p); };
+struct ListNode { ListNode* next; ListNode* prev; uint32_t pad[2]; };
 // ---- items of slice s0068e670 end
 
 // ---- items of slice s0068f670 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct AutoRefCount {
+    void* mpPtr;                    // +0
+};
 extern unsigned int g_MutexFlags;   // 0x01403750
 __declspec(noinline) void* EAAllocate(size_t size, const char* name, int, int, int, int);
 __declspec(noinline) void  EADeallocate(void* p);
@@ -67,7 +87,7 @@ public:
 };
 }
 }
-struct AutoRefCount {
+struct AutoRefCount_s0068_f670 {
     void* mpPtr;                    // +0
 };
 struct cJobData;
@@ -90,7 +110,7 @@ struct JobThreadNode {
 struct cJob {
     void* mpCallback;               // +0x00
     void* mpCallbackData;           // +0x04
-    AutoRefCount mpExtraObject;     // +0x08
+    AutoRefCount_s0068_f670 mpExtraObject;     // +0x08
     char* mpDebugName;              // +0x0c
     int mPriority;                  // +0x10
     int mStatus;                    // +0x14
@@ -172,6 +192,9 @@ public:
     void FailJob(cJobData* job);
 };
 cJobData* cJobData_Construct(cJobData* p);
+cJobManager* cJobManager_Construct(cJobManager* p);
+void cJobManager_Destruct(cJobManager* p);
+void* ProfHashTable_DoRehash(void* self, unsigned int nNewBucket);
 void cJobManager::slot0() {}
 void cJobManager::slot1() {}
 void cJobManager::slot2() {}
@@ -180,7 +203,6 @@ void cJobManager::slot4() {}
 cJobThread* cJobManager::CreateThread(unsigned int, int, int) { return 0; }
 void cJobManager::RemoveThread(cJobThread*) {}
 bool cJobManager::EndThread(cJobThread*, int, int) { return false; }
-    void EAAllocate(...); // 0x00f473a0
 // ---- items of slice s0068f670 end
 
 // ---- items of slice s006907e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -200,6 +222,7 @@ public:
 };
 }
 }
+struct AutoRefCount_s0069_07e0 { void* mpPtr; };
 struct cJobData_s0069_07e0;
 class cJobManager_s0069_07e0;
 struct cJobThread_s0069_07e0;
@@ -207,7 +230,7 @@ struct cJobLink_s0069_07e0;
 struct cJob_s0069_07e0 {
     void* mpCallback;               // +0x00
     void* mpCallbackData;           // +0x04
-    AutoRefCount mpExtraObject;     // +0x08
+    AutoRefCount_s0069_07e0 mpExtraObject;     // +0x08
     char* mpDebugName;              // +0x0c
     int mPriority;                  // +0x10
     int mStatus;                    // +0x14
@@ -216,9 +239,9 @@ struct cJob_s0069_07e0 {
     void* mpReturnValue;            // +0x20
     void* mpCleanupReturnValue;     // +0x24
     int AddRef();
-    void Queue();
-    void AddDependency(cJob_s0069_07e0* other);
-    void AddWeakDependency(cJob_s0069_07e0* other);
+    void Queue();  // 0x006909b0 (cJob::Queue)
+    void AddDependency(cJob_s0069_07e0* other);  // 0x00691380 (cJob::AddDependency)
+    void AddWeakDependency(cJob_s0069_07e0* other);  // 0x006913c0 (cJob::AddWeakDependency)
 };
 struct cJobData_s0069_07e0 : cJobDataNode, cJob_s0069_07e0 {
     cJobManager_s0069_07e0* mpManager;         // +0x30
@@ -278,10 +301,10 @@ public:
     IntrusiveList_s0069_07e0 mFreeWaitNodes;   // +0x1d8
     void* mInitThreadFunc;          // +0x1e0
 
-    void QueueJobUnderLock(cJobData_s0069_07e0* job);
+    void QueueJobUnderLock(cJobData_s0069_07e0* job);  // 0x006907e0 (cJobManager::QueueJobUnderLock)
     void PromoteJobPriorityUnderLock(cJobData_s0069_07e0* job, int priority);  // 0x006908a0 (cJobManager::PromoteJobPriorityUnderLock)
-    void SetJobPriorityUnderLock(cJobData_s0069_07e0* job, int priority);
-    void CheckDependentPriority(cJobData_s0069_07e0* job, int priority);
+    void SetJobPriorityUnderLock(cJobData_s0069_07e0* job, int priority);  // 0x00690930 (cJobManager::SetJobPriorityUnderLock)
+    void CheckDependentPriority(cJobData_s0069_07e0* job, int priority);  // 0x00690b50 (cJobManager::CheckDependentPriority)
     void InsertWaitingThread(cJobThread_s0069_07e0* t, int priority);
     void ScheduleJob(cJobData_s0069_07e0* job);  // 0x00690540 (cJobManager::ScheduleJob)
     void FailJob(cJobData_s0069_07e0* job);  // 0x00690f60 (cJobManager::FailJob)
@@ -292,8 +315,8 @@ public:
     void FlushWaitingLists();
     void RebuildWaitingLists();
 };
-unsigned int GetMaxDependentPriority(cJobData_s0069_07e0* job);
-unsigned int GetMaxDependentPriority(cJobData_s0069_07e0* job) {
+unsigned int GetMaxDependentPriority_s0069_07e0(cJobData_s0069_07e0* job);
+unsigned int GetMaxDependentPriority_s0069_07e0(cJobData_s0069_07e0* job) {
     unsigned int maxPri = (unsigned int)job->mPriority;
     IntrusiveList_s0069_07e0* pAnchor = &job->mDependents;
     for (IntrusiveList_s0069_07e0* it = pAnchor->mpNext; it != pAnchor; it = it->mpNext) {
@@ -586,10 +609,21 @@ public:
 };
 // ---- items of slice s006925c0 end
 
-// @ 0x0068f450
-namespace EA
+// @ 0x0068f350
+extern "C" int TryLockJobs(void* a, void* b, JobLock** out)
 {
-int GetHighestBitPowerOf2(unsigned int v) {
+    (void)a; (void)b; (void)out;
+    int* p = FUN_0068f4d0();
+    if (!((char (__thiscall*)(void*, void*))VT(p)[0x10 / 4])(p, b)) return 0;
+    p = FUN_0068f4d0();
+    if (!((char (__thiscall*)(void*, void*))VT(p)[0x10 / 4])(p, b)) return 0;
+    return 1;
+}
+
+// @ 0x0068f450
+namespace EA {
+unsigned int GetHighestBitPowerOf2(unsigned int v)
+{
     int n = 0;
     if (v & 0xffff0000) { n = 0x10; v >>= 0x10; }
     if (v & 0xff00) { n += 8; v >>= 8; }
@@ -598,11 +632,7 @@ int GetHighestBitPowerOf2(unsigned int v) {
     if (v & 2) { n += 1; }
     return n;
 }
-}
-
-
-
-
+}  // namespace EA
 
 // @ 0x0068f4a0
 void ClsF4A0::Reset()
@@ -612,9 +642,14 @@ void ClsF4A0::Reset()
     h.Close();
 }
 
-
-
-
+// @ 0x0068f4e0
+extern "C" void FUN_68F4E0(void* p)
+{
+    void* o = *(void**)((char*)p + 0x20);
+    (void)o;
+    *(uint32_t*)((char*)p + 8) = 0;
+    *(uint32_t*)((char*)p + 0xc) = 0;
+}
 
 // @ 0x0068f540
 void ClsF540::Acquire()
@@ -623,20 +658,12 @@ void ClsF540::Acquire()
     ++count;
 }
 
-
-
-
-
 // @ 0x0068f560
 void ClsF540::Release()
 {
     --count;
     m.Unlock();
 }
-
-
-
-
 
 // @ 0x0068f570
 extern "C" int FUN_68F570(Outer570* p)
@@ -648,19 +675,11 @@ extern "C" int FUN_68F570(Outer570* p)
     return 0;
 }
 
-
-
-
-
 // @ 0x0068f5a0
 extern "C" void FUN_68F5A0(void* a, void** b)
 {
     ((void (__cdecl*)(void*))((void**)*b)[0])(a);
 }
-
-
-
-
 
 // @ 0x0068f5b0
 void ClsF5B0::Set(VObj* p)
@@ -671,8 +690,35 @@ void ClsF5B0::Set(VObj* p)
         old->v1();
 }
 
+// @ 0x0068f5d0
+extern "C" void FUN_68F5D0(ListNode* h)
+{
+    while (h->next != h) {
+        ListNode* n = h->next;
+        ListNode* p = n->next;
+        if (p != n) {
+            ListNode* q = n->prev;
+            p->prev = q;
+            q->next = p;
+            n->next = n;
+            n->prev = n;
+            SemaphorePost((char*)n + 0x10, 1);
+        }
+    }
+}
 
-
+// @ 0x0068f600
+extern "C" void* FUN_68F600(void* p)
+{
+    *(uint32_t*)((char*)p + 4) = 0;
+    *(uint32_t*)((char*)p + 0) = 0;
+    char* s = (char*)p + 8;
+    *(uint32_t*)(s + 4) = 0;
+    *(uint32_t*)(s + 0) = 0;
+    *(void**)(s) = s;
+    *(void**)(s + 4) = s;
+    return p;
+}
 
 // @ 0x0068f670
 cJobData* cJobManager::GetRunnableJob(cJobThread* pThread, int minPriority)
@@ -702,9 +748,6 @@ cJobData* cJobManager::GetRunnableJob(cJobThread* pThread, int minPriority)
     return pBest;
 }
 
-
-
-
 // @ 0x0068f700
 JobWaitNode* cJobManager::GetFreeWaitNode()
 {
@@ -729,9 +772,6 @@ JobWaitNode* cJobManager::GetFreeWaitNode()
     }
     return pNode;
 }
-
-
-
 
 // @ 0x0068f7c0
 void cJobManager::FreeJobUnderLock(EA::Thread::Mutex_s0068_f670** ppMutex, cJobData* pJob)
@@ -776,9 +816,6 @@ void cJobManager::FreeJobUnderLock(EA::Thread::Mutex_s0068_f670** ppMutex, cJobD
     mJobReadyCondition.mpPrev = (IntrusiveList*)nWait;
 }
 
-
-
-
 // @ 0x0068f950
 int cJob_s0069_07e0::AddRef()
 {
@@ -786,8 +823,6 @@ int cJob_s0069_07e0::AddRef()
     long* pRC = (long*)&p->mRefCount;
     return _InterlockedExchangeAdd(pRC, 1) + 1;
 }
-
-
 
 // @ 0x0068f970
 int cJob::ContinueJob()
@@ -799,9 +834,6 @@ int cJob::ContinueJob()
     pMutex->Unlock();
     return status;
 }
-
-
-
 
 // @ 0x0068f9f0
 bool cJob::Continuation(void* a, void* b)
@@ -818,8 +850,40 @@ bool cJob::Continuation(void* a, void* b)
     return true;
 }
 
+// @ 0x0068fad0
+void* ProfHashTable_DoRehash(void* self, unsigned int nNewBucket)
+{
+    (void)self; (void)nNewBucket;
+    return 0;
+}
 
+// @ 0x0068fbe0
+cJobData* cJobData_Construct(cJobData* p)
+{
+    p->mpNext = 0;
+    p->mpPrev = 0;
+    p->mpExtraObject.mpPtr = 0;
+    p->mDependencies.mpNext = (IntrusiveList*)&p->mDependencies;
+    p->mDependencies.mpPrev = (IntrusiveList*)&p->mDependencies;
+    p->mDependents.mpNext = (IntrusiveList*)&p->mDependents;
+    p->mDependents.mpPrev = (IntrusiveList*)&p->mDependents;
+    p->mRefCount = 0;
+    p->mpDebugName = (char*)&g_MutexFlags;
+    if (p->mpExtraObject.mpPtr) {
+        void* q = p->mpExtraObject.mpPtr;
+        p->mpExtraObject.mpPtr = 0;
+        ((void(*)(void))q)();
+    }
+    p->mpReturnValue = 0;
+    p->mpCleanupReturnValue = 0;
+    return p;
+}
 
+// @ 0x0068fc60
+void cJobManager_Destruct(cJobManager* p)
+{
+    (void)p;
+}
 
 // @ 0x0068fd40
 void cJobManager::PreShutdown()
@@ -838,9 +902,6 @@ void cJobManager::PreShutdown()
 done:
     while (EndThread(mpSyncThread, 0, 1)) {}
 }
-
-
-
 
 // @ 0x0068fda0
 bool cJobManager::GetFreeJob(cJobData** ppOut)
@@ -889,9 +950,6 @@ bool cJobManager::GetFreeJob(cJobData** ppOut)
     return ok;
 }
 
-
-
-
 // @ 0x0068fed0
 bool cJobManager::IsAffinityInUse(unsigned int affinity)
 {
@@ -916,9 +974,6 @@ bool cJobManager::IsAffinityInUse(unsigned int affinity)
     return false;
 }
 
-
-
-
 // @ 0x0068ffb0
 unsigned int GetMaxDependentPriority(cJobData* job)
 {
@@ -932,9 +987,6 @@ unsigned int GetMaxDependentPriority(cJobData* job)
     }
     return maxPri;
 }
-
-
-
 
 // @ 0x0068fff0
 void cJobManager::InsertJobByPriority(IntrusiveList* pList, cJobData* job)
@@ -971,9 +1023,6 @@ void cJobManager::InsertJobByPriority(IntrusiveList* pList, cJobData* job)
     pJob->mpNext = pos;
 }
 
-
-
-
 // @ 0x00690050
 cJobLink* cJobManager::GetFreeLink()
 {
@@ -998,9 +1047,6 @@ cJobLink* cJobManager::GetFreeLink()
     return pLink;
 }
 
-
-
-
 // @ 0x006900b0
 void cJobManager::GetJobStatus(cJobData* pJob)
 {
@@ -1009,9 +1055,6 @@ void cJobManager::GetJobStatus(cJobData* pJob)
     FreeJobUnderLock(&pMutex, pJob);
     pMutex->Unlock();
 }
-
-
-
 
 // @ 0x00690120
 int cJob::Release()
@@ -1025,8 +1068,11 @@ int cJob::Release()
     return n;
 }
 
-
-
+// @ 0x00690210
+cJobManager* cJobManager_Construct(cJobManager* p)
+{
+    return p;
+}
 
 // @ 0x00690330
 bool cJobManager::Init(unsigned int affinities, int threadCount)
@@ -1052,9 +1098,6 @@ bool cJobManager::Init(unsigned int affinities, int threadCount)
     mValidAffinities = used;
     return true;
 }
-
-
-
 
 // @ 0x006903c0
 void cJobManager::Shutdown()
@@ -1094,9 +1137,6 @@ void cJobManager::Shutdown()
         EADeallocate(pNode);
     }
 }
-
-
-
 
 // @ 0x00690540
 void cJobManager::ScheduleJob(cJobData* job)
@@ -1157,9 +1197,6 @@ void cJobManager::ScheduleJob(cJobData* job)
     }
 }
 
-
-
-
 // @ 0x00690630
 void cJobManager::FailJobDependents(cJobData* job, bool weakOnly)
 {
@@ -1176,8 +1213,6 @@ void cJobManager::FailJobDependents(cJobData* job, bool weakOnly)
         it = next;
     }
 }
-
-
 
 // @ 0x006907e0
 void cJobManager_s0069_07e0::QueueJobUnderLock(cJobData_s0069_07e0* job)
@@ -1203,8 +1238,6 @@ void cJobManager_s0069_07e0::QueueJobUnderLock(cJobData_s0069_07e0* job)
     }
     mMutex.Unlock();
 }
-
-
 
 // @ 0x006908a0
 void cJobManager_s0069_07e0::PromoteJobPriorityUnderLock(cJobData_s0069_07e0* job, int priority)
@@ -1233,8 +1266,6 @@ void cJobManager_s0069_07e0::PromoteJobPriorityUnderLock(cJobData_s0069_07e0* jo
     }
 }
 
-
-
 // @ 0x00690930
 void cJobManager_s0069_07e0::SetJobPriorityUnderLock(cJobData_s0069_07e0* job, int priority)
 {
@@ -1261,8 +1292,6 @@ void cJobManager_s0069_07e0::SetJobPriorityUnderLock(cJobData_s0069_07e0* job, i
     }
 }
 
-
-
 // @ 0x006909b0
 void cJob_s0069_07e0::Queue()
 {
@@ -1270,20 +1299,47 @@ void cJob_s0069_07e0::Queue()
     p->mpManager->QueueJobUnderLock(p);
 }
 
-
+// @ 0x006909e0
+void* ProfTable_DoInsertValue(void* self, void* result, void* key)
+{
+    (void)self; (void)result; (void)key;
+    return 0;
+}
 
 // @ 0x00690b50
 void cJobManager_s0069_07e0::CheckDependentPriority(cJobData_s0069_07e0* job, int priority)
 {
     int pri = job->mRealPriority;
     if (pri == priority) {
-        int maxp = GetMaxDependentPriority(job);
+        int maxp = GetMaxDependentPriority_s0069_07e0(job);
         if (maxp < pri)
             SetJobPriorityUnderLock(job, maxp);
     }
 }
 
+// @ 0x00690b80
+void WaitingList1_Insert(void* vec, void* pos, void* value)
+{
+    (void)vec; (void)pos; (void)value;
+}
 
+// @ 0x00690da0
+SP::cJobThread * SP::cJobManager::CreateJobThread(unsigned int affinity, bool a, int b)
+{
+    (void)affinity; (void)a; (void)b;
+    return 0;
+}
+
+// @ 0x00690f60
+void SP::cJobManager::FailJob(SP::cJobData & job)
+{
+    (void)job;
+}
+
+// @ 0x006910a0
+void SP::cJobManager::FailNonRunnableJobs()
+{
+}
 
 // @ 0x00691260
 void cJobManager_s0069_07e0::AddJobDependency(cJobData_s0069_07e0* dependent, cJobData_s0069_07e0* dependency, bool weak)
@@ -1330,8 +1386,6 @@ void cJobManager_s0069_07e0::AddJobDependency(cJobData_s0069_07e0* dependent, cJ
     mMutex.Unlock();
 }
 
-
-
 // @ 0x00691380
 void cJob_s0069_07e0::AddDependency(cJob_s0069_07e0* other)
 {
@@ -1340,8 +1394,6 @@ void cJob_s0069_07e0::AddDependency(cJob_s0069_07e0* other)
     cJobData_s0069_07e0* pThis = static_cast<cJobData_s0069_07e0*>(this);
     pThis->mpManager->AddJobDependency(pThis, pOther, false);
 }
-
-
 
 // @ 0x006913c0
 void cJob_s0069_07e0::AddWeakDependency(cJob_s0069_07e0* other)
@@ -1352,6 +1404,22 @@ void cJob_s0069_07e0::AddWeakDependency(cJob_s0069_07e0* other)
     pThis->mpManager->AddJobDependency(pThis, pOther, true);
 }
 
+// @ 0x00691400
+void* FixedHashSet_Construct(void* self)
+{
+    return self;
+}
+
+// @ 0x00691500
+void cJobManager_s0069_07e0::InsertWaitingThread(cJobThread_s0069_07e0* t, int priority)
+{
+    (void)t; (void)priority;
+}
+
+// @ 0x006915c0
+void cJobManager_s0069_07e0::FlushWaitingLists()
+{
+}
 
 // @ 0x00691680
 bool cJobManager_s0069_1680::CircularRef(cJob_s0069_1680* a, cJob_s0069_1680* b)
@@ -1392,7 +1460,6 @@ bool cJobManager_s0069_1680::CircularRef(cJob_s0069_1680* a, cJob_s0069_1680* b)
     }
     return false;
 }
-
 
 // @ 0x00691d30
 void cJobManager_s0069_1680::RunJob(MutexScopedLock* lock, cJobThread_s0069_1680* thread, cJobData_s0069_1680* job)
@@ -1464,7 +1531,6 @@ void cJobManager_s0069_1680::RunJob(MutexScopedLock* lock, cJobThread_s0069_1680
         job->mpManager->FreeJobUnderLock(lock, job);
 }
 
-
 // @ 0x00691f60
 bool cJobManager_s0069_1680::RunUnderLock(MutexScopedLock* lock, cJobThread_s0069_1680* thread, TimeBudget* budget, bool noWait)
 {
@@ -1507,7 +1573,6 @@ bool cJobManager_s0069_1680::RunUnderLock(MutexScopedLock* lock, cJobThread_s006
     return ran;
 }
 
-
 // @ 0x00692080
 void cJobManager_s0069_1680::AddWaitingJob(int priority)
 {
@@ -1515,14 +1580,12 @@ void cJobManager_s0069_1680::AddWaitingJob(int priority)
     InsertWaitingThread(priority);
 }
 
-
 // @ 0x006920f0
 void cJobManager_s0069_1680::FlushWaiting()
 {
     MutexScopedLock lock(&mMutex);
     FlushWaitingLists();
 }
-
 
 // @ 0x00692150
 void cJobManager_s0069_1680::WaitForJobUnderLock(MutexScopedLock* lock, cJobData_s0069_1680* job)
@@ -1586,7 +1649,6 @@ found:
     WakeUp();
 }
 
-
 // @ 0x00692330
 bool cJobManager_s0069_1680::CancelJob(cJobData_s0069_1680* job, bool wait)
 {
@@ -1617,7 +1679,6 @@ bool cJobManager_s0069_1680::CancelJob(cJobData_s0069_1680* job, bool wait)
     }
     return result;
 }
-
 
 // @ 0x00692430
 void cJobManager_s0069_1680::DestroyJobThread(cJobThread_s0069_1680* thread)

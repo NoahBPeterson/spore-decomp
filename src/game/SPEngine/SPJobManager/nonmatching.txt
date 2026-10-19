@@ -12,8 +12,8 @@
 00690050 78 complete; head-pop list idiom near-miss
 006900b0 28 complete; wrapper call shape near-miss (FreeJobUnderLock args)
 00690120 17 complete; Release refcount decrement shape differs
-00690540 181 complete; ScheduleJob signalling shape near-miss
-006907e0 102 complete; QueueJobUnderLock EH/register near-miss
+00690540 3 complete; ScheduleJob signalling shape near-miss
+006907e0 86 complete; QueueJobUnderLock EH/register near-miss
 006908a0 104 complete; PromoteJobPriorityUnderLock register near-miss
 00690930 83 complete; SetJobPriorityUnderLock register near-miss
 006909b0 14 complete; Queue two-step manager load near-miss
