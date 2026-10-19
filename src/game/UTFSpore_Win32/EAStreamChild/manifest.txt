@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAStreamChild.cpp  ?Close@StreamChild@IO@EA@@UAE_NXZ  0093b6a0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamChild.cpp  ?GetState@StreamChild@IO@EA@@UBEHXZ  0093b6d0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamChild.cpp  ?GetPosition@StreamChild@IO@EA@@UBEHH@Z  0093b6f0  /O2 /MD /Gy /TP /Isrc/game/include

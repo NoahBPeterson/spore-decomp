@@ -32,7 +32,7 @@
 0093b820 EA::IO::WriteEncoded  # dev-PDB EA::IO::WriteEncoded
 0093b8b0 FixedMemoryStream::Release  # IStream slot 0x08
 0093b8e0 FixedMemoryStream::SetData  # member
-0093b900 FixedMemoryStream::SetSize  # IStream slot 0x20
-0093b920 FixedMemoryStream::GetPosition  # IStream slot 0x24
-0093b950 FixedMemoryStream::SetPosition  # IStream slot 0x28
-0093b9a0 FixedMemoryStream::Read  # IStream slot 0x30
+0093b900 ?SetSize@FixedMemoryStream@IO@EA@@UAE_NI@Z  # FixedMemoryStream::SetSize migrated from s0093a9d0 (verbatim, slice spelling)
+0093b920 ?GetPosition@FixedMemoryStream@IO@EA@@UBEHH@Z  # FixedMemoryStream::GetPosition migrated from s0093a9d0 (verbatim, slice spelling)
+0093b950 ?SetPosition@FixedMemoryStream@IO@EA@@UAE_NHH@Z  # FixedMemoryStream::SetPosition migrated from s0093a9d0 (verbatim, slice spelling)
+0093b9a0 ?Read@FixedMemoryStream@IO@EA@@UAEHPAXI@Z  # FixedMemoryStream::Read migrated from s0093a9d0 (verbatim, slice spelling)
