@@ -3,6 +3,8 @@
 
 typedef unsigned int  u32;
 typedef unsigned char u8;
+#include <new>
+#include <math.h>
 
 struct IWindow;
 
@@ -242,6 +244,229 @@ void PieMenuInit::Init(void* n1, void* n2, void* p4, void* p5, void* p6, void* p
 }
 
 // ===========================================================================
+// completed partials (formerly stubs)
+// ===========================================================================
+#pragma float_control(precise, off, push)   // fast-math codegen (inline fsqrt, SSE scalar)
+void* FUN_008067f0(void* w, int a);                // 0x008067f0 cdecl
+char  FUN_00806aa0(void* w, void* image, int v);   // 0x00806aa0 cdecl
+
+struct IRefObj {
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+};
+
+struct PieRect { float l, t, r, b; };
+
+// @ 0x00818000
+void cSPUIPieMenuItem::SetIcon(int arg) {
+    IRefObj* nw = (IRefObj*)arg;
+    if ((int)mpParentWin == arg) return;
+    void* rhs = Vcp2(mpCurrentWindow, 0xf0, 0x122a5c7, 1);
+    if (*((char*)this + 0x34) != 0) {
+        FUN_00806aa0(rhs, FUN_008067f0(nw, -1), 0);
+        IRefObj* old = (IRefObj*)mpParentWin;
+        if (nw != old) {
+            if (nw) nw->AddRef();
+            mpParentWin = nw;
+            if (old) old->Release();
+        }
+    } else {
+        IRefObj* cur = (IRefObj*)mpParentWin;
+        if (cur) {
+            void* par = Vcp0(cur, 0x10);
+            if (par) Vv1(par, 0xdc, (int)mpParentWin);
+            IRefObj* t = (IRefObj*)mpParentWin;
+            if (t) { mpParentWin = 0; t->Release(); }
+        }
+        IRefObj* old = (IRefObj*)mpParentWin;
+        if (nw != old) {
+            if (nw) nw->AddRef();
+            mpParentWin = nw;
+            if (old) old->Release();
+        }
+        if (mpParentWin) {
+            void* par = Vcp0(mpParentWin, 0x10);
+            if (Vcp0(mpParentWin, 0x10)) Vv1(par, 0xdc, (int)mpParentWin);
+            Vv1(rhs, 0xd8, (int)mpParentWin);
+            PieRect* rp = (PieRect*)Vcp0(rhs, 0x38);
+            PieRect r;
+            r.l = rp->l; r.t = rp->t; r.r = rp->r; r.b = rp->b;
+            PieRect* q = (PieRect*)Vcp0(mpParentWin, 0x38);
+            float x = ((r.r - r.l) - (q->r - q->l)) * 0.5f;
+            float y = ((r.b - r.t) - (q->b - q->t)) * 0.5f;
+            ((void(__thiscall*)(void*, float, float))(*(void***)mpParentWin)[0x64 / 4])(mpParentWin, x, y);
+            Vv2(mpParentWin, 0x7c, 0x10, 1);
+        }
+    }
+}
+
+struct PieVert { float x, y; int c; float u, v; };
+struct IPieDraw {
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
+    virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();
+    virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11();
+    virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15();
+    virtual void s16(); virtual void s17(); virtual void s18();
+    virtual void Quad(float* a, int ca, float* b, int cb, float* c, int cc);  // +0x4c
+    virtual void Tri(PieVert* v, int n, int tex);                              // +0x50
+};
+
+// @ 0x008183a0
+void __stdcall FUN_008183a0(IPieDraw* dr, float* p2, float* p3, int c1, int c2, float width, int tex) {
+    PieVert v[3];
+    float pts[4];
+    pts[0] = p3[0];
+    pts[1] = p3[1];
+    v[0].x = p2[0];
+    v[0].y = p2[1];
+    float dx = pts[0] - v[0].x;
+    float dy = -(pts[1] - v[0].y);
+    float inv = 1.0f / (float)sqrt((double)(dy * dy + dx * dx));
+    float half = width * 0.5f;
+    float ux = dy * inv;
+    float uy = dx * inv;
+    float nx = ux * half;
+    float ny = uy * half;
+    pts[2] = nx + pts[0];
+    pts[3] = ny + pts[1];
+    pts[0] = pts[0] - nx;
+    pts[1] = pts[1] - ny;
+    if (tex) {
+        v[0].c = c1; v[0].u = 1.0f; v[0].v = 0.5f;
+        v[1].x = pts[2]; v[1].y = pts[3]; v[1].c = c2; v[1].u = 0.0f; v[1].v = 0.0f;
+        v[2].x = pts[0]; v[2].y = pts[1]; v[2].c = c2; v[2].u = 0.0f; v[2].v = 1.0f;
+        dr->Tri(v, 1, tex);
+        return;
+    }
+    dr->Quad(p2, c1, &pts[2], c2, &pts[0], c2);
+}
+
+// @ 0x00818500
+bool __stdcall FUN_00818500(float* r1, float* r2, float dx, float dy) {
+    float offx = 5.0f, offy = 5.0f;
+    float ex, ey;
+    if (dx > 0.0f) {
+        ex = r1[0x40 / 4] - r2[0x38 / 4];
+        if (dy > 0.0f) ey = r1[0x44 / 4] - r2[0x3c / 4];
+        else { offy = -5.0f; ey = r1[0x3c / 4] - r2[0x44 / 4]; }
+    } else {
+        ex = r1[0x38 / 4] - r2[0x40 / 4];
+        offx = -5.0f;
+        if (dy > 0.0f) ey = r1[0x44 / 4] - r2[0x3c / 4];
+        else { offy = -5.0f; ey = r1[0x3c / 4] - r2[0x44 / 4]; }
+    }
+    if (ex * dx > 0.0f && ey * dy > 0.0f) {
+        float tY = ex / dx * dy;
+        float tX = ey / dy * dx;
+        if (tY * tY + ex * ex > tX * tX + ey * ey) ex = tX;
+        else ey = tY;
+        ex += offx;
+        ey += offy;
+        float* rc = r2 + 0x38 / 4;
+        rc[0] += ex;
+        rc[1] += ey;
+        rc[2] += ex;
+        rc[3] += ey;
+        Vv1(*(void**)((char*)r2 + 8), 0x60, (int)rc);
+    }
+    return true;
+}
+
+// Retail layout of the item as seen by its constructors (the 0x2c field and the +0x30 win proc
+// are what the stubs above call mpWinProc / pad).
+struct WPBaseA { virtual int AddRef(); virtual int Release(); };
+struct WPBaseB { virtual void wpb() = 0; int mB; WPBaseB() : mB(0) {} };
+struct ItemWinProc : WPBaseA, WPBaseB {
+    int  mButtonId;   // +0xc
+    int  mItemId;     // +0x10
+    bool mClicked;    // +0x14
+    int  mCallback;   // +0x18
+    ItemWinProc() : mButtonId(-1), mItemId(-1), mClicked(false), mCallback(0) {}
+    virtual void wpb();
+};
+void* FUN_009512d0(int size, int align, const char* name, int flags);  // 0x009512d0 cdecl
+int   FUN_009512c0();                                                   // 0x009512c0 cdecl
+
+static inline void AssignRef(IRefObj*& d, IRefObj* s) {
+    IRefObj* old = d;
+    if (s != old) {
+        if (s) s->AddRef();
+        d = s;
+        if (old) old->Release();
+    }
+}
+
+struct PieItemFull {
+    virtual void v0();
+    u32        mID;           // +0x04
+    void*      mpCurrentWin;  // +0x08
+    float      mAnchorX;      // +0x0c
+    float      mAnchorY;      // +0x10
+    u32        mFlags;        // +0x14
+    float      mRayWidth;     // +0x18
+    IRefObj*   mpLHS;         // +0x1c
+    IRefObj*   mpRHS;         // +0x20
+    IRefObj*   mpIcon;        // +0x24
+    IRefObj*   mpParent;      // +0x28
+    IRefObj*   mpW2c;         // +0x2c
+    ItemWinProc* mpWinProc;   // +0x30
+    char       mB34;          // +0x34
+
+    PieItemFull();
+    PieItemFull(const PieItemFull& o);
+    PieItemFull& assign(const PieItemFull& o);
+};
+
+// @ 0x00818650
+PieItemFull::PieItemFull(const PieItemFull& o) {
+    mID = o.mID;
+    mpCurrentWin = o.mpCurrentWin;
+    mAnchorX = o.mAnchorX;
+    mAnchorY = o.mAnchorY;
+    mFlags = o.mFlags;
+    mRayWidth = o.mRayWidth;
+    mpLHS = o.mpLHS;       if (mpLHS)    mpLHS->AddRef();
+    mpRHS = o.mpRHS;       if (mpRHS)    mpRHS->AddRef();
+    mpIcon = o.mpIcon;     if (mpIcon)   mpIcon->AddRef();
+    mpParent = o.mpParent; if (mpParent) mpParent->AddRef();
+    mpW2c = o.mpW2c;       if (mpW2c)    mpW2c->AddRef();
+    mpWinProc = o.mpWinProc; if (mpWinProc) mpWinProc->AddRef();
+    mB34 = o.mB34;
+}
+
+// @ 0x008186f0
+PieItemFull& PieItemFull::assign(const PieItemFull& o) {
+    mID = o.mID;
+    mpCurrentWin = o.mpCurrentWin;
+    mAnchorX = o.mAnchorX;
+    mAnchorY = o.mAnchorY;
+    mFlags = o.mFlags;
+    mRayWidth = o.mRayWidth;
+    AssignRef(mpLHS, o.mpLHS);
+    AssignRef(mpRHS, o.mpRHS);
+    AssignRef(mpIcon, o.mpIcon);
+    AssignRef(mpParent, o.mpParent);
+    AssignRef(mpW2c, o.mpW2c);
+    AssignRef((IRefObj*&)mpWinProc, (IRefObj*)(void*)o.mpWinProc);
+    mB34 = o.mB34;
+    return *this;
+}
+
+// @ 0x00818820
+PieItemFull::PieItemFull() {
+    mID = 0xffffffff;
+    mpCurrentWin = 0;
+    mFlags = 3;
+    mRayWidth = 10.0f;
+    mpLHS = 0; mpRHS = 0; mpIcon = 0; mpParent = 0; mpW2c = 0;
+    void* mem = FUN_009512d0(0x20, 4, "UI/ItemWinProc", FUN_009512c0());
+    ItemWinProc* wp = mem ? new (mem) ItemWinProc() : 0;
+    mpWinProc = wp;
+    if (wp) wp->AddRef();
+    mpWinProc->mButtonId = 0x122a5c7;
+}
+
+// ===========================================================================
 // incomplete / approximate (see partial.txt)
 // ===========================================================================
 struct PieStub {
@@ -250,9 +475,4 @@ struct PieStub {
 };
 void stub_817cb0(PieStub* p) { p->a(); }
 void stub_817d70(PieStub* p) { p->a(); }
-void stub_818000(PieStub* p) { p->a(); }
-void stub_8183a0(PieStub* p) { p->a(); }
-void stub_818500(PieStub* p) { p->a(); }
-void stub_818650(PieStub* p) { p->a(); }
-void stub_8186f0(PieStub* p) { p->a(); }
-void stub_818820(PieStub* p) { p->a(); }
+#pragma float_control(pop)

@@ -11,3 +11,6 @@
 00818500 cSPUIPieMenu::disjoin_items  # PDB name
 008188d0 ?SetId@cSPUIPieMenuItem@@QAEXI@Z  # cSPUIPieMenuItem::SetId migrated from s00817cb0 (verbatim, slice spelling)
 00818950 ?MarkUnused@cSPUIPieMenuItem@@QAEXXZ  # cSPUIPieMenuItem::MarkUnused migrated from s00817cb0 (verbatim, slice spelling)
+00818650 cSPUIPieMenuItem::copy_ctor  # copy ctor: vptr 0x1418ef8, AddRef x6 smart-pointer fields (+0x1c..+0x30)
+008186f0 cSPUIPieMenuItem::operator=  # AutoRefCount assign x6, returns this
+00818820 cSPUIPieMenuItem::ctor  # default ctor, allocs "UI/ItemWinProc" cSPUIPieMenuItemWinProc
