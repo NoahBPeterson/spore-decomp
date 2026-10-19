@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+0065b1b0 178 cSPUIAssetWebBrowser::Shutdown: complete; register allocation/vcall temp differs; recheck FAIL was the mpParentWin virtual-call argument (0x65b215 pushes `this` — the child removed from its parent — not mpParentWin); equiv: WEAK (175 valid, no mismatch, 100% coverage) flags /O2 /MD /Gy /TP
+0065b380 76 CreateContent: complete; this/window register swap (edi vs esi)
+0065b440 109 Feed build helper: complete; cFeedList inline layout differs
+0065b530  101  CharTypeStringRSearch: complete; cdecl param register assignment differs
+0065b5f0 109 CreateLayout helper: complete; operator-new / vcall schedule differs
+0065bac0 296 cSPUIAssetWebBrowser::Init: complete; object construction schedule differs
+0065bce0 84 wstring range ctor: complete; inlined RangeInitialize register allocation

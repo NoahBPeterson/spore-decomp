@@ -1,4 +1,4 @@
-0065bf20 SP::cSPUIFeedEdit::HandleMessage  # PDB candidate (large wcsncmp/wcsstr handler)
+0065bf20 ?FUN_0065bf20@cSPUIFeedEdit@@QAE_NPAXPAH@Z  # cSPUIFeedEdit::FUN_0065bf20 migrated from s0065bf20 (verbatim, slice spelling)
 0065c3c0 SP::cSPUIFeedEdit::LoadPage  # card PDB name
 0065c480 SP::cSPUIFeedEditAssetView::FUN_0065c480  # unknown; sets field +8
 0065c490 ?GetThumbnailBackdrop@cSPUIFeedEditAssetView@@QBEXPAII@Z  # cSPUIFeedEditAssetView::GetThumbnailBackdrop migrated from s0065bf20 (verbatim, slice spelling)

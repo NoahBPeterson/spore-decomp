@@ -1,20 +1,20 @@
 0065af90 ?FUN_0065af90@SiblingWin@@QAEX_NH@Z  # SiblingWin::FUN_0065af90 migrated from s0065af90 (verbatim, slice spelling)
-0065b180 CharTypeStringFindEnd  # eastl basic_string private helper, matches string.h source
-0065b1b0 SP::cSPUIAssetWebBrowser::Shutdown  # card real name
-0065b2a0 SP::cSPUIAssetWebBrowser::SetActive  # card real name
-0065b380 SP::cSPUIAssetWebBrowser::CreateContent  # inlined FUN_009979f0/GetFrame content creation
-0065b410 SP::cSPUIAssetWebBrowser reload callback  # SetReloadCallback target in FUN_0065b5f0
-0065b440 SP::cSPUIAssetWebBrowser feed build helper  # mpFeedList at +0xa0
-0065b510 SP::cSPUIAssetWebBrowser::ClearPage  # HandleLocationChange with blank html
+0065b180 ?CharTypeStringFindEnd@eastl@@YAPBDPBD0D@Z  # __declspec migrated from s0065af90 (verbatim, slice spelling)
+0065b1b0 ?Shutdown@cSPUIAssetWebBrowser@@QAE_NXZ  # cSPUIAssetWebBrowser::Shutdown migrated from s0065af90 (verbatim, slice spelling)
+0065b2a0 ?SetActive@cSPUIAssetWebBrowser@@QAEX_N@Z  # cSPUIAssetWebBrowser::SetActive migrated from s0065af90 (verbatim, slice spelling)
+0065b380 ?FUN_0065b380@cSPUIAssetWebBrowser@@QAEXXZ  # cSPUIAssetWebBrowser::FUN_0065b380 migrated from s0065af90 (verbatim, slice spelling)
+0065b410 ?FUN_0065b410@@YAXPAVcSPUIAssetWebBrowser@@H_N@Z  # FUN_0065b410 migrated from s0065af90 (verbatim, slice spelling)
+0065b440 ?FUN_0065b440@cSPUIAssetWebBrowser@@QAEXHH@Z  # cSPUIAssetWebBrowser::FUN_0065b440 migrated from s0065af90 (verbatim, slice spelling)
+0065b510 ?FUN_0065b510@cSPUIAssetWebBrowser@@QAEXXZ  # cSPUIAssetWebBrowser::FUN_0065b510 migrated from s0065af90 (verbatim, slice spelling)
 0065b530 CharTypeStringRSearch  # eastl basic_string rfind helper, matches string.h source
-0065b5f0 SP::cSPUIAssetWebBrowser::CreateLayout  # allocs cSPUILayout into +0x14
-0065b6b0 SP::cSPUIAssetWebBrowser::OnModalWindowEnd  # PDB candidate
-0065b8c0 eastl::basic_string<char>::rfind(3)  # matches EASTL rfind(p,pos,n)
-0065b930 SP::cSPUIAssetWebBrowser::cSPUIAssetWebBrowser  # constructor, stores class vtables
-0065ba20 SP::cSPUIAssetWebBrowser::~cSPUIAssetWebBrowser  # card real name
-0065bac0 SP::cSPUIAssetWebBrowser::Init  # card real name
-0065bc20 SP::cSPUIAssetWebBrowser::LoadPage  # PDB candidate
-0065bcb0 eastl::basic_string<char>::rfind(2)  # calls rfind(p,pos,strlen)
-0065bce0 eastl::basic_string<wchar_t>::basic_string(str,pos,n)  # range ctor
-0065bd80 SP::cSPUIAssetWebBrowser::HandleMessage  # PDB candidate (layout differs at +0x94)
+0065b5f0 ?FUN_0065b5f0@cSPUIAssetWebBrowser@@QAEXXZ  # cSPUIAssetWebBrowser::FUN_0065b5f0 migrated from s0065af90 (verbatim, slice spelling)
+0065b6b0 ?FUN_0065b6b0@cSPUIAssetWebBrowser@@QAEXHH@Z  # cSPUIAssetWebBrowser::FUN_0065b6b0 migrated from s0065af90 (verbatim, slice spelling)
+0065b8c0 ?rfind@cstring@eastl@@QBEIPBDII@Z  # cstring::rfind migrated from s0065af90 (verbatim, slice spelling)
+0065b930 ??0cSPUIAssetWebBrowser@@QAE@XZ  # cSPUIAssetWebBrowser::cSPUIAssetWebBrowser migrated from s0065af90 (verbatim, slice spelling)
+0065ba20 ??1cSPUIAssetWebBrowser@@QAE@XZ  # cSPUIAssetWebBrowser::~cSPUIAssetWebBrowser migrated from s0065af90 (verbatim, slice spelling)
+0065bac0 ?Init@cSPUIAssetWebBrowser@@QAE_NPAX0@Z  # cSPUIAssetWebBrowser::Init migrated from s0065af90 (verbatim, slice spelling)
+0065bc20 ?LoadPage@cSPUIAssetWebBrowser@@QAE_NPAX@Z  # cSPUIAssetWebBrowser::LoadPage migrated from s0065af90 (verbatim, slice spelling)
+0065bcb0 ?rfind@cstring@eastl@@QBEIPBDI@Z  # cstring::rfind migrated from s0065af90 (verbatim, slice spelling)
+0065bce0 ??0wstring@eastl@@QAE@ABV01@II@Z  # wstring::wstring migrated from s0065af90 (verbatim, slice spelling)
+0065bd80 ?HandleMessage@cSPUIAssetWebBrowser@@QAE_NHPAX@Z  # cSPUIAssetWebBrowser::HandleMessage migrated from s0065af90 (verbatim, slice spelling)
 0065be20 ExtractFeedPath  # builds a wstring substring after "/user/"
