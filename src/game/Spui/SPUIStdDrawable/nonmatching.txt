@@ -1,0 +1,28 @@
+# va  diff-bytes  reason
+008304c0 45 FactoryRegistry::CreateInstance: register (esi) output convention differs; equiv: UNSUPPORTED (0 valid inputs)
+008306e0 180 bbox adjust: x87 double Validate calls / register alloc differ; equiv: FAIL (1 ulp float)
+00830810 182 cSPUIStdDrawableImageInfo ctor: vptr + descriptor store schedule differs; equiv: PASS
+00830910 29 SmallSet::Do: /Od frame layout (force /Od flags) differs; equiv: PASS
+00830950 211 cSPUIStdDrawable ctor: base ctor + 8 AutoRefCount stores schedule differs; equiv: FAIL (field stores differ)
+00830b30 122 cSPUIStdDrawable dtor: embedded image-info release loop differs; equiv: PASS
+00830c00 53 Drawable::GetImageInfo: register allocation (this/def swap) and branch layout differ; equiv WEAK: 1200 valid inputs (need 200), 89.5% coverage (need 100%% (all insns))
+00830c60 5 DSub::GetFieldC: cl folds (+0xc) into the load instead of add-then-load; equiv PASS: 1007 valid inputs, 100.0% coverage (all insns)
+00830c80 10 DSub::GetField14: same address-fold difference; equiv FAIL: 5/5 valid inputs mismatched; first: eax
+00830c90 18 DSub::GetPair28: x87 pair copy schedule differs; equiv FAIL: 5/5 valid inputs mismatched; first: memory pool @40020000
+00830cc0 18 DSub::GetPair30: x87 pair copy schedule differs; equiv FAIL: 5/5 valid inputs mismatched; first: memory pool @40020000
+00830cf0 9 DSub::GetField10: same address-fold difference; equiv FAIL: 5/6 valid inputs mismatched; first: eax
+00830d10 10 DSub::GetField18: same address-fold difference; equiv FAIL: 5/5 valid inputs mismatched; first: eax
+00830d20 10 DSub::GetField20: same address-fold difference; equiv FAIL: 5/5 valid inputs mismatched; first: execution
+00830d30 18 DSub::GetPair38: x87 pair copy schedule differs; equiv FAIL: 5/5 valid inputs mismatched; first: memory pool @40020000
+00830d60 18 DSub::GetPair40: x87 pair copy schedule differs; equiv FAIL: 5/5 valid inputs mismatched; first: execution
+008310a0 188 ImageInfo2::CopyFrom: refcount + rep movsd block schedule differs; equiv PASS: 1120 valid inputs, 100.0% coverage (all insns)
+00831170 99 SetImageColor: factory/create + CopyFrom inlining schedule differs
+008311f0 99 SetField18At: factory/create path now force-inlined (as in original), removing the edx clobber the original never writes (callerdeps depth-8 SAFE); equiv WEAK: 348 valid inputs, 73.3% coverage (need 100% all insns); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00831270 99 SetField20At: same clone-of-template schedule differs
+008312f0 106 SetPair38At: same clone-of-template schedule differs
+00831380 106 SetPair40At: same clone-of-template schedule differs
+00831410 129 PickImageInfo: switch lowering + default-info copy schedule differs; equiv WEAK: 1113 valid inputs (need 200), 94.2% coverage (need 100%% (all insns))
+00831650 37 EnsureImageInfo0: refcount swap + CopyFrom schedule differs; equiv FAIL: 5/8 valid inputs mismatched; first: memory pool @40010090
+008316b0 179 DSub::SetImage: factory/create + refcount swap schedule differs; equiv FAIL: 5/24 valid inputs mismatched; first: memory pool @4001007c
+00831760 141 Drawable::SetImageIcon: factory/create + refcount swap schedule differs; equiv FAIL: 5/37 valid inputs mismatched; first: memory pool @40010088
+012fe300 198 init_15476e4: complete; /Od arithmetic for size field not reproduced

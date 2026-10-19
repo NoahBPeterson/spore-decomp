@@ -6,7 +6,7 @@
 012f7570 init_1542c44  # reflection/type registry table
 012fc2b0 init_1546064  # reflection/type registry table
 012fe000 init_15477a4  # reflection/type registry table (12 entries)
-012fe300 init_15476e4  # reflection/type registry table (7 entries)
+012fe300 ?init_15476e4@@YAXXZ  # init_15476e4 migrated from s012f64e0 (verbatim, slice spelling)
 012ffaf0 init_1548764  # reflection/type registry table
 012ffef0 init_16514ec  # stores default core allocator
 01300080 init_1667a58  # stores InitXInputFunctions() result
