@@ -7,6 +7,7 @@
 #include "EA/Allocator/FixedBufferAllocator.h"
 #include "EA/XML/XmlTextWriter.h"
 #include <stdio.h>
+#include <wchar.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern void* GetManager();  // 0x67dcd0
@@ -490,7 +491,9 @@ extern char PTR_FUN_0150c50c[];
 extern void StartElementCb();   // 0x4bdcd0
 extern void EndElementCb();     // 0x4be100
 extern void CharDataCb();       // 0x4be070
+extern void FUN_00903550(void* parser, int arg);   // 0x903550 (XML_StopParser-style, cdecl)
 extern int FUN_00903400(void* parser, int param);                       // 0x903400
+#pragma intrinsic(wcscmp)
 struct cEditorModelParser;
 __declspec(thread) cEditorModelParser* g_pCurrentParser;
 struct cEditorModelParser {
@@ -512,6 +515,13 @@ struct cEditorModelParser {
     bool ReadULong(unsigned long* out);   // 004be380
     bool ReadFloat(float* out);           // 004be2e0
 };
+__declspec(dllimport) unsigned long __cdecl wcstoul(const wchar_t*, wchar_t**, int);
+struct ParserBlockOps {
+    void AddBlock(int index);                      // 0x004be420 (thiscall, ret 4)
+};
+struct ParserModelBlocks {
+    void Reserve(uint32_t count);                  // 0x004c0250 (thiscall, ret 4)
+};
 // ---- items of slice s004bd850 end
 
 // ---- items of slice s004bf430 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -519,32 +529,57 @@ extern "C" long _InterlockedExchangeAdd(volatile long* Addend, long Value);
 extern int FUN_004afd00(int n);                                  // 0x4afd00
 extern void operator_new__(void* p, int a, int n);               // in-place new
 #pragma intrinsic(_InterlockedExchangeAdd)
+struct SPMemPoolStub {
+    void* LockedAlloc(uint32_t size, int a, int b, int c, int d, int e);                      // 0x009289f0 (ret 0x18)
+    void* LockedAligned(uint32_t size, uint32_t align, int a, int b, int c, int d, int e, int f);  // 0x00928a30 (ret 0x20)
+};
+extern SPMemPoolStub* g_pSPMemPool;     // 0x016c8b44
 struct FixedBufferAllocatorStub {
     struct buffer_info { int32_t mSignature, mSize, mSizeFree; void* mpFirstFree; };
+    struct block_header { uint32_t mSize; block_header* mpPrev; };
     buffer_info* mpBufferInfo;
-    void* Malloc(void* p, int n);       // 0x4bfc40
+    bool IsInitialized() const { return mpBufferInfo != 0; }
+    void* Malloc(uint32_t nSize, uint32_t nAlignment);   // 0x4bfc40
     void Free(void* p);                 // 0x4bcab0
 };
 __declspec(thread) void* g_tls_current;
-void* FixedBufferAllocatorStub::Malloc(void* p, int n) {
-    (void)p; (void)n;
-    return 0;
-}
+#define FBA_MASK 0x3fffffff
+#define FBA_INUSE 0x80000000
+#define FBA_TRAILER 0x40000000
 void FixedBufferAllocatorStub::Free(void* p) {
     (void)p;
 }
 struct StreamWriter {
-    virtual void v0(); virtual void v4(); virtual void v8(); virtual void vC();
-    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1C();
-    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2C();
-    virtual void v30(); virtual void v34();
+virtual void v0();
+virtual void v4();
+virtual void v8();
+virtual void vC();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1C();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2C();
+virtual void v30();
+virtual void v34();
     virtual bool v38(void* buf, int n);   // +0x38
 };
 extern bool FUN_004bf0a0(StreamWriter* w, int addr, int n);   // 0x4bf0a0
 struct StreamReader {
-    virtual void v0(); virtual void v4(); virtual void v8(); virtual void vC();
-    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1C();
-    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2C();
+virtual void v0();
+virtual void v4();
+virtual void v8();
+virtual void vC();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1C();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2C();
     virtual int v30(void* buf, int n);   // +0x30
 };
 extern bool FUN_004bf2a0(StreamReader* r, int addr, int n);      // 0x4bf2a0
@@ -573,11 +608,6 @@ FactoryObject* FactoryObject::Destroy(uint32_t param_2)
     return this;
 }
 
-
-
-
-
-
 // @ 0x004bc210
 unsigned int SP::cSPEditorResourceFactory::GetSupportedTypes(unsigned int * types, unsigned int count)
 {
@@ -597,11 +627,6 @@ unsigned int SP::cSPEditorResourceFactory::GetSupportedTypes(unsigned int * type
     return 8;
 }
 
-
-
-
-
-
 // @ 0x004bc290
 bool SP::cSPEditorResourceFactory::CanConvert(unsigned int inType, unsigned int outType) const
 {
@@ -611,11 +636,6 @@ bool SP::cSPEditorResourceFactory::CanConvert(unsigned int inType, unsigned int 
                outType == 0x438f6347 || outType == 0x3d97a8e4;
     return false;
 }
-
-
-
-
-
 
 // @ 0x004bc300
 bool cSPEditorResourceFactory::CreateResource(StreamObject* obj, int* out, uint32_t param_4, int typeHash)
@@ -655,11 +675,6 @@ bool cSPEditorResourceFactory::CreateResource(StreamObject* obj, int* out, uint3
     return false;
 }
 
-
-
-
-
-
 // @ 0x004bc540
 bool cSPEditorResourceFactory::ReadResource(StreamObject* stream, uint32_t param_2, uint32_t param_3, int typeHash)
 {
@@ -683,11 +698,6 @@ bool cSPEditorResourceFactory::ReadResource(StreamObject* stream, uint32_t param
     return ok;
 }
 
-
-
-
-
-
 // @ 0x004bc620
 bool cSPEditorResourceFactory::WriteResource(StreamObject* stream, uint32_t param_1, uint32_t param_2, int typeHash)
 {
@@ -706,11 +716,6 @@ bool cSPEditorResourceFactory::WriteResource(StreamObject* stream, uint32_t para
     }
     return false;
 }
-
-
-
-
-
 
 // @ 0x004bc6d0
 bool cSPEditorResourceFactory::ReadResourceFromStream(StreamObject* stream, uint32_t key, int typeHash)
@@ -746,11 +751,6 @@ bool cSPEditorResourceFactory::ReadResourceFromStream(StreamObject* stream, uint
     return ok;
 }
 
-
-
-
-
-
 // @ 0x004bc8a0
 namespace EA { namespace Allocator {
 FixedBufferAllocator_s004b_bfb0* FixedBufferAllocator_s004b_bfb0::Create(void* pBuffer, uint32_t size, uint8_t bShared)
@@ -779,11 +779,6 @@ FixedBufferAllocator_s004b_bfb0* FixedBufferAllocator_s004b_bfb0::Create(void* p
 }
 }}  // namespace EA::Allocator
 
-
-
-
-
-
 // @ 0x004bc990
 bool EA::Allocator::FixedBufferAllocator::IsValid()
 {
@@ -796,11 +791,6 @@ bool EA::Allocator::FixedBufferAllocator::IsValid()
         return true;
     return false;
 }
-
-
-
-
-
 
 // @ 0x004bca10
 void EA::Allocator::FixedBufferAllocator::destroy_shared()
@@ -819,11 +809,6 @@ void EA::Allocator::FixedBufferAllocator::destroy_shared()
         }
     }
 }
-
-
-
-
-
 
 // @ 0x004bcab0
 void EA::Allocator::FixedBufferAllocator::Free(void * p)
@@ -865,10 +850,6 @@ void EA::Allocator::FixedBufferAllocator::Free(void * p)
         mpBufferInfo->mSizeFree += *block;
     }
 }
-
-
-
-
 
 // @ 0x004bcc50
 namespace SP {
@@ -1014,9 +995,6 @@ bool cSPEditorResourceFactory_s004b_cc50::WriteResourceToStream(IStream* stream,
 }
 }  // namespace SP
 
-
-
-
 // @ 0x004bd9f0
 void cEditorModelParser::FUN_004bd9f0(int param)
 {
@@ -1033,7 +1011,6 @@ void cEditorModelParser::FUN_004bd9f0(int param)
     mCursor = 0;
 }
 
-
 // @ 0x004bdc00
 int cEditorModelParser::FUN_004bdc00(int param)
 {
@@ -1043,13 +1020,61 @@ int cEditorModelParser::FUN_004bdc00(int param)
     return result;
 }
 
+// @ 0x004bdcd0
+void cEditorModelParser_StartElement(void* userData, const wchar_t* name, const wchar_t** atts)
+{
+    cEditorModelParser* nCount = (cEditorModelParser*)userData;
+    unsigned long p15;
+    const wchar_t** hi;
+    const wchar_t* t22;
+    const wchar_t* t26;
+    const wchar_t** item;
+
+    nCount->mBuffer[0] = 0;
+    nCount->mLength = 0;
+    nCount->mCursor = 0;
+    if (wcscmp(name, L"blockref") == 0) {
+        if (nCount->m3aa8 < 0x100) {
+            nCount->m3aa4 = nCount->m3aa8;
+            nCount->m3aa8 = nCount->m3aa8 + 1;
+            ((ParserBlockOps*)nCount)->AddBlock(nCount->m3aa4);
+        } else {
+            FUN_00903550(nCount->mpXMLParser, 0);
+        }
+    } else if (wcscmp(name, L"blocks") == 0) {
+        t22 = L"0";
+        do {
+            for (hi = atts; hi[0] && hi[1]; hi += 2) {
+                if (wcscmp(hi[0], L"p15") == 0) {
+                    t22 = hi[1];
+                    break;
+                }
+            }
+        } while (0);
+        p15 = wcstoul(t22, 0, 0);
+        if (p15 <= 0x100)
+            ((ParserModelBlocks*)((char*)nCount->m3aa0 + 0x98))->Reserve(p15);
+        else
+            FUN_00903550(nCount->mpXMLParser, 0);
+    } else if (wcscmp(name, L"weight") == 0) {
+        t26 = L"0";
+        do {
+            for (item = atts; item[0] && item[1]; item += 2) {
+                if (wcscmp(item[0], L"channel") == 0) {
+                    t26 = item[1];
+                    break;
+                }
+            }
+        } while (0);
+        nCount->m3aac = wcstoul(t26, 0, 0);
+    }
+}
 
 // @ 0x004be420
 void FUN_004be420(void* self, int index)
 {
     (void)self; (void)index;
 }
-
 
 // @ 0x004beca0
 wchar_t* FormatFloat(wchar_t* buf, float value)
@@ -1065,17 +1090,11 @@ wchar_t* FormatFloat(wchar_t* buf, float value)
     return buf;
 }
 
-
-
-
 // @ 0x004bede0
 bool XmlWriteElement(IXmlWriter* writer, const wchar_t* name, const wchar_t* text)
 {
     return writer->BeginElement(name) && writer->WriteText(text) && writer->EndElement(name);
 }
-
-
-
 
 // @ 0x004bee50
 bool XmlWriteBool(IXmlWriter* writer, const wchar_t* name, bool value)
@@ -1083,18 +1102,12 @@ bool XmlWriteBool(IXmlWriter* writer, const wchar_t* name, bool value)
     return XmlWriteElement(writer, name, value ? L"true" : L"false");
 }
 
-
-
-
 // @ 0x004bee90
 bool XmlWriteUInt(IXmlWriter* writer, const wchar_t* name, unsigned long value)
 {
     wchar_t buf[20];
     return XmlWriteElement(writer, name, _ultow(value, buf, 10));
 }
-
-
-
 
 // @ 0x004beec0
 bool XmlWriteHex(IXmlWriter* writer, const wchar_t* name, uint32_t value)
@@ -1108,18 +1121,12 @@ bool XmlWriteHex(IXmlWriter* writer, const wchar_t* name, uint32_t value)
     return XmlWriteElement(writer, name, buf);
 }
 
-
-
-
 // @ 0x004bef40
 bool XmlWriteFloat(IXmlWriter* writer, const wchar_t* name, float value)
 {
     wchar_t buf[64];
     return XmlWriteElement(writer, name, FormatFloat(buf, value));
 }
-
-
-
 
 // @ 0x004bef80
 bool XmlWriteVector3(IXmlWriter* writer, const wchar_t* name, const Vector3_s004b_e5d0& v)
@@ -1131,9 +1138,6 @@ bool XmlWriteVector3(IXmlWriter* writer, const wchar_t* name, const Vector3_s004
            writer->WriteText(FormatFloat(buf, v.z)) &&
            writer->EndElement(name);
 }
-
-
-
 
 // @ 0x004bf0a0
 bool WriteRLE(IStream_s004b_e5d0* stream, const uint8_t* data, uint32_t size)
@@ -1179,9 +1183,6 @@ bool WriteRLE(IStream_s004b_e5d0* stream, const uint8_t* data, uint32_t size)
     return true;
 }
 
-
-
-
 // @ 0x004bf2a0
 bool ReadRLE(IStream_s004b_e5d0* stream, uint8_t* data, uint32_t size)
 {
@@ -1225,8 +1226,6 @@ bool ReadRLE(IStream_s004b_e5d0* stream, uint8_t* data, uint32_t size)
     }
     return true;
 }
-
-
 
 // @ 0x004bf430
 bool FUN_004bf430(int* stream, int data)
@@ -1295,7 +1294,88 @@ bool FUN_004bfb20(StreamWriter* w, int data)
 void FUN_004bfc10(void* p)
 {
     FixedBufferAllocatorStub* fba = (FixedBufferAllocatorStub*)g_tls_current;
-    fba->Malloc(p, 4);
+    fba->Malloc((uint32_t)p, 4);
+}
+
+// @ 0x004bfc40
+void* FixedBufferAllocatorStub::Malloc(uint32_t nSize, uint32_t nAlignment)
+{
+    char* i;
+    int n40;
+    block_header* n1;
+    int n16;
+    block_header* v40;
+    block_header* list;
+    block_header* g;
+    int p23;
+    int owner;
+    uint32_t t33;
+    int node;
+    block_header* alloc;
+
+    n40 = ((nSize + 3) & 0xfffffffc) + 8 + ((mpBufferInfo[1].mSignature & FBA_TRAILER) ? 4 : 0);
+    if (IsInitialized() && mpBufferInfo->mSizeFree >= n40) {
+        i = (char*)mpBufferInfo + 0x10 + mpBufferInfo->mSize;
+        if (n40 > 8) {
+            n1 = (block_header*)mpBufferInfo->mpFirstFree;
+            n16 = 0;
+            while ((char*)n1 < i && n16 + n40 < mpBufferInfo->mSizeFree) {
+                if ((int)n1->mSize >= 0) {
+                    list = (block_header*)((char*)n1 + (n1->mSize & FBA_MASK));
+                    if ((char*)list < i && (int)list->mSize >= 0) {
+                        g = (block_header*)((char*)list + (list->mSize & FBA_MASK));
+                        if ((char*)g < i)
+                            g->mpPrev = n1;
+                        n1->mSize = n1->mSize + list->mSize;
+                        continue;
+                    }
+                    n16 = (n1->mSize & FBA_MASK) + n16;
+                    v40 = (block_header*)(((uint32_t)n1 + nAlignment + 7 & ~(nAlignment - 1)) - 8);
+                    if ((char*)v40 + n40 < (char*)n1 + (n1->mSize & FBA_MASK)) {
+                        owner = (int)((char*)v40 - (char*)n1);
+                        if (owner > 0) {
+                            if (!(mpBufferInfo[1].mSignature & FBA_TRAILER)) {
+                                v40->mpPrev = n1->mpPrev;
+                                v40->mSize = (n1->mSize & FBA_MASK) - owner;
+                                v40->mpPrev->mSize = (v40->mpPrev->mSize & 0xc0000000) | (((v40->mpPrev->mSize & FBA_MASK) + owner) & FBA_MASK);
+                            } else {
+                                t33 = (n1->mpPrev->mSize & FBA_TRAILER)
+                                    ? *(uint32_t*)((n1->mpPrev->mSize & FBA_MASK) + (char*)n1->mpPrev - 4) : 0;
+                                v40->mpPrev = n1->mpPrev;
+                                v40->mSize = (n1->mSize & FBA_MASK) - owner;
+                                v40->mpPrev->mSize = (v40->mpPrev->mSize & 0xc0000000) | (((v40->mpPrev->mSize & FBA_MASK) + owner) & FBA_MASK);
+                                if ((int)v40->mpPrev->mSize < 0 || v40->mpPrev == (block_header*)(mpBufferInfo + 1))
+                                    mpBufferInfo->mSizeFree = mpBufferInfo->mSizeFree - owner;
+                                *(uint32_t*)((v40->mpPrev->mSize & FBA_MASK) + (char*)v40->mpPrev - 4) = t33;
+                            }
+                        }
+                        p23 = (v40->mSize & FBA_MASK) - n40;
+                        if (p23 >= 0x28) {
+                            v40->mSize = (v40->mSize & 0xc0000000) | ((uint32_t)n40 & FBA_MASK);
+                            alloc = (block_header*)((char*)v40 + (v40->mSize & FBA_MASK));
+                            alloc->mSize = p23;
+                            alloc->mpPrev = v40;
+                        }
+                        if (mpBufferInfo->mpFirstFree == n1)
+                            mpBufferInfo->mpFirstFree = (char*)v40 + (v40->mSize & FBA_MASK);
+                        mpBufferInfo->mSizeFree = mpBufferInfo->mSizeFree - (v40->mSize & FBA_MASK);
+                        v40->mSize = v40->mSize | FBA_INUSE;
+                        if (mpBufferInfo[1].mSignature & FBA_TRAILER) {
+                            v40->mSize = v40->mSize | FBA_TRAILER;
+                            *(FixedBufferAllocatorStub**)((char*)v40 + (v40->mSize & FBA_MASK) - 4) = this;
+                        }
+                        return (char*)v40 + 8;
+                    }
+                }
+                n1 = (block_header*)((char*)n1 + (n1->mSize & FBA_MASK));
+            }
+        } else {
+            return (char*)mpBufferInfo + 0x18;
+        }
+    }
+    if (nAlignment < 8)
+        return g_pSPMemPool->LockedAlloc(n40, 0, 0, 0, 0, 0);
+    return g_pSPMemPool->LockedAligned(n40, nAlignment, 0, 0, 0, 0, 0, 0);
 }
 
 // @ 0x004c01b0

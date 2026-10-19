@@ -6,6 +6,7 @@
 ../src/game/SPBake/SPEditorResourceFactory.cpp  ?IsValid@FixedBufferAllocator@Allocator@EA@@QAE_NXZ  004bc990  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorResourceFactory.cpp  ?FUN_004bd9f0@cEditorModelParser@@QAEXH@Z  004bd9f0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorResourceFactory.cpp  ?FUN_004bdc00@cEditorModelParser@@QAEHH@Z  004bdc00  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorResourceFactory.cpp  ?cEditorModelParser_StartElement@@YAXPAXPB_WPAPB_W@Z  004bdcd0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorResourceFactory.cpp  ?FormatFloat@@YAPA_WPA_WM@Z  004beca0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorResourceFactory.cpp  ?XmlWriteElement@@YA_NPAVIXmlWriter@@PB_W1@Z  004bede0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorResourceFactory.cpp  ?XmlWriteBool@@YA_NPAVIXmlWriter@@PB_W_N@Z  004bee50  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
@@ -15,5 +16,6 @@
 ../src/game/SPBake/SPEditorResourceFactory.cpp  ?XmlWriteVector3@@YA_NPAVIXmlWriter@@PB_WABUVector3_s004b_e5d0@@@Z  004bef80  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorResourceFactory.cpp  ?WriteRLE@@YA_NPAVIStream_s004b_e5d0@@PBEI@Z  004bf0a0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorResourceFactory.cpp  ?ReadRLE@@YA_NPAVIStream_s004b_e5d0@@PAEI@Z  004bf2a0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorResourceFactory.cpp  ?Malloc@FixedBufferAllocatorStub@@QAEPAXII@Z  004bfc40  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorResourceFactory.cpp  ?Init@XmlTextWriter@@QAEPAHXZ  004c01b0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorResourceFactory.cpp  ?ExportMeshEnd@cExportHelper@@QAEXXZ  00501200  /Od /Ob1 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

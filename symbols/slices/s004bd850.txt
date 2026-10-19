@@ -5,7 +5,7 @@
 004bdbd0 SP::cEditorModelParser::GetLineNumber  # returns expat current line or -1
 004bdc00 ?FUN_004bdc00@cEditorModelParser@@QAEHH@Z  # cEditorModelParser::FUN_004bdc00 migrated from s004bd850 (verbatim, slice spelling)
 004bdc60 SP::cEditorModelParser::Parse  # TLS current-parser + XML_Parse
-004bdcd0 SP::cEditorModelParser::StartElement  # PDB name; expat StartElement callback
+004bdcd0 ?cEditorModelParser_StartElement@@YAXPAXPB_WPAPB_W@Z  # cEditorModelParser_StartElement migrated from s004bd850 (verbatim, slice spelling)
 004be070 SP::cEditorModelParser::AppendCharData  # UTF-16 append into 0x400-unit buffer
 004be100 expat_end_element_callback  # FNV hash lookup + per-type converter dispatch
 004be2e0 SP::cEditorModelParser::ReadFloat  # wcstod-like parse + cursor advance
