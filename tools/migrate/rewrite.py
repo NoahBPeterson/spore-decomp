@@ -3159,6 +3159,10 @@ class Rewrite:
         pat = re.compile(r"(?<![\w.>:\x01])(%s)\b(?!\s*::)" % "|".join(re.escape(k) for k in sorted(names, key=len, reverse=True)))
         out, last = [], 0
         for mm in pat.finditer(m):
+            # a namespace of the same name (`namespace Thread {` inside EA::Thread next to class Thread, mig12 s00922500)
+            # is not the class: respelled, it became `namespace EA::Thread::Thread {` (C2061)
+            if re.search(r"\bnamespace\s+$", m[:mm.start()]):
+                continue
             out.append(text[last:mm.start()])
             out.append(names[mm.group(1)])
             last = mm.end()
