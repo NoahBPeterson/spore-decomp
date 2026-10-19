@@ -3,3 +3,4 @@
 006268a0  569  CalculateCameraToWorldMatrix: complete; cTransform field offsets/matrix expression order (x87 vs SSE) differ
 00626b50  471  SetInitialCameraValues: complete; same cTransform/matrix transcription differences
 00626290   22  ReloadTuning: complete (all 24 tuning-property reads); only the SSE register choice of the two phi *= deg-to-rad multiplies differs (orig loads member into xmm1, const into xmm0)
+00625f70  692  COMPLETE FUN_00625f70 (distance/theta/pitch exponential damping + quaternion-rotated look vector); x87/SSE interleave and register allocation differ [equiv: FAIL 5/146 float-rounding only, denormal-range cancellation in desiredPosition.x; call trace and esp match]

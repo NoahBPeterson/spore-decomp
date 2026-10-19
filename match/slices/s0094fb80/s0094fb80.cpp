@@ -40,7 +40,7 @@ struct Ext {
     void* ctor(int a, int b);               // 0x009222A0 Mutex::Mutex
     int   Lock(const void* nm);             // 0x009221B0 Mutex::Lock
     void  fixedvec_resize(unsigned n);      // 0x0089CB60 fixed_vector::resize
-    void  faf0(void*, void*, void*);        // 0x0094FAF0
+    void* faf0(void* out, void* value, void* b);   // 0x0094FAF0 map::insert(pair<iterator,bool>* out, const value_type* v, bool)
     int*  resize(unsigned n);               // 0x00837310 RawFixed::Resize
     void  d470(int a);                      // 0x0094D470
     int   e3a0(int a, int b, int c);        // 0x0094E3A0
@@ -240,16 +240,19 @@ char SSLManager::RestoreClientSession(void* ssl, unsigned char* name)
     GetSession((const char*)name);
     CRYPTO_add_lock((int*)(B(ssl) + 0x9c), 1, 0xe, g_szFileName, 0x581);
     unsigned h = 0x811c9dc5;
-    unsigned char c = *name;
+    unsigned c = *name;
     unsigned char* p = name;
     while (c != 0) {
         p++;
         h = h * 0x1000193 ^ c;
         c = *p;
     }
-    void* out[4];
-    out[1] = ssl;
-    ((Ext*)(B(self) + 0x48))->faf0(&out[1], &h, (void*)((unsigned)name & 0xffffff00u));
+    struct MapValue { unsigned key; void* ssl; } v;
+    v.key = h;
+    v.ssl = ssl;
+    void* result[2];
+    // the original pushes the dead `name` argument slot with its low byte cleared (a bool temp stored over it)
+    ((Ext*)(B(self) + 0x48))->faf0(result, &v, (void*)((unsigned)name & 0xffffff00u));
     Mutex_Unlock(B(self) + 0x18);
     return 1;
 }

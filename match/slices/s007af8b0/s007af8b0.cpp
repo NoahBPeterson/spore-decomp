@@ -8,6 +8,8 @@
 void  __cdecl EAFree(void* p);                                   // 0x00F47380
 void* __cdecl EAAlloc(unsigned n, const char* name, int a, int b, const char* f, int l); // 0x00F473A0
 extern "C" long __stdcall _InterlockedExchange(volatile long*, long);
+extern "C" long _InterlockedExchangeAdd(volatile long*, long);
+#pragma intrinsic(_InterlockedExchangeAdd)
 void  __cdecl eadxt(void* dst, void* src, int stride, int count, int mode, int quality); // 0x007AF490
 void  __cdecl FUN_007ad0c0(void* a, void* b);                    // 0x007AD0C0
 void  __cdecl FUN_007acfe0(void* a, void* b);                    // 0x007ACFE0
@@ -319,30 +321,64 @@ void** CopyRefRange(void** dst, void** first, void** last)
 struct GfxBlitCtx { int op; void* p; };
 void GraphicsBakeSprites(void* self, void* a, void* b);
 
-// ---------------------------------------------------------------------------
+struct ImgTex {
+    int mFormat;              // +0x0
+    char pad4[8];
+    unsigned short mWidth;    // +0xc
+    unsigned short mHeight;   // +0xe
+    int Lock(int mode, int zero, int* out);   // 0x011EF750 __thiscall
+    void Unlock(int* buf);                    // 0x011EF880 __thiscall
+};
+struct ImgObj {
+    ImgTex* mTex;             // +0
+    unsigned mFlags;          // +4
+    volatile long mRef;       // +8
+    void Release()
+    {
+        _InterlockedExchangeAdd(&mRef, -1);
+        if (_InterlockedExchangeAdd(&mRef, 0) < 1)
+            _InterlockedExchangeAdd(&mRef, 1);
+        else
+            _InterlockedExchangeAdd(&mRef, 0);
+    }
+};
+struct ImgRef {
+    ImgObj* p;
+    ~ImgRef() { if (p) p->Release(); }
+};
+IFac* __cdecl GetTexFactory();   // 0x0067DD60
+
 // @ 0x007af8b0  (bake/blit one sprite image into another)
-// ---------------------------------------------------------------------------
-bool FUN_007af8b0(void* pa, void* pb)
+bool FUN_007af8b0(ImgRef a, ImgRef b)
 {
-    // Full structure recovered: two smart pointers wrapping cImageDataRaw; when both carry
-    // matching dimensions/formats and both can be locked (2=luma / 1=rgba), the alpha channel
-    // is copied into the destination.  The completion paths release both references.
-    if (pa && pb) {
-        cImageDataRaw* a = (cImageDataRaw*)*(void**)pa;
-        cImageDataRaw* b = (cImageDataRaw*)*(void**)pb;
-        if (a && b && a->mWidth == b->mWidth && a->mHeight == b->mHeight
-            && a->mFormat == 0x15 && b->mFormat == 0x1c) {
-            int bufa[8], bufb[8];
-            if (((ImgOps*)b)->Lock(2, 0, bufa) && ((ImgOps*)a)->Lock(1, 0, bufb)) {
-                for (int y = 0; y < b->mHeight; ++y) {
-                    unsigned char* dstp = (unsigned char*)bufa[0];
-                    unsigned char* srcp = (unsigned char*)bufb[0];
-                    for (int x = 0; x < b->mWidth; ++x)
-                        dstp[y * b->mWidth + (b->mHeight - 1 - y)] = srcp[x * 4];
+    if (a.p) {
+        if (b.p) {
+            ImgObj* oa = a.p;
+            if (!(oa->mFlags & 1)) GetTexFactory()->v13(oa);
+            ImgTex* ta = oa->mTex;
+            ImgObj* ob = b.p;
+            if (!(ob->mFlags & 1)) GetTexFactory()->v13(ob);
+            ImgTex* tb = ob->mTex;
+            if (ta && tb) {
+                unsigned short w = ta->mWidth;
+                unsigned short h = ta->mHeight;
+                if (w == tb->mWidth && h == tb->mHeight && ta->mFormat == 0x15 && tb->mFormat == 0x1c) {
+                    int dstBuf[7];
+                    int srcBuf[7];
+                    if (tb->Lock(2, 0, dstBuf)) {
+                        if (ta->Lock(1, 0, srcBuf)) {
+                            for (int y = 0; y < (int)h; ++y) {
+                                int row = h - y - 1;
+                                for (int x = 0; x < (int)w; ++x)
+                                    ((unsigned char*)dstBuf[0])[row * w + x] = ((unsigned char*)srcBuf[0])[(row * w + x) * 4 + 3];
+                            }
+                            ta->Unlock(srcBuf);
+                        }
+                        tb->Unlock(dstBuf);
+                    }
+                    return true;
                 }
-                ((ImgOps*)a)->Unlock(bufb);
             }
-            ((ImgOps*)b)->Unlock(bufa);
         }
     }
     return false;

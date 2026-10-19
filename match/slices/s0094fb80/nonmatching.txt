@@ -17,3 +17,4 @@
 00950970  121  StreamSSLSocket::Connect: complete (if session: get name, RestoreClientSession, free session); control flow/regalloc differ; difftest WEAK (335 valid, 42.1% coverage)
 00950a20  112  StreamSSLSocket::SaveClientSession: complete (if session: find+release stored session, SSL_set_session); control flow/regalloc differ; difftest WEAK (311 valid, 20.8% coverage)
 00950ad0  24  Sock::SetStr (fixed_string::assign): complete (if begin!=str: reset then copy [str,str+len) via 0x45f430); strlen idiom/regalloc differ; difftest PASS (397 valid, 100% coverage)
+0094fd20  52  COMPLETE SSLManager::RestoreClientSession; third arg of map insert is the dead name arg slot with low byte cleared (bool temp over it), original stores byte 0 + dword reload [equiv: WEAK 184 valid inputs, 100% coverage, no mismatch]

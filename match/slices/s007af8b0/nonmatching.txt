@@ -11,3 +11,4 @@
 007b03e0    3  (equiv UNSUPPORTED: unresolved ref ??1AutoVec after marker fix) scalar deleting dtor: base vptr store order +4,+0 not reproduced
 007b07e0   99  SP::cTexturePreload ctor: EH state + burn/final vptr ordering differs
 007b0980  193  eastl vector assignment: helper call arg order/scheduling differs
+007af8b0  264  sprite alpha blit (by-value ImgRef params, /GS-): loop register allocation / dst base spill differs [equiv: WEAK 55.7% coverage]

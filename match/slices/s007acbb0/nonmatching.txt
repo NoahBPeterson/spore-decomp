@@ -3,3 +3,4 @@
 007acef0  132  COMPLETE 2x2 RGBA SWAR box filter; same register-assignment divergence as FUN_007ace40.
 007acfa0    2  COMPLETE vertical 2-tap RGBA SWAR average; only the register operand of the two inner loads is swapped.
 007acfe0  240  COMPLETE DXT surface downsampling dispatcher; parameter/register assignment and the cold `return false` block order differ.
+007ad810  315  COMPLETE trymapblock; original uses an LTCG register ABI (c0 in eax, c1 in ecx; trymappixel takes the pixel in eax), written with all-stack cdecl args [equiv: UNSUPPORTED original reads eax at entry]

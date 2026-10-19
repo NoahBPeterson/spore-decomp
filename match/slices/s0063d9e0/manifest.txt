@@ -2,3 +2,4 @@
 slices/s0063d9e0/s0063d9e0.cpp  ?Activate@cSPPlayModeSubModePhoto@@QAE_NXZ  0063e770  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s0063d9e0/s0063d9e0.cpp  ?Shutdown@cSPPlayModeSubModePhoto@@QAEXXZ  0063e810  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s0063d9e0/s0063d9e0.cpp  ?HandleButton@cSPPlayModeSubModeMovie@@QAE_NH@Z  0063e100  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063d9e0/s0063d9e0.cpp  ?FUN_0063de20@cSPPlayModeSubModeMovie@@QAEXH@Z  0063de20  /O2 /MD /Gy /TP /arch:SSE /GS-

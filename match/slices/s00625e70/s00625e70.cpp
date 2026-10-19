@@ -183,18 +183,56 @@ void cCreatureCameraBase::AimTowardsTarget(int unused) {
   (void)unused;
 }
 
-// @ 0x00625f70
+cVec3 QuatRotate(const cVec3& v, const cQuat& q);   // 0x0059AED0 (hidden return pointer, cdecl)
+
+// @ 0x00625f70  damp distance / orbit angles toward their desired values (frame-rate independent)
 void cCreatureCameraBase::FUN_00625f70() {
-  float distLimit = mMinCameraDistance;
-  float* chosen = (mCameraData.currentPlayerDistance <= mMinCameraDistance)
-                      ? &distLimit : &mCameraData.currentPlayerDistance;
-  float d = *chosen;
-  float rate = mCameraData.nonPenetratingPhi;
-  (void)rate; (void)d;
-  float f = (float)pow(10.0, (double)(mCameraData.nonPenetratingPhi / mFarClip) * -0.30103);
-  mCameraData.desiredPlayerDistance = (d - mCameraData.desiredPlayerDistance) * (1.0f - f)
-                                      + mCameraData.desiredPlayerDistance;
-  // (transcendental x87 body; see partial.txt)
+  float minDist = mMinCameraDistance;
+  float* sel = &mCameraData.desiredPlayerDistance;
+  if (mCameraData.desiredPlayerDistance <= minDist)
+    sel = &minDist;
+  float target = *sel;
+  float dt = mCameraData.dt;
+  mCameraData.desiredPlayerDistance = target;
+  double k = exp((double)(dt / mTuning188) * -0.30103f);
+  double nd = ((double)target - (double)mCameraData.currentPlayerDistance) * (1.0 - k)
+              + (double)mCameraData.currentPlayerDistance;
+  mCameraData.currentPlayerDistance = (float)nd;
+  float dist = (float)nd;
+  cVec3 up;
+  up.x = gUpX;
+  up.y = gUpY;
+  up.z = gUpZ;
+  double k2 = exp((double)(dt / mTuning180) * -0.30103f);
+  double theta = (double)mCameraData.currentPlayerTheta
+                 + ((double)mCameraData.desiredPlayerTheta - (double)mCameraData.currentPlayerTheta) * (1.0 - k2);
+  mCameraData.currentPlayerTheta = (float)theta;
+  double half = theta * 0.5f;
+  cVec3 diff;
+  diff.x = mCameraData.desiredLookAt.x - mCameraData.desiredPosition.x;
+  diff.y = mCameraData.desiredLookAt.y - mCameraData.desiredPosition.y;
+  diff.z = mCameraData.desiredLookAt.z - mCameraData.desiredPosition.z;
+  float sh = (float)sin(half);
+  cQuat q;
+  q.x = up.x * sh;
+  q.y = up.y * sh;
+  q.z = up.z * sh;
+  q.w = (float)cos(half);
+  cVec3 r = QuatRotate(diff, q);
+  float d = r.z * up.z + r.y * up.y + r.x * up.x;
+  float vx = r.x - d * up.x;
+  float vy = r.y - up.y * d;
+  float vz = r.z - up.z * d;
+  float inv = (float)(1.0 / sqrt((double)vx * vx + ((double)vy * vy + (double)vz * vz)));
+  double k3 = exp((double)(dt / mTuning184) * -0.30103f);
+  double pitch = (double)mCameraData.currentPlayerPitch
+                 + ((double)mCameraData.desiredPlayerPitch - (double)mCameraData.currentPlayerPitch) * (1.0 - k3);
+  mCameraData.currentPlayerPitch = (float)pitch;
+  float sy = (float)(sin(pitch) * dist);
+  float cy = (float)(cos(pitch) * dist);
+  mCameraData.desiredPosition.x = (mCameraData.desiredLookAt.x - (inv * vx) * cy) + up.x * sy;
+  mCameraData.desiredPosition.y = (mCameraData.desiredLookAt.y - (vy * inv) * cy) + up.y * sy;
+  mCameraData.desiredPosition.z = (mCameraData.desiredLookAt.z - (vz * inv) * cy) + up.z * sy;
 }
 
 // @ 0x00626290

@@ -1,5 +1,4 @@
 # va  diff-bytes  reason (incomplete)
-0094fd20  98  SSLManager::RestoreClientSession: incomplete - mutex lock, GetSession, CRYPTO_add_lock, FNV-1 hash of name, rbtree insert; residual memory-pool write differs under replay (map node key/arg layout); difftest FAIL (5/15 valid, orig writes 0x40020000, ours 0xcccccccc)
 00950280  123  StreamSSLSocket::InitConnection: incomplete - reset state, create SSL+BIO, SSL_set_bio, ctrl 0x21; exercises socket import unavailable under difftest; difftest UNSUPPORTED (0/400 valid)
 009503c0  94  Sock::Accept (StreamSSLSocket::Accept): incomplete - inner e650 accept, SSL_accept, verify, teardown on fail; exercises accept import unavailable under difftest; difftest UNSUPPORTED (0/400 valid)
 00950b10  109  Sock::DoPostConnectionCheck: incomplete - save session, SSL_connect, verify, teardown on fail; exercises connect import, all inputs discarded; difftest UNSUPPORTED (0/400 valid)

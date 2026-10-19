@@ -181,10 +181,58 @@ extern "C" uint32_t rbmappixel(void)
 }
 
 // @ 0x007ad810
-extern "C" uint32_t trymapblock(void)
+// Original: LTCG custom register ABI (c0 in eax, c1 in ecx, three stack args; trymappixel takes the pixel in eax).
+// Written here with an all-stack cdecl signature, so the bytes cannot match; behaviour is the same.
+struct BlockCache {
+    int      mCount;          // +0
+    uint32_t mEntries[256];   // +4
+};
+extern "C" uint32_t trymappixel_stack(uint32_t pix, uint32_t* colors);   // 0x007ad610
+
+static __forceinline uint32_t Expand565(uint32_t c)
 {
-    // PARTIAL: test a candidate 4x4 block against a 256-entry cache.
-    return 0;
+    uint8_t r5 = (uint8_t)((c >> 11) << 3);
+    uint32_t r = (c >> 13 & 7) | r5 | 0xffffff00u;
+    uint8_t g6 = (uint8_t)((c >> 5) << 2);
+    uint32_t rg = (r << 8) | (c >> 9 & 3) | g6;
+    uint8_t b5 = (uint8_t)(c << 3);
+    return (rg << 8) | (c >> 2 & 7) | b5;
+}
+
+extern "C" uint32_t trymapblock(uint32_t c0, uint32_t c1, BlockCache* cache, uint32_t* pixels, uint32_t threshold)
+{
+    uint32_t key = c1 << 16 | c0;
+    int n = cache->mCount;
+    int i = 0;
+    if (0 < n) {
+        do {
+            if (cache->mEntries[i] == key)
+                return 0x7fffffff;
+            i++;
+        } while (i < cache->mCount);
+        n = cache->mCount;
+    }
+    if (n < 0x100) {
+        cache->mEntries[n] = key;
+        cache->mCount++;
+    }
+    __declspec(align(8)) uint32_t colors[2];
+    colors[0] = Expand565(c1);
+    colors[1] = Expand565(c0);
+    uint32_t err = 0;
+    int a = 0;
+    do {
+        int b = 0;
+        do {
+            err += trymappixel_stack(*pixels, colors);
+            if (threshold < err)
+                return err;
+            b++;
+            pixels++;
+        } while (b < 4);
+        a++;
+    } while (a < 4);
+    return err;
 }
 
 // @ 0x007ad950

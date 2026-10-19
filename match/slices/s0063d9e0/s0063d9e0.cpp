@@ -45,7 +45,6 @@ struct cSPPlayModeSubModePhoto {
     void Shutdown();               // 0x0063E810
     void FUN_0063d9e0();
     void FUN_0063dc40();
-    void FUN_0063de20();
 };
 
 
@@ -94,8 +93,6 @@ void cSPPlayModeSubModePhoto::Shutdown()
 void cSPPlayModeSubModePhoto::FUN_0063d9e0() {}
 // @ 0x0063DC40  PARTIAL
 void cSPPlayModeSubModePhoto::FUN_0063dc40() {}
-// @ 0x0063DE20  PARTIAL
-void cSPPlayModeSubModePhoto::FUN_0063de20() {}
 
 // ---------------------------------------------------------------- cSPPlayModeSubModeMovie::HandleButton
 struct Key12 { uint32_t a, b, c; };
@@ -124,6 +121,8 @@ struct IConfigMgr {
     virtual void c10();
     virtual void SetValue(uint32_t id, int v);                       // +0x2c
     virtual int GetValue(uint32_t id);                               // +0x30
+    virtual void c13(); virtual void c14();
+    virtual void Slot3c();                                           // +0x3c
 };
 IConfigMgr* GetConfigManager();                                      // 0x0067DD30
 struct ISaveArea {
@@ -167,7 +166,9 @@ public:
 }
 
 struct cDateStrings {
-    char pad0[0x44];
+    char pad0[0x34];
+    const wchar_t* mMessage;   // +0x34
+    char pad38[0x44 - 0x38];
     const wchar_t* mYear;   // +0x44
     const wchar_t* mMonth;  // +0x48
     const wchar_t* mDay;    // +0x4C
@@ -198,13 +199,36 @@ struct cSPPlayModeSubModeMovie {
     int mDialogInProgress;          // +0x22E4
     char pad22e8[0x22fc - 0x22e8];
     eastl::string mYTUsername;      // +0x22FC
-    char pad230c[0x234c - 0x230c];
+    char pad230c[0x231c - 0x230c];
+    bool mRegisterSuccess;          // +0x231C
+    bool mRegisterCheckComplete;    // +0x231D
+    bool mDoRegisterCheck;          // +0x231E
+    bool mLoginSuccess;             // +0x231F
+    bool mLoginCheckComplete;       // +0x2320
+    bool mDoLoginCheck;             // +0x2321
+    bool mVideoUploadSuccess;       // +0x2322
+    bool mDoVideoUpload;            // +0x2323
+    bool mVideoUploadComplete;      // +0x2324
+    bool mEnableYouTubeVideoUpload; // +0x2325
+    char pad2326[2];
+    uint32_t mYTStatusCode;         // +0x2328
+    char pad232c[0x234c - 0x232c];
     eastl::string mYTPassword;      // +0x234C
 
     bool HandleButton(int id);                       // 0x0063E100
     void ToggleRecordingIndicator(char b);           // 0x0063D910
     void CheckYouTubeRegistration();                 // 0x0063CED0
     void FUN_0063cd30();
+    void FUN_0063de20(int dt);                       // 0x0063DE20
+    void FUN_0063dc40();
+    void FUN_0063d9e0();
+    void FUN_0063cf90();
+    void SetState2();                                // 0x0063B7B0
+    void SetState4();                                // 0x0063B7F0
+    void SetState5();                                // 0x0063B820
+    void SetState6();                                // 0x0063B860
+    static void ShowLoginToYouTubeDialog();          // 0x0063BD50
+    static void ShowYouTubeUploadVideoDialog();      // 0x0063BE00
     void FUN_0063b760();
     bool FUN_0063b950();
     bool FUN_0063b9a0();
@@ -216,6 +240,13 @@ struct cSPPlayModeSubModeMovie {
     static bool IsLocaleEnglish();                   // 0x0063C0A0
 };
 void CreateConnectingDialog();                       // 0x0063BC70
+void __cdecl DestroyConnectingDialog(bool b);        // 0x0063C060
+struct cSPPlayModeUIExt {
+    void FUN_00635350(uint32_t a, uint32_t b);       // 0x00635350
+    void SetTagField(uint32_t v);                    // 0x006353E0
+    void SetEnabled(uint32_t id, bool on);           // 0x00634EF0
+    void ShowEditor();                               // 0x00635380
+};
 
 // @ 0x0063E100
 bool cSPPlayModeSubModeMovie::HandleButton(int id)
@@ -350,4 +381,83 @@ bool cSPPlayModeSubModeMovie::HandleButton(int id)
 callout:
     BeginProfScope(0, 1)->End();
     return true;
+}
+
+// @ 0x0063DE20
+void cSPPlayModeSubModeMovie::FUN_0063de20(int dt)
+{
+    if (mRecording) {
+        mIndicatorTimer += dt;
+        if ((uint32_t)mIndicatorTimer > 500) {
+            FUN_0063b760();
+            mIndicatorTimer = 0;
+        }
+        if (!mMovieSystem->IsRecording()) {
+            ToggleRecordingIndicator(0);
+            ISaveArea* sa = GetSaveArea(0x11ac197);
+            eastl::string16 name;
+            WStr_Format(&name, L"%s.avi", EA::ConvertToString16(mCurrFilename, -1).c_str());
+            sa->SetName(name.c_str(), 0, 2);
+            ((cSPPlayModeUIExt*)mUI)->FUN_00635350(1, 0);
+            mUI->EnablePhotoViewerButton(true);
+            ((cSPPlayModeUIExt*)mUI)->SetTagField(1);
+            ((cSPPlayModeUIExt*)mUI)->SetEnabled(0x3a8ede4, true);
+            ((cSPPlayModeUIExt*)mUI)->ShowEditor();
+        }
+    }
+    if (mDoRegisterCheck && mRegisterCheckComplete) {
+        if (mRegisterSuccess) {
+            GetConfigManager()->Slot3c();
+            FUN_0063dc40();
+            ShowLoginToYouTubeDialog();
+            FUN_0063cf90();
+        } else {
+            DestroyConnectingDialog(false);
+            {
+                SP::cString msg;
+                msg.Load(0x7518573e, 0x5baf944, L"Login Failed (PLACEHOLDER)");
+                cDateStrings* ds = gDateStrings;
+                ds->mMessage = msg.GetText();
+            }
+            if (mYTStatusCode == 0x193)
+                SetState2();
+            else
+                SetState4();
+        }
+        mDoRegisterCheck = false;
+    }
+    if (mDoLoginCheck && mLoginCheckComplete) {
+        if (mLoginSuccess) {
+            ShowYouTubeUploadVideoDialog();
+            mEnableYouTubeVideoUpload = true;
+            FUN_0063d9e0();
+        } else {
+            DestroyConnectingDialog(false);
+            {
+                SP::cString msg;
+                msg.Load(0x7518573e, 0x5baf944, L"Login Failed (PLACEHOLDER)");
+                cDateStrings* ds = gDateStrings;
+                ds->mMessage = msg.GetText();
+            }
+            SetState4();
+        }
+        mDoLoginCheck = false;
+    }
+    if (mDoVideoUpload && mVideoUploadComplete) {
+        if (mVideoUploadSuccess) {
+            DestroyConnectingDialog(true);
+            SetState5();
+            mDoVideoUpload = false;
+            return;
+        }
+        DestroyConnectingDialog(false);
+        {
+            SP::cString msg;
+            msg.Load(0x7518573e, 0x5cbdeda, L"Upload Failed (PLACEHOLDER)");
+            cDateStrings* ds = gDateStrings;
+            ds->mMessage = msg.GetText();
+        }
+        SetState6();
+        mDoVideoUpload = false;
+    }
 }

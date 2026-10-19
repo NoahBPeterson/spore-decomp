@@ -5,5 +5,4 @@
 007ad400  517  PARTIAL mappixeltransparent skeleton only.
 007ad610  321  PARTIAL trymappixel skeleton only.
 007ad760  169  PARTIAL rbmappixel skeleton only.
-007ad810  312  PARTIAL trymapblock skeleton only.
 007ad950  231  PARTIAL trymapblockfast (MMX) skeleton only.

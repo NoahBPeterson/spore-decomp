@@ -1,2 +1,1 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-00625f70  798  camera damping: skeleton; the x87 pow/sin/cos orbit-damping body (f2xm1/fscale/fsin/fcos and FUN_0059aed0) is only approximated

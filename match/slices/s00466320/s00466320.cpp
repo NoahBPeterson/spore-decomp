@@ -205,10 +205,32 @@ inline TexData* DataOf(Tex* t)
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x00466320 (not yet decompiled)
+// 0x00466320  cSPBoundingBox::GetCorners  (the eight corners of an axis-aligned box)
 // ---------------------------------------------------------------------------------------------
+struct cSPVector3 {
+    float x, y, z;
+    void Set(float ix, float iy, float iz) { x = ix; y = iy; z = iz; }
+};
+struct cSPBoundingBox {
+    float mMin[3];                                         // +0
+    float mMax[3];                                         // +0xc
+    const float& Min(int i) const { return mMin[i]; }
+    const float& Max(int i) const { return mMax[i]; }
+    void GetCorners(cSPVector3 corners[8]) const;
+};
+
 // @ 0x00466320
-void F_00466320() {}
+void cSPBoundingBox::GetCorners(cSPVector3 corners[8]) const
+{
+    corners[0].Set(Min(0), Min(1), Min(2));
+    corners[1].Set(Max(0), Min(1), Min(2));
+    corners[2].Set(Min(0), Max(1), Min(2));
+    corners[3].Set(Max(0), Max(1), Min(2));
+    corners[4].Set(Min(0), Min(1), Max(2));
+    corners[5].Set(Max(0), Min(1), Max(2));
+    corners[6].Set(Min(0), Max(1), Max(2));
+    corners[7].Set(Max(0), Max(1), Max(2));
+}
 
 // ---------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------

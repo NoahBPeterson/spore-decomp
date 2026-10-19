@@ -495,6 +495,9 @@ unsigned CommandLine::FindArgument(const wchar_t* arg, bool exact, bool sub, WSt
     return result;
 }
 
+wchar_t* __cdecl StrIStrW(const wchar_t* s, const wchar_t* sub);   // 0x0092CC90
+typedef wchar_t* (__cdecl *StrSearchFn)(const wchar_t*, const wchar_t*);
+
 // @ 0x0092b300  find a switch (starting with '-' or '/') in the argument vector
 unsigned CommandLine::FindSwitch(const wchar_t* sw, bool exact, WString* out, unsigned start) {
     if (out != 0 && out->mpBegin != out->mpEnd) {
@@ -503,26 +506,71 @@ unsigned CommandLine::FindSwitch(const wchar_t* sw, bool exact, WString* out, un
     }
     if ((int)start < 0)
         start = 0;
-    // skip leading switch introducer chars
     int k = 0;
     do {
-        if (*sw == (wchar_t)"-/"[k]) {
+        if (*sw == "-/"[k]) {
             ++sw;
             break;
         }
         ++k;
     } while (k < 2);
     const wchar_t* p = sw;
-    while (*p) ++p;
-    unsigned len = (unsigned)(p - sw);
-    unsigned count = (unsigned)((char*)mpEnd - (char*)mpBegin) >> 4;
-    if (len != 0 && start < count) {
-        for (; start < count; ++start) {
-            WString* cur = (WString*)((char*)mpBegin + (start << 4));
-            if (out != 0) {
-                out->assign(sw, sw + len);
-            }
-            return start;
+    const wchar_t* base = sw + 1;
+    while (*p++) ;
+    int len = (int)(p - base);
+    unsigned count = (unsigned)(mpEnd - mpBegin);
+    if (len != 0 && start < (unsigned)(mpEnd - mpBegin)) {
+        StrSearchFn search;
+        if (exact)
+            search = (StrSearchFn)wcsstr;
+        else
+            search = StrIStrW;
+        if (start < count) {
+            unsigned i = start;
+            int off = start << 4;
+            do {
+                WString* cur = (WString*)((char*)mpBegin + off);
+                const wchar_t* s = cur->mpBegin;
+                if ((unsigned)(cur->mpEnd - s) >= 2) {
+                    int j = 0;
+                    do {
+                        if (*s == "-/"[j]) {
+                            if (j > 1)
+                                break;
+                            wchar_t* hit = search(s + 1, sw);
+                            if (hit != cur->mpBegin + 1)
+                                break;
+                            wchar_t* after = hit + len;
+                            wchar_t c = *after;
+                            if (c == 0) {
+                                if (*after != L':')
+                                    return i;
+                            } else if (c != L':') {
+                                break;
+                            }
+                            wchar_t* val = after + 1;
+                            if (val != 0 && out != 0) {
+                                wchar_t v0 = *val;
+                                int n = (int)(cur->mpEnd - cur->mpBegin);
+                                wchar_t* q = val;
+                                if (v0 == L'"' && cur->mpBegin[n - 1] == v0) {
+                                    out->assign(after + 2, after + (n - (int)(val - cur->mpBegin)) - 1);
+                                    return i;
+                                }
+                                while (v0 != 0) {
+                                    v0 = q[1];
+                                    ++q;
+                                }
+                                out->assign(val, val + (q - val));
+                            }
+                            return i;
+                        }
+                        ++j;
+                    } while (j < 2);
+                }
+                ++i;
+                off += 0x10;
+            } while (i < count);
         }
     }
     return 0xffffffff;

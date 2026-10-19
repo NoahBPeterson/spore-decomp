@@ -85,8 +85,6 @@ Desc* Desc::init0()
 
 // ---- not yet reproduced -----------------------------------------------------
 
-// @ 0x0046f1b0
-void F_0046f1b0() {}
 
 // ===================================================================================
 // ExportCreatureBlocksFile
@@ -317,6 +315,7 @@ struct DescVec {
     StreamDesc* mpEnd;
     StreamDesc* mpCapacity;
     uint32_t mAllocator[2];
+    DescVec();                                                // 0x004725d0 (fixed_vector ctor)
     void resize(unsigned n);                                  // 0x004751a0
     StreamDesc& operator[](int i) { return mpBegin[i]; }
 };
@@ -325,19 +324,30 @@ struct IndexVec {
     StreamIndex* mpEnd;
     StreamIndex* mpCapacity;
     uint32_t mAllocator[2];
+    IndexVec();                                               // 0x00472560 (fixed_vector ctor)
     void push_back(const StreamIndex& v);                     // 0x00475130
+};
+
+struct DescInit : Desc {
+    DescInit() { init0(); }
 };
 
 struct __declspec(align(4)) Batch {                            // 0x8c bytes
     Batch();                              // 0x0046f1b0
     ~Batch();                             // 0x0041f940
-    uint32_t mIndices[4];                 // +0x00 (StreamDesc)
+    DescInit mDesc;                       // +0x00 (StreamDesc, zeroed by Desc::init0)
     int mVertexCount;                     // +0x10
     IndexVec mStreamIndices;              // +0x14
     uint32_t pad28[(0x44 - 0x28) / 4];
     DescVec mIndexDescs;                  // +0x44
     uint32_t pad58[(0x8c - 0x58) / 4];
 };
+// @ 0x0046f1b0
+Batch::Batch() : mVertexCount(0)
+{
+    ScratchSlots<7>();
+}
+
 struct BatchVec {
     Batch* mpBegin;
     Batch* mpEnd;

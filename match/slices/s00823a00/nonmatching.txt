@@ -1,1 +1,2 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+00823b50  50  register allocation / arm layout of first window-id selection (ternary arm duplicates vtable load) [equiv: UNSUPPORTED: 11 unresolved Modify* callees]
