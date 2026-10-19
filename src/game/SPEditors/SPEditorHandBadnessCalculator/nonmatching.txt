@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+005a85f0 291 Hand CalculateBadness complete; x87 normal/dot-product schedule and the f*tuning operand order of the second sum differ; difftest PASS after fixing the second badness sum order (cl /fp:fast had moved the cameraAngle term last, now written f * mCameraAngleTuning first) and the swapped normal components (original pairs c.x with gHandAxis.x)
+005a8e10 7 AsInterface: original loads the type id into ecx after mov eax,ecx; mine uses edx

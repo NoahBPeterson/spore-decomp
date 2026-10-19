@@ -1,4 +1,4 @@
-005a8e10 SP::cSPEditorHandBadnessCalculator::AsInterface  # PDB name on card; ids 0xEE3F516E / 0x0212D6EB
+005a8e10 ?AsInterface@cSPEditorHandBadnessCalculator_s005a_8d20@SP@@QAEPAXI@Z  # cSPEditorHandBadnessCalculator_s005a_8d20::AsInterface migrated from s005a8d20 (verbatim, slice spelling)
 005a8ea0 eastl::bitset<128>::none  # 4-word any() loop negated; used on cEditorLaunchData::mEditorValidationLevel
 005a9080 SP::Editor::cEditorLaunchData::cEditorLaunchData  # field layout matches PDB cEditorLaunchData (retail-extended), byte-exact
 005a9170 SP::Editor::cEditorLaunchData::~cEditorLaunchData  # byte-exact

@@ -1,7 +1,7 @@
 0047db30 ?Init@cSPEditorHandle@SP@@UAEXPAVcSPEditorBlock@2@_NII@Z  # SP::cSPEditorHandle::Init (callee of s005a7d00, named from the dev publics; slice address comment)
 005a7d00 ?CalculateValues@cSPEditorGeneralBadnessCalculator_s005a_7d00@SP@@UAEXPAVcSPEditorLimbJoint_s005a_7d00@2@UcSPVector3@2@11@Z  # cSPEditorGeneralBadnessCalculator_s005a_7d00::CalculateValues migrated from s005a7d00 (verbatim, slice spelling)
 005a83d0 editor helper  # unnamed
-005a85f0 SP::cSPEditorHandBadnessCalculator::CalculateBadness  # PDB candidate
+005a85f0 ?CalculateBadness@cSPEditorHandBadnessCalculator@SP@@UAEMPAVcSPEditorLimbJoint_s005a_7d00@2@UcSPVector3@2@11@Z  # cSPEditorHandBadnessCalculator::CalculateBadness migrated from s005a7d00 (verbatim, slice spelling)
 005a88a0 36-byte struct assignment  # rep movsd 9 dwords
 005a8900 EditorTuning Vector3 accessor (__stdcall)  # returns EditorTuning()+0x60
 005a8930 SP::cSPEditorHandleSpine scalar deleting destructor  # Shutdown + base dtor
