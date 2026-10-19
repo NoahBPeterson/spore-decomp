@@ -233,6 +233,9 @@ BANNER_VA = re.compile(r"^(?://\s*|\s+//\s*(?:@\s*)?)(?:0x)?([0-9a-fA-F]{6,8})\b
 def insert_missing_markers(lines, sid, known_vas=()):
     """Give every function definition that has no `// @ 0xVA` marker one, when its VA can be established.
     -> (lines, [(va, name, how)]) ."""
+    # `// ---------------- @ 0x00531380` (a dash rule ending in the VA, mig11 s00530db0: Clear/Stop/IsRunning were silently
+    # never landed) is the slice's own marker spelling
+    lines = [re.sub(r"^//\s*-{4,}\s*@\s*(0x[0-9a-fA-F]{6,8})\s*$", r"// @ \1", l) for l in lines]
     rows, syms = slice_rows(sid)
     rows = set(rows) | set(known_vas)
     by_path = {}
