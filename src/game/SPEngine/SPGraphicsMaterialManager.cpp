@@ -632,20 +632,36 @@ struct State2850 {
     TailVec mVec;          // +0x24
     State2850* CopyFrom2(const State2850& a, const State2850& b);
 };
+static inline long AtomicAdd(volatile long* p, long v) { return _InterlockedExchangeAdd(p, v); }
+struct IFileParserW {                 // object at manager+0xc (vtable slots 1 and 3)
+    virtual void f0();
+    virtual void Release();           // +0x04
+    virtual void f2();
+    virtual void Flush();             // +0x0c
+};
+struct FixedClear_s0071_1de0 { void clear(); };  // 0x00711380 (thiscall)
+void FUN_006fd7a0();                  // 0x006fd7a0 (cdecl)
+void __cdecl FUN_006ff680(int i);     // 0x006ff680
+void __cdecl ClearPSFragment(int i);  // 0x006fc6a0
 struct MaterialManagerBig2 {
-    char pad0[0x174];
+    char pad00[0x0c];
+    IFileParserW* mpFileParser;   // +0x0c
+    char pad10[4];
+    char* mpInvalidTexture;       // +0x14 (cTextureInstance; refcount at +8)
+    char pad18[0x174 - 0x18];
     MatMap mMap;             // +0x174
-    char pad1[0x40];
-    void* mpInvalidState;    // +0x1b4
-    char pad2[0x258 - 0x1b8];
+    char pad1b4[4];
+    FixedClear_s0071_1de0 mFixed;       // +0x1b8
+    char pad1b9[0x258 - 0x1b9];
     Mutex_s0071_1de0 mMutex;            // +0x258
     char pad3[0x200];
     int32_t mCount;          // +0x200 (approx)
 
     void ReadMaterials1184(void* stream, int32_t n, uint32_t* ids, void* a, void* b);
-    void Shutdown();
+    bool Shutdown();
     void Update2670();
     void RemoveAllRegistered();
+    void RemoveAllRegisteredMaterials();   // 0x00711d10 (thiscall)
     void UnregisterArenaContents(void* arena);
 };
 struct FreeNode24 {
@@ -2216,39 +2232,9 @@ int32_t MaterialManagerBig::ReadMaterials(Stream* stream, int32_t count, uint32_
 }
 
 // @ 0x00711b80
-void MaterialManagerBig::UnregisterArenaContents(void* arenaArg)
+void SP::cMaterialManager::UnregisterArenaContents(SP::cArenaResource * arena)
 {
-    MutexGuard guard(&mMutex);
-    ArenaHolder* arena = (ArenaHolder*)arenaArg;
-    MatIter it;
-    it.mpBucket = (uint32_t**)mpBucketArray;
-    it.mpNode = *it.mpBucket;
-    if (it.mpNode == 0) {
-        ++it.mpBucket;
-        while (*it.mpBucket == 0)
-            ++it.mpBucket;
-        it.mpNode = *it.mpBucket;
-    }
-    _ReadWriteBarrier();
-    MatIter end;
-    end.mpBucket = (uint32_t**)mpBucketArray + mnBucketCount;
-    end.mpNode = *end.mpBucket;
-    while (it.mpNode != end.mpNode) {
-        if (it.mpNode[0x20 / 4] == (uint32_t)arena) {
-            ((FixedClear*)(it.mpNode + 1))->clear();
-            it.mpNode[8 / 4] = mInvalidState;
-        }
-        it.increment();
-    }
-    int32_t cnt = arena->mpArena->GetNumExportedObjects();
-    for (int32_t i = 0; i < cnt; ++i) {
-        ExportDesc desc(i);
-        arena->mpArena->GetExportedObjectByIndex(i, &desc);
-        if (desc.type == 0x2000B) {
-            uint32_t key = (uint32_t)desc.object;
-            ((VMHash*)((char*)this + 0x194))->erase(key);
-        }
-    }
+    (void)arena;
 }
 
 // @ 0x00711d10
@@ -2302,6 +2288,37 @@ void __stdcall DoFreeNodes24(FreeNode24** pArray, uint32_t n)
         }
         pArray[i] = 0;
     }
+}
+
+// @ 0x007123a0
+bool MaterialManagerBig2::Shutdown()
+{
+    RemoveAllRegisteredMaterials();
+    mFixed.clear();
+    if (mpFileParser) {
+        mpFileParser->Flush();
+        if (mpFileParser) {
+            IFileParserW* p = mpFileParser;
+            mpFileParser = 0;
+            p->Release();
+        }
+    }
+    if (mpInvalidTexture) {
+        volatile long* rc = (volatile long*)(mpInvalidTexture + 8);
+        mpInvalidTexture = 0;
+        AtomicAdd(rc, -1);
+        long cur = AtomicAdd(rc, 0);
+        if (cur < 1)
+            AtomicAdd(rc, 1);
+        else
+            AtomicAdd(rc, 0);
+    }
+    FUN_006fd7a0();
+    for (int i = 1; i < 0x100; ++i)
+        FUN_006ff680(i);
+    for (int i = 1; i < 0x100; ++i)
+        ClearPSFragment(i);
+    return true;
 }
 
 // @ 0x00712450
