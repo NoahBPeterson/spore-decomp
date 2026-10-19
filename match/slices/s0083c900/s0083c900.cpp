@@ -307,11 +307,69 @@ void __cdecl PairStringExprDtor(void* self) {
 }
 
 // ===========================================================================
-// 0x0083d140  hashtable<...cExprFunction...>::insert(key)  (same shape as 0083c900)
+// 0x0083d140  hashtable<string, pair<string, AutoRefCount<cExprFunction>>>::insert(value, true_type)
 // ===========================================================================
+struct TrueTag {};                       // eastl::true_type (an empty by-value argument still takes a stack slot)
+
+struct ExprNode {
+    eastl::string8 mFirst;               // +0x00  key
+    int*           mpObj;                // +0x10  AutoRefCount<cExprFunction>
+    ExprNode*      mpNext;               // +0x14
+};
+struct ExprIterator { ExprNode* mpNode; ExprNode** mpBucket; };
+struct ExprInsertResult {                // 12 bytes, returned through a hidden pointer
+    ExprIterator first; bool second;
+    ExprInsertResult(ExprNode* n, ExprNode** b, bool r) { first.mpNode = n; first.mpBucket = b; second = r; }
+};
+struct RehashRequest { bool first; unsigned second; };
+struct RehashPolicy {
+    unsigned pad[2];
+    RehashRequest GetRehashRequired(unsigned nBucketCount, unsigned nElementCount, unsigned nElementAdd);  // 0x00921440
+};
+bool __cdecl StrEqual(const eastl::string8& a, const eastl::string8& b);   // 0x00554fb0
+
+struct ExprHashtable {
+    unsigned     pad0;                   // +0x00
+    ExprNode**   mpBucketArray;          // +0x04
+    unsigned     mnBucketCount;          // +0x08
+    unsigned     mnElementCount;         // +0x0c
+    RehashPolicy mRehashPolicy;          // +0x10
+    ExprNode* DoAllocateNode(const eastl::string8& value);       // 0x0083d0c0
+    void      DoRehash(unsigned nBucketCount);                   // 0x0083cf50
+    ExprInsertResult insert(const eastl::string8& value, TrueTag);   // 0x0083d140
+    static unsigned bucket_index(const eastl::string8& k, unsigned c, unsigned n) { (void)k; return (unsigned)(c % n); }
+};
+
 // @ 0x0083d140
-void* HashInsertExprValue(void* self, void* outIt, const void** keyPtr) {
-    return ((HashCmdTable*)self)->Insert(outIt, keyPtr);
+ExprInsertResult ExprHashtable::insert(const eastl::string8& value, TrueTag) {
+    const unsigned char* p = (const unsigned char*)value.mpBegin;
+    unsigned c = 0x811c9dc5;
+    unsigned ch = *p;
+    while (ch != 0) {
+        ++p;
+        c = c * 0x1000193 ^ ch;
+        ch = *p;
+    }
+    unsigned n = bucket_index(value, c, (unsigned)mnBucketCount);
+    ExprNode* pNode = mpBucketArray[n];
+    ExprNode** pBucket = mpBucketArray + n;
+    for (; pNode; pNode = pNode->mpNext) {
+        if (StrEqual(value, pNode->mFirst))
+            break;
+    }
+    if (pNode == 0) {
+        RehashRequest bRehash = mRehashPolicy.GetRehashRequired(mnBucketCount, mnElementCount, 1);
+        ExprNode* pNodeNew = DoAllocateNode(value);
+        if (bRehash.first) {
+            n = bucket_index(value, c, bRehash.second);
+            DoRehash(bRehash.second);
+        }
+        pNodeNew->mpNext = mpBucketArray[n];
+        mpBucketArray[n] = pNodeNew;
+        ++mnElementCount;
+        return ExprInsertResult(pNodeNew, mpBucketArray + n, true);
+    }
+    return ExprInsertResult(pNode, pBucket, false);
 }
 
 // ===========================================================================

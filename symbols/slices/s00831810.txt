@@ -1,1 +1,2 @@
 00831810 SP::cSPUIStdDrawable::Draw  # PDB candidate (CreateRenderables); layout = PDB cSPUIStdDrawable (mDrawParams +0x138, mDrawArea +0x148); draws 6 image/icon passes with drop shadows
+00832010 SetTextProperty@DebugConsole  # kind 0x12: copies a cString into the console's FixedBufferAllocator buffer (slice name; byte-exact)

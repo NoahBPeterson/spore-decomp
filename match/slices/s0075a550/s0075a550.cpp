@@ -22,6 +22,18 @@ extern "C" void  __cdecl FUN_0071dcc0(void* p);
 // ---------------------------------------------------------------------------
 struct Controller { char pad[0x1c]; };
 
+struct B4 { unsigned char b[4]; };
+
+// rw::BaseResourceDescriptor: {size, alignment}; its ctor/dtor are out of line so that arrays of
+// it go through __ehvec_ctor / __ehvec_dtor as in the original.
+struct BaseResourceDescriptor {
+    unsigned mSize;
+    unsigned mAlign;
+    BaseResourceDescriptor();            // 0x006c0fa0
+    ~BaseResourceDescriptor();           // 0x00c2e4e0
+};
+struct ResourceDescriptor { BaseResourceDescriptor d[4]; };
+
 // an interpolator element (stride mInterpolatorStride).  A 4-byte non-polymorphic
 // base puts the vfptr at +4, matching the original's `mov edx,[ecx+4]` virtual calls.
 struct InterpBase { int dummy; };
@@ -37,9 +49,10 @@ struct Interp : InterpBase {
     float mf20;      // +0x20
     void Fb220();
     void Fb600(float);
+    static ResourceDescriptor GetResourceDescriptor(int n, B4 flags, int x);   // 0x011fe550
 };
 
-struct B4 { unsigned char b[4]; };
+
 
 struct cMultiBlender : Controller {
     unsigned m_maxNumQuats;         // +0x1c
@@ -71,6 +84,7 @@ struct cMultiBlender : Controller {
     void  F980(void* a, unsigned char* b, int c, int d);  // 0075a980
     void  Fb410();                  // 0075b410
     int   Fb440(float arg);         // 0075b440
+    static ResourceDescriptor GetResourceDescriptor(int n, B4 flags, int count, int addA, int addB);  // 0075b190
 };
 
 // ---------------------------------------------------------------------------
@@ -294,8 +308,35 @@ int cMultiBlender::Fb440(float arg) {
     return 1;
 }
 
+// cMultiBlender::GetResourceDescriptor (static, returns the descriptor by value)
+// @ 0x0075b190
+ResourceDescriptor cMultiBlender::GetResourceDescriptor(int n, B4 flags, int count, int addA, int addB) {
+    ResourceDescriptor base = Interp::GetResourceDescriptor(n, flags, 0);
+    unsigned size = (unsigned)((count * 3 + 0x2a) * 2);
+    unsigned align = base.d[0].mAlign;
+    if (align > 1)
+        size = (size + (align - 1)) & ~(align - 1);
+    int rowBytes = ((flags.b[1] + flags.b[0] * 4 + flags.b[2]) * 4) + 4;
+    int a1 = 4;
+    if (flags.b[0] != 0) a1 = 0x10;
+    int total = (int)size;
+    total += (int)base.d[0].mSize * count;
+    total += ((((unsigned)a1 - 1) + rowBytes) & ~((unsigned)a1 - 1)) * n;
+    if (addA != 0) {
+        int a2 = 4;
+        if (flags.b[0] != 0) a2 = 0x10;
+        total = total + ((((unsigned)a2 - 1) + rowBytes) & ~((unsigned)a2 - 1)) * n;
+    }
+    if (addB != 0)
+        total = ((total + 3) & 0xfffffffc) + 0x10 + n * 8;
+    ResourceDescriptor result;
+    result.d[0].mSize = (unsigned)total;
+    result.d[0].mAlign = align;
+    return result;
+}
+
 // ---------------------------------------------------------------------------
-// @ 0x0075aa30 / 0x0075ac40 / 0x0075ad80 / 0x0075b190 / 0x0075b2c0 / 0x0075b4d0
+// @ 0x0075aa30 / 0x0075ac40 / 0x0075ad80 / 0x0075b2c0 / 0x0075b4d0
 // ---------------------------------------------------------------------------
 struct Big700;   // 0x70-byte cMultiBlender-related object
 void __fastcall FUN_0075aa30(cMultiBlender* self, void* a, void* b, void* c) {
@@ -305,8 +346,5 @@ void __fastcall FUN_0075ac40(cMultiBlender* self, void* a, void* b) {
     (void)self; (void)a; (void)b;
 }
 void* __fastcall FUN_0075ad80(cMultiBlender* self) { (void)self; return 0; }
-void __cdecl cMultiBlender_GetResourceDescriptor(void* out, int a, int b, int c, int d, int e) {
-    (void)out; (void)a; (void)b; (void)c; (void)d; (void)e;
-}
 void __fastcall FUN_0075b2c0(cMultiBlender* self, void* a) { (void)self; (void)a; }
 void* __fastcall FUN_0075b4d0(int* self) { (void)self; return 0; }

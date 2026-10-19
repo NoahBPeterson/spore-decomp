@@ -55,6 +55,7 @@ struct DebugConsole {
     DebugConsole *Ctor();           // 0x008320d0
     void  Dtor();             // 0x00832160
     bool  CheckTimeout();     // 0x008321d0
+    bool  SetTextProperty(struct PropOut *out, int kind, const struct StrVal *val);   // 0x00832010
     bool  StateCheck();       // 0x00832370
     void  Update();           // 0x008326c0
     void  Dtor2();            // 0x00832710
@@ -194,9 +195,45 @@ void DebugConsole::Dtor2()
 }
 
 // ---------------------------------------------------------------- 0x00832010
-int FUN_00832010(void * /*self*/, int /*a*/, int /*kind*/, void * /*val*/)
+extern "C" unsigned __cdecl wcslen(const wchar_t *);
+#pragma intrinsic(wcslen)
+
+struct PropOut { uint32_t pad0; uint32_t *mpSlot; };      // *mpSlot receives the text pointer
+struct StrVal  { uint32_t mInstance; uint32_t pad4; uint32_t mTable; };
+struct SPString {                                          // SP::cString (retail size 0x14)
+    uint32_t raw[5];
+    SPString(unsigned table, unsigned instance, const wchar_t *text);   // 0x006b5770
+    ~SPString();                                           // 0x006b5240
+    const wchar_t *GetText();                              // 0x006b55c0
+};
+struct FixedBufAlloc {
+    void  Free(void *p);                                   // 0x004bcab0
+    void *Malloc(unsigned size, unsigned align);           // 0x004bfc40
+};
+
+// @ 0x00832010
+bool DebugConsole::SetTextProperty(PropOut *out, int kind, const StrVal *val)
 {
-    return 0;
+    if (kind == 0x12) {
+        SPString s(val->mTable, val->mInstance, 0);
+        FixedBufAlloc *fba = (FixedBufAlloc *)((char *)this + 0xc);
+        fba->Free(mpText);
+        const wchar_t *t = s.GetText();
+        unsigned len = wcslen(t);
+        mpText = fba->Malloc(len * 2 + 2, 4);
+        const wchar_t *src = s.GetText();
+        wchar_t *dst = (wchar_t *)mpText;
+        wchar_t c;
+        do {
+            c = *src;
+            *dst = c;
+            ++src;
+            ++dst;
+        } while (c != 0);
+        *out->mpSlot = (uint32_t)mpText;
+        return true;
+    }
+    return false;
 }
 
 // ---------------------------------------------------------------- 0x00831810 cSPUIStdDrawable::Draw

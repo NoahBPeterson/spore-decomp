@@ -10,7 +10,7 @@ void  RTTBuffer_Draw(void* self, void* a, void* b, uint32_t color);  // 0x005296
 void  RTTBuffer_BeginDraw(void* self);                               // 0x00529bf0
 int   FUN_0041d870(void* p);                                         // 0x0041d870
 void  FUN_00423be0(int n, void* p);                                  // 0x00423be0
-void  FUN_004c6ae0(void* dst, int a, int n, void* b);                // 0x004c6ae0
+void  FUN_004c6ae0(void* dst, char* a, int n, char* b);              // 0x004c6ae0
 void  FUN_0041e5d0();                                                // 0x0041e5d0
 void  FUN_00552750();                                                // 0x00552750
 void  FUN_0051d1e0(void* p);                                         // 0x0051d1e0
@@ -119,34 +119,88 @@ bool nSPSkinner::cPaintSplatAlphaJob::Render()
     return nBlocks <= mBlock;
 }
 
+// ---- 0x0051a6a0 helpers
+#include <intrin.h>
+struct ImgObj {                          // refcounted image (vtable slot 1 = Release)
+    virtual void v0();
+    virtual void Release();
+    char pad04[0x1c - 4];
+    int  mW;                             // +0x1c
+    int  mH;                             // +0x20
+    char pad24[4];
+    char* mpPixels;                      // +0x28 (4 bytes per pixel, channel at +1)
+};
+template<class T> struct ARCRef {        // AutoRefCount with virtual Release in slot 1
+    T* p;
+    ARCRef() : p(0) {}
+    ~ARCRef() { if (p) p->Release(); }
+    void** AsPPVoidParam();              // 0x0041d870
+};
+struct RasterObj {
+    void SetMipLevelData(void* data, int level);   // 0x011f0270
+};
+struct TexObj {                          // atomic refcounted texture: Raster* at +0, flags +4, count +8
+    RasterObj* mpRaster;
+    uint32_t mFlags;
+    volatile long mnRefCount;
+    int Release();                       // 0x00402420 (AtomicRefCounted::Release)
+};
+struct TexRefAuto {
+    TexObj* p;
+    TexRefAuto() : p(0) {}
+    ~TexRefAuto() { if (p) p->Release(); }
+};
+struct ByteBuf {                         // 3-pointer byte vector
+    char* mpBegin; char* mpEnd; char* mpCap;
+    ByteBuf(int n, char* tag);           // 0x00423be0
+    ~ByteBuf();                          // 0x0041e5d0
+};
+struct Svc40 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8();
+    virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
+    virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18();
+    virtual void v19(); virtual void v20(); virtual void v21();
+    virtual void* Make(void** pp, int a, int b); };               // +0x58 on the 0x0067dd40 object
+struct Svc60 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8();
+    virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12();
+    virtual void ReleaseTex(TexObj* t);                            // +0x34
+    virtual void v14(); virtual void v15();
+    virtual TexObj* CreateBuf(int w, int h, int a, int b, int c, int d);   // +0x40
+    virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21();
+    virtual void Make(void* r); };                                 // +0x58 on the 0x0067dd60 object
+Svc40* FUN_0067dd40_t();                 // 0x0067dd40
+Svc60* FUN_0067dd60_t();                 // 0x0067dd60
+
 // @ 0x0051a6a0 FUN_0051a6a0
-void FUN_0051a6a0(int* out)
+void FUN_0051a6a0(TexObj** out)
 {
-    int* local_8 = 0;
-    int* piVar1 = (int*)FUN_0067dd40();
-    int* piVar2 = (int*)FUN_0067dd60();
-    int st = FUN_0041d870(&local_8);
-    int u = ((Factory*)piVar1)->Make((void*)st, 0, 0);
-    ((Factory*)piVar2)->Make((void*)u, 0, 0);
-    int* p8 = local_8;
-    int n = p8[7] * p8[8];
-    char local_29 = 0;
-    int local_20 = 0;
-    FUN_00423be0(n, &local_29);
-    char local_35 = 0;
-    FUN_004c6ae0(&local_20, local_20, n, &local_35);
-    for (int i = 0; i < p8[7] * p8[8]; i++)
-        *(char*)(local_20 + i) = *(char*)(p8[10] + 1 + i * 4);
-    int* puVar4 = (int*)((Factory*)FUN_0067dd60())->CreateBuf(p8[7], p8[8], 1, 8, 0x32, 4);
-    if (puVar4 != 0)
-        puVar4[2] = puVar4[2] + 1;
-    if ((puVar4[1] & 1) == 0)
-        ((Factory*)FUN_0067dd60())->Release(puVar4);
-    Raster_D3D9GetStreamedMipLevelSize((void*)*puVar4, local_20, 0);
-    *out = (int)puVar4;
-    FUN_0041e5d0();
-    if (p8 != 0)
-        (*(Factory**)p8)->v1();
+    ARCRef<ImgObj> img;
+    Svc40* s1 = FUN_0067dd40_t();
+    Svc60* s2 = FUN_0067dd60_t();
+    void** pp = img.AsPPVoidParam();
+    s2->Make(s1->Make(pp, 0, 0));
+    int n = img.p->mW * img.p->mH;
+    char tag;
+    ByteBuf buf(n, &tag);
+    char zero = 0;
+    char* iter;
+    FUN_004c6ae0(&iter, buf.mpBegin, n, &zero);
+    buf.mpEnd = buf.mpBegin + n;
+    int count = img.p->mW * img.p->mH;
+    for (int i = 0; i < count; i++)
+        buf.mpBegin[i] = img.p->mpPixels[i * 4 + 1];
+    TexRefAuto tex;
+    tex.p = FUN_0067dd60_t()->CreateBuf(img.p->mW, img.p->mH, 1, 8, 0x32, 4);
+    if (tex.p != 0)
+        _InterlockedExchangeAdd(&tex.p->mnRefCount, 1);
+    char* data = buf.mpBegin;
+    if ((tex.p->mFlags & 1) == 0)
+        FUN_0067dd60_t()->ReleaseTex(tex.p);
+    tex.p->mpRaster->SetMipLevelData(data, 0);
+    TexObj* moved = tex.p;
+    tex.p = 0;
+    *out = moved;
 }
 
 // @ 0x0051a8a0 FUN_0051a8a0

@@ -90,6 +90,7 @@ struct cSPTransformP {
     float    mTranslation[3];
     float    mScale;
     float    mRotation[9];
+    void BackTransformPoint(__m128* p);                    // 0x004ff6d0 (thiscall)
 };
 
 // Lane k of a vector, read back from a stack copy.
@@ -123,9 +124,9 @@ struct cModelInstance_Pose {
     // @ 0x0073d6b0  SP::cModelInstance::GetPoseTransforms
     int GetPoseTransforms(cMDBoneTransform* dst, bool original);
 
-    // @ 0x0073e080  SP::cModelInstance::PickLineWithHit (PDB candidate)
-    int PickLineWithHit(uint32_t* pLine, uint32_t* pDir, cSPTransformP* pTransform,
-                        float* pOut);
+    // SP::cModelInstance::PickLineWithHit (PDB candidate; marker at the definition below)
+    bool PickLineWithHit(const float* pLine, const float* pDir, cSPTransformP* pTransform,
+                         float* pOut);
 };
 
 // ---------------------------------------------------------------------------
@@ -163,14 +164,120 @@ int cModelInstance_Pose::GetPoseTransforms(cMDBoneTransform* dst, bool original)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0073e080  SP::cModelInstance::PickLineWithHit  (partial)
+// 0x0073e080  SP::cModelInstance::PickLineWithHit
 // ---------------------------------------------------------------------------
-int cModelInstance_Pose::PickLineWithHit(uint32_t* pLine, uint32_t* pDir,
-                                         cSPTransformP* pTransform, float* pOut)
+struct BaseResDesc {                     // rw::BaseResourceDescriptor {size, alignment}
+    unsigned mSize, mAlign;
+    BaseResDesc();                       // 0x006c0fa0
+    ~BaseResDesc();                      // 0x00c2e4e0
+};
+struct ResDesc4 { BaseResDesc d[4]; };
+struct ResDescCombined { unsigned raw[4]; };
+
+extern ResDesc4 FUN_01201660_t(int a, int b);                         // 0x01201660 (cdecl, hidden return)
+extern void*    FUN_006c1c80_t(ResDescCombined* out, ResDesc4* in);   // 0x006c1c80 (cdecl)
+extern void*    FUN_012016d0_t(ResDescCombined* desc, int a, int b);  // 0x012016d0 (cdecl)
+
+struct HitRec {                          // 0xd0-byte ray-hit record
+    char  pad0[0x40];
+    float mDist;                         // +0x40
+    char  pad44[0xd0 - 0x44];
+};
+struct PickCtx {                         // cached pick/traversal context (global singleton)
+    char     pad0[0x10];
+    HitRec*  mpHits;                     // +0x10
+    int      mnHits;                     // +0x14
+    char     pad18[0xe8 - 0x18];
+    int      mE8;                        // +0xe8
+    char     padec[0x100 - 0xec];
+    int      mMode;                      // +0x100
+    void Init(void** ppBuf, int a, int b, const __m128* pOrigin, const __m128* pDir);   // 0x0073a6e0 (thiscall)
+};
+extern PickCtx* g_pPickCtx;              // 0x0162eaec
+
+struct XformBlock {                      // three scaled rotation rows + translation row
+    float r0[4], r1[4], r2[4];
+    float t[4];
+};
+struct Vec3S {
+    float x, y, z;
+    Vec3S() {}
+    Vec3S(float a, float b, float c) : x(a), y(b), z(c) {}
+    Vec3S operator*(float s) const { return Vec3S(x * s, y * s, z * s); }
+};
+struct DbObj {                           // result of GetAllocator(): object with a vtable pointer at +0x20
+    char pad[0x20];
+    void** mpVtbl2;
+};
+struct DatabasePackedFileT {
+    DbObj* GetAllocator();                                            // 0x007f54d0 (thiscall)
+};
+extern const float kOne;                                              // _DAT_01485720
+extern const float kFltMax;                                           // _DAT_0140d56c
+
+// @ 0x0073e080  SP::cModelInstance::PickLineWithHit (PDB candidate)
+bool cModelInstance_Pose::PickLineWithHit(const float* pLine, const float* pDir,
+                                          cSPTransformP* pTransform, float* pOut)
 {
-    // Partial: ray/transform setup reproduced; the KD-tree traversal is omitted.
-    if (*(int*)((char*)this + 0xcc) == 0)
-        return 0;
-    (void)pLine; (void)pDir; (void)pTransform; (void)pOut;
-    return 0;
+    if (*(void**)((char*)this + 0xcc) == 0)
+        return false;
+
+    __m128 origin = _mm_set_ps(pLine[0], pLine[2], pLine[1], pLine[0]);
+    __m128 dir    = _mm_set_ps(pDir[0], pDir[2], pDir[1], pDir[0]);
+    cModelInstance_Pose* self = this;
+    XformBlock xf;
+    if (pTransform->mScale != kOne) {
+        pTransform->BackTransformPoint(&origin);
+        pTransform->BackTransformPoint(&dir);
+        _mm_store_ps(xf.t, _mm_setzero_ps());
+        _mm_store_ps(xf.r2, _mm_set_ps(0.0f, kOne, 0.0f, 0.0f));
+        _mm_store_ps(xf.r1, _mm_set_ps(0.0f, 0.0f, kOne, 0.0f));
+        _mm_store_ps(xf.r0, _mm_set_ps(0.0f, 0.0f, 0.0f, kOne));
+    } else {
+        float s = pTransform->mScale;
+        *(Vec3S*)xf.t = *(Vec3S*)pTransform->mTranslation;
+        xf.r0[0] = pTransform->mRotation[0] * s; xf.r0[1] = pTransform->mRotation[1] * s; xf.r0[2] = pTransform->mRotation[2] * s;
+        xf.r1[0] = pTransform->mRotation[3] * s; xf.r1[1] = pTransform->mRotation[4] * s; xf.r1[2] = pTransform->mRotation[5] * s;
+        xf.r2[0] = pTransform->mRotation[6] * s; xf.r2[1] = pTransform->mRotation[7] * s; xf.r2[2] = pTransform->mRotation[8] * s;
+    }
+
+    PickCtx* ctx = g_pPickCtx;
+    if (ctx == 0) {
+        ResDescCombined desc;
+        {
+            ResDesc4 tmp = FUN_01201660_t(4, 4);
+            FUN_006c1c80_t(&desc, &tmp);
+        }
+        ctx = (PickCtx*)FUN_012016d0_t(&desc, 4, 4);
+        g_pPickCtx = ctx;
+    }
+    uint32_t scratch[25];
+    void* pScratch = scratch;
+    ctx->Init(&pScratch, 0, 1, &origin, &dir);
+    ctx->mMode = 2;
+    float minDist = kFltMax;
+    int n;
+    bool miss;
+    do {
+        ctx->mnHits = 0;
+        ctx->mE8 = 0;
+        DbObj* db = (*(DatabasePackedFileT**)((char*)self + 0xcc))->GetAllocator();
+        typedef int (__thiscall *TraverseFn)(DbObj*, PickCtx*, XformBlock*);
+        int r = ((TraverseFn)db->mpVtbl2[5])(db, ctx, &xf);
+        ctx = g_pPickCtx;
+        n = ctx->mnHits;
+        miss = (r == 0);
+        for (int i = 0; i < n; i++) {
+            float d = ctx->mpHits[i].mDist;
+            if (d < minDist)
+                minDist = d;
+        }
+    } while (pOut != 0 && (unsigned)n > 0u && miss);
+
+    if (kFltMax > minDist) {
+        if (pOut != 0)
+            *pOut = minDist;
+        return true;
+    }
+    return false;
 }

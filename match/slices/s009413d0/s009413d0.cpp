@@ -360,6 +360,7 @@ struct HTTPClient {
     bool AllocBuffer();
     bool FindHeader(char* name, void* out, int index);
     void SetNotificationTarget(void* target, void* ctx);
+    void Pump(int* stream);
 };
 
 // @ 0x00941F20
@@ -482,35 +483,36 @@ void HTTPClient::SetNotificationTarget(void* target, void* ctx) {
     }
 }
 
-// @ 0x009421B0  (partial: stream state-machine reconstruction incomplete)
-void HTTPClientPump(int self, int* stream) {
+extern "C" unsigned int __cdecl strlen(const char*);
+#pragma intrinsic(strlen)
+
+// @ 0x009421B0  EA::Internet::HTTPClient::Pump
+void HTTPClient::Pump(int* stream) {
     if (stream == 0)
         return;
     int* sub = (int*)(*(int*(__thiscall**)(int*))(*stream + 0x10))(stream);
     if ((*(char(__thiscall**)(int*))(*sub + 0x20))(sub) == 0)
         return;
     (*(void(__thiscall**)(int*, int))(*stream + 0x18))(stream, 1);
-    while ((*(int(__thiscall**)(int*))(*stream + 0x2c))(stream) == 2) {
-        sub = (int*)(*(int*(__thiscall**)(int*))(*stream + 0x10))(stream);
-        if ((*(char(__thiscall**)(int*, int))(*sub + 0x64))(sub, 0) == 0)
-            break;
-        int n = (*(int(__thiscall**)(int*, int, int, int))(*stream + 0x44))(
-            stream, *(int*)(self + 0x140), *(int*)(self + 0x144), 0);
-        if (n < 1)
-            break;
-        const char* buf = *(const char**)(self + 0x140);
-        int m = n;
-        if (n == -1) {
-            const char* p = buf;
-            do {
-            } while (*p++ != 0);
-            m = (int)(p - (buf + 1));
-        }
-        if (*(int*)(self + 0x30) > 0)
-            (*(void(__thiscall**)(void*, const char*, int))((char*)*(void**)(self + 0x54) + 0x38))(
-                *(void**)(self + 0x54), buf, m);
-        *(uint32_t*)(self + 0x138) += n;
-        *(uint32_t*)(self + 0x13c) += (uint32_t)((uint32_t)n > 0xffffffffu - *(uint32_t*)(self + 0x138));
+    if ((*(int(__thiscall**)(int*))(*stream + 0x2c))(stream) == 2) {
+        do {
+            sub = (int*)(*(int*(__thiscall**)(int*))(*stream + 0x10))(stream);
+            if ((*(char(__thiscall**)(int*, int))(*sub + 0x64))(sub, 0) == 0)
+                break;
+            int n = (*(int(__thiscall**)(int*, int, int, int))(*stream + 0x44))(
+                stream, *(int*)((char*)this + 0x140), *(int*)((char*)this + 0x144), 0);
+            if (n <= 0)
+                break;
+            const char* buf = *(const char**)((char*)this + 0x140);
+            int m = n;
+            if (n == -1)
+                m = (int)strlen(buf);
+            if (*(int*)((char*)this + 0x30) > 0) {
+                void* log = *(void**)((char*)this + 0x54);
+                (*(void(__thiscall**)(void*, const char*, int))((char*)*(void**)log + 0x38))(log, buf, m);
+            }
+            *(unsigned __int64*)((char*)this + 0x138) += (unsigned)n;
+        } while ((*(int(__thiscall**)(int*))(*stream + 0x2c))(stream) == 2);
     }
     (*(void(__thiscall**)(int*))(*stream + 0x14))(stream);
 }

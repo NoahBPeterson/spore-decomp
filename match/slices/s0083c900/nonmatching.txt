@@ -11,3 +11,4 @@
 0083d240  45   complete: EvalBoolParentheses (expect char + throw)
 0083d290  95   complete: EvalContinueChar (expect char + throw)
 0083d2f0  209  complete: EvalRealParentheses; float returns and throw frames differ; equiv: UNSUPPORTED (0/1200 valid: _CxxThrowException discards)
+0083d140  53  hashtable<string, pair<string,AutoRefCount<cExprFunction>>>::insert(value, true_type): complete, EASTL-shaped; div operand form (mov ecx,[esi+8] first) and node-link store scheduling differ [equiv: UNSUPPORTED, 0/400 valid: pointer-chasing inputs fault]

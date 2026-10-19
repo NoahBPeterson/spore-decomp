@@ -1,3 +1,4 @@
 006b8410 45 complete; min(logical,physical) - original selects by reference through stack temps
 006b8460 67 complete; CBig ctor - SSE matches, original interleaves per-string cap stores
 006b7b90 398 complete; GetWindowsCPUSpeed full rewrite, register/frame differences
+006b7880  649  SP::cStringTableResourceFactory::WriteResource: complete (all paths/calls); register allocation, prologue push order and hex-table store scheduling differ [equiv: WEAK 400 valid, 5% coverage]

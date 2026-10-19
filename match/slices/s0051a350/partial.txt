@@ -1,2 +1,1 @@
 # <va>  <diff-bytes>  <reason>
-0051a6a0  512  texture-create helper; property iterator locals not fully resolved

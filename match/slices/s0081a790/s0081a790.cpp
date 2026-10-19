@@ -4,6 +4,8 @@
 #include "types.h"
 
 extern "C" double ceil(double);
+extern "C" unsigned wcslen(const wchar_t*);
+#pragma intrinsic(wcslen)
 
 extern int g_1440aec;   // offset-pool base used by UI object iterators
 extern int g_164dd8c;   // default scroll-button time limit
@@ -189,6 +191,7 @@ struct cSPUIPopupMenuWin {
   void* FindChild(int idx);
   void RemoveChild(int idx);
   void HideMenuItems(bool a, bool b);
+  bool MeasureItemHeight(int skip, float* out);
   void AddMenuItem2(cSPUIPopupMenuItemWin* item, bool attach);
 };
 
@@ -441,7 +444,90 @@ void* cSPUIPopupMenuWin2::AddMenuItem3(int id, int styleId, int parent, bool att
   return result;
 }
 
-// @ 0x0081B240  cSPUIPopupMenuWin::MeasureItemHeight  (incomplete -- see partial.txt)
+// --- EA::Text helpers used by MeasureItemHeight
+namespace EAT {
+struct TextStyle;
+struct LineLayout {
+  char pad00[0x98];
+  float mX;      // +0x98
+  char pad01[4];
+  float mTop;    // +0xa0
+  float mBot;    // +0xa4
+  void Clear(int);                                   // 0x0089cbc0
+};
+struct StyleManager {
+  TextStyle* GetStyle(unsigned id, TextStyle* def);  // 0x00894670
+};
+struct Typesetter {
+  LineLayout* GetLineLayout();                       // 0x008976a0
+  int LayoutLine(const wchar_t* text, unsigned len, float x, float y, const TextStyle* st); // 0x0089db20
+};
+}
+extern EAT::StyleManager* __cdecl EAGetStyleManager(bool create);  // 0x00885bd0
+
+static __forceinline const float& MaxRef(const float& a, const float& b) { return a < b ? b : a; }
+
+// @ 0x0081B240  cSPUIPopupMenuWin::MeasureItemHeight
+bool cSPUIPopupMenuWin::MeasureItemHeight(int skip, float* out) {
+  if (skip != 0) return false;
+  void* self = (char*)this + 4;
+  struct __declspec(align(64)) Al { int v; };
+  Al dummy_; dummy_.v = 0;
+  float cur[2];
+  cur[0] = 0.f; cur[1] = 0.f;
+  float maxW = 0.f, maxH = 0.f;
+  void* it;
+  void* end;
+  ((void (__thiscall*)(void*, void*))VTSLOT(self, 0xcc))(self, &it);
+  ((void (__thiscall*)(void*, void*))VTSLOT(self, 0xd0))(self, &end);
+  while (it != end) {
+    void* w;
+    if ((void*)(g_1440aec + (int)it) == 0 ||
+        (w = ((void* (__thiscall*)(void*, int))VTSLOT((void*)(g_1440aec + (int)it), 0xc))((void*)(g_1440aec + (int)it), 0x4c058cf)) == 0) {
+      void* obj = (void*)(g_1440aec + (int)it);
+      if (obj != 0) {
+        void* m = ((void* (__thiscall*)(void*, int))VTSLOT(obj, 0xc))(obj, 0x4c058d5);
+        if (m != 0)
+          ((void (__thiscall*)(void*, int, float*))VTSLOT(m, 0xa4))(m, 0, cur);
+      }
+    } else {
+      void* wself = (char*)w + 4;
+      const wchar_t* text = ((const wchar_t* (__thiscall*)(void*))VTSLOT(wself, 0x3c))(wself);
+      unsigned len = (unsigned)wcslen(text);
+      if (text != 0 && len > 0u) {
+        EAT::StyleManager* sm = EAGetStyleManager(true);
+        if (sm != 0) {
+          EAT::TextStyle* st = sm->GetStyle(((unsigned (__thiscall*)(void*))VTSLOT(wself, 0x40))(wself), 0);
+          if (st != 0) {
+            EAT::Typesetter* ts = (EAT::Typesetter*)((char*)this + 0x280);
+            EAT::LineLayout* ll = ts->GetLineLayout();
+            ll->Clear(1);
+            ts->LayoutLine(text, len, 0.f, 0.f, st);
+            cur[0] = ll->mX;
+            cur[1] = ll->mTop - ll->mBot;
+          }
+        }
+      }
+    }
+    maxW = MaxRef(maxW, cur[0]);
+    float c = (float)ceil((double)cur[1]);
+    maxH = MaxRef(maxH, c);
+    it = *(void**)it;
+  }
+  out[0] = *(float*)((char*)this + 0x250) + *(float*)((char*)this + 0x248) + maxW;
+  out[1] = *(float*)((char*)this + 0x254) + *(float*)((char*)this + 0x24c) + maxH;
+  float tmp[2];
+  tmp[0] = 0.f; tmp[1] = 0.f;
+  void* sub = *(void**)((char*)this + 0x1e0);
+  if (sub != 0)
+    ((void (__thiscall*)(void*, float*, int, int))VTSLOT(sub, 0x18))(sub, tmp, 0, 0);
+  out[0] = MaxRef(out[0], tmp[0]);
+  out[1] = MaxRef(out[1], tmp[1]);
+  float k = 14.0f;
+  out[0] = MaxRef(out[0], k);
+  out[1] = MaxRef(out[1], k);
+  return true;
+}
 // @ 0x0081A790  cSPUIPieMenu::get_unused_item        (incomplete -- see partial.txt)
 // --- equivalence checker address annotations
     void cSPUILayout_Shutdown(...); // 0x00811ad0

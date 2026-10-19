@@ -13,7 +13,7 @@ void* __cdecl operator new(unsigned int, const char*, int, int, const char*, int
 void  __cdecl operator_delete__(void*) throw();                                     // 0x00F47380
 void* __cdecl memmove(void*, const void*, unsigned int);                            // 0x011E0744
 extern "C" int __cdecl strncmp(const char*, const char*, unsigned int);
-extern "C" int __cdecl isxdigit(int);
+extern "C" __declspec(dllimport) int __cdecl isxdigit(int);
 extern "C" unsigned int __cdecl strlen(const char*);
 
 // 0x00941BB0
@@ -126,7 +126,7 @@ public:
                       unsigned totalLo, int totalHi, unsigned* progress);          // 00942530
     int   ReadResponseData(WorkerThreadInfo* wti, unsigned totalLo,
                            unsigned totalHi, char notify);                          // 00942690
-    int   ReadChunkedResponseData(WorkerThreadInfo* wti);                           // 009428B0
+    __int64 ReadChunkedResponseData(WorkerThreadInfo* wti);                         // 009428B0
     int   ReadResponseBody(WorkerThreadInfo* wti);                                 // 00942B40
     bool  FindHeader(const char* name, void** out, int index);                     // 00942050
     bool  FindHeaderByField(int field, void** out, int index);                     // 009420E0
@@ -418,7 +418,7 @@ int HTTPClient::ReadResponseBody(WorkerThreadInfo* wti) {
         job = (Job*)wti->mpCurrentJob;
         job->mnLastNotifySize = 0;
         int r;
-        if (chunked) r = ReadChunkedResponseData(wti);
+        if (chunked) r = (int)ReadChunkedResponseData(wti);
         else        r = ReadResponseData(wti, (unsigned)len, (unsigned)(len >> 32), 1);
         if (wti->mbCancelCurrent == 0 && wti->mbShouldQuit == 0 && r < 0) return 0;
     }
@@ -428,31 +428,60 @@ int HTTPClient::ReadResponseBody(WorkerThreadInfo* wti) {
 // ---------------------------------------------------------------------------
 // @ 0x009428B0  HTTPClient::ReadChunkedResponseData
 // ---------------------------------------------------------------------------
-int HTTPClient::ReadChunkedResponseData(WorkerThreadInfo* wti) {
+// 0x00942690 returns its byte count as a 64-bit value in edx:eax; the class declaration above
+// keeps the older 32-bit view, so the chunked reader calls it through this view.
+struct HTTPClientRd64 {
+    __int64 ReadResponseData64(WorkerThreadInfo* wti, unsigned totalLo, unsigned totalHi, char notify); // 0x00942690
+};
+
+__int64 HTTPClient::ReadChunkedResponseData(WorkerThreadInfo* wti) {
     __int64 total = 0;
     for (;;) {
-        int n = ReadResponseLine(wti, mpReadBuffer, mnReadBufferSize, 0);
-        if (n < 0) { ((Job*)wti->mpCurrentJob)->mnLastNotifySize = (unsigned __int64)-1; return (int)total; }
-        if (n == 0) { ((Job*)wti->mpCurrentJob)->mnLastNotifySize = (unsigned __int64)-1; return -1; }
-        // strip the trailing CR/LF after the hex size line
-        while (n > 0 && !isxdigit((unsigned char)mpReadBuffer[n - 1])) --n;
-        if (n == 0) {
+        __int64 n = ReadResponseLine(wti, mpReadBuffer, mnReadBufferSize, 0);
+        if (n < 0) { total = n; break; }
+        // scan the hex digits of the chunk-size line
+        __int64 i;
+        for (i = 0; i < n && isxdigit(mpReadBuffer[i]); ++i) {}
+        if (i <= 0 || i == n) {
             ((Job*)wti->mpCurrentJob)->mResult = 0xd;
-            ((Job*)wti->mpCurrentJob)->mnLastNotifySize = (unsigned __int64)-1;
-            return -1;
+            total = -1;
+            break;
         }
-        mpReadBuffer[n] = 0;
+        mpReadBuffer[i] = 0;
         __int64 chunk = ParseInt64(mpReadBuffer, 0, 16);
-        if (chunk < 0) { ((Job*)wti->mpCurrentJob)->mnLastNotifySize = 0; return 0; }
-        int consumed = ReadResponseData(wti, (unsigned)chunk, (unsigned)(chunk >> 32), 0);
-        total += consumed;
-        if (chunk == 0) {
-            for (;;) {
-                int r = ReadResponseLine(wti, mpReadBuffer, mnReadBufferSize, 1);
-                if (r <= 0) break;
+        if (n == (__int64)(int)mnReadBufferSize) {
+            // the size line filled the buffer: drain the rest of the line
+            while (mpReadBuffer[mnReadBufferSize - 1] != '\n') {
+                __int64 r = ReadResponseLine(wti, mpReadBuffer, mnReadBufferSize, 0);
+                if (r < 0) { total = r; break; }
+                if (r != (__int64)(int)mnReadBufferSize) break;
             }
         }
+        __int64 got = ((HTTPClientRd64*)this)->ReadResponseData64(wti, (unsigned)chunk, (unsigned)(chunk >> 32), 0);
+        if (got < chunk) { total = got; break; }
+        total += got;
+        if (chunk == 0) {
+            // last chunk: consume the trailer lines
+            for (;;) {
+                __int64 r = ReadResponseLine(wti, mpReadBuffer, mnReadBufferSize, 1);
+                if (r < 0) { total = r; break; }
+                bool full = (r == (__int64)(int)mnReadBufferSize);
+                if (r == 0 || full) break;
+            }
+            break;
+        }
+        // CRLF that terminates the chunk data
+        __int64 t = ReadResponseLine(wti, mpReadBuffer, mnReadBufferSize, 0);
+        if (t < 0) { total = t; break; }
+        if (t < 1 || t > 2) {
+            ((Job*)wti->mpCurrentJob)->mResult = 0xd;
+            total = -1;
+            break;
+        }
+        if (wti->mbCancelCurrent != 0 || wti->mbShouldQuit != 0) break;
     }
+    ((Job*)wti->mpCurrentJob)->mnLastNotifySize = (unsigned __int64)total;
+    return total;
 }
 
 // ---------------------------------------------------------------------------

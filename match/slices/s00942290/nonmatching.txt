@@ -6,3 +6,4 @@
 00942690  495  HTTPClient::ReadResponseData: complete; 64-bit accumulation + buffer growth call sequence differs; difftest FAIL (1/325 valid, 38.0% coverage)
 00942b40  333  HTTPClient::ReadResponseBody: complete; content-length/chunked dispatch schedule differs; difftest FAIL (5/5 valid, 50.6% coverage)
 00942e50  244  eastl::StrStub::assignRange: complete; growth/memmove sequence differs; difftest UNSUPPORTED (0/400 valid inputs, all faulted)
+009428b0  703  HTTPClient::ReadChunkedResponseData: complete (int64 return, all paths); loop/branch layout and register allocation differ [equiv: WEAK 304 valid, 31.8% coverage]

@@ -7,3 +7,4 @@
 0081b510  224  OnDetach: interface query + member releases, register scheduling differs
 0081b650  2  AddMenuItem: first vtable call loads slot into eax instead of edx
 0081b6a0  159  AddMenuItem(layout): cSPUILayout local frame + Init/FindWindowByID not exact
+0081b240  289  cSPUIPopupMenuWin::MeasureItemHeight: complete; stack slot order of locals differs from original, and and-esp,-64 frame forced with an align(64) dummy [equiv: WEAK 398 valid, 46% coverage]

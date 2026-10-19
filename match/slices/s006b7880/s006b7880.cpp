@@ -78,9 +78,15 @@ struct CBig {
 };
 
 // ---------------------------------------------------------------------------
-// @ 0x006b7880  SP::cStringTableResourceFactory::WriteResource
-// Behavioural reconstruction (EH-heavy original; left as a complete rewrite).
+// SP::cStringTableResourceFactory::WriteResource (see below)
 // ---------------------------------------------------------------------------
+struct Writer {
+    virtual void w0(); virtual void w1(); virtual void w2(); virtual void w3();
+    virtual void w4(); virtual void w5(); virtual void w6(); virtual void w7();
+    virtual void w8(); virtual void w9(); virtual void w10(); virtual void w11();
+    virtual void w12(); virtual void w13();
+    virtual void Write(const void* p, int n);       // +0x38
+};
 struct Stream {
     virtual void s0();
     virtual void s1();
@@ -88,15 +94,7 @@ struct Stream {
     virtual void s3();
     virtual void s4();
     virtual void s5();
-    virtual void s6();          // +0x18
-    virtual void s7();
-    virtual void s8();
-    virtual void s9();
-    virtual void s10();
-    virtual void s11();
-    virtual void s12();
-    virtual void s13();
-    virtual void s14();         // +0x38
+    virtual Writer* GetWriter();     // +0x18
 };
 struct StrTable {
     char pad0[0x18];
@@ -105,11 +103,89 @@ struct StrTable {
     uint32_t* mpBegin;          // +0x2c
     uint32_t* mpEnd;            // +0x30
 };
-int __stdcall WriteResource(StrTable* table, Stream* stream, uint32_t a, uint32_t typeId)
+
+extern const char g_crlf[];                                        // 0x01409be4 "\r\n"
+extern "C" void* __cdecl memcpy_thunk(void*, const void*, unsigned);   // 0x011e0744 (memcpy)
+extern "C" void  __cdecl FreeArray(void*);                          // 0x00f47380
+extern "C" int   __cdecl StrncpyUTF8ToUTF16(char* dst, int dstCap, const wchar_t* src, int srcLen); // 0x0093cf10
+
+struct ByteVec {
+    char* mpBegin;
+    char* mpEnd;
+    char* mpCap;
+    ByteVec() : mpBegin(0), mpEnd(0), mpCap(0) {}
+    ~ByteVec() { if (mpBegin && ((int*)mpBegin)[-1] != 0) FreeArray(mpBegin); }
+    void reserve(unsigned n);                                   // 0x006b6b70
+    void insert(char* pos, unsigned n, const char& v);          // 0x006b7180
+    void resize(unsigned n) {
+        unsigned sz = (unsigned)(mpEnd - mpBegin);
+        if (sz < n) {
+            insert(mpEnd, n - sz, 0);
+        } else {
+            char* first = mpBegin + n;
+            memcpy_thunk(first, mpEnd, 0);
+            mpEnd = first;
+        }
+    }
+};
+
+#pragma intrinsic(strlen, wcslen)
+extern "C" unsigned strlen(const char*);
+extern "C" unsigned wcslen(const wchar_t*);
+
+// @ 0x006b7880  SP::cStringTableResourceFactory::WriteResource
+bool __stdcall WriteResource(StrTable* table, Stream* stream, uint32_t a, uint32_t typeId)
 {
-    if (typeId != 0x2fac0b6u) return 0;
-    // full implementation omitted (see partial note)
-    return 1;
+    bool ok = false;
+    if (typeId == 0x2fac0b6u) {
+        Writer* w = stream->GetWriter();
+        ByteVec buf;
+        buf.reserve(0x400);
+        int eolLen = (int)strlen(g_crlf);
+        char b[28];
+        b[0] = (char)0xef; b[1] = (char)0xbb; b[2] = (char)0xbf;
+        b[3] = 0; b[4] = 0; b[5] = 0; b[6] = 0; b[7] = 0;
+        b[8] = '\\'; b[9] = 'n'; b[10] = '0'; b[11] = 'x';
+        b[12] = '0'; b[13] = '1'; b[14] = '2'; b[15] = '3'; b[16] = '4'; b[17] = '5';
+        b[18] = '6'; b[19] = '7'; b[20] = '8'; b[21] = '9'; b[22] = 'A'; b[23] = 'B';
+        b[24] = 'C'; b[25] = 'D'; b[26] = 'E'; b[27] = 'F';
+        char* bom = b; char* esc = b + 8; char* px = b + 10; char* hex = b + 12;
+        w->Write(bom, 3);
+        uint32_t* end = table->mpEnd;
+        for (uint32_t* e = table->mpBegin; e != end; ) {
+            uint32_t* cur = e;
+            e += 2;
+            bom[0] = hex[*cur >> 28];
+            bom[1] = hex[(*cur >> 24) & 0xf];
+            bom[2] = hex[(*cur >> 20) & 0xf];
+            bom[3] = hex[(*cur >> 16) & 0xf];
+            bom[4] = hex[(*cur >> 12) & 0xf];
+            bom[5] = hex[(*cur >> 8) & 0xf];
+            bom[6] = hex[(*cur >> 4) & 0xf];
+            bom[7] = hex[*cur & 0xf];
+            w->Write(px, 2);
+            w->Write(bom, 8);
+            w->Write(g_crlf, eolLen);
+            const wchar_t* str = (const wchar_t*)(table->mpStrings + cur[1]);
+            int n = (int)wcslen(str);
+            buf.resize((unsigned)((n * 3 + 3) * 2));
+            int size = (int)(buf.mpEnd - buf.mpBegin);
+            if (StrncpyUTF8ToUTF16(buf.mpBegin, size, str, n) != 0) {
+                int start = 0;
+                int i = 0;
+                while (i < size) {
+                    while (i < size && buf.mpBegin[i] != '\n') i++;
+                    if (i - start > 0) w->Write(buf.mpBegin + start, i - start);
+                    if (i < size && buf.mpBegin[i] == '\n') w->Write(esc, 2);
+                    i++;
+                    start = i;
+                }
+            }
+            w->Write(g_crlf, eolLen);
+        }
+        ok = true;
+    }
+    return ok;
 }
 
 // ---------------------------------------------------------------------------
