@@ -4,4 +4,10 @@ slices/s007fed20/s007fed20.cpp  ?CopyFromWindow@ShadeColor@@QAEXXZ  007ff600  /O
 slices/s007fed20/s007fed20.cpp  ?Set@Scale@@QAEXMM@Z  007ff690  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s007fed20/s007fed20.cpp  ?Set2@Scale@@QAEXM@Z  007ff6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s007fed20/s007fed20.cpp  ?SetDefault@Scale@@QAEXXZ  007ff6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s007fed20/s007fed20.cpp  ?SerReadC@@YA_NPAUSerItem@@PAX@Z  007ff8c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fed20/s007fed20.cpp  ?SerReadC@@YA_NPAUSerItem3@@PAX@Z  007ff8c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fed20/s007fed20.cpp  ?Ctor@WinEvent@@QAEPAU1@II_N@Z  007ff400  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fed20/s007fed20.cpp  ?Ctor@WinBoolStateEvent@@QAEPAU1@III_N@Z  007ff470  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fed20/s007fed20.cpp  ?Ctor@ShadeColorFull@@QAEPAU1@XZ  007ff510  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fed20/s007fed20.cpp  ?Ctor@ScaleFull@@QAEPAU1@XZ  007ff620  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fed20/s007fed20.cpp  ?CopyThing@@YA_NPAUSerItem3@@PAX@Z  007ff940  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fed20/s007fed20.cpp  ?Apply@Scale@@QAEXMPAUInterpTarget@@@Z  007ff7c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

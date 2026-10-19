@@ -1,2 +1,6 @@
-# va diff reason
-007ff8f0 71 complete; predicate null-check helper; vcall/temp schedule differs
+# va diff-bytes reason (equiv verdict in brackets)
+007fed20 - complete [WEAK 399/18.2%]; behavior-message factory (kind switch + ARef/Factory + SerItem binding); vtable dispatch + temp schedule differ (LTCG)
+007ff0d0 - complete [WEAK 391/31.6%]; WinEvent HandleMessage (register/visibility/dispatch paths); refcount + vcall scheduling differs (LTCG)
+007ff290 - complete [WEAK 399/23.1%]; BoolStateEvent HandleMessage (predicate/allocator + vtable dispatch); LTCG register allocation differs
+007ff570 20 complete [PASS 398/88.6%]; ShadeColor::Apply: Color::Lerp + window vcall; only callee-saved hoisting (push ebx/edi, edi=mpWindow, ebx=[edi]) differs (LTCG)
+007ff8f0 - complete [WEAK 266/34.3%, out of scope]; predicate null-check helper; vcall/temp schedule differs
