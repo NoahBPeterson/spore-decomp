@@ -1,3 +1,10 @@
 # source  symbol  original VA  [cl flags override]
 slices/s0056a7b0/s0056a7b0.cpp  ?InitEmpty@WStrHolder@@  0056afc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s0056a7b0/s0056a7b0.cpp  ?CopyInit@WStrSrc@@  0056b020  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056a7b0/s0056a7b0.cpp  ?AddPoint@Box3@@  0056aba0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056a7b0/s0056a7b0.cpp  ?DescribeTraits@cTallnessClassifier@@  0056ad20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056a7b0/s0056a7b0.cpp  ?Add@cAnnotatedFeatureVector@@  0056aec0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056a7b0/s0056a7b0.cpp  ?ExtractTraits@cBlockTypePercentClassifier@@  0056b080  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056a7b0/s0056a7b0.cpp  ?DescribeTraits@cBlockTypePercentClassifier@@  0056b120  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056a7b0/s0056a7b0.cpp  ?ExtractTraits@cEditorRigBlockType@@  0056b2e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056a7b0/s0056a7b0.cpp  ?DescribeTraits@cEditorRigBlockType@@  0056b440  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

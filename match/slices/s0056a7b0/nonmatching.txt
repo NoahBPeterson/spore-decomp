@@ -1,2 +1,1 @@
-0056aba0  372  Box3::AddPoint (AABB expand); complete, /Od operator[] slot shape differs
-0056b080  138  cBlockTypePercentClassifier::ExtractTraits; complete, /Od loop rotation/local shape differs
+0056a7b0  568  cTallnessClassifier::ExtractTraits; complete, every named local matches its slot but /Od temp layout differs (matrix sret, V3 sret and 0.5f temps order; original keeps the matrix-copy source pointer in a temp) [equiv: WEAK, 79 valid inputs, 54% coverage, no mismatch]
