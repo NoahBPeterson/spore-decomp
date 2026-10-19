@@ -32,6 +32,7 @@
 ../src/game/SPEditors/SPSubModeMovie.cpp  ??1cEditorYouTubeVideoUploadMessage@@QAE@XZ  0063c750  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?LoadYouTubeCredentials@cSPPlayModeSubModeMovie_s0063_ba50@@QAEXXZ  0063c7f0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?OnMovieRecorded@cSPPlayModeSubModeMovie_s0063_ba50@@QAEXXZ  0063c8f0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_0063cd30@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXXZ  0063cd30  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?CheckYouTubeRegistration@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXXZ  0063ced0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_0063cf90@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXXZ  0063cf90  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?ConstructYouTubeVideoUploadXMLRequest@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXPAV?$basic_string_s0063_caf0@DU?$allocator_s0063_caf0@D@eastl@@@eastl@@@Z  0063d050  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

@@ -10,10 +10,10 @@
 0063b270 ?Init@cSPPlayModeSubModeBase@SP@@UAEXPAUSubModeParams_t@2@@Z  # SP::cSPPlayModeSubModeBase::Init (callee of s0063caf0, named from the dev publics; slice address comment)
 0063bec0 ?ShowYouTubeLoginDialog@cSPPlayModeSubModeMovie@SP@@AAEXXZ  # SP::cSPPlayModeSubModeMovie::ShowYouTubeLoginDialog (callee of s0063caf0, named from the dev publics; slice address comment)
 0063caf0 SP::cSPPlayModeSubModeMovie::Init  # PDB candidate (caller-single): calls base Init 0x63b270, reads 0x456f974..979 props, registers 12 messages
-0063cd30 SP::cSPPlayModeSubModeMovie::ShowMovieSavedDialogCustom  # PDB candidate (caller-single): fills gTextTable 0x15f7cf4 from filename/path and calls cSPPlayModeUI::ShowMovieSavedDialogCustom
+0063cd30 ?FUN_0063cd30@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXXZ  # cSPPlayModeSubModeMovie_s0063_caf0::FUN_0063cd30 migrated from s0063caf0 (verbatim, slice spelling)
 0063ced0 ?CheckYouTubeRegistration@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXXZ  # cSPPlayModeSubModeMovie_s0063_caf0::CheckYouTubeRegistration migrated from s0063caf0 (verbatim, slice spelling)
 0063cf90 ?FUN_0063cf90@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXXZ  # cSPPlayModeSubModeMovie_s0063_caf0::FUN_0063cf90 migrated from s0063caf0 (verbatim, slice spelling)
 0063d050 ?ConstructYouTubeVideoUploadXMLRequest@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXPAV?$basic_string_s0063_caf0@DU?$allocator_s0063_caf0@D@eastl@@@eastl@@@Z  # cSPPlayModeSubModeMovie_s0063_caf0::ConstructYouTubeVideoUploadXMLRequest migrated from s0063caf0 (verbatim, slice spelling)
-0063d170 SP::cSPPlayModeSubModeMovie::ConstructVideoURL  # PDB name
-0063d2f0 SP::cSPPlayModeSubModeMovie::HandleMessage  # PDB candidate (caller-scored); this is the IHandler sub-object at movie+0x14, ret 8 (id, msg)
+0063d170 ?ConstructVideoURL@cSPPlayModeSubModeMovie_s0063_caf0@@SA_NPAV?$basic_string_s0063_caf0@_WU?$allocator_s0063_caf0@_W@eastl@@@eastl@@0@Z  # cSPPlayModeSubModeMovie_s0063_caf0::ConstructVideoURL migrated from s0063caf0 (verbatim, slice spelling)
+0063d2f0 ?HandleMessage@cMovieHandler@@QAE_NIPAUcMsg@@@Z  # cMovieHandler::HandleMessage migrated from s0063caf0 (verbatim, slice spelling)
 0063d910 ?ToggleRecordingIndicator@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXD@Z  # cSPPlayModeSubModeMovie_s0063_caf0::ToggleRecordingIndicator migrated from s0063caf0 (verbatim, slice spelling)
