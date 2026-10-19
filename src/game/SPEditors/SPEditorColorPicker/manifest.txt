@@ -1,2 +1,7 @@
 # source  symbol  va  flags
+../src/game/SPEditors/SPEditorColorPicker.cpp  ?SetColor@cSPColorSwatch_s005a_4250@@QAEXABUcSPColorRGB_s005a_4250@SP@@@Z  005a45d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorColorPicker.cpp  ?CollapseExpansion@cSPColorSwatch_s005a_4250@@QAEXXZ  005a4630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorColorPicker.cpp  ?SetPaletteColor@cSPEditorColorPicker_s005a_4250@@QAEXABUcSPColorRGB_s005a_4250@SP@@@Z  005a4920  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorColorPicker.cpp  ?SetDefault@cSPEditorColorPicker_s005a_4250@@QAEXXZ  005a4fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorColorPicker.cpp  ??1cSPColorSwatch_s005a_4250@@UAE@XZ  005a5100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorColorPicker.cpp  ?Clear@cSPEditorColorPicker@@QAEXXZ  005a6390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

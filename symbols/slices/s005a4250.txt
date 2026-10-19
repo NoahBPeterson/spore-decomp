@@ -1,14 +1,14 @@
-005a4250 SP::cSPColorSwatch::GetExpansionColor  # PDB anchor
-005a4500 SP::cSPColorSwatch::SetArea  # cSPColorSwatch layout (0x3c original area, window SetArea calls)
-005a45d0 SP::cSPColorSwatch::SetColor  # sets mDisplayColor(0x30)/mBaseColor(0x24), mWinColor(0x58) vcall
-005a4630 SP::cSPColorSwatch::CollapseExpansion  # clears sub-swatch input flags, mWinExpansion(0x60), mExpanded(0xf)
-005a4680 SP::cSPColorSwatch::AddTooltip  # PDB anchor
-005a4750 SP::cSPEditorColorPicker::GetSwatchArea  # PDB callee-scored
-005a4800 SP::cSPEditorColorPicker::SetArea  # PDB candidate; mRootWidth/Height(0x14/0x18), mSwatches(0x30)
-005a4920 SP::cSPEditorColorPicker::SetPaletteColor  # selects mDefaultIndex(0x2c) swatch then SetColor
-005a4990 SP::cSPColorSwatch::SetExpansionArea  # PDB anchor
-005a4b80 SP::cSPColorSwatch::SetSelectedColor  # mBecomingOwner(0x10), mOwner(0x64), calls SetArea
-005a4e20 SP::cSPEditorColorPicker::SetColor  # stores mSelectedColor(0x1c), scans mSwatches by distance
-005a4fb0 SP::cSPEditorColorPicker::SetDefault  # selects mDefaultIndex(0x2c) into mSelectedSwatch(0xc)
-005a5000 SP::cSPColorSwatch::cSPColorSwatch  # full cSPColorSwatch field init
-005a5100 SP::cSPColorSwatch::~cSPColorSwatch  # releases swatch members, restores base vtables
+005a4250 ?GetExpansionColor@cSPColorSwatch_s005a_4250@@QAEXPAMMMMHH@Z  # cSPColorSwatch_s005a_4250::GetExpansionColor migrated from s005a4250 (verbatim, slice spelling)
+005a4500 ?SetArea@cSPColorSwatch_s005a_4250@@QAEXURectT_s005a_4250@EA@@_N@Z  # cSPColorSwatch_s005a_4250::SetArea migrated from s005a4250 (verbatim, slice spelling)
+005a45d0 ?SetColor@cSPColorSwatch_s005a_4250@@QAEXABUcSPColorRGB_s005a_4250@SP@@@Z  # cSPColorSwatch_s005a_4250::SetColor migrated from s005a4250 (verbatim, slice spelling)
+005a4630 ?CollapseExpansion@cSPColorSwatch_s005a_4250@@QAEXXZ  # cSPColorSwatch_s005a_4250::CollapseExpansion migrated from s005a4250 (verbatim, slice spelling)
+005a4680 ?AddTooltip@cSPColorSwatch@SP@@QAEXI@Z  # SP::cSPColorSwatch::AddTooltip migrated from s005a4250
+005a4750 ?GetSwatchArea@cSPEditorColorPicker_s005a_4250@@QAEXPAUcSPColorRGB_s005a_4250@SP@@HH@Z  # cSPEditorColorPicker_s005a_4250::GetSwatchArea migrated from s005a4250 (verbatim, slice spelling)
+005a4800 ?SetArea@cSPEditorColorPicker_s005a_4250@@QAEXURectT_s005a_4250@EA@@@Z  # cSPEditorColorPicker_s005a_4250::SetArea migrated from s005a4250 (verbatim, slice spelling)
+005a4920 ?SetPaletteColor@cSPEditorColorPicker_s005a_4250@@QAEXABUcSPColorRGB_s005a_4250@SP@@@Z  # cSPEditorColorPicker_s005a_4250::SetPaletteColor migrated from s005a4250 (verbatim, slice spelling)
+005a4990 ?SetExpansionArea@cSPColorSwatch_s005a_4250@@QAEX_N@Z  # cSPColorSwatch_s005a_4250::SetExpansionArea migrated from s005a4250 (verbatim, slice spelling)
+005a4b80 ?SetSelectedColor@cSPColorSwatch_s005a_4250@@QAEXPAVIUnknown32_s005a_4250@COM@EA@@@Z  # cSPColorSwatch_s005a_4250::SetSelectedColor migrated from s005a4250 (verbatim, slice spelling)
+005a4e20 ?SetColor@cSPEditorColorPicker_s005a_4250@@QAEXABUcSPColorRGB_s005a_4250@SP@@@Z  # cSPEditorColorPicker_s005a_4250::SetColor migrated from s005a4250 (verbatim, slice spelling)
+005a4fb0 ?SetDefault@cSPEditorColorPicker_s005a_4250@@QAEXXZ  # cSPEditorColorPicker_s005a_4250::SetDefault migrated from s005a4250 (verbatim, slice spelling)
+005a5000 ??0cSPColorSwatch_s005a_4250@@QAE@XZ  # cSPColorSwatch_s005a_4250::cSPColorSwatch migrated from s005a4250 (verbatim, slice spelling)
+005a5100 ??1cSPColorSwatch_s005a_4250@@UAE@XZ  # cSPColorSwatch_s005a_4250::~cSPColorSwatch migrated from s005a4250 (verbatim, slice spelling)
