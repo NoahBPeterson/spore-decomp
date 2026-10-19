@@ -1,6 +1,6 @@
-006e0030 chart vertical-span builder  # fills +0x34/+0x48 min/max scanline arrays, max at +0x5c
-006e04d0 ChartSet::RectPackCharts  # weighted area at +0x230, list at +0x234, UV at +0x25c
-006e09d0 SP::RectPackCharts  # PDB name at 0x6e09d0
-006e0e00 Elem16VecMem::Resize  # calls 0x6dfd90 grow / 0x6dfca0 shrink
+006e0030 ?ChartBuildSpans@@YAHPAUCluster@@@Z  # ChartBuildSpans migrated from s006e0030 (verbatim, slice spelling)
+006e04d0 ?RectPackCharts@ChartSet@@QAEHH@Z  # RectPackCharts migrated from s006e0030 (verbatim, slice spelling)
+006e09d0 ?SP_RectPackCharts@@YAXPAH0MH@Z  # SP_RectPackCharts migrated from s006e0030 (verbatim, slice spelling)
+006e0e00 ?Resize@Elem16VecMem@@QAEXI@Z  # Resize migrated from s006e0030 (verbatim, slice spelling)
 006e0ea0 ChartSet::FillVertices  # element 0x10 with intrusive ptr at +0xc
 006e0f90 visit all charts, virtual call at +0x34  # global list 0x170a6b4

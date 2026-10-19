@@ -12,3 +12,7 @@
 006dfd00 75 eastl::quick_sort<cClusterRect*>; Log2/quick_sort_impl/insertion_sort dispatch present, helper call schedule differs
 006dfd90 389 Elem16 vector DoInsertValues; all grow in-place branches reproduced (source complete, 462 vs 547 bytes), helper/temp schedule differs; equiv: WEAK (502 valid, 14.3% coverage)
 006dffc0 82 cluster-map constructor; all 20 stores reproduced, register/ordering differs
+006e0030 735 chart vertical-span builder; all scanline/ABS branches, the two clamped raster loops and the max pass translated, vector<bool> helper and float ROUND schedule differ
+006e04d0 1144 rect-pack charts; weighted-area accumulation, 0x20-iteration retry loop, UV scale/bias and zeroing paths all present (transliterated), register/helper schedule differs; equiv: UNSUPPORTED (0/1200 valid inputs; now ChartSet member for ECX this)
+006e09d0 929 SP::RectPackCharts; area scaling, quick_sort, fit-retry loop and UV snap/transform translated, EH frame and scheduling differ
+006e0e00 90 Elem16 vector resize; grow (FUN_006dfd90) and shrink (FUN_006dfca0) paths both present, helper ABI approximated; equiv: PASS (785 valid, 100% coverage)
