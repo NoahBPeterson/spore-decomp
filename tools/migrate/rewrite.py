@@ -604,6 +604,52 @@ def same_function(a, b):
     return a[1] or b[1] or norm(a[2]) == norm(b[2])
 
 
+def relocate_named_markers(lines):
+    """`// @ 0x006404F0  SP::cSPPlayModeSubModePhoto::HandleButton` over ~140 lines of stubs, an inline helper
+    `GetRecorderState() {..}` and then `bool cSPPlayModeSubModePhoto::HandleButton(int id) {`: the helper was the chunk's
+    function and took the VA (mig9 s006404f0, SPSubModePhoto: HandleButton held, equiv "our symbol not found").  A marker that
+    names a function whose first definition after it is another function moves to the named function's definition, when that
+    is defined before the next marker; otherwise nothing changes."""
+    marks = [i for i, l in enumerate(lines) if MARKER.match(l)]
+    moves = []
+    for k, i in enumerate(marks):
+        mn = re.match(r"^\s*(?:[A-Za-z_]\w*::)*(~?[A-Za-z_]\w*)\s*$", MARKER.match(lines[i]).group(2))
+        if not mn:
+            continue
+        name = mn.group(1)
+        nxt = marks[k + 1] if k + 1 < len(marks) else len(lines)
+        defre = re.compile(r"^[A-Za-z_][^;{}()]*?(?<![\w~])%s\s*\(" % re.escape(name))
+        first, target = None, None
+        for j in range(i + 1, nxt):
+            l = lines[j]
+            if not l[:1].strip() or l.lstrip().startswith(("//", "#")):
+                continue
+            mt = re.match(r"^[A-Za-z_][^;{}()=]*?(~?[A-Za-z_]\w*)\s*\(", l)
+            if not mt:
+                continue
+            rest = mask("\n".join(lines[j:min(nxt, j + 12)]))
+            kb, ks = rest.find("{"), rest.find(";")
+            if kb < 0 or (0 <= ks < kb):
+                continue            # a declaration
+            if first is None:
+                first = mt.group(1)
+                if first == name:
+                    break
+            if defre.match(l):
+                target = j
+                break
+        if first is not None and first != name and target is not None:
+            moves.append((i, target))
+    if not moves:
+        return lines
+    out = list(lines)
+    for i, t in sorted(moves, reverse=True):
+        m = out[i]
+        out.insert(t, m)
+        del out[i]
+    return out
+
+
 def parse_slice(sid, variant=""):
     path = os.path.join(SLICES, sid, sid + variant + ".cpp")
     if not variant and not os.path.exists(path):
@@ -625,6 +671,7 @@ def parse_slice(sid, variant=""):
     # rewrite_stubs: the slice's own header expanded in place, local types.h includes dropped, and a `// @ 0xVA` marker
     # inserted before every function definition the slice left unmarked whose VA the manifest/FUN_ name/banner gives
     lines, _marked = RS.insert_missing_markers(RS.slice_lines(sid, text), sid)
+    lines = relocate_named_markers(lines)
     marks = [i for i, l in enumerate(lines) if MARKER.match(l)]
     # a legend of consecutive marker lines over one block (s00688dd0: `// @ 0x00689BE0 ..operator[]` .. `// @ 0x00689D00
     # ..GetFirstParameterID` above operator[]) is one boundary at its first line, whose VA is the function that follows; the
