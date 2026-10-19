@@ -5,21 +5,21 @@
 0093ac80 ReadBool  # no PDB name
 0093acd0 ReadString  # no PDB name
 0093adb0 WriteCString  # no PDB name
-0093ae40 StreamBuffer::GetAccessFlags  # dev-PDB StreamBuffer::GetType nearby; IStream slot 0x10
-0093ae60 StreamBuffer::GetState  # IStream slot 0x14
-0093ae80 StreamBuffer::GetSize  # IStream slot 0x1c
-0093aeb0 StreamBuffer::GetPosition  # IStream slot 0x24
-0093aef0 StreamBuffer::GetAvailable  # IStream slot 0x2c
+0093ae40 ?GetAccessFlags@StreamBuffer@IO@EA@@UBEHXZ  # StreamBuffer::GetAccessFlags migrated from s0093a9d0 (verbatim, slice spelling)
+0093ae60 ?GetState@StreamBuffer@IO@EA@@UBEHXZ  # StreamBuffer::GetState migrated from s0093a9d0 (verbatim, slice spelling)
+0093ae80 ?GetSize@StreamBuffer@IO@EA@@UBEIXZ  # StreamBuffer::GetSize migrated from s0093a9d0 (verbatim, slice spelling)
+0093aeb0 ?GetPosition@StreamBuffer@IO@EA@@UBEHH@Z  # StreamBuffer::GetPosition migrated from s0093a9d0 (verbatim, slice spelling)
+0093aef0 ?GetAvailable@StreamBuffer@IO@EA@@UBEHXZ  # StreamBuffer::GetAvailable migrated from s0093a9d0 (verbatim, slice spelling)
 0093af00 StreamBuffer::FlushWriteBuffer  # ModAPI Addresses(StreamBuffer)
 0093af60 StreamBuffer::SetBufferSizes  # ModAPI Addresses(StreamBuffer)
-0093b050 StreamBuffer::SetSize  # IStream slot 0x20
-0093b0a0 StreamBuffer::SetPosition  # IStream slot 0x28
-0093b140 StreamBuffer::Read  # IStream slot 0x30
-0093b300 StreamBuffer::Flush  # IStream slot 0x34
+0093b050 ?SetSize@StreamBuffer@IO@EA@@UAE_NI@Z  # StreamBuffer::SetSize migrated from s0093a9d0 (verbatim, slice spelling)
+0093b0a0 ?SetPosition@StreamBuffer@IO@EA@@UAE_NHH@Z  # StreamBuffer::SetPosition migrated from s0093a9d0 (verbatim, slice spelling)
+0093b140 ?Read@StreamBuffer@IO@EA@@UAEHPAXI@Z  # StreamBuffer::Read migrated from s0093a9d0 (verbatim, slice spelling)
+0093b300 ?Flush@StreamBuffer@IO@EA@@UAE_NXZ  # StreamBuffer::Flush migrated from s0093a9d0 (verbatim, slice spelling)
 0093b310 StreamBuffer::FillWriteBuffer  # ModAPI Addresses(StreamBuffer)
 0093b3c0 StreamBuffer::SetStream  # ModAPI Addresses(StreamBuffer)
-0093b450 StreamBuffer::Close  # IStream slot 0x18
-0093b490 StreamBuffer::Write  # IStream slot 0x38
+0093b450 ?Close@StreamBuffer@IO@EA@@UAE_NXZ  # StreamBuffer::Close migrated from s0093a9d0 (verbatim, slice spelling)
+0093b490 ?Write@StreamBuffer@IO@EA@@UAEHPBXI@Z  # StreamBuffer::Write migrated from s0093a9d0 (verbatim, slice spelling)
 0093b530 StreamBuffer::StreamBuffer  # ctor
 0093b5a0 StreamBuffer::~StreamBuffer  # dtor
 0093b630 StreamChild::Open  # ModAPI Addresses(StreamChild)

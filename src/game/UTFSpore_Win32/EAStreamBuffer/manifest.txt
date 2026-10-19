@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAStreamBuffer.cpp  ?GetAccessFlags@StreamBuffer@IO@EA@@UBEHXZ  0093ae40  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamBuffer.cpp  ?GetState@StreamBuffer@IO@EA@@UBEHXZ  0093ae60  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamBuffer.cpp  ?GetPosition@StreamBuffer@IO@EA@@UBEHH@Z  0093aeb0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamBuffer.cpp  ?GetAvailable@StreamBuffer@IO@EA@@UBEHXZ  0093aef0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamBuffer.cpp  ?SetSize@StreamBuffer@IO@EA@@UAE_NI@Z  0093b050  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamBuffer.cpp  ?Flush@StreamBuffer@IO@EA@@UAE_NXZ  0093b300  /O2 /MD /Gy /TP /Isrc/game/include
