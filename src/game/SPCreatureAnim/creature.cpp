@@ -816,9 +816,18 @@ struct wiggle_static_data {              // body wiggle descriptor, size 0x3c
     int   cap_b;                         // +0x08
     int   channel;                       // +0x0c
     float vx, vy, vz;                    // +0x10
-    int   pad_1c[7];                     // +0x1c .. 0x38
+    vector_3_s009c_1f60 v1c;                        // +0x1c
+    vector_3_s009c_1f60 v28;                        // +0x28
+    float s34;                           // +0x34
     uint8 flag;                          // +0x38
     uint8 pad_39[3];
+    wiggle_static_data()
+    {
+        v1c.z = 0.0f; v1c.y = 0.0f; v1c.x = 0.0f;
+        v28.z = 0.0f; v28.y = 0.0f; v28.x = 0.0f;
+        s34 = 1.0f;
+    }
+    wiggle_static_data& operator=(const wiggle_static_data& o);   // 0x009b3ab0 (retail CopyBlock::operator=)
 };
 }
 namespace nSPCreatureAnim {
@@ -837,9 +846,45 @@ struct vec3p {
 };
 }
 namespace nSPCreatureAnim {
+wiggle_static_data* CopyWiggles(wiggle_static_data* first, wiggle_static_data* last, wiggle_static_data* result);   // 0x009b43f0 cdecl
+}
+namespace nSPCreatureAnim {
+struct wiggle_vec : vec3p<wiggle_static_data> {
+    void DoInsert(wiggle_static_data* pos, const wiggle_static_data& v);   // 0x009c10c0 ret 8
+    void erase(wiggle_static_data* first, wiggle_static_data* last)
+    {
+        CopyWiggles(last, mpEnd, first);
+        mpEnd -= (last - first);
+    }
+    void erase(wiggle_static_data* position)
+    {
+        if ((position + 1) < mpEnd)
+            CopyWiggles(position + 1, mpEnd, position);
+        --mpEnd;
+    }
+};
+}
+namespace nSPCreatureAnim {
 struct bone_xform {                      // pair<matrix_3x3, vector_3>, size 0x30
     matrix_3x3_s009c_1f60 first;
     vector_3_s009c_1f60   second;
+    bone_xform()
+    {
+        first.m[0][1] = 0.0f; first.m[0][2] = 0.0f;
+        first.m[1][0] = 0.0f; first.m[1][2] = 0.0f;
+        first.m[2][0] = 0.0f; first.m[2][1] = 0.0f;
+        first.m[2][2] = 1.0f; first.m[1][1] = 1.0f; first.m[0][0] = 1.0f;
+        second.z = 0.0f; second.y = 0.0f; second.x = 0.0f;
+    }
+};
+}
+namespace nSPCreatureAnim {
+bone_xform* CopyBoneXforms(bone_xform* first, bone_xform* last, bone_xform* result);   // 0x009b4550 cdecl
+}
+namespace nSPCreatureAnim {
+struct bone_xform_vec : vec3p<bone_xform> {
+    void resize(unsigned n);             // 0x009c2520
+    void DoInsertValues(bone_xform* pos, unsigned n, const bone_xform& v);   // 0x009c11e0 ret 0xc
 };
 }
 namespace nSPCreatureAnim {
@@ -879,6 +924,7 @@ struct creature_body_static_data_s009c_1f60 {       // retail size 0x468
     uint8      pad_154[0xa4];            // +0x154 .. 0x1f8
     uint32     bidx;                     // +0x1f8
     int        parent_bidx;              // +0x1fc
+    uint8      pad_200[0x268];           // +0x200 .. 0x468
 };
 }
 namespace nSPCreatureAnim {
@@ -902,7 +948,7 @@ struct creature_static_data_s009c_1f60 {            // retail size >= 0x408
     uint8          pad_3a8[4];           // +0x3a8 .. 0x3ac
     uint32         spine_start_bidx;     // +0x3ac
     uint32         spine_end_bidx;       // +0x3b0
-    vec3p<wiggle_static_data> mWiggles;  // +0x3b4
+    wiggle_vec     mWiggles;             // +0x3b4
     uint8          pad_3c4[8];           // +0x3c4 .. 0x3cc
     vec3p<unk_pair> mUnk3cc;             // +0x3cc
     uint8          pad_3dc[0x18];        // +0x3dc .. 0x3f4
@@ -922,18 +968,28 @@ struct creature_static_data_s009c_1f60 {            // retail size >= 0x408
 namespace nSPCreatureAnim {
 struct wiggle_instance_data {            // element of instance mWiggles, size 0x2c
     wiggle_static_data* wiggle;          // +0x00
-    uint8   pad_004;
     uint8   flag4;                       // +0x04
     uint8   flag5;                       // +0x05
-    uint8   pad_006[2];
+    uint8   pad_006a;
+    uint8   pad_006b;
     vector_3_s009c_1f60 zero;                       // +0x08
     vector_3_s009c_1f60 pos;                        // +0x14
     vector_3_s009c_1f60 pos_copy;                   // +0x20
+    wiggle_instance_data()
+    {
+        zero.z = 0.0f; zero.y = 0.0f; zero.x = 0.0f;
+        pos.z = 0.0f; pos.y = 0.0f; pos.x = 0.0f;
+        pos_copy.z = 0.0f; pos_copy.y = 0.0f; pos_copy.x = 0.0f;
+    }
 };
+}
+namespace nSPCreatureAnim {
+void DestroyWiggleInstances(void* first, void* last, void* result);   // 0x009b4a20 cdecl
 }
 namespace nSPCreatureAnim {
 struct wiggle_instance_vec : vec3p<wiggle_instance_data> {
     void resize(unsigned n);             // 0x009c25f0
+    void DoInsertValues(wiggle_instance_data* pos, unsigned n, const wiggle_instance_data& v);   // 0x009c13a0 ret 0xc
 };
 }
 namespace nSPCreatureAnim {
@@ -960,19 +1016,117 @@ struct creature_instance_data_s009c_1f60 {
     float      f_16a8;                   // +0x16a8
     uint8      pad_16ac[0x16c4 - 0x16ac];
     wiggle_static_data desc_a;           // +0x16c4
-    uint8      pad_1700[0x172c - 0x1700];
+    wiggle_instance_data inst_a;         // +0x1700
     wiggle_static_data desc_b;           // +0x172c
-    uint8      pad_1768[8];
+    wiggle_instance_data inst_b;         // +0x1768
 
     void BuildBodyList();
     void InitWiggles();  // 0x009c2c20 (nSPCreatureAnim::creature_instance_data::InitWiggles)
 };
 }
 namespace nSPCreatureAnim {
+struct FixedNodePool {                   // eastl::fixed_node_pool<20,...>, size 0x14
+    void*    mpHead;                     // +0x00
+    uint32   pad04;
+    void*    mpNext;                     // +0x08
+    void*    mpCapacity;                 // +0x0c
+    uint32   mnNodeSize;                 // +0x10
+    void init(void* mem, unsigned memSize, unsigned nodeSize, unsigned align, unsigned alignOffset);   // 0x00921260 (eastl::fixed_pool_base::init) ret 0x14
+};
+}
+namespace nSPCreatureAnim {
+struct RBNodeU32 {                       // rbtree node: right, left, parent, color, then the value
+    RBNodeU32* mpNodeRight;
+    RBNodeU32* mpNodeLeft;
+    RBNodeU32* mpNodeParent;
+    uint32     mColor;
+    uint32     mKey;                     // +0x10
+    void*      mValue;                   // +0x14
+};
+}
+namespace nSPCreatureAnim {
+RBNodeU32* RBTreeIncrementU32(RBNodeU32* node);                         // 0x00921580 cdecl
+}
+namespace nSPCreatureAnim {
+struct KVPair { uint32 first; void* second; };
+}
+namespace nSPCreatureAnim {
+struct RbInsertResult { RBNodeU32* mpNode; int mbInserted; };
+}
+namespace nSPCreatureAnim {
+struct RbTrueType {};
+}
+namespace nSPCreatureAnim {
+struct FixedMapU32 {                     // eastl::fixed_map<unsigned, void*, 255>, size 0x2c
+    uint32      mCompare;                // +0x00 (empty class slot)
+    RBNodeU32*  mpNodeRight;             // +0x04  (anchor)
+    RBNodeU32*  mpNodeLeft;              // +0x08
+    RBNodeU32*  mpNodeParent;            // +0x0c
+    uint32      mColor;                  // +0x10
+    uint32      mnSize;                  // +0x14
+    FixedNodePool mAllocator;            // +0x18
+
+    RBNodeU32* anchor() { return (RBNodeU32*)&mpNodeRight; }
+    RbInsertResult insert(const KVPair& v, RbTrueType t);               // 0x009c1700 (sret, ret 0xc)
+    void DoNukeSubtree(RBNodeU32* pNode);                               // 0x00d3b370 ret 4
+};
+}
+namespace nSPCreatureAnim {
+struct FixedVecU32 {                     // eastl::fixed_vector<unsigned, 255, true>
+    uint32* mpBegin;                     // +0x00
+    uint32* mpEnd;                       // +0x04
+    uint32* mpCapacity;                  // +0x08
+    uint32  mAllocPad;                   // +0x0c
+    uint32* mpBuffer;                    // +0x10
+    uint32  mPad14;                      // +0x14
+    uint32  mBuffer[255];                // +0x18
+    void DoInsertValue(uint32* pos, const uint32& v);                   // 0x00899480 ret 8
+    void push_back(const uint32& v)
+    {
+        if (mpEnd < mpCapacity) {
+            uint32* p = mpEnd++;
+            if (p)
+                *p = v;
+        } else {
+            DoInsertValue(mpEnd, v);
+        }
+    }
+};
+}
+namespace nSPCreatureAnim {
+bool CreateWiggle(creature_static_data_s009c_1f60* c, int index, wiggle_static_data* desc,
+                  int a, int b, int c2, int d, int e, int f);           // 0x009ba4c0
+}
+namespace nSPCreatureAnim {
+void AddWiggle(creature_static_data_s009c_1f60* c, wiggle_static_data* w);         // 0x009ba590
+}
+namespace nSPCreatureAnim {
+bool FUN_009b3150(const void* a, const void* b);                        // 0x009b3150
+}
+namespace nSPCreatureAnim {
 int  FUN_009d7d10(creature_instance_data_s009c_1f60* c, float* pos, float* rot);   // 0x009d7d10
 }
 namespace nSPCreatureAnim {
 void* FUN_00a09f50();                                                   // 0x00a09f50
+}
+namespace nSPCreatureAnim {
+extern int   g_gait_channel;               // 0x0166c130
+}
+namespace nSPCreatureAnim {
+extern uint8 g_wiggle_symmetry;            // 0x01550c2d
+}
+namespace nSPCreatureAnim {
+static inline float PickGait(const wiggle_static_data* w, int g)
+{
+    float v;
+    switch (g) {
+    case 0:  v = w->vx; break;
+    case 1:  v = w->vy; break;
+    case 2:  v = w->vz; break;
+    default: v = 0.0f;  break;
+    }
+    return v;
+}
 }
 // ---- items of slice s009c1f60 end
 
@@ -2533,6 +2687,89 @@ void creature_instance_data_s009c_1f60::BuildBodyList()
 }
 }  // namespace nSPCreatureAnim
 
+// @ 0x009c2300
+namespace nSPCreatureAnim {
+bool creature_static_data_s009c_1f60::FilterAndAddWiggle(wiggle_static_data* w, bool keep, bool sym)
+{
+    unsigned count = (unsigned)(mWiggles.mpEnd - mWiggles.mpBegin);
+    int found = -1;
+    unsigned i = 0;
+    if (count != 0) {
+        do {
+            wiggle_static_data* o = &mWiggles.mpBegin[i];
+            if (w->cap_a == o->cap_a && w->cap_b == o->cap_b) {
+                creature_body_static_data_s009c_1f60* bodies = Bodies.mpBegin;
+                bool sameParent = bodies[w->body].parent_bidx == bodies[o->body].parent_bidx;
+                int g = g_gait_channel;
+                float oVal = PickGait(o, g);
+                float wVal = PickGait(w, g);
+
+                if (keep && o->channel == w->channel && fabs((double)oVal - (double)wVal) < 0.01f &&
+                    FUN_009b3150(&bodies[o->body].cap_flags, &bodies[w->body].cap_flags)) {
+                    w->flag = 1;
+                    o->flag = 1;
+                }
+                if ((!sym || !sameParent) && (!keep || w->flag == 0)) {
+                    if ((unsigned)o->channel < (unsigned)w->channel || wVal > oVal)
+                        found = (int)i;
+                    else
+                        return false;
+                }
+            }
+            ++i;
+        } while (i < count);
+    }
+
+    AddWiggle(this, w);
+    if (found != -1) {
+        mWiggles.mpBegin[found] = *w;
+        return true;
+    }
+    if (mWiggles.mpEnd < mWiggles.mpCapacity) {
+        wiggle_static_data* p = mWiggles.mpEnd++;
+        if (p)
+            *p = *w;
+        return true;
+    }
+    mWiggles.DoInsert(mWiggles.mpEnd, *w);
+    return true;
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009c2520
+namespace nSPCreatureAnim {
+void bone_xform_vec::resize(unsigned n)
+{
+    unsigned s = (unsigned)(mpEnd - mpBegin);
+    if (n > s) {
+        bone_xform value;
+        DoInsertValues(mpEnd, n - s, value);
+    } else {
+        bone_xform* first = mpBegin + n;
+        bone_xform* last = mpEnd;
+        CopyBoneXforms(last, mpEnd, first);
+        mpEnd -= (last - first);
+    }
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009c25f0
+namespace nSPCreatureAnim {
+void wiggle_instance_vec::resize(unsigned n)
+{
+    unsigned s = (unsigned)(mpEnd - mpBegin);
+    if (n > s) {
+        wiggle_instance_data value;
+        DoInsertValues(mpEnd, n - s, value);
+    } else {
+        wiggle_instance_data* first = mpBegin + n;
+        wiggle_instance_data* last = mpEnd;
+        DestroyWiggleInstances(last, mpEnd, first);
+        mpEnd -= (last - first);
+    }
+}
+}  // namespace nSPCreatureAnim
+
 // @ 0x009c26a0
 namespace nSPCreatureAnim {
 int creature_static_data_s009c_1f60::Release()
@@ -2548,6 +2785,112 @@ int creature_static_data_s009c_1f60::Release()
         return 0;
     }
     return n;
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009c26f0
+namespace nSPCreatureAnim {
+void creature_static_data_s009c_1f60::InitWiggles()
+{
+    const bool legless = mIsLegless != 0;
+    const bool keep = !legless;
+
+    {
+        wiggle_static_data* first = mWiggles.mpBegin;
+        wiggle_static_data* last = mWiggles.mpEnd;
+        mWiggles.erase(first, last);
+    }
+
+    unsigned n = (unsigned)(Bodies.mpEnd - Bodies.mpBegin);
+    for (unsigned i = 0; i < n; ++i) {
+        wiggle_static_data w;
+        if (CreateWiggle(this, (int)i, &w, 0, 1, 1, legless, 0, 0))
+            FilterAndAddWiggle(&w, keep, true);
+    }
+
+    // temporary pool + fixed_map<unsigned, void*, 255> (parents of the dropped symmetric pairs)
+    uint32 poolBuf[0x13ec / 4];
+    FixedNodePool pool;
+    pool.mpHead = 0;
+    pool.init(poolBuf, 0x13ec, 0x14, 4, 0);
+    pool.mpNext = poolBuf;
+    pool.mpCapacity = (char*)poolBuf + 0x13ec;
+    pool.mnNodeSize = 0x14;
+
+    FixedMapU32 map;
+    map.mpNodeRight = 0;
+    map.mpNodeLeft = 0;
+    map.mpNodeParent = 0;
+    map.mColor = 0;
+    map.mnSize = 0;
+    map.mAllocator.mpHead = 0;
+    map.mAllocator.init(pool.mpHead, 0x13ec, 0x14, 4, 0);
+    map.mAllocator.mpNext = pool.mpHead;
+    map.mAllocator.mpCapacity = (char*)pool.mpHead + 0x13ec;
+    map.mpNodeRight = map.anchor();
+    map.mpNodeLeft = map.anchor();
+    map.mpNodeParent = 0;
+    map.mColor = 0;
+    map.mnSize = 0;
+    map.mAllocator.mnNodeSize = 0x14;
+
+    FixedVecU32 list;
+    list.mpBegin = list.mBuffer;
+    list.mpEnd = list.mBuffer;
+    list.mpCapacity = list.mBuffer + 255;
+    list.mpBuffer = list.mBuffer;
+
+    unsigned wcount = (unsigned)(mWiggles.mpEnd - mWiggles.mpBegin);
+    for (unsigned a = 0; a < wcount; ++a) {
+        wiggle_static_data* wa = &mWiggles.mpBegin[a];
+        creature_body_static_data_s009c_1f60* bodies = Bodies.mpBegin;
+        creature_body_static_data_s009c_1f60* bodyA = &bodies[wa->body];
+        int waParent = bodyA->parent_bidx;
+        float waVal = PickGait(wa, g_gait_channel);
+
+        wiggle_static_data* wb = mWiggles.mpBegin;
+        for (unsigned b = 0; b < wcount; ++b, ++wb) {
+            if (a == b)
+                continue;
+            if (waParent != bodies[wb->body].parent_bidx)
+                continue;
+            float wbVal = PickGait(wb, g_gait_channel);
+            if (!keep || wa->flag == 0) {
+                if (wb->flag == 0 && ((unsigned)wa->channel < (unsigned)wb->channel || waVal < wbVal)) {
+                    list.push_back(a);
+                    break;
+                }
+            } else if (!((bodyA->cap_flags >> 2) & 1)) {
+                KVPair kv;
+                kv.first = (uint32)waParent;
+                kv.second = 0;
+                map.insert(kv, RbTrueType());
+                list.push_back(a);
+                break;
+            }
+        }
+    }
+
+    // Erase the marked wiggles, highest index first.
+    for (int idx = (int)(list.mpEnd - list.mpBegin) - 1; idx >= 0; --idx)
+        mWiggles.erase(mWiggles.mpBegin + list.mpBegin[idx]);
+
+    // Symmetry pass over the collected parents.
+    if (g_wiggle_symmetry != 0) {
+        RBNodeU32* node = map.mpNodeLeft;
+        if (node != map.anchor()) {
+            do {
+                wiggle_static_data w;
+                if (CreateWiggle(this, (int)node->mKey, &w, 0, 0, 1, legless, 0, 0))
+                    FilterAndAddWiggle(&w, false, false);
+                node = RBTreeIncrementU32(node);
+            } while (node != map.anchor());
+        }
+    }
+
+    if (list.mpBegin && list.mpBegin != list.mpBuffer)
+        operator delete[](list.mpBegin);
+    map.DoNukeSubtree(map.mpNodeParent);
 }
 }  // namespace nSPCreatureAnim
 

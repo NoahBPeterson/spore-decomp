@@ -1,4 +1,4 @@
-# va  diff-bytes  reason
+# partial: source exists and compiles, but the translation is not verified complete / not
 009b3180  613  partial; creature_body_static_data::Clear skeleton
 009b3850  207  partial; creature_instance_data::ComposeGaitFileName skeleton
 009b3970  108  partial; angle/power curve helper skeleton
