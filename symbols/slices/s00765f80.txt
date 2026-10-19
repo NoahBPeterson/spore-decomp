@@ -13,6 +13,6 @@
 007668c0 ?UnionDestroy@@YAXPAXH@Z  # UnionDestroy migrated from s00765f80 (verbatim, slice spelling)
 00766910 ?push_back@VPtr@@QAEXABI@Z  # VPtr::push_back migrated from s00765f80 (verbatim, slice spelling)
 00766950 ?insert@V4@@QAEXPAIIABI@Z  # V4::insert migrated from s00765f80 (verbatim, slice spelling)
-00766b30 ?RequestPaintDecalsFromModels@@YA_NPAX0@Z  # RequestPaintDecalsFromModels migrated from s00765f80 (verbatim, slice spelling)
+00766b30 ?RequestPaintDecalsFromModels@TerrainSphere@@QAE_NPAX@Z  # RequestPaintDecalsFromModels (thiscall member)
 00766e10 ?ReadDecalBlock@@YI_NPAUReader@@@Z  # ReadDecalBlock migrated from s00765f80 (verbatim, slice spelling)
 00766ed0 ?CreateResource@Factory@@QAE_NPAHPAPAXHH@Z  # Factory::CreateResource migrated from s00765f80 (verbatim, slice spelling)

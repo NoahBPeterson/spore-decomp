@@ -4,3 +4,4 @@ slices/s00765f80/s00765f80.cpp  ?Method660b0@ResB@@QAEXXZ  007660b0
 slices/s00765f80/s00765f80.cpp  ??0ResE@@QAE@XZ  00766220
 slices/s00765f80/s00765f80.cpp  ?UnionDestroy@@YAXPAXH@Z  007668c0
 slices/s00765f80/s00765f80.cpp  ?push_back@VPtr@@QAEXABI@Z  00766910
+slices/s00765f80/s00765f80.cpp  ?ReadDecalBlock@Reader@@QAE_NH@Z  00766e10
