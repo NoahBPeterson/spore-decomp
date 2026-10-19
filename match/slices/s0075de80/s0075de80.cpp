@@ -3,9 +3,22 @@
 // EH frames around the mutex; the reconstructions keep the behavior but not the frame.
 #include "types.h"
 
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
+extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags, unsigned debugFlags,
+                                          const char* file, int line); // 0x00f473a0
+struct RefObj; // refcounted interface (AddRef at vtbl +0x00, Release at vtbl +0x04)
+struct SubObj {
+    RefObj* m0;       // +0x00
+    int m4;           // +0x04
+    int m8;           // +0x08
+    int m_0c_3c[0xb];
+};
+
 namespace EA { namespace Thread {
 struct Mutex { void Lock(const void*); void Unlock(); char pad[0x28]; };
 }}
+
+struct LayerDrawArg;
 
 struct cRenderer {
     char pad00[0x28];              // +0x00
@@ -22,6 +35,7 @@ struct cRenderer {
     void RenderSettings(char useProps); // @ 0x0075de80
     void ResizeFromCanvas();            // @ 0x0075df60
     void SubRender(int a, int lo, int hi, void* extra, char flag, unsigned orbits); // @ 0x0075dff0
+    void LayerInfoAt_Draw(LayerDrawArg* arg, int unused);  // @ 0x0075e3f0
 };
 
 static inline char* LayerBegin(cRenderer* r) { return *(char**)((char*)r + 0x8c); }
@@ -233,31 +247,232 @@ void cRenderer::ResizeFromCanvas()
     }
 }
 
-// ---------------------------------------------------------------- remaining (partial)
-// @ 0x0075e3f0
-int RenderLayerInfo(int a, int b)
+// ---------------------------------------------------------------- render node / layer records
+// A refcounted render-node handle record: slot 0 is a refcounted interface pointer, slots 1..3
+// are copied verbatim.  Element stride of the owning array is 0x14 (5 slots).
+struct RefObj {
+    virtual void AddRef();          // vtbl +0x00
+    virtual void Release();         // vtbl +0x04
+};
+struct RenderNode {
+    RefObj* m0;
+    int m4;
+    int m8;
+    int mC;
+    float m10;
+    RenderNode* operator=(RenderNode* other);   // @ 0x0075ed50
+};
+struct RenderNodeArray {
+    RenderNode* mBegin;             // +0x00
+    RenderNode* mEnd;               // +0x04
+    char pad08[8];                  // +0x08
+    RenderNode* mAlloc;             // +0x10
+    void Free();                    // @ 0x0075eda0
+};
+
+// @ 0x0075ed50
+RenderNode* RenderNode::operator=(RenderNode* other)
 {
-    return a + b;   // partial placeholder
+    RefObj* const old = m0;
+    RefObj* const src = other->m0;
+    if (src != old) {
+        if (src != 0)
+            src->AddRef();
+        m0 = src;
+        if (old != 0)
+            old->Release();
+    }
+    m4 = other->m4;
+    m8 = other->m8;
+    mC = other->mC;
+    m10 = other->m10;
+    return this;
 }
+
+// @ 0x0075eda0
+void RenderNodeArray::Free()
+{
+    RenderNode* p = mBegin;
+    for (; p < mEnd; p += 1) {
+        if (p->m0 != 0)
+            p->m0->Release();
+    }
+    RenderNode* const first = mBegin;
+    if (first != 0 && first != mAlloc)
+        EASTL_allocator_deallocate(first);
+}
+
+// ---------------------------------------------------------------- layer info builder
+// The info record passed to LayerInfoAt_Draw; member layout matches 0075e3f0's offsets.
+struct DrawSink {              // the object at this+0x58 (a render sink)
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void Pick14(int obj, int rel, int z);   // vtbl +0x14
+    virtual void Pick18(int obj, int rel, int z);   // vtbl +0x18
+};
+struct DrawIfc {               // arg->m0 : has a Draw at vtbl +0x0c
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void Draw(int a, unsigned flags, int* rect, int b);   // vtbl +0x0c
+};
+struct RefCnt {                // arg->m1c / arg->m24 : vtbl +0x08 ref
+    virtual void r00();
+    virtual void r04();
+    virtual void Ref();
+};
+struct LayerDrawArg {
+    DrawIfc* m0;                // +0x00
+    int m4;
+    int m8;
+    int mC;
+    int m10;                    // +0x10
+    char m14;                   // +0x14  selects vtbl +0x14 / +0x18
+    char pad15[3];
+    int m18;                    // +0x18  primary render object
+    int m1c;                    // +0x1c  ref target
+    int m20;                    // +0x20  secondary render object
+    int m24;                    // +0x24
+    int m28;                    // +0x28
+    int m2c;
+    int m30;
+    int m34;
+};
+
+// @ 0x0075e3f0
+void cRenderer::LayerInfoAt_Draw(LayerDrawArg* arg, int param_3)
+{
+    cRenderer* const self = this;
+    DrawSink* sink;
+    if (arg->m18 != 0 && (sink = *(DrawSink**)((char*)self + 0x58)) != 0) {
+        if (arg->m14 != 0)
+            sink->Pick18(arg->m18, arg->m1c, 0);
+        else
+            sink->Pick14(arg->m18, arg->m1c, 0);
+        ((RefCnt*)arg->m1c)->Ref();
+    }
+    int a = arg->m28;
+    if (a == 0) a = *(int*)((char*)self + 0x33c);
+    int b = arg->m2c;
+    if (b == 0) b = *(int*)((char*)self + 0x340);
+    int c = arg->m30;
+    if (c == 0) c = *(int*)((char*)self + 0x344);
+    int d = arg->m34;
+    if (d == 0) d = *(int*)((char*)self + 0x348);
+    int rect[4];
+    rect[0] = a;
+    rect[1] = b;
+    rect[2] = c;
+    rect[3] = d;
+    arg->m0->Draw(arg->m10, 0x80000000u, rect, param_3);
+    if (arg->m20 != 0 && (sink = *(DrawSink**)((char*)self + 0x58)) != 0) {
+        if (arg->m14 != 0)
+            sink->Pick18(arg->m20, arg->m24, 0);
+        else
+            sink->Pick14(arg->m20, arg->m24, 0);
+        ((RefCnt*)arg->m24)->Ref();
+    }
+    *(int*)((char*)param_3 + 0x18) += 1;
+}
+
+// ---------------------------------------------------------------- stage/property caches
+extern "C" int __fastcall FUN_006237a0(int x);   // 0x006237a0  (arg in ecx) -> ticks
+extern "C" float* __fastcall FUN_004e4230(int x); // 0x004e4230 (arg in ecx) -> float*
+
+struct Stage {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20();
+    virtual bool Probe(int a, int* out);       // vtbl +0x24
+    char pad04[0x2c];
+    int m30;                                   // +0x30
+    int m34;                                   // +0x34
+};
+
+struct StageCache {
+    float m0;                                  // +0x00
+    Stage* m4;                                 // +0x04
+    int m8;                                    // +0x08
+    int mC;                                    // +0x0c
+    bool Ready();                              // @ 0x0075e620
+    void Step(Stage* arg);                     // @ 0x0075e6d0
+};
+
+// @ 0x0075e620
+bool StageCache::Ready() {
+    Stage* const s = m4;
+    if (s != 0) {
+        int e = s->m30 ? FUN_006237a0(s->m30) : 0;
+        if (mC != s->m34 + e) {
+            int e2 = s->m30 ? FUN_006237a0(s->m30) : 0;
+            mC = s->m34 + e2;
+            int t;
+            if (s->Probe(m8, &t)) {
+                float* p = FUN_004e4230(t);
+                float f = *p;
+                if (m0 != f) {
+                    m0 = f;
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+// @ 0x0075e6d0
+void StageCache::Step(Stage* arg) {
+    int t;
+    if (arg->Probe(m8, &t)) {
+        short ty = *(short*)(t + 0x12);
+        int* src;
+        if (ty == 0xd || ty == 0x10) {
+            if ((*(unsigned char*)(t + 0x10) & 0x30) == 0)
+                src = (ty != 0) ? 0 : (int*)t;
+            else
+                src = *(int**)t;
+        } else {
+            src = (int*)0x15d9c6c;
+        }
+        m0 = *(float*)src;
+    }
+    Stage* const s = m4;
+    if (s->m30 != 0) {
+        mC = s->m34 + FUN_006237a0(s->m30);
+        return;
+    }
+    mC = s->m34;
+}
+
+// @ 0x0075e750
+void* __stdcall MakeRenderSubObject(SubObj* src)
+{
+    SubObj* dst = (SubObj*)((char*)EASTL_allocator_allocate(0x40,
+        "Graphics", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+        0xd1) + 8);
+    if (dst != 0) {
+        dst->m0 = src->m0;
+        if (src->m0 != 0)
+            src->m0->AddRef();
+        dst->m4 = src->m4;
+        dst->m8 = src->m8;
+        int* d = (int*)((char*)dst + 0xC);
+        int* s = (int*)((char*)src + 0xC);
+        for (int i = 0xb; i != 0; --i)
+            *d++ = *s++;
+    }
+    return (char*)dst - 8;
+}
+
+// ---------------------------------------------------------------- remaining (partial)
 // @ 0x0075e4f0
 int InitRenderSubsystem()
 {
     return 1;       // partial placeholder
-}
-// @ 0x0075e620
-bool RenderStageReady(int a)
-{
-    (void)a; return true;   // partial placeholder
-}
-// @ 0x0075e6d0
-int RenderStageStep(int a)
-{
-    return a;       // partial placeholder
-}
-// @ 0x0075e750
-void* MakeRenderSubObject(int a)
-{
-    return (void*)a; // partial placeholder
 }
 // @ 0x0075e830
 bool InitRenderGlobals()
@@ -273,16 +488,6 @@ int BuildRenderTree(int a)
 void InitShaderGlobals()
 {
     // partial placeholder
-}
-// @ 0x0075ed50
-void* CopyRenderNode(void* dst, void* src)
-{
-    (void)src; return dst;   // partial placeholder
-}
-// @ 0x0075eda0
-void FreeRenderNodeArray(void* p)
-{
-    (void)p;        // partial placeholder
 }
 // @ 0x0075ee10
 void* InitRenderNode(void* p, int a, int b)

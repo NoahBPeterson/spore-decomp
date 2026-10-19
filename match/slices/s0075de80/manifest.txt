@@ -1,2 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-slices/s0075de80/s0075de80.cpp  ?LayerInfoAt@cRenderer@@  0075e370  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0075de80/s0075de80.cpp  ?LayerInfoAt@cRenderer@@QAEPAXH@Z  0075e370  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0075de80/s0075de80.cpp  ??4RenderNode@@QAEPAU0@PAU0@@Z  0075ed50  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0075de80/s0075de80.cpp  ?Ready@StageCache@@QAE_NXZ  0075e620  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

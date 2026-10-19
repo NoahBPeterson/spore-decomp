@@ -2,10 +2,4 @@
 0075e830  0  large render global init with EH/subsystem calls; not reconstructed
 0075e900  0  very large (900+ B) render-tree builder; not reconstructed
 0075eca0  0  large shader-global init; not reconstructed
-0075ed50  0  render node copy; not reconstructed
-0075e3f0    0  placeholder stub, far smaller than the original (was: complete; render-layer info builder, layout differs); equiv lookup rejects size ratio
-0075e620    0  placeholder stub, far smaller than the original (was: complete; render stage ready query, layout differs); equiv lookup rejects size ratio
-0075e6d0    0  placeholder stub, far smaller than the original (was: complete; render stage step, layout differs); equiv lookup rejects size ratio
-0075e750    0  placeholder stub, far smaller than the original (was: complete; render sub-object construction, layout differs); equiv lookup rejects size ratio
-0075eda0    0  placeholder stub, far smaller than the original (was: complete; render node array free, layout differs); equiv lookup rejects size ratio
-0075ee10    0  placeholder stub, far smaller than the original (was: complete; render node init, layout differs); equiv lookup rejects size ratio
+0075ee10  0  render node init; not reconstructed (non-target helper in this file)

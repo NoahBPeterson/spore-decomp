@@ -7,3 +7,7 @@
 0075e290  146  complete; cRenderer::GetInfoFlags lower_bound under mutex, EH frame not reproduced
 0075e330  48  complete; cRenderer::NumLayers (end-begin)/0x14 under mutex, scheduling differs
 0075e3b0  1  complete; cRenderer::LayerInfoAtIndex, cl keeps base+index across Unlock instead of the final pointer
+0075e3f0  196 complete; cRenderer::LayerInfoAt_Draw (layer info + sink draw): the sink vtable-call split and the 4-value default select are scheduled differently (196/218)
+0075e6d0  50  complete; StageCache::Step (variant property read + tick cache): the variant type dispatch compiles to setne/dec instead of neg/sbb (50/117)
+0075e750  90  complete; MakeRenderSubObject (__stdcall; alloc 0x40 via EASTL_allocator_allocate + copy): original carries an EH prolog around the allocator guard (90/104)
+0075eda0  56  complete; RenderNodeArray::Free (release each node + free the buffer): original carries an EH prolog around the loop (56/60)
