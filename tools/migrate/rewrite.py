@@ -719,7 +719,7 @@ def parse_slice(sid, variant=""):
             rest = mask(body[mo.end():]).lstrip()
             k1 = rest.find("{")
             head1 = rest[:k1] if k1 >= 0 else rest
-            if re.match(r"^(?:template\b|struct\b|class\b|union\b|enum\b|typedef\b|namespace\b)", head1):
+            if re.match(r"^(?:template\b|struct\b|class\b|union\b|enum\b|typedef\b)", head1):
                 break
             own_ns.append(mo.group(2))
             body = body[mo.end():]
