@@ -1,9 +1,9 @@
-0076ed30  cRTTCheat::~cRTTCheat  # PDB name (scalar deleting dtor)
-0076ed90  eastl::vector<cPageInfo,sp_vector_allocator>::erase  # PDB name
-0076edf0  0x3c-element vector insert  # grow/shift insert
-0076f050  RTT init  # property reads + page alloc + cRTTCheat registration
+0076ed30 ?ScalarDelete@cRTTCheat_s0076_ed30@@QAEXXZ  # cRTTCheat_s0076_ed30::ScalarDelete migrated from s0076ed30 (verbatim, slice spelling)
+0076ed90 ?erase@PageVec_s0076_ed30@@QAEPAUPageInfo_s0076_ed30@@PAU2@0@Z  # PageVec_s0076_ed30::erase migrated from s0076ed30 (verbatim, slice spelling)
+0076edf0 ?BigVecInsert@@YAXPAXII@Z  # BigVecInsert migrated from s0076ed30 (verbatim, slice spelling)
+0076f050 ?RTTCheatInit@@YA_NPAX@Z  # RTTCheatInit migrated from s0076ed30 (verbatim, slice spelling)
 0076f210  SP::cRTTManager::Shutdown  # PDB name
-0076f280  RTT job setup  # 703-byte job build
+0076f280 ?RTTBigJob@@YAXPAX@Z  # RTTBigJob migrated from s0076ed30 (verbatim, slice spelling)
 0076f540  LessPage  # 3-int lexicographic comparator
 0076f580  JobRecordI copy ctor  # 0xa8 int-flavour record
 0076f640  InsertionSort20  # 0x14-key insertion sort

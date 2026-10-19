@@ -1,0 +1,19 @@
+# va  diff-bytes  reason
+0076da50  174  per-job render prep: skeleton
+0076db40  97   cRTTManager::GetTextureHandle: skeleton (lazy raster resolve via 0x0067dd60 omitted)
+0076e110  195  cRTTManager::AllocateNewPage: skeleton (raster create + ID generation omitted)
+0076e2c0  95   Rec3c::DestroyOne: approximate AutoRefCount release (lock xadd schedule not reproduced)
+0076e320  134  DestroyRecRange: approximate (uses DestroyOne; return/skip schedule not reproduced)
+0076e3b0  120  DestroyRecArray: approximate (uses DestroyOne; refcount release not reproduced)
+0076e5c0  79   SomeObj3 destructor: approximate (vector range destroy + base vtable stores)
+0076e670  177  BigRec_Construct: skeleton (0x3c record construct/copy omitted)
+0076e750  67   BigRecOps::CopyFrom: skeleton (record copy + refcount AddRef omitted)
+0076e840  182  CopyBigRecRange: skeleton (0x3c record range copy omitted)
+0076e900  171  CopyBigRecRange2: skeleton (0x3c record range assign omitted)
+0076e9b0  171  CopyBigRecRangeBack: skeleton (backward range assign omitted)
+0076ea60  137  cRTTCheat ctor: skeleton (base ctors + vtable stores omitted)
+0076eb00  551  cRTTCheat::Execute: skeleton (argument parsing + RTT page allocation omitted)
+0076ed30  96   cRTTCheat scalar deleting destructor: member/base dtors + flag-guarded free not reproduced
+0076edf0  475  0x3c-element vector insert: skeleton (growth/relocate/destroy call shapes omitted)
+0076f050  447  RTT init: skeleton (page allocation, property reads and cheat registration omitted)
+0076f280  703  RTT job setup: skeleton

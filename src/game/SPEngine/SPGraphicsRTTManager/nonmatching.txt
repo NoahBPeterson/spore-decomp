@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+0076d9e0 59 cRTTManager::ReleasePage: bounds check + refcount release/dec complete; register schedule (this/index home regs) differs
+0076dbb0 75 cRTTManager::GetTexture: bounds+refcount check and texture return complete; register schedule differs
+0076dc00 110 cRTTManager::GetRect: rect copy complete; register schedule/bounds code differs
+0076dc70 121 cRTTManager::GetRectSizes: rect + w/h deltas complete; register schedule differs
+0076dcf0 107 cRTTManager::GetAB: mA/mB copy complete; register schedule differs
+0076de20 73 UninitCopyPageRecords: full copy loop complete; argument/register mapping differs
+0076de80 33 CopyPageRecords: memberwise 0x1d-record copy loop complete; first/dest register roles differ
+0076e040 222 cRTTManager::GetScaledRect: 1/mA,1/mB scaling of sub-rect complete; SSE schedule differs

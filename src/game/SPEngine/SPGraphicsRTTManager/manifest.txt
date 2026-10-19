@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?RasterFormatSize@@YAHHHH@Z  0076d820  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?OnCaptureMessage@@YG_NHPAX@Z  0076db00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?DeallocateSelf@SpVec@@QAEXXZ  0076e1e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?FreeElemArray@@YGXPAUVecElem@@0@Z  0076e430  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?DestroyBigRecArray@@YGXPAUBigRec2@@0@Z  0076e7a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?erase@PageVec_s0076_ed30@@QAEPAUPageInfo_s0076_ed30@@PAU2@0@Z  0076ed90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
