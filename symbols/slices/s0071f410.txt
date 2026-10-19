@@ -1,6 +1,16 @@
-00720070 ?Obj15_20070@@YAXPAX@Z  # Obj15_20070 migrated from s0071f410 (verbatim, slice spelling)
-007200f0 ?Obj15_200f0@@YAXPAX00@Z  # Obj15_200f0 migrated from s0071f410 (verbatim, slice spelling)
+0071f410  CopySections  # eastl::copy cMDSection range-assign: AutoRef + fixed_vector<cMDFormatEntry,6>@0x14 + fixed_vector<cEltArrayRef,3>@0x44 (complete, nonmatching)
+0071f590  SectionVec::DoInsertValues  # eastl::vector<SP::cMDSection>::DoInsertValues(position,n,value); allocator.h:0xd1 (complete, nonmatching)
+0071f7e0  SectionVec::resize  # eastl::vector<SP::cMDSection>::resize(n): default cMDSection temp then DoInsertValues else erase 0x71f520 (complete, nonmatching)
+0071f8f0  MeshDataLoad  # SP::cMeshData (0x58) deserializer: format tag 3/4, GetObject/ReadInt32/HasRoom/ReadBytes (complete, nonmatching); returns bool
+0071fce0  ?Obj15_Assign@@YAXPAX0H@Z  # byte-exact; cEltArrayRef append/copy src elems into dst at dstIdx (fast path memcpy, else stride loop)
+0071fd60  CopyEltRange  # copy src[sIdx,eIdx) into dst at *out (stride aware), *out += n (complete, nonmatching)
+0071fe10  CopyEltArrayAdd  # copy src elems into dst at dstIdx, mask table 0x140d018 & src format, + add (complete, nonmatching)
+0071ff50  FillEltIndices  # fill count indices with (base + i) per element width 1/2/4 (complete, nonmatching: 1 SIB byte)
+00720010  ?AllocEltBuffer@@YAPAXH@Z  # byte-exact; refcounted buffer: operator new(n+0xc), vtbl 0x13eb938/0x13ef094 -> 0x140d02c/0x14188c0
+00720070  Obj15_Init  # cEltArrayRef::Init: AllocEltBuffer(count*eltSize), swap dataRC ref, stride=eltSize (complete, nonmatching)
+007200f0  ?Obj15_200f0@@YAXPAX00@Z  # Obj15_200f0 migrated from s0071f410 (verbatim, slice spelling)
 00720190  Obj15 ctor(a,b,out)  # byte-exact; out->0=a; out->8=b; Obj15_Init 0x720070
-007201b0 ?Obj15_copy@@YAXPBUObj15@@PAU1@@Z  # Obj15_copy migrated from s0071f410 (verbatim, slice spelling)
-007201d0 ?Obj15_copyAssign@@YAXPBUObj15@@PAU1@@Z  # Obj15_copyAssign migrated from s0071f410 (verbatim, slice spelling)
-00720250 ?CopyVertex3D@@YAXPAUVertex3D@@00@Z  # CopyVertex3D migrated from s0071f410 (verbatim, slice spelling)
+007201b0  ?Obj15_copy@@YAXPBUObj15@@PAU1@@Z  # Obj15_copy migrated from s0071f410 (verbatim, slice spelling)
+007201d0  ?Obj15_copyAssign@@YAXPBUObj15@@PAU1@@Z  # Obj15_copyAssign migrated from s0071f410 (verbatim, slice spelling)
+00720200  ?Obj15_20200@@YAXPAX0@Z  # Obj15_20200 migrated from s0071f410 (verbatim, slice spelling)
+00720250  ?CopyVertex3D@@YAXPAUVertex3D@@00@Z  # CopyVertex3D migrated from s0071f410 (verbatim, slice spelling)

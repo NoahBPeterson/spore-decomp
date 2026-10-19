@@ -1,3 +1,12 @@
 # va  diff-bytes  reason
-0071dd80  29   container find(key) over stride-0x20 entries: complete; register allocation of the end/begin loads and a 2-byte vs 1-byte nop padding differ
-0071e040  28   find(key) in a short[] stride-4 table at +0x14: complete; register/ordering of the begin/end loads differ
+0071d550  1115   sphere mesh emitter (rings x segments, blend falloff, two tri-strips + quad strip): complete; original is LTCG-scheduled, ours 1148 vs 1038 bytes. equiv UNSUPPORTED (its vtable calls cannot be modelled: fake-arity)
+0071d960  582    disc mesh emitter (rings x cols, optional cap strip + quad strip): complete; LTCG scheduling, ours 660 vs 643 bytes. equiv UNSUPPORTED (vtable fake-arity)
+0071dbf0  100    writer: WriteUint32(count) + WriteUint16(format) then vtable +0x38 rows: complete; ours reserves a 4-byte local the original homes in an incoming argument slot. equiv PASS
+0071dcc0  179    Model::sumSection over stride-0x14 sections with two int8 tables: complete; compiler hoists the per-mesh section count (the original recomputes it) and so also clobbers ecx, ours 192 vs 180 bytes. equiv FAIL (ecx untouched by original); callerdeps 71dcc0 ecx = SAFE
+0071ddc0  100    Model::findStreamEntry(sem, usage, number, type): complete; original keeps a byte-offset induction and reloads the stream base, ours 101 vs 113 bytes. equiv PASS
+0071de40  n/a    Model::findStream(sem, usage, number, type) -> &entry.stream or empty-stream 0x162aa80: complete; ours 110 vs 129 bytes (outside the search window). equiv PASS
+0071ded0  338    Model::selectStreams(count, out, sem, usage, numbers, types): complete; merged greedy loop, register allocation differs, ours 325 vs 358 bytes. equiv WEAK (coverage 35%)
+0071e090  109    Model::findMeshStreamIndex(meshIndex, sem, usage, number): complete; base/register allocation differs, ours 108 vs 114 bytes. equiv WEAK (coverage 48%)
+0071e110  295    Model::findMeshStreams(meshIndex, count, sem, usage, formats, out): complete; greedy merge, register allocation differs, ours 301 vs 280 bytes. equiv WEAK (coverage 44%)
+0071dd80  29     Vec20_find(v, key) over stride-0x20 entries: complete; begin/end load order and a 2-byte vs 1-byte nop padding differ. equiv PASS
+0071e040  28     find(key) in a short[] stride-4 table at +0x14: complete; register/ordering of the begin/end loads differ. equiv PASS

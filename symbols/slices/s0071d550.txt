@@ -1,8 +1,15 @@
-0071dbf0  writer helper  # EA::IO::WriteUint32 0x93aa70 / WriteUint16 0x93a9d0 then vtable +0x38 emission
+0071d550  Mesh::EmitSphere  # Rend* writer, float r, float zScale, int count, int seg, int subdiv, char flag; rings x segments UV sphere with blend falloff + 2 tri-strips + quad strip; ends with vtable +0x10
+0071d960  Mesh::EmitDisc  # Rend* writer, float a, float b, char flag, int count; rings x cols disc + optional cap strip + quad strip; ends with vtable +0x10
+0071dbf0  WriteStream  # EA::IO::WriteUint32 0x93aa70 / WriteUint16 0x93a9d0 then vtable +0x38 rows (whole row when format==stride, else per-element)
 0071dc90  Obj13::func_dc90  # byte-exact; returns element[idx @0x8c].field44 != field48
-0071dcc0  per-section sum over stride-0x14 entries  # char tables 0x140cf84 / 0x140cf90
-0071dd80  container find(key) stride-0x20  # returns entry @0xc == key ? entry @0x10 : 0
-0071e040  find(key) in a short[] stride-4 table at object+idx*0x8c+0x14
-0071e230 ?Obj13_e230@@YA_NPBXHPBHPAH@Z  # Obj13_e230 migrated from s0071d550 (verbatim, slice spelling)
+0071dcc0  Model::sumSection  # per-section sum over stride-0x14 entries using char tables 0x140cf84 / 0x140cf90
+0071dd80  Vec20_find  # container find(key) stride-0x20; returns entry @0xc == key ? entry @0x10 : 0
+0071ddc0  Model::findStreamEntry  # (m, semantic, usageIdx, number, type) -> index or -1
+0071de40  Model::findStream  # (m, semantic, usageIdx, number, type) -> &entry.stream or empty stream 0x162aa80
+0071ded0  Model::selectStreams  # (m, count, out, semantic, usage, numbers, types) -> bool; greedy merged selection
+0071e040  Obj13_findShort  # find(key) in a short[] stride-4 table at object+idx*0x8c+0x14
+0071e090  Model::findMeshStreamIndex  # (m, meshIndex, semantic, usageIdx, number) -> ref index or -1
+0071e110  Model::findMeshStreams  # (m, meshIndex, count, semantic, usage, formats, out) -> bool
+0071e230 ?Obj13_e230@@YA_NPBXHPBHPAH@Z  # byte-exact; Obj13_e230 migrated from s0071d550 (verbatim, slice spelling)
 0071e290 ?Obj13_e290@@YAXPAX0@Z  # Obj13_e290 migrated from s0071d550 (verbatim, slice spelling)
 0071e320 ?Obj13_e320@@YAXPAX00@Z  # Obj13_e320 migrated from s0071d550 (verbatim, slice spelling)
