@@ -1,10 +1,22 @@
 00a4c610 EA::Audio::Eapd::x_gui_setup  # PDB candidate; calls gfxstub/openpanel/savepanel setup
-00a4c710 EA::Audio::Eapd::glist_isselected  # inlined Pd glist_isselected loop over e_selection
-00a4ca40 EA::Audio::Eapd::canvas_setgraph  # PDB candidate; toggles gl_isgraph, Pd g_graph.c
-00a4cfb0 EA::Audio::Eapd::canvas_getlastxy  # Pd glist_getnextxy: canvas_last_glist coordinates
-00a4ce30 EA::Audio::Eapd::canvas_connect  # PDB candidate; Pd canvas_connect (sys_gui create line)
-00a4d070 EA::Audio::Eapd::g_editor_free  # frees copy_binbuf
-00a4d090 EA::Audio::Eapd::glist_deselect  # PDB candidate; Pd glist_deselect
+00a4c630 ?gobj_getrect@Eapd@Audio@EA@@YAXPAUt_gobj@123@PAUt_glist@123@PAH222@Z  # gobj_getrect migrated from s00a4c300 (verbatim, slice spelling)
+00a4c6f0 ?gobj_click@Eapd@Audio@EA@@YAHPAUt_gobj@123@PAUt_glist@123@HHHHHH@Z  # gobj_click migrated from s00a4c300 (verbatim, slice spelling)
+00a4c710 ?glist_isselected@Eapd@Audio@EA@@YAHPAUt_glist@123@PAUt_gobj@123@@Z  # glist_isselected migrated from s00a4c300 (verbatim, slice spelling)
+00a4c740 ?glist_select@Eapd@Audio@EA@@YAXPAUt_glist@123@PAUt_gobj@123@@Z  # glist_select migrated from s00a4c300 (verbatim, slice spelling)
+00a4c7e0 ?canvas_noundo@Eapd@Audio@EA@@YAXPAUt_glist@123@@Z  # canvas_noundo migrated from s00a4c300 (verbatim, slice spelling)
+00a4c860 ?canvas_disconnect@Eapd@Audio@EA@@YAXPAUt_glist@123@MMMM@Z  # canvas_disconnect migrated from s00a4c300 (verbatim, slice spelling)
+00a4c940 ?canvas_setcursor@Eapd@Audio@EA@@YAXPAUt_glist@123@I@Z  # canvas_setcursor migrated from s00a4c300 (verbatim, slice spelling)
+00a4c990 ?canvas_hitbox@Eapd@Audio@EA@@YAHPAUt_glist@123@PAUt_gobj@123@HHPAH222@Z  # canvas_hitbox migrated from s00a4c300 (verbatim, slice spelling)
+00a4ca40 ?canvas_setgraph@Eapd@Audio@EA@@YAXPAUt_glist@123@H@Z  # canvas_setgraph migrated from s00a4c300 (verbatim, slice spelling)
+00a4cc30 ?canvas_stowconnections@Eapd@Audio@EA@@YAXPAUt_glist@123@@Z  # canvas_stowconnections migrated from s00a4c300 (verbatim, slice spelling)
+00a4ce00 ?canvas_restoreconnections@Eapd@Audio@EA@@YAXPAUt_glist@123@@Z  # canvas_restoreconnections migrated from s00a4c300 (verbatim, slice spelling)
+00a4ce30 ?canvas_connect@Eapd@Audio@EA@@YAXPAUt_glist@123@MMMM@Z  # canvas_connect migrated from s00a4c300 (verbatim, slice spelling)
+00a4cfb0 ?canvas_getlastxy@Eapd@Audio@EA@@YA_NPAUt_glist@123@PAH1@Z  # canvas_getlastxy migrated from s00a4c300 (verbatim, slice spelling)
+00a4cff0 ?g_editor_setup@Eapd@Audio@EA@@YA_NXZ  # EA::Audio::Eapd::g_editor_setup migrated from s00a4c300
+00a4d070 ?g_editor_free@Eapd@Audio@EA@@YA_NXZ  # g_editor_free migrated from s00a4c300 (verbatim, slice spelling)
+00a4d090 ?glist_deselect@Eapd@Audio@EA@@YAXPAUt_glist@123@PAUt_gobj@123@@Z  # glist_deselect migrated from s00a4c300 (verbatim, slice spelling)
+00a4d1d0 ?glist_noselect@Eapd@Audio@EA@@YAXPAUt_glist@123@@Z  # glist_noselect migrated from s00a4c300 (verbatim, slice spelling)
+00a4d230 ?canvas_startmotion@Eapd@Audio@EA@@YAXPAUt_glist@123@@Z  # canvas_startmotion migrated from s00a4c300 (verbatim, slice spelling)
 00a4d280 EA::Audio::Eapd::sys_nearestfontsize  # sys_fontspec table walk
 00a4d2b0 EA::Audio::Eapd::sys_fontwidth  # sys_fontspec table walk
 00a4d2e0 EA::Audio::Eapd::sys_fontheight  # sys_fontspec table walk
