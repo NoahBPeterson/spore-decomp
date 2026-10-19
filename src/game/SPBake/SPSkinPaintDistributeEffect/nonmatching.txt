@@ -1,2 +1,5 @@
 # va  diff-bytes  reason
+00531380 37 Clear: /Od temp slot schedule differs
+005313e0 82 Stop: loop/deref temp slots and GetPaintSystem path differ
+00531470 96 IsRunning: iterator/temp slots differ
 00531510 4227 complete /Od source (all paths/calls); /Od stack-slot layout and inline-accessor temps (frame 0x7a0 vs ~0x430) not reproduced

@@ -59,40 +59,6 @@ struct cSPSkinPaintDistributeEffect : cComponentBase {
     void Stop(int immediate);                                    // @ 0x005313e0
     bool IsRunning();                                            // @ 0x00531470
 };
-cSPSkinPaintDistributeEffect::cSPSkinPaintDistributeEffect(void* desc, int componentId)
-    : mpDesc(desc), mpWorld(0), mComponentId(componentId)
-{
-}
-cSPSkinPaintDistributeEffect::~cSPSkinPaintDistributeEffect()
-{
-}
-void cSPSkinPaintDistributeEffect::Clear()
-{
-    mEffectsList.erase(mEffectsList.mpBegin, mEffectsList.mpEnd);
-    mpWorld = 0;
-}
-void cSPSkinPaintDistributeEffect::Stop(int immediate)
-{
-    GetPaintSystem();
-    for (cIVisualEffect** p = mEffectsList.mpBegin; p != mEffectsList.mpEnd; ++p)
-        (*p)->Stop(immediate);
-    mEffectsList.erase(mEffectsList.mpBegin, mEffectsList.mpEnd);
-    mNeedsFirstTick = false;
-}
-bool cSPSkinPaintDistributeEffect::IsRunning()
-{
-    if (!mNeedsFirstTick) {
-        void* p = GetPaintSystem();
-        if (!((cPaintSystem*)p)->IsPaused()) {
-            for (uint32_t i = 0; i < (uint32_t)(mEffectsList.mpEnd - mEffectsList.mpBegin); ++i) {
-                if (mEffectsList.mpBegin[i]->IsActive())
-                    return true;
-            }
-            return false;
-        }
-    }
-    return true;
-}
 // ---- items of slice s00530db0 end
 
 // ---- items of slice s00531510 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -433,11 +399,44 @@ void cSPSkinPaintDistributeEffect::SetWorld(void* world, void* b, void* c)
     mNeedsFirstTick = false;
 }
 
+// @ 0x00531380
+void cSPSkinPaintDistributeEffect::Clear()
+{
+    mEffectsList.erase(mEffectsList.mpBegin, mEffectsList.mpEnd);
+    mpWorld = 0;
+}
+
 // @ 0x005313c0
 void cSPSkinPaintDistributeEffect::Start(void* a)
 {
     (void)a;
     mNeedsFirstTick = true;
+}
+
+// @ 0x005313e0
+void cSPSkinPaintDistributeEffect::Stop(int immediate)
+{
+    GetPaintSystem();
+    for (cIVisualEffect** p = mEffectsList.mpBegin; p != mEffectsList.mpEnd; ++p)
+        (*p)->Stop(immediate);
+    mEffectsList.erase(mEffectsList.mpBegin, mEffectsList.mpEnd);
+    mNeedsFirstTick = false;
+}
+
+// @ 0x00531470
+bool cSPSkinPaintDistributeEffect::IsRunning()
+{
+    if (!mNeedsFirstTick) {
+        void* p = GetPaintSystem();
+        if (!((cPaintSystem*)p)->IsPaused()) {
+            for (uint32_t i = 0; i < (uint32_t)(mEffectsList.mpEnd - mEffectsList.mpBegin); ++i) {
+                if (mEffectsList.mpBegin[i]->IsActive())
+                    return true;
+            }
+            return false;
+        }
+    }
+    return true;
 }
 
 // @ 0x00531510
