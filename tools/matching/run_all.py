@@ -7,9 +7,12 @@ Manifests: match/manifest.txt, match/slices/*/manifest.txt, match/clones.txt, ma
 Each distinct (source, flags) pair is compiled once, in parallel, into its own object file; every
 function is then compared in-process (relocations masked on both sides). Only one run_all may run
 at a time (work/run_all.lock). Results are written to work/verify_results.json.
+With --manifest, a run uses its own object directory, lock and results file (work/match/m/<key>/,
+work/run_all_m/<key>.lock, work/run_all_m/<key>.json, key = hash of the manifest path), so runs on different
+manifests never wait for each other (fix pass 6 F26: mig7 agents waited 20-40 minutes on the shared lock).
 Exit 0 iff every listed function matches.
 """
-import argparse, bisect, fcntl, glob, json, os, subprocess, sys
+import argparse, bisect, fcntl, glob, hashlib, json, os, subprocess, sys
 from concurrent.futures import ThreadPoolExecutor
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -47,8 +50,11 @@ def resolve_flags(flags):
     return out
 
 
+OBJ_DIR = OUT        # main() points this at a per-manifest directory for --manifest runs
+
+
 def obj_path(src, flags):
-    return os.path.join(OUT, src.replace("/", "_").rsplit(".", 1)[0] + "_" +
+    return os.path.join(OBJ_DIR, src.replace("/", "_").rsplit(".", 1)[0] + "_" +
                         "".join(f.strip("/") for f in flags).replace(":", "").replace("/", "_") + ".obj")
 
 
@@ -114,15 +120,23 @@ def main():
     ap.add_argument("--filter", default=""); ap.add_argument("-v", action="store_true")
     ap.add_argument("--manifest"); ap.add_argument("--jobs", type=int, default=6)
     a = ap.parse_args()
+    global OBJ_DIR
     os.makedirs(OUT, exist_ok=True)
-    # One run_all at a time: the lock serialises the shared object directory and
-    # work/verify_results.json. Wait for it (module manifests take seconds), say so first
-    # so a caller can tell a queue from a slow compile.
-    lock = open(os.path.join(ROOT, "work", "run_all.lock"), "w")
+    # One run_all at a time per object directory: the lock serialises it and the results file. Wait for it (module
+    # manifests take seconds), say so first so a caller can tell a queue from a slow compile.
+    lock_path, res_path = os.path.join(ROOT, "work", "run_all.lock"), os.path.join(ROOT, "work", "verify_results.json")
+    if a.manifest:
+        key = hashlib.sha1(os.path.abspath(a.manifest).encode()).hexdigest()[:16]
+        OBJ_DIR = os.path.join(OUT, "m", key)
+        os.makedirs(OBJ_DIR, exist_ok=True)
+        os.makedirs(os.path.join(ROOT, "work", "run_all_m"), exist_ok=True)
+        lock_path = os.path.join(ROOT, "work", "run_all_m", key + ".lock")
+        res_path = os.path.join(ROOT, "work", "run_all_m", key + ".json")
+    lock = open(lock_path, "w")
     try:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except BlockingIOError:
-        print("waiting for another run_all.py to finish (work/run_all.lock)", flush=True)
+        print("waiting for another run_all.py to finish (%s)" % os.path.relpath(lock_path, ROOT), flush=True)
         fcntl.flock(lock, fcntl.LOCK_EX)
 
     rows = read_rows(manifests(a.manifest), a.filter)
@@ -181,7 +195,7 @@ def main():
                 print("MATCH  %-40s %08x" % (sym[:40], va))
         else:
             print("%-6s %-40s %08x  %s" % (status.split()[0], sym[:40], va, status))
-    json.dump(results, open(os.path.join(ROOT, "work", "verify_results.json"), "w"))
+    json.dump(results, open(res_path, "w"))
     print("\n%d / %d functions byte-exact (%d sources compiled)" % (ok, len(rows), len(keys)))
     return 0 if ok == len(rows) else 1
 

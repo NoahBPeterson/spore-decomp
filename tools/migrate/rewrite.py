@@ -5098,7 +5098,7 @@ class Rewrite:
         for _i in range(tries):
             r = subprocess.run([py, W("tools", "matching", "run_all.py"), "--manifest", manifest, "-v"], capture_output=True, text=True, cwd=ROOT)
             out = r.stdout + r.stderr
-            if "another run_all" not in out:
+            if "another run_all" not in out or "functions byte-exact" in out:
                 return out
             time.sleep(wait)
         raise RuntimeError("run_all.lock held for %d s" % (tries * wait))
