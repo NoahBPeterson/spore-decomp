@@ -1,0 +1,3 @@
+# s01141a90: complete, behavior-equivalent source that is not byte-exact.
+01142900   78  voice reset/advance leaf; complete; difftest PASS 75.8% cov; the module's float copies use x87 fld/fstp here (the rest of the unit is /arch:SSE), so byte-exactness is lost on 2 copy loops. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01142960   98  MIX_stop: accumulate voice into mix buses + free instance chain; complete; difftest PASS 78.8% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
