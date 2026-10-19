@@ -3,3 +3,4 @@
 005c0070 SP::cSPEditorNaming::~cSPEditorNaming  # byte-exact
 005c0100 SP::cSPEditorNaming::DoMessage  # dev PDB DoMessage (IWinProc::HandleUIMessage override)
 005c0770 SP::cSPEditorPageControls::cSPEditorPageControls  # byte-exact
+005c0ba0 ?SetImage@cSPEditorPaintLikeThis_s005b_fb90@SP@@QAEXUKey_s005b_fb90@ResourceMan@EA@@@Z  # cSPEditorPaintLikeThis_s005b_fb90::SetImage migrated from s005bfb90 (verbatim, slice spelling)
