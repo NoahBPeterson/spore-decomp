@@ -3366,6 +3366,13 @@ class Rewrite:
                 # in the slice as a partial row
                 self.notes.append(("skipped", "0x%08x %s stays in the slice: asm transcription (%s)" % (c.va, c.name, asm)))
                 continue
+            if (str(c.how).startswith("address contradiction") or c.cls in getattr(self, "refused", {})) and self._landed_in_tu(c):
+                # already committed in the module TU (mig14 DatabasePackedFile_v2: the address-contradiction skip pruned the
+                # landed, byte-exact SetLocation 0x6bd650): it stays, verbatim as it landed; the checked apply verifies it
+                self.make_verbatim(c)
+                self.notes.append(("verbatim", "0x%08x %s::%s: already in the module TU, kept verbatim (%s)" % (c.va, c.cls, c.name, c.how)))
+                self.fns.append(c)
+                continue
             if str(c.how).startswith("address contradiction"):
                 self.notes.append(("skipped", "0x%08x %s::%s stays in the slice: %s" % (c.va, c.cls, c.name, c.how)))
                 continue
