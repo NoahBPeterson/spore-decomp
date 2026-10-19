@@ -26,7 +26,10 @@ struct RefCounted {
 // ---- items of slice s00762d70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void  __cdecl EA_Delete(void* p);                                                  // 0x0f47380
 extern "C" bool  __cdecl EA_IO_ReadInt32(void* stream, void* dst, int count, int flags);      // 0x093a780
+extern "C" void* __cdecl GetGlobal67de80();                                                   // 0x067de80
 extern "C" void* __cdecl CreateRasterFn(int w, int h, int a, int b, int c);                   // 0x0761420
+extern unsigned char g_flags1630180;   // 0x01630180
+extern int g_word160077c;              // 0x0160077c
 struct RefVec {
     void* b; void* e; void* c;
     RefVec() { b = 0; e = 0; c = 0; }
@@ -34,6 +37,7 @@ struct RefVec {
     void destroy();   // 0x0041eb80
 };
 struct Raster { void D3D9GetStreamedMipLevelSize(unsigned char*, int); }; // 0x011f0270
+struct IObj { virtual void s0(); virtual void s1(); virtual void s2(int); };
 namespace SP {
 struct cRasterFromGimexLoadState_s0076_2d70 {
     uint32_t mFormat; uint32_t mWidth; uint32_t mHeight;
@@ -42,7 +46,9 @@ struct cRasterFromGimexLoadState_s0076_2d70 {
 }
 using SP::cRasterFromGimexLoadState_s0076_2d70;
 struct IUnknown32 {
-    virtual void u0(); virtual void u1(); virtual void u2();
+virtual void u0();
+virtual void u1();
+virtual void u2();
 };
 struct AtomicInt {
     int v;
@@ -53,11 +59,11 @@ struct Resource : IUnknown32 {
     int mKey0, mKey1, mKey2;  // +0x8
     Resource() { mRefCount = 0; mKey0 = 0; mKey1 = 0; mKey2 = 0; }
 };
-struct cResourceBase : Resource {
+struct cResourceBase_s0076_2d70 : Resource {
     int* mReleaseCallback;    // +0x14
-    cResourceBase() { mReleaseCallback = 0; }
+    cResourceBase_s0076_2d70() { mReleaseCallback = 0; }
 };
-struct CEditorRes : cResourceBase {
+struct CEditorRes : cResourceBase_s0076_2d70 {
     RefVec mRefs;             // +0x18
     CEditorRes();
     ~CEditorRes() {}
@@ -136,8 +142,8 @@ struct Resource_s0076_4df0 : IUnknown32 {
     AtomicInt mRefCount; int k0, k1, k2;
     Resource_s0076_4df0() { mRefCount = 0; k0 = 0; k1 = 0; k2 = 0; }
 };
-struct cResourceBase_s0076_4df0 : Resource_s0076_4df0 { int* cb; cResourceBase_s0076_4df0() { cb = 0; } };
-struct D765f10 : cResourceBase_s0076_4df0 {
+struct cResourceBase : Resource_s0076_4df0 { int* cb; cResourceBase() { cb = 0; } };
+struct D765f10 : cResourceBase {
     int f18;
     void* f1c;
     D765f10(void* arg);
@@ -145,6 +151,16 @@ struct D765f10 : cResourceBase_s0076_4df0 {
 // ---- items of slice s00764df0 end
 
 // ---- items of slice s00765f80 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void __cdecl sub_87cf40(void* p);
+extern "C" void __cdecl sub_87cf60(void* p, int v);
+extern "C" bool __cdecl sub_87d2a0(void* p, int a, int b);
+extern "C" bool __cdecl sub_87d030(void* p, void* a, int n);
+extern "C" void __cdecl sub_87cff0(void* p);
+extern "C" void __cdecl sub_87d260(void* p);
+extern "C" void* __cdecl Ctor765f10(void* p);   // 0x765f10
+extern "C" void* __cdecl Ctor763100(void* p);   // 0x763100
+extern "C" void* __cdecl Ctor7004d0(void* p);   // 0x7004d0
+extern "C" void __cdecl sub_4e0880(void* vec, uint32_t n);
 extern "C" void* __cdecl EA_Alloc6(uint32_t size, const char* name, int a, int b, const char* file, int line);
 extern "C" void* __cdecl EA_Alloc8(uint32_t size, int align, int a, const char* name, int b, int c, const char* file, int line);
 extern "C" void  __cdecl EA_Dealloc(void* p);
@@ -152,11 +168,18 @@ extern "C" void* __cdecl memcpy_t(void* dst, const void* src, uint32_t n);
 extern "C" void  __cdecl sub_6c20b0(void* p);
 extern "C" void  __cdecl sub_6c2060(void* p, int a, int b);
 extern "C" void  __cdecl sub_6c20e0(void* p);
+extern "C" void* __cdecl MessageServer();
+extern "C" void* __cdecl Manager67dcd0();
+extern "C" bool  __cdecl ReadInt32(void* stream, void* dst, int count, int flags);
+extern "C" void  __cdecl sub_4b54b0(void* p);
+extern "C" void  __cdecl sub_6ac0a0(int a, void* b);
 extern "C" void  __cdecl sub_11eff60(void* p);
 extern "C" void  __cdecl cLocalLightInfo_dtor(void* alloc, void* obj);
 extern "C" char* __cdecl BigMoveBack(char* dst, char* first, char* last, char* src);   // 0x764720
 extern "C" char* __cdecl BigMove(char* dst, char* first, char* last);                  // 0x763f10
 extern "C" char* __cdecl BigUninitFill(char* dst, uint32_t n, char* value);            // 0x765200
+extern "C" void __cdecl VecReserve41e4d0(void* vec, int n);               // 0x41e4d0
+extern "C" void __cdecl PushDeclareParam(void* vec, int* v);              // 0x4e19a0
 extern "C" extern char g_allocFile_s0076_5f80[];
 static inline void* VP(void* p) { return *(void**)p; }
 struct IRef {
@@ -173,9 +196,18 @@ struct Arena {
     void Release();          // 0x11e40a0
 };
 struct IResEd {
-    virtual void e0(); virtual void e1(); virtual void e2(); virtual void e3();
-    virtual void e4(); virtual void e5(); virtual void e6(); virtual void e7();
-    virtual void e8(); virtual void e9(); virtual void eA(); virtual void eB();
+virtual void e0();
+virtual void e1();
+virtual void e2();
+virtual void e3();
+virtual void e4();
+virtual void e5();
+virtual void e6();
+virtual void e7();
+virtual void e8();
+virtual void e9();
+virtual void eA();
+virtual void eB();
     virtual ~IResEd();
     int mRef;                 // +0x4
     int m08, m0c, m10, m14;   // +0x8..+0x14
@@ -183,18 +215,36 @@ struct IResEd {
     IRef* m1c;                // +0x1c
 };
 struct BaseP {
-    virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3();
-    virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7();
-    virtual void p8(); virtual void p9(); virtual void pA(); virtual void pB();
-    virtual void pC(); virtual void pD(); virtual void pE(); virtual void pF();
+virtual void p0();
+virtual void p1();
+virtual void p2();
+virtual void p3();
+virtual void p4();
+virtual void p5();
+virtual void p6();
+virtual void p7();
+virtual void p8();
+virtual void p9();
+virtual void pA();
+virtual void pB();
+virtual void pC();
+virtual void pD();
+virtual void pE();
+virtual void pF();
     int mRef;                 // +0x4
     int k8, kc, k10, k14;     // +0x8..+0x14
     int x18;                  // +0x18
     BaseP() { (void)_InterlockedExchange((volatile long*)&mRef, 0); k8 = 0; kc = 0; k10 = 0; k14 = 0; x18 = 0; }
 };
 struct SecP {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
-    virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
     SecP() {}
 };
 struct ResB : BaseP, SecP {
@@ -208,10 +258,39 @@ struct ResB : BaseP, SecP {
 struct RawRes {
     void* AsInterface(int type);
 };
+struct Elem8 {
+    void* p;
+    int   x;
+    Elem8() : p(0), x(0) {}
+    ~Elem8() {}
+};
+struct ResD {
+virtual void d0();
+virtual void d1();
+virtual void d2();
+virtual void d3();
+    virtual ~ResD();
+    int mRef;                 // +0x4
+    int m08, m0c, m10, m14;   // +0x8..+0x14
+    void* mArena;             // +0x18
+    Elem8* mpBegin;           // +0x20
+    Elem8* mpEnd;             // +0x24
+    Elem8* mpCap;             // +0x28
+    ResD();
+};
 struct BaseE {
-    virtual void e0(); virtual void e1(); virtual void e2(); virtual void e3();
-    virtual void e4(); virtual void e5(); virtual void e6(); virtual void e7();
-    virtual void e8(); virtual void e9(); virtual void eA(); virtual void eB();
+virtual void e0();
+virtual void e1();
+virtual void e2();
+virtual void e3();
+virtual void e4();
+virtual void e5();
+virtual void e6();
+virtual void e7();
+virtual void e8();
+virtual void e9();
+virtual void eA();
+virtual void eB();
     int mRef;                 // +0x4
     int k8, kc, k10, k14;     // +0x8..+0x14
     BaseE() { (void)_InterlockedExchange((volatile long*)&mRef, 0); k8 = 0; kc = 0; k10 = 0; k14 = 0; }
@@ -221,6 +300,7 @@ struct ResE : BaseE {
     ResE();
     ~ResE();
 };
+void* InitResE(void* p) { return new (p) ResE(); }
 ResE::~ResE() {
     if (a18) {
         sub_11eff60((void*)a18);
@@ -233,6 +313,23 @@ struct VBig {
     char* mpCap;              // +8
     void _insert(char* position, uint32_t n, char* value);
 };
+struct IPngArg {
+virtual void a0();
+virtual void a1();
+virtual void a2();
+virtual void a3();
+virtual void a4();
+virtual void a5();
+virtual void a6();
+virtual void a7();
+    char pad[0x18];
+    void* mMgr;               // +0x1c (approx)
+};
+struct PngArg {
+    char pad[0x8];
+    IPngArg* p08;             // +0x8
+};
+void* InitResE(void* p);
 struct CUnionTarget { void m(); };
 struct VPtr {
     uint32_t* mpBegin;   // +0
@@ -248,15 +345,50 @@ struct V4 {
     uint32_t* mpAlloc;   // +0x10
     void insert(uint32_t* position, uint32_t n, const uint32_t& value);
 };
+struct IResMgr {
+virtual void m0();
+virtual void m1();
+virtual void m2();
+virtual void m3();
+    virtual bool m4(void* key, void** outA, void** outB, int, int, int, int, int);
+};
+struct ResHandle { virtual void h0(); virtual void h1(); virtual void h2(); virtual void h3(); };
+struct IStream {
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void sA();
+virtual void sB();
+    virtual int  sC(void* dst, int n);          // slot 0xc
+};
+struct Reader { IStream* mStream; int mField2c; };
+extern "C" bool __cdecl ReadTriplet763340(IStream* s, int* p, int io);   // 0x763340
 struct IFactorySrc {
-    virtual void f0(); virtual void f1(); virtual void f2(); virtual void f3();
+virtual void f0();
+virtual void f1();
+virtual void f2();
+virtual void f3();
     virtual void* f4();   // +0x10
 };
 struct Factory {
     char pad[0x8];
-    virtual void g0(); virtual void g1(); virtual void g2(); virtual void g3();
-    virtual void g4(); virtual void g5();
-    virtual void g6(); virtual void g7(); virtual void g8(); virtual void g9();
+virtual void g0();
+virtual void g1();
+virtual void g2();
+virtual void g3();
+virtual void g4();
+virtual void g5();
+virtual void g6();
+virtual void g7();
+virtual void g8();
+virtual void g9();
     virtual bool g9call(int* src, void* res, int a, int b);   // +0x24
     bool CreateResource(int* src, void** out, int a, int b);
 };
@@ -298,6 +430,15 @@ extern "C" void  __cdecl FUN_00764760(void* self, int v);                       
 extern "C" void  __cdecl FUN_0041f2d0(void* p);                                        // 0x41f2d0
 extern "C" void  __cdecl FUN_00700670(void* a, void* b);                               // 0x700670
 extern "C" void  __cdecl FUN_00767350(void* self, void* pos, uint32_t n, void* value); // 0x767350
+struct Raster_s0076_7ee0 {
+    char pad0[4];
+    int mFlags;               // +0x4
+    char pad8[4];
+    unsigned short mWidth;    // +0xc
+    unsigned short mHeight;   // +0xe
+    unsigned char mLevels;    // +0x11
+    unsigned char mFace;      // +0x12
+};
 struct C68200 {
     char pad[0xd0];
     int mD0;                  // +0xd0
@@ -306,6 +447,14 @@ struct C68200 {
 struct V7cB {
     char* b; char* e; char* c;
     void Resize(uint32_t n);
+};
+struct C68370 {
+    void* m0; void* m4; void* m8; void* mc; void* m10; void* m14;
+    int   m18; int m1c; int m20; int m24; void* m28;
+    char pad2c[0xd0];
+    int   mFC; int m100; void* m104; void* m108; void* m10c; void* m118;
+    void* m19c; void* m1a0; void* m1a4; void* m1b0; char m334;
+    C68370(void* a, int* b, void* c, int* d, void* e);
 };
 // ---- items of slice s00767ee0 end
 
@@ -421,10 +570,24 @@ extern "C" void* __cdecl FUN_0093b530(int a, int b, void* c);                   
 // ---- items of slice s00769310 end
 
 // ---- items of slice s00769f20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl Node8F4d0(void);                                             // 0x68f4d0
+extern "C" void* __cdecl FUN_0067de70();                                              // 0x67de70
+extern "C" void* __cdecl FUN_00768370v(void* a, void* b, void* c, void* d, void* e);  // 0x768370
+extern "C" char  __cdecl FUN_007666a0v(void* a, void* b, void* c);                    // 0x7666a0
 extern "C" char  __cdecl FUN_00769d80v(void* a, void* b, void* c, void* d);           // 0x769d80
+extern "C" char  __cdecl FUN_00765b30v(void* a, void* b);                             // 0x765b30
+extern "C" char  __cdecl FUN_00765d30v(void* a, void* b);                             // 0x765d30
+extern "C" char  __cdecl FUN_007652c0v(void* a, void* b);                             // 0x7652c0
 extern "C" char  __cdecl FUN_007655f0b(void* a, void* b, void* c);   // 0x7655f0
+extern "C" bool  __fastcall ArmDecodeB(void* self, int, int);         // 0x7677c0
 extern "C" char  __cdecl FUN_0076a940v(void* a, void* b, void* c, void* d, void* e);   // 0x76a940
+struct C69a9 { char pad0[0x10]; void* m10; char pad14[4]; int m18; char pad1c[0x18]; };
 // ---- items of slice s00769f20 end
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+bool __fastcall SetupJobChain(void* self, int, int unused);  // 0x00769f20 (stays in the slice: not this object's)
+bool __fastcall CreateRequestJob(void* self, int, void* out);  // 0x0076a400 (stays in the slice: not this object's)
+bool __fastcall TryLockChain(void* self, int, int unused);  // 0x0076a4d0 (stays in the slice: not this object's)
 
 // @ 0x00683f10
 int RefCounted::AddRef()
@@ -432,25 +595,30 @@ int RefCounted::AddRef()
     return (int)((_InterlockedExchangeAdd((volatile long*)&mRef, 2) + 2) >> 1);
 }
 
-
-
-
-
-
-
-
-
 // @ 0x00763100
 CEditorRes::CEditorRes()
 {}
 
-
-
-
-
-
-
-
+// @ 0x00763250
+int __fastcall Release763250(void* self)
+{
+    volatile int* rc = (volatile int*)((char*)self + 4);
+    int n = _InterlockedExchangeAdd((volatile long*)rc, -2) - 2;
+    if (n == 0) {
+        _InterlockedExchange((volatile long*)rc, 2);
+        if (g_flags1630180 != 0 || g_word160077c != *(int*)__readfsdword(0x18)) {
+            void* o = GetGlobal67de80();
+            (void)o; (void)self;
+        } else if (self != 0) {
+            ((IObj*)self)->s2(1);
+        }
+    } else if (n == 3) {
+        void* p = *(void**)((char*)self + 0x14);
+        if (p != 0)
+            (*(void(__thiscall**)(void*, void*))p)(*(void**)p, self);
+    }
+    return n;
+}
 
 // @ 0x00763520
 bool SP::cGraphicsResourceFactory::Shutdown()
@@ -458,14 +626,6 @@ bool SP::cGraphicsResourceFactory::Shutdown()
     RemoveRegistrationCallback(0x2f4e681b, (void*)0x7632f0);
     return true;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x00763550
 unsigned int SP::cGraphicsResourceFactory::GetSupportedTypes(unsigned int * types, unsigned int n)
@@ -481,14 +641,6 @@ unsigned int SP::cGraphicsResourceFactory::GetSupportedTypes(unsigned int * type
     return count;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x00763580
 bool __stdcall IsRegType(unsigned a, int b)
 {
@@ -499,25 +651,15 @@ bool __stdcall IsRegType(unsigned a, int b)
     return false;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x007635b0
 EhHolder::~EhHolder()
 {}
 
-
-
-
-
-
-
-
+// @ 0x00763620
+bool __cdecl LoadRasterHeader(cRasterFromGimexLoadState_s0076_2d70* s, const char* name, void* unused)
+{
+    (void)s; (void)name; (void)unused; return false;
+}
 
 // @ 0x00763770
 bool __stdcall CreateRasterFromState(cRasterFromGimexLoadState_s0076_2d70* s, int unused, OutRaster* out)
@@ -533,13 +675,11 @@ bool __stdcall CreateRasterFromState(cRasterFromGimexLoadState_s0076_2d70* s, in
     return false;
 }
 
-
-
-
-
-
-
-
+// @ 0x007637d0
+bool __stdcall LoadAndCreateRaster(cRasterFromGimexLoadState_s0076_2d70* src, int a, int b, int* out3)
+{
+    (void)src; (void)a; (void)b; (void)out3; return false;
+}
 
 // @ 0x007638a0
 bool __stdcall ReadTriplets(void* stream, int, int, int)
@@ -560,12 +700,11 @@ bool __stdcall ReadTriplets(void* stream, int, int, int)
     return true;
 }
 
-
-
-
-
-
-
+// @ 0x00763950
+bool SP::cGraphicsResourceFactory::ReadResourcePCAWeights(EA::IO::IStream * a, EA::ResourceMan::Resource * b, EA::ResourceMan::Key const & a3)
+{
+    (void)a; (void)b; return false;
+}
 
 // @ 0x007641c0
 bool SP::cGraphicsResourceFactory::Init()
@@ -580,23 +719,9 @@ bool SP::cGraphicsResourceFactory::Init()
     return true;
 }
 
-
-
-
-
-
-
-
 // @ 0x007642c0
 D7642c0::~D7642c0()
 {}
-
-
-
-
-
-
-
 
 // @ 0x00764670
 void Loader::Wrap670(int)
@@ -607,36 +732,17 @@ void Loader::Wrap670(int)
         b334 = 1;
 }
 
-
-
-
-
-
-
-
 // @ 0x007646a0
 void Loader::Wrap6a0(int)
 {
     ((Ctx63620*)pC)->Load(p2c, p28, p14);
 }
 
-
-
-
-
-
-
 // @ 0x007650d0
 void Loader29::WrapA50(int)
 {
     ((Ctx764a50*)pC)->ReadArena(p2c, p28, p14);
 }
-
-
-
-
-
-
 
 // @ 0x00765150
 void Loader29::WrapDf0(int)
@@ -646,12 +752,6 @@ void Loader29::WrapDf0(int)
     if (ok)
         b334 = 1;
 }
-
-
-
-
-
-
 
 // @ 0x00765980
 void HVec::grow(unsigned n)
@@ -669,12 +769,6 @@ void HVec::grow(unsigned n)
     }
 }
 
-
-
-
-
-
-
 // @ 0x00765ac0
 D765ac0::~D765ac0()
 {
@@ -689,12 +783,6 @@ D765ac0::~D765ac0()
         EA_Delete(v20.b);
 }
 
-
-
-
-
-
-
 // @ 0x00765f10
 D765f10::D765f10(void* arg)
 {
@@ -705,28 +793,13 @@ D765f10::D765f10(void* arg)
     f18 = 0;
 }
 
-
-
-
-
-
 // @ 0x00765f80
 IResEd::~IResEd()
 { if (m1c) m1c->Release(); }
 
-
-
-
-
-
 // @ 0x00765fe0
 ResB::ResB()
 : a20(0), a24(0), a28(0), a2c(0) {}
-
-
-
-
-
 
 // @ 0x00766030
 void* __fastcall AsInterfaceFC(void* self, int, int type)
@@ -741,11 +814,6 @@ void* __fastcall AsInterfaceFC(void* self, int, int type)
     return ((RawRes*)self)->AsInterface(type);
 }
 
-
-
-
-
-
 // @ 0x00766070
 void ResB::Method66070(int a, int b)
 {
@@ -758,21 +826,11 @@ void ResB::Method66070(int a, int b)
     sub_6c2060(p, a, b);
 }
 
-
-
-
-
-
 // @ 0x007660b0
 void ResB::Method660b0()
 {
     sub_6c20e0((char*)this + 4);
 }
-
-
-
-
-
 
 // @ 0x00766100
 void ResB::MoveOut(void* out)
@@ -789,19 +847,17 @@ void ResB::MoveOut(void* out)
     *(int*)(self + 0x10) = 0;
 }
 
-
-
-
-
+// @ 0x00766140
+ResD::ResD()
+: mRef(0), m08(0), m0c(0), m10(0), m14(0), mArena(0),
+               mpBegin(0), mpEnd(0), mpCap(0) {
+    Elem8 tmp[4];
+    (void)tmp;
+}
 
 // @ 0x00766220
 ResE::ResE()
 : a18(0) {}
-
-
-
-
-
 
 // @ 0x007662d0
 void VBig::_insert(char* position, uint32_t n, char* value)
@@ -842,10 +898,83 @@ void VBig::_insert(char* position, uint32_t n, char* value)
     }
 }
 
+// @ 0x007664e0
+bool __stdcall PNGWriteCallback(PngArg* arg)
+{
+    unsigned char* buf = (unsigned char*)_alloca(0x2a70);
+    (void)buf;
+    IPngArg* a = arg->p08;
+    void* inner = *(void**)((char*)a + 0xc);
+    int c1c = *(int*)((char*)inner + 0x1c);
+    void* c20 = *(void**)((char*)inner + 0x20);
+    void* ctx = 0;
+    (void)c1c; (void)c20;
+    if (*(char*)((char*)a + 0x18)) {
+        // formatted debug string path (stubbed)
+    }
+    sub_87cf40(&ctx);
+    void* m = *(void**)((char*)a + 0x10);
+    int v = ((int(__thiscall**)(void*))VP(m))[0x18 / 4](m);
+    sub_87cf60(&ctx, v);
+    bool ok = sub_87d2a0(&ctx, 1, 4);
+    if (ok) {
+        ok = sub_87d030(&ctx, *(void**)((char*)inner + 0x28), *(int*)((char*)arg + 0x44) * 4) != 0;
+        sub_87cff0(&ctx);
+        m = *(void**)((char*)a + 0x10);
+        ((void(__thiscall**)(void*))VP(m))[0x24 / 4](m);
+        void* srv = MessageServer();
+        if (srv && *(void**)((char*)a + 0x14))
+            ((void(__thiscall**)(void*, void*, int, int, int))VP(srv))[0x18 / 4](
+                srv, *(void**)((char*)a + 0x14), 0, 0, 0);
+    }
+    sub_87d260(&ctx);
+    return ok;
+}
 
-
-
-
+// @ 0x007666a0
+bool __stdcall CreateByType(void** out, uint32_t type, int sub)
+{
+    void* obj = 0;
+    if (type < 0x2cb4f30) {
+        if (type == 0x2f4e681b) {
+            void* p = EA_Alloc6(0x3fe4, "RenderAsset", 0, 0, 0, 0);
+            if (p) {
+                // cPropertyList base ctor + derived vtable
+                *(void**)p = (void*)0x13ebcdc;
+                _InterlockedExchange((volatile long*)((char*)p + 4), 0);
+                *(int*)((char*)p + 8) = 0;
+                *(int*)((char*)p + 0xc) = 0;
+                *(int*)((char*)p + 0x10) = 0;
+                *(int*)((char*)p + 0x14) = 0;
+                // (large body stubbed)
+                obj = p;
+            }
+        } else if (type == 0x2cb4f2f) {
+            void* p = EA_Alloc6(0x140, "RenderAsset", 0, 0, 0, 0);
+            if (p) obj = Ctor7004d0(p);
+        } else if (type == 0x1c135da) {
+            void* p = EA_Alloc6(0x2c, "RenderAsset", 0, 0, 0, 0);
+            if (p) obj = Ctor763100(p);
+        }
+    } else if (type == 0x2f4e681b) {
+        // unreachable by ordering
+    } else if (type == 0x2f4e681c) {
+        if (sub == 0x2f4e681b) {
+            void* p = EA_Alloc6(0x20, "RenderAsset", 0, 0, 0, 0);
+            if (p) obj = Ctor765f10(p);
+        } else {
+            void* p = EA_Alloc6(0x1c, "RenderAsset", 0, 0, 0, 0);
+            if (p) obj = InitResE(p);
+        }
+    }
+    if (obj) {
+        *out = obj;
+        ((void(__thiscall**)(void*))VP(obj))[0](obj);   // AddRef
+        ((void(__thiscall**)(void*))VP(obj))[1](obj);   // Release
+        return true;
+    }
+    return false;
+}
 
 // @ 0x007668c0
 void __cdecl UnionDestroy(void* p, int type)
@@ -868,11 +997,6 @@ void __cdecl UnionDestroy(void* p, int type)
     }
 }
 
-
-
-
-
-
 // @ 0x00766910
 void VPtr::push_back(const uint32_t& v)
 {
@@ -885,11 +1009,6 @@ void VPtr::push_back(const uint32_t& v)
     }
     DoInsertValue(e, v);
 }
-
-
-
-
-
 
 // @ 0x00766950
 void V4::insert(uint32_t* position, uint32_t n, const uint32_t& value)
@@ -937,10 +1056,78 @@ void V4::insert(uint32_t* position, uint32_t n, const uint32_t& value)
     }
 }
 
+// @ 0x00766b30
+bool RequestPaintDecalsFromModels(void* self, void* job)
+{
+    char* s = (char*)self;
+    // reserve
+    sub_4e0880(s + 0x104, (uint32_t)((*(int*)(s + 0x1a0) - *(int*)(s + 0x19c)) / 0xc));
+    uint32_t have = (uint32_t)((*(int*)(s + 0x108) - *(int*)(s + 0x104)) >> 2);
+    uint32_t want = (uint32_t)((*(int*)(s + 0x1a0) - *(int*)(s + 0x19c)) / 0xc);
+    while (have < want) {
+        if (*(void**)(s + 0x100) == 0) {
+            IResMgr* mgr = (IResMgr*)Manager67dcd0();
+            ResHandle* hA = 0;
+            ResHandle* hB = 0;
+            bool ok = ((IResMgr*)mgr)->m4(s + 0x19c + have * 0xc, (void**)&hA, (void**)&hB, 0, 0, 0, 0, 0);
+            if (!ok) {
+                if (hA) { hA->h1(); hA = 0; }
+                if (hB) { hB->h1(); hB = 0; }
+            }
+            ResHandle* got = hA ? (ResHandle*)((int(__thiscall**)(ResHandle*, int))VP(hA))[0xc / 4](hA, 0x3a212ac) : 0;
+            ResHandle* old = *(ResHandle**)(s + 0x100);
+            if (got != old) {
+                if (got) got->h0();
+                *(ResHandle**)(s + 0x100) = got;
+                if (old) old->h1();
+            }
+            if (hB == 0 && *(void**)(s + 0x100) != 0) {
+                // continuation
+                sub_4b54b0(&hB);
+                if (hB) sub_6ac0a0(2, hB);
+                if (hB) hB->h1();
+                if (hA) hA->h1();
+                return true;
+            }
+            sub_4b54b0(&hB);
+            if (hB) sub_6ac0a0(2, hB);
+            if (hA) hA->h1();
+        } else {
+            ResHandle* local = 0;
+            ((void(__thiscall**)(ResHandle*, ResHandle**))VP(*(void**)(s + 0x100)))[0x14 / 4](
+                *(ResHandle**)(s + 0x100), &local);
+            ResHandle* old = *(ResHandle**)(s + 0x100);
+            if (old) { *(void**)(s + 0x100) = 0; old->h1(); }
+            sub_4b54b0(&local);
+            if (local) sub_6ac0a0(2, local);
+            if (local) local->h1();
+        }
+        have = (uint32_t)((*(int*)(s + 0x108) - *(int*)(s + 0x104)) >> 2);
+    }
+    return true;
+}
 
-
-
-
+// @ 0x00766e10
+bool __fastcall ReadDecalBlock(Reader* r)
+{
+    int n = r->mStream->sC(&r->mField2c, 4);
+    if (n != 4)
+        return false;
+    int count = r->mField2c;
+    if (count < 8 || count > 9)
+        return false;
+    int num = 0;
+    if (!ReadInt32(r->mStream, &num, 1, 0))
+        return false;
+    VecReserve41e4d0((char*)r + 0x19c, num);
+    for (int i = 0; i < num; i++) {
+        int v[3] = {0, 0, 0};
+        if (!ReadTriplet763340(r->mStream, v, 0))
+            return false;
+        PushDeclareParam((char*)r + 0x19c, v);
+    }
+    return true;
+}
 
 // @ 0x00766ed0
 bool Factory::CreateResource(int* src, void** out, int a, int b)
@@ -960,10 +1147,6 @@ bool Factory::CreateResource(int* src, void** out, int a, int b)
         ((void(__thiscall**)(void*))VP(local))[1](local);
     return false;
 }
-
-
-
-
 
 // @ 0x00767170
 bool PaintHolder::FUN_00767170(void* a, void* b, void* c)
@@ -986,10 +1169,6 @@ bool PaintHolder::FUN_00767170(void* a, void* b, void* c)
     return false;
 }
 
-
-
-
-
 // @ 0x00767290
 void VBig2::Resize(int, uint32_t n)
 {
@@ -1003,8 +1182,15 @@ void VBig2::Resize(int, uint32_t n)
     e = e + (uint32_t)((e - dst) / 0xa0) * 0xa0;
 }
 
-
-
+// @ 0x00767ee0
+int __stdcall WriteResourceRaster(void* arg, int* stream)
+{
+    Raster_s0076_7ee0* r = *(Raster_s0076_7ee0**)((char*)arg + 0x18);
+    (void)r; (void)stream;
+    // full writer is a register-heavy event loop over mip levels/faces;
+    // modelled only structurally here.
+    return 1;
+}
 
 // @ 0x00768200
 void C68200::Release()
@@ -1020,9 +1206,6 @@ void C68200::Release()
     }
 }
 
-
-
-
 // @ 0x007682a0
 void V7cB::Resize(uint32_t n)
 {
@@ -1037,7 +1220,36 @@ void V7cB::Resize(uint32_t n)
     }
 }
 
-
+// @ 0x00768370
+C68370::C68370(void* a, int* b, void* c, int* d, void* e)
+{
+    m0 = (void*)0;            // vtable (masked)
+    m4 = (void*)0;
+    _InterlockedExchange((volatile long*)&m8, 0);
+    m0 = (void*)0;
+    m4 = (void*)0;
+    mc = b;
+    if (b) ((void(__thiscall**)(void*))*(void***)b)[1](b);
+    m10 = e;
+    if (e) ((void(__thiscall**)(void*))*(void***)e)[1](e);
+    m14 = a;
+    if (a) ((void(__thiscall**)(void*))*(void***)a)[0](a);
+    m18 = 0; // param_6 (int) - approximated
+    m1c = d[0];
+    m20 = d[1];
+    m24 = d[2];
+    m28 = 0;
+    mFC = 0; m100 = 0;
+    m104 = (char*)this + 0x11c;
+    m108 = (char*)this + 0x11c;
+    m10c = (char*)this + 0x19c;
+    m118 = 0;
+    m19c = (char*)this + 0x1b4;
+    m1a0 = (char*)this + 0x1b4;
+    m1a4 = (char*)this + 0x334;
+    m1b0 = 0;
+    m334 = 0;
+}
 
 // @ 0x00769200
 bool Factory_s0076_89a0::WriteResource(void* obj, void* src, void* u3, void* u4)
@@ -1074,7 +1286,6 @@ bool Factory_s0076_89a0::WriteResource(void* obj, void* src, void* u3, void* u4)
     return false;
 }
 
-
 // @ 0x00769cf0
 char __fastcall Func69cf0(void* self, int, void* stream, void* a2, void* a3)
 {
@@ -1089,7 +1300,6 @@ char __fastcall Func69cf0(void* self, int, void* stream, void* a2, void* a3)
         return 0;
     return FUN_00769310b(stream, a3, a2, (void*)local);
 }
-
 
 // @ 0x00769d80
 char __fastcall ReadResourceFromStream(void* self, int, int* obj1, int* obj2, void* a4)
@@ -1163,6 +1373,57 @@ char __fastcall ReadResource(void* self, int, void* a1, void* a2, void* a3)
     void* t = *(void**)((char*)q + 4);
     void* u = (void*)((int(__thiscall**)(void*, void*, void**, void*))*(void***)self)[6](self, a1, &t, t);
     return FUN_00769d80v(u, a1, &t, t);
+}
+
+// @ 0x0076a720
+bool __fastcall CanConvert(void* self, int, void* out)
+{
+    C69a9* s = (C69a9*)self;
+    void* a = Node8F4d0();
+    ((void(__thiscall**)(void*))*(void***)a)[8](a);
+    int holder = 0;
+    int type = s->m18;
+    char r;
+    if (type < 0x2f4e681c) {
+        if (type == 0x2f4e681b) r = FUN_00765b30v(self, &holder);
+        else if (type == 0xe6bce5) r = SetupJobChain(self, 0, 0);
+        else if (type == 0x1c135da) r = TryLockChain(self, 0, 0);
+        else r = CreateRequestJob(self, 0, &holder);
+    } else if (type == 0x2f4e681c) {
+        void* p = (void*)((int(__thiscall**)(void*))*(void***)s->m10)[4](s->m10);
+        uint32_t sub = *(uint32_t*)((char*)p + 4);
+        if (sub < 0x2f7d0005) {
+            if (sub == 0x2f7d0004) r = FUN_007652c0v(self, &holder);
+            else if (sub == 0x2f4e681b) r = FUN_00765d30v(self, &holder);
+            else if (sub == 0x2f4e681c) r = ArmDecodeB(self, 0, 0);
+            else return false;
+        } else if (sub == 0x2f7d0007) r = FUN_007652c0v(self, &holder);
+        else return false;
+    } else {
+        r = CreateRequestJob(self, 0, &holder);
+    }
+    if (!r)
+        return false;
+    *(void**)out = (void*)holder;
+    return true;
+}
+
+// @ 0x0076a940
+bool __cdecl CreateConvertedResourceAsync(void* a, void* b, void* c, int* d, void* e)
+{
+    if (!FUN_0067de70())
+        return false;
+    void* res = 0;
+    int t = ((int(__thiscall**)(int*))*(void***)d)[4](d);
+    if (!FUN_007666a0v(&res, e, *(void**)((char*)t + 4)))
+        return false;
+    void* job = Alloc6(0x338, "Graphics", 0, 0, 0, 0);
+    if (job)
+        job = FUN_00768370v(res, b, c, d, e);
+    if (job)
+        ((void(__thiscall**)(void*))*(void***)job)[0](job);
+    ((void(__thiscall**)(int*))*(void***)d)[8](d);
+    return true;
 }
 
 // @ 0x0076ac30

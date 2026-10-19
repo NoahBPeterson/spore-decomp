@@ -4,11 +4,15 @@
 00766070 ?Method66070@ResB@@QAEXHH@Z  # ResB::Method66070 migrated from s00765f80 (verbatim, slice spelling)
 007660b0 ?Method660b0@ResB@@QAEXXZ  # ResB::Method660b0 migrated from s00765f80 (verbatim, slice spelling)
 00766100 ?MoveOut@ResB@@QAEXPAX@Z  # ResB::MoveOut migrated from s00765f80 (verbatim, slice spelling)
+00766140 ??0ResD@@QAE@XZ  # ResD::ResD migrated from s00765f80 (verbatim, slice spelling)
 00766220 ??0ResE@@QAE@XZ  # ResE::ResE migrated from s00765f80 (verbatim, slice spelling)
 00766250 ResE::~ResE  # dtor: releases +0x18 (cLocalLightInfo) via 0x11eff60/0x9276c0
 007662d0 ?_insert@VBig@@QAEXPADI0@Z  # VBig::_insert migrated from s00765f80 (verbatim, slice spelling)
+007664e0 ?PNGWriteCallback@@YG_NPAUPngArg@@@Z  # PNGWriteCallback migrated from s00765f80 (verbatim, slice spelling)
+007666a0 ?CreateByType@@YG_NPAPAXIH@Z  # CreateByType migrated from s00765f80 (verbatim, slice spelling)
 007668c0 ?UnionDestroy@@YAXPAXH@Z  # UnionDestroy migrated from s00765f80 (verbatim, slice spelling)
 00766910 ?push_back@VPtr@@QAEXABI@Z  # VPtr::push_back migrated from s00765f80 (verbatim, slice spelling)
 00766950 ?insert@V4@@QAEXPAIIABI@Z  # V4::insert migrated from s00765f80 (verbatim, slice spelling)
-00766e10 ReadDecalBlock  # painter decal reader; stream vcall at +0x28 slot 0xc
+00766b30 ?RequestPaintDecalsFromModels@@YA_NPAX0@Z  # RequestPaintDecalsFromModels migrated from s00765f80 (verbatim, slice spelling)
+00766e10 ?ReadDecalBlock@@YI_NPAUReader@@@Z  # ReadDecalBlock migrated from s00765f80 (verbatim, slice spelling)
 00766ed0 ?CreateResource@Factory@@QAE_NPAHPAPAXHH@Z  # Factory::CreateResource migrated from s00765f80 (verbatim, slice spelling)

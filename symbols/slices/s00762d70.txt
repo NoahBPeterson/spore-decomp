@@ -1,10 +1,13 @@
 00763100 ??0CEditorRes@@QAE@XZ  # CEditorRes::CEditorRes migrated from s00762d70 (verbatim, slice spelling)
 007631f0 ?_GCEditorRes  # vtables 0x140df3c/0x13eb938; RefVector @+0x18 dtor 0x41eb80
+00763250 ?Release763250@@YIHPAX@Z  # Release763250 migrated from s00762d70 (verbatim, slice spelling)
 007633a0 ResolveColor  # invented; cDirectPropertyList key -> cSPColorRGB via tables @0x16304bc
 00763520 ?Shutdown@cGraphicsResourceFactory@SP@@UAE_NXZ  # SP::cGraphicsResourceFactory::Shutdown migrated from s00762d70
 00763550 ?GetSupportedTypes@cGraphicsResourceFactory@SP@@UAEIPAII@Z  # SP::cGraphicsResourceFactory::GetSupportedTypes migrated from s00762d70
 00763580 ?IsRegType@@YG_NIH@Z  # IsRegType migrated from s00762d70 (verbatim, slice spelling)
 007635b0 ??1EhHolder@@QAE@XZ  # EhHolder::~EhHolder migrated from s00762d70 (verbatim, slice spelling)
+00763620 ?LoadRasterHeader@@YA_NPAUcRasterFromGimexLoadState_s0076_2d70@SP@@PBDPAX@Z  # LoadRasterHeader migrated from s00762d70 (verbatim, slice spelling)
 00763770 ?CreateRasterFromState@@YG_NPAUcRasterFromGimexLoadState_s0076_2d70@SP@@HPAUOutRaster@@@Z  # CreateRasterFromState migrated from s00762d70 (verbatim, slice spelling)
+007637d0 ?LoadAndCreateRaster@@YG_NPAUcRasterFromGimexLoadState_s0076_2d70@SP@@HHPAH@Z  # LoadAndCreateRaster migrated from s00762d70 (verbatim, slice spelling)
 007638a0 ?ReadTriplets@@YG_NPAXHHH@Z  # ReadTriplets migrated from s00762d70 (verbatim, slice spelling)
-00763950 SP::cGraphicsResourceFactory::ReadResourcePCAWeights  # PDB anchor
+00763950 ?ReadResourcePCAWeights@cGraphicsResourceFactory@SP@@QAE_NPAVIStream@IO@EA@@PAVResource@ResourceMan@5@ABVKey@75@@Z  # SP::cGraphicsResourceFactory::ReadResourcePCAWeights migrated from s00762d70
