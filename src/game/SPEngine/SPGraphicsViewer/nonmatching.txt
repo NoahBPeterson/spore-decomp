@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+007c3da0 17 copy 3x3 rotation: complete; cl uses absolute offsets for the last row instead of `add ecx,0x20 / add eax,0x18` + relative stores
+007c3f70 12 viewer init: complete; cl emits `xor ecx,ecx` before materialising the 10000.0f constant (load/schedule order differs)
+007c4010 46 viewport rect: complete; register allocation of the four ushort loads and the output store order differ
+007c4a60 74 set-viewport: complete; cl reorders the four ushort loads vs the original scheduling
+007c4b50 13 set aspect: complete; the 1.0f and height values land in different xmm registers
+007c4c40 192 SIMD 3x3 transpose with sign flip; scalar C++ does not reproduce unpcklps schedule [equiv: PASS 913 valid, 100% cov]
+007c4d20 109 builds affine 4x4 into locals then calls 4c40; SIMD local layout differs [equiv: PASS 1200 valid, 100% cov]
+007c4dd0 428 cViewer::Init; identity-matrix SIMD + x87 fov block not reproduced [equiv: UNSUPPORTED unresolved _tanf (original inlines fptan, ours calls tanf)]
+007c4fd0 233 cViewer::Update; x87 aspect compare + shader-state compare schedule differs [equiv: WEAK 15.2% cov (D3DXMatrixMultiply import)]
+007c50b0 425 cViewer::Copy; emitted size differs from original range (no similar-size symbol)
+007c5240 275 cViewer::CopyFrom; SIMD 4x4 copy + reciprocal schedule differs [equiv: PASS 1200 valid, 100% cov]

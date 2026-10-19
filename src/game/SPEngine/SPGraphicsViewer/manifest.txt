@@ -1,0 +1,13 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsViewer.cpp  ?GetCameraLocationInfo@cViewer@SP@@QBEXPAUcSPVector3@@000@Z  007c3d30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsViewer.cpp  ?FUN_007c4000@cViewer@@QAEXXZ  007c4000  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsViewer.cpp  ?FUN_007c4050@cViewer@@QAEMXZ  007c4050  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsViewer.cpp  ?FUN_007c40a0@cViewer@@QAEMXZ  007c40a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsViewer.cpp  ?FUN_007c40c0@cViewer@@QAEXPAM0@Z  007c40c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsViewer.cpp  ?FUN_007c40e0@cViewer@@QAEMXZ  007c40e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsViewer.cpp  ?FUN_007c4ad0@cViewer@@QAEXMM@Z  007c4ad0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsViewer.cpp  ?FUN_007c4b00@cViewer@@QAEXMM@Z  007c4b00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsViewer.cpp  ?FUN_007c4ba0@cViewer@@QAEXM@Z  007c4ba0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsViewer.cpp  ?FUN_007c4bc0@cViewer@@QAEXM@Z  007c4bc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsViewer.cpp  ?SetRaster@cViewer_s007c_4be0@@QAEXPAH_N@Z  007c4be0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsViewer.cpp  ?SetBasis@cViewer_s007c_4be0@@QAEXPAX@Z  007c4d00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

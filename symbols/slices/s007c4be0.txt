@@ -1,11 +1,11 @@
-# VA Name  # evidence
-007c4be0 cViewer::SetRaster  # cViewer uses [ecx+0x170]=mCamera, vtable singleton +0x18/+0x20
-007c4c40 cViewer::SetCameraToWorld  # copies 4x4 into +0, camera transform, calls 0x7c4940
-007c4d20 cViewer::SetCameraToWorldFromBasis  # basis build + camera transform
-007c4dd0 cViewer::Init  # mCamera/mShaderDataRT/mTileRender + default raster setup
-007c4fd0 cViewer::Update  # aspect check + BuildTransforms + shader select
-007c50b0 SP::cViewer::Copy  # PDB callee-scored
-007c5240 cViewer::CopyFrom  # per-member copy, same callers as Copy
+007c4be0 ?SetRaster@cViewer_s007c_4be0@@QAEXPAH_N@Z  # cViewer_s007c_4be0::SetRaster migrated from s007c4be0 (verbatim, slice spelling)
+007c4c40 ?SetCameraToWorld@cViewer_s007c_4be0@@QAEXPAM@Z  # cViewer_s007c_4be0::SetCameraToWorld migrated from s007c4be0 (verbatim, slice spelling)
+007c4d00 ?SetBasis@cViewer_s007c_4be0@@QAEXPAX@Z  # cViewer_s007c_4be0::SetBasis migrated from s007c4be0 (verbatim, slice spelling)
+007c4d20 ?SetCameraToWorldFromBasis@cViewer_s007c_4be0@@QAEXPAM@Z  # cViewer_s007c_4be0::SetCameraToWorldFromBasis migrated from s007c4be0 (verbatim, slice spelling)
+007c4dd0 ?Init@cViewer_s007c_4be0@@QAE_N_N@Z  # cViewer_s007c_4be0::Init migrated from s007c4be0 (verbatim, slice spelling)
+007c4fd0 ?Update@cViewer_s007c_4be0@@QAE_NXZ  # cViewer_s007c_4be0::Update migrated from s007c4be0 (verbatim, slice spelling)
+007c50b0 ?Copy@cViewer_s007c_4be0@@QAE_NPAU1@_N1@Z  # cViewer_s007c_4be0::Copy migrated from s007c4be0 (verbatim, slice spelling)
+007c5240 ?CopyFrom@cViewer_s007c_4be0@@QAEXPAU1@@Z  # cViewer_s007c_4be0::CopyFrom migrated from s007c4be0 (verbatim, slice spelling)
 007c5310 cViewer::SetViewportRectArgs  # builds rect and calls 0x7c4a60
 007c5350 cViewer::SetViewAngle  # projectionType=1, fptan fov
 007c53d0 cViewer::SetViewAngleY  # projectionType=1, fptan fov (vert)
@@ -29,3 +29,4 @@
 007c5820 CompareAdjacentRows  # stride byte-compare helper (edi input)
 007c5920 FindMatchingRow  # scans rows calling 0x7c5820
 007c5a40 InitViewportDesc  # field-wise POD initializer
+011e3c30 ?ObjectToId@Arena@arena@core@rw@@QAEIPBX@Z  # rw::core::arena::Arena::ObjectToId (callee of s007c4be0, named from the dev publics; slice address comment)
