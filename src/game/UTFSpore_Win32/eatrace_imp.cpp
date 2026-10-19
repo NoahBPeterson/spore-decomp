@@ -225,6 +225,195 @@ namespace Trace {
 extern void* __fastcall ctor_00925540(void*);
 }
 }
+namespace EA {
+namespace Trace {
+struct Mutex {
+    char d[0x30];
+    Mutex* Init(const char* name, bool b);    // 0x009222a0 (Mutex::Mutex)
+    void Destroy();                           // 0x00922130 (~Mutex)
+    void Lock(const void* ctx);               // 0x009221b0
+    int  Unlock();                            // 0x00922270
+};
+}
+}
+namespace EA {
+namespace Trace {
+struct TraceHelper_s0092_5770 {
+    char pad0;
+    bool mIsFiltered;
+    bool mIsFilterEvaluated;
+    char pad3[0x1d];
+    void* mTracer;
+};
+}
+}
+namespace EA {
+namespace Trace {
+TraceHelper_s0092_5770** __cdecl vec_move(void* dst, void* src, int bytes);                                    // 0x011e0744
+}
+}
+namespace EA {
+namespace Trace {
+void* __cdecl eastl_new(unsigned size, const char* name, int, int, const char* file, int line);    // 0x00f473a0
+}
+}
+namespace EA {
+namespace Trace {
+void __cdecl eastl_delete(void* p);                                                                // 0x00f47380
+}
+}
+namespace EA {
+namespace Trace {
+struct HelperVec_s0092_5770 {
+    TraceHelper_s0092_5770** mpBegin;
+    TraceHelper_s0092_5770** mpEnd;
+    TraceHelper_s0092_5770** mpCapacity;
+    void DoInsertValue(TraceHelper_s0092_5770** pos, TraceHelper_s0092_5770* const* val);   // 0x009257e0
+    __forceinline TraceHelper_s0092_5770** find(TraceHelper_s0092_5770* v) {
+        TraceHelper_s0092_5770** last = mpEnd; TraceHelper_s0092_5770** first = mpBegin;
+        while (first != last && *first != v) ++first;
+        return first;
+    }
+    __forceinline void erase(TraceHelper_s0092_5770** it) {
+        TraceHelper_s0092_5770** next = it + 1;
+        if (next < mpEnd) vec_move(it, next, (int)((char*)mpEnd - (char*)next));
+        --mpEnd;
+    }
+    __forceinline void Zero() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; }
+    void Reserve(int n);                                              // 0x009256a0
+    inline void push_back(TraceHelper_s0092_5770* v) {
+        if (mpEnd < mpCapacity) {
+            TraceHelper_s0092_5770** e = mpEnd++;
+            if (e) *e = v;
+        } else {
+            DoInsertValue(mpEnd, &v);
+        }
+    }
+};
+}
+}
+namespace EA {
+namespace Trace {
+struct TraceHelperTable_s0092_5770 {
+    virtual void AddRef();  // 0x00925050 (EA::Trace::TraceHelperTable::AddRef)
+    virtual void Release();  // 0x00925060 (EA::Trace::TraceHelperTable::Release)
+    void* mTracer;
+    HelperVec_s0092_5770 mVec;
+    char pad14[0xc];
+    Mutex mMutex;
+    long mFlag;
+    char pad54[4];
+    void RegisterHelper(TraceHelper_s0092_5770* h);      // 0x00925b50
+    void UnregisterHelper(TraceHelper_s0092_5770* h);    // 0x00925960
+};
+}
+}
+namespace EA {
+namespace Trace {
+struct HelperTablePtr {
+    int w0, w4, w8, wc;
+    TraceHelperTable_s0092_5770* mpTable;
+    HelperTablePtr* Init();                   // 0x00925b00
+    __forceinline void setTable(TraceHelperTable_s0092_5770* n) {
+        TraceHelperTable_s0092_5770* old = mpTable;
+        if (n != old) {
+            if (n) n->AddRef();
+            mpTable = n;
+            if (old) old->Release();
+        }
+    }
+};
+}
+}
+namespace EA {
+namespace Trace {
+extern const float g_01485720;
+}
+}
+namespace EA {
+namespace Trace {
+extern const float g_01470f1c;
+}
+}
+namespace EA {
+namespace Trace {
+struct TempMapHT {
+    void* vt;
+    void* mpBuckets;
+    unsigned mBucketCount;
+    unsigned mElementCount;
+    float mMaxLoad;
+    float mGrowth;
+    volatile int mNextResize;
+    int   w1c;
+    char  mbEnable;
+    void DoFreeNodes(void* buckets, unsigned n);   // 0x007611f0
+    __forceinline void Clear() {
+        DoFreeNodes(mpBuckets, mBucketCount);
+        mElementCount = 0;
+        if (mBucketCount > 1) eastl_delete(mpBuckets);
+    }
+};
+}
+}
+namespace EA {
+namespace Trace {
+struct TempTraceHelperMap_s0092_5770 {
+    Mutex mMutex;
+    TempMapHT ht;
+    TempTraceHelperMap_s0092_5770* Init();                    // 0x009259d0
+    void Destroy();                                // 0x009257a0 (~TempTraceHelperMap)
+    void ReleaseHelpers();                         // 0x009255f0
+};
+}
+}
+namespace EA {
+namespace Trace {
+extern const float g_013f0620;
+}
+}
+namespace EA {
+namespace Trace {
+struct FixedPool {
+    void* mpHead;
+    int   w4;
+    void* mBuf;
+    void* mBufEnd;
+    int   mNodeSize;
+    void* mAlloc;
+    void init(void* buf, unsigned size, unsigned nodeSize, unsigned align, unsigned off);   // 0x00921260
+};
+}
+}
+namespace EA {
+namespace Trace {
+struct RehashPolicy {
+    float mMaxLoad, mGrowth;
+    int   mNextResize;
+    unsigned GetBucketCount(unsigned n);       // 0x009213c0
+};
+}
+}
+namespace EA {
+namespace Trace {
+unsigned __cdecl policy_prime(unsigned n);     // 0x00921340
+}
+}
+namespace EA {
+namespace Trace {
+struct TraceHashtable_s0092_5770 {
+    int w0, w4;
+    unsigned mBucketCount;
+    unsigned mElementCount;
+    RehashPolicy mPolicy;
+    char pad1c[0x18];
+    char mNodes[1];
+    TraceHashtable_s0092_5770* Init(unsigned a1, unsigned a2);
+    void Init7(unsigned b, unsigned a1, const unsigned& r1, const unsigned& r2, unsigned v, const unsigned& r3, FixedPool* pool);  // 0x00925490
+    void DoRehash(unsigned n);                 // 0x00925370
+};
+}
+}
 // ---- items of slice s00925770 end
 
 // @ 0x00925000
@@ -464,5 +653,155 @@ void* CreateTracerPtr()
     int* p = (int*)eanew(0x14, 4, 0, "OSGlobal", 0, 0, 0, 0);
     if (p) return ctor_00925540(p);
     return 0;
+}
+}}  // namespace EA::Trace
+
+// @ 0x009257a0
+namespace EA { namespace Trace {
+void TempTraceHelperMap_s0092_5770::Destroy()
+{
+    ReleaseHelpers();
+    ht.Clear();
+    mMutex.Destroy();
+}
+}}  // namespace EA::Trace
+
+// @ 0x009257e0
+namespace EA { namespace Trace {
+void HelperVec_s0092_5770::DoInsertValue(TraceHelper_s0092_5770** pos, TraceHelper_s0092_5770* const* val)
+{
+    if (mpEnd != mpCapacity) {
+        TraceHelper_s0092_5770** e0 = mpEnd;
+        TraceHelper_s0092_5770* const* v = val;
+        if (v >= pos && v < e0) ++v;
+        if (e0) *e0 = e0[-1];
+        TraceHelper_s0092_5770** last = mpEnd - 1;
+        size_t bytes = (size_t)((char*)last - (char*)pos);
+        memmove(mpEnd - (last - pos), pos, bytes);
+        *pos = *v;
+        ++mpEnd;
+        return;
+    }
+    unsigned cap = (unsigned)(mpEnd - mpBegin);
+    cap = (cap > 0u) ? cap * 2 : 1;
+    TraceHelper_s0092_5770** buf = cap ? (TraceHelper_s0092_5770**)eastl_new(cap * 4, "EATrace", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+    int off = (int)((char*)pos - (char*)mpBegin);
+    TraceHelper_s0092_5770** p = vec_move(buf, mpBegin, off);
+    p = p + (off >> 2);
+    if (p) *p = *val;
+    int tail = (int)((char*)mpEnd - (char*)pos);
+    TraceHelper_s0092_5770** e = vec_move(p + 1, pos, tail);
+    e = e + (tail >> 2);
+    if (mpBegin && ((int*)mpBegin)[-1]) eastl_delete(mpBegin);
+    mpBegin = buf;
+    mpEnd = e;
+    mpCapacity = buf + cap;
+}
+}}  // namespace EA::Trace
+
+// @ 0x009258f0
+namespace EA { namespace Trace {
+TraceHelperTable_s0092_5770* CreateHelperTable()
+{
+    TraceHelperTable_s0092_5770* t = (TraceHelperTable_s0092_5770*)eastl_new(0x58, "EATrace/TraceHelperTable", 0, 0, 0, 0);
+    if (t) {
+        *(void**)t = (void*)0x143e050;
+        t->mTracer = 0;
+        t->mVec.Zero();
+        t->mMutex.Init(0, true);
+        _InterlockedExchange(&t->mFlag, 0);
+        t->mVec.Reserve(0x1000);
+        return t;
+    }
+    return 0;
+}
+}}  // namespace EA::Trace
+
+// @ 0x00925960
+namespace EA { namespace Trace {
+void TraceHelperTable_s0092_5770::UnregisterHelper(TraceHelper_s0092_5770* h)
+{
+    mMutex.Lock((const void*)0x143dffc);
+    h->mTracer = 0;
+    h->mIsFiltered = true;
+    h->mIsFilterEvaluated = false;
+    TraceHelper_s0092_5770** it = mVec.find(h);
+    if (it != mVec.mpEnd) mVec.erase(it);
+    mMutex.Unlock();
+}
+}}  // namespace EA::Trace
+
+// @ 0x009259d0
+namespace EA { namespace Trace {
+TempTraceHelperMap_s0092_5770* TempTraceHelperMap_s0092_5770::Init()
+{
+    mMutex.Init(0, true);
+    ht.mMaxLoad = g_01485720;
+    ht.mGrowth = g_01470f1c;
+    ht.mNextResize = 0;
+    ht.mBucketCount = 1;
+    ht.mpBuckets = (void*)0x154df28;
+    ht.mElementCount = 0;
+    ht.mNextResize = 0;
+    ht.mbEnable = 1;
+    return this;
+}
+}}  // namespace EA::Trace
+
+// @ 0x00925a30
+namespace EA { namespace Trace {
+TraceHashtable_s0092_5770* TraceHashtable_s0092_5770::Init(unsigned a1, unsigned a2)
+{
+    char* self = (char*)this;
+    union { FixedPool pool; RehashPolicy tmp; } u;
+    FixedPool& pool = u.pool;
+    {
+        pool.mpHead = 0;
+        char* buf = self + 0x138;
+        pool.init(buf, 0x2f4, 0xc, 4, 0);
+        pool.mBuf = buf;
+        char* alloc = self + 0x34;
+        buf += 0x2f4;
+        pool.mBufEnd = buf;
+        pool.mNodeSize = 0xc;
+        pool.mAlloc = alloc;
+        unsigned nb = policy_prime(0x40);
+        Init7(nb, a1, a2, a2, a2, a2, &pool);
+    }
+    RehashPolicy& tmp = u.tmp;
+    tmp.mMaxLoad = g_013f0620;
+    tmp.mGrowth = g_01470f1c;
+    tmp.mNextResize = 0;
+    *(int*)&mPolicy.mMaxLoad = *(int*)&tmp.mMaxLoad;
+    *(int*)&mPolicy.mGrowth = *(int*)&tmp.mGrowth;
+    mPolicy.mNextResize = tmp.mNextResize;
+    unsigned n = tmp.GetBucketCount(mElementCount);
+    if (n > mBucketCount) DoRehash(n);
+    return this;
+}
+}}  // namespace EA::Trace
+
+// @ 0x00925b00
+namespace EA { namespace Trace {
+HelperTablePtr* HelperTablePtr::Init()
+{
+    w4 = w0 = 0;
+    mpTable = 0;
+    setTable(CreateHelperTable());
+    return this;
+}
+}}  // namespace EA::Trace
+
+// @ 0x00925b50
+namespace EA { namespace Trace {
+void TraceHelperTable_s0092_5770::RegisterHelper(TraceHelper_s0092_5770* h)
+{
+    mMutex.Lock((const void*)0x143dffc);
+    h->mTracer = mTracer;
+    h->mIsFiltered = true;
+    h->mIsFilterEvaluated = false;
+    mVec.push_back(h);
+    mMutex.Unlock();
 }
 }}  // namespace EA::Trace

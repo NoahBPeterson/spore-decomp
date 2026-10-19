@@ -7,3 +7,8 @@
 ../src/game/UTFSpore_Win32/eatrace_imp.cpp  ??_GTraceHelperTable@Trace@EA@@UAEPAXI@Z  009255a0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/eatrace_imp.cpp  ?CreateEnabledValue@Trace@EA@@YAPAXXZ  00925730  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/eatrace_imp.cpp  ?CreateTracerPtr@Trace@EA@@YAPAXXZ  00925770  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/eatrace_imp.cpp  ?Destroy@TempTraceHelperMap_s0092_5770@Trace@EA@@QAEXXZ  009257a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/eatrace_imp.cpp  ?CreateHelperTable@Trace@EA@@YAPAUTraceHelperTable_s0092_5770@12@XZ  009258f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/eatrace_imp.cpp  ?UnregisterHelper@TraceHelperTable_s0092_5770@Trace@EA@@QAEXPAUTraceHelper_s0092_5770@23@@Z  00925960  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/eatrace_imp.cpp  ?Init@TempTraceHelperMap_s0092_5770@Trace@EA@@QAEPAU123@XZ  009259d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/eatrace_imp.cpp  ?RegisterHelper@TraceHelperTable_s0092_5770@Trace@EA@@QAEXPAUTraceHelper_s0092_5770@23@@Z  00925b50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

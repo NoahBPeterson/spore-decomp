@@ -5,3 +5,6 @@
 00925370 106 hashtable::DoRehash: complete; ebp used for both bucket count and node temp in the original
 00925540 8 TraceLogManagerRef ctor: complete; push edi placement
 009255f0 133 TempTraceHelperMap::ReleaseHelpers: complete; iterator/register allocation differs
+009257e0 34 vector<TraceHelper*>::DoInsertValue: esi/edi swapped (this vs pos) [equiv: WEAK 116 valid inputs, memmove-heavy]
+00925a30 63 TraceHashtable ctor: &a2 arg lea not repeated (CSE'd), policy copy order [equiv: PASS]
+00925b00 6 HelperTablePtr ctor: push edi placement [equiv: PASS]
