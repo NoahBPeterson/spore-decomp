@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+008a77b0 332 FlipContourDirection: complete; FontFusion module uses a different register allocator (four pointer regs pre-zeroed) than cl 15.00 /O2
+008a7930 692 New_FFT1HintClass: complete; allocation/initialisation replicated, cl expands the zero-loops and orders the ~20 allocations differently
+008a7c90 377 SetupStemWeights: complete; FontFusion module codegen (register/frame layout) differs from cl 15.00 /O2
+008a8280 685 DoHStrokes: complete; original is a register-ABI static (h in EDI, first in ECX) from a whole-program build
+008a8700 300 DoExtraEdges: complete; register-ABI prebuilt-module static
+008a8880 1009 ApplyHints_FFT1HintClass: complete; interpolation loops factored into one helper, original has both inline
+008a8ff0 60 FFT1HintClass_releaseMem: complete; reg assignment (h in eax, zero in ecx) differs in the prebuilt toolset
+008a90f0 168 Delete_FFT1HintClass: complete; free order matches, register allocation differs

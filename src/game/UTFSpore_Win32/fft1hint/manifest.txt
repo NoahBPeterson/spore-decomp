@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/fft1hint.cpp  ?SetScale_FFT1HintClass@@YAXPAUFFT1HintClass@@HH@Z  008a8830  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

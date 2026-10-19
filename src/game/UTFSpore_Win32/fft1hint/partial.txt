@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+008a7e30  844  partial: per-hint-set interpolation table builder skeleton; not reconstructed
+008a8180  256  partial: DoVStrokes vertical-stroke fit loop; original uses a register ABI (first value in EAX, class ptr in EDI), not expressible as matching C
