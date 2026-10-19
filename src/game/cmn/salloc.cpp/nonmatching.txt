@@ -1,0 +1,3 @@
+# s01140b70: complete, behavior-equivalent source that is not byte-exact.
+01140cb0  581  SNDVOICEI_alloc: voice-slot allocation + sort over the 0x84-byte voice table; complete; difftest PASS 96.0% cov. flags /vc71 /O2 /MD /Gy /TP
+01141020  234  SNDVOICEI_free: leaf; unlink/clear voice slot and its partner; complete; difftest WEAK 50.0% cov (random inputs rarely satisfy partner conditions). flags /vc71 /O2 /MD /Gy /TP
