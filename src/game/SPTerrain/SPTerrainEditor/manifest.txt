@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPTerrain/SPTerrainEditor.cpp  ?Draw@Compositor@@QAE_NPAUSource@@PBIHURect@@MMMHPAX@Z  00f6a960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
