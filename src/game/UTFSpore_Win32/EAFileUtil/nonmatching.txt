@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00931fa0 8 File::Exists: original ends with mov eax,1 / xor eax,eax returns
+009322b0 8 Directory::Exists: original ends with mov eax,1 / xor eax,eax returns
+009322e0 96 Directory::Create: reserved 0x208 local buffer reproduced, register allocation (edi vs edx/esi) differs

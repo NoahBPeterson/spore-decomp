@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAFileUtil.cpp  ?Remove@File@IO@EA@@YA_NPB_W@Z  00931fd0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFileUtil.cpp  ?Move@File@IO@EA@@YA_NPB_W0_N@Z  00931ff0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFileUtil.cpp  ?Copy@File@@YA_NPB_W0_N@Z  00932030  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFileUtil.cpp  ?GetSize@File@IO@EA@@YAIPB_W@Z  00932060  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFileUtil.cpp  ?SetAttributes@File@IO@EA@@YA_NPB_WH_N@Z  009320a0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFileUtil.cpp  ?GetTime@File@@YA_JPB_WH@Z  00932130  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFileUtil.cpp  ?GetTempDirectoryPath@@YAHPA_W@Z  00932190  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFileUtil.cpp  ?GetDriveSerialNumber@IO@EA@@YAHPB_WPA_W@Z  00932220  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFileUtil.cpp  ?GetCurrentWorkingDirectory@Directory@IO@EA@@YAHPA_W@Z  00932370  /O2 /MD /Gy /TP /GS- /Isrc/game/include
