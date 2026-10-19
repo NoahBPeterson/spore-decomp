@@ -6,7 +6,10 @@
 00a16d00 ??0PAggC@@QAE@H@Z  # PAggC::PAggC migrated from s00a168c0 (verbatim, slice spelling)
 00a16da0 ?UpdatePrimitives@PAgg@@QAE_NXZ  # PAgg::UpdatePrimitives migrated from s00a168c0 (verbatim, slice spelling)
 00a16e20 ?PushBack@Agg@@QAE_NPAUIPrimitive@@@Z  # Agg::PushBack migrated from s00a168c0 (verbatim, slice spelling)
-00a16e70 EA::Audio::PrimitiveBase::Shutdown  # PDB caller-scored
+00a16e70 ?Shutdown@PrimBase@@QAE_NXZ  # PrimBase::Shutdown migrated from s00a168c0 (verbatim, slice spelling)
+00a16eb0 ?GetDirty@PrimBase@@QAE_NH@Z  # PrimBase::GetDirty migrated from s00a168c0 (verbatim, slice spelling)
+00a16ec0 ?ClearDirty@PrimBase@@QAEXH@Z  # PrimBase::ClearDirty migrated from s00a168c0 (verbatim, slice spelling)
+00a16f00 ?HandleMessage@PrimBase@@QAE_NHPAX@Z  # PrimBase::HandleMessage migrated from s00a168c0 (verbatim, slice spelling)
 00a16f60 EA::Audio::PrimitiveBase::Init  # PDB caller-scored
 00a174d0 ?GetPropertyAsKey@RC@@QAE_NIPAUKey@@@Z  # RC::GetPropertyAsKey migrated from s00a168c0 (verbatim, slice spelling)
 00a17520 EA::Audio::ResourceConfiguration::GetPropertyAsKeyInstance  # PDB vtable-slot
