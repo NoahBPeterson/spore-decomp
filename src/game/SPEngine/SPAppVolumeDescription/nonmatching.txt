@@ -1,0 +1,8 @@
+# va diff reason
+007ee540 228 SP::cVolumeDescription::cVolumeDescription - field/vtable store schedule differs
+007ee630 111 SP::VolumeRead - read helper shapes differ
+007ee700 48 VolumeAlpha command - float-conv vcall differs [equiv FAIL (member fn now testable)]
+007ee730 65 VolumeColor command - vector-conv vcall differs [equiv UNSUPPORTED: 0/1200 valid inputs (_CxxThrowException)]
+007ee7b0 38 VolumeMaterial command - hash call shape differs
+007ee7f0 512 copy cVolumeDescription - unrolled field copy vs loop
+007eec80 50 register volume description - new/construct/register schedule differs [equiv WEAK: 35.9% coverage]
