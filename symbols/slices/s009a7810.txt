@@ -2,10 +2,10 @@
 009a7d90 nSPCreatureAnim::HandleEvents  # per-event 0x60-stride filter; calls HandleEvent; EA::Random singleton (thiscall)
 009a7f10 nSPCreatureAnim::HandleAnimationEvents  # walks animation event entries, 64-bit flag mask, dispatches HandleEvents
 009a80e0 FUN_009a80e0  # eastl hashtable equal_range walk (incomplete)
-009a8170 FUN_009a8170  # bit select/combine helper used by ConvertEvent_v9_v10
-009a81b0 nSPCreatureAnim::converters::ConvertEvent_v11_v12  # v11 -> v12 event field copy/fixup
-009a8290 nSPCreatureAnim::converters::ConvertEvent_v9_v10  # v9 -> v10 event repack (calls operator_new__(dst,0,0x60))
+009a8170 ?FUN_009a8170@@YAIII@Z  # FUN_009a8170 migrated from s009a7810 (verbatim, slice spelling)
+009a81b0 ?ConvertEvent_v11_v12@converters@nSPCreatureAnim@@YAXPAI0@Z  # ConvertEvent_v11_v12 migrated from s009a7810 (verbatim, slice spelling)
+009a8290 ?ConvertEvent_v9_v10@converters@nSPCreatureAnim@@YAXPAI0@Z  # ConvertEvent_v9_v10 migrated from s009a7810 (verbatim, slice spelling)
 009a84f0 eastl::rbtree<unsigned_int,...>::find  # stride-7 key scan -> entry + nonzero count
 009a8560 nSPCreatureAnim::GetAvailableDeformsForContextTarget  # selects deform rbtree key (8 entries)
-009a85c0 FUN_009a85c0  # property-name table lookup (stride 0x1c, 20 entries)
-009a8670 nSPCreatureAnim::ComputeAnimationStaticDataSizeBytesForVersion  # version-dependent size rounding
+009a85c0 ?FUN_009a85c0@@YAHPAI0@Z  # FUN_009a85c0 migrated from s009a7810 (verbatim, slice spelling)
+009a8670 ?ComputeAnimationStaticDataSizeBytesForVersion@nSPCreatureAnim@@YAKPAUanimation_static_data@latest_version@1@@Z  # nSPCreatureAnim::ComputeAnimationStaticDataSizeBytesForVersion migrated from s009a7810

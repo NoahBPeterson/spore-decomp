@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPCreatureAnim/animation_version.cpp  ?ComputeAnimationStaticDataSizeBytesForVersion@nSPCreatureAnim@@YAKPAUanimation_static_data@latest_version@1@@Z  009a8670  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
