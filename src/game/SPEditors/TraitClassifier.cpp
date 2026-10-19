@@ -605,6 +605,7 @@ template eastl::pair_s0056_df80<SP::Traits::FactoryMap::iterator, SP::Traits::Fa
 // ---- items of slice s0056df80 end
 
 
+
 // ---- items of slice s0056fb90 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Pair8 { uint32_t a; uint32_t b; };
 inline bool LessU32(uint32_t a, uint32_t b) { return a < b; }
@@ -629,6 +630,7 @@ WStrHolder* WStrHolder::InitEmpty()
 
 
 
+
 // @ 0x0056b020
 WStrSrc* WStrSrc::CopyInit(WStrSrc* src)
 {
@@ -641,6 +643,7 @@ WStrSrc* WStrSrc::CopyInit(WStrSrc* src)
     s->AllocateSelf(d->mpBegin, d->mpEnd);
     return this;
 }
+
 
 
 
@@ -671,6 +674,7 @@ bool cEditorPartCount::ExtractTraits(Creature* c, float** weights, cFeatureVecto
     }
     return p30;
 }
+
 
 
 
@@ -710,6 +714,7 @@ bool cEditorPartCount::DescribeTraits(Creature* c, float** weights, cFeatureVect
     }
     return p30;
 }
+
 
 
 
@@ -773,6 +778,7 @@ bool cRigBlockTag::ExtractTraits(Creature* c, float** weights, cFeatureVector* f
 
 
 
+
 // @ 0x0056bd30
 bool cRigBlockTag::DescribeTraits(Creature* c, float** weights, cFeatureVector* fv)
 {
@@ -815,6 +821,7 @@ bool cRigBlockTag::DescribeTraits(Creature* c, float** weights, cFeatureVector* 
     }
     return p30;
 }
+
 
 
 
@@ -879,6 +886,7 @@ bool cTextureTag::ExtractTraits(Creature* c, float** weights, cFeatureVector* fv
 
 
 
+
 // @ 0x0056c2d0
 bool cTextureTag::DescribeTraits(Creature* c, float** weights, cFeatureVector* fv)
 {
@@ -924,6 +932,7 @@ bool cTextureTag::DescribeTraits(Creature* c, float** weights, cFeatureVector* f
     }
     return p30;
 }
+
 
 
 
