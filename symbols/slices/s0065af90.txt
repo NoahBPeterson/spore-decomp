@@ -1,3 +1,4 @@
+0065af90 ?FUN_0065af90@SiblingWin@@QAEX_NH@Z  # SiblingWin::FUN_0065af90 migrated from s0065af90 (verbatim, slice spelling)
 0065b180 CharTypeStringFindEnd  # eastl basic_string private helper, matches string.h source
 0065b1b0 SP::cSPUIAssetWebBrowser::Shutdown  # card real name
 0065b2a0 SP::cSPUIAssetWebBrowser::SetActive  # card real name

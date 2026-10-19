@@ -6,10 +6,12 @@
 00656890  SP::cSPUIAssetVerbs::ReloadCallback  # PDB candidate (caller-scored) in card
 00656b00  SP::cSPUIAssetVerbs::cSPUIAssetVerbs  # ctor stores 3 vtables + fields; dtor restores base vtables
 00656b80  SP::cSPUIAssetVerbs::Init  # PDB-named "SP::cSPUIAssetVerbs::Init" in card
-006577a0  SP::cSPUIAssetView::IsAnimTargetDifferent  # reads mTargetX/Y at +0xc/+0x10, mWinShine +0x28
-00657810  SP::cSPUIAssetView::Show  # vtable stores to ctor layout (mWinShine +0x28, mBf6/f7 +0xf6/f7)
-00657870  SP::cSPUIAssetView::Hide  # mirror of Show
-006578d0  SP::cSPUIAssetView::GetHeight  # mWinShine->[0x34][3]-[1]
-006578f0  SP::cSPUIAssetView::GetWidth  # mWinShine->[0x34][2]-[0]
-00657930  SP::cSPUIAssetView::SetFirstUpdate  # writes mFirstUpdate +0x15, mThumb/mLocked rect
-00657a30  SP::cSPUIAssetView::SelectAsset  # PDB candidate (caller-scored); alloc 0x1c + message 0x94174b89
+00657460 ?m57460@cSPUIAssetView@@QAEX_N@Z  # cSPUIAssetView::m57460 migrated from s00656310 (verbatim, slice spelling)
+00657640 ?m57640@cSPUIAssetView@@QAEXPAX00H00PAPAX@Z  # cSPUIAssetView::m57640 migrated from s00656310 (verbatim, slice spelling)
+006577a0 ?IsAnimTargetDifferent@cSPUIAssetView@@QAEHXZ  # cSPUIAssetView::IsAnimTargetDifferent migrated from s00656310 (verbatim, slice spelling)
+00657810 ?Show@cSPUIAssetView@@QAEXXZ  # cSPUIAssetView::Show migrated from s00656310 (verbatim, slice spelling)
+00657870 ?Hide@cSPUIAssetView@@QAEXXZ  # cSPUIAssetView::Hide migrated from s00656310 (verbatim, slice spelling)
+006578d0 ?GetHeight@cSPUIAssetView@@QAEMXZ  # cSPUIAssetView::GetHeight migrated from s00656310 (verbatim, slice spelling)
+006578f0 ?GetWidth@cSPUIAssetView@@QAEMXZ  # cSPUIAssetView::GetWidth migrated from s00656310 (verbatim, slice spelling)
+00657930 ?SetFirstUpdate@cSPUIAssetView@@QAEXH@Z  # cSPUIAssetView::SetFirstUpdate migrated from s00656310 (verbatim, slice spelling)
+00657a30 ?SelectAsset@cSPUIAssetView@@QAEXHDHDD@Z  # cSPUIAssetView::SelectAsset migrated from s00656310 (verbatim, slice spelling)

@@ -1,0 +1,17 @@
+# va  diff-bytes  reason (incomplete/approximate)
+00657640  104  approximate: 9-arg (ret 0x24) template value-ctor helper; argument count/mapping not fully recovered (235 vs 339 bytes)
+00657bc0  -  SP::cSPUIAssetView key handler (526 bytes): switch head + window-manager branches implemented; remaining key branches are approximate
+00657f70  -  UI::AssetDiscovery_View::AssetDiscovery_View (294 bytes): ctor skeleton
+006580b0  -  UI update (576 bytes): skeleton
+006582f0  -  UI update (330 bytes): skeleton
+00658440  -  UI update (1417 bytes): skeleton
+006589d0  -  SP::cSPUIAssetView::OnLeftMouseDown (670 bytes): skeleton
+00658c70  -  cSPUIAssetView helper (386 bytes): skeleton
+00658e80  -  SP::cSPUIAssetView::SelectAsset update (994 bytes): skeleton
+00659270  -  cSPUIAssetView helper (203 bytes): skeleton
+00659340  -  cSPUIAssetView release/destroy helper (122 bytes): skeleton
+006593c0  -  cSPUIAssetView helper (752 bytes): skeleton
+006596b0  -  cSPUIAssetView update (870 bytes): skeleton
+00659a20  -  SP::cSPUIAssetView::OnRollover (1000 bytes): skeleton
+00659ec0  -  cSPUIAssetView update (420 bytes): skeleton
+0065af90  293  Sibling UI window message helper: layout-construction half approximated

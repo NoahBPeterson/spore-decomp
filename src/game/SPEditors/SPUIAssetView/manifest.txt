@@ -1,0 +1,16 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPUIAssetView.cpp  ?FUN_004bb860@@YAII@Z  004bb860  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?AsInterface@cSPUIAssetView@SP@@UAEPAXW4InterfaceId@COM@EA@@@Z  00657340  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?LogEvent_4e79d7d1@@YA_NXZ  00657370  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?GetGlobal_15f9f40@@YAHXZ  006573e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?Get@Vec3Holder@@QAE?AUVec3@@XZ  006573f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?SetEnabled@@YAXPAUVObj@@H_N@Z  00657420  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?CastSub@@YAPAXPAPAUOuter@@@Z  00657440  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?Show@cSPUIAssetView@@QAEXXZ  00657810  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?Hide@cSPUIAssetView@@QAEXXZ  00657870  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?GetHeight@cSPUIAssetView@@QAEMXZ  006578d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?GetWidth@cSPUIAssetView@@QAEMXZ  006578f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?SetFirstUpdate@cSPUIAssetView@@QAEXH@Z  00657930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?IsReady@AssetView@@QAEDXZ  00657dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?OnDetach@AssetView@@QAEXXZ  00657e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?FUN_00657e20@@YAXPAXH@Z  00657e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

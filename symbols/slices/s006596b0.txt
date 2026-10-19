@@ -1,4 +1,4 @@
-006596b0  cSPUIAssetView update  # 870 bytes
-00659a20  SP::cSPUIAssetView::OnRollover  # PDB name; 1000 bytes
+006596b0 ?FUN_006596b0@@YAXPAX@Z  # FUN_006596b0 migrated from s006596b0 (verbatim, slice spelling)
+00659a20 ?FUN_00659a20@@YAXPAX0@Z  # FUN_00659a20 migrated from s006596b0 (verbatim, slice spelling)
 00659e30  SP::cSPUIAssetView::Cleanup  # releases +0x94/+0x54, FUN_00659340
-00659ec0  cSPUIAssetView update  # 420 bytes
+00659ec0 ?FUN_00659ec0@@YAXPAX@Z  # FUN_00659ec0 migrated from s006596b0 (verbatim, slice spelling)

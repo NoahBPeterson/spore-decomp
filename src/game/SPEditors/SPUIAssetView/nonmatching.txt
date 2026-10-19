@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+00657460 375 complete cSPUIAssetView::m57460: all paths present; repeated multi-branch flag setup and release sequencing differ
+006577a0 60 complete IsAnimTargetDifferent: pointer kept in ecx and second xmm load delayed vs original eax / both loads up front
+00657a30 41 complete SelectAsset: null-object path laid out inline instead of as a cold block after the epilogue
+00657ad0 173 SP::cSPUIAssetView::SetWindowArea: both window vcalls, SetFirstUpdate, and the target/dest rect math complete; vcall-target register schedule differs
+00657e60 88 SP::cSPUIAssetView::UpdateVerbIcon: switch over the vcall result maps to the same 7 FUN_00657e20 calls; jump-table/compare shape differs
+00658e00 101 SP::cSPUIAssetView::SetPos(x,y,snap): field stores + window vcall 0x64 + Show-on-change complete; x87 arg order / xmm register assignment differ
+0065a070 1947 cSPUIAssetView::LoadLayout - complete source, huge UI layout builder, not byte-exact
+0065a990 968 cSPUIAssetView::Update - complete source, drag/animation + timer logic, not byte-exact
