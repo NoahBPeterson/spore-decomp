@@ -114,7 +114,8 @@ def slice_lines(sid, text):
             continue
         # `#include "s006bd150.h"` (the slice's own header) or `#include "../s006bc1b0/s006bc1b0.h"` (a sibling slice's
         # header shared by a run of slices)
-        m = re.match(r'^\s*#\s*include\s+"(?:\.\./(s[0-9a-f]{8})/)?(s[0-9a-f]{8}\.h)"\s*$', l)
+        # `s00634490_ui.h`, `s0049d760_pal.h`: any header of the slice's own name (fix pass 6 C7, mig7 report s00634490)
+        m = re.match(r'^\s*#\s*include\s+"(?:\.\./(s[0-9a-f]{8})/)?(s[0-9a-f]{8}\w*\.h)"\s*$', l)
         if m:
             hp = os.path.join(SLICES, m.group(1) or sid, m.group(2))
             if os.path.exists(hp):

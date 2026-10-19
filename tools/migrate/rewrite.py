@@ -5186,6 +5186,29 @@ class NoFunctions(Exception):
     pass
 
 
+def var_sources(sid):
+    """{va: variant suffix} for the functions of a slice that live in a second source `<sid><suffix>.cpp`"""
+    d = os.path.join(SLICES, sid)
+    var_of = {}
+    if not os.path.exists(os.path.join(d, sid + ".cpp")):
+        return var_of
+    mp_ = os.path.join(d, "manifest.txt")
+    if os.path.exists(mp_):
+        for l in open(mp_):
+            t = l.split("#", 1)[0].split()
+            if len(t) >= 3 and t[0].endswith(".cpp"):
+                base = os.path.basename(t[0])[:-4]
+                if base.startswith(sid) and base != sid:
+                    var_of[t[2].lower().zfill(8)] = base[len(sid):]
+    marks = lambda f: {m.lower().zfill(8) for m in re.findall(r"(?m)^\s*//\s*@\s*0x([0-9a-fA-F]+)", open(f, errors="replace").read())}
+    main_vas = marks(os.path.join(d, sid + ".cpp"))
+    for f in sorted(os.listdir(d)):
+        if f.endswith(".cpp") and f.startswith(sid) and f != sid + ".cpp":
+            for va in marks(os.path.join(d, f)) - main_vas:
+                var_of.setdefault(va, f[len(sid):-4])
+    return var_of
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("slice")
@@ -5223,16 +5246,11 @@ def main():
             for va in e["vas"]:
                 if va.lower() not in listed and not _defines(e["id"], va.lower()) and _defines(a.slice, va.lower()):
                     listed.add(va.lower())
-        # flag variants: a VA whose manifest row names `<slice><variant>.cpp` lands from that variant's run only
-        var_of = {}
-        mp_ = os.path.join(SLICES, a.slice, "manifest.txt")
-        if os.path.exists(mp_):
-            for l in open(mp_):
-                t = l.split("#", 1)[0].split()
-                if len(t) >= 3 and t[0].endswith(".cpp"):
-                    base = os.path.basename(t[0])[:-4]
-                    if base.startswith(a.slice + "_") and os.path.exists(os.path.join(SLICES, a.slice, a.slice + ".cpp")):
-                        var_of[t[2].lower().zfill(8)] = base[len(a.slice):]
+        # variants: a VA whose manifest row names `<slice><variant>.cpp` lands from that variant's run only.  fix pass 6 C7: any
+        # second source `<slice>*.cpp` is a variant (s0062da00_ui.cpp, s00634490b.cpp), and a VA without a manifest row
+        # (a nonmatching row: 0x62e2e0) belongs to the source whose marker defines it when the main source does not
+        var_of = var_sources(a.slice)
+        listed_all = set(listed)
         listed = {va for va in listed if var_of.get(va, "") == a.variant}
         rw.batch_vas = (a.batch, listed)
     rw.assign_chunks(a.module)
@@ -5274,9 +5292,16 @@ def main():
     for n in rw.notes:
         if n[0] != "probe":
             print("note", n[0], n[1][:200])
+    if a.batch:
+        other_vars = sorted({var_of[va] for va in listed_all if var_of.get(va, "") != a.variant})
+        for v in other_vars:
+            vv = sorted(va for va in listed_all if var_of.get(va, "") == v)
+            print("VARIANT SOURCE: %d batch function(s) of this slice live in %s%s.cpp (%s): after this entry, run the same "
+                  "commands with --variant %s" % (len(vv), a.slice, v or "", " ".join(vv[:8]), v or '""'))
     log = ""
     if a.apply:
-        rw.write_renames()
+        if not os.environ.get("RW_NO_WRITE"):
+            rw.write_renames()
         ok, log = rw.apply_checked()
         if not ok:
             print("COMPILE FAILED (module TU and bookkeeping restored)\n" + log[-6000:])
@@ -5289,7 +5314,8 @@ def main():
             for n in rw.notes:
                 if n[0] in ("demoted", "dropped", "renamed-stub"):
                     print("note", n[0], n[1][:300])
-    rw.write_renames()
+    if not os.environ.get("RW_NO_WRITE"):       # dry sweeps while landing agents edit the renames files' manual sections
+        rw.write_renames()
 
 
 if __name__ == "__main__":
