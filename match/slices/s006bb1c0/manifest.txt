@@ -7,3 +7,6 @@ slices/s006bb1c0/s006bb1c0.cpp  Init@DBPF             006bbdd0  /O2 /MD /Gy /GS-
 slices/s006bb1c0/s006bb1c0.cpp  LockOrUnlock@MutexOwner  006bbe50  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
 slices/s006bb1c0/s006bb1c0.cpp  ??_GDebugMessage@@UAEPAXI@Z  006bb760  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
 slices/s006bb1c0/s006bb1c0.cpp  ??1DebugMessage@@UAE@XZ  006bb690  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
+slices/s006bb1c0/s006bb1c0.cpp  ?FUN_006bb7b0@@YAHPBX0@Z        006bb7b0  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
+slices/s006bb1c0/s006bb1c0.cpp  ?FUN_006bb830@@YGJPAXPBXPAPAX@Z  006bb830  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
+slices/s006bb1c0/s006bb1c0.cpp  ?FUN_006bba70@@YGJPAXIIIIPAI@Z   006bba70  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE

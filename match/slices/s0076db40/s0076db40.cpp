@@ -5,6 +5,13 @@
 extern "C" void* EASTL_allocator_allocate(uint32_t n, const char* name, int a, int b, const char* f, int line); // 0x00f473a0
 extern "C" void  EASTL_allocator_deallocate(void* p);   // 0x00f47380
 
+extern "C" long _InterlockedExchangeAdd(volatile long* Addend, long Value);
+extern "C" long _InterlockedExchange(volatile long* Target, long Value);
+extern "C" long _InterlockedIncrement(volatile long* Addend);
+#pragma intrinsic(_InterlockedExchangeAdd)
+#pragma intrinsic(_InterlockedExchange)
+#pragma intrinsic(_InterlockedIncrement)
+
 // ------------------------------------------------------------------ page records
 struct PageRecord {
     int a[7];             // +0x00
@@ -42,7 +49,8 @@ void __cdecl UninitCopyPageRecords(PageRecord** out, PageRecord* first, PageReco
 // ------------------------------------------------------------------ cRTTManager page table
 struct PageInfo {
     void* mData;      // +0x00
-    char  pad04[0x28];
+    char  pad04[0x24];
+    int   mC;         // +0x28
     int   mA;         // +0x2c
     int   mB;         // +0x30
     int   mRefCount;  // +0x34
@@ -54,7 +62,7 @@ struct cRTTManager {
     PageVec mTexturePages;   // +0x18
 
     // @ 0x0076db40  lazily resolve the raster from a page's texture instance.
-    void* GetTextureHandle(int i);
+    void* GetTextureHandle(int i, int);
     // @ 0x0076dbb0  page texture pointer.
     void* GetTexture(int i);
     // @ 0x0076dc00  copy a 4-dword rect for sub-page `sub` into out.
@@ -151,7 +159,7 @@ bool cRTTManager::FindPage(int a, int b, int c, int* out)
     if (count != 0) {
         PageInfo* p = mTexturePages.mBegin;
         do {
-            if (p->mB == 0 && p->mA == a && p->mB == b && p->mRefCount == c) {
+            if (p->mRefCount == 0 && p->mA == a && p->mB == b && p->mC == c) {
                 *out = idx;
                 return true;
             }
@@ -179,18 +187,51 @@ bool cRTTManager::GetScaledRect(int i, int sub, float* a, float* b)
     return true;
 }
 
-// @ 0x0076db40  (skeleton; see partial.txt)
-void* cRTTManager::GetTextureHandle(int i)
+// @ 0x0076db40
+void* cRTTManager::GetTextureHandle(int i, int)
 {
-    (void)i;
-    return 0;
+    if (i < 0 || i >= (int)(mTexturePages.mEnd - mTexturePages.mBegin)) return 0;
+    PageInfo* p = mTexturePages.mBegin + i;
+    if (p->mRefCount <= 0) return 0;
+    RTTTexRef* t = (RTTTexRef*)p->mTexture;
+    if (!(t->mFlags & 1))
+        GetRTTResolver()->Resolve(t);
+    return t->mRaster;
 }
 
-// @ 0x0076e110  (skeleton; see partial.txt)
-extern int RasterCreate();
+// @ 0x0076e110
+void* FUN_0067dd50();                 // 0x0067dd50
+void* SP_IDGenerator();               // 0x0067de60
+void  FUN_0076d8e0(void* arg);        // 0x0076d8e0
+void  GetImageResource();             // 0x00576650
+void  FUN_007b0fa0();                 // 0x007b0fa0
 bool cRTTManager::AllocateNewPage(int pageId, int w, int h, int depth)
 {
-    (void)pageId; (void)w; (void)h; (void)depth;
+    void* mgr = FUN_0067dd50();
+    ((void(__thiscall*)(void*))((void**)mgr)[0x1c / 4])(mgr);
+
+    void* resolver = GetRTTResolver();
+    int buf[3];
+    buf[0] = pageId;
+    buf[1] = 0;
+    buf[2] = 0x40002a00;
+    if (pageId == -1) {
+        void* gen = SP_IDGenerator();
+        ((void(__thiscall*)(void*, int*, int, int, int, int, int))((void**)gen)[1])
+            (gen, buf, 0x2f4e681c, 0, 0, 0x2a, 0);
+    }
+    void* res = ((void*(__thiscall*)(void*, int, int, int, int, int, int, int, int))
+                     ((void**)resolver)[0x3c / 4])
+        (resolver, buf[0], buf[2], w, h, 1, 9, depth, 0);
+    if (res != 0) {
+        ((void(__thiscall*)(void*, void*))GetImageResource)((char*)this + 0x38, res);
+        *(int*)((char*)this + 0x28) = depth;
+        *(int*)((char*)this + 0x34) = 0;
+        *(int*)((char*)this + 0x2c) = w;
+        *(int*)((char*)this + 0x30) = h;
+        ((void(__thiscall*)(void*, int, int))FUN_007b0fa0)(this, w, h);
+        return true;
+    }
     return false;
 }
 
@@ -228,10 +269,13 @@ struct Rec3c {
 void Rec3c::DestroyOne()
 {
     if (mTexture) {
-        // AutoRefCount<...>::Release: decrement at +8, delete when it reaches 0
-        volatile int* rc = (volatile int*)((char*)mTexture + 8);
-        int n = --*rc;
-        if (n < 1) ++*rc;
+        // AutoRefCount release: atomic decrement at +8, restore when it would drop below 1.
+        volatile long* rc = (volatile long*)((char*)mTexture + 8);
+        _InterlockedExchangeAdd(rc, -1);
+        if (_InterlockedExchangeAdd(rc, 0) < 1)
+            _InterlockedIncrement(rc);
+        else
+            _InterlockedExchangeAdd(rc, 0);
     }
     void* p = *(void**)((char*)this + 0x14);
     if (p && *(int*)((char*)p - 4) != 0)
@@ -269,9 +313,14 @@ struct SomeObj3 {
 };
 void SomeObj3::Destroy()
 {
+    *(void**)this = (void*)0x140e398;
+    *(void**)((char*)this + 4) = (void*)0x140e384;
+    *(void**)((char*)this + 8) = (void*)0x140e374;
     DestroyRecArray(mBegin, mEnd);
     if (mBegin && *(int*)((char*)mBegin - 4) != 0)
         EASTL_allocator_deallocate(mBegin);
+    *(void**)((char*)this + 8) = (void*)0x13ec458;
+    *(void**)((char*)this + 4) = (void*)0x13eb394;
 }
 
 // ------------------------------------------------------------------ record copy/relocate
@@ -317,21 +366,44 @@ Obj2c* __cdecl CreateObj2c()
     return 0;
 }
 
-// @ 0x0076e670  (skeleton; see partial.txt)
+// @ 0x0076e670
+struct Vec20 { void Construct(int count, void* tag); };   // 0x0076e200 (thiscall)
+struct VecF  { void Construct(int count, void* tag); };   // 0x004aa350 (thiscall)
+void* eastl_DoInsertValue_11e0744(void*, void*, int);     // 0x011e0744 (cdecl)
 struct BigRecOps {
     void* Construct(void* src);
     int   CopyFrom(BigRecOps* src);
 };
 void* BigRecOps::Construct(void* src)
 {
-    (void)src;
+    char* s = (char*)src;
+    char* t = (char*)this;
+    ((Vec20*)t)->Construct((*(int*)(s + 4) - *(int*)s) >> 5, s + 0xc);
+    PageRecord* out;
+    ((void(__cdecl*)(PageRecord**, PageRecord*, PageRecord*, PageRecord*, PageRecord*))UninitCopyPageRecords)
+        (&out, *(PageRecord**)s, *(PageRecord**)(s + 4), *(PageRecord**)t, (PageRecord*)s);
+    *(void**)(t + 4) = out;
+    ((VecF*)(t + 0x14))->Construct((*(int*)(s + 0x18) - *(int*)(s + 0x14)) >> 2, s + 0x20);
+    int size = *(int*)(s + 0x18) - *(int*)(s + 0x14);
+    void* p = eastl_DoInsertValue_11e0744(*(void**)(t + 0x14), *(void**)(s + 0x14), size);
+    *(void**)(t + 0x18) = (char*)p + (size >> 2) * 4;
     return this;
 }
 
 // @ 0x0076e750
 int BigRecOps::CopyFrom(BigRecOps* src)
 {
-    (void)src;
+    Construct(src);
+    char* s = (char*)src;
+    char* t = (char*)this;
+    *(int*)(t + 0x28) = *(int*)(s + 0x28);
+    *(int*)(t + 0x2c) = *(int*)(s + 0x2c);
+    *(int*)(t + 0x30) = *(int*)(s + 0x30);
+    *(int*)(t + 0x34) = *(int*)(s + 0x34);
+    int r = *(int*)(s + 0x38);
+    *(int*)(t + 0x38) = r;
+    if (r != 0)
+        _InterlockedIncrement((volatile long*)(r + 8));
     return (int)(size_t)this;
 }
 
@@ -383,9 +455,54 @@ void* __cdecl CopyBigRecRangeBack(void* first, void* last, void* out)
 
 // ------------------------------------------------------------------ big bodies
 // @ 0x0076dee0
+struct CObj18 { void* vt; void* f4; int f8, fc, f10, f14; };
+struct CaptureJobMsg {
+    int f00, f04;
+    char f08;
+    int f0c, f10, f14;
+    void* f18;
+    int f1c, f20, f24, f28;
+};
 void __cdecl RegisterCaptureJob(void* arg)
 {
-    (void)arg;   // skeleton: viewer + behaviour-message job registration (see partial.txt)
+    CObj18* a = (CObj18*)EASTL_allocator_allocate(0x18, "Graphics", 0, 0, 0, 0);
+    if (a) {
+        a->f4 = (void*)0x13ec458;
+        a->f8 = 0;
+        a->vt = (void*)0x140e360;
+        a->f4 = (void*)0x149bad8;
+        a->fc = 0;
+        a->f10 = -1;
+        a->f14 = -1;
+    }
+    if (a)
+        ((void(__thiscall*)(void*))((void**)a)[0])(a);
+
+    FUN_0076d8e0(arg);
+
+    CObj18* b = (CObj18*)EASTL_allocator_allocate(0x18, "Graphics", 0, 0, 0, 0);
+    if (b) {
+        b->f10 = 0;
+        b->vt = (void*)0x13eb90c;
+        _InterlockedExchange((volatile long*)((char*)b + 4), 0);
+        b->vt = (void*)0x1452a38;
+    }
+    if (b)
+        ((void(__thiscall*)(void*))((void**)b)[1])(b);
+
+    *(void**)((char*)b + 8) = a;
+
+    CaptureJobMsg msg;
+    msg.f00 = 1; msg.f04 = 0; msg.f08 = 0; msg.f0c = 0; msg.f10 = 0;
+    msg.f14 = 0x3d037f1; msg.f18 = b; msg.f1c = 0; msg.f20 = 0; msg.f24 = 0; msg.f28 = 0;
+
+    void* r = ((void*(__thiscall*)(void*, int, void*))((void**)a)[0x10 / 4])(a, 0, &msg);
+    void* s = FUN_0067dd50();
+    ((void(__thiscall*)(void*, void*))((void**)s)[0x78 / 4])(s, r);
+
+    if (b)
+        ((void(__thiscall*)(void*))((void**)b)[2])(b);
+    ((void(__thiscall*)(void*))((void**)a)[1])(a);
 }
 
 // @ 0x0076ea60

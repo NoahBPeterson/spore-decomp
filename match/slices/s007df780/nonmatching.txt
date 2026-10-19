@@ -1,6 +1,21 @@
+# Slice s007df780 — Swarm split-model-kernel storage + ArgScript SplitModelKernelEffect.
+# Region flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+# (arch:SSE, not SSE2 — the original evaluates the 1/sqrt(x^2+y^2+z^2) norm with x87 fsqrt/fdivrp).
+
+# --- the 10 assigned targets, complete but not byte-exact ---
+007df780  -  cSafeDynamicKernelStorage::CreateRandomKernel; comprehensive rewrite (switch on mKernelType, per-type EAllocSwarm 0x10/0x10/0x1c, RandomLinearCongruential draws, x87 norm) [equiv: FAIL - 5/26 valid inputs, out[3]/out[6] = v*v computed in x87 extended precision where ours rounds the intermediate to float first; 1-ulp denormal (1.4e-45 vs 0) — sub-ULP x87 scheduling, not a logic error]
+007dfac0  -  cSafeDynamicKernelStorage::Serialize; complete (262 = 247 oracle bytes + EH) [equiv: PASS - 321 valid inputs, 100.0% coverage]
+007dfc20  -  cSafeDynamicKernelStorage::ConstructFrom; complete (364 vs 369) [equiv: PASS - 352 valid inputs, 92.6% coverage]
+007dfd90  -  cDescCtx::FUN_007dfd90 (SetKernelType helper); complete (228 vs 158: our SEH/__EHsc frame is larger than the original's compact one) [equiv: WEAK - 100 valid inputs (need 200), 82.1% coverage]
+007dfe80  -  ArgScript::SplitModelKernelEffect::SplitModelKernelEffect; complete (68 = 68 bytes) — differs only in store *scheduling* (the compiler emits [this]=vtbl and [+0x34]=imm immediately after the base ctor, then interleaves the zero-inits; ours groups them) [equiv: PASS - 400 valid inputs, 100.0% coverage]
+007dfed0  -  cEffectCommand::FUN_007dfed0; complete (564 vs 446: 6 inlined `new` command registrations + EH state machine; ours outlined the registration loop) [equiv: WEAK - 154 valid inputs (need 200), 96.8% coverage]
+007e0110  -  cMapDescription::FUN_007e0110; complete (80 vs 38: original has an SEH frame) [equiv: WEAK - 123 valid inputs (need 200), 100.0% coverage]
+007e01a0  -  cEffectCommand::FUN_007e01a0; complete (90 = 90 bytes, 16 diff) — the p==0 else-branch: original reloads m30 into ecx *after* materialising the zero arg (`xor eax,eax; push eax`), ours hoists the m40 load into ecx first [equiv: WEAK - 392 valid inputs, 18.2% coverage]
+
+# --- non-target VAs in this slice's region ---
 007e0420  32   cSafeDynamicKernelStorage::SetNormal; throw/EH branch shape and copy schedule differ
 007e0480  32   cSafeDynamicKernelStorage::SetOrigin; type-check branch layout differs
 007e04f0  32   cSafeDynamicKernelStorage::SetRadius; branch layout and frame offsets differ
 007e0570  32   cSafeDynamicKernelStorage::SetDirection; type-check branch layout differs
-007e0340  105  SetKernelType: complete (224 = 224 bytes, same free/alloc/throw sequence); original lowers the 0/1/2 dispatch as a sub-chain with the register in ebx where ours uses range compares and edi, and lays the throw block differently [equiv: WEAK - no mismatch, 136 valid inputs, 88.6% coverage]
-007e05e0  45  operator=: complete (193 = 193 bytes); original dispatches on the type with a sub-chain (sub eax,esi / je) where ours emits cmp, and the register allocation of the 4-dword copies differs; flags default (no /arch:SSE2: the 28-byte copy is rep movsd) [equiv: WEAK - no mismatch, 177 valid inputs, 70.1% coverage]
+007e0340  105  SetKernelType (region helper): complete (224 = 224 bytes, same free/alloc/throw sequence); original lowers the 0/1/2 dispatch as a sub-chain with the register in ebx where ours uses range compares and edi, and lays the throw block differently [equiv: WEAK - no mismatch, 136 valid inputs, 88.6% coverage]
+007e05e0  45  operator= (region helper): complete (193 = 193 bytes); original dispatches on the type with a sub-chain (sub eax,esi / je) where ours emits cmp, and the register allocation of the 4-dword copies differs; flags default (no /arch:SSE: the 28-byte copy is rep movsd) [equiv: WEAK - no mismatch, 177 valid inputs, 70.1% coverage]

@@ -1,3 +1,10 @@
 006bb670 26 complete; refcount release via lock xadd idiom not reproduced
 006bbb10 8 complete; teardown correct, tail-jmp to OleUninitialize becomes call+ret
 006bbe20 13 complete; AsInterface null-mask expression emits extra neg
+006bb1c0 748 complete; EH frame + EASTL string replace loop differs in frame size/shape [equiv: UNSUPPORTED (0/400 valid: fault+strtoul import)]
+006bb4b0 280 complete; varargs arg-vector build + WideSpawn path, frame shape differs [equiv: UNSUPPORTED (0/400 valid: _wsearchenv import)]
+006bb6c0 148 complete; DebugMessage ctor with AllocateSelf+memcpy+InterlockedExchange, size/regs differ [equiv: UNSUPPORTED (stores own vtable copy)]
+006bb8e0 204 complete; IDropTarget::DragEnter, whole-function register rotation differs [equiv: UNSUPPORTED (unresolved SetFocus/ScreenToClient)]
+006bb9b0 129 complete; IDropTarget::DragOver, register allocation (x/pOut) swapped [equiv: WEAK]
+006bbb60 140 complete; CreateDropTarget, allocation kept in eax vs esi, regs differ [equiv: UNSUPPORTED (OleInitialize import)]
+006bbbf0 157 complete; vector<string16>::push_back of empty element, regs/inline differ [equiv: UNSUPPORTED (object symbol not resolved by name)]

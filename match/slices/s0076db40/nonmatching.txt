@@ -5,3 +5,21 @@
 0076de20  79   UninitCopyPageRecords: full copy loop complete; argument/register mapping differs
 0076de80  33   CopyPageRecords: memberwise 0x1d-record copy loop complete; first/dest register roles differ
 0076e040  222  cRTTManager::GetScaledRect: 1/mA,1/mB scaling of sub-rect complete; SSE schedule differs
+0076db40  97   cRTTManager::GetTextureHandle: lazy raster resolve (0067dd60 -> vtbl[0x34] Resolve, return raster) complete; register ABI differs (i in esi vs original edi, count in eax vs esi)
+0076ddb0  103  cRTTManager::FindPage: linear search on (mRefCount==0, mA, mB, mC) complete; register rotation differs (count esi vs eax, iterator eax vs ecx)
+0076dee0  348  capture-job registration: viewer + RefBaseA22 behaviour-message job complete; large SEH/vtable register schedule differs
+0076e110  195  cRTTManager::AllocateNewPage: resolver vtbl[0x3c] raster create + page-field setup complete; register schedule differs
+0076e2c0  95   Rec3c::DestroyOne: atomic refcount release complete; first lock-xadd register rotation differs (addr ecx vs edx)
+0076e320  134  DestroyRecRange: inlines DestroyOne (same refcount release); register rotation differs
+0076e3b0  120  DestroyRecArray: inlines DestroyOne (same refcount release); register rotation differs
+0076e5c0  79   SomeObj3 destructor: vector range destroy + base vtable stores complete; register schedule differs
+0076e670  177  BigRecOps::Construct: 0x20-record + float-vector construct/copy complete; SEH + register schedule differs
+  [equiv: WEAK]
+0076db40  97   cRTTManager::GetTextureHandle: lazy raster resolve (0067dd60 -> vtbl[0x34] Resolve, return raster) complete; register ABI differs (i in esi vs original edi, count in eax vs esi) [equiv: WEAK: 2-arg build vs 3-arg original]
+0076ddb0  103  cRTTManager::FindPage: linear search on (mRefCount==0, mA, mB, mC) complete; register rotation differs (count esi vs eax, iterator eax vs ecx) [equiv: PASS]
+0076dee0  348  capture-job registration: viewer + RefBaseA22 behaviour-message job complete; large SEH/vtable schedule differed, now narrowed to an accounting shift; [equiv: UNSUPPORTED] (0 valid inputs: needs live vtable/allocator objects)
+0076e110  195  cRTTManager::AllocateNewPage: resolver vtbl[0x3c] raster create + page-field setup complete; register/epilogue schedule differs [equiv: WEAK rebuilt; original 5-arg]
+0076e2c0  95   Rec3c::DestroyOne: atomic refcount release complete; first lock-xadd register rotation differs (addr ecx vs edx) [equiv: PASS]
+0076e320  134  DestroyRecRange: inlines DestroyOne (same refcount release); register rotation differs [equiv: UNSUPPORTED] (needs live guards)
+0076e3b0  120  DestroyRecArray: inlines DestroyOne (same refcount release); register rotation differs [equiv: WEAK]
+0076e5c0  79   SomeObj3 destructor: vector range destroy + base vtable stores complete; register schedule differs [equiv: PASS]
