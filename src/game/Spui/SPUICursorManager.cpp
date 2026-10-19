@@ -8,6 +8,7 @@
 extern float g_15435bc, g_15435c0;
 #include <new>
 #include <intrin.h>
+#include "EA/IO/FileStream.h"
 
 // ---- items of slice s007ffc70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define VFN(p, off) (*(void***)(p))[((off) >> 2)]
@@ -39,6 +40,9 @@ struct C_801980 { char pad[0x44]; uint8_t m44; char pad45[0xb]; void* m50; void 
 // ---- items of slice s007ffc70 end
 
 // ---- items of slice s008019f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char fac_a[], fac_b[];
+void* __cdecl operator_new(unsigned size, const char* name, int a, int b, const char* f, int l);
+struct C_801ac0 { int f(void* p2, void* p3, int p4, int p5); };
 extern "C" void __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" __declspec(dllimport) void* __stdcall LoadImageW(void* hinst, const wchar_t* name, unsigned type,
 int cx, int cy, unsigned fuLoad);
@@ -47,8 +51,6 @@ extern char dc_b[];   // 0x01416fd4 (equiv t3)
 extern char dc_c[];   // 0x013eb938 (equiv t3)
 extern char dc_d[];   // 0x013effb8 (equiv t3)
 extern char cc_a[], cc_b[], cc_c[];
-extern char fac_a[], fac_b[];
-void* __cdecl operator_new(unsigned size, const char* name, int a, int b, const char* f, int l);
 void  __cdecl operator_delete(void* p);
 unsigned __cdecl RBTreeIncrement(void* node);
 void  __cdecl RBTreeErase(void* node, void* anchor); // 0x00921880
@@ -92,13 +94,38 @@ unsigned C_802870::f(unsigned arg) {
   return ((char*)this - 4) ? (unsigned)(unsigned)this : 0u;
 }
 void Sub_8019f0();
-struct C_801ac0 { int f(void* p2, void* p3, int p4, int p5); };
+struct FileStream {
+  uint32_t mData[0x22c / 4];
+  FileStream(const wchar_t* path);        // 0x00931e10 (ret 4)
+  ~FileStream();                          // 0x00931e70
+  bool Open(int access, int disposition, int sharing, int usage);   // 0x009318f0 (ret 0x10)
+  bool Write(const void* data, unsigned n);                          // 0x00931d30 (ret 8)
+  bool Close();                           // 0x00931a70
+};
+void __cdecl CreateTempFile(wchar_t* path, int a, int b, int c);   // 0x00932580
+bool __cdecl FileRemove(const wchar_t* path);                       // 0x00931fd0
+struct VecBuf {
+  int* mpBegin; int* mpEnd; int* mpCapacity; int mAlloc[2];
+  int* Init(unsigned n, void* tag);       // 0x00686430 (ret 8)
+};
+struct IRecordSrc { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+                    virtual struct IRecordObj* GetRecord(); };      // +0x18
+struct IRecordObj { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6();
+                    virtual unsigned GetSize();                      // +0x1c
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+                    virtual void Read(void* dst, unsigned n); };    // +0x30
+struct EmptyTag801d80 {};
+struct C_801d80 {
+  bool SetCursor(const wchar_t* path, void* info);   // 0x008026b0 (ret 8; ecx unused)
+  uint8_t f(IRecordSrc* src, void* info, int c, int type);
+};
 struct CursorTable {
   uint32_t AddCursor(void* self, uint32_t id, const wchar_t* name, char load, int a, int b);
   int AddStandardCursors();
 };
-    void RBTreeErase(...); // 0x00921880
-    void operator_delete(...); // 0x00f47380
 // ---- items of slice s008019f0 end
 
 // @ 0x00801330
@@ -112,7 +139,6 @@ int __stdcall f_801330(void* p, unsigned n)
   return 1;
 }
 
-
 // @ 0x00801360
 void C_801360::Show()
 {
@@ -122,7 +148,6 @@ void C_801360::Show()
     ((void (__thiscall*)(void*, int))VFN(a, 0x40))(a, 1);
   }
 }
-
 
 // @ 0x00801380
 void C_801360::Hide()
@@ -136,7 +161,6 @@ void C_801360::Hide()
   }
 }
 
-
 // @ 0x008013d0
 bool C_8013d0::Set40(uint8_t v)
 {
@@ -148,13 +172,11 @@ bool C_8013d0::Set40(uint8_t v)
   return true;
 }
 
-
 // @ 0x00801420
 void __stdcall f_801420(int a, int b)
 {
   f_804f10((float)a, (float)b);
 }
-
 
 // @ 0x00801450
 void __stdcall f_801450(int* p1, int* p2)
@@ -164,7 +186,6 @@ void __stdcall f_801450(int* p1, int* p2)
   *p1 = (int)x;
   *p2 = (int)y;
 }
-
 
 // @ 0x008014c0
 int C_8014c0::Init()
@@ -197,7 +218,6 @@ int C_8014c0::Init()
   return 1;
 }
 
-
 // @ 0x008016e0
 void C_8016e0::Move(float x, float y)
 {
@@ -223,7 +243,6 @@ void C_8016e0::Move(float x, float y)
   ((void (__thiscall*)(void*, float, float))VFN(m4c, 0x64))(m4c, px, py);
   ((void (__thiscall*)(void*, void*))VFN(mainWin, 0xe8))(mainWin, m4c);
 }
-
 
 // @ 0x008017f0
 bool C_8017f0::Set(void* p)
@@ -262,7 +281,6 @@ bool C_8017f0::Set(void* p)
   return true;
 }
 
-
 // @ 0x00801950
 bool C_801950::Run(int a)
 {
@@ -270,7 +288,6 @@ bool C_801950::Run(int a)
     return f_806a60(m50, m54, a, -1);
   return false;
 }
-
 
 // @ 0x00801980
 void C_801980::Set(bool v)
@@ -406,6 +423,33 @@ void* RbtreeNode::DoCreateNode(void* arg)
   *(void**)((char*)node + 0x18) = *(void**)((char*)arg + 0x18);
   *(void**)((char*)node + 0x1c) = *(void**)((char*)arg + 0x1c);
   return node;
+}
+
+// @ 0x00801d80
+uint8_t C_801d80::f(IRecordSrc* src, void* info, int c, int type)
+{
+  uint8_t result = 0;
+  if (type == 0x2393756) {
+    uint32_t pathbuf[0x208 / 4];
+    CreateTempFile((wchar_t*)pathbuf, 0, 0, 0);
+    FileStream fs((const wchar_t*)pathbuf);
+    if (fs.Open(2, 6, 1, 0)) {
+      IRecordObj* rec = src->GetRecord();
+      unsigned n = rec->GetSize();
+      EmptyTag801d80 tag;
+      VecBuf vec;
+      vec.Init(n, &tag);
+      int* data = vec.mpBegin;
+      rec->Read(data, n);
+      fs.Write(data, n);
+      fs.Close();
+      result = (uint8_t)SetCursor((const wchar_t*)pathbuf, info);
+      FileRemove((const wchar_t*)pathbuf);
+      if (data && data[-1])
+        operator_delete(data);
+    }
+  }
+  return result;
 }
 
 // @ 0x00801e90

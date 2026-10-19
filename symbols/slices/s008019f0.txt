@@ -5,7 +5,7 @@
 00801c10 ?FindCanvas@CurMgr@@QAE_NI@Z  # CurMgr::FindCanvas migrated from s008019f0 (verbatim, slice spelling)
 00801c70 ?FindCanvasAdj@CurMgr@@QAE_NI@Z  # CurMgr::FindCanvasAdj migrated from s008019f0 (verbatim, slice spelling)
 00801c80 ?DoCreateNode@RbtreeNode@@QAEPAXPAX@Z  # RbtreeNode::DoCreateNode migrated from s008019f0 (verbatim, slice spelling)
-00801d80 cSPUICursorManager::SaveCursorToFile  # FileStream open/write of a cursor bitmap
+00801d80 ?f@C_801d80@@QAEEPAUIRecordSrc@@PAXHH@Z  # C_801d80::f migrated from s008019f0 (verbatim, slice spelling)
 00801e90 ?Erase@MapBase@@QAEXPAPAXPAX@Z  # MapBase::Erase migrated from s008019f0 (verbatim, slice spelling)
 00801ef0 ?NukeSubtree@MapBase@@QAEXPAX@Z  # MapBase::NukeSubtree migrated from s008019f0 (verbatim, slice spelling)
 00801fd0 ?Sub_801fd0@@YIXPAX@Z  # Sub_801fd0 migrated from s008019f0 (verbatim, slice spelling)

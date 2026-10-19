@@ -8,6 +8,7 @@
 00801bb0 68 rbtree find + local cursor select (complete)
 00801c10 59 rbtree find + canvas cursor select (complete)
 00801c80 43 rbtree DoCreateNode string/value copy (complete)
+00801d80 5 SaveCursorToFile complete (temp file, FileStream open/write/close, load cursor, remove, free); data/vtable load order differs [equiv: WEAK (12% coverage)]
 00801e90 67 rbtree erase node (complete)
 00801fd0 4 base destructor; push/lea argument order (complete)
 008024e0 117 remove cursor entry (complete)
