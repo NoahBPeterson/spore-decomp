@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+0084cf20 76 giflib EGifUpdateLSD (/O2 /MD /Gy /TP /GS-): built with LTCG's custom register ABI (GifFile in ESI, position in EAX); plain C++ takes them on the stack, so the whole body differs. difftest equiv: UNSUPPORTED (original reads EAX at entry)
+0084d140 313 giflib EGifPutScreenDesc (/O2 /MD /Gy /TP /GS-): register allocation differs (original keeps Private in EDI and cmap in EBP; ours the reverse) and the two early-out tests are laid out with opposite branch polarity. difftest equiv: PASS (388 valid, 100% coverage)
+0084d2a0 421 giflib EGifCompressOutput (/O2 /MD /Gy /TP /GS-): LTCG custom register ABI (private in ESI) and the original inlines EGifBufferedOutput; ours uses a helper. difftest equiv: UNSUPPORTED (0/400 inputs valid)
+0084d430 89 giflib GIF_wopen (/O2 /MD /Gy /TP /GS-): MSVC constant-folds `ok` and materialises the struct zero stores from EDI, whereas the original uses a separate zeroed EAX and sets EDI=1/returns via `mov eax,edi`. difftest equiv: PASS (202 valid, 100% coverage)
+0084d4c0 150 giflib EGifSetupCompress (/O2 /MD /Gy /TP /GS-): LTCG custom register ABI (GifFile in EAX). difftest equiv: UNSUPPORTED (original reads EAX at entry)
+0084d570 341 giflib EGifCompressLine (/O2 /MD /Gy /TP /GS-): LTCG custom register ABI (GifFile in EAX). difftest equiv: UNSUPPORTED (original reads EAX at entry)

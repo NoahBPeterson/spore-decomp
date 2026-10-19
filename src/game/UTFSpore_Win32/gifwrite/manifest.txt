@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/gifwrite.cpp  ?GifPutNetscapeBlock@@YAHPAX@Z  0084cde0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/gifwrite.cpp  ?EGifPutExtension@@YAHPAUGifFileType@@EHPAX@Z  0084ce40  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/gifwrite.cpp  ?EGifCloseFile@@YAHPAX@Z  0084ceb0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/gifwrite.cpp  ?GIF_wclose@@YGHPAUGIFWriteInfo@@@Z  0084cf90  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/gifwrite.cpp  ?_InitHashTable@@YAPAXXZ  0084cfd0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/gifwrite.cpp  ?EGifOpenFileHandle@@YAPAXPAX@Z  0084d060  /O2 /MD /Gy /TP /GS- /Isrc/game/include
