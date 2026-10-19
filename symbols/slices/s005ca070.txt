@@ -1,7 +1,13 @@
+005c28b0 ?Update@cSPPaletteCategoryUI@SP@@QAEXI@Z  # SP::cSPPaletteCategoryUI::Update (callee of s005ca070, named from the dev publics; slice address comment)
+005c2960 ?SetVisibility@cSPPaletteCategoryUI@SP@@QAEX_N@Z  # SP::cSPPaletteCategoryUI::SetVisibility (callee of s005ca070, named from the dev publics; slice address comment)
+005c2cd0 ?IsPaintByNumber@cSPPaletteCategoryUI@SP@@QAE_NXZ  # SP::cSPPaletteCategoryUI::IsPaintByNumber (callee of s005ca070, named from the dev publics; slice address comment)
+005c53c0 ?Init@cSPPaletteCategoryUI@SP@@QAEXPAVcSPPaletteCategory@2@PAVIWindow@UTFWin@EA@@PAUcSPPaletteInfo@2@@Z  # SP::cSPPaletteCategoryUI::Init (callee of s005ca070, named from the dev publics; slice address comment)
 005ca070 SP::cSPPaletteSubCategoryUI::Init  # dev-build symbol; retail vectors at 0x30/0x44/0x58/0x6c/0x80 (0x14 stride)
 005ca880 SetGlobalProperty  # drives the audio system vtable (SetId/SetInt/SetFloat/Flush)
 005ca920 SP::cSPPaletteUI::IsPaintByNumber  # forwards to the selected category UI
 005ca980 SP::cSPPaletteUI::UpdateCategories  # calls Update(delta) on every category UI
 005ca9c0 SP::cSPPaletteUI::FindCategoryIndex  # index of mSelectedCategory in mCategories, else -1
 005ca9f0 SP::cSPPaletteUI::UpdateNavigationVisiblity  # dev-build symbol (spelling as in the PDB)
-005cadb0 SP::cSPPaletteUI::SetVisibleChunk  # dev-build symbol
+005cadb0 ?SetVisibleChunk@cSPPaletteUI@@QAEXH@Z  # cSPPaletteUI::SetVisibleChunk migrated from s005ca070 (verbatim, slice spelling)
+005cae30 ?GetSubCategory@cSPPaletteCategory@SP@@QAEPAV12@H@Z  # SP::cSPPaletteCategory::GetSubCategory (callee of s005ca070, named from the dev publics; slice address comment)
+005cae60 ?cPaletteBig@@YAXPAX0@Z  # cPaletteBig migrated from s005ca070 (verbatim, slice spelling)

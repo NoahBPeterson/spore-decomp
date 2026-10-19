@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorPaletteUI.cpp  ?SetExpanded@cSPPaletteUI_s005c_b060@SP@@QAEX_N@Z  005cb060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteUI.cpp  ?SetVisible@cSPPaletteUI_s005c_b060@SP@@QAEX_N@Z  005cb180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteUI.cpp  ?GetCategoryInfo@cSPPaletteUI_s005c_b060@SP@@QAE?AUcCategoryInfo@2@XZ  005cb1b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteUI.cpp  ?SetCurrentCategoryIndex@cSPPaletteUI_s005c_b060@SP@@QAEXH@Z  005cb240  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteUI.cpp  ??0cSPPaletteUI_s005c_b060@SP@@QAE@XZ  005cb3b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteUI.cpp  ??1cSPPaletteUI_s005c_b060@SP@@UAE@XZ  005cb420  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteUI.cpp  ?DoMessage@cSPPaletteUI_s005c_b060@SP@@UAE_NPAVIWindow_s005c_b060@UTFWin@EA@@ABUMessage_s005c_b060@45@@Z  005cb4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteUI.cpp  ?Shutdown@cSPPaletteUI_s005c_b060@SP@@QAEXXZ  005cba90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

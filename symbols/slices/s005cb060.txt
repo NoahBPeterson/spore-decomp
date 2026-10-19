@@ -1,4 +1,14 @@
-005cb3b0 SP::cSPPaletteUI::cSPPaletteUI  # vptr pair IWinProc/RefCountVTemplate, zeroes members to +0x69; byte-exact
-005cb420 SP::cSPPaletteUI::~cSPPaletteUI  # destroys mCategoryButtons/mCategoryUIs vectors, mInfo/mData/mLayout; byte-exact
-005cb4a0 SP::cSPPaletteUI::DoMessage  # PDB caller-scored candidate; chunk prev/next buttons 0x5aec4b8/9, expand 0x7bce6e8
-005cb1b0 SP::cSPPaletteUI::GetCategoryInfo  # returns current category's info (index + two Vector3) or defaults
+005c53c0 ?Init@cSPPaletteCategoryUI@SP@@QAEXPAVcSPPaletteCategory@2@PAVIWindow@UTFWin@EA@@PAUcSPPaletteInfo@2@@Z  # SP::cSPPaletteCategoryUI::Init (callee of s005cb060, named from the dev publics; slice address comment)
+005c5de0 ?GetCategory@cSPPalette@SP@@QAEPAVcSPPaletteCategory@2@H@Z  # SP::cSPPalette::GetCategory (callee of s005cb060, named from the dev publics; slice address comment)
+005ca9c0 ?GetCurrentCategoryIndex@cSPPaletteUI@SP@@QAEHXZ  # SP::cSPPaletteUI::GetCurrentCategoryIndex (callee of s005cb060, named from the dev publics; slice address comment)
+005cb060 ?SetExpanded@cSPPaletteUI_s005c_b060@SP@@QAEX_N@Z  # cSPPaletteUI_s005c_b060::SetExpanded migrated from s005cb060 (verbatim, slice spelling)
+005cb180 ?SetVisible@cSPPaletteUI_s005c_b060@SP@@QAEX_N@Z  # cSPPaletteUI_s005c_b060::SetVisible migrated from s005cb060 (verbatim, slice spelling)
+005cb1b0 ?GetCategoryInfo@cSPPaletteUI_s005c_b060@SP@@QAE?AUcCategoryInfo@2@XZ  # cSPPaletteUI_s005c_b060::GetCategoryInfo migrated from s005cb060 (verbatim, slice spelling)
+005cb240 ?SetCurrentCategoryIndex@cSPPaletteUI_s005c_b060@SP@@QAEXH@Z  # cSPPaletteUI_s005c_b060::SetCurrentCategoryIndex migrated from s005cb060 (verbatim, slice spelling)
+005cb380 ?ToggleExpanded@cSPPaletteUI_s005c_b060@SP@@QAEXXZ  # cSPPaletteUI_s005c_b060::ToggleExpanded migrated from s005cb060 (verbatim, slice spelling)
+005cb3b0 ??0cSPPaletteUI_s005c_b060@SP@@QAE@XZ  # cSPPaletteUI_s005c_b060::cSPPaletteUI migrated from s005cb060 (verbatim, slice spelling)
+005cb420 ??1cSPPaletteUI_s005c_b060@SP@@UAE@XZ  # cSPPaletteUI_s005c_b060::~cSPPaletteUI migrated from s005cb060 (verbatim, slice spelling)
+005cb4a0 ?DoMessage@cSPPaletteUI_s005c_b060@SP@@UAE_NPAVIWindow_s005c_b060@UTFWin@EA@@ABUMessage_s005c_b060@45@@Z  # cSPPaletteUI_s005c_b060::DoMessage migrated from s005cb060 (verbatim, slice spelling)
+005cb5a0 ?Init@cSPPaletteUI_s005c_b060@SP@@QAEXPAVcSPPalette_s005c_b060@2@PAVIWindow_s005c_b060@UTFWin@EA@@HPAVcSPPaletteInfo_s005c_b060@2@@Z  # cSPPaletteUI_s005c_b060::Init migrated from s005cb060 (verbatim, slice spelling)
+005cba90 ?Shutdown@cSPPaletteUI_s005c_b060@SP@@QAEXXZ  # cSPPaletteUI_s005c_b060::Shutdown migrated from s005cb060 (verbatim, slice spelling)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005cb060, named from the dev publics; slice address comment)
