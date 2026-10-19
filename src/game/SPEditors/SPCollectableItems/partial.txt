@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00598b50 - PARTIAL: rbtree node plumbing 342B; skeleton only
+00598cb0 - PARTIAL: rbtree emplace 252B; skeleton only
+00598db0 - PARTIAL: metadata append 220B; skeleton only
+00598e90 - PARTIAL: cCollectableItems::AddCollectableItemInfo 418B; skeleton only
+00599040 - PARTIAL: cCollectableItems::LoadConfiguration 1015B; skeleton only
