@@ -9,3 +9,5 @@
 00a46950  15   duplicated default branch reordered; original returns Sym2* (out) in eax, now returned too; difftest PASS under flags /O2 /MD /Gy /EHsc /TP (394 valid, 100% coverage)
 00a467c0  999  sprintf/gensym helper shape differs
 00a46830  999  snprintf loop shape differs
+00a465b0  10  hashtable member init store order (movss/vptr scheduling); equiv UNSUPPORTED (vtable of ours not mapped: secondary-base thunk 0xa46140 not in this slice)
+00a46160  957  large EH StartVoice: stack-slot sharing of disjoint-scope locals and register choice differ (1128 vs 1095 bytes); all paths and callees present; equiv UNSUPPORTED (orig-abi-broken(fake): 399/400 inputs need valid vtables)
