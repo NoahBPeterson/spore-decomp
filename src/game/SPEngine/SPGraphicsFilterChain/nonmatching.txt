@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+006f69c0 343 complete init; new-expression temp and p share one slot in the original, two in mine
+006f6c30 691 complete SetupFromDesc wrapper (uint64 flags + fixed_vector<8>); needs /GS- /EHsc; element copy and arg load order differ
+006f6f40 624 complete wrapper (uint64 flags + fixed_vector<8>); needs /GS- /EHsc; element copy and arg load order differ
+006f71f0 485 complete wrapper (uint64 flags + fixed_vector<8>); needs /GS- /EHsc; element copy and arg load order differ
+006f79a0 1245 cFilterChain::Dispatch (key + 12 floats + shader consts + fixed_vector<u64,8> + camera-driven blend, Submit): complete; register roles (ebx=tables/edi=this) and one extra 8-byte frame slot differ (flags /GS-).

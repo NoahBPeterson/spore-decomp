@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsFilterChain.cpp  ?AddCameraTexture@cFilterChain@@QAE_NGGPAH@Z  006f6830  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFilterChain.cpp  ?Wrapper8c@cFilterChain_s006f_7430@@QAEXPAUFilterTables@@PAUFilterOp@@HHHHH@Z  006f7430  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFilterChain.cpp  ?Wrapper200@cFilterChain_s006f_7430@@QAEXPAUFilterTables@@PAUFilterOp@@HHHHH@Z  006f7680  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFilterChain.cpp  ?ApplyStrengthFilter@cFilterChain_s006f_7430@@QAEXPAUFilterTables@@PAUFilterOp@@HHHHF@Z  006f7f70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
