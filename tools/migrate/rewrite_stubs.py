@@ -235,7 +235,20 @@ def insert_missing_markers(lines, sid, known_vas=()):
     -> (lines, [(va, name, how)]) ."""
     # `// ---------------- @ 0x00531380` (a dash rule ending in the VA, mig11 s00530db0: Clear/Stop/IsRunning were silently
     # never landed) is the slice's own marker spelling
-    lines = [re.sub(r"^//\s*-{4,}\s*@\s*(0x[0-9a-fA-F]{6,8})\s*$", r"// @ \1", l) for l in lines]
+    # ... unless a real `// @ 0xVA` of the same VA follows within a few lines: then the rule is only a banner, and as a
+    # marker it made an empty chunk that took the VA (s009c1f60 0x9c1f60: `namespace nSPCreatureAnim` with no body, C2059;
+    # 14 such banners in s009c1f60, s009c4a30, s00a168c0)
+    def _dash_marker(k, l):
+        m = re.match(r"^//\s*-{4,}\s*@\s*(0x[0-9a-fA-F]{6,8})\s*$", l)
+        if not m:
+            return l
+        va = int(m.group(1), 16)
+        for n in lines[k + 1:k + 6]:
+            mr = re.match(r"^//\s*@\s*0x([0-9a-fA-F]+)\b", n)
+            if mr:
+                return l if int(mr.group(1), 16) == va else "// @ " + m.group(1)
+        return "// @ " + m.group(1)
+    lines = [_dash_marker(k, l) for k, l in enumerate(lines)]
     rows, syms = slice_rows(sid)
     rows = set(rows) | set(known_vas)
     by_path = {}
