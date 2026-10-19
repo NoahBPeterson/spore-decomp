@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPAssetListData.cpp  ?IsBakeableType@@YA_NIE@Z  004bbe20  /Od /Ob1 /MD /Gy /TP /Isrc/game/include

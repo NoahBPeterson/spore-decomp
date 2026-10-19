@@ -1,5 +1,5 @@
 004bafc0 SP::EditorUtils::ComputeVerbIcons  # PDB candidate (caller-scored)
 004bb860 ?FUN_004bb860@@YAII@Z  # FUN_004bb860 migrated from s004bafc0 (verbatim, slice spelling)
 004bbd20 ?GetTypeForCategory@@YAIIE@Z  # GetTypeForCategory migrated from s004bafc0 (verbatim, slice spelling)
-004bbe20 SP::cSPAssetDataList::SetAssetData  # PDB (callee-scored); model-type predicate
+004bbe20 ?IsBakeableType@@YA_NIE@Z  # IsBakeableType migrated from s004bafc0 (verbatim, slice spelling)
 004bbe90 ?FUN_004bbe90@@YA_NI@Z  # FUN_004bbe90 migrated from s004bafc0 (verbatim, slice spelling)
