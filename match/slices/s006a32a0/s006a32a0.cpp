@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <intrin.h>
 
 // ---------------------------------------------------------------------------
 // cPropertyManager / command stubs with fields at the observed retail offsets
@@ -237,6 +238,8 @@ struct String {
     void* mAlloc;       // +0xc
     String& assign(const char* p);
     String& assign(const char* pBegin, const char* pEnd);
+    String* Init(const char** range, const void** tag);  // 0x006a3f40
+    void RangeInitialize(unsigned n);                    // 0x00475ab0
 };
 
 // @ 0x006a4380
@@ -251,24 +254,167 @@ String& String::assign(const char* p)
 }
 
 // ---------------------------------------------------------------------------
-// 006a3ac0  `anonymous_namespace'::cPropertyListCommand::Execute  (partial)
-// 006a3c30  `anonymous_namespace'::cPropertyListCommand::OnEndParse (partial)
-// 006a3dd0  property apply helper (partial)
+// 006a3ac0  `anonymous_namespace'::cPropertyListCommand::Execute
+// 006a3c30  `anonymous_namespace'::cPropertyListCommand::OnEndParse
+// 006a3dd0  property apply helper
 // ---------------------------------------------------------------------------
-void FUN_006a3ac0(void* args)
+extern "C" void* EA_Alloc2(unsigned size, const char* name, int a, int b, const char* file, int line); // 0x00f473a0
+void* FUN_006a1b90(void* mem, const char* name);   // 0x006a1b90 (ret 4)
+void  FUN_0068d5a0(void* out, unsigned key, unsigned magic); // 0x0068d5a0
+void  FUN_006ad010(void* p);                       // 0x006ad010
+void  FUN_006ad050(void* p);                       // 0x006ad050
+void* FUN_0067dcd0(void);                          // 0x0067dcd0
+void  FUN_006a1710(void* txn, void* prop);         // 0x006a1710
+void* FUN_006bb640(void);                          // 0x006bb640
+void* FUN_00e5c780(void* outA, void* outB, void* map); // 0x00e5c780 (rbtree find)
+
+struct IVtRef {
+    virtual void  Slot0();          // +0
+    virtual void  Release();        // +4
+};
+typedef IVtRef* (*GetInfoFn)(void* self);  // vfn at info vtbl +0x10
+
+struct Resource {
+    virtual void AddRef();          // +0 (slot 0)
+    virtual void Release(int);      // +4 (slot 1)
+    void*    mRef;                  // +4
+    uint32_t mKey0;                 // +8
+    uint32_t mKey1;                 // +0xc
+    uint32_t mKey2;                 // +0x10
+    Resource* Ctor(const char* name);   // 0x006a1b90
+};
+
+template<class T>
+struct Ref {
+    T* mp;
+    void* mk;
+    Ref(T* p) : mp(p), mk(0) {}
+    ~Ref() { if (mp) mp->Release(1); }
+    T* operator->() const { return mp; }
+    T* release() { T* t = mp; mp = 0; return t; }
+};
+
+// cPropertyListCommand (anonymous namespace)
+struct cPropertyListCommand {
+    void* vftable;      // +0
+    void* mOwner;       // +4
+    void* mField8;      // +8
+    void* mTxn;         // +0xc
+    void* mPropList;    // +0x10
+    void Execute(void* args);   // 0x006a3ac0
+    void OnEndParse(int b);     // 0x006a3c30
+};
+
+// @ 0x006a3ac0
+void cPropertyListCommand::Execute(void* args)
 {
-    (void)args;
+    char* edi = (char*)((EA::ArgScript::cArguments*)args)->MainArguments(1);
+    Ref<Resource> pl((Resource*)EA_Alloc2(0x38, (const char*)0x13ebc58, 0, 0, 0, 0));
+    if (pl.mp)
+        pl.mp = (Resource*)FUN_006a1b90(pl.mp, *(const char**)edi);
+    Resource* old = (Resource*)mPropList;
+    if (pl.mp != old) {
+        if (pl.mp)
+            pl.mp->AddRef();
+        mPropList = pl.mp;
+        if (old)
+            old->Release(1);
+    }
+    unsigned char buf[0xc];
+    *(void**)&buf[0] = 0;
+    *(void**)&buf[4] = 0;
+    *(unsigned int*)&buf[8] = 0;
+    FUN_0068d5a0(buf, *(unsigned int*)mTxn, 0xb1b104);
+    unsigned int* dst = (unsigned int*)((char*)mPropList + 8);
+    dst[0] = *(unsigned int*)&buf[0];
+    dst[1] = *(unsigned int*)&buf[4];
+    dst[2] = *(unsigned int*)&buf[8];
+    unsigned int* ve = (unsigned int*)((char*)mTxn + 0x1d8);
+    if (ve[0] != ve[1]) {
+        *(unsigned char*)ve[0] = 0;
+        ve[1] = ve[0];
+    }
+    void* owner = mOwner;
+    ((void (__thiscall*)(void*, void*, const void*))(*(void***)owner)[0x90 / 4])(owner, this, (const void*)0x1408db4);
+    pl.release();
 }
 
-void FUN_006a3c30(int b)
+// @ 0x006a3c30
+void cPropertyListCommand::OnEndParse(int b)
 {
-    (void)b;
+    if (b == 0) {
+        ++*(unsigned int*)((char*)mPropList + 0x34);
+        void* p = FUN_0067dcd0();
+        void* prop = 0;
+        if (((bool (__thiscall*)(void*, void*, void**))(*(void***)p)[0x14 / 4])(p, (char*)mPropList + 8, &prop))
+            FUN_006ad050(prop);
+        FUN_006ad010(mPropList);
+        if (mPropList)
+            (*(IVtRef**)mPropList)->Release();
+    }
+    void* pl = mPropList;
+    if (pl) {
+        mPropList = 0;
+        (*(IVtRef**)pl)->Release();
+    }
 }
 
-void FUN_006a3dd0(int* p)
+// property apply helper (thiscall)
+struct cPropsSelf {
+    void* vftable;  // +0
+    void Apply(void* prop);     // 0x006a3dd0
+};
+
+// @ 0x006a3dd0
+void cPropsSelf::Apply(void* prop)
 {
-    (void)p;
+    unsigned int c;
+    if (prop == 0)
+        goto cleanup;
+    if (!((bool (__thiscall*)(void*, unsigned))(*(void***)prop)[0x1c / 4])(prop, 0xb2cccb)) {
+        if (*(void**)((char*)prop + 0x30))
+            FUN_006a1710(prop, 0);
+        goto cleanup;
+    }
+    {
+        void* var = ((void* (__thiscall*)(void*, unsigned))(*(void***)prop)[0x28 / 4])(prop, 0xb2cccb);
+        unsigned short tid = *(unsigned short*)((char*)var + 0x12);
+        void* data;
+        if (tid == 0x20 || tid == 0x10) {
+            if (*(unsigned char*)((char*)var + 0x10) & 0x30)
+                data = *(void**)var;
+            else
+                data = (tid != 0) ? var : 0;
+        } else {
+            data = FUN_006bb640();
+        }
+        unsigned int lo = *(unsigned int*)((char*)data + 4);
+        unsigned int a = *(unsigned int*)data;
+        unsigned int hi = *(unsigned int*)((char*)data + 8);
+        if (hi == 0)
+            hi = *(unsigned int*)((char*)prop + 0x10);
+        unsigned int tmp = lo;
+        void* cur = *(void**)((char*)prop + 0x30);
+        if (cur && *(unsigned int*)((char*)cur + 8) == a
+            && *(unsigned int*)((char*)cur + 0xc) == 0xb1b104
+            && *(unsigned int*)((char*)cur + 0x10) == hi)
+            goto cleanup;
+        {
+            void* out = 0;
+            void* vt = *(void**)this;
+            if (((bool (__thiscall*)(void*, unsigned, unsigned, void**))(*(void***)vt)[0x2c / 4])(this, a, hi, &out)) {
+                FUN_006a1710(prop, out);
+            }
+            if (tmp)
+                ((IVtRef*)tmp)->Release();
+        }
+    }
+cleanup:
+    c = *(unsigned int*)((char*)prop + 0x30);
+    if (c)
+        ((IVtRef*)c)->Release();
 }
+
 
 // ===========================================================================
 //  External helpers
@@ -378,45 +524,47 @@ Float3* FUN_006a3920(Float3* out, const float* m)
 }
 
 // ---------------------------------------------------------------------------
-// 006a3330  bool cPropertyManager::CreateResource(int* info,int a,int b,int out)
+// 006a3330  bool cPropertyManager::CreateResource(int* info,int a,int b,int* out)
 // ---------------------------------------------------------------------------
-struct cPropertyList {
-    void* vftable;           // +0
-    void* mRef;              // +4
-    uint32_t mKey0, mKey1, mKey2;  // +8,0xc,0x10
-    uint8_t pad[0x20];       // +0x14
-    void* vfn0_idx;          // placeholder
-    cPropertyList* Ctor(const char* name);
-    void Release(int);
-    void AddRef();
+struct InfoObj {
+    virtual void      s0();
+    virtual void      s1();
+    virtual void      s2();
+    virtual void      s3();
+    virtual uint32_t* s4();     // +0x10
+};
+
+template <class T> struct AutoPtr {
+    T* mp;
+    AutoPtr(T* p) : mp(p) {}
+    ~AutoPtr() { if (mp) mp->Release(1); }
+    T* operator->() const { return mp; }
+    T* release() { T* t = mp; mp = 0; return t; }
 };
 
 struct cPropertyManager2 {
     void* vftable;              // +0
-    void* mBase;                // +4
-    uint8_t pad[0x20];          // +8
-    void* mFactoryVt;           // +0x24 area
-    bool CreateResource(int* info, int a, int b, int* out);
+    bool CreateResource(int* info, void** out, int a, int b);   // 0x006a3330
 };
 
-bool cPropertyManager2::CreateResource(int* info, int a, int b, int* out)
+bool cPropertyManager2::CreateResource(int* info, void** out, int a, int b)
 {
-    cPropertyList* pl = (cPropertyList*)EA_Alloc(0x38, "App/PropertyList/Create", 0, 0, 0, 0);
-    if (pl)
-        pl = pl->Ctor("CreateResource");
+    AutoPtr<Resource> pl((Resource*)EA_Alloc(0x38, (const char*)0x1408b44, 0, 0, 0, 0));
+    if (pl.mp)
+        pl.mp = pl.mp->Ctor((const char*)0x1408b34);
 
-    uint32_t* k = (uint32_t*)((int* (*)(int*))((void**)info)[0x10 / 4])(info);
+    uint32_t* k = ((InfoObj*)info)->s4();
     pl->mKey0 = k[0];
     pl->mKey1 = k[1];
     pl->mKey2 = k[2];
 
-    bool ok = ((bool (__thiscall*)(void*, int*, void*, int, int))(((void**)this)[0x24 / 4]))(this, info, pl, a, b);
+    bool ok = ((bool (__thiscall*)(void*, int*, Resource*, int, int))(*(void***)this)[0x24 / 4])(this, info, pl.mp, a, b);
     if (ok) {
-        *out = (int)pl;
-        pl->AddRef();
+        *out = pl.mp;
+        pl.mp->AddRef();
+        pl.release();
         return true;
     }
-    pl->Release(1);
     return false;
 }
 
@@ -427,76 +575,181 @@ bool cPropertyManager2::CreateResource(int* info, int a, int b, int* out)
 // ---------------------------------------------------------------------------
 // 006a3d50  feedback-event lookup
 // ---------------------------------------------------------------------------
+struct FbIter { void* p; };
+void FUN_011e07ef(void* fn);   // 0x011e07ef (atexit-ish; cdecl)
+
+struct FbMap { void* FindSlot(void* a, void* b); };   // 0x00e5c780
+struct FbOwner {   // embedded at FeedbackCmd+0x3c; vtable at +0
+    virtual bool  s0(); virtual bool  s1(); virtual bool  s2(); virtual bool  s3();
+    virtual bool  s4(); virtual void  s5(); virtual bool  s6();
+    virtual bool  s7(int key);            // +0x1c
+    virtual void* s8(); virtual void* s9();
+    virtual void* s10(int key);           // +0x28
+};
 struct FeedbackCmd {
     uint8_t pad0[0x1c];
     uint8_t mActive;        // +0x1c
     uint8_t pad1[3];
-    uint8_t mMap[0x20];     // +0x20  (rbtree)
-    void*   mEnd;           // +0x40 ... approx
+    uint8_t mTree[4];       // +0x20  (map object; ecx for Find)
+    uint8_t mEnd[0x18];     // +0x24  (end node; +0x24 = sentinel)
+    FbOwner mOwner;         // +0x3c
+    void* Get(int key);     // 0x006a3d50
+    bool  Test(int key);    // 0x006a3f00
 };
+extern void* g_fb_default;  // 0x016029b0
+struct FbInitFlag { unsigned inited : 1; unsigned unused : 31; };
+extern FbInitFlag g_fbInit;  // 0x016029c4
 
-void* FUN_006a3d50(FeedbackCmd* self)
+// @ 0x006a3d50
+void* FeedbackCmd::Get(int key)
 {
-    if (!self->mActive)
-        return ((void* (__thiscall*)(void*))((void**)*(void**)((char*)self + 0x3c))[0x28 / 4])((char*)self + 0x3c);
-    // rbtree find + atexit fallback
-    extern void* g_feedbackFallback;
-    return g_feedbackFallback;
+    if (mActive) {
+        void* it;
+        void* k;
+        void** slot = (void**)((FbMap*)(mTree))->FindSlot(&it, &k);
+        char* found = (char*)*slot;
+        if (found != (char*)this + 0x24)
+            return found + 0x14;
+        if (!g_fbInit.inited) {
+            g_fbInit.inited = 1;
+            FUN_011e07ef((*(volatile uint16_t*)0x16029c0 = 0,
+                           *(volatile uint16_t*)0x16029c2 = 0,
+                           (void*)0x13bed20));
+        }
+        return (void*)0x16029b0;
+    } else {
+        return mOwner.s10(key);
+    }
 }
 
 // ---------------------------------------------------------------------------
 // 006a3f00  bool FUN_006a3f00(FeedbackCmd*)
 // ---------------------------------------------------------------------------
-bool FUN_006a3f00(FeedbackCmd* self)
+// @ 0x006a3f00
+bool FeedbackCmd::Test(int key)
 {
-    if (self->mActive)
-        return true;    // replaced by real rbtree test in matching version
-    return ((bool (__thiscall*)(void*))((void**)*(void**)((char*)self + 0x3c))[0x1c / 4])((char*)self + 0x3c);
+    if (mActive) {
+        void* it;
+        void* k;
+        void** slot = (void**)((FbMap*)(mTree))->FindSlot(&it, &k);
+        return *slot != (void*)((char*)this + 0x24);
+    } else {
+        return mOwner.s7(key);
+    }
 }
 
 // ---------------------------------------------------------------------------
-// 006a3f40  String-range constructor
+// 006a3f40  String::Init(const char** range, const void** tag)  (range ctor)
 // ---------------------------------------------------------------------------
-void FUN_006a3f40(String* self, const char** range, const void* tag)
+// @ 0x006a3f40
+String* String::Init(const char** range, const void** tag)
 {
-    self->mpBegin = 0;
-    self->mpEnd = 0;
-    self->mpCapacity = 0;
-    const char* b = range[0];
-    const char* e = range[1];
+    mpBegin = 0;
+    mpEnd = 0;
+    mpCapacity = 0;
+    char* e = (char*)range[1];
+    char* b = (char*)range[0];
     unsigned n = (unsigned)(e - b);
-    ((void (__thiscall*)(String*, unsigned))0x00475ab0)(self, n + 1);  // RangeInitialize
-    char* dst = (char*)self->mpBegin;
+    RangeInitialize(n + 1);                 // 0x00475ab0 (thiscall, ret 4)
+    char* dst = (char*)mpBegin;
     memcpy(dst, b, n);
-    self->mpEnd = dst + n;
-    dst[n] = 0;
-    *(const void**)((char*)self + 0x10) = tag;
+    char* end = (dst - b) + e;
+    mpEnd = end;
+    *end = 0;
+    *(const void**)((char*)this + 0x10) = *tag;
+    return this;
 }
 
 // ---------------------------------------------------------------------------
-// 006a4190  unsigned int FUN_006a4190(...)
+// 006a4190  unsigned int FUN_006a4190(void* a, cArgParser* p)
 // ---------------------------------------------------------------------------
-uint32_t FUN_006a4190(void* parser)
+// SSO 16-byte string: empty string points into a static table.
+struct PoiStr16 {
+    char* mpBegin;      // +0
+    char* mpEnd;        // +4
+    char* mpCapacity;   // +8
+    void* mAlloc;       // +0xc
+    PoiStr16() { char* const p = (char*)0x1667bac; mpBegin = p; mpEnd = p; mpCapacity = (char*)0x1667bad; }
+    ~PoiStr16() { if (mpCapacity - mpBegin > 1 && mpBegin) EA_Dealloc(mpBegin); }
+};
+
+struct cArgParser {
+    void  Tag(void* a, int tag);            // 0x0083d240
+    void  EvalString(void* a, void* out);   // 0x0083dc00
+    void* MainArguments(int b);             // 0x00838320
+};
+
+// @ 0x006a4190
+unsigned int __stdcall FUN_006a4190(void* a, cArgParser* p)
 {
-    static char buf[0x10];
-    char* s = buf;
-    // EvalString(parser, string) then hash
-    StringEvalString(parser, s);
-    return FNVHash(s, 0x811c9dc5u, 1);
+    PoiStr16 s;
+    p->Tag(a, 0x28);
+    p->EvalString(a, &s);
+    p->Tag(a, 0x29);
+    return FNVHash(s.mpBegin, 0x811c9dc5u, 1);
 }
 
 // ---------------------------------------------------------------------------
 // 006a4240 / 006a42d0  hashtable lookups
 // ---------------------------------------------------------------------------
-bool FUN_006a4240(cPropertyManager* self, int a, int b)
-{
-    (void)self; (void)a; (void)b;
-    return false;
+// An opaque intrinsic-map-like hashtable at cPropertyManager+0x74. Lookup takes
+// a composed 64-bit key and returns an iterator (pointer to a bucket link).
+struct THashTable {
+    uint8_t  pad0[4];
+    uint8_t** mpBucketArray;   // +0x4  (points at array of bucket-end pointers)
+    uint32_t  mBucketIndex;    // +0x8
+};
+// 0x0041fb20: Find(outIter, key, table) — thiscall on the table.
+struct THashFind { void Find(void* out, const void* key); };
+inline void poi_ht_find(void* out, const void* key, void* table) {
+    ((THashFind*)table)->Find(out, key);
 }
 
-bool FUN_006a42d0(cPropertyManager* self, int n, const void* values)
+// thiscall wrappers exposing the +0x74 hashtable at the observed offsets.
+struct cPropertyManagerThunk {
+    bool HasKey(unsigned int a, unsigned int b);           // 0x006a4240
+    bool ReleaseKeys(int n, const void* values);           // 0x006a42d0
+};
+
+// @ 0x006a4240
+bool cPropertyManagerThunk::HasKey(unsigned int a, unsigned int b)
 {
-    (void)self; (void)n; (void)values;
+    char* const base = (char*)this;
+    THashTable* const ht = (THashTable*)(base + 0x74);
+    struct Key64 { unsigned int lo, hi; } key;
+    key.lo = a;
+    key.hi = b;
+    void* it;
+    poi_ht_find(&it, &key, ht);
+    if (it != (void*)ht->mpBucketArray[ht->mBucketIndex])
+        return *(unsigned int*)((char*)it + 8) != 0;
+    void* const obj = *(void**)(base + 0x18);
+    struct KeyC { unsigned int a, magic, b; } k;
+    k.a = a; k.magic = 0xb1b104; k.b = b;
+    return ((bool (__thiscall*)(void*, void*, int))((void**)*(void**)obj)[3])(obj, &k, 0);
+}
+
+// @ 0x006a42d0
+bool cPropertyManagerThunk::ReleaseKeys(int n, const void* values)
+{
+    char* const base = (char*)this;
+    THashTable* const ht = (THashTable*)(base + 0x74);
+    const unsigned char* v = (const unsigned char*)values;
+    for (int i = 0; i < n; ++i, v += 0xc) {
+        struct Key64 { unsigned int lo, hi; } key;
+        key.lo = *(const unsigned int*)(v + 0);
+        key.hi = *(const unsigned int*)(v + 8);
+        void* it;
+        poi_ht_find(&it, &key, ht);
+        if (it != (void*)ht->mpBucketArray[ht->mBucketIndex]) {
+            long* const rc = (long*)*(void**)((char*)it + 8);
+            if (rc) {
+                long old = _InterlockedExchangeAdd(rc + 1, 0);
+                if ((old >> 1) - 1 > 1)
+                    return true;
+            }
+        }
+    }
     return false;
 }
 
