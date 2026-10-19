@@ -3,9 +3,12 @@
 00956af0 ?FUN_00956af0@@YIHPAX@Z  # FUN_00956af0 migrated from s009568c0 (verbatim, slice spelling)
 00956b30 EA::UTFWin::GlyphRenderer::DrawText  # LayoutTextLine into a fixed_vector<GlyphDisplayEntry,256>, then vslot 13 draws the glyphs
 00956c40 EA::UTFWin::GlyphRenderer::DrawText  # 4-float overload (FUN_00890830 layout variant)
-00956f30 EA::UTFWin::FreeAllPooledLists  # drains display-list pool and renderable list chunk pool
-00956fa0 EA::UTFWin::FreeDisplayListEntries  # card
-00956ff0 EA::UTFWin::AllocDisplayListEntry  # card
+00956e30 ?FreeRenderableListChunks@@YAXPAURLChunk@@0@Z  # FreeRenderableListChunks migrated from s009568c0 (verbatim, slice spelling)
+00956e90 ?FreeDisplayListEntry@@YAXPAH@Z  # FreeDisplayListEntry migrated from s009568c0 (verbatim, slice spelling)
+00956ed0 ?AllocRenderableListChunk@@YAPAURLChunk@@XZ  # AllocRenderableListChunk migrated from s009568c0 (verbatim, slice spelling)
+00956f30 ?FUN_00956f30@@YAXXZ  # FUN_00956f30 migrated from s009568c0 (verbatim, slice spelling)
+00956fa0 ?FreeDisplayListEntries@@YAXPAUDLNode@@@Z  # FreeDisplayListEntries migrated from s009568c0 (verbatim, slice spelling)
+00956ff0 ?AllocDisplayListEntry@@YAPAUDisplayList@@XZ  # AllocDisplayListEntry migrated from s009568c0 (verbatim, slice spelling)
 00957080 EA::UTFWin::UpperBound16  # upper_bound over a uint16 run table
 009570c0 EA::UTFWin::HitMask::Contains  # parity of upper_bound(runs, y*w+x)
 00957110 eastl::vector<unsigned short>::DoAllocateAndCopy  # new(n*2,"EASTL") + memcpy

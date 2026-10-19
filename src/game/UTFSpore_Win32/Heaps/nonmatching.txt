@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00956f30 27 free pool drain: complete; pop_front register choice (ecx copy of node) differs
+00956fa0 22 FreeDisplayListEntries splice: complete; prologue push order (orig pushes esi/edi before Lock) differs
+00956ff0 58 AllocDisplayListEntry: complete; anchor held in ecx vs eax, node copy and DisplayList ctor store order differ
