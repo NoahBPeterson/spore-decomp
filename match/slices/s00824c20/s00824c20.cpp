@@ -29,7 +29,7 @@ struct IWinW {
   virtual void SetA(unsigned a);  // slot 20
   virtual void SetB(unsigned b);  // slot 21
   virtual void s22();
-  virtual void s23();
+  virtual void V23(int a);  // slot 23
   virtual void SetArea(const float* r);  // slot 24
   virtual void SetPos(float x, float y);  // slot 25
   virtual void s26();
@@ -49,7 +49,7 @@ struct IWinW {
   virtual void s40();
   virtual void s41();
   virtual void s42();
-  virtual void s43();
+  virtual void V43(unsigned c);  // slot 43
   virtual void s44();
   virtual void s45();
   virtual void s46();
@@ -68,7 +68,7 @@ struct ITE {
   virtual void s2();
   virtual void s3();
   virtual IWinW* GetWin();  // slot 4
-  virtual void s5();
+  virtual void V5(int a);  // slot 5
   virtual void V6(const void* s);  // slot 6
   virtual void s7();
   virtual void SetColor(int i, unsigned c);  // slot 8
@@ -119,6 +119,12 @@ struct IBtn {
   virtual void s2();
   virtual void s3();
   virtual IWinW* GetWin();  // slot 4
+  virtual void s5();
+  virtual void s6();
+  virtual void s7();
+  virtual void s8();
+  virtual void s9();
+  virtual void V10(int a, int b);  // slot 10
 };
 struct IGrid {
   virtual void AddRef();  // slot 0
@@ -218,6 +224,11 @@ struct IGrid {
 extern void* GetAllocator();                                                      // 0x009512c0
 extern void* AllocAligned(unsigned size, int align, const char* name, void* a);   // 0x009512d0
 extern IBtn* CreateDefaultButton(int a, int b, int c);                            // 0x009671c0 WinButton::CreateDefault
+extern ITE* CreateDefaultText(int a, unsigned b);                                 // 0x00989130 WinText::CreateDefault
+extern const char kSubWinName[];                                                  // 0x01419dd8 "UI/UI/SubWindow"
+extern const char kLabelCmd[];                                                    // 0x015a5d0e
+extern const float kLabelH;                                                       // 0x013f1cac
+extern "C" void* __cdecl memmove_nd(void* dst, const void* src, unsigned n);       // 0x011e0744
 extern const char kTextEditName[];                                                // "UI/UI/WinTextEdit"
 extern const char kStyleStr[];                                                    // 0x015a4361
 extern const char kBtnTextA[];                                                    // 0x01419de8
@@ -237,6 +248,9 @@ extern const float kAdv30;                                                      
 extern char kEmptyStr[2];                                                         // 0x01667bac
 
 struct WinTextEdit;  // EA::UTFWinControls::WinTextEdit, 0x658 bytes; ITE sub-object at +0x20c
+struct WindowMem {
+  void* Construct();  // 0x00962a10 UTFWin::Window::Window (thiscall, returns this)
+};
 struct WinTextEditMem {
   WinTextEdit* Construct();  // 0x0098c110 (thiscall, returns this)
 };
@@ -266,11 +280,13 @@ struct EString16 {  // eastl::string16
   char* b;
   char* e;
   char* cap;
+  unsigned alloc;
   ~EString16() {
     if ((int)(((unsigned)cap - (unsigned)b) & 0xfffffffe) > 2 && b) operator delete(b);
   }
 };
 extern EString16* ConvertToString16(EString16* out, const EString* in);          // 0x0093c6d0
+extern EString16* ConvertToString16Impl(EString16* out, const char* s, int n);   // 0x0093c5a0
 
 template <class T>
 struct SpVec {  // eastl::vector<T*, sp_vector_allocator>, 0x14 bytes
@@ -279,8 +295,9 @@ struct SpVec {  // eastl::vector<T*, sp_vector_allocator>, 0x14 bytes
   T** cap;
   unsigned pad[2];
   unsigned size() const {
-    if (b == e) return 0;
-    return (unsigned)(e - b);
+    unsigned n = 0;
+    if (b != e) n = (unsigned)(e - b);
+    return n;
   }
   void Grow(T** pos, T** val);   // vector<T*>::DoInsertValue; per-T addresses in symbols/slices/s00825930.txt
   void push_back(T* v) {
@@ -292,6 +309,16 @@ struct SpVec {  // eastl::vector<T*, sp_vector_allocator>, 0x14 bytes
     } else {
       Grow(at, &tmp);
     }
+  }
+  bool empty() const { return b == e; }
+  void erase(T** first, T** last) {
+    if (first != last) {
+      memmove_nd(first, last, (char*)e - (char*)last);
+      e -= (last - first);
+    }
+  }
+  void clear() {
+    if (b != e) erase(b, e);
   }
   ~SpVec() {
     if (b && ((int*)b)[-1]) operator delete(b);
@@ -333,7 +360,9 @@ struct HashMapBase {  // eastl::hash_map<unsigned, T*>, 0x20 bytes
 struct TEMap : HashMapBase {
   ITE*& operator[](const unsigned& k);  // 0x00820af0
 };
-struct BtnMap : HashMapBase {};
+struct BtnMap : HashMapBase {
+  IBtn*& operator[](const unsigned& k);  // 0x00820af0 (same hash_map<unsigned,void*> instantiation as TEMap)
+};
 
 struct cSPUILayout {
   unsigned pad[6];
@@ -380,9 +409,9 @@ struct cPropertyUI : IWinProc, RefCountVTemplate {
   SpVec<IBtn> mGrid;            // +0xac
   SpVec<IBtn> mSpinner;         // +0xc0
   SpVec<IBtn> mSlider;          // +0xd4
-  SpVec<IBtn> mText;            // +0xe8
+  SpVec<ITE> mText;             // +0xe8
   SpVec<ITE> mTextEdit;         // +0xfc
-  SpVec<IWinW> mSubWindow;      // +0x110
+  SpVec<IBtn> mSubWindow;       // +0x110 (elements are IWinW*; shares the IBtn Grow instantiation 0x00630b30)
   AutoRef<IBtn> mDialog;        // +0x124
   AutoRef<IGrid> mGroupsGrid;   // +0x128
   AutoRef<IGrid> mPropsGrid;    // +0x12c
@@ -391,6 +420,9 @@ struct cPropertyUI : IWinProc, RefCountVTemplate {
   BtnMap mPropToToggleButtonMap;// +0x170
 
   void ClearAll();  // 0x00824c20
+  void AddLabel(const char* text);                                                    // 0x00824e10
+  unsigned AddSubWindow(unsigned id);                                                 // 0x00824ff0
+  unsigned AddBool(unsigned id, unsigned state, IWinW* parent);                       // 0x00825110
   unsigned AddSpinnerRow(unsigned id, float value, IWinW* parent);                    // 0x00825930
   unsigned AddIntSpinnerRow(unsigned id, int value, IWinW* parent);                   // 0x008252b0
   unsigned AddTextEditRowA(unsigned id, const void* text, IWinW* parent);             // 0x00825fc0
@@ -404,6 +436,82 @@ typedef char chk_off_fc[offsetof(cPropertyUI, mTextEdit) == 0xfc ? 1 : -1];
 typedef char chk_off_128[offsetof(cPropertyUI, mGroupsGrid) == 0x128 ? 1 : -1];
 typedef char chk_off_170[offsetof(cPropertyUI, mPropToToggleButtonMap) == 0x170 ? 1 : -1];
 typedef char chk_off_14[offsetof(cPropertyUI, mCurrentX) == 0x14 ? 1 : -1];
+
+// @ 0x00824c20
+void cPropertyUI::ClearAll() {
+  mButton.clear();
+  mToggleButton.clear();
+  mComboBox.clear();
+  mSpinner.clear();
+  mSlider.clear();
+  mText.clear();
+  mTextEdit.clear();
+  mGrid.clear();
+  mSubWindow.clear();
+}
+
+// @ 0x00824e10
+void cPropertyUI::AddLabel(const char* text) {
+  SpVec<ITE>& tv = mText;
+  unsigned idx = tv.size();
+  RefHold<ITE> t(CreateDefaultText(-1, 0xacbf4564));
+  float r[4] = {0.0f, 0.0f, kEditW, kLabelH};
+  t->GetWin()->SetHash((unsigned)kLabelCmd);
+  t->GetWin()->SetArea(r);
+  t->GetWin()->V43(0xffbac1b3);
+  t->GetWin()->V23(-1);
+  {
+    IWinW* tw = t->GetWin();
+    EString16 out16;
+    const void* s16 = ConvertToString16Impl(&out16, text, -1)->b;
+    tw->SetText(s16);
+  }
+  t->GetWin()->V36();
+  t->V5(1);
+  t->GetWin()->SetPos(mCurrentX, mCurrentY);
+  mCurrentX += kRowAdvance;
+  tv.push_back(t.p);
+  mHolderWindow.p->AddChild(tv.b[idx]->GetWin());
+}
+
+// @ 0x00824ff0
+unsigned cPropertyUI::AddSubWindow(unsigned id) {
+  SpVec<IBtn>& sv = mSubWindow;
+  unsigned idx = sv.size();
+  void* mem = AllocAligned(0x20c, 4, kSubWinName, GetAllocator());
+  void* w = mem ? ((WindowMem*)mem)->Construct() : 0;
+  RefHold<IWinW> sw(w ? (IWinW*)((char*)w + 4) : 0);
+  float r[4] = {0.0f, 0.0f, kEditH, kEditH};
+  sw->SetArea(r);
+  sw->SetA(id);
+  sw->SetPos(mCurrentX, mCurrentY);
+  sv.push_back((IBtn*)sw.p);
+  mHolderWindow.p->AddChild((IWinW*)sv.b[idx]);
+  return idx;
+}
+
+// @ 0x00825110
+unsigned cPropertyUI::AddBool(unsigned id, unsigned state, IWinW* parent) {
+  SpVec<IBtn>& bv = mToggleButton;
+  unsigned idx = bv.size();
+  RefHold<IBtn> b(CreateDefaultButton(2, 0, 0));
+  b->V10(4, state);
+  float r[4] = {0.0f, 0.0f, kEditH, kEditH};
+  b->GetWin()->SetArea(r);
+  b->GetWin()->SetA(id);
+  if (parent == mHolderWindow.p) {
+    b->GetWin()->SetPos(mCurrentX, mCurrentY);
+  } else {
+    b->GetWin()->SetPos(mCurrentX, 0.0f);
+  }
+  id = parent->GetID();
+  b->GetWin()->SetB(id);
+  mPropToToggleButtonMap[id] = b.p;
+  bv.push_back(b.p);
+  mCurrentX += kAdv30;
+  parent->AddChild(bv.b[idx]->GetWin());
+  return idx;
+}
 
 // @ 0x008252b0
 // Same row as AddSpinnerRow, but the text edit shows an integer ("%d"): text edit + up/down button pair,

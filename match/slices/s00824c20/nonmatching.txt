@@ -1,2 +1,6 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
 008252b0  1372  cPropertyUI::AddIntSpinnerRow complete; same call/vslot sequence as AddSpinnerRow (%d text instead of %f), locals held by AddRef/Release scope guards, narrow string dtor; 1662 B vs 1662 B; differs in vcall register order (eax/edx swapped) and frame/reg alloc; flags /O2 /MD /Gy /TP /arch:SSE
+00824c20  429  cPropertyUI::ClearAll complete (nine member vectors erased via the memmove helper 0x11e0744); original reloads the end pointer after the empty test and keeps the begin pointer in eax with a copy in ebx, cl hoists both loads [equiv: PASS]
+00824e10  395  cPropertyUI::AddLabel complete (WinText label row); register allocation differs (this in edi/ebp vs ebp, &mText in ebx) and vcall register order (edx/eax) [equiv: WEAK]
+00824ff0  217  cPropertyUI::AddSubWindow complete ("UI/UI/SubWindow" window row); register allocation and vcall register order differ [equiv: WEAK]
+00825110  341  cPropertyUI::AddBool complete (toggle button row); cl tail-merges the two SetPos calls the original keeps separate, Grow temp slot differs [equiv: UNSUPPORTED]

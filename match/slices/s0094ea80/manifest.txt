@@ -14,3 +14,5 @@ slices/s0094ea80/s0094ea80.cpp  ?EA_SSL_SSL_Free@@YAXPAX@Z  0094f1a0  /O2 /MD /G
 slices/s0094ea80/s0094ea80.cpp  ?EA_SSL_SSL_Realloc@@YAPAXPAXI@Z  0094f1c0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0094ea80/s0094ea80.cpp  ?Fn0094f260@@YIHPAUStreamRef94@@@Z  0094f260  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0094ea80/s0094ea80.cpp  ?Fn0094f850@@YAXPAUMutexNew94@@@Z  0094f850  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094ea80/s0094ea80.cpp  ?OpenFile@FileSystemDefault@@QAEPAUIFileStream94@@PBDHH@Z  0094f720  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094ea80/s0094ea80.cpp  ?RemoveSession@SSLManager@@QAEHXZ  0094f990  /O2 /MD /Gy /EHsc /TP /GS-

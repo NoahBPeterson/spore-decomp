@@ -323,8 +323,15 @@ unsigned __cdecl Fn0094ef10(BIO94* p, char* buf, unsigned len)
 // static line reader (register-arg helper, called from Fn0094efb0 / file_ctrl)
 // ===========================================================================
 // @ 0x0094EF50
-char* __cdecl ReadLine94(char* buf, int maxLen, SLInner* s)
+// Custom register ABI: maxLen arrives in eax, the stream in ebx, buf on the stack (caller pops it).
+char* __cdecl ReadLine94(char* buf)
 {
+    int maxLen;
+    SLInner* s;
+    __asm {
+        mov maxLen, eax
+        mov s, ebx
+    }
     char* out = buf;
     int left = maxLen - 1;
     char c = (char)-1;
@@ -353,25 +360,19 @@ char* __cdecl ReadLine94(char* buf, int maxLen, SLInner* s)
 // @ 0x0094EFB0
 int __cdecl Fn0094efb0(BIO94* p, char* buf, int maxLen)
 {
-    SLInner* s = (SLInner*)*(void**)((char*)p + 0x20);
-    char* out = buf;
-    int left = maxLen - 1;
-    char c = (char)-1;
-    if (left > 0) {
-        while (s->i30((int)&c, 1) == 1) {
-            if (c < 0)
-                break;
-            *out++ = c;
-            if (c == '\n')
-                break;
-            if (--left <= 0)
-                break;
-        }
+    SLInner* s = p->obj;
+    __asm {
+        mov ebx, s
+        mov eax, maxLen
+        push buf
+        call ReadLine94
+        add esp, 4
     }
-    *out = 0;
     char* q = buf + 1;
-    do { c = *buf; buf++; } while (c != 0);
-    return (int)buf - (int)q;
+    char c;
+    char* e = buf;
+    do { c = *e; e++; } while (c != 0);
+    return (int)e - (int)q;
 }
 
 // @ 0x0094EFE0
@@ -430,7 +431,7 @@ struct SSLManager {
     void* CreateStreamSSLSocket();              // 0x0094F030
     void  SetFileSystem(int v, bool set);       // 0x0094F080
     unsigned GetSession(const char* name);      // 0x0094F910
-    void  RemoveSession();                      // 0x0094F990
+    int   RemoveSession();                      // 0x0094F990
 };
 
 extern SSLManager* g_spSSLManager;    // 0x0166aaa8
@@ -712,17 +713,19 @@ IFileStream94* __thiscall FileSystemDefault::OpenFile(const char* name, int m1, 
     ICoreAllocator* alloc = mpSSLManager->mpCoreAllocator;
     FileStreamCtor94* p = (FileStreamCtor94*)
         alloc->AllocA(0x230, g_szUTFUp, 0, 4, 0);
-    if (p == 0)
-        return 0;
-    p->ctor(0);
-    IFileStream94* io = (IFileStream94*)p;
-    ((void**)io)[0] = vtbl_filesys;
-    *(SSLManager**)((char*)io + 0x22c) = mpSSLManager;
-    io->v40((int)name);
-    if (io->v4c(m1, m2, 1, 0))
-        return io;
-    io->v00(0);
-    alloc->Free(io, 0);
+    if (p != 0) {
+        p->ctor(0);
+        IFileStream94* io = (IFileStream94*)p;
+        *(void* volatile*)io = vtbl_filesys;
+        *(SSLManager**)((char*)io + 0x22c) = mpSSLManager;
+        io->v40((int)name);
+        if (!io->v4c(m1, m2, 1, 0)) {
+            io->v00(0);
+            alloc->Free(io, 0);
+        } else {
+            return io;
+        }
+    }
     return 0;
 }
 
@@ -740,6 +743,13 @@ void __cdecl Fn0094f850(MutexNew94* m)
 // eastl map lookups in the SSLManager
 // ===========================================================================
 struct RTreeU {
+    unsigned pad0;
+    void* aRight;      // +4  (rbtree anchor node)
+    void* aLeft;       // +8
+    void* aParent;     // +0xc
+    char  aColor;      // +0x10
+    char  pad11[3];
+    int   count;       // +0x14
     void find(void** out, const unsigned* key);       // 0x00e5c780
     void erase(void* a, void* b);                     // 0x00898b20
     void DoNukeSubtree(void* node);                   // 0x00d3b370
@@ -798,23 +808,23 @@ unsigned __thiscall SSLManager::GetSession(const char* name)
 }
 
 // @ 0x0094F990
-void __thiscall SSLManager::RemoveSession()
+int __thiscall SSLManager::RemoveSession()
 {
     Mutex94* m = (Mutex94*)((char*)this + 0x18);
     m->Lock(&g_lockArg);
-    RTreeU* tree = (RTreeU*)((char*)this + 0x48);
     void* end = (char*)this + 0x4c;
     for (void* n = *(void**)((char*)this + 0x50); n != end; ) {
         SSL_SESSION_free(*(void**)((char*)n + 0x14));
         n = RBTreeIncrement(n);
     }
+    RTreeU* tree = (RTreeU*)((char*)this + 0x48);
     tree->DoNukeSubtree(*(void**)((char*)this + 0x54));
-    *(void**)((char*)this + 0x50) = (char*)this + 0x4c;
-    *(void**)((char*)this + 0x4c) = (char*)this + 0x4c;
-    *(void**)((char*)this + 0x54) = 0;
-    *(char*)((char*)this + 0x58) = 0;
-    *(int*)((char*)this + 0x5c) = 0;
-    m->Unlock();
+    tree->aLeft = &tree->aRight;
+    tree->aRight = &tree->aRight;
+    tree->aParent = 0;
+    tree->aColor = 0;
+    tree->count = 0;
+    return m->Unlock();
 }
 
 // @ 0x0094FA60

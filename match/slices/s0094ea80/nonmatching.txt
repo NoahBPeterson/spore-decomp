@@ -10,3 +10,5 @@
 0094f870  87  SessionOwner::FindAndRelease: complete (rbtree find on FNV hash key, optional erase, calls DoNukeSubtree); rbtree walk/regalloc differ; difftest WEAK (375 valid, 51.6% coverage)
 0094f910  114  SSLManager::GetSession: complete (mutex lock, FNV-1 hash of name, rbtree find, refcount inc / SSL_SESSION_new+insert, unlock); regalloc differs; difftest PASS (264 valid, 85.1% coverage)
 0094fa60  71  Fn0094fa60: complete (temporary SSL_CTX params callback: builds callback args, calls fn ptr, frees list); regalloc differs; difftest PASS (339 valid, 100% coverage)
+0094ef50  60  ReadLine94: complete; custom register ABI (maxLen in eax, stream in ebx, buf on the stack) reproduced with a 2-instruction asm shim that copies eax/ebx into locals, so the body is spilled and the frame differs from the original (size differs); difftest UNSUPPORTED (original reads eax at entry) [equiv: UNSUPPORTED]
+0094efb0  48  Fn0094efb0: complete (reads a line via ReadLine94 with ebx=stream, eax=maxLen through a 5-instruction asm call shim, then strlen); the asm block forces an ebp frame and stack temps [equiv: PASS]
