@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPCookie.cpp -- migrated from slice(s) s0060a720 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPCookie.cpp -- migrated from slice(s) s00609790, s0060a720 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPCookie.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -14,6 +14,7 @@
 #include "SP/Pollen/cCookie.h"
 #include "cSPUILayout.h"
 #include "SP/cString.h"
+#include "EA/COM/AutoRefCount.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
@@ -330,6 +331,156 @@ static __forceinline bool DomainMatchesInline(const string8& domain, const strin
 }
 void operator delete(void* p, const char*);
 // ---- items of slice s0060a720 end
+
+// ---- items of slice s00609790 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl memset(void*, int, unsigned int);
+extern "C" char* __cdecl strcpy(char*, const char*);
+#pragma intrinsic(memset)
+#pragma intrinsic(strlen, strcpy)
+namespace eastl {
+struct allocator_s0060_9790 {
+  allocator_s0060_9790() {}
+};
+}
+namespace eastl {
+int Compare(const char* p1, const char* p2, unsigned int n);   // 0x00606ea0
+}
+namespace eastl {
+template <typename I1, typename I2>
+I1 search(I1 first1, I1 last1, I2 first2, I2 last2) {
+  if (first2 != last2) {
+    I2 temp2(first2);
+    ++temp2;
+    if (temp2 == last2) return eastl::find(first1, last1, *first2);
+    I1 cur1(first1);
+    I2 p2;
+    while (first1 != last1) {
+      while ((first1 != last1) && !(*first1 == *first2)) ++first1;
+      if (first1 != last1) {
+        p2 = temp2;
+        cur1 = first1;
+        if (++cur1 != last1) {
+          while (*cur1 == *p2) {
+            if (++p2 == last2) return first1;
+            if (++cur1 == last1) return last1;
+          }
+          ++first1;
+          continue;
+        }
+      }
+      return last1;
+    }
+  }
+  return first1;
+}
+}
+namespace eastl {
+template <typename T, typename A = allocator_s0060_9790>
+struct basic_string_s0060_9790 {
+  typedef unsigned int size_type;
+  enum { npos = -1 };
+  T* mpBegin;
+  T* mpEnd;
+  T* mpCapacity;
+  A mAllocator;
+
+  basic_string_s0060_9790() : mpBegin(0), mpEnd(0), mpCapacity(0) {
+    mpBegin = (T*)gEmptyString;
+    mpEnd = mpBegin;
+    mpCapacity = mpBegin + 1;
+  }
+  ~basic_string_s0060_9790() { DeallocateSelf(); }
+  void DeallocateSelf() {
+    if ((mpCapacity - mpBegin) > 1) DoFree(mpBegin, mpCapacity - mpBegin);
+  }
+  void DoFree(T* p, size_type) {
+    if (p) EASTL_allocator_deallocate(p);
+  }
+  size_type length() const { return (size_type)(mpEnd - mpBegin); }
+  const T* c_str() const { return mpBegin; }
+  basic_string_s0060_9790& assign(const T* pBegin, const T* pEnd);  // 0x00454cb0 (char)
+  basic_string_s0060_9790& assign(const T* p) { return assign(p, p + strlen(p)); }
+  basic_string_s0060_9790& operator=(const T* p);  // 0x006a4380 (char)
+
+  static int compare(const T* pBegin1, const T* pEnd1, const T* pBegin2, const T* pEnd2) {
+    const int n1 = (int)(pEnd1 - pBegin1);
+    const int n2 = (int)(pEnd2 - pBegin2);
+    const int nMin = min_alt(n1, n2);
+    const int cmp = Compare(pBegin1, pBegin2, (size_type)nMin);
+    return (cmp != 0 ? cmp : (n1 < n2 ? -1 : (n1 > n2 ? 1 : 0)));
+  }
+  static int comparei(const T* pBegin1, const T* pEnd1, const T* pBegin2, const T* pEnd2) {
+    const int n1 = (int)(pEnd1 - pBegin1);
+    const int n2 = (int)(pEnd2 - pBegin2);
+    const int nMin = min_alt(n1, n2);
+    const int cmp = CompareI(pBegin1, pBegin2, (size_type)nMin);
+    return (cmp != 0 ? cmp : (n1 < n2 ? -1 : (n1 > n2 ? 1 : 0)));
+  }
+  int compare(const basic_string_s0060_9790& x) const;
+  int comparei(const basic_string_s0060_9790& x) const;
+  size_type rfind(T c, size_type position) const;
+  size_type find(const basic_string_s0060_9790& x, size_type position) const;
+  size_type find(const T* p, size_type position, size_type n) const {
+    T* const pBegin = mpBegin;
+    T* const pEnd = mpEnd;
+    if ((position + n) <= (size_type)(pEnd - pBegin)) {
+      const T* const pResult = search(pBegin + position, pEnd, p, p + n);
+      if ((pResult != pEnd) || (n == 0)) return (size_type)(pResult - pBegin);
+    }
+    return (size_type)npos;
+  }
+};
+}
+typedef eastl::basic_string_s0060_9790<char> string8_s0060_9790;
+namespace SP {
+namespace Pollen {
+class cCookie_s0060_9790;  // namespace SP
+}
+}
+namespace EA {
+namespace COM {
+template <typename T>
+class RefCountTemplate_s0060_9790 {
+ public:
+  RefCountTemplate_s0060_9790() : mRefCount(0) {}
+  virtual ~RefCountTemplate_s0060_9790() {}
+  int AddRef() { return mRefCount += 1; }
+  int Release() {
+    int n = (*(volatile int*)&mRefCount += -1);
+    if (n == 0) {
+      mRefCount = 1;
+      delete this;
+      return 0;
+    }
+    return n;
+  }
+  T mRefCount;
+};
+}
+}
+namespace SP {
+namespace Pollen {
+class cCookie_s0060_9790 : public EA::COM::RefCountTemplate_s0060_9790<int> {
+ public:
+  cCookie_s0060_9790();
+  string8_s0060_9790 mName;           // +0x8
+  string8_s0060_9790 mValue;          // +0x18
+  string8_s0060_9790 mDomain;         // +0x28
+  bool mDomainDefaulted;   // +0x38
+  unsigned int mMaxAge;    // +0x3c
+  string8_s0060_9790 mPath;           // +0x40
+  bool mPathDefaulted;     // +0x50
+  unsigned short mVersion; // +0x52
+};
+}
+}
+// ---- items of slice s00609790 end
+
+// @ 0x0060a040
+namespace SP { namespace Pollen {
+cCookie_s0060_9790::cCookie_s0060_9790()
+{}
+}}  // namespace SP::Pollen
 
 // @ 0x0060a960
 namespace SP { namespace Pollen {

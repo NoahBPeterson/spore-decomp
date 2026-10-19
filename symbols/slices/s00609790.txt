@@ -22,7 +22,7 @@
 00609f40 eastl::basic_string<char>::rfind(char,size_type)  # byte-exact
 00609f90 eastl::basic_string<char>::find(const basic_string&,size_type)  # byte-exact
 00609fe0 eastl::basic_string<char>::compare(const basic_string&)  # byte-exact
-0060a040 SP::Pollen::cCookie::cCookie  # PDB layout cCookie (0x54); byte-exact
+0060a040 ??0cCookie_s0060_9790@Pollen@SP@@QAE@XZ  # cCookie_s0060_9790::cCookie migrated from s00609790 (verbatim, slice spelling)
 0060a080 SP::Pollen::cCookie::~cCookie  # byte-exact
 0060a150 eastl::fixed_string<char>::append(const char*,const char*)  # fixed allocator (pool ptr at +0x10); byte-exact
 0060a2c0 eastl::fixed_string<char>::assign(const char*,const char*)  # byte-exact
