@@ -1,5 +1,32 @@
 # va  diff-bytes  reason
-00781b10  86   complete: Vec12 destroy loop + tagged deallocate; differs only by the compiler-generated EH unwind frame
-00781cf0  81   complete: E36 vector destroy loop + tagged deallocate; differs only by the compiler-generated EH unwind frame; equiv FAIL (callee arg mismatch, 5/5)
-00781b80  131  complete: E36 range copy-construct (p0 + Vec12 copy + a/b/c); differs only by the compiler-generated EH unwind frame and register schedule; equiv WEAK (385 valid, 38.5% cov; write faults)
+00781a60  129  Vec12::ConstructRange: COMPLETE (count via 0x2aaaaaab magic divide, sized EastlAllocate with
+                the allocator.h:0xd1 site, begin/end/cap stores, FUN_0077fa70 relocate, ret 4). Equiv gate: WEAK
+                (189/400 valid, 80.3% coverage; no mismatch). Differs only by
+                the MSVC SEH prologue + try-scope frame (handler 0x120f188) and the readonly vtable/name
+                relocations emitted as absolute constants instead of relocations.
+00781c30  -   MOVED TO manifest.txt: byte-exact as ?Construct@E36@@QAEPAU1@PAXUE36Part@@@Z.
+00781d60  n/a  cShadowWorld ctor: COMPLETE for the whole 1088-byte path (vtable/pointer/flag prologue, member
+                inits, memset of +0x44, ??_L on +0xf4/+0x10c, the 16x -1 fill, float/constant matrix, then the
+                2x2 refcount release loop). MSVC's EH state tracking cannot be reproduced without a full
+                class-hierarchy model, and the compiler emits no symbol of comparable size, so chk/run_all
+                cannot score it. Ours is 899 bytes vs 1088.
+007821b0  n/a  cShadowWorld dtor: COMPLETE (release +0x1bc, ??_M(4,8) on +0x10c, ??_M(4,2) on +0xf4, E36-vector
+                destroy of +0x30, Vec12::Destroy of +0x1c, release +0x18, then the two teardown vtable stores
+                0x13ef094/0x13eb938). Differs by the SEH frame (handler 0x1213ad4) and because FUN_00781CF0 is
+                inlined here; ours is 156 bytes vs 180.
+00782270  294  Vec12::Assign: COMPLETE (self-assign early-out, grow path via Allocate + DestroyRange + header-flag
+                free, the copy-then-append path, and the truncate path via FUN_00760ba0 + DestroyRange). The
+                reallocation/relocate helper call shapes are uncertain and the register schedule differs. Equiv
+                gate: WEAK (136/400 inputs valid, 44.4% instruction coverage; no mismatch observed).
+007824e0  11   cSWsub pop_back-like helper: COMPLETE. Pure instruction-scheduling difference: the original loads
+                the vtable slot for the +0x10 call (mov edx,[edx+0x14]) BEFORE the mInt21c store, ours schedules
+                it after. Tried int locals, explicit fn-ptr locals, comma operators, comma-in-argument, early/late
+                arg reads and flag variants (no /Gy, /Oi, /Ob1, /Os, /Oy) - all >= 11 bytes; likely a different cl
+                build. Every store/call of the original is present. Equiv gate: UNSUPPORTED (0/400 valid, 0%
+                coverage - the plus-N register/stack ABI of the vtable calls cannot be faked by the harness).
+00782800  n/a  OUT OF SCOPE for this slice (VA not in the slice's target list; kept as a helper used by
+                FUN_00782660's slice). Range insert; destroy/relocate split not exact.
 007819d0  120  complete: conditional Apply/notify with the four enable flags and the 0x20a/0x20b/0x223 notifications; only register schedule differs; equiv WEAK (1200 valid, 40% cov)
+00781b10  86   complete: Vec12 destroy loop + tagged deallocate; differs only by the compiler-generated EH unwind frame
+00781b80  131  complete: E36 range copy-construct (p0 + Vec12 copy + a/b/c); differs only by the compiler-generated EH unwind frame and register schedule; equiv WEAK (385 valid, 38.5% cov; write faults)
+00781cf0  81   complete: E36 vector destroy loop + tagged deallocate; differs only by the compiler-generated EH unwind frame; equiv FAIL (callee arg mismatch, 5/5)
