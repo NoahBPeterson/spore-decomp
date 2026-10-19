@@ -1,7 +1,11 @@
-0099b110 EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::CreateLazyReference  # PDB pdb_names.json
-0099b1f0 EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::ReadProperty  # PDB pdb_names.json
-0099b660 EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::XmlReaderState  # PDB pdb_names.json
-0099b730 EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::ReadPropertyList  # Ghidra PDB candidate (caller-single)
-0099b8a0 EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::ReadObject  # PDB pdb_names.json
-0099b9e0 EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::ReadBindings  # PDB pdb_names.json
-0099bac0 EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::ReadGraph  # PDB pdb_names.json
+0099afe0 ?Fixup@XmlReaderState_s0099_afe0@@QAE_NPAUIList@@@Z  # XmlReaderState_s0099_afe0::Fixup migrated from s0099afe0 (verbatim, slice spelling)
+0099b110 ?CreateLazyReference@XmlReaderState_s0099_afe0@@QAEPAULazyReference@@PAUSerItem@@PAUPropInfo@@0H@Z  # XmlReaderState_s0099_afe0::CreateLazyReference migrated from s0099afe0 (verbatim, slice spelling)
+0099b1f0 ?ReleaseTemp@@YAXPAUStackAlloc@@PAD@Z  # ReleaseTemp migrated from s0099afe0 (verbatim, slice spelling)
+0099b5a0 ?f@S99b5a0@@QAEXHH@Z  # S99b5a0::f migrated from s0099afe0 (verbatim, slice spelling)
+0099b5e0 ?f@S99b5e0@@QAEXXZ  # S99b5e0::f migrated from s0099afe0 (verbatim, slice spelling)
+0099b660 ?f@S99b660@@QAEPAU1@HHHHH@Z  # S99b660::f migrated from s0099afe0 (verbatim, slice spelling)
+0099b730 ?ReadPropertyList@XmlReaderState_s0099_afe0@@QAE_NPAUSerItem@@PAUIList@@@Z  # XmlReaderState_s0099_afe0::ReadPropertyList migrated from s0099afe0 (verbatim, slice spelling)
+0099b8a0 ?ReadObject@XmlReaderState_s0099_afe0@@QAEPAUIUnknown32_s0099_afe0@@PAI@Z  # XmlReaderState_s0099_afe0::ReadObject migrated from s0099afe0 (verbatim, slice spelling)
+0099b9e0 ?ReadBindings@XmlReaderState_s0099_afe0@@QAE_NXZ  # XmlReaderState_s0099_afe0::ReadBindings migrated from s0099afe0 (verbatim, slice spelling)
+0099bac0 ?ReadGraph@XmlReaderState_s0099_afe0@@QAE_NXZ  # XmlReaderState_s0099_afe0::ReadGraph migrated from s0099afe0 (verbatim, slice spelling)
+0099be60 ?XmlDeserializerRead@@YGIPAUIStreamX@@PAXPAUSerCollection_s0099_afe0@@PAUBinderVec@@11@Z  # XmlDeserializerRead migrated from s0099afe0 (verbatim, slice spelling)

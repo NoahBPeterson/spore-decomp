@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/XmlDeserializer.cpp  ?Read@cSPUIDeserializer@@UAEIPAUIStream@@HPAXHHH@Z  0082d9f0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlDeserializer.cpp  ?Allocate@XmlReaderState@UTFWinToolsInternal@UTFWinTools@EA@@QAEXPAX0@Z  0099a920  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlDeserializer.cpp  ?Splice@XmlReaderState@UTFWinToolsInternal@UTFWinTools@EA@@QAEXPAX@Z  0099a9d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlDeserializer.cpp  ?f@S99b5a0@@QAEXHH@Z  0099b5a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlDeserializer.cpp  ?f@S99b5e0@@QAEXXZ  0099b5e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlDeserializer.cpp  ?ReadGraph@XmlReaderState_s0099_afe0@@QAE_NXZ  0099bac0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlDeserializer.cpp  ?XmlDeserializerRead@@YGIPAUIStreamX@@PAXPAUSerCollection_s0099_afe0@@PAUBinderVec@@11@Z  0099be60  /O2 /MD /Gy /TP /GS- /Isrc/game/include
