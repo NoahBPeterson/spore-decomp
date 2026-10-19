@@ -1,1 +1,1 @@
-007dd070  SP::cSmoothCameraController::Update  # PDB name
+007dd070 ?Update@cSmoothCameraController_s007d_d070@@QAEXHPAUcViewer@@@Z  # cSmoothCameraController_s007d_d070::Update migrated from s007dd070 (verbatim, slice spelling)

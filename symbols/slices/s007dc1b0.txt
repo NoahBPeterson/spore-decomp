@@ -1,11 +1,11 @@
-007dc1b0  SP::cSmoothCameraController::Zoom  # PDB name
-007dc230  SP::cSmoothCameraController::ZoomRange  # PDB name
-007dc260  SP::cSmoothCameraController::UpdateSubjectMotion  # PDB name
-007dc340  SP::cSmoothCameraController::HandleRequest  # PDB name
-007dc510  SP::cSmoothCameraController::ZoomInterpolationParamsFromDistanceAlongCurve  # PDB name
-007dc5e0  SP::cSmoothCameraController::ConstrainDistanceAlongCurve  # PDB name
+007dc1b0 ?Zoom@cSmoothCameraController_s007d_c1b0@@QAEMXZ  # cSmoothCameraController_s007d_c1b0::Zoom migrated from s007dc1b0 (verbatim, slice spelling)
+007dc230 ?ZoomRange@cSmoothCameraController_s007d_c1b0@@QAE_NPAM0@Z  # cSmoothCameraController_s007d_c1b0::ZoomRange migrated from s007dc1b0 (verbatim, slice spelling)
+007dc260 ?UpdateSubjectMotion@cSmoothCameraController_s007d_c1b0@@QAEXM@Z  # cSmoothCameraController_s007d_c1b0::UpdateSubjectMotion migrated from s007dc1b0 (verbatim, slice spelling)
+007dc340 ?HandleRequest@cSmoothCameraController_s007d_c1b0@@QAE_NH@Z  # cSmoothCameraController_s007d_c1b0::HandleRequest migrated from s007dc1b0 (verbatim, slice spelling)
+007dc510 ?ZoomInterpolationParamsFromDistanceAlongCurve@cSmoothCameraController_s007d_c1b0@@QAEXPAI0PAMM@Z  # cSmoothCameraController_s007d_c1b0::ZoomInterpolationParamsFromDistanceAlongCurve migrated from s007dc1b0 (verbatim, slice spelling)
+007dc5e0 ?ConstrainDistanceAlongCurve@cSmoothCameraController_s007d_c1b0@@QAEMM@Z  # cSmoothCameraController_s007d_c1b0::ConstrainDistanceAlongCurve migrated from s007dc1b0 (verbatim, slice spelling)
 007dc630  SP::cSmoothCameraController::~cSmoothCameraController  # PDB name
-007dc7b0  SP::cSmoothCameraController::ViewerOrientationFromPositionAndLookAt  # PDB name
-007dca30  SP::cSmoothCameraController::OnUpdateTargetSet  # PDB name
-007dcb00  FUN_007dcb00  # quaternion multiply helper
-007dcc30  SP::cSmoothCameraController::ViewerPositionAndOrientationFromDistanceAlongCurve  # PDB name
+007dc7b0 ?ViewerOrientationFromPositionAndLookAt@@YAXPBM00PAM@Z  # ViewerOrientationFromPositionAndLookAt migrated from s007dc1b0 (verbatim, slice spelling)
+007dca30 ?OnUpdateTargetSet@cSmoothCameraController_s007d_c1b0@@QAEXXZ  # cSmoothCameraController_s007d_c1b0::OnUpdateTargetSet migrated from s007dc1b0 (verbatim, slice spelling)
+007dcb00 ?FUN_007dcb00@@YAXPAMPBM1@Z  # FUN_007dcb00 migrated from s007dc1b0 (verbatim, slice spelling)
+007dcc30 ?ViewerPositionAndOrientationFromDistanceAlongCurve@cSmoothCameraController_s007d_c1b0@@QAEXPAM0MH@Z  # cSmoothCameraController_s007d_c1b0::ViewerPositionAndOrientationFromDistanceAlongCurve migrated from s007dc1b0 (verbatim, slice spelling)

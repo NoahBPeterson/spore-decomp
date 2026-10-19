@@ -1,0 +1,10 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast)
+007dc1b0 158 cSmoothCameraController::Zoom; x87 compare/branch schedule differs
+007dc230 28 cSmoothCameraController::ZoomRange; comparison operand order and reload schedule differ
+007dc260 226 cSmoothCameraController::UpdateSubjectMotion; x87 sqrt/normalise schedule differs
+007dc510 213 cSmoothCameraController::ZoomInterpolationParamsFromDistanceAlongCurve; clamp/select schedule differs
+007dc5e0 85 cSmoothCameraController::ConstrainDistanceAlongCurve; minss/maxss asm helper not reproduced
+007dca30 75 cSmoothCameraController::OnUpdateTargetSet; constant/field-copy schedule differs
+007dcb00 211 FUN_007dcb00 quaternion multiply; SSE expression schedule differs; equiv FAIL (1 ulp float-rounding mismatch at input 5)
+007dd070 1562 complete, flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast : all 11 direct calls and 6 vtable slots in original order; remaining diff = local Vec3 copy kept on the stack, spill/register choices
+007dd880 3559 SP::cSmoothCameraController::ConfigUpdated; complete (all property reads incl. zoom/FOV, clip, pitch and orientation arrays), this lives in esi instead of ebx and frame is 4 bytes smaller

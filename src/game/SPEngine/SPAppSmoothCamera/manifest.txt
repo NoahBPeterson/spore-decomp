@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPAppSmoothCamera.cpp  ?Init@cSmoothCameraController@@QAE_NH@Z  007db920  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppSmoothCamera.cpp  ?OnKeyDown@cSmoothCameraController@@QAE_NHH@Z  007dbc30  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppSmoothCamera.cpp  ?SetFocus@cSmoothCameraController@@QAEXH@Z  007dbcb0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppSmoothCamera.cpp  ?SetZoomDuration@cSmoothCameraController@@QAEXI@Z  007dbd90  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppSmoothCamera.cpp  ?GetSavedCamera@cSmoothCameraController@@QAEPAXXZ  007dbdd0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppSmoothCamera.cpp  ?SetSavedCamera@cSmoothCameraController@@QAEXPAM@Z  007dbdf0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
