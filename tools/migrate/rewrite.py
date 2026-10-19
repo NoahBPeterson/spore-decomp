@@ -4427,6 +4427,20 @@ class Rewrite:
                                     open(os.path.join(INC, p0), encoding="utf-8", errors="replace").read()):
                                 hdr = p0
                                 break
+            if not hdr:
+                # a namespaced stub the slice hoists to global scope (`namespace SP { struct cSPColorRGB {..}; }` +
+                # `using SP::cSPColorRGB;`) collides with a canonical GLOBAL class of that name (cSPColorRGB.h): C2874,
+                # mig9 s005a4250/s005a51c0 (SPEditorColorPicker, 21 functions).  The stub is renamed; so is the using.
+                ns1, inner1 = RS.unwrap_namespaces(text)
+                if ns1 and RS.mask(inner1).lstrip().startswith(("struct", "class", "union")):
+                    nm1 = RS.item_names("struct", inner1)
+                    if len(nm1) == 1 and re.search(r"(?m)^\s*using\s+(?:::)?%s\s*;" % re.escape("::".join(ns1 + [nm1[0]])),
+                                                   "\n".join(t for _k, t in self.items)):
+                        p1 = H.include_path(nm1[0])
+                        if os.path.exists(os.path.join(INC, p1)) and re.search(
+                                r"\b(?:struct|class|union)\s+%s\b" % re.escape(nm1[0]),
+                                open(os.path.join(INC, p1), encoding="utf-8", errors="replace").read()):
+                            hdr = p1
             # renamed whenever the class HAS a canonical header, not only when this run includes it: a later slice of the module
             # that converts a function includes the header, and the earlier slice's kept block then redefines the class
             # (s0083c900's eastl::allocator / string8 stubs vs s0083d3d0's eastl/string.h: C2011 in another slice's block, which
