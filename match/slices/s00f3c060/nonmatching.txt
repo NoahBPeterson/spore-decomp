@@ -1,1 +1,10 @@
-# va  diff-bytes  reason   (none complete-but-not-exact in this slice)
+# va  diff-bytes  reason
+00f3c120   31  complete; begin-iterator skip-advance. cl swaps begin/out registers (eax/edx) vs the original and folds the flag tests; difftest FAIL on the hidden eax only (original leaves the `out` argument in eax; callerdeps flags 1 site, but the sole caller at 00f410c7 does not read eax -- false positive).
+00f3c160   58  complete; next-non-empty-index scan. cl folds the first (flags>>30)&1 test into `test [mem],0x40000000` and emits a longer loop body than the original's 46-byte form; difftest PASS.
+00f3c2c0   89  complete; element visitor loop (mpBase/mpEnd/mCur at m10+0x2c10/0x2c14/0x2c24). inner skip-loop shape and the (g>>31)&1 test differ (cl folds it); difftest WEAK (no mismatch; low coverage from fake callees).
+00f3c330  223  complete; resource lookup + bitset<128>::none. call/register allocation not tuned; difftest WEAK (no mismatch; low coverage from fake callees).
+00f3c420  199  complete; intrusive-refcount teardown of 4 slots + member zeroing. inlined ReleaseRef register assignment differs; difftest PASS.
+00f3c500  190  complete; cSPTransform build + BackTransformPoint + bounds box test (X/Y, +-4.0f). frame/register allocation not tuned; difftest WEAK (no mismatch; low coverage -- g_16c87ec is null in most inputs so the early return dominates).
+00f3c610    7  complete; planet-proximity callback install. identical 308-byte length; only the `g_16c87ec = edi` global store is scheduled into the virtual-call arg window by the original instead of before it. Not reachable from source ordering; difftest WEAK (low coverage from fake callees).
+00f3c750  120  complete; scenario-entry loop. unsigned loop bound (matches the original's `je`/`jb`); cl register allocation/scheduling differ from the original. unsigned is required for equivalence (the signed form FAILs), difftest PASS.
+00f3c7f0   51  complete; element count by id. `while (end != p)` + sign-bit test; cl folds the (x>>31)&1 test into `test [mem],0x80000000` vs the original's materialised mov/shr/test. difftest WEAK (no mismatch; low coverage).

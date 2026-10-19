@@ -4,4 +4,5 @@ slices/s00f3c060/s00f3c060.cpp  ?KillThing@@YAXXZ  00f3c0b0  /O2 /MD /Gy /EHsc /
 slices/s00f3c060/s00f3c060.cpp  ?GetThing@@YAHXZ  00f3c0e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00f3c060/s00f3c060.cpp  ?IndexOf@W@@QAEHPAX@Z  00f3c100  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00f3c060/s00f3c060.cpp  ?CallD@@YAXXZ  00f3c1b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f3c060/s00f3c060.cpp  ?FUN_00f3c1d0@@YAXPAIPAM11@Z  00f3c1d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00f3c060/s00f3c060.cpp  ?GetAt@W@@QAEHPAH@Z  00f3cb30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

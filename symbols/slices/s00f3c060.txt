@@ -2,7 +2,17 @@
 00f3c0b0  KillThing  # g_16065fc Release
 00f3c0e0  GetThing   # g_16c7aa4+0xcc==2 ? [g+0x78]+0xb8 : ScenarioTutorials_GetActive()
 00f3c100  W::IndexOf
+00f3c120  W::FUN_00f3c120   # *out=begin; skip-advance begin by 0x238 while flags bit30 clear & bit31 set
+00f3c160  W::FUN_00f3c160   # scan forward for first flags>=0; else 0x3fffffff
 00f3c1b0  CallD      # g_15b0534.fn(0x55c0377, g_15b0530)
+00f3c1d0  FUN_00f3c1d0  # GetPropertyT_float x3 (XML property read, __cdecl)
+00f3c2c0  W::FUN_00f3c2c0   # element visitor loop (ElemList at m10+0x2c10)
+00f3c330  W::FUN_00f3c330   # resource lookup + bitset<128>::none
+00f3c420  W::FUN_00f3c420   # refcount teardown of 4 slots + member zeroing
+00f3c500  FUN_00f3c500  # cSPTransform build + BackTransformPoint + bounds box test (__cdecl)
+00f3c610  W::FUN_00f3c610   # planet-proximity callback install
+00f3c750  W::FUN_00f3c750   # scenario-entry loop
+00f3c7f0  W::FUN_00f3c7f0   # element count by id
 00f3cb30  W::GetAt
 00f3cd10  scalar deleting dtor of the summarizer class
 00f3cd60/cdf0/ce80  wide-string member setters (+0x48/+0x58/+0x68)
