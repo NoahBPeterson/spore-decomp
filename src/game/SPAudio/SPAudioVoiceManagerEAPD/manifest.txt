@@ -3,3 +3,4 @@
 ../src/game/SPAudio/SPAudioVoiceManagerEAPD.cpp  ?AudioFunc98@@YGXH@Z  00a45ff0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPAudio/SPAudioVoiceManagerEAPD.cpp  ?AudioFunc9c@@YGXHH@Z  00a46010  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPAudio/SPAudioVoiceManagerEAPD.cpp  ?AudioCopyPtr@@YG_NHHPAPAX@Z  00a46040  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPAudio/SPAudioVoiceManagerEAPD.cpp  ?erase@VMHash@@QAEIABI@Z  00a460d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

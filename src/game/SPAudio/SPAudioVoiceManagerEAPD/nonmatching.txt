@@ -2,4 +2,6 @@
 00a46050 12 bool-normalisation / vcall register choice
 00a46080 12 bool-normalisation / vcall register choice
 00a460b0 2 tail-jmp target register differs
+00a46160 924 large EH StartVoice: stack-slot sharing of disjoint-scope locals and register choice differ (1128 vs 1095 bytes); all paths and callees present; equiv UNSUPPORTED (orig-abi-broken(fake): 399/400 inputs need valid vtables)
+00a465b0 10 hashtable member init store order (movss/vptr scheduling); equiv UNSUPPORTED (vtable of ours not mapped: secondary-base thunk 0xa46140 not in this slice)
 00a46690 29 branch orientation and bool materialisation
