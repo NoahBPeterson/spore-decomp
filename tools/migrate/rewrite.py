@@ -4273,8 +4273,11 @@ class Rewrite:
             ids += toks[:-1] if len(toks) > 1 else toks
         return all(t in self._BUILTIN or re.search(r"\b%s\b" % re.escape(t), known) for t in ids)
 
-    def _tu_defines_cpp(self, name):
-        """The module TU (as it is on disk) defines a free function `name` (after the first marker) without C linkage."""
+    def _tu_defines_cpp(self, name, nparams=None):
+        """The module TU (as it is on disk) defines a free function `name` (after the first marker) without C linkage.
+        With `nparams`, only a definition with that many parameters counts: another overload is another function (s008087f0's
+        `extern "C" AnchorWindowToWindow(IWin*, IWin*, int, int)` was dropped against s008068d0's C++
+        `AnchorWindowToWindow(W*)`, C3861 in a preamble helper, eight functions held)."""
         tu = W(*getattr(self, "tu_rel", "x/y").split("/"))
         if not os.path.exists(tu):
             return False
@@ -4283,9 +4286,13 @@ class Rewrite:
         if k < 0:
             return False
         body = mask(t[k:])
-        for mm in re.finditer(r"(?m)^([^\n;{}]*?)\b%s\s*\([^;{}]*\)\s*\{" % re.escape(name), body):
+        for mm in re.finditer(r"(?m)^([^\n;{}]*?)\b%s\s*\(([^;{}]*)\)\s*\{" % re.escape(name), body):
             if "::" in mm.group(1).split("(")[0][-2:] or re.search(r"extern\s*\"C\"", t[k + mm.start():k + mm.end()]):
                 continue
+            if nparams is not None:
+                ps = mm.group(2).strip()
+                if len(split_params(ps) if ps and ps != "void" else []) != nparams:
+                    continue
             if not re.search(r"(\w+)::\s*$", mm.group(1)):
                 return True
         return False
@@ -4359,7 +4366,7 @@ class Rewrite:
                     if same_function(pk, o) and not dll(o[5]) and o[5] in "\n".join(lines):
                         lines = "\n".join(lines).replace(o[5], text).split("\n")
                         self.notes.append(("dedup-proto", "%s: the TU's declaration respelled with this slice's dllimport" % pk[0]))
-            if pk and pk[1] and self._tu_defines_cpp(pk[0].split("::")[-1]):
+            if pk and pk[1] and self._tu_defines_cpp(pk[0].split("::")[-1], len(pk[2])):
                 # an `extern "C"` prototype of a function another slice DEFINES in this TU with C++ linkage (s00767ee0's
                 # `extern "C" void __cdecl UnionDestroy(void*, int)` vs s00765f80's definition, 0x7668c0): emitted first, it gave
                 # the definition C linkage and the byte-exact row lost its symbol (fix pass 4)
