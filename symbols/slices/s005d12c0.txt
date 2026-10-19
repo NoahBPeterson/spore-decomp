@@ -1,3 +1,12 @@
-005d12c0 SP::cSPEditorSpine::RecordBlockCoordinates
-005d19e0 SP::cSPEditorSpine::RepinArea
-005d1d40 SP::cSPEditorSpine::UpdateVertebraeOrderAndCollisionFilters
+005d12c0 ?RecordBlockCoordinatesSkeleton@SP@@YAXPAX0@Z  # RecordBlockCoordinatesSkeleton migrated from s005d12c0 (verbatim, slice spelling)
+005d13f0 ?CopyElem24@SP@@YAPAUElem24@1@PAU21@00@Z  # CopyElem24 migrated from s005d12c0 (verbatim, slice spelling)
+005d1450 ?RelocateElem24Backward@SP@@YAPAUElem24@1@PAU21@00@Z  # RelocateElem24Backward migrated from s005d12c0 (verbatim, slice spelling)
+005d14a0 ?FUN_005d14a0@SP@@YAXH@Z  # FUN_005d14a0 migrated from s005d12c0 (verbatim, slice spelling)
+005d1530 ?FUN_005d1530@SP@@YAXH@Z  # FUN_005d1530 migrated from s005d12c0 (verbatim, slice spelling)
+005d1600 ?SetFlag@cSpine75@SP@@QAEX_NH@Z  # cSpine75::SetFlag migrated from s005d12c0 (verbatim, slice spelling)
+005d1640 ?FUN_005d1640@SP@@YAXH@Z  # FUN_005d1640 migrated from s005d12c0 (verbatim, slice spelling)
+005d1780 ?FUN_005d1780@SP@@YAXH@Z  # FUN_005d1780 migrated from s005d12c0 (verbatim, slice spelling)
+005d19e0 ?FUN_005d19e0@SP@@YAXH@Z  # FUN_005d19e0 migrated from s005d12c0 (verbatim, slice spelling)
+005d1ba0 ?FUN_005d1ba0@SP@@YAXH@Z  # FUN_005d1ba0 migrated from s005d12c0 (verbatim, slice spelling)
+005d1d40 ?FUN_005d1d40@SP@@YAXH@Z  # FUN_005d1d40 migrated from s005d12c0 (verbatim, slice spelling)
+005d1e70 ?FUN_005d1e70@SP@@YAXH@Z  # FUN_005d1e70 migrated from s005d12c0 (verbatim, slice spelling)

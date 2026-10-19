@@ -1,4 +1,10 @@
-005cdd00 SP::cSPEditorSpine::CreateVertebraBody  # pdb dev 00d37240, gap-align
-005ce0c0 SP::CreateAxialConstraintData  # pdb dev 00d375a0, gap-align
-005ce300 SP::cSPEditorSpine::LoadDynamicTuning  # pdb dev 00d37c20, anchor
-005ce680 SP::cSPEditorSpine::CalcVertebraPhysicsBoundingBox  # pdb dev 00d37f80, gap-align
+005cdd00 ?CreateVertebraBody@cSPEditorSpine_s005c_dd00@SP@@QAEPAVhkRigidBody_s005c_dd00@@MPAUhkTransform_s005c_dd00@@@Z  # cSPEditorSpine_s005c_dd00::CreateVertebraBody migrated from s005cdd00 (verbatim, slice spelling)
+005ce060 ?AddVertebraBody@cSPEditorSpine_s005c_dd00@SP@@QAEPAHPAHMPAUhkTransform_s005c_dd00@@@Z  # cSPEditorSpine_s005c_dd00::AddVertebraBody migrated from s005cdd00 (verbatim, slice spelling)
+005ce0c0 ?CreateAxialConstraintData@@YAPAVhkGenericConstraintData@@H@Z  # CreateAxialConstraintData migrated from s005cdd00 (verbatim, slice spelling)
+005ce210 ?SetEnabled@cSpineHelper@SP@@QAEXH@Z  # cSpineHelper::SetEnabled migrated from s005cdd00 (verbatim, slice spelling)
+005ce250 ?ReleaseE8@cSpineHelper@SP@@QAEXXZ  # cSpineHelper::ReleaseE8 migrated from s005cdd00 (verbatim, slice spelling)
+005ce270 ?GetHandle@cSpineHelper@SP@@QAEPAXH@Z  # cSpineHelper::GetHandle migrated from s005cdd00 (verbatim, slice spelling)
+005ce2a0 ?NormalizeVector2@@YAXPAMPBM@Z  # NormalizeVector2 migrated from s005cdd00 (verbatim, slice spelling)
+005ce300 ?LoadDynamicTuning@cSPEditorSpine@SP@@QAEXXZ  # SP::cSPEditorSpine::LoadDynamicTuning migrated from s005cdd00
+005ce680 ?CalcVertebraPhysicsBoundingBox@cSPEditorSpine_s005c_dd00@SP@@QAEXMPAEPAM@Z  # cSPEditorSpine_s005c_dd00::CalcVertebraPhysicsBoundingBox migrated from s005cdd00 (verbatim, slice spelling)
+005ce7b0 ?FUN_005ce7b0@@YAHPAXPAMHD10@Z  # FUN_005ce7b0 migrated from s005cdd00 (verbatim, slice spelling)

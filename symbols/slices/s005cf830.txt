@@ -1,1 +1,2 @@
-005cf830 SP::cSPEditorSpine::LoadStaticTuning  # pdb dev 00d38ca0, anchor
+005cf830 ?LoadStaticTuning@cSPEditorSpine@SP@@QAEXXZ  # SP::cSPEditorSpine::LoadStaticTuning migrated from s005cf830
+005cfde0 ?FUN_005cfde0@@YAXHHPAMH00HD@Z  # FUN_005cfde0 migrated from s005cf830 (verbatim, slice spelling)

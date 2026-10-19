@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+005cd870 105 cInterp::Interp: original clamps with inline-asm Min/Max (maxss/minss with stack spills); C++ ternaries give comiss branches
+005ce060 50 AddVertebraBody: cl schedules `push 1` before loading mpWorld into ecx; original loads ecx first
+005ce250 4 ReleaseE8: uses eax + pop ecx; original uses ecx + add esp,4
+005ce2a0 61 NormalizeVector2: original splits sqrt (x87) from reciprocal (SSE divss); cl fuses 1/sqrt into fdivrp
+005ce680 243 CalcVertebraPhysicsBoundingBox: original has an aligned frame (and esp,-16) and differs in SSE scheduling of the center/offset terms
+005ce9b0 1609 complete belt-of-circles arc walker (kinds 0/1/2, tangent search); not byte-exact: x87/SSE mix scheduling differs
+005cf110 655 complete nearest-parameter search (coarse scan + bisection); not byte-exact: x87 sum scheduling differs; difftest FAIL is a checker artifact: on the failing input Curve::Eval (0x5d5050) on a soup curve returns without writing its output point, so both sides read their uninitialized stack Vec2 (the original's slot holds leftover P/A values, ours the 0xcc stack fill) and the final ratio differs; all calls, parameters and the bisection result res->x agree
+005cf4f0 487 complete handle extrusion helper; not byte-exact: fabs/sqrt x87 interleave and vec3 copy via int regs differ
+005d13f0 68 CopyElem24: cl puts `last` in a callee-saved reg and picks different home registers; original keeps last in memory and aliases +0xc
+005d1450 63 RelocateElem24Backward: same register-allocation difference (original aliases src+0xc/dst+0xc, keeps bounds in memory)

@@ -1,0 +1,12 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorSpine.cpp  ?TimeObjValue@@YAMPAVcTimeObj@@@Z  005cd910  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?IncRef@cRefCounted@@QAEXH@Z  005cdbb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?DecRef@cRefCounted@@QAEXH@Z  005cdbc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?CreateAxialConstraintData@@YAPAVhkGenericConstraintData@@H@Z  005ce0c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?SetEnabled@cSpineHelper@SP@@QAEXH@Z  005ce210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?GetHandle@cSpineHelper@SP@@QAEPAXH@Z  005ce270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?CopyE20@@YA?AUE20Iter@SP@@U12@00@Z  005cf7a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?GetFirstLeg@cSPEditorSpine_s005d_02d0@SP@@QAEPAULeg@2@XZ  005d0ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?GetLastLeg@cSPEditorSpine_s005d_02d0@SP@@QAEPAULeg@2@XZ  005d0d90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?SetFlag@cSpine75@SP@@QAEX_NH@Z  005d1600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?CrossSideCcw@@YA_NPAM00@Z  005d4ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

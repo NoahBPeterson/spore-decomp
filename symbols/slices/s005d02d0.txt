@@ -1,4 +1,5 @@
-005d07f0 SP::cSPEditorSpine::Update  # pdb dev (anchor)
-005d0ce0 SP::cSPEditorSpine::GetFirstLeg
-005d0d90 SP::cSPEditorSpine::GetLastLeg
-005d0ea0 SP::cSPEditorSpine::cSPEditorSpine
+005d02d0 ?FUN_005d02d0@@YAXHHMM@Z  # FUN_005d02d0 migrated from s005d02d0 (verbatim, slice spelling)
+005d07f0 ?FUN_005d07f0@@YAXH@Z  # FUN_005d07f0 migrated from s005d02d0 (verbatim, slice spelling)
+005d0ce0 ?GetFirstLeg@cSPEditorSpine_s005d_02d0@SP@@QAEPAULeg@2@XZ  # cSPEditorSpine_s005d_02d0::GetFirstLeg migrated from s005d02d0 (verbatim, slice spelling)
+005d0d90 ?GetLastLeg@cSPEditorSpine_s005d_02d0@SP@@QAEPAULeg@2@XZ  # cSPEditorSpine_s005d_02d0::GetLastLeg migrated from s005d02d0 (verbatim, slice spelling)
+005d0ea0 ?FUN_005d0ea0@@YAXH@Z  # FUN_005d0ea0 migrated from s005d02d0 (verbatim, slice spelling)
