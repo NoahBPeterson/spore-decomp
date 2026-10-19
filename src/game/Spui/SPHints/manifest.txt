@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/Spui/SPHints.cpp  ?find@C_aee0@@QAEPAUE_aee0@@H@Z  0067aee0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/Spui/SPHints.cpp  ?dtor@cHint@@QAEXXZ  0067b1f0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/Spui/SPHints.cpp  ?Insert@WStr@@QAEHHH@Z  0067bbf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/Spui/SPHints.cpp  ?UpdateHints@cUIHints@@QAEXDD@Z  0067c350  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/Spui/SPHints.cpp  ?SetFlag@cUIHints@@QAEHDH@Z  0067c420  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

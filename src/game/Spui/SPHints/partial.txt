@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0067b030  200  approximate: eastl vector<unsigned short> insert/DoInsertValue replacement is hand-written
+0067b370  289  approximate: eastl vector<AutoRefCount<cHint>> insert/DoInsertValue replacement is hand-written

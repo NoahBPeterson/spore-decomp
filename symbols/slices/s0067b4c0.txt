@@ -1,8 +1,8 @@
-0067b4c0 cUIHints::ParseHints  # PDB anchor
-0067ba10 cUIHints::InitHints  # unnamed; builds killallhints command
-0067bb80 cUIHints::ShutdownHints  # unnamed
-0067bbf0 cUIHints::InsertHint  # unnamed; string push_back or forward
-0067bc30 cUIHints::SetVisibility  # PDB anchor
-0067c350 cUIHints::UpdateHints  # PDB candidate (caller-scored)
-0067c3b0 cUIHints::SetHintState  # unnamed
-0067c420 cUIHints::SetEnabled  # unnamed
+0067b4c0 ?ParseHints@cUIHints@@QAEDXZ  # cUIHints::ParseHints migrated from s0067b4c0 (verbatim, slice spelling)
+0067ba10 ?InitHints@cUIHints@@QAEXXZ  # cUIHints::InitHints migrated from s0067b4c0 (verbatim, slice spelling)
+0067bb80 ?Destroy2@cUIHints@@QAEXXZ  # cUIHints::Destroy2 migrated from s0067b4c0 (verbatim, slice spelling)
+0067bbf0 ?Insert@WStr@@QAEHHH@Z  # WStr::Insert migrated from s0067b4c0 (verbatim, slice spelling)
+0067bc30 ?SetVisibility@cUIHints@@QAEXHPAUcHint_s0067_b4c0@@@Z  # cUIHints::SetVisibility migrated from s0067b4c0 (verbatim, slice spelling)
+0067c350 ?UpdateHints@cUIHints@@QAEXDD@Z  # cUIHints::UpdateHints migrated from s0067b4c0 (verbatim, slice spelling)
+0067c3b0 ?Next@cUIHints@@QAEXHD@Z  # cUIHints::Next migrated from s0067b4c0 (verbatim, slice spelling)
+0067c420 ?SetFlag@cUIHints@@QAEHDH@Z  # cUIHints::SetFlag migrated from s0067b4c0 (verbatim, slice spelling)

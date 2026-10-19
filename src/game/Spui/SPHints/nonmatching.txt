@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+0067af10 66 complete: predicate loop uses different loop shape/register allocation (this in ebp, counter in edi) than original
+0067b150 76 complete: store scheduling and 0.0f register reuse differ; cl hoists the cString construct differently
+0067b270 55 complete: cl CSEs the first secondary-vtable store (base ctor vptr) that the original keeps
+0067b4c0 1293 ParseHints: complete (clears list, reads each hint property list, builds cHint); not exact: ref/h register roles (edi/ebx/ebp) and merged pl-null tests differ
+0067ba10 104 InitHints: complete; exact except the window vtable[0x104] call schedules edx load before lea ecx
+0067bb80 57 hint-list teardown: complete behaviour; cl swaps the this/begin/end register roles (edi=this vs original ebx=this, ebp=begin); difftest PASS
+0067bc30 1573 SetVisibility: complete (layout show/hide, text split at <hinticon>, icon, flash window); not exact: register allocation (ebx/ebp roles) and spill slots differ; difftest WEAK (170 valid, 6.4% cov: real cSPUILayout::SetVisibility faults on random layouts)
+0067c3b0 99 next-hint lookup: complete behaviour; list walk + UpdateHints call scheduling/register use differs
