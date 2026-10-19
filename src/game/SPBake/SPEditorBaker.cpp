@@ -1,4 +1,4 @@
-// src/game/SPBake/SPEditorBaker.cpp -- migrated from slice(s) s005609a0, s0041aa40, s00419000, s004186c0, s00417d60, s00417600, s00416990, s00416180, s00414e30, s004145c0, s00413cc0, s004124b0, s0040eb70, s0040e5b0, s0040a9c0, s0040a170, s004098a0, s00406ac0, s00405000, s00404660, s00404480, s00403af0, s0042f9d0, s004035d0, s00402cc0, s00402470, s00401b80 by tools/migrate/rewrite.py
+// src/game/SPBake/SPEditorBaker.cpp -- migrated from slice(s) s0041c1d0, s005609a0, s0041aa40, s00419000, s004186c0, s00417d60, s00417600, s00416990, s00416180, s00414e30, s004145c0, s00413cc0, s004124b0, s0040eb70, s0040e5b0, s0040a9c0, s0040a170, s004098a0, s00406ac0, s00405000, s00404660, s00404480, s00403af0, s0042f9d0, s004035d0, s00402cc0, s00402470, s00401b80 by tools/migrate/rewrite.py
 // Object file: SPBake/SPEditorBaker.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -34,6 +34,9 @@ extern bool gbLoadExtraResources;  // 0x015D115C
 #include "cSPTransform.h"
 #include "SP/cIModelWorld.h"
 #include "EA/LimitStopwatch.h"
+#include "EA/ResourceMan/DatabasePackedFile.h"
+#include "EA/IO/FileStream.h"
+#include "EA/IO/MemoryStream.h"
 #pragma intrinsic(memcmp)
 #pragma intrinsic(_InterlockedExchangeAdd, _InterlockedIncrement, _InterlockedDecrement)
 
@@ -3701,38 +3704,200 @@ struct CEditorResourceThunk {
 }
 // ---- items of slice s005609a0 end
 
+// ---- items of slice s0041c1d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern uint32_t g_ResType0, g_ResType1, g_ResType2, g_ResType3, g_ResType4, g_ResType5;   // 0x015d13b8,0x15d117c,0x15d1248,0x15d1174,0x15d1254,0x15d132c
+struct ResKey3 { uint32_t mInstance, mGroup, mType; };      // 12-byte key in the property array
+struct IPropertyList {                       // vtable only needs Release at +4
+    virtual void v0();
+    virtual void Release();
+};
+struct PropListPtr {                         // EA::AutoRefCount<PropertyList>
+    IPropertyList* mp;
+    void** AsPPVoidParam();                  // 0x0041d870
+};
+struct IPropertyManager {                    // SP::PropertyManager() 0x0067de30
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+    virtual void GetPropertyList(int instance, int group, void** out);       // +0x2c
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+    virtual void GetPropertyIDs(uint32_t typeID, void* idsVec);             // +0x48
+};
+IPropertyManager* PropertyManager();         // 0x0067de30
+struct KeySet {
+    uint32_t mAlloc;
+    void* mpEnd;                             // +4  (header node)
+    void* mpBegin;                           // +8  (leftmost)
+    void* mpRoot;                            // +0xc
+    uint32_t pad[3];
+    KeySet(const uint8_t* tag);              // 0x004b5980
+    void Insert(void* outPair, ResKey3* key, bool b);   // 0x004290c0 DoInsertValue_unique
+    void Find(void* outIter, ResKey3* key);              // 0x00422b00
+    void DoNuke(void* root);                             // 0x004e8a30
+};
+struct KeyIter {
+    void* mpNode;
+    KeyIter(void* node);                     // 0x00566c50
+    KeyIter& operator++();                   // 0x00422c50
+    ResKey3& operator*();                    // 0x00564f50
+};
+struct AuxAlloc { uint32_t a, b; AuxAlloc(const uint8_t* tag); };   // 0x00429360
+struct IdVec {                               // SimpleVector<uint32_t>
+    uint32_t* mpBegin; uint32_t* mpEnd; uint32_t* mpCap;
+    AuxAlloc mAlloc;
+    IdVec(const uint8_t* tag) : mAlloc(tag) { mpBegin = 0; mpEnd = 0; mpCap = 0; }
+    void erase(uint32_t* first, uint32_t* last);   // 0x004769b0
+    void FreeAll();                                // 0x00425990
+};
+struct WideBufA { uint32_t mpData; uint32_t pad[0x85]; WideBufA(); void ReleaseHeap(); };  // 0x0041d660 / 0x004292a0
+struct WideBufB { uint32_t mpData; uint32_t pad[0x107]; WideBufB(); void ReleaseHeap(); }; // 0x0041d6c0 / 0x004292a0
+struct ByteBuf  { uint32_t mpData; uint32_t pad[0x87]; ByteBuf(); void ReleaseHeap(); };   // 0x0041d720 / 0x00429300
+struct IStream_s0041_c1d0 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+                 virtual void Write(const void* data, uint32_t size); };       // +0x38
+struct IRecord { virtual void v0(); virtual void v1(); virtual void Release();   // +8
+virtual void v3();
+virtual void v4();
+virtual void v5();
+                 virtual IStream_s0041_c1d0* GetStream();                                   // +0x18
+virtual void v7();
+virtual void v8();
+                 virtual void Close(); };                                        // +0x24
+struct ResKeyRec { uint32_t mInstance, mType, mGroup; };    // key passed to OpenRecord, 0x10 bytes incl. pad
+struct IRecordCounted { char pad[0x40]; int mRefCount; void Release(); };       // Counted::Release 0x0040f360
+struct IDatabaseDir {                                                           // Baker()->vcall(0x60)
+virtual void v0();
+virtual void v1();
+virtual void v2();
+    virtual IRecordCounted* GetRecord(uint32_t id, uint32_t type, int mode);    // +0xc
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+    virtual void Process(IRecordCounted* rec);                                  // +0x58
+};
+struct IBakerLike {                                                             // Baker() 0x00401010
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+    virtual IDatabaseDir* GetDatabaseDir();                                     // +0x60
+};
+IBakerLike* Baker_s0041_c1d0();                                                            // 0x00401010
+struct IPkgSecondary { virtual void AddRef(); virtual void Release(); };         // sub-object at +4
+struct IPkgPrimary {
+virtual void v0();
+virtual void Release();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual void Open(int mode, int access, int flags);                          // +0x18
+    virtual void Close();                                                        // +0x1c
+virtual void v8();
+virtual void v9();
+virtual void v10();
+    virtual void SetPath(const wchar_t* path);                                   // +0x2c
+    virtual void v12();
+    virtual bool OpenRecord(ResKeyRec* key, IRecord** out, int a, int b, int c, int d);   // +0x34
+};
+struct DatabasePackedFile : IPkgPrimary, IPkgSecondary {
+    char pad[0x380];
+    DatabasePackedFile(const wchar_t* path, void* alloc);                        // 0x008d9f80
+    bool SetHoleUse(int mode, float f);                                          // 0x008d8530
+};
+struct MemoryStream {
+    uint32_t pad[9];
+    MemoryStream(void* a, void* b, const char* name);       // 0x0093c270
+    void AddRef();                                          // 0x0083f5d0
+    void SetOption(int opt, float v);                       // 0x0093bb40
+    void SetSize(int n);                                    // 0x0093c370
+    bool SetPosition(int off, int type);                    // 0x0093c0c0
+    uint32_t GetSize();                                     // 0x00fc7e50
+    void* GetData();                                        // 0x0093ba70
+    void Destroy();                                         // 0x0093bde0
+};
+struct FileStream {
+    uint32_t pad[0x8c];
+    FileStream(const wchar_t* path);                        // 0x00931e10
+    bool Open(int a, int b, int c, int d);                  // 0x009318f0
+    void Write(const void* data, uint32_t size);            // 0x00931d30
+    void Close();                                           // 0x00931a70
+    ~FileStream();                                          // 0x00931e70
+};
+struct Transform_s0041_c1d0 {  // 0x00409930
+    uint32_t pad[0x16];
+    Transform_s0041_c1d0();
+};
+struct XfSlot { uint32_t mHead; Transform_s0041_c1d0 mXf; };           // 0x5c bytes
+void  FormatPath(void* wideBuf, const wchar_t* fmt, ...);   // 0x004c0530 (cdecl)
+const wchar_t* GetBasePath();                               // 0x00688cf0
+void* ZoneObject_new(int size, const char* name, int a, int b, int c, int d);   // 0x00926020
+void  CreateDirectoryPath(const wchar_t* path);             // 0x00932960
+bool  GetArrayProperty(IPropertyList* list, uint32_t id, int* count, ResKey3** arr);  // 0x006a0ae0 (cdecl)
+bool  CollectAndDestroy(IRecordCounted* rec, MemoryStream* ms);   // 0x0041aa40 (cdecl)
+// ---- items of slice s0041c1d0 end
+
 // @ 0x00401ff0
 ResourceCollector::ResourceCollector()
 : mHandle(), mField4(0), mField8(0), mbField64(false), mbField65(false)
 {
     uint32_t unused;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004021a0
 void ResourceCollector::AddResource(ResourceKey key)
@@ -3768,32 +3933,6 @@ void ResourceCollector::AddResource(ResourceKey key)
         mMissingKeys.push_back(key);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00402390
 void ResourceCollector::AddCreated(uint32_t a, uint32_t b, const void* params)
 {
@@ -3806,32 +3945,6 @@ void ResourceCollector::AddCreated(uint32_t a, uint32_t b, const void* params)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00402420
 int AtomicRefCounted::Release()
 {
@@ -3842,31 +3955,6 @@ int AtomicRefCounted::Release()
     }
     return _InterlockedExchangeAdd(&mnRefCount, 0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00402470
 void Preloader::Gather(PreloadSource* pSource, bool bSkipKeys)
@@ -3924,31 +4012,6 @@ void Preloader::Gather(PreloadSource* pSource, bool bSkipKeys)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004029f0
 void Preloader::Start(const ResourceKey_s0040_2470& key, bool flag)
 {
@@ -3961,61 +4024,11 @@ void Preloader::Start(const ResourceKey_s0040_2470& key, bool flag)
     mbFlag = flag;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00402a90
 LoadHandle* Preloader::GetHandle()
 {
     return mpHandle.get();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00402ab0
 Preloader* Preloader::Self()
@@ -4023,61 +4036,11 @@ Preloader* Preloader::Self()
     return this;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00402ac0
 bool Preloader::IsFinished()
 {
     return !mpHandle.get() || IsLoadFinished(mpHandle.get());
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00402b30
 void Preloader::Reset()
@@ -4095,30 +4058,6 @@ void Preloader::Reset()
     for (int i = 0; i < 6; ++i)
         mpObjects[i] = 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00402cc0
 void BlockLoader::Update()
@@ -4176,30 +4115,6 @@ void BlockLoader::Update()
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00403240
 EditorBlockData::EditorBlockData()
 : mCache(0, -1, BlockAlloc, BlockFree, "Editor/BlockData"),
@@ -4208,29 +4123,6 @@ EditorBlockData::EditorBlockData()
 {
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004035d0
 RangeSettings::RangeSettings()
 : mID(0), mbEnabled(false), mItems(),
@@ -4238,109 +4130,17 @@ RangeSettings::RangeSettings()
       mIndex1(0), mMin1(0.0f), mMax1(0.0f),
       mIndex2(0), mMin2(0.0f), mMax2(0.0f) {}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004036a0
 int GameSystem::AddRef()
 { return DefaultRefCounted::AddRef(); }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004036e0
 KeyedRecord::KeyedRecord()
 : mpOwner(0), mpData(0), mpExtra(0) {}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004037b0
 GameSystem::~GameSystem()
 { uint32_t unused0, unused1, unused2; }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004039f0
 bool PendingBatch::Flush()
@@ -4354,54 +4154,9 @@ bool PendingBatch::Flush()
     return result;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00403aa0
 SlotArray8::~SlotArray8()
 {}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00403af0
 bool cBaker::Initialize()
@@ -4471,27 +4226,6 @@ bool cBaker::Initialize()
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004043f0
 void AddListeners(IMessageManager* pManager, IMessageListener* pListener, const unsigned int* pIDs, unsigned int count)
 {
@@ -4499,51 +4233,9 @@ void AddListeners(IMessageManager* pManager, IMessageListener* pListener, const 
         pManager->AddListener(pListener, pIDs[i]);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00404430
 inline void sort(SortEntry* first, SortEntry* last, SortLess compare)
 { SortEntries(first, last, compare); }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00404460
 namespace Skinner {
@@ -4552,27 +4244,6 @@ bool IdPaintSystem::IsEqual(const PaintSystem& other) const
     return static_cast<const IdPaintSystem&>(other).mId == mId;
 }
 }  // namespace Skinner
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00404480
 void* LinearAllocator::Allocate(unsigned int size, bool allowGrow)
@@ -4587,26 +4258,6 @@ void* LinearAllocator::Allocate(unsigned int size, bool allowGrow)
     mpLast = mpCurrent;
     return result;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00404500
 BakerCommand_s0040_4480::BakerCommand_s0040_4480(void* pBaker)
@@ -4633,51 +4284,11 @@ BakerCommand_s0040_4480::BakerCommand_s0040_4480(void* pBaker)
         0);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00404630
 void BakerCommand_s0040_4480::Description(void* stream)
 {
     mOptions.PrintUsage("baker", stream);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00404660
 void BakerCommand_s0040_4660::ParseLine(ArgScript::Line& line)
@@ -4779,25 +4390,6 @@ void BakerCommand_s0040_4660::ParseLine(ArgScript::Line& line)
         Baker()->SetProcessQueue(mProcessQueue);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00404f10
 bool ResourceKeyFilter::IsValid(const ResourceKey_s0040_4660& key)
 {
@@ -4805,25 +4397,6 @@ bool ResourceKeyFilter::IsValid(const ResourceKey_s0040_4660& key)
         && (mGroupID == 0xffffffff || (mGroupID & mGroupMask) == (key.groupID & mGroupMask))
         && (mInstanceID == 0xffffffff || mInstanceID == key.instanceID);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00404f90
 namespace Resource_s0040_4660 {
@@ -4837,25 +4410,6 @@ int ThreadedObject_s0040_4660::Release()
     return 0;
 }
 }  // namespace Resource_s0040_4660
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00405000
 BakerCommand_s0040_5000::BakerCommand_s0040_5000(void* pBaker)
@@ -4882,24 +4436,6 @@ BakerCommand_s0040_5000::BakerCommand_s0040_5000(void* pBaker)
         0);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004051e0
 void Baker_s0040_5000::CancelAll()
 {
@@ -4924,24 +4460,6 @@ void Baker_s0040_5000::CancelAll()
     mQueued.clear();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004055b0
 void Baker_s0040_5000::Shutdown()
 {
@@ -4957,46 +4475,11 @@ void Baker_s0040_5000::Shutdown()
     mBakedKeys.clear();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00406e90
 bool IPredicateTarget::TestAny(void* arg)
 {
     return TestA(arg, 0) || TestB(arg);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00406ef0
 bool ResourceFlagQuery::IsFlagged(const ResourceKey& key, bool requireSecondary)
@@ -5025,23 +4508,6 @@ bool ResourceFlagQuery::IsFlagged(const ResourceKey& key, bool requireSecondary)
     return flag;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004071e0
 void KeyRemapper::Apply(vector_s0040_6ac0<KeyPair>& pairs, ResourceKey key)
 {
@@ -5054,45 +4520,12 @@ void KeyRemapper::Apply(vector_s0040_6ac0<KeyPair>& pairs, ResourceKey key)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004098e0
 Vector3& MulMatrixAssign(Vector3& dst, const Matrix3& m)
 {
     dst = dst * m;
     return dst;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00409b30
 void Transform::Scale(float s)
@@ -5102,22 +4535,6 @@ void Transform::Scale(float s)
     mFlags |= 1;
     mVersion++;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0040a590
 bool EditorList::HandleKey(const ResourceKey_s0040_a170* key, const KeyFlags* info)
@@ -5175,21 +4592,6 @@ bool EditorList::HandleKey(const ResourceKey_s0040_a170* key, const KeyFlags* in
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0040a9c0
 bool KeyCopier::Copy(const ResourceKey_s0040_a9c0* src, const ResourceKey_s0040_a9c0* dst)
 {
@@ -5234,20 +4636,6 @@ bool KeyCopier::Copy(const ResourceKey_s0040_a9c0* src, const ResourceKey_s0040_
     return result;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0040e5b0
 bool Obj::OnA(int)
 {
@@ -5277,19 +4665,6 @@ bool Obj::OnA(int)
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0040e800
 bool Dispatcher::Handle(uint32_t id, int arg)
 {
@@ -5317,19 +4692,6 @@ bool Dispatcher::Handle(uint32_t id, int arg)
 #undef OBJ
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0040e9c0
 bool Obj::OnClear(int)
 {
@@ -5344,19 +4706,6 @@ bool Obj::OnClear(int)
     ProcessLayout(lay338, f228, f230, f3f8, f39c, f3b0, f3c8, f374);
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0040eab0
 bool Obj::OnReset(int)
@@ -5374,19 +4723,6 @@ bool Obj::OnReset(int)
     GetMsgManager()->Post4(0x67B65F1, 0, 0, 0);
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0040eb70
 bool EditorPartList::ProcessBatch()
@@ -5438,18 +4774,6 @@ bool EditorPartList::ProcessBatch()
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0040efa0
 void PartTransform::Invert()
 {
@@ -5460,33 +4784,9 @@ void PartTransform::Invert()
     mPosition.MulAssign(mRotation);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0040f070
 PartHolder::PartHolder(const PartHolder* src)
 : mA(src->mA), mB(src->mB), mC(src->mC), mD(src->mD) {}
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0040f110
 bool EditorPartList::Rescan()
@@ -5511,18 +4811,6 @@ bool EditorPartList::Rescan()
     }
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004124b0
 void Owner::Rebuild()
@@ -5569,17 +4857,6 @@ void Owner::Rebuild()
     keys.Destroy();
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00414420
 bool ClipPlayer::Step(Clip* t, float time)
 {
@@ -5590,16 +4867,6 @@ bool ClipPlayer::Step(Clip* t, float time)
     }
     return Advance(t, time, false);
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004145c0
 bool PaletteEditor::SetItem(Item_s0041_45c0* n)
@@ -5624,27 +4891,9 @@ bool PaletteEditor::SetItem(Item_s0041_45c0* n)
     return false;
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x00414e10
 int EditorObject::GetField78()
 { return Field78(); }
-
-
-
-
-
-
-
-
-
 
 // @ 0x00414e30
 bool BoundsLibrary::Query(unsigned int idLo, unsigned int idHi, float* weights, int nWeights, Vector3_s0041_4e30* mn, Vector3_s0041_4e30* mx)
@@ -5667,14 +4916,6 @@ bool BoundsLibrary::Query(unsigned int idLo, unsigned int idHi, float* weights, 
     return false;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x00415660
 PropertyList_s0041_4e30* PropertyListCache::Get(unsigned int instanceID, unsigned int groupID)
 {
@@ -5687,14 +4928,6 @@ PropertyList_s0041_4e30* PropertyListCache::Get(unsigned int instanceID, unsigne
     }
     return slot->get();
 }
-
-
-
-
-
-
-
-
 
 // @ 0x00415730
 bool ConfigManager_s0041_4e30::FindModelKey(unsigned int instanceID, unsigned int groupID, ResourceKey_s0041_4e30* dst)
@@ -5709,14 +4942,6 @@ bool ConfigManager_s0041_4e30::FindModelKey(unsigned int instanceID, unsigned in
     }
     return false;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x00416180
 bool EditorPanel::HasHandler(ResourceKey_s0041_6180* k, int id)
@@ -5741,13 +4966,6 @@ bool EditorPanel::HasHandler(ResourceKey_s0041_6180* k, int id)
     return false;
 }
 
-
-
-
-
-
-
-
 // @ 0x00416320
 bool EditorPanel::HasId(int id)
 {
@@ -5762,13 +4980,6 @@ bool EditorPanel::HasId(int id)
     }
     return false;
 }
-
-
-
-
-
-
-
 
 // @ 0x004163f0
 bool EditorPanel::HasHandlerNormalized(ResourceKey_s0041_6180* k)
@@ -5793,13 +5004,6 @@ bool EditorPanel::HasHandlerNormalized(ResourceKey_s0041_6180* k)
     }
     return false;
 }
-
-
-
-
-
-
-
 
 // @ 0x004165a0
 bool EditorPanel::Activate(ResourceKey_s0041_6180* k, int id)
@@ -5841,13 +5045,6 @@ bool EditorPanel::Activate(ResourceKey_s0041_6180* k, int id)
     return false;
 }
 
-
-
-
-
-
-
-
 // @ 0x00416990
 bool EditorPanel_s0041_6990::ActivateById(int id)
 {
@@ -5876,12 +5073,6 @@ bool EditorPanel_s0041_6990::ActivateById(int id)
     return found;
 }
 
-
-
-
-
-
-
 // @ 0x00416c60
 bool EditorPanel_s0041_6990::ActivateByKey(ResourceKey_s0041_6990* k)
 {
@@ -5905,12 +5096,6 @@ bool EditorPanel_s0041_6990::ActivateByKey(ResourceKey_s0041_6990* k)
     return found;
 }
 
-
-
-
-
-
-
 // @ 0x00416e30
 void EditorPanel_s0041_6990::AdjustPressCount(bool release)
 {
@@ -5924,23 +5109,11 @@ void EditorPanel_s0041_6990::AdjustPressCount(bool release)
     noEntries = pressCount == 0;
 }
 
-
-
-
-
-
-
 // @ 0x00416eb0
 int EditorPanel_s0041_6990::CountPending()
 {
     return entries.Size() + ((flagA || flagB) ? 1 : 0);
 }
-
-
-
-
-
-
 
 // @ 0x00416f00
 int EditorPanel_s0041_6990::CountWithId(int id)
@@ -5956,12 +5129,6 @@ int EditorPanel_s0041_6990::CountWithId(int id)
     return count;
 }
 
-
-
-
-
-
-
 // @ 0x00416fb0
 bool EditorPanel_s0041_6990::GetActiveKey(ResourceKey_s0041_6990* out)
 {
@@ -5973,12 +5140,6 @@ bool EditorPanel_s0041_6990::GetActiveKey(ResourceKey_s0041_6990* out)
     }
     return false;
 }
-
-
-
-
-
-
 
 // @ 0x00417010
 void EditorPanel_s0041_6990::CollectAll(EntrySink* out)
@@ -5993,12 +5154,6 @@ void EditorPanel_s0041_6990::CollectAll(EntrySink* out)
     }
 }
 
-
-
-
-
-
-
 // @ 0x00417150
 float EditorPanel_s0041_6990::GetSlotValue(KeyedEvent* ev)
 {
@@ -6012,12 +5167,6 @@ float EditorPanel_s0041_6990::GetSlotValue(KeyedEvent* ev)
     }
     return 0.0f;
 }
-
-
-
-
-
-
 
 // @ 0x00417600
 void Panel::Apply(ResourceKey_s0041_7600* key, bool flag, void* extra)
@@ -6086,21 +5235,11 @@ void Panel::Apply(ResourceKey_s0041_7600* key, bool flag, void* extra)
     }
 }
 
-
-
-
-
-
 // @ 0x00417cf0
 char* EditorBlockData_s0041_7600::GetSlotArea()
 {
     return (char*)this + 0x1100;
 }
-
-
-
-
-
 
 // @ 0x00417d10
 EditorBlockData_s0041_7600* CreateEditorBlockData()
@@ -6108,29 +5247,16 @@ EditorBlockData_s0041_7600* CreateEditorBlockData()
     return new("Editor", 0, 0, 0, 0) EditorBlockData_s0041_7600();
 }
 
-
-
-
-
-
 // @ 0x00417d60
 ToolState::ToolState()
 : mCountA(0), mCapacity(0x10), mFlagA(0), mFlagB(0), mMode(0)
 {
 }
 
-
-
-
-
 // @ 0x00417fe0
 ToolState::~ToolState()
 {
 }
-
-
-
-
 
 // @ 0x00418120
 SubState::SubState()
@@ -6139,18 +5265,10 @@ SubState::SubState()
 {
 }
 
-
-
-
-
 // @ 0x00418240
 SubState::~SubState()
 {
 }
-
-
-
-
 
 // @ 0x00418440
 bool CheckMatchingProps(PropList_s0041_7d60* list)
@@ -6174,10 +5292,6 @@ bool CheckMatchingProps(PropList_s0041_7d60* list)
         return false;
     return true;
 }
-
-
-
-
 
 // @ 0x00418500
 void Loader::LoadAll(int a, int b)
@@ -6206,10 +5320,6 @@ void Loader::LoadAll(int a, int b)
     }
 }
 
-
-
-
-
 // @ 0x004186c0
 EditorResource* CreateEditorResource(EditorSource* pSource, uint32_t* pKey, LoadHandle_s0041_86c0** pOutHandle)
 {
@@ -6229,15 +5339,9 @@ EditorResource* CreateEditorResource(EditorSource* pSource, uint32_t* pKey, Load
     return pRes;
 }
 
-
-
-
 // @ 0x00418870
 EditorResource::EditorResource()
 {}
-
-
-
 
 // @ 0x00418960
 // EditorResource scalar deleting destructor (implicit): the forcing function below makes the compiler emit it out of line
@@ -6248,9 +5352,6 @@ void rwForceEmit_EditorResource_sdtor(EditorResource* p)
 }
 #pragma auto_inline(on)
 
-
-
-
 // @ 0x00418990
 // EditorResource destructor (implicit): the forcing function below makes the compiler emit it out of line
 #pragma auto_inline(off)
@@ -6260,15 +5361,9 @@ void rwForceEmit_EditorResource_dtor(EditorResource* p)
 }
 #pragma auto_inline(on)
 
-
-
-
 // @ 0x00418a10
 SubObject::~SubObject()
 { uint32_t pre[6]; }
-
-
-
 
 // @ 0x00418ae0
 bool EditorResource::Setup(LoadHandle_s0041_86c0* pParent)
@@ -6312,9 +5407,6 @@ bool EditorResource::Setup(LoadHandle_s0041_86c0* pParent)
     return pParent->Process(this);
 }
 
-
-
-
 // @ 0x00418f90
 void EditorResource::NotifyA(LoadHandle_s0041_86c0* pParent)
 {
@@ -6323,18 +5415,12 @@ void EditorResource::NotifyA(LoadHandle_s0041_86c0* pParent)
     pParent->Process(this);
 }
 
-
-
-
 // @ 0x00418fd0
 bool EditorResource::NotifyB(LoadHandle_s0041_86c0* pParent)
 {
     mpThreaded.get()->Method3();
     return true;
 }
-
-
-
 
 // @ 0x00419000
 char LoadTask::Run(Finisher* fin)
@@ -6388,8 +5474,6 @@ char LoadTask::Run(Finisher* fin)
     return 1;
 }
 
-
-
 // @ 0x00419690
 void __thiscall Task::Prepare(Request* req)
 {
@@ -6410,8 +5494,6 @@ void __thiscall Task::Prepare(Request* req)
     req->Dispatch(this);
 }
 
-
-
 // @ 0x0041aa40
 bool CollectAndDestroy(unsigned int a, unsigned int b)
 {
@@ -6419,58 +5501,144 @@ bool CollectAndDestroy(unsigned int a, unsigned int b)
     return v.Collect(a, b);
 }
 
+// @ 0x0041c1d0
+void DumpBlockDescriptions(int group, int instance)
+{
+    uint8_t tag;
+    KeySet seen(&tag);
+    bool haveList = group != 0;
+    if (haveList) {
+        PropListPtr list;
+        list.mp = 0;
+        PropertyManager()->GetPropertyList(instance, group, list.AsPPVoidParam());
+        if (list.mp) {
+            int count;
+            ResKey3* arr;
+            GetArrayProperty(list.mp, 0x53878d0, &count, &arr);
+            for (int i = 0; i < count; ++i) {
+                arr[i].mGroup = 0;
+                ResKey3* key = &arr[i];
+                uint8_t dup = 0;
+                char outPair[8];
+                seen.Insert(outPair, key, dup != 0);
+            }
+            KeyIter it(seen.mpBegin);
+            for (;;) {
+                KeyIter e(seen.mpEnd);
+                if (!(it.mpNode != e.mpNode)) break;
+                ResKey3 copy = *it;
+                ++it;
+            }
+            if (list.mp) list.mp->Release();
+        }
+    }
+
+    uint8_t tag2;
+    IdVec ids(&tag2);
+    WideBufA dirPath;
+    FormatPath(&dirPath, L"%lsEditors_BlockData.package", GetBasePath());
+
+    DatabasePackedFile* pkg;
+    void* mem = ZoneObject_new(0x388, "Editor", 0, 0, 0, 0);
+    if (mem) pkg = new (mem) DatabasePackedFile(0, 0);
+    else pkg = 0;
+    if (pkg) ((IPkgSecondary*)pkg)->AddRef();
+    pkg->SetPath(dirPath.mpData ? (const wchar_t*)dirPath.mpData : 0);
+    pkg->SetHoleUse(5, -1.0f);
+    ((IPkgPrimary*)pkg)->Release();
+    pkg->Open(2, 2, 0);
+    FormatPath(&dirPath, L"%lsBlockData/", GetBasePath());
+    CreateDirectoryPath((const wchar_t*)dirPath.mpData);
+    IDatabaseDir* dbdir = Baker_s0041_c1d0()->GetDatabaseDir();
+
+    XfSlot slots[32];
+    WideBufB filePath;
+    ByteBuf scratch;
+    uint32_t types[6];
+    types[0] = g_ResType0; types[1] = g_ResType1; types[2] = g_ResType2;
+    types[3] = g_ResType3; types[4] = g_ResType4; types[5] = g_ResType5;
+
+    MemoryStream ms(0, 0, "UTF/MemoryStream");
+    ms.AddRef();
+    ms.SetOption(1, 1.0f);
+    ms.SetOption(2, 2.0f);
+
+    for (unsigned t = 0; t < 6; ++t) {
+        ids.erase(ids.mpBegin, ids.mpEnd);
+        PropertyManager()->GetPropertyIDs(types[t], &ids);
+        for (int i = 0; i < (int)(ids.mpEnd - ids.mpBegin); ++i) {
+            if (haveList) {
+                ResKey3 probe;
+                probe.mInstance = ids.mpBegin[i];
+                probe.mGroup = 0;
+                probe.mType = types[t];
+                KeyIter found(0);
+                seen.Find(&found, &probe);
+                KeyIter e(seen.mpEnd);
+                if (found.mpNode == e.mpNode)
+                    continue;
+            }
+            uint32_t* elem = &ids.mpBegin[i];
+            IRecordCounted* rec = dbdir->GetRecord(*elem, types[t], 4);
+            if (rec)
+                rec->mRefCount = rec->mRefCount + 1;
+            if (!rec) {
+                continue;
+            }
+            dbdir->Process(rec);
+            ms.SetSize(0);
+            ms.SetPosition(0, 0);
+            if (!CollectAndDestroy(rec, &ms)) {
+                rec->Release();
+                continue;
+            }
+            ResKeyRec key;
+            key.mInstance = ids.mpBegin[i];
+            key.mType = 0x5caa5e28;
+            key.mGroup = types[t];
+            IRecord* out = 0;
+            if (out) {
+                IRecord* o = out;
+                out = 0;
+                o->Release();
+            }
+            if (pkg->OpenRecord(&key, &out, 2, 2, 1, 0)) {
+                IStream_s0041_c1d0* st = out->GetStream();
+                st->Write(ms.GetData(), ms.GetSize());
+                out->Close();
+            }
+            uint32_t* elem2 = &ids.mpBegin[i];
+            FormatPath(&filePath, L"%s0x%08x!0x%08x.blockdata", (const wchar_t*)dirPath.mpData, types[t], *elem2);
+            FileStream fs((const wchar_t*)filePath.mpData);
+            if (fs.Open(2, 2, 0, 0)) {
+                fs.Write(ms.GetData(), ms.GetSize());
+                fs.Close();
+            }
+            if (out)
+                out->Release();
+            rec->Release();
+        }
+    }
+    pkg->Close();
+    ms.Destroy();
+    scratch.ReleaseHeap();
+    filePath.ReleaseHeap();
+    if (pkg)
+        ((IPkgSecondary*)pkg)->Release();
+    dirPath.ReleaseHeap();
+    for (uint32_t* p = ids.mpBegin; p < ids.mpEnd; ++p) {
+    }
+    ids.FreeAll();
+    seen.DoNuke(seen.mpRoot);
+}
 
 // @ 0x0042fbe0
 DelObj::DelObj()
 {}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0042fc20
 EditorResourceD::EditorResourceD()
 {}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0042ff00
 void __cdecl BakeSpritesCreateThunk(RefVector* vecA, uint32_t f24, uint32_t f28, uint32_t f20, RefVector* vecB, Vector8* v8, Elem24Vec* elems, TransformVec* xf)

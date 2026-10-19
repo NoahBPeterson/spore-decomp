@@ -26,3 +26,4 @@
 00418ae0 656 EditorResource::Setup: instruction stream identical modulo stack-slot layout; pl/pProp locals land in the named-slot pool instead of the late inline-frame pool, and local-name slot order unresolved
 00419000 1137 /Od /Ob1 /arch:SSE module; large loader with deep inlining and unknown stack-slot order; behavior-equivalent only
 00419690 165 /Od /Ob1 /arch:SSE; frame has 0xb0 unused local space and slot order of inlined temps not reproduced
+0041c1d0 1848 COMPLETE /Od DumpBlockDescriptions (all paths and callees written; frame layout 0x1730 vs 0x17c0, local slot order and dead rec/out release branches not reproduced; 72 vs 70 calls) [equiv: UNSUPPORTED: 13 unresolved refs]
