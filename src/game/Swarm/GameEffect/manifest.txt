@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/Swarm/GameEffect.cpp  ?Update@cSPEditorModel_s004a_d550@SP@@QAEXXZ  004ae250  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
