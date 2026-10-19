@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAText.cpp  ?FUN_008859f0@@YAHPBM0@Z  008859f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00885a60 1 single instruction: original emits `mov edx,[fs]` (vtbl load) before `mov [gpFontServer],eax`, MSVC sinks the vtbl load below the store; proven not fixable by source ordering. equiv WEAK 70 valid 16.2% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
