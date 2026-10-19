@@ -1,6 +1,7 @@
 00545220 SP::Feed::AtomParser::StartElementHandler  # dev PDB static handler; registered by Open/ResetParser
 005452b0 SP::Feed::AtomParser::EndElementHandler  # dev PDB static handler
 005453c0 SP::Feed::HandshakeParser::HandshakeParser  # byte-exact; dev PDB layout + retail extra fields
+00545520 SP::Feed::HandshakeParser::SetPosition
 005455b0 SP::Feed::HandshakeParser::~HandshakeParser  # byte-exact
 00545620 SP::Feed::HandshakeParser::SetLists  # dev PDB method (retail takes 4 args)
 00545680 SP::Feed::HandshakeParser::ResetParser
@@ -10,7 +11,6 @@
 005458e0 SP::Feed::HandshakeParser::GetAccessFlags
 00545910 SP::Feed::HandshakeParser::GetState
 00545950 SP::Feed::HandshakeParser::GetPosition
-00545520 SP::Feed::HandshakeParser::SetPosition
 005459a0 SP::Feed::HandshakeParser::StartDoc
 00545aa0 SP::Feed::HandshakeParser::EndDoc
 00545ad0 SP::Feed::HandshakeParser::StartFeed
@@ -26,4 +26,5 @@
 00546020 SP::Feed::HandshakeParser::EndUpdated
 00546050 SP::Feed::HandshakeParser::EndNextID  # HandshakeData::mnNextID
 00546090 SP::Feed::HandshakeParser::EndUserID  # HandshakeData::mnUserID
-00546110 SP::Feed::HandshakeParser::EndScreenName  # HandshakeData::mScreenName
+005460d0 ?EndField20@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::EndField20 migrated from s00545220 (verbatim, slice spelling)
+00546110 ?EndScreenName@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::EndScreenName migrated from s00545220 (verbatim, slice spelling)
