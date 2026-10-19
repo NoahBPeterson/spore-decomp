@@ -1,1 +1,18 @@
 # va  diff-bytes  reason
+00559050 105 scalar deleting destructor (cPropertyList/cEditorResource); stub only
+005590c0 77 virtual-call helper; stub only
+00559110 967 Editor::ObjectTemplateDB constructor; stub only
+005594e0 32 constructor storing two vtable pointers; stub only
+00559590 792 stub only
+0055a580 1055 stub only
+0055aa00 190 SP::Audio::cCityMusicSummarizer::ExtractParameters; stub only
+0055fc10  0  asset key-list builder; selection loop approximated
+005609a0  0  large OTDB processing driver left as a call-shape skeleton
+00561340  0  large resource-wrapper driver left as a call-shape skeleton
+00562c00  0  candidate assign/union helper approximated
+00562d50  0  candidate query helper skeleton
+00562de0  0  candidate query helper skeleton
+00562e90  0  candidate query helper skeleton
+00562f50  0  candidate helper skeleton
+00563090  0  candidate helper skeleton
+00563370  0  candidate helper skeleton

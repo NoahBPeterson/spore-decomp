@@ -1,4 +1,4 @@
-005634e0 SP::cSPObjectTemplateDB::BanAsset  # PDB caller-scored candidate; deletes save records, posts ban message
+005634e0 ?BanAsset@cSPObjectTemplateDB_s0056_34e0@SP@@QAEXABUResourceKey_s0056_34e0@@_N@Z  # cSPObjectTemplateDB_s0056_34e0::BanAsset migrated from s005634e0 (verbatim, slice spelling)
 00563910 ?GetFeatureVector@cSPObjectTemplateDB_s0056_34e0@SP@@UAE_NIAAVcFeatureVector_s0056_34e0@Traits@2@@Z  # cSPObjectTemplateDB_s0056_34e0::GetFeatureVector migrated from s005634e0 (verbatim, slice spelling)
 005639a0 ?FindSummaryByID@cSPObjectTemplateDB_s0056_34e0@SP@@UAEPAXABI@Z  # cSPObjectTemplateDB_s0056_34e0::FindSummaryByID migrated from s005634e0 (verbatim, slice spelling)
 00563a30 ?FindSummary@cSPObjectTemplateDB_s0056_34e0@SP@@UAEPAXI@Z  # cSPObjectTemplateDB_s0056_34e0::FindSummary migrated from s005634e0 (verbatim, slice spelling)

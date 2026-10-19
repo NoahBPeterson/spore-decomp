@@ -1,3 +1,4 @@
 0055a550 ?GetParamId@cCityMusicSummarizer@Audio@SP@@QAEII@Z  # cCityMusicSummarizer::GetParamId migrated from s0055a550 (verbatim, slice spelling)
+0055a580 ?sub@c55a580@Audio@SP@@QAEXXZ  # c55a580::sub migrated from s0055a550 (verbatim, slice spelling)
 0055a9d0 ?GetParamType@cCityMusicSummarizer@Audio@SP@@QAEII@Z  # cCityMusicSummarizer::GetParamType migrated from s0055a550 (verbatim, slice spelling)
-0055aa00 SP::Audio::cCityMusicSummarizer::ExtractParameters  # PDB candidate (caller-scored)
+0055aa00 ?ExtractParameters@cCityMusicSummarizer@Audio@SP@@QAE_NHPAX@Z  # cCityMusicSummarizer::ExtractParameters migrated from s0055a550 (verbatim, slice spelling)

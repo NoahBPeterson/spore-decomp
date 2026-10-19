@@ -1,5 +1,7 @@
 # va  diff-bytes  reason
 00559500 4 element increment: flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; complete; only the compiler spill slot of `this` (-8) vs the named local (-0xc) is swapped; equiv PASS
+0055aac0 2743 complete (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): all named locals and temps on the original slots, folded call/vcall/constant sequence identical (168 entries); cl inlines a different subset of ~vector<Constraint>/~vector<ResourceKey>/empty() sites (original declines the query/test_asset ones, inlines the stress-loop ones), so frame is 0x50c vs 0x574 and size 4427 vs 5098; difftest WEAK (5% coverage: random cArguments make the real HasArgument/OptionArguments fault on most inputs; callees mapped by // 0x annotations, vector/VectorBase dtors via symbols/slices/s0055aac0.txt)
+0055c3c0 14 SP::cSPObjectTemplateDB::HandleMessage: complete switch, compare tree identical; only case-local slot placement/holes differ
 0055d9e0 168 complete classifier-registration loop; intrusive-ptr temp schedule differs
 0055db30 263 complete summarizer-registration path; /Od register schedule differs
 0055eae0 52 complete vector constructor; vtable/frame schedule differs; equiv FAIL (ours faults where original returns)
@@ -7,5 +9,10 @@
 0055fa20 213 complete asset activate/deactivate path; /Od frame differs; equiv FAIL (ecx receiver fixed)
 0055fb30 93 complete asset-membership query; /Od frame differs; equiv FAIL (ecx receiver fixed)
 0055fbb0 64 complete asset timestamp setter; /Od frame differs; equiv FAIL (ecx receiver fixed)
+0055fe60 61 complete population-count update; /Od frame differs
+0055fed0 33 complete clear/free-list reset; /Od frame differs; equiv FAIL (ecx receiver fixed)
+00560880 66 complete asset-subtype query; /Od frame differs; equiv FAIL (ecx receiver fixed)
+005608d0 159 complete asset-key membership scan; /Od frame differs; equiv FAIL (ecx receiver fixed)
 00562b80 98 complete candidate-list assignment; /Od frame differs; equiv: FAIL (ours faults in memcpy import; testable after ecx fix)
 00562ca0 122 complete candidate filter path; /Od frame differs; equiv: FAIL (ours faults at 004769bd; testable after ecx fix)
+005634e0 35 BanAsset: complete; /Od register rotation differs after the first key loop (eax/ecx/edx offset by one)

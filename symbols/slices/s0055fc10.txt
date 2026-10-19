@@ -1,4 +1,5 @@
-0055fe60 SP::cSPObjectTemplateDB::SetPopulationCount  # mPopulationCount[key]=value
-0055fed0 SP::cSPObjectTemplateDB::ResetCandidateState  # clears mCandidates then RebuildFreeList
-00560880 SP::cSPObjectTemplateDB::GetAssetSubtype  # reads AssetInfo+0xc
-005608d0 SP::cSPObjectTemplateDB::FindAssetByKey  # scans mResultSet for a matching ResourceKey
+0055fc10 ?FUN_0055fc10@SP@@YAXPAXI0H@Z  # FUN_0055fc10 migrated from s0055fc10 (verbatim, slice spelling)
+0055fe60 ?FUN_0055fe60@SP@@YAXPAXII@Z  # FUN_0055fe60 migrated from s0055fc10 (verbatim, slice spelling)
+0055fed0 ?slot_26@cSPObjectTemplateDB@SP@@UAEXXZ  # SP::cSPObjectTemplateDB::slot_26 migrated from s0055fc10
+00560880 ?FUN_00560880@EcxStubFc@SP@@QAE_NPAXPAI@Z  # EcxStubFc::FUN_00560880 migrated from s0055fc10 (verbatim, slice spelling)
+005608d0 ?FUN_005608d0@EcxStubFc@SP@@QAE_NPAIPAX@Z  # EcxStubFc::FUN_005608d0 migrated from s0055fc10 (verbatim, slice spelling)

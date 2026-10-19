@@ -1,3 +1,6 @@
-00559050 Editor::cPropertyList/cEditorResource scalar deleting destructor  # vtbl refs in body
-00559110 Editor::ObjectTemplateDB::ObjectTemplateDB  # PDB name
+00559050 ?Dtor@c559050@W1G2_58@Editor@@QAEPAXI@Z  # c559050::Dtor migrated from s00559050 (verbatim, slice spelling)
+005590c0 ?sub@c5590c0@W1G2_58@Editor@@QAEXHHHH@Z  # c5590c0::sub migrated from s00559050 (verbatim, slice spelling)
+00559110 ??0cObjectTemplateDB@W1G2_58@Editor@@QAE@XZ  # cObjectTemplateDB::cObjectTemplateDB migrated from s00559050 (verbatim, slice spelling)
+005594e0 ??0c5594e0@W1G2_58@Editor@@QAE@XZ  # c5594e0::c5594e0 migrated from s00559050 (verbatim, slice spelling)
 00559500 ?AddRef@cSPObjectTemplateDB@SP@@UAEHXZ  # SP::cSPObjectTemplateDB::AddRef migrated from s00559050
+00559590 ??1cSPObjectTemplateDB@SP@@UAE@XZ  # SP::cSPObjectTemplateDB::~cSPObjectTemplateDB migrated from s00559050

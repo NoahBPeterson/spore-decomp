@@ -23,7 +23,7 @@
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ??0cSummarizerFinal_s0055_beb0@@QAE@XZ  0055bf50  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?Shutdown@cSPObjectTemplateDB_s0055_beb0@SP@@QAE_NXZ  0055bfb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?RandomizeFirstN@cSPObjectTemplateDB_s0055_beb0@SP@@QAE_NPAU?$ParamVec@UKey3@@@@H@Z  0055c2e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPEditors/SPObjectTemplateDB.cpp  ?CreateObjectTemplateDB@SP@@YAPAVObjectTemplateDB@Editor@@XZ  0055c640  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?CreateObjectTemplateDB@SP@@YAPAVObjectTemplateDB_s0055_beb0@Editor@@XZ  0055c640  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?AsInterface@cSPObjectTemplateDB_s0055_beb0@SP@@QAEPAXI@Z  0055c690  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?CheckForMinPopulations@cSPObjectTemplateDB_s0056_1970@SP@@QAEXXZ  00561bd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?GetFloatParameterValues@cSPObjectTemplateDB_s0056_1970@SP@@QAE_NIAAV?$vector_s0056_1970@MUallocator_s0056_1970@eastl@@@eastl@@@Z  00561d80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

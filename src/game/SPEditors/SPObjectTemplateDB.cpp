@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPObjectTemplateDB.cpp -- migrated from slice(s) s00569690, s005634e0, s005628d0, s00561970, s0055ec70, s0055dce0, s0055ce80, s0055beb0, s0055a550, s005598b0, s00559050, s005580e0 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPObjectTemplateDB.cpp -- migrated from slice(s) s005609a0, s0055fc10, s0055aac0, s00569690, s005634e0, s005628d0, s00561970, s0055ec70, s0055dce0, s0055ce80, s0055beb0, s0055a550, s005598b0, s00559050, s005580e0 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPObjectTemplateDB.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -24,6 +24,14 @@
 #include "SP/cJob.h"
 #include "SP/cJobManager.h"
 #include "eastl/vector.h"
+#include "EA/ResourceMan/Manager.h"
+#include "EA/Random/RandomLinearCongruential.h"
+#include "EA/ArgScript/cArguments.h"
+#include "EA/ArgScript/cCommandBase.h"
+#include "SP/FunctionalMatch/eType.h"
+#include "SP/FunctionalMatch/Sentinel.h"
+#include "SP/FunctionalMatch/EqualConstraint.h"
+#include "SP/FunctionalMatch/RangeConstraint.h"
 
 // ---- items of slice s005580e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 template<int N> inline void ScratchSlots() { uint32_t s[N]; }
@@ -598,15 +606,31 @@ public:
 };
 }
 }
+namespace SP {
+namespace Audio {
+class c55a580 {
+public:
+    uint32_t pad[0x200];
+    void sub();
+};
+}
+}
 // ---- items of slice s0055a550 end
 
 // ---- items of slice s0055beb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" long __cdecl _InterlockedExchange(long volatile*, long);
-#pragma intrinsic(_InterlockedExchange)
 namespace Editor {
 class ObjectTemplateDB {
 public:
     ObjectTemplateDB();
+    uint32_t pad[0x270 / 4];
+};
+}
+extern "C" long __cdecl _InterlockedExchange(long volatile*, long);
+#pragma intrinsic(_InterlockedExchange)
+namespace Editor {
+class ObjectTemplateDB_s0055_beb0 {
+public:
+    ObjectTemplateDB_s0055_beb0();
     uint32_t pad[0x270 / 4];
 };
 }
@@ -617,6 +641,41 @@ public:
     bool IsEnabled();
 };  // namespace SP
 }
+struct ResKey { uint32_t instance, type, group; };
+namespace EA {
+namespace IO {
+struct IStream_s0055_beb0;
+}
+}
+using EA::IO::IStream_s0055_beb0;
+struct IRecord {   // an open record (stream owner)
+    virtual void v0();
+    virtual int AddRef();
+    virtual int Release();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual IStream_s0055_beb0* GetStream();   // +0x18
+virtual void v7();
+virtual void v8();
+    virtual void Close();           // +0x24
+};
+struct IRecordArea {   // record opener (database / save area)
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+    virtual void v08();
+    virtual void Save();            // +0x24
+virtual void v10();
+virtual void v11();
+virtual void v12();
+    virtual bool OpenRecord(const ResKey* key, IRecord** out, int access, int create, int a5, int a6);   // +0x34
+};
 template <int N> inline void ScratchSlots_s0055_beb0() { uint32_t slots[N]; }
 template <typename T> struct ARC_s0055_beb0 {   // EA::AutoRefCount
     T* mp;
@@ -652,42 +711,110 @@ template <typename T> struct ParamVec {   // eastl::vector<T>, 12-byte elements
     void erase(T* first, T* last);               // 0x0050f740
     void truncate(uint32_t n);                   // 0x004548d0
 };
+namespace SP {
+ IRecordArea* GetSaveArea_s0055_beb0(uint32_t id);   // 0x006b1f90
+}
 struct Key3 { uint32_t a, b, c; };
 struct cISPObjectTemplateDB_s0055_beb0 {
-    virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
-    virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
-    virtual void s08(); virtual void s09(); virtual void s10(); virtual void s11();
-    virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15();
-    virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
-    virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23();
-    virtual void s24(); virtual void s25(); virtual void s26(); virtual void s27();
+virtual void s00();
+virtual void s01();
+virtual void s02();
+virtual void s03();
+virtual void s04();
+virtual void s05();
+virtual void s06();
+virtual void s07();
+virtual void s08();
+virtual void s09();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void s24();
+virtual void s25();
+virtual void s26();
+virtual void s27();
     virtual bool IsObjectKnown(const Key3* key);                    // +0x70
     virtual void s29();
     virtual void Reload(const Key3* key, int flag);                 // +0x78
 };
 struct cIMatchTuning_s0055_beb0 { virtual void m0(); };
+struct IMessage {
+virtual void m0();
+virtual void m1();
+virtual void m2();
+virtual void m3();
+virtual void m4();
+    virtual IMessage* GetSource();      // +0x14
+virtual void m6();
+virtual void m7();
+virtual void m8();
+virtual void m9();
+virtual void m10();
+    virtual void Dispatch(int flag);    // +0x2c
+};
 struct IMessageServer_s0055_beb0 {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
     virtual void Post(uint32_t id, void* data, int flag);        // +0x14
-    virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9(); virtual void s10();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
     virtual void RemoveHandler(void* handler, uint32_t id, int pri);   // +0x2c
 };
 struct IHandlerRC_s0055_beb0 {
-    virtual bool HandleMessage(uint32_t msgID, void* msg);  // 0x007c1170 (IHandlerRC::HandleMessage)
+    virtual bool HandleMessage(uint32_t msgID, void* msg);
 };
 struct ICheatManager_s0055_beb0 {
-    virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3(); virtual void c4();
-    virtual void c5(); virtual void c6();
+virtual void c0();
+virtual void c1();
+virtual void c2();
+virtual void c3();
+virtual void c4();
+virtual void c5();
+virtual void c6();
     virtual void Remove(const char* name);   // +0x1c
 };
 struct ICommandServer_s0055_beb0 {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
-    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
     virtual void s10();
     virtual void RegisterCommands(const void* table, int count);   // +0x2c
 };
+struct MsgArg { uint32_t a, b; };
+struct MsgData {
+    uint32_t pad[2];
+    MsgArg args[2];
+    MsgArg& operator[](int i) { return args[i]; }
+};
 namespace SP {
 ICheatManager_s0055_beb0* CheatManager_s0055_beb0();            // 0x0067de20
+}
+namespace SP {
+IMessageServer_s0055_beb0* MessageServer();          // 0x0067dcc0
 }
 namespace EA {
 namespace Messaging {
@@ -731,7 +858,7 @@ public:
 
     virtual bool HandleMessage(uint32_t msgID, void* msg);  // 0x0055c3c0 (SP::cSPObjectTemplateDB::HandleMessage)
     bool Shutdown();  // 0x0055bfb0 (SP::cSPObjectTemplateDB::Shutdown)
-    bool RandomizeFirstN(ParamVec<Key3>* v, int n);
+    bool RandomizeFirstN(ParamVec<Key3>* v, int n);  // 0x0055c2e0 (SP::cSPObjectTemplateDB::RandomizeFirstN)
     void* AsInterface(uint32_t type);  // 0x0055c690 (SP::cSPObjectTemplateDB::AsInterface)
     void CheckForMinPopulations();      // 0x00561bd0
     void FUN_00561220(void* p);
@@ -751,7 +878,7 @@ struct cResBase1_s0055_beb0 : cResBase0 {
     virtual ~cResBase1_s0055_beb0() {}
 };
 struct cResFinal_s0055_beb0 : cResBase1_s0055_beb0 {
-    cResFinal_s0055_beb0();
+    cResFinal_s0055_beb0();  // 0x0055bf10 (cResFinal::cResFinal_s0055_beb0)
     virtual ~cResFinal_s0055_beb0() {}
 };
 struct cSummarizerBase {
@@ -760,7 +887,7 @@ struct cSummarizerBase {
     virtual ~cSummarizerBase() {}
 };
 struct cSummarizerFinal_s0055_beb0 : cSummarizerBase {
-    cSummarizerFinal_s0055_beb0();
+    cSummarizerFinal_s0055_beb0();  // 0x0055bf50 (cSummarizerFinal::cSummarizerFinal_s0055_beb0)
     virtual ~cSummarizerFinal_s0055_beb0() {}
 };
 // ---- items of slice s0055beb0 end
@@ -1744,8 +1871,8 @@ public:
     size_t size() const { return mpEnd - mpBegin; }
     T& operator[](size_t n) { return *(mpBegin + n); }
     const T& operator[](size_t n) const { return *(mpBegin + n); }
-    iterator erase(iterator first, iterator last);
-    iterator erase(iterator position);
+    iterator erase(iterator first, iterator last);  // 0x00621f50 (eastl::vector::erase)
+    iterator erase(iterator position);  // 0x00621f50 (eastl::vector::erase)
     void clear() { ScratchSlots<EraseFrame_s0056_34e0<T>::kSlots>(); erase(mpBegin, mpEnd); }
     void clear_noframe() { erase(mpBegin, mpEnd); }
     bool empty() const;
@@ -1992,12 +2119,22 @@ struct ResourceKey_s0056_34e0 {
     uint32_t mGroupID;
 };
 struct DatabasePackedFile_s0056_34e0 {
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
     virtual void v08();
     virtual void Commit();
-    virtual void v0a(); virtual void v0b(); virtual void v0c(); virtual void v0d();
-    virtual void v0e(); virtual void v0f();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
     virtual void DeleteRecord(const ResourceKey_s0056_34e0& key);  // 0x006bc5f0 (DatabasePackedFile::DeleteRecord)
 };
 struct IResourceFilter {
@@ -2005,14 +2142,32 @@ struct IResourceFilter {
     virtual ~IResourceFilter() {}
     virtual bool IsValid(const ResourceKey_s0056_34e0& key);
 };
+struct ResourceKeyFilter : public IResourceFilter {
+    uint32_t mInstanceID;
+    uint32_t mGroupID;
+    uint32_t mTypeID;
+    uint32_t mFlags;
+    ResourceKeyFilter(uint32_t groupID, uint32_t instanceID)
+        : mInstanceID(instanceID), mGroupID(groupID), mTypeID(0xffffffff), mFlags(0xdfff0000) {}
+    virtual bool IsValid(const ResourceKey_s0056_34e0& key);
+};
 namespace eastl {
  template<typename T> class basic_vector_s0056_34e0; template<typename T> class key_vector_s0056_34e0; 
 }
 struct IResourceManager_s0056_34e0 {
-    virtual void v00(); virtual void v01(); virtual void v02();
+virtual void v00();
+virtual void v01();
+virtual void v02();
     virtual bool GetResource(const ResourceKey_s0056_34e0& key, SP::ResourceObject** ppResource, int a, int b, int c, int d);
-    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
-    virtual void v08(); virtual void v09(); virtual void v0a(); virtual void v0b(); virtual void v0c();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
     // MSVC lays out overloaded virtuals in reverse declaration order.
     virtual int GetResourceKeyList(eastl::key_vector_s0056_34e0<ResourceKey_s0056_34e0>& keys, IResourceFilter& filter, eastl::basic_vector_s0056_34e0<DatabasePackedFile_s0056_34e0*>& dbs);
     virtual int GetResourceKeyList(eastl::key_vector_s0056_34e0<ResourceKey_s0056_34e0>& keys, IResourceFilter& filter);
@@ -2109,7 +2264,10 @@ namespace SP {
 namespace Traits {
 class cIClassifier_s0056_34e0 {
 public:
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
     virtual uint32_t GetID();
     virtual uint32_t GetGroup();
     virtual void v06();
@@ -2130,7 +2288,10 @@ namespace SP {
 namespace FunctionalMatch {
 class cISummarizer_s0056_34e0 {
 public:
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
     virtual uint32_t GetID();
     virtual uint32_t GetGroup();
     virtual void* GetSummary();
@@ -2142,13 +2303,34 @@ public:
 namespace SP {
 class cISPObjectTemplateDB_s0056_34e0 {
 public:
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
-    virtual void v08(); virtual void v09(); virtual void v0a(); virtual void v0b();
-    virtual void v0c(); virtual void v0d(); virtual void v0e(); virtual void v0f();
-    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
-    virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
-    virtual void v18(); virtual void v19(); virtual void v1a(); virtual void v1b();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v1a();
+virtual void v1b();
     virtual void v1c();
     virtual void OnAssetBanned(const ResourceKey_s0056_34e0& key, bool permanent);
 };
@@ -2200,6 +2382,85 @@ public:
     void BanAsset(const ResourceKey_s0056_34e0& key, bool permanent);
 
 };
+}
+namespace EA {
+namespace Messaging {
+class IMessageServer_s0056_34e0 {
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+    virtual void MessageSend(uint32_t messageID, void* pMessage, int flags);
+};
+}
+}
+namespace EA {
+namespace Messaging {
+IMessageServer_s0056_34e0* GetServer_s0056_34e0();
+}
+}
+namespace EA {
+namespace Messaging {
+class MessageRCBase {
+public:
+    MessageRCBase(int flags);
+    virtual ~MessageRCBase();
+    uint32_t mnRefCount;
+};
+}
+}
+namespace EA {
+namespace Messaging {
+template<int N>
+class MessageBasicRC_s0056_34e0 : public MessageRCBase {
+public:
+    struct Data { uint32_t mValue; uint32_t mType; };
+    Data mData[N];
+    uint32_t mId;
+    uint32_t mRC;
+    uint32_t mRCFlags;
+    uint32_t mReserved;
+    MessageBasicRC_s0056_34e0(uint32_t id) : MessageRCBase(0) { mRCFlags = 0; mId = id; }
+    ~MessageBasicRC_s0056_34e0();
+    void SetUint32(int index, uint32_t value) { mData[index].mValue = value; }
+    uint32_t GetId() const { return mId; }
+};
+}
+}
+class cAssetBrowser {
+public:
+    void OnAssetBanned(const ResourceKey_s0056_34e0& key);
+};
+cAssetBrowser* GetAssetBrowser();
+class IPropertyManager2 {
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+    virtual void RemovePropertyList(int flags, const ResourceKey_s0056_34e0& key);
+};
+namespace SP {
+DatabasePackedFile_s0056_34e0* GetSaveArea_s0056_34e0(uint32_t groupID);
+}
+namespace SP {
+IPropertyManager2* PropertyManager_s0056_34e0();
+}
+namespace SP {
+void RemoveResource(const ResourceKey_s0056_34e0& key);
 }
 struct IDPair { uint32_t mID; uint32_t mIndex; };
 struct WeightedID {
@@ -2453,6 +2714,768 @@ struct Creature { uint32_t pad[38]; Parts mParts; };   // mParts at +0x98
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 bool GetPartVolume(const Part* pPart, float* pVolume);  // 0x0056a710 (stays in the slice: not this object's)
 
+// ---- items of slice s00559050 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace Editor {
+namespace W1G2_58 {
+class c559050 {
+public:
+    uint32_t pad[0x40];
+    void* Dtor(uint32_t flags);   // @ 0x00559050
+};
+}
+}
+namespace Editor {
+namespace W1G2_58 {
+class c5590c0 {
+public:
+    uint32_t pad[0x40];
+    void sub(int a, int b, int c, int d);   // @ 0x005590C0
+};
+}
+}
+namespace Editor {
+namespace W1G2_58 {
+class cObjectTemplateDB {
+public:
+    uint32_t pad[0x200];
+    cObjectTemplateDB();
+};
+}
+}
+namespace Editor {
+namespace W1G2_58 {
+class c5594e0 {
+public:
+    c5594e0();
+};
+}
+}
+// ---- items of slice s00559050 end
+
+// ---- items of slice s0055aac0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" __declspec(dllimport) int sscanf(const char* buffer, const char* format, ...);
+namespace eastl {
+struct sp_vector_allocator_s0055_aac0 {
+    sp_vector_allocator_s0055_aac0(const allocator_tag& tag);  // 0x00429360
+    const char* mpName;
+    uint32_t mFlags;
+};
+}
+namespace eastl {
+template<typename T, typename A>
+struct VectorBase_s0055_aac0 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    A mAllocator;
+    VectorBase_s0055_aac0(const allocator_tag& a)
+        : mpBegin(0), mpEnd(0), mpCapacity(0), mAllocator(a) {}
+    ~VectorBase_s0055_aac0();  // <Constraint> 0x004AB0D0, <ResourceKey> 0x005156B0 (see the specializations below)
+};
+}
+namespace eastl {
+template<typename T, typename A = sp_vector_allocator_s0055_aac0>
+class vector_s0055_aac0 : public VectorBase_s0055_aac0<T, A> {
+public:
+    typedef VectorBase_s0055_aac0<T, A> base_type;
+    typedef T* iterator;
+    vector_s0055_aac0(const allocator_tag& a = allocator_tag()) : base_type(a) {}
+    ~vector_s0055_aac0() { DoDestroyValues(base_type::mpBegin, base_type::mpEnd); }
+    iterator begin() { return base_type::mpBegin; }
+    iterator end() { return base_type::mpEnd; }
+    bool empty() const;  // <ResourceKey> 0x00526430
+    void push_back(const T& value);  // <Constraint> 0x004E18E0
+    iterator erase(iterator first, iterator last);  // <Constraint> 0x00565B50
+    void clear() { erase(base_type::mpBegin, base_type::mpEnd); }
+    void DoDestroyValues(T* first, T* last) {
+        for (; first < last; ++first)
+            first->~T();
+    }
+};
+}
+namespace eastl {
+extern char gEmptyString[1];  // 0x01667BAC
+}
+namespace eastl {
+template<typename T>
+class basic_string_s0055_aac0 {
+public:
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    uint32_t mAllocator;
+    basic_string_s0055_aac0() : mpBegin(0), mpEnd(0), mpCapacity(0) { AllocateSelf(); }
+    ~basic_string_s0055_aac0();
+    void AllocateSelf() {
+        mpBegin = gEmptyString;
+        mpEnd = mpBegin;
+        mpCapacity = mpBegin + 1;
+    }
+    const T* c_str() const { return mpBegin; }
+    bool empty() const { return mpBegin == mpEnd; }
+};
+}
+namespace eastl {
+typedef basic_string_s0055_aac0<char> string;
+}
+struct ResourceKey_s0055_aac0 {
+    uint32_t mInstanceID;
+    uint32_t mTypeID;
+    uint32_t mGroupID;
+    ResourceKey_s0055_aac0() : mInstanceID(0), mTypeID(0), mGroupID(0) {}
+};
+bool SPKeyFromName(ResourceKey_s0055_aac0& key, const char* pName, uint32_t defaultType, uint32_t defaultGroup);  // 0x0068D5A0
+namespace SP {
+namespace FunctionalMatch {
+enum eType_s0055_aac0 {
+    kInteger_s0055_aac0 = 48342877,    // 0x2e1a75d
+    kFloat_s0055_aac0 = 48343039,      // 0x2e1a7ff
+    kTerminal_s0055_aac0 = 48343507    // 0x2e1a9d3
+};
+}
+}
+namespace SP {
+namespace FunctionalMatch {
+enum Sentinel_s0055_aac0 { kEndConstraint_s0055_aac0 = 0 };
+}
+}
+namespace SP {
+namespace FunctionalMatch {
+enum EqualConstraint_s0055_aac0 { kEquals_s0055_aac0 = 0 };
+}
+}
+namespace SP {
+namespace FunctionalMatch {
+enum RangeConstraint_s0055_aac0 { kBetween_s0055_aac0 = 0 };
+}
+}
+namespace SP {
+namespace FunctionalMatch {
+struct Constraint_s0055_aac0 {
+    unsigned int mParameter;
+    eType_s0055_aac0 mType;
+    union {
+        struct { int mMin; int mMax; } mIntVal;
+        struct { float mMin; float mMax; } mFloatVal;
+    };
+    eastl::vector_s0055_aac0<Constraint_s0055_aac0, eastl::sp_vector_allocator_s0055_aac0> mConstraints;
+
+    Constraint_s0055_aac0(Sentinel_s0055_aac0);                                                              // 0x00558830
+    Constraint_s0055_aac0(unsigned int param, ToleranceConstraint, float value, float tolerance);  // 0x00558880
+    Constraint_s0055_aac0(unsigned int param, RangeConstraint_s0055_aac0, float minVal, float maxVal);       // 0x005588F0
+    Constraint_s0055_aac0(unsigned int param, EqualConstraint_s0055_aac0, int value);                        // 0x00558960
+};
+}
+}
+namespace SP {
+namespace FunctionalMatch {
+struct DeclareParam_s0055_aac0 {
+    unsigned int mParameter;
+    eType_s0055_aac0 mType;
+    union { int mIntVal; float mFloatVal; };
+};
+}
+}
+namespace SP {
+struct cAssetSummary {
+    eastl::vector_s0055_aac0<FunctionalMatch::DeclareParam_s0055_aac0, eastl::sp_vector_allocator_s0055_aac0>& GetParameters();  // 0x005507A0
+};
+}
+namespace SP {
+class cISPObjectTemplateDB_s0055_aac0 {
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+    virtual void Reindex(bool bForce, bool bWriteSummarizers);                              // +0x18
+virtual void v07();
+virtual void v08();
+    virtual bool FindAssets(eastl::vector_s0055_aac0<ResourceKey_s0055_aac0, eastl::sp_vector_allocator_s0055_aac0>& results, int maxResults,
+                            const eastl::vector_s0055_aac0<FunctionalMatch::Constraint_s0055_aac0, eastl::sp_vector_allocator_s0055_aac0>& query);  // +0x24
+    virtual bool FindAssetsV(eastl::vector_s0055_aac0<ResourceKey_s0055_aac0, eastl::sp_vector_allocator_s0055_aac0>& results, ...);  // +0x28
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+    virtual void TouchAsset(const ResourceKey_s0055_aac0& key);                                        // +0x60
+virtual void v19();
+virtual void v1a();
+virtual void v1b();
+virtual void v1c();
+virtual void v1d();
+virtual void v1e();
+virtual void v1f();
+virtual void v20();
+    virtual bool TestAsset(const ResourceKey_s0055_aac0& key, const FunctionalMatch::Constraint_s0055_aac0& constraint);  // +0x84
+};
+}
+namespace SP {
+cISPObjectTemplateDB_s0055_aac0* ObjectTemplateDB();
+}
+namespace SP {
+void GetAssetMetadata(const ResourceKey_s0055_aac0& key, eastl::string& msg);  // 0x00563DE0
+}
+namespace SP {
+namespace Pollen {
+class cAssetDirectory_s0055_aac0 {
+public:
+    bool GetLocalKey(uint64_t serverID, ResourceKey_s0055_aac0& key);
+};
+}
+}
+namespace SP {
+namespace Pollen {
+struct cPollenManager {
+    uint32_t pad00[0x58 / 4];
+    cAssetDirectory_s0055_aac0* mpAssetDirectory;   // +0x58
+};
+}
+}
+namespace SP {
+namespace Pollen {
+cPollenManager* GetPollenManager();  // 0x0067CB30
+}
+}
+namespace SP {
+namespace Pollen {
+inline cAssetDirectory_s0055_aac0* AssetDirectory() {
+    cPollenManager* pManager = GetPollenManager();
+    return pManager->mpAssetDirectory;
+}
+}
+}
+namespace EA {
+namespace StdC {
+uint64_t StrtoU64(const char* pString, char** ppStringEnd, int nBase);  // 0x0092D6F0
+}
+}
+namespace EA {
+namespace Random {
+class RandomLinearCongruential_s0055_aac0 {
+public:
+    RandomLinearCongruential_s0055_aac0(uint32_t nSeed) { SetSeed(nSeed); }
+    void SetSeed(uint32_t nSeed);  // 0x00936090 (EA::Random::RandomLinearCongruential::SetSeed)
+    double RandomDoubleUniform();  // 0x009360d0 (EA::Random::RandomLinearCongruential::RandomDoubleUniform)
+    uint32_t RandomUint32Uniform(uint32_t nLimit);  // 0x00A68FB0
+    uint32_t mnSeed;
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct IResource {
+    virtual int AddRef();
+    virtual int Release();
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct IResourceManager_s0055_aac0 {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+    virtual bool GetResource(const ResourceKey_s0055_aac0& key, IResource** ppResource, int a, int b, int c, int d);
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+IResourceManager_s0055_aac0* GetManager_s0055_aac0();
+}
+}
+namespace EA {
+namespace ArgScript {
+class cIParser_s0055_aac0;
+}
+}
+namespace EA {
+namespace ArgScript {
+void Output(cIParser_s0055_aac0* pParser, const char* pFormat, ...);
+}
+}
+namespace EA {
+namespace ArgScript {
+class cArguments_s0055_aac0 {
+public:
+    bool HasArgument(const char* pName);                          // 0x00837EE0
+    const char** OptionArguments(const char* pName, int count);   // 0x00838330
+    bool HasFlag(const char* pName);  // 0x008380b0 (EA::ArgScript::cArguments::HasFlag)
+};
+}
+}
+namespace EA {
+namespace ArgScript {
+class cCommandBase_s0055_aac0 {
+public:
+    virtual void v00();
+    cIParser_s0055_aac0* mParser;
+    int mRefCount;
+};
+}
+}
+template<typename T>
+struct IntrusivePtr_s0055_aac0 {
+    T* mpObject;
+    IntrusivePtr_s0055_aac0(T* p = 0) : mpObject(p) {
+        if (mpObject)
+            mpObject->AddRef();
+    }
+    ~IntrusivePtr_s0055_aac0() {
+        if (mpObject)
+            mpObject->Release();
+    }
+    T** operator&() {
+        if (mpObject) {
+            T* const pTemp = mpObject;
+            mpObject = 0;
+            pTemp->Release();
+        }
+        return &mpObject;
+    }
+};
+namespace SP {
+cAssetSummary* object_cast_summary(IntrusivePtr_s0055_aac0<EA::ResourceMan::IResource>& res);  // 0x00564ED0
+}
+namespace SP {
+struct IntPair { int a; int b; };
+}
+namespace SP {
+extern const IntPair kStressIntegerPairs[];  // 0x013F4358
+}
+namespace SP {
+typedef eastl::vector_s0055_aac0<ResourceKey_s0055_aac0, eastl::sp_vector_allocator_s0055_aac0> KeyVector;
+}
+namespace SP {
+typedef eastl::vector_s0055_aac0<Constraint_s0055_aac0, eastl::sp_vector_allocator_s0055_aac0> ConstraintVector;
+}
+namespace SP {
+class cFunctionalTestCheat_s0055_aac0 : public EA::ArgScript::cCommandBase_s0055_aac0 {
+public:
+    virtual void Execute(EA::ArgScript::cArguments_s0055_aac0& args);  // 0x0055aac0 (SP::cFunctionalTestCheat::Execute)
+};
+}
+// ---- items of slice s0055aac0 end
+
+// ---- items of slice s0055fc10 begin (TODO(rewrite): local stubs, replace by canonical classes)
+template<typename T> struct EraseFrame_s0055_fc10 { enum { kSlots = 6 }; };
+template<> struct EraseFrame_s0055_fc10<uint32_t> { enum { kSlots = 4 }; };
+template<> struct EraseFrame_s0055_fc10<int> { enum { kSlots = 4 }; };
+template<> struct EraseFrame_s0055_fc10<float> { enum { kSlots = 4 }; };
+namespace eastl {
+ template<typename T1, typename T2> struct pair_s0055_fc10; 
+}
+template<> struct EraseFrame_s0055_fc10<eastl::pair_s0055_fc10<uint32_t, float> > { enum { kSlots = 4 }; };
+namespace eastl {
+struct allocator_s0055_fc10 { allocator_s0055_fc10() {} };
+}
+namespace eastl {
+struct sp_vector_allocator_s0055_fc10;
+}
+namespace eastl {
+struct sp_vector_allocator_s0055_fc10 : public allocator_s0055_fc10 {
+    sp_vector_allocator_s0055_fc10() {}
+    sp_vector_allocator_s0055_fc10(const allocator_s0055_fc10& a);
+    void deallocate(void* p, size_t n) { void* pMem = p; EASTLFree(pMem); }
+    const char* mpName;
+    uint32_t mFlags;
+};
+}
+namespace eastl {
+template<typename T> struct less_s0055_fc10 {
+    less_s0055_fc10() {}
+    bool operator()(const T& a, const T& b) const { return a < b; }
+};
+}
+namespace eastl {
+template<typename T1, typename T2>
+struct pair_s0055_fc10 {
+    T1 first;
+    T2 second;
+    pair_s0055_fc10() {}
+    pair_s0055_fc10(const T1& x, const T2& y) : first(x), second(y) {}
+    template<typename U, typename W>
+    pair_s0055_fc10(const pair_s0055_fc10<U, W>& p) : first(p.first), second(p.second) {}
+};
+}
+namespace eastl {
+template<typename T, typename A = allocator_s0055_fc10>
+class vector_s0055_fc10 {
+public:
+    typedef T* iterator;
+    typedef T value_type;
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    A mAllocator;
+
+    vector_s0055_fc10() : mpBegin(0), mpEnd(0), mpCapacity(0), mAllocator() { ScratchSlots<1>(); }
+    vector_s0055_fc10(const vector_s0055_fc10& x);
+    ~vector_s0055_fc10();
+    iterator begin() { return mpBegin; }
+    iterator end() { return mpEnd; }
+    size_t size() const { return mpEnd - mpBegin; }
+    T& operator[](size_t n) { return *(mpBegin + n); }
+    const T& operator[](size_t n) const { return *(mpBegin + n); }
+    iterator erase(iterator first, iterator last);  // 0x00621f50 (eastl::vector::erase)
+    iterator erase(iterator position);  // 0x00621f50 (eastl::vector::erase)
+    void clear() { ScratchSlots<EraseFrame_s0055_fc10<T>::kSlots>(); erase(mpBegin, mpEnd); }
+    void clear_noframe() { erase(mpBegin, mpEnd); }
+    bool empty() const;
+    void swap(vector_s0055_fc10& x);
+    template<typename It> void DoAssignFromIterator(It first, It last, random_access_iterator_tag);
+    template<typename It> void assign(It first, It last) {
+        false_type bIsIntegral;
+        false_type bIsPOD;
+        DoAssignFromIterator(first, last, random_access_iterator_tag());
+    }
+    void reserve(size_t n);
+    void push_back(const T& value);
+    iterator insert(iterator position, const T& value);
+    void DoInsertValues(iterator position, size_t n, const T& value);
+    void insert(iterator position, size_t n, const T& value) { DoInsertValues(position, n, value); }
+    void resize(size_t n);
+};
+}
+namespace eastl {
+template<typename T, typename A>
+vector_s0055_fc10<T, A>::~vector_s0055_fc10() {
+    for (T* p = mpBegin; p < mpEnd; ++p)
+        p->~T();
+    if (mpBegin)
+        mAllocator.deallocate(mpBegin, (mpCapacity - mpBegin) * sizeof(T));
+}
+}
+namespace eastl {
+template<typename T, typename A>
+typename vector_s0055_fc10<T, A>::iterator vector_s0055_fc10<T, A>::erase(iterator position) {
+    if ((position + 1) < mpEnd)
+        copy_n3(position + 1, mpEnd, position);
+    --mpEnd;
+    mpEnd->~T();
+    return position;
+}
+}
+namespace eastl {
+template<typename T, typename A>
+void vector_s0055_fc10<T, A>::resize(size_t n) {
+    if (n > (size_t)(mpEnd - mpBegin))
+        insert(mpEnd, n - (size_t)(mpEnd - mpBegin), value_type());
+    else
+        erase(mpBegin + n, mpEnd);
+    ScratchSlots<6>();
+}
+}
+namespace eastl {
+template<typename K, typename V, typename C = less_s0055_fc10<K>, typename A = sp_vector_allocator_s0055_fc10>
+class vector_map_s0055_fc10 : public vector_s0055_fc10<pair_s0055_fc10<K, V>, A> {
+public:
+    typedef vector_s0055_fc10<pair_s0055_fc10<K, V>, A> base_type;
+    typedef pair_s0055_fc10<K, V> value_type;
+    typedef pair_s0055_fc10<K, V>* iterator;
+    C mCompare;
+    pair_s0055_fc10<iterator, iterator> equal_range(const K& k);
+    iterator find(const K& k) {
+        const pair_s0055_fc10<iterator, iterator> pairIts(equal_range(k));
+        ScratchSlots<5>();
+        if (pairIts.first != pairIts.second)
+            return pairIts.first;
+        return base_type::end();
+    }
+    // Same as find(); this instance reserves a smaller declined-inline frame.
+    iterator find_(const K& k) {
+        const pair_s0055_fc10<iterator, iterator> pairIts(equal_range(k));
+        ScratchSlots<3>();
+        if (pairIts.first != pairIts.second)
+            return pairIts.first;
+        return base_type::end();
+    }
+    V& operator[](const K& k);
+};
+}
+namespace eastl {
+template<typename K, typename V, typename C, typename A>
+V& vector_map_s0055_fc10<K, V, C, A>::operator[](const K& k) {
+    iterator pos;   // unused in the original as well (it occupies a frame slot)
+    iterator itLB = lower_bound(base_type::begin(), base_type::end(), k, mCompare);
+    if ((itLB == base_type::end()) || mCompare(k, (*itLB).first)) {
+        itLB = base_type::insert(itLB, value_type(k, V()));
+    }
+    return (*itLB).second;
+}
+}
+namespace eastl {
+struct rbtree_node_base_s0055_fc10 {
+    rbtree_node_base_s0055_fc10* mpNodeRight;
+    rbtree_node_base_s0055_fc10* mpNodeLeft;
+    rbtree_node_base_s0055_fc10* mpNodeParent;
+    char mColor;
+};
+}
+namespace eastl {
+template<typename V>
+struct rbtree_iterator_s0055_fc10 {
+    rbtree_node_base_s0055_fc10* mpNode;
+    rbtree_iterator_s0055_fc10(const rbtree_node_base_s0055_fc10* pNode);
+    rbtree_iterator_s0055_fc10(const rbtree_iterator_s0055_fc10& x) : mpNode(x.mpNode) {}
+    V& operator*() const;
+    rbtree_iterator_s0055_fc10& operator++();
+    bool operator!=(const rbtree_iterator_s0055_fc10& x) const { return mpNode != x.mpNode; }
+};
+}
+namespace eastl {
+template<typename K, typename V, typename C = less_s0055_fc10<K>, typename A = allocator_s0055_fc10>
+class map_s0055_fc10 {
+public:
+    typedef pair_s0055_fc10<const K, V> value_type;
+    typedef rbtree_iterator_s0055_fc10<value_type> iterator;
+    C mCompare;
+    rbtree_node_base_s0055_fc10 mAnchor;
+    size_t mnSize;
+    A mAllocator;
+    iterator begin() { return iterator(mAnchor.mpNodeLeft); }
+    iterator end() { return iterator(&mAnchor); }
+    size_t size() const { return mnSize; }
+    iterator find(const K& k);
+    pair_s0055_fc10<iterator, iterator> equal_range(const K& k);
+
+    struct const_iterator {
+        rbtree_node_base_s0055_fc10* mpNode;
+        const_iterator(const iterator& x);
+        const value_type& operator*() const;
+        const_iterator& operator++();
+        bool operator!=(const const_iterator& x) const { return mpNode != x.mpNode; }
+    };
+
+    struct key_iterator {
+        rbtree_node_base_s0055_fc10* mpNode;
+        key_iterator(const rbtree_node_base_s0055_fc10* pNode);
+        const K& operator*() const;
+        key_iterator& operator++();
+        bool operator!=(const key_iterator& x) const { return mpNode != x.mpNode; }
+    };
+    key_iterator key_begin() { return key_iterator(mAnchor.mpNodeLeft); }
+    key_iterator key_end() { return key_iterator(&mAnchor); }
+};
+}
+namespace eastl {
+struct prime_rehash_policy_s0055_fc10 {
+    float mfMaxLoadFactor;
+    float mfGrowthFactor;
+    uint32_t mnNextResize;
+};
+}
+namespace eastl {
+template<typename V>
+struct hash_node_s0055_fc10 {
+    V mValue;
+    hash_node_s0055_fc10* mpNext;
+};
+}
+namespace eastl {
+template<typename V>
+struct hashtable_iterator_base_s0055_fc10 {
+    hash_node_s0055_fc10<V>* mpNode;
+    hash_node_s0055_fc10<V>** mpBucket;
+    hashtable_iterator_base_s0055_fc10(hash_node_s0055_fc10<V>* pNode, hash_node_s0055_fc10<V>** pBucket) : mpNode(pNode), mpBucket(pBucket) {}
+    void increment_bucket();
+};
+}
+namespace eastl {
+template<typename V>
+struct hashtable_iterator_s0055_fc10 : public hashtable_iterator_base_s0055_fc10<V> {
+    typedef hashtable_iterator_base_s0055_fc10<V> base_type;
+    hashtable_iterator_s0055_fc10(hash_node_s0055_fc10<V>** pBucket) : base_type(*pBucket, pBucket) {}
+    hashtable_iterator_s0055_fc10(const hashtable_iterator_s0055_fc10& x) : base_type(x.mpNode, x.mpBucket) {}
+    V* operator->() const { return &base_type::mpNode->mValue; }
+    hashtable_iterator_s0055_fc10& operator++() {
+        base_type::mpNode = base_type::mpNode->mpNext;
+        while (!base_type::mpNode)
+            base_type::mpNode = *++base_type::mpBucket;
+        return *this;
+    }
+    bool operator!=(const hashtable_iterator_s0055_fc10& x) const { return base_type::mpNode != x.mpNode; }
+};
+}
+namespace eastl {
+template<typename K, typename V, typename A, typename ExtractKey, typename Equal, typename H1, typename H2, typename H>
+class hashtable_s0055_fc10 {
+public:
+    typedef V value_type;
+    typedef hashtable_iterator_s0055_fc10<V> iterator;
+    typedef hash_node_s0055_fc10<V> node_type;
+    typedef A allocator_type;
+
+    uint32_t mFunctorPad;   // empty hash/compare functor bases
+    node_type** mpBucketArray;
+    size_t mnBucketCount;
+    size_t mnElementCount;
+    prime_rehash_policy_s0055_fc10 mRehashPolicy;
+    A mAllocator;
+
+    hashtable_s0055_fc10(size_t nBucketCount, const H1& h1, const H2& h2, const H& h, const Equal& eq, const ExtractKey& ek, const A& a);
+    ~hashtable_s0055_fc10();
+    iterator begin();
+    iterator end() { return iterator(mpBucketArray + mnBucketCount); }
+    pair_s0055_fc10<iterator, bool> DoInsertValue(const value_type& value, true_type);
+    pair_s0055_fc10<iterator, bool> insert(const value_type& value) { return DoInsertValue(value, true_type()); }
+};
+}
+namespace eastl {
+template<typename K, typename V, typename A, typename ExtractKey, typename Equal, typename H1, typename H2, typename H>
+typename hashtable_s0055_fc10<K, V, A, ExtractKey, Equal, H1, H2, H>::iterator hashtable_s0055_fc10<K, V, A, ExtractKey, Equal, H1, H2, H>::begin() {
+    iterator i(mpBucketArray);
+    if (!i.mpNode)
+        i.increment_bucket();
+    return i;
+}
+}
+struct ResourceKey_s0055_fc10 {
+    uint32_t mInstanceID;
+    uint32_t mTypeID;
+    uint32_t mGroupID;
+};
+struct DatabasePackedFile_s0055_fc10 {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+    virtual void v08();
+    virtual void Commit();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
+    virtual void DeleteRecord(const ResourceKey_s0055_fc10& key);  // 0x006bc5f0 (DatabasePackedFile::DeleteRecord)
+};
+struct IResourceFilter_s0055_fc10 {
+    IResourceFilter_s0055_fc10() {}
+    virtual ~IResourceFilter_s0055_fc10() {}
+    virtual bool IsValid(const ResourceKey_s0055_fc10& key);
+};
+namespace eastl {
+ template<typename T> class basic_vector_s0055_fc10; template<typename T> class key_vector_s0055_fc10; 
+}
+struct IResourceManager_s0055_fc10 {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+    virtual bool GetResource(const ResourceKey_s0055_fc10& key, SP::ResourceObject** ppResource, int a, int b, int c, int d);
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+    // MSVC lays out overloaded virtuals in reverse declaration order.
+    virtual int GetResourceKeyList(eastl::key_vector_s0055_fc10<ResourceKey_s0055_fc10>& keys, IResourceFilter_s0055_fc10& filter, eastl::basic_vector_s0055_fc10<DatabasePackedFile_s0055_fc10*>& dbs);
+    virtual int GetResourceKeyList(eastl::key_vector_s0055_fc10<ResourceKey_s0055_fc10>& keys, IResourceFilter_s0055_fc10& filter);
+};
+namespace EA {
+namespace ResourceMan {
+ IResourceManager_s0055_fc10* GetManager_s0055_fc10(); 
+}
+}
+namespace eastl {
+template<typename T>
+struct VectorBase_s0055_fc10 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    sp_vector_allocator_s0055_fc10 mAllocator;
+    VectorBase_s0055_fc10() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~VectorBase_s0055_fc10();
+};
+}
+namespace eastl {
+template<typename T>
+struct KeyVectorBase_s0055_fc10 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    sp_vector_allocator_s0055_fc10 mAllocator;
+    KeyVectorBase_s0055_fc10(const allocator_s0055_fc10& a) : mpBegin(0), mpEnd(0), mpCapacity(0), mAllocator(a) {}
+    ~KeyVectorBase_s0055_fc10();
+};
+}
+namespace eastl {
+template<typename T>
+class key_vector_s0055_fc10 : public KeyVectorBase_s0055_fc10<T> {
+public:
+    typedef KeyVectorBase_s0055_fc10<T> base_type;
+    key_vector_s0055_fc10(const allocator_s0055_fc10& a = allocator_s0055_fc10()) : base_type(a) {}
+    ~key_vector_s0055_fc10() { destruct(base_type::mpBegin, base_type::mpEnd); ScratchSlots<3>(); }
+    size_t size() const { return base_type::mpEnd - base_type::mpBegin; }
+    T& operator[](size_t n) { return base_type::mpBegin[n]; }
+    T* begin() { return base_type::mpBegin; }
+    T* end() { return base_type::mpEnd; }
+    T* erase(T* first, T* last);
+    void clear() { ScratchSlots<4>(); erase(base_type::mpBegin, base_type::mpEnd); }
+};
+}
+namespace eastl {
+template<typename T>
+class basic_vector_s0055_fc10 : public VectorBase_s0055_fc10<T> {
+public:
+    T& operator[](size_t n) { return VectorBase_s0055_fc10<T>::mpBegin[n]; }
+    basic_vector_s0055_fc10() {}
+    ~basic_vector_s0055_fc10() { destruct(VectorBase_s0055_fc10<T>::mpBegin, VectorBase_s0055_fc10<T>::mpEnd); ScratchSlots<3>(); }
+};
+}
+namespace SP {
+struct EcxStubFc {
+    void FUN_0055fed0();
+    bool FUN_00560880(void* key, unsigned* out);
+    bool FUN_005608d0(uint32_t* key, void* c);
+};
+}
+namespace SP {
+void FUN_00540470(void* p);
+}
+namespace SP {
+void FUN_00547240(void* key);
+}
+namespace SP {
+void FUN_00565040(void* out, void* val);
+}
+namespace SP {
+void FUN_00564960(void* out, void* val);
+}
+namespace SP {
+void FUN_00562280(void* self, void* c);
+}
+namespace SP {
+void FUN_0041e4d0(int n);
+}
+namespace SP {
+void FUN_00564fd0(void* p);
+}
+namespace SP {
+void FUN_00561cc0(void* self);
+}
+// ---- items of slice s0055fc10 end
+
 // @ 0x005588f0
 namespace SP { namespace FunctionalMatch {
 Constraint_s0055_80e0::Constraint_s0055_80e0(unsigned int param, RangeConstraint_s0055_80e0, float minVal, float maxVal)
@@ -2461,17 +3484,6 @@ Constraint_s0055_80e0::Constraint_s0055_80e0(unsigned int param, RangeConstraint
     mFloatVal.mMax = maxVal;
 }
 }}  // namespace SP::FunctionalMatch
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00558960
 namespace SP { namespace FunctionalMatch {
@@ -2482,17 +3494,6 @@ Constraint_s0055_80e0::Constraint_s0055_80e0(unsigned int param, EqualConstraint
 }
 }}  // namespace SP::FunctionalMatch
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x005589c0
 namespace SP { namespace FunctionalMatch {
 Constraint_s0055_80e0::Constraint_s0055_80e0(unsigned int param, RangeConstraint_s0055_80e0, int minVal, int maxVal)
@@ -2501,17 +3502,6 @@ Constraint_s0055_80e0::Constraint_s0055_80e0(unsigned int param, RangeConstraint
     mIntVal.mMax = maxVal;
 }
 }}  // namespace SP::FunctionalMatch
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00558a20
 namespace SP { namespace FunctionalMatch {
@@ -2525,17 +3515,6 @@ Constraint_s0055_80e0::Constraint_s0055_80e0(unsigned int param, NotEqualConstra
 }
 }}  // namespace SP::FunctionalMatch
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00558ae0
 namespace SP { namespace FunctionalMatch {
 Constraint_s0055_80e0::Constraint_s0055_80e0(AnyConstraint, eastl::vector_s0055_80e0<Constraint_s0055_80e0, eastl::sp_vector_allocator_s0055_80e0> constraints)
@@ -2543,17 +3522,6 @@ Constraint_s0055_80e0::Constraint_s0055_80e0(AnyConstraint, eastl::vector_s0055_
     ScratchSlots<18>();
 }
 }}  // namespace SP::FunctionalMatch
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00558b20
 namespace SP { namespace FunctionalMatch {
@@ -2563,33 +3531,11 @@ bool Constraint_s0055_80e0::IsCompound() const
 }
 }}  // namespace SP::FunctionalMatch
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00558b70
 SP::FunctionalMatch::DeclareParam::DeclareParam()
 {
     mType = kTerminal;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00558b90
 SP::FunctionalMatch::DeclareParam::DeclareParam(unsigned int param, float value)
@@ -2599,17 +3545,6 @@ SP::FunctionalMatch::DeclareParam::DeclareParam(unsigned int param, float value)
     mFloatVal = value;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00558bc0
 SP::FunctionalMatch::DeclareParam::DeclareParam(unsigned int param, int value)
 {
@@ -2617,17 +3552,6 @@ SP::FunctionalMatch::DeclareParam::DeclareParam(unsigned int param, int value)
     mType = kInteger;
     mIntVal = value;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00558bf0
 namespace SP {
@@ -2650,17 +3574,6 @@ bool IsPillRecordStale(uint32_t instanceID, int expectedValue)
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00558d50
 namespace SP {
 void WritePillRecord(uint32_t instanceID, uint32_t value)
@@ -2677,17 +3590,6 @@ void WritePillRecord(uint32_t instanceID, uint32_t value)
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00558e40
 namespace SP {
 void* cParameterResource::AsInterface(uint32_t iid)
@@ -2697,17 +3599,6 @@ void* cParameterResource::AsInterface(uint32_t iid)
     return cResourceBase_s0055_80e0::AsInterface(iid);
 }
 }  // namespace SP
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00558e70
 namespace SP {
@@ -2723,17 +3614,6 @@ size_t cParameterResourceFactory::GetSupportedTypes(uint32_t* types, size_t coun
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00558eb0
 namespace SP {
 bool cParameterResourceFactory::IsValid(uint32_t typeID, uint32_t subtypeID)
@@ -2741,17 +3621,6 @@ bool cParameterResourceFactory::IsValid(uint32_t typeID, uint32_t subtypeID)
     return typeID == 0x2d5c9af && subtypeID == 0x2d5c9af;
 }
 }  // namespace SP
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00558ef0
 namespace SP {
@@ -2770,15 +3639,34 @@ bool cParameterResourceFactory::CreateResource(IPFRecord* pRecord, ResourceObjec
 }
 }  // namespace SP
 
+// @ 0x00559050
+namespace Editor { namespace W1G2_58 {
+void* c559050::Dtor(uint32_t)
+{
+    return 0;
+}
+}}  // namespace Editor::W1G2_58
 
+// @ 0x005590c0
+namespace Editor { namespace W1G2_58 {
+void c5590c0::sub(int a, int b, int c, int d)
+{
+}
+}}  // namespace Editor::W1G2_58
 
+// @ 0x00559110
+namespace Editor { namespace W1G2_58 {
+cObjectTemplateDB::cObjectTemplateDB()
+{
+}
+}}  // namespace Editor::W1G2_58
 
-
-
-
-
-
-
+// @ 0x005594e0
+namespace Editor { namespace W1G2_58 {
+c5594e0::c5594e0()
+{
+}
+}}  // namespace Editor::W1G2_58
 
 // @ 0x00559500
 int SP::cSPObjectTemplateDB::AddRef()
@@ -2789,14 +3677,10 @@ int SP::cSPObjectTemplateDB::AddRef()
     return len;
 }
 
-
-
-
-
-
-
-
-
+// @ 0x00559590
+SP::cSPObjectTemplateDB::~cSPObjectTemplateDB()
+{
+}
 
 // @ 0x005598b0
 namespace SP {
@@ -2902,14 +3786,6 @@ bool cSPObjectTemplateDB_s0055_98b0::Init()
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
 // @ 0x0055a550
 namespace SP { namespace Audio {
 uint32_t cCityMusicSummarizer::GetParamId(uint32_t index)
@@ -2921,13 +3797,12 @@ uint32_t cCityMusicSummarizer::GetParamId(uint32_t index)
 }
 }}  // namespace SP::Audio
 
-
-
-
-
-
-
-
+// @ 0x0055a580
+namespace SP { namespace Audio {
+void c55a580::sub()
+{
+}
+}}  // namespace SP::Audio
 
 // @ 0x0055a9d0
 namespace SP { namespace Audio {
@@ -2940,12 +3815,172 @@ uint32_t cCityMusicSummarizer::GetParamType(uint32_t index)
 }
 }}  // namespace SP::Audio
 
+// @ 0x0055aa00
+namespace SP { namespace Audio {
+bool cCityMusicSummarizer::ExtractParameters(int a, void* b)
+{
+    return false;
+}
+}}  // namespace SP::Audio
 
+// @ 0x0055aac0
+namespace SP {
+void cFunctionalTestCheat_s0055_aac0::Execute(EA::ArgScript::cArguments_s0055_aac0& args)
+{
+    bool bDoGetParams = false;
+    ResourceKey_s0055_aac0 checkKey;
+    const char** va;
 
+    if (args.HasArgument("get_key_params") && (va = args.OptionArguments("get_key_params", 1)) != 0) {
+        if (SPKeyFromName(checkKey, va[0], 0, 0))
+            bDoGetParams = true;
+        else
+            EA::ArgScript::Output(mParser, "Couldn't parse %s as a key\n", va[0]);
+    }
 
+    if (args.HasArgument("get_id_params") && (va = args.OptionArguments("get_id_params", 1)) != 0) {
+        uint64_t serverID = EA::StdC::StrtoU64(va[0], 0, 10);
+        if (Pollen::AssetDirectory()->GetLocalKey(serverID, checkKey))
+            bDoGetParams = true;
+        else
+            EA::ArgScript::Output(mParser,
+                "That server ID (%s) doesn't seem to have been downloaded yet. Try:\npollen -get %s\n",
+                va[0], va[0]);
+    }
 
+    if (args.HasArgument("query") && (va = args.OptionArguments("query", 1)) != 0) {
+        KeyVector resultList;
+        unsigned int nParameter, nValue;
+        if (sscanf(va[0], "%x=%x", &nParameter, &nValue) == 2) {
+            ObjectTemplateDB()->FindAssetsV(resultList, Constraint_s0055_aac0(nParameter, kEquals_s0055_aac0, nValue),
+                                            Constraint_s0055_aac0(kEndConstraint_s0055_aac0));
+        }
+        if (!resultList.empty()) {
+            ResourceKey_s0055_aac0* it = resultList.begin();
+            ResourceKey_s0055_aac0* itEnd = resultList.end();
+            for (; it != itEnd; ++it) {
+                const ResourceKey_s0055_aac0& assetKey = *it;
+                eastl::string msg;
+                GetAssetMetadata(assetKey, msg);
+                EA::ArgScript::Output(mParser, "Asset (T:0x%08x G:0x%08x I:0x%08x)\n",
+                                      assetKey.mTypeID, assetKey.mGroupID, assetKey.mInstanceID);
+                if (!msg.empty())
+                    EA::ArgScript::Output(mParser, "%s\n", msg.c_str());
+                else
+                    EA::ArgScript::Output(mParser, "Couldn't find metadata\n\n");
+            }
+        } else {
+            EA::ArgScript::Output(mParser, "Query returned no matches\n");
+        }
+    }
 
+    if (args.HasArgument("test_asset") && (va = args.OptionArguments("test_asset", 2)) != 0 &&
+        SPKeyFromName(checkKey, va[0], 0, 0)) {
+        unsigned int nParameter, nValue;
+        if (sscanf(va[1], "%x=%x", &nParameter, &nValue) == 2) {
+            if (ObjectTemplateDB()->TestAsset(checkKey, Constraint_s0055_aac0(nParameter, kEquals_s0055_aac0, nValue)))
+                EA::ArgScript::Output(mParser, "Yes\n\n");
+            else
+                EA::ArgScript::Output(mParser, "No\n\n");
+        }
+    }
 
+    if (args.HasArgument("touch") && (va = args.OptionArguments("touch", 1)) != 0 &&
+        SPKeyFromName(checkKey, va[0], 0, 0)) {
+        ObjectTemplateDB()->TouchAsset(checkKey);
+    }
+
+    if (bDoGetParams) {
+        ResourceKey_s0055_aac0 paramsKey = checkKey;
+        paramsKey.mTypeID = 0x2d5c9af;
+        IntrusivePtr_s0055_aac0<EA::ResourceMan::IResource> res;
+        if (EA::ResourceMan::GetManager_s0055_aac0()->GetResource(paramsKey, &res, 0, 0, 0, 0)) {
+            cAssetSummary* pSummary = object_cast_summary(res);
+            DeclareParam_s0055_aac0* itCur = pSummary->GetParameters().begin();
+            DeclareParam_s0055_aac0* itEnd = pSummary->GetParameters().end();
+            if (itCur != itEnd) {
+                for (; itCur != itEnd; ++itCur) {
+                    if (itCur->mType == kInteger_s0055_aac0)
+                        EA::ArgScript::Output(mParser, "0x%08x  =  %d\n", itCur->mParameter, itCur->mIntVal);
+                    else
+                        EA::ArgScript::Output(mParser, "0x%08x  =  %f\n", itCur->mParameter,
+                                              (double)itCur->mFloatVal);
+                }
+            } else {
+                EA::ArgScript::Output(mParser,
+                    "That's weird. Asset %s is in the OTDB, but has no parameters\n", va[0]);
+            }
+        } else {
+            EA::ArgScript::Output(mParser, "Asset %s is not in the OTDB\n", va[0]);
+        }
+    }
+
+    if (args.HasFlag("reindex"))
+        ObjectTemplateDB()->Reindex(true, false);
+
+    if (args.HasFlag("stress")) {
+        EA::Random::RandomLinearCongruential_s0055_aac0 random(1);
+        ConstraintVector query;
+        KeyVector resultList;
+        float fVal;
+
+        // Float parameters.
+        for (unsigned int i = 0; i < 20; i++) {
+            query.clear();
+
+            fVal = (float)(random.RandomDoubleUniform() * 2.5);
+            query.push_back(Constraint_s0055_aac0(0x7358629a, kBetween_s0055_aac0, fVal - 7.5f, fVal + 7.5f));
+            query.push_back(Constraint_s0055_aac0(0x2f05c58, kWithin, (float)random.RandomUint32Uniform(2), 0.00001f));
+            query.push_back(Constraint_s0055_aac0(0x2f05c59, kWithin, (float)random.RandomUint32Uniform(2), 0.00001f));
+
+            fVal = (float)(random.RandomDoubleUniform() * 16.0 + 9.5);
+            query.push_back(Constraint_s0055_aac0(0x2f05c5e, kBetween_s0055_aac0, fVal - 7.5f, fVal + 7.5f));
+            fVal = (float)(random.RandomDoubleUniform() * 5.0 + 2.5);
+            query.push_back(Constraint_s0055_aac0(0x2f05c5f, kBetween_s0055_aac0, fVal - 7.5f, fVal + 7.5f));
+            fVal = (float)(random.RandomDoubleUniform() * 5.0 + 2.5);
+            query.push_back(Constraint_s0055_aac0(0x2f05c60, kBetween_s0055_aac0, fVal - 7.5f, fVal + 7.5f));
+            fVal = (float)(random.RandomDoubleUniform() * 5.0 + 2.5);
+            query.push_back(Constraint_s0055_aac0(0x2f05c61, kBetween_s0055_aac0, fVal - 7.5f, fVal + 7.5f));
+
+            fVal = (float)(random.RandomUint32Uniform(3) * 2);
+            query.push_back(Constraint_s0055_aac0(0x3fea1c0, kBetween_s0055_aac0, fVal - 0.5f, fVal + 0.5f));
+
+            fVal = (float)(random.RandomDoubleUniform() * 5.0 + 2.5);
+            query.push_back(Constraint_s0055_aac0(0x3fea210, kBetween_s0055_aac0, fVal - 7.5f, fVal + 7.5f));
+            fVal = (float)(random.RandomDoubleUniform() * 5.0 + 2.5);
+            query.push_back(Constraint_s0055_aac0(0x3fea1a0, kBetween_s0055_aac0, fVal - 7.5f, fVal + 7.5f));
+            fVal = (float)(random.RandomDoubleUniform() * 5.0 + 2.5);
+            query.push_back(Constraint_s0055_aac0(0x4ab3bd8, kBetween_s0055_aac0, fVal - 7.5f, fVal + 7.5f));
+            fVal = (float)(random.RandomDoubleUniform() * 5.0 + 2.5);
+            query.push_back(Constraint_s0055_aac0(0x4ab3bd9, kBetween_s0055_aac0, fVal - 7.5f, fVal + 7.5f));
+            fVal = (float)(random.RandomDoubleUniform() * 5.0 + 2.5);
+            query.push_back(Constraint_s0055_aac0(0x4ab3bda, kBetween_s0055_aac0, fVal - 7.5f, fVal + 7.5f));
+            fVal = (float)(random.RandomDoubleUniform() * 5.0 + 2.5);
+            query.push_back(Constraint_s0055_aac0(0x4ab3bdb, kBetween_s0055_aac0, fVal - 7.5f, fVal + 7.5f));
+            fVal = (float)(random.RandomDoubleUniform() * 5.0 + 2.5);
+            query.push_back(Constraint_s0055_aac0(0xf42136d5, kBetween_s0055_aac0, fVal - 7.5f, fVal + 7.5f));
+            fVal = (float)(random.RandomDoubleUniform() * 5.0 + 2.5);
+            query.push_back(Constraint_s0055_aac0(0xf42136d6, kBetween_s0055_aac0, fVal - 7.5f, fVal + 7.5f));
+            fVal = (float)(random.RandomDoubleUniform() * 5.0 + 2.5);
+            query.push_back(Constraint_s0055_aac0(0xf42136d7, kBetween_s0055_aac0, fVal - 7.5f, fVal + 7.5f));
+            fVal = (float)(random.RandomDoubleUniform() * 5.0 + 2.5);
+            query.push_back(Constraint_s0055_aac0(0xf42136d8, kBetween_s0055_aac0, fVal - 7.5f, fVal + 7.5f));
+
+            ObjectTemplateDB()->FindAssets(resultList, 10, query);
+        }
+
+        // Integer parameters.
+        for (unsigned int j = 0; j < 15; j++) {
+            for (int k = 0; kStressIntegerPairs[k].a != -1; k++) {
+                query.clear();
+                query.push_back(Constraint_s0055_aac0(0x2dd90af, kEquals_s0055_aac0, kStressIntegerPairs[k].a));
+                query.push_back(Constraint_s0055_aac0(0x2dc9d1e, kEquals_s0055_aac0, kStressIntegerPairs[k].b));
+                ObjectTemplateDB()->FindAssets(resultList, 10, query);
+            }
+        }
+    }
+}
+}  // namespace SP
 
 // @ 0x0055beb0
 char const * SP::cFunctionalTestCheat::Description(EA::ArgScript::tHelpType index) const
@@ -2957,13 +3992,6 @@ char const * SP::cFunctionalTestCheat::Description(EA::ArgScript::tHelpType inde
                "-get_id_params <SPID key name>\n   dump otdb parameters associated with the given server id.\n";
 }
 
-
-
-
-
-
-
-
 // @ 0x0055bee0
 namespace SP {
 bool cFunctionalTestCheat_s0055_beb0::IsEnabled()
@@ -2972,34 +4000,13 @@ bool cFunctionalTestCheat_s0055_beb0::IsEnabled()
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
 // @ 0x0055bf10
 cResFinal_s0055_beb0::cResFinal_s0055_beb0()
 {}
 
-
-
-
-
-
-
-
 // @ 0x0055bf50
 cSummarizerFinal_s0055_beb0::cSummarizerFinal_s0055_beb0()
 {}
-
-
-
-
-
-
-
 
 // @ 0x0055bfb0
 bool SP::cSPObjectTemplateDB_s0055_beb0::Shutdown()
@@ -3031,13 +4038,6 @@ bool SP::cSPObjectTemplateDB_s0055_beb0::Shutdown()
     return true;
 }
 
-
-
-
-
-
-
-
 // @ 0x0055c2e0
 bool SP::cSPObjectTemplateDB_s0055_beb0::RandomizeFirstN(ParamVec<Key3>* v, int n)
 {
@@ -3056,27 +4056,75 @@ bool SP::cSPObjectTemplateDB_s0055_beb0::RandomizeFirstN(ParamVec<Key3>* v, int 
     return !v->empty();
 }
 
-
-
-
-
-
-
+// @ 0x0055c3c0
+bool SP::cSPObjectTemplateDB_s0055_beb0::HandleMessage(uint32_t msgID, void* msg)
+{
+    ScratchSlots_s0055_beb0<5>();
+    switch (msgID) {
+    case 0xca665fa7:
+    case 0x1a7f758:
+    case 0x165e841:
+    case 0x5132ed1: {
+        Key3 key = *(Key3*)msg;
+        if (IsObjectKnown(&key))
+            SP::MessageServer()->Post(0x9421c619, msg, 0);
+        break;
+    }
+    case 0x64e331c: {
+        void* data = msg;
+        FUN_00561220(data);
+        break;
+    }
+    case 0x5132eec: {
+        Key3 key = *(Key3*)msg;
+        Reload(&key, 0);
+        break;
+    }
+    case 0x264a132: {
+        FUN_0055e190(1, 0);
+        IMessage* m = (IMessage*)msg;
+        m->GetSource()->Dispatch(0);
+        break;
+    }
+    case 0x3743e04: {
+        CheckForMinPopulations();
+        if (!mVec.empty()) {
+            uint32_t* last = mVec.mpEnd;
+            uint32_t* first = mVec.mpBegin;
+            for (uint32_t* it = first; it != last; ++it) {
+                char tmp[8];
+                uint32_t holeA[5];
+                mSet.insert(tmp, it);
+            }
+            mVec.clear();
+        }
+        break;
+    }
+    case 0x212d3e7:
+    case 0x680c633:
+        if (mDirty) {
+            FUN_00560470();
+            mDirty = 0;
+        }
+        SP::GetSaveArea_s0055_beb0(0x11ac19c)->Save();
+        break;
+    case 0x4c6f86a: {
+        MsgData* d = (MsgData*)msg;
+        uint32_t v = (*d)[0].a;
+        SetMode((const char*)v);
+        break;
+    }
+    }
+    return true;
+}
 
 // @ 0x0055c640
 namespace SP {
-Editor::ObjectTemplateDB* CreateObjectTemplateDB()
+Editor::ObjectTemplateDB_s0055_beb0* CreateObjectTemplateDB()
 {
-    return new ("Editor/ObjectTemplateDB", 0, 0, 0, 0) Editor::ObjectTemplateDB();
+    return new ("Editor/ObjectTemplateDB", 0, 0, 0, 0) Editor::ObjectTemplateDB_s0055_beb0();
 }
 }  // namespace SP
-
-
-
-
-
-
-
 
 // @ 0x0055c690
 void* SP::cSPObjectTemplateDB_s0055_beb0::AsInterface(uint32_t type)
@@ -3091,12 +4139,6 @@ void* SP::cSPObjectTemplateDB_s0055_beb0::AsInterface(uint32_t type)
     }
     return 0;
 }
-
-
-
-
-
-
 
 // @ 0x0055d9e0
 namespace SP {
@@ -3123,12 +4165,6 @@ char cSPObjectTemplateDB_s0055_ce80::FUN_0055d9e0(void* pObj, int count, void* p
     return result;
 }
 }  // namespace SP
-
-
-
-
-
-
 
 // @ 0x0055db30
 namespace SP {
@@ -3164,11 +4200,6 @@ char cSPObjectTemplateDB_s0055_ce80::FUN_0055db30(void* pObj)
 }
 }  // namespace SP
 
-
-
-
-
-
 // @ 0x0055eae0
 void* PaintStub::FUN_0055eae0(int* first, int count)
 {
@@ -3184,10 +4215,6 @@ void* PaintStub::FUN_0055eae0(int* first, int count)
     return this_;
 }
 
-
-
-
-
 // @ 0x0055f9e0
 namespace SP {
 void EcxStub70::FUN_0055f9e0()
@@ -3200,10 +4227,6 @@ void EcxStub70::FUN_0055f9e0()
     }
 }
 }  // namespace SP
-
-
-
-
 
 // @ 0x0055fa20
 namespace SP {
@@ -3239,10 +4262,6 @@ unsigned char EcxStub70::FUN_0055fa20(void* key, char flag)
 }
 }  // namespace SP
 
-
-
-
-
 // @ 0x0055fb30
 bool SP::cSPObjectTemplateDB::GetAssetType(EA::ResourceMan::Key const & key, unsigned int & a2)
 {
@@ -3258,10 +4277,6 @@ bool SP::cSPObjectTemplateDB::GetAssetType(EA::ResourceMan::Key const & key, uns
     }
     return 0;
 }
-
-
-
-
 
 // @ 0x0055fbb0
 namespace SP {
@@ -3280,8 +4295,123 @@ unsigned char EcxStub70::FUN_0055fbb0(void* key)
 }
 }  // namespace SP
 
+// @ 0x0055fc10
+namespace SP {
+void FUN_0055fc10(void* this_, unsigned maxCount, void* pOut, int param4)
+{
+    char tmp[64];
+    FUN_00540470(&tmp);
+    FUN_00547240(this_);
+    unsigned count = 0;
+    void* mgr = EA::ResourceMan::GetManager_s0055_fc10();
+    char* begin = *(char**)((char*)this_ + 0x14);
+    char* end = *(char**)((char*)this_ + 0x18);
+    char* it = begin;
+    for (;;) {
+        if (it == end) {
+            // copy(pOut->begin, pOut->end)
+            uint32_t* v = (uint32_t*)pOut;
+            FUN_0041e4d0(0);
+            (void)v;
+            FUN_00564fd0(&tmp);
+            return;
+        }
+        char* entry = it;
+        bool take;
+        if (param4 == 0)
+            take = true;
+        else
+            take = ((bool(__thiscall*)(void*, char*, int, int))(*(void***)mgr)[0x30 / 4])(mgr, it, 0, param4) != 0;
+        if (take) {
+            if (count < maxCount) {
+                int idx = (int)(it - begin) / 0x50;
+                struct { int a, b, c; } rec;
+                rec.a = *(int*)(entry + 0x48);
+                rec.b = *(int*)(entry + 0x4c);
+                rec.c = idx;
+                char out[16];
+                FUN_00565040(out, &rec);
+                count++;
+            }
+        }
+        it += 0x50;
+    }
+}
+}  // namespace SP
 
+// @ 0x0055fe60
+namespace SP {
+void FUN_0055fe60(void* this_, unsigned key, unsigned value)
+{
+    char tmp[8];
+    unsigned two[2];
+    two[0] = key;
+    two[1] = 0;
+    FUN_00564960(tmp, two);
+    eastl::vector_map_s0055_fc10<uint32_t, uint32_t>* map_s0055_fc10 =
+        (eastl::vector_map_s0055_fc10<uint32_t, uint32_t>*)((char*)this_ + 0xc4);
+    map_s0055_fc10->operator[](key) = value;
+}
+}  // namespace SP
 
+// @ 0x0055fed0
+void SP::cSPObjectTemplateDB::slot_26()
+{
+    void* this_ = this;
+    FUN_004769b0(*(void**)((char*)this_ + 0x64), *(void**)((char*)this_ + 0x68));
+    FUN_00561cc0(this_);
+}
+
+// @ 0x00560880
+namespace SP {
+bool EcxStubFc::FUN_00560880(void* key, unsigned* out)
+{
+    void* this_ = this;
+    int index = 0;
+    FUN_005631e0(this_, &index);
+    if (index == -1)
+        return false;
+    char* asset = (char*)(index * 0x50 + *(int*)((char*)this_ + 0x14));
+    *out = *(unsigned*)(asset + 0xc);
+    return true;
+}
+}  // namespace SP
+
+// @ 0x005608d0
+namespace SP {
+bool EcxStubFc::FUN_005608d0(uint32_t* key, void* c)
+{
+    void* this_ = this;
+    FUN_004769b0(*(void**)((char*)this_ + 0x144), *(void**)((char*)this_ + 0x148));
+    FUN_00562280((char*)this_ + 0x144, c);
+    uint32_t* it = *(uint32_t**)((char*)this_ + 0x144);
+    uint32_t* end = *(uint32_t**)((char*)this_ + 0x148);
+    for (; it != end; ++it) {
+        uint32_t* asset = (uint32_t*)(*it * 0x50 + *(int*)((char*)this_ + 0x14));
+        if (asset[0] == key[0] && asset[1] == key[1] && asset[2] == key[2])
+            return true;
+    }
+    return false;
+}
+}  // namespace SP
+
+// @ 0x005609a0
+namespace SP {
+bool FUN_005609a0(void* this_, void* a, char b)
+{
+    (void)this_; (void)a; (void)b;
+    return false;
+}
+}  // namespace SP
+
+// @ 0x00561340
+namespace SP {
+bool FUN_00561340(void* this_, void* a, void* b)
+{
+    (void)this_; (void)a; (void)b;
+    return false;
+}
+}  // namespace SP
 
 // @ 0x00561bd0
 namespace SP {
@@ -3297,9 +4427,6 @@ void cSPObjectTemplateDB_s0056_1970::CheckForMinPopulations()
     }
 }
 }  // namespace SP
-
-
-
 
 // @ 0x00561d80
 namespace SP {
@@ -3317,9 +4444,6 @@ bool cSPObjectTemplateDB_s0056_1970::GetFloatParameterValues(uint32_t paramID, e
 }
 }  // namespace SP
 
-
-
-
 // @ 0x00561ea0
 namespace SP {
 bool cSPObjectTemplateDB_s0056_1970::GetIntParameterValues(uint32_t paramID, eastl::vector_s0056_1970<int>& values)
@@ -3335,9 +4459,6 @@ bool cSPObjectTemplateDB_s0056_1970::GetIntParameterValues(uint32_t paramID, eas
     }
 }
 }  // namespace SP
-
-
-
 
 // @ 0x00561fc0
 namespace SP {
@@ -3370,9 +4491,6 @@ bool cSPObjectTemplateDB_s0056_1970::GetFloatParameterTable(uint32_t paramID, ea
 }
 }  // namespace SP
 
-
-
-
 // @ 0x00562120
 namespace SP {
 bool cSPObjectTemplateDB_s0056_1970::GetIntParameterTable(uint32_t paramID, eastl::vector_s0056_1970<int>& values, eastl::vector_s0056_1970<ResourceKey_s0056_1970>& keys)
@@ -3404,9 +4522,6 @@ bool cSPObjectTemplateDB_s0056_1970::GetIntParameterTable(uint32_t paramID, east
 }
 }  // namespace SP
 
-
-
-
 // @ 0x00562280
 namespace SP {
 void cSPObjectTemplateDB_s0056_1970::FindMatching(eastl::vector_set_s0056_1970<uint32_t>* pResults, const Constraint_s0056_1970& c)
@@ -3436,9 +4551,6 @@ void cSPObjectTemplateDB_s0056_1970::FindMatching(eastl::vector_set_s0056_1970<u
 }
 }  // namespace SP
 
-
-
-
 // @ 0x00562680
 namespace SP {
 void cSPObjectTemplateDB_s0056_1970::AddPriorityConstraint(const Constraint_s0056_1970& c, uint32_t tag)
@@ -3448,9 +4560,6 @@ void cSPObjectTemplateDB_s0056_1970::AddPriorityConstraint(const Constraint_s005
     ScratchSlots<9>();
 }
 }  // namespace SP
-
-
-
 
 // @ 0x00562710
 namespace SP {
@@ -3462,9 +4571,6 @@ void cSPObjectTemplateDB_s0056_1970::RemovePriorityConstraint(uint32_t tag)
     ScratchSlots<12>();
 }
 }  // namespace SP
-
-
-
 
 // @ 0x00562790
 namespace SP {
@@ -3482,9 +4588,6 @@ void cSPObjectTemplateDB_s0056_1970::SetExcludedParameter(int value)
 }
 }  // namespace SP
 
-
-
-
 // @ 0x005628b0
 namespace SP {
 void cSPObjectTemplateDB_s0056_1970::ClearExcludedParameter()
@@ -3492,8 +4595,6 @@ void cSPObjectTemplateDB_s0056_1970::ClearExcludedParameter()
     RemovePriorityConstraint(0x5dd2a5b);
 }
 }  // namespace SP
-
-
 
 // @ 0x00562b80
 namespace SP {
@@ -3507,7 +4608,14 @@ void CandidateDBStub::AssignCandidates(void* out, void* pRange)
 }
 }  // namespace SP
 
-
+// @ 0x00562c00
+namespace SP {
+bool FUN_00562c00(void* this_, void* out)
+{
+    (void)this_; (void)out;
+    return false;
+}
+}  // namespace SP
 
 // @ 0x00562ca0
 namespace SP {
@@ -3524,6 +4632,112 @@ bool CandidateDBStub::TryFilterCandidates(void* a, void* b, void* pRange)
 }
 }  // namespace SP
 
+// @ 0x00562d50
+namespace SP {
+bool FUN_00562d50(void* this_, void* a)
+{
+    (void)this_; (void)a;
+    return false;
+}
+}  // namespace SP
+
+// @ 0x00562de0
+namespace SP {
+bool FUN_00562de0(void* this_, void* a)
+{
+    (void)this_; (void)a;
+    return false;
+}
+}  // namespace SP
+
+// @ 0x00562e90
+namespace SP {
+bool FUN_00562e90(void* this_, void* a)
+{
+    (void)this_; (void)a;
+    return false;
+}
+}  // namespace SP
+
+// @ 0x00562f50
+namespace SP {
+bool FUN_00562f50(void* this_, void* a, void* b)
+{
+    (void)this_; (void)a; (void)b;
+    return false;
+}
+}  // namespace SP
+
+// @ 0x00563090
+namespace SP {
+bool FUN_00563090(void* this_, void* a, void* b)
+{
+    (void)this_; (void)a; (void)b;
+    return false;
+}
+}  // namespace SP
+
+// @ 0x00563370
+namespace SP {
+bool FUN_00563370(void* this_, void* a, void* b)
+{
+    (void)this_; (void)a; (void)b;
+    return false;
+}
+}  // namespace SP
+
+// @ 0x005634e0
+namespace SP {
+void cSPObjectTemplateDB_s0056_34e0::BanAsset(const ResourceKey_s0056_34e0& key, bool permanent)
+{
+    uint32_t saveID = GetGroupForAssetGroup(key.mGroupID);
+    if (key.mInstanceID == 0xffffffff || saveID == 0)
+        return;
+    if (EA::ResourceMan::GetManager_s0056_34e0()->GetResource(key, 0, 0, 0, 0, 0)) {
+        EA::Messaging::MessageBasicRC_s0056_34e0<5> msg(0x4249453);
+        msg.SetUint32(0, key.mTypeID);
+        msg.SetUint32(1, key.mGroupID);
+        msg.SetUint32(2, key.mInstanceID);
+        msg.SetUint32(3, permanent != 0);
+        EA::Messaging::GetServer_s0056_34e0()->MessageSend(msg.mId, &msg, 0);
+    }
+    OnAssetBanned(key, permanent);
+    if (GetAssetBrowser())
+        GetAssetBrowser()->OnAssetBanned(key);
+
+    IResourceManager_s0056_34e0* pRM = EA::ResourceMan::GetManager_s0056_34e0();
+    DatabasePackedFile_s0056_34e0* dbpf = 0;
+    eastl::key_vector_s0056_34e0<ResourceKey_s0056_34e0> resourceKeys;
+    eastl::basic_vector_s0056_34e0<DatabasePackedFile_s0056_34e0*> sources;
+    ScratchSlots<1>();
+    ResourceKeyFilter instFilter(key.mGroupID, key.mInstanceID);
+    pRM->GetResourceKeyList(resourceKeys, instFilter, sources);
+    DatabasePackedFile_s0056_34e0* pSaveC = GetSaveArea_s0056_34e0(0x11ac1ac);
+    DatabasePackedFile_s0056_34e0* pSave2 = GetSaveArea_s0056_34e0(0x11ac19c);
+    DatabasePackedFile_s0056_34e0* pGroupArea = GetSaveArea_s0056_34e0(saveID);
+    for (int i = 0, count = (int)resourceKeys.size(); i < count; i++) {
+        ResourceKey_s0056_34e0& recordKey = resourceKeys[i];
+        dbpf = sources[i];
+        if (dbpf == pSaveC || dbpf == pSave2 || dbpf == pGroupArea)
+            dbpf->DeleteRecord(recordKey);
+    }
+    resourceKeys.clear();
+    pRM->GetResourceKeyList(resourceKeys, instFilter);
+    for (ResourceKey_s0056_34e0* pos = resourceKeys.begin(), *end = resourceKeys.end(); pos != end; ++pos) {
+        const ResourceKey_s0056_34e0& k = *pos;
+        if (k.mTypeID != 0xb1b104)
+            RemoveResource(k);
+        else
+            PropertyManager_s0056_34e0()->RemovePropertyList(1, k);
+    }
+    if (pSaveC)
+        pSaveC->Commit();
+    if (pSave2)
+        pSave2->Commit();
+    if (pGroupArea)
+        pGroupArea->Commit();
+}
+}  // namespace SP
 
 // @ 0x00563910
 namespace SP {
@@ -3543,7 +4757,6 @@ bool cSPObjectTemplateDB_s0056_34e0::GetFeatureVector(uint32_t assetID, Traits::
 }
 }  // namespace SP
 
-
 // @ 0x005639a0
 namespace SP {
 void* cSPObjectTemplateDB_s0056_34e0::FindSummaryByID(const uint32_t& id)
@@ -3557,7 +4770,6 @@ void* cSPObjectTemplateDB_s0056_34e0::FindSummaryByID(const uint32_t& id)
 }
 }  // namespace SP
 
-
 // @ 0x00563a30
 namespace SP {
 void* cSPObjectTemplateDB_s0056_34e0::FindSummary(uint32_t id)
@@ -3570,7 +4782,6 @@ void* cSPObjectTemplateDB_s0056_34e0::FindSummary(uint32_t id)
     return 0;
 }
 }  // namespace SP
-
 
 // @ 0x00563ac0
 namespace SP {
@@ -3601,7 +4812,6 @@ bool cSPObjectTemplateDB_s0056_34e0::ValidateResource(const ResourceKey_s0056_34
 }
 }  // namespace SP
 
-
 // @ 0x00563c80
 namespace SP {
 void cSPObjectTemplateDB_s0056_34e0::SetClassifierWeights(const eastl::vector_map_s0056_34e0<uint32_t, float>& weights)
@@ -3616,7 +4826,6 @@ void cSPObjectTemplateDB_s0056_34e0::SetClassifierWeights(const eastl::vector_ma
 }
 }  // namespace SP
 
-
 // @ 0x00563d60
 namespace SP {
 void cSPObjectTemplateDB_s0056_34e0::GetDefaultClassifierWeights(eastl::vector_map_s0056_34e0<uint32_t, float>& weights)
@@ -3624,7 +4833,6 @@ void cSPObjectTemplateDB_s0056_34e0::GetDefaultClassifierWeights(eastl::vector_m
     weights.assign(mDefaultClassifierWeights.begin(), mDefaultClassifierWeights.end());
 }
 }  // namespace SP
-
 
 // @ 0x00563df0
 namespace SP {

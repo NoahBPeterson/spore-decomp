@@ -1,3 +1,10 @@
 00562b80 ?AssignCandidates@CandidateDBStub@SP@@QAEXPAX0@Z  # CandidateDBStub::AssignCandidates migrated from s005628d0 (verbatim, slice spelling)
+00562c00 ?FUN_00562c00@SP@@YA_NPAX0@Z  # FUN_00562c00 migrated from s005628d0 (verbatim, slice spelling)
 00562ca0 ?TryFilterCandidates@CandidateDBStub@SP@@QAE_NPAX00@Z  # CandidateDBStub::TryFilterCandidates migrated from s005628d0 (verbatim, slice spelling)
+00562d50 ?FUN_00562d50@SP@@YA_NPAX0@Z  # FUN_00562d50 migrated from s005628d0 (verbatim, slice spelling)
+00562de0 ?FUN_00562de0@SP@@YA_NPAX0@Z  # FUN_00562de0 migrated from s005628d0 (verbatim, slice spelling)
+00562e90 ?FUN_00562e90@SP@@YA_NPAX0@Z  # FUN_00562e90 migrated from s005628d0 (verbatim, slice spelling)
+00562f50 ?FUN_00562f50@SP@@YA_NPAX00@Z  # FUN_00562f50 migrated from s005628d0 (verbatim, slice spelling)
+00563090 ?FUN_00563090@SP@@YA_NPAX00@Z  # FUN_00563090 migrated from s005628d0 (verbatim, slice spelling)
 005631e0 SP::cSPObjectTemplateDB::FindAssetIndex  # linear scan of mAssetList by key
+00563370 ?FUN_00563370@SP@@YA_NPAX00@Z  # FUN_00563370 migrated from s005628d0 (verbatim, slice spelling)
