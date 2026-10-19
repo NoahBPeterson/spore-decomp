@@ -1,3 +1,6 @@
+005ccc90 ?TranslateTokenStub@@YAXPAX00@Z  # TranslateTokenStub migrated from s005ccc90 (verbatim, slice spelling)
+005cd190 ?GetDayOfWeekStringStub@@YAXHPAX@Z  # GetDayOfWeekStringStub migrated from s005ccc90 (verbatim, slice spelling)
+005cd340 ?GetTimeStringStub@@YAXPAX0@Z  # GetTimeStringStub migrated from s005ccc90 (verbatim, slice spelling)
 005cd670 ?SpineBigStub@@YAXPAX00@Z  # SpineBigStub migrated from s005ccc90 (verbatim, slice spelling)
 005cd870 ?Interp@cInterp@@QAEXMMPAM0@Z  # cInterp::Interp migrated from s005ccc90 (verbatim, slice spelling)
 005cd910 ?TimeObjValue@@YAMPAVcTimeObj@@@Z  # TimeObjValue migrated from s005ccc90 (verbatim, slice spelling)

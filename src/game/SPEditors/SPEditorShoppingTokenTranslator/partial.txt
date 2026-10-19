@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+005ccc90  1180  cSPEditorShoppingTokenTranslator::TranslateToken: body not reconstructed (stub)
+005cd190  420   SP::GetDayOfWeekString: body not reconstructed (stub)
+005cd340  765   cSPEditorShoppingTokenTranslator::GetTimeString: body not reconstructed (stub)
