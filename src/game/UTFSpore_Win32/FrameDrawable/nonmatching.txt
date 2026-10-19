@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>   (nonmatching: complete + behaviourally equivalent, but not byte-exact)
+0096f240 23 Ctx96::q(AsInterface): complete; return-this block placement differs; difftest PASS after fixing the base AsInterface tail call (thiscall on this; was a free cdecl call with the iid only)

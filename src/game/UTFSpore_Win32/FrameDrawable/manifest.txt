@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/FrameDrawable.cpp  ?a@Ctx96@@QAEXPAMM@Z  0096f1b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/FrameDrawable.cpp  ?s@Ctx96@@QAEHI@Z  0096f280  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/FrameDrawable.cpp  ??0FrameDrawable@UTFWinControls@EA@@QAE@XZ  0096fe30  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -4,4 +4,7 @@
 0096ef80 EA::UTFWinControls registration chain                      # sequence of static registrations
 0096f060 UI::FadeEffect::FadeEffect                                 # 2008 dev-PDB name
 0096f080 UTFWin::BiStateEffect::func84h                             # 2008 dev-PDB name (partial)
+0096f1b0 ?a@Ctx96@@QAEXPAMM@Z  # Ctx96::a migrated from s0096e3a0 (verbatim, slice spelling)
+0096f240 ?q@Ctx96@@QAEHH@Z  # Ctx96::q migrated from s0096e3a0 (verbatim, slice spelling)
+0096f280 ?s@Ctx96@@QAEHI@Z  # Ctx96::s migrated from s0096e3a0 (verbatim, slice spelling)
 0096f320 ?FUN_0096f320@@YA_NPAXPAD1@Z  # FUN_0096f320 migrated from s0096e3a0 (verbatim, slice spelling)

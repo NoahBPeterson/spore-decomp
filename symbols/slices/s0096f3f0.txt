@@ -1,5 +1,5 @@
-0096f3f0  EA::UTFWinControls::FrameDrawable::CreateRenderables  # draws the FrameDrawable's 2D frame/outlines; complex, not reconstructed (partial)
-0096fe30  EA::UTFWinControls::FrameDrawable::FrameDrawable  # ctor; sets vtables 0x14424d4/0x14424bc (and serial 0x13fa72c), 1.0f border widths +0x4c..+0x58, outline 0xff000000, states; byte-exact
+0096f3f0 ?CreateRenderables@FrameDrawable@UTFWinControls@EA@@QAEHPAURenderContext_s0096_f3f0@UTFWin@3@PAX@Z  # FrameDrawable::CreateRenderables migrated from s0096f3f0 (verbatim, slice spelling)
+0096fe30 ??0FrameDrawable@UTFWinControls@EA@@QAE@XZ  # FrameDrawable::FrameDrawable migrated from s0096f3f0 (verbatim, slice spelling)
 00970010 ?Scale@GlideEffect@UTFWinControls@EA@@QAEXPAXPAUFloatSink@23@M@Z  # GlideEffect::Scale migrated from s0096f3f0 (verbatim, slice spelling)
 00970060 ?Set@GlideEffect@UTFWinControls@EA@@QAEXPAM@Z  # GlideEffect::Set migrated from s0096f3f0 (verbatim, slice spelling)
 009700b0 ?FUN_009700b0@UTFWinControls@EA@@YIPAXPAD@Z  # FUN_009700b0 migrated from s0096f3f0 (verbatim, slice spelling)
