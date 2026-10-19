@@ -6,3 +6,5 @@ slices/s00eec5c0/s00eec5c0.cpp  ?f_00eec940@@YAXPAPAHH@Z  00eec940  /O2 /MD /Gy 
 slices/s00eec5c0/s00eec5c0.cpp  ?f_00eec990@@YAHH@Z  00eec990  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00eec5c0/s00eec5c0.cpp  ?f_00eeca30@@YAPAXH@Z  00eeca30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00eec5c0/s00eec5c0.cpp  ?f_00eece20@@YAHPAH@Z  00eece20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00eec5c0/s00eec5c0.cpp  ?f_00eed010@@YAIPBUResourceKey@@@Z  00eed010  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00eec5c0/s00eec5c0.cpp  ?f_00eed090@@YAXXZ  00eed090  /O2 /MD /Gy /TP /arch:SSE /fp:fast

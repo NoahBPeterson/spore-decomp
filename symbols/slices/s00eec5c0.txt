@@ -6,3 +6,13 @@
 00eec990  ResourceProperty4a8  # returns entry+0x4a8 or 2
 00eeca30  ResourceQuery1186577 # FUN_00f3d780 then query hash 0x1186577
 00eece20  ResourceKeyToIcon    # hash -> constant id dispatch
+00eec5c0  ResourceRoundedValue # type->rounded (ceil) scaled value, 1.0f default
+00eec760  HashedIntTriple      # three hashed property reads into an int triple
+00eec9c0  UninitMoveEntry32    # eastl::uninitialized_move<0x20-byte Entry32>
+00eeca60  ResourceTypeToKey    # resource type -> property key (pair copy)
+00eecba0  ResourceLookupEntryId # manager find -> cast 0x670da17/0x3c609f8 -> entry id
+00eeccb0  CreatureModelUpdate  # creature locomotion model state update
+00eecf10  HashDispatchConst    # key typeID -> constant id dispatch (bool props)
+00eed010  NounPropertyKey      # property-as-key fetch for a resource key
+00eed090  SetGlobal55c0377     # thunk: g_015aca38.Set(0x55c0377, g_015aca34)
+00eed0b0  PropertyPairRead     # resource key -> (float,float) pair, bool ok
