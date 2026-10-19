@@ -11,3 +11,4 @@
 ../src/game/UTFSpore_Win32/Grid.cpp  ?ListErase@@YGPAUListIter@@PAU1@U1@1@Z  00973d10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/Grid.cpp  ?ListInsertRange@@YGXPAUListNode@@UListIter@@1H@Z  00973d60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/Grid.cpp  ?SetRowHeight@WinGridView@@QAE_NHHM@Z  00977e50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/Grid.cpp  ?Refresh@WinGridRefreshThunk@@QAEXXZ  0097d080  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

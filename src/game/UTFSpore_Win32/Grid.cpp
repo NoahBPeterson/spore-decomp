@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/Grid.cpp -- migrated from slice(s) s0097a130, s00978df0, s00977e50, s00972e30, s0096f3f0 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/Grid.cpp -- migrated from slice(s) s0097cea0, s0097a130, s00978df0, s00977e50, s00972e30, s0096f3f0 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/Grid.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -8,6 +8,9 @@
 #include <intrin.h>
 #include <math.h>
 #include <float.h>
+#include "EA/UTFWin/Image.h"
+#include "EA/UTFWinControls/ImageDrawable.h"
+#include "EA/UTFWin/cDropShadowDescriptor.h"
 
 // ---- items of slice s0096f3f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace EA {
@@ -792,6 +795,11 @@ static WString* FindHeading(HeadingMap& m, int key) {
 }
 // ---- items of slice s0097a130 end
 
+// ---- items of slice s0097cea0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct WinGridBase { void RefreshImpl(); };   // 0x97bc80, thiscall
+struct WinGridRefreshThunk { void Refresh(); };
+// ---- items of slice s0097cea0 end
+
 // @ 0x009702b0
 void EA::UTFWinControls::WinGrid::SetDefaultFormatting()
 {
@@ -832,11 +840,6 @@ void EA::UTFWinControls::WinGrid::SetDefaultFormatting()
     *(int*)(ecx + 0x27c) = esi;
 }
 
-
-
-
-
-
 // @ 0x00970460
 bool EA::UTFWinControls::WinGrid::OnMouseMove(float a0, float x, unsigned int y)
 {
@@ -852,11 +855,6 @@ bool EA::UTFWinControls::WinGrid::OnMouseMove(float a0, float x, unsigned int y)
     return 1;
 }
 
-
-
-
-
-
 // @ 0x00970540
 namespace EA { namespace UTFWinControls {
 void WinGrid_s0096_f3f0::OnMouseWheel(int, int, int, int delta)
@@ -864,10 +862,6 @@ void WinGrid_s0096_f3f0::OnMouseWheel(int, int, int, int delta)
     ((WinGridSub*)((char*)this + 0x20c))->OnWheel(delta / -100);
 }
 }}  // namespace EA::UTFWinControls
-
-
-
-
 
 // @ 0x00972e30
 RBNode* __stdcall CreateNodeCopy(const RBNode* src, RBNode* parent)
@@ -886,9 +880,6 @@ RBNode* __stdcall CreateNodeCopy(const RBNode* src, RBNode* parent)
     *(char*)&n->color = FLD(char, src, 0xc);
     return n;
 }
-
-
-
 
 // @ 0x00972e90
 void EA::UTFWinControls::WinGrid::DoArrowKey(unsigned int vk, unsigned int bExtend)
@@ -977,9 +968,6 @@ void EA::UTFWinControls::WinGrid::DoArrowKey(unsigned int vk, unsigned int bExte
     VCALL2(void, win, 0x7c, 8, 1);
 }
 
-
-
-
 // @ 0x00973200
 void EA::UTFWinControls::WinGrid::ClearSelection()
 {
@@ -1003,9 +991,6 @@ void EA::UTFWinControls::WinGrid::ClearSelection()
     }
 }
 
-
-
-
 // @ 0x00973330
 void WinGrid::DoCellWindowMove(int* msg)
 {
@@ -1024,9 +1009,6 @@ void WinGrid::DoCellWindowMove(int* msg)
     }
 }
 
-
-
-
 // @ 0x00973390
 bool WinGrid::SetScrollBarDrawableVertical(void* p)
 {
@@ -1041,9 +1023,6 @@ bool WinGrid::SetScrollBarDrawableVertical(void* p)
     return true;
 }
 
-
-
-
 // @ 0x00973410
 bool WinGrid::SetScrollBarDrawableHorizontal(void* p)
 {
@@ -1057,9 +1036,6 @@ bool WinGrid::SetScrollBarDrawableHorizontal(void* p)
     if (sb) VCALL1(void, sb, 0x5c, AsDrawable(FLD(void*, this, 0x1f8)));
     return true;
 }
-
-
-
 
 // @ 0x00973490
 bool WinGrid::AddScrollBar(bool vert, bool horz)
@@ -1107,9 +1083,6 @@ bool WinGrid::AddScrollBar(bool vert, bool horz)
     return true;
 }
 
-
-
-
 // @ 0x00973640
 ColIterA& ColIterA::operator++()
 {
@@ -1125,9 +1098,6 @@ ColIterA& ColIterA::operator++()
     return *this;
 }
 
-
-
-
 // @ 0x009736c0
 ColIterB& ColIterB::operator++()
 {
@@ -1142,9 +1112,6 @@ ColIterB& ColIterB::operator++()
     }
     return *this;
 }
-
-
-
 
 // @ 0x00973740
 void SparseMatrix::RowBegin(Iter* ret, int key)
@@ -1163,9 +1130,6 @@ void SparseMatrix::RowBegin(Iter* ret, int key)
     }
 }
 
-
-
-
 // @ 0x009737a0
 void SparseMatrix::RowEnd(Iter* ret, int key)
 {
@@ -1182,9 +1146,6 @@ void SparseMatrix::RowEnd(Iter* ret, int key)
         ret->cur = 0;
     }
 }
-
-
-
 
 // @ 0x00973800
 bool SparseMatrix::GetMinMaxUsedRowForCol(int key, int* pMin, int* pMax)
@@ -1211,9 +1172,6 @@ bool SparseMatrix::GetMinMaxUsedRowForCol(int key, int* pMin, int* pMax)
     return r;
 }
 
-
-
-
 // @ 0x00973930
 int SparseMatrix::GetMinUsedColAndRow(int* pRow)
 {
@@ -1228,9 +1186,6 @@ int SparseMatrix::GetMinUsedColAndRow(int* pRow)
     }
     return r;
 }
-
-
-
 
 // @ 0x00973980
 int SparseMatrix::GetMaxUsedColAndRow(int* pRow)
@@ -1248,9 +1203,6 @@ int SparseMatrix::GetMaxUsedColAndRow(int* pRow)
     return r;
 }
 
-
-
-
 // @ 0x009739e0
 int SparseMatrix::GetCountForKey(int key)
 {
@@ -1260,9 +1212,6 @@ int SparseMatrix::GetCountForKey(int key)
     }
     return count;
 }
-
-
-
 
 // @ 0x00973a40
 bool SparseMatrix::IsCellUsed(int col, int row)
@@ -1275,9 +1224,6 @@ bool SparseMatrix::IsCellUsed(int col, int row)
     n->inner.Find(&in, &col);
     return in != &n->inner.anchor;
 }
-
-
-
 
 // @ 0x00973a90
 bool SparseMatrix::GetCellPtr(int col, int row, void*** out)
@@ -1292,9 +1238,6 @@ bool SparseMatrix::GetCellPtr(int col, int row, void*** out)
     if (out) *out = (void**)&((InNode*)in)->f18;
     return true;
 }
-
-
-
 
 // @ 0x00973b00
 int SparseMatrix::CountCellsInRange(int a, int b, int c, int d)
@@ -1312,9 +1255,6 @@ int SparseMatrix::CountCellsInRange(int a, int b, int c, int d)
     }
     return count;
 }
-
-
-
 
 // @ 0x00973b90
 int SparseMatrix::GetCellsInRange(int a, int b, int c, int d, int* out)
@@ -1338,9 +1278,6 @@ int SparseMatrix::GetCellsInRange(int a, int b, int c, int d, int* out)
     return count;
 }
 
-
-
-
 // @ 0x00973c30
 Iter* SparseMatrix::FindByValue(Iter* ret, int value)
 {
@@ -1361,9 +1298,6 @@ Iter* SparseMatrix::FindByValue(Iter* ret, int value)
     return ret;
 }
 
-
-
-
 // @ 0x00973cc0
 Iter* SparseMatrix::FirstUsed(Iter* ret)
 {
@@ -1377,9 +1311,6 @@ Iter* SparseMatrix::FirstUsed(Iter* ret)
     return ret;
 }
 
-
-
-
 // @ 0x00973d10
 ListIter* __stdcall ListErase(ListIter* ret, ListIter first, ListIter last)
 {
@@ -1388,17 +1319,12 @@ ListIter* __stdcall ListErase(ListIter* ret, ListIter first, ListIter last)
     return ret;
 }
 
-
-
-
 // @ 0x00973d60
 void __stdcall ListInsertRange(ListNode* pos, ListIter first, ListIter last, int tag)
 {
     for (; first != last; ++first)
         DoInsertValue(pos, first.mpNode->value);
 }
-
-
 
 // @ 0x00977e50
 bool WinGridView::SetRowHeight(int start, int count, float h)
@@ -1421,8 +1347,6 @@ bool WinGridView::SetRowHeight(int start, int count, float h)
     }
     return ok;
 }
-
-
 
 // @ 0x00977f90
 bool WinGridView::SetCellFormat(int col, int row, const CellFormat* fmt)
@@ -1481,8 +1405,6 @@ bool WinGridView::SetCellFormat(int col, int row, const CellFormat* fmt)
     return true;
 }
 
-
-
 // @ 0x00978250
 bool WinGridView::SetCellTextStyle(int col, int row, unsigned style)
 {
@@ -1509,8 +1431,6 @@ bool WinGridView::SetCellTextStyle(int col, int row, unsigned style)
     return true;
 }
 
-
-
 // @ 0x009783f0
 bool WinGridView::SetCellColors(int col, int row, int index, unsigned color)
 {
@@ -1532,8 +1452,6 @@ bool WinGridView::SetCellColors(int col, int row, int index, unsigned color)
     return false;
 }
 
-
-
 // @ 0x00978560
 bool WinGridView::SetCellWrapping(int col, int row, char wrapping)
 {
@@ -1554,8 +1472,6 @@ bool WinGridView::SetCellWrapping(int col, int row, char wrapping)
     }
     return false;
 }
-
-
 
 // @ 0x009786c0
 bool WinGridView::SetCellAlignment(int col, int row, char h, char v)
@@ -1580,8 +1496,6 @@ bool WinGridView::SetCellAlignment(int col, int row, char h, char v)
     return false;
 }
 
-
-
 // @ 0x00978830
 bool WinGridView::SetCellBorder(int col, int row, unsigned border, unsigned color)
 {
@@ -1604,8 +1518,6 @@ bool WinGridView::SetCellBorder(int col, int row, unsigned border, unsigned colo
     }
     return false;
 }
-
-
 
 // @ 0x009789a0
 void WinGrid_s0097_7e50::SetSizeCachedActualForRow(int start, int count, float v)
@@ -1646,8 +1558,6 @@ void WinGrid_s0097_7e50::SetSizeCachedActualForRow(int start, int count, float v
         row++;
     }
 }
-
-
 
 // @ 0x00978b50
 void WinGrid_s0097_7e50::SetSizeCachedActualForColumn(int start, int count, float v)
@@ -1698,8 +1608,6 @@ void WinGrid_s0097_7e50::SetSizeCachedActualForColumn(int start, int count, floa
     }
 }
 
-
-
 // @ 0x00978d30
 bool WinGridView::SetCellExtraData(int col, int row, void* extra)
 {
@@ -1716,7 +1624,6 @@ bool WinGridView::SetCellExtraData(int col, int row, void* extra)
     }
     return false;
 }
-
 
 // @ 0x00978df0
 void WinGridView_s0097_8df0::SortRowsByColumn(int nColumn, int nDescending, bool bAllColumns, CompareFn pfnCompare)
@@ -1796,7 +1703,6 @@ void WinGridView_s0097_8df0::SortRowsByColumn(int nColumn, int nDescending, bool
     FinishSort(vis);
     ListClear(&newSelection);
 }
-
 
 // @ 0x00979440
 void WinGridView_s0097_8df0::SortColumnsByRow(int nRow, int nDescending, bool bAllRows, CompareFn pfnCompare)
@@ -2151,3 +2057,7 @@ bool WinGrid_s0097_a130::OnRebuild(RenderContext* rc)
     }
     return true;
 }
+
+// @ 0x0097d080
+void WinGridRefreshThunk::Refresh()
+{ ((WinGridBase*)((char*)this - 0x20c))->RefreshImpl(); }

@@ -1,5 +1,5 @@
 0097cea0 ?SetCellWindow@WinGridIface@Gr@@QAE_NHHPAX_N1H@Z  # EA::UTFWinControls::WinGrid::SetCellWindow (slice spelling, decompiled in mig16d)
-0097d080 EA::UTFWinControls::WinGrid::Refresh  # pdb_names vtable-slot
+0097d080 ?Refresh@WinGridRefreshThunk@@QAEXXZ  # WinGridRefreshThunk::Refresh migrated from s0097cea0 (verbatim, slice spelling)
 0097d100 ?SetIntrusive18@IntrusiveHolder@@QAEXPAX@Z  # IntrusiveHolder::SetIntrusive18 migrated from s0097cea0 (verbatim, slice spelling)
 0097d170 ?GetNaturalSize@NaturalSizeHolder@@QAE_NPAH0H@Z  # NaturalSizeHolder::GetNaturalSize migrated from s0097cea0 (verbatim, slice spelling)
 0097d1a0 ?ImageDrawable_GetWidth@@YAHPAX@Z  # ImageDrawable_GetWidth migrated from s0097cea0 (verbatim, slice spelling)
