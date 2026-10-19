@@ -1,4 +1,4 @@
-00900410 EA::XHTML::Resource::StylesheetFactory::CreateResource  # 2008 dev PDB name
+00900410 ?CreateResource@@YAHPAXHPAH0@Z  # CreateResource migrated from s00900410 (verbatim, slice spelling)
 00900800 EA::XML::XmlReader::ReadString  # 2008 dev PDB name
 00900990 EA::XML::XmlReader::XmlReader  # class layout + base-ctor call from XmlTextReader ctor
 009009e0 EA::XML::XmlReader::~XmlReader  # matching dtor body / vtable

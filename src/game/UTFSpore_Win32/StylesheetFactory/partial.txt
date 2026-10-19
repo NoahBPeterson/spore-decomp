@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00900410  326  partial: XHTML StylesheetFactory::CreateResource skeleton (operator_new + stream read + CSSParser path not reconstructed)
