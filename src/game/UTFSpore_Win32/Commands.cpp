@@ -45,6 +45,7 @@ struct cMetaCommandBase {
 extern "C" void* __cdecl EASTL_allocator_allocate(unsigned n, const char* name, int, int, const char* file, int line);
 extern "C" void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern char gEmptyString[];
+extern void* vtbl_AppProps;   // 0x0141b5e4 (equiv t3)
 typedef unsigned int   uint32;
 static const char g_allocFile[] =
     "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
@@ -70,6 +71,31 @@ void  __cdecl HashDoRehash(void* self, int n);                             // 0x
 int   __cdecl StrEqInsensitive(const char* a, const char* b);              // 0x00554fb0
 void  __cdecl MakeCaseInsensitive(void* p);
 struct HashCmdTable { void* Insert(void* outIt, const void** keyPtr); };
+struct CmdDtor {
+    void* vtbl;
+    int pad04[3];
+    void* mpBucketArray;
+    int   mnBucketCount;
+    int   mnElementCount;
+    int   pad1c;
+    int   pad20[4];
+    void Dtor();
+};
+struct AppPropsFields {
+    void* vtbl;          // +0x00
+    int   mParser;       // +0x04
+    int   mRefCount;     // +0x08
+    int   pad0c;         // +0x0c
+    int   pad10;         // +0x10
+    void* mpBucketArray; // +0x14
+    int   mnBucketCount; // +0x18
+    int   mnElementCount;// +0x1c
+    float mMin;          // +0x20
+    float mMax;          // +0x24
+    int   pad28;         // +0x28
+    AppPropsFields();                        // 0x0083cdd0
+    AppPropsFields* VectorDtor(unsigned char flags); // 0x0083ce20
+};
 // ---- items of slice s0083c900 end
 
 // @ 0x0083c760
@@ -211,4 +237,27 @@ void HashmapSetCommand(void* self, const char* name, int* cmd)
     int** slot = (int**)HashmapCommandLookup(0, &s);
     (void)slot;
     (void)self; (void)cmd;
+}
+
+// @ 0x0083cd90
+void CmdDtor::Dtor()
+{
+    vtbl = vtbl_AppProps;
+    DoFreeNodesTable(mpBucketArray, mnBucketCount);
+    if (mnBucketCount > 1)
+        EASTL_allocator_deallocate(mpBucketArray);
+    mnElementCount = 0;
+}
+
+// @ 0x0083ce20
+AppPropsFields* AppPropsFields::VectorDtor(unsigned char flags)
+{
+    vtbl = vtbl_AppProps;
+    DoFreeNodesTable(mpBucketArray, mnBucketCount);
+    mnElementCount = 0;
+    if ((unsigned)mnBucketCount > 1)
+        EASTL_allocator_deallocate(mpBucketArray);
+    if (flags & 1)
+        EASTL_allocator_deallocate(this);
+    return this;
 }

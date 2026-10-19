@@ -1,2 +1,4 @@
 # va  diff-bytes  reason
 0083c900 214 complete: hashtable<cICommand>::insert; hash walk/EH and helper call shapes differ; equiv: UNSUPPORTED (0/1200 valid inputs)
+0083cd90 36 complete: cBlockCommandBase::~cBlockCommandBase; vtable store and free scheduling differ
+0083ce20 51 complete: AppProps deleting dtor; scheduling differs
