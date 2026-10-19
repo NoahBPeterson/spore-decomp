@@ -1083,6 +1083,50 @@ void Typesetter_s0089_d3b0::OrderGlyphs()
 }
 }}  // namespace EA::Text
 
+// @ 0x0089d9a0
+namespace EA { namespace Text {
+void Typesetter_s0089_d3b0::FinalizeLine()
+{
+    if (mLineState == 0 && mAnalysisEnd.mnScheduleIndex != mScheduleEnd.mnScheduleIndex)
+        FUN_0089cf10();
+    mLineLayout.FUN_00897d60();
+    uint32_t len = mLineLayout.mnLength;
+    uint32_t curLen = (uint32_t)((mLineLayout.mCharArray.mpEnd - mLineLayout.mCharArray.mpBegin) >> 1);
+    if (curLen != len) {
+        uint32_t gi = GlyphIndexOf(mLineLayout, len);
+        mLineLayout.mGlyphArray.resize(gi);
+        mLineLayout.mGlyphInfoArray.resize(gi);
+        mLineLayout.mGlyphLayoutInfoArray.resize(gi);
+        mLineLayout.mCharIndexArray.resize(gi);
+        mLineLayout.mCharArray.resize(len);
+        mLineLayout.mAnalysisInfoArray.resize(len);
+        mLineLayout.mGlyphIndexArray.resize(len);
+        uint32_t n = (uint32_t)(mBidiRunInfoArray.mpEnd - mBidiRunInfoArray.mpBegin);
+        RunInfo_s0089_d3b0* run = mBidiRunInfoArray.mpBegin;
+        for (uint32_t i = 0; i < n; ) {
+            ++i;
+            if (run->mnCharEnd >= len) {
+                run->mnCharEnd = len;
+                mBidiRunInfoArray.resize(i);
+                break;
+            }
+            ++run;
+        }
+    }
+    GetScheduleLocationFromCharIndex(mLineBegin.mnCharOffset + mLineBegin.mnCharBase + mLineLayout.mnLength,
+                                     &mLineEnd, 0);
+    mAnalysisEnd.mnScheduleIndex = mLineEnd.mnScheduleIndex;
+    mnLastLineEndIndex += mLineLayout.mnLength;
+    mAnalysisEnd.mnCharBase = mLineEnd.mnCharBase;
+    mAnalysisEnd.mnCharOffset = mLineEnd.mnCharOffset;
+    mLineState = 1;
+    if (mbEllipsize) SubstituteEllipsis();
+    AdjustWhitespaceEmbedding();
+    AdjustPositioning();
+    OrderGlyphs();
+}
+}}  // namespace EA::Text
+
 // @ 0x0089db20
 namespace EA { namespace Text {
 int Typesetter_s0089_d3b0::LayoutLine(const wchar_t* text, uint32_t len, float x, float y, const TextStyle_s0089_d3b0* style)

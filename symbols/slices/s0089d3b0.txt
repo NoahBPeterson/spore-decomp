@@ -1,5 +1,5 @@
 0089d3b0 ?ReorderBidiRunInfoArray@Typesetter_s0089_d3b0@Text@EA@@QAEXPAURunVec@23@@Z  # Typesetter_s0089_d3b0::ReorderBidiRunInfoArray migrated from s0089d3b0 (verbatim, slice spelling)
 0089d610 ?OrderGlyphs@Typesetter_s0089_d3b0@Text@EA@@QAEXXZ  # Typesetter_s0089_d3b0::OrderGlyphs migrated from s0089d3b0 (verbatim, slice spelling)
-0089d9a0 EA::Text::Typesetter::FinalizeLine  # PDB candidate (caller-single); finishes a laid-out line
+0089d9a0 ?FinalizeLine@Typesetter_s0089_d3b0@Text@EA@@QAEXXZ  # Typesetter_s0089_d3b0::FinalizeLine migrated from s0089d3b0 (verbatim, slice spelling)
 0089db20 ?LayoutLine@Typesetter_s0089_d3b0@Text@EA@@QAEHPB_WIMMPBUTextStyle_s0089_d3b0@23@@Z  # Typesetter_s0089_d3b0::LayoutLine migrated from s0089d3b0 (verbatim, slice spelling)
 0089dc00 EA::Text::Typesetter::LayoutParagraph  # PDB candidate (caller-scored)
