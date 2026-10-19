@@ -437,7 +437,17 @@ def item_uses(kind, text):
     # (`EA::ResourceMan::PFIndexModifiable::Foo` does not use the slice's own `struct PFIndexModifiable`)
     # (a leading `::` is the global scope, a use: s00948de0's `::MIMEStringToMIMETypes(...)`)
     return {mm.group(0) for mm in IDENT.finditer(m)
-            if mm.group(0) not in KEYWORDS and not re.search(r"([\w>)]\s*::|\.|->)\s*~?\s*$", m[max(0, mm.start() - 8):mm.start()])}
+            if mm.group(0) not in KEYWORDS and not _qualified_use(m, mm.start())}
+
+
+def _qualified_use(m, i):
+    """The name at m[i] follows `X::`, `.` or `->`.  A keyword before `::` is no qualifier: `virtual ::IDrawable* GetDrawable();`
+    names the global IDrawable (mig9 s005a51c0: the slice's global IDrawable was pruned, C2039 in the kept IWindow stub)."""
+    pre = m[max(0, i - 24):i]
+    if not re.search(r"([\w>)]\s*::|\.|->)\s*~?\s*$", pre[-8:]):
+        return False
+    mk = re.search(r"([A-Za-z_]\w*)\s*::\s*~?\s*$", pre)
+    return not (mk and mk.group(1) in KEYWORDS)
 
 
 def needed_items(items, fn_texts, skip=()):
