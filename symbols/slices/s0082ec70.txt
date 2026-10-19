@@ -1,9 +1,10 @@
+0082f020 SPUIShader2D::Cleanup  # g_pShader2D @0x164e910, tail-calls 0x7c3c10
 0082f0b0 UTFWin::cSPUIMaterialWinProc::cSPUIMaterialWinProc  # vt PDB
 0082f110 cSPUIMaterialWinProc::`scalar deleting destructor'  # vtable 0x141a5e8, ret 4
-0082f410 cSPUIShaderProxy::cSPUIShaderProxy  # PDB ctor
+0082f410 ?Construct@cSPUIShaderProxy_s0082_ec70@@QAEPAU1@XZ  # cSPUIShaderProxy_s0082_ec70::Construct migrated from s0082ec70 (verbatim, slice spelling)
 0082f500 cSPUIShaderProxy::~cSPUIShaderProxy  # PDB dtor
-0082f630 SPUIShader::AcquireShaderProxy  # free-list pop + AddCore loop
-0082f6e0 SPUIShader::GetShaderProxy  # singleton accessor, g_pShaderProxy @0x164ea4c
+0082f5c0 ?GetParam@cSPUIShaderProxy_s0082_ec70@@QAE_NIPAI00@Z  # cSPUIShaderProxy_s0082_ec70::GetParam migrated from s0082ec70 (verbatim, slice spelling)
+0082f630 ?AcquireShaderProxy@@YAPAXXZ  # AcquireShaderProxy migrated from s0082ec70 (verbatim, slice spelling)
+0082f6e0 ?GetShaderProxy@@YAPAXXZ  # GetShaderProxy migrated from s0082ec70 (verbatim, slice spelling)
 0082f760 EA::UTFWin::Init2DSystem  # Ghidra PDB candidate
 0082f8a0 EA::UTFWin::Shutdown2DSystem  # pairs with 0082f760
-0082f020 SPUIShader2D::Cleanup  # g_pShader2D @0x164e910, tail-calls 0x7c3c10

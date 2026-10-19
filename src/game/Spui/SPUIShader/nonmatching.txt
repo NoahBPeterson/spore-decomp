@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+0082eba0 23 complete translation; register allocation of the read-modify-write differs
+0082f410 122 cSPUIShaderProxy ctor body: fixed_vector_map/string inline init order differs; equiv: FAIL (inline string init differs)
+0082f5c0 93 cSPUIShaderProxy::GetParam: lower_bound helper inlining differs; equiv: FAIL (result pointer differs)
+0082f630 58 AcquireShaderProxy: free-list/AddCore loop layout (cold found block) differs; equiv: WEAK (75% coverage)

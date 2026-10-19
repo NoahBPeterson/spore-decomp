@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/Spui/SPUIShader.cpp  ?AppFlagSet@@YA_NXZ  0082e400  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUIShader.cpp  ?AsInterface@LayerWinProc@@QAEPAXH@Z  0082e420  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUIShader.cpp  ?GetShaderProxy@@YAPAXXZ  0082f6e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

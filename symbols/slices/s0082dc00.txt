@@ -1,2 +1,7 @@
-0082ebd0 UTFWin::cSPUILayerIdWinProc::cSPUILayerIdWinProc  # vtable_names.txt + PDB class cSPUILayerIdWinProc
+0082e400 ?AppFlagSet@@YA_NXZ  # AppFlagSet migrated from s0082dc00 (verbatim, slice spelling)
+0082e420 ?AsInterface@LayerWinProc@@QAEPAXH@Z  # LayerWinProc::AsInterface migrated from s0082dc00 (verbatim, slice spelling)
+0082e6b0 ?LayerPoolTick@@YAXXZ  # LayerPoolTick migrated from s0082dc00 (verbatim, slice spelling)
+0082e6c0 ?LayerProcRelease@@YAXPAULayerWinProc@@@Z  # LayerProcRelease migrated from s0082dc00 (verbatim, slice spelling)
 0082e890 rw::graphics::EmbeddedState::GetBlendMode  # pdb_candidates.json caller-single (probable)
+0082eba0 ?ReleaseRef@LayerWinProc@@QAEHXZ  # LayerWinProc::ReleaseRef migrated from s0082dc00 (verbatim, slice spelling)
+0082ebd0 UTFWin::cSPUILayerIdWinProc::cSPUILayerIdWinProc  # vtable_names.txt + PDB class cSPUILayerIdWinProc
