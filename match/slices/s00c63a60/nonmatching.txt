@@ -2,5 +2,7 @@
 00c63aa0 50  MorphB::QueryInterface: complete; same register-allocation near miss
 00c63be0 33  cMorphHandle::cMorphHandle: complete; vtable/float/bool store ordering differs
 00c63dd0 8   Target::Offset: complete; only the vcall function-pointer register (eax vs edx) differs
+00c63e30 44  Simulator::cTargetMorphHandle::cTargetMorphHandle: complete; vtable/float store scheduling differs [equiv: PASS 400 valid inputs, 100.0% coverage]
 00c63ef0 11  Target2::Dtor: complete; the +0x134 load is hoisted above the vtable stores
+00c640e0 41  CmpObj64::Fn: complete; SSE result stores are interleaved with the adds [equiv: UNSUPPORTED only 0/400 inputs valid (fake-arity=221, fault(read)=178, fault(write)=1)]
 00c643a0 48  HandleThing::SetEnabled: complete; bool lives in dl instead of cl and vtable load is scheduled late

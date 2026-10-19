@@ -6,14 +6,14 @@
 struct VObj {
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
-    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void* v2c();
     virtual void v30(); virtual void v34();
     virtual void v38(void* out);
     virtual void v3c();
     virtual void v40(float f);
     virtual void v44(); virtual void v48(); virtual void v4c();
     virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
-    virtual void v60(void* out);
+    virtual void* v60(void* out);
 };
 struct Ref {
     virtual void v0();
@@ -174,8 +174,32 @@ cMorphHandle::cMorphHandle() {
     *(uint8_t*)((char*)this + 0xda) = 0;
 }
 
-// @ 0x00c63e30  (partial: ctor store ordering not reproduced)
-void cTargetMorphHandle_ctor_stub() {}
+// @ 0x00c63e30  (Simulator::cTargetMorphHandle::cTargetMorphHandle)
+extern void* gVtblTgtMorph0;    // 0x1470ff8
+extern void* gVtblTgtMorph1;    // 0x1470fe4
+extern void* gVtblTgtMorphSpr;  // 0x1470f20
+extern uint8_t gTgtMorphKeyData; // 0x15777e4
+
+struct cTargetMorphHandle : cMorphHandle {
+    cTargetMorphHandle();
+};
+
+cTargetMorphHandle::cTargetMorphHandle()
+{
+    char* self = (char*)this;
+    *(void**)(self + 0) = &gVtblTgtMorph0;
+    *(void**)(self + 4) = &gVtblTgtMorph1;
+    *(void**)(self + 0x34) = &gVtblTgtMorphSpr;
+    *(int*)(self + 0x130) = 3;
+    *(float*)(self + 0x118) = 0.0f;
+    *(float*)(self + 0x11c) = 0.0f;
+    *(float*)(self + 0x120) = 0.0f;
+    *(uint8_t*)(self + 0x124) = 0;
+    *(int*)(self + 0x128) = 0;
+    *(float*)(self + 0x12c) = 0.0f;
+    *(int*)(self + 0x134) = 0;
+    ((SpatialObj*)(self + 0x34))->SetModelKey(&gTgtMorphKeyData);
+}
 
 // @ 0x00c63dd0  (complete, near miss: vcall register)
 struct AppObj {
@@ -246,22 +270,68 @@ void Target2::Release() {
 // Partially-reconstructed functions (see partial.txt).
 // =====================================================================
 
-// @ 0x00c63b40  (partial)
-int ComparePair(void* a, int b, void* c) { (void)a; (void)b; (void)c; return 0; }
-// @ 0x00c63b90  (partial)
-void CopyPair(void* a, void* b) { (void)a; (void)b; }
+// @ 0x00c63b40  (ComparePair)
+extern "C" float QuaternionSlerp(void*, void*, void*);
+char ComparePair(void* a, void* b, void* c)
+{
+    float r = QuaternionSlerp(((VObj*)((char*)c + 0x34))->v2c(), b,
+                              ((VObj*)((char*)a + 0x34))->v2c());
+    if (r > 2.0f)
+        return 0;
+    return 1;
+}
+
+// @ 0x00c63b90  (CopyPair)
+// The original folds an identical void-returning overload of the SP helper at
+// 0x00698b30 (ICF); using the float overload here would leave an `fstp st(0)`.
+extern "C" void QuaternionSlerpVoid(void*, void*, void*);
+void CopyPair(void* a, void* b)
+{
+    QuaternionSlerpVoid(((VObj*)((char*)a + 0x34))->v2c(),
+                        (char*)b + 0x118,
+                        ((VObj*)((char*)b + 0x34))->v2c());
+}
 // @ 0x00c63cb0  (partial)
 void FUN_c63cb0() {}
 // @ 0x00c63f90  (partial)
 void FUN_c63f90() {}
-// @ 0x00c640e0  (partial)
-void FUN_c640e0() {}
+// @ 0x00c640e0  (complete, near miss: result stores are interleaved)
+struct Vec3f { float x, y, z; };
+struct CmpObj64 { void Fn(); };
+void CmpObj64::Fn()
+{
+    char* self = (char*)this;
+    float tmp[3];
+    Vec3f* v = (Vec3f*)((VObj*)(self + 0x34))->v60(tmp);
+    float s = *(float*)(self + 0x1bc);
+    Vec3f sc;
+    sc.x = v->x * s;
+    sc.y = v->y * s;
+    sc.z = v->z * s;
+    Vec3f out;
+    out.x = sc.x + *(float*)(self + 0x198);
+    out.y = sc.y + *(float*)(self + 0x19c);
+    out.z = sc.z + *(float*)(self + 0x1a0);
+    ((VObj*)(self + 0x34))->v38(&out);
+}
 // @ 0x00c64170  (partial)
 void FUN_c64170() {}
 // @ 0x00c642e0  (partial)
 void FUN_c642e0() {}
-// @ 0x00c64400  (partial)
-int FUN_c64400() { return 0; }
+// @ 0x00c64400  (ComparePairDist)
+extern "C" double sqrt(double);
+char FUN_c64400(void* a, void* b)
+{
+    float* p1 = (float*)((VObj*)((char*)b + 0x34))->v2c();
+    float* p2 = (float*)((VObj*)((char*)a + 0x34))->v2c();
+    float dx = p2[0] - p1[0];
+    float dy = p2[1] - p1[1];
+    float dz = p2[2] - p1[2];
+    float len = (float)sqrt((double)((dx * dx + dz * dz) + dy * dy));
+    if (2.0f < len)
+        return 0;
+    return 1;
+}
 // @ 0x00c64460  (partial)
 void FUN_c64460() {}
 // @ 0x00c64590  (partial)
