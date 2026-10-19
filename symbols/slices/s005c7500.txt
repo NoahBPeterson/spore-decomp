@@ -1,3 +1,6 @@
+005c1ce0 ?GetPage@cSPPaletteCategory@SP@@QAEPAVcSPPalettePage@2@H@Z  # SP::cSPPaletteCategory::GetPage (callee of s005c7500, named from the dev publics; slice address comment)
+005c5de0 ?GetCategory@cSPPalette@SP@@QAEPAVcSPPaletteCategory@2@H@Z  # SP::cSPPalette::GetCategory (callee of s005c7500, named from the dev publics; slice address comment)
+005c7500 ?Init@cSPOLDPaletteItemUI_s005c_7500@SP@@QAEXPAVcSPPaletteItem_s005c_7500@2@PAVUIWindow@2@HPAVcSPSwatch_s005c_7500@2@@Z  # cSPOLDPaletteItemUI_s005c_7500::Init migrated from s005c7500 (verbatim, slice spelling)
 005c7b80  ??0cSPPaletteCursor@SP@@QAE@XZ  # palette cursor ctor (base vptrs + zeroed indices), byte-exact
 005c7bc0  ?SetPalette@cSPPaletteCursor@SP@@QAEXPAVcSPPalette@2@@Z  # sets refcounted mPalette @+0xc, resets indices
 005c7c10  ?Advance@cSPPaletteCursor@SP@@QAE_NXZ  # walks category -> subcategory -> page -> item indices
@@ -6,3 +9,6 @@
 005c7ed0  ?Shutdown@cSPPalettePage@SP@@QAEXXZ  # calls cSPPaletteItem::Shutdown on mItems @+0x70
 005c7f50  ??0cSPPalettePage@SP@@QAE@XZ  # cSPPalettePage ctor (mLayoutInstanceID 0xd8006607)
 005c8440  ??_GcSPPalettePage@SP@@UAEPAXI@Z  # cSPPalettePage scalar deleting dtor (vector @+0x70)
+005cae30 ?GetSubCategory@cSPPaletteCategory@SP@@QAEPAV12@H@Z  # SP::cSPPaletteCategory::GetSubCategory (callee of s005c7500, named from the dev publics; slice address comment)
+00641770 ?GetPriority@cSPPaletteItem@SP@@QBEHXZ  # SP::cSPPaletteItem::GetPriority (callee of s005c7500, named from the dev publics; slice address comment)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005c7500, named from the dev publics; slice address comment)

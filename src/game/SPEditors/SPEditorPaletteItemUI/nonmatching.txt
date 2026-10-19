@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+005c7500 1233 Init: complete (all branches); block layout/register allocation differ (size 1612 vs 1606)

@@ -1,6 +1,22 @@
-005c6c50 SP::cSPPaletteItemUI::~cSPPaletteItemUI  # resets cSPPaletteItemUI then base vptrs, releases mWinRoot/mPaletteItem; byte-exact
-005c7370 SP::cSPPaletteItemUI::`scalar deleting destructor'  # inlined ~cSPPaletteItemUI + flag&1 delete; byte-exact
-005c6a30 SP::cSPPaletteItemUI::Cast  # IWinProc-subobject override returning this-0xc / IWinProc for type IDs; byte-exact
+005c6a30 ?Cast@cSPPaletteItemUI_s005c_6340@SP@@UBEPAXI@Z  # cSPPaletteItemUI_s005c_6340::Cast migrated from s005c6340 (verbatim, slice spelling)
 005c6a70 SP::cSPPaletteItemUISelectable::Cast  # adds 0x47a9a1c then defers to cSPPaletteItemUI::Cast; byte-exact
 005c6ad0 SP::cSPPaletteItemUISelectable::SetIsSelected  # PDB caller-scored candidate; posts 0x47a9a20 / clears mSelected
-005c6b10 SP::cSPPaletteItemUISelectable::HandleMessage  # IHandlerRC at +0x20, message 0x47a9a20, compares mSelectionGroup
+005c6b10 ?HandleMessage@cSPPaletteItemUISelectable_s005c_6340@SP@@UAE_NIPAX@Z  # cSPPaletteItemUISelectable_s005c_6340::HandleMessage migrated from s005c6340 (verbatim, slice spelling)
+005c6ba0 ?OffRollover@cSPPaletteItemRollover_s005c_6340@SP@@UAEXXZ  # cSPPaletteItemRollover_s005c_6340::OffRollover migrated from s005c6340 (verbatim, slice spelling)
+005c6bf0 ??0cSPPaletteItemUI_s005c_6340@SP@@QAE@XZ  # cSPPaletteItemUI_s005c_6340::cSPPaletteItemUI migrated from s005c6340 (verbatim, slice spelling)
+005c6c50 ??1cSPPaletteItemUI_s005c_6340@SP@@UAE@XZ  # cSPPaletteItemUI_s005c_6340::~cSPPaletteItemUI migrated from s005c6340 (verbatim, slice spelling)
+005c6ca0 ?Init@cSPPaletteItemUI_s005c_6340@SP@@UAEXPAVcSPPaletteItem_s005c_6340@2@PAVIWindow_s005c_6340@UTFWin@EA@@HH@Z  # cSPPaletteItemUI_s005c_6340::Init migrated from s005c6340 (verbatim, slice spelling)
+005c6d20 ?Shutdown@cSPPaletteItemUI_s005c_6340@SP@@UAEXXZ  # cSPPaletteItemUI_s005c_6340::Shutdown migrated from s005c6340 (verbatim, slice spelling)
+005c6d70 ?DoMessage@cSPPaletteItemUI_s005c_6340@SP@@UAE_NPAVIWindow_s005c_6340@UTFWin@EA@@ABUMessage_s005c_6340@45@@Z  # cSPPaletteItemUI_s005c_6340::DoMessage migrated from s005c6340 (verbatim, slice spelling)
+005c6f00 ?OnRollover@cSPPaletteItemUI_s005c_6340@SP@@UAEXXZ  # cSPPaletteItemUI_s005c_6340::OnRollover migrated from s005c6340 (verbatim, slice spelling)
+005c6f40 ?OffRollover@cSPPaletteItemUI_s005c_6340@SP@@UAEXXZ  # cSPPaletteItemUI_s005c_6340::OffRollover migrated from s005c6340 (verbatim, slice spelling)
+005c6f80 ?Init@cSPPaletteItemUISelectable_s005c_6340@SP@@UAEXPAVcSPPaletteItem_s005c_6340@2@PAVIWindow_s005c_6340@UTFWin@EA@@HHI@Z  # cSPPaletteItemUISelectable_s005c_6340::Init migrated from s005c6340 (verbatim, slice spelling)
+005c6fd0 ?Shutdown@cSPPaletteItemUISelectable_s005c_6340@SP@@UAEXXZ  # cSPPaletteItemUISelectable_s005c_6340::Shutdown migrated from s005c6340 (verbatim, slice spelling)
+005c7010 ??0cSPPaletteItemRollover_s005c_6340@SP@@QAE@XZ  # cSPPaletteItemRollover_s005c_6340::cSPPaletteItemRollover migrated from s005c6340 (verbatim, slice spelling)
+005c7050 ??1cSPPaletteItemRollover_s005c_6340@SP@@UAE@XZ  # cSPPaletteItemRollover_s005c_6340::~cSPPaletteItemRollover migrated from s005c6340 (verbatim, slice spelling)
+005c70d0 ?OnRollover@cSPPaletteItemRollover_s005c_6340@SP@@UAEXXZ  # cSPPaletteItemRollover_s005c_6340::OnRollover migrated from s005c6340 (verbatim, slice spelling)
+005c7260 ?DoMessage@cSPPaletteItemRollover_s005c_6340@SP@@UAE_NPAVIWindow_s005c_6340@UTFWin@EA@@ABUMessage_s005c_6340@45@@Z  # cSPPaletteItemRollover_s005c_6340::DoMessage migrated from s005c6340 (verbatim, slice spelling)
+005c7320 ?Shutdown@cSPPaletteItemRollover_s005c_6340@SP@@QAEXXZ  # cSPPaletteItemRollover_s005c_6340::Shutdown migrated from s005c6340 (verbatim, slice spelling)
+005c7370 SP::cSPPaletteItemUI::`scalar deleting destructor'  # inlined ~cSPPaletteItemUI + flag&1 delete; byte-exact
+005c73d0 ?Trigger@cSPPaletteItemUI_s005c_6340@SP@@QAEXXZ  # cSPPaletteItemUI_s005c_6340::Trigger migrated from s005c6340 (verbatim, slice spelling)
+005c74a0 ??0cSPPaletteItemUISelectable_s005c_6340@SP@@QAE@XZ  # cSPPaletteItemUISelectable_s005c_6340::cSPPaletteItemUISelectable migrated from s005c6340 (verbatim, slice spelling)

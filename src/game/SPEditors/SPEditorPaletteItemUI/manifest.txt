@@ -1,0 +1,20 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ?Cast@cSPPaletteItemUI_s005c_6340@SP@@UBEPAXI@Z  005c6a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ?HandleMessage@cSPPaletteItemUISelectable_s005c_6340@SP@@UAE_NIPAX@Z  005c6b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ?OffRollover@cSPPaletteItemRollover_s005c_6340@SP@@UAEXXZ  005c6ba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ??0cSPPaletteItemUI_s005c_6340@SP@@QAE@XZ  005c6bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ??1cSPPaletteItemUI_s005c_6340@SP@@UAE@XZ  005c6c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ?Init@cSPPaletteItemUI_s005c_6340@SP@@UAEXPAVcSPPaletteItem_s005c_6340@2@PAVIWindow_s005c_6340@UTFWin@EA@@HH@Z  005c6ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ?Shutdown@cSPPaletteItemUI_s005c_6340@SP@@UAEXXZ  005c6d20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ?DoMessage@cSPPaletteItemUI_s005c_6340@SP@@UAE_NPAVIWindow_s005c_6340@UTFWin@EA@@ABUMessage_s005c_6340@45@@Z  005c6d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ?OnRollover@cSPPaletteItemUI_s005c_6340@SP@@UAEXXZ  005c6f00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ?OffRollover@cSPPaletteItemUI_s005c_6340@SP@@UAEXXZ  005c6f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ?Init@cSPPaletteItemUISelectable_s005c_6340@SP@@UAEXPAVcSPPaletteItem_s005c_6340@2@PAVIWindow_s005c_6340@UTFWin@EA@@HHI@Z  005c6f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ?Shutdown@cSPPaletteItemUISelectable_s005c_6340@SP@@UAEXXZ  005c6fd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ??0cSPPaletteItemRollover_s005c_6340@SP@@QAE@XZ  005c7010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ??1cSPPaletteItemRollover_s005c_6340@SP@@UAE@XZ  005c7050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ?OnRollover@cSPPaletteItemRollover_s005c_6340@SP@@UAEXXZ  005c70d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ?DoMessage@cSPPaletteItemRollover_s005c_6340@SP@@UAE_NPAVIWindow_s005c_6340@UTFWin@EA@@ABUMessage_s005c_6340@45@@Z  005c7260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ?Shutdown@cSPPaletteItemRollover_s005c_6340@SP@@QAEXXZ  005c7320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ?Trigger@cSPPaletteItemUI_s005c_6340@SP@@QAEXXZ  005c73d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteItemUI.cpp  ??0cSPPaletteItemUISelectable_s005c_6340@SP@@QAE@XZ  005c74a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
