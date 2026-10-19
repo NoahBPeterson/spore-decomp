@@ -1,9 +1,12 @@
-008fd6c0 EA::XHTML::Resource::HTTPHandler::SetAcceptLanguage  # 2008 dev-PDB name
-008fd710 EA::XHTML::Resource::SetRequestTypeInfo  # 2008 dev-PDB name
-008fd790 EA::XHTML::Resource::HTTPHandler::CalculateCacheTimeout  # Cache-Control no-cache/no-store/max-age parsing
-008fdb70 EA::XHTML::Resource::HTTPHandler::CheckInit  # registers msg handler 0x338cd0e
-008fdd10 EA::XHTML::Resource::HTTPHandler::ProcessRequest  # cJob + CreateHTTPGetRequest
-008fe0c0 EA::XHTML::Resource::HTTPHandler::HandleMessage  # IMsgHandler subobject this (-0xc)
+008fd6c0 ?SetAcceptLanguage@HTTPlang@@QAEXPBD@Z  # HTTPlang::SetAcceptLanguage migrated from s008fd6c0 (verbatim, slice spelling)
+008fd710 ?SetRequestTypeInfo@@YAXPAUResourceRequest@@PBD@Z  # SetRequestTypeInfo migrated from s008fd6c0 (verbatim, slice spelling)
+008fd790 ?CalculateCacheTimeout@HttpHandler2@@QAEJPAUHeaderSet@@@Z  # HttpHandler2::CalculateCacheTimeout migrated from s008fd6c0 (verbatim, slice spelling)
+008fdaf0 ?NotificationTargetTest@HttpHandler2@@QAE_NPBD@Z  # HttpHandler2::NotificationTargetTest migrated from s008fd6c0 (verbatim, slice spelling)
+008fdb70 ?CheckInit@HttpHandler2@@QAE_NXZ  # HttpHandler2::CheckInit migrated from s008fd6c0 (verbatim, slice spelling)
+008fdc00 ?RemoveJobFor@HttpHandler2@@QAE_NPAUResourceRequest@@@Z  # HttpHandler2::RemoveJobFor migrated from s008fd6c0 (verbatim, slice spelling)
+008fdca0 ?erase@JobMap@@QAE_NABI@Z  # JobMap::erase migrated from s008fd6c0 (verbatim, slice spelling)
+008fdd10 ?ProcessRequest@HttpHandler2@@QAE_NPAUResourceRequest@@_N@Z  # HttpHandler2::ProcessRequest migrated from s008fd6c0 (verbatim, slice spelling)
+008fe0c0 ?HandleMessage@IMsgSub@@QAE_NIPAUJobMsg@@@Z  # IMsgSub::HandleMessage migrated from s008fd6c0 (verbatim, slice spelling)
 008fe430 ?DoFindNode@IHTableW@@QBEPAHPAHPAPBG@Z  # IHTableW::DoFindNode migrated from s008fd6c0 (verbatim, slice spelling)
 008fe490 ?find@IHTableW@@QAE?AUIHTableWIter@@PAPBG@Z  # IHTableW::find migrated from s008fd6c0 (verbatim, slice spelling)
 008fe510 ?erase@IHTable@@QAEIABQB_W@Z  # IHTable::erase migrated from s008fd6c0 (verbatim, slice spelling)

@@ -1,21 +1,18 @@
-008fcab0 EA::XHTML::Resource::DocumentFactory::CreateResource  # 2008 dev-PDB name
-008fce50 EA::XHTML::Resource::FileHandler::ProcessRequest  # 2008 dev-PDB name
-008fd080 EA::XHTML::Resource::HTTPHandler::GetProtocolName  # 2008 dev-PDB name
-008fd0a0 EA::XHTML::Resource::EncodingFromName  # 2008 dev-PDB name
-008fd350 EA::XHTML::Resource::HTTPHandler::~HTTPHandler  # PDB candidate (caller-scored)
-008fd3d0 EA::Internet::HTTPClient::`scalar deleting destructor'  # PDB candidate (caller-single)
-008fd540 EA::XHTML::Resource::HTTPHandler::HTTPHandler  # 2008 dev-PDB name
-008fd670 EA::XHTML::Resource::HTTPHandler::SetAcceptEncoding  # 2008 dev-PDB name
 008fc670 TextStyle::Update  # resolves font sizes vs parent, GetFontServer metrics, merges string tables into parent
 008fcab0 EA::XHTML::Resource::DocumentFactory::CreateResource  # strcmp mime "text/html", new Document, XmlParser::Parse
 008fcbd0 StripLeadingDotComponents  # removes leading ".", ".." and empty components of a wide path (compare against L"." / L".." / L"")
 008fce50 EA::XHTML::Resource::FileHandler::ProcessRequest  # ConvertURLToFilePath, Join, ext-map find, FileStream open
-008fd240 ?4AutoRef  # AutoRef::operator= (base identifier so the matcher finds it)
-008fd350 EA::XHTML::Resource::HTTPHandler::HandlerMsgCb  # notification target callback (id 0x700af301)
-008fd3d0 EA::XHTML::Resource::HTTPHandler::~HTTPHandler  # unregisters msg handler 0x338cd0e, frees strings, HTTPClient dtor
-008fd540 EA::XHTML::Resource::HTTPHandler::HTTPHandler  # UA string "EA UTF XHTML browser with HTTP"
+008fd080 ?GetProtocolName@@YGPB_WH@Z  # GetProtocolName migrated from s008fc670 (verbatim, slice spelling)
+008fd0a0 ?EncodingFromName@Resource@XHTML@EA@@YAIPBD@Z  # EA::XHTML::Resource::EncodingFromName migrated from s008fc670
+008fd1a0 ?SetFilter@HTTPz@@QAEXPAULogFilter@@I@Z  # HTTPz::SetFilter migrated from s008fc670 (verbatim, slice spelling)
+008fd240 ??4AutoRef@@QAEPAU0@PAURCObj@@@Z  # AutoRef::operator= migrated from s008fc670 (verbatim, slice spelling)
+008fd290 ??0D290@@QAE@H@Z  # D290::D290 migrated from s008fc670 (verbatim, slice spelling)
+008fd350 ?HandlerMsgCb@@YAXIIHPAUHMsg@@@Z  # HandlerMsgCb migrated from s008fc670 (verbatim, slice spelling)
+008fd3d0 ??1HttpHandler@@UAE@XZ  # HttpHandler::~HttpHandler migrated from s008fc670 (verbatim, slice spelling)
+008fd540 ??0HttpHandler@@QAE@XZ  # HttpHandler::HttpHandler migrated from s008fc670 (verbatim, slice spelling)
+008fd670 ?SetAcceptEncoding@HTTPy@@QAEXPBD@Z  # HTTPy::SetAcceptEncoding migrated from s008fc670 (verbatim, slice spelling)
+013eb394  ??_7IMsgHandler@@6B@  # base vtable stored first by ctor 0x8fd540 (COMDAT-folded, shared)
 013eb918  ??_7BaseA2@@6B@  # base vtable stored by D2e0 dtor 0x8fd2e0 (COMDAT-folded, shared)
 013ec458  ??_7BaseB2@@6B@  # base vtable stored by D290 ctor / D2e0 dtor (COMDAT-folded, shared)
-01439e80  ??_7HttpHandler@@6BIProtocolHandler@@@  # HTTPHandler primary vtable (ctor 0x8fd540)
 01439e78  ??_7HttpHandler@@6BIMsgHandler@@@  # HTTPHandler IMsgHandler-subobject vtable at +0xc
-013eb394  ??_7IMsgHandler@@6B@  # base vtable stored first by ctor 0x8fd540 (COMDAT-folded, shared)
+01439e80  ??_7HttpHandler@@6BIProtocolHandler@@@  # HTTPHandler primary vtable (ctor 0x8fd540)

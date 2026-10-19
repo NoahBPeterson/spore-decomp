@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+008fd240 30 AutoRef::operator=: cl folds the refcount decrement compare into the xadd flags (missing dec); difftest PASS (80.6% coverage) run on a scratch copy with operator= renamed to Assign: the checker cannot match operator symbols (??4) by name, so on this source it stays "our symbol not found"; equiv PASS (736 valid, 100% cov) after adding symbols/slices entry ?4AutoRef
+008fd540 86 HttpHandler ctor: float constant load hoisting (movss placement); difftest PASS after annotating HClient ctor, RangeInit, gEmptyStr, kUserAgent, kDefLMRatio and mapping the HttpHandler/IMsgHandler vtables in symbols/slices
+008fd790 580 HttpHandler::CalculateCacheTimeout: register allocation (hdrs/this) + string ctor schedule differ; difftest WEAK (219 valid, 15% coverage) after mapping gEmptyStr to 0x1667bac
+008fdb70 19 HttpHandler::CheckInit: vcall register choice and push edi placement
+008fdc00 110 HttpHandler::RemoveJobFor: register allocation and copy-loop addressing
+008fdca0 58 vector_map<uint,uint>::erase: callee-saved register order, eax-8 copy addressing
+008fdd10 718 HttpHandler::ProcessRequest: complete; scheduling and register allocation differ; difftest PASS after fixing three real bugs: sizeof MemStream (0x24) and cJob (0x20) passed to operator new, and the stream reference was never released on the failure/success-after-request paths (now an RAII holder destroyed after url, as in the original); mapped gEmptyStr/assign/EncodingFromName/SetEncoding
+008fe0c0 555 HttpHandler IHandler::HandleMessage (IHandler subobject this): complete; allocation differs; difftest WEAK (394 valid, 18.5% coverage) after fixing JobMsg layout (reqId/event/job/resp were 4 bytes low) and mapping gEmptyWStr
