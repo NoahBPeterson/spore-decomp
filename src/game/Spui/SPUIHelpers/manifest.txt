@@ -1,5 +1,12 @@
 # source  symbol  va  flags
+../src/game/Spui/SPUIHelpers.cpp  ?UpdateMouseFocus@@YAXH@Z  00804f50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?WinB0@@YAXXZ  00805180  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?IsSomething@@YAHXZ  008053b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?AllocCoreBlock@@YAPAXH@Z  008053e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?CallVt8@VThunk8@@QAEXHHHHH@Z  00805490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?ChooseAlloc@@YAPAXD@Z  00805510  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?Bounds@F4@@QAEXPAU1@0@Z  00805530  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?Feq@@YAHPAUF4@@0@Z  008055c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?GetImageFromLayout@@YAPAXPAXH@Z  008061c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?CreateImageFromResourceA@@YAXHHHHHHH@Z  00806320  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00806780@@YAPAXHHHHHH@Z  00806780  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -23,4 +30,5 @@
 ../src/game/Spui/SPUIHelpers.cpp  ?set89c@@YAXI@Z  00809910  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?set896@@YAXE@Z  00809930  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?set8a0@@YAXI@Z  00809950  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FUN_00809970@@YAHXZ  00809970  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?GetScrollOffset@SFV@@QAEMXZ  0082a4e0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include

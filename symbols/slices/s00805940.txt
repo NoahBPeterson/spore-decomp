@@ -1,9 +1,11 @@
+00805940 ?FUN_00805940@@YAXPAXMMMHHMM0M@Z  # FUN_00805940 migrated from s00805940 (verbatim, slice spelling)
+00805bb0 ?FUN_00805bb0@@YAXPAXMMMMHHMMHM@Z  # FUN_00805bb0 migrated from s00805940 (verbatim, slice spelling)
 00805ea0 ?SPUIHelpers_GetMainWindowArea@@YAPAUVec4@@PAU1@@Z  # SPUIHelpers_GetMainWindowArea migrated from s00805940 (verbatim, slice spelling)
 00805ef0 ?FUN_00805ef0@@YAPAUVec4@@PAU1@PAUW@@@Z  # FUN_00805ef0 migrated from s00805940 (verbatim, slice spelling)
-00805fe0 SPUIHelpers::GetWindowBounds?  # unlabeled; returns {0,0,w,h} via vtable+0xc0
+00805fe0 ?FUN_00805fe0@@YAPAUVec4@@PAU1@PAUW@@@Z  # FUN_00805fe0 migrated from s00805940 (verbatim, slice spelling)
 008060d0 ?GetImageFromTexture@@YAPAXHHHH@Z  # GetImageFromTexture migrated from s00805940 (verbatim, slice spelling)
 008061c0 ?GetImageFromLayout@@YAPAXPAXH@Z  # GetImageFromLayout migrated from s00805940 (verbatim, slice spelling)
-00806230 SPUIHelpers::CreateImageFromResource  # PDB dev 00fb7510
+00806230 ?CreateImageFromResource2@@YADPAXPAPAXDHH@Z  # CreateImageFromResource2 migrated from s00805940 (verbatim, slice spelling)
 00806320 ?CreateImageFromResourceA@@YAXHHHHHHH@Z  # CreateImageFromResourceA migrated from s00805940 (verbatim, slice spelling)
 00806370 ?FUN_00806370@@YAPAXPAUW@@@Z  # FUN_00806370 migrated from s00805940 (verbatim, slice spelling)
 008064c0 ?FUN_008064c0@@YAPAXPAUW@@@Z  # FUN_008064c0 migrated from s00805940 (verbatim, slice spelling)

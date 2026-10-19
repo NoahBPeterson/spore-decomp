@@ -1,1 +1,20 @@
 # va  diff-bytes  reason
+00805410  111  approximate FixedAllocatorBase::AllocateChunk: loop and big-path reconstructed
+00805660  174  approximate ExpandRect: min/max accumulation reconstructed; some paths unverified
+00805740  500  approximate DrawArc: x87 arc/pie routine skeleton with correct call sites but omitted arithmetic
+00805940  0  approximate math/drawing transcription (fsin/fcos arc helper) - not verified complete
+00805bb0  0  approximate math/drawing transcription (ellipse/rect arc helper) - not verified complete
+00805fe0  0  approximate; the two GetArea-style calls are not reconstructed faithfully
+00806230  0  approximate local context layout for CreateImageFromResource
+00806d10  0  partial; Typesetter::Validate calls not reconstructed
+00806e40  0  partial; second-argument (extra horizontal offset) handling not exact
+008070d0  0  partial; anchor flag logic approximated
+00807340  0  partial; anchor rect construction approximated
+00807880  0  partial; ImageDrawable+Window composition approximated
+00807d30  0  partial; child-list iteration (vtable 0xcc/0xd0) not reconstructed
+00808370  0  partial; recursive union-of-bounds not reconstructed
+00809700  -  modal-window state machine: not reconstructed
+008099a0  -  SPUIHelpers::BeginModal: not reconstructed
+00809c50  -  SPUIHelpers::EndModal: not reconstructed
+0082a140 -   Create: full layout/window setup call sequence not reconstructed
+0082a500 -   Update: full rectangle recomputation not reconstructed

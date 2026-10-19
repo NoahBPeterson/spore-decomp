@@ -6,7 +6,7 @@
 00804e70 UTFWin::cSPUIFrameSequencer::ScalarDeletingDtor  # primary vtable slot 0
 00804ed0 FUN_00804ed0  # WindowManager wrapper -> 0x00812f70
 00804f10 FUN_00804f10  # WindowManager wrapper -> 0x00812ff0
-00804f50 SPUIHelpers::UpdateMouseFocus  # PDB name; -> cSPUIMainWin::GetMousePosition
+00804f50 ?UpdateMouseFocus@@YAXH@Z  # UpdateMouseFocus migrated from s00804920 (verbatim, slice spelling)
 00804f80 ?Help2@@YAXPAXMM0@Z  # Help2 migrated from s00804920 (verbatim, slice spelling)
 00804fc0 ?SetWindowAlpha@SPUIHelpers@@YAXPAVIWindow@UTFWin@EA@@M@Z  # SPUIHelpers::SetWindowAlpha migrated from s00804920
 00805040 ?GetAlpha@@YAMPAH@Z  # GetAlpha migrated from s00804920 (verbatim, slice spelling)
@@ -14,7 +14,7 @@
 008050b0 ?WalkAll@@YAHPAH@Z  # WalkAll migrated from s00804920 (verbatim, slice spelling)
 008050f0 ?WalkFind@@YAPAHPAH@Z  # WalkFind migrated from s00804920 (verbatim, slice spelling)
 00805150 ?Contains@@YA_NPAH0@Z  # Contains migrated from s00804920 (verbatim, slice spelling)
-00805180 FUN_00805180  # WindowManager wrapper -> 0x008130b0
+00805180 ?WinB0@@YAXXZ  # WinB0 migrated from s00804920 (verbatim, slice spelling)
 008051b0 ?FindByKey@@YAPAHPAHH@Z  # FindByKey migrated from s00804920 (verbatim, slice spelling)
 00805200 ?AttrF14@@YAMPAH@Z  # AttrF14 migrated from s00804920 (verbatim, slice spelling)
 00805230 ?AttrF18@@YAMPAH@Z  # AttrF18 migrated from s00804920 (verbatim, slice spelling)
@@ -22,15 +22,15 @@
 00805290 ?AttrF0c@@YAMPAH@Z  # AttrF0c migrated from s00804920 (verbatim, slice spelling)
 008052c0 ?AttrF10@@YAMPAH@Z  # AttrF10 migrated from s00804920 (verbatim, slice spelling)
 00805310 ?CreditsTabInit@@YA_NHHPAPAX@Z  # CreditsTabInit migrated from s00804920 (verbatim, slice spelling)
-008053b0 FUN_008053b0  # checks a window's type id == 0x7a7c0bb
-008053e0 FUN_008053e0  # operator new("UI/FixedAllocationBin/CoreBlock")
+008053b0 ?IsSomething@@YAHXZ  # IsSomething migrated from s00804920 (verbatim, slice spelling)
+008053e0 ?AllocCoreBlock@@YAPAXH@Z  # AllocCoreBlock migrated from s00804920 (verbatim, slice spelling)
 00805400 ?FreeCoreBlock@@YAXPAX@Z  # FreeCoreBlock migrated from s00804920 (verbatim, slice spelling)
-00805410 EA::Allocator::FixedAllocatorBase::AllocateChunk  # PDB callee 0x00926650
+00805410 ?FixedAlloc@@YAPAXPADHHH@Z  # FixedAlloc migrated from s00804920 (verbatim, slice spelling)
 00805490 ?CallVt8@VThunk8@@QAEXHHHHH@Z  # VThunk8::CallVt8 migrated from s00804920 (verbatim, slice spelling)
 008054b0 ?FixedFree@@YAXPAHPAX@Z  # FixedFree migrated from s00804920 (verbatim, slice spelling)
 008054f0 ?InitAlloc@@YAXXZ  # InitAlloc migrated from s00804920 (verbatim, slice spelling)
-00805510 FUN_00805510  # select allocator
-00805530 FUN_00805530  # Rect bounds combine (min/max)
-008055c0 FUN_008055c0  # Rect equality (NaN-aware ucomiss)
-00805660 FUN_00805660  # expand Rect to include an object
-00805740 FUN_00805740  # x87 arc/pie drawing
+00805510 ?ChooseAlloc@@YAPAXD@Z  # ChooseAlloc migrated from s00804920 (verbatim, slice spelling)
+00805530 ?Bounds@F4@@QAEXPAU1@0@Z  # F4::Bounds migrated from s00804920 (verbatim, slice spelling)
+008055c0 ?Feq@@YAHPAUF4@@0@Z  # Feq migrated from s00804920 (verbatim, slice spelling)
+00805660 ?ExpandRect@@YA_NPAHPAUF4@@@Z  # ExpandRect migrated from s00804920 (verbatim, slice spelling)
+00805740 ?DrawArc@@YAXPAXMMMMMMHMM@Z  # DrawArc migrated from s00804920 (verbatim, slice spelling)

@@ -1,10 +1,10 @@
 00807840 ?FUN_00807840@@YAXHHHHHHH@Z  # FUN_00807840 migrated from s00807840 (verbatim, slice spelling)
-00807880 SPUIHelpers::CreateImageWindow  # unlabeled; ImageDrawable + UI/Window
+00807880 ?FUN_00807880@@YAPAHPAM@Z  # FUN_00807880 migrated from s00807840 (verbatim, slice spelling)
 00807a50 ?FUN_00807a50@@YAPAHPAXH0@Z  # FUN_00807a50 migrated from s00807840 (verbatim, slice spelling)
 00807bb0 SPUIHelpers::SetWindowImage  # PDB dev 00fb8ec0
 00807c70 SPUIHelpers::SetImageFromLayout  # wrapper over GetImageFromLayout + SetImageIcon
 00807cb0 SPUIHelpers::SetWindowImageResource  # unlabeled; SetImageIcon variant
-00807d30 SPUIHelpers::VisitWindowTreeDepthFirst  # PDB dev 00fb8fa0
+00807d30 ?VisitWindowTreeDepthFirst@@YAHPAUW_s0080_7840@@P6AH0PAX@Z1@Z  # VisitWindowTreeDepthFirst migrated from s00807840 (verbatim, slice spelling)
 00807dc0 ?SetWindowSPShader@@YAPAXPAUW_s0080_7840@@EPAX@Z  # SetWindowSPShader migrated from s00807840 (verbatim, slice spelling)
 00807e50 ?WindowTransform_ctor@@YIPAXPAUXform@@@Z  # WindowTransform_ctor migrated from s00807840 (verbatim, slice spelling)
 00807ed0 ?FUN_00807ed0@@YGDPAUW_s0080_7840@@@Z  # FUN_00807ed0 migrated from s00807840 (verbatim, slice spelling)
@@ -14,7 +14,7 @@
 00808210 ?SetWindowScale@@YAXPAUW_s0080_7840@@M@Z  # SetWindowScale migrated from s00807840 (verbatim, slice spelling)
 00808230 ?FUN_00808230@@YAXPAUW_s0080_7840@@PAM@Z  # FUN_00808230 migrated from s00807840 (verbatim, slice spelling)
 008082f0 ?FUN_008082f0@@YAXPAUW_s0080_7840@@MM@Z  # FUN_008082f0 migrated from s00807840 (verbatim, slice spelling)
-00808370 SPUIHelpers::ComputeWindowBounds  # unlabeled; recursive bounds union
+00808370 ?FUN_00808370@@YAPAMPAMPAUW_s0080_7840@@PAX@Z  # FUN_00808370 migrated from s00807840 (verbatim, slice spelling)
 00808590 ?Invoke@CbProc@@QAEDPAX0@Z  # CbProc::Invoke migrated from s00807840 (verbatim, slice spelling)
 008085d0 ?FUN_008085d0@@YAXPAUW_s0080_7840@@PAX111@Z  # FUN_008085d0 migrated from s00807840 (verbatim, slice spelling)
 00808660 ?OpenRecordAsStream@@YAHPAXPAH0@Z  # OpenRecordAsStream migrated from s00807840 (verbatim, slice spelling)

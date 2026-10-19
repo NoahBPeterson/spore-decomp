@@ -3,9 +3,9 @@
 00829f30 UTFWin::cSPUIRotateEffect::UpdateTransform  # PDB UpdateTransform enum (X_AXIS..ARBITRARY_AXIS), size 0xe8
 0082a040 UI::ScrollFrameVertical::ScrollFrameVertical  # vtable 0x141a0f4 vtbl_UI::ScrollFrameVertical
 0082a0d0 UI::ScrollFrameVertical::~ScrollFrameVertical  # releases members, resets base vtables
-0082a140 SPUIHelpers::CreateScrollFrameVertical  # symbols/pdb_names.json anchor
+0082a140 ?Create@SFV@@QAE_NHII@Z  # SFV::Create migrated from s00829bc0 (verbatim, slice spelling)
 0082a450 ?Shutdown@SFV@@QAEXXZ  # SFV::Shutdown migrated from s00829bc0 (verbatim, slice spelling)
 0082a4e0 ?GetScrollOffset@SFV@@QAEMXZ  # SFV::GetScrollOffset migrated from s00829bc0 (verbatim, slice spelling)
-0082a500 SPUIHelpers::UpdateScrollFrameVertical  # symbols/pdb_names.json anchor
+0082a500 ?Update@SFV@@QAEXXZ  # SFV::Update migrated from s00829bc0 (verbatim, slice spelling)
 0082ab00 ?RangeCheck@@YAHHH@Z  # RangeCheck migrated from s00829bc0 (verbatim, slice spelling)
 0082ab40 ?TableLookup@@YAIPAUTable@@PBG@Z  # TableLookup migrated from s00829bc0 (verbatim, slice spelling)

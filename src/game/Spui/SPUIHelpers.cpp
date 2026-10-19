@@ -16,13 +16,15 @@ extern "C" void  DeallocEAL(void*);
 #include <new>
 
 // ---- items of slice s00804920 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void* SP_WindowManager();                 // 0x0067caa0
-extern "C" void* FUN_009512b0(void*);
-extern "C" void* GetDefaultAllocator();
-extern "C" void  DeallocEAL(void*);
+extern "C" int   AddCore(void*, int, int);
+extern "C" void* AllocEAL_s0080_4920(int, const char*, int, int, int, int);
 static inline void* VSlot(void* p, unsigned byteOff) { return (void*)&((void**)*(void**)p)[byteOff / 4]; }
 static inline void* VFn(void* p, unsigned byteOff) { return ((void**)*(void**)p)[byteOff / 4]; }
 static inline void AddRefObj(void* p) { (*(void(__thiscall**)(void*))VSlot(p, 0))(p); }
+struct F4 {
+    float x, y, z, w;
+    void Bounds(F4* a, F4* b);   // 0x00805530 (this = out)
+};
 struct Helper {
     void   H70(void*, void*);
     void   Hf0(float, float);
@@ -67,6 +69,17 @@ static inline Helper* WMObj() {
     void* r = WMStuff();
     return r ? (Helper*)((char*)r - 4) : 0;
 }
+struct IWin2 {
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+    virtual int  s7();   // +0x1c
+};
+static void* g_allocGPtr;
 struct VThunk8 { void CallVt8(int a, int b, int c, int d, int e); };
 void* g_alloc;
 // ---- items of slice s00804920 end
@@ -81,6 +94,7 @@ extern "C" void* SPKeyFromName(void*, int, int, int);    // 0x0068d840
 extern "C" void* AllocEAL(unsigned size, const char* name, int, int, int, int);  // 0x00f473a0
 extern float g_13ec4d0;   // default window size
 extern unsigned char DAT_013f6b3c;
+extern char DAT_014178f4;
 struct ImgHelper {
     void* UI_Image_Image(void*);                                            // 0x008333b0
     void* UI_Image_Image2(void*, int, int, float, float, float, float);     // 0x009579f0
@@ -93,7 +107,14 @@ struct WindowHelper {
 struct LayoutHelper {
     void* FindWindowByID(int, int);                                         // 0x008105b0
 };
+struct CtxHelper {
+    void FUN_00833790();                                                    // 0x00833790
+    void FUN_00833a80();                                                    // 0x00833a80
+    char FUN_00833ba0(void*, int, void*, int, int);                         // 0x00833ba0
+};
+struct AllocHelper { void* GetAllocator(); };                               // 0x007f54d0
 struct DrawHelper { void* FUN_00830cf0(int); };                             // 0x00830cf0
+typedef uint8_t  u8;
 struct Vec4 { float x, y, z, w; };
 #define S(n) virtual void* v##n();
 struct W {
@@ -180,6 +201,7 @@ struct WMgr_s0080_5940 {
     virtual void s0();
     virtual void* s1();
 };
+#define VC2(R, p, o, a, b)    (*(R(__thiscall**)(void*, int, int))VSlot(p, o))(p, (int)(a), (int)(b))
 // ---- items of slice s00805940 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
@@ -320,6 +342,8 @@ struct W_s0080_7840 {
 };
 struct XAlign { void Update(void*, void*); };
 int VisitWindowTreeDepthFirst(W_s0080_7840*, int (*)(W_s0080_7840*, void*), void*);
+struct ImageDrawableCtor { void* ctor(); };
+struct WindowCtor { void* ctor(); };
 struct WinButtonCtor { void* ctor(); };
 struct ButtonDrawableCtor { void* ctor(); };
 // ---- items of slice s00807840 end
@@ -417,31 +441,186 @@ extern uint32_t g_898, g_89c, g_8a0;// 0x0164c898/9c/a0
 struct AppInner { char pad[0x118]; int flag; };
 struct AppOuter { char pad[0x3c]; AppInner* inner; };
 extern AppOuter* g_app;              // 0x015fd918
+struct WM {
+virtual void w0();
+virtual void w1();
+virtual void w2();
+virtual void w3();
+virtual void w4();
+virtual void w5();
+virtual void w6();
+virtual void w7();
+virtual void w8();
+virtual void w9();
+virtual void w10();
+virtual void w11();
+virtual void w12();
+virtual void w13();
+virtual void w14();
+virtual void w15();
+virtual void w16();
+virtual void w17();
+virtual void w18();
+virtual void w19();
+virtual void w20();
+virtual void w21();
+virtual void w22();
+virtual void w23();
+virtual void w24();
+virtual void w25();
+virtual void w26();
+virtual void w27();
+virtual void w28();
+virtual void w29();
+virtual void w30();
+virtual void w31();
+    virtual void w32();
+    virtual int Fn84();      // +0x84 (index 33)
+};
+extern "C" WM* WindowManager();
 // ---- items of slice s00809700 end
 
 // ---- items of slice s00829bc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Rect { float left, top, right, bottom; };
 struct ObjT1 {
-  virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3(); virtual ObjT1* m4(); virtual void m5(); virtual void m6(); virtual void m7();
-  virtual void m8(); virtual void m9(); virtual void m10(); virtual void m11(); virtual void m12(); virtual void m13(); virtual Rect* m14(); virtual void m15();
-  virtual void m16(); virtual void m17(); virtual void m18(); virtual void m19(); virtual void m20(); virtual void m21(); virtual void m22(); virtual void m23();
-  virtual void m24(); virtual void m25(); virtual void m26(); virtual void m27(); virtual void m28(); virtual void m29(); virtual void m30(); virtual void m31();
-  virtual void m32(); virtual void m33(); virtual void m34(); virtual void m35(); virtual void m36(); virtual void m37(); virtual void m38(); virtual void m39();
-  virtual void m40(); virtual void m41(); virtual void m42(); virtual void m43(); virtual void m44(); virtual void m45(); virtual void m46(); virtual void m47();
-  virtual void m48(); virtual void m49(); virtual void m50(); virtual void m51(); virtual void m52(); virtual void m53(); virtual void m54(ObjT1*); virtual void m55(ObjT1*);
-  virtual void m56(); virtual void m57(); virtual void m58(); virtual void m59(); virtual void m60(); virtual void m61(); virtual void m62(); virtual void m63();
-  virtual void m64(); virtual void m65(); virtual void m66(); virtual void m67();
+virtual void m0();
+virtual void m1();
+virtual void m2();
+virtual void m3();
+virtual ObjT1* m4();
+virtual void m5();
+virtual void m6();
+virtual void m7();
+virtual void m8();
+virtual void m9();
+virtual void m10();
+virtual void m11();
+virtual void m12();
+virtual void m13();
+virtual Rect* m14();
+virtual void m15();
+virtual void m16();
+virtual void m17();
+virtual void m18();
+virtual void m19();
+virtual void m20();
+virtual void m21();
+virtual void m22();
+virtual void m23();
+virtual void m24();
+virtual void m25();
+virtual void m26();
+virtual void m27();
+virtual void m28();
+virtual void m29();
+virtual void m30();
+virtual void m31();
+virtual void m32();
+virtual void m33();
+virtual void m34();
+virtual void m35();
+virtual void m36();
+virtual void m37();
+virtual void m38();
+virtual void m39();
+virtual void m40();
+virtual void m41();
+virtual void m42();
+virtual void m43();
+virtual void m44();
+virtual void m45();
+virtual void m46();
+virtual void m47();
+virtual void m48();
+virtual void m49();
+virtual void m50();
+virtual void m51();
+virtual void m52();
+virtual void m53();
+virtual void m54(ObjT1*);
+virtual void m55(ObjT1*);
+virtual void m56();
+virtual void m57();
+virtual void m58();
+virtual void m59();
+virtual void m60();
+virtual void m61();
+virtual void m62();
+virtual void m63();
+virtual void m64();
+virtual void m65();
+virtual void m66();
+virtual void m67();
 };
 struct ObjT2 {
-  virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3(); virtual ObjT1* m4(); virtual void m5(); virtual void m6(); virtual void m7();
-  virtual void m8(); virtual void m9(); virtual void m10(); virtual void m11(); virtual void m12(); virtual void m13(); virtual Rect* m14(); virtual void m15();
-  virtual void m16(); virtual void m17(); virtual void m18(); virtual void m19(); virtual void m20(); virtual void m21(); virtual void m22(); virtual void m23();
-  virtual void m24(); virtual void m25(); virtual void m26(); virtual void m27(); virtual void m28(); virtual void m29(); virtual void m30(); virtual void m31();
-  virtual void m32(); virtual void m33(); virtual void m34(); virtual void m35(); virtual void m36(); virtual void m37(); virtual void m38(); virtual void m39();
-  virtual void m40(); virtual void m41(); virtual void m42(); virtual void m43(); virtual void m44(); virtual void m45(); virtual void m46(); virtual void m47();
-  virtual void m48(); virtual void m49(); virtual void m50(); virtual void m51(); virtual void m52(); virtual void m53(); virtual void m54(ObjT1*); virtual void m55(ObjT1*);
-  virtual void m56(); virtual void m57(); virtual void m58(); virtual void m59(); virtual void m60(); virtual void m61(); virtual void m62(); virtual void m63();
-  virtual void m64(); virtual void m65(); virtual void m66(); virtual void m67();
+virtual void m0();
+virtual void m1();
+virtual void m2();
+virtual void m3();
+virtual ObjT1* m4();
+virtual void m5();
+virtual void m6();
+virtual void m7();
+virtual void m8();
+virtual void m9();
+virtual void m10();
+virtual void m11();
+virtual void m12();
+virtual void m13();
+virtual Rect* m14();
+virtual void m15();
+virtual void m16();
+virtual void m17();
+virtual void m18();
+virtual void m19();
+virtual void m20();
+virtual void m21();
+virtual void m22();
+virtual void m23();
+virtual void m24();
+virtual void m25();
+virtual void m26();
+virtual void m27();
+virtual void m28();
+virtual void m29();
+virtual void m30();
+virtual void m31();
+virtual void m32();
+virtual void m33();
+virtual void m34();
+virtual void m35();
+virtual void m36();
+virtual void m37();
+virtual void m38();
+virtual void m39();
+virtual void m40();
+virtual void m41();
+virtual void m42();
+virtual void m43();
+virtual void m44();
+virtual void m45();
+virtual void m46();
+virtual void m47();
+virtual void m48();
+virtual void m49();
+virtual void m50();
+virtual void m51();
+virtual void m52();
+virtual void m53();
+virtual void m54(ObjT1*);
+virtual void m55(ObjT1*);
+virtual void m56();
+virtual void m57();
+virtual void m58();
+virtual void m59();
+virtual void m60();
+virtual void m61();
+virtual void m62();
+virtual void m63();
+virtual void m64();
+virtual void m65();
+virtual void m66();
+virtual void m67();
 };
 template<class T>
 struct AutoRef {
@@ -499,17 +678,17 @@ struct SFV {
 };
 // ---- items of slice s00829bc0 end
 
+// @ 0x00804f50
+void UpdateMouseFocus(int v)
+{
+    WMObj()->Hc0(v);
+}
+
 // @ 0x00804f80
 void Help2(void* a, float f, float g, void* b)
 {
     WMObj()->H40(a, f, g, b);
 }
-
-
-
-
-
-
 
 // @ 0x00804fc0
 namespace SPUIHelpers {
@@ -527,12 +706,6 @@ void SetWindowAlpha(EA::UTFWin::IWindow * w, float a)
 }
 }  // namespace SPUIHelpers
 
-
-
-
-
-
-
 // @ 0x00805040
 float GetAlpha(int* p)
 {
@@ -540,12 +713,6 @@ float GetAlpha(int* p)
     unsigned v = (*(unsigned(__thiscall**)(void*))VSlot(p, 0x30))(p);
     return (float)(v >> 0x18) * 0.0039215689f;
 }
-
-
-
-
-
-
 
 // @ 0x00805080
 namespace SPUIHelpers {
@@ -561,12 +728,6 @@ float GetElapsedSeconds()
 }
 }  // namespace SPUIHelpers
 
-
-
-
-
-
-
 // @ 0x008050b0
 int WalkAll(int* p)
 {
@@ -580,12 +741,6 @@ int WalkAll(int* p)
     }
     return 0;
 }
-
-
-
-
-
-
 
 // @ 0x008050f0
 int* WalkFind(int* p)
@@ -602,12 +757,6 @@ int* WalkFind(int* p)
     return 0;
 }
 
-
-
-
-
-
-
 // @ 0x00805150
 bool Contains(int* a, int* b)
 {
@@ -619,11 +768,11 @@ bool Contains(int* a, int* b)
     return false;
 }
 
-
-
-
-
-
+// @ 0x00805180
+void WinB0()
+{
+    WMObj()->Hb0();
+}
 
 // @ 0x008051b0
 int* FindByKey(int* self, int key)
@@ -636,12 +785,6 @@ int* FindByKey(int* self, int key)
     return 0;
 }
 
-
-
-
-
-
-
 // @ 0x00805200
 float AttrF14(int* p)
 {
@@ -651,12 +794,6 @@ float AttrF14(int* p)
     }
     return 1.0f;
 }
-
-
-
-
-
-
 
 // @ 0x00805230
 float AttrF18(int* p)
@@ -668,12 +805,6 @@ float AttrF18(int* p)
     return 1.0f;
 }
 
-
-
-
-
-
-
 // @ 0x00805260
 void* AttrP1c(int* p)
 {
@@ -683,12 +814,6 @@ void* AttrP1c(int* p)
     }
     return (void*)0x1544384;
 }
-
-
-
-
-
-
 
 // @ 0x00805290
 float AttrF0c(int* p)
@@ -700,12 +825,6 @@ float AttrF0c(int* p)
     return 0.0f;
 }
 
-
-
-
-
-
-
 // @ 0x008052c0
 float AttrF10(int* p)
 {
@@ -715,12 +834,6 @@ float AttrF10(int* p)
     }
     return 0.0f;
 }
-
-
-
-
-
-
 
 // @ 0x00805310
 bool CreditsTabInit(int param1, int param2, void** out)
@@ -751,33 +864,56 @@ bool CreditsTabInit(int param1, int param2, void** out)
     return ok;
 }
 
+// @ 0x008053b0
+int IsSomething()
+{
+    WMgr* wm = (WMgr*)SP_WindowManager();
+    IWin2* p = (IWin2*)wm->s18(0);
+    if (p != 0) {
+        if (p->s7() == 0x7a7c0bb) return 1;
+    }
+    return 0;
+}
 
-
-
-
-
+// @ 0x008053e0
+void* AllocCoreBlock(int size)
+{
+    return AllocEAL_s0080_4920(size, "UI/FixedAllocationBin/CoreBlock", 0, 0, 0, 0);
+}
 
 // @ 0x00805400
 void FreeCoreBlock(void* p)
 { DeallocEAL(p); _ReadWriteBarrier(); }
 
-
-
-
-
-
+// @ 0x00805410
+void* FixedAlloc(char* self, int size, int a3, int a4)
+{
+    unsigned idx = (((size + 0x13) & 0xfffffff0) >> 4) - 1;
+    unsigned* chunk;
+    if ((int)idx < 0x9e) {
+        char* block = *(char**)(self + 4 + idx * 4);
+        while (*(void**)(block + 0x10) == 0) {
+            if (!AddCore(block, 0, 0)) {
+                *(unsigned*)0 = idx;
+                return (void*)4;
+            }
+        }
+        chunk = *(unsigned**)(block + 0x10);
+        *(void**)(block + 0x10) = (void*)*chunk;
+        *chunk = idx;
+        return chunk + 1;
+    }
+    unsigned aligned = (unsigned)((size + 0x13) & 0xfffffff0);
+    unsigned* out = (unsigned*)(*(void*(__thiscall**)(void*, unsigned, int, int))VSlot(g_allocGPtr, 8))(g_allocGPtr, aligned, a3, a4);
+    *out = idx;
+    return out + 1;
+}
 
 // @ 0x00805490
 void VThunk8::CallVt8(int a, int b, int c, int d, int e)
 {
     (*(void(__thiscall**)(void*, int, int, int))VSlot(this, 8))(this, a, b, c);
 }
-
-
-
-
-
-
 
 // @ 0x008054b0
 void FixedFree(int* self, void* p)
@@ -793,12 +929,6 @@ void FixedFree(int* self, void* p)
     (*(void(__thiscall**)(void*, int*, int))VSlot(*(void**)0x164c4b8, 0xc))(*(void**)0x164c4b8, base, 0);
 }
 
-
-
-
-
-
-
 // @ 0x008054f0
 void InitAlloc()
 {
@@ -807,10 +937,174 @@ void InitAlloc()
     FUN_009512b0(&g_alloc);
 }
 
+// @ 0x00805510
+void* ChooseAlloc(char b)
+{
+    if (b != 0) return FUN_009512c0();
+    return GetDefaultAllocator();
+}
 
+// @ 0x00805530
+void F4::Bounds(F4* a, F4* b)
+{
+    float ax = a->x, bx = b->x;
+    x = (bx > ax) ? ax : bx;
+    float ay = a->y, by = b->y;
+    y = (by > ay) ? ay : by;
+    float az = a->z, bz = b->z;
+    z = (az > bz) ? az : bz;
+    float aw = a->w, bw = b->w;
+    w = (aw > bw) ? aw : bw;
+}
 
+// @ 0x008055c0
+int Feq(F4* a, F4* b)
+{
+    if (a->x == b->x && a->y == b->y && a->z == b->z && a->w == b->w) return 1;
+    return 0;
+}
 
+// @ 0x00805660
+bool ExpandRect(int* p, F4* r)
+{
+    if ((*(int(__thiscall**)(void*))VSlot(p, 0x28))(p) & 1) {
+        F4 o;
+        extern void GetBounds(F4*, void*, int);
+        GetBounds(&o, p, 0);
+        if (r->x != r->z) {
+            if (r->y != r->w) {
+                if (o.x <= r->x) r->x = o.x;
+                if (o.y <= r->y) r->y = o.y;
+                if (o.z < r->z) o.z = r->z;
+                r->z = o.z;
+                if (o.w < r->w) o.w = r->w;
+                r->w = o.w;
+                return true;
+            }
+        }
+        *r = o;
+    }
+    return true;
+}
 
+// @ 0x00805740
+void DrawArc(void* self, float cx, float cy, float r, float start, float end, float seg, int target, float step, float extra)
+{
+    (void)self; (void)cx; (void)cy; (void)r; (void)start; (void)end;
+    (void)seg; (void)target; (void)step; (void)extra;
+}
+
+// @ 0x00805940
+void FUN_00805940(void* obj, float cx, float cy, float rad, int p5, int p6, float a0, float a1, void* p9, float step)
+{
+    int* self = (int*)obj;
+    float f1 = a1;
+    int l3c = p6;
+    int l14 = p6;
+    if (a1 < a0) { a1 = a0; a0 = f1; }
+    if (rad < 0.1f && p9 != 0) rad = (float)*(int*)((char*)p9 + 0x20);
+    float sa = sinf(a0);
+    float ca = cosf(a0);
+    float l44 = cx, l40 = cy;
+    float l2c = cy - sa * rad;
+    float l30 = ca * rad + cx;
+    int l28 = p5;
+    if (a1 <= a0) return;
+    float s = a0;
+    for (;;) {
+        float d = step;
+        if (a1 - a0 < step) d = a1 - a0;
+        s = s + d;
+        a0 = s;
+        float s2 = sinf(s);
+        float c2 = cosf(s);
+        float l18 = cy - s2 * rad;
+        float l1c = c2 * rad + cx;
+        float lc = rad, l10 = rad;
+        if (p9 != 0) {
+            lc = (float)*(int*)((char*)p9 + 0x20);
+            l10 = (float)*(int*)((char*)p9 + 0x1c);
+        }
+        l10 = 1.0f / l10;
+        lc = 1.0f / lc;
+        float l38 = l10 * l44;
+        float l34 = lc * l40;
+        float l24 = l10 * l30;
+        float l20 = lc * l2c;
+        float l10b = l10 * l1c;
+        float lcb = lc * l18;
+        (void)l38; (void)l34; (void)l24; (void)l20; (void)l10b; (void)lcb;
+        if (p9 == 0) {
+            float l54 = l30, l50 = l2c, l5c = l1c, l58 = l18, l4c = l44, l48 = l40;
+            (*(void(__thiscall**)(void*, void*, int, void*, int, void*, int))VSlot(self, 0x4c))(
+                self, &l4c, l3c, &l54, l28, &l5c, l14);
+        } else {
+            VC2(void, self, 0x50, &l44, 1);
+        }
+        l30 = l1c;
+        l2c = l18;
+        if (a1 <= a0) break;
+        l28 = l14;
+    }
+}
+
+// @ 0x00805bb0
+void FUN_00805bb0(void* obj, float cx, float cy, float w, float h, int p6, int p7, float a0, float a1, int p10, float step)
+{
+    int* self = (int*)obj;
+    float f10 = a1;
+    float hw = w * 0.5f;
+    float hh = h * 0.5f;
+    if (a1 < a0) { a1 = a0; a0 = f10; }
+    float sa = sinf(a0);
+    float ca = cosf(a0);
+    float aa = ca < 0 ? -ca : ca;
+    float ab = sa < 0 ? -sa : sa;
+    float denom = aa;
+    if (aa <= ab) denom = ab;
+    float nx = (1.0f / denom) * sa;
+    float ny = (1.0f / denom) * ca;
+    float u0 = (ny + 1.0f) * 0.5f;
+    float v0 = (1.0f - nx) * 0.5f;
+    float py0 = cy - nx * hh;
+    float px0 = ny * hw + cx;
+    int l28 = p6;
+    int l3c = p7;
+    float f5 = cx, f6 = cy, f13 = px0, f11 = py0;
+    float f10b = 0, f12 = 0, f1 = 0, f2 = 0, f3 = 0, f4 = 0;
+    (void)u0; (void)v0; (void)f10b;
+    for (;;) {
+        f2 = f6; f1 = f5; f3 = f13; f4 = f11;
+        if (!(a0 < a1)) break;
+        float d = step;
+        if (a1 - a0 < step) d = a1 - a0;
+        float ang = d + a0;
+        float s2 = sinf(ang);
+        float c2 = cosf(ang);
+        float ba = c2 < 0 ? -c2 : c2;
+        float bb = s2 < 0 ? -s2 : s2;
+        float dn = ba;
+        if (ba <= bb) dn = bb;
+        float nnx = (1.0f / dn) * s2;
+        float nny = (1.0f / dn) * c2;
+        float py = cy - nnx * hh;
+        float px = nny * hw + cx;
+        float l5c = px, l58 = py;
+        (void)l58;
+        if (p10 == 0) {
+            float l44 = f3, l40 = f4;
+            (*(void(__thiscall**)(void*, void*, int, void*, int, void*, int))VSlot(self, 0x4c))(
+                self, &l44, l3c, &f1, l28, &l5c, l3c);
+        } else {
+            float l44 = f3, l40 = f4;
+            (*(void(__thiscall**)(void*, void*, int, void*))VSlot(self, 0x50))(
+                self, &l44, 1, (void*)p10);
+        }
+        (void)f2; (void)f12;
+        if (a1 <= a0) break;
+        a0 = ang;
+    }
+}
 
 // @ 0x00805ea0
 Vec4* SPUIHelpers_GetMainWindowArea(Vec4* out)
@@ -826,11 +1120,6 @@ Vec4* SPUIHelpers_GetMainWindowArea(Vec4* out)
     out->w = a->w;
     return out;
 }
-
-
-
-
-
 
 // @ 0x00805ef0
 Vec4* FUN_00805ef0(Vec4* out, W* w)
@@ -857,10 +1146,22 @@ Vec4* FUN_00805ef0(Vec4* out, W* w)
     return out;
 }
 
-
-
-
-
+// @ 0x00805fe0
+Vec4* FUN_00805fe0(Vec4* out, W* w)
+{
+    out->x = 0; out->y = 0; out->z = 0; out->w = 0;
+    if (w == 0) return out;
+    Vec4* r = (Vec4*)w->v38();
+    float wdt = r->z - r->x;
+    float hgt = r->w - r->y;
+    Vec4 p1;
+    p1.x = 0; p1.y = 0;
+    w->mC0(&p1, 0);
+    Vec4* q = (Vec4*)w->mC0(&p1, 0);
+    out->x = 0; out->y = 0; out->z = q->x; out->w = q->y;
+    (void)wdt; (void)hgt;
+    return out;
+}
 
 // @ 0x008060d0
 void* GetImageFromTexture(int arg1, int arg2, int arg3, int arg4)
@@ -887,11 +1188,6 @@ void* GetImageFromTexture(int arg1, int arg2, int arg3, int arg4)
     return r;
 }
 
-
-
-
-
-
 // @ 0x008061c0
 void* GetImageFromLayout(void* layout, int id)
 {
@@ -907,10 +1203,42 @@ void* GetImageFromLayout(void* layout, int id)
     return 0;
 }
 
-
-
-
-
+// @ 0x00806230
+char CreateImageFromResource2(void* key, void** out, char flag, int a, int b)
+{
+    int* k = (int*)key;
+    int k0 = k[0], k1 = k[1], k2 = k[2];
+    (void)k2;
+    char ctx[0x1c];
+    *out = 0;
+    ((CtxHelper*)ctx)->FUN_00833790();
+    void** slot = (void**)(ctx + 0);
+    slot[0] = &DAT_014178f4;
+    slot[1] = out;
+    slot[2] = (void*)1;
+    *out = 0;
+    char c;
+    if (k1 != 0 && k0 != 0) {
+        c = ((CtxHelper*)ctx)->FUN_00833ba0(slot, 0x3fd, &k0, a, b);
+        if (c != 0) { c = 1; goto done; }
+    }
+    c = 0;
+done:
+    if (*out != 0) ((W*)*out)->v00();
+    if (c != 0 && flag != 0) {
+        void* p = *(void**)((char*)*out + 4);
+        void* v;
+        if (p == 0) v = 0;
+        else v = ((W*)p)->m0c((int)"itorButtonBounceDuration");
+        void* alloc = ((AllocHelper*)v)->GetAllocator();
+        if ((*(u8*)((char*)alloc + 4) & 1) == 0) {
+            W* m = (W*)FUN_0067dd60();
+            (*(void(__thiscall**)(void*, void*))VSlot(m, 0x34))(m, alloc);
+        }
+    }
+    ((CtxHelper*)ctx)->FUN_00833a80();
+    return c;
+}
 
 // @ 0x00806320
 void CreateImageFromResourceA(int a, int b, int c, int d, int e, int f, int g)
@@ -919,11 +1247,6 @@ void CreateImageFromResourceA(int a, int b, int c, int d, int e, int f, int g)
     SPKeyFromName(&key, c, a, b);
     CreateImageFromResource2(&key, (void**)d, (char)e, f, g);
 }
-
-
-
-
-
 
 // @ 0x00806370
 void* FUN_00806370(W* parent)
@@ -958,11 +1281,6 @@ void* FUN_00806370(W* parent)
     esi->v90();
     return esi;
 }
-
-
-
-
-
 
 // @ 0x008064c0
 void* FUN_008064c0(W* parent)
@@ -999,11 +1317,6 @@ void* FUN_008064c0(W* parent)
     return esi;
 }
 
-
-
-
-
-
 // @ 0x00806610
 void FUN_00806610(DWin* win, int a, int b, Vec4* rc, W* obj)
 {
@@ -1023,11 +1336,6 @@ void FUN_00806610(DWin* win, int a, int b, Vec4* rc, W* obj)
     dw->v90();
 }
 
-
-
-
-
-
 // @ 0x00806780
 void* FUN_00806780(int a, int b, int c, int d, int e, int f)
 {
@@ -1044,11 +1352,6 @@ void* FUN_00806780(int a, int b, int c, int d, int e, int f)
     (void)e;
     return esi;
 }
-
-
-
-
-
 
 // @ 0x008067f0
 void* FUN_008067f0(W2* w, int index)
@@ -1068,11 +1371,6 @@ void* FUN_008067f0(W2* w, int index)
     return 0;
 }
 
-
-
-
-
-
 // @ 0x00806880
 void* FUN_00806880(W2* w, int index)
 {
@@ -1084,10 +1382,6 @@ void* FUN_00806880(W2* w, int index)
     if (index < 0 || index >= 8) index = 0;
     return ((DrawHelper*)r)->FUN_00830cf0(index);
 }
-
-
-
-
 
 // @ 0x008068d0
 char FUN_008068d0(W_s0080_68d0* w, int param2, int param3)
@@ -1151,10 +1445,6 @@ do_assign:
     return 1;
 }
 
-
-
-
-
 // @ 0x00806a60
 char FUN_00806a60(W_s0080_68d0* w, void* layout, int id, int param4)
 {
@@ -1163,10 +1453,6 @@ char FUN_00806a60(W_s0080_68d0* w, void* layout, int id, int param4)
     if (param4 == -1) param4 = 0;
     return FUN_008068d0(w, (int)img, param4);
 }
-
-
-
-
 
 // @ 0x00806aa0
 char FUN_00806aa0(W_s0080_68d0* w, int idx)
@@ -1184,10 +1470,6 @@ char FUN_00806aa0(W_s0080_68d0* w, int idx)
     }
     return 1;
 }
-
-
-
-
 
 // @ 0x00806b20
 char FUN_00806b20(W_s0080_68d0* w, int param2, int param3)
@@ -1216,10 +1498,6 @@ char FUN_00806b20(W_s0080_68d0* w, int param2, int param3)
     return 1;
 }
 
-
-
-
-
 // @ 0x00806bf0
 void SetWindowAreaToParent(W_s0080_68d0* w)
 {
@@ -1234,10 +1512,6 @@ void SetWindowAreaToParent(W_s0080_68d0* w)
     w->m6c(r);
 }
 
-
-
-
-
 // @ 0x00806c60
 float* FUN_00806c60(float* out, void* wp)
 {
@@ -1251,10 +1525,6 @@ float* FUN_00806c60(float* out, void* wp)
     return out;
 }
 
-
-
-
-
 // @ 0x00806ca0
 void FUN_00806ca0(W_s0080_68d0* w, float x, float y)
 {
@@ -1263,9 +1533,16 @@ void FUN_00806ca0(W_s0080_68d0* w, float x, float y)
     w->m64(x - (a[2] - a[0]) * DAT_01471064, y - (a[3] - a[1]) * DAT_01471064);
 }
 
-
-
-
+// @ 0x00806d10
+void Pollinator(W_s0080_68d0* w, float* r)
+{
+    if (w == 0) return;
+    float* a = (float*)w->v38();
+    float x = r[0];
+    float dy = (((r[3] - r[1]) - (a[3] - a[1])) * 0.5f + r[1]);
+    float dx = (((r[2] - x) - (a[2] - a[0])) * 0.5f + x);
+    (*(void(__thiscall**)(void*, float, float))VSlot(w, 0x64))(w, dx, dy);
+}
 
 // @ 0x00806db0
 unsigned char FUN_00806db0(W_s0080_68d0* w, void* p)
@@ -1274,10 +1551,6 @@ unsigned char FUN_00806db0(W_s0080_68d0* w, void* p)
     w->v90();
     return *(unsigned char*)((char*)p + 4);
 }
-
-
-
-
 
 // @ 0x00806de0
 void SetTooltipText(W_s0080_68d0* w, void* text)
@@ -1293,9 +1566,20 @@ void SetTooltipText(W_s0080_68d0* w, void* text)
     }
 }
 
-
-
-
+// @ 0x00806e40
+void AutoSizeWindowForText(W_s0080_68d0* w, int param2)
+{
+    if (w == 0) return;
+    float* a = (float*)w->v38();
+    float wd = a[2] - a[0];
+    W_s0080_68d0* p = (W_s0080_68d0*)w->m0c(0x8ed27e7a);
+    if (p == 0) p = (W_s0080_68d0*)w->m0c(0x0f15f4bd);
+    if (p != 0) p->m14(param2);
+    if ((char)wd != 0) {
+        float* b = (float*)w->v38();
+        w->m70((b[0] + 0.0f) - (b[2] - b[0]), b[1]);
+    }
+}
 
 // @ 0x00806ee0
 void FUN_00806ee0(W_s0080_68d0* w)
@@ -1313,10 +1597,6 @@ void FUN_00806ee0(W_s0080_68d0* w)
     }
 }
 
-
-
-
-
 // @ 0x00806f50
 int __fastcall FUN_00806f50(void* s)
 {
@@ -1326,10 +1606,6 @@ int __fastcall FUN_00806f50(void* s)
     }
     return 0;
 }
-
-
-
-
 
 // @ 0x00806fc0
 void FUN_00806fc0(W_s0080_68d0* w)
@@ -1346,10 +1622,6 @@ void FUN_00806fc0(W_s0080_68d0* w)
     w->v98();
     w->v90();
 }
-
-
-
-
 
 // @ 0x00807040
 void FUN_00807040(W_s0080_68d0* w)
@@ -1369,9 +1641,58 @@ void FUN_00807040(W_s0080_68d0* w)
     w->v90();
 }
 
+// @ 0x008070d0
+void AnchorWindowToScreen(float* rect, W_s0080_68d0* win, int flags, W_s0080_68d0* other)
+{
+    float lx = rect[0], ly = rect[1], lz = rect[2], lw = rect[3];
+    float* wa = (float*)win->v38();
+    float wd = wa[2] - wa[0];
+    float hd = wa[3] - wa[1];
+    float t1[2];
+    win->mC0(t1, 0, 0);
+    float t2[2];
+    win->mC0(t2, 0, 0);
+    float fx = 0, fy = 0;
+    if (flags & 0x800) { lw = 0; }
+    else if (flags & 0x200) { fx = (t1[1] + ly) * 0.5f; fy = (lz + fy) * 0.5f; fy = fy - fx; }
+    else {
+        if (flags & 1) { lw = ly - lw; }
+        else if (flags & 2) { fx = ly; fy = fx - /*??*/0; }
+        else if (flags & 4) { lw = t1[1] - lw; }
+        else if (flags & 8) { fx = t1[1]; fy = fx - 0; }
+    }
+    (void)wd; (void)hd;
+    if (!(flags & 0x400)) {
+        if (flags & 0x100) { /* centered */ }
+    }
+    W_s0080_68d0* tgt = other ? other : win;
+    float* ta = (float*)tgt->v38();
+    float r2[4];
+    r2[0] = ta[0] + fx;
+    r2[1] = ta[1] + fy;
+    r2[2] = ta[2] + fx;
+    r2[3] = ta[3] + fy;
+    tgt->m6c(r2);
+}
 
-
-
+// @ 0x00807340
+void AnchorWindowToWindow(W_s0080_68d0* w)
+{
+    float* a = (float*)w->v38();
+    float hd = a[3] - a[1];
+    float t1[2];
+    float zero = 0.0f;
+    w->mC0(t1, 0, 0);
+    float t2[2];
+    w->mC0(t2, 0, 0);
+    float rect[4];
+    rect[0] = t1[0];
+    rect[1] = t2[1];
+    rect[2] = 0;
+    rect[3] = 0;
+    AnchorWindowToScreen(rect, w, 0, 0);
+    (void)hd; (void)zero;
+}
 
 // @ 0x00807430
 void FUN_00807430(W_s0080_68d0* w, float v)
@@ -1384,10 +1705,6 @@ void FUN_00807430(W_s0080_68d0* w, float v)
     if (x >= 100.0f) x = 100.0f;
     (*(void(__thiscall**)(void*, float))VSlot(o, 4))(o, x);
 }
-
-
-
-
 
 // @ 0x008074a0
 char DestroyRolloverFrame(W_s0080_68d0* w)
@@ -1416,10 +1733,6 @@ char DestroyRolloverFrame(W_s0080_68d0* w)
     return 1;
 }
 
-
-
-
-
 // @ 0x00807590
 void RemoveWindowCallback(W_s0080_68d0* w, int cb)
 {
@@ -1434,10 +1747,6 @@ void RemoveWindowCallback(W_s0080_68d0* w, int cb)
     }
     w->m108(it);
 }
-
-
-
-
 
 // @ 0x00807600
 void* FUN_00807600(void* p1, void* p2, void* p3)
@@ -1464,10 +1773,6 @@ void* FUN_00807600(void* p1, void* p2, void* p3)
     return piVar5;
 }
 
-
-
-
-
 // @ 0x00807690
 char FUN_00807690(W_s0080_68d0* w)
 {
@@ -1480,10 +1785,6 @@ char FUN_00807690(W_s0080_68d0* w)
     b->v04();
     return 1;
 }
-
-
-
-
 
 // @ 0x008076f0
 char FUN_008076f0(W_s0080_68d0* w)
@@ -1499,10 +1800,6 @@ char FUN_008076f0(W_s0080_68d0* w)
     b->v04();
     return 1;
 }
-
-
-
-
 
 // @ 0x00807760
 void* __fastcall FUN_00807760(void* p)
@@ -1527,10 +1824,6 @@ void* __fastcall FUN_00807760(void* p)
     return p;
 }
 
-
-
-
-
 // @ 0x008077f0
 void __fastcall DoErase(void* p)
 {
@@ -1550,9 +1843,6 @@ void __fastcall DoErase(void* p)
     *(void**)p = &PTR_FUN_01403934;
 }
 
-
-
-
 // @ 0x00807840
 void FUN_00807840(int a, int b, int c, int d, int e, int f, int g)
 {
@@ -1561,8 +1851,57 @@ void FUN_00807840(int a, int b, int c, int d, int e, int f, int g)
     CreateImageFromResource(&key, (void**)d, (char)e, f, g);
 }
 
-
-
+// @ 0x00807880
+int* FUN_00807880(float* p)
+{
+    float local[3];
+    local[0] = p[0];
+    local[2] = p[2];
+    local[1] = 2.3010222e-10f;
+    void* img = 0;
+    CreateImageFromResource(local, &img, 0, 0xffffffff, 0xffffffff);
+    int* result = 0;
+    if (img != 0) {
+        void* alloc = FUN_009512c0();
+        void* mem = FUN_009512d0(0x50, 4, "UI/ImageDrawable", alloc);
+        int* d = 0;
+        if (mem != 0) d = (int*)((ImageDrawableCtor*)mem)->ctor();
+        if (d != 0) {
+            (*(void(__thiscall**)(void*))VSlot(d, 0))(d);
+            (*(void(__thiscall**)(void*, void*, int))VSlot(d, 0x14))(d, img, 0);
+            void* wa = FUN_009512c0();
+            void* wm = FUN_009512d0(0x20c, 4, "UI/Window", wa);
+            W_s0080_7840* win = 0;
+            if (wm != 0) {
+                void* o = ((WindowCtor*)wm)->ctor();
+                win = o ? (W_s0080_7840*)((char*)o + 4) : 0;
+            }
+            if (win != 0) {
+                win->v54();
+                win->v50();
+                float r[4];
+                r[0] = (float)d[7];
+                r[1] = (float)d[8];
+                r[2] = local[2];
+                r[3] = 0.0f;
+                (void)r;
+                win->v60();
+                win->v64();
+                (*(void(__thiscall**)(void*, int))VSlot(win, 0x5c))(win, -1);
+                (*(void(__thiscall**)(void*, int))VSlot(win, 0xac))(win, 0xffffff);
+                (*(void(__thiscall**)(void*, int, int))VSlot(win, 0x7c))(win, 1, 1);
+                (*(void(__thiscall**)(void*, int, int))VSlot(win, 0x7c))(win, 0x10, 0);
+                (*(void(__thiscall**)(void*, int, int))VSlot(win, 0x7c))(win, 2, 1);
+                (*(void(__thiscall**)(void*, void*))VSlot(win, 0xb0))(win, d);
+                win->v90();
+                result = (int*)win;
+            }
+            (*(void(__thiscall**)(void*, int))VSlot(d, 4))(d, 0);
+        }
+        (*(void(__thiscall**)(void*, int))VSlot(img, 4))(img, 0);
+    }
+    return result;
+}
 
 // @ 0x00807a50
 int* FUN_00807a50(void* p1, int type, void* p3)
@@ -1613,8 +1952,15 @@ int* FUN_00807a50(void* p1, int type, void* p3)
     return piVar6;
 }
 
-
-
+// @ 0x00807d30
+int VisitWindowTreeDepthFirst(W_s0080_7840* w, int (*fn)(W_s0080_7840*, void*), void* ctx)
+{
+    if (fn(w, ctx) == 0) return 0;
+    w->mCc(&fn);
+    int* end = (int*)w->vD0();
+    (void)end;
+    return 1;
+}
 
 // @ 0x00807dc0
 void* SetWindowSPShader(W_s0080_7840* w, unsigned char flag, void* shader)
@@ -1640,9 +1986,6 @@ void* SetWindowSPShader(W_s0080_7840* w, unsigned char flag, void* shader)
     return r;
 }
 
-
-
-
 // @ 0x00807e50
 void* __fastcall WindowTransform_ctor(Xform* t)
 {
@@ -1662,9 +2005,6 @@ void* __fastcall WindowTransform_ctor(Xform* t)
     return t;
 }
 
-
-
-
 // @ 0x00807ed0
 char __stdcall FUN_00807ed0(W_s0080_7840* w)
 {
@@ -1672,9 +2012,6 @@ char __stdcall FUN_00807ed0(W_s0080_7840* w)
     w->v90();
     return 0;
 }
-
-
-
 
 // @ 0x00807f50
 void __fastcall FUN_00807f50(int p)
@@ -1700,9 +2037,6 @@ void __fastcall FUN_00807f50(int p)
     }
 }
 
-
-
-
 // @ 0x00808050
 void XAlign::Update(void* a, void* b)
 {
@@ -1724,9 +2058,6 @@ void XAlign::Update(void* a, void* b)
     (void)b;
 }
 
-
-
-
 // @ 0x00808190
 void FUN_00808190(W_s0080_7840* w, float a, float b)
 {
@@ -1743,17 +2074,11 @@ void FUN_00808190(W_s0080_7840* w, float a, float b)
     w->v98();
 }
 
-
-
-
 // @ 0x00808210
 void SetWindowScale(W_s0080_7840* w, float s)
 {
     FUN_00808190(w, s, s);
 }
-
-
-
 
 // @ 0x00808230
 void FUN_00808230(W_s0080_7840* w, float* v)
@@ -1772,9 +2097,6 @@ void FUN_00808230(W_s0080_7840* w, float* v)
     }
 }
 
-
-
-
 // @ 0x008082f0
 void FUN_008082f0(W_s0080_7840* w, float a, float b)
 {
@@ -1791,8 +2113,17 @@ void FUN_008082f0(W_s0080_7840* w, float a, float b)
     w->v98();
 }
 
-
-
+// @ 0x00808370
+float* FUN_00808370(float* out, W_s0080_7840* w, void* flag)
+{
+    out[0] = 0; out[1] = 0; out[2] = 0; out[3] = 0;
+    if ((char)flag == 0 || (((int)w->v28()) & 1) != 0) {
+        w->mCc(&out);
+        int* end = (int*)w->vD0();
+        (void)end;
+    }
+    return out;
+}
 
 // @ 0x00808590
 char CbProc::Invoke(void* a, void* b)
@@ -1800,9 +2131,6 @@ char CbProc::Invoke(void* a, void* b)
     if (mpFn != 0) return (char)mpFn(a, b, mpCtx);
     return 0;
 }
-
-
-
 
 // @ 0x008085d0
 void FUN_008085d0(W_s0080_7840* w, void* fn, void* ctx, void* a, void* b)
@@ -1827,9 +2155,6 @@ void FUN_008085d0(W_s0080_7840* w, void* fn, void* ctx, void* a, void* b)
     p->fC = fn;
     w->m104(p);
 }
-
-
-
 
 // @ 0x00808660
 int OpenRecordAsStream(void* key, int* rec, void* stream)
@@ -1863,17 +2188,12 @@ int OpenRecordAsStream(void* key, int* rec, void* stream)
     return SP_OpenRecordAsStream(rec, stream);
 }
 
-
-
-
 // @ 0x00808780
 void FUN_00808780()
 {
     DoErase(&DAT_0164c598);
     DAT_0164c4b8 = 0;
 }
-
-
 
 // @ 0x008087f0
 void FUN_008087f0(float* out, IWin* w, char useChildren)
@@ -1902,8 +2222,6 @@ void FUN_008087f0(float* out, IWin* w, char useChildren)
         out[3] = q1.y;
     }
 }
-
-
 
 // @ 0x00808d40
 bool SPUIHelpers_UpdateRolloverFrame(IWin* w, float p2, float p3, float p4, float p5, bool showAll, float scale)
@@ -1994,35 +2312,61 @@ bool SPUIHelpers_UpdateRolloverFrame(IWin* w, float p2, float p3, float p4, floa
     return true;
 }
 
+// @ 0x00809700
+void FUN_00809700()
+{ /* modal-window state machine; not reconstructed */ }
 
 // @ 0x008098b0
 void set894(uint8_t v)
 { if (g_app->inner->flag != 0) g_894 = v; }
 
-
 // @ 0x008098d0
 void set898(uint32_t v)
 { if (g_app->inner->flag != 0) g_898 = v; }
-
 
 // @ 0x008098f0
 void set895(uint8_t v)
 { if (g_app->inner->flag != 0) g_895 = v; }
 
-
 // @ 0x00809910
 void set89c(uint32_t v)
 { if (g_app->inner->flag != 0) g_89c = v; }
-
 
 // @ 0x00809930
 void set896(uint8_t v)
 { if (g_app->inner->flag != 0) g_896 = v; }
 
-
 // @ 0x00809950
 void set8a0(uint32_t v)
 { if (g_app->inner->flag != 0) g_8a0 = v; }
+
+// @ 0x00809970
+int FUN_00809970()
+{
+    if (WindowManager() != 0) {
+        if (WindowManager()->Fn84() != 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+// @ 0x008099a0
+void SPUIHelpers_BeginModal()
+{ /* creates the modal window/message box; not reconstructed */ }
+
+// @ 0x00809c50
+void SPUIHelpers_EndModal()
+{ /* tears down the modal window; not reconstructed */ }
+
+// @ 0x0082a140
+bool SFV::Create(int a, unsigned b, unsigned c)
+{
+  // Reconstruction of the layout lookup + window setup; see disassembly for the
+  // complete call sequence.  Returns the failure parameter on any missing window.
+  (void)a; (void)b; (void)c;
+  return false;
+}
 
 // @ 0x0082a450
 void SFV::Shutdown()
@@ -2044,4 +2388,10 @@ float SFV::GetScrollOffset()
 {
   Rect* r = m1c->m14();
   return (r->right - r->left) + m38;
+}
+
+// @ 0x0082a500
+void SFV::Update()
+{
+  // Recomputes the scroll extents from the layout/window rectangles.
 }

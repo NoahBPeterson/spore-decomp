@@ -5,16 +5,16 @@
 00806bf0 ?SetWindowAreaToParent@@YAXPAUW_s0080_68d0@@@Z  # SetWindowAreaToParent migrated from s008068d0 (verbatim, slice spelling)
 00806c60 ?FUN_00806c60@@YAPAMPAMPAX@Z  # FUN_00806c60 migrated from s008068d0 (verbatim, slice spelling)
 00806ca0 ?FUN_00806ca0@@YAXPAUW_s0080_68d0@@MM@Z  # FUN_00806ca0 migrated from s008068d0 (verbatim, slice spelling)
-00806d10 SP::Pollinator  # PDB dev 00de8b10
+00806d10 ?Pollinator@@YAXPAUW_s0080_68d0@@PAM@Z  # Pollinator migrated from s008068d0 (verbatim, slice spelling)
 00806db0 ?FUN_00806db0@@YAEPAUW_s0080_68d0@@PAX@Z  # FUN_00806db0 migrated from s008068d0 (verbatim, slice spelling)
 00806de0 ?SetTooltipText@@YAXPAUW_s0080_68d0@@PAX@Z  # SetTooltipText migrated from s008068d0 (verbatim, slice spelling)
-00806e40 SPUIHelpers::AutoSizeWindowForText  # PDB dev 00fb7e80
+00806e40 ?AutoSizeWindowForText@@YAXPAUW_s0080_68d0@@H@Z  # AutoSizeWindowForText migrated from s008068d0 (verbatim, slice spelling)
 00806ee0 ?FUN_00806ee0@@YAXPAUW_s0080_68d0@@@Z  # FUN_00806ee0 migrated from s008068d0 (verbatim, slice spelling)
 00806f50 ?FUN_00806f50@@YIHPAX@Z  # FUN_00806f50 migrated from s008068d0 (verbatim, slice spelling)
 00806fc0 ?FUN_00806fc0@@YAXPAUW_s0080_68d0@@@Z  # FUN_00806fc0 migrated from s008068d0 (verbatim, slice spelling)
 00807040 ?FUN_00807040@@YAXPAUW_s0080_68d0@@@Z  # FUN_00807040 migrated from s008068d0 (verbatim, slice spelling)
-008070d0 SPUIHelpers::AnchorWindowToScreen  # PDB dev 00fb7fd0
-00807340 SPUIHelpers::AnchorWindowToWindow  # PDB dev 00fb8200
+008070d0 ?AnchorWindowToScreen@@YAXPAMPAUW_s0080_68d0@@H1@Z  # AnchorWindowToScreen migrated from s008068d0 (verbatim, slice spelling)
+00807340 ?AnchorWindowToWindow@@YAXPAUW_s0080_68d0@@@Z  # AnchorWindowToWindow migrated from s008068d0 (verbatim, slice spelling)
 00807430 ?FUN_00807430@@YAXPAUW_s0080_68d0@@M@Z  # FUN_00807430 migrated from s008068d0 (verbatim, slice spelling)
 008074a0 ?DestroyRolloverFrame@@YADPAUW_s0080_68d0@@@Z  # DestroyRolloverFrame migrated from s008068d0 (verbatim, slice spelling)
 00807590 ?RemoveWindowCallback@@YAXPAUW_s0080_68d0@@H@Z  # RemoveWindowCallback migrated from s008068d0 (verbatim, slice spelling)
