@@ -1,0 +1,3 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00fc1c70  415  SP::cTerrainSystem::Init: the manager/wrapper setup chain is only sketched
+00fc1e40  350  cTerrainSystem shutdown: the teardown chain (editor/resource/wrapper) is only sketched
