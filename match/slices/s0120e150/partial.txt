@@ -1,13 +1,13 @@
-0120e150 76 compiler-generated EH cleanup funclet; enclosing source is outside the slice
-0120e230 44 compiler-generated EH cleanup funclet; enclosing source is outside the slice
-0120e280 84 compiler-generated EH cleanup funclet; enclosing source is outside the slice
-0120e380 95 compiler-generated EH cleanup funclet; enclosing source is outside the slice
-0120e440 52 compiler-generated EH cleanup funclet; enclosing source is outside the slice
-0120e480 68 compiler-generated EH cleanup funclet; enclosing source is outside the slice
-0120e4d0 18 compiler-generated EH cleanup funclet; enclosing source is outside the slice
-0120e4f0 68 compiler-generated EH cleanup funclet; enclosing source is outside the slice
-0120e5c0 50 compiler-generated EH cleanup funclet; enclosing source is outside the slice
-0120e640 19 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+0120e150 76 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into local dtors/delete + __ehhandler thunk, funcinfo 0x14fbb2c); orphaned - enclosing fn EH prolog @0x6af262; no standalone C++ source
+0120e230 44 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into local dtors/delete + __ehhandler thunk, funcinfo 0x14fbc50); orphaned - enclosing fn EH prolog @0x6b0138; no standalone C++ source
+0120e280 84 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into local dtors/delete + __ehhandler thunk, funcinfo 0x14fbca0); orphaned - enclosing fn EH prolog @0x6b0c02; no standalone C++ source
+0120e380 95 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into local dtors/delete + __ehhandler thunk, funcinfo 0x14fbdb4); orphaned - enclosing fn EH prolog @0x6b1ab2; no standalone C++ source
+0120e440 52 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into local dtors/delete + __ehhandler thunk, funcinfo 0x14fbeb4); orphaned - enclosing fn EH prolog @0x6b2622; no standalone C++ source
+0120e480 68 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into local dtors/delete + __ehhandler thunk, funcinfo 0x14fbed8); orphaned - enclosing fn EH prolog @0x6b27f2; no standalone C++ source
+0120e4d0 18 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into local dtors/delete + __ehhandler thunk, funcinfo 0x14fbf2c); orphaned - enclosing fn EH prolog @0x6b2aa8; no standalone C++ source
+0120e4f0 68 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into local dtors/delete + __ehhandler thunk, funcinfo 0x14fbf50); orphaned - enclosing fn EH prolog @0x6b2b32; no standalone C++ source
+0120e5c0 50 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into local dtors/delete + __ehhandler thunk, funcinfo 0x14fc0f4); orphaned - enclosing fn EH prolog @0x6b4342; no standalone C++ source
+0120e640 19 MSVC EH unwind funclet (no prologue; reads caller EBP; tail-jmps into a local dtor; no handler thunk in-group); orphaned; no standalone C++ source
 0120e6a0 44 compiler-generated EH cleanup funclet; enclosing source is outside the slice
 0120e740 26 compiler-generated EH cleanup funclet; enclosing source is outside the slice
 0120e760 51 compiler-generated EH cleanup funclet; enclosing source is outside the slice
