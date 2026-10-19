@@ -1,6 +1,7 @@
 # va  diff-bytes  reason
 00672480 202 cSPUISporeGuidePage::Init: complete behaviour; ctor local + interface_cast / frame-set scheduling differs
 00672910 67 eastl::copy_impl do_copy: complete behaviour; early-return/branch layout differs
+006729d0 239 `anonymous namespace'::cBuildXHTMLDetokenizer::detokenize: complete behaviour (ProcessString + wstring assign, then nested 0x63c/0x58 element loops calling inner->fn(this,outer,inner)); &this->m84 lives in edi vs ebp and the loop counters use registers vs stack slots; equiv: WEAK (22.7% coverage, no mismatch)
 00672b50 46 cBuildXHTMLDetokenizer::token_action_copy: complete behaviour; eastl string assign shape differs
 006741b0 157 FindRange: complete behaviour (0x63c-stride bucket walk + wide-string compare); loop/inline shape and size differ
 00674230 346 FillInsert: complete behaviour (vector fill-insert fast path + memmove tail); size 346 vs 178, fill helper inlined differently

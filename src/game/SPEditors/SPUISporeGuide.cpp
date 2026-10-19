@@ -13,6 +13,7 @@
 #include "SP/cString.h"
 #include "SP/cVarListSerializer.h"
 #include <wchar.h>
+#include "SP/cSPEditorModelValidity.h"
 
 // ---- items of slice s00671840 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct VObj { void** vt; };
@@ -58,8 +59,10 @@ struct Detokenizer {
   bool detokenize();
   void token_action_copy(void* a, unsigned short* b);
 };
-    void interface_cast(...); // 0x0081d780
-    void operator_delete_(...); // 0x00f47380
+struct DetokSink {
+  bool ProcessString(const unsigned short* a, void* b);   // 0x006b5bd0
+  void Assign(void* begin, void* end);                    // 0x00423650
+};
 // ---- items of slice s00671840 end
 
 // ---- items of slice s00673c50 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -266,8 +269,6 @@ bool GuidePage::Init(void* a)
   return true;
 }
 
-
-
 // @ 0x006725a0
 bool GuidePage::OnRelease()
 {
@@ -277,8 +278,6 @@ bool GuidePage::OnRelease()
   }
   return true;
 }
-
-
 
 // @ 0x00672880
 EString* EString::AssignFrom(EString* other)
@@ -291,8 +290,6 @@ EString* EString::AssignFrom(EString* other)
   }
   return this;
 }
-
-
 
 // @ 0x00672910
 void* FUN_00672910(void* first, void* last, void* dst)
@@ -311,15 +308,36 @@ void* FUN_00672910(void* first, void* last, void* dst)
   return dst;
 }
 
-
-
 // @ 0x006729d0
 bool Detokenizer::detokenize()
 {
-  return false;
+  char* self = (char*)this;
+  ((DetokSink*)this)->ProcessString(*(unsigned short**)(self + 0x84),
+                                    *(void**)(self + 0x94));
+  void* p94 = *(void**)(self + 0x94);
+  if (p94 != self + 0x84)
+    ((DetokSink*)(self + 0x84))->Assign(*(void**)p94, *(void**)((char*)p94 + 4));
+  if (*(int*)(self + 0x60) != 1)
+    return true;
+  int off = 0;
+  for (int i = 0;
+       i < (int)(*(char**)(self + 0xa4) - *(char**)(self + 0xa0)) / 0x63c; ++i) {
+    char* outer = *(char**)(self + 0xa0) + off;
+    *(void**)(self + 0x98) = outer;
+    for (int j = 0;
+         j < (int)(*(char**)(outer + 0xb0) - *(char**)(outer + 0xac)) / 0x58; ++j) {
+      char* inner = *(char**)(*(char**)(self + 0x98) + 0xac) + j * 0x58;
+      *(void**)(self + 0x9c) = inner;
+      ((void (__thiscall*)(void*, void*, void*))*(void**)(inner + 0x54))(
+          self, *(void**)(self + 0x98), inner);
+      void* q = *(void**)(self + 0x94);
+      if (q != self + 0x84)
+        ((DetokSink*)(self + 0x84))->Assign(*(void**)q, *(void**)((char*)q + 4));
+    }
+    off += 0x63c;
+  }
+  return true;
 }
-
-
 
 // @ 0x00672b50
 void Detokenizer::token_action_copy(void* a, unsigned short* b)
@@ -337,11 +355,9 @@ void Detokenizer::token_action_copy(void* a, unsigned short* b)
     operator_delete_(local[0]);
 }
 
-
 // @ 0x00673c50
 void Detokenizer_s0067_3c50::Ctor()
 { }
-
 
 // @ 0x00674170
 void* FillN(unsigned short* first, unsigned n, unsigned short value)
@@ -351,7 +367,6 @@ void* FillN(unsigned short* first, unsigned n, unsigned short value)
     while (p < end) *p++ = value;
     return first;
 }
-
 
 // @ 0x006741b0
 int FindRange(int* p, unsigned short* key)
@@ -379,7 +394,6 @@ int FindRange(int* p, unsigned short* key)
         i += 0x63c;
     }
 }
-
 
 // @ 0x00674230
 unsigned* FillVec::FillInsert(unsigned count, unsigned value)
@@ -414,7 +428,6 @@ unsigned* FillVec::FillInsert(unsigned count, unsigned value)
     return p;
 }
 
-
 // @ 0x006742f0
 EStr* MoveAssignBackward(EStr* first, EStr* last, EStr* dst)
 {
@@ -434,7 +447,6 @@ EStr* MoveAssignBackward(EStr* first, EStr* last, EStr* dst)
     return dst;
 }
 
-
 // @ 0x00674340
 EStr* UninitCopy(EStr* first, EStr* last, EStr* dst)
 {
@@ -453,7 +465,6 @@ EStr* UninitCopy(EStr* first, EStr* last, EStr* dst)
     return dst;
 }
 
-
 // @ 0x006743a0
 EStr* DestroyValues(EStr* first, EStr* last, EStr* dst)
 {
@@ -466,7 +477,6 @@ EStr* DestroyValues(EStr* first, EStr* last, EStr* dst)
     }
     return dst;
 }
-
 
 // @ 0x006743f0
 EStr* EStr::Construct(const unsigned short* src)
@@ -484,13 +494,11 @@ EStr* EStr::Construct(const unsigned short* src)
     return this;
 }
 
-
 // @ 0x00674440
 void EStrVec::DoInsertValueSkeleton(EStr* pos, const EStr* v)
 {
     (void)pos; (void)v;
 }
-
 
 // @ 0x006745d0
 void EStrVec::push_back(const EStr& v)
