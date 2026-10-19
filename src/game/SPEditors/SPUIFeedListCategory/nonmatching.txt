@@ -1,0 +1,21 @@
+# va  diff-bytes  reason
+00663b80 48 category comparator - complete, only branch encoding differs
+00663e50 11 Shutdown; AttachProc receiver/arg register (eax vs edx) and vtable-load order differ
+00664390 4 area/height update; md4 temp held in eax instead of ecx
+00664480 60 Expand; ternary null-check/merge schedule differs
+006644e0 51 visibility toggle; float join goes x87 instead of the original's shared xmm0 store
+00664550 35 predicate; return-value materialisation (setcc vs shared xor eax,eax / mov eax,1)
+00664610 30 element-at; original loads the index into edx first, cl hoists the header loads
+00664640 56 find-by-0x17c; cl assigns esi=begin/edx=index, original esi=index/ecx=begin
+00664680 56 find-by-0x134; same register-assignment divergence; equiv: PASS (100% coverage)
+006646c0 56 find-by-0x188; same register-assignment divergence; equiv: PASS (100% coverage)
+00664700 190 intrusive insertion-sort primitive; allocation/compare schedule differs
+00664800 192 intrusive insertion-sort primitive; allocation/compare schedule differs
+00664960  32   eastl::promote_heap<AutoRefCount,AlphabeticalFeedSort>; comparator inlining/register order differs; equiv: FAIL (5/5 valid inputs mismatched)
+00664a60 30 HandleMessage; branch inversion and find-loop tail schedule differ
+00664c90 131 cSPUIFeedListCategory ctor - complete, vtable/field store scheduling differs
+00664dc0 178 cSPUIFeedListCategory dtor - complete, refcount cleanup ordering differs
+006650c0 287 vector<AutoRefCount4>::insert - complete, reallocation path not byte-exact; equiv: UNSUPPORTED (0 valid inputs; vector-insert state not generated)
+00665c50 185 cSPUIFeedListCategory::Populate - complete, cString/property path scheduling differs
+00665d30 1016 ReloadCallback: complete behaviour (window lookup/assign, layout Init/SetParentWin/SetReloadCallback, teardown+erase); large scheduling/helper-shape gap
+006661d0 428 category initialiser: complete behaviour; AutoRefCount reset/PropertyManager call shape differs

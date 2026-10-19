@@ -2,3 +2,4 @@
 00663040 UI::cSPUIFeedList::cSPUIFeedList  # PDB ctor name
 006630e0 SP::cSPUIFeedList::~cSPUIFeedList  # PDB dtor name (dev 006630e0)
 006631c0 SP::cSPUIFeedList::UpdateScrolling  # PDB candidate (caller-scored)
+00663b80 ?FUN_00663b80@@YADHH@Z  # FUN_00663b80 migrated from s00662d70 (verbatim, slice spelling)

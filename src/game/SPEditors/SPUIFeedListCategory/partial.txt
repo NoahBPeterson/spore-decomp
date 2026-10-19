@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00663be0  200  FUN_00663be0 message dispatch: call/path structure reconstructed but the SetiEffects id select is approximate
+00663ef0  400  layout sweep reconstruction: the per-item x87 area/animation math and temp stack layout are approximated
+00664f30 160 partition-by-feed comparator - partial: wcsicmp/loop structure approximated
+00665210 227 eastl::partial_sort - partial: heap helper calls approximated
+00665410 908 cSPUIFeedListCategory::Refresh - partial: property/template-DB query approximated
+00665870 979 RefreshAll - partial: child dedup/rebuild loop approximated

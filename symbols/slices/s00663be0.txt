@@ -1,5 +1,18 @@
-00663e50 SP::cSPUIFeedListCategory::Shutdown  # PDB + method shape
-00664480 SP::cSPUIFeedListCategory::Expand    # PDB + method shape
-00664a60 SP::cSPUIFeedListCategory::HandleMessage  # PDB + IHandler signature
+00663be0 ?FUN_00663be0@cSPUIFeedListCategory@@QAE_NPAX@Z  # cSPUIFeedListCategory::FUN_00663be0 migrated from s00663be0 (verbatim, slice spelling)
+00663e50 ?FUN_00663e50@cSPUIFeedListCategory@@QAEXXZ  # cSPUIFeedListCategory::FUN_00663e50 migrated from s00663be0 (verbatim, slice spelling)
+00663ef0 ?FUN_00663ef0@cSPUIFeedListCategory@@QAEXH@Z  # cSPUIFeedListCategory::FUN_00663ef0 migrated from s00663be0 (verbatim, slice spelling)
+00664390 ?FUN_00664390@cSPUIFeedListCategory@@QAEXMMMM@Z  # cSPUIFeedListCategory::FUN_00664390 migrated from s00663be0 (verbatim, slice spelling)
+00664440 ?FUN_00664440@cSPUIFeedListCategory@@QAEXXZ  # cSPUIFeedListCategory::FUN_00664440 migrated from s00663be0 (verbatim, slice spelling)
+00664480 ?FUN_00664480@cSPUIFeedListCategory@@QAEX_N@Z  # cSPUIFeedListCategory::FUN_00664480 migrated from s00663be0 (verbatim, slice spelling)
+006644e0 ?FUN_006644e0@cSPUIFeedListCategory@@QAEX_N@Z  # cSPUIFeedListCategory::FUN_006644e0 migrated from s00663be0 (verbatim, slice spelling)
+00664550 ?FUN_00664550@cSPUIFeedListCategory@@QAE_N_N@Z  # cSPUIFeedListCategory::FUN_00664550 migrated from s00663be0 (verbatim, slice spelling)
+00664580 ?FUN_00664580@cSPUIFeedListCategory@@QAEX_N@Z  # cSPUIFeedListCategory::FUN_00664580 migrated from s00663be0 (verbatim, slice spelling)
+00664610 ?FUN_00664610@cSPUIFeedListCategory@@QAEPAUFeedItem@@I@Z  # cSPUIFeedListCategory::FUN_00664610 migrated from s00663be0 (verbatim, slice spelling)
+00664640 ?FUN_00664640@cSPUIFeedListCategory@@QAEPAUFeedItem@@H@Z  # cSPUIFeedListCategory::FUN_00664640 migrated from s00663be0 (verbatim, slice spelling)
+00664680 ?FUN_00664680@cSPUIFeedListCategory@@QAEPAUFeedItem@@H@Z  # cSPUIFeedListCategory::FUN_00664680 migrated from s00663be0 (verbatim, slice spelling)
+006646c0 ?FUN_006646c0@cSPUIFeedListCategory@@QAEPAUFeedItem@@H@Z  # cSPUIFeedListCategory::FUN_006646c0 migrated from s00663be0 (verbatim, slice spelling)
+00664700 ?FUN_00664700@@YAXPAUAutoRefCountT@@0@Z  # FUN_00664700 migrated from s00663be0 (verbatim, slice spelling)
+00664800 ?FUN_00664800@@YAXPAUAutoRefCountT@@0@Z  # FUN_00664800 migrated from s00663be0 (verbatim, slice spelling)
 00664960 promote_heap<EA::AutoRefCount<SP::cSPUIFeedListItem>*,int,EA::AutoRefCount<SP::cSPUIFeedListItem>,SP::AlphabeticalFeedSort>  # symbolised in binary
+00664a60 ?FUN_00664a60@cSPUIFeedListCategory@@QAE_NIPAX@Z  # cSPUIFeedListCategory::FUN_00664a60 migrated from s00663be0 (verbatim, slice spelling)
 00664ad0 adjust_heap<EA::AutoRefCount<SP::cSPUIFeedListItem>*,int,EA::AutoRefCount<SP::cSPUIFeedListItem>,SP::AlphabeticalFeedSort>   # symbolised in binary

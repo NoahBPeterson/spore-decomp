@@ -1,3 +1,3 @@
-00665d30 SP::cSPUIFeedListCategory::ReloadCallback  # PDB name on card; called from 006661d0 layout setup
+00665d30 ?ReloadCallback@@YAXPAUCFull@@PAXD@Z  # ReloadCallback migrated from s00665d30 (verbatim, slice spelling)
+006661d0 ?Init@CCat@@QAE_NPAX0H@Z  # CCat::Init migrated from s00665d30 (verbatim, slice spelling)
 006666c0 SP::cSPUIFeedListItem::Refresh  # PDB candidate (caller-scored) on card
-006661d0 $E213  # compiler-assigned card name; category initialiser (cSPUILayout Init/SetReloadCallback)

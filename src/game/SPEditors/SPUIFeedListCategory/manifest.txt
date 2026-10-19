@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPUIFeedListCategory.cpp  ?FUN_00664440@cSPUIFeedListCategory@@QAEXXZ  00664440  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIFeedListCategory.cpp  ?FUN_00664580@cSPUIFeedListCategory@@QAEX_N@Z  00664580  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIFeedListCategory.cpp  ?push_back@Vec8@@QAEXPAX@Z  00665330  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedListCategory.cpp  ?ShutdownChildren@cSPUIFeedListCategory_s0066_4c90@@QAEXXZ  006657a0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
