@@ -1,4 +1,4 @@
-0047e4b0  SP::cSPEditorHandle::SetModelFlags  # sets bitset bit 3 and byte +0x5c on both models
+0047e4b0 ?SetModelFlags@cSPEditorHandle@@QAEI_NE@Z  # cSPEditorHandle::SetModelFlags migrated from s0047e4b0 (verbatim, slice spelling)
 0047e600  SP::cSPEditorHandle::GetPosition  # returns mBlock->+0x48 or a default vector
 0047e6e0  SP::cSPEditorHandle::GetHandleAlphaForState  # PDB name; property keys 0x050fc1d0..1d4
 0047e830  SP::cSPEditorHandle::GetOverdrawHandleAlphaForState  # PDB name; keys 0x050fc1d1..1d5

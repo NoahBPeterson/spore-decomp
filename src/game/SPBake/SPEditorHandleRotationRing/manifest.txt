@@ -1,0 +1,17 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?Destroy@RotationRing@@QAEXXZ  00483e90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?AsInterface@cSPEditorHandleRotationRing@SP@@UAEPAXW4InterfaceId@COM@EA@@@Z  00483ec0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?GetHandleRadiusBasedOnBoundingBox@cSPEditorHandleRotationRing_s0048_3f10@SP@@QAEMXZ  00484640  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?CalculateBallOffset@cSPEditorHandleRotationRing_s0048_3f10@SP@@QAEXXZ  00484820  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?GetPropListKey@RotationRing_s0048_3f10@@QAEPAUVector3@@PAU2@@Z  00484e00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?GetRotationAxis@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAE?AUcSPVector3_s0048_4e40@@_N@Z  00484e40  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?GetForwardVector@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAE?AUcSPVector3_s0048_4e40@@_N@Z  00484ee0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?GetHandleDirection@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAE?AUcSPVector3_s0048_4e40@@_N@Z  00484f80  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?GetRadius@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEMXZ  00485110  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?SetBoundingBox@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXABUcSPBoundingBox_s0048_4e40@@@Z  00485200  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?CalculateAnimTime@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEMXZ  00485420  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?UpdateAnimTime@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXXZ  00485650  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?SetState@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXH_N@Z  00485690  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?AnimateOn@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXXZ  004856d0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?SetModelScale@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXM@Z  00485850  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?Shutdown@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXXZ  004858b0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

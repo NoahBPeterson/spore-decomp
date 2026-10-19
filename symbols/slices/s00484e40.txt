@@ -1,3 +1,14 @@
-00484e40 SP::cSPEditorHandleRotationRing::GetRotationAxis  # returns mRotationAxis (+0x54) * block orientation
-00484ee0 SP::cSPEditorHandleRotationRing::GetForwardVector  # same shape on mForwardVector (+0x60)
-00485200 SP::cSPEditorHandleRotationRing::SetBoundingBox  # writes mUnscaledRadius, calls GetHandleRadiusBasedOnBoundingBox
+0047ec40 ?SetState@cSPEditorHandle@SP@@UAEXW4eEditorHandleState@12@_N@Z  # SP::cSPEditorHandle::SetState (callee of s00484e40, named from the dev publics; slice address comment)
+0047f290 ?IsVisible@cSPEditorHandle@SP@@QAE_NXZ  # SP::cSPEditorHandle::IsVisible (callee of s00484e40, named from the dev publics; slice address comment)
+00484e40 ?GetRotationAxis@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAE?AUcSPVector3_s0048_4e40@@_N@Z  # cSPEditorHandleRotationRing_s0048_4e40::GetRotationAxis migrated from s00484e40 (verbatim, slice spelling)
+00484ee0 ?GetForwardVector@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAE?AUcSPVector3_s0048_4e40@@_N@Z  # cSPEditorHandleRotationRing_s0048_4e40::GetForwardVector migrated from s00484e40 (verbatim, slice spelling)
+00484f80 ?GetHandleDirection@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAE?AUcSPVector3_s0048_4e40@@_N@Z  # cSPEditorHandleRotationRing_s0048_4e40::GetHandleDirection migrated from s00484e40 (verbatim, slice spelling)
+00485110 ?GetRadius@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEMXZ  # cSPEditorHandleRotationRing_s0048_4e40::GetRadius migrated from s00484e40 (verbatim, slice spelling)
+00485200 ?SetBoundingBox@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXABUcSPBoundingBox_s0048_4e40@@@Z  # cSPEditorHandleRotationRing_s0048_4e40::SetBoundingBox migrated from s00484e40 (verbatim, slice spelling)
+00485420 ?CalculateAnimTime@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEMXZ  # cSPEditorHandleRotationRing_s0048_4e40::CalculateAnimTime migrated from s00484e40 (verbatim, slice spelling)
+00485550 ?ApplyAnimTime@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXXZ  # cSPEditorHandleRotationRing_s0048_4e40::ApplyAnimTime migrated from s00484e40 (verbatim, slice spelling)
+00485650 ?UpdateAnimTime@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXXZ  # cSPEditorHandleRotationRing_s0048_4e40::UpdateAnimTime migrated from s00484e40 (verbatim, slice spelling)
+00485690 ?SetState@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXH_N@Z  # cSPEditorHandleRotationRing_s0048_4e40::SetState migrated from s00484e40 (verbatim, slice spelling)
+004856d0 ?AnimateOn@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXXZ  # cSPEditorHandleRotationRing_s0048_4e40::AnimateOn migrated from s00484e40 (verbatim, slice spelling)
+00485850 ?SetModelScale@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXM@Z  # cSPEditorHandleRotationRing_s0048_4e40::SetModelScale migrated from s00484e40 (verbatim, slice spelling)
+004858b0 ?Shutdown@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXXZ  # cSPEditorHandleRotationRing_s0048_4e40::Shutdown migrated from s00484e40 (verbatim, slice spelling)

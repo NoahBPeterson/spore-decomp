@@ -3,5 +3,5 @@
 00483cc0  SP::cSPEditorHandleRotationRing::SetScale2  # writes model+0x18, ++model+0xa
 00483d10  SP::cSPEditorHandleRotationRing::Shutdown2  # base Shutdown 0x47e2c0 then byte +0x5c=0
 00483d40  SP::cSPEditorHandleRotationRing::cSPEditorHandleRotationRing  # base ctor + vptrs + inits
-00483e90  SP::cSPEditorHandleRotationRing::~cSPEditorHandleRotationRing  # Ring Shutdown 0x4858b0 + base dtor
-00483ec0  SP::cSPEditorHandleRotationRing::AsInterface  # ids 0xee3f516e / 0x050a1fe5 / 0x050a2ed2
+00483e90 ?Destroy@RotationRing@@QAEXXZ  # RotationRing::Destroy migrated from s004834d0 (verbatim, slice spelling)
+00483ec0 ?AsInterface@cSPEditorHandleRotationRing@SP@@UAEPAXW4InterfaceId@COM@EA@@@Z  # SP::cSPEditorHandleRotationRing::AsInterface migrated from s004834d0

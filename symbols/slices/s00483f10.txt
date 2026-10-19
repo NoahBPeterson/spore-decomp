@@ -1,2 +1,9 @@
-00483f10 SP::cSPEditorHandleRotationRing::Update  # card PDB name
-004849e0 SP::cSPEditorHandleRotationRing::Resume  # card PDB name
+0047db30 ?Init@cSPEditorHandle@SP@@UAEXPAVcSPEditorBlock@2@_NII@Z  # SP::cSPEditorHandle::Init (callee of s00483f10, named from the dev publics; slice address comment)
+0047ec40 ?SetState@cSPEditorHandle@SP@@UAEXW4eEditorHandleState@12@_N@Z  # SP::cSPEditorHandle::SetState (callee of s00483f10, named from the dev publics; slice address comment)
+0047f290 ?IsVisible@cSPEditorHandle@SP@@QAE_NXZ  # SP::cSPEditorHandle::IsVisible (callee of s00483f10, named from the dev publics; slice address comment)
+00483f10 ?Update@cSPEditorHandleRotationRing_s0048_3f10@SP@@QAEXXZ  # cSPEditorHandleRotationRing_s0048_3f10::Update migrated from s00483f10 (verbatim, slice spelling)
+004845d0 ?GetHandlePosition@RotationRing_s0048_3f10@@QAEPAUVector3@@PAU2@@Z  # RotationRing_s0048_3f10::GetHandlePosition migrated from s00483f10 (verbatim, slice spelling)
+00484640 ?GetHandleRadiusBasedOnBoundingBox@cSPEditorHandleRotationRing_s0048_3f10@SP@@QAEMXZ  # cSPEditorHandleRotationRing_s0048_3f10::GetHandleRadiusBasedOnBoundingBox migrated from s00483f10 (verbatim, slice spelling)
+00484820 ?CalculateBallOffset@cSPEditorHandleRotationRing_s0048_3f10@SP@@QAEXXZ  # cSPEditorHandleRotationRing_s0048_3f10::CalculateBallOffset migrated from s00483f10 (verbatim, slice spelling)
+004849e0 ?Resume@cSPEditorHandleRotationRing_s0048_3f10@SP@@QAEXPAUIModelManager@2@PAUcSPEditorBlock_s0048_3f10@2@IIIMMM_N2@Z  # cSPEditorHandleRotationRing_s0048_3f10::Resume migrated from s00483f10 (verbatim, slice spelling)
+00484e00 ?GetPropListKey@RotationRing_s0048_3f10@@QAEPAUVector3@@PAU2@@Z  # RotationRing_s0048_3f10::GetPropListKey migrated from s00483f10 (verbatim, slice spelling)

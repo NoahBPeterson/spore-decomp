@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+0047e4b0 121 SetModelFlags: bitset div-based set and /Od local slots differ; equiv PASS (297 valid, 100% cov) now returns hidden eax (this with low byte = highlight when a model exists)
+00483f10 1110 Update: complete; Vec3 member copies use lea/lea inline operator= in original, frame temps differ
+004845d0 51 GetHandlePosition: VMul return pointer local and fld/fstp out-copy flavour differ; difftest PASS
+004849e0 322 Resume: complete; inlined bitset::set pointer temps land at different frame slots
+00485550 129 /Od; complete. Abs() return-value slot and conversion-temp placement differ (layout only)
