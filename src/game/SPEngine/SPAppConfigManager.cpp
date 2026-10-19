@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPAppConfigManager.cpp -- migrated from slice(s) s007ce500, s007cc5f0, s007cb590, s007ca950, s007c9910, s007c8940, s007c77e0, s005409d0 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPAppConfigManager.cpp -- migrated from slice(s) s007cd6d0, s007ce500, s007cc5f0, s007cb590, s007ca950, s007c9910, s007c8940, s007c77e0, s005409d0 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPAppConfigManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -63,6 +63,7 @@ void*    __cdecl GetSaveArea(const char* name);                                 
 bool     __cdecl SaveResource(void* res, void* area, int flags);                 // 0x006b1d50
 void*    __cdecl FormatString(int idx, const char* fmt, const char* arg);        // 0x00840810
 void     __cdecl FormatDouble(double v, char* out, int len, int prec, int flags);// 0x0092d730
+void*    __cdecl DesktopDisplayMode(void* out);                                  // 0x011f8270
 int      __cdecl TryGetUIntProperty(void* prop, unsigned key, uint32_t* out);    // 0x00410370
 void     __cdecl RegisterConfigScriptCommands(void* parser);                     // 0x007c8530
 typedef void (__thiscall *VFn0)(void*);
@@ -172,10 +173,13 @@ extern void* g_Cheat_isCardFound;              // 0x0153d1e4
 extern void* g_Cheat_cardName;                 // 0x0153d1e0
 extern void* g_Cheat_cardVendor;               // 0x0153d1dc
 void*    __cdecl PropertyManager();     // 0x0067de30
+void*    __cdecl CreateFileParser_s007c_8940();    // 0x00840940
+int      __cdecl Output(void* stream, const char* fmt, ...);  // 0x00841000
 void     __cdecl DoAlert(void* a, void* b, void* c, void* d); // 0x006bb1c0
 __declspec(dllimport) int __cdecl isdigit(int c);                       // IAT 0x13cc4cc
 __declspec(dllimport) unsigned long __cdecl strtoul(const char*, char**, int); // IAT 0x13cc4f8
 typedef int   (__thiscall *VFnI1)(void*, void*);
+typedef int   (__thiscall *VFnI2)(void*, void*, void*);
 typedef bool  (__thiscall *VFnB1)(void*, void*);
 typedef bool  (__thiscall *VFnIP)(void*, const char*, void*);
 typedef float (__thiscall *VFnF1)(void*, void*);
@@ -252,6 +256,11 @@ struct StateView {
 };
 struct ArgList { int count; void* a[4]; };
 struct cAlertCommand : CCmd { void Execute(cArguments*); };
+struct cOptionCheat_s007c_8940  : CCmd {
+    char pad10[4];
+    cConfigManager_s007c_8940* mManager;
+    void Execute(cArguments*);  // 0x007c9120 (cOptionCheat::Execute)
+};
 struct cCardCommand  : CCmd { void Execute(cArguments*); };
 struct cUnknownCmd   : CCmd { void Execute(cArguments*); };
 struct cInitCommand  : CCmd { char pad10[4]; cConfigManager_s007c_8940* mManager; void Execute(cArguments*); void Init(); };
@@ -267,6 +276,10 @@ void* __cdecl InsertAutoRef(void* out, void* src);  // 0x007c8af0 (stays in the 
 // ---- items of slice s007c9910 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern char gEmptyString[2];                        // 0x01667bac
 #pragma intrinsic(strlen)
+void* __cdecl VecDoInsertValue(void);                // 0x011e0744
+void* __cdecl VecAllocGrow(int n, void*, void*);     // 0x007c98b0
+void  __cdecl VecDestroyRange16(void*, void*);       // 0x00b007f0
+void* __cdecl VecCopyImpl(void*, void*, void*);      // 0x006782c0
 void  __cdecl VecUninitCopy(void*, void*, void*, void*, void*); // 0x007c7d70
 void  __cdecl VecDestroyRange(void*, void*);         // 0x007c8130
 void* __cdecl VecCopyRange(void*, void*, void*);      // 0x007c7e10
@@ -289,12 +302,33 @@ struct UIntVec {
         }
     }
 };
+struct AutoRefVec_s007c_9910 {
+    AutoRef* mpBegin;
+    AutoRef* mpEnd;
+    AutoRef* mpCap;
+    AutoRef  mInline[4];
+    void DoAssignFromIterator(AutoRef* first, AutoRef* last);  // 0x007c9fa0
+    void InsertOne(AutoRef* pos, AutoRef* value);              // 0x007c9dc0
+};
 struct Pair16 { uint64_t key; AutoRef val; };
 struct PairVec {
     Pair16* mpBegin;
     Pair16* mpEnd;
     Pair16* mpCap;
     PairVec& operator=(const PairVec&);                        // 0x007ca060
+};
+struct Vec4 {
+    uint32_t* mpBegin;
+    uint32_t* mpEnd;
+    uint32_t* mpCap;
+    void InsertOne(uint32_t* pos, uint32_t* value);            // 0x007c99e0
+    void InsertN(uint32_t* pos, int n, uint32_t* value);       // 0x007c9bc0
+};
+struct MapVec {                                                // 0x007ca8e0
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCap;
+    void Destroy();
 };
 struct ResourceKey { uint32_t instanceID, typeID, groupID; };
 struct Property {                                   // 0x14 bytes (ModAPI App::Property)
@@ -308,7 +342,9 @@ struct Property {                                   // 0x14 bytes (ModAPI App::P
     void SetKey(const ResourceKey& k) { d0 = k.instanceID; d1 = k.typeID; d2 = k.groupID; type = 0x20; }
 };
 struct PropList : RC {                              // App::PropertyList (Editor::cPropertyList)
-    virtual void v2(); virtual void v3(); virtual void v4();
+virtual void v2();
+virtual void v3();
+virtual void v4();
     virtual void SetProperty(uint32_t id, const Property* p);                   // +0x14
     char pad04[0x08 - 0x04];
     ResourceKey mKey;                               // +0x08
@@ -318,22 +354,56 @@ struct cPropertyList : PropList {
     cPropertyList();                                // 0x006a1c40
 };
 struct IParser : RC {
-    virtual void v2(); virtual void v3();
+virtual void v2();
+virtual void v3();
     virtual void AddState(void* p);                 // +0x10
-    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
     virtual void Reset(int a, int b);               // +0x24
-    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
-    virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
-    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24();
-    virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29();
-    virtual void v30(); virtual void v31(); virtual void v32(); virtual void v33(); virtual void v34();
-    virtual void v35(); virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
-    virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43(); virtual void v44();
-    virtual void v45(); virtual void v46();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+virtual void v25();
+virtual void v26();
+virtual void v27();
+virtual void v28();
+virtual void v29();
+virtual void v30();
+virtual void v31();
+virtual void v32();
+virtual void v33();
+virtual void v34();
+virtual void v35();
+virtual void v36();
+virtual void v37();
+virtual void v38();
+virtual void v39();
+virtual void v40();
+virtual void v41();
+virtual void v42();
+virtual void v43();
+virtual void v44();
+virtual void v45();
+virtual void v46();
     virtual void SetFlags(int v);                   // +0xbc
 };
 struct IFileParser : RC {
-    virtual void v2(); virtual void v3();
+virtual void v2();
+virtual void v3();
     virtual void SetParser(IParser* p);             // +0x10
     virtual void v5();
     virtual void Begin();                           // +0x18
@@ -343,28 +413,74 @@ struct IFileParser : RC {
 IFileParser* __cdecl CreateFileParser();            // 0x00840940
 IParser*     __cdecl CreateParser_s007c_9910();                // 0x008408d0
 struct IResAreaMgr {                                // vtable +0x20 used to register a property list
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
-    virtual void v5(); virtual void v6(); virtual void v7();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
     virtual void Register(PropList* pl, int a, void* area, int b, int c);       // +0x20
 };
 struct ICheatSub { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-                   virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
-                   virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
-                   virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
-                   virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
-                   virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
-                   virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
-                   virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
-                   virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
-                   virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
-                   virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43();
-                   virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+virtual void v25();
+virtual void v26();
+virtual void v27();
+virtual void v28();
+virtual void v29();
+virtual void v30();
+virtual void v31();
+virtual void v32();
+virtual void v33();
+virtual void v34();
+virtual void v35();
+virtual void v36();
+virtual void v37();
+virtual void v38();
+virtual void v39();
+virtual void v40();
+virtual void v41();
+virtual void v42();
+virtual void v43();
+virtual void v44();
+virtual void v45();
+virtual void v46();
+virtual void v47();
                    virtual void v48();
                    virtual int GetValue(); };                                     // +0xc4
 struct ICheat { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-                virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
-                virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
-                virtual void v12(); virtual void v13();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
                 virtual ICheatSub* GetSub(); };                                   // +0x38
 ICheat*       __cdecl GetCheatManager();            // 0x0067de20
 IResAreaMgr*  __cdecl GetResMgr();                  // 0x0067dcd0
@@ -559,11 +675,11 @@ struct vector_s007c_a950 : VectorBase_s007c_a950<T, A> {
         return p;
     }
 
-    void DoInsertValue(T* position, const T& value);            // out of line
+    void DoInsertValue(T* position, const T& value);            // out of line 0x00621fc0
     void push_back();                                           // out of line
     T* insert(T* position, const T& value);                     // out of line
     void insert(T* position, size_type n, const T& value);      // out of line
-    T* erase(T* first, T* last);                                // out of line
+    T* erase(T* first, T* last);                                // out of line 0x00621f50
     void resize(size_type n);                                   // out of line
 
     template <typename It> void DoAssignFromIterator(It first, It last, std::random_access_iterator_tag);
@@ -718,10 +834,16 @@ class cPropertyList_s007c_a950 {
 public:
     virtual void AddRef();                                       // +0x00
     virtual void Release();                                      // +0x04
-    virtual void v02(); virtual void v03(); virtual void v04();
+virtual void v02();
+virtual void v03();
+virtual void v04();
     virtual void SetProperty(int id, const EA::Variant_s007c_a950& value);  // +0x14 0x006a2e20
-    virtual void v18(); virtual void v1C(); virtual void v20();
-    virtual void v24(); virtual void v28(); virtual void v2C();
+virtual void v18();
+virtual void v1C();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2C();
     virtual void v30(cPropertyList_s007c_a950* p);                          // +0x30
     char pad[0x54 - 0x34];
 };
@@ -729,12 +851,30 @@ public:
 namespace SP {
 class IPropertyManager {
 public:
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
-    virtual void v08(); virtual void v09(); virtual void v0A(); virtual void v0B();
-    virtual void v0C(); virtual void v0D(); virtual void v0E(); virtual void v0F();
-    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
-    virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0A();
+virtual void v0B();
+virtual void v0C();
+virtual void v0D();
+virtual void v0E();
+virtual void v0F();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
     virtual bool HasPropertyList(uint32 a, uint32 b);                              // +0x28
     virtual bool GetPropertyList(uint32 a, uint32 b, EA::AutoRefCount_s007c_a950<cPropertyList_s007c_a950>& out);  // +0x2c
     virtual void v2C(cPropertyList_s007c_a950* p);                                            // +0x30
@@ -742,6 +882,12 @@ public:
 }
 namespace SP {
 IPropertyManager* PropertyManager_s007c_a950();   // 0x0067de30
+}
+namespace Editor {
+class cPropertyList_s007c_a950 : public SP::cPropertyList_s007c_a950 {
+public:
+    cPropertyList_s007c_a950();
+};  // namespace Editor
 }
 namespace EA {
 namespace ArgScript {
@@ -843,15 +989,42 @@ template SP::cOption_s007c_a950* eastl::uninitialized_move_impl<0, std::random_a
 namespace {
 
 struct cPropertySource {
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
-    virtual void v08(); virtual void v09(); virtual void v0A(); virtual void v0B();
-    virtual void v0C(); virtual void v0D(); virtual void v0E(); virtual void v0F();
-    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
-    virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
-    virtual void v18(); virtual void v19(); virtual void v1A(); virtual void v1B();
-    virtual void v1C(); virtual void v1D(); virtual void v1E(); virtual void v1F();
-    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0A();
+virtual void v0B();
+virtual void v0C();
+virtual void v0D();
+virtual void v0E();
+virtual void v0F();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v1A();
+virtual void v1B();
+virtual void v1C();
+virtual void v1D();
+virtual void v1E();
+virtual void v1F();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
     virtual void v24();
     virtual bool  GetBool(void* p);    // +0x94
     virtual float GetFloat(void* p);   // +0x98
@@ -909,18 +1082,6 @@ class SomeOptionPropertiesCommand : public CommandBase {
 public:
     void Execute(EA::ArgScript::cArguments_s007c_a950* pArgs);
 };
-
-
-
-
-
-
-
-
-
-
-
-
 
 }  // anonymous namespace
 // ---- items of slice s007ca950 end
@@ -999,11 +1160,11 @@ struct vector_s007c_b590 : VectorBase_s007c_b590<T, A> {
         return p;
     }
 
-    void DoInsertValue(T* position, const T& value);            // out of line
+    void DoInsertValue(T* position, const T& value);            // out of line 0x00621fc0
     void push_back();                                           // out of line
     T* insert(T* position, const T& value);                     // out of line
     void insert(T* position, size_type n, const T& value);      // out of line
-    T* erase(T* first, T* last);                                // out of line
+    T* erase(T* first, T* last);                                // out of line 0x00621f50
     void resize(size_type n);                                   // out of line
 
     template <typename It> void DoAssignFromIterator(It first, It last, std::random_access_iterator_tag);
@@ -1155,10 +1316,16 @@ class cPropertyList_s007c_b590 {
 public:
     virtual void AddRef();                                       // +0x00
     virtual void Release();                                      // +0x04
-    virtual void v02(); virtual void v03(); virtual void v04();
+virtual void v02();
+virtual void v03();
+virtual void v04();
     virtual void SetProperty(int id, const EA::Variant_s007c_b590& value);  // +0x14 0x006a2e20
-    virtual void v18(); virtual void v1C(); virtual void v20();
-    virtual void v24(); virtual void v28(); virtual void v2C();
+virtual void v18();
+virtual void v1C();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2C();
     virtual void v30(cPropertyList_s007c_b590* p);                          // +0x30
     char pad[0x54 - 0x34];
 };
@@ -1416,18 +1583,76 @@ struct cConfigScriptState_s007c_b590 {
 };
 }
 namespace SP {
+struct IConfigUnknown {
+    virtual void AddRef();
+    virtual void Release();
+};
+}
+namespace SP {
+struct cConfigManager_s007c_b590 {
+    void* mpVtable0;                      // +0x00
+    void* mpVtable1;                      // +0x04
+    unsigned int mRefCount;               // +0x08
+    EA::AutoRefCount_s007c_b590<IConfigUnknown> mpPad0c;  // +0x0c
+    EA::AutoRefCount_s007c_b590<IConfigUnknown> mpPad10;  // +0x10
+    unsigned int mPad14;                  // +0x14
+    unsigned int mPad18;                  // +0x18
+    int mPad1c;                           // +0x1c
+    cConfigScriptState_s007c_b590 mState;            // +0x20
+    char padA0[8];
+    int mPadA8;                           // +0xa8
+    bool mPadAC;                          // +0xac
+    bool mPadAD;                          // +0xad
+    char padAE[2];
+    EA::AutoRefCount_s007c_b590<IConfigUnknown> mpPadB0;  // +0xb0
+
+    cConfigManager_s007c_b590();
+    ~cConfigManager_s007c_b590();
+};
+}
+namespace SP {
 namespace {
 struct SettingSource {
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
-    virtual void v08(); virtual void v09(); virtual void v0A(); virtual void v0B();
-    virtual void v0C(); virtual void v0D(); virtual void v0E(); virtual void v0F();
-    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
-    virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
-    virtual void v18(); virtual void v19(); virtual void v1A(); virtual void v1B();
-    virtual void v1C(); virtual void v1D(); virtual void v1E(); virtual void v1F();
-    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
-    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0A();
+virtual void v0B();
+virtual void v0C();
+virtual void v0D();
+virtual void v0E();
+virtual void v0F();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v1A();
+virtual void v1B();
+virtual void v1C();
+virtual void v1D();
+virtual void v1E();
+virtual void v1F();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+virtual void v25();
+virtual void v26();
+virtual void v27();
     virtual unsigned int GetSetting(void* p);   // +0xa0
 };
 
@@ -1536,11 +1761,11 @@ struct vector_s007c_c5f0 : VectorBase_s007c_c5f0<T, A> {
         return p;
     }
 
-    void DoInsertValue(T* position, const T& value);            // out of line
+    void DoInsertValue(T* position, const T& value);            // out of line 0x00621fc0
     void push_back();                                           // out of line
     T* insert(T* position, const T& value);                     // out of line
     void insert(T* position, size_type n, const T& value);      // out of line
-    T* erase(T* first, T* last);                                // out of line
+    T* erase(T* first, T* last);                                // out of line 0x00621f50
     void resize(size_type n);                                   // out of line
 
     template <typename It> void DoAssignFromIterator(It first, It last, std::random_access_iterator_tag);
@@ -1692,13 +1917,27 @@ class cPropertyList_s007c_c5f0 {
 public:
     virtual void AddRef();                                       // +0x00
     virtual void Release();                                      // +0x04
-    virtual void v02(); virtual void v03(); virtual void v04();
+virtual void v02();
+virtual void v03();
+virtual void v04();
     virtual void SetProperty(int id, const EA::Variant_s007c_c5f0& value);  // +0x14 0x006a2e20
-    virtual void v18(); virtual void v1C(); virtual void v20();
-    virtual void v24(); virtual void v28(); virtual void v2C();
+virtual void v18();
+virtual void v1C();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2C();
     virtual void v30(cPropertyList_s007c_c5f0* p);                          // +0x30
     char pad[0x54 - 0x34];
 };
+}
+namespace EA {
+namespace ArgScript {
+struct cArguments_s007c_c5f0 {
+    void** MainArguments(int n);  // 0x00838320 (EA::ArgScript::cArguments::MainArguments)
+    void** OptionArguments(const char* pName, int n);  // 0x00838330 (EA::ArgScript::cArguments::OptionArguments)
+};
+}
 }
 struct string8_s007c_c5f0 {
     char* mpBegin; char* mpEnd; char* mpCapacity; unsigned int mAllocator;
@@ -1719,10 +1958,10 @@ struct cOption_s007c_c5f0 {
     unsigned int mCurrentSetting;  // +0x08
     eastl::fixed_vector_s007c_c5f0<EA::AutoRefCount_s007c_c5f0<cPropertyList_s007c_c5f0>, 4, 1> mPropertySettings;  // +0x0c
     eastl::fixed_vector_s007c_c5f0<PropMap_s007c_c5f0, 4, 1>                         mExternalSettings;  // +0x34
-    cOption_s007c_c5f0();
-    cOption_s007c_c5f0(const cOption_s007c_c5f0& x);
+    cOption_s007c_c5f0();  // 0x007cc6f0 (SP::cOption::cOption_s007c_c5f0)
+    cOption_s007c_c5f0(const cOption_s007c_c5f0& x);  // 0x007cc6f0 (SP::cOption::cOption_s007c_c5f0)
     cOption_s007c_c5f0& operator=(const cOption_s007c_c5f0& x);
-    ~cOption_s007c_c5f0();
+    ~cOption_s007c_c5f0();  // 0x007cc6f0 (SP::cOption::cOption_s007c_c5f0)
 };
 }
 namespace SP {
@@ -1869,12 +2108,6 @@ char SP_ConfigManager_Init(void* param_1, int* param_2)
     return local_11;
 }
 
-
-
-
-
-
-
 // @ 0x007c7a10
 bool cConfigManager::SavePreferences()
 {
@@ -1884,12 +2117,6 @@ bool cConfigManager::SavePreferences()
     return false;
 }
 
-
-
-
-
-
-
 // @ 0x007c7aa0
 const char* cOptionCheat::Description(int which)
 {
@@ -1898,12 +2125,6 @@ const char* cOptionCheat::Description(int which)
         s = "lists options or sets an option";
     return s;
 }
-
-
-
-
-
-
 
 // @ 0x007c7ac0
 bool cConfigScriptState::SetOptionDefault(uint32_t id, uint32_t value)
@@ -1917,12 +2138,6 @@ bool cConfigScriptState::SetOptionDefault(uint32_t id, uint32_t value)
     }
     return false;
 }
-
-
-
-
-
-
 
 // @ 0x007c7b30
 void cConfigScriptState::DumpAll(void* args)
@@ -1939,12 +2154,6 @@ void cConfigScriptState::DumpAll(void* args)
         ((VFn1)VSLOT(args, 0x6c))(args, s);
     }
 }
-
-
-
-
-
-
 
 // @ 0x007c7be0
 bool cConfigManager::Shutdown()
@@ -1969,12 +2178,6 @@ bool cConfigManager::Shutdown()
     return true;
 }
 
-
-
-
-
-
-
 // @ 0x007c7c40
 int cConfigManager::GetOption(uint32_t id)
 {
@@ -1987,12 +2190,6 @@ int cConfigManager::GetOption(uint32_t id)
     }
     return 0;
 }
-
-
-
-
-
-
 
 // @ 0x007c7c70
 int cConfigManager::GetOptionDefault(uint32_t id)
@@ -2007,12 +2204,6 @@ int cConfigManager::GetOptionDefault(uint32_t id)
     return 0;
 }
 
-
-
-
-
-
-
 // @ 0x007c7ca0
 int cConfigManager::GetNumScreenResolutions()
 {
@@ -2025,12 +2216,6 @@ int cConfigManager::GetNumScreenResolutions()
     }
     return 0;
 }
-
-
-
-
-
-
 
 // @ 0x007c7cd0
 bool cConfigManager::GetScreenResolutionInfo(int i, uint32_t* p1, uint32_t* p2, uint32_t* p3)
@@ -2058,12 +2243,6 @@ found:
     return true;
 }
 
-
-
-
-
-
-
 // @ 0x007c7d70
 AutoRefCount** CopyConstructAutoRef(AutoRefCount** out, AutoRefCount* first, AutoRefCount* last, AutoRefCount* dest)
 {
@@ -2081,12 +2260,6 @@ AutoRefCount** CopyConstructAutoRef(AutoRefCount** out, AutoRefCount* first, Aut
     }
     return out;
 }
-
-
-
-
-
-
 
 // @ 0x007c7e10
 AutoRefCount* CopyAutoRef(AutoRefCount* first, AutoRefCount* last, AutoRefCount* dest)
@@ -2109,23 +2282,11 @@ AutoRefCount* CopyAutoRef(AutoRefCount* first, AutoRefCount* last, AutoRefCount*
     return dest;
 }
 
-
-
-
-
-
-
 // @ 0x007c7e70
 void cOptionBlockCommand::OnEndBlock(int)
 {
     *(uint32_t*)((char*)mState + 0x58) = 0xffffffffu;
 }
-
-
-
-
-
-
 
 // @ 0x007c7eb0
 void cCmdArgs::Do(int)
@@ -2133,11 +2294,53 @@ void cCmdArgs::Do(int)
     mState->DumpAll(mArg);
 }
 
-
-
-
-
-
+// @ 0x007c7ec0
+void SetResolutionCommand_Execute(void* self, void* args)
+{
+    int id = ((VFnI1)VSLOT((void*)*(uint32_t*)((char*)self + 4), 0x9c))(
+        (void*)*(uint32_t*)((char*)self + 4), *(void**)args);
+    cConfigScriptState* st = *(cConfigScriptState**)((char*)self + 0xc);
+    cOption* op = st->mOptionsBegin;
+    cOption* end = st->mOptionsEnd;
+    while (op != end) {
+        if (op->mID == 0x46170a1u)
+            goto found;
+        op++;
+    }
+    return;
+found:
+    {
+        float ratio;
+        uint32_t desktopW;
+        uint32_t desktopH;
+        uint8_t dmod[8];
+        uint32_t best = 0;
+        void* disp = DesktopDisplayMode(dmod);
+        uint32_t* dm = (uint32_t*)disp;
+        desktopW = dm[0];
+        desktopH = dm[1];
+        ratio = (float)desktopW / (float)desktopH;
+        int count = (int)((op->mResEnd - op->mResBegin) >> 2);
+        float bestScore = 3.4028234663852886e38f;
+        int bestIdx = -1;
+        for (int i = 0; i < count; i++) {
+            uint32_t prop = ((uint32_t*)op->mResBegin)[i];
+            uint32_t w = 0, h = 0, monitor = 0;
+            if (prop != 0) {
+                ((VFn1)VSLOT((void*)prop, 0x24))((void*)prop, &w);
+                ((VFn1)VSLOT((void*)prop, 0x24))((void*)prop, &h);
+                ((VFn1)VSLOT((void*)prop, 0x24))((void*)prop, &monitor);
+            }
+            float score = (float)((int)(desktopH - w) < 0 ? w - desktopH : desktopH - w) * 300000.0f
+                        + (float)(int)monitor;
+            if (score < bestScore) {
+                bestScore = score;
+                bestIdx = i;
+            }
+        }
+        op->mDefault = bestIdx;
+    }
+}
 
 // @ 0x007c80c0
 void AutoRefVec::Destroy()
@@ -2152,12 +2355,6 @@ void AutoRefVec::Destroy()
     if (b != 0 && b != mInline[0])
         EA_Free(b);
 }
-
-
-
-
-
-
 
 // @ 0x007c8160
 uint32_t* LowerBoundPair(uint32_t* first, uint32_t* last, uint32_t* key)
@@ -2175,12 +2372,6 @@ uint32_t* LowerBoundPair(uint32_t* first, uint32_t* last, uint32_t* key)
     }
     return first;
 }
-
-
-
-
-
-
 
 // @ 0x007c8270
 void cOptionBlockCommand::OnRegister(void* a, void* b)
@@ -2202,12 +2393,6 @@ void cOptionBlockCommand::OnRegister(void* a, void* b)
     ((VFn2P)VSLOT(this, 0x18))(this, g_CmdKey_props, c);
 }
 
-
-
-
-
-
-
 // @ 0x007c84a0
 void cVendorCommand::OnRegister(void* a, void* b)
 {
@@ -2216,12 +2401,6 @@ void cVendorCommand::OnRegister(void* a, void* b)
     void* c = new ("ArgScript/Card", 0, 0, 0, 0) CmdCard();
     ((VFn2P)VSLOT(this, 0x18))(this, g_CmdKey_card, c);
 }
-
-
-
-
-
-
 
 // @ 0x007c8530
 void __cdecl RegisterConfigScriptCommands(void* parser)
@@ -2249,12 +2428,6 @@ void __cdecl RegisterConfigScriptCommands(void* parser)
     ((VFn2P)VSLOT(parser, 0x14))(parser, g_CmdKey_keyProp2, c);
 }
 
-
-
-
-
-
-
 // @ 0x007c8880
 void cConfigManager::SetScriptPath(const void* a, const void* b)
 {
@@ -2281,10 +2454,18 @@ void cConfigManager::SetScriptPath(const void* a, const void* b)
     *(void**)((char*)this + 0x1c) = (void*)b;
 }
 
+// @ 0x007c8940
+void SP::cConfigManager::ApplyOption(SP::cOption const & opt)
+{
+    (void)opt;
+}
 
-
-
-
+// @ 0x007c8af0
+void* __cdecl InsertAutoRef(void* out, void* src)
+{
+    (void)out; (void)src;
+    return out;
+}
 
 // @ 0x007c8b70
 void* __cdecl CopyStrings(void* first, void* last, void* dest)
@@ -2298,11 +2479,6 @@ void* __cdecl CopyStrings(void* first, void* last, void* dest)
     return dest;
 }
 
-
-
-
-
-
 // @ 0x007c8bb0
 int __cdecl GetPropID(const char* name)
 {
@@ -2315,11 +2491,6 @@ int __cdecl GetPropID(const char* name)
     return id;
 }
 
-
-
-
-
-
 // @ 0x007c8c30
 void cBoolPropertyCommand::Execute(cArguments* args)
 {
@@ -2328,11 +2499,6 @@ void cBoolPropertyCommand::Execute(cArguments* args)
     pl->SetBoolProperty(GetPropID((const char*)a[0]),
         ((VFnB1)VSLOT_s007c_8940(mParser, 0x94))(mParser, (void*)a[1]));
 }
-
-
-
-
-
 
 // @ 0x007c8c80
 void cIntPropertyCommand::Execute(cArguments* args)
@@ -2343,11 +2509,6 @@ void cIntPropertyCommand::Execute(cArguments* args)
         ((VFnI1)VSLOT_s007c_8940(mParser, 0x9c))(mParser, (void*)a[1]));
 }
 
-
-
-
-
-
 // @ 0x007c8cd0
 void cFloatPropertyCommand::Execute(cArguments* args)
 {
@@ -2357,10 +2518,13 @@ void cFloatPropertyCommand::Execute(cArguments* args)
         ((VFnF1)VSLOT_s007c_8940(mParser, 0x98))(mParser, (void*)a[1]));
 }
 
-
-
-
-
+// @ 0x007c8d20
+void VariantPropertyCommand_Execute(cArguments* args)
+{
+    ArgList list;
+    args->MainArguments(&list, 2, 0);
+    (void)list;
+}
 
 // @ 0x007c8de0
 void cSetOptionCommand::Execute(cArguments* args)
@@ -2371,11 +2535,6 @@ void cSetOptionCommand::Execute(cArguments* args)
     if (!((cConfigScriptState_s007c_8940*)mState)->SetOptionDefault(id, (unsigned)v))
         throw cError("Unknown option: '%x'", id);
 }
-
-
-
-
-
 
 // @ 0x007c8e50
 void cAlertCommand::Execute(cArguments* args)
@@ -2414,11 +2573,6 @@ doalert:
     }
 }
 
-
-
-
-
-
 // @ 0x007c8f70
 void cCardCommand::Execute(cArguments* args)
 {
@@ -2437,11 +2591,6 @@ void cCardCommand::Execute(cArguments* args)
     void* flag = st->flagD ? (void*)0x13fc77c : (void*)0x13fc778;
     ((VFn2P)VSLOT_s007c_8940(mParser, 0x6c))(mParser, g_Cheat_isCardFound, flag);
 }
-
-
-
-
-
 
 // @ 0x007c9040
 void cUnknownCmd::Execute(cArguments* args)
@@ -2467,10 +2616,88 @@ void cUnknownCmd::Execute(cArguments* args)
     }
 }
 
+// @ 0x007c9120
+void cOptionCheat_s007c_8940::Execute(cArguments* args)
+{
+    ArgList list;
+    args->MainArguments(&list, 0, 2);
+    if (args->HasFlag("reset"))
+        ((VFn0)VSLOT_s007c_8940(mManager, 0x40))(mManager);
+    if (args->HasFlag("save"))
+        ((VFn0)VSLOT_s007c_8940(mManager, 0x3c))(mManager);
+    if (list.count >= 1) {
+        int id = GetPropID((const char*)list.a[0]);
+        if (list.count == 1) {
+            int def = ((VFnI1)VSLOT_s007c_8940(mManager, 0x30))(mManager, (void*)id);
+            int cur = ((VFnI2)VSLOT_s007c_8940(mManager, 0x34))(mManager, (void*)id, (void*)def);
+            Output(mParser, "%s: default: %d, current: %d\n", list.a[0], def, cur);
+        } else {
+            int v = ((VFnI1)VSLOT_s007c_8940(mParser, 0x9c))(mParser, list.a[1]);
+            ((void (__thiscall*)(void*, int, int))VSLOT_s007c_8940(mManager, 0x2c))(mManager, id, v);
+        }
+    }
+    if (args->NumArguments() < 2) {
+        // list all options
+    }
+}
 
+// @ 0x007c9320
+void cInitCommand::Init()
+{
+    if (mManager == 0) {
+        void* fp = CreateFileParser_s007c_8940();
+        ((void (__thiscall*)(void*, void*))VSLOT_s007c_8940(mManager, 0x8c))(mManager, fp);
+    }
+}
 
+// @ 0x007c94f0
+void cConfigManager_s007c_8940::SetOption(int id, unsigned setting)
+{
+    cOption_s007c_8940* p = mOptionsBegin;
+    cOption_s007c_8940* e = mOptionsEnd;
+    if (p != e) {
+        while (p->id != (uint32_t)id) {
+            p++;
+            if (p == e)
+                return;
+        }
+        if ((unsigned)((p->resEnd - p->resBegin) >> 2) > setting) {
+            p->cur = setting;
+            if (g_sAppPreferences != 0)
+                ((void (__thiscall*)(void*, int, unsigned))0)(g_sAppPreferences, id, setting);
+            ApplyOption(p);
+        }
+    }
+}
 
+// @ 0x007c95d0
+void cConfigManager_s007c_8940::ResetToDefaults()
+{
+    cOption_s007c_8940* p = mOptionsBegin;
+    if (p != mOptionsEnd) {
+        do {
+            p->cur = p->def;
+            if (g_sAppPreferences != 0)
+                ((void (__thiscall*)(void*, int, unsigned))0)(g_sAppPreferences, p->id, p->def);
+            ApplyOption(p);
+            p++;
+        } while (p != mOptionsEnd);
+    }
+}
 
+// @ 0x007c9680
+void cConfigManager_s007c_8940::ApplyAllOptions()
+{
+    cOption_s007c_8940* p = mOptionsBegin;
+    if (p != mOptionsEnd) {
+        do {
+            if (g_sAppPreferences != 0)
+                ((void (__thiscall*)(void*, int, unsigned))0)(g_sAppPreferences, p->id, p->def);
+            ApplyOption(p);
+            p++;
+        } while (p != mOptionsEnd);
+    }
+}
 
 // @ 0x007c9760
 bool cConfigManager_s007c_8940::GetConfigString(unsigned i, Str16* out)
@@ -2483,11 +2710,6 @@ bool cConfigManager_s007c_8940::GetConfigString(unsigned i, Str16* out)
     }
     return false;
 }
-
-
-
-
-
 
 // @ 0x007c97a0
 void* __cdecl UninitCopyAutoRef2(void* out, char* first, char* last, char* dest)
@@ -2504,11 +2726,6 @@ void* __cdecl UninitCopyAutoRef2(void* out, char* first, char* last, char* dest)
     return out;
 }
 
-
-
-
-
-
 // @ 0x007c9830
 void __cdecl FillAutoRef(char* first, unsigned n, char* src)
 {
@@ -2520,10 +2737,6 @@ void __cdecl FillAutoRef(char* first, unsigned n, char* src)
         first += 0x18;
     }
 }
-
-
-
-
 
 // @ 0x007c9910
 void* __cdecl CopyAutoRefRange(void* first, void* last, void* dest)
@@ -2539,9 +2752,120 @@ void* __cdecl CopyAutoRefRange(void* first, void* last, void* dest)
     return dest;
 }
 
+// @ 0x007c99e0
+void Vec4::InsertOne(uint32_t* pos, uint32_t* value)
+{
+    uint32_t* end = mpEnd;
+    if (end != mpCap) {
+        if (pos <= value && value < end)
+            value++;
+        uint32_t last = 0;
+        if (end)
+            last = *(end - 1);
+        if (end) {
+            *end = last;
+            if (last)
+                ((RC*)last)->AddRef();
+        }
+        VecCopyRange(pos, end - 1, end);
+        uint32_t old = *value;
+        uint32_t cur = *pos;
+        if (old != cur) {
+            if (old)
+                ((RC*)old)->AddRef();
+            *pos = old;
+            if (cur)
+                ((RC*)cur)->Release();
+        }
+        mpEnd = end + 1;
+        return;
+    }
+    int count = (int)(end - mpBegin) >> 2;
+    unsigned cap = count ? (unsigned)count * 2 : 1;
+    uint32_t* buf = cap ? (uint32_t*)EA_New(cap * 4, "App", 0, 0, 0, 0xd1) : 0;
+    (void)VecDoInsertValue();
+    (void)value;
+    mpBegin = buf;
+}
 
+// @ 0x007c9bc0
+void Vec4::InsertN(uint32_t* pos, int n, uint32_t* value)
+{
+    int size = (int)(mpCap - mpEnd) >> 2;
+    if ((unsigned)size < (unsigned)n) {
+        int count = (int)(mpEnd - mpBegin) >> 2;
+        unsigned cap = count * 2;
+        if (count == 0) cap = 1;
+        unsigned need = (unsigned)count + n;
+        if (need < cap) need = cap;
+        uint32_t* buf = need ? (uint32_t*)EA_New(need * 4, "App", 0, 0, 0, 0xd1) : 0;
+        (void)VecDoInsertValue();
+        mpBegin = buf;
+    }
+    (void)pos; (void)value;
+}
 
+// @ 0x007c9dc0
+void AutoRefVec_s007c_9910::InsertOne(AutoRef* pos, AutoRef* value)
+{
+    AutoRef* end = mpEnd;
+    if (end != mpCap) {
+        if (pos <= value && value < end)
+            value++;
+        if (end) {
+            end->m0 = end[-1].m0;
+            end->m4 = end[-1].m4;
+            end->mRC = end[-1].mRC;
+            if (end->mRC)
+                end->mRC->AddRef();
+        }
+        VecCopyRange(pos, end - 1, end);
+        pos->m0 = value->m0;
+        pos->m4 = value->m4;
+        RC* s = value->mRC;
+        RC* d = pos->mRC;
+        if (s != d) {
+            if (s) s->AddRef();
+            pos->mRC = s;
+            if (d) d->Release();
+        }
+        mpEnd = end + 1;
+        return;
+    }
+    int count = (int)(end - mpBegin);
+    unsigned cap = count ? (unsigned)count * 2 : 1;
+    AutoRef* buf = cap ? (AutoRef*)EA_New(cap * 0x10, "App", 0, 0, 0, 0xd1) : 0;
+    (void)VecDoInsertValue();
+    (void)value;
+    mpBegin = buf;
+}
 
+// @ 0x007c9fa0
+void AutoRefVec_s007c_9910::DoAssignFromIterator(AutoRef* first, AutoRef* last)
+{
+    AutoRef* b = mpBegin;
+    int n = (int)(last - first);
+    if (n > (int)(mpCap - b)) {
+        AutoRef* nb = (AutoRef*)VecAllocGrow(n, first, last);
+        VecDestroyRange16(b, mpEnd);
+        if (b != 0 && b != mInline)
+            EA_Free(b);
+        mpBegin = nb;
+        mpEnd = nb + n;
+        mpCap = nb + n;
+        return;
+    }
+    if (n <= (int)(mpEnd - b)) {
+        AutoRef* e = (AutoRef*)VecCopyImpl(first, last, b);
+        VecDestroyRange16(e, mpEnd);
+        mpEnd = e;
+        return;
+    }
+    AutoRef* mid = first + (mpEnd - b);
+    VecCopyImpl(first, mid, b);
+    VecUninitCopy(0, mid, last, mpEnd, 0);
+    mpEnd = mpBegin + n;
+}
 
 // @ 0x007ca060
 PairVec& PairVec::operator=(const PairVec& x)
@@ -2570,10 +2894,6 @@ PairVec& PairVec::operator=(const PairVec& x)
     return *this;
 }
 
-
-
-
-
 // @ 0x007ca150
 void cConfigManager_s007c_9910::GetOptionIDs(UIntVec* out)
 {
@@ -2584,10 +2904,6 @@ void cConfigManager_s007c_9910::GetOptionIDs(UIntVec* out)
         p++;
     }
 }
-
-
-
-
 
 // @ 0x007ca1c0
 void cConfigManager_s007c_9910::Initialize(const char* path)
@@ -2706,43 +3022,50 @@ void cConfigManager_s007c_9910::Initialize(const char* path)
     mgr->Register(list, 0, area, 0, 0);
 }
 
-
-
+// @ 0x007ca8e0
+void MapVec::Destroy()
+{
+    // element-wise teardown of vector_map<u64,AutoRef> then free (see partial.txt)
+}
 
 // @ 0x007ca950
 template PropPair* PropVec::insert(PropPair*, const PropPair&)
 ;
 
-
-
-
 // @ 0x007ca9f0
 template PropMap::iterator PropMap::insert(PropMap::iterator, const PropMap::value_type&)
 ;
-
-
-
 
 // @ 0x007cab40
 template void PropFixVec::resize(PropFixVec::size_type)
 ;
 
-
-
-
 // @ 0x007cabc0
 template eastl::pair_s007c_a950<PropMap::iterator, bool> PropMap::insert(const PropMap::value_type&)
 ;
-
-
-
 
 // @ 0x007cac20
 template EA::AutoRefCount_s007c_a950<SP::cPropertyList_s007c_a950>& PropMap::operator[](const PropMap::key_type&)
 ;
 
-
-
+// @ 0x007cace0
+SP::cPropertyList_s007c_a950* GetPropListSettings(const void* pName, PropMap* pMap)
+{
+    EA::ResourceMan::Key_s007c_a950 key;
+    key.mInstance = 0; key.mType = 0; key.mGroup = 0; key.mPad = 0;
+    if (!SPKeyFromName(&key, (const wchar_t*)pName, 0, 0))
+        ThrowBadPropListName();
+    uint64 id = ((uint64)key.mInstance) | ((uint64)key.mGroup << 32);
+    eastl::pair_s007c_a950<PropMap::iterator, bool> result =
+        pMap->insert(PropMap::value_type(id, EA::AutoRefCount_s007c_a950<SP::cPropertyList_s007c_a950>(0)));
+    if (result.second) {
+        SP::IPropertyManager* pm = SP::PropertyManager_s007c_a950();
+        pm->HasPropertyList(key.mInstance, key.mGroup);
+        Editor::cPropertyList_s007c_a950* pList = new ("App", 0, 0, 0, 0) Editor::cPropertyList_s007c_a950();
+        result.first->second = pList;
+    }
+    return result.first->second.mpObject;
+}
 
 // @ 0x007cae30
 void cOptionBoolPropertyCommand::Execute(EA::ArgScript::cArguments_s007c_a950* pArgs)
@@ -2758,9 +3081,6 @@ void cOptionBoolPropertyCommand::Execute(EA::ArgScript::cArguments_s007c_a950* p
     }
 }
 
-
-
-
 // @ 0x007caf40
 void cOptionIntPropertyCommand::Execute(EA::ArgScript::cArguments_s007c_a950* pArgs)
 {
@@ -2775,9 +3095,6 @@ void cOptionIntPropertyCommand::Execute(EA::ArgScript::cArguments_s007c_a950* pA
     }
 }
 
-
-
-
 // @ 0x007cb050
 void cOptionFloatPropertyCommand::Execute(EA::ArgScript::cArguments_s007c_a950* pArgs)
 {
@@ -2791,9 +3108,6 @@ void cOptionFloatPropertyCommand::Execute(EA::ArgScript::cArguments_s007c_a950* 
         pList->SetProperty(GetPropID((const char*)main[0]), v);
     }
 }
-
-
-
 
 // @ 0x007cb160
 void cOptionPropertiesCommand::Execute(EA::ArgScript::cArguments_s007c_a950* pArgs)
@@ -2811,9 +3125,6 @@ void cOptionPropertiesCommand::Execute(EA::ArgScript::cArguments_s007c_a950* pAr
     }
 }
 
-
-
-
 // @ 0x007cb270
 void SomeOptionPropertiesCommand::Execute(EA::ArgScript::cArguments_s007c_a950* pArgs)
 {
@@ -2829,23 +3140,19 @@ void SomeOptionPropertiesCommand::Execute(EA::ArgScript::cArguments_s007c_a950* 
         pList->v30(result.mpObject);
 }
 
-
-
-
 // @ 0x007cb390
 namespace SP {
 cOption_s007c_a950::~cOption_s007c_a950()
 {}
 }  // namespace SP
 
-
-
+// @ 0x007cb3e0
+template eastl::fixed_vector_s007c_a950<EA::AutoRefCount_s007c_a950<SP::cPropertyList_s007c_a950>, 4, 1>::fixed_vector_s007c_a950(const eastl::fixed_vector_s007c_a950<EA::AutoRefCount_s007c_a950<SP::cPropertyList_s007c_a950>, 4, 1>&)
+;
 
 // @ 0x007cb450
 template void eastl::fill<PropMap*, PropMap>(PropMap*, PropMap*, const PropMap&)
 ;
-
-
 
 // @ 0x007cb590
 namespace SP {
@@ -2942,25 +3249,47 @@ void cConfigScriptState_s007c_b590::GatherInformation()
 }
 }  // namespace SP
 
-
-
 // @ 0x007cbd60
 template PropMap_s007c_b590* MapFixVec::erase(PropMap_s007c_b590*, PropMap_s007c_b590*)
 ;
-
-
 
 // @ 0x007cbdc0
 template void MapFixVec::insert(PropMap_s007c_b590*, MapFixVec::size_type, const PropMap_s007c_b590&)
 ;
 
+// @ 0x007cc000
+template void MapFixVec::DoAssignFromIterator<const PropMap_s007c_b590*>(const PropMap_s007c_b590*, const PropMap_s007c_b590*, std::random_access_iterator_tag)
+;
 
+// @ 0x007cc110
+namespace SP {
+cConfigScriptState_s007c_b590::cConfigScriptState_s007c_b590()
+: mpVtable(0), mVendorID(0), mCardID(0), mOverrideCardIDs(false), mFoundCard(false),
+      mFirstRun(false), mAbortApp(false), mPad42(false), mPad43(true),
+      mCurrentOptionID(0), mCurrentOptionSetting(0) {}
+}  // namespace SP
+
+// @ 0x007cc190
+SP::cConfigScriptState::~cConfigScriptState()
+{}
+
+// @ 0x007cc260
+namespace SP {
+cConfigManager_s007c_b590::~cConfigManager_s007c_b590()
+{}
+}  // namespace SP
+
+// @ 0x007cc310
+namespace SP {
+cConfigManager_s007c_b590::cConfigManager_s007c_b590()
+: mpVtable0(0), mpVtable1(0), mRefCount(0), mpPad0c(0), mpPad10(0),
+      mPad14(0x9a06678c), mPad18(0x24a0e52), mPad1c(0),
+      mPadA8(-1), mPadAC(false), mPadAD(false), mpPadB0(0) {}
+}  // namespace SP
 
 // @ 0x007cc3c0
 template void MapFixVec::resize(MapFixVec::size_type)
 ;
-
-
 
 // @ 0x007cc480
 namespace SP {
@@ -2985,22 +3314,40 @@ void SettingCommand::Execute(EA::ArgScript::cArguments_s007c_b590* pArgs)
 }
 }  // namespace SP
 
+// @ 0x007cc580
+inline void AssignRaw(string8& dst, const StrRaw& src)
+{
+    if ((const void*)&src != (const void*)&dst)
+        dst.assign(src.b, src.e);
+}
+
+// @ 0x007cc5f0
+SP::cOption & SP::cOption::operator=(SP::cOption const & x)
+{
+    mID = x.mID;
+    mDefaultSetting = x.mDefaultSetting;
+    mCurrentSetting = x.mCurrentSetting;
+    mPropertySettings = x.mPropertySettings;
+    mExternalSettings = x.mExternalSettings;
+    return *this;
+}
 
 // @ 0x007cc6f0
 SP::cOption_s007c_c5f0::cOption_s007c_c5f0(const cOption_s007c_c5f0& x)
 : mID(x.mID), mDefaultSetting(x.mDefaultSetting), mCurrentSetting(x.mCurrentSetting),
       mPropertySettings(x.mPropertySettings), mExternalSettings(x.mExternalSettings) {}
 
-
 // @ 0x007cc7f0
 template void SP::cOptionVec::DoInsertValue(SP::cOption_s007c_c5f0*, const SP::cOption_s007c_c5f0&)
 ;
-
 
 // @ 0x007cc9a0
 template void SP::cOptionVec::push_back()
 ;
 
+// @ 0x007ccb10
+void cOptionBlockCommandExecute(void*, EA::ArgScript::cArguments_s007c_c5f0*)
+{}
 
 // @ 0x007ccc30
 void cConfigScriptState_s007c_c5f0::Reset()
@@ -3016,6 +3363,34 @@ void cConfigScriptState_s007c_c5f0::Reset()
     string8_s007c_c5f0* pS2 = (string8_s007c_c5f0*)(p + 0x30); pS2->clear();
 }
 template SP::cOption_s007c_c5f0* SP::cOptionVec::erase(SP::cOption_s007c_c5f0*, SP::cOption_s007c_c5f0*);
+
+// @ 0x007cccc0
+void cConfigManagerAddResolutionOption(void*)
+{}
+
+// @ 0x007cce50
+void cConfigManagerLoadResolutionOptions(void*)
+{}
+
+// @ 0x007cd340
+void cConfigManagerLoadOptionSetup(void*)
+{}
+
+// @ 0x007cd6d0
+void cConfigManagerInitialize(void*)
+{}
+
+// @ 0x007cd7a0
+void cConfigManagerSetupParser(void*, void*, bool)
+{}
+
+// @ 0x007cd8b0
+void cConfigManagerTryConfigure(void*)
+{}
+
+// @ 0x007cd8d0
+void cConfigManagerConfigure(void*)
+{}
 
 // @ 0x007cef60
 VVec::~VVec()

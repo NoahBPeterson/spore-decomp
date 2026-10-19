@@ -1,9 +1,9 @@
-007cc5f0 ?4cOption  # dev-PDB name
+007cc5f0 ??4cOption@SP@@QAEAAU01@ABU01@@Z  # SP::cOption::operator= migrated from s007cc5f0
 007cc6f0 ??0cOption_s007c_c5f0@SP@@QAE@ABU01@@Z  # cOption_s007c_c5f0::cOption migrated from s007cc5f0 (verbatim, slice spelling)
 007cc7f0 ?DoInsertValue@?$vector_s007c_c5f0@UcOption_s007c_c5f0@SP@@Usp_vector_allocator@@@eastl@@QAEXPAUcOption_s007c_c5f0@SP@@ABU34@@Z  # DoInsertValue migrated from s007cc5f0 (verbatim, slice spelling)
 007cc9a0 ?push_back@UIntVec@@QAEXI@Z  # push_back migrated from s007cc5f0 (verbatim, slice spelling)
-007ccb10 `anonymous namespace'::cOptionBlockCommand::Execute  # dev-PDB name
+007ccb10 ?cOptionBlockCommandExecute@@YAXPAXPAUcArguments_s007c_c5f0@ArgScript@EA@@@Z  # cOptionBlockCommandExecute migrated from s007cc5f0 (verbatim, slice spelling)
 007ccc30 ?Reset@cConfigScriptState_s007c_c5f0@@QAEXXZ  # cConfigScriptState_s007c_c5f0::Reset migrated from s007cc5f0 (verbatim, slice spelling)
-007cccc0 SP::cConfigManager resolution-info option builder  # unnamed; cOption id 0x46170a2 + 2 ResolutionInfo property lists
-007cce50 SP::cConfigManager resolution option loader  # unnamed; GetIntProperty 0x46c0c15/0x46c0c16, defaults 0x320/0x258
-007cd340 SP::cConfigManager::LoadOptionSetup  # dev-PDB name
+007cccc0 ?cConfigManagerAddResolutionOption@@YAXPAX@Z  # cConfigManagerAddResolutionOption migrated from s007cc5f0 (verbatim, slice spelling)
+007cce50 ?cConfigManagerLoadResolutionOptions@@YAXPAX@Z  # cConfigManagerLoadResolutionOptions migrated from s007cc5f0 (verbatim, slice spelling)
+007cd340 ?cConfigManagerLoadOptionSetup@@YAXPAX@Z  # cConfigManagerLoadOptionSetup migrated from s007cc5f0 (verbatim, slice spelling)

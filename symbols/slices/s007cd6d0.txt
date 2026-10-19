@@ -1,7 +1,7 @@
-007cd6d0 cConfigManager startup (unnamed)  # calls state reset 007ccc30, LoadOptionSetup 007cd340, 007cccc0/007cce50, ApplyAllOptions 007c9680, tail-jumps vtable slots 0x3c/0x40
-007cd7a0 cConfigManager parser setup (unnamed)  # CommandLine::FindSwitch "safe"/"showConfigAlerts", registers "option" cheat
-007cd8b0 cConfigManager try-configure (unnamed)  # checks file parser slot 0x28 then calls 007cd6d0
-007cd8d0 SP::cConfigManager::Configure  # dev-PDB name
+007cd6d0 ?cConfigManagerInitialize@@YAXPAX@Z  # cConfigManagerInitialize migrated from s007cd6d0 (verbatim, slice spelling)
+007cd7a0 ?cConfigManagerSetupParser@@YAXPAX0_N@Z  # cConfigManagerSetupParser migrated from s007cd6d0 (verbatim, slice spelling)
+007cd8b0 ?cConfigManagerTryConfigure@@YAXPAX@Z  # cConfigManagerTryConfigure migrated from s007cd6d0 (verbatim, slice spelling)
+007cd8d0 ?cConfigManagerConfigure@@YAXPAX@Z  # cConfigManagerConfigure migrated from s007cd6d0 (verbatim, slice spelling)
 007cd960 unnamed config helper  # not identified
 007cd990 unnamed config helper  # not identified
 007cd9c0 unnamed config helper  # not identified

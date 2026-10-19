@@ -1,1 +1,27 @@
 # va  diff-bytes  reason
+007c7ec0  451  cSetResolutionCommand::Execute: resolution scoring float math approximated, property-getter return values (test al,al + tagged-pointer unwrap) not modelled, so not behaviorally complete yet.
+007c8940  -   cConfigManager::ApplyOption skeleton: property-apply loop / BehaviorMessage emission omitted
+007c8af0  86  AutoRef insert helper skeleton: 0x7c7a40 resize and 0x7c7d70 copy-construct calls omitted
+007c8d20  154 ResourceKey Variant property command: Variant construction/assign paths approximated
+007c9120  -   cOptionCheat::Execute: list-all-options loop and exact Output formatting omitted
+007c9320  -   cConfigManager::Initialize: parser/file-parser wiring and tail string build omitted
+007c94f0  184 cConfigManager::SetOption: g_sAppPreferences Variant set path stubbed
+007c95d0  144 cConfigManager::ResetToDefaults: g_sAppPreferences Variant set path stubbed
+007c9680  188 cConfigManager::ApplyAllOptions: g_sAppPreferences Variant/type-query path stubbed
+007c99e0  -   eastl vector<refptr> insert-one: reallocation/relocate path reduced to a skeleton
+007c9bc0  -   eastl vector<refptr> insert-N: reserve + UninitializedFill/CopyAssign paths omitted
+007c9dc0  -   eastl vector<AutoRef> insert-one: reallocation path reduced to a skeleton
+007ca8e0  -   eastl vector<vector_map<u64,AutoRef>> destructor: element teardown omitted
+007cace0  275  `anonymous namespace'::GetPropListSettings: main path complete (SPKeyFromName, vector_map insert, PropertyManager HasPropertyList, `new ("App",...) Editor::cPropertyList`, AutoRefCount store) but the bad-name throw path is a noreturn helper instead of the original cError object construction + _CxxThrowException, and the u64 key assembly / register allocation differs.
+007cc110  85  SP::cConfigScriptState::cConfigScriptState: real ctor using a layout inferred from the disasm (offsets +0x00..+0x7c); string8/cOption member sizes are approximate, so the exact stores and value are not verified.
+007cc190  140  SP::cConfigScriptState::~cConfigScriptState: implicit member destruction using the inferred layout (sp_vector_allocator header checks, string frees, vector<cOption> dtor); not verified byte-exact.
+007cc260  147  SP::cConfigManager::~cConfigManager: implicit member destruction using the inferred layout (IConfigUnknown AutoRefCount releases at +0xc/+0x10/+0xb0, embedded state dtor); not verified.
+007cc310  93  SP::cConfigManager::cConfigManager: real ctor using the inferred layout (magic ResourceKey words at +0x14/+0x18, embedded cConfigScriptState at +0x20); not verified.
+007ccb10  280  `anonymous namespace'::cOptionBlockCommand::Execute: stub body (280-byte command: reads cArguments, iterates cOption block, sets option values); not reconstructed.
+007cccc0  387  SP::cConfigManager resolution-info option builder: stub body (finds/creates cOption id 0x46170a2, clears its settings, creates 2 `App/ConfigManager/ResolutionInfo` property lists and stores Variant 0/1, resizes external settings); not reconstructed.
+007cce50  1261  SP::cConfigManager resolution option loader: stub body (GetIntProperty 0x46c0c15/0x46c0c16, clamps to 800x600, creates/clears cOption id 0x46170a1, fills from the display mode list); not reconstructed.
+007cd340  906  SP::cConfigManager::LoadOptionSetup: stub body (dev-PDB name; builds the option setup table); not reconstructed.
+007cd6d0  204  cConfigManager startup (unnamed): stub body; original resets state, loads/uses the file parser, stores safe-mode/show-alert flags and applies all options via vtable slots 0x3c/0x40.
+007cd7a0  271  cConfigManager parser setup (unnamed): stub body; original replaces mAppProperties AutoRefCount (global 0x15fd918), handles "safe"/"showConfigAlerts" switch, registers the "option" cheat command.
+007cd8b0  31  cConfigManager try-configure (unnamed): stub body; original checks mFileParser and calls the startup routine if its slot 0x28 returns true.
+007cd8d0  127  SP::cConfigManager::Configure: stub body; sets safeMode/showConfigAlerts properties, GatherInformation, startup, returns !mAbortApp.

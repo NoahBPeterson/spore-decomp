@@ -17,7 +17,7 @@
 007c7e10 ?CopyAutoRef@@YAPAUAutoRefCount@@PAU1@00@Z  # CopyAutoRef migrated from s007c77e0 (verbatim, slice spelling)
 007c7e70 ?OnEndBlock@cOptionBlockCommand@@QAEXH@Z  # cOptionBlockCommand::OnEndBlock migrated from s007c77e0 (verbatim, slice spelling)
 007c7eb0 ?Do@cCmdArgs@@QAEXH@Z  # cCmdArgs::Do migrated from s007c77e0 (verbatim, slice spelling)
-007c7ec0 cSetResolutionCommand::Execute  # PDB name
+007c7ec0 ?SetResolutionCommand_Execute@@YAXPAX0@Z  # SetResolutionCommand_Execute migrated from s007c77e0 (verbatim, slice spelling)
 007c80c0 ?Destroy@AutoRefVec@@QAEXXZ  # AutoRefVec::Destroy migrated from s007c77e0 (verbatim, slice spelling)
 007c8160 ?LowerBoundPair@@YAPAIPAI00@Z  # LowerBoundPair migrated from s007c77e0 (verbatim, slice spelling)
 007c8270 ?OnRegister@cOptionBlockCommand@@QAEXPAX0@Z  # cOptionBlockCommand::OnRegister migrated from s007c77e0 (verbatim, slice spelling)

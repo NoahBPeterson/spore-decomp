@@ -1,11 +1,11 @@
 007cb590 ?GatherInformation@cConfigScriptState_s007c_b590@SP@@QAEXXZ  # cConfigScriptState_s007c_b590::GatherInformation migrated from s007cb590 (verbatim, slice spelling)
 007cbd60 ?erase@?$vector_s007c_b590@U?$vector_map_s007c_b590@_KU?$AutoRefCount_s007c_b590@VcPropertyList_s007c_b590@SP@@@EA@@U?$less_s007c_b590@_K@eastl@@Uallocator_s007c_b590@4@U?$vector_s007c_b590@U?$pair_s007c_b590@_KU?$AutoRefCount_s007c_b590@VcPropertyList_s007c_b590@SP@@@EA@@@eastl@@Uallocator_s007c_b590@2@@4@@eastl@@U?$fixed_vector_allocator@$0BI@$03$03$0A@$00@2@@eastl@@QAEPAU?$vector_map_s007c_b590@_KU?$AutoRefCount_s007c_b590@VcPropertyList_s007c_b590@SP@@@EA@@U?$less_s007c_b590@_K@eastl@@Uallocator_s007c_b590@4@U?$vector_s007c_b590@U?$pair_s007c_b590@_KU?$AutoRefCount_s007c_b590@VcPropertyList_s007c_b590@SP@@@EA@@@eastl@@Uallocator_s007c_b590@2@@4@@2@PAU32@0@Z  # erase migrated from s007cb590 (verbatim, slice spelling)
 007cbdc0 ?insert@?$vector_s007c_a950@U?$pair_s007c_a950@_KU?$AutoRefCount_s007c_a950@VcPropertyList_s007c_a950@SP@@@EA@@@eastl@@Uallocator_s007c_a950@2@@eastl@@QAEPAU?$pair_s007c_a950@_KU?$AutoRefCount_s007c_a950@VcPropertyList_s007c_a950@SP@@@EA@@@2@PAU32@ABU32@@Z  # insert migrated from s007cb590 (verbatim, slice spelling)
-007cc000 eastl::vector::DoAssignFromIterator  # dev-PDB name
-007cc110 SP::cConfigScriptState::cConfigScriptState  # ctor: vtable + ids + 3 strings + bools + 3 vectors (offsets 0x00..0x7c)
-007cc190 SP::cConfigScriptState::~cConfigScriptState  # dev-PDB name
-007cc260 SP::cConfigManager::~cConfigManager  # PDB candidate
-007cc310 SP::cConfigManager::cConfigManager  # ctor: calls cConfigScriptState ctor at +0x20
+007cc000 ?DoAssignFromIterator@AutoRefVec_s007c_9910@@QAEXPAUAutoRef@@0@Z  # DoAssignFromIterator migrated from s007cb590 (verbatim, slice spelling)
+007cc110 ??0cConfigScriptState_s007c_b590@SP@@QAE@XZ  # cConfigScriptState_s007c_b590::cConfigScriptState migrated from s007cb590 (verbatim, slice spelling)
+007cc190 ??1cConfigScriptState@SP@@QAE@XZ  # SP::cConfigScriptState::~cConfigScriptState migrated from s007cb590
+007cc260 ??1cConfigManager_s007c_b590@SP@@QAE@XZ  # cConfigManager_s007c_b590::~cConfigManager migrated from s007cb590 (verbatim, slice spelling)
+007cc310 ??0cConfigManager_s007c_b590@SP@@QAE@XZ  # cConfigManager_s007c_b590::cConfigManager migrated from s007cb590 (verbatim, slice spelling)
 007cc3c0 ?resize@?$vector_s007c_a950@U?$AutoRefCount_s007c_a950@VcPropertyList_s007c_a950@SP@@@EA@@U?$fixed_vector_allocator@$03$03$03$0A@$00@eastl@@@eastl@@QAEXI@Z  # resize migrated from s007cb590 (verbatim, slice spelling)
-007cc480 ?Execute@cInitCommand@@QAEXPAUcArguments@@@Z  # Execute migrated from s007cb590 (verbatim, slice spelling)
-007cc580 eastl::fixed_vector<eastl::vector_map<unsigned __int64,EA::AutoRefCount<SP::cPropertyList>,eastl::less<unsigned __int64>,eastl::allocator,eastl::vector<eastl::pair<unsigned __int64,EA::AutoRefCount<SP::cPropertyList> >,eastl::allocator> >,4,1>::fixed_vector  # dev-PDB name (copy ctor)
+007cc480 ?Execute@cBoolPropertyCommand@@QAEXPAUcArguments@@@Z  # Execute migrated from s007cb590 (verbatim, slice spelling)
+007cc580 ?AssignRaw@@YAXAAUstring8@@ABUStrRaw@@@Z  # AssignRaw migrated from s007cb590 (verbatim, slice spelling)
