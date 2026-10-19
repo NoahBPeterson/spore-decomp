@@ -1,3 +1,10 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00555bc0/s00555bc0.cpp  ??$uninitialized_copy_ptr@U?$basic_string@D@eastl@@@eastl@@YAPAU?$basic_string@D@0@PAU10@00@Z  00555bc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s00555bc0/s00555bc0.cpp  ?GetResType@cVehicleModelSummarizer@SP@@QAEIH@Z  005567c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00555bc0/s00555bc0.cpp  ?SaveAssetDir@cModelPartSummary@W1G2_55@SP@@QAEXI@Z  00555cc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00555bc0/s00555bc0.cpp  ?GetModelMeta@W1G2_55@SP@@YAPAVMeta@12@PAUKey@ResourceMan@EA@@@Z  00555cf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00555bc0/s00555bc0.cpp  ?GetPartPropertyId@W1G2_55@SP@@YAII@Z  00555dd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00555bc0/s00555bc0.cpp  ?GetPartPropertyVector@W1G2_55@SP@@YAXIPAUSimpleVectorU32@12@@Z  00555e80  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00555bc0/s00555bc0.cpp  ?FindModelPart@W1G2_55@SP@@YAIPAUKey@ResourceMan@EA@@I@Z  00556140  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00555bc0/s00555bc0.cpp  ?KeyHasAxis@W1G2_55@SP@@YA_NPAUKey@ResourceMan@EA@@PAX@Z  00556210  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00555bc0/s00555bc0.cpp  ?KeyCombine@W1G2_55@SP@@YAIHHHH@Z  00556440  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

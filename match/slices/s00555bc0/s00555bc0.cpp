@@ -822,65 +822,319 @@ uint32_t cVehicleModelSummarizer::GetResType(int arg) {
 
 namespace W1G2_55 {
 
-// ResourceManager-backed helper: loads a resource (via 0x0067CB30) and calls
-// through the object's field at +0x58 (0x0054F1A0).
-class c555cc0 {
+using EA::ResourceMan::ResourceObject;
+using EA::ResourceMan::Key;
+using EA::ResourceMan::ResourceKey;
+
+// ---------------------------------------------------------------------------------------
+// AutoRefCount-style intrusive handle (EA::AutoRefCount<T>).  /Od inlines AsPPTypeParam
+// (release + &mpObject) at the call sites that pass an out-pointer.
+template <class T> class AutoRef {
 public:
-    char pad[0x100];
-    void sub(int arg);   // @ 0x00555CC0
+    T* mpObject;
+    AutoRef(T* p = 0) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRef() { if (mpObject) mpObject->Release(); }
+    AutoRef& operator=(T* p) {
+        if (p != mpObject) {
+            T* const pTemp = mpObject;
+            if (p) p->AddRef();
+            mpObject = p;
+            if (pTemp) pTemp->Release();
+        }
+        return *this;
+    }
+    T** AsPPTypeParam() {
+        if (mpObject) {
+            T* const pTemp = mpObject;
+            mpObject = 0;
+            pTemp->Release();
+        }
+        return &mpObject;
+    }
+    T* get() const { return mpObject; }
 };
-void c555cc0::sub(int arg) {
+
+// SP property-list object (vtable +0x24 = sub-property lookup).
+class Property;
+class cPropertyList {
+public:
+    virtual int AddRef();                                   // 0x00
+    virtual int Release();                                  // 0x04
+    virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20();
+    virtual bool GetProperty(uint32_t id, Property** pOut); // 0x24
+};
+
+// A property value node (type tag at +0x12).
+class Property {
+public:
+    virtual void v00();
+    uint32_t mPad04[3];
+    uint16_t mFlags;                                        // +0x10
+    uint16_t mType;                                         // +0x12
+    float* GetFloat();                                      // 0x0041EA70
+};
+
+// SP property manager.
+class IPropManager {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual bool GetPropertyList(uint32_t instance, uint32_t group, cPropertyList** dst); // 0x2c
+    virtual void GetGlobalProperty(uint32_t id, cPropertyList** dst);                     // 0x30
+};
+IPropManager* PropertyManager();                            // 0x0067DE30
+
+bool GetPropertyAsKeyInstance(cPropertyList* pProp, uint32_t id, uint32_t* pOut);   // 0x006A12A0
+bool GetPropertyVector(cPropertyList* pProp, uint32_t id, uint32_t* pCount, void** pData); // 0x006A0AE0
+
+// Extended resource manager (GetResource@0xc is on the shared IResourceManager; these are the
+// two slots these functions reach beyond it).
+class IResourceManagerEx {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual bool GetResource(const Key& key, ResourceObject** ppResource, int, int, int, int); // 0x0c
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(void* pResource, int, void* pPayload, int, int);                    // 0x20
+    virtual void v24(); virtual void v28(); virtual void v2c(); virtual void v30();
+    virtual void v34(); virtual void v38(); virtual void v3c(); virtual void v40();
+    virtual void v44(); virtual void v48(); virtual void v4c(); virtual void v50();
+    virtual void v54();
+    virtual void* GetResourceKeyed(void* pKey);                                          // 0x58
+};
+
+// The SP model asset (Meta): refcounted, plus the entry-set manipulation used here.
+class Meta {
+public:
+    virtual int AddRef();                                   // 0x00
+    virtual int Release();                                  // 0x04
+    int NumEntries();                                       // 0x00550A30
+    uint32_t Entry(uint32_t index);                         // 0x00550A60
+    bool HasEntry(void* pKey);                              // 0x00550AA0
+    void AddEntry(int hash);                                // 0x00550B00
+    void RemoveEntry(int hash);                             // 0x00550B30
+    uint32_t mPad04;                                        // +0x04
+    uint32_t mResourceId;                                   // +0x08
+};
+
+Meta* GetMeta(ResourceObject** ppResource);                 // 0x00421F60
+
+// Asset-dir manager plumbing.
+class AssetDir {
+public:
+    bool Save();                                            // 0x0054F1A0
+};
+class cAssetManager {
+public:
+    uint32_t mPad00[0x58 / 4];
+    AssetDir* mpAssetDir;                                   // +0x58
+};
+cAssetManager* GetAssetManager();                           // 0x0067CB30
+
+// SP::SimpleVector<uint32_t>.  Stays a C++03 aggregate (user-declared destructors do not
+// disqualify an aggregate) so `SimpleVectorU32 x = {0,0,0,tag}` expands to three plain
+// stores plus one VecAlloc ctor call.  /Ob1 then inlines the destructor down to the
+// element-destruction loop plus an out-of-line call to Free() (0x00425990), as original.
+struct VecAllocTag { VecAllocTag() {} };
+struct VecAlloc {
+    VecAlloc(const VecAllocTag& tag);                       // 0x00429360
+};
+struct SimpleVectorU32 {
+    uint32_t* mpBegin;
+    uint32_t* mpEnd;
+    uint32_t* mpCapacity;
+    VecAlloc mAlloc;
+    ~SimpleVectorU32() {
+        for (uint32_t* p = mpBegin; p < mpEnd; ++p) { }
+        Free();
+    }
+    void Free();                                            // 0x00425990 (frees the buffer)
+    void push_back(const uint32_t& value);                  // 0x00454860
+    uint32_t& operator[](int index) { return mpBegin[index]; }
+};
+
+
+IResourceManagerEx* GetResourceManager();                   // 0x0067DCD0
+
+inline float MinF(float a, float b) { return a > b ? b : a; }
+inline float MaxF(float a, float b) { return a > b ? a : b; }
+
+extern uint32_t g_axisTable[4][4][4][4];                    // 0x013F3E00
+
+// @ 0x00555CC0
+class cModelPartSummary {
+public:
+    void SaveAssetDir(uint32_t arg);
+};
+void cModelPartSummary::SaveAssetDir(uint32_t arg) {
+    cAssetManager* mgr = GetAssetManager();
+    AssetDir* dir = mgr->mpAssetDir;
+    dir->Save();
 }
 
-// @ 0x00555CF0 — partial: GetManager()/virtual GetResource(ResourceKey) + AddRef
-class c555cf0 {
-public:
-    char pad[0x100];
-    void* sub();   // @ 0x00555CF0
-};
-void* c555cf0::sub() {
+// @ 0x00555CF0
+Meta* GetModelMeta(Key* key) {
+    AutoRef<ResourceObject> res;
+    if (GetResourceManager()->GetResource(ResourceKey(key->mInstance, 0x30bdee3, key->mGroup), res.AsPPTypeParam(), 0, 0, 0, 0))
+        return GetMeta(&res.mpObject);
     return 0;
 }
 
-// @ 0x00555DD0 — partial: SP::PropertyManager lookup + GetPropertyAsKeyInstance
-void __cdecl f555dd0(void* self);
-void __cdecl f555dd0(void* self) {
+// @ 0x00555DD0
+uint32_t GetPartPropertyId(uint32_t instance) {
+    uint32_t result = 0;
+    AutoRef<cPropertyList> pProp;
+    if (PropertyManager()->GetPropertyList(instance, 0xf865c777, pProp.AsPPTypeParam()))
+        GetPropertyAsKeyInstance(pProp.get(), 0x54d95164, &result);
+    return result;
 }
 
 // @ 0x00555E80
-void __cdecl f555e80();
-void __cdecl f555e80() {
+void GetPartPropertyVector(uint32_t instance, SimpleVectorU32* pOut) {
+    AutoRef<cPropertyList> prop;
+    if (PropertyManager()->GetPropertyList(instance, 0xf865c777, prop.AsPPTypeParam())) {
+        int count;
+        void* pData;
+        pData = 0;
+        count = 0;
+        if (GetPropertyVector(prop.get(), 0x54d95163, (uint32_t*)&count, &pData)) {
+            ScratchSlots<2>();
+            for (int i = 0; i < count; ++i) {
+                uint32_t value = *(uint32_t*)((char*)pData + i * 12);
+                pOut->push_back(value);
+            }
+        }
+    }
 }
 
 // @ 0x00555F70
-void __cdecl f555f70();
-void __cdecl f555f70() {
+void SummarizeVehiclePart(Key* key, uint32_t partID) {
+    uint32_t id = GetPartPropertyId(partID);
+    if (id != 0 && (key->mType == 0x2b978c46 || key->mType == 0x3d97a8e4)) {
+        AutoRef<Meta> res(GetModelMeta(key));
+        void* resource;
+        ScratchSlots<1>();
+        if (res.get()) {
+            SimpleVectorU32 entries = { 0, 0, 0, VecAllocTag() };
+            for (int i = 0, num = res.get()->NumEntries(); i < num; ++i) {
+                uint32_t entry = res.get()->Entry(i);
+                if (GetPartPropertyId(entry) == id)
+                    entries.push_back(entry);
+            }
+            ScratchSlots<2>();
+            for (int j = 0, count = (int)(entries.mpEnd - entries.mpBegin); j < count; ++j)
+                res.get()->RemoveEntry(entries[j]);
+            res.get()->AddEntry((int)partID);
+            ScratchSlots<3>();
+            resource = GetResourceManager()->GetResourceKeyed(&res.get()->mResourceId);
+            if (resource)
+                GetResourceManager()->v20(res.get(), 0, resource, 0, 0);
+        }
+    }
 }
 
 // @ 0x00556140
-void __cdecl f56140();
-void __cdecl f56140() {
+uint32_t FindModelPart(Key* key, uint32_t partID) {
+    uint32_t result = 0;
+    if (key->mType == 0x2b978c46 || key->mType == 0x3d97a8e4) {
+        AutoRef<Meta> res(GetModelMeta(key));
+        if (res.get()) {
+            for (int i = 0, num = res.get()->NumEntries(); i < num; ++i) {
+                uint32_t entry = res.get()->Entry(i);
+                if (GetPartPropertyId(entry) == partID) {
+                    result = entry;
+                    break;
+                }
+            }
+        }
+    }
+    return result;
 }
 
 // @ 0x00556210
-void __cdecl f56210();
-void __cdecl f56210() {
+bool KeyHasAxis(Key* key, void* axis) {
+    if (key->mType == 0x2b978c46) {
+        AutoRef<Meta> res(GetModelMeta(key));
+        if (res.get())
+            return res.get()->HasEntry(axis);
+    }
+    return false;
 }
 
 // @ 0x005562A0
-void __cdecl f562a0();
-void __cdecl f562a0() {
+void KeyResetAxis(Key* key, uint32_t partID) {
+    if (key->mType == 0x2b978c46 || key->mType == 0x3d97a8e4) {
+        AutoRef<Meta> res(GetModelMeta(key));
+        void* resource;
+        ScratchSlots<1>();
+        if (res.get()) {
+            SimpleVectorU32 entries = { 0, 0, 0, VecAllocTag() };
+            for (int i = 0, num = res.get()->NumEntries(); i < num; ++i) {
+                uint32_t entry = res.get()->Entry(i);
+                if (GetPartPropertyId(entry) == partID)
+                    entries.push_back(entry);
+            }
+            ScratchSlots<2>();
+            for (int j = 0, count = (int)(entries.mpEnd - entries.mpBegin); j < count; ++j)
+                res.get()->RemoveEntry(entries[j]);
+            ScratchSlots<3>();
+            resource = GetResourceManager()->GetResourceKeyed(&res.get()->mResourceId);
+            if (resource)
+                GetResourceManager()->v20(res.get(), 0, resource, 0, 0);
+        }
+    }
 }
 
 // @ 0x00556440
-void __cdecl f56440();
-void __cdecl f56440() {
+uint32_t KeyCombine(int arg1, int arg2, int arg3, int arg4) {
+    int k = 0;
+    int j = 0;
+    int i = 0;
+    int n = 0;
+    switch (arg1) {
+    case 0: k = 0; break;
+    case (int)0xcfb01b93: k = 1; break;
+    case 0x5ece4770: k = 2; break;
+    case (int)0xa8ec6f99: k = 3; break;
+    }
+    switch (arg2) {
+    case 0: j = 0; break;
+    case 0x17e5ef84: j = 1; break;
+    case (int)0xb9de15f2: j = 2; break;
+    case (int)0xfd159d91: j = 3; break;
+    }
+    switch (arg3) {
+    case 0: i = 0; break;
+    case 0xcac124d: i = 1; break;
+    case (int)0xc2ca9495: i = 2; break;
+    case 0x60a78928: i = 3; break;
+    }
+    switch (arg4) {
+    case 0: n = 0; break;
+    case 0xa35d0f5: n = 1; break;
+    case 0x3360727f: n = 2; break;
+    case (int)0x6aeb96a1: n = 3; break;
+    }
+    return g_axisTable[n][i][k][j];
 }
 
 // @ 0x005565E0
-void __cdecl f565e0();
-void __cdecl f565e0() {
+float ComputeVehicleModelScale(float p1, float p2, float p3, float p4) {
+    float scale = 20.0f;
+    AutoRef<cPropertyList> prop;
+    PropertyManager()->GetGlobalProperty(0xcc271289, prop.AsPPTypeParam());
+    Property* sub;
+    if (prop.get() && prop.get()->GetProperty(0x6087cb5, &sub) && sub->mType == 0xd)
+        scale = *sub->GetFloat();
+    float result = p1;
+    float lo = p3 > p4 ? MinF(p4, p2) : MinF(p3, p2);
+    float hi = p4 > p3 ? MaxF(p2, p4) : MaxF(p2, p3);
+    if (hi / lo > 20.0f)
+        result = 0.0f;
+    return result;
 }
 
-}
-}
+}  // namespace W1G2_55
+}  // namespace SP
