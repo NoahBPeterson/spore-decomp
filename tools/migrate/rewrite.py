@@ -569,6 +569,8 @@ def proto_key(text):
     code = re.sub(r"__declspec\s*\([^()]*\)|\bthrow\s*\([^()]*\)|\b__(?:cdecl|stdcall|fastcall|thiscall)\b|\binline\b|\bstatic\b", " ", code)
     mc = mask(code)
     p = mc.find("(")
+    if p < 0:           # `__declspec(thread) int g_tls_dummy;`: the only parenthesis was the __declspec's (mig8 s004bd850)
+        return None
     mm = re.search(r"(operator\s*\S+?|~?[A-Za-z_]\w*)\s*$", code[:p])
     if not mm or "(*" in mc[:p + 2].replace(" ", "") or mm.group(1) in RS.KEYWORDS:
         return None
