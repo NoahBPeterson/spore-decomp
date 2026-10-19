@@ -1,4 +1,5 @@
 # source  symbol  va  flags
+../src/game/SPEditors/SPNameGenerator.cpp  ??$search@PA_WPB_W@eastl@@YAPA_WPA_W0PB_W1@Z  005e8ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPNameGenerator.cpp  ??R?$less_s005e_8470@UKey2_s005e_8470@@@eastl@@QBE_NABUKey2_s005e_8470@@0@Z  005e90f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPNameGenerator.cpp  ??R?$less_s005e_8470@UKey3@@@eastl@@QBE_NABUKey3@@0@Z  005e9120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPNameGenerator.cpp  ?lower_bound@?$rbtree_s005e_8470@UKey2_s005e_8470@@U?$less_s005e_8470@UKey2_s005e_8470@@@eastl@@@eastl@@QAE?AU?$rbtree_iterator_s005e_8470@UKey2_s005e_8470@@@2@ABUKey2_s005e_8470@@@Z  005e91c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -871,6 +871,9 @@ FI1 search(FI1 first1, FI1 last1, FI2 first2, FI2 last2) {
 }
 }
 namespace eastl {
+template wchar_t* search<wchar_t*, const wchar_t*>(wchar_t*, wchar_t*, const wchar_t*, const wchar_t*);
+}
+namespace eastl {
 template <typename II, typename T> inline II find_s005e_8470(II first, II last, const T& value) {
   while ((first != last) && !(*first == value)) ++first;
   return first;
