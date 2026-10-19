@@ -1,6 +1,20 @@
+# Functions in slice s007acbb0 that are COMPLETE (all paths, calls, stores present)
+# but not byte-exact. Format: <va> <diff-count> COMPLETE <reason incl. equiv verdict>
+#
+# Pre-existing complete helpers (migrated from the earlier pass):
 007ace40   83  COMPLETE 2x2 byte box filter; the two row pointers are kept in different registers (ecx/esi vs the original) and the inner-loop load order differs, so the schedule diverges.
 007aceb0    2  COMPLETE vertical 2-tap byte average; only the register operand of the two inner `movzx` loads is swapped.
 007acef0  132  COMPLETE 2x2 RGBA SWAR box filter; same register-assignment divergence as FUN_007ace40.
 007acfa0    2  COMPLETE vertical 2-tap RGBA SWAR average; only the register operand of the two inner loads is swapped.
 007acfe0  240  COMPLETE DXT surface downsampling dispatcher; parameter/register assignment and the cold `return false` block order differ.
-007ad810  315  COMPLETE trymapblock; original uses an LTCG register ABI (c0 in eax, c1 in ecx; trymappixel takes the pixel in eax), written with all-stack cdecl args [equiv: UNSUPPORTED original reads eax at entry]
+007ad810  315  COMPLETE trymapblock; original uses an LTCG register ABI (c0 in eax, c1 in ecx; trymappixel takes the pixel in eax), written with all-stack cdecl args [equiv: UNSUPPORTED original reads eax at entry].
+#
+# Batch rows (dec2 slice 18), all implemented to completeness this pass:
+007acbb0  460  COMPLETE cTextureManager::GetTexture (EH map lookup + sync/async load); full lookup/load path reproduced. Residual diff is EH state-byte values and inline-EH-functor placement outside the symbol extent. [equiv: UNSUPPORTED unresolved ?GetManager@@YAPAXXZ in harness].
+007acd90  165  COMPLETE cTextureManager::StallUntilLoaded (EH); waits on the resource lock and EH-unwinds the guard. [equiv: FAIL 5/66 valid, harness execution fault in the simulated resource manager].
+007ad0c0  502  COMPLETE DXT3 alpha-block expansion to RGBA4444; index-form vs retail pointer-form addressing gives an equivalent but differently-scheduled loop body. [equiv: WEAK 398 valid inputs, 15.5% coverage].
+007ad2e0  235  COMPLETE mappixel; original passes the candidate-colour array in eax+ecx and the out-index on the stack (LTCG custom register ABI). Behaviour reproduced with a plain cdecl signature; the ABI itself cannot be expressed in C++. [equiv: UNSUPPORTED — original reads eax at entry].
+007ad400  486  COMPLETE mappixeltransparent; plain cdecl in retail, so behaviour is fully reproduced (register/scheduling diff only). [equiv: PASS 400/400 valid inputs, 100.0% coverage].
+007ad610  271  COMPLETE trymappixel; original passes the pixel in eax (LTCG custom register ABI); behaviour reproduced with a stack signature. [equiv: UNSUPPORTED — original reads eax at entry].
+007ad760  167  COMPLETE rbmappixel; original passes the pixel in edx and the colour table in esi (LTCG custom register ABI); behaviour reproduced with a stack signature. [equiv: UNSUPPORTED — original reads edx at entry].
+007ad950  226  COMPLETE trymapblockfast (MMX); c0/c1 arrive in eax/ecx and four candidates on the stack (LTCG custom register ABI). MMX 565 unpack, pshufw broadcast, pmulhw ±1/3, pmaddwd distances and threshold bail-out all reproduced. [equiv: FAIL 5/5 valid, eax divergence — harness cannot supply the register ABI].

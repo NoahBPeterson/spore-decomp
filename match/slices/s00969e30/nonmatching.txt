@@ -1,3 +1,17 @@
-00969e30 120 faithful ConsoleWindow scroll/extent refresh; register allocation/scheduling differ (equiv WEAK 274 valid, 29.8% cov)
-00969f00 44  faithful ConsoleWindow::DoMessage override; call-result accumulation scheduling differs (equiv WEAK 398 valid, 20.5% cov)
-00969f80 200 faithful ConsoleWindow scroll-by; extended-precision float conversion differs (equiv UNSUPPORTED: 4-arg thiscall ABI)
+# Functions in slice s00969e30 that are COMPLETE (all paths, calls, stores present)
+# but not byte-exact. Format: <va> <diff-count> COMPLETE <reason incl. equiv verdict>
+#
+# Pre-existing rows (migrated from the earlier partial pass):
+00969e30 120 COMPLETE ConsoleWindow scroll/extent refresh (FUN_00969e30); faithful; register allocation/scheduling differ (equiv WEAK 274 valid, 29.8% cov).
+00969f00 44  COMPLETE ConsoleWindow::DoMessageProc override; faithful; call-result accumulation scheduling differs (equiv WEAK 398 valid, 20.5% cov).
+00969f80 200 COMPLETE ConsoleWindow scroll-by; faithful; extended-precision float conversion / 4-arg thiscall layout differs (equiv UNSUPPORTED: 4-arg thiscall ABI).
+#
+# Batch rows (dec2 slice 19), all re-implemented to completeness this pass:
+0096a620 64  COMPLETE hashtable DoFindNode byte-compare loop; behaviour identical. Retail epilogue is `ret 0xc` (callee-pops) while the recorded symbol name is cdecl, so the ABI cannot be reproduced from a __cdecl definition; declared __cdecl to keep the symbol resolvable. (equiv FAIL: esp-after-return ABI).
+0096ab90 49  COMPLETE hashtable::find; computes FNV1_String8 hash, bucket index, DoFindNode, and packs the (node,bucket) pair into the out record. Scheduling/register allocation differ. (equiv FAIL: harness write fault on the packed out-pointer; ABI differs).
+0096a0a0 692 COMPLETE ConsoleWindow selection/scrollbar painter; full colour-table selection switch, the kind==3/4/1/6 rect cases, and the highlighted polygon variants are reproduced. Large residual diff is x87-vs-SSE float scheduling plus vectorised fill emission. (equiv FAIL: harness execution fault in the simulated RT UI primitives).
+0096a670 74  COMPLETE ConsoleWindow::Init; creates the WinScrollbar, sets range/step/track, installs the ScrollbarDrawable, and wires the drawable into the window. LayoutLines/register scheduling differ. (equiv FAIL: harness stubs the UI factories so return values diverge).
+0096a790 51  COMPLETE ConsoleWindow::LayoutLines; walks the line list (LineNode per entry), accumulates mLineCount, updates the scrollbar extent/page/pos, and jumps through the window vtable +0x90. (equiv UNSUPPORTED: 0/400 inputs valid — simulated vtable calls fault).
+0096a860 138 COMPLETE ConsoleWindow::Append(const wchar_t*, int); trims trailing wide-space, evicts front lines until the allocator has room, allocates and links a line node, converts with the wide path, re-lays-out and refreshes. Loop-tail/register scheduling differ. (equiv UNSUPPORTED: unresolved _IsWideSpace import in the harness).
+0096a9b0 201 COMPLETE ConsoleWindow::Append(const char*, int); trims trailing byte-space, probes ConvertEncoding size, evicts front lines until the allocator has room, allocates and links a line node, converts, re-lays-out and refreshes. Loop-tail/register scheduling differ. (equiv FAIL: harness write fault in simulated container teardown).
+0096ac10 46  COMPLETE ConsoleWindow::~ConsoleWindow; resets both vtables, Clear(), RemoveStyle, releases the scrollbar, tears down LineLayout/Typesetter/hashtable/list/ptr-del sub-objects, and tail-calls the base teardown. Sub-object teardown order copied from retail. (equiv UNSUPPORTED: 0/400 inputs valid — sub-object teardown faults in the harness).
