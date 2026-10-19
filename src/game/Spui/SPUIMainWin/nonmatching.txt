@@ -1,0 +1,16 @@
+# va  diff-bytes  reason
+0080a320 4 enter/esc message filter: complete and 98/102 bytes exact; two jump/byte-table entries differ
+00813120 124 complete: sInitDropShadowQuality; property-variant branch shape differs
+00813300 99 complete: cSPUIMainWin::ApplyToFocus; test-then-reload vs load-once register allocation
+00813370 94 complete: cSPUIMainWin::RouteKey; callee-saved register assignment differs
+008137f0 182 complete: MainWin::InitStringFactories; thiscall StringMan/refcount call shapes differ
+008138e0 113 complete: MainWin::ShutdownStringFactories; thiscall release + refcount store schedule differ
+00813c20 21 complete: LowerBoundUShort; the batch region also contains a second unlisted function at 0x813c60
+00813ca0 305 complete: cSPUIMainWin destructor; field-release order/registers differ [equiv: UNSUPPORTED, 0/1012 valid inputs (read faults)]
+00814d50 119 complete: cSPUIMainWin::KeyHandler - logic reproduced; same-TU helper clobber analysis and vcall scheduling differ
+00815310 42 complete: vector remove-by-value; cl keeps loop `end` in ecx, original reloads it into edx for the copy bound
+00815370 76 complete: vector push_back; AutoRefCount temp/dup AddRef ordering differs
+008153e0 47 complete: vector clear; cl saves `this` in ebx and vector addr in ebp, original uses ecx/ebx
+00815aa0 59 complete: hashtable DoFreeNodes; thiscall vs free-function call shape and EASTL free-list details differ [equiv: PASS 571 valid, 100% cov]
+00815b50 85 complete: EA::Text::TextStyleReader::~TextStyleReader; nested inline-hashtable destruction schedule differs [equiv: WEAK 765 valid, 92% cov]
+00815dd0 1162 cSPUIMainWin::Init complete (all calls/vcalls/constants in order); diff is register allocation (esi/edi/ebx roles) and frame size

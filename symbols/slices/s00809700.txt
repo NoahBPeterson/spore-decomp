@@ -9,4 +9,5 @@
 00809db0 UI::CalloutMessageBox create helper  # callee 0x816cb0/0x817040
 00809e40 EA::UTFWin subobject rebind (AutoRefCount<IWinText>)  # callee 0xb5f950
 00809ff0 window scale/position update  # callee 0x957f30
-0080a1a0 `anonymous namespace'::sOnEnterEscKeys  # PDB name
+0080a1a0 ?sOnEnterEscKeys@@YAXXZ  # sOnEnterEscKeys migrated from s00809700 (verbatim, slice spelling)
+0080a320 ?FUN_0080a320@@YG_NPAXPAUMsg@@@Z  # FUN_0080a320 migrated from s00809700 (verbatim, slice spelling)

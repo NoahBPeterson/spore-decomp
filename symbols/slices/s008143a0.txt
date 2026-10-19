@@ -1,10 +1,10 @@
-008143a0 cSPUIMainWin::OnKeyDown  # card real name
-008145d0 cSPUIMainWin::ToggleMovie  # card FUN, SP::MovieSystem
-008148b0 cSPUIMainWin::OpenReadme  # card FUN, README/OpenFile
-008149c0 eastl::basic_string<wchar_t,fixed_vector_allocator<2,32,2,0,1>>::basic_string  # SSO construction
-00814b80 `anonymous_namespace'::sTextStyleCallback  # card real name
-00814d50 cSPUIMainWin::OnKey  # card FUN, key dispatch
-00814e40 cSPUIMainWin::HandleMessage  # card real name
-00815310 vector<AutoRefCount>::remove  # erase-by-value + copy_impl
-00815370 vector<AutoRefCount>::push_back  # card FUN
-008153e0 vector<AutoRefCount>::clear  # card FUN, UI::CalloutMessageBox::OnWindowClosed loop
+008143a0 ?OnKeyDown@MainWin_s0081_43a0@@QAEXXZ  # MainWin_s0081_43a0::OnKeyDown migrated from s008143a0 (verbatim, slice spelling)
+008145d0 ?MovieToggle@MainWin_s0081_43a0@@QAEXXZ  # MainWin_s0081_43a0::MovieToggle migrated from s008143a0 (verbatim, slice spelling)
+008148b0 ?SaveReadme@MainWin_s0081_43a0@@QAE_NH@Z  # MainWin_s0081_43a0::SaveReadme migrated from s008143a0 (verbatim, slice spelling)
+008149c0 ?StringConstruct@@YAPAXPAX0I@Z  # StringConstruct migrated from s008143a0 (verbatim, slice spelling)
+00814b80 ?sTextStyleCallback@@YAXHPAX0@Z  # sTextStyleCallback migrated from s008143a0 (verbatim, slice spelling)
+00814d50 ?KeyHandler2@MainWin_s0081_43a0@@QAE_NHHH@Z  # MainWin_s0081_43a0::KeyHandler2 migrated from s008143a0 (verbatim, slice spelling)
+00814e40 ?HandleMessage@MainWin_s0081_43a0@@QAEXIPAH@Z  # MainWin_s0081_43a0::HandleMessage migrated from s008143a0 (verbatim, slice spelling)
+00815310 ?RemoveElem@MainWin_s0081_43a0@@QAEXH@Z  # MainWin_s0081_43a0::RemoveElem migrated from s008143a0 (verbatim, slice spelling)
+00815370 ?AddElem@MainWin_s0081_43a0@@QAEXPAUElem@@@Z  # MainWin_s0081_43a0::AddElem migrated from s008143a0 (verbatim, slice spelling)
+008153e0 ?CloseAll@MainWin_s0081_43a0@@QAEXXZ  # MainWin_s0081_43a0::CloseAll migrated from s008143a0 (verbatim, slice spelling)

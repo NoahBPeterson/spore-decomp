@@ -1,15 +1,15 @@
 008133f0 cSPUIMainWin::KeyRouted  # key capture + focus dispatch (b28d guard, m268/m26c)
 00813550 cSPUIMainWin::FocusInput  # focus dispatch (b28d guard, m268/m26c)
-00813630 cSPUIMainWin::FocusKey2  # 2-float key to m268->v2c / m26c->v38
-008136b0 cSPUIMainWin::FocusKey4  # 2-float + 2-int key route
-00813740 UTFWin::Window::SetAreaNotify  # card PDB candidate cSPUIMainWin::SetArea
-00813760 cSPUIMainWin::InitHitMaskFactory  # card FUN, ResourceMan factory
-008137f0 cSPUIMainWin::InitStringFactories  # card FUN, ResourceMan + UI::StringMan
-008138e0 cSPUIMainWin::ShutdownStringFactories  # card FUN
-00813980 cSPUIMainWin::InitTitleScreen  # card real name
+00813630 ?FocusKey2@MainWin_s0081_33f0@@QAE_NMMH@Z  # MainWin_s0081_33f0::FocusKey2 migrated from s008133f0 (verbatim, slice spelling)
+008136b0 ?FocusKey4@MainWin_s0081_33f0@@QAE_NMMHH@Z  # MainWin_s0081_33f0::FocusKey4 migrated from s008133f0 (verbatim, slice spelling)
+00813740 ?SetAreaNotify@WinSub@@QAEXH@Z  # WinSub::SetAreaNotify migrated from s008133f0 (verbatim, slice spelling)
+00813760 ?InitHitMaskFactory@MainWin_s0081_33f0@@QAE_NXZ  # MainWin_s0081_33f0::InitHitMaskFactory migrated from s008133f0 (verbatim, slice spelling)
+008137f0 ?InitStringFactories@MainWin_s0081_33f0@@QAE_NXZ  # MainWin_s0081_33f0::InitStringFactories migrated from s008133f0 (verbatim, slice spelling)
+008138e0 ?ShutdownStringFactories@MainWin_s0081_33f0@@QAE_NXZ  # MainWin_s0081_33f0::ShutdownStringFactories migrated from s008133f0 (verbatim, slice spelling)
+00813980 ?InitTitleScreen@MainWin_s0081_33f0@@QAE_NXZ  # MainWin_s0081_33f0::InitTitleScreen migrated from s008133f0 (verbatim, slice spelling)
 00813b20 cSPUITooltipManager::Init  # card real name
-00813c20 eastl::lower_bound<unsigned short>  # binary search over ushort range
-00813ca0 cSPUIMainWin::~cSPUIMainWin  # card real name
+00813c20 ?LowerBoundUShort@@YAHHHPAG@Z  # LowerBoundUShort migrated from s008133f0 (verbatim, slice spelling)
+00813ca0 ?Dtor@MainWin_s0081_33f0@@QAEXXZ  # MainWin_s0081_33f0::Dtor migrated from s008133f0 (verbatim, slice spelling)
 00813e70 cSPUIMainWin::DoMessage  # PDB candidate on card
 00814090 cSPUIMainWin::KeyHandler  # card FUN, key/message switch
-008141b0 cSPUIMainWin::cSPUIMainWin  # card FUN, constructor
+008141b0 ?MainWin_Ctor@@YAPAXPAUMainWin_s0081_33f0@@@Z  # MainWin_Ctor migrated from s008133f0 (verbatim, slice spelling)

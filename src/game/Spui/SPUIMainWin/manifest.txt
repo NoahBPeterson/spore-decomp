@@ -1,0 +1,12 @@
+# source  symbol  va  flags
+../src/game/Spui/SPUIMainWin.cpp  ?OnMouse@MainWin@@QAEX_N@Z  008130c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIMainWin.cpp  ?UpdateMouseScale@MainWin@@QAEXXZ  008131b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIMainWin.cpp  ?SetFocusObj@MainWin@@QAEXPAUX@@@Z  00813260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIMainWin.cpp  ?FocusKey2@MainWin_s0081_33f0@@QAE_NMMH@Z  00813630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIMainWin.cpp  ?FocusKey4@MainWin_s0081_33f0@@QAE_NMMHH@Z  008136b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIMainWin.cpp  ?SetAreaNotify@WinSub@@QAEXH@Z  00813740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIMainWin.cpp  ?InitHitMaskFactory@MainWin_s0081_33f0@@QAE_NXZ  00813760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIMainWin.cpp  ?Execute@Cheat@@QAEXPAUArgs@@@Z  00815990  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIMainWin.cpp  ?ExecuteColor@Outer@@QAEXH@Z  00815a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIMainWin.cpp  ?Wrap@Outer@@QAEXH@Z  00815b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIMainWin.cpp  ?cSPUIMainWin_InitFonts@@YA_NXZ  00815ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

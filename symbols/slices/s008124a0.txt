@@ -16,9 +16,9 @@
 00813040 ScaleXY  # multiplies by mouse scales
 00813070 cSPUIMainWin::GetScaledElapsed  # Stopwatch + scale at +0x23c
 008130a0 cSPUIMainWin::GetMouseRefs  # returns 8 bytes from +0x250
-008130c0 cSPUIMainWin::GetMousePosition  # card real name
-00813120 `anonymous namespace'::sInitDropShadowQuality  # card real name
-008131b0 cSPUIMainWin::UpdateMouseScale  # card real name
-00813260 cSPUIMainWin::SetFocusObj  # refcount assign of +0x268/+0x26c
-00813300 cSPUIMainWin::ApplyToFocus  # forwards to focus controllers
-00813370 cSPUIMainWin::RouteKey  # key routing to focus controllers
+008130c0 ?OnMouse@MainWin@@QAEX_N@Z  # MainWin::OnMouse migrated from s008124a0 (verbatim, slice spelling)
+00813120 ?sInitDropShadowQuality@@YAXXZ  # sInitDropShadowQuality migrated from s008124a0 (verbatim, slice spelling)
+008131b0 ?UpdateMouseScale@MainWin@@QAEXXZ  # MainWin::UpdateMouseScale migrated from s008124a0 (verbatim, slice spelling)
+00813260 ?SetFocusObj@MainWin@@QAEXPAUX@@@Z  # MainWin::SetFocusObj migrated from s008124a0 (verbatim, slice spelling)
+00813300 ?ApplyToFocus@MainWin@@QAEXH@Z  # MainWin::ApplyToFocus migrated from s008124a0 (verbatim, slice spelling)
+00813370 ?RouteKey@MainWin@@QAE_NHHH@Z  # MainWin::RouteKey migrated from s008124a0 (verbatim, slice spelling)

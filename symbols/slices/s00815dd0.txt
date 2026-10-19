@@ -1,3 +1,5 @@
+00812160 ?Init@cSPUILayout@@QAE_NPB_WH_NI@Z  # cSPUILayout::Init (callee of s00815dd0, named from the dev publics; slice address comment)
+00815dd0 ?Init@cSPUIMainWin@@QAE_NXZ  # cSPUIMainWin::Init migrated from s00815dd0 (verbatim, slice spelling)
 00816790 FUN_00816790  # cdecl window-material helper (PDB candidate sSetMaterialAPC)
 008167d0 UTFWin::cSPUIMaterialEffect::SetWeight  # thiscall, [this+0x88] weight, [this+0x80] window set
 00816860 UTFWin::cSPUIMaterialEffect::cSPUIMaterialEffect  # vtbl 0x1418d00
@@ -8,4 +10,3 @@
 00816b90 UI::CalloutMessageBox::DoMessage  # PDB candidate cSPUIMessageBox::DoMessage
 00816ca0 UI::CalloutMessageBox::GetWindow  # FindWindowByID(0x6318e78,0)
 00816cb0 UI::CalloutMessageBox::CalloutMessageBox  # ctor, vtable 0x1418dd4
-00815dd0 cSPUIMainWin::Init  # PDB name; initialises UI managers (retail frame offset differs from 2008 PDB)
