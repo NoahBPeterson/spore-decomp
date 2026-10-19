@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+006c22b0  498  anonymous-namespace cBakedArenaResource constructor: skeleton only
