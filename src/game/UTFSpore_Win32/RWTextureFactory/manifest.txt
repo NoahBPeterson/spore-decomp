@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/RWTextureFactory.cpp  ?FUN_009980d0@@YAII@Z  009980d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/RWTextureFactory.cpp  ?AsInterface@Misc34@@QAEHH@Z  00998100  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/RWTextureFactory.cpp  ?f98140@Misc34@@QAEXXZ  00998140  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/RWTextureFactory.cpp  ?GetSupportedTypes@RWTextureFactory@UTFWinTools@EA@@UAEIPAII@Z  00998170  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/RWTextureFactory.cpp  ?CanConvert@RWTextureFactory@UTFWinTools@EA@@UBE_NII@Z  009981b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/RWTextureFactory.cpp  ?FUN_009986e0@@YIPAXPAX@Z  009986e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

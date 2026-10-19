@@ -1,13 +1,14 @@
 00997f50 EA::UTFWinTools::HitMaskResource::HitMaskResource  # 2008 dev-PDB name
 00998050 EA::UTFWinTools::HitMaskFactory::CreateResource  # 2008 dev-PDB name
-009980d0 hash bit-smear finalizer  # (MurmurHash3 fmix32 shape)
-00998100 EA::UTFWinTools::RWTextureFactory interface query  # AsInterface-like
-00998140 FUN_00998140  # resource release helper
-00998170 EA::UTFWinTools::RWTextureFactory::GetSupportedTypes  # 2008 dev-PDB name
-009981b0 EA::UTFWinTools::RWTextureFactory::CanConvert  # 2008 dev-PDB name
-00998250 EA::UTFWinTools::RWTextureResource::InitTextureResources  # PDB candidate caller-scored
-009983d0 EA::UTFWinTools::RWTextureFactory::ReadResource  # 2008 dev-PDB name
-00998530 EA::UTFWinTools::RWTextureFactory::WriteResource  # 2008 dev-PDB name
-00998770 EA::UTFWinTools::RWTextureFactory::CreateResource  # 2008 dev-PDB name
+009980d0 ?FUN_009980d0@@YAII@Z  # FUN_009980d0 migrated from s00997f50 (verbatim, slice spelling)
+00998100 ?AsInterface@Misc34@@QAEHH@Z  # Misc34::AsInterface migrated from s00997f50 (verbatim, slice spelling)
+00998140 ?f98140@Misc34@@QAEXXZ  # Misc34::f98140 migrated from s00997f50 (verbatim, slice spelling)
+00998170 ?GetSupportedTypes@RWTextureFactory@UTFWinTools@EA@@UAEIPAII@Z  # EA::UTFWinTools::RWTextureFactory::GetSupportedTypes migrated from s00997f50
+009981b0 ?CanConvert@RWTextureFactory@UTFWinTools@EA@@UBE_NII@Z  # EA::UTFWinTools::RWTextureFactory::CanConvert migrated from s00997f50
+00998250 ?InitTextureResources@RWTexResource@@QAEXXZ  # RWTexResource::InitTextureResources migrated from s00997f50 (verbatim, slice spelling)
+009983d0 ?ReadResource@RWTextureFactory@UTFWinTools@EA@@UAE_NPAVRecord@ResourceMan@3@PAVResource@53@PAXI@Z  # EA::UTFWinTools::RWTextureFactory::ReadResource migrated from s00997f50
+00998530 ?WriteResource@RWTextureFactory@UTFWinTools@EA@@UAE_NPAVResource@ResourceMan@3@PAVRecord@53@PAXI@Z  # EA::UTFWinTools::RWTextureFactory::WriteResource migrated from s00997f50
+009986e0 ?FUN_009986e0@@YIPAXPAX@Z  # FUN_009986e0 migrated from s00997f50 (verbatim, slice spelling)
+00998770 ?CreateResource@RWTexFactory@@QAE_NHPAPAXPAX1@Z  # RWTexFactory::CreateResource migrated from s00997f50 (verbatim, slice spelling)
 00999000 EA::UTFWinTools::SerCollection::RemoveAll  # 2008 dev-PDB name
 00999080 EA::UTFWinTools::SerCollection::SerCollection  # 2008 dev-PDB name
