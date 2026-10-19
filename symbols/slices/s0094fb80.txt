@@ -1,7 +1,7 @@
 0094fb80 THREAD_cleanup  # clear 5 CRYPTO callbacks; destroy+free each mutex in g manager; vector-clear; return 1
 0094fc40 ?Ctor@SSLManager_s0094_fb80@@QAEPAU1@PAUICoreAllocator@@@Z  # SSLManager_s0094_fb80::Ctor migrated from s0094fb80 (verbatim, slice spelling)
 0094fcc0 ?SSLManager_Shutdown@@YIDPAX@Z  # SSLManager_Shutdown migrated from s0094fb80 (verbatim, slice spelling)
-0094fd20 SSLManager::RestoreClientSession  # lock, GetSession, CRYPTO_add_lock, FNV hash name, map insert; unlock
+0094fd20 ?RestoreClientSession@SSLManager_s0094_fb80@@QAEDPAXPAE@Z  # SSLManager_s0094_fb80::RestoreClientSession migrated from s0094fb80 (verbatim, slice spelling)
 0094fdc0 ?THREAD_setup@@YAHXZ  # THREAD_setup migrated from s0094fb80 (verbatim, slice spelling)
 0094fe70 ?DeletingDtor@SSLManager_s0094_fb80@@QAEPAXD@Z  # SSLManager_s0094_fb80::DeletingDtor migrated from s0094fb80 (verbatim, slice spelling)
 0094fed0 ?SSLManager_Init@@YIDPAX@Z  # SSLManager_Init migrated from s0094fb80 (verbatim, slice spelling)

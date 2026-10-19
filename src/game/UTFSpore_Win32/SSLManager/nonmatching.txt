@@ -8,6 +8,7 @@
 0094f910 109 SSLManager::GetSession: complete (mutex lock, FNV-1 hash of name, rbtree find, refcount inc / SSL_SESSION_new+insert, unlock); regalloc differs; difftest PASS (264 valid, 85.1% coverage)
 0094fb80  121  THREAD_cleanup: complete (clear 5 CRYPTO callbacks, destroy+free each mutex in manager vector, vector clear, return 1); regalloc/order differ; difftest PASS (217 valid, 73.0% coverage)
 0094fc40 25 SSLManager::SSLManager (ctor): complete (set vtable + fields, Mutex + fixed_map init, reset pool, claim global if unset); regalloc/order differ; difftest PASS (400 valid, 100% coverage)
+0094fd20 49 COMPLETE SSLManager::RestoreClientSession; third arg of map insert is the dead name arg slot with low byte cleared (bool temp over it), original stores byte 0 + dword reload [equiv: WEAK 184 valid inputs, 100% coverage, no mismatch]
 0094fdc0 77 THREAD_setup: complete (allocate one Mutex per CRYPTO_num_locks, resize vector, register 5 lock/dynlock callbacks); regalloc differ; difftest PASS (301 valid, 100% coverage)
 0094fe70 4 SSLManager::~SSLManager (scalar deleting dtor): complete (Shutdown, free pool, nuke map, Mutex dtor); 4 bytes differ (map nuke `lea ecx` emitted after `push eax`); difftest PASS (205 valid, 100% coverage)
 0094fed0 202 SSLManager_Init: complete (register SSL mem funcs, THREAD_setup, RAND_seed, build SSL_CTX, set ciphers/verify/purpose/tmp_dh); large OpenSSL control flow, regalloc differ; difftest WEAK (269 valid, 7.6% coverage)

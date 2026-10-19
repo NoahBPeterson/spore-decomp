@@ -249,7 +249,7 @@ struct Ext {
     void* ctor(int a, int b);               // 0x009222A0 Mutex::Mutex
     int   Lock(const void* nm);             // 0x009221B0 Mutex::Lock
     void  fixedvec_resize(unsigned n);      // 0x0089CB60 fixed_vector::resize
-    void  faf0(void*, void*, void*);        // 0x0094FAF0
+    void* faf0(void* out, void* value, void* b);   // 0x0094FAF0 map::insert(pair<iterator,bool>* out, const value_type* v, bool)
     int*  resize(unsigned n);               // 0x00837310 RawFixed::Resize
     void  d470(int a);                      // 0x0094D470
     int   e3a0(int a, int b, int c);        // 0x0094E3A0
@@ -260,6 +260,7 @@ struct Ext {
     void  nuke(void* node);                 // 0x00D3B370 DoNukeSubtree
 };
 void  __fastcall Mutex_dtor(void* m);                   // 0x00922130
+int   __fastcall Mutex_Unlock(void* m);                 // 0x00922270
 void  __fastcall Fn0094fa00(void* map);                 // 0x0094FA00 fixed_map ctor
 void  __fastcall SSLManager_RemoveSession(void* self);  // 0x0094F990
 int   __cdecl GetThreadId();                                    // 0x00921CC0
@@ -295,7 +296,6 @@ void* __cdecl tmp_dh_callback(int a, int b, int bits)
         return r;
     return g_dh512;
 }
-
 
 // @ 0x0094ec00
 int __cdecl NetSSLVerifyConnection(void* ssl, const char* name)
@@ -358,7 +358,6 @@ int __cdecl NetSSLVerifyConnection(void* ssl, const char* name)
     return 0x32;
 }
 
-
 // @ 0x0094ee30
 void* __cdecl Fn0094ee30(void* a, void* b)
 {
@@ -367,7 +366,6 @@ void* __cdecl Fn0094ee30(void* a, void* b)
         BIO_ctrl(bio, 0x6a, (long)b, a);
     return bio;
 }
-
 
 // @ 0x0094ee70
 int __cdecl Fn0094ee70(BIO94* p)
@@ -387,7 +385,6 @@ int __cdecl Fn0094ee70(BIO94* p)
     return 1;
 }
 
-
 // @ 0x0094eec0
 int __cdecl Fn0094eec0(BIO94* p, int a, int b)
 {
@@ -402,7 +399,6 @@ int __cdecl Fn0094eec0(BIO94* p, int a, int b)
     return r;
 }
 
-
 // @ 0x0094ef10
 unsigned __cdecl Fn0094ef10(BIO94* p, char* buf, unsigned len)
 {
@@ -413,7 +409,6 @@ unsigned __cdecl Fn0094ef10(BIO94* p, char* buf, unsigned len)
     }
     return r;
 }
-
 
 // @ 0x0094efe0
 int __cdecl Fn0094efe0(BIO94* p, char* str)
@@ -429,7 +424,6 @@ int __cdecl Fn0094efe0(BIO94* p, char* str)
     }
     return r;
 }
-
 
 // @ 0x0094f030
 void* __thiscall SSLManager::CreateStreamSSLSocket()
@@ -451,7 +445,6 @@ void* __thiscall SSLManager::CreateStreamSSLSocket()
     return q;
 }
 
-
 // @ 0x0094f080
 void EA::SSL::SSLManager::RegisterFileSystem(EA::SSL::FileSystem * v, bool set)
 {
@@ -464,13 +457,11 @@ void EA::SSL::SSLManager::RegisterFileSystem(EA::SSL::FileSystem * v, bool set)
         *(int*)((char*)this + 0x14c) = 0;
 }
 
-
 // @ 0x0094f0b0
 bool SSLContext::LoadVerifyLocations(const char* file)
 {
     return SSL_CTX_load_verify_locations(*(void**)((char*)this + 0x14), file, 0) == 1;
 }
-
 
 // @ 0x0094f0e0
 void* __cdecl SetSSLManagerGlobal(void* m)
@@ -479,7 +470,6 @@ void* __cdecl SetSSLManagerGlobal(void* m)
     g_spSSLManager = (SSLManager*)m;
     return old;
 }
-
 
 // @ 0x0094f120
 MutexNew94* __cdecl Fn0094f120()
@@ -492,7 +482,6 @@ MutexNew94* __cdecl Fn0094f120()
     }
     return 0;
 }
-
 
 // @ 0x0094f160
 namespace EA {
@@ -510,13 +499,11 @@ void * SSL_Malloc(unsigned int size)
 }
 }  // namespace EA::SSL
 
-
 // @ 0x0094f1a0
 void __cdecl EA_SSL_SSL_Free(void* p)
 {
     g_spSSLManager->mpCoreAllocator->Free((char*)p - 8, 0);
 }
-
 
 // @ 0x0094f1c0
 namespace EA {
@@ -548,7 +535,6 @@ void * SSL_Realloc(void * oldp, unsigned int size)
 }
 }  // namespace EA::SSL
 
-
 // @ 0x0094f260
 int __fastcall Fn0094f260(StreamRef94* p)
 {
@@ -559,7 +545,6 @@ int __fastcall Fn0094f260(StreamRef94* p)
     a->Free(p, 0);
     return 0;
 }
-
 
 // @ 0x0094f2a0
 void* __cdecl BIO_new_file_override(const char* name, const char* mode)
@@ -589,7 +574,6 @@ void* __cdecl BIO_new_file_override(const char* name, const char* mode)
     st->i08();
     return 0;
 }
-
 
 // @ 0x0094f4d0
 unsigned __cdecl file_ctrl(BIO94* bio, int cmd, unsigned arg, void* parg)
@@ -662,7 +646,6 @@ mode2:
     }
 }
 
-
 // @ 0x0094f850
 void __cdecl Fn0094f850(MutexNew94* m)
 {
@@ -671,7 +654,6 @@ void __cdecl Fn0094f850(MutexNew94* m)
         operator_delete__(m);
     }
 }
-
 
 // @ 0x0094f870
 void* __thiscall SessionOwner::FindAndRelease(const char* name, char remove)
@@ -691,7 +673,6 @@ void* __thiscall SessionOwner::FindAndRelease(const char* name, char remove)
     tree.erase(&h, node);
     return (void*)v;
 }
-
 
 // @ 0x0094f910
 unsigned __thiscall SSLManager::GetSession(const char* name)
@@ -778,6 +759,31 @@ char __fastcall SSLManager_Shutdown(void* self)
             PTR(self, 0x150) = 0;
         }
     }
+    return 1;
+}
+
+// @ 0x0094fd20
+char SSLManager_s0094_fb80::RestoreClientSession(void* ssl, unsigned char* name)
+{
+    void* self = this;
+    ((Ext*)(B(self) + 0x18))->Lock(&g_lockArg);
+    GetSession((const char*)name);
+    CRYPTO_add_lock((int*)(B(ssl) + 0x9c), 1, 0xe, g_szFileName, 0x581);
+    unsigned h = 0x811c9dc5;
+    unsigned c = *name;
+    unsigned char* p = name;
+    while (c != 0) {
+        p++;
+        h = h * 0x1000193 ^ c;
+        c = *p;
+    }
+    struct MapValue { unsigned key; void* ssl; } v;
+    v.key = h;
+    v.ssl = ssl;
+    void* result[2];
+    // the original pushes the dead `name` argument slot with its low byte cleared (a bool temp stored over it)
+    ((Ext*)(B(self) + 0x48))->faf0(result, &v, (void*)((unsigned)name & 0xffffff00u));
+    Mutex_Unlock(B(self) + 0x18);
     return 1;
 }
 
