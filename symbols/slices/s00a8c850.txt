@@ -1,1 +1,1 @@
-00a8cb00 EA::Swarm::cDistributeEffect::~cDistributeEffect  # base-body dtor (thiscall, no args); resets 4 vtables, frees blocks, releases 3 interfaces, destroys sub-objects 0x11c/0xd8, restores vtables
+00a8cb00 ??1cDistributeEffect_s00a8_c850@@QAE@XZ  # cDistributeEffect_s00a8_c850::~cDistributeEffect migrated from s00a8c850 (verbatim, slice spelling)

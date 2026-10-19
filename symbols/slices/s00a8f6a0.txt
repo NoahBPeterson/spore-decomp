@@ -1,1 +1,1 @@
-00a8f6a0 EA::Swarm::cDistributeEffect::CreateClusteredMatchingSamples2D  # PDB (callee-scored)
+00a8f6a0 ?cDistributeEffect_CreateClusteredMatchingSamples2D@@YAXPAXH@Z  # cDistributeEffect_CreateClusteredMatchingSamples2D migrated from s00a8f6a0 (verbatim, slice spelling)

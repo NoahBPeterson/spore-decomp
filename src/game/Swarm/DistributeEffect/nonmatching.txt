@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00a88d50 1562 complete EA::Swarm::cDistributeEffect colour/alpha curves + random variation + colour-map pass over samples [first,last); same 6 calls in order (4x RandomDoubleUniform, vcall 0x18 Contains, vcall 0x2c Sample), size 1885 vs 1851 (1.02x); difftest PASS (295 valid, 75.6% cov); t=(n+0.5)*inv is kept in SSE with _ReadWriteBarrier (x87 gave 1-ulp differences) but cl still schedules the desc loads before it and spills the p-transform temporaries differently
+00a8e7c0 2729 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); cl tail-merges some cDistributeSample ctor/push_back pairs (36 vs 40 calls), then-before-else block order, frame/temp layout differs ; difftest WEAK (296 valid, 49% coverage; added // @ marker)
+00a8f6a0 2892 complete behavioural transcription of the Ghidra decompile (switch cases 0/3/4/6/default: clustered sample grids, cube->sphere mapping, EASTL sample pushes); code size differs, not byte-exact

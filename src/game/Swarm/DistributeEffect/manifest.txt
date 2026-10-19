@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/Swarm/DistributeEffect.cpp  ?mul_705290@@YAXPAUV3@@0@Z  00705290  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/DistributeEffect.cpp  ??1cDistributeEffect_s00a8_c850@@QAE@XZ  00a8cb00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

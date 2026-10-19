@@ -14,5 +14,6 @@
 007051e0 ?copy_7051e0@@YAPAUV32@@PBU1@0PAU1@@Z  # copy_7051e0 migrated from s007046e0 (verbatim, slice spelling)
 00705220 ?copy_backward_705220@@YAPAUV32@@PBU1@0PAU1@@Z  # copy_backward_705220 migrated from s007046e0 (verbatim, slice spelling)
 00705250 ?copy_705250@@YAPAUQuad16@@PBU1@0PAU1@@Z  # copy_705250 migrated from s007046e0 (verbatim, slice spelling)
+00705290 ?mul_705290@@YAXPAUV3@@0@Z  # mul_705290 migrated from s007046e0 (verbatim, slice spelling)
 007052e0 ?FUN_007052e0@@YAHPAMM@Z  # FUN_007052e0 migrated from s007046e0 (verbatim, slice spelling)
 00705470 ?FUN_00705470@@YAHPAMM@Z  # FUN_00705470 migrated from s007046e0 (verbatim, slice spelling)
