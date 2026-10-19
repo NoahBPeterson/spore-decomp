@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?GetPropertyAsKey@RC@@QAE_NIPAUKey@@@Z  00a174d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?GetPropertyAsFloatArray@RC@@QAE_NIPAIPAPBX@Z  00a17560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?GetPropertyAsUint32Array@RC@@QAE_NIPAIPAPBX@Z  00a175c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?GetPropertyAsKeyArray@RC@@QAE_NIPAIPAPBX@Z  00a17620  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?AddLegacyPropertyTypes@FactoryConfiguration@Audio@EA@@QAEXXZ  00a18d90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
