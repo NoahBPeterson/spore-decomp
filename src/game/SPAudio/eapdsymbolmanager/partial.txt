@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+009a80e0 133 incomplete FUN_009a80e0; eastl hashtable equal_range walk over the object at [param_1+4] (calls FUN_009c8900 per matched node); the inlined equal_range / bucket walk is not reproduced (stubbed to the FUN_009c8900 call), so the emitted symbol is far smaller than the 133-byte target; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv UNSUPPORTED (no object symbol of similar size)

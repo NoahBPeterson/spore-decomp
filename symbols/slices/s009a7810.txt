@@ -1,7 +1,7 @@
 009a7810 nSPCreatureAnim::HandleEvent  # dispatches location candidate sets A/B/C/D via ContextFilterEventLocationData + ComputeEventLocationState + FUN_009a6e60
 009a7d90 nSPCreatureAnim::HandleEvents  # per-event 0x60-stride filter; calls HandleEvent; EA::Random singleton (thiscall)
 009a7f10 nSPCreatureAnim::HandleAnimationEvents  # walks animation event entries, 64-bit flag mask, dispatches HandleEvents
-009a80e0 FUN_009a80e0  # eastl hashtable equal_range walk (incomplete)
+009a80e0 ?FUN_009a80e0@@YAXH@Z  # FUN_009a80e0 migrated from s009a7810 (verbatim, slice spelling)
 009a8170 ?FUN_009a8170@@YAIII@Z  # FUN_009a8170 migrated from s009a7810 (verbatim, slice spelling)
 009a81b0 ?ConvertEvent_v11_v12@converters@nSPCreatureAnim@@YAXPAI0@Z  # ConvertEvent_v11_v12 migrated from s009a7810 (verbatim, slice spelling)
 009a8290 ?ConvertEvent_v9_v10@converters@nSPCreatureAnim@@YAXPAI0@Z  # ConvertEvent_v9_v10 migrated from s009a7810 (verbatim, slice spelling)
