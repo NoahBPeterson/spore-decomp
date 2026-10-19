@@ -1,7 +1,8 @@
 // Slice s007ee060: SP::cVolumeDescription (Swarm volume effect descriptor) and
 // its ArgScript commands, volume serialization, and the cVolumeEffectCommand
 // registration helper.
-// Flags: /O2 /MD /Gy /EHsc /TP.
+// Flags: /O2 /MD /Gy /EHsc /TP for most rows; 007eea90 adds /GS- (the original has no /GS
+// cookie, and with /GS cl emits a different EH frame around the five placement-new commands).
 #include "types.h"
 
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags,
@@ -10,6 +11,8 @@ void* operator new(size_t size, const char* pName, int flags, unsigned debugFlag
                    const char* file, int line); // 0x00f473a0
 void operator delete(void* p);
 void operator delete[](void* p);
+void operator delete(void* p, const char* pName, int flags, unsigned debugFlags,
+                     const char* file, int line);  // 0x00f47410
 inline void* operator new(size_t, void* p) throw() { return p; }
 
 namespace EA {
@@ -341,23 +344,62 @@ void* MapDescription::Copy(int src) {
   return self;
 }
 
-// @ 0x007EEA90  cVolumeEffectCommand::OnRegister (register ArgScript commands)
-struct CommandBase {
-  void* vtable;
+// ArgScript command base + per-command vtables used by cVolumeEffectCommand::OnRegister (0x007EEA90).
+namespace EA {
+namespace ArgScript {
+struct cCommandBase {
+  void* mVtbl;    // +0x00
+  void* mParser;  // +0x04
+  void* mF8;      // +0x08
+  void* mChild;   // +0x0c
+  cCommandBase();                              // 0x0083c800
+  void OnRegister(void* arg, void* state);     // 0x0083c780
+  void SetChildState(void* state);             // 0x00fd9450
 };
-void CommandBaseCtor(CommandBase*);
-extern "C" void VolumeEffectOnRegister(char* font, void* arg, int param3) {
-  int v = (param3 == 0) ? 0 : param3 - 0xc;
-  *(int*)(font + 4) = v;
-  extern void FUN_0083c780(void*, int);
-  FUN_0083c780(arg, param3);
-  const char* names[] = {"alpha", "color", "slicespacing", "material", "volumeset"};
-  for (int i = 0; i < 5; ++i) {
-    void* cmd = operator new(0x10, "ArgScript/Volume", 0, 0, 0, 0);
-    CommandBaseCtor((CommandBase*)cmd);
-    typedef void(__thiscall * F0)(void*, const char*, void*);
-    ((F0)VSLOT(font, 0x18))(font, names[i], cmd);
+}  // namespace ArgScript
+}  // namespace EA
+
+extern char VtblAlpha;     // 0x01414768
+extern char VtblColor;     // 0x01414780
+extern char VtblSlice;     // 0x01414798
+extern char VtblMaterial;  // 0x014147b0
+extern char VtblSet;       // 0x014147c8
+extern void* g_CommandNames[5];  // 0x01540390
+
+#define VOL_CMD(type, base, vtbl) \
+  struct type : base {            \
+    type() { *(void**)this = &vtbl; } \
   }
+
+VOL_CMD(CmdAlpha, EA::ArgScript::cCommandBase, VtblAlpha);
+VOL_CMD(CmdColor, EA::ArgScript::cCommandBase, VtblColor);
+VOL_CMD(CmdSlice, EA::ArgScript::cCommandBase, VtblSlice);
+VOL_CMD(CmdMaterial, EA::ArgScript::cCommandBase, VtblMaterial);
+VOL_CMD(CmdSet, EA::ArgScript::cCommandBase, VtblSet);
+
+// @ 0x007EEA90  cVolumeEffectCommand::OnRegister (register the five ArgScript commands)
+// __thiscall member: `this` in ecx, callee pops the two stack args (ret 8).  Building it as a
+// free cdecl function makes cl drop the new-expression EH state stores entirely (an `extern "C"`
+// function never gets them), so it must stay a member of a C++-linkage class.
+struct cVolumeEffectCommand {
+  void OnRegister(void* arg, void* param3);
+};
+void cVolumeEffectCommand::OnRegister(void* arg, void* param3) {
+  char* font = (char*)this;
+  *(int*)(font + 0x30) = param3 ? (int)((char*)param3 - 0xc) : 0;
+  ((EA::ArgScript::cCommandBase*)font)->OnRegister(arg, param3);
+  ((EA::ArgScript::cCommandBase*)font)->SetChildState(font + 0x38);
+  typedef void(__thiscall * AddCmdFn)(void*, const void*, void*);
+  CmdAlpha* p0 = new ("ArgScript/VolumeAlpha", 0, 0, 0, 0) CmdAlpha();
+  ((AddCmdFn)VSLOT(font, 0x18))(font, g_CommandNames[0], p0);
+  CmdColor* p1 = new ("ArgScript/VolumeColor", 0, 0, 0, 0) CmdColor();
+  ((AddCmdFn)VSLOT(font, 0x18))(font, g_CommandNames[1], p1);
+  CmdSlice* p2 = new ("ArgScript/VolumeSliceSpacing", 0, 0, 0, 0) CmdSlice();
+  ((AddCmdFn)VSLOT(font, 0x18))(font, g_CommandNames[2], p2);
+  CmdMaterial* p3 = new ("ArgScript/VolumeMaterial", 0, 0, 0, 0) CmdMaterial();
+  ((AddCmdFn)VSLOT(font, 0x18))(font, g_CommandNames[3], p3);
+  CmdSet* p4 = new ("ArgScript/VolumeSet", 0, 0, 0, 0) CmdSet();
+  ((AddCmdFn)VSLOT(font, 0x18))(font, g_CommandNames[4], p4);
 }
 
 struct VolumeRegistrar {

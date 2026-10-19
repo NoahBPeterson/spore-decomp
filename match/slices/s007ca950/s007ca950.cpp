@@ -14,6 +14,12 @@ struct cArguments {
     void** MainArguments(int n);
     void** OptionArguments(const char* pName, int n);
 };
+struct cError {
+    unsigned int mMessage[4];      // eastl::basic_string
+    cError(const char* fmt, ...);  // 0x0052df30 (cdecl, `this` pushed)
+    cError(const cError&);
+    ~cError();
+};
 }}
 
 typedef eastl::pair<uint64, EA::AutoRefCount<SP::cPropertyList> > PropPair;
@@ -260,7 +266,7 @@ void cOptionPropertiesCommand::Execute(EA::ArgScript::cArguments* pArgs) {
     SP::cPropertyList* pList = GetTargetList(this, opt);
     if (pList) {
         EA::ResourceMan::Key key;
-        key.mInstance = 0; key.mType = 0; key.mGroup = 0; key.mPad = 0;
+        key.mInstance = 0; key.mType = 0; key.mGroup = 0;
         SPKeyFromName(&key, (const wchar_t*)main[1], 0, 0);
         EA::Variant v;
         v = key;
@@ -274,7 +280,7 @@ void SomeOptionPropertiesCommand::Execute(EA::ArgScript::cArguments* pArgs) {
     void** opt = pArgs->OptionArguments("list", 1);
     SP::cPropertyList* pList = GetTargetList(this, opt);
     EA::ResourceMan::Key key;
-    key.mInstance = 0; key.mType = 0; key.mGroup = 0; key.mPad = 0;
+    key.mInstance = 0; key.mType = 0; key.mGroup = 0;
     SPKeyFromName(&key, (const wchar_t*)main[0], 0, 0);
     SP::IPropertyManager* pm = SP::PropertyManager();
     EA::AutoRefCount<SP::cPropertyList> result;
@@ -285,19 +291,22 @@ void SomeOptionPropertiesCommand::Execute(EA::ArgScript::cArguments* pArgs) {
 // @ 0x007cace0
 SP::cPropertyList* GetPropListSettings(const void* pName, PropMap* pMap) {
     EA::ResourceMan::Key key;
-    key.mInstance = 0; key.mType = 0; key.mGroup = 0; key.mPad = 0;
-    if (!SPKeyFromName(&key, (const wchar_t*)pName, 0, 0))
-        ThrowBadPropListName();
-    uint64 id = ((uint64)key.mInstance) | ((uint64)key.mGroup << 32);
-    eastl::pair<PropMap::iterator, bool> result =
-        pMap->insert(PropMap::value_type(id, EA::AutoRefCount<SP::cPropertyList>(0)));
-    if (result.second) {
-        SP::IPropertyManager* pm = SP::PropertyManager();
-        pm->HasPropertyList(key.mInstance, key.mGroup);
-        Editor::cPropertyList* pList = new ("App", 0, 0, 0, 0) Editor::cPropertyList();
-        result.first->second = pList;
+    key.mInstance = 0;
+    key.mType = 0;
+    key.mGroup = 0;
+    if (SPKeyFromName(&key, (const wchar_t*)pName, 0, 0)) {
+        uint64 id = ((uint64)key.mInstance) | ((uint64)key.mGroup << 32);
+        eastl::pair<PropMap::iterator, bool> result =
+            pMap->insert(PropMap::value_type(id, EA::AutoRefCount<SP::cPropertyList>(0)));
+        if (result.second) {
+            SP::IPropertyManager* pm = SP::PropertyManager();
+            pm->HasPropertyList(key.mInstance, key.mGroup);
+            Editor::cPropertyList* pList = new ("App", 0, 0, 0, 0) Editor::cPropertyList();
+            result.first->second = pList;
+        }
+        return result.first->second.mpObject;
     }
-    return result.first->second.mpObject;
+    throw EA::ArgScript::cError("Bad prop list name");
 }
 
 }  // anonymous namespace

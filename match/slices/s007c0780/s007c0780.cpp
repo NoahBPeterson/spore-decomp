@@ -54,51 +54,73 @@ bool IHandlerRC::HandleMessage(unsigned int msgId, void* arg)
 struct EditorResBase {
     virtual void v0();
     virtual void v1();
+    virtual ~EditorResBase() {}
 };
 struct RefCountVBase {
     virtual int AddRef();
     virtual int Release();
     int mnRefCount;
     RefCountVBase() : mnRefCount(0) {}
+    virtual ~RefCountVBase() {}
 };
-struct RefPtr { void* p; RefPtr() : p(0) {} };
-struct Triple {
-    void* a; void* b; void* c;
-    Triple() : a(0), b(0), c(0) {}
+
+void __cdecl SpFree(void* p) throw();                               // 0xf47380
+
+// 0x14-byte containers (three pointers + an 8-byte allocator).
+struct RefVec {                     // dtor out of line (0x41eb80)
+    void* mpBegin; void* mpEnd; void* mpCapacity; unsigned mA0, mA1;
+    RefVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~RefVec();
 };
+struct Elem24Vec {                  // dtor out of line (0x421230)
+    void* mpBegin; void* mpEnd; void* mpCapacity; unsigned mA0, mA1;
+    Elem24Vec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~Elem24Vec();
+};
+struct FreeVec {                    // inlined dtor: free the buffer
+    void* mpBegin; void* mpEnd; void* mpCapacity; unsigned mA0, mA1;
+    FreeVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~FreeVec() throw() { if (mpBegin) SpFree(mpBegin); }
+};
+struct PoolVec {                    // inlined dtor: free non-pool blocks only
+    void* mpBegin; void* mpEnd; void* mpCapacity; unsigned mA0, mA1;
+    PoolVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~PoolVec() throw() { if (mpBegin && ((int*)mpBegin)[-1] != 0) SpFree(mpBegin); }
+};
+struct IPtr60 { virtual void s0(); virtual void s1(); };
+struct IPtr90 { virtual void s0(); virtual void s1(); virtual void s2(); };
+struct AutoPtr60 { IPtr60* p; AutoPtr60() : p(0) {} ~AutoPtr60() { if (p) p->s1(); } };
+struct AutoPtr90 { IPtr90* p; AutoPtr90() : p(0) {} ~AutoPtr90() { if (p) p->s2(); } };
+
 struct ContentValidationSummarizer : EditorResBase, RefCountVBase {
-    Triple m0c;
-    unsigned pad18[2];
-    Triple m20;
-    unsigned pad2c[2];
-    Triple m34;
-    unsigned pad40[3];
-    Triple m4c;
-    unsigned pad58[2];
-    RefPtr m60;
+    RefVec mRefs1;      // +0x0c
+    RefVec mRefs2;      // +0x20
+    FreeVec mFree34;    // +0x34
+    int m48;            // +0x48
+    Elem24Vec mElems;   // +0x4c
+    AutoPtr60 m60;      // +0x60
     int m64;
     int m68;
     int m6c;
     int m70;
     int m74;
     char m78;
-    void* m7c;
-    void* m80;
-    void* m84;
-    unsigned pad88[2];
-    void* m90;
+    PoolVec m7c;        // +0x7c
+    AutoPtr90 m90;      // +0x90
     ContentValidationSummarizer();
-    virtual void v2();
+    virtual ~ContentValidationSummarizer();
 };
 
 // @ 0x007c12a0
 ContentValidationSummarizer::ContentValidationSummarizer()
-    : m64(-1), m68(-1), m6c(0), m70(0), m74(0x10), m78(0), m7c(0), m80(0), m84(0), m90(0)
+    : m64(-1), m68(-1), m6c(0), m70(0), m74(0x10), m78(0)
 {
 }
 
-// @ 0x007c1330  matching destructor
-void FUN_007c1330(void* p) { (void)p; }
+// @ 0x007c1330
+ContentValidationSummarizer::~ContentValidationSummarizer()
+{
+}
 
 // ===========================================================================
 // @ 0x007c0780  SP::cThumbnailManager ambient-occlusion capture setup.

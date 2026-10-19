@@ -5,3 +5,4 @@
 007da910  168  cMouseCameraController::StartDrag; x87 exp inline and field-copy flavour differ
 007da9f0  629  cMouseCameraController::Update; large float lerp/wrap schedule differs
 007db0c0  191  PluginManager::Load; constant-arg block and register allocation differ
+007dae20  568  SP::RunOfflineWorld; full loop/calls reproduced (stopwatch, eastl::basic_string message payload); frame size, dt float schedule and sprintf/x87 formatting differ

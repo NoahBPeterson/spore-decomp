@@ -18,6 +18,8 @@ typedef unsigned __int64 uint64;
 inline void* operator new(unsigned int, void* p) { return p; }
 void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags,
                    const char* file, int line);
+void  operator delete(void* p, const char* name, int flags, unsigned debugFlags,
+                      const char* file, int line);  // 0x00f47410
 
 // EASTL allocation hooks (masked relocations).
 void* __cdecl EASTL_allocator_allocate(unsigned int size, const char* name, int flags,
@@ -301,7 +303,7 @@ struct Variant {
 };
 
 namespace ResourceMan {
-struct Key { unsigned int mInstance; unsigned int mType; unsigned int mGroup; unsigned int mPad; };
+struct Key { unsigned int mInstance; unsigned int mType; unsigned int mGroup; };
 }
 }  // namespace EA
 
@@ -317,7 +319,7 @@ public:
     virtual void v18(); virtual void v1C(); virtual void v20();
     virtual void v24(); virtual void v28(); virtual void v2C();
     virtual void v30(cPropertyList* p);                          // +0x30
-    char pad[0x54 - 0x34];
+    char pad[0x38 - 4];
 };
 
 // Stub of the property manager interface: slots 0x18/0x28/0x2c/0x30 used.
@@ -325,10 +327,7 @@ class IPropertyManager {
 public:
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
     virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
-    virtual void v08(); virtual void v09(); virtual void v0A(); virtual void v0B();
-    virtual void v0C(); virtual void v0D(); virtual void v0E(); virtual void v0F();
-    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
-    virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
+    virtual void v08(); virtual void v09();
     virtual bool HasPropertyList(uint32 a, uint32 b);                              // +0x28
     virtual bool GetPropertyList(uint32 a, uint32 b, EA::AutoRefCount<cPropertyList>& out);  // +0x2c
     virtual void v2C(cPropertyList* p);                                            // +0x30

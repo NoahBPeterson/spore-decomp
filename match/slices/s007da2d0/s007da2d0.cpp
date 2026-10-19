@@ -70,7 +70,7 @@ struct RandomLinearCongruential {
     void SetSeed(int);                       // 0x00936090
     uint32_t RandomUint32Uniform();          // 0x009360b0
 };
-extern RandomLinearCongruential g_sRandom;
+extern RandomLinearCongruential g_sRandom;   // 0x016778dc (EA::Swarm::sRandom)
 
 void* SP_ConfigManager();                    // 0x0067dd30
 
@@ -560,13 +560,73 @@ bool PluginManager::Load(const char* name, int param)
 // ===========================================================================
 // 0x007dae20  SP::RunOfflineWorld
 // ===========================================================================
+extern "C" unsigned __int64 __rdtsc(void);   // 0x00f47582 (crt lib_)
+#pragma intrinsic(__rdtsc)
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(int64_t* p);
+extern "C" long _InterlockedExchange(volatile long* Target, long Value);  // 0x00f4711d (crt lib_)
+#pragma intrinsic(_InterlockedExchange)
+
+// EASTL string (the shared empty buffer lives at 0x01667bac); bodies out of line.
+extern char gEmptyString[];                  // 0x01667bac
+namespace eastl {
+struct allocator {
+    void deallocate(void* p, unsigned int) { delete[] (char*)p; }
+};
+struct basic_string {
+    char* mpBegin;                           // +0x00
+    char* mpEnd;                             // +0x04
+    char* mpCapacity;                        // +0x08
+    allocator mAllocator;                    // +0x0c (empty)
+    basic_string() : mpBegin(0), mpEnd(0), mpCapacity(0) { AllocateSelf(); }
+    ~basic_string() { DeallocateSelf(); }
+    void AllocateSelf() { mpBegin = gEmptyString; mpEnd = mpBegin; mpCapacity = mpBegin + 1; }
+    void DeallocateSelf() {
+        if ((mpCapacity - mpBegin) > 1)
+            DoFree(mpBegin, mpCapacity - mpBegin);
+    }
+    void DoFree(char* p, unsigned int n) { if (p) mAllocator.deallocate(p, n); }
+    const char* c_str() const { return mpBegin; }
+    basic_string& sprintf(const char* pFormat, ...);   // 0x00472fe0
+};
+}  // namespace eastl
+
+// EA::Stopwatch (see slice s00939a60 for the standalone bodies).
 struct EA_Stopwatch {
-    char mData[0x18];
-    EA_Stopwatch(int mode, int flag);       // 0x0093a560
-    int64_t GetTicks();                     // 0x0093a3a0
+    uint64_t mnStartTime;                          // +0x00
+    uint64_t mnTotalElapsedTime;                   // +0x08
+    int      mnUnits;                              // +0x10
+    float    mfStopwatchCyclesToUnitsCoefficient;  // +0x14
+
+    EA_Stopwatch(int units, bool start);           // 0x0093a560
+    int64_t GetElapsedTimeFloat();                 // 0x0093a3a0
+
+    void Start() {
+        if (mnStartTime == 0) {
+            if (mnUnits == 1) {
+                mnStartTime = __rdtsc();
+            } else {
+                int64_t li;
+                QueryPerformanceCounter(&li);
+                mnStartTime = (uint64_t)li;
+            }
+        }
+    }
 };
 
 void* EA_GetMessagingServer();              // 0x00883860
+
+// EA::Messaging::MessageBasicRC<2> (vtable pair 0x13eb90c base / 0x1452a38 derived;
+// 0x13eb918 is restored on unwind).  Only the fields the caller touches.
+extern void* vtbl_MsgBase[];                // 0x013eb90c
+extern void* vtbl_MsgDerived[];             // 0x01452a38
+struct Msg2T {
+    void* vptr;                             // +0x00
+    long  mField04;                         // +0x04
+    void* mpText;                           // +0x08
+    void* mField0c;                         // +0x0c
+    void* mField10;                         // +0x10
+};
+typedef void (__thiscall *MsgPostFn)(void*, unsigned, void*, int);
 
 // The vtable-bearing simulator / world objects are only accessed through their
 // virtual slots; the slot offsets in the comments are the real ones.
@@ -586,7 +646,8 @@ struct WorldObject {
     virtual void v15(float, float, void*);
 };
 
-int SP_RunOfflineWorld(WorldObject* world, SimObject* sim, int seed, int dtMs,
+// @ 0x007dae20
+int SP_RunOfflineWorld(WorldObject* world, SimObject* sim, int seed, unsigned int dtMs,
                        float maxSeconds, int unused, float* outElapsed,
                        char verbose, void* effectName)
 {
@@ -598,16 +659,18 @@ int SP_RunOfflineWorld(WorldObject* world, SimObject* sim, int seed, int dtMs,
     g_sRandom.RandomUint32Uniform();
 
     int totalMs = 0;
-    EA_Stopwatch sw(5, 0);
+    EA_Stopwatch sw(5, false);
+    sw.Start();
     sim->v02(0);
 
     float dt = (float)dtMs * 0.001f;
-    float elapsed = 0.0f;
+    float elapsed;
     char buffer[0x80];
     for (;;) {
         world->v15(dt, dt, buffer);
         totalMs += dtMs;
-        elapsed = (float)sw.GetTicks();
+        elapsed = (float)sw.GetElapsedTimeFloat() *
+                  sw.mfStopwatchCyclesToUnitsCoefficient;
         if (!sim->v04())
             break;
         if (!(maxSeconds > elapsed))
@@ -618,12 +681,18 @@ int SP_RunOfflineWorld(WorldObject* world, SimObject* sim, int seed, int dtMs,
         *outElapsed = elapsed;
     world->v13();
     if (verbose) {
-        char text[512];
-        sprintf(text, "Effect: %s, Duration: %d virtual ms in %g s (%g x)\n",
-                effectName, totalMs, elapsed, (double)totalMs / (elapsed * 1000.0));
+        eastl::basic_string text;
+        text.sprintf("Effect: %s, Duration: %d virtual ms in %g s (%g x)\n",
+                     (const char*)effectName, totalMs, (double)elapsed,
+                     (double)totalMs / ((double)elapsed * 1000.0f));
+        Msg2T msg;
+        msg.mField10 = 0;
+        msg.vptr = vtbl_MsgBase;
+        _InterlockedExchange(&msg.mField04, 0);
+        msg.vptr = vtbl_MsgDerived;
+        msg.mpText = (void*)text.c_str();
         void* server = EA_GetMessagingServer();
-        ((void(__thiscall*)(void*, void*, const void*, int, int, char))
-             (*(void***)server)[0x14 / 4])(server, text, NULL, 0, 0, 1);
+        ((MsgPostFn)(*(void***)server)[5])(server, 0x11998ee, &msg, 0);
     }
     return totalMs;
 }
