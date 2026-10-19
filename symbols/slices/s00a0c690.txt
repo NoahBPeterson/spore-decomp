@@ -1,1 +1,1 @@
-00a0c690 SP::cSPCreatureAnimWorld::Update  # PDB caller-scored candidate; matches cSPCreatureAnimWorld layout (mManager +0x1c, mCreatures +0x24, LOD counters), cAnimatingCreature -> creature_instance_data sync
+00a0c690 ?Update@cSPCreatureAnimWorld@@QAEXMPAUcViewer_s00a0_c690@@@Z  # cSPCreatureAnimWorld::Update migrated from s00a0c690 (verbatim, slice spelling)
