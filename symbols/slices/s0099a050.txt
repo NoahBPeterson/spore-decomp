@@ -1,4 +1,4 @@
-0099a050  EA::StringMan::FactoryStringTableXml::ReadResource  # 811-byte XML resource reader (guard on 0xcf6c21b8); partial
+0099a050 ?ReadResource@FactoryStringTableXml_s0099_a050@StringMan@EA@@QAE_NHPAHIH@Z  # FactoryStringTableXml_s0099_a050::ReadResource migrated from s0099a050 (verbatim, slice spelling)
 0099a380  EA::UTFWinTools::UTFWinToolsInternal::FUN_0099a380  # sorted wide-string name table binary search (table 0x15503d0, 23 entries); nonmatching (7 diff)
 0099a3f0 ?FUN_0099a3f0@UTFWinToolsInternal@UTFWinTools@EA@@YI_NII@Z  # FUN_0099a3f0 migrated from s0099a050 (verbatim, slice spelling)
 0099a470 ?ReportResult@XmlReaderState@UTFWinToolsInternal@UTFWinTools@EA@@QAEXPAX@Z  # XmlReaderState::ReportResult migrated from s0099a050 (verbatim, slice spelling)

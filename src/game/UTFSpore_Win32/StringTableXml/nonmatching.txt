@@ -1,0 +1,6 @@
+# <va>  <diff-bytes>  <reason>   (nonmatching: complete + behaviourally equivalent, but not byte-exact)
+00999b20 78 complete StringTableXml::StrDup; length loop and allocator branch shape differ
+00999c50 25 complete StringTableXml ctor; member-init/argument scheduling differs; difftest PASS
+00999d30 23 complete FactoryStringTableXml::CreateResource; key-copy/count schedule differs
+00999dd0 370 complete SpVec::insert(pos,n,value); register allocation and this-reload differ
+0099a010 17 complete StringTableXml::SetString; this/vector register allocation differs

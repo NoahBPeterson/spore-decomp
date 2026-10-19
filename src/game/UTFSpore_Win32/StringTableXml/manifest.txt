@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/StringTableXml.cpp  ?FUN_00999ba0@@YGHPAII@Z  00999ba0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/StringTableXml.cpp  ?Invoke@LoadCallbackHolder@@QAEXPAUILoadSrc@@I@Z  00999bc0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/StringTableXml.cpp  ??0FactoryStringTableXml@@QAE@XZ  00999c20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/StringTableXml.cpp  ??_GStringTableXml@@UAEPAXI@Z  00999ce0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

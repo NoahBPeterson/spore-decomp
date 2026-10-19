@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>   (partial: source present and compilable, but not a faithful/complete reconstruction)
+0099a050  811  EA::StringMan::FactoryStringTableXml::ReadResource  (/O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast).  811-byte XML resource reader: version/hash guard, XmlReader setup, wide-string table parse.  Body reduced to the argument guard returning 0; the whole parse is not reconstructed.  difftest: UNSUPPORTED (no symbol of similar size).
