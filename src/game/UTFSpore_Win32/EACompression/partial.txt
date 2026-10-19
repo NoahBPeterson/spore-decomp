@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0092c340  -  RefPack::DecodeUnchecked: skeleton (EA refpack LZ decode outline only)
+0092c510  970  EA::Refpack::iCompress core; compression search approximated
+0092c8e0  300  EA::Refpack::DeflateBuf; hash-table/deflate core approximated

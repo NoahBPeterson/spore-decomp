@@ -1,6 +1,6 @@
 0092c510 EA::Refpack::iCompress  # PDB name (callee-scored)
-0092c8e0 EA::Refpack::DeflateBuf  # PDB name (anchor)
-0092c9f0 EA::CompressionRefpack::CompressData  # PDB candidate (caller-single)
+0092c8e0 ?DeflateBuf@Refpack@EA@@YAHPAXHPBXHI@Z  # EA::Refpack::DeflateBuf migrated from s0092c510
+0092c9f0 ?Refpack_CompressData@@YGHHHHHI@Z  # Refpack_CompressData migrated from s0092c510 (verbatim, slice spelling)
 0092ca60 EA::CompressionRefpack::DecompressData  # PDB (vtable-slot); refpack header + decode
 0092cb00 ?Memset32@@YAPAIPAIIH@Z  # Memset32 migrated from s0092c510 (verbatim, slice spelling)
 0092cb30 ?AppendNarrow@@YAIPAXPBDI@Z  # AppendNarrow migrated from s0092c510 (verbatim, slice spelling)
