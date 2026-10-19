@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0093acd0  183  approximate: ReadString padding/seek behavior reconstructed loosely

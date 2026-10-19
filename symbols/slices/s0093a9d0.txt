@@ -1,9 +1,9 @@
-0093a9d0 WriteUint16  # dev-PDB EA::IO::WriteUint16
-0093aa70 WriteUint32  # dev-PDB EA::IO::WriteUint32
+0093a9d0 ?WriteUint16@IO@EA@@YA_NPAVIStream_s0093_a9d0@12@PBGIH@Z  # WriteUint16 migrated from s0093a9d0 (verbatim, slice spelling)
+0093aa70 ?WriteUint32@IO@EA@@YA_NPAVIStream_s0093_a9d0@12@PBIIH@Z  # WriteUint32 migrated from s0093a9d0 (verbatim, slice spelling)
 0093ab10 WriteUint64  # no PDB name; 8-byte sibling of WriteUint32
 0093abd0 WriteString  # no PDB name
 0093ac80 ReadBool  # no PDB name
-0093acd0 ReadString  # no PDB name
+0093acd0 ?ReadString@IO@EA@@YAHPAVIStream_s0093_a9d0@12@PADHH@Z  # ReadString migrated from s0093a9d0 (verbatim, slice spelling)
 0093adb0 WriteCString  # no PDB name
 0093ae40 ?GetAccessFlags@StreamBuffer@IO@EA@@UBEHXZ  # StreamBuffer::GetAccessFlags migrated from s0093a9d0 (verbatim, slice spelling)
 0093ae60 ?GetState@StreamBuffer@IO@EA@@UBEHXZ  # StreamBuffer::GetState migrated from s0093a9d0 (verbatim, slice spelling)

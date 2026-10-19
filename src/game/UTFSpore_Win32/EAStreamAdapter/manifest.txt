@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?ReadInt32@@YA_NPAVIOStream@@PAIHH@Z  0093a780  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?ReadUInt64@@YA_NPAVIOStream@@PA_KHH@Z  0093a800  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?HasRoom@@YA_NPAVIOStream@@HH@Z  0093a890  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?StreamWrite@@YA_NPAVIOStream@@HH@Z  0093a9a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

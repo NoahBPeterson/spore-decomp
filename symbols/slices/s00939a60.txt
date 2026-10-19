@@ -13,8 +13,8 @@
 0093a610 StreamCopy  # chunked stream copy
 0093a6c0 WriteExact  # v14 guard, then v30 exact-length write
 0093a700 ReadUInt16  # big-endian swap read
-0093a780 EA::IO::ReadInt32  # PDB name (also ReadUint32)
-0093a800 ReadUInt64  # 64-bit big-endian swap read
-0093a890 HasRoom  # (a*b) <= v2c()
-0093a8b0 EA::IO::ReadLine  # PDB name
-0093a9a0 operator<<  # v14 guard, v38 write
+0093a780 ?ReadInt32@@YA_NPAVIOStream@@PAIHH@Z  # ReadInt32 migrated from s00939a60 (verbatim, slice spelling)
+0093a800 ?ReadUInt64@@YA_NPAVIOStream@@PA_KHH@Z  # ReadUInt64 migrated from s00939a60 (verbatim, slice spelling)
+0093a890 ?HasRoom@@YA_NPAVIOStream@@HH@Z  # HasRoom migrated from s00939a60 (verbatim, slice spelling)
+0093a8b0 ?ReadLine@@YAIPAVIOStream@@PAD@Z  # ReadLine migrated from s00939a60 (verbatim, slice spelling)
+0093a9a0 ?StreamWrite@@YA_NPAVIOStream@@HH@Z  # StreamWrite migrated from s00939a60 (verbatim, slice spelling)

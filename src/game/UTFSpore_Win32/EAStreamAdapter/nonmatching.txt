@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0093a8b0 155 ReadLine: complete behaviourally; buffered-line state machine register/schedule differs
+0093a9d0 139 complete: WriteUint16 byte-swap loop, register schedule differs
+0093aa70 127 complete: WriteUint32 byte-swap loop, register schedule differs
