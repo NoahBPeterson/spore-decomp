@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00528e90 578 SP::cEffectsRenderer::RenderSingleModels; approximated (RenderWare global state block)
+005295b0 120 append-vertices writer; approximated pointer sequence

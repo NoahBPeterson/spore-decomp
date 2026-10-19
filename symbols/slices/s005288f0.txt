@@ -1,2 +1,9 @@
-00529280 StateBits::Set  # card decompile: builds a 4-bit flag word from four unsigned char args
-00529350 rw::graphics::SetRenderState  # card disasm: sets dirty bit 0x16fa38c and value 0x16f91e0
+00528e20 ?Destroy@cRTTBuffer_s0052_88f0@nSPSkinner@@QAEXXZ  # cRTTBuffer_s0052_88f0::Destroy migrated from s005288f0 (verbatim, slice spelling)
+00528e90 ?RenderSingleModels@@YA_NXZ  # RenderSingleModels migrated from s005288f0 (verbatim, slice spelling)
+005291f0 ?EffectsDispatch@@YAXPAUMatrix44f@@I@Z  # EffectsDispatch migrated from s005288f0 (verbatim, slice spelling)
+00529280 ?Set@StateBits@@QAEXEEEE@Z  # StateBits::Set migrated from s005288f0 (verbatim, slice spelling)
+005292d0 ?Draw@DrawCtx@@QAEXPAMM@Z  # DrawCtx::Draw migrated from s005288f0 (verbatim, slice spelling)
+00529350 ?SetRenderState@@YAXHI@Z  # SetRenderState migrated from s005288f0 (verbatim, slice spelling)
+00529520 ?ClampAndStream@cRTTBuffer_s0052_88f0@nSPSkinner@@QAEII@Z  # cRTTBuffer_s0052_88f0::ClampAndStream migrated from s005288f0 (verbatim, slice spelling)
+005295b0 ?WriteBuffer@@YAXPAI00I@Z  # WriteBuffer migrated from s005288f0 (verbatim, slice spelling)
+00529690 ?RwTeardown@@YIXPAURwObj@@@Z  # RwTeardown migrated from s005288f0 (verbatim, slice spelling)
