@@ -8,14 +8,17 @@ typedef unsigned int uint32_t;
 
 char gEmptyString16;
 char gEmptyString16B;
+char gEmptyString16C;
 
-void* operator new[](unsigned, const char*, int, int, int, int);
+void* operator new[](unsigned, const char*, int, int, int, int);    // 0x00f473a0  ??_U@YAPAXIPBDHHHH@Z
 void  operator delete[](void*);
-extern "C" void* __cdecl operator_new_ea(unsigned, const char*, int, int, const char*, int);
-extern "C" void  __cdecl operator_delete_ea(void*);
+extern "C" void* __cdecl operator_new_ea(unsigned, const char*, int, int, const char*, int);  // 0x00f473a0
+extern "C" void  __cdecl operator_delete_ea(void*);                                            // 0x00f47380
 extern "C" void* __cdecl memcpy_f(void*, const void*, unsigned);
 extern "C" wchar_t* __cdecl wcsncpy_f(wchar_t*, const wchar_t*, unsigned);
 extern "C" void  __cdecl FUN_004228e0(void*, unsigned);
+
+#define ALLOC_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 
 // ---------------------------------------------------------------------------------------------
 // anonymous namespace StackArray<T,256> (inline buffer + heap overflow).
@@ -27,6 +30,7 @@ struct StackArray {
     T* mpDataEnd;
     unsigned mCapacity;
     void Resize(unsigned n);
+    T* Init(T* p, int n);       // 0x009332D0 - out of line in the original
 };
 
 // @ 0x00933320  StackArray<wchar_t,256>::Resize
@@ -54,9 +58,28 @@ struct WString {
     char16_t* mpEnd;        // +0x04
     char16_t* mpCapacity;   // +0x08
     void*     mpAlloc;      // +0x0c
-    void DeallocateSelf();
+    void DeallocateSelf();                                       // 0x00933960
+    void Reset() {
+        mpBegin = (char16_t*)&gEmptyString16;
+        mpEnd   = (char16_t*)&gEmptyString16;
+        mpCapacity = (char16_t*)&gEmptyString16B;
+    }
+    void ctor(const wchar_t* str, const void* dummy);            // 0x0041df50
+    void make_lower();                                           // 0x005e8e80
+    void ltrim();                                                // 0x00554170
+    void rtrim();                                                // 0x005541e0
+    void trim();                                                 // 0x0057eda0
+    int  find(char16_t c, unsigned pos);                         // 0x004f6ab0
+    void erase(unsigned pos, unsigned n);                        // 0x004228e0
+    void append(const WString& s, unsigned pos, unsigned n);     // 0x006ab800
+    WString* operator=(const WString& s);                        // 0x0057cb60
     WString* Assign(const WString& s);
-    void Reset();
+};
+
+// rbtree<basic_string<wchar_t>>: only the lookup entry point is needed here.
+struct RBTreeKeyedByWString {
+    void* mpRoot;                                                // +0x00 (header at tree base)
+    void* find_iter(void** out, const WString* key);             // 0x005e96f0
 };
 
 // @ 0x00933960  (lib_eatext::basic_string<wchar_t>::DeallocateSelf)
@@ -67,7 +90,10 @@ void WString::DeallocateSelf() {
     }
 }
 
-// @ 0x00933850  EA::IO::IniFile::ReadEntry
+struct CharStr;
+struct WStr16;
+
+// IniFile layout (only the fields this slice touches).
 // ---------------------------------------------------------------------------------------------
 struct IniFile {
     void*   vtbl;           // +0x000
@@ -83,17 +109,19 @@ struct IniFile {
 
     void* V(int off) const { return ((void**)vtbl)[off / 4]; }
 
-    int   ReadEntryRaw(void* a, wchar_t* b);
+    int   ReadEntryRaw(void* a, void* b, wchar_t* dst, int maxn);
     bool  WriteEntryFormatted(void* a, unsigned n, void* args);
-    int   ReadBinary(void* a, void* b);
-    bool  WriteBinary(void* a, unsigned n, void* b);
+    int   ReadBinary(void* a, void* b, void* p, int n);
+    bool  WriteBinary(void* a1, void* a2, void* src, unsigned n);
     bool  ConvertAndWriteStream(void* a, int n);
     bool  GetFileLine(WString* out);
-    bool  GetFileLine8To8(WString* out);
-    bool  GetFileLine16To16(WString* out);
-    int   ReadEntry(void* a, void* b, WString* c);
+    bool  GetFileLine8To8(CharStr* out);
+    bool  GetFileLine16To16(WStr16* out);
     bool  SectionExists(wchar_t* name);
+    int   ReadEntry(const wchar_t* section, const wchar_t* key, WString* out);
 };
+
+int ReadEntryFormatted(IniFile* self, void* a, void* b, void* c, void* d);
 
 bool EnsureTrailingPathSeparator(wchar_t*, int);
 int  ConcatenatePathComponents(wchar_t*, const wchar_t*, const wchar_t*);
@@ -121,31 +149,54 @@ bool IniFile::WriteEntryFormatted(void* a, unsigned n, void* args) {
 // ---------------------------------------------------------------------------------------------
 // @ 0x009334D0  EA::IO::IniFile::ReadBinary
 // ---------------------------------------------------------------------------------------------
-int IniFile::ReadBinary(void* a, void* b) {
+extern "C" bool EA_Text_ConvertASCIIArrayToBinaryData(const wchar_t*, int, void*);  // 0x0093d280
+
+int IniFile::ReadBinary(void* a, void* b, void* p, int n) {
+    // Wide scratch buffer that receives the hex text read off the stream.
     StackArray<wchar_t, 256> wb;
-    wb.mpData = wb.mData; wb.mpDataEnd = 0; wb.mCapacity = 0x100;
-    int n = ((int(__fastcall*)(void*, void*, void*, int))V(0x20))(this, a, b, 0x100);
-    if (n > (int)wb.mCapacity) {
-        wb.Resize(n + 1);
-        ((int(__fastcall*)(void*, void*, void*, int))V(0x20))(this, a, b, n);
+    wb.mpDataEnd = 0;
+    wb.mCapacity = 0x100;
+    wb.mpData = wb.mData;
+    int len = ((int(__thiscall*)(void*, void*, void*, void*, unsigned))V(0x20))(this, a, b, wb.mpData, 0x100);
+    if ((int)wb.mCapacity < len) {
+        wb.Resize((unsigned)(len + 1));
+        ((int(__thiscall*)(void*, void*, void*, void*, unsigned))V(0x20))(this, a, b, wb.mpData, (unsigned)len);
     }
+    // Byte scratch buffer.  It takes its own 256-byte inline block, then adopts the wide
+    // buffer's storage (twice the bytes we need) via Init once the wide buffer is non-empty.
     StackArray<char, 256> cb;
-    cb.mpData = cb.mData; cb.mpDataEnd = 0; cb.mCapacity = 0x100;
-    return n;
+    cb.mpData = cb.mData;
+    cb.mpDataEnd = (char*)p;
+    cb.mCapacity = (unsigned)n;
+    if (cb.mpDataEnd != 0 && cb.mCapacity != 0)
+        cb.Init((char*)p, n);
+    unsigned half = (unsigned)(n / 2);
+    if (half > cb.mCapacity) cb.Resize(half);
+    char* dst = cb.Init((char*)wb.mpData, (int)cb.mCapacity);
+    EA_Text_ConvertASCIIArrayToBinaryData((const wchar_t*)cb.mpData, len, dst);
+    if (cb.mpDataEnd != cb.mpData) {
+        unsigned cnt = cb.mCapacity;
+        if (cnt > 0x100) cnt = 0x100;
+        memcpy_f(cb.mpDataEnd, cb.mpData, cnt);
+    }
+    if (cb.mpData != cb.mData && cb.mpDataEnd != cb.mpData) operator delete[](cb.mpData);
+    if (wb.mpData != wb.mData && wb.mpDataEnd != wb.mpData) operator delete[](wb.mpData);
+    return len;
 }
 
 // ---------------------------------------------------------------------------------------------
 // @ 0x00933640  EA::IO::IniFile::WriteBinary
 // ---------------------------------------------------------------------------------------------
-extern "C" int EA_Text_ConvertBinaryDataToASCIIArray(void*, unsigned, void*);
+extern "C" int EA_Text_ConvertBinaryDataToASCIIArray(const void*, unsigned,
+                                                     wchar_t*);  // 0x0093d210
 
-bool IniFile::WriteBinary(void* a, unsigned n, void* b) {
+bool IniFile::WriteBinary(void* a1, void* a2, void* src, unsigned n) {
     StackArray<wchar_t, 256> buf;
     buf.mpData = buf.mData; buf.mpDataEnd = 0; buf.mCapacity = 0x100;
     unsigned need = n * 2 + 1;
     if (need > buf.mCapacity) buf.Resize(need);
-    EA_Text_ConvertBinaryDataToASCIIArray(a, n, buf.mpData);
-    bool r = ((bool(__fastcall*)(void*, void*, void*))V(0x2c))(this, buf.mpData, b) != 0;
+    EA_Text_ConvertBinaryDataToASCIIArray(src, n, (wchar_t*)buf.mpData);
+    bool r = ((bool(__thiscall*)(void*, void*, void*, void*))V(0x2c))(this, a1, a2, buf.mpData) != 0;
     if (buf.mpData != buf.mData && buf.mpDataEnd != buf.mpData) operator delete[](buf.mpData);
     return r;
 }
@@ -199,35 +250,36 @@ WString* WString_ctor(WString* dst, const WString* src) {
 // ---------------------------------------------------------------------------------------------
 extern "C" int WString_InitRange(void*, void*);
 
-int IniFile::ReadEntryRaw(void* a, wchar_t* b) {
-    void* loc[3];
-    loc[0] = &gEmptyString16; loc[1] = &gEmptyString16; loc[2] = &gEmptyString16B;
-    int r = ((int(__fastcall*)(void*, void*, void*, void*))V(0x24))(this, a, b, loc);
+int IniFile::ReadEntryRaw(void* a, void* b, wchar_t* dst, int maxn) {
+    char16_t* loc[4];
+    loc[0] = (char16_t*)&gEmptyString16;
+    loc[1] = (char16_t*)&gEmptyString16;
+    loc[2] = (char16_t*)&gEmptyString16B;
+    int r = ((int(__thiscall*)(void*, void*, void*, void*))V(0x24))(this, a, b, loc);
     if (r >= 0) {
-        int n = (int)(size_t)a;
-        if (n > r) n = r;
-        wcsncpy_f(b, (const wchar_t*)a, n);
-        b[n - 1] = 0;
+        int n = maxn > r ? r : maxn;
+        wcsncpy_f(dst, (const wchar_t*)loc[0], n);
+        dst[n - 1] = 0;
     }
-    if ((int)((int)loc[1] - (int)loc[0] & 0xfffffffeU) > 2 && loc[0]) operator delete[](loc[0]);
+    if ((int)(((char*)loc[1] - (char*)loc[0]) & 0xfffffffeU) > 2 && loc[0] != 0)
+        operator delete[](loc[0]);
     return r;
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x009338E0  EA::IO::IniFile::ReadEntryFormatted
-// ---------------------------------------------------------------------------------------------
-extern "C" int Vsscanf16(void*, void*, void*);
+extern "C" int Vsscanf16(void*, void*, void*);                          // 0x00939d30
 
-int IniFile::ReadEntry(void* a, void* b, WString* c) {
-    (void)c;
-    void* loc[3];
-    loc[0] = &gEmptyString16; loc[1] = &gEmptyString16; loc[2] = &gEmptyString16B;
+// @ 0x009338E0  ReadEntryFormatted (cdecl free form: self, fmt, src, c, d)
+int ReadEntryFormatted(IniFile* self, void* a, void* b, void* c, void* d) {
+    char16_t* loc[4];
+    loc[0] = (char16_t*)&gEmptyString16;
+    loc[1] = (char16_t*)&gEmptyString16;
+    loc[2] = (char16_t*)&gEmptyString16B;
     int r = 0;
-    int rv = ((int(__fastcall*)(void*, void*, void*))V(0x24))(this, a, loc);
-    if (rv != 0) {
-        r = Vsscanf16(loc[0], this, b);
-    }
-    if ((int)((int)loc[1] - (int)loc[0] & 0xfffffffeU) > 2 && loc[0]) operator delete[](loc[0]);
+    if (((int(__thiscall*)(void*, void*, void*, void*))self->V(0x24))(self, a, b, loc) != 0)
+        r = Vsscanf16(loc[0], c, &d);
+    if ((int)(((char*)loc[1] - (char*)loc[0]) & 0xfffffffeU) > 2 && loc[0] != 0)
+        operator delete[](loc[0]);
     return r;
 }
 
@@ -236,23 +288,25 @@ int IniFile::ReadEntry(void* a, void* b, WString* c) {
 // ---------------------------------------------------------------------------------------------
 extern "C" void WString_RangeInitialize(WString*, const wchar_t*);
 extern "C" int  WString_makeLower(WString*);
-extern "C" int  EA_Text_ConvertEncoding8(void*, int, int, void*);
+extern "C" int  EA_Text_GetCharacterSize(int);                          // 0x0093c920
+extern "C" int  EA_Text_ConvertEncoding8(void*, int, int, void*);       // 0x0093cfb0
 
 bool IniFile::GetFileLine(WString* out) {
     if (out->mpBegin != out->mpEnd) { *out->mpBegin = 0; out->mpEnd = out->mpBegin; }
-    int cs = EA_Text_GetCharacterSize(mEncoding);
+    unsigned cs = EA_Text_GetCharacterSize(mEncoding);
     if (cs == 2) {
-        return ((bool(__fastcall*)(void*, WString*))V(0x58))(this, out) != 0;
+        return ((bool(__thiscall*)(void*, WString*))V(0x58))(this, out) != 0;
     }
-    void* loc[3];
-    loc[0] = &gEmptyString16; loc[1] = &gEmptyString16; loc[2] = &gEmptyString16B;
-    char ok = (char)((int(__fastcall*)(void*, void*))V(0x54))(this, loc);
-    if (ok) {
+    char16_t* loc[4];
+    loc[0] = (char16_t*)&gEmptyString16;
+    loc[1] = (char16_t*)&gEmptyString16;
+    loc[2] = (char16_t*)&gEmptyString16C;
+    if (((int(__thiscall*)(void*, void*))V(0x54))(this, loc)) {
         EA_Text_ConvertEncoding8(loc[0], (int)((char*)loc[1] - (char*)loc[0]), 8, out);
-        if ((int)((int)loc[1] - (int)loc[0]) > 1 && loc[0]) operator delete[](loc[0]);
+        if ((int)((char*)loc[2] - (char*)loc[0]) > 1 && loc[0] != 0) operator delete[](loc[0]);
         return true;
     }
-    if ((int)((int)loc[1] - (int)loc[0]) > 1 && loc[0]) operator delete[](loc[0]);
+    if ((int)((char*)loc[2] - (char*)loc[0]) > 1 && loc[0] != 0) operator delete[](loc[0]);
     return false;
 }
 
@@ -300,34 +354,59 @@ void* eastl_do_copy_backward(WString* first, WString* last, WString* out) {
 // ---------------------------------------------------------------------------------------------
 // @ 0x00933B70  EA::IO::IniFile::GetFileLine8To8
 // ---------------------------------------------------------------------------------------------
-extern "C" void CharString_append(void*, const char*, const char*);
+extern "C" void* __cdecl memset_f(void*, int, unsigned);             // 0x011e073e
 
-bool IniFile::GetFileLine8To8(WString* out) {
-    char buf[0x44];
-    int pos = ((int(__fastcall*)(void*, int))V(0x24))(this, 0);
+// The transcode object at IniFile+0x438; vtable slots: 0x24 Tell, 0x28 Seek, 0x30 Read.
+struct IniStream {
+    void* vtbl;
+    void* V(int off) const { return ((void**)vtbl)[off / 4]; }
+};
+typedef int  (__thiscall *T_i_i)(void*, int);
+typedef int  (__thiscall *T_i_pi)(void*, void*, int);
+typedef void (__thiscall *T_v_ii)(void*, int, int);
+
+// 8-bit and 16-bit eastl character strings (same 3-pointer body as WString).
+struct CharStr {
+    char* mpBegin; char* mpEnd; char* mpCapacity;
+    void append(const char* first, const char* last);                // 0x00455d60
+};
+struct WStr16 {
+    char16_t* mpBegin; char16_t* mpEnd; char16_t* mpCapacity;
+    void append(const char16_t* first, const char16_t* last);        // 0x00429580
+};
+
+bool IniFile::GetFileLine8To8(CharStr* out) {
+    char buf[0x40];
     bool done = false;
+    char c;
+    int i = 0;
+    bool found = false;
+    int pos = ((T_i_i)((IniStream*)mpEncodingSrc)->V(0x24))((IniStream*)mpEncodingSrc, 0);
     if (out->mpBegin != out->mpEnd) { *out->mpBegin = 0; out->mpEnd = out->mpBegin; }
+    memset_f(buf, 0, 0x40);
     for (;;) {
-        int n = ((int(__fastcall*)(void*, void*, int))V(0x30))(this, buf, 0x40);
+        int n = ((T_i_pi)((IniStream*)mpEncodingSrc)->V(0x30))((IniStream*)mpEncodingSrc, buf, 0x40);
         if (n == 0 || n == -1) break;
-        int i = 0;
-        for (; i < n; ++i) {
-            if (buf[i] == '\r' || buf[i] == '\n') {
-                done = true;
-                ((void(__fastcall*)(void*, int, int))V(0x28))(this, pos + i, 0);
-                for (;;) {
-                    char c;
-                    if (((int(__fastcall*)(void*, void*, int))V(0x30))(this, &c, 1) != 1) goto append;
-                    if (c != '\r' && c != '\n') break;
-                }
-                ((void(__fastcall*)(void*, int, int))V(0x28))(this, -1, 1);
-                goto append;
+        done = true;
+        i = 0;
+        if (n > 0) {
+            for (;;) {
+                if (i >= n) goto append;
+                if (buf[i] == '\r' || buf[i] == '\n') break;
+                ++i;
             }
+            found = true;
+            ((T_v_ii)((IniStream*)mpEncodingSrc)->V(0x28))((IniStream*)mpEncodingSrc, pos + i, 0);
+            for (;;) {
+                if (((T_i_pi)((IniStream*)mpEncodingSrc)->V(0x30))((IniStream*)mpEncodingSrc, &c, 1) != 1) goto append;
+                if (c != '\r' && c != '\n') break;
+            }
+            ((T_v_ii)((IniStream*)mpEncodingSrc)->V(0x28))((IniStream*)mpEncodingSrc, -1, 1);
         }
     append:
-        CharString_append(buf, buf, buf + i);
-        pos = ((int(__fastcall*)(void*, int))V(0x24))(this, 0);
-        if (done) break;
+        out->append(buf, buf + i);
+        pos = ((T_i_i)((IniStream*)mpEncodingSrc)->V(0x24))((IniStream*)mpEncodingSrc, 0);
+        if (found) break;
     }
     return done;
 }
@@ -337,36 +416,45 @@ bool IniFile::GetFileLine8To8(WString* out) {
 // ---------------------------------------------------------------------------------------------
 extern "C" void WStr_Append(WString*, const char16_t*, const char16_t*);
 
-bool IniFile::GetFileLine16To16(WString* out) {
+bool IniFile::GetFileLine16To16(WStr16* out) {
     char16_t buf[0x80];
-    int pos = ((int(__fastcall*)(void*, int))V(0x24))(this, 0);
+    char16_t c;
     bool done = false;
+    bool found = false;
+    int pos = ((T_i_i)((IniStream*)mpEncodingSrc)->V(0x24))((IniStream*)mpEncodingSrc, 0);
     if (out->mpBegin != out->mpEnd) { *out->mpBegin = 0; out->mpEnd = out->mpBegin; }
+    memset_f(buf, 0, 0x100);
     for (;;) {
-        int n = ((int(__fastcall*)(void*, void*, int))V(0x30))(this, buf, 0x100);
+        int n = ((T_i_pi)((IniStream*)mpEncodingSrc)->V(0x30))((IniStream*)mpEncodingSrc, buf, 0x100);
         if (n == 0 || n == -1) break;
         int i = 0;
-        for (; i < n; ++i) {
-            if (buf[i] == '\r' || buf[i] == '\n') {
-                done = true;
-                ((void(__fastcall*)(void*, int, int))V(0x28))(this, pos + i, 0);
-                for (;;) {
-                    char16_t c;
-                    if (((int(__fastcall*)(void*, void*, int))V(0x30))(this, &c, 2) != 2) goto append;
-                    if (c != '\r' && c != '\n') break;
-                }
-                ((void(__fastcall*)(void*, int, int))V(0x28))(this, -2, 1);
-                goto append;
+        done = true;
+        if (n > 0) {
+            for (;;) {
+                if (i >= n) goto append;
+                if (buf[i] == 0xd || buf[i] == 0xa) break;
+                ++i;
             }
+            found = true;
+            ((T_v_ii)((IniStream*)mpEncodingSrc)->V(0x28))((IniStream*)mpEncodingSrc, pos + i, 0);
+            for (;;) {
+                if (((T_i_pi)((IniStream*)mpEncodingSrc)->V(0x30))((IniStream*)mpEncodingSrc, &c, 2) != 2) goto append;
+                if (c != 0xd && c != 0xa) break;
+            }
+            ((T_v_ii)((IniStream*)mpEncodingSrc)->V(0x28))((IniStream*)mpEncodingSrc, -2, 1);
         }
     append:
-        WStr_Append(out, buf, buf + i);
-        pos = ((int(__fastcall*)(void*, int))V(0x24))(this, 0);
-        if (done) break;
-        if (mEncoding == 0x4b0) continue;
+        out->append(buf, buf + i);
+        pos = ((T_i_i)((IniStream*)mpEncodingSrc)->V(0x24))((IniStream*)mpEncodingSrc, 0);
+        if (found) break;
+    }
+    if (mEncoding != 0x4b0) {
         int cnt = (int)(out->mpEnd - out->mpBegin) >> 1;
-        unsigned short* q = out->mpBegin;
-        for (int k = 0; k < cnt; ++k) { q[k] = (unsigned short)((q[k] >> 8) | (q[k] << 8)); }
+        char16_t* q = out->mpBegin;
+        for (int k = 0; k < cnt; ++k) {
+            unsigned short w = q[k];
+            q[k] = (char16_t)((w >> 8) | (w << 8));
+        }
     }
     return done;
 }
@@ -387,35 +475,108 @@ void __stdcall DestroyPairRange(WString* first, WString* last) {
 // ---------------------------------------------------------------------------------------------
 // @ 0x00933E50  rbtree insert helper
 // ---------------------------------------------------------------------------------------------
-extern "C" int  WString_compare(const void*, const void*);
-extern "C" void* RBTreeInsert(void*, void*, void*, int);
+extern "C" int  WString_compare(const char16_t*, const char16_t*, const char16_t*,
+                                const char16_t*);                     // 0x005e9260
+extern "C" void RBTreeInsert(void*, void*, void*, int);               // 0x009216a0
 
-void RbtreeInsertHelper(char* tree, void** out, char* hint, WString* key, char flag) {
-    int less = 0;
+struct RBTreeHelper {
+    void* Insert(void** out, char* hint, WString* key, char flag);
+};
+
+// 0x009337F0 is __thiscall (dst in ecx, src on the stack, `ret 4`) even though the PDB spells it
+// as a two-argument __cdecl helper.
+typedef WString* (__thiscall *WStringCtorThiscall)(WString*, const WString*);
+
+void* RBTreeHelper::Insert(void** out, char* hint, WString* key, char flag) {
+    char* tree = (char*)this;
+    int side = 0;
     if (flag == 0 && hint != tree + 4) {
-        if (WString_compare(key, hint + 0x10) >= 0) less = 1;
+        if (WString_compare(key->mpBegin, key->mpEnd,
+                            *(char16_t**)(hint + 0x10), *(char16_t**)(hint + 0x14)) >= 0)
+            side = 1;
     }
-    void* node = operator_new_ea(0x24, "EASTL", 0, 0, "EASTL/allocator.h", 0xd1);
-    if (node) WString_ctor((WString*)((char*)node + 0x10), key);
-    RBTreeInsert(tree + 4, hint, node, less);
+    void* node = operator_new_ea(0x24, "EASTL", 0, 0, ALLOC_FILE, 0xd1);
+    if ((char*)node + 0x10 != 0)
+        ((WStringCtorThiscall)WString_ctor)((WString*)((char*)node + 0x10), key);
+    RBTreeInsert(node, hint, tree + 4, side);
     ++*(int*)(tree + 0x14);
     *out = node;
+    return (void*)out;
 }
 
 // ---------------------------------------------------------------------------------------------
 // @ 0x00933EF0  EA::IO::IniFile::ReadEntry
+//   bool/int ReadEntry(const wchar_t* section, const wchar_t* key, WString* out)
+//   Reads forward from the section's offset looking for "key=value"; returns the value length.
 // ---------------------------------------------------------------------------------------------
-int IniFile_ReadEntry(IniFile* self, WString* key, WString* out) {
-    if (self->mpEncodingSrc == 0 || key == 0 || key->mpBegin == 0 || *key->mpBegin == 0) return -1;
-    if (out == 0 || out->mpBegin == 0 || *out->mpBegin == 0) return -1;
-    if (self->m_b442 == 0) {
-        char c = (char)((int(__fastcall*)(void*, int))self->V(0x50))(self, 1);
-        if (c == 0) {
-            if (self->m_b441 == 0) ((void(__fastcall*)(void*))self->V(0x1c))(self);
+extern "C" int Locale_MakeLocaleAvailable(const WString*, const WString*);   // 0x0087d9a0
+typedef bool (__thiscall *T_b_ii)(void*, int, int);
+
+int IniFile::ReadEntry(const wchar_t* section, const wchar_t* key, WString* out) {
+    if (mpEncodingSrc == 0) return -1;
+    if (section == 0 || *section == 0) return -1;
+    if (key == 0 || *key == 0) return -1;
+    if (m_b442 == 0) {
+        if ((char)((int(__thiscall*)(void*, int))V(0x50))(this, 1) == 0) {
+            if (m_b441 == 0) ((void(__thiscall*)(void*))V(0x1c))(this);
             return -1;
         }
     }
-    ((void(__fastcall*)(void*))self->V(0x1c))(self);
+    WString value;      // the line currently being examined
+    WString name;       // the key name parsed out of that line
+    WString keyLower;   // "key", lowercased
+    WString secLower;   // "section", lowercased
+    secLower.ctor(section, &section);
+    secLower.make_lower();
+    keyLower.ctor(key, &section);
+    keyLower.make_lower();
+    void* node = ((RBTreeKeyedByWString*)((char*)this + 0x444))->find_iter(&node, &secLower);
+    if (node == (void*)((char*)this + 0x448)) goto fail;
+    if (!((T_b_ii)((IniStream*)mpEncodingSrc)->V(0x28))((IniStream*)mpEncodingSrc,
+                                                       *(int*)((char*)node + 0x20), 0)) goto fail;
+    value.Reset();
+    name.Reset();
+    if ((char)((int(__thiscall*)(void*, WString*))V(0x5c))(this, &value) != 0) {
+        if ((char)((int(__thiscall*)(void*, WString*))V(0x5c))(this, &value) != 0) {
+            for (;;) {
+                value.ltrim();
+                if ((((int)((char*)value.mpEnd - (char*)value.mpBegin)) & 0xfffffffe) == 0) goto next;
+                if (*value.mpBegin == 0x3b) goto next;                  // ';' comment line
+                if (*value.mpBegin == 0x5b) {                           // '[' next section
+                    if (value.mpBegin != value.mpEnd) { *value.mpBegin = 0; value.mpEnd = value.mpBegin; }
+                    goto fail;
+                }
+                {
+                    int eq = value.find(0x3d, 0);                       // '='
+                    if (eq != -1) {
+                        name.append(value, 0, eq);
+                        name.rtrim();
+                        name.make_lower();
+                        if (Locale_MakeLocaleAvailable(&name, &keyLower) != 0) {
+                            value.erase(0, eq + 1);
+                            value.trim();
+                            out->operator=(value);
+                            if (m_b441 == 0) ((void(__thiscall*)(void*))V(0x1c))(this);
+                            int len = (int)((char*)value.mpEnd - (char*)value.mpBegin) >> 1;
+                            value.DeallocateSelf();
+                            name.DeallocateSelf();
+                            keyLower.DeallocateSelf();
+                            secLower.DeallocateSelf();
+                            return len;
+                        }
+                    }
+                }
+            next:
+                if ((char)((int(__thiscall*)(void*, WString*))V(0x5c))(this, &value) == 0) break;
+            }
+        }
+    }
+fail:
+    if (m_b441 == 0) ((void(__thiscall*)(void*))V(0x1c))(this);
+    value.DeallocateSelf();
+    name.DeallocateSelf();
+    keyLower.DeallocateSelf();
+    secLower.DeallocateSelf();
     return -1;
 }
 

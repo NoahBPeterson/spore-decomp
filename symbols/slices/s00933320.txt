@@ -1,19 +1,19 @@
-00933320 ?Resize@?$StackArray@_W$0BAA@@@QAEXI@Z  # Resize migrated from s00933320 (verbatim, slice spelling)
-00933390 `anonymous namespace'::StackArray<char,256>::Resize  # pdb_names gap-align
-009333f0 ?WriteEntryFormatted@IniFile@@QAE_NPAXI0@Z  # IniFile::WriteEntryFormatted migrated from s00933320 (verbatim, slice spelling)
-009334d0 ?ReadBinary@IniFile@@QAEHPAX0@Z  # IniFile::ReadBinary migrated from s00933320 (verbatim, slice spelling)
-00933640 ?WriteBinary@IniFile@@QAE_NPAXI0@Z  # IniFile::WriteBinary migrated from s00933320 (verbatim, slice spelling)
-00933700 ?ConvertAndWriteStream@IniFile@@QAE_NPAXH@Z  # IniFile::ConvertAndWriteStream migrated from s00933320 (verbatim, slice spelling)
-009337f0 ?WString_ctor@@YAPAUWString@@PAU1@PBU1@@Z  # WString_ctor migrated from s00933320 (verbatim, slice spelling)
-00933850 ?ReadEntryRaw@IniFile@@QAEHPAXPA_W@Z  # IniFile::ReadEntryRaw migrated from s00933320 (verbatim, slice spelling)
-009338e0 ?ReadEntry@IniFile@@QAEHPAX0PAUWString@@@Z  # IniFile::ReadEntry migrated from s00933320 (verbatim, slice spelling)
-00933960 ?DeallocateSelf@WString@@QAEXXZ  # WString::DeallocateSelf migrated from s00933320 (verbatim, slice spelling)
-00933980 ?GetFileLine@IniFile@@QAE_NPAUWString@@@Z  # IniFile::GetFileLine migrated from s00933320 (verbatim, slice spelling)
-00933a90 ?eastl_do_move_commit@@YAPAXPAUWString@@00@Z  # eastl_do_move_commit migrated from s00933320 (verbatim, slice spelling)
-00933b00 ?eastl_do_copy_backward@@YAPAXPAUWString@@00@Z  # eastl_do_copy_backward migrated from s00933320 (verbatim, slice spelling)
-00933b70 ?GetFileLine8To8@IniFile@@QAE_NPAUWString@@@Z  # IniFile::GetFileLine8To8 migrated from s00933320 (verbatim, slice spelling)
-00933c80 ?GetFileLine16To16@IniFile@@QAE_NPAUWString@@@Z  # IniFile::GetFileLine16To16 migrated from s00933320 (verbatim, slice spelling)
-00933df0 ?DestroyPairRange@@YGXPAUWString@@0@Z  # DestroyPairRange migrated from s00933320 (verbatim, slice spelling)
-00933e50 ?RbtreeInsertHelper@@YAXPADPAPAX0PAUWString@@D@Z  # RbtreeInsertHelper migrated from s00933320 (verbatim, slice spelling)
-00933ef0 ?IniFile_ReadEntry@@YAHPAUIniFile@@PAUWString@@1@Z  # IniFile_ReadEntry migrated from s00933320 (verbatim, slice spelling)
-009341b0 ?SectionExists@IniFile@@QAE_NPA_W@Z  # IniFile::SectionExists migrated from s00933320 (verbatim, slice spelling)
+00933320 ?Resize@?$StackArray@_W$0BAA@@@QAEXI@Z
+00933390 ?Resize@?$StackArray@D$0BAA@@@QAEXI@Z
+009333f0 ?WriteEntryFormatted@IniFile@@QAE_NPAXI0@Z
+009334d0 ?ReadBinary@IniFile@@QAEHPAX00H@Z
+00933640 ?WriteBinary@IniFile@@QAE_NPAX00I@Z
+00933700 ?ConvertAndWriteStream@IniFile@@QAE_NPAXH@Z
+009337f0 ?WString_ctor@@YAPAUWString@@PAU1@PBU1@@Z
+00933850 ?ReadEntryRaw@IniFile@@QAEHPAX0PA_WH@Z
+009338e0 ?ReadEntryFormatted@@YAHPAUIniFile@@PAX111@Z
+00933960 ?DeallocateSelf@WString@@QAEXXZ
+00933980 ?GetFileLine@IniFile@@QAE_NPAUWString@@@Z
+00933a90 ?eastl_do_move_commit@@YAPAXPAUWString@@00@Z
+00933b00 ?eastl_do_copy_backward@@YAPAXPAUWString@@00@Z
+00933b70 ?GetFileLine8To8@IniFile@@QAE_NPAUCharStr@@@Z
+00933c80 ?GetFileLine16To16@IniFile@@QAE_NPAUWStr16@@@Z
+00933df0 ?DestroyPairRange@@YGXPAUWString@@0@Z
+00933e50 ?Insert@RBTreeHelper@@QAEPAXPAPAXPADPAUWString@@D@Z
+00933ef0 ?ReadEntry@IniFile@@QAEHPB_W0PAUWString@@@Z
+009341b0 ?SectionExists@IniFile@@QAE_NPA_W@Z
