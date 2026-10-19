@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00a73110 1736 complete (call/vcall sequence identical, 62/62); /O2 register allocation and SSE scheduling differ (scale-transform math, cached string c_str across calls, flag-store placement); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a74260 2592 complete Execute; same calls/vcalls/branches, size 1.04x; differs in stack-slot packing (frame 0xf4 vs 0xb4) and register choice

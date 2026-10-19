@@ -1,1 +1,2 @@
-00a73110 EA::Swarm::cEffectCheat::ParseLine  # PDB candidate (caller-scored) cEffectCheat; uses mArgSpec.Parse, mTestEffects, OpenEffectsFile, "Couldn't open '%s'"
+0083b9d0 ?Parse@cArgumentSpec@ArgScript@EA@@QAEXPAVcArguments@23@PAVcIParser@23@@Z  # EA::ArgScript::cArgumentSpec::Parse (callee of s00a73110, named from the dev publics; slice address comment)
+00a73110 ?ParseLine@cEffectCheat@@QAEXABUcArguments@@@Z  # cEffectCheat::ParseLine migrated from s00a73110 (verbatim, slice spelling)

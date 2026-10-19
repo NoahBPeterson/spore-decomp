@@ -1,2 +1,1 @@
-# va  Name  # evidence
-00a74260  EA::Swarm::cEffectsManagerCheat::Execute  # card/PDB name
+00a74260 ?Execute@cEffectsManagerCheat@Swarm@EA@@QAEXABULine@ArgScript@3@@Z  # cEffectsManagerCheat::Execute migrated from s00a74260 (verbatim, slice spelling)
