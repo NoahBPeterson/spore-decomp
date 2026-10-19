@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPCreatureAnim/gait_dynamics.cpp  ?OnMouseUp@cSPEditorManipulationLimb@SP@@QAE_NHMMH@Z  005adb20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_dynamics.cpp  ?DoOnMouseMove@cSPEditorManipulationLimb@SP@@QAE_NMMH@Z  005ae0b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_dynamics.cpp  ?Shutdown@cSPEditorManipulationLimb@SP@@QAEXXZ  005ae120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_dynamics.cpp  ?DoOnMouseDown@cSPEditorManipulationLimb@SP@@QAE_NHMMH@Z  005ae480  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
