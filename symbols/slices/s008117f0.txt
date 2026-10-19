@@ -1,9 +1,9 @@
-008117f0 cSPUILayoutManager::CloseLayout  # PDB candidate (554-byte body not reconstructed)
-00811a20 eastl::vector<EA::COM::IUnknown32*,eastl::sp_vector_allocator>::swap  # card name
+008117f0 ?CloseLayout@cSPUILayoutManager@@QAE_NPAVcSPUILayoutObjectCollection@@_N@Z  # cSPUILayoutManager::CloseLayout migrated from s008117f0
+00811a20 ?swap@PtrVec_s0081_17f0@@QAEXAAU1@@Z  # PtrVec_s0081_17f0::swap migrated from s008117f0 (verbatim, slice spelling)
 00811ad0 ?Shutdown@cSPUILayout_s0081_17f0@@QAEXI@Z  # cSPUILayout_s0081_17f0::Shutdown migrated from s008117f0 (verbatim, slice spelling)
 00811b30 ?attach_parent@cSPUILayoutObjectCollection@@QAEXXZ  # cSPUILayoutObjectCollection::attach_parent migrated from s008117f0
-00811b80 cSPUILayoutObjectCollection::OnLoad  # gap-align
-00811c20 cSPUILayoutManager::Method11c20  # 768-byte body (not reconstructed)
+00811b80 ?OnLoad@cSPUILayoutObjectCollection@@UAEXXZ  # cSPUILayoutObjectCollection::OnLoad migrated from s008117f0
+00811c20 ?Reload@cSPUILayoutObjectCollection@@UAE_NXZ  # cSPUILayoutObjectCollection::Reload migrated from s008117f0
 00811f20 ?ctor@cSPUILayoutManager_s0081_17f0@@QAEPAXXZ  # cSPUILayoutManager_s0081_17f0::ctor migrated from s008117f0 (verbatim, slice spelling)
 00811f80 ?scalarDtor@cSPUILayoutManager_s0081_17f0@@QAEPAXE@Z  # cSPUILayoutManager_s0081_17f0::scalarDtor migrated from s008117f0 (verbatim, slice spelling)
 00811fe0 ?dtor@cSPUILayout_s0081_17f0@@QAEXXZ  # cSPUILayout_s0081_17f0::dtor migrated from s008117f0 (verbatim, slice spelling)
@@ -14,4 +14,4 @@
 008121b0 ?SetParentWin@cSPUILayout@@QAE_NPAVIWindow@UTFWin@EA@@_NI@Z  # cSPUILayout::SetParentWin migrated from s008117f0
 00812210 ?FUN_00812210@@YA_NPAUVecView@@0@Z  # FUN_00812210 migrated from s008117f0 (verbatim, slice spelling)
 00812310 ?eraseSys@RBTree1@@QAEXPAPAXPAX@Z  # RBTree1::eraseSys migrated from s008117f0 (verbatim, slice spelling)
-00812370 eastl::rbtree<...>::lower_bound  # multimap node search + FUN_00812280
+00812370 ?Method12370@RBTree1@@QAEXPAPAXPAUVecView@@@Z  # RBTree1::Method12370 migrated from s008117f0 (verbatim, slice spelling)

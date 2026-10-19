@@ -1,4 +1,4 @@
-008124a0 cSPUILayoutCheat::Execute  # PDB name from card
+008124a0 ?Execute@cSPUILayoutCheat_s0081_24a0@@QAEXPAUcArguments_s0081_24a0@ArgScript@EA@@@Z  # cSPUILayoutCheat_s0081_24a0::Execute migrated from s008124a0 (verbatim, slice spelling)
 00812990 cSPUILayoutCheat::`scalar_deleting_destructor'  # card
 008129c0 RegisterLayoutCheat  # allocates cSPUILayoutCheat then tail-calls SP::CheatManager
 00812a10 UTFWin::cSPUILayoutZoom::SetWindow  # card (PDB class cSPUILayoutZoom)

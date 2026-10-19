@@ -1,12 +1,12 @@
-008107d0 cSPUILayoutResourceFactory::CreateResource  # builds cPropertyList then calls this->v24
-008108a0 cSPUILayoutResourceFactory::Function8a0  # resource load: binary stream / token IO context
+008107d0 ?CreateResource@cSPUILayoutResourceFactory_s0081_07d0@@QAEPAXPAX0I0@Z  # cSPUILayoutResourceFactory_s0081_07d0::CreateResource migrated from s008107d0 (verbatim, slice spelling)
+008108a0 ?Function8a0@cSPUILayoutResourceFactory_s0081_07d0@@QAEPAXPAX0I0@Z  # cSPUILayoutResourceFactory_s0081_07d0::Function8a0 migrated from s008107d0 (verbatim, slice spelling)
 00810a50 ?dtor@PtrVec@@QAEXXZ  # PtrVec::dtor migrated from s008107d0 (verbatim, slice spelling)
 00810af0 ?insertNode@RBTree@@QAEXPAPAXPAURBNode@@PAI_N@Z  # RBTree::insertNode migrated from s008107d0 (verbatim, slice spelling)
 00810d30 ?FUN_00810d30@@YGHIPAE@Z  # FUN_00810d30 migrated from s008107d0 (verbatim, slice spelling)
-00810e30 eastl::vector<...>::insert  # vector<bool,...>::DoInsertValue call at 0x11e0744
-00810fd0 cSPUILayoutManager::CreateLayoutObjects  # operator_new 0x9c "UI/LayoutObjects", ctor 0x8100d0
-00811110 cSPUILayoutManager::FindWorldById  # rbtree find + CreateWindow
+00810e30 ?insert@PtrVec@@QAEXPAPAX0@Z  # PtrVec::insert migrated from s008107d0 (verbatim, slice spelling)
+00810fd0 ?CreateObjects@cSPUILayerManagerLike@@QAEPAXI@Z  # cSPUILayerManagerLike::CreateObjects migrated from s008107d0 (verbatim, slice spelling)
+00811110 ?Method11110@cSPUILayerManagerLike@@QAEPAXII@Z  # cSPUILayerManagerLike::Method11110 migrated from s008107d0 (verbatim, slice spelling)
 00811260 ??4PtrVec@@QAEPAU0@ABU0@@Z  # PtrVec::operator= migrated from s008107d0 (verbatim, slice spelling)
-00811330 cSPUILayoutManager::Method11330  # 604-byte body (not reconstructed)
-008115a0 cSPUILayoutManager::InitMessaging  # registers 0x22568e7 / 0xf62ade handlers
-008116e0 cSPUILayoutManager::ShutdownMessaging  # unregisters the same handlers
+00811330 ?Method11330@cSPUILayerManagerLike@@QAEPAXI@Z  # cSPUILayerManagerLike::Method11330 migrated from s008107d0 (verbatim, slice spelling)
+008115a0 ?InitMessaging@cSPUILayerManagerLike@@QAE_NXZ  # cSPUILayerManagerLike::InitMessaging migrated from s008107d0 (verbatim, slice spelling)
+008116e0 ?ShutdownMessaging@cSPUILayerManagerLike@@QAEXXZ  # cSPUILayerManagerLike::ShutdownMessaging migrated from s008107d0 (verbatim, slice spelling)

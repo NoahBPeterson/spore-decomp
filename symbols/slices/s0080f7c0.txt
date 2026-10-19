@@ -6,7 +6,8 @@
 0080fa20 ?Shutdown@cSPUILayerManager@@QAE_NXZ  # cSPUILayerManager::Shutdown migrated from s0080f7c0 (verbatim, slice spelling)
 0080fac0 ?MethodFAC0@cSPUILayeredObject_s0080_f7c0@@QAEPAXPAX00@Z  # cSPUILayeredObject_s0080_f7c0::MethodFAC0 migrated from s0080f7c0 (verbatim, slice spelling)
 0080fc50 ?AddModel@cSPUILayeredObject_s0080_f7c0@@QAEPAXPAUcMWModel_s0080_f7c0@@@Z  # cSPUILayeredObject_s0080_f7c0::AddModel migrated from s0080f7c0 (verbatim, slice spelling)
-0080fd60 cSPUILayoutObjectCollection::Init  # anchor name
+0080fd60 ?Init@cSPUILayoutObjectCollection_s0080_f7c0@@QAEXPAX@Z  # cSPUILayoutObjectCollection_s0080_f7c0::Init migrated from s0080f7c0 (verbatim, slice spelling)
+0080fe10 ?Subscribe@cSPUILayoutObjectCollection_s0080_f7c0@@QAEXH@Z  # cSPUILayoutObjectCollection_s0080_f7c0::Subscribe migrated from s0080f7c0 (verbatim, slice spelling)
 0080feb0 ?ResourceChanged@cSPUILayoutObjectCollection_s0080_f7c0@@QAEXXZ  # cSPUILayoutObjectCollection_s0080_f7c0::ResourceChanged migrated from s0080f7c0 (verbatim, slice spelling)
 0080fef0 ?IsKeyIncluded@cSPUIResourcesKeyFilter@@UAE_NABVKey@ResourceMan@EA@@@Z  # cSPUIResourcesKeyFilter::IsKeyIncluded migrated from s0080f7c0
 0080ff50 ?Init@cSPUILayoutResourceFactory@@UAE_NXZ  # cSPUILayoutResourceFactory::Init migrated from s0080f7c0
@@ -19,19 +20,19 @@
 00810090 ?SetReloadCallback@cSPUILayout@@QAEXP6AXPAXPAV1@_N@Z0@Z  # cSPUILayout::SetReloadCallback migrated from s0080f7c0
 008100d0 ?ctor@cSPUILayoutObjectCollection_s0080_f7c0@@QAEPAXXZ  # cSPUILayoutObjectCollection_s0080_f7c0::ctor migrated from s0080f7c0 (verbatim, slice spelling)
 00810140 ?detach_parent@cSPUILayoutObjectCollection@@QAEXXZ  # cSPUILayoutObjectCollection::detach_parent migrated from s0080f7c0
-008101a0 cSPUILayoutObjectCollection::Shutdown  # PDB candidate (SerCollection view)
+008101a0 ?Shutdown@cSPUILayoutObjectCollectionV8@@QAEXXZ  # cSPUILayoutObjectCollectionV8::Shutdown migrated from s0080f7c0 (verbatim, slice spelling)
 00810200 ?FindWindowByID@cSPUILayoutObjectCollection_s0080_f7c0@@QAEPAXHD@Z  # cSPUILayoutObjectCollection_s0080_f7c0::FindWindowByID migrated from s0080f7c0 (verbatim, slice spelling)
-00810270 cSPUILayoutObjectCollection::OnUnload  # gap-align
+00810270 ?OnUnload@cSPUILayoutObjectCollectionV8@@QAEXXZ  # cSPUILayoutObjectCollectionV8::OnUnload migrated from s0080f7c0 (verbatim, slice spelling)
 00810310 ?SetVisibility@cSPUILayoutObjectCollection@@QAE_N_N@Z  # cSPUILayoutObjectCollection::SetVisibility migrated from s0080f7c0
-008103a0 ?set_world_visibility@cSPUILayoutManager@@QAEXPAUcWorld@1@_N@Z  # cSPUILayoutManager::set_world_visibility migrated from s0080f7c0
+008103a0 ?SetNodeVisibility@cSPUILayoutManager_s0080_f7c0@@QAEXPAXD@Z  # cSPUILayoutManager_s0080_f7c0::SetNodeVisibility migrated from s0080f7c0 (verbatim, slice spelling)
 00810400 ?cEditorResource_dtor@@YIXPAX@Z  # cEditorResource_dtor migrated from s0080f7c0 (verbatim, slice spelling)
-00810460 cSPUILayoutResourceFactory::WriteResource  # gap-align
+00810460 ?WriteResource@cSPUILayoutResourceFactory@@UAE_NPAVResource@ResourceMan@EA@@PAVRecord@34@PAXI@Z  # cSPUILayoutResourceFactory::WriteResource migrated from s0080f7c0
 00810520 ?alloc@EastlNodeBuilder@@QAEPAXPAX@Z  # EastlNodeBuilder::alloc migrated from s0080f7c0 (verbatim, slice spelling)
 00810590 ?SetVisibility@cSPUILayout@@QAE_N_N@Z  # cSPUILayout::SetVisibility migrated from s0080f7c0
 008105b0 ?FindWindowByID@cSPUILayout@@QBEPAVIWindow@UTFWin@EA@@I_N@Z  # cSPUILayout::FindWindowByID migrated from s0080f7c0
 008105d0 ?VectorDtor@cSPUILayoutObjectCollection_s0080_f7c0@@QAEPAXE@Z  # cSPUILayoutObjectCollection_s0080_f7c0::VectorDtor migrated from s0080f7c0 (verbatim, slice spelling)
-00810620 cSPUILayoutManager::GetWorldMainWindow  # rbtree find, returns node+0x1c
-00810660 cSPUILayoutManager::Method10660  # rbtree find then SetNodeVisibility
-008106a0 cSPUILayoutManager::SetAllWorldsVisibility  # gap-align
+00810620 ?GetWorldMainWindow@cSPUILayoutManager_s0080_f7c0@@QAEPAXI@Z  # cSPUILayoutManager_s0080_f7c0::GetWorldMainWindow migrated from s0080f7c0 (verbatim, slice spelling)
+00810660 ?Method10660@cSPUILayoutManager_s0080_f7c0@@QAEXI_N@Z  # cSPUILayoutManager_s0080_f7c0::Method10660 migrated from s0080f7c0 (verbatim, slice spelling)
+008106a0 ?SetAllWorldsVisibility@cSPUILayoutManager_s0080_f7c0@@QAEX_N@Z  # cSPUILayoutManager_s0080_f7c0::SetAllWorldsVisibility migrated from s0080f7c0 (verbatim, slice spelling)
 00810730 ?AnyWorldHidden@cSPUILayoutManager_s0080_f7c0@@QAE_NXZ  # cSPUILayoutManager_s0080_f7c0::AnyWorldHidden migrated from s0080f7c0 (verbatim, slice spelling)
-00810760 cSPUILayoutManager::IsWorldVisible  # rbtree find, node+0x14+0xc==0
+00810760 ?IsWorldVisible@cSPUILayoutManager_s0080_f7c0@@QAE_NI@Z  # cSPUILayoutManager_s0080_f7c0::IsWorldVisible migrated from s0080f7c0 (verbatim, slice spelling)

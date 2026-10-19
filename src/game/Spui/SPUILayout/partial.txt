@@ -1,1 +1,24 @@
 # va  diff-bytes  reason
+0080fd60  89  approximate: Init second Get() branch and key fields omitted
+0080fe10  95  approximate: subscribe notification path handling simplified
+008101a0  144  approximate: Shutdown (SerCollection view) teardown/offsets approximate
+00810270  83  approximate: OnUnload callback dispatch + notification path simplified
+00810460  156  approximate: WriteResource branches reconstructed, arg roles guessed
+00810620  52  approximate: rbtree find call convention + iterator handling approximate
+00810660  50  approximate: rbtree find call convention + node dispatch approximate
+008106a0  113  approximate: rbtree iteration via RBTreeIncrement, node layout approximate
+00810760  59  approximate: rbtree find call convention + result field approximate
+008107d0  148  approximate: CreateResource callback arg roles + vtable slots guessed
+008108a0  269  approximate: resource reload/binary-stream path simplified
+00810e30  242  approximate: vector insert grow path uses generic copy/memmove
+00810fd0  163  approximate: CreateObjects message construction + temp layout simplified
+00811110  84  approximate: rbtree find result handling stubbed
+00811330  4  approximate: 604-byte body stubbed to a return
+008115a0  90  approximate: messaging registration arguments approximated
+008116e0  45  approximate: unregistration loop body omitted
+008117f0  4   approximate: 554-byte CloseLayout body stubbed
+00811a20  153 approximate: vector swap allocator-mismatch branch approximated
+00811b80  110 approximate: OnLoad reload callback / notification path simplified
+00811c20  3   approximate: 768-byte body stubbed
+00812370  181 approximate: multimap lower_bound/equal_range node search approximated
+008124a0  -  partial: cSPUILayoutCheat::Execute - only the list/load/unload/textures main paths; EASTL vector<bool>/map plumbing omitted
