@@ -1,11 +1,11 @@
-0080f7c0 cSPUILayerManager::RemoveObject  # moves a layered object from mObjects to mRemovedObjects (offsets +0xc/+0x20)
-0080f8e0 cSPUILayerManager::RemoveAllObjects  # calls RemoveObject over mObjects then erase(mRemoved)
-0080f920 cSPUILayerManager::DrawLayer  # real name in card (PDB candidate)
-0080f9d0 cSPUILayeredObject::MethodF9D0  # window-message predicate, flag at +0x74
-0080fa00 cSPUILayerManager::~adjustor  # vbase/this thunk: ecx-=0x250 then jmp 0x80f380
-0080fa20 cSPUILayerManager::Shutdown  # real name in card (PDB candidate)
-0080fac0 cSPUILayeredObject::MethodFAC0  # builds model via callback, pushes into mModels
-0080fc50 cSPUILayeredObject::AddModel  # real mangled name (callee-scored)
+0080f7c0 ?RemoveObject@cSPUILayerManager@@QAEIPAUcSPUILayeredObject_s0080_f7c0@@@Z  # cSPUILayerManager::RemoveObject migrated from s0080f7c0 (verbatim, slice spelling)
+0080f8e0 ?RemoveAllObjects@cSPUILayerManager@@QAEXXZ  # cSPUILayerManager::RemoveAllObjects migrated from s0080f7c0 (verbatim, slice spelling)
+0080f920 ?DrawLayer@cSPUILayerManager@@QAEXPAX000@Z  # cSPUILayerManager::DrawLayer migrated from s0080f7c0 (verbatim, slice spelling)
+0080f9d0 ?MethodF9D0@cSPUILayeredObject_s0080_f7c0@@QAEIPAX0@Z  # cSPUILayeredObject_s0080_f7c0::MethodF9D0 migrated from s0080f7c0 (verbatim, slice spelling)
+0080fa00 ?FUN_0080fa00@@YIXPAX@Z  # FUN_0080fa00 migrated from s0080f7c0 (verbatim, slice spelling)
+0080fa20 ?Shutdown@cSPUILayerManager@@QAE_NXZ  # cSPUILayerManager::Shutdown migrated from s0080f7c0 (verbatim, slice spelling)
+0080fac0 ?MethodFAC0@cSPUILayeredObject_s0080_f7c0@@QAEPAXPAX00@Z  # cSPUILayeredObject_s0080_f7c0::MethodFAC0 migrated from s0080f7c0 (verbatim, slice spelling)
+0080fc50 ?AddModel@cSPUILayeredObject_s0080_f7c0@@QAEPAXPAUcMWModel_s0080_f7c0@@@Z  # cSPUILayeredObject_s0080_f7c0::AddModel migrated from s0080f7c0 (verbatim, slice spelling)
 0080fd60 cSPUILayoutObjectCollection::Init  # anchor name
 0080feb0 ?ResourceChanged@cSPUILayoutObjectCollection_s0080_f7c0@@QAEXXZ  # cSPUILayoutObjectCollection_s0080_f7c0::ResourceChanged migrated from s0080f7c0 (verbatim, slice spelling)
 0080fef0 ?IsKeyIncluded@cSPUIResourcesKeyFilter@@UAE_NABVKey@ResourceMan@EA@@@Z  # cSPUIResourcesKeyFilter::IsKeyIncluded migrated from s0080f7c0

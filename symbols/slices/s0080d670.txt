@@ -1,6 +1,12 @@
-0080dfe0 cSPUILayeredObject::get_camera_location_and_zoom  # PDB name in card
-0080e270 cSPUILayeredObject::RenderBegin  # PDB name in card
-0080de20 cSPUILayeredObject::RenderEnd  # PDB candidate (caller-scored) in card
-0080df80 cSPUIModelsAndEffectsRenderer::Release  # real name in card
-0080df50 cSPUIModelsAndEffectsRenderer::AddRef  # paired with Release thunk (this-0x250)
 0080d710 SPUIHelpers::Renderer  # card name; wraps VisitWindowTreeDepthFirst
+0080d7e0 ?FUN_0080d7e0@@YAHPAM0@Z  # FUN_0080d7e0 migrated from s0080d670 (verbatim, slice spelling)
+0080d810 ?Method810@Layered@@QAEPAEXZ  # Layered::Method810 migrated from s0080d670 (verbatim, slice spelling)
+0080da50 ?MethodDA50@Layered@@QAEXPAX@Z  # Layered::MethodDA50 migrated from s0080d670 (verbatim, slice spelling)
+0080de20 cSPUILayeredObject::RenderEnd  # PDB candidate (caller-scored) in card
+0080de80 ?FUN_0080de80@@YAPAXPAPAX00@Z  # FUN_0080de80 migrated from s0080d670 (verbatim, slice spelling)
+0080df00 ?FUN_0080df00@@YAPAXPAPAX00@Z  # FUN_0080df00 migrated from s0080d670 (verbatim, slice spelling)
+0080df50 cSPUIModelsAndEffectsRenderer::AddRef  # paired with Release thunk (this-0x250)
+0080df80 ?Release@cSPUIModelsAndEffectsRenderer@@QAEHXZ  # cSPUIModelsAndEffectsRenderer::Release migrated from s0080d670
+0080dfc0 ?FUN_0080dfc0@@YIXPAD@Z  # FUN_0080dfc0 migrated from s0080d670 (verbatim, slice spelling)
+0080dfe0 ?CameraLocZoom@Layered@@QAEXXZ  # Layered::CameraLocZoom migrated from s0080d670 (verbatim, slice spelling)
+0080e270 ?RenderBegin@Layered@@QAEXXZ  # Layered::RenderBegin migrated from s0080d670 (verbatim, slice spelling)

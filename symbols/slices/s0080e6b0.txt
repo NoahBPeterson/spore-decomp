@@ -1,12 +1,19 @@
-0080e850 UI::cSPUILayeredObject::cSPUILayeredObject  # real name in card
-0080e980 UI::cSPUILayeredObject::RemoveModel  # real name in card
-0080ea50 UI::cSPUILayeredObject::RemoveAllModels  # PDB candidate in card
-0080ead0 UI::cSPUILayeredObject::~cSPUILayeredObject  # real name in card
-0080ea80 eastl::vector<cSPUICustomRendererImpl::cLayerInfo,eastl::fixed_vector_allocator<12,5,4,0,1>>::~vector  # mangled name in card
-0080ebc0 cSPUICustomRendererImpl::cSPUICustomRendererImpl  # produces 0x1417df8/0x1417df4 vtables
-0080ec40 cSPUICustomRendererImpl::~cSPUICustomRendererImpl  # real name in card
-0080eca0 cSPUICustomRendererImpl::`scalar deleting destructor'  # real name in card
-0080ed50 cSPUICustomRendererImpl::operator new factory  # allocates 0x264, returns +0x250 interface
-0080edb0 UI::LayerManager::LayerManager  # real name in card
-0080ee10 UI::LayerManager::~LayerManager  # real name in card
-0080f530 cSPUILayerManager::Init  # real name in card
+0080e6b0 ?MethodE6B0@cSPUILayeredObject_s0080_e6b0@@QAEXPAX0@Z  # cSPUILayeredObject_s0080_e6b0::MethodE6B0 migrated from s0080e6b0 (verbatim, slice spelling)
+0080e850 ?ctor@cSPUILayeredObject_s0080_e6b0@@QAEPAU1@XZ  # cSPUILayeredObject_s0080_e6b0::ctor migrated from s0080e6b0 (verbatim, slice spelling)
+0080e980 ?RemoveModel@cSPUILayeredObject_s0080_e6b0@@QAEIPAUcMWModel@@@Z  # cSPUILayeredObject_s0080_e6b0::RemoveModel migrated from s0080e6b0 (verbatim, slice spelling)
+0080ea50 ?RemoveAllModels@cSPUILayeredObject@@QAEXXZ  # cSPUILayeredObject::RemoveAllModels migrated from s0080e6b0
+0080ea80 ?dtor@LayerInfoVec@@QAEXXZ  # LayerInfoVec::dtor migrated from s0080e6b0 (verbatim, slice spelling)
+0080ead0 ?dtor@cSPUILayeredObject_s0080_e6b0@@QAEXXZ  # cSPUILayeredObject_s0080_e6b0::dtor migrated from s0080e6b0 (verbatim, slice spelling)
+0080ebc0 ?ctor@cSPUICustomRendererImpl@@QAEPAXXZ  # cSPUICustomRendererImpl::ctor migrated from s0080e6b0 (verbatim, slice spelling)
+0080ec40 ?VectorDtor@cSPUICustomRendererImpl@@QAEPAXE@Z  # cSPUICustomRendererImpl::VectorDtor migrated from s0080e6b0 (verbatim, slice spelling)
+0080eca0 ?ScalarDtor@cSPUICustomRendererImpl@@QAEXXZ  # cSPUICustomRendererImpl::ScalarDtor migrated from s0080e6b0 (verbatim, slice spelling)
+0080ed50 ?FUN_0080ed50@@YAPAXXZ  # FUN_0080ed50 migrated from s0080e6b0 (verbatim, slice spelling)
+0080edb0 ?ctor@UI_LayerManager@@QAEPAU1@XZ  # UI_LayerManager::ctor migrated from s0080e6b0 (verbatim, slice spelling)
+0080ee10 ?VectorDtor@UI_LayerManager@@QAEPAXE@Z  # UI_LayerManager::VectorDtor migrated from s0080e6b0 (verbatim, slice spelling)
+0080efe0 ?Insert1@PtrVec@@QAEXPAPAX0@Z  # PtrVec::Insert1 migrated from s0080e6b0 (verbatim, slice spelling)
+0080f140 ?Insert12@PtrVec@@QAEXPAPAX0@Z  # PtrVec::Insert12 migrated from s0080e6b0 (verbatim, slice spelling)
+0080f2e0 ?FUN_0080f2e0@@YIXPADPAPAXPAX2@Z  # FUN_0080f2e0 migrated from s0080e6b0 (verbatim, slice spelling)
+0080f360 ?FUN_0080f360@@YIXPADPAPAXPAX2@Z  # FUN_0080f360 migrated from s0080e6b0 (verbatim, slice spelling)
+0080f380 ?MethodF380@cSPUICustomRendererImpl@@QAEXPAX@Z  # cSPUICustomRendererImpl::MethodF380 migrated from s0080e6b0 (verbatim, slice spelling)
+0080f530 ?FUN_0080f530@@YIXPAX0@Z  # FUN_0080f530 migrated from s0080e6b0 (verbatim, slice spelling)
+0080f730 ?FUN_0080f730@@YAXXZ  # FUN_0080f730 migrated from s0080e6b0 (verbatim, slice spelling)

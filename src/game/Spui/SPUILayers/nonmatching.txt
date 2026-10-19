@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+0080df80 55 complete; interlocked refcount/release schedule differs
+0080e980 130 complete; refcount release/call schedule differs
+0080ea50 14 complete; load of vector begin reuses eax instead of a fresh ecx
+0080ed50 39 complete; null-return block placement + store ordering differ
+0080edb0 61 complete; ctor store schedule / this-in-eax shape differs (now returns this in eax); equiv PASS 400/400; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2
+0080f8e0 24 complete; begin-pointer reloaded through eax instead of a fresh ecx load
+0080fa00 5 complete; vbase adjustor uses add ecx,0xfffffdb0 (cl canonicalises to sub)

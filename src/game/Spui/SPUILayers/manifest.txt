@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+../src/game/Spui/SPUILayers.cpp  ?SetFlag8@@YGXPAD@Z  0080d590  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?FUN_0080d7e0@@YAHPAM0@Z  0080d7e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?FUN_0080de80@@YAPAXPAPAX00@Z  0080de80  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?FUN_0080df00@@YAPAXPAPAX00@Z  0080df00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?FUN_0080dfc0@@YIXPAD@Z  0080dfc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?dtor@LayerInfoVec@@QAEXXZ  0080ea80  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?VectorDtor@cSPUICustomRendererImpl@@QAEPAXE@Z  0080ec40  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?ScalarDtor@cSPUICustomRendererImpl@@QAEXXZ  0080eca0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?VectorDtor@UI_LayerManager@@QAEPAXE@Z  0080ee10  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?FUN_0080f360@@YIXPADPAPAXPAX2@Z  0080f360  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
