@@ -1,5 +1,6 @@
 # source  symbol  va  flags
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?Info_AddOffset@@YAHPAX@Z  00692ca0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?SortRecords_C@@YAXPAUSortRec@@HHU1@@Z  00692d90  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?Construct@cRegNode@@QAEPAU1@PAX@Z  00692f60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ClearBuffer@@YAXPAPAC@Z  00692fb0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseInt64@@YAXPAPBDPA_J@Z  00692fd0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
@@ -13,10 +14,13 @@
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseVector3@@YAXPAPBDPAM@Z  006930f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseVector4@@YAXPAPBDPAM@Z  00693120  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseColorRGB@@YAXPAPBDPAI@Z  00693150  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00693280  00693280  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00693320  00693320  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00693b90  00693b90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00693c10  00693c10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00693c70  00693c70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  @FUN_00693dd0@4  00693dd0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?copyAssign@Obj@@QAEPAU1@ABU1@@Z  006941c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00694270  00694270  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00694bf0  00694bf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00694e00  00694e00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

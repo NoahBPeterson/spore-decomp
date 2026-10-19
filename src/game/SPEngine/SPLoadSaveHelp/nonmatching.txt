@@ -1,18 +1,22 @@
 # va  diff-bytes  reason
-00692880 88 complete; Init serializer-record layout near-miss
-00692c50 55 complete; Unload near-miss
+00692880 80 complete; Init serializer-record layout near-miss
+00692900 371 complete; Serialize: tmp/ok stack-slot assignment and store scheduling differ (bool flag wants the dead param slot); equiv: UNSUPPORTED (0/400 valid inputs)
+00692c50 53 complete; Unload near-miss
 00692cb0 95 complete; record insertion sort near-miss
+00692d20 57 complete; unguarded insertion sort: induction-variable choice (src derived from dst + constant offset) differs; equiv: WEAK (19% cov)
 00692e00 2 complete; WriteBlob32 one-register near-miss
 00692e50 2 complete; WriteBlob16 one-register near-miss; equiv FAIL (eax&0xffff return value)
 00692ee0 24 complete; registry resolve walk near-miss
 00692f20 28 complete; registry release walk near-miss; equiv WEAK (25% cov)
 00692f90 18 complete; cVarListSerializer constructor near-miss
 006930b0 16 complete; ParseFloat stack-slot reuse near-miss
+00693390  772  Variant writer (complete; flags /O2 /MD /Gy /EHsc /TP /GS-): io/info register roles swapped and cl cross-jumps identical case tails the original keeps separate [equiv: WEAK]
 00693900  158  binder destructor: vtable store, +0x18/+0x14 probe, two smart-ref releases present; cl EH frame/state layout differs
 006939b0 165 binder bind A: virtual +0x18 probe, +0x1c release, AutoRef assignment all present; EH frame and this-arg reordering differ
 00693aa0 167 binder bind B: virtual +0x24/+0x28 probe/release paths present; EH frame and this-arg reordering differ
 00693cd0 34 binder ctor A: vtable + zeroed refs + bind call present; missing compiler EH prolog, so frame/scheduling differ
 00693d60 34 binder ctor B: vtable + zeroed refs + bind call present; missing compiler EH prolog, so frame/scheduling differ
+00693e10 374 cVarListSerializer::Serialize (complete; flags /O2 /MD /Gy /EHsc /TP /GS-): frame 4 bytes smaller (a pointer-iteration slot) and this/io registers swapped [equiv: UNSUPPORTED 0/400 valid inputs]
 006940d0 121 Obj copy ctor: header copy + two eastl-string range-init/copy sequence reproduced; no EH region and register scheduling differ; equiv UNSUPPORTED (unresolved refs: Str16::RangeInitialize, Str_DoInsertValue)
 00694210  66  Hoare partition: full algorithm present; cl rotates the two scan loops differently
 006943b0  66  move_backward over 0x60-byte objects with two string assigns; addressing/register base differs

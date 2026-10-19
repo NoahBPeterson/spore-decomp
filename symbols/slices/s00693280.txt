@@ -1,4 +1,6 @@
+00693280 _FUN_00693280  # __declspec migrated from s00693280 (verbatim, slice spelling)
 00693320 _FUN_00693320  # __declspec migrated from s00693280 (verbatim, slice spelling)
+00693390 SP::cVariant::Write  # writes type and flags then the value, or stride/count plus each element for arrays (guess at name; behaviour read from the card)
 006939b0 ?bindA@C3@@QAEHPAX000@Z  # C3::bindA migrated from s00693280 (verbatim, slice spelling)
 00693aa0 ?bindB@C3@@QAEHPAX000@Z  # C3::bindB migrated from s00693280 (verbatim, slice spelling)
 00693b90 _FUN_00693b90  # FUN_00693b90 migrated from s00693280 (verbatim, slice spelling)
@@ -6,6 +8,7 @@
 00693c70 _FUN_00693c70  # FUN_00693c70 migrated from s00693280 (verbatim, slice spelling)
 00693cd0 ?ctorA@C3@@QAEPAU1@PAX000@Z  # C3::ctorA migrated from s00693280 (verbatim, slice spelling)
 00693d60 ?ctorB@C3@@QAEPAU1@PAX000@Z  # C3::ctorB migrated from s00693280 (verbatim, slice spelling)
+00693dd0 @FUN_00693dd0@4  # FUN_00693dd0 migrated from s00693280 (verbatim, slice spelling)
+00693e10 ?Serialize@cVarListSerializer_s0069_3280@@QAE_NPAUISerialStream@@@Z  # cVarListSerializer_s0069_3280::Serialize migrated from s00693280 (verbatim, slice spelling)
 006940d0 ??0Obj@@QAE@ABU0@@Z  # Obj::Obj migrated from s00693280 (verbatim, slice spelling)
-00693390 SP::cVariant::Write  # writes type and flags then the value, or stride/count plus each element for arrays (guess at name; behaviour read from the card)
-00693e10 SP::cVarListSerializer::Serialize  # name from the dev PDB (pdb_type cVarListSerializer); reads block header, per-var ids and sizes
+006941c0 ?copyAssign@Obj@@QAEPAU1@ABU1@@Z  # Obj::copyAssign migrated from s00693280 (verbatim, slice spelling)

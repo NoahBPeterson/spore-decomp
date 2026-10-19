@@ -21,12 +21,9 @@ extern void* g_RegVtbl;
 #include <intrin.h>
 #include "EA/Variant.h"
 #include <wchar.h>
+#include "cDataSerializationInfoLessCompare.h"
 
 // ---- items of slice s006925c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" __declspec(dllimport) long __cdecl atol(const char*);
-extern "C" __declspec(dllimport) unsigned long __cdecl strtoul(const char*, char**, int);
-extern "C" __declspec(dllimport) double __cdecl strtod(const char*, char**);
-extern "C" __declspec(dllimport) int __cdecl sscanf(const char*, const char*, ...);
 __declspec(noinline) long long FUN_0092d6f0(const char*, int, int);
 __declspec(noinline) void* FUN_00920090();
 struct cDataSerializationInfo {
@@ -42,15 +39,42 @@ struct cDataSerializerGeneric {
     int mId;                    // +0x04
     char mPad08[0x10];
     void* mpBinderContext;      // +0x18
-    char mPad1c[8];
+    char mPad1c[4];
+    void* mpAccessFunc;         // +0x20 (cdecl: ser -> value)
     void* mpWriteFunc;          // +0x24
     void* mpReadFunc;           // +0x28
     char mPad2c[0x10];
 };
+bool EA_IO_WriteUint32(void*, const void*, int, int);
+class cStreamPos { public:
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+    virtual int Tell(int); virtual void Seek(int, int); };
+class cStreamWriter { public:
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+    virtual void v5(); virtual cStreamPos* GetStream(); };
+class cOutStream { public:
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+    virtual void v5(); virtual void v6(); virtual bool IsOk(); virtual cStreamWriter* GetWriter(); };
+static inline void WriteU32(cOutStream* s, unsigned int v) { unsigned int t = v; cStreamPos* st = s->GetWriter()->GetStream(); EA_IO_WriteUint32(st, &t, 1, 0); }
 class cVarListSerializer {
 public:
-    char mPad00[0x10];
-    cDataSerializationInfo mDataSerializationInfos[128]; // +0x10 (0x14 each)
+    cDataSerializationInfo mDataSerializationInfos[128]; // +0x00 (0x14 each)
     int mSerializableVarCount;  // +0xa00
     int mSerializedVarCount;    // +0xa04
     unsigned int mSignature;    // +0xa08
@@ -58,29 +82,36 @@ public:
     cDataSerializerGeneric* mpSerializerList; // +0xa10
 
     void Init(void* obj, cDataSerializerGeneric* list, unsigned int sig);
-    bool Serialize(void* stream);
+    bool Serialize(cOutStream* stream);
     void Unload();
     cVarListSerializer(void* obj, cDataSerializerGeneric* list, unsigned int sig);
 };
 bool EA_IO_WriteBytes(void*, const void*, int);
 bool EA_IO_WriteUint16(void*, const void*, int, int);
-bool EA_IO_WriteUint32(void*, const void*, int, int);
+struct SortRec { unsigned int f[15]; };
 struct BlobRange { void* mpBegin; void* mpEnd; };
 struct cRegNode { void* mpVtbl; cRegNode* mpNext; void* mpData; char mState; cRegNode* Construct(void* data); };
 extern cRegNode* g_pRegList;   // 0x01600c58
-extern void* g_RegVtbl;
 // ---- items of slice s006925c0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern cRegNode* g_pRegList;   // 0x01600c58
 
 // ---- items of slice s00693280 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" bool  EA_IO_ReadInt32(void* io, void* p, int n, int f);       // 93a780
-extern "C" bool  EA_IO_ReadUint8(void* io, void* p, int n);              // 93a6c0
+extern "C" bool  EA_IO_ReadInt32(void* io, void* p, int n, int f);       // 0x0093a780
+extern "C" bool  EA_IO_ReadUint8(void* io, void* p, int n);              // 0x0093a6c0
 extern "C" void Str_DoInsertValue(char* dest, const char* src, int n);   // 11e0744
 extern "C" void* __fastcall AutoRef_assign(void* dst, void* src);   // 0xb5f950
 extern "C" void  FUN_00ac9480(void* a, void* b);                    // 0xac9480
 extern "C" void* g_vtbl_1403970[];                                  // 0x1403970
+extern "C" bool FUN_00571f10(void* io, unsigned char v);            // 0x571f10
+extern "C" bool FUN_00692780(void* io, unsigned char v);            // 0x692780
+extern "C" bool FUN_006927a0(void* io, unsigned short v, int p);    // 0x6927a0
+extern "C" bool FUN_006927c0(void* io, unsigned int v, int p);      // 0x6927c0
+extern "C" bool FUN_006927c0f(void* io, float v, int p);            // 0x6927c0 (float overload)
+extern "C" bool FUN_006927e0(void* io, unsigned int a, unsigned int b, int p); // 0x6927e0
+extern "C" bool FUN_006927e0d(void* io, double v, int p);           // 0x6927e0 (double overload)
+extern "C" bool FUN_00692e00(void* io, void* v);                    // 0x692e00
+extern "C" bool FUN_00692e50(void* io, void* v);                    // 0x692e50
 struct Elem { unsigned int m0; unsigned int mId; unsigned int m2[13]; };
 struct CString { char* begin; char* end; char* cap; void resize(int n, char c); };
 struct Str16 { char* begin; char* end; char* cap; void* pad;
@@ -96,6 +127,7 @@ struct Obj {
     Obj(const Obj& src);
     Obj* copyAssign(const Obj& src);
 };
+extern "C" void  FUN_00692d90(Elem* first, int topPosition, int position, Elem value, int cmp);
 Str16::Str16(const Str16& src)
 {
     begin = 0; end = 0; cap = 0;
@@ -120,6 +152,77 @@ struct C3 {
     C3*  ctorA(void* a, void* b, void* c, void* d);     // 0x693cd0
     C3*  ctorB(void* a, void* b, void* c, void* d);     // 0x693d60
 };
+struct FieldInfo {
+    unsigned int   mData[4];  // inline value; for arrays: [0] data, [1] count, [2] stride
+    unsigned short flags;     // +0x10
+    unsigned short type;      // +0x12
+};
+static inline bool WriteU16(void* io, unsigned int v, int param) { return EA_IO_WriteUint16(io, &v, 1, param); }
+static inline bool WriteU32_s0069_3280(void* io, unsigned int v, int param) { return EA_IO_WriteUint32(io, &v, 1, param); }
+struct cDataSerializerGeneric_s0069_3280 {
+    char*        mpStaticFieldName;      // +0
+    unsigned int mId;                    // +4
+    unsigned char mData[16];             // +8
+    void*        mpBinderContext;        // +0x18
+    void*        mpSetDefaultValueFunc;  // +0x1c
+    void* (__cdecl* mpDataBinderFunc)(cDataSerializerGeneric_s0069_3280*);   // +0x20
+    bool  (__cdecl* mpReadFunc)(void* stream, void* data);        // +0x24
+};
+struct cDataSerializationInfo_s0069_3280 {
+    unsigned int mId;                       // +0
+    unsigned int mDataSize;                 // +4
+    bool         mbSerialized;              // +8
+    void*        mpBinderContext;           // +0xc
+    cDataSerializerGeneric_s0069_3280* mpSerializer;   // +0x10
+};
+struct IStreamPos {
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+    virtual int  GetPosition(int whence);              // +0x24
+    virtual void SetPosition(int pos, int whence);     // +0x28
+};
+struct IStreamMid {
+virtual void m0();
+virtual void m1();
+virtual void m2();
+virtual void m3();
+virtual void m4();
+    virtual void m5();
+    virtual IStreamPos* GetStream();                   // +0x18
+};
+struct ISerialStream {
+virtual void i0();
+virtual void i1();
+virtual void i2();
+virtual void i3();
+virtual void i4();
+virtual void i5();
+virtual void i6();
+    virtual bool IsOk();                               // +0x1c
+    virtual IStreamMid* GetMid();                      // +0x20
+};
+struct cDataSerializationInfoLessCompare_s0069_3280 {};
+cDataSerializationInfo_s0069_3280* __cdecl LowerBoundInfo(cDataSerializationInfo_s0069_3280* first, cDataSerializationInfo_s0069_3280* last,
+                                               const cDataSerializationInfo_s0069_3280& value,
+                                               cDataSerializationInfoLessCompare_s0069_3280 comp);   // 0x00e0e9f0
+struct cVarListSerializer_s0069_3280 {
+    cDataSerializationInfo_s0069_3280 mDataSerializationInfos[128]; // +0
+    int            mSerializableVarCount;  // +0xa00
+    int            mSerializedVarCount;    // +0xa04
+    unsigned int   mSignature;             // +0xa08
+    void*          mpObject;               // +0xa0c
+    cDataSerializerGeneric_s0069_3280* mpSerializerList;   // +0xa10
+    void Unload();                         // 0x00692c50
+    bool Serialize(ISerialStream* stream);
+};
+#define READ_I32(dst) do { IStreamPos* rs_ = stream->GetMid()->GetStream(); EA_IO_ReadInt32(rs_, &(dst), 1, 0); } while (0)
 // ---- items of slice s00693280 end
 
 // ---- items of slice s00694210 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -370,6 +473,50 @@ void cVarListSerializer::Init(void* obj, cDataSerializerGeneric* list, unsigned 
     }
 }
 
+// @ 0x00692900
+bool cVarListSerializer::Serialize(cOutStream* stream)
+{
+    int ok = 1;
+    cStreamPos* pos = stream->GetWriter()->GetStream();
+    WriteU32(stream, mSignature);
+    WriteU32(stream, 0);
+    int startPos = pos->Tell(0);
+    WriteU32(stream, 0);
+    for (int i = 0; i < mSerializableVarCount; ++i) {
+        WriteU32(stream, 0);
+        WriteU32(stream, 0);
+    }
+    for (mSerializedVarCount = 0; mSerializedVarCount < mSerializableVarCount; ++mSerializedVarCount) {
+        int idx = mSerializedVarCount;
+        cDataSerializationInfo* info = &mDataSerializationInfos[idx];
+        cDataSerializerGeneric* ser = (cDataSerializerGeneric*)info->mpSerializer;
+        int before = pos->Tell(0);
+        if (ser->mpBinderContext == 0) ser->mpBinderContext = mpObject;
+        void* value = ((void*(__cdecl*)(cDataSerializerGeneric*))ser->mpAccessFunc)(ser);
+        bool r = ((bool(__cdecl*)(cOutStream*, void*))ser->mpReadFunc)(stream, value);
+        info->mbSerialized = (r && stream->IsOk()) ? true : false;
+        ser->mpBinderContext = info->mpBinderContext;
+        if (!info->mbSerialized) {
+            __debugbreak();
+            info->mDataSize = 0;
+            pos->Seek(before, 0);
+            ok = 0;
+            break;
+        }
+        info->mDataSize = pos->Tell(0) - before;
+    }
+    int endPos = pos->Tell(0);
+    pos->Seek(startPos - 4, 0);
+    WriteU32(stream, endPos - startPos);
+    WriteU32(stream, mSerializedVarCount);
+    for (int i = 0; i < mSerializedVarCount; ++i) {
+        WriteU32(stream, mDataSerializationInfos[i].mId);
+        WriteU32(stream, mDataSerializationInfos[i].mDataSize);
+    }
+    pos->Seek(endPos, 0);
+    return ok && stream->IsOk();
+}
+
 // @ 0x00692c50
 void cVarListSerializer::Unload()
 {
@@ -406,6 +553,34 @@ void SortRecords_A(void* first, void* last)
         }
         __movsb((unsigned char*)j, (unsigned char*)tmp, 0x3c);
     }
+}
+
+// @ 0x00692d20
+void SortRecords_B(SortRec* first, SortRec* last)
+{
+    for (SortRec* i = first; i != last; ++i) {
+        SortRec val = *i;
+        SortRec* next = i;
+        unsigned int* key = &next[-1].f[1];
+        while (val.f[1] < *key) {
+            *next = next[-1];
+            key -= 15;
+            --next;
+        }
+        *next = val;
+    }
+}
+
+// @ 0x00692d90
+void SortRecords_C(SortRec* base, int top, int hole, SortRec value)
+{
+    int parent = (hole - 1) >> 1;
+    while (hole > top && base[parent].f[1] < value.f[1]) {
+        base[hole] = base[parent];
+        hole = parent;
+        parent = (hole - 1) >> 1;
+    }
+    base[hole] = value;
 }
 
 // @ 0x00692e00
@@ -543,6 +718,26 @@ void ParseColorRGB(const char** src, unsigned int* out)
     sscanf(*src, "0x%08x,0x%08x,0x%08x", out, out + 2, out + 1);
 }
 
+// @ 0x00693280
+extern "C" __declspec(noinline) void FUN_00693280(Elem* first, int topPosition, int heapSize, int position, Elem value, int cmp)
+{
+    int childPosition = (2 * position) + 2;
+    while (childPosition < heapSize)
+    {
+        if (first[childPosition].mId < first[childPosition - 1].mId)
+            --childPosition;
+        first[position] = first[childPosition];
+        position = childPosition;
+        childPosition = (2 * position) + 2;
+    }
+    if (childPosition == heapSize)
+    {
+        first[position] = first[childPosition - 1];
+        position = childPosition - 1;
+    }
+    FUN_00692d90(first, topPosition, position, value, cmp);
+}
+
 // @ 0x00693320
 extern "C" void FUN_00693280(Elem* first, int topPosition, int heapSize, int position, Elem value, int cmp);
 extern "C" __declspec(noinline) void FUN_00693320(Elem* first, Elem* last, int cmp)
@@ -551,6 +746,69 @@ extern "C" __declspec(noinline) void FUN_00693320(Elem* first, Elem* last, int c
     *(last - 1) = *first;
     int n = (int)((char*)last - (char*)first) / 60 - 1;
     FUN_00693280(first, 0, n, 0, value, cmp);
+}
+
+// @ 0x00693390
+extern "C" bool FUN_00693390(void* io, FieldInfo* info, int param)
+{
+    bool ok = WriteU16(io, info->type, param) && WriteU16(io, info->flags, param);
+
+    if ((info->flags & 0x30) == 0)
+    {
+        unsigned char* p = (unsigned char*)info;
+        switch (info->type)
+        {
+        case 1: if (ok && FUN_00571f10(io, *p)) return true; break;
+        case 2: case 6: if (ok && FUN_00692780(io, *p)) return true; break;
+        case 3: if (ok && FUN_006927a0(io, *(unsigned short*)p, param)) return true; break;
+        case 5: if (ok && FUN_00692780(io, *p)) return true; break;
+        case 7: if (ok && FUN_006927a0(io, *(unsigned short*)p, param)) return true; break;
+        case 8: if (ok && FUN_006927a0(io, *(unsigned short*)p, param)) return true; break;
+        case 9: if (ok && FUN_006927c0(io, *(unsigned int*)p, param)) return true; break;
+        case 10: if (ok && FUN_006927c0(io, *(unsigned int*)p, param)) return true; break;
+        case 11: if (ok && FUN_006927e0(io, *(unsigned int*)p, *(unsigned int*)(p + 4), param)) return true; break;
+        case 12: if (ok && FUN_006927e0(io, *(unsigned int*)p, *(unsigned int*)(p + 4), param)) return true; break;
+        case 13: if (ok && FUN_006927c0f(io, *(float*)p, param)) return true; break;
+        case 14: if (ok && FUN_006927e0d(io, *(double*)p, param)) return true; break;
+        case 18: if (ok && FUN_00692e00(io, p)) return true; break;
+        case 19: if (ok && FUN_00692e50(io, p)) return true; break;
+        case 17: break;
+        default: if (ok && ((bool(__thiscall*)(void*, unsigned char*, int))VTABLE(io)[0x38 / 4])(io, p, 0x10)) return true; break;
+        }
+        return false;
+    }
+
+    if ((info->flags & 0x40) != 0)
+        return false;
+    unsigned char* data = (unsigned char*)info->mData[0];
+    int stride = info->mData[2];
+    int count = info->mData[1];
+    ok = ok && WriteU32_s0069_3280(io, stride, param) && WriteU32_s0069_3280(io, count, param);
+    unsigned char* end = data + count * stride;
+    for (unsigned char* p = data; p < end; p += stride)
+    {
+        switch (info->type)
+        {
+        case 1:  ok = ok && FUN_00571f10(io, *p); break;
+        case 2: case 6: ok = ok && FUN_00692780(io, *p); break;
+        case 3:  ok = ok && FUN_006927a0(io, *(unsigned short*)p, param); break;
+        case 5:  ok = ok && FUN_00692780(io, *p); break;
+        case 7:  ok = ok && FUN_006927a0(io, *(unsigned short*)p, param); break;
+        case 8:  ok = ok && FUN_006927a0(io, *(unsigned short*)p, param); break;
+        case 9:  ok = ok && FUN_006927c0(io, *(unsigned int*)p, param); break;
+        case 10: ok = ok && FUN_006927c0(io, *(unsigned int*)p, param); break;
+        case 11: ok = ok && FUN_006927e0(io, *(unsigned int*)p, *(unsigned int*)(p + 4), param); break;
+        case 12: ok = ok && FUN_006927e0(io, *(unsigned int*)p, *(unsigned int*)(p + 4), param); break;
+        case 13: ok = ok && FUN_006927c0f(io, *(float*)p, param); break;
+        case 14: ok = ok && FUN_006927e0d(io, *(double*)p, param); break;
+        case 18: ok = ok && FUN_00692e00(io, p); break;
+        case 19: ok = ok && FUN_00692e50(io, p); break;
+        case 16: ok = ok && ((bool(__thiscall*)(void*, unsigned char*, int))VTABLE(io)[0x38 / 4])(io, p, stride); break;
+        case 17: ok = false; break;
+        default: ok = ok && ((bool(__thiscall*)(void*, unsigned char*, int))VTABLE(io)[0x38 / 4])(io, p, stride); break;
+        }
+    }
+    return ok;
 }
 
 // @ 0x00693900
@@ -701,10 +959,103 @@ C3* C3::ctorB(void* a, void* b, void* c, void* d)
     return this;
 }
 
+// @ 0x00693dd0
+extern "C" void __fastcall FUN_00693dd0(char* self)
+{
+    char* p = *(char**)(self + 0x50);
+    if ((*(char**)(self + 0x58) - p) > 1 && p != 0)
+        operator_delete_arr(p);
+    p = *(char**)(self + 0x40);
+    if ((*(char**)(self + 0x48) - p) > 1 && p != 0)
+        operator_delete_arr(p);
+}
+
+// @ 0x00693e10
+bool cVarListSerializer_s0069_3280::Serialize(ISerialStream* stream)
+{
+    IStreamPos* io = stream->GetMid()->GetStream();
+    int signature;
+    int blockSize;
+    READ_I32(signature);
+    READ_I32(blockSize);
+    int endPos = io->GetPosition(0) + blockSize;
+    if ((unsigned int)signature != mSignature)
+    {
+        io->SetPosition(endPos, 0);
+        Unload();
+        return false;
+    }
+    unsigned int count = 0;
+    READ_I32(count);
+    cDataSerializationInfo_s0069_3280 infos[128];
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        READ_I32(infos[i].mId);
+        READ_I32(infos[i].mDataSize);
+    }
+    cDataSerializationInfo_s0069_3280* last = mDataSerializationInfos + mSerializableVarCount;
+    mSerializedVarCount = 0;
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        if (infos[i].mDataSize != 0)
+        {
+            int pos = io->GetPosition(0);
+            cDataSerializationInfo_s0069_3280 key;
+            key.mId = infos[i].mId;
+            cDataSerializationInfo_s0069_3280* it = LowerBoundInfo(mDataSerializationInfos, last, key,
+                                                        cDataSerializationInfoLessCompare_s0069_3280());
+            if (it->mId == infos[i].mId)
+            {
+                cDataSerializerGeneric_s0069_3280* ser = it->mpSerializer;
+                if (ser->mpBinderContext == 0)
+                    ser->mpBinderContext = mpObject;
+                it->mbSerialized = ser->mpReadFunc(stream, ser->mpDataBinderFunc(ser)) && stream->IsOk();
+                ser->mpBinderContext = it->mpBinderContext;
+                if (!it->mbSerialized)
+                {
+                    io->SetPosition(endPos, 0);
+                    Unload();
+                    return false;
+                }
+                ++mSerializedVarCount;
+            }
+            else
+            {
+                io->SetPosition(infos[i].mDataSize + pos, 0);
+            }
+        }
+    }
+    Unload();
+    if (endPos != io->GetPosition(0))
+    {
+        io->SetPosition(endPos, 0);
+        return false;
+    }
+    return stream->IsOk();
+}
+
 // @ 0x006940d0
 Obj::Obj(const Obj& src)
 : h(src.h), x(src.x), s1(src.s1), s2(src.s2)
 {
+}
+
+// @ 0x006941c0
+Obj* Obj::copyAssign(const Obj& src)
+{
+    h = src.h;
+    x = src.x;
+    if (&src.s1 != &s1)
+    {
+        const Str16* p = &src.s1;
+        s1.assign(p->begin, p->end);
+    }
+    if (&src.s2 != &s2)
+    {
+        const Str16* p = &src.s2;
+        s2.assign(p->begin, p->end);
+    }
+    return this;
 }
 
 // @ 0x00694210
