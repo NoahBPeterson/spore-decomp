@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00802a30 167 show/hide cursor window (complete)
+00802b20 39 query cursor-window enabled flag (complete)
+00802b80 211 console alpha/colour application (complete)
+00802ff0 2 OnToggle; bool-to-int conversion register shape (complete)

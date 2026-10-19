@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00802910 -  cSPUIDebugConsole::Clear empty stub (string/vector command buffer omitted)
+00802950 -  cSPUIDebugConsole::Output empty stub (string concat + event dispatch omitted)
+00802cd0 -  cSPUIDebugConsole::Init skeleton (layout/ConsoleWindow/command-list wiring omitted)

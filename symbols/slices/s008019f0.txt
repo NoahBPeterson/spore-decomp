@@ -23,5 +23,5 @@
 00802870 cSPUICursorManager::QueryCursorId  # id 0x2F009DD0 -> this unless 4
 00802890 cSPUICursorManager::FindConsoleWindow  # FindWindowByID(0x14A4606)
 008028e0 cSPUICursorManager::ShutdownAttachment  # cSPUILayout::Shutdown + release +0x28
-00802910 cSPUIDebugConsole::Clear  # Ghidra name
-00802950 cSPUIDebugConsole::Output  # Ghidra name
+00802910 ?DebugConsole_Clear@@YAXPAX@Z  # DebugConsole_Clear migrated from s008019f0 (verbatim, slice spelling)
+00802950 ?DebugConsole_Output@@YAXPAXPAD1@Z  # DebugConsole_Output migrated from s008019f0 (verbatim, slice spelling)
