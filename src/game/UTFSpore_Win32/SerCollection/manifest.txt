@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/SerCollection.cpp  ?FUN_00999050@@YIXPAD@Z  00999050  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/SerCollection.cpp  ??0SerCollection@@QAE@XZ  00999080  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/SerCollection.cpp  ?Shutdown@SerCollection_s0099_9110@@QAEXXZ  009991e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

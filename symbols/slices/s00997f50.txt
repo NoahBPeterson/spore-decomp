@@ -11,5 +11,6 @@
 00998530 ?WriteResource@RWTextureFactory@UTFWinTools@EA@@UAE_NPAVResource@ResourceMan@3@PAVRecord@53@PAXI@Z  # EA::UTFWinTools::RWTextureFactory::WriteResource migrated from s00997f50
 009986e0 ?FUN_009986e0@@YIPAXPAX@Z  # FUN_009986e0 migrated from s00997f50 (verbatim, slice spelling)
 00998770 ?CreateResource@RWTexFactory@@QAE_NHPAPAXPAX1@Z  # RWTexFactory::CreateResource migrated from s00997f50 (verbatim, slice spelling)
-00999000 EA::UTFWinTools::SerCollection::RemoveAll  # 2008 dev-PDB name
-00999080 EA::UTFWinTools::SerCollection::SerCollection  # 2008 dev-PDB name
+00999000 ?SerCollection_RemoveAll@@YIXPAD@Z  # SerCollection_RemoveAll migrated from s00997f50 (verbatim, slice spelling)
+00999050 ?FUN_00999050@@YIXPAD@Z  # FUN_00999050 migrated from s00997f50 (verbatim, slice spelling)
+00999080 ??0SerCollection@@QAE@XZ  # SerCollection::SerCollection migrated from s00997f50 (verbatim, slice spelling)

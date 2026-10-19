@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00999000 28 SerCollection::RemoveAll: pointer-diff arithmetic schedule differs
+00999110 101 complete SerCollection dtor; only prologue register-save (push edi) placement differs
+00999250 423 complete SerCollection::Reload; schedule/register allocation differs; difftest WEAK (37% coverage: the ResourceMan singleton 0x1667aa0 is a fixed global, not an input)
