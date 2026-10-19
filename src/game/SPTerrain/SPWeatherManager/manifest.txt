@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPTerrain/SPWeatherManager.cpp  ?UpdateProperties@cWeatherManager_s00fc_31f0@SP@@QAEXXZ  00fc31f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
