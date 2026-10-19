@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a41a70 183 cSound::TickInternal: complete; large virtual-dispatch tick with EH; scheduling and register allocation differ. difftest UNSUPPORTED (0/400 inputs valid; fake-arity + faults). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

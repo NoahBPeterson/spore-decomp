@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPAudio/SPAudioSound.cpp  ?Init@cSound@Audio@SP@@QAE_NXZ  00a419a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSound.cpp  ?Start@cSound@Audio@SP@@QAE_NN@Z  00a419c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSound.cpp  ?StopThunk@cSound@Audio@SP@@QAEXHD@Z  00a41a00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSound.cpp  ?SetPropertyInternal@cSound@Audio@SP@@QAEXHMH@Z  00a41a20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSound.cpp  ?ConfigureSound@cSound@Audio@SP@@QAEEXZ  00a41b60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
