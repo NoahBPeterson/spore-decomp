@@ -1,3 +1,1 @@
-00763cb0  306  partial: D3D9 texture-stage raster registration/setup; global image objects + stage loop not translated
-00763fd0  234  partial: arena exported-object scan (ClearDisposableReferences); EH vector-ctor iterator not translated
-007640c0  84   partial: MI ctor (two vtables + atomic refcount at +8); member layout/EH not reconstructed
+# va  diff-bytes  reason

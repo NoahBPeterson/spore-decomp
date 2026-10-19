@@ -377,7 +377,7 @@ struct ArenaIter { char pad[0x134]; uint32_t f134; char pad2[0x40];
 int __cdecl ArenaStart(void* arena, ArenaIter* it, void* owner, int* flag);   // 0x011e3c70
 unsigned int __cdecl FixupNext(ArenaIter*);     // 0x011e39e0 rw::core::arena::Arena::FixupNext
 unsigned int __cdecl DestructNext(ArenaIter*);  // 0x011e2330 rw::core::arena::Arena::DestructNext
-bool __cdecl FUN_763fd0(void* arena);           // 0x00763fd0 (partial below)
+bool __cdecl FUN_763fd0(void* arena);           // 0x00763fd0
 
 namespace SP {
 class cGraphicsResourceFactory {
@@ -476,7 +476,122 @@ bool SP::cGraphicsResourceFactory::Init() {
 }
 
 // ===========================================================================
-// partial stubs -----------------------------------------------------------------
-void __cdecl FUN_763cb0(void* a, void* b) { (void)a; (void)b; }           // 00763cb0
-__declspec(noinline) bool __cdecl FUN_763fd0(void* arena) { (void)arena; return false; }       // 00763fd0
-void __cdecl FUN_7640c0(void* p) { (void)p; }                            // 007640c0
+// @ 0x00763cb0  D3D9 texture-stage raster registration + per-stage state refresh
+// Lazily builds two shared raster objects from the property list, then refreshes
+// every texture stage (0..3) whose hard-state dirty bit is set.
+// ===========================================================================
+struct EmbeddedState {
+    char     pad0[0x10];
+    uint32_t dirtyBits;                              // +0x10
+    unsigned int GetTextureStageState(int stage);    // 0x011ee870
+    void         SetRaster(int stage, void* raster); // 0x011ee6b0
+};
+struct RasterThing {
+    void FUN_00763c60(unsigned state);               // 0x00763c60
+};
+struct Managed { void* value; uint8_t flags; };      // +0 flags bit0
+void* __cdecl GetRasterMgr();                        // 0x0067dd60
+uint32_t __cdecl FUN_011ed690(void* hard, void* raster);   // 0x011ed690
+extern void*    g_texStageRaster0;                   // 0x016303f8
+extern void*    g_texStageRaster1;                   // 0x016303fc
+extern uint32_t g_texStageCreate[3];                 // 0x016304d4 / d8 / dc
+extern uint32_t g_texStageRasterType[3];             // 0x016304c8 / cc / d0
+
+// @ 0x00763cb0
+uint32_t __cdecl FUN_763cb0(EmbeddedState* hard, RasterThing* raster) {
+    if (g_texStageRaster0 == 0) {
+        typedef void* (__thiscall *FnCreate)(void*, V3u, int);
+        typedef void  (__thiscall *FnRelease)(void*, void*);
+        void* mgr = GetRasterMgr();
+        Managed* m = (Managed*)((FnCreate)((*(void***)mgr)[0x1c / 4]))(mgr, *(const V3u*)g_texStageCreate, 0);
+        if ((m->flags & 1) == 0) {
+            void* mgr2 = GetRasterMgr();
+            ((FnRelease)((*(void***)mgr2)[0x34 / 4]))(mgr2, m);
+        }
+        g_texStageRaster0 = m->value;
+
+        mgr = GetRasterMgr();
+        Managed* m2 = (Managed*)((FnCreate)((*(void***)mgr)[0x1c / 4]))(mgr, *(const V3u*)g_texStageRasterType, 0);
+        if ((m2->flags & 1) == 0) {
+            void* mgr2 = GetRasterMgr();
+            ((FnRelease)((*(void***)mgr2)[0x34 / 4]))(mgr2, m2);
+        }
+        g_texStageRaster1 = m2->value;
+    }
+
+    uint32_t result = FUN_011ed690(hard, raster);
+
+    void* props = g_sAppProperties;
+    if (*(uint32_t*)((char*)(*(uint32_t*)((char*)props + 0x3c)) + 0x130) != 0) {
+        uint32_t bit = 1;
+        for (int stage = 0; stage < 4; ++stage, bit = _rotl(bit, 1)) {
+            if ((hard->dirtyBits & bit) == 0)
+                return result;
+            if (stage > 0) {
+                raster->FUN_00763c60(hard->GetTextureStageState(stage));
+                void* r;
+                if (stage == 1)
+                    r = g_texStageRaster0;
+                else if (stage == 2)
+                    r = g_texStageRaster1;
+                else
+                    r = 0;
+                hard->SetRaster(stage, r);
+            }
+        }
+    }
+    return result;
+}
+
+// ===========================================================================
+// @ 0x00763fd0  clear the disposable references of every object exported by an arena
+// ===========================================================================
+struct __declspec(align(8)) RDesc8 {
+    uint32_t size; uint32_t align;
+    RDesc8();      // 0x006c0fa0
+    ~RDesc8();     // 0x00c2e4e0
+};
+struct ExportRec { uint32_t type; void* obj; };
+struct Arena {
+    int  GetNumExportedObjects();                              // 0x011e23a0
+    void GetExportedObjectByIndex(uint32_t i, ExportRec* out); // 0x011e28e0
+};
+
+// @ 0x00763fd0
+bool __cdecl FUN_763fd0(void* arena) {
+    Arena* a = (Arena*)arena;
+    int n = a->GetNumExportedObjects();
+    for (unsigned i = 0; (int)i < n; ++i) {
+        RDesc8 desc[4];
+        ExportRec rec;
+        desc[0].size = 0;
+        desc[0].align = 1;
+        a->GetExportedObjectByIndex(i, &rec);
+        switch (rec.type) {
+        case 0x20005:
+            *(uint32_t*)((char*)rec.obj + 0x18) = 0;
+            break;
+        case 0x20007:
+            *(uint32_t*)((char*)rec.obj + 0x18) = 0;
+            break;
+        }
+    }
+    return true;
+}
+
+// ===========================================================================
+// @ 0x007640c0  multiple-inheritance ctor: two vtables, atomic refcount at +8
+// ===========================================================================
+// @ 0x007640c0
+void* __fastcall FUN_7640c0(void* self) {
+    uint32_t* p = (uint32_t*)self;
+    p[0] = 0x013f1ab0;                 // first vtable (primary base)
+    p[1] = 0x013ef094;                 // second vtable (secondary base)
+    _InterlockedExchange((volatile long*)(p + 2), 0);   // atomic refcount init at +8
+    p[0] = 0x0140e044;                 // final first vtable
+    p[1] = 0x0140e040;                 // final second vtable
+    p[3] = 0;                          // +0x0c
+    p[4] = 0;                          // +0x10
+    *((uint8_t*)p + 0x18) = 1;         // +0x18
+    return self;
+}

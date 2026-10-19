@@ -431,49 +431,73 @@ C_e210* C_e210::ctor()
 // ===========================================================================
 
 // ---------------------------------------------------------------------------
-// 0x0069d090 / 0x0069d100 / 0x0069d150  "clear three vectors" instantiations
+// 0x0069d090 / 0x0069d100 / 0x0069d150  cHermiteSplineInterpolation<T>::Clear()
+// Each clears three member vectors: a float vector at +0x00 and two value
+// vectors at +0x14 / +0x28.  Every erase is "move [last,end) onto first, then
+// mEnd -= (last - first)"; for a full-range erase the moved span is empty, so
+// the memcpy/copy copies zero elements.  T=float inlines the 4-byte erase for
+// all three members, T=Vector3 calls SpVector<Vector3>::erase for the value
+// vectors, and T=cSPQuaternion uses the 16-byte copy_705250 helper.
 // ---------------------------------------------------------------------------
+extern "C" void* copy_705250(const void*, const void*, void*);  // 0x00705250
+
+struct Quad16 { char b[16]; };
+
+struct VecF {
+    void* mBegin;   // +0x00
+    void* mEnd;     // +0x04
+    void* mCap;     // +0x08
+    void* pad0;     // +0x0c
+    void* pad1;     // +0x10
+    void erase() {
+        void* first = mBegin;
+        void* last  = mEnd;
+        memcpy(first, last, (unsigned)((char*)mEnd - (char*)last));
+        mEnd = (void*)((int*)mEnd - ((int*)last - (int*)first));
+    }
+    void eraseQ() {
+        Quad16* first = (Quad16*)mBegin;
+        Quad16* last  = (Quad16*)mEnd;
+        copy_705250(last, last, first);
+        mEnd = (void*)((Quad16*)mEnd - (last - first));
+    }
+};
+
+struct SpVector {
+    void* mBegin; void* mEnd; void* mCap; void* pad0; void* pad1;
+    void* erase(void* first, void* last);                 // 0x0050f740
+    void eraseAll() { erase(mBegin, mEnd); }
+};
+
 struct ClrTriple {
-    VP b0, e0, pad0[3];
-    VP b1, e1, pad1[3];
-    VP b2, e2;
+    VecF v[3];      // +0x00, +0x14, +0x28
     void clr090();
     void clr100();
     void clr150();
 };
 
+// @ 0x0069d090
 void ClrTriple::clr090()
 {
-    VP b = b0, e = e0;
-    memcpy(b, e, (unsigned)((char*)e - (char*)e));
-    e0 = (VP)((char*)e - ((char*)e - (char*)b));
-    b = b1; e = e1;
-    memcpy(b, e, (unsigned)((char*)e - (char*)e));
-    e1 = (VP)((char*)e - ((char*)e - (char*)b));
-    b = b2; e = e2;
-    memcpy(b, e, (unsigned)((char*)e - (char*)e));
-    e2 = (VP)((char*)e - ((char*)e - (char*)b));
+    v[0].erase();
+    v[1].erase();
+    v[2].erase();
 }
 
-extern "C" void do_copy_key(void*, void*);
-extern "C" void do_copy_runinfo(void*, void*);
-
+// @ 0x0069d100
 void ClrTriple::clr100()
 {
-    VP b = b0, e = e0;
-    memcpy(b, e, (unsigned)((char*)e - (char*)e));
-    e0 = (VP)((char*)e - ((char*)e - (char*)b));
-    do_copy_key(b1, e1);
-    do_copy_key(b2, e2);
+    v[0].erase();
+    ((SpVector&)v[1]).eraseAll();
+    ((SpVector&)v[2]).eraseAll();
 }
 
+// @ 0x0069d150
 void ClrTriple::clr150()
 {
-    VP b = b0, e = e0;
-    memcpy(b, e, (unsigned)((char*)e - (char*)e));
-    e0 = (VP)((char*)e - ((char*)e - (char*)b));
-    do_copy_runinfo(b1, e1);
-    do_copy_runinfo(b2, e2);
+    v[0].erase();
+    v[1].eraseQ();
+    v[2].eraseQ();
 }
 
 // ---------------------------------------------------------------------------

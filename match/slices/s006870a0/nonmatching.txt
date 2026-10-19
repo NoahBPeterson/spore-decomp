@@ -4,3 +4,5 @@
 00687a20  97   complete: iterate array pushing wstrings/ids; register allocation/scheduling differs
 00687bc0  37   complete: set element count; Reserve call shape + index computation scheduling differ
 006870a0  412  vector<Elem28>::DoInsertValues complete; spill-via-push of position and tail-duplicated epilogues differ, extra 4-byte frame slot [equiv: WEAK 15% coverage, no mismatch]
+006872f0  487  complete: directory scan (DirectoryIterator::Read + deque walk) and DatabasePackedFile dispatch; inlined WideFixedBuf/deque EH frame and vtable-call scheduling differ (/O2 /MD /Gy /EHsc /TP /GS-) [equiv: UNSUPPORTED 0/400 valid, original reaches import FindFirstFileW via DirectoryIterator::Read]
+00687610  493  complete: register packages, then Preload.package + ResourceMan database directory; sp_vector/EH frame and manager vtable-call scheduling differ (/O2 /MD /Gy /EHsc /TP /GS-) [equiv: UNSUPPORTED 0/400 valid, original touches filesystem/globals and faults]
