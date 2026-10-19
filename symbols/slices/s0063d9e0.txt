@@ -9,5 +9,5 @@
 00637860 ?Show@cSPPlayModeUI@SP@@QAEXXZ  # SP::cSPPlayModeUI::Show (callee of s0063d9e0, named from the dev publics; slice address comment)
 0063c590 ?SetRecordingMsg@cSPPlayModeSubModeMovie@SP@@QAEX_NPAD@Z  # SP::cSPPlayModeSubModeMovie::SetRecordingMsg (callee of s0063d9e0, named from the dev publics; slice address comment)
 0063e100 ?HandleButton@cSPPlayModeSubModeMovie_s0063_d9e0@@QAE_NH@Z  # cSPPlayModeSubModeMovie_s0063_d9e0::HandleButton migrated from s0063d9e0 (verbatim, slice spelling)
-0063e770 SP::cSPPlayModeSubModePhoto::Activate  # PDB name
-0063e810 SP::cSPPlayModeSubModePhoto::Shutdown  # PDB candidate (caller-single)
+0063e770 ?Activate@cSPPlayModeSubModePhoto@@QAE_NXZ  # cSPPlayModeSubModePhoto::Activate migrated from s0063d9e0 (verbatim, slice spelling)
+0063e810 ?Shutdown@cSPPlayModeSubModePhoto@@QAEXXZ  # cSPPlayModeSubModePhoto::Shutdown migrated from s0063d9e0 (verbatim, slice spelling)

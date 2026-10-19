@@ -1,0 +1,13 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPSubModePhoto.cpp  ?Activate@cSPPlayModeSubModePhoto@@QAE_NXZ  0063e770  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModePhoto.cpp  ?Shutdown@cSPPlayModeSubModePhoto@@QAEXXZ  0063e810  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModePhoto.cpp  ?Update@cSPPlayModeSubModePhoto_s0063_e880@@QAEXI@Z  0063e880  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModePhoto.cpp  ?ShowErrorDialog@cSPPlayModeSubModePhoto@SP@@QAEXIPB_W@Z  0063eb30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModePhoto.cpp  ?IsPhotosWriting@cSPPlayModeSubModePhoto_s0063_e880@@QAE_N_N@Z  0063eb90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModePhoto.cpp  ?CloseSendPhotoWindow@cSPPlayModeSubModePhoto_s0063_e880@@QAEXXZ  0063ec10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModePhoto.cpp  ?Init@cSPPlayModeSubModePhoto_s0063_e880@@QAEXPAX@Z  0063ee30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModePhoto.cpp  ?Shutdown@cSPPlayModeSubModePhoto_s0063_e880@@QAEXXZ  0063eef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModePhoto.cpp  ?HandleKey@cSPPlayModeSubModePhoto_s0063_e880@@QAE_NIH@Z  0063ef30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModePhoto.cpp  ??1cSPPlayModeSubModePhoto_s0063_e880@@UAE@XZ  0063f2b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModePhoto.cpp  ??1cFourStrings@@QAE@XZ  0063f350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModePhoto.cpp  ?SendPhoto@cSPPlayModeSubModePhoto_s0063_f740@@QAEXXZ  0063fd20  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
