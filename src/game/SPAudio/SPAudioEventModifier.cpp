@@ -1061,3 +1061,24 @@ bool cEventModifier_s00a3_9ce0::Init()
     return true;
 }
 }}  // namespace SP::Audio
+
+// @ 0x00a3a670
+namespace SP { namespace Audio {
+void cEventModifierPrimitiveAlias::ModifyEvent(Command_s00a3_9ce0* cmd, int a, char* name, int capacity)
+{
+    AudioSystem_s00a3_9ce0* sys = GetSystemAT_s00a3_9ce0();
+    a = (int)sys->HashName(name);   // the original reuses a dead argument slot for the key
+    RbIter it = mMap.find((uint32_t&)a);
+    if (it.mpNode != mMap.anchor()) {
+        const char* s = ((StrNode*)it.mpNode)->mValue.mpBegin;
+        char* d = name;
+        char c;
+        do {
+            c = *s;
+            *d = c;
+            s++;
+            d++;
+        } while (c != 0);
+    }
+}
+}}  // namespace SP::Audio
