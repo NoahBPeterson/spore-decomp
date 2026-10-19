@@ -29,12 +29,16 @@ extern "C" int FixedAllocatorAddCore(void* pThis, int a, int b); // 0x00926650
 // ---- items of slice s008de020 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int uint32;
 extern "C" char (*g_154c464)(void*, void*, void*, void*, void*, int);                            // 0x0154c464
-extern "C" void RBTreeInsert_impl(void*, void*, void*, int); // 0x009216a0
-extern "C" void* Fn921440(void*, void*, void*, int);          // 0x00921440
-extern "C" void* EA_Allocator_GetDefaultAllocator();         // 0x00925cb0
-extern "C" long __cdecl _InterlockedIncrement(volatile long*);
-extern "C" long __cdecl _InterlockedDecrement(volatile long*);
-extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
+namespace EA {
+namespace Thread {
+struct Mutex_s008d_e020 {
+    char pad[0x30];
+    void Lock(const char* pName);   // 0x009221b0
+    int Unlock();                   // 0x00922270
+    Mutex_s008d_e020(int a = 0, int b = 0);    // 0x009222a0
+};
+}
+}
 namespace EA {
 namespace ResourceMan {
 struct KeyFilter_s008d_e020;
@@ -53,8 +57,13 @@ struct ChangeNotificationInfo_s008d_e020 {
 namespace EA {
 namespace ResourceMan {
 struct ChangeNotificationInfoCompare_s008d_e020 {
-    bool operator()(const ChangeNotificationInfo_s008d_e020& a, const ChangeNotificationInfo_s008d_e020& b) const;
+    bool operator()(const ChangeNotificationInfo_s008d_e020& a, const ChangeNotificationInfo_s008d_e020& b) const;  // 0x008de1e0 (EA::ResourceMan::ChangeNotificationInfoCompare::operator)
 };
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct CacheRes;
 }
 }
 namespace EA {
@@ -70,16 +79,16 @@ struct Manager_s008d_e020 {
     void** mCompressorBegin;        // +0x9c
     void** mCompressorEnd;          // +0xa0
     char padA4[0x148 - 0xa4];
-    Thread::Mutex mNameMutex;       // +0x148
+    Thread::Mutex_s008d_e020 mNameMutex;       // +0x148
 
-    char Fn8de230(int a, int b, int c, int d);
+    char Fn8de230(int a, int b, int c, int d);  // 0x008de230 (EA::ResourceMan::Manager::Fn8de230)
     bool GetLoadedResource(int a, int b);  // 0x008de280 (EA::ResourceMan::Manager::GetLoadedResource)
     bool IsDatabaseRegistered(int a, void** pOut);  // 0x008de2d0 (EA::ResourceMan::Manager::IsDatabaseRegistered)
     void* FindDatabase(int a);  // 0x008de310 (EA::ResourceMan::Manager::FindDatabase)
-    void* Fn8de360(int a);
-    bool Fn8de3b0(int a, int b);
-    void Fn8de400(void* p, int a);
-    char CheckCacheInternal(void* p1, void* p2, void** ppOut, char flag);  // 0x008de9d0 (EA::ResourceMan::Manager::CheckCacheInternal)
+    void* Fn8de360(int a);  // 0x008de360 (EA::ResourceMan::Manager::Fn8de360)
+    bool Fn8de3b0(int a, int b);  // 0x008de3b0 (EA::ResourceMan::Manager::Fn8de3b0)
+    void Fn8de400(void* p, int a);  // 0x008de400 (EA::ResourceMan::Manager::Fn8de400)
+    char CheckCacheInternal(CacheRes* p1, void* p2, void** ppOut, char flag);  // 0x008de9d0 (EA::ResourceMan::Manager::CheckCacheInternal)
     char Fn8dead0(void* pArg2, int a3, void* pArg4, void* pArg5, void* pArg6);
     void DoDatabaseChanged(int a, void* pList);  // 0x008debf0 (EA::ResourceMan::Manager::DoDatabaseChanged)
 };
@@ -121,14 +130,14 @@ struct InternalDatabaseList_s008d_e020 {
     };
 
     Node mAnchor;                              // +0x00
-    Thread::Mutex mWriteMutex;                 // +0x10
+    Thread::Mutex_s008d_e020 mWriteMutex;                 // +0x10
     void** mpBegin;                            // +0x40
     void** mpEnd;                              // +0x44
     void** mpCapacity;                         // +0x48
     IAllocatorV* mpCoreAllocator;              // +0x4c
     const char* mpName;                        // +0x50
 
-    InternalDatabaseList_s008d_e020(int a);
+    InternalDatabaseList_s008d_e020(int a);  // 0x008de8e0 (EA::ResourceMan::InternalDatabaseList::InternalDatabaseList_s008d_e020)
     void Add(void* pDatabase, int a);  // 0x008de940 (EA::ResourceMan::InternalDatabaseList::Add)
 };
 }
@@ -182,9 +191,88 @@ struct AutoRefObj {
 
     AutoRefObj& operator=(const AutoRefObj& src);   // 0x008dee30
 };
-extern "C" void FixedAllocatorCtor(void* pThis, int a, int b, int c, int d, int e,
-                                   void* f, void* g, int h); // 0x00926720
-extern "C" int FixedAllocatorAddCore(void* pThis, int a, int b); // 0x00926650
+namespace EA {
+namespace ResourceMan {
+struct CacheRes {
+    virtual void v0();
+    virtual void Release();                 // +0x04
+    virtual void v2();
+    virtual void v3();
+    virtual void v4();
+    virtual char Convert(CacheRes** ppOut); // +0x14
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct CacheSrc {
+    virtual void v0();
+    virtual void Release();
+    virtual void v2();
+    virtual void v3();
+    virtual void v4();
+    virtual char Lookup(void* pKey, CacheRes** ppOut); // +0x14
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct CacheRef {   // AutoRefCount<T> wrapper
+    CacheRes* mp;
+    CacheRes** AsPPTypeParam();             // 0x00a16f40
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+extern CacheSrc* Fn8d5d00_src();            // 0x008d5d00 (cdecl, returns CacheSrc*)
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct Key3 { uint32 v0, v1, v2; };
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct ResObj {                       // vtable slots used: 2 (+8), 9 (+0x24), 10 (+0x28)
+    virtual void p0();
+    virtual void p1();
+    virtual void Release();           // +0x08
+    virtual void p3();
+    virtual void p4();
+    virtual void p5();
+    virtual void p6();
+    virtual void p7();
+    virtual void p8();
+    virtual void Vf24();              // +0x24
+    virtual char Vf28(void* a, ResObj* b, int c, uint32 d); // +0x28
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct DbObj {                        // slots used: 13 (+0x34), 16 (+0x40)
+    virtual void p0();
+    virtual void p1();
+    virtual void p2();
+    virtual void p3();
+    virtual void p4();
+    virtual void p5();
+    virtual void p6();
+    virtual void p7();
+    virtual void p8();
+    virtual void p9();
+    virtual void p10();
+    virtual void p11();
+    virtual void p12();
+    virtual char Vf34(Key3* pKey, ResObj** ppOut, int a, int b, int c, int d); // +0x34
+    virtual void p14();
+    virtual void p15();
+    virtual void Vf40(Key3* pKey);    // +0x40
+};
+}
+}
 struct Vec8 {
     AutoRefObj* mpBegin;    // +0x00
     AutoRefObj* mpEnd;      // +0x04
@@ -374,6 +462,12 @@ bool EA::ResourceMan::ChangeNotificationInfoCompare_s008d_e020::operator()( cons
     return a.mpKeyFilter < b.mpKeyFilter;
 }
 
+// @ 0x008de220
+bool EA::ResourceMan::Manager::Init()
+{
+    if (!mbInitialized) mbInitialized = true;
+    return true;
+}
 
 // @ 0x008de230
 char EA::ResourceMan::Manager_s008d_e020::Fn8de230(int a, int b, int c, int d)
@@ -386,7 +480,6 @@ char EA::ResourceMan::Manager_s008d_e020::Fn8de230(int a, int b, int c, int d)
     }
     return r;
 }
-
 
 // @ 0x008de280
 bool EA::ResourceMan::Manager_s008d_e020::GetLoadedResource(int a, int b)
@@ -403,7 +496,6 @@ bool EA::ResourceMan::Manager_s008d_e020::GetLoadedResource(int a, int b)
     return false;
 }
 
-
 // @ 0x008de2d0
 bool EA::ResourceMan::Manager_s008d_e020::IsDatabaseRegistered(int a, void** pOut)
 {
@@ -417,7 +509,6 @@ bool EA::ResourceMan::Manager_s008d_e020::IsDatabaseRegistered(int a, void** pOu
         n = n->mpNext;
     }
 }
-
 
 // @ 0x008de310
 void* EA::ResourceMan::Manager_s008d_e020::FindDatabase(int a)
@@ -434,7 +525,6 @@ void* EA::ResourceMan::Manager_s008d_e020::FindDatabase(int a)
     return 0;
 }
 
-
 // @ 0x008de360
 void* EA::ResourceMan::Manager_s008d_e020::Fn8de360(int a)
 {
@@ -450,7 +540,6 @@ void* EA::ResourceMan::Manager_s008d_e020::Fn8de360(int a)
     return 0;
 }
 
-
 // @ 0x008de3b0
 bool EA::ResourceMan::Manager_s008d_e020::Fn8de3b0(int a, int b)
 {
@@ -465,7 +554,6 @@ bool EA::ResourceMan::Manager_s008d_e020::Fn8de3b0(int a, int b)
     }
     return false;
 }
-
 
 // @ 0x008de400
 void EA::ResourceMan::Manager_s008d_e020::Fn8de400(void* p, int a)
@@ -487,7 +575,6 @@ void EA::ResourceMan::Manager_s008d_e020::Fn8de400(void* p, int a)
         it += 2;
     } while (it != end);
 }
-
 
 // @ 0x008de450
 namespace eastl_shim {
@@ -537,7 +624,6 @@ void ChangeSet::LowerBound(void** ppOut, const uint32* pKey)
 }
 }  // namespace eastl_shim
 
-
 // @ 0x008de4f0
 namespace eastl_shim {
 void ChangeSet::DoFreeNodes(RbNode* node)
@@ -550,7 +636,6 @@ void ChangeSet::DoFreeNodes(RbNode* node)
     }
 }
 }  // namespace eastl_shim
-
 
 // @ 0x008de530
 void HashBase::DoRehash1(uint32 n)
@@ -573,7 +658,6 @@ void HashBase::DoRehash1(uint32 n)
     mnBucketCount = n;
 }
 
-
 // @ 0x008de5e0
 void HashBase::DoRehash2(uint32 n)
 {
@@ -594,7 +678,6 @@ void HashBase::DoRehash2(uint32 n)
     mpBucketArray = pNew;
     mnBucketCount = n;
 }
-
 
 // @ 0x008de690
 void HashBase::DoRehash3(uint32 n)
@@ -617,6 +700,19 @@ void HashBase::DoRehash3(uint32 n)
     mnBucketCount = n;
 }
 
+// @ 0x008de7f0
+void HashBase::DoFreeNodes(void** pBucketArray, uint32 n)
+{
+    for (uint32 i = 0; i < n; ++i) {
+        char* node = (char*)pBucketArray[i];
+        while (node) {
+            char* next = *(char**)(node + 8);
+            mpAllocator->Deallocate(node, 0xc);
+            node = next;
+        }
+        pBucketArray[i] = 0;
+    }
+}
 
 // @ 0x008de840
 void* Fn8de840(void** ppOut, AutoRefObj* first, AutoRefObj* last, AutoRefObj* dest)
@@ -639,7 +735,6 @@ void* Fn8de840(void** ppOut, AutoRefObj* first, AutoRefObj* last, AutoRefObj* de
     return ppOut;
 }
 
-
 // @ 0x008de890
 AutoRefObj* Fn8de890(AutoRefObj* first, AutoRefObj* last, AutoRefObj* dest)
 {
@@ -660,7 +755,6 @@ AutoRefObj* Fn8de890(AutoRefObj* first, AutoRefObj* last, AutoRefObj* dest)
     return dest;
 }
 
-
 // @ 0x008de8e0
 EA::ResourceMan::InternalDatabaseList_s008d_e020::InternalDatabaseList_s008d_e020(int a)
 {
@@ -670,8 +764,8 @@ EA::ResourceMan::InternalDatabaseList_s008d_e020::InternalDatabaseList_s008d_e02
     mAnchor.mpNext = 0;
     mAnchor.mpValue = 0;
     mAnchor.mnPriority = 0;
-    new (&mWriteMutex) Thread::Mutex(0, 1);
-    IAllocatorV* alloc = (IAllocatorV*)EA_Allocator_GetDefaultAllocator();
+    new (&mWriteMutex) Thread::Mutex_s008d_e020(0, 1);
+    EA::ResourceMan::IAllocatorV* alloc = (EA::ResourceMan::IAllocatorV*)EA_Allocator_GetDefaultAllocator();
     mpBegin = 0;
     mpEnd = 0;
     mpCapacity = 0;
@@ -680,7 +774,6 @@ EA::ResourceMan::InternalDatabaseList_s008d_e020::InternalDatabaseList_s008d_e02
     FixedAllocatorCtor((char*)this + 0x54, 0xc, 0, 0xc8, 0, 0,
                        (void*)0x8de1c0, (void*)0x89ed40, a);
 }
-
 
 // @ 0x008de940
 void EA::ResourceMan::InternalDatabaseList_s008d_e020::Add(void* pDatabase, int a)
@@ -706,7 +799,7 @@ void EA::ResourceMan::InternalDatabaseList_s008d_e020::Add(void* pDatabase, int 
     }
     pNode->mpValue = pDatabase;
     pNode->mnPriority = a;
-    mWriteMutex.Lock(*(const unsigned int*)0x1436ab8);
+    mWriteMutex.Lock((const char*)0x1436ab8);
     Node* p = mAnchor.mpNext;
     Node* prev = &mAnchor;
     while (p) {
@@ -719,6 +812,78 @@ void EA::ResourceMan::InternalDatabaseList_s008d_e020::Add(void* pDatabase, int 
     mWriteMutex.Unlock();
 }
 
+// @ 0x008de9d0
+char EA::ResourceMan::Manager_s008d_e020::CheckCacheInternal(EA::ResourceMan::CacheRes* p1, void* p2, void** ppOut, char flag)
+{
+    typedef char (__thiscall *Slot5)(void*, void*, void*);
+    EA::ResourceMan::CacheRes* key = p1;
+    char bl = ((Slot5)(*(void***)this)[0x14 / 4])(this, key, p2);
+    if (!bl) {
+        EA::ResourceMan::CacheSrc* src = EA::ResourceMan::Fn8d5d00_src();
+        EA::ResourceMan::CacheRes* found = 0;
+        if (src) {
+            if (src->Lookup(key, &found)) {
+                bl = 1;
+                if (ppOut) {
+                    *ppOut = found;
+                    return bl;
+                }
+                if (p2) {
+                    if (flag) mNameMutex.Unlock();
+                    EA::ResourceMan::CacheRef& ref = *(EA::ResourceMan::CacheRef*)&p1;
+                    ref.mp = 0;
+                    bl = found->Convert(ref.AsPPTypeParam());
+                    if (bl) {
+                        *(EA::ResourceMan::CacheRes**)p2 = ref.mp;
+                        ref.mp = 0;
+                    }
+                    if (flag) mNameMutex.Lock((const char*)0x1436ab8);
+                    if (ref.mp) ref.mp->Release();
+                }
+            }
+            if (found) found->Release();
+        }
+    }
+    return bl;
+}
+
+// @ 0x008dead0
+char EA::ResourceMan::Manager_s008d_e020::Fn8dead0(void* pArg2, int a3, void* pArg4, void* pArg5, void* pArg6)
+{
+    char result = 0;
+    if (pArg2) {
+        EA::ResourceMan::Key3 k;
+        if (pArg6) {
+            k = *(EA::ResourceMan::Key3*)pArg6;
+        } else {
+            k.v0 = *(uint32*)((char*)pArg2 + 8);
+            k.v1 = *(uint32*)((char*)pArg2 + 0xc);
+            k.v2 = *(uint32*)((char*)pArg2 + 0x10);
+        }
+        EA::ResourceMan::DbObj* db = (EA::ResourceMan::DbObj*)pArg4;
+        EA::ResourceMan::ResObj* res = (EA::ResourceMan::ResObj*)pArg5;
+        if (!db) {
+            typedef EA::ResourceMan::DbObj* (__thiscall *Fn)(void*, EA::ResourceMan::Key3*);
+            db = ((Fn)(*(void***)this)[0x58 / 4])(this, &k);
+        }
+        if (db) {
+            if (!res) {
+                typedef EA::ResourceMan::ResObj* (__thiscall *Fn)(void*, uint32, int);
+                res = ((Fn)(*(void***)this)[0x48 / 4])(this, k.v1, -1);
+            }
+            if (res) {
+                EA::ResourceMan::ResObj* tmp = 0;
+                if (db->Vf34(&k, &tmp, 3, 2, 1, 0)) {
+                    result = res->Vf28(pArg2, tmp, a3, k.v1);
+                    tmp->Vf24();
+                    if (!result) db->Vf40(&k);
+                }
+                if (tmp) tmp->Release();
+            }
+        }
+    }
+    return result;
+}
 
 // @ 0x008debf0
 void EA::ResourceMan::Manager::DoDatabaseChanged(EA::ResourceMan::Database * a, eastl::vector<EA::ResourceMan::Key, eastl::sp_vector_allocator> * pList)
@@ -763,7 +928,6 @@ void EA::ResourceMan::Manager::DoDatabaseChanged(EA::ResourceMan::Database * a, 
     } while (node != pAnchor);
 }
 
-
 // @ 0x008decb0
 void Vec8::Fn8decb0()
 {
@@ -780,7 +944,6 @@ void Vec8::Fn8decb0()
         mpAllocator->Deallocate(mpBegin, bytes * 8);
     }
 }
-
 
 // @ 0x008ded00
 void HashBase::HashBase_Insert(void** ppResult, uint32* pKey, uint32 extra)
@@ -822,7 +985,6 @@ void HashBase::HashBase_Insert(void** ppResult, uint32* pKey, uint32 extra)
     *(void**)((char*)ppResult + 4) = (char*)mpBucketArray + off;
 }
 
-
 // @ 0x008dede0
 void __stdcall Fn8dede0(AutoRefObj* first, AutoRefObj* last)
 {
@@ -838,7 +1000,6 @@ void __stdcall Fn8dede0(AutoRefObj* first, AutoRefObj* last)
         }
     }
 }
-
 
 // @ 0x008dee30
 AutoRefObj& AutoRefObj::operator=(const AutoRefObj& src)
@@ -860,7 +1021,6 @@ AutoRefObj& AutoRefObj::operator=(const AutoRefObj& src)
     mField = src.mField;
     return *this;
 }
-
 
 // @ 0x008dee90
 void RbTree::DoInsertValueImpl(void* p2, char* pPos, void* pValue, char flag)
@@ -890,7 +1050,6 @@ void RbTree::DoInsertValueImpl(void* p2, char* pPos, void* pValue, char flag)
     *(void**)p2 = node;
 }
 
-
 // @ 0x008def20
 void* AutoRefVec::Fn8def20(int n, void* pAllocPair)
 {
@@ -911,7 +1070,6 @@ void* AutoRefVec::Fn8def20(int n, void* pAllocPair)
     return this;
 }
 
-
 // @ 0x008def80
 AutoRefObj* Fn8def80(AutoRefObj* first, AutoRefObj* last, AutoRefObj* dest)
 {
@@ -931,7 +1089,6 @@ AutoRefObj* Fn8def80(AutoRefObj* first, AutoRefObj* last, AutoRefObj* dest)
     } while (first != last);
     return dest;
 }
-
 
 // @ 0x008defe0
 AutoRefObj* Fn8defe0(AutoRefObj* first, AutoRefObj* last, AutoRefObj* dest)

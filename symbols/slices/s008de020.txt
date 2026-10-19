@@ -1,5 +1,6 @@
 008de0c0 ?ReadKey@ResourceMan@EA@@YA_NPB_WAAVKey@12@@Z  # EA::ResourceMan::ReadKey migrated from s008de020
 008de1e0 ??RChangeNotificationInfoCompare_s008d_e020@ResourceMan@EA@@QBE_NABUChangeNotificationInfo_s008d_e020@12@0@Z  # ChangeNotificationInfoCompare_s008d_e020::operator() migrated from s008de020 (verbatim, slice spelling)
+008de220 ?Init@Manager@ResourceMan@EA@@UAE_NXZ  # EA::ResourceMan::Manager::Init migrated from s008de020
 008de230 ?Fn8de230@Manager_s008d_e020@ResourceMan@EA@@QAEDHHHH@Z  # Manager_s008d_e020::Fn8de230 migrated from s008de020 (verbatim, slice spelling)
 008de280 ?GetLoadedResource@Manager_s008d_e020@ResourceMan@EA@@QAE_NHH@Z  # Manager_s008d_e020::GetLoadedResource migrated from s008de020 (verbatim, slice spelling)
 008de2d0 ?IsDatabaseRegistered@Manager_s008d_e020@ResourceMan@EA@@QAE_NHPAPAX@Z  # Manager_s008d_e020::IsDatabaseRegistered migrated from s008de020 (verbatim, slice spelling)
@@ -12,10 +13,13 @@
 008de530 ?DoRehash1@HashBase@@QAEXI@Z  # HashBase::DoRehash1 migrated from s008de020 (verbatim, slice spelling)
 008de5e0 ?DoRehash2@HashBase@@QAEXI@Z  # HashBase::DoRehash2 migrated from s008de020 (verbatim, slice spelling)
 008de690 ?DoRehash3@HashBase@@QAEXI@Z  # HashBase::DoRehash3 migrated from s008de020 (verbatim, slice spelling)
+008de7f0 ?DoFreeNodes@HashBase@@QAEXPAPAXI@Z  # HashBase::DoFreeNodes migrated from s008de020 (verbatim, slice spelling)
 008de840 ?Fn8de840@@YAPAXPAPAXPAUAutoRefObj@@11@Z  # Fn8de840 migrated from s008de020 (verbatim, slice spelling)
 008de890 ?Fn8de890@@YAPAUAutoRefObj@@PAU1@00@Z  # Fn8de890 migrated from s008de020 (verbatim, slice spelling)
 008de8e0 ??0InternalDatabaseList_s008d_e020@ResourceMan@EA@@QAE@H@Z  # InternalDatabaseList_s008d_e020::InternalDatabaseList migrated from s008de020 (verbatim, slice spelling)
 008de940 ?Add@InternalDatabaseList_s008d_e020@ResourceMan@EA@@QAEXPAXH@Z  # InternalDatabaseList_s008d_e020::Add migrated from s008de020 (verbatim, slice spelling)
+008de9d0 ?CheckCacheInternal@Manager_s008d_e020@ResourceMan@EA@@QAEDPAUCacheRes@23@PAXPAPAXD@Z  # Manager_s008d_e020::CheckCacheInternal migrated from s008de020 (verbatim, slice spelling)
+008dead0 ?Fn8dead0@Manager_s008d_e020@ResourceMan@EA@@QAEDPAXH000@Z  # Manager_s008d_e020::Fn8dead0 migrated from s008de020 (verbatim, slice spelling)
 008debf0 ?DoDatabaseChanged@Manager@ResourceMan@EA@@UAEXPAVDatabase@23@PAV?$vector@VKey@ResourceMan@EA@@Vsp_vector_allocator@eastl@@@eastl@@@Z  # EA::ResourceMan::Manager::DoDatabaseChanged migrated from s008de020
 008decb0 ?Fn8decb0@Vec8@@QAEXXZ  # Vec8::Fn8decb0 migrated from s008de020 (verbatim, slice spelling)
 008ded00 ?HashBase_Insert@HashBase@@QAEXPAPAXPAII@Z  # HashBase::HashBase_Insert migrated from s008de020 (verbatim, slice spelling)

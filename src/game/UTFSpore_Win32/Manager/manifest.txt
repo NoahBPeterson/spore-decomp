@@ -1,5 +1,6 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/Manager.cpp  ??RChangeNotificationInfoCompare_s008d_e020@ResourceMan@EA@@QBE_NABUChangeNotificationInfo_s008d_e020@12@0@Z  008de1e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Manager.cpp  ?Init@Manager@ResourceMan@EA@@UAE_NXZ  008de220  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/Manager.cpp  ?Fn8de230@Manager_s008d_e020@ResourceMan@EA@@QAEDHHHH@Z  008de230  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/Manager.cpp  ?Fn8de400@Manager_s008d_e020@ResourceMan@EA@@QAEXPAXH@Z  008de400  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/Manager.cpp  ?DoFreeNodes@ChangeSet@eastl_shim@@QAEXPAURbNode@2@@Z  008de4f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

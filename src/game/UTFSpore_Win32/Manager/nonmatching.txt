@@ -8,10 +8,13 @@
 008de530 86 HashBase::DoRehash1; memset/allocation sequence codegen differs
 008de5e0 86 HashBase::DoRehash2; memset/allocation sequence codegen differs
 008de690 85 HashBase::DoRehash3; memset/allocation sequence codegen differs
+008de7f0 14 HashBase::DoFreeNodes; register allocation differs (equiv WEAK)
 008de840 64 AutoRefCount range-assign helper; register allocation differs
 008de890 63 AutoRefCount range-copy helper; register allocation differs
-008de8e0 133 InternalDatabaseList constructor; allocator-ctor codegen differs
+008de8e0 129 InternalDatabaseList constructor; allocator-ctor codegen differs
 008de940 120 InternalDatabaseList::Add; lock/xchg list-insert codegen differs
+008de9d0 153 Manager::CheckCacheInternal complete; param-slot reuse for the ref and register allocation differ (equiv UNSUPPORTED: fake-arity)
+008dead0 249 Manager::Fn8dead0 complete (vf34 6 args, vf28 4 args, tmp reuses param slot); register allocation differs (equiv FAIL only on ah of char return)
 008debf0 95 Manager::DoDatabaseChanged tree walk; codegen differs (equiv WEAK)
 008decb0 53 AutoRefCount vector destructor; register allocation differs (equiv PASS)
 008ded00 196 hash-map insert; rehash-policy template codegen differs
