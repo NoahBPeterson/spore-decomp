@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPTerrain/SPTerrainDistributeDescription.cpp  ?FUN_00f63120@@YAXHH@Z  00f63120  /O2 /MD /Gy /TP /Isrc/game/include

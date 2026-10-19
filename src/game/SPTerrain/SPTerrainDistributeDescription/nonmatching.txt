@@ -1,0 +1,8 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+00f62bc0 305 description serializer: complete; the WriteUint32 call schedule and the  [equiv: UNSUPPORTED (unresolved EA_IO_WriteUint32)] element-loop byte reads use a different stack temp layout
+00f631e0 13 base init wrapper: complete; the tail call and the [esp+8] store order  [equiv: UNSUPPORTED (orig-abi-broken)] differ
+00f631f0 78 cTDDebugCommand::Execute: complete; HasFlag/vtable call scheduling and  [equiv: UNSUPPORTED (unresolved cArguments::OptionArguments)] the flag masks differ
+00f63280 52 cTDLevelCommand::Execute: complete; the atoi vcall and level-bounds  [equiv: FAIL (execution)] branch schedule differ
+00f632f0 104 cTDDistanceCommand::Execute: complete; the float vcall/store schedule  [equiv: UNSUPPORTED (unresolved cArguments::OptionArguments)] differs
+00f63360 63 cTDFacingCommand::Execute: complete; same float vcall/store schedule  [equiv: FAIL (execution)]
+00f63650 26 SWARM_TerrainDistributeAddCommands: complete; the operator new / command  [equiv: UNSUPPORTED (unresolved operator_new, PTR_s_terrainDistribute)] registration vcall sequence differs
