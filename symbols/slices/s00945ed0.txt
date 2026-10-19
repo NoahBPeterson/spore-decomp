@@ -1,1 +1,19 @@
 00945ed0 ?WorkerThreadFunction@HTTPClient_s0094_5ed0@Internet@EA@@QAEIPAUWorkerThreadInfo_s0094_5ed0@23@@Z  # HTTPClient_s0094_5ed0::WorkerThreadFunction migrated from s00945ed0 (verbatim, slice spelling)
+009467b0 ?SetSize@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UAE_NI@Z  # EA::Internet::HTTPFormURLEncodedPostBodyStream::SetSize migrated from s00945ed0
+009467c0 ?Flush@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UAE_NXZ  # EA::Internet::HTTPFormURLEncodedPostBodyStream::Flush migrated from s00945ed0
+009467d0 ?Write@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UAE_NPBXI@Z  # EA::Internet::HTTPFormURLEncodedPostBodyStream::Write migrated from s00945ed0
+009467e0 ?GetSize@HTTPMultipartFormDataPostBodyStream@Internet@EA@@UBEIXZ  # EA::Internet::HTTPMultipartFormDataPostBodyStream::GetSize migrated from s00945ed0
+00946800 ?SetSize@HTTPMultipartRelatedPostBodyStream@Internet@EA@@UAE_NI@Z  # EA::Internet::HTTPMultipartRelatedPostBodyStream::SetSize migrated from s00945ed0
+00946810 ?Close@HTTPFormURLEncodedPostBodyStream_s0094_5ed0@Internet@EA@@QAE_NXZ  # HTTPFormURLEncodedPostBodyStream_s0094_5ed0::Close migrated from s00945ed0 (verbatim, slice spelling)
+00946830 ?GetSize@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UBEIXZ  # EA::Internet::HTTPFormURLEncodedPostBodyStream::GetSize migrated from s00945ed0
+00946850 ?GetPosition@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UBEJW4PositionType@IO@3@@Z  # EA::Internet::HTTPFormURLEncodedPostBodyStream::GetPosition migrated from s00945ed0
+00946890 ?SetPosition@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UAE_NJW4PositionType@IO@3@@Z  # EA::Internet::HTTPFormURLEncodedPostBodyStream::SetPosition migrated from s00945ed0
+00946900 ?GetAvailable@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UBEIXZ  # EA::Internet::HTTPFormURLEncodedPostBodyStream::GetAvailable migrated from s00945ed0
+00946920 ?Read@HTTPFormURLEncodedPostBodyStream_s0094_5ed0@Internet@EA@@QAEHPAXI@Z  # HTTPFormURLEncodedPostBodyStream_s0094_5ed0::Read migrated from s00945ed0 (verbatim, slice spelling)
+00946970 ?Finalize@HTTPMultipartFormDataPostBodyStream_s0094_5ed0@Internet@EA@@QAE_NXZ  # HTTPMultipartFormDataPostBodyStream_s0094_5ed0::Finalize migrated from s00945ed0 (verbatim, slice spelling)
+009469c0 ?WriteField@HTTPMultipartFormDataPostBodyStream_s0094_5ed0@Internet@EA@@QAE_NPBD0@Z  # HTTPMultipartFormDataPostBodyStream_s0094_5ed0::WriteField migrated from s00945ed0 (verbatim, slice spelling)
+00946aa0 ?WriteEndBoundary@HTTPMultipartFormDataPostBodyStream_s0094_5ed0@Internet@EA@@QAE_NXZ  # HTTPMultipartFormDataPostBodyStream_s0094_5ed0::WriteEndBoundary migrated from s00945ed0 (verbatim, slice spelling)
+00946b30 ?SetPosition@HTTPMultipartRelatedPostBodyStream_s0094_5ed0@Internet@EA@@QAE_NHH@Z  # HTTPMultipartRelatedPostBodyStream_s0094_5ed0::SetPosition migrated from s00945ed0 (verbatim, slice spelling)
+00946cc0 ?Finalize@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UAE_NXZ  # EA::Internet::HTTPFormURLEncodedPostBodyStream::Finalize migrated from s00945ed0
+00946d20 ?GetContentTypeString@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UAE_NAAV?$basic_string@DVallocator@eastl@@@eastl@@@Z  # EA::Internet::HTTPFormURLEncodedPostBodyStream::GetContentTypeString migrated from s00945ed0
+00946d40 ?Write@HTTPFormURLEncodedPostBodyStream_s0094_5ed0@Internet@EA@@QAE_NPBD0@Z  # HTTPFormURLEncodedPostBodyStream_s0094_5ed0::Write migrated from s00945ed0 (verbatim, slice spelling)

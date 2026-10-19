@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0060c110 26 WriteToStream: complete; original reuses esi for the vtable pointer and has no jmp over the loop alignment pad
+00946850 2 GetPosition: complete; operand order of pos - end + begin differs by 2 bytes; difftest PASS
+00946900 2 GetAvailable: complete; operand order of end - pos - begin differs by 2 bytes; difftest PASS

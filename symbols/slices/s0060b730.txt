@@ -6,7 +6,11 @@
 0060b9e0 UI::InsertDisc::~InsertDisc  # calls Shutdown, releases dialog
 0060ba40 UI::InsertDisc::HandleMessage  # msg 0x49a32cb -> Show, 0x238de9c -> Shutdown
 0060bae0 UI::InsertDisc::Show  # switch on disc state (0/1/2) posting messages / showing the prompt
+0060bc90 SP::Pollen::GetAESKey  # fills the 32-byte AES key
 0060bcf0 SP::Pollen::Encrypt  # AES-256-CBC (EVP) + base64 BIO; output is base64(iv||ciphertext)
 0060bf00 SP::Pollen::Decrypt  # inverse of Encrypt
-0060bc90 SP::Pollen::GetAESKey  # fills the 32-byte AES key
+0060c0f0 ?GetAvailable@HTTPMultipartFormDataPostBodyStream@Internet@EA@@UBEIXZ  # EA::Internet::HTTPMultipartFormDataPostBodyStream::GetAvailable migrated from s0060b730
+0060c110 ?WriteToStream@HTTPMultipartRelatedPostBodyStream_s0060_b730@Internet@EA@@UAEXPBDPAVIStream_s0060_b730@IO@3@@Z  # HTTPMultipartRelatedPostBodyStream_s0060_b730::WriteToStream migrated from s0060b730 (verbatim, slice spelling)
 0060c4e0 eastl::basic_string::append
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s0060b730, named from the dev publics; slice address comment)
+0093bb40 ?SetOption@MemoryStream@IO@EA@@QAEXW4Options@123@M@Z  # EA::IO::MemoryStream::SetOption (callee of s0060b730, named from the dev publics; slice address comment)
