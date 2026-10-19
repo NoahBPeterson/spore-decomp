@@ -1,4 +1,5 @@
-00457950  SP::cSPEditorBudget::AsInterface     # QueryInterface
+00457950 ?AsInterface@cSPEditorBudget@SP@@UAEPAXW4InterfaceId@COM@EA@@@Z  # SP::cSPEditorBudget::AsInterface migrated from s004575d0
+004579a0 ?FUN_004579a0@@YAXPAH@Z  # FUN_004579a0 migrated from s004575d0 (verbatim, slice spelling)
 00457af0  SP::cSPEditorBudget::Init
-004581d0  SP::cSPEditorBudget::Shutdown
 004580c0  SP::ColorRGBAToU32
+004581d0 ?Shutdown@cSPEditorBudget@SP@@QAEXXZ  # SP::cSPEditorBudget::Shutdown migrated from s004575d0

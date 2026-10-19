@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00457950 84 AsInterface: QueryInterface id dispatch; /Od branch/local layout not exact
+004581d0 100 Shutdown: layout refcount release and MessageServer sends not reproduced exactly
