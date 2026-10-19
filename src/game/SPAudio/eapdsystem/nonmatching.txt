@@ -1,1 +1,3 @@
 # va  diff-bytes  reason
+00a681e0  11  singleton teardown; local allocator-guard reg allocation (esi vs ecx reload), EH frame [equiv: WEAK 31.8% cov]
+00a683b0 1 CallbackManager dtor; EH state index (n dtor under state 2, original 0) [equiv: UNSUPPORTED unresolved dtor refs]

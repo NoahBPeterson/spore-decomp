@@ -1,3 +1,12 @@
 # source  symbol  va  flags
+../src/game/SPAudio/eapdsystem.cpp  ?GetInfoA@EapdInfo@@QAEXPAH@Z  00a68140  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?GetInfoB@EapdInfo@@QAEXPAH@Z  00a68190  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?RemoveKey@KeyList@@QAEXPBH@Z  00a68280  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?Allocate@NodePool@@QAEPAXPBH@Z  00a682d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?FreeChains@NodePool@@QAEXPAPAUPoolNode@@I@Z  00a68330  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPAudio/eapdsystem.cpp  ?RemoveEntry@Outer310@@QAEXH@Z  00a68410  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?PushTask@EapdTasks@@QAEXPAX@Z  00a685a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?Init@EapdAssets@@QAE_NHHH@Z  00a685e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ??1NodePool@@QAE@XZ  00a687f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ??1EapdSystemFull@@UAE@XZ  00a68dd0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPAudio/eapdsystem.cpp  ?ScalarDtor@EapdSystem@@QAEPAXH@Z  00a68e80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
