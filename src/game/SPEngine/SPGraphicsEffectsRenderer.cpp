@@ -42,7 +42,6 @@ public:
 struct Manager {
     void* vtbl;
 };
-extern "C" void* FUN_0067dd50();
 typedef int(__thiscall* VirtualFn1)(void*, int);
 typedef void(__thiscall* VirtualFn3)(void*, int, int, int);
 // ---- items of slice s006e6100 end
@@ -852,6 +851,7 @@ void SortPairsB(uint32_t* begin, uint32_t* end)
 
 
 
+
 // @ 0x006e7450
 char Host3::Method7450(unsigned char)
 {
@@ -1091,6 +1091,7 @@ void Host3::Method8090(int index, int a, float b)
         fn(p, index, a, b);
     }
 }
+
 
 
 
@@ -1413,6 +1414,7 @@ void CCreature::m8dd0(int, int, int, int, void*, int, int, int, int, int, int, i
 
 
 
+
 // @ 0x006ea920
 void S6::m920()
 {
@@ -1581,6 +1583,7 @@ void S6::mad40(int idx, void* xf)
 
 
 
+
 // @ 0x006ed2c0
 void cEffectsRenderer::SetTextureParticleActive(int index, bool active)
 {
@@ -1648,11 +1651,13 @@ cEffectsModel::cEffectsModel(unsigned, unsigned, unsigned, const float* box)
 
 
 
+
 // @ 0x006eeb60
 void vector_insert_stub(void* self, void* a, void* b)
 {
     (void)self; (void)a; (void)b;
 }
+
 
 
 
@@ -1760,6 +1765,7 @@ void EffectsHelper320(int)
 void EffectsHelper5a0(int)
 {
 }
+
 
 
 // @ 0x006f0890
@@ -2045,6 +2051,7 @@ bool Effects0FB0::AddParticleSet(int id, const SetDesc* d, int* outIndex)
     ((unsigned char*)s)[0x49] = keep;
     return true;
 }
+
 
 // @ 0x006f1770
 bool AddParticleSet(int a, int b, int c, int d)
