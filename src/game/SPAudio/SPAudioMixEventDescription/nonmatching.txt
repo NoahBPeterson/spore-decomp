@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a3cce0 74 MixEventAddCommands: complete; EH-guarded command-base construction + vtable store differ. difftest UNSUPPORTED (unresolved debug operator new and cCommandBase_ctor). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
