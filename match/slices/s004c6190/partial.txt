@@ -1,10 +1,3 @@
-004c6190  0  partial: vector<bool> reallocation/assign skeleton
-004c64d0  0  partial: allocator-free skeleton
-004c6520  0  partial: helper skeleton
-004c6560  0  partial: vector<bool>::insert skeleton
-004c69b0  0  partial: trampoline skeleton
-004c69e0  0  partial: helper skeleton
-004c6a70  0  partial: allocator-free skeleton
-004c6ae0  0  partial: uninitialized-fill skeleton
-004c6b30  0  partial: uninitialized-copy skeleton
-004c6ba0  0  partial: refcounted release skeleton
+# va  diff-bytes  reason
+# All 10 slice targets are complete definitions; see manifest.txt (1 byte-exact)
+# and nonmatching.txt (9 complete-inexact).

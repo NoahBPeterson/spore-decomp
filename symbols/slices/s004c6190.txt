@@ -1,0 +1,13 @@
+# Slice s004c6190 names.
+# MSVC 2008 /Od (/Ob1) EASTL vector<Elem> / vector<bool> and GmeRefCount
+# helpers from a single translation unit.
+004c6190  insert<E0x8>          # vector<8-byte Elem>::insert(pos, value); in-place shift + realloc growth
+004c64d0  deallocate            # free begin unless it is the inline buffer pointer
+004c6520  uninitialized_move    # copy-construct [first,last) into dst, then destroy the source range
+004c6560  insert<bool>          # vector<bool>::insert(pos, count, value)
+004c69b0  uninitialized_copy_n  # copy-construct [first,last) into dst (result unused here)
+004c69e0  uninitialized_copy    # copy-construct each 8-byte Elem; AddRef the +0xbc ref object
+004c6a70  destroy_range         # destroy each 8-byte Elem; Release the +0xbc ref object
+004c6ae0  uninitialized_fill_n  # byte fill, writes the resulting cursor to *out
+004c6b30  DoInsertValue<bool>   # vector<bool>::DoInsertValue wrapper
+004c6ba0  ctor                  # GmeRefCount-derived editor task ctor (vftables 0x13ef094 / 0x13f05a8)
