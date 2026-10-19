@@ -1,14 +1,4 @@
 # va  diff-bytes  reason
-00925c40  -  CoreAllocatorGeneral trace wrapper: skeleton
-00925c70  -  CoreAllocatorGeneral trace wrapper: skeleton
-00925ca0  -  cLocalLightInfo dtor thunk: skeleton
-00925cf0  -  GeneralAllocatorDebug dtor: skeleton
-00925d60  -  hash node free loop: skeleton
-00925dc0  -  allocator bookkeeping helper: skeleton
-00925e70  -  allocator size-check wrapper: skeleton
-00925eb0  -  allocator free bookkeeping: skeleton
-00926080  -  allocator helper: skeleton
-009260c0  -  allocator helper: skeleton
 00926160  -  critical-section helper: skeleton
 00926190  -  critical-section helper: skeleton
 009261f0  -  allocator helper: skeleton

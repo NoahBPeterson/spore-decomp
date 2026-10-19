@@ -93,12 +93,6 @@ extern void FUN_00925d60();
 struct HashHolder { void FUN_00925e60() { *(void**)this = (void*)0x0143e104; FUN_00925d60(); } };
 void FUN_00925e60_hash(HashHolder* h) { h->FUN_00925e60(); }
 
-// @ 0x00925CF0
-struct AllocDebug { char pad[8]; char flag; void* p1; void* p2; void* p3; };
-void FUN_00925cf0(AllocDebug* self) { (void)self; }
-// @ 0x00925D60
-void FUN_00925d60(void* self) { (void)self; }
-
 // @ 0x00926100
 void* FUN_00926100(void* p) {
     if (p) { *(void**)((char*)p + 0x18) = 0; InitializeCriticalSectionAndSpinCount((CRITICAL_SECTION*)p, 10); return p; }
@@ -428,19 +422,165 @@ void* ZoneAlloc_Named(int size, ICoreAlloc* alloc, int flags) {
 
 }} // namespace EA::Trace
 
-// ================================================================== skeletons (partial)
-extern "C" {
-void sk_00925c40() {}
-void sk_00925c70() {}
-void sk_00925ca0() {}
-void sk_00925dc0() {}
-void sk_00925e70() {}
-void sk_00925eb0() {}
-void sk_00926080() {}
-void sk_009260c0() {}
-void sk_00926160() {}
-void sk_00926190() {}
-void sk_009261f0() {}
-void sk_00926300() {}
-void sk_00926350() {}
+// ================================================================== allocator wrappers (completed)
+namespace EA { namespace Trace {
+
+struct F9289f0 { void m(int, int, int, int, const char *, int); };              // 0x009289f0
+struct F928a30 { void m(int, int, int, int, int, int, const char *, int); };    // 0x00928a30
+struct F9276c0 { void m(int); };                                                // 0x009276c0
+struct F9289e0 { void m(); };                                                   // 0x009289e0
+
+// @ 0x00925c40
+struct C25c40 { void* f0; void* f4; void F(int p1, int p2, int p3); };
+void C25c40::F(int p1, int p2, int p3) {
+    ((F9289f0 *)f4)->m(p1, p3, 0, p2,
+        "..\\..\\UTFKernel\\MemoryMan\\source\\CoreAllocatorGeneral.cpp", 0x2a);
 }
+
+// @ 0x00925c70
+struct C25c70 { void* f0; void* f4; void F(int p1, int p2, int p3, int p4, int p5); };
+void C25c70::F(int p1, int p2, int p3, int p4, int p5) {
+    ((F928a30 *)f4)->m(p1, p4, p5, p3, 0, p2,
+        "..\\..\\UTFKernel\\MemoryMan\\source\\CoreAllocatorGeneral.cpp", 0x31);
+}
+
+// @ 0x00925ca0
+struct C25ca0 { void* f0; void* f4; void F(int p1, int p2); };
+void C25ca0::F(int p1, int p2) {
+    (void)p2;
+    ((F9276c0 *)f4)->m(p1);
+}
+
+// @ 0x00925cf0
+struct C25cf0 { void* vt; void* f4; char f8; void* fC; void* f10; void F(); };
+void C25cf0::F() {
+    vt = (void *)0x143e0e4;
+    if (f8 != 0) {
+        if (fC != 0) {
+            ((void (__cdecl *)(void *, void *, void *))fC)(this, f4, f10);
+            vt = (void *)0x1403934;
+            return;
+        }
+        void *p = f4;
+        if (p) {
+            ((F9289e0 *)p)->m();
+            eastl_delete(p);
+        }
+    }
+    vt = (void *)0x1403934;
+}
+
+// @ 0x00925d60
+struct C25d60 { void* vt; void* f4; void* f8; void* fC; void F(); };
+void C25d60::F() {
+    void *p = fC;
+    vt = (void *)0x143e0f4;
+    while (p != 0) {
+        fC = *(void **)p;
+        ((void (__thiscall *)(void *, void *, int))(*(void ***)f4)[3])(f4, p, 0);
+        p = fC;
+    }
+    f8 = 0;
+    fC = 0;
+    vt = (void *)0x1403934;
+}
+
+// @ 0x00925dc0
+struct C25dc0 {
+    void* vt; void* f4; void* f8; void* fC; unsigned f10; unsigned f14; int f18;
+    void *F(unsigned size, int p3, int p4, int p5, int p6);
+};
+void *C25dc0::F(unsigned size, int p3, int p4, int p5, int p6) {
+    if (size > f14) {
+        if (f14 == 0)
+            f14 = size;
+        else
+            return 0;
+    }
+    if (f8 == 0) {
+        void *r = ((void *(__thiscall *)(void *, unsigned, int, int, int, int))(*(void ***)f4)[1])
+            (f4, (f18 + 1) * (int)size, p3, p4, p5, p6);
+        *(void **)r = fC;
+        fC = r;
+        unsigned i = 0;
+        r = (char *)r + size;
+        while (i < (unsigned)f18) {
+            *(void **)r = f8;
+            f8 = r;
+            ++i;
+            r = (char *)r + size;
+        }
+    }
+    void *p = f8;
+    ++f10;
+    f8 = *(void **)p;
+    return p;
+}
+
+// @ 0x00925e70
+struct C25e70 {
+    void* vt; void* f4; void* f8; void* fC; unsigned f10; unsigned f14; int f18; int f1c;
+    void *F(unsigned size, int p3, int p4, int p5, int p6);
+};
+void *C25e70::F(unsigned size, int p3, int p4, int p5, int p6) {
+    if (size <= f14)
+        return ((C25dc0 *)this)->F(size, p3, p4, p5, p6);
+    ++f1c;
+    return ((void *(__thiscall *)(void *, unsigned, int, int, int, int))(*(void ***)f4)[1])
+        (f4, size, p3, p4, p5, p6);
+}
+
+// @ 0x00925eb0
+struct C25eb0 {
+    void* vt; void* f4; void* f8; void* fC; unsigned f10; unsigned f14; int f18; int f1c;
+    void F(void *p, unsigned n);
+};
+void C25eb0::F(void *p, unsigned n) {
+    unsigned u = f14;
+    if (n <= u) {
+        void *q = fC;
+        int span = f18 * (int)u;
+        if (q != 0) {
+            for (;;) {
+                char *lo = (char *)q + u * 4;
+                if (p >= (void *)lo) {
+                    char *hi = lo + span * 4;
+                    if (p < (void *)hi) break;
+                }
+                q = *(void **)q;
+                if (q == 0) return;
+            }
+            void *old = f8;
+            f8 = p;
+            *(void **)p = old;
+            --f10;
+        }
+        return;
+    }
+    --f1c;
+    ((void (__thiscall *)(void *, void *, unsigned))(*(void ***)f4)[3])(f4, p, n);
+}
+
+// @ 0x00926080
+extern unsigned int g_1668eb4;
+extern void *g_1668eb0;
+void *FUN_00926080(SIZE_T size) {
+    if ((g_1668eb4 & 1) == 0) {
+        g_1668eb4 = g_1668eb4 | 1;
+        g_1668eb0 = GetProcessHeap();
+    }
+    return HeapAlloc((HANDLE)g_1668eb0, 0, size);
+}
+
+// @ 0x009260c0
+extern unsigned int g_1668ebc;
+extern void *g_1668eb8;
+void FUN_009260c0(void *p) {
+    if ((g_1668ebc & 1) == 0) {
+        g_1668ebc = g_1668ebc | 1;
+        g_1668eb8 = GetProcessHeap();
+    }
+    HeapFree((HANDLE)g_1668eb8, 0, p);
+}
+
+}} // namespace EA::Trace
