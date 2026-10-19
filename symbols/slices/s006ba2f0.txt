@@ -4,6 +4,6 @@
 006ba940 XForm2::PreRotateX  # build cTransform + rotate
 006baa70 XForm2::PreRotateY  # build cTransform + rotate
 006bae50 FUN_006bae50  # app property setup
-006baec0 SP::FindDirectoryUp  # PDB callee-scored
-006baff0 SP::SporeAlert  # PDB anchor, MessageBoxA + eastl sprintf
+006baec0 ?FUN_006baec0@@YAXPAX@Z  # FUN_006baec0 migrated from s006ba2f0 (verbatim, slice spelling)
+006baff0 ?SporeAlert@SP@@YAXPBDHH@Z  # SporeAlert migrated from s006ba2f0 (verbatim, slice spelling)
 006bb0b0 FUN_006bb0b0  # wide SporeAlert variant

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+006baec0 246 SP::FindDirectoryUp - empty stub, too small vs original for symbol lookup; equiv UNSUPPORTED
