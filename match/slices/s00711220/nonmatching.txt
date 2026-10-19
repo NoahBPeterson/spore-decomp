@@ -2,3 +2,6 @@
 00711220 167 vector::resize(uint32_t); inlined resize(n,value_type()) call shape and slot order not reproduced
 007112c0 28 hashtable::DoFreeNodes; only inner-loop register assignment differs (node copy in edi vs esi)
 00711400 120 cMaterialManager::GetTexturesFromMaterial; atomic AutoRefCount assignment dance not reproduced
+00711630 104 cMaterialManager::GetExternalReferenceKeys; Key temp/loop counter live in memory in original (frame 4 bytes larger) [equiv: WEAK]
+00711780 796 cMaterialManager::ReadMaterials; complete (all paths), register allocation/block layout differs [equiv: WEAK]
+00711b80 239 cMaterialManager::UnregisterArenaContents; complete, arena param kept in ebp in original, ExportDesc zero-init order differs [equiv: WEAK]

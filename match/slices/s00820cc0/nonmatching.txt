@@ -1,1 +1,5 @@
-# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast unless noted)
+00820cc0 38 cPropertyUI::cPropertyUI; complete, only the store order of the third hash_map's rehash-policy words differs (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast) [equiv: UNSUPPORTED]
+00820ec0 679 cPropertyUI::ModifyInt32; complete, AutoRefCount/Variant stack slots (frame 0x60 vs 0x4c) and register allocation differ flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: UNSUPPORTED]
+00821260 652 cPropertyUI::ModifyUInt32; complete, same AutoRefCount/Variant slot issue as ModifyInt32 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: UNSUPPORTED]
+00821600 652 cPropertyUI::ModifyFloat; complete, same AutoRefCount/Variant slot issue as ModifyInt32 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: UNSUPPORTED]
