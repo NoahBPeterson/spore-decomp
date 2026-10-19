@@ -2,8 +2,10 @@
 007f3a90 83 IMEComposition::SetWindowColors - color-constant store scheduling (c6a8/c6b4 placed late) differs
 007f3b00 9 CalculateTextSize - x87 fstp vs movss scheduling of the width/height stores
 007f3b70 85 IMEComposition::OnChar - stack local frame (0x1c vs 0x10) and field-store order differ
+007f4500 100 complete; this lands in ebx instead of ebp (register allocation)
 007f45b0 9 complete; one member load scheduled before the vtable stores
 007f4710 198 complete; this/server register allocation and spill differ
 007f48d0 15 complete; mFixed store vs mCapacity lea scheduling
 007f4920 76 complete; vtable stores reordered (needs the real ctor hierarchy)
+007f50f0 184 complete; this/window register allocation differs
 007f5300 89 complete; byte-copy loop and vtable call schedule differ

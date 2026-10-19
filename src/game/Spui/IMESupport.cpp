@@ -85,7 +85,6 @@ struct IMEC {
 // ---- items of slice s007f3380 end
 
 // ---- items of slice s007f42e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" long __cdecl _InterlockedExchange(long volatile*, long);
 extern void* g_vt_1414fd0;
 extern void* g_vt_1414eb0;
 extern void* g_vt_1414db8;
@@ -97,15 +96,22 @@ extern void* g_vt_13eb90c;
 extern const wchar_t g_ja_jp[] = L"ja-jp";
 extern const char g_name_IMEServer[] = "UI/IME/IMEServer";
 extern const char g_name_IMEProxy[] = "UI/IME/IMEProxy";
+extern const char g_name_IMECandidateList[] = "UI/IME/IMECandidateList";
+extern const char g_name_mpWinComposition[] = "UI/IME/mpWinComposition";
+extern const float g_compDx;
+extern const float g_compDy;
 #pragma intrinsic(_InterlockedExchange)
 typedef unsigned short wchar16;
 #define VTOBJ(p) (*(void***)(p))
 typedef void*  (__thiscall *FPR0)(void*);
 typedef void   (__thiscall *FV0)(void*);
 typedef void   (__thiscall *FVI)(void*, int);
+typedef void   (__thiscall *FVP)(void*, void*);
 typedef void*  (__thiscall *FPRI)(void*, int);
 typedef char   (__thiscall *FPC0)(void*);
 typedef char   (__thiscall *FPCI)(void*, int);
+void* __cdecl FUN_009512c0();
+void* __cdecl FUN_009512d0(int size, int align, const char* name, void* caller);
 void* __cdecl op_new(int size, const char* name, int a, int b, int c, int d);
 void* __cdecl FUN_0067de40();
 void* __cdecl SP_Canvas();
@@ -121,8 +127,13 @@ struct IMEServerWin32Ctor {
     void SetCanvas(void*);
     void SetSomething(void*);
 };
+struct IMECandidateListCtor_s007f_42e0 { void* Ctor(); };
+struct IMECandidateListInit { void Init(void* msg); };
+struct IMECompositionInit_s007f_42e0 { void Init(void* msg); };
+struct IMECompositionCtorStub { IMECompositionCtorStub* Construct(); };
 struct IMEProxyInit { bool Init(void* server, void* svc); };
 struct IMEProxyMisc { void M1(); void M2(); };
+struct AutoRefAssign { void* Assign(void* p); };
 struct IMEProxyShutdown { void Shutdown(); };
 struct WideFixedBuf {
     wchar16* mBegin;      // +0x00
@@ -181,6 +192,7 @@ struct IMEServiceS {
 extern void* g_pIMEProxy;   // 0x01542214
 extern void* g_pIMEServer;  // 0x01542210
 // ---- items of slice s007f42e0 end
+
 
 // ---- items of slice s007f5300 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* __cdecl FUN_0095fba0();
@@ -259,9 +271,11 @@ bool IMEProxy::Init(void* server, int)
 
 
 
+
 // @ 0x007f31e0
 void IMEProxy::SetupDefaultFonts()
 {}
+
 
 
 
@@ -279,6 +293,7 @@ void IMEProxy::Shutdown()
     ((void(__thiscall*)(void*, int))VSLOT(p, 4))(p, 1);
   }
 }
+
 
 
 
@@ -300,6 +315,7 @@ void IMEProxy2::ShutdownCandidateListImpl()
 
 
 
+
 // @ 0x007f33d0
 void IMECompositionInit(void* self, int a, int b)
 {
@@ -310,11 +326,13 @@ void IMECompositionInit(void* self, int a, int b)
 
 
 
+
 // @ 0x007f35d0
 void IMECompositionShutdown(void* self)
 {
   (void)self;
 }
+
 
 
 
@@ -345,6 +363,7 @@ bool IMEComp::HandleMessage(int msg, void* arg)
 
 
 
+
 // @ 0x007f3750
 void IMECompositionBig(void* self, int a, int b)
 {
@@ -352,6 +371,7 @@ void IMECompositionBig(void* self, int a, int b)
   (void)a;
   (void)b;
 }
+
 
 
 
@@ -370,6 +390,7 @@ void IMECompColors::SetWindowColors()
 
 
 
+
 // @ 0x007f3b00
 void* CalculateTextSize(void* out, int text, int style, int len, void* typesetter)
 {
@@ -385,6 +406,7 @@ void* CalculateTextSize(void* out, int text, int style, int len, void* typesette
   *(float*)((char*)out + 4) = 0.0f;
   return out;
 }
+
 
 
 
@@ -412,6 +434,7 @@ bool IMEC::OnChar(int, unsigned short ch)
 
 
 
+
 // @ 0x007f3be0
 void IMEComp3::Helper(int param)
 {
@@ -424,6 +447,7 @@ void IMEComp3::Helper(int param)
 
 
 
+
 // @ 0x007f3c10
 void IMECandidateListCtor(void* self)
 {
@@ -432,11 +456,13 @@ void IMECandidateListCtor(void* self)
 
 
 
+
 // @ 0x007f3cc0
 void IMECandidateListDtor(void* self)
 {
   (void)self;
 }
+
 
 
 
@@ -450,11 +476,13 @@ void IMECandidateListPaint(void* self, int a, int b)
 
 
 
+
 // @ 0x007f4090
 void IMECandidateListShutdown(void* self)
 {
   (void)self;
 }
+
 
 
 
@@ -480,12 +508,14 @@ bool IMECand::HandleMessage(int msg, void* arg)
 
 
 
+
 // @ 0x007f4200
 void IMECandidateListScalarDtor(void* self, unsigned flags)
 {
   (void)self;
   (void)flags;
 }
+
 
 
 
@@ -508,6 +538,7 @@ bool IMEProxy2::Shutdown()
       mpMessageServer, this, 0x2ac44ed4, 0xffffd8f1);
   return true;
 }
+
 
 
 // @ 0x007f42e0
@@ -610,6 +641,33 @@ bool IMEProxyS::Update()
     return true;
 }
 
+// @ 0x007f4500
+void IMEProxyS::StartCandidateList()
+{
+    if (!mbWinCandidateListEnabled)
+        return;
+    void* pCand = (char*)this + 0x3c;
+    if (mpWinCandidateList != 0)
+        return;
+    void* window = ((FPR0)VTOBJ(mpWinMgr)[4 / 4])(mpWinMgr);
+    void* caller = FUN_009512c0();
+    void* mem = FUN_009512d0(0x244, 4, g_name_IMECandidateList, caller);
+    void* obj;
+    if (mem) {
+        obj = ((IMECandidateListCtor_s007f_42e0*)mem)->Ctor();
+    } else {
+        obj = 0;
+    }
+    ((AutoRefAssign*)pCand)->Assign(obj);
+    if (*(void**)pCand == 0)
+        return;
+    SetupDefaultFonts();
+    void* win = (char*)*(void**)pCand + 4;
+    ((FVP)VTOBJ(window)[0xd8 / 4])(window, win);
+    ((FVP)VTOBJ(window)[0xe8 / 4])(window, win);
+    ((void(__thiscall*)(void*, int, int))VTOBJ(win)[0x7c / 4])(win, 4, 0);
+    ((IMECandidateListInit*)mpWinCandidateList)->Init(mpMessageServer);
+}
 
 // @ 0x007f45b0
 void IMECompositionS::Dtor()
@@ -631,14 +689,12 @@ void IMECompositionS::Dtor()
     ((WinTextEditDtorStub*)this)->Dtor();
 }
 
-
 // @ 0x007f4630
 void IMECompositionS::SetFlag(int x)
 {
     void* sub = (char*)this + 0x208;
     ((void(__thiscall*)(void*, int, int))VTOBJ(sub)[0x60 / 4])(sub, x, 1);
 }
-
 
 // @ 0x007f4710
 bool IMEServiceS::Init()
@@ -696,7 +752,6 @@ bool IMEServiceS::Init()
     return ((IMEProxyInit*)cur)->Init(mpIMEServer, this);
 }
 
-
 // @ 0x007f4860
 namespace Sims3 {
 namespace UI {
@@ -722,7 +777,6 @@ void IMEServiceShutdown()
 }
 }  // namespace Sims3::UI
 
-
 // @ 0x007f48d0
 WideFixedBuf::WideFixedBuf(const wchar16* s)
 {
@@ -734,7 +788,6 @@ WideFixedBuf::WideFixedBuf(const wchar16* s)
     *mBegin = 0;
     append(s, s + WLen(s));
 }
-
 
 // @ 0x007f4920
 IMECompositionS* IMECompositionS::Construct()
@@ -760,13 +813,50 @@ IMECompositionS* IMECompositionS::Construct()
     return this;
 }
 
-
 // @ 0x007f49b0
 void IMECandidateListS_SetupWindow(void* self)
 {
     (void)self;
 }
 
+// @ 0x007f50f0
+void IMEProxyS::StartComposition()
+{
+    if (!mbWinCompositionEnabled)
+        return;
+    if (mpWinComposition != 0)
+        return;
+    void* window = ((FPR0)VTOBJ(mpWinMgr)[4 / 4])(mpWinMgr);
+    void* caller = FUN_009512c0();
+    void* mem = FUN_009512d0(0x6c0, 8, g_name_mpWinComposition, caller);
+    void* obj;
+    if (mem) {
+        obj = ((IMECompositionCtorStub*)mem)->Construct();
+    } else {
+        obj = 0;
+    }
+    ((AutoRefAssign*)((char*)this + 0x30))->Assign(obj);
+    void* comp = mpWinComposition;
+    ((FVI)VTOBJ((char*)comp + 4)[0x50 / 4])((char*)comp + 4, (int)0x7a7c0bb);
+    if (mpWinComposition == 0)
+        return;
+    SetupDefaultFonts();
+    void* win = (char*)mpWinComposition + 4;
+    ((FVP)VTOBJ(window)[0xd8 / 4])(window, win);
+    ((FVP)VTOBJ(window)[0xe8 / 4])(window, win);
+    if (mPtX != 0x7fffffff) {
+        struct Rect { float l, t, r, b; } rc;
+        rc.l = (float)mPtX;
+        rc.t = (float)mPtY;
+        rc.r = (float)mPtX + g_compDx;
+        rc.b = (float)mPtY + g_compDy;
+        ((void(__thiscall*)(void*, void*))VTOBJ((char*)mpWinComposition + 4)[0x6c / 4])(
+            (char*)mpWinComposition + 4, &rc);
+    }
+    ((void(__thiscall*)(void*, int, int))VTOBJ((char*)mpWinComposition + 4)[0x7c / 4])(
+        (char*)mpWinComposition + 4, 4, 0);
+    ((IMECompositionInit_s007f_42e0*)mpWinComposition)->Init(mpMessageServer);
+}
 
 // @ 0x007f5220
 bool IMEProxyS::HandleMessage(uint32_t msgId, void* param)
