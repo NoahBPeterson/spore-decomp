@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAHashString.cpp  ?GetInt@Property@@QAEPAHXZ  0041e990  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAHashString.cpp  ?FNV1@@YAIPBEHI@Z  00932e50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAHashString.cpp  ?FNV1_String8@@YAIPBDIH@Z  00932e80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAHashString.cpp  ?FNV1_String16@@YAIPB_WIH@Z  00932f30  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

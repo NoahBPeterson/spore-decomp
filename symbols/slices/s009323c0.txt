@@ -8,9 +8,9 @@
 00932d00 EA::Hash::InitCRC32Table  # pdb anchor
 00932da0 EA::Hash::CRC32  # pdb callee-single
 00932df0 EA::Hash::CRC64  # dc: dual-table 64-bit CRC
-00932e50 EA::Hash::FNV1  # pdb callee-single
-00932e80 EA::Hash::FNV1_String8  # dc: null-terminated FNV1 with case mode
-00932f30 EA::Hash::FNV1_String16  # pdb callee-single
+00932e50 ?FNV1@@YAIPBEHI@Z  # FNV1 migrated from s009323c0 (verbatim, slice spelling)
+00932e80 ?FNV1_String8@@YAIPBDIH@Z  # FNV1_String8 migrated from s009323c0 (verbatim, slice spelling)
+00932f30 ?FNV1_String16@@YAIPB_WIH@Z  # FNV1_String16 migrated from s009323c0 (verbatim, slice spelling)
 00932ff0 ?GetOption@EA_IO_IniFile@@QAEHH@Z  # EA_IO_IniFile::GetOption migrated from s009323c0 (verbatim, slice spelling)
 00933010 ?SetOption@EA_IO_IniFile@@QAEXHH@Z  # EA_IO_IniFile::SetOption migrated from s009323c0 (verbatim, slice spelling)
 00933040 ?SetPath@EA_IO_IniFile@@QAE_NPB_W@Z  # EA_IO_IniFile::SetPath migrated from s009323c0 (verbatim, slice spelling)
