@@ -1,8 +1,11 @@
-// src/game/SPEngine/SPAppVolumeDescription.cpp -- migrated from slice(s) s007ee060 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPAppVolumeDescription.cpp -- migrated from slice(s) s007eed10, s007ee060 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPAppVolumeDescription.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#define __PLACEMENT_NEW_INLINE   // the slices' own placement new/delete win over <new>'s (rewrite.py)
+#include <new>
+inline void operator delete(void*, void*) {}   // placement delete (<new>'s is skipped, rewrite.py)
 
 // ---- items of slice s007ee060 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags,
@@ -100,6 +103,18 @@ struct VolumeRegistrar {
 };
     void* operator new(unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
 // ---- items of slice s007ee060 end
+
+// ---- items of slice s007eed10 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* ArgMainArguments(void* args, void* out, int a, int b);
+extern int ArgParseEnum(void* s, const char* name);
+extern void ArgThrow(void* err, const char* msg);
+extern void* GetInherited(void* parser, void* args, int n, int size);
+struct HeapNode {
+  double d;
+  uint32_t x, y;
+};
+inline bool operator<(const HeapNode& a, const HeapNode& b) { return a.d < b.d; }
+// ---- items of slice s007eed10 end
 
 // @ 0x007ee540
 SP::cVolumeDescription::cVolumeDescription()
@@ -209,4 +224,43 @@ void VolumeRegistrar::Register(char flag)
     extern void FUN_00a6f9c0(int, int, void*);
     FUN_00a6f9c0(*(int*)(self + 0x130), 0x28, v);
   }
+}
+
+// @ 0x007eed10
+void VolumeSetExecute(void* self, void* args)
+{
+  int count = 0;
+  void** a = (void**)ArgMainArguments(args, &count, 2, 8);
+  int sel = ArgParseEnum(a[0], "corner");
+  switch (sel) {
+    case 0: {
+      if (count < 5) ArgThrow(0, "Wrong number of arguments.");
+      int* dst = *(int**)((char*)self + 0xc);
+      dst[0] = 0;  // corner 0
+      break;
+    }
+    case 1:
+    case 2:
+    case 3:
+      if (count < 2) ArgThrow(0, "Wrong number of arguments.");
+      break;
+    default:
+      break;
+  }
+}
+
+// @ 0x007ef080
+void VolumeEffectExecute(void* self, void* args)
+{
+  int count = 0;
+  void** a = (void**)ArgMainArguments(args, &count, 1, 3);
+  const char* name = (const char*)a[0];
+  int n = 0;
+  while (name[n] != 0) ++n;
+  ((void(__thiscall*)(void*, const char*, int))VSLOT((char*)self + 0x130, 0))(0, name, n);
+  if (count > 1) {
+    void* inh = GetInherited(*(void**)((char*)self + 0x30), a, count, 0x28);
+    (void)inh;
+  }
+  ((void(__thiscall*)(void*))VSLOT(*(void**)((char*)self + 4), 0x8c))(self);
 }
