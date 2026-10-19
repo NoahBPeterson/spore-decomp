@@ -1,4 +1,4 @@
-00671840 ?ShowMissingExpansionPacks@MissingPage_s0067_1840@@QAE_NPAXH@Z  # MissingPage_s0067_1840::ShowMissingExpansionPacks migrated from s00671840 (verbatim, slice spelling)
+00671840 ?ShowMissingExpansionPacks@MissingPage_s0067_1840@@QAE_NPAX@Z  # MissingPage_s0067_1840::ShowMissingExpansionPacks (ret 4: one stack arg, corrected from the migrated 2-arg spelling)
 00671c00 ?Shutdown@cSPUISearchBox@SP@@QAEXXZ  # SP::cSPUISearchBox::Shutdown migrated from s00671840
 00671c50 ?OnSearchChanged@cSPUISearchBox@@QAEXXZ  # cSPUISearchBox::OnSearchChanged migrated from s00671840 (verbatim, slice spelling)
 00671ca0 ?ReloadCallback@cSPUISearchBox@@QAEXPAXD@Z  # cSPUISearchBox::ReloadCallback migrated from s00671840 (verbatim, slice spelling)

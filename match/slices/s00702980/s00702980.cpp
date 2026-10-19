@@ -23,13 +23,25 @@ void __stdcall HashTable_ClearBuckets(void** buckets, unsigned count); // 0x0070
 struct HashTableStub { void clearBuckets(void** buckets, unsigned count); };
 void __cdecl GetParentChildInfo(unsigned cellID, unsigned* parent, unsigned* child); // 0x00700b70
 unsigned __cdecl CellMaskHash(unsigned cellID);                       // 0x00700c00
-void __cdecl HashFind_Cell(void* out, const unsigned* key);           // 0x00a3b2c0
 void __cdecl memset0(void* dst, int v, unsigned n);                   // 0x011e073e
 
 // ---- layouts ----
 struct ObjListNode { ObjListNode* pNext; ObjListNode* pPrev; void* mObj; };
-struct CellInfo { ObjListNode mHead; unsigned char mOctantFlags; char _pad[3]; };
+struct CellInfo {
+    ObjListNode mHead;
+    unsigned char mOctantFlags;
+    CellInfo() { mHead.pNext = &mHead; mHead.pPrev = &mHead; mOctantFlags = 0; }
+    ~CellInfo() {
+        ObjListNode* p = mHead.pNext;
+        while (p != &mHead) {
+            ObjListNode* n = p->pNext;
+            operator delete(p);
+            p = n;
+        }
+    }
+};
 struct CellNode { unsigned mKey; CellInfo mInfo; CellNode* mpNext; };  // next at +0x14
+struct HashIter { CellNode* mpNode; void** mpBucket; unsigned char mFlag; };
 
 struct CellMap {
     unsigned m0;             // +0x00
@@ -42,6 +54,9 @@ struct CellMap {
     void CopyConstruct(const CellMap& src);   // 0x702a10
     CellMap& Assign(const CellMap& src);      // 0x702f60
     CellInfo* Index(unsigned* key);           // 0x703360
+    void Find(HashIter* out, const unsigned* key);                 // 0x00a3b2c0
+    CellNode* Insert(HashIter* out, CellNode* node, bool growFlag);// 0x00702ea0
+    HashIter* Erase(HashIter* out, CellNode* node, void** bucket); // 0x007028e0
 };
 
 struct cGrid {
@@ -62,15 +77,24 @@ struct cGrid {
 };
 
 struct HierGridStub {
-    char pad0[0x20];
+    char pad0[0x18];
+    int mTopLevel;                            // +0x18
+    int mLeafLevel;                           // +0x1c
     int mNumObjects;                          // +0x20
-    char pad24[0x60 - 0x24];
+    cGrid* mGrids;                            // +0x24
+    char pad28[0x60 - 0x28];
     SlotVecStub mSlots;                       // +0x60
     char pad64[0x78 - 0x64];
     unsigned mSlotFree;                       // +0x78
     unsigned mSlotNext;                       // +0x7c
     int  Clear(unsigned index);               // 0x702af0
     void Remove(unsigned index);              // 0x702da0
+};
+
+struct SlotRec {            // 0x10-byte slot record, +4 of the slot (slot link word is at +0)
+    int      mGrid;         // +0x04
+    unsigned mKey;          // +0x08   (0xffffffff when the slot is free)
+    void*    mPtr;          // +0x0c
 };
 
 extern unsigned g_emptyBucket[1]; // 0x0154df28
@@ -128,7 +152,95 @@ void __thiscall CellMap::CopyConstruct(const CellMap& src)
 int __thiscall HierGridStub::Clear(unsigned index)
 {
     int result = 0;
-    (void)index;
+    void** blocks = (void**)mSlots.mBlocks;
+    SlotRec* s = (SlotRec*)((char*)blocks[index >> 7] + (index & 0x7f) * 0x10 + 4);
+
+    if (s->mKey == 0xffffffffu) {
+        // free slot: unlink and release the cached node, return its object count
+        char* R = *(char**)&s->mPtr;
+        int n = *(int*)(R + 8);
+        ObjListNode* a = *(ObjListNode**)(*(char**)R + 4);
+        a->pNext->pPrev = a->pPrev;
+        a->pPrev->pNext = a->pNext;
+        operator delete(a);
+        return n;
+    }
+
+    cGrid* grid = (cGrid*)((char*)mGrids + s->mGrid * 0x44);
+    HashIter it;
+    grid->mCells.Find(&it, (unsigned*)&s->mKey);
+    if (it.mpNode == (CellNode*)grid->mCells.mpBuckets[grid->mCells.mnBucketCount])
+        return result;
+
+    {
+        char* R = *(char**)&s->mPtr;
+        result = *(int*)(R + 8);
+        ObjListNode* a = *(ObjListNode**)(*(char**)R + 4);
+        a->pNext->pPrev = a->pPrev;
+        a->pPrev->pNext = a->pNext;
+        operator delete(a);
+    }
+
+    if (it.mpNode->mInfo.mHead.pNext == &it.mpNode->mInfo.mHead) {
+        if (s->mGrid > 0 && it.mpNode->mInfo.mOctantFlags == 0) {
+            unsigned parent = 0;
+            unsigned child = 0;
+            GetParentChildInfo(s->mKey, &parent, &child);
+            cGrid* pg = (cGrid*)((char*)mGrids + (s->mGrid - 1) * 0x44);
+            HashIter it2;
+            pg->mCells.Find(&it2, &parent);
+            if (it2.mpNode != (CellNode*)pg->mCells.mpBuckets[pg->mCells.mnBucketCount])
+                it2.mpNode->mInfo.mOctantFlags &= (unsigned char)~(1 << child);
+        }
+        if (grid->mMask != 0) {
+            unsigned h = CellMaskHash(s->mKey);
+            int w = (int)(h >> 3);
+            unsigned char bit = 1;
+            bit <<= (h & 7);
+            grid->mMask[w] &= (unsigned char)~bit;
+            int lvl = s->mGrid;
+            while (lvl > 0 &&
+                   ((cGrid*)((char*)mGrids + (lvl - 1) * 0x44))->mMask != 0 &&
+                   ((cGrid*)((char*)mGrids + lvl * 0x44))->mMask[w] == 0 &&
+                   ((cGrid*)((char*)mGrids + lvl * 0x44))->mChildMask[w] == 0) {
+                lvl = lvl - 1;
+                unsigned char b = (unsigned char)w;
+                w = w >> 3;
+                unsigned char m = (unsigned char)(1 << (b & 7));
+                ((cGrid*)((char*)mGrids + lvl * 0x44))->mChildMask[w] &= (unsigned char)~m;
+            }
+        }
+        HashIter out;
+        grid->mCells.Erase(&out, it.mpNode, it.mpBucket);
+        if (grid->mCells.mnElementCount == 0) {
+            int lvl = s->mGrid;
+            int leaf = mLeafLevel;
+            if (lvl == mLeafLevel) {
+                if (lvl == mTopLevel) {
+                    mLeafLevel = 0;
+                    mTopLevel = 1000;
+                    return result;
+                }
+            }
+            if (lvl == leaf) {
+                mLeafLevel = leaf - 1;
+                while (mLeafLevel >= mTopLevel) {
+                    if (((cGrid*)((char*)mGrids + mLeafLevel * 0x44))->mCells.mnElementCount != 0)
+                        return result;
+                    mLeafLevel = mLeafLevel - 1;
+                }
+                return result;
+            }
+            if (lvl == mTopLevel) {
+                mTopLevel = mTopLevel + 1;
+                while (mTopLevel < mLeafLevel) {
+                    if (((cGrid*)((char*)mGrids + mTopLevel * 0x44))->mCells.mnElementCount != 0)
+                        return result;
+                    mTopLevel = mTopLevel + 1;
+                }
+            }
+        }
+    }
     return result;
 }
 
@@ -243,9 +355,24 @@ cGrid* __cdecl grid_destroy_range(cGrid* first, cGrid* last, cGrid* ended)
 // @ 0x00703360
 CellInfo* __thiscall CellMap::Index(unsigned* key)
 {
-    char local[8];
-    HashFind_Cell(local, key);
-    return 0;
+    HashIter it;
+    Find(&it, key);
+    if (it.mpNode != (CellNode*)mpBuckets[mnBucketCount])
+        return (CellInfo*)((char*)it.mpNode + 4);
+
+    CellInfo info;
+
+    CellNode node;
+    node.mKey = *key;
+    ((ListStub*)&node.mInfo)->CopyFrom((ListStub*)&info);
+    node.mInfo.mOctantFlags = info.mOctantFlags;
+
+    // NB: the original spills this bool literal into the (dead) incoming `key` argument slot
+    // and then reloads it as a dword, so its pushed value is (key & 0xffffff00) rather than 0.
+    // The callee only tests the low byte, so the value is the same `false`.
+    Insert(&it, &node, false);
+
+    return (CellInfo*)((char*)it.mpNode + 4);
 }
 
 // @ 0x00703470

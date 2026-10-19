@@ -1,4 +1,6 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+00663be0  456  FeedListCategory message dispatch (548-byte switch on msg+8); behavior complete, but MSVC block ordering (def block placement), sub_b4/sub_b3 body order and register assignment differ; equiv: WEAK (29% coverage, no mismatch)
+00663ef0  869  layout sweep; byte-exact-size match (1173) is only reached with /fp:fast (SSE lerp), the recorded /arch:SSE-no-/fp:fast build bloats it to 1407 (no symbol of similar size); residual diffs are frame size 0x30 vs 0x24 and value-spill layout; equiv: WEAK (5.9% coverage, no mismatch)
 00663e50  11   Shutdown; AttachProc receiver/arg register (eax vs edx) and vtable-load order differ
 00664390  4    area/height update; md4 temp held in eax instead of ecx
 00664480  67   Expand; ternary null-check/merge schedule differs

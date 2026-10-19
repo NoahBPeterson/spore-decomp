@@ -1,3 +1,4 @@
+00671840  611  cSPUIMissingExpansionPackPage::ShowMissingExpansionPacks: complete behaviour (AuthManager flag, SetFlag vt[0x7c], GetFrame, Pollen URL + ?assetid / ?blocks= / ?paints= string build, GetListOfUnknownPartsAndPaints, HandleLocationChange tail, vector frees); signature corrected to one stack arg (ret 4, caller at 0x66d0aa); frame 0x48 vs 0x30, esp-relative offsets and scheduling differ; equiv: WEAK (21.4% coverage, no mismatch)
 00671ca0  219  cSPUISearchBox::ReloadCallback: complete behaviour (window find/assign/release + layout vt callbacks); call/register scheduling differs
 00671da0  183  cSPUISearchBox::SetParentWindow: complete behaviour (layout new/Init/SetParentWin/SetReloadCallback + timer reset); rdtsc/QPC and vtable-assign scheduling differ
 00671ec0  43  cSPUISearchBox ctor: base vptr stores dead-store-eliminated; statement scheduling differs
@@ -7,4 +8,5 @@
 00672480  220  cSPUISporeGuidePage::Init: complete behaviour; ctor local + interface_cast / frame-set scheduling differs
 00672910  62  eastl::copy_impl do_copy: complete behaviour; early-return/branch layout differs
 00672960  49  cBuildXHTMLDetokenizer dtor: complete behaviour; induction-variable/address folding differs
+006729d0  264  `anonymous namespace'::cBuildXHTMLDetokenizer::detokenize: complete behaviour (ProcessString + wstring assign, then nested 0x63c/0x58 element loops calling inner->fn(this,outer,inner)); &this->m84 lives in edi vs ebp and the loop counters use registers vs stack slots; equiv: WEAK (22.7% coverage, no mismatch)
 00672b50  112  cBuildXHTMLDetokenizer::token_action_copy: complete behaviour; eastl string assign shape differs

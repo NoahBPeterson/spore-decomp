@@ -36,7 +36,7 @@ struct cModelInstance {
 };
 
 void __cdecl AddRefThunk(void*);            // 0x00bddd00
-void __cdecl LineClip(const void*, const void*, int, int);  // 0x006989d0
+bool __cdecl LineClip(const void*, const void*, int, int);  // 0x006989d0
 
 struct cSPVector3 { float x, y, z; };
 struct cSPMatrix3 { float m[9]; };
@@ -46,6 +46,8 @@ struct cSPTransform {
     cSPVector3 mTranslation;   // +0x04
     float      mScale;         // +0x10
     cSPMatrix3 mRotation;      // +0x14
+    float      mMatrix30;      // +0x38
+    uint32_t   mData3C;        // +0x3c
 };
 
 // cMWModelInternal: intrusive_list_node base at +0, Model base at +8.
@@ -518,24 +520,27 @@ void TransformTwo(const cSPVector3* p1, const cSPVector3* p2, const cSPTransform
 }
 
 // 0x007442c0
-void TransformTwoOffset(const cSPVector3* p1, const cSPVector3* p2, const cSPTransform* t,
-                        cSPVector3 a, float pad, cSPVector3 b) {
-    cSPVector3 r1, r2;
+// Argument layout taken from the call site (0074df1e) and the body's stack reads:
+// 3 pointers, a (cSPVector3), b (cSPVector3), an int, then the float padding.  Result is
+// LineClip's bool, which the four call sites test with `test al, al; je`.
+bool TransformTwoOffset(const cSPVector3* p1, const cSPVector3* p2, const cSPTransform* t,
+                        cSPVector3 a, cSPVector3 b, int flag, float pad) {
+    cSPVector3 r2, r1;
     {
         const cSPVector3* p = p1;
         cSPVector3 v;
         v.x = p->x - t->mTranslation.x;
         v.y = p->y - t->mTranslation.y;
         v.z = p->z - t->mTranslation.z;
-        float s = t->mScale;
-        if (s != 1.0f) {
-            float inv = 1.0f / s;
+        if (t->mScale != 1.0f) {
+            float inv = 1.0f / t->mScale;
             v.x *= inv; v.y *= inv; v.z *= inv;
         }
         if (t->mFlags & 2) {
-            r1.x = t->mRotation.m[0]*v.x + t->mRotation.m[1]*v.y + t->mRotation.m[2]*v.z;
-            r1.y = t->mRotation.m[3]*v.x + t->mRotation.m[4]*v.y + t->mRotation.m[5]*v.z;
-            r1.z = t->mRotation.m[6]*v.x + t->mRotation.m[7]*v.y + t->mRotation.m[8]*v.z;
+            // The original multiplies the z term first, then y, then x.
+            r1.x = t->mRotation.m[2]*v.z + t->mRotation.m[1]*v.y + t->mRotation.m[0]*v.x;
+            r1.y = t->mRotation.m[5]*v.z + t->mRotation.m[4]*v.y + t->mRotation.m[3]*v.x;
+            r1.z = t->mRotation.m[8]*v.z + t->mRotation.m[7]*v.y + t->mRotation.m[6]*v.x;
         } else {
             r1 = v;
         }
@@ -546,15 +551,14 @@ void TransformTwoOffset(const cSPVector3* p1, const cSPVector3* p2, const cSPTra
         v.x = p->x - t->mTranslation.x;
         v.y = p->y - t->mTranslation.y;
         v.z = p->z - t->mTranslation.z;
-        float s = t->mScale;
-        if (s != 1.0f) {
-            float inv = 1.0f / s;
+        if (t->mScale != 1.0f) {
+            float inv = 1.0f / t->mScale;
             v.x *= inv; v.y *= inv; v.z *= inv;
         }
         if (t->mFlags & 2) {
-            r2.x = t->mRotation.m[0]*v.x + t->mRotation.m[1]*v.y + t->mRotation.m[2]*v.z;
-            r2.y = t->mRotation.m[3]*v.x + t->mRotation.m[4]*v.y + t->mRotation.m[5]*v.z;
-            r2.z = t->mRotation.m[6]*v.x + t->mRotation.m[7]*v.y + t->mRotation.m[8]*v.z;
+            r2.x = t->mRotation.m[2]*v.z + t->mRotation.m[1]*v.y + t->mRotation.m[0]*v.x;
+            r2.y = t->mRotation.m[5]*v.z + t->mRotation.m[4]*v.y + t->mRotation.m[3]*v.x;
+            r2.z = t->mRotation.m[8]*v.z + t->mRotation.m[7]*v.y + t->mRotation.m[6]*v.x;
         } else {
             r2 = v;
         }
@@ -564,7 +568,7 @@ void TransformTwoOffset(const cSPVector3* p1, const cSPVector3* p2, const cSPTra
         a.x -= off; a.y -= off; a.z -= off;
         b.x += off; b.y += off; b.z += off;
     }
-    LineClip(&r1, &r2, *(int*)&a, 0);
+    return LineClip(&r1, &r2, (int)&a, flag);
 }
 
 // ---------------------------------------------------------------- resource ids
@@ -602,14 +606,16 @@ void cModelWorld::GetModelResourceIDs(Model* model, uint32_t* pInstance, uint32_
 
 // 0x007445b0
 bool cModelWorld::CallOnLoad(Model* model, void* cb, void* data) {
-    if (((model->mFlags >> 14) & 1) != 0) {
+    bool onLoad = (model->mFlags >> 14) & 1;   // bool, like StallGetBoundingBox: the original reads
+                                               // mFlags into eax, shr 0xe, then test al,1
+    if (onLoad != 0) {
         ((void (__cdecl*)(Model*, void*))cb)(model, data);
         return true;
     }
-    for (int i = 0; i < 8; ++i) {
+    for (uint32_t i = 0; i < 8; ++i) {
         char* e = (char*)this + 0x318 + i * 0x50;
         if (*(Model**)e == model) {
-            for (int j = 0; j < 8; ++j) {
+            for (uint32_t j = 0; j < 8; ++j) {
                 char* f = (char*)this + 0x318 + j * 0x50;
                 if (*(Model**)f == model) {
                     *(void**)(f + 0x14) = cb;
@@ -632,9 +638,8 @@ bool cModelWorld::CallOnLoad(Model* model, void* cb, void* data) {
         }
         begin += 0x1c;
         if (begin == segEnd) {
-            begin = *(char**)((char*)segTable + 4);
-            segTable = (char**)((char*)segTable + 4);
-            segEnd = *(char**)(begin + 0xe0);
+            begin = *++segTable;
+            segEnd = begin + 0xe0;
         }
     }
     return false;

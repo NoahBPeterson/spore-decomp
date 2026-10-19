@@ -74,15 +74,107 @@ unsigned g_1528cf0;
 void* g_1528cfc;
 void* g_1529058;
 
-// ---- 0x00671840 : ShowMissingExpansionPacks (partial skeleton) --------
-struct MissingPage {
-  char pad[0x400];
-  bool ShowMissingExpansionPacks(void* a, int b);
+// ---- 0x00671840 : ShowMissingExpansionPacks ---------------------------
+struct KeyVec { void* begin; void* end; void* cap; };
+struct Str16L { void* begin; void* end; void* cap; };
+struct WStrOps {
+  void operator+=(const wchar_t* s);                       // 0x00599bb0
+  void Append(const wchar_t* a, const wchar_t* b);         // 0x00429580
+};
+struct AssetDir { bool GetServerId(const void* key, void* out, int flag); }; // 0x0054e530
+struct HLCallee {
+  bool Call(void* a);   // 0x00997730
+};
+void* Pollen_AuthManager();                                       // 0x00607a60
+bool  Pollen_GetURL(unsigned id, void* str);                      // 0x006214c0
+void* FUN_0067cb30();                                             // 0x0067cb30
+void* FUN_004e0850(void* dest, const wchar_t* fmt, ...);   // 0x004e0850
+bool  GetListOfUnknownPartsAndPaints(const void* key, void* v1, void* v2); // 0x004f5c60
+struct MissingPage_s0067_1840 {
+  bool ShowMissingExpansionPacks(void* key);
 };
 // @ 0x00671840
-bool MissingPage::ShowMissingExpansionPacks(void* a, int b) {
-  (void)a; (void)b;
-  return false;
+bool MissingPage_s0067_1840::ShowMissingExpansionPacks(void* key) {
+  void* am = Pollen_AuthManager();
+  bool bl = ((bool (__thiscall*)(void*))*(void**)((char*)*(void**)am + 0x24))(am);
+
+  void* o = *(void**)((char*)this + 0x70);
+  void* r = ((void* (__thiscall*)(void*, unsigned, int))*(void**)((char*)*(void**)o + 0xf0))
+                (o, 0x34a5bc7au, 1);
+  if (r)
+    ((void (__thiscall*)(void*, int, bool))*(void**)((char*)*(void**)r + 0x7c))(r, 1, bl);
+
+  void* frame = ((FrameSet*)((char*)this + 0xc))->GetFrame(*(void**)0x15282e4);
+  if (!frame)
+    return false;
+  ((void (__thiscall*)(void*, int, bool))*(void**)((char*)*(void**)((char*)frame + 4) + 0x7c))
+      ((char*)frame + 4, 1, bl == 0);
+  if (bl)
+    return true;
+
+  Str16L url;
+  url.begin = (void*)0x1667bac;
+  url.end = (void*)0x1667bac;
+  url.cap = (void*)0x1667bae;
+  Pollen_GetURL(0xf4a5bd1eu, &url);
+  bool bVar4 = true;
+  unsigned long long id = 0;
+  void* ab = FUN_0067cb30();
+  if (((AssetDir*)*(void**)((char*)ab + 0x58))->GetServerId(key, &id, 0) &&
+      ((unsigned)id & (unsigned)(id >> 32)) != 0xffffffffu) {
+    ((WStrOps*)&url)->operator+=(L"?assetid=");
+    FUN_004e0850(&url, L"%016x", id);
+    bVar4 = false;
+  }
+
+  KeyVec blocks;
+  blocks.begin = blocks.end = blocks.cap = 0;
+  KeyVec paints;
+  paints.begin = paints.end = paints.cap = 0;
+  GetListOfUnknownPartsAndPaints(key, &blocks, &paints);
+
+  const wchar_t* pw;
+  if (blocks.begin == blocks.end) {
+    if (paints.begin == paints.end)
+      goto LAB;
+    pw = bVar4 ? L"?paints=" : L"&paints=";
+  } else {
+    ((WStrOps*)&url)->operator+=(bVar4 ? L"?blocks=" : L"&blocks=");
+    int n = (int)((char*)blocks.end - (char*)blocks.begin) / 0xc;
+    for (int k = 0; k < n; ++k) {
+      FUN_004e0850(&url, L"%08x!%08x",
+                   *(unsigned*)((char*)blocks.begin + k * 0xc + 8),
+                   *(unsigned*)((char*)blocks.begin + k * 0xc));
+      if (k != n - 1)
+        ((WStrOps*)&url)->Append(L",", L"," + 1);
+    }
+    if (paints.begin == paints.end)
+      goto LAB;
+    pw = L"&paints=";
+  }
+  ((WStrOps*)&url)->operator+=(pw);
+  {
+    int n = (int)((char*)paints.end - (char*)paints.begin) / 0xc;
+    for (int k = 0; k < n; ++k) {
+      FUN_004e0850(&url, L"%08x!%08x",
+                   *(unsigned*)((char*)paints.begin + k * 0xc + 8),
+                   *(unsigned*)((char*)paints.begin + k * 0xc));
+      if (k != n - 1)
+        ((WStrOps*)&url)->Append(L",", L"," + 1);
+    }
+  }
+LAB:;
+  void* lr = ((void* (__thiscall*)(void*, void*, int, int))*(void**)((char*)*(void**)frame + 0x8c))
+                 (frame, &url, 0, 0);
+  bool res = ((HLCallee*)url.begin)->Call(lr);
+
+  if (paints.begin && *(int*)((char*)paints.begin - 4))
+    operator_delete_(paints.begin);
+  if (blocks.begin && *(int*)((char*)blocks.begin - 4))
+    operator_delete_(blocks.begin);
+  if ((((int)((char*)url.cap - (char*)url.begin) & 0xfffffffe) > 2) && url.begin)
+    operator_delete_(url.begin);
+  return res;
 }
 
 // ---- 0x00671b80 -------------------------------------------------------
@@ -519,9 +611,38 @@ struct Detokenizer {
   bool detokenize();
   void token_action_copy(void* a, unsigned short* b);
 };
+struct DetokSink {
+  bool ProcessString(const unsigned short* a, void* b);   // 0x006b5bd0
+  void Assign(void* begin, void* end);                    // 0x00423650
+};
 // @ 0x006729d0
 bool Detokenizer::detokenize() {
-  return false;
+  char* self = (char*)this;
+  ((DetokSink*)this)->ProcessString(*(unsigned short**)(self + 0x84),
+                                    *(void**)(self + 0x94));
+  void* p94 = *(void**)(self + 0x94);
+  if (p94 != self + 0x84)
+    ((DetokSink*)(self + 0x84))->Assign(*(void**)p94, *(void**)((char*)p94 + 4));
+  if (*(int*)(self + 0x60) != 1)
+    return true;
+  int off = 0;
+  for (int i = 0;
+       i < (int)(*(char**)(self + 0xa4) - *(char**)(self + 0xa0)) / 0x63c; ++i) {
+    char* outer = *(char**)(self + 0xa0) + off;
+    *(void**)(self + 0x98) = outer;
+    for (int j = 0;
+         j < (int)(*(char**)(outer + 0xb0) - *(char**)(outer + 0xac)) / 0x58; ++j) {
+      char* inner = *(char**)(*(char**)(self + 0x98) + 0xac) + j * 0x58;
+      *(void**)(self + 0x9c) = inner;
+      ((void (__thiscall*)(void*, void*, void*))*(void**)(inner + 0x54))(
+          self, *(void**)(self + 0x98), inner);
+      void* q = *(void**)(self + 0x94);
+      if (q != self + 0x84)
+        ((DetokSink*)(self + 0x84))->Assign(*(void**)q, *(void**)((char*)q + 4));
+    }
+    off += 0x63c;
+  }
+  return true;
 }
 // @ 0x00672b50
 void Detokenizer::token_action_copy(void* a, unsigned short* b) {

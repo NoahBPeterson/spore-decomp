@@ -2,6 +2,7 @@
 // comparator/heap helpers and the intrusive refcounted-pointer sort primitives around it.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /GS-.
 #include "types.h"
+#include <math.h>
 
 struct IWindow;
 
@@ -30,7 +31,8 @@ struct FeedItem {
     void FUN_00667690(int v);    // 0x00667690
     void FUN_00668550(int v);    // 0x00668550
     void FUN_00666590(float* r); // 0x00666590
-    void FUN_00666680(int v);    // 0x00666680
+    bool FUN_00666680(bool v);   // 0x00666680 CheckFlag
+    float FUN_00c37480();        // 0x00c37480
 };
 
 // =============================================================================
@@ -136,7 +138,7 @@ struct IWindow {
     virtual void      SetArea(float*);                // 0x60
     virtual void      v25();                          // 0x64
     virtual void      v26();                          // 0x68
-    virtual void      v27(void*);                     // 0x6c
+    virtual void      v27(float*);                    // 0x6c
     virtual void      v28();                          // 0x70
     virtual void      v29();                          // 0x74
     virtual void      v30();                          // 0x78
@@ -206,7 +208,7 @@ struct WindowManager {
 // external callees
 // -----------------------------------------------------------------------------
 void  __cdecl EA_RemoveHandler(void* h, uint32_t a, uint32_t b, uint32_t c, uint32_t d); // 0x00571db0
-struct D4Obj { void FUN_00829d30(); };
+struct D4Obj { void FUN_00829d30(); void FUN_008297b0(); };    // +0x00c; 0x008297b0
 void  __stdcall FUN_008294c0(void* p, int v);                 // 0x008294c0
 bool  __cdecl FUN_00805150(void* a, void* b);                 // 0x00805150
 bool  __cdecl StartBanMode(uint32_t id);                      // 0x008d2fb0
@@ -216,7 +218,7 @@ void* __cdecl SP_GetSystemAT();                               // 0x00a206f0
 void  __cdecl SP_KillSetiEffects(uint32_t id, void* at);      // 0x00435ed0
 void* __cdecl FUN_005c2570(void* p);                          // 0x005c2570 interface_cast
 void  __cdecl FUN_00662b00(void* p);                          // 0x00662b00
-void  __cdecl FUN_00c37480(void* p);                          // 0x00c37480 (float thiscall)
+void  __cdecl FUN_00805ef0(void* out, void* w);               // 0x00805ef0
 
 extern uint32_t g_fp1;   // 0x01486110
 extern uint32_t g_fp2;   // 0x013f4fd0
@@ -261,7 +263,7 @@ struct cSPUIFeedListCategory {
     char      padD0[4];
     void*     md4;            // +0xd4
 
-    bool FUN_00663be0(void* msg);
+    bool FUN_00663be0(void* sender, void* msg);
     void FUN_00663e50();
     void FUN_00663ef0(int param);
     void FUN_00664390(float a, float b, float c, float d);
@@ -280,84 +282,69 @@ struct cSPUIFeedListCategory {
 // =============================================================================
 // @ 0x00663be0
 // =============================================================================
-bool cSPUIFeedListCategory::FUN_00663be0(void* msg) {
-    int type = *(int*)((char*)msg + 8);
-    if (type > 0x1c) goto case287259f6;
-    if (type == 0x1c) goto case1c;
-    if (type == 9) goto case9;
-    if (type != 0x1b) goto def;
-    {
-        if (*(int*)((char*)msg + 0xc) != 1) goto def;
-        if (mcc) goto def;
-        void* q = *(void**)((char*)msg + 0x18);
-        if (!FUN_00805150(m70, q)) goto def;
-        bool b1 = StartBanMode(0x3e8);
-        bool b2 = StartBanMode(0x3ea);
-        bool b3 = StartBanMode(0x3e9);
-        if (b1 || b2 || b3) goto def;
-        mcc = 1;
-        return false;
-    }
-case9:
-    {
-        uint32_t v = *(uint32_t*)((char*)msg + 4);
-        if (v != (uint32_t)m78 && v != (uint32_t)m7c && v != (uint32_t)m80) goto def;
-        WindowManager* wm = (WindowManager*)SP_WindowManager();
-        wm->w04((int)m6c, m64, msg, 0);
-        return false;
-    }
-case1c:
-    {
-        if (*(int*)((char*)msg + 0xc) != 1) goto def;
-        if (!mcc) goto def;
-        WindowManager* wm = (WindowManager*)SP_WindowManager();
-        void* r = wm->w18(1);
-        void* q = *(void**)((char*)msg + 0x18);
-        if (!FUN_00805150(m70, q)) goto def;
-        if (FUN_00805150(m70, r)) goto def;
-        mcc = 0;
-        return false;
-    }
-case287259f6:
-    if (type != 0x287259f6) goto def;
-    {
-        int sub = *(int*)((char*)msg + 0xc);
-        if (sub == (int)0xb3c6efc2) goto sub_b3;
-        if (sub == (int)0xb48e2560) goto sub_b4;
-        goto def;
-    }
-sub_b3:
-    {
-        bool nv = (m98 == 0);
-        m98 = nv;
-        void* at = SP_GetSystemAT();
-        void* r = at ? ((AudioAT*)at)->Slot20() : 0;
-        uint32_t id = nv ? 0xea0588f8u : 0x2dd00402u + 0xea0588f8u;
-        SP_KillSetiEffects(id, r);
-        if (m7c) {
-            IWindow* b = (IWindow*)FUN_005c2570(&m7c);
-            b->SetStateFlag(4, nv);
+bool cSPUIFeedListCategory::FUN_00663be0(void* sender, void* msg) {
+    (void)sender;
+    bool& mccb = *(bool*)&mcc;
+    switch (*(uint32_t*)((char*)msg + 8)) {
+    case 0x1b:
+        if (*(int*)((char*)msg + 0xc) != 1) return false;
+        if (mccb) return false;
+        {
+            void* q = *(void**)((char*)msg + 0x18);
+            if (!FUN_00805150(m70, q)) return false;
         }
-        goto tail;
-    }
-sub_b4:
-    {
-        bool nv = (m98 == 0);
-        m98 = nv;
-        void* at = SP_GetSystemAT();
-        void* r = at ? ((AudioAT*)at)->Slot20() : 0;
-        uint32_t id = nv ? 0xea0588f8u : 0x2dd00402u + 0xea0588f8u;
-        SP_KillSetiEffects(id, r);
-        if (m7c) {
-            IWindow* b = (IWindow*)FUN_005c2570(&m7c);
-            b->SetStateFlag(4, nv);
+        {
+            bool b1 = StartBanMode(0x3e8);
+            bool b2 = StartBanMode(0x3ea);
+            bool b3 = StartBanMode(0x3e9);
+            if (b1 || b2 || b3) return false;
         }
-        goto tail;
+        mccb = true;
+        return false;
+    case 9:
+        {
+            uint32_t v = *(uint32_t*)((char*)msg + 4);
+            if (v != (uint32_t)m78 && v != (uint32_t)m7c && v != (uint32_t)m80) return false;
+            WindowManager* wm = (WindowManager*)SP_WindowManager();
+            wm->w04((int)m6c, m64, msg, 0);
+        }
+        return false;
+    case 0x1c:
+        if (*(int*)((char*)msg + 0xc) != 1) return false;
+        if (!mccb) return false;
+        {
+            WindowManager* wm = (WindowManager*)SP_WindowManager();
+            void* r = wm->w18(1);
+            void* q = *(void**)((char*)msg + 0x18);
+            if (!FUN_00805150(m70, q)) return false;
+            if (FUN_00805150(m70, r)) return false;
+        }
+        mccb = false;
+        return false;
+    case 0x287259f6u:
+        {
+            int sub = *(int*)((char*)msg + 0xc);
+            if (sub == (int)0xb3c6efc2) {
+                m98 = (m98 == 0);
+                void* at = SP_GetSystemAT();
+                void* r = at ? ((AudioAT*)at)->Slot20() : 0;
+                SP_KillSetiEffects((m98 ? 0x2dd00402u : 0u) + 0xea0588f8u, r);
+            } else if (sub == (int)0xb48e2560) {
+                m98 = (m98 == 0);
+                void* at = SP_GetSystemAT();
+                void* r = at ? ((AudioAT*)at)->Slot20() : 0;
+                SP_KillSetiEffects((m98 ? 0x2dd00402u : 0u) + 0xea0588f8u, r);
+                if (m7c) {
+                    IWindow* b = (IWindow*)FUN_005c2570(&m7c);
+                    b->SetStateFlag(4, m98);
+                }
+            } else {
+                return false;
+            }
+        }
+        if (*(int*)&m5c) FUN_00662b00((char*)this - 4);
+        return true;
     }
-tail:
-    if (m5c) FUN_00662b00((char*)this - 4);
-    return true;
-def:
     return false;
 }
 
@@ -391,23 +378,82 @@ void cSPUIFeedListCategory::FUN_00663e50() {
 // @ 0x00663ef0  (large layout sweep; see partial.txt)
 // =============================================================================
 void cSPUIFeedListCategory::FUN_00663ef0(int param) {
-    if (!m7c) return;
-    float* p = m7c->GetRect();
-    float span = p[2] - p[0];
-    float total = m58 + *(float*)&g_fp1;
-    int n = (int)((m8c - m88));
-    for (int i = 0; i < n; ++i) {
-        FeedItem* it = m88[i];
-        it->FUN_00668550(param);
-        float h = 0.0f;
-        (void)h;
-        float r[4];
-        (void)span;
-        it->FUN_00666590(r);
+    if (m7c) {
+        float* p = m7c->GetRect();
+        float span = p[2] - p[0];
+        float total = m58 + *(float*)&g_fp1;
+        int n = (int)(m8c - m88);
+        for (int i = 0; i < n; ++i) {
+            FeedItem* it = m88[i];
+            it->FUN_00668550(param);
+            float fv = it->FUN_00c37480();
+            float v[4];
+            v[0] = 0.0f;
+            if (m9c == 0) {
+                v[1] = 0.0f;
+                v[2] = span;
+                v[3] = m58;
+            } else {
+                v[1] = total;
+                v[2] = span;
+                v[3] = fv + total;
+                if (it->FUN_00666680(false))
+                    total = fv + total;
+            }
+            it->FUN_00666590(v);
+        }
+        m5c = total + *(float*)&g_fp1;
+        m7c->SetFlag(1, m9c);
     }
-    m5c = total + *(float*)&g_fp1;
-    m7c->SetFlag(1, m9c);
-    (void)span;
+    if (m70) {
+        float t = (float)(uint32_t)param;
+        float k = t * *(float*)&g_fp3;
+        if (k < 0.0f) k = 0.0f;
+        if (k > *(float*)&g_fp4) k = *(float*)&g_fp4;
+        float v[4];
+        FUN_00805ef0(v, m70);
+        if (v[0] != m28 || v[1] != m2c || v[2] != m30 || v[3] != m34) {
+            v[3] = (m34 - v[3]) * k + v[3];
+            v[1] = (m2c - v[1]) * k + v[1];
+            v[2] = (m30 - v[2]) * k + v[2];
+            v[0] = (m28 - v[0]) * k + v[0];
+            if (fabsf(v[3] - m34) < *(float*)&g_fp5 &&
+                fabsf(v[1] - m2c) < *(float*)&g_fp5 &&
+                fabsf(v[2] - m30) < *(float*)&g_fp5 &&
+                fabsf(v[0] - m28) < *(float*)&g_fp5) {
+                v[0] = m28;
+                v[1] = m2c;
+                v[2] = m30;
+                v[3] = m34;
+            }
+            m70->SetArea(v);
+        }
+    }
+    if (m74) {
+        float t = (float)(uint32_t)param;
+        float k = t * *(float*)&g_fp3;
+        if (k < 0.0f) k = 0.0f;
+        if (k > *(float*)&g_fp4) k = *(float*)&g_fp4;
+        float v[4];
+        FUN_00805ef0(v, m74);
+        if (v[0] != m38 || v[1] != m3c || v[2] != m40 || v[3] != m44) {
+            v[3] = (m44 - v[3]) * k + v[3];
+            v[1] = (m3c - v[1]) * k + v[1];
+            v[2] = (m40 - v[2]) * k + v[2];
+            v[0] = (m38 - v[0]) * k + v[0];
+            if (fabsf(v[3] - m44) < *(float*)&g_fp5 &&
+                fabsf(v[1] - m3c) < *(float*)&g_fp5 &&
+                fabsf(v[2] - m40) < *(float*)&g_fp5 &&
+                fabsf(v[0] - m38) < *(float*)&g_fp5) {
+                v[0] = m38;
+                v[1] = m3c;
+                v[2] = m40;
+                v[3] = m44;
+            }
+            m74->v27(v);
+        }
+    }
+    if (md4) ((D4Obj*)md4)->FUN_008297b0();
 }
 
 // =============================================================================
