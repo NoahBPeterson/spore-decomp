@@ -3,6 +3,15 @@
 // Callees outside the slice are declared as members of stub classes so that the
 // compiler emits a __thiscall `mov ecx, ...; call` (addresses are masked relocs).
 #include "../../include/types.h"
+#include <intrin.h>
+
+#ifndef LOCK
+#define LOCK()
+#define UNLOCK()
+#endif
+
+
+template <class T> static inline T _clamp_dec(T& x) { x = x - 1; return x; }
 
 // ---------------------------------------------------------------------------
 // globals (undefined externs -> DIR32 relocations, masked by the verifier)
@@ -14,10 +23,16 @@ extern char  g_cachesEnd[]; // 0x1604118
 // ---------------------------------------------------------------------------
 // stub classes
 // ---------------------------------------------------------------------------
+struct LRUEntry { void* obj; int refs; };
 struct cLRUCache {
+    char pad[4];
+    LRUEntry* beg;      // +4
+    LRUEntry* end;      // +8
+    char pad2[0x120 - 0xc];
+    char lock;          // +0x120
     void Clear();          // FUN_006ad350
     void Reset();          // FUN_006ad270
-    void Do(int);          // FUN_006ada20
+    void Do(unsigned);     // FUN_006ada20
     void Destroy(void** base, unsigned count);  // 006ad910
 };
 
@@ -360,33 +375,51 @@ void __fastcall FUN_006adbf0(void* self, unsigned char flag)
 }
 
 // ---------------------------------------------------------------------------
-// 006adc90  create the KRMap singleton and size three LRU caches  (partial)
+// 006adc90  create the KRMap singleton and size three LRU caches
 // ---------------------------------------------------------------------------
-void __fastcall FUN_006adc90(void* self, void* arg)
+extern "C" void* ea_zone_new2(unsigned size, void* zone);   // 0x926020
+void* __fastcall FUN_006adb40(void* self);
+
+// @ 0x006adc90
+void __fastcall FUN_006adc90(void* self, int* arg)
 {
-    (void)self; (void)arg;
-    // partial: zone_new(0x58) -> FUN_006adb40, publish to g_pRegistry, notify,
-    // then FUN_006ada20(0x10/0x40/0x20) on three cache globals.
+    (void)self;
+    void* p = ea_zone_new2(0x58, &vtbl_14093bc);
+    if (!p)
+        g_pRegistry = 0;
+    else
+        FUN_006adb40(p);
+    ((void(__thiscall*)(int*, int, void*, int))(*(void***)arg)[0x64 / 4])(arg, 1, g_pRegistry, 0);
+    ((cLRUCache*)(g_caches))->Do(0x10);
+    ((cLRUCache*)(g_caches + 0x150))->Do(0x40);
+    ((cLRUCache*)(g_caches + 0x2a0))->Do(0x20);
 }
 
 // ---------------------------------------------------------------------------
-// 006add30  sub-list ctor  (partial)
+// 006add30  unsigned SList::Init(void* a)   (__thiscall, ret 4)
 // ---------------------------------------------------------------------------
-void __fastcall FUN_006add30(void* self, void* a)
+struct SList {
+    unsigned Init(void* a);
+};
+
+// @ 0x006add30
+unsigned SList::Init(void* a)
 {
-    *(void**)((char*)self + 0x10) = (char*)self + 0x18;
-    *(void**)((char*)self + 4) = (char*)self + 0x18;
-    *(void**)self = (char*)self + 0x18;
-    *(void**)((char*)self + 8) = (char*)self + 0x38;
-    void* x = *(void**)a;
-    void* y = *(void**)((char*)a + 4);
-    ((Sub970*)self)->Do(x, y, a);
+    char* s = (char*)this;
+    char* p = s + 0x18;
+    *(void**)(s + 0x10) = p;
+    *(void**)(s + 4) = p;
+    *(void**)s = p;
+    *(void**)(s + 8) = p + 0x20;
+    ((Sub970*)s)->Do(*(void**)a, *(void**)((char*)a + 4), a);
+    return (unsigned)this;
 }
 
 // ---------------------------------------------------------------------------
-// 006adda0  allocate one pool node and copy-construct the value  (partial)
+// 006adda0  void* __stdcall FUN_006adda0(void* a)  (pool node alloc)
 // ---------------------------------------------------------------------------
-void* __fastcall FUN_006adda0(void* a)
+// @ 0x006adda0
+void* __stdcall FUN_006adda0(void* a)
 {
     void* n = ea_eastl_alloc(
         0x40, &vtbl_14093bc, 0, 0,
@@ -394,7 +427,7 @@ void* __fastcall FUN_006adda0(void* a)
         0xd1);
     if (n) {
         *(void**)n = *(void**)a;
-        ((void(__fastcall*)(void*, void*))FUN_006add30)((char*)n + 4, (char*)a + 4);
+        ((SList*)((char*)n + 4))->Init((char*)a + 4);
     }
     *(int*)((char*)n + 0x3c) = 0;
     return n;
@@ -515,14 +548,268 @@ void* __fastcall FUN_006ae660(void* self, void* val)
 }
 
 // ---------------------------------------------------------------------------
-// complex functions left as partial skeletons (see partial.txt)
+// 006ae590  void RBTreeX::Remove(void** out, RBNodeX* n)   (__thiscall, ret 8)
 // ---------------------------------------------------------------------------
-void FUN_006ad5c0() {}
-void FUN_006ada20() {}
-void FUN_006adb40() {}
-void FUN_006adee0() {}
-void FUN_006ae3f0() {}
-void FUN_006ae590() {}
-void FUN_006ae880() {}
+extern "C" void* F_921580(void*);
+extern "C" void  F_921880(void*, void*);
+
+struct RBNodeX { RBNodeX* left; char pad[0x18]; void* mgr; };   // left @0, mgr @0x1c
+struct RBTreeX {
+    char pad0[4];
+    char sub;                  // 0x04
+    char pad1[0x14 - 5];
+    int  count;                // 0x14
+    RBNodeX* freeList;         // 0x18
+    char pad2[0x20 - 0x1c];
+    RBNodeX* poolBegin;        // 0x20
+    RBNodeX* poolEnd;          // 0x24
+    void Remove(void** out, RBNodeX* n);
+};
+
+// @ 0x006ae590
+void RBTreeX::Remove(void** out, RBNodeX* n)
+{
+    _clamp_dec(count);
+    void* r = F_921580(n);
+    F_921880(n, &sub);
+    if (n->mgr)
+        ((Releasable*)n->mgr)->Release();
+    if ((char*)n < (char*)poolBegin || (char*)n >= (char*)poolEnd) {
+        ea_dealloc(n);
+    } else {
+        n->left = freeList;
+        freeList = n;
+    }
+    *out = r;
+}
+
+// ---------------------------------------------------------------------------
+// 006ae3f0  bool RegistryHost::Find(int a, void** out)   (__thiscall, ret 8)
+// ---------------------------------------------------------------------------
+extern "C" void F_9221b0(void* cs);
+extern "C" void F_922270(void* cs);
+extern "C" void F_a21dc0(void* out, void* arg);
+struct RefObj { virtual void s0(); virtual void s1(); };
+
+struct RegistryHost {
+    char pad[0x10];
+    char cs;        // 0x10
+    char pad2[0x30];
+    char map;       // 0x40
+    char endMarker; // 0x44
+    bool Find(int a, void** out);
+};
+
+// @ 0x006ae3f0
+bool RegistryHost::Find(int a, void** out)
+{
+    (void)a;
+    F_9221b0(&cs);
+    void* it = &endMarker;
+    F_a21dc0(&it, &a);
+    if (it != &endMarker) {
+        RefObj* p = *(RefObj**)((char*)it + 0x1c);
+        *out = p;
+        p->s0();
+        F_922270(&cs);
+        return true;
+    }
+    F_922270(&cs);
+    return false;
+}
+
+// ---------------------------------------------------------------------------
+// 006ad5c0  LRU cache flush: walk buckets, drop refs, run callbacks, GC
+// ---------------------------------------------------------------------------
+extern "C" void F_6abfa0(void*);                 // 0x6abfa0
+extern "C" int  F_6ac0d0(void*);                 // 0x6ac0d0
+extern "C" void F_6ad180(void*);                 // 0x6ad180
+extern "C" void F_6aca20(void*, void*, void*);   // 0x6aca20
+extern "C" void F_6ac630(void*);                 // 0x6ac630
+extern "C" void F_7c80c0(void);                  // 0x7c80c0
+
+// @ 0x006ad5c0
+void* __fastcall FUN_006ad5c0(void* self, void* filter)
+{
+    char   buf[1024];       // vector of removed (node, iterator) pairs
+    char*  end = buf;
+    char*  vec = buf;
+    void*  f = filter;
+
+    F_6abfa0((char*)self + 0x48);
+
+    int* it   = *(int**)((char*)self + 0x10);
+    int  v    = *it;
+    if (v == 0) {
+        do { ++it; v = *it; } while (v == 0);
+    }
+    int* cur  = it;
+    int  stop = *(int*)((char*)self + 0x10) + *(int*)((char*)self + 0x14) * 4;
+
+    while (v != stop) {
+        void* node = (void*)v;
+        void* ref  = *(void**)((char*)node + 0xc);
+        int   next = *(int*)((char*)node + 0x10);
+        while (next == 0) { ++cur; next = *cur; }
+
+        int pass = 0;
+        if (f == 0 || ((unsigned char(__thiscall*)(void*, void*))(((void**)f)[1]))(f, node) != 0) {
+            if (ref == 0) {
+                pass = 1;
+            } else {
+                void* q = ((void* (__thiscall*)(void*, int))(((void**)ref)[3]))(ref, 0x355d6f5);
+                if (q == 0 || *(int*)((char*)q + 0x14) == 0 || F_6ac0d0(ref) == 1)
+                    pass = 1;
+            }
+            if (pass && (f != 0 || F_6ac0d0((void*)v) != 1)) {
+                if (((int (__thiscall*)(void*))(((void**)ref)[4]))(ref) == 1) {
+                    F_6ad180((char*)self + 0x30);
+                    void* r = *(void**)((char*)node + 0xc);
+                    *(void**)((char*)node + 0xc) = 0;
+                    void* old = *(void**)(end - 4);
+                    *(void**)(end - 4) = r;
+                    if (old)
+                        ((void(__thiscall*)(void*))(((void**)old)[1]))(old);
+                    /* append the (node, cur) pair to the removal vector */
+                    *(void**)end = node;
+                    *(void**)(end + 4) = cur;
+                    F_6aca20(vec, end, end + 8);
+                    end += 8;
+                }
+            }
+        }
+        v = next;
+    }
+
+    LOCK();
+    *(int*)((char*)self + 0x48) = *(int*)((char*)self + 0x48) - 1;
+    UNLOCK();
+    LOCK();
+    *(int*)((char*)self + 0x50) = *(int*)((char*)self + 0x50) + 1;
+    UNLOCK();
+
+    unsigned n = (unsigned)(end - vec) >> 2;
+    for (unsigned i = 0; i < n; ++i)
+        F_6ac630(vec);
+    F_7c80c0();
+    return self;
+}
+
+// ---------------------------------------------------------------------------
+// 006ada20  cLRUCache::Do(unsigned)  resize + refcount-triggered GC
+// ---------------------------------------------------------------------------
+extern "C" void F_6ace70(void*, void*);   // 0x6ace70
+extern "C" void F_6acaa0(void*, unsigned, void*); // 0x6acaa0
+extern "C" void F_9221b0(void*);          // 0x9221b0
+extern "C" void F_922270(void*);          // 0x922270
+
+// @ 0x006ada20
+void cLRUCache::Do(unsigned n)
+{
+    cLRUCache* t = this;
+    F_9221b0(&t->lock);
+    unsigned cnt = (unsigned)((char*)t->end - (char*)t->beg) >> 3;
+    for (unsigned i = n; i < cnt; ++i) {
+        if (t->beg[i].obj != 0) {
+            int* rc = &t->beg[i].refs;
+            int old = _InterlockedExchangeAdd((volatile long*)rc, 0);
+            if ((old >> 1) == 1 && g_pRegistry != 0)
+                F_6ace70((char*)t->beg[i].obj + 8, t->beg[i].obj);
+        }
+    }
+    unsigned have = (unsigned)((char*)t->end - (char*)t->beg) >> 3;
+    if (have < n) {
+        void* st[2];
+        st[0] = 0;
+        st[1] = (void*)1000;
+        F_6acaa0(t->end, n - have, st);
+    } else {
+        t->end = t->beg + n;
+    }
+    F_922270(&t->lock);
+}
+
+// ---------------------------------------------------------------------------
+// 006adb40  KRMap singleton ctor
+// ---------------------------------------------------------------------------
+struct BufObj { void Fn(); };             // 0x9265b0
+
+// @ 0x006adb40
+void* __fastcall FUN_006adb40(void* self)
+{
+    char* s = (char*)self;
+    *(void**)s = &vtbl_14093bc;
+    _InterlockedExchange((volatile long*)(s + 4), 0);
+    *(void**)s = &vtbl_14093cc;
+    *(unsigned char*)(s + 8) = 0;
+
+    char tmp[32];
+    ((Sub140*)tmp)->Init((void*)"App/cCache/KRMap");
+    FUN_006ad890(s + 0xc, tmp);
+    ((BufObj*)tmp)->Fn();
+
+    _InterlockedExchange((volatile long*)(s + 0x48), 0);
+    _InterlockedExchange((volatile long*)(s + 0x4c), 0);
+    _InterlockedExchange((volatile long*)(s + 0x50), 0);
+    *(int*)(s + 0x54) = (*(volatile char*)0x154c478 != 0) ? 100 : 0;
+    return self;
+}
+
+// ---------------------------------------------------------------------------
+// 006adee0  hash_map::operator[] (find or insert)
+// ---------------------------------------------------------------------------
+struct HashFind { void Find(void* out, void* key); };        // 0x6ac490
+struct HashMapOps { void Insert(void* out, void* key, unsigned char flag); }; // 0x6ade20
+
+// @ 0x006adee0
+int* __fastcall FUN_006adee0(void* self, void* key)
+{
+    char* s = (char*)self;
+    char  ctl[0x90];
+
+    ((HashFind*)s)->Find(ctl, key);
+    unsigned node = *(unsigned*)ctl;
+    if (node == *(unsigned*)(*(int*)(s + 4) + *(int*)(s + 8) * 4)) {
+        char     nodebuf[0x40];
+        unsigned keyval = *(unsigned*)key;
+        void*    range[2];
+        range[0] = &keyval;
+        range[1] = (char*)&keyval + 4;
+        ((SList*)(nodebuf + 4))->Init(range);
+
+        unsigned out[3];
+        out[0] = 0;
+        ((HashMapOps*)s)->Insert(out, &keyval, (unsigned char)out[0]);
+        node = out[0];
+    }
+    return (int*)(node + 4);
+}
+
+// ---------------------------------------------------------------------------
+// 006ae880  cAsyncResourceManager::RequestComplete
+// ---------------------------------------------------------------------------
+extern "C" void* F_67dcd0(void);                 // 0x67dcd0
+extern char g_mapLock[];                         // 0x1409448
+struct Inserter { void Insert(void* p, int one); };
+struct MapLookup { void Find(void** out, void* key); };  // 0xa21dc0
+
+// @ 0x006ae880
+void __fastcall FUN_006ae880(void* self, void* p, void* rec)
+{
+    char* s = (char*)self;
+    if (rec) {
+        *(void**)((char*)rec + 8)   = *(void**)p;
+        *(void**)((char*)rec + 0xc) = *(void**)((char*)p + 4);
+        *(void**)((char*)rec + 0x10) = *(void**)((char*)p + 8);
+        Inserter* m = (Inserter*)F_67dcd0();
+        m->Insert(rec, 1);
+    }
+    F_9221b0(g_mapLock);
+    void* it = 0;
+    ((MapLookup*)(s + 0x40))->Find(&it, p);
+    if (it != s + 0x44)
+        ((RBTreeX*)(s + 0x24))->Remove(&it, (RBNodeX*)it);
+    F_922270(g_mapLock);
+}
 
 

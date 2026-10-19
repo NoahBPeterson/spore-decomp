@@ -1,13 +1,26 @@
 # complete behaviourally-equivalent source, not byte-exact (yet)
-006ad800  10  loop prologue: cl tests the parameter directly in edi instead of eax/shrink-wrapped prologue; equiv: WEAK (17% cov)
-006ad890   -  ctor: EH prologue + /arch:SSE movss constant-pool loads not reproduced; equiv: FAIL (esp)
-006adbf0   -  scalar deleting dtor: old-style EH prolog not reproduced; equiv: FAIL (execution)
-006ae060  39  4-IID test: cl 15 emits a linear compare chain instead of the original median tree
-006ae120   -  dtor: EH prologue not reproduced; equiv: PASS
-006ae190   -  dtor: EH prologue not reproduced; equiv: PASS
-006ae210   -  rbtree_node dtor: EH prologue not reproduced; equiv: PASS
-006ae280  21  return (unsigned)(r-7)<=1; cl uses sbb/inc instead of setbe al; equiv: PASS
-006ae2a0   -  AutoRefCount::operator= : lock xadd / xchg refcount shape not reproduced; equiv: FAIL (esp)
-006ae2f0  13  callback setter: extra pop esi moved to the end of the function; equiv: PASS
-006ae4c0  31  getter: duplicated tail / xor eax scheduling differs; equiv: PASS
-006ae510   -  Resource::Async ctor: EH prologue + InterlockedExchange zero store not reproduced; equiv: FAIL (esp)
+# slice s006ad5c0 (resource manager / LRU cache module)
+# flags "/O2 /MD /Gy /EHsc /TP"; diff byte counts from `run_all.py`
+006ad5c0  330  LRU-cache flush (EASTL vector build + callback filter + GC); skeleton only, see partial.txt
+006ada20  157  cLRUCache::Do resize/GC: body mirrors the original but the /GS- `mov fs:[0],esp` EH frame is not reproduced
+006adb40  122  singleton ctor: EH-guard frame kept across the 0x6ad890 temp; cl drops/reshapes it under /O2 /O1 /Ox /Os
+006adc90   46  singleton creation: dst-dtor EH cleanup frame for `if (p) X(p)` not reproduced
+006add30   37  SList::Init: body byte-identical; the 3-DWORD fs:[0] EH prolog + `[esp+4]=esi` is missing (non-POD guard yields the /GS form instead)
+006adda0   62  pool node alloc: -> nonmatching, see partial.txt (approximate)
+006adee0  142  hash_map::operator[] find+insert; skeleton, see partial.txt
+006ae3f0   72  RegistryHost::Find: /O2 body + EH cleanup; tail/dtor masks differ
+006ae590   85  rbtree::Remove: original spills the call result to the outgoing-arg slot; cl hoists it into ebx (/O1 /O2 /Ox /Oy /Ob1)
+006ae880   88  RequestComplete: iterator erase + EH cleanup frame; skeleton, see partial.txt
+006ad800   10  loop prologue: cl tests the parameter directly in edi instead of eax/shrink-wrapped prologue
+006ad890   89  ctor: EH prologue + /arch:SSE movss constant-pool loads not reproduced
+006adbf0   52  scalar deleting dtor: old-style EH prolog not reproduced
+006ae060   39  4-IID test: cl 15 emits a linear compare chain instead of the original median tree
+006ae120   51  dtor: EH prologue not reproduced
+006ae190   48  dtor: EH prologue not reproduced
+006ae210   46  rbtree_node dtor: EH prologue not reproduced
+006ae280   21  return (unsigned)(r-7)<=1; cl uses sbb/inc instead of setbe al
+006ae2a0   75  AutoRefCount::operator= : lock xadd / xchg refcount shape not reproduced
+006ae2f0   13  callback setter: extra pop esi moved to the end of the function
+006ae4c0   31  getter: duplicated tail / xor eax scheduling differs
+006ae510   92  Resource::Async ctor: EH prologue + InterlockedExchange zero store not reproduced
+006ae660    -  pool node alloc from freelist: approximate, see partial.txt

@@ -1,12 +1,12 @@
-# incomplete / approximate (stubbed blocks or omitted paths)
-006ad5c0   -  large /Od EH routine: only a skeleton (EASTL vector build + callback filter + GC)
-006ada20   -  /Od EH cache resize/GC: skeleton only
-006adb40   -  KRMap singleton ctor: skeleton only
-006adc90   -  KRMap init: skeleton only
-006adee0   -  hash_map::operator[] find+insert: skeleton only
-006ae3f0   -  cAsyncResourceManager::GetRequest: skeleton only
-006ae590   -  rbtree::erase with node pool: skeleton only
-006ae880   -  cAsyncResourceManager::RequestComplete: skeleton only
-006add30   -  sub-list ctor: approximate (FUN_006ad970 call only)
-006adda0   -  pool node alloc: approximate (alloc + shallow copy)
-006ae660   -  pool node alloc from freelist: approximate
+# incomplete / approximate (stubbed or omitted paths) — bodies compile and are non-trivially shaped
+006ad5c0   LRU-cache flush: good-faith C++ (bucket walk, tri-state ref filter, callback filter, remove-vector append, refcount atomics, GC loop); not byte-exact
+006ada20   cLRUCache::Do: resize + lock-xadd refcount drop + 0x6ace70 callback + 0x6acaa0 fill; not byte-exact (EH frame)
+006adb40   KRMap singleton ctor: real ctor chain (vtables, KRMap string init, 0x6ad890 + 0x9265b0 temp, atomics, 100/0 slot); not byte-exact (EH frame)
+006adc90   KRMap init: zone_new(0x58) -> FUN_006adb40 -> vtbl[0x64](arg,1,reg,0) -> Do(0x10/0x40/0x20); not byte-exact (EH frame)
+006addee0   hash_map::operator[] find+insert: node build + 0x6ade20 insert; approximate (local layout not recovered)
+006ae3f0   RegistryHost::Find: lock, lookup, refcount bump, unlock; structurally close (72 diff bytes)
+006ae590   RBTreeX::Remove: dec count, 0x921580 erase, 0x921880 rebalance, release mgr, pool free; 85 diff (register hoist)
+006ae880   RequestComplete: rec field copy + 0x67dcd0 insert + map lock/erase; approximate
+006add30   SList::Init: body byte-identical, EH prolog missing (see nonmatching.txt)
+006adda0   pool node alloc: EASTL alloc(0x40) + 0x6add30 sub-list init + tail zero; approximate
+006ae660   pool node alloc from freelist: freelist pop / EASTL alloc + 16-byte copy + ref release; approximate
