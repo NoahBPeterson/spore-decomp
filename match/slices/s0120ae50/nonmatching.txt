@@ -4,3 +4,5 @@
 0120b8f0  20  complete hkUnaryAction dtor; base-vptr restore shape differs
 0120b960  77  complete hkBinaryAction ctor; reference-add branch shape differs
 0120b9c0  42  complete hkBinaryAction dtor
+0120b0a0  254  complete _hkMatrix6SetMul (260 B); x87 2x2 block MAC; frame/prologue and esi/edi loop-pointer allocation differ
+0120b310  1440  complete hkMatrix6::setInvert (1384 B); Gauss-Jordan inversion; register scheduling/stack slots differ
