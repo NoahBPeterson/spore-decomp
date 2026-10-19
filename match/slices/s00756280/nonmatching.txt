@@ -1,1 +1,11 @@
+00756280  539  SP::Map/vector element append (FUN_0071ddc0/FUN_0071dd80 region slot); complete, not byte-exact (EH frame + register allocation)  [equiv: WEAK 183 valid, 51.7% cov, 0 mismatches]
+007564b0  197  X_7565a0::FUN_007564b0 job-start; complete, not byte-exact (MSVC EH frame; the original's 5th call is the unreachable unwind cleanup at 0x690120)  [equiv: PASS 339 valid, 61.4% cov]
+00756650  316  CB24::FUN_00756650 job ctor; complete, not byte-exact (EH frame); harness cannot run either side (both fault at the same null-job-manager deref)  [equiv: UNSUPPORTED 0/400 valid, both sides fault identically]
+00756790  194  FUN_00756790 refcounted CB24 new + FUN_00756650; complete, not byte-exact (EH frame)  [equiv: PASS 219 valid, 98.6% cov]
+00756860  439  SP::BuildRegionToInfoMap; complete, not byte-exact (EH frame; virtual m42/vfunc dispatch)  [equiv: WEAK 339 valid, 52.3% cov, 0 mismatches]
+00756a20  284  CModelRegion::FUN_00756a20 lock/job-step; complete, not byte-exact (EH frame + mSlot in ebp vs local)  [equiv: PASS 269 valid, 67.0% cov]
+00756b50  288  CModelRegion::FUN_00756b50 refcount swap + part update; complete, not byte-exact (EH frame); harness cannot run either side (orig and ours fault at the identical eip 0x009289f4)  [equiv: UNSUPPORTED 0/400 valid, both sides fault at the same instruction]
+00756c70  262  CModelRegion::FUN_00756c70 part-holder resolve + F3 copy; complete, not byte-exact (EH frame; inline F3 copy vs call)  [equiv: WEAK 151 valid, 55.4% cov, 0 mismatches]
+00756d80  575  CModelRegion::FUN_00756d80 model resolve + Obj140 build; complete, not byte-exact (EH frame; virtual AddRef/Release)  [equiv: PASS 225 valid, 82.0% cov]
+00756fc0  417  FUN_00756fc0 ref-vector merge (resize + per-element ref swap); complete, not byte-exact (EH frame + register allocation)  [equiv: WEAK 186 valid, 22.3% cov, 0 mismatches]
 007565a0  170  complete behaviourally (EA placement new of a 0x6c-byte refcounted object with FUN_007564b0 start + vtable slot 2 on failure); no MSVC EH frame emitted, so bytes differ
