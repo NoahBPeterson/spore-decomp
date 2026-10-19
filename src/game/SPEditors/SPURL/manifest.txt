@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPURL.cpp  ?InitURLs@Pollen@SP@@YAXXZ  00621830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

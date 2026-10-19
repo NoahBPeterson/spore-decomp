@@ -3,7 +3,7 @@
 00620e50 SP::Pollen::cRegistrationDialog  # dialog UI-notify helper (this = dialog)
 00620ef0 ?TOSDialog_DoMessage@@YAHHPAXPAH@Z  # TOSDialog_DoMessage migrated from s00620bd0 (verbatim, slice spelling)
 00621460 SP::Pollen::MapLookup  # id -> URL map lookup, optional string out
-006214c0 SP::Pollen::GetURL  # formats URL into a string16 out
-00621540 SP::Pollen::SanitizeURL  # URL normalizer
-006216b0 SP::Pollen::RegisterURL  # mapA lookup + "https://%hs%hs" into mapB
-00621770 SP::Pollen::RegisterInsecureURL  # same with "http://%hs%hs"
+006214c0 ?GetURL@@YA_NIPAUString8@@@Z  # GetURL migrated from s00620bd0 (verbatim, slice spelling)
+00621540 ?SanitizeURL@@YAXPAXPAD@Z  # SanitizeURL migrated from s00620bd0 (verbatim, slice spelling)
+006216b0 ?RegisterURL@@YA_NIIPBD@Z  # RegisterURL migrated from s00620bd0 (verbatim, slice spelling)
+00621770 ?RegisterInsecureURL@@YA_NIIPBD@Z  # RegisterInsecureURL migrated from s00620bd0 (verbatim, slice spelling)

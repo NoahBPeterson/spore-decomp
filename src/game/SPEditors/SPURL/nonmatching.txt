@@ -1,0 +1,6 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00546930 108 complete; vector_map::operator[] lower_bound/insert schedule differs
+00549dc0 78 complete; /Od lower_bound schedule differs
+006214c0 2 GetURL: complete; same compare operand order (2 bytes)
+006216b0 105 RegisterURL: complete; the CtorSprintf tag/local-string call sequence is emitted differently
+00621770 104 RegisterInsecureURL: complete; same CtorSprintf call-sequence issue
