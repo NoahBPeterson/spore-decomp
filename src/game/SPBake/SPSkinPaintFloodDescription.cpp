@@ -70,10 +70,10 @@ struct cPaintVarEvalList_s0053_4cf0 {
     cPaintVarEvalList_s0053_4cf0(const cPaintVarEvalList_s0053_4cf0& x);
 };
 }
+extern "C" size_t __cdecl strlen(const char*);
 // ---- items of slice s00534cf0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" size_t __cdecl strlen(const char*);
 
 // ---- items of slice s00535d00 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* EASTL_Allocate(void* allocator, size_t size, int align, int flags);   // 0x0042dee0
