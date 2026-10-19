@@ -1,11 +1,11 @@
 00962ff0 FUN_00962ff0 # unnamed GetResourceDescriptor + index-buffer factory helper
 00963060 FUN_00963060 # card name EA::UTFWin::CreateIndexBuffer<cMallocAlloc>
 009630e0 FUN_009630e0 # unnamed index-buffer append/copy path
-009634c0 EA::UTFWinControls::BiStateEffect::GetEventMask # card prev-name IWinProc::GetEventFlags
-009634f0 FUN_009634f0 # unnamed easing curve
-009635e0 FUN_009635e0 # unnamed fade on/off toggle
-00963630 FUN_00963630 # unnamed only-when-visible toggle
-009636f0 FUN_009636f0 # unnamed alpha clamp/normalise
+009634c0 ?GetEventMask@Btn@@QAEHXZ  # Btn::GetEventMask migrated from s00962ff0 (verbatim, slice spelling)
+009634f0 ?Ease@EaseFx@@QAEOM@Z  # EaseFx::Ease migrated from s00962ff0 (verbatim, slice spelling)
+009635e0 ?SetFade@Btn@@QAEX_N@Z  # Btn::SetFade migrated from s00962ff0 (verbatim, slice spelling)
+00963630 ?OnlyWhenVisible@Btn@@QAEXPAH_N@Z  # Btn::OnlyWhenVisible migrated from s00962ff0 (verbatim, slice spelling)
+009636f0 ?SetAlphaClamp@Btn@@QAEXMM@Z  # Btn::SetAlphaClamp migrated from s00962ff0 (verbatim, slice spelling)
 00963780 EA::UTFWin::IWinProc::HandleUIMessage # card name
 00963db0 EA::UTFWinControls::FadeEffect::FadeEffect # card name
 00963f60 ?GetEffectFlag@FlexFlag@@QAEHXZ  # FlexFlag::GetEffectFlag migrated from s00962ff0 (verbatim, slice spelling)

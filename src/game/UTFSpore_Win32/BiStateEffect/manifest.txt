@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/BiStateEffect.cpp  ?GetEventMask@Btn@@QAEHXZ  009634c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/BiStateEffect.cpp  ?SetFade@Btn@@QAEX_N@Z  009635e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/BiStateEffect.cpp  ?SetAlphaClamp@Btn@@QAEXMM@Z  009636f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

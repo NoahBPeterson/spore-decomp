@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+009634f0 195 faithful easing curve (mode 0/1/2); x87/SSE mix and constant pooling differ
+00963630 25 faithful OnlyWhenVisible; outgoing message-frame store scheduling differs
