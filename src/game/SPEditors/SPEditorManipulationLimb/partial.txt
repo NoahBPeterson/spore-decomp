@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+005aed80  1079  SP::cSPEditorManipulationLimb::PickOptimalPointOnLine: not translated
