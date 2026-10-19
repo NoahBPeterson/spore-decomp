@@ -14,6 +14,7 @@
 #include "rw/graphics/IndexBuffer.h"
 #include "rw/graphics/VertexBuffer.h"
 #include "SP/cJob.h"
+#include "rw/graphics/EmbeddedState.h"
 
 // ---- items of slice s00682f40 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct RefCounted {
@@ -77,6 +78,7 @@ extern "C" void  __cdecl RemoveRegistrationCallback(int id, void* cb);          
 // ---- items of slice s00762d70 end
 
 // ---- items of slice s00763cb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+__declspec(noinline) bool __cdecl FUN_763fd0(void* arena) { (void)arena; return false; }       // 00763fd0
 extern float g_one_01485720;    // 0x01485720
 #pragma pack(push, 1)
 #pragma pack(pop)
@@ -285,17 +287,16 @@ void Done();
 int __cdecl ArenaStart(void* arena, ArenaIter* it, void* owner, int* flag);   // 0x011e3c70
 unsigned int __cdecl FixupNext(ArenaIter*);     // 0x011e39e0 rw::core::arena::Arena::FixupNext
 unsigned int __cdecl DestructNext(ArenaIter*);  // 0x011e2330 rw::core::arena::Arena::DestructNext
-bool __cdecl FUN_763fd0(void* arena);           // 0x00763fd0 (partial below)
+bool __cdecl FUN_763fd0(void* arena);           // 0x00763fd0
 namespace SP {
 class cGraphicsResourceFactory_s0076_3cb0 {
 public:
     bool Init();                                            // 007641c0 0x007641c0
-    bool FixupArena(ArenaOwner* p);                         // 00764580
-    bool ReadResourceArena(D7642c0* st, Stm7* s, Registry* reg);   // 00764a50
-    bool BuildArena(Stm7* s, Registry* reg, const V3u* pv); // 00764ce0
+    bool FixupArena(ArenaOwner* p);                         // 00764580 0x00764580
+    bool ReadResourceArena(D7642c0* st, Stm7* s, Registry* reg);   // 00764a50 0x00764a50
+    bool BuildArena(Stm7* s, Registry* reg, const V3u* pv); // 00764ce0 0x00764ce0
 };
 }
-__declspec(noinline) bool __cdecl FUN_763fd0(void* arena) { (void)arena; return false; }       // 00763fd0
 extern "C" void* __cdecl AddRegistrationCallback(int id, void* cb);   // 0x06adfe0
 extern "C" void* __cdecl ArenaTypeRegGetType(int t);                   // 0x011e22c0
 extern "C" void* __cdecl GetManager();                                 // 0x067dcd0
@@ -561,35 +562,23 @@ struct AsyncReqC {
 // ---- items of slice s00764df0 end
 
 // ---- items of slice s00765f80 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void __cdecl sub_87cf40(void* p);
-extern "C" void __cdecl sub_87cf60(void* p, int v);
-extern "C" bool __cdecl sub_87d2a0(void* p, int a, int b);
-extern "C" bool __cdecl sub_87d030(void* p, void* a, int n);
-extern "C" void __cdecl sub_87cff0(void* p);
-extern "C" void __cdecl sub_87d260(void* p);
-extern "C" void* __cdecl Ctor765f10(void* p);   // 0x765f10
-extern "C" void* __cdecl Ctor763100(void* p);   // 0x763100
-extern "C" void* __cdecl Ctor7004d0(void* p);   // 0x7004d0
-extern "C" void __cdecl sub_4e0880(void* vec, uint32_t n);
-extern "C" void* __cdecl EA_Alloc6(uint32_t size, const char* name, int a, int b, const char* file, int line);
+extern "C" void* __cdecl sub_f473a0(uint32_t size, const char* name, int a, int b, const char* file, int line);
 extern "C" void* __cdecl EA_Alloc8(uint32_t size, int align, int a, const char* name, int b, int c, const char* file, int line);
 extern "C" void  __cdecl EA_Dealloc(void* p);
 extern "C" void* __cdecl memcpy_t(void* dst, const void* src, uint32_t n);
 extern "C" void  __cdecl sub_6c20b0(void* p);
 extern "C" void  __cdecl sub_6c2060(void* p, int a, int b);
 extern "C" void  __cdecl sub_6c20e0(void* p);
+extern "C" void  __cdecl sub_6ac040(int a, void* b);
 extern "C" void* __cdecl MessageServer();
 extern "C" void* __cdecl Manager67dcd0();
 extern "C" bool  __cdecl ReadInt32(void* stream, void* dst, int count, int flags);
-extern "C" void  __cdecl sub_4b54b0(void* p);
 extern "C" void  __cdecl sub_6ac0a0(int a, void* b);
 extern "C" void  __cdecl sub_11eff60(void* p);
 extern "C" void  __cdecl cLocalLightInfo_dtor(void* alloc, void* obj);
 extern "C" char* __cdecl BigMoveBack(char* dst, char* first, char* last, char* src);   // 0x764720
 extern "C" char* __cdecl BigMove(char* dst, char* first, char* last);                  // 0x763f10
 extern "C" char* __cdecl BigUninitFill(char* dst, uint32_t n, char* value);            // 0x765200
-extern "C" void __cdecl VecReserve41e4d0(void* vec, int n);               // 0x41e4d0
-extern "C" void __cdecl PushDeclareParam(void* vec, int* v);              // 0x4e19a0
 extern "C" extern char g_allocFile_s0076_5f80[];
 static inline void* VP(void* p) { return *(void**)p; }
 struct IRef {
@@ -668,24 +657,21 @@ struct ResB : BaseP, SecP {
 struct RawRes {
     void* AsInterface(int type);
 };
-struct Elem8 {
-    void* p;
-    int   x;
-    Elem8() : p(0), x(0) {}
-    ~Elem8() {}
+struct AllocDesc {
+    uint32_t size;            // +0
+    uint32_t type;            // +4
+    AllocDesc();              // 0x6c0fa0
+    ~AllocDesc();             // 0xc2e4e0
 };
+void __cdecl FreePtrs4(void* p);                                  // 0x6c20b0
+void __cdecl AllocFromDesc(void* dst, const void* desc, int n);   // 0x6c2060
 struct ResD {
-virtual void d0();
-virtual void d1();
-virtual void d2();
-virtual void d3();
-    virtual ~ResD();
-    int mRef;                 // +0x4
-    int m08, m0c, m10, m14;   // +0x8..+0x14
+    char pad0[0x18];
     void* mArena;             // +0x18
-    Elem8* mpBegin;           // +0x20
-    Elem8* mpEnd;             // +0x24
-    Elem8* mpCap;             // +0x28
+    void* m20;                // +0x20
+    void* m24;                // +0x24
+    void* m28;                // +0x28
+    void* m2c;                // +0x2c
     ResD();
 };
 struct BaseE {
@@ -710,7 +696,6 @@ struct ResE : BaseE {
     ResE();
     ~ResE();
 };
-void* InitResE(void* p) { return new (p) ResE(); }
 ResE::~ResE() {
     if (a18) {
         sub_11eff60((void*)a18);
@@ -723,23 +708,76 @@ struct VBig {
     char* mpCap;              // +8
     void _insert(char* position, uint32_t n, char* value);
 };
-struct IPngArg {
-virtual void a0();
-virtual void a1();
-virtual void a2();
-virtual void a3();
-virtual void a4();
-virtual void a5();
-virtual void a6();
-virtual void a7();
-    char pad[0x18];
-    void* mMgr;               // +0x1c (approx)
+struct PngInner {
+    char pad0[0x1c];
+    int      c1c;      // +0x1c
+    void*    c20;      // +0x20
+    void*    c24;      // +0x24
+    void*    c28;      // +0x28
+    uint32_t c2c;      // +0x2c
+    uint32_t c30;      // +0x30
+    char     c34;      // +0x34
+};
+struct PngObj10 {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual int  v6();      // +0x18
+virtual void v7();
+virtual void v8();
+    virtual void v9();      // +0x24
+};
+struct PngArg2 {
+    char pad0[0xc];
+    PngInner* inner;        // +0xc
+    PngObj10* obj10;        // +0x10
+    void*     p14;          // +0x14
+    unsigned char flag18;   // +0x18
 };
 struct PngArg {
     char pad[0x8];
-    IPngArg* p08;             // +0x8
+    PngArg2* p08;           // +0x8
 };
-void* InitResE(void* p);
+struct PngCtx {
+    char pad[0x10];
+    void ctor87cf40();                          // 0x87cf40 (thiscall)
+    void m87cf60(int v);                        // 0x87cf60
+    bool m87d2a0(int a, int b);                 // 0x87d2a0
+    bool m87d030(void* dst, void* src, int n);  // 0x87d030
+    void m87cff0();                             // 0x87cff0
+    void m87d260();                             // 0x87d260
+};
+struct MsgSrv {
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+    virtual int  s6(void* a, int, int, int);    // +0x18
+};
+void __cdecl EA_Free(void* p);                                    // 0xf47380
+struct PngStr {
+    const char* mpBegin;    // +0
+    const char* mpEnd;      // +4
+    const char* mpCap;      // +8
+    ~PngStr() {
+        if ((int)(mpCap - mpBegin) > 1 && mpBegin != 0)
+            EA_Free((void*)mpBegin);
+    }
+};
+void __cdecl EAString_sprintf(PngStr* s, const char* fmt, ...);   // 0x472fe0
+void __cdecl MsvcrSprintf(char* dst, const char* fmt, ...);       // 0x13cc4a0
+struct CEditorRes_s0076_5f80 { CEditorRes_s0076_5f80(); };       // 0x763100 (thiscall, no args)
+struct D7004d0    { D7004d0(); };          // 0x7004d0
+struct D765f10_s0076_5f80    { D765f10_s0076_5f80(void*); };     // 0x765f10 (thiscall, one arg)
+struct AutoRef {
+    void* p;                               // +0
+    AutoRef& operator=(void* q);           // 0xb5f950 (thiscall, one arg)
+};
 struct CUnionTarget { void m(); };
 struct VPtr {
     uint32_t* mpBegin;   // +0
@@ -755,14 +793,51 @@ struct V4 {
     uint32_t* mpAlloc;   // +0x10
     void insert(uint32_t* position, uint32_t n, const uint32_t& value);
 };
+struct RefObj {
+    virtual void AddRef();                    // +0x00
+    virtual void Release();                   // +0x04
+    virtual void r2();                        // +0x08
+    virtual RefObj* GetCached(int key);       // +0x0c
+    virtual void r4();                        // +0x10
+    virtual void GetOut(RefObj** out);        // +0x14
+};
+struct AutoRefCount {
+    RefObj* p;
+    AutoRefCount() : p(0) {}
+    ~AutoRefCount() { if (p) p->Release(); }
+    AutoRefCount& operator=(RefObj* q) {
+        RefObj* old = p;
+        p = q;
+        if (old) old->Release();
+        return *this;
+    }
+};
+struct RefVec_s0076_5f80 {
+    void* mpBegin;             // +0
+    void* mpEnd;               // +4
+    void* mpCap;               // +8
+    void reserve(uint32_t n);              // 0x4e0880 (thiscall)
+    void push_back(const AutoRefCount& v);      // 0x4b54b0 (thiscall)
+};
 struct IResMgr {
 virtual void m0();
 virtual void m1();
 virtual void m2();
 virtual void m3();
-    virtual bool m4(void* key, void** outA, void** outB, int, int, int, int, int);
+    virtual bool m4(void* key, AutoRefCount* hA, AutoRefCount* hB, int, int, int, int, int);
 };
-struct ResHandle { virtual void h0(); virtual void h1(); virtual void h2(); virtual void h3(); };
+struct NodeFC { int Type(); };                     // 0xfc7e50 (thiscall)
+struct JobC {
+    void AddWeakDependency(int t);                 // 0x6913c0 (thiscall)
+    bool Continuation(void* fn, void* ctx);        // 0x68f9f0 (thiscall)
+};
+struct TerrainSphere {
+    char pad0[0x100];
+    RefObj* handle;            // +0x100
+    RefVec_s0076_5f80 vec;                // +0x104
+    char pad1[0x19c - 0x110];
+    bool RequestPaintDecalsFromModels(void* job);
+};
 struct IStream {
 virtual void s0();
 virtual void s1();
@@ -778,7 +853,18 @@ virtual void sA();
 virtual void sB();
     virtual int  sC(void* dst, int n);          // slot 0xc
 };
-struct Reader { IStream* mStream; int mField2c; };
+struct Vec3Vec {
+    void reserve(uint32_t n);          // 0x41e4d0 (thiscall)
+    void push_back(const int* v);      // 0x4e19a0 (thiscall)
+};
+struct Reader {
+    char pad0[0x28];
+    IStream* mStream;         // +0x28
+    int mField2c;             // +0x2c
+    char pad1[0x19c - 0x30];
+    Vec3Vec vec;              // +0x19c
+    bool ReadDecalBlock(int unused);
+};
 extern "C" bool __cdecl ReadTriplet763340(IStream* s, int* p, int io);   // 0x763340
 struct IFactorySrc {
 virtual void f0();
@@ -1623,10 +1709,19 @@ void ResB::MoveOut(void* out)
 
 // @ 0x00766140
 ResD::ResD()
-: mRef(0), m08(0), m0c(0), m10(0), m14(0), mArena(0),
-               mpBegin(0), mpEnd(0), mpCap(0) {
-    Elem8 tmp[4];
-    (void)tmp;
+{
+    *(void**)this = (void*)0x140e118;
+    *(void**)((char*)this + 0x1c) = (void*)0x140e0f8;
+    AllocDesc desc[4];
+    desc[0].size = 0;
+    desc[0].type = 1;
+    if (mArena)
+        ((Arena*)mArena)->Release();
+    mArena = 0;
+    FreePtrs4((char*)this + 0x20);
+    AllocFromDesc((char*)this + 0x20, desc, 0);
+    *(void**)((char*)this + 0x1c) = (void*)0x13eb938;
+    *(void**)this = (void*)0x13eb938;
 }
 
 // @ 0x00766220
@@ -1675,76 +1770,97 @@ void VBig::_insert(char* position, uint32_t n, char* value)
 // @ 0x007664e0
 bool __stdcall PNGWriteCallback(PngArg* arg)
 {
-    unsigned char* buf = (unsigned char*)_alloca(0x2a70);
-    (void)buf;
-    IPngArg* a = arg->p08;
-    void* inner = *(void**)((char*)a + 0xc);
-    int c1c = *(int*)((char*)inner + 0x1c);
-    void* c20 = *(void**)((char*)inner + 0x20);
-    void* ctx = 0;
-    (void)c1c; (void)c20;
-    if (*(char*)((char*)a + 0x18)) {
-        // formatted debug string path (stubbed)
+    unsigned char buf[0x2a70];
+    memset(buf, 0, 0x2a70);
+    PngArg2* a = arg->p08;
+    PngInner* inner = a->inner;
+    int c1c = inner->c1c;
+    void* c20 = inner->c20;
+    *(int*)(buf + 0x10) = c1c;
+    *(void**)(buf + 0x14) = c20;
+    *(int*)(buf + 0x18) = 0x20;
+    *(int*)(buf + 0x438) = (a->flag18 != 0) ? 8 : 0;
+    if (inner->c34 != 0) {
+        PngStr s;
+        s.mpBegin = (const char*)0x1667bac;
+        s.mpEnd   = (const char*)0x1667bac;
+        s.mpCap   = (const char*)0x1667bad;
+        EAString_sprintf(&s, "0x%08x:0x%08x", inner->c2c, inner->c30);
+        MsvcrSprintf((char*)buf + 0x65c, s.mpBegin);
     }
-    sub_87cf40(&ctx);
-    void* m = *(void**)((char*)a + 0x10);
-    int v = ((int(__thiscall**)(void*))VP(m))[0x18 / 4](m);
-    sub_87cf60(&ctx, v);
-    bool ok = sub_87d2a0(&ctx, 1, 4);
-    if (ok) {
-        ok = sub_87d030(&ctx, *(void**)((char*)inner + 0x28), *(int*)((char*)arg + 0x44) * 4) != 0;
-        sub_87cff0(&ctx);
-        m = *(void**)((char*)a + 0x10);
-        ((void(__thiscall**)(void*))VP(m))[0x24 / 4](m);
-        void* srv = MessageServer();
-        if (srv && *(void**)((char*)a + 0x14))
-            ((void(__thiscall**)(void*, void*, int, int, int))VP(srv))[0x18 / 4](
-                srv, *(void**)((char*)a + 0x14), 0, 0, 0);
+    PngCtx ctx;
+    ctx.ctor87cf40();
+    int v = a->obj10->v6();
+    ctx.m87cf60(v);
+    bool ok = ctx.m87d2a0(4, 1);
+    if (!ok) {
+        ctx.m87d260();
+        return false;
     }
-    sub_87d260(&ctx);
-    return ok;
+    bool wrote = ctx.m87d030(buf, inner->c28, c1c * 4);
+    ctx.m87cff0();
+    a->obj10->v9();
+    MsgSrv* srv = (MsgSrv*)MessageServer();
+    if (srv && a->p14)
+        srv->s6(a->p14, 0, 0, 0);
+    ctx.m87d260();
+    return wrote;
 }
 
 // @ 0x007666a0
 bool __stdcall CreateByType(void** out, uint32_t type, int sub)
 {
-    void* obj = 0;
+    AutoRef ref;
+    ref.p = 0;
     if (type < 0x2cb4f30) {
-        if (type == 0x2f4e681b) {
-            void* p = EA_Alloc6(0x3fe4, "RenderAsset", 0, 0, 0, 0);
+        if (type == 0x2cb4f2f) {
+            void* p = sub_f473a0(0x3fe4, "RenderAsset", 0, 0, 0, 0);
             if (p) {
-                // cPropertyList base ctor + derived vtable
                 *(void**)p = (void*)0x13ebcdc;
                 _InterlockedExchange((volatile long*)((char*)p + 4), 0);
                 *(int*)((char*)p + 8) = 0;
                 *(int*)((char*)p + 0xc) = 0;
                 *(int*)((char*)p + 0x10) = 0;
                 *(int*)((char*)p + 0x14) = 0;
-                // (large body stubbed)
-                obj = p;
+                *(void**)p = (void*)0x140e0d0;
+                ref.p = p;
+                ((IRef*)p)->AddRef();
             }
-        } else if (type == 0x2cb4f2f) {
-            void* p = EA_Alloc6(0x140, "RenderAsset", 0, 0, 0, 0);
-            if (p) obj = Ctor7004d0(p);
+        } else if (type == 0xe6bce5) {
+            void* p = sub_f473a0(0x140, "RenderAsset", 0, 0, 0, 0);
+            ref = p ? (void*)new (p) D7004d0() : 0;
+            sub_6ac040(4, ref.p);
         } else if (type == 0x1c135da) {
-            void* p = EA_Alloc6(0x2c, "RenderAsset", 0, 0, 0, 0);
-            if (p) obj = Ctor763100(p);
+            void* p = sub_f473a0(0x2c, "RenderAsset", 0, 0, 0, 0);
+            ref = p ? (void*)new (p) CEditorRes_s0076_5f80() : 0;
+            sub_6ac040(4, ref.p);
+        } else {
+            return false;
         }
     } else if (type == 0x2f4e681b) {
-        // unreachable by ordering
+        void* p = sub_f473a0(0x30, "RenderAsset", 0, 0, 0, 0);
+        if (!p)
+            return false;
+        void* q = (void*)new (p) ResB();
+        if (!q)
+            return false;
+        ref.p = q;
+        ((IRef*)q)->AddRef();
     } else if (type == 0x2f4e681c) {
         if (sub == 0x2f4e681b) {
-            void* p = EA_Alloc6(0x20, "RenderAsset", 0, 0, 0, 0);
-            if (p) obj = Ctor765f10(p);
+            void* p = sub_f473a0(0x20, "RenderAsset", 0, 0, 0, 0);
+            ref = p ? (void*)new (p) D765f10_s0076_5f80(0) : 0;
         } else {
-            void* p = EA_Alloc6(0x1c, "RenderAsset", 0, 0, 0, 0);
-            if (p) obj = InitResE(p);
+            void* p = sub_f473a0(0x1c, "RenderAsset", 0, 0, 0, 0);
+            ref = p ? (void*)new (p) ResE() : 0;
         }
+    } else {
+        return false;
     }
-    if (obj) {
-        *out = obj;
-        ((void(__thiscall**)(void*))VP(obj))[0](obj);   // AddRef
-        ((void(__thiscall**)(void*))VP(obj))[1](obj);   // Release
+    if (ref.p) {
+        *out = ref.p;
+        ((IRef*)ref.p)->AddRef();
+        ((IRef*)ref.p)->Release();
         return true;
     }
     return false;
@@ -1795,7 +1911,7 @@ void V4::insert(uint32_t* position, uint32_t n, const uint32_t& value)
         uint32_t need = size + n;
         if (need < cap)
             need = cap;
-        uint32_t* nb = need ? (uint32_t*)EA_Alloc6(need * 4, "Graphics", 0, 0, g_allocFile_s0076_5f80, 0xd1) : 0;
+        uint32_t* nb = need ? (uint32_t*)sub_f473a0(need * 4, "Graphics", 0, 0, g_allocFile_s0076_5f80, 0xd1) : 0;
         uint32_t* p = (uint32_t*)memcpy_t(nb, mpBegin, (uint32_t)((char*)position - (char*)mpBegin));
         p = (uint32_t*)((char*)p + ((char*)position - (char*)mpBegin));
         for (uint32_t i = 0; i < n; i++)
@@ -1831,74 +1947,69 @@ void V4::insert(uint32_t* position, uint32_t n, const uint32_t& value)
 }
 
 // @ 0x00766b30
-bool RequestPaintDecalsFromModels(void* self, void* job)
+bool TerrainSphere::RequestPaintDecalsFromModels(void* job)
 {
-    char* s = (char*)self;
-    // reserve
-    sub_4e0880(s + 0x104, (uint32_t)((*(int*)(s + 0x1a0) - *(int*)(s + 0x19c)) / 0xc));
-    uint32_t have = (uint32_t)((*(int*)(s + 0x108) - *(int*)(s + 0x104)) >> 2);
-    uint32_t want = (uint32_t)((*(int*)(s + 0x1a0) - *(int*)(s + 0x19c)) / 0xc);
-    while (have < want) {
-        if (*(void**)(s + 0x100) == 0) {
-            IResMgr* mgr = (IResMgr*)Manager67dcd0();
-            ResHandle* hA = 0;
-            ResHandle* hB = 0;
-            bool ok = ((IResMgr*)mgr)->m4(s + 0x19c + have * 0xc, (void**)&hA, (void**)&hB, 0, 0, 0, 0, 0);
-            if (!ok) {
-                if (hA) { hA->h1(); hA = 0; }
-                if (hB) { hB->h1(); hB = 0; }
-            }
-            ResHandle* got = hA ? (ResHandle*)((int(__thiscall**)(ResHandle*, int))VP(hA))[0xc / 4](hA, 0x3a212ac) : 0;
-            ResHandle* old = *(ResHandle**)(s + 0x100);
-            if (got != old) {
-                if (got) got->h0();
-                *(ResHandle**)(s + 0x100) = got;
-                if (old) old->h1();
-            }
-            if (hB == 0 && *(void**)(s + 0x100) != 0) {
-                // continuation
-                sub_4b54b0(&hB);
-                if (hB) sub_6ac0a0(2, hB);
-                if (hB) hB->h1();
-                if (hA) hA->h1();
-                return true;
-            }
-            sub_4b54b0(&hB);
-            if (hB) sub_6ac0a0(2, hB);
-            if (hA) hA->h1();
+    char* s = (char*)this;
+    vec.reserve((uint32_t)((*(int*)(s + 0x1a0) - *(int*)(s + 0x19c)) / 0xc));
+    uint32_t have = (uint32_t)(((char*)vec.mpEnd - (char*)vec.mpBegin) >> 2);
+    while (have < (uint32_t)((*(int*)(s + 0x1a0) - *(int*)(s + 0x19c)) / 0xc)) {
+        if (handle != 0) {
+            AutoRefCount local;
+            handle->GetOut(&local.p);
+            RefObj* old = handle;
+            if (old) { handle = 0; old->Release(); }
+            vec.push_back(local);
+            if (local.p) sub_6ac0a0(2, local.p);
         } else {
-            ResHandle* local = 0;
-            ((void(__thiscall**)(ResHandle*, ResHandle**))VP(*(void**)(s + 0x100)))[0x14 / 4](
-                *(ResHandle**)(s + 0x100), &local);
-            ResHandle* old = *(ResHandle**)(s + 0x100);
-            if (old) { *(void**)(s + 0x100) = 0; old->h1(); }
-            sub_4b54b0(&local);
-            if (local) sub_6ac0a0(2, local);
-            if (local) local->h1();
+            AutoRefCount hA;
+            AutoRefCount hB;
+            IResMgr* mgr = (IResMgr*)Manager67dcd0();
+            bool ok = mgr->m4(s + 0x19c + have * 0xc, &hA, &hB, 0, 0, 0, 0, 0);
+            if (!ok) {
+                hA = (RefObj*)0;
+                hB = (RefObj*)0;
+            }
+            RefObj* got = hA.p ? hA.p->GetCached(0x3a212ac) : 0;
+            RefObj* old = handle;
+            if (got != old) {
+                if (got) got->AddRef();
+                handle = got;
+                if (old) old->Release();
+            }
+            if (hB.p == 0 && handle != 0) {
+                int t = ((NodeFC*)handle)->Type();
+                ((JobC*)job)->AddWeakDependency(t);
+                return ((JobC*)job)->Continuation((void*)0x767340, this);
+            }
+            vec.push_back(hB);
+            if (hB.p) sub_6ac0a0(2, hB.p);
         }
-        have = (uint32_t)((*(int*)(s + 0x108) - *(int*)(s + 0x104)) >> 2);
+        have = (uint32_t)(((char*)vec.mpEnd - (char*)vec.mpBegin) >> 2);
     }
     return true;
 }
 
 // @ 0x00766e10
-bool __fastcall ReadDecalBlock(Reader* r)
+bool Reader::ReadDecalBlock(int /*unused*/)
 {
-    int n = r->mStream->sC(&r->mField2c, 4);
-    if (n != 4)
+    if (mStream->sC(&mField2c, 4) != 4)
         return false;
-    int count = r->mField2c;
-    if (count < 8 || count > 9)
+    uint32_t count = (uint32_t)mField2c;
+    if (count < 8)
         return false;
-    int num = 0;
-    if (!ReadInt32(r->mStream, &num, 1, 0))
+    if (count > 9)
         return false;
-    VecReserve41e4d0((char*)r + 0x19c, num);
-    for (int i = 0; i < num; i++) {
+    uint32_t num;
+    IStream* stream = mStream;
+    if (!ReadInt32(stream, &num, 1, 0))
+        return false;
+    vec.reserve(num);
+    for (uint32_t i = 0; i < num; i++) {
         int v[3] = {0, 0, 0};
-        if (!ReadTriplet763340(r->mStream, v, 0))
+        IStream* s2 = mStream;
+        if (!ReadTriplet763340(s2, v, 0))
             return false;
-        PushDeclareParam((char*)r + 0x19c, v);
+        vec.push_back(v);
     }
     return true;
 }

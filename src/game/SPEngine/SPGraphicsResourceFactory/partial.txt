@@ -3,11 +3,6 @@
 00763620  325  partial: Gimex raster header load (0x87xxxx stream); not translated
 007637d0  196  partial: Gimex load + create-raster wrapper; not translated
 00763950  294  partial: cRaster PCA-weight header reader; not translated
-00766140  144  ResD ctor: _eh_vector_constructor_iterator temporary not reproduced
-007664e0  355  PNGWriteCallback: debug formatted-string path stubbed
-007666a0  455  CreateByType: large cPropertyList construction body stubbed
-00766b30    0  RequestPaintDecalsFromModels: job-continuation path stubbed
-00766e10  150  ReadDecalBlock: stream vcall modelled at wrong offsets
 00767ee0  n/a  WriteResourceRaster: register-heavy mip/face event loop only structurally modelled
 00768370  n/a  BakeSprites ctor: refcounted member and inline-container setup approximated
 0076a720  n/a  CanConvert: type dispatch approximated
