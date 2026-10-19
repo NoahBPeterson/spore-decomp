@@ -1,7 +1,13 @@
+005e5e40 ?SetRolloverLayout@cSPEditorVerbIconTray@SP@@QAEXVKey@ResourceMan@EA@@@Z  # SP::cSPEditorVerbIconTray::SetRolloverLayout (callee of s00605870, named from the dev publics; slice address comment)
+005e5ee0 ?SetIgnoreKeyPress@cSPEditorVerbIconTray@SP@@QAEX_N@Z  # SP::cSPEditorVerbIconTray::SetIgnoreKeyPress (callee of s00605870, named from the dev publics; slice address comment)
+005e6170 ?SetShowRollover@cSPEditorVerbIconTray@SP@@QAEX_N@Z  # SP::cSPEditorVerbIconTray::SetShowRollover (callee of s00605870, named from the dev publics; slice address comment)
+005e61b0 ?SetIgnoreKeyPress@cSPEditorVerbIconTray@SP@@QAEX_N@Z  # SP::cSPEditorVerbIconTray::SetIgnoreKeyPress (callee of s00605870, named from the dev publics; slice address comment)
+00605980 ?Init@cSPVerbTrayCollection_s0060_5870@SP@@QAEXPAVIWindow_s0060_5870@UTFWin@EA@@UResourceKey@@PBU6@H_N@Z  # cSPVerbTrayCollection_s0060_5870::Init migrated from s00605870 (verbatim, slice spelling)
 00605b20 eastl::map<EA::AutoRefCount<IWindow>,eastl::vector<EA::AutoRefCount<SP::cSPEditorVerbIconTray>>>::DoNukeSubtree  # recursive node free, value = window key + tray vector (cSPVerbTrayCollection::mWindowsToVerbTrays)
 00605cb0 SP::cSPVerbTrayCollection::~cSPVerbTrayCollection  # destroys map at +0x28, AutoRefCounts +0x24/+0x20, tray vector +0xc
 00605e60 SP::cSPVerbTrayCollection::cSPVerbTrayCollection  # inits mImageGroup 0xb5ac9c22 as InitTrays does
 00605ee0 ?A?$map  # cSPVerbTrayCollection::mWindowsToVerbTrays operator[] (mangled ??A?$map@..., base identifier only so the name matcher finds it)
+00605f90 ?InitTrays@cSPVerbTrayCollection_s0060_5870@SP@@UAEXUResourceKey@@PBU3@H@Z  # cSPVerbTrayCollection_s0060_5870::InitTrays migrated from s00605870 (verbatim, slice spelling)
 006064c0 IsSporeDisc  # GetDriveTypeA==CDROM, volume label xor 0x2a == "yzexo" ("SPORE"), >=2GB
 00606590 FindSporeDisc  # scans GetLogicalDrives with IsSporeDisc
 00606730 eastl::uninitialized_relocate_commit<SP::FunctionalMatch::ConstraintNode*>  # destroys sources, advances dest by 0x24
