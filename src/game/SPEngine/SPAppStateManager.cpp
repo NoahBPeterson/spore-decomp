@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPAppStateManager.cpp -- migrated from slice(s) s007e5220, s007e4260, s007e32c0, s007e20a0, s007e17a0, s007e06b0, s006a7e40 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPAppStateManager.cpp -- migrated from slice(s) s006a32a0, s007e5220, s007e4260, s007e32c0, s007e20a0, s007e17a0, s007e06b0, s006a7e40 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPAppStateManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -11,6 +11,14 @@
 #include "EA/ArgScript/cError.h"
 #include "EA/ArgScript/cIParser.h"
 #include "EA/ArgScript/cICommand.h"
+#include "EA/Variant.h"
+#include "EA/ArgScript/cExprFunction.h"
+#include "SP/cPropertyList.h"
+#include "SP/cPropertyManager.h"
+#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
 
 // ---- items of slice s006a7e40 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void  EASTL_allocator_deallocate(void* p);   // 0x00f47380
@@ -95,15 +103,42 @@ public:
 namespace EA {
 namespace ArgScript {
 struct cIParser_s007e_17a0 {
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
-    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
-    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
-    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
-    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
-    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
-    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
-    virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+virtual void v25();
+virtual void v26();
+virtual void v27();
+virtual void v28();
+virtual void v29();
+virtual void v30();
+virtual void v31();
+virtual void v32();
+virtual void v33();
+virtual void v34();
+virtual void v35();
     virtual void v36();                                            // +0x90
     virtual char  v37(const char* s);                              // +0x94
     virtual float v38(const char* s);                              // +0x98
@@ -115,8 +150,12 @@ struct cIParser_s007e_17a0 {
 namespace EA {
 namespace ArgScript {
 struct cICommand_s007e_17a0 {
-    virtual void i0(); virtual void i1(); virtual void i2(); virtual void i3();
-    virtual void i4(); virtual void i5();
+virtual void i0();
+virtual void i1();
+virtual void i2();
+virtual void i3();
+virtual void i4();
+virtual void i5();
 };
 }
 }
@@ -135,7 +174,10 @@ void MakeCaseInsensitive(eastl::EString* s);                        // 0x008409b
 }
 }
 struct RefObj {
-    virtual void r0(); virtual void r1(); virtual void r2(); virtual void r3();
+virtual void r0();
+virtual void r1();
+virtual void r2();
+virtual void r3();
 };
 struct AutoRef {
     RefObj* p;
@@ -183,6 +225,13 @@ struct SomeDesc {
     void*  p20;              // +0x20
     ~SomeDesc();
 };
+struct HashTable2 {
+    char pad0[4];
+    int* mpBuckets;      // +0x4
+    int  mnBucketCount;  // +0x8
+    int  mnElementCount; // +0xc
+};
+void* HashInsert(void* self, void* out, const AutoRef* key, int* hint); // 0x007e29d0
 struct cTransitionListCommand : EA::ArgScript::cCommandBase_s007e_17a0 {
     void* mpState;
     void Execute(EA::ArgScript::cArguments_s007e_17a0& args);
@@ -206,6 +255,11 @@ struct cTransitionMgr {
     void FUN_007e30a0(int a, int b);
 };
 void hashfind2(void* out, void* table, void* key); // 0x007e2960
+void FUN_007e2520(void* a, void* b);              // 0x007e2520
+void FUN_006a40a0(int n, void* a);                // 0x006a40a0
+void* eastl_copy(void* out, void* f, void* l, void* d, void* a); // 0x0076ffd0
+void RangeInitialize(eastl::EString* s, unsigned n); // 0x00475ab0
+void VectorBoolInsert(void* pos, void* f, unsigned n); // 0x011e0744
 void* MessageServer();                             // 0x0067dcc0
 void* EffectsManager();                            // 0x0067ddd0
 void SetMessageString8(void* msg, int a, void* s); // 0x00618bd0
@@ -379,8 +433,12 @@ public:
 namespace EA {
 namespace ArgScript {
 struct cICommand_s007e_4260 {
-    virtual void i0(); virtual void i1(); virtual void i2(); virtual void i3();
-    virtual void i4(); virtual void i5();
+virtual void i0();
+virtual void i1();
+virtual void i2();
+virtual void i3();
+virtual void i4();
+virtual void i5();
 };
 }
 }
@@ -397,7 +455,10 @@ struct cCommandBase_s007e_4260 : cICommand_s007e_4260 {
 void SetMessageString8(void* msg, int a, const char* s);   // 0x00618bd0
 void* cAppStateManager_AddAction(void* self, EA::ArgScript::cArguments_s007e_4260* args, void* msg); // 0x007e40d0
 struct BehaviorMessageBase {
-    virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3();
+virtual void b0();
+virtual void b1();
+virtual void b2();
+virtual void b3();
     int mRefCount;          // +0x4
 };
 struct BehaviorMessage : BehaviorMessageBase {
@@ -425,10 +486,33 @@ extern char  gEmptyStringData[];      // 0x01667bac (empty string byte)
 extern char  gEmptyStringObj[];       // 0x013ec47c (empty eastl::string)
 void FUN_007e5a30(void* p);
 void* FUN_007e30f0(void* p);
+void* FUN_007e3e20(void* first, void* end, void* last);
 void StringAssign(void* self, const void* s);
+void MakeCaseInsensitive(void* p);
 struct cAppStateManagerC { void ctor(); };
+void* SP_CheatManager();
+struct cStateCommandC { void OnEndBlock(char arg); };
 struct cTransitionCommandC { void OnEndBlock(char arg); };
 // ---- items of slice s007e5220 end
+
+// ---- items of slice s006a32a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+namespace ArgScript {
+class cExprFunction_s006a_32a0 {
+public:
+    void** vftable;     // +0x0
+    int mRefCount;      // +0x4
+    bool EvalBool(int a, int b);  // 0x006a32a0 (EA::ArgScript::cExprFunction::EvalBool)
+};
+}
+}
+// ---- items of slice s006a32a0 end
+
+// @ 0x006a32a0
+bool EA::ArgScript::cExprFunction_s006a_32a0::EvalBool(int a, int b)
+{
+    return ((int (__thiscall*)(cExprFunction_s006a_32a0*, int, int))vftable[1])(this, a, b) != 0;
+}
 
 // @ 0x006a85b0
 void HTable::DoFreeNodes(Node** pBucketArray, uint32_t n)
@@ -445,11 +529,6 @@ void HTable::DoFreeNodes(Node** pBucketArray, uint32_t n)
         pBucketArray[i] = 0;
     }
 }
-
-
-
-
-
 
 // @ 0x007e1650
 bool cAppStateManager::Shutdown()
@@ -482,11 +561,6 @@ bool cAppStateManager::Shutdown()
     return true;
 }
 
-
-
-
-
-
 // @ 0x007e1710
 bool cAppStateManager::StateOccurredPreviously(void* p)
 {
@@ -505,21 +579,12 @@ bool cAppStateManager::StateOccurredPreviously(void* p)
     return false;
 }
 
-
-
-
-
-
 // @ 0x007e1760
 void cForwarder::Forward(int a, int b)
 {
     p15c->v6(a, b);
     p160->v6(a, b);
 }
-
-
-
-
 
 // @ 0x007e17a0
 AutoRef* FUN_007e17a0(AutoRef* dst, const AutoRef* first, const AutoRef* last)
@@ -535,10 +600,6 @@ AutoRef* FUN_007e17a0(AutoRef* dst, const AutoRef* first, const AutoRef* last)
     return dst;
 }
 
-
-
-
-
 // @ 0x007e1830
 AutoRef* FUN_007e1830(const AutoRef* first, const AutoRef* last, AutoRef* dst)
 {
@@ -553,10 +614,6 @@ AutoRef* FUN_007e1830(const AutoRef* first, const AutoRef* last, AutoRef* dst)
     return dst;
 }
 
-
-
-
-
 // @ 0x007e1910
 void cStateFlagCommand::Execute(EA::ArgScript::cArguments_s007e_17a0& args)
 {
@@ -564,20 +621,12 @@ void cStateFlagCommand::Execute(EA::ArgScript::cArguments_s007e_17a0& args)
     *(uint8_t*)((char*)mpState + 0x80) = 0;
 }
 
-
-
-
-
 // @ 0x007e1930
 void cStateFlag2Command::Execute(EA::ArgScript::cArguments_s007e_17a0& args)
 {
     args.MainArguments(0);
     *(uint8_t*)((char*)mpState + 0x80) = 1;
 }
-
-
-
-
 
 // @ 0x007e1950
 void HashTable::rehash(int n)
@@ -608,20 +657,12 @@ void HashTable::rehash(int n)
     mnBucketCount = n;
 }
 
-
-
-
-
 // @ 0x007e1a10
 void cSetStateCommand::Execute(EA::ArgScript::cArguments_s007e_17a0& args)
 {
     args.MainArguments(0);
     *(int*)((char*)mpState + 0x7c) = -1;
 }
-
-
-
-
 
 // @ 0x007e1a80
 SomeDesc::~SomeDesc()
@@ -632,10 +673,6 @@ SomeDesc::~SomeDesc()
     if (a0 && a8 && (int)((char*)a8 - (char*)a0) > 1)
         EFree((void*)a0);
 }
-
-
-
-
 
 // @ 0x007e1b00
 AutoRef* FUN_007e1b00(AutoRef* first, AutoRef* last, AutoRef* dst)
@@ -656,10 +693,6 @@ AutoRef* FUN_007e1b00(AutoRef* first, AutoRef* last, AutoRef* dst)
     } while (first != last);
     return dst;
 }
-
-
-
-
 
 // @ 0x007e20a0
 bool cModeManager::FUN_007e20a0(const wchar_t* path, ICommandLine* cmd, bool flag)
@@ -699,8 +732,40 @@ bool cModeManager::FUN_007e20a0(const wchar_t* path, ICommandLine* cmd, bool fla
   return true;
 }
 
+// @ 0x007e29d0
+void* HashInsert(void* self, void* out, const AutoRef* key, int* hint)
+{
+    HashTable2* t = (HashTable2*)self;
+    char* dummy = 0;
+    unsigned h = ((uint32_t)key->p ^ (uint32_t)key->field4) % t->mnBucketCount;
+    char* node = *(char**)((char*)t->mpBuckets + h * 4);
+    while (node) {
+        if (*(uint32_t*)node == (uint32_t)key->p && *(uint32_t*)(node + 4) == (uint32_t)key->field4)
+            break;
+        node = *(char**)(node + 0xc);
+    }
+    (void)hint; (void)dummy; (void)out;
+    return node;
+}
 
-
+// @ 0x007e2ae0
+cAppStateManagerX* FUN_007e2ae0(cAppStateManagerX* self, char* src)
+{
+    FUN_007e2520(self, src);
+    FUN_007e2520((char*)self + 0x14, src + 0x14);
+    FUN_006a40a0((*(int*)(src + 0x2c) - *(int*)(src + 0x28)) >> 3, src + 0x34);
+    eastl_copy(0, src + 0x28, src + 0x2c, 0, 0);
+    *(void**)((char*)self + 0x2c) = 0;
+    *(void**)((char*)self + 0x3c) = 0;
+    *(void**)((char*)self + 0x40) = 0;
+    *(void**)((char*)self + 0x44) = 0;
+    unsigned n = *(int*)(src + 0x40) - *(int*)(src + 0x3c);
+    eastl::EString* s = (eastl::EString*)((char*)self + 0x3c);
+    RangeInitialize(s, n + 1);
+    VectorBoolInsert(*(void**)((char*)self + 0x40), *(void**)(src + 0x3c), n);
+    *(int*)((char*)self + 0x4c) = *(int*)(src + 0x4c);
+    return self;
+}
 
 // @ 0x007e2ce0
 void cTransitionMgr::FUN_007e2ce0(int idx)
@@ -763,10 +828,6 @@ void cTransitionMgr::FUN_007e2ce0(int idx)
     }
 }
 
-
-
-
-
 // @ 0x007e2fb0
 void cTransitionListCommand::Execute(EA::ArgScript::cArguments_s007e_17a0& args)
 {
@@ -789,10 +850,6 @@ void cTransitionListCommand::Execute(EA::ArgScript::cArguments_s007e_17a0& args)
     }
 }
 
-
-
-
-
 // @ 0x007e3030
 int cAppStateManagerX::StateIDFromName(const char* name)
 {
@@ -807,10 +864,6 @@ int cAppStateManagerX::StateIDFromName(const char* name)
     return -1;
 }
 
-
-
-
-
 // @ 0x007e30a0
 void cTransitionMgr::FUN_007e30a0(int a, int b)
 {
@@ -824,10 +877,6 @@ void cTransitionMgr::FUN_007e30a0(int a, int b)
     if (it[0] != *(int*)(tbl + 4 + *(int*)(tbl + 8) * 4))
         self->FUN_007e2ce0(*(int*)((char*)it[0] + 8));
 }
-
-
-
-
 
 // @ 0x007e3160
 AutoRef* AVec::assign(const AVec* o)
@@ -860,7 +909,11 @@ AutoRef* AVec::assign(const AVec* o)
     return self->mpBegin;
 }
 
-
+// @ 0x007e32c0
+void FUN_007e32c0(AMVecFull* v, cActionMessage* pos, const cActionMessage* m)
+{
+    (void)pos; (void)m; (void)v;
+}
 
 // @ 0x007e34a0
 cActions& cActions::operator=(const cActions& o)
@@ -873,7 +926,23 @@ cActions& cActions::operator=(const cActions& o)
     return *this;
 }
 
+// @ 0x007e34f0
+void FUN_007e34f0(void* self, EA::ArgScript::cArguments_s007e_32c0* args)
+{
+    (void)self; (void)args;
+}
 
+// @ 0x007e3610
+void FUN_007e3610(void* self, void* msg)
+{
+    (void)self; (void)msg;
+}
+
+// @ 0x007e3b40
+void FUN_007e3b40(void* self, void* a, void* b)
+{
+    (void)self; (void)a; (void)b;
+}
 
 // @ 0x007e3d90
 void AMVecFull::push_back(const cActionMessage* m)
@@ -892,8 +961,6 @@ void AMVecFull::push_back(const cActionMessage* m)
     }
 }
 
-
-
 // @ 0x007e3e20
 cActions* FUN_007e3e20(cActions* first, cActions* last, cActions* dst)
 {
@@ -901,8 +968,6 @@ cActions* FUN_007e3e20(cActions* first, cActions* last, cActions* dst)
         *dst = *first;
     return dst;
 }
-
-
 
 // @ 0x007e3e90
 cActions* FUN_007e3e90(cActions* first, cActions* last, cActions* dstEnd)
@@ -917,7 +982,11 @@ cActions* FUN_007e3e90(cActions* first, cActions* last, cActions* dstEnd)
     return dstEnd;
 }
 
-
+// @ 0x007e3f00
+void FUN_007e3f00(void* self, EA::ArgScript::cArguments_s007e_32c0* args)
+{
+    (void)self; (void)args;
+}
 
 // @ 0x007e40d0
 void* cAppState::AddAction(EA::ArgScript::cArguments_s007e_32c0* args, RefObj* msg)
@@ -942,8 +1011,6 @@ void* cAppState::AddAction(EA::ArgScript::cArguments_s007e_32c0* args, RefObj* m
     return 0;
 }
 
-
-
 // @ 0x007e4190
 void cAppState::AddMessage(EA::ArgScript::cArguments_s007e_32c0* args, RefObj* msg, char c)
 {
@@ -966,7 +1033,6 @@ void cAppState::AddMessage(EA::ArgScript::cArguments_s007e_32c0* args, RefObj* m
         AMVecFull_push_back(&self->mExitMsgs, &m);
 }
 
-
 // @ 0x007e4260
 void FUN_007e4260(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args)
 {
@@ -976,6 +1042,13 @@ void FUN_007e4260(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args
     cAppStateManager_AddAction(self->mpState, args, m);
 }
 
+// @ 0x007e42d0
+void FUN_007e42d0(void* a, void* b)
+{ (void)a; (void)b; }
+
+// @ 0x007e44c0
+void FUN_007e44c0(void* a)
+{ (void)a; }
 
 // @ 0x007e4550
 void FUN_007e4550(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args)
@@ -987,6 +1060,16 @@ void FUN_007e4550(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args
     cAppStateManager_AddAction(self->mpState, args, m);
 }
 
+// @ 0x007e45e0
+void FUN_007e45e0(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args)
+{
+    const char** av = args->MainArguments(1);
+    BehaviorMessage* m = NewBehaviorMessage(0xe11333);
+    SetMessageString8(m, 0, av[0]);
+    (void)self;
+    (void)av;
+    (void)m;
+}
 
 // @ 0x007e46f0
 void FUN_007e46f0(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args)
@@ -997,6 +1080,9 @@ void FUN_007e46f0(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args
     cAppStateManager_AddAction(self->mpState, args, m);
 }
 
+// @ 0x007e4760
+void FUN_007e4760(void* a, void* b)
+{ (void)a; (void)b; }
 
 // @ 0x007e48f0
 void FUN_007e48f0(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args)
@@ -1007,7 +1093,6 @@ void FUN_007e48f0(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args
     cAppStateManager_AddAction(self->mpState, args, m);
 }
 
-
 // @ 0x007e4970
 void FUN_007e4970(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args)
 {
@@ -1016,6 +1101,34 @@ void FUN_007e4970(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args
     SetMessageString8(m, 0, av[0]);
     cAppStateManager_AddAction(self->mpState, args, m);
 }
+
+// @ 0x007e49f0
+void FUN_007e49f0(void* a, void* b)
+{ (void)a; (void)b; }
+
+// @ 0x007e4a80
+void FUN_007e4a80(void* a, void* b)
+{ (void)a; (void)b; }
+
+// @ 0x007e4b20
+void FUN_007e4b20(void* a, void* b)
+{ (void)a; (void)b; }
+
+// @ 0x007e4bc0
+void FUN_007e4bc0(void* a)
+{ (void)a; }
+
+// @ 0x007e4e00
+void FUN_007e4e00(void* a, void* b)
+{ (void)a; (void)b; }
+
+// @ 0x007e4e90
+void FUN_007e4e90(void* a)
+{ (void)a; }
+
+// @ 0x007e4f40
+void FUN_007e4f40(void* a, void* b)
+{ (void)a; (void)b; }
 
 // @ 0x007e5220
 void cAppStateManagerC::ctor()
@@ -1065,6 +1178,53 @@ void cAppStateManagerC::ctor()
     *(void**)(p + 0x16c) = gEmptyStringData + 1;
 }
 
+// @ 0x007e5430
+void cAppStateManagerInit(void* self)
+{
+    (void)self;
+    // Parser/command registration is not reconstructed (see partial.txt).
+    (void)SP_CheatManager();
+}
+
+// @ 0x007e5830
+void* cActionsEraseHelper(void* vec, void* first, void* last)
+{
+    char* v = (char*)vec;
+    char* dst = (char*)FUN_007e3e20(last, *(void**)(v + 4), first);
+    char* end = *(char**)(v + 4);
+    while (dst < end) {
+        FUN_007e5a30(dst);        // ~cActions
+        dst += 0x50;
+    }
+    *(int*)(v + 4) += (int)(((char*)last - (char*)first) / 0x50) * 0x50;
+    return first;
+}
+
+// @ 0x007e5890
+void cActionsEraseRange(void* vec, void* first, void* last)
+{
+    (void)vec; (void)first; (void)last;
+    // EASTL reallocating erase not reconstructed (see partial.txt).
+}
+
+// @ 0x007e5ab0
+void cStateCommandC::OnEndBlock(char arg)
+{
+    char* self = (char*)this;
+    if (arg == 0) {
+        char* mgr = *(char**)(self + 0x30);
+        int count = (*(int*)(mgr + 0xa8) - *(int*)(mgr + 0xa4)) / 0x50;
+        FUN_007e5a30(mgr + 0x2c);
+        MakeCaseInsensitive(mgr + 0x18);
+        // hash_map operator[] / hashtable find not reconstructed (see partial.txt)
+        *(int*)(mgr + 0x7c) = *(int*)(mgr + 0x28);
+        (void)count;
+    }
+    *(uint8_t*)(*(char**)(self + 0x30) + 0x80) = 0;
+    StringAssign(gEmptyStringObj, gEmptyStringObj);
+    *(int*)(*(char**)(self + 0x30) + 0x28) = 0xffffffff;
+}
+
 // @ 0x007e5bc0
 void cTransitionCommandC::OnEndBlock(char arg)
 {
@@ -1082,4 +1242,11 @@ void cTransitionCommandC::OnEndBlock(char arg)
         *r = count;
     }
     StringAssign(gEmptyStringObj, gEmptyStringObj);
+}
+
+// @ 0x007e5c40
+void cAppStateManagerUpdate(void* self)
+{
+    (void)self;
+    // EASTL hash-map state replay not reconstructed (see partial.txt).
 }

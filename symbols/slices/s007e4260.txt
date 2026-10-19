@@ -1,17 +1,17 @@
 007e4260 ?FUN_007e4260@@YAXPAUcAppStateCmd@@PAVcArguments_s007e_4260@ArgScript@EA@@@Z  # FUN_007e4260 migrated from s007e4260 (verbatim, slice spelling)
-007e42d0 FUN_007e42d0  # 486B dispatcher
-007e44c0 FUN_007e44c0  # 133B
+007e42d0 ?FUN_007e42d0@@YAXPAX0@Z  # FUN_007e42d0 migrated from s007e4260 (verbatim, slice spelling)
+007e44c0 ?FUN_007e44c0@@YAXPAX@Z  # FUN_007e44c0 migrated from s007e4260 (verbatim, slice spelling)
 007e4550 ?FUN_007e4550@@YAXPAUcAppStateCmd@@PAVcArguments_s007e_4260@ArgScript@EA@@@Z  # FUN_007e4550 migrated from s007e4260 (verbatim, slice spelling)
-007e45e0 `anonymous namespace'::cModeCommand::Execute  # PDB caller-scored, msg 0xe11333/onExit
+007e45e0 ?FUN_007e45e0@@YAXPAUcAppStateCmd@@PAVcArguments_s007e_4260@ArgScript@EA@@@Z  # FUN_007e45e0 migrated from s007e4260 (verbatim, slice spelling)
 007e46f0 ?FUN_007e46f0@@YAXPAUcAppStateCmd@@PAVcArguments_s007e_4260@ArgScript@EA@@@Z  # FUN_007e46f0 migrated from s007e4260 (verbatim, slice spelling)
-007e4760 `anonymous namespace'::cLoadResourceCommand::Execute  # PDB name
+007e4760 ?FUN_007e4760@@YAXPAX0@Z  # FUN_007e4760 migrated from s007e4260 (verbatim, slice spelling)
 007e48f0 ?FUN_007e48f0@@YAXPAUcAppStateCmd@@PAVcArguments_s007e_4260@ArgScript@EA@@@Z  # FUN_007e48f0 migrated from s007e4260 (verbatim, slice spelling)
 007e4970 ?FUN_007e4970@@YAXPAUcAppStateCmd@@PAVcArguments_s007e_4260@ArgScript@EA@@@Z  # FUN_007e4970 migrated from s007e4260 (verbatim, slice spelling)
-007e49f0 FUN_007e49f0  # 139B
-007e4a80 FUN_007e4a80  # 145B
-007e4b20 `anonymous namespace'::cFloatPropCommand::Execute  # PDB name
-007e4bc0 SP::cAppStateManager::~cAppStateManager  # PDB name
-007e4e00 FUN_007e4e00  # 138B
-007e4e90 SP::cAppStateCheat::cAppStateCheat  # PDB name
-007e4f40 SP::cAppStateCheat::Execute  # PDB name
+007e49f0 ?FUN_007e49f0@@YAXPAX0@Z  # FUN_007e49f0 migrated from s007e4260 (verbatim, slice spelling)
+007e4a80 ?FUN_007e4a80@@YAXPAX0@Z  # FUN_007e4a80 migrated from s007e4260 (verbatim, slice spelling)
+007e4b20 ?FUN_007e4b20@@YAXPAX0@Z  # FUN_007e4b20 migrated from s007e4260 (verbatim, slice spelling)
+007e4bc0 ?FUN_007e4bc0@@YAXPAX@Z  # FUN_007e4bc0 migrated from s007e4260 (verbatim, slice spelling)
+007e4e00 ?FUN_007e4e00@@YAXPAX0@Z  # FUN_007e4e00 migrated from s007e4260 (verbatim, slice spelling)
+007e4e90 ?FUN_007e4e90@@YAXPAX@Z  # FUN_007e4e90 migrated from s007e4260 (verbatim, slice spelling)
+007e4f40 ?FUN_007e4f40@@YAXPAX0@Z  # FUN_007e4f40 migrated from s007e4260 (verbatim, slice spelling)
 007e51c0 option-carrying command scalar deleting dtor  # ArgScript::OptionParser dtor at +0x14

@@ -1,9 +1,10 @@
 007e5220 ?ctor@cAppStateManagerC@@QAEXXZ  # cAppStateManagerC::ctor migrated from s007e5220 (verbatim, slice spelling)
-007e5430 SP::cAppStateManager::Init  # PDB candidate (caller-single)
-007e5890 eastl::vector<SP::cAppStateManager::cActions,eastl::sp_vector_allocator>::erase  # PDB candidate
-007e5ab0 cStateCommand::OnEndBlock  # PDB/decomp name (anonymous namespace)
+007e5430 ?cAppStateManagerInit@@YAXPAX@Z  # cAppStateManagerInit migrated from s007e5220 (verbatim, slice spelling)
+007e5830 ?cActionsEraseHelper@@YAPAXPAX00@Z  # cActionsEraseHelper migrated from s007e5220 (verbatim, slice spelling)
+007e5890 ?cActionsEraseRange@@YAXPAX00@Z  # cActionsEraseRange migrated from s007e5220 (verbatim, slice spelling)
+007e5ab0 ?OnEndBlock@cStateCommandC@@QAEXD@Z  # cStateCommandC::OnEndBlock migrated from s007e5220 (verbatim, slice spelling)
 007e5bc0 ?OnEndBlock@cTransitionCommandC@@QAEXD@Z  # cTransitionCommandC::OnEndBlock migrated from s007e5220 (verbatim, slice spelling)
-007e5c40 SP::cAppStateManager::Update  # PDB name
+007e5c40 ?cAppStateManagerUpdate@@YAXPAX@Z  # cAppStateManagerUpdate migrated from s007e5220 (verbatim, slice spelling)
 007e5d90 ?LockToSingleCore@@YAXXZ  # LockToSingleCore migrated from s007e5220 (verbatim, slice spelling)
 007e5e10 ?FUN_007e5e10@@YAXXZ  # FUN_007e5e10 migrated from s007e5220 (verbatim, slice spelling)
 007e5e80 ?FUN_007e5e80@cAppSystem@@QAEHXZ  # cAppSystem::FUN_007e5e80 migrated from s007e5220 (verbatim, slice spelling)

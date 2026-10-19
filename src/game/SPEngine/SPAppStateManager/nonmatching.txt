@@ -10,13 +10,13 @@
 007e3030 89 cAppStateManager::StateIDFromName; hashtable find call/inline differs
 007e30a0 37 hashtable lookup + FUN_007e2ce0; find call schedule differs; equiv: FAIL (fake-arity/callee, member fix)
 007e3160 173 eastl::vector<cActionMessage>::operator=; branch layout differs; equiv: FAIL (member fix)
-007e3d90 60 vector<cActionMessage>::push_back; EH frame / grow branch schedule differs
+007e3d90 46 vector<cActionMessage>::push_back; EH frame / grow branch schedule differs
 007e40d0 99 cAppStateManager::AddAction; AutoRef temp + push_back call schedule differs; equiv: FAIL (write fault in push_back path, member fix)
 007e4190 106 cAppStateManager::AddMessage; AutoRef temp + push_back call schedule differs; equiv: FAIL (fake-arity, member fix)
-007e4260 81 cGotoStateCommand::Execute; BehaviorMessage ctor/vtable + InterlockedExchange init schedule differs
-007e4550 100 cKillEffectCommand::Execute; same + softStop flag arg order differs
-007e46f0 84 cCheatCommand::Execute; same BehaviorMessage construction schedule differs
-007e48f0 83 cLightingCommand::Execute; same BehaviorMessage construction schedule differs
-007e4970 83 cCameraCommand::Execute; same BehaviorMessage construction schedule differs
+007e4260 83 cGotoStateCommand::Execute; BehaviorMessage ctor/vtable + InterlockedExchange init schedule differs
+007e4550 96 cKillEffectCommand::Execute; same + softStop flag arg order differs
+007e46f0 80 cCheatCommand::Execute; same BehaviorMessage construction schedule differs
+007e48f0 79 cLightingCommand::Execute; same BehaviorMessage construction schedule differs
+007e4970 79 cCameraCommand::Execute; same BehaviorMessage construction schedule differs
 007e5220 252 constructor reconstructed as member/subobject stores; original inlines EASTL string ctors under an SEH frame, so bytes differ
 007e5bc0 76 cTransitionCommand::OnEndBlock complete but EASTL basic_string::assign / vector count arithmetic schedule differs

@@ -1,1 +1,24 @@
 # va  diff-bytes  reason
+007e29d0  -  hashtable insert; only the lookup half is implemented (allocation/relink omitted)
+007e2ae0  -  cAppStateManager copy ctor; container copies are placeholder calls
+007e32c0  -  vector<cActionMessage> insert/grow; only a skeleton (grow path not reproduced)
+007e34f0  -  cTransitionCommand::Execute; skeleton (nesting check / arg parse not reproduced)
+007e3610  -  cAppStateManager::HandleMessage (1320B); skeleton
+007e3b40  -  FUN_007e3b40 (580B); skeleton
+007e3f00  -  cStateCommand::Execute (456B); skeleton
+007e42d0  -  FUN_007e42d0 (486B); skeleton
+007e44c0  -  FUN_007e44c0 (133B); skeleton
+007e45e0  -  cModeCommand::Execute; message built but AddMessage flag path omitted
+007e4760  -  cLoadResourceCommand::Execute (389B); skeleton
+007e49f0  -  FUN_007e49f0 (139B); skeleton
+007e4a80  -  FUN_007e4a80 (145B); skeleton
+007e4b20  -  cFloatPropCommand::Execute (145B); skeleton
+007e4bc0  -  SP::cAppStateManager::~cAppStateManager (533B); skeleton
+007e4e00  -  FUN_007e4e00 (138B); skeleton
+007e4e90  -  SP::cAppStateCheat::cAppStateCheat (175B); skeleton
+007e4f40  -  SP::cAppStateCheat::Execute (637B); skeleton
+007e5430  899  cAppStateManager::Init not reconstructed (parser/command registration + MessageServer batch); incomplete
+007e5830  85  eastl::vector<cActions,sp_vector_allocator>::erase helper incomplete
+007e5890  1  eastl::vector<cActions,sp_vector_allocator>::erase (reallocating) not reconstructed; empty stub
+007e5ab0  64  cStateCommand::OnEndBlock: hash_map operator[]/hashtable find stubbed
+007e5c40  332  cAppStateManager::Update: EASTL hash-map state replay not reconstructed

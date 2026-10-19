@@ -1,4 +1,4 @@
-006a32a0 EA::ArgScript::cExprFunction::EvalBool  # pdb vtable-slot
+006a32a0 ?EvalBool@cExprFunction_s006a_32a0@ArgScript@EA@@QAE_NHH@Z  # cExprFunction_s006a_32a0::EvalBool migrated from s006a32a0 (verbatim, slice spelling)
 006a3310 ?Forward@cCommandStub@@QAEXHH@Z  # cCommandStub::Forward migrated from s006a32a0 (verbatim, slice spelling)
 006a3330 ?CreateResource@cPropertyManager2@@QAE_NPAHHH0@Z  # cPropertyManager2::CreateResource migrated from s006a32a0 (verbatim, slice spelling)
 006a3400 ?GetSupportedTypes@cPropertyManager@SP@@UAEIPAII@Z  # SP::cPropertyManager::GetSupportedTypes migrated from s006a32a0

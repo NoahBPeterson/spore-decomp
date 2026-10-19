@@ -7,8 +7,8 @@
 007e1a80 ??1SomeDesc@@QAE@XZ  # SomeDesc::~SomeDesc migrated from s007e17a0 (verbatim, slice spelling)
 007e1b00 ?FUN_007e1b00@@YAPAUAutoRef@@PAU1@00@Z  # FUN_007e1b00 migrated from s007e17a0 (verbatim, slice spelling)
 007e1b60 `anonymous namespace'::cTransitionCommand::OnRegister  # PDB name
-007e29d0 eastl::hashtable::DoInsertValue/insert  # hashes key, buckets at +4
-007e2ae0 cAppStateManager/description copy constructor  # copies strings/vectors
+007e29d0 ?HashInsert@@YAPAXPAX0PBUAutoRef@@PAH@Z  # HashInsert migrated from s007e17a0 (verbatim, slice spelling)
+007e2ae0 ?FUN_007e2ae0@@YAPAUcAppStateManagerX@@PAU1@PAD@Z  # FUN_007e2ae0 migrated from s007e17a0 (verbatim, slice spelling)
 007e2ce0 ?FUN_007e2ce0@cTransitionMgr@@QAEXH@Z  # cTransitionMgr::FUN_007e2ce0 migrated from s007e17a0 (verbatim, slice spelling)
 007e2fb0 ?Execute@cTransitionListCommand@@QAEXAAVcArguments_s007e_17a0@ArgScript@EA@@@Z  # cTransitionListCommand::Execute migrated from s007e17a0 (verbatim, slice spelling)
 007e3030 ?StateIDFromName@cAppStateManagerX@@QAEHPBD@Z  # cAppStateManagerX::StateIDFromName migrated from s007e17a0 (verbatim, slice spelling)

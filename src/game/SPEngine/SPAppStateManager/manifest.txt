@@ -1,4 +1,5 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPAppStateManager.cpp  ?EvalBool@cExprFunction_s006a_32a0@ArgScript@EA@@QAE_NHH@Z  006a32a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPAppStateManager.cpp  ?DoFreeNodes@HTable@@QAEXPAPAUNode@@I@Z  006a85b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPAppStateManager.cpp  ?Shutdown@cAppStateManager@@QAE_NXZ  007e1650  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppStateManager.cpp  ?Forward@cForwarder@@QAEXHH@Z  007e1760  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
