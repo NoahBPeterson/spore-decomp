@@ -1,14 +1,14 @@
 006108a0 ?FUN_006108a0@@YAXPAX00@Z  # FUN_006108a0 migrated from s006108a0 (verbatim, slice spelling)
-00610c20 ?PostGetAssetFeedEx@cPollinator_s0061_08a0@SP@@QAEXPAX0@Z  # cPollinator_s0061_08a0::PostGetAssetFeedEx migrated from s006108a0 (verbatim, slice spelling)
-00610cb0 ?FUN_00610cb0@@YAXPAX00@Z  # FUN_00610cb0 migrated from s006108a0 (verbatim, slice spelling)
-00610d40 ?FUN_00610d40@@YAXPAX00@Z  # FUN_00610d40 migrated from s006108a0 (verbatim, slice spelling)
-00610df0 ?FUN_00610df0@@YAXPAXH@Z  # FUN_00610df0 migrated from s006108a0 (verbatim, slice spelling)
-00610e90 ?FUN_00610e90@@YAXPAX0@Z  # FUN_00610e90 migrated from s006108a0 (verbatim, slice spelling)
-00610f30 ?FUN_00610f30@@YAXPAX00@Z  # FUN_00610f30 migrated from s006108a0 (verbatim, slice spelling)
-00611170 ?CancelTransactions@cPollinator_s0061_08a0@SP@@QAEXH@Z  # cPollinator_s0061_08a0::CancelTransactions migrated from s006108a0 (verbatim, slice spelling)
+00610c20 ?PostGetAssetFeedEx@cPollinator@SP@@QAEXPAX0@Z  # SP::cPollinator::PostGetAssetFeedEx
+00610cb0 ?PostTxn0x18@cPollinator@SP@@QAEXPAX00@Z  # SP::cPollinator::PostTxn0x18 poster
+00610d40 ?PostAddPending@cPollinator@SP@@QAEXPAX@Z  # SP::cPollinator::PostAddPending
+00610df0 ?CancelId@?$deque@U?$AutoRefCount@UcITransaction@@@@$0EA@@@QAEXH@Z  # deque CancelId
+00610e90 ?PopFront@?$deque@U?$AutoRefCount@UcITransaction@@@@$0EA@@@QAEXXZ  # deque PopFront
+00610f30 ?Shutdown@cPollinator@SP@@QAE_NXZ  # SP::cPollinator::Shutdown
+00611170 ?CancelTransactions@cPollinator@SP@@QAEXH@Z  # SP::cPollinator::CancelTransactions
 006111c0 ?FUN_006111c0@@YAXPAX0@Z  # FUN_006111c0 migrated from s006108a0 (verbatim, slice spelling)
-00611480 ?FUN_00611480@@YAXPAX0@Z  # FUN_00611480 migrated from s006108a0 (verbatim, slice spelling)
-00611540 ?CancelAllTransactions@cPollinator_s0061_08a0@SP@@QAEXXZ  # cPollinator_s0061_08a0::CancelAllTransactions migrated from s006108a0 (verbatim, slice spelling)
-00611550 ?FUN_00611550@@YAPAXPAX0@Z  # FUN_00611550 migrated from s006108a0 (verbatim, slice spelling)
-00611580 ?FUN_00611580@@YAXPAX0@Z  # FUN_00611580 migrated from s006108a0 (verbatim, slice spelling)
-006116c0 ?FUN_006116c0@@YAXPAX@Z  # FUN_006116c0 migrated from s006108a0 (verbatim, slice spelling)
+00611480 ?PostTxn0xa8@cPollinator@SP@@QAEXPAX00@Z  # SP::cPollinator::PostTxn0xa8 poster
+00611540 ?CancelAllTransactions@cPollinator@SP@@QAEXXZ  # SP::cPollinator::CancelAllTransactions
+00611550 ?erase@FeedVec@@QAEPAUFeedDescription@@PAU2@@Z  # FeedVec::erase
+00611580 ?Create@cPollinator@SP@@QAEPAXXZ  # SP::cPollinator::Create (ctor)
+006116c0 ?Destroy@cPollinator@SP@@QAEXXZ  # SP::cPollinator::Destroy (dtor body)

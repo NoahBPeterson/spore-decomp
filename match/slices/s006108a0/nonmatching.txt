@@ -1,1 +1,6 @@
-00610c20  111  SP::cPollinator::GetAssetFeedEx candidate (137 B): behaviorally complete poster; register/inline-shape differ.
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /GS- /arch:SSE)
+00610c20  111  non-target helper (cPollinator::PostGetAssetFeedEx); behaviorally complete poster; register/inline-shape differ. flags /O2 /MD /Gy /TP /GS- /arch:SSE [equiv: WEAK]
+00610cb0  108  complete; original 0x610cb0 is a 0x40-byte thunk into the real body at 0x610cf0 (differing ebx/esi/edi callee-save set) — reproduced as the direct body. flags /O2 /MD /Gy /TP /GS- /arch:SSE [equiv: WEAK]
+00611480  155  complete; EASTL 'Pollinator' alloc modelled as EASTL_allocator_allocate(0xa8,"Pollinator",0,0,0,0); register allocation / stack-frame differ. flags /O2 /MD /Gy /TP /GS- /arch:SSE [equiv: WEAK]
+00611580  219  complete ctor (vtable 0x13fc000, deque ctor at +8, anchor at +0x38, fields zeroed, +0x10c=0xf, +0x110/+0x114=0x1667bac, +0x118=0x1667bad); instruction selection differs. flags /O2 /MD /Gy /TP /GS- /arch:SSE [equiv: PASS]
+006116c0    8  complete teardown body (dtor-equivalent: +0x110/+0xf4, 3x vector<FeedDescription> +0xdc/+0xc8/+0xb4, +0x98/+0x88/+0x68/0x40 tree/deque, mField4 release, vtbl 0x13eb394); register allocation differs. flags /O2 /MD /Gy /TP /GS- /arch:SSE [equiv: WEAK]

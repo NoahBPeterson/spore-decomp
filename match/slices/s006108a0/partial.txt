@@ -1,12 +1,4 @@
-006108a0  -  (881 B): skeleton.
-00610f30  -  (565 B): skeleton.
-00611170  -  SP::cPollinator::CancelTransactions (77 B): outline port of the active-transaction rbtree walk.
-006111c0  -  SP::cPollinator::HandleTransactionResult (696 B): skeleton.
-00611480  -  (189 B): skeleton.
-00611550  -  feed-description vector erase (48 B): outline port.
-00611580  -  (314 B): skeleton.
-006116c0  -  SP::cPollinator::~cPollinator (322 B): skeleton.
-00610cb0  -  (139 B): empty stub body; incomplete reconstruction (poster not ported).
-00610d40  -  (133 B): empty stub body; incomplete reconstruction (poster not ported).
-00610df0  -  (157 B): empty stub body; incomplete reconstruction (poster not ported).
-00610e90  -  (150 B): empty stub body; incomplete reconstruction (poster not ported).
+006108a0  881  SP::FUN_006108a0 (881 B): media-key transaction poster; skeleton only (1-byte ret stub), not reconstructed. flags /O2 /MD /Gy /TP /GS- /arch:SSE
+006111c0  696  SP::FUN_006111c0 (696 B): transaction-result type-switch handler; skeleton only (1-byte ret stub), not reconstructed. flags /O2 /MD /Gy /TP /GS- /arch:SSE
+00610df0  157  -  deque CancelId (157 B): out of slice target list; not reconstructed.
+00610e90  150  -  deque PopFront (150 B): out of slice target list; not reconstructed.
