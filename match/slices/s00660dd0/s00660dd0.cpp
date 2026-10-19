@@ -1,6 +1,7 @@
 // Slice s00660dd0: SP::cSPUIFeedFilter and its filter-button/asset-key containers.
 // UI module: /O2 /MD /Gy /TP /arch:SSE2 (no /EHsc).
 #include "types.h"
+#include <new>
 
 typedef void(__thiscall* FnP)(void*);
 typedef void(__thiscall* FnP2)(void*, int, int);
@@ -39,7 +40,7 @@ struct E34 {
     char     pad1d[3];
     Blob14   e;          // 0x20
 };
-struct Vec34 { E34* begin; E34* end; E34* cap; void FUN_00661670(); void FUN_00661700(); };
+struct Vec34 { E34* begin; E34* end; E34* cap; void FUN_00661670(); void FUN_00661700(); void DestroyRange(E34* first, E34* last); };   // DestroyRange: 0x00646d70
 struct MapRoot34 { void* FUN_006612b0(void* key); };
 struct SubD8 { void FUN_0065f9e0(); };
 
@@ -101,6 +102,9 @@ struct cSPUIFeedFilter {
     char  mb10c;                       // 0x10c
     void* ctor();
     void dtor();
+    bool HasAnyAsset(unsigned key);                    // 0x00661a10
+    bool AllHaveAssets(unsigned key);                  // 0x00661b10
+    bool MatchRecursive(unsigned key, int* pCount);    // 0x00661c00
 };
 
 // @ 0x00661020
@@ -183,7 +187,7 @@ extern "C" void* Fun0066_0fc0(unsigned n, void* a, void* b);
 struct Key3 { uint32_t a, b, c; };
 extern "C" void* FUN_006603d0(void* key, void* out);
 extern "C" char  FUN_006a12a0(void* obj, int k, void* out);
-extern "C" char  FUN_006a0ae0(void* obj, int k, void* a, void* b);
+uint32_t* __cdecl LowerBoundU32(uint32_t* first, uint32_t* last, const uint32_t* val, unsigned char flag);   // 0x00555a20
 
 // @ 0x00661180
 char FUN_00661180(void* vec, void* key) {
@@ -313,33 +317,213 @@ void Vec34::FUN_00661700() {
     v->end = (E34*)((char*)v->end - 0x34);
 }
 
-// @ 0x00661740
-char FUN_00661740(void* vec, void* key) {
-    (void)vec; (void)key;
-    void* pm = SP_PropertyManager();
-    void* local = 0;
-    (*(void(__thiscall*)(void*, int, void**))Vslot(pm, 0x2c))(pm, 0xcc489c6f, &local);
-    char r = 0;
-    if (local) { r = 1; (*(FnP)Vslot(local, 4))(local); }
-    return r;
+// ---------------------------------------------------------------------------
+// Property-list plumbing shared by the functions below (same shapes as s00ca6630/s00eef810).
+// ---------------------------------------------------------------------------
+struct PropertyList {
+    virtual void AddRef();
+    virtual void Release();                          // +4
+};
+struct PropertyMgr {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9(); virtual void v10();
+    virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, PropertyList** ppList);   // +0x2c
+};
+// EA::AutoRefCount<PropertyList> as a local: taking its address releases and clears it.
+struct PropRef {
+    PropertyList* p;
+    PropRef() : p(0) {}
+    ~PropRef() { if (p) p->Release(); }
+    PropertyList** Out() {
+        if (p) { PropertyList* t = p; p = 0; t->Release(); }
+        return &p;
+    }
+};
+struct PElem { uint32_t a; int b; uint32_t c; };      // 12-byte property array element
+bool __cdecl GetPropArray(PropertyList* list, uint32_t id, int* count, PElem** data);   // 0x006A0AE0
+
+// Functional-match constraint (see s00eef810 / s0055aac0).
+struct FMConstraint;
+struct FMConstraintVec {                             // eastl::vector<Constraint, sp_vector_allocator>
+    FMConstraint* mpBegin;
+    FMConstraint* mpEnd;
+    FMConstraint* mpCapacity;
+    uint32_t mAllocator[2];
+    FMConstraintVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    void DoInsertValue(FMConstraint* pos, const FMConstraint& c);              // 0x004E39D0
+    __forceinline void push_back(const FMConstraint& c);
+    void DoDestroyValues(FMConstraint* first, FMConstraint* last);             // 0x004E39A0
+    ~FMConstraintVec() {
+        DoDestroyValues(mpBegin, mpEnd);
+        if (mpBegin && ((int*)mpBegin)[-1]) EASTL_allocator_deallocate(mpBegin);
+    }
+};
+enum FMEqual { kEquals = 0 };
+enum FMTolerance { kWithin = 0 };
+struct FMConstraint {                                // 0x24 bytes
+    uint32_t mParameter, mType;
+    int mMin, mMax;
+    FMConstraintVec mConstraints;
+    FMConstraint(uint32_t param, FMEqual, int value);                          // 0x00558960
+    FMConstraint(uint32_t param, FMTolerance, float value, float tolerance);   // 0x00558880
+    FMConstraint(const FMConstraint& x);                                       // 0x00606880
+    ~FMConstraint();                                                           // 0x006066F0
+};
+__forceinline void FMConstraintVec::push_back(const FMConstraint& c)
+{
+    if (mpEnd < mpCapacity) {
+        FMConstraint* p = mpEnd;
+        mpEnd = p + 1;
+        if (p) new (p) FMConstraint(c);
+    } else
+        DoInsertValue(mpEnd, c);
+}
+struct KeyRange { uint32_t k[3]; };
+struct KeyVecE {                                     // eastl::vector<ResourceKey>
+    KeyRange* mpBegin; KeyRange* mpEnd; KeyRange* mpCapacity;
+    KeyRange* erase(KeyRange* first, KeyRange* last);                          // 0x0050F740
+};
+void __cdecl SortKeys(KeyRange* first, KeyRange* last);                        // 0x004F6B70
+struct IObjectTemplateDB {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0C(); virtual void v10();
+    virtual void v14(); virtual void v18(); virtual void v1C(); virtual void v20(); virtual void v24();
+    virtual void v28(); virtual void v2C(); virtual void v30(); virtual void v34();
+    virtual void FindTemplates(KeyVecE* out, FMConstraintVec* pConstraints);   // 0x38
+};
+IObjectTemplateDB* __cdecl ObjectTemplateDB();       // 0x0067CB40
+
+// @ 0x00661740  collect the asset keys of a verb's constraint list
+char FUN_00661740(unsigned key, KeyVecE* out)
+{
+    out->erase(out->mpBegin, out->mpEnd);
+    PropRef list;
+    PropertyMgr* mgr = (PropertyMgr*)SP_PropertyManager();
+    mgr->GetPropertyList(key, 0xcc489c6f, list.Out());
+    if (!list.p)
+        return 0;
+    int count = 0;
+    PElem* data = 0;
+    if (!GetPropArray(list.p, 0x60c9e55, &count, &data) || count <= 0)
+        return 0;
+    FMConstraintVec cons;
+    for (int i = 0; i < count; i++) {
+        PElem* e = &data[i];
+        uint32_t pa = e->a;
+        int pb = e->b;
+        if (e->c == 0x4edcd7a9)
+            cons.push_back(FMConstraint(pa, kWithin, (float)pb, *(float*)0x14000b8));
+        else
+            cons.push_back(FMConstraint(pa, kEquals, pb));
+    }
+    ObjectTemplateDB()->FindTemplates(out, &cons);
+    SortKeys(out->mpBegin, out->mpEnd);
+    return 1;
 }
 
-// @ 0x00661900
-void FUN_00661900(int param, void* out) { (void)param; (void)out; }
+// @ 0x00661900  ComputeCreatureVerbIcons: append one E34 entry per verb, recursing into sub-verbs
+void FUN_00661900(unsigned key, Vec34* out)
+{
+    PropRef list;
+    PropertyMgr* mgr = (PropertyMgr*)SP_PropertyManager();
+    mgr->GetPropertyList(key, 0xcc489c6f, list.Out());
+    if (list.p) {
+        {
+            uint32_t k = 0;
+            if (FUN_006a12a0(list.p, 0x7435a2d2, &k)) {
+                out->FUN_00661670();
+                E34* e = out->end - 1;
+                e->a = k;
+                e->b = FUN_00661180((void*)key, &e->c);
+                e->d = FUN_00661740(key, (KeyVecE*)&e->e);
+            }
+        }
+        int count = 0;
+        PElem* data = 0;
+        if (GetPropArray(list.p, 0x7435a2d3, &count, &data)) {
+            for (int i = 0; i < count; i++)
+                FUN_00661900(data[i].a, out);
+        }
+    }
+}
 
 // @ 0x00661a10
-char FUN_00661a10(void* self, unsigned key) {
-    char* p = (char*)self;
-    if (*(void**)(p + 0xf4) == *(void**)(p + 0xf8)) return 1;
-    (void)key;
-    return 0;
+bool cSPUIFeedFilter::HasAnyAsset(unsigned key)
+{
+    if (mVf4.begin == mVf4.end)
+        return true;
+    bool found = false;
+    Vec34 keys;
+    keys.begin = 0; keys.end = 0; keys.cap = 0;
+    FUN_00661900(key, &keys);
+    int n = (int)(keys.end - keys.begin);
+    key = 0;                                         // the original reuses the dead key slot as the counter
+    if (n) {
+        E34* cur = keys.begin;
+        uint32_t* last = (uint32_t*)mVf4.end;
+        do {
+            uint32_t* r = LowerBoundU32((uint32_t*)mVf4.begin, last, &cur->a, (unsigned char)mb108);
+            if (r == last || cur->a < *r || r == r + 1)
+                r = last;
+            if (r != last) { found = true; break; }
+            key++;
+            cur++;
+        } while (key < (unsigned)n);
+    }
+    keys.DestroyRange(keys.begin, keys.end);
+    if (keys.begin && ((int*)keys.begin)[-1])
+        EASTL_allocator_deallocate(keys.begin);
+    return found;
 }
 
 // @ 0x00661b10
-char FUN_00661b10(void* self, int param) { (void)self; (void)param; return 0; }
+bool cSPUIFeedFilter::AllHaveAssets(unsigned key)
+{
+    PropRef list;
+    PropertyMgr* mgr = (PropertyMgr*)SP_PropertyManager();
+    mgr->GetPropertyList(key, 0xcc489c6f, list.Out());
+    if (!list.p)
+        return false;
+    int& count = (int&)key;                          // the original reuses the dead key slot
+    count = 0;
+    PElem* data = 0;
+    if (GetPropArray(list.p, 0x7435a2d3, &count, &data) && count > 0) {
+        for (int i = 0; i < count; i++) {
+            if (!HasAnyAsset(data[i].a))
+                return false;
+        }
+        return true;
+    }
+    return false;
+}
 
 // @ 0x00661c00
-char FUN_00661c00(void* self, void* a, void* b) { (void)self; (void)a; (void)b; return 0; }
+bool cSPUIFeedFilter::MatchRecursive(unsigned key, int* pCount)
+{
+    if (!HasAnyAsset(key))
+        return false;
+    if (key == (unsigned)mpWinParent)
+        return true;
+    PropRef list;
+    PropertyMgr* mgr = (PropertyMgr*)SP_PropertyManager();
+    mgr->GetPropertyList(key, 0xcc489c6f, list.Out());
+    if (!list.p)
+        return false;
+    int count = 0;
+    PElem* data = 0;
+    if (GetPropArray(list.p, 0x7435a2d3, &count, &data)) {
+        bool r = false;
+        for (int i = 0; i < count; i++) {
+            if (r || MatchRecursive(data[i].a, pCount))
+                r = true;
+        }
+        if (r && pCount)
+            ++*pCount;
+        return r;
+    }
+    return false;
+}
+
 // --- equivalence checker address annotations
 
 // --- equivalence checker address annotations (dummy declarations) ---

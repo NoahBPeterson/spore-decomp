@@ -1,13 +1,14 @@
 // Slice s007b19c0 — SP::cTexturePreload / cThumbnailManager helpers and small accessor/setter
 // routines in the texture/thumbnail subsystem. Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 #include "types.h"
+#include <intrin.h>
+#include <new>
 
 // ---------------------------------------------------------------------------
 // external helpers
 // ---------------------------------------------------------------------------
 void* __cdecl FUN_0067dd60();                       // 0x0067DD60 (RTT manager / factory)
 void* __cdecl FUN_0067dcc0();                       // 0x0067DCC0 MessageServer()
-bool  __cdecl FUN_007b1bb0(int, void*, void*);      // 0x007B1BB0
 
 struct S3 { int a, b, c; };
 
@@ -151,13 +152,207 @@ void __stdcall FUN_007b2970(P2970* p)
 // ---------------------------------------------------------------------------
 // remaining entry points (best-effort / skeleton reconstruction)
 // ---------------------------------------------------------------------------
-void FUN_007b1de0(void*) {}
-void FUN_007b1af0(void*) {}
-void FUN_007b1e90(void*) {}
-void FUN_007b19c0(void*) {}
 void FUN_007b1f40(void*) {}
 void FUN_007b2270(void*) {}
 void FUN_007b2320(void*) {}
 void FUN_007b2380(void*) {}
 void FUN_007b2600(void*) {}
 void FUN_007b26a0(void*) {}
+
+// ---------------------------------------------------------------------------
+// intrusive texture-instance pointers (same shape as TexPtr in s00776730)
+// ---------------------------------------------------------------------------
+static __forceinline long AtomicAdd(volatile long* p, long v)
+{
+    return _InterlockedExchangeAdd(p, v);
+}
+struct cTexInst {
+    void* vt; unsigned flags; volatile long refCount;
+    void AddRef() { AtomicAdd(&refCount, 1); }
+    void Release()
+    {
+        volatile long* rc = &refCount;
+        AtomicAdd(rc, -1);
+        long v = AtomicAdd(rc, 0);
+        if (v < 1)
+            AtomicAdd(rc, 1);
+        else
+            AtomicAdd(rc, 0);
+    }
+};
+struct TexRef {
+    cTexInst* p;
+    TexRef() : p(0) {}
+    TexRef(cTexInst* o) : p(o) { if (o) o->AddRef(); }
+    TexRef(const TexRef& o) : p(o.p) { if (p) p->AddRef(); }
+    ~TexRef() { if (p) p->Release(); }
+};
+struct TexRefVec {
+    TexRef* mpBegin; TexRef* mpEnd; TexRef* mpCap;
+    void DoInsertValue(TexRef* pos, const TexRef* v);   // 0x00425a80
+    void push_back(cTexInst* raw, const TexRef& v) {
+        if (mpEnd < mpCap) {
+            TexRef* d = mpEnd;
+            mpEnd = d + 1;
+            if (d) {
+                d->p = raw;
+                raw->AddRef();
+            }
+        } else {
+            DoInsertValue(mpEnd, &v);
+        }
+    }
+    void push_back(const TexRef& v) {
+        if (mpEnd < mpCap) {
+            TexRef* d = mpEnd;
+            mpEnd = d + 1;
+            if (d) new (d) TexRef(v);
+        } else {
+            DoInsertValue(mpEnd, &v);
+        }
+    }
+};
+
+struct IPropList { virtual void v0(); virtual void Release(); };
+struct PropListRef {
+    IPropList* p;
+    PropListRef() : p(0) {}
+    ~PropListRef() { if (p) p->Release(); }
+    void reset() { if (p) { IPropList* q = p; p = 0; q->Release(); } }
+};
+struct IPropMgr {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9(); virtual void v10();
+    virtual bool GetPropertyList(unsigned grp, unsigned inst, PropListRef* out);   // +0x2c
+};
+IPropMgr* __cdecl PropertyManager();                 // 0x0067DE30
+bool __cdecl GetPropArray(void* list, unsigned id, int* count, char** data);   // 0x006A0AE0
+struct PropKey { unsigned group, x, inst; };
+
+struct TexPreload {
+    char pad0[0xc];
+    TexRefVec mQueue;                               // +0x0c
+    char pad1[8];
+    TexRefVec mReady;                               // +0x20
+    bool MoveReady();                               // 0x007B19C0
+    void Push(cTexInst* t);                         // 0x007B1AF0
+    void PreloadTextureList(void* list);            // 0x007B1DE0
+    void PreloadTextureList(PropKey* key);          // 0x007B1E90
+};
+
+// @ 0x007b19c0
+bool TexPreload::MoveReady()
+{
+    while (mQueue.mpBegin != mQueue.mpEnd) {
+        cTexInst* raw = mQueue.mpEnd[-1].p;
+        if (!(raw->flags & 1))
+            return false;
+        {
+            TexRef t(raw);
+            mReady.push_back(raw, t);
+        }
+        --mQueue.mpEnd;
+        mQueue.mpEnd->~TexRef();
+    }
+    return true;
+}
+
+// @ 0x007b1af0
+void TexPreload::Push(cTexInst* raw)
+{
+    if (raw) {
+        TexRef t(raw);
+        mQueue.push_back(raw, t);
+    }
+}
+
+// @ 0x007b1de0
+void TexPreload::PreloadTextureList(void* list)
+{
+    char* data = 0;
+    int count = 0;
+    if (GetPropArray(list, 0x85155a0c, &count, &data)) {
+        int off = 0;
+        for (int i = 0; i < count; i++) {
+            S3* e = (S3*)(data + off);
+            IFac* fac = (IFac*)FUN_0067dd60();
+            Push((cTexInst*)fac->v7(*e, 0));
+            off += 12;
+        }
+    }
+}
+
+// @ 0x007b1e90
+void TexPreload::PreloadTextureList(PropKey* key)
+{
+    unsigned id = key->inst;
+    if (id == 0x40464100) id = 0x40464200;
+    PropListRef list;
+    IPropMgr* mgr = PropertyManager();
+    list.reset();
+    if (mgr->GetPropertyList(key->group, id, &list))
+        PreloadTextureList((void*)list.p);
+}
+
+// ---------------------------------------------------------------------------
+// 0x007b1bb0 rectangle-packing tree node placement (returns node index or -1)
+// ---------------------------------------------------------------------------
+struct Span { int d[8]; Span* Init(int, int, int, int, int); };   // 0x007AE920
+struct PackNode {                                   // 0x20 bytes
+    int x0, y0, x1, y1;
+    int unk;
+    int c1, c2;
+    unsigned char used; char padn[3];
+    void Set(Span*);                                // 0x0076D9A0
+};
+struct PackTree {
+    PackNode* nodes;
+    int Alloc();                                    // 0x007B10A0
+    int Place(int idx, int w, int h);               // 0x007B1BB0
+};
+// @ 0x007b1bb0
+int PackTree::Place(int idx, int w, int h)
+{
+    PackNode* n = &nodes[idx];
+    if (n->x1 - n->x0 >= w) {
+        while (n->y1 - n->y0 >= h) {
+            if (n->c1 >= 0) {
+                int r = Place(nodes[idx].c1, w, h);
+                if (r < 0)
+                    r = Place(nodes[idx].c2, w, h);
+                return r;
+            }
+            if (n->used)
+                return -1;
+            if (n->x1 - n->x0 == w && n->y1 - n->y0 == h) {
+                nodes[idx].used = 1;
+                return idx;
+            }
+            int a = Alloc();
+            int b = Alloc();
+            nodes[idx].c1 = a;
+            nodes[idx].c2 = b;
+            PackNode* base = nodes;
+            int dw = (base[idx].x1 - base[idx].x0) - w;
+            int dh = (base[idx].y1 - base[idx].y0) - h;
+            Span sp;
+            int ex, ey, ew, eh;
+            if (dh < dw) {
+                base[a].Set(sp.Init(base[idx].x0, base[idx].y0, w, base[idx].y1 - base[idx].y0, idx));
+                base = nodes;
+                ex = base[idx].x0 + w; ey = base[idx].y0; ew = dw; eh = base[idx].y1 - base[idx].y0;
+            } else {
+                base[a].Set(sp.Init(base[idx].x0, base[idx].y0, base[idx].x1 - base[idx].x0, h, idx));
+                base = nodes;
+                ex = base[idx].x0; ey = base[idx].y0 + h; ew = base[idx].x1 - base[idx].x0; eh = dh;
+            }
+            base[b].Set(sp.Init(ex, ey, ew, eh, idx));
+            idx = nodes[idx].c1;
+            n = &nodes[idx];
+            if (n->x1 - n->x0 < w)
+                return -1;
+        }
+    }
+    return -1;
+}

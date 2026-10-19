@@ -6,3 +6,4 @@
 006614d0 243 vector<E34>::insert - complete, reallocation path not byte-exact
 00661670 112 vector<E34>::push_back default - complete, temp cleanup inlining differs; equiv FAIL (5/38 inputs mismatched; ours faults at 0x00660b47 in callee; now member, ecx fixed)
 00661700 57 vector<E34>::pop_back - complete, helper call order differs; equiv FAIL (5/5 inputs mismatched; ours hits fake-arity for a callee; now member, ecx fixed)
+00661a10 218 cSPUIFeedFilter::HasAnyAsset - complete, lower_bound result compare folded and loop counter/this register allocation differ; equiv WEAK (55.8% coverage)

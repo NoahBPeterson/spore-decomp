@@ -1,3 +1,6 @@
 # va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
 007b2890   61  destructor: original has an EH frame (vptr-restore protection); our body compiles without it
 007b2900   61  destructor: original has an EH frame (vptr-restore protection); our body compiles without it
+007b19c0  159  TexPreload::MoveReady - complete, dtor/AddRef register allocation differs; equiv PASS
+007b1af0   79  TexPreload::Push - complete, AddRef/Release register allocation differs; equiv WEAK (196 valid inputs)
+007b1bb0  404  PackTree::Place - complete, loop rotation/register allocation differs; equiv WEAK (32% coverage)
