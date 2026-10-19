@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorPageControls.cpp  ??0cSPEditorPageControls_s005b_fb90@SP@@QAE@XZ  005c0770  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPageControls.cpp  ??1cSPEditorPageControls_s005b_fb90@SP@@UAE@XZ  005c07d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPageControls.cpp  ?Init@cSPEditorPageControls_s005b_fb90@SP@@QAEXPAVIWindow_s005b_fb90@UTFWin@EA@@PAVcSPPaletteCategoryUI_s005b_fb90@2@@Z  005c0840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPageControls.cpp  ?Shutdown@cSPEditorPageControls_s005b_fb90@SP@@QAEXXZ  005c0990  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPageControls.cpp  ?HandleUIMessage@cSPEditorPageControls_s005b_fb90@SP@@UAE_NPAVIWindow_s005b_fb90@UTFWin@EA@@PBX@Z  005c0a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPageControls.cpp  ?Update@cSPEditorPageControls_s005b_fb90@SP@@QAEXM@Z  005c0a60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

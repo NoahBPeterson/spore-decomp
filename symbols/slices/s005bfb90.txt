@@ -7,5 +7,10 @@
 005c0100 ?HandleUIMessage@cSPEditorNaming_s005b_fb90@SP@@UAE_NPAVIWindow_s005b_fb90@UTFWin@EA@@PBX@Z  # cSPEditorNaming_s005b_fb90::HandleUIMessage migrated from s005bfb90 (verbatim, slice spelling)
 005c0320 ?SetPrompt@cSPEditorNaming_s005b_fb90@SP@@QAEXPB_W@Z  # cSPEditorNaming_s005b_fb90::SetPrompt migrated from s005bfb90 (verbatim, slice spelling)
 005c0380 ?SetExpanded@cSPEditorNaming_s005b_fb90@SP@@UAEX_N@Z  # cSPEditorNaming_s005b_fb90::SetExpanded migrated from s005bfb90 (verbatim, slice spelling)
-005c0770 SP::cSPEditorPageControls::cSPEditorPageControls  # byte-exact
+005c0770 ??0cSPEditorPageControls_s005b_fb90@SP@@QAE@XZ  # cSPEditorPageControls_s005b_fb90::cSPEditorPageControls migrated from s005bfb90 (verbatim, slice spelling)
+005c07d0 ??1cSPEditorPageControls_s005b_fb90@SP@@UAE@XZ  # cSPEditorPageControls_s005b_fb90::~cSPEditorPageControls migrated from s005bfb90 (verbatim, slice spelling)
+005c0840 ?Init@cSPEditorPageControls_s005b_fb90@SP@@QAEXPAVIWindow_s005b_fb90@UTFWin@EA@@PAVcSPPaletteCategoryUI_s005b_fb90@2@@Z  # cSPEditorPageControls_s005b_fb90::Init migrated from s005bfb90 (verbatim, slice spelling)
+005c0990 ?Shutdown@cSPEditorPageControls_s005b_fb90@SP@@QAEXXZ  # cSPEditorPageControls_s005b_fb90::Shutdown migrated from s005bfb90 (verbatim, slice spelling)
+005c0a00 ?HandleUIMessage@cSPEditorPageControls_s005b_fb90@SP@@UAE_NPAVIWindow_s005b_fb90@UTFWin@EA@@PBX@Z  # cSPEditorPageControls_s005b_fb90::HandleUIMessage migrated from s005bfb90 (verbatim, slice spelling)
+005c0a60 ?Update@cSPEditorPageControls_s005b_fb90@SP@@QAEXM@Z  # cSPEditorPageControls_s005b_fb90::Update migrated from s005bfb90 (verbatim, slice spelling)
 005c0ba0 ?SetImage@cSPEditorPaintLikeThis_s005b_fb90@SP@@QAEXUKey_s005b_fb90@ResourceMan@EA@@@Z  # cSPEditorPaintLikeThis_s005b_fb90::SetImage migrated from s005bfb90 (verbatim, slice spelling)
