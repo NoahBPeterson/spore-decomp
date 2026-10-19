@@ -1,9 +1,8 @@
-# address  name  # evidence
-00849d20 SetStyle     # Canvas::SetStyle; /O2
-00849da0 ScalarDtor   # Canvas scalar deleting destructor
-00849df0 SetCaption   # Canvas::SetCaption
-008491a0 OnInput      # Canvas message handler (event dispatch 0x1ee1003)
-00849a40 Canvas       # Canvas::Canvas constructor (vftable 0x141ca70)
-00849230 WindowProc2  # Canvas::WindowProc (msg switch)
-00849b10 InitCanvas   # Canvas::Init
-00849e30 VecMsgInsert # eastl::vector<tagMSG>::insert
+008491a0 ?OnInput@Canvas@@QAEXHHH@Z  # Canvas::OnInput migrated from s008491a0 (verbatim, slice spelling)
+00849230 ?FUN_00849230@@YAXXZ  # FUN_00849230 migrated from s008491a0 (verbatim, slice spelling)
+00849a40 ??0Canvas@@QAE@XZ  # Canvas::Canvas migrated from s008491a0 (verbatim, slice spelling)
+00849b10 ?FUN_00849b10@@YAXXZ  # FUN_00849b10 migrated from s008491a0 (verbatim, slice spelling)
+00849d20 ?SetStyle@Canvas@@QAEXH@Z  # Canvas::SetStyle migrated from s008491a0 (verbatim, slice spelling)
+00849da0 ?ScalarDtor@Canvas@@QAEPAU1@I@Z  # Canvas::ScalarDtor migrated from s008491a0 (verbatim, slice spelling)
+00849df0 ?SetCaption@Canvas@@QAEXPB_W@Z  # Canvas::SetCaption migrated from s008491a0 (verbatim, slice spelling)
+00849e30 ?FUN_00849e30@@YAXXZ  # FUN_00849e30 migrated from s008491a0 (verbatim, slice spelling)

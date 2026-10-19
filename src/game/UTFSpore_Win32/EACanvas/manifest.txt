@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EACanvas.cpp  ?SetStyle@Canvas@@QAEXH@Z  00849d20  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EACanvas.cpp  ?ScalarDtor@Canvas@@QAEPAU1@I@Z  00849da0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EACanvas.cpp  ?SetCaption@Canvas@@QAEXPB_W@Z  00849df0  /O2 /MD /Gy /TP /Isrc/game/include

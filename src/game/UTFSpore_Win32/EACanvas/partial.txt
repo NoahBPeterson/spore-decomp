@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00849230 2058 EA::App::Canvas::WindowProc; 2058-byte message switch, not reconstructed
+00849b10 515  EA::App::Canvas::Init; 515-byte window-creation routine, not reconstructed
+00849e30 318  eastl::vector<tagMSG>::insert; 28-byte element growth/copy template, not reconstructed
+00849f70  0  Canvas::FlushInput: only the drain/repost skeleton is written; the original's large inlined message-coalescing pass (mouse/keyboard filtering over a vector<tagMSG>) is omitted.
