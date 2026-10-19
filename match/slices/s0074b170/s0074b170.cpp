@@ -145,11 +145,69 @@ void SP::cModelWorld::SetInWorld(ListNode* n, bool b)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0074B170  cLoadQueue reset/clear   (partial: refcount/list walk stubbed)
+// @ 0x0074B170  cLoadQueue reset/clear (this in ecx; EH frame; refcount/list walk)
 // ---------------------------------------------------------------------------
-void cloadqueue_b170(void* self)
+struct ClqJob { int Release(); };                       // SP::cJob::Release 0x00690120
+struct ClqRef { char pad[4]; uint32_t mnRef; };         // refcounted + vtable
+struct SlotEntry {                                      // 0x1c-byte local (EH-scoped)
+    uint32_t w[7];
+    SlotEntry();
+    ~SlotEntry();
+};
+SlotEntry::SlotEntry() { w[0] = 0; w[1] = 0; w[2] = 0; w[3] = 0; w[4] = 0; w[5] = 0; w[6] = 0; }
+SlotEntry::~SlotEntry() {}
+
+void __fastcall cloadqueue_b170(void* self_)
 {
-    (void)self;
+    char* s = (char*)self_;
+    if (s[0x1c] == 0)
+        return;
+    s[0x1c] = 0;
+
+    ClqJob* j = *(ClqJob**)(s + 0x20);
+    if (j) { *(void**)(s + 0x20) = 0; j->Release(); }
+    j = *(ClqJob**)(s + 0x24);
+    if (j) { *(void**)(s + 0x24) = 0; j->Release(); }
+
+    void** slot = (void**)(s + 0x34);
+    for (int i = 6; i != 0; --i, ++slot) {
+        void* p = *slot;
+        if (p) {
+            *slot = 0;
+            uint32_t* rc = (uint32_t*)((char*)p + 4);
+            if (--*rc == 0) {
+                *rc = 1;
+                ((void(__thiscall*)(void*, int))VT(p)[0])(p, 1);
+            }
+        }
+    }
+    *(int*)(s + 0x2c) = 6;
+    j = *(ClqJob**)(s + 0x30);
+    if (j) { *(void**)(s + 0x30) = 0; j->Release(); }
+    *(void**)(s + 0x4c) = 0;
+
+    SlotEntry scratch;
+    *(void**)s = 0;
+    void* p4 = *(void**)(s + 4);
+    if (p4) {
+        *(void**)(s + 4) = 0;
+        ((void(__thiscall*)(void*))VT(p4)[1])(p4);
+    }
+    *(void**)(s + 8) = 0;
+    *(void**)(s + 0xc) = 0;
+    *(void**)(s + 0x10) = 0;
+    *(void**)(s + 0x14) = 0;
+    *(void**)(s + 0x18) = 0;
+
+    void* p28 = *(void**)(s + 0x28);
+    if (p28) {
+        *(void**)(s + 0x28) = 0;
+        uint32_t n = *(uint32_t*)((char*)p28 + 0x40);
+        if (n > 1) { *(uint32_t*)((char*)p28 + 0x40) = n - 1; return; }
+        int b = (*(int*)((char*)p28 + 4) >> 31) & 1;
+        ((void(__thiscall*)(void*, int))VT(p28)[0x170 / 4])(p28, b);
+    }
+    (void)scratch;
 }
 
 // ---------------------------------------------------------------------------
@@ -168,11 +226,32 @@ struct cLoadQueue {
 SP::cLoadQueue::~cLoadQueue() {}
 
 // ---------------------------------------------------------------------------
-// @ 0x0074B390  eastl::partial_sort<cOccluder*>   (partial)
+// @ 0x0074B390  eastl::partial_sort<cOccluder*>
 // ---------------------------------------------------------------------------
+struct cOccluder { float x, y, z, nx, ny, nz; };            // 0x18 bytes
+typedef bool (__cdecl* OccluderComp)(const cOccluder&, const cOccluder&);
+extern "C" void MakeHeapOccluder(cOccluder*, cOccluder*, OccluderComp);                      // 0x00747eb0
+extern "C" void PopHeapOccluder(cOccluder*, cOccluder*, OccluderComp);                       // 0x00747f30
+extern "C" void AdjustHeapOccluder(cOccluder*, int, int, int, cOccluder, OccluderComp);      // 0x00745cf0
+
 void partial_sort_b390(void* a, void* b, void* c, void* cmp)
 {
-    (void)a; (void)b; (void)c; (void)cmp;
+    cOccluder* first  = (cOccluder*)a;
+    cOccluder* middle = (cOccluder*)b;
+    cOccluder* last   = (cOccluder*)c;
+    OccluderComp compare = (OccluderComp)cmp;
+
+    MakeHeapOccluder(first, middle, compare);
+    if (middle < last) {
+        for (cOccluder* i = middle; i < last; ++i) {
+            if (compare(*i, *first)) {
+                cOccluder tmp = *i;
+                *i = *first;
+                AdjustHeapOccluder(first, 0, (int)(middle - first), 0, tmp, compare);
+            }
+        }
+    }
+    PopHeapOccluder(first, middle, compare);
 }
 
 // ---------------------------------------------------------------------------
@@ -421,33 +500,146 @@ void SP::cModelWorld::UpdateFromPropList(IPropList* pl, void* mdl, uint32_t flag
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0074BDA0  slot-list find helper   (partial)
+// @ 0x0074BDA0  slot-list find (this in ecx): chunk probe then vector insert
 // ---------------------------------------------------------------------------
-void list_find_bda0(void* self, void* key)
+struct Quad { uint32_t v[4]; };
+extern "C" void ChunkFind(uint32_t* out, Quad a, Quad b, int key);            // 0x00745560
+struct Stub747190 { void* F(int*); };                                         // 0x00747190
+struct SlotList {
+    char pad0[0x28c];
+    Quad mQ1;                                     // +0x28c
+    Quad mQ2;                                     // +0x29c
+    void Find(void* key);
+    void Erase(int* key);
+};
+void SlotList::Find(void* key_)
 {
-    (void)self; (void)key;
+    char* self = (char*)this;
+    int* key = (int*)key_;
+    int out[4];
+    ChunkFind((uint32_t*)out, mQ1, mQ2, key[0]);
+    if (out[0] != *(int*)(self + 0x29c)) {
+        ((Stub747190*)out[0])->F(key);
+        return;
+    }
+    ((Vec1c*)(self + 0x284))->DoInsert((const T1c*)key);
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0074BE40  slot-list erase by key   (partial)
+// @ 0x0074BE40  slot-list erase by key (this in ecx; EH frame; chunk walk)
 // ---------------------------------------------------------------------------
-void list_erase_be40(void* self, int* key)
+void SlotList::Erase(int* key)
 {
-    (void)self; (void)key;
+    char* self = (char*)this;
+    int* p        = *(int**)(self + 0x28c);
+    int* chunkEnd = *(int**)(self + 0x294);
+    int** chunkArr = *(int***)(self + 0x298);
+    int* limit    = *(int**)(self + 0x29c);
+    if (p == limit)
+        return;
+    do {
+        if (*p == *key) {
+            SlotEntry scratch;
+            (void)scratch;
+            *p = 0;
+            void* q = (void*)p[1];
+            if (q) {
+                p[1] = 0;
+                ((void(__thiscall*)(void*))VT(q)[1])(q);
+            }
+            p[2] = 0; p[3] = 0; p[4] = 0; p[5] = 0; p[6] = 0;
+        }
+        p += 7;
+        if (p == chunkEnd) {
+            chunkArr += 1;
+            p = *chunkArr;
+            chunkEnd = p + 0x38;
+        }
+    } while (p != limit);
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0074BF10  vector::insert (element 8B)   (partial: growth path)
+// @ 0x0074BF10  eastl::vector<T8>::insert(position, value)  (element 8B)
 // ---------------------------------------------------------------------------
-void vec_insert_bf10(void* self, void* pos, void* val)
+struct Pair8 { uint32_t a, b; };
+extern "C" void* FUN_0099efa0(char* first, char* last, char* dst);          // 0x0099efa0 uninit move
+struct Vec8Ins {
+    void Insert(void* pos, void* val);
+};
+void Vec8Ins::Insert(void* pos_, void* val_)
 {
-    (void)self; (void)pos; (void)val;
+    char* self = (char*)this;
+    Pair8* end = *(Pair8**)(self + 4);
+    if (end != *(Pair8**)(self + 8)) {
+        Pair8* position = (Pair8*)pos_;
+        const Pair8* value = (const Pair8*)val_;
+        const Pair8* pValue = value;
+        if (pValue >= position && pValue < end)
+            ++pValue;
+        if (end)
+            *end = end[-1];
+        Pair8* src = end - 1;
+        Pair8* dst = end;
+        while (src != position) {
+            --src; --dst;
+            *dst = *src;
+        }
+        *position = *pValue;
+        *(Pair8**)(self + 4) = end + 1;
+        return;
+    }
+    int nPrev = (int)(*(Pair8**)(self + 4) - *(Pair8**)self);
+    int nNew = (nPrev > 0) ? nPrev * 2 : 1;
+    Pair8* pNew = nNew ? (Pair8*)eastl_alloc((uint32_t)(nNew * 8), "Graphics", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+    Pair8* p = (Pair8*)FUN_0099efa0((char*)*(Pair8**)self, (char*)pos_, (char*)pNew);
+    if (p)
+        *p = *(const Pair8*)val_;
+    Pair8* pEnd = (Pair8*)FUN_0099efa0((char*)pos_, (char*)*(Pair8**)(self + 4), (char*)(p + 1));
+    Pair8* begin0 = *(Pair8**)self;
+    if (begin0 && begin0 != *(Pair8**)(self + 0x10))
+        eastl_dealloc(begin0);
+    *(Pair8**)self = pNew;
+    *(Pair8**)(self + 4) = pEnd;
+    *(Pair8**)(self + 8) = pNew + nNew;
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0074C020  vector::insert (element 0x18B)   (partial: growth path)
+// @ 0x0074C020  eastl::vector<Vertex3D>::insert(position, value)  (element 0x18)
 // ---------------------------------------------------------------------------
-void vec_insert_c020(void* self, void* pos, void* val)
+struct Vec6 { float mX, mY, mZ, mNX, mNY, mNZ; };                           // EA::Text::Vertex3D
+extern "C" char* UninitCopy24(char* first, char* last, char* dst);          // 0x00745ca0
+extern "C" char* CopyBackward24(char* first, char* last, char* dst);        // 0x00cc8b50
+struct Vec24Ins {
+    void Insert(void* pos, void* val);
+};
+void Vec24Ins::Insert(void* pos_, void* val_)
 {
-    (void)self; (void)pos; (void)val;
+    char* self = (char*)this;
+    Vec6* end = *(Vec6**)(self + 4);
+    if (end != *(Vec6**)(self + 8)) {
+        Vec6* position = (Vec6*)pos_;
+        const Vec6* value = (const Vec6*)val_;
+        const Vec6* pValue = value;
+        if (pValue >= position && pValue < end)
+            ++pValue;
+        if (end)
+            *end = end[-1];
+        CopyBackward24((char*)position, (char*)(end - 1), (char*)end);
+        *position = *pValue;
+        *(Vec6**)(self + 4) = end + 1;
+        return;
+    }
+    int nPrev = (int)(((char*)*(Vec6**)(self + 4) - *(char**)self) / 0x18);
+    int nNew = (nPrev > 0) ? nPrev * 2 : 1;
+    Vec6* pNew = nNew ? (Vec6*)eastl_alloc((uint32_t)(nNew * 0x18), "Graphics", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+    char* p = UninitCopy24((char*)*(Vec6**)self, (char*)pos_, (char*)pNew);
+    if (p)
+        *(Vec6*)p = *(const Vec6*)val_;
+    Vec6* pEnd = (Vec6*)UninitCopy24((char*)pos_, (char*)*(Vec6**)(self + 4), p + 0x18);
+    Vec6* begin0 = *(Vec6**)self;
+    if (begin0 && begin0 != *(Vec6**)(self + 0x10))
+        eastl_dealloc(begin0);
+    *(Vec6**)self = pNew;
+    *(Vec6**)(self + 4) = pEnd;
+    *(Vec6**)(self + 8) = pNew + nNew;
 }
