@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a15220 1269 complete; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast; MultiDelay::Process, register allocation and loop scheduling differ; x87 tail-log evaluation order split into ratio/mul statements so the divide precedes the maxDelay/rate/tempo multiplies like the original; equiv WEAK 337 valid inputs 0 mismatch 59.8% coverage
