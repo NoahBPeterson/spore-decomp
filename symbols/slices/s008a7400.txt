@@ -1,6 +1,6 @@
-008a7760 ff_malloc  # 2008 dev PDB callee-single name
-008a7770 ff_free  # 2008 dev PDB callee-single name
-008a7780 ff_realloc  # 2008 dev PDB callee-single name
+008a7760 ?ff_malloc@@YAPAXI@Z  # ff_malloc migrated from s008a7400 (verbatim, slice spelling)
+008a7770 ?ff_free@@YAXPAX@Z  # ff_free migrated from s008a7400 (verbatim, slice spelling)
+008a7780 ?ff_realloc@@YAPAXPAXI@Z  # ff_realloc migrated from s008a7400 (verbatim, slice spelling)
 008a77b0 ?FlipContourDirection@@YAXPAUGlyphClass@@F@Z  # FlipContourDirection migrated from s008a7400 (verbatim, slice spelling)
 008a7930 ?New_FFT1HintClass@@YAPAUFFT1HintClass@@PAUtsiMemObject@@F@Z  # New_FFT1HintClass migrated from s008a7400 (verbatim, slice spelling)
 008a7c90 ?SetupStemWeights@@YAXPAUFFT1HintClass@@HPAHHH11@Z  # SetupStemWeights migrated from s008a7400 (verbatim, slice spelling)

@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+008a7760 3 FontFusion ff_malloc: complete; original is a memory-indirect guard/tail-jump stub (prebuilt toolset), cl emits register-indirect
+008a7770 3 FontFusion ff_free: complete; same memory-indirect stub shape not reproduced
+008a7780 3 FontFusion ff_realloc: complete; same memory-indirect stub shape not reproduced
