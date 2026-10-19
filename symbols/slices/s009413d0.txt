@@ -5,8 +5,8 @@
 00941560 EA::UTFWin::GetVariantOpChecked  # dc: lazy-init wrapper
 00941580 EA::UTFWin::SetVariantOpChecked  # dc: lazy-init wrapper
 009415a0 EA::UTFWin::InvokeVariantOpChecked  # dc: lazy-init wrapper
-009415f0 EA::Internet::EncodeBase64  # pdb callee-scored
-00941790 EA::Internet::DecodeBase64  # dc: base64 decode core
+009415f0 ?EncodeBase64@Internet@EA@@YA_NPBDIPADAAI@Z  # EA::Internet::EncodeBase64 migrated from s009413d0
+00941790 ?DecodeBase64Core@@YA_NPBEHPADPAH@Z  # DecodeBase64Core migrated from s009413d0 (verbatim, slice spelling)
 00941a10 EA::Internet::EncodeBase64String  # dc: eastl string wrapper
 00941af0 EA::Internet::DecodeBase64String  # dc: eastl string wrapper
 00941bb0 GetTime64  # dc: _time64(0)
