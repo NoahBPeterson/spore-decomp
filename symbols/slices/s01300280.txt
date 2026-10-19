@@ -8,4 +8,5 @@
 01300e90 ?init_154ff0c@@YAXXZ  # init_154ff0c migrated from s01300280 (verbatim, slice spelling)
 01307ea0 zero_1675eb8  # zero-fill 0x40 records of 0x20 bytes
 01307ed0 zero_1675a00  # zero-fill 0x20 records of 0x24 bytes
+01308d20 ?init_1676bfc@@YAXXZ  # init_1676bfc migrated from s01300280 (verbatim, slice spelling)
 0130fcc0 init_1679034  # {int C; int 0} global initializer
