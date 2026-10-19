@@ -1,4 +1,4 @@
-0075d440 SP::cMultiBlender::Update  # inferred: same class layout as slice s0075b520
+0075d440 ?Update@cMultiBlender_s0075_cf20@SP@@QAEXXZ  # cMultiBlender_s0075_cf20::Update migrated from s0075cf20 (verbatim, slice spelling)
 0075d870 render-manager update gate  # inferred from asm
 0075d8d0 intrusive list unlink helper  # structure (two back-pointers) from asm
 0075d930 `anonymous namespace'::DeviceLost  # PDB (card)

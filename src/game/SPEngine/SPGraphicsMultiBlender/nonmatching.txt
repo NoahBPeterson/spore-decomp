@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+0075a820 36 SumWeight: blending/weight accumulation complete; float-returning virtual call spills the fn pointer vs original call eax
+0075a900 91 F900: slot assignment / virtual 0x24/0x28 calls complete; register schedule differs
+0075b440 117 Fb440: clip/loop weight logic + virtual call complete; x87/SSE schedule differs
+0075b520 17 complete; the original keeps `cmp [eax],0` then reloads `*r`, cl 15.00 CSEs the two loads (tried split ifs / volatile / pointer levels)
+0075b540 87 complete; original's 12-byte Vector3 temp (3 movss init + integer-reg copy, aligned frame sub esp,0xc) is constant-folded to movss splat, changing register allocation
