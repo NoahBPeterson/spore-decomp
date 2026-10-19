@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPCreatureAnim/parts_caps.cpp  ?GetAvailableDeformsForContextTarget@nSPCreatureAnim@@YAPAHPAI0@Z  009a8560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/parts_caps.cpp  ?ElemAssignFrom@@YAXPAUElem14@@00@Z  009fc680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/parts_caps.cpp  ?ElemMove@@YAPAUElem14@@PAU1@00@Z  009fc970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

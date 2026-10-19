@@ -1,0 +1,2 @@
+# nonmatching: compiles and is behaviourally equivalent to the original (difftest PASS/WEAK)
+009a84f0 72 complete eastl::rbtree<unsigned_int,...>::find (flattened free fn); stride-7 scan for key, returns base+i*7+1 and count of leading nonzero dwords capped at 6; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv PASS 377/377; not byte-exact (register allocation: index edx vs esi; jbe vs je)

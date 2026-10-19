@@ -1,0 +1,2 @@
+# partial: source exists and compiles, but is not verified complete / not behaviourally
+009fc3e0 75/89 /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED cCommandBase::InitDeform: store arg at +0x30, FUN_0083c780, operator new(0x10)+ctor/overwrite vftable, then virtual slot 0x18. difftest: original reads ecx at entry (__thiscall) but our declaration is a free function.

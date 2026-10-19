@@ -19,12 +19,12 @@
 009fc140 BehaviorTableExpand  # expand ids from rbtree g_166c080
 009fc220 BehaviorTableDedup  # dedup + compact behaviour ids
 009fc310 BehaviorLookup  # id triple -> rbtree g_166c078
-009fc3e0 cCommandBase_InitDeform  # store +0x30, operator new(0x10) ctor, virtual 0x18
+009fc3e0 ?cCommandBase_InitDeform@@YAXPAXHH@Z  # cCommandBase_InitDeform migrated from s009fb8e0 (verbatim, slice spelling)
 009fc440 ElemCtor  # Elem14 string triple ctors
 009fc4a0 RBTreeInsertIdx  # rbtree node insert
 009fc5b0 ElemConstructRange  # copy-construct element range
-009fc680 ElemAssignFrom  # assign each element from a source element
+009fc680 ?ElemAssignFrom@@YAXPAUElem14@@00@Z  # ElemAssignFrom migrated from s009fb8e0 (verbatim, slice spelling)
 009fc6c0 ElemFill  # copy-construct n elements
 009fc8b0 ElemCopyRange  # copy-construct element range
-009fc970 ElemMove  # move/assign element range
+009fc970 ?ElemMove@@YAPAUElem14@@PAU1@00@Z  # ElemMove migrated from s009fb8e0 (verbatim, slice spelling)
 009fc9c0 ElemHeapSiftUp  # binary-heap sift-up for Elem14
