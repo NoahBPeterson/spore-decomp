@@ -27,6 +27,7 @@
 #include "SP/cRenderer.h"
 #include "EA/Audio/IPrimitive.h"
 #include "SP/cSPPaletteItemUIOneClickPaint.h"
+#include "SP/cStarManager.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern uint32_t g_15d86fc;
@@ -39,14 +40,6 @@ extern uint32_t g_15d87bc;
 extern uint32_t g_15d8608;
 
 // ---- items of slice s004bd850 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern uint32_t g_15d86fc;
-extern uint32_t g_15d860c;
-extern uint32_t g_15d86d8;
-extern uint32_t g_15d884c;
-extern uint32_t g_15d8a40;
-extern uint32_t g_15d86e4;
-extern uint32_t g_15d87bc;
-extern uint32_t g_15d8608;
 struct PackedKey {
     uint32_t b0 : 8;
     uint32_t b1 : 8;
@@ -387,20 +380,20 @@ public:
     void StartListeningToMessages();  // 0x005dc380 (SP::cSPEditorUI::StartListeningToMessages)
     void StopListeningToMessages();  // 0x005dc400 (SP::cSPEditorUI::StopListeningToMessages)
     void ShowGeneralMessage(const wchar_t* pText);  // 0x005dc460 (SP::cSPEditorUI::ShowGeneralMessage)
-    void HandleRequestedPostSaveAction(uint32_t action);
+    void HandleRequestedPostSaveAction(uint32_t action);  // 0x005dc4d0 (SP::cSPEditorUI::HandleRequestedPostSaveAction)
     void EnableUIButton(uint32_t id, bool bEnable);  // 0x005dc610 (SP::cSPEditorUI::EnableUIButton)
     void SetShowNew(bool bShow);  // 0x005dcba0 (SP::cSPEditorUI::SetShowNew)
     void SetShowSave(bool bShow);
     void SetShowPublish(bool bShow);
     void SetShowLoad(bool bShow);  // 0x005dcc90 (SP::cSPEditorUI::SetShowLoad)
-    bool IsLoadDialog(uint32_t dialogID);
-    void SetLoadDialogOptions(bool bUseDialog, int source, bool bFlag);
-    bool OnPaletteDrop(cRect16 a, cRect16 b, Key_s005d_bd20 key);
-    void SelectKeyA();
-    void SelectKeyB();
+    bool IsLoadDialog(uint32_t dialogID);  // 0x005dc250 (SP::cSPEditorUI::IsLoadDialog)
+    void SetLoadDialogOptions(bool bUseDialog, int source, bool bFlag);  // 0x005dc280 (SP::cSPEditorUI::SetLoadDialogOptions)
+    bool OnPaletteDrop(cRect16 a, cRect16 b, Key_s005d_bd20 key);  // 0x005dc190 (SP::cSPEditorUI::OnPaletteDrop)
+    void SelectKeyA();  // 0x005dc560 (SP::cSPEditorUI::SelectKeyA)
+    void SelectKeyB();  // 0x005dc580 (SP::cSPEditorUI::SelectKeyB)
     void UpdateSaveButtons();
     void EnableUndoRedo(bool bEnable);
-    void OnPaletteClick(cRect16 a);
+    void OnPaletteClick(cRect16 a);  // 0x005dca00 (SP::cSPEditorUI::OnPaletteClick)
     void OpenDialog(uint32_t dialogID, bool bFlag);
 
     cSPUILayout mLayout;                           // +0x14
@@ -829,7 +822,7 @@ class cSPEditorUI_s005d_cd80 : public cSPUIAssetBrowserCallback_s005d_cd80, publ
   void SetSelected(uint32_t id, bool selected, bool alsoState20);  // 0x005dcf20 (SP::cSPEditorUI::SetSelected)
   void EnablePlayModeButton(bool enable);  // 0x005dcf90 (SP::cSPEditorUI::EnablePlayModeButton)
   void Hide();  // 0x005dd050 (SP::cSPEditorUI::Hide)
-  void Show();
+  void Show();  // 0x005dd070 (SP::cSPEditorUI::Show)
   void SetInputBlocked(bool blocked);
   void SelectCurrentTypeInGrid();
   void ShowSaveDialog();
@@ -1496,8 +1489,9 @@ uint32_t FUN_004bd850(uint32_t key)
 
 
 
+
 // @ 0x005dc190
-bool SP::cSPEditorUI_s005d_bd20::OnPaletteDrop(cRect16 a, cRect16 b, Key_s005d_bd20 key)
+bool SP::cSPEditorUI_s005d_bd20::OnPaletteDrop(SP::cRect16 a, SP::cRect16 b, Key_s005d_bd20 key)
 {
     const int region = SP::HitTestRegion(a, b);
     if (region != 0x1c) {
@@ -1610,7 +1604,7 @@ SP::cSPEditorUI_s005d_bd20::~cSPEditorUI_s005d_bd20()
 
 
 // @ 0x005dca00
-void SP::cSPEditorUI_s005d_bd20::OnPaletteClick(cRect16 a)
+void SP::cSPEditorUI_s005d_bd20::OnPaletteClick(SP::cRect16 a)
 {
     const int region = SP::HitTestRegion(a, mApp->GetViewRect());
     if (region != 0x1c)
@@ -1618,6 +1612,7 @@ void SP::cSPEditorUI_s005d_bd20::OnPaletteClick(cRect16 a)
     if (region == 4 || region == 0x14 || region == 0x15)
         mApp->mpPlayModeController->Activate(true);
 }
+
 
 
 
@@ -2089,6 +2084,7 @@ void cSPEditorUI_s005d_cd80::SetMode(int mode)
 
 
 
+
 // @ 0x005ddd60
 bool EditorUI::Init(AppMode* app, int a2, unsigned a3, int a4)
 {
@@ -2367,6 +2363,7 @@ EditorUI* EditorUI::Construct()
     fb8 = this;
     return this;
 }
+
 
 
 
@@ -2649,6 +2646,7 @@ void EditorUI2::DoSaveAndExit()
 }
 
 
+
 // @ 0x005dfbb0
 void FUN_005dfbb0(void* self)
 { (void)self; }
@@ -2662,6 +2660,7 @@ void FUN_005dfd00(void* self, int cmd)
 // @ 0x005e0000
 void FUN_005e0000(void* self)
 { (void)self; }
+
 
 // @ 0x00de8ad0
 bool cSPEditorUI::DoMessage(uint32_t messageID, void* pMessage)
