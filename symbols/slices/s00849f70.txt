@@ -1,4 +1,9 @@
 00849f70 ?Canvas_FlushInput@@YAHXZ  # Canvas_FlushInput migrated from s00849f70 (verbatim, slice spelling)
 0084a360 EA::App::IMEServer::IsOpen  # ImmGetOpenStatus wrapper
+0084a540 ?SetCompositionWindow@IMEServerWin32@@QAEXGGH@Z  # IMEServerWin32::SetCompositionWindow migrated from s00849f70 (verbatim, slice spelling)
+0084a590 ?EnsureInitialized@IMEServer@@QAE_NXZ  # IMEServer::EnsureInitialized migrated from s00849f70 (verbatim, slice spelling)
+0084a5d0 ?Shutdown@IMEServer@@QAE_NXZ  # IMEServer::Shutdown migrated from s00849f70 (verbatim, slice spelling)
+0084a700 ??0IMECompositionStringDataEx@@QAE@XZ  # IMECompositionStringDataEx::IMECompositionStringDataEx migrated from s00849f70 (verbatim, slice spelling)
 0084aad0 eastl::vector<eastl::basic_string<wchar_t,eastl::allocator>,eastl::sp_vector_allocator>::DoDestroyValues  # ghidra symbol
 0084ab40 ?CopyWStrings@@YAPAUWString@@PBU1@0PAU1@@Z  # CopyWStrings migrated from s00849f70 (verbatim, slice spelling)
+0084ad40 ?WriteCompositionString@IMEServer@@QAEXPAXHHI@Z  # IMEServer::WriteCompositionString migrated from s00849f70 (verbatim, slice spelling)

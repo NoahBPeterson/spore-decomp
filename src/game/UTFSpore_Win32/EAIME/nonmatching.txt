@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0084a540 13 SetCompositionWindow: arg0/arg1 register assignment and vtable-register schedule differ
+0084a700 86 IMECompositionStringDataEx ctor: locale copy loop shape + member store order differ
+0084ad40 331 WriteCompositionString: inlined Imm/resize/VecFill schedule differs
