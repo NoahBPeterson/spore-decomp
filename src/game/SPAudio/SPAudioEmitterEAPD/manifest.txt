@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPAudio/SPAudioEmitterEAPD.cpp  ?Start@EmitterSub@@QAE_NHH@Z  00a377b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEmitterEAPD.cpp  ?Stop@EmitterSub@@QAE_NXZ  00a37820  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEmitterEAPD.cpp  ?Tick@cEmitterEAPD@@QAEXHH@Z  00a37860  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEmitterEAPD.cpp  ?Pause@EmitterSub@@QAE_N_N@Z  00a378e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEmitterEAPD.cpp  ?GetProperty@cEmitterEAPD@@QAE_NHPAM@Z  00a37930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEmitterEAPD.cpp  ?SetProperty@EmitterSub@@QAE_NHMH@Z  00a37960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEmitterEAPD.cpp  ?SetPropertyInternal@cEmitterEAPD@@QAEIHM@Z  00a379d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
