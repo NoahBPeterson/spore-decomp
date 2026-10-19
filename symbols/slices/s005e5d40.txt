@@ -1,3 +1,20 @@
 005e5d40 SP::cSPEditorVerbIconData::GetIconDescription  # PDB caller-scored candidate; reads text property 0x3249a320 into a wstring
-005e6200 SP::cSPEditorVerbIconTray::SetParent  # PDB caller-scored candidate; reparents mWinRoot and resizes to the parent
-005e6ae0 SP::cSPEditorVerbIconTray::GetTrayDescription  # PDB caller-scored candidate; sibling of GetTrayName (property 0x4acedf9)
+005e5e40 ?SetRolloverLayout@cSPEditorVerbIconTray@SP@@QAEXVKey@ResourceMan@EA@@@Z  # SP::cSPEditorVerbIconTray::SetRolloverLayout migrated from s005e5d40
+005e5e60 ?SetLayoutKey@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEXUKey_s005e_5d40@ResourceMan@EA@@@Z  # cSPEditorVerbIconTray_s005e_5d40::SetLayoutKey migrated from s005e5d40 (verbatim, slice spelling)
+005e5e80 ?SetLayoutID@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEXI@Z  # cSPEditorVerbIconTray_s005e_5d40::SetLayoutID migrated from s005e5d40 (verbatim, slice spelling)
+005e5ea0 ?SetHaveChargeDials@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEX_N@Z  # cSPEditorVerbIconTray_s005e_5d40::SetHaveChargeDials migrated from s005e5d40 (verbatim, slice spelling)
+005e5ec0 ?SetForceEnabled@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEX_N@Z  # cSPEditorVerbIconTray_s005e_5d40::SetForceEnabled migrated from s005e5d40 (verbatim, slice spelling)
+005e5f10 ?GetMaxVerbWidth@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEMXZ  # cSPEditorVerbIconTray_s005e_5d40::GetMaxVerbWidth migrated from s005e5d40 (verbatim, slice spelling)
+005e5fa0 ?GetMaxVerbHeight@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEMXZ  # cSPEditorVerbIconTray_s005e_5d40::GetMaxVerbHeight migrated from s005e5d40 (verbatim, slice spelling)
+005e6030 ?SetVerbIconSize@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEXXZ  # cSPEditorVerbIconTray_s005e_5d40::SetVerbIconSize migrated from s005e5d40 (verbatim, slice spelling)
+005e60d0 ?RemoveVerbIconInternal@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEXH@Z  # cSPEditorVerbIconTray_s005e_5d40::RemoveVerbIconInternal migrated from s005e5d40 (verbatim, slice spelling)
+005e6170 ?SetShowRollover@cSPEditorVerbIconTray@SP@@QAEX_N@Z  # SP::cSPEditorVerbIconTray::SetShowRollover migrated from s005e5d40
+005e61b0 ?SetIgnoreKeyPress@cSPEditorVerbIconTray@SP@@QAEX_N@Z  # SP::cSPEditorVerbIconTray::SetIgnoreKeyPress migrated from s005e5d40
+005e6200 ?SetParent@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEXPAVIWindow_s005e_5d40@UTFWin@EA@@_N@Z  # cSPEditorVerbIconTray_s005e_5d40::SetParent migrated from s005e5d40 (verbatim, slice spelling)
+005e6390 ?GetHeight@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEMXZ  # cSPEditorVerbIconTray_s005e_5d40::GetHeight migrated from s005e5d40 (verbatim, slice spelling)
+005e63b0 ?SetMaxArea@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEXABURectangle@Math@@@Z  # cSPEditorVerbIconTray_s005e_5d40::SetMaxArea migrated from s005e5d40 (verbatim, slice spelling)
+005e6400 ?LayoutTray@cSPEditorVerbIconTray_s005e_5d40@SP@@UAEXXZ  # cSPEditorVerbIconTray_s005e_5d40::LayoutTray migrated from s005e5d40 (verbatim, slice spelling)
+005e67f0 ??0cSPEditorVerbIconTray_s005e_5d40@SP@@QAE@XZ  # cSPEditorVerbIconTray_s005e_5d40::cSPEditorVerbIconTray migrated from s005e5d40 (verbatim, slice spelling)
+005e6980 ??1cSPEditorVerbIconTray_s005e_5d40@SP@@UAE@XZ  # cSPEditorVerbIconTray_s005e_5d40::~cSPEditorVerbIconTray migrated from s005e5d40 (verbatim, slice spelling)
+005e6a60 ?GetTrayName@cSPEditorVerbIconTray_s005e_5d40@SP@@QAE?AVwstring@eastl@@H@Z  # cSPEditorVerbIconTray_s005e_5d40::GetTrayName migrated from s005e5d40 (verbatim, slice spelling)
+005e6ae0 ?GetTrayDescription@cSPEditorVerbIconTray_s005e_5d40@SP@@QAE?AVwstring@eastl@@XZ  # cSPEditorVerbIconTray_s005e_5d40::GetTrayDescription migrated from s005e5d40 (verbatim, slice spelling)

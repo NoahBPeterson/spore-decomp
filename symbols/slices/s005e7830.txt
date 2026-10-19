@@ -1,1 +1,3 @@
-005e7830 SP::cSPEditorVerbIconTray::Init  # reads verb-tray property list, builds layout and windows; PDB name
+005e7830 ?Init@cSPEditorVerbIconTray_s005e_7830@SP@@QAEXPAVIWindow_s005e_7830@UTFWin@EA@@UKey_s005e_7830@ResourceMan@5@I_NH@Z  # cSPEditorVerbIconTray_s005e_7830::Init migrated from s005e7830 (verbatim, slice spelling)
+005e8130 ?FUN_005e8130@SP@@YAXXZ  # FUN_005e8130 migrated from s005e7830 (verbatim, slice spelling)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005e7830, named from the dev publics; slice address comment)

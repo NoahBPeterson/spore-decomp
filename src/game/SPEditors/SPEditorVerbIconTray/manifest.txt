@@ -1,0 +1,18 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?SetRolloverLayout@cSPEditorVerbIconTray@SP@@QAEXVKey@ResourceMan@EA@@@Z  005e5e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?SetLayoutKey@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEXUKey_s005e_5d40@ResourceMan@EA@@@Z  005e5e60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?SetHaveChargeDials@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEX_N@Z  005e5ea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?SetForceEnabled@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEX_N@Z  005e5ec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?GetMaxVerbWidth@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEMXZ  005e5f10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?GetMaxVerbHeight@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEMXZ  005e5fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?SetVerbIconSize@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEXXZ  005e6030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?RemoveVerbIconInternal@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEXH@Z  005e60d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?SetShowRollover@cSPEditorVerbIconTray@SP@@QAEX_N@Z  005e6170  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?SetIgnoreKeyPress@cSPEditorVerbIconTray@SP@@QAEX_N@Z  005e61b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?SetParent@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEXPAVIWindow_s005e_5d40@UTFWin@EA@@_N@Z  005e6200  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?GetHeight@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEMXZ  005e6390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?SetMaxArea@cSPEditorVerbIconTray_s005e_5d40@SP@@QAEXABURectangle@Math@@@Z  005e63b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ??0cSPEditorVerbIconTray_s005e_5d40@SP@@QAE@XZ  005e67f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ??1cSPEditorVerbIconTray_s005e_5d40@SP@@UAE@XZ  005e6980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?GetTrayName@cSPEditorVerbIconTray_s005e_5d40@SP@@QAE?AVwstring@eastl@@H@Z  005e6a60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?GetTrayDescription@cSPEditorVerbIconTray_s005e_5d40@SP@@QAE?AVwstring@eastl@@XZ  005e6ae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
