@@ -1,3 +1,4 @@
+006ab760 ?FUN_006ab760@@YA_NPAXPB_W@Z  # FUN_006ab760 migrated from s006ab3d0 (verbatim, slice spelling)
 006ab7e0 eastl::basic_string<wchar_t>::assign(const wchar_t*, size_type)  # tail-calls 0x00423650
 006abdf0 refcount release-by-2 (interlocked)  # lock xadd -2
 006abe00 refcount release+acquire pair (interlocked)  # lock xadd -1 at +0, +1 at +8
