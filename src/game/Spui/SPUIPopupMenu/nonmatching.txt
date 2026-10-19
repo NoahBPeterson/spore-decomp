@@ -3,6 +3,7 @@
 0081ae90 35 ctor cSPUIPopupMenuScrollButton: vptr stores + Stopwatch/LimitStopwatch calls
 0081b000 134 ctor cSPUIPopupMenuWin: 12 pointer + float + flag initialisers, vptr stores
 0081b100 6 dtor cSPUIPopupMenuWin: AutoRefCount release order / base dtor not exact [equiv: UNSUPPORTED, 0/1200 valid inputs (faults + fake-arity)]
+0081b240 282 cSPUIPopupMenuWin::MeasureItemHeight: complete; stack slot order of locals differs from original, and and-esp,-64 frame forced with an align(64) dummy [equiv: WEAK 398 valid, 46% coverage]
 0081b510 213 OnDetach: interface query + member releases, register scheduling differs
 0081b650 2 AddMenuItem: first vtable call loads slot into eax instead of edx
 0081b6a0 175 AddMenuItem(layout): cSPUILayout local frame + Init/FindWindowByID not exact

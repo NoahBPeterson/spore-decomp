@@ -4,6 +4,8 @@
 
 #include "game/types.h"
 #include <wchar.h>
+#include "EA/Text/LineLayout.h"
+#include "EA/Text/Typesetter.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" double ceil(double);
@@ -20,13 +22,10 @@ extern void cSPUILayout_Shutdown(void*, int); // 0x00811ad0
 extern void cSPUILayout_Dtor(void*);   // 0x00811fe0 (equiv t3)
 
 // ---- items of slice s0081a790 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" double ceil(double);
-extern int g_1440aec;   // offset-pool base used by UI object iterators
-extern int g_164dd8c;   // default scroll-button time limit
+    void cSPUILayout_Shutdown(...); // 0x00811ad0
+extern "C" unsigned wcslen(const wchar_t*);
+#pragma intrinsic(wcslen)
 #define VTSLOT(p, off) ((*(void***)(p))[(off) / 4])
-extern void Mark1();
-extern void Mark2();
-extern void Mark3();
 struct LimitStopwatch { void SetTimeLimit(int, int); };
 struct cSPUIPopupMenuItemWin {
   char pad00[0x888];
@@ -34,7 +33,6 @@ struct cSPUIPopupMenuItemWin {
   void SomeFunc();               // 0081ae40
   __declspec(noinline) void OnAttach();   // 0081ad50
 };
-extern float FUN_0083ce70(float);
 struct cSPUIPopupMenuScrollButton {
   char pad00[0x888];
   LimitStopwatch timer;          // +0x888
@@ -64,6 +62,7 @@ struct cSPUIPopupMenuWin {
   void* FindChild(int idx);
   void RemoveChild(int idx);
   void HideMenuItems(bool a, bool b);
+  bool MeasureItemHeight(int skip, float* out);
   void AddMenuItem2(cSPUIPopupMenuItemWin* item, bool attach);
 };
 struct ScrollBtnCtor {
@@ -94,16 +93,36 @@ struct PopupWinDetach {
   void OnDetach();
   void EndModal(void*, int, int);
 };
-extern void cSPUILayout_Ctor(void*);
-extern char cSPUILayout_Init(void*, int, int, int);
-extern void* cSPUILayout_FindWindowByID(void*, int, int);
-extern void cSPUILayout_Shutdown(void*, int); // 0x00811ad0
-extern void cSPUILayout_Dtor(void*);   // 0x00811fe0 (equiv t3)
 struct cSPUIPopupMenuWin2 {
   char pad00[0x8a8];
   void* AddMenuItem3(int id, int styleId, int parent, bool attach);
 };
-    void cSPUILayout_Shutdown(...); // 0x00811ad0
+namespace EAT {
+struct TextStyle;
+}
+namespace EAT {
+struct LineLayout {
+  char pad00[0x98];
+  float mX;      // +0x98
+  char pad01[4];
+  float mTop;    // +0xa0
+  float mBot;    // +0xa4
+  void Clear(int);                                   // 0x0089cbc0
+};
+}
+namespace EAT {
+struct StyleManager {
+  TextStyle* GetStyle(unsigned id, TextStyle* def);  // 0x00894670
+};
+}
+namespace EAT {
+struct Typesetter {
+  LineLayout* GetLineLayout();                       // 0x008976a0
+  int LayoutLine(const wchar_t* text, unsigned len, float x, float y, const TextStyle* st); // 0x0089db20
+};
+}
+extern EAT::StyleManager* __cdecl EAGetStyleManager(bool create);  // 0x00885bd0
+static __forceinline const float& MaxRef(const float& a, const float& b) { return a < b ? b : a; }
 // ---- items of slice s0081a790 end
 
 // ---- items of slice s0081b990 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -321,6 +340,69 @@ void PopupWinCtor::Ctor()
 static void ReleaseRef(void* p)
 {
   ((void (__thiscall*)(void*))((void**)*(void**)p)[1])(p);
+}
+
+// @ 0x0081b240
+bool cSPUIPopupMenuWin::MeasureItemHeight(int skip, float* out)
+{
+  if (skip != 0) return false;
+  void* self = (char*)this + 4;
+  struct __declspec(align(64)) Al { int v; };
+  Al dummy_; dummy_.v = 0;
+  float cur[2];
+  cur[0] = 0.f; cur[1] = 0.f;
+  float maxW = 0.f, maxH = 0.f;
+  void* it;
+  void* end;
+  ((void (__thiscall*)(void*, void*))VTSLOT(self, 0xcc))(self, &it);
+  ((void (__thiscall*)(void*, void*))VTSLOT(self, 0xd0))(self, &end);
+  while (it != end) {
+    void* w;
+    if ((void*)(g_1440aec + (int)it) == 0 ||
+        (w = ((void* (__thiscall*)(void*, int))VTSLOT((void*)(g_1440aec + (int)it), 0xc))((void*)(g_1440aec + (int)it), 0x4c058cf)) == 0) {
+      void* obj = (void*)(g_1440aec + (int)it);
+      if (obj != 0) {
+        void* m = ((void* (__thiscall*)(void*, int))VTSLOT(obj, 0xc))(obj, 0x4c058d5);
+        if (m != 0)
+          ((void (__thiscall*)(void*, int, float*))VTSLOT(m, 0xa4))(m, 0, cur);
+      }
+    } else {
+      void* wself = (char*)w + 4;
+      const wchar_t* text = ((const wchar_t* (__thiscall*)(void*))VTSLOT(wself, 0x3c))(wself);
+      unsigned len = (unsigned)wcslen(text);
+      if (text != 0 && len > 0u) {
+        EAT::StyleManager* sm = EAGetStyleManager(true);
+        if (sm != 0) {
+          EAT::TextStyle* st = sm->GetStyle(((unsigned (__thiscall*)(void*))VTSLOT(wself, 0x40))(wself), 0);
+          if (st != 0) {
+            EAT::Typesetter* ts = (EAT::Typesetter*)((char*)this + 0x280);
+            EAT::LineLayout* ll = ts->GetLineLayout();
+            ll->Clear(1);
+            ts->LayoutLine(text, len, 0.f, 0.f, st);
+            cur[0] = ll->mX;
+            cur[1] = ll->mTop - ll->mBot;
+          }
+        }
+      }
+    }
+    maxW = MaxRef(maxW, cur[0]);
+    float c = (float)ceil((double)cur[1]);
+    maxH = MaxRef(maxH, c);
+    it = *(void**)it;
+  }
+  out[0] = *(float*)((char*)this + 0x250) + *(float*)((char*)this + 0x248) + maxW;
+  out[1] = *(float*)((char*)this + 0x254) + *(float*)((char*)this + 0x24c) + maxH;
+  float tmp[2];
+  tmp[0] = 0.f; tmp[1] = 0.f;
+  void* sub = *(void**)((char*)this + 0x1e0);
+  if (sub != 0)
+    ((void (__thiscall*)(void*, float*, int, int))VTSLOT(sub, 0x18))(sub, tmp, 0, 0);
+  out[0] = MaxRef(out[0], tmp[0]);
+  out[1] = MaxRef(out[1], tmp[1]);
+  float k = 14.0f;
+  out[0] = MaxRef(out[0], k);
+  out[1] = MaxRef(out[1], k);
+  return true;
 }
 
 // @ 0x0081b510

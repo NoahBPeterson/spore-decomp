@@ -9,6 +9,7 @@
 0081afb0 ?OnFocusAcquired@cSPUIPopupMenuScrollButton@@QAEXHH@Z  # cSPUIPopupMenuScrollButton::OnFocusAcquired migrated from s0081a790 (verbatim, slice spelling)
 0081b000 ?Ctor@PopupWinCtor@@QAEXXZ  # PopupWinCtor::Ctor migrated from s0081a790 (verbatim, slice spelling)
 0081b100 ?ReleaseRef@@YAXPAX@Z  # ReleaseRef migrated from s0081a790 (verbatim, slice spelling)
+0081b240 ?MeasureItemHeight@cSPUIPopupMenuWin@@QAE_NHPAM@Z  # cSPUIPopupMenuWin::MeasureItemHeight migrated from s0081a790 (verbatim, slice spelling)
 0081b510 ?OnDetach@PopupWinDetach@@QAEXXZ  # PopupWinDetach::OnDetach migrated from s0081a790 (verbatim, slice spelling)
 0081b650 ?AddMenuItem2@cSPUIPopupMenuWin@@QAEXPAUcSPUIPopupMenuItemWin@@_N@Z  # cSPUIPopupMenuWin::AddMenuItem2 migrated from s0081a790 (verbatim, slice spelling)
 0081b6a0 ?AddMenuItem3@cSPUIPopupMenuWin2@@QAEPAXHHH_N@Z  # cSPUIPopupMenuWin2::AddMenuItem3 migrated from s0081a790 (verbatim, slice spelling)
