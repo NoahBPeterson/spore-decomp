@@ -8,3 +8,5 @@
 007dcb00 211 FUN_007dcb00 quaternion multiply; SSE expression schedule differs; equiv FAIL (1 ulp float-rounding mismatch at input 5)
 007dd070 1562 complete, flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast : all 11 direct calls and 6 vtable slots in original order; remaining diff = local Vec3 copy kept on the stack, spill/register choices
 007dd880 3559 SP::cSmoothCameraController::ConfigUpdated; complete (all property reads incl. zoom/FOV, clip, pitch and orientation arrays), this lives in esi instead of ebx and frame is 4 bytes smaller
+007de7d0 819 SP::cSmoothCameraController::Reset; complete (all keyboard/lerp defaults, 7 local float vectors, 4 vtable setters, vector clears, camera-position invalidation, refresh); frame size now equal, only constant-register choice (xmm1 vs xmm2) and store/load scheduling differ
+007df230 16 SP::cSmoothCameraController::SetPitchAngles; complete, only the mpEnd-before-value load order in the push_back loop differs; difftest WEAK (54% coverage, no mismatch)

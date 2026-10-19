@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPAppSmoothCamera.cpp -- migrated from slice(s) s007dd880, s007dd070, s007dc1b0, s007db1b0 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPAppSmoothCamera.cpp -- migrated from slice(s) s007de7d0, s007dd880, s007dd070, s007dc1b0, s007db1b0 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPAppSmoothCamera.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -590,6 +590,180 @@ unsigned g_defaultUInt;
 static const float kDegToRad = 0.017453292f;
 // ---- items of slice s007dd880 end
 
+// ---- items of slice s007de7d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float g_kPiOver6; // 0x0153f194 (0.5235988)
+extern const float g_kPiOver4; // 0x0153f198 (0.7853982)
+struct FloatVec_s007d_e7d0 {
+    float* mpBegin; float* mpEnd; float* mpCapacity; const char* mpName; int mpAllocExtra;
+
+    FloatVec_s007d_e7d0() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; }
+    // vector(n): allocate n floats and zero-fill (variable n compiles to `rep stosd`)
+    __forceinline FloatVec_s007d_e7d0(size_type n)
+    {
+        mpBegin = n ? (float*)EA_Alloc(n * 4, "App", 0, 0, ALLOC_FILE, 0xd1) : 0;
+        mpCapacity = mpBegin + n;
+        for (size_type i = 0; i < n; ++i) mpBegin[i] = 0.0f;
+        mpEnd = mpBegin + n;
+    }
+    // same, for compile-time sizes (inline memset: integer-register zero stores)
+    __forceinline FloatVec_s007d_e7d0(size_type n, int)
+    {
+        mpBegin = n ? (float*)EA_Alloc(n * 4, "App", 0, 0, ALLOC_FILE, 0xd1) : 0;
+        mpCapacity = mpBegin + n;
+        memset(mpBegin, 0, n * 4);
+        mpEnd = mpBegin + n;
+    }
+    ~FloatVec_s007d_e7d0() { if (mpBegin) { if (((int*)mpBegin)[-1]) EA_Free(mpBegin); } }
+    float& operator[](size_type i) { return mpBegin[i]; }
+    size_type size() const { return (size_type)(mpEnd - mpBegin); }
+    void DoInsertValue(float* pos, const float& v);              // 0x00455660 (push_back slow path)
+    void push_back(const float& v)
+    {
+        if (mpEnd < mpCapacity) ::new((void*)mpEnd++) float(v);
+        else DoInsertValue(mpEnd, v);
+    }
+    void erase_all()
+    {
+        float* first = mpBegin; float* last = mpEnd;
+        memcpy(first, last, (size_t)((char*)mpEnd - (char*)last));
+        mpEnd -= (last - first);
+    }
+};
+struct Vec3_s007d_e7d0 { float x, y, z; };
+struct tLerpScalar_s007d_e7d0  { float mCurrent; float mTarget; int mSteps; float mMinChange;      // 0x10
+    tLerpScalar_s007d_e7d0() { memset(this, 0, 16); } };
+struct tLerpVector3_s007d_e7d0 { Vec3_s007d_e7d0 mCurrent; Vec3_s007d_e7d0 mTarget; int mSteps; float mMinChange; };        // 0x20
+struct tLerpQuaternion_s007d_e7d0 { Quat mCurrent; Quat mTarget; int mSteps; float mMinChange; };    // 0x28
+struct tSavedCameraPosition_s007d_e7d0 {                                                              // 0x38
+    bool mValid; int mCurrentZoomLevel; float mDistance; int mCurrentOrientation;
+    float mHeading, mNearClip, mFarClip, mFOV, mPitchParam;
+    Vec3_s007d_e7d0 mSubjectPosition; int mFloorLevel; int mWallMode;
+};
+struct cSmoothCameraController_s007d_e7d0 : cICameraControllerBase, cIHandlerBase, cRefCountBase {
+    // vtable slot N is at byte offset N*4 (slot 0 = cICameraControllerBase::slot0)
+    virtual void v1();
+    virtual void v2();
+    virtual void v3();
+    virtual void v4();
+    virtual void v5();
+    virtual void v6();
+    virtual void v7();
+    virtual void v8();
+    virtual void v9();
+    virtual void v10();
+    virtual void v11();
+    virtual void v12();
+    virtual void v13();
+    virtual void v14();
+    virtual void v15();
+    virtual void v16();
+    virtual void v17();
+    virtual void v18();
+    virtual void v19();
+    virtual void ConfigUpdated();   // 0x50  @ 0x007dd880
+    virtual void v21();
+    virtual void Reset();                // 0x58  @ 0x007de7d0
+    virtual void v23();
+    virtual void v24();
+    virtual void v25();
+    virtual void v26_Unk(int);           // 0x68
+    virtual void v27();
+    virtual void SetZoomLevels(const FloatVec_s007d_e7d0& zoom, const FloatVec_s007d_e7d0& fov);             // 0x70 @ 0x007df6a0
+    virtual void SetCurrentZoomLevel(int level);                                       // 0x74 0x007dbfe0
+    virtual void SetClipPlanes(const FloatVec_s007d_e7d0& nearClip, const FloatVec_s007d_e7d0& farClip);     // 0x78 @ 0x007df6d0
+    virtual void SetPitchAngles(const FloatVec_s007d_e7d0& minDeg, const FloatVec_s007d_e7d0& maxDeg);      // 0x7c @ 0x007df230
+    virtual void v32();
+    virtual void SetOrientations(const FloatVec_s007d_e7d0& v);                                   // 0x84 @ 0x007df700
+    virtual void SetCurrentDiscreteOrientation(int i);                                 // 0x88 0x007dc140
+    virtual void v35();
+    virtual void v36();
+    virtual void v37();
+    virtual void v38();
+    virtual void v39();
+    virtual void v40();
+    virtual void v41();
+    virtual void v42();
+    virtual void SetEdgeConstraints(float a, float b, float c, float d);              // 0xac @ 0x007df330
+    virtual void v44();
+    virtual void v45();
+    virtual void v46();
+    virtual void v47();
+    virtual void v48();
+    virtual void v49_Refresh();           // 0xc4
+    virtual void v50();
+    virtual void v51();
+    virtual void v52();
+    virtual void v53();
+    virtual void v54();
+    virtual void v55();
+    virtual void v56();
+    virtual void v57();
+
+    AutoRefCountPL mConfig;               // +0x10
+    FloatVec_s007d_e7d0 mEdgeConstraints; // +0x14
+    int mCurrentZoomLevel;                // +0x28
+    float mContinuousZoomDistance;        // +0x2c
+    FloatVec_s007d_e7d0 mZoomLevels;      // +0x30
+    FloatVec_s007d_e7d0 mNearClipPlanes;  // +0x44
+    FloatVec_s007d_e7d0 mFarClipPlanes;   // +0x58
+    FloatVec_s007d_e7d0 mMinPitches;      // +0x6c
+    FloatVec_s007d_e7d0 mMaxPitches;      // +0x80
+    float mViewSlope;                     // +0x94
+    tLerpScalar_s007d_e7d0 mBufferedHeading;         // +0x98
+    tLerpScalar_s007d_e7d0 mBufferedDistanceAlongCurve; // +0xa8
+    tLerpScalar_s007d_e7d0 mBufferedNearClip;        // +0xb8
+    tLerpScalar_s007d_e7d0 mBufferedFarClip;         // +0xc8
+    tLerpScalar_s007d_e7d0 mBufferedFOV;             // +0xd8
+    tLerpScalar_s007d_e7d0 mBufferedPitchParam;      // +0xe8
+    tLerpVector3_s007d_e7d0 mBufferedSubjectPosition; // +0xf8
+    tLerpVector3_s007d_e7d0 mBufferedLookAtPosition;  // +0x118
+    FloatVec_s007d_e7d0 mFOVLevels;     // +0x138
+    FloatVec_s007d_e7d0 mOrientations;   // +0x14c
+    int mCurrentOrientation;              // +0x160
+    Vec3_s007d_e7d0 mDraggedVelocity;                // +0x164
+    unsigned mPositionInterpolationSteps; // +0x170
+    float mTranslationInputVelocity;      // +0x174
+    Vec3_s007d_e7d0 mxyzSubjectOffset;               // +0x178
+    tLerpQuaternion_s007d_e7d0 mRelativeOrientation; // +0x184
+    float mHeadingRelative;               // +0x1ac
+    bool mTracking, mReadFromStream, mAdjustablePitch, mbInModalDialogLoop; // +0x1b0
+    int mStartMouseWheelLevel;            // +0x1b4
+    tLerpScalar_s007d_e7d0 mKeyboardRotation;        // +0x1b8
+    tLerpScalar_s007d_e7d0 mKeyboardZoomDelta;       // +0x1c8
+    tLerpVector3_s007d_e7d0 mKeyboardTranslation;    // +0x1d8
+    float mKeyboardRotationSpeed;         // +0x1f8
+    float mKeyboardZoomSpeed;             // +0x1fc
+    float mKeyboardZoomScale;             // +0x200
+    float mKeyboardTranslationSpeed;      // +0x204
+    tSavedCameraPosition_s007d_e7d0 mCameraPositions[7]; // +0x208
+    float mSubjectTrackingDeadZoneMagnitude;  // +0x390
+    float mRotationPitchRatioMax;         // +0x394
+    float mCameraPitchScaling;            // +0x398
+    float mContinuousRotationScaling;     // +0x39c
+    float mMaxRotationDelta;              // +0x3a0
+
+    cSmoothCameraController_s007d_e7d0(cPropertyList* config);   // @ 0x007df450
+};
+struct FVec { void* b; void* e; void* c; void* a; FVec& operator=(const FVec&); };
+struct Cam24 {
+    char pad0[0x30];        // +0x00
+    FVec mZoomLevels;       // +0x30
+    char pad1[4];           // +0x40
+    FVec mNearClip;         // +0x44
+    char pad2[4];           // +0x54
+    FVec mFarClip;          // +0x58
+    char pad3[0x138 - 0x68];// +0x68
+    FVec mOrientations;     // +0x138
+
+    void SetZoomLevels(const FVec& a, const FVec& b);   // 007df6a0
+    void SetClipPlanes(const FVec& a, const FVec& b);   // 007df6d0
+};
+extern Vec3_s007d_e7d0 g_kVec3Zero3_s007d_e7d0;     // 0x016389dc (3-float constant triple)
+void* __cdecl operator new(size_t size, const char* pName, int flags, int dbgFlags, int file, int line);
+    void EA_Alloc(...); // 0x00f473a0
+    void EA_Free(...); // 0x00f47380
+// ---- items of slice s007de7d0 end
+
 // @ 0x007db920
 bool cPackManager::Init()
 {
@@ -597,6 +771,7 @@ bool cPackManager::Init()
     // available-pack list, sorted by sequence number.
     return true;
 }
+
 
 
 
@@ -687,6 +862,7 @@ bool cSmoothCameraController::HandleMessage(int msg, void* data)
 
 
 
+
 // @ 0x007dbc30
 bool cSmoothCameraController::OnKeyDown(int key, int)
 {
@@ -716,6 +892,7 @@ bool cSmoothCameraController::OnKeyDown(int key, int)
 
 
 
+
 // @ 0x007dbcb0
 void cSmoothCameraController::SetFocus(int)
 {
@@ -737,6 +914,7 @@ void cSmoothCameraController::SetFocus(int)
 
 
 
+
 // @ 0x007dbd90
 void cSmoothCameraController::SetZoomDuration(uint32_t bits)
 {
@@ -745,6 +923,7 @@ void cSmoothCameraController::SetZoomDuration(uint32_t bits)
     *(uint32_t*)&mBufferedFOV.mCurrent = bits;
     *(uint32_t*)&mBufferedPitchParam.mCurrent = bits;
 }
+
 
 
 
@@ -759,6 +938,7 @@ void* cSmoothCameraController::GetSavedCamera()
 
 
 
+
 // @ 0x007dbdf0
 void cSmoothCameraController::SetSavedCamera(float* src)
 {
@@ -766,6 +946,7 @@ void cSmoothCameraController::SetSavedCamera(float* src)
     memcpy(&mCameraPositions[0].mPitchParam, src, 0x38);
     ((void(__thiscall*)(void*, int))vt[0xcc / 4])(this, 0);
 }
+
 
 
 
@@ -790,6 +971,7 @@ float cSmoothCameraController_s007d_c1b0::Zoom()
 
 
 
+
 // @ 0x007dc230
 bool cSmoothCameraController_s007d_c1b0::ZoomRange(float* lo, float* hi)
 {
@@ -799,6 +981,7 @@ bool cSmoothCameraController_s007d_c1b0::ZoomRange(float* lo, float* hi)
     *hi = ((float*)mZoomLevels.mpEnd)[0];
     return true;
 }
+
 
 
 
@@ -823,6 +1006,7 @@ void cSmoothCameraController_s007d_c1b0::UpdateSubjectMotion(float dt)
     }
     (void)dt;
 }
+
 
 
 
@@ -859,6 +1043,7 @@ bool cSmoothCameraController_s007d_c1b0::HandleRequest(int id)
 
 
 
+
 // @ 0x007dc510
 void cSmoothCameraController_s007d_c1b0::ZoomInterpolationParamsFromDistanceAlongCurve (uint32_t* a, uint32_t* b, float* t, float d)
 {
@@ -892,6 +1077,7 @@ void cSmoothCameraController_s007d_c1b0::ZoomInterpolationParamsFromDistanceAlon
 
 
 
+
 // @ 0x007dc5e0
 float cSmoothCameraController_s007d_c1b0::ConstrainDistanceAlongCurve(float d)
 {
@@ -906,6 +1092,7 @@ float cSmoothCameraController_s007d_c1b0::ConstrainDistanceAlongCurve(float d)
 
 
 
+
 // @ 0x007dc7b0
 void ViewerOrientationFromPositionAndLookAt(const float* pos, const float* look, const float* up, float* out)
 {
@@ -915,6 +1102,7 @@ void ViewerOrientationFromPositionAndLookAt(const float* pos, const float* look,
     (void)up; (void)dx; (void)dy; (void)dz;
     out[0] = 0; out[1] = 0; out[2] = 0; out[3] = 1.0f;
 }
+
 
 
 
@@ -940,6 +1128,7 @@ void cSmoothCameraController_s007d_c1b0::OnUpdateTargetSet()
 
 
 
+
 // @ 0x007dcb00
 void FUN_007dcb00(float* out, const float* a, const float* b)
 {
@@ -953,6 +1142,7 @@ void FUN_007dcb00(float* out, const float* a, const float* b)
 
 
 
+
 // @ 0x007dcc30
 void cSmoothCameraController_s007d_c1b0::ViewerPositionAndOrientationFromDistanceAlongCurve (float* pos, float* quat, float d, int flag)
 {
@@ -963,6 +1153,7 @@ void cSmoothCameraController_s007d_c1b0::ViewerPositionAndOrientationFromDistanc
     quat[0] = 0.0f; quat[1] = 0.0f; quat[2] = 0.0f; quat[3] = 1.0f;
     (void)d;
 }
+
 
 
 // @ 0x007dd070
@@ -1089,6 +1280,7 @@ void cSmoothCameraController_s007d_d070::Update(int deltaTime, cViewer* viewer)
     }
 }
 
+
 // @ 0x007dd880
 void cSmoothCameraController_s007d_d880::ConfigUpdated()
 {
@@ -1194,4 +1386,175 @@ void cSmoothCameraController_s007d_d880::ConfigUpdated()
             orientations[i] = ori[i] * kDegToRad;
         SetOrientations(orientations);
     }
+}
+
+// @ 0x007de7d0
+void cSmoothCameraController_s007d_e7d0::Reset()
+{
+    mKeyboardRotation.mTarget = 0.0f;
+    mKeyboardRotation.mCurrent = 0.0f;
+    mKeyboardRotation.mMinChange = 0.05f;
+    mKeyboardRotationSpeed = 5.0f;
+    mKeyboardRotation.mSteps = 20;
+    mKeyboardTranslation.mTarget = g_kVec3Zero3_s007d_e7d0;
+    mKeyboardTranslation.mCurrent = g_kVec3Zero3_s007d_e7d0;
+    mKeyboardTranslationSpeed = 0.0f;
+    mKeyboardZoomDelta.mTarget = 0.0f;
+    mKeyboardZoomDelta.mCurrent = 0.0f;
+    mKeyboardTranslation.mMinChange = 0.05f;
+    mKeyboardTranslation.mSteps = 20;
+    mKeyboardZoomDelta.mMinChange = 0.05f;
+    mKeyboardZoomDelta.mSteps = 20;
+    mKeyboardZoomSpeed = 5.0f;
+    mKeyboardZoomScale = 1.0f;
+    v26_Unk(0);
+
+    mxyzSubjectOffset = g_kVec3Zero3_s007d_e7d0;
+    mViewSlope = 0.7f;
+    mStartMouseWheelLevel = 0;
+    mDraggedVelocity = g_kVec3Zero3_s007d_e7d0;
+    mBufferedHeading.mTarget = g_kPiOver4;
+    mPositionInterpolationSteps = 7;
+    mTranslationInputVelocity = 1.0f;
+    mReadFromStream = false;
+    mbInModalDialogLoop = false;
+    mBufferedSubjectPosition.mSteps = 7;
+    mBufferedSubjectPosition.mMinChange = 0.01f;
+    mBufferedLookAtPosition.mSteps = 7;
+    mBufferedLookAtPosition.mMinChange = 0.01f;
+    mBufferedHeading.mSteps = 8;
+    mBufferedHeading.mMinChange = 0.01f;
+    mBufferedDistanceAlongCurve.mSteps = 7;
+    mBufferedDistanceAlongCurve.mMinChange = 0.01f;
+    mBufferedDistanceAlongCurve.mTarget = 0.0f;
+    mContinuousZoomDistance = 0.0f;
+    mBufferedNearClip.mSteps = 7;
+    mBufferedNearClip.mMinChange = 0.01f;
+    mBufferedNearClip.mTarget = 1.0f;
+    mBufferedFarClip.mSteps = 7;
+    mBufferedFarClip.mTarget = 100.0f;
+    mBufferedFOV.mTarget = g_kPiOver6;
+    mBufferedFarClip.mMinChange = 0.01f;
+    mBufferedFOV.mMinChange = 0.01f;
+    mBufferedPitchParam.mMinChange = 0.01f;
+    mBufferedFOV.mSteps = 7;
+    mBufferedPitchParam.mSteps = 7;
+    mBufferedPitchParam.mTarget = 0.5f;
+    mRelativeOrientation.mCurrent = g_kQuatIdent;
+    mRelativeOrientation.mTarget = g_kQuatIdent;
+    mRelativeOrientation.mMinChange = 0.01f;
+    mCameraPitchScaling = 0.005f;
+    mRelativeOrientation.mSteps = 7;
+    mHeadingRelative = 0.0f;
+    mRotationPitchRatioMax = 1.0f;
+    mContinuousRotationScaling = 0.003f;
+
+    FloatVec_s007d_e7d0 zoom(5, 0);       // zoom distances
+    FloatVec_s007d_e7d0 fov(5, 0);        // FOV levels (radians)
+    FloatVec_s007d_e7d0 nearClip(5, 0);
+    FloatVec_s007d_e7d0 farClip(5, 0);
+    FloatVec_s007d_e7d0 minPitch(5, 0);   // degrees
+    FloatVec_s007d_e7d0 maxPitch(5, 0);   // degrees
+
+    zoom[0] = 68.0f; fov[0] = 0.56199604f; nearClip[0] = 1.0f; farClip[0] = 500.0f;
+    minPitch[0] = 30.0f; maxPitch[0] = 40.0f;
+    zoom[1] = 49.0f; fov[1] = 0.49916416f; nearClip[1] = 1.0f; farClip[1] = 500.0f;
+    minPitch[1] = 26.0f; maxPitch[1] = 45.0f;
+    zoom[2] = 28.0f; fov[2] = 0.40142572f; nearClip[2] = 1.0f; farClip[2] = 500.0f;
+    minPitch[2] = 22.5f; maxPitch[2] = 50.0f;
+    zoom[3] = 18.3f; fov[3] = 0.3892084f; nearClip[3] = 1.0f; farClip[3] = 500.0f;
+    minPitch[3] = 19.0f; maxPitch[3] = 55.0f;
+    zoom[4] = 12.0f; fov[4] = 0.38048175f; nearClip[4] = 1.0f; farClip[4] = 500.0f;
+    minPitch[4] = 15.0f; maxPitch[4] = 60.0f;
+
+    FloatVec_s007d_e7d0 orient(8, 0);     // discrete orientations (radians)
+    orient[0] = 0.17453292f; orient[1] = 0.9599311f; orient[2] = 1.7453293f; orient[3] = 2.5307274f;
+    orient[4] = 3.3161256f; orient[5] = 4.101524f; orient[6] = 4.886922f; orient[7] = 5.67232f;
+
+    SetZoomLevels(zoom, fov);
+    SetCurrentZoomLevel(0);
+    mFarClipPlanes.erase_all();
+    mNearClipPlanes.erase_all();
+    mMinPitches.erase_all();
+    mMaxPitches.erase_all();
+    SetOrientations(orient);
+    SetCurrentDiscreteOrientation(1);
+    SetClipPlanes(nearClip, farClip);
+    SetPitchAngles(minPitch, maxPitch);
+
+    orient[0] = 10.0f;
+    orient[1] = 55.0f;
+    orient[2] = 100.0f;
+    orient[3] = 145.0f;
+    orient[4] = 190.0f;
+
+    for (int i = 0; i < 7; ++i)
+        mCameraPositions[i].mValid = false;
+    mSubjectTrackingDeadZoneMagnitude = 1.0f;
+    v49_Refresh();
+}
+
+// @ 0x007df230
+void cSmoothCameraController_s007d_e7d0::SetPitchAngles(const FloatVec_s007d_e7d0& minDeg, const FloatVec_s007d_e7d0& maxDeg)
+{
+    mMinPitches.erase_all();
+    mMaxPitches.erase_all();
+    int n = (int)minDeg.size();
+    for (int i = 0; i < n; ++i) {
+        mMinPitches.push_back(minDeg.mpBegin[i] * kDegToRad);
+        mMaxPitches.push_back(maxDeg.mpBegin[i] * kDegToRad);
+    }
+}
+
+// @ 0x007df330
+void cSmoothCameraController_s007d_e7d0::SetEdgeConstraints(float a, float b, float c, float d)
+{
+    if (a + c < 1.0f && b + d < 1.0f) {
+        mEdgeConstraints.erase_all();
+        mEdgeConstraints.push_back(a);
+        mEdgeConstraints.push_back(b);
+        mEdgeConstraints.push_back(c);
+        mEdgeConstraints.push_back(d);
+    }
+}
+
+// @ 0x007df450
+cSmoothCameraController_s007d_e7d0::cSmoothCameraController_s007d_e7d0(cPropertyList* config)
+: mConfig(config),
+      mCurrentZoomLevel(0),
+      mContinuousZoomDistance(0.0f),
+      mViewSlope(0.0f),
+      mCurrentOrientation(0),
+      mPositionInterpolationSteps(0),
+      mTranslationInputVelocity(0.0f),
+      mHeadingRelative(0.0f),
+      mTracking(false), mReadFromStream(false), mAdjustablePitch(false), mbInModalDialogLoop(false),
+      mStartMouseWheelLevel(0),
+      mKeyboardRotationSpeed(0.0f),
+      mKeyboardZoomSpeed(0.0f),
+      mKeyboardZoomScale(0.0f),
+      mKeyboardTranslationSpeed(0.0f),
+      mSubjectTrackingDeadZoneMagnitude(0.0f),
+      mRotationPitchRatioMax(0.0f),
+      mCameraPitchScaling(0.0f),
+      mContinuousRotationScaling(0.0f),
+      mMaxRotationDelta(0.0f)
+{
+    Reset();
+    if (mConfig.mpObject)
+        ConfigUpdated();
+}
+
+// @ 0x007df6a0
+void Cam24::SetZoomLevels(const FVec& a, const FVec& b)
+{
+    mZoomLevels = a;
+    mOrientations = b;
+}
+
+// @ 0x007df6d0
+void Cam24::SetClipPlanes(const FVec& a, const FVec& b)
+{
+    mNearClip = a;
+    mFarClip = b;
 }

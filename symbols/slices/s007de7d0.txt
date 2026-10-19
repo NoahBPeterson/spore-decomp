@@ -1,7 +1,7 @@
-007de7d0  SP::cSmoothCameraController::Reset  # PDB name
-007df230  SP::cSmoothCameraController::SetPitchAngles  # PDB name
-007df330  quadratic ramp helper
-007df450  cSmoothCameraController constructor body
-007df6a0  SP::cSmoothCameraController::SetZoomLevels  # PDB name
-007df6d0  SP::cSmoothCameraController::SetClipPlanes  # PDB name
+007de7d0 ?Reset@cSmoothCameraController_s007d_e7d0@@UAEXXZ  # cSmoothCameraController_s007d_e7d0::Reset migrated from s007de7d0 (verbatim, slice spelling)
+007df230 ?SetPitchAngles@cSmoothCameraController_s007d_e7d0@@UAEXABUFloatVec_s007d_e7d0@@0@Z  # cSmoothCameraController_s007d_e7d0::SetPitchAngles migrated from s007de7d0 (verbatim, slice spelling)
+007df330 ?SetEdgeConstraints@cSmoothCameraController_s007d_e7d0@@UAEXMMMM@Z  # cSmoothCameraController_s007d_e7d0::SetEdgeConstraints migrated from s007de7d0 (verbatim, slice spelling)
+007df450 ??0cSmoothCameraController_s007d_e7d0@@QAE@PAUcPropertyList@@@Z  # cSmoothCameraController_s007d_e7d0::cSmoothCameraController migrated from s007de7d0 (verbatim, slice spelling)
+007df6a0 ?SetZoomLevels@Cam24@@QAEXABUFVec@@0@Z  # Cam24::SetZoomLevels migrated from s007de7d0 (verbatim, slice spelling)
+007df6d0 ?SetClipPlanes@Cam24@@QAEXABUFVec@@0@Z  # Cam24::SetClipPlanes migrated from s007de7d0 (verbatim, slice spelling)
 007df710  SP::CreateSmoothCameraController  # PDB caller-single

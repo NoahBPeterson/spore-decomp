@@ -5,3 +5,7 @@
 ../src/game/SPEngine/SPAppSmoothCamera.cpp  ?SetZoomDuration@cSmoothCameraController@@QAEXI@Z  007dbd90  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPAppSmoothCamera.cpp  ?GetSavedCamera@cSmoothCameraController@@QAEPAXXZ  007dbdd0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPAppSmoothCamera.cpp  ?SetSavedCamera@cSmoothCameraController@@QAEXPAM@Z  007dbdf0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppSmoothCamera.cpp  ?SetEdgeConstraints@cSmoothCameraController_s007d_e7d0@@UAEXMMMM@Z  007df330  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppSmoothCamera.cpp  ??0cSmoothCameraController_s007d_e7d0@@QAE@PAUcPropertyList@@@Z  007df450  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppSmoothCamera.cpp  ?SetZoomLevels@Cam24@@QAEXABUFVec@@0@Z  007df6a0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppSmoothCamera.cpp  ?SetClipPlanes@Cam24@@QAEXABUFVec@@0@Z  007df6d0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
