@@ -1,0 +1,3 @@
+# va  size  reason
+008dd8f0 519 incomplete: FUN_008dd8f0; stub (returns 0); not implemented
+008ddc80 340 incomplete: DefaultCreateNameFromKey; empty stub; not implemented

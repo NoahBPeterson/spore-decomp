@@ -1,3 +1,4 @@
 008dd1c0 ?Release@SharedLibrary@EA@@UAEHXZ  # EA::SharedLibrary::Release migrated from s008dd0d0
 008dd250 ?CopyDatabaseRecord@ResourceMan@EA@@YA_NPAVDatabase@12@0ABVKey@12@_N@Z  # EA::ResourceMan::CopyDatabaseRecord migrated from s008dd0d0
 008dd430 ?CopyDatabaseRecords@ResourceMan@EA@@YAIPAVDatabase@12@0PAVKeyFilter@12@_N@Z  # EA::ResourceMan::CopyDatabaseRecords migrated from s008dd0d0
+008ddc80 ?DefaultCreateNameFromKey@ResourceMan@EA@@YAXABVKey@12@AAV?$basic_string@_WVallocator@eastl@@@eastl@@PBVManager@12@PBVDatabase@12@PB_W@Z  # EA::ResourceMan::DefaultCreateNameFromKey migrated from s008dd0d0

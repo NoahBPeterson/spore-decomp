@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+008ddb00 122 complete: FUN_008ddb00; body/register allocation differs
+008ddb90 29 complete: FUN_008ddb90; vtable fn load vs io-zero scheduling differs
+008ddc10 68 complete: GetNameFromDatabaseKey; single-vs-early epilogue layout + buffer offset differ
