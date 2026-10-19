@@ -1,7 +1,9 @@
 0065ea00 ?DoMessage@cSPUIFeedEdit_s0065_ea00@@QAEXHPAX@Z  # cSPUIFeedEdit_s0065_ea00::DoMessage migrated from s0065ea00 (verbatim, slice spelling)
 0065ef10 ?Handler@CallbackObj@@QAEXHH@Z  # CallbackObj::Handler migrated from s0065ea00 (verbatim, slice spelling)
+0065ef30 ?LoadFilter@cSPUIFeedEdit_s0065_ea00@@QAE_NH_N@Z  # cSPUIFeedEdit_s0065_ea00::LoadFilter migrated from s0065ea00 (verbatim, slice spelling)
 0065f390 ?AddAsset@cSPUIFeedEdit_s0065_ea00@@QAEDHHHPAX@Z  # cSPUIFeedEdit_s0065_ea00::AddAsset migrated from s0065ea00 (verbatim, slice spelling)
 0065f4d0 ?InitLayout@cSPUIFeedEdit_s0065_ea00@@QAEXXZ  # cSPUIFeedEdit_s0065_ea00::InitLayout migrated from s0065ea00 (verbatim, slice spelling)
+0065f580 ?HandleMessage@cSPUIFeedEdit_s0065_ea00@@QAEDHPAH@Z  # cSPUIFeedEdit_s0065_ea00::HandleMessage migrated from s0065ea00 (verbatim, slice spelling)
 0065f700 ?Init@cSPUIFeedEdit@SP@@QAEXPAVIWindow@UTFWin@EA@@@Z  # SP::cSPUIFeedEdit::Init migrated from s0065ea00
 0065f810 ?Get@ModeViewGetter@@QAEPAD_N@Z  # ModeViewGetter::Get migrated from s0065ea00 (verbatim, slice spelling)
 0065f820 ?Set@WindowSet4@@QAEXPAUIWindow@@@Z  # WindowSet4::Set migrated from s0065ea00 (verbatim, slice spelling)

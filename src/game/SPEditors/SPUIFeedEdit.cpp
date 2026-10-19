@@ -17,8 +17,12 @@ extern void* g_vt_13ec458;
 #include "EA/UTFWin/IWinProc.h"
 #include "EA/UTFWinExtras/cXHTMLFrameSet.h"
 #include "SP/cStringTokenTranslator.h"
+#include "SP/cString.h"
+#include "SP/FunctionalMatch/Constraint.h"
+#include "EA/Messaging/IHandlerRC.h"
 
 // ---- items of slice s0065bf20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+    void GetElapsedSeconds(...); // 0x00805080
 typedef void(__thiscall* FnP)(void*);
 typedef void(__thiscall* FnP2)(void*, int, int);
 typedef void(__thiscall* FnPv)(void*, void*);
@@ -31,18 +35,14 @@ struct cSPUILayout_s0065_bf20 {
 };
 struct cXHTMLFrameSet {
   void* GetFrame(uint32_t id);
-  bool HandleLocationChange(void* win, const wchar_t* url, void* a, int b);
-  bool HandleFormSubmit(void* win, void* form);
+  bool HandleLocationChange(void* win, const wchar_t* url, void* a, int b);   // 0x00997730
+  bool HandleFormSubmit(void* win, void* form);                              // 0x009978b0
   void FUN_00997140();
 };
 void* GetElapsedSeconds(); // 0x00805080
 void SetWindowImage(void* w, uint32_t* key, int flags);
-void* FUN_0067de40();
-void MessageServer_Unsub(void* h, uint32_t id, int y);   // 0x0067dcc0 (equiv t2)
-extern int g_15fa6e4;
-extern void* g_vt_13fff3c;
-extern void* g_vt_13fff2c;
-extern void* g_vt_13ec458;
+void* FUN_0067de40();                                  // 0x0067de40
+void MessageServer_Unsub(void* h, uint32_t id, int y); // 0x0067dcc0 (equiv t2)
 class cSPUIFeedEditAssetView {
  public:
   cSPUIFeedEditAssetView* FUN_0065c480(int v);
@@ -75,7 +75,75 @@ struct AssetInfo {
   void* a; void* b; void* c; void* d;
   AssetInfo& operator=(const AssetInfo& other);
 };
-    void GetElapsedSeconds(...); // 0x00805080
+struct FeedStr {                      // SP::cString, 0x14 bytes
+  uint32_t raw[5];
+  FeedStr(uint32_t table, uint32_t id, const wchar_t* dflt);   // 0x006b5770
+  const wchar_t* GetText();                                    // 0x006b55c0
+  ~FeedStr();                                                  // 0x006b5240
+};
+struct FeedWin {
+virtual void fa0();
+virtual void fa1();
+virtual void fa2();
+virtual void fa3();
+virtual void fa4();
+virtual void fa5();
+virtual void fa6();
+virtual void fa7();
+virtual void fa8();
+virtual void fa9();
+virtual void fa10();
+virtual void fa11();
+virtual void fa12();
+virtual void fa13();
+virtual void fa14();
+virtual void fa15();
+virtual void fa16();
+virtual void fa17();
+virtual void fa18();
+virtual void fa19();
+virtual void fa20();
+virtual void fa21();
+virtual void fa22();
+virtual void fa23();
+virtual void fa24();
+virtual void fa25();
+virtual void fa26();
+virtual void fa27();
+virtual void fa28();
+virtual void fa29();
+virtual void fa30();
+virtual void fa31();
+  virtual void SetText(const wchar_t* s);                      // 0x80
+virtual void fb0();
+virtual void fb1();
+virtual void fb2();
+virtual void fb3();
+virtual void fb4();
+virtual void fb5();
+virtual void fb6();
+virtual void fb7();
+virtual void fb8();
+virtual void fb9();
+virtual void fb10();
+virtual void fb11();
+virtual void fb12();
+virtual void fb13();
+virtual void fb14();
+virtual void fb15();
+virtual void fb16();
+virtual void fb17();
+virtual void fb18();
+virtual void fb19();
+virtual void fb20();
+virtual void fb21();
+virtual void fb22();
+virtual void fb23();
+virtual void fb24();
+virtual void fb25();
+virtual void fb26();
+  virtual FeedWin* FindWin(uint32_t id, int recursive);        // 0xf0
+};
 // ---- items of slice s0065bf20 end
 
 // ---- items of slice s0065d050 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -512,6 +580,7 @@ struct cSPUIFeedEdit_s0065_df30 {
 // ---- items of slice s0065df30 end
 
 // ---- items of slice s0065ea00 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* SP_MessageServer();
 extern "C" void  FUN_00809db0(void* a, void* b);
 extern "C" void  FUN_00996280(void* self, int a, int b, int c, int d);  // thiscall via struct
 extern "C" void  FUN_0065d490();
@@ -519,11 +588,18 @@ extern "C" void  HashDoInsert(uint64_t* a, uint64_t* b, int c);  // 0x553750
 struct AssetInfo_s0065_ea00 { uint64_t mnAssetID; uint32_t mnType; void* mpImage; };
 struct AssetVec_s0065_ea00 {
     AssetInfo_s0065_ea00* begin; AssetInfo_s0065_ea00* end; AssetInfo_s0065_ea00* cap;
-    AssetInfo_s0065_ea00* DoInsertValue(AssetInfo_s0065_ea00* pos, AssetInfo_s0065_ea00* value);
-    AssetInfo_s0065_ea00* erase(AssetInfo_s0065_ea00* first, AssetInfo_s0065_ea00* last);
+    AssetInfo_s0065_ea00* DoInsertValue(AssetInfo_s0065_ea00* pos, AssetInfo_s0065_ea00* value);   // 0x0065df30
+    AssetInfo_s0065_ea00* erase(AssetInfo_s0065_ea00* first, AssetInfo_s0065_ea00* last);   // 0x0065ded0
     void push_back();  // 0x0065e6d0 (AssetVec::push_back)
 };
-struct HashSet_s0065_ea00 { char pad[0xc]; int count; void DoFreeNodes(void*, void*); };
+struct TrueTag {};
+struct HashSet_s0065_ea00 {
+    char pad[0xc];
+    int count;
+    uint32_t tail[4];
+    void DoFreeNodes(void*, void*);                              // 0x005687d0
+    void Insert(void* outIt, uint64_t* key, TrueTag tag);        // 0x00553750
+};
 struct cSPUILayout_s0065_ea00 {
     void* FindWindowByID(uint32_t id, int recursive);  // 0x008105b0 (cSPUILayout::FindWindowByID)
     void* Init(const void* key, int a, int id);  // 0x008120d0 (cSPUILayout::Init)
@@ -532,8 +608,13 @@ struct cSPUILayout_s0065_ea00 {
 };
 struct LayoutCtor { void* Create(); };
 struct ComObj {
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void v04(); virtual void v05(); virtual void v06();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
     virtual void Slot1c(void*);   // 0x1c
     virtual ComObj* Slot20();     // 0x20
 };
@@ -544,25 +625,71 @@ struct cXHTMLFrameSet_s0065_ea00 {
 struct cSPUIFeedEditAssetView_s0065_ea00;
 struct cSPUIFeedEdit_s0065_ea00;
 struct IWindow_s0065_ea00 {
-    virtual void m00(); virtual void m01(); virtual void m02(); virtual void m03();
-    virtual void m04(); virtual void m05(); virtual void m06(); virtual void m07();
-    virtual void m08(); virtual void m09(); virtual void m10(); virtual void m11();
-    virtual void m12(); virtual void m13(); virtual void m14(); virtual void m15();
-    virtual void m16(); virtual void m17(); virtual void m18(); virtual void m19();
-    virtual void m20(); virtual void m21(); virtual void m22(); virtual void m23();
-    virtual void m24(); virtual void m25(); virtual void m26(); virtual void m27();
-    virtual void m28(); virtual void m29(); virtual void m30();
+virtual void m00();
+virtual void m01();
+virtual void m02();
+virtual void m03();
+virtual void m04();
+virtual void m05();
+virtual void m06();
+virtual void m07();
+virtual void m08();
+virtual void m09();
+virtual void m10();
+virtual void m11();
+virtual void m12();
+virtual void m13();
+virtual void m14();
+virtual void m15();
+virtual void m16();
+virtual void m17();
+virtual void m18();
+virtual void m19();
+virtual void m20();
+virtual void m21();
+virtual void m22();
+virtual void m23();
+virtual void m24();
+virtual void m25();
+virtual void m26();
+virtual void m27();
+virtual void m28();
+virtual void m29();
+virtual void m30();
     virtual void Slot7c(int, int);          // 0x7c (index 31)
-    virtual void m32(); virtual void m33(); virtual void m34(); virtual void m35();
+virtual void m32();
+virtual void m33();
+virtual void m34();
+virtual void m35();
     virtual void Slot90();                  // 0x90 (index 36)
-    virtual void m37(); virtual void m38(); virtual void m39(); virtual void m40();
-    virtual void m41(); virtual void m42(); virtual void m43(); virtual void m44();
-    virtual void m45(); virtual void m46(); virtual void m47(); virtual void m48();
-    virtual void m49(); virtual void m50(); virtual void m51(); virtual void m52();
-    virtual void m53(); virtual void m54(); virtual void m55(); virtual void m56();
-    virtual void m57(); virtual void m58(); virtual void m59();
+virtual void m37();
+virtual void m38();
+virtual void m39();
+virtual void m40();
+virtual void m41();
+virtual void m42();
+virtual void m43();
+virtual void m44();
+virtual void m45();
+virtual void m46();
+virtual void m47();
+virtual void m48();
+virtual void m49();
+virtual void m50();
+virtual void m51();
+virtual void m52();
+virtual void m53();
+virtual void m54();
+virtual void m55();
+virtual void m56();
+virtual void m57();
+virtual void m58();
+virtual void m59();
     virtual void* SlotF0(uint32_t id, int b);  // 0xf0 (index 60)
-    virtual void m61(); virtual void m62(); virtual void m63(); virtual void m64();
+virtual void m61();
+virtual void m62();
+virtual void m63();
+virtual void m64();
     virtual void Slot104(void*);               // 0x104 (index 65)
 };
 struct cSPUIFeedEdit_s0065_ea00 {
@@ -606,9 +733,11 @@ struct cSPUIFeedEdit_s0065_ea00 {
     void ResetPanel();  // 0x0065e720 (cSPUIFeedEdit::ResetPanel)
     void LoadLayout();  // 0x0065e8d0 (cSPUIFeedEdit::LoadLayout)
     void Init(void* parent);  // 0x0065f700 (cSPUIFeedEdit::Init)
-    void InitLayout();
-    void LoadFilter(int param, bool b);
-    char AddAsset(int a, int b, int c, void* img);
+    void InitLayout();  // 0x0065f4d0 (cSPUIFeedEdit::InitLayout)
+    bool LoadFilter(int param, bool b);
+    void Sub65cae0();   // 0x0065cae0
+    void Sub65cc50();   // 0x0065cc50
+    char AddAsset(int a, int b, int c, void* img);  // 0x0065f390 (cSPUIFeedEdit::AddAsset)
     char HandleMessage(int msg, int* data);
     void UpdateStrings();  // 0x0065cb90 (cSPUIFeedEdit::UpdateStrings)
     void UpdateEnabledState();
@@ -643,7 +772,164 @@ struct CallbackObj {
     IWindow_s0065_ea00* win;
     void Handler(int a, int b);
 };
-extern "C" void* SP_MessageServer();
+struct FEStr_s0065_ea00 {
+    char* mpBegin; char* mpEnd; char* mpCap; int mAlloc;
+    void assign(const char* b, const char* e);   // 0x00454cb0
+    FEStr_s0065_ea00& operator=(const FEStr_s0065_ea00& x) { if (&x != this) assign(x.mpBegin, x.mpEnd); return *this; }
+};
+struct FilterRec {                 // 0x70 bytes
+    char pad00[0x18];
+    int f18, f1c;
+    char pad20[8];
+    int f28;
+    char pad2c[0x54 - 0x2c];
+    FEStr_s0065_ea00 name;                    // +0x54
+    int id;                        // +0x64
+    char pad68[8];
+};
+struct IAssetDir {
+    bool GetServerId(const void* key, uint64_t* out, bool flag) const;   // 0x0054e530
+};
+struct FilterDB {
+    char pad00[0x58];
+    IAssetDir* mpDir;              // +0x58
+    char pad5c[0xb4 - 0x5c];
+    FilterRec* mpFilterBegin;      // +0xb4
+    FilterRec* mpFilterEnd;        // +0xb8
+};
+FilterDB* __cdecl GetFilterDB();   // 0x0067cb30
+void* __cdecl GetImageFromTexture(int a, int b, int c, int d);   // 0x008060d0
+struct Cons {                      // SP::FunctionalMatch::Constraint, 0x24 bytes
+    uint32_t mParameter, mType;
+    int mMin, mMax;
+    Cons* cb; Cons* ce; Cons* cc;
+    uint32_t p1c, p20;
+    Cons(int dummy);                               // 0x00558830
+    Cons(uint32_t id, int kind, int value);        // 0x00558960
+    void DestroyChild();                           // 0x006066f0
+    ~Cons() {
+        Cons* e = ce;
+        for (Cons* c = cb; c < e; ++c) c->DestroyChild();
+        if (cb && ((int*)cb)[-1] != 0) EASTL_allocator_deallocate(cb);
+    }
+};
+struct FKey { int a, b, c; };
+struct FKeyVec {
+    FKey* b; FKey* e; FKey* c;
+    FKeyVec() : b(0), e(0), c(0) {}
+    ~FKeyVec() { if (b && ((int*)b)[-1] != 0) EASTL_allocator_deallocate(b); }
+};
+struct TplDB {
+virtual void tp0();
+virtual void tp1();
+virtual void tp2();
+virtual void tp3();
+virtual void tp4();
+virtual void tp5();
+virtual void tp6();
+virtual void tp7();
+virtual void tp8();
+virtual void tp9();
+virtual void tp10();
+virtual void tp11();
+virtual void tp12();
+    virtual void __cdecl Query(FKeyVec* out, Cons filter, Cons extra);   // 0x34
+virtual void tq0();
+virtual void tq1();
+virtual void tq2();
+virtual void tq3();
+virtual void tq4();
+virtual void tq5();
+virtual void tq6();
+virtual void tq7();
+virtual void tq8();
+virtual void tq9();
+virtual void tq10();
+virtual void tq11();
+virtual void tq12();
+virtual void tq13();
+virtual void tq14();
+virtual void tq15();
+virtual void tq16();
+virtual void tq17();
+    virtual bool Lookup(const FKey* key, uint32_t* outType);             // 0x80
+};
+TplDB* __cdecl GetTplDB();         // 0x0067cb40
+struct ImgRef {
+    void* p;
+    ImgRef() : p(0) {}
+    ~ImgRef() { if (p) ((FnP)Vslot(p, 4))(p); }
+};
+struct AssetInfoT {
+    uint64_t mnAssetID; uint32_t mnType; ImgRef mpImage;
+};
+struct FWin {
+virtual void wa0();
+virtual void wa1();
+virtual void wa2();
+    virtual void* QueryProc(uint32_t id);                                // 0xc
+};
+struct FProc {
+virtual void pa0();
+virtual void pa1();
+virtual void pa2();
+virtual void pa3();
+    virtual void* GetParent();                                           // 0x10
+virtual void pb0();
+virtual void pb1();
+virtual void pb2();
+virtual void pb3();
+virtual void pb4();
+virtual void pb5();
+virtual void pb6();
+virtual void pb7();
+virtual void pb8();
+virtual void pb9();
+virtual void pb10();
+virtual void pb11();
+virtual void pb12();
+virtual void pb13();
+virtual void pb14();
+virtual void pb15();
+virtual void pb16();
+virtual void pb17();
+virtual void pb18();
+    virtual void SetValue(int v, int w);                                 // 0x60
+};
+struct FParent {
+virtual void qa0();
+virtual void qa1();
+virtual void qa2();
+virtual void qa3();
+virtual void qa4();
+virtual void qa5();
+virtual void qa6();
+virtual void qa7();
+virtual void qa8();
+virtual void qa9();
+virtual void qa10();
+virtual void qa11();
+virtual void qa12();
+virtual void qa13();
+virtual void qa14();
+virtual void qa15();
+virtual void qa16();
+virtual void qa17();
+virtual void qa18();
+virtual void qa19();
+virtual void qa20();
+virtual void qa21();
+virtual void qa22();
+virtual void qa23();
+virtual void qa24();
+virtual void qa25();
+virtual void qa26();
+virtual void qa27();
+virtual void qa28();
+virtual void qa29();
+virtual void qa30();
+    virtual void SetTab(int a, int b);                                   // 0x7c
+};
 // ---- items of slice s0065ea00 end
 
 // ---- items of slice s00ed74f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -813,6 +1099,18 @@ unsigned int SP::cSPUIFeedEditAssetView::GetEventMask() const
   return (uint32_t)(*(int*)((char*)this + 0x44)) | 0xfffffffd;
 }
 
+// @ 0x0065c730
+__declspec(noinline) void FindChar(const wchar_t* p1, const wchar_t* p2, const wchar_t* c)
+{
+  if (p1 != p2) {
+    do {
+      if (*p1 == *c)
+        return;
+      ++p1;
+    } while (p1 != p2);
+  }
+}
+
 // @ 0x0065c790
 void CtorObj::FUN_0065c790(void* a, void* b, void* c)
 {
@@ -861,13 +1159,13 @@ void SP::cSPUIFeedEditAssetView::SetMode(SP::cSPUIFeedEditAssetView::Mode mode)
 }
 
 // @ 0x0065c9a0
-bool SP::cSPUIFeedEditAssetView::OnTick(EA::UTFWin::IWindow * win)
+bool cSPUIFeedEditAssetView::FUN_0065c9a0(void* win)
 {
   char* p = (char*)this;
   if (win == *(void**)(p + 0x14) && *(int*)(p + 0x30) == 2 && 0.0f < *(float*)(p + 0x48)) {
     float now = (float)(int)((void* (__cdecl *)(void))GetElapsedSeconds)();
     if (0.35f < now - *(float*)(p + 0x48)) {
-      SetMode((SP::cSPUIFeedEditAssetView::Mode)1);
+      SetMode(1);
       if (*(void**)(p + 0x14) && *(int*)(p + 0x44)) {
         *(int*)(p + 0x44) = 0;
         (*(FnPv)Vslot(*(void**)(p + 0x14), 0x104))((void*)*(void**)(p + 0x14), this);
@@ -878,13 +1176,13 @@ bool SP::cSPUIFeedEditAssetView::OnTick(EA::UTFWin::IWindow * win)
 }
 
 // @ 0x0065ca10
-void SP::cSPUIFeedEdit::Shutdown()
+void cSPUIFeedEdit::Shutdown()
 {
   char* p = (char*)this;
   if (!*(char*)(p + 0x91))
     return;
   ((cXHTMLFrameSet*)(p + 0x18))->FUN_00997140();
-  cSPUILayout* lay = *(cSPUILayout**)(p + 0x14);
+  cSPUILayout_s0065_bf20* lay = *(cSPUILayout_s0065_bf20**)(p + 0x14);
   lay->Shutdown(1);
   if (lay) {
     *(void**)(p + 0x14) = 0;
@@ -920,6 +1218,22 @@ void cSPUIFeedEdit::FUN_0065cae0()
   void* w = (*(FnRetPi)Vslot(*(void**)(p + 0x80), 0xf0))((void*)*(void**)(p + 0x80), 0x5937900);
   if (w)
     (*(FnP2)Vslot(w, 0x7c))(w, 2, v);
+}
+
+// @ 0x0065cb90
+void cSPUIFeedEdit::UpdateStrings()
+{
+  char* p = (char*)this;
+  FeedWin* w1 = (*(FeedWin**)(p + 0x80))->FindWin(0x58b5d48, 1);
+  if (w1) {
+    FeedStr s(0xa153f7a1, 0x58b5d48, L"Items Added (~feededitnumitems~):");
+    w1->SetText(s.GetText());
+  }
+  FeedWin* w2 = (*(FeedWin**)(p + 0x80))->FindWin(0x58b5d50, 1);
+  if (w2) {
+    FeedStr s(0xa153f7a1, 0x58b5d50, L"(~feededitcurpage~/~feededitnumpages~)");
+    w2->SetText(s.GetText());
+  }
 }
 
 // @ 0x0065cc50
@@ -1825,6 +2139,96 @@ void CallbackObj::Handler(int a, int b)
     (*(FnP)Vslot(win, 0x90))(win);
 }
 
+// @ 0x0065ef30
+bool cSPUIFeedEdit_s0065_ea00::LoadFilter(int param, bool b)
+{
+    char* s = (char*)this;
+    mNewAssets.DoFreeNodes(*(void**)(s + 0xdc), *(void**)(s + 0xe0)); mNewAssets.count = 0;
+    mDeleteAssets.DoFreeNodes(*(void**)(s + 0xfc), *(void**)(s + 0x100)); mDeleteAssets.count = 0;
+    mExistingAssets.DoFreeNodes(*(void**)(s + 0x11c), *(void**)(s + 0x120)); mExistingAssets.count = 0;
+    mAssetList.erase(mAssetList.begin, mAssetList.end);
+
+    FilterDB* db = GetFilterDB();
+    FilterRec* it = db->mpFilterBegin;
+    FilterRec* itEnd = db->mpFilterEnd;
+    for (; it != itEnd; it = (FilterRec*)((char*)it + 0x70)) {
+        if (it->id == param)
+            break;
+    }
+    if (it == itEnd)
+        return false;
+    *(FEStr_s0065_ea00*)(s + 0x138) = it->name;
+
+    FKeyVec keys;
+    GetTplDB()->Query(&keys, Cons(0x3cc89b1, 0, param), Cons(0));
+    if (!b) {
+        FKey* kEnd = keys.e;
+        for (FKey* k = keys.b; k != kEnd; ++k) {
+            uint64_t id;
+            if (GetFilterDB()->mpDir->GetServerId(k, &id, false)) {
+                void* img = GetImageFromTexture(k->a, k->c, -1, -1);
+                if (img) {
+                    AssetInfo_s0065_ea00* pEnd = mAssetList.end;
+                    if (pEnd < mAssetList.cap) {
+                        mAssetList.end = pEnd + 1;
+                        if (pEnd)
+                            *(void**)((char*)pEnd + 0xc) = 0;
+                    } else {
+                        AssetInfoT tmp;
+                        mAssetList.DoInsertValue(pEnd, (AssetInfo_s0065_ea00*)&tmp);
+                    }
+                    AssetInfo_s0065_ea00* e = mAssetList.end - 1;
+                    uint32_t type;
+                    if (!GetTplDB()->Lookup(k, &type))
+                        type = k->b;
+                    e->mnAssetID = id;
+                    e->mnType = type;
+                    void* old = e->mpImage;
+                    if (img != old) {
+                        ((FnP)Vslot(img, 0))(img);
+                        e->mpImage = img;
+                        if (old)
+                            ((FnP)Vslot(old, 4))(old);
+                    }
+                    uint32_t itOut[2];
+                    mNewAssets.Insert(itOut, &id, TrueTag());
+                }
+            }
+        }
+    }
+    m8c = 1;
+    Sub65cae0();
+    uint32_t nAssets = ((char*)mAssetList.end - (char*)mAssetList.begin) >> 4;
+    uint32_t nPerPage = ((char*)mViewEnd - (char*)mViewBegin) >> 2;
+    mnNumPages = nAssets / nPerPage;
+    if (mnNumPages * nPerPage != nAssets)
+        mnNumPages++;
+    Sub65cc50();
+    UpdateStrings();
+    FWin* w1 = (FWin*)((IWindow_s0065_ea00*)mpWin80)->SlotF0(0x58b5d5b, 1);
+    if (w1) {
+        FProc* pr = (FProc*)w1->QueryProc(0xcf428691);
+        if (pr) {
+            pr->SetValue(it->f18, 0);
+            mbTransactionActive = (it->f18 != it->f1c);
+            ((FParent*)pr->GetParent())->SetTab(2, 0);
+        }
+    }
+    FWin* w2 = (FWin*)((IWindow_s0065_ea00*)mpWin80)->SlotF0(0x58b5d76, 1);
+    if (w2) {
+        FProc* pr2 = (FProc*)w2->QueryProc(0xcf428691);
+        if (pr2)
+            pr2->SetValue(it->f28, 0);
+    }
+    mbNameSet = 0;
+    Sub65cae0();
+    if (mAssetList.begin != mAssetList.end) {
+        AssetInfo_s0065_ea00* last = mAssetList.end;
+        ShowAsset(((int*)last)[-4], ((int*)last)[-3]);
+    }
+    return true;
+}
+
 // @ 0x0065f390
 char cSPUIFeedEdit_s0065_ea00::AddAsset(int a, int b, int c, void* img)
 {
@@ -1881,6 +2285,34 @@ void cSPUIFeedEdit_s0065_ea00::InitLayout()
     LoadLayout();
 }
 
+// @ 0x0065f580
+char cSPUIFeedEdit_s0065_ea00::HandleMessage(int msg, int* data)
+{
+    char* s = (char*)this;
+    if (msg == 0x3b27023) {
+        if (data) {
+            AddAsset(data[4], data[5], data[6], (void*)data[7]);
+            UpdateGrid();
+        }
+        return 1;
+    }
+    if (*(char*)(s + 0x138)) {
+        if (msg == 0x3cdd5f9) {
+            IWindow_s0065_ea00* ms = (IWindow_s0065_ea00*)SP_MessageServer();
+            (*(void(__thiscall*)(void*, int, int, int))Vslot(ms, 0x14))(ms, 0x53dd093, 0, 0);
+            if (s) FUN_00809db0((void*)0x1526cb4, *(void**)(s + 0xfffffff4 + 0x14 + 0x14));
+            return 1;
+        }
+        if (msg == 0x49a3777) { return 1; }
+        if (msg == 0x1dd7bda9 && data && data[1] && data[0] != 1) {
+            if (*(int*)(s + 0x7c) == 0) return 1;
+            if (*(int*)(s + 0x7c) == 1) return 1;
+        }
+        *(char*)(s + 0x138) = 0;
+    }
+    return 0;
+}
+
 // @ 0x0065f700
 void SP::cSPUIFeedEdit::Init(EA::UTFWin::IWindow * parent)
 {
@@ -1899,7 +2331,7 @@ void SP::cSPUIFeedEdit::Init(EA::UTFWin::IWindow * parent)
     ComObj* m = (ComObj*)FUN_0067de40();
     ComObj* q = m->Slot20();
     q->Slot1c(s);
-    ((cSPUIFeedEdit_s0065_ea00*)s)->InitLayout();
+    ((cSPUIFeedEdit*)s)->InitLayout();
     *(char*)(s + 0x91) = 1;
     void* handler = s + 0x10;
     (*(void(__thiscall*)(void*, void*, int))Vslot(ms, 0x20))(ms, handler, 0x3b27023);
