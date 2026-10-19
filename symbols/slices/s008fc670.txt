@@ -1,7 +1,7 @@
 008fc670 TextStyle::Update  # resolves font sizes vs parent, GetFontServer metrics, merges string tables into parent
 008fcab0 EA::XHTML::Resource::DocumentFactory::CreateResource  # strcmp mime "text/html", new Document, XmlParser::Parse
-008fcbd0 StripLeadingDotComponents  # removes leading ".", ".." and empty components of a wide path (compare against L"." / L".." / L"")
-008fce50 EA::XHTML::Resource::FileHandler::ProcessRequest  # ConvertURLToFilePath, Join, ext-map find, FileStream open
+008fcbd0 ?StripLeadingDotComponents@@YAXPAUWStr@@@Z  # StripLeadingDotComponents migrated from s008fc670 (verbatim, slice spelling)
+008fce50 ?ProcessRequest@FileHandler@@QAE_NPAUFileReq@@H@Z  # FileHandler::ProcessRequest migrated from s008fc670 (verbatim, slice spelling)
 008fd080 ?GetProtocolName@@YGPB_WH@Z  # GetProtocolName migrated from s008fc670 (verbatim, slice spelling)
 008fd0a0 ?EncodingFromName@Resource@XHTML@EA@@YAIPBD@Z  # EA::XHTML::Resource::EncodingFromName migrated from s008fc670
 008fd1a0 ?SetFilter@HTTPz@@QAEXPAULogFilter@@I@Z  # HTTPz::SetFilter migrated from s008fc670 (verbatim, slice spelling)
