@@ -1,3 +1,4 @@
+00fc19a0 ?FUN_00fc19a0@@YAHXZ  # FUN_00fc19a0 migrated from s00fc10d0 (verbatim, slice spelling)
 00fc1ba0 ?FUN_00fc1ba0@@YIXH@Z  # FUN_00fc1ba0 migrated from s00fc10d0 (verbatim, slice spelling)
 00fc1c70 ?FUN_00fc1c70@@YIHH@Z  # FUN_00fc1c70 migrated from s00fc10d0 (verbatim, slice spelling)
 00fc1e40 ?FUN_00fc1e40@@YIHH@Z  # FUN_00fc1e40 migrated from s00fc10d0 (verbatim, slice spelling)

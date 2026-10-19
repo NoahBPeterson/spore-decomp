@@ -9,7 +9,27 @@
 void* __cdecl SP_ModelManager();
 char  __cdecl FUN_0075e620_dummy();
 void  __cdecl FUN_00f67ff0_dummy();
+void  __cdecl FUN_00f7be60();
+void  __cdecl FUN_00f580f0();
+void  __cdecl FUN_00f61a70();
+void  __cdecl FUN_00f52b70(int, const char*);
+void  __cdecl FUN_00f58230(int, void*);
+void  __cdecl FUN_00aa7fa0(int, void*);
+void __cdecl FUN_00fc5480();
+void __cdecl FUN_00f4b690();
 // ---- items of slice s00fc10d0 end
+
+// @ 0x00fc19a0
+int __cdecl FUN_00fc19a0(void)
+{
+    FUN_00f7be60();
+    FUN_00f580f0();
+    FUN_00f61a70();
+    FUN_00f52b70(3, "coriolis");
+    FUN_00f58230(3, (void*)FUN_00fc5480);
+    FUN_00aa7fa0(6, (void*)FUN_00f4b690);
+    return 1;
+}
 
 // @ 0x00fc1ba0
 void __fastcall FUN_00fc1ba0(int self)
