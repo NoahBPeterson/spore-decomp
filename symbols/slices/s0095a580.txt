@@ -6,7 +6,7 @@
 0095a9a0 EA::UTFWin::WindowMgr::PostMsg  # card name
 0095aa80 ?ProcessMessages@WindowMgr@@QAEXXZ  # WindowMgr::ProcessMessages migrated from s0095a580 (verbatim, slice spelling)
 0095add0 ?AttachWindow@WindowMgr@@QAEXPAUWin@@@Z  # WindowMgr::AttachWindow migrated from s0095a580 (verbatim, slice spelling)
-0095af00 ?UpdateWindowCachedTransforms@WindowMgr@@QAEXPAUWin@@@Z  # WindowMgr::UpdateWindowCachedTransforms migrated from s0095a580 (verbatim, slice spelling)
+0095af00 ?UpdateWindowCachedTransforms@WindowMgr@UTFWin@EA@@QAEXAAVWindow@23@@Z  # EA::UTFWin::WindowMgr::UpdateWindowCachedTransforms migrated from s0095a580
 0095af20 ?SetFocusWindow@WindowMgr@@QAE_NPAUIWin@@PAUICb@@@Z  # WindowMgr::SetFocusWindow migrated from s0095a580 (verbatim, slice spelling)
 0095afd0 ?Swap@MsgListX@@QAEXAAU1@@Z  # MsgListX::Swap migrated from s0095a580 (verbatim, slice spelling)
 0095b080 ?SetMainWindow@WindowMgr@@QAE_NPAUIWin@@D@Z  # WindowMgr::SetMainWindow migrated from s0095a580 (verbatim, slice spelling)

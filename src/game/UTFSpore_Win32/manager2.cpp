@@ -743,7 +743,7 @@ void W::e90(int idx, void* arg)
 
 
 // @ 0x00957ed0
-void EA::UTFWin::WindowMgr::SetDebugFlag(unsigned int mask, bool set)
+void W::ed0(unsigned mask, char set)
 {
     U32(this, 0xd0) = U32(this, 0xd0) & ~mask;
     if (set) U32(this, 0xd0) = U32(this, 0xd0) | mask;
@@ -1264,6 +1264,7 @@ void W::DispatchMsgToWindow(int p2, char* p3, int p4)
 
 
 
+
 // @ 0x00958a70
 Win* __thiscall WM::HitTest(Win* w, V2* pt, const V2& p3, V2* outLocal)
 {
@@ -1535,6 +1536,7 @@ void __thiscall MsgList::InsertRange(Node* where, Iter first, Iter last, int tag
         first.n = first.n->next;
     } while (first.n != last.n);
 }
+
 
 
 
@@ -1920,6 +1922,7 @@ void W_s0095_9780::RenderWindow(int win, void* ctx)
 }
 
 
+
 // @ 0x0095a580
 void __thiscall WindowMgr::BuildDisplayList(Node* out, Win* w, void* info_)
 {
@@ -2153,7 +2156,7 @@ void __thiscall WindowMgr::AttachWindow(Win* w)
 
 
 // @ 0x0095af00
-void __thiscall WindowMgr::UpdateWindowCachedTransforms(Win* w)
+void EA::UTFWin::WindowMgr::UpdateWindowCachedTransforms(EA::UTFWin::Window & w)
 {
     UpdateRenderState(w, 0, 0);
 }
@@ -2285,6 +2288,7 @@ void __thiscall WindowMgr::FlushMessageQueue()
     q1.anchor.prev = &q1.anchor;
     q1.anchor.next = &q1.anchor;
 }
+
 
 // @ 0x0095b310
 void __thiscall WM::UpdateVisuals()

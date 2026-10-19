@@ -13,7 +13,7 @@
 00957dd0 ?dd0@W@@QAEIPAX@Z  # W::dd0 migrated from s009579f0 (verbatim, slice spelling)
 00957e70 ?e70@W@@QAEPADH@Z  # W::e70 migrated from s009579f0 (verbatim, slice spelling)
 00957e90 ?e90@W@@QAEXHPAX@Z  # W::e90 migrated from s009579f0 (verbatim, slice spelling)
-00957ed0 ?SetDebugFlag@WindowMgr@UTFWin@EA@@UAEXI_N@Z  # EA::UTFWin::WindowMgr::SetDebugFlag migrated from s009579f0
+00957ed0 ?ed0@W@@QAEXID@Z  # W::ed0 migrated from s009579f0 (verbatim, slice spelling)
 00957f50 ?Fn00957f50@@YIPAXPAX@Z  # Fn00957f50 migrated from s009579f0 (verbatim, slice spelling)
 00957fa0 ?Fn00957fa0@@YIXPAX@Z  # Fn00957fa0 migrated from s009579f0 (verbatim, slice spelling)
 00957ff0 ?SetCanvasCallback@WindowMgr@UTFWin@EA@@UAEXPAVICanvasCallback@23@@Z  # EA::UTFWin::WindowMgr::SetCanvasCallback migrated from s009579f0
