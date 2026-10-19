@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (none: all reconstructed functions byte-exact)
+005c9010 45 cSPPalettePageUI ctor: g_one load scheduling + derived/base vptr store order differ
