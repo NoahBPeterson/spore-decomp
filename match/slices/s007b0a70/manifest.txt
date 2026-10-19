@@ -1,2 +1,6 @@
 # source  symbol  original VA  [flags override]
 slices/s007b0a70/s007b0a70.cpp  ?push_back@C20@@QAEXABUT20@@@Z  007b0f40
+slices/s007b0a70/s007b0a70.cpp  ?AddNode@C20@@QAEXHH@Z  007b0fa0
+slices/s007b0a70/s007b0a70.cpp  ?clear@C20@@QAEXXZ  007b1950
+slices/s007b0a70/s007b0a70.cpp  ?SP_DXTCompress@@YA_NPAUImg@@PAUVecDst@@PAXPAUICom@@@Z  007b1710  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007b0a70/s007b0a70.cpp  ?FUN_007b1830@@YA_NPAUImg@@PAUVecDst@@PAXPAUICom@@@Z  007b1830  /O2 /MD /Gy /EHsc /TP /GS-
