@@ -996,8 +996,13 @@ def parse_preamble(pre):
                     continue
                 acc.append(ln.strip())
                 joined = mask("\n".join(acc))
-                if code.endswith(";") and joined.count("(") == joined.count(")"):
-                    items.append(("extern", 'extern "C" ' + "\n".join(acc)))
+                if code.endswith(";") and joined.count("(") == joined.count(")") and joined.count("{") == joined.count("}"):
+                    # a type defined in the block (`struct ChartSet { .. };`, mig10 s006e0030: the members were split into
+                    # `extern "C"` items, C2059) is one item without the linkage prefix, which means nothing for a type
+                    if re.match(r"^\s*(?:struct|class|union|enum)\b[^;]*\{", joined):
+                        items.append(("other", "\n".join(acc)))
+                    else:
+                        items.append(("extern", 'extern "C" ' + "\n".join(acc)))
                     acc = []
             if acc:
                 items.append(("extern", 'extern "C" ' + "\n".join(acc)))
