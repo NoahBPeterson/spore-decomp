@@ -3806,6 +3806,10 @@ class Rewrite:
                             continue
                         declared.add(nm)
                         sig, va, ens = free_fns[nm]
+                        if va not in {f.va for f in fns}:
+                            # not landed here: a `static` prototype without its body is C2129 (mig10 SPCookie, TrimWhitespace
+                            # 0x609cc0 stays in the slice)
+                            sig = re.sub(r"^(?:\s*(?:static|inline|__inline|__forceinline)\b)+\s*", "", sig)
                         cmt = "  // 0x%08x (defined below; used by a stub's inline body)" % va
                         out.append((" ".join("namespace %s {" % n for n in ens) + " %s; " % sig + "}" * len(ens) + cmt) if ens else sig + ";" + cmt)
                 out.append(text)
@@ -4096,6 +4100,8 @@ class Rewrite:
             for ns_r, old_n, new_n in getattr(self, "renamed", []):
                 sig = RS.rename_word(sig, old_n, new_n, ns_r)
             ens = list(getattr(c, "enc_ns", []) or [])
+            # a static/inline helper of the slice declared here without its body is C2129 (mig10 SPCookie TrimWhitespace)
+            sig = re.sub(r"^(?:\s*(?:static|inline|__inline|__forceinline)\b)+\s*", "", sig)
             cmt = "  // 0x%08x (stays in the slice: not this object's)" % c.va
             # the closing braces go before the comment (they were after it and commented out: C1075, mig10 eapdeditor 0xa4c470)
             protos.append((" ".join("namespace %s {" % n for n in ens) + " " + sig + "; " + "}" * len(ens) + cmt) if ens else sig + ";" + cmt)
