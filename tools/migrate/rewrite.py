@@ -4106,6 +4106,20 @@ class Rewrite:
             pk = proto_key(text) if kind in ("extern", "other") else None
             if pk:
                 old_protos.setdefault(pk[0], []).append(pk)
+        # free functions other slices' blocks define in the TU: a local struct of the same name clashes (mig8 IMESupport:
+        # s007f3380 landed `IMECandidateListCtor(..)` as a function, s007f42e0's `struct IMECandidateListCtor` then failed
+        # C2059 in `((IMECandidateListCtor*)mem)->Ctor()`)
+        mine_vas = {c.va for c in self.chunks}
+        for b in parts[1:]:
+            va_b = int(re.match(r"// @ 0x([0-9a-fA-F]+)", b).group(1), 16)
+            if va_b in mine_vas:
+                continue
+            mb = RS.mask(b)
+            k = mb.find("{")
+            head = " ".join(l.strip() for l in b[:k].split("\n")[1:] if l.strip() and not l.strip().startswith(("//", "#"))) if k > 0 else ""
+            mf = re.search(r"(?<![\w:~])([A-Za-z_]\w*)\s*\([^()]*(?:\([^()]*\)[^()]*)*\)\s*(?:const\s*)?$", head)
+            if mf and not head[:mf.start()].rstrip().endswith("::"):
+                have.setdefault(mf.group(1), "<free function of another slice>")
         # a prototype the module TU declares with the same parameters but another return type that names a different local stub
         # (s0063aa90 `cConfigMgr* GetConfigManager();` vs s0063ba50 `IConfigManager* GetConfigManager();`, both 0x67dd30):
         # merge_preamble kept the TU's spelling and this slice's verbatim calls of IConfigManager::GetBool did not compile
