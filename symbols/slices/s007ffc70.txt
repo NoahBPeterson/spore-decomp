@@ -6,8 +6,8 @@
 00800ef0 UTFWin::CreateBehaviorWinBoolStateEvent  # factory: alloc 0x90 "UTFWin/cSPUIBehaviorWinBoolStateEvent", ctor(1,10,max,0)
 008010a0 UTFWin::CreateBehaviorTimeFunctionSmoothRamp  # factory: alloc 0x48 "UTFWin/cSPUIBehaviorTimeFunctionSmoothRamp"
 00801100 UTFWin::CreateBehaviorTimeFunctionDampedPeriodic  # factory: alloc 0x50 "UTFWin/cSPUIBehaviorTimeFunctionDampedPeriodic"
-008011f0 cSPUICursorAttachmentLayout::~cSPUICursorAttachmentLayout  # PDB name; vtable 0x1416EC4
-00801210 cSPUICursorAttachmentLayout::FindWindowByIDAdjustor  # vtable 0x1416EC4 slot 6; adjusts this by -0x6C then calls cSPUILayout::FindWindowByID
+008011f0 ?Dtor@C_8011f0@@QAEXXZ  # C_8011f0::Dtor migrated from s007ffc70 (verbatim, slice spelling)
+00801210 ?Thunk@C_801210@@QAEPAXXZ  # C_801210::Thunk migrated from s007ffc70 (verbatim, slice spelling)
 00801280 cSPUICursorAttachmentLayout::cSPUICursorAttachmentLayout  # PDB type cSPUICursorAttachmentLayout; vtable 0x1416EC4 at +0x78
 00801330 ?f_801330@@YGHPAXI@Z  # f_801330 migrated from s007ffc70 (verbatim, slice spelling)
 00801360 ?Show@C_801360@@QAEXXZ  # C_801360::Show migrated from s007ffc70 (verbatim, slice spelling)

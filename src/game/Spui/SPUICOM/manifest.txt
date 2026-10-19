@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/Spui/SPUICOM.cpp  ?f_8005f0@@YAXXZ  008005f0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUICOM.cpp  ?f_8008b0@@YGPAXHPAX@Z  008008b0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
