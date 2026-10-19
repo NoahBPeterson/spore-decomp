@@ -199,6 +199,7 @@ struct cPackManager {
 // ---- items of slice s007db1b0 end
 
 // ---- items of slice s007dc1b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void EFreeCam(void*);   // 0x00f47380
 struct cSPVector3_s007d_c1b0 { float x, y, z; };
 struct cSPQuaternion_s007d_c1b0 { float x, y, z, w; };
 struct tLerpAngle_s007d_c1b0   { float mCurrent; float mTarget; uint32_t mSteps; float mMinChange; };
@@ -210,8 +211,15 @@ struct tSavedCameraPosition_s007d_c1b0 {
     float mHeading, mNearClip, mFarClip, mFOV, mPitchParam;
     cSPVector3_s007d_c1b0 mSubjectPosition; int mFloorLevel, mWallMode;
 };
-struct cSmoothCameraController_s007d_c1b0 {
-    void* mVtbl; char mPad04[0xc]; void* mConfig;
+struct SmP0 { virtual ~SmP0() {} };
+struct SmP1 { virtual ~SmP1() {} };
+struct SmRC { virtual ~SmRC() {} int mnRefCount; };
+struct SmBase : SmP0, SmP1, SmRC { };
+struct SmCfgPtr {
+    void* mp;
+};
+struct cSmoothCameraController_s007d_c1b0 : SmBase {
+    SmCfgPtr mConfig;
     Vec16 mEdgeConstraints; int mCurrentZoomLevel; float mContinuousZoomDistance;
     Vec16 mZoomLevels; Vec16 mNearClipPlanes; Vec16 mFarClipPlanes;
     Vec16 mMinPitches; Vec16 mMaxPitches; float mViewSlope;
@@ -239,32 +247,11 @@ struct cSmoothCameraController_s007d_c1b0 {
     void ZoomInterpolationParamsFromDistanceAlongCurve
         (uint32_t* a, uint32_t* b, float* t, float d);  // 007dc510
     float ConstrainDistanceAlongCurve(float d);     // 007dc5e0 0x007dc5e0
-    ~cSmoothCameraController_s007d_c1b0();                     // 007dc630
+    virtual ~cSmoothCameraController_s007d_c1b0();             // 007dc630
     void OnUpdateTargetSet();                       // 007dca30 0x007dca30
     void ViewerPositionAndOrientationFromDistanceAlongCurve
         (float* pos, float* quat, float d, int flag);  // 007dcc30
 };
-void EFreeCam(void*);   // 0x00f47380
-cSmoothCameraController_s007d_c1b0::~cSmoothCameraController_s007d_c1b0()
-{
-    void* v;
-    v = mFOVLevels.mpCapacity;
-    if (v && ((int*)v)[-1]) EFreeCam(v);
-    v = mOrientations.mpCapacity;
-    if (v && ((int*)v)[-1]) EFreeCam(v);
-    v = mEdgeConstraints.mpBegin;
-    if (v && ((int*)v)[-1]) EFreeCam(v);
-    v = mMaxPitches.mpBegin;
-    if (v && ((int*)v)[-1]) EFreeCam(v);
-    v = mFarClipPlanes.mpBegin;
-    if (v && ((int*)v)[-1]) EFreeCam(v);
-    v = mNearClipPlanes.mpBegin;
-    if (v && ((int*)v)[-1]) EFreeCam(v);
-    v = mZoomLevels.mpBegin;
-    if (v && ((int*)v)[-1]) EFreeCam(v);
-    v = mConfig;
-    if (v) ((void(__thiscall*)(void*))(((void**)*(void**)v)[1]))(v);
-}
 // ---- items of slice s007dc1b0 end
 
 // ---- items of slice s007dd070 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -772,10 +759,6 @@ bool cPackManager::Init()
     return true;
 }
 
-
-
-
-
 // @ 0x007db950
 bool cSmoothCameraController::HandleMessage(int msg, void* data)
 {
@@ -859,10 +842,6 @@ bool cSmoothCameraController::HandleMessage(int msg, void* data)
     return false;
 }
 
-
-
-
-
 // @ 0x007dbc30
 bool cSmoothCameraController::OnKeyDown(int key, int)
 {
@@ -889,10 +868,6 @@ bool cSmoothCameraController::OnKeyDown(int key, int)
     return false;
 }
 
-
-
-
-
 // @ 0x007dbcb0
 void cSmoothCameraController::SetFocus(int)
 {
@@ -911,10 +886,6 @@ void cSmoothCameraController::SetFocus(int)
     *(int*)&mRelativeOrientation.mCurrent.z = g_16389e4;
 }
 
-
-
-
-
 // @ 0x007dbd90
 void cSmoothCameraController::SetZoomDuration(uint32_t bits)
 {
@@ -924,20 +895,12 @@ void cSmoothCameraController::SetZoomDuration(uint32_t bits)
     *(uint32_t*)&mBufferedPitchParam.mCurrent = bits;
 }
 
-
-
-
-
 // @ 0x007dbdd0
 void* cSmoothCameraController::GetSavedCamera()
 {
     ((void(__thiscall*)(void*, int))(((void**)*(void**)this)[0xc8 / 4]))(this, 0);
     return &mCameraPositions[0].mPitchParam;
 }
-
-
-
-
 
 // @ 0x007dbdf0
 void cSmoothCameraController::SetSavedCamera(float* src)
@@ -946,9 +909,6 @@ void cSmoothCameraController::SetSavedCamera(float* src)
     memcpy(&mCameraPositions[0].mPitchParam, src, 0x38);
     ((void(__thiscall*)(void*, int))vt[0xcc / 4])(this, 0);
 }
-
-
-
 
 // @ 0x007dc1b0
 float cSmoothCameraController_s007d_c1b0::Zoom()
@@ -969,9 +929,6 @@ float cSmoothCameraController_s007d_c1b0::Zoom()
     return 1.0f;
 }
 
-
-
-
 // @ 0x007dc230
 bool cSmoothCameraController_s007d_c1b0::ZoomRange(float* lo, float* hi)
 {
@@ -981,9 +938,6 @@ bool cSmoothCameraController_s007d_c1b0::ZoomRange(float* lo, float* hi)
     *hi = ((float*)mZoomLevels.mpEnd)[0];
     return true;
 }
-
-
-
 
 // @ 0x007dc260
 void cSmoothCameraController_s007d_c1b0::UpdateSubjectMotion(float dt)
@@ -1006,9 +960,6 @@ void cSmoothCameraController_s007d_c1b0::UpdateSubjectMotion(float dt)
     }
     (void)dt;
 }
-
-
-
 
 // @ 0x007dc340
 bool cSmoothCameraController_s007d_c1b0::HandleRequest(int id)
@@ -1041,9 +992,6 @@ bool cSmoothCameraController_s007d_c1b0::HandleRequest(int id)
     return false;
 }
 
-
-
-
 // @ 0x007dc510
 void cSmoothCameraController_s007d_c1b0::ZoomInterpolationParamsFromDistanceAlongCurve (uint32_t* a, uint32_t* b, float* t, float d)
 {
@@ -1075,9 +1023,6 @@ void cSmoothCameraController_s007d_c1b0::ZoomInterpolationParamsFromDistanceAlon
     *a = i; *b = j; *t = r;
 }
 
-
-
-
 // @ 0x007dc5e0
 float cSmoothCameraController_s007d_c1b0::ConstrainDistanceAlongCurve(float d)
 {
@@ -1090,8 +1035,17 @@ float cSmoothCameraController_s007d_c1b0::ConstrainDistanceAlongCurve(float d)
     return d;
 }
 
-
-
+// @ 0x007dc630
+cSmoothCameraController_s007d_c1b0::~cSmoothCameraController_s007d_c1b0()
+{
+    // Retail vector blocks (begin pointers at +0x14, +0x30, +0x44, +0x58, +0x6c, +0x80, +0x138, +0x14c).
+    void* v;
+#define SM_FREE(off) v = *(void**)((char*)this + (off)); if (v && ((int*)v)[-1]) EFreeCam(v);
+    SM_FREE(0x14c) SM_FREE(0x138) SM_FREE(0x80) SM_FREE(0x6c)
+    SM_FREE(0x58) SM_FREE(0x44) SM_FREE(0x30) SM_FREE(0x14)
+#undef SM_FREE
+    if (mConfig.mp) ((void(__thiscall*)(void*))(((void**)*(void**)mConfig.mp)[1]))(mConfig.mp);
+}
 
 // @ 0x007dc7b0
 void ViewerOrientationFromPositionAndLookAt(const float* pos, const float* look, const float* up, float* out)
@@ -1102,9 +1056,6 @@ void ViewerOrientationFromPositionAndLookAt(const float* pos, const float* look,
     (void)up; (void)dx; (void)dy; (void)dz;
     out[0] = 0; out[1] = 0; out[2] = 0; out[3] = 1.0f;
 }
-
-
-
 
 // @ 0x007dca30
 void cSmoothCameraController_s007d_c1b0::OnUpdateTargetSet()
@@ -1126,9 +1077,6 @@ void cSmoothCameraController_s007d_c1b0::OnUpdateTargetSet()
     ((void(__thiscall*)(void*, float))vt[0x74 / 4])(this, mContinuousZoomDistance);
 }
 
-
-
-
 // @ 0x007dcb00
 void FUN_007dcb00(float* out, const float* a, const float* b)
 {
@@ -1140,9 +1088,6 @@ void FUN_007dcb00(float* out, const float* a, const float* b)
     out[3] = a3 * b3 - ((b0 * a0 + b2 * a2) + b1 * a1);
 }
 
-
-
-
 // @ 0x007dcc30
 void cSmoothCameraController_s007d_c1b0::ViewerPositionAndOrientationFromDistanceAlongCurve (float* pos, float* quat, float d, int flag)
 {
@@ -1153,8 +1098,6 @@ void cSmoothCameraController_s007d_c1b0::ViewerPositionAndOrientationFromDistanc
     quat[0] = 0.0f; quat[1] = 0.0f; quat[2] = 0.0f; quat[3] = 1.0f;
     (void)d;
 }
-
-
 
 // @ 0x007dd070
 void cSmoothCameraController_s007d_d070::Update(int deltaTime, cViewer* viewer)
@@ -1279,7 +1222,6 @@ void cSmoothCameraController_s007d_d070::Update(int deltaTime, cViewer* viewer)
         viewer->SetCameraTransform(t);
     }
 }
-
 
 // @ 0x007dd880
 void cSmoothCameraController_s007d_d880::ConfigUpdated()
