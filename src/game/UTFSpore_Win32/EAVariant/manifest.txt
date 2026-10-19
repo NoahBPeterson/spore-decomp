@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAVariant.cpp  ?Destruct@Variant@EA@@QAEX_N@Z  0093db80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
