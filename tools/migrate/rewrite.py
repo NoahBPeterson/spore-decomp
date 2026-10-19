@@ -229,6 +229,39 @@ def word_sim(a, b):
     return r
 
 
+def name_key(n):
+    """method-name anchor (fix pass 6 B): equal up to case and underscores (FindPhotoByGuid / FindPhotoByGUID,
+    GetClassID / GetClassId).  word_sim alone paired opposites (SetUIDisabled -> SetUIEnabled 1.00, SetTabIndentOff -> On,
+    getIdentity -> setIdentity, PreloadResources -> UnloadResources) and unrelated slots (Init -> AsInterface 0.80)"""
+    return re.sub(r"_", "", n).lower()
+
+
+def class_key(n):
+    """short class name without namespace, leading c/I prefix, trailing digits and case: cSPUISettings13 -> spuisettings"""
+    n = re.sub(r"<.*", "", n).split("::")[-1]
+    n = re.sub(r"^[cI](?=[A-Z])", "", n)
+    return re.sub(r"\d+$", "", n).lower()
+
+
+def class_anchor(sname, canon):
+    """the slice struct's name names the canonical class: equal keys, or one contains the other (at least 4 letters:
+    IButton / IWinButton, PropertyList / cDirectPropertyList, Job / cJob)"""
+    a, b = class_key(sname), class_key(canon)
+    if not a or not b:
+        return False
+    return a == b or (min(len(a), len(b)) >= 3 and (a in b or b in a))
+
+
+# slot/method names that are placeholders (v10, pv08, slot_10, m24, _cb0, d0, FUN_00a2e1b0, Fn0095f620, sub_..)
+PLACEHOLDER = re.compile(r"^(?:v|pv|vf|vfn|slot_?|m|_cb|cb|d|f|s|fn|Fn|FUN_|sub_|W|unk_?)?[0-9a-fA-F]{1,8}$|^(?:FUN|Fn|sub)_?[0-9a-fA-F]{6,8}$")
+
+
+# names whose bodies the linker folds across classes (one `Release` body serves cRefObject and cAnimatingCreature): an
+# address named like this says nothing about the class
+FOLDED_NAMES = {"addref", "release", "getrefcount", "refcount", "operator=", "operatornew", "operatordelete", "new",
+                "delete", "asinterface", "cast", "dispose", "destroy", "destruct"}
+
+
 # ---------------------------------------------------------------------------------------------
 # the slice
 # ---------------------------------------------------------------------------------------------
@@ -1341,10 +1374,15 @@ class Rewrite:
                 self.notes.append(("layout-mismatch", why))
 
     def map_from_methods_va(self):
+        # fix pass 6 B: a vote needs an anchor.  The retail method must be named like the slice's (no placeholder FUN_/Fn
+        # names, no unnamed generated-header owners), and not a name whose bodies the linker folds across classes; the
+        # class name may also anchor it.  mig7: cRefObject -> cAnimatingCreature (Release), cStarManager -> cAppModeEditorBase
+        # (SaveState -> Redo), cJob -> cJobManager while SP::cJob exists, cInputManager -> EA::Audio::Sound (header owner)
         for s in self.structs.values():
             if s.name in self.class_map:
                 continue
             votes = collections.Counter()
+            anchored = collections.Counter()
             for m in s.methods:
                 if m["va"] is None:
                     continue
@@ -1360,6 +1398,9 @@ class Rewrite:
                         self.hdr_votes.setdefault(s.name, []).append("%s -> %s (0x%08x, generated header)" % (m["name"], next(iter(own)), m["va"]))
                     continue
                 cls, mshort = H.split_qual(nm)
+                if name_key(mshort) == name_key(m["name"]) and name_key(mshort).replace("operator", "") not in FOLDED_NAMES \
+                        and name_key(mshort) not in FOLDED_NAMES or (m["ctor"] and cls.split("::")[-1] == mshort):
+                    anchored[cls] += 1
                 # a retail address that pdb_names gives to a constructor/destructor is not evidence for a slice method that
                 # is neither (the linker folded identical bodies: 0x9276c0 `MemAlloc::Free(void*)` is named
                 # SP::cLocalLightInfo::~cLocalLightInfo, a one-line free)
@@ -1369,7 +1410,22 @@ class Rewrite:
                     continue
                 votes[cls] += 1
             if votes:
-                cls = votes.most_common(1)[0][0]
+                exact = [c for c in votes if class_key(c) == class_key(s.name)]
+                named = [c for c in votes if class_anchor(s.name, c)]
+                if exact or named or len(anchored) == 1:
+                    cls = max(exact, key=lambda c: (votes[c], anchored[c])) if exact else \
+                        max(named, key=lambda c: (votes[c], anchored[c])) if named else next(iter(anchored))
+                    # the slice names its struct like another canonical class (cJob while the votes say cJobManager)
+                    other = self.namesake(s.name, cls)
+                    if other:
+                        self.notes.append(("class-map", "%s not mapped to %s by retail address: the slice's name is that of %s" % (
+                            s.name, cls, other)))
+                        continue
+                else:
+                    self.notes.append(("class-map", "%s not mapped by retail address: no anchored vote (%s)" % (
+                        s.name, ", ".join("%s %d" % (c, n) for c, n in votes.most_common(3)) if not anchored else
+                        "anchored votes split: " + ", ".join("%s %d" % (c, n) for c, n in anchored.most_common(3)))))
+                    continue
                 if cls in self.data.types.structs and not cls.startswith("eastl::"):
                     self.class_map[s.name] = cls
                     self.why[s.name] = "retail address comments: %s" % ", ".join(
@@ -1378,6 +1434,35 @@ class Rewrite:
                         getattr(self, "hdr_votes", {}).get(s.name, []))
                 else:
                     self.notes.append(("template-owner", "%s: methods name %s (a library template; mapped through its owner member)" % (s.name, cls)))
+
+    def slot_clash(self, st, canon):
+        """(slots whose real names disagree, slots whose names agree) between a slice struct's virtuals and the header's"""
+        c = Canon.get(canon)
+        agree = clash = 0
+        for m in st.methods:
+            if not m["virtual"] or m["slot"] is None:
+                continue
+            d = c.slots.get(m["slot"])
+            if not d or PLACEHOLDER.match(m["name"]) or PLACEHOLDER.match(d.name) or m["name"].startswith("~") and d.dtor:
+                continue
+            if name_key(d.name) == name_key(m["name"]):
+                agree += 1
+            elif d.dtor or m["name"].startswith("~") or name_key(m["name"]) in FOLDED_NAMES or name_key(d.name) in FOLDED_NAMES \
+                    or word_sim(m["name"], d.name) < 0.5:
+                clash += 1
+        return clash, agree
+
+    def namesake(self, sname, cls):
+        """another canonical class whose name is exactly the slice struct's (class_key), when `cls` is not"""
+        if class_key(cls) == class_key(sname):
+            return None
+        if not hasattr(self, "_by_key"):
+            self._by_key = collections.defaultdict(list)
+            for t in self.data.types.structs:
+                if "<" not in t:
+                    self._by_key[class_key(t)].append(t)
+        hit = self._by_key.get(class_key(sname))
+        return hit[0] if hit else None
 
     def map_from_signatures(self):
         """Slice virtuals vs the canonical slot of the same index: parameter and return types pair by position
@@ -1457,7 +1542,20 @@ class Rewrite:
                             score += 2
                 if best is None or score > best[0]:
                     best = (score, cname)
-            if best and best[0] >= len(vm) + 2:
+            if best and best[0] >= len(vm) + 2 and class_anchor(s.name, best[1]) and not self.namesake(s.name, best[1]):
+                # real slot names that disagree with the canonical ones (the slice's CustomWinProc has AddRef/Release at
+                # slots 1/2, EA::UTFWin::CustomWinProc Release/destructor): another vtable
+                clash, agree = self.slot_clash(s, best[1])
+                if clash > agree:
+                    self.notes.append(("class-map", "%s not mapped to %s: %d of its named vtable slots disagree with the header, %d agree" % (
+                        s.name, best[1], clash, agree)))
+                    best = None
+            if best and best[0] >= len(vm) + 2 and (not class_anchor(s.name, best[1]) or self.namesake(s.name, best[1])):
+                # fix pass 6 B: slot arity alone is no evidence (every 3-slot refcounted interface scored 7 against
+                # EA::Audio::FactoryBinarySampleData; IHook -> EA::Audio::Group, IObj -> EA::Swarm::cIMap in manager2)
+                self.notes.append(("class-map", "%s not mapped to %s: vtable slot shape (%d slots, score %d) without a name anchor" % (
+                    s.name, best[1], len(vm), best[0])))
+            elif best and best[0] >= len(vm) + 2:
                 self.class_map[s.name] = best[1]
                 self.why[s.name] = "vtable slot shape (%d slots, score %d)" % (len(vm), best[0])
 
@@ -1911,6 +2009,13 @@ class Rewrite:
         for d in decls:
             if d in claimed:
                 continue
+            # fix pass 6 B: a method the header puts at another retail address is another function (AudioSystem 0xa2f1a0 ->
+            # Init 0xa252b0, EditorUI 0x5de690 -> EnableUIButton 0x5dc610), and the names must agree up to case and
+            # underscores (dev-only Login for PostGetAssetFeed, AsInterface for Init, AddRef for a destructor)
+            if va and d.va and d.va != va:
+                continue
+            if name_key(name) != name_key(d.name):
+                continue
             sh = self.shape(sparams, d.params)
             if sh is None:
                 continue
@@ -1979,6 +2084,7 @@ class Rewrite:
                 d.slice_ret = c.ret
                 self.method_map[c.cls][c.name] = d
         # methods of the other mapped structs (calls in bodies): virtual slots by index, else address, else shape+name
+        self.mm_how = {}
         for sname, canon in self.class_map.items():
             st = self.structs.get(sname)
             if not st:
@@ -2015,6 +2121,7 @@ class Rewrite:
                     d = copy.copy(d)                  # the slice's own return type travels with the declaration (convert_chains)
                     d.slice_ret = m["ret"]
                     self.method_map[sname][m["name"]] = d
+                    self.mm_how["%s::%s" % (sname, m["name"])] = how
                 else:
                     self.notes.append(("method", "%s::%s: %s" % (sname, m["name"], how)))
             for m in st.methods:
@@ -5155,6 +5262,10 @@ def main():
         for k, v in sorted(rw.class_map.items()):
             print("  %-20s -> %-50s %s" % (k, v[:50], rw.why.get(k, "")[:100]))
         print("unmapped structs:", [s for s in rw.structs if s not in rw.class_map])
+        print("methods of other mapped structs:")
+        for k, how in sorted(getattr(rw, "mm_how", {}).items()):
+            s_, m_ = k.split("::", 1)
+            print("  %-40s -> %-50s [%s]" % (k, rw.method_map[s_][m_].sig()[:50], how))
         print("functions:")
         for c in rw.chunks:
             print("  0x%08x %-22s -> %s   [%s]" % (c.va, (c.cls + "::" + c.name) if c.ok else "(free function)", (c.decl.sig() if c.decl else "-"), c.how))

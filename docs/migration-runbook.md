@@ -786,3 +786,24 @@ Round 7 (29 objects, commits 60a260fb..46e5d89a) is landed, byte-exact and asm-c
   28 s. The cached sweep's output is identical to the uncached one for all 253 entries; versus the pre-fix probe, one
   layout-guard message gained a member (s0048c0f0, same decision).
 - Known cosmetic: each re-apply adds blank lines to the TU (s00575270: +153 blank lines, no other change). Part C.
+
+### 8i. Fix pass 6, part B (2026-10-18): class and method guesses need an anchor
+
+- **Method shape+name** (`choose_decl`): a candidate whose retail address differs from the function's is never chosen, and the
+  names must be equal up to case and underscores (`name_key`). On the mig7 sweep, 276 shape+name decisions included opposites
+  (SetUIDisabled -> SetUIEnabled, SetTabIndentOff -> On, getIdentity -> setIdentity) and unrelated slots (Init -> AsInterface,
+  a destructor -> AddRef, PostGetAssetFeed -> dev-only Login). Those functions now stay unconverted (verbatim).
+- **Class maps from retail address comments** (`map_from_methods_va`): a vote is anchored only when the retail method's name
+  equals the slice's and is not a name whose bodies the linker folds across classes (`FOLDED_NAMES`: AddRef, Release, new,
+  delete, AsInterface, ...); placeholder names (`FUN_`, `Fn`, `f`) and generated-header owners do not anchor. A class whose
+  name corresponds (`class_anchor`) wins; otherwise exactly one anchored class is needed. A slice struct named exactly like
+  another canonical class is not mapped elsewhere (`namesake`: cJob is not SP::cJobManager).
+- **Class maps from vtable slot shape** (`map_from_slots`): need a name anchor, no namesake, and named slots that do not
+  disagree more than they agree (`slot_clash`). Every three-slot refcounted interface used to map to
+  EA::Audio::FactoryBinarySampleData.
+- Not done on purpose: a general vtable-name guard for all maps (it refused correct main classes such as cSPSwatch, whose slice
+  virtual names are guesses; calls are mapped by slot index and the byte-exact check catches a wrong slot order), and mapping
+  a struct by a unique same-named canonical class (it added ~230 maps; out of scope).
+- `rewrite.py` without `--quiet` now also prints the methods of other mapped structs with their reasons, and
+  `work/claude/night_sweep.sh` + `night_cmp.py` diff two dry sweeps of the mig7 entries.
+- Header item found: EA::UTFWin::CustomWinProc's header notes only 2 of 32 retail slots agree with the dev vtable.
