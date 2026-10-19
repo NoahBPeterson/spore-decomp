@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPUIFeedList.cpp  ?FUN_006628d0@FeedList@@QAEXXZ  006628d0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIFeedList.cpp  ?FUN_00662920@FeedList@@QAEX_N@Z  00662920  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIFeedList.cpp  ?FUN_00662960@FeedList@@QAEHPAX@Z  00662960  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIFeedList.cpp  ?FUN_006629a0@FeedList@@QAEHPAX@Z  006629a0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIFeedList.cpp  ?FUN_006629e0@FeedList@@QAEXXZ  006629e0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIFeedList.cpp  ?FUN_00662a90@FeedList@@QAEXPAX@Z  00662a90  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIFeedList.cpp  ?FUN_00662ad0@FeedList@@QAEXXZ  00662ad0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIFeedList.cpp  ?FUN_00662c10@FeedList@@QAEXPAX@Z  00662c10  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

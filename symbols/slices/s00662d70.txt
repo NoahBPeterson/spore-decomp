@@ -1,5 +1,8 @@
-00662d70 SP::cSPUIFeedList::Update  # named by class/method layout
-00663040 UI::cSPUIFeedList::cSPUIFeedList  # PDB ctor name
+00662d70 ?cSPUIFeedList_Update@@YAXPAUcSPUIFeedList@@@Z  # cSPUIFeedList_Update migrated from s00662d70 (verbatim, slice spelling)
+00662ea0 ?cSPUIFeedList_DoMessage@@YADPAUcSPUIFeedList@@HPAH@Z  # cSPUIFeedList_DoMessage migrated from s00662d70 (verbatim, slice spelling)
+00663040 ?Ctor@cSPUIFeedList@@QAEPAXXZ  # cSPUIFeedList::Ctor migrated from s00662d70 (verbatim, slice spelling)
 006630e0 SP::cSPUIFeedList::~cSPUIFeedList  # PDB dtor name (dev 006630e0)
-006631c0 SP::cSPUIFeedList::UpdateScrolling  # PDB candidate (caller-scored)
+006631c0 ?cSPUIFeedList_UpdateScrolling@@YAXPAUcSPUIFeedList@@I@Z  # cSPUIFeedList_UpdateScrolling migrated from s00662d70 (verbatim, slice spelling)
+00663860 ?FUN_00663860@@YAXPADPAXHH1@Z  # FUN_00663860 migrated from s00662d70 (verbatim, slice spelling)
+00663a90 ?FUN_00663a90@@YADPADIPAH@Z  # FUN_00663a90 migrated from s00662d70 (verbatim, slice spelling)
 00663b80 ?FUN_00663b80@@YADHH@Z  # FUN_00663b80 migrated from s00662d70 (verbatim, slice spelling)

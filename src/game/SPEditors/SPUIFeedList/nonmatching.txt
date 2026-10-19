@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+00662a20 25 vector element access; original loads the index into edx first, cl hoists the header loads
+00662a40 56 indexed element search; cl CSEs the recomputed vector size, original reloads mEnd each step
+00662b40 180 mouse-focus clamp; x87/SSE float schedule differs (behavior and calls match)
+00662c70 191 object-based clamp; float schedule and temp slots differ (behavior and calls match)
+00662d70 220 cSPUIFeedList::Update - complete, scroll frame/asset-browser path not byte-exact
+00662ea0 320 cSPUIFeedList::DoMessage - complete, message branches not byte-exact
+00663040 83 cSPUIFeedList ctor - complete, only xor ecx hoisted before two volatile vtable stores
+006631c0 306 cSPUIFeedList::UpdateScrolling - complete, float scroll clamp schedule differs

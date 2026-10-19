@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00663860 500 $E161 SetParent/Init - partial: parent assignment and layout init approximated
+00663a90 166 FUN_00663a90 message handler - partial: SporeGuide/category branches approximated
