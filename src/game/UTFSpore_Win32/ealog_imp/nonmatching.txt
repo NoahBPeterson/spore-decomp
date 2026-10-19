@@ -14,6 +14,7 @@
 00923f30 30 LogFilterGroupLevels::LogFilterGroupLevels: complete; mName/anchor init store schedule differs; difftest PASS after fixing the string init call (thiscall RangeInitialize on mName, was a free call with cfg) and the anchor color store (the original zeroes the whole color dword +0x2c)
 00923f90 11 LogFilterGroupLevels::~LogFilterGroupLevels: complete; DoNukeSubtree arg register differs
 00924060 39 rbtree::DoInsertValue: complete; traversal/insert schedule differs
+00924170 100 LogReporter::LogReporter: complete; string/notify schedule differs
 009241f0 59 Server::RemoveLogReporter: complete; copy/erase schedule differs
 00924270 29 LogReporter::SkipFilter1: complete; register allocation differs
 009242b0 34 LogReporter::SkipFilter2: complete; register allocation differs

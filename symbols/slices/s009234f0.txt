@@ -19,7 +19,7 @@
 00923c90 ?IsFiltered2@LogFilterGroupLevels_s0092_34f0@Trace@EA@@QAE_NPAX@Z  # LogFilterGroupLevels_s0092_34f0::IsFiltered2 migrated from s009234f0 (verbatim, slice spelling)
 00923cf0 ??1LogReporter_s0092_34f0@Trace@EA@@UAE@XZ  # LogReporter_s0092_34f0::~LogReporter migrated from s009234f0 (verbatim, slice spelling)
 00923d40 ??0Server_s0092_34f0@Trace@EA@@QAE@XZ  # Server_s0092_34f0::Server migrated from s009234f0 (verbatim, slice spelling)
-00923db0 ??1Server@Trace@EA@@UAE@XZ  # EA::Trace::Server::~Server (callee of s009234f0, named from the dev publics; slice address comment)
+00923db0 ??1ITracer@Trace@EA@@UAE@XZ  # EA::Trace::ITracer::~ITracer (callee of s009234f0, named from the dev publics; slice address comment)
 00923dc0 ?FUN_00923dc0@@YAPAXPAXPBDZZ  # FUN_00923dc0 migrated from s009234f0 (verbatim, slice spelling)
 00923de0 ?DoInsertValueImpl@RBTreeMap@Trace@EA@@QAEXPAPAURBNode@23@PAU423@PBXD@Z  # RBTreeMap::DoInsertValueImpl migrated from s009234f0 (verbatim, slice spelling)
 00923e70 ??1LogFormatterSimple_s0092_34f0@Trace@EA@@UAE@XZ  # LogFormatterSimple_s0092_34f0::~LogFormatterSimple migrated from s009234f0 (verbatim, slice spelling)
@@ -29,7 +29,7 @@
 00923fe0 ?SetName@LogFilterGroupLevels_s0092_34f0@Trace@EA@@QAEXPBD@Z  # LogFilterGroupLevels_s0092_34f0::SetName migrated from s009234f0 (verbatim, slice spelling)
 00924010 EA::Trace::LogReporter::SetName  # string at +0x14; notifies filter/formatter
 00924060 ?DoInsertValue@RBTreeMap@Trace@EA@@QAEXPAPAURBNode@23@PBX@Z  # RBTreeMap::DoInsertValue migrated from s009234f0 (verbatim, slice spelling)
-00924170 EA::Trace::LogReporter::LogReporter  # PDB name (card); string at +0x14
+00924170 ??0LogReporter@Trace@EA@@QAE@PBD@Z  # EA::Trace::LogReporter::LogReporter migrated from s009234f0
 009241f0 ?RemoveLogReporter@Server_s0092_34f0@Trace@EA@@QAE_NPAUILogReporter_s0092_34f0@23@@Z  # Server_s0092_34f0::RemoveLogReporter migrated from s009234f0 (verbatim, slice spelling)
 00924270 ?SkipFilter1@LogReporter_s0092_34f0@Trace@EA@@QAEHPAX@Z  # LogReporter_s0092_34f0::SkipFilter1 migrated from s009234f0 (verbatim, slice spelling)
 009242b0 ?SkipFilter2@LogReporter_s0092_34f0@Trace@EA@@QAEHPAX@Z  # LogReporter_s0092_34f0::SkipFilter2 migrated from s009234f0 (verbatim, slice spelling)

@@ -72,7 +72,6 @@ struct C233f0 { void** vtbl; void Call(void* arg); };
 
 // ---- items of slice s009234f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern unsigned g_timeoutP;  // 0x0143dc78
-extern "C" __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
 extern "C" __declspec(dllimport) void __stdcall OutputDebugStringA(const char*);
 extern "C" void  EA_operator_delete(void* p);                                   // 0xf47380
 extern "C" void* EA_operator_new(unsigned size, const char* name, int f1, int f2, int f3, int f4); // 0xf473a0
@@ -270,11 +269,11 @@ struct LogFilterGroupLevels_s0092_34f0 : ILogFilter_s0092_34f0 {
     int      mGlobalLevel;   // +0x18
     RBTreeMap mGroupLevelMap;// +0x1c
 
-    LogFilterGroupLevels_s0092_34f0(void* cfg);
-    virtual ~LogFilterGroupLevels_s0092_34f0();
-    void SetName(const char* name);
+    LogFilterGroupLevels_s0092_34f0(void* cfg);  // 0x00923f30 (EA::Trace::LogFilterGroupLevels::LogFilterGroupLevels_s0092_34f0)
+    virtual ~LogFilterGroupLevels_s0092_34f0();  // 0x00923f30 (EA::Trace::LogFilterGroupLevels::LogFilterGroupLevels_s0092_34f0)
+    void SetName(const char* name);  // 0x00923fe0 (EA::Trace::LogFilterGroupLevels::SetName)
     bool RemoveGroupLevel(const char* name);  // 0x00923bc0 (EA::Trace::LogFilterGroupLevels::RemoveGroupLevel)
-    bool IsFiltered2(void* rec);
+    bool IsFiltered2(void* rec);  // 0x00923c90 (EA::Trace::LogFilterGroupLevels::IsFiltered2)
 };
 }
 }
@@ -285,8 +284,8 @@ struct LogFormatterSimple_s0092_34f0 : ILogFormatter_s0092_34f0 {
     FixedString2048 mName;       // +0x8  (0x814 bytes)
     FixedString2048 mLine;       // +0x81c
 
-    LogFormatterSimple_s0092_34f0(const char* name);
-    virtual ~LogFormatterSimple_s0092_34f0();
+    LogFormatterSimple_s0092_34f0(const char* name);  // 0x009243d0 (EA::Trace::LogFormatterSimple::LogFormatterSimple_s0092_34f0)
+    virtual ~LogFormatterSimple_s0092_34f0();  // 0x009243d0 (EA::Trace::LogFormatterSimple::LogFormatterSimple_s0092_34f0)
     void SetName(const char* name);  // 0x00924450 (EA::Trace::LogFormatterSimple::SetName)
     void* Clone();  // 0x00924490 (EA::Trace::LogFormatterSimple::Clone)
 };
@@ -304,8 +303,8 @@ struct LogFormatterFancy_s0092_34f0 : ILogFormatter_s0092_34f0 {
     char mTimer[0x18];           // +0x228 Stopwatch
     FixedString2048 mLine;       // +0x240
 
-    LogFormatterFancy_s0092_34f0(const char* name);
-    virtual ~LogFormatterFancy_s0092_34f0();
+    LogFormatterFancy_s0092_34f0(const char* name);  // 0x009244d0 (EA::Trace::LogFormatterFancy::LogFormatterFancy_s0092_34f0)
+    virtual ~LogFormatterFancy_s0092_34f0();  // 0x009244d0 (EA::Trace::LogFormatterFancy::LogFormatterFancy_s0092_34f0)
     void SetName(const char* name);  // 0x00924570 (EA::Trace::LogFormatterFancy::SetName)
 };
 }
@@ -362,8 +361,8 @@ struct Server_s0092_34f0 : IServer_s0092_34f0, ITracer_s0092_34f0 {
     int   mnRefCount;        // +0x34
     EA::Thread::Mutex_s0092_34f0 mMutex;// +0x38
 
-    Server_s0092_34f0();
-    ~Server_s0092_34f0();
+    Server_s0092_34f0();  // 0x00923d40 (EA::Trace::Server::Server_s0092_34f0)
+    ~Server_s0092_34f0();  // 0x00923d40 (EA::Trace::Server::Server_s0092_34f0)
     const char* GetLevelName(int level);  // 0x00923630 (EA::Trace::Server::GetLevelName)
     Server_s0092_34f0* AsInterface(int id);  // 0x00923680 (EA::Trace::Server::AsInterface)
     int Release();  // 0x009236d0 (EA::Trace::Server::Release)
@@ -428,6 +427,7 @@ struct ServerTracer {
 };
 }
 }
+extern "C" char DAT_01667bac;
 // ---- items of slice s009234f0 end
 
 // ---- items of slice s009245b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -714,15 +714,11 @@ int Server_s0069_6c80::ShouldLog(unsigned int category)
 }
 }}  // namespace EA::Trace
 
-
-
 // @ 0x009233e0
 void C233e0::Set(unsigned short x)
 {
     v = x;
 }
-
-
 
 // @ 0x009233f0
 void C233f0::Call(void* arg)
@@ -730,8 +726,6 @@ void C233f0::Call(void* arg)
     void* v = *(void**)((char*)arg + 0xc);
     (*(void(__thiscall**)(void*, void*))((char*)vtbl + 0x14))(this, v);
 }
-
-
 
 // @ 0x00923440
 int __fastcall FUN_00923440(void* self)
@@ -745,8 +739,6 @@ int __fastcall FUN_00923440(void* self)
     return 0;
 }
 
-
-
 // @ 0x009234a0
 int __fastcall FUN_009234a0(void* self)
 {
@@ -759,8 +751,6 @@ int __fastcall FUN_009234a0(void* self)
     return 0;
 }
 
-
-
 // @ 0x009234c0
 void* EA::Trace::GetServer()
 {
@@ -770,15 +760,12 @@ void* EA::Trace::GetServer()
     return 0;
 }
 
-
-
 // @ 0x009234e0
 void EA::Trace::UpdateLogFilters()
 {
     void* p = EA::Trace::GetTraceHelperTable();
     (*(void(__thiscall**)(void*))((char*)*(void**)p + 0x14))(p);
 }
-
 
 // @ 0x009234f0
 unsigned EA::Trace::ServerTracer::TraceVaList(void* sender, const char* fmt, void* ap)
@@ -827,7 +814,6 @@ done:
     return r;
 }
 
-
 // @ 0x00923630
 char const * EA::Trace::Server::GetLevelName(int level) const
 {
@@ -838,7 +824,6 @@ char const * EA::Trace::Server::GetLevelName(int level) const
     if (level <= 0x96) return "Error";
     return "Fatal";
 }
-
 
 // @ 0x00923680
 void * EA::Trace::Server::AsInterface(EA::COM::InterfaceId id)
@@ -852,7 +837,6 @@ void * EA::Trace::Server::AsInterface(EA::COM::InterfaceId id)
         return (Server*)((char*)self + 4);
     return 0;
 }
-
 
 // @ 0x009236d0
 int EA::Trace::Server::Release()
@@ -868,7 +852,6 @@ int EA::Trace::Server::Release()
     return n;
 }
 
-
 // @ 0x00923700
 int EA::Trace::LogReporter_s0092_34f0::FilterEnabled(void* rec)
 {
@@ -881,7 +864,6 @@ int EA::Trace::LogReporter_s0092_34f0::FilterEnabled(void* rec)
     return 1;
 }
 
-
 // @ 0x00923740
 int EA::Trace::LogReporter_s0092_34f0::FilterEnabled2(void* rec)
 {
@@ -893,7 +875,6 @@ int EA::Trace::LogReporter_s0092_34f0::FilterEnabled2(void* rec)
     }
     return 1;
 }
-
 
 // @ 0x009237c0
 bool EA::Trace::Server_s0092_34f0::GetLogReporter(char* name, int* out)
@@ -917,7 +898,6 @@ bool EA::Trace::Server_s0092_34f0::GetLogReporter(char* name, int* out)
     return r;
 }
 
-
 // @ 0x00923840
 unsigned EA::Trace::Server_s0092_34f0::EnumerateLogReporters(void** out, unsigned max)
 {
@@ -940,7 +920,6 @@ unsigned EA::Trace::Server_s0092_34f0::EnumerateLogReporters(void** out, unsigne
     return n;
 }
 
-
 // @ 0x00923930
 bool EA::Trace::ServerTracer::IsFiltered(void* rec)
 {
@@ -957,7 +936,6 @@ bool EA::Trace::ServerTracer::IsFiltered(void* rec)
     M()->Unlock();
     return true;
 }
-
 
 // @ 0x00923990
 unsigned EA::Trace::ServerTracer::Trace(void* sender, const char* msg)
@@ -989,7 +967,6 @@ unsigned EA::Trace::ServerTracer::Trace(void* sender, const char* msg)
     return flags;
 }
 
-
 // @ 0x00923a60
 void EA::Trace::LogReporter_s0092_34f0::ShowAlert(void* rec)
 {
@@ -1000,7 +977,6 @@ void EA::Trace::LogReporter_s0092_34f0::ShowAlert(void* rec)
     EA_DisplayTraceDialog(name, fmt);
 }
 
-
 // @ 0x00923aa0
 int EA::Trace::LogReporter_s0092_34f0::DebugPrint(void* rec)
 {
@@ -1009,9 +985,8 @@ int EA::Trace::LogReporter_s0092_34f0::DebugPrint(void* rec)
     return 0;
 }
 
-
 // @ 0x00923ac0
-EA::Trace::RBNode** EA::Trace::RBTreeMap::find(RBNode** out, const char** key)
+EA::Trace::RBNode** EA::Trace::RBTreeMap::find(EA::Trace::RBNode** out, const char** key)
 {
     EA::Trace::RBNode* end = (EA::Trace::RBNode*)&mAnchor;
     EA::Trace::RBNode* candidate = end;
@@ -1032,9 +1007,8 @@ EA::Trace::RBNode** EA::Trace::RBTreeMap::find(RBNode** out, const char** key)
     return out;
 }
 
-
 // @ 0x00923b40
-void EA::Trace::RBTreeMap::DoNukeSubtree(RBNode* node)
+void EA::Trace::RBTreeMap::DoNukeSubtree(EA::Trace::RBNode* node)
 {
     while (node) {
         DoNukeSubtree(node->mpLeft);
@@ -1044,9 +1018,8 @@ void EA::Trace::RBTreeMap::DoNukeSubtree(RBNode* node)
     }
 }
 
-
 // @ 0x00923b80
-EA::Trace::RBNode** EA::Trace::RBTreeMap::erase(RBNode** outNext, RBNode* pos)
+EA::Trace::RBNode** EA::Trace::RBTreeMap::erase(EA::Trace::RBNode** outNext, EA::Trace::RBNode* pos)
 {
     mnSize--;
     EA::Trace::RBNode* next = (EA::Trace::RBNode*)eastl_RBTreeIncrement(pos);
@@ -1055,7 +1028,6 @@ EA::Trace::RBNode** EA::Trace::RBTreeMap::erase(RBNode** outNext, RBNode* pos)
     *outNext = next;
     return outNext;
 }
-
 
 // @ 0x00923bc0
 bool EA::Trace::LogFilterGroupLevels_s0092_34f0::RemoveGroupLevel(const char* name)
@@ -1089,7 +1061,6 @@ bool EA::Trace::LogFilterGroupLevels_s0092_34f0::RemoveGroupLevel(const char* na
     return false;
 }
 
-
 // @ 0x00923c90
 bool EA::Trace::LogFilterGroupLevels_s0092_34f0::IsFiltered2(void* rec)
 {
@@ -1103,7 +1074,6 @@ bool EA::Trace::LogFilterGroupLevels_s0092_34f0::IsFiltered2(void* rec)
     return *(int*)((char*)rec + 0xc) < mGlobalLevel;
 }
 
-
 // @ 0x00923cf0
 EA::Trace::LogReporter_s0092_34f0::~LogReporter_s0092_34f0()
 {
@@ -1115,7 +1085,6 @@ EA::Trace::LogReporter_s0092_34f0::~LogReporter_s0092_34f0()
     if (mFilter.mpObject)
         ((void(__thiscall*)(void*))(*(void***)mFilter.mpObject)[1])(mFilter.mpObject);
 }
-
 
 // @ 0x00923d40
 EA::Trace::Server_s0092_34f0::Server_s0092_34f0()
@@ -1134,7 +1103,6 @@ EA::Trace::Server_s0092_34f0::Server_s0092_34f0()
     new (&mMutex) EA::Thread::Mutex_s0092_34f0(0, 1);
 }
 
-
 // @ 0x00923dc0
 void* FUN_00923dc0(void* out, const char* fmt, ...)
 {
@@ -1143,9 +1111,8 @@ void* FUN_00923dc0(void* out, const char* fmt, ...)
     return out;
 }
 
-
 // @ 0x00923de0
-void EA::Trace::RBTreeMap::DoInsertValueImpl(RBNode** out, RBNode* parent, const void* value, char hasParent)
+void EA::Trace::RBTreeMap::DoInsertValueImpl(EA::Trace::RBNode** out, EA::Trace::RBNode* parent, const void* value, char hasParent)
 {
     char color = 0;
     if (!hasParent && parent != (EA::Trace::RBNode*)&mAnchor) {
@@ -1163,7 +1130,6 @@ void EA::Trace::RBTreeMap::DoInsertValueImpl(RBNode** out, RBNode* parent, const
     if (out) *out = node;
 }
 
-
 // @ 0x00923e70
 EA::Trace::LogFormatterSimple_s0092_34f0::~LogFormatterSimple_s0092_34f0()
 {
@@ -1175,7 +1141,6 @@ EA::Trace::LogFormatterSimple_s0092_34f0::~LogFormatterSimple_s0092_34f0()
         EA_operator_delete(nm->mpBegin);
 }
 
-
 // @ 0x00923ed0
 EA::Trace::LogFormatterFancy_s0092_34f0::~LogFormatterFancy_s0092_34f0()
 {
@@ -1186,7 +1151,6 @@ EA::Trace::LogFormatterFancy_s0092_34f0::~LogFormatterFancy_s0092_34f0()
     if ((nm->mpCapacity - nm->mpBegin) > 1 && nm->mpBegin != 0 && nm->mpBegin != nm->mpPool)
         EA_operator_delete(nm->mpBegin);
 }
-
 
 // @ 0x00923f30
 EA::Trace::LogFilterGroupLevels_s0092_34f0::LogFilterGroupLevels_s0092_34f0(void* cfg)
@@ -1211,7 +1175,6 @@ EA::Trace::LogFilterGroupLevels_s0092_34f0::LogFilterGroupLevels_s0092_34f0(void
     anchor->mpLeft = anchor;
 }
 
-
 // @ 0x00923f90
 EA::Trace::LogFilterGroupLevels_s0092_34f0::~LogFilterGroupLevels_s0092_34f0()
 {
@@ -1225,16 +1188,14 @@ EA::Trace::LogFilterGroupLevels_s0092_34f0::~LogFilterGroupLevels_s0092_34f0()
         EA_operator_delete(mName.mpBegin);
 }
 
-
 // @ 0x00923fe0
 void EA::Trace::LogFilterGroupLevels_s0092_34f0::SetName(const char* name)
 {
     ((EaStringOps*)&mName)->assign(name, name + strlen(name));
 }
 
-
 // @ 0x00924060
-void EA::Trace::RBTreeMap::DoInsertValue(RBNode** out, const void* value)
+void EA::Trace::RBTreeMap::DoInsertValue(EA::Trace::RBNode** out, const void* value)
 {
     EA::Trace::RBNode* node = (EA::Trace::RBNode*)mAnchor.mpParent;
     EA::Trace::RBNode* parent = (EA::Trace::RBNode*)&mAnchor;
@@ -1261,9 +1222,25 @@ void EA::Trace::RBTreeMap::DoInsertValue(RBNode** out, const void* value)
     }
 }
 
+// @ 0x00924170
+EA::Trace::LogReporter::LogReporter(char const * name)
+{
+    mFilter.mpObject = 0;
+    mFormatter.mpObject = 0;
+    mIsEnabled = true;
+    mnRefCount = 0;
+    mName.mpBegin = (char*)&DAT_01667bac;
+    mName.mpEnd = (char*)&DAT_01667bac;
+    mName.mpCapacity = (char*)&DAT_01667bac + 1;
+    ((EaStringOps*)&mName)->assign(name, name + strlen(name));
+    if (mFilter.mpObject)
+        ((void(__thiscall*)(void*, const char*))(*(void***)mFilter.mpObject)[6])(mFilter.mpObject, name);
+    if (mFormatter.mpObject)
+        ((void(__thiscall*)(void*, const char*))(*(void***)mFormatter.mpObject)[5])(mFormatter.mpObject, name);
+}
 
 // @ 0x009241f0
-bool EA::Trace::Server_s0092_34f0::RemoveLogReporter(ILogReporter_s0092_34f0* p)
+bool EA::Trace::Server_s0092_34f0::RemoveLogReporter(EA::Trace::ILogReporter_s0092_34f0* p)
 {
     mMutex.Lock((unsigned*)&g_timeoutP);
     void** it = (void**)mpVecBegin;
@@ -1287,7 +1264,6 @@ bool EA::Trace::Server_s0092_34f0::RemoveLogReporter(ILogReporter_s0092_34f0* p)
     return true;
 }
 
-
 // @ 0x00924270
 int EA::Trace::LogReporter_s0092_34f0::SkipFilter1(void* rec)
 {
@@ -1299,7 +1275,6 @@ int EA::Trace::LogReporter_s0092_34f0::SkipFilter1(void* rec)
     }
     return 1;
 }
-
 
 // @ 0x009242b0
 int EA::Trace::LogReporter_s0092_34f0::SkipFilter2(void* rec)
@@ -1313,7 +1288,6 @@ int EA::Trace::LogReporter_s0092_34f0::SkipFilter2(void* rec)
     return 1;
 }
 
-
 // @ 0x00924350
 int EA::Trace::LogReporter_s0092_34f0::SkipFilter3(void* rec)
 {
@@ -1326,7 +1300,6 @@ int EA::Trace::LogReporter_s0092_34f0::SkipFilter3(void* rec)
     return 1;
 }
 
-
 // @ 0x00924390
 int EA::Trace::LogReporter_s0092_34f0::SkipFilter4(void* rec)
 {
@@ -1338,7 +1311,6 @@ int EA::Trace::LogReporter_s0092_34f0::SkipFilter4(void* rec)
     }
     return 1;
 }
-
 
 // @ 0x009243d0
 EA::Trace::LogFormatterSimple_s0092_34f0::LogFormatterSimple_s0092_34f0(const char* name)
@@ -1359,7 +1331,6 @@ EA::Trace::LogFormatterSimple_s0092_34f0::LogFormatterSimple_s0092_34f0(const ch
     l->buffer[0] = 0;
 }
 
-
 // @ 0x00924450
 void EA::Trace::LogFormatterSimple_s0092_34f0::SetName(const char* name)
 {
@@ -1374,7 +1345,6 @@ void EA::Trace::LogFormatterSimple_s0092_34f0::SetName(const char* name)
     }
 }
 
-
 // @ 0x00924490
 void* EA::Trace::LogFormatterSimple_s0092_34f0::Clone()
 {
@@ -1383,7 +1353,6 @@ void* EA::Trace::LogFormatterSimple_s0092_34f0::Clone()
         return new (p) EA::Trace::LogFormatterSimple_s0092_34f0(mName.mpBegin);
     return 0;
 }
-
 
 // @ 0x009244d0
 EA::Trace::LogFormatterFancy_s0092_34f0::LogFormatterFancy_s0092_34f0(const char* name)
@@ -1406,7 +1375,6 @@ EA::Trace::LogFormatterFancy_s0092_34f0::LogFormatterFancy_s0092_34f0(const char
     l->mpCapacity = l->buffer + 0x800;
     l->buffer[0] = 0;
 }
-
 
 // @ 0x00924570
 void EA::Trace::LogFormatterFancy_s0092_34f0::SetName(const char* name)
