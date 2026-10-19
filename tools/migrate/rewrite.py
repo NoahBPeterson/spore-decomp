@@ -732,8 +732,18 @@ def parse_slice(sid, variant=""):
         ch.enc_ns = ns_at[i] + own_ns
         # what follows a function's closing brace (structs, typedefs, statics, helper functions the next function needs)
         # belongs to the preamble: the module TU is written in VA order, the slice in its own order
-        pre += ch.after.split("\n")
-        ch.after = ""
+        # ... except the `#pragma` lines right after the closing brace: they restore what a pragma before the function set
+        # (`#pragma inline_depth(0)` .. function .. `#pragma inline_depth()`).  In the preamble the restore came first and every
+        # later function of the TU was compiled without inlining (mig8/mig7r: 30+ functions byte-exact in their slices were
+        # dropped as DIFF in the module TU, e.g. s005d61b0's hkDefaultError::sectionBegin calling hkArray::pushBack)
+        aft = ch.after.split("\n")
+        keep = []
+        while aft and (not aft[0].strip() or re.match(r"^\s*#\s*pragma\b", aft[0])):
+            l0 = aft.pop(0)
+            if l0.strip():
+                keep.append(l0)
+        pre += aft
+        ch.after = "\n".join(keep)
         chunks.append(ch)
     # two definitions under one VA (mig7 s0061c350 0x61d0d0: cGetAssetFeedTransaction::HandleResult and
     # cEditFeedTransaction::HandleResult, one folded retail body): the first one is the function, a later one keeps its text in
