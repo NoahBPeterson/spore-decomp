@@ -5,7 +5,7 @@
 00932960 CreateDirectoryPath  # dc: component-wise MakeOneDirectory
 00932ae0 EnsureDirectoryExists  # dc: GetFileAttributesW + CreateDirectoryPath
 00932b20 CopyDirectoryTree  # dc: recursive CopyFileW over WalkDirectory listing
-00932d00 EA::Hash::InitCRC32Table  # pdb anchor
+00932d00 ?InitCRC32Table@Hash@EA@@YAXXZ  # EA::Hash::InitCRC32Table migrated from s009323c0
 00932da0 EA::Hash::CRC32  # pdb callee-single
 00932df0 EA::Hash::CRC64  # dc: dual-table 64-bit CRC
 00932e50 ?FNV1@@YAIPBEHI@Z  # FNV1 migrated from s009323c0 (verbatim, slice spelling)
