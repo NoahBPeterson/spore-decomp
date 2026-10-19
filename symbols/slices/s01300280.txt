@@ -1,4 +1,4 @@
-01300280 init_1668f1c  # LoadLibraryA("kernel32.dll") + GetProcAddress("ReadDirectoryChangesW") + atexit
+01300280 ?init_1668f1c@@YAXXZ  # init_1668f1c migrated from s01300280 (verbatim, slice spelling)
 013002d0 InitOSGlobalSystem_init  # calls anonymous_namespace::InitOSGlobalSystem then atexit
 01300330 WSAStartup_init  # WSAStartup(2, &data) then atexit
 013004a0 init_154ed8c  # registry table, function-pointer entries via FUN_00957a60/957880
