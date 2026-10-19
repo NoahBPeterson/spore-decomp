@@ -1,4 +1,8 @@
-0091e970 EA::Debug::ReportWriter::ReportWriter  # ctor, sets vtable/path/file/depth
+0091e650 ?SetBuildDescription@ExceptionHandler_s0091_e650@@QAEXPBD@Z  # ExceptionHandler_s0091_e650::SetBuildDescription migrated from s0091e650 (verbatim, slice spelling)
+0091e690 ?ExceptionFilter@ExceptionHandlerWin32_s0091_e650@@QAEIPAX@Z  # ExceptionHandlerWin32_s0091_e650::ExceptionFilter migrated from s0091e650 (verbatim, slice spelling)
+0091e770 ??0ExceptionHandlerWin32_s0091_e650@@QAE@PAUExceptionHandler_s0091_e650@@@Z  # ExceptionHandlerWin32_s0091_e650::ExceptionHandlerWin32 migrated from s0091e650 (verbatim, slice spelling)
+0091e810 ??0ExceptionHandler_s0091_e650@@QAE@XZ  # ExceptionHandler_s0091_e650::ExceptionHandler migrated from s0091e650 (verbatim, slice spelling)
+0091e970 ??0ReportWriter_s0091_e650@@QAE@XZ  # ReportWriter_s0091_e650::ReportWriter migrated from s0091e650 (verbatim, slice spelling)
 0091e990 ?GetFileNameExtension@ReportWriter@Debug@EA@@UAEXPADI@Z  # EA::Debug::ReportWriter::GetFileNameExtension migrated from s0091e650
 0091e9c0 ?OpenReport@ReportWriter@Debug@EA@@UAE_NPBD@Z  # EA::Debug::ReportWriter::OpenReport migrated from s0091e650
 0091ea20 ?CloseReport@ReportWriter@Debug@EA@@UAE_NXZ  # EA::Debug::ReportWriter::CloseReport migrated from s0091e650

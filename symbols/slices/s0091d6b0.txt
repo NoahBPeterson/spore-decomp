@@ -1,11 +1,13 @@
-0091d950 EA::Debug::ExceptionHandlerWin32::GetExceptionString  # pdb_names anchor
-0091df70 EA::Debug::ExceptionHandlerWin32::WriteCallStack  # pdb_names anchor
-0091e040 EA::Debug::ExceptionHandler::SetReportDirectory  # pdb_names gap-align
-0091e080 EA::Debug::ExceptionHandlerWin32::GetReportFilePath  # pdb_names anchor
-0091e190 EA::Debug::ExceptionHandlerWin32::WriteMiniDump  # pdb_names anchor
-0091e250 EA::Debug::ExceptionHandlerWin32::WriteHeader  # pdb_names anchor
-0091e3b0 EA::Debug::ExceptionHandler::NotifyClients  # pdb_names callee-single
-0091e3e0 EA::Debug::ExceptionHandlerWin32::WriteExtraData  # pdb_names anchor
-0091e4b0 EA::Debug::ExceptionHandlerWin32::WriteExceptionReportInternal  # pdb_names anchor
+0091d950 ?GetExceptionString@ExceptionHandlerWin32@@QAEXPADI@Z  # ExceptionHandlerWin32::GetExceptionString migrated from s0091d6b0 (verbatim, slice spelling)
+0091df70 ?WriteCallStack@ExceptionHandlerWin32@@QAEXXZ  # ExceptionHandlerWin32::WriteCallStack migrated from s0091d6b0 (verbatim, slice spelling)
+0091e020 ?Set@Holder@@QAEXHH@Z  # Holder::Set migrated from s0091d6b0 (verbatim, slice spelling)
+0091e040 ?SetReportDirectory@ExceptionHandler@@QAEXPA_W@Z  # ExceptionHandler::SetReportDirectory migrated from s0091d6b0 (verbatim, slice spelling)
+0091e080 ?GetReportFilePath@ExceptionHandlerWin32@@QAEHPADIH@Z  # ExceptionHandlerWin32::GetReportFilePath migrated from s0091d6b0 (verbatim, slice spelling)
+0091e190 ?WriteMiniDump@ExceptionHandlerWin32@@QAEXXZ  # ExceptionHandlerWin32::WriteMiniDump migrated from s0091d6b0 (verbatim, slice spelling)
+0091e250 ?WriteHeader@ExceptionHandlerWin32@@QAEXXZ  # ExceptionHandlerWin32::WriteHeader migrated from s0091d6b0 (verbatim, slice spelling)
+0091e3b0 ?NotifyClients@ExceptionHandler@@QAEXH@Z  # ExceptionHandler::NotifyClients migrated from s0091d6b0 (verbatim, slice spelling)
+0091e3e0 ?WriteExtraData@ExceptionHandlerWin32@@QAEXXZ  # ExceptionHandlerWin32::WriteExtraData migrated from s0091d6b0 (verbatim, slice spelling)
+0091e4b0 ?WriteExceptionReportInternal@ExceptionHandlerWin32@@QAEXPAUReportWriter@@@Z  # ExceptionHandlerWin32::WriteExceptionReportInternal migrated from s0091d6b0 (verbatim, slice spelling)
+0091e5c0 ?WriteExceptionReport@ExceptionHandlerWin32@@QAEXXZ  # ExceptionHandlerWin32::WriteExceptionReport migrated from s0091d6b0 (verbatim, slice spelling)
 0091e770 EA::Debug::ExceptionHandlerWin32::ExceptionHandlerWin32  # pdb_names anchor
 0091e810 EA::Debug::ExceptionHandler::ExceptionHandler  # pdb_names callee-scored

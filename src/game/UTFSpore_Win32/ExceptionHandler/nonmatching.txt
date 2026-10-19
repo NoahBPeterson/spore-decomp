@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+0091e080 167 GetReportFilePath: local buffers/format arg schedule differ from the original _snprintf use
+0091e5c0 6 WriteExceptionReport: Destroy-call placement relative to pop esi (stack offset esp+0xc vs +8)
+0091e690 10 ExceptionFilter: mPreviousFilter load schedule / IAT call operand shapes differ
+0091e750  7    global exception-filter thunk: branch layout (je vs jne) differs
+0091e770 66 ExceptionHandlerWin32 ctor: field-init order + strncpy/memset scheduling differ
+0091e810 115 ExceptionHandler ctor: fixed-vector inline storage / DoInsertValue clear schedule differ
