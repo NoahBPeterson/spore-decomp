@@ -1,3 +1,4 @@
+00623f40 _FUN_00623f40  # LAB_00623f40 callback code address (cSPUIFeedEdit ctor passes it to cXHTMLFrameSet)
 0065d050 ?ClearAsset@cSPUIFeedEditAssetView@SP@@QAEXXZ  # SP::cSPUIFeedEditAssetView::ClearAsset migrated from s0065d050
 0065d110 ?ReloadCallback@@YAXPAUcSPUIFeedEditAssetView_s0065_d050@@PAX_N@Z  # ReloadCallback migrated from s0065d050 (verbatim, slice spelling)
 0065d260 ?UpdateGrid@cSPUIFeedEdit_s0065_d050@@QAEXXZ  # cSPUIFeedEdit_s0065_d050::UpdateGrid migrated from s0065d050 (verbatim, slice spelling)
@@ -8,9 +9,9 @@
 0065d6a0 ?erase@HashtableU64@@QAEPAHPAH00@Z  # HashtableU64::erase migrated from s0065d050 (verbatim, slice spelling)
 0065d720 ?Init@cSPUIFeedEditAssetView_s0065_d050@@QAE_NPAXI@Z  # cSPUIFeedEditAssetView_s0065_d050::Init migrated from s0065d050 (verbatim, slice spelling)
 0065d810 ?Shutdown@cSPUIFeedEditAssetView@SP@@UAEXXZ  # SP::cSPUIFeedEditAssetView::Shutdown migrated from s0065d050
-0065d860 SP::cSPUIFeedEdit::~cSPUIFeedEdit  # PDB name
+0065d860 ??1FeedEditObj@@QAE@XZ  # FeedEditObj::~FeedEditObj migrated from s0065d050 (verbatim, slice spelling)
 0065d9f0 ?SetActive@cSPUIFeedEdit_s0065_d050@@QAEX_N@Z  # cSPUIFeedEdit_s0065_d050::SetActive migrated from s0065d050 (verbatim, slice spelling)
-0065daa0 SP::cSPUIFeedEdit::cSPUIFeedEdit  # PDB name
+0065daa0 ??0FeedEditObj@@QAE@XZ  # FeedEditObj::FeedEditObj migrated from s0065d050 (verbatim, slice spelling)
 0065dc60 ?TranslateToken@cSPUIFeedEdit_s0065_d050@@QAE_NPB_WPAX@Z  # cSPUIFeedEdit_s0065_d050::TranslateToken migrated from s0065d050 (verbatim, slice spelling)
+0065dd30 ?FUN_0065dd30@@YGXPB_W@Z  # FUN_0065dd30 migrated from s0065d050 (verbatim, slice spelling)
 0065ded0 ?erase@VecUFO@@QAEPAUUFOCollisionEffectInfo@@PAU2@0@Z  # VecUFO::erase migrated from s0065d050 (verbatim, slice spelling)
-00623f40 _FUN_00623f40  # LAB_00623f40 callback code address (cSPUIFeedEdit ctor passes it to cXHTMLFrameSet)

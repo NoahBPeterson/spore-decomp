@@ -7,6 +7,7 @@
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ?FUN_0065d490@cSPUIFeedEdit_s0065_d050@@QAEXXZ  0065d490  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ?SetPage@cSPUIFeedEdit_s0065_d050@@QAE_NI@Z  0065d4e0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ?Shutdown@cSPUIFeedEditAssetView@SP@@UAEXXZ  0065d810  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ??1FeedEditObj@@QAE@XZ  0065d860  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ?UnloadLayout@cSPUIFeedEdit@SP@@QAEXXZ  0065e0a0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ?push_back@AssetVec@@QAEXXZ  0065e6d0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ?Handler@CallbackObj@@QAEXHH@Z  0065ef10  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include

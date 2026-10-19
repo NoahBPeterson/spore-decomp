@@ -15,6 +15,8 @@ extern void* g_vt_13ec458;
 #include <intrin.h>
 #include <string.h>
 #include "EA/UTFWin/IWinProc.h"
+#include "EA/UTFWinExtras/cXHTMLFrameSet.h"
+#include "SP/cStringTokenTranslator.h"
 
 // ---- items of slice s0065bf20 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef void(__thiscall* FnP)(void*);
@@ -79,9 +81,14 @@ struct AssetInfo {
 // ---- items of slice s0065d050 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* operator_new_ea(unsigned int size, const char* tag, int, int, int, int);
+extern "C" __declspec(dllimport) unsigned long __cdecl wcstoul(const wchar_t* s, wchar_t** end, int base);
 extern uint32_t g_1526cb0;
-extern wchar_t g_str_1667bac;
-extern wchar_t g_str_1667bae;
+extern wchar_t g_01667bac;
+extern wchar_t g_01667bae;
+extern void* g_0154df28;
+extern "C" void FUN_00623f40();  // 0x00623f40 (LAB_00623f40 callback)
+extern const wchar_t* g_0152694c;
+unsigned long long __cdecl StrtoU6416(const wchar_t* s, wchar_t** end, int base);  // 0x0092d710
 typedef void(__thiscall* FnPi)(void*, int);
 struct ResourceKey { uint32_t a, b, c; };
 struct cXHTMLFrameSet_s0065_d050 {
@@ -91,9 +98,11 @@ struct cXHTMLFrameSet_s0065_d050 {
 };
 void* MessageServer();
 unsigned int __cdecl FNVHash16(const wchar_t* s, unsigned int seed, int n);
-void GetURL(unsigned int id, void* out);
+void GetURL(unsigned int id, void* out);  // 0x006214c0
 void SetNumberString(int value, int a, wchar_t* buf, int n);
+void* GetResourceProvider();  // 0x008fe480
 void* CopyImpl(void* first, void* last, void* dest);
+void DoFreeNodes(void* a, void* b);
 struct cSPUIFeedEditAssetView_s0065_d050 {
   void* vt;            // +0x00
   void* vt4;           // +0x04
@@ -142,29 +151,74 @@ struct IWinLookup {
   virtual void* FindByKey(unsigned int key);  // slot 3 (offset 0xc)
 };
 struct IWindow {
-  virtual void m00(); virtual void m01(); virtual void m02(); virtual void m03();
-  virtual void m04(); virtual void m05(); virtual void m06(); virtual void m07();
-  virtual void m08(); virtual void m09(); virtual void m10(); virtual void m11();
-  virtual void m12(); virtual void m13(); virtual void m14(); virtual void m15();
-  virtual void m16(); virtual void m17(); virtual void m18(); virtual void m19();
+virtual void m00();
+virtual void m01();
+virtual void m02();
+virtual void m03();
+virtual void m04();
+virtual void m05();
+virtual void m06();
+virtual void m07();
+virtual void m08();
+virtual void m09();
+virtual void m10();
+virtual void m11();
+virtual void m12();
+virtual void m13();
+virtual void m14();
+virtual void m15();
+virtual void m16();
+virtual void m17();
+virtual void m18();
+virtual void m19();
   virtual void m20(int);                        // 0x50
-  virtual void m21(); virtual void m22(); virtual void m23();
-  virtual void m24(); virtual void m25(); virtual void m26(); virtual void m27();
-  virtual void m28(); virtual void m29(); virtual void m30();
+virtual void m21();
+virtual void m22();
+virtual void m23();
+virtual void m24();
+virtual void m25();
+virtual void m26();
+virtual void m27();
+virtual void m28();
+virtual void m29();
+virtual void m30();
   virtual void m31(int, int);                   // 0x7c
-  virtual void m32(); virtual void m33(); virtual void m34(); virtual void m35();
+virtual void m32();
+virtual void m33();
+virtual void m34();
+virtual void m35();
   virtual void m36();                           // 0x90
-  virtual void m37(); virtual void m38(); virtual void m39(); virtual void m40();
+virtual void m37();
+virtual void m38();
+virtual void m39();
+virtual void m40();
   virtual void m41();
   virtual IWinLookup* GetLookup();              // 0xa8
-  virtual void m43(); virtual void m44(); virtual void m45(); virtual void m46();
-  virtual void m47(); virtual void m48(); virtual void m49(); virtual void m50();
-  virtual void m51(); virtual void m52(); virtual void m53(); virtual void m54();
-  virtual void m55(); virtual void m56(); virtual void m57(); virtual void m58();
-  virtual void m59(); virtual void m60(); virtual void m61(); virtual void m62();
-  virtual void m63(); virtual void m64();
+virtual void m43();
+virtual void m44();
+virtual void m45();
+virtual void m46();
+virtual void m47();
+virtual void m48();
+virtual void m49();
+virtual void m50();
+virtual void m51();
+virtual void m52();
+virtual void m53();
+virtual void m54();
+virtual void m55();
+virtual void m56();
+virtual void m57();
+virtual void m58();
+virtual void m59();
+virtual void m60();
+virtual void m61();
+virtual void m62();
+virtual void m63();
+virtual void m64();
   virtual void m65(void*);                      // 0x104
 };
+void __stdcall FUN_0065dd30(const wchar_t* s);  // 0x0065dd30 (defined below; used by a stub's inline body)
 struct cSPUIFeedEdit_s0065_d050 {
   void* vt;  // +0x00
   char pad[0x50];
@@ -174,17 +228,156 @@ struct cSPUIFeedEdit_s0065_d050 {
   int GetAssetIndex(int a, int b);  // 0065ccd0 (slice s0065bf20) 0x0065ccd0
   void FUN_0065cf30(int a, int b, int c, int* asset);  // slice s0065bf20
 
-  void UpdateGrid();         // 0065d260
-  void FUN_0065d490();       // 0065d490
+  void UpdateGrid();         // 0065d260 0x0065d260
+  void FUN_0065d490();       // 0065d490 0x0065d490
   bool SetPage(unsigned int page);  // 0065d4e0 0x0065d4e0
   void ShowAsset(int a, int b);     // 0065d570 0x0065d570
   bool TranslateToken(const wchar_t* token, void* out);  // 0065dc60 0x0065dc60
-  void SetActive(bool b);    // 0065d9f0
+  void SetActive(bool b);    // 0065d9f0 0x0065d9f0
   bool FUN_0065dd30(unsigned int id);  // 0065dd30 wrapper
 };
 struct HashtableU64 {
   int count;  // +0x0c
   int* erase(int* out, int* node, int* bucket);
+};
+struct WStr3 {  // eastl::basic_string<wchar_t> head: begin, end, capacity
+  wchar_t* b;
+  wchar_t* e;
+  wchar_t* c;
+  unsigned int mAlloc;
+  void Append(const wchar_t* first, const wchar_t* last);  // 0x00429580
+};
+struct FEPolicy {  // eastl::prime_rehash_policy
+  float mfMaxLoadFactor, mfGrowthFactor;
+  unsigned int mnNextResize;
+};
+struct FEHashTab {  // eastl::hashtable<uint64> after the allocator word
+  void* mpAlloc;
+  void* mpBucketArray;
+  unsigned int mnBucketCount;
+  unsigned int mnElementCount;
+  FEPolicy mRehashPolicy;
+  unsigned int mpad;
+  void DoFreeNodes(void* a, unsigned int n);  // 0x005687d0
+  FEHashTab() {
+    mRehashPolicy.mfMaxLoadFactor = 1.0f;
+    mRehashPolicy.mfGrowthFactor = 2.0f;
+    mnElementCount = 0;
+    mRehashPolicy.mnNextResize = 0;
+    mnBucketCount = 1;
+    mpBucketArray = &g_0154df28;
+  }
+  ~FEHashTab() {
+    DoFreeNodes(mpBucketArray, mnBucketCount);
+    mnElementCount = 0;
+    if (mnBucketCount > 1)
+      EASTL_allocator_deallocate(mpBucketArray);
+  }
+};
+struct FEI { virtual void a0(); virtual void Release(); };
+struct FELay { virtual void a0(); virtual void a1(); virtual void Release(); };
+struct FERef {
+  FEI* p;
+  FERef() : p(0) {}
+  ~FERef() {
+    if (p)
+      p->Release();
+  }
+};
+struct FELayRef {
+  FELay* p;
+  FELayRef() : p(0) {}
+  ~FELayRef() {
+    if (p)
+      p->Release();
+  }
+};
+struct FEVecA {
+  void* b; void* e; void* c; void* n;
+  FEVecA() : b(0), e(0), c(0) {}
+  ~FEVecA();  // 0x0065cd30
+};
+struct FEVecB {
+  void* b; void* e; void* c; void* n;
+  FEVecB() : b(0), e(0), c(0) {}
+  ~FEVecB();  // 0x00ae6970
+};
+struct FEStr {
+  wchar_t* b; wchar_t* e; wchar_t* c; unsigned int pad;
+  FEStr() {
+    b = &g_01667bac;
+    e = &g_01667bac;
+    c = (wchar_t*)((char*)&g_01667bac + 1);
+  }
+  ~FEStr() {
+    if (((char*)c - (char*)b) > 1 && b)
+      EASTL_allocator_deallocate(b);
+  }
+};
+struct FEFrameSet {
+  unsigned int d[25];
+  FEFrameSet(void* fn);  // 0x00996cc0
+  ~FEFrameSet();         // 0x009968a0
+};
+struct FETok {                     // cStringTokenTranslator: vptr +0, refcount +4
+  FETok();                         // 0x006b5870
+  ~FETok();                        // 0x005725a0
+  virtual void t0();
+  int mRefCount;
+};
+struct FEWinProc { FEWinProc() {} ~FEWinProc() {} virtual void w0(); };          // +8 (IWinProc)
+struct __declspec(novtable) FEModalCB { virtual void m0() = 0; };  // +0xc (no vptr store in base ctor)
+struct FEHandler { FEHandler() {} ~FEHandler() {} virtual void h0(); };          // +0x10 (IHandlerRC)
+struct FeedEditObj : FETok, FEWinProc, FEModalCB, FEHandler {
+  FELayRef mpLayout;        // +0x14
+  FEFrameSet mFrameSet;     // +0x18 .. 0x7b (cXHTMLFrameSet)
+  FERef mpRef7c;
+  FERef mpRef80;
+  FERef mpRef84;
+  FERef mpRef88;
+  int m8c;
+  bool mb90;
+  bool mb91;
+  float mf94;
+  float mf98;
+  unsigned int m9c, ma0, ma4, ma8;
+  int mac;
+  FEVecB mViewList;         // +0xb0
+  unsigned int mc0;
+  FEVecA mAssetList;        // +0xc4
+  unsigned int md4;
+  FEHashTab mExisting;      // +0xd8
+  FEHashTab mNew;           // +0xf8
+  FEHashTab mDelete;        // +0x118
+  FEStr mStr;               // +0x138
+  bool mb148, mb149, mb14a;
+  FeedEditObj();   // 0x0065daa0
+  ~FeedEditObj();  // 0x0065d860
+  virtual void t0();
+  virtual void w0();
+  virtual void m0();
+  virtual void h0();
+};
+struct ResProvider {
+  void Request(void* out, const wchar_t* url, void* cb, void* obj, int a, int b);  // vslot 1 (+4)
+};
+struct __declspec(novtable) ReqI { virtual void q0(); virtual void AddRef(); };
+struct ReqRC {
+  virtual void r0();
+  int mRefCount;
+  ReqRC() : mRefCount(0) {}
+};
+struct ReqObj : ReqI, ReqRC {
+  unsigned long long mId;  // +0x10
+  unsigned long mNum;      // +0x18
+  void* mpData;            // +0x1c
+  ReqObj(unsigned long long id, unsigned long num) : mId(id), mNum(num), mpData(0) {}
+  virtual void q0();
+  virtual void AddRef();
+  virtual void r0();
+  static void* operator new(unsigned int n, const char* name, int a, int b, int c, int d) {
+    return operator_new_ea(n, name, a, b, c, d);
+  }
 };
 struct UFOCollisionEffectInfo { int a, b, c; int ref; };
 struct VecUFO {
@@ -614,19 +807,11 @@ void cSPUIFeedEditAssetView::GetThumbnailBackdrop(uint32_t* out, unsigned int id
   }
 }
 
-
-
-
-
 // @ 0x0065c6f0
 unsigned int SP::cSPUIFeedEditAssetView::GetEventMask() const
 {
   return (uint32_t)(*(int*)((char*)this + 0x44)) | 0xfffffffd;
 }
-
-
-
-
 
 // @ 0x0065c790
 void CtorObj::FUN_0065c790(void* a, void* b, void* c)
@@ -640,10 +825,6 @@ void CtorObj::FUN_0065c790(void* a, void* b, void* c)
   m18 = c;
   m1c = 0;
 }
-
-
-
-
 
 // @ 0x0065c840
 void SP::cSPUIFeedEditAssetView::SetMode(SP::cSPUIFeedEditAssetView::Mode mode)
@@ -679,10 +860,6 @@ void SP::cSPUIFeedEditAssetView::SetMode(SP::cSPUIFeedEditAssetView::Mode mode)
   *(int*)(p + 0x30) = mode;
 }
 
-
-
-
-
 // @ 0x0065c9a0
 bool SP::cSPUIFeedEditAssetView::OnTick(EA::UTFWin::IWindow * win)
 {
@@ -699,10 +876,6 @@ bool SP::cSPUIFeedEditAssetView::OnTick(EA::UTFWin::IWindow * win)
   }
   return false;
 }
-
-
-
-
 
 // @ 0x0065ca10
 void SP::cSPUIFeedEdit::Shutdown()
@@ -728,10 +901,6 @@ void SP::cSPUIFeedEdit::Shutdown()
   (*(FnPv)Vslot(q, 0x20))(q, this);
 }
 
-
-
-
-
 // @ 0x0065cae0
 void cSPUIFeedEdit::FUN_0065cae0()
 {
@@ -753,10 +922,6 @@ void cSPUIFeedEdit::FUN_0065cae0()
     (*(FnP2)Vslot(w, 0x7c))(w, 2, v);
 }
 
-
-
-
-
 // @ 0x0065cc50
 void cSPUIFeedEdit::FUN_0065cc50()
 {
@@ -772,10 +937,6 @@ void cSPUIFeedEdit::FUN_0065cc50()
     (*(FnP2)Vslot(w2, 0x7c))(w2, 1, idx != 0);
 }
 
-
-
-
-
 // @ 0x0065ccd0
 int cSPUIFeedEdit::GetAssetIndex(int a, int b)
 {
@@ -788,10 +949,6 @@ int cSPUIFeedEdit::GetAssetIndex(int a, int b)
   }
   return -1;
 }
-
-
-
-
 
 // @ 0x0065cd70
 AssetInfo& AssetInfo::operator=(const AssetInfo& other)
@@ -810,10 +967,6 @@ AssetInfo& AssetInfo::operator=(const AssetInfo& other)
   return *this;
 }
 
-
-
-
-
 // @ 0x0065cdc0
 __declspec(noinline) AssetInfo* FUN_0065cdc0(AssetInfo* first, AssetInfo* last, AssetInfo* out)
 {
@@ -831,10 +984,6 @@ __declspec(noinline) AssetInfo* FUN_0065cdc0(AssetInfo* first, AssetInfo* last, 
   return out;
 }
 
-
-
-
-
 // @ 0x0065ce10
 __declspec(noinline) AssetInfo* FUN_0065ce10(AssetInfo* first, AssetInfo* last, AssetInfo* out)
 {
@@ -845,10 +994,6 @@ __declspec(noinline) AssetInfo* FUN_0065ce10(AssetInfo* first, AssetInfo* last, 
   }
   return out;
 }
-
-
-
-
 
 // @ 0x0065cec0
 int cSPUIFeedEditAssetView::FUN_0065cec0(void* msg, void* data)
@@ -869,10 +1014,6 @@ int cSPUIFeedEditAssetView::FUN_0065cec0(void* msg, void* data)
     ++g_15fa6e4;
   return 0;
 }
-
-
-
-
 
 // @ 0x0065cf30
 void cSPUIFeedEditAssetView::FUN_0065cf30(int, int, int, int* asset)
@@ -908,9 +1049,6 @@ void cSPUIFeedEditAssetView::FUN_0065cf30(int, int, int, int* asset)
   *(int*)(p + 0x30) = 1;
 }
 
-
-
-
 // @ 0x0065d050
 void SP::cSPUIFeedEditAssetView::ClearAsset()
 {
@@ -938,9 +1076,6 @@ void SP::cSPUIFeedEditAssetView::ClearAsset()
   (*(FnP)Vslot(*(void**)(p + 0x14), 0x90))(*(void**)(p + 0x14));
   *(int*)(p + 0x30) = 0;
 }
-
-
-
 
 // @ 0x0065d110
 void ReloadCallback(cSPUIFeedEditAssetView_s0065_d050* self, void* layout, bool b)
@@ -990,9 +1125,6 @@ void ReloadCallback(cSPUIFeedEditAssetView_s0065_d050* self, void* layout, bool 
   }
 }
 
-
-
-
 // @ 0x0065d260
 void cSPUIFeedEdit_s0065_d050::UpdateGrid()
 {
@@ -1037,9 +1169,6 @@ void cSPUIFeedEdit_s0065_d050::UpdateGrid()
   } while (it != end);
 }
 
-
-
-
 // @ 0x0065d410
 void AssetRequestCallBack(int* param)
 {
@@ -1061,9 +1190,6 @@ void AssetRequestCallBack(int* param)
   }
 }
 
-
-
-
 // @ 0x0065d490
 void cSPUIFeedEdit_s0065_d050::FUN_0065d490()
 {
@@ -1076,9 +1202,6 @@ void cSPUIFeedEdit_s0065_d050::FUN_0065d490()
     *(unsigned int*)(p + 0xa8) = np + 1;
   FUN_0065cc50();
 }
-
-
-
 
 // @ 0x0065d4e0
 bool cSPUIFeedEdit_s0065_d050::SetPage(unsigned int page)
@@ -1103,9 +1226,6 @@ bool cSPUIFeedEdit_s0065_d050::SetPage(unsigned int page)
   }
   return false;
 }
-
-
-
 
 // @ 0x0065d570
 void cSPUIFeedEdit_s0065_d050::ShowAsset(int a, int b)
@@ -1146,9 +1266,6 @@ void cSPUIFeedEdit_s0065_d050::ShowAsset(int a, int b)
   }
 }
 
-
-
-
 // @ 0x0065d6a0
 int* HashtableU64::erase(int* out, int* node, int* bucket)
 {
@@ -1177,9 +1294,6 @@ int* HashtableU64::erase(int* out, int* node, int* bucket)
   count = count - 1;
   return out;
 }
-
-
-
 
 // @ 0x0065d720
 bool cSPUIFeedEditAssetView_s0065_d050::Init(void* parent, unsigned int index)
@@ -1215,9 +1329,6 @@ bool cSPUIFeedEditAssetView_s0065_d050::Init(void* parent, unsigned int index)
   return true;
 }
 
-
-
-
 // @ 0x0065d810
 void SP::cSPUIFeedEditAssetView::Shutdown()
 {
@@ -1241,8 +1352,9 @@ void SP::cSPUIFeedEditAssetView::Shutdown()
   *(void**)(p + 0x10) = 0;
 }
 
-
-
+// @ 0x0065d860
+FeedEditObj::~FeedEditObj()
+{}
 
 // @ 0x0065d9f0
 void cSPUIFeedEdit_s0065_d050::SetActive(bool b)
@@ -1254,9 +1366,9 @@ void cSPUIFeedEdit_s0065_d050::SetActive(bool b)
     (*(FnP2)Vslot(*(void**)(p + 0x80), 0x7c))(*(void**)(p + 0x80), 1, b ? 1 : 0);
     if (b) {
       wchar_t* tmp[3];
-      tmp[0] = &g_str_1667bac;
-      tmp[1] = &g_str_1667bac;
-      tmp[2] = &g_str_1667bae;
+      tmp[0] = &g_01667bac;
+      tmp[1] = &g_01667bac;
+      tmp[2] = &g_01667bae;
       *(int*)(p + 0x8c) = 0;
       GetURL(0x5908ef2, tmp);
       ((cXHTMLFrameSet_s0065_d050*)(p + 0x18))->HandleLocationChange(*(void**)(p + 0x84), tmp[0], 0, 0);
@@ -1264,8 +1376,12 @@ void cSPUIFeedEdit_s0065_d050::SetActive(bool b)
   }
 }
 
-
-
+// @ 0x0065daa0
+FeedEditObj::FeedEditObj()
+: mFrameSet((void*)&FUN_00623f40), m8c(0), mb90(false), mb91(false), mf94(0.0f), mf98(0.0f),
+      m9c(0), ma0(0), ma4(0), ma8(0), mac(-1), mb148(false), mb149(false), mb14a(false) {
+  (*(FnP)Vslot(&mFrameSet, 0))(&mFrameSet);
+}
 
 // @ 0x0065dc60
 bool cSPUIFeedEdit_s0065_d050::TranslateToken(const wchar_t* token, void* out)
@@ -1293,8 +1409,54 @@ bool cSPUIFeedEdit_s0065_d050::TranslateToken(const wchar_t* token, void* out)
   return true;
 }
 
-
-
+// @ 0x0065dd30
+void __stdcall FUN_0065dd30(const wchar_t* s)
+{
+  WStr3 url;
+  url.b = &g_01667bac;
+  url.e = &g_01667bac;
+  url.c = &g_01667bae;
+  GetURL(0x55192fa, &url);
+  const wchar_t* t = s;
+  const wchar_t* t1 = s + 1;
+  while (*t++) {
+  }
+  const wchar_t* end = s + (t - t1);
+  const wchar_t* dot = s;
+  while (dot != end && *dot != L'.')
+    ++dot;
+  unsigned int n = (unsigned int)(dot - s);
+  unsigned int i = 0;
+  const wchar_t* q = s;
+  unsigned int rem = n;
+  while (rem > 3) {
+    url.Append(q, q + 3);
+    const wchar_t* sep = L"/";
+    const wchar_t* se = sep;
+    while (*++se) {
+    }
+    url.Append(sep, sep + (se - sep));
+    i += 3;
+    q += 3;
+    rem = n - i;
+  }
+  url.Append(s, s + n);
+  const wchar_t* g = g_0152694c;
+  const wchar_t* ge = g;
+  while (*ge)
+    ++ge;
+  url.Append(g, g + (ge - g));
+  unsigned long long id = StrtoU6416(s, 0, 10);
+  unsigned long num = wcstoul(s + n + 1, 0, 10);
+  ReqObj* obj = new ("Sporepedia", 0, 0, 0, 0) ReqObj(id, num);
+  (*(FnP)Vslot(obj, 4))(obj);
+  ResProvider* rp = (ResProvider*)GetResourceProvider();
+  char res[4];
+  (*(void(__thiscall*)(void*, void*, const wchar_t*, void*, void*, int, int))Vslot(rp, 4))(
+      rp, res, url.b, (void*)&AssetRequestCallBack, obj, 0, 0);
+  if (((int)((char*)url.c - (char*)url.b) & ~1) > 2 && url.b)
+    EASTL_allocator_deallocate(url.b);
+}
 
 // @ 0x0065ded0
 UFOCollisionEffectInfo* VecUFO::erase(UFOCollisionEffectInfo* first, UFOCollisionEffectInfo* last)
@@ -1315,8 +1477,6 @@ UFOCollisionEffectInfo* VecUFO::erase(UFOCollisionEffectInfo* first, UFOCollisio
   mpEnd = (UFOCollisionEffectInfo*)((char*)mpEnd + (((char*)last - (char*)first) >> 4) * -0x10);
   return first;
 }
-
-
 
 // @ 0x0065df30
 __declspec(noinline) AssetInfo_s0065_df30* AssetVec::DoInsertValue(AssetInfo_s0065_df30* position, AssetInfo_s0065_df30* value)
@@ -1357,8 +1517,6 @@ __declspec(noinline) AssetInfo_s0065_df30* AssetVec::DoInsertValue(AssetInfo_s00
     return position;
 }
 
-
-
 // @ 0x0065e0a0
 void SP::cSPUIFeedEdit::UnloadLayout()
 {
@@ -1372,8 +1530,6 @@ void SP::cSPUIFeedEdit::UnloadLayout()
     ((cXHTMLFrameSet_s0065_df30*)(p + 0x18))->FUN_00997140();
     *(char*)(p + 0x90) = 0;
 }
-
-
 
 // @ 0x0065e110
 bool cSPUIFeedEdit_s0065_df30::Populate()
@@ -1447,8 +1603,6 @@ bool cSPUIFeedEdit_s0065_df30::Populate()
     return true;
 }
 
-
-
 // @ 0x0065e570
 bool cSPUIFeedEdit_s0065_df30::RemoveAsset(int a, int b)
 {
@@ -1483,8 +1637,6 @@ bool cSPUIFeedEdit_s0065_df30::RemoveAsset(int a, int b)
     return true;
 }
 
-
-
 // @ 0x0065e6d0
 void AssetVec::push_back()
 {
@@ -1500,8 +1652,6 @@ void AssetVec::push_back()
     void* x = *(void* volatile*)&tmp.mpImage;
     if (x) (*(FnP)Vslot(x, 4))(x);
 }
-
-
 
 // @ 0x0065e720
 void cSPUIFeedEdit_s0065_df30::ResetPanel()
@@ -1550,8 +1700,6 @@ void cSPUIFeedEdit_s0065_df30::ResetPanel()
     UpdateEnabledState();
 }
 
-
-
 // @ 0x0065e8d0
 void cSPUIFeedEdit_s0065_df30::LoadLayout()
 {
@@ -1592,7 +1740,6 @@ void cSPUIFeedEdit_s0065_df30::LoadLayout()
         *(char*)(p + 0x90) = 1;
     }
 }
-
 
 // @ 0x0065ea00
 void cSPUIFeedEdit_s0065_ea00::DoMessage(int msg, void* data)
@@ -1670,7 +1817,6 @@ void cSPUIFeedEdit_s0065_ea00::DoMessage(int msg, void* data)
     }
 }
 
-
 // @ 0x0065ef10
 void CallbackObj::Handler(int a, int b)
 {
@@ -1678,7 +1824,6 @@ void CallbackObj::Handler(int a, int b)
     ((cSPUIFeedEdit_s0065_ea00*)((char*)this - 0xc))->ResetPanel();
     (*(FnP)Vslot(win, 0x90))(win);
 }
-
 
 // @ 0x0065f390
 char cSPUIFeedEdit_s0065_ea00::AddAsset(int a, int b, int c, void* img)
@@ -1715,7 +1860,6 @@ char cSPUIFeedEdit_s0065_ea00::AddAsset(int a, int b, int c, void* img)
     return result;
 }
 
-
 // @ 0x0065f4d0
 void cSPUIFeedEdit_s0065_ea00::InitLayout()
 {
@@ -1736,7 +1880,6 @@ void cSPUIFeedEdit_s0065_ea00::InitLayout()
     mpLayout->SetReloadCallback((void*)0x65e9e0, this);
     LoadLayout();
 }
-
 
 // @ 0x0065f700
 void SP::cSPUIFeedEdit::Init(EA::UTFWin::IWindow * parent)
