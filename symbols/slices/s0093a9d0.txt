@@ -29,7 +29,7 @@
 0093b700 StreamChild::SetPosition  # IStream slot 0x28 (dispatch uncertain)
 0093b770 StreamChild::Read  # IStream slot 0x30
 0093b7d0 StreamChild::StreamChild  # ctor
-0093b820 EA::IO::WriteEncoded  # dev-PDB EA::IO::WriteEncoded
+0093b820 ?WriteEncoded@IO@EA@@YA_NPAVIStream_s0093_a9d0@12@PB_WIH@Z  # WriteEncoded migrated from s0093a9d0 (verbatim, slice spelling)
 0093b8b0 FixedMemoryStream::Release  # IStream slot 0x08
 0093b8e0 FixedMemoryStream::SetData  # member
 0093b900 ?SetSize@FixedMemoryStream@IO@EA@@UAE_NI@Z  # FixedMemoryStream::SetSize migrated from s0093a9d0 (verbatim, slice spelling)
