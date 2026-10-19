@@ -6,11 +6,16 @@
 typedef unsigned int   uint32;
 typedef unsigned short uint16;
 typedef unsigned char  byte;
+static inline void** VT(void* p) { return *(void***)p; }
 
 // ---------------------------------------------------------------------------
 struct RCObj {                       // refcounted, vtable slot0 AddRef, slot1 Release
     virtual void AddRef();
     virtual void Release();
+};
+struct NRef {                        // refcounted with *non-virtual* AddRef/Release (direct calls)
+    void AddRef();                   // 0x00a02c30
+    void Release();                  // 0x00a05270
 };
 extern "C" void WriteUint32(void* stream, void* pValue, int one, int zero);  // 0x93aa70
 extern "C" void operator_delete(void* p);                                    // 0xf47380
@@ -137,32 +142,32 @@ extern "C" void* FUN_006bb5d0(void);                          // 0x6bb5d0
 struct CSC { void FUN_00695b40(void* a, void* b, const wchar_t* c); };  // 0x695b40
 extern int DAT_0164dc58;
 
-void* FUN_00ac8f00(void* out, int* p, int a, int p4, int p5)
+float* FUN_00ac8f00(float* out, int* p, int a, float p4, float p5)
 {
     if (p) {
-        char ok = (*(char (__thiscall*)(void*, int, void**))((char*)*(void**)p + 0x24))(p, a, (void**)&p);
+        char ok = (*(char (__thiscall**)(void*, int, void**))((char*)VT(p) + 0x24))(p, a, (void**)&p);
         if (ok) {
             short t = *(short*)((char*)p + 0x12);
             if (t != 0x30 && t != 0x10) {
-                void* q = FUN_006bb5d0();
-                *(int*)out = *(int*)q;
-                ((int*)out)[1] = ((int*)q)[1];
+                float* q = (float*)FUN_006bb5d0();
+                out[0] = q[0];
+                out[1] = q[1];
                 return out;
             }
             if (*(byte*)((char*)p + 0x10) & 0x30) {
-                void* q = (void*)*(int*)p;
-                *(int*)out = *(int*)q;
-                ((int*)out)[1] = ((int*)q)[1];
+                float* q = (float*)*(int*)p;
+                out[0] = q[0];
+                out[1] = q[1];
                 return out;
             }
-            void* q = (void*)(-(int)(t != 0) & (int)p);
-            *(int*)out = *(int*)q;
-            ((int*)out)[1] = ((int*)q)[1];
+            float* q = (float*)((t != 0 ? -1 : 0) & (int)p);
+            out[0] = q[0];
+            out[1] = q[1];
             return out;
         }
     }
-    *(int*)out = p4;
-    ((int*)out)[1] = p5;
+    out[0] = p4;
+    out[1] = p5;
     return out;
 }
 
@@ -172,7 +177,7 @@ void* FUN_00ac8f00(void* out, int* p, int a, int p4, int p5)
 int FUN_00ac8fa0(int* p, int a, int b)
 {
     if (p) {
-        char ok = (*(char (__thiscall*)(void*, int, void**))((char*)*(void**)p + 0x24))(p, a, (void**)&p);
+        char ok = (*(char (__thiscall**)(void*, int, void**))((char*)VT(p) + 0x24))(p, a, (void**)&p);
         if (ok) {
             short t = *(short*)((char*)p + 0x12);
             if (t != 10 && t != 0x10) {
@@ -181,7 +186,8 @@ int FUN_00ac8fa0(int* p, int a, int b)
             if (*(byte*)((char*)p + 0x10) & 0x30) {
                 return *(int*)*(int*)p;
             }
-            return *(int*)(-(int)(t != 0) & (int)p);
+            int m = (t != 0 ? -1 : 0);
+            return *(int*)(m & (int)p);
         }
     }
     return b;
@@ -197,20 +203,20 @@ extern "C" char SP_cVarListSerializer_Serialize(void* self, void* p);           
 void FUN_00ac9040(int* self, int* arr)
 {
     int count = (arr[1] - arr[0]) >> 5;
-    int* q = (int*)(*(void* (__thiscall*)(int*))((char*)*(void**)self + 0x20))(self);
-    WriteUint32((void*)(*(void* (__thiscall*)(int*))((char*)*(void**)q + 0x18))(q), &count, 1, 0);
+    int* q = (int*)(*(void* (__thiscall**)(int*))((char*)VT(self) + 0x20))(self);
+    WriteUint32((void*)(*(void* (__thiscall**)(int*))((char*)VT(q) + 0x18))(q), &count, 1, 0);
     int* end = (int*)arr[1];
     for (int* it = (int*)arr[0]; it != end; it += 8) {
         int v = *it;
-        q = (int*)(*(void* (__thiscall*)(int*))((char*)*(void**)self + 0x20))(self);
-        WriteUint32((void*)(*(void* (__thiscall*)(int*))((char*)*(void**)q + 0x18))(q), &v, 1, 0);
-        (*(void (__thiscall*)(int*))((char*)*(void**)self + 0x1c))(self);
+        q = (int*)(*(void* (__thiscall**)(int*))((char*)VT(self) + 0x20))(self);
+        WriteUint32((void*)(*(void* (__thiscall**)(int*))((char*)VT(q) + 0x18))(q), &v, 1, 0);
+        (*(void (__thiscall**)(int*))((char*)VT(self) + 0x1c))(self);
         char srl[0xa14];
         SP_cVarListSerializer_ctor(srl, it + 1, (void*)0x1566000, 0x1a80d26);
         SP_cVarListSerializer_Serialize(srl, self);
-        (*(void (__thiscall*)(int*))((char*)*(void**)self + 0x1c))(self);
+        (*(void (__thiscall**)(int*))((char*)VT(self) + 0x1c))(self);
     }
-    (*(void (__thiscall*)(int*))((char*)*(void**)self + 0x1c))(self);
+    (*(void (__thiscall**)(int*))((char*)VT(self) + 0x1c))(self);
 }
 
 // ===========================================================================
@@ -234,13 +240,13 @@ bool FUN_00ac9110(void* a, int* arr)
 void FUN_00ac9150(int* self, int* arr)
 {
     int count = (arr[1] - arr[0]) / 0xc;
-    int* q = (int*)(*(void* (__thiscall*)(int*))((char*)*(void**)self + 0x20))(self);
-    WriteUint32((void*)(*(void* (__thiscall*)(int*))((char*)*(void**)q + 0x18))(q), &count, 1, 0);
+    int* q = (int*)(*(void* (__thiscall**)(int*))((char*)VT(self) + 0x20))(self);
+    WriteUint32((void*)(*(void* (__thiscall**)(int*))((char*)VT(q) + 0x18))(q), &count, 1, 0);
     int* end = (int*)arr[1];
     for (int* it = (int*)arr[0]; it != end; it += 3) {
-        (*(void (__thiscall*)(int*, int*))((char*)*(void**)it + 4))(it, self);
+        (*(void (__thiscall**)(int*, int*))((char*)VT(it) + 4))(it, self);
     }
-    (*(void (__thiscall*)(int*))((char*)*(void**)self + 0x1c))(self);
+    (*(void (__thiscall**)(int*))((char*)VT(self) + 0x1c))(self);
 }
 
 // ===========================================================================
@@ -397,8 +403,7 @@ void FUN_00ac9560(char* d, int n, char* s)
 // ===========================================================================
 char* FUN_00ac95a0(char* s, char* end, char* d)
 {
-    if (s == end) return d;
-    do {
+    while (s != end) {
         if (d) {
             *(void**)d = (void*)0x145a158;
             d[4] = s[4];
@@ -408,20 +413,41 @@ char* FUN_00ac95a0(char* s, char* end, char* d)
         }
         s += 0xc;
         d += 0xc;
-    } while (s != end);
+    }
+    return d;
+}
+
+// ===========================================================================
+// @ 0x00ac97f0
+// ===========================================================================
+char* FUN_00ac97f0(char* first, char* last, char* d)
+{
+    while (last != first) {
+        char v = last[-8];
+        last -= 0xc;
+        d -= 0xc;
+        d[4] = v;
+        RCObj* s = *(RCObj**)(last + 8);
+        RCObj* old = *(RCObj**)(d + 8);
+        if (s != old) {
+            if (s) s->AddRef();
+            *(RCObj**)(d + 8) = s;
+            if (old) old->Release();
+        }
+    }
     return d;
 }
 
 // ===========================================================================
 // @ 0x00ac95f0
 // ===========================================================================
-void** FUN_00ac95f0(void** out, RCObj*** src, RCObj*** end, void* base)
+void** FUN_00ac95f0(void** out, NRef*** src, NRef*** end, void* base)
 {
     *out = base;
     for (; src != end; ++src) {
-        RCObj** d = (RCObj**)*out;
+        NRef** d = (NRef**)*out;
         if (d) {
-            RCObj* p = (RCObj*)*src;
+            NRef* p = (NRef*)*src;
             *d = p;
             if (p) p->AddRef();
         }
@@ -433,11 +459,11 @@ void** FUN_00ac95f0(void** out, RCObj*** src, RCObj*** end, void* base)
 // ===========================================================================
 // @ 0x00ac9630
 // ===========================================================================
-void FUN_00ac9630(RCObj** p, RCObj** end, RCObj*** src)
+void FUN_00ac9630(NRef** p, NRef** end, NRef*** src)
 {
     for (; p != end; ++p) {
-        RCObj* s = (RCObj*)*src;
-        RCObj* old = *p;
+        NRef* s = (NRef*)*src;
+        NRef* old = *p;
         if (s != old) {
             if (s) s->AddRef();
             *p = s;
@@ -449,14 +475,15 @@ void FUN_00ac9630(RCObj** p, RCObj** end, RCObj*** src)
 // ===========================================================================
 // @ 0x00ac9680
 // ===========================================================================
-void FUN_00ac9680(RCObj** p, int n, RCObj*** src)
+void FUN_00ac9680(NRef** p, unsigned int n, NRef*** src)
 {
-    for (; n != 0; --n) {
+    while (n > 0) {
         if (p) {
-            RCObj* s = (RCObj*)*src;
+            NRef* s = (NRef*)*src;
             *p = s;
             if (s) s->AddRef();
         }
+        --n;
         ++p;
     }
 }
@@ -498,8 +525,7 @@ char* FUN_00ac96b0(char* p, char* end, char* d)
 // ===========================================================================
 char* FUN_00ac9740(char* p, char* end, char* d)
 {
-    if (p == end) return d;
-    do {
+    while (p != end) {
         d[4] = p[4];
         RCObj* s = *(RCObj**)(p + 8);
         RCObj* old = *(RCObj**)(d + 8);
@@ -510,7 +536,7 @@ char* FUN_00ac9740(char* p, char* end, char* d)
         }
         p += 0xc;
         d += 0xc;
-    } while (p != end);
+    }
     return d;
 }
 
@@ -519,8 +545,7 @@ char* FUN_00ac9740(char* p, char* end, char* d)
 // ===========================================================================
 RCObj** FUN_00ac97a0(RCObj** last, RCObj** first, RCObj** d)
 {
-    if (first == last) return d;
-    do {
+    while (first != last) {
         RCObj* s = *(RCObj**)(first - 1);
         RCObj* old = d[-1];
         --first;
@@ -530,29 +555,7 @@ RCObj** FUN_00ac97a0(RCObj** last, RCObj** first, RCObj** d)
             *d = s;
             if (old) old->Release();
         }
-    } while (first != last);
-    return d;
-}
-
-// ===========================================================================
-// @ 0x00ac97f0
-// ===========================================================================
-char* FUN_00ac97f0(char* p, char* end, char* d)
-{
-    if (p == end) return d;
-    do {
-        char v = p[-8];
-        p -= 0xc;
-        d -= 0xc;
-        d[4] = v;
-        RCObj* s = *(RCObj**)(p + 8);
-        RCObj* old = *(RCObj**)(d + 8);
-        if (s != old) {
-            if (s) s->AddRef();
-            *(RCObj**)(d + 8) = s;
-            if (old) old->Release();
-        }
-    } while (p != end);
+    }
     return d;
 }
 
@@ -599,11 +602,11 @@ static int FUN_00ac98e0_readfloat(int* p, int id, int def)
 {
     int v;
     if (!p) return def;
-    if (!(*(char (__thiscall*)(void*, int, void**))((char*)*(void**)p + 0x24))(p, id, (void**)&p)) return def;
+    if (!(*(char (__thiscall**)(void*, int, void**))((char*)VT(p) + 0x24))(p, id, (void**)&p)) return def;
     short t = *(short*)((char*)p + 0x12);
     if (t != 0xd && t != 0x10) { v = DAT_015d9c6c; return v; }
     if (*(byte*)((char*)p + 0x10) & 0x30) return *(int*)*(int*)p;
-    return *(int*)(-(int)(t != 0) & (int)p);
+    return *(int*)((t != 0 ? -1 : 0) & (int)p);
 }
 
 // @ 0x00ac98e0
@@ -616,7 +619,7 @@ void FUN_00ac98e0(int* p)
     {
         float a = 0.5f;
         int out[2];
-        FUN_00ac8f00(out, p, 0x5008313, 0, *(int*)&a);
+        FUN_00ac8f00((float*)out, p, 0x5008313, 0.0f, a);
         DAT_01565d54 = out[0];
         DAT_01565d58 = out[1];
     }
@@ -624,12 +627,12 @@ void FUN_00ac98e0(int* p)
     {
         int v;
         if (!p) v = 5;
-        else if (!(*(char (__thiscall*)(void*, int, void**))((char*)*(void**)p + 0x24))(p, 0x500849f, (void**)&p)) v = 5;
+        else if (!(*(char (__thiscall**)(void*, int, void**))((char*)VT(p) + 0x24))(p, 0x500849f, (void**)&p)) v = 5;
         else {
             short t = *(short*)((char*)p + 0x12);
             if (t != 10 && t != 0x10) v = DAT_0164dc58;
             else if (*(byte*)((char*)p + 0x10) & 0x30) v = *(int*)*(int*)p;
-            else v = *(int*)(-(int)(t != 0) & (int)p);
+            else v = *(int*)((t != 0 ? -1 : 0) & (int)p);
         }
         DAT_01565cf0 = v;
     }
@@ -637,43 +640,43 @@ void FUN_00ac98e0(int* p)
     {
         float a = 100.0f, b = 150.0f;
         int out[2];
-        FUN_00ac8f00(out, p, 0x509beb7, *(int*)&a, *(int*)&b);
+        FUN_00ac8f00((float*)out, p, 0x509beb7, a, b);
         DAT_01565d5c = out[0];
         DAT_01565d60 = out[1];
     }
     {
         int v;
         if (!p) v = 100;
-        else if (!(*(char (__thiscall*)(void*, int, void**))((char*)*(void**)p + 0x24))(p, 0x5c8390d, (void**)&p)) v = 100;
+        else if (!(*(char (__thiscall**)(void*, int, void**))((char*)VT(p) + 0x24))(p, 0x5c8390d, (void**)&p)) v = 100;
         else {
             short t = *(short*)((char*)p + 0x12);
             if (t != 9 && t != 0x10) v = DAT_015d9c68;
             else if (*(byte*)((char*)p + 0x10) & 0x30) v = *(int*)*(int*)p;
-            else v = *(int*)(-(int)(t != 0) & (int)p);
+            else v = *(int*)((t != 0 ? -1 : 0) & (int)p);
         }
         DAT_01565d00 = v;
     }
     {
         int v;
         if (!p) v = 10;
-        else if (!(*(char (__thiscall*)(void*, int, void**))((char*)*(void**)p + 0x24))(p, 0x68dc104, (void**)&p)) v = 10;
+        else if (!(*(char (__thiscall**)(void*, int, void**))((char*)VT(p) + 0x24))(p, 0x68dc104, (void**)&p)) v = 10;
         else {
             short t = *(short*)((char*)p + 0x12);
             if (t != 9 && t != 0x10) v = DAT_015d9c68;
             else if (*(byte*)((char*)p + 0x10) & 0x30) v = *(int*)*(int*)p;
-            else v = *(int*)(-(int)(t != 0) & (int)p);
+            else v = *(int*)((t != 0 ? -1 : 0) & (int)p);
         }
         DAT_01565d04 = v;
     }
     {
         int v;
         if (!p) v = 4;
-        else if (!(*(char (__thiscall*)(void*, int, void**))((char*)*(void**)p + 0x24))(p, 0x511f4a9, (void**)&p)) v = 4;
+        else if (!(*(char (__thiscall**)(void*, int, void**))((char*)VT(p) + 0x24))(p, 0x511f4a9, (void**)&p)) v = 4;
         else {
             short t = *(short*)((char*)p + 0x12);
             if (t != 10 && t != 0x10) v = DAT_0164dc58;
             else if (*(byte*)((char*)p + 0x10) & 0x30) v = *(int*)*(int*)p;
-            else v = *(int*)(-(int)(t != 0) & (int)p);
+            else v = *(int*)((t != 0 ? -1 : 0) & (int)p);
         }
         DAT_01565d08 = v;
     }
@@ -714,8 +717,8 @@ void FUN_00ac9dd0(int a, int b)
 void FUN_00ac9df0(int* self, int* p)
 {
     int v = *(int*)((char*)p + 0xc);
-    int* q = (int*)(*(void* (__thiscall*)(int*))((char*)*(void**)self + 0x20))(self);
-    WriteUint32((void*)(*(void* (__thiscall*)(int*))((char*)*(void**)q + 0x18))(q), &v, 1, 0);
+    int* q = (int*)(*(void* (__thiscall**)(int*))((char*)VT(self) + 0x20))(self);
+    WriteUint32((void*)(*(void* (__thiscall**)(int*))((char*)VT(q) + 0x18))(q), &v, 1, 0);
     int* root = *(int**)((char*)p + 4);
     int* node = (int*)*root;
     int* slot = root;
@@ -726,21 +729,21 @@ void FUN_00ac9df0(int* self, int* p)
     }
     int* end = (int*)root[*(int*)((char*)p + 8)];
     while (node != end) {
-        q = (int*)(*(void* (__thiscall*)(int*))((char*)*(void**)self + 0x20))(self);
+        q = (int*)(*(void* (__thiscall**)(int*))((char*)VT(self) + 0x20))(self);
         int nv = *node;
-        WriteUint32((void*)(*(void* (__thiscall*)(int*))((char*)*(void**)q + 0x18))(q), &nv, 1, 0);
-        (*(void (__thiscall*)(int*))((char*)*(void**)self + 0x1c))(self);
+        WriteUint32((void*)(*(void* (__thiscall**)(int*))((char*)VT(q) + 0x18))(q), &nv, 1, 0);
+        (*(void (__thiscall**)(int*))((char*)VT(self) + 0x1c))(self);
         char srl[0xa14];
         SP_cVarListSerializer_ctor(srl, node + 1, (void*)0x15661a8, 0x1a80d26);
         SP_cVarListSerializer_Serialize(srl, self);
-        (*(void (__thiscall*)(int*))((char*)*(void**)self + 0x1c))(self);
+        (*(void (__thiscall**)(int*))((char*)VT(self) + 0x1c))(self);
         node = (int*)node[0x1a];
         while (!node) {
             node = (int*)slot[1];
             ++slot;
         }
     }
-    (*(void (__thiscall*)(int*))((char*)*(void**)self + 0x1c))(self);
+    (*(void (__thiscall**)(int*))((char*)VT(self) + 0x1c))(self);
 }
 
 // ===========================================================================

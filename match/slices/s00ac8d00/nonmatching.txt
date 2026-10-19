@@ -1,4 +1,13 @@
 # va  diff-bytes  reason
+00ac8f00  55   complete; property->vector resolve with tag-type dispatch; register schedule differs (148 vs 145); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest PASS (399 valid, 60.4% cov)
+00ac8fa0  34   complete; property->int resolve; schedule differs (85 vs 82); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest PASS (399 valid, 67.6% cov)
+00ac9040  168  complete; serialize vector of 0x20-stride records via cVarListSerializer; schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest UNSUPPORTED (0/400 valid, fault(read))
+00ac9150  77   complete; serialize vector of 0xc records; schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest UNSUPPORTED (0/400 valid)
+00ac94c0  70   complete; construct 0xc-pair range from template element; schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest UNSUPPORTED (0/400 valid)
+00ac9680  18   complete; refcounted fill loop; schedule differs (48 vs 47); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest PASS (312 valid, 100% cov)
+00ac9740  7    complete; 0xc-pair range assign w/ AddRef/Release; schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest UNSUPPORTED (0/400 valid)
+00ac97a0  20   complete; reverse refcounted-pointer range assign; schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest UNSUPPORTED (0/400 valid)
+00ac97f0  16   complete; reverse 0xc-pair range assign; schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest UNSUPPORTED (0/400 valid)
 00ac8d00  40   complete; city civilization lookup + g->FUN_00d57a60, register schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (62.5% cov)
 00ac8d80  92   complete; SSE sphere-list point test, unrolled/hoist schedule differs (171 vs 111 bytes); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (100% cov)
 00ac8df0  92   complete; SSE sphere-list point test (<= radius at +0xc), schedule differs (171 vs 111); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (100% cov)
