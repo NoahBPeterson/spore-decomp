@@ -1,3 +1,4 @@
+00922500 ?FUN_00922500@@YAXPAX0D@Z  # FUN_00922500 migrated from s00922500 (verbatim, slice spelling)
 00922570 EA::Thread::EASemaphoreData::UpdateCancelCount  # 2008 dev PDB name
 009225d0 EA::Thread::SemaphoreData::SemaphoreData  # PDB name (count/intra/name descriptor)
 00922620 EA::Thread::Semaphore::Init  # 2008 dev PDB name (CreateSemaphoreA)

@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00922150 61 Mutex::Init: CreateMutexA name-pointer select and field init ordering differ
+009221b0 119 Mutex::Lock: timeout/TryEnterCriticalSection loop shape differs
+009222a0 69 Mutex::Mutex: member zero-init ordering differs
