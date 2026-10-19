@@ -1,1 +1,1 @@
-00a6f110 EA::Swarm::cEffectsParser::ParseDescRecOptions  # PDB name; args cArguments*, DescRec*; ret 8
+00a6f110 ?ParseDescRecOptions@cEffectsParser@@QAEXPAUcArguments@@PAUDescRec@@@Z  # cEffectsParser::ParseDescRecOptions migrated from s00a6f110 (verbatim, slice spelling)
