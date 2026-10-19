@@ -1,0 +1,15 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+006e1260 560 3D cumulative-moment pass; all five scratch arrays, the 0x40x0x40 inner accumulation and writeback translated, local layout/schedule differs
+006e1480 80 3D box moment sum; index algebra and the 8-term combination reproduced; declaration order aligned so the pushed-ecx scratch holds the same box[] element as the original (harness reads the dead ecx); equiv: WEAK (valid-input cap)
+006e1520 238 axis-selector plane moment sum; all three axis branches reproduced, codegen differs
+006e1650 275 plane moment sum with fixed coordinate; all three axis branches reproduced, codegen differs
+006e1880 372 maximise variance along an axis; plane-moment calls + variance formula + argmax loop translated; volatile best keeps the loop-carried variance accumulator out of xmm6/xmm7 so the original's untouched xmm6/7 stay untouched; equiv: WEAK
+006e1a30 238 cut box along best axis; three MaximizeVariance calls and the split assignments translated, register/schedule differs
+006e1be0 79 fill a 3D byte region; triple loop translated, loop rotation differs
+006e1c50 129 WUINTERNAL::AllocWuData; both galloc buffers, zeroing and the four contiguous moment pointers reproduced, schedule differs
+006e1d10 34 WU_open; 0x10 context alloc + AllocWuData + tag/version stores translated, store order/schedule differs
+006e1d50 57 WU_read; descriptor validation, dimension stores and Hist3d call translated, register schedule differs
+006e1db0 858 WU_close; moment pass, box-cut loop, best-score scan and palette/image output all translated, helper/register schedule differs
+006e20f0  428  CRAPI_diffuseerror; all three channel error branches (clamp/negative) and the scan loop translated, schedule differs
+006e22d0 646 CRAPI_getcolour; both distance tables, the channel-expansion hint paths, 0x1fff cache probe and nearest loop translated, schedule differs
+006e25f0 1084 CRAPI_remap; palette build (both 0x40/0x100 cases), cache clear, wide/narrow paths, dither call translated, schedule differs
