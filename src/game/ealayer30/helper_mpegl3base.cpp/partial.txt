@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0116c750  5170  complete: ISO dist10 III_stereo (MPEG-2 LSF, float, in place); regalloc/strength-reduction differ, ms helper 0116c600 called as extern cdecl (original: same-TU static, xr in EAX); /arch:SSE  [demoted 2026-10-06: equivalence harness FAIL, value difference in call #1 (depth 1); see work/difftest/op1_equiv.json]

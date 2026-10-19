@@ -1,1 +1,1 @@
-0116e4f0 rw::audio::core::HELPER_Imdct36X1  # card/PDB name; 36-pt IMDCT+window, twin of 0x011666d0
+0116e4f0 ?HELPER_Imdct36X1@core@audio@rw@@YIXPBMPAM1@Z  # HELPER_Imdct36X1 migrated from s0116e4f0 (verbatim, slice spelling)
