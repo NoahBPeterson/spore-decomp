@@ -1156,18 +1156,6 @@ void __cdecl FinishMesh(void* mesh);                               // 0x00735a90
 }
 // ---- items of slice s00728c90 end
 
-
-
-
-
-
-
-
-
-
-
-
-
 // ---- items of slice s007249f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" int   FUN_0071ddc0(void* p, int a, int b, int c, int d);   // 0x71ddc0
 extern "C" int   FUN_0071e040(void* p, int idx, int id);              // 0x71e040
@@ -1227,39 +1215,319 @@ struct MeshCtx {
 };
 // ---- items of slice s00728020 end
 
+// ---- items of slice s00726c20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line); // 0x00f473a0
+struct cSPVector3_s0072_6c20 {
+  float x, y, z;
+  cSPVector3_s0072_6c20() {}
+  cSPVector3_s0072_6c20(const cSPVector3_s0072_6c20& v) : x(v.x), y(v.y), z(v.z) {}
+};
+__forceinline int RoundToInt(float f) { __asm cvtss2si eax, f }
+namespace EA {
+namespace COM {
+class IRefCount_s0072_6c20 {
+ public:
+  virtual int AddRef();
+  virtual int Release();
+};  // namespace COM
+}
+}
+namespace EA {
+template <typename T>
+class AutoRefCount_s0072_6c20 {
+ public:
+  T* mpObject;
+  AutoRefCount_s0072_6c20() : mpObject(0) {}
+  AutoRefCount_s0072_6c20(const AutoRefCount_s0072_6c20& x) : mpObject(x.mpObject) {
+    if (mpObject)
+      mpObject->AddRef();
+  }
+  ~AutoRefCount_s0072_6c20() {
+    if (mpObject)
+      mpObject->Release();
+  }
+  AutoRefCount_s0072_6c20& operator=(T* pObject) {
+    if (pObject != mpObject) {
+      T* const pTemp = mpObject;
+      if (pObject)
+        pObject->AddRef();
+      mpObject = pObject;
+      if (pTemp)
+        pTemp->Release();
+    }
+    return *this;
+  }
+  AutoRefCount_s0072_6c20& operator=(const AutoRefCount_s0072_6c20& x) { return operator=(x.mpObject); }
+};
+}
+namespace EA {
+namespace Thread {
+typedef unsigned int ThreadTime;
+}
+}
+namespace EA {
+namespace Thread {
+void ThreadSleep(const ThreadTime& timeRelative);  // 0x00921df0
+}
+}
+namespace eastl {
+struct sp_vector_allocator_s0072_6c20 {
+  uint32_t mName[2];
+  sp_vector_allocator_s0072_6c20() {}
+};
+}
+namespace eastl {
+template <typename T>
+class vector_s0072_6c20 {
+ public:
+  T* mpBegin;
+  T* mpEnd;
+  T* mpCapacity;
+  sp_vector_allocator_s0072_6c20 mAllocator;
+  int size() const { return (int)(mpEnd - mpBegin); }
+  T& operator[](int i) { return mpBegin[i]; }
+  void DoInsertValue(T* position, const T& value);
+  void push_back(const T& value) {
+    if (mpEnd < mpCapacity)
+      ::new (mpEnd++) T(value);
+    else
+      DoInsertValue(mpEnd, value);
+  }
+};
+}
+namespace eastl {
+template <typename T, int N>
+class fixed_vector_s0072_6c20 {
+ public:
+  T* mpBegin;          // +0x00
+  T* mpEnd;            // +0x04
+  T* mpCapacity;       // +0x08
+  uint32_t mOverflow;  // +0x0c
+  T* mpPoolBegin;      // +0x10
+  uint32_t mPad;       // +0x14
+  uint32_t mBuffer[N * sizeof(T) / 4];  // +0x18 (aligned_buffer)
+
+  fixed_vector_s0072_6c20() {
+    mpPoolBegin = (T*)mBuffer;
+    mpBegin = mpEnd = (T*)mBuffer;
+    mpCapacity = (T*)mBuffer + N;
+  }
+  explicit fixed_vector_s0072_6c20(int n);  // fixed_vector<int,256>: 0x00726900
+  ~fixed_vector_s0072_6c20() {
+    if (mpBegin && mpBegin != mpPoolBegin)
+      operator delete[](mpBegin);
+  }
+  int size() const { return (int)(mpEnd - mpBegin); }
+  T& operator[](int i) { return mpBegin[i]; }
+  void DoInsertValue(T* position, const T& value);
+  void push_back(const T& value) {
+    if (mpEnd < mpCapacity)
+      ::new (mpEnd++) T(value);
+    else
+      DoInsertValue(mpEnd, value);
+  }
+};
+}
+namespace eastl {
+struct true_type {};
+}
+namespace eastl {
+template <typename K, typename V>
+struct pair_s0072_6c20 {
+  K first;
+  V second;
+  pair_s0072_6c20(const K& k, const V& v) : first(k), second(v) {}
+};
+}
+namespace eastl {
+template <typename K, typename V>
+class hash_map_s0072_6c20 {
+ public:
+  typedef pair_s0072_6c20<const K, V> value_type;
+  struct node_type {
+    value_type mValue;
+    node_type* mpNext;
+  };
+  struct iterator {
+    node_type* mpNode;
+    node_type** mpBucket;
+    iterator() {}
+    iterator(node_type** pBucket) : mpNode(*pBucket), mpBucket(pBucket) {}
+    iterator(const iterator& x) : mpNode(x.mpNode), mpBucket(x.mpBucket) {}
+    bool operator!=(const iterator& x) const { return mpNode != x.mpNode; }
+    value_type* operator->() const { return &mpNode->mValue; }
+  };
+  struct insert_return_type {
+    iterator first;
+    bool second;
+  };
+
+  node_type** mpBucketArray;   // +0x00
+  uint32_t mnBucketCount;      // +0x04
+  uint32_t mnElementCount;     // +0x08
+  float mfMaxLoadFactor;       // +0x0c
+  float mfGrowthFactor;        // +0x10
+  uint32_t mnNextResize;       // +0x14
+
+  hash_map_s0072_6c20() {
+    mfMaxLoadFactor = 1.0f;
+    mfGrowthFactor = 2.0f;
+    mnBucketCount = 1;
+    mpBucketArray = (node_type**)&gpEmptyBucketArray[0];
+    mnElementCount = 0;
+    mnNextResize = 0;
+  }
+  ~hash_map_s0072_6c20() {
+    DoFreeNodes(mpBucketArray, mnBucketCount);
+    mnElementCount = 0;
+    if (mnBucketCount > 1)
+      operator delete[](mpBucketArray);
+  }
+  iterator end() { return iterator(mpBucketArray + mnBucketCount); }
+  iterator find(const K& k);                                                   // 0x00721bb0
+  insert_return_type DoInsertValue(const value_type& value, true_type tag);  // 0x00721c30
+  void DoFreeNodes(node_type** pBucketArray, uint32_t n);                    // 0x007611f0
+  V& operator[](const K& k) {
+    iterator it = find(k);
+    if (it != end())
+      return it->second;
+    return DoInsertValue(value_type(k, V()), true_type()).first->second;
+  }
+  static void* gpEmptyBucketArray[2];  // 0x0154df28
+};
+}
+namespace SP {
+enum tQuantizeType { kQuantizePositionOnly = 0, kQuantizePositionClasses = 1, kQuantizeAll = 2 };
+}
+namespace SP {
+struct tMDShort4_s0072_6c20 { short m0, m1, m2, m3; };
+}
+namespace SP {
+struct tMDUByte4_s0072_6c20 { uint8_t m0, m1, m2, m3; };
+}
+namespace SP {
+struct cEltArrayRef_s0072_6c20 {
+  int mNumElts;                                  // +0x0
+  uint8_t* mData;                                // +0x4
+  uint16_t mEltSize;                             // +0x8
+  uint16_t mEltStride;                           // +0xa
+  EA::AutoRefCount_s0072_6c20<EA::COM::IRefCount_s0072_6c20> mDataRC;  // +0xc
+  cEltArrayRef_s0072_6c20(int eltSize) : mNumElts(0), mData(0), mEltSize((uint16_t)eltSize), mEltStride((uint16_t)eltSize) {}
+  int size() const { return mNumElts; }
+};
+}
+namespace SP {
+template <typename T>
+struct cEltArrayRefT_s0072_6c20 : public cEltArrayRef_s0072_6c20 {
+  cEltArrayRefT_s0072_6c20() : cEltArrayRef_s0072_6c20(sizeof(T)) {}
+  cEltArrayRefT_s0072_6c20(const cEltArrayRef_s0072_6c20& r) : cEltArrayRef_s0072_6c20(r) {}
+  cEltArrayRefT_s0072_6c20& operator=(const cEltArrayRef_s0072_6c20& r) {
+    cEltArrayRef_s0072_6c20::operator=(r);
+    return *this;
+  }
+  T& operator[](int i) { return *(T*)(mData + i * mEltStride); }
+};
+}
+namespace SP {
+template <>
+struct cEltArrayRefT_s0072_6c20<int> : public cEltArrayRef_s0072_6c20 {
+  cEltArrayRefT_s0072_6c20(const cEltArrayRef_s0072_6c20& r);
+  int& operator[](int i) { return *(int*)(mData + i * mEltStride); }
+};
+}
+namespace SP {
+struct cIndexArrayRef_s0072_6c20 : public cEltArrayRef_s0072_6c20 {
+  cIndexArrayRef_s0072_6c20() : cEltArrayRef_s0072_6c20(0) {}
+  int& Int(int i) { return *(int*)(mData + i * mEltStride); }
+  uint16_t& UShort(int i) { return *(uint16_t*)(mData + i * mEltStride); }
+};
+}
+namespace SP {
+template <typename T>
+class cEltArrayT : public EA::COM::IRefCount_s0072_6c20 {
+ public:
+  void* mpInterfaceVtbl;                 // +0x04
+  int mRefCount;                         // +0x08
+  eastl::vector_s0072_6c20<T> mEltData;             // +0x0c
+  uint32_t mField20;                     // +0x20
+  cEltArrayT();                          // 0x006c3510
+  cEltArrayRefT_s0072_6c20<T> AsRef();              // 0x007217c0
+};
+}
+namespace SP {
+struct cMDElementArray_s0072_6c20 {
+  int mSemantic;        // +0x00
+  int mNumber;          // +0x04
+  int mType;            // +0x08
+  int mClass;           // +0x0c
+  cEltArrayRef_s0072_6c20 mArray;  // +0x10
+};
+}
+namespace SP {
+struct cMDFormatEntry_s0072_6c20 {
+  short mElts;     // +0x0
+  short mIndices;  // +0x2
+};
+}
+namespace SP {
+struct cMDSection_s0072_6c20 {
+  cIndexArrayRef_s0072_6c20 mVertIndices;                       // +0x00
+  int mNumVertices;                                  // +0x10
+  eastl::fixed_vector_s0072_6c20<cMDFormatEntry_s0072_6c20, 6> mFormat;    // +0x14
+  eastl::fixed_vector_s0072_6c20<cIndexArrayRef_s0072_6c20, 3> mEltIndices;  // +0x44
+};
+}
+namespace SP {
+class cMeshData_s0072_6c20 {
+ public:
+  void* mpVtbl;                                // +0x00
+  int mRefCount;                               // +0x04
+  eastl::vector_s0072_6c20<cMDElementArray_s0072_6c20> mEltArrays;   // +0x08
+  eastl::vector_s0072_6c20<cMDSection_s0072_6c20> mSections;         // +0x1c
+};
+}
+namespace SP {
+struct cQuantizeClass {
+  float mScale;        // +0x0
+  bool mUseBoneClass;  // +0x4
+  uint8_t mFlagB;      // +0x5
+  uint8_t mNormalMask; // +0x6
+  uint8_t mPad;
+  cQuantizeClass() : mScale(1.0f), mUseBoneClass(true), mFlagB(0), mNormalMask(0) {}
+};
+}
+namespace SP {
+struct cDecCellID {
+  int m[3];
+  cDecCellID(int x, int y, int z) {
+    m[0] = x;
+    m[1] = y;
+    m[2] = z;
+  }
+};
+}
+namespace SP {
+void PushIndices(cMeshData_s0072_6c20* meshData);                                                  // 0x007366e0
+}
+namespace SP {
+int FindEltArrayIndex(cMeshData_s0072_6c20* meshData, int semantic, int number, int type, int classes);  // 0x0071ddc0
+}
+namespace SP {
+int FindSectionEltIndex(cMeshData_s0072_6c20* meshData, int section, int eltArrayIndex);           // 0x0071e040
+}
+namespace SP {
+void CreateArray(const cIndexArrayRef_s0072_6c20& src, cIndexArrayRef_s0072_6c20& dst);                       // 0x007201b0
+}
+    void* operator new(unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
+// ---- items of slice s00726c20 end
+
 // @ 0x00720070
 void Obj15_20070(void* a)
 { (void)a; }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007200f0
 void Obj15_200f0(void* a, void* b, void* c)
 { (void)a; (void)b; (void)c; }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007201b0
 void Obj15_copy(const Obj15* src, Obj15* dst)
@@ -1269,19 +1537,6 @@ void Obj15_copy(const Obj15* src, Obj15* dst)
     Obj15_Init(dst);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007201d0
 void Obj15_copyAssign(const Obj15* src, Obj15* dst)
 {
@@ -1290,19 +1545,6 @@ void Obj15_copyAssign(const Obj15* src, Obj15* dst)
     Obj15_Init(dst);
     Obj15_Assign((void*)src, dst, 0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00720290
 void MeshAdj::AddTri(int a, int n, int c, int* in, Pair16* out, int d)
@@ -1373,18 +1615,6 @@ void MeshAdj::AddTri(int a, int n, int c, int* in, Pair16* out, int d)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00720590
 uint32_t __cdecl HashVec(const float* v)
 {
@@ -1405,18 +1635,6 @@ uint32_t __cdecl HashVec(const float* v)
     } while (q < e);
     return h;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00720620
 void SP::cHeap::HeapifyDown(int i)
@@ -1451,18 +1669,6 @@ void SP::cHeap::HeapifyDown(int i)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007206b0
 void SP::cHeap::HeapifyUp(int i)
 {
@@ -1484,18 +1690,6 @@ void SP::cHeap::HeapifyUp(int i)
         parent = (i - 1) >> 1;
     } while (parent >= 0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00720700
 void cMeshClusterer::CalcError(cFaceCluster* a, cFaceCluster* b, float* out)
@@ -1543,18 +1737,6 @@ void cMeshClusterer::CalcError(cFaceCluster* a, cFaceCluster* b, float* out)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00720920
 void __cdecl MinMaxIndices(const float* const* v, int* minOut, int* maxOut)
 {
@@ -1574,18 +1756,6 @@ void __cdecl MinMaxIndices(const float* const* v, int* minOut, int* maxOut)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00720b10
 void Element68::Dtor()
 {
@@ -1596,18 +1766,6 @@ void Element68::Dtor()
     if (v14 != 0 && ((int*)v14)[-1] != 0)
         EASTL_allocator_deallocate(v14);
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00720b60
 void HashTable::Grow(uint32_t newSize)
@@ -1639,18 +1797,6 @@ void HashTable::Grow(uint32_t newSize)
     mCount = newSize;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00720c20
 Element68* __cdecl DestroyRange68(Element68* first, Element68* last, Element68* dst)
 {
@@ -1668,18 +1814,6 @@ Element68* __cdecl DestroyRange68(Element68* first, Element68* last, Element68* 
     } while (first != last);
     return dst;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00720c90
 void __cdecl UninitCopyFace28(cFaceCluster** out, const cFaceCluster* first, const cFaceCluster* last, cFaceCluster* dst)
@@ -1703,18 +1837,6 @@ void __cdecl UninitCopyFace28(cFaceCluster** out, const cFaceCluster* first, con
     *out = dst;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00720d10
 void __cdecl FillFace28(cFaceCluster* dst, uint32_t n, const cFaceCluster* src)
 {
@@ -1737,18 +1859,6 @@ void __cdecl FillFace28(cFaceCluster* dst, uint32_t n, const cFaceCluster* src)
     } while (n != 0);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00720d70
 void __cdecl UninitCopyDual18(cDualEdge** out, const cDualEdge* first, const cDualEdge* last, cDualEdge* dst)
 {
@@ -1761,18 +1871,6 @@ void __cdecl UninitCopyDual18(cDualEdge** out, const cDualEdge* first, const cDu
     }
     *out = dst;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00720dd0
 void* __cdecl MoveCopy34(void* first, void* last, void* dst)
@@ -1803,18 +1901,6 @@ void* __cdecl MoveCopy34(void* first, void* last, void* dst)
     return dst;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00720ea0
 void* __cdecl CopyFace28(void* first, void* last, void* dst)
 {
@@ -1840,18 +1926,6 @@ void* __cdecl CopyFace28(void* first, void* last, void* dst)
     } while (first != last);
     return dst;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00720f40
 void cMeshClusterer::MergeEdgeLists(int param_2, int param_3)
@@ -1942,18 +2016,6 @@ void cMeshClusterer::MergeEdgeLists(int param_2, int param_3)
     *plink = -1;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00721240
 void __cdecl SortFloatsByDist(void* v)
 {
@@ -1994,17 +2056,6 @@ void __cdecl SortFloatsByDist(void* v)
     qsort((char*)*(float**)v + 8, n - 1, 8, ComparePairs);
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00721340
 void __cdecl ChartSolve(int n, int stride, int* a, int* b, float* out)
 {
@@ -2012,17 +2063,6 @@ void __cdecl ChartSolve(int n, int stride, int* a, int* b, float* out)
     out[0] = 1.0f;
     out[1] = 0.0f;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007217c0
 ChartRef* ChartVec::MakeChartRef(ChartRef* out)
@@ -2036,17 +2076,6 @@ ChartRef* ChartVec::MakeChartRef(ChartRef* out)
     out->mOwner = this_;
     return out;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00721850
 void ChartHash::GrowF(uint32_t newSize)
@@ -2076,17 +2105,6 @@ void ChartHash::GrowF(uint32_t newSize)
     mCapacity = newSize;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00721910
 void __stdcall DestroyChartRange(Chart68* first, Chart68* last)
 {
@@ -2100,17 +2118,6 @@ void __stdcall DestroyChartRange(Chart68* first, Chart68* last)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00721980
 void* __cdecl DeleteTwoVtbl(TwoVtbl* this_, uint32_t flags)
 {
@@ -2120,17 +2127,6 @@ void* __cdecl DeleteTwoVtbl(TwoVtbl* this_, uint32_t flags)
         EASTL_allocator_deallocate(this_);
     return this_;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007219f0
 void ChartHash::FindF(int* out, float* key)
@@ -2152,17 +2148,6 @@ void ChartHash::FindF(int* out, float* key)
     out[0] = (int)*slot;
     out[1] = (int)slot;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00721a80
 void ChartHash::InsertF(int* out, float* key)
@@ -2197,17 +2182,6 @@ void ChartHash::InsertF(int* out, float* key)
     out[1] = (int)slot;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00721bb0
 void ChartHash::FindI(int* out, int* key)
 {
@@ -2226,17 +2200,6 @@ void ChartHash::FindI(int* out, int* key)
     out[0] = (int)*slot;
     out[1] = (int)slot;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00721c30
 void ChartHash::InsertI(int* out, int* key)
@@ -2271,17 +2234,6 @@ void ChartHash::InsertI(int* out, int* key)
     out[1] = (int)slot;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00721d80
 void* __cdecl CopyChart68(void* dst, void* src)
 {
@@ -2292,17 +2244,6 @@ void* __cdecl CopyChart68(void* dst, void* src)
     return dst;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00722010
 void __cdecl InitChartHash(ChartHash* this_)
 {
@@ -2311,34 +2252,12 @@ void __cdecl InitChartHash(ChartHash* this_)
     this_->mCount = 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007220c0
 void __cdecl FreeChartThing(ChartHash* this_)
 {
     if (this_->mBuckets != 0 && ((int*)this_->mBuckets)[-1] != 0)
         EASTL_allocator_deallocate(this_->mBuckets);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007221c0
 void CMeshClusterer2::CollapseEdges()
@@ -2375,17 +2294,6 @@ void CMeshClusterer2::CollapseEdges()
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007222f0
 void* __cdecl Insert34Vec(void* v, void* pos, void* val)
 {
@@ -2393,32 +2301,11 @@ void* __cdecl Insert34Vec(void* v, void* pos, void* val)
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00722410
 void __cdecl VectorAppend8Impl(void* dstEnd, void* val)
 {
     (void)dstEnd; (void)val;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00722520
 void __thiscall VecAny::Assign(int n, int value, int dummy)
@@ -2439,47 +2326,17 @@ void __thiscall VecAny::Assign(int n, int value, int dummy)
     (void)dummy;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00722580
 void __cdecl VecInsert18(int* v, void* pos, uint32_t n, void* val)
 {
     (void)v; (void)pos; (void)n; (void)val;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00722770
 void __cdecl VecInsert28(int* v, void* pos, uint32_t n, void* val)
 {
     (void)v; (void)pos; (void)n; (void)val;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00722990
 void* __cdecl AllocConstruct38(int n, const void* a, const void* b)
@@ -2494,16 +2351,6 @@ void* __cdecl AllocConstruct38(int n, const void* a, const void* b)
     return p;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x007229f0
 void* __cdecl CopyChartRecord(void* dst, void* src)
 {
@@ -2514,16 +2361,6 @@ void* __cdecl CopyChartRecord(void* dst, void* src)
     return dst;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00722b20
 int __cdecl FindOrInsertF(void* hash, float* key)
 {
@@ -2532,16 +2369,6 @@ int __cdecl FindOrInsertF(void* hash, float* key)
     return *p;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00722ba0
 void __cdecl SwapVecIfOwned(int* a, int* b)
 {
@@ -2549,16 +2376,6 @@ void __cdecl SwapVecIfOwned(int* a, int* b)
     a[0] = b[0]; a[1] = b[1]; a[2] = b[2];
     b[0] = (int)t0; b[1] = (int)t1; b[2] = (int)t2;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00722c60
 void __thiscall VecAny::Push8(Vec8* val)
@@ -2576,16 +2393,6 @@ void __thiscall VecAny::Push8(Vec8* val)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00722ca0
 int* __cdecl ConstructIntVec(int* v, int n, int val)
 {
@@ -2594,31 +2401,11 @@ int* __cdecl ConstructIntVec(int* v, int n, int val)
     return v;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00722d00
 void __cdecl BuildTextureChart(int param_1)
 {
     (void)param_1;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00723140
 void MeshBuild::Build()
@@ -2703,15 +2490,6 @@ void MeshBuild::Build()
     ReleaseRef(adj.ref);
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x00723680
 IntVecObj::IntVecObj(int n)
 {
@@ -2724,30 +2502,12 @@ IntVecObj::IntVecObj(int n)
     mField20 = 0;
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x00723720
 IntVecObj::IntVecObj(int n, const int* v)
 {
     mVec.Fill(n, *v);
     mField20 = 0;
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x007237a0
 void Vec24::resize(uint32_t n)
@@ -2764,15 +2524,6 @@ void Vec24::resize(uint32_t n)
     mpEnd = mpEnd - (pEnd - pNewEnd);
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x007238b0
 void Vec24::resize(uint32_t n, const Vertex3D* val)
 {
@@ -2786,15 +2537,6 @@ void Vec24::resize(uint32_t n, const Vertex3D* val)
     CopyVertex3D(pEnd, pEnd, pNewEnd);
     mpEnd = mpEnd - (pEnd - pNewEnd);
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x00723930
 ChartRec::ChartRec(const ChartRec& o)
@@ -2830,15 +2572,6 @@ ChartRec::ChartRec(const ChartRec& o)
     i64 = o.i64;
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x00723a70
 ChartRec& ChartRec::operator=(const ChartRec& o)
 {
@@ -2858,15 +2591,6 @@ ChartRec& ChartRec::operator=(const ChartRec& o)
     i64 = o.i64;
     return *this;
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x00723af0
 void Vec56::DoAssign(const Xform56* first, const Xform56* last, int tag)
@@ -2893,15 +2617,6 @@ void Vec56::DoAssign(const Xform56* first, const Xform56* last, int tag)
     mpEnd = out;
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x00723cf0
 void PairVec::Reset(uint32_t nVerts, uint32_t nPairs, int a, int b, uint8_t flag)
 {
@@ -2921,15 +2636,6 @@ void PairVec::Reset(uint32_t nVerts, uint32_t nPairs, int a, int b, uint8_t flag
     mField38 = b;
     mFlag3C = flag;
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x00723d60
 void __cdecl ExportSubMeshRemap(MeshData* mesh)
@@ -3015,15 +2721,6 @@ void __cdecl ExportSubMeshRemap(MeshData* mesh)
     if (pv.mVerts.mpBegin && ((int*)pv.mVerts.mpBegin)[-1] != 0) operator_delete__(pv.mVerts.mpBegin);
     if (pv.mpBegin && ((int*)pv.mpBegin)[-1] != 0) operator_delete__(pv.mpBegin);
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x00724100
 void cMeshClusterer_s0072_4100::Setup()
@@ -3133,37 +2830,13 @@ void cMeshClusterer_s0072_4100::Setup()
     }
 }
 
-
-
-
-
-
-
-
-
 // @ 0x00724700
 void __cdecl FUN_00724700(void* this_)
 { (void)this_; }
 
-
-
-
-
-
-
-
-
 // @ 0x007247c0
 void __cdecl FUN_007247c0()
 {}
-
-
-
-
-
-
-
-
 
 // @ 0x007249f0
 void FUN_007249f0(MeshContext* ctx)
@@ -3353,13 +3026,6 @@ void FUN_007249f0(MeshContext* ctx)
     FUN_0073a4b0(p);
 }
 
-
-
-
-
-
-
-
 // @ 0x00725130
 namespace SP {
 void CreateEdges(cMeshData_s0072_5130* mesh)
@@ -3504,12 +3170,6 @@ void CreateEdges(cMeshData_s0072_5130* mesh)
 }
 }  // namespace SP
 
-
-
-
-
-
-
 // @ 0x00725e40
 namespace SP {
 void cMeshClusterer_s0072_5e40::AssignCharts(int texCoordSet, bool normalize, bool alignToBoundary)
@@ -3624,11 +3284,6 @@ void cMeshClusterer_s0072_5e40::AssignCharts(int texCoordSet, bool normalize, bo
 }
 }  // namespace SP
 
-
-
-
-
-
 // @ 0x007269b0
 void FUN_007269b0(int* param_1, int param_2, unsigned param_3, int param_4)
 {
@@ -3684,10 +3339,202 @@ void FUN_007269b0(int* param_1, int param_2, unsigned param_3, int param_4)
     }
 }
 
+// @ 0x00726c20
+namespace SP {
+void QuantizeVertices(cMeshData_s0072_6c20* meshData, float granularity, tQuantizeType quantizeType, const cQuantizeClass* classes)
+{
+  PushIndices(meshData);
+  int pointArrayIndex = FindEltArrayIndex(meshData, 1, 0, 3, 0xe);
+  if (pointArrayIndex < 0 || meshData->mEltArrays[pointArrayIndex].mClass != 0)
+    return;
 
+  cEltArrayRefT_s0072_6c20<cSPVector3_s0072_6c20> points(meshData->mEltArrays[pointArrayIndex].mArray);
+  eastl::hash_map_s0072_6c20<cDecCellID, int> pointMap;
+  eastl::fixed_vector_s0072_6c20<int, 256> indicesRemap(points.mNumElts);
+  eastl::fixed_vector_s0072_6c20<int, 256> anchorIndices;
+  eastl::fixed_vector_s0072_6c20<float, 256> weights;
+  cEltArrayT<cSPVector3_s0072_6c20>* newPoints = new ("Graphics", 0, 0, 0, 0) cEltArrayT<cSPVector3_s0072_6c20>;
+  int newIndex = 0;
 
+  int index = FindEltArrayIndex(meshData, 9, 0, 9, 0xe);
+  cEltArrayRefT_s0072_6c20<tMDShort4_s0072_6c20> boneIndices;
+  cEltArrayRefT_s0072_6c20<tMDUByte4_s0072_6c20> boneIndicesB;
+  if (index >= 0) {
+    boneIndices = meshData->mEltArrays[index].mArray;
+    if (boneIndices.mNumElts != points.mNumElts)
+      boneIndices = cEltArrayRefT_s0072_6c20<tMDShort4_s0072_6c20>();
+  } else {
+    index = FindEltArrayIndex(meshData, 9, 0, 7, 0xe);
+    if (index >= 0) {
+      boneIndicesB = meshData->mEltArrays[index].mArray;
+      if (boneIndicesB.mNumElts != points.mNumElts)
+        boneIndicesB = cEltArrayRefT_s0072_6c20<tMDUByte4_s0072_6c20>();
+    }
+  }
 
+  cEltArrayRefT_s0072_6c20<long> classIndices;
+  cQuantizeClass defaultClass;
+  if (classes) {
+    defaultClass = classes[0];
+    index = FindEltArrayIndex(meshData, 0x18, 0, 6, 0xe);
+    if (index >= 0)
+      classIndices = meshData->mEltArrays[index].mArray;
+  }
 
+  index = FindEltArrayIndex(meshData, 2, 0, 3, 0xe);
+  cEltArrayRefT_s0072_6c20<cSPVector3_s0072_6c20> normals;
+  if (index >= 0) {
+    normals = meshData->mEltArrays[index].mArray;
+    if (normals.mNumElts != points.mNumElts)
+      normals = cEltArrayRefT_s0072_6c20<cSPVector3_s0072_6c20>();
+  }
+
+  index = FindEltArrayIndex(meshData, 2, 0, 7, 0xe);
+  cEltArrayRefT_s0072_6c20<uint32_t> packedNormals;
+  if (index >= 0) {
+    packedNormals = meshData->mEltArrays[index].mArray;
+    if (packedNormals.mNumElts != points.mNumElts)
+      packedNormals = cEltArrayRefT_s0072_6c20<uint32_t>();
+  }
+
+  eastl::fixed_vector_s0072_6c20<int, 8> sectionStarts;
+  index = FindEltArrayIndex(meshData, 0x19, 0, 6, 0xe);
+  if (index >= 0) {
+    cEltArrayRefT_s0072_6c20<int> starts(meshData->mEltArrays[index].mArray);
+    const uint8_t* p = starts.mData;
+    for (int j = 0; j < starts.mNumElts; j++) {
+      sectionStarts.push_back(*(const int*)p);
+      p += starts.mEltStride;
+    }
+  } else {
+    sectionStarts.push_back(0);
+    sectionStarts.push_back(points.size());
+  }
+
+  int ns = sectionStarts.size() - 1;
+  for (int is = 0; is < ns; is++) {
+    for (int i = sectionStarts[is]; i < sectionStarts[is + 1]; i++) {
+      int classIdx = 0;
+      const cQuantizeClass* info = &defaultClass;
+      if (boneIndices.mData) {
+        classIdx = boneIndices[i].m0 / 3;
+        if (classIndices.mData)
+          info = &classes[classIndices[classIdx]];
+      } else if (boneIndicesB.mData) {
+        classIdx = boneIndicesB[i].m0 / 3;
+        if (classIndices.mData)
+          info = &classes[classIndices[classIdx]];
+      }
+
+      float scale = info->mScale * granularity;
+      cSPVector3_s0072_6c20 v(points[i]);
+      cDecCellID cellID(RoundToInt(v.x * scale), RoundToInt(v.y * scale), RoundToInt(v.z * scale));
+      cellID.m[0] ^= -(int)info->mUseBoneClass & (classIdx << 24);
+      cellID.m[1] ^= info->mFlagB << 24;
+      cellID.m[2] ^= is << 27;
+      if (normals.mData) {
+        cSPVector3_s0072_6c20 n(normals[i]);
+        uint32_t nx = *(uint32_t*)&n.x;
+        uint32_t ny = *(uint32_t*)&n.y;
+        uint32_t nz = *(uint32_t*)&n.z;
+        cellID.m[2] ^= ((((nz >> 29) & 4) + ((ny >> 30) & 2) + (nx >> 31)) & info->mNormalMask) << 24;
+      }
+      if (packedNormals.mData) {
+        uint32_t p = packedNormals[i];
+        cellID.m[2] ^= (((((p >> 16) & 0xff) >> 5 & 4) + (((p >> 8) & 0xff) >> 6 & 2) + ((p & 0xff) >> 7)) &
+                        info->mNormalMask)
+                       << 24;
+      }
+
+      eastl::hash_map_s0072_6c20<cDecCellID, int>::iterator it = pointMap.find(cellID);
+      if (it != pointMap.end()) {
+        indicesRemap[i] = it->second;
+        cSPVector3_s0072_6c20& p = newPoints->mEltData[it->second];
+        p.x = v.x + p.x;
+        p.y = p.y + v.y;
+        p.z = p.z + v.z;
+        weights[it->second] += 1.0f;
+      } else {
+        indicesRemap[i] = newIndex;
+        pointMap[cellID] = newIndex;
+        newIndex++;
+        newPoints->mEltData.push_back(v);
+        weights.push_back(1.0f);
+        if (quantizeType)
+          anchorIndices.push_back(i);
+      }
+
+      if ((i & 0xfff) == 0)
+        EA::Thread::ThreadSleep(0);
+    }
+  }
+  EA::Thread::ThreadSleep(0);
+
+  for (int i = 0; i < newIndex; i++) {
+    float inv = 1.0f / weights[i];
+    cSPVector3_s0072_6c20& p = newPoints->mEltData[i];
+    p.x = inv * p.x;
+    p.y = inv * p.y;
+    p.z = p.z * inv;
+  }
+
+  meshData->mEltArrays[pointArrayIndex].mArray = newPoints->AsRef();
+
+  int numSections = meshData->mSections.size();
+  for (int is = 0; is < numSections; is++) {
+    int oldEltIndicesIndex = FindSectionEltIndex(meshData, is, pointArrayIndex);
+    if (oldEltIndicesIndex < 0)
+      continue;
+    cIndexArrayRef_s0072_6c20 srcEltIndices(
+        meshData->mSections[is].mEltIndices[meshData->mSections[is].mFormat[oldEltIndicesIndex].mIndices]);
+    cIndexArrayRef_s0072_6c20 dstEltIndices;
+    CreateArray(srcEltIndices, dstEltIndices);
+    cIndexArrayRef_s0072_6c20 dstEltIndicesPC;
+    if (quantizeType)
+      CreateArray(srcEltIndices, dstEltIndicesPC);
+
+    if (srcEltIndices.mEltSize == 4) {
+      if (quantizeType) {
+        for (int i = 0; i < srcEltIndices.mNumElts; i++) {
+          dstEltIndices.Int(i) = indicesRemap[srcEltIndices.Int(i)];
+          dstEltIndicesPC.Int(i) = anchorIndices[dstEltIndices.Int(i)];
+        }
+      } else {
+        for (int i = 0; i < srcEltIndices.mNumElts; i++)
+          dstEltIndices.Int(i) = indicesRemap[srcEltIndices.Int(i)];
+      }
+    } else if (srcEltIndices.mEltSize == 2) {
+      if (quantizeType) {
+        for (int i = 0; i < srcEltIndices.mNumElts; i++) {
+          dstEltIndices.UShort(i) = (uint16_t)indicesRemap[srcEltIndices.UShort(i)];
+          dstEltIndicesPC.UShort(i) = (uint16_t)anchorIndices[dstEltIndices.UShort(i)];
+        }
+      } else {
+        for (int i = 0; i < srcEltIndices.mNumElts; i++)
+          dstEltIndices.UShort(i) = (uint16_t)indicesRemap[srcEltIndices.UShort(i)];
+      }
+    }
+
+    cMDSection_s0072_6c20& section = meshData->mSections[is];
+    int newEltIndicesIndex = section.mEltIndices.size();
+    section.mEltIndices.push_back(dstEltIndices);
+    short& formatIndices = section.mFormat[oldEltIndicesIndex].mIndices;
+    oldEltIndicesIndex = formatIndices;
+    formatIndices = (short)newEltIndicesIndex;
+    if (quantizeType) {
+      int newEltIndicesPCIndex = section.mEltIndices.size();
+      section.mEltIndices.push_back(dstEltIndicesPC);
+      for (int f = 0; f < section.mFormat.size(); f++) {
+        if (section.mFormat[f].mIndices == oldEltIndicesIndex &&
+            (quantizeType == kQuantizeAll ||
+             meshData->mEltArrays[section.mFormat[f].mElts].mClass == 0))
+          section.mFormat[f].mIndices = (short)newEltIndicesPCIndex;
+      }
+    }
+    EA::Thread::ThreadSleep(0);
+  }
+}
+}  // namespace SP
 
 // @ 0x00728020
 void FUN_00728020(MeshCtx* ctx, float f, int mode, void* p4)
@@ -3708,19 +3555,11 @@ void FUN_00728020(MeshCtx* ctx, float f, int mode, void* p4)
     }
 }
 
-
-
-
-
 // @ 0x007280b0
 void FUN_007280b0(void* self, void* param_2, int param_3, int param_4, int param_5)
 {
     (void)self; (void)param_2; (void)param_3; (void)param_4; (void)param_5;
 }
-
-
-
-
 
 // @ 0x007281d0
 void FUN_007281d0(void* self)
@@ -3728,19 +3567,11 @@ void FUN_007281d0(void* self)
     (void)self;
 }
 
-
-
-
-
 // @ 0x00728330
 void FUN_00728330(void* self, unsigned n)
 {
     (void)self; (void)n;
 }
-
-
-
-
 
 // @ 0x00728400
 void FUN_00728400(void* self, unsigned a, unsigned b)
@@ -3748,19 +3579,11 @@ void FUN_00728400(void* self, unsigned a, unsigned b)
     (void)self; (void)a; (void)b;
 }
 
-
-
-
-
 // @ 0x007285a0
 void FUN_007285a0(void* self)
 {
     (void)self;
 }
-
-
-
-
 
 // @ 0x007289a0
 void FUN_007289a0(void* self)
@@ -3768,19 +3591,11 @@ void FUN_007289a0(void* self)
     (void)self;
 }
 
-
-
-
-
 // @ 0x00728af0
 void FUN_00728af0(void* self, void* meshData, int n)
 {
     (void)self; (void)meshData; (void)n;
 }
-
-
-
-
 
 // @ 0x00728c90
 void __cdecl FUN_00728c90(UV::PtrVec* meshes, float clusterParam, const float* scales, const UV::MeshXform* info)
@@ -3862,9 +3677,6 @@ void __cdecl FUN_00728c90(UV::PtrVec* meshes, float clusterParam, const float* s
     }
 }
 
-
-
-
 // @ 0x00729290
 int FUN_00729290(void* self)
 {
@@ -3872,16 +3684,11 @@ int FUN_00729290(void* self)
     return 1;
 }
 
-
-
-
 // @ 0x00735470
 void FUN_00735470(void)
 {
     // PARTIAL: ~1.2 KB container routine; skeleton only.
 }
-
-
 
 // @ 0x00735960
 void FUN_00735960(int* param_1, int* param_2)
@@ -3890,8 +3697,6 @@ void FUN_00735960(int* param_1, int* param_2)
     (void)param_1; (void)param_2;
 }
 
-
-
 // @ 0x007366e0
 void FUN_007366e0(int param_1)
 {
@@ -3899,14 +3704,12 @@ void FUN_007366e0(int param_1)
     (void)param_1;
 }
 
-
 // @ 0x007368a0
 void FUN_007368a0(int* param_1)
 {
     // PARTIAL: rebuild reverse index streams with refcounted EltArrays; skeleton only.
     (void)param_1;
 }
-
 
 // @ 0x0073a4b0
 void QuadricVectorResize(void* self, uint32_t n)
