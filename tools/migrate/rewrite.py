@@ -735,6 +735,19 @@ def parse_slice(sid, variant=""):
         pre += ch.after.split("\n")
         ch.after = ""
         chunks.append(ch)
+    # an explicit instantiation the slice wrote inside `namespace X {` that reached the preamble outside that block (mig7r
+    # s004e01d0 0x4e0600: its marker's chunk became a template definition, the statement landed after the block's `}`:
+    # `template class hash_map<..>;` at global scope, C2059; the slice's three functions were held) gets its namespaces back
+    pre_ns = enclosing_namespaces(pre)
+    pos = {}
+    for k, l in enumerate(lines):
+        pos.setdefault(l, k)
+    for k, l in enumerate(pre):
+        if not re.match(r"^\s*template\s+(?!<)[^;{]*;\s*(//.*)?$", l) or pre_ns[k]:
+            continue
+        want = ns_at[pos[l]] if l in pos else []
+        if want:
+            pre[k] = " ".join("namespace %s {" % n for n in want) + " " + l.strip() + " " + "}" * len(want)
     return text, pre, chunks
 
 
