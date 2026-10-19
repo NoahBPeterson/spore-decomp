@@ -301,7 +301,8 @@ def insert_missing_markers(lines, sid, known_vas=()):
                     break
                 # `// SubstituteParameters (0x00844270)` over `namespace {` + the definition (mig9 s00844270, Parser: no VA,
                 # the helper was silently not emitted and cParser::InstantiateMacro failed C3861): the name must be this one
-                nb = re.match(r"^\s*//\s*([A-Za-z_~][\w:~]*)\s*\(\s*0x([0-9a-fA-F]{6,8})\s*\)\s*$", lines[q])
+                nb = re.match(r"^\s*//\s*([A-Za-z_~][\w:~]*)\s*\(\s*0x([0-9a-fA-F]{6,8})\s*\)\s*$", lines[q]) or \
+                    re.match(r"^\s*//\s*-+\s*([A-Za-z_~][\w:~]*)\s*@\s*0x([0-9a-fA-F]{6,8})\s*-*\s*$", lines[q])   # `// ---- Name @ 0xVA ----` (mig11 s00a36d60)
                 if nb and short and nb.group(1).split("::")[-1] == short and int(nb.group(2), 16) in rows:
                     va, how = int(nb.group(2), 16), "name (0xVA) banner line %d" % (q + 1)
                     break
