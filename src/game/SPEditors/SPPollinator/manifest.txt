@@ -15,5 +15,10 @@
 ../src/game/SPEditors/SPPollinator.cpp  ?copy@StreamDeque@@YA?AUIterator@1@U21@00@Z  0060d610  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPollinator.cpp  ?copy_backward@StreamDeque@@YA?AUIterator@1@U21@00@Z  0060d6e0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPollinator.cpp  ?NotificationFunction@@YAXPAX0IPAI@Z  0060d800  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPPollinator.cpp  ?pop_back@?$deque_s0060_d860@UQueuedPtr@@$0EA@@eastl@@QAEXXZ  0060dae0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPPollinator.cpp  ?DoPushFrontSlow@?$deque_s0060_d860@UQueuedPtr@@$0EA@@eastl@@QAEXABUQueuedPtr@@@Z  0060db40  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPPollinator.cpp  ?DoPushBackSlow@?$deque_s0060_d860@UQueuedPtr@@$0EA@@eastl@@QAEXABUQueuedPtr@@@Z  0060dbd0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPPollinator.cpp  ?PostBehaviorFloat@@YAXM@Z  0060e540  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPPollinator.cpp  ??1JobHolder@@QAE@XZ  0060e5b0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPollinator.cpp  ?push_back@UploadQueue@@QAEXABUQValue@@@Z  0060f080  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPPollinator.cpp  ?CancelAllTransactions@cPollinator_s0061_08a0@SP@@QAEXXZ  00611540  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include

@@ -1,1 +1,1 @@
-00611860 SP::cPollinator::HandleMessage  # dev PDB name (card)
+00611860 ?HandleMessage@cPollinator_s0061_1860@SP@@QAE_NIPAX@Z  # cPollinator_s0061_1860::HandleMessage migrated from s00611860 (verbatim, slice spelling)

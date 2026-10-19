@@ -1,8 +1,13 @@
+0060d9f0 QueueEntry::QueueEntry
 0060da40 eastl::DequeIterator<SP::cTextureAsyncQueueEntry,SP::cTextureAsyncQueueEntry *,SP::cTextureAsyncQueueEntry &,64>::operator+  # copy + operator+=
 0060da90 eastl::DequeIterator<SP::cTextureAsyncQueueEntry,SP::cTextureAsyncQueueEntry *,SP::cTextureAsyncQueueEntry &,64>::operator-  # copy + operator+=(-n)
-0060dfb0 SP::cPollinatorCheat::Execute  # PDB-named; 'pollen' console cheat (get/getBatch/serverID/queryID/flood/floodstop)
-0060d9f0 QueueEntry::QueueEntry
+0060dae0 ?pop_back@?$deque_s0060_d860@UQueuedPtr@@$0EA@@eastl@@QAEXXZ  # pop_back migrated from s0060d860 (verbatim, slice spelling)
+0060db40 ?DoPushFrontSlow@?$deque_s0060_d860@UQueuedPtr@@$0EA@@eastl@@QAEXABUQueuedPtr@@@Z  # DoPushFrontSlow migrated from s0060d860 (verbatim, slice spelling)
+0060dbd0 ?DoPushBackSlow@?$deque_s0060_d860@UQueuedPtr@@$0EA@@eastl@@QAEXABUQueuedPtr@@@Z  # DoPushBackSlow migrated from s0060d860 (verbatim, slice spelling)
 0060df50 ?_GcJobResultMessage
-0060e5b0 JobHolder::~JobHolder
+0060dfb0 SP::cPollinatorCheat::Execute  # PDB-named; 'pollen' console cheat (get/getBatch/serverID/queryID/flood/floodstop)
+0060e540 ?PostBehaviorFloat@@YAXM@Z  # PostBehaviorFloat migrated from s0060d860 (verbatim, slice spelling)
+0060e5b0 ??1JobHolder@@QAE@XZ  # JobHolder::Destroy migrated from s0060d860 (verbatim, slice spelling)
 0060e6e0 UCancelByIdPred::remove_if
 0060e800 UCancelCancelledPred::remove_if
+0093dd80 ?Construct@Variant@EA@@IAE_NGGPBXII@Z  # EA::Variant::Construct (callee of s0060d860, named from the dev publics; slice address comment)
