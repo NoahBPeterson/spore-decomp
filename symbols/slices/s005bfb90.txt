@@ -1,6 +1,11 @@
-005bfc90 SP::cSPEditorNaming::SetTagField  # dev PDB order (SetTagField 37 bytes between Shutdown and SetDataProvider)
-005bfff0 SP::cSPEditorNaming::cSPEditorNaming  # vtables + mNamePrompt empty string init, byte-exact
-005c0070 SP::cSPEditorNaming::~cSPEditorNaming  # byte-exact
-005c0100 SP::cSPEditorNaming::DoMessage  # dev PDB DoMessage (IWinProc::HandleUIMessage override)
+005bfb90 ?Shutdown@cSPEditorNaming_s005b_fb90@SP@@QAEXXZ  # cSPEditorNaming_s005b_fb90::Shutdown migrated from s005bfb90 (verbatim, slice spelling)
+005bfc90 ?SetTagField@cSPEditorNaming_s005b_fb90@SP@@QAEX_N@Z  # cSPEditorNaming_s005b_fb90::SetTagField migrated from s005bfb90 (verbatim, slice spelling)
+005bfcc0 ?SetDataProvider@cSPEditorNaming_s005b_fb90@SP@@QAEXPAVcISPEditorNameProvider_s005b_fb90@2@@Z  # cSPEditorNaming_s005b_fb90::SetDataProvider migrated from s005bfb90 (verbatim, slice spelling)
+005bfd40 ?Init@cSPEditorNaming_s005b_fb90@SP@@QAEXPAVcISPEditorNameProvider_s005b_fb90@2@PAVIWindow_s005b_fb90@UTFWin@EA@@I_NI@Z  # cSPEditorNaming_s005b_fb90::Init migrated from s005bfb90 (verbatim, slice spelling)
+005bfff0 ??0cSPEditorNaming_s005b_fb90@SP@@QAE@XZ  # cSPEditorNaming_s005b_fb90::cSPEditorNaming migrated from s005bfb90 (verbatim, slice spelling)
+005c0070 ??1cSPEditorNaming_s005b_fb90@SP@@UAE@XZ  # cSPEditorNaming_s005b_fb90::~cSPEditorNaming migrated from s005bfb90 (verbatim, slice spelling)
+005c0100 ?HandleUIMessage@cSPEditorNaming_s005b_fb90@SP@@UAE_NPAVIWindow_s005b_fb90@UTFWin@EA@@PBX@Z  # cSPEditorNaming_s005b_fb90::HandleUIMessage migrated from s005bfb90 (verbatim, slice spelling)
+005c0320 ?SetPrompt@cSPEditorNaming_s005b_fb90@SP@@QAEXPB_W@Z  # cSPEditorNaming_s005b_fb90::SetPrompt migrated from s005bfb90 (verbatim, slice spelling)
+005c0380 ?SetExpanded@cSPEditorNaming_s005b_fb90@SP@@UAEX_N@Z  # cSPEditorNaming_s005b_fb90::SetExpanded migrated from s005bfb90 (verbatim, slice spelling)
 005c0770 SP::cSPEditorPageControls::cSPEditorPageControls  # byte-exact
 005c0ba0 ?SetImage@cSPEditorPaintLikeThis_s005b_fb90@SP@@QAEXUKey_s005b_fb90@ResourceMan@EA@@@Z  # cSPEditorPaintLikeThis_s005b_fb90::SetImage migrated from s005bfb90 (verbatim, slice spelling)

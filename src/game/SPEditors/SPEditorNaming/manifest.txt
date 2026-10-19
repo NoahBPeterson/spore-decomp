@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorNaming.cpp  ?IsValid@cResourceFilter@@QAE_NABVKey_s005b_eaf0@ResourceMan@EA@@PBV234@@Z  005bf8c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorNaming.cpp  ?SetDisplayText@cSPEditorNaming_s005b_eaf0@SP@@QAEXPB_W@Z  005bf950  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorNaming.cpp  ?ResetParentWin@cSPEditorNaming_s005b_eaf0@SP@@QAEXXZ  005bfb70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorNaming.cpp  ?Shutdown@cSPEditorNaming_s005b_fb90@SP@@QAEXXZ  005bfb90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorNaming.cpp  ?SetTagField@cSPEditorNaming_s005b_fb90@SP@@QAEX_N@Z  005bfc90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorNaming.cpp  ?SetDataProvider@cSPEditorNaming_s005b_fb90@SP@@QAEXPAVcISPEditorNameProvider_s005b_fb90@2@@Z  005bfcc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorNaming.cpp  ?Init@cSPEditorNaming_s005b_fb90@SP@@QAEXPAVcISPEditorNameProvider_s005b_fb90@2@PAVIWindow_s005b_fb90@UTFWin@EA@@I_NI@Z  005bfd40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorNaming.cpp  ??0cSPEditorNaming_s005b_fb90@SP@@QAE@XZ  005bfff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorNaming.cpp  ??1cSPEditorNaming_s005b_fb90@SP@@UAE@XZ  005c0070  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorNaming.cpp  ?SetPrompt@cSPEditorNaming_s005b_fb90@SP@@QAEXPB_W@Z  005c0320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

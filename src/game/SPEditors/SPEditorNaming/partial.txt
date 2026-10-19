@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0064dbd0  1433  1433-byte /O2 hash-switch message handler (cSPEditorNaming::DoMessage); approximate skeleton only

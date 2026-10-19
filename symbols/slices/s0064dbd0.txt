@@ -1,4 +1,4 @@
-0064dbd0 SP::cSPEditorNaming::DoMessage  # pdb_names anchor
+0064dbd0 ?DoMessage@cSPEditorNaming_s0064_dbd0@SP@@QAE_NPAXPAH@Z  # cSPEditorNaming_s0064_dbd0::DoMessage migrated from s0064dbd0 (verbatim, slice spelling)
 0064e170 SP::cSPUIAssetComments::cSPUIAssetComments  # ctor; retail mFrameSet+0xc, mpContentWin+0x70, mpXHTMLWin+0x74
 0064e1d0 SP::cSPUIAssetComments::`scalar deleting destructor'  # vptr teardown + RefCount deallocation
 0064e230 SP::cSPUIAssetComments::Init  # pdb_names anchor

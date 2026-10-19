@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+005bf9d0 308 cSPEditorNaming::HandleMessage: switch/branch layout and register allocation differ
+005c0100 292 cSPEditorNaming::HandleUIMessage (IWinProc): case block layout differs
+005c0380 541 cSPEditorNaming::SetExpanded: ebp/edi allocation of the text-edit block differs
