@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorManipulationRotationHandle.cpp  ?DoOnMouseMove@SPin50@@QAE_NMMH@Z  005b50a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

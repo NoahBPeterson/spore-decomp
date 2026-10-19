@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+005b5a30 5085 complete ring+ball drag update; frame 0x284 vs 0x200 (extra named temps), Transform/Matrix3 copy ctors and string ctor inlining differ, /fp:fast float scheduling
