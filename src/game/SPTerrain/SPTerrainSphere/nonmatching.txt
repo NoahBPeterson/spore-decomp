@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00f98970 2083 complete; /O2 register allocation (ebx/ebp vs esi/edi), rec+0x2f4 base hoisting and lerp scheduling differ
+00fa3c10 1128 cTerrainSphere::ApplyModelFootprint: complete (34/34 calls and vcall slots in order, size 1627 vs 1740); stack slot assignment (frame 0xa4 vs 0xa0), this spilled to a different slot, and the null-image call-site duplication differ
+00fa5610 1220 cTerrainSphere::UpdateQuadsPostCamera (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast): complete, 25/25 calls in order, size 1640 vs 1710; clear() schedule and frame size differ
+00fa75f0 4249 complete SSE-intrinsics reconstruction (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast) (all paths + calls); compiles; not byte-exact: no symbol of matching size, register allocation/scheduling of 4.2KB intrinsics body unmatched; difftest WEAK (264 valid, 1.8% coverage, many budget/fault discards; O210::Use annotation split)
+00fa9d20 1806 complete; call sequence identical (47/47), size 2209/2203; register allocation + inline Vector3 copy order differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00faa5c0 1469 complete cTerrainSphere::SaveModifications (27/27 calls in order, 4 vcalls slot 0x14); register allocation, frame size (0x94 vs 0xa0) and loop-carried vector end pointers differ
+00fab2b0  995  complete (AddRibbonQuad: all 4 corner projections, same-face fast path, 6-face clip/re-project loop; 9/9 calls and all constants in original order; 2655 vs 2736 B); frame 0x22c vs 0x234, original multiplies the normalize factor in SSE after spilling it while cl keeps it on x87; equiv UNSUPPORTED (equiv: original reads eax at entry, custom/LTCG register ABI, left as is)

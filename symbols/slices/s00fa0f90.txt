@@ -1,1 +1,5 @@
-00fa0f90 SP::cTerrainSphere::Initialize  # creates decal mgr, viewer, state mgr, weather, quads, impostor job; PDB anchor names it GetConfig
+007c4dd0 ?Init@cViewer@SP@@QAE_N_N@Z  # SP::cViewer::Init (callee of s00fa0f90, named from the dev publics; slice address comment)
+00fa0f90 ?Initialize@cTerrainSphere@@QAE_N_N@Z  # cTerrainSphere::Initialize migrated from s00fa0f90 (verbatim, slice spelling)
+00fb4e10 ?Init@cTerrainSphereQuad@SP@@QAEXPAVcTerrainSphere@2@PAV12@HAAUcSPVector2@@2_N@Z  # SP::cTerrainSphereQuad::Init (callee of s00fa0f90, named from the dev publics; slice address comment)
+00fc04b0 ??0cTerrainStateMgr@SP@@QAE@PAVcTerrainSphere@1@@Z  # SP::cTerrainStateMgr::cTerrainStateMgr (callee of s00fa0f90, named from the dev publics; slice address comment)
+00fc5900 ?Init@cWeatherManager@SP@@QAE_NPAVcTerrainSphere@2@@Z  # SP::cWeatherManager::Init (callee of s00fa0f90, named from the dev publics; slice address comment)

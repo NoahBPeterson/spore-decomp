@@ -1,1 +1,1 @@
-00fa9d20 SP::cTerrainSphere::SetDefinition  # PDB name on card
+00fa9d20 ?SetDefinition@cTerrainSphere_s00fa_9d20@@QAEXPAUPropList@@@Z  # cTerrainSphere_s00fa_9d20::SetDefinition migrated from s00fa9d20 (verbatim, slice spelling)

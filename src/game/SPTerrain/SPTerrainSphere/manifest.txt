@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?Initialize@cTerrainSphere@@QAE_N_N@Z  00fa0f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
