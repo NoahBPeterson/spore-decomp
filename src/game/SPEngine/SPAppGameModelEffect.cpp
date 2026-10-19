@@ -30,9 +30,39 @@ struct cEffectNode { void Tick(void* arg); char HandleParam(int kind, float* val
 // ---- items of slice s007d3930 end
 
 // ---- items of slice s007d4a40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void  operator delete[](void* p) throw();
+void  operator delete(void* p);
 struct Matrix3 { float m[9]; void Assign(const Matrix3& o); };     // 0x41cb40
 void ElemCtor(void* self, const void* src);                       // 0x79a0d0
 struct TransformInit { void* Init(const void* src, void* a, char flag); };
+struct IUnk32 { virtual int AddRef(); virtual int Release(); };
+struct UnkRef {
+    IUnk32* mpObject;
+    UnkRef() : mpObject(0) {}
+    ~UnkRef() throw() { if (mpObject) mpObject->Release(); }
+};
+struct cParamRec {
+    uint16_t mOffset, mCount;
+    cParamRec() : mOffset(0), mCount(0) {}
+};
+template<class T> struct spvec {
+    T* mpBegin; T* mpEnd; T* mpCapacity;
+    uint32_t mAlloc[2];
+    spvec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~spvec() throw() { if (mpBegin && ((int*)mpBegin)[-1] != 0) operator delete[](mpBegin); }
+};
+struct cEffectParams_s007d_4a40 {
+    cParamRec mFloatParams[25];     // +0x00
+    spvec<float> mFloatStorage;     // +0x64
+    cParamRec mIntParams[10];       // +0x78
+    spvec<int> mIntStorage;         // +0xa0
+    UnkRef mUnknownParams[9];       // +0xb4
+    cEffectParams_s007d_4a40();
+    ~cEffectParams_s007d_4a40();
+    bool Handle(int kind, void* a, int b);
+    char Handle2(int kind, void* a);
+    void Tick(void* arg);
+};
 // ---- items of slice s007d4a40 end
 
 // @ 0x007d4620
@@ -152,4 +182,14 @@ void* TransformInit::Init(const void* src, void* a, char flag)
     ((Matrix3*)(s + 0x50))->Assign(*(const Matrix3*)0x163725c);
     ElemCtor(s, a);
     return self;
+}
+
+// @ 0x007d4ae0
+cEffectParams_s007d_4a40::~cEffectParams_s007d_4a40()
+{
+}
+
+// @ 0x007d55e0
+cEffectParams_s007d_4a40::cEffectParams_s007d_4a40()
+{
 }

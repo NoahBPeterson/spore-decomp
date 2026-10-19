@@ -2,3 +2,5 @@
 ../src/game/SPEngine/SPAppGameModelEffect.cpp  ?UnknownStore@cEffectParams@@QAEXHPAUIUnknown32@@@Z  007d4620  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppGameModelEffect.cpp  ?SetVisible@EffOwner@@QAEXH@Z  007d4820  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppGameModelEffect.cpp  ?Allocate@VecOut@@QAEPAU1@IPAX@Z  007d48e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelEffect.cpp  ??1cEffectParams_s007d_4a40@@QAE@XZ  007d4ae0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelEffect.cpp  ??0cEffectParams_s007d_4a40@@QAE@XZ  007d55e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
