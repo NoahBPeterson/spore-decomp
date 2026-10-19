@@ -101,6 +101,7 @@ struct SL71
     void     v0aaa0();
     void*    v0ab90(void* a2);
     void     v0ac10(unsigned n);
+    void     FUN_00a05830(int n, void* p);   // 0x00a05830
 };
 
 // 00a099e0 - eastl::vector<rw::math::fpu::Vector3Template<float,0> >::insert(pos,count,val)
@@ -380,13 +381,11 @@ void SL71::v0a360(void* a2, void* a3)
 // @ 0x00a0a520
 void* SL71::v0a520(void* a2)
 {
-    char* self = (char*)this;
-    char* p = (char*)a2;
-    FUN_00a05830((int)((*(char**)(p + 4) - *(char**)p) / 0x1c), p + 0xc);
-    char* out = 0;
-    FUN_00a09560(&out, *(void**)p, *(void**)(p + 4), *(void**)self, p);
-    *(void**)(self + 4) = out;
-    return self;
+    char* c = (char*)a2;
+    FUN_00a05830((int)((*(char**)(c + 4) - *(char**)c) / 0x1c), c + 0xc);
+    FUN_00a09560(&a2, *(void**)c, *(void**)(c + 4), *(void**)this, c);
+    *((void**)this + 1) = a2;
+    return this;
 }
 
 // 00a0a580 - (free) destroy each 0x18-byte element in [a1,a2), then the outer array
