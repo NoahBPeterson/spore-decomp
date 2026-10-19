@@ -1,3 +1,11 @@
 # source  symbol  original VA  [flags override]
 slices/s007b29a0/s007b29a0.cpp  ?f@W39d0@@QAEXXZ  007b39d0
 slices/s007b29a0/s007b29a0.cpp  ?set@W3a30@@QAEXHPAM@Z  007b3a30
+slices/s007b29a0/s007b29a0.cpp  ?ReleaseTimelineJobs@ThumbnailMgr29a0@@QAEXXZ  007b29a0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007b29a0/s007b29a0.cpp  ?Run@cThumbJobA@@QAEXPAUcThumbRef@@PAUcViewer@@PAUcThumbTgt@@@Z  007b2ab0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007b29a0/s007b29a0.cpp  ?Run@cThumbJobB@@QAEXPAUcThumbRef@@PAUcViewer@@PAUcThumbTgt@@@Z  007b2ca0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007b29a0/s007b29a0.cpp  ?Submit@ThumbnailMgr2e10@@QAEXXZ  007b2e10  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007b29a0/s007b29a0.cpp  ??1cThumbResA@@UAE@XZ  007b2eb0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007b29a0/s007b29a0.cpp  ?Run@cThumbJobC@@QAEXPAUcThumbRef@@0PAUcThumbTgt@@@Z  007b2f40  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007b29a0/s007b29a0.cpp  ?Run@cThumbJobD@@QAEXPAUcThumbRef@@PAUcThumbTgt@@@Z  007b31f0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007b29a0/s007b29a0.cpp  ??1cThumbResB@@UAE@XZ  007b32e0  /O2 /MD /Gy /EHsc /TP /GS-
