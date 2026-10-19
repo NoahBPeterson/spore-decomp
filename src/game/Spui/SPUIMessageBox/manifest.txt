@@ -1,2 +1,4 @@
 # source  symbol  va  flags
+../src/game/Spui/SPUIMessageBox.cpp  ?AutoSizeButtons@cSPUIMessageBoxW@@QAEMXZ  00816d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIMessageBox.cpp  ?scalarDtor@MsgBoxA@@QAEPAXE@Z  00817000  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Spui/SPUIMessageBox.cpp  ?Init@cSPUIMessageBoxW@@QAE_NPBUResourceKeyW@@_N@Z  00817040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

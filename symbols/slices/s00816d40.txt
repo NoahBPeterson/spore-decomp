@@ -1,10 +1,11 @@
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00816d40, named from the dev publics; slice address comment)
 00816cb0 UI::CalloutMessageBox::CalloutMessageBox  # (slice s00815dd0)
+00816d40 ?AutoSizeButtons@cSPUIMessageBoxW@@QAEMXZ  # cSPUIMessageBoxW::AutoSizeButtons migrated from s00816d40 (verbatim, slice spelling)
 00817000 ?scalarDtor@MsgBoxA@@QAEPAXE@Z  # MsgBoxA::scalarDtor migrated from s00816d40 (verbatim, slice spelling)
+00817040 ?Init@cSPUIMessageBoxW@@QAE_NPBUResourceKeyW@@_N@Z  # cSPUIMessageBoxW::Init migrated from s00816d40 (verbatim, slice spelling)
 008175a0 FUN_008175a0  # cString::Load wrapper (Movie Name PLACEHOLDER)
 008175c0 UI::CalloutMessageBox::Shutdown  # tears down windows, layout, message handler
 00817670 UI::CalloutMessageBox::SetVisible  # toggles three windows + app-property query
 00817720 UI::CalloutMessageBox::OnShow  # rebinds root/child windows from layout (ids 0xffffffff,0x62ef978,0x642d110)
 00817840 UI::CalloutMessageBox::OnMovieCommand  # movie-system enable/disable dispatch
 00817c40 FUN_00817c40  # hash-based named-string getter (FNV1_String16)
-00816d40 cSPUIMessageBox::AutoSizeButtons  # sizes buttons 0x5107b17..1a, returns the gap between the left and right button groups
-00817040 cSPUIMessageBox::Init  # loads the property list, layout and button/text setup (pdb: cSPUIMessageBox)
