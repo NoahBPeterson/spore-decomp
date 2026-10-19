@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPPlayModeUI.cpp -- migrated from slice(s) s00637f80, s006373e0, s00636560, s00636320, s006354c0 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPPlayModeUI.cpp -- migrated from slice(s) s00634490, s00637f80, s006373e0, s00636560, s00636320, s006354c0 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPPlayModeUI.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -19,6 +19,12 @@
 #include "SP/cSPPlayModeSubModeAction.h"
 #include "SP/cString.h"
 #include "EA/Swarm/cIVisualEffect.h"
+#include "SP/cSPPlayModePhotoBrowser.h"
+#include "SP/cPropertyList.h"
+#include "SP/cJob.h"
+#include "SP/cPlayModeTokenTranslator.h"
+#include "cSPUITooltipWinProc.h"
+#include "SP/cStringTokenTranslator.h"
 
 // ---- items of slice s006354c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 class IWindow {
@@ -730,6 +736,653 @@ public:
 }
 // ---- items of slice s00637f80 end
 
+// ---- items of slice s00634490 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float gBtnFx0, gBtnFx1, gBtnFx2, gBtnFx3;     // 0x013f9328, 0x013f9324, 0x013ef53c, 0x013fe744
+struct IRefCountU {
+    virtual int AddRef();
+    virtual int Release();
+};
+struct UIProc;
+struct UIWin {
+    virtual void s00();
+    virtual void s01();
+    virtual void s02();
+    virtual struct UIProc* QueryProc(uint32_t id);
+    virtual void s04();
+    virtual void s05();
+    virtual void s06();
+    virtual uint32_t GetID();
+    virtual void s08();
+    virtual void s09();
+    virtual uint8_t GetFlags();
+    virtual void s0b();
+    virtual void s0c();
+    virtual void s0d();
+    virtual void s0e();
+    virtual void s0f();
+    virtual void s10();
+    virtual void s11();
+    virtual void s12();
+    virtual void s13();
+    virtual void s14();
+    virtual void s15();
+    virtual void s16();
+    virtual void s17();
+    virtual void s18();
+    virtual void s19();
+    virtual void s1a();
+    virtual void s1b();
+    virtual void s1c();
+    virtual void s1d();
+    virtual void s1e();
+    virtual void SetFlag(int flag, bool v);
+    virtual void SetText(const wchar_t* text);
+    virtual void s21();
+    virtual void s22();
+    virtual void s23();
+    virtual void s24();
+    virtual void s25();
+    virtual void s26();
+    virtual void s27();
+    virtual void s28();
+    virtual void s29();
+    virtual void s2a();
+    virtual void s2b();
+    virtual void s2c();
+    virtual void s2d();
+    virtual void s2e();
+    virtual void s2f();
+    virtual void s30();
+    virtual void s31();
+    virtual void s32();
+    virtual void s33();
+    virtual void s34();
+    virtual void s35();
+    virtual void s36();
+    virtual void s37();
+    virtual void s38();
+    virtual void s39();
+    virtual void s3a();
+    virtual void s3b();
+    virtual UIWin* FindChild(uint32_t id, bool recurse);
+    virtual void s3d();
+    virtual void s3e();
+    virtual void s3f();
+    virtual void s40();
+    virtual void SetTooltip(void* tip);
+    virtual void RemoveTooltip(void* tip);
+};
+struct UIProc {
+    virtual void s00();
+    virtual void s01();
+    virtual void s02();
+    virtual void s03();
+    virtual UIWin* GetParent();
+    virtual void s05();
+    virtual void s06();
+    virtual void s07();
+    virtual uint32_t GetState();
+    virtual void s09();
+    virtual void SetFlags(uint32_t flags, bool v);
+    virtual void s0b();
+    virtual void s0c();
+    virtual void SetState13(int a, int b);
+};
+struct UIObjVec {
+    UIWin** mpBegin;
+    UIWin** mpEnd;
+};
+struct cSPUILayout_s0063_4490 {
+    uint32_t pad[6];
+    cSPUILayout_s0063_4490();                                   // 0x00810000
+    UIWin* FindWindowByID(uint32_t id, bool recurse);   // 0x008105b0
+    UIObjVec* GetObjects();                          // 0x008100c0
+};
+struct cSPEditorNaming_s0063_4490 {
+    void SetTagField(uint32_t v);                    // 0x005bfc90
+};
+struct cSPEditorUI_s0063_4490 {
+    UIWin* FindWindowByID(uint32_t id);              // 0x005dc310
+    void DoCommand(uint32_t cmd);                    // 0x005dfd00
+    void EnableUIButton(uint32_t id, uint32_t v);    // 0x005dc610
+    void Show();                                     // 0x005dd070
+    void FUN_005de690(uint32_t a, uint32_t b);       // 0x005de690
+};
+struct FxController;
+struct cAppMode {
+    FxController* FUN_00572400();                    // 0x00572400
+    uint32_t pad0[0x78 / 4];
+    cSPEditorUI_s0063_4490* mEditorUI;                          // +0x78
+    uint32_t pad1[(0x98 - 0x7c) / 4];
+    IRefCountU* mObj98;                              // +0x98
+    uint32_t pad2[(0x358 - 0x9c) / 4];
+    cSPEditorNaming_s0063_4490* mNaming;                        // +0x358
+};
+struct StopwatchU {
+    uint32_t pad[7];
+    StopwatchU(int units, int start);                // 0x0093a560
+};
+struct IWinProcU {
+    virtual void w0();
+    virtual void w1();
+};
+struct RefCountBaseU {
+    virtual void r0();
+    int mRefCount;
+    RefCountBaseU() : mRefCount(0) {}
+};
+struct cSPPlayModeUI_s0063_4490 : IWinProcU, RefCountBaseU {
+    cAppMode* mApp;            // +0x0c
+    void* mPlayMode;           // +0x10
+    cSPUILayout_s0063_4490 mLayout;       // +0x14
+    cSPUILayout_s0063_4490 mLayout2;      // +0x2c
+    uint8_t mFlag44;           // +0x44
+    uint8_t mFlag45;           // +0x45
+    StopwatchU mTimer;         // +0x48
+    uint32_t mField64;         // +0x64
+    UIWin* mField68;           // +0x68
+
+    cSPPlayModeUI_s0063_4490();
+    void AttachWinProc();
+    UIWin* FindPlayModeUIWindow(uint32_t id);  // 0x00634dc0 (cSPPlayModeUI::FindPlayModeUIWindow)
+    UIWin* FindEditorUIWindow(uint32_t id);  // 0x00634e40 (cSPPlayModeUI::FindEditorUIWindow)
+    int FUN_00634e50();
+    uint8_t IsItemVisible(uint32_t id);
+    void SetHighlight(uint32_t id, bool v);  // 0x00634e90 (cSPPlayModeUI::SetHighlight)
+    void SetSelected(uint32_t id, bool v);  // 0x00634ec0 (cSPPlayModeUI::SetSelected)
+    void SetEnabled(uint32_t id, bool v);  // 0x00634ef0 (cSPPlayModeUI::SetEnabled)
+    void SetEditorUIEnabled(uint32_t id, bool v);  // 0x00634f20 (cSPPlayModeUI::SetEditorUIEnabled)
+    void SetHideOut(uint32_t id, bool v);
+    void SetEditorText(uint32_t id, const wchar_t** text);  // 0x00635010 (cSPPlayModeUI::SetEditorText)
+    void ShowToolTip(uint32_t id, uint32_t a, uint32_t b, struct cSPUITooltipWinProc_s0063_4490* existing, float* pos);
+    void ShowEditorUIToolTip(uint32_t id, uint32_t a, uint32_t b, struct cSPUITooltipWinProc_s0063_4490* existing, float* pos);
+    void RemoveTooltip(uint32_t id, void* tip);  // 0x00635290 (cSPPlayModeUI::RemoveTooltip)
+    void DoCommand103();
+    void DoCommand102();
+    void SetPrompt(uint32_t v);
+    void FUN_00635350(uint32_t a, uint32_t b);
+    void ShowEditor();
+    void ToggleNameAndDescribe(bool v);  // 0x00635390 (cSPPlayModeUI::ToggleNameAndDescribe)
+    void SetTagField(uint32_t v);
+    void SetSendEmailDialogVisibility(bool v);  // 0x00635400 (cSPPlayModeUI::SetSendEmailDialogVisibility)
+    void UpdateButtonEffects(int unused);
+};
+struct FxController {
+    void SetScaleA(float v);    // 0x00625270
+    void SetScaleB(float v);    // 0x006252a0
+};
+struct UIHelperObj { void FUN_0067c420(); };
+UIHelperObj* __stdcall FUN_0067cac0(int a, int b);
+struct WinMgrHandler { void FUN_00802a30(int v); };
+struct WinMgrOwner { uint32_t pad[0x2d8 / 4]; WinMgrHandler* mHandler; };
+struct WinMgr { virtual void w0(); virtual void* GetCurrent(); };
+WinMgr* WindowManager();
+void BeginModal(UIWin* w, int a, int b);
+void EndModal(UIWin* w, int a, int b);
+struct cSPUITooltipWinProc_s0063_4490 : IRefCountU {
+    uint32_t pad[0x68 / 4 - 1];
+    cSPUITooltipWinProc_s0063_4490(const wchar_t* cls, uint32_t id, const wchar_t* text);   // 0x00835e30
+    void SetText(const wchar_t* t);                              // 0x00835ed0
+};
+// ---- items of slice s00634490 end
+
+// ---- items of slice s00634490b begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float gTipDefault0, gTipDefault1;             // 0x01486110, 0x013f6ad8
+void* operator new(size_t, const char*, int, int, int, int);
+inline void* operator new(size_t, void* p) { return p; }
+struct cSPUILayout_s0063_4490_b {
+    uint32_t pad[6];
+    cSPUILayout_s0063_4490_b();                                   // 0x00810000
+    UIWin* FindWindowByID(uint32_t id, bool recurse);   // 0x008105b0
+    UIObjVec* GetObjects();                          // 0x008100c0
+};
+struct cSPEditorNaming_s0063_4490_b {
+    void SetTagField(uint32_t v);                    // 0x005bfc90
+};
+struct cSPEditorUI_s0063_4490_b {
+    UIWin* FindWindowByID(uint32_t id);              // 0x005dc310
+    void DoCommand(uint32_t cmd);                    // 0x005dfd00
+    void EnableUIButton(uint32_t id, uint32_t v);    // 0x005dc610
+    void Show();                                     // 0x005dd070
+    void FUN_005de690(uint32_t a, uint32_t b);       // 0x005de690
+};
+struct cAppMode_s0063_4490_b {
+    FxController* FUN_00572400();                    // 0x00572400
+    uint32_t pad0[0x78 / 4];
+    cSPEditorUI_s0063_4490_b* mEditorUI;                          // +0x78
+    uint32_t pad1[(0x98 - 0x7c) / 4];
+    IRefCountU* mObj98;                              // +0x98
+    uint32_t pad2[(0x358 - 0x9c) / 4];
+    cSPEditorNaming_s0063_4490_b* mNaming;                        // +0x358
+};
+struct cSPPlayModeUI_s0063_4490_b : IWinProcU, RefCountBaseU {
+    cAppMode_s0063_4490_b* mApp;            // +0x0c
+    void* mPlayMode;           // +0x10
+    cSPUILayout_s0063_4490_b mLayout;       // +0x14
+    cSPUILayout_s0063_4490_b mLayout2;      // +0x2c
+    uint8_t mFlag44;           // +0x44
+    uint8_t mFlag45;           // +0x45
+    StopwatchU mTimer;         // +0x48
+    uint32_t mField64;         // +0x64
+    UIWin* mField68;           // +0x68
+
+    cSPPlayModeUI_s0063_4490_b();
+    void AttachWinProc();  // 0x00634b10 (cSPPlayModeUI::AttachWinProc)
+    UIWin* FindPlayModeUIWindow(uint32_t id);  // 0x00634dc0 (cSPPlayModeUI::FindPlayModeUIWindow)
+    UIWin* FindEditorUIWindow(uint32_t id);  // 0x00634e40 (cSPPlayModeUI::FindEditorUIWindow)
+    int FUN_00634e50();  // 0x00634e50 (cSPPlayModeUI::FUN_00634e50)
+    uint8_t IsItemVisible(uint32_t id);  // 0x00634e60 (cSPPlayModeUI::IsItemVisible)
+    void SetHighlight(uint32_t id, bool v);  // 0x00634e90 (cSPPlayModeUI::SetHighlight)
+    void SetSelected(uint32_t id, bool v);  // 0x00634ec0 (cSPPlayModeUI::SetSelected)
+    void SetEnabled(uint32_t id, bool v);  // 0x00634ef0 (cSPPlayModeUI::SetEnabled)
+    void SetEditorUIEnabled(uint32_t id, bool v);  // 0x00634f20 (cSPPlayModeUI::SetEditorUIEnabled)
+    void SetHideOut(uint32_t id, bool v);  // 0x00634f50 (cSPPlayModeUI::SetHideOut)
+    void SetEditorText(uint32_t id, const wchar_t** text);  // 0x00635010 (cSPPlayModeUI::SetEditorText)
+    void ShowToolTip(uint32_t id, uint32_t a, uint32_t b, struct cSPUITooltipWinProc_s0063_4490_b* existing, float* pos);
+    void ShowEditorUIToolTip(uint32_t id, uint32_t a, uint32_t b, struct cSPUITooltipWinProc_s0063_4490_b* existing, float* pos);
+    void RemoveTooltip(uint32_t id, void* tip);  // 0x00635290 (cSPPlayModeUI::RemoveTooltip)
+    void DoCommand103();  // 0x006352d0 (cSPPlayModeUI::DoCommand103)
+    void DoCommand102();  // 0x006352f0 (cSPPlayModeUI::DoCommand102)
+    void SetPrompt(uint32_t v);  // 0x00635310 (cSPPlayModeUI::SetPrompt)
+    void FUN_00635350(uint32_t a, uint32_t b);  // 0x00635350 (cSPPlayModeUI::FUN_00635350)
+    void ShowEditor();  // 0x00635380 (cSPPlayModeUI::ShowEditor)
+    void ToggleNameAndDescribe(bool v);  // 0x00635390 (cSPPlayModeUI::ToggleNameAndDescribe)
+    void SetTagField(uint32_t v);  // 0x006353e0 (cSPPlayModeUI::SetTagField)
+    void SetSendEmailDialogVisibility(bool v);  // 0x00635400 (cSPPlayModeUI::SetSendEmailDialogVisibility)
+    void UpdateButtonEffects(int unused);  // 0x00634c80 (cSPPlayModeUI::UpdateButtonEffects)
+};
+struct cString {
+    uint32_t pad[5];
+    cString();                                                   // 0x006b5060
+    ~cString();                                                  // 0x006b5240
+    void Load(uint32_t id, uint32_t a, uint32_t b);              // 0x006b54b0
+    const wchar_t* Format(float* pos, int a, const wchar_t* fmt, int b);   // 0x006b55c0
+    const wchar_t* Format2(int len, int flag);                   // 0x006b55c0
+};
+struct cSPUITooltipWinProc_s0063_4490_b : IRefCountU {
+    uint32_t pad[0x68 / 4 - 1];
+    cSPUITooltipWinProc_s0063_4490_b(const wchar_t* cls, uint32_t id, const wchar_t* text);   // 0x00835e30
+    void SetText(const wchar_t* t);                              // 0x00835ed0
+};
+void* FUN_009512c0();
+void* FUN_009512d0(size_t size, int align, const char* name, void* alloc);
+struct RectF {
+    float x0, y0, x1, y1;
+    bool Intersect(const RectF& a, const RectF& b);
+};
+// ---- items of slice s00634490b end
+
+// @ 0x00634b10
+void cSPPlayModeUI_s0063_4490::AttachWinProc()
+{
+    UIWin* w = mLayout.FindWindowByID(0x5b5ef50, true);
+    if (w)
+        w->SetTooltip(this);
+    w = mLayout.FindWindowByID(0x5650568, true);
+    if (w)
+        w->SetTooltip(this);
+}
+
+
+// @ 0x00634b60
+bool RectF::Intersect(const RectF& a, const RectF& b)
+{
+    if (b.x0 >= a.x1 || a.x0 >= b.x1 || b.y0 >= a.y1 || a.y0 >= b.y1) {
+        y0 = 0.0f;
+        x1 = 0.0f;
+        x0 = 0.0f;
+        y1 = 0.0f;
+        return false;
+    }
+    x0 = (a.x0 > b.x0) ? a.x0 : b.x0;
+    y0 = (a.y0 > b.y0) ? a.y0 : b.y0;
+    x1 = (a.x1 < b.x1) ? a.x1 : b.x1;
+    y1 = (a.y1 < b.y1) ? a.y1 : b.y1;
+    return true;
+}
+
+// @ 0x00634c10
+cSPPlayModeUI_s0063_4490::cSPPlayModeUI_s0063_4490()
+: mLayout(), mLayout2(), mFlag44(0), mFlag45(0), mTimer(5, 0)
+{
+    mField64 = 0;
+    mField68 = 0;
+}
+
+
+// @ 0x00634c80
+void cSPPlayModeUI_s0063_4490::UpdateButtonEffects(int unused)
+{
+    UIWin* w = mLayout2.FindWindowByID(0x4cab570, true);
+    if (w) {
+        UIProc* p = w->QueryProc(0x8ed27e7a);
+        if (p->GetState() & 2) {
+            FxController* fx = mApp->FUN_00572400();
+            if (fx)
+                fx->SetScaleA(gBtnFx0);
+        }
+    }
+    w = mLayout2.FindWindowByID(0x4cab571, true);
+    if (w) {
+        UIProc* p = w->QueryProc(0x8ed27e7a);
+        if (p->GetState() & 2) {
+            FxController* fx = mApp->FUN_00572400();
+            if (fx)
+                fx->SetScaleA(gBtnFx1);
+        }
+    }
+    w = mLayout2.FindWindowByID(0x4cab56f, true);
+    if (w) {
+        UIProc* p = w->QueryProc(0x8ed27e7a);
+        if (p->GetState() & 2) {
+            FxController* fx = mApp->FUN_00572400();
+            if (fx)
+                fx->SetScaleB(gBtnFx2);
+        }
+    }
+    w = mLayout2.FindWindowByID(0x4cab56e, true);
+    if (w) {
+        UIProc* p = w->QueryProc(0x8ed27e7a);
+        if (p->GetState() & 2) {
+            FxController* fx = mApp->FUN_00572400();
+            if (fx)
+                fx->SetScaleB(gBtnFx3);
+        }
+    }
+}
+
+
+// @ 0x00634dc0
+UIWin* cSPPlayModeUI_s0063_4490::FindPlayModeUIWindow(uint32_t id)
+{
+    UIObjVec* objs = mLayout.GetObjects();
+    int n = (int)(objs->mpEnd - objs->mpBegin);
+    for (int i = 0; i < n; ++i) {
+        UIWin* obj = objs->mpBegin[i];
+        if (obj) {
+            UIWin* win = (UIWin*)obj->QueryProc(0xeeee8218);
+            if (win) {
+                if (win->GetID() == id)
+                    return win;
+                UIWin* r = win->FindChild(id, true);
+                if (r)
+                    return r;
+            }
+        }
+    }
+    return 0;
+}
+
+
+// @ 0x00634e40
+UIWin* cSPPlayModeUI_s0063_4490::FindEditorUIWindow(uint32_t id)
+{
+    cSPEditorUI_s0063_4490* ed = mApp->mEditorUI;
+    return ed->FindWindowByID(id);
+}
+
+
+// @ 0x00634e50
+int cSPPlayModeUI_s0063_4490::FUN_00634e50()
+{
+    return mApp->mObj98->Release();
+}
+
+
+// @ 0x00634e60
+uint8_t cSPPlayModeUI_s0063_4490::IsItemVisible(uint32_t id)
+{
+    uint8_t result = 0;
+    UIWin* w = FindPlayModeUIWindow(id);
+    if (w) {
+        result = w->GetFlags();
+        result &= 1;
+    }
+    return result;
+}
+
+
+// @ 0x00634e90
+void cSPPlayModeUI_s0063_4490::SetHighlight(uint32_t id, bool v)
+{
+    UIWin* w = FindPlayModeUIWindow(id);
+    if (w)
+        w->QueryProc(0x8ed27e7a)->SetFlags(8, v);
+}
+
+
+// @ 0x00634ec0
+void cSPPlayModeUI_s0063_4490::SetSelected(uint32_t id, bool v)
+{
+    UIWin* w = FindPlayModeUIWindow(id);
+    if (w)
+        w->QueryProc(0x8ed27e7a)->SetFlags(4, v);
+}
+
+
+// @ 0x00634ef0
+void cSPPlayModeUI_s0063_4490::SetEnabled(uint32_t id, bool v)
+{
+    UIWin* w = FindPlayModeUIWindow(id);
+    if (w)
+        w->SetFlag(2, v);
+}
+
+
+// @ 0x00634f20
+void cSPPlayModeUI_s0063_4490::SetEditorUIEnabled(uint32_t id, bool v)
+{
+    cSPEditorUI_s0063_4490* ed = mApp->mEditorUI;
+    UIWin* w = ed->FindWindowByID(id);
+    if (w)
+        w->SetFlag(2, v);
+}
+
+
+// @ 0x00634f50
+void cSPPlayModeUI_s0063_4490::SetHideOut(uint32_t id, bool v)
+{
+    UIWin* w;
+    switch (id) {
+    case 0x44594d8:
+        w = FindPlayModeUIWindow(0x5ac71d9);
+        if (w)
+            w->SetFlag(1, v);
+        break;
+    case 0x3e831e4:
+        w = FindPlayModeUIWindow(0x5ac71d8);
+        if (w)
+            w->SetFlag(1, v);
+        break;
+    case 0x445a468:
+        w = FindPlayModeUIWindow(0x5ac71da);
+        if (w)
+            w->SetFlag(1, v);
+        break;
+    case 0x445ea18:
+        w = FindPlayModeUIWindow(0x5ac71db);
+        if (w)
+            w->SetFlag(2, !v);
+        break;
+    }
+}
+
+
+// @ 0x00635010
+void cSPPlayModeUI_s0063_4490::SetEditorText(uint32_t id, const wchar_t** text)
+{
+    cSPEditorUI_s0063_4490* ed = mApp->mEditorUI;
+    UIWin* w = ed->FindWindowByID(id);
+    w->SetText(*text);
+}
+
+
+// @ 0x00635040
+void cSPPlayModeUI_s0063_4490_b::ShowToolTip(uint32_t id, uint32_t a2, uint32_t a3, cSPUITooltipWinProc_s0063_4490_b* existing, float* pos)
+{
+    float defaults[2];
+    defaults[0] = gTipDefault0;
+    defaults[1] = gTipDefault1;
+    UIWin* win = FindPlayModeUIWindow(id);
+    if (win) {
+        cString str;
+        str.Load(0x7518573e, a2, a3);
+        UIProc* proc = win->QueryProc(0x8ed27e7a);
+        if (!pos)
+            pos = defaults;
+        cSPUITooltipWinProc_s0063_4490_b* tip = existing;
+        cSPUITooltipWinProc_s0063_4490_b* result = 0;
+        if (!tip) {
+            void* mem = FUN_009512d0(0x68, 4, "UI/Tooltip", FUN_009512c0());
+            if (mem) {
+                tip = new (mem) cSPUITooltipWinProc_s0063_4490_b(L"Tooltips", 0x3754e6c, str.Format(pos, 0, (const wchar_t*)0x13fe714, 0));
+                if (tip) {
+                    tip->AddRef();
+                    result = tip;
+                }
+            }
+        } else {
+            tip->SetText(str.Format2(-1, 1));
+            tip->AddRef();
+            result = tip;
+        }
+        proc->GetParent()->SetTooltip(result);
+        if (result)
+            result->Release();
+    }
+}
+
+// @ 0x00635160
+void cSPPlayModeUI_s0063_4490_b::ShowEditorUIToolTip(uint32_t id, uint32_t a2, uint32_t a3, cSPUITooltipWinProc_s0063_4490_b* existing, float* pos)
+{
+    float defaults[2];
+    defaults[0] = gTipDefault0;
+    defaults[1] = gTipDefault1;
+    cSPEditorUI_s0063_4490_b* ed = mApp->mEditorUI;
+    UIWin* win = ed->FindWindowByID(id);
+    if (win) {
+        cString str;
+        str.Load(0x7518573e, a2, a3);
+        UIProc* proc = win->QueryProc(0x8ed27e7a);
+        if (!pos)
+            pos = defaults;
+        cSPUITooltipWinProc_s0063_4490_b* tip = existing;
+        cSPUITooltipWinProc_s0063_4490_b* result = 0;
+        if (!tip) {
+            void* mem = FUN_009512d0(0x68, 4, "UI/Tooltip", FUN_009512c0());
+            if (mem) {
+                tip = new (mem) cSPUITooltipWinProc_s0063_4490_b(L"Tooltips", 0x3754e6c, str.Format(pos, 0, (const wchar_t*)0x13fe714, 0));
+                if (tip) {
+                    tip->AddRef();
+                    result = tip;
+                }
+            }
+        } else {
+            tip->SetText(str.Format2(-1, 1));
+            tip->AddRef();
+            result = tip;
+        }
+        proc->GetParent()->SetTooltip(result);
+        if (result)
+            result->Release();
+    }
+}
+
+// @ 0x00635290
+void cSPPlayModeUI_s0063_4490::RemoveTooltip(uint32_t id, void* tip)
+{
+    if (tip) {
+        UIWin* w = FindPlayModeUIWindow(id);
+        if (w)
+            w->QueryProc(0x8ed27e7a)->GetParent()->RemoveTooltip(tip);
+    }
+}
+
+
+// @ 0x006352d0
+void cSPPlayModeUI_s0063_4490::DoCommand103()
+{
+    mApp->mEditorUI->DoCommand(0x103);
+}
+
+
+// @ 0x006352f0
+void cSPPlayModeUI_s0063_4490::DoCommand102()
+{
+    mApp->mEditorUI->DoCommand(0x102);
+}
+
+
+// @ 0x00635310
+void cSPPlayModeUI_s0063_4490::SetPrompt(uint32_t v)
+{
+    UIWin* w = FindPlayModeUIWindow(0x5665f58);
+    if (!w)
+        w = mField68;
+    if (w) {
+        UIProc* p = w->QueryProc(0x8ed27e7a);
+        if (p)
+            p->SetState13(4, v);
+    }
+}
+
+
+// @ 0x00635350
+void cSPPlayModeUI_s0063_4490::FUN_00635350(uint32_t a, uint32_t b)
+{
+    mApp->mEditorUI->FUN_005de690(a, b);
+    mApp->mEditorUI->EnableUIButton(0x58b74e8, a);
+}
+
+
+// @ 0x00635380
+void cSPPlayModeUI_s0063_4490::ShowEditor()
+{
+    mApp->mEditorUI->Show();
+}
+
+
+// @ 0x00635390
+void cSPPlayModeUI_s0063_4490::ToggleNameAndDescribe(bool v)
+{
+    UIWin* w = mApp->mEditorUI->FindWindowByID(0x5a73030);
+    if (w) {
+        if (!(w->GetFlags() & 2) && !v)
+            w->SetFlag(2, true);
+        else
+            w->SetFlag(2, false);
+    }
+}
+
+
+// @ 0x006353e0
+void cSPPlayModeUI_s0063_4490::SetTagField(uint32_t v)
+{
+    cSPEditorNaming_s0063_4490* n = mApp->mNaming;
+    if (n)
+        n->SetTagField(v);
+}
+
+
+// @ 0x00635400
+void cSPPlayModeUI_s0063_4490::SetSendEmailDialogVisibility(bool v)
+{
+    cSPEditorUI_s0063_4490* ed = mApp->mEditorUI;
+    ed->FindWindowByID(0x5b9cdb0)->SetFlag(1, v);
+    UIWin* w = mApp->mEditorUI->FindWindowByID(0x3f67620);
+    if (v) {
+        FUN_0067cac0(0, 1)->FUN_0067c420();
+        BeginModal(w, 0, 0);
+        void* p = WindowManager()->GetCurrent();
+        WinMgrOwner* o = p ? (WinMgrOwner*)((char*)p - 4) : 0;
+        o->mHandler->FUN_00802a30(0);
+    } else {
+        FUN_0067cac0(1, 1)->FUN_0067c420();
+        EndModal(w, 0, 0);
+    }
+}
+
+
 // @ 0x006354c0
 void SP::cSPPlayModeUI_s0063_54c0::SetUpSendEmailWindow()
 {
@@ -739,6 +1392,8 @@ void SP::cSPPlayModeUI_s0063_54c0::SetUpSendEmailWindow()
     mApp->mpEditorUI->FindWindowByID(-1)->AddWindow(w);
     w->Release();
 }
+
+
 
 
 
@@ -760,11 +1415,15 @@ void SP::cSPPlayModeUI_s0063_54c0::ResetSendEmailWindow()
 
 
 
+
+
 // @ 0x00635580
 void SP::cSPPlayModeUI_s0063_54c0::SetEnableNewCreatureButton(bool b)
 {
     SET_ENABLE_BODY(0x4766ff0, )
 }
+
+
 
 
 
@@ -782,11 +1441,15 @@ void SP::cSPPlayModeUI_s0063_54c0::SetEnableTakePictureButton(bool b)
 
 
 
+
+
 // @ 0x00635680
 void SP::cSPPlayModeUI_s0063_54c0::SetEnableRecordMovieButton(bool b)
 {
     SET_ENABLE_BODY(0x3fc1740, )
 }
+
+
 
 
 
@@ -805,6 +1468,8 @@ void SP::cSPPlayModeUI_s0063_54c0::SetUIGroupVisible(uint32_t id, bool b)
 
 
 
+
+
 // @ 0x00635790
 void SP::cSPPlayModeUI_s0063_54c0::SetEditorUIGroupVisible(uint32_t id, bool b)
 {
@@ -812,6 +1477,8 @@ void SP::cSPPlayModeUI_s0063_54c0::SetEditorUIGroupVisible(uint32_t id, bool b)
     IWindow* w = ui->FindWindowByID(id);
     if (w) w->SetFlag(1, b);
 }
+
+
 
 
 
@@ -835,6 +1502,8 @@ void SP::cSPPlayModeUI_s0063_54c0::ToggleUIGroup(uint32_t id, bool b)
 
 
 
+
+
 // @ 0x00635810
 void SP::cSPPlayModeUI_s0063_54c0::SetCheckButtonSelected(uint32_t id, bool b)
 {
@@ -842,6 +1511,8 @@ void SP::cSPPlayModeUI_s0063_54c0::SetCheckButtonSelected(uint32_t id, bool b)
     IButton* btn = w ? (IButton*)w->Cast(0x8ed27e7a) : 0;
     btn->SetStateFlag(4, b);
 }
+
+
 
 
 
@@ -864,6 +1535,8 @@ bool SP::cSPPlayModeUI_s0063_54c0::IsCheckButtonSelected(uint32_t id)
 
 
 
+
+
 // @ 0x00635890
 bool SP::cSPPlayModeUI_s0063_54c0::IsUIGroupEnabled(uint32_t id)
 {
@@ -872,6 +1545,8 @@ bool SP::cSPPlayModeUI_s0063_54c0::IsUIGroupEnabled(uint32_t id)
         return true;
     return false;
 }
+
+
 
 
 
@@ -966,6 +1641,8 @@ bool SP::cSPPlayModeUI_s0063_54c0::Init(cAppModeEditorBase_s0063_54c0* app, cSPP
 
 
 
+
+
 // @ 0x00635dc0
 void SP::cSPPlayModeUI_s0063_54c0::SetTabIndentOff(uint32_t id)
 {
@@ -995,6 +1672,8 @@ void SP::cSPPlayModeUI_s0063_54c0::SetTabIndentOff(uint32_t id)
 
 
 
+
+
 // @ 0x00635e80
 void SP::cSPPlayModeUI_s0063_54c0::SetTabIndentOn()
 {
@@ -1007,6 +1686,8 @@ void SP::cSPPlayModeUI_s0063_54c0::SetTabIndentOn()
     w = FindPlayModeUIWindow(0x46db980);
     if (w) w->SetFlag(1, false);
 }
+
+
 
 
 
@@ -1032,6 +1713,8 @@ void SP::cSPPlayModeUI_s0063_54c0::SetAnimButtonsEnabled(bool b)
 
 
 
+
+
 // @ 0x00635ff0
 void SP::cSPPlayModeUI_s0063_54c0::SetExpansionAnimButtonsEnabled(bool b)
 {
@@ -1045,6 +1728,8 @@ void SP::cSPPlayModeUI_s0063_54c0::SetExpansionAnimButtonsEnabled(bool b)
     w = FindPlayModeUIWindow(0x48667c8); if (w) w->SetFlag(1, b);
     w = FindPlayModeUIWindow(0x48667e0); if (w) w->SetFlag(1, b);
 }
+
+
 
 
 
@@ -1091,6 +1776,8 @@ void SP::cSPPlayModeUI_s0063_54c0::ShowYouTubeLoginDialog()
 
 
 
+
+
 // @ 0x00636260
 void SP::cSPPlayModeUI_s0063_54c0::HideYouTubeLoginDialog()
 {
@@ -1112,6 +1799,8 @@ void SP::cSPPlayModeUI_s0063_54c0::HideYouTubeLoginDialog()
     w = FindPlayModeUIWindow(0x5650568);
     if (w) w->SetFlag(1, false);
 }
+
+
 
 
 
@@ -1170,6 +1859,8 @@ void cSPPlayModeUI::EnablePhotoViewerButton(bool b)
 
 
 
+
+
 // @ 0x006364a0
 void cSPPlayModeUI::HideMovieSavedDialogCustom()
 {
@@ -1199,6 +1890,8 @@ void cSPPlayModeUI::HideMovieSavedDialogCustom()
     if (w)
         w->SetFlag(1, 0);
 }
+
+
 
 
 
@@ -1414,6 +2107,8 @@ bool cSPPlayModeUI_s0063_6560::DoMessageInternal(uint32_t a, UIMessage* msg)
 }
 
 
+
+
 // @ 0x006373e0
 bool cSPPlayModeUI_s0063_73e0::Shutdown()
 {
@@ -1442,6 +2137,8 @@ bool cSPPlayModeUI_s0063_73e0::Shutdown()
 }
 
 
+
+
 // @ 0x006374b0
 void cSPPlayModeUI_s0063_73e0::SetYTUsername(const eastl::string_s0063_73e0& s)
 {
@@ -1450,6 +2147,8 @@ void cSPPlayModeUI_s0063_73e0::SetYTUsername(const eastl::string_s0063_73e0& s)
     IWindow_s0063_73e0* win = FindPlayModeUIWindow(0x5650498);
     win->SetCaption(p);
 }
+
+
 
 
 // @ 0x00637510
@@ -1462,12 +2161,16 @@ void cSPPlayModeUI_s0063_73e0::SetYTPassword(const eastl::string_s0063_73e0& s)
 }
 
 
+
+
 // @ 0x006375e0
 char FindParentDir2(int a, int b, int c)
 {
     (void)a; (void)b; (void)c;
     return 0;
 }
+
+
 
 
 // @ 0x006377d0
@@ -1479,12 +2182,16 @@ void cSPPlayModeUI_s0063_73e0::GetEditorText(uint32_t id, eastl::string_s0063_73
 }
 
 
+
+
 // @ 0x00637800
 void cSPPlayModeUI_s0063_73e0::GetYTUsername(eastl::string_s0063_73e0* out)
 {
     IWindow_s0063_73e0* w = FindPlayModeUIWindow(0x5650498);
     out->sprintf("%ls", w->GetText());
 }
+
+
 
 
 // @ 0x00637830
@@ -1495,16 +2202,22 @@ void cSPPlayModeUI_s0063_73e0::GetYTPassword(eastl::string_s0063_73e0* out)
 }
 
 
+
+
 // @ 0x00637860
 void SP::cSPPlayModeUI::Show()
 {
 }
 
 
+
+
 // @ 0x00637c90
 void cSPPlayModeUI_s0063_73e0::SendVideoURLInfoToServer()
 {
 }
+
+
 
 // @ 0x00638430
 void SP::cSPPlayModeUI_s0063_7f80::ShowMovieSavedDialogCustom()

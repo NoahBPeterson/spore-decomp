@@ -1,4 +1,29 @@
 # source  symbol  va  flags
+../src/game/SPEditors/SPPlayModeUI.cpp  ?AttachWinProc@cSPPlayModeUI_s0063_4490@@QAEXXZ  00634b10  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?Intersect@RectF@@QAE_NABU1@0@Z  00634b60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ??0cSPPlayModeUI_s0063_4490@@QAE@XZ  00634c10  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?UpdateButtonEffects@cSPPlayModeUI_s0063_4490@@QAEXH@Z  00634c80  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?FindPlayModeUIWindow@cSPPlayModeUI_s0063_4490@@QAEPAUUIWin@@I@Z  00634dc0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?FindEditorUIWindow@cSPPlayModeUI_s0063_4490@@QAEPAUUIWin@@I@Z  00634e40  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?FUN_00634e50@cSPPlayModeUI_s0063_4490@@QAEHXZ  00634e50  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?IsItemVisible@cSPPlayModeUI_s0063_4490@@QAEEI@Z  00634e60  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetHighlight@cSPPlayModeUI_s0063_4490@@QAEXI_N@Z  00634e90  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetSelected@cSPPlayModeUI_s0063_4490@@QAEXI_N@Z  00634ec0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetEnabled@cSPPlayModeUI_s0063_4490@@QAEXI_N@Z  00634ef0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetEditorUIEnabled@cSPPlayModeUI_s0063_4490@@QAEXI_N@Z  00634f20  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetHideOut@cSPPlayModeUI_s0063_4490@@QAEXI_N@Z  00634f50  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetEditorText@cSPPlayModeUI_s0063_4490@@QAEXIPAPB_W@Z  00635010  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?ShowToolTip@cSPPlayModeUI_s0063_4490_b@@QAEXIIIPAUcSPUITooltipWinProc_s0063_4490_b@@PAM@Z  00635040  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?ShowEditorUIToolTip@cSPPlayModeUI_s0063_4490_b@@QAEXIIIPAUcSPUITooltipWinProc_s0063_4490_b@@PAM@Z  00635160  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?RemoveTooltip@cSPPlayModeUI_s0063_4490@@QAEXIPAX@Z  00635290  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?DoCommand103@cSPPlayModeUI_s0063_4490@@QAEXXZ  006352d0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?DoCommand102@cSPPlayModeUI_s0063_4490@@QAEXXZ  006352f0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetPrompt@cSPPlayModeUI_s0063_4490@@QAEXI@Z  00635310  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?FUN_00635350@cSPPlayModeUI_s0063_4490@@QAEXII@Z  00635350  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?ShowEditor@cSPPlayModeUI_s0063_4490@@QAEXXZ  00635380  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?ToggleNameAndDescribe@cSPPlayModeUI_s0063_4490@@QAEX_N@Z  00635390  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetTagField@cSPPlayModeUI_s0063_4490@@QAEXI@Z  006353e0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetSendEmailDialogVisibility@cSPPlayModeUI_s0063_4490@@QAEX_N@Z  00635400  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModeUI.cpp  ?SetUpSendEmailWindow@cSPPlayModeUI_s0063_54c0@SP@@QAEXXZ  006354c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPPlayModeUI.cpp  ?ResetSendEmailWindow@cSPPlayModeUI_s0063_54c0@SP@@QAEXXZ  00635520  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPPlayModeUI.cpp  ?SetEnableNewCreatureButton@cSPPlayModeUI_s0063_54c0@SP@@QAEX_N@Z  00635580  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

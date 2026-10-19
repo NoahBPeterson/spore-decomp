@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPPlayMode.cpp -- migrated from slice(s) s0062e7e0, s0062bb40, s0062abd0, s00629c50, s00628d50, s00627d50 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPPlayMode.cpp -- migrated from slice(s) s0062da00, s0062e7e0, s0062bb40, s0062abd0, s00629c50, s00628d50, s00627d50 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPPlayMode.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -473,6 +473,119 @@ struct PM {
 };
 // ---- items of slice s0062bb40 end
 
+// ---- items of slice s0062da00_ui begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct AnimLoadInfo {
+  uint32_t pad[2];
+  uint32_t mAnimID;        // +0x08
+  uint32_t mAnimBabyID;    // +0x0c
+  float mAnimBabySpeed;    // +0x10
+  float mAnimBabyDelay;    // +0x14
+};
+struct LoadInfoVector {
+  AnimLoadInfo** mpBegin;
+  AnimLoadInfo** mpEnd;
+  AnimLoadInfo** mpCapacity;
+  uint32_t mAllocator;
+  uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
+};
+struct AnimPanelInfo {
+  uint32_t pad[5];
+  LoadInfoVector mAnimLoadInfo;     // +0x14
+};
+struct PanelVector {
+  AnimPanelInfo** mpBegin;
+  AnimPanelInfo** mpEnd;
+  AnimPanelInfo** mpCapacity;
+  uint32_t mAllocator;
+  uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
+};
+struct IWindow {
+  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+  virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+  virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
+  virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+  virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24();
+  virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29();
+  virtual void v30();
+  virtual void SetFlag(int flag, bool value);          // +0x7c
+  virtual void SetCaption(const wchar_t* text);        // +0x80
+  virtual void v33(); virtual void v34(); virtual void v35(); virtual void v36(); virtual void v37();
+  virtual void v38(); virtual void v39(); virtual void v40(); virtual void v41(); virtual void v42();
+  virtual void v43(); virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47();
+  virtual void v48(); virtual void v49(); virtual void v50(); virtual void v51(); virtual void v52();
+  virtual void v53(); virtual void v54(); virtual void v55(); virtual void v56(); virtual void v57();
+  virtual void v58(); virtual void v59(); virtual void v60(); virtual void v61(); virtual void v62();
+  virtual void v63(); virtual void v64();
+  virtual void SetWinProc(void* proc);                 // +0x104
+};
+struct cSPPlayModeUI {
+  IWindow* FindPlayModeUIWindow(uint32_t id);
+  void SetUIGroupVisible(uint32_t group, bool visible);
+};
+struct UITooltip {
+  virtual void AddRef();
+  virtual void Release();
+  uint32_t pad[25];
+  UITooltip(const wchar_t* name, uint32_t id, const wchar_t* text, const float* pos, int a,
+            const void* b, int c);
+};
+struct AnimController;   // object at creature+0x184
+struct AnimSlot;
+struct AnimatingCreature {
+  virtual void v0(); virtual void v1();
+  virtual uint32_t CreateAnim(uint32_t anim, int a);     // +0x08
+  virtual void SetAnimParam(uint32_t h, uint32_t v);     // +0x0c
+  virtual void v4(); virtual void v5();
+  virtual void Start(uint32_t h);                        // +0x18
+  virtual void v7();
+  virtual void SetLooping(uint32_t h, int v);            // +0x20
+  virtual void SetBlend(uint32_t h, float v);            // +0x24
+  virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
+  virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+  virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+  virtual float GetAnimLength(uint32_t anim);            // +0x60
+  uint32_t pad[(0x184 - 4) / 4];
+  AnimController* mController;      // +0x184
+  uint32_t mFadeOutHandle;          // +0x188
+  uint32_t mCurHandle;              // +0x18c
+  bool IsMoveIdleAnim(uint32_t anim);
+  bool FUN_00a02800(uint32_t anim);
+};
+struct AnimController {
+  void FUN_00a00f90(void* slot, int v);
+  void FUN_00a01f10(uint32_t handle, int v);
+};
+struct AnimSlot { uint32_t pad[0x36]; uint32_t mAnimID; };   // +0xd8
+void* FUN_009ff6f0(AnimController* ctl, uint32_t handle);
+struct CreatureStructure {
+  uint32_t pad[2];
+  AnimatingCreature* mCreature;   // +0x08
+  void FUN_007cd950(uint32_t anim);
+};
+struct EditorBase { uint32_t pad[0x360 / 4]; struct AnimMgr* mgr; };
+struct AnimMgr { CreatureStructure* GetCreatureStructure(uint32_t id); };
+class cSPPlayModeAnimation_s0062_da00__ui {
+ public:
+  void* vftable;
+  EditorBase* mEditorBase;       // +0x04
+  uint32_t mCurrAnimID;          // +0x08
+  PanelVector mAnimPanelInfo;    // +0x0c
+  uint32_t pad1c;                // +0x1c
+  uint32_t mPageCount;           // +0x20
+  uint32_t mViewMode;            // +0x24
+  cSPPlayModeUI* mUI;            // +0x28
+  UITooltip* pTooltip[24];       // +0x2c
+
+  __declspec(noinline) int GetAnimCount();  // 0x0062e4b0 (cSPPlayModeAnimation::GetAnimCount)
+  bool GetExpansionAnimInfo(int buttonId, uint32_t* id, uint32_t* babyId, float* speed, float* delay);  // 0x0062e4f0 (cSPPlayModeAnimation::GetExpansionAnimInfo)
+  bool IsExtraAnims();
+  void UpdatePageCount();  // 0x0062e600 (cSPPlayModeAnimation::UpdatePageCount)
+  void Activate();
+  void ResetCurAnimWindow();  // 0x0062e7a0 (cSPPlayModeAnimation::ResetCurAnimWindow)
+  float StartNewAnimation(uint32_t creatureId, uint32_t anim, bool flag, uint32_t param, uint32_t* outHandle);
+};
+// ---- items of slice s0062da00_ui end
+
 // @ 0x00628610
 namespace SP {
 bool __stdcall cSPPlayMode_s0062_7d50::IsWalkTypeAnim(unsigned id)
@@ -493,6 +606,7 @@ bool __stdcall cSPPlayMode_s0062_7d50::IsWalkTypeAnim(unsigned id)
     return false;
 }
 }  // namespace SP
+
 
 
 
@@ -536,6 +650,7 @@ unsigned cSPPlayMode_s0062_7d50::GetRandomEnvironmentReactionAnim()
 
 
 
+
 // @ 0x00628720
 namespace SP {
 int cSPPlayMode_s0062_7d50::FindBabyAnimSlot(int id)
@@ -551,6 +666,7 @@ int cSPPlayMode_s0062_7d50::FindBabyAnimSlot(int id)
     return -1;
 }
 }  // namespace SP
+
 
 
 
@@ -578,6 +694,7 @@ unsigned char cSPPlayMode_s0062_7d50::GetBabyPhotoMode(int id)
 
 
 
+
 // @ 0x00628810
 namespace SP {
 void cResetable::Reset()
@@ -594,6 +711,7 @@ void cResetable::Reset()
 
 
 
+
 // @ 0x00628860
 namespace SP {
 float cSPPlayMode_s0062_7d50::SetBabyCrouchAnimation(unsigned creatureId)
@@ -601,6 +719,7 @@ float cSPPlayMode_s0062_7d50::SetBabyCrouchAnimation(unsigned creatureId)
     return mAnimation.PlayAnim(creatureId, 0x43736cd, 0, 1, 0);
 }
 }  // namespace SP
+
 
 
 
@@ -624,6 +743,7 @@ void cSPPlayMode_s0062_7d50::W6288d0(bool b)
 
 
 
+
 // @ 0x006288f0
 namespace SP {
 void cSPPlayMode_s0062_7d50::ResetExpansionAnimWindow()
@@ -632,6 +752,7 @@ void cSPPlayMode_s0062_7d50::ResetExpansionAnimWindow()
     mAnimation.UpdatePageCount();
 }
 }  // namespace SP
+
 
 
 
@@ -651,6 +772,7 @@ void __cdecl W628910()
 
 
 
+
 // @ 0x00628940
 namespace SP {
 bool cSPPlayMode_s0062_7d50::W628940()
@@ -664,11 +786,13 @@ bool cSPPlayMode_s0062_7d50::W628940()
 
 
 
+
 // @ 0x00628970
 namespace SP {
 Quat4* ForceQuat(void* p, float a, float b, float c, float d)
 { return new (p) Quat4(a, b, c, d); }
 }  // namespace SP
+
 
 
 
@@ -700,6 +824,7 @@ void cPreloadOwner::EnsurePreload()
 
 
 
+
 // @ 0x00628ca0
 namespace SP {
 void cAppModeEditorBaseT::SendButtonEventToBabies(int arg)
@@ -723,6 +848,7 @@ void cAppModeEditorBaseT::SendButtonEventToBabies(int arg)
     }
 }
 }  // namespace SP
+
 
 
 
@@ -764,6 +890,7 @@ bool cSPPlayMode::HandleButton(int id)
 
 
 
+
 // @ 0x00628f10
 void cSPPlayMode::SetMomToFaceBaby(uint32_t baby)
 {
@@ -788,6 +915,7 @@ void cSPPlayMode::SetMomToFaceBaby(uint32_t baby)
 
 
 
+
 // @ 0x00629110
 uint32_t cSPPlayMode::GetLatestBabyID()
 {
@@ -803,12 +931,14 @@ uint32_t cSPPlayMode::GetLatestBabyID()
 
 
 
+
 // @ 0x00629150
 int cSPPlayMode::GetLatestBabyIndex()
 {
   Editor* e = mEditor;
   return e->babies.ssize() - 1;
 }
+
 
 
 
@@ -831,6 +961,7 @@ uint32_t cSPPlayMode::GetAnimatedBabyIndex(uint32_t id)
 
 
 
+
 // @ 0x006291d0
 uint32_t cSPPlayMode::FUN_006291d0(uint32_t index)
 {
@@ -842,6 +973,7 @@ uint32_t cSPPlayMode::FUN_006291d0(uint32_t index)
   if (index < n) return b[index].id;
   return b[0].id;
 }
+
 
 
 
@@ -860,6 +992,7 @@ void cSPPlayMode::SetAllBabySitUp()
     v[i].timer = 0.0f;
   }
 }
+
 
 
 
@@ -887,12 +1020,14 @@ void cSPPlayMode::SetAllOtherBabiesToIdle(uint32_t id, uint32_t anim, float f)
 
 
 
+
 // @ 0x00629380
 void cSPPlayMode::SetBabySpawned(uint32_t index, uint8_t value)
 {
   BabyVec& v = mEditor->babies;
   if (index < v.size()) v[index].spawned = value;
 }
+
 
 
 
@@ -924,6 +1059,7 @@ void cSPPlayMode::SetBabySocialCallState(uint32_t id, uint32_t anim, float f)
 
 
 
+
 // @ 0x006294e0
 float cSPPlayMode::SetBabyCelebrationAnim()
 {
@@ -941,6 +1077,7 @@ float cSPPlayMode::SetBabyCelebrationAnim()
   }
   return result;
 }
+
 
 
 
@@ -985,6 +1122,7 @@ bool cSPPlayMode::FUN_00629590()
   }
   return result;
 }
+
 
 
 
@@ -1040,6 +1178,7 @@ void cSPPlayMode::ForceBabiesToIdle(int param)
 
 
 
+
 // @ 0x006298b0
 void cSPPlayMode::FUN_006298b0(uint32_t exceptId)
 {
@@ -1054,6 +1193,7 @@ void cSPPlayMode::FUN_006298b0(uint32_t exceptId)
     }
   }
 }
+
 
 
 
@@ -1088,6 +1228,7 @@ void cSPPlayMode::FUN_00629960(int dt)
 
 
 
+
 // @ 0x00629a90
 bool cSPPlayMode::BabiesReachedTargetAngle()
 {
@@ -1101,6 +1242,7 @@ bool cSPPlayMode::BabiesReachedTargetAngle()
   }
   return true;
 }
+
 
 
 
@@ -1122,6 +1264,7 @@ void cSPPlayMode::SetAllBabyRotateSpeeds(float speed)
 
 
 
+
 // @ 0x00629bd0
 float cSPPlayMode::FUN_00629bd0(CreatureStruct* s)
 {
@@ -1138,9 +1281,11 @@ float cSPPlayMode::FUN_00629bd0(CreatureStruct* s)
 
 
 
+
 // @ 0x00629c50
 void FUN_00629c50(cSPPlayMode_s0062_9c50* m)
 { (void)m; }
+
 
 
 
@@ -1161,6 +1306,7 @@ void __stdcall FUN_00629d90(int arg1, int arg2)
 
 
 
+
 // @ 0x00629de0
 void FUN_00629de0(cSPPlayMode_s0062_9c50* m)
 { (void)m; }
@@ -1168,9 +1314,11 @@ void FUN_00629de0(cSPPlayMode_s0062_9c50* m)
 
 
 
+
 // @ 0x0062a1a0
 void StopWalk(cSPPlayMode_s0062_9c50* m, void* a, int b)
 { (void)m; (void)a; (void)b; }
+
 
 
 
@@ -1199,6 +1347,7 @@ void SetBabyPath(cSPPlayMode_s0062_9c50* m, uint32_t id, float x, float y, float
 
 
 
+
 // @ 0x0062a360
 bool cSPPlayMode_s0062_9c50::HasActivePath(int creatureID)
 {
@@ -1223,6 +1372,7 @@ bool cSPPlayMode_s0062_9c50::HasActivePath(int creatureID)
 
 
 
+
 // @ 0x0062a3d0
 void PlayMode_Init(cSPPlayMode_s0062_9c50* m, void* a, uint8_t b)
 {
@@ -1233,9 +1383,11 @@ void PlayMode_Init(cSPPlayMode_s0062_9c50* m, void* a, uint8_t b)
 
 
 
+
 // @ 0x0062a550
 void FUN_0062a550(cSPPlayMode_s0062_9c50* m)
 { (void)m; }
+
 
 
 
@@ -1269,6 +1421,7 @@ void WakeupCreature(cSPPlayMode_s0062_9c50* m)
 
 
 
+
 // @ 0x0062a7f0
 uint8_t cSPPlayMode_s0062_9c50::OnMouseDown(void* a, void* b, void* c, void* d)
 {
@@ -1293,6 +1446,7 @@ uint8_t cSPPlayMode_s0062_9c50::OnMouseDown(void* a, void* b, void* c, void* d)
 
 
 
+
 // @ 0x0062a860
 void SetupFromConfigFile(cSPPlayMode_s0062_9c50* m)
 {
@@ -1305,12 +1459,14 @@ void SetupFromConfigFile(cSPPlayMode_s0062_9c50* m)
 
 
 
+
 // @ 0x0062a990
 void BabyStartSocialCallEffect(cSPPlayMode_s0062_9c50* m)
 {
   uint32_t idx = GetMouthPartIdx(m);
   if (idx == 0xffffffffu) return;
 }
+
 
 
 
@@ -1347,6 +1503,7 @@ void SetBabySitState(cSPPlayMode_s0062_9c50* m, uint32_t index)
 
 
 
+
 // @ 0x0062ab80
 void cSPPlayMode_s0062_9c50::SetAllBabySitState()
 {
@@ -1355,6 +1512,7 @@ void cSPPlayMode_s0062_9c50::SetAllBabySitState()
   int n = (*(int*)(cm + 0x370) - *(int*)(cm + 0x36c)) / 0x30;
   for (int i = 0; i < n; ++i) SetBabySitState(m, (uint32_t)i);
 }
+
 
 
 
@@ -1375,6 +1533,7 @@ void __fastcall cSPPlayMode_MakeCreaturesFaceCamera(void* self)
 
 
 
+
 // @ 0x0062ace0
 float __stdcall FUN_0062ace0(void* p, char b)
 {
@@ -1390,11 +1549,13 @@ float __stdcall FUN_0062ace0(void* p, char b)
 
 
 
+
 // @ 0x0062ad70
 void __fastcall cSPPlayMode_ad70(void* self, void*, int, int, float, float, float, float)
 {
   (void)self;
 }
+
 
 
 
@@ -1441,12 +1602,14 @@ void __fastcall FUN_0062b000(void* self)
 
 
 
+
 // @ 0x0062b0f0
 cSPPlayModeAnimation::cSPPlayModeAnimation()
 {
   mF20 = 0;
   for (int i = 0; i < 24; ++i) pTooltip[i] = 0;
 }
+
 
 
 
@@ -1463,11 +1626,13 @@ cSPPlayModeAnimation::~cSPPlayModeAnimation()
 
 
 
+
 // @ 0x0062b1c0
 void __fastcall cSPPlayMode_ctor(void* self)
 {
   (void)self;
 }
+
 
 
 
@@ -1479,12 +1644,14 @@ void __fastcall cSPPlayMode_dtor(void* self)
 
 
 
+
 // @ 0x0062b5c0
 unsigned __fastcall cSPPlayMode_HandleMessage(void* self, unsigned, int)
 {
   (void)self;
   return 0;
 }
+
 
 
 
@@ -1522,6 +1689,7 @@ void __fastcall FUN_0062b980(void* self, int id)
 
 
 
+
 // @ 0x0062ba10
 void __fastcall cSPPlayMode_IsEventForBaby(void* self, int)
 {
@@ -1529,9 +1697,11 @@ void __fastcall cSPPlayMode_IsEventForBaby(void* self, int)
 }
 
 
+
 // @ 0x0062bb40
 __declspec(noinline) void PM::FUN_0062bb40(int, int)
 {}
+
 
 
 // @ 0x0062bdb0
@@ -1569,6 +1739,7 @@ void PM::FUN_0062bdb0()
 }
 
 
+
 // @ 0x0062bec0
 void PM::FUN_0062bec0()
 {
@@ -1589,9 +1760,11 @@ void PM::FUN_0062bec0()
 }
 
 
+
 // @ 0x0062bf10
 __declspec(noinline) void PM::FUN_0062bf10(int)
 {}
+
 
 
 // @ 0x0062c340
@@ -1599,9 +1772,57 @@ void SP::cSPPlayMode::Stop()
 {}
 
 
+
 // @ 0x0062c550
 void SP::cSPPlayMode::Update(unsigned int a0)
 {}
+
+
+// @ 0x0062e2e0
+float cSPPlayModeAnimation_s0062_da00__ui::StartNewAnimation(uint32_t creatureId, uint32_t anim, bool flag, uint32_t param, uint32_t* outHandle)
+{
+  EditorBase* eb = mEditorBase;
+  uint32_t cid = creatureId;
+  CreatureStructure* cs = eb->mgr->GetCreatureStructure(cid);
+  if (cs != 0) {
+    AnimatingCreature* c = cs->mCreature;
+    if (c != 0) {
+      if (c->IsMoveIdleAnim(anim)) {
+        AnimSlot* slot = (AnimSlot*)FUN_009ff6f0(c->mController, c->mCurHandle);
+        if (slot == 0 || slot->mAnimID != anim) {
+          uint32_t h = c->CreateAnim(anim, 0);
+          c->mCurHandle = h;
+          c->SetAnimParam(h, param);
+          c->Start(c->mCurHandle);
+        }
+        if (slot != 0 && slot->mAnimID != anim) c->mController->FUN_00a00f90(slot, 0);
+        if (flag) {
+          c->SetLooping(c->mCurHandle, 1);
+          c->SetBlend(c->mCurHandle, -1.0f);
+        }
+        if (outHandle != 0) *outHandle = c->mCurHandle;
+      } else {
+        uint32_t h = c->CreateAnim(anim, 0);
+        c->SetAnimParam(h, param);
+        c->Start(h);
+        if (flag) {
+          c->SetLooping(h, 1);
+          c->SetBlend(h, -1.0f);
+        }
+        if (outHandle != 0) *outHandle = h;
+        if (!c->FUN_00a02800(anim)) {
+          c->mController->FUN_00a01f10(c->mFadeOutHandle, 0);
+          c->mController->FUN_00a01f10(c->mCurHandle, 0);
+        }
+        cs->FUN_007cd950(anim);
+      }
+      mCurrAnimID = anim;
+      return cs->mCreature->GetAnimLength(anim);
+    }
+  }
+  if (outHandle != 0) *outHandle = 0;
+  return -1.0f;
+}
 
 // @ 0x0062f2a0
 void SP::cSPPlayModeAnimation::Init(SP::cAppModeEditorBase * editorBase, SP::cSPPlayModeUI * ui)

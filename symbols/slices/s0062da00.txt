@@ -9,7 +9,7 @@
 0062dea0 SP::cSPCasual_Path::`scalar deleting destructor'  # vtable 0x13fe220
 0062df10 SP::cSPCasual_Path::ExpandNode  # A* expansion step
 0062e010 SP::cSPCasual_Path::FindPath  # A* driver
-0062e2e0 SP::cSPPlayModeAnimation::StartNewAnimation  # PDB candidate
+0062e2e0 ?StartNewAnimation@cSPPlayModeAnimation_s0062_da00__ui@@QAEMII_NIPAI@Z  # cSPPlayModeAnimation_s0062_da00__ui::StartNewAnimation migrated from s0062da00 (verbatim, slice spelling)
 0062e4b0 SP::cSPPlayModeAnimation::GetAnimCount  # PDB name
 0062e4f0 SP::cSPPlayModeAnimation::GetExpansionAnimInfo  # PDB name
 0062e5f0 SP::cSPPlayModeAnimation::IsExtraAnims  # PDB candidate

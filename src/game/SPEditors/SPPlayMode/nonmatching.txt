@@ -17,4 +17,5 @@
 0062b980 86 FUN_0062b980: complete; vector erase/copy helper form differs
 0062bdb0 196 FUN_0062bdb0: complete; vector<bool>-ish DoInsertValue erase loop and pointer/register scheduling differ
 0062bec0 49 FUN_0062bec0: complete; loop counter/index register swap (esi/edi) and &arr[i] CSE vs re-index
+0062e2e0 20 StartNewAnimation: complete; prologue/regalloc of arg loads; equiv: UNSUPPORTED (unresolved refs AnimMgr::GetCreatureStructure, AnimatingCreature::IsMoveIdleAnim; needs --src s0062da00_ui.cpp)
 0062f2a0 31 Init: complete; orig reloads vector bounds after the store (alias) and loads args earlier
