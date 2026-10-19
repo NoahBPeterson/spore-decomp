@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorManipulationPinning.cpp  ?Nlerp@@YA?AUcSPQuaternion_s005b_1e30@@ABU1@0M@Z  005b2350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationPinning.cpp  ??0cSPEditorManipulationPinning@SP@@QAE@XZ  005b23d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationPinning.cpp  ??1cSPEditorManipulationPinning@SP@@UAE@XZ  005b24a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationPinning.cpp  ?SlerpWrap@@YA?AUcSPQuaternionW@@ABUcSPQuaternion_s005b_1e30@@0M@Z  005b26f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+005b1e30 655 SP::cSPEditorManipulationPinning::OnMouseUp: complete; SSE register order in world-position math and merged message-send tail differ
+005b2180 118 SP::cSPEditorManipulationPinning::Init: complete; scheduling of the offset*matrix products differs (loads/regs)
+005b2500 410 Slerp: complete; q0/q1 copies and blend scheduled differently; difftest PASS after fixing the blend precision (s0/s1 rounded to float and blended in SSE via quaternion operator* / operator+, was x87 extended) and passing b itself, not the copy, to Nlerp
+005b2750 450 SP::cSPEditorManipulationPinning::Update: complete; frame layout (temps for quaternion/matrix copies) differs
+005b2a50 618 SP::cSPEditorManipulationPinning::DoOnMouseDown: complete; frame layout/temp order differs
+005b2d90 4185 COMPLETE SP::cSPEditorManipulationPinning::DoOnMouseMove (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); 104/104 calls and vtable slots in identical order; frame 0x220 vs 0x1dc (stack-slot packing) and register allocation differ

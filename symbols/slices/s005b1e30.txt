@@ -1,9 +1,9 @@
-005b1e30 SP::cSPEditorManipulationPinning::OnMouseUp  # vtable 013f74dc slot 4; cursor-warp + RepinBlockToTorso + animated-event send
-005b2180 SP::cSPEditorManipulationPinning::Init  # 6 stack args (block ref, Vec3, skin AutoRefCount by value, bool)
-005b2350 Nlerp  # Lerp(a,b,t) normalised; cdecl sret
-005b23d0 SP::cSPEditorManipulationPinning::cSPEditorManipulationPinning  # ctor, vtable 013f74dc/013f74cc
-005b24a0 SP::cSPEditorManipulationPinning::~cSPEditorManipulationPinning  # dtor body
-005b2500 Slerp  # quaternion slerp, nlerp fallback below cos(5deg)
-005b26f0 SlerpWrap  # sret wrapper around Slerp
-005b2750 SP::cSPEditorManipulationPinning::Update  # PDB name; eases block toward target pos/orientation
-005b2a50 SP::cSPEditorManipulationPinning::DoOnMouseDown  # PDB candidate 00d664a0
+005b1e30 ?OnMouseUp@cSPEditorManipulationPinning@SP@@QAE_NHMMH@Z  # cSPEditorManipulationPinning::OnMouseUp migrated from s005b1e30 (verbatim, slice spelling)
+005b2180 ?Init@cSPEditorManipulationPinning@SP@@QAEXABV?$AutoRefCount_s005b_1e30@VcSPEditorBlock_s005b_1e30@SP@@@EA@@UcSPVector3_s005b_1e30@@V?$AutoRefCount_s005b_1e30@VcSPEditorSkinManager_s005b_1e30@SP@@@4@_N@Z  # cSPEditorManipulationPinning::Init migrated from s005b1e30 (verbatim, slice spelling)
+005b2350 ?Nlerp@@YA?AUcSPQuaternion_s005b_1e30@@ABU1@0M@Z  # Nlerp migrated from s005b1e30 (verbatim, slice spelling)
+005b23d0 ??0cSPEditorManipulationPinning@SP@@QAE@XZ  # cSPEditorManipulationPinning::cSPEditorManipulationPinning migrated from s005b1e30 (verbatim, slice spelling)
+005b24a0 ??1cSPEditorManipulationPinning@SP@@UAE@XZ  # cSPEditorManipulationPinning::~cSPEditorManipulationPinning migrated from s005b1e30 (verbatim, slice spelling)
+005b2500 ?Slerp@@YA?AUcSPQuaternion_s005b_1e30@@ABU1@0M@Z  # Slerp migrated from s005b1e30 (verbatim, slice spelling)
+005b26f0 ?SlerpWrap@@YA?AUcSPQuaternionW@@ABUcSPQuaternion_s005b_1e30@@0M@Z  # SlerpWrap migrated from s005b1e30 (verbatim, slice spelling)
+005b2750 ?Update@cSPEditorManipulationPinning@SP@@QAEXM@Z  # cSPEditorManipulationPinning::Update migrated from s005b1e30 (verbatim, slice spelling)
+005b2a50 ?DoOnMouseDown@cSPEditorManipulationPinning@SP@@QAE_NHMMH@Z  # cSPEditorManipulationPinning::DoOnMouseDown migrated from s005b1e30 (verbatim, slice spelling)
