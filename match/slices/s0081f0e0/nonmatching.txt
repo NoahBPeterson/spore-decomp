@@ -1,1 +1,4 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+0081f0e0  826  complete ModifyResourceKey (scalar + array paths); frame 0x44 vs 0x50 and local/register assignment differ [equiv: UNSUPPORTED (0/400 valid inputs; vtable-heavy faults)]
+0081f490  1017  complete ModifyVec2 (scalar + array paths, array path keeps the original's pre-increment store); register/frame assignment differs [equiv: UNSUPPORTED (0/400 valid inputs)]
+0081f900  1007  complete ModifyVec3 (scalar + array paths); register/frame assignment differs [equiv: UNSUPPORTED (0/400 valid inputs)]

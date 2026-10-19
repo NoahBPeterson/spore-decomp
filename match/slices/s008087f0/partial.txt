@@ -1,4 +1,0 @@
-00808930  -  SetButtonImages: WinButton IWinButton subobject (+0x20c) and resource attach not reconstructed
-00808b20  -  rollover-frame placement/clamping: main flow sketched, inner clamp math omitted
-008093b0  -  CreateRolloverFrame: layout Init/FindWindowByID flow not reconstructed
-00809670  -  fixed_node_pool-backed list ctor: eastl template instantiation not reproduced

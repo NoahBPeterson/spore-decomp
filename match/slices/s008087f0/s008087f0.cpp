@@ -8,10 +8,12 @@
 // ------------------------------------------------------------------ external helpers (stubs)
 struct IWin;
 struct Mat;
-extern "C" void* op_new(unsigned size, int align, const char* name, int a);
-extern "C" void* WinButton_ctor(void* self);
-extern "C" void  SetWindowImage(IWin* w, void* image, int state);
-extern "C" void  FUN_00806610(void* w, void* a, void* b, void* c, void* d);
+extern "C" void* op_new(unsigned size, int align, const char* name, void* alloc);   // 0x009512d0 (cdecl)
+extern "C" void* GetUIAllocator();                                                   // 0x009512c0
+struct WinButtonCtor { void* ctor(); };                                              // 0x00966f90 (thiscall, returns this)
+extern "C" void  SetWindowImage(IWin* w, const void* image, int state);              // 0x00807bb0
+struct Pt;
+extern "C" void  FUN_00806610(void* w, int a, int b, const Pt* v, void* c);          // 0x00806610 (cdecl)
 extern "C" void  VisitWindowTreeDepthFirst(IWin* w, void* cb, void* user);
 extern "C" void  WindowAreaCB(IWin* w, void* user);
 extern "C" Mat*  SetWindowSPShader(IWin* w, int shader, int zero);
@@ -20,7 +22,8 @@ extern "C" void  AnchorWindowToScreen(float* rect, IWin* child, int flags, IWin*
 extern "C" void  AnchorWindowToWindow(IWin* parent, IWin* child, int flags, int zero);  // 0x00807340
 extern "C" void  GetMainWindowArea(float* out);  // 0x00805ea0
 extern "C" IWin* FindWindowByID(void* layout, uint32_t id, int recurse);
-extern "C" void  DestroyRolloverFrame(IWin* w);
+extern "C" void  DestroyRolloverFrame(IWin* w);   // 0x008074a0
+extern "C" bool  UpdateRolloverFrameB(IWin* w, float a, float b, float c, float d, int e, float f);   // 0x00808d40 (returns al)
 
 // ------------------------------------------------------------------ UI stub types
 struct Mat {
@@ -40,7 +43,18 @@ struct MatContainer {
 struct Pt { float x, y; };
 
 struct IWinOwner;
-struct cSPUILayout { IWin* FindWindowByID(uint32_t id, int recurse); };   // 0x008105b0 (thiscall)
+struct LayoutTemp {                                  // temporary layout description, 0x18 bytes
+    LayoutTemp();                                    // 0x00810000 (returns this)
+    ~LayoutTemp();                                   // 0x00811fe0
+    int pad[6];
+};
+struct cSPUILayout {
+    cSPUILayout(const LayoutTemp& x);                // 0x00810020
+    virtual void lv0();
+    int pad[5];
+    bool Init(const wchar_t* name, int group, bool b, unsigned id);   // 0x00812160 (thiscall)
+    IWin* FindWindowByID(uint32_t id, int recurse);  // 0x008105b0 (thiscall)
+};
 struct IUILayoutHolder {
     virtual void AddRef(); virtual void Release();
     int pad;
@@ -61,13 +75,14 @@ template <class T> struct Ref {
     }
     T* operator->() const { return p; }
     operator T*() const { return p; }
+    T** AsPPTypeParam() { *this = 0; return &p; }
 };
 extern float gRolloverMinScale;                    // 0x01485378 (reads 0.0)
 
 // A generic UTFWin window / layout.  Only slots actually referenced below are typed; the rest
 // are placeholders so the vtable indices line up.
 struct IWin {
-    virtual void AddRef(); virtual void Release(); virtual void s02(); virtual void s03();
+    virtual void AddRef(); virtual void Release(); virtual void s02(); virtual void* Cast(unsigned iid);   // +0x0c (index 3)
     virtual void* GetArea();                       // +0x10 (index 4)
     virtual void s05(); virtual void s06(); virtual void s07();
     virtual void s08(); virtual void s09(); virtual void s10(); virtual void s11();
@@ -85,13 +100,14 @@ struct IWin {
     virtual void s32(); virtual void s33(); virtual void s34(); virtual void s35();
     virtual void s36(); virtual void s37(); virtual void s38(); virtual void s39();
     virtual void s40(); virtual void s41();
+    virtual IWin* GetDrawable();                    // +0xa8 (index 42)
     virtual void FnAc(bool a);                      // +0xac (index 43)
-    virtual void s44(); virtual void s45();
+    virtual void s44();
     virtual IWinOwner* GetOwnerByID(uint32_t id);   // +0xb4 (index 45)
-    virtual void FnB8(void* a, int b);              // +0xb8 (index 46)
+    virtual void FnB8(unsigned id, void* obj);      // +0xb8 (index 46)
     virtual void s47();
     virtual void FnC0(void* pt, Pt p);              // +0xc0 (index 48)
-    virtual void FnC4(void* pt, float x, float y);  // +0xc4 (index 49)
+    virtual void FnC4(void* pt, Pt p);              // +0xc4 (index 49)
     virtual void s50(); virtual void s51(); virtual void s52(); virtual void s53();
     virtual void s54(); virtual void s55(); virtual void s56(); virtual void s57();
     virtual void s58(); virtual void s59();
@@ -135,41 +151,75 @@ void FUN_008087f0(float* out, IWin* w, char useChildren)
 }
 
 // ------------------------------------------------------------------ 0x00808930
-// Creates a WinButton, assigns 8 image states from an image array, copies the remaining
-// parameters into it and forwards the requested resource object.  Partial.
-void* FUN_00808930(void* images, void* a, void* b, void* c, void* d)
+// SPUIHelpers::SetButtonImages: creates a WinButton, assigns the 8 state images from an array of
+// resource keys (a 9th key, at +0x60, names a button-drawable resource that is attached to the
+// button's drawable), then forwards the remaining layout parameters.
+struct ResKey { unsigned instance, type, group; };
+struct ButtonImages { ResKey state[8]; ResKey extra; };
+
+struct IRefObject {                                  // refcounted resource returned by the resource manager
+    virtual int AddRef();
+    virtual int Release();
+    virtual void r2();
+    virtual void* Cast(unsigned iid);                // +0x0c
+};
+struct IButtonDrawable {                             // what IWin::GetDrawable()->Cast(0x103c1908) returns
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3();
+    virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
+    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11();
+    virtual void d12();
+    virtual void SetResource(void* res);             // +0x34
+};
+struct IResourceManager {
+    virtual void m0(); virtual void m1(); virtual void m2();
+    virtual bool GetResource(const ResKey* key, IRefObject** out, int a, int b, int c, int d);   // +0x0c
+};
+extern "C" IResourceManager* GetResourceManager();   // 0x008de1a0
+
+// @ 0x00808930
+IWin* SPUIHelpers_SetButtonImages(ButtonImages* images, int a, int b, Pt v, void* c)
 {
     if (images == 0)
         return 0;
 
-    void* alloc = op_new(0x888, 4, "UI/WinButton", 0);
-    IWin* wb = 0;
-    if (alloc != 0) {
-        wb = (IWin*)WinButton_ctor(alloc);
-        if (wb != 0)
-            wb = (IWin*)((char*)wb + 0x20c);
-    }
-    if (wb == 0)
-        return 0;
+    void* mem = op_new(0x888, 4, "UI/WinButton", GetUIAllocator());
+    IWin* btn;
+    void* o;
+    if (mem != 0 && (o = ((WinButtonCtor*)mem)->ctor()) != 0)
+        btn = (IWin*)((char*)o + 0x20c);
+    else
+        btn = 0;
+    IWin* area = (IWin*)btn->GetArea();
+    SetWindowImage(area, &images->state[0], 0);
+    SetWindowImage(area, &images->state[1], 1);
+    SetWindowImage(area, &images->state[2], 2);
+    SetWindowImage(area, &images->state[3], 3);
+    SetWindowImage(area, &images->state[4], 4);
+    SetWindowImage(area, &images->state[5], 5);
+    SetWindowImage(area, &images->state[6], 6);
+    SetWindowImage(area, &images->state[7], 7);
+    FUN_00806610(btn, a, b, &v, c);
 
-    SetWindowImage(wb, images, 0);
-    SetWindowImage(wb, (char*)images + 0xc, 1);
-    SetWindowImage(wb, (char*)images + 0x18, 2);
-    SetWindowImage(wb, (char*)images + 0x24, 3);
-    SetWindowImage(wb, (char*)images + 0x30, 4);
-    SetWindowImage(wb, (char*)images + 0x3c, 5);
-    SetWindowImage(wb, (char*)images + 0x48, 6);
-    SetWindowImage(wb, (char*)images + 0x54, 7);
-
-    FUN_00806610(wb, a, b, c, d);
-    IWin* res = wb->Fn104(0);
-    if (res != 0 && res->Fn10C((void*)0x103c1908) != 0) {
-        // attach the found sub-object to the button
+    IWin* drawable = area->GetDrawable();
+    if (drawable != 0) {
+        IButtonDrawable* bd = (IButtonDrawable*)drawable->Cast(0x103c1908);
+        if (bd != 0) {
+            ResKey key = images->extra;
+            key.type = 0x19aef76;
+            Ref<IRefObject> res;
+            IResourceManager* rm = GetResourceManager();
+            if (rm->GetResource(&key, res.AsPPTypeParam(), 0, 0, 0, 0) && res.p != 0) {
+                void* r = res.p->Cast(0xf074e1c8);
+                if (r != 0)
+                    bd->SetResource(r);
+            }
+        }
     }
-    return wb;
+    return btn;
 }
 
 // ------------------------------------------------------------------ 0x00808ad0
+// @ 0x00808ad0
 void SPUIHelpers_SetWindowSPMaterial(IWin* w, int material, int shader)
 {
     MatContainer* c = w->GetSPMaterial();
@@ -183,31 +233,58 @@ void SPUIHelpers_SetWindowSPMaterial(IWin* w, int material, int shader)
 }
 
 // ------------------------------------------------------------------ 0x00808b20
-// Complex rollover-frame placement: computes the requested rect and, when the frame would
-// leave the screen, clamps it and shifts the companion label.  Partial.
-void FUN_00808b20(int* p1, IWin* w, char useChildren)
+// SPUIHelpers rollover-frame placement: positions window `w` next to `anchor` (the window it
+// describes). The requested top-left is the anchor's bounding screen rect corner; when the frame
+// would run past the right edge of the main window area it is shifted back (never left of 0), and
+// when it would leave the top it is moved below the anchor (also when the anchor is in the lower
+// half of the main area and `useChildren` is set).
+extern "C" int ExpandRect(int* a, float* b);   // 0x00805660 (visitor callback)
+
+// @ 0x00808b20
+void FUN_00808b20(IWin* anchor, IWin* w, char useChildren)
 {
-    if (p1 == 0 || w == 0)
+    if (anchor == 0 || w == 0)
         return;
-    IWin* child = (IWin*)w->GetArea();
-    if (child == 0)
-        return;
+    IWin* area = (IWin*)w->GetArea();
+    if (area != 0) {
 
-    float main[4];
-    GetMainWindowArea(main);
-    float rect[4];
-    FUN_008087f0(rect, (IWin*)p1, useChildren);
+        float M[4];
+        GetMainWindowArea(M);
+        float R[4];
+        FUN_008087f0(R, anchor, useChildren);
 
-    float frame[4];
-    if (useChildren) {
-        frame[0] = 0.0f; frame[1] = 0.0f; frame[2] = 0.0f; frame[3] = 0.0f;
-        VisitWindowTreeDepthFirst(w, (void*)&WindowAreaCB, frame);
-    } else {
-        float* r = w->GetRect();
-        frame[0] = r[0]; frame[1] = r[1]; frame[2] = r[2]; frame[3] = r[3];
+        float* p;
+        float c[4];
+        if (useChildren != 0) {
+            float r[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+            VisitWindowTreeDepthFirst(w, (void*)&ExpandRect, r);
+            c[0] = r[0];
+            c[1] = r[1];
+            c[2] = r[2];
+            c[3] = r[3];
+            p = c;
+        } else {
+            p = w->GetRect();
+        }
+        float right = (p[2] - p[0]) + R[0];
+        float y = (R[1] - (p[3] - p[1])) - 5.0f;
+        float x = R[0];
+        if (right > M[2]) {
+            float* q = M[2] > R[2] ? &R[2] : &M[2];
+            x = *q - (right - R[0]);
+        } else if (R[0] < 0.0f) {
+            x = 0.0f;
+        }
+        if ((useChildren != 0 && (R[3] + R[1]) * 0.5f < (M[3] + M[1]) * 0.5f) || y < 0.0f)
+            y = R[3] + 5.0f;
+
+        Pt in;
+        in.x = x;
+        in.y = y;
+        Pt out;
+        area->FnC4(&out, in);
+        w->Fn70(out.x, out.y);
     }
-    (void)main;
-    (void)frame;
 }
 
 // ------------------------------------------------------------------ 0x00808ce0
@@ -233,6 +310,7 @@ RolloverFrameLayout::~RolloverFrameLayout()
 }
 
 // ------------------------------------------------------------------ 0x00808d20
+// @ 0x00808d20
 float* SPUIHelpers_GetBoundingScreenRect(float* out, IWin* w, char useChildren)
 {
     FUN_008087f0(out, w, useChildren);
@@ -338,28 +416,105 @@ bool SPUIHelpers_UpdateRolloverFrame(IWin* w, float p2, float p3, float p4, floa
 }
 
 // ------------------------------------------------------------------ 0x00809370
+// @ 0x00809370
 void FUN_00809370(IWin* w, float a, float b, int c, float d)
 {
     UpdateRolloverFrame(w, a, b, -1.0f, -1.0f, c, d);
 }
 
 // ------------------------------------------------------------------ 0x008093b0
-// Creates the boxed rollover layout, initialises it and places it.  Partial.
-IWin* SPUIHelpers_CreateRolloverFrame(void* p1, void* p2, void* p3, void** p4,
-                                      void* p5, void* p6, void* p7, void* p8,
-                                      void* p9, void* p10)
+// SPUIHelpers::CreateRolloverFrame: loads the boxed rollover layout (UI/RolloverFrameBoxedLayout),
+// places the frame with UpdateRolloverFrame, moves the children of its content slot into the
+// root window and returns the root window; the content window is returned through `outContent`.
+struct RolloverFrameLayoutBase {
+    virtual int AddRef();                  // 0x00804910
+    virtual int Release();                 // 0x00623070
+    virtual ~RolloverFrameLayoutBase();    // 0x008087c0
+    virtual void Slot3();                  // 0x008087a0
+    int mRefCount;                         // +4
+    cSPUILayout mLayout;                   // +8
+    int mPad[8];
+    RolloverFrameLayoutBase() : mRefCount(0), mLayout(LayoutTemp()) {}
+};
+struct RolloverFrameBoxedLayout : RolloverFrameLayoutBase {
+    virtual ~RolloverFrameBoxedLayout();   // 0x00808ce0
+};
+void* __cdecl operator_new_f473a0(unsigned size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
+void* operator new(unsigned size, const char* name, int a, int b, int c, int d);
+
+// @ 0x008093b0
+IWin* SPUIHelpers_CreateRolloverFrame(const wchar_t* layoutName, float a, float b, float c, float d,
+                                      IWin** outContent, char showAll, int flag, float scale,
+                                      unsigned id)
 {
-    void* mem = op_new(0x40, 4, "UI/RolloverFrameBoxedLayout", 0);
-    if (mem == 0)
-        return 0;
-    (void)p1; (void)p2; (void)p3; (void)p4; (void)p5; (void)p6; (void)p7; (void)p8; (void)p9; (void)p10;
-    return (IWin*)mem;
+    Ref<RolloverFrameBoxedLayout> layout(new ("UI/RolloverFrameBoxedLayout", 0, 0, 0, 0) RolloverFrameBoxedLayout);
+    if (layout->mLayout.Init(layoutName, 0x40464100, true, id)
+        && layout->mLayout.FindWindowByID(0x4aa0748, 0)
+        && layout->mLayout.FindWindowByID(0x4a61af0, 1)
+        && layout->mLayout.FindWindowByID(0x4a612b0, 1)) {
+        Ref<IWin> root(layout->mLayout.FindWindowByID(0x4aa0748, 0));
+        root->FnB8(0x4a61af0, layout);
+        if (!UpdateRolloverFrameB(root, a, b, c, d, flag, scale)) {
+            DestroyRolloverFrame(root);
+            return 0;
+        }
+        Ref<IWin> frame(layout->mLayout.FindWindowByID(0x4a61af0, 1));
+        Ref<IWin> content(layout->mLayout.FindWindowByID(0x4a612b0, 1));
+        *outContent = content;
+        content->AddRef();
+        root->SetVisible(true, false);
+        IWin* slot = frame->FnF0(0x4a9c6b8, 1);
+        Ref<IWin> next(slot->Fn10C(0));
+        while (next) {
+            Ref<IWin> child(next);
+            next = slot->Fn10C(child);
+            slot->Fn108(child);
+            root->Fn104(child);
+        }
+        if (showAll)
+            root->SetVisible(true, true);
+        content->FnAc(false);
+        return root;
+    }
+    return 0;
 }
 
 // ------------------------------------------------------------------ 0x00809670
-// Initialises a fixed_node_pool-backed list (two inline 0x600-byte node buffers).
-// Partial: the eastl template instantiation is not reproduced.
-void* FUN_00809670(void* self)
+// Constructor of a list whose nodes (12 bytes) come from a fixed_node_allocator pool: two
+// 0x600-byte pools are initialised (a temporary one first, then the allocator's own member from the
+// temporary's head) and the list sentinel is linked to itself.
+struct FixedPool {
+    void* mpHead;
+    void* mpPad;
+    void* mpNext;
+    void* mpCapacity;
+    unsigned mnNodeSize;
+    void init(void* mem, unsigned size, unsigned nodeSize, unsigned align, unsigned off);   // 0x00921260 (thiscall, ret 0x14)
+    void Setup(void* mem) {                // fixed_node_allocator constructor (inlined)
+        mpHead = 0;
+        init(mem, 0x600, 0xc, 4, 0);
+        mpNext = mem;
+        mpCapacity = (char*)mem + 0x600;
+        mnNodeSize = 0xc;
+    }
+};
+struct FixedNodeList {
+    FixedNodeList* mpNext;                 // +0 sentinel
+    FixedNodeList* mpPrev;                 // +4
+    FixedPool mPool;                       // +8
+    char mBuffer[0x600];                   // +0x1c
+    FixedNodeList* ctor();
+};
+
+// @ 0x00809670
+FixedNodeList* FixedNodeList::ctor()
 {
-    return self;
+    FixedPool tmp;
+    tmp.Setup(mBuffer);
+    mpNext = 0;
+    mpPrev = 0;
+    mPool.Setup(tmp.mpHead);
+    mpNext = this;
+    mpPrev = this;
+    return this;
 }

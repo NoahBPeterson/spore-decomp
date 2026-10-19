@@ -1,3 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s007aea30/s007aea30.cpp  ?FUN_007af620@@  007af620
 slices/s007aea30/s007aea30.cpp  ?FUN_007af670@@  007af670
+slices/s007aea30/s007aea30.cpp  ??1DxtSurfaceEx@@UAE@XZ  007aea30  /O2 /MD /Gy /EHsc /TP /GS-

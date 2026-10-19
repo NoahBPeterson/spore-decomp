@@ -84,11 +84,34 @@ void FUN_007af6d0(Endpoint* first, Endpoint* last, Endpoint* dest)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x007aea30
-extern "C" void FUN_007aea30(void)
+// DXT surface destructor (compiler-generated): releases three held references and resets the base
+// vtables. Same shape as DxtSurface (slice s007ada40, 0x007ae980) with a third member at +0x24.
+class DxtBase1 { public: virtual void v1(); virtual ~DxtBase1() {} };
+class DxtBase2 { public: virtual void v2(); virtual ~DxtBase2() {} };
+class DxtRefCount { public: long mCount; };
+struct IRel1 { virtual void v0(); virtual void Release(); };                      // Release at slot 1 (+4)
+struct IRel2 { virtual void v0(); virtual void v1(); virtual void Release(); };   // Release at slot 2 (+8)
+template<class T> struct RelPtr {
+    T* mp;
+    ~RelPtr() { if (mp) mp->Release(); }
+};
+class DxtSurfaceEx : public DxtBase1, public DxtBase2, public DxtRefCount {
+public:
+    RelPtr<IRel1> mC;    // +0x0c
+    RelPtr<IRel1> m10;   // +0x10
+    int m14[4];          // +0x14
+    RelPtr<IRel2> m24;   // +0x24
+    DxtSurfaceEx();
+};
+DxtSurfaceEx::DxtSurfaceEx() { mC.mp = 0; m10.mp = 0; m24.mp = 0; }   // forces the vtable / dtor emission
+
+// @ 0x007aea30 (compiler-generated ~DxtSurfaceEx)
+#pragma auto_inline(off)
+void DestroyDxtSurfaceEx(DxtSurfaceEx* p)
 {
-    // PARTIAL: DXT surface dtor (three refcounted member releases) skeleton only.
+    p->~DxtSurfaceEx();
 }
+#pragma auto_inline(on)
 
 // @ 0x007aeab0  findendpoints
 //
@@ -354,14 +377,129 @@ done:
     return best;
 }
 
+// ---------------------------------------------------------------------------
+// Callees that the original reaches through compiler-chosen register conventions (see the
+// nonmatching notes); declared here with the same argument values.
+struct __m64_t { uint32_t lo, hi; };
+void FUN_007ae840(const uint8_t* src, int stride, void* copy, uint32_t* out);        // 0x007ae840 (MMX min/max)
+void FUN_007ae5b0(const uint8_t* src, uint8_t* dst, int stride);                     // 0x007ae5b0
+void InterpolatedAlphaBlock(int hi, int lo, const uint8_t* src, uint8_t* dst);       // 0x007ae660
+uint32_t RefineMinMaxColors(const uint32_t* px, uint32_t* out);                      // 0x007ae2a0
+void FUN_007adcf0(const uint32_t* src, uint8_t* dst, uint32_t cB, uint32_t cA);      // 0x007adcf0
+void mapblock(const uint32_t* src, uint8_t* dst, uint32_t c0, uint32_t c1, int mode); // 0x007ada40
+
 // @ 0x007af490
-extern "C" void eadxt(void)
+// eadxt: compress `nblocks` 4x4 blocks of 32-bit pixels (rows `stride` bytes apart) into DXT blocks.
+// flags: 0x100 = DXT3 explicit alpha, 0x200 = DXT5 interpolated alpha, nonzero = punch-through/alpha
+// mapping; quality < 10 uses the fast endpoint mapper, otherwise the endpoint search.
+void eadxt(uint8_t* dst, const uint8_t* src, int stride, int nblocks, uint32_t flags, int quality)
 {
-    // PARTIAL: whole-surface DXT encode skeleton only.
+    for (int i = 0; i < nblocks; ++i) {
+        uint32_t block[16];
+        EndpointColors mm;
+        FUN_007ae840(src, stride, block, mm.v);
+        if (flags & 0x100) {
+            FUN_007ae5b0((const uint8_t*)block, dst, 0x10);
+            dst += 8;
+        } else if (flags & 0x200) {
+            InterpolatedAlphaBlock((int)(mm.v[1] >> 24), (int)(mm.v[0] >> 24), (const uint8_t*)block, dst);
+            dst += 8;
+        }
+        if (quality < 10 && flags != 0) {
+            if (quality >= 5 && ((mm.v[1] - mm.v[0]) & 0xf8f8f8) != 0)
+                RefineMinMaxColors(block, mm.v);
+            FUN_007adcf0(block, dst, mm.v[0], mm.v[1]);
+        } else {
+            uint32_t e0, e1;
+            mm.findendpoints(block, &e0, &e1, (int)flags, quality);
+            mapblock(block, dst, e0, e1, (int)flags);
+        }
+        src += 0x10;
+        dst += 8;
+    }
 }
 
+// ---------------------------------------------------------------------------
+// Write the surface to a stream: opens the stream named by the key at +0x24, writes a 0x18-byte
+// header {1, width, height, mip count, 8, format}, then for each mip level its byte size followed by
+// its data. Returns false when the stream cannot be opened.
+struct IDxtWriter {
+    virtual void w0(); virtual void w1(); virtual void w2(); virtual void w3();
+    virtual void w4(); virtual void w5(); virtual void w6(); virtual void w7();
+    virtual void w8(); virtual void w9(); virtual void w10(); virtual void w11();
+    virtual void w12(); virtual void w13();
+    virtual void Write(const void* data, int size);   // slot 14 (+0x38)
+};
+struct IDxtStream {
+    virtual void s0(); virtual void s1();
+    virtual void Release();                           // slot 2 (+8)
+    virtual void s3(); virtual void s4(); virtual void s5();
+    virtual IDxtWriter* GetWriter();                  // slot 6 (+0x18)
+    virtual void s7(); virtual void s8();
+    virtual void Close();                             // slot 9 (+0x24)
+};
+struct DxtKey { uint32_t instance, type, group; };
+struct IDxtStreamMgr {
+    virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3();
+    virtual void m4(); virtual void m5(); virtual void m6(); virtual void m7();
+    virtual void m8(); virtual void m9(); virtual void m10(); virtual void m11();
+    virtual void m12();
+    virtual bool Open(const DxtKey* key, IDxtStream** out, int a, int b, int c, int d);   // slot 13 (+0x34)
+};
+struct DxtMip {
+    char pad00[0x1c];
+    int mWidth;      // +0x1c
+    int mHeight;     // +0x20
+    int pad24;
+    void* mpData;    // +0x28
+};
+template <class T> struct StreamRef {
+    T* mp;
+    StreamRef() : mp(0) {}
+    ~StreamRef() { if (mp) mp->Release(); }
+};
+class DxtImage {
+public:
+    char pad00[0xc];
+    DxtMip** mpMipBegin;       // +0x0c
+    DxtMip** mpMipEnd;         // +0x10
+    char pad14[0xc];
+    IDxtStreamMgr* mpMgr;      // +0x20
+    DxtKey mKey;               // +0x24
+    uint32_t mFormat;          // +0x30
+    int mBlockBytes;           // +0x34
+    int mPixelBytes;           // +0x38
+    bool WriteStream(int unused);
+};
+
 // @ 0x007af720
-extern "C" void FUN_007af720(void)
+bool DxtImage::WriteStream(int unused)
 {
-    // PARTIAL: DXT block encode + stream write skeleton only.
+    (void)unused;
+    StreamRef<IDxtStream> stream;
+    if (mpMgr->Open(&mKey, &stream.mp, 2, 2, 1, 0)) {
+        IDxtWriter* w = stream.mp->GetWriter();
+        int n = (int)(mpMipEnd - mpMipBegin);
+        uint32_t hdr[6];
+        hdr[0] = 1;
+        hdr[1] = (uint32_t)mpMipBegin[0]->mWidth;
+        hdr[2] = (uint32_t)mpMipBegin[0]->mHeight;
+        hdr[3] = (uint32_t)n;
+        hdr[4] = 8;
+        hdr[5] = mFormat;
+        w->Write(hdr, 0x18);
+        for (int i = 0; i < n; ++i) {
+            DxtMip* mip = mpMipBegin[i];
+            int size;
+            if (mBlockBytes != 0)
+                size = ((mip->mHeight + 3) / 4) * ((mip->mWidth + 3) / 4) * mBlockBytes;
+            else
+                size = mip->mHeight * mip->mWidth * mPixelBytes;
+            w->Write(&size, 4);
+            w->Write(mip->mpData, size);
+        }
+        stream.mp->Close();
+        return true;
+    }
+    return false;
 }
