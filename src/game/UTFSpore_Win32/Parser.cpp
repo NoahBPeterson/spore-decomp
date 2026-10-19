@@ -13,6 +13,8 @@ struct cExprAccess { void EvalBoolParentheses(const char** p, char c); };  // 0x
 // ---- items of slice s00840250 end
 
 // ---- items of slice s00844270 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" __declspec(dllimport) int __cdecl isalpha(int);
+extern "C" __declspec(dllimport) int __cdecl isdigit(int);
 extern "C" void* __cdecl memcpy(void*, const void*, unsigned);
 extern "C" void* __cdecl memmove(void*, const void*, unsigned);
 extern char gEmptyStr[2];   // 0x01667bac: shared empty-string storage
@@ -114,6 +116,11 @@ struct cError_s0084_4270 {
     const char* mMessage;
     unsigned char pad[12];
 };
+}
+}
+namespace EA {
+namespace ArgScript {
+void MakeCaseInsensitive(const char* s, string8_s0084_4270* out);   // 0x00840cc0 (cdecl)
 }
 }
 namespace EA {
@@ -373,6 +380,71 @@ bool __fastcall ParserEvent40(int* self, int, void* arg)
     return true;
 }
 
+// @ 0x00844270
+void SubstituteParameters(EA::ArgScript::cArguments_s0084_4270* params, EA::ArgScript::cArguments_s0084_4270* values, string8_s0084_4270* text)
+{
+    unsigned size = text->size();
+    if (size == 0) return;
+    // find first '&'
+    const char* p = text->mpBegin;
+    while (p != text->mpEnd && *p != '&') ++p;
+    if (p == text->mpEnd) return;
+    unsigned amp = p - text->mpBegin;
+    if (amp == (unsigned)-1) return;
+
+    string8_s0084_4270 result;
+    unsigned start = 0;
+    do {
+        unsigned total = text->size() - start;
+        unsigned len = amp - start;
+        const char* b = text->mpBegin;
+        result.append(b + start, b + start + (total < len ? total : len));
+        if (amp == (unsigned)-1) break;
+        ++amp;
+        bool brace = text->mpBegin[amp] == '{';
+        if (brace) ++amp;
+        if (amp >= text->size()) throw EA::ArgScript::cError_s0084_4270("missing parameter name");
+        unsigned char c = text->mpBegin[amp];
+        if (!(isalpha(c) || isdigit(c) || c == '_') || isdigit((unsigned char)text->mpBegin[amp]))
+            throw EA::ArgScript::cError_s0084_4270("bad parameter name");
+        start = amp + 1;
+        while (start < text->size()) {
+            unsigned char d = text->mpBegin[start];
+            if (!(isalpha(d) || isdigit(d) || d == '_')) break;
+            ++start;
+        }
+        if (brace && (start >= text->size() || text->mpBegin[start] != '}'))
+            throw EA::ArgScript::cError_s0084_4270("missing '}'");
+        int i = 0;
+        if (params->NumArguments() > 0) {
+            unsigned nameLen = start - amp;
+            do {
+                if (text->compare(amp, nameLen, (*params)[i]) == 0) {
+                    if (!brace) result.push_back('(');
+                    const char* v = (*values)[i];
+                    const char* e = v + CharStrlen(v);
+                    result.append(v, e);
+                    if (!brace) result.push_back(')');
+                    break;
+                }
+                ++i;
+            } while (i < params->NumArguments());
+        }
+        if (i == params->NumArguments()) {
+            string8_s0084_4270 msg;
+            msg.append("Unknown parameter: ", "Unknown parameter: " + 19);
+            unsigned total = text->size() - amp;
+            unsigned len = start - amp;
+            msg.append(text->mpBegin + amp, text->mpBegin + amp + (total < len ? total : len));
+            throw EA::ArgScript::cError_s0084_4270(msg.mpBegin);
+        }
+        if (brace) ++start;
+        amp = text->find('&', start);
+    } while (start < text->size());
+
+    if (&result != text) text->assign(result.mpBegin, result.mpEnd);
+}
+
 // @ 0x00844680
 void __fastcall MacroPair_dtor(MacroPair* p)
 { p->~MacroPair(); }
@@ -531,6 +603,47 @@ int cParser::ParseEnd(bool bUnwind)
     int r = *(int*)((char*)this + 0x168);   // value left in eax by the original (mArgs storage field)
     mBlockCommentDepth = 0;
     return r;
+}
+
+// @ 0x00844fb0
+void cParser::InstantiateMacro(const char* name, EA::ArgScript::cArguments_s0084_4270* args)
+{
+    EA::ArgScript::MakeCaseInsensitive(name, &mLCName);
+    const char* nameEnd = name + CharStrlen(name);
+    MacroTable* t = MacroTableOf(this);
+    MacroIter it;
+    {
+        string8_s0084_4270 key(name, nameEnd);
+        it = t->find(key);
+    }
+    if (it.node == (MacroNode*)t->mpBucketArray[t->mnBucketCount])
+        throw EA::ArgScript::cError_s0084_4270("Unknown definition: '%s'", name);
+    EA::ArgScript::cMacroDefinition* m = it.node->value.mpObject;
+    if (m->mParams.NumArguments() != args->NumArguments())
+        throw EA::ArgScript::cError_s0084_4270("Wrong number of arguments");
+    string8_s0084_4270 line;
+    EA::ArgScript::cMacroLine* end = m->mMacroBody.mpEnd;
+    for (EA::ArgScript::cMacroLine* p = m->mMacroBody.mpBegin; p != end; ++p) {
+        int lineNo = p->line;
+        int relLine = lineNo - m->mStartLine;
+        const char* s = m->mMacroText.mpBegin + p->offset;
+        const char* e = s + CharStrlen(s);
+        line.assign(s, e);
+        SubstituteParameters(&m->mParams, args, &line);
+        if (m->mStartLine) {
+            if (&m->mPath != &mCurrentPath)
+                mCurrentPath.assign(m->mPath.mpBegin, m->mPath.mpEnd);
+            mCurrentLine = lineNo;
+        }
+        try {
+            ParseLine(line.mpBegin);
+        } catch (EA::ArgScript::cError_s0084_4270& err) {
+            if (m->mStartLine)
+                throw EA::ArgScript::cError_s0084_4270("\n%s(%d): %s\n      in definition '%s', line %d",
+                             m->mPath.mpBegin, lineNo, err.mMessage, name, relLine);
+            throw EA::ArgScript::cError_s0084_4270("%s\n  in definition '%s', line %d", err.mMessage, name, relLine);
+        }
+    }
 }
 
 // @ 0x00845260
