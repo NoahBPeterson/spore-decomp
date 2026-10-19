@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a781f0 655 complete Add (9-case MapInfo factory); case block layout differs, o in case 6 reuses param home slot in original

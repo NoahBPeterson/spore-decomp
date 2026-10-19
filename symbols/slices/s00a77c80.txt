@@ -1,2 +1,3 @@
+00a781f0 ?Add@@YAXPAUMapDescription@@PAUIContext@@@Z  # Add migrated from s00a77c80 (verbatim, slice spelling)
 00a78590  Swarm::MapDescription::MapDescription  # ctor: vptr + default fields
 01453948  ??_7MapDescription@@6B@  # Swarm::MapDescription vtable, stored by the ctor 0xa78590
