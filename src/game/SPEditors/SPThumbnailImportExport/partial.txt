@@ -1,0 +1,16 @@
+# va  diff-bytes  reason
+005f9310  -  SP::Thumbnail::cImportExport::SetupExportFolderPath: skeleton only
+005f9470  -  hash-table insert variant (FNV wchar hash + bucket): skeleton only
+005f95a0  -  unnamed 212-byte helper: skeleton only
+005f9680  -  unnamed 63-byte helper: skeleton only
+005f96c0  -  unnamed 155-byte helper: skeleton only
+005f9760  -  unnamed 92-byte helper: skeleton only
+005f97c0  -  unnamed 350-byte helper: skeleton only
+005fa8d0  -  cImportExport::CreateExportThumb: only the guard/skeleton is reconstructed; the sprite/texture and file pipeline inside is not reproduced.
+005faec0  201  cImportExport::RemoveExportThumb: main key-map erase path written, but the Guid->Key / Key->Guid map erase calls are omitted.
+005fafb0  -  cImportExport::ImportFromFolder: only the signature and a false return are present; the folder-scan loop is not reconstructed.
+005fb430  -  cImportExport::UpdateExportThumb: only the signature / a false return are reconstructed; the image-update pipeline is not reproduced.
+005fc9f0  -  cImportExport::ScanFolder: only the signature / a false return are reconstructed; the folder scan logic is not reproduced.
+005fd0a0  -  cImportExport::ScanForImports: only a zero-return skeleton is reconstructed; the bucket walk over the eight folder paths is not reproduced.
+005fd260  -  import deserializer: stub.
+005fd880  -  cImportExport::Init (candidate): stub.

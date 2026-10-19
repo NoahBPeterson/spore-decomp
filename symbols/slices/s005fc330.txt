@@ -1,4 +1,4 @@
-005fc330 SP::Thumbnail::cImportExport::ImportNewAsset  # PDB anchor
-005fc9f0 SP::Thumbnail::cImportExport::ScanFolder  # PDB anchor
-005fcf40 SP::Thumbnail::cImportExport::cImportExport (retail layout)  # 4 hash_maps (+4..+88), image embed +88, 8 string16 +104..+174
-005fd0a0 SP::Thumbnail::cImportExport::ScanForImports  # PDB candidate (caller-single)
+005fc330 ?ImportNewAsset@cImportExportCtor@@QAE_NPB_WPAUKey_s005f_c330@ResourceMan@EA@@@Z  # cImportExportCtor::ImportNewAsset migrated from s005fc330 (verbatim, slice spelling)
+005fc9f0 ?ScanFolder@cImportExportCtor@@QAE_NPBXPAX1@Z  # cImportExportCtor::ScanFolder migrated from s005fc330 (verbatim, slice spelling)
+005fcf40 ??0cImportExportCtor@@QAE@XZ  # cImportExportCtor::cImportExportCtor migrated from s005fc330 (verbatim, slice spelling)
+005fd0a0 ?ScanForImports@cImportExportCtor@@QAEEXZ  # cImportExportCtor::ScanForImports migrated from s005fc330 (verbatim, slice spelling)

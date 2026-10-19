@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+005f9920 1386 WriteAssetDataToImage: complete; callee-saved register assignment (edi/esi/ebp order) and frame size differ
+005fa100 4 string-key hashtable erase: complete; ecx/edx swap in second equal-loop; difftest PASS after fixing StrNode::next offset (0x14 -> 0x10, spurious pad after the 16-byte key)
+005fa1d0 33 hashtable bucket teardown A (string node free loop): complete; current/next register allocation is swapped (esi/edi)
+005fa230 69 hashtable bucket teardown B (node free loop, +0xc/+0x14 fields): complete; register allocation differs
+005fa290 1291 RestoreImportTable: complete; stream/local init scheduling and frame size (0x4f0 vs 0x4e8) differ; difftest WEAK (400 valid, no mismatch, 3.6% coverage: random inputs leave early)
+005face0 112 hashtable::erase(string16): behaviourally complete; the node/key register allocation across the equal() calls differs, so the byte image does not converge. [equiv: WEAK, 786 valid inputs, 63.2% coverage]
+005fc330 1419 cImportExport::ImportNewAsset: complete (all paths and 58 calls); frame/register allocation and bResult-in-register differ from the original.
+005fcf40 236 cImportExport retail constructor: all four hashtables, the embedded image and the eight strings are initialized; the SSE float-constant scheduling / register allocation does not converge byte-exact.
+005fda40 2 message handler for 0x24ce123: complete; only the scratch register holding &local differs (ecx vs edx), so the byte image does not converge.

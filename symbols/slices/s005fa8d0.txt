@@ -1,7 +1,7 @@
-005fa8d0 SP::Thumbnail::cImportExport::CreateExportThumb  # PDB candidate (caller-scored)
-005fae40 SP::Thumbnail::cImportExport::Shutdown  # PDB names (callee-scored), byte-exact
+005fa8d0 ?CreateExportThumb@cImportExport_s005f_a8d0@Thumbnail@SP@@QAE_NPAXABUKey_s005f_a8d0@ResourceMan@EA@@0@Z  # cImportExport_s005f_a8d0::CreateExportThumb migrated from s005fa8d0 (verbatim, slice spelling)
+005face0 ?erase@?$hashtable_s005f_a8d0@U?$pair_s005f_a8d0@V?$basic_string_s005f_a8d0@_W@eastl@@UKey_s005f_a8d0@ResourceMan@EA@@@eastl@@V?$basic_string_s005f_a8d0@_W@2@Uhash_s005f_a8d0@2@Uequal_to_s005f_a8d0@2@@eastl@@QAEIABV?$basic_string_s005f_a8d0@_W@2@@Z  # erase migrated from s005fa8d0 (verbatim, slice spelling)
 005fadb0 eastl::hashtable<KeyNamePair,Key,KeyHash>::erase(const_iterator)  # byte-exact
-005fb350 cImportInfo::operator=  # byte-exact (0x005fb350)
-005face0 eastl::hashtable<NameKeyPair,string16,hash>::erase  # erase(const string16&), inferred from layout
-005faec0 SP::Thumbnail::cImportExport::RemoveExportThumb  # inferred (erases from key/name maps)
-005fafb0 SP::Thumbnail::cImportExport::ImportFromFolder  # inferred (scans mKeyToNameMap)
+005fae40 ?Shutdown@cImportExport_s005f_a8d0@Thumbnail@SP@@QAE_NXZ  # cImportExport_s005f_a8d0::Shutdown migrated from s005fa8d0 (verbatim, slice spelling)
+005faec0 ?RemoveExportThumb@cImportExport_s005f_a8d0@Thumbnail@SP@@QAE_NABUKey_s005f_a8d0@ResourceMan@EA@@@Z  # cImportExport_s005f_a8d0::RemoveExportThumb migrated from s005fa8d0 (verbatim, slice spelling)
+005fafb0 ?ImportFromFolder@cImportExport_s005f_a8d0@Thumbnail@SP@@QAE_NABUKey_s005f_a8d0@ResourceMan@EA@@PAX@Z  # cImportExport_s005f_a8d0::ImportFromFolder migrated from s005fa8d0 (verbatim, slice spelling)
+005fb350 ??4cImportInfo@@QAEAAU0@ABU0@@Z  # cImportInfo::operator= migrated from s005fa8d0 (verbatim, slice spelling)

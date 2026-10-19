@@ -1,5 +1,5 @@
-005f9920 SP::Thumbnail::cImportExport::WriteAssetDataToImage  # PDB name on card
-005fa100 hashtable_insert_wchar  # FNV-1a wchar hash + bucket chain dedup
-005fa1d0 ClearBucketsA  # hashtable bucket teardown, string-node free loop
-005fa230 ClearBucketsB  # hashtable bucket teardown variant
-005fa290 SP::Thumbnail::cImportExport::RestoreImportTable  # PDB name on card
+005f9920 ?WriteAssetDataToImage@cImportExport_s005f_9920@Thumbnail@SP@@QAE_NPAUcAssetMetadata_s005f_9920@@PAXH@Z  # cImportExport_s005f_9920::WriteAssetDataToImage migrated from s005f9920 (verbatim, slice spelling)
+005fa100 ?erase@StrTable@@QAEIPBUWStr@@@Z  # StrTable::erase migrated from s005f9920 (verbatim, slice spelling)
+005fa1d0 ?ClearBucketsA@@YGXPAPAHI@Z  # ClearBucketsA migrated from s005f9920 (verbatim, slice spelling)
+005fa230 ?ClearBucketsB@@YGXPAPAHI@Z  # ClearBucketsB migrated from s005f9920 (verbatim, slice spelling)
+005fa290 ?RestoreImportTable@cImportExport_s005f_9920@Thumbnail@SP@@QAE_NXZ  # cImportExport_s005f_9920::RestoreImportTable migrated from s005f9920 (verbatim, slice spelling)

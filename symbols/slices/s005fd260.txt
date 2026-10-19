@@ -1,6 +1,7 @@
-005fda40 cImportExport import message handler (0x24ce123)  # inferred; refcounted vec local
-005fd880 SP::Thumbnail::cImportExport::Init  # PDB anchor
-005fdeb0 UI::AchievementNotifier::AchievementNotifier  # PDB names; 3 vptrs (+0,+8,+0xc)
+005fd260 ?FUN_005fd260@@YAXXZ  # FUN_005fd260 migrated from s005fd260 (verbatim, slice spelling)
+005fd880 ?FUN_005fd880@@YAXXZ  # FUN_005fd880 migrated from s005fd260 (verbatim, slice spelling)
+005fda40 ?Handler@HandlerStub@@QAE_NIPAX@Z  # HandlerStub::Handler migrated from s005fd260 (verbatim, slice spelling)
 005fdbb0 UI::AchievementNotifier::~AchievementNotifier  # inferred (dtor)
 005fdca0 SP::cSPPaletteItemUIHutStyle::Init  # PDB candidate (caller-scored)
+005fdeb0 UI::AchievementNotifier::AchievementNotifier  # PDB names; 3 vptrs (+0,+8,+0xc)
 005fdf40 UI::AchievementNotifier::Update  # inferred state machine
