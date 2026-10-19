@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPCreatureAnim/queued_blender.cpp  ?packHandle@@YAHHE@Z  009fef70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/queued_blender.cpp  ?packGoalHandle@@YAHPAUQueuedBlender@@PAUAnimGoal@@@Z  009fef90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/queued_blender.cpp  ?Count@QueuedBlender@@QAEHXZ  009fefd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/queued_blender.cpp  ?IsActive@AnimGoal@@QAEHXZ  009ff020  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/queued_blender.cpp  ?TransitionToNextAnimation@QueuedBlender@@QAEXXZ  009ff440  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
