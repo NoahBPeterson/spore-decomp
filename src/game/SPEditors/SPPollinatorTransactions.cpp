@@ -2943,6 +2943,7 @@ class cFeedStateTransaction : public cITransaction_s0061_c350 {
 // ---- items of slice s0061c350 end
 
 
+
 // ---- items of slice s0061d240 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #pragma intrinsic(memmove)
 namespace EA {
@@ -3072,6 +3073,7 @@ fail:
 
 
 
+
 // @ 0x00616160
 cTripleObj* cTripleObj::Init()
 {
@@ -3100,11 +3102,13 @@ cTripleObj* cTripleObj::Init()
 
 
 
+
 // @ 0x00616220
 bool cTimeGreater::operator()(unsigned a, unsigned b) const
 {
     return mpOwner->mpTable[a].mTime > mpOwner->mpTable[b].mTime;
 }
+
 
 
 
@@ -3138,6 +3142,7 @@ bool cHandlerStub::HandleResult(int err, cHttpResult* r, void* unused)
 
 
 
+
 // @ 0x00616300
 cSmallC* cSmallC::Init(const sTriple* t, int* obj, int c)
 {
@@ -3151,6 +3156,7 @@ cSmallC* cSmallC::Init(const sTriple* t, int* obj, int c)
     m20 = 0;
     return this;
 }
+
 
 
 
@@ -3192,6 +3198,7 @@ void cTxC::Dtor()
 
 
 
+
 // @ 0x006163e0
 cTxD* cTxD::Init(ResourceKey_s0061_6360 key, IAddRef* ref, RCObj* counted, unsigned n, bool b)
 {
@@ -3209,6 +3216,7 @@ cTxD* cTxD::Init(ResourceKey_s0061_6360 key, IAddRef* ref, RCObj* counted, unsig
     mpRel = 0;
     return this;
 }
+
 
 
 
@@ -3256,6 +3264,7 @@ void cTxD::Dtor()
 
 
 
+
 // @ 0x00616500
 void cTxE::Dtor()
 {
@@ -3282,6 +3291,7 @@ void cTxE::Dtor()
     }
     vtbl = kBaseVtbl;
 }
+
 
 
 
@@ -3323,6 +3333,7 @@ bool cTxF::HandleResult(int err, void* a, void* b)
 
 
 
+
 // @ 0x00616610
 bool cTxG::HandleResult(int err, cHttpResult_s0061_6360* r, void* unused)
 {
@@ -3335,6 +3346,7 @@ bool cTxG::HandleResult(int err, cHttpResult_s0061_6360* r, void* unused)
         GetPollinatorLite()->Notify(0x3cf0359, mp8);
     return b;
 }
+
 
 
 
@@ -3367,6 +3379,7 @@ bool cTxI::HandleResult(int err, cHttpResult_s0061_6360* r, void* unused)
 
 
 
+
 // @ 0x006166e0
 cTxJ* cTxJ::Init(IAddRef1* a, IAddRef1* b)
 {
@@ -3378,6 +3391,7 @@ cTxJ* cTxJ::Init(IAddRef1* a, IAddRef1* b)
     if (b) b->AddRef1();
     return this;
 }
+
 
 
 
@@ -3417,6 +3431,7 @@ bool cTxK::HandleResult(int err, cHttpResult2* r, void* unused)
 
 
 
+
 // @ 0x006167a0
 void insertion_sort(unsigned* first, unsigned* last, cTimeGreaterInl compare)
 {
@@ -3441,6 +3456,7 @@ void insertion_sort(unsigned* first, unsigned* last, cTimeGreaterInl compare)
 
 
 
+
 // @ 0x00616820
 void insertion_sort_unguarded(unsigned* first, unsigned* last, cTimeGreaterInl compare)
 {
@@ -3452,6 +3468,7 @@ void insertion_sort_unguarded(unsigned* first, unsigned* last, cTimeGreaterInl c
         *end = value;
     }
 }
+
 
 
 
@@ -3488,6 +3505,7 @@ inline const unsigned& median(const unsigned& a, const unsigned& b, const unsign
 
 
 
+
 // @ 0x00616960
 string8& string8::append(size_type n, char c)
 {
@@ -3513,6 +3531,7 @@ string8& string8::append(size_type n, char c)
 
 
 
+
 // @ 0x00616a00
 void promote_heap(unsigned* first, int topPosition, int position, const unsigned value, cTimeGreaterInl compare)
 {
@@ -3524,6 +3543,7 @@ void promote_heap(unsigned* first, int topPosition, int position, const unsigned
     }
     *(first + position) = value;
 }
+
 
 
 
@@ -3557,6 +3577,7 @@ void string8::AllocateSelf(size_type n)
 
 
 
+
 // @ 0x00616b00
 void* cPoolTxA::Destroy(unsigned flags)
 {
@@ -3567,6 +3588,7 @@ void* cPoolTxA::Destroy(unsigned flags)
     }
     return this;
 }
+
 
 
 
@@ -3597,6 +3619,7 @@ void* cPoolTxB::Destroy(unsigned flags)
 
 
 
+
 // @ 0x00616b40
 void* cTxUp1::Destroy(unsigned flags)
 {
@@ -3610,6 +3633,7 @@ void* cTxUp1::Destroy(unsigned flags)
     }
     return this;
 }
+
 
 
 
@@ -3679,6 +3703,7 @@ retry:
 
 
 
+
 // @ 0x00616d20
 void* cTxUp2::Destroy(unsigned flags)
 {
@@ -3692,6 +3717,7 @@ void* cTxUp2::Destroy(unsigned flags)
     }
     return this;
 }
+
 
 
 
@@ -3753,6 +3779,7 @@ void CreateDownloadJob(IAddRef* pDb, SubOwner_s0061_6360* pOwner, const Resource
 
 
 
+
 // @ 0x00616ed0
 bool cTxDownload::HandleResult(int err, void* a, void* b)
 {
@@ -3788,6 +3815,7 @@ bool cTxDownload::HandleResult(int err, void* a, void* b)
     }
     return false;
 }
+
 
 
 
@@ -3844,6 +3872,7 @@ bool cTxThumbnail::ConstructRequest(char** ppOut)
 
 
 
+
 // @ 0x00617450
 void* cTelemetryUploadTransaction::Destroy(unsigned flags)
 {
@@ -3857,6 +3886,7 @@ void* cTelemetryUploadTransaction::Destroy(unsigned flags)
     }
     return this;
 }
+
 
 
 
@@ -3889,6 +3919,7 @@ void* cPollenTxTwoRefs::Destroy(unsigned flags)
 
 
 
+
 // @ 0x00617530
 void adjust_heap(unsigned* first, int topPosition, int heapSize, int position, unsigned value, cTimeGreaterInl compare)
 {
@@ -3906,6 +3937,7 @@ void adjust_heap(unsigned* first, int topPosition, int heapSize, int position, u
     }
     promote_heap(first, topPosition, position, value, compare);
 }
+
 
 
 
@@ -3958,6 +3990,7 @@ void __cdecl RemoveFeedFromAll(cPendingAssetSet* self, const string8_s0061_7130*
 
 
 
+
 // @ 0x006177b0
 void RemoveFeedByName(const string8_s0061_7130* name)
 {
@@ -3983,6 +4016,7 @@ void RemoveFeedByName(const string8_s0061_7130* name)
     }
     FreeCountedArray(results.mpBegin);
 }
+
 
 
 
@@ -4021,6 +4055,7 @@ void cGetAssetFeedTransaction::Dtor()
 
 
 
+
 // @ 0x00617b10
 bool cFeedGetTx::ConstructRequestA(HTTPRequest** ppOut)
 { return BuildGetRequest(this, 0x539f69d, ppOut); }
@@ -4033,9 +4068,11 @@ bool cFeedGetTx::ConstructRequestA(HTTPRequest** ppOut)
 
 
 
+
 // @ 0x00617c90
 bool cFeedGetTx::ConstructRequestB(HTTPRequest** ppOut)
 { return BuildGetRequest(this, 0x539f705, ppOut); }
+
 
 
 
@@ -4077,6 +4114,7 @@ bool cFeedUnsubscribeTransaction::HandleResult(int err, cHttpResult_s0061_7130* 
 
 
 
+
 // @ 0x00617e80
 void cSnapshotUploadTransaction::Dtor()
 {
@@ -4087,6 +4125,7 @@ void cSnapshotUploadTransaction::Dtor()
     mMyEmailAddress.~string8_s0061_7130();
     vtbl = kBaseVtbl;
 }
+
 
 
 
@@ -4158,11 +4197,13 @@ bool cSnapshotUploadTransaction::ConstructRequest(HTTPRequest** ppOut)
 
 
 
+
 // @ 0x00618150
 namespace SP { namespace Pollen {
 cYouTubeAuthenticationTransaction_s0061_8150::~cYouTubeAuthenticationTransaction_s0061_8150()
 {}
 }}  // namespace SP::Pollen
+
 
 
 
@@ -4205,6 +4246,7 @@ bool cYouTubeAuthenticationTransaction_s0061_8150::ConstructRequest(void** ppReq
 
 
 
+
 // @ 0x00618370
 namespace SP { namespace Pollen {
 cYouTubeVideoUploadTransaction_s0061_8150::~cYouTubeVideoUploadTransaction_s0061_8150()
@@ -4218,11 +4260,13 @@ cYouTubeVideoUploadTransaction_s0061_8150::~cYouTubeVideoUploadTransaction_s0061
 
 
 
+
 // @ 0x00618430
 namespace SP { namespace Pollen {
 cYouTubeVideoURLTransaction_s0061_8150::~cYouTubeVideoURLTransaction_s0061_8150()
 {}
 }}  // namespace SP::Pollen
+
 
 
 
@@ -4257,6 +4301,7 @@ bool cYouTubeVideoURLTransaction_s0061_8150::ConstructRequest(void** ppRequest)
   return false;
 }
 }}  // namespace SP::Pollen
+
 
 
 
@@ -4315,6 +4360,7 @@ bool cUploadTransactionRetail::ConstructRequest(void** ppRequest)
 
 
 
+
 // @ 0x00618890
 namespace eastl {
 string8_s0061_8150 operator+(const string8_s0061_8150& a, const string8_s0061_8150& b)
@@ -4325,6 +4371,7 @@ string8_s0061_8150 operator+(const string8_s0061_8150& a, const string8_s0061_81
   return result;
 }
 }  // namespace eastl
+
 
 
 
@@ -4365,6 +4412,7 @@ template <> string8_s0061_8150& string8_s0061_8150::append_sprintf_va_list(const
 
 
 
+
 // @ 0x006189e0
 namespace SP { namespace Pollen {
 unsigned int* UnguardedPartition(unsigned int* first, unsigned int* last, unsigned int pivot, EntryKeyGreater cmp)
@@ -4381,6 +4429,7 @@ unsigned int* UnguardedPartition(unsigned int* first, unsigned int* last, unsign
   }
 }
 }}  // namespace SP::Pollen
+
 
 
 
@@ -4412,6 +4461,7 @@ void make_heap(unsigned int* first, unsigned int* last, EntryKeyGreater cmp)
 
 
 
+
 // @ 0x00618aa0
 namespace SP { namespace Pollen {
 void sort_heap(unsigned int* first, unsigned int* last, EntryKeyGreater cmp)
@@ -4423,6 +4473,7 @@ void sort_heap(unsigned int* first, unsigned int* last, EntryKeyGreater cmp)
   }
 }
 }}  // namespace SP::Pollen
+
 
 
 
@@ -4446,11 +4497,13 @@ string8N::string8N(const string8N& x)
 
 
 
+
 // @ 0x00618b90
 namespace SP { namespace Pollen {
 cMsgString8::~cMsgString8()
 {}
 }}  // namespace SP::Pollen
+
 
 
 
@@ -4487,12 +4540,14 @@ void FillFeedInfo(const FeedSource* src, FeedInfo* dst)
 
 
 
+
 // @ 0x00618d40
 namespace SP { namespace Pollen {
 cFeedTransactionBase::cFeedTransactionBase(uint32_t type, uint32_t intParam, uint32_t count, uint32_t unk18)
 : mpFeed(0), mFeedType(type), mnIntParam(intParam), mnCount(count), mUnk18(unk18), mFlag(0) {
 }
 }}  // namespace SP::Pollen
+
 
 
 
@@ -4517,6 +4572,7 @@ cFeedTransactionBase::cFeedTransactionBase(uint32_t type, const char* str, uint3
 
 
 
+
 // @ 0x00618e30
 namespace SP { namespace Pollen {
 cGetAssetFeedTransactionEx::~cGetAssetFeedTransactionEx()
@@ -4530,11 +4586,13 @@ cGetAssetFeedTransactionEx::~cGetAssetFeedTransactionEx()
 
 
 
+
 // @ 0x00618e70
 namespace SP { namespace Pollen {
 cEditFeedTransaction_s0061_8150::~cEditFeedTransaction_s0061_8150()
 { mpFeed.reset(); }
 }}  // namespace SP::Pollen
+
 
 
 
@@ -4585,6 +4643,7 @@ bool cFeedEntryAssetTransaction::ConstructRequest(void** ppRequest)
 
 
 
+
 // @ 0x00619150
 namespace SP { namespace Pollen {
 cDeleteMyFeedTransaction_s0061_9150::cDeleteMyFeedTransaction_s0061_9150(const char* uri)
@@ -4597,11 +4656,13 @@ cDeleteMyFeedTransaction_s0061_9150::cDeleteMyFeedTransaction_s0061_9150(const c
 
 
 
+
 // @ 0x006191d0
 namespace SP { namespace Pollen {
 cFeedUnsubscribeTransaction_s0061_9150::cFeedUnsubscribeTransaction_s0061_9150(const char* uri)
 : mURI(uri) {}
 }}  // namespace SP::Pollen
+
 
 
 
@@ -4625,11 +4686,13 @@ cSnapshotUploadTransaction_s0061_9150::cSnapshotUploadTransaction_s0061_9150(con
 
 
 
+
 // @ 0x00619300
 namespace SP { namespace Pollen {
 cYouTubeAuthenticationTransaction_s0061_9150::cYouTubeAuthenticationTransaction_s0061_9150(const char* username, const char* password, const char* source, bool check)
 : mUsername(username), mPassword(password), mSource(source), mCheckRegistration(check) {}
 }}  // namespace SP::Pollen
+
 
 
 
@@ -4655,6 +4718,7 @@ cYouTubeVideoUploadTransaction_s0061_9150::cYouTubeVideoUploadTransaction_s0061_
 
 
 
+
 // @ 0x00619470
 namespace SP { namespace Pollen {
 cYouTubeVideoURLTransaction_s0061_9150::cYouTubeVideoURLTransaction_s0061_9150(const char* myEmail, const char* destEmail, const char* message, const char* locale)
@@ -4663,6 +4727,7 @@ cYouTubeVideoURLTransaction_s0061_9150::cYouTubeVideoURLTransaction_s0061_9150(c
       mMessageText(message),
       mLocale(locale) {}
 }}  // namespace SP::Pollen
+
 
 
 
@@ -4690,6 +4755,7 @@ void partial_sort(unsigned int* first, unsigned int* middle, unsigned int* last,
 
 
 
+
 // @ 0x006195d0
 FeedDescription** uninitialized_copy_rev(FeedDescription** ppResult, FeedDescription* last, FeedDescription* first, FeedDescription* dest)
 {
@@ -4708,6 +4774,7 @@ FeedDescription** uninitialized_copy_rev(FeedDescription** ppResult, FeedDescrip
 
 
 
+
 // @ 0x00619650
 FeedDescription* copy_rev(FeedDescription* first, FeedDescription* last, FeedDescription* dest)
 {
@@ -4719,6 +4786,7 @@ FeedDescription* copy_rev(FeedDescription* first, FeedDescription* last, FeedDes
   } while (first != last);
   return dest;
 }
+
 
 
 
@@ -4937,6 +5005,7 @@ bool cModelUploadTransaction_s0061_96c0::ConstructRequest(EA::Internet::HTTPRequ
 
 
 
+
 // @ 0x0061a650
 namespace SP { namespace Pollen {
 bool AssetFeedGetRequest(void** ppRequest)
@@ -4945,6 +5014,7 @@ bool AssetFeedGetRequest(void** ppRequest)
   return false;
 }
 }}  // namespace SP::Pollen
+
 
 
 
@@ -4959,6 +5029,7 @@ cGetAssetFeedTransaction_s0061_a650::cGetAssetFeedTransaction_s0061_a650(uint32_
   mFlag = 1;
 }
 }}  // namespace SP::Pollen
+
 
 
 
@@ -4981,11 +5052,13 @@ cGetAssetFeedTransactionEx_s0061_a650::cGetAssetFeedTransactionEx_s0061_a650(uin
 
 
 
+
 // @ 0x0061a970
 namespace SP { namespace Pollen {
 cEditFeedTransaction_s0061_a650::cEditFeedTransaction_s0061_a650(int opType)
 : mpFeed(0), mOpType(opType), mFeedURI(), mFeedDescription(), mAssetsToAdd(), mAssetsToRemove() {}
 }}  // namespace SP::Pollen
+
 
 
 
@@ -5004,6 +5077,7 @@ bool cUserMatchTransaction_s0061_a650::ConstructRequest(void** ppRequest)
 
 
 
+
 // @ 0x0061abf0
 namespace SP { namespace Pollen {
 bool UserMatchGetRequest(void** ppRequest)
@@ -5012,6 +5086,7 @@ bool UserMatchGetRequest(void** ppRequest)
   return false;
 }
 }}  // namespace SP::Pollen
+
 
 
 
@@ -5030,12 +5105,14 @@ bool cHandshakeTransaction_s0061_a650::ConstructRequest(void** ppRequest)
 
 
 
+
 // @ 0x0061b0e0
 bool SP::Pollen::cTelemetryUploadTransaction::ConstructRequest(EA::Internet::HTTPRequest ** ppRequest)
 {
   (void)ppRequest;
   return false;
 }
+
 
 
 
@@ -5051,12 +5128,14 @@ bool SP::Pollen::cYouTubeAuthenticationTransaction::HandleResult(unsigned int pp
 
 
 
+
 // @ 0x0061b620
 bool SP::Pollen::cYouTubeVideoUploadTransaction::ConstructRequest(EA::Internet::HTTPRequest ** ppRequest)
 {
   (void)ppRequest;
   return false;
 }
+
 
 
 
@@ -5070,6 +5149,7 @@ bool PollenRequestHelper(void* self, void* arg)
   return false;
 }
 }}  // namespace SP::Pollen
+
 
 
 
@@ -5091,6 +5171,7 @@ void quick_sort_impl(unsigned int* first, unsigned int* last, int kRecursionCoun
 
 
 
+
 // @ 0x0061bcf0
 namespace SP { namespace Pollen {
 void WritePropertyListAndPNG(void* self, void* a, void* b, void* c)
@@ -5105,6 +5186,7 @@ void WritePropertyListAndPNG(void* self, void* a, void* b, void* c)
 
 
 
+
 // @ 0x0061c1c0
 namespace SP { namespace Pollen {
 void* AllocateAndCopy70(unsigned int n, void* a, void* b)
@@ -5115,6 +5197,7 @@ void* AllocateAndCopy70(unsigned int n, void* a, void* b)
   return EASTL_allocator_allocate(n * 0x70, "Editor", 0, 0, "EASTL/allocator.h", 0xd1);
 }
 }}  // namespace SP::Pollen
+
 
 
 
@@ -5322,6 +5405,7 @@ void* AssetHelper288(void* self, void* a)
 }}  // namespace SP::Pollen
 
 
+
 // @ 0x0061d380
 namespace SP { namespace Pollen {
 bool GetAssetFeedConstructRequest(void* self, void* ppRequest)
@@ -5333,6 +5417,7 @@ bool GetAssetFeedConstructRequest(void* self, void* ppRequest)
 }}  // namespace SP::Pollen
 
 
+
 // @ 0x0061d960
 namespace SP { namespace Pollen {
 bool EditFeedConstructRequest(void* self, void* ppRequest)
@@ -5342,6 +5427,7 @@ bool EditFeedConstructRequest(void* self, void* ppRequest)
   return false;
 }
 }}  // namespace SP::Pollen
+
 
 
 // @ 0x0061de00
