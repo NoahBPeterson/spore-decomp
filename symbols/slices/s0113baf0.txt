@@ -1,7 +1,9 @@
+0113bb30 ?FUN_0113bb30@Ctx@@QAEXXZ  # Ctx::FUN_0113bb30 migrated from s0113baf0 (verbatim, slice spelling)
+0113bb90 ?FUN_0113bb90@Ctx@@QAE_NH@Z  # Ctx::FUN_0113bb90 migrated from s0113baf0 (verbatim, slice spelling)
 0113bc60 rw::audio::core::PacketPlayer::StartPlaying  # PDB candidate (caller-single)
 0113bcf0 rw::audio::core::PacketPlayer::PlayHandler  # PDB candidate (caller-single)
-0113bd60 rw::audio::core::PacketPlayer::RwacTimerClient  # PDB gap-align
-0113be10 rw::audio::core::PacketPlayer::CreateInstance  # PDB anchor
+0113bd60 ?FUN_0113bd60@@YAXPAE@Z  # FUN_0113bd60 migrated from s0113baf0 (verbatim, slice spelling)
+0113be10 ?FUN_0113be10@@YA_NPAE@Z  # FUN_0113be10 migrated from s0113baf0 (verbatim, slice spelling)
+0113cb50 rw::audio::core::Delay::RwacTimerClient  # timer callback installed by Delay::CreateInstance
 0113cbf0 rw::audio::core::Delay::CreateInstance  # PDB anchor
 0113ce00 rw::audio::core::Dac::Mix  # PDB candidate (caller-single)
-0113cb50 rw::audio::core::Delay::RwacTimerClient  # timer callback installed by Delay::CreateInstance
