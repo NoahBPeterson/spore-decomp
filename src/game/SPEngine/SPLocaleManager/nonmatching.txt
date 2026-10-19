@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00695d10 13 resource-manager add loop: both manager calls and list walk present; vtable load scheduled after the pushes
+00696420 44 cLocaleManager ctor: EH-state stores and list-init store scheduling (lea ecx vs lea eax/esi disp) differ

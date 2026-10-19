@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+006964c0  1069  skeleton only; the full CommandLine/locale-info/registry bootstrap (dozens of GetLocaleInfoInt calls) not reconstructed
+006968f0  141  skeleton only; longest-common-prefix locale match + vtable SetLocale not reconstructed
+006969b0  155  skeleton only; locale-list probe via FUN_0087fd10 not reconstructed
+00697710  582  skeleton only; cLocaleManager::SetLocale (IsLocaleAvailable + list walk + SetLocale + message) not reconstructed

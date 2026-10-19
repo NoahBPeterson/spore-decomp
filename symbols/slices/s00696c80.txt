@@ -1,5 +1,5 @@
 00697650 SP::cLocaleManager::BroadcastLocaleChange  # vtable slot +0x20/+0x14 then MessageServer dispatch of App/cLocaleChangeMessage
-00697710 SP::cLocaleManager::SetLocale  # PDB caller-single name; IsLocaleAvailable gate, list walk, SetLocale, then FUN_00697650
+00697710 ?cLocaleManagerSetLocale@SP@@YA_NPAX0@Z  # cLocaleManagerSetLocale migrated from s00696c80 (verbatim, slice spelling)
 00697960 SP::cLocalInputState zero-init helper  # memset(this,0,0x48); return this (__fastcall)
 00697980 SP::cLocalInputState::Reset  # PDB name
 006979c0 SP::cLocalInputState::UpdateModifiers  # PDB name; inline KeyBit(k,i,b)=((k[i]>>b)&1)
