@@ -1,9 +1,17 @@
-009515e0 AnimationCurveFactory_GetName  # returns "AnimationCurve"; next to Create in factory vtable 0x14402d0
+009515e0 ?GetName@AnimationCurveFactory@UTFWin@@QAEPBDH@Z  # AnimationCurveFactory::GetName migrated from s009515e0 (verbatim, slice spelling)
+009515f0 ?GetPointCount@AnimationCurve@UTFWin@@UAEIXZ  # AnimationCurve::GetPointCount migrated from s009515e0 (verbatim, slice spelling)
+00951600 ?GetPoints@AnimationCurve@UTFWin@@UAEIPAUCurvePoint@@I@Z  # AnimationCurve::GetPoints migrated from s009515e0 (verbatim, slice spelling)
+00951650 ?GetProperty@AnimationCurve@UTFWin@@UAEXPAUPropertyRef@2@@Z  # AnimationCurve::GetProperty migrated from s009515e0 (verbatim, slice spelling)
+00951680 ?GetPointCount@AnimationPath2D@UTFWin@@UAEIXZ  # AnimationPath2D::GetPointCount migrated from s009515e0 (verbatim, slice spelling)
+009516a0 ?GetPoints@AnimationPath2D@UTFWin@@UAEIPAUVector3@Math@@I@Z  # AnimationPath2D::GetPoints migrated from s009515e0 (verbatim, slice spelling)
+00951710 ?GetProperty@AnimationPath2D@UTFWin@@UAEXPAUPropertyRef@2@@Z  # AnimationPath2D::GetProperty migrated from s009515e0 (verbatim, slice spelling)
 00951780 AnimationCurve_scalar_deleting_dtor  # vtable 0x14402f0 slot 2
 009517c0 AnimationPath2D_scalar_deleting_dtor  # vtable 0x1440320 slot 2
-00951850 AnimationPath2DFactory_Create  # allocs 0x20 named "UTFWin/EA::UTFWin::AnimationPath2D", installs vtable 0x1440320
-00951960 AnimationCurveFactory_Create  # allocs 0x20 named "UTFWin/EA::UTFWin::AnimationCurve", installs vtable 0x14402f0
+00951850 ?Create@AnimationPath2DFactory@UTFWin@@QAEPAVObject@2@IPAVICoreAllocator@2@@Z  # AnimationPath2DFactory::Create migrated from s009515e0 (verbatim, slice spelling)
 009518a0 eastl_vector_CurvePoint_DoRealloc  # EASTL_allocator_allocate(n*8,"EASTL",...) + uninitialized_copy
 00951900 eastl_vector_Vector3_DoRealloc  # EASTL_allocator_allocate(n*12,"EASTL",...) + uninitialized_copy
+00951960 ?Create@AnimationCurveFactory@UTFWin@@QAEPAVObject@2@IPAVICoreAllocator@2@@Z  # AnimationCurveFactory::Create migrated from s009515e0 (verbatim, slice spelling)
 009519b0 eastl_vector_CurvePoint_DoAssignFromIterator  # EASTL assign shape, 8-byte elements
 00951a80 eastl_vector_Vector3_DoAssignFromIterator  # EASTL assign shape, 12-byte elements
+00951b60 ?SetPoints@AnimationCurve@UTFWin@@UAEXPBUCurvePoint@@H@Z  # AnimationCurve::SetPoints migrated from s009515e0 (verbatim, slice spelling)
+00951b80 ?SetPoints@AnimationPath2D@UTFWin@@UAEXPBUVector3@Math@@H@Z  # AnimationPath2D::SetPoints migrated from s009515e0 (verbatim, slice spelling)

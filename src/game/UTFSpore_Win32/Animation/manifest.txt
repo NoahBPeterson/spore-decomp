@@ -1,0 +1,14 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/Animation.cpp  ?Release@CustomWinProc_s0095_0bb0@UTFWin@EA@@QAEHXZ  009514a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Animation.cpp  ?ForwardCall514d0@@YA_NPAH0@Z  009514d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Animation.cpp  ?GetName@AnimationCurveFactory@UTFWin@@QAEPBDH@Z  009515e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Animation.cpp  ?GetPointCount@AnimationCurve@UTFWin@@UAEIXZ  009515f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Animation.cpp  ?GetPoints@AnimationCurve@UTFWin@@UAEIPAUCurvePoint@@I@Z  00951600  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Animation.cpp  ?GetProperty@AnimationCurve@UTFWin@@UAEXPAUPropertyRef@2@@Z  00951650  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Animation.cpp  ?GetPointCount@AnimationPath2D@UTFWin@@UAEIXZ  00951680  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Animation.cpp  ?GetPoints@AnimationPath2D@UTFWin@@UAEIPAUVector3@Math@@I@Z  009516a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Animation.cpp  ?GetProperty@AnimationPath2D@UTFWin@@UAEXPAUPropertyRef@2@@Z  00951710  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Animation.cpp  ?Create@AnimationPath2DFactory@UTFWin@@QAEPAVObject@2@IPAVICoreAllocator@2@@Z  00951850  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Animation.cpp  ?Create@AnimationCurveFactory@UTFWin@@QAEPAVObject@2@IPAVICoreAllocator@2@@Z  00951960  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Animation.cpp  ?SetPoints@AnimationCurve@UTFWin@@UAEXPBUCurvePoint@@H@Z  00951b60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Animation.cpp  ?SetPoints@AnimationPath2D@UTFWin@@UAEXPBUVector3@Math@@H@Z  00951b80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

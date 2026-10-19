@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+009513d0 78 complete; vertex-elem array init stride 8 (count via vtable +0x18, alloc +0x28)
+009514f0 75 complete; vertex-elem array init stride 0xc; equiv: UNSUPPORTED (0/1200 valid inputs, fake-arity/faults)
