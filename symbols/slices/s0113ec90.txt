@@ -1,6 +1,6 @@
-0113ec90 SNDMEMI_alloc  # PDB
-0113eda0 F_0113eda0  # dc: initialise and copy the SND global state (7 dwords at 0x16e7bf0)
-0113ee40 F_0113ee40  # dc: apply a SND global-state record
+0113ec90 ?SNDMEMI_alloc@@YAXPAXH@Z  # SNDMEMI_alloc migrated from s0113ec90 (verbatim, slice spelling)
+0113eda0 ?F_0113eda0@@YAHPAI@Z  # F_0113eda0 migrated from s0113ec90 (verbatim, slice spelling)
+0113ee40 ?F_0113ee40@@YAHPAI@Z  # F_0113ee40 migrated from s0113ec90 (verbatim, slice spelling)
 0113ef00 SNDSYS_restore  # PDB
 0113ef90 SNDSYSI_chanpubinit  # PDB
 0113f060 SNDSYSI_init  # PDB
