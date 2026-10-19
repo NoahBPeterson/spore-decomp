@@ -1,4 +1,5 @@
-00820cc0 SP::cPropertyUI::cPropertyUI  # pdb_names.json callee-single
-00820ec0 SP::cPropertyUI::ModifyInt32  # pdb_names.json gap-align
-00821260 SP::cPropertyUI::ModifyUInt32  # pdb_names.json gap-align
-00821600 SP::cPropertyUI::ModifyFloat  # pdb_names.json gap-align
+00820cc0 ??0cPropertyUI_s0082_0cc0@@QAE@XZ  # cPropertyUI_s0082_0cc0::cPropertyUI migrated from s00820cc0 (verbatim, slice spelling)
+00820ec0 ?ModifyInt32@cPropertyUI_s0082_0cc0@@QAEXPAUIW@@_N@Z  # cPropertyUI_s0082_0cc0::ModifyInt32 migrated from s00820cc0 (verbatim, slice spelling)
+00821260 ?ModifyUInt32@cPropertyUI_s0082_0cc0@@QAEXPAUIW@@_N@Z  # cPropertyUI_s0082_0cc0::ModifyUInt32 migrated from s00820cc0 (verbatim, slice spelling)
+00821600 ?ModifyFloat@cPropertyUI_s0082_0cc0@@QAEXPAUIW@@_N@Z  # cPropertyUI_s0082_0cc0::ModifyFloat migrated from s00820cc0 (verbatim, slice spelling)
+0093dd80 ?Construct@Variant@EA@@IAE_NGGPBXII@Z  # EA::Variant::Construct (callee of s00820cc0, named from the dev publics; slice address comment)

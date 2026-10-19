@@ -1,4 +1,4 @@
-// src/game/Spui/SPUIPropertyEditor.cpp -- migrated from slice(s) s00b5f040, s00826960, s00825930, s00824c20, s00823e30, s00823a00, s008220e0, s0081fd70, s0081c9c0 by tools/migrate/rewrite.py
+// src/game/Spui/SPUIPropertyEditor.cpp -- migrated from slice(s) s00827bf0, s00820cc0, s0081f0e0, s00b5f040, s00826960, s00825930, s00824c20, s00823e30, s00823a00, s008220e0, s0081fd70, s0081c9c0 by tools/migrate/rewrite.py
 // Object file: Spui/SPUIPropertyEditor.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -22,6 +22,7 @@
 #include "SP/cPropertyList.h"
 #include "SP/cPropertyManager.h"
 #include <intrin.h>
+#include "EA/Stopwatch.h"
 
 // ---- items of slice s0081c9c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define VTSLOT(p, off) ((*(void***)(p))[(off) / 4])
@@ -44,6 +45,22 @@ struct D3 {
   D3* Init(int arg);
   D3* Init2(int arg);
 };
+struct UObj {
+  virtual void AddRef();                   // slot 0
+  virtual void Release();                  // slot 1
+  virtual void v2();
+  virtual UObj* Cast(unsigned id);         // slot 3
+};
+struct UVec { UObj** begin; UObj** end; };
+struct UiLayout { UVec* GetObjects(); };   // 0x008100c0
+struct PUI {
+  char pad00[0x44];
+  UiLayout layout;     // +0x44
+  void** FindPropertyUIWindow(void** out, int id);
+};
+extern void* MessageServer();
+extern int g_15bbbf3;
+extern int g_16af8d8;
 // ---- items of slice s0081c9c0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
@@ -1385,6 +1402,619 @@ template struct AutoRefCount_s00b5_f040<UTFWinControls::IWinText_s00b5_f040>;
 }
 // ---- items of slice s00b5f040 end
 
+// ---- items of slice s0081f0e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+enum { kTypeKey_s0081_f0e0 = 0x20, kTypeVector2_s0081_f0e0 = 0x30, kTypeVector3_s0081_f0e0 = 0x31, kTypeColorRGB_s0081_f0e0 = 0x32, kTypeVector4_s0081_f0e0 = 0x33, kTypeColorRGBA_s0081_f0e0 = 0x34 };
+struct Variant_s0081_f0e0 {
+  unsigned mData[4];
+  unsigned short mFlags;  // +0x10
+  unsigned short mType;   // +0x12
+  Variant_s0081_f0e0() {}
+  ~Variant_s0081_f0e0() {
+    if (mFlags & 4) Destruct(0);
+  }
+  void Destruct(int);                                                       // 0x0093db80
+  bool Set(int type, int flags, const void* p, unsigned size, unsigned n);  // 0x0093dd80
+  Variant_s0081_f0e0& operator=(const Variant_s0081_f0e0& x);                                     // 0x00542b80
+  Variant_s0081_f0e0& Assign(const ResourceKey& v);                                    // 0x00422f40
+  Variant_s0081_f0e0& AssignArrayVec2(Vector2* p);                                      // 0x0081daa0
+  Variant_s0081_f0e0& AssignArrayVec3(Vector3* p);                                      // 0x0081db10
+  Variant_s0081_f0e0& Assign(Vector4* p);                                              // 0x0081dc60
+  Variant_s0081_f0e0& AssignArrayRGB(ColorRGB* p);                                     // 0x0081db80
+  Variant_s0081_f0e0& AssignArrayRGBA(ColorRGBA* p);                                   // 0x0081dbf0
+};
+struct VariantKeyPtr : Variant_s0081_f0e0 {
+  VariantKeyPtr(ResourceKey* p) {
+    mData[0] = (unsigned)p;
+    mData[1] = 0xc;
+    mData[2] = 1;
+    mFlags = 0x22;
+    mType = kTypeKey_s0081_f0e0;
+  }
+};
+template <int kType, class T> struct VariantInline : Variant_s0081_f0e0 {
+  VariantInline(const T& v) {
+    *(T*)mData = v;
+    mFlags = 2;
+    mType = kType;
+  }
+};
+struct VariantArrVec2 : Variant_s0081_f0e0 {
+  VariantArrVec2(Vector2* const& p) {
+    mFlags = 2;
+    mType = kTypeVector2_s0081_f0e0;
+    AssignArrayVec2(p);
+  }
+};
+struct VariantArrVec3 : Variant_s0081_f0e0 {
+  VariantArrVec3(Vector3* const& p) {
+    mFlags = 2;
+    mType = kTypeVector3_s0081_f0e0;
+    AssignArrayVec3(p);
+  }
+};
+struct IWindow_s0081_f0e0;
+struct ChildIterator_s0081_f0e0 {
+  ListNode* mpNode;
+  IWindow_s0081_f0e0* operator*() const { return (IWindow_s0081_f0e0*)((char*)mpNode + gWindowListNodeOffset); }
+  ChildIterator_s0081_f0e0& operator++() {
+    mpNode = mpNode->mpNext;
+    return *this;
+  }
+  bool operator!=(const ChildIterator_s0081_f0e0& x) const { return mpNode != x.mpNode; }
+};
+struct IWindow_s0081_f0e0 {
+  virtual int AddRef();
+  virtual int Release();
+  virtual void w2();
+  virtual void* Cast(unsigned iid) const;  // slot 3
+virtual void w4();
+virtual void w5();
+virtual void w6();
+  virtual unsigned GetControlID() const;  // slot 7
+virtual void w8();
+virtual void w9();
+virtual void w10();
+virtual void w11();
+virtual void w12();
+virtual void w13();
+virtual void w14();
+virtual void w15();
+virtual void w16();
+virtual void w17();
+virtual void w18();
+virtual void w19();
+virtual void w20();
+virtual void w21();
+virtual void w22();
+virtual void w23();
+virtual void w24();
+virtual void w25();
+virtual void w26();
+virtual void w27();
+virtual void w28();
+virtual void w29();
+virtual void w30();
+virtual void w31();
+virtual void w32();
+virtual void w33();
+virtual void w34();
+virtual void w35();
+virtual void w36();
+virtual void w37();
+virtual void w38();
+virtual void w39();
+virtual void w40();
+virtual void w41();
+virtual void w42();
+virtual void w43();
+virtual void w44();
+virtual void w45();
+virtual void w46();
+virtual void w47();
+virtual void w48();
+virtual void w49();
+virtual void w50();
+  virtual ChildIterator_s0081_f0e0 children_begin();  // slot 51
+  virtual ChildIterator_s0081_f0e0 children_end();    // slot 52
+};
+template <class T> inline T* interface_cast_s0081_f0e0(const AutoRefCount<IWindow_s0081_f0e0>& w) {
+  return w.mpObject ? (T*)w.mpObject->Cast(T::IID) : 0;
+}
+struct PropertyList_s0081_f0e0 {
+  virtual int AddRef();
+  virtual int Release();
+virtual void l2();
+virtual void l3();
+virtual void l4();
+  virtual void SetProperty(unsigned id, const Variant_s0081_f0e0& v);  // slot 5
+virtual void l6();
+virtual void l7();
+virtual void l8();
+virtual void l9();
+  virtual Variant_s0081_f0e0* GetProperty(unsigned id);  // slot 10
+};
+struct IPropManager_s0081_f0e0 {
+virtual void m0();
+virtual void m1();
+virtual void m2();
+virtual void m3();
+virtual void m4();
+virtual void m5();
+virtual void m6();
+virtual void m7();
+virtual void m8();
+virtual void m9();
+virtual void m10();
+  virtual bool GetPropertyList(unsigned instanceID, unsigned groupID, PropertyList_s0081_f0e0** out);  // slot 11
+};
+namespace SP {
+ IPropManager_s0081_f0e0* PropertyManager_s0081_f0e0();   // 0x0067de30
+}
+static inline void* VariantValue_s0081_f0e0(Variant_s0081_f0e0* v) {
+  if (v->mFlags & 0x30) return *(void**)v->mData;
+  return v->mType ? (void*)v : 0;
+}
+namespace SP {
+class cPropertyUI_s0081_f0e0 {
+ public:
+  unsigned mPad0[3];
+  unsigned mCurrentGroupID;     // +0xc
+  unsigned mCurrentInstanceID;  // +0x10
+  void ReloadPropResource();    // 0x0081e230
+  void ModifyResourceKey(IWindow_s0081_f0e0* window, bool bArray);  // 0x0081f0e0
+  void ModifyVec2(IWindow_s0081_f0e0* window, bool bArray);         // 0x0081f490
+  void ModifyVec3(IWindow_s0081_f0e0* window, bool bArray);         // 0x0081f900
+};  // namespace SP
+}
+// ---- items of slice s0081f0e0 end
+
+// ---- items of slice s00820cc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char gEmptyBucketArray[];   // 0x0154DF28
+extern int g_nodeOfs;                         // 0x01440aec  offset from an intrusive list node to its element
+extern wchar_t gEmptyW[];                     // 0x01667bac  eastl empty-string storage
+struct __declspec(novtable) IWinProc_s0082_0cc0 {
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+    virtual int QueryInterface(uint32_t, void**) = 0;
+};
+struct RefCountVTemplate_s0082_0cc0 {
+    int32_t mRefCount;
+    RefCountVTemplate_s0082_0cc0() : mRefCount(0) {}
+    virtual int AddRef();
+    virtual int Release();
+};
+struct cSPUILayout_s0082_0cc0 {
+    uint32_t pad[3];
+    cSPUILayout_s0082_0cc0() throw();      // 0x00810000
+};
+struct HashMapRaw {
+    void* mpBucketArray;          // +0x00
+    uint32_t mnBucketCount;       // +0x04
+    uint32_t mnElementCount;      // +0x08
+    float mfMaxLoadFactor;        // +0x0c
+    float mfGrowthFactor;         // +0x10
+    uint32_t mnNextResize;        // +0x14
+    uint32_t unk[2];              // +0x18 (not set by the constructor)
+    HashMapRaw() {
+        mfMaxLoadFactor = 1.0f;
+        mfGrowthFactor = 2.0f;
+        mnBucketCount = 1;
+        mpBucketArray = gEmptyBucketArray;
+        mnElementCount = 0;
+        mnNextResize = 0;
+    }
+};
+struct Zero3 {
+    void* a; void* b; void* c;
+    Zero3() : a(0), b(0), c(0) {}
+};
+struct VecSlot {
+    Zero3 v;
+    uint32_t unk[2];               // not set by the constructor
+};
+struct cPropertyUI_s0082_0cc0 : public IWinProc_s0082_0cc0, public RefCountVTemplate_s0082_0cc0 {
+    uint32_t mCurrentGroupID;          // +0x0c
+    uint32_t mCurrentInstanceID;       // +0x10
+    float mCurrentX;                   // +0x14
+    float mCurrentY;                   // +0x18
+    float mCurrentWindowX;             // +0x1c
+    float mCurrentWindowY;             // +0x20
+    float mPreviousScrollVal;          // +0x24
+    float mRefreshScrollVal;           // +0x28 (not set by the constructor)
+    float mScrollRatio;                // +0x2c
+    float mScrollHeight;               // +0x30
+    uint32_t mSpinnerButtonID;         // +0x34
+    float mFloatIncrement;             // +0x38
+    uint32_t mIntIncrement;            // +0x3c
+    bool returnPressed;                // +0x40
+    cSPUILayout_s0082_0cc0 mLayout;               // +0x44
+    char padDialogs[0x5c - 0x50];      // +0x50 (editor/chooser dialogs, holder window)
+    void* mScrollbar;                  // +0x5c
+    void* mTitleText;                  // +0x60
+    void* w64; void* w68; void* w6c;   // +0x64..+0x6c
+    VecSlot v0;                        // +0x70
+    VecSlot v1;                        // +0x84
+    VecSlot v2;                        // +0x98
+    VecSlot v3;                        // +0xac
+    VecSlot v4;                        // +0xc0
+    VecSlot v5;                        // +0xd4
+    VecSlot v6;                        // +0xe8
+    VecSlot v7;                        // +0xfc
+    VecSlot v8;                        // +0x110
+    Zero3 v9;                          // +0x124
+    uint32_t pad130;                   // +0x130
+    HashMapRaw mPropToTextEditMap;     // +0x134
+    HashMapRaw mSpinnerToTextEditMap;  // +0x154
+    HashMapRaw mPropToToggleButtonMap; // +0x174
+
+    cPropertyUI_s0082_0cc0();
+    void ReloadPropResource();                  // 0x0081e230
+    void ModifyInt32(struct IW* w, bool multi);   // 0x00820ec0
+    void ModifyUInt32(struct IW* w, bool multi);  // 0x00821260
+    void ModifyFloat(struct IW* w, bool multi);   // 0x00821600
+};
+#define NODE_ELEM(it) ((void*)((char*)g_nodeOfs + (int)(it)))
+struct PropMgr;
+PropMgr* __cdecl GetPropMgr();                // 0x0067de30  SP::PropertyManager
+void __cdecl Dealloc(void* p);                // 0x00f47380  operator delete[] / eastl deallocate
+double __cdecl StrToD(const wchar_t* s, wchar_t** end);   // 0x0092ddc0
+struct WStrE {                                // eastl::basic_string<char16_t> (begin, end, capacity end)
+  wchar_t* b;
+  wchar_t* e;
+  wchar_t* cap;
+  WStrE() { b = gEmptyW; e = gEmptyW; cap = gEmptyW + 1; }
+  ~WStrE() { if ((((char*)cap - (char*)b) & ~1) > 2 && b) Dealloc(b); }
+  void __thiscall assign(const wchar_t* first, const wchar_t* last);   // 0x00423650
+};
+struct IW {
+  virtual void AddRef();   // +0x0
+  virtual void Release();   // +0x4
+  virtual void s8();
+  virtual IW* QI(uint32_t iid);   // +0xc
+virtual void s10();
+virtual void s14();
+virtual void s18();
+  virtual uint32_t GetID();   // +0x1c
+virtual void s20();
+virtual void s24();
+virtual void s28();
+virtual void s2c();
+virtual void s30();
+virtual void s34();
+virtual void s38();
+virtual void s3c();
+virtual void s40();
+virtual void s44();
+virtual void s48();
+virtual void s4c();
+  virtual void s50();
+  virtual const wchar_t* GetCaption();   // +0x54
+virtual void s58();
+virtual void s5c();
+virtual void s60();
+virtual void s64();
+virtual void s68();
+virtual void s6c();
+virtual void s70();
+virtual void s74();
+virtual void s78();
+virtual void s7c();
+virtual void s80();
+virtual void s84();
+virtual void s88();
+virtual void s8c();
+virtual void s90();
+virtual void s94();
+virtual void s98();
+virtual void s9c();
+virtual void sa0();
+virtual void sa4();
+virtual void sa8();
+virtual void sac();
+virtual void sb0();
+virtual void sb4();
+virtual void sb8();
+virtual void sbc();
+virtual void sc0();
+virtual void sc4();
+virtual void sc8();
+  virtual char** Begin(void* t);   // +0xcc
+  virtual char** End(void* t);   // +0xd0
+};
+struct PL {
+virtual void s0();
+virtual void s4();
+virtual void s8();
+virtual void sc();
+virtual void s10();
+  virtual void SetValue(uint32_t id, void* v);   // +0x14
+virtual void s18();
+virtual void s1c();
+virtual void s20();
+virtual void s24();
+  virtual void* GetItem(uint32_t id);   // +0x28
+};
+struct PropMgr {
+virtual void s0();
+virtual void s4();
+virtual void s8();
+virtual void sc();
+virtual void s10();
+virtual void s14();
+virtual void s18();
+virtual void s1c();
+virtual void s20();
+virtual void s24();
+virtual void s28();
+  virtual void GetPropList(uint32_t inst, uint32_t grp, void** out);   // +0x2c
+};
+struct ARC {                                  // EA::AutoRefCount<IW>
+  IW* p;
+  ARC() { p = 0; }
+  ~ARC() { if (p) p->Release(); }
+  ARC& operator=(IW* n) {
+    IW* old = p;
+    if (n != old) {
+      if (n) n->AddRef();
+      p = n;
+      if (old) old->Release();
+    }
+    return *this;
+  }
+  ARC& operator=(const ARC& o) { return *this = o.p; }
+  IW** Out() { if (p) { IW* t = p; p = 0; t->Release(); } return &p; }   // release and hand out the slot
+};
+struct Variant_s0082_0cc0 {                              // EA::Variant (data at +0, flags +0x10, type id +0x12)
+  uint32_t f0, f4, f8, fc;
+  uint16_t flags, typeId;
+  Variant_s0082_0cc0() { flags = 0; typeId = 0; }
+  Variant_s0082_0cc0(uint16_t t) { flags = 2; typeId = t; }
+  ~Variant_s0082_0cc0() { if (flags & 4) Destruct(false); }
+  bool __thiscall Construct(uint16_t type, uint16_t fl, const void* data, uint32_t size, uint32_t count);   // 0x0093dd80
+  Variant_s0082_0cc0& __thiscall operator=(const Variant_s0082_0cc0& o);   // 0x00542b80
+  void __thiscall Destruct(bool b);           // 0x0093db80
+  Variant_s0082_0cc0& __thiscall SetInt32Ptr(int32_t* p);     // 0x0081d800
+  Variant_s0082_0cc0& __thiscall SetUInt32Ptr(uint32_t* p);   // 0x0081d870
+  Variant_s0082_0cc0& __thiscall SetFloatPtr(float* p);       // 0x0081d8e0
+};
+static inline void AssignCaption(WStrE& str, ARC& btn) {
+  const wchar_t* s = btn.p->GetCaption();
+  const wchar_t* e = s;
+  while (*e) ++e;
+  str.assign(s, s + (e - s));
+}
+// ---- items of slice s00820cc0 end
+
+// ---- items of slice s00827bf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Key { unsigned int a, b, c; };
+struct UIObj {
+virtual void s0();
+virtual void s1();
+virtual void s2();
+  virtual void* Cast(unsigned id);  // +0xc
+  virtual UIObj* Get10();  // +0x10
+virtual void s5();
+virtual void s6();
+  virtual unsigned GetId();  // +0x1c
+virtual void s8();
+virtual void s9();
+  virtual int Get28();  // +0x28
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void s24();
+  virtual void SetPos64(float x, float y);  // +0x64
+virtual void s26();
+virtual void s27();
+  virtual void SetPos(float x, float y);  // +0x70
+virtual void s29();
+virtual void s30();
+  virtual void Set7c(int a, int b);  // +0x7c
+  virtual void Set80(unsigned a);  // +0x80
+virtual void s33();
+virtual void s34();
+virtual void s35();
+  virtual void Fn90();  // +0x90
+virtual void s37();
+virtual void s38();
+virtual void s39();
+virtual void s40();
+  virtual bool Fa4(unsigned* a, unsigned* b);  // +0xa4
+virtual void s42();
+virtual void s43();
+virtual void s44();
+virtual void s45();
+virtual void s46();
+virtual void s47();
+virtual void s48();
+virtual void s49();
+virtual void s50();
+virtual void s51();
+virtual void s52();
+virtual void s53();
+virtual void s54();
+virtual void s55();
+virtual void s56();
+virtual void s57();
+virtual void s58();
+virtual void s59();
+virtual void s60();
+virtual void s61();
+virtual void s62();
+virtual void s63();
+virtual void s64();
+  virtual void Attach(void* p);  // +0x104
+virtual void s66();
+virtual void s67();
+virtual void s68();
+virtual void s69();
+virtual void s70();
+virtual void s71();
+virtual void s72();
+virtual void s73();
+virtual void s74();
+virtual void s75();
+virtual void s76();
+virtual void s77();
+virtual void s78();
+virtual void s79();
+virtual void s80();
+virtual void s81();
+virtual void s82();
+virtual void s83();
+virtual void s84();
+virtual void s85();
+virtual void s86();
+virtual void s87();
+virtual void s88();
+virtual void s89();
+virtual void s90();
+virtual void s91();
+virtual void s92();
+virtual void s93();
+virtual void s94();
+virtual void s95();
+virtual void s96();
+virtual void s97();
+virtual void s98();
+virtual void s99();
+virtual void s100();
+virtual void s101();
+virtual void s102();
+virtual void s103();
+  virtual void F1a0(unsigned a, unsigned b, unsigned* c);  // +0x1a0
+virtual void s105();
+virtual void s106();
+virtual void s107();
+virtual void s108();
+virtual void s109();
+virtual void s110();
+virtual void s111();
+virtual void s112();
+  virtual unsigned F1c4(unsigned a, unsigned b);  // +0x1c4
+};
+struct IdObj {
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+  virtual unsigned GetId();  // +0x10
+};
+struct MsgSrv {
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+  virtual void Post(unsigned id, int a, int b);  // +0x14
+};
+MsgSrv* SP_MessageServer();                      // 0x0067dcc0
+struct cSPUILayout_s0082_7bf0 {
+  cSPUILayout_s0082_7bf0();                              // 0x00810000
+  ~cSPUILayout_s0082_7bf0();                             // 0x00811fe0
+  void Shutdown(int);                         // 0x00811ad0 (callee pops)
+  bool IsVisible() const;                     // 0x00810070
+  bool Init(const Key* k, bool b, unsigned u);   // 0x008120d0
+  void* FindWindowByID(int id, int flag);     // 0x008105b0 __thiscall (callee pops)
+  struct ObjVec { UIObj** mpBegin; UIObj** mpEnd; };
+  ObjVec* GetObjects();                       // 0x008100c0
+  void* mpVtbl;               // +0x0
+  int mRefCount;              // +0x4
+  void* mpObject;             // +0x8
+};
+struct Msg { char pad[8]; unsigned type; unsigned param; int p10; int p14; };
+struct IdObj;
+struct HashNode_s0082_7bf0 { unsigned first; IdObj* second; HashNode_s0082_7bf0* next; };
+struct HashIter_s0082_7bf0 { HashNode_s0082_7bf0* mpNode; HashNode_s0082_7bf0** mpBucket; };
+struct HashMapU32_s0082_7bf0 {
+  unsigned pad0;
+  HashNode_s0082_7bf0** mpBucketArray;   // +4
+  unsigned mnBucketCount;     // +8
+  char pad1[0x20 - 0xc];
+  HashIter_s0082_7bf0 find(const unsigned& key);   // 0x00645ed0
+};
+struct DirPropList2 { char pad[0x3c]; struct AppX* mp3c; void SetBoolProperty(unsigned id, bool v); };  // 0x006a17e0
+struct AppX { char pad[0x54]; int v54; };
+extern DirPropList2* g_AppProperties;     // 0x015fd918
+namespace SP {
+struct cPropertyUI_s0082_7bf0 {
+  virtual int vslot0();
+  char pad4[8];               // +0x4 .. +0xb
+  unsigned mCurrentGroupID;   // +0xc
+  char pad10[0x1c - 0x10];
+  float mCurrentWindowX;      // +0x1c
+  float mCurrentWindowY;      // +0x20
+  float mPreviousScrollVal;   // +0x24
+  char pad28[4];
+  float mScrollRatio;         // +0x2c
+  char pad30[0x40 - 0x30];
+  bool returnPressed;         // +0x40
+  char pad41[3];
+  cSPUILayout_s0082_7bf0 mLayout;        // +0x44
+  char pad50[0x60 - 0x50];
+  UIObj* mTitleText;          // +0x60
+  UIObj* mWin64;              // +0x64
+  UIObj* mWin68;              // +0x68
+  UIObj* mWin6c;              // +0x6c
+  char pad70[0x128 - 0x70];
+  UIObj* mGroupsGrid;         // +0x128
+  UIObj* mPropsGrid;          // +0x12c
+  HashMapU32_s0082_7bf0 mPropToTextEditMap;   // +0x130
+  HashMapU32_s0082_7bf0 mSpinnerMap;          // +0x150
+  HashMapU32_s0082_7bf0 mPropToToggleMap;     // +0x170
+
+  bool DoMessage(int, Msg* m);  // 0x00827bf0 (SP::cPropertyUI::DoMessage)
+  void ProcessTextChange(unsigned);       // 0x00823b50
+  void ProcessToggleButton(unsigned);     // 0x0081f020
+  void ProcessSpinnerButtons(unsigned);   // 0x00823e30
+  void SavePropFile();                    // 0x008220e0
+  void LoadPropFile(unsigned, unsigned, bool);  // 0x00826960
+  void PopulatePropsGrid(unsigned);       // 0x0081ebe0
+  void FUN_0081e070();                    // 0x0081e070
+};
+}
+struct Variant_s0082_7bf0 {
+  char pad[0x10];
+  unsigned short mFlags;
+  unsigned short mTypeId;
+  Variant_s0082_7bf0() { mFlags = 0; mTypeId = 0; }
+  Variant_s0082_7bf0& operator=(const Variant_s0082_7bf0&);   // 0x00542b80
+  void Destruct(int);  // 0x0093db80 (Variant::Destruct)
+};
+struct IRefThing { virtual int AddRef(); virtual int Release(); };
+struct Elem {
+  unsigned int first;      // +0x00
+  void* mpObject;          // +0x04
+  Variant_s0082_7bf0 mVariant;        // +0x08
+  int mLast;               // +0x1c
+  Elem(const Elem& o);
+  Elem& operator=(const Elem& o);
+};
+Elem& Elem::operator=(const Elem& o) {
+  first = o.first;
+  void* old = mpObject;
+  void* nw = o.mpObject;
+  if (nw != old) {
+    if (nw) ((IRefThing*)nw)->AddRef();
+    mpObject = nw;
+    if (old) ((IRefThing*)old)->Release();
+  }
+  mVariant = o.mVariant;
+  mLast = o.mLast;
+  return *this;
+}
+// ---- items of slice s00827bf0 end
+
 // @ 0x0081d7a0
 Variant* Variant::Reset(int v)
 {
@@ -1396,15 +2026,6 @@ Variant* Variant::Reset(int v)
   return this;
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x0081da30
 Variant* Variant::Set20(int v)
 {
@@ -1415,15 +2036,6 @@ Variant* Variant::Set20(int v)
   f0 = v; f4 = 0xc; f8 = 1;
   return this;
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x0081dce0
 void SP::cSPUIPropertyEditor::Shutdown()
@@ -1444,39 +2056,195 @@ void SP::cSPUIPropertyEditor::Shutdown()
   }
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x0081ddd0
 D3* D3::Init(int arg)
 { w10 = 2; w12 = 0x33; Call5(0x33, 0, arg, 0x10, 1); return this; }
-
-
-
-
-
-
-
-
-
 
 // @ 0x0081de30
 D3* D3::Init2(int arg)
 { w10 = 2; w12 = 0x34; Call5(0x34, 0, arg, 0x10, 1); return this; }
 
+// @ 0x0081df10
+void** PUI::FindPropertyUIWindow(void** out, int id)
+{
+  UVec* v = layout.GetObjects();
+  int n = v->end - v->begin;
+  for (int i = 0; i < n; i++) {
+    {
+      UObj* obj = v->begin[i];
+      UObj* w;
+      if (obj != 0) {
+        obj->AddRef();
+        w = obj->Cast(0xeeee8218);
+      } else {
+        w = 0;
+      }
+      UObj* res = w;
+      if (res != 0) {
+        w->AddRef();
+        int wid = ((int (__thiscall*)(void*))VTSLOT(w, 0x1c))(w);
+        if (wid == id) {
+          *out = w;
+          w->AddRef();
+          w->Release();
+          if (obj != 0) obj->Release();
+          return out;
+        }
+        UObj* r = ((UObj* (__thiscall*)(void*, int, int))VTSLOT(w, 0xf0))(w, id, 1);
+        if (r != w) {
+          if (r != 0) r->AddRef();
+          w->Release();
+          res = r;
+        }
+        if (res != 0) {
+          *out = res;
+          res->AddRef();
+          res->Release();
+          if (obj != 0) obj->Release();
+          return out;
+        }
+      }
+      if (obj != 0) obj->Release();
+    }
+  }
+  *out = 0;
+  return out;
+}
 
+// @ 0x0081f0e0
+namespace SP {
+void cPropertyUI_s0081_f0e0::ModifyResourceKey(IWindow_s0081_f0e0* window, bool bArray)
+{
+  AutoRefCount<PropertyList_s0081_f0e0> propList;
+  AutoRefCount<IWindow_s0081_f0e0> childWindow;
+  AutoRefCount<IWinTextEdit> textEdit;
+  EString16 text;
+  PropertyManager_s0081_f0e0()->GetPropertyList(mCurrentInstanceID, mCurrentGroupID, propList.AsPPTypeParam());
+  if (!bArray) {
+    textEdit = window ? (IWinTextEdit*)window->Cast(IWinTextEdit::IID) : 0;
+    text = textEdit->GetText();
+    ResourceKey key;
+    SPKeyFromName(&key, text.c_str(), 0, 0);
+    propList->SetProperty(window->GetControlID(), VariantInline<kTypeKey_s0081_f0e0, ResourceKey>(key));
+  } else {
+    ResourceKey* pValue = (ResourceKey*)VariantValue_s0081_f0e0(propList->GetProperty(window->GetControlID()));
+    ResourceKey* pCur = pValue;
+    for (ChildIterator_s0081_f0e0 it = window->children_begin(); it != window->children_end(); ++it) {
+      if ((*it)->GetControlID()) {
+        childWindow = *it;
+        textEdit = interface_cast_s0081_f0e0<IWinTextEdit>(childWindow);
+        text = textEdit->GetText();
+        SPKeyFromName(pCur, text.c_str(), 0, 0);
+        ++pCur;
+      }
+    }
+    propList->SetProperty(window->GetControlID(), VariantKeyPtr(pValue));
+    childWindow = 0;
+  }
+  textEdit = 0;
+  ReloadPropResource();
+}
+}  // namespace SP
 
+// @ 0x0081f490
+namespace SP {
+void cPropertyUI_s0081_f0e0::ModifyVec2(IWindow_s0081_f0e0* window, bool bArray)
+{
+  AutoRefCount<PropertyList_s0081_f0e0> propList;
+  AutoRefCount<IWindow_s0081_f0e0> childWindow;
+  AutoRefCount<IWinTextEdit> textEdit;
+  EString16 text;
+  PropertyManager_s0081_f0e0()->GetPropertyList(mCurrentInstanceID, mCurrentGroupID, propList.AsPPTypeParam());
+  if (!bArray) {
+    Vector2 v2;
+    wchar_t* end;
+    for (ChildIterator_s0081_f0e0 it = window->children_begin(); it != window->children_end(); ++it) {
+      unsigned idx = (*it)->GetControlID();
+      if (idx) {
+        childWindow = *it;
+        textEdit = interface_cast_s0081_f0e0<IWinTextEdit>(childWindow);
+        text = textEdit->GetText();
+        (&v2.x)[idx - 1] = (float)StrtodW(text.c_str(), &end);
+      }
+    }
+    propList->SetProperty(window->GetControlID(), VariantInline<kTypeVector2_s0081_f0e0, Vector2>(v2));
+  } else {
+    Vector2* pValue = (Vector2*)VariantValue_s0081_f0e0(propList->GetProperty(window->GetControlID()));
+    Vector2* pCur = pValue;
+    Vector2 v2;
+    unsigned i = 0;
+    wchar_t* end;
+    for (ChildIterator_s0081_f0e0 it = window->children_begin(); it != window->children_end(); ++it) {
+      if ((*it)->GetControlID()) {
+        childWindow = *it;
+        textEdit = interface_cast_s0081_f0e0<IWinTextEdit>(childWindow);
+        text = textEdit->GetText();
+        (&v2.x)[i] = (float)StrtodW(text.c_str(), &end);
+        ++i;
+        if (i == 2) {
+          ++pCur;
+          *pCur = v2;
+          i = 0;
+        }
+      }
+    }
+    propList->SetProperty(window->GetControlID(), VariantArrVec2(pValue));
+  }
+  childWindow = 0;
+  textEdit = 0;
+  ReloadPropResource();
+}
+}  // namespace SP
 
-
-
-
-
+// @ 0x0081f900
+namespace SP {
+void cPropertyUI_s0081_f0e0::ModifyVec3(IWindow_s0081_f0e0* window, bool bArray)
+{
+  AutoRefCount<PropertyList_s0081_f0e0> propList;
+  AutoRefCount<IWindow_s0081_f0e0> childWindow;
+  AutoRefCount<IWinTextEdit> textEdit;
+  EString16 text;
+  PropertyManager_s0081_f0e0()->GetPropertyList(mCurrentInstanceID, mCurrentGroupID, propList.AsPPTypeParam());
+  if (!bArray) {
+    Vector3 v3;
+    wchar_t* end;
+    for (ChildIterator_s0081_f0e0 it = window->children_begin(); it != window->children_end(); ++it) {
+      unsigned idx = (*it)->GetControlID();
+      if (idx) {
+        childWindow = *it;
+        textEdit = interface_cast_s0081_f0e0<IWinTextEdit>(childWindow);
+        text = textEdit->GetText();
+        (&v3.x)[idx - 1] = (float)StrtodW(text.c_str(), &end);
+      }
+    }
+    propList->SetProperty(window->GetControlID(), VariantInline<kTypeVector3_s0081_f0e0, Vector3>(v3));
+  } else {
+    Vector3* pValue = (Vector3*)VariantValue_s0081_f0e0(propList->GetProperty(window->GetControlID()));
+    Vector3* pCur = pValue;
+    Vector3 v3;
+    unsigned i = 0;
+    wchar_t* end;
+    for (ChildIterator_s0081_f0e0 it = window->children_begin(); it != window->children_end(); ++it) {
+      if ((*it)->GetControlID()) {
+        childWindow = *it;
+        textEdit = interface_cast_s0081_f0e0<IWinTextEdit>(childWindow);
+        text = textEdit->GetText();
+        (&v3.x)[i] = (float)StrtodW(text.c_str(), &end);
+        ++i;
+        if (i == 3) {
+          ++pCur;
+          *pCur = v3;
+          i = 0;
+        }
+      }
+    }
+    propList->SetProperty(window->GetControlID(), VariantArrVec3(pValue));
+  }
+  childWindow = 0;
+  textEdit = 0;
+  ReloadPropResource();
+}
+}  // namespace SP
 
 // @ 0x0081fd70
 namespace SP {
@@ -1528,14 +2296,6 @@ void cPropertyUI_s0081_fd70::ModifyVec4(IWindow* window, bool bArray)
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
 // @ 0x00820210
 namespace SP {
 void cPropertyUI_s0081_fd70::ModifyRGB(IWindow* window, bool bArray)
@@ -1585,14 +2345,6 @@ void cPropertyUI_s0081_fd70::ModifyRGB(IWindow* window, bool bArray)
   ReloadPropResource();
 }
 }  // namespace SP
-
-
-
-
-
-
-
-
 
 // @ 0x00820680
 namespace SP {
@@ -1644,14 +2396,6 @@ void cPropertyUI_s0081_fd70::ModifyRGBA(IWindow* window, bool bArray)
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
 // @ 0x00820bb0
 void PtrVec::DoInsertValue(void** position, void* const& value)
 {
@@ -1679,12 +2423,145 @@ void PtrVec::DoInsertValue(void** position, void* const& value)
   }
 }
 
+// @ 0x00820cc0
+cPropertyUI_s0082_0cc0::cPropertyUI_s0082_0cc0()
+: mCurrentGroupID(0), mCurrentInstanceID(0),
+      mCurrentX(0.0f), mCurrentY(10.0f), mCurrentWindowX(8.0f), mCurrentWindowY(60.0f),
+      mPreviousScrollVal(0.0f), mScrollRatio(1.0f), mScrollHeight(256.0f),
+      mSpinnerButtonID(0), mFloatIncrement(0.25f), mIntIncrement(1), returnPressed(false),
+      mScrollbar(0), mTitleText(0), w64(0), w68(0), w6c(0)
+{
+}
 
+// @ 0x00820ec0
+void cPropertyUI_s0082_0cc0::ModifyInt32(IW* w, bool multi)
+{
+  ARC cur;
+  WStrE str;
+  ARC btn;
+  ARC prop;
+  PropMgr* pm = GetPropMgr();
+  pm->GetPropList(mCurrentInstanceID, mCurrentGroupID, (void**)prop.Out());
+  if (!multi) {
+    btn = w ? w->QI(0xcf428691) : 0;
+    AssignCaption(str, btn);
+    Variant_s0082_0cc0 v1;
+    v1.Construct(0x13, 9, &str, 0x10, 1);
+    Variant_s0082_0cc0 v2(9);
+    v2 = v1;
+    ((PL*)prop.p)->SetValue(w->GetID(), &v2);
+  } else {
+    Variant_s0082_0cc0* iv = (Variant_s0082_0cc0*)((PL*)prop.p)->GetItem(w->GetID());
+    int32_t* base = (iv->flags & 0x30) ? *(int32_t**)iv : (iv->typeId ? (int32_t*)iv : 0);
+    int32_t* out = base;
+    void* t1;
+    void* t2;
+    char* n = *w->Begin(&t1);
+    if (n != *w->End(&t2)) {
+      do {
+        IW* c = (IW*)NODE_ELEM(n);
+        if (c->GetID()) {
+          cur = (IW*)NODE_ELEM(n);
+          btn = cur.p ? cur.p->QI(0xcf428691) : 0;
+          AssignCaption(str, btn);
+          *out++ = wcstol(str.b, 0, 0);
+        }
+        n = *(char**)n;
+      } while (n != *w->End(&t2));
+    }
+    Variant_s0082_0cc0 v(9);
+    v.SetInt32Ptr(base);
+    ((PL*)prop.p)->SetValue(w->GetID(), &v);
+  }
+  ReloadPropResource();
+}
 
+// @ 0x00821260
+void cPropertyUI_s0082_0cc0::ModifyUInt32(IW* w, bool multi)
+{
+  ARC cur;
+  WStrE str;
+  ARC btn;
+  ARC prop;
+  PropMgr* pm = GetPropMgr();
+  pm->GetPropList(mCurrentInstanceID, mCurrentGroupID, (void**)prop.Out());
+  if (!multi) {
+    btn = w ? w->QI(0xcf428691) : 0;
+    AssignCaption(str, btn);
+    Variant_s0082_0cc0 v1;
+    v1.Construct(0x13, 9, &str, 0x10, 1);
+    Variant_s0082_0cc0 v2(0xa);
+    v2 = v1;
+    ((PL*)prop.p)->SetValue(w->GetID(), &v2);
+  } else {
+    Variant_s0082_0cc0* iv = (Variant_s0082_0cc0*)((PL*)prop.p)->GetItem(w->GetID());
+    uint32_t* base = (iv->flags & 0x30) ? *(uint32_t**)iv : (iv->typeId ? (uint32_t*)iv : 0);
+    uint32_t* out = base;
+    void* t1;
+    void* t2;
+    char* n = *w->Begin(&t1);
+    if (n != *w->End(&t2)) {
+      do {
+        IW* c = (IW*)NODE_ELEM(n);
+        if (c->GetID()) {
+          cur = (IW*)NODE_ELEM(n);
+          btn = cur.p ? cur.p->QI(0xcf428691) : 0;
+          AssignCaption(str, btn);
+          *out++ = wcstoul(str.b, 0, 0);
+        }
+        n = *(char**)n;
+      } while (n != *w->End(&t2));
+    }
+    Variant_s0082_0cc0 v(0xa);
+    v.SetUInt32Ptr(base);
+    ((PL*)prop.p)->SetValue(w->GetID(), &v);
+  }
+  ReloadPropResource();
+}
 
-
-
-
+// @ 0x00821600
+void cPropertyUI_s0082_0cc0::ModifyFloat(IW* w, bool multi)
+{
+  ARC cur;
+  WStrE str;
+  ARC btn;
+  ARC prop;
+  PropMgr* pm = GetPropMgr();
+  pm->GetPropList(mCurrentInstanceID, mCurrentGroupID, (void**)prop.Out());
+  if (!multi) {
+    btn = w ? w->QI(0xcf428691) : 0;
+    AssignCaption(str, btn);
+    Variant_s0082_0cc0 v1;
+    v1.Construct(0x13, 9, &str, 0x10, 1);
+    Variant_s0082_0cc0 v2(0xd);
+    v2 = v1;
+    ((PL*)prop.p)->SetValue(w->GetID(), &v2);
+  } else {
+    Variant_s0082_0cc0* iv = (Variant_s0082_0cc0*)((PL*)prop.p)->GetItem(w->GetID());
+    float* base = (iv->flags & 0x30) ? *(float**)iv : (iv->typeId ? (float*)iv : 0);
+    float* out = base;
+    void* t1;
+    void* t2;
+    char* n = *w->Begin(&t1);
+    if (n != *w->End(&t2)) {
+      do {
+        IW* c = (IW*)NODE_ELEM(n);
+        if (c->GetID()) {
+          cur = (IW*)NODE_ELEM(n);
+          btn = cur.p ? cur.p->QI(0xcf428691) : 0;
+          AssignCaption(str, btn);
+          wchar_t* endp;
+          *out++ = (float)StrToD(str.b, &endp);
+        }
+        n = *(char**)n;
+      } while (n != *w->End(&t2));
+    }
+    Variant_s0082_0cc0 v(0xd);
+    v.SetFloatPtr(base);
+    ((PL*)prop.p)->SetValue(w->GetID(), &v);
+  }
+  ReloadPropResource();
+}
 
 // @ 0x008220e0
 namespace SP {
@@ -2020,11 +2897,6 @@ void cPropertyUI_s0082_20e0::SavePropFile()
 }
 }  // namespace SP
 
-
-
-
-
-
 // @ 0x00823a00
 void cSPUIPropertyEditor::Init()
 {
@@ -2042,11 +2914,6 @@ void cSPUIPropertyEditor::Init()
     mPropUI = 0;
   }
 }
-
-
-
-
-
 
 // @ 0x00823ac0
 bool SP::cSPUIPropertyEditor::HandleMessage(unsigned int msg, void * arg)
@@ -2072,10 +2939,6 @@ bool SP::cSPUIPropertyEditor::HandleMessage(unsigned int msg, void * arg)
   }
   return false;
 }
-
-
-
-
 
 // @ 0x00823e30
 void SP::cPropertyUI_s0082_3e30::ProcessSpinnerButtons(unsigned buttonID)
@@ -2328,9 +3191,6 @@ void SP::cPropertyUI_s0082_3e30::ProcessSpinnerButtons(unsigned buttonID)
     }
 }
 
-
-
-
 // @ 0x008252b0
 unsigned cPropertyUI_s0082_4c20::AddIntSpinnerRow(unsigned id, int value, IWinW* parent)
 {
@@ -2407,8 +3267,6 @@ unsigned cPropertyUI_s0082_4c20::AddIntSpinnerRow(unsigned id, int value, IWinW*
   mTextEdit.b[idx]->GetWin()->AddChild(mButton.b[n1]->GetWin());
   return idx;
 }
-
-
 
 // @ 0x00825930
 unsigned cPropertyUI_s0082_5930::AddSpinnerRow(unsigned id, float value, IWinW* parent)
@@ -2493,8 +3351,6 @@ unsigned cPropertyUI_s0082_5930::AddSpinnerRow(unsigned id, float value, IWinW* 
   return idx;
 }
 
-
-
 // @ 0x00825fc0
 unsigned cPropertyUI_s0082_5930::AddTextEditRowA(unsigned id, const void* text, IWinW* parent)
 {
@@ -2536,8 +3392,6 @@ unsigned cPropertyUI_s0082_5930::AddTextEditRowA(unsigned id, const void* text, 
   te->Release();
   return idx;
 }
-
-
 
 // @ 0x00826290
 unsigned cPropertyUI_s0082_5930::AddTextEditRowB(unsigned id, const void* text, IWinW* parent)
@@ -2581,8 +3435,6 @@ unsigned cPropertyUI_s0082_5930::AddTextEditRowB(unsigned id, const void* text, 
   return idx;
 }
 
-
-
 // @ 0x00826560
 cPropertyUI_s0082_5930::~cPropertyUI_s0082_5930()
 {
@@ -2604,7 +3456,6 @@ cPropertyUI_s0082_5930::~cPropertyUI_s0082_5930()
   if (mPropToTextEditMap.count) mPropToTextEditMap.clear();
   if (mPropToToggleButtonMap.count) mPropToToggleButtonMap.clear();
 }
-
 
 // @ 0x00826960
 namespace SP {
@@ -2880,6 +3731,93 @@ void cPropertyUI_s0082_6960::LoadPropFile(uint32_t groupID, uint32_t instanceID,
     }
 }
 }  // namespace SP
+
+// @ 0x00827bf0
+bool SP::cPropertyUI_s0082_7bf0::DoMessage(int, Msg* m)
+{
+  if (!mLayout.IsVisible()) return false;
+  if (m->type == 1 && m->p14 == 0 && m->p10 == 0xd) returnPressed = true;
+  
+  if (m->type == 0x8f4d1282) {
+    if (m->param == 0x154feb2) {
+      mTitleText->Get10()->Set7c(1, 0);
+      return true;
+    }
+    if (m->param == 0x153a7c9) {
+      g_AppProperties->SetBoolProperty(0x15, g_AppProperties->mp3c->v54 == 0);
+      SP_MessageServer()->Post(0x15bbbf3, 0, 0);
+      return true;
+    }
+  }
+  if (m->type == 0x9b1552d8) {
+    unsigned key = m->param;
+    HashIter_s0082_7bf0 it = mPropToTextEditMap.find(key);
+    if (it.mpNode != mPropToTextEditMap.mpBucketArray[mPropToTextEditMap.mnBucketCount]) {
+      ProcessTextChange(it.mpNode->second->GetId());
+      returnPressed = false;
+      return true;
+    }
+  }
+  if (m->type == 0x287259f6) {
+    unsigned id = m->param;
+    switch (id) {
+    case 0x153a7f7:
+      SavePropFile();
+      return true;
+    case 0x153a853:
+      mTitleText->Get10()->Set7c(1, 1);
+      return true;
+    case 0x154febb:
+      mTitleText->Get10()->Set7c(1, 0);
+      return true;
+    default: {
+      unsigned key = id;
+      HashIter_s0082_7bf0 it = mPropToToggleMap.find(key);
+      if (it.mpNode != mPropToToggleMap.mpBucketArray[mPropToToggleMap.mnBucketCount]) {
+        ProcessToggleButton(it.mpNode->second->GetId());
+        return true;
+      }
+      ProcessSpinnerButtons(id);
+      return true;
+    }
+    }
+  }
+  if (m->type == 0x8ef0c8dd && m->param == 0x15a490f) {
+    int v = mWin68->Get28();
+    float prev = mPreviousScrollVal;
+    mPreviousScrollVal = (float)v;
+    mCurrentWindowY = mCurrentWindowY - mScrollRatio * ((float)v - prev);
+    mWin64->SetPos64(mCurrentWindowX, mCurrentWindowY);
+    FUN_0081e070();
+    return true;
+  }
+  if (m->type == 0x9a1552d3) {
+    unsigned id = m->param;
+    if (id == 0x154fec5) {
+      unsigned a, b;
+      if (mGroupsGrid->Fa4(&a, &b)) {
+        mCurrentGroupID = mGroupsGrid->F1c4(a, b);
+        PopulatePropsGrid(mCurrentGroupID);
+      }
+      return true;
+    }
+    if (id == 0x154fed1) {
+      unsigned a, b, z;
+      if (mPropsGrid->Fa4(&a, &b)) {
+        unsigned r = mPropsGrid->F1c4(a, b);
+        if (r) {
+          mPropsGrid->F1a0(a, b, &z);
+          mWin6c->Get10()->Set7c(1, 1);
+          mWin6c->Get10()->Set80(z);
+          mWin6c->Get10()->Fn90();
+          LoadPropFile(mCurrentGroupID, r, false);
+        }
+      }
+      return true;
+    }
+  }
+  return false;
+}
 
 // @ 0x00b5f950
 EA::AutoRefCount_s00b5_f040<EA::UTFWinControls::IWinText_s00b5_f040>& EA::AutoRefCount_s00b5_f040<EA::UTFWinControls::IWinText_s00b5_f040>::operator=(UTFWinControls::IWinText_s00b5_f040* p)

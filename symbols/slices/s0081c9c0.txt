@@ -1,6 +1,12 @@
+0081c9c0 cSPUIPopupMenuWin::OnAttach  # PDB candidate (caller-scored); byte-exact
+0081ca60 cSPUIPopupMenuWin::OnMouseUp  # PDB candidate (caller-scored); byte-exact
+0081cbe0 cSPUIPopupMenuWin::OnChar  # PDB candidate (caller-single); byte-exact
+0081cc60 cSPUIPopupMenuWin::OnScrollButtonClicked  # PDB name
 0081cce0 ?Reset@MB@@QAEXXZ  # MB::Reset migrated from s0081c9c0 (verbatim, slice spelling)
 0081cd50 ?ScrollButtonSelected@SB@@QAEXH@Z  # SB::ScrollButtonSelected migrated from s0081c9c0 (verbatim, slice spelling)
+0081cdb0 cSPUIPopupMenuWin::OnMouseWheel  # PDB name
 0081ce60 ?OnButtonClicked2@ScrollBtn2@@QAEXH@Z  # ScrollBtn2::OnButtonClicked2 migrated from s0081c9c0 (verbatim, slice spelling)
+0081ce80 cSPUIPopupMenuScrollButton::OnTick  # PDB candidate (caller-single); byte-exact
 0081d020 UTFWin::cSPUIProgressBarGradientWin::cSPUIProgressBarGradientWin  # PDB name
 0081d510 UTFWin::cSPUIProgressBarWin::cSPUIProgressBarWin  # PDB name
 0081d7a0 ?Reset@Variant@@QAEPAU1@H@Z  # Variant::Reset migrated from s0081c9c0 (verbatim, slice spelling)
@@ -8,10 +14,4 @@
 0081dce0 ?Shutdown@cSPUIPropertyEditor@SP@@QAEXXZ  # SP::cSPUIPropertyEditor::Shutdown migrated from s0081c9c0
 0081ddd0 ?Init@D3@@QAEPAU1@H@Z  # D3::Init migrated from s0081c9c0 (verbatim, slice spelling)
 0081de30 ?Init2@D3@@QAEPAU1@H@Z  # D3::Init2 migrated from s0081c9c0 (verbatim, slice spelling)
-0081c9c0 cSPUIPopupMenuWin::OnAttach  # PDB candidate (caller-scored); byte-exact
-0081ca60 cSPUIPopupMenuWin::OnMouseUp  # PDB candidate (caller-scored); byte-exact
-0081cbe0 cSPUIPopupMenuWin::OnChar  # PDB candidate (caller-single); byte-exact
-0081cc60 cSPUIPopupMenuWin::OnScrollButtonClicked  # PDB name
-0081cdb0 cSPUIPopupMenuWin::OnMouseWheel  # PDB name
-0081ce80 cSPUIPopupMenuScrollButton::OnTick  # PDB candidate (caller-single); byte-exact
-0081df10 SP::cPropertyUI::FindPropertyUIWindow  # PDB name
+0081df10 ?FindPropertyUIWindow@PUI@@QAEPAPAXPAPAXH@Z  # PUI::FindPropertyUIWindow migrated from s0081c9c0 (verbatim, slice spelling)
