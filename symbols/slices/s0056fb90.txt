@@ -3,5 +3,10 @@
 00570140 eastl stream element copy  # copies 8-byte key + float + wstring assign
 005701b0 ?LowerBoundPair@@YAPAUPair8@@PAU1@0PBU1@@Z  # LowerBoundPair migrated from s0056fb90 (verbatim, slice spelling)
 00570230 ?DoFreeNodes@HashTable@@QAEXPAPAUHashNode@@I@Z  # HashTable::DoFreeNodes migrated from s0056fb90 (verbatim, slice spelling)
-005702c0 vector<...>::DoDestroyValues range  # destroys+deallocates stride 0x1c
+005702c0 ?CopyDestroyRange1c@@YAPAXPAX00@Z  # vector range: uninit-copy 0x1c elements then destroy the source range
+00570330 ?UninitCopy@@YAPAUElemI@@PAU1@00@Z  # uninitialized copy of ElemI {Key,MetaI} then destroy the source
+00570400 ?UninitCopyB@@YAPAUElem1cB@@PAU1@00@Z  # uninitialized copy of Elem1cB {uint32,Payload}
+00570480 ?RigBlockSetInsert@@YAXI_N@Z  # insert/erase one rig-block key in the global block-key set
+005704c0 ?Intersect@TraitData@@QAEMPAUFeatureVector@@0@Z  # TraitData::Intersect (float, ret 8)
 00570870 Big::Init  # two sub-inits + zero 3-float vector + flag/value
+005708d0 ?Blend@TraitData@@QAEX_NPAUFeatureVector@@I@Z  # TraitData::Blend

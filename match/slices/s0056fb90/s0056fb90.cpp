@@ -117,6 +117,9 @@ struct Elem1cB {                        // 0x1c-byte element: 4-byte key + 0x18-
         void DoDestroyValues();         // 0x00553fb0 (thiscall ret 0)
         void AssignFrom(const void* src);  // 0x0050d440 (thiscall ret 4)
     } body;                            // +4
+    // An explicit p->~Elem1cB() makes cl /Od emit the destroy call plus the
+    // guarded "scalar deleting destructor" tail (operator delete) seen in the original.
+    ~Elem1cB() { body.DoDestroyValues(); }
 };
 Elem1cB* UninitCopyB(Elem1cB* first, Elem1cB* last, Elem1cB* dst);   // 0x00570400 (cdecl)
 
@@ -153,6 +156,7 @@ struct TraitData {                      // object holding two cFeatureVector mem
 struct Str16 {                          // eastl::basic_string<wchar_t> (16 bytes with allocator)
     wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; uint32_t mAlloc;
     Str16(const Str16& x);              // 0x0056e2d0
+    void FreeBuffer();                  // 0x004237d0 (thiscall ret 0)
 };
 struct MetaI {                          // float weight + description string
     float f;
@@ -176,6 +180,7 @@ struct ElemI {                          // 0x1c-byte vector element
     MetaI meta;                         // +8
     ElemI(const ElemI& s) : key(s.key), meta(s.meta) {}
     ElemI& operator=(const ElemI& s);   // 0x00570140 (assign)
+    ~ElemI() { meta.str.FreeBuffer(); }
 };
 ElemI* UninitCopy(ElemI* first, ElemI* last, ElemI* dst);                 // 0x00570330 (cdecl)
 inline ElemI* CopyBackwardImpl(ElemI* first, ElemI* last, ElemI* result)
@@ -328,35 +333,36 @@ void HashTable::DoFreeNodes(HashNode** pNodeArray, uint32_t n)
 }
 
 // @ 0x005702c0
-// Copy the 0x1c-byte elements [first,last) into dst, then tear down the source
-// range: destroy each element's payload object, and (debug allocator path, dead
-// here) hand the raw storage back to operator delete[].
+// vector<...>::DoDestroyValues: uninitialized-copy the 0x1c-byte elements
+// [first,last) into dst, then tear down the source range (destroy each
+// element's payload; the debug allocator branch is dead here).
+// Local names chosen via tools/matching/od_names.py to reproduce the /Od slot order.
 void* CopyDestroyRange1c(void* first, void* last, void* dst)
 {
-    void* result = UninitCopyB((Elem1cB*)first, (Elem1cB*)last, (Elem1cB*)dst);
-    const bool bBlocks = false;
-    ScratchSlots<18>();
-    char* src = (char*)first;
-    char* out = (char*)dst;
-    for (; src != last; src += 0x1c, out += 0x1c) {
-        ((Elem1cB*)src)->body.DoDestroyValues();
-        if (bBlocks) {
-            ScratchSlots<4>();
-            ::operator delete[](src);
-        }
+    void* p30 = UninitCopyB((Elem1cB*)first, (Elem1cB*)last, (Elem1cB*)dst);
+    uint32_t v[8];
+    uint32_t t32[10];
+    bool t21 = false;   // unused initialised local: cl /Od still materialises the store
+    uint32_t n30[4];
+    char* owner = (char*)dst;
+    char* b = (char*)first;
+    for (; b != last; b += 0x1c, owner += 0x1c) {
+        ((Elem1cB*)b)->~Elem1cB();
     }
-    return result;
+    return p30;
 }
 
 // @ 0x00570330
 // Uninitialized copy of the 0x1c-byte {Key,MetaI} elements [first,last) to dst,
 // destroying the source MetaI strings afterwards.
+// Local names chosen via tools/matching/od_names.py to reproduce the /Od slot
+// order (highest slot first: p30 first it p v last dst t21 n30).
 ElemI* UninitCopy(ElemI* first, ElemI* last, ElemI* dst)
 {
     const bool bUnused = false;
-    ScratchSlots<2>();
-    ElemI* src = first;
+    ScratchSlots<4>();
     ElemI* out = dst;
+    ElemI* src = first;
     for (; src != last; ++src, ++out) {
         ElemI* pElem = out;
         ElemI* pCreated;
@@ -371,41 +377,42 @@ ElemI* UninitCopy(ElemI* first, ElemI* last, ElemI* dst)
     }
     ElemI* result = out;
     const bool bBlocks = false;
-    ElemI* freeSrc = first;
     ElemI* freeDst = dst;
+    ElemI* freeSrc = first;
     for (; freeSrc != last; ++freeSrc, ++freeDst) {
-        freeSrc->meta.FreeBuffer();
-        if (bBlocks) {
-            ScratchSlots<4>();
-            ::operator delete[](freeSrc);
-        }
+        freeSrc->~ElemI();
     }
     (void)bUnused;
+    (void)bBlocks;
     return result;
 }
 
 // @ 0x00570400
 // Uninitialized copy of the 0x1c-byte {uint32,payload} elements [first,last) to dst.
+// Local names chosen via tools/matching/od_names.py to reproduce the /Od slot order.
 Elem1cB* UninitCopyB(Elem1cB* first, Elem1cB* last, Elem1cB* dst)
 {
-    const bool bUnused = false;
-    Elem1cB* out = dst;
-    Elem1cB* src;
-    for (src = first; src != last; src = src + 1) {
-        Elem1cB* pElem = out;
-        Elem1cB* pCreated;
-        if (pElem != 0) {
-            pElem->key = src->key;
-            pElem->body.AssignFrom(&src->body);
-            pCreated = pElem;
+    bool v6 = false;                // bUnused: /Od still materialises the store
+    Elem1cB* n26 = dst;             // out
+    Elem1cB* n24 = first;           // src
+    uint32_t t20[18];               // dead pad filling the original frame
+    for (; n24 != last; n24 = n24 + 1) {
+        Elem1cB* v22 = n26;         // pElem
+        Elem1cB::Payload* n17 = &v22->body;   // pBody
+        Elem1cB* p30;               // pCreated
+        if (v22 != 0) {
+            v22->key = n24->key;
+            n17->AssignFrom(&n24->body);
+            p30 = v22;
         } else {
-            pCreated = 0;
+            p30 = 0;
         }
-        (void)pCreated;
-        out = out + 1;
+        (void)p30;
+        (void)t20;
+        n26 = n26 + 1;
     }
-    (void)bUnused;
-    return out;
+    (void)v6;
+    return n26;
 }
 
 // @ 0x00570480
@@ -545,6 +552,6 @@ void TraitData::Blend(bool positive, FeatureVector* vec, uint32_t amount)
     Elem12* t21 = (Elem12*)mBase.end();
     for (; t32 != t21; t32 += 1) {
         Elem12* b = t32;
-        mExtra.add(b, amount / (double)b->f);
+        mExtra.add(b, amount / b->f);
     }
 }
