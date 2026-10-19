@@ -1,4 +1,4 @@
-# va  diff-bytes  reason   flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+# all functions complete (see nonmatching.txt)
 00a23360  -   System::GetPosDist approximated (difftest FAIL: x87 st0 differs); distance formula order/precision not reproduced
 00a233b0  -   System::MuteAll approximated (difftest FAIL: execution); submix mute/unmute flow not reproduced
 00a24210  -   RBTree::Assign stub (difftest UNSUPPORTED: symbol not found); body not implemented

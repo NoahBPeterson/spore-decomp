@@ -1,2 +1,20 @@
-00a27110  ??_EPropList@@UAEPAXI@Z
 00432b10  ??_EPropBase@@UAEPAXI@Z
+00a26e10 ?Insert@KTable@@QAEPAUInsertRes@@PAU2@PBUKey4@@H@Z  # KTable::Insert migrated from s00a26e10 (verbatim, slice spelling)
+00a26f30 ?DoFreeNodes@ResTable@@QAEXPAPAUResNode@@I@Z  # ResTable::DoFreeNodes migrated from s00a26e10 (verbatim, slice spelling)
+00a27010 ?Alloc@NodePool@@QAEPAXPBUPayload@@@Z  # NodePool::Alloc migrated from s00a26e10 (verbatim, slice spelling)
+00a270b0 ??0PropList_s00a2_6e10@@QAE@XZ  # PropList_s00a2_6e10::PropList migrated from s00a26e10 (verbatim, slice spelling)
+00a27110  ??_EPropList@@UAEPAXI@Z
+00a27170 ?CreateResource@FactoryVoiceTemplate@@QAE_NHPAPAUPropList_s00a2_6e10@@HH@Z  # FactoryVoiceTemplate::CreateResource migrated from s00a26e10 (verbatim, slice spelling)
+00a27290 ??_GAbilityList@@UAEPAXI@Z  # AbilityList::AbilityList migrated from s00a26e10 (verbatim, slice spelling)
+00a27340 ?Remove@StyleMgr@@QAE_NI@Z  # StyleMgr::Remove migrated from s00a26e10 (verbatim, slice spelling)
+00a273d0 ?RemoveAll@StyleMgr@@QAEXXZ  # StyleMgr::RemoveAll migrated from s00a26e10 (verbatim, slice spelling)
+00a27460 ?Find@TexMgr@@QAEPAXPBX@Z  # TexMgr::Find migrated from s00a26e10 (verbatim, slice spelling)
+00a27530 ?FindOrInsert@RefMap@@QAEPAPAUCountedRes@@PBI@Z  # RefMap::FindOrInsert migrated from s00a26e10 (verbatim, slice spelling)
+00a27660 ?erase@ETable@@QAEPAUHIter_s00a2_6e10@@PAU2@PAUENode@@PAPAU3@@Z  # ETable::erase migrated from s00a26e10 (verbatim, slice spelling)
+00a276e0 ?DoFreeNodes@SubTable@@QAEXPAPAUSubNode_s00a2_6e10@@I@Z  # SubTable::DoFreeNodes migrated from s00a26e10 (verbatim, slice spelling)
+00a27760 ?DoInsertValue@RcVector@@QAEXPAURcPtr@@PBU2@@Z  # RcVector::DoInsertValue migrated from s00a26e10 (verbatim, slice spelling)
+00a27910 ?DoInsertValue@Rec12Vector@@QAEXPAURec12@@PBU2@@Z  # Rec12Vector::DoInsertValue migrated from s00a26e10 (verbatim, slice spelling)
+00a27a40 ?DoInsertValue@Rec24Vector@@QAEXPAURec24@@PBU2@@Z  # Rec24Vector::DoInsertValue migrated from s00a26e10 (verbatim, slice spelling)
+00a27b90 ?DoInsertValue@ZoneVector@@QAEXPAUZone@@PBU2@@Z  # ZoneVector::DoInsertValue migrated from s00a26e10 (verbatim, slice spelling)
+00a27ed0 ?ConnectToSubmix@Submix_s00a2_6e10@@QAE_NPAU1@@Z  # Submix_s00a2_6e10::ConnectToSubmix migrated from s00a26e10 (verbatim, slice spelling)
+00a27ff0 ?Register@EvOwner@@QAE_NIIPAXN@Z  # EvOwner::Register migrated from s00a26e10 (verbatim, slice spelling)

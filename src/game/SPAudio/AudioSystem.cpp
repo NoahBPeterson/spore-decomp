@@ -1,4 +1,4 @@
-// src/game/SPAudio/AudioSystem.cpp -- migrated from slice(s) s00a32f20, s00a31f20, s00a31170, s00a30460, s00a2e650, s00a2d790, s00a2c6c0, s00a2a020, s00a24e10, s00a23360, s00a22220, s00a20060, s00432830 by tools/migrate/rewrite.py
+// src/game/SPAudio/AudioSystem.cpp -- migrated from slice(s) s00a26e10, s00a21130, s00a0f350, s00a32f20, s00a31f20, s00a31170, s00a30460, s00a2e650, s00a2d790, s00a2c6c0, s00a2a020, s00a24e10, s00a23360, s00a22220, s00a20060, s00432830 by tools/migrate/rewrite.py
 // Object file: SPAudio/AudioSystem.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -42,6 +42,10 @@
 #include "EA/Messaging/IHandler.h"
 #include "EA/Audio/Allocator2.h"
 #include <stddef.h>
+#include "SP/cSPCreatureAnimManager.h"
+#include "EA/ArgScript/cCommandBase.h"
+#include "EA/Audio/FactoryVoiceTemplate.h"
+#include <stdarg.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" long __cdecl _InterlockedExchange(long volatile* target, long value);
@@ -137,17 +141,37 @@ struct Sound2 {                           // Audio::Sound, 0x1e10 bytes
     char data[0x1e10 - 4];
 };
 struct PropSet {
-    virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3();
+virtual void p0();
+virtual void p1();
+virtual void p2();
+virtual void p3();
     virtual void GetFloat(u32 key, float* out);   // +0x10
 };
 struct SoundOrd {
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
     virtual bool Flag(int which, int z);          // +0x20
-    virtual void v09(); virtual void v0a(); virtual void v0b();
-    virtual void v0c(); virtual void v0d(); virtual void v0e(); virtual void v0f();
-    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
-    virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
     virtual float Dist();                         // +0x60
     PropSet props;                                // +4 (embedded subobject with its own vptr)
     bool  Has();        // 00a1af50
@@ -163,8 +187,6 @@ struct OrdInfo {
 };
     void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
 // ---- items of slice s00a20060 end
-
-
 
 // ---- items of slice s00a22220 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(__int64*);
@@ -563,7 +585,6 @@ struct RDD {
     bool    Tick3(void* a, void* b, void* c);   // 0x00a24930
 };
 // ---- items of slice s00a23360 end
-
 
 // forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
 RBNode_s00a2_3360* __cdecl RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent);   // defined at 0x00a245e0, called earlier in the TU
@@ -1414,7 +1435,6 @@ struct FixedVec11b {
 };
 // ---- items of slice s00a30460 end
 
-
 // ---- items of slice s00a31f20 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern char vt_0140de80[];
 extern char vt_01403934[];
@@ -2143,6 +2163,349 @@ public:
 };
 // ---- items of slice s00a31170 end
 
+// ---- items of slice s00a0f350 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const char g_audioAllocatorFile[];
+struct MemPool {
+    void* LockedAlloc(int a, int b, int zero, const char* name, int c, int d);                  // 0x9289f0
+    void* LockedAligned(int a, int b, int c, int d, int zero, const char* name, int e, int f);  // 0x928a30
+    void  Free(void* p);                                                                        // 0x9276c0
+};
+extern MemPool* g_memPool;       // 0x16c8b44
+struct AudioBlock { void* mPtr; int a, b, c; };
+// ---- items of slice s00a0f350 end
+
+// ---- items of slice s00a21130 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* f_00a158d0(void);
+extern void* f_00a151c0(void);
+extern void* f_00a149a0(void);
+extern void* f_00a161b0(void);
+extern void* f_00a15d30(void);
+extern void* f_00a14800(void);
+extern void  f_0112ccc0(void* self, int a, int b, void* c);
+extern void  f_00f47380(void* p);
+extern void* f_00f473a0(void* a, void* b, unsigned size, void* file, unsigned line, const char* cat);
+struct Callee_Th {
+void* m_0112ce00();
+void m_0112dca0();
+void m_0112cd60(void* v);
+void* m_0112dc80();
+void m_0112dbd0();
+void* m_00a34230(unsigned tag);
+void m_00a34890();
+void m_0112c600();
+void m_0112c620();
+};
+#define TH(p) ((Callee_Th*)(p))
+#define VPTR(ret, obj, slot, ...) \
+    ((ret (__thiscall*)(void*, __VA_ARGS__))((void**)*(void**)obj)[(slot) / 4])
+struct AudioSystem_00a21170 { void RegisterBuiltInModules(); };
+struct VoiceContainer_s00a2_1130 {
+    bool Connect(int a1, int a2);
+    bool Connect4(int a1, int a2, int a3, int a4);
+};
+struct MsgTarget_00a21630 { bool Handle(int a1, int a2); };
+struct VoiceVec_00a21c00 { void Destroy(); };
+struct RbTree_00a21dc0 { void* Find(void* key, void** out); };
+struct HashA_00a21eb0 { void Rehash(unsigned a); void* Alloc(unsigned n); };
+struct HashB_00a22060 { void Rehash(unsigned a); void* Alloc(unsigned n); };
+struct HashC_00a22110 { void Rehash(unsigned a); void* Alloc(unsigned n); };
+__declspec(noinline) void __fastcall disconnect_00a21590(char* self);
+// ---- items of slice s00a21130 end
+
+// ---- items of slice s00a26e10 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char g_EmptyStrRep[];            // 0x01667bac
+#define EASTL_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
+void* eaNew(size_t size, const char* name, int flags, unsigned dbgFlags, const char* file, int line);   // 0x00f473a0
+void* operator new(size_t size, const char* name, int a, int b, int c, int d);                           // 0x00f473a0 (new-expression form)
+void  operator delete(void*);                                                                           // 0x00f47380
+template <class T> static inline T& fld(void* p, int off) { return *(T*)((char*)p + off); }
+struct RefObj {
+    virtual void AddRef();
+    virtual void Release();
+};
+struct CountedRes {
+    virtual void Destroy(int flag);
+    volatile int mnRefCount;
+};
+static inline void ReleaseCounted(CountedRes* r)
+{
+    if (r) {
+        int n = (r->mnRefCount += -1);
+        if (n == 0) {
+            r->mnRefCount = 1;
+            r->Destroy(1);
+        }
+    }
+}
+struct Key4 { uint32_t a, b, c, d; };
+struct KNode { Key4 key; KNode* next; };
+struct RehashRes { bool bNeed; uint32_t nNew; };
+struct RehashPolicy { void GetRehashRequired(RehashRes* out, uint32_t nBuckets, uint32_t nElems, uint32_t nExtra); };  // 0x00921440
+struct InsertRes { KNode* node; KNode** bucket; bool inserted; };
+struct KTable {
+    void* pad0;
+    KNode** mpBuckets;      // +4
+    uint32_t mnBuckets;     // +8
+    uint32_t mnElements;    // +0xc
+    RehashPolicy mPolicy;   // +0x10
+    void DoRehash(uint32_t n);                                   // 0x00998870
+    InsertRes* Insert(InsertRes* out, const Key4* k, int tag);   // 0x00a26e10
+};
+struct ResNode { uint32_t key; CountedRes* value; ResNode* next; };
+struct ResTable {
+    void DoFreeNodes(ResNode** buckets, uint32_t n);
+};
+struct Payload { uint32_t a, b, c; RefObj* obj; };
+struct NodePool {
+    char pad[0x18];
+    void** mpFree;          // +0x18
+    char pad1c[0xc];
+    size_t mnNodeSize;      // +0x28
+    void* Alloc(const Payload* src);
+};
+struct EdRes {
+    virtual void AddRef();                                  // 0x00432a50
+    virtual void Release();                                 // 0x00432a70
+    virtual ~EdRes() {}
+    virtual void Slot3();                                   // 0x00432ad0
+    virtual int GetReferenceCount();                        // 0x004c0190
+};
+struct PropBase_s00a2_6e10 : EdRes {                                   // vtable 0x013ebcdc
+    long mnRefCount;        // +4
+    uint32_t a, b, c;       // +8..+0x10
+    PropBase_s00a2_6e10()
+    {
+        _InterlockedExchange(&mnRefCount, 0);
+        a = 0; b = 0; c = 0;
+    }
+};
+struct FixedVec {
+    char* mpBegin;
+    char* mpEnd;
+    char* mpCap;
+    int   pad;
+    char* mpLocal;
+    ~FixedVec() { if (mpBegin && mpBegin != mpLocal) operator delete(mpBegin); }
+};
+template <int N> struct FixedVecBuf : FixedVec {           // fixed_vector: header, pad, inline buffer
+    int pad;
+    char buf[N];
+    FixedVecBuf()
+    {
+        mpLocal = buf;
+        mpBegin = mpEnd = buf;
+        mpCap = mpBegin + N;
+    }
+};
+struct PropList_s00a2_6e10 : PropBase_s00a2_6e10 {
+    FixedVecBuf<0x168> v1;  // +0x14 (buffer +0x2c)
+    FixedVecBuf<0x2d0> v2;  // +0x194 (buffer +0x1ac)
+    PropList_s00a2_6e10();  // 0x00a270b0 (PropList::PropList_s00a2_6e10)
+    virtual ~PropList_s00a2_6e10();  // 0x00a270b0 (PropList::PropList_s00a2_6e10)
+};
+struct FactoryVoiceTemplate {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+    virtual bool InitResource(int key, PropList_s00a2_6e10* res, int a, int b);     // slot 9 (+0x24)
+    bool CreateResource(int key, PropList_s00a2_6e10** out, int a, int b);
+};
+struct OwnerBase { virtual ~OwnerBase() {} };               // vtable 0x013ef094
+struct OwnedVec {
+    char* mpBegin; char pad[0xc]; char* mpLocal;
+    ~OwnedVec() { if (mpBegin && mpBegin != mpLocal) operator delete(mpBegin); }
+};
+struct AbilityList : OwnerBase {
+    char pad4[4];
+    OwnedVec v;             // +8
+    AbilityList();
+};
+struct HIter_s00a2_6e10 { void* node; void** bucket; };
+struct StyleTable_s00a2_6e10 {
+    char pad0[4];
+    void** mpBuckets;       // +4
+    uint32_t mnBuckets;     // +8
+    void find(HIter_s00a2_6e10* out, const uint32_t* key) const;       // 0x00645ed0
+    HIter_s00a2_6e10 erase(HIter_s00a2_6e10 it);                                  // 0x00d2c9f0
+};
+struct StyleNode { uint32_t key; RefObj* value; };
+struct StyleMgr {
+    virtual void v0();
+    char pad[0x119bb4];
+    StyleTable_s00a2_6e10 mStyles;     // +0x119bb8
+    bool Remove(uint32_t key);
+    void RemoveAll();
+};
+typedef void (__thiscall* VFn1)(void*, void*);
+typedef bool (__thiscall* VFnB)(void*);
+#define VSLOT(obj, off) ((*(void***)(obj))[(off) / 4])
+struct TexNode { uint32_t key[3]; void* value; };
+struct TexTable {
+    char pad0[4];
+    void** mpBuckets;       // +4
+    uint32_t mnBuckets;     // +8
+    void find(HIter_s00a2_6e10* out, const void* key) const;           // 0x00833840
+};
+struct TexMgr { char pad[0x80424]; TexTable mTex; void* Find(const void* key); };
+struct MapNode_s00a2_6e10 { uint32_t key; CountedRes* value; };
+struct RefSlot {                                            // AutoRefCount<CountedRes>
+    CountedRes* p;
+    RefSlot() : p(0) {}
+    RefSlot(const RefSlot& o) : p(o.p) { if (p) p->mnRefCount++; }
+    ~RefSlot()
+    {
+        if (p) {
+            int n = p->mnRefCount - 1;
+            p->mnRefCount = n;
+            if (n == 0) {
+                p->mnRefCount = 1;
+                p->Destroy(1);
+            }
+        }
+    }
+};
+struct MapValue {                                           // pair<const uint, AutoRefCount<X>>
+    uint32_t key;
+    RefSlot value;
+    MapValue(uint32_t k, const RefSlot& v) : key(k), value(v) {}
+};
+struct MapIter {
+    MapNode_s00a2_6e10* node; void** bucket;
+    MapIter() {}
+    explicit MapIter(void** b) : node((MapNode_s00a2_6e10*)*b), bucket(b) {}
+};
+struct MapInsertRet { MapIter first; bool second; };      // pair<iterator, bool> (12 bytes)
+struct MapTrueType {};                                      // eastl::true_type tag passed by value
+struct RefMap {
+    char pad0[4];
+    void** mpBuckets;       // +4
+    uint32_t mnBuckets;     // +8
+    MapIter find(const uint32_t& key) const;                // 0x00645ed0
+    MapInsertRet Insert(const MapValue& v, MapTrueType tag);   // 0x00a23830 (DoInsertValue)
+    CountedRes** FindOrInsert(const uint32_t* key);
+};
+struct ENode { uint32_t pad[3]; RefObj* value; ENode* next; };
+struct ETable {
+    char pad0[4];
+    void** mpBuckets;       // +4
+    uint32_t mnBuckets;     // +8
+    uint32_t mnElements;    // +0xc
+    HIter_s00a2_6e10* erase(HIter_s00a2_6e10* out, ENode* node, ENode** bucket);
+};
+struct SubNode_s00a2_6e10 { void* link; uint32_t key; void* pad; char* sub; SubNode_s00a2_6e10* next; };
+struct SubTable {
+    char pad[0x1c];
+    SubNode_s00a2_6e10* mpFreeList;    // +0x1c
+    char pad20[4];
+    char* mpPoolBegin;      // +0x24
+    char* mpPoolEnd;        // +0x28
+    char pad2c[4];
+    SubNode_s00a2_6e10* mpInline;      // +0x30
+    void DoFreeNodes(SubNode_s00a2_6e10** buckets, uint32_t n);
+};
+struct RcPtr {                                              // AutoRefCount<T>
+    RefObj* p;
+    RcPtr() : p(0) {}
+    RcPtr(const RcPtr& o) : p(o.p) { if (p) p->AddRef(); }
+    ~RcPtr() { if (p) p->Release(); }
+    RcPtr& operator=(const RcPtr& o)
+    {
+        if (p != o.p) {
+            RefObj* old = p;
+            p = o.p;
+            if (p) p->AddRef();
+            if (old) old->Release();
+        }
+        return *this;
+    }
+};
+RcPtr* CopyBackwardRc(RcPtr* first, RcPtr* last, RcPtr* destEnd);     // 0x00ac97a0 (cdecl)
+void* memcpy_11e0744(void* dst, const void* src, size_t n);           // 0x011e0744 (memcpy)
+struct RcVector {
+    RcPtr* mpBegin;
+    RcPtr* mpEnd;
+    RcPtr* mpCap;
+    void DoInsertValue(RcPtr* pos, const RcPtr* value);
+};
+struct Rec12 { uint32_t a, b, c; };
+Rec12* RelocateRec12(Rec12* first, Rec12* last, Rec12* dest);         // 0x00a11310 (cdecl)
+struct Rec12Vector {
+    Rec12* mpBegin;
+    Rec12* mpEnd;
+    Rec12* mpCap;
+    char pad[4];
+    Rec12* mpFixed;         // +0x10
+    void DoInsertValue(Rec12* pos, const Rec12* value);
+};
+struct Rec24 { uint32_t d[6]; };
+Rec24* CopyBackwardRec24(Rec24* first, Rec24* last, Rec24* destEnd);   // 0x00cc8b50 (cdecl)
+Rec24* RelocateRec24(Rec24* first, Rec24* last, Rec24* dest);          // 0x00720200 (cdecl)
+struct Rec24Vector {
+    Rec24* mpBegin;
+    Rec24* mpEnd;
+    Rec24* mpCap;
+    char pad[4];
+    Rec24* mpFixed;         // +0x10
+    void DoInsertValue(Rec24* pos, const Rec24* value);
+};
+struct Zone { uint32_t d[11]; };
+Zone* RelocateZone(Zone* first, Zone* last, Zone* dest);               // 0x00b3d890 (cdecl)
+struct ZoneVector {
+    Zone* mpBegin;
+    Zone* mpEnd;
+    Zone* mpCap;
+    void DoInsertValue(Zone* pos, const Zone* value);
+};
+struct EStr {
+    char* mpBegin; char* mpEnd; char* mpCap;
+    struct Alloc {} mAllocator;         // eastl::allocator (empty)
+    const char* c_str() const { return mpBegin; }
+    EStr() : mpBegin(g_EmptyStrRep), mpEnd(g_EmptyStrRep), mpCap(g_EmptyStrRep + 1) {}
+    ~EStr() { if (mpCap - mpBegin > 1 && mpBegin) operator delete(mpBegin); }
+    void sprintf(const char* fmt, ...);                                    // 0x00472fe0 (cdecl, this pushed)
+};
+struct LockObj { void Lock(); void Unlock(); };                            // 0x0112c600 / 0x0112c620
+extern LockObj* g_pAudioLock_s00a2_6e10;           // 0x016e61a8
+struct AudioLockGuard {
+    AudioLockGuard() { if (g_pAudioLock_s00a2_6e10) g_pAudioLock_s00a2_6e10->Lock(); }
+    ~AudioLockGuard() { if (g_pAudioLock_s00a2_6e10) g_pAudioLock_s00a2_6e10->Unlock(); }
+};
+struct VoiceContainer_s00a2_6e10 {
+    void* FindPlugin(uint32_t id);                                         // 0x00a34230
+    bool ConnectToSubmix(void* submixVoice, int flag);                     // 0x00a34b50
+};
+struct Plugin { void SetName(int a, const char* const& name); };                 // 0x0112ccc0
+struct Submix_s00a2_6e10 {
+    char pad0[0x10];
+    VoiceContainer_s00a2_6e10 mVoiceContainer;     // +0x10
+    char pad_988[0x977];
+    const char* mpName;                 // +0x988
+    bool ConnectToSubmix(Submix_s00a2_6e10* other);  // 0x00a27ed0 (Submix::ConnectToSubmix)
+};
+struct EvTable {
+    char pad0[4];
+    void** mpBuckets;       // +4
+    uint32_t mnBuckets;     // +8
+    void find(HIter_s00a2_6e10* out, const uint32_t* key);                            // 0x00a23ef0
+    void Insert(HIter_s00a2_6e10* out, const uint32_t* v, int tag);                   // 0x00a26be0
+};
+struct EvOwner {
+    virtual void v0();
+    char pad[0x13795c - 4];
+    EvTable mEvents;        // +0x13795c
+    bool Register(uint32_t a1, uint32_t a2, void* a3, double a4);
+};
+typedef bool (__thiscall* VCreate)(void*, uint32_t, uint32_t, void*, int, RefObj**);
+typedef void (__thiscall* VNotify)(void*, uint32_t, int);
+typedef bool (__thiscall* VFire)(void*, double);
+// ---- items of slice s00a26e10 end
+
 // @ 0x00432ad0
 void* Queryable::Cast(unsigned id)
 {
@@ -2155,17 +2518,67 @@ void* Queryable::Cast(unsigned id)
     return 0;
 }
 
+// @ 0x00a0f6a0
+static __declspec(noinline) void* AudioAlloc(int a, int b, int c, int d, const char* name)
+{
+    char buf[0x80];
+    strcpy(buf, "Audio");
+    if (name) {
+        buf[5] = '/';
+        buf[6] = 0;
+        strncpy(buf + 6, name, 0x7a);
+    }
+    return g_memPool->LockedAlloc(a, b, 0, name, c, d);
+}
 
+// @ 0x00a0f710
+static __declspec(noinline) void* AudioAligned(int a, int b, int c, int d, int e, int f, const char* name)
+{
+    char buf[0x80];
+    strcpy(buf, "Audio");
+    if (name) {
+        buf[5] = '/';
+        buf[6] = 0;
+        strncpy(buf + 6, name, 0x7a);
+    }
+    return g_memPool->LockedAligned(a, b, c, d, 0, name, e, f);
+}
 
+// @ 0x00a0f790
+void* __stdcall AudioAllocA(int a, const char* name, int c)
+{
+    return AudioAlloc(a, c, (int)g_audioAllocatorFile, 0x3c, name);
+}
 
+// @ 0x00a0f7c0
+void* __stdcall AudioAlignedA(int a, const char* name, int c, int d, int e)
+{
+    return AudioAligned(a, d, e, c, (int)g_audioAllocatorFile, 0x42, name);
+}
 
+// @ 0x00a0f7f0
+void __stdcall AudioFree(void* p, int)
+{
+    g_memPool->Free(p);
+}
 
+// @ 0x00a0f810
+AudioBlock* __stdcall AudioBlockAlloc(AudioBlock* out, const int* in, const char* name)
+{
+    void* p = AudioAligned(in[0], in[1], 0, 0, (int)g_audioAllocatorFile, 0x53, name);
+    out->mPtr = 0;
+    out->a = 0;
+    out->b = 0;
+    out->c = 0;
+    out->mPtr = p;
+    return out;
+}
 
-
-
-
-
-
+// @ 0x00a0f860
+void __stdcall AudioFreeBlock(void** pp)
+{
+    g_memPool->Free(*pp);
+}
 
 // @ 0x00a207a0
 int Sys::ReleaseSub()
@@ -2180,17 +2593,6 @@ int Sys::ReleaseSub()
     }
     return n;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a207d0
 bool Sys::Shutdown()
@@ -2230,17 +2632,6 @@ bool Sys::Shutdown()
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a20910
 bool Sys::Route1(u32 id, int a, int b, float c, int d)
 {
@@ -2250,17 +2641,6 @@ bool Sys::Route1(u32 id, int a, int b, float c, int d)
     ((void (__thiscall*)(void*, int, int, float, int))((*(void***)o)[0x1c / 4]))(o, a, b, c, d);
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a20950
 bool Sys::Route2(u32 id, float value)
@@ -2273,17 +2653,6 @@ bool Sys::Route2(u32 id, float value)
         s, 0x25df0108, value, 1);
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a20990
 bool Sys::Route3(u32 id, float a, float b, float c)
@@ -2299,17 +2668,6 @@ bool Sys::Route3(u32 id, float a, float b, float c)
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a20a00
 bool Sys::Route4(u32 id, void* a, void* b, void* c)
 {
@@ -2319,17 +2677,6 @@ bool Sys::Route4(u32 id, void* a, void* b, void* c)
     ((void (__thiscall*)(void*, void*, void*, void*))((*(void***)o)[0x64 / 4]))(o, a, b, c);
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a20a40
 void Sys::SetSlot(int idx, void* a, void* b)
@@ -2346,17 +2693,6 @@ void Sys::SetSlot(int idx, void* a, void* b)
     ((void (__thiscall*)(void*))((*(void***)this)[0x58 / 4]))(this);
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a20ac0
 void Sys::GetSlot(int idx, void* out, void* big)
 {
@@ -2364,33 +2700,11 @@ void Sys::GetSlot(int idx, void* out, void* big)
     *(Big9*)big = *(Big9*)((char*)this + 0x15b6f0 + idx * 0x24);
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a20b20
 void Sys::Add214(void* a, float b)
 {
     ((Sub214*)((char*)this + 0x214))->Add(a, b);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a20ba0
 void Sys::Commit214()
@@ -2399,17 +2713,6 @@ void Sys::Commit214()
     ((void (__thiscall*)(void*, int))((*(void***)this)[0x1e8 / 4]))(this, x);
     ((Sub214*)((char*)this + 0x214))->Reset();
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a20be0
 void Sys::Flush()
@@ -2437,33 +2740,11 @@ void Sys::Flush()
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a20cd0
 unsigned int __stdcall HashString(const void* s)
 {
     return FNV1_String8(s, 0x811c9dc5, 1);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a20cf0
 void Sys::Tick119(int a, int b)
@@ -2473,17 +2754,6 @@ void Sys::Tick119(int a, int b)
     p->m((void*)b);
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a20d10
 void Sys::Tick119b()
 {
@@ -2491,50 +2761,17 @@ void Sys::Tick119b()
     p->m2();
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a20d20
 void* Sys::SlotA(int idx)
 {
     return (void*)((char*)this + 0x15b6c0 + idx * 0xc);
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a20d40
 void* Sys::SlotB(int idx)
 {
     return (void*)((char*)this + 0x15b6d8 + idx * 0xc);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a20d60
 bool __stdcall MakeSound(Sound2** out)
@@ -2546,17 +2783,6 @@ bool __stdcall MakeSound(Sound2** out)
     p->s0();
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a20df0
 bool Less1(SoundOrd* s, bool flag, OrdInfo* info)
@@ -2588,17 +2814,6 @@ bool Less1(SoundOrd* s, bool flag, OrdInfo* info)
     }
     return false;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a20eb0
 bool Less2(SoundOrd* a, SoundOrd* b)
@@ -2649,17 +2864,6 @@ bool Less2(SoundOrd* a, SoundOrd* b)
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a21080
 bool Sys::WithinRange(void* a, int b)
 {
@@ -2676,33 +2880,11 @@ bool Sys::WithinRange(void* a, int b)
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a210d0
 void Sys::LockB8()
 {
     ((Mutex*)((char*)this + 0xb8))->Lock((void*)0x1452970);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a21100
 bool Sys::HasLocation()
@@ -2711,16 +2893,604 @@ bool Sys::HasLocation()
     return n > 0;
 }
 
+// @ 0x00a21130
+int __stdcall isVoiceShareMsg_00a21130(void* msg)
+{
+    unsigned* m = (unsigned*)msg;
+    if (m[2] == 0x21407ee) {
+        unsigned v = m[1];
+        if (v == 0x1a527db || v == 0x1eef63a || v == 0x42c9cbb || v == 0x3055f61)
+            return 1;
+    }
+    return 0;
+}
 
+// @ 0x00a21170
+void AudioSystem_00a21170::RegisterBuiltInModules()
+{
+    void* self = this;
+    void* sys = TH(*(void**)((char*)self + 0xa4))->m_0112ce00();
+    if (sys != 0) {
+        TH(sys)->m_0112dca0();
+        TH(sys)->m_0112cd60((void*)f_00a158d0());
+        TH(sys)->m_0112cd60((void*)f_00a151c0());
+        TH(sys)->m_0112cd60((void*)f_00a149a0());
+        TH(sys)->m_0112cd60((void*)f_00a161b0());
+        TH(sys)->m_0112cd60((void*)f_00a15d30());
+        TH(sys)->m_0112cd60((void*)f_00a14800());
+    }
+    void* reg = TH(*(void**)((char*)self + 0xa4))->m_0112dc80();
+    if (reg != 0)
+        TH(reg)->m_0112dbd0();
+}
 
+// @ 0x00a21200
+bool __stdcall isMsg00a21200(void* msg)
+{
+    return *(unsigned*)((char*)msg + 4) == 0x2c9eff2;
+}
 
+// @ 0x00a21220
+double globalTime_00a21220()
+{
+    void* p = *(void**)0x16e61a8;
+    if (p != 0) return *(double*)((char*)p + 8);
+    return 0.0;
+}
 
+// @ 0x00a21260
+void __fastcall release_00a21260(void* self)
+{
+    int* rc = *(int**)((char*)self + 4);
+    if (rc == 0) return;
+    int n = rc[1] - 1;
+    rc[1] = n;
+    if (n == 0) {
+        rc[1] = 1;
+        void* vt = *(void**)rc;
+        ((void (__thiscall*)(void*, int))((void**)vt)[0])(rc, 1);
+    }
+}
 
+// @ 0x00a21290
+void** __fastcall resetHead_00a21290(void** self)
+{
+    char* v = (char*)*self;
+    v = *(char**)(v + 0x10);
+    if (v != 0) { *self = v - 0x10; return self; }
+    *self = 0;
+    return self;
+}
 
+// @ 0x00a212b0
+void splice_00a212b0(void* dummy, void* node, void* pos, void* last)
+{
+    char* p  = (char*)node;
+    char* q  = (char*)pos;
+    unsigned qprev = *(unsigned*)(q + 0x14);
+    char* qp = (qprev != 0) ? (char*)(qprev - 0x10) : (char*)0;
+    char* esi_p = (char*)*(unsigned*)(q + 4);
+    char* ecx_p = (char*)(q + 0x14);
+    char* eax_p = qp + 0x10;
+    *(unsigned*)(*(unsigned*)eax_p + 4) = (unsigned)esi_p;
+    *(unsigned*)*(unsigned*)(long)ecx_p = *(unsigned*)eax_p;
+    char* edx_p = (char*)last;
+    char* esi_q = (char*)(edx_p + 0x14);
+    char* ebx_p = edx_p;
+    unsigned edx_v = *(unsigned*)esi_q;
+    char* edx2 = (edx_v != 0) ? (char*)(edx_v - 0x10) : (char*)0;
+    p += 0x10;
+    edx2 += 0x10;
+    *(unsigned*)edx2 = (unsigned)p;
+    ebx_p += 0x10;
+    *(unsigned*)(long)ecx_p = (unsigned)edx2;
+    *(unsigned*)eax_p = (unsigned)ebx_p;
+    *(unsigned*)esi_q = (unsigned)eax_p;
+}
 
+// @ 0x00a21310
+void erase_00a21310(void* a1, void* holder, void* target)
+{
+    char* eax_p = (char*)holder;
+    unsigned edx = *(unsigned*)eax_p;
+    if (edx == (unsigned)holder) return;
+    char* ecx_p = (char*)a1;
+    char* ebx_p = (char*)(ecx_p + 0x14);
+    unsigned c = *(unsigned*)ebx_p;
+    char* ebp_p = (c != 0) ? (char*)(c - 0x10) : (char*)0;
+    char* esi_0 = (edx != 0) ? (char*)(edx - 0x10) : (char*)0;
+    unsigned c2 = *(unsigned*)(eax_p + 4);
+    char* edi_p = (c2 != 0) ? (char*)(c2 - 0x10) : (char*)0;
+    char* edx2 = (esi_0 != 0) ? (char*)(esi_0 + 0x10) : (char*)0;
+    *(unsigned*)(ebp_p + 0x10) = (unsigned)edx2;
+    unsigned edx3 = (unsigned)target;
+    char* ecx2 = (char*)(ebp_p + 0x10);
+    *(unsigned*)(esi_0 + 0x14) = (unsigned)ecx2;
+    char* ecx3 = (char*)(edi_p + 0x10);
+    edx3 += 0x10;
+    *(unsigned*)ecx3 = edx3;
+    *(unsigned*)ebx_p = (unsigned)ecx3;
+    *(unsigned*)eax_p = (unsigned)eax_p;
+    *(unsigned*)(eax_p + 4) = (unsigned)eax_p;
+}
 
+// @ 0x00a21390
+bool EA::Audio::Submix::DisconnectFromSubmix()
+{
+    void* self = this;
+    void* m = *(void**)0x16e61a8;
+    if (m != 0) TH(m)->m_0112c600();
+    void* esi = (char*)self + 0x10;
+    void* p = TH(esi)->m_00a34230(0x41695730);
+    if (p != 0)
+        f_0112ccc0(p, 1, 0, 0);
+    TH(esi)->m_00a34890();
+    m = *(void**)0x16e61a8;
+    if (m != 0) TH(m)->m_0112c620();
+    return true;
+}
 
+// @ 0x00a21410
+bool VoiceContainer_s00a2_1130::Connect(int a1, int a2)
+{
+    char* self = (char*)this;
+    void* p = TH(self + 0x10)->m_00a34230(0x53747030);
+    if (p == 0) return false;
+    void* m = *(void**)0x16e61a8;
+    if (m != 0) TH(m)->m_0112c600();
+    char buf[8];
+    *(int*)(buf + 0) = a1;
+    *(int*)(buf + 4) = a2;
+    f_0112ccc0(p, 2, 0, buf);
+    m = *(void**)0x16e61a8;
+    if (m != 0) TH(m)->m_0112c620();
+    return true;
+}
 
+// @ 0x00a214b0
+bool VoiceContainer_s00a2_1130::Connect4(int a1, int a2, int a3, int a4)
+{
+    char* self = (char*)this;
+    char cached = (*(int*)(self + 0x15f4) != 0);
+    if (!cached)
+        *(void**)(self + 0x15f4) = TH(self + 0x10)->m_00a34230(0x53747030);
+    if (*(int*)(self + 0x15f4) == 0) return false;
+    void* m = *(void**)0x16e61a8;
+    if (m != 0) TH(m)->m_0112c600();
+    if (!cached) {
+        char buf[16];
+        *(int*)(buf + 0)  = a1;
+        *(int*)(buf + 4)  = a2;
+        *(int*)(buf + 8)  = a3;
+        *(int*)(buf + 12) = a4;
+        f_0112ccc0(*(void**)(self + 0x15f4), 0, 0, buf);
+    }
+    m = *(void**)0x16e61a8;
+    if (m != 0) TH(m)->m_0112c620();
+    return true;
+}
+
+// @ 0x00a21590
+void __fastcall disconnect_00a21590(char* self)
+{
+    if (*(int*)(self + 0x15f4) == 0) return;
+    void* m = *(void**)0x16e61a8;
+    if (m != 0) TH(m)->m_0112c600();
+    f_0112ccc0(*(void**)(self + 0x15f4), 1, 0, 0);
+    *(void**)(self + 0x15f4) = 0;
+    m = *(void**)0x16e61a8;
+    if (m != 0) TH(m)->m_0112c620();
+}
+
+// @ 0x00a21630
+bool MsgTarget_00a21630::Handle(int a1, int a2)
+{
+    void* self = this;
+    void* eax = *(void**)((char*)*(void**)self + 0x1d4);
+    void* p = ((void* (__thiscall*)(void*, int))eax)(self, a1);
+    void* esi = p;
+    if (esi != 0)
+        VPTR(void, esi, 0)(esi);
+    if (esi == 0) return false;
+    VPTR(void, esi, 0x18, int, int)(esi, 2, a2);
+    VPTR(void, esi, 4)(esi);
+    return true;
+}
+
+// @ 0x00a216d0
+void __fastcall get3_00a216d0(char* self, void* dummy, int* a, int* b, int* c)
+{
+    if (a != 0) *a = *(int*)(self + 0x200);
+    if (b != 0) *b = *(int*)(self + 0x15bb7c);
+    if (c != 0) *c = (*(int*)(self + 0x15bb80) - *(int*)(self + 0x15bb7c)) >> 2;
+}
+
+// @ 0x00a21710
+bool HandleMessage_00a21710(char* self, unsigned msg, void* info)
+{
+    char* esi = self - 4;
+    void* vt;
+    char* edi;
+
+    switch (msg) {
+    case 0xff0f31:
+        vt = *(void**)esi;
+        VPTR(void, esi, 0x38, unsigned)(esi, 0x3475373);
+        edi = (char*)info;
+        VPTR(void, esi, 0x40, unsigned, int)(esi, 0x3475385, *(int*)(edi + 8));
+        VPTR(void, esi, 0x3c, unsigned, float)(esi, 0x3475391, *(float*)(edi + 0x10));
+        VPTR(void, esi, 0x3c, unsigned, float)(esi, 0x3475395, *(float*)(edi + 0x18));
+        VPTR(void, esi, 0x3c, unsigned, float)(esi, 0x3475398, *(float*)(edi + 0x20));
+        VPTR(void, esi, 0x58)(esi);
+        return true;
+    case 0xff0ed1:
+        vt = *(void**)esi;
+        VPTR(void, esi, 0x38, unsigned)(esi, 0x3475365);
+        edi = (char*)info;
+        if (*(unsigned*)(edi + 0x88) & 1)
+            VPTR(void, esi, 0x44, unsigned, int, int)(esi, 0x347537e, *(int*)(edi + 8), 0);
+        if ((*(unsigned*)(edi + 0x88) >> 1) & 1)
+            VPTR(void, esi, 0x40, unsigned, int)(esi, 0x3475381, *(int*)(edi + 0x10));
+        VPTR(void, esi, 0x40, unsigned, int)(esi, 0x3475385, *(int*)(edi + 0x18));
+        if ((*(unsigned*)(edi + 0x88) >> 8) & 1)
+            VPTR(void, esi, 0x48, unsigned, int)(esi, 0x347539c, *(int*)(edi + 0x48));
+        if (((*(unsigned*)(edi + 0x88) >> 5) & 1) && ((*(unsigned*)(edi + 0x88) >> 6) & 1)
+            && ((*(unsigned*)(edi + 0x88) >> 7) & 1)) {
+            VPTR(void, esi, 0x3c, unsigned, float)(esi, 0x3475391, *(float*)(edi + 0x30));
+            VPTR(void, esi, 0x3c, unsigned, float)(esi, 0x3475395, *(float*)(edi + 0x38));
+            VPTR(void, esi, 0x3c, unsigned, float)(esi, 0x3475398, *(float*)(edi + 0x40));
+            VPTR(void, esi, 0x58)(esi);
+            return true;
+        }
+        VPTR(void, esi, 0x58)(esi);
+        return true;
+    case 0xff0ee1:
+        vt = *(void**)esi;
+        VPTR(void, esi, 0x38, unsigned)(esi, 0x347536b);
+        edi = (char*)info;
+        VPTR(void, esi, 0x40, unsigned, int)(esi, 0x3475385, *(int*)(edi + 8));
+        VPTR(void, esi, 0x40, unsigned, int)(esi, 0x34753a0, *(int*)(edi + 0x10));
+        return true;
+    case 0xff0f01:
+        vt = *(void**)esi;
+        VPTR(void, esi, 0x38, unsigned)(esi, 0x347536f);
+        edi = (char*)info;
+        VPTR(void, esi, 0x40, unsigned, int)(esi, 0x3475385, *(int*)(edi + 8));
+        VPTR(void, esi, 0x3c, unsigned, float)(esi, 0x34753a4, *(float*)(edi + 0x10));
+        VPTR(void, esi, 0x58)(esi);
+        return true;
+    case 0x1956125:
+        vt = *(void**)esi;
+        VPTR(void, esi, 0x38, unsigned)(esi, 0x3475376);
+        edi = (char*)info;
+        VPTR(void, esi, 0x40, unsigned, int)(esi, 0x3475385, *(int*)(edi + 8));
+        VPTR(void, esi, 0x40, unsigned, int)(esi, 0x34753a7, *(int*)(edi + 0x10));
+        VPTR(void, esi, 0x3c, unsigned, float)(esi, 0x34753aa, *(float*)(edi + 0x18));
+        VPTR(void, esi, 0x40, unsigned, int)(esi, 0x34753ad, *(int*)(edi + 0x20));
+        VPTR(void, esi, 0x58)(esi);
+        return true;
+    case 0x19aa8ab:
+        vt = *(void**)esi;
+        VPTR(void, esi, 0x38, unsigned)(esi, 0x3475331);
+        edi = (char*)info;
+        VPTR(void, esi, 0x40, unsigned, int)(esi, 0x3475381, *(int*)(edi + 8));
+        VPTR(void, esi, 0x40, unsigned, int)(esi, 0x3475385, *(int*)(edi + 0x10));
+        VPTR(void, esi, 0x58)(esi);
+        return true;
+    case 0x24255a9:
+        vt = *(void**)esi;
+        VPTR(void, esi, 0x38, unsigned)(esi, 0x347537a);
+        edi = (char*)info;
+        VPTR(void, esi, 0x40, unsigned, int)(esi, 0x3475385, *(int*)(edi + 8));
+        VPTR(void, esi, 0x40, unsigned, int)(esi, 0x34753a7, *(int*)(edi + 0x10));
+        VPTR(void, esi, 0x4c, unsigned, int, int)(esi, 0x34753b0, *(int*)(edi + 0x18), *(int*)(edi + 0x20));
+        VPTR(void, esi, 0x58)(esi);
+        return true;
+    default:
+        break;
+    }
+    return true;
+}
+
+// @ 0x00a21b20
+bool command_00a21b20(char* self, int a, int n, void* extra)
+{
+    if (a == 0 || n == 0) return false;
+    void* p = VPTR(void*, self, 0x17c, int)(self, a);
+    if (p != 0) {
+        if (((VoiceContainer_s00a2_1130*)p)->Connect(n, (int)extra)) {
+            return true;
+        }
+    }
+    if (extra == 0) return false;
+    int i = 0;
+    if (n <= 0) return false;
+    while (i < n) {
+        void* v = *(void**)(a + i * 4);
+        ((void (__cdecl*)(void*, void*))extra)(v, extra);
+        ++i;
+    }
+    return false;
+}
+
+// @ 0x00a21b90
+bool command4_00a21b90(char* self, int a, int b, int c, int d)
+{
+    if (d == 0) return false;
+    void* p = VPTR(void*, self, 0x17c, int)(self, a);
+    if (p == 0) return false;
+    return ((VoiceContainer_s00a2_1130*)p)->Connect4(b, c, d, d);
+}
+
+// @ 0x00a21bd0
+void __fastcall command_00a21bd0(void* self, void* dummy, int a)
+{
+    void* p = VPTR(void*, self, 0x17c, int)(self, a);
+    if (p != 0)
+        disconnect_00a21590((char*)p);
+}
+
+// @ 0x00a21c00
+void VoiceVec_00a21c00::Destroy()
+{
+    int* self = (int*)this;
+    int* end = (int*)self[1];
+    int* it  = (int*)self[0];
+    while (it < end) {
+        void* p = (void*)*it;
+        if (p != 0)
+            VPTR(void, p, 8)(p);
+        ++it;
+    }
+    void* begin = (void*)self[0];
+    if (begin != 0)
+        f_00f47380(begin);
+}
+
+// @ 0x00a21c70
+void** __fastcall nodeToPayload_00a21c70(void* self, void* dummy, void** out)
+{
+    void* v = *(void**)self;
+    if (v != 0) *out = (char*)v - 0x10;
+    else *out = 0;
+    return out;
+}
+
+// @ 0x00a21c90
+void** __fastcall nodeToPayload_00a21c90(void* self, void* dummy, void** out)
+{
+    if (self != 0) *out = (char*)self - 0x10;
+    else *out = 0;
+    return out;
+}
+
+// @ 0x00a21cb0
+void listInsert_00a21cb0(void* a1, void* holder, void* newnode)
+{
+    char* eax_p = (char*)holder;
+    char* edx_p = (char*)(eax_p + 0x14);
+    unsigned e = *(unsigned*)edx_p;
+    char* esi_p = (e != 0) ? (char*)(e - 0x10) : (char*)0;
+    char* ecx_p = (char*)newnode;
+    char* eax2 = (ecx_p != 0) ? (char*)(ecx_p + 0x10) : (char*)0;
+    *(unsigned*)edx_p = (unsigned)eax2;
+    unsigned edx2 = *(unsigned*)edx_p;
+    char* eax3 = (char*)(esi_p + 0x10);
+    *(unsigned*)eax3 = edx2;
+    *(unsigned*)(ecx_p + 0x14) = (unsigned)eax3;
+    char* eax4 = (char*)(eax_p + 0x10);
+    *(unsigned*)(ecx_p + 0x10) = (unsigned)eax4;
+    *(unsigned*)a1 = (unsigned)ecx_p;
+}
+
+// @ 0x00a21d00
+void* __fastcall copyRef_00a21d00(char* self, void* dummy, void* src, unsigned** ref)
+{
+    *(unsigned*)(self + 0) = *(unsigned*)((char*)src + 0);
+    *(unsigned*)(self + 4) = *(unsigned*)((char*)src + 4);
+    *(unsigned*)(self + 8) = *(unsigned*)((char*)src + 8);
+    unsigned r = (unsigned)*ref;
+    *(unsigned*)(self + 0xc) = r;
+    if (r != 0) VPTR(void, (void*)r, 0)((void*)r);
+    return self;
+}
+
+// @ 0x00a21d30
+void __fastcall ringPush_00a21d30(char* self, void* dummy, unsigned* v)
+{
+    unsigned* p = *(unsigned**)(self + 0xfc0);
+    *p = *v;
+    *(unsigned*)(self + 0xfc0) += 4;
+    unsigned* end = *(unsigned**)(self + 4);
+    if (*(unsigned**)(self + 0xfc0) == end)
+        *(unsigned*)(self + 0xfc0) = *(unsigned*)self;
+    unsigned* begin = *(unsigned**)(self + 0xfbc);
+    if (*(unsigned**)(self + 0xfc0) == begin) {
+        begin = begin + 1;
+        *(unsigned*)(self + 0xfbc) = (unsigned)begin;
+        if (begin == end)
+            *(unsigned*)(self + 0xfbc) = *(unsigned*)self;
+        return;
+    }
+    ++*(unsigned*)(self + 0xfc4);
+}
+
+// @ 0x00a21d90
+void* __fastcall copyRef2_00a21d90(char* self, void* dummy, unsigned** a, unsigned** b)
+{
+    *(unsigned*)(self + 0) = (unsigned)*a;
+    unsigned r = (unsigned)*b;
+    *(unsigned*)(self + 4) = r;
+    if (r != 0) VPTR(void, (void*)r, 0)((void*)r);
+    return self;
+}
+
+// @ 0x00a21dc0
+void* RbTree_00a21dc0::Find(void* key, void** out)
+{
+    char* self = (char*)this;
+    unsigned node = *(unsigned*)(self + 0xc);
+    char* root = self + 4;
+    char* it = root;
+    if (node != 0) {
+        unsigned* k = (unsigned*)key;
+        do {
+            unsigned k0 = k[0];
+            unsigned v10 = *(unsigned*)(node + 0x10);
+            bool less;
+            if (v10 != k0) {
+                less = v10 < k0;
+            } else {
+                unsigned v18 = *(unsigned*)(node + 0x18);
+                unsigned k8 = k[2];
+                if (v18 != k8) {
+                    less = v18 < k8;
+                } else {
+                    less = *(unsigned*)(node + 0x14) < k[1];
+                }
+            }
+            if (!less) {
+                it = (char*)node;
+                node = *(unsigned*)(node + 4);
+            } else {
+                node = *(unsigned*)(node + 0);
+            }
+        } while (node != 0);
+    }
+    if (it != root) {
+        unsigned* k = (unsigned*)key;
+        unsigned k0 = k[0];
+        unsigned v10 = *(unsigned*)((char*)it + 0x10);
+        bool less;
+        if (v10 != k0) {
+            less = k0 < v10;
+        } else {
+            unsigned k8 = k[2];
+            unsigned v18 = *(unsigned*)((char*)it + 0x18);
+            if (v18 != k8) {
+                less = k8 < v18;
+            } else {
+                less = k[1] < *(unsigned*)((char*)it + 0x14);
+            }
+        }
+        if (!less) { *out = it; return it; }
+    }
+    *out = root;
+    return root;
+}
+
+// @ 0x00a21eb0
+void HashA_00a21eb0::Rehash(unsigned a)
+{
+    char* self = (char*)this;
+    int count = (int)a;
+    void* newTable = ((HashA_00a21eb0*)self)->Alloc(a);
+    int i = 0;
+    for (i = 0; (unsigned)i < *(unsigned*)(self + 8); ++i) {
+        int* node = *(int**)((char*)*(void**)(self + 4) + i * 4);
+        if (node == 0) continue;
+        for (;;) {
+            unsigned h = (unsigned)(node[2] ^ node[0]);
+            unsigned bucket = h % a;
+            int* next = (int*)node[4];
+            *(unsigned*)((char*)*(void**)(self + 4) + i * 4) = (unsigned)next;
+            int** head = (int**)((char*)newTable + bucket * 4);
+            node[4] = (int)*head;
+            *head = node;
+            node = *(int**)((char*)*(void**)(self + 4) + i * 4);
+            if (node == 0) break;
+        }
+    }
+    if (*(unsigned*)(self + 8) > 1) {
+        void* p = *(void**)(self + 4);
+        if (p != *(void**)(self + 0x30)
+            && !((char*)p < *(char**)(self + 0x24) || (char*)p >= *(char**)(self + 0x28))) {
+            f_00f47380(p);
+        }
+    }
+    *(void**)(self + 4) = newTable;
+    *(unsigned*)(self + 8) = (unsigned)count;
+}
+
+// @ 0x00a21f60
+void* allocRef_00a21f60(void* src)
+{
+    unsigned char* esi = (unsigned char*)f_00f473a0(0, 0, 0x14, (void*)0x13ebb38, 0xd1, "EASTL");
+    if (esi != 0) {
+        *(unsigned*)(esi + 0) = *(unsigned*)((char*)src + 0);
+        *(unsigned*)(esi + 4) = *(unsigned*)((char*)src + 4);
+        *(unsigned*)(esi + 8) = *(unsigned*)((char*)src + 8);
+        unsigned c = *(unsigned*)((char*)src + 0xc);
+        *(unsigned*)(esi + 0xc) = c;
+        if (c != 0) VPTR(void, (void*)c, 0)((void*)c);
+        *(unsigned*)(esi + 0x10) = 0;
+    }
+    return esi;
+}
+
+// @ 0x00a22060
+void HashB_00a22060::Rehash(unsigned a)
+{
+    char* self = (char*)this;
+    int count = (int)a;
+    void* newTable = ((HashB_00a22060*)self)->Alloc(a);
+    int i = 0;
+    for (i = 0; (unsigned)i < *(unsigned*)(self + 8); ++i) {
+        int* node = *(int**)((char*)*(void**)(self + 4) + i * 4);
+        if (node == 0) continue;
+        for (;;) {
+            unsigned bucket = (unsigned)node[0] % a;
+            int* next = *(int**)((char*)node + 0x1e4);
+            *(unsigned*)((char*)*(void**)(self + 4) + i * 4) = (unsigned)next;
+            int** head = (int**)((char*)newTable + bucket * 4);
+            *(unsigned*)((char*)node + 0x1e4) = (unsigned)*head;
+            *head = node;
+            node = *(int**)((char*)*(void**)(self + 4) + i * 4);
+            if (node == 0) break;
+        }
+    }
+    if (*(unsigned*)(self + 8) > 1) {
+        void* p = *(void**)(self + 4);
+        if (p != *(void**)(self + 0x30)
+            && !((char*)p < *(char**)(self + 0x24) || (char*)p >= *(char**)(self + 0x28))) {
+            f_00f47380(p);
+        }
+    }
+    *(void**)(self + 4) = newTable;
+    *(unsigned*)(self + 8) = (unsigned)count;
+}
+
+// @ 0x00a22110
+void HashC_00a22110::Rehash(unsigned a)
+{
+    char* self = (char*)this;
+    int count = (int)a;
+    void* newTable = ((HashC_00a22110*)self)->Alloc(a);
+    int i = 0;
+    for (i = 0; (unsigned)i < *(unsigned*)(self + 8); ++i) {
+        int* node = *(int**)((char*)*(void**)(self + 4) + i * 4);
+        if (node == 0) continue;
+        for (;;) {
+            unsigned bucket = (unsigned)node[0] % a;
+            int* next = (int*)((char*)node + 0x24);
+            *(unsigned*)((char*)*(void**)(self + 4) + i * 4) = (unsigned)next;
+            int** head = (int**)((char*)newTable + bucket * 4);
+            *(unsigned*)((char*)node + 0x24) = (unsigned)*head;
+            *head = node;
+            node = *(int**)((char*)*(void**)(self + 4) + i * 4);
+            if (node == 0) break;
+        }
+    }
+    if (*(unsigned*)(self + 8) > 1) {
+        void* p = *(void**)(self + 4);
+        if (p != *(void**)(self + 0x30)
+            && !((char*)p < *(char**)(self + 0x24) || (char*)p >= *(char**)(self + 0x28))) {
+            f_00f47380(p);
+        }
+    }
+    *(void**)(self + 4) = newTable;
+    *(unsigned*)(self + 8) = (unsigned)count;
+}
 
 // @ 0x00a22220
 void HTable28::Rehash(u32 n)
@@ -2751,29 +3521,6 @@ void HTable28::Rehash(u32 n)
     bucketCount = n;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a222c0
 void PoolList::FreeNodes()
 {
@@ -2789,29 +3536,6 @@ void PoolList::FreeNodes()
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a22370
 void HTable20::Rehash(u32 n)
@@ -2841,29 +3565,6 @@ void HTable20::Rehash(u32 n)
     buckets = nb;
     bucketCount = n;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a22410
 void SList::merge(SList& x, bool (__cdecl* compare)(Snd*, Snd*))
@@ -2899,29 +3600,6 @@ void SList::merge(SList& x, bool (__cdecl* compare)(Snd*, Snd*))
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a225d0
 AR* __cdecl ARUninitCopy(AR* first, AR* last, AR* dst)
 {
@@ -2929,29 +3607,6 @@ AR* __cdecl ARUninitCopy(AR* first, AR* last, AR* dst)
         ::new((void*)dst) AR(*first);
     return dst;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a226c0
 AR* __cdecl ARCopyBackward(AR* first, AR* last, AR* dst)
@@ -2964,29 +3619,6 @@ AR* __cdecl ARCopyBackward(AR* first, AR* last, AR* dst)
     return dst;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a22730
 AR* __cdecl ARCopy(AR* first, AR* last, AR* dst)
 {
@@ -2995,82 +3627,13 @@ AR* __cdecl ARCopy(AR* first, AR* last, AR* dst)
     return dst;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a227a0
 DrvBA22::DrvBA22(void* arg)
 : mArg(arg), mZero(0) {}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a227d0
 ResourceDeviceDriver* MakeRDD()
 { return new ResourceDeviceDriver; }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a22820
 void Subscription::UpdateOutput(Builder* b)
@@ -3091,29 +3654,6 @@ void Subscription::UpdateOutput(Builder* b)
         } while (n != &anchor);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a228d0
 int __cdecl WorkerThread(WorkerCtx* self)
@@ -3156,29 +3696,6 @@ int __cdecl WorkerThread(WorkerCtx* self)
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a22b00
 int __stdcall MakeKeyPair(int* out, int)
 {
@@ -3188,29 +3705,6 @@ int __stdcall MakeKeyPair(int* out, int)
     }
     return 2;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a22b90
 bool __stdcall LoadShared(IStream_* stream, Item* item, int, int)
@@ -3241,28 +3735,6 @@ bool __stdcall LoadShared(IStream_* stream, Item* item, int, int)
     return ok;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a23360
 float System::GetPosDist(float* p)
 {
@@ -3273,16 +3745,6 @@ float System::GetPosDist(float* p)
     float dz = pos[2] - p[2];
     return (float)sqrt((double)(dy * dy + (dz * dz + dx * dx)));
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a233b0
 void System::MuteAll(bool bMute, bool bParam)
@@ -3331,16 +3793,6 @@ void System::MuteAll(bool bMute, bool bParam)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a23830
 EInsertRes* EHTable::DoInsertKey(EInsertRes* out, const int* pkey, u32 unused)
 {
@@ -3382,16 +3834,6 @@ EInsertRes* EHTable::DoInsertKey(EInsertRes* out, const int* pkey, u32 unused)
     return out;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a23920
 void RefVec::Destroy()
 {
@@ -3408,16 +3850,6 @@ void RefVec::Destroy()
             operator_delete__(begin);
     }
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a23d20
 int PHTable::Erase(const int* pkey)
@@ -3452,16 +3884,6 @@ int PHTable::Erase(const int* pkey)
     return oldCount - (int)mnElementCount;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a23db0
 PHNode** PHTable::EraseNode(PHNode** out, PHNode* n, PHNode** pb)
 {
@@ -3494,16 +3916,6 @@ PHNode** PHTable::EraseNode(PHNode** out, PHNode* n, PHNode** pb)
     return out;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a24210
 void RBTree::Assign(void* arg)
 {
@@ -3513,16 +3925,6 @@ void RBTree::Assign(void* arg)
     sub_00a21310();
     sub_00a22410();
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a243e0
 void* RBTree::AllocNode2(const void* src, void* parent)
@@ -3547,16 +3949,6 @@ void* RBTree::AllocNode2(const void* src, void* parent)
     return n;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a24480
 void PHTable::FreeBuckets(PHNode** buckets, u32 count)
 {
@@ -3580,16 +3972,6 @@ void PHTable::FreeBuckets(PHNode** buckets, u32 count)
         buckets[i] = 0;
     }
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a24530
 RBNode_s00a2_3360* __thiscall RBTree::CloneNode(RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent)
@@ -3620,16 +4002,6 @@ RBNode_s00a2_3360* __thiscall RBTree::CloneNode(RBNode_s00a2_3360* src, RBNode_s
     return dst;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a245e0
 RBNode_s00a2_3360* __cdecl RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent)
 {
@@ -3644,16 +4016,6 @@ RBNode_s00a2_3360* __cdecl RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00
     n->color = src->color;
     return n;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a24750
 Elem20* __cdecl CopyElems20(Elem20** out, Elem20* first, Elem20* last)
@@ -3676,16 +4038,6 @@ Elem20* __cdecl CopyElems20(Elem20** out, Elem20* first, Elem20* last)
     return *out;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a247f0
 void RDD::Construct()
 {
@@ -3696,16 +4048,6 @@ void RDD::Construct()
     mpCapacity = 0;
     mMutex.ctor(0, 1);
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a24850
 u32 __cdecl ParseResman(const char* param_1, u8* param_2)
@@ -3726,16 +4068,6 @@ u32 __cdecl ParseResman(const char* param_1, u8* param_2)
     return 1;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a248a0
 ProfileTimer::ProfileTimer(void* acc)
 {
@@ -3755,16 +4087,6 @@ ProfileTimer::ProfileTimer(void* acc)
     *(unsigned int*)((char*)&sw.mnTotalElapsedTime + 4) = 0;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00a24900
 void ProfileTimer::Accumulate()
 {
@@ -3772,16 +4094,6 @@ void ProfileTimer::Accumulate()
     float* acc = (float*)mpAccumulator;
     *acc = (float)e * sw.mfCyclesToUnitsCoefficient + *acc;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a24930
 bool __thiscall RDD::Tick3(void* a, void* b, void* c)
@@ -3793,16 +4105,6 @@ bool __thiscall RDD::Tick3(void* a, void* b, void* c)
     *acc = (float)e * local.sw.mfCyclesToUnitsCoefficient + *acc;
     return false;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a25090
 bool Factory::MakeProps(const char* a, Obj_s00a2_4e10** out, int c, int d)
@@ -3820,15 +4122,6 @@ bool Factory::MakeProps(const char* a, Obj_s00a2_4e10** out, int c, int d)
     }
     return ok;
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a25190
 bool Factory::MakeAudio(const char* a, ARC* out, int c, int id)
@@ -3857,15 +4150,6 @@ bool Factory::MakeAudio(const char* a, ARC* out, int c, int id)
     }
     return ok;
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a252b0
 bool System_s00a2_4e10::Init()
@@ -3947,15 +4231,6 @@ bool System_s00a2_4e10::Init()
     return ok;
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x00a25980
 void Namer::Convert(const char* s, int a, int b, double c)
 {
@@ -3963,15 +4238,6 @@ void Namer::Convert(const char* s, int a, int b, double c)
     g_pfnString(&out, (int)ConvertToString16(s, -1).b, 0, 0, 0, 0); // 0x0154c464
     Dispatch((wchar_t*)out.a, a, b, c);
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a25a40
 bool AudioSys::CallPrim(unsigned id, int a, float b, int c)
@@ -3983,15 +4249,6 @@ bool AudioSys::CallPrim(unsigned id, int a, float b, int c)
     it.node->val->Update(a, b, c);
     return true;
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a25aa0
 void AudioSys::CallAll(int a, float b, int c)
@@ -4005,30 +4262,12 @@ void AudioSys::CallAll(int a, float b, int c)
     }
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x00a25b20
 bool AudioSys::HasPrim(unsigned id)
 {
     PNode* end = mPrims.end();
     return mPrims.find(id).node != end;
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a25b60
 void AudioSys::UpdateOutput()
@@ -4043,15 +4282,6 @@ void AudioSys::UpdateOutput()
         } while (it.node != end);
     }
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x00a25bd0
 bool AudioSys::GetFloat(unsigned k1, unsigned k2, float* out)
@@ -4068,14 +4298,365 @@ bool AudioSys::GetFloat(unsigned k1, unsigned k2, float* out)
     return false;
 }
 
+// @ 0x00a26e10
+InsertRes* KTable::Insert(InsertRes* out, const Key4* k, int)
+{
+    uint32_t h = k->a ^ k->c;
+    uint32_t idx = h % mnBuckets;
+    KNode** bucket = &mpBuckets[idx];
+    for (KNode* n = mpBuckets[idx]; n; n = n->next) {
+        if (k->a == n->key.a && k->b == n->key.b && k->c == n->key.c) {
+            out->node = n;
+            out->inserted = false;
+            out->bucket = bucket;
+            return out;
+        }
+    }
+    RehashRes r;
+    mPolicy.GetRehashRequired(&r, mnBuckets, mnElements, 1);
+    KNode* nn = (KNode*)eaNew(0x14, "EASTL", 0, 0, EASTL_FILE, 0xd1);
+    if (nn) {
+        nn->key = *k;
+    }
+    nn->next = 0;
+    if (r.bNeed) {
+        idx = h % r.nNew;
+        DoRehash(r.nNew);
+    }
+    nn->next = mpBuckets[idx];
+    mpBuckets[idx] = nn;
+    mnElements++;
+    out->node = nn;
+    out->inserted = true;
+    out->bucket = &mpBuckets[idx];
+    return out;
+}
 
+// @ 0x00a26f30
+void ResTable::DoFreeNodes(ResNode** buckets, uint32_t n)
+{
+    for (uint32_t i = 0; i < n; i++) {
+        ResNode* node = buckets[i];
+        while (node) {
+            ResNode* cur = node;
+            node = node->next;
+            ReleaseCounted(cur->value);
+            operator delete(cur);
+        }
+        buckets[i] = 0;
+    }
+}
 
+// @ 0x00a27010
+void* NodePool::Alloc(const Payload* src)
+{
+    void** node = mpFree;
+    if (node) {
+        mpFree = (void**)*node;
+    } else {
+        node = (void**)eaNew(mnNodeSize, "EASTL", 0, 0, EASTL_FILE, 0xd1);
+    }
+    Payload* dst = (Payload*)(node + 4);
+    if (dst) {
+        dst->a = src->a;
+        dst->b = src->b;
+        dst->c = src->c;
+        dst->obj = src->obj;
+        if (src->obj) src->obj->AddRef();
+    }
+    return node;
+}
 
+// @ 0x00a270b0
+PropList_s00a2_6e10::PropList_s00a2_6e10()
+{
+}
 
+// @ 0x00a27170
+bool FactoryVoiceTemplate::CreateResource(int key, PropList_s00a2_6e10** out, int a, int b)
+{
+    bool ok = false;
+    if (out != 0 && key != 0) {
+        PropList_s00a2_6e10* res = new ("audio", 0, 0, 0, 0) PropList_s00a2_6e10();
+        if (res) res->AddRef();
+        if (InitResource(key, res, a, b)) {
+            res->AddRef();
+            *out = res;
+            ok = true;
+        }
+        if (res) res->Release();
+    }
+    return ok;
+}
 
+// @ 0x00a27290
+AbilityList::AbilityList()
+{}
 
+// @ 0x00a27340
+bool StyleMgr::Remove(uint32_t key)
+{
+    StyleMgr* self = this;
+    HIter_s00a2_6e10 it;
+    self->mStyles.find(&it, &key);
+    HIter_s00a2_6e10 end; end.node = self->mStyles.mpBuckets[self->mStyles.mnBuckets];
+    if (it.node != end.node) {
+        void* obj = ((StyleNode*)it.node)->value;
+        ((VFn1)VSLOT(self, 0x170))(self, obj);
+        bool r = ((VFnB)VSLOT(obj, 0x24))(obj);
+        self->mStyles.erase(it);
+        return r;
+    }
+    return false;
+}
 
+// @ 0x00a273d0
+void StyleMgr::RemoveAll()
+{
+    StyleMgr* self = this;
+    void** bucket = self->mStyles.mpBuckets;
+    void* node = *bucket;
+    if (!node) {
+        bucket++;
+        node = *bucket;
+        while (!node) { bucket++; node = *bucket; }
+        node = *bucket;
+    }
+    void* end = self->mStyles.mpBuckets[self->mStyles.mnBuckets];
+    while (node != end) {
+        void* obj = ((StyleNode*)node)->value;
+        ((VFn1)VSLOT(self, 0x170))(self, obj);
+        ((VFnB)VSLOT(obj, 0x24))(obj);
+        HIter_s00a2_6e10 it; it.node = node; it.bucket = bucket;
+        HIter_s00a2_6e10 nx = self->mStyles.erase(it);
+        bucket = nx.bucket;
+        node = nx.node;
+    }
+}
 
+// @ 0x00a27460
+void* TexMgr::Find(const void* key)
+{
+    TexMgr* self = this;
+    HIter_s00a2_6e10 it;
+    it.node = 0;
+    self->mTex.find(&it, key);
+    if (it.node != self->mTex.mpBuckets[self->mTex.mnBuckets]) {
+        return ((TexNode*)it.node)->value;
+    }
+    return 0;
+}
+
+// @ 0x00a27530
+CountedRes** RefMap::FindOrInsert(const uint32_t* key)
+{
+    MapIter it = find(*key);
+    if (it.node != MapIter(mpBuckets + mnBuckets).node)
+        return &it.node->value;
+    return &Insert(MapValue(*key, RefSlot()), MapTrueType()).first.node->value;
+}
+
+// @ 0x00a27660
+HIter_s00a2_6e10* ETable::erase(HIter_s00a2_6e10* out, ENode* node, ENode** bucket)
+{
+    out->bucket = (void**)bucket;
+    out->node = node->next;
+    while (out->node == 0) {
+        out->bucket = (void**)((char*)out->bucket + 4);
+        out->node = *(void**)out->bucket;
+    }
+    ENode* cur = *bucket;
+    if (cur == node) {
+        *bucket = cur->next;
+    } else {
+        ENode* nx = cur->next;
+        while (nx != node) {
+            cur = nx;
+            nx = nx->next;
+        }
+        cur->next = nx->next;
+    }
+    if (node->value) node->value->Release();
+    operator delete(node);
+    mnElements--;
+    return out;
+}
+
+// @ 0x00a276e0
+void SubTable::DoFreeNodes(SubNode_s00a2_6e10** buckets, uint32_t n)
+{
+    for (uint32_t i = 0; i < n; i++) {
+        SubNode_s00a2_6e10* node = buckets[i];
+        while (node) {
+            SubNode_s00a2_6e10* cur = node;
+            node = node->next;
+            if (cur->sub) {
+                RefObj* r = (RefObj*)(cur->sub + 4);
+                r->Release();
+            }
+            if (cur != mpInline) {
+                if ((char*)cur < mpPoolBegin || (char*)cur >= mpPoolEnd) {
+                    operator delete(cur);
+                } else {
+                    *(SubNode_s00a2_6e10**)cur = mpFreeList;
+                    mpFreeList = cur;
+                }
+            }
+        }
+        buckets[i] = 0;
+    }
+}
+
+// @ 0x00a27760
+void RcVector::DoInsertValue(RcPtr* pos, const RcPtr* value)
+{
+    if (mpEnd != mpCap) {
+        const RcPtr* pv = value;
+        if (pv >= pos && pv < mpEnd) ++pv;
+        ::new (mpEnd) RcPtr(*(mpEnd - 1));
+        CopyBackwardRc(pos, mpEnd - 1, mpEnd);
+        *pos = *pv;
+        ++mpEnd;
+    } else {
+        size_t nPrev = mpEnd - mpBegin;
+        size_t nNew = nPrev ? nPrev * 2 : 1;
+        RcPtr* pNew = nNew ? (RcPtr*)eaNew(nNew * sizeof(RcPtr), "EASTL", 0, 0, EASTL_FILE, 0xd1) : 0;
+        size_t nBefore = (char*)pos - (char*)mpBegin;
+        RcPtr* pNewPos = (RcPtr*)memcpy_11e0744(pNew, mpBegin, nBefore) + nBefore / sizeof(RcPtr);
+        ::new (pNewPos) RcPtr(*value);
+        size_t nAfter = (char*)mpEnd - (char*)pos;
+        RcPtr* pNewEnd = (RcPtr*)memcpy_11e0744(pNewPos + 1, pos, nAfter) + nAfter / sizeof(RcPtr);
+        if (mpBegin && ((int*)mpBegin)[-1] != 0) operator delete(mpBegin);
+        mpEnd = pNewEnd;
+        mpBegin = pNew;
+        mpCap = pNew + nNew;
+    }
+}
+
+// @ 0x00a27910
+void Rec12Vector::DoInsertValue(Rec12* pos, const Rec12* value)
+{
+    if (mpEnd != mpCap) {
+        const Rec12* pv = value;
+        if (pv >= pos && pv < mpEnd) ++pv;
+        if (mpEnd) *mpEnd = mpEnd[-1];
+        Rec12* last = mpEnd - 1;
+        Rec12* dst = mpEnd;
+        while (last != pos) {
+            --last;
+            --dst;
+            *dst = *last;
+        }
+        *pos = *pv;
+        ++mpEnd;
+    } else {
+        size_t nPrev = mpEnd - mpBegin;
+        size_t nNew = nPrev ? nPrev * 2 : 1;
+        Rec12* pNew = nNew ? (Rec12*)eaNew(nNew * sizeof(Rec12), "EASTL", 0, 0, EASTL_FILE, 0xd1) : 0;
+        Rec12* pNewEnd = RelocateRec12(mpBegin, pos, pNew);
+        if (pNewEnd) *pNewEnd = *value;
+        pNewEnd = RelocateRec12(pos, mpEnd, pNewEnd + 1);
+        if (mpBegin && mpBegin != mpFixed) operator delete(mpBegin);
+        mpBegin = pNew;
+        mpEnd = pNewEnd;
+        mpCap = pNew + nNew;
+    }
+}
+
+// @ 0x00a27a40
+void Rec24Vector::DoInsertValue(Rec24* pos, const Rec24* value)
+{
+    if (mpEnd != mpCap) {
+        const Rec24* pv = value;
+        if (pv >= pos && pv < mpEnd) ++pv;
+        if (mpEnd) *mpEnd = mpEnd[-1];
+        CopyBackwardRec24(pos, mpEnd - 1, mpEnd);
+        *pos = *pv;
+        ++mpEnd;
+    } else {
+        size_t nPrev = mpEnd - mpBegin;
+        size_t nNew = nPrev ? nPrev * 2 : 1;
+        Rec24* pNew = nNew ? (Rec24*)eaNew(nNew * sizeof(Rec24), "EASTL", 0, 0, EASTL_FILE, 0xd1) : 0;
+        Rec24* pNewEnd = RelocateRec24(mpBegin, pos, pNew);
+        if (pNewEnd) *pNewEnd = *value;
+        pNewEnd = RelocateRec24(pos, mpEnd, pNewEnd + 1);
+        if (mpBegin && mpBegin != mpFixed) operator delete(mpBegin);
+        mpBegin = pNew;
+        mpEnd = pNewEnd;
+        mpCap = pNew + nNew;
+    }
+}
+
+// @ 0x00a27b90
+void ZoneVector::DoInsertValue(Zone* pos, const Zone* value)
+{
+    if (mpEnd != mpCap) {
+        const Zone* pv = value;
+        if (pv >= pos && pv < mpEnd) ++pv;
+        if (mpEnd) *mpEnd = mpEnd[-1];
+        Zone* last = mpEnd - 1;
+        Zone* dst = mpEnd;
+        while (last != pos) {
+            --last;
+            --dst;
+            *dst = *last;
+        }
+        *pos = *pv;
+        ++mpEnd;
+    } else {
+        size_t nPrev = mpEnd - mpBegin;
+        size_t nNew = nPrev ? nPrev * 2 : 1;
+        Zone* pNew = nNew ? (Zone*)eaNew(nNew * sizeof(Zone), "EASTL", 0, 0, EASTL_FILE, 0xd1) : 0;
+        Zone* pNewEnd = RelocateZone(mpBegin, pos, pNew);
+        if (pNewEnd) *pNewEnd = *value;
+        pNewEnd = RelocateZone(pos, mpEnd, pNewEnd + 1);
+        if (mpBegin && ((int*)mpBegin)[-1] != 0) operator delete(mpBegin);
+        mpEnd = pNewEnd;
+        mpBegin = pNew;
+        mpCap = pNew + nNew;
+    }
+}
+
+// @ 0x00a27ed0
+bool Submix_s00a2_6e10::ConnectToSubmix(Submix_s00a2_6e10* other)
+{
+    if (!other) return false;
+    AudioLockGuard lock;
+    Plugin* plugin = (Plugin*)mVoiceContainer.FindPlugin(0x41695730);
+    if (plugin) {
+        EStr s;
+        s.sprintf("%s.aiff", mpName);
+        plugin->SetName(0, s.c_str());
+    }
+    return mVoiceContainer.ConnectToSubmix(fld<void*>(other, 0x970), 0);
+}
+
+// @ 0x00a27ff0
+bool EvOwner::Register(uint32_t a1, uint32_t a2, void* a3, double a4)
+{
+    EvOwner* self = this;
+    HIter_s00a2_6e10 it;
+    EvTable& t = self->mEvents;
+    void* end = t.mpBuckets[t.mnBuckets];
+    t.find(&it, &a1);
+    if (it.node != end) return false;
+    RefObj* created = 0;
+    bool ok = ((VCreate)VSLOT(self, 0x94))(self, a1, a2, a3, 0, &created);
+    if (!ok) {
+        HIter_s00a2_6e10 res;
+        t.Insert(&res, &a1, 0);
+        ((VNotify)VSLOT(self, 0x98))(self, a2, 1);
+        if (created) created->Release();
+        return false;
+    }
+    bool fired = ((VFire)VSLOT(created, 0x14))(created, a4);
+    if (fired) {
+        if (created) created->Release();
+        return true;
+    }
+    if (created) created->Release();
+    return false;
+}
 
 // @ 0x00a2a020
 bool SysLike::ConnectSubmixTree()
@@ -4112,14 +4693,6 @@ bool SysLike::ConnectSubmixTree()
     return fail == 0;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x00a2a150
 int SmallStubs::GetOrInsert(int* key)
 {
@@ -4134,14 +4707,6 @@ int SmallStubs::GetOrInsert(int* key)
     FUN_00a136f0(local_18, &k, 0);
     return local_18[0] + 4;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x00a2aa70
 void SmallStubs::Dtor()
@@ -4162,14 +4727,6 @@ void SmallStubs::Dtor()
     }
 }
 
-
-
-
-
-
-
-
-
 // @ 0x00a2ae90
 int SmallStubs::EraseRange(int param_2, int param_3)
 {
@@ -4189,14 +4746,6 @@ int SmallStubs::EraseRange(int param_2, int param_3)
     *(int*)((char*)this + 4) += ((param_3 - param_2) / 0x14) * 0x14;
     return param_2;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x00a2c6c0
 namespace EA { namespace Audio {
@@ -4576,13 +5125,6 @@ done:
 }
 }}  // namespace EA::Audio
 
-
-
-
-
-
-
-
 // @ 0x00a2d790
 bool EA::Audio::System::RegisterPrimitive(EA::Audio::IPrimitive * p)
 {
@@ -4609,12 +5151,6 @@ bool EA::Audio::System::RegisterPrimitive(EA::Audio::IPrimitive * p)
     return true;
 }
 
-
-
-
-
-
-
 // @ 0x00a2d880
 void* AudioSystem::FUN_00a2d880(uint key, void* out)
 {
@@ -4631,12 +5167,6 @@ void* AudioSystem::FUN_00a2d880(uint key, void* out)
     return (void*)1;
 }
 
-
-
-
-
-
-
 // @ 0x00a2d940
 void* AudioSystem::FUN_00a2d940(void* arg)
 {
@@ -4644,12 +5174,6 @@ void* AudioSystem::FUN_00a2d940(void* arg)
     ((XF*)((uchar*)this + 4))->FUN_00a26fa0(arg);
     return this;
 }
-
-
-
-
-
-
 
 // @ 0x00a2d990
 int AudioSystem::FUN_00a2d990(void* arg)
@@ -4663,12 +5187,6 @@ int AudioSystem::FUN_00a2d990(void* arg)
     return 0;
 }
 
-
-
-
-
-
-
 // @ 0x00a2d9d0
 void* AudioSystem::FUN_00a2d9d0(uchar flags)
 {
@@ -4678,12 +5196,6 @@ void* AudioSystem::FUN_00a2d9d0(uchar flags)
     return this;
 }
 
-
-
-
-
-
-
 // @ 0x00a2da30
 void AudioSystem::FUN_00a2da30()
 {
@@ -4692,23 +5204,11 @@ void AudioSystem::FUN_00a2da30()
     return;
 }
 
-
-
-
-
-
-
 // @ 0x00a2dc40
 void EA::Audio::System::SetupPropertyAggregationRules()
 {
     return;
 }
-
-
-
-
-
-
 
 // @ 0x00a2de20
 bool EA::Audio::System::DestroySubmixes()
@@ -4743,12 +5243,6 @@ bool EA::Audio::System::DestroySubmixes()
     return true;
 }
 
-
-
-
-
-
-
 // @ 0x00a2dfe0
 void AudioSystem::FUN_00a2dfe0(void* p)
 {
@@ -4765,12 +5259,6 @@ void AudioSystem::FUN_00a2dfe0(void* p)
         ((XF*)vec)->FUN_00a2ac20(cur, p);
     }
 }
-
-
-
-
-
-
 
 // @ 0x00a2e060
 uint& AudioSystem::FUN_00a2e060(const uint& k)
@@ -4795,12 +5283,6 @@ uint& AudioSystem::FUN_00a2e060(const uint& k)
     else cand->right = n;
     return n->value;
 }
-
-
-
-
-
-
 
 // @ 0x00a2e0e0
 int AudioSystem::FUN_00a2e0e0(uint* p)
@@ -4828,12 +5310,6 @@ int AudioSystem::FUN_00a2e0e0(uint* p)
     return before - *(int*)(ht + 0xc);
 }
 
-
-
-
-
-
-
 // @ 0x00a2e1b0
 void* AudioSystem::FUN_00a2e1b0(void* out, void* node, void* parent)
 {
@@ -4860,12 +5336,6 @@ void* AudioSystem::FUN_00a2e1b0(void* out, void* node, void* parent)
     return out;
 }
 
-
-
-
-
-
-
 // @ 0x00a2e260
 void AudioSystem::FUN_00a2e260(void* p)
 {
@@ -4884,24 +5354,12 @@ void AudioSystem::FUN_00a2e260(void* p)
     }
 }
 
-
-
-
-
-
-
 // @ 0x00a2e2f0
 AudioSystem* AudioSystem::FUN_00a2e2f0(void* p)
 {
     (void)p;
     return this;
 }
-
-
-
-
-
-
 
 // @ 0x00a2e420
 void* AudioSystem::FUN_00a2e420(void* p)
@@ -4922,24 +5380,12 @@ void* AudioSystem::FUN_00a2e420(void* p)
     return node;
 }
 
-
-
-
-
-
-
 // @ 0x00a2e4c0
 void* AudioSystem::FUN_00a2e4c0(void* p)
 {
     (void)p;
     return p;
 }
-
-
-
-
-
-
 
 // @ 0x00a2e650
 bool MgrBase::Create(unsigned name, unsigned id, void* existing, float* pos, void** out)
@@ -5102,22 +5548,12 @@ bool MgrBase::Create(unsigned name, unsigned id, void* existing, float* pos, voi
     return true;
 }
 
-
-
-
-
-
 // @ 0x00a2ee40
 void MgrBase::PostEvent(unsigned a, unsigned b, unsigned c, unsigned d, void* ref)
 {
     EventMsg m(a, b, c, d, ref);
     AT(EventQueue, this, 0x15b77c).Push(m);
 }
-
-
-
-
-
 
 // @ 0x00a2eed0
 bool MgrBase::RemoveEntry(void* obj)
@@ -5133,11 +5569,6 @@ bool MgrBase::RemoveEntry(void* obj)
     it = m->erase(it);
     return true;
 }
-
-
-
-
-
 
 // @ 0x00a2ef60
 void MgrBase::Rebuild()
@@ -5175,21 +5606,11 @@ void MgrBase::Rebuild()
     }
 }
 
-
-
-
-
-
 // @ 0x00a2f180
 void cTypeMapHolder::SetTypePriority(uint32_t type, uint32_t priority)
 {
     mMap[type] = (int)priority;
 }
-
-
-
-
-
 
 // @ 0x00a2f1a0
 void cTypeMapHolder::InitDefaultPriorities()
@@ -5198,11 +5619,6 @@ void cTypeMapHolder::InitDefaultPriorities()
     mMap[0x2b9f662] = 1;
     mMap[0x1a527db] = 2;
 }
-
-
-
-
-
 
 // @ 0x00a30460
 void EA::Audio::System::SetProperty(unsigned int key, float value)
@@ -5266,10 +5682,6 @@ void EA::Audio::System::SetProperty(unsigned int key, float value)
         node->val = value;
 }
 
-
-
-
-
 // @ 0x00a30790
 int __cdecl FUN_00a30790(void)
 {
@@ -5277,10 +5689,6 @@ int __cdecl FUN_00a30790(void)
     (void)obj;
     return 0;
 }
-
-
-
-
 
 // @ 0x00a30940
 void EA::Audio::System::PreloadConfigurations()
@@ -5296,10 +5704,6 @@ void EA::Audio::System::PreloadConfigurations()
     (void)obj;
     // enumerator walk + per-record construction/Read/insert omitted (alloca frame)
 }
-
-
-
-
 
 // @ 0x00a30e10
 int FixedMap30e10::ctor(void* a2, void* a3)
@@ -5318,10 +5722,6 @@ int FixedMap30e10::ctor(void* a2, void* a3)
         ((HashBaseCD*)this)->rehash(u);
     return (int)this;
 }
-
-
-
-
 
 // @ 0x00a30f10
 int NodeMap::eraseKey(u32* key)
@@ -5347,10 +5747,6 @@ int NodeMap::eraseKey(u32* key)
     return iVar1 - mnElementCount;
 }
 
-
-
-
-
 // @ 0x00a31040
 FixedVec11* FixedVec11::ctor(int param_2)
 {
@@ -5366,10 +5762,6 @@ FixedVec11* FixedVec11::ctor(int param_2)
     return this;
 }
 
-
-
-
-
 // @ 0x00a310b0
 FixedVec11b* FixedVec11b::ctor(u32* param_2)
 {
@@ -5381,10 +5773,6 @@ FixedVec11b* FixedVec11b::ctor(u32* param_2)
     InitRange(param_2[0], param_2[1], param_2);
     return this;
 }
-
-
-
-
 
 // @ 0x00a31170
 bool cSystem::InitAT()
@@ -5628,8 +6016,6 @@ bool System_s00a3_1f20::DoCommandMainThread(EA::Audio::Command_s00a3_1f20* cmd)
     return true;
 }
 
-
-
 // @ 0x00a32220
 FixedHashMap::FixedHashMap(uint a, uint b)
 {
@@ -5652,8 +6038,6 @@ FixedHashMap::FixedHashMap(uint a, uint b)
         ((FHMapBase*)this)->Rehash(n);
 }
 
-
-
 // @ 0x00a32320
 void FUN_00a32320(uint32_t* x, uint32_t* y)
 {
@@ -5669,8 +6053,6 @@ void FUN_00a32320(uint32_t* x, uint32_t* y)
     }
     ((HashTmp*)&tmp.t0)->Dtor();
 }
-
-
 
 // @ 0x00a323e0
 uint32_t* OuterMap::operator_index(uint32_t* key)
@@ -5702,8 +6084,6 @@ uint32_t* OuterMap::operator_index(uint32_t* key)
     }
     return r;
 }
-
-
 
 // @ 0x00a32550
 void SystemDtor::Destroy()
@@ -5795,8 +6175,6 @@ void SystemDtor::Destroy()
     d[1] = (uint32_t)vtbl_PaintSystem;
 }
 
-
-
 // @ 0x00a32ea0
 void SystemProps::SetOutputProperty(uint32_t id, uint32_t prop, float value)
 {
@@ -5815,8 +6193,6 @@ void SystemProps::SetOutputProperty(uint32_t id, uint32_t prop, float value)
     char out[12];
     ((InnerInsert*)m)->Insert((uint32_t*)out, kv, prop);
 }
-
-
 
 // @ 0x00a33600
 System_s00a3_2f20::System_s00a3_2f20()
