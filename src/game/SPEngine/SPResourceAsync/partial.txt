@@ -1,0 +1,9 @@
+# incomplete / approximate (stubbed blocks or omitted paths)
+006ae3f0   -  cAsyncResourceManager::GetRequest: skeleton only
+006ae590   -  rbtree::erase with node pool: skeleton only
+006ae660   -  pool node alloc from freelist: approximate
+006ae880   -  cAsyncResourceManager::RequestComplete: skeleton only
+006ae940   -  async request poll/GC loop: skeleton only
+006aea90   -  job completion: skeleton only
+006aec60   -  rbtree insert/emplace with node pool: skeleton only
+006af260   -  large async submit routine: skeleton only

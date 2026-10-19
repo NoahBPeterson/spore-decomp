@@ -13,10 +13,20 @@
 006adda0 ?FUN_006adda0@@YIPAXPAX@Z  # FUN_006adda0 migrated from s006ad5c0 (verbatim, slice spelling)
 006adee0 ?FUN_006adee0@@YAXXZ  # FUN_006adee0 migrated from s006ad5c0 (verbatim, slice spelling)
 006adfe0 ?AddRegistrationCallback@SP@@YAXIPAX@Z  # AddRegistrationCallback migrated from s006ad5c0 (verbatim, slice spelling)
-006ae060 SP::cAsyncResourceRequest::AsInterface  # PDB
-006ae210 eastl::rbtree_node<...>::~rbtree_node  # PDB
-006ae3f0 SP::cAsyncResourceManager::GetRequest  # PDB
-006ae510 Resource::Async::Async  # PDB
-006ae590 eastl::rbtree<...>::erase  # PDB
-006ae600 eastl::rbtree<...>::DoNukeSubtree  # PDB
-006ae880 SP::cAsyncResourceManager::RequestComplete  # PDB
+006ae060 ?AsInterface@cAsyncResourceRequest@SP@@UAEPAXW4InterfaceId@COM@EA@@@Z  # SP::cAsyncResourceRequest::AsInterface migrated from s006ad5c0
+006ae0d0 ?FUN_006ae0d0@@YIEPAPAX@Z  # FUN_006ae0d0 migrated from s006ad5c0 (verbatim, slice spelling)
+006ae0f0 ?FUN_006ae0f0@@YIEPAPAX@Z  # FUN_006ae0f0 migrated from s006ad5c0 (verbatim, slice spelling)
+006ae110 ?FUN_006ae110@@YIXPAPAX@Z  # FUN_006ae110 migrated from s006ad5c0 (verbatim, slice spelling)
+006ae120 ?FUN_006ae120@@YIXPAX@Z  # FUN_006ae120 migrated from s006ad5c0 (verbatim, slice spelling)
+006ae190 ?FUN_006ae190@@YIXPAX@Z  # FUN_006ae190 migrated from s006ad5c0 (verbatim, slice spelling)
+006ae210 ?FUN_006ae210@@YIXPAX@Z  # FUN_006ae210 migrated from s006ad5c0 (verbatim, slice spelling)
+006ae280 ?FUN_006ae280@@YI_NH@Z  # FUN_006ae280 migrated from s006ad5c0 (verbatim, slice spelling)
+006ae2a0 ?FUN_006ae2a0@@YIPAXPAX0@Z  # FUN_006ae2a0 migrated from s006ad5c0 (verbatim, slice spelling)
+006ae2f0 ?FUN_006ae2f0@@YA_NPADPAX@Z  # FUN_006ae2f0 migrated from s006ad5c0 (verbatim, slice spelling)
+006ae3f0 ?FUN_006ae3f0@@YAXXZ  # FUN_006ae3f0 migrated from s006ad5c0 (verbatim, slice spelling)
+006ae4c0 ?Get@Self@@QAE_NPAPAX@Z  # Self::Get migrated from s006ad5c0 (verbatim, slice spelling)
+006ae510 ?FUN_006ae510@@YIPAXPAX0@Z  # FUN_006ae510 migrated from s006ad5c0 (verbatim, slice spelling)
+006ae590 ?FUN_006ae590@@YAXXZ  # FUN_006ae590 migrated from s006ad5c0 (verbatim, slice spelling)
+006ae600 ?DoNukeSubtree@RBTree@@QAEXPAURBNode@@@Z  # RBTree::DoNukeSubtree migrated from s006ad5c0 (verbatim, slice spelling)
+006ae660 ?FUN_006ae660@@YIPAXPAX0@Z  # FUN_006ae660 migrated from s006ad5c0 (verbatim, slice spelling)
+006ae880 ?FUN_006ae880@@YAXXZ  # FUN_006ae880 migrated from s006ad5c0 (verbatim, slice spelling)

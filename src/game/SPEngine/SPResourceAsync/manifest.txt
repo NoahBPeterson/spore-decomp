@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPResourceAsync.cpp  ?FUN_006ae0d0@@YIEPAPAX@Z  006ae0d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPResourceAsync.cpp  ?FUN_006ae0f0@@YIEPAPAX@Z  006ae0f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPResourceAsync.cpp  ?FUN_006ae110@@YIXPAPAX@Z  006ae110  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPResourceAsync.cpp  ?DoNukeSubtree@RBTree@@QAEXPAURBNode@@@Z  006ae600  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

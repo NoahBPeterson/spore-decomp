@@ -1,0 +1,12 @@
+# complete behaviourally-equivalent source, not byte-exact (yet)
+006ae060 39 4-IID test: cl 15 emits a linear compare chain instead of the original median tree
+006ae120 33 dtor: EH prologue not reproduced; equiv: PASS
+006ae190 30 dtor: EH prologue not reproduced; equiv: PASS
+006ae210 17 rbtree_node dtor: EH prologue not reproduced; equiv: PASS
+006ae280 17 return (unsigned)(r-7)<=1; cl uses sbb/inc instead of setbe al; equiv: PASS
+006ae2a0 56 AutoRefCount::operator= : lock xadd / xchg refcount shape not reproduced; equiv: FAIL (esp)
+006ae2f0 13 callback setter: extra pop esi moved to the end of the function; equiv: PASS
+006ae4c0 30 getter: duplicated tail / xor eax scheduling differs; equiv: PASS
+006ae510 20 Resource::Async ctor: EH prologue + InterlockedExchange zero store not reproduced; equiv: FAIL (esp)
+006aebd0 21 dtor: EH prologue + vtable stores not reproduced; equiv UNSUPPORTED: unresolved refs XRBTree::DoNukeSubtree, Mutex2::dtor
+006aedc0 12 ctor: EH prologue + lock xchg + Mutex ctor not reproduced; equiv UNSUPPORTED: unresolved ref Mutex2::dtor

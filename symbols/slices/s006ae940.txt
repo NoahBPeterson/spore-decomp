@@ -1,7 +1,8 @@
-006aebd0 SP::cAsyncResourceManager::~cAsyncResourceManager  # PDB
-006aedc0 SP::cAsyncResourceManager::cAsyncResourceManager  # PDB
-006af150 SP::cAsyncResourceManager::AllocateRequest  # PDB candidate (caller-scored)
-006ae940 (return-and-destroy async job drain loop)  # dc
-006aea90 (async job completion / RequestComplete)  # dc
-006aec60 eastl::fixed_map<...>::operator[]  # dc
+006ae940 ?FUN_006ae940@@YAXXZ  # FUN_006ae940 migrated from s006ae940 (verbatim, slice spelling)
+006aea90 ?FUN_006aea90@@YAXXZ  # FUN_006aea90 migrated from s006ae940 (verbatim, slice spelling)
+006aebd0 ?FUN_006aebd0@@YIXPAX@Z  # FUN_006aebd0 migrated from s006ae940 (verbatim, slice spelling)
+006aec60 ?FUN_006aec60@@YAXXZ  # FUN_006aec60 migrated from s006ae940 (verbatim, slice spelling)
+006aedc0 ?FUN_006aedc0@@YIXPAX@Z  # FUN_006aedc0 migrated from s006ae940 (verbatim, slice spelling)
 006af080 eastl::fixed_map<...>::find  # dc
+006af150 SP::cAsyncResourceManager::AllocateRequest  # PDB candidate (caller-scored)
+006af260 ?FUN_006af260@@YAXXZ  # FUN_006af260 migrated from s006ae940 (verbatim, slice spelling)
