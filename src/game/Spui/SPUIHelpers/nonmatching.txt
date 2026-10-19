@@ -46,6 +46,8 @@
 008082f0 23 complete; only vtable-load scheduling differs
 008085d0 52 complete; ctor field-store/register differences
 00808660 172 complete; property/stream loop register differences
-008087f0 292 bounding-screen-rect core: complete equivalent but vtable-call float staging / local layout differ; equiv: UNSUPPORTED (0/1200 valid inputs; fake-arity/faults) after marker fix
+008087f0 311 bounding-screen-rect core: complete equivalent but vtable-call float staging / local layout differ; equiv: UNSUPPORTED (0/1200 valid inputs; fake-arity/faults) after marker fix
+00808b20 268 complete rollover-frame placement (both useChildren paths, clamp math, FnC4 Pt-by-value + Fn70 reposition); original saves all four callee-saved registers up front (single epilogue), ours shrink-wraps them, which shifts the frame (M at +0x48 vs +0x44) [equiv: WEAK (195 valid inputs, 13.5% coverage; no mismatch)]
 00808d40 1274 complete UpdateRolloverFrame, 43 calls/43 in the same order (flags /O2 /MD /Gy /TP /arch:SSE2 /fp:fast, no EH): frame size matches; xmm register assignment for rect staging and ebp table-pointer base differ
+008093b0 707 complete CreateRolloverFrame (layout alloc/Init/3 FindWindowByID checks, Update, child-move loop, outputs); vptr-store scheduling around the layout-member copy ctor and the AddRef null-merge differ [equiv: UNSUPPORTED (our vtable reaches ??_E vector-deleting dtor)]
 0082a450 128 complete translation; AutoRef release sequence codegen differs

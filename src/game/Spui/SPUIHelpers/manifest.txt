@@ -24,6 +24,10 @@
 ../src/game/Spui/SPUIHelpers.cpp  ?SetWindowScale@@YAXPAUW_s0080_7840@@M@Z  00808210  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?Invoke@CbProc@@QAEDPAX0@Z  00808590  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00808780@@YAXXZ  00808780  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?SPUIHelpers_SetButtonImages@@YAPAUIWin@@PAUButtonImages@@HHUPt@@PAX@Z  00808930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?SPUIHelpers_SetWindowSPMaterial@@YAXPAUIWin@@HH@Z  00808ad0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?SPUIHelpers_GetBoundingScreenRect@@YAPAMPAMPAUIWin@@D@Z  00808d20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FUN_00809370@@YAXPAUIWin@@MMHM@Z  00809370  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?set894@@YAXE@Z  008098b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?set898@@YAXI@Z  008098d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?set895@@YAXE@Z  008098f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

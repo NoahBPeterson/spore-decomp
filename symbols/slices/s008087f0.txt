@@ -1,6 +1,9 @@
 008087f0 ?FUN_008087f0@@YAXPAMPAUIWin@@D@Z  # FUN_008087f0 migrated from s008087f0 (verbatim, slice spelling)
-00808ad0 SPUIHelpers::SetWindowSPMaterial  # PDB name
-00808d20 SPUIHelpers::GetBoundingScreenRect  # PDB name
+00808930 ?SPUIHelpers_SetButtonImages@@YAPAUIWin@@PAUButtonImages@@HHUPt@@PAX@Z  # SPUIHelpers_SetButtonImages migrated from s008087f0 (verbatim, slice spelling)
+00808ad0 ?SPUIHelpers_SetWindowSPMaterial@@YAXPAUIWin@@HH@Z  # SPUIHelpers_SetWindowSPMaterial migrated from s008087f0 (verbatim, slice spelling)
+00808b20 ?FUN_00808b20@@YAXPAUIWin@@0D@Z  # FUN_00808b20 migrated from s008087f0 (verbatim, slice spelling)
+00808d20 ?SPUIHelpers_GetBoundingScreenRect@@YAPAMPAMPAUIWin@@D@Z  # SPUIHelpers_GetBoundingScreenRect migrated from s008087f0 (verbatim, slice spelling)
 00808d40 ?SPUIHelpers_UpdateRolloverFrame@@YA_NPAUIWin@@MMMM_NM@Z  # SPUIHelpers_UpdateRolloverFrame migrated from s008087f0 (verbatim, slice spelling)
-008093b0 SPUIHelpers::CreateRolloverFrame  # PDB name
-00808930 SPUIHelpers::SetButtonImages  # PDB candidate (caller-scored), matched byte-exact
+00809370 ?FUN_00809370@@YAXPAUIWin@@MMHM@Z  # FUN_00809370 migrated from s008087f0 (verbatim, slice spelling)
+008093b0 ?SPUIHelpers_CreateRolloverFrame@@YAPAUIWin@@PB_WMMMMPAPAU1@DHMI@Z  # SPUIHelpers_CreateRolloverFrame migrated from s008087f0 (verbatim, slice spelling)
+00812160 ?Init@cSPUILayout@@QAE_NPB_WH_NI@Z  # cSPUILayout::Init (callee of s008087f0, named from the dev publics; slice address comment)
