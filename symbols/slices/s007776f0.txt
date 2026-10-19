@@ -10,7 +10,7 @@
 00777aa0 ShaderState::setSlotV0
 00777ac0 ShaderState::setSlotV1
 00777ae0 shader data setter (dirty mask + undo stack)
-00777b50 SP::SetShaderData
+00777b50 ?SetShaderData@SP@@YAXPAVEmbeddedState@graphics@rw@@@Z  # SP::SetShaderData migrated from s007776f0
 00777bf0 pushShaderDataNull
 00777c10 shader data stack pop/restore
 00777c90 shaderDataStackNotEmpty

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00777b50 - SP::SetShaderData (loop over shader-data entries); skeleton
