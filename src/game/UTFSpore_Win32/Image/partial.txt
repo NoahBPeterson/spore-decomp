@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (incomplete / not equivalence-testable)
+00957b00  48  GetGlobalImageTable: complete logic but difftest UNSUPPORTED - lazy ctor path imports _decode_pointer; 400/400 inputs discarded
+00957bb0  92  ImageTable::Add: complete logic but difftest UNSUPPORTED - unresolved reference ?DoInsertValue@SimpleVec@@QAEXPAIABI@Z
+00957c40  213  Fn00957c40 (ImageTable reset/clear): incomplete - only lock/drop-vector/unlock translated; original is a 225-byte routine handling more work; difftest NOT RUN (known incomplete)
+00957d30  16  ProcessPendingTextures: complete logic but difftest UNSUPPORTED - callee GetGlobalImageTable path imports _decode_pointer; 400/400 inputs discarded

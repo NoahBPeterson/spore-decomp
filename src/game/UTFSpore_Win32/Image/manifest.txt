@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/Image.cpp  ?Fn00957c20@@YAXHH@Z  00957c20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include

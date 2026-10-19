@@ -2,11 +2,11 @@
 00957a60 Fn00957a60  # one-shot lazy init of global table at 0x154edf0 (guard flag 0x166b138)
 00957aa0 Fn00957aa0  # return element 0 of a UIImage array (indexer)
 00957ac0 Fn00957ac0  # indexer helper (a,b) -> pointer
-00957b00 EA::UTFWin::GetGlobalImageTable  # lazy ctor of global ImageTable at 0x166b140, register atexit dtor
-00957bb0 ImageTable::Add  # lock, push (obj+k) into vector (end<cap else DoInsertValue), obj->v00, unlock
-00957c20 Fn00957c20  # wrapper: GetGlobalImageTable()->Add(a, (uchar)b)
-00957c40 Fn00957c40  # ImageTable reset/clear (INCOMPLETE stub: lock, drop vector, unlock)
-00957d30 EA::UTFWin::ProcessPendingTextures  # wrapper: Fn00957c40(GetGlobalImageTable())
+00957b00 ?GetGlobalImageTable@@YAPAXXZ  # GetGlobalImageTable migrated from s009579f0 (verbatim, slice spelling)
+00957bb0 ?Add@ImageTable@@QAEXPAXE@Z  # ImageTable::Add migrated from s009579f0 (verbatim, slice spelling)
+00957c20 ?Fn00957c20@@YAXHH@Z  # Fn00957c20 migrated from s009579f0 (verbatim, slice spelling)
+00957c40 ?Fn00957c40@@YIDPAX@Z  # Fn00957c40 migrated from s009579f0 (verbatim, slice spelling)
+00957d30 ?ProcessPendingTextures@@YAXXZ  # ProcessPendingTextures migrated from s009579f0 (verbatim, slice spelling)
 00957d40 ?PostAPC@W@@QAEXHPAX@Z  # W::PostAPC migrated from s009579f0 (verbatim, slice spelling)
 00957d90 ?d90@W@@QAEXPAX@Z  # W::d90 migrated from s009579f0 (verbatim, slice spelling)
 00957db0 ?db0@W@@QAEPADH@Z  # W::db0 migrated from s009579f0 (verbatim, slice spelling)
