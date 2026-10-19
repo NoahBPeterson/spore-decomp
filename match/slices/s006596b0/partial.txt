@@ -1,4 +1,0 @@
-# va  diff-bytes  reason (incomplete/approximate)
-006596b0  -  cSPUIAssetView update (870 bytes): skeleton
-00659a20  -  SP::cSPUIAssetView::OnRollover (1000 bytes): skeleton
-00659ec0  -  cSPUIAssetView update (420 bytes): skeleton

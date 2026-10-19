@@ -11,9 +11,11 @@ void  EASTL_deallocate(void* p);   // 0x00f47380
 // ---------------------------------------------------------------------------
 struct cSPUILayout {
     char pad[0x18];
-    cSPUILayout();                 // 0x00810000
-    ~cSPUILayout();                // 0x00811fe0
-    void Shutdown(int flag);       // 0x00811ad0
+    cSPUILayout();                          // 0x00810000
+    cSPUILayout(const cSPUILayout& x);      // 0x00810020
+    ~cSPUILayout();                         // 0x00811fe0
+    cSPUILayout& operator=(const cSPUILayout& x);  // 0x00810050
+    void Shutdown(int flag);                // 0x00811ad0
 };
 
 struct UILayoutVector {
@@ -24,12 +26,33 @@ struct UILayoutVector {
     uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
     cSPUILayout* erase(cSPUILayout* first, cSPUILayout* last);   // 0x0059f4a0
     void resize(uint32_t newSize);                               // 0x0059f950
+    void insert(cSPUILayout* position, uint32_t n, const cSPUILayout& value);  // 0x0059f510
+    ~UILayoutVector();                                           // 0x0059ee80
+};
+
+// eastl::map<int, ...> (sp_vector_allocator): compare selector + rbtree anchor.
+struct RBNodeBase {
+    RBNodeBase* mpNodeRight;
+    RBNodeBase* mpNodeLeft;
+    RBNodeBase* mpNodeParent;
+    char        mColor;
+};
+namespace SP { struct VerbIconVec; }
+struct VerbCategoryMap {
+    uint32_t    mCompare;       // +0
+    RBNodeBase  mAnchor;        // +4
+    int* Find(const int& key);  // 0x004e88a0
+    void FreeNodes(void* p);    // 0x004e8a30
+    ~VerbCategoryMap() { FreeNodes(mAnchor.mpNodeParent); }
 };
 
 struct cSPEditorBlockAbilities {
     char          pad[0x24];
-    UILayoutVector mLayouts;    // +0x24
-    void ShutdownLayouts();     // 0x0059f900
+    UILayoutVector mLayouts;            // +0x24
+    VerbCategoryMap mVerbCategoryMap;   // +0x38
+    void ShutdownLayouts();             // 0x0059f900
+    void SortAbilities(SP::VerbIconVec* abilities, VerbCategoryMap* categories);   // 0x0059f7c0
+    void* ScalarDeletingDtor(unsigned char flags);   // 0x0059fa50
 };
 
 // 0xc4-byte ability record whose first field is an object with a vtable
@@ -46,11 +69,17 @@ struct AbilityVector {
     int EraseRange(AbilityRec* first, AbilityRec* last);   // 0x0059faa0
 };
 
-// 0x18-byte UI-layout constructor (as called from resize)
+// 0x18-byte UI-layout default construction (as called from resize)
 cSPUILayout* ConstructLayout(cSPUILayout* p, int arg);   // 0x00810020
-void VectorInsertFill(UILayoutVector* v, cSPUILayout* pos, uint32_t count, cSPUILayout* value);  // 0x0059f510
-void MoveLayouts(UILayoutVector* v, cSPUILayout* dst, cSPUILayout* src);   // 0x0059ee20
-cSPUILayout* MoveLayoutArray(UILayoutVector* v, cSPUILayout* out, cSPUILayout* a, cSPUILayout* b, cSPUILayout* c); // 0x0059ef30
+
+// eastl::vector<cSPUILayout, sp_vector_allocator> algorithm helpers
+cSPUILayout* UninitCopy(cSPUILayout* first, cSPUILayout* last, cSPUILayout* dest);       // 0x0059ed60
+cSPUILayout* RelocateCommit(cSPUILayout* first, cSPUILayout* last, cSPUILayout* dest);   // 0x0059eda0
+cSPUILayout* CopyBackward(cSPUILayout* first, cSPUILayout* last, cSPUILayout* dLast);    // 0x0059ee20
+void FillLayouts(cSPUILayout* first, cSPUILayout* last, const cSPUILayout* value);       // 0x0059ef00
+cSPUILayout* UninitMove(cSPUILayout** out, cSPUILayout* first, cSPUILayout* last,
+                        cSPUILayout* dest, const cSPUILayout* tag);                      // 0x0059ef30
+cSPUILayout* UninitFillN(cSPUILayout* first, uint32_t n, const cSPUILayout* value);      // 0x0059ef70
 
 // ability helpers
 AbilityRec* FindAbilitySlot(AbilityRec* a, AbilityRec* b, AbilityRec* c);  // 0x0059f740
@@ -79,7 +108,7 @@ void UILayoutVector::resize(uint32_t newSize)
     if (cur < newSize) {
         char tmp[0x18];
         ConstructLayout((cSPUILayout*)tmp, 0);
-        VectorInsertFill(this, mpEnd, newSize - cur, (cSPUILayout*)tmp);
+        insert(mpEnd, newSize - cur, *(cSPUILayout*)tmp);
         ((cSPUILayout*)tmp)->~cSPUILayout();
     } else {
         erase(mpBegin + newSize, mpEnd);
@@ -126,23 +155,67 @@ int AbilityVector::EraseRange(AbilityRec* first, AbilityRec* last)
 
 // ===========================================================================
 // @ 0x0059f510
-void VectorInsertFill(UILayoutVector* v, cSPUILayout* pos, uint32_t count, cSPUILayout* value)
+void UILayoutVector::insert(cSPUILayout* position, uint32_t n, const cSPUILayout& value)
 {
-    (void)v; (void)pos; (void)count; (void)value;
-}
-
-// @ 0x0059f7c0
-int SortAbilities(void* a, void* b)
-{
-    (void)a; (void)b;
-    return 0;
+    if (n <= (uint32_t)(mpCapacity - mpEnd)) {
+        if (n > 0) {
+            cSPUILayout temp(value);
+            const uint32_t nExtra = (uint32_t)(mpEnd - position);
+            cSPUILayout* const pEnd = mpEnd;
+            if (n < nExtra) {
+                cSPUILayout* out;
+                UninitMove(&out, mpEnd - n, mpEnd, mpEnd, position);
+                mpEnd += n;
+                CopyBackward(position, pEnd - n, pEnd);
+                FillLayouts(position, position + n, &temp);
+            } else {
+                cSPUILayout* out;
+                UninitFillN(mpEnd, n - nExtra, &temp);
+                mpEnd += n - nExtra;
+                UninitMove(&out, position, pEnd, mpEnd, position);
+                mpEnd += nExtra;
+                FillLayouts(position, pEnd, &temp);
+            }
+        }
+    } else {
+        const uint32_t nPrevSize = (uint32_t)(mpEnd - mpBegin);
+        const uint32_t nGrowSize = nPrevSize ? nPrevSize * 2 : 1;
+        const uint32_t nNewSize  = nGrowSize > (nPrevSize + n) ? nGrowSize : (nPrevSize + n);
+        cSPUILayout* const pNewData = nNewSize
+            ? (cSPUILayout*)operator new(nNewSize * 0x18, "Editor", 0, 0,
+                  "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1)
+            : 0;
+        cSPUILayout* pNewEnd = UninitCopy(mpBegin, position, pNewData);
+        RelocateCommit(mpBegin, position, pNewData);
+        UninitFillN(pNewEnd, n, &value);
+        pNewEnd = pNewEnd + n;
+        cSPUILayout* const pNewEnd2 = UninitCopy(position, mpEnd, pNewEnd);
+        RelocateCommit(position, mpEnd, pNewEnd);
+        if (mpBegin && ((uint32_t*)mpBegin)[-1])
+            EASTL_deallocate(mpBegin);
+        mpBegin = pNewData;
+        mpEnd = pNewEnd2;
+        mpCapacity = pNewData + nNewSize;
+    }
 }
 
 // @ 0x0059fa50
-void* ScalarDeletingDtor(void* p, unsigned char flags)
+extern char vtbl_BlockAbilities0[];      // 0x013f6914
+extern char vtbl_BlockAbilities1[];      // 0x013f6910
+extern char vtbl_BlockAbilitiesBase0[];  // 0x013f68c4
+extern char vtbl_BlockAbilitiesBase1[];  // 0x013ef094
+void* cSPEditorBlockAbilities::ScalarDeletingDtor(unsigned char flags)
 {
-    (void)flags;
-    return p;
+    *(void**)this = vtbl_BlockAbilities0;
+    *(void**)((char*)this + 4) = vtbl_BlockAbilities1;
+    ShutdownLayouts();
+    mVerbCategoryMap.~VerbCategoryMap();
+    mLayouts.~UILayoutVector();
+    *(void**)((char*)this + 4) = vtbl_BlockAbilitiesBase1;
+    *(void**)this = vtbl_BlockAbilitiesBase0;
+    if (flags & 1)
+        EASTL_deallocate(this);
+    return this;
 }
 
 // @ 0x0059fc60  (types for BlockGetAbilities: retail layouts, see s0059e360_b.cpp / s0059d300.cpp)
@@ -246,6 +319,7 @@ class cSPEditorVerbIconData : public EA::COM::IUnknown32, public EA::RefCountVTe
 public:
     cSPEditorVerbIconData();                                // 0x005e5a70
     cSPEditorVerbIconData(const cSPEditorVerbIconData&);    // 0x0059f2a0
+    cSPEditorVerbIconData& operator=(const cSPEditorVerbIconData&);  // 0x0059f0e0
     virtual int AddRef();
     virtual int Release();
     virtual ~cSPEditorVerbIconData() {}
@@ -421,3 +495,33 @@ void BlockGetAbilities(VerbIconVec* out, ResourceKey* key, uint32_t listId)
 }
 
 }  // namespace SP
+
+// @ 0x0059f7c0
+void cSPEditorBlockAbilities::SortAbilities(SP::VerbIconVec* abilities, VerbCategoryMap* categories)
+{
+    int count = (int)(abilities->mpEnd - abilities->mpBegin) - 1;
+    if (count >= 0) {
+        bool bSwapped;
+        while (bSwapped = false, count > 0) {
+            int n = count;
+            int i = 0;
+            do {
+                SP::cSPEditorVerbIconData* a = abilities->mpBegin + i;
+                int v1 = *categories->Find(a->mType);
+                int v2 = *categories->Find(a[1].mType);
+                if (v2 < v1) {
+                    SP::cSPEditorVerbIconData temp(*a);
+                    *a = a[1];
+                    a[1] = temp;
+                    bSwapped = true;
+                }
+                i++;
+            } while (--n != 0);
+            if (!bSwapped)
+                return;
+            if (--count < 0)
+                return;
+        }
+    }
+    return;
+}

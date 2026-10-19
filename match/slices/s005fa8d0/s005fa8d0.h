@@ -121,6 +121,7 @@ struct pair {
   T2 second;
   pair(const T1& x, const T2& y) : first(x), second(y) {}
   pair(const pair& p) : first(p.first), second(p.second) {}
+  pair() {}
   ~pair() {}
 };
 
@@ -134,13 +135,15 @@ template <typename Node>
 struct hashtable_iterator_base {
   Node* mpNode;
   Node** mpBucket;
+  hashtable_iterator_base() {}
   hashtable_iterator_base(Node* pNode, Node** pBucket) : mpNode(pNode), mpBucket(pBucket) {}
 };
 
 template <typename T, typename Node>
 struct hashtable_iterator : public hashtable_iterator_base<Node> {
   typedef hashtable_iterator_base<Node> base_type;
-  hashtable_iterator(Node* pNode = 0, Node** pBucket = 0) : base_type(pNode, pBucket) {}
+  hashtable_iterator() {}
+  hashtable_iterator(Node* pNode, Node** pBucket) : base_type(pNode, pBucket) {}
   explicit hashtable_iterator(Node** pBucket) : base_type(*pBucket, pBucket) {}
   hashtable_iterator(const hashtable_iterator& x) : base_type(x.mpNode, x.mpBucket) {}
   template <typename U>
@@ -204,7 +207,7 @@ class hashtable {
   void DoFreeNode(node_type* pNode) { pNode->~node_type(); mAllocator.deallocate(pNode); }
 
   iterator find(const KeyT& k);
-  pair<iterator, iterator> equal_range(const KeyT& k);
+  void equal_range(pair<iterator, iterator>* pResult, const KeyT& k);
   uint32_t erase(const KeyT& k);
   iterator erase(const_iterator i);
   void DoFreeNodes(node_type** pBucketArray, uint32_t n);
@@ -227,8 +230,7 @@ typename hashtable<V, K, H, E>::iterator hashtable<V, K, H, E>::find(const K& k)
 }
 
 template <typename V, typename K, typename H, typename E>
-pair<typename hashtable<V, K, H, E>::iterator, typename hashtable<V, K, H, E>::iterator>
-hashtable<V, K, H, E>::equal_range(const K& k) {
+void hashtable<V, K, H, E>::equal_range(pair<iterator, iterator>* pResult, const K& k) {
   const uint32_t n = mHash(k) % mnBucketCount;
   node_type** head = mpBucketArray + n;
   node_type* pNode = DoFindNode(*head, k);
@@ -239,9 +241,11 @@ hashtable<V, K, H, E>::equal_range(const K& k) {
     iterator first(pNode, head);
     iterator last(p1, head);
     if (!p1) last.increment_bucket();
-    return pair<iterator, iterator>(first, last);
+    *pResult = pair<iterator, iterator>(first, last);
+    return;
   }
-  return pair<iterator, iterator>(iterator(mpBucketArray + mnBucketCount), iterator(mpBucketArray + mnBucketCount));
+  *pResult = pair<iterator, iterator>(iterator(mpBucketArray + mnBucketCount),
+                                      iterator(mpBucketArray + mnBucketCount));
 }
 
 // @ 0x005face0
@@ -336,7 +340,7 @@ class cImportExport {
   eastl::string16 mExportCityMusicFolderPath;  // +0x14c
   bool mUseShipDir;                            // +0x15c
 
-  bool CreateExportThumb(void* pImage, const Key& key, void* pInfo);   // 0x005fa8d0
+  bool CreateExportThumb(void* pResource, void* pImage, void* pSaveDb, int arg4, int arg5); // 0x005fa8d0 (ret 0x14)
   bool RemoveExportThumb(const Key& key);                              // 0x005faec0
   bool ImportFromFolder(const Key& key, void* pArg);                   // 0x005fafb0
   bool Shutdown();                                                     // 0x005fae40
@@ -377,12 +381,12 @@ bool WString_Assign(void* dst, const wchar_t* begin, const wchar_t* end);   // 0
 void QualifyNameWithGroup();
 bool FUN_005f97c0(void* a, void* b, void* c, int d, void* e);
 void FUN_005f7970(void* p);
-void FUN_005f7940(void* p, void* q);
+void* FUN_005f7940(void* p, void* q);
 void FUN_005f8320(void* p);
 void FUN_005f8390(void* p);
-void FUN_005f9080(void* p);
-void FUN_005f90c0(void* p);
-void FUN_005f8d80(void* p);
+void* FUN_005f9080(void* p);
+void* FUN_005f90c0(void* a, void* b, void* c, void* d);
+void FUN_005f8d80();
 void FUN_005f8ed0(void* p, void* q);
 void FUN_005f8f00(void* p, void* q);
 void FUN_005fa0a0(void* p, void* q);
