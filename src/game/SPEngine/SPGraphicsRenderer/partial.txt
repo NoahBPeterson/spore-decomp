@@ -1,1 +1,22 @@
 # va  diff-bytes  reason
+0075dd30  0  EH-heavy light-info merge scan; our MergeLocalLights is a ~10-byte placeholder vs 326-byte original (size ratio >5x); not reconstructed
+0075e3f0    0  placeholder stub, far smaller than the original (was: complete; render-layer info builder, layout differs); equiv lookup rejects size ratio
+0075e4f0  0  large render subsystem constructor (many inlined subsystem calls); not reconstructed
+0075e620    0  placeholder stub, far smaller than the original (was: complete; render stage ready query, layout differs); equiv lookup rejects size ratio
+0075e6d0    0  placeholder stub, far smaller than the original (was: complete; render stage step, layout differs); equiv lookup rejects size ratio
+0075e750    0  placeholder stub, far smaller than the original (was: complete; render sub-object construction, layout differs); equiv lookup rejects size ratio
+0075e830  0  large render global init with EH/subsystem calls; not reconstructed
+0075e900  0  very large (900+ B) render-tree builder; not reconstructed
+0075eca0  0  large shader-global init; not reconstructed
+0075ed50  0  render node copy; not reconstructed
+0075eda0    0  placeholder stub, far smaller than the original (was: complete; render node array free, layout differs); equiv lookup rejects size ratio
+0075ee10    0  placeholder stub, far smaller than the original (was: complete; render node init, layout differs); equiv lookup rejects size ratio
+0075eed0  0  large elem-array copy/construct wrapper with EH; not reconstructed
+0075ef80  0  large range construct (allocator aware) with EH; not reconstructed
+0075f030  0  very large (946 B) render-property registration; not reconstructed
+0075f510  0  large AddPostRenderJob (EH, list insert); not reconstructed
+0075f640  0  large AddPreRenderJob (EH, list insert); not reconstructed
+0075f7e0  0  render-job-list destructor (EH); not reconstructed
+0075f960  0  large render-job-list constructor (EH); not reconstructed
+0075fc70  0  large EASTL insert-n/erase with EH; not reconstructed
+0075fe50  0  large EASTL resize/erase with EH; not reconstructed

@@ -1,9 +1,17 @@
-// src/game/SPEngine/SPGraphicsRenderer.cpp -- migrated from slice(s) s0075ee90, s0075de80, s0075cf20 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsRenderer.cpp -- migrated from slice(s) s0075ff50, s0075ee90, s0075de80, s0075cf20 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsRenderer.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include "SP/cRenderer.h"
+#include "EA/Thread/Mutex.h"
+#include "SP/cILayer.h"
+#include "SP/cLayerInfo.h"
+#include "SP/cRenderStats.h"
+#include "EA/Stopwatch.h"
+#include <intrin.h>
+#include <new>
+#include <stddef.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern int* g_deviceGlobal;   // @ 0x0162f9c8
@@ -134,6 +142,373 @@ struct RenderJob {
     float      id;     // +0x10
 };
 // ---- items of slice s0075ee90 end
+
+// ---- items of slice s0075ff50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl memset(void*, int, size_t);
+extern "C" void* __cdecl operator_new(unsigned int size, int align, const char* name);
+extern "C" void  __cdecl operator_delete_(void* p);
+#pragma function(memset)
+void __cdecl ResetGlobalState();    // @ 0x7618e0
+void* __cdecl SP_Canvas_s0075_ff50();          // @ 0x67dcf0
+void* __cdecl SP_AppSystem();       // @ 0x67dd00
+void __cdecl ClearJobList(void* list);
+void __cdecl CloseArena();
+void __cdecl DevStop1();
+void __cdecl DevStop2();
+void __cdecl DevStop3();
+void __cdecl timeEndPeriod_(int);
+namespace EA {
+namespace Thread {
+struct Mutex_s0075_ff50 {
+    void Lock(const char* name);   // @ 0x9221b0
+    void Lock(const unsigned int* pTimeout);   // @ 0x9221b0 (EA::Thread::Mutex::Lock(const ThreadTime*))
+    void Unlock();                 // @ 0x922270
+};
+}
+}
+namespace SP {
+struct cILayer_s0075_ff50 {                       // reference-counted interface
+    virtual void AddRef();             // +0x0
+    virtual void Release();            // +0x4
+};
+}
+namespace SP {
+struct cLayerInfo_s0075_ff50 {                    // size 0x14
+    cILayer_s0075_ff50*     mLayer;               // +0x0
+    unsigned int mLayerNumber;         // +0x4
+    unsigned int mLayerFlags;          // +0x8
+    unsigned int mInfoFlags;           // +0xc
+    float        mTimeMS;              // +0x10
+    void operator=(const cLayerInfo_s0075_ff50& o);   // @ 0x75ed50
+    cLayerInfo_s0075_ff50(const cLayerInfo_s0075_ff50& o);       // @ 0x75ee90
+    cLayerInfo_s0075_ff50() {}
+};
+}
+namespace SP {
+struct LayerVector {                   // `this` points at mpBegin
+    cLayerInfo_s0075_ff50* mpBegin;               // +0x0
+    cLayerInfo_s0075_ff50* mpEnd;                 // +0x4
+    cLayerInfo_s0075_ff50* mpCapacity;            // +0x8
+    void erase(cLayerInfo_s0075_ff50* first, cLayerInfo_s0075_ff50* last);                  // @ 0x75fc00
+    void DoInsertValue(cLayerInfo_s0075_ff50* position, const cLayerInfo_s0075_ff50& value);// @ 0x75fc70
+    void DoAssignFromIterator(cLayerInfo_s0075_ff50* first, cLayerInfo_s0075_ff50* last, unsigned int tag); // @ 0x75fe50
+    cLayerInfo_s0075_ff50* insert(cLayerInfo_s0075_ff50* position, const cLayerInfo_s0075_ff50& value);// @ 0x760030
+};
+}
+namespace SP {
+void __cdecl copy_layers(cLayerInfo_s0075_ff50* first, cLayerInfo_s0075_ff50* last, cLayerInfo_s0075_ff50* dest); // @ 0x75f4a0
+}
+namespace SP {
+struct MutexLock {
+    EA::Thread::Mutex_s0075_ff50* mMutex;
+    MutexLock(EA::Thread::Mutex_s0075_ff50* m) : mMutex(m) { mMutex->Lock("Renderer"); }
+    ~MutexLock() { mMutex->Unlock(); }
+};
+}
+namespace SP {
+struct cRenderJob_s0075_ff50;
+}
+namespace SP {
+struct cRenderStats_s0075_ff50;
+}
+namespace SP {
+class cRenderer_s0075_ff50 {
+public:
+    char mData[0x660];
+
+    bool ClearLayer(unsigned int layerNumber);             // @ 0x75ff50
+    bool Shutdown();                                       // @ 0x7600d0
+    void SetLayer(cILayer_s0075_ff50* layer, unsigned int layerNumber, unsigned int flags); // @ 0x7602a0
+    void ClearAllLayers();                                  // @ 0x7603e0
+    void Render(unsigned int flags);                        // @ 0x760450
+    void ExecuteJob(cRenderJob_s0075_ff50* job, cRenderStats_s0075_ff50* stats);  // @ 0x75e3f0
+};
+}
+namespace SP {
+struct RefObj {
+    virtual void AddRef();             // +0x0
+    virtual void Release();            // +0x4
+};
+}
+namespace SP {
+struct RefTriple {
+    RefObj* p;                         // +0x0
+    int     a;                         // +0x4
+    int     b;                         // +0x8
+    RefTriple* operator=(const RefTriple& o);   // @ 0x760b50
+};
+}
+namespace SP {
+RefTriple* RefTriple::operator=(const RefTriple& o)
+{
+    RefObj* old = p;
+    RefObj* src = o.p;
+    if (src != old) {
+        if (src) src->AddRef();
+        p = src;
+        if (old) old->Release();
+    }
+    a = o.a;
+    b = o.b;
+    return this;
+}
+}
+namespace SP {
+struct RefCountedAt8 {
+    virtual void r0();
+    int r1;
+    int mRefCount;                     // +0x8
+    void AddRef();
+    void Release();
+};
+}
+namespace SP {
+struct Elem3 {
+    RefCountedAt8* p;                  // +0x0
+    void* a;                           // +0x4
+    void* b;                           // +0x8
+};
+}
+namespace SP {
+Elem3* __cdecl move_elems2(Elem3* dest, Elem3* last, Elem3* src);  // @ 0x77fb10
+}
+namespace SP {
+void __cdecl destroy_range(Elem3* first, Elem3* last);            // @ 0x760b10
+}
+namespace SP {
+void __cdecl move_ptrs(RefCountedAt8** dest, RefCountedAt8** last, RefCountedAt8** src); // @ 0x6f43e0
+}
+namespace SP {
+struct PtrVec {
+    RefCountedAt8** mpBegin;           // +0x0
+    RefCountedAt8** mpEnd;             // +0x4
+    RefCountedAt8** mpCapacity;        // +0x8
+    RefCountedAt8** erase(RefCountedAt8** position);   // @ 0x760c40
+};
+}
+namespace SP {
+struct Vec3 {
+    Elem3* mpBegin;                    // +0x0
+    Elem3* mpEnd;                      // +0x4
+    Elem3* mpCapacity;                 // +0x8
+    Elem3* insert(Elem3* position, const Elem3& value); // @ 0x760ca0
+};
+}
+namespace SP {
+RefCountedAt8** PtrVec::erase(RefCountedAt8** position)
+{
+    if (position + 1 < mpEnd)
+        move_ptrs(position + 1, mpEnd, position);
+    mpEnd = mpEnd - 1;
+    RefCountedAt8* p = *mpEnd;
+    if (p) {
+        volatile long* rc = (volatile long*)((char*)p + 8);
+        _InterlockedExchangeAdd(rc, -1);
+        if (_InterlockedExchangeAdd(rc, 0) < 1) {
+            _InterlockedExchangeAdd(rc, 1);
+            return position;
+        }
+    }
+    return position;
+}
+}
+namespace SP {
+Elem3* Vec3::insert(Elem3* position, const Elem3& value)
+{
+    if (mpEnd != mpCapacity) {
+        Elem3* end = mpEnd;
+        if (position < end) {
+            Elem3* p = end;
+            while (p != position) {
+                Elem3* prev = p - 1;
+                p->p = prev->p;
+                if (p->p) p->p->AddRef();
+                p->a = prev->a;
+                p->b = prev->b;
+                p = prev;
+            }
+        }
+        *position = value;
+        if (position->p) position->p->AddRef();
+        mpEnd = end + 1;
+        return position;
+    }
+    int count = (int)(mpEnd - mpBegin);
+    int cap = (count == 0) ? 1 : count * 2;
+    Elem3* newBuf = cap ? (Elem3*)operator_new(cap * 0xc, 0, "Graphics") : 0;
+    Elem3* newPos = move_elems2(newBuf, position, 0);
+    destroy_range(newBuf, position);
+    if (newPos) { *newPos = value; if (newPos->p) newPos->p->AddRef(); }
+    Elem3* newEnd = move_elems2(position, mpEnd, newPos + 1);
+    destroy_range(position, mpEnd);
+    if (mpBegin && *(int*)((char*)mpBegin - 4) != 0) operator_delete_(mpBegin);
+    mpEnd = newEnd;
+    mpBegin = newBuf;
+    mpCapacity = newBuf + cap;
+    return newPos;
+}
+}
+namespace SP {
+void __cdecl EA_Free(void* p) throw();                    // @ 0xf47380
+}
+namespace SP {
+void __cdecl ShaderDataSet(unsigned short id, void* v, char force);   // @ 0x777ae0
+}
+namespace SP {
+struct Raster;
+}
+namespace SP {
+void __cdecl ShowRaster(Raster* r);                       // @ 0x11f8120 (rw::graphics::Device::ShowRaster)
+}
+namespace SP {
+void __cdecl RestoreVertexShader();                       // @ 0x11f81d0
+}
+namespace SP {
+extern Raster* g_defaultCameraRaster;                     // @ 0x15d0838
+}
+namespace SP {
+extern unsigned g_renderThreadId;                         // @ 0x1600778
+}
+namespace SP {
+extern char g_shaderActiveState[0x40];                    // @ 0x16f65a8
+}
+namespace SP {
+extern char g_shaderDirtyBits[0x57];                      // @ 0x16f67a8
+}
+namespace SP {
+extern char g_shaderStack[0x40];                          // @ 0x16f68a8
+}
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(__int64*);   // @ 0x13cc2b8
+namespace SP {
+struct cRenderStats_s0075_ff50 {
+    float mLastFrameMS, mLastFPS, mSmoothedMS, mSmoothedFPS, mReserved;
+    int   mLayersRendered, mN6, mJobCount, mN8, mN9, mN10;
+    cRenderStats_s0075_ff50()
+        : mLastFrameMS(0.0f), mLastFPS(0.0f), mSmoothedMS(0.0f), mSmoothedFPS(0.0f), mReserved(0.0f),
+          mLayersRendered(0), mN6(0), mJobCount(0), mN8(0), mN9(0), mN10(0) {}
+};
+}
+namespace SP {
+struct cIRenderLayer {
+    virtual void AddRef();
+    virtual void Release();
+    virtual void s2();
+    virtual void Render(unsigned int flags, unsigned int layerNumber, void* viewers, cRenderStats_s0075_ff50* stats);
+};
+}
+namespace SP {
+struct cRenderJob_s0075_ff50 {                    // size 0x38 (eastl::list node value)
+    cIRenderLayer* mLayer;             // +0x0 (AutoRefCount)
+    int            mPriority;          // +0x4
+    unsigned int   mID;                // +0x8
+    int            mCost;              // +0xc
+    unsigned int   pad10[(0x38 - 0x10) / 4];
+};
+}
+namespace SP {
+struct RenderJobNode {                 // eastl::list node
+    RenderJobNode* mpNext;
+    RenderJobNode* mpPrev;
+    cRenderJob_s0075_ff50     mValue;             // +0x8
+};
+}
+namespace SP {
+struct RenderJobList {
+    RenderJobNode* mpNext;
+    RenderJobNode* mpPrev;
+    RenderJobList() { mpNext = 0; mpPrev = 0; mpNext = (RenderJobNode*)this; mpPrev = (RenderJobNode*)this; }
+    ~RenderJobList() { clear(); }
+    void clear()
+    {
+        RenderJobNode* pNode = mpNext;
+        while (pNode != (RenderJobNode*)this) {
+            RenderJobNode* pTemp = pNode;
+            pNode = pNode->mpNext;
+            cIRenderLayer* layer = pTemp->mValue.mLayer;
+            if (layer) layer->Release();
+            EA_Free(pTemp);
+        }
+    }
+    int size() const
+    {
+        int n = 0;
+        for (const RenderJobNode* p = mpNext; p != (const RenderJobNode*)this; p = p->mpNext) ++n;
+        return n;
+    }
+    void pop_front()
+    {
+        RenderJobNode* pNode = mpNext;
+        pNode->mpPrev->mpNext = pNode->mpNext;
+        pNode->mpNext->mpPrev = pNode->mpPrev;
+        cIRenderLayer* layer = pNode->mValue.mLayer;
+        if (layer) layer->Release();
+        EA_Free(pNode);
+    }
+    // eastl::list::splice(position, x): move all of x in front of position
+    void splice(RenderJobNode* position, RenderJobList& x)
+    {
+        if ((RenderJobNode*)&x != x.mpNext) {
+            RenderJobNode* first = x.mpNext;
+            RenderJobNode* last = (RenderJobNode*)&x;
+            last->mpPrev->mpNext = position;
+            first->mpPrev->mpNext = last;
+            position->mpPrev->mpNext = first;
+            RenderJobNode* pTemp = position->mpPrev;
+            position->mpPrev = last->mpPrev;
+            last->mpPrev = first->mpPrev;
+            first->mpPrev = pTemp;
+        }
+    }
+};
+}
+namespace SP {
+void __cdecl SwapRenderJobLists(RenderJobList* a, RenderJobList* b);   // @ 0x75d8d0 (intrusive list swap)
+}
+namespace SP {
+struct cStopwatch {                    // at cRenderer+0x5e8
+    unsigned int mStartLo, mStartHi;   // +0x0 start tick
+    unsigned int mStopLo, mStopHi;     // +0x8
+    int          mMode;                // +0x10 (1 = rdtsc, otherwise QueryPerformanceCounter)
+    float        mMsPerTick;           // +0x14
+    __int64 GetElapsedTicks();         // @ 0x93a3a0
+    void Start()
+    {
+        if (mMode == 1) {
+            unsigned __int64 t = __rdtsc();
+            mStartLo = (unsigned int)t; mStartHi = (unsigned int)(t >> 32);
+        } else {
+            __int64 t;
+            QueryPerformanceCounter(&t);
+            mStartLo = (unsigned int)t; mStartHi = (unsigned int)((unsigned __int64)t >> 32);
+        }
+        mStopLo = 0; mStopHi = 0;
+    }
+};
+}
+namespace SP {
+extern const unsigned int kTimeoutNone;                 // @ 0x140dca0 (EA::Thread::kTimeoutNone, 0xffffffff)
+}
+namespace SP {
+struct RenderLock {
+    EA::Thread::Mutex_s0075_ff50* mMutex;
+    RenderLock(EA::Thread::Mutex_s0075_ff50* m) : mMutex(m) { mMutex->Lock(&kTimeoutNone); }
+    ~RenderLock() { mMutex->Unlock(); }
+};
+}
+namespace SP {
+template <class T> inline T& Fld(void* self, int off) { return *(T*)((char*)self + off); }
+}
+namespace SP {
+__forceinline void ResetRenderPassState(void* dbgData)
+{
+    ResetGlobalState();
+    memset(g_shaderActiveState, 0, 0x40);
+    memset(g_shaderDirtyBits, 0, 0x57);
+    memset(g_shaderStack, 0, 0x40);
+    ShaderDataSet(0x24e, dbgData, 0);
+}
+}
+// ---- items of slice s0075ff50 end
 
 // @ 0x0075d950
 void DeviceRelease()
@@ -282,6 +657,13 @@ bool cRenderer_InitShaders()
         local = 0;
     FUN_006a17e0(0x668d4fa1, local);
     return FUN_011fd770() != 0;
+}
+
+// @ 0x0075dd30
+bool MergeLocalLights(int param_1, int param_2, int param_3, int param_4)
+{
+    (void)param_2; (void)param_3; (void)param_4;
+    return param_1 >= 0;   // partial placeholder; see partial.txt
 }
 
 // @ 0x0075de80
@@ -480,6 +862,72 @@ void* cRenderer_s0075_de80::LayerInfoAtIndex(int idx)
     return r;
 }
 
+// @ 0x0075e3f0
+int RenderLayerInfo(int a, int b)
+{
+    return a + b;   // partial placeholder
+}
+
+// @ 0x0075e4f0
+int InitRenderSubsystem()
+{
+    return 1;       // partial placeholder
+}
+
+// @ 0x0075e620
+bool RenderStageReady(int a)
+{
+    (void)a; return true;   // partial placeholder
+}
+
+// @ 0x0075e6d0
+int RenderStageStep(int a)
+{
+    return a;       // partial placeholder
+}
+
+// @ 0x0075e750
+void* MakeRenderSubObject(int a)
+{
+    return (void*)a; // partial placeholder
+}
+
+// @ 0x0075e830
+bool InitRenderGlobals()
+{
+    return true;    // partial placeholder
+}
+
+// @ 0x0075e900
+int BuildRenderTree(int a)
+{
+    return a;       // partial placeholder
+}
+
+// @ 0x0075eca0
+void InitShaderGlobals()
+{
+    // partial placeholder
+}
+
+// @ 0x0075ed50
+void* CopyRenderNode(void* dst, void* src)
+{
+    (void)src; return dst;   // partial placeholder
+}
+
+// @ 0x0075eda0
+void FreeRenderNodeArray(void* p)
+{
+    (void)p;        // partial placeholder
+}
+
+// @ 0x0075ee10
+void* InitRenderNode(void* p, int a, int b)
+{
+    (void)a; (void)b; return p;   // partial placeholder
+}
+
 // @ 0x0075ee90
 Elem* Elem::Copy(Elem* src)
 {
@@ -493,6 +941,24 @@ Elem* Elem::Copy(Elem* src)
     dst->d = src->d;
     dst->f = src->f;
     return dst;
+}
+
+// @ 0x0075eed0
+void* CopyElemRange(void* dst, void* first, void* last)
+{
+    (void)first; (void)last; return dst;   // partial placeholder
+}
+
+// @ 0x0075ef80
+void ConstructElemArrayImpl()
+{
+    // partial placeholder
+}
+
+// @ 0x0075f030
+bool RegisterRenderProperties()
+{
+    return true;   // partial placeholder
 }
 
 // @ 0x0075f430
@@ -545,6 +1011,18 @@ Elem* CopyForward(Elem* first, Elem* last, Elem* dest)
     return dest;
 }
 
+// @ 0x0075f510
+bool AddPostRenderJob(void* a, void* b, void* c)
+{
+    (void)b; (void)c; return a != 0;   // partial placeholder
+}
+
+// @ 0x0075f640
+bool AddPreRenderJob(void* a, void* b, void* c)
+{
+    (void)b; (void)c; return a != 0;   // partial placeholder
+}
+
 // @ 0x0075f770
 void* AllocElemArray(unsigned count, void* dst, void* src)
 {
@@ -557,6 +1035,12 @@ void* AllocElemArray(unsigned count, void* dst, void* src)
                 0xd1);
     ConstructElemArray(&count, dst, src, mem, count);
     return mem;
+}
+
+// @ 0x0075f7e0
+void* DestroyRenderJobList(void* self)
+{
+    return self;   // partial placeholder
 }
 
 // @ 0x0075f8a0
@@ -600,3 +1084,262 @@ bool cRenderer_s0075_ee90::RemovePreRenderJob(float id)
     EASTL_deallocate(n);
     return true;
 }
+
+// @ 0x0075f960
+void* RenderJobListCtor(void* self)
+{
+    return self;   // partial placeholder
+}
+
+// @ 0x0075fc70
+void* InsertElemN(void* self, void* pos, unsigned n, void* v)
+{
+    (void)pos; (void)n; (void)v; return self;   // partial placeholder
+}
+
+// @ 0x0075fe50
+void* ResizeElemArray(void* self, unsigned a, unsigned b, void* c)
+{
+    (void)a; (void)b; (void)c; return self;   // partial placeholder
+}
+
+// @ 0x0075ff50
+namespace SP {
+bool cRenderer_s0075_ff50::ClearLayer(unsigned int layerNumber)
+{
+    char* self = (char*)this;
+    EA::Thread::Mutex_s0075_ff50* m = (EA::Thread::Mutex_s0075_ff50*)(self + 0x28);
+    MutexLock lock(m);
+    LayerVector* v = (LayerVector*)(self + 0x8c);
+    cLayerInfo_s0075_ff50* it = v->mpBegin;
+    cLayerInfo_s0075_ff50* last = v->mpEnd;
+    unsigned int n = layerNumber;
+    while (it != last) {
+        if (n <= it->mLayerNumber) break;
+        it = (cLayerInfo_s0075_ff50*)((char*)it + 0x14);
+    }
+    if (it != last && n == it->mLayerNumber) {
+        if ((char*)(it + 1) < (char*)v->mpEnd)
+            copy_layers(it + 1, v->mpEnd, it);
+        v->mpEnd = (cLayerInfo_s0075_ff50*)((char*)v->mpEnd - 0x14);
+        cLayerInfo_s0075_ff50* e = v->mpEnd;
+        if (e->mLayer) e->mLayer->Release();
+        return true;
+    }
+    return false;
+}
+}  // namespace SP
+
+// @ 0x00760030
+namespace SP {
+cLayerInfo_s0075_ff50* LayerVector::insert(cLayerInfo_s0075_ff50* position, const cLayerInfo_s0075_ff50& value)
+{
+    int idx = (int)(position - mpBegin);
+    if (position == mpEnd && mpEnd != mpCapacity) {
+        mpEnd = mpEnd + 1;
+        if (position)
+            new (position) cLayerInfo_s0075_ff50(value);
+    } else {
+        DoInsertValue(position, value);
+    }
+    return mpBegin + idx;
+}
+}  // namespace SP
+
+// @ 0x007600d0
+namespace SP {
+bool cRenderer_s0075_ff50::Shutdown()
+{
+    char* self = (char*)this;
+    if (!*(char*)(self + 0xc)) return false;
+    EA::Thread::Mutex_s0075_ff50* m = (EA::Thread::Mutex_s0075_ff50*)(self + 0x28);
+    *(char*)(self + 0xc) = 0;
+    MutexLock lock(m);
+    *(int*)(self + 0x7c) = 0;
+    *(int*)(self + 0x80) = 0;
+    *(int*)(self + 0x84) = 0;
+    *(int*)(self + 0x88) = 0;
+    LayerVector* v = (LayerVector*)(self + 0x8c);
+    v->erase(v->mpBegin, v->mpEnd);
+    *(int*)(self + 0x33c) = 0;
+    *(int*)(self + 0x340) = 0;
+    *(int*)(self + 0x344) = 0;
+    *(int*)(self + 0x348) = 0;
+    LayerVector* v2 = (LayerVector*)(self + 0x34c);
+    v2->erase(v2->mpBegin, v2->mpEnd);
+    ClearJobList(self + 0x330);
+    ClearJobList(self + 0x324);
+    if (*(char*)(self + 0xd)) {
+        DevStop1();
+        if (*(char*)(self + 0xd)) {
+            DevStop2();
+            *(char*)(self + 0xd) = 0;
+            DevStop3();
+        }
+    }
+    if (*(int*)(self + 0x20)) {
+        CloseArena();
+        *(int*)(self + 0x20) = 0;
+    }
+    *(int*)(self + 0x58) = 0;
+    timeEndPeriod_(1);
+    return true;
+}
+}  // namespace SP
+
+// @ 0x007602a0
+namespace SP {
+void cRenderer_s0075_ff50::SetLayer(cILayer_s0075_ff50* layer, unsigned int layerNumber, unsigned int flags)
+{
+    char* self = (char*)this;
+    EA::Thread::Mutex_s0075_ff50* m = (EA::Thread::Mutex_s0075_ff50*)(self + 0x28);
+    MutexLock lock(m);
+    LayerVector* v = (LayerVector*)(self + 0x8c);
+    cLayerInfo_s0075_ff50* it = v->mpBegin;
+    cLayerInfo_s0075_ff50* last = v->mpEnd;
+    cLayerInfo_s0075_ff50* found = 0;
+    while (it != last) {
+        if (layerNumber <= it->mLayerNumber) break;
+        it = (cLayerInfo_s0075_ff50*)((char*)it + 0x14);
+    }
+    if (it != last && layerNumber == it->mLayerNumber)
+        found = it;
+    cLayerInfo_s0075_ff50 info;
+    info.mLayer = layer;
+    if (layer) layer->AddRef();
+    info.mLayerNumber = layerNumber;
+    info.mLayerFlags = flags;
+    info.mInfoFlags = 1;
+    info.mTimeMS = 0.0f;
+    if (found)
+        found->operator=(info);
+    else
+        v->insert(it, info);
+    if (info.mLayer) info.mLayer->Release();
+}
+}  // namespace SP
+
+// @ 0x007603e0
+namespace SP {
+void cRenderer_s0075_ff50::ClearAllLayers()
+{
+    char* self = (char*)this;
+    EA::Thread::Mutex_s0075_ff50* m = (EA::Thread::Mutex_s0075_ff50*)(self + 0x28);
+    MutexLock lock(m);
+    LayerVector* v = (LayerVector*)(self + 0x8c);
+    v->erase(v->mpBegin, v->mpEnd);
+}
+}  // namespace SP
+
+// @ 0x00760450
+namespace SP {
+void cRenderer_s0075_ff50::Render(unsigned int flags)
+{
+    char* self = (char*)this;
+    if (Fld<char>(self, 0x6c) && SP_Canvas_s0075_ff50()) {
+        void* c = SP_Canvas_s0075_ff50();
+        if (!(*(bool(__thiscall**)(void*))(*(char**)c + 0x44))(c))
+            return;
+    }
+    RenderJobList preJobs;                       // swapped in from +0x330
+    RenderJobList postJobs;                      // swapped in from +0x324
+    EA::Thread::Mutex_s0075_ff50* m = (EA::Thread::Mutex_s0075_ff50*)(self + 0x28);
+    int budget;
+    {
+        RenderLock lock(m);
+        if (!Fld<int>(self, 0x7c))
+            return;
+        Fld<int>(self, 0x33c) = Fld<int>(self, 0x7c);
+        Fld<int>(self, 0x340) = Fld<int>(self, 0x80);
+        Fld<int>(self, 0x344) = Fld<int>(self, 0x84);
+        Fld<int>(self, 0x348) = Fld<int>(self, 0x88);
+        LayerVector* layers = (LayerVector*)(self + 0x8c);
+        LayerVector* frameLayers = (LayerVector*)(self + 0x34c);
+        if (frameLayers != layers) {
+            frameLayers->erase(frameLayers->mpBegin, frameLayers->mpEnd);
+            frameLayers->DoAssignFromIterator(layers->mpBegin, layers->mpEnd, flags);
+        }
+        SwapRenderJobLists(&preJobs, (RenderJobList*)(self + 0x330));
+        SwapRenderJobLists(&postJobs, (RenderJobList*)(self + 0x324));
+        budget = Fld<int>(self, 0x10);
+    }
+    {
+        void* app = SP_AppSystem();
+        if ((*(bool(__thiscall**)(void*))(*(char**)app + 0x44))(app)) {
+            int def = Fld<int>(self, 0x14) * 3;
+            if (budget < def)
+                budget = def;
+        }
+    }
+    bool onRenderThread = (g_renderThreadId == __readfsdword(0x18));
+    cRenderStats_s0075_ff50 stats;
+    stats.mJobCount = postJobs.size() + preJobs.size();
+    if (Fld<char>(self, 0x1b)) {
+        RestoreVertexShader();
+        Fld<char>(self, 0x1b) = 0;
+    }
+    ShowRaster(g_defaultCameraRaster);
+    if ((*(bool(__thiscall**)(void*))(*(char**)self + 0x88))(self)) {
+        ResetRenderPassState(self + 0x648);
+        int done = 0;
+        while (preJobs.mpNext != (RenderJobNode*)&preJobs && done < budget) {
+            cRenderJob_s0075_ff50* job = &preJobs.mpNext->mValue;
+            ExecuteJob(job, &stats);
+            done += job->mCost;
+            preJobs.pop_front();
+        }
+        ResetRenderPassState(self + 0x648);
+        unsigned int mask = 0x10001, want = 1;
+        if (!onRenderThread) {
+            mask = 0x10005;
+            want = 5;
+        }
+        LayerVector* frameLayers = (LayerVector*)(self + 0x34c);
+        cLayerInfo_s0075_ff50* sel = frameLayers->mpBegin;
+        for (cLayerInfo_s0075_ff50* p = frameLayers->mpBegin; p != frameLayers->mpEnd; ++p)
+            if (p->mInfoFlags & 2) sel = p;
+        if (sel != frameLayers->mpEnd) {
+            cLayerInfo_s0075_ff50* p = sel;
+            do {
+                if ((p->mInfoFlags & mask) == want) {
+                    unsigned int id = p->mLayerNumber;
+                    Fld<unsigned int>(self, 0x654) = id;
+                    ResetGlobalState();
+                    ((cIRenderLayer*)p->mLayer)->Render(p->mLayerFlags | flags, id, self + 0x33c, &stats);
+                    ++stats.mLayersRendered;
+                }
+                p->mInfoFlags &= 0xfffeffff;
+                ++p;
+            } while (p != frameLayers->mpEnd);
+        }
+        ResetRenderPassState(self + 0x648);
+        done = 0;
+        while (postJobs.mpNext != (RenderJobNode*)&postJobs && done < budget) {
+            cRenderJob_s0075_ff50* job = &postJobs.mpNext->mValue;
+            ExecuteJob(job, &stats);
+            done += job->mCost;
+            postJobs.pop_front();
+        }
+        Fld<char>(self, 0x18) = 0;
+        (*(void(__thiscall**)(void*))(*(char**)self + 0x8c))(self);
+    }
+    cStopwatch* sw = (cStopwatch*)(self + 0x5e8);
+    float ms = (float)sw->GetElapsedTicks() * sw->mMsPerTick;
+    Fld<float>(self, 0x600) = ms;
+    Fld<float>(self, 0x604) = Fld<float>(self, 0x604) * 0.9f + ms * 0.1f;
+    sw->Start();
+    stats.mLastFrameMS = Fld<float>(self, 0x600);
+    stats.mSmoothedMS = Fld<float>(self, 0x604);
+    stats.mLastFPS = 1000.0f / stats.mLastFrameMS;
+    stats.mSmoothedFPS = 1000.0f / stats.mSmoothedMS;
+    m->Lock(&kTimeoutNone);
+    RenderJobNode* preHead = Fld<RenderJobNode*>(self, 0x330);
+    Fld<cRenderStats_s0075_ff50>(self, 0x608) = stats;
+    ((RenderJobList*)(self + 0x330))->splice(preHead, preJobs);
+    ((RenderJobList*)(self + 0x324))->splice(Fld<RenderJobNode*>(self, 0x324), postJobs);
+    Fld<int>(self, 0x10) = Fld<int>(self, 0x14);
+    m->Unlock();
+    LayerVector* fl = (LayerVector*)(self + 0x34c);
+    fl->erase(fl->mpBegin, fl->mpEnd);
+}
+}  // namespace SP

@@ -15,3 +15,4 @@
 0075dc10 ?slot_35@cRenderer@SP@@UAEXXZ  # SP::cRenderer::slot_35 migrated from s0075cf20
 0075dc20 ?BuildPaletteTable@@YAXM@Z  # BuildPaletteTable migrated from s0075cf20 (verbatim, slice spelling)
 0075dca0 ?cRenderer_InitShaders@@YA_NXZ  # cRenderer_InitShaders migrated from s0075cf20 (verbatim, slice spelling)
+0075dd30 ?MergeLocalLights@@YA_NHHHH@Z  # MergeLocalLights migrated from s0075cf20 (verbatim, slice spelling)

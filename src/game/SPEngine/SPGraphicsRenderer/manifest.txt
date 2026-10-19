@@ -7,3 +7,4 @@
 ../src/game/SPEngine/SPGraphicsRenderer.cpp  ?slot_35@cRenderer@SP@@UAEXXZ  0075dc10  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRenderer.cpp  ?LayerInfoAt@cRenderer_s0075_de80@@QAEPAXH@Z  0075e370  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRenderer.cpp  ?Copy@Elem@@QAEPAU1@PAU1@@Z  0075ee90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderer.cpp  ?ClearAllLayers@cRenderer_s0075_ff50@SP@@QAEXXZ  007603e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
