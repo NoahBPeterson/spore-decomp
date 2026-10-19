@@ -10,9 +10,9 @@
 00941a10 EA::Internet::EncodeBase64String  # dc: eastl string wrapper
 00941af0 EA::Internet::DecodeBase64String  # dc: eastl string wrapper
 00941bb0 GetTime64  # dc: _time64(0)
-00941bc0 EA::Internet::HTTPMethodToString  # pdb anchor
-00941c40 EA::Internet::HeaderFieldToFieldString  # pdb anchor
-00941e80 EA::Internet::EncodeFormURL  # pdb anchor
+00941bc0 ?HTTPMethodToString@Internet@EA@@YAPBDW4HTTPMethod@12@@Z  # EA::Internet::HTTPMethodToString migrated from s009413d0
+00941c40 ?HeaderFieldToFieldString@Internet@EA@@YAPBDW4HTTPHeaderField@12@@Z  # EA::Internet::HeaderFieldToFieldString migrated from s009413d0
+00941e80 ?EncodeFormURL@@YAXPBDPAX@Z  # EncodeFormURL migrated from s009413d0 (verbatim, slice spelling)
 00941f20 ?AllocBuffer@HTTPClient@@QAE_NXZ  # HTTPClient::AllocBuffer migrated from s009413d0 (verbatim, slice spelling)
 00941f90 EA::Internet::HTTPClient::AllocateSocket  # pdb candidate caller-single
 00942010 ?HTTPClientCheckTimeout@@YA_NHPAH@Z  # HTTPClientCheckTimeout migrated from s009413d0 (verbatim, slice spelling)
