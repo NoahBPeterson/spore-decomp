@@ -1,7 +1,9 @@
+005e8940 ?FUN_005e8940@cSPEditorVerbTrayCollection_s005e_8470@SP@@QAEXHUKey_s005e_8470@ResourceMan@EA@@HHH@Z  # cSPEditorVerbTrayCollection_s005e_8470::FUN_005e8940 migrated from s005e8470 (verbatim, slice spelling)
+005e8980 ?Init@cSPEditorVerbTrayCollection_s005e_8470@SP@@QAEXUKey_s005e_8470@ResourceMan@EA@@HH@Z  # cSPEditorVerbTrayCollection_s005e_8470::Init migrated from s005e8470 (verbatim, slice spelling)
 005e8e80 eastl::basic_string<wchar_t>::make_lower  # byte-exact EASTL make_lower/CharToLower body
+005e90a0 eastl::rbtree<uint16_t>::find  # byte-exact EASTL rbtree::find
 005e9170 eastl::basic_string<wchar_t>::find  # byte-exact find(const T*, pos, n) calling eastl::search
 005e9260 eastl::basic_string<wchar_t>::compare  # byte-exact static compare(b1,e1,b2,e2) with min_alt
-005e93a0 eastl::basic_string<wchar_t>::AllocateSelf  # gEmptyString begin/end, capacity=+1, no return value
 005e92c0 eastl::VectorBase<uint16_t>::VectorBase  # (n, allocator) ctor, byte-exact
-005e90a0 eastl::rbtree<uint16_t>::find  # byte-exact EASTL rbtree::find
-005e8980 SP::cSPEditorVerbTrayCollection::Init  # thiscall thunk forwarding (Key,a,b) to cSPVerbTrayCollection::InitTrays
+005e93a0 eastl::basic_string<wchar_t>::AllocateSelf  # gEmptyString begin/end, capacity=+1, no return value
+00605f90 ?InitTrays@cSPVerbTrayCollection@SP@@MAEXVKey@ResourceMan@EA@@PAV345@H@Z  # SP::cSPVerbTrayCollection::InitTrays (callee of s005e8470, named from the dev publics; slice address comment)
