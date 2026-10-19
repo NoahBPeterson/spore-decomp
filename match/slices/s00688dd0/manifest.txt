@@ -12,3 +12,5 @@ slices/s00688dd0/s00688dd0.cpp  ??AParamSet@@QAEPAXI@Z                         0
 slices/s00688dd0/s00688dd0.cpp  ?GetParameter@ParamSet@@QAEPAXI@Z             00689c20  /O2 /MD /Gy /EHsc /TP
 slices/s00688dd0/s00688dd0.cpp  ?AppendParameter@ParamSet@@QAEXI@Z            00689c50  /O2 /MD /Gy /EHsc /TP
 slices/s00688dd0/s00688dd0.cpp  ?GetFirstParameterID@ParamSet@@QAEIXZ         00689d00  /O2 /MD /Gy /EHsc /TP
+slices/s00688dd0/s00688dd0.cpp  ?ExecuteCommand@StringCmdGenExec@@QAEHII@Z  00689750  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00688dd0/s00688dd0.cpp  ?SetStatusParameterValue@ParamSetStatus@@QAEXH@Z  00689c80  /O2 /MD /Gy /EHsc /TP /GS-

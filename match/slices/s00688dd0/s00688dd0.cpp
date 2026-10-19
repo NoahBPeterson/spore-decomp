@@ -459,34 +459,35 @@ unsigned FPUGetFlags()
 }
 
 // ===========================================================================
-// @ 0x00689750  SP::cStringCommandGenerator::ExecuteCommand
+// (see marker at definition) SP::cStringCommandGenerator::ExecuteCommand
 // ===========================================================================
 struct RefObj { virtual void r0(); virtual void Release(); virtual void r2();
                 virtual void r3(); virtual void r4(); virtual void r5();
                 virtual void r6(); virtual void r7(); virtual void r8(); };
-extern RefObj* gpCommandServer;
+extern RefObj* gpCommandServer;   // 0x015ff660
 
 struct StringCmdGenExec {
     void* vtbl;
     int ExecuteCommand(unsigned a, unsigned b);
 };
 
+struct RefHolder {
+    RefObj* p;
+    RefHolder() : p(0) {}
+    ~RefHolder() { if (p) p->Release(); }
+};
+
+// @ 0x00689750
 int StringCmdGenExec::ExecuteCommand(unsigned a, unsigned b)
 {
+    RefHolder local;
     RefObj* s = gpCommandServer;
-    void* local = 0;
     if (s != 0 &&
-        ((bool(__thiscall*)(void*, unsigned, unsigned*, void**))
+        ((bool(__thiscall*)(void*, unsigned, unsigned*, RefHolder*))
             (*(void***)this)[0x24 / 4])(this, a, &a, &local)) {
-        void* p = local;
-        int r = ((int(__thiscall*)(void*, unsigned, unsigned, void*))
-            (*(void***)s)[0x54 / 4])(s, a, b, p);
-        if (p != 0)
-            ((void(__thiscall*)(void*))(*(void***)p)[1])(p);
-        return r;
+        return ((int(__thiscall*)(void*, unsigned, RefObj*, unsigned))
+            (*(void***)s)[0x54 / 4])(s, a, local.p, b);
     }
-    if (local != 0)
-        ((void(__thiscall*)(void*))(*(void***)local)[1])(local);
     return 2;
 }
 
@@ -499,10 +500,17 @@ struct EditorResBase {
 };
 
 struct EditorResDerived : EditorResBase {
-    char  pad[0x1c];
+    uint32 pad04;
+    void*  mIn;     // +0x08  (dispatcher +0x18)
+    uint32 pad0c;
+    void*  mOut;    // +0x10  (dispatcher +0x20)
+    uint32 pad14;
+    uint32 mId;     // +0x18  (dispatcher +0x28)
+    uint32 pad1c;
     void* m20;   // +0x20
     void* m24;   // +0x24
-    ~EditorResDerived();
+    EditorResDerived() : mId(0), m20(0), m24(0) {}
+    __declspec(noinline) ~EditorResDerived();
 };
 
 // @ 0x00689810
@@ -515,94 +523,168 @@ EditorResDerived::~EditorResDerived()
 }
 
 // ===========================================================================
-// @ 0x00689880  ~message command dispatcher
+// (see marker at definition) ~message command dispatcher
 // ===========================================================================
-struct MsgDispatch {
-    void* vtbl0;   // +0
-    void* vtbl1;   // +4
-    ~MsgDispatch();
+extern const int kDefaultInt32Value;   // 0x015d1160
+struct Property {
+    void*    mpData;      // +0x00
+    uint32   pad04[3];
+    uint16   mnFlags;     // +0x10
+    uint16   mnType;      // +0x12
+    void* GetValuePtr()
+    {
+        if (mnFlags & 0x30)
+            return mpData;
+        else if (mnType != 0)
+            return this;
+        return 0;
+    }
+    int* GetValueInt32()
+    {
+        if (mnType == 9 || mnType == 0x10)
+            return (int*)GetValuePtr();
+        return (int*)&kDefaultInt32Value;
+    }
 };
 
-MsgDispatch::~MsgDispatch()
-{
-    // MI destructor: releases +0x40, +0x3c, +0x38 and the +0x10 base subobject.
-}
-
-// ===========================================================================
-// @ 0x006899D0  SP::cMessageCommandDispatcher::ExecuteCommand
-// ===========================================================================
-struct MsgDispatchExec {
-    void* vtbl;
-    int ExecuteCommand(unsigned a, void* d, void* e);
+struct ParamSetObj {
+    virtual int AddRef();                    // 0x00
+    virtual int Release();                   // 0x04
+    virtual void v08(); virtual void v0c(); virtual void v10();
+    virtual void Reset(int a);               // 0x14
+    virtual void v18();
+    virtual Property* GetParameter(unsigned id);   // 0x1c
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual void Unknown2c(int a);           // 0x2c
 };
 
-int MsgDispatchExec::ExecuteCommand(unsigned a, void* d, void* e)
-{
-    // Dispatches through the EA messaging server; approximate.
-    (void)a; (void)d; (void)e;
-    return 2;
-}
+struct ArcRef {                  // EA::AutoRefCount<T> member
+    ParamSetObj* p;
+    ArcRef() : p(0) {}
+    ~ArcRef() { if (p) p->Release(); }
+};
+
+struct MsgServer {
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
+    virtual void Post(unsigned id, void* msg, int a);   // 0x14
+};
+MsgServer* MsgGetServer();   // 0x00883860 EA::Messaging::GetServer
+
+struct IDispBase {
+    ~IDispBase() {}
+    virtual void i0(); virtual void i1(); virtual void i2(); virtual void i3();
+    virtual void i4(); virtual void i5(); virtual void i6();
+    virtual int ExecuteCommand(unsigned id, ParamSetObj* in, ParamSetObj* out);   // 0x1c
+};
+struct GmeRC {
+    virtual ~GmeRC() {}
+    virtual int AddRef();
+    virtual int Release();
+    int mRefCount;
+    GmeRC() : mRefCount(0) {}
+};
+
+struct Slot0c { int x; Slot0c() {} ~Slot0c() {} };
+struct GmeEditorResBase2 : IDispBase, GmeRC {
+};
+
+struct CMessageCommandDispatcher : GmeEditorResBase2 {
+    Slot0c           mUnk0c;     // +0x0c
+    EditorResDerived mMessage;   // +0x10
+    ArcRef           mpIn;       // +0x38
+    ArcRef           mpOut;      // +0x3c
+    ArcRef           mpGen;      // +0x40
+    CMessageCommandDispatcher();
+    ~CMessageCommandDispatcher();
+    int ExecuteCommand(unsigned id, ParamSetObj* in, ParamSetObj* out);
+};
 
 // ===========================================================================
-// @ 0x00689C80  SP::cCommandParameterSet::SetStatusParameterValue
+// (see marker at definition) SP::cCommandParameterSet::SetStatusParameterValue
 // ===========================================================================
 struct VariantStub {
-    unsigned mTypeId;
-    unsigned mFlags;
-    void SetU32(unsigned v);
-    void Destruct(int);
+    uint32 mData[4];
+    unsigned short mFlags;    // +0x10
+    unsigned short mTypeId;   // +0x12
+    VariantStub(const int& x) : mFlags(0), mTypeId(0) { *this = x; }
+    ~VariantStub() { if (mFlags & 4) Destruct(0); }
+    void Destruct(int);                          // 0x0093db80
+    VariantStub& operator=(const int& v);        // 0x00422eb0
 };
 
 struct ParamSetStatus {
     void* vtbl;
-    void SetStatusParameterValue(unsigned id);
+    void SetStatusParameterValue(int id);
 };
 
-void ParamSetStatus::SetStatusParameterValue(unsigned id)
+// @ 0x00689C80
+void ParamSetStatus::SetStatusParameterValue(int id)
 {
-    VariantStub v;
-    v.mTypeId = 0;
-    v.mFlags = 0;
-    v.SetU32(0);
+    VariantStub v(id);
     ((void(__thiscall*)(void*, unsigned, VariantStub*))(*(void***)this)[0x20 / 4])
-        (this, id, &v);
-    if (v.mFlags & 4)
-        v.Destruct(0);
+        (this, 0x2b999d2b, &v);
 }
 
 // ===========================================================================
-// @ 0x00689D40  App::cMessageCommandDispatcher constructor
+// (see marker at definition) ~cMessageCommandDispatcher
 // ===========================================================================
-struct VtblA { virtual void a0(); };
-struct VtblB { virtual void b0(); };
-struct CMessageCommandDispatcher : VtblA, VtblB {
-    void* m8;    // +0x08
-    void* mC;    // +0x0c
-    void* m10;   // +0x10
-    void* m14;   // +0x14
-    void* m18;   // +0x18
-    void* m1c;   // +0x1c
-    void* m20;   // +0x20
-    void* m24;   // +0x24
-    void* m28;   // +0x28
-    void* m2c;   // +0x2c
-    void* m30;   // +0x30
-    void* m34;   // +0x34
-    void* m38;   // +0x38
-    void* m3c;   // +0x3c
-    void* m40;   // +0x40
-    CMessageCommandDispatcher();
-};
+// @ 0x00689880
+CMessageCommandDispatcher::~CMessageCommandDispatcher()
+{
+}
 
+// ===========================================================================
+// (see marker at definition) SP::cMessageCommandDispatcher::ExecuteCommand
+// ===========================================================================
+// @ 0x006899D0
+int CMessageCommandDispatcher::ExecuteCommand(unsigned id, ParamSetObj* in, ParamSetObj* out)
+{
+    int result = 2;
+    MsgServer* srv = MsgGetServer();
+    if (srv != 0) {
+        if (in == 0) {
+            mpIn.p->Reset(0);
+            in = mpIn.p;
+        }
+        if (out == 0) {
+            mpOut.p->Reset(0);
+            out = mpOut.p;
+        }
+        mMessage.mId = id;
+        mMessage.mIn = in;
+        ParamSetObj* old = (ParamSetObj*)mMessage.m20;
+        if (in != old) {
+            if (in)
+                in->AddRef();
+            mMessage.m20 = in;
+            if (old)
+                old->Release();
+        }
+        mMessage.mOut = out;
+        old = (ParamSetObj*)mMessage.m24;
+        if (out != old) {
+            if (out)
+                out->AddRef();
+            mMessage.m24 = out;
+            if (old)
+                old->Release();
+        }
+        srv->Post(id, &mMessage, 0);
+        Property* p = out->GetParameter(0x2b999d2b);
+        if (p)
+            return *p->GetValueInt32();
+        out->Unknown2c(0);
+        result = 0;
+    }
+    return result;
+}
+
+// ===========================================================================
+// (see marker at definition) App::cMessageCommandDispatcher constructor
+// ===========================================================================
+// @ 0x00689D40
 CMessageCommandDispatcher::CMessageCommandDispatcher()
 {
-    m8 = 0;
-    m28 = 0;
-    m30 = 0;
-    m34 = 0;
-    m38 = 0;
-    m3c = 0;
-    m40 = 0;
 }
 // --- equivalence checker address annotations
     void SP_MessageServer(...); // 0x0067dcc0

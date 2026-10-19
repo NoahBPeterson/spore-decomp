@@ -1,2 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s009c1f60/s009c1f60.cpp  ??1creature_static_data@nSPCreatureAnim@@QAE@XZ  009c2050  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009c1f60/s009c1f60.cpp  ?resize@bone_xform_vec@nSPCreatureAnim@@QAEXI@Z  009c2520  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009c1f60/s009c1f60.cpp  ?resize@wiggle_instance_vec@nSPCreatureAnim@@QAEXI@Z  009c25f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -7,3 +7,6 @@
 00689810  80  derived destructor: base dtor inlining + vptr store order; equiv: UNSUPPORTED (our code stores address of its own vtable; map that symbol)
 00689b00  8  setter: compiler reuses one epilogue instead of duplicating it
 00689dc0  160  recursive rbtree walk: loop/register layout
+00689880  4  cMessageCommandDispatcher dtor: EH state numbers are one lower than the original (original tracks one more unwindable subobject below the message member); equiv: UNSUPPORTED (vtable address stores, 85.7% coverage)
+006899d0  101  cMessageCommandDispatcher::ExecuteCommand: register allocation (original keeps const 2 in edi and 0 in esi, load/store scheduling of the AutoRefCount swaps); equiv: WEAK (400 valid, 11% coverage)
+00689d40  56  cMessageCommandDispatcher ctor: original has an EH frame (no state stores) and a different vptr/zero-store order; equiv: UNSUPPORTED (stores image vtable addresses, 100% coverage)
