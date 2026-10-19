@@ -1,0 +1,9 @@
+# va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
+0113f5c0 219 SNDPKTPLAY_submit complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 4.5% coverage)
+0113f6c0 59 F_0113f6c0 (free packet slots) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 18.9% coverage)
+0113f720 5 F_0113f720 (played-sample count) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 28.6% coverage). Only the final add folds a memory operand.
+0113f750 2 F_0113f750 (release play slot) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 40.0% coverage). Only the global byte test is mov/test vs cmp.
+0113f780 331 F_0113f780 (advance packet, emit callback) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (341 valid, 10.3% coverage)
+0113f8f0 58 F_0113f8f0 (update play cursor) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (350 valid, 40.9% coverage)
+0113f940 59 F_0113f940 (drain deferred callbacks) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 17.9% coverage)
+0113f9b0 78 F_0113f9b0 (stop play, free voices) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 8.7% coverage)
