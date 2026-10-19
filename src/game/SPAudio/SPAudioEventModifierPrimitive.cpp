@@ -34,7 +34,6 @@ struct ResourceKey {
     uint32_t instanceID, typeID, groupID;
     ResourceKey(uint32_t i, uint32_t t, uint32_t g) : instanceID(i), typeID(t), groupID(g) {}
 };
-extern char gStrEmpty[];                 // 0x1667bac (shared empty eastl string)
 namespace EA {
 struct Property {
     uint32_t* mpData;
@@ -323,8 +322,10 @@ bool cEventModifierPrimitiveAlias::ReadTuningValues(const ResourceKey* key) {
 }
 }
     void* operator new(unsigned int, char*, int, int, char*, int); // 0x00f473a0
-    void operator delete[](void*); // 0x00f47380
 // ---- items of slice s00a39ce0 end
+
+// unnamed retail callees and globals that name local stubs (address in the comment)
+extern ResourceKey gEventModifiersKey;   // 0x15535ac
 
 // @ 0x00a3a4b0
 namespace SP { namespace Audio {
