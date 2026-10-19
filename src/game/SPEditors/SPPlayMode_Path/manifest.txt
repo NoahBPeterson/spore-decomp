@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPPlayMode_Path.cpp  ??0cSPCasual_Path@@QAE@XZ  0062de70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayMode_Path.cpp  ??_GcSPCasual_Path@@UAEPAXI@Z  0062dea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

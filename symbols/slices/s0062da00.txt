@@ -5,8 +5,8 @@
 0062dc70 SP::cSPCasual_Path::GetBestOpenNode  # min mTotalDistance over open list
 0062dce0 SP::cSPCasual_Path::BlockCircle  # marks grid nodes within radius
 0062de30 SP::cSPCasual_Path::GetNextPathPoint  # returns point, advances along mChild
-0062de70 SP::cSPCasual_Path::cSPCasual_Path  # PDB name
-0062dea0 SP::cSPCasual_Path::`scalar deleting destructor'  # vtable 0x13fe220
+0062de70 ??0cSPCasual_Path@@QAE@XZ  # cSPCasual_Path::cSPCasual_Path migrated from s0062da00 (verbatim, slice spelling)
+0062dea0 ??_GcSPCasual_Path@@UAEPAXI@Z  # cSPCasual_Path::~cSPCasual_Path migrated from s0062da00 (verbatim, slice spelling)
 0062df10 SP::cSPCasual_Path::ExpandNode  # A* expansion step
 0062e010 SP::cSPCasual_Path::FindPath  # A* driver
 0062e2e0 ?StartNewAnimation@cSPPlayModeAnimation_s0062_da00__ui@@QAEMII_NIPAI@Z  # cSPPlayModeAnimation_s0062_da00__ui::StartNewAnimation migrated from s0062da00 (verbatim, slice spelling)
