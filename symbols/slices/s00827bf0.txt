@@ -1,8 +1,10 @@
 00827bf0 SP::cSPUIPropertyLayout::DoMessage  # decomp index
 00827fc0 cSPUIPropertyLayout::SetKey (SPKeyFromName into +0x24/+0x28)
 00828020 cSPUIPropertyLayout::SetFlag (bool +0x74 + window vcalls)
-00828070 cSPUIPropertyLayout::GetEventMask  # PDB
-00828080 cSPUIPropertyLayout::DoMessage  # PDB (stopwatch timed)
-00828100 cSPUIPropertyLayout::GetRootWindow  # PDB
-008283a0 cSPUIPropertyLayout::SetPositionAndOffset  # PDB
+00828070 ?GetEventMask@CPL@@UAEIXZ  # CPL::GetEventMask migrated from s00827bf0 (verbatim, slice spelling)
+00828080 ?DoMessage@CPL@@UAE_NHPAX@Z  # CPL::DoMessage migrated from s00827bf0 (verbatim, slice spelling)
+00828100 ?GetRootWindow@CPL@@QAEPAXXZ  # CPL::GetRootWindow migrated from s00827bf0 (verbatim, slice spelling)
+008283a0 ?SetPositionAndOffset@CPL@@QAEXMMMM@Z  # CPL::SetPositionAndOffset migrated from s00827bf0 (verbatim, slice spelling)
+00828410 ?ElemDoDestroyValues@@YGXPAUElem@@0@Z  # ElemDoDestroyValues migrated from s00827bf0 (verbatim, slice spelling)
+00828450 ??0Elem@@QAE@ABU0@@Z  # Elem::Elem migrated from s00827bf0 (verbatim, slice spelling)
 008284a0 ?4Elem  # Elem::operator= (base identifier so the matcher finds it)

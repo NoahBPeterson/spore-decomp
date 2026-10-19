@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/Spui/SPUIPropertyLayout.cpp  ?GetEventMask@CPL@@UAEIXZ  00828070  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPropertyLayout.cpp  ?DoMessage@CPL@@UAE_NHPAX@Z  00828080  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPropertyLayout.cpp  ?GetRootWindow@CPL@@QAEPAXXZ  00828100  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPropertyLayout.cpp  ?SetPositionAndOffset@CPL@@QAEXMMMM@Z  008283a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
