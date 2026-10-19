@@ -1,0 +1,2 @@
+005c3cb0  116  SetSelectedPack: orig materialises the size()>0 test as seta al / test al,al / je (3 bytes longer); every later branch shifts [equiv: WEAK]
+005c4210  91  GetWindowsWithMatchingID: register roles swapped (window/out in edi/ebx) and child address-taken slot is cached in esi with reload after Grow; mine forgoes the reload [equiv: WEAK]
