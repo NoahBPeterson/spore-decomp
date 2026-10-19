@@ -662,6 +662,8 @@ def mod_match(flt, module):
 
 def parse_slice(sid, variant=""):
     path = os.path.join(SLICES, sid, sid + variant + ".cpp")
+    if not os.path.exists(path) and os.path.exists(path[:-4] + ".c"):
+        path = path[:-4] + ".c"         # a C slice (mig12 s008be260.c): its functions land in the object's C++ TU like any other
     if not variant and not os.path.exists(path):
         # a slice whose only TU is a flag variant (`s007f9550_od.cpp`, fix pass 5: round 5 landed it from a temporary copy):
         # the file its manifest rows name, else the single <sid>_*.cpp
@@ -886,6 +888,28 @@ def base_list(text):
 def parse_preamble(pre):
     """-> (structs: {name: SliceStruct}, items: [(kind, text)]) ; kind in include/struct/typedef/extern/other/comment."""
     structs, items = {}, []
+    # a C header guard around a linkage block (`#ifdef __cplusplus` / `extern "C" {` / `#endif` ... `#ifdef __cplusplus` /
+    # `}` / `#endif`): the module TU is always C++, so the guards go and the block is an ordinary linkage block (mig12
+    # s008bb550: the `#endif` after `extern "C" {` became part of the block's first item, `extern "C" #endif`, C2014)
+    pre = list(pre)
+    k = 0
+    while k + 2 < len(pre):
+        a, b, c = (x.strip() for x in pre[k:k + 3])
+        if re.match(r"#\s*if(?:def\s+__cplusplus|\s+defined\s*\(?\s*__cplusplus\s*\)?)\s*$", a) and re.match(r"#\s*endif\b", c) \
+                and (re.match(r'^extern\s+"C"\s*\{\s*(//.*)?$', b) or re.match(r"^\}\s*(//.*)?$", b)):
+            pre[k:k + 3] = [pre[k + 1]]
+        k += 1
+    # several typedefs on one line (`typedef uint8_t uint8; typedef int16_t int16;`, mig12 s008b71c0) are one item each, so
+    # each is kept when its own name is used (the line was one item keyed by one name, and `uint32` was dropped: C2061)
+    k = 0
+    while k < len(pre):
+        ms = mask(pre[k]).split("//")[0]
+        if ms.strip().startswith("typedef") and ms.count(";") > 1 and not re.search(r"[{}()]", ms):
+            parts = [x.strip() + ";" for x in pre[k].split("//")[0].split(";") if x.strip()]
+            pre[k:k + 1] = parts
+            k += len(parts)
+            continue
+        k += 1
     i, n = 0, len(pre)
     while i < n:
         l = pre[i]
