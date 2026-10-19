@@ -146,7 +146,6 @@ struct ListDataV {
 void* AuthManager();                                      // SP::Pollen::AuthManager (0x607a60)
 struct WebBrowser { void SetActive(bool a); void Navigate(uint32_t a, uint32_t b); };
 struct SubA { void Set(uint32_t a); void Fn_e720(); void Fn_ef30(uint32_t a, uint32_t b); };
-#define AT(T, off) (*(T*)((char*)this + (off)))
 struct Browser {
     void SetWebBrowserVisibility(char vis, uint32_t x);
     void Fn_c50(char vis, uint32_t a, uint32_t b);
@@ -213,7 +212,11 @@ struct WebBrowser {
     void SetActive();   // 0x0065b2a0 (equiv t2)
 };
 }
+extern Key3 g1525894, g15258a0;
 // ---- items of slice s00644b90 end
+
+
+
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
 extern Key3 g1525894, g15258a0;
@@ -738,7 +741,7 @@ struct cSPUIAssetBrowser_s0064_acd0 {
     uint8_t  b24c;                 // +0x24c
 
     void ShowSporeGuide();  // 0x0064b6a0 (cSPUIAssetBrowser::ShowSporeGuide)
-    void BanItem();
+    void BanItem();  // 0x0064b4b0 (cSPUIAssetBrowser::BanItem)
     void HandleMessage(Msg* m);  // 0x0064b6b0 (cSPUIAssetBrowser::HandleMessage)
     void LaunchEditorEnd();  // 0x0064acd0 (cSPUIAssetBrowser::LaunchEditorEnd)
     void Update();                                                        // 0x64ab20
@@ -817,12 +820,6 @@ void Browser::Fn_c50(char vis, uint32_t a, uint32_t b)
     }
 }
 
-
-
-
-
-
-
 // @ 0x00644d10
 void Browser::Fn_d10(char vis, int x)
 {
@@ -848,12 +845,6 @@ void Browser::Fn_d10(char vis, int x)
     }
 }
 
-
-
-
-
-
-
 // @ 0x00644db0
 int Browser::IsA()
 {
@@ -864,12 +855,6 @@ int Browser::IsA()
     }
     return 0;
 }
-
-
-
-
-
-
 
 // @ 0x00644dd0
 int Browser::IsB()
@@ -882,24 +867,12 @@ int Browser::IsB()
     return 0;
 }
 
-
-
-
-
-
-
 // @ 0x00644df0
 int Browser::CanSporepediaShowSporeGuide()
 {
     if (AT(uint8_t, 0x1c) != 0 && AT(uint32_t, 0x158) == 0 && AT(uint32_t, 0x230) == 0) return 1;
     return 0;
 }
-
-
-
-
-
-
 
 // @ 0x00644e20
 void Browser::Fn_e20(char flag)
@@ -926,12 +899,6 @@ void Browser::Fn_e20(char flag)
     }
 }
 
-
-
-
-
-
-
 // @ 0x00644eb0
 void Browser::Fn_eb0()
 {
@@ -957,24 +924,12 @@ void Browser::Fn_eb0()
     *(int*)(st + 0x254) = 2;
 }
 
-
-
-
-
-
-
 // @ 0x00644fc0
 void RelPair::Release2()
 {
     if (a) a->Release();
     if (b) b->Release();
 }
-
-
-
-
-
-
 
 // @ 0x00644ff0
 void LocaleMsg2::Dtor()
@@ -983,12 +938,6 @@ void LocaleMsg2::Dtor()
     vt1 = 0x13ef094;
     vt0 = 0x13eb918;
 }
-
-
-
-
-
-
 
 // @ 0x00645010
 void SP::cSPUIAssetBrowser::PreloadTextures()
@@ -1009,12 +958,6 @@ void SP::cSPUIAssetBrowser::PreloadTextures()
     for (ResourceKey* k = keys; k < keys + 8; ++k)
         AT(TexturePreload*, 0x218)->PreloadTextureList(k);
 }
-
-
-
-
-
-
 
 // @ 0x00645160
 void Browser::Fn_160()
@@ -1046,12 +989,6 @@ void Browser::Fn_160()
     ((BrowserB*)this)->Fn990();
 }
 
-
-
-
-
-
-
 // @ 0x00645260
 void Browser::Fn_260()
 {
@@ -1067,12 +1004,6 @@ void Browser::Fn_260()
     AT(uint32_t, 0x230) = 5;
 }
 
-
-
-
-
-
-
 // @ 0x006452c0
 uint32_t Browser::Get_c()
 {
@@ -1081,12 +1012,6 @@ uint32_t Browser::Get_c()
     return 0;
 }
 
-
-
-
-
-
-
 // @ 0x00645300
 uint32_t Browser::Get_10()
 {
@@ -1094,12 +1019,6 @@ uint32_t Browser::Get_10()
     if (!v.empty() && v.size() == 1) return (uint32_t)v.mpBegin->e;
     return 0;
 }
-
-
-
-
-
-
 
 // @ 0x00645340
 Node12* __stdcall AllocNode12(const Node12* src)
@@ -1114,12 +1033,6 @@ Node12* __stdcall AllocNode12(const Node12* src)
     return n;
 }
 
-
-
-
-
-
-
 // @ 0x00645390
 Ent20x* Ent20x::Copy(const Ent20* o)
 {
@@ -1128,12 +1041,6 @@ Ent20x* Ent20x::Copy(const Ent20* o)
     e = o->e; if (e) e->AddRef();
     return this;
 }
-
-
-
-
-
-
 
 // @ 0x006453e0
 Ent20** UninitCopyOut(Ent20** out, Ent20* first, Ent20* last, Ent20* dest)
@@ -1150,12 +1057,6 @@ Ent20** UninitCopyOut(Ent20** out, Ent20* first, Ent20* last, Ent20* dest)
     }
     return out;
 }
-
-
-
-
-
-
 
 // @ 0x00645450
 Ent20* UninitCopy(Ent20* first, Ent20* last, Ent20* dest)
@@ -1175,12 +1076,6 @@ Ent20* UninitCopy(Ent20* first, Ent20* last, Ent20* dest)
     return dest;
 }
 
-
-
-
-
-
-
 // @ 0x006454c0
 Ent20* DestroyRange(Ent20* first, Ent20* last, Ent20* dest)
 {
@@ -1197,12 +1092,6 @@ Ent20* DestroyRange(Ent20* first, Ent20* last, Ent20* dest)
     return dest;
 }
 
-
-
-
-
-
-
 // @ 0x00645510
 void UninitFillN(Ent20* dest, uint32_t n, const Ent20* v)
 {
@@ -1216,12 +1105,6 @@ void UninitFillN(Ent20* dest, uint32_t n, const Ent20* v)
         ++dest;
     }
 }
-
-
-
-
-
-
 
 // @ 0x006455b0
 void Browser::SetCallToActionMessage(const short* msg)
@@ -1238,14 +1121,11 @@ void Browser::SetCallToActionMessage(const short* msg)
     }
 }
 
-
-
-
-
-
 // @ 0x00645620
 void SP::cSPUIAssetBrowser::LoadConfigFile(SP::cSPUIAssetBrowserLaunch const & a1, bool & a2)
 {}
+
+
 
 
 
@@ -1261,9 +1141,13 @@ void cSPUIAssetBrowser::FUN_00645bf0()
 
 
 
+
+
 // @ 0x00645cc0
 void cSPUIAssetBrowser::FUN_00645cc0_()
 {}
+
+
 
 
 
@@ -1287,6 +1171,8 @@ int cSPUIAssetBrowser::FUN_00645d90()
 
 
 
+
+
 // @ 0x00645db0
 void cSPUIAssetBrowser::FUN_00645db0(Elem* other)
 { other->a = 0; }
@@ -1296,9 +1182,13 @@ void cSPUIAssetBrowser::FUN_00645db0(Elem* other)
 
 
 
+
+
 // @ 0x00645e20
 __declspec(noinline) void cSPUIAssetBrowser::FUN_00645e20()
 { gPartialCall3(); }
+
+
 
 
 
@@ -1323,9 +1213,13 @@ void __stdcall FUN_00645ff0(Elem* first, Elem* last)
 
 
 
+
+
 // @ 0x00646030
 Elem* cSPUIAssetBrowser::FUN_00646030(Elem* first, Elem* last, uint32_t* key)
 { (void)last; (void)key; return first; }
+
+
 
 
 
@@ -1355,6 +1249,8 @@ void cSPUIAssetBrowser::FUN_006460b0(Elem* first, Elem* last, Elem* src)
         }
     }
 }
+
+
 
 
 
@@ -1393,6 +1289,8 @@ Elem* cSPUIAssetBrowser::FUN_00646140(Elem* first, Elem* last, Elem* dst)
 
 
 
+
+
 // @ 0x006461d0
 Elem* cSPUIAssetBrowser::FUN_006461d0(Elem* first, Elem* last, Elem* dst)
 {
@@ -1425,6 +1323,8 @@ Elem* cSPUIAssetBrowser::FUN_006461d0(Elem* first, Elem* last, Elem* dst)
 
 
 
+
+
 // @ 0x00646260
 void cSPUIAssetBrowser::FUN_00646260()
 {
@@ -1443,9 +1343,14 @@ void cSPUIAssetBrowser::FUN_00646260()
 
 
 
+
+
 // @ 0x006462b0
 void cSPUIAssetBrowser::FUN_006462b0(void* p)
 { (void)p; }
+
+
+
 
 
 
@@ -1572,10 +1477,14 @@ bool __stdcall CloneModelAsset(Key key, Key* pOutKey, int size, bool bKeepParent
 
 
 
+
+
 // @ 0x00646ae0
 void __fastcall sub_646ae0(void*)
 {
 }
+
+
 
 
 
@@ -1605,6 +1514,8 @@ void MapFindSelf::Find(OutPair* out, const OutPair* key)
 
 
 
+
+
 // @ 0x00646d70
 void __stdcall sub_646d70(uint8_t* first, uint8_t* last)
 {
@@ -1613,6 +1524,8 @@ void __stdcall sub_646d70(uint8_t* first, uint8_t* last)
         FreeChecked(*(void**)(first + 8));
     }
 }
+
+
 
 
 
@@ -1630,6 +1543,8 @@ bool Owner::Insert118(uint32_t a, uint32_t b)
 
 
 
+
+
 // @ 0x00646e00
 bool Owner::Insert0F8(uint32_t a, uint32_t b)
 {
@@ -1637,6 +1552,8 @@ bool Owner::Insert0F8(uint32_t a, uint32_t b)
     InsertResult r = m0F8.find_insert(key, EmptyTag());
     return r.inserted;
 }
+
+
 
 
 
@@ -1658,6 +1575,8 @@ bool Owner::Insert138(uint32_t a, IRef* b)
 
 
 
+
+
 // @ 0x00646ec0
 bool Owner::Insert15C(uint32_t a, IRef* b)
 {
@@ -1674,6 +1593,8 @@ bool Owner::Insert15C(uint32_t a, IRef* b)
 
 
 
+
+
 // @ 0x00646f40
 uint32_t* MapFindInsert::FindOrInsert(uint32_t* key)
 {
@@ -1685,6 +1606,8 @@ uint32_t* MapFindInsert::FindOrInsert(uint32_t* key)
     insert(&r, &keyCopy, EmptyTag());
     return (uint32_t*)r.node + 1;
 }
+
+
 
 
 
@@ -1717,9 +1640,15 @@ void Vec14::reserve(uint32_t n)
 
 
 
+
+
+
 // @ 0x00648ce0
 void __cdecl sub_648ce0()
 {}
+
+
+
 
 
 
@@ -1729,9 +1658,13 @@ void __fastcall sub_649f60(void*)
 
 
 
+
+
 // @ 0x0064a220
 void __fastcall sub_64a220(void*)
 {}
+
+
 
 
 
@@ -1741,9 +1674,13 @@ void __fastcall sub_64a400(void*)
 
 
 
+
+
 // @ 0x0064a990
 void __fastcall sub_64a990(void*)
 {}
+
+
 
 
 
@@ -1771,9 +1708,14 @@ void cSPUIAssetBrowser_s0064_9f60::Update()
 
 
 
+
+
 // @ 0x0064aba0
 void __fastcall sub_64aba0(void*)
 {}
+
+
+
 
 
 // @ 0x0064acd0
@@ -1963,6 +1905,8 @@ finish:
 }
 
 
+
+
 // @ 0x0064b4b0
 void cSPUIAssetBrowser_s0064_acd0::BanItem()
 {
@@ -2007,11 +1951,15 @@ void cSPUIAssetBrowser_s0064_acd0::BanItem()
 }
 
 
+
+
 // @ 0x0064b6a0
 void cSPUIAssetBrowser_s0064_acd0::ShowSporeGuide()
 {
     LaunchSporeGuide(mField19C);
 }
+
+
 
 
 // @ 0x0064b6b0
@@ -2182,6 +2130,9 @@ void cSPUIAssetBrowser_s0064_acd0::HandleMessage(Msg* m)
     if (m->b31)
         feedList->FUN_00662ad0();
 }
+
+
+
 
 // @ 0x0064bc50
 void __cdecl Launch(uint32_t a, uint32_t b, uint32_t c)
