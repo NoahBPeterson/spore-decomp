@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+005a7930  0  cSPEditorGeneralBadnessCalculator::SetTuningValues: body abridged

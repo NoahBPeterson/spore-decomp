@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorGeneralBadnessCalculator.cpp  ??1cSPEditorGeneralBadnessCalculator@SP@@UAE@XZ  005a7920  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

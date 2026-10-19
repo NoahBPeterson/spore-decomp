@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+005a7d00 1343 CalculateValues complete; frame 0x5c vs 0x48 (extra temps), x87/SSE scheduling and vtable reload after GetMode differ

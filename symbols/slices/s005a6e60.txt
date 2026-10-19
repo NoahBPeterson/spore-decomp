@@ -9,5 +9,5 @@
 005a7810 dual-cString data ctor  # two cString members at 0/0x14
 005a7840 SP::cSPEditorEconomy::SendChangedMessage  # PDB callee-scored; posts id 0x3150c27
 005a7900 SP::cSPEditorGeneralBadnessCalculator::cSPEditorGeneralBadnessCalculator  # ctor
-005a7920 SP::cSPEditorGeneralBadnessCalculator::~cSPEditorGeneralBadnessCalculator  # PDB anchor
-005a7930 SP::cSPEditorGeneralBadnessCalculator::SetTuningValues  # PDB candidate
+005a7920 ??1cSPEditorGeneralBadnessCalculator@SP@@UAE@XZ  # cSPEditorGeneralBadnessCalculator::~cSPEditorGeneralBadnessCalculator migrated from s005a6e60 (verbatim, slice spelling)
+005a7930 ?FUN_005a7930@@YAXXZ  # FUN_005a7930 migrated from s005a6e60 (verbatim, slice spelling)
