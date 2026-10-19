@@ -1,12 +1,17 @@
 00fd71e0  FUN_00fd71e0  # no PDB name; 5-arg cdecl delegate
-00fd7660  SP::cMovieSystem::RecordFrames  # PDB gap-align
-00fd7750  SP::cMovieLetterbox::Init  # PDB anchor
-00fd7b30  SP::cMovieSystem::cMovieSystem  # PDB gap-align
-00fd7cd0  SP::cMovieSystem::~cMovieSystem  # PDB gap-align
-00fd7260  SP::cMovieSystem::DrawLayer  # PDB caller-single
-00fd7800  SP::cMovieSystem::Shutdown  # PDB caller-scored
-00fd79e0  SP::cMovieSystem::StopMovie  # PDB caller-scored
-00fd7d80  SP::cMovieSystem::StopRecordingMovie  # PDB caller-scored
-00fd75a0  SP::cMovieSystem::MovieIsPlaying  # vtable slot identity
-00fd7610  SP::cMovieSystem::PauseMovie  # vtable slot identity (alias)
+00fd7260 ?DrawLayer@cMovieSystem@@QAEXHHHH@Z  # cMovieSystem::DrawLayer migrated from s00fd71e0 (verbatim, slice spelling)
+00fd74f0 ?OnMovieMsg@cMovieSystem@@QAEDHHH@Z  # cMovieSystem::OnMovieMsg migrated from s00fd71e0 (verbatim, slice spelling)
 00fd7570  SP::cMovieSystem::MovieIsPlaying  # PDB vtable-slot
+00fd75a0 ?MovieIsPlaying@cMovieSystem@@QAE_NXZ  # cMovieSystem::MovieIsPlaying migrated from s00fd71e0 (verbatim, slice spelling)
+00fd7610 ?PauseMovie2@cMovieSystem@@QAEDXZ  # cMovieSystem::PauseMovie2 migrated from s00fd71e0 (verbatim, slice spelling)
+00fd7660 ?RecordFrames@cMovieSystem@@QAEHH@Z  # cMovieSystem::RecordFrames migrated from s00fd71e0 (verbatim, slice spelling)
+00fd7730 ?FUN_00fd7730@@YAXHPAUIWindowCtl@@@Z  # FUN_00fd7730 migrated from s00fd71e0 (verbatim, slice spelling)
+00fd7750 ?Init@cMovieLetterbox@@QAEXXZ  # cMovieLetterbox::Init migrated from s00fd71e0 (verbatim, slice spelling)
+00fd7800 ?Shutdown@cMovieSystem@@QAE_NXZ  # cMovieSystem::Shutdown migrated from s00fd71e0 (verbatim, slice spelling)
+00fd79e0  SP::cMovieSystem::StopMovie  # PDB caller-scored
+00fd7a90 ?GetSomething@cMovieSystem@@QAEPAXXZ  # cMovieSystem::GetSomething migrated from s00fd71e0 (verbatim, slice spelling)
+00fd7ab0 ?Init@cContentValidationSummarizer@@QAEPAU1@XZ  # cContentValidationSummarizer::Init migrated from s00fd71e0 (verbatim, slice spelling)
+00fd7b30 ??0cMovieSystem@@QAE@XZ  # cMovieSystem::cMovieSystem migrated from s00fd71e0 (verbatim, slice spelling)
+00fd7cd0 ??1cMovieSystem@@QAE@XZ  # cMovieSystem::~cMovieSystem migrated from s00fd71e0 (verbatim, slice spelling)
+00fd7d80  SP::cMovieSystem::StopRecordingMovie  # PDB caller-scored
+00fd7f80 ?EndRecording@cMovieSystem@@QAE_NXZ  # cMovieSystem::EndRecording migrated from s00fd71e0 (verbatim, slice spelling)

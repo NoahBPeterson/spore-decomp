@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPMovie/SPMovieSystem.cpp  ?PauseMovie2@cMovieSystem@@QAEDXZ  00fd7610  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/SPMovieSystem.cpp  ?FUN_00fd7730@@YAXHPAUIWindowCtl@@@Z  00fd7730  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/SPMovieSystem.cpp  ?GetSomething@cMovieSystem@@QAEPAXXZ  00fd7a90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -1,5 +1,4 @@
-# va  symbol  # evidence
-00fd90c0 ?Init@MovieSys@@QAE_NXZ       # PDB candidate SP::cMovieSystem::Init (caller-single)
+00fd90c0 ?Init@MovieSys@@QAE_NXZ  # MovieSys::Init migrated from s00fd90c0 (verbatim, slice spelling)
 00fd9460 ?f9460@Vid@@QAEXPAX@Z         # VideoRenderer_Rw4 helper (void* setter)
 00fd9480 ?f9480@Vid@@QAEEH@Z           # PDB candidate rw::movie::VideoRenderer_Rw4::ConvertRenderableToRaster
 00fd9610 ?f9610@Vid@@QAEXH@Z           # VideoRenderer_Rw4 part reset

@@ -1,0 +1,12 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not byte-exact)
+00fd74f0 93 message-driven movie play/stop; class/offset uncertainty
+00fd75a0 126 frame-count vs elapsed-time check; register/rounding
+00fd7660 161 RecordFrames loop
+00fd7750 110 cMovieLetterbox::Init refcount assignment + layout Init
+00fd7800 188 Shutdown: 5 message posts + layout release
+00fd7ab0 5 cContentValidationSummarizer Init returns this in eax (caller feeds AutoRefCount::operator=); base vtable store + zero-store scheduling differ
+00fd7b30 264 cMovieSystem constructor
+00fd7cd0 135 cMovieSystem destructor
+00fd8c40 155 `anonymous_namespace'::cMovieCheat::cMovieCheat: complete; the cCommandBase base ctor, the derived vtable store, the cArgumentSpec sub-object ctor and the full ConstructSpec argument list (all option pointers/flags/strings) are present in original order; remaining diff is register allocation and 4-byte frame slack. difftest: UNSUPPORTED (0/400 inputs valid; object-heavy). flags /O2 /MD /Gy /TP /arch:SSE
+00fd8d80 716 `anonymous_namespace'::cMovieCheat::Execute: complete; all property lookups (float/uint/bool by name), ParseThrowing, the flag-bit dispatch arms (0x1<<0..2, v30/v34/v38, v14/v20, name registration via SPKeyFromName), the ConvertToString16 + movie-system registration arm and the EString release are reproduced. difftest: UNSUPPORTED (unresolved fake callees). flags /O2 /MD /Gy /TP /arch:SSE
+00fd90c0 170 SP::cMovieSystem::Init: complete; the seven operator-new/ctor sites and the MessageServer registrations are present but the pointer keeps switching registers and the +0x328 clamp schedule differs. difftest: UNSUPPORTED (0 valid inputs; object-heavy). flags /O2 /MD /Gy /TP /arch:SSE
