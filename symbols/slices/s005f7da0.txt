@@ -5,5 +5,6 @@
 005f8170 eastl::hashtable::DoInsertValue  # calls GetRehashRequired/DoAllocateNode/DoRehash
 005f8400 eastl::basic_string<wchar_t>::replace  # byte-exact EASTL replace(iterator,iterator,const T*,const T*); calls insert
 005f8840 eastl::DequeBase::DoInit  # EASTL deque init shape (ptr array min 8, subarray 4 x 0x30)
+005f8e40 ??1cKeyNameRecord@@QAE@XZ  # cKeyNameRecord::~cKeyNameRecord migrated from s005f7da0 (verbatim, slice spelling)
 005f8f30 eastl::basic_string<char>::basic_string  # (size_type n, char c, const allocator&) fill ctor
 005f8f80 eastl::basic_string<wchar_t>::replace  # replace(size_type,size_type,const T*) forwarding to 0x5f8400

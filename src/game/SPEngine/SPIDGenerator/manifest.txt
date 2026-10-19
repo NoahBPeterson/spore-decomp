@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPIDGenerator.cpp  ??1cKeyNameRecord@@QAE@XZ  005f8e40  /O2 /MD /Gy /TP /Isrc/game/include
