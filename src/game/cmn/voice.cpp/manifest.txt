@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/cmn/voice.cpp.cpp  ?Release@Voice@core@audio@rw@@QAEXXZ  0112e950  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/cmn/voice.cpp.cpp  ?Voice_CreateInstance@@YAHH@Z  01133050  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
