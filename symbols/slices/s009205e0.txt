@@ -1,2 +1,2 @@
 00921260 eastl::fixed_pool_base::init  # pdb_names callee-single
-00921580 eastl::RBTreeIncrement  # pdb_names callee-single
+00921580 ?RBTreeIncrement@@YAPAURBNode@@PAU1@@Z  # RBTreeIncrement migrated from s009205e0 (verbatim, slice spelling)

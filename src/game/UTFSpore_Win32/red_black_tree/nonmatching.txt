@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00921580 41 RBTreeIncrement: parameter register (eax vs ecx) and loop layout differ
+009216a0 354 2008 EASTL RBTreeInsert differs structurally from the 2017 ModAPI source (behaviourally equivalent red-black insert); equiv: WEAK 51% coverage
+00921880 555 2008 EASTL RBTreeErase differs structurally from the 2017 ModAPI source (behaviourally equivalent red-black erase); equiv: WEAK 77% coverage

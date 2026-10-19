@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/red_black_tree.cpp  ?RBTreeDecrement@eastl@@YAPAUrbtree_node_base@@PBU2@@Z  009215c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/red_black_tree.cpp  ?RBTreeRotateLeft@eastl@@YAPAUrbtree_node_base@@PAU2@0@Z  00921600  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/red_black_tree.cpp  ?RBTreeRotateRight@eastl@@YAPAUrbtree_node_base@@PAU2@0@Z  00921650  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
