@@ -1,7 +1,7 @@
-00698ca0 SP segment/triangle intersection
-00698e00 SP point-segment distance
-00698fa0 SP closest-points-between-segments
-006994a0 SP ray-sphere intersection
-00699600 SP move-toward (max step)
-00699730 SP angle wrap/normalize
-00699800 SP segment physics sweep
+00698ca0 ?SegmentTriangleIntersect@@YAHPBUVector3_s0069_8ca0@@00PAU1@1PAH@Z  # SegmentTriangleIntersect migrated from s00698ca0 (verbatim, slice spelling)
+00698e00 ?DistancePointSegment@@YAMPBUVector3_s0069_8ca0@@00M@Z  # DistancePointSegment migrated from s00698ca0 (verbatim, slice spelling)
+00698fa0 ?ClosestPointsOnSegments@@YAXPBUVector3_s0069_8ca0@@000PAU1@1@Z  # ClosestPointsOnSegments migrated from s00698ca0 (verbatim, slice spelling)
+006994a0 ?RaySphereIntersect@@YAXPBUVector3_s0069_8ca0@@0MPAU1@PAH@Z  # RaySphereIntersect migrated from s00698ca0 (verbatim, slice spelling)
+00699600 ?MoveToward@@YAXPAUVector3_s0069_8ca0@@PBU1@1M@Z  # MoveToward migrated from s00698ca0 (verbatim, slice spelling)
+00699730 ?WrapAngle@@YAMMM@Z  # WrapAngle migrated from s00698ca0 (verbatim, slice spelling)
+00699800 ?SegmentPhysics@@YAXPBUVector3_s0069_8ca0@@0M0PAU1@@Z  # SegmentPhysics migrated from s00698ca0 (verbatim, slice spelling)

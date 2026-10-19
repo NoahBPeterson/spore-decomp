@@ -1,0 +1,15 @@
+# va  diff-bytes  reason
+006985b0 171 OrthogonalVector: complete real C++ (fabs branch); x87 fabs/fcomi branch shape not reproduced (209 vs 154 bytes)
+00698880 532 RayBoxIntersect: complete slab test in real C++; branch/register schedule differs (551 vs 329 bytes)
+006989d0 534 SegmentBoxIntersect: complete slab test with t<1 end clip in real C++; schedule differs (554 vs 349 bytes)
+00699600 214 MoveToward: complete real C++ (clamped step along to-from); normalize grouping/SSE schedule differs (231 vs 294 bytes)
+00699a10 1549 ConvexHull2D complete (monotone chain), Vec3 struct copies; loop unrolling/schedule differs; difftest PASS after fixing NaN-sensitive cross-product tests (original takes the hull branch when c is NaN: !(c >= 0)), x87 fld/fstp point copies (now struct copies) and the slice flags (module is /fp:fast)
+0069a050 78 PointInPolygon2D complete; condition/schedule differs slightly; difftest PASS after fixing the slice flags (module is /fp:fast; the checker had compiled ours /fp:precise)
+0069a240 531 ClipSegmentToPolygon complete; FPU/SSE schedule differs; difftest PASS after fixing the slice flags (module is /fp:fast; the checker had compiled ours /fp:precise)
+0069a5f0 146 HermiteTrack::Evaluate complete; x87/SSE mix differs; difftest PASS after fixing the slice flags (/fp:fast: ours was all-SSE float precision), float-rounded tangent*h products (m[2] array) and the NaN-sensitive segment search (!(t > x))
+0069a750 604 HermiteTrack3::ComputeTangents complete; unroll by 4 not reproduced
+0069a9a0 645 complete: Vec3 Hermite track evaluate (4x-unrolled segment search); first compare/operand order and register alloc differ; difftest PASS after fixing the source's Flags comment (it lacked the fast floating-point flag, so the checker built x87 code calling _CIsqrt and rounding differently)
+0069ac00 496 complete: Vec4 track tangent builder (compiler 4x unroll); /fp:fast SSE operand order differs
+0069aee0 575 complete: Vec4 Hermite track evaluate; register alloc and first-branch compare layout differ; difftest PASS after fixing the source's Flags comment (it lacked the fast floating-point flag, so the checker built x87 code calling _CIsqrt and rounding differently)
+0069b1c0 513 complete: rotation matrix taking vector a onto b (axis-angle, OrthogonalVector fallback); x87 normalize scheduling differs; difftest PASS after fixing the source's Flags comment (it lacked the fast floating-point flag, so the checker built x87 code calling _CIsqrt and rounding differently)
+0069b440 198 complete: SP::Matrix3FromFacingAndUp; only SSE register allocation differs; difftest PASS after fixing the source's Flags comment (it lacked the fast floating-point flag, so the checker built x87 code calling _CIsqrt and rounding differently)

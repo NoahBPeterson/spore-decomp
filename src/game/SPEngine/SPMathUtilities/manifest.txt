@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPMathUtilities.cpp  ?ComputeSlopes@CurveSlopes@@QAEXXZ  0069a4c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPMathUtilities.cpp  ?QuaternionFromFacingAndUp@@YAPAUQuaternion_s0069_a9a0_b@@PAU1@PBUVector3_s0069_a9a0_b@@1@Z  0069b600  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

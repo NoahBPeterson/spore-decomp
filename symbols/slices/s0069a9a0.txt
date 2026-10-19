@@ -1,9 +1,9 @@
-0069b600 SP::QuaternionFromFacingAndUp  # PDB name; Matrix3FromFacingAndUp + QuaternionFromMatrix33<float,0>, copies 4 floats
-0069b440 SP::Matrix3FromFacingAndUp  # PDB name
-0069a9a0 SP animated-event interpolate
-0069ac00 SP animated-event insert
-0069aee0 SP animated-event erase
-0069b1c0 SP segment closest-point helper
+0069a9a0 ?Evaluate@?$HermiteTrack_s0069_a9a0@UVec4k@@@@QAEXPAUVec4k@@M@Z  # Evaluate migrated from s0069a9a0 (verbatim, slice spelling)
+0069ac00 ?BuildTangents@?$HermiteTrack_s0069_a9a0@UVec4k@@@@QAEXXZ  # BuildTangents migrated from s0069a9a0 (verbatim, slice spelling)
+0069aee0 ?Evaluate@?$HermiteTrack_s0069_a9a0@UVec3k@@@@QAEXPAUVec3k@@M@Z  # Evaluate migrated from s0069a9a0 (verbatim, slice spelling)
+0069b1c0 ?MatrixFromTwoVectors@@YAXPAUMatrix3_s0069_a9a0@@PBUVector3_s0069_a9a0@@1@Z  # MatrixFromTwoVectors migrated from s0069a9a0 (verbatim, slice spelling)
+0069b440 ?Matrix3FromFacingAndUp@@YAPAUMatrix3Rows@@PAU1@PBUVector3_s0069_a9a0@@1@Z  # Matrix3FromFacingAndUp migrated from s0069a9a0 (verbatim, slice spelling)
+0069b600 ?QuaternionFromFacingAndUp@@YAPAUQuaternion_s0069_a9a0_b@@PAU1@PBUVector3_s0069_a9a0_b@@1@Z  # QuaternionFromFacingAndUp migrated from s0069a9a0 (verbatim, slice spelling)
 0069b650 SP segment point distance
 0069b760 SP orthonormal basis helper
 0069b840 SP angle clamp/wrap

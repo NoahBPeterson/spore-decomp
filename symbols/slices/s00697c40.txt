@@ -3,8 +3,10 @@
 00697ee0 EA::Trace::LogManager::~LogManager  # restores vtables, frees three vectors, calls Server dtor 0x924bd0
 00697fa0 EA::Trace::GetLogManager  # new (0xf8, "Debug/EATrace/LogManager") then FUN_00697e00, vtable +0x14/+0x10
 00698030 EA::Trace::Server::SetNames  # assign 3 wide strings at +0x68/+0x78/+0x88 then FUN_00697bb0
-00698180 SP::QuaternionFromDirections  # PDB name; x87 normalize + 1/sqrt(3) fallback
-006983a0 SP::MatrixFromDirection  # normalize dir, build orthonormal 3x3
-006985b0 SP::OrthogonalVector  # pick a perpendicular axis from the smallest |component|
-00698650 SP::MatrixFromQuaternion  # 4x4 from quaternion
-00698880 SP::?  006989d0 SP::?  00698b30 SP::?
+00698180 ?QuaternionFromDirections@SP@@YAXPAUQuaternion@1@PBUVector3@1@1@Z  # QuaternionFromDirections migrated from s00697c40 (verbatim, slice spelling)
+006983a0 ?MatrixFromDirection@SP@@YAXPAUMatrix3@1@PBUVector3@1@@Z  # MatrixFromDirection migrated from s00697c40 (verbatim, slice spelling)
+006985b0 ?OrthogonalVector@SP@@YAXPAUVector3@1@PBU21@@Z  # OrthogonalVector migrated from s00697c40 (verbatim, slice spelling)
+00698650 ?MatrixFromQuaternion@SP@@YAXPAUMatrix3@1@PBUQuaternion@1@@Z  # MatrixFromQuaternion migrated from s00697c40 (verbatim, slice spelling)
+00698880 ?RayBoxIntersect@SP@@YA_NPBM00PAM@Z  # RayBoxIntersect migrated from s00697c40 (verbatim, slice spelling)
+006989d0 ?SegmentBoxIntersect@SP@@YA_NPBM00PAM@Z  # SegmentBoxIntersect migrated from s00697c40 (verbatim, slice spelling)
+00698b30 ?QuaternionSlerp@SP@@YAXPAUQuaternion@1@PBU21@1M@Z  # QuaternionSlerp migrated from s00697c40 (verbatim, slice spelling)
