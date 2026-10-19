@@ -3706,9 +3706,11 @@ class Rewrite:
         """Prefix `n::` to the bare uses in `text` of the stubs the slice defines in namespace n (and not at global scope)."""
         defined, glob = collections.defaultdict(set), set()
         for kind, t in self.items:
-            if re.match(r"^\s*(?:template\s+(?:class|struct)\b|using\b)", RS.mask(t)):
-                continue                 # an explicit instantiation / using-directive declares nothing
             ns, _inner = RS.unwrap_namespaces(t)
+            # an explicit instantiation / using-directive declares nothing, also inside a namespace block (s0056df80:
+            # `namespace SP { namespace Traits { using namespace eastl; } }` made every `eastl::` SP::Traits::eastl::, C3083)
+            if re.match(r"^\s*(?:template\s+(?:class|struct)\b|using\b)", RS.mask(_inner)):
+                continue
             (defined["::".join(ns)] if ns else glob).update(RS.item_names(kind, t))
         for v in sorted(defined.get(n, ()), key=len, reverse=True):
             if v in glob or v in own:
