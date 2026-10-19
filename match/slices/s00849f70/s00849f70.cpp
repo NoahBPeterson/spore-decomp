@@ -690,14 +690,118 @@ bool IMEServerWin32::SetCompositionData(const wchar_t* s, int len) {
 }
 
 // ---------------------------------------------------------------- Canvas
+struct MsgVec {
+    tagMSG* mpBegin;      // +0x00
+    tagMSG* mpEnd;        // +0x04
+    tagMSG* mpCapacity;   // +0x08
+    void insert(tagMSG* pos, const tagMSG& val);   // 0x00849e30
+};
+
 // @ 0x00849f70
 int Canvas_FlushInput() {
-    // Drain WM_KEY* messages (up to 0x400) and repost the survivors.
+    MsgVec msgs;
+    msgs.mpBegin = 0;
+    msgs.mpEnd = 0;
+    msgs.mpCapacity = 0;
     tagMSG msg;
+    int removed = 0;
     int count = 0;
-    while (count < 0x400 && PeekMessageA(&msg, 0, 0x100, 0x109, 1)) {
+
+    // Drain the WM_KEY* range into a local queue.
+    while (PeekMessageA(&msg, 0, 0x100, 0x109, 1)) {
+        if (count >= 0x400)
+            break;
         ++count;
-        PostMessageA(msg.hwnd, msg.message, msg.wParam, msg.lParam);
+        if (msgs.mpEnd >= msgs.mpCapacity) {
+            msgs.insert(msgs.mpEnd, msg);
+        } else {
+            tagMSG* d = msgs.mpEnd++;
+            if (d)
+                *d = msg;
+        }
     }
-    return 0;
+
+    tagMSG* begin = msgs.mpBegin;
+    int n = (int)(msgs.mpEnd - begin);
+
+    // Mouse-message coalescing: drop duplicate button/move noise.
+    for (int i = n - 1; i >= 0; --i) {
+        tagMSG* cur = begin + i;
+        int target;
+        if (cur->message == 0x202) {            target = 0x201;
+        } else if (cur->message == 0x208) {
+            target = 0x207;
+        } else if (cur->message == 0x205) {
+            target = 0x204;
+        } else if (cur->message == 0x20a) {
+            cur->message = 0;
+            ++removed;
+            continue;
+        } else if (cur->message == 0x200) {
+            cur->message = 0;
+            ++removed;
+            continue;
+        } else {
+            continue;
+        }
+        int moves = 0;
+        for (int j = i - 1; j >= 0; --j) {
+            tagMSG* prev = begin + j;
+            if (prev->message == target) {
+                cur->message = 0;
+                prev->message = 0;
+                removed += 2;
+                break;
+            }
+            if (prev->message == 0x200 && ++moves > 1) {
+                prev->message = 0;
+                ++removed;
+            }
+        }
+    }
+
+    // Keyboard-message coalescing.
+    for (int i = n - 1; i >= 0; --i) {
+        tagMSG* cur = begin + i;
+        unsigned m = cur->message;
+        if (m == 0x102 || m == 0x106 || m == 0x103 || m == 0x107) {
+            cur->message = 0;
+            ++removed;
+            continue;
+        }
+        if (m == 0x101 || m == 0x105) {
+            bool found = false;
+            for (int j = i - 1; j >= 0; --j) {
+                tagMSG* prev = begin + j;
+                if (found)
+                    break;
+                unsigned pm = prev->message;
+                if (pm < 0x100 || pm > 0x109)
+                    continue;
+                if (pm == 0x101 || pm == 0x105)
+                    break;
+                if (prev->wParam == cur->wParam) {
+                    if (pm == 0x100 || pm == 0x104)
+                        found = true;
+                    prev->message = 0;
+                    ++removed;
+                }
+            }
+            if (found) {
+                cur->message = 0;
+                ++removed;
+            }
+        }
+    }
+
+    // Repost the survivors.
+    for (int i = 0; i < n; ++i) {
+        tagMSG* m = begin + i;
+        if (m->message)
+            PostMessageA(m->hwnd, m->message, m->wParam, m->lParam);
+    }
+
+    if (msgs.mpBegin && *(int*)((char*)msgs.mpBegin - 4))
+        EASTL_allocator_deallocate(msgs.mpBegin);
+    return removed;
 }

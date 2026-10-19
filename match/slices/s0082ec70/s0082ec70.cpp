@@ -3,6 +3,7 @@
 // Region flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
 #include "types.h"
 #include <new>
+#include <string.h>
 
 // ---------------------------------------------------------------- masked globals
 extern void     *g_d3dDevice;                 // 0x16f89d0
@@ -34,6 +35,7 @@ extern "C" void *__cdecl msvc_memmove(void *, const void *, uint32_t);          
 
 extern "C" bool  __cdecl FUN_0082e4f0(void *, void *);        // 0x82e4f0
 extern "C" void  __cdecl SUB_00951d10(void *);                // 0x951d10
+extern "C" void *__cdecl FUN_0067cad0();                      // 0x67cad0
 extern "C" int   __cdecl FUN_0067de10();                      // 0x67de10
 extern "C" int   __cdecl FUN_0067dd60();                      // 0x67dd60
 extern "C" bool  __cdecl SUB_009568c0(int);                   // 0x9568c0
@@ -90,13 +92,13 @@ extern u32vector g_layerVec;   // 0x154744c
 struct SPUIShader2D {
     uint8_t   flag0;            // +0x000
     char      pad1[3];
-    int32_t   count;            // +0x004
+    uint32_t  count;            // +0x004
     int32_t   field8;           // +0x008
     uint32_t  flagsC;           // +0x00c
     void     *field10;          // +0x010
     uint32_t  arr14[0x40];      // +0x014
     char      ent114[0x500];    // +0x114  (64 x 0x14)
-    uint32_t  countB;           // +0x614
+    int32_t   countB;           // +0x614
     char      items618[0x600];  // +0x618  (16 x 0x60)
     uint32_t  boxC18[4];        // +0xc18
     char      padC28[0x34];     // +0xc28..+0xc5c
@@ -224,7 +226,13 @@ struct QueueItem {
     uint8_t  pad30[4];       // +0x30
     float    f13, f14;       // +0x34,+0x38
 };
-struct Range { void *begin; void *end; };
+struct IterCopy {
+    void *container;                     // +0x00
+    void *begin;                         // +0x04
+    void *end;                           // +0x08
+    void *f0c, *f10, *f14, *f18, *f1c;   // +0x0c..
+    IterCopy *Set(int *src);             // 0x00951dc0
+};
 struct IterData {
     int32_t  id;     // +0x00
     int32_t  acc;    // +0x04
@@ -233,6 +241,9 @@ struct IterData {
     void    *p24;    // +0x10
 };
 
+static inline int ToInt(float f) { return (int)f; }
+
+// @ 0x0082ec70
 void SPUIShader2D::Process(void *itemv, uint32_t arg)
 {
     QueueItem *item = (QueueItem *)itemv;
@@ -241,19 +252,22 @@ void SPUIShader2D::Process(void *itemv, uint32_t arg)
 
     cSPUIShaderProxy *px = (cSPUIShaderProxy *)proxy;
     int saved = px->refCount;
-    int r = ((H *)this)->AddBoundingBox(saved);
+    void *r = FUN_0067cad0();
     if (saved != ((H *)r)->FUN_00a1ad10())
         return;
 
-    if (0xf < (int)countB)
+    int q[4];
+    IterData it;
+    IterCopy range;
+
+    if (countB >= 0x10)
         ((H *)this)->FUN_0082e890();
 
     if (g_bRender3D) {
-        uint32_t q[4];
-        q[0] = (uint32_t)(int)item->f2;
-        q[1] = (uint32_t)(int)item->f3;
-        q[2] = (uint32_t)(int)item->f4;
-        q[3] = (uint32_t)(int)item->f5;
+        q[0] = ToInt(item->f2);
+        q[1] = ToInt(item->f3);
+        q[2] = ToInt(item->f4);
+        q[3] = ToInt(item->f5);
         if (FUN_0082e4f0((char *)this + 0xc18, q)) {
             ((H *)this)->FUN_0082e890();
             *(uint32_t *)((char *)this + 0xc18) = q[0];
@@ -262,17 +276,15 @@ void SPUIShader2D::Process(void *itemv, uint32_t arg)
             *(uint32_t *)((char *)this + 0xc24) = q[3];
             void *dev = g_d3dDevice;
             void **vt = *(void ***)dev;
-            ((void (__stdcall *)(void *, uint32_t *))vt[0x12c / 4])(dev, q);
+            ((void (__stdcall *)(void *, uint32_t *))vt[0x12c / 4])(dev, (uint32_t *)q);
         }
     }
 
-    Range range;
-    ((H *)&range)->FUN_00951dc0((void *)arg);
+    range.Set((int *)arg);
     bool changed = false;
     if (range.begin != range.end) {
-        IterData it;
         do {
-            if (!((H *)&range)->FUN_009528d0(&it, (uint8_t)(count != 0))) {
+            if (!((H *)&range)->FUN_009528d0(&it, (uint8_t)(count > 0))) {
                 ((H *)this)->FUN_0082e890();
                 changed = false;
                 continue;
@@ -324,9 +336,7 @@ void SPUIShader2D::Process(void *itemv, uint32_t arg)
                 int idx = countB;
                 countB = idx + 1;
                 float *dst = (float *)((char *)this + idx * 0x60 + 0x618);
-                float *src = (float *)item->pData;
-                for (int i = 0; i < 0x10; ++i)
-                    dst[4 + i] = src[i];
+                memcpy(dst + 4, item->pData, 0x40);
                 const float k = 0.003921569f;
                 dst[2] = (float)item->b4 * k;
                 dst[0] = (float)item->b6 * k;

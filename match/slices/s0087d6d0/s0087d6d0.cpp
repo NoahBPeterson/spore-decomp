@@ -486,13 +486,18 @@ uint32_t Locale_FindLower(const wchar_t* name, wchar_t* out, int cap)
                 return LocFieldToken(1, *pp, out, cap, L'^');
 
             wchar_t taiwan[8];
-            taiwan[0] = (wchar_t)(0x59d3 ^ 0x59a7);
-            taiwan[1] = (wchar_t)(0x59c6 ^ 0x59a7);
-            taiwan[2] = (wchar_t)(0x59ce ^ 0x59a7);
-            taiwan[3] = (wchar_t)(0x59d0 ^ 0x59a7);
-            taiwan[4] = (wchar_t)(0x59c6 ^ 0x59a7);
-            taiwan[5] = (wchar_t)(0x59c9 ^ 0x59a7);
+            taiwan[0] = (wchar_t)0x59d3;
+            taiwan[1] = (wchar_t)0x59c6;
+            taiwan[2] = (wchar_t)0x59ce;
+            taiwan[3] = (wchar_t)0x59d0;
+            taiwan[4] = (wchar_t)0x59c6;
+            taiwan[5] = (wchar_t)0x59c9;
             taiwan[6] = 0;
+            wchar_t* pt = taiwan;
+            do {
+                *pt ^= (wchar_t)0x59a7;
+                ++pt;
+            } while (*pt);
 
             const wchar_t* e = b;
             while (*e) ++e;

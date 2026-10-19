@@ -17,12 +17,10 @@ void  f_883870(void* p);
 void* f_e5cac0(const char* name);
 void  f_10829f0(void* p);
 void* f_8ac360(int n, void* p);
-void* f_6abeb0();
-void* f_884a20(void* p);
+void* f_6abeb0(unsigned int size);            // 0x006abeb0
 void* f_9512c0();
 void* f_9512d0(int a, int b, const char* c, void* d);
 void* f_7fb700(void* p);
-void  f_7fa350_init(void* p);
 void* f_11b7240(void* p);
 void* f_7fa4f0(void* a, void* b, void* c);
 int   f_571e00(void* p);
@@ -34,7 +32,6 @@ void** GetActSlot(void* self, int i);
 void  f_7fc330(void* p);
 void  f_7fc2a0_ctor(void* p);
 void  f_7fbce0_dtor(void* p);
-void  f_7fba80_init(void* p);
 
 
 // ---- f_7fb7b0 types (vtable-based) ----
@@ -355,34 +352,42 @@ void* C_7fc2a0::Ctor() {
 }
 
 // @ 0x007fc330
+// Local names below are chosen so the /Od name-hash reproduces the original stack slots
+// (srv,r,s,pp,raw,old,obj) at ebp-4,-8,-0xc,-0x10,-0x14,-0x18,-0x1c.
+struct Srv7fc330 { void* Server(); };          // 0x00884a20 (thiscall, returns this)
+struct Ev7fc330  { void* SetGlobal(); };       // 0x007fa350 (thiscall, returns this)
+void* operator new(unsigned int size, const char* name, int a, int b, int c, int d); // 0x00f473a0
+extern char ppv_a[], ppv_b[], ppv_c[], ppv_d[];
 void f_7fc330(void* param_1) {
+  void* k; void* right; void* p1; void* len; void* chunk; void* cap; void* p30;
   if (f_883860() == 0) {
-    void* s = f_6abeb0();
-    void* srv = 0;
-    if (s) srv = f_884a20(s);
-    void** vt = *(void***)srv;
-    ((void (__thiscall*)(void*))vt[1])(srv);
-    ((void (__thiscall*)(void*, int, int))vt[4])(srv, 4, 0);
-    f_883870(srv);
+    chunk = f_6abeb0(0xc8);
+    p30 = chunk ? ((Srv7fc330*)chunk)->Server() : 0;
+    ((void (__thiscall*)(void*))((void**)*(void***)p30)[1])(p30);
+    ((void (__thiscall*)(void*, int, int))((void**)*(void***)p30)[4])(p30, 4, 0);
+    f_883870(p30);
     g_164b1f0 = 1;
-    RCObj* r = (RCObj*)((void* (__thiscall*)(void*, int))(*(void***)param_1)[1])(param_1, 0);
-    void* tag = f_9512c0();
-    void* pp = f_9512d0(0x18, 4, "PluginProc", tag);
-    void* obj = 0;
-    if (pp) {
-      f_7fba80_init(pp);
-      obj = pp;
+    cap = ((void* (__thiscall*)(void*))((void**)*(void***)param_1)[1])(param_1);
+    len = f_9512d0(0x18, 4, "PluginProc", f_9512c0());
+    if (len) {
+      ((C_7fba80*)len)->Ctor();
+      *(void**)((char*)len + 0x0) = (void*)ppv_a;
+      *(void**)((char*)len + 0x4) = (void*)ppv_b;
+      *(void**)((char*)len + 0x8) = (void*)ppv_c;
+      *(void**)((char*)len + 0x10) = (void*)ppv_d;
+      k = len;
     }
-    void* old = g_164b410;
-    if (obj != old) {
-      if (obj) ((void (__thiscall*)(void*))**(void***)obj)(obj);
-      g_164b410 = obj;
-      if (old) ((void (__thiscall*)(void*))(*(void***)old)[1])(old);
+    else k = 0;
+    if (k != g_164b410) {
+      right = g_164b410;
+      if (k) ((void (__thiscall*)(void*))((void**)*(void***)k)[0])(k);
+      g_164b410 = k;
+      if (right) ((void (__thiscall*)(void*))((void**)*(void***)right)[1])(right);
     }
-    void* v = (void*)f_7fb700(&g_164b410);
-    ((void (__thiscall*)(void*, void*))(*(void***)r)[0x104 / 4])(r, v);
+    ((void (__thiscall*)(void*, void*))((void**)*(void***)cap)[0x104 / 4])(cap, f_7fb700(&g_164b410));
   }
-  f_7fa350_init(0);
+  p1 = operator new(1, "UI/PluginBroadcasterProc", 0, 0, 0, 0);
+  p1 ? ((Ev7fc330*)p1)->SetGlobal() : 0;
 }
 
 struct IRefHost {

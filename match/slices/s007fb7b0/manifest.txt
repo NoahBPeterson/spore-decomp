@@ -9,3 +9,4 @@ slices/s007fb7b0/s007fb7b0.cpp  ?f@C_7fc860@@QAEXHH@Z      007fc860  /Od /Ob1 /M
 slices/s007fb7b0/s007fb7b0.cpp  ?f_7fb7b0@@YAXPAUIWorldHost@@@Z  007fb7b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s007fb7b0/s007fb7b0.cpp  ??0Holder7fbd50@@QAE@XZ  007fbd50  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s007fb7b0/s007fb7b0.cpp  ?OnMessage@Handler7fc4b0@@QAE_NHPAX@Z  007fc4b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fb7b0/s007fb7b0.cpp  ?f_7fc330@@YAXPAX@Z   007fc330  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,3 +1,4 @@
+00849f70  574  Canvas::FlushInput: fully reconstructed (drain loop + mouse/keyboard coalescing + repost + vector free); differs only in /O2 register allocation/scheduling (frame 0x38 vs 0x3c, 217 vs 225 insns); [equiv: UNSUPPORTED] (import:PeekMessageA unstubbed, 0/400 valid)
 0084a230  211  SetEnabled: repeated mpCanvas/mD0 member reloads and vcall register schedule differ
 0084a540  13   SetCompositionWindow: arg0/arg1 register assignment and vtable-register schedule differ
 0084a700  88   IMECompositionStringDataEx ctor: locale copy loop shape + member store order differ

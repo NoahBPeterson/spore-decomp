@@ -1,2 +1,1 @@
 # va diff reason
-007fc330 187 plugin server registration/plugin-proc creation — vtable slots and call order approximated

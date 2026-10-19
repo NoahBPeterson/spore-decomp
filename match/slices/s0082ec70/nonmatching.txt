@@ -1,4 +1,5 @@
 # va  diff-bytes  reason
+0082ec70  749 queue-flush batch builder: complete + faithful, but /O2 instruction scheduling / register allocation differs throughout (x87 float, frame layout); [equiv: WEAK] (390 valid, 0 mismatch, 12.7% coverage)
 0082f170  226 eastl vector<u32>::insert: allocation + DoInsertValue memcpy schedule differs; equiv: FAIL (ours huge memcpy where orig returns)
 0082f280  236 eastl vector<16-byte>::insert: element shift/copy schedule differs; equiv: FAIL (element shift differs)
 0082f410  134 cSPUIShaderProxy ctor body: fixed_vector_map/string inline init order differs; equiv: FAIL (inline string init differs)

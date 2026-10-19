@@ -6,3 +6,4 @@
 0087deb0  377  group-separator number formatter; instruction scheduling differs
 0087e0d0  76  formatter buffer init (two fixed buffers); register scheduling differs
 0087e130  2  LCID locale lookup; two CRT IAT loads emitted in swapped registers
+0087e230  361  lowercased Australian locale match; frame 8 bytes larger, regalloc + branch shapes differ [equiv: UNSUPPORTED]
