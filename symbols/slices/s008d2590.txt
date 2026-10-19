@@ -1,8 +1,24 @@
-008d2590 EA::Input::InputMan::UpdateController  # XInput/DirectInput poll of one Controller (PDB layout)
-008d2b50 EA::Input::Controller::GetDeviceInfo  # calls InputMan::GetControllerDeviceInfo(mnIndex)
-008d2d70 EA::Input::Keyboard::GetDeviceInfo  # PDB name
-008d2ea0 EA::Input::Mouse::GetDeviceInfo  # PDB name
+008d2590 ?UpdateController@InputMan@Input@EA@@QAEXI@Z  # InputMan::UpdateController migrated from s008d2590 (verbatim, slice spelling)
+008d2b50 ?GetDeviceInfo@Controller@Input@EA@@QAEXPAUDeviceInfo@@@Z  # Controller::GetDeviceInfo migrated from s008d2590 (verbatim, slice spelling)
+008d2b80 ?GetControlValue@Controller@Input@EA@@QAEMI_N@Z  # Controller::GetControlValue migrated from s008d2590 (verbatim, slice spelling)
+008d2c20 ?GetControlButton@Controller@Input@EA@@QAE_NI_N@Z  # Controller::GetControlButton migrated from s008d2590 (verbatim, slice spelling)
+008d2c60 ?GetControlStates@Controller@Input@EA@@QAE_NPAM_N@Z  # Controller::GetControlStates migrated from s008d2590 (verbatim, slice spelling)
+008d2d70 ?GetDeviceInfo@Keyboard@Input@EA@@QAEXPAUDeviceInfo@@@Z  # Keyboard::GetDeviceInfo migrated from s008d2590 (verbatim, slice spelling)
+008d2db0 ?GetModifierState@@YAIXZ  # GetModifierState migrated from s008d2590 (verbatim, slice spelling)
+008d2e20 ?GetKeyboardState@Keyboard@Input@EA@@QAE_NPAE@Z  # Keyboard::GetKeyboardState migrated from s008d2590 (verbatim, slice spelling)
+008d2e70 ?GetLocale@Keyboard@Input@EA@@QAEXPA_W@Z  # Keyboard::GetLocale migrated from s008d2590 (verbatim, slice spelling)
+008d2ea0 ?GetDeviceInfo@Mouse@Input@EA@@QAEXPAUDeviceInfo@@@Z  # Mouse::GetDeviceInfo migrated from s008d2590 (verbatim, slice spelling)
+008d2ee0 ?SetBounds@Mouse@Input@EA@@QAEXHHHH@Z  # Mouse::SetBounds migrated from s008d2590 (verbatim, slice spelling)
+008d2f00 ?GetBounds@Mouse@Input@EA@@QAEXPAH000@Z  # Mouse::GetBounds migrated from s008d2590 (verbatim, slice spelling)
+008d2f30 ?GetCursorPosition@@YA_NPAH0@Z  # GetCursorPosition migrated from s008d2590 (verbatim, slice spelling)
+008d2f60 ?SetPosition@Mouse@Input@EA@@QAE_NHH_N@Z  # Mouse::SetPosition migrated from s008d2590 (verbatim, slice spelling)
+008d2fb0 ?IsMouseButtonDown@@YA_NI@Z  # IsMouseButtonDown migrated from s008d2590 (verbatim, slice spelling)
+008d3050 ?GetButtons@Mouse@Input@EA@@QAE_NPAE@Z  # Mouse::GetButtons migrated from s008d2590 (verbatim, slice spelling)
 008d3080 InitXInputFunctions  # PDB name
 008d3130 EA::Input::InputMan::~InputMan  # vptr resets of Controller[4]/Keyboard/Mouse
-008d31b0 EA::Input::InputMan::PollAll  # updates 4 controllers then poll-completion callback
+008d31b0 ?PollAll@InputMan@Input@EA@@QAEXXZ  # InputMan::PollAll migrated from s008d2590 (verbatim, slice spelling)
+008d3270 ?IsToggleKeyOn@Keyboard@Input@EA@@QAE_NI@Z  # Keyboard::IsToggleKeyOn migrated from s008d2590 (verbatim, slice spelling)
+008d32b0 ?GetPosition@Mouse@Input@EA@@QAE_NPAH0@Z  # Mouse::GetPosition migrated from s008d2590 (verbatim, slice spelling)
+008d32e0 ?IsButtonDown@Mouse@Input@EA@@QAE_NI@Z  # Mouse::IsButtonDown migrated from s008d2590 (verbatim, slice spelling)
 008d32f0 EA::Input::InputMan::InputMan  # ctor, noise 0.02 / binary 0.5
+008d3450 ?IsKeyDown@Keyboard@Input@EA@@QAE_NII@Z  # Keyboard::IsKeyDown migrated from s008d2590 (verbatim, slice spelling)

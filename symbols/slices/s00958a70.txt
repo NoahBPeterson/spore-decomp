@@ -5,6 +5,7 @@
 00958ca0 ?EraseRange@MsgList@@QAE?AUIter@@U2@0@Z  # MsgList::EraseRange migrated from s00958a70 (verbatim, slice spelling)
 00958cf0 ??0WM@@QAE@XZ  # WM::WM migrated from s00958a70 (verbatim, slice spelling)
 00958fa0 ?SendModifiedMsg@WM@@QAE_NPAUIWin@@0PAUMsg@@@Z  # WM::SendModifiedMsg migrated from s00958a70 (verbatim, slice spelling)
+00959050 ?UpdateCursorWindow@WM@@QAEPAUIWin@@PAUV2@@_N@Z  # WM::UpdateCursorWindow migrated from s00958a70 (verbatim, slice spelling)
 00959230 ?FindWindowAt@WM@@QAEPAUIWin@@PBUV2@@@Z  # WM::FindWindowAt migrated from s00958a70 (verbatim, slice spelling)
 009594b0 ?PopFocus@WM@@QAE_NPAUIWin@@0@Z  # WM::PopFocus migrated from s00958a70 (verbatim, slice spelling)
 009595e0 ?InsertRange@MsgList@@QAEXPAUNode@@UIter@@1H@Z  # MsgList::InsertRange migrated from s00958a70 (verbatim, slice spelling)
