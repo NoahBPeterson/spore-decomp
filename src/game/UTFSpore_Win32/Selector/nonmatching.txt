@@ -1,0 +1,2 @@
+# Slice s008f9220 (gold1 44) -- functions that are complete + equivalence-verified
+008f9b00 138 PseudoSelector::Match -- switch over the pseudo-class token recomputed; jump table reproduced but case bodies and the >0x22 immediate lowerings differ.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (399 valid inputs, 67.1% coverage).

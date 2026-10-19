@@ -1,0 +1,13 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/Selector.cpp  ?wmemcmp@Style@XHTML@EA@@YAHPB_W0I@Z  008f96a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Selector.cpp  ?Match@Selector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f96e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Selector.cpp  ?StringContains@Style@XHTML@EA@@YA_NPB_W0I_W@Z  008f9710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Selector.cpp  ?Match@TagSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f9780  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Selector.cpp  ?Match@ClassSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f97d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Selector.cpp  ?Match@IdSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f9830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Selector.cpp  ?Match@DescendantSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f98a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Selector.cpp  ?Match@ChildSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f9910  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Selector.cpp  ?Match@AttrExistsSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f9970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Selector.cpp  ?Match@AttrEqualsSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f99c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Selector.cpp  ?Match@AttrIncludesSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f9a40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Selector.cpp  ?Match@AttrDashSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f9aa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
