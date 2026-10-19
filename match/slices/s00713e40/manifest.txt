@@ -1,4 +1,8 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00713e40/s00713e40.cpp  ?RegisterInvalidShader@@YAXXZ  00713f20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00713e40/s00713e40.cpp  ?Init@Adapter20@@QAEPAXXZ  00713f90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00713e40/s00713e40.cpp  ?DispatchAll@@YAXPAUDispatchTarget@@PAX1@Z  007141e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00713e40/s00713e40.cpp  ?InsertionSortA@@YAXPAI0URecordCmp@@@Z  00714780  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00713e40/s00713e40.cpp  ?SetName@ResourceAdapter@@QAEXPBX@Z  00714310  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 slices/s00713e40/s00713e40.cpp  ?SetNameAndCall@ResourceAdapter@@QAEXPBX0@Z  00714350  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 slices/s00713e40/s00713e40.cpp  ?SetFlag@ResourceAdapter@@QAEXH@Z  007143a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
