@@ -1,1 +1,1 @@
-00622130 SP::cXHTMLControlAppearance::Init  # PDB-resolved; builds the control-appearance drawable set
+00622130 ?Init@cXHTMLControlAppearance31@@QAE_NXZ  # cXHTMLControlAppearance31::Init migrated from s00622130 (verbatim, slice spelling)

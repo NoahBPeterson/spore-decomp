@@ -1,0 +1,6 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00621ee0 2 cXHTMLControlAppearance ctor: complete; vptr store scheduled after mPad4 in the original
+00621f00 12 cXHTMLControlAppearance dtor: complete; vptr/base-dtor store schedule and vector release order
+00621f50 29 vector<ControlDrawable>::erase: complete; helper thiscall form and element-destroy loop shape; equiv WEAK (58.7% cov)
+00621fc0 293 vector<ControlDrawable>::DoInsertValue: complete; reallocation path (eastl uninitialized_copy/relocate) shape differs; equiv WEAK (57.0% cov)
+00622130 3108 SP::cXHTMLControlAppearance::Init: complete (4 StdDrawable sets + 2 ScrollbarDrawables, all 43 images/3 hitmasks, vector appends); register allocation (ebx/esi/edi roles) and one extra spill slot differ.

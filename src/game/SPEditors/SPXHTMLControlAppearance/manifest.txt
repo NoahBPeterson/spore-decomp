@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPXHTMLControlAppearance.cpp  ?UninitCopy@@YAPAUControlDrawable@@PAU1@00@Z  00621cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
