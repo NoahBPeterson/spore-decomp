@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+008fbac0 198 DoRehash(n): EASTL prime_rehash_policy rehash; instruction scheduling/register allocation differs from the template. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (148 valid, 100% coverage)
+008fbbf0 59 find(k): FNV-1a over wchar, DoFindNode + iterator sret; register allocation and branch/return layout differ. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (195 valid, 100% coverage)
+008fbc80 69 insert(value,key): hash + DoFindNode + prime_rehash_policy::FUN_00921440 + node append; scheduling/register allocation differ. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (186 valid, 92.2% coverage)
+008fbda0 69 GetCounter(name): walk mpBase chain reusing the same map; only q=&map register roles swapped (esi/edi) in MSVC. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (207 valid, 100% coverage)
+008fbe00 430 StyleState(Page*): default ctor; field order matches but MSVC hoists the 0xa constant / 1.0f,2.0f loads and schedules the ~200 stores differently. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (400/400 valid, 100% coverage)
+008fc130 678 StyleState(const StyleState&): copy ctor (placement-new TextStyle, memcpy edges); emission order non-monotonic by offset, so byte-exact unreachable. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (400/400 valid, 100% coverage)

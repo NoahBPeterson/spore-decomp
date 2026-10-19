@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/Form.cpp  ?ClearCounterReset@StyleState@Style@@QAEXXZ  008fbbc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
