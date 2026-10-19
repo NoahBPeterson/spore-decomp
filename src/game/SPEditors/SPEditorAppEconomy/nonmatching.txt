@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0059e580 733 CanAffordWithReason: same ceil idiom (aligned frame from the __m128 intrinsic shifts everything), block layout differs

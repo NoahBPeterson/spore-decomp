@@ -7,6 +7,7 @@
 0059e430 SP::cSPEditorAppEconomy::SetWealth  # set if changed, enforce cap, SendChangedMessage
 0059e470 SP::cSPEditorAppEconomy::CanAfford  # (type, amount) mBalances[type] >= amount
 0059e490 SP::cSPEditorAppEconomy::CanAffordBlock  # per-currency checks over block costs
+0059e580 ?CanAffordWithReason@cSPEditorAppEconomy_s0059_e360@SP@@UAEHABUResourceKey@@PAUcCantAffordReason@2@@Z  # cSPEditorAppEconomy_s0059_e360::CanAffordWithReason migrated from s0059e360 (verbatim, slice spelling)
 0059e8d0 SP::cSPEditorAppEconomy::CanAffordBlockPile  # gathers block pile (+symmetric block) and sums costs
 0059eb40 SP::cSPEditorAppEconomy::DeductBlockPileValue  # mode 2: AdjustWealth(-pile value); mode 0: DeductBlockValue per block
 0059ec80 SP::cSPEditorAppEconomy::Init  # resize mBalances/mBalanceCaps to numTypes with 0
