@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+005a2370  139   cEditorCameraController::SetCenterCameraOffset: skeleton
+005a2400  177   cEditorCameraController::SetPartModeCameraOffset: skeleton
+005a24c0  188   cEditorCameraController::SetPaintModeCameraOffset: skeleton
