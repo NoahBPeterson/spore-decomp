@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /GS-)
+00949e10 760 MIMETypeStringToMIMEType: complete MIME-type hash switch; FNV end pointer computed add-vs-lea (original `add ecx,eax`, ours `lea edx,[eax+ecx]`) shifts every subsequent branch target (tree itself is identical)
