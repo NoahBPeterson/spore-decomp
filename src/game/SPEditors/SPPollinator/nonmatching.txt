@@ -3,6 +3,8 @@
 0060d240 31 AtomicRef::reset: complete; same dec/register difference and the original keeps the inner delete-this null check
 0060d3c0 39 deque DoReallocPtrArray: complete; only register assignment of mpPtrArray/mItBegin node differs
 0060d7a0 8 Pollinator::cJobResultMessage ctor: complete; mov edx,1 is scheduled after the add ecx,4
+0060d860 11 id struct locals: stack slot/reg order
+0060d920 6 reg order of id lo/hi loads
 006103d0 90 SP::cPollinator::GetAssetFeed candidate (137 B): behaviorally complete; register allocation and the inlined deque fast path differ.
 00610460 85 SP::cPollinator::EatFeed candidate (132 B): behaviorally complete; see above.
 006104f0 78 SP::cPollinator::CreateMyFeed (222 B): behaviorally complete (sprintf args and deque push omitted in the outline).

@@ -833,6 +833,16 @@ struct FloodHandler {
 extern "C" long _InterlockedDecrement(volatile long*);
 #pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange, _InterlockedDecrement)
 namespace EA {
+namespace ResourceMan {
+struct Key_s0060_d860 {
+    uint32_t instanceID, typeID, groupID;
+};
+}
+}
+namespace EA {
+using ResourceMan::Key_s0060_d860;
+}
+namespace EA {
 struct AtomicInt {
     volatile long mValue;
     long Increment() { return _InterlockedExchangeAdd(&mValue, 1) + 1; }
@@ -863,6 +873,35 @@ struct AutoRefCount_s0060_d860 {
     }
 };
 }
+namespace EA {
+struct U64Pair {
+    uint32_t lo, hi;
+};
+}
+namespace EA {
+struct Variant_s0060_d860 {
+    char mData[16];
+    uint16_t mFlags;
+    uint16_t mTypeId;
+    void Construct(const U64Pair* p);                                                     // 0x0060cfa0
+    void Construct(uint32_t type, uint32_t size, uint32_t a, uint32_t b, uint32_t c);      // 0x0093dd80
+    void Destruct(int);                                                                    // 0x0093db80
+    Variant_s0060_d860(const U64Pair* p) {
+        mTypeId = 0;
+        mFlags = 0;
+        Construct(p);
+    }
+    Variant_s0060_d860(uint32_t a, uint32_t b) {
+        mFlags = 0;
+        mTypeId = 0;
+        Construct(0xc, 0x18, a, 8, b);
+    }
+    ~Variant_s0060_d860() {
+        if (mFlags & 4) Destruct(0);
+    }
+};
+}
+using EA::Key_s0060_d860;
 struct IQueued {
     virtual void v0();
     virtual int AddRef();
@@ -973,6 +1012,49 @@ deque_s0060_d860<T, N>::~deque_s0060_d860() {
         DoFreePtrArray(mpPtrArray);
     }
 }
+}
+namespace SP {
+namespace Pollen {
+struct cAssetMetadata_s0060_d860 {
+    virtual int AddRef();
+    virtual int Release();
+    const EA::U64Pair* GetServerId();  // 0x005507a0 (not virtual)
+};
+}
+}
+namespace SP {
+namespace Pollen {
+bool GetAssetMetadata(const Key_s0060_d860& key, cAssetMetadata_s0060_d860** ppMetadata);  // 0x00552450
+}
+}
+namespace SP {
+namespace Pollen {
+struct cAssetDirectory_s0060_d860 {
+    bool GetLocalKey(uint64_t serverId, Key_s0060_d860* pKey) const;                       // 0x0054e460
+    bool GetServerId(const Key_s0060_d860& key, uint64_t* pServerId, bool bLoad) const;    // 0x0054e530
+};
+}
+}
+namespace SP {
+struct cPropertyManager_s0060_d860 {
+    void SetProperty(uint32_t id, EA::Variant_s0060_d860* v);                              // 0x0061fdb0
+    void SetProperty2(uint32_t id, uint32_t lo, uint32_t hi, EA::Variant_s0060_d860* v);   // 0x0061fee0
+};
+}
+namespace SP {
+cPropertyManager_s0060_d860* GetPropertyManager();  // 0x0061df20
+}
+namespace SP {
+struct cPollinator_s0060_d860 {
+    virtual void v0();
+    virtual bool HandleMessage(uint32_t id, void* msg);  // 0x00611860 (SP::cPollinator::HandleMessage)
+    char pad[0x54];
+    Pollen::cAssetDirectory_s0060_d860* mpAsssetDirectory;  // +0x58
+
+    void UpdateProperty(uint32_t id, const Key_s0060_d860& key);                                  // 0x0060d860
+    void UpdateProperty2(uint32_t id, const Key_s0060_d860* key, EA::Variant_s0060_d860* v);                 // 0x0060d920
+    void UpdatePropertyInt(uint32_t id, const Key_s0060_d860* key, uint32_t a, uint32_t b);       // 0x0060e600
+};
 }
 template struct eastl::deque_s0060_d860<QueuedPtr>;
 struct JobHolder {
@@ -1704,6 +1786,40 @@ void NotificationFunction(void*, void*, uint32_t nMessage, uint32_t* pData)
   }
 }
 
+// @ 0x0060d860
+namespace SP {
+void cPollinator_s0060_d860::UpdateProperty(uint32_t id, const Key_s0060_d860& key)
+{
+    if (mpAsssetDirectory) {
+        EA::U64Pair serverId = {0xffffffff, 0xffffffff};
+        Pollen::cAssetMetadata_s0060_d860* pMetadata = 0;
+        if (Pollen::GetAssetMetadata(key, &pMetadata)) serverId = *pMetadata->GetServerId();
+        if ((serverId.lo & serverId.hi) != 0xffffffff) {
+            if (cPropertyManager_s0060_d860* pMgr = GetPropertyManager()) {
+                EA::Variant_s0060_d860 v(&serverId);
+                pMgr->SetProperty(id, &v);
+            }
+        }
+        if (pMetadata) pMetadata->Release();
+    }
+}
+}  // namespace SP
+
+// @ 0x0060d920
+namespace SP {
+void cPollinator_s0060_d860::UpdateProperty2(uint32_t id, const Key_s0060_d860* key, EA::Variant_s0060_d860* v)
+{
+    Pollen::cAssetMetadata_s0060_d860* pMetadata = 0;
+    if (Pollen::GetAssetMetadata(*key, &pMetadata)) {
+        EA::U64Pair serverId = *pMetadata->GetServerId();
+        if ((serverId.lo & serverId.hi) != 0xffffffff) {
+            if (cPropertyManager_s0060_d860* pMgr = GetPropertyManager()) pMgr->SetProperty2(id, serverId.lo, serverId.hi, v);
+        }
+    }
+    if (pMetadata) pMetadata->Release();
+}
+}  // namespace SP
+
 // @ 0x0060dae0
 namespace eastl {
 template <class T, int N> void deque_s0060_d860<T, N>::pop_back()
@@ -1757,6 +1873,15 @@ void PostBehaviorFloat(float value)
 // @ 0x0060e5b0
 void JobHolder::Destroy()
 { this->~JobHolder(); }
+
+// @ 0x0060e600
+namespace SP {
+void cPollinator_s0060_d860::UpdatePropertyInt(uint32_t id, const Key_s0060_d860* key, uint32_t a, uint32_t b)
+{
+    EA::Variant_s0060_d860 v(a, b);
+    UpdateProperty2(id, key, &v);
+}
+}  // namespace SP
 
 // @ 0x0060ea40
 QValue* MakeNode(const QValue* src)

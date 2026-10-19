@@ -20,5 +20,6 @@
 ../src/game/SPEditors/SPPollinator.cpp  ?DoPushBackSlow@?$deque_s0060_d860@UQueuedPtr@@$0EA@@eastl@@QAEXABUQueuedPtr@@@Z  0060dbd0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPollinator.cpp  ?PostBehaviorFloat@@YAXM@Z  0060e540  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPollinator.cpp  ??1JobHolder@@QAE@XZ  0060e5b0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPPollinator.cpp  ?UpdatePropertyInt@cPollinator_s0060_d860@SP@@QAEXIPBUKey_s0060_d860@ResourceMan@EA@@II@Z  0060e600  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPollinator.cpp  ?push_back@UploadQueue@@QAEXABUQValue@@@Z  0060f080  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPPollinator.cpp  ?CancelAllTransactions@cPollinator_s0061_08a0@SP@@QAEXXZ  00611540  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
