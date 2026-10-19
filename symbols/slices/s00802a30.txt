@@ -5,9 +5,9 @@
 00802fb0 ?Forward@DbgOut@@QAEXPBD@Z  # DbgOut::Forward migrated from s00802a30 (verbatim, slice spelling)
 00802fd0 ?OnShow@Dbg@@QAEXHH@Z  # Dbg::OnShow migrated from s00802a30 (verbatim, slice spelling)
 00802ff0 ?OnToggle@Dbg@@QAEXH@Z  # Dbg::OnToggle migrated from s00802a30 (verbatim, slice spelling)
-00803020 cSPUIStringBinder::cSPUIStringBinder  # PDB name; vtables 0x1417604/0x14175E8/0x14175D8, FixedBufferAllocator
+00803020 ?Ctor@C_803020@@QAEPAU1@XZ  # C_803020::Ctor migrated from s00802a30 (verbatim, slice spelling)
 00803140 cSPUIDebugConsole::~cSPUIDebugConsole  # PDB candidate; deletes allocator + vector + wraps
-00803220 cSPUIDebugConsole::DoMessage  # PDB candidate; message/command switch
+00803220 ?cSPUIDebugConsole_DoMessage@@YAHPAX00@Z  # cSPUIDebugConsole_DoMessage migrated from s00802a30 (verbatim, slice spelling)
 00803730 DebugMessageThunk  # dispatches *msg through a->vtable[1]
 00803750 DebugMessagePost  # EA::UTFWin::GetManager()->PostMessage(0,arg,&msg,0)
 00803790 cSPUIDebugConsole::OnCheatCommand  # 0x7BE2444..0x7BE2447 hit-test state machine

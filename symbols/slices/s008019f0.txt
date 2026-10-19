@@ -20,7 +20,7 @@
 008027a0 cSPUICursorManager::DestroyCursorEntry  # DestroyCursor on +0x2C
 008027e0 cSPUICursorManager::ApplyCursor  # picks a cursor and calls SP::Canvas +0x80
 00802850 ?CheckEntry@CurMgr@@QAE_NPAX@Z  # CurMgr::CheckEntry migrated from s008019f0 (verbatim, slice spelling)
-00802870 cSPUICursorManager::QueryCursorId  # id 0x2F009DD0 -> this unless 4
+00802870 ?f@C_802870@@QAEII@Z  # C_801d80::f migrated from s008019f0 (verbatim, slice spelling)
 00802890 cSPUICursorManager::FindConsoleWindow  # FindWindowByID(0x14A4606)
 008028e0 cSPUICursorManager::ShutdownAttachment  # cSPUILayout::Shutdown + release +0x28
 00802910 ?DebugConsole_Clear@@YAXPAX@Z  # DebugConsole_Clear migrated from s008019f0 (verbatim, slice spelling)

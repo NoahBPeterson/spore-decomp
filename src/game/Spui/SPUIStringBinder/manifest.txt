@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/Spui/SPUIStringBinder.cpp  ?f@C_802870@@QAEII@Z  00802870  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
