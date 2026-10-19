@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPUICredits.cpp  ?LoadNamesFromProp@cSPUICredits_s005f_e1d0@SP@@QAEXXZ  005fe340  /O2 /MD /Gy /TP /GS- /Isrc/game/include

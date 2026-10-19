@@ -1,5 +1,6 @@
-005fe340 SP::cSPUICredits::LoadNamesFromProp  # card name; members match PDB cSPUICredits (+0 props, +4 count, +8 names, +0xc return string)
+005fe340 ?LoadNamesFromProp@cSPUICredits_s005f_e1d0@SP@@QAEXXZ  # cSPUICredits_s005f_e1d0::LoadNamesFromProp migrated from s005fe1d0 (verbatim, slice spelling)
 005fe4f0 SP::cSPUICredits::SetPropertyID  # stores +0x20 then calls LoadNamesFromProp
 005fe500 SP::cSPUICredits::GetCreditName  # returns mReturnString.c_str() after localizing entry [index]
 005ff1a0 EA::Stopwatch::GetElapsedTimeFloat  # (float)cycles * mfStopwatchCyclesToUnitsCoefficient (+0x14)
 005ff1c0 EA::LimitStopwatch::IsTimeUp  # QPC vs mnEndTime (+0x18), PDB layout
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005fe1d0, named from the dev publics; slice address comment)
