@@ -11,5 +11,5 @@
 006fe170  `anonymous namespace'::GenerateFillOutputStruct  # PDB name
 006fe230  FUN_006fe230  # shader-state dispatcher via 0x1624568 manager and 0x16fa604 function table
 006fe310  FUN_006fe310  # eastl::copy_backward of 0x130-byte blocks (returns dest)
-006fe350  FUN_006fe350  # linear strcmp over names at 0x1628b14..0x1628b18
-006fe3c0  FUN_006fe3c0  # stream write of vertex-decl vector at +0x48, indexed by g_16f6dac+4
+006fe350 ?FUN_006fe350@@YA_NPAX@Z  # FUN_006fe350 migrated from s006fd520 (verbatim, slice spelling)
+006fe3c0 ?FUN_006fe3c0@@YAXHH@Z  # FUN_006fe3c0 migrated from s006fd520 (verbatim, slice spelling)
