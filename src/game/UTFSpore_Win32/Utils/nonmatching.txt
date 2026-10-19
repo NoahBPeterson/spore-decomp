@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0095f8c0 124 ModulateARGB32: complete; channel packing arithmetic schedule differs
