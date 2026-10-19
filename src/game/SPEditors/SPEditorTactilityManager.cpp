@@ -423,11 +423,9 @@ template struct pair_s005d_87a0<float* const, SP::ComponentList>;
 namespace eastl {
  template class map_s005d_87a0<float*, SP::ComponentList>; 
 }
-extern const cSPVector3_s005d_87a0 kZeroVector3;              // 0x015EF03C
 // ---- items of slice s005d87a0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern const cSPVector3_s005d_87a0 kZeroVector3;              // 0x015EF03C
 
 // @ 0x005d87a0
 bool SP::cSPEditorTactilityManager::Init()
