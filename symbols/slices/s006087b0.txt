@@ -5,14 +5,15 @@
 006090e0 SP::Pollen::cAuthManager::ReadLoginLayout  # reads user/password edit fields (name guessed); byte-exact
 006091e0 ?HandleMessage@cAuthManager_s0060_87b0@Pollen@SP@@UAE_NIPAX@Z  # cAuthManager_s0060_87b0::HandleMessage migrated from s006087b0 (verbatim, slice spelling)
 006092b0 ?HandleUIMessage@cAuthManager_s0060_87b0@Pollen@SP@@UAE_NPAVIWindow_s0060_87b0@UTFWin@EA@@ABUMessage_s0060_87b0@56@@Z  # cAuthManager_s0060_87b0::HandleUIMessage migrated from s006087b0 (verbatim, slice spelling)
-00609460 SP::Pollen::cCanvasResFilter::Filter  # AppResolution header; byte-exact
-00609480 SP::Pollen::cBuddyModeFilter::Filter  # BuddyMode header (class name guessed); byte-exact
-006094a0 SP::Pollen::cCanvasResFilter::cCanvasResFilter  # byte-exact
-006094e0 SP::Pollen::cBuddyModeFilter::cBuddyModeFilter  # byte-exact
+00609460 ?Filter@cCanvasResFilter@Pollen@SP@@UAEXPAURequest@Resource@XHTML@EA@@@Z  # cCanvasResFilter::Filter migrated from s006087b0 (verbatim, slice spelling)
+00609480 ?Filter@cBuddyModeFilter@Pollen@SP@@UAEXPAURequest@Resource@XHTML@EA@@@Z  # cBuddyModeFilter::Filter migrated from s006087b0 (verbatim, slice spelling)
+006094a0 ??0cCanvasResFilter@Pollen@SP@@QAE@XZ  # cCanvasResFilter::cCanvasResFilter migrated from s006087b0 (verbatim, slice spelling)
+006094e0 ??0cBuddyModeFilter@Pollen@SP@@QAE@XZ  # cBuddyModeFilter::cBuddyModeFilter migrated from s006087b0 (verbatim, slice spelling)
 00609580 SP::Pollen::cBuddyModeFilter::`scalar deleting destructor'  # byte-exact
-006095d0 SP::Pollen::cBuddyModeFilter::UpdateHeaderString  # "true"/"false"; byte-exact
-00609630 SP::Pollen::cBuddyModeFilter::Init  # byte-exact
-00609690 SP::Pollen::cBuddyModeFilter::HandleMessage  # byte-exact
+006095d0 ?UpdateHeaderString@cBuddyModeFilter@Pollen@SP@@QAE_NXZ  # cBuddyModeFilter::UpdateHeaderString migrated from s006087b0 (verbatim, slice spelling)
+00609630 ?Init@cBuddyModeFilter@Pollen@SP@@QAE_NXZ  # cBuddyModeFilter::Init migrated from s006087b0 (verbatim, slice spelling)
+00609690 ?HandleMessage@cBuddyModeFilter@Pollen@SP@@UAE_NIPAX@Z  # cBuddyModeFilter::HandleMessage migrated from s006087b0 (verbatim, slice spelling)
+00609710 ?UpdateHeaderString@cCanvasResFilter@Pollen@SP@@QAE_NXZ  # cCanvasResFilter::UpdateHeaderString migrated from s006087b0 (verbatim, slice spelling)
 00609760 SP::Pollen::cCanvasResFilter::Init  # byte-exact
 00620050 ?Show@cRegistrationDialog@Pollen@SP@@QAE_N_N@Z  # SP::Pollen::cRegistrationDialog::Show (callee of s006087b0, named from the dev publics; slice address comment)
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s006087b0, named from the dev publics; slice address comment)

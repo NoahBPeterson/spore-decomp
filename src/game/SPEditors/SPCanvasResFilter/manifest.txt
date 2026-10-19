@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPCanvasResFilter.cpp  ?Filter@cCanvasResFilter@Pollen@SP@@UAEXPAURequest@Resource@XHTML@EA@@@Z  00609460  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPCanvasResFilter.cpp  ?Filter@cBuddyModeFilter@Pollen@SP@@UAEXPAURequest@Resource@XHTML@EA@@@Z  00609480  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPCanvasResFilter.cpp  ??0cCanvasResFilter@Pollen@SP@@QAE@XZ  006094a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPCanvasResFilter.cpp  ??0cBuddyModeFilter@Pollen@SP@@QAE@XZ  006094e0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPCanvasResFilter.cpp  ?UpdateHeaderString@cBuddyModeFilter@Pollen@SP@@QAE_NXZ  006095d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPCanvasResFilter.cpp  ?Init@cBuddyModeFilter@Pollen@SP@@QAE_NXZ  00609630  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPCanvasResFilter.cpp  ?HandleMessage@cBuddyModeFilter@Pollen@SP@@UAE_NIPAX@Z  00609690  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPCanvasResFilter.cpp  ?UpdateHeaderString@cCanvasResFilter@Pollen@SP@@QAE_NXZ  00609710  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
