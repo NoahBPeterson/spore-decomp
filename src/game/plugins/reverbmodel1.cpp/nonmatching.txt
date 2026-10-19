@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+01139f20 271 complete ReverbModel1 gain update (x87 log2 math); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (1 unresolved reference _log2)
+01139fe0 986 complete ReverbModel1 timer configure; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (231 valid, 89.4% coverage)
+0113a4c0 215 complete ReverbModel1 timer callback; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (294 valid, 78.9% coverage)
+0113a5c0 250 complete ReverbModel1::CreateInstance; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (181 valid, 97% coverage, no mismatch; original faults on ~half the random inputs)
