@@ -649,7 +649,6 @@ IAudioSystem* GetSystemAT();                          // 0x00A206F0
 extern void* gCalloutWhere;                                          // 0x0152481C
 struct IWindow_s0063_d9e0;
 struct IOther_s0063_d9e0;
-struct IControl_s0063_d9e0;
 struct cSPEditorUI_s0063_d9e0;
 namespace eastl {
 template <typename T> struct EmptyStr_s0063_d9e0;
@@ -714,45 +713,120 @@ struct cSPUILayout_s0063_d9e0 {
     void Shutdown(bool b);                                    // 0x00811AD0
 };
 struct IOther_s0063_d9e0 {
-    virtual void o00(); virtual void o01(); virtual void o02(); virtual void o03(); virtual void o04();
-    virtual void o05(); virtual void o06(); virtual void o07(); virtual void o08(); virtual void o09();
-    virtual void o10(); virtual void o11(); virtual void o12(); virtual void o13(); virtual void o14();
-    virtual void o15(); virtual void o16(); virtual void o17(); virtual void o18(); virtual void o19();
-    virtual void o20(); virtual void o21(); virtual void o22(); virtual void o23(); virtual void o24();
-    virtual void o25(); virtual void o26(); virtual void o27(); virtual void o28(); virtual void o29();
-    virtual void o30(); virtual void o31(); virtual void o32(); virtual void o33(); virtual void o34();
-    virtual void o35(); virtual void o36(); virtual void o37(); virtual void o38(); virtual void o39();
-    virtual void o40(); virtual void o41(); virtual void o42(); virtual void o43(); virtual void o44();
-    virtual void o45(); virtual void o46(); virtual void o47(); virtual void o48(); virtual void o49();
-    virtual void o50(); virtual void o51(); virtual void o52(); virtual void o53(); virtual void o54();
+virtual void o00();
+virtual void o01();
+virtual void o02();
+virtual void o03();
+virtual void o04();
+virtual void o05();
+virtual void o06();
+virtual void o07();
+virtual void o08();
+virtual void o09();
+virtual void o10();
+virtual void o11();
+virtual void o12();
+virtual void o13();
+virtual void o14();
+virtual void o15();
+virtual void o16();
+virtual void o17();
+virtual void o18();
+virtual void o19();
+virtual void o20();
+virtual void o21();
+virtual void o22();
+virtual void o23();
+virtual void o24();
+virtual void o25();
+virtual void o26();
+virtual void o27();
+virtual void o28();
+virtual void o29();
+virtual void o30();
+virtual void o31();
+virtual void o32();
+virtual void o33();
+virtual void o34();
+virtual void o35();
+virtual void o36();
+virtual void o37();
+virtual void o38();
+virtual void o39();
+virtual void o40();
+virtual void o41();
+virtual void o42();
+virtual void o43();
+virtual void o44();
+virtual void o45();
+virtual void o46();
+virtual void o47();
+virtual void o48();
+virtual void o49();
+virtual void o50();
+virtual void o51();
+virtual void o52();
+virtual void o53();
+virtual void o54();
     virtual void Attach(IWindow_s0063_d9e0* p);              // +0xDC
 };
 struct IWindow_s0063_d9e0 {
     virtual void v00();
     virtual int Release();                                    // +0x04
     virtual void v02();
-    virtual IControl_s0063_d9e0* v03(uint32_t id);                       // +0x0C
+    virtual IControl* v03(uint32_t id);                       // +0x0C
     virtual IOther_s0063_d9e0* GetOther();                               // +0x10
-    virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
     virtual uint8_t v10();                                    // +0x28
-    virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
     virtual const wchar_t* GetText();                         // +0x3C
-    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20();
-    virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25();
-    virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29(); virtual void v30();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+virtual void v25();
+virtual void v26();
+virtual void v27();
+virtual void v28();
+virtual void v29();
+virtual void v30();
     virtual void SetFlag(int flag, int on);                   // +0x7C
     virtual void SetCaption(const wchar_t* text);             // +0x80
-    virtual void v33(); virtual void v34(); virtual void v35(); virtual void v36(); virtual void v37();
-    virtual void v38(); virtual void v39(); virtual void v40(); virtual void v41(); virtual void v42();
-    virtual void v43(); virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47();
-    virtual void v48(); virtual void v49(); virtual void v50(); virtual void v51(); virtual void v52();
-    virtual void v53(); virtual void v54(IWindow_s0063_d9e0* p);         // +0xD8
+virtual void v33();
+virtual void v34();
+virtual void v35();
+virtual void v36();
+virtual void v37();
+virtual void v38();
+virtual void v39();
+virtual void v40();
+virtual void v41();
+virtual void v42();
+virtual void v43();
+virtual void v44();
+virtual void v45();
+virtual void v46();
+virtual void v47();
+virtual void v48();
+virtual void v49();
+virtual void v50();
+virtual void v51();
+virtual void v52();
+virtual void v53();
+virtual void v54(IWindow_s0063_d9e0* p);
     virtual void v55(IWindow_s0063_d9e0* p);                             // +0xDC
-};
-struct IControl_s0063_d9e0 {
-    virtual void c00(); virtual void c01(); virtual void c02(); virtual void c03(); virtual void c04();
-    virtual void c05(); virtual void c06(); virtual void c07(); virtual void c08(); virtual void c09();
-    virtual void SetMode(int a, int b);                       // +0x28
 };
 struct cSPPlayModeUI_s0063_d9e0 {
     char pad0[0xC];
@@ -782,8 +856,16 @@ struct cSPPlayModeUI_s0063_d9e0 {
 };
 struct Key12 { uint32_t a, b, c; };
 struct IMovieSystem_s0063_d9e0 {
-    virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3(); virtual void m4();
-    virtual void m5(); virtual void m6(); virtual void m7(); virtual void m8(); virtual void m9();
+virtual void m0();
+virtual void m1();
+virtual void m2();
+virtual void m3();
+virtual void m4();
+virtual void m5();
+virtual void m6();
+virtual void m7();
+virtual void m8();
+virtual void m9();
     virtual void m10();
     virtual void StartRecording(const wchar_t* name, void* info);   // +0x2c
     virtual bool IsRecording();                                      // +0x30
@@ -791,38 +873,80 @@ struct IMovieSystem_s0063_d9e0 {
     virtual void StopRecording();                                    // +0x38
 };
 struct IAuthManager {
-    virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3(); virtual void a4();
-    virtual void a5(); virtual void a6(); virtual void a7(); virtual void a8();
+virtual void a0();
+virtual void a1();
+virtual void a2();
+virtual void a3();
+virtual void a4();
+virtual void a5();
+virtual void a6();
+virtual void a7();
+virtual void a8();
     virtual bool v24();                                              // +0x24
-    virtual void a10(); virtual void a11(); virtual void a12(); virtual void a13(); virtual void a14();
-    virtual void a15(); virtual void a16(); virtual void a17(); virtual void a18(); virtual void a19();
-    virtual void a20(); virtual void a21();
+virtual void a10();
+virtual void a11();
+virtual void a12();
+virtual void a13();
+virtual void a14();
+virtual void a15();
+virtual void a16();
+virtual void a17();
+virtual void a18();
+virtual void a19();
+virtual void a20();
+virtual void a21();
     virtual bool v58();                                              // +0x58
 };
 IAuthManager* GetAuthManager();                                      // 0x00607A60
 struct IConfigMgr {
-    virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3(); virtual void c4();
-    virtual void c5(); virtual void c6(); virtual void c7(); virtual void c8(); virtual void c9();
+virtual void c0();
+virtual void c1();
+virtual void c2();
+virtual void c3();
+virtual void c4();
+virtual void c5();
+virtual void c6();
+virtual void c7();
+virtual void c8();
+virtual void c9();
     virtual void c10();
     virtual void SetValue(uint32_t id, int v);                       // +0x2c
     virtual int GetValue(uint32_t id);                               // +0x30
+virtual void c13();
+virtual void c14();
+    virtual void Slot3c();                                           // +0x3c
 };
 IConfigMgr* GetConfigManager_s0063_d9e0();                                      // 0x0067DD30
 struct ISaveArea_s0063_d9e0 {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
-    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
     virtual const char* GetPath();                                   // +0x28
-    virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15();
-    virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19(); virtual void s20();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
     virtual void SetName(const wchar_t* name, int a, int b);         // +0x54 (index 21)
 };
 ISaveArea_s0063_d9e0* __cdecl GetSaveArea_s0063_d9e0(uint32_t id);                         // 0x006B1F90
 void __cdecl WStr_Format(void* str, const wchar_t* fmt, ...);        // 0x0041E050
 void __cdecl Utf16ToUtf8(char* dst, unsigned n, const wchar_t* src, int len);   // 0x0093CF10
-struct IPropList_s0063_d9e0;
-extern IPropList_s0063_d9e0* gAppProperties_s0063_d9e0;                                    // 0x015FD918
-bool __cdecl TryGetUIntProperty(IPropList_s0063_d9e0* pl, uint32_t id, uint32_t* out);   // 0x00410370
-bool __cdecl GetBoolProperty(IPropList_s0063_d9e0* pl, uint32_t id, bool* out);          // 0x00407190
+struct IPropList;
+bool __cdecl TryGetUIntProperty(IPropList* pl, uint32_t id, uint32_t* out);   // 0x00410370
+bool __cdecl GetBoolProperty(IPropList* pl, uint32_t id, bool* out);          // 0x00407190
 void __cdecl CalloutMessageBox(void* where, const Key12* key);       // 0x00809DB0
 void __cdecl OpenBrowser(const wchar_t* url, int flag);              // 0x00935FB0
 extern Key12 gKey15247e0, gKey15247ec, gKey1524810;
@@ -846,7 +970,9 @@ public:
 };
 }
 struct cDateStrings {
-    char pad0[0x44];
+    char pad0[0x34];
+    const wchar_t* mMessage;   // +0x34
+    char pad38[0x44 - 0x38];
     const wchar_t* mYear;   // +0x44
     const wchar_t* mMonth;  // +0x48
     const wchar_t* mDay;    // +0x4C
@@ -876,13 +1002,36 @@ struct cSPPlayModeSubModeMovie_s0063_d9e0 {
     int mDialogInProgress;          // +0x22E4
     char pad22e8[0x22fc - 0x22e8];
     eastl::string_s0063_d9e0 mYTUsername;      // +0x22FC
-    char pad230c[0x234c - 0x230c];
+    char pad230c[0x231c - 0x230c];
+    bool mRegisterSuccess;          // +0x231C
+    bool mRegisterCheckComplete;    // +0x231D
+    bool mDoRegisterCheck;          // +0x231E
+    bool mLoginSuccess;             // +0x231F
+    bool mLoginCheckComplete;       // +0x2320
+    bool mDoLoginCheck;             // +0x2321
+    bool mVideoUploadSuccess;       // +0x2322
+    bool mDoVideoUpload;            // +0x2323
+    bool mVideoUploadComplete;      // +0x2324
+    bool mEnableYouTubeVideoUpload; // +0x2325
+    char pad2326[2];
+    uint32_t mYTStatusCode;         // +0x2328
+    char pad232c[0x234c - 0x232c];
     eastl::string_s0063_d9e0 mYTPassword;      // +0x234C
 
     bool HandleButton(int id);                       // 0x0063E100
     void ToggleRecordingIndicator(char b);           // 0x0063D910
     void CheckYouTubeRegistration();                 // 0x0063CED0
     void FUN_0063cd30();
+    void FUN_0063de20(int dt);                       // 0x0063DE20
+    void FUN_0063dc40();
+    void FUN_0063d9e0();
+    void FUN_0063cf90();  // 0x0063cf90 (cSPPlayModeSubModeMovie::FUN_0063cf90)
+    void SetState2();                                // 0x0063B7B0
+    void SetState4();                                // 0x0063B7F0
+    void SetState5();                                // 0x0063B820
+    void SetState6();                                // 0x0063B860
+    static void ShowLoginToYouTubeDialog();          // 0x0063BD50
+    static void ShowYouTubeUploadVideoDialog();      // 0x0063BE00
     void FUN_0063b760();  // 0x0063b760 (cSPPlayModeSubModeMovie::FUN_0063b760)
     bool FUN_0063b950();
     bool FUN_0063b9a0();
@@ -894,6 +1043,13 @@ struct cSPPlayModeSubModeMovie_s0063_d9e0 {
     static bool IsLocaleEnglish();                   // 0x0063C0A0
 };
 void CreateConnectingDialog();                       // 0x0063BC70
+void __cdecl DestroyConnectingDialog(bool b);        // 0x0063C060
+struct cSPPlayModeUIExt {
+    void FUN_00635350(uint32_t a, uint32_t b);       // 0x00635350
+    void SetTagField(uint32_t v);                    // 0x006353E0
+    void SetEnabled(uint32_t id, bool on);           // 0x00634EF0
+    void ShowEditor();                               // 0x00635380
+};
 // ---- items of slice s0063d9e0 end
 
 // @ 0x0063b640
@@ -922,9 +1078,6 @@ void cConnectingDialog::SetDialogText(int state)
     }
 }
 
-
-
-
 // @ 0x0063b730
 bool SP::cSPPlayModeSubModeMovie::OnKeyDown(unsigned int key, unsigned int mods)
 {
@@ -935,9 +1088,6 @@ bool SP::cSPPlayModeSubModeMovie::OnKeyDown(unsigned int key, unsigned int mods)
     return false;
 }
 
-
-
-
 // @ 0x0063b760
 void cSPPlayModeSubModeMovie::FUN_0063b760()
 {
@@ -947,9 +1097,6 @@ void cSPPlayModeSubModeMovie::FUN_0063b760()
     mFlag22c1 ^= 1;
 }
 
-
-
-
 // @ 0x0063b7b0
 void cSPPlayModeSubModeMovie::SetState2()
 {
@@ -957,9 +1104,6 @@ void cSPPlayModeSubModeMovie::SetState2()
     FUN_00809db0(g152481c, g15247b0);
     mState = 2;
 }
-
-
-
 
 // @ 0x0063b7f0
 void cSPPlayModeSubModeMovie::SetState4()
@@ -969,9 +1113,6 @@ void cSPPlayModeSubModeMovie::SetState4()
     mState = 4;
 }
 
-
-
-
 // @ 0x0063b820
 void cSPPlayModeSubModeMovie::SetState5()
 {
@@ -979,9 +1120,6 @@ void cSPPlayModeSubModeMovie::SetState5()
     FUN_00809db0(g152481c, g15247d4);
     mState = 5;
 }
-
-
-
 
 // @ 0x0063b860
 void cSPPlayModeSubModeMovie::SetState6()
@@ -991,17 +1129,11 @@ void cSPPlayModeSubModeMovie::SetState6()
     mState = 6;
 }
 
-
-
-
 // @ 0x0063b890
 bool SP::cSPPlayModeSubModeMovie::GetYTPrompt()
 {
     return GetConfigManager()->GetValue(0x5664a8b) == 0;
 }
-
-
-
 
 // @ 0x0063b8b0
 void cSPPlayModeSubModeMovie::CheckServer()
@@ -1015,9 +1147,6 @@ void cSPPlayModeSubModeMovie::CheckServer()
     }
 }
 
-
-
-
 // @ 0x0063b910
 void cSPPlayModeSubModeMovie::SetStateB()
 {
@@ -1025,9 +1154,6 @@ void cSPPlayModeSubModeMovie::SetStateB()
     FUN_00809db0(g152481c, g1524804);
     mState = 0xb;
 }
-
-
-
 
 // @ 0x0063b950
 void FUN_0063b950()
@@ -1039,9 +1165,6 @@ void FUN_0063b950()
     FUN_009322b0(p);
 }
 
-
-
-
 // @ 0x0063b9a0
 void FUN_0063b9a0()
 {
@@ -1052,9 +1175,6 @@ void FUN_0063b9a0()
     FUN_00932960(p);
 }
 
-
-
-
 // @ 0x0063b9f0
 void cSPPlayModeSubModeMovie::FUN_0063b9f0(bool v)
 {
@@ -1064,8 +1184,6 @@ void cSPPlayModeSubModeMovie::FUN_0063b9f0(bool v)
     mUI->SetEnabled(0x3a8ede4, v);
     if (v) mUI->FUN_00635380();
 }
-
-
 
 // @ 0x0063ba50
 void cConnectingDialog_s0063_ba50::Show(int a)
@@ -1079,8 +1197,6 @@ void cConnectingDialog_s0063_ba50::Show(int a)
         BeginModal(w, 0, 1);
 }
 
-
-
 // @ 0x0063bab0
 bool cConnectingDialog_s0063_ba50::SetWindow(IWindow_s0063_ba50* w)
 {
@@ -1088,8 +1204,6 @@ bool cConnectingDialog_s0063_ba50::SetWindow(IWindow_s0063_ba50* w)
     mStartTime = GetElapsedSeconds();
     return true;
 }
-
-
 
 // @ 0x0063baf0
 void cConnectingDialog_s0063_ba50::HandleResults(bool b)
@@ -1099,8 +1213,6 @@ void cConnectingDialog_s0063_ba50::HandleResults(bool b)
     mpWindow = 0;
     mLayout.Shutdown(true);
 }
-
-
 
 // @ 0x0063bb90
 void cSPPlayModeSubModeMovie_s0063_ba50::Shutdown()
@@ -1116,8 +1228,6 @@ void cSPPlayModeSubModeMovie_s0063_ba50::Shutdown()
         RemoveHandler(a, b, c, d, e);
     }
 }
-
-
 
 // @ 0x0063bc10
 void cSPPlayModeSubModeMovie_s0063_ba50::SetUpYouTubeErrorMessage(int kind)
@@ -1135,8 +1245,6 @@ void cSPPlayModeSubModeMovie_s0063_ba50::SetUpYouTubeErrorMessage(int kind)
     g->mpError = s.Get();
 }
 
-
-
 // @ 0x0063bc70
 void CreateConnectingDialog()
 {
@@ -1146,8 +1254,6 @@ void CreateConnectingDialog()
     if (gConnectingDialog.mpObject->Init())
         gConnectingDialog.mpObject->Show(0);
 }
-
-
 
 // @ 0x0063bd50
 void cSPPlayModeSubModeMovie_s0063_ba50::ShowLoginToYouTubeDialog()
@@ -1164,8 +1270,6 @@ void cSPPlayModeSubModeMovie_s0063_ba50::ShowLoginToYouTubeDialog()
         t->SetCaption(s.Get());
     }
 }
-
-
 
 // @ 0x0063be00
 void cSPPlayModeSubModeMovie_s0063_ba50::ShowYouTubeUploadVideoDialog()
@@ -1185,8 +1289,6 @@ void cSPPlayModeSubModeMovie_s0063_ba50::ShowYouTubeUploadVideoDialog()
     }
 }
 
-
-
 // @ 0x0063bec0
 void cSPPlayModeSubModeMovie_s0063_ba50::ShowYouTubeLoginDialog()
 {
@@ -1201,8 +1303,6 @@ void cSPPlayModeSubModeMovie_s0063_ba50::ShowYouTubeLoginDialog()
     }
 }
 
-
-
 // @ 0x0063bf20
 void cConnectingDialog_s0063_ba50::End(bool b)
 {
@@ -1215,8 +1315,6 @@ void cConnectingDialog_s0063_ba50::End(bool b)
     mpWindow = 0;
     mLayout.Shutdown(true);
 }
-
-
 
 // @ 0x0063bf80
 bool cConnectingDialog_s0063_ba50::Update(void* p)
@@ -1242,8 +1340,6 @@ bool cConnectingDialog_s0063_ba50::Update(void* p)
     return true;
 }
 
-
-
 // @ 0x0063c060
 void DestroyConnectingDialog(bool b)
 {
@@ -1254,16 +1350,12 @@ void DestroyConnectingDialog(bool b)
     }
 }
 
-
-
 // @ 0x0063c0a0
 bool SP::cSPPlayModeSubModeMovie::IsLocaleEnglish()
 {
     return StrEq(GetLocale()->GetLanguage(), L"en-us") || StrEq(GetLocale()->GetLanguage(), L"en-us")
         || StrEq(GetLocale()->GetLanguage(), L"en-gb");
 }
-
-
 
 // @ 0x0063c190
 bool cConnectingDialog_s0063_ba50::HandleUIMessage(void* a, void* m)
@@ -1283,8 +1375,6 @@ bool cConnectingDialog_s0063_ba50::HandleUIMessage(void* a, void* m)
     return false;
 }
 
-
-
 // @ 0x0063c200
 cSPPlayModeSubModeMovie_s0063_ba50::cSPPlayModeSubModeMovie_s0063_ba50()
 : mpMovieSystem(0), mDialogInProgress(0), mRegisterSuccess(false), mRegisterCheckComplete(false), mDoRegisterCheck(false),
@@ -1294,14 +1384,10 @@ cSPPlayModeSubModeMovie_s0063_ba50::cSPPlayModeSubModeMovie_s0063_ba50()
 {
 }
 
-
-
 // @ 0x0063c3f0
 cSPPlayModeSubModeMovie_s0063_ba50::~cSPPlayModeSubModeMovie_s0063_ba50()
 {
 }
-
-
 
 // @ 0x0063c590
 void cSPPlayModeSubModeMovie_s0063_ba50::SetStatusText(bool withArg, int arg)
@@ -1318,8 +1404,6 @@ void cSPPlayModeSubModeMovie_s0063_ba50::SetStatusText(bool withArg, int arg)
     }
 }
 
-
-
 // @ 0x0063c640
 void cSPPlayModeSubModeMovie_s0063_ba50::ShowMovieSavedDialog()
 {
@@ -1332,19 +1416,13 @@ void cSPPlayModeSubModeMovie_s0063_ba50::ShowMovieSavedDialog()
     mDialogInProgress = 1;
 }
 
-
-
 // @ 0x0063c700
 cEditorYouTubeAuthenticationMessage::~cEditorYouTubeAuthenticationMessage()
 {}
 
-
-
 // @ 0x0063c750
 cEditorYouTubeVideoUploadMessage::~cEditorYouTubeVideoUploadMessage()
 {}
-
-
 
 // @ 0x0063c7f0
 void cSPPlayModeSubModeMovie_s0063_ba50::LoadYouTubeCredentials()
@@ -1363,8 +1441,6 @@ void cSPPlayModeSubModeMovie_s0063_ba50::LoadYouTubeCredentials()
         GetConfigManager_s0063_ba50()->SetBool(0x5664a8b, false);
     }
 }
-
-
 
 // @ 0x0063c8f0
 void cSPPlayModeSubModeMovie_s0063_ba50::OnMovieRecorded()
@@ -1399,7 +1475,6 @@ void cSPPlayModeSubModeMovie_s0063_ba50::OnMovieRecorded()
     GetMessageServer()->PostMessage(0x52f180, (void*)0x21, 0);
 }
 
-
 // @ 0x0063ced0
 void cSPPlayModeSubModeMovie_s0063_caf0::CheckYouTubeRegistration()
 {
@@ -1414,7 +1489,6 @@ void cSPPlayModeSubModeMovie_s0063_caf0::CheckYouTubeRegistration()
     GetMessageServer()->PostMessage(0x55be439, &msg, 0);
 }
 
-
 // @ 0x0063cf90
 void cSPPlayModeSubModeMovie_s0063_caf0::FUN_0063cf90()
 {
@@ -1428,7 +1502,6 @@ void cSPPlayModeSubModeMovie_s0063_caf0::FUN_0063cf90()
     msg.mCheckRegistration = false;
     GetMessageServer()->PostMessage(0x55be439, &msg, 0);
 }
-
 
 // @ 0x0063d050
 void cSPPlayModeSubModeMovie_s0063_caf0::ConstructYouTubeVideoUploadXMLRequest(eastl::string_s0063_caf0* out)
@@ -1456,7 +1529,6 @@ void cSPPlayModeSubModeMovie_s0063_caf0::ConstructYouTubeVideoUploadXMLRequest(e
     out->append_sprintf("%s", "</entry>\n");
 }
 
-
 // @ 0x0063d910
 void cSPPlayModeSubModeMovie_s0063_caf0::ToggleRecordingIndicator(char b)
 {
@@ -1473,6 +1545,85 @@ void cSPPlayModeSubModeMovie_s0063_caf0::ToggleRecordingIndicator(char b)
     mUI->SetUIGroupVisible(0x3fc1740, true);
     if (mb22c1)
         FUN_0063b760();
+}
+
+// @ 0x0063de20
+void cSPPlayModeSubModeMovie_s0063_d9e0::FUN_0063de20(int dt)
+{
+    if (mRecording) {
+        mIndicatorTimer += dt;
+        if ((uint32_t)mIndicatorTimer > 500) {
+            FUN_0063b760();
+            mIndicatorTimer = 0;
+        }
+        if (!mMovieSystem->IsRecording()) {
+            ToggleRecordingIndicator(0);
+            ISaveArea_s0063_d9e0* sa = GetSaveArea_s0063_d9e0(0x11ac197);
+            eastl::string16_s0063_d9e0 name;
+            WStr_Format(&name, L"%s.avi", EA::ConvertToString16_s0063_d9e0(mCurrFilename, -1).c_str());
+            sa->SetName(name.c_str(), 0, 2);
+            ((cSPPlayModeUIExt*)mUI)->FUN_00635350(1, 0);
+            mUI->EnablePhotoViewerButton(true);
+            ((cSPPlayModeUIExt*)mUI)->SetTagField(1);
+            ((cSPPlayModeUIExt*)mUI)->SetEnabled(0x3a8ede4, true);
+            ((cSPPlayModeUIExt*)mUI)->ShowEditor();
+        }
+    }
+    if (mDoRegisterCheck && mRegisterCheckComplete) {
+        if (mRegisterSuccess) {
+            GetConfigManager_s0063_d9e0()->Slot3c();
+            FUN_0063dc40();
+            ShowLoginToYouTubeDialog();
+            FUN_0063cf90();
+        } else {
+            DestroyConnectingDialog(false);
+            {
+                SP::cString_s0063_d9e0 msg;
+                msg.Load(0x7518573e, 0x5baf944, L"Login Failed (PLACEHOLDER)");
+                cDateStrings* ds = gDateStrings;
+                ds->mMessage = msg.GetText();
+            }
+            if (mYTStatusCode == 0x193)
+                SetState2();
+            else
+                SetState4();
+        }
+        mDoRegisterCheck = false;
+    }
+    if (mDoLoginCheck && mLoginCheckComplete) {
+        if (mLoginSuccess) {
+            ShowYouTubeUploadVideoDialog();
+            mEnableYouTubeVideoUpload = true;
+            FUN_0063d9e0();
+        } else {
+            DestroyConnectingDialog(false);
+            {
+                SP::cString_s0063_d9e0 msg;
+                msg.Load(0x7518573e, 0x5baf944, L"Login Failed (PLACEHOLDER)");
+                cDateStrings* ds = gDateStrings;
+                ds->mMessage = msg.GetText();
+            }
+            SetState4();
+        }
+        mDoLoginCheck = false;
+    }
+    if (mDoVideoUpload && mVideoUploadComplete) {
+        if (mVideoUploadSuccess) {
+            DestroyConnectingDialog(true);
+            SetState5();
+            mDoVideoUpload = false;
+            return;
+        }
+        DestroyConnectingDialog(false);
+        {
+            SP::cString_s0063_d9e0 msg;
+            msg.Load(0x7518573e, 0x5cbdeda, L"Upload Failed (PLACEHOLDER)");
+            cDateStrings* ds = gDateStrings;
+            ds->mMessage = msg.GetText();
+        }
+        SetState6();
+        mDoVideoUpload = false;
+    }
 }
 
 // @ 0x0063e100
@@ -1527,12 +1678,12 @@ bool cSPPlayModeSubModeMovie_s0063_d9e0::HandleButton(int id)
             sprintf(mCurrPathname, "%s", narrow);
 
             uint32_t width, height;
-            TryGetUIntProperty(gAppProperties_s0063_d9e0, 0x456f975, &width);
-            TryGetUIntProperty(gAppProperties_s0063_d9e0, 0x456f976, &height);
+            TryGetUIntProperty(gAppProperties, 0x456f975, &width);
+            TryGetUIntProperty(gAppProperties, 0x456f976, &height);
             mWidth = width;
             mHeight = height;
             mTime = 120.0f;
-            GetBoolProperty(gAppProperties_s0063_d9e0, 0x456f97a, &mExcludeUI);
+            GetBoolProperty(gAppProperties, 0x456f97a, &mExcludeUI);
             mMovieSystem->StartRecording(EA::ConvertToString16_s0063_d9e0(mCurrFilename, -1).c_str(), &mWidth);
             SetStatusText(true, mCurrFilename);
             mRecording = true;

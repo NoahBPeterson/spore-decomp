@@ -36,4 +36,5 @@
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_0063cf90@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXXZ  0063cf90  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?ConstructYouTubeVideoUploadXMLRequest@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXPAV?$basic_string_s0063_caf0@DU?$allocator_s0063_caf0@D@eastl@@@eastl@@@Z  0063d050  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?ToggleRecordingIndicator@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXD@Z  0063d910  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_0063de20@cSPPlayModeSubModeMovie_s0063_d9e0@@QAEXH@Z  0063de20  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?HandleButton@cSPPlayModeSubModeMovie_s0063_d9e0@@QAE_NH@Z  0063e100  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
