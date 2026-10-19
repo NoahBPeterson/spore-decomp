@@ -6,6 +6,21 @@
 
 static inline void** VT(void* p) { return *(void***)p; }
 
+// Refcounted slot release (inlined in SubA920): clear the slot, drop a refcount;
+// when it reaches zero, restore it to 1 and call the object's vtbl[0](1) dtor.
+static __forceinline void ReleaseSlot(void** slot)
+{
+    void* q = *slot;
+    if (q) {
+        *slot = 0;
+        uint32_t* rc = (uint32_t*)((char*)q + 4);
+        if (--*rc == 0) {
+            *rc = 1;
+            ((void(__thiscall*)(void*, int))VT(q)[0])(q, 1);
+        }
+    }
+}
+
 // vector deallocate (FUN_00f47380)
 extern "C" void __cdecl eastl_dealloc(void* p);
 
@@ -18,13 +33,23 @@ struct cSPTransform {
     float    fc;
     float    f10;
     float    m[9];        // +0x14
-    void operator=(const cSPTransform& o);
+    void operator=(const cSPTransform& o);   // 0x537dc0
     void Compose(const cSPTransform* o);   // ComposeTransforms 0x40ccb0
 };
 typedef char cSPTransform_size_check[(sizeof(cSPTransform) == 0x38) ? 1 : -1];
 
 // result of `anonymous_namespace'::translateTransform (FUN_006271a0)
-extern cSPTransform translateTransform(const void* xform, const void* src);
+extern cSPTransform translateTransform(const void* xform, const void* src);   // 0x6271a0
+
+extern float g_162eb0c, g_162eb10, g_162eb14, g_1485720;
+extern char g_162ec4c[];
+struct Matrix3 {
+    float m[9];
+    void Assign(const void* src);   // 0x41cb40
+};
+typedef char Matrix3_size_check[(sizeof(Matrix3) == 0x24) ? 1 : -1];
+
+extern void __cdecl PropGetTransforms(void* list, unsigned key, int* count, void* out);  // 0x6a0c30
 
 // cModelInstance-like object held at cModelWorld+0x9c (FUN_00743270 thiscall)
 struct cModelInstance {
@@ -44,9 +69,9 @@ struct cModelWorld {
     bool GetBakedMeshesUnscaled(void* model, void* arg2); // 0074a700
     bool GetBakedMeshes2(void* model, void* arg2, cSPTransform* out);  // 0074a780
     bool GetMeshes(void* model, void* arg2, cSPTransform* out);        // 0074a850
-    static void SetExternalEffectsTransform(void* a, void* b, void* c);  // 0074a290
+    static void __stdcall SetExternalEffectsTransform(void* a, void* b, void* c);  // 0074a290
     void SubA490(void* a, void* b);                      // 0074a490
-    void SubA920(void* a, void* b);                      // 0074a920
+    void SubA920(void* list, void* obj, uint32_t flags); // 0074a920
     void AddAttachments(char* model);                    // 0074ac80
 };
 
@@ -148,22 +173,21 @@ bool SP::cModelWorld::GetBakedMeshesUnscaled(void* model, void* arg2)
 // ---------------------------------------------------------------------------
 extern float g_162eb0c, g_162eb10, g_162eb14, g_1485720;
 extern char g_162ec4c[];
-struct Matrix3 { void Assign(const void* src); };
 
 bool SP::cModelWorld::GetBakedMeshes2(void* model, void* arg2, cSPTransform* out)
 {
     ((void(__thiscall*)(void*, void*))VT(this)[0x58 / 4])(this, model);
     char* base = model ? (char*)model - 8 : 0;
     if (*(int*)(base + 0x9c) != 0) {
-        *out = translateTransform(base + 0xe4, base + 0x10);
-        cSPTransform r;
+        cSPTransform r = translateTransform(base + 0xe4, base + 0x10);
+        *out = r;
         r.f0 = 0;
         r.f2 = 0;
         r.f4 = g_162eb0c;
         r.f8 = g_162eb10;
         r.fc = g_162eb14;
         r.f10 = g_1485720;
-        ((Matrix3*)((char*)&r + 0x14))->Assign((const void*)g_162ec4c);
+        ((Matrix3*)&r.m[0])->Assign((const void*)g_162ec4c);
         cModelInstance* inst = *(cModelInstance**)(base + 0x9c);
         return inst->BuildBaked(&r, arg2);
     }
@@ -187,29 +211,226 @@ bool SP::cModelWorld::GetMeshes(void* model, void* arg2, cSPTransform* out)
 
 // ---------------------------------------------------------------------------
 // @ 0x0074A290  SP::cModelWorld::SetExternalEffectsTransform
-// partial: index/slot walk over the occluder transform array omitted.
 // ---------------------------------------------------------------------------
+struct EffRec {
+    uint32_t id;       // +0x00
+    uint32_t id2;      // +0x04
+    void*    obj;      // +0x08
+    cSPTransform xf;   // +0x0c
+    uint32_t pad;      // +0x44
+};
+typedef char EffRec_size_check[(sizeof(EffRec) == 0x48) ? 1 : -1];
+
 void SP::cModelWorld::SetExternalEffectsTransform(void* a, void* b, void* c)
 {
-    (void)a; (void)b; (void)c;
+    char* model = a ? (char*)a - 8 : 0;
+    EffRec* rec = *(EffRec**)(model + 0xdc);
+    if (rec == 0)
+        return;
+
+    if (b != 0) {
+        if (rec->obj == 0)
+            return;
+        do {
+            if (c == 0 || (c == (void*)rec->id && rec->id2 == 0)) {
+                rec->xf = *(cSPTransform*)b;
+                void* obj = rec->obj;
+                cSPTransform t;
+                t.f0 = *(uint16_t*)((char*)a + 8);
+                t.f2 = *(uint16_t*)((char*)a + 0xa);
+                t.f4 = *(float*)((char*)a + 0xc);
+                t.f8 = *(float*)((char*)a + 0x10);
+                t.fc = *(float*)((char*)a + 0x14);
+                t.f10 = *(float*)((char*)a + 0x18);
+                ((Matrix3*)&t.m[0])->Assign((char*)a + 0x1c);
+                t.Compose(&rec->xf);
+                ((void(__thiscall*)(void*, cSPTransform*))VT(obj)[0x18 / 4])(obj, &t);
+            }
+            rec++;
+        } while (rec->obj);
+        return;
+    }
+
+    int count = 0;
+    void* data = 0;
+    PropGetTransforms(*(void**)((char*)a + 0x90), 0x2a907b6, &count, &data);
+    rec = *(EffRec**)(model + 0xdc);
+    if (rec->obj == 0)
+        return;
+    int i = 0;
+    do {
+        if (c == 0 || (c == (void*)rec->id && rec->id2 == 0)) {
+            void* obj = rec->obj;
+            void* arg;
+            if (i < count) {
+                rec->xf = ((cSPTransform*)data)[i];
+                cSPTransform t = translateTransform(&rec->xf, (char*)a + 8);
+                arg = &t;
+            } else {
+                rec->xf.f0 = 0;
+                rec->xf.f2 = 0;
+                rec->xf.f4 = g_162eb0c;
+                rec->xf.f8 = g_162eb10;
+                rec->xf.fc = g_162eb14;
+                rec->xf.f10 = g_1485720;
+                *(Matrix3*)&rec->xf.m[0] = *(Matrix3*)g_162ec4c;
+                arg = (char*)a + 8;
+            }
+            ((void(__thiscall*)(void*, void*))VT(obj)[0x18 / 4])(obj, arg);
+        }
+        i++;
+        rec++;
+    } while (rec->obj);
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x0074A490  SP::cModelWorld::SubA490
-// partial: EASTL vector build path partly omitted.
 // ---------------------------------------------------------------------------
-void SP::cModelWorld::SubA490(void* a, void* b)
+typedef void (__cdecl *Sub9510Fn)(void*, unsigned, void*, unsigned);   // 0x6b9510
+typedef void (__cdecl *VecCopyFn)(void*, const void*, unsigned);       // 0x11e0744
+extern "C" void* __cdecl GfxAlloc(unsigned size, const char* name, int, int, int, int);  // 0xf473a0
+
+void SP::cModelWorld::SubA490(void* model, void* outp)
 {
-    (void)a; (void)b;
+    ((void(__thiscall*)(void*, void*))VT(this)[0x58 / 4])(this, model);
+    char* base = model ? (char*)model - 8 : 0;
+    uint32_t* p = *(uint32_t**)outp;
+    if (p == 0) {
+        p = (uint32_t*)GfxAlloc(0x28, "Graphics", 0, 0, 0, 0);
+        if (p) {
+            p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0; p[4] = 0;
+            p[5] = 0; p[6] = 0; p[7] = 0; p[8] = 0; p[9] = 0;
+        }
+        void* arg = base ? base + 8 : 0;
+        ((void(__thiscall*)(void*, void*, void*))VT(this)[0xd8 / 4])(this, arg, p);
+        p[8] = p[0];
+        p[9] = p[4];
+        p[7] = p[2];
+        uint32_t n = p[2];
+        p[0] = 0xc;
+        p[4] = (uint32_t)GfxAlloc(n * 0xc, "Graphics", 0, 0, 0, 0);
+        *(uint32_t**)outp = p;
+    } else {
+        ((void(__thiscall*)(void*, void*, void*))VT(this)[0x17c / 4])(this, model, p);
+    }
+
+    cSPTransform t;
+    t.f0 = *(uint16_t*)(base + 0x10);
+    t.f2 = *(uint16_t*)(base + 0x12);
+    t.f4 = *(float*)(base + 0x14);
+    t.f8 = *(float*)(base + 0x18);
+    t.fc = *(float*)(base + 0x1c);
+    t.f10 = *(float*)(base + 0x20);
+    ((Matrix3*)&t.m[0])->Assign(base + 0x24);
+    t.Compose((cSPTransform*)(base + 0xe4));
+
+    void* src = (void*)p[9];
+    void* dst = (void*)p[4];
+    if (p[8] == p[0]) {
+        ((VecCopyFn)0x11e0744)(dst, src, p[2] * p[0]);
+    } else {
+        uint32_t* s = (uint32_t*)src;
+        uint32_t* d = (uint32_t*)dst;
+        for (uint32_t k = p[2]; k > 0; k--) {
+            d[0] = s[0];
+            d[1] = s[1];
+            d[2] = s[2];
+            s = (uint32_t*)((char*)s + p[8]);
+            d += 3;
+        }
+    }
+    ((Sub9510Fn)0x6b9510)(&t, p[2], (void*)p[4], 0xc);
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x0074A920  SP::cModelWorld::SubA920
-// partial: refcount/list walk partly omitted.
 // ---------------------------------------------------------------------------
-void SP::cModelWorld::SubA920(void* a, void* b)
+struct PropKey { uint32_t id; uint32_t id2; int idx; };             // 0xc bytes
+extern bool __cdecl GetPropertyAsKey(void* list, unsigned key, PropKey* out);   // 0x6a1250
+extern bool __cdecl CreateModelInstance(unsigned id, unsigned idx, void** out, unsigned flags); // 0x754ba0
+extern void __cdecl Sub7340(void* obj);                              // 0x747340
+extern "C" float __cdecl sqrtf(float);
+struct cSPBoundingBox {
+    float w[6];
+    void TransformBy(const void* xf);   // 0x409dd0
+};
+
+void SP::cModelWorld::SubA920(void* list, void* obj, uint32_t flags)
 {
-    (void)a; (void)b;
+    char* o = (char*)obj;
+    for (int i = 0; i < 6; i++) {
+        ReleaseSlot((void**)(o + 0x9c + i * 4));
+        ReleaseSlot((void**)(o + 0xb4 + i * 4));
+        *(uint8_t*)(o + 0xcc + i) = 0xff;
+    }
+
+    PropKey k;
+    k.id = 0; k.id2 = 0; k.idx = 0;
+    for (int i = 0; i < 4; i++) {
+        if (!GetPropertyAsKey(list, i + 0xf9efbb, &k))
+            break;
+        void** slot = (void**)(o + 0x9c + i * 4);
+        ReleaseSlot(slot);
+        int idx = (k.idx == -1) ? *(int*)((char*)list + 0x10) : k.idx;
+        CreateModelInstance(k.id, idx, slot, flags);
+    }
+
+    if ((flags & 0x20) && GetPropertyAsKey(list, 0xf9efc1, &k)) {
+        void** slot = (void**)(o + 0xb0);
+        int idx = (k.idx == -1) ? *(int*)((char*)list + 0x10) : k.idx;
+        ReleaseSlot(slot);
+        CreateModelInstance(k.id, idx, slot, 0);
+    }
+
+    if (GetPropertyAsKey(list, 0xf9efc0, &k)) {
+        void** slot = (void**)(o + 0xac);
+        int idx = (k.idx == -1) ? 0 : k.idx;
+        ReleaseSlot(slot);
+        CreateModelInstance(k.id, idx, slot, 0);
+    }
+
+    Sub7340(obj);
+
+    void** pslot = (void**)(o + 0x9c);
+    if (*pslot == 0)
+        pslot = (void**)(o + 0xac);
+    void* src = *pslot;
+    if (src == 0)
+        goto tail;
+
+    if (!(*(uint8_t*)(o + 0xe) & 1)) {
+        *(uint32_t*)(o + 0x84) = *(uint32_t*)((char*)src + 0xb4);
+        *(uint32_t*)(o + 0x88) = *(uint32_t*)((char*)src + 0xb8);
+        *(uint32_t*)(o + 0x8c) = *(uint32_t*)((char*)src + 0xbc);
+        *(uint32_t*)(o + 0x78) = *(uint32_t*)((char*)src + 0xa8);
+        *(uint32_t*)(o + 0x7c) = *(uint32_t*)((char*)src + 0xac);
+        *(uint32_t*)(o + 0x80) = *(uint32_t*)((char*)src + 0xb0);
+        if (*(float*)(o + 0xf4) != 1.0f || (*(uint8_t*)(o + 0xe4) & 6))
+            ((cSPBoundingBox*)(o + 0x78))->TransformBy(o + 0xe4);
+    }
+
+    if (!((*(uint32_t*)(o + 0xc) >> 0x11) & 1)) {
+        float v = *(float*)((char*)src + 0xc0);
+        *(float*)(o + 0x74) = v;
+        if (*(float*)(o + 0xf4) != 1.0f || (*(uint8_t*)(o + 0xe4) & 6)) {
+            v = *(float*)(o + 0xf4) * *(float*)(o + 0x74);
+            *(float*)(o + 0x74) = v;
+            float dx = *(float*)(o + 0xe8);
+            float dy = *(float*)(o + 0xec);
+            float dz = *(float*)(o + 0xf0);
+            *(float*)(o + 0x74) = sqrtf(dx * dx + dy * dy + dz * dz) + v;
+        }
+    }
+
+tail:
+    *(uint32_t*)(o + 0xc) |= 0x4000;
+    ++*(uint16_t*)(o + 0x70);
+    void* q = *(void**)(o + 0x6c);
+    if (q) {
+        void* r = ((void*(__thiscall*)(void*, unsigned))VT(q)[0xc / 4])(q, 0x7bbc4ff);
+        if (r)
+            ((void(__thiscall*)(void*, void*))VT(r)[0])(r, o + 8);
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -234,7 +455,6 @@ extern bool __cdecl PropReserve(void* list, unsigned key, int* count, void* out)
 extern void __cdecl PropGetTransforms(void* list, unsigned key, int* count, void* out);  // 0x6a0c30
 extern bool __cdecl PropGetFloats(void* list, unsigned key, int* count, void* out);   // 0x6a08b0
 extern bool __cdecl PropGetInts(void* list, unsigned key, int* count, void* out);     // 0x6a0990
-extern void* __cdecl GfxAlloc(unsigned size, const char* name, int, int, int, int);   // 0xf473a0
 extern "C" void* __cdecl memset(void*, int, unsigned);
 
 #define VCALL(T, obj, off) ((T)VT(obj)[(off) / 4])

@@ -1,2 +1,6 @@
 0074a8c0  68  complete source; only register allocation differs (index kept in eax vs original ecx). Every path/call present.
 0074ac80  912  SP::cModelWorld::AddAttachments - complete, needs /GS- (old EH prolog); reg alloc differs (this in ebp, list in edi, rec spilled), frame 0x7c vs 0x78 [equiv: WEAK 15% coverage, run with default flags]
+0074a290  449  SP::cModelWorld::SetExternalEffectsTransform - complete; frame 0x4c vs 0x48 and register allocation differ (model kept in edi / rec in esi / zero in ebx in the original) [equiv: PASS 361/400 valid, 66.5% coverage]
+0074a490  404  SP::cModelWorld::SubA490 - complete; original has an SEH prolog (`push -1; fs:[0]` + frame 0x3c) that we do not emit [equiv: UNSUPPORTED original faults on all inputs]
+0074a780  86   SP::cModelWorld::GetBakedMeshes2 - complete; original threads translateTransform's returned pointer into operator= while we recompute `lea eax,[esp+4]`, and the zero/constant store order differs [equiv: UNSUPPORTED original faults/mis-arity on all inputs]
+0074a920  754  SP::cModelWorld::SubA920 - complete; register allocation differs (object kept in ebp, loop counter in edi) and the tail call layout differs [equiv: WEAK 275/400 valid, 39.9% coverage]
