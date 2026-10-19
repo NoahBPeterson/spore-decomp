@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPSkinPaintFloodDescription.cpp  ??0cPaintVarEvalList_s0053_4cf0@nSPSkinner@@QAE@ABU01@@Z  00535c60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
