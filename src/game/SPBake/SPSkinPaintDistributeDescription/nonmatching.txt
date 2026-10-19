@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+0052f170 320 OnEndParse; complete but /Od layout/EH frame differs
+0052f330 72 spacing command Execute; complete but byte layout differs; equiv: FAIL (ecx fixed; 5/5 mismatched)
+0052f3a0 38 limit command Execute; complete but byte layout differs; equiv: FAIL (ecx fixed; 5/5 mismatched)
+0052f6b0 76 AddCommands; complete but EH frame/layout differs
+0052f7c0 24 distribute effect ctor; complete but byte layout differs
+0052f890 161 block parse; complete but byte layout differs
+0052f9f0 73 add-effect helper; complete but EH frame/layout differs; equiv: WEAK (ecx fixed; 48.5% coverage)
+0052fb00 9 derived dtor thunk; complete but byte layout differs
+0052fb20 124 copy params; complete but byte layout differs; equiv: UNSUPPORTED (ecx fixed; 0/1200 inputs valid, fault(read))
+0052fc10 116 swarm effect ctor; complete but byte layout differs; equiv: FAIL (ecx fixed; 5/5 mismatched)
+0052fd80 33 command dtor; complete but byte layout differs

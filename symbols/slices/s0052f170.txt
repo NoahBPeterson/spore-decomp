@@ -1,6 +1,13 @@
-0052f170 cSPSkinPaintDistributeParticlesCommand::OnEndParse  # PDB previous-name
-0052f330 cSPSkinPaintDistributeSpacingCommand::Execute  # PDB previous-name
-0052f3f0 cSPSkinPaintDistributeRegionCommand::Execute  # PDB previous-name
-0052f6b0 SWARM_SPSkinPaintDistributeAddCommands  # PDB caller-scored
-0052f7c0 cSPSkinPaintDistributeEffectCommand ctor  # PDB previous-name
-0052fe20 cSPSkinPaintDistributeInlineCommand::Execute  # PDB previous-name
+0052f170 ?DistributeParticles_OnEndParse@@YAXH@Z  # DistributeParticles_OnEndParse migrated from s0052f170 (verbatim, slice spelling)
+0052f330 ?SpacingExecute@cDistributeCmd@@QAEXPAUcArguments_s0052_f170@ArgScript@EA@@@Z  # cDistributeCmd::SpacingExecute migrated from s0052f170 (verbatim, slice spelling)
+0052f3a0 ?LimitExecute@cDistributeCmd@@QAEXPAUcArguments_s0052_f170@ArgScript@EA@@@Z  # cDistributeCmd::LimitExecute migrated from s0052f170 (verbatim, slice spelling)
+0052f3f0 ?DistributeRegion_Execute@@YAXHPAUcArguments_s0052_f170@ArgScript@EA@@@Z  # DistributeRegion_Execute migrated from s0052f170 (verbatim, slice spelling)
+0052f6b0 ?SPSkinPaintDistributeAddCommands@@YAXPAH0@Z  # SPSkinPaintDistributeAddCommands migrated from s0052f170 (verbatim, slice spelling)
+0052f7c0 ?DistributeEffectCommandCtor@@YAPAXPAX@Z  # DistributeEffectCommandCtor migrated from s0052f170 (verbatim, slice spelling)
+0052f890 ?DistributeBlock_Parse@@YAXHPAUcArguments_s0052_f170@ArgScript@EA@@@Z  # DistributeBlock_Parse migrated from s0052f170 (verbatim, slice spelling)
+0052f9f0 ?AddEffect@cDistributeCmd@@QAEXD@Z  # cDistributeCmd::AddEffect migrated from s0052f170 (verbatim, slice spelling)
+0052fb00 ?BlockCmdBaseDerivedDtor@@YIXPAUcBlockCommandBase_s0052_f170@ArgScript@EA@@@Z  # BlockCmdBaseDerivedDtor migrated from s0052f170 (verbatim, slice spelling)
+0052fb20 ?CopyParams@cSwarmEffect@@QAEPAHH@Z  # cSwarmEffect::CopyParams migrated from s0052f170 (verbatim, slice spelling)
+0052fc10 ?Ctor@cSwarmEffect@@QAEPAXH@Z  # cSwarmEffect::Ctor migrated from s0052f170 (verbatim, slice spelling)
+0052fd80 ?Distribute_CommandDtor@@YIXPAUcBlockCommandBase_s0052_f170@ArgScript@EA@@@Z  # Distribute_CommandDtor migrated from s0052f170 (verbatim, slice spelling)
+0052fe20 ?DistributeInline_Execute@@YAXHPAUcArguments_s0052_f170@ArgScript@EA@@@Z  # DistributeInline_Execute migrated from s0052f170 (verbatim, slice spelling)

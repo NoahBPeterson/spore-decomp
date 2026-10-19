@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPSkinPaintDistributeDescription.cpp  ?OnRegister@cSPSkinPaintDistributeEffectCommand@?A0x5d0c430c@@QAEXPAUcIParser_s0052_e1f0@ArgScript@EA@@PAUcState_s0052_e1f0@45@@Z  0052ec40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc /Isrc/game/include
+../src/game/SPBake/SPSkinPaintDistributeDescription.cpp  ?WriteString@@YAPAUIStream@@PAU1@PAUstring@@@Z  005305c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc /Isrc/game/include
+../src/game/SPBake/SPSkinPaintDistributeDescription.cpp  ?OnRegister@CmdStateMeta@@QAEXPAX0@Z  00530c40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc /Isrc/game/include
