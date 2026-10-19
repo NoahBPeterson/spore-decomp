@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+008b71c0 3499 complete Type1BuildChar charstring interpreter; ~16 bytes frame/inline differences, register assignment and number-decode shape differ (not iterated)
+008b9400 2031 complete (T2K New_T1kernSubTable0Data); 13-call sequence identical (FindString takes eax=0 like the original, ATOI out of line once), size 2383 vs 2438; register allocation / frame (0xb0 vs 0xb4) / rotation of the inlined scanners differ flags /O2 /MD /Gy /TP /GS-
