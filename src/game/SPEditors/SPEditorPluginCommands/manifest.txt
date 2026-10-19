@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorPluginCommands.cpp  ?EditorCommandHandler@SP@@YA_NPBDPAXPAIPAH@Z  005cbb70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

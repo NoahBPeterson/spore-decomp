@@ -11,6 +11,7 @@
 005cb4a0 ?DoMessage@cSPPaletteUI_s005c_b060@SP@@UAE_NPAVIWindow_s005c_b060@UTFWin@EA@@ABUMessage_s005c_b060@45@@Z  # cSPPaletteUI_s005c_b060::DoMessage migrated from s005cb060 (verbatim, slice spelling)
 005cb5a0 ?Init@cSPPaletteUI_s005c_b060@SP@@QAEXPAVcSPPalette_s005c_b060@2@PAVIWindow_s005c_b060@UTFWin@EA@@HPAVcSPPaletteInfo_s005c_b060@2@@Z  # cSPPaletteUI_s005c_b060::Init migrated from s005cb060 (verbatim, slice spelling)
 005cba90 ?Shutdown@cSPPaletteUI_s005c_b060@SP@@QAEXXZ  # cSPPaletteUI_s005c_b060::Shutdown migrated from s005cb060 (verbatim, slice spelling)
+005cbb70 ?EditorCommandHandler@SP@@YA_NPBDPAXPAIPAH@Z  # EditorCommandHandler migrated from s005cb060 (verbatim, slice spelling)
 005cbca0 ?GetState@cBufferedStream@@UAEHXZ  # cBufferedStream::GetState migrated from s005cb060 (verbatim, slice spelling)
 005cbcb0 ?GetSize@cBufferedStream@@UAEHXZ  # cBufferedStream::GetSize migrated from s005cb060 (verbatim, slice spelling)
 005cbcd0 ?GetValue@cBufferedStream@@UAEHH@Z  # cBufferedStream::GetValue migrated from s005cb060 (verbatim, slice spelling)
