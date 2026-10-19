@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+005a9200 536 Editor::Launch(cEditorLaunchData*): message ID is reloaded from the message before PostMessage in the original; register choices; switch block layout shifts
+005a9610 15 pair<const uint, vector<AutoRefCount<cPropertyList>>> copy ctor: register assignment of the uninitialized_copy arguments differs

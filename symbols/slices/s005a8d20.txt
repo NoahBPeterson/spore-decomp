@@ -2,8 +2,9 @@
 005a8ea0 eastl::bitset<128>::none  # 4-word any() loop negated; used on cEditorLaunchData::mEditorValidationLevel
 005a9080 SP::Editor::cEditorLaunchData::cEditorLaunchData  # field layout matches PDB cEditorLaunchData (retail-extended), byte-exact
 005a9170 SP::Editor::cEditorLaunchData::~cEditorLaunchData  # byte-exact
-005a9200 SP::Editor::Launch  # (cEditorLaunchData*) PDB name on card
-005a94d0 SP::Editor::Launch  # (config, key, callerID, callerData, validation bitset, canSwitch) builds cEditorLaunchData, calls Launch(data); dev-build has two Launch overloads
+005a9200 ?Launch@Editor@SP@@YA_NPAVcEditorLaunchData_s005a_8d20@12@@Z  # Launch migrated from s005a8d20 (verbatim, slice spelling)
+005a94d0 ?Launch@Editor@SP@@YA_NIABUResourceKey@@IPAVIUnknown32_s005a_8d20@COM@EA@@U?$bitset@$0IA@@eastl@@_N@Z  # Launch migrated from s005a8d20 (verbatim, slice spelling)
+005a9610 ?CopyConstructEditorPropListEntry@@YAXPAXABU?$pair_s005a_8d20@$$CBIV?$vector_s005a_8d20@V?$AutoRefCount_s005a_8d20@VcPropertyList_s005a_8d20@SP@@@EA@@@eastl@@@eastl@@@Z  # CopyConstructEditorPropListEntry migrated from s005a8d20 (verbatim, slice spelling)
 005a97a0 eastl::rbtree<uint,pair<uint const,vector<AutoRefCount<SP::cPropertyList>>>>::DoNukeSubtree  # map at 0x0151102C
 005a9930 ?A?$map  # eastl::map<uint,vector<AutoRefCount<SP::cPropertyList>>>::operator[] (base identifier form so the name matcher finds it)
 005a9c40 IntersectRaySphere  # origin/dir/center/radius/out distance; byte-exact (name descriptive)
