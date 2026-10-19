@@ -1881,7 +1881,15 @@ def main(argv=None):
     results = []
     for va in vas:
         print("%s %08x ..." % (sid, va), flush=True)
-        r = test_function(sid, va, opts)
+        try:
+            r = test_function(sid, va, opts)
+        except Exception as e:      # noqa: BLE001
+            # an emulator error escaping a hook (unicorn UcError in fake_call, mig10 SPCheatManager 0x67ec70) killed the
+            # whole multi-VA run; the row is UNSUPPORTED and the shared machine is rebuilt for the next VA
+            r = {"slice": sid, "va": "%08x" % va, "verdict": "UNSUPPORTED",
+                 "reason": "harness error: %s: %s" % (type(e).__name__, str(e)[:160])}
+            ctx = context()
+            ctx["m"] = M.Machine(ctx["img"])
         results.append(r)
         print_result(r)
     if opts.json:
