@@ -18,7 +18,7 @@ extern "C" {
     __declspec(dllimport) void __stdcall OleUninitialize(void);
     __declspec(dllimport) int  __stdcall OleInitialize(void*);
 }
-void __cdecl EASTL_dealloc(void*);
+void __cdecl EASTL_dealloc(void*) throw();
 void __cdecl FUN_00688dd0(void*);
 
 // ---------------------------------------------------------------------------
@@ -125,18 +125,32 @@ int __fastcall FUN_006bb670(void* self)
 void __cdecl FUN_006bb1c0(void* self) { (void)self; }
 void __cdecl FUN_006bb4b0(void* self) { (void)self; }
 void __cdecl FUN_006bb6c0(void* self) { (void)self; }
-// @ 0x006bb690 / @ 0x006bb760  DebugMessage destructors
-struct AppMsgBase { void* vtbl; virtual ~AppMsgBase() { } };
-struct DebugMessage : AppMsgBase {
+struct BaseA2 { virtual ~BaseA2() {} };
+struct WStr16 {            // eastl::basic_string<wchar_t>: begin, end, capacity + allocator word
     wchar_t* mpBegin;
     wchar_t* mpEnd;
     wchar_t* mpCapacity;
-    virtual ~DebugMessage();
+    int      mAlloc;
+    ~WStr16()
+    {
+        if ((int)(((char*)mpCapacity - (char*)mpBegin) & 0xfffffffe) > 2 && mpBegin) EASTL_dealloc(mpBegin);
+    }
 };
-DebugMessage::~DebugMessage()
+struct DebugMessage : BaseA2 {
+    WStr16 mText;
+// @ 0x006bb690
+// @ 0x006bb760
+    virtual ~DebugMessage() {}   // ~DebugMessage 0x6bb690; its ??_G 0x6bb760 is compiler generated from it
+};
+// Constructing one in this unit makes it emit DebugMessage's vtable and with it ??_G.
+inline void* operator new(size_t, void* p) { return p; }
+DebugMessage* ConstructDebugMessage(void* mem)
 {
-    if ((((char*)mpCapacity - (char*)mpBegin) & 0xfffffffe) > 2 && mpBegin) EASTL_dealloc(mpBegin);
+    DebugMessage* m = new (mem) DebugMessage;
+    m->mText.mpBegin = 0; m->mText.mpEnd = 0; m->mText.mpCapacity = 0;
+    return m;
 }
+// DebugMessage's scalar deleting destructor (??_G) is compiler generated from the inline destructor above.
 void __cdecl FUN_006bb8e0(void* self) { (void)self; }
 void __cdecl FUN_006bb9b0(void* self) { (void)self; }
 void __cdecl FUN_006bba70(void* self) { (void)self; }

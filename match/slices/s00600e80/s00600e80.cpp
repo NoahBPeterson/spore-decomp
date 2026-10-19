@@ -50,16 +50,66 @@ SettingsRecord& SettingsRecord::operator=(const SettingsRecord& o)
 struct LayoutShutdown { void Shutdown(int a); };   // 0x00811ad0
 void RemoveTabHelper(void* self, uint32_t id);
 
+// A settings tab: refcounted object that embeds a layout at +8 and keeps its root window id at +0x20.
+struct cUILayoutS {
+  void* FindWindowByID(uint32_t id, bool recursive) const;   // 0x008105b0 (thiscall, ret 8)
+};
+struct cUITab {
+  virtual int AddRef();     // +0
+  virtual int Release();    // +4
+  char pad08[0x28 - 0x08];
+};
+
+#define SLOTS8(n) virtual void s##n##a(); virtual void s##n##b(); virtual void s##n##c(); virtual void s##n##d(); \
+                  virtual void s##n##e(); virtual void s##n##f(); virtual void s##n##g(); virtual void s##n##h();
+struct IWindowS {          // only slots +0x10 and +0xdc are used here
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+  virtual void* Slot4();                             // +0x10
+  virtual void v14(); virtual void v18(); virtual void v1c();
+  SLOTS8(1) SLOTS8(2) SLOTS8(3) SLOTS8(4) SLOTS8(5)             // +0x20 .. +0xc7
+  virtual void s6a(); virtual void s6b(); virtual void s6c(); virtual void s6d();
+  virtual void s6e(); virtual void s6f(); virtual void s6g();                         // .. +0xdb
+  virtual void Slot55(void* arg);                    // +0xdc
+};
+
 struct SPUISettingsStub {
   char pad0[0x10];
   char mHandler[4];        // +0x10 (IHandler subobject passed to MessageServer)
-  void* mpLayout;          // +0x14
+  cUILayoutS* mpLayout;    // +0x14
   char pad18[0x20c - 0x18];
-  uint32_t* mTabBegin;     // +0x20c
-  uint32_t* mTabEnd;       // +0x210
-  void RemoveTab(uint32_t id);   // 0x00601da0
+  cUITab** mTabBegin;      // +0x20c
+  cUITab** mTabEnd;        // +0x210
+  void RemoveTab(cUITab* tab);   // 0x00601da0
   bool Shutdown();               // 0x00601e60
 };
+void* __cdecl Memmove_11e0744(void* dst, const void* src, uint32_t n);   // 0x011e0744 (static CRT)
+
+// @ 0x00601da0
+void SPUISettingsStub::RemoveTab(cUITab* tab)
+{
+  cUITab** end = mTabEnd;
+  cUITab** p = mTabBegin;
+  while (p != end && *p != tab)
+    ++p;
+  cUITab** next = p + 1;
+  if (next < end)
+    Memmove_11e0744(p, next, (char*)end - (char*)next);
+  mTabEnd -= 1;
+  if (mpLayout) {
+    IWindowS* win = (IWindowS*)mpLayout->FindWindowByID(0x46967c0, true);
+    if (win && tab) {
+      cUILayoutS* sub = (cUILayoutS*)((char*)tab + 8);
+      if (sub->FindWindowByID(*(uint32_t*)((char*)tab + 0x20), true)) {
+        IWindowS* w2 = (IWindowS*)sub->FindWindowByID(*(uint32_t*)((char*)tab + 0x20), true);
+        if (w2->Slot4()) {
+          void* arg = sub->FindWindowByID(*(uint32_t*)((char*)tab + 0x20), true);
+          win->Slot55(arg);
+        }
+      }
+      tab->Release();
+    }
+  }
+}
 
 // @ 0x00601e60
 bool SPUISettingsStub::Shutdown()

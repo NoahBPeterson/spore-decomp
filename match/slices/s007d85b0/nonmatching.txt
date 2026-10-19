@@ -10,3 +10,4 @@
 007d9120  n/a  SP::cApp::Shutdown; complete (unregister 3 messages, leave mode, cheat, mode Apply/assign/destroy, viewer release), EH/schedule differs
 007d9260  n/a  SP::cApp::AddAppMode; complete (build cAppModeInfo, string assign, push to vector), EH/register schedule differs
 007d93a0  72   base-object destructor (restore 3 vtables, release member +0x24); complete, original EH prologue/vtable store order not reproduced; equiv: PASS (1183 valid inputs, 100% coverage)
+007d8740  37  cAppModeInfo copy ctor (modeled as layout twin cAppModeInfoC); register allocation only (sb/n/d swap), complete [equiv: WEAK]

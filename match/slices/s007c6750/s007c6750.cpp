@@ -6,40 +6,88 @@ typedef unsigned int   u32;
 
 struct cViewer;
 struct cICameraController;
-struct cCameraManager {
-    void* vftable;                  // +0x00
-    u32   mRefCount;                // +0x04
-    u8    pad08[4];
+
+extern "C" void  operator_delete(void*);   // 0x00f47380 (equiv t2)
+
+// --- member types as the retail destructor sees them -------------------------------------------
+struct IMsgHandlerBase {            // primary base: vptr at +0 (final vtable ??_7IMsgHandler@@6B@)
+    virtual ~IMsgHandlerBase() {}
+    virtual void h1();
+};
+struct GmeRefCountBase {            // second base: vptr at +4, refcount at +8 (??_7GmeRefCount@@6B@)
+    GmeRefCountBase() : mRefCount(0) {}
+    virtual ~GmeRefCountBase() {}
+    int mRefCount;
+};
+struct CheatStr {                   // eastl::basic_string<char>
+    char* mpBegin;                  // +0x00
+    char* mpEnd;                    // +0x04
+    char* mpCapacity;               // +0x08
+    int   mAlloc;                   // +0x0c
+    ~CheatStr() { if ((int)(mpCapacity - mpBegin) > 1 && mpBegin) operator_delete(mpBegin); }
+};
+struct HTStr {                      // hashtable<basic_string<wchar_t>, ...>: nodes own a string
+    u8    mEmpty[4];
+    int   mpBucketArray;            // +0x04
+    u32   mnBucketCount;            // +0x08
+    u32   mnElementCount;           // +0x0c
+    u8    mPolicy[0x10];
+    void DoFreeNodes(int bucketArray, u32 bucketCount) throw();   // 0x007c7050 (thiscall, ret 8)
+    ~HTStr() {
+        DoFreeNodes(mpBucketArray, mnBucketCount);
+        mnElementCount = 0;
+        if (mnBucketCount > 1) operator_delete((void*)mpBucketArray);
+    }
+};
+struct HTPlain {                    // hashtable with trivially destructible nodes
+    u8    mEmpty[4];
+    int   mpBucketArray;            // +0x04
+    u32   mnBucketCount;            // +0x08
+    u32   mnElementCount;           // +0x0c
+    u8    mPolicy[0x10];
+    void DoFreeNodes(int bucketArray, u32 bucketCount) throw();   // 0x00693230 (thiscall, ret 8)
+    ~HTPlain() {
+        DoFreeNodes(mpBucketArray, mnBucketCount);
+        mnElementCount = 0;
+        if (mnBucketCount > 1) operator_delete((void*)mpBucketArray);
+    }
+};
+struct RefVecS {                    // vector<AutoRefCount<cICameraController>, sp_vector_allocator>
+    void** mpBegin;                 // +0x00
+    void** mpEnd;                   // +0x04
+    void** mpCapacity;              // +0x08
+    u8     mAlloc[8];
+    void Destroy();                 // 0x00a23920 (thiscall)
+};
+struct NamesVec {                   // vector<basic_string<wchar_t>, sp_vector_allocator>
+    int* mpBegin;                   // +0x00 (allocation has a count word at [-1])
+    void* mpEnd;                    // +0x04
+    void* mpCapacity;               // +0x08
+    u32   mAlloc;
+    void DoDestroyValues(void* first, void* last);   // 0x0084aad0 (thiscall, ret 8)
+};
+
+struct cCameraManager : public IMsgHandlerBase, public GmeRefCountBase {   // vptrs at +0 and +4
     bool  mInitialized;             // +0x0c
     u8    pad0d[3];
-    char* mCheatBegin;              // +0x10
-    char* mCheatEnd;                // +0x14
-    char* mCheatCap;                // +0x18
-    void* mCheatAlloc;              // +0x1c
-    u8    mapNameID[0x20];          // +0x20
-    u8    mapTypeID[0x20];          // +0x40
-    u8    mapID[0x20];              // +0x60
-    void** mControllersBegin;       // +0x80
-    void** mControllersEnd;         // +0x84
-    void** mControllersCap;         // +0x88
-    u8    pad8c[4];
-    void* mNamesBegin;              // +0x90
-    void* mNamesEnd;                // +0x94
-    void* mNamesCap;                // +0x98
-    u8    pad9c[4];
-    int   mActiveControllerIndex;   // +0xa0
-    u32   mPropModCount;            // +0xa4
-    int   mIndexA8;                 // +0xa8
+    CheatStr mCheatName;            // +0x10
+    HTStr    mControllerNameIDMap;  // +0x20
+    HTPlain  mControllerTypeIDMap;  // +0x40
+    HTPlain  mControllerIDMap;      // +0x60
+    RefVecS  mControllers;          // +0x80
+    NamesVec mControllerNames;      // +0x94
+    int   mActiveControllerIndex;   // +0xa4 (approximate; ctor stub only)
+    u32   mPropModCount;
+    int   mIndexA8;
 
     void Init(void* cmd);           // 0x7c70b0
     void Shutdown();                // 0x7c6db0
     void ClearControllers();        // 0x7c6eb0
     void LoadControllers();         // 0x7c6b80
-    ~cCameraManager();              // 0x7c74a0
+    virtual ~cCameraManager();      // 0x7c74a0
     cCameraManager();               // 0x7c75e0
 };
 
-extern "C" void  operator_delete(void*);   // 0x00f47380 (equiv t2)
 extern "C" void* operator_new(unsigned int, const char*, int, int, int, int);
 extern "C" int   FUN_007e9350(void**);
 extern "C" void  FUN_007c3990(void*, void*, void*);
@@ -73,31 +121,31 @@ void cCameraManager::LoadControllers() {
 void cCameraManager::Shutdown() {
     if (!mInitialized) return;
     mInitialized = false;
-    if (mCheatBegin != mCheatEnd) { *mCheatBegin = 0; mCheatEnd = mCheatBegin; }
-    int n = (int)((char*)mControllersEnd - (char*)mControllersBegin) >> 2;
+    if (mCheatName.mpBegin != mCheatName.mpEnd) { *mCheatName.mpBegin = 0; mCheatName.mpEnd = mCheatName.mpBegin; }
+    int n = (int)((char*)mControllers.mpEnd - (char*)mControllers.mpBegin) >> 2;
     for (int i = 0; i < n; i++) {
-        void* c = mControllersBegin[i];
+        void* c = mControllers.mpBegin[i];
         if (c) ((void(__thiscall*)(void*))((void**)*(void**)c)[0x14 / 4])(c);
     }
-    mControllersEnd = mControllersBegin;
+    mControllers.mpEnd = mControllers.mpBegin;
     mIndexA8 = 0;
 }
 
 // ===========================================================================
 // @ 0x007c6eb0
 void cCameraManager::ClearControllers() {
-    int n = (int)((char*)mControllersEnd - (char*)mControllersBegin) >> 2;
+    int n = (int)((char*)mControllers.mpEnd - (char*)mControllers.mpBegin) >> 2;
     for (int i = 0; i < n; i++) {
-        void* c = mControllersBegin[i];
+        void* c = mControllers.mpBegin[i];
         if (c) ((void(__thiscall*)(void*))((void**)*(void**)c)[0x14 / 4])(c);
     }
-    mControllersEnd = mControllersBegin;
+    mControllers.mpEnd = mControllers.mpBegin;
     mIndexA8 = 0;
 }
 
 // ===========================================================================
 // @ 0x007c7050
-void DoFreeNodes(int bucketArray, u32 bucketCount) {
+void HTStr::DoFreeNodes(int bucketArray, u32 bucketCount) throw() {
     u32 i = 0;
     if (bucketCount != 0) {
         do {
@@ -136,18 +184,22 @@ void RegisterController(cCameraManager* m, int id, void* controller, void* name)
 // ===========================================================================
 // @ 0x007c74a0
 cCameraManager::~cCameraManager() {
-    if (mCheatBegin != 0 && mCheatBegin + 1 < mCheatCap) operator_delete(mCheatBegin);
+    mControllerNames.DoDestroyValues(mControllerNames.mpBegin, mControllerNames.mpEnd);
+    int* names = mControllerNames.mpBegin;
+    if (names && names[-1])
+        operator_delete(names);
+    mControllers.Destroy();
 }
 
 // ===========================================================================
 // @ 0x007c75e0
 cCameraManager::cCameraManager() {
     mInitialized = false;
-    mCheatBegin = (char*)1;
-    mCheatEnd = (char*)1;
-    mCheatCap = (char*)2;
-    mControllersBegin = 0; mControllersEnd = 0; mControllersCap = 0;
-    mNamesBegin = 0; mNamesEnd = 0; mNamesCap = 0;
+    mCheatName.mpBegin = (char*)1;
+    mCheatName.mpEnd = (char*)1;
+    mCheatName.mpCapacity = (char*)2;
+    mControllers.mpBegin = 0; mControllers.mpEnd = 0; mControllers.mpCapacity = 0;
+    mControllerNames.mpBegin = 0; mControllerNames.mpEnd = 0; mControllerNames.mpCapacity = 0;
     mActiveControllerIndex = 0;
     mPropModCount = 0;
     mIndexA8 = -1;

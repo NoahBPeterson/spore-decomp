@@ -1,6 +1,5 @@
 007abc90 1001  PARTIAL large texture-creation EH routine skeleton only.
 007ac0f0  121  PARTIAL cLoadQueue::cLoadQueue (EH member construction) skeleton only.
-007ac1e0  262  PARTIAL cTextureManager::cTextureManager (EH base/vtable + members) skeleton only.
 007ac2f0  280  PARTIAL cTextureManager::CreateInstance skeleton only.
 007ac480  381  PARTIAL eastl::deque<cTextureAsyncQueueEntry>::erase skeleton only.
 007ac600  331  PARTIAL cTextureManager::RegisterBuiltInGameTexture skeleton only.

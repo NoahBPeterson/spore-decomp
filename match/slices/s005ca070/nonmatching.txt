@@ -2,3 +2,4 @@
 005ca9c0  36  FindCategoryIndex: register roles of begin/selected swapped (orig keeps selected in esi, reloads begin into ecx)
 005cadb0  34  SetVisibleChunk: mVisibleChunk store scheduled late instead of at function entry; otherwise identical
 005ca070  1407  cSPPaletteSubCategoryUI::Init: complete (call/vtable sequence identical, 1815 vs 1842 bytes); loop counter kept in a register by us, in memory ([esp+0x10]) by the original; btn copy temp for push_back
+005ca9f0  872  cSPPaletteUI::UpdateNavigationVisiblity complete (all 3 blocks, Transform vcalls 0xc0/0xc4); Vec2 arg copy from call result is elided by cl (original copies via movss), frame 0x40 vs 0x48, FindCategoryIndex inline loads [0x34] once [equiv: WEAK]

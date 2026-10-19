@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with flags /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+009f2a00  2137  IKSolveParticles complete (child Update loop, per-particle orientation rebuild for modes 0 and 2 with blend/normalise, position and pivot derivation); float scheduling and register allocation differ [equiv: PASS (705 valid, 100% coverage with --inputs 2000 --alias 0.5)]

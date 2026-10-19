@@ -3,4 +3,3 @@
 007c6b80  -  LoadControllers; property-group + EASTL map walk not reproduced (stub: our body is a tiny fraction of the original size; equiv lookup rejects >5x size gap, UNSUPPORTED)
 007c70b0  -  cCameraManager::Init; command registration + EASTL assigns not reproduced (stub: our body is a tiny fraction of the original size; equiv lookup rejects >5x size gap, UNSUPPORTED)
 007c7270  -  RegisterController; hashtable update path not reproduced (stub: our body is a tiny fraction of the original size; equiv lookup rejects >5x size gap, UNSUPPORTED)
-007c74a0  -  ~cCameraManager; full EASTL member teardown not reproduced (stub: our body is a tiny fraction of the original size; equiv lookup rejects >5x size gap, UNSUPPORTED)

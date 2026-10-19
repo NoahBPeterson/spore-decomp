@@ -9,3 +9,4 @@
 00fd7ab0  5  cContentValidationSummarizer Init returns this in eax (caller feeds AutoRefCount::operator=); base vtable store + zero-store scheduling differ
 00fd7b30  297  cMovieSystem constructor
 00fd7cd0  128  cMovieSystem destructor
+00fd7d80  111  cMovieSystem record/update tick (StopRecordingMovie): complete; compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast; frame float lives in xmm1 (orig xmm0) and floor-by-cvtss2si is asm-block + ternary instead of the original's cmov sequence [equiv: PASS]

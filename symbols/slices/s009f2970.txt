@@ -1,0 +1,1 @@
+009f2a00 ?IKSolveParticles@@YGXPAUIKContext@@PAUIKParticle@@@Z  # IK per-frame orientation/position pass over the particle array (name guessed); __stdcall (ctx, root particle), ret 8

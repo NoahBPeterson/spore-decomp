@@ -5,5 +5,4 @@
 00601790  -  SP::cSPUISettings::cSPUISettings: stub.
 00601930  -  SP::cSPUISettings::~cSPUISettings: stub.
 00601a70  -  helper: stub.
-00601da0  -  SP::cSPUISettings::RemoveTab: stub.
 00601f00  -  SP::cSPUISettings::CloseWindow: stub.

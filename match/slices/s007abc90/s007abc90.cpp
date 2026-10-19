@@ -6,6 +6,8 @@
 namespace EA { namespace Thread {
 class Mutex {
 public:
+    Mutex(const void* pParams, bool bDefault);   // 0x009222a0
+    ~Mutex();
     bool Lock(void* pAttribute);
     void Unlock();
 private:
@@ -60,6 +62,15 @@ public:
     InsertResult  DoInsertValue(const TextureValue& value, true_type); // 0x007ab0d0
     void*&        operator[](const ResourceKey& key);                  // 0x007ac080
     void          DoFreeNodes(void*, uint32_t);
+    TextureInstanceMap() {
+        mRehashPolicy.mfMaxLoadFactor = 1.0f;
+        mRehashPolicy.mfGrowthFactor = 2.0f;
+        mnBucketCount = 1;
+        mpBucketArray = (TextureNode**)&g_emptyBucketArray;
+        mnElementCount = 0;
+        mRehashPolicy.mnNextResize = 0;
+    }
+    ~TextureInstanceMap();
 
     char            mEmpty[4];     // +0x00
     TextureNode**   mpBucketArray; // +0x04
@@ -69,34 +80,60 @@ public:
     char            mRest[4];      // +0x1c
 };
 
+void cLoadQueueInit();   // placeholder callee so the stub is not provably nothrow
+
 class cLoadQueue {
 public:
-    cLoadQueue();                                   // 0x007ac0f0
+    __declspec(noinline) cLoadQueue();              // 0x007ac0f0
     void Schedule(void* pEntry);                    // 0x007abae0
     void*           mpManager;    // +0x00
     char            mEntry[0x40]; // +0x04
     char            mQueue[0x30]; // +0x44
 };
 
-class cTextureManager {
+// Base at +0x00 (vptr only) and base at +0x04 (vptr + refcount); both have destructors.
+class cTmBaseA {
+public:
+    virtual ~cTmBaseA();
+};
+class cTmBaseB {
+public:
+    cTmBaseB() : mRefCount(0) {}
+    virtual ~cTmBaseB();
+    int mRefCount;
+};
+struct cTmDtorMember {   // 4-byte members with destructors at +0x18 and +0x1c
+    int v;
+    cTmDtorMember() : v(0) {}
+    ~cTmDtorMember();
+};
+struct cTmListHead {     // intrusive list head at +0x50
+    cTmListHead* mpNext;
+    cTmListHead* mpPrev;
+    cTmListHead() { mpPrev = this; mpNext = this; }
+    ~cTmListHead();
+};
+
+class cTextureManager : public cTmBaseA, public cTmBaseB {
 public:
     cTextureManager();                              // 0x007ac1e0
+    virtual ~cTextureManager();
     void* CreateInstance(ResourceKey* key, void* pResource, int a, uint32_t flags, char b, ...); // 0x007ac2f0
     void* GetTextureSync(ResourceKey key, int flags);   // 0x007ac750
     void* GetTextureAsync(ResourceKey key, int flags);  // 0x007ac850
     void* StallUntilLoadedUnderLock(ResourceKey* key);  // 0x007ac8d0
     void* RegisterBuiltInGameTexture(void* p1, uint32_t flags); // 0x007ac600
 
-    char            mPad00[0x0c]; // +0x00
-    bool            mIsInitialized;
+    bool            mIsInitialized; // +0x0c
     char            mPad0d[3];
     void*           mInvalidRaster; // +0x10
     void*           mLoadingRaster; // +0x14
-    char            mPad18[8];
+    cTmDtorMember   mMember18;      // +0x18
+    cTmDtorMember   mMember1c;      // +0x1c
     EA::Thread::Mutex mMutex;       // +0x20
-    char            mPad50[8];
+    cTmListHead     mList;          // +0x50
     TextureInstanceMap mTextureInstanceMap; // +0x58
-    char            mPad78[0x20];
+    TextureInstanceMap mTextureArenas;      // +0x78
     EA::Thread::Mutex mArenaMutex;  // +0x98
     int             mNumCacheFrames;      // +0xc8
     int             mCurrentMipLodSetting; // +0xcc
@@ -126,13 +163,16 @@ extern "C" void FUN_007abc90(void)
 cLoadQueue::cLoadQueue()
 {
     // PARTIAL: EH member construction (entry vector + deque).
+    cLoadQueueInit();
     mpManager = 0;
 }
 
 // @ 0x007ac1e0
 cTextureManager::cTextureManager()
+    : mIsInitialized(false), mInvalidRaster(0), mLoadingRaster(0),
+      mMutex(0, true), mArenaMutex(0, true),
+      mNumCacheFrames(10), mCurrentMipLodSetting(0), mUnknownD0(0)
 {
-    // PARTIAL: EH base/vtable + member construction.
 }
 
 // @ 0x007ac2f0

@@ -1,1 +1,2 @@
 007ac080   ?  COMPLETE eastl::hash_map::operator[] (find + DoInsertValue on miss); frame 0x24 vs 0x1c and this/key register assignment swapped, so the whole schedule differs.; equiv: PASS (symbol entry ?ATextureInstanceMap)
+007ac1e0  24  cTextureManager::cTextureManager complete (2 bases, 9-state EH, members); store scheduling of map init + tail stores differ; cLoadQueue ctor still a stub [equiv: UNSUPPORTED (vtable store, class has undefined virtuals)]

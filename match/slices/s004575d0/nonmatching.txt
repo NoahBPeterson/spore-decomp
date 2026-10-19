@@ -1,3 +1,4 @@
 004580c0  730  ColorRGBAToU32: intrinsic (_mm_max_ss/min_ss/cvtss_si32) form bloats vs the original's compact sequence
 00457950  64   AsInterface: QueryInterface id dispatch; /Od branch/local layout not exact
 004581d0  155  Shutdown: layout refcount release and MessageServer sends not reproduced exactly
+00457af0  717  cSPEditorBudget::Init complete (economy/layout/window ARC assigns, 3 message registrations, bar-window loop with money strings, optional tooltip); call and vtable sequence follows the original, /Od frame is 0xdc vs 0x134 (hidden inline slots not reproduced) [equiv: UNSUPPORTED (0/400 valid inputs, deep object graph)]

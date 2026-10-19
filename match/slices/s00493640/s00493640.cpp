@@ -45,16 +45,46 @@ X3 operator*(const V3& v, const float& s);         // 0x0041dca0
 float VectorLength(const V3* v);                   // 0x0040ae50
 extern V3 kVecA;                                   // 0x015d6324
 extern V3 kVecB;                                   // 0x015d63f4
+extern V3 kVecB2;                                  // 0x015d6370
+
+X3 Cross2(const V3& a, const V3& b);               // 0x00454c00 (returns a member-wise-copied triple)
+void MulAssign(V3* v, const float* s);             // 0x0041dba0 (cdecl)
+extern float kNegOne;                              // 0x013eb1bc
+
+struct RwVec3 {                                    // rw::math::fpu::Vector3Template<float,0>
+    float v[3];
+    RwVec3(const void* src);                       // 0x004098a0 (thiscall, ret 4)
+    float& operator[](int i) { return v[i]; }
+};
+
+// bitset<60> as inlined at /Od: bounds check, word fetch, mask by pos % 32
+struct Bits60 {
+    unsigned w[2];
+    unsigned GetWord(unsigned pos) const { return w[pos >> 5]; }
+    bool test(unsigned pos) const {
+        if (pos < 60)
+            return (GetWord(pos) & (1u << (pos % 32))) != 0;
+        return false;
+    }
+};
+
+struct cSPEditorBlock {
+    char pad[0x138];
+    char pos138[0xc];
+    char pad144[0xdc8 - 0x144];
+    Bits60 flags;                                  // +0xdc8
+    void GetDirectionIndices(int& a, int& b, int& c);   // 0x0044c0e0 (thiscall, ret 12)
+};
 
 // forward decls
-void FUN_00493ce0(void* a, void* b, Matrix3 m);
+Matrix3* FUN_00493ce0(Matrix3* a, cSPEditorBlock* b, Matrix3 m);
 int ClassifyAgainstSymmetryPlane(V3* p, float width, float zmin, float zmax, Basis* out);
 
 // @ 0x00494270
 void* FUN_00494270(void* a, void* b) {
     unsigned hole[11];
     (void)hole;
-    FUN_00493ce0(a, b, *(Matrix3*)((char*)b + 0xa8));
+    FUN_00493ce0((Matrix3*)a, (cSPEditorBlock*)b, *(Matrix3*)((char*)b + 0xa8));
     return a;
 }
 
@@ -147,9 +177,61 @@ int ClassifyAgainstSymmetryPlane(V3* p, float width, float zmin, float zmax, Bas
     return p18;
 }
 
-// @ 0x00493ce0
-void FUN_00493ce0(void* a, void* b, Matrix3 m) {
-    (void)a;
-    (void)b;
-    (void)m;
+// @ 0x00493ce0  SP::EditorUtils::MoveBlockAndTranslateSnappedBlocks
+// Builds the block's orientation basis (binormal, axis, normal rows) into the by-value matrix and
+// returns a copy of it through the hidden return slot.
+Matrix3* FUN_00493ce0(Matrix3* a, cSPEditorBlock* b, Matrix3 m) {
+    bool flag = false;
+    if (b->flags.test(0x13) || b->flags.test(0x28))
+        flag = true;
+    bool f1;
+    f1 = b->flags.test(0x11);
+    V3 u;
+    V3 t;
+    V3 w;
+    if (f1 && flag) {
+        u = -kVecB;
+        w = kVecB2;
+        t = kVecA;
+    } else if (f1) {
+        u = kVecB2;
+        w = kVecB;
+        t = kVecA;
+    } else {
+        w = ((Basis*)&m)->operator[](1);
+        w[0] = 0.0f;
+        if (VectorLength(&w) == 0.0f)
+            w = -kVecA;
+        w = Normalize(w);
+        if (flag) {
+            t = kVecB2;
+            V3 c;
+            c = Cross2(w, t);
+            u = Normalize(c);
+        } else {
+            u = kVecB2;
+            V3 c;
+            c = Cross2(u, w);
+            t = Normalize(c);
+        }
+    }
+    Basis* mb = (Basis*)&m;
+    (*mb)[0] = u;
+    (*mb)[1] = w;
+    (*mb)[2] = t;
+    if (!flag) {
+        if (!b->flags.test(0x34)) {
+            RwVec3 pos(b->pos138);
+            if (pos[1] > 0.0f) {
+                int i0, i1, i2;
+                b->GetDirectionIndices(i0, i1, i2);
+                float k1 = kNegOne;
+                MulAssign(&(*mb)[i0], &k1);
+                float k2 = kNegOne;
+                MulAssign(&(*mb)[i2], &k2);
+            }
+        }
+    }
+    a->Assign(&m);
+    return a;
 }

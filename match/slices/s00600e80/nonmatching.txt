@@ -1,1 +1,2 @@
 00601e60  121  cSPUISettings::Shutdown: complete; the loop-over-tabs codegen (size() recomputation / register reuse) does not converge.
+00601da0  10  cSPUISettings::RemoveTab complete (erase from tab vector, unhook window, Release); only the mpLayout load is scheduled before the end-pointer store instead of after [equiv: PASS]

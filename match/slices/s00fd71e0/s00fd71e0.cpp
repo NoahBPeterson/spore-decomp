@@ -56,6 +56,9 @@ struct IMovieSystemMethods {
     virtual bool IsPlaying() = 0;                      // +0x14
     virtual void v18() = 0; virtual void v1c() = 0;
     virtual void PauseMovie() = 0;                     // +0x20
+    virtual void v24() = 0; virtual void v28() = 0; virtual void v2c() = 0;
+    virtual void v30() = 0; virtual void v34() = 0;
+    virtual void ShutdownV() = 0;                      // +0x38
 };
 
 struct IVideoOps {
@@ -106,6 +109,8 @@ struct IWindowCtl {
 
 struct EAMutex {
     uint32_t mData[0xc];
+    void Lock(void* tag);   // 0x009221b0 (thiscall, ret 4)
+    void Unlock();          // 0x00922270 (thiscall)
 };
 void EAMutex_ctor(void* p, int, int);              // 0x009222a0
 void EAMutex_dtor(void* p);                        // 0x00922130
@@ -231,6 +236,8 @@ extern float kFloat_1485378;
 extern float kFloat_13f9428;
 extern float kFloat_13f4fd0;
 extern void* g_pMutexTag;                            // 0x01493900
+extern char g_MutexTagObj;                           // 0x01493900 (address is the tag)
+struct PacketNode { PacketNode* next; PacketNode* prev; int payload; };
 
 // @ 0x00fd71e0
 void FUN_00fd71e0(int p1, int p2, int p3, int mode, IInputHandler* handler)
@@ -580,44 +587,49 @@ void cMovieSystem::StopRecordingMovie(unsigned int dtMs)
         dtMs = 100;
     MoviePlayer* pl = *(MoviePlayer**)(p + 0x34);
     if (pl != 0) {
-        float dt = (float)(int)dtMs;
+        float dt = (float)dtMs;
         *(float*)(p + 0x60) = dt * kFloat_13f9428 + *(float*)(p + 0x60);
         if (pl->CanPlay())
-            PauseMovie2();
+            ((IMovieSystemMethods*)this)->PauseMovie();
     }
     if (!*(bool*)(p + 0xa0))
         return;
     EAMutex* mx = (EAMutex*)(p + 0x70);
-    EAMutex_Lock(mx, g_pMutexTag);
-    while (*(void**)(p + 0x31c) != p + 0x31c
-           && EA_Audio_GetSystemAT() != 0) {
-        void* n = *(void**)(p + 0x320);
-        void* nn = *(void**)n;
-        void* nn2 = *(void**)((char*)n + 4);
-        *(void**)nn2 = nn;
-        *(void**)((char*)nn + 4) = nn2;
+    mx->Lock(&g_MutexTagObj);
+    IAudioSystem* au = EA_Audio_GetSystemAT();
+    while (*(void**)(p + 0x31c) != p + 0x31c && au != 0) {
+        PacketNode* n = *(PacketNode**)(p + 0x320);
+        int payload = n->payload;
+        n->prev->next = n->next;
+        n->next->prev = n->prev;
         operator_delete(n);
-        IAudioSystem* au = EA_Audio_GetSystemAT();
         au->v38_set(0x4640907);
         au->v40_call(0x4501144, 0x52de7b41);
-        au->v48_call(0x45705b8, (void*)0xfd7730);
-        
+        au->v4c_call(0x4501150, &payload, 4);
+        au->v48_call(0x45705b8, (void*)FUN_00fd7730);
+        au->v48_call(0x45706c7, this);
         au->v58();
     }
-    EAMutex_Unlock(mx);
-    float dt = (float)(int)dtMs;
-    *(float*)(p + 0x310) = dt * kFloat_13f9428 + *(float*)(p + 0x310);
+    mx->Unlock();
+    float dt = (float)dtMs;
     float frame = *(float*)(p + 0xc0) * kFloat_13f9428 * dt + *(float*)(p + 0x314);
+    *(float*)(p + 0x310) = dt * kFloat_13f9428 + *(float*)(p + 0x310);
     *(float*)(p + 0x314) = frame;
     if (frame >= 1.0f) {
-        int n = (int)frame;
-        if (frame < (float)n) --n;
+        float f = frame;
+        int r;
+        __asm {
+            movss xmm0, f
+            cvtss2si eax, xmm0
+            mov r, eax
+        }
+        int n = (f < (float)r) ? r - 1 : r;
         n = RecordFrames(n);
         *(float*)(p + 0x314) = *(float*)(p + 0x314) - (float)n;
     }
     float t = *(float*)(p + 0xc4);
     if (t > 0.0f && t < *(float*)(p + 0x310)) {
-        Shutdown();
+        ((IMovieSystemMethods*)this)->ShutdownV();
         SP_MessageServer()->PostMsg(0x62ff415, 0, 0);
     }
 }

@@ -30,7 +30,6 @@ int  Sub_7d8890(void* first, void* last, void* dest);    // uninitialized copy
 void Sub_7d90a0(void* value);                            // add to vector
 
 struct cAppModeInfo;
-cAppModeInfo* Sub_7d8740(cAppModeInfo* self, const cAppModeInfo* src);
 
 // eastl::basic_string<char,allocator> (3 pointers + allocator word)
 struct Str16 {
@@ -65,6 +64,42 @@ inline bool ModeInfoFreeName(cAppModeInfo* e) {
 inline void ModeInfoDestroy(cAppModeInfo* e) {
     ModeInfoFreeName(e);
     ModeInfoRelease(e->mpMode);
+}
+
+// Layout twin of cAppModeInfo whose members have destructors, so the copy constructor gets
+// the member-unwind state the original has.
+void* __cdecl Memmove_11e0744(void* dst, const void* src, unsigned n);   // 0x011e0744 (static CRT)
+struct RefInit {
+    void* p;
+    RefInit(void* q) : p(q) { ModeInfoAddRef(p); }
+};
+struct StrD {
+    char* mpBegin;
+    char* mpEnd;
+    char* mpCapacity;
+    int   mAlloc;
+    StrD() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~StrD() { if ((int)(mpCapacity - mpBegin) > 1 && mpBegin != 0) ea_free(mpBegin); }
+    void RangeInitialize(unsigned n);   // @ 0x00475ab0 (thiscall)
+};
+struct cAppModeInfoC {
+    RefInit  mpMode;
+    unsigned mID;
+    StrD     mName;
+    cAppModeInfoC(const cAppModeInfoC& src);   // @ 0x007d8740
+};
+
+// @ 0x007d8740
+cAppModeInfoC::cAppModeInfoC(const cAppModeInfoC& src) : mpMode(src.mpMode.p), mID(src.mID) {
+    StrD* t = &mName;
+    const char* sb = src.mName.mpBegin;
+    const char* se = src.mName.mpEnd;
+    unsigned n = se - sb;
+    t->RangeInitialize(n + 1);
+    char* d = t->mpBegin;
+    Memmove_11e0744(d, sb, n);
+    t->mpEnd = d + (se - sb);
+    *t->mpEnd = 0;
 }
 
 // @ 0x007d8830
@@ -226,7 +261,7 @@ void cApp::InsertAppMode(cAppModeInfo* position, const cAppModeInfo& value) {
         if ((char*)&value >= (char*)position && (char*)&value < (char*)mAppModesEnd)
             p = (const cAppModeInfo*)((char*)&value + 0x18);
         if (mAppModesEnd != 0)
-            Sub_7d8740(mAppModesEnd, mAppModesEnd - 1);
+            new (mAppModesEnd) cAppModeInfoC(*(cAppModeInfoC*)(mAppModesEnd - 1));
         cAppModeInfoAssignBackward(position, mAppModesEnd - 1, mAppModesEnd);
         position->operator=(*p);
         mAppModesEnd = mAppModesEnd + 1;
@@ -237,7 +272,7 @@ void cApp::InsertAppMode(cAppModeInfo* position, const cAppModeInfo& value) {
         size_type posIndex = (size_type)((char*)position - (char*)mAppModesBegin);
         cAppModeInfo* mid = (cAppModeInfo*)Sub_7d8890(mAppModesBegin, position, newBuf);
         cAppModeInfoDestroyRange(mAppModesBegin, position);
-        Sub_7d8740(mid, &value);
+        new (mid) cAppModeInfoC(*(const cAppModeInfoC*)&value);
         cAppModeInfo* end = (cAppModeInfo*)Sub_7d8890(position, mAppModesEnd, mid + 1);
         cAppModeInfoDestroyRange(position, mAppModesEnd);
         if (mAppModesBegin != 0 && ((int*)mAppModesBegin)[-1] != 0)
