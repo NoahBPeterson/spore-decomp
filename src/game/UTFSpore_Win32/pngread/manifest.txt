@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/pngread.cpp  ?PNGREAD_free@@YAXPAUpng_struct_def@@PAX@Z  0084de50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/pngread.cpp  ?PNG_about@@YAPAXXZ  0084de60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/pngread.cpp  ?PNG_read_rgba@@YGHPAUPngHandle@@PAUGimexInfo@@PAEH@Z  0084e3c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/pngread.cpp  ?PNG_rclose@@YGHH@Z  0084e4e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

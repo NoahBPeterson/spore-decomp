@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+0084dcd0 331 PNG_read_gimex complete; equiv UNSUPPORTED (import _setjmp3 cannot be simulated). Only register/scheduling allocation differs (loop index/row pointer kept in memory vs regs); identical call sequence and control flow.
+0084df40 24 PNG_check_sig complete; equiv PASS (399 valid, 87.9% cov). The second png_check_sig(...)!=0 test is folded to neg/sbb/and (branchless) instead of the original branch/`mov eax,0x32`.
+0084dfa0 219 PNG_ropen complete; equiv UNSUPPORTED (import _setjmp3). Original reuses esi for h and pair and keeps edi as the constant zero; ours pins pair in edi and the zero in ebx (extra callee-saved reg).
+0084e0d0 645 PNG_read complete; equiv PASS (226 valid, 66.8% cov). Switch/jump-table prologue, grayscale ramp and BGRA palette loops differ in register allocation only.
