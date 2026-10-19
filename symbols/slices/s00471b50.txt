@@ -1,1 +1,2 @@
+00471b50 ?AddInitialBoundInfo@EditorUtils@SP@@YAXPAVcEditorResource@2@PAVcPropertyList@2@@Z  # SP::EditorUtils::AddInitialBoundInfo migrated from s00471b50
 00472540 ??1RefHolderB@@QAE@XZ  # RefHolderB::~RefHolderB migrated from s00471b50 (verbatim, slice spelling)

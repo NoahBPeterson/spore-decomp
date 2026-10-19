@@ -1,4 +1,4 @@
-// src/game/SPBake/SPEditorExportUtilities.cpp -- migrated from slice(s) s00471b50, s00470bd0, s0046ff00, s0046f2a0, s0046e450, s0046d660, s0046c900, s0046c000, s0046b8e0, s0046aac0, s00469bb0, s00469500, s004680c0, s00466e20, s00466320, s004655e0, s00464bb0, s004629e0 by tools/migrate/rewrite.py
+// src/game/SPBake/SPEditorExportUtilities.cpp -- migrated from slice(s) s00467a20, s00464300, s00461680, s004614b0, s004604f0, s00471b50, s00470bd0, s0046ff00, s0046f2a0, s0046e450, s0046d660, s0046c900, s0046c000, s0046b8e0, s0046aac0, s00469bb0, s00469500, s004680c0, s00466e20, s00466320, s004655e0, s00464bb0, s004629e0 by tools/migrate/rewrite.py
 // Object file: SPBake/SPEditorExportUtilities.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -484,8 +484,6 @@ struct cBlockGeometryExporter {
                 EA::RectT_s0046_4bb0<float>& uvRect, unsigned int id, bool flag);
 };
 
-
-
 }  // namespace
 // ---- items of slice s00464bb0 end
 
@@ -576,8 +574,6 @@ struct cBlockGeometryExporter_s0046_55e0 {
 
     void BuildBoundingBoxGeometry(SP::cSPEditorBlock_s0046_55e0* block);
 };
-
-
 
 } // anonymous namespace
 // ---- items of slice s004655e0 end
@@ -2399,8 +2395,16 @@ struct cPropertyList_s0046_e450 {
     virtual int Release();
 };
 struct IPropertyManager_s0046_e450 {
-    virtual void pv0(); virtual void pv1(); virtual void pv2(); virtual void pv3(); virtual void pv4();
-    virtual void pv5(); virtual void pv6(); virtual void pv7(); virtual void pv8(); virtual void pv9();
+virtual void pv0();
+virtual void pv1();
+virtual void pv2();
+virtual void pv3();
+virtual void pv4();
+virtual void pv5();
+virtual void pv6();
+virtual void pv7();
+virtual void pv8();
+virtual void pv9();
     virtual void pv10();
     virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, cPropertyList_s0046_e450*& result);
 };
@@ -2954,6 +2958,312 @@ struct RefHolderB {
 };
 // ---- items of slice s00471b50 end
 
+// ---- items of slice s004604f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
+    extern float g_f1485720; // 0x01485720
+    extern float g_f13eecd8; // 0x013eecd8
+    extern float g_f13ec480; // 0x013ec480
+    extern float g_f1471064; // 0x01471064
+#pragma intrinsic(_InterlockedExchange)
+struct RefCounted {
+    char         pad[8];
+    volatile long mnRefCount;
+    int AddRef();
+};
+struct Vec3_s0046_04f0 { float x, y, z; Vec3_s0046_04f0() {} Vec3_s0046_04f0(const Vec3_s0046_04f0& o) { x = o.x; y = o.y; z = o.z; } };
+extern Vec3_s0046_04f0* __cdecl Vector3_Add(Vec3_s0046_04f0* a, const Vec3_s0046_04f0* b);                           // 0x41ddb0
+extern Vec3_s0046_04f0* __cdecl Vector3_Sub(Vec3_s0046_04f0* out, const Vec3_s0046_04f0* a, const Vec3_s0046_04f0* b);          // 0x41db10
+extern Vec3_s0046_04f0* __cdecl Vector3_Scale(Vec3_s0046_04f0* out, const Vec3_s0046_04f0* a, const float* s);       // 0x41dca0
+struct Bone {
+    char  pad0[4];
+    short parent;      // +4
+    char  pad1[0x26];
+    float weight;      // +0x2c
+    char  pad2[0x24];
+    Vec3_s0046_04f0  pos;         // +0x54
+    char  pad3[0x8c - 0x60];
+};
+void* operator new(unsigned n, const char* name, int, int, int, int);   // 0xf473a0
+struct MatInfo {
+    char  pad[0xc];
+    char  kind;       // +0xc
+    char  pad1[3];
+    float f10, f14, f18, f1c;
+    MatInfo();        // 0x432cf0
+};
+struct IRef { virtual void v0(); virtual void Release(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+              virtual bool GetProperty(unsigned key, struct Property_s0046_04f0** out); };
+struct Property_s0046_04f0 {
+    char pad[0x12];
+    unsigned short type;
+    int* __thiscall GetInt();  // 0x0041e990 (Property::GetInt)
+};
+struct PropMgr3 {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+    virtual bool GetPropertyList(unsigned id, unsigned group, IRef** out);   // +0x2c
+};
+struct ShaderRes {
+    char pad[0x70];
+    ShaderRes();                                       // 0x40d010
+    void __thiscall InsertResource(int slot, int res); // 0x77cb10
+    void __thiscall setSlotU0(int slot, int v);        // 0x777a60
+    void __thiscall setSlotU1(int slot, int v);        // 0x777a80
+    void __thiscall setSlotV0(int slot, int v);        // 0x777aa0
+    void __thiscall setSlotV1(int slot, int v);        // 0x777ac0
+};
+struct ResMgr { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+                virtual int GetResource(unsigned key, int a, int b); };   // +0x20
+extern PropMgr3* __cdecl GetPropertyManager3();   // 0x67de30
+extern ResMgr* __cdecl GetResMgr();               // 0x67dd60
+struct PtrVector { void __thiscall PushBack(void* p); };   // 0x77d970
+struct C472660 { char pad[0xc]; C472660(); };   // 0x472660
+struct C4726d0 { char pad[0xc]; C4726d0(); };   // 0x4726d0
+// ---- items of slice s004604f0 end
+
+// ---- items of slice s004614b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern unsigned char g_byte_15d3c30;
+extern "C" void  FUN_009fc0f0(void* p);               // 0x9fc0f0
+extern "C" void  FUN_0052a400(int a, unsigned int b, unsigned int c, int d, int e, int f); // 0x52a400
+extern "C" void  FUN_00473300(void* p);               // 0x473300
+extern "C" void  WString_FreeBuffer(void* p);         // 0x4237d0
+extern "C" void  Counted_Release(void* p);            // 0x40f360
+extern "C" void* LowerBound12(void* start, void* end, const void* key, int flag); // 0x422430
+extern char g_table_150c050;
+extern int  g_count_13ec430;
+struct TableEntry {
+    int         key;
+    const char* name;
+    char        pad[4];
+};
+struct IRefObj {
+    virtual void v0();
+    virtual void Release();   // +0x04
+};
+struct Holder {
+    char  pad0[4];
+    char  str[0x24];     // +0x04  (string buffer)
+    char  sub[0x14];     // +0x28
+    void* p3c;           // +0x3c
+    char  pad40[4];
+    IRefObj* p44;        // +0x40
+    void Dtor();
+};
+union Bits {
+    unsigned int raw;
+    struct {
+        unsigned int lo : 8;
+        unsigned int mid : 8;
+        unsigned int hi : 16;
+    } f;
+};
+// ---- items of slice s004614b0 end
+
+// forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
+namespace SP { namespace EditorUtils { void AddInitialBoundInfo(SP::cEditorResource * a1, SP::cPropertyList * a2); } }   // defined at 0x00471b50, called earlier in the TU
+
+// @ 0x004604f0
+void BuildCreatureMaterialInfo(PtrVector* out, unsigned id, int tex0, int tex1, int unused, char skipLookup)
+{
+    MatInfo* mi = new ("Editor", 0, 0, 0, 0) MatInfo();
+    mi->f18 = g_f1485720;
+    mi->f10 = g_f13eecd8;
+    mi->f14 = g_f13ec480;
+    mi->f1c = g_f1471064;
+    if (id == 0x3d97a8e4) {
+        mi->kind = 4;
+    } else if (id == 0x438f6347) {
+        mi->kind = 5;
+    } else {
+        int level = 2;
+        if (!skipLookup) {
+            unsigned key = 0x4529f96f;
+            unsigned group = 0x40626200;
+            IRef* list = 0;
+            PropMgr3* pm = GetPropertyManager3();
+            if (list) {
+                IRef* t = list;
+                list = 0;
+                t->Release();
+            }
+            if (pm->GetPropertyList(key, group, &list)) {
+                IRef* l = list;
+                if (l) {
+                    Property_s0046_04f0* prop;
+                    if (l->GetProperty(0x4c6ba3c, &prop)) {
+                        if (prop->type == 9) level = *prop->GetInt();
+                    }
+                }
+            }
+            if (list) list->Release();
+        }
+        if (level >= 2) mi->kind = 7; else mi->kind = 6;
+    }
+    out->PushBack(mi);
+    int flag = tex0 != 0;
+    if (mi->kind == 4) {
+        ShaderRes* sr = new ("Editor", 0, 0, 0, 0) ShaderRes();
+        int r2 = GetResMgr()->GetResource(0x552a5077, 0, 0);
+        sr->InsertResource(0, tex0);
+        sr->setSlotU0(0, 3); sr->setSlotU1(0, 2); sr->setSlotV0(0, 2); sr->setSlotV1(0, flag);
+        sr->InsertResource(1, tex1);
+        sr->setSlotU0(1, 3); sr->setSlotU1(1, 2); sr->setSlotV0(1, 2); sr->setSlotV1(1, flag);
+        sr->InsertResource(2, r2);
+        sr->setSlotU0(2, 3); sr->setSlotU1(2, 2); sr->setSlotV0(2, 2); sr->setSlotV1(2, flag);
+        out->PushBack(sr);
+    } else if (mi->kind == 7 || mi->kind == 5) {
+        ShaderRes* sr = new ("Editor", 0, 0, 0, 0) ShaderRes();
+        sr->InsertResource(0, tex0);
+        sr->setSlotU0(0, 1); sr->setSlotU1(0, 2); sr->setSlotV0(0, 2); sr->setSlotV1(0, flag);
+        sr->InsertResource(1, tex1);
+        sr->setSlotU0(1, 3); sr->setSlotU1(1, 2); sr->setSlotV0(1, 2); sr->setSlotV1(1, flag);
+        out->PushBack(sr);
+    } else if (mi->kind == 6) {
+        ShaderRes* sr = new ("Editor", 0, 0, 0, 0) ShaderRes();
+        sr->InsertResource(0, tex0);
+        sr->setSlotU0(0, 1); sr->setSlotU1(0, 2); sr->setSlotV0(0, 2); sr->setSlotV1(0, flag);
+        out->PushBack(sr);
+    }
+    if (id == 0x2b978c46) {
+        out->PushBack(new ("Editor", 0, 0, 0, 0) C472660());
+    } else if (id == 0x3d97a8e4) {
+        out->PushBack(new ("Editor", 0, 0, 0, 0) C4726d0());
+    }
+}
+
+// @ 0x00460a80
+int FUN_00460a80(int verts, int target, int* ids, int count)
+{
+    int out = 0;
+    int i = 0;
+    while (i < count) {
+        if (target == *(short*)(verts + ids[i] * 4)) {
+            int id = ids[i];
+            ids[i] = ids[out];
+            ids[out] = id;
+            out = out + 1;
+            int n = FUN_00460a80(verts, id, ids + out, count - out);
+            out = n + out;
+        }
+        int nxt = i + 1;
+        int* chosen;
+        if (nxt < out) {
+            chosen = &out;
+        } else {
+            chosen = &nxt;
+        }
+        i = *chosen;
+    }
+    return out;
+}
+
+// @ 0x00460b50
+void FUN_00460b50(Bone* bones, int count, int root, Vec3_s0046_04f0 offs)
+{
+    for (int i = root + 1; i < count; i++) {
+        if (bones[i].parent == root) {
+            Vector3_Add(&bones[i].pos, &offs);
+            FUN_00460b50(bones, count, i, offs);
+        }
+    }
+}
+
+// @ 0x00460bf0
+void FUN_00460bf0(Bone* bones, int count, int root, float t)
+{
+    bones[root].weight = bones[root].weight * t;
+    for (int i = root + 1; i < count; i++) {
+        if (bones[i].parent == root) {
+            Vec3_s0046_04f0 n28;
+            int v2;
+            Vec3_s0046_04f0* hi = Vector3_Sub(&n28, &bones[root].pos, &bones[i].pos);
+            Vec3_s0046_04f0 p30;
+            p30.x = hi->x; p30.y = hi->y; p30.z = hi->z;
+            float key = 1.0f - t;
+            Vec3_s0046_04f0 v9;
+            Vector3_Add(&bones[i].pos, Vector3_Scale(&v9, &p30, &key));
+            FUN_00460b50(bones, count, i, p30);
+        }
+    }
+}
+
+// @ 0x00461290
+int RefCounted::AddRef()
+{
+    return _InterlockedIncrement(&mnRefCount);
+}
+
+// @ 0x004614b0
+void Holder::Dtor()
+{
+    if (p44 != 0) {
+        p44->Release();
+    }
+    if (p3c != 0) {
+        Counted_Release(p3c);
+    }
+    FUN_00473300(sub);
+    WString_FreeBuffer(str);
+    return;
+}
+
+// @ 0x00461510
+unsigned char GetGlobalFlag()
+{
+    return g_byte_15d3c30;
+}
+
+// @ 0x00461520
+const char* LookupName(int key)
+{
+    TableEntry* start = (TableEntry*)&g_table_150c050;
+    TableEntry* end = (TableEntry*)((char*)&g_table_150c050 + g_count_13ec430 * 0xc);
+    TableEntry* it = (TableEntry*)LowerBound12(start, end, &key, 0);
+    TableEntry* found = end;
+    if (it != end && !(key < it->key)) {
+        found = it;
+    }
+    if (found == end) {
+        return "unknown";
+    }
+    return found->name;
+}
+
+// @ 0x004615b0
+void UseName(int key)
+{
+    void* p = (void*)LookupName(key);
+    FUN_009fc0f0(p);
+    return;
+}
+
+// @ 0x004615e0
+void RegisterCreatureModels(int a, unsigned int flags, int c, int d, int e)
+{
+    Bits x;
+    x.raw = flags;
+    x.f.mid = 0x29;
+    x.f.lo = 1;
+    Bits y;
+    y.raw = flags;
+    y.f.mid = 0x29;
+    y.f.lo = 0;
+    FUN_0052a400(a, y.raw, x.raw, c, d, e);
+    return;
+}
+
 // @ 0x004629e0
 namespace SP { namespace EditorUtils {
 bool ExportToXMFAndBlocks(EditorModel* model, EditorCreatureData* data, const wchar_t* dir)
@@ -3208,21 +3518,25 @@ bool ExportToXMFAndBlocks(EditorModel* model, EditorCreatureData* data, const wc
 }
 }}  // namespace SP::EditorUtils
 
+// @ 0x00464300
+void F_00464300()
+{}
 
+// @ 0x00464480
+void F_00464480()
+{}
 
+// @ 0x00464580
+void F_00464580()
+{}
 
+// @ 0x00464680
+void F_00464680()
+{}
 
-
-
-
-
-
-
-
-
-
-
-
+// @ 0x004647b0
+void F_004647b0()
+{}
 
 // @ 0x00464bb0
 void cBlockGeometryExporter::Export(nSPSkinner::cExportHelper_s0046_4bb0& helper, SP::cSPEditorBlock_s0046_4bb0* block, EA::RectT_s0046_4bb0<float>& uvRect, unsigned int id, bool flag)
@@ -3350,21 +3664,6 @@ void cBlockGeometryExporter::Export(nSPSkinner::cExportHelper_s0046_4bb0& helper
                          12, 12, 8);
     ScratchSlots<8>();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004655e0
 void cBlockGeometryExporter_s0046_55e0::BuildBoundingBoxGeometry(SP::cSPEditorBlock_s0046_55e0* block)
@@ -3523,20 +3822,6 @@ void cBlockGeometryExporter_s0046_55e0::BuildBoundingBoxGeometry(SP::cSPEditorBl
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00466690
 namespace SP { namespace EditorUtils {
 void ExportBakedModelToXMF(EditorModel* model, const wchar_t* dir, ResourceKey* key)
@@ -3600,19 +3885,6 @@ void ExportBakedModelToXMF(EditorModel* model, const wchar_t* dir, ResourceKey* 
     }
 }
 }}  // namespace SP::EditorUtils
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00466e20
 void MeshAccum_s0046_6e20::Export(cExportHelper_s0046_6e20* helper, const ModelVec_s0046_6e20& models)
@@ -3712,37 +3984,11 @@ void MeshAccum_s0046_6e20::Export(cExportHelper_s0046_6e20* helper, const ModelV
                           mPositions.size(), mIndices.size() / 3, 0xc, 0xc, 8);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00467980
 unsigned int ArrF::get(int i)
 {
     return *(unsigned int*)(data + stride * i) & maskTable[maskIdx];
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004679b0
 int ArrG::f()
@@ -3757,17 +4003,13 @@ int ArrG::f()
     return (v9 + t10) / cap;
 }
 
+// @ 0x00467a20
+void F_00467a20()
+{}
 
-
-
-
-
-
-
-
-
-
-
+// @ 0x00467ef0
+void F_00467ef0()
+{}
 
 // @ 0x004680c0
 bool MeshUploadJob::Run(cJob* pDependency)
@@ -3879,17 +4121,6 @@ bool MeshUploadJob::Run(cJob* pDependency)
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00469500
 S45a::S45a(int a_, int b_, int c_, int d_, int e_)
 : a(a_), b(b_), c(c_), d(d_), sub(e_)
@@ -3897,17 +4128,6 @@ S45a::S45a(int a_, int b_, int c_, int d_, int e_)
     int hole_;
     (void)hole_;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00469550
 S45b* S45b::init(int a_, int b_, int c_, int d_, int e_)
@@ -3920,16 +4140,9 @@ S45b* S45b::init(int a_, int b_, int c_, int d_, int e_)
     return this;
 }
 
-
-
-
-
-
-
-
-
-
-
+// @ 0x00469590
+void F_00469590()
+{}
 
 // @ 0x004696d0
 S45c& S45c::operator=(const S45c& o)
@@ -3944,15 +4157,13 @@ S45c& S45c::operator=(const S45c& o)
     return *this;
 }
 
+// @ 0x00469790
+void F_00469790()
+{}
 
-
-
-
-
-
-
-
-
+// @ 0x00469920
+void F_00469920()
+{}
 
 // @ 0x00469bb0
 void BuildEditorCreature(EdCtx* ed, KeyArg* key, int p3, uint32_t p4, uint32_t p5, CJob* p6)
@@ -4024,15 +4235,9 @@ void BuildEditorCreature(EdCtx* ed, KeyArg* key, int p3, uint32_t p4, uint32_t p
         job3.mp->Release();
 }
 
-
-
-
-
-
-
-
-
-
+// @ 0x0046a510
+void F_0046a510()
+{}
 
 // @ 0x0046a630
 S630::S630(const S630& o)
@@ -4042,15 +4247,9 @@ S630::S630(const S630& o)
     ScratchSlots_s0046_9bb0<4>();
 }
 
-
-
-
-
-
-
-
-
-
+// @ 0x0046a750
+void F_0046a750()
+{}
 
 // @ 0x0046a7c0
 // M18real copy constructor (implicit): the forcing function below makes the compiler emit it out of line
@@ -4061,14 +4260,13 @@ void rwForceEmit_M18real_copy(const M18real& s)
 }
 #pragma auto_inline(on)
 
-
-
-
-
-
-
-
-
+// @ 0x0046a8a0
+namespace SP {
+namespace EditorUtils {
+void MakeBabyRuntimeCreature(SP::cRuntimeCreatureResource * a1)
+{}
+}
+}  // namespace SP::EditorUtils
 
 // @ 0x0046aac0
 void BuildRuntimeCreature(Editor* ed, MakeOutput* out, bool baby, ThreadedObject** pJob)
@@ -4181,15 +4379,6 @@ void BuildRuntimeCreature(Editor* ed, MakeOutput* out, bool baby, ThreadedObject
     out->bIsVerbCollection = isVerb;
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x0046b460
 void ReplaceModelsWithCopies(ModelListObj* self)
 {
@@ -4228,15 +4417,6 @@ void ReplaceModelsWithCopies(ModelListObj* self)
     }
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x0046b7b0
 bool BlockOrAncestorHasFlag(Block* b)
 {
@@ -4247,14 +4427,6 @@ bool BlockOrAncestorHasFlag(Block* b)
     else
         return BlockOrAncestorHasFlag(b->GetParent());
 }
-
-
-
-
-
-
-
-
 
 // @ 0x0046b8e0
 extern "C" Vector3T* FUN_0046b8e0(Vector3T* out, cSPEditorModel* model, int flags)
@@ -4332,27 +4504,12 @@ extern "C" Vector3T* FUN_0046b8e0(Vector3T* out, cSPEditorModel* model, int flag
     return out;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x0046bfd0
 int FUN_0046bfd0(int a, int b)
 {
     FUN_0046b8e0((Vector3T*)a, (cSPEditorModel*)b, ((Tbfd*)b)->m());
     return a;
 }
-
-
-
-
-
-
-
 
 // @ 0x0046c000
 Vector3Copyable GetTranslationOffset(BoxVec* boxes, EditorModel_s0046_c000* model, Creature_s0046_c000* creature)
@@ -4458,12 +4615,6 @@ Vector3Copyable GetTranslationOffset(BoxVec* boxes, EditorModel_s0046_c000* mode
     }
     return result;
 }
-
-
-
-
-
-
 
 // @ 0x0046c900
 namespace SP { namespace EditorUtils {
@@ -4617,11 +4768,6 @@ void CreateExportCreatureModel(cSkin* pSkin, const wchar_t* modelpath, ExportMod
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
-
-
 // @ 0x0046d660
 float* FUN_0046d660(float* out, const float* m)
 {
@@ -4634,9 +4780,21 @@ float* FUN_0046d660(float* out, const float* m)
     return out;
 }
 
+// @ 0x0046d6c0
+void F_0046d6c0()
+{}
 
+// @ 0x0046d840
+void F_0046d840()
+{}
 
+// @ 0x0046dad0
+void F_0046dad0()
+{}
 
+// @ 0x0046de70
+void F_0046de70()
+{}
 
 // @ 0x0046e450
 namespace SP { namespace EditorUtils {
@@ -4694,10 +4852,6 @@ void ExportCreatureBlocksFile(const wchar_t* baseName, CreatureBlocks* data)
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
-
 // @ 0x0046eae0
 namespace SP { namespace EditorUtils {
 void DumpEditorModelZPR(EditorModelSource* src, const wchar_t* name)
@@ -4728,10 +4882,6 @@ void DumpEditorModelZPR(EditorModelSource* src, const wchar_t* name)
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
-
 // @ 0x0046f140
 Desc* Desc::init(int a_, int b_, BaseDesc* r_, int)
 {
@@ -4745,10 +4895,6 @@ Desc* Desc::init(int a_, int b_, BaseDesc* r_, int)
         (*local)->v0();
     return this;
 }
-
-
-
-
 
 // @ 0x0046f1f0
 Desc* Desc::init0()
@@ -4764,10 +4910,6 @@ Desc* Desc::init0()
     return this;
 }
 
-
-
-
-
 // @ 0x0046f260
 int __fastcall FUN_0046f260(Sf260* p)
 {
@@ -4775,9 +4917,6 @@ int __fastcall FUN_0046f260(Sf260* p)
         FUN_0067dd60()->v13(p);
     return p->field0;
 }
-
-
-
 
 // @ 0x0046f2a0
 bool DumpZPR(RefVector_s0046_f2a0 meshesIn, SpriteTexture* tex, const wchar_t* fullPath)
@@ -4850,9 +4989,6 @@ bool DumpZPR(RefVector_s0046_f2a0 meshesIn, SpriteTexture* tex, const wchar_t* f
     return true;
 }
 
-
-
-
 // @ 0x0046f8a0
 void DumpZPR_M0(FILE* f, RefVector_s0046_f2a0 meshesIn, int& numPrimTris, IntVector_s0046_f2a0& vertOffsets, IntVector_s0046_f2a0& primOffsets)
 {
@@ -4924,8 +5060,6 @@ void DumpZPR_M0(FILE* f, RefVector_s0046_f2a0 meshesIn, int& numPrimTris, IntVec
     }
     (void)kZPRFF;
 }
-
-
 
 // @ 0x0046ff00
 void ExportModelTriangles(FILE* file, ModelRefVector models, int unused, const int& triangleCount, const IntVector_s0046_ff00& vertexBase, const IntVector_s0046_ff00& triangleBase, bool perModelID)
@@ -5047,7 +5181,6 @@ void ExportModelTriangles(FILE* file, ModelRefVector models, int unused, const i
     fclose(file);
 }
 
-
 // @ 0x00470bd0
 Vec2_s0047_0bd0* FUN_00470bd0(Vec2_s0047_0bd0* out, Box* a, int na, Box* b, int nb, float z)
 {
@@ -5087,7 +5220,6 @@ Vec2_s0047_0bd0* FUN_00470bd0(Vec2_s0047_0bd0* out, Box* a, int na, Box* b, int 
     return out;
 }
 
-
 // @ 0x00470f20
 float FUN_00470f20(Vec4* p)
 {
@@ -5095,7 +5227,6 @@ float FUN_00470f20(Vec4* p)
     float r = Max2(p, 2, 3);
     return MaxF(l, r);
 }
-
 
 // @ 0x00471000
 namespace SP { namespace EditorUtils {
@@ -5212,7 +5343,6 @@ void AddInitialBoundInfo(u64* ids, Box* boxes, int count, int unused, IPropList_
 }
 }}  // namespace SP::EditorUtils
 
-
 // @ 0x00471830
 void FUN_00471830(Editor_s0047_0bd0* self, IPropList_s0047_0bd0* pl)
 {
@@ -5251,6 +5381,14 @@ void FUN_00471830(Editor_s0047_0bd0* self, IPropList_s0047_0bd0* pl)
     for (char* p = (char*)boxes.mpBegin; p < (char*)boxes.mpEnd; p += 0x18) {}
     boxes.Free();
 }
+
+// @ 0x00471b50
+namespace SP {
+namespace EditorUtils {
+void AddInitialBoundInfo(SP::cEditorResource * a1, SP::cPropertyList * a2)
+{}
+}
+}  // namespace SP::EditorUtils
 
 // @ 0x00472540
 RefHolderB::~RefHolderB()

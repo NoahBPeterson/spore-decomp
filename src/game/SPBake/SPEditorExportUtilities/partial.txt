@@ -1,1 +1,19 @@
 # va  reason
+00464300 ctor zero-initializing several container members and calling sub-ctors; layout unknown
+00464480 destructor: several inlined vector-destroy loops + member dtors; container types unknown
+00464580 ctor zero-initializing several 0x14-byte container members; layout unknown
+00464680 destructor: inlined vector-destroy loops + member dtors; container types unknown
+004647b0 1014-byte /Od function; only skeleton written
+00467a20 1205-byte /Od function; only skeleton written
+00467ef0 457-byte /Od function (part placement / vector pushes); only skeleton written
+00469590 large ctor with several inlined base vtables at +0/+4 and member ctors; class hierarchy not recovered
+00469790 destructor calls a long sequence of member dtors / inline vector-destroy loops; container types unknown
+00469920 reflection property-registration body (PropertyManager vtable calls + EA new cPropertyList); only skeleton written
+0046a510 copy-ctor-shaped with two inline base vtables at +0/+4 and MI base adjust; layout not recovered
+0046a750 base copy ctor with inlined polymorphic base vtable chain and atomic xchg refcount init; hierarchy not recovered
+0046a8a0 541-byte /Od function; only skeleton written
+0046d6c0 376-byte /Od function; only skeleton written
+0046d840 656-byte /Od function; only skeleton written
+0046dad0 924-byte /Od function; only skeleton written
+0046de70 1497-byte /Od function; only skeleton written
+00471b50 SP::EditorUtils::AddInitialBoundInfo: 2KB+ stack frame with local Transform/array scratch; only skeleton written

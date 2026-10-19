@@ -1,1 +1,5 @@
 0046d660 ?FUN_0046d660@@YAPAMPAMPBM@Z  # FUN_0046d660 migrated from s0046d660 (verbatim, slice spelling)
+0046d6c0 ?F_0046d6c0@@YAXXZ  # F_0046d6c0 migrated from s0046d660 (verbatim, slice spelling)
+0046d840 ?F_0046d840@@YAXXZ  # F_0046d840 migrated from s0046d660 (verbatim, slice spelling)
+0046dad0 ?F_0046dad0@@YAXXZ  # F_0046dad0 migrated from s0046d660 (verbatim, slice spelling)
+0046de70 ?F_0046de70@@YAXXZ  # F_0046de70 migrated from s0046d660 (verbatim, slice spelling)

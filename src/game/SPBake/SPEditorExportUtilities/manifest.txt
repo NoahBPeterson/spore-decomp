@@ -1,4 +1,8 @@
 # source  symbol  va  flags
+../src/game/SPBake/SPEditorExportUtilities.cpp  ?FUN_00460b50@@YAXPAUBone@@HHUVec3_s0046_04f0@@@Z  00460b50  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorExportUtilities.cpp  ?AddRef@RefCounted@@QAEHXZ  00461290  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorExportUtilities.cpp  ?GetGlobalFlag@@YAEXZ  00461510  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorExportUtilities.cpp  ?UseName@@YAXH@Z  004615b0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?Export@cBlockGeometryExporter@?A0xc0b312ee@@QAEXAAVcExportHelper_s0046_4bb0@nSPSkinner@@PAVcSPEditorBlock_s0046_4bb0@SP@@AAU?$RectT_s0046_4bb0@M@EA@@I_N@Z  00464bb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?get@ArrF@@QAEIH@Z  00467980  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?f@ArrG@@QAEHXZ  004679b0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include

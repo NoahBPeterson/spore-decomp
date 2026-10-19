@@ -1,4 +1,10 @@
 # va  diff-bytes  reason
+4604f0 944 BuildCreatureMaterialInfo complete (all three shader-state blocks, property lookup, extra ctor pushes); /Od frame/temp slot layout differs
+460a80 170 recursive batch reorder; reference-temp frame differs
+460bf0 6 complete; one reserved 4-byte hole between locals not reproduced (frame 0x3c vs 0x38); needs /fp:fast; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; difftest FAIL is a checker artifact: the checker took only the loose /fp:fast token from this reason and compiled ours at /O2 (which stores 1-t into t's own argument slot, so the pointer passed to FUN_0041dca0 is not normalised to STK); with the slice's real flags it is PASS (324 valid, 100% coverage)
+4614b0 78 holder destructor; member layout inferred, inline release codegen differs
+461520 74 table lower_bound lookup; /Od frame/index math differs
+4615e0 96 SP::EditorUtils::RegisterCreatureModels bitfield packing; constant folding differs
 004629e0 5299 complete source (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-); same 93 calls, /Od name-hash frame slots and inline-accessor temp slots differ (frame 0x2524 vs 0x2724)
 004655e0 1939 (anon)::cBlockGeometryExporter::BuildBoundingBoxGeometry (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): complete reconstruction (bbox corners, transform, 24 UVs, 6 faces of positions/normals/indices), identical 120-call sequence incl. the 7 out-of-line Vector3 copy ctors; not exact: /Od stack-slot layout (frame 0x330 vs 0x464), and the 5 inlined copy-ctor expansions are spelled as an explicit inline helper
 00466690 108 ExportBakedModelToXMF: complete, every instruction matches; /Od frame is 0x64 bytes smaller (a 4-dword and a 21-dword inline-callee hole between the temp blocks, plus one named instArg slot that is a temp in the original)

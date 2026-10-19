@@ -1,4 +1,7 @@
 0040efa0 ?Invert@cSPTransform@@QAEXXZ  # cSPTransform::Invert (callee of s00469bb0, named from the dev publics; slice address comment)
 00469bb0 ?BuildEditorCreature@@YAXPAUEdCtx@@PAUKeyArg@@HIIPAUCJob@@@Z  # BuildEditorCreature migrated from s00469bb0 (verbatim, slice spelling)
+0046a510 ?F_0046a510@@YAXXZ  # F_0046a510 migrated from s00469bb0 (verbatim, slice spelling)
 0046a630 ??0S630@@QAE@ABU0@@Z  # S630::S630 migrated from s00469bb0 (verbatim, slice spelling)
+0046a750 ?F_0046a750@@YAXXZ  # F_0046a750 migrated from s00469bb0 (verbatim, slice spelling)
 0046a7c0 ??0M18real@@QAE@ABU0@@Z  # M18real::M18real migrated from s00469bb0 (verbatim, slice spelling)
+0046a8a0 ?MakeBabyRuntimeCreature@EditorUtils@SP@@YAXPAVcRuntimeCreatureResource@2@@Z  # SP::EditorUtils::MakeBabyRuntimeCreature migrated from s00469bb0
