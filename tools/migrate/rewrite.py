@@ -3909,6 +3909,7 @@ class Rewrite:
             tu = W(*self.tu_rel.split("/"))
             os.makedirs(os.path.dirname(tu), exist_ok=True)
             self.drop_annotation_dummies(tu)
+            self.drop_orphan_instantiations(fns, tu)
             self.rename_shadowed_stubs(fns)
             self.resolve_conflicts(fns, tu)
             pre = self.render_preamble(fns)
@@ -4489,6 +4490,29 @@ class Rewrite:
                 real = re.compile(r"(?<![\w:.>])%s\s*\((?!\s*\.\.\.\s*\))" % re.escape(n))
                 if any(real.search(t2) for t2 in texts if t2 is not mt) or real.search(old):
                     self.notes.append(("annotation-dummy", "%s(...) dropped: the slice or the TU declares %s" % (n, n)))
+                    continue
+            keep.append((kind, text))
+        self.items = keep
+
+    INST_RE = re.compile(r"^\s*template\s+(?!<)[^;{}]*?\b([A-Za-z_]\w*)\s*<[^;{}]*>\s*\([^;{}]*\)\s*;")
+
+    def drop_orphan_instantiations(self, fns, tu):
+        """`template cSPPaletteItem** find<..>(..);` after the slice's own `template <..> It find(..) {..}`: the statement goes to
+        the preamble (trailing lines of a chunk), but when the template's chunk is not landed here (another object, or none)
+        nothing defines `find` in the TU: C2143 (mig9 s005c0c00 0x5c1cc0, SPEditorPaintLikeThis, 20 functions held).  An
+        explicit function-template instantiation whose template the SLICE defines is dropped unless a landed function or the
+        TU defines that template; instantiations of header templates are kept."""
+        old = mask(open(tu).read()) if os.path.exists(tu) else ""
+        src = mask(self.src_text)
+        landed = "\n".join(mask(c.defline) for c in fns)
+        keep = []
+        for kind, text in self.items:
+            mi = self.INST_RE.match(mask(RS.unwrap_namespaces(text)[1]))
+            if mi:
+                n = mi.group(1)
+                tdef = re.compile(r"template\s*<[^;{}]*>\s*[^;{}()]*?\b%s\s*\([^;{}]*\)\s*(?:const\s*)?\{" % re.escape(n))
+                if tdef.search(src) and not tdef.search(old) and not re.search(r"\b%s\s*\(" % re.escape(n), landed):
+                    self.notes.append(("orphan-instantiation", "explicit instantiation of %s dropped: its template is not landed here" % n))
                     continue
             keep.append((kind, text))
         self.items = keep
