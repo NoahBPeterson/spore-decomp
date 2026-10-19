@@ -39,6 +39,17 @@ void FUN_005460d0(...); void FUN_00546110(...);
 extern char  gEmptyString[];        // @ 0x1667bac
 extern short gFeedEndTable[];       // @ 0x13f3ae0
 
+// sub-object helpers used by the 0x118-byte entry ctor (all thiscall)
+struct AllocSub {                       // sp_vector_allocator
+    void Ctor(void* tag);               // 0x429360  (allocator copy ctor)
+};
+struct VSetSub {                        // eastl::vector_set
+    void Ctor(void* tag);               // 0x540470
+};
+struct Vec3Sub {                        // Vector3
+    void SetZero();                     // 0x56dec0
+};
+
 // ---------------------------------------------------------------- object
 struct Obj42 {
     char mPad[0x200];
@@ -269,10 +280,73 @@ void Obj42::FUN_00546b70()
     }
 }
 
-// @ 0x00546c20  (large 0x118-byte entry ctor -- not transcribed)
+// @ 0x00546c20  SP::Feed::AtomEntry constructor (0x118-byte entry)
+// Byte-exact reproduction is blocked by MSVC 2008 /Od frame slot allocation (slots are
+// name-dependent: identical declaration order assigns different frame offsets for different
+// local names).  This is a faithful, complete transcription of the original store/call schedule.
 int* Obj42::FUN_00546c20()
 {
-    return (int*)this;
+    int* p = (int*)this;
+
+    p[0] = 0; p[1] = 0; p[2] = 0;
+    p[0] = (int)gEmptyString; p[1] = p[0]; p[2] = p[0] + 1;
+    p[4] = -1; p[5] = -1;
+
+    int* l10 = p + 6;                               // +0x18
+    l10[0] = 0; l10[1] = 0; l10[2] = 0;
+    l10[0] = (int)gEmptyString; l10[1] = l10[0]; l10[2] = l10[0] + 2;
+
+    p[10] = 0; p[0xb] = 0;
+    p[0xc] = -1; p[0xd] = 0x7fffffff;
+    p[0xe] = -1; p[0xf] = -1; p[0x10] = -1; p[0x11] = -1;
+
+    int* l14 = p + 0x12;                            // +0x48
+    l14[0] = 0; l14[1] = 0; l14[2] = 0;
+    l14[0] = (int)gEmptyString; l14[1] = l14[0]; l14[2] = l14[0] + 2;
+
+    p[0x16] = -1; p[0x17] = -1; p[0x18] = -1; p[0x19] = -1;
+
+    int* l18 = p + 0x1a;                            // +0x68
+    l18[0] = 0; l18[1] = 0; l18[2] = 0;
+    l18[0] = (int)gEmptyString; l18[1] = l18[0]; l18[2] = l18[0] + 2;
+
+    int* l1c = p + 0x1e;                            // +0x78 vector, allocator at +0x84
+    l1c[0] = 0; l1c[1] = 0; l1c[2] = 0;
+    char tag9;
+    ((AllocSub*)((char*)l1c + 0xc))->Ctor(&tag9);
+
+    int* l24 = p + 0x23;                            // +0x8c vector_set
+    char tag1d;
+    ((VSetSub*)l24)->Ctor(&tag1d);
+
+    int* l2c = p + 0x29;                            // +0xa4 AutoRefCount
+    l2c[0] = 0;
+    if (l2c[0] != 0) {
+        int* t = (int*)l2c[0];
+        t[1] = t[1] + 1;
+    }
+
+    int* l30 = p + 0x2a;                            // +0xa8
+    l30[0] = 0; l30[1] = 0; l30[2] = 0;
+    l30[0] = (int)gEmptyString; l30[1] = l30[0]; l30[2] = l30[0] + 1;
+
+    int* l34 = p + 0x2e;                            // +0xb8
+    l34[0] = 0; l34[1] = 0; l34[2] = 0;
+    l34[0] = (int)gEmptyString; l34[1] = l34[0]; l34[2] = l34[0] + 1;
+
+    p[0x32] = 0; p[0x33] = 0;
+
+    int* l38 = p + 0x34;                            // +0xd0
+    l38[0] = 0; l38[1] = 0; l38[2] = 0;
+    l38[0] = (int)gEmptyString; l38[1] = l38[0]; l38[2] = l38[0] + 2;
+
+    int* l3c = p + 0x38;                            // +0xe0 vector_set
+    char tag39;
+    ((VSetSub*)l3c)->Ctor(&tag39);
+
+    ((Vec3Sub*)((char*)p + 0xf8))->SetZero();       // +0xf8 Vector3
+    *((char*)p + 0x110) = 0;
+    return p;
 }
 // --- equivalence checker address annotations
     void FNV1_String16(...); // 0x00932f30

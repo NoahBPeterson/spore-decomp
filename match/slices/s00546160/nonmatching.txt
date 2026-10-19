@@ -7,3 +7,4 @@
 00546930  290  complete; vector_map::operator[] lower_bound/insert schedule differs
 00546a60  81   complete; /Od vector push_back schedule differs
 00546b70  127  complete; /Od 0x118 vector push_back schedule differs
+00546c20  851  complete; /Od frame slot layout differs (name-hashed slots); equiv PASS (400 inputs, 94.6% cov)

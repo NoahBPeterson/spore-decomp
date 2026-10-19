@@ -1,1 +1,2 @@
 005816f0 1644 complete (cAppModeEditorBase DrawLayer); 74-call/vtable-slot sequence identical, size 2483 vs 2475, frame 0x9c = original; local slot layout and SetTint float load order differ, so a callee's uninitialized-stack read can differ (equiv FAIL 5/3286 inputs, calls identical)
+005820a0  429  complete; thiscall (ECX=this); frame+slot layout identical (push ecx, temps at [esp+0x10]); residual 299 diff bytes = instruction scheduling + register-name nits (original loads M(0xcc) into eax then copies to ecx; loop 16-byte nop padding); equiv PASS (400 inputs, 78.6% cov)

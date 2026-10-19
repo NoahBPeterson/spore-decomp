@@ -134,6 +134,7 @@ namespace SP {
 class cBuildingModelSummarizer {
 public:
     uint32_t GetResType(int arg);
+    bool ExtractParameters(const ResourceKey& key, eastl::vector<DeclareParam, eastl::sp_vector_allocator>& params);
 };
 uint32_t cBuildingModelSummarizer::GetResType(int arg) {
     if (arg == 0)
@@ -220,16 +221,30 @@ bool cVehicleModelSummarizer::ExtractParameters(const ResourceKey& key, eastl::v
     return true;
 }
 
-namespace W1G2_56 {
+// @ 0x00556E30 — building summarizer parameter setup.
+bool cBuildingModelSummarizer::ExtractParameters(const ResourceKey& key, eastl::vector<DeclareParam, eastl::sp_vector_allocator>& params) {
+    IntrusivePtr<cSummaryData> spMeta;
+    IResourceManager* pResourceManager = EA::ResourceMan::GetManager();
+    ResourceObjectPtr resource;
+    if (!pResourceManager || !pResourceManager->GetResource(key, resource.AsPPTypeParam(), 0, 0, 0, 0))
+        return false;
 
-// @ 0x00556E30 — partial: building summarizer parameter setup.
-class c56e30 {
-public:
-    uint32_t pad[0x80];
-    void sub(int a, int b);   // @ 0x00556E30
-};
-void c56e30::sub(int a, int b) {
+    cCreationResource* editorResource = (cCreationResource*)resource.get();
+    if (!FUN_004f3d60(editorResource->GetRequiredValidity(kVehicleHash, true), kVehicleHash))
+        return true;
+
+    float partTotalVolume = kZeroF;
+    BBox resourceBBox;
+    FUN_00471ec0(&resourceBBox, editorResource, &partTotalVolume);
+    float width = fabs(resourceBBox.mMax[0] - resourceBBox.mMin[0]);
+    float depth = fabs(resourceBBox.mMax[1] - resourceBBox.mMin[1]);
+    float height = fabs(resourceBBox.mMax[2] - resourceBBox.mMin[2]);
+    float volume = width * depth * height;
+    float quotient = partTotalVolume / volume;
+    ScratchSlots<5>();                                   // reserved frame of the declined-inline FUN_005565e0
+    float computed = FUN_005565e0(quotient, width, height, depth);
+    params.push_back(DeclareParam(0x5e62409, computed));
+    return true;
 }
 
-}
 }

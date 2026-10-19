@@ -418,5 +418,83 @@ void EditorLayer::DrawLayer(int a0, int layer, DrawCtx* ctx, int a3)
     }
 }
 
+typedef unsigned int uint;
+
+extern "C" void* __cdecl FUN_011e0744(void* dst, const void* src, unsigned n);   // memcpy/memmove thunk
+
+struct cSPEditorBlock_s {
+    void F830(unsigned char b);                        // 0x0043a830
+};
+
+// uint vector at cAppModeEditorBase+0x39c
+struct UIntVec2 {
+    uint* mpBegin;
+    uint* mpEnd;
+    uint* mpCapacity;
+    void DoInsertValue(uint* pos, const uint& value);  // 0x004558a0 (thiscall ret 8)
+    void push_back(const uint& value) {
+        if (mpEnd < mpCapacity) {
+            uint* p = mpEnd++;
+            if (p)
+                *p = value;
+        } else {
+            DoInsertValue(mpEnd, value);
+        }
+    }
+    void clear() {
+        erase(mpBegin, mpEnd);
+    }
+    uint* erase(uint* first, uint* last) {
+        uint* position = (uint*)FUN_011e0744(first, last, (char*)mpEnd - (char*)last);
+        mpEnd -= (last - first);
+        return position;
+    }
+};
+
+struct SPModel_s {
+    bool UsingSymmetry();                              // 0x004adc40
+    unsigned GetBlockCount();                          // 0x004accf0
+    void* GetBlock(unsigned i);                        // 0x004accb0
+};
+
+void __cdecl GatherBlocks(void* block, UIntVec2* out);  // 0x004a7c90
+
+struct cAppModeEditorBase_5820a0 {
+    void FUN_005820a0();                               // 0x005820a0
+};
+
+#define M(T, off) (*(T*)((char*)this + (off)))
+
+static inline void* CC(void* self) { return *(void**)((char*)self + 0xcc); }
+struct Sub_s { char pad[0x3e0]; unsigned field; };
+
 // @ 0x005820a0  (429 bytes)
-void FUN_005820a0() {}
+void cAppModeEditorBase_5820a0::FUN_005820a0() {
+    UIntVec2& vec = M(UIntVec2, 0x39c);
+    int n = vec.mpEnd - vec.mpBegin;
+    for (int i = 0; i < n; i++)
+        ((cSPEditorBlock_s*)vec.mpBegin[i])->F830(0);
+    vec.clear();
+    if (CC(this)) {
+        vec.push_back((uint)CC(this));
+        M(int, 0x3b0) = (M(unsigned, 0x3c) & 2) ? -1 : M(int, 0x3b4);
+        if (M(SPModel_s*, 0x98)->UsingSymmetry()) {
+            uint sub = ((Sub_s*)CC(this))->field;
+            if (sub)
+                vec.push_back(sub);
+        }
+        unsigned f = M(unsigned, 0x3c);
+        if (!(f & 0x10)) {
+            if (f & 4) {
+                GatherBlocks(CC(this), &vec);
+            } else if (f & 8) {
+                vec.clear();
+                for (int i = 0, cnt = M(SPModel_s*, 0x98)->GetBlockCount(); i < cnt; i++)
+                    vec.push_back((uint)M(SPModel_s*, 0x98)->GetBlock(i));
+            }
+        }
+        int m = vec.mpEnd - vec.mpBegin;
+        for (int i = 0; i < m; i++)
+            ((cSPEditorBlock_s*)vec.mpBegin[i])->F830(1);
+    }
+}

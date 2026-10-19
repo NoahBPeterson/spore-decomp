@@ -1,5 +1,5 @@
 005816f0 SP::cAppModeEditorBase::DrawLayer  # PDB anchor (symbols/pdb_names.json); cILayer-subobject this
-005820a0 ?FUN_005820a0@@YAXXZ  # FUN_005820a0 migrated from s005816f0 (verbatim, slice spelling)
+005820a0 ?FUN_005820a0@cAppModeEditorBase_5820a0@@QAEXXZ  # FUN_005820a0 migrated from s005816f0 (verbatim, slice spelling); thiscall (ECX=this)
 007c3c20 ?SetClearColor@cViewer@SP@@QAEXABUcSPColorRGBA@@@Z  # SP::cViewer::SetClearColor (callee of s005816f0, named from the dev publics; slice address comment)
 007c3cc0 ?Clear@cViewer@SP@@QBEXI@Z  # SP::cViewer::Clear (callee of s005816f0, named from the dev publics; slice address comment)
 007c3ce0 ?SetRenderType@cViewer@SP@@QAEXHH@Z  # SP::cViewer::SetRenderType (callee of s005816f0, named from the dev publics; slice address comment)

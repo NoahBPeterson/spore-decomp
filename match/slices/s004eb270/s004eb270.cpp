@@ -206,9 +206,49 @@ void FUN_004eb270(uint32_t id, Elem16Vec* out)
 }
 
 // ===========================================================================
-// @ 0x004eba00  (INCOMPLETE skeleton)
+// @ 0x004eba00
+// Validity flag propagation over a 128-bit flag array (4 x uint32_t words).
+// Reads two guard bits and ORs dependent bits in.
 // ===========================================================================
-void FUN_004eba00(void* a, void* b, void* c)
+static __forceinline bool GetBit(const uint32_t* p, uint32_t i)
 {
-    (void)a; (void)b; (void)c;
+    uint32_t w;
+    bool r;
+    if (i < 0x80) {
+        w = p[i / 32];
+        r = (w & (1u << (i % 32))) != 0;
+    } else {
+        r = false;
+    }
+    return r;
+}
+
+static __forceinline uint32_t* WordPtr(uint32_t* p, uint32_t i)
+{
+    return &p[i / 32];
+}
+
+static __forceinline void SetBit(uint32_t* p, uint32_t i, bool v)
+{
+    if (i < 0x80) {
+        if (v)
+            *WordPtr(p, i) |= 1u << (i % 32);
+        else
+            *WordPtr(p, i) &= ~(1u << (i % 32));
+    }
+}
+
+void FUN_004eba00(uint32_t* p)
+{
+    if (GetBit(p, 4)) {
+        SetBit(p, 0x14, true);
+        SetBit(p, 0x15, true);
+    }
+    if (GetBit(p, 9)) {
+        SetBit(p, 0x16, true);
+        SetBit(p, 0x17, true);
+        SetBit(p, 0x18, true);
+        SetBit(p, 0x19, true);
+    }
+    SetBit(p, 0x1a, true);
 }
