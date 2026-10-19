@@ -1,1 +1,6 @@
-0061eba0  60  eastl::basic_string<char>::TrimLeft: complete; trim-set literal/strlen and inlined erase min-selection schedule differ
+# va  diff-bytes  reason   flags /O2 /MD /Gy /TP /arch:SSE /GS-
+0061e3c0  68  String8::find_last_not_of(p, position): complete behaviour; the min-select (eastl::min on a const ref) and the shared early-return slot are allocated differently (95 vs 99 bytes)
+0061e4a0  73  PaintSystem::Ctor: complete behaviour; MSVC zero-register allocation (edi/eax/ebx) and the placement of the explicit vptr stores differ from the original's schedule
+0061e540  11  PaintSystem::Dtor: complete behaviour; the two entry vptr-reset stores are sunk into the branch shadow after the length test instead of staying first (11 diff bytes)
+0061eac0  176 PaintSystem::ProcessFile: complete behaviour; stack-buffer offsets (the two 0x104 wchar buffers) and the wide compare loop codegen differ
+0061eba0  138  eastl::basic_string<char>::TrimLeft: complete behaviour; the whitespace scratch buffer, the null-scan loop and the min-select shift are allocated with different registers (push ecx/esi/edi vs sub esp,8/ebx/ebp/esi)

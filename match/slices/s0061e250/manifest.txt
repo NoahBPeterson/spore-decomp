@@ -1,1 +1,5 @@
-# no byte-exact functions
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0061e250/s0061e250.cpp  ??0O96@Pollen@SP@@QAE@PAXPBX@Z  0061e250  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0061e250/s0061e250.cpp  ??0O96@Pollen@SP@@QAE@PAXHHPBX@Z  0061e2c0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0061e250/s0061e250.cpp  ?DeletingDtor@O96@Pollen@SP@@QAEPAU123@I@Z  0061e330  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0061e250/s0061e250.cpp  ?ConvertToString8@Pollen@SP@@YAXPAXPB_W@Z  0061e430  /O2 /MD /Gy /TP /arch:SSE /GS-
