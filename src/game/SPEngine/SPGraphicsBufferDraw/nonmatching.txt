@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+006dd540 607 SP::cBufferDrawImpl::IssueDraw (D3D9 draw switch); vtable dispatch and switch shape differ; equiv: UNSUPPORTED (unresolved refs g_d3d9Device, g_shader, g_softStateUpdated)

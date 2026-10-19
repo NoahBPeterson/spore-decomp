@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsBufferDraw.cpp  ?FUN_006dd2a0@@YAXPAX@Z  006dd2a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

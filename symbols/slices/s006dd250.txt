@@ -1,2 +1,2 @@
-006dd2a0 rw::graphics::ActiveState::VertexDescriptorChange  # card decompile name
-006dd540 CBufferDraw::IssueDraw  # card PDB candidate (caller-single)
+006dd2a0 ?FUN_006dd2a0@@YAXPAX@Z  # None migrated from s006dd250 (verbatim, slice spelling)
+006dd540 ?IssueDraw@CBufferDraw@@QAEXH@Z  # CBufferDraw::IssueDraw migrated from s006dd250 (verbatim, slice spelling)
