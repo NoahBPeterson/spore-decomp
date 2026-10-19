@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00684ca0  512  partial: SP::WrapCubeFace; face-wrap table indexing/logic approximate

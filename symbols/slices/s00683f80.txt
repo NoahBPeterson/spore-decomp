@@ -13,6 +13,6 @@
 00684a90 read records
 00684b40 App::cConversationFactory serializer entry (alt path, lookups 0x226a1de/0x355d6f5)
 00684be0 float->int truncation helper
-00684bf0 SP::CoordToIndex  # PDB name
+00684bf0 ?SP_CoordToIndex@@YAPAHPAHHPAM@Z  # SP_CoordToIndex migrated from s00683f80 (verbatim, slice spelling)
 00684c50 index->coordinate (inverse of CoordToIndex)
-00684ca0 SP::WrapCubeFace  # PDB name; recursive cube-face wrap
+00684ca0 ?SP_WrapCubeFace@@YAHHPAI0PAH11@Z  # SP_WrapCubeFace migrated from s00683f80 (verbatim, slice spelling)

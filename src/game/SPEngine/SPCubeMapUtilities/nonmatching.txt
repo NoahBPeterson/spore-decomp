@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00684bf0 63 complete: SP::CoordToIndex; cl keeps the float->int conversion in a register while the original spills to a stack temp
