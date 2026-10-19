@@ -1,2 +1,2 @@
-# slice s00919620
+0091a010 ?F91a010@Holder@@QAEIEPAXPAUStrPair@@PAI@Z  # Holder::F91a010 migrated from s00919620 (verbatim, slice spelling)
 0091a620 StrRec::StrRec  # implicit copy ctor of the 0x48-byte record (emitted out of line via CopyStrRec)

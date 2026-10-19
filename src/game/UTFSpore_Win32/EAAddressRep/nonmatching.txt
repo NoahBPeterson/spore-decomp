@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0091a620 76 complete; copy ctor of 0x48-byte record: bitfield word-load (movzx) and prologue register choice differ
