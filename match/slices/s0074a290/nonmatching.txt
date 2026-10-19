@@ -1,1 +1,2 @@
 0074a8c0  68  complete source; only register allocation differs (index kept in eax vs original ecx). Every path/call present.
+0074ac80  912  SP::cModelWorld::AddAttachments - complete, needs /GS- (old EH prolog); reg alloc differs (this in ebp, list in edi, rec spilled), frame 0x7c vs 0x78 [equiv: WEAK 15% coverage, run with default flags]

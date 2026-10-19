@@ -19,6 +19,7 @@ struct cSPTransform {
     float    f10;
     float    m[9];        // +0x14
     void operator=(const cSPTransform& o);
+    void Compose(const cSPTransform* o);   // ComposeTransforms 0x40ccb0
 };
 typedef char cSPTransform_size_check[(sizeof(cSPTransform) == 0x38) ? 1 : -1];
 
@@ -46,6 +47,7 @@ struct cModelWorld {
     static void SetExternalEffectsTransform(void* a, void* b, void* c);  // 0074a290
     void SubA490(void* a, void* b);                      // 0074a490
     void SubA920(void* a, void* b);                      // 0074a920
+    void AddAttachments(char* model);                    // 0074ac80
 };
 
 } // namespace SP
@@ -208,4 +210,147 @@ void SP::cModelWorld::SubA490(void* a, void* b)
 void SP::cModelWorld::SubA920(void* a, void* b)
 {
     (void)a; (void)b;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x0074AC80  SP::cModelWorld::AddAttachments
+// ---------------------------------------------------------------------------
+struct IRel { virtual void v0(); virtual void Release(); };
+
+struct Rec48 {
+    uint32_t id;       // +0
+    uint32_t id2;      // +4
+    IRel*    obj;      // +8
+    cSPTransform xf;   // +0xc
+    uint8_t  flag;     // +0x44
+    Rec48();                                    // 0x746de0
+    ~Rec48() { if (obj) obj->Release(); }       // 0xae9670
+};
+
+void* operator new[](size_t, const char*, int, int, int, int);   // 0xf473a0
+void operator delete[](void*, const char*, int, int, int, int);
+extern "C" void* __cdecl EffectsManager();     // 0x67ddd0
+extern bool __cdecl PropReserve(void* list, unsigned key, int* count, void* out);     // 0x6a0ae0
+extern void __cdecl PropGetTransforms(void* list, unsigned key, int* count, void* out);  // 0x6a0c30
+extern bool __cdecl PropGetFloats(void* list, unsigned key, int* count, void* out);   // 0x6a08b0
+extern bool __cdecl PropGetInts(void* list, unsigned key, int* count, void* out);     // 0x6a0990
+extern void* __cdecl GfxAlloc(unsigned size, const char* name, int, int, int, int);   // 0xf473a0
+extern "C" void* __cdecl memset(void*, int, unsigned);
+
+#define VCALL(T, obj, off) ((T)VT(obj)[(off) / 4])
+
+void SP::cModelWorld::AddAttachments(char* m)
+{
+    cSPTransform t;
+    Rec48* r;
+    char* var;
+    int n; int first; int c2;
+    int cnt1; void* data1; int cnt2; void* data2; int cnt3; void* data3;
+    uint32_t flags = *(uint32_t*)(m + 0x138);
+    if (!(flags & 8)) {
+        void* list = *(void**)(m + 0x98);
+        if (!(flags & 4) && PropReserve(list, 0x2a907b5, &cnt1, &data1)) {
+            int good = 0;
+            cnt2 = 0;
+            PropGetTransforms(list, 0x2a907b6, &cnt2, &data2);
+            cnt3 = 0;
+            data3 = 0;
+            PropReserve(list, 0x2a907b9, &cnt3, &data3);
+            void* defModel = *(void**)((char*)this + 0x5c8);
+            if (defModel == 0) {
+                void* e = EffectsManager();
+                defModel = VCALL(void*(__thiscall*)(void*), e, 0x5c)(e);
+            }
+            for (int i = 0; i < cnt1; i++) {
+                void* e = EffectsManager();
+                if (VCALL(bool(__thiscall*)(void*, unsigned, int), e, 0x28)(e, *(unsigned*)((char*)data1 + i * 12), 0))
+                    good++;
+            }
+            Rec48* recs = new ("Graphics", 0, 0, 0, 0) Rec48[good + 1];
+            *(Rec48**)(m + 0xdc) = recs;
+            int j = 0;
+            for (int i = 0; i < cnt1; i++) {
+                r = (Rec48*)(*(char**)(m + 0xdc) + j * 0x48);
+                void* mdl;
+                if (i < cnt3) {
+                    void* e = EffectsManager();
+                    mdl = VCALL(void*(__thiscall*)(void*, unsigned), e, 0x54)(e, *(unsigned*)((char*)data3 + i * 12));
+                    if (mdl == 0) mdl = defModel;
+                } else {
+                    mdl = defModel;
+                }
+                if (r->obj) {
+                    IRel* o = r->obj;
+                    r->obj = 0;
+                    o->Release();
+                }
+                if (VCALL(bool(__thiscall*)(void*, unsigned, int, void*), mdl, 8)(mdl, *(unsigned*)((char*)data1 + i * 12), 0, &r->obj)) {
+                    void* o = r->obj;
+                    VCALL(void(__thiscall*)(void*, int, void*), o, 0x4c)(o, 6, (char*)this + 0xc);
+                    if (i < cnt2) {
+                        r->xf = ((cSPTransform*)data2)[i];
+                        t.f0 = *(uint16_t*)(m + 0x10);
+                        t.f2 = *(uint16_t*)(m + 0x12);
+                        t.f4 = *(float*)(m + 0x14);
+                        t.f8 = *(float*)(m + 0x18);
+                        t.fc = *(float*)(m + 0x1c);
+                        t.f10 = *(float*)(m + 0x20);
+                        ((Matrix3*)&t.m[0])->Assign(m + 0x24);
+                        t.Compose(&r->xf);
+                        void* o2 = r->obj;
+                        VCALL(void(__thiscall*)(void*, cSPTransform*), o2, 0x18)(o2, &t);
+                    } else {
+                        void* o2 = r->obj;
+                        VCALL(void(__thiscall*)(void*, void*), o2, 0x18)(o2, m + 0x10);
+                    }
+                    if ((*(uint32_t*)(m + 0xc) >> 0x13) & 1) {
+                        void* o3 = r->obj;
+                        VCALL(void(__thiscall*)(void*, int), o3, 8)(o3, 0);
+                    }
+                    if (!(*(uint8_t*)(m + 0xc) & 1)) {
+                        void* o4 = r->obj;
+                        VCALL(void(__thiscall*)(void*, int), o4, 0x30)(o4, 1);
+                    }
+                    r->id = *(uint32_t*)((char*)data1 + i * 12);
+                    r->id2 = 0;
+                    j++;
+                }
+            }
+            if (!(*(uint32_t*)(m + 0x138) & 0x20000000)) {
+                *(float*)(m + 0x124) = 0.0f;
+                if (list) {
+                    if (VCALL(bool(__thiscall*)(void*, unsigned, char**), list, 0x24)(list, 0x2a907b8, &var)
+                        && *(uint16_t*)(var + 0x12) == 0xd) {
+                        char* p = var;
+                        if (*(uint8_t*)(var + 0x10) & 0x30) p = *(char**)var;
+                        *(float*)(m + 0x124) = *(float*)p;
+                    }
+                }
+            }
+        }
+        if (*(int*)((char*)this + 0x1cc) != 0) {
+            if (PropGetFloats(list, 0x49fc837, &n, &first)) {
+                unsigned size = n * 4 + 0x14;
+                int* p = (int*)GfxAlloc(size, "Graphics", 0, 0, 0, 0);
+                memset(p, 0, size);
+                p[0] = n;
+                for (int k = 0; k < n; k++) p[5 + k] = -1;
+                *(int**)(m + 0xe0) = p;
+                p[1] = first;
+                if (PropGetInts(list, 0x49fc838, &c2, *(char**)(m + 0xe0) + 8) && c2 != n)
+                    (*(int**)(m + 0xe0))[2] = 0;
+                if (PropGetInts(list, 0x49fc83a, &c2, *(char**)(m + 0xe0) + 0x10) && c2 != n)
+                    (*(int**)(m + 0xe0))[4] = 0;
+                if (PropGetFloats(list, 0x49fc839, &c2, *(char**)(m + 0xe0) + 0xc) && c2 != n)
+                    (*(int**)(m + 0xe0))[3] = 0;
+            }
+        }
+        char* mgr = *(char**)((char*)this + 0x18);
+        void** it = *(void***)(mgr + 0x4c);
+        void** end = *(void***)(mgr + 0x50);
+        for (; it != end; ++it) {
+            void* o = *it;
+            VCALL(void(__thiscall*)(void*, void*), o, 0)(o, m + 8);
+        }
+    }
 }

@@ -5,3 +5,4 @@ slices/s0075cf20/s0075cf20.cpp  ?DeviceLost@@  0075d930  /O2 /MD /Gy /EHsc /TP /
 slices/s0075cf20/s0075cf20.cpp  ?DeviceRelease@@  0075d950  /O2 /MD /Gy /EHsc /TP /arch:SSE2
 slices/s0075cf20/s0075cf20.cpp  ?SetViewer@cRenderer@@  0075daa0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
 slices/s0075cf20/s0075cf20.cpp  ?GetRenderStats@cRenderer@@  0075dad0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0075cf20/s0075cf20.cpp  ?RendererFlush@@  0075db00  /O2 /MD /Gy /EHsc /TP /arch:SSE2

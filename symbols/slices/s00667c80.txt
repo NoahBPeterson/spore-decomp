@@ -1,0 +1,2 @@
+007f8fd0 ?Add@SeqInner@@QAEXPAUAnimRaw@@PAXH@Z  # SeqInner::Add (FUN_007f8fd0), thiscall ret 0xc, animation-sequence add used by QueryNumItems
+0059a1e0 ?Destroy@AnimRaw@@QAEXXZ  # AnimRaw::Destroy (FUN_0059a1e0), thiscall no args, resets vtables and releases member +0xc

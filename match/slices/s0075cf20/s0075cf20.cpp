@@ -361,6 +361,22 @@ bool cRenderer_InitShaders()
     return FUN_011fd770() != 0;
 }
 
+// @ 0x0075db00  (cRenderer::Flush)
+extern "C" void __cdecl EAThreadSleep(unsigned int* t);   // @ 0x00921df0
+void __stdcall RendererFlush(bool noSleep)
+{
+    int* d = g_deviceGlobal;
+    if (d != 0) {
+        ((void (__stdcall*)(void*, int))*(void**)(*d + 0x18))(d, 1);
+        while (((int (__stdcall*)(void*, int, int, int))*(void**)(*g_deviceGlobal + 0x1c))(g_deviceGlobal, 0, 0, 1) == 1) {
+            if (!noSleep) {
+                unsigned int t = 0;
+                EAThreadSleep(&t);
+            }
+        }
+    }
+}
+
 // @ 0x0075d4b0 -- partial: large EH/stack-cookie scene-cache builder.
 int BuildSceneCache(int param_1)
 {

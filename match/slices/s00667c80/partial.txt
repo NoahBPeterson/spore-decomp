@@ -1,2 +1,1 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
-00668070  1200  QueryNumItems: only the guard/entry and the trailing [0x142]/[0x64] updates are reconstructed; the animator shade/scale animation block is omitted

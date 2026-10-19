@@ -217,11 +217,12 @@ void SP::cPropertyList::ClearMapOnly() {
 // @ 0x006A2A40
 void SP::cPropertyList::Copy(cPropertyList* src) {
   if (this == src) return;
-  mPropertyMap.mpBegin = src->mPropertyMap.mpBegin;
-  mPropertyMap.mpEnd = src->mPropertyMap.mpEnd;
-  mPropertyMap.mpCapacity = src->mPropertyMap.mpCapacity;
-  mPropertyMap.mCompare = src->mPropertyMap.mCompare;
-  SetParent(src->mParent);
+  VariantMap* s = &src->mPropertyMap;
+  VariantMap* d = &mPropertyMap;
+  cPropertyList* me = this;
+  *(eastl::pvector*)d = *(const eastl::pvector*)s;
+  d->mCompare = s->mCompare;
+  me->SetParent(me->mParent);
 }
 
 // @ 0x006A2AD0

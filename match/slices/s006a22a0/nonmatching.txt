@@ -18,3 +18,4 @@
 006a3070  62   SP::cPropertyList::GetPropertyIDs - complete
 006a30c0  123  SP::cDirectPropertyList::SetProperty - complete
 006a3180  246  SP::cDirectPropertyList::GetPropertyIDs - complete
+006a2a40  2  complete; eax vs ecx for the SetParent arg load [equiv: WEAK]

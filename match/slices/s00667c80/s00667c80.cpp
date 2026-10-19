@@ -84,7 +84,8 @@ struct ImageWin {
     virtual void SetColor(unsigned rgba);            // slot 23 (+0x5c)
 };
 struct TailObj { void Tick(); };                     // 0x008297b0 (thiscall)
-struct AssetBrowserG { char pad[0x18]; void* mProps; };
+struct Animator;
+struct AssetBrowserG { char pad[0x14]; Animator* mAnim; void* mProps; };
 
 AssetBrowserG* __cdecl SP_AssetBrowserG();           // 0x00401030
 void  __cdecl GetWindowArea(Vec4* out, void* win);   // 0x00805ef0
@@ -296,23 +297,102 @@ void FeedItem::FUN_00668000(const wchar_t* s) {
 }
 
 // -----------------------------------------------------------------------------
-// @ 0x00668070  SP::cSPUIFeedListItem::QueryNumItems  (PARTIAL - see partial.txt)
+// SP::cSPUIFeedListItem::QueryNumItems helpers
 // -----------------------------------------------------------------------------
+// Animation helpers used by QueryNumItems (all cdecl unless noted).
+struct AnimRaw { void Destroy(); /* 0x0059a1e0 thiscall, no args */ };
+struct SeqBuf { char d[0x80]; void Destroy(); /* 0x0059a1e0 same dtor */ };
+struct SeqInner { void Add(AnimRaw* a, void* win, int z); /* 0x007f8fd0 thiscall, ret 0xc */ };
+struct Animator {
+    void RemoveAnimation(void* win, int id);                    // 0x007f6210 (thiscall, ret 8)
+    void AddAnimation(void* seq, void* win, int z);             // 0x007f8d10 (thiscall, ret 0xc)
+};
+void* __cdecl SeqInit(SeqBuf* out, SeqInner** inner);           // 0x007f9340
+AnimRaw* __cdecl ShadeW(AnimRaw* out, void* win, unsigned color, float a, float b, int c);   // 0x007f82f0
+AnimRaw* __cdecl ScaleW(AnimRaw* out, void* win, float a, float b, float c, int d);          // 0x007f81d0
+void __cdecl SetNumberString(unsigned n, int zero, wchar_t* buf, int cap);                   // 0x00881ae0
+void __cdecl WStr_Format(void* str, const wchar_t* fmt, ...);                                // 0x0041e050
+void __cdecl EastlFree(void* p);                                                             // 0x00f47380
+extern Vec4 g_defA;   // 0x01527678
+extern Vec4 g_defB;   // 0x015275e8
+extern wchar_t g_wEmpty[];            // 0x01667bac
+extern const wchar_t g_wEmptyLit[];   // 0x013ec468
+struct WStrLocal { wchar_t* b; wchar_t* e; wchar_t* cap; };
+
+struct FeedItemRefresh { void Refresh(const wchar_t* s); };   // 0x006666c0 (thiscall, ret 4)
+
+// @ 0x00668070  SP::cSPUIFeedListItem::QueryNumItems
 void FeedItem::FUN_00668070() {
-    // Skeleton: the real body builds a large set of SPUI window-shade/scale animations
-    // via the animator (cSPUIAnimator::AddAnimation/RemoveAnimation, SPUICreateWindowAnimation*,
-    // SP::ColorRGBAToU32, Locale::SetNumberString, WStr_Format) - reconstructed only in outline.
-    if (*(int*)((char*)this + 0x64) != -1 && *(void**)((char*)this + 0xb0) != 0) {
-        void* browser = SP_AssetBrowser();
-        if (browser) {
-            browser = SP_AssetBrowser();
-            if (browser && *(void**)((char*)browser + 0x18)) {
-                // animation blocks omitted (partial)
+    char tmpbuf[0x100];
+    SeqBuf seqA, seqB, seqC;
+    SeqInner* inner;
+    Vec4 col;
+    AnimRaw* tmp = (AnimRaw*)tmpbuf;
+
+    if (*(int*)((char*)this + 0x64) != -1) {
+        if (*(void**)((char*)this + 0xb0) != 0) {
+            Animator* anim = SP_AssetBrowserG() ? SP_AssetBrowserG()->mAnim : 0;
+            if (anim && SP_AssetBrowserG() && SP_AssetBrowserG()->mProps) {
+                if (mActiveA) {
+                    GetPropertyColor(&col, SP_AssetBrowserG()->mProps, 0x861275,
+                                     g_defA);
+                    void* pr1 = SP_AssetBrowserG()->mProps;
+                    float k1 = GetPropertyFloat(pr1, 0x732bc7a2, 1.5f);
+                    void* pr2 = SP_AssetBrowserG()->mProps;
+                    float k2 = GetPropertyFloat(pr2, 0xbf96774c, 0.5f);
+                    anim->RemoveAnimation(mImage, -1);
+                    SeqInit(&seqA, &inner);
+                    float el = GetElapsedSeconds();
+                    float h = k2 * 0.5f;
+                    inner->Add(ShadeW(tmp, mImage, ColorRGBAToU32(&col), el, h, 0), mImage, 0);
+                    tmp->Destroy();
+                    inner->Add(ShadeW(tmp, mImage, ColorRGBAToU32(&mColorA), h + el, h, 0), mImage, 0);
+                    tmp->Destroy();
+                    anim->AddAnimation(&seqA, mImage, 0);
+                    anim->RemoveAnimation(mAreaWin, -1);
+                    SeqInit(&seqB, &inner);
+                    float el2 = GetElapsedSeconds();
+                    inner->Add(ScaleW(tmp, mAreaWin, k1, el2, h, 2), mAreaWin, 0);
+                    tmp->Destroy();
+                    inner->Add(ScaleW(tmp, mAreaWin, 1.0f, h + el2, h, 1), mAreaWin, 0);
+                    tmp->Destroy();
+                    anim->AddAnimation(&seqB, mAreaWin, 0);
+                    mActiveA = false;
+                    mActiveB = true;
+                    mTimerB = h;
+                    seqB.Destroy();
+                    seqA.Destroy();
+                }
+                unsigned c2 = ColorRGBAToU32(GetPropertyColor(&col, SP_AssetBrowserG()->mProps, 0x4a203987,
+                                     g_defB));
+                anim->RemoveAnimation(mSpinWin, -1);
+                SeqInit(&seqC, &inner);
+                inner->Add(ShadeW(tmp, mSpinWin, c2, GetElapsedSeconds(), 0.5f, 0), mSpinWin, 0);
+                tmp->Destroy();
+                inner->Add(ShadeW(tmp, mSpinWin, 0xffffff, GetElapsedSeconds() + 0.5f, 0.5f, 0), mSpinWin, 0);
+                tmp->Destroy();
+                anim->AddAnimation(&seqC, mSpinWin, 0);
+                seqC.Destroy();
             }
         }
+        if (!*(uint8_t*)((char*)this + 0xc2)) *(uint8_t*)((char*)this + 0x142) = 1;
     }
-    if (!*(uint8_t*)((char*)this + 0xc2)) *(uint8_t*)((char*)this + 0x142) = 1;
-    *(uint32_t*)((char*)this + 0x64) = *(uint32_t*)((char*)this + 0x60);
+    unsigned n = *(unsigned*)((char*)this + 0x60);
+    *(unsigned*)((char*)this + 0x64) = n;
+    if (mWinD) {
+        if (n > 0) {
+            WStrLocal str;
+            str.b = g_wEmpty;
+            str.e = g_wEmpty;
+            str.cap = g_wEmpty + 1;
+            SetNumberString(n, 0, (wchar_t*)tmpbuf, 0x80);
+            WStr_Format(&str, L"(%s)", tmpbuf);
+            ((FeedItemRefresh*)this)->Refresh(str.b);
+            if ((((char*)str.cap - (char*)str.b) & ~1) > 2 && str.b) EastlFree(str.b);
+        } else {
+            ((FeedItemRefresh*)this)->Refresh(g_wEmptyLit);
+        }
+    }
 }
 
 // -----------------------------------------------------------------------------
