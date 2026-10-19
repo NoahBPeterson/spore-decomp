@@ -4094,8 +4094,9 @@ class Rewrite:
             for ns_r, old_n, new_n in getattr(self, "renamed", []):
                 sig = RS.rename_word(sig, old_n, new_n, ns_r)
             ens = list(getattr(c, "enc_ns", []) or [])
-            line = "%s;  // 0x%08x (stays in the slice: not this object's)" % (sig, c.va)
-            protos.append((" ".join("namespace %s {" % n for n in ens) + " " + line + " " + "}" * len(ens)) if ens else line)
+            cmt = "  // 0x%08x (stays in the slice: not this object's)" % c.va
+            # the closing braces go before the comment (they were after it and commented out: C1075, mig10 eapdeditor 0xa4c470)
+            protos.append((" ".join("namespace %s {" % n for n in ens) + " " + sig + "; " + "}" * len(ens) + cmt) if ens else sig + ";" + cmt)
         if not protos:
             return pre
         self.notes.append(("held-callee-proto", ", ".join(p.split("(")[0].split()[-1] for p in protos)))
