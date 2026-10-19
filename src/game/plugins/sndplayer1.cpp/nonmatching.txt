@@ -12,3 +12,4 @@
 01138640 277 complete HandleSampleEnd; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL (5/13 valid) on a single aliased pool dword (this+0x104): with a degenerate random mRequestInternalOffset (0) the per-request samplesFed field aliases FeedDesc[10].chunkSamplesPlayed, and the two sides diverge there; not proven to be uninitialised-frame noise
 011387b0 255 complete StartRequest; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid: every input faults in the random Stream/Decoder object graph)
 011388f0 478 complete SndPlayer1 timer client; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL (request-state pump diverges)
+01138af0 379 complete SndPlayer1::CreateInstance; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (230 valid, 100% coverage)

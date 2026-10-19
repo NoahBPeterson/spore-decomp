@@ -781,6 +781,15 @@ struct SndPlayer1_s0113_88f0 : PlugIn_s0113_88f0 {
 }
 }
 }
+namespace rw {
+namespace audio {
+namespace core {
+struct TimerMgr {
+    char AddTimer(void*, void*, void*, const char*, int, int); // 0x0112d8e0
+};
+}
+}
+}
 // ---- items of slice s011388f0 end
 
 // @ 0x0112dbb0
@@ -1447,5 +1456,55 @@ void __cdecl FUN_011388f0(SndPlayer1_s0113_88f0* self)
             }
         } else { if (!self->StreamNextChunk(b, 0, 0)) return; }
     }
+}
+}}}  // namespace rw::audio::core
+
+// @ 0x01138af0
+namespace rw { namespace audio { namespace core {
+bool __cdecl FUN_01138af0(SndPlayer1_s0113_88f0* self, float* pReq)
+{
+    if (pReq == 0) pReq = (float*)1;
+    else pReq = (float*)_mm_cvtss_si32(_mm_load_ss(pReq));   /* cvtss2si: round to nearest */
+    if (self) {
+        *(void**)self = (void*)0x14ab718;
+        /* PlugIn::Initialize<...>(self+0x40) */
+        A<int>(self, 0x40) = 0;
+        A<int>(self, 0x4c) = 0x13f9034;
+        A<int>(self, 0x50) = 0;
+        A<u8>(self, 0x54) = 3;
+    }
+    int a = (int)self;
+    int b = (a + 0x1d7) & 0xfffffff8;
+    self->mRequestInternalOffset = (u16)((((int)A<u8>(self, 0x21) * 4 + b + 7) & 0xfffffff8) - a);
+    self->mDeclickBufferOffset = (u16)(b - a);
+    A<int>(self, 0xc) = (int)((char*)self + 0x28);
+    self->mTimerAdded = 0;
+    void* buf = self->mpSystem->Alloc((int)pReq * 0x50 + 4, "SndPlayer1 RequestHandle and RequestExternal array", 0x10, 0);
+    self->mpRequestHandle = (float*)buf;
+    if (!buf) return false;
+    self->mpRequestExternal = (RequestExternal_s0113_88f0*)((char*)buf + 4);
+    self->mMaxRequests = (u8)(int)pReq;
+    for (int i = 0, off = 0; i < (int)pReq; i++, off += 0x30)
+        *(u8*)((char*)self + self->mRequestInternalOffset + off + 0x2a) = 0;
+    self->mAttribute[2].f64 = 0.0; self->mAttribute[1].f64 = 0.0;
+    self->mMaxChannels = A<u8>(self, 0x21);
+    A<float>(self, 0x28) = 0.0f;
+    *self->mpRequestHandle = 0.0f;
+    self->mLastRequestHandleProcessed = 0.0f;
+    self->mLastRequestHandleSuccessfullyProcessed = 0.0f;
+    self->mCurrentRequest = 0; self->mNextRequestToFree = 0; self->mNextFreeRequest = 0;
+    self->mCurrentRequestHandle = 0.0f;
+    self->mCurrentRequestSampleRate = A<float>(self->mpSystem, 0xc0);
+    self->mCurrentRequestSamplesPlayed = 0; self->mCurrentRequestNumSamples = 0;
+    self->mNumDeclickSamples = 0; self->mDcOffsetsGathered = 0;
+    self->mPreviousSampleRate = A<float>(self->mpSystem, 0xc0);
+    self->mNextFeedSlotToFill = 0; self->mNextFeedSlotToFree = 0;
+    for (int i = 0; i < 20; i++) { A<int>(self, 0x5c + i * 0x10) = 0; A<u8>(self, 0x5c + i * 0x10 + 0xd) = 0; }
+    char ok = ((TimerMgr*)((char*)self->mpSystem + 0x60))->AddTimer(
+                   (void*)((char*)self + 0x40), (void*)&FUN_011388f0, self, "SndPlayer", 1, 1);
+    if (ok != 0)
+        return false;
+    self->mTimerAdded = 1;
+    return true;
 }
 }}}  // namespace rw::audio::core
