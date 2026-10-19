@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPXHTMLWin.cpp  ?OnKeyUp@cXHTMLWin@Pollen@SP@@QAE_NHHH@Z  00622fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPXHTMLWin.cpp  ?CreateXHTMLButton@Pollen@SP@@YA_NPAPAVIWindow_s0062_2f20@UTFWin@EA@@@Z  006230b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPXHTMLWin.cpp  ?ShowFormControl@Pollen@SP@@YGXPAUFormControlRef@12@H@Z  00623150  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPXHTMLWin.cpp  ?HandleMessage@cXHTMLWin@Pollen@SP@@QAE_NABUMessage_s0062_2f20@UTFWin@EA@@@Z  00623190  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPXHTMLWin.cpp  ?Refresh@cFloatPropWatch@Pollen@SP@@QAE_NPAUIPropertyListV@23@@Z  006231d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPXHTMLWin.cpp  ??1cXHTMLWin@Pollen@SP@@UAE@XZ  00623280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPXHTMLWin.cpp  ?OnKeyDown@cXHTMLWin@Pollen@SP@@QAE_NHHH@Z  00623ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

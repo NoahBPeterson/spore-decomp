@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+00623260 20 DomHook -> Node conversion helper: complete; original stores via the pre-loaded out pointer, zero via ecx
+00623370 13 cXHTMLWin::DestroyFormControl: complete; list clear is not CSE'd in the original (separate empty test and loop-entry test)
+006233f0 258 cXHTMLWin::FocusNextControl (tab order via the tabindex attribute): complete; block layout of the first scan loop
+00623570 95 FindSubmitChild: complete; original keeps a top-tested loop with two back-jumps (no loop inversion)
+00623610 51 FindFormChild: same loop shape issue
+00623660 114 cXHTMLWin::SubmitForm: complete; register assignment (edi/ebx) and click-struct slot
+00623830 326 cSPHoverTitle::Layout (position tooltip near the cursor): complete; SSE operand order of (w + pad + x) and SPPoint arg copies
+00623c90 530 cXHTMLWin::SetFormControlValue (select/option handling): complete; list end iterator kept as a null-checked value in the original
+00623f90 7 popup timer OnMessage; complete, only the fstp/mov al scheduling in the 0x51a1a2e path differs
+00624080 1600 cXHTMLWin::CreateFormControl; complete behaviour, structure/regalloc differ (jump-table switch, duplicated inlined tails)
+006248d0 130 cXHTMLWin::GetFormControlValue; complete; WString assign is a usercall (eax=begin) and list anchor null-test shape differs

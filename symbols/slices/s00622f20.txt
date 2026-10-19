@@ -1,10 +1,19 @@
 00622f20 SP::Pollen::ToDouble  # wcstod wrapper, byte-exact
+00622fe0 ?OnKeyUp@cXHTMLWin@Pollen@SP@@QAE_NHHH@Z  # cXHTMLWin::OnKeyUp migrated from s00622f20 (verbatim, slice spelling)
 00623000 SP::Pollen::IsSubmittableControl  # byte-exact: not disabled, not hidden input
-006230b0 SP::Pollen::CreateXHTMLButton  # PDB name; byte-exact
-00623280 SP::Pollen::cXHTMLWin::~cXHTMLWin  # byte-exact
+006230b0 ?CreateXHTMLButton@Pollen@SP@@YA_NPAPAVIWindow_s0062_2f20@UTFWin@EA@@@Z  # CreateXHTMLButton migrated from s00622f20 (verbatim, slice spelling)
+00623150 ?ShowFormControl@Pollen@SP@@YGXPAUFormControlRef@12@H@Z  # ShowFormControl migrated from s00622f20 (verbatim, slice spelling)
+00623190 ?HandleMessage@cXHTMLWin@Pollen@SP@@QAE_NABUMessage_s0062_2f20@UTFWin@EA@@@Z  # cXHTMLWin::HandleMessage migrated from s00622f20 (verbatim, slice spelling)
+006231d0 ?Refresh@cFloatPropWatch@Pollen@SP@@QAE_NPAUIPropertyListV@23@@Z  # cFloatPropWatch::Refresh migrated from s00622f20 (verbatim, slice spelling)
+00623260 ?GetNode@DomHookX@Pollen@SP@@QAEXPAPAUDomNode@@@Z  # DomHookX::GetNode migrated from s00622f20 (verbatim, slice spelling)
+00623280 ??1cXHTMLWin@Pollen@SP@@UAE@XZ  # cXHTMLWin::~cXHTMLWin migrated from s00622f20 (verbatim, slice spelling)
+00623370 ?DestroyFormControl@cXHTMLWin@Pollen@SP@@QAEXPAUDomElement@@@Z  # cXHTMLWin::DestroyFormControl migrated from s00622f20 (verbatim, slice spelling)
+006233f0 ?FocusNextControl@cXHTMLWin@Pollen@SP@@QAE_NXZ  # cXHTMLWin::FocusNextControl migrated from s00622f20 (verbatim, slice spelling)
+00623570 ?FindSubmitChild@Pollen@SP@@YAPAUDomElement@@PAU3@@Z  # FindSubmitChild migrated from s00622f20 (verbatim, slice spelling)
+00623610 ?FindFormChild@Pollen@SP@@YAPAUDomElement@@PAU3@@Z  # FindFormChild migrated from s00622f20 (verbatim, slice spelling)
+00623660 ?SubmitForm@cXHTMLWin@Pollen@SP@@QAE_NXZ  # cXHTMLWin::SubmitForm migrated from s00622f20 (verbatim, slice spelling)
+00623830 ?Layout@cSPHoverTitle@Pollen@SP@@QAEXXZ  # cSPHoverTitle::Layout migrated from s00622f20 (verbatim, slice spelling)
 006239c0 SP::cSPHoverTitle::Load  # byte-exact: hover layout and property list
-00623570 SP::Pollen::FindSubmitChild  # PDB name
-00623610 SP::Pollen::FindFormChild  # PDB name
-00623660 SP::Pollen::cXHTMLWin::SubmitForm  # PDB name
-00623370 SP::Pollen::cXHTMLWin::DestroyFormControl  # PDB name
-00623c90 SP::Pollen::cXHTMLWin::SetFormControlValue  # PDB name
+00623c90 ?SetFormControlValue@cXHTMLWin@Pollen@SP@@QAEXPAUDomElement@@PB_W@Z  # cXHTMLWin::SetFormControlValue migrated from s00622f20 (verbatim, slice spelling)
+00623ef0 ?OnKeyDown@cXHTMLWin@Pollen@SP@@QAE_NHHH@Z  # cXHTMLWin::OnKeyDown migrated from s00622f20 (verbatim, slice spelling)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00622f20, named from the dev publics; slice address comment)

@@ -1,3 +1,6 @@
+00623f90 ?OnMessage@cPopupTimer@@QAE_NPAXPAUSMessage@@@Z  # cPopupTimer::OnMessage migrated from s00623f90 (verbatim, slice spelling)
+00624080 ?CreateFormControl@cXHTMLWin_s0062_3f90@@QAEXPAUFormControl@@@Z  # cXHTMLWin_s0062_3f90::CreateFormControl migrated from s00623f90 (verbatim, slice spelling)
+006248d0 ?GetFormControlValue@cXHTMLWin_s0062_3f90@@QAEXPAUFormControl@@PAUWString@@@Z  # cXHTMLWin_s0062_3f90::GetFormControlValue migrated from s00623f90 (verbatim, slice spelling)
 00624eb0 ?Shutdown@cCreatureCameraBase@SP@@UAE_NXZ  # SP::cCreatureCameraBase::Shutdown migrated from s00623f90
 00624ec0 ?Deactivate@cCreatureCameraBase@SP@@UAEXXZ  # SP::cCreatureCameraBase::Deactivate migrated from s00623f90
 00624f20 ?OnKeyDown@cCreatureCameraBase@SP@@UAE_NII@Z  # SP::cCreatureCameraBase::OnKeyDown migrated from s00623f90
