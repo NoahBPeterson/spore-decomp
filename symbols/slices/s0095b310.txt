@@ -7,3 +7,4 @@
 0095b860 ?Shutdown@WM@@QAEXXZ  # WM::Shutdown migrated from s0095b310 (verbatim, slice spelling)
 0095ba70 ?GetTableEntry@@YAII@Z  # GetTableEntry migrated from s0095b310 (verbatim, slice spelling)
 0095ba90 ?Swap@Chunk@@QAEXPAU1@@Z  # Chunk::Swap migrated from s0095b310 (verbatim, slice spelling)
+0095c0d0 ?DrawClippedRect@@YAXPAUIRenderer@@PBURectF@@11@Z  # DrawClippedRect migrated from s0095b310 (verbatim, slice spelling)
