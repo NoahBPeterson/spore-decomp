@@ -1,0 +1,14 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPPaletteItemUIOneClickPaint.cpp  ?SetIsSelected@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEX_N@Z  005ee710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIOneClickPaint.cpp  ?Trigger@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  005ee740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIOneClickPaint.cpp  ?OnPaintThemeSelected@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXIIH@Z  005ee760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIOneClickPaint.cpp  ??0cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@QAE@I@Z  005ee7b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIOneClickPaint.cpp  ??0cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@QAE@XZ  005ee820  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIOneClickPaint.cpp  ?Update@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXM@Z  005eece0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIOneClickPaint.cpp  ?Shutdown@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  005eef80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIOneClickPaint.cpp  ?HandleMessage@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAE_NIPAX@Z  005eefd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIOneClickPaint.cpp  ?OnSelected@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  005ef030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIOneClickPaint.cpp  ?OnDeselected@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  005ef080  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIOneClickPaint.cpp  ?OnRollover@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  005ef0b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIOneClickPaint.cpp  ?OffRollover@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  005ef0f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIOneClickPaint.cpp  ?SendPaintMessage@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  005ef130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

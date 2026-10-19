@@ -1,8 +1,27 @@
+005c6630 ?IsUnlocked@cSPPaletteItem@SP@@QBE_NPAVcCollectableItems@2@@Z  # SP::cSPPaletteItem::IsUnlocked (callee of s005ee480, named from the dev publics; slice address comment)
+005c6670 ?IsNew@cSPPaletteItem@SP@@QBE_NPAVcCollectableItems@2@@Z  # SP::cSPPaletteItem::IsNew (callee of s005ee480, named from the dev publics; slice address comment)
+005c6b10 ?HandleMessage@cSPPaletteItemUISelectable@SP@@MAE_NIPAX@Z  # SP::cSPPaletteItemUISelectable::HandleMessage (callee of s005ee480, named from the dev publics; slice address comment)
+005c6ca0 ?Init@cSPPaletteItemUI@SP@@UAEXPAVcSPPaletteItem@2@PAVIWindow@UTFWin@EA@@1PAUcSPPaletteInfo@2@@Z  # SP::cSPPaletteItemUI::Init (callee of s005ee480, named from the dev publics; slice address comment)
 005ee480 cSPUIPropertyLayout::SetItem  # byte-exact; called from palette rollovers with (item, paletteInfo, content, show)
 005ee500 SP::cSPPaletteItemUIDrag::Cast  # in cSPPaletteItemUIDrag IWinProc vtable slot 3 (0x13f98dc+0xc), byte-exact
 005ee590 SP::cSPPaletteItemUIDrag::`scalar deleting destructor'  # vtable 0x13f98f8 slot 0, byte-exact
 005ee660 SP::cSPPaletteItemUIDrag::Shutdown  # vtable 0x13f98f8 slot 2, byte-exact
 005ee6d0 SP::cSPPaletteItemUIDrag::OnDeselected  # vtable 0x13f98f8 slot 0x34 (pairs with OnSelected at 0x30)
-005eece0 SP::cSPPaletteItemUIOneClickPaint::Update  # vtable 0x13f7d40 slot 0x18, byte-exact
+005ee710 ?SetIsSelected@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEX_N@Z  # cSPPaletteItemUIOneClickPaint_s005e_e480::SetIsSelected migrated from s005ee480 (verbatim, slice spelling)
+005ee740 ?Trigger@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  # cSPPaletteItemUIOneClickPaint_s005e_e480::Trigger migrated from s005ee480 (verbatim, slice spelling)
+005ee760 ?OnPaintThemeSelected@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXIIH@Z  # cSPPaletteItemUIOneClickPaint_s005e_e480::OnPaintThemeSelected migrated from s005ee480 (verbatim, slice spelling)
+005ee7b0 ??0cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@QAE@I@Z  # cSPPaletteItemUIOneClickPaint_s005e_e480::cSPPaletteItemUIOneClickPaint migrated from s005ee480 (verbatim, slice spelling)
+005ee820 ??0cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@QAE@XZ  # cSPPaletteItemUIOneClickPaint_s005e_e480::cSPPaletteItemUIOneClickPaint migrated from s005ee480 (verbatim, slice spelling)
+005ee880 ?Init@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXPAVcSPPaletteItem_s005e_e480@2@PAVIWindow_s005e_e480@UTFWin@EA@@HPAUcSPPaletteInfo_s005e_e480@2@@Z  # cSPPaletteItemUIOneClickPaint_s005e_e480::Init migrated from s005ee480 (verbatim, slice spelling)
+005eece0 ?Update@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXM@Z  # cSPPaletteItemUIOneClickPaint_s005e_e480::Update migrated from s005ee480 (verbatim, slice spelling)
+005eef80 ?Shutdown@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  # cSPPaletteItemUIOneClickPaint_s005e_e480::Shutdown migrated from s005ee480 (verbatim, slice spelling)
+005eefd0 ?HandleMessage@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAE_NIPAX@Z  # cSPPaletteItemUIOneClickPaint_s005e_e480::HandleMessage migrated from s005ee480 (verbatim, slice spelling)
+005ef030 ?OnSelected@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  # cSPPaletteItemUIOneClickPaint_s005e_e480::OnSelected migrated from s005ee480 (verbatim, slice spelling)
+005ef080 ?OnDeselected@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  # cSPPaletteItemUIOneClickPaint_s005e_e480::OnDeselected migrated from s005ee480 (verbatim, slice spelling)
+005ef0b0 ?OnRollover@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  # cSPPaletteItemUIOneClickPaint_s005e_e480::OnRollover migrated from s005ee480 (verbatim, slice spelling)
+005ef0f0 ?OffRollover@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  # cSPPaletteItemUIOneClickPaint_s005e_e480::OffRollover migrated from s005ee480 (verbatim, slice spelling)
+005ef130 ?SendPaintMessage@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  # cSPPaletteItemUIOneClickPaint_s005e_e480::SendPaintMessage migrated from s005ee480 (verbatim, slice spelling)
 005ef1b0 SP::cSPPaletteItemUIPlannerEdit::Cast  # type id 0xb4e4f69b, byte-exact
 005ef2d0 SP::cSPPaletteItemUIPlannerEdit::OnRollover  # mirrors cSPPaletteItemRollover::OnRollover, byte-exact
+005f4f80 ?Init@cSPSwatch@SP@@QAEXABVKey@ResourceMan@EA@@PAVIWindow@UTFWin@5@_N2W4eLODType@cAnimatingCreature@2@2@Z  # SP::cSPSwatch::Init (callee of s005ee480, named from the dev publics; slice address comment)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005ee480, named from the dev publics; slice address comment)
