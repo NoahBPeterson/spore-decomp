@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPAudio/SPAudioEventModifier.cpp  ?ConvertStringToMaskBit@cEventModifier_s00a3_8e40@Audio@SP@@QAEIPBD@Z  00a390d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEventModifier.cpp  ?ReleasePrimitives@cEventModifier_s00a3_8e40@Audio@SP@@QAEXXZ  00a39310  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEventModifier.cpp  ??0cEventModifier_s00a3_8e40@Audio@SP@@QAE@XZ  00a398d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEventModifier.cpp  ??0cEventModifierPrimitiveMouthType@Audio@SP@@QAE@PBD@Z  00a3a070  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEventModifier.cpp  ?Init@cEventModifier_s00a3_9ce0@Audio@SP@@QAE_NXZ  00a3a180  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
