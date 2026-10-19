@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorSellBackRollover.cpp  ?Init@cSellBackRollover@@QAE_NG@Z  005cc5a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorSellBackRollover.cpp  ?HideWin@cSellBackRollover@@QAEXXZ  005cc690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorSellBackRollover.cpp  ?IsWinVisible@cSellBackRollover@@QAE_NXZ  005cc6c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

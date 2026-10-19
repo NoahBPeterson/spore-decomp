@@ -3,6 +3,7 @@
 005cc100 ?IsWinVisible@cDetachedRollover@@QAE_NXZ  # cDetachedRollover::IsWinVisible migrated from s005cbfd0 (verbatim, slice spelling)
 005cc120 ?Show@cSPEditorSellBackDetachedRollover@SP@@QAEXPB_WH_N@Z  # SP::cSPEditorSellBackDetachedRollover::Show migrated from s005cbfd0
 005cc520 ?cSellBackRolloverCtor@@YAXPAX@Z  # cSellBackRolloverCtor migrated from s005cbfd0 (verbatim, slice spelling)
-005cc5a0  ?Init@cSellBackRollover@@QAE_NG@Z  # sell-back rollover Init (window at +0x80)
-005cc690  ?HideWin@cSellBackRollover@@QAEXXZ  # if !mFlag9e && mWin -> SetFlag(1,false)
-005cc6c0  ?IsWinVisible@cSellBackRollover@@QAE_NXZ  # if !mFlag9e && mWin -> GetFlag()&1
+005cc5a0 ?Init@cSellBackRollover@@QAE_NG@Z  # cSellBackRollover::Init migrated from s005cbfd0 (verbatim, slice spelling)
+005cc690 ?HideWin@cSellBackRollover@@QAEXXZ  # cSellBackRollover::HideWin migrated from s005cbfd0 (verbatim, slice spelling)
+005cc6c0 ?IsWinVisible@cSellBackRollover@@QAE_NXZ  # cSellBackRollover::IsWinVisible migrated from s005cbfd0 (verbatim, slice spelling)
+005cc750 ?Show@cSPEditorSellBackRollover@SP@@QAEXPB_WH_N@Z  # SP::cSPEditorSellBackRollover::Show migrated from s005cbfd0
