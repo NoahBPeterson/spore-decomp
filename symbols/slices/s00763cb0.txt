@@ -2,3 +2,8 @@
 007642c0 ??1D7642c0@@QAE@XZ  # D7642c0::~D7642c0 migrated from s00763cb0 (verbatim, slice spelling)
 00764670 ?Wrap670@Loader@@QAEXH@Z  # Loader::Wrap670 migrated from s00763cb0 (verbatim, slice spelling)
 007646a0 ?Wrap6a0@Loader@@QAEXH@Z  # Loader::Wrap6a0 migrated from s00763cb0 (verbatim, slice spelling)
+00764220 rw::core::arena::Arena::Arena  # 0x98-byte Arena default ctor (two ResourceDescriptor vec-ctors + 4 zero ints at +0x84); dtor is 0x7635b0
+00764580 SP::cGraphicsResourceFactory::FixupArena  # ArenaStart/FixupNext loop, DestructNext on refusal; called from 0x764ce0
+00764a50 SP::cGraphicsResourceFactory::ReadResourceArena_1  # PDB candidate; reads 0x98-byte arena header + 4 spans
+00764ce0 SP::cGraphicsResourceFactory::BuildArena  # ReadResourceArena + FixupArena + store block ptr and 12-byte key into mArenaResource
+00764820 Loader::Load820  # reads whole stream into SharedBuf, wraps in GraphicsFactoryAsyncRequest

@@ -1,2 +1,7 @@
 00763df0  12   complete: registered-object predicate; original keeps key in edi / list in esi (ours swapped)
 007646a0  22   complete: state->Load(&state[0x2c], p28, p14); original keeps p28 in esi, ours edx; equiv PASS (1187 valid inputs, 100% coverage)
+00764220  72  complete: rw::core::arena::Arena default ctor (two EH-vector-constructed ResourceDescriptors); original keeps 1 in eax after the vec-ctor call, ours stores imm 1 and hoists xor differently [equiv: PASS]
+00764430  25  complete: serialize 0x7c-byte records via stream vslot 14; 12-byte temp copy is scheduled load/store interleaved in original, ours hoists loads [equiv: UNSUPPORTED (0/400 valid inputs, vtable-driven)]
+00764760  4  complete: ctor with two Blk blocks, flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE; stores of +0x70/+0x74/+0x78 ordered differently [equiv: PASS]
+007649f0  4  complete: async request complete; register choice (ecx vs edx) for arg of 0x6ae2f0 [equiv: UNSUPPORTED (0/400 valid inputs, vtable-driven)]
+00764ce0  13  complete: arena wrapper build/teardown; original keeps this in esi and first block in edi, ours swapped [equiv: UNSUPPORTED (0/400 valid inputs)]

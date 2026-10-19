@@ -4,3 +4,8 @@ slices/s00763cb0/s00763cb0.cpp  ??1D7642c0@@QAE@XZ                          0076
 slices/s00763cb0/s00763cb0.cpp  ??1D7643d0@@QAE@XZ                          007643d0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00763cb0/s00763cb0.cpp  ?Wrap670@Loader@@QAEXH@Z                    00764670  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00763cb0/s00763cb0.cpp  ?Wrap670@Loader@@QAEXH@Z                    007646c0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00763cb0/s00763cb0.cpp  ?Assign@ObjState@@QAEAAU1@ABU1@@Z                            00763e50  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00763cb0/s00763cb0.cpp  ?FUN_764320@@YGEPAURasterLoadState@@PAXPAUOutRec@@@Z         00764320  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00763cb0/s00763cb0.cpp  ?FixupArena@cGraphicsResourceFactory@SP@@QAE_NPAUArenaOwner@@@Z 00764580  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00763cb0/s00763cb0.cpp  ?Load820@Loader@@QAE_NH@Z                                    00764820  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00763cb0/s00763cb0.cpp  ?ReadResourceArena@cGraphicsResourceFactory@SP@@QAE_NPAUD7642c0@@PAUStm7@@PAURegistry@@@Z 00764a50  /O2 /MD /Gy /EHsc /TP /GS-
