@@ -7,4 +7,5 @@
 ../src/game/SPCreatureAnim/creature.cpp  ??1creature_static_data_s009c_1f60@nSPCreatureAnim@@QAE@XZ  009c2050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/creature.cpp  ?resize@bone_xform_vec@nSPCreatureAnim@@QAEXI@Z  009c2520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/creature.cpp  ?resize@wiggle_instance_vec@nSPCreatureAnim@@QAEXI@Z  009c25f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature.cpp  ??1creature_instance_data_s009c_4a30@nSPCreatureAnim@@QAE@XZ  009c4bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/creature.cpp  ?FUN_009c4d10@creature_instance_data_s009c_4a30@nSPCreatureAnim@@QAEXXZ  009c4d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

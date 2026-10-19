@@ -2,8 +2,8 @@
 009c26f0 ?InitWiggles@creature_static_data@nSPCreatureAnim@@QAEXXZ  # nSPCreatureAnim::creature_static_data::InitWiggles (callee of s009c4a30, named from the dev publics; slice address comment)
 009c4a30 ?FinalizeCreature@nSPCreatureAnim@@YAIPAUcreature_static_data_s009c_4a30@1@@Z  # FinalizeCreature migrated from s009c4a30 (verbatim, slice spelling)
 009c4b90 ??1dynamics_walking_s009c_4a30@nSPCreatureAnim@@QAE@XZ  # dynamics_walking_s009c_4a30::~dynamics_walking migrated from s009c4a30 (verbatim, slice spelling)
-009c4bf0 nSPCreatureAnim::creature_instance_data::~creature_instance_data  # hashtable DoFreeNodes(0x17a0), free node block(0x17a4), delete[] mWiggles(0x1694)/Bodies(0x2e4)/[0x24c], ~dynamics_walking(0x15b8), FUN_009b59c0(0x2f8), Release [0x294], static_data->Release
+009c4bf0 ??1creature_instance_data_s009c_4a30@nSPCreatureAnim@@QAE@XZ  # creature_instance_data_s009c_4a30::~creature_instance_data migrated from s009c4a30 (verbatim, slice spelling)
 009c4cc0 ?Release@creature_instance_data@nSPCreatureAnim@@QAEJXZ  # nSPCreatureAnim::creature_instance_data::Release migrated from s009c4a30
 009c4d10 ?FUN_009c4d10@creature_instance_data_s009c_4a30@nSPCreatureAnim@@QAEXXZ  # creature_instance_data_s009c_4a30::FUN_009c4d10 migrated from s009c4a30 (verbatim, slice spelling)
-009c4d40 nSPCreatureAnim::creature_instance_data::Clear  # flag-gated static_data release; bodies/wiggle vectors cleared; ~200 stores resetting the gait/rig state; FUN_0099ce40; FUN_009e3f70(6,4); two new[] buffers
+009c4d40 ?Clear@creature_instance_data_s009c_4a30@nSPCreatureAnim@@QAEX_N@Z  # creature_instance_data_s009c_4a30::Clear migrated from s009c4a30 (verbatim, slice spelling)
 009c52a0 nSPCreatureAnim::InitCreatureInstance  # cdecl(static,inst,7 floats,int): body-count guard, Clear, static_data ref, requested pos/rot, per-body init, BuildBodyList/FUN_009b6360, gait setup, InitWiggles

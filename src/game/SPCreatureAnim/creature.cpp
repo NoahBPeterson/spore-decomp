@@ -1440,6 +1440,21 @@ namespace nSPCreatureAnim {
 void FUN_009b5ce0(creature_static_data_s009c_4a30* c);                 // 0x009b5ce0
 }
 namespace nSPCreatureAnim {
+void FUN_009bf5c0(void* first, void* last, void* out);      // 0x009bf5c0
+}
+namespace nSPCreatureAnim {
+void FUN_009b4a20(void* first, void* last, void* out);      // 0x009b4a20
+}
+namespace nSPCreatureAnim {
+struct M3 { float f[9]; void FUN_0099ce40(); };             // 0x0099ce40
+}
+namespace nSPCreatureAnim {
+void FUN_009e3f70(void* self, int a, int b);                // 0x009e3f70
+}
+namespace nSPCreatureAnim {
+void* FUN_011e073e(void* p, int a, int b);                  // 0x011e073e
+}
+namespace nSPCreatureAnim {
 struct phasegroup_vec {
     void* mpBegin;
     void* mpEnd;
@@ -1460,11 +1475,43 @@ struct dynamics_walking_s009c_4a30 {
 };
 }
 namespace nSPCreatureAnim {
+struct sub_2f8 {                                            // object at instance+0x2f8
+    uint8 pad[0x10];
+    void FUN_009e3f70(int a, int b);                        // 0x009e3f70
+    void FUN_009b59c0();                                    // 0x009b59c0
+};
+}
+namespace nSPCreatureAnim {
+struct ik_vec {                                             // object at instance+0x24c
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    uint32 mAllocator;
+    void resize(int n);                                     // 0x009c2ef0
+};
+}
+namespace nSPCreatureAnim {
+struct instance_hashtable {                                 // object at instance+0x17a0
+    uint32 mAllocator0;                                     // +0x00
+    void*  mpBucketArray;                                   // +0x04
+    uint32 mnBucketCount;                                   // +0x08
+    uint32 mnElementCount;                                  // +0x0c
+    uint32 pad10[3];                                        // +0x10
+    void*  mpFreeList;                                      // +0x1c  (fixed allocator free list)
+    uint32 pad20;                                           // +0x20
+    void*  mpPoolBegin;                                     // +0x24
+    void*  mpPoolEnd;                                       // +0x28
+    uint32 pad2c;
+    void*  mpFixedBuffer;                                   // +0x30
+    void DoFreeNodes(void* a, void* b);                     // 0x00a1b6c0
+};
+}
+namespace nSPCreatureAnim {
 struct creature_instance_data_s009c_4a30 {
     uint8 blob[0x17b0];
 
     void Clear(bool flag);                                  // 0x009c4d40
-    int  Release();                                         // 0x009c4cc0
+    __declspec(noinline) int Release();                     // 0x009c4cc0
     ~creature_instance_data_s009c_4a30();                              // 0x009c4bf0
     void InitWiggles();                                     // 0x009c2c20
     void BuildBodyList();                                   // 0x009c20e0
@@ -1472,6 +1519,33 @@ struct creature_instance_data_s009c_4a30 {
     void FUN_009cb4f0();                                    // 0x009cb4f0
     void FUN_009b6360();                                    // 0x009b6360
 };
+}
+namespace nSPCreatureAnim {
+#define F(o) (*(float*)(b + (o)))
+}
+namespace nSPCreatureAnim {
+struct V2 { float x, y; V2& operator=(const V2& o) { x = o.x; y = o.y; return *this; } };
+}
+namespace nSPCreatureAnim {
+struct V3 { float x, y, z; V3& operator=(const V3& o) { x = o.x; y = o.y; z = o.z; return *this; } };
+}
+namespace nSPCreatureAnim {
+#define V2AT(o) (*(V2*)(b + (o)))
+}
+namespace nSPCreatureAnim {
+#define V3AT(o) (*(V3*)(b + (o)))
+}
+namespace nSPCreatureAnim {
+struct Elem2bc { uint8 d[0x2bc]; };
+}
+namespace nSPCreatureAnim {
+struct Elem2c  { uint8 d[0x2c]; };
+}
+namespace nSPCreatureAnim {
+struct vec2bc { Elem2bc* mpBegin; Elem2bc* mpEnd; };
+}
+namespace nSPCreatureAnim {
+struct vec2c  { Elem2c*  mpBegin; Elem2c*  mpEnd; };
 }
 // ---- items of slice s009c4a30 end
 
@@ -3328,6 +3402,41 @@ dynamics_walking_s009c_4a30::~dynamics_walking_s009c_4a30()
 }
 }  // namespace nSPCreatureAnim
 
+// @ 0x009c4bf0
+namespace nSPCreatureAnim {
+creature_instance_data_s009c_4a30::~creature_instance_data_s009c_4a30()
+{
+    char* b = (char*)this;
+    instance_hashtable* ht = (instance_hashtable*)(b + 0x17a0);
+    ht->DoFreeNodes(ht->mpBucketArray, (void*)ht->mnBucketCount);
+    {
+        void* e = ht->mpBucketArray;
+        ht->mnElementCount = 0;
+        if (ht->mnBucketCount > 1 && e != ht->mpFixedBuffer) {
+            if (e < ht->mpPoolBegin || e >= ht->mpPoolEnd)
+                operator delete[](e);
+            else {
+                *(void**)e = ht->mpFreeList;
+                ht->mpFreeList = e;
+            }
+        }
+    }
+    if (*(void**)(b + 0x1694) && ((int*)*(void**)(b + 0x1694))[-1] != 0)
+        operator delete[](*(void**)(b + 0x1694));
+    ((dynamics_walking_s009c_4a30*)(b + 0x15b8))->~dynamics_walking_s009c_4a30();
+    ((sub_2f8*)(b + 0x2f8))->FUN_009b59c0();
+    if (*(void**)(b + 0x2e4) && ((int*)*(void**)(b + 0x2e4))[-1] != 0)
+        operator delete[](*(void**)(b + 0x2e4));
+    if (*(void**)(b + 0x294))
+        ((creature_instance_data_s009c_4a30*)*(void**)(b + 0x294))->Release();
+    if (*(void**)(b + 0x24c) && ((int*)*(void**)(b + 0x24c))[-1] != 0)
+        operator delete[](*(void**)(b + 0x24c));
+    creature_static_data_s009c_4a30* sd = *(creature_static_data_s009c_4a30**)b;
+    if (sd)
+        sd->Release();
+}
+}  // namespace nSPCreatureAnim
+
 // @ 0x009c4cc0
 long nSPCreatureAnim::creature_instance_data::Release()
 {
@@ -3357,5 +3466,157 @@ void creature_instance_data_s009c_4a30::FUN_009c4d10()
     }
     FUN_009cb4f0();
     *(uint8*)(b + 0xc) = 0;
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009c4d40
+namespace nSPCreatureAnim {
+void creature_instance_data_s009c_4a30::Clear(bool flag)
+{
+    char* b = (char*)this;
+    creature_static_data_s009c_4a30* sd;
+
+    if (flag) {
+        sd = *(creature_static_data_s009c_4a30**)b;
+        *(uint32*)(b + 0x2c0) = 0;
+        if (sd) { *(void**)b = 0; sd->Release(); }
+        *(uint8*)(b + 0xc) = 0;
+    }
+
+    sd = *(creature_static_data_s009c_4a30**)b;
+    *(uint32*)(b + 0x2c0) = 0;
+    if (sd) { *(void**)b = 0; sd->Release(); }
+    *(uint32*)(b + 4) = 0;
+    *(uint32*)(b + 8) = 0;
+
+    // Bodies.clear()
+    {
+        vec2bc* v = (vec2bc*)(b + 0x2e4);
+        Elem2bc* be = v->mpBegin;
+        Elem2bc* en = v->mpEnd;
+        FUN_009bf5c0(en, en, be);
+        v->mpEnd += (en - be);
+    }
+    *(uint32*)(b + 0x10) = (uint32)this >> 4;
+    *(uint8*)(b + 0xc) = 0;
+    FUN_009cb4f0();
+
+    F(0x34) = 0.0f;  F(0x38) = 0.0f;  F(0x30) = 0.0f;  F(0x18) = 0.0f;
+    V2AT(0x1c) = V2AT(0x34);
+    F(0x24) = 0.0f;
+    V2AT(0x28) = V2AT(0x1c);
+    F(0x60) = 0.0f;  F(0x64) = 0.0f;  F(0x68) = 1.0f;  F(0x5c) = 0.0f;  F(0x3c) = 0.0f;
+    V3AT(0x40) = V3AT(0x60);
+    F(0x4c) = 0.0f;
+    V3AT(0x50) = V3AT(0x40);
+    F(0x6c) = 1.0f;  F(0x70) = 1.0f;
+    F(0xb4) = 0.0f;  F(0xb8) = 0.0f;  F(0xb0) = 0.0f;  F(0x98) = 0.0f;
+    V2AT(0x9c) = V2AT(0xb4);
+    F(0x8c) = 0.0f;
+    V2AT(0x90) = V2AT(0x9c);
+    F(0x80) = 0.0f;
+    V2AT(0x84) = V2AT(0x90);
+    F(0x74) = 0.0f;
+    V2AT(0x78) = V2AT(0x84);
+    F(0xc8) = 0.0f;  F(0xcc) = 0.0f;  F(0xd0) = 0.0f;  F(0xd4) = 1.0f;
+    F(0xa4) = 0.0f;  F(0xa8) = 0.0f;  F(0xac) = 0.0f;
+    F(0xbc) = 0.0f;  F(0xc0) = 0.0f;  F(0xc4) = 0.0f;
+    F(0xd8) = 0.0f;  F(0xdc) = 0.0f;  F(0xe0) = 0.0f;  F(0xe4) = 0.0f;
+    F(0x110) = 0.0f; F(0x114) = 0.0f;
+    {
+        M3* mm = (M3*)(b + 0x118);
+        float* m = mm->f;
+        m[0] = 0.0f;
+        m[1] = 0.0f;
+        m[2] = 0.0f;
+        m[3] = 0.0f;
+        m[4] = 0.0f;
+        m[5] = 0.0f;
+        m[6] = 0.0f;
+        m[7] = 0.0f;
+        m[8] = 0.0f;
+        mm->FUN_0099ce40();
+    }
+
+    F(0x13c) = 0.0f;
+    F(0x140) = 0.0f;
+    F(0x144) = 0.0f;
+    F(0x148) = 0.0f;
+    F(0x14c) = 0.0f;
+    F(0x150) = 0.0f;
+    F(0x154) = 0.0f;
+    F(0x158) = 0.0f;
+    F(0x15c) = 0.0f;
+    F(0x160) = 0.0f;
+    F(0x164) = 0.0f;
+    F(0x168) = 0.0f;
+    F(0x16c) = 0.0f;
+    F(0x170) = 0.0f;
+    F(0x174) = 0.0f;
+    F(0x178) = 0.0f;
+    F(0x17c) = 0.0f;
+    F(0x180) = 0.0f;
+    F(0x184) = 0.0f;
+    F(0x188) = 0.0f;
+    F(0x18c) = 0.0f;
+    F(0x190) = 0.0f;
+    F(0x194) = 0.0f;
+    F(0x198) = 0.0f;
+    F(0x19c) = 0.0f;
+    F(0x1a0) = 0.0f;
+    F(0x1a4) = 0.0f;
+
+    *(uint32*)(b + 0x274) = 0;
+    F(0x27c) = -10.0f;
+    F(0x280) = 2.0f;
+    F(0x278) = 0.0f;
+    F(0x284) = 0.0f;  F(0x288) = 0.0f;  F(0x28c) = 0.0f;  F(0x290) = 1.0f;
+
+    if (*(void**)(b + 0x294)) {
+        void* p = *(void**)(b + 0x294);
+        *(uint32*)(b + 0x294) = 0;
+        ((creature_instance_data_s009c_4a30*)p)->Release();
+    }
+
+    *(uint32*)(b + 0x2b0) = 0;
+    *(uint32*)(b + 0x2b8) = 0;
+    *(uint32*)(b + 0x2bc) = 0;
+    *(uint32*)(b + 0x2b4) = 0xc;
+    *(uint32*)(b + 0x2a8) = 0;
+    *(uint32*)(b + 0x2ac) = 0xffffffffu;
+    *(uint8*)(b + 0x260) = 1;  *(uint8*)(b + 0x261) = 0;
+    *(uint8*)(b + 0x262) = 1;  *(uint8*)(b + 0x263) = 0;
+    F(0x26c) = 0.0f;  F(0x264) = 0.0f;  F(0x268) = 0.0f;
+    ((sub_2f8*)(b + 0x2f8))->FUN_009e3f70(6, 4);
+
+    *(uint32*)(b + 0x1640) = 0;
+    F(0x1650) = 0.0f; F(0x1654) = 0.0f; F(0x1658) = 0.0f; F(0x165c) = 1.0f;
+    *(uint8*)(b + 0x168c) = 1;  *(uint8*)(b + 0x168d) = 1;
+    *(uint8*)(b + 0x168e) = 1;  F(0x1690) = 0.0f;
+
+    // mWiggles.clear()
+    {
+        vec2c* v = (vec2c*)(b + 0x1694);
+        Elem2c* be = v->mpBegin;
+        Elem2c* en = v->mpEnd;
+        FUN_009b4a20(en, en, be);
+        v->mpEnd += (en - be);
+    }
+    *(uint8*)(b + 0x1704) = 0;  *(uint8*)(b + 0x176c) = 0;
+    *(uint8*)(b + 0x1794) = 1;  F(0x1798) = 0.0f;
+    *(uint8*)(b + 0x179c) = 0;  *(uint8*)(b + 0x1680) = 1;
+    *(uint32*)(b + 0x1684) = 0;
+    *(uint32*)(b + 0x2d0) = 0xffffffffu;
+    *(uint8*)(b + 0x2d4) = 1;  *(uint8*)(b + 0x2d5) = 0;
+    *(uint32*)(b + 0x2dc) = 0;  *(uint32*)(b + 0x2d8) = 0;
+    *(uint8*)(b + 0x2e0) = 1;
+    *(uint32*)(b + 0x1ac) = 0;
+    ((ik_vec*)(b + 0x24c))->resize(0);
+
+    F(0x238) = 0.0f; F(0x23c) = 0.0f;
+    F(0x240) = 0.0f; F(0x244) = 1.0f;
+    F(0x248) = 1.0f;
+    FUN_011e073e(b + 0x1f8, 0xaa, 0x40);
+    FUN_011e073e(b + 0x1b8, 0, 0x40);
 }
 }  // namespace nSPCreatureAnim
