@@ -2,8 +2,8 @@
 01138af0 ?FUN_01138af0@core@audio@rw@@YA_NPAUSndPlayer1_s0113_88f0@123@PAM@Z  # FUN_01138af0 migrated from s011388f0 (verbatim, slice spelling)
 01138d00  rw::audio::core::Snd9Service::ReleaseEvent  # PDB candidate
 01138d40  rw::audio::core::Snd9Service::UpdateSnd9SampleRate  # PDB candidate
-01138d90  rw::audio::core::Snd9Service::RwacTimerClient  # PDB anchor
-01138ec0  rw::audio::core::Snd9Service::CreateInstance  # PDB anchor
+01138d90 ?FUN_01138d90@core@audio@rw@@YAXPAX@Z  # FUN_01138d90 migrated from s011388f0 (verbatim, slice spelling)
+01138ec0 ?FUN_01138ec0@core@audio@rw@@YA_NPAX@Z  # FUN_01138ec0 migrated from s011388f0 (verbatim, slice spelling)
 01138f90  rw::audio::core::SinePlayer::PlayHandler  # PDB
 01138fb0  rw::audio::core::SinePlayer::StopHandler  # PDB
 01139500  rw::audio::core::SampleCapture::StartHandler  # PDB anchor

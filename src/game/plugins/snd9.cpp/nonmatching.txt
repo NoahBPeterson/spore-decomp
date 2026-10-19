@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+01138d90 304 complete Snd9Service timer client mix loop; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (127 valid, 100% coverage, no mismatch)
+01138ec0 117 complete Snd9Service::CreateInstance; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (329 valid, 100% coverage)
