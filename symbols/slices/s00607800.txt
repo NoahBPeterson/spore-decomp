@@ -1,9 +1,13 @@
+00607800 ?ProcessLoginResults@cAuthManager_s0060_7800@Pollen@SP@@UAEXF@Z  # cAuthManager_s0060_7800::ProcessLoginResults migrated from s00607800 (verbatim, slice spelling)
 00607a60 SP::Pollen::AuthManager  # returns service-registry Get(0x7201461) = IAuthManager; byte-exact
-00607a80 eastl::basic_string<char>::compare(const char*)  # EASTL compare shape; byte-exact
-00607b70 SP::Pollen::cOfflinePromptDialog::HandleUIMessage  # dialog DoMessage calling ProcessLoginResults(6) (class name guessed)
+00607a80 ?compare@?$basic_string_s0060_87b0@DUallocator_s0060_87b0@eastl@@@eastl@@QBEHPBD@Z  # None migrated from s00607800 (verbatim, slice spelling)
+00607b70 ?HandleUIMessage@cOfflinePromptDialog@Pollen@SP@@UAE_NPAVIWindow_s0060_7800@UTFWin@EA@@ABUMessage_s0060_7800@56@@Z  # cOfflinePromptDialog::HandleUIMessage migrated from s00607800 (verbatim, slice spelling)
 00607be0 SP::Pollen::cLoginPromptDialog::HandleUIMessage  # dialog DoMessage, layout at +0xc (class name guessed)
+00607cf0 ?Show@cLoginHelpDialog_s0060_7800@?A0x2dae62f7@Pollen@SP@@QAE_NXZ  # Show migrated from s00607800 (verbatim, slice spelling)
+00607f30 ??0cAuthManager_s0060_7800@Pollen@SP@@QAE@XZ  # cAuthManager_s0060_7800::cAuthManager migrated from s00607800 (verbatim, slice spelling)
 00608090 SP::Pollen::cAuthManager::~cAuthManager  # frees mUser/mPassword/mScreenName, releases pReg; byte-exact
-006082a0 ?substr@?$basic_string_s0060_7800@DUallocator_s0060_7800@eastl@@@eastl@@QBE?AU12@II@Z  # None migrated from s00607800 (verbatim, slice spelling)
+00608120 ?LoadSavedPrefs@cAuthManager_s0060_7800@Pollen@SP@@QAEXXZ  # cAuthManager_s0060_7800::LoadSavedPrefs migrated from s00607800 (verbatim, slice spelling)
+006082a0 ?substr@?$basic_string_s0060_87b0@DUallocator_s0060_87b0@eastl@@@eastl@@QBE?AU12@II@Z  # None migrated from s00607800 (verbatim, slice spelling)
 00608310 ?left@?$basic_string_s0060_7800@DUallocator_s0060_7800@eastl@@@eastl@@QBE?AU12@I@Z  # None migrated from s00607800 (verbatim, slice spelling)
 006083b0 ?GetEmptyString8@@YAAAU?$basic_string_s0060_7800@DUallocator_s0060_7800@eastl@@@eastl@@XZ  # GetEmptyString8 migrated from s00607800 (verbatim, slice spelling)
 006083f0 ?OnAuthMessage@Pollen@SP@@YGXII@Z  # OnAuthMessage migrated from s00607800 (verbatim, slice spelling)

@@ -16,10 +16,16 @@
 ../src/game/SPEditors/SPAuthentication.cpp  ??0cLoginHelpDialog@?A0x2dae62f7@Pollen@SP@@QAE@XZ  00607480  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAuthentication.cpp  ?OnModalWindowEnd@cAuthManager_s0060_68c0@Pollen@SP@@UAEXPAVIWindow_s0060_68c0@UTFWin@EA@@I@Z  006074b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAuthentication.cpp  ?SetAuthManager@Pollen@SP@@YAXPAVIUnknownCast@12@@Z  00607530  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEditors/SPAuthentication.cpp  ?find@?$basic_string_s0060_68c0@D@eastl@@QBEIDI@Z  00607580  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPAuthentication.cpp  ?find@?$basic_string_s0060_87b0@DUallocator_s0060_87b0@eastl@@@eastl@@QBEIDI@Z  00607580  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAuthentication.cpp  ?HandleResults@cConnectingDialog@?A0x2dae62f7@Pollen@SP@@QAEX_N@Z  006075c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAuthentication.cpp  ?OnTick@cConnectingDialog@?A0x2dae62f7@Pollen@SP@@QAE_NH@Z  00607630  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAuthentication.cpp  ?ShowLogin@cAuthManager_s0060_68c0@Pollen@SP@@UAEXXZ  006077f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPAuthentication.cpp  ?ProcessLoginResults@cAuthManager_s0060_7800@Pollen@SP@@UAEXF@Z  00607800  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPAuthentication.cpp  ?compare@?$basic_string_s0060_87b0@DUallocator_s0060_87b0@eastl@@@eastl@@QBEHPBD@Z  00607a80  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPAuthentication.cpp  ?HandleUIMessage@cOfflinePromptDialog@Pollen@SP@@UAE_NPAVIWindow_s0060_7800@UTFWin@EA@@ABUMessage_s0060_7800@56@@Z  00607b70  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPAuthentication.cpp  ?Show@cLoginHelpDialog_s0060_7800@?A0x2dae62f7@Pollen@SP@@QAE_NXZ  00607cf0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPAuthentication.cpp  ??0cAuthManager_s0060_7800@Pollen@SP@@QAE@XZ  00607f30  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPAuthentication.cpp  ?LoadSavedPrefs@cAuthManager_s0060_7800@Pollen@SP@@QAEXXZ  00608120  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPAuthentication.cpp  ?left@?$basic_string_s0060_7800@DUallocator_s0060_7800@eastl@@@eastl@@QBE?AU12@I@Z  00608310  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPAuthentication.cpp  ?GetEmptyString8@@YAAAU?$basic_string_s0060_7800@DUallocator_s0060_7800@eastl@@@eastl@@XZ  006083b0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPAuthentication.cpp  ?OnAuthMessage@Pollen@SP@@YGXII@Z  006083f0  /O2 /MD /Gy /TP /Isrc/game/include

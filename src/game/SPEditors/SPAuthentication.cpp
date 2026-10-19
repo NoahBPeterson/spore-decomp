@@ -36,8 +36,6 @@ extern "C" __declspec(dllimport) int __cdecl tolower(int c);
 void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
 void operator delete[](void* p);
 inline void* operator new(size_t, void* p) { return p; }
-extern "C" __declspec(dllimport) int __cdecl toupper(int c);
-extern "C" __declspec(dllimport) int __cdecl tolower(int c);
 struct ResourceKey {
   uint32_t mInstance;  // +0x0
   uint32_t mType;      // +0x4
@@ -464,6 +462,9 @@ class IUnknownCast {
 };
 }
 }
+struct cAuthMessage {
+  virtual ~cAuthMessage();
+};
 // ---- items of slice s006068c0 end
 
 // ---- items of slice s00607800 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -471,6 +472,8 @@ extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* __cdecl memmove(void*, const void*, unsigned int);
 extern "C" unsigned int __cdecl strlen(const char*);
 extern char gEmptyString[];  // 0x01667bac (shared "" for char and wchar_t strings)
+extern const char DAT_0151e5f0[], DAT_0151e5e0[], DAT_0151e5ec[], DAT_0151e5d4[];
+extern const wchar_t* kLoginPrefsName;            // 0x0151e23c (L"login")
 #pragma intrinsic(strlen)
 namespace eastl {
 struct allocator_s0060_7800 {
@@ -716,6 +719,17 @@ class cSPUILayout_s0060_7800 {
 namespace SPUIHelpers {
 bool BeginModal(EA::UTFWin::IWindow_s0060_7800* pWindow, int a, bool b);  // 0x008099a0
 }
+void FUN_00809db0(const void* a, const void* b);
+namespace SP {
+class cString_s0060_7800 {
+ public:
+  cString_s0060_7800();                                                    // 0x006b5060
+  ~cString_s0060_7800();                                                   // 0x006b5240
+  void Load(uint32_t tableID, uint32_t instanceID, const wchar_t* pDefault);  // 0x006b54b0
+  const wchar_t* GetText(bool b);                                 // 0x006b55c0
+  uint32_t pad[5];
+};
+}
 namespace SP {
 class cStringTokenTranslator_s0060_7800 : public EA::RefCountVTemplate_s0060_7800<int> {
  public:
@@ -736,6 +750,28 @@ class cPollinator_s0060_7800 {
 }
 namespace SP {
 cPollinator_s0060_7800* Pollinator_s0060_7800();  // FUN_0067cb30
+}
+namespace SP {
+class IMessageBox_s0060_7800 {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12)
+  virtual void Show(const wchar_t* text);  // +0x34
+};
+}
+namespace SP {
+class IUIManager_s0060_7800 {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7)
+  virtual IMessageBox_s0060_7800* GetMessageBox();  // +0x20
+};
+}
+namespace SP {
+IUIManager_s0060_7800* UIManager_s0060_7800();  // FUN_0067de40
+}
+namespace SP {
+namespace Pollen {
+bool GetURL(uint32_t id, string16& out);  // 0x006214c0
+}
 }
 namespace SP {
 namespace Pollen {
@@ -851,11 +887,68 @@ class cAuthManager_s0060_7800 : public EA::UTFWin::IWinProc_s0060_7800,
 };
 }
 }
+namespace SP {
+namespace Pollen {
+class cOfflinePromptDialog : public EA::UTFWin::CustomWinProc_s0060_7800 {
+ public:
+  bool HandleUIMessage(EA::UTFWin::IWindow_s0060_7800* pWindow, const EA::UTFWin::Message_s0060_7800& msg);
+  uint32_t padc[3];
+  bool mbClosed;  // +0x18
+};
+}
+}
+namespace SP {
+namespace Pollen {
+bool FUN_00685520(int mode);
+}
+}
+namespace SP {
+namespace Pollen {
+struct Property_s0060_7800 {
+  uint32_t pad[4];
+  uint16_t pad10;
+  uint16_t mnType;  // +0x12
+  bool* GetBool();  // 0x0041e920
+};
+}
+}
+namespace SP {
+namespace Pollen {
+class IPropertyList_s0060_7800 {
+ public:
+  virtual int AddRef();
+  virtual int Release();
+  PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8)
+  virtual bool GetProperty(uint32_t id, Property_s0060_7800*& prop);  // +0x24
+};
+}
+}
+namespace SP {
+namespace Pollen {
+class IPropertyManager_s0060_7800 {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
+  virtual bool GetPropertyList(uint32_t instance, uint32_t group, IPropertyList_s0060_7800*& out);  // +0x2c
+};
+}
+}
+namespace SP {
+namespace Pollen {
+IPropertyManager_s0060_7800* PropertyManager_s0060_7800();  // 0x0067de30
+}
+}
+namespace SP {
+namespace Pollen {
+bool GetPropertyAsString8(IPropertyList_s0060_7800* pList, uint32_t id, string8& out);  // 0x006a13b0
+}
+}
 namespace EA {
 namespace Hash {
 uint32_t FNV1_String16(const wchar_t* p, uint32_t seed, int caseMode);  // 0x00932f30
 }
 }
+void Decrypt(const string8& in, string8& out);  // 0x0060bf00
+extern const wchar_t* kLoginPrefsName;            // 0x0151e23c (L"login")
 namespace SP {
 namespace Pollen {
 struct cAppProperties {
@@ -935,7 +1028,6 @@ void FUN_006b8f00(const char* name, string16& out);
 extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags, unsigned debugFlags,
                                           const char* file, int line);
 extern "C" long __cdecl _InterlockedExchange(long volatile*, long);
-extern const wchar_t* kLoginPrefsName;            // 0x0151e23c (L"login")
 #pragma intrinsic(_InterlockedExchange)
 void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);
 struct ICoreAllocator;
@@ -1660,6 +1752,9 @@ class RefCountTemplate_s0060_87b0 {
 }
 // ---- items of slice s006087b0 end
 
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+namespace SP { namespace Pollen { IAuthManager* AuthManager(); }}  // 0x00607a60 (stays in the slice: not this object's)
+
 // @ 0x00606d00
 void * SP::Pollen::cAuthManager::AsInterface(EA::COM::InterfaceId typeID)
 {
@@ -1672,8 +1767,6 @@ void * SP::Pollen::cAuthManager::AsInterface(EA::COM::InterfaceId typeID)
   return 0;
 }
 
-
-
 // @ 0x00606d70
 namespace SP { namespace Pollen {
 uint64_t cAuthManager_s0060_68c0::GetUserServerID()
@@ -1681,8 +1774,6 @@ uint64_t cAuthManager_s0060_68c0::GetUserServerID()
   return mnUserServerID;
 }
 }}  // namespace SP::Pollen
-
-
 
 // @ 0x00606d80
 namespace SP { namespace Pollen {
@@ -1695,8 +1786,6 @@ void cAuthManager_s0060_68c0::EndLoginDialog()
   mpLoginLayout = 0;
 }
 }}  // namespace SP::Pollen
-
-
 
 // @ 0x00606de0
 namespace SP { namespace Pollen {
@@ -1714,8 +1803,6 @@ void cAuthManager_s0060_68c0::SetLoginDialogVisible(bool visible)
 }
 }}  // namespace SP::Pollen
 
-
-
 // @ 0x00606e60
 namespace eastl {
 template <typename T> void basic_string_s0060_68c0<T>::make_upper()
@@ -1723,8 +1810,6 @@ template <typename T> void basic_string_s0060_68c0<T>::make_upper()
   for (T* p = mpBegin; p < mpEnd; ++p) *p = (T)CharToUpper(*p);
 }
 }  // namespace eastl
-
-
 
 // @ 0x00606ea0
 namespace eastl {
@@ -1739,7 +1824,9 @@ int CompareI(const char* p1, const char* p2, size_t n)
 }
 }  // namespace eastl
 
-
+// @ 0x00606f30
+cAuthMessage::~cAuthMessage()
+{}
 
 // @ 0x00606f60
 namespace SP { namespace Pollen {
@@ -1749,8 +1836,6 @@ bool cLoginHelpDialog::IsReturnKey(void* a, void* b, int key, void* c)
   return false;
 }
 }}  // namespace SP::Pollen
-
-
 
 // @ 0x00606f80
 namespace SP { namespace Pollen {
@@ -1763,8 +1848,6 @@ void cConnectingDialog::end_dialog(bool connected)
   MessageServer()->PostMSG(0x44db12e, (void*)(connected != 0), 0);
 }
 }}  // namespace SP::Pollen
-
-
 
 // @ 0x00607050
 namespace SP { namespace Pollen {
@@ -1794,8 +1877,6 @@ bool cOfflineConfirmationDialog::Init()
 }
 }}  // namespace SP::Pollen
 
-
-
 // @ 0x00607190
 namespace SP { namespace Pollen {
 bool cAuthManager_s0060_68c0::Shutdown()
@@ -1815,8 +1896,6 @@ bool cAuthManager_s0060_68c0::Shutdown()
 }
 }}  // namespace SP::Pollen
 
-
-
 // @ 0x00607290
 namespace SP { namespace Pollen {
 void cAuthManager_s0060_68c0::SetPlayOffline(bool offline)
@@ -1830,8 +1909,6 @@ void cAuthManager_s0060_68c0::SetPlayOffline(bool offline)
 }
 }}  // namespace SP::Pollen
 
-
-
 // @ 0x006072d0
 namespace SP { namespace Pollen {
 void cAuthManager_s0060_68c0::SetOfflineUserID()
@@ -1841,8 +1918,6 @@ void cAuthManager_s0060_68c0::SetOfflineUserID()
   mnUserLocalID = FNVHash(mScreenName.c_str(), 0x811c9dc5, true);
 }
 }}  // namespace SP::Pollen
-
-
 
 // @ 0x00607310
 namespace SP { namespace Pollen {
@@ -1855,8 +1930,6 @@ void cAuthManager_s0060_68c0::ShowLoginDialog(bool b)
     ShowLoginUI(b);
 }
 }}  // namespace SP::Pollen
-
-
 
 // @ 0x006073a0
 namespace SP { namespace Pollen {
@@ -1876,23 +1949,17 @@ void cAuthManager_s0060_68c0::InitialLogin()
 }
 }}  // namespace SP::Pollen
 
-
-
 // @ 0x00607450
 namespace SP { namespace Pollen {
 cOfflineConfirmationDialog::cOfflineConfirmationDialog()
 {}
 }}  // namespace SP::Pollen
 
-
-
 // @ 0x00607480
 namespace SP { namespace Pollen {
 cLoginHelpDialog::cLoginHelpDialog()
 {}
 }}  // namespace SP::Pollen
-
-
 
 // @ 0x006074b0
 namespace SP { namespace Pollen {
@@ -1909,8 +1976,6 @@ void cAuthManager_s0060_68c0::OnModalWindowEnd(IWindow_s0060_68c0* window, uint3
 }
 }}  // namespace SP::Pollen
 
-
-
 // @ 0x00607530
 namespace SP { namespace Pollen {
 void SetAuthManager(IUnknownCast* object)
@@ -1918,8 +1983,6 @@ void SetAuthManager(IUnknownCast* object)
   sAuthManager = object ? (cAuthManager_s0060_68c0*)object->Cast(0x40f7cee) : 0;
 }
 }}  // namespace SP::Pollen
-
-
 
 // @ 0x00607580
 namespace eastl {
@@ -1935,8 +1998,6 @@ template <typename T> size_t basic_string_s0060_68c0<T>::find(T c, size_t positi
 }
 }  // namespace eastl
 
-
-
 // @ 0x006075c0
 namespace SP { namespace Pollen {
 void cConnectingDialog::HandleResults(bool success)
@@ -1947,8 +2008,6 @@ void cConnectingDialog::HandleResults(bool success)
     end_dialog(false);
 }
 }}  // namespace SP::Pollen
-
-
 
 // @ 0x00607630
 namespace SP { namespace Pollen {
@@ -1988,8 +2047,6 @@ bool cConnectingDialog::OnTick(int a)
 }
 }}  // namespace SP::Pollen
 
-
-
 // @ 0x006077f0
 namespace SP { namespace Pollen {
 void cAuthManager_s0060_68c0::ShowLogin()
@@ -1998,6 +2055,149 @@ void cAuthManager_s0060_68c0::ShowLogin()
 }
 }}  // namespace SP::Pollen
 
+// @ 0x00607800
+namespace SP { namespace Pollen {
+void cAuthManager_s0060_7800::ProcessLoginResults(short result)
+{
+  const short kResultSuccess = 0;
+  const short kResultNoPrivileges = 7;
+  if (kResultNoPrivileges == result && !mbSavedPrefsFlag) {
+    mbRetryLogin = true;
+    FUN_00809db0(DAT_0151e5f0, DAT_0151e5e0);
+    return;
+  }
+  if (gpConnectingDialog) {
+    gpConnectingDialog->HandleResults(kResultSuccess == result);
+    if (gpConnectingDialog) {
+      cConnectingDialog_s0060_7800* p = gpConnectingDialog;
+      gpConnectingDialog = 0;
+      p->Release();
+    }
+  }
+  if (kResultSuccess != result) {
+    mbRetryLogin = false;
+    cString_s0060_7800 text;
+    if (result == 1) {
+      text.Load(0xb7bcef68, 0x56bfcfc,
+                L"There was an error connecting to the Spore web servers.  Please check your internet connection or try again later.");
+    } else if (result == 3) {
+      text.Load(0xb7bcef68, 0x662d9ed, L"There was an internal application error.  Please try again.");
+    } else if (result == 2) {
+      text.Load(0xb7bcef68, 0x56bfcfc, L"The Spore server encountered an error.  Please try again later.");
+    } else if (result == 5) {
+      text.Load(0xb7bcef68, 0x662da10,
+                L"Your account has not been validated.  Please respond to the validation email sent to you on registration.  Use the help link on the login dialog if you need help.");
+    } else if (result == 7) {
+      text.Load(0xb7bcef68, 0x636e66e,
+                L"You do not have the proper Spore.com privileges to use this product's online features.");
+    } else if (result == 8) {
+      text.Load(0xb7bcef68, 0x636e611,
+                L"The code for this installation is invalid and cannot be used to link this product to your account.");
+      mbSavedPrefsFlag = true;
+      SavePrefs();
+    } else if (result == 4) {
+      text.Load(0xb7bcef68, 0x662d9eb, L"");
+      mUser.clear();
+      mPassword.clear();
+    } else if (result == 6) {
+      if (mpLoginLayout)
+        FinishLogin(true);
+      else
+        ShowLoginDialog(true);
+      return;
+    }
+    UIManager_s0060_7800()->GetMessageBox()->Show(text.GetText(false));
+    FUN_00809db0(DAT_0151e5ec, DAT_0151e5d4);
+    mDialogInProgress = 1;
+    if (mpLoginLayout) FinishLogin(false);
+  } else {
+    if (mbRetryLogin) mbSavedPrefsFlag = true;
+    mbLoggedIn = true;
+    SavePrefs();
+    Pollinator_s0060_7800()->SetEnabledState(0x4c4d2c3);
+    Pollinator_s0060_7800()->FUN_00612270();
+    if (mpLoginLayout) EndLoginDialog();
+  }
+}
+}}  // namespace SP::Pollen
+
+// @ 0x00607a80
+template <> int eastl::basic_string_s0060_7800<char>::compare(const char* p) const
+{
+  return compare(mpBegin, mpEnd, p, p + strlen(p));
+}
+
+// @ 0x00607b70
+namespace SP { namespace Pollen {
+bool cOfflinePromptDialog::HandleUIMessage(EA::UTFWin::IWindow_s0060_7800* pWindow, const EA::UTFWin::Message_s0060_7800& msg)
+{
+  if (msg.mEventType == 0x287259f6 && FUN_00685520(2) && msg.mpSource->GetControlID() == 0x5d2bdf8 &&
+      !mbClosed) {
+    Pollinator_s0060_7800()->FUN_00611540();
+    IAuthManager* pAuth = AuthManager();
+    if (pAuth) pAuth->ProcessLoginResults(6);
+    return true;
+  }
+  return CustomWinProc_s0060_7800::HandleUIMessage(pWindow, msg);
+}
+}}  // namespace SP::Pollen
+
+// @ 0x00607cf0
+namespace SP { namespace Pollen {
+bool cLoginHelpDialog_s0060_7800::Show()
+{
+  ResourceKey_s0060_7800 key = {0xd5aabe49, 0x510a95b, 0x40464100};
+  if (mLayout.Init(key, 0, 0x5b598f7)) {
+    EA::UTFWin::IWindow_s0060_7800* pText = mLayout.FindWindowByID(0x56c14b8, true);
+    if (pText) {
+      string16 url;
+      if (GetURL(0x56bbbd1, url)) pText->SetCaption(url.c_str());
+    }
+    EA::UTFWin::IWindow_s0060_7800* pWindow = mLayout.FindWindowByID(0x56c1908, true);
+    if (pWindow) {
+      pWindow->AddWinProc(this);
+      return SPUIHelpers::BeginModal(pWindow, 0, true);
+    }
+    mLayout.Shutdown(true);
+  }
+  return false;
+}
+}}  // namespace SP::Pollen
+
+// @ 0x00607f30
+namespace SP { namespace Pollen {
+cAuthManager_s0060_7800::cAuthManager_s0060_7800()
+: mnUserServerID((uint64_t)-2),
+      mnUserLocalID((uint32_t)-1),
+      mbPlayOffline(false),
+      mbPrompt(false),
+      mbSavedPrefsFlag(false),
+      mbRetryLogin(false),
+      mpLoginLayout(0),
+      mbDontSavePrefs(false),
+      mbLoggedIn(false),
+      mDialogInProgress(0) {}
+}}  // namespace SP::Pollen
+
+// @ 0x00608120
+namespace SP { namespace Pollen {
+void cAuthManager_s0060_7800::LoadSavedPrefs()
+{
+  EA::AutoRefCount_s0060_7800<IPropertyList_s0060_7800> pList;
+  IPropertyManager_s0060_7800* pPropMgr = PropertyManager_s0060_7800();
+  IPropertyList_s0060_7800*& pListOut = pList.AsOutParam();
+  const uint32_t instance = EA::Hash::FNV1_String16(kLoginPrefsName, 0x811c9dc5, 1);
+  if (pPropMgr->GetPropertyList(instance, 0x11ac192, pListOut)) {
+    Property_s0060_7800* prop;
+    if (pList && pList->GetProperty(0x40e3d98, prop) && prop->mnType == 1) mbPlayOffline = *prop->GetBool();
+    if (pList && pList->GetProperty(0x440a514, prop) && prop->mnType == 1) mbPrompt = *prop->GetBool();
+    GetPropertyAsString8(pList, 0x40512ef, mUser);
+    string8 encrypted;
+    if (GetPropertyAsString8(pList, 0x40512f4, encrypted)) Decrypt(encrypted, mPassword);
+    if (pList && pList->GetProperty(0x6390ede, prop) && prop->mnType == 1) mbSavedPrefsFlag = true;
+  }
+}
+}}  // namespace SP::Pollen
 
 // @ 0x006082a0
 template <> string8 eastl::basic_string_s0060_7800<char>::substr(size_type position, size_type n) const
@@ -2007,7 +2207,6 @@ template <> string8 eastl::basic_string_s0060_7800<char>::substr(size_type posit
                       mAllocator);
 }
 
-
 // @ 0x00608310
 template <> string8 eastl::basic_string_s0060_7800<char>::left(size_type n) const
 {
@@ -2016,14 +2215,12 @@ template <> string8 eastl::basic_string_s0060_7800<char>::left(size_type n) cons
   return *this;
 }
 
-
 // @ 0x006083b0
 string8& GetEmptyString8()
 {
   static string8 sEmpty;
   return sEmpty;
 }
-
 
 // @ 0x006083f0
 namespace SP { namespace Pollen {
@@ -2049,7 +2246,6 @@ void __stdcall OnAuthMessage(uint32_t unused, uint32_t messageID)
 }
 }}  // namespace SP::Pollen
 
-
 // @ 0x00608550
 namespace SP { namespace Pollen {
 void cAuthManager_s0060_7800::SetUserPassword(const string8& user, const string8& password)
@@ -2060,7 +2256,6 @@ void cAuthManager_s0060_7800::SetUserPassword(const string8& user, const string8
 }
 }}  // namespace SP::Pollen
 
-
 // @ 0x00608590
 namespace SP { namespace Pollen {
 void cAuthManager_s0060_7800::GetUserPassword(string8& user, string8& password)
@@ -2069,7 +2264,6 @@ void cAuthManager_s0060_7800::GetUserPassword(string8& user, string8& password)
   password = mPassword;
 }
 }}  // namespace SP::Pollen
-
 
 // @ 0x006085d0
 namespace SP { namespace Pollen {
@@ -2088,7 +2282,6 @@ bool cAuthManager_s0060_7800::AddAuthentication(void* pResource, EA::XHTML::Reso
 }
 }}  // namespace SP::Pollen
 
-
 // @ 0x006086b0
 namespace SP { namespace Pollen {
 bool cAuthManager_s0060_7800::TranslateToken(const wchar_t* pToken, string16& out)
@@ -2102,7 +2295,6 @@ bool cAuthManager_s0060_7800::TranslateToken(const wchar_t* pToken, string16& ou
   return true;
 }
 }}  // namespace SP::Pollen
-
 
 // @ 0x00608710
 namespace SP { namespace Pollen {
