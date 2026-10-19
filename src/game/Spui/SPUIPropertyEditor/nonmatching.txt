@@ -15,7 +15,10 @@
 00820ec0 640 cPropertyUI::ModifyInt32; complete, AutoRefCount/Variant stack slots (frame 0x60 vs 0x4c) and register allocation differ flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: UNSUPPORTED]
 00821260 613 cPropertyUI::ModifyUInt32; complete, same AutoRefCount/Variant slot issue as ModifyInt32 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: UNSUPPORTED]
 00821600 613 cPropertyUI::ModifyFloat; complete, same AutoRefCount/Variant slot issue as ModifyInt32 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: UNSUPPORTED]
+008219a0 701 complete ModifyString8 (scalar + array paths); register assignment (this/window/iterator) and frame 0x4c vs 0x48 differ [equiv: UNSUPPORTED (0/400 valid inputs; vtable-heavy faults)]
+00821d70 534 complete ModifyString16 (scalar + array paths); register assignment (this/window/iterator) and frame 0x3c vs 0x38 differ [equiv: UNSUPPORTED (0/400 valid inputs; vtable-heavy faults)]
 008220e0 5633 complete (all 12 scalar + 12 dead array property branches); stack slot layout and inline/out-of-line choices of Variant ctors and AutoRefCount::operator= differ
+00823b50 27 register allocation / arm layout of first window-id selection (ternary arm duplicates vtable load) [equiv: UNSUPPORTED: 11 unresolved Modify* callees]
 00823e30 3030 cPropertyUI::ProcessSpinnerButtons complete (inc/dec x 8 types x array); cl dynamically aligns the frame (and esp) once many double-vararg sprintf sites exist, the original has a plain 0x38 frame
 008252b0 1354 cPropertyUI::AddIntSpinnerRow complete; same call/vslot sequence as AddSpinnerRow (%d text instead of %f), locals held by AddRef/Release scope guards, narrow string dtor; 1662 B vs 1662 B; differs in vcall register order (eax/edx swapped) and frame/reg alloc; flags /O2 /MD /Gy /TP /arch:SSE
 00825930 1385 AddSpinnerRow complete; call/vslot sequence identical to original, differs in reg alloc (edx/eax order for vcalls), frame layout (pid in arg slot) and AddChild codegen; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

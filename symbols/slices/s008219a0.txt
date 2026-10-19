@@ -1,2 +1,2 @@
-008219a0 SP::cPropertyUI::ModifyString8  # caller-scored PDB candidate; 8-bit string path (type 0x12) of ModifyString16
-00821d70 SP::cPropertyUI::ModifyString16  # pdb_names.json gap-align
+008219a0 ?ModifyString8@cPropertyUI_s0082_19a0@SP@@QAEXPAUIWindow_s0082_19a0@@_N@Z  # cPropertyUI_s0082_19a0::ModifyString8 migrated from s008219a0 (verbatim, slice spelling)
+00821d70 ?ModifyString16@cPropertyUI_s0082_19a0@SP@@QAEXPAUIWindow_s0082_19a0@@_N@Z  # cPropertyUI_s0082_19a0::ModifyString16 migrated from s008219a0 (verbatim, slice spelling)

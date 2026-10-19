@@ -1,1 +1,1 @@
-008268b0 SP::cPropertyUI::ResetView  # resets +0x14..+0x28 scroll state, window vcalls, tails into ClearAllPropertyControls
+008268b0 ?ResetView@cPropertyUI_s0082_68b0@@QAEXXZ  # cPropertyUI_s0082_68b0::ResetView migrated from s008268b0 (verbatim, slice spelling)

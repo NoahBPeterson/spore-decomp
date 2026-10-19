@@ -3,4 +3,5 @@
 ../src/game/Spui/SPUIPropertyEditor.cpp  ?Init@cSPUIPropertyEditor@@QAEXXZ  00823a00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPropertyEditor.cpp  ?HandleMessage@cSPUIPropertyEditor@SP@@UAE_NIPAX@Z  00823ac0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPropertyEditor.cpp  ??1cPropertyUI_s0082_5930@@UAE@XZ  00826560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPropertyEditor.cpp  ?ResetView@cPropertyUI_s0082_68b0@@QAEXXZ  008268b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPropertyEditor.cpp  ??4?$AutoRefCount_s00b5_f040@VIWinText_s00b5_f040@UTFWinControls@EA@@@EA@@QAEAAU01@PAVIWinText_s00b5_f040@UTFWinControls@1@@Z  00b5f950  /O2 /MD /Gy /TP /Isrc/game/include
