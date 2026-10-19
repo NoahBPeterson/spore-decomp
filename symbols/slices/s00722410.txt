@@ -2,6 +2,7 @@
 00722520 ?Assign@VecAny@@QAEXHHH@Z  # VecAny::Assign migrated from s00722410 (verbatim, slice spelling)
 00722580 ?VecInsert18@@YAXPAHPAXI1@Z  # VecInsert18 migrated from s00722410 (verbatim, slice spelling)
 00722770 ?VecInsert28@@YAXPAHPAXI1@Z  # VecInsert28 migrated from s00722410 (verbatim, slice spelling)
+00722990 ?AllocConstruct38@@YAPAXHPBX0@Z  # AllocConstruct38 migrated from s00722410 (verbatim, slice spelling)
 007229f0 ?CopyChartRecord@@YAPAXPAX0@Z  # CopyChartRecord migrated from s00722410 (verbatim, slice spelling)
 00722b20 ?FindOrInsertF@@YAHPAXPAM@Z  # FindOrInsertF migrated from s00722410 (verbatim, slice spelling)
 00722ba0 ?SwapVecIfOwned@@YAXPAH0@Z  # SwapVecIfOwned migrated from s00722410 (verbatim, slice spelling)
