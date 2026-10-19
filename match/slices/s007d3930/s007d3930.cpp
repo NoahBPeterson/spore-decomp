@@ -32,6 +32,30 @@ bool ReadBytes(void* s, void* p, unsigned n);                  // 0x93a6c0
 void* ReadIntVector(void* stream, void* vec);                  // 0x7d27d0
 uint32_t FNVHash(const char* s, uint32_t seed, int a);         // 0x932e80
 
+// game-model description stream decoders / misc helpers (see slice header)
+void* sub_7d10d0(void* stream, void* vec);                     // 0x7d10d0
+void* sub_7d4190(void* stream, void* vec);                     // 0x7d4190
+void* sub_53bc90(void* stream, void* vec);                     // 0x53bc90
+void* sub_7d1010(void* self);                                  // 0x7d1010 dtor/ctor
+void  sub_7d0f60(void* self);                                  // 0x7d0f60
+void* sub_7d35b0(void* self, const void* src);                 // 0x7d35b0 operator=
+void  sub_454cb0(void* str, const char* first, const char* last); // 0x454cb0 string assign
+void* sub_a6f090(void* parser, const char** av, int count, int which); // 0xa6f090
+void  sub_7d3670(void* vec, const void* elem);                 // 0x7d3670 push_back
+void  sub_455660(void* vec, const float* value);               // 0x455660 push_back
+// cSPTransform::operator= and the per-label propagation helper are __thiscall
+// (ecx = target, one stack argument).  Model them as member methods so the
+// calling convention matches the original.
+struct cSPTransformOps { cSPTransformOps* Assign(const void* src); };  // 0x537dc0
+struct cLabelOps      { void Propagate(const void* txf); };            // 0x79a0d0
+
+// split-command helpers (all __thiscall; modelled as member methods)
+void  sub_7d05b0(void* out, void* node, int* key, int extra);  // 0x7d05b0
+int   sub_a6eb60(const char* name, int n);                     // 0xa6eb60
+void* sub_f47380(void* p);                                     // 0xf47380 allocator deallocate
+extern float kFX2Pi;                                           // 0x163703c
+extern const char* kSplitCommandsEnum[];                       // 0x153d820
+
 struct IUnknown32 { virtual void AddRef(); virtual void Release(); };
 
 // ----------------------------------------------------- IStream (slot 0x30 Read)
@@ -50,6 +74,16 @@ struct cAnimationCurve {
     Vec20 mCurve;          // +0x08
     float mA, mB, mC;      // +0x1c
     uint8_t mMode;         // +0x28
+    cAnimationCurve() {     // inlined default ctor (zeroes the live fields)
+        mX = 0; mY = 0;
+        mCurve.p0 = 0; mCurve.p1 = 0; mCurve.p2 = 0;
+        mA = 0; mB = 0; mC = 0;
+        mMode = 0;
+    }
+    ~cAnimationCurve() {    // inlined vector teardown
+        if (mCurve.p0 && *(int*)((char*)mCurve.p0 - 4))
+            operator delete[](mCurve.p0);
+    }
 };
 struct cGameModelDescription {
     void* vtbl; int mRefCount; int mStateID; uint32_t mFlags;
@@ -57,7 +91,13 @@ struct cGameModelDescription {
     uint32_t mInstanceID, mGroupID, mWorldID;
     Vec20 mAnimationCurves, mModelSplitters, mSplitControllers, mGroups;
     uint32_t mFlagsToSet; uint8_t mPickLevel, mOverrideSet, pad86[2]; uint32_t field88;
-    cGameModelDescription();
+    cGameModelDescription();           // 0x7d1010
+    ~cGameModelDescription();          // 0x7d0f60
+};
+
+struct cError {
+    cError(const char* fmt, ...);      // 0x52df30
+    ~cError();
 };
 }
 
@@ -158,7 +198,7 @@ VecOut* VecOut::Allocate(unsigned n, void* alloc) {
 // ====================================================== remaining functions
 struct cGameModelState { void* vtbl; SP::cGameModelDescription mDesc; };
 
-// @ 0x007d3930  cGameModelAnimateCommand::Execute
+// @ 0x007d3930
 struct cGameModelAnimateCommand {
     void* mParser;         // +0x4
     cGameModelState* mState;   // +0xc
@@ -167,58 +207,249 @@ struct cGameModelAnimateCommand {
 void cGameModelAnimateCommand::Execute(EA::ArgScript::cArguments& args) {
     int count;
     const char** av = args.MainArguments(&count, 1, 0x7fffffff);
-    SP::cGameModelDescription* d = &mState->mDesc;
-    char* curve = (char*)((char**)&d->mAnimationCurves)[0];
-    (void)curve;
-    SP::cAnimationCurve* c = (SP::cAnimationCurve*)curve;
-    if (count > 0) {
-        for (int i = 0; i < count; ++i) {
-            // parser->ParseFloat(av[i]) appended to the curve's float vector
-            float f = ((float(__thiscall*)(void*, const char*))((*(void***)mParser)[0x98 / 4]))(mParser, av[i]);
-            (void)f;
-            (void)c;
-        }
+
+    // Append a default-constructed animation curve to the description's curve
+    // list; `e` then points at the copy that now sits at the end of that list.
+    SP::cAnimationCurve curve;
+    sub_7d3670(&mState->mDesc.mAnimationCurves, &curve);
+    char* e = (char*)mState->mDesc.mAnimationCurves.p1 - 0x2c;
+
+    for (int i = 0; i < count; ++i) {
+        float f = ((float(__thiscall*)(void*, const char*))
+                   ((*(void***)mParser)[0x98 / 4]))(mParser, av[i]);
+        sub_455660(e + 8, &f);
     }
-    const char** length = args.OptionArguments("length", 1);
+
+    int n;
+    const char** length = args.OptionArguments("length", &n, 1, 2);
     if (length) {
-        float f = ((float(__thiscall*)(void*, const char*))((*(void***)mParser)[0x98 / 4]))(mParser, length[0]);
-        (void)f;
+        float f = ((float(__thiscall*)(void*, const char*))
+                   ((*(void***)mParser)[0x98 / 4]))(mParser, length[0]);
+        *(float*)(e + 0x00) = f;
+        *(float*)(e + 0x04) = f;
+        if (n > 1) {
+            float g = ((float(__thiscall*)(void*, const char*))
+                       ((*(void***)mParser)[0x98 / 4]))(mParser, length[1]);
+            *(float*)(e + 0x00) = *(float*)(e + 0x00) - g;
+            *(float*)(e + 0x04) = *(float*)(e + 0x04) + g;
+        }
     }
     const char** channel = args.OptionArguments("channel", 1);
     if (channel)
-        *(uint32_t*)(curve + 0x24) = FNVHash(channel[0], 0x811c9dc5, 1);
-    if (args.HasFlag("sustain")) *(uint8_t*)(curve + 0x28) = 1;
-    else if (args.HasFlag("single")) *(uint8_t*)(curve + 0x28) = 2;
-    else if (args.HasFlag("loop")) *(uint8_t*)(curve + 0x28) = 0;
+        *(uint32_t*)(e + 0x24) = FNVHash(channel[0], 0x811c9dc5, 1);
+    else
+        *(uint32_t*)(e + 0x24) = 0;
+    if (args.HasFlag("sustain")) *(uint8_t*)(e + 0x28) = 1;
+    else if (args.HasFlag("single")) *(uint8_t*)(e + 0x28) = 2;
+    else if (args.HasFlag("loop")) *(uint8_t*)(e + 0x28) = 0;
     const char** vary = args.OptionArguments("vary", 1);
     if (vary)
-        *(float*)(curve + 0x1c) = ((float(__thiscall*)(void*, const char*))((*(void***)mParser)[0x98 / 4]))(mParser, vary[0]);
+        *(float*)(e + 0x1c) = ((float(__thiscall*)(void*, const char*))
+                               ((*(void***)mParser)[0x98 / 4]))(mParser, vary[0]);
     const char** ss = args.OptionArguments("speedScale", 1);
     if (ss)
-        *(float*)(curve + 0x20) = ((float(__thiscall*)(void*, const char*))((*(void***)mParser)[0x98 / 4]))(mParser, ss[0]);
+        *(float*)(e + 0x20) = ((float(__thiscall*)(void*, const char*))
+                               ((*(void***)mParser)[0x98 / 4]))(mParser, ss[0]);
 }
 
-// @ 0x007d3b60  cGameModelSplitCommand::Execute  (large; skeleton)
-void GameModelSplitCommand_Execute(void* self, void* args) {
-    (void)self; (void)args;
+// @ 0x007d3b60
+struct cXform {                       // SP::cTransform, at cSplitTxf+8
+    uint16_t mFlags;                  // +0x00
+    uint16_t mModCount;               // +0x02
+    float    mTrans[3];               // +0x04
+    float    mScale;                  // +0x10
+    float    mRot[9];                 // +0x14
+    void RotateZ(float a);            // 0x7d1ac0
+    void RotateY(float a);            // 0x6b9050
+    void PreRotateX(float a);         // 0x5a2d90
+};
+struct MapEntry { void* node; uint8_t inserted; };
+struct cRBT {                         // eastl::rbtree<uint32,...> at cSplitTxf+0x4c
+    char raw[0x1c];
+    void Insert(MapEntry* out, const int* key, uint8_t flag);   // 0x7d0850
+    void Nuke(void* sub);                                        // 0x9a9600
+};
+struct cSplitTxf {                    // ctor 0x7d0670
+    int32_t  field00;                 // +0x00
+    int32_t  mCount;                  // +0x04
+    cXform   xf;                      // +0x08
+    float    mOrigin[3];              // +0x40
+    cRBT     map;                     // +0x4c
+    void Init();                      // 0x7d0670
+};
+struct cStateOps { void Finalize(void* txf); };   // 0x7d36f0
+struct cGameModelSplitCommand {
+    void* mParser;                    // +0x04
+    void* field08;
+    cGameModelState* mState;          // +0x0c
+    void Execute(EA::ArgScript::cArguments& args);
+};
+void cGameModelSplitCommand::Execute(EA::ArgScript::cArguments& args) {
+    int count;
+    const char** av = args.MainArguments(&count, 2, 0x7fffffff);
+
+    cSplitTxf txf;
+    txf.Init();
+
+    unsigned kind = (unsigned char)EA::ArgScript::ParseEnum(av[0], kSplitCommandsEnum);
+    int i = 2;
+    if (kind == 0) {
+        txf.mCount = (*(int*)((char*)mState + 0x4c) - *(int*)((char*)mState + 0x48)) >> 3;
+    } else if (kind == 1) {
+        if (count < 3)
+            throw SP::cError("Either meta particle or at least one split index unspecified");
+        txf.mCount = sub_a6eb60(av[1], 2);
+        if (txf.mCount < 0)
+            throw SP::cError("Unknown meta particle: %s", av[1]);
+        for (; i < count; ++i) {
+            int v = ((int(__thiscall*)(void*, const char*))
+                     ((*(void***)mParser)[0x9c / 4]))(mParser, av[i]);
+            MapEntry out;
+            txf.map.Insert(&out, &v, 0);
+        }
+    } else if (kind == 2) {
+        for (i = 1; i < count; ++i) {
+            int v = ((int(__thiscall*)(void*, const char*))
+                     ((*(void***)mParser)[0x9c / 4]))(mParser, av[i]);
+            MapEntry out;
+            txf.map.Insert(&out, &v, 0);
+        }
+    } else {
+        throw SP::cError("Unimplemented split command");
+    }
+
+    const char** parg = args.OptionArguments("origin", 1);
+    if (parg) {
+        float* v = (float*)((void*(__thiscall*)(void*, const char*))
+                            ((*(void***)mParser)[0xa8 / 4]))(mParser, parg[0]);
+        float x = v[0], y = v[1], z = v[2];
+        float s = txf.xf.mScale;
+        float t0 = txf.xf.mTrans[0] + (txf.xf.mRot[0] * (s*x) + txf.xf.mRot[3] * (s*y) + txf.xf.mRot[6] * (s*z));
+        float t1 = txf.xf.mTrans[1] + (txf.xf.mRot[1] * (s*x) + txf.xf.mRot[4] * (s*y) + txf.xf.mRot[7] * (s*z));
+        float t2 = txf.xf.mTrans[2] + (txf.xf.mRot[2] * (s*x) + txf.xf.mRot[5] * (s*y) + txf.xf.mRot[8] * (s*z));
+        txf.xf.mFlags |= 4;
+        txf.xf.mModCount += 1;
+        txf.xf.mTrans[0] = t0; txf.xf.mTrans[1] = t1; txf.xf.mTrans[2] = t2;
+        txf.mOrigin[0] = x;
+        txf.mOrigin[1] = y;
+        txf.mOrigin[2] = z;
+    }
+    parg = args.OptionArguments("offset", 1);
+    if (parg) {
+        float* v = (float*)((void*(__thiscall*)(void*, const char*))
+                            ((*(void***)mParser)[0xa8 / 4]))(mParser, parg[0]);
+        txf.xf.mTrans[0] += v[0];
+        txf.xf.mTrans[1] += v[1];
+        txf.xf.mTrans[2] += v[2];
+        txf.xf.mFlags |= 4;
+        txf.xf.mModCount += 1;
+    }
+#define SPLIT_ANGLE(slot) \
+    ((float(__thiscall*)(void*, const char*))((*(void***)mParser)[0x98 / 4]))(mParser, (slot)) * kFX2Pi
+    parg = args.OptionArguments("rotateZ", 1);
+    if (parg) txf.xf.RotateZ(SPLIT_ANGLE(parg[0]));
+    parg = args.OptionArguments("rotateY", 1);
+    if (parg) txf.xf.RotateY(SPLIT_ANGLE(parg[0]));
+    parg = args.OptionArguments("rotateX", 1);
+    if (parg) txf.xf.PreRotateX(SPLIT_ANGLE(parg[0]));
+    parg = args.OptionArguments("rotateXYZ", 3);
+    if (parg) {
+        txf.xf.RotateZ(SPLIT_ANGLE(parg[2]));
+        txf.xf.RotateY(SPLIT_ANGLE(parg[1]));
+        txf.xf.PreRotateX(SPLIT_ANGLE(parg[0]));
+    }
+    parg = args.OptionArguments("rotateZXY", 3);
+    if (parg) {
+        txf.xf.RotateY(SPLIT_ANGLE(parg[2]));
+        txf.xf.PreRotateX(SPLIT_ANGLE(parg[1]));
+        txf.xf.RotateZ(SPLIT_ANGLE(parg[0]));
+    }
+    parg = args.OptionArguments("scale", 1);
+    if (parg) {
+        txf.xf.mScale = SPLIT_ANGLE(parg[0]) * txf.xf.mScale;
+        txf.xf.mFlags |= 1;
+        txf.xf.mModCount += 1;
+    }
+#undef SPLIT_ANGLE
+
+    ((cStateOps*)((char*)mState + 0x5c))->Finalize(&txf);
+
+    // drain the temporary rbtree of split indices
+    void** node = *(void***)((char*)&txf + 0x58);
+    while (node) {
+        txf.map.Nuke(*node);
+        void** next = (void**)node[1];
+        sub_f47380(node);
+        node = next;
+    }
 }
 
-// @ 0x007d41f0  cGameModelEffectCommand::Execute
-void EffectCommand_Execute(void* self, EA::ArgScript::cArguments& args) {
+// @ 0x007d41f0
+struct cGameModelEffectCommand {
+    void* mParser;              // +0x04  (cIParser*, used for the final vcall)
+    void* mField30;             // +0x30  inherited-source pointer
+    void* mVtbl34;              // +0x34
+    void* mDesc;                // +0x38  owned cGameModelDescription
+    void* mFieldC4;             // +0xc4
+    void* mName;                // +0xc8  eastl::string
+    void  Execute(EA::ArgScript::cArguments& args);
+};
+void cGameModelEffectCommand::Execute(EA::ArgScript::cArguments& args) {
     int count;
     const char** av = args.MainArguments(&count, 1, 3);
-    (void)av;
+
+    const char* s = av[0];
+    const char* end = s;
+    while (*end) ++end;
+    sub_454cb0((char*)this + 0xc8, s, end);
+
     SP::cGameModelDescription tmp;
-    (void)count; (void)tmp;
+    mVtbl34 = (void*)0x30bac64;
+    sub_7d35b0((char*)this + 0x38, &tmp);
+    mFieldC4 = (void*)0;
+
+    *(void**)((char*)this + 0xc4) = mField30;
+    if (count > 1) {
+        void* inh = sub_a6f090(mField30, av, count, 0x25);
+        if (inh)
+            sub_7d35b0((char*)this + 0x38, inh);
+    }
+    ((void(__thiscall*)(void*))((*(void***)mParser)[0x8c / 4]))(this);
 }
 
-// @ 0x007d4300  SP::ReadDescription  (not fully decoded; skeleton)
-void __cdecl ReadDescription(void* stream, void* a, void* desc) {
-    (void)stream; (void)a; (void)desc;
+// @ 0x007d4300
+void __cdecl ReadDescription(void* stream, int version, SP::cGameModelDescription* desc) {
+    int flags;
+    EA::IO::ReadInt32(stream, &flags, 1, 0);
+    desc->mFlags = (uint32_t)flags & 0x3f;
+    EA::IO::ReadInt32(stream, (int32_t*)&desc->mSize, 1, 0);
+    ((IStream*)stream)->Read(&desc->mColourX, 0xc);
+    EA::IO::ReadInt32(stream, (int32_t*)&desc->mAlpha, 1, 0);
+    EA::IO::ReadInt32(stream, (int32_t*)&desc->mInstanceID, 1, 0);
+    EA::IO::ReadInt32(stream, (int32_t*)&desc->mGroupID, 1, 0);
+    EA::IO::ReadInt32(stream, (int32_t*)&desc->mWorldID, 1, 0);
+
+    ReadAnimationCurves((IStream*)stream, (AnimVec*)&desc->mAnimationCurves);
+    sub_7d10d0(stream, &desc->mModelSplitters);
+    sub_7d4190(stream, &desc->mSplitControllers);
+    sub_53bc90(stream, &desc->mGroups);
+
+    int flagsToSet;
+    EA::IO::ReadInt32(stream, &flagsToSet, 1, 0);
+    desc->mFlagsToSet = (uint32_t)flagsToSet;
+    ReadBytes(stream, &desc->mPickLevel, 1);
+    ReadBytes(stream, &desc->mOverrideSet, 1);
+
+    if (version >= 8) {
+        EA::IO::ReadInt32(stream, (int32_t*)&desc->field88, 1, 0);
+    } else {
+        desc->mFlags &= ~4u;
+        desc->field88 = 0;
+    }
 }
 
 // @ 0x007d44c0  make a fresh description from a stream
-void* MakeState(void* a, void* b) {
+void* MakeState(void* a, int b) {
     SP::cGameModelDescription* d = new ("Swarm", 0, 0, 0, 0) SP::cGameModelDescription();
     ReadDescription(a, b, d);
     return d;
@@ -313,7 +544,39 @@ char cEffectNode::HandleParam(int kind, float* value, void* extra) {
     return any;
 }
 
-// @ 0x007d4980  cSPTransform assignment then per-label loop (skeleton)
-void AssignTransforms(void* self, void* src) {
-    (void)self; (void)src;
+// @ 0x007d4980
+// eastl vector<cSPTransform> insert: copy the transform, then
+// propagate it into each live sub-entry of the element list.
+struct XformVec {
+    int32_t  field00;      // +0x00
+    int32_t  field04;      // +0x04
+    void*    p08;          // +0x08  (cSPTransform copy target)
+    char     pad0c[0x34];  // +0x0c
+    char*    mpBegin;      // +0x40
+    char*    mpEnd;        // +0x44
+    void DoInsertValue(const void* src);
+};
+void XformVec::DoInsertValue(const void* src) {
+    ((cSPTransformOps*)((char*)this + 8))->Assign(src);
+    unsigned count = (unsigned)((mpEnd - mpBegin) / 0x1c);
+    unsigned off = 0;
+    if (count == 0) return;
+    do {
+        char* base = *(char**)((char*)this + 0x40);
+        int* pm = (int*)*(void**)(base + off + 4);
+        int* last = (int*)*(void**)(base + off + 8);
+        int* pb = last;
+        while (pm != last && *pm != -2) pm = (int*)((char*)pm + 0x78);
+        while (pm != pb) {
+            ((cLabelOps*)((char*)pm + 4))->Propagate((char*)this + 8);
+            pm = (int*)((char*)pm + 0x78);
+            if (pm != last) {
+                while (*pm != -2) {
+                    pm = (int*)((char*)pm + 0x78);
+                    if (pm == last) break;
+                }
+            }
+        }
+        off += 0x1c;
+    } while (--count);
 }

@@ -1,8 +1,8 @@
-007d3930 ?Execute@cGameModelAnimateCommand@@QAEXAAVcArguments_s007d_3930@ArgScript@EA@@@Z  # cGameModelAnimateCommand::Execute migrated from s007d3930 (verbatim, slice spelling)
-007d3b60 ?GameModelSplitCommand_Execute@@YAXPAX0@Z  # GameModelSplitCommand_Execute migrated from s007d3930 (verbatim, slice spelling)
-007d40f0  ReadAnimationCurves  # int count then count cAnimationCurve records from an IStream
-007d41f0 ?EffectCommand_Execute@@YAXPAXAAVcArguments_s007d_3930@ArgScript@EA@@@Z  # EffectCommand_Execute migrated from s007d3930 (verbatim, slice spelling)
-007d4300 ?ReadDescription@SP@@YAXAAVIStream@IO@EA@@HAAUcGameModelDescription@1@@Z  # SP::ReadDescription migrated from s007d3930
+007d3930 ?Execute@cGameModelAnimateCommand@@QAEXAAVcArguments@ArgScript@EA@@@Z  # cGameModelAnimateCommand::Execute
+007d3b60 ?Execute@cGameModelSplitCommand@@QAEXAAVcArguments@ArgScript@EA@@@Z  # cGameModelSplitCommand::Execute
+007d40f0 ?ReadAnimationCurves@@YAPAUIStream@@PAU1@PAUAnimVec@@@Z  # int count then count cAnimationCurve records from an IStream
+007d41f0 ?Execute@cGameModelEffectCommand@@QAEXAAVcArguments@ArgScript@EA@@@Z  # cGameModelEffectCommand::Execute
+007d4300 ?ReadDescription@@YAXPAXHPAUcGameModelDescription@SP@@@Z  # SP::ReadDescription
 007d44a0  Wrapper::Func  # forwards to a virtual at slot 0x16c with (this,1)
 007d44c0  make a fresh cGameModelDescription and read it from a stream
 007d4540  key-presence test writing a 0x102-tagged key
@@ -12,4 +12,21 @@
 007d4730 ?HandleParam@cEffectNode@@QAEDHPAMPAX@Z  # cEffectNode::HandleParam migrated from s007d3930 (verbatim, slice spelling)
 007d4820 ?SetVisible@EffOwner@@QAEXH@Z  # EffOwner::SetVisible migrated from s007d3930 (verbatim, slice spelling)
 007d48e0 ?Allocate@VecOut@@QAEPAU1@IPAX@Z  # VecOut::Allocate migrated from s007d3930 (verbatim, slice spelling)
-007d4980 ?AssignTransforms@@YAXPAX0@Z  # AssignTransforms migrated from s007d3930 (verbatim, slice spelling)
+007d4980 ?DoInsertValue@XformVec@@QAEXPBX@Z  # eastl vector<cSPTransform>::DoInsertValue
+00838020 ?MainArguments@cArguments@ArgScript@EA@@QAEPAPBDPAHHH@Z  # EA::ArgScript::cArguments::MainArguments
+008380b0 ?HasFlag@cArguments@ArgScript@EA@@QAE_NPBD@Z  # EA::ArgScript::cArguments::HasFlag
+00838130 ?OptionArguments@cArguments@ArgScript@EA@@QAEPAPBDPBDPAHHH@Z  # OptionArguments(name,&count,min,max)
+00838330 ?OptionArguments@cArguments@ArgScript@EA@@QAEPAPBDPBDH@Z  # OptionArguments(name,n)
+00840bb0  ParseEnum  # EA::ArgScript::ParseEnum
+00537dc0 ?Assign@cSPTransformOps@@QAEPAU1@PBX@Z  # cSPTransform::operator= (thiscall)
+0079a0d0 ?Propagate@cLabelOps@@QAEXPBX@Z  # per-label propagation (thiscall)
+007d0670 ?Init@cSplitTxf@@QAEXXZ  # cSplitTxf ctor
+007d1ac0 ?RotateZ@cXform@@QAEXM@Z  # cTransform RotateZ
+006b9050 ?RotateY@cXform@@QAEXM@Z  # cTransform RotateY
+005a2d90 ?PreRotateX@cXform@@QAEXM@Z  # cTransform PreRotateX
+007d0850 ?Insert@cRBT@@QAEXPAUMapEntry@@PBME@Z  # rbtree insert
+009a9600 ?Nuke@cRBT@@QAEXPAX@Z  # rbtree node teardown
+007d36f0 ?Finalize@cStateOps@@QAEXPAX@Z  # model split finalize
+007d1010 ?cGameModelDescription@SP@@QAE@XZ  # SP::cGameModelDescription ctor
+007d0f60 ?~cGameModelDescription@SP@@QAE@XZ  # SP::cGameModelDescription dtor
+0052df30 ?cError@SP@@QAA@PBDZZ  # SP::cError ctor
