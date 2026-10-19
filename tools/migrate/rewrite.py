@@ -713,6 +713,14 @@ def parse_slice(sid, variant=""):
             mo = re.match(r"^(\s*(?://[^\n]*\n\s*)*)namespace\s+(\w+)\s*\{", body)
             if not mo or not namespace_defines_function(body[len(mo.group(1)):]):
                 break
+            # ... and only when the function is the namespace's FIRST item (mig8 s004b8af0: the implicit 0x4b8ef0's chunk went on
+            # into `namespace eastl { struct sp_vector_allocator ..; template .. copy_impl(..) {..} .. }`, which was taken as the
+            # function's own namespace: its opener was dropped and its closer emitted, C2059 in the preamble, 4 functions held)
+            rest = mask(body[mo.end():]).lstrip()
+            k1 = rest.find("{")
+            head1 = rest[:k1] if k1 >= 0 else rest
+            if re.match(r"^(?:template\b|struct\b|class\b|union\b|enum\b|typedef\b|namespace\b)", head1):
+                break
             own_ns.append(mo.group(2))
             body = body[mo.end():]
         ch = Chunk(va, body.rstrip() + "\n")
