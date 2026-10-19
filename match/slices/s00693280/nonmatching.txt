@@ -4,3 +4,5 @@
 00693cd0  83  binder ctor A: vtable + zeroed refs + bind call present; missing compiler EH prolog, so frame/scheduling differ
 00693d60  83  binder ctor B: vtable + zeroed refs + bind call present; missing compiler EH prolog, so frame/scheduling differ
 006940d0  202  Obj copy ctor: header copy + two eastl-string range-init/copy sequence reproduced; no EH region and register scheduling differ; equiv UNSUPPORTED (unresolved refs: Str16::RangeInitialize, Str_DoInsertValue)
+00693390  772  Variant writer (complete; flags /O2 /MD /Gy /EHsc /TP /GS-): io/info register roles swapped and cl cross-jumps identical case tails the original keeps separate [equiv: WEAK]
+00693e10  381  cVarListSerializer::Serialize (complete; flags /O2 /MD /Gy /EHsc /TP /GS-): frame 4 bytes smaller (a pointer-iteration slot) and this/io registers swapped [equiv: UNSUPPORTED 0/400 valid inputs]

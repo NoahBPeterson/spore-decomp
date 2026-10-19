@@ -1,3 +1,2 @@
 # va  diff-bytes  reason (incomplete / approximated source)
-007c12a0  0  skeleton: 113-byte two-vtable constructor; exact base/member declaration order not reconstructed
 007c1330  0  skeleton: 192-byte destructor with EH; member destruction order not reconstructed

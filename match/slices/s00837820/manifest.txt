@@ -10,3 +10,4 @@ slices/s00837820/s00837820.cpp  ?OptionArguments@cArguments@@QAEXPBDH@Z  0083833
 slices/s00837820/s00837820.cpp  ?FUN_00838740@@YAXH@Z  00838740  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00837820/s00837820.cpp  ?StrEqualI@@YA_NPBD0@Z  00838760  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00837820/s00837820.cpp  ?StrNEqualI@@YA_NPBD0I@Z  00838780  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00837820/s00837820.cpp  ??0cArgumentsEH@@QAE@H@Z  008386d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /EHsc /GS-

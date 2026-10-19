@@ -26,12 +26,12 @@ struct Obj {
 
 // ------------------------------------------------- out-of-slice callees ----
 extern "C" void  FUN_00692d90(Elem* first, int topPosition, int position, Elem value, int cmp);
-extern "C" bool  EA_IO_ReadInt32(void* io, void* p, int n, int f);       // 93a780
-extern "C" bool  EA_IO_ReadUint16(void* io, void* p, int n, int f);      // 93a700
-extern "C" bool  EA_IO_ReadUint8(void* io, void* p, int n);              // 93a6c0
-extern "C" bool  EA_IO_WriteUint16(void* io, void* p, int n, int f);     // 93a9d0
-extern "C" bool  EA_IO_WriteUint32(void* io, void* p, int n, int f);     // 93aa70
-extern "C" void  operator_delete_arr(void* p);                           // f47380
+extern "C" bool  EA_IO_ReadInt32(void* io, void* p, int n, int f);       // 0x0093a780
+extern "C" bool  EA_IO_ReadUint16(void* io, void* p, int n, int f);      // 0x0093a700
+extern "C" bool  EA_IO_ReadUint8(void* io, void* p, int n);              // 0x0093a6c0
+extern "C" bool  EA_IO_WriteUint16(void* io, void* p, int n, int f);     // 0x0093a9d0
+extern "C" bool  EA_IO_WriteUint32(void* io, void* p, int n, int f);     // 0x0093aa70
+extern "C" void  operator_delete_arr(void* p);                           // 0x00f47380
 
 // =====================================================================
 // 0x00693280  heap adjust (sift down)
@@ -317,81 +317,133 @@ C3* C3::ctorB(void* a, void* b, void* c, void* d)
 }
 
 // =====================================================================
-// 0x00693390  write one typed value descriptor.
-// NOTE: approximation -- the two per-type dispatch switch tables and the
-// fixed-stride array path are summarised, not reproduced instruction for
-// instruction.  Listed in partial.txt.
+// 0x00693390  write one typed value (Variant: 16 data bytes, flags +0x10, type +0x12)
 // =====================================================================
 struct FieldInfo {
-    unsigned char* data;    // +0
-    int            count;   // +4
-    int            stride;  // +8
-    unsigned short flags;   // +0x10
-    unsigned short type;    // +0x12
+    unsigned int   mData[4];  // inline value; for arrays: [0] data, [1] count, [2] stride
+    unsigned short flags;     // +0x10
+    unsigned short type;      // +0x12
 };
 
 extern "C" bool FUN_00571f10(void* io, unsigned char v);            // 0x571f10
 extern "C" bool FUN_00692780(void* io, unsigned char v);            // 0x692780
 extern "C" bool FUN_006927a0(void* io, unsigned short v, int p);    // 0x6927a0
 extern "C" bool FUN_006927c0(void* io, unsigned int v, int p);      // 0x6927c0
+extern "C" bool FUN_006927c0f(void* io, float v, int p);            // 0x6927c0 (float overload)
 extern "C" bool FUN_006927e0(void* io, unsigned int a, unsigned int b, int p); // 0x6927e0
+extern "C" bool FUN_006927e0d(void* io, double v, int p);           // 0x6927e0 (double overload)
 extern "C" bool FUN_00692e00(void* io, void* v);                    // 0x692e00
 extern "C" bool FUN_00692e50(void* io, void* v);                    // 0x692e50
 
-static bool oneValue(void* io, unsigned char* p, unsigned short type, int param)
-{
-    switch (type)
-    {
-    case 1:  return FUN_00571f10(io, *p);
-    case 2: case 6: return FUN_00692780(io, *p);
-    case 3: case 7: case 8: return FUN_006927a0(io, *(unsigned short*)p, param);
-    case 9: case 10: case 0xd: return FUN_006927c0(io, *(unsigned int*)p, param);
-    case 0xb: case 0xc: case 0xe: return FUN_006927e0(io, *(unsigned int*)p, *(unsigned int*)(p + 4), param);
-    case 0x12: return FUN_00692e00(io, p);
-    case 0x13: return FUN_00692e50(io, p);
-    case 0x11: return false;
-    default:
-        return ((bool(__thiscall*)(void*, unsigned char*, int))VTABLE(io)[0x38 / 4])(io, p, 0x10);
-    }
-}
+static inline bool WriteU16(void* io, unsigned int v, int param) { return EA_IO_WriteUint16(io, &v, 1, param); }
+static inline bool WriteU32(void* io, unsigned int v, int param) { return EA_IO_WriteUint32(io, &v, 1, param); }
 
+// @ 0x00693390
 extern "C" bool FUN_00693390(void* io, FieldInfo* info, int param)
 {
-    unsigned short t = info->type;
-    bool ok = EA_IO_WriteUint16(io, &t, 1, param);
-    if (ok)
-        ok = EA_IO_WriteUint16(io, &info->flags, 1, param);
+    bool ok = WriteU16(io, info->type, param) && WriteU16(io, info->flags, param);
 
-    if ((info->flags & 0x30) != 0)
+    if ((info->flags & 0x30) == 0)
     {
-        if ((info->flags & 0x40) != 0)
-            return false;
-        int stride = info->stride;
-        int count = info->count;
-        if (ok && EA_IO_WriteUint32(io, &stride, 1, param) && EA_IO_WriteUint32(io, &count, 1, param))
-            ok = true;
-        else
-            ok = false;
-        unsigned char* end = info->data + stride * count;
-        for (unsigned char* p = info->data; p < end; p += stride)
-            ok = oneValue(io, p, info->type, param);
-        return ok;
+        unsigned char* p = (unsigned char*)info;
+        switch (info->type)
+        {
+        case 1: if (ok && FUN_00571f10(io, *p)) return true; break;
+        case 2: case 6: if (ok && FUN_00692780(io, *p)) return true; break;
+        case 3: if (ok && FUN_006927a0(io, *(unsigned short*)p, param)) return true; break;
+        case 5: if (ok && FUN_00692780(io, *p)) return true; break;
+        case 7: if (ok && FUN_006927a0(io, *(unsigned short*)p, param)) return true; break;
+        case 8: if (ok && FUN_006927a0(io, *(unsigned short*)p, param)) return true; break;
+        case 9: if (ok && FUN_006927c0(io, *(unsigned int*)p, param)) return true; break;
+        case 10: if (ok && FUN_006927c0(io, *(unsigned int*)p, param)) return true; break;
+        case 11: if (ok && FUN_006927e0(io, *(unsigned int*)p, *(unsigned int*)(p + 4), param)) return true; break;
+        case 12: if (ok && FUN_006927e0(io, *(unsigned int*)p, *(unsigned int*)(p + 4), param)) return true; break;
+        case 13: if (ok && FUN_006927c0f(io, *(float*)p, param)) return true; break;
+        case 14: if (ok && FUN_006927e0d(io, *(double*)p, param)) return true; break;
+        case 18: if (ok && FUN_00692e00(io, p)) return true; break;
+        case 19: if (ok && FUN_00692e50(io, p)) return true; break;
+        case 17: break;
+        default: if (ok && ((bool(__thiscall*)(void*, unsigned char*, int))VTABLE(io)[0x38 / 4])(io, p, 0x10)) return true; break;
+        }
+        return false;
     }
 
-    return ok && oneValue(io, info->data, info->type, param);
+    if ((info->flags & 0x40) != 0)
+        return false;
+    unsigned char* data = (unsigned char*)info->mData[0];
+    int stride = info->mData[2];
+    int count = info->mData[1];
+    ok = ok && WriteU32(io, stride, param) && WriteU32(io, count, param);
+    unsigned char* end = data + count * stride;
+    for (unsigned char* p = data; p < end; p += stride)
+    {
+        switch (info->type)
+        {
+        case 1:  ok = ok && FUN_00571f10(io, *p); break;
+        case 2: case 6: ok = ok && FUN_00692780(io, *p); break;
+        case 3:  ok = ok && FUN_006927a0(io, *(unsigned short*)p, param); break;
+        case 5:  ok = ok && FUN_00692780(io, *p); break;
+        case 7:  ok = ok && FUN_006927a0(io, *(unsigned short*)p, param); break;
+        case 8:  ok = ok && FUN_006927a0(io, *(unsigned short*)p, param); break;
+        case 9:  ok = ok && FUN_006927c0(io, *(unsigned int*)p, param); break;
+        case 10: ok = ok && FUN_006927c0(io, *(unsigned int*)p, param); break;
+        case 11: ok = ok && FUN_006927e0(io, *(unsigned int*)p, *(unsigned int*)(p + 4), param); break;
+        case 12: ok = ok && FUN_006927e0(io, *(unsigned int*)p, *(unsigned int*)(p + 4), param); break;
+        case 13: ok = ok && FUN_006927c0f(io, *(float*)p, param); break;
+        case 14: ok = ok && FUN_006927e0d(io, *(double*)p, param); break;
+        case 18: ok = ok && FUN_00692e00(io, p); break;
+        case 19: ok = ok && FUN_00692e50(io, p); break;
+        case 16: ok = ok && ((bool(__thiscall*)(void*, unsigned char*, int))VTABLE(io)[0x38 / 4])(io, p, stride); break;
+        case 17: ok = false; break;
+        default: ok = ok && ((bool(__thiscall*)(void*, unsigned char*, int))VTABLE(io)[0x38 / 4])(io, p, stride); break;
+        }
+    }
+    return ok;
 }
 
 // =====================================================================
-// 0x00693e10  SP::cVarListSerializer::Serialize
-// NOTE: approximation -- full control flow is summarised.  partial.txt.
+// 0x00693e10  SP::cVarListSerializer::Serialize (reads a var-list block back into the bound fields)
 // =====================================================================
-struct cDataSerializationInfo {
-    unsigned int mId;             // +0
-    unsigned int mDataSize;       // +4
-    bool         mbSerialized;    // +8
-    void*        mpBinderContext; // +0xc
-    void*        mpSerializer;    // +0x10
+struct cDataSerializerGeneric {
+    char*        mpStaticFieldName;      // +0
+    unsigned int mId;                    // +4
+    unsigned char mData[16];             // +8
+    void*        mpBinderContext;        // +0x18
+    void*        mpSetDefaultValueFunc;  // +0x1c
+    void* (__cdecl* mpDataBinderFunc)(cDataSerializerGeneric*);   // +0x20
+    bool  (__cdecl* mpReadFunc)(void* stream, void* data);        // +0x24
 };
+
+struct cDataSerializationInfo {
+    unsigned int mId;                       // +0
+    unsigned int mDataSize;                 // +4
+    bool         mbSerialized;              // +8
+    void*        mpBinderContext;           // +0xc
+    cDataSerializerGeneric* mpSerializer;   // +0x10
+};
+
+struct IStreamPos {
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
+    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8();
+    virtual int  GetPosition(int whence);              // +0x24
+    virtual void SetPosition(int pos, int whence);     // +0x28
+};
+struct IStreamMid {
+    virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3(); virtual void m4();
+    virtual void m5();
+    virtual IStreamPos* GetStream();                   // +0x18
+};
+struct ISerialStream {
+    virtual void i0(); virtual void i1(); virtual void i2(); virtual void i3(); virtual void i4();
+    virtual void i5(); virtual void i6();
+    virtual bool IsOk();                               // +0x1c
+    virtual IStreamMid* GetMid();                      // +0x20
+};
+
+struct cDataSerializationInfoLessCompare {};
+cDataSerializationInfo* __cdecl LowerBoundInfo(cDataSerializationInfo* first, cDataSerializationInfo* last,
+                                               const cDataSerializationInfo& value,
+                                               cDataSerializationInfoLessCompare comp);   // 0x00e0e9f0
 
 struct cVarListSerializer {
     cDataSerializationInfo mDataSerializationInfos[128]; // +0
@@ -399,19 +451,73 @@ struct cVarListSerializer {
     int            mSerializedVarCount;    // +0xa04
     unsigned int   mSignature;             // +0xa08
     void*          mpObject;               // +0xa0c
-    void*          mpSerializerList;       // +0xa10
-    unsigned char Read(void* io);
+    cDataSerializerGeneric* mpSerializerList;   // +0xa10
+    void Unload();                         // 0x00692c50
+    bool Serialize(ISerialStream* stream);
 };
 
-extern "C" void FUN_00692c50(void* this_);   // 0x692c50
-extern "C" void* LowerBound(void* first, int count, unsigned int* key, void* cmp); // 0xe0e9f0
+#define READ_I32(dst) do { IStreamPos* rs_ = stream->GetMid()->GetStream(); EA_IO_ReadInt32(rs_, &(dst), 1, 0); } while (0)
 
-unsigned char cVarListSerializer::Read(void* io)
+// @ 0x00693e10
+bool cVarListSerializer::Serialize(ISerialStream* stream)
 {
-    // (see Ghidra decompilation; control flow approximated)
-    unsigned int sig = mSignature;
-    (void)sig;
-    return 1;
+    IStreamPos* io = stream->GetMid()->GetStream();
+    int signature;
+    int blockSize;
+    READ_I32(signature);
+    READ_I32(blockSize);
+    int endPos = io->GetPosition(0) + blockSize;
+    if ((unsigned int)signature != mSignature)
+    {
+        io->SetPosition(endPos, 0);
+        Unload();
+        return false;
+    }
+    unsigned int count = 0;
+    READ_I32(count);
+    cDataSerializationInfo infos[128];
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        READ_I32(infos[i].mId);
+        READ_I32(infos[i].mDataSize);
+    }
+    cDataSerializationInfo* last = mDataSerializationInfos + mSerializableVarCount;
+    mSerializedVarCount = 0;
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        if (infos[i].mDataSize != 0)
+        {
+            int pos = io->GetPosition(0);
+            cDataSerializationInfo key;
+            key.mId = infos[i].mId;
+            cDataSerializationInfo* it = LowerBoundInfo(mDataSerializationInfos, last, key,
+                                                        cDataSerializationInfoLessCompare());
+            if (it->mId == infos[i].mId)
+            {
+                cDataSerializerGeneric* ser = it->mpSerializer;
+                if (ser->mpBinderContext == 0)
+                    ser->mpBinderContext = mpObject;
+                it->mbSerialized = ser->mpReadFunc(stream, ser->mpDataBinderFunc(ser)) && stream->IsOk();
+                ser->mpBinderContext = it->mpBinderContext;
+                if (!it->mbSerialized)
+                {
+                    io->SetPosition(endPos, 0);
+                    Unload();
+                    return false;
+                }
+                ++mSerializedVarCount;
+            }
+            else
+            {
+                io->SetPosition(infos[i].mDataSize + pos, 0);
+            }
+        }
+    }
+    Unload();
+    if (endPos != io->GetPosition(0))
+    {
+        io->SetPosition(endPos, 0);
+        return false;
+    }
+    return stream->IsOk();
 }
-
-

@@ -1,1 +1,2 @@
 008387a0  5  StrEqualI2 - complete _stricmp(*p,b)==0 wrapper; only register naming (eax/ecx/edx) differs
+008383c0  560  cArguments::SplitIntoArguments (complete tokeniser); register allocation differs (original spills this/&mOptionArguments and keeps isspace in ebp), temp cOptionArgInfo forwarded through the stack [equiv: WEAK]

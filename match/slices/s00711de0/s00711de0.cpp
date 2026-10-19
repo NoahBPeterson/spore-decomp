@@ -2,6 +2,7 @@
 // the hash_map operator[] itself, serialization/list helpers and a fixed-vector copy ctor.
 // /O2 /MD /Gy /EHsc /TP /GS-
 #include <new>
+#include <intrin.h>
 #include "types.h"
 
 void __cdecl EastlFree(void* p);                     // 0xF47380
@@ -164,20 +165,39 @@ State2850* State2850::CopyFrom2(const State2850& a, const State2850& b)
 // ---------------------------------------------------------------------------------------------
 // remaining cMaterialManager machinery (partial reconstructions)
 // ---------------------------------------------------------------------------------------------
+static inline long AtomicAdd(volatile long* p, long v) { return _InterlockedExchangeAdd(p, v); }
+
+struct IFileParserW {                 // object at manager+0xc (vtable slots 1 and 3)
+    virtual void f0();
+    virtual void Release();           // +0x04
+    virtual void f2();
+    virtual void Flush();             // +0x0c
+};
+struct FixedClear { void clear(); };  // 0x00711380 (thiscall)
+
+void FUN_006fd7a0();                  // 0x006fd7a0 (cdecl)
+void __cdecl FUN_006ff680(int i);     // 0x006ff680
+void __cdecl ClearPSFragment(int i);  // 0x006fc6a0
+
 struct MaterialManagerBig2 {
-    char pad0[0x174];
+    char pad00[0x0c];
+    IFileParserW* mpFileParser;   // +0x0c
+    char pad10[4];
+    char* mpInvalidTexture;       // +0x14 (cTextureInstance; refcount at +8)
+    char pad18[0x174 - 0x18];
     MatMap mMap;             // +0x174
-    char pad1[0x40];
-    void* mpInvalidState;    // +0x1b4
-    char pad2[0x258 - 0x1b8];
+    char pad1b4[4];
+    FixedClear mFixed;       // +0x1b8
+    char pad1b9[0x258 - 0x1b9];
     Mutex mMutex;            // +0x258
     char pad3[0x200];
     int32_t mCount;          // +0x200 (approx)
 
     void ReadMaterials1184(void* stream, int32_t n, uint32_t* ids, void* a, void* b);
-    void Shutdown();
+    bool Shutdown();
     void Update2670();
     void RemoveAllRegistered();
+    void RemoveAllRegisteredMaterials();   // 0x00711d10 (thiscall)
     void UnregisterArenaContents(void* arena);
 };
 
@@ -191,11 +211,34 @@ void MaterialManagerBig2::ReadMaterials1184(void* stream, int32_t n, uint32_t* i
 }
 
 // @ 0x007123A0
-void MaterialManagerBig2::Shutdown()
+bool MaterialManagerBig2::Shutdown()
 {
-    RemoveAllRegistered();
-    // FUN_00711380 on this+0x1b8
-    // release file parser and invalid texture, then clear package tables
+    RemoveAllRegisteredMaterials();
+    mFixed.clear();
+    if (mpFileParser) {
+        mpFileParser->Flush();
+        if (mpFileParser) {
+            IFileParserW* p = mpFileParser;
+            mpFileParser = 0;
+            p->Release();
+        }
+    }
+    if (mpInvalidTexture) {
+        volatile long* rc = (volatile long*)(mpInvalidTexture + 8);
+        mpInvalidTexture = 0;
+        AtomicAdd(rc, -1);
+        long cur = AtomicAdd(rc, 0);
+        if (cur < 1)
+            AtomicAdd(rc, 1);
+        else
+            AtomicAdd(rc, 0);
+    }
+    FUN_006fd7a0();
+    for (int i = 1; i < 0x100; ++i)
+        FUN_006ff680(i);
+    for (int i = 1; i < 0x100; ++i)
+        ClearPSFragment(i);
+    return true;
 }
 
 // @ 0x00712670
@@ -214,6 +257,41 @@ void MaterialManagerBig2::RemoveAllRegistered()
 void MaterialManagerBig2::UnregisterArenaContents(void* arena)
 {
     (void)arena;
+}
+
+// ---------------------------------------------------------------------------------------------
+// eastl::vector<AutoRefCount<cMaterialInternal>>::resize(n)  (0x00712280)
+// ---------------------------------------------------------------------------------------------
+struct ARefMat {                       // EA::AutoRefCount<cMaterialInternal>
+    void* mpObject;
+    ARefMat() : mpObject(0) {}
+    ~ARefMat() { if (mpObject) ((IFileParserW*)mpObject)->Release(); }
+};
+void** __cdecl AssignWeak14(void** first, void** last, void** dest);   // 0x0070ebf0 (copy of the tail down over the erased range)
+
+struct MatRefVec {
+    void** mpBegin;                    // +0
+    void** mpEnd;                      // +4
+    void** mpCapacity;                 // +8
+    void DoInsertValues(void** pos, uint32_t n, const ARefMat& value);   // 0x00710510 (thiscall, ret 0xc)
+    void RangeWeakRelease(void** first, void** last);   // 0x0070e890 (thiscall, ret 8; releases the vacated range)
+    void resize(uint32_t n);
+};
+
+// @ 0x00712280
+void MatRefVec::resize(uint32_t n)
+{
+    void** pEnd = mpEnd;
+    uint32_t nSize = (uint32_t)(pEnd - mpBegin);
+    if (n > nSize) {
+        const ARefMat zero;
+        DoInsertValues(pEnd, n - nSize, zero);
+    } else {
+        void** first = mpBegin + n;
+        void** pos = AssignWeak14(pEnd, pEnd, first);
+        RangeWeakRelease(pos, mpEnd);
+        mpEnd -= (pEnd - first);
+    }
 }
 
 // ---------------------------------------------------------------------------------------------

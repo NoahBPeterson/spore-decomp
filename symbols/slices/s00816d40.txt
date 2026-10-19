@@ -6,3 +6,5 @@
 00817720 UI::CalloutMessageBox::OnShow  # rebinds root/child windows from layout (ids 0xffffffff,0x62ef978,0x642d110)
 00817840 UI::CalloutMessageBox::OnMovieCommand  # movie-system enable/disable dispatch
 00817c40 FUN_00817c40  # hash-based named-string getter (FNV1_String16)
+00816d40 cSPUIMessageBox::AutoSizeButtons  # sizes buttons 0x5107b17..1a, returns the gap between the left and right button groups
+00817040 cSPUIMessageBox::Init  # loads the property list, layout and button/text setup (pdb: cSPUIMessageBox)

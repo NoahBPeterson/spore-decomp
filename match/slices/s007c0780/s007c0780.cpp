@@ -48,13 +48,54 @@ bool IHandlerRC::HandleMessage(unsigned int msgId, void* arg)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x007c12a0  cContentValidationSummarizer-like constructor (vtable + zero)
+// cContentValidationSummarizer (Simulator) constructor: two vtables, a
+// RefCountVTemplate<int> base at +4, and zero-initialised container members.
 // ---------------------------------------------------------------------------
-struct ContentValidationSummarizer {
+struct EditorResBase {
     virtual void v0();
     virtual void v1();
-    char pad[0x94 - 0x08];
 };
+struct RefCountVBase {
+    virtual int AddRef();
+    virtual int Release();
+    int mnRefCount;
+    RefCountVBase() : mnRefCount(0) {}
+};
+struct RefPtr { void* p; RefPtr() : p(0) {} };
+struct Triple {
+    void* a; void* b; void* c;
+    Triple() : a(0), b(0), c(0) {}
+};
+struct ContentValidationSummarizer : EditorResBase, RefCountVBase {
+    Triple m0c;
+    unsigned pad18[2];
+    Triple m20;
+    unsigned pad2c[2];
+    Triple m34;
+    unsigned pad40[3];
+    Triple m4c;
+    unsigned pad58[2];
+    RefPtr m60;
+    int m64;
+    int m68;
+    int m6c;
+    int m70;
+    int m74;
+    char m78;
+    void* m7c;
+    void* m80;
+    void* m84;
+    unsigned pad88[2];
+    void* m90;
+    ContentValidationSummarizer();
+    virtual void v2();
+};
+
+// @ 0x007c12a0
+ContentValidationSummarizer::ContentValidationSummarizer()
+    : m64(-1), m68(-1), m6c(0), m70(0), m74(0x10), m78(0), m7c(0), m80(0), m84(0), m90(0)
+{
+}
 
 // @ 0x007c1330  matching destructor
 void FUN_007c1330(void* p) { (void)p; }

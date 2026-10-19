@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008268b0/s008268b0.cpp  ?ResetView@cPropertyUI@@QAEXXZ  008268b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

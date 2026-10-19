@@ -2,3 +2,5 @@
 slices/s00816d40/s00816d40.cpp  ?scalarDtor@MsgBoxA@@QAEPAXE@Z  00817000  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00816d40/s00816d40.cpp  ?FUN_008175a0@@YGXPAUEString@@@Z  008175a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00816d40/s00816d40.cpp  ?rebind@MsgBoxD@@QAEXXZ  00817720  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00816d40/s00816d40.cpp  ?AutoSizeButtons@cSPUIMessageBoxW@@QAEMXZ  00816d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00816d40/s00816d40.cpp  ?Init@cSPUIMessageBoxW@@QAE_NPBUResourceKeyW@@_N@Z  00817040  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -7,3 +7,5 @@
 00693cd0 ?ctorA@C3@@QAEPAU1@PAX000@Z  # C3::ctorA migrated from s00693280 (verbatim, slice spelling)
 00693d60 ?ctorB@C3@@QAEPAU1@PAX000@Z  # C3::ctorB migrated from s00693280 (verbatim, slice spelling)
 006940d0 ??0Obj@@QAE@ABU0@@Z  # Obj::Obj migrated from s00693280 (verbatim, slice spelling)
+00693390 SP::cVariant::Write  # writes type and flags then the value, or stride/count plus each element for arrays (guess at name; behaviour read from the card)
+00693e10 SP::cVarListSerializer::Serialize  # name from the dev PDB (pdb_type cVarListSerializer); reads block header, per-var ids and sizes
