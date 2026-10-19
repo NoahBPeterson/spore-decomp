@@ -9,23 +9,23 @@ Equivalent = complete compilable source with the same behavior, not (yet) byte-i
 
 | Tier | Functions | Share (by count) | Code size | Share (by size) | Notes |
 |---|---:|---:|---:|---:|---|
-| Functions, byte-exact | 8704 | 9.86% | 0.53 MB | 3.72% | free (non-member) functions |
-| Classes, templates, byte-exact | 14014 | 15.87% | 1.11 MB | 7.82% | member functions and template instantiations |
-| Globals, other code, byte-exact | 31088 | 35.21% | 1.21 MB | 8.49% | static initializers/destructors of globals, compiler stubs; 16626 of these written as a plain function rather than `T g = ...;` (shape-only) |
-| Functions, equivalent but not exact | 2969 | 3.36% | 1.68 MB | 11.81% |  |
-| Classes, templates, equivalent | 6294 | 7.13% | 3.05 MB | 21.42% |  |
+| Functions, byte-exact | 8796 | 9.96% | 0.54 MB | 3.79% | free (non-member) functions |
+| Classes, templates, byte-exact | 14237 | 16.12% | 1.16 MB | 8.17% | member functions and template instantiations |
+| Globals, other code, byte-exact | 31099 | 35.22% | 1.21 MB | 8.51% | static initializers/destructors of globals, compiler stubs; 16626 of these written as a plain function rather than `T g = ...;` (shape-only) |
+| Functions, equivalent but not exact | 3140 | 3.56% | 1.76 MB | 12.33% |  |
+| Classes, templates, equivalent | 6509 | 7.37% | 3.16 MB | 22.15% |  |
 | Globals, other code, equivalent | 43 | 0.05% | 0.04 MB | 0.30% |  |
-| Other: partial source | 4891 | 5.54% | 1.85 MB | 13.01% | incomplete or approximate source, not counted as decompiled |
-| Other: no source yet | 20290 | 22.98% | 4.77 MB | 33.43% | Ghidra pseudocode only (readable, not compilable) |
-| **Total with compilable source** | 63112 | 71.48% | 7.63 MB | 53.56% |  |
+| Other: partial source | 4489 | 5.08% | 1.70 MB | 11.92% | incomplete or approximate source, not counted as decompiled |
+| Other: no source yet | 19980 | 22.63% | 4.68 MB | 32.82% | Ghidra pseudocode only (readable, not compilable) |
+| **Total with compilable source** | 63824 | 72.29% | 7.87 MB | 55.25% |  |
 | Game functions (denominator) | 88293 | 100.00% | 14.25 MB | 100.00% |  |
 
 | Component | Functions | Byte-exact | Byte-exact (by size) | With compilable source | Code size | With source (by size) |
 |---|---:|---:|---:|---:|---:|---:|
-| Havok 3.1.0 | 2118 | 564 (26.63%) | 3.67% | 1176 (55.52%) | 0.66 MB | 51.18% |
-| RenderWare | 1944 | 447 (22.99%) | 5.33% | 1030 (52.98%) | 0.43 MB | 50.58% |
-| EA framework (UTFSpore) | 6382 | 2303 (36.09%) | 13.75% | 3462 (54.25%) | 1.22 MB | 44.68% |
-| Spore game code (everything else) | 77849 | 50492 (64.86%) | 22.11% | 57444 (73.79%) | 11.95 MB | 54.70% |
+| Havok 3.1.0 | 2118 | 565 (26.68%) | 3.68% | 1176 (55.52%) | 0.66 MB | 51.18% |
+| RenderWare | 1944 | 452 (23.25%) | 5.35% | 1030 (52.98%) | 0.43 MB | 50.58% |
+| EA framework (UTFSpore) | 6382 | 2337 (36.62%) | 14.05% | 3518 (55.12%) | 1.22 MB | 45.85% |
+| Spore game code (everything else) | 77849 | 50778 (65.23%) | 22.60% | 58100 (74.63%) | 11.95 MB | 56.60% |
 
 Migration into `src/game/` module TUs (Phase B, docs/migration.md). Same denominator. A closed interval is a
 retail address interval of one object file (tools/migrate/intervals.py) in which every function has compilable
@@ -33,14 +33,14 @@ source in a module TU: contiguous retail code reproduced in object order, the li
 
 | Tier | Functions | Share (by count) | Code size | Share (by size) | Notes |
 |---|---:|---:|---:|---:|---|
-| Migrated: in src/game, byte-exact | 515 | 0.58% | 0.09 MB | 0.65% |  |
-| Migrated: in src/game, equivalent | 601 | 0.68% | 0.23 MB | 1.60% |  |
-| Migrated: in src/game, partial | 78 | 0.09% | 0.02 MB | 0.12% | not counted as migrated |
-| **Migrated: total with compilable source in src/game** | 1116 | 1.26% | 0.32 MB | 2.25% | 36 object files with a TU, 8 closed of 83 intervals |
-| Migrated: verbatim slice text, not yet on canonical classes | 899 | 1.02% | 0.29 MB | 2.07% | subset of the total above |
-| Migrated: converted to canonical classes | 217 | 0.25% | 0.03 MB | 0.19% | subset of the total above |
-| Migrated: inside closed object intervals | 8 | 0.01% | 0.00 MB | 0.02% |  |
-| Compilable source still only in match/slices | 61996 | 70.22% | 7.31 MB | 51.31% |  |
+| Migrated: in src/game, byte-exact | 3385 | 3.83% | 0.49 MB | 3.43% |  |
+| Migrated: in src/game, equivalent | 3477 | 3.94% | 1.59 MB | 11.15% |  |
+| Migrated: in src/game, partial | 1625 | 1.84% | 0.66 MB | 4.65% | not counted as migrated |
+| **Migrated: total with compilable source in src/game** | 6862 | 7.77% | 2.08 MB | 14.58% | 513 object files with a TU, 151 closed of 847 intervals |
+| Migrated: verbatim slice text, not yet on canonical classes | 6393 | 7.24% | 2.01 MB | 14.11% | subset of the total above |
+| Migrated: converted to canonical classes | 469 | 0.53% | 0.07 MB | 0.48% | subset of the total above |
+| Migrated: inside closed object intervals | 274 | 0.31% | 0.08 MB | 0.59% |  |
+| Compilable source still only in match/slices | 56962 | 64.51% | 5.80 MB | 40.67% |  |
 
 Kind is from the name (template arguments, recovered class) or, for unnamed functions, from the calling
 convention (reads ECX = `this` before writing it).
