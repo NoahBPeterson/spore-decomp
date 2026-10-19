@@ -1,0 +1,11 @@
+# va  diff-bytes  reason   flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a34ee0 39 AmbLayer::UpdatePrimitives: equivalent; difftest WEAK (360 valid, 23.4% coverage); original sinks the 0xc1a03855 branch out of line, MSVC keeps it inline
+00a34fd0 60 FUN_00a34fd0 (copy-construct [p1,p2) into p3 with AutoRefCount AddRef): complete SEH implementation; difftest UNSUPPORTED (only 3/400 valid, read faults on random inputs)
+00a35070 47 FUN_00a35070 (assign-copy range with AddRef/Release): equivalent; difftest WEAK (92 valid, 17.5% coverage); register allocation differs (dst in ebx vs edi)
+00a35150 452 FUN_00a35150 (ambience-cluster recentre): complete implementation; difftest UNSUPPORTED (unresolved SP_App / Memset32)
+00a35570 48 FUN_00a35570 (destroy AutoRefCount vector + free): equivalent; difftest PASS (248 valid, 76.3% coverage); frame/temp slots differ
+00a355e0 18 F_a355e0::call (basic_string::assign(const char*)): equivalent; difftest WEAK (182 valid, 100.0% coverage); end-pointer arithmetic codegen differs
+00a35610 175 F_a35610::call (vector insert at position): complete implementation; difftest UNSUPPORTED (0/400 valid, memmove import on unmapped ranges)
+00a358d0 314 F_a358d0::call (AutoRefCount-pair vector insert, EH-aware): equivalent; difftest WEAK (127 valid, 59.0% coverage)
+00a35c00 45 FUN_00a35c00 (clear primitive vector, reset accumulators): equivalent; difftest PASS (400 valid, 100.0% coverage)
+00a35c40 174 F_a35c40::call (select primitives + recentre): complete implementation; difftest UNSUPPORTED (0/400 valid, read faults)
