@@ -9,10 +9,10 @@
 00935c80 EA::GetOSGlobal  # PDB name
 00935d30 GetApplicationPath  # GetModuleFileNameW(buf,0x104) wrapper
 00935d60 WideSpawn  # tail-jumps to _wspawnv(_P_WAIT/_P_DETACH)
-00935db0 EA::Process::Spawn  # PDB name; tail-jumps to _spawnv
-00935e00 WideSearchEnvironmentPath  # _wsearchenv wrapper, default L"PATH"
-00935e30 EA::Process::SearchEnvironmentPath  # PDB name; _searchenv wrapper
-00935e60 EA::Process::OpenFile  # PDB name (wchar_t*)
-00935f80 EA::Process::OpenFile  # PDB name (char* -> GetCharacterAsUTF16 -> wide)
-00935fb0 EA::Process::OpenBrowser  # PDB name; ShellExecuteW(L"open", ...)
+00935db0 ?Spawn@Process@EA@@YAHPBDPBQBD_N@Z  # EA::Process::Spawn migrated from s009350f0
+00935e00 ?WideSearchEnvironmentPath@@YA_NPB_WPA_W0@Z  # WideSearchEnvironmentPath migrated from s009350f0 (verbatim, slice spelling)
+00935e30 ?SearchEnvironmentPath@Process@EA@@YA_NPBDPAD0@Z  # EA::Process::SearchEnvironmentPath migrated from s009350f0
+00935e60 ?OpenFile@Process@EA@@YA_NPB_W@Z  # EA::Process::OpenFile migrated from s009350f0
+00935f80 ?Process_OpenFileA@@YAXPBD@Z  # Process_OpenFileA migrated from s009350f0 (verbatim, slice spelling)
+00935fb0 ?OpenBrowser@Process@EA@@YA_NPB_W_N@Z  # EA::Process::OpenBrowser migrated from s009350f0
 00936050 RandomBytes  # __rdtsc-seeded byte generator
