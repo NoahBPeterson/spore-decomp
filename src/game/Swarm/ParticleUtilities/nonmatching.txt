@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a7b370 1180 complete PathBuilder::Build (arc-length params, widths, tangents -> vertices); x87/SSE scheduling and block layout differ; difftest WEAK after fixing the output clear (0xd73090 is the thiscall vector::erase(first,last) on mpOut, ret 8, not a cdecl free function)
