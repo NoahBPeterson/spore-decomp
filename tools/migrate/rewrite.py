@@ -4245,7 +4245,7 @@ class Rewrite:
                 if kind in ("other", "extern") and mi0.endswith(")") is False and mi0.endswith(";") and "(" in mi0 and "{" not in mi0 \
                         and not mi0.startswith(("typedef", "extern \"C\" long")) and "=" not in mi0:
                     continue      # a function prototype that differs from the TU's is an overload (or a redeclaration), not a stub clash
-                if RS.is_template_member_def(text):
+                if RS.is_template_member_def(text) or self.is_stub_member_def(text):
                     # an out-of-class member definition of a class template is not a stub of that member's name: renaming the
                     # member renamed the in-class declaration but not `this->DoAssignFromIterator(..)` calls (fix pass 5,
                     # s007cb590 vs s007ca950's identical-named definitions: C2039, five functions dropped); when its class
@@ -4342,6 +4342,25 @@ class Rewrite:
                         done.add((tuple(ns), n))
                         self.rename_stub(fns, ns, n, "a header the TU includes defines %s; the verbatim functions keep the slice's stub" % "::".join(list(ns) + [n]),
                                          verbatim_only=True)
+
+    def is_stub_member_def(self, text):
+        """`bool F_ec20::f(int* io, unsigned index) { .. }`: an out-of-class definition of a member of one of the slice's
+        stub classes names no stub of its own (fix pass 6 C13: item_names gave `f`, which clashed with another slice's `f`;
+        the in-class declarations were renamed to f_s0069_e3a0 and the definitions not: C2039, s0069e3a0 0x69ec20/0x69f940;
+        SwatchStrategies' clash loop).  When the class stub itself is renamed, the qualifier follows."""
+        _ns, inner = RS.unwrap_namespaces(text)
+        mi = RS.mask(inner)
+        k = mi.find("{")
+        if k < 0:
+            return False
+        mm = re.search(r"(?<![\w:])([A-Za-z_]\w*)\s*::\s*~?\s*(?:operator\s*\S+?|[A-Za-z_]\w*)\s*\(", mi[:k])
+        if not mm:
+            return False
+        if not hasattr(self, "_stub_struct_names"):
+            self._stub_struct_names = {n for kind, t in self.items if kind == "struct" for n in RS.item_names(kind, t)} | \
+                {n for kind, t in self.items if kind == "other" and RS.mask(RS.unwrap_namespaces(t)[1]).lstrip().startswith(("struct", "class", "union"))
+                 for n in RS.item_names(kind, t)}
+        return mm.group(1) in self._stub_struct_names
 
     def rename_namespace(self, fns, old_n):
         """This slice's top-level `namespace X` -> `X_sNNNN_NNNN` in its items and verbatim functions (the module TU has a
