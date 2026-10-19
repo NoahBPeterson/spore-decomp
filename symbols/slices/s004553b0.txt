@@ -2,7 +2,7 @@
 004554a0  eastl::rbtree<...>::DoNukeSubtree / FreeTree
 004554f0 ?DoFreeNodes@@YAPAXPAX00@Z  # DoFreeNodes migrated from s004553b0 (verbatim, slice spelling)
 00455590  eastl::hashtable<SP::cString_*,...>::insert
-00455660  eastl::vector<rw::math::fpu::Vector3Template<float,0>,eastl::sp_vector_allocator>::push_back
+00455660 ?VectorPushBack3@@YAPAXPAHPAUVec3@@@Z  # VectorPushBack3 migrated from s004553b0 (verbatim, slice spelling)
 004558a0 ?VectorInsertU32@@YAPAXPAHPAXI@Z  # VectorInsertU32 migrated from s004553b0 (verbatim, slice spelling)
 00455ae0  eastl::vector<...0x14-stride...>::erase/move
 00455c00  string-to-Vector3 parser
