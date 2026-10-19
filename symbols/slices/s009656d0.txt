@@ -1,1 +1,1 @@
-009656d0 EA::UTFWinControls::ButtonDrawable::Paint  # Ghidra 'UTFWin::IDrawable::Paint'; PDB candidate CreateRenderables is the same VA
+009656d0 ?Paint@ButtonDrawable@UTFWinControls@EA@@QAEXPAURenderContext_s0096_56d0@UTFWin@3@PBMPBUDrawState@23@@Z  # ButtonDrawable::Paint migrated from s009656d0 (verbatim, slice spelling)

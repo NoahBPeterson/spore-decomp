@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/Button.cpp  ?GetEffectFlag@FlexFlag@@QAEHXZ  00963f60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Button.cpp  ?SetSlot@WinButtonX@@QAEXIH@Z  00963fd0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Button.cpp  ?GetCaptionColor@WinButtonX@@QAEHXZ  00964000  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Button.cpp  ?GetSlot@WinButtonX@@QAEHI@Z  00964020  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
