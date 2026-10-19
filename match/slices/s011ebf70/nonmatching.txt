@@ -4,3 +4,13 @@
 011ec170  133 complete Mutex::Lock; register allocation around TryEnterCriticalSection loop differs
 011ec230  27  complete Mutex::Unlock; cl picks esi and folds the bool test
 011ecf40  24  complete stream-list teardown; cl materialises the vtable slot in eax instead of `call [edx+0x10]`
+011ebf70  133 complete rw::core::thread::ThreadObj::findFirstFile (FindFirstFileA + alloc 0x10 handle, fill WIN32_FIND_DATAA fields + attr flags); the `out` load is hoisted to the alloc-failure join point (orig tests `out` after the size-OR pair) and the FindFirstFileA import thunk renders unresolved [equiv: UNSUPPORTED]
+011ec260   93 complete Mutex::ctor0 (lock count / field28 / intra flag + 8 dword clears, static dispatch to Init); cl keeps `this` in esi where orig aliases edi and loads the int arg into ecx [equiv: PASS]
+011ec2f0  112 complete ThreadObj::ctorStream (CritSect init, stream-name set, handle alloc); register allocation and frame-slot order differ [equiv: PASS]
+011ec390   47 complete ThreadObj::ctor (interlocked exchange, two Semaphore::ctor0 + Mutex::ctor0, dispatch to ctorStream); xchg base register and char-truth test form differ [equiv: WEAK]
+011ec410   29 complete ThreadObj::condWait (interlocked inc, Mutex::Lock/Unlock, Semaphore::Wait/Post, waiter signal); only register naming and relocation order differ [equiv: PASS]
+011ec4e0  169 complete ThreadObj::condSignal (mField4/mField8 bookkeeping, one/all paths, Mutex::Lock/Unlock, Semaphore::Wait/Post); branch layout and register scheduling differ [equiv: PASS]
+011ec5d0   60 complete ThreadObj::threadCleanup (CritSect, GetExitCodeThread STILL_ACTIVE filter, CloseHandle + clear slot); char-truth test form and unresolved import thunk tail differ [equiv: UNSUPPORTED]
+011ec650  169 complete ThreadObj::threadAdd (CritSect, first-empty slot, reap finished thread, remove path); cl unrolls both index scans where orig does not [equiv: WEAK]
+011ec750   39 complete TLS thread hook (lazy TlsAlloc, TlsSetValue/TlsGetValue, threadAdd/threadCleanup dispatch); `mov ecx,0` vs an absolute address and the TlsAlloc import thunk rendering differ [equiv: UNSUPPORTED]
+011ec840   87 complete ThreadObj::setPriority (null guard, -0xf..0xf clamp loop via SetThreadPriority, !=0 returns); loop back-edge test choice and the !=0 return idiom differ [equiv: WEAK]

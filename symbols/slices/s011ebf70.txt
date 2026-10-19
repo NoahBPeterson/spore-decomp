@@ -1,5 +1,10 @@
 # Slice s011ebf70 names. RenderWare core threading / file-system module.
-011ebf70 rw::core::filesys::Handle::findFirstFile  # FindFirstFileA + StreamImpl::operator_new(0x10)
+011ebf70 rw::core::thread::ThreadObj::findFirstFile  # FindFirstFileA + StreamImpl::operator_new(0x10)
+011ed3b0 ?set@StreamName@@QAEPAU1@HDPBD@Z  # out-of-slice callee: StreamName::set(int,char,const char*)
+011ed400 ?Init@Semaphore@@QAEDPBX@Z  # out-of-slice callee: Semaphore::Init(const void*)
+011ed470 ?Wait@Semaphore@@QAEHPAI@Z  # out-of-slice callee: Semaphore::Wait(unsigned int*)
+011ed520 ?Post@Semaphore@@QAEHH@Z  # out-of-slice callee: Semaphore::Post(int)
+011ed5d0 ?ctor0@Semaphore@@QAEPAU1@HD@Z  # out-of-slice callee: Semaphore::ctor0(int,char)
 011ec070 unknown trivial (64-bit 0, ret 0x18)
 011ec080 unknown trivial (64-bit 0, ret 4)
 011ec0b0 rw::core::stdc::String / fixed-name set(char,const char*)  # strncpy(this+1,src,0xf)
@@ -7,19 +12,19 @@
 011ec110 rw::core::thread::Mutex::Init  # CreateMutexA / InitializeCriticalSection
 011ec170 rw::core::thread::Mutex::Lock  # dev-PDB symbol
 011ec230 rw::core::thread::Mutex::Unlock  # dev-PDB symbol
-011ec260 scheduler helper
+011ec260 ?ctor0@Mutex@@QAEPAU1@HD@Z  # Mutex::ctor0(int,char)
 011ec2d0 subobject teardown (Mutex + two stream lists)
-011ec2f0 filesystem stream open
-011ec390 scheduler helper
-011ec410 scheduler/timer wait
-011ec4e0 scheduler helper
-011ec5d0 scheduler helper
-011ec650 scheduler helper
-011ec750 thread start thunk
+011ec2f0 ?ctorStream@ThreadObj@@QAEDPBD@Z  # ThreadObj::ctorStream(const char*)
+011ec390 ?ctor@ThreadObj@@QAEPAU1@HD@Z  # ThreadObj::ctor(int,char)
+011ec410 ?condWait@ThreadObj@@QAEHPAUMutex@@PAI@Z  # ThreadObj::condWait(Mutex*,unsigned int*)
+011ec4e0 ?condSignal@ThreadObj@@QAEDD@Z  # ThreadObj::condSignal(char)
+011ec5d0 ?threadCleanup@ThreadObj@@QAEXD@Z  # ThreadObj::threadCleanup(char)
+011ec650 ?threadAdd@ThreadObj@@QAEXPAXD@Z  # ThreadObj::threadAdd(void*,char)
+011ec750 ?f_011ec750@@YAXPAXD@Z  # thread start/add thunk
 011ec7e0 SleepEx(*p,1) wrapper
 011ec800 refcounted-object init
 011ec830 refcounted-object init
-011ec840 filesystem handle init
+011ec840 ?setPriority@ThreadObj@@QAEDH@Z  # ThreadObj::setPriority(int)
 011ec8c0 stream wait/timed
 011ec960 stream wait/timed
 011eca30 refcounted object init
