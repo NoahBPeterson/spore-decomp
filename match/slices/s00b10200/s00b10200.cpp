@@ -19,14 +19,30 @@ extern "C" void* DebugDrawGrid_00f48aa0(void*);          // SP::cDistGrid::Debug
 extern "C" float FUN_00f987f0(void*);
 extern "C" float GetHeightAt_00f927c0(void*, void*);
 extern "C" void* GameInputManager_00b3d250();
-extern "C" void* g_167bc78;
-extern "C" float FUN_007f2590(const char*);
-extern "C" void FUN_007f25c0(const char*, float);
-extern "C" void FUN_00b0f270(void*, int, int, int, int, int, int);
-extern "C" void FUN_0067cab0(int);
-extern "C" void CanvasVisibilitySetter(int);
-extern "C" void CursorAttachmentLayout_IsSomething(int);
-extern "C" void CursorAttachmentLayout_SetEnabled(int);
+// float constants kept as globals in the original
+extern float g_kQuarterPi;        // +0x1567dc0 = 0.785398185
+extern float g_kDegToRad;         // +0x145ccfc = 0.0174532924
+extern float g_kYawDegToRad;      // +0x1412cb0 = 0.17453292
+extern float g_kZoomKeySpeed;     // +0x1486110 = 5.0
+extern float g_kZoomReleaseStep;  // +0x1567d94 = 0.1
+extern float g_kHalf;             // +0x1471064 = 0.5
+
+// SP::VarMap singleton at 0x167bc78; its accessors are __thiscall and GetVar
+// returns through the x87 stack (double, not xmm0).
+struct VarMap
+{
+    double GetVar(const char* pName);              // 0x7f2590
+    void   SetVar(const char* pName, float value); // 0x7f25c0
+};
+extern VarMap g_cameraVarMap;                      // 0x167bc78
+
+extern "C" bool LoadArithmeticaFile(void* file, int mode, VarMap* pVarMap); // 0x7f2240
+
+// 0x67cab0 returns the object the following __thiscall call operates on.
+extern "C" void* FUN_0067cab0(int);
+struct C_8013d0 { bool Set40(unsigned char v); };  // 0x8013d0
+struct C_801950 { bool Run(int v); };              // 0x801950
+struct C_801980 { void Set(bool v); };             // 0x801980
 
 static inline void* g_vt(void* p) { return *(void**)p; }
 static inline void* g_vfn(void* p, int off) { return *(void**)((char*)g_vt(p) + off); }
@@ -36,6 +52,8 @@ template<class R, class A1> static inline R vcall1(void* p, int off, A1 a1)
 { return ((R(__thiscall*)(void*, A1))g_vfn(p, off))(p, a1); }
 template<class R, class A1, class A2> static inline R vcall2(void* p, int off, A1 a1, A2 a2)
 { return ((R(__thiscall*)(void*, A1, A2))g_vfn(p, off))(p, a1, a2); }
+template<class R, class A1, class A2, class A3> static inline R vcall3(void* p, int off, A1 a1, A2 a2, A3 a3)
+{ return ((R(__thiscall*)(void*, A1, A2, A3))g_vfn(p, off))(p, a1, a2, a3); }
 
 // ===========================================================================
 
@@ -206,73 +224,96 @@ void cTerrainCameraController::FUN_00b10760(float d, float p, float y)
 // @ 0x00b108b0
 void cTerrainCameraController::ReloadZoomProgram()
 {
-    // Reloads the zoom program from the config VarMap: distance / pitch and the
-    // three mouse sensitivities, then sets up the interpolation targets.
-    if (!*(int*)((char*)this + 0x314)) return;
-    FUN_00b0f270(this, 0, 0, 0, 0, 0, 0);
-    float dist = FUN_007f2590("default_distance");
-    float dd = dist > g_kMinInterpTime ? dist : g_kMinInterpTime;
-    m29c = dd;
-    FUN_007f25c0("distance", m29c);
-    FUN_007f25c0("height_above_water", m2a4);
-    FUN_00b0f270(this, 0, 0, 0, 0, 0, 0);
-    float pitch = FUN_007f2590("pitch") * 0.017453292f;
-    m294 = pitch;
-    m298 = FUN_007f2590("mouse_rotate_sensitivity_x") * 0.017453292f;
-    m2a0 = FUN_007f2590("mouse_rotate_sensitivity_y") * 0.17453292f;
-    m2a4 = FUN_007f2590("mouse_scroll_sensitivity");
+    // Reloads the zoom programme from the VarMap: resets the camera matrix,
+    // re-reads distance / pitch / mouse sensitivities and publishes the new
+    // distance / height-above-water back into the VarMap.
+    if (m308 == 0)
+        return;
+
+    m2ac = 0.0f;
+    m2b0 = g_kQuarterPi;
+    m2b8 = 0;
+    m2bc = 0;
+    m2c0 = 0;
+    m2c4 = 0;
+    m2c8 = 0;
+
+    LoadArithmeticaFile(m308, 0, &g_cameraVarMap);
+    RunCameraScript(0, 0, 0, 0, 0);
+
+    double dDistance = g_cameraVarMap.GetVar("default_distance");
+    float dist = (float)dDistance;
+    m294 = dDistance > g_kMinInterpTime ? dist : g_kMinInterpTime;
+    if (m294 != m114)
+    {
+        m108 = m10c;
+        mfc = true;
+        m114 = m294;
+    }
+    g_cameraVarMap.SetVar("distance", m114);
+    g_cameraVarMap.SetVar("height_above_water", m274);
+
+    RunCameraScript(0, 0, 0, 0, 0);
+
+    double dPitch = g_cameraVarMap.GetVar("pitch") * g_kDegToRad;
+    if (dPitch != (double)m138)
+    {
+        m12c = m130;
+        m138 = (float)dPitch;
+        m120 = true;
+    }
+    m298 = (float)(g_cameraVarMap.GetVar("mouse_rotate_sensitivity_x") * g_kDegToRad);
+    m29c = (float)(g_cameraVarMap.GetVar("mouse_rotate_sensitivity_y") * g_kYawDegToRad);
+    m2a4 = (float)g_cameraVarMap.GetVar("mouse_scroll_sensitivity");
 }
 
 // @ 0x00b10a90
 void cTerrainCameraController::FUN_00b10a90(float dt)
 {
-    if (*(char*)((char*)this + 0x390)) return;
+    if (m390) return;
     void* input = GameInputManager_00b3d250();
     if (input)
     {
         if (vcall1<char, int>(input, 0x18, 7))
         {
-            float v = m138 - (m29c * dt) * 5.0f;
-            if (v <= m2ac) v = m2ac;
-            if (v >= m2b0) v = m2b0;
+            float v = m138 - (m29c * dt) * g_kZoomKeySpeed;
+            v = (v < m2ac) ? m2ac : v;
+            v = (v > m2b0) ? m2b0 : v;
             m290 = v;
             if (v != m138) { m12c = m130; m120 = true; m138 = m290; }
         }
         if (vcall1<char, int>(input, 0x18, 8))
         {
-            float v = (m29c * dt) * 5.0f + m138;
-            if (v <= m2ac) v = m2ac;
-            if (v >= m2b0) v = m2b0;
+            float v = (m29c * dt) * g_kZoomKeySpeed + m138;
+            v = (v < m2ac) ? m2ac : v;
+            v = (v > m2b0) ? m2b0 : v;
             m290 = v;
             if (v != m138) { m12c = m130; m120 = true; m138 = m290; }
         }
     }
-    if (!*(char*)((char*)this + 0x318))
-        vcall2<void, float, int>(this, 0x38, *(float*)((char*)this + 0x348),
-                                 *(float*)((char*)this + 0x34c));
-    *(char*)((char*)this + 0x318) = 0;
+    if (!m318)
+        vcall3<void, float, float, int>(this, 0x38, m348, m34c, 0);
+    m318 = false;
 }
 
 // @ 0x00b10c40
 void cTerrainCameraController::FUN_00b10c40(bool enabled)
 {
-    *(bool*)((char*)this + 0x319) = !enabled;
-    FUN_0067cab0(!enabled);
-    CanvasVisibilitySetter(!enabled);
+    unsigned char inv = (unsigned char)(enabled == 0);
+    m319 = inv != 0;
+    ((C_8013d0*)FUN_0067cab0(inv))->Set40(inv);
     if (enabled)
     {
-        *(int*)((char*)this + 0x388) = *(int*)((char*)this + 0x348);
-        *(int*)((char*)this + 0x38c) = *(int*)((char*)this + 0x34c);
-        FUN_0067cab0(0x67f5c34);
-        CursorAttachmentLayout_IsSomething(0x67f5c34);
-        FUN_0067cab0(enabled);
-        CursorAttachmentLayout_SetEnabled(enabled);
+        m388 = m348;
+        m38c = m34c;
+        ((C_801950*)FUN_0067cab0(0x67f5c34))->Run(0x67f5c34);
+        ((C_801980*)FUN_0067cab0(enabled ? 1 : 0))->Set(enabled);
         return;
     }
-    float dt = 0.1f;
+    float dt = g_kZoomReleaseStep;
     if (0.0f < m14c - m148)
     {
-        float v = (m160 * dt) * 0.5f + m154;
+        float v = (m160 * dt) * g_kHalf + m154;
         if (v != m15c) { m150 = m154; m15c = v; m144 = true; }
         m158 = m15c;
         m14c = dt;
@@ -282,7 +323,7 @@ void cTerrainCameraController::FUN_00b10c40(bool enabled)
     }
     if (0.0f < m128 - m124)
     {
-        float v = (m13c * dt) * 0.5f + m130;
+        float v = (m13c * dt) * g_kHalf + m130;
         if (v != m138) { m12c = m130; m138 = v; m120 = true; }
         m134 = m138;
         m128 = dt;
@@ -290,8 +331,7 @@ void cTerrainCameraController::FUN_00b10c40(bool enabled)
         m124 = 0.0f;
         m120 = false;
     }
-    FUN_0067cab0(enabled);
-    CursorAttachmentLayout_SetEnabled(enabled);
+    ((C_801980*)FUN_0067cab0(enabled ? 1 : 0))->Set(enabled);
 }
 
 // @ 0x00b10de0

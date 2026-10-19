@@ -8,8 +8,22 @@ extern "C" uint64_t ByteSwap64(uint32_t lo, uint32_t hi);   // 0x008de020
 #pragma intrinsic(_byteswap_ushort, _byteswap_ulong)
 
 __declspec(dllimport) int __stdcall QueryPerformanceCounter(int64_t* p);
+__declspec(dllimport) int __stdcall QueryPerformanceFrequency(int64_t* p);
+__declspec(dllimport) void* __stdcall GetCurrentProcess(void);
+__declspec(dllimport) unsigned __stdcall GetPriorityClass(void* h);
+__declspec(dllimport) void* __stdcall GetCurrentThread(void);
+__declspec(dllimport) int __stdcall GetThreadPriority(void* h);
+__declspec(dllimport) int __stdcall SetPriorityClass(void* h, unsigned c);
+__declspec(dllimport) int __stdcall SetThreadPriority(void* h, int p);
+__declspec(dllimport) unsigned __stdcall SleepEx(unsigned ms, int alertable);
 extern "C" unsigned __int64 __rdtsc(void);
 #pragma intrinsic(__rdtsc)
+
+__declspec(dllimport) wchar_t* __cdecl wcschr(const wchar_t* s, wchar_t c);
+
+// swscanf dispatch pointer (installed at startup from the swscanf import)
+typedef int (__cdecl* ScanfFn)(const wchar_t*, const wchar_t*, ...);
+extern "C" ScanfFn gpScanfFn;                                // 0x166994c
 
 // ------------------------------------------------------------------ globals
 extern "C" uint64_t mnStopwatchFrequency;                    // 0x154eae8
@@ -21,6 +35,24 @@ extern "C" float mfStopwatchCyclesToMicrosecondsCoefficient; // 0x1669974
 extern "C" float mfStopwatchCyclesToMillisecondsCoefficient; // 0x166996c
 extern "C" float mfStopwatchCyclesToSecondsCoefficient;      // 0x1669980
 extern "C" float mfStopwatchCyclesToMinutesCoefficient;      // 0x166995c
+// inverse (units -> cycles) coefficients, same block as above
+extern "C" float mfStopwatchUnitsToCyclesNanoseconds;        // 0x1669970
+extern "C" float mfStopwatchUnitsToCyclesMicroseconds;       // 0x1669988
+extern "C" float mfStopwatchUnitsToCyclesMilliseconds;       // 0x166998c
+extern "C" float mfStopwatchUnitsToCyclesSeconds;            // 0x1669960
+extern "C" float mfStopwatchUnitsToCyclesMinutes;            // 0x166999c
+// CPU (rdtsc) coefficient block
+extern "C" float mfCPUCyclesToNanosecondsCoefficient;        // 0x1669950
+extern "C" float mfCPUCyclesToMicrosecondsCoefficient;       // 0x1669968
+extern "C" float mfCPUCyclesToMillisecondsCoefficient;       // 0x1669954
+extern "C" float mfCPUCyclesToSecondsCoefficient;            // 0x166997c
+extern "C" float mfCPUCyclesToMinutesCoefficient;            // 0x1669994
+extern "C" float mfCPUUnitsToCyclesNanoseconds;              // 0x1669978
+extern "C" float mfCPUUnitsToCyclesMicroseconds;             // 0x1669984
+extern "C" float mfCPUUnitsToCyclesMilliseconds;             // 0x1669990
+extern "C" float mfCPUUnitsToCyclesSeconds;                  // 0x1669998
+extern "C" float mfCPUUnitsToCyclesMinutes;                  // 0x1669964
+extern "C" uint64_t mnCPUCycleReadingOverhead;               // 0x16699a8
 
 // ------------------------------------------------------------------ Stopwatch
 struct Stopwatch {
@@ -159,7 +191,7 @@ public:
     virtual void v10();
     virtual int  v14();
     virtual void v18();
-    virtual void v1c();
+    virtual unsigned v1c();
     virtual void v20();
     virtual void* v24(int);
     virtual void v28(int, int);
@@ -330,25 +362,198 @@ void cDirectPropertyList::SetBoolProperty() {
     }
 }
 
-// @ 0x0093a610  (partial: chunked stream copy not reconstructed)
-int StreamCopy(IOStream* s, void* user, unsigned count) {
-    (void)s;
-    (void)user;
-    (void)count;
-    return -1;
+// @ 0x0093a610
+int StreamCopy(IOStream* src, IOStream* dst, unsigned count) {
+    uint32_t buf[0x200];
+    unsigned size = src->v1c();
+    if (size == 0xffffffffu) {
+        count = size;
+    } else if (count > size) {
+        count = size;
+    }
+    unsigned total = count;
+    while (total != 0) {
+        unsigned chunk = total >= 0x800 ? 0x800 : total;
+        int r = src->v30(buf, chunk);
+        if (r == -1 || !dst->v38(buf, r))
+            return -1;
+        if (r == 0)
+            break;
+        total -= r;
+    }
+    return (int)(count - total);
 }
 
-// @ 0x00939a60  (partial: printf-style tokenizer with jump table)
-int ParseFormatToken(const char* p, char* out) {
-    (void)p;
-    (void)out;
-    return 0;
+// @ 0x00939a60
+// EAStdC wide-character sscanf core. pFormat is scanned for the argument-
+// consuming conversion specifiers (capped at 20); the matching count of raw
+// varargs is copied out of the va_list pointer and forwarded to the CRT
+// swscanf entry held in gpScanfFn (0x166994c). Only up to 10 arguments are
+// forwarded; anything else returns 0.
+int Vsscanf16(const wchar_t* pString, const wchar_t* pFormat, uint32_t* arguments) {
+    uint32_t args[16];
+    int count = 0;
+    const wchar_t* p = wcschr(pFormat, L'%');
+    while (p != 0) {
+        if (*p != L'%')
+            break;
+        if (count >= 20)
+            break;
+        switch (p[1]) {
+        case L'%':
+            ++p;
+            break;
+        case L' ':
+        case L'#':
+        case L'+':
+        case L'-':
+            if (p[2] != L'*')
+                ++count;
+            break;
+        case L'*':
+            break;
+        default:
+            ++count;
+            break;
+        }
+        p = wcschr(p + 1, L'%');
+    }
+
+    for (int i = 0; i < count; ++i)
+        args[i] = arguments[i];
+
+    switch (count) {
+    case 0:
+        return gpScanfFn(pString, pFormat);
+    case 1:
+        return gpScanfFn(pString, pFormat, args[0]);
+    case 2:
+        return gpScanfFn(pString, pFormat, args[0], args[1]);
+    case 3:
+        return gpScanfFn(pString, pFormat, args[0], args[1], args[2]);
+    case 4:
+        return gpScanfFn(pString, pFormat, args[0], args[1], args[2], args[3]);
+    case 5:
+        return gpScanfFn(pString, pFormat, args[0], args[1], args[2], args[3], args[4]);
+    case 6:
+        return gpScanfFn(pString, pFormat, args[0], args[1], args[2], args[3], args[4], args[5]);
+    case 7:
+        return gpScanfFn(pString, pFormat, args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+    case 8:
+        return gpScanfFn(pString, pFormat, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+    case 9:
+        return gpScanfFn(pString, pFormat, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
+    case 10:
+        return gpScanfFn(pString, pFormat, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]);
+    default:
+        return 0;
+    }
 }
 
-// @ 0x00939d40  (partial)
-int ParseFormat(const char* p, int n, char* out) {
-    (void)p;
-    (void)n;
-    (void)out;
-    return 0;
+// @ 0x00939d40
+// EA::Stopwatch module initialiser: calibrates the CPU (rdtsc) frequency, then
+// derives the cycles<->time coefficients for both the QPC and rdtsc clocks.
+void GetCPUFrequency() {
+    if (mnStopwatchFrequency >= 2)
+        return;
+
+    void* hProcess = GetCurrentProcess();
+    unsigned prioClass = GetPriorityClass(hProcess);
+    void* hThread = GetCurrentThread();
+    int threadPrio = GetThreadPriority(hThread);
+    SetPriorityClass(hProcess, 0x100);
+    SetThreadPriority(hThread, 0xf);
+
+    mnCPUFrequency = 0;
+    for (int i = 0; i < 5; ++i) {
+        uint64_t qpc;
+        QueryPerformanceCounter((int64_t*)&qpc);
+        uint64_t tsc = __rdtsc();
+        double ratio = (double)tsc / (double)qpc;
+        if (ratio > 0.98 && ratio < 1.02) {
+            QueryPerformanceFrequency((int64_t*)&mnCPUFrequency);
+            break;
+        }
+    }
+
+    if (mnCPUFrequency == 0) {
+        uint64_t qpcFreq;
+        QueryPerformanceFrequency((int64_t*)&qpcFreq);
+        uint64_t qpc0;
+        QueryPerformanceCounter((int64_t*)&qpc0);
+        uint64_t tsc0 = __rdtsc();
+        double elapsed;
+        uint64_t tsc1;
+        do {
+            SleepEx(50, 1);
+            uint64_t qpc1;
+            QueryPerformanceCounter((int64_t*)&qpc1);
+            tsc1 = __rdtsc();
+            elapsed = (double)(qpc1 - qpc0) / (double)qpcFreq;
+        } while (elapsed < 0.25);
+        mnCPUFrequency = (uint64_t)((double)(tsc1 - tsc0) / elapsed);
+    }
+
+    QueryPerformanceFrequency((int64_t*)&mnStopwatchFrequency);
+    SetPriorityClass(hProcess, prioClass);
+    SetThreadPriority(hThread, threadPrio);
+
+    {
+        float base = (float)(1.0 / (double)mnStopwatchFrequency);
+        float nano = base * 1e9f;
+        float micro = base * 1e6f;
+        float milli = base * 1e3f;
+        float secs = base;
+        float mins = base * 0.016666668f;
+        mfStopwatchCyclesToNanosecondsCoefficient = nano;
+        mfStopwatchCyclesToMicrosecondsCoefficient = micro;
+        mfStopwatchCyclesToMillisecondsCoefficient = milli;
+        mfStopwatchCyclesToSecondsCoefficient = secs;
+        mfStopwatchCyclesToMinutesCoefficient = mins;
+        mfStopwatchUnitsToCyclesNanoseconds = 1.0f / nano;
+        mfStopwatchUnitsToCyclesMicroseconds = 1.0f / micro;
+        mfStopwatchUnitsToCyclesMilliseconds = 1.0f / milli;
+        mfStopwatchUnitsToCyclesSeconds = 1.0f / secs;
+        mfStopwatchUnitsToCyclesMinutes = 1.0f / mins;
+    }
+
+    uint64_t qpcOverhead = 0xffffffffffffffffull;
+    for (int j = 0; j < 8; ++j) {
+        uint64_t a, b;
+        QueryPerformanceCounter((int64_t*)&a);
+        QueryPerformanceCounter((int64_t*)&b);
+        uint64_t d = b - a;
+        if (d < qpcOverhead)
+            qpcOverhead = d;
+    }
+    mnStopwatchCycleReadingOverhead = qpcOverhead;
+
+    {
+        float base = (float)(1.0 / (double)mnCPUFrequency);
+        float nano = base * 1e9f;
+        float micro = base * 1e6f;
+        float milli = base * 1e3f;
+        float secs = base;
+        float mins = base * 0.016666668f;
+        mfCPUCyclesToNanosecondsCoefficient = nano;
+        mfCPUCyclesToMicrosecondsCoefficient = micro;
+        mfCPUCyclesToMillisecondsCoefficient = milli;
+        mfCPUCyclesToSecondsCoefficient = secs;
+        mfCPUCyclesToMinutesCoefficient = mins;
+        mfCPUUnitsToCyclesNanoseconds = 1.0f / nano;
+        mfCPUUnitsToCyclesMicroseconds = 1.0f / micro;
+        mfCPUUnitsToCyclesMilliseconds = 1.0f / milli;
+        mfCPUUnitsToCyclesSeconds = 1.0f / secs;
+        mfCPUUnitsToCyclesMinutes = 1.0f / mins;
+    }
+
+    uint64_t tscOverhead = 0xffffffffffffffffull;
+    for (int j = 0; j < 8; ++j) {
+        uint64_t a = __rdtsc();
+        uint64_t b = __rdtsc();
+        uint64_t d = b - a;
+        if (d < tscOverhead)
+            tscOverhead = d;
+    }
+    mnCPUCycleReadingOverhead = tscOverhead;
 }

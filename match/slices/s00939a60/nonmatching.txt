@@ -4,3 +4,5 @@
 0093a480 103 LimitStopwatch::SetTimeLimit: complete; x87 double rounding dance (fstp/fld/fistp) not reproduced
 0093a510 43  cSPUILayerManager::GetDelta: complete; cl emits an inline fistp instead of the original's stored double round-trip
 0093a8b0 155 ReadLine: complete behaviourally; buffered-line state machine register/schedule differs
+00939a60 507 Vsscanf16: complete; counts %-specs and forwards up to 10 varargs to the swscanf fn-ptr, but cl picks a different callee-saved register map and frame base (args array at esp+0x0c of a 0x50 frame vs 0x00 of 0x40) (/O2 /MD /Gy /EHsc /TP /arch:SSE) [equiv: UNSUPPORTED — unresolved reference __imp_?wcschr@@YAPA_WPB_W_W@Z (CRT import the harness cannot bind)]
+00939d40 690 Stopwatch::GetCPUFrequency: complete; QPC/rdtsc calibration + all 20 coefficient globals written, but x87/SSE scheduling and local slot layout differ (/O2 /MD /Gy /EHsc /TP /arch:SSE) [equiv: UNSUPPORTED — 9 unresolved kernel32 imports (GetCurrentProcess/GetPriorityClass/GetCurrentThread/GetThreadPriority/SetPriorityClass/SetThreadPriority/QueryPerformanceCounter/QueryPerformanceFrequency/GetTickCount)]

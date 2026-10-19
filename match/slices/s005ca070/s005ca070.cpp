@@ -7,6 +7,9 @@
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 void* operator new(unsigned int n, const char* name, int flags, unsigned int debugFlags,
                    const char* file, int line); // 0x00f473a0
+// The bulk-move helper: a real function (not the memcpy intrinsic), so that cl cannot assume the
+// vector elements are unchanged across the call when a range is erased.
+extern "C" void* __cdecl FUN_011e0744(void* dst, const void* src, unsigned int n); // 0x011e0744
 
 #define PV(n) virtual void pv##n();
 
@@ -74,6 +77,7 @@ class IWindow : public IUnknown32 {
   PV(50) PV(51) PV(52) PV(53) PV(54) PV(55)
   PV(56) PV(57) PV(58) PV(59) PV(60) PV(61) PV(62) PV(63) PV(64)
   virtual void AddWinProc(IWinProc* proc);       // +0x104
+  virtual void RemoveWinProc(IWinProc* proc);    // +0x108
 };
 class IWinButton : public IUnknown32 {
  public:
@@ -129,7 +133,7 @@ class cSPPaletteUI {
  public:
   char pad0[0xc];                                        // vtable + refcount bases
   cSPUILayout* mLayout;                                  // +0xc
-  char pad10[4];
+  IWindow* mWinCategoryIcons;                            // +0x10
   IWindow* mLeftBackground;                              // +0x14
   IWindow* mRightBackground;                             // +0x18
   IWindow* mFullBackground;                              // +0x1c
@@ -143,6 +147,7 @@ class cSPPaletteUI {
   cSPPaletteCategoryUI* mSelectedCategory;               // +0x64
 
   void UpdateCategories(int deltaTime);                  // 0x005ca980
+  void SetButtonPositions();                             // 0x005cae60
   __declspec(noinline) int FindCategoryIndex();          // 0x005ca9c0
   __forceinline bool ShowChunkButtons() {
     if (((unsigned int)((char*)mVec48.mpEnd - (char*)mVec48.mpBegin) >> 2) != 0) {
@@ -263,6 +268,14 @@ class sp_vec {  // vector<T, sp_vector_allocator>: begin/end/capacity + 2-word a
   T* mpCapacity;
   int mAllocator[2];
   unsigned int size() const { return (unsigned int)(mpEnd - mpBegin); }
+  T& operator[](unsigned int i) { return mpBegin[i]; }
+  void clear() {
+    T* last = mpEnd;
+    T* first = mpBegin;
+    FUN_011e0744(first, last, (unsigned int)((char*)mpEnd - (char*)last));
+    mpEnd = mpEnd + (-(last - first));
+  }
+  T* erase(T* first, T* last);  // 0x00663430
   void DoInsertValue(T* position, const T& value);
   void push_back(const T& value) {
     if (mpEnd < mpCapacity)
@@ -444,7 +457,19 @@ void cSPPaletteSubCategoryUI::Init(IWindow* parent, cSPPaletteCategory* data, un
 }
 
 // @ 0x005CA7B0
-void cSPPaletteSubCategoryUI::Shutdown() {}
+void cSPPaletteSubCategoryUI::Shutdown() {
+  if (mWinRoot) {
+    mWinRoot->RemoveWinProc(this);
+    mWinRoot = (IWindow*)0;
+  }
+  mButtons.clear();
+  mArrows.clear();
+  mSubWindows.clear();
+  for (unsigned int i = 0; i < mCategoryUIs.size(); i++)
+    mCategoryUIs[i]->Shutdown();
+  mCategoryUIs.erase(mCategoryUIs.mpBegin, mCategoryUIs.mpEnd);
+  return;
+}
 
 // @ 0x005CA9F0
 void cSPPaletteUI::UpdateNavigationVisiblity() {
@@ -493,9 +518,50 @@ void cSPPaletteUI::UpdateNavigationVisiblity() {
 }
 
 // @ 0x005CAE60
-void cPaletteBig(void* a, void* b) {
-  (void)a;
-  (void)b;
+void cSPPaletteUI::SetButtonPositions() {
+  if (!mWinCategoryIcons)
+    return;
+  if (mVec48.mpBegin == mVec48.mpEnd)
+    return;
+
+  const Rect& iconFrame = mWinCategoryIcons->GetRealArea();
+  float iconW = iconFrame.mRight - iconFrame.mLeft;
+  const Rect& iconFrame2 = mWinCategoryIcons->GetRealArea();
+  float iconH = iconFrame2.mBottom - iconFrame2.mTop;
+
+  IWindow* firstBtn = mVec48.mpBegin[0]->ToWindow();
+  const Rect& btnRect = firstBtn->GetArea();
+  float btnW = btnRect.mRight - btnRect.mLeft;
+  IWindow* firstBtn2 = mVec48.mpBegin[0]->ToWindow();
+  const Rect& btnRect2 = firstBtn2->GetArea();
+  float btnH = btnRect2.mBottom - btnRect2.mTop;
+
+  const unsigned int total = (unsigned int)(mVec48.mpEnd - mVec48.mpBegin);
+  unsigned int n = total;
+  if (n > 9)
+    n = 9;
+  if (iconW < (float)n * btnW) {
+    float scale = iconW / ((float)n * btnW);
+    btnW = scale * btnW;
+    btnH = scale * btnH;
+  }
+  if (iconH < btnH) {
+    float scale = iconH / btnH;
+    btnW = scale * btnW;
+    btnH = scale * btnH;
+  }
+  float step = (iconW - (float)n * btnW) / (float)(n + 1);
+  float gap = (iconH - btnH) * 0.5f;
+  int count = (int)(mVec48.mpEnd - mVec48.mpBegin);
+  for (int i = 0; i < count; i++) {
+    IWindow* btnWin = mVec48.mpBegin[i]->ToWindow();
+    Rect area = btnWin->GetArea();
+    area.mLeft = (float)(i % n + 1) * step + (float)(i % n) * btnW;
+    area.mTop = gap;
+    area.mRight = area.mLeft + btnW;
+    area.mBottom = area.mTop + btnH;
+    btnWin->SetArea(area);
+  }
 }
 // --- equivalence checker address annotations
     void* operator new(unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0

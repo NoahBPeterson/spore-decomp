@@ -10,6 +10,11 @@ inline void  vc0(void* p, int off) { ((void(__thiscall*)(void*))(*(void**)((char
 inline void  vc1(void* p, int off, int a) { ((void(__thiscall*)(void*, int))(*(void**)((char*)*(void**)p + off)))(p, a); }
 inline void  vc2(void* p, int off, int a, int b) { ((void(__thiscall*)(void*, int, int))(*(void**)((char*)*(void**)p + off)))(p, a, b); }
 inline void  vc3(void* p, int off, int a, int b, int c) { ((void(__thiscall*)(void*, int, int, int))(*(void**)((char*)*(void**)p + off)))(p, a, b, c); }
+inline void  vcp3(void* p, int off, int a, int b, int c) { ((void*(__thiscall*)(void*, int, int, int))(*(void**)((char*)*(void**)p + off)))(p, a, b, c); }
+inline void  vc7(void* p, int off, int a, int b, int c, int d, int e, int f, int g) {
+    typedef void(__thiscall* VC7F)(void*, int, int, int, int, int, int, int);
+    ((VC7F)(*(void**)((char*)*(void**)p + off)))(p, a, b, c, d, e, f, g);
+}
 inline int   vcr0(void* p, int off) { return ((int(__thiscall*)(void*))(*(void**)((char*)*(void**)p + off)))(p); }
 inline int   vcr1(void* p, int off, int a) { return ((int(__thiscall*)(void*, int))(*(void**)((char*)*(void**)p + off)))(p, a); }
 inline void* vcp0(void* p, int off) { return ((void*(__thiscall*)(void*))(*(void**)((char*)*(void**)p + off)))(p); }
@@ -17,6 +22,7 @@ inline void* vcp2(void* p, int off, int a, int b) { return ((void*(__thiscall*)(
 inline void* vcp1(void* p, int off, int a) { return ((void*(__thiscall*)(void*, int))(*(void**)((char*)*(void**)p + off)))(p, a); }
 inline void  vc1p(void* p, int off, void* a) { ((void(__thiscall*)(void*, void*))(*(void**)((char*)*(void**)p + off)))(p, a); }
 inline float* vcfp(void* p, int off) { return ((float*(__thiscall*)(void*))(*(void**)((char*)*(void**)p + off)))(p); }
+inline float  vcf0(void* p, int off) { return ((float(__thiscall*)(void*))(*(void**)((char*)*(void**)p + off)))(p); }
 inline void  vc2f(void* p, int off, float a, float b) { ((void(__thiscall*)(void*, float, float))(*(void**)((char*)*(void**)p + off)))(p, a, b); }
 
 // AutoRefCount<T> assignment semantics. Windows: AddRef slot0 / Release slot4.
@@ -52,19 +58,21 @@ struct cSPUILayout {
     void  Init(void* key, int a, int id);
 };
 extern "C" void* __fastcall cSPUILayout_Ctor(void* self);
-extern "C" void* __cdecl EA_operator_new(int size, const char* name, int a, int b, int c, int d);
+extern "C" void* __cdecl EA_operator_new(int size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
 extern "C" void __cdecl RemoveHandler5(void* a, void* b, void* c, void* d, void* e);
 extern "C" void __cdecl SPUIHelpers_UpdateMouseFocus(int v);
 extern "C" void __cdecl SPUIHelpers_SetWindowAreaToParent(void* w);
 extern "C" void* __cdecl SP_AssetBrowser();
 extern "C" void* __cdecl SP_ConfigManager();
 extern "C" void* __cdecl SP_AuthManager();
-extern "C" void* __cdecl SP_PropertyManager();
+extern "C" void* __cdecl SP_PropertyManager();                 // 0x0067de30
 extern "C" void* __cdecl SP_MessageServer();
 extern "C" bool __fastcall FUN_006418e0(void* p);
-extern "C" void* __fastcall FUN_00656240(void* a, void* b);
-extern "C" void FUN_00654e20();
-extern "C" void  __cdecl FUN_004e5410(int, int, int, void*, void*, float);
+extern "C" void* FUN_00654e20();
+extern "C" void* __cdecl FUN_005e8920(void* p);                   // 0x005e8920
+extern "C" void  __cdecl operator_delete_0(void* p);
+extern "C" void  __cdecl vec_reserve(void* v, void* alloc, void* a, void* b);   // 0x006a0ae0
+extern "C" void  __cdecl FUN_004e5410(int, int, int, void*, void*, float);      // 0x004e5410
 
 // Animator helper: __thiscall at 0x7f62c0 (HasAnimation(IWindow*, int)).
 struct cSPUIAnimator {
@@ -342,7 +350,9 @@ struct cSPUIAssetView {
     void* mP88;           // 0x88
     void* mP8c;           // 0x8c
     void* mP90;           // 0x90
-    char  b94[0x60];      // 0x94..0xf3
+    char  b94[0x4c];      // 0x94..0xdf
+    void* mE0;            // 0xe0
+    char  bE4[0x10];      // 0xe4..0xf3
     bool  mBf4;           // 0xf4
     bool  mBf5;           // 0xf5
     bool  mBf6;           // 0xf6
@@ -356,7 +366,8 @@ struct cSPUIAssetView {
     void  SetFirstUpdate(int b);
     void  SelectAsset(int a, char b, int c, char d, char e);
     void  m57460(bool b);
-    void  m57640(void* a, void* b, void* c, int d, void* e, void* f, void** out);
+    void  m57640(void* a, void* b, void* c, void* d, void* e, void* f, void* res, void** dst, void* arg9);
+    void  m56310(void* range);
 };
 
 // @ 0x006577a0
@@ -545,35 +556,37 @@ void cSPUIAssetView::m57460(bool b) {
 }
 
 // @ 0x00657640
-void cSPUIAssetView::m57640(void* a, void* b, void* c, int d, void* e, void* f, void** out) {
+//   Nine stack args (ret 0x24): two 12-byte records (a,b,c) and (d,e,f), an
+//   AutoRefCount<T> passed by value (released on exit), the caller-owned ARC
+//   transient slot `slot` (cleared + released on the d path), the destination
+//   `dst`, and arg9.
+void cSPUIAssetView::m57640(void* a, void* b, void* c, void* d, void* e, void* f,
+                            void* res, void** dst, void* arg9) {
     cSPUIAssetView* self = this;
-    if (!out) return;
     if (!a) return;
+    if (!res) return;
     if (!self->mP90) return;
-    void* v = 0;
-    void* x = 0;
-    void* y = 0;
+    void* slots[2] = {0, 0};
     if (d) {
         void* pm = SP_PropertyManager();
-        if (v) AssignWin(&v, 0);
-        vcp2(pm, 0x2c, d, (int)e);   // (d, e, &v)
-        extern void __cdecl vec_reserve(void*, int, void*, void*);
-        vec_reserve(v, 0x4aa3838, &x, &y);
+        if (res) { void* old = res; res = 0; vc0(old, 4); }
+        vcp3(pm, 0x2c, (int)f, (int)arg9, (int)&res);
+        vec_reserve(res, (void*)0x4aa3838, (void*)&slots[0], (void*)&slots[1]);
     }
     void* obj = EA_operator_new(0x54, "Sporepedia", 0, 0, 0, 0);
     void* made;
     if (obj == 0) made = 0;
     else {
-        made = FUN_00656240(obj, (void*)0);
+        made = FUN_005e8920(obj);
         if (made) vc0(made, 0);
     }
-    vc2(made, 0x10, (int)a, (int)b);
+    vc7(made, 0x10, (int)res, (int)e, (int)d, (int)arg9, (int)slots[1], (int)slots[0], 1);
     void* m = self->mP90;
     void* pos = vcp0(m, 0x40);
-    void* sz = vcp0(m, 0x3c);
-    float fv = *(float*)sz;
-    FUN_004e5410(*(int*)pos, *(int*)((char*)pos + 4), *(int*)((char*)pos + 8), b, made, fv);
-    *out = made;
+    float fv = vcf0(m, 0x3c);
+    FUN_004e5410(*(int*)pos, *(int*)((char*)pos + 4), *(int*)((char*)pos + 8), e, made, fv);
+    *dst = made;
+    if (res) { void* old2 = res; vc0(old2, 4); }
 }
 
 // ---------------------------------------------------------------------------
@@ -598,9 +611,55 @@ C563c0::C563c0() {
     fc = 0;
 }
 
+// ---------------------------------------------------------------------------
+// 0x00656310: cSPUIAssetView verb-key helper.
+//   Fills an eastl::fixed_vector<unsigned int,30,1> (out-of-line ctor 0x653cf0)
+//   from the object at this->mE0, folds the passed {begin,end} range of
+//   0x10-byte records against that key list (0x654050, a thiscall on a second
+//   default-constructed key vector built as a by-value argument) and erases the
+//   filtered tail with an eastl::copy (0x705250).
+// ---------------------------------------------------------------------------
+struct KeyVecBase { void* mpBegin; KeyVecBase() : mpBegin(0) {} };
+struct KeyVec : KeyVecBase {          // eastl::fixed_vector<unsigned int,30,1>
+    void*         mpEnd;              // +0x04
+    void*         mpCapacityEnd;      // +0x08
+    void*         mAlloc;             // +0x0c
+    void*         mAllocBuf;          // +0x10 (allocator's copy of the buffer)
+    void*         mAllocSize;         // +0x14
+    unsigned int  mStore[30];         // +0x18..0x8f
+    unsigned char mFlag;              // +0x90
+    KeyVec();                         // default (inline)
+    void Init(void* coll);            // 0x00653cf0 (out-of-line member)
+    void Op654050(void* a, void* b, void* c);   // 0x00654050 (thiscall, 3 stack args)
+};
+inline KeyVec::KeyVec() {
+    mAllocBuf = mStore;
+    mpEnd = mStore;
+    mpBegin = mStore;
+    mpCapacityEnd = (char*)mStore + sizeof(mStore);
+}
+// Builds the default key vector and folds the [first,last) range into it.  NRVO
+// makes the returned object the by-value argument itself (no copy).
+__forceinline KeyVec MakeKeys(void* first, void* last, void* extra) {
+    KeyVec k;
+    k.Op654050(first, last, extra);
+    return k;
+}
+extern "C" void* __cdecl FUN_00656240(void* first, void* last, KeyVec v);
+extern "C" void* __cdecl copy_705250(const void* first, const void* last, void* dst);  // 0x00705250
+extern "C" void  __cdecl operator_delete_0(void* p);                           // 0x00f47380
+
 // @ 0x00656310
-struct CBig { char pad[0xe0]; int mE0; void Insert(void* p); };
-void CBig::Insert(void* p) {
-    // incomplete: template insert/erase; see partial.txt
-    (void)p;
+void cSPUIAssetView::m56310(void* range) {
+    KeyVec keys;
+    unsigned int extra;
+    char* base = (char*)range;
+    char* oldEnd = *(char**)(base + 4);
+    keys.Init(mE0);
+    char* p = (char*)FUN_00656240(*(void**)base, *(char**)(base + 4),
+                                  MakeKeys(keys.mpBegin, keys.mpEnd, (void*)extra));
+    copy_705250(oldEnd, *(void**)(base + 4), p);
+    int n = (int)((oldEnd - p) >> 4);
+    *(char**)(base + 4) += -(n << 4);
+    if (keys.mpBegin && keys.mpBegin != keys.mAllocBuf) operator_delete_0(keys.mpBegin);
 }

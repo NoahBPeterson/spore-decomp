@@ -34,14 +34,27 @@ struct cTerrainCameraController
     char  pad_146[0x148 - 0x146];
     float m148, m14c;                            // +0x148,+0x14c
     float m150, m154, m158, m15c, m160, m164;   // +0x150..+0x164
-    char  pad_168[0x290 - 0x168];
-    float m290;                                  // +0x290
+    char  pad_168[0x274 - 0x168];
+    float m274;                                  // +0x274 height_above_water (VarMap value)
+    char  pad_278[0x290 - 0x278];
+    float m290;                                  // +0x290 scratch (zoom target)
     float m294, m298, m29c, m2a0, m2a4;          // +0x294..+0x2a4
     char  pad_2a8[0x2ac - 0x2a8];
-    float m2ac, m2b0, m2b4;                      // +0x2ac..+0x2b4
-    char  pad_2b8[0x304 - 0x2b8];
+    float m2ac, m2b0, m2b4;                      // +0x2ac..+0x2b4 zoom clamp / camera matrix
+    unsigned m2b8, m2bc, m2c0, m2c4, m2c8;       // +0x2b8..+0x2cc camera matrix rows
+    char  pad_2cc[0x304 - 0x2cc];
     bool  m304;             // +0x304
-    char  pad_305[0x35c - 0x305];
+    char  pad_305[0x308 - 0x305];
+    void* m308;             // +0x308 loaded Arithmetica programme ("mKeys[5]")
+    char  pad_30c[0x318 - 0x30c];
+    bool  m318;             // +0x318 yaw/pitch scratch set by FUN_00b10a90
+    bool  m319;             // +0x319 mirror of !enabled
+    char  pad_31a[0x348 - 0x31a];
+    float m348, m34c;       // +0x348,+0x34c scripted pitch/yaw
+    char  pad_350[0x388 - 0x350];
+    float m388, m38c;       // +0x388,+0x38c active pitch/yaw
+    bool  m390;             // +0x390
+    char  pad_391[0x394 - 0x391];
 
     float* FUN_00b10200();                               // @ 0x00b10200
     float* FUN_00b10260();                               // @ 0x00b10260
@@ -54,6 +67,7 @@ struct cTerrainCameraController
     void   ReloadZoomProgram();                          // @ 0x00b108b0
     void   FUN_00b10a90(float);                          // @ 0x00b10a90
     void   FUN_00b10c40(bool);                           // @ 0x00b10c40
+    void   RunCameraScript(int, int, int, int, int);     // @ 0x00b0f270
 };
 
 // Reset helper used at 0x00b10de0 (Hermite spline / interpolation scratch block).

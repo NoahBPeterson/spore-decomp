@@ -1,3 +1,1 @@
 # va  diff-bytes  reason
-005ca7b0  202   category teardown/reset: body not reconstructed (stub)
-005cae60  503   palette helper: body not reconstructed (stub)

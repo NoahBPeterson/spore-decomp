@@ -1,5 +1,5 @@
-00939a60 ?ParseFormatToken@@YAHPBDPAD@Z  # ParseFormatToken migrated from s00939a60 (verbatim, slice spelling)
-00939d40 FUN_00939d40  # formatter, calls 0x939a60
+00939a60 ?Vsscanf16@@YAHPB_W0PAI@Z  # EAStdC wide-char sscanf core: counts %-specs in pFormat (cap 20), copies that many varargs, dispatches via swscanf fn-ptr 0x166994c; 0x939d30 is a jmp thunk to it (PDB: Vsscanf16)
+00939d40 ?GetCPUFrequency@Stopwatch@EA@@SA_KXZ  # EA::Stopwatch::GetCPUFrequency (static); guard mnStopwatchFrequency<2, rdtsc/QPC calibration, fills cycles<->time coefficient globals 0x1669950-0x16699ac; returns void in retail
 0093a1a0 ?SetUnits@Stopwatch@EA@@QAEXH@Z  # EA::Stopwatch::SetUnits migrated from s00939a60
 0093a2e0 ?SetBoolProperty@cDirectPropertyList@@QAEXXZ  # cDirectPropertyList::SetBoolProperty migrated from s00939a60 (verbatim, slice spelling)
 0093a380 ?SetElapsedCycles@Stopwatch@@QAEX_J@Z  # Stopwatch::SetElapsedCycles migrated from s00939a60 (verbatim, slice spelling)

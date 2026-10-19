@@ -10,4 +10,4 @@
 005ca9f0 SP::cSPPaletteUI::UpdateNavigationVisiblity  # dev-build symbol (spelling as in the PDB)
 005cadb0 ?SetVisibleChunk@cSPPaletteUI@@QAEXH@Z  # cSPPaletteUI::SetVisibleChunk migrated from s005ca070 (verbatim, slice spelling)
 005cae30 ?GetSubCategory@cSPPaletteCategory@SP@@QAEPAV12@H@Z  # SP::cSPPaletteCategory::GetSubCategory (callee of s005ca070, named from the dev publics; slice address comment)
-005cae60 ?cPaletteBig@@YAXPAX0@Z  # cPaletteBig migrated from s005ca070 (verbatim, slice spelling)
+005cae60 ?SetButtonPositions@cSPPaletteUI@SP@@QAEXXZ  # SP::cSPPaletteUI::SetButtonPositions (corrected: the earlier ?cPaletteBig@@YAXPAX0@Z was a mis-map; dev VA 0x00d177f0, size 477, right after SetVisibleChunk)
