@@ -650,6 +650,16 @@ def relocate_named_markers(lines):
     return out
 
 
+def mod_match(flt, module):
+    """--module FILTER selects a module by its object name (`SPEditorHandle` -> SPBake/SPEditorHandle.obj) or its path.  It
+    was a substring test: `SPEditorHandle` also took SPEditorHandleRotationRing/SPEditorHandleDeform, `SPUIFeedList` took
+    SPUIFeedListCategory and `SPString` SPStringManager, and their TUs were rewritten by other objects' runs (mig10/mig11)."""
+    f = flt.lower().replace("\\", "/")
+    m = module.lower().replace("\\", "/")
+    stem = m.rsplit("/", 1)[-1]
+    return f in (m, stem, stem[:-4] if stem.endswith(".obj") else stem, m[:-4] if m.endswith(".obj") else m)
+
+
 def parse_slice(sid, variant=""):
     path = os.path.join(SLICES, sid, sid + variant + ".cpp")
     if not variant and not os.path.exists(path):
@@ -1288,7 +1298,7 @@ class Rewrite:
             if c.dev_name and c.cls:
                 # only chunks of the module being migrated name classes (a slice mixes neighbours: SPPropertyHelpers' SP::GetPropertyAsText is
                 # a namespace function, not a method of a class "SP"), and only a class the dev types know
-                if module_filter and not (c.module and module_filter.lower() in c.module.lower()):
+                if module_filter and not (c.module and mod_match(module_filter, c.module)):
                     continue
                 cls, _m = H.split_qual(c.dev_name)
                 if cls not in self.data.types.structs:
@@ -1301,7 +1311,7 @@ class Rewrite:
         # (which only knows the neighbours it sat between) calls it a method of
         for c in self.chunks:
             if c.va in self.fn_class or c.dev_name or not c.cls or \
-                    (module_filter and not (c.module and module_filter.lower() in c.module.lower())):
+                    (module_filter and not (c.module and mod_match(module_filter, c.module))):
                 continue
             owner = self.header_owners().get(c.va, set())
             if len(owner) == 1:
@@ -1311,7 +1321,7 @@ class Rewrite:
         # namespace functions (no `Class::` in the slice): the canonical declaration is the dev public of the function
         for c in self.chunks:
             c.free_decl, c.free_why = None, None
-            if not c.free or (module_filter and not (c.module and module_filter.lower() in c.module.lower())):
+            if not c.free or (module_filter and not (c.module and mod_match(module_filter, c.module))):
                 continue
             c.free_decl, c.free_why = self.free_function_decl(c, mm.get("%08x" % c.va))
         for k, v in self.manual.get("class_map", {}).items():
@@ -3275,7 +3285,7 @@ class Rewrite:
         self.implicit_member_chunks()
         self.fns = []
         for c in sorted(self.chunks, key=lambda x: x.va):
-            if module_filter and (not c.module or module_filter.lower() not in c.module.lower()):
+            if module_filter and (not c.module or not mod_match(module_filter, c.module)):
                 self.notes.append(("skipped", "0x%08x %s::%s belongs to %s" % (c.va, c.cls, c.name, c.module)))
                 continue
             if "%08x" % c.va in self.manual.get("exclude", {}):
@@ -5126,7 +5136,7 @@ class Rewrite:
         slice put in the module TU: its function blocks, its items section and their rows (s004e01d0: the stale verbatim
         `reserve` of round 0 stayed in SPGraphicsTextureUtilities.cpp, and the next slice's merge would have kept it)."""
         mods = {c.module for c in self.chunks if c.module and (not getattr(self, "module_filter", None) or
-                                                               self.module_filter.lower() in c.module.lower())}
+                                                               mod_match(self.module_filter, c.module))}
         mine = {c.va for c in self.chunks}
         bv = getattr(self, "batch_vas", None)
         if bv:
@@ -5476,7 +5486,7 @@ def main():
         return
     if a.batch:
         ents = json.load(open(W("work", "batches", a.batch + ".json")))
-        listed = {va.lower() for e in ents if e["id"] == a.slice and (not a.module or a.module.lower() in e["module"].lower())
+        listed = {va.lower() for e in ents if e["id"] == a.slice and (not a.module or mod_match(a.module, e["module"]))
                   for va in e["vas"]}
         # a VA the batch lists for this module under another slice that does not define it (mig3: 0x4f6510 under s005ec030 but
         # defined in s004f56f0, 0x4f6720 under s004ef880 but defined in s004f6630; round 3 landed them by hand) is this
@@ -5485,7 +5495,7 @@ def main():
             vas, _syms = RS.slice_rows(sid)
             return int(va, 16) in vas
         for e in ents:
-            if e["id"] == a.slice or (a.module and a.module.lower() not in e["module"].lower()):
+            if e["id"] == a.slice or (a.module and not mod_match(a.module, e["module"])):
                 continue
             for va in e["vas"]:
                 if va.lower() not in listed and not _defines(e["id"], va.lower()) and _defines(a.slice, va.lower()):
@@ -5504,7 +5514,7 @@ def main():
         # of the merged preamble.  A VA the batch gives to another slice stays that slice's (fix pass 5, s007ca950)
         other = {va.lower() for e in ents if e["id"] != a.slice for va in e["vas"]}
         added = []
-        for module in sorted({c.module for c in rw.chunks if c.module and (not a.module or a.module.lower() in c.module.lower())}):
+        for module in sorted({c.module for c in rw.chunks if c.module and (not a.module or mod_match(a.module, c.module))}):
             d, obj = os.path.split(module)
             tu = W("src", "game", d, obj[:-4] + ".cpp")
             if not os.path.exists(tu):
