@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+008353a0 90 TooltipManager::ReleaseRefs: ref-slot store/call register scheduling differs
+008354a0 74 TooltipManager::SetTooltipText: virtual-call register assignment differs
+00835520 6 TooltipManager::MakeFullyVisibleInMainWindow: vtable/function register swap only
+00835610 47 TooltipManager::LoadProps: PropertyManager loop register scheduling differs
+008356e0 660 cSPUITooltipManager::ShowTooltip - full tooltip/layout state machine; complete, register/scheduling mismatch on the float layout-rect branch
+00835a50 505 cSPUITooltipWinProc::DoMessage - full switch dispatch; complete, jump-table layout + timestamp stores differ
+00835cc0 3 cSPUITooltipWinProc::cSPUITooltipWinProc - complete; only the two movss default-offset copies are scheduled together instead of load/store pairs
+00835d90 2 cSPUITooltipWinProc::~cSPUITooltipWinProc - complete; inlined base dtor stores the two base vptrs in the opposite order ([esi] before [esi+4])
+00835e30 6 cSPUITooltipWinProc::cSPUITooltipWinProc(args) - complete; mTooltipBehavior store is hoisted above the layout-key zeroing

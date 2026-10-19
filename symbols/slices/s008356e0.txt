@@ -1,9 +1,10 @@
-008356e0  cSPUITooltipManager::ShowTooltip  # this = cSPUITooltipManager (offsets match); PDB-adjacent tooltip state update
-00835a50  cSPUITooltipWinProc::DoMessage  # this = cSPUITooltipWinProc; PDB candidate cSPUITooltipWinProc::DoMessage
-00835cc0  cSPUITooltipWinProc::cSPUITooltipWinProc  # vtable stores + member init
-00835d90  cSPUITooltipWinProc::~cSPUITooltipWinProc  # vtable reset + 3 string frees
-00835e30  cSPUITooltipWinProc::cSPUITooltipWinProc  # parameterised ctor (layout/resources)
-00835ed0  cSPUITooltipWinProc::SetText  # assigns mTooltipString, refreshes tooltip
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s008356e0, named from the dev publics; slice address comment)
+008356e0 ?ShowTooltip@cSPUITooltipManager@@QAEIDPAXPAMH1PB_WIID@Z  # cSPUITooltipManager::ShowTooltip migrated from s008356e0 (verbatim, slice spelling)
+00835a50 ?DoMessage@cSPUITooltipWinProc_s0083_56e0@@QAEIPAXPAH@Z  # cSPUITooltipWinProc_s0083_56e0::DoMessage migrated from s008356e0 (verbatim, slice spelling)
+00835cc0 ??0cSPUITooltipWinProc_s0083_56e0@@QAE@XZ  # cSPUITooltipWinProc_s0083_56e0::cSPUITooltipWinProc migrated from s008356e0 (verbatim, slice spelling)
+00835d90 ??1cSPUITooltipWinProc@@UAE@XZ  # cSPUITooltipWinProc::~cSPUITooltipWinProc migrated from s008356e0
+00835e30 ??0cSPUITooltipWinProc_s0083_56e0@@QAE@PB_WI0PAMI0I@Z  # cSPUITooltipWinProc_s0083_56e0::cSPUITooltipWinProc migrated from s008356e0 (verbatim, slice spelling)
+00835ed0 ?SetText@cSPUITooltipWinProc_s0083_56e0@@QAEXPB_WPAXD@Z  # cSPUITooltipWinProc_s0083_56e0::SetText migrated from s008356e0 (verbatim, slice spelling)
 00835fa0  TooltipHelper::Attach  # /Od; FUN_00835f80 init + slot-0x14 vcall store at +0xc
 00835fe0  cSPUIVariableWidthDrawable::Draw  # this->mpImage(+0xc)/mFillColor(+0x10), RenderContext Begin2D/End2D
 00836420  cSPUIVariableWidthDrawable::cSPUIVariableWidthDrawable  # vtable + mpImage/mFillColor ctor

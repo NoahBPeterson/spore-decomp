@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00835660  -  TooltipManager::ShowWindow: FindWindowByID/bounding-box path stubbed

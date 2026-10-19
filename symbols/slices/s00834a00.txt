@@ -3,15 +3,15 @@
 00834e30 UI::TextZoomName::Shutdown  # releases windows/layout/props
 00834f30 TextZoomName message dispatch  # msg ids 0x1b/0x1c, layout id
 00834fa0 UI::TextZoomName::SetTargetWindow  # "UI/cSPUITextZoom", layout init
-008352a0 cSPUITooltipWinProc::GetEventMask  # mbMouseOver@0x58 -> 0x441|2
-008352c0 UI::TooltipManager::Get  # singleton global 0x164f328
-008352d0 UI::TooltipManager::TooltipManager  # vtable 0x141aec8
-00835320 UI::TooltipManager::~TooltipManager  # releases 4 refs
-008353a0 UI::TooltipManager::ReleaseRefs  # clears 4 ref slots
-008353f0 UI::TooltipManager::ShouldDisplayTooltip  # x87 compare vs 0x164f45c/0x164f44c
-00835440 UI::TooltipManager::ShouldTimeoutTooltip  # vs 0x164f46c
-00835470 UI::TooltipManager::ShouldDisplayDetailedTooltip  # vs 0x164f47c
-008354a0 UI::TooltipManager::SetTooltipText  # window slots 0x80/0x5c/0x68
-00835520 UI::TooltipManager::MakeFullyVisibleInMainWindow  # clamps rect, slot 0x70
-00835610 UI::TooltipManager::LoadProps  # SP::PropertyManager key 0x5c770db7
-00835660 UI::TooltipManager::ShowWindow  # FindWindowByID + Renderer
+008352a0 ?GetEventMask@cSPUITooltipWinProc@@UBEIXZ  # cSPUITooltipWinProc::GetEventMask migrated from s00834a00
+008352c0 ?FUN_008352c0@@YAPAXXZ  # FUN_008352c0 migrated from s00834a00 (verbatim, slice spelling)
+008352d0 ??0TooltipManager@@QAE@XZ  # TooltipManager::TooltipManager migrated from s00834a00 (verbatim, slice spelling)
+00835320 ?Dtor@TooltipManager@@QAEXXZ  # TooltipManager::Dtor migrated from s00834a00 (verbatim, slice spelling)
+008353a0 ?ReleaseRefs@TooltipManager@@QAE_NXZ  # TooltipManager::ReleaseRefs migrated from s00834a00 (verbatim, slice spelling)
+008353f0 ?ShouldDisplayTooltip@TooltipManager@@QAE_NPAX@Z  # TooltipManager::ShouldDisplayTooltip migrated from s00834a00 (verbatim, slice spelling)
+00835440 ?ShouldTimeoutTooltip@TooltipManager@@QAEHXZ  # TooltipManager::ShouldTimeoutTooltip migrated from s00834a00 (verbatim, slice spelling)
+00835470 ?ShouldDisplayDetailedTooltip@TooltipManager@@QAEHXZ  # TooltipManager::ShouldDisplayDetailedTooltip migrated from s00834a00 (verbatim, slice spelling)
+008354a0 ?SetTooltipText@TooltipManager@@QAEXHH@Z  # TooltipManager::SetTooltipText migrated from s00834a00 (verbatim, slice spelling)
+00835520 ?MakeFullyVisibleInMainWindow@TooltipManager@@QAEXH@Z  # TooltipManager::MakeFullyVisibleInMainWindow migrated from s00834a00 (verbatim, slice spelling)
+00835610 ?LoadProps@TooltipManager@@QAE_NXZ  # TooltipManager::LoadProps migrated from s00834a00 (verbatim, slice spelling)
+00835660 ?FUN_00835660@@YAXPAXHHH@Z  # FUN_00835660 migrated from s00834a00 (verbatim, slice spelling)
