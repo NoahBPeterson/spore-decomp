@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+0062e4b0 5 GetAnimCount: complete; orig re-reads panel vector begin for the loop bound; equiv: WEAK (35.7% coverage; needs --src s0062da00_ui.cpp)
+0062e4f0 242 GetExpansionAnimInfo: complete; orig is less optimised (hoists page*3-3 to a stack slot, reloads button id); equiv: WEAK (63.6% coverage; needs --src s0062da00_ui.cpp)
+0062e7e0 791 UpdateButtonImages: complete; orig indexes icon tables by byte offset and uses branches for the visible flag, regalloc differs
+0062ec90 7 LoadAnimInfo: complete; frame is 4 bytes larger (orig shares a slot between property temp and ref)
+0062efb0 395 LoadPanelInfo: complete; local layout and register assignment differ (sorted insert of panel info)

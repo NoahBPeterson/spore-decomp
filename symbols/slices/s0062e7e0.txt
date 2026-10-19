@@ -1,9 +1,9 @@
-0062e7e0 SP::cSPPlayModeAnimation::UpdateButtonImages  # PDB candidate name
-0062ebb0 SP::cSPPlayModeAnimPanelInfo::`scalar deleting destructor'  # vtable 0x13fe378, vector at +0x14
-0062ebe0 SP::cSPPlayModeAnimation::NextAnimWindowSet  # PDB candidate
-0062ec30 SP::cSPPlayModeAnimation::PreviousAnimWindowSet  # PDB candidate
-0062ec90 SP::cSPPlayModeAnimation::LoadAnimInfo  # PDB name
-0062efb0 SP::cSPPlayModeAnimation::LoadPanelInfo  # PDB name
+0062e7e0 ?UpdateButtonImages@cSPPlayModeAnimation_s0062_e7e0@@QAEXXZ  # cSPPlayModeAnimation_s0062_e7e0::UpdateButtonImages migrated from s0062e7e0 (verbatim, slice spelling)
+0062ebb0 ??_GcSPPlayModeAnimPanelInfo@@UAEPAXI@Z  # cSPPlayModeAnimPanelInfo::~cSPPlayModeAnimPanelInfo migrated from s0062e7e0 (verbatim, slice spelling)
+0062ebe0 ?NextAnimWindowSet@cSPPlayModeAnimation@SP@@QAEXXZ  # SP::cSPPlayModeAnimation::NextAnimWindowSet migrated from s0062e7e0
+0062ec30 ?PreviousAnimWindowSet@cSPPlayModeAnimation@SP@@QAEXXZ  # SP::cSPPlayModeAnimation::PreviousAnimWindowSet migrated from s0062e7e0
+0062ec90 ?LoadAnimInfo@cSPPlayModeAnimation_s0062_e7e0@@QAEXPAVcSPPlayModeAnimPanelInfo@@PAUResourceKey@@@Z  # cSPPlayModeAnimation_s0062_e7e0::LoadAnimInfo migrated from s0062e7e0 (verbatim, slice spelling)
+0062efb0 ?LoadPanelInfo@cSPPlayModeAnimation_s0062_e7e0@@QAEXABUResourceKey@@@Z  # cSPPlayModeAnimation_s0062_e7e0::LoadPanelInfo migrated from s0062e7e0 (verbatim, slice spelling)
 0062f1e0 SP::cSPPlayModeAnimation::LoadAllAnimInfoFromGroup  # PDB candidate
 0062f2a0 ?Init@cSPPlayModeAnimation_s0062_e7e0@@QAEXPAXPAUcSPPlayModeUI_s0062_e7e0@@@Z  # cSPPlayModeAnimation_s0062_e7e0::Init migrated from s0062e7e0 (verbatim, slice spelling)
 0062f340 ?SetBGHilite@cSPPlayModeBGMgr@SP@@QAEXI@Z  # SP::cSPPlayModeBGMgr::SetBGHilite migrated from s0062e7e0

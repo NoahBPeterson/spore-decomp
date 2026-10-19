@@ -10,9 +10,9 @@
 0062df10 SP::cSPCasual_Path::ExpandNode  # A* expansion step
 0062e010 SP::cSPCasual_Path::FindPath  # A* driver
 0062e2e0 ?StartNewAnimation@cSPPlayModeAnimation_s0062_da00__ui@@QAEMII_NIPAI@Z  # cSPPlayModeAnimation_s0062_da00__ui::StartNewAnimation migrated from s0062da00 (verbatim, slice spelling)
-0062e4b0 SP::cSPPlayModeAnimation::GetAnimCount  # PDB name
-0062e4f0 SP::cSPPlayModeAnimation::GetExpansionAnimInfo  # PDB name
-0062e5f0 SP::cSPPlayModeAnimation::IsExtraAnims  # PDB candidate
-0062e600 SP::cSPPlayModeAnimation::UpdatePageCount  # PDB name
-0062e6c0 SP::cSPPlayModeAnimation::Activate  # PDB candidate
-0062e7a0 SP::cSPPlayModeAnimation::ResetCurAnimWindow  # PDB name
+0062e4b0 ?GetAnimCount@cSPPlayModeAnimation@@QAEHXZ  # cSPPlayModeAnimation::GetAnimCount migrated from s0062da00 (verbatim, slice spelling)
+0062e4f0 ?GetExpansionAnimInfo@cSPPlayModeAnimation@@QAE_NHPAI0PAM1@Z  # cSPPlayModeAnimation::GetExpansionAnimInfo migrated from s0062da00 (verbatim, slice spelling)
+0062e5f0 ?IsExtraAnims@cSPPlayModeAnimation@SP@@QAE_NXZ  # SP::cSPPlayModeAnimation::IsExtraAnims migrated from s0062da00
+0062e600 ?UpdatePageCount@cSPPlayModeAnimation@@QAEXXZ  # cSPPlayModeAnimation::UpdatePageCount migrated from s0062da00 (verbatim, slice spelling)
+0062e6c0 ?Activate@cSPPlayModeAnimation@@QAEXXZ  # cSPPlayModeAnimation::Activate migrated from s0062da00 (verbatim, slice spelling)
+0062e7a0 ?ResetCurAnimWindow@cSPPlayModeAnimation@SP@@QAEXXZ  # SP::cSPPlayModeAnimation::ResetCurAnimWindow migrated from s0062da00

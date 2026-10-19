@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPPlayModeAnimation.cpp  ?IsExtraAnims@cSPPlayModeAnimation@SP@@QAE_NXZ  0062e5f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPPlayModeAnimation.cpp  ?UpdatePageCount@cSPPlayModeAnimation@@QAEXXZ  0062e600  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPPlayModeAnimation.cpp  ?Activate@cSPPlayModeAnimation@@QAEXXZ  0062e6c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPPlayModeAnimation.cpp  ?ResetCurAnimWindow@cSPPlayModeAnimation@SP@@QAEXXZ  0062e7a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPPlayModeAnimation.cpp  ??_GcSPPlayModeAnimPanelInfo@@UAEPAXI@Z  0062ebb0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPPlayModeAnimation.cpp  ?NextAnimWindowSet@cSPPlayModeAnimation@SP@@QAEXXZ  0062ebe0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPPlayModeAnimation.cpp  ?PreviousAnimWindowSet@cSPPlayModeAnimation@SP@@QAEXXZ  0062ec30  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
