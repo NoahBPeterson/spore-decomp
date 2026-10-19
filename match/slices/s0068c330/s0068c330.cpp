@@ -430,19 +430,50 @@ void  FUN_0068CBB0(void* self, unsigned n);             // packed erase
 void  FUN_0068D0B0(void* out, const void* tpl, const char* s); // fixed wstring ctor
 void* FUN_00688760(unsigned key, void* out);
 void* FUN_0068CFF0(void* ht, void* a, void* b, void* c);
+void  FUN_0068C280(uint32 lo, uint32 hi);               // tagged-head release helper
+
+extern "C" __int64 _InterlockedCompareExchange64(volatile __int64* dest, __int64 exch,
+                                                 __int64 comp);
+
+// thiscall helpers reached with an explicit ecx (same addresses as the free decls above).
+struct PackStrOps {                                     // packed string (EASTL string) members
+    void Ctor(PackStr* src);                            // 0x0068CF00  copy ctor
+    void Assign(const char* first, const char* last);   // 0x0068CF60  assign/append range
+    void Erase(unsigned n);                             // 0x0068CBB0  erase tail down to n
+};
+struct HashMapOps {                                     // eastl::hashtable member
+    void* Insert(void* itOut, void* pair, uint32 key);  // 0x0068CFF0  insert(pair)
+    void  Find(void** itOut, uint32 key);               // 0x00A3B2C0  find(key)
+};
 
 // ===========================================================================
 // @ 0x0068C330  FreeQueue::TryPop
 // ===========================================================================
 bool FreeQueue::TryPop(void** out)
 {
-    // 64-bit tagged-pointer pop loop; body approximated.
-    uint64 head = AtomicRead64(&mPop);
+    // Tagged-head CAS loop on the push side (+0x08): the popped node stores the next
+    // tagged head at node+0x08, and the ABA tag (high dword) is bumped on every pop.
+    uint64 head = AtomicRead64(&mPush);
     if ((uint32)head == 0)
         return false;
-    out[0] = 0;
-    out[1] = 0;
-    return false;
+    for (;;) {
+        const uint32 lo = (uint32)head;
+        const uint32 hi = (uint32)(head >> 32);
+        const uint64 next =
+            AtomicRead64((volatile uint64*)((char*)((unsigned)lo) + 8));
+        const uint64 desired = (uint64)(uint32)next | ((uint64)(hi + 1) << 32);
+        if ((uint64)_InterlockedCompareExchange64((volatile __int64*)&mPush, (__int64)desired,
+                                                  (__int64)head) == head) {
+            const void** node = (const void**)((unsigned)lo);
+            out[0] = (void*)node[0];
+            out[1] = (void*)node[1];
+            FUN_0068C280(lo, hi);
+            return true;
+        }
+        head = AtomicRead64(&mPush);
+        if ((uint32)head == 0)
+            return false;
+    }
 }
 
 // ===========================================================================
@@ -450,10 +481,54 @@ bool FreeQueue::TryPop(void** out)
 // ===========================================================================
 void PackStr::Insert(char* pos, const char* first, const char* last)
 {
-    // EASTL string insert; body approximated (scratch only).
-    (void)pos;
-    (void)first;
-    (void)last;
+    // eastl::string::insert(pos, first, last), inlined body (SSO or heap buffer).
+    const unsigned n = (unsigned)(last - first);
+    if (n == 0)
+        return;
+    const unsigned size = (unsigned)(mpEnd - mpBegin);
+    const unsigned cap = (unsigned)(mpCapacity - mpBegin);
+    const bool roomInBuffer = (n + 1) <= (cap - size);
+    const bool overlap = !(last <= mpBegin || pos > mpEnd);
+    if (roomInBuffer && !overlap) {
+        const unsigned tail = (unsigned)(mpEnd - pos);
+        if (n <= tail) {
+            memmove(mpEnd + 1, mpEnd - n + 1, n);
+            mpEnd += n;
+            memmove(pos + n, pos, (tail - n) + 1);
+        } else {
+            const char* front = first + (tail + 1);
+            memmove(mpEnd + 1, front, (unsigned)(last - front));
+            mpEnd += n - tail;
+            memmove(mpEnd, pos, (tail + 1));
+            mpEnd += tail;
+        }
+        return;
+    }
+    unsigned newCap;
+    if (roomInBuffer) {
+        newCap = size + n + (1 - 0);
+    } else {
+        const unsigned need = size + n;
+        const unsigned grow = (size > 8) ? size * 2 : 8;
+        newCap = (need > grow ? need : grow) + 1;
+    }
+    char* dst = (char*)EAAllocate(newCap, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\"
+                                          "SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\"
+                                          "EASTL/allocator.h",
+                                  0, 0, 0, 0xd1);
+    const char* oldBegin = mpBegin;
+    const unsigned head = (unsigned)(pos - oldBegin);
+    memmove(dst, oldBegin, head);
+    char* mid = dst + head;
+    memmove(mid, first, n);
+    memmove(mid + n, pos, size - head);
+    mid[size - head + n] = 0;
+    const char* newEnd = mid + (size - head) + n;
+    if ((unsigned)(mpCapacity - oldBegin) > 1 && oldBegin != 0)
+        EAFree((void*)oldBegin);
+    mpBegin = dst;
+    mpEnd = (char*)newEnd;
+    mpCapacity = dst + newCap;
 }
 
 // ===========================================================================
@@ -471,7 +546,17 @@ void PackStrSwap(PackStr* a, PackStr* b)
         }
         return;
     }
-    // Non-SSO swap uses a temp copy + assign; approximated.
+    PackStr tmp;
+    tmp.mpBegin = 0;
+    tmp.mpEnd = 0;
+    tmp.mpCapacity = 0;
+    ((PackStrOps*)&tmp)->Ctor(a);
+    if (b != a)
+        ((PackStrOps*)a)->Assign(b->mpBegin, b->mpEnd);
+    if (b != &tmp)
+        ((PackStrOps*)b)->Assign(tmp.mpBegin, tmp.mpEnd);
+    if ((unsigned)(tmp.mpCapacity - tmp.mpBegin) > 2 && tmp.mpBegin != 0)
+        EAFree(tmp.mpBegin);
 }
 
 // ===========================================================================
@@ -479,10 +564,29 @@ void PackStrSwap(PackStr* a, PackStr* b)
 // ===========================================================================
 void* HashMapOp(void* self, unsigned key, void* out)
 {
-    (void)self;
-    (void)key;
+    // eastl::hash_map<unsigned, WStr>::operator[]: find, else insert an empty WStr.
+    char* map = (char*)self;
+    char* it;
+    ((HashMapOps*)map)->Find((void**)&it, key);
+    char** buckets = *(char***)(map + 4);
+    const uint32 nBucket = *(uint32*)(map + 8);
+    char* sentinel = buckets[nBucket];
+    if (it != sentinel)
+        return it + 4;
+
+    WStr empty;
+    empty.mpBegin = (wchar_t*)0x01667bac;
+    empty.mpEnd = (wchar_t*)0x01667bac;
+    empty.mpCapacity = (wchar_t*)0x01667bae;
+    empty.mAllocator = 0;
+    void* pair = FUN_00688760(key, &empty);
+    void* ins = 0;
+    ((HashMapOps*)map)->Insert(&ins, pair, key);
+    if (((unsigned)((char*)empty.mpEnd - (char*)empty.mpBegin) & 0xfffffffeu) > 2 &&
+        empty.mpBegin != 0)
+        EAFree(empty.mpBegin);
     (void)out;
-    return 0;
+    return (char*)ins + 4;
 }
 
 // ===========================================================================
@@ -490,8 +594,37 @@ void* HashMapOp(void* self, unsigned key, void* out)
 // ===========================================================================
 void PackStrReserve(PackStr* self, unsigned n)
 {
-    (void)self;
-    (void)n;
+    // eastl::string::reserve(n).
+    if (n != 0xffffffffu && (unsigned)((self->mpEnd - self->mpBegin) >> 1) < n) {
+        const unsigned newBytes = n * 2;
+        char* dst = (char*)EAAllocate(newBytes, "App", 0, 0,
+                                      "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\"
+                                      "SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\"
+                                      "EASTL/allocator.h",
+                                      0xd1);
+        const unsigned oldBytes = (unsigned)((self->mpEnd - self->mpBegin) >> 1) * 2;
+        memmove(dst, self->mpBegin, oldBytes);
+        char* newEnd = dst + oldBytes;
+        *(unsigned short*)newEnd = 0;
+        char* old = self->mpBegin;
+        if ((unsigned)(self->mpCapacity - old) > 2 && old != 0 && old != *(char**)((char*)self + 0x10))
+            EAFree(old);
+        self->mpBegin = dst;
+        self->mpCapacity = dst + newBytes;
+        self->mpEnd = newEnd;
+        return;
+    }
+    PackStr tmp;
+    tmp.mpBegin = 0;
+    tmp.mpEnd = 0;
+    tmp.mpCapacity = (char*)0x10;
+    if (n < (unsigned)((self->mpEnd - self->mpBegin) >> 1))
+        ((PackStrOps*)self)->Erase(n);
+    ((PackStrOps*)self)->Ctor(&tmp);
+    PackStrSwap(self, &tmp);
+    char* b = tmp.mpBegin;
+    if ((unsigned)(tmp.mpCapacity - b) > 2 && b != 0 && b != (char*)0x10)
+        EAFree(b);
 }
 
 // ===========================================================================
