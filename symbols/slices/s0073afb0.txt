@@ -1,10 +1,10 @@
-0073afb0 Animate              # SP::cModelInstance; PDB name
-0073b190 MoveToTime           # SP::cModelInstance; PDB name
-0073b530 SetWeight            # SP::cModelInstance; PDB name
-0073b6d0 GetAnimationRange   # SP::cModelInstance; PDB name
+0073afb0 ?Animate@cModelInstance_s0073_afb0@SP@@QAEXM@Z  # cModelInstance_s0073_afb0::Animate migrated from s0073afb0 (verbatim, slice spelling)
+0073b190 ?MoveToTime@cModelInstance_s0073_afb0@SP@@QAEXHHM@Z  # cModelInstance_s0073_afb0::MoveToTime migrated from s0073afb0 (verbatim, slice spelling)
+0073b530 ?SetWeight@cModelInstance_s0073_afb0@SP@@QAEXHHM@Z  # cModelInstance_s0073_afb0::SetWeight migrated from s0073afb0 (verbatim, slice spelling)
+0073b6d0 ?GetAnimationRange@cModelInstance_s0073_afb0@SP@@QAE_NHHPAM0@Z  # cModelInstance_s0073_afb0::GetAnimationRange migrated from s0073afb0 (verbatim, slice spelling)
 0073b7e0 ?GetNumBones@cModelInstance_s0073_afb0@SP@@QAEHXZ  # cModelInstance_s0073_afb0::GetNumBones migrated from s0073afb0 (verbatim, slice spelling)
 0073b800 ?SetBoneTable@cModelInstance_s0073_afb0@SP@@QAEXHPAX@Z  # cModelInstance_s0073_afb0::SetBoneTable migrated from s0073afb0 (verbatim, slice spelling)
 0073b840 ?SetBoneCallback@cModelInstance_s0073_afb0@SP@@QAEXHPAX00@Z  # cModelInstance_s0073_afb0::SetBoneCallback migrated from s0073afb0 (verbatim, slice spelling)
 0073b8e0 ?SetDynamicDraw@cModelInstance_s0073_afb0@SP@@QAEXPAX_N@Z  # cModelInstance_s0073_afb0::SetDynamicDraw migrated from s0073afb0 (verbatim, slice spelling)
+0073bab0 ?Notify@cModelInstance_s0073_afb0@SP@@QAEXPAUcNotifyOther@2@@Z  # cModelInstance_s0073_afb0::Notify migrated from s0073afb0 (verbatim, slice spelling)
 0073bdc0 Release              # release refcounted object at this+0xc
-0073bab0 Notify  # SP::cModelInstance binding-list notify (behaviour name)

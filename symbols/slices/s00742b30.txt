@@ -1,5 +1,12 @@
-00742db0 SP::cModelInstance::ConstructFromGameModelResource  # PDB name (symbols/pdb_names.json)
-00743030 SP::cModelInstance::GetBoneParents  # PDB name (symbols/pdb_names.json)
+00742b30 ?Sub2b30@cMI@@QAEXPAUSrc@@@Z  # cMI::Sub2b30 migrated from s00742b30 (verbatim, slice spelling)
+00742ca0 ?MapInsert@Map8@@QAEPAURefPair8_s0074_2b30@@PAU2@0@Z  # Map8::MapInsert migrated from s00742b30 (verbatim, slice spelling)
+00742cf0 ?SetAnimationResource@cMI@@QAEXPAURC_s0074_2b30@@@Z  # cMI::SetAnimationResource migrated from s00742b30 (verbatim, slice spelling)
+00742db0 ?ConstructFromGameModelResource@cMI@@QAEXPAD@Z  # cMI::ConstructFromGameModelResource migrated from s00742b30 (verbatim, slice spelling)
+00742f60 ?GetOrAdd@Map8@@QAEPAUAR@@PBH@Z  # Map8::GetOrAdd migrated from s00742b30 (verbatim, slice spelling)
+00743030 ?GetBoneParents@cModelInstance@SP@@QAEHPAH@Z  # SP::cModelInstance::GetBoneParents migrated from s00742b30
+00743150 ?Sub3150@cMI2@@QAEXHPAURefCounted_s0074_2b30@@@Z  # cMI2::Sub3150 migrated from s00742b30 (verbatim, slice spelling)
+00743270 ?Sub3270@cMI3@@QAE_NPAUXf_s0074_2b30@@PAURefVecL@@@Z  # cMI3::Sub3270 migrated from s00742b30 (verbatim, slice spelling)
+007434b0 ?Sub34b0@cMI3@@QAE_NPAM@Z  # cMI3::Sub34b0 migrated from s00742b30 (verbatim, slice spelling)
 00743940 ?Adjustor@cModelWorld56@@QAEHH@Z  # cModelWorld56::Adjustor migrated from s00742b30 (verbatim, slice spelling)
 00743950 ?SetTimeScale@@YGXHM@Z  # SetTimeScale migrated from s00742b30 (verbatim, slice spelling)
 007439b0 ?OffsetOrE4@@YGHH@Z  # OffsetOrE4 migrated from s00742b30 (verbatim, slice spelling)
@@ -8,6 +15,3 @@
 00743a60 ?SetCurveRange@cModelWorld56@@QAEXHHH@Z  # cModelWorld56::SetCurveRange migrated from s00742b30 (verbatim, slice spelling)
 00743a80 ?GetCurveRange@cModelWorld56@@QAEXHPAH0@Z  # cModelWorld56::GetCurveRange migrated from s00742b30 (verbatim, slice spelling)
 00743b00 ?ResetHighlightCurve@cModelWorld@SP@@UAEXXZ  # SP::cModelWorld::ResetHighlightCurve migrated from s00742b30
-00742ca0 Map8::MapInsert  # lower_bound + Vec8::insert on the (int key, AutoRefCount) sorted-vector map; byte-exact
-00742f60 Map8::GetOrAdd  # map operator[] (lower_bound, insert default pair); equiv PASS
-00743150 SP::cModelInstance::SetMaterialForTag  # name is Claude-coined: assigns a material ref to the slots whose shader-data tag matches

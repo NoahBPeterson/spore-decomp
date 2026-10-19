@@ -1,11 +1,11 @@
-00740550 SP::cModelInstance::GetBoneTransforms  # PDB name (symbols/pdb_names.json)
-00740740 SP::cModelInstance::GetBoneIDs  # PDB name (symbols/pdb_names.json)
-00740b00 Vec8Vector::DoInsertValues  # eastl::vector<8-byte POD>::DoInsertValues(pos, n, value) (ret 0xc, begin/end/cap at +0/+4/+8); the PDB name ~cModelInstance is wrong for this address (shared code)
-00741150 SP::cModelInstance::GetRegionMaterialInfo  # PDB name (symbols/pdb_names.json)
-00741040 SP::cModelInstance::~cModelInstance  # destructor body: resets +0xd0/+0xcc, members destroyed in reverse, vptr set to GmeRefCount (0x13ef094)
-00740e90 SP::cModelInstance::cModelInstance  # constructor: stores vptr 0x140d638, bounds/transform defaults
-007409d0 Vec12Vector::DoInsertValue  # eastl::vector<12-byte POD>::DoInsertValue(pos, value)
-00740cc0 Vec8Vector::DoInsertRange  # eastl::vector<8-byte POD> range insert(pos, first, last, tag) (ret 0x10)
-007407d0 SP::cModelInstance::CreateBinding  # builds a Graphics-tagged binding object (0x20/0x9c/0x38 bytes) and validates it; ret 8
-007403c0 SP::cModelInstance::LoadExportedBoneTable  # reads type 0x80003 exported objects from the arena into +0xcc, clears +0xd0
+007403c0 ?LoadExportedBoneTable@cModelInstanceBones@@QAEXPAUArenaOwner@@@Z  # cModelInstanceBones::LoadExportedBoneTable migrated from s007403c0 (verbatim, slice spelling)
+00740550 ?GetBoneTransforms@cModelResourceInfo@@QAEHPAUMat12@@@Z  # cModelResourceInfo::GetBoneTransforms migrated from s007403c0 (verbatim, slice spelling)
+00740740 ?GetBoneIDs@cModelResourceInfo@@QAEHPAI@Z  # cModelResourceInfo::GetBoneIDs migrated from s007403c0 (verbatim, slice spelling)
+007407d0 ?CreateBinding@cModelInstanceB@@QAE_NIPAPAURefIface@@@Z  # cModelInstanceB::CreateBinding migrated from s007403c0 (verbatim, slice spelling)
+007409d0 ?DoInsertValue@Vec12Vector@@QAEXPAUVec12@@ABU2@@Z  # Vec12Vector::DoInsertValue migrated from s007403c0 (verbatim, slice spelling)
+00740b00 ?DoInsertValues@Vec8Vector@@QAEXPAUP8@@IABU2@@Z  # Vec8Vector::DoInsertValues migrated from s007403c0 (verbatim, slice spelling)
+00740cc0 ?DoInsertRange@Vec8Vector@@QAEXPAUP8@@00H@Z  # Vec8Vector::DoInsertRange migrated from s007403c0 (verbatim, slice spelling)
+00740e90 ??0MInit@@QAE@XZ  # MInit::MInit migrated from s007403c0 (verbatim, slice spelling)
+00741040 ??1cModelInstance_s0074_03c0@@QAE@XZ  # cModelInstance_s0074_03c0::~cModelInstance migrated from s007403c0 (verbatim, slice spelling)
+00741150 ?GetRegionMaterialInfo@cModelInstanceR@@QAEPAXH@Z  # cModelInstanceR::GetRegionMaterialInfo migrated from s007403c0 (verbatim, slice spelling)
 007411b0 ?push_back@Vec12Vector@@QAEXABUVec12@@@Z  # Vec12Vector::push_back migrated from s007403c0 (verbatim, slice spelling)

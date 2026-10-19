@@ -1,7 +1,12 @@
 # va  diff-bytes  reason
-0073abb0 96 cModelInstance::GetAnimationMoveToTimes: complete; regalloc/schedule differs
+0073abb0 32 cModelInstance::GetAnimationMoveToTimes: complete; regalloc/schedule differs
+0073af20 124 AdvanceBinding: complete; original keeps a zero in ebx (xor ebx,ebx) that cannot be reproduced [equiv: PASS 395 inputs 100% cov]
+0073afb0 67 cModelInstance::Animate: complete; only this/index register assignment (esi vs edi) differs  [equiv: WEAK (313 valid, 29% cov, no mismatch)]
+0073b530 298 cModelInstance::SetWeight: complete; group-array base reload / register schedule differs (loop A uses ecx/edx swapped)  [equiv: WEAK (400 valid, 40% cov, no mismatch)]
+0073b6d0 205 cModelInstance::GetAnimationRange: complete (4x unrolled loop reproduced); prologue register allocation (esi vs eax for grp) differs  [equiv: PASS (373 valid, 98% cov)]
 0073b800 2 cModelInstance::SetBoneTable: complete; only the scratch register for arg2 differs
 0073b840 90 cModelInstance::SetBoneCallback: complete; arg-load/register schedule differs
+0073bab0 47 cModelInstance::Notify: complete; ecx/eax use in the second loop and epilogue sharing differ  [equiv: WEAK (234 valid, 31% cov, no mismatch)]
 0073d160 86 complete; result register (edi) lifetime differs from original (compiler folds the always-zero fall-through), otherwise identical control flow/calls
 0073d6b0 2135 COMPLETE SP::cModelInstance::GetPoseTransforms(dst, original): per-bone 4x4 copy, SIMD affine cofactor inverse when !original (singular -> the uninitialized result local is stored, as in the original), transposed 3x4 store; returns bone count or 0. SSE register allocation/temp layout differ (frame 0x444 vs ~0x2a0).
 0073e410 1241 complete: all paths/calls reconstructed; not byte-exact (register allocation/EH layout/x87-vs-SSE copies)
@@ -17,3 +22,22 @@
 0073f910 804 complete IntersectsSphere (same shape as PickLine); SSE lane build and EH/static-init codegen differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; difftest PASS after fixing a spurious 0x40-byte copy of the inverse matrix (the item tests take the matrix object itself; ours memcpy'd it into a second buffer)
 0073fe80 72 complete 3-binding validator (mesh query + 3x Check); this/loop-index register swap (esi/edi)
 0073ffb0 75 complete 3-binding validator with extra CheckEntry; same esi/edi register swap
+007403c0 256 LoadExportedBoneTable: complete (arena walk, type 0x80003 -> new 0x4c "Graphics" BoneTable, +0xcc AddRef/Release swap, +0xd0 hull delete); diff is the zero-constant register (eax vs ebx) and spill slots; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv: WEAK 226 valid, 23.8% coverage, no mismatch]
+00740550 483 cModelResourceInfo::GetBoneTransforms: complete (clamp copy, identity fill, per-range material copy); same schedule, this kept in esi instead of the stack slot; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv: WEAK 319 valid, 44.3% coverage, no mismatch]
+00740740 109 cModelResourceInfo::GetBoneIDs: complete; register assignment (range pointer in edi vs edx copy) only; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv: PASS]
+007407d0 324 cModelInstance::CreateBinding: complete (owner path T20 + vtable slot 8 validate, resource path T9c then T38); ?: on begin/end compiled branchless (neg/sbb) where the original branches; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv: PASS]
+007409d0 137 Vec12Vector::DoInsertValue: complete (shift-up path, grow path); register allocation (newCap in ebx vs ebp); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv: WEAK 44 valid, 58.0% coverage, no mismatch]
+00740b00 332 Vec8Vector::DoInsertValues(pos, n, value): complete (in-place two cases, grow); register allocation and spill slots; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv: WEAK 197 valid, 12.2% coverage, no mismatch]
+00740cc0 331 Vec8Vector::DoInsertRange(pos, first, last, tag): complete (in-place two cases, grow); register allocation and spill slots; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv: WEAK 67 valid, 33.9% coverage, no mismatch; 600 s time limit]
+00740e90 292 cModelInstance constructor (GmeRefCount base, +0xd4/+0xe0 FLT_MAX/-FLT_MAX via Vec3 temp): complete; mine keeps this in a spill slot for the EH frame and orders the vptr store earlier; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv: PASS]
+00741040 20 cModelInstance destructor body (hull delete, +0xcc reset, members 4..0 destroyed in reverse, vptr -> GmeRefCount): complete; only the vptr store and the +0xcc load/+0xd0 store order differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv: PASS]
+00741150 70 cModelInstanceR::GetRegionMaterialInfo (region map lower_bound): complete; original keeps this in esi (push esi/mov esi,ecx) and end in edi; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv: PASS]
+00741210 986 cMI_Geo::AddGeometryFromArena: complete (all 3 export types, bbox merge, radius); aligned __m128 temp slots / frame size differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv: WEAK 277 valid inputs, 37% cov]
+00742b30 84 complete; register allocation (original reloads the incoming argument from its stack slot for the 4th insert_range arg instead of using esi) [equiv: WEAK (no mismatch, 769 valid, 50% cov)]
+00742cf0 8 complete; only the E8 push_back copy schedule differs (edx loaded before the pops) [equiv: WEAK (no mismatch, 173 valid, 94% cov)]
+00742db0 366 complete; register allocation (original keeps this/src/old in esi/edi/ebp and spills the loop count) [equiv: PASS]
+00742f60 185 complete; register allocation (key pointer in ebp, end in edi) and EH epilogue merging [equiv: PASS]
+00743030 237 complete; original omits the final state=-1 store before the inline FixedVec64 dtor and reloads info after the null test [equiv: PASS]
+00743150 84 complete; load scheduling and register allocation of the slot loop [equiv: WEAK (no mismatch, 193 valid, 50% cov)]
+00743270 517 complete; frame is 12 bytes smaller (original spills loop index/count) and cl inlines the mesh-vector dtor at both exits [equiv: WEAK (no mismatch, 304 valid, 17% cov)]
+007434b0 921 complete; frame 4 bytes smaller (original keeps the DynArr pointer in a stack slot), register allocation [equiv: WEAK (no mismatch, 293 valid, 41% cov)]
