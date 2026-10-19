@@ -1,5 +1,5 @@
 005b0f80 SP::cSPEditorManipulationObject::cSPEditorManipulationObject  # vtable 013f73e4; mDeadZoneSize=2.0f
-005b0fd0 SP::cSPEditorManipulationObject::OnMouseDown  # PDB 00d6... ; vtable slot
-005b1010 SP::cSPEditorManipulationObject::OnMouseMove  # PDB; vtable slot
+005b0fd0 ?Stub_005b0fd0@@YAXXZ  # Stub_005b0fd0 migrated from s005b0f80 (verbatim, slice spelling)
+005b1010 ?Stub_005b1010@@YAXXZ  # Stub_005b1010 migrated from s005b0f80 (verbatim, slice spelling)
 005b1c80 ?Stub_005b1c80@@YAXXZ  # Stub_005b1c80 migrated from s005b0f80 (verbatim, slice spelling)
 005b1cd0 ?Stub_005b1cd0@@YAXXZ  # Stub_005b1cd0 migrated from s005b0f80 (verbatim, slice spelling)
