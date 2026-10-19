@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/DatabasePackedFile_v2.cpp  ?FUN_006bc2d0@DatabasePackedFile@@QAE_NPA_KII@Z  006bc2d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile_v2.cpp  ?FUN_006bc370@DatabasePackedFile@@QAE_NPA_K@Z  006bc370  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile_v2.cpp  ?FUN_006bc3a0@DatabasePackedFile@@QAE_NIM@Z  006bc3a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile_v2.cpp  ?FUN_006bc3e0@DatabasePackedFile@@QAEHIH@Z  006bc3e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile_v2.cpp  ?FUN_006bc420@DatabasePackedFile@@QAEDDPAXD@Z  006bc420  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile_v2.cpp  ?DeleteRecord@DatabasePackedFile@@QAE_NXZ  006bc5f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile_v2.cpp  ?FUN_006bca70@DatabasePackedFile@@QAEXXZ  006bca70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile_v2.cpp  ?FUN_006bcb50@DatabasePackedFile@@QAE_NIIII@Z  006bcb50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile_v2.cpp  ?FUN_006bcd30@DatabasePackedFile@@QAE_NXZ  006bcd30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile_v2.cpp  ?SetLocation@DatabasePackedFile_s006b_d150@@QAE_NPB_W@Z  006bd650  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
