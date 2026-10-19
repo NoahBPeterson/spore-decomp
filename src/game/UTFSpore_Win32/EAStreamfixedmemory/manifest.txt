@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAStreamfixedmemory.cpp  ?SetSize@FixedMemoryStream@IO@EA@@UAE_NI@Z  0093b900  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamfixedmemory.cpp  ?GetPosition@FixedMemoryStream@IO@EA@@UBEHH@Z  0093b920  /O2 /MD /Gy /TP /Isrc/game/include

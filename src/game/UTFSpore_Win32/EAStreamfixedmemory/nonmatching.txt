@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0093b950 55 complete: FixedMemoryStream::SetPosition, branch layout differs
+0093b9a0 40 complete: FixedMemoryStream::Read, unsigned test/cmov differs
+0093b9e0 65 complete: App::memorystream append, capacity/size schedule differs

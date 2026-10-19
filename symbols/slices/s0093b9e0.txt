@@ -1,4 +1,4 @@
-0093b9e0 App::memorystream::WriteBuffer  # no PDB name; +4 raw buffer
+0093b9e0 ?WriteBuffer@memorystream@@QAEHPBXI@Z  # memorystream::WriteBuffer migrated from s0093b9e0 (verbatim, slice spelling)
 0093ba40 App::memorystream::memorystream  # dev-PDB App::memorystream::memorystream
 0093ba90 FUN_0093ba90  # no PDB name
 0093bab0 GraphicsFactoryAsyncRequest::GetProperty  # no PDB name
