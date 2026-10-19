@@ -6,3 +6,4 @@
 00753bb0 ?FUN_00753bb0@@YAPAXPAX00@Z  # FUN_00753bb0 migrated from s00753270 (verbatim, slice spelling)
 00753c50 ?cModelWorld_FinalRelease_00753c50@@YAXPAX@Z  # cModelWorld_FinalRelease_00753c50 migrated from s00753270 (verbatim, slice spelling)
 00753d10 ?FUN_00753d10@@YAPAXPAX000@Z  # FUN_00753d10 migrated from s00753270 (verbatim, slice spelling)
+00754250 ?FUN_00754250@S_754250@@QAEPAU1@H@Z  # S_754250::FUN_00754250 migrated from s00753270 (verbatim, slice spelling)

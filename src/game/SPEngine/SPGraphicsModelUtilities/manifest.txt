@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ??0BakeJob@@QAE@II@Z  00410cc0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?LowerBound@@YAPAUKeyPair@@PAU1@0ABU1@@Z  0042dd00  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?PostEditorEvent@@YAXIIIE@Z  004303e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ??0SimpleAbility@@QAE@XZ  00430c20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?FUN_007544e0@@YAXPAXII@Z  007544e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?CreateModelInstance@SP@@YA_NIIPAPAVcModelInstance@1@I@Z  00754ba0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?FUN_00755520@X_755520@@QAE_NPAUcJob_755520@@@Z  00755520  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
