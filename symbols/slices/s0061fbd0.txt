@@ -1,6 +1,19 @@
 00620050 SP::Pollen::cRegistrationDialog::Show  # byte-exact: SetFlag(1,b) on the root window then Begin/EndModal
-00620380 SP::Pollen::cRegistrationDialog::End  # byte-exact: removes the two listeners, shuts down the frameset and layout
-006205f0 SP::Pollen::cRegistrationDialog::ConfirmLogin  # byte-exact: ShowLoginDialog(true), SavePrefs, post 0x5b98f52, End
-006208c0 SP::Pollen::cRegistrationDialog::Show2  # PDB name Show; byte-exact: layout init, frameset creation, load the registration URL
-00620b30 SP::Pollen::cRegistrationDialog::FormParamCallback  # PDB name; byte-exact
-00620230 eastl::intrusive_list_base::~intrusive_list_base  # byte-exact
+006200c0 ?AutoSizeButtons@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAEXXZ  # cRegistrationDialog_s0061_fbd0::AutoSizeButtons migrated from s0061fbd0 (verbatim, slice spelling)
+00620110 ?SetControlsEnabled@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAEX_N@Z  # cRegistrationDialog_s0061_fbd0::SetControlsEnabled migrated from s0061fbd0 (verbatim, slice spelling)
+006201a0 ?SetButtonsEnabled@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAEX_N@Z  # cRegistrationDialog_s0061_fbd0::SetButtonsEnabled migrated from s0061fbd0 (verbatim, slice spelling)
+00620230 ??1intrusive_list_base_s0061_fbd0@eastl@@QAE@XZ  # intrusive_list_base_s0061_fbd0::~intrusive_list_base migrated from s0061fbd0 (verbatim, slice spelling)
+00620270 ?Init@cCancelConfirmationDialog@Pollen@SP@@QAE_NXZ  # cCancelConfirmationDialog::Init migrated from s0061fbd0 (verbatim, slice spelling)
+00620380 ?End@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAEXXZ  # cRegistrationDialog_s0061_fbd0::End migrated from s0061fbd0 (verbatim, slice spelling)
+00620470 ?HandleMessage@cRegistrationDialog_s0061_fbd0@Pollen@SP@@UAE_NIPAX@Z  # cRegistrationDialog_s0061_fbd0::HandleMessage migrated from s0061fbd0 (verbatim, slice spelling)
+006204b0 ??0cCancelConfirmationDialog@Pollen@SP@@QAE@XZ  # cCancelConfirmationDialog::cCancelConfirmationDialog migrated from s0061fbd0 (verbatim, slice spelling)
+006204e0 ?HandleUIMessage@cCancelConfirmationDialog@Pollen@SP@@UAE_NPAVIWindow_s0061_fbd0@UTFWin@EA@@ABUMessage_s0061_fbd0@56@@Z  # cCancelConfirmationDialog::HandleUIMessage migrated from s0061fbd0 (verbatim, slice spelling)
+006205f0 ?ConfirmLogin@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAEXXZ  # cRegistrationDialog_s0061_fbd0::ConfirmLogin migrated from s0061fbd0 (verbatim, slice spelling)
+00620690 ?FindFirstTaggedElement@cXHTMLRegistrationHandler@Pollen@SP@@QAEPAUDomElement@23@PAU423@@Z  # cXHTMLRegistrationHandler::FindFirstTaggedElement migrated from s0061fbd0 (verbatim, slice spelling)
+006206f0 ??0cXHTMLRegistrationHandler@Pollen@SP@@QAE@PAX00@Z  # cXHTMLRegistrationHandler::cXHTMLRegistrationHandler migrated from s0061fbd0 (verbatim, slice spelling)
+00620740 ??0cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAE@XZ  # cRegistrationDialog_s0061_fbd0::cRegistrationDialog migrated from s0061fbd0 (verbatim, slice spelling)
+006207f0 ??1cRegistrationDialog_s0061_fbd0@Pollen@SP@@UAE@XZ  # cRegistrationDialog_s0061_fbd0::~cRegistrationDialog migrated from s0061fbd0 (verbatim, slice spelling)
+006208c0 ?Show2@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAE_N_N@Z  # cRegistrationDialog_s0061_fbd0::Show2 migrated from s0061fbd0 (verbatim, slice spelling)
+00620b30 ?FormParamCallback@cRegistrationDialog_s0061_fbd0@Pollen@SP@@SAXPB_W0PAV123@@Z  # cRegistrationDialog_s0061_fbd0::FormParamCallback migrated from s0061fbd0 (verbatim, slice spelling)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s0061fbd0, named from the dev publics; slice address comment)
+009979f0 ?Attach@cXHTMLFrameSet@UTFWinExtras@EA@@QAE_NPAVIWindow@UTFWin@3@I@Z  # EA::UTFWinExtras::cXHTMLFrameSet::Attach (callee of s0061fbd0, named from the dev publics; slice address comment)

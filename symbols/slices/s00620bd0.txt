@@ -1,7 +1,7 @@
 00620bd0 SP::Pollen::cRegistrationDialog::SubmitRegistrationForm  # PDB caller-single
-00620dc0 SP::Pollen::cRegistrationDialog::OnModalEnd  # this = dialog+8 (IModalWindowCallback subobject); PDB candidate
+00620dc0 ?OnModalEnd@DialogSub@@QAEXPAXH@Z  # DialogSub::OnModalEnd migrated from s00620bd0 (verbatim, slice spelling)
 00620e50 SP::Pollen::cRegistrationDialog  # dialog UI-notify helper (this = dialog)
-00620ef0 SP::Pollen::cTOSDialog::DoMessage  # PDB caller-scored
+00620ef0 ?TOSDialog_DoMessage@@YAHHPAXPAH@Z  # TOSDialog_DoMessage migrated from s00620bd0 (verbatim, slice spelling)
 00621460 SP::Pollen::MapLookup  # id -> URL map lookup, optional string out
 006214c0 SP::Pollen::GetURL  # formats URL into a string16 out
 00621540 SP::Pollen::SanitizeURL  # URL normalizer

@@ -1,0 +1,15 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPUIRegistration.cpp  ?AutoSizeButtons@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAEXXZ  006200c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIRegistration.cpp  ?SetControlsEnabled@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAEX_N@Z  00620110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIRegistration.cpp  ?SetButtonsEnabled@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAEX_N@Z  006201a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIRegistration.cpp  ??1intrusive_list_base_s0061_fbd0@eastl@@QAE@XZ  00620230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIRegistration.cpp  ?End@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAEXXZ  00620380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIRegistration.cpp  ?HandleMessage@cRegistrationDialog_s0061_fbd0@Pollen@SP@@UAE_NIPAX@Z  00620470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIRegistration.cpp  ??0cCancelConfirmationDialog@Pollen@SP@@QAE@XZ  006204b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIRegistration.cpp  ?HandleUIMessage@cCancelConfirmationDialog@Pollen@SP@@UAE_NPAVIWindow_s0061_fbd0@UTFWin@EA@@ABUMessage_s0061_fbd0@56@@Z  006204e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIRegistration.cpp  ?ConfirmLogin@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAEXXZ  006205f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIRegistration.cpp  ??0cXHTMLRegistrationHandler@Pollen@SP@@QAE@PAX00@Z  006206f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIRegistration.cpp  ??0cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAE@XZ  00620740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIRegistration.cpp  ??1cRegistrationDialog_s0061_fbd0@Pollen@SP@@UAE@XZ  006207f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIRegistration.cpp  ?Show2@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAE_N_N@Z  006208c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIRegistration.cpp  ?FormParamCallback@cRegistrationDialog_s0061_fbd0@Pollen@SP@@SAXPB_W0PAV123@@Z  00620b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
