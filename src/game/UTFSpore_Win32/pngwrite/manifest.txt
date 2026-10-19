@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/pngwrite.cpp  ?PNGREAD_malloc@@YAPAXPAUpng_struct_def@@I@Z  0084e790  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

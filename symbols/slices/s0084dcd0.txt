@@ -7,7 +7,7 @@
 0084e3c0 ?PNG_read_rgba@@YGHPAUPngHandle@@PAUGimexInfo@@PAEH@Z  # PNG_read_rgba migrated from s0084dcd0 (verbatim, slice spelling)
 0084e4e0 ?PNG_rclose@@YGHH@Z  # PNG_rclose migrated from s0084dcd0 (verbatim, slice spelling)
 0084e520 PNGREAD_write_data # png write callback -> gwrite, png_error on short write; byte-exact
-0084e560 PNG_write_gimex    # pack GIMEX pixels into rows and png_write_image; equiv UNSUPPORTED(setjmp3)
-0084e790 PNGREAD_malloc     # png malloc_fn wrapper -> galloc; byte-exact
-0084e7a0 PNG_wopen          # open a PNG write handle; equiv PASS (byte-diff = regalloc only)
-0084e7e0 PNG_write          # write a GIMEX image as PNG (build info/text/pHYs, PNG_write_gimex); equiv WEAK
+0084e560 ?PNG_write_gimex@@YAHPAUGimexInfo@@PAUpng_info_def@@PAUpng_struct_def@@PAEH@Z  # PNG_write_gimex migrated from s0084dcd0 (verbatim, slice spelling)
+0084e790 ?PNGREAD_malloc@@YAPAXPAUpng_struct_def@@I@Z  # PNGREAD_malloc migrated from s0084dcd0 (verbatim, slice spelling)
+0084e7a0 ?PNG_wopen@@YGHPAPAHHHH@Z  # PNG_wopen migrated from s0084dcd0 (verbatim, slice spelling)
+0084e7e0 ?PNG_write@@YGHPAUPngHandle@@PAUGimexInfo@@PAEH@Z  # PNG_write migrated from s0084dcd0 (verbatim, slice spelling)
