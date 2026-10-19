@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00987bf0 251 StdDrawable::draw_with_image (3 stack args, ret 0xc): edge-block and scaling-type call schedule differs
+00987d40 679 StdDrawable::CreateRenderables: complete; ebp frame and loop scheduling differ; difftest PASS after fixing Begin2D (thiscall on ctx, was cdecl), the falloff distance (u-cu, v-cv; was u-b, v-a), the floor(u) hoist (once per outer pass, only when the inner loop runs) and the alpha conversion ((unsigned), fistp rounding; was (int) truncation)
+009880e0 446 StdDrawable::HitTest: scaling switch and modulo/div schedule differs

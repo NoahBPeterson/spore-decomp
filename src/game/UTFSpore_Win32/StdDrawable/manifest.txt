@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/StdDrawable.cpp  ?SetImageAt@StdDrawable@@QAEXIPAX@Z  00987970  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/StdDrawable.cpp  ?GetImageAt@StdDrawable@@QAEPAXI@Z  009879b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/StdDrawable.cpp  ?GetImageForState@StdDrawable@@QAEPAXI@Z  009879f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/StdDrawable.cpp  ??1StdDrawable@@QAE@XZ  00987b10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/StdDrawable.cpp  ?QueryAttribute@StdDrawable@@QAE_NHPAI@Z  009883c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/StdDrawable.cpp  ?GetNaturalSize@StdDrawable@@QAE_NPAMHH@Z  009883f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/StdDrawable.cpp  ??0StdDrawable@@QAE@XZ  00988420  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/StdDrawable.cpp  ?init_154fbe4@@YAXXZ  01300c50  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include

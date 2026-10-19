@@ -3,10 +3,13 @@
 00987530 EA::UTFWinControls::BasicFactory_SpinnerDrawable::CreateInstance  # 2008 dev-PDB name
 00987590 EA::UTFWinControls::WinSpinner::Refresh  # 2008 dev-PDB name
 00987900 UI::StdDrawable method  # vtable statics (SetSerializer/SetMode)
-009879f0 EA::UTFWinControls::StdDrawable::GetImageForState  # 2008 dev-PDB name
-00987b10 EA::UTFWinControls::StdDrawable::~StdDrawable  # 2008 dev-PDB name
-00987d40 EA::UTFWinControls::StdDrawable::CreateRenderables  # 2008 dev-PDB name
-009880e0 EA::UTFWinControls::StdDrawable::HitTest  # 2008 dev-PDB name
-009883c0 EA::UTFWinControls::StdDrawable::QueryAttribute  # 2008 dev-PDB name
-009883f0 EA::UTFWinControls::StdDrawable::GetNaturalSize  # 2008 dev-PDB name
-00988420 UI::StdDrawable::StdDrawable  # 2008 dev-PDB name
+00987970 ?SetImageAt@StdDrawable@@QAEXIPAX@Z  # StdDrawable::SetImageAt migrated from s009873a0 (verbatim, slice spelling)
+009879b0 ?GetImageAt@StdDrawable@@QAEPAXI@Z  # StdDrawable::GetImageAt migrated from s009873a0 (verbatim, slice spelling)
+009879f0 ?GetImageForState@StdDrawable@@QAEPAXI@Z  # StdDrawable::GetImageForState migrated from s009873a0 (verbatim, slice spelling)
+00987b10 ??1StdDrawable@@QAE@XZ  # StdDrawable::~StdDrawable migrated from s009873a0 (verbatim, slice spelling)
+00987bf0 ?draw_with_image@StdDrawable@@QAEXPAHPAX1@Z  # StdDrawable::draw_with_image migrated from s009873a0 (verbatim, slice spelling)
+00987d40 ?CreateRenderables@StdDrawable@@QAEXPAXPAMPAI@Z  # StdDrawable::CreateRenderables migrated from s009873a0 (verbatim, slice spelling)
+009880e0 ?HitTest@StdDrawable@@QAE_NPAMPAHH@Z  # StdDrawable::HitTest migrated from s009873a0 (verbatim, slice spelling)
+009883c0 ?QueryAttribute@StdDrawable@@QAE_NHPAI@Z  # StdDrawable::QueryAttribute migrated from s009873a0 (verbatim, slice spelling)
+009883f0 ?GetNaturalSize@StdDrawable@@QAE_NPAMHH@Z  # StdDrawable::GetNaturalSize migrated from s009873a0 (verbatim, slice spelling)
+00988420 ??0StdDrawable@@QAE@XZ  # StdDrawable::StdDrawable migrated from s009873a0 (verbatim, slice spelling)
