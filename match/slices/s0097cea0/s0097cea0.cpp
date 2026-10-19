@@ -4,7 +4,7 @@
 //   CustomWinProc::Release, ImageCursorProvider::*, eastl hashtable helpers, CursorListMarshaller::Read.
 #include "types.h"
 
-extern "C" void* ea_new(unsigned, const char*, int, int, const char*, int);
+extern "C" void* ea_new(unsigned, const char*, int, int, const char*, int); // 0x00f473a0
 extern "C" void  ea_delete(void*);
 extern "C" void  FUN_00951330(void*);              // MultiHeapObject::operator_delete
 extern "C" void* UTFWin_GetManager();
@@ -116,10 +116,9 @@ bool NaturalSizeHolder::GetNaturalSize(int* outW, int* outH, int unused) {
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x0097D1A0 / 0x0097D270 / 0x0097D8D0  ImageDrawable helpers (approximated)
+// @ 0x0097D1A0  ImageDrawable helper (approximated)
 // ---------------------------------------------------------------------------------------------
 int  ImageDrawable_GetWidth(void* self) { return self ? *(int*)((char*)self + 0x14) : 0; }
-void ImageDrawable_Destroy(void* self) { (void)self; }
 
 
 // ---------------------------------------------------------------------------------------------
@@ -143,9 +142,12 @@ struct cDropShadowDescriptor {          // 0x28 bytes
     unsigned int mSize, mStrength, mQuality;
     float mOffsetX, mOffsetY, mSizeX, mSizeY, mSmoothness, mSaturation;
     unsigned int mColor;
-    cDropShadowDescriptor()
-        : mSize(0), mStrength(2), mQuality(3), mOffsetX(0.0f), mOffsetY(0.0f), mSizeX(0.0f), mSizeY(0.0f), mColor(0)
-    { SetMode(2); }
+    cDropShadowDescriptor() {
+        mSize = 0; mStrength = 2; mQuality = 3;
+        mSizeX = 0.0f; mSizeY = 0.0f; mOffsetX = 0.0f; mOffsetY = 0.0f;
+        mColor = 0;
+        SetMode(2);
+    }
     void SetMode(int mode);             // 0x830150, thiscall ret 4 (sets +4, +0x1c, +0x20)
     static void CopyWithQualityAdjustment(cDropShadowDescriptor* dst, const cDropShadowDescriptor* src, int q); // 0x96e3a0 cdecl
 };
@@ -243,55 +245,469 @@ void Cr::ImageDrawable::CreateRenderables(Cr::RenderContext* ctx, const float* r
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x0097CEA0  EA::UTFWinControls::WinGrid::SetCellWindow  (465 bytes)
+// @ 0x0097D8D0  EA::UTFWinControls::ImageDrawable::ImageDrawable  (constructor, returns this)
 // ---------------------------------------------------------------------------------------------
-extern "C" bool WinGrid_AssignCell(void* self, int row, int col);
-bool WinGrid_SetCellWindow(void* self, int row, int col, int window, int flags) {
-    (void)flags;
-    if (!WinGrid_AssignCell(self, row, col)) {
+extern char g_vtblResourceAsync;       // 0x013fa72c
+extern char g_vtblAddRef;              // 0x01443050
+extern char g_vtblImageDrawableC;      // 0x014430f8
+extern char g_vtblImageDrawableC4;     // 0x014430e0
+extern char g_vtblImageDrawableC12;    // 0x01443098
+
+namespace Cr {
+struct P0  { virtual void p0(); };
+struct P4  { virtual void p4(); int mRefCount; P4() : mRefCount(0) {} };   // +4, +8
+struct P12 { virtual void p12(); };                                         // +0xc
+struct CustomDrawableX : P0, P4, P12 {
+    float mfScale;                     // +0x10
+    CustomDrawableX() : mfScale(1.0f) {}
+};
+struct ImageDrawableCtor : CustomDrawableX {
+    unsigned int mnFlags;              // +0x14
+    unsigned int mnTiling;             // +0x18
+    unsigned int mnAlignmentH;         // +0x1c
+    unsigned int mnAlignmentV;         // +0x20
+    void*        mpImage;              // +0x24
+    cDropShadowDescriptor mDropShadow; // +0x28
+    ImageDrawableCtor();
+};
+ImageDrawableCtor::ImageDrawableCtor()
+    : mnFlags(0), mnTiling(0), mnAlignmentH(3), mnAlignmentV(3), mpImage(0) {}
+}
+
+// ---------------------------------------------------------------------------------------------
+// @ 0x0097CEA0  EA::UTFWinControls::WinGrid::SetCellWindow  (465 bytes)
+//   `this` is the IWinGrid subobject at WinGrid+0x20c; ret 0x18
+// ---------------------------------------------------------------------------------------------
+namespace Gr {
+
+#define GVT(o, i) ((*(void***)(o))[i])
+
+struct CellData {                        // 0x1c bytes, allocated "UTFWin/Grid"
+    int mType;                           // +0
+    int mCol, mRow;                      // +4, +8
+    void* mpWindow;                      // +0xc
+    int pad10, pad14;
+    unsigned mFlags;                     // +0x18
+};
+
+struct SparseMatrix {                    // SparseMatrix<CellData*> at IWinGrid+0x114
+    int  GetMaxUsedColAndRow(int* pOut);                              // 0x973980, ret 4
+    bool GetMinMaxUsedColForRow(int row, int* pMin, int* pMax);      // 0x975350, ret 0xc
+    bool GetMinMaxUsedRowForCol(int col, int* pMin, int* pMax);      // 0x973800, ret 0xc
+    void InsertCell(int col, int row, CellData** ppCell, int flag);  // 0x976f90, ret 0x10
+};
+
+struct WinGridMain {                     // the full WinGrid object (IWinGrid subobject - 0x20c)
+    void SetupCell(int col, int row, int one, int flag);             // 0x97bfb0, ret 0x10
+    void InitCellWindow(int col, int row, void* w, bool b1, bool b2); // 0x975ea0, ret 0x14
+};
+
+struct WinGridIface {                    // IWinGrid subobject
+    void* vtbl;                          // +0
+    char  pad4[4];
+    bool  mbDirty;                       // +8
+    char  pad9[0x7c - 9];
+    int   mLastCol;                      // +0x7c
+    int   mLastRow;                      // +0x80
+    char  pad84[0x114 - 0x84];
+    SparseMatrix mCells;                 // +0x114
+    bool SetCellWindow(int col, int row, void* w, bool b1, bool b2, int flag);
+};
+
+bool WinGridIface::SetCellWindow(int colIn, int rowIn, void* w, bool b1, bool b2, int flag) {
+    if (flag == 0) flag = 1;
+    if (((bool(__thiscall*)(void*, void*, int, int, int))GVT(this, 0x1b8 / 4))(this, w, 0, 0, 0))
+        return false;
+    int col = colIn, row = rowIn;
+    {
+    int mn, mx;
+    if (col == 0x7fffffff) {
+        bool skipToRow = false;
+        if (row == 0x7fffffff) {
+            col = mCells.GetMaxUsedColAndRow(&mx);
+            if (col == (int)0x80000000) { col = 0; skipToRow = true; }
+            else if (col != 0x7fffffff) skipToRow = true;
+        }
+        if (!skipToRow) {
+            if (!mCells.GetMinMaxUsedColForRow(row, &mn, &mx)) col = 0;
+            else col = mx + 1;
+        }
+    }
+    if (row == 0x7fffffff) {
+        if (!mCells.GetMinMaxUsedRowForCol(col, &mn, &mx)) row = 0;
+        else row = mx + 1;
+    }
+    }
+    if (!((bool(__thiscall*)(void*, int, int))GVT(this, 0xd4 / 4))(this, col, row)) {
+        ((void(__thiscall*)(void*, int, int))GVT(this, 0x164 / 4))(this, col, row);
         return false;
     }
-    return true;   // control flow approximated (SparseMatrix cell insert)
+    if (w == 0) {
+        ((void(__thiscall*)(void*, int, int))GVT(this, 0x164 / 4))(this, col, row);
+        mLastRow = row;
+        mLastCol = col;
+        return true;
+    }
+    CellData* cell = 0;
+    CellData* n = (CellData*)ea_new(0x1c, "UTFWin/Grid", 0, 0, 0, 0);
+    if (n) {
+        n->pad10 = 0;
+        n->pad14 = 0;
+        n->mFlags = 0;
+        n->mType = 1;
+        n->mCol = col;
+        n->mRow = row;
+        n->mpWindow = w;
+        cell = n;
+        if (b1) n->mFlags |= 1;
+        if (b2) n->mFlags |= 2;
+        WinGridMain* wg = (WinGridMain*)((char*)this - 0x20c);
+        wg->SetupCell(col, row, 1, flag);
+        mCells.InsertCell(col, row, &cell, 0);
+        wg->InitCellWindow(col, row, w, b1, b2);
+    }
+    mbDirty = true;
+    void* sub = (char*)this - 0x208;
+    ((void(__thiscall*)(void*, int, int))GVT(sub, 0x7c / 4))(sub, 8, 1);
+    mLastRow = row;
+    mLastCol = col;
+    return true;
 }
 
+}  // namespace Gr
+
 // ---------------------------------------------------------------------------------------------
-// @ 0x0097DAD0  ImageCursorProvider::CursorWindow::CursorWindow  (ctor)
+// ImageCursorProvider tail: CursorWindow, eastl::fixed_hash_map<unsigned, ImageCursor> helpers
+// ---------------------------------------------------------------------------------------------
+#include <new>
+namespace Cur {
+
+#define VT(o, i) ((*(void***)(o))[i])
+#define VCALL0(R, o, i)    (((R(__thiscall*)(void*))VT(o, i))(o))
+#define VCALL1(R, o, i, A, a) (((R(__thiscall*)(void*, A))VT(o, i))(o, a))
+
+struct IRef {                            // AutoRefCount target: slot 0 AddRef, slot 1 Release
+    virtual int AddRef() throw();
+    virtual int Release() throw();
+};
+
+struct ImgRef {                          // EA::AutoRefCount<Image>
+    IRef* p;
+    ImgRef() throw() : p(0) {}
+    ImgRef(const ImgRef& o) throw() : p(o.p) { if (p) p->AddRef(); }
+    ~ImgRef() throw() { if (p) p->Release(); }
+    ImgRef& operator=(IRef* q) {
+        IRef* old = p;
+        if (q != old) {
+            if (q) q->AddRef();
+            p = q;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+};
+
+struct PlaceTag {};
+
+struct ImageCursor {                     // 0xc bytes
+    int mX, mY;                          // mPickPoint, deliberately left uninitialised
+    ImgRef mpImage;                      // +8
+    ImageCursor() throw() {}
+    ImageCursor(const ImageCursor& o) throw() : mX(o.mX), mY(o.mY), mpImage(o.mpImage) {}
+};
+
+struct CursorPair {                      // eastl::pair<unsigned const, ImageCursor>, 0x10 bytes
+    unsigned first;
+    ImageCursor second;
+    CursorPair(unsigned k, const ImageCursor& v) throw() : first(k), second(v) {}
+    CursorPair(const CursorPair& o) throw() : first(o.first), second(o.second) {}
+    static void* operator new(unsigned, void* p, PlaceTag) throw() { return p; }
+    static void operator delete(void*, void*, PlaceTag) throw() {}
+};
+
+
+struct HNode {                           // eastl hash_node, 0x14 bytes
+    CursorPair mValue;                   // +0
+    HNode* mpNext;                       // +0x10
+};
+
+struct HIter { HNode* mpNode; HNode** mpBucket; };
+
+struct TrueTag { char pad; TrueTag() : pad(0) {} };
+
+void*  ea_alloc(unsigned, const char*, int, int, const char*, int);   // 0x00f473a0
+void   ea_free(void*);                                                // 0x00f47380
+
+struct Table {                           // eastl::hashtable<unsigned, pair<..>, fixed_hashtable_allocator<65,20,64,4,0,1>, ...>
+    int       pad0;                      // +0
+    HNode**   mpBucketArray;             // +4
+    unsigned  mnBucketCount;             // +8
+    unsigned  mnElementCount;            // +0xc
+    int       policy[3];                 // +0x10 prime_rehash_policy
+    HNode*    mpFreeList;                // +0x1c
+    int       pad20;
+    void*     mpPoolBegin;               // +0x24
+    void*     mpPoolEnd;                 // +0x28
+    unsigned  mnNodeSize;                // +0x2c
+    void*     mpInlineBuckets;           // +0x30
+    HNode* End() const { return mpBucketArray[mnBucketCount]; }
+    HNode*  AllocNodeCopy(const CursorPair* src);                  // 0x97dd80
+    HNode** AllocBuckets(unsigned n);                              // 0xa21e40, ret 4
+    HIter*  Find(HIter* out, const unsigned* key) throw();        // 0xdb4780
+    void    DoFreeNodes(HNode** buckets, unsigned n);              // 0x97e030
+    void    DoRehash(unsigned n);                                  // 0x97dc30
+    HIter*  DoInsertValue(HIter* out, const CursorPair* v, TrueTag t) throw(); // 0x97df70
+    ImageCursor* Index(const unsigned* key);                       // 0x97e0b0
+};
+
+struct Sub4 {                            // second interface at CursorWindow+4
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual int  Slot5();
+    virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10();
+    virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20();
+    virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25();
+    virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29(); virtual void v30();
+    virtual void v31(); virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+    virtual void Slot36();
+    virtual void v37();
+    virtual void Slot38();
+};
+
+struct Target2D {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
+    virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void DrawImage(float x, float y, IRef* img);          // slot 24
+};
+
+struct RenderContext {
+    Target2D* Begin2D(int);              // 0x95bc10, thiscall ret 4
+    void End2D();                        // 0x95bb20, thiscall
+};
+
+struct Vec3Sink { void Apply(const float* v3); };                 // 0x95e890, thiscall ret 4
+
+struct CursorWindow {
+    Sub4 mIface;                         // +0 (vptr slot of the primary base is the first word; see pad)
+};
+
+struct Pt { int x, y; };
+
+struct PrimaryBase { virtual void p0(); };
+
+struct CursorWindowObj : PrimaryBase, Sub4 {   // Sub4 is the interface at +4
+    char    pad[0x204];                  // +8 .. +0x20c
+    ImageCursor* mpCursor;               // +0x20c
+    Pt      mMouse;                      // +0x210, +0x214
+    bool    OnRebuild(RenderContext* ctx);                // 0x97db30, ret 4
+    void    PushMouse(Vec3Sink* sink);                    // 0x97db90, ret 4
+};
+
+struct Mgr1 {};
+
+struct Provider {
+    void*   vt0;                         // +0
+    void*   vt1;                         // +4
+    int     mRefCount;                   // +8
+    Table   mCursorMap;                  // +0xc
+    char    pad[0x75c - 0xc - sizeof(Table)];
+    CursorWindowObj* mpCursorWindow;     // +0x75c
+    void    UpdateMousePosition(const int* pt);           // 0x97dc00, ret 4
+    bool    HasCursor(unsigned key);                      // 0x97ddf0, ret 4
+    bool    SetCursor(unsigned key);                      // 0x97de20, ret 4
+};
+
+struct Manager {
+    void* vt;
+};
+Manager* GetManager();                   // 0x957f30
+
+struct ReadEntry { unsigned key; int x, y; IRef* img; };
+struct ReadList  { int pad0; ReadEntry* mpBegin; unsigned mnCount; };
+struct ReadOwner { int pad0; Provider* mpProvider; };
+bool CursorListMarshaller_Read(ReadOwner* self, ReadList* list);   // 0x97e140, cdecl
+
 // @ 0x0097DB30  ImageCursorProvider::CursorWindow::OnRebuild
-// @ 0x0097DB90  (provider helper)
+bool CursorWindowObj::OnRebuild(RenderContext* ctx) {
+    if (mpCursor) {
+        Target2D* t = ctx->Begin2D(0);
+        ImageCursor* c = mpCursor;
+        t->DrawImage((float)-c->mX, (float)-c->mY, c->mpImage.p);
+        ctx->End2D();
+    }
+    return true;
+}
+
+// @ 0x0097DB90  ImageCursorProvider helper (CursorWindow::PushMouse)
+void CursorWindowObj::PushMouse(Vec3Sink* sink) {
+    float v[3];
+    v[0] = (float)mMouse.x;
+    v[1] = (float)mMouse.y;
+    v[2] = 0.0f;
+    sink->Apply(v);
+}
+
 // @ 0x0097DC00  ImageCursorProvider::UpdateMousePosition
-// @ 0x0097DC30  hashtable<...>::DoRehash
-// @ 0x0097DD80  (hashtable helper)
+void Provider::UpdateMousePosition(const int* pt) {
+    CursorWindowObj* w = mpCursorWindow;
+    w->mMouse.x = pt[0];
+    w->mMouse.y = pt[1];
+    static_cast<Sub4*>(w)->Slot38();
+}
+
+// @ 0x0097DD80  eastl hashtable node alloc+copy
+HNode* Table::AllocNodeCopy(const CursorPair* src) {
+    HNode* n = mpFreeList;
+    if (n) {
+        mpFreeList = *(HNode**)n;
+    } else {
+        n = (HNode*)ea_alloc(mnNodeSize, "EASTL", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+    }
+    new ((void*)n, PlaceTag()) CursorPair(*src);
+    n->mpNext = 0;
+    return n;
+}
+
 // @ 0x0097DDF0  ImageCursorProvider::HasCursor
+bool Provider::HasCursor(unsigned key) {
+    Table* t = &mCursorMap;
+    HNode* end = t->End();
+    HIter it;
+    return t->Find(&it, &key)->mpNode != end;
+}
+
 // @ 0x0097DE20  ImageCursorProvider::SetCursor
-// @ 0x0097E030  hashtable<...>::DoFreeNodes
-// @ 0x0097E0B0  hash_map<...>::operator[]
+bool Provider::SetCursor(unsigned key) {
+    bool ok = false;
+    Manager* mgr = GetManager();
+    if (!mgr) return ok;
+    void* obj = VCALL0(void*, mgr, 1);
+    if (!obj) return false;
+    ImageCursor* cur = 0;
+    ok = true;
+    if (key) {
+        HIter it;
+        Table* t = &mCursorMap;
+        t->Find(&it, &key);
+        if (it.mpNode == t->End()) ok = false;
+        else cur = &it.mpNode->mValue.second;
+    }
+    CursorWindowObj* w = mpCursorWindow;
+    w->mpCursor = cur;
+    w->Slot36();
+    w = mpCursorWindow;
+    if (cur) {
+        if (!w->Slot5()) {
+            w = mpCursorWindow;
+            VCALL1(void, obj, 54, void*, w ? static_cast<Sub4*>(w) : 0);
+            w = mpCursorWindow;
+            VCALL1(void, obj, 58, void*, w ? static_cast<Sub4*>(w) : 0);
+        }
+    } else {
+        if (w->Slot5()) {
+            w = mpCursorWindow;
+            VCALL1(void, obj, 55, void*, w ? static_cast<Sub4*>(w) : 0);
+        }
+    }
+    return ok;
+}
+
+// @ 0x0097DC30  eastl hashtable::DoRehash
+void Table::DoRehash(unsigned n) {
+    HNode** nb = AllocBuckets(n);
+    for (unsigned i = 0; i < mnBucketCount; ++i) {
+        while (HNode* node = mpBucketArray[i]) {
+            unsigned idx = node->mValue.first % n;
+            mpBucketArray[i] = node->mpNext;
+            node->mpNext = nb[idx];
+            nb[idx] = node;
+        }
+    }
+    HNode** old = mpBucketArray;
+    if (mnBucketCount > 1 && (void*)old != mpInlineBuckets) {
+        if ((void*)old >= mpPoolBegin && (void*)old < mpPoolEnd) {
+            HNode* fl = mpFreeList;
+            mpFreeList = (HNode*)old;
+            *(HNode**)old = fl;
+        } else {
+            ea_free(old);
+        }
+    }
+    mnBucketCount = n;
+    mpBucketArray = nb;
+}
+
+// @ 0x0097E030  eastl hashtable::DoFreeNodes
+void Table::DoFreeNodes(HNode** buckets, unsigned n) {
+    for (unsigned i = 0; i < n; ++i) {
+        HNode* node = buckets[i];
+        while (node) {
+            HNode* cur = node;
+            node = node->mpNext;
+            if (cur->mValue.second.mpImage.p) cur->mValue.second.mpImage.p->Release();
+            if (cur != (HNode*)mpInlineBuckets) {
+                if ((void*)cur >= mpPoolBegin && (void*)cur < mpPoolEnd) {
+                    *(HNode**)cur = mpFreeList;
+                    mpFreeList = cur;
+                } else {
+                    ea_free(cur);
+                }
+            }
+        }
+        buckets[i] = 0;
+    }
+}
+
+// @ 0x0097E0B0  eastl hash_map::operator[]
+ImageCursor* Table::Index(const unsigned* key) {
+    HIter it;
+    Find(&it, key);
+    if (it.mpNode != mpBucketArray[mnBucketCount])
+        return &it.mpNode->mValue.second;
+    ImageCursor def;
+    CursorPair v(*key, def);
+    TrueTag tag;
+    DoInsertValue(&it, &v, tag);
+    return &it.mpNode->mValue.second;
+}
+
 // @ 0x0097E140  CursorListMarshaller::Read
+bool CursorListMarshaller_Read(ReadOwner* self, ReadList* list) {
+    Provider* prov = self->mpProvider;
+    ReadEntry* e = list->mpBegin;
+    unsigned n = list->mnCount;
+    Table* t = &prov->mCursorMap;
+    t->DoFreeNodes(t->mpBucketArray, t->mnBucketCount);
+    t->mnElementCount = 0;
+    if (n) {
+        do {
+            IRef* img = e->img;
+            if (img) {
+                unsigned key = e->key;
+                ImageCursor* c = t->Index(&key);
+                IRef* old = c->mpImage.p;
+                if (img != old) {
+                    if (img) img->AddRef();
+                    c->mpImage.p = img;
+                    if (old) old->Release();
+                }
+                c->mX = e->x;
+                c->mY = e->y;
+                e->img->Release();
+            }
+            ++e;
+        } while (--n);
+    }
+    return true;
+}
+
+}  // namespace Cur
+
+// ---------------------------------------------------------------------------------------------
+// @ 0x0097DAD0  ImageCursorProvider::CursorWindow::CursorWindow  (ctor; still a stub, not in this pass)
 // ---------------------------------------------------------------------------------------------
 void CursorWindow_ctor(void* self) { (void)self; }
-void CursorWindow_OnRebuild(void* self) { (void)self; }
-void CursorProvider_helper_db90(void* self) { (void)self; }
-void ImageCursorProvider_UpdateMousePosition(void* self) { (void)self; }
-void Hashtable_DoRehashStub(void* self) { Hashtable_DoRehash(); }
-void Hashtable_helper_dd80(void* self) { (void)self; }
-
-bool ImageCursorProvider_HasCursor(void* self) {
-    (void)self;
-    return false;   // eastl hashtable<unsigned,...>::find -> approximated
-}
-
-bool ImageCursorProvider_SetCursor(void* self, int cursor) {
-    (void)self; (void)cursor;
-    return false;   // 325-byte manager interaction approximated
-}
-
-void Hashtable_DoFreeNodesStub(void* self) { Hashtable_DoFreeNodes(); }
-
-void* Hashmap_operator_index(void* self, unsigned key) {
-    (void)self; (void)key;
-    return 0;   // find + insert + rehash approximation
-}
-
-bool CursorListMarshaller_Read(void* self, void* r) {
-    (void)self; (void)r;
-    return false;   // stream read approximation
-}

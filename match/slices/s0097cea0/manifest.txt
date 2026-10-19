@@ -1,3 +1,10 @@
 slices/s0097cea0/s0097cea0.cpp  ?DestroyScalar@ImageDrawable@@QAEPAU1@E@Z  0097d950
 slices/s0097cea0/s0097cea0.cpp  ?Release@CustomWinProc2@@QAEHXZ  0097da40
 slices/s0097cea0/s0097cea0.cpp  ?AsInterface@ImageCursorProvider@@QAEPAXI@Z  0097da60
+slices/s0097cea0/s0097cea0.cpp  ??0ImageDrawableCtor@Cr@@QAE@XZ  0097d8d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0097cea0/s0097cea0.cpp  ?OnRebuild@CursorWindowObj@Cur@@QAE_NPAURenderContext@2@@Z  0097db30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0097cea0/s0097cea0.cpp  ?PushMouse@CursorWindowObj@Cur@@QAEXPAUVec3Sink@2@@Z  0097db90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0097cea0/s0097cea0.cpp  ?UpdateMousePosition@Provider@Cur@@QAEXPBH@Z  0097dc00
+slices/s0097cea0/s0097cea0.cpp  ?HasCursor@Provider@Cur@@QAE_NI@Z  0097ddf0
+slices/s0097cea0/s0097cea0.cpp  ?DoFreeNodes@Table@Cur@@QAEXPAPAUHNode@2@I@Z  0097e030
+slices/s0097cea0/s0097cea0.cpp  ?Index@Table@Cur@@QAEPAUImageCursor@2@PBI@Z  0097e0b0

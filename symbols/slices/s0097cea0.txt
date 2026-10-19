@@ -1,16 +1,21 @@
-0097cea0 EA::UTFWinControls::WinGrid::SetCellWindow  # pdb_candidates caller-single
+0097cea0 ?SetCellWindow@WinGridIface@Gr@@QAE_NHHPAX_N1H@Z  # EA::UTFWinControls::WinGrid::SetCellWindow (slice spelling, decompiled in mig16d)
 0097d080 EA::UTFWinControls::WinGrid::Refresh  # pdb_names vtable-slot
 0097d100 ?SetIntrusive18@IntrusiveHolder@@QAEXPAX@Z  # IntrusiveHolder::SetIntrusive18 migrated from s0097cea0 (verbatim, slice spelling)
 0097d170 ?GetNaturalSize@NaturalSizeHolder@@QAE_NPAH0H@Z  # NaturalSizeHolder::GetNaturalSize migrated from s0097cea0 (verbatim, slice spelling)
 0097d1a0 ?ImageDrawable_GetWidth@@YAHPAX@Z  # ImageDrawable_GetWidth migrated from s0097cea0 (verbatim, slice spelling)
 0097d270 ?DrawTiling@@YAXPAUImageDrawable@Cr@@PAUTarget2D@2@PBM2@Z  # DrawTiling migrated from s0097cea0 (verbatim, slice spelling)
+0097d8d0 ??0ImageDrawableCtor@Cr@@QAE@XZ  # EA::UTFWinControls::ImageDrawable::ImageDrawable (ctor) (slice spelling, decompiled in mig16d)
 0097d950 ?DestroyScalar@ImageDrawable@@QAEPAU1@E@Z  # ImageDrawable::DestroyScalar migrated from s0097cea0 (verbatim, slice spelling)
 0097da40 ?Release@CustomWinProc2@@QAEHXZ  # CustomWinProc2::Release migrated from s0097cea0 (verbatim, slice spelling)
 0097da60 ?AsInterface@ImageCursorProvider@@QAEPAXI@Z  # ImageCursorProvider::AsInterface migrated from s0097cea0 (verbatim, slice spelling)
 0097dad0 ?CursorWindow_ctor@@YAXPAX@Z  # CursorWindow_ctor migrated from s0097cea0 (verbatim, slice spelling)
-0097db30 EA::UTFWinControls::ImageCursorProvider::CursorWindow::OnRebuild  # pdb_names gap-align
-0097dc00 EA::UTFWinControls::ImageCursorProvider::UpdateMousePosition  # pdb_names vtable-slot
-0097ddf0 EA::UTFWinControls::ImageCursorProvider::HasCursor  # pdb_names gap-align
-0097de20 EA::UTFWinControls::ImageCursorProvider::SetCursor  # pdb_names gap-align
-0097e0b0 eastl::hash_map<unsigned int,...>::operator[]  # pdb_names callee-single
-0097e140 EA::UTFWinControls::`anonymous namespace'::CursorListMarshaller::Read  # pdb_names gap-align
+0097db30 ?OnRebuild@CursorWindowObj@Cur@@QAE_NPAURenderContext@2@@Z  # EA::UTFWinControls::ImageCursorProvider::CursorWindow::OnRebuild (slice spelling, decompiled in mig16d)
+0097db90 ?PushMouse@CursorWindowObj@Cur@@QAEXPAUVec3Sink@2@@Z  # ImageCursorProvider::CursorWindow helper (mouse position to Vec3 sink) (slice spelling, decompiled in mig16d)
+0097dc00 ?UpdateMousePosition@Provider@Cur@@QAEXPBH@Z  # EA::UTFWinControls::ImageCursorProvider::UpdateMousePosition (slice spelling, decompiled in mig16d)
+0097dc30 ?DoRehash@Table@Cur@@QAEXI@Z  # eastl::hashtable<unsigned,pair<unsigned const,ImageCursor>,fixed_hashtable_allocator<65,20,64,4,0,1>,...>::DoRehash (slice spelling, decompiled in mig16d)
+0097dd80 ?AllocNodeCopy@Table@Cur@@QAEPAUHNode@2@PBUCursorPair@2@@Z  # eastl hashtable node allocate+copy (ImageCursor map) (slice spelling, decompiled in mig16d)
+0097ddf0 ?HasCursor@Provider@Cur@@QAE_NI@Z  # EA::UTFWinControls::ImageCursorProvider::HasCursor (slice spelling, decompiled in mig16d)
+0097de20 ?SetCursor@Provider@Cur@@QAE_NI@Z  # EA::UTFWinControls::ImageCursorProvider::SetCursor (slice spelling, decompiled in mig16d)
+0097e030 ?DoFreeNodes@Table@Cur@@QAEXPAPAUHNode@2@I@Z  # eastl::hashtable<...ImageCursor...>::DoFreeNodes (slice spelling, decompiled in mig16d)
+0097e0b0 ?Index@Table@Cur@@QAEPAUImageCursor@2@PBI@Z  # eastl::hash_map<unsigned,ImageCursor,...>::operator[] (slice spelling, decompiled in mig16d)
+0097e140 ?CursorListMarshaller_Read@Cur@@YA_NPAUReadOwner@1@PAUReadList@1@@Z  # EA::UTFWinControls::`anonymous namespace'::CursorListMarshaller::Read (slice spelling, decompiled in mig16d)
