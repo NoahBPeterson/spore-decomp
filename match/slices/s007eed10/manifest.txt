@@ -7,3 +7,4 @@ slices/s007eed10/s007eed10.cpp  ?SetKey@CTrack@@QAE_NHPAUKeyFrame@@H@Z  007ef450
 slices/s007eed10/s007eed10.cpp  ?Eval@CTrack@@QAEXHMH@Z  007ef480  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s007eed10/s007eed10.cpp  ?AdjustHeap@@YAXPAUHeapNode@@HHHU1@UEmptyCmp@@@Z  007ef4a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s007eed10/s007eed10.cpp  ?MakeHeap@@YAXPAUHeapNode@@0UEmptyCmp@@@Z  007ef5d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007eed10/s007eed10.cpp  ??_GcVolumeEffectCommand@@UAEPAXI@Z  007ef220  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

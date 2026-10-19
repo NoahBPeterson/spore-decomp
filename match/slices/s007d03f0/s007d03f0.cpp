@@ -396,11 +396,28 @@ cGameModelDescription::cGameModelDescription()
 }
 
 // ===========================================================================
-// 0x007d10d0  read vector (partial)
+// 0x007d10d0  read vector of {int32, uint8, uint8}
 // ===========================================================================
-void ReadVec(void* stream, int* vec)
+void* __cdecl ReadI32_93a780(void* stream, void* p, int n, int endian);   // 0x0093a780
+void* __cdecl ReadU8_93a6c0(void* stream, void* p, int n);                // 0x0093a6c0
+struct RdElem { int32_t a; uint8_t b; uint8_t c; uint8_t pad[2]; };
+struct RdVec {
+    RdElem* mpBegin;
+    void Resize(unsigned n);   // 0x007cf630 thiscall ret 4
+};
+// @ 0x007d10d0
+void* ReadVec(void* stream, RdVec* vec)
 {
-    (void)stream; (void)vec;
+    unsigned count;
+    ReadI32_93a780(stream, &count, 1, 0);
+    vec->Resize(count);
+    for (unsigned i = 0; i < count; ++i) {
+        RdElem* e = &vec->mpBegin[i];
+        ReadI32_93a780(stream, &e->a, 1, 0);
+        ReadU8_93a6c0(stream, &e->b, 1);
+        ReadU8_93a6c0(stream, &e->c, 1);
+    }
+    return stream;
 }
 
 // ===========================================================================

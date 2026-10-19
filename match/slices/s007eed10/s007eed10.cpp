@@ -232,7 +232,7 @@ void VolStateDestroy(VolState* self) {
 // base + cVolumeState + an EASTL string.  0x007EF220 is its scalar deleting
 // destructor.
 // ---------------------------------------------------------------------------
-extern void EAllocDealloc(void* p);
+extern void EAllocDealloc(void* p) throw();   // 0x00f47380
 
 struct EString {
   char* mpBegin;  // +0
@@ -248,23 +248,24 @@ struct cVolumeDescLite {
   int mRef;
 };
 struct cBlockCommandBase {
-  virtual ~cBlockCommandBase();
+  virtual ~cBlockCommandBase() throw();   // 0x0083cd90
   char pad[0x34];
 };
 struct cVolumeStateLite {
   char pad[8];
   cVolumeDescLite mDesc;   // +0x40 in the derived object
-  char pad2[0x130 - 0x44];
+  char pad2[0x130 - 0x48];
 };
 struct cVolumeEffectCommand : cBlockCommandBase {
   cVolumeStateLite mVolumeState;  // +0x38
   EString mDescName;              // +0x130
   virtual void Execute(void* args);
 };
-void ForceVolumeEffect() {
-  cVolumeEffectCommand* p = new cVolumeEffectCommand;
+// @ 0x007EF220  scalar deleting destructor
+void ForceVolumeEffect(cVolumeEffectCommand* p) {
   delete p;
 }
+cVolumeEffectCommand* ForceVolumeEffectNew() { return new cVolumeEffectCommand; }
 
 // @ 0x007EFC90
 void PQ::Push(const HeapNode& v) {

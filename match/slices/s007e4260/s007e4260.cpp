@@ -27,7 +27,7 @@ struct cCommandBase : cICommand {
     virtual void AddCommand(void* key, void* cmd);
     void* mParser;
     int   mRefCount;
-    ~cCommandBase();
+    virtual ~cCommandBase();
 };
 struct OptionParser {
     virtual void o0(); virtual void o1(); virtual void o2();
@@ -137,11 +137,15 @@ void FUN_007e4e90(void* a) { (void)a; }
 // @ 0x007e4f40
 void FUN_007e4f40(void* a, void* b) { (void)a; (void)b; }
 
-// @ 0x007e51c0  scalar deleting destructor for an option-carrying command
+struct cArgSpecStub {
+    uint32_t raw[7];
+    ~cArgSpecStub();    // 0x00405050 EA::ArgScript::cArgumentSpec::~cArgumentSpec
+};
 struct cOptionCommand : EA::ArgScript::cCommandBase {
     void* pad0c;
     void* pad10;
-    EA::ArgScript::OptionParser mOptions;   // +0x14
-    virtual ~cOptionCommand() {}
+    cArgSpecStub mOptions;   // +0x14
 };
+// @ 0x007e51c0  scalar deleting destructor for an option-carrying command
 void* ForceOptionCommand() { return new cOptionCommand(); }
+void ForceOptionCommandDel(cOptionCommand* p) { delete p; }

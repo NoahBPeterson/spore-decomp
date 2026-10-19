@@ -62,6 +62,7 @@ struct cICommand {
 };
 
 struct cCommandBase : cICommand {
+    cCommandBase();                                                 // 0x0083c800
     virtual void AddCommand(void* key, void* cmd);                  // +0x18
     cIParser* mParser;      // +0x4
     int       mRefCount;    // +0x8
@@ -244,7 +245,7 @@ AutoRef* FUN_007e1b00(AutoRef* first, AutoRef* last, AutoRef* dst) {
 
 // =============================================================== 0x007e1b60
 // cTransitionCommand::OnRegister - registers 16 empty sub-commands.
-#define CMDCLASS(Name) struct Name : EA::ArgScript::cCommandBase {}
+#define CMDCLASS(Name) struct Name : EA::ArgScript::cCommandBase { void* mpState; virtual void i3(); }
 CMDCLASS(CmdEntry);
 CMDCLASS(CmdExit);
 CMDCLASS(CmdGotoState);
@@ -281,14 +282,17 @@ extern void* g_kInt;     // 0x153f630
 extern void* g_kFloat;   // 0x153f634
 
 struct cTransitionCommand : EA::ArgScript::cBlockCommandBase {
+    void* mTransState;      // +0x30
+    void BaseOnRegister(void* a, void* childState);   // 0x0083c780
     void OnRegister(void* a, void* childState);
 };
 void* operator new(size_t, const char*, int, int, int, int);
+void  operator delete(void*, const char*, int, int, int, int);
 
 // @ 0x007e1b60
 void cTransitionCommand::OnRegister(void* a, void* childState) {
-    mChildState = childState ? (void*)((char*)childState - 0x10) : 0;
-    ((void(__thiscall*)(void*, void*, void*))0)(this, a, childState);
+    mTransState = childState ? (void*)((char*)childState - 0x10) : 0;
+    BaseOnRegister(a, childState);
     AddCommand(g_kEntry,    new ("ArgScript/Entry",0,0,0,0) CmdEntry());
     AddCommand(g_kExit,     new ("ArgScript/Exit",0,0,0,0) CmdExit());
     AddCommand(g_kGoto,     new ("ArgScript/GotoState",0,0,0,0) CmdGotoState());

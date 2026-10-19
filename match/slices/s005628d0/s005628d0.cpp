@@ -83,17 +83,32 @@ bool FUN_00563090(void* this_, void* a, void* b) {
     return false;
 }
 
-// @ 0x005631e0  (asset lookup used by the timestamp helpers)
-int FUN_005631e0(void* this_, void* pOut) {
-    int index = -1;
-    for (char* it = *(char**)((char*)this_ + 0x14); it != *(char**)((char*)this_ + 0x18); it += 0x50) {
-        if (*(uint32_t*)it == *(uint32_t*)pOut) {
-            index = (int)(it - *(char**)((char*)this_ + 0x14)) / 0x50;
-            break;
-        }
+struct LookupAsset {
+    ResourceKey mKey;
+    char pad0c[0x50 - 0x0c];
+};
+struct LookupDB {
+    char pad00[0x14];
+    eastl::vector<LookupAsset, eastl::sp_vector_allocator> mAssetList;   // +0x14
+    eastl::vector_set<uint32_t> mFreeList;                               // +0x28
+    int FindAssetIndex(const ResourceKey& key);
+};
+
+static inline bool KeyNotEqual(const LookupAsset* a, const ResourceKey* k) {
+    return !(a->mKey.mInstanceID == k->mInstanceID && a->mKey.mTypeID == k->mTypeID &&
+             a->mKey.mGroupID == k->mGroupID);
+}
+
+// @ 0x005631e0  (asset lookup by resource key)
+int LookupDB::FindAssetIndex(const ResourceKey& key) {
+    LookupAsset* pAsset = mAssetList.begin();
+    LookupAsset* end = mAssetList.end();
+    for (; pAsset != end && KeyNotEqual(pAsset, &key); ++pAsset) {
     }
-    (void)index;
-    return -1;
+    uint32_t index = pAsset - mAssetList.begin();
+    if (pAsset == end || mFreeList.find(index) != mFreeList.end())
+        return -1;
+    return index;
 }
 
 // @ 0x005632d0

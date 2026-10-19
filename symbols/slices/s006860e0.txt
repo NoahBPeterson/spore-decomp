@@ -10,4 +10,4 @@
 00686490 SP::OpenRecordAsStream  # manager->open, hash_map insert, return id
 00686520 DecodeRecord  # record decode: read header then RSA/SHA1 verify
 006866f0 ReadPropRecords  # Editor::cPropertyList record reader
-00686d90 ReadPropRecords2 # Editor::cPropertyList record reader variant
+00686d90 OpenPackageRecord # opens the package record, builds its path, hands the DatabasePackedFile to ReadPropRecords

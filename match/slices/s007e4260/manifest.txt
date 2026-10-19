@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007e4260/s007e4260.cpp  ??_GcOptionCommand@@UAEPAXI@Z  007e51c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

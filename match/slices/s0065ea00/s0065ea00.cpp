@@ -36,12 +36,19 @@ extern const wchar_t* PTR_u_spore;  // 0x1526950
 struct AssetInfo { uint64_t mnAssetID; uint32_t mnType; void* mpImage; };
 struct AssetVec {
     AssetInfo* begin; AssetInfo* end; AssetInfo* cap;
-    AssetInfo* DoInsertValue(AssetInfo* pos, AssetInfo* value);
-    AssetInfo* erase(AssetInfo* first, AssetInfo* last);
+    AssetInfo* DoInsertValue(AssetInfo* pos, AssetInfo* value);   // 0x0065df30
+    AssetInfo* erase(AssetInfo* first, AssetInfo* last);   // 0x0065ded0
     void push_back();
 };
 struct VecPtr { void* begin; void* end; void* cap; void* erase(void*, void*); };
-struct HashSet { char pad[0xc]; int count; void DoFreeNodes(void*, void*); };
+struct TrueTag {};
+struct HashSet {
+    char pad[0xc];
+    int count;
+    uint32_t tail[4];
+    void DoFreeNodes(void*, void*);                              // 0x005687d0
+    void Insert(void* outIt, uint64_t* key, TrueTag tag);        // 0x00553750
+};
 struct HashtableU64 { int count; int* erase(int* out, int* node, int* bucket); };
 struct cSPUILayout {
     void* FindWindowByID(uint32_t id, int recursive);
@@ -133,7 +140,9 @@ struct cSPUIFeedEdit {
     void LoadLayout();
     void Init(void* parent);
     void InitLayout();
-    void LoadFilter(int param, bool b);
+    bool LoadFilter(int param, bool b);
+    void Sub65cae0();   // 0x0065cae0
+    void Sub65cc50();   // 0x0065cc50
     char AddAsset(int a, int b, int c, void* img);
     char HandleMessage(int msg, int* data);
     void UpdateStrings();
@@ -253,20 +262,172 @@ void CallbackObj::Handler(int a, int b) {
     (*(FnP)Vslot(win, 0x90))(win);
 }
 
+// ---- LoadFilter helpers -------------------------------------------------
+struct FEStr {
+    char* mpBegin; char* mpEnd; char* mpCap; int mAlloc;
+    void assign(const char* b, const char* e);   // 0x00454cb0
+    FEStr& operator=(const FEStr& x) { if (&x != this) assign(x.mpBegin, x.mpEnd); return *this; }
+};
+struct FilterRec {                 // 0x70 bytes
+    char pad00[0x18];
+    int f18, f1c;
+    char pad20[8];
+    int f28;
+    char pad2c[0x54 - 0x2c];
+    FEStr name;                    // +0x54
+    int id;                        // +0x64
+    char pad68[8];
+};
+struct IAssetDir {
+    bool GetServerId(const void* key, uint64_t* out, bool flag) const;   // 0x0054e530
+};
+struct FilterDB {
+    char pad00[0x58];
+    IAssetDir* mpDir;              // +0x58
+    char pad5c[0xb4 - 0x5c];
+    FilterRec* mpFilterBegin;      // +0xb4
+    FilterRec* mpFilterEnd;        // +0xb8
+};
+FilterDB* __cdecl GetFilterDB();   // 0x0067cb30
+void* __cdecl GetImageFromTexture(int a, int b, int c, int d);   // 0x008060d0
+
+struct Cons {                      // SP::FunctionalMatch::Constraint, 0x24 bytes
+    uint32_t mParameter, mType;
+    int mMin, mMax;
+    Cons* cb; Cons* ce; Cons* cc;
+    uint32_t p1c, p20;
+    Cons(int dummy);                               // 0x00558830
+    Cons(uint32_t id, int kind, int value);        // 0x00558960
+    void DestroyChild();                           // 0x006066f0
+    ~Cons() {
+        Cons* e = ce;
+        for (Cons* c = cb; c < e; ++c) c->DestroyChild();
+        if (cb && ((int*)cb)[-1] != 0) EASTL_allocator_deallocate(cb);
+    }
+};
+struct FKey { int a, b, c; };
+struct FKeyVec {
+    FKey* b; FKey* e; FKey* c;
+    FKeyVec() : b(0), e(0), c(0) {}
+    ~FKeyVec() { if (b && ((int*)b)[-1] != 0) EASTL_allocator_deallocate(b); }
+};
+struct TplDB {
+    virtual void tp0(); virtual void tp1(); virtual void tp2(); virtual void tp3(); virtual void tp4(); virtual void tp5(); virtual void tp6(); virtual void tp7(); virtual void tp8(); virtual void tp9(); virtual void tp10(); virtual void tp11(); virtual void tp12();
+    virtual void __cdecl Query(FKeyVec* out, Cons filter, Cons extra);   // 0x34
+    virtual void tq0(); virtual void tq1(); virtual void tq2(); virtual void tq3(); virtual void tq4(); virtual void tq5(); virtual void tq6(); virtual void tq7(); virtual void tq8(); virtual void tq9(); virtual void tq10(); virtual void tq11(); virtual void tq12(); virtual void tq13(); virtual void tq14(); virtual void tq15(); virtual void tq16(); virtual void tq17();
+    virtual bool Lookup(const FKey* key, uint32_t* outType);             // 0x80
+};
+TplDB* __cdecl GetTplDB();         // 0x0067cb40
+struct ImgRef {
+    void* p;
+    ImgRef() : p(0) {}
+    ~ImgRef() { if (p) ((FnP)Vslot(p, 4))(p); }
+};
+struct AssetInfoT {
+    uint64_t mnAssetID; uint32_t mnType; ImgRef mpImage;
+};
+struct FWin {
+    virtual void wa0(); virtual void wa1(); virtual void wa2();
+    virtual void* QueryProc(uint32_t id);                                // 0xc
+};
+struct FProc {
+    virtual void pa0(); virtual void pa1(); virtual void pa2(); virtual void pa3();
+    virtual void* GetParent();                                           // 0x10
+    virtual void pb0(); virtual void pb1(); virtual void pb2(); virtual void pb3(); virtual void pb4(); virtual void pb5(); virtual void pb6(); virtual void pb7(); virtual void pb8(); virtual void pb9(); virtual void pb10(); virtual void pb11(); virtual void pb12(); virtual void pb13(); virtual void pb14(); virtual void pb15(); virtual void pb16(); virtual void pb17(); virtual void pb18();
+    virtual void SetValue(int v, int w);                                 // 0x60
+};
+struct FParent {
+    virtual void qa0(); virtual void qa1(); virtual void qa2(); virtual void qa3(); virtual void qa4(); virtual void qa5(); virtual void qa6(); virtual void qa7(); virtual void qa8(); virtual void qa9(); virtual void qa10(); virtual void qa11(); virtual void qa12(); virtual void qa13(); virtual void qa14(); virtual void qa15(); virtual void qa16(); virtual void qa17(); virtual void qa18(); virtual void qa19(); virtual void qa20(); virtual void qa21(); virtual void qa22(); virtual void qa23(); virtual void qa24(); virtual void qa25(); virtual void qa26(); virtual void qa27(); virtual void qa28(); virtual void qa29(); virtual void qa30();
+    virtual void SetTab(int a, int b);                                   // 0x7c
+};
+
 // @ 0x0065ef30
-void cSPUIFeedEdit::LoadFilter(int param, bool b) {
+bool cSPUIFeedEdit::LoadFilter(int param, bool b) {
     char* s = (char*)this;
     mNewAssets.DoFreeNodes(*(void**)(s + 0xdc), *(void**)(s + 0xe0)); mNewAssets.count = 0;
     mDeleteAssets.DoFreeNodes(*(void**)(s + 0xfc), *(void**)(s + 0x100)); mDeleteAssets.count = 0;
     mExistingAssets.DoFreeNodes(*(void**)(s + 0x11c), *(void**)(s + 0x120)); mExistingAssets.count = 0;
     mAssetList.erase(mAssetList.begin, mAssetList.end);
-    void* db = FUN_0067cb30();
-    (void)db; (void)param; (void)b;
-    mnNumPages = 1;
-    FUN_0065cae0();
+
+    FilterDB* db = GetFilterDB();
+    FilterRec* it = db->mpFilterBegin;
+    FilterRec* itEnd = db->mpFilterEnd;
+    for (; it != itEnd; it = (FilterRec*)((char*)it + 0x70)) {
+        if (it->id == param)
+            break;
+    }
+    if (it == itEnd)
+        return false;
+    *(FEStr*)(s + 0x138) = it->name;
+
+    FKeyVec keys;
+    GetTplDB()->Query(&keys, Cons(0x3cc89b1, 0, param), Cons(0));
+    if (!b) {
+        FKey* kEnd = keys.e;
+        for (FKey* k = keys.b; k != kEnd; ++k) {
+            uint64_t id;
+            if (GetFilterDB()->mpDir->GetServerId(k, &id, false)) {
+                void* img = GetImageFromTexture(k->a, k->c, -1, -1);
+                if (img) {
+                    AssetInfo* pEnd = mAssetList.end;
+                    if (pEnd < mAssetList.cap) {
+                        mAssetList.end = pEnd + 1;
+                        if (pEnd)
+                            *(void**)((char*)pEnd + 0xc) = 0;
+                    } else {
+                        AssetInfoT tmp;
+                        mAssetList.DoInsertValue(pEnd, (AssetInfo*)&tmp);
+                    }
+                    AssetInfo* e = mAssetList.end - 1;
+                    uint32_t type;
+                    if (!GetTplDB()->Lookup(k, &type))
+                        type = k->b;
+                    e->mnAssetID = id;
+                    e->mnType = type;
+                    void* old = e->mpImage;
+                    if (img != old) {
+                        ((FnP)Vslot(img, 0))(img);
+                        e->mpImage = img;
+                        if (old)
+                            ((FnP)Vslot(old, 4))(old);
+                    }
+                    uint32_t itOut[2];
+                    mNewAssets.Insert(itOut, &id, TrueTag());
+                }
+            }
+        }
+    }
+    m8c = 1;
+    Sub65cae0();
+    uint32_t nAssets = ((char*)mAssetList.end - (char*)mAssetList.begin) >> 4;
+    uint32_t nPerPage = ((char*)mViewEnd - (char*)mViewBegin) >> 2;
+    mnNumPages = nAssets / nPerPage;
+    if (mnNumPages * nPerPage != nAssets)
+        mnNumPages++;
+    Sub65cc50();
     UpdateStrings();
-    *(char*)(s + 0x139) = 1;
-    UpdateEnabledState();
+    FWin* w1 = (FWin*)((IWindow*)mpWin80)->SlotF0(0x58b5d5b, 1);
+    if (w1) {
+        FProc* pr = (FProc*)w1->QueryProc(0xcf428691);
+        if (pr) {
+            pr->SetValue(it->f18, 0);
+            mbTransactionActive = (it->f18 != it->f1c);
+            ((FParent*)pr->GetParent())->SetTab(2, 0);
+        }
+    }
+    FWin* w2 = (FWin*)((IWindow*)mpWin80)->SlotF0(0x58b5d76, 1);
+    if (w2) {
+        FProc* pr2 = (FProc*)w2->QueryProc(0xcf428691);
+        if (pr2)
+            pr2->SetValue(it->f28, 0);
+    }
+    mbNameSet = 0;
+    Sub65cae0();
+    if (mAssetList.begin != mAssetList.end) {
+        AssetInfo* last = mAssetList.end;
+        ShowAsset(((int*)last)[-4], ((int*)last)[-3]);
+    }
+    return true;
 }
 
 // @ 0x0065f390

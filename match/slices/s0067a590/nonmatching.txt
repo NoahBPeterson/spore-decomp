@@ -7,3 +7,4 @@
 0067b150  76  complete: store scheduling and 0.0f register reuse differ; cl hoists the cString construct differently
 0067b270  55  complete: cl CSEs the first secondary-vtable store (base ctor vptr) that the original keeps
 0067b2f0  54  complete: vtable-store scheduling vs member loads differs; duplicate vtable stores
+0067a6e0  174  HintManager::HandleHintMessage complete; branch layout (End block out of line, redundant cur!=win test) and ebx/esi/edi allocation differ [equiv: WEAK 22% coverage]

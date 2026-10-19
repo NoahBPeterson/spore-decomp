@@ -9,4 +9,3 @@
 007e4e00  -  FUN_007e4e00 (138B); skeleton
 007e4e90  -  SP::cAppStateCheat::cAppStateCheat (175B); skeleton
 007e4f40  -  SP::cAppStateCheat::Execute (637B); skeleton
-007e51c0  -  option-carrying command scalar deleting dtor; skeleton (symbol not emitted)

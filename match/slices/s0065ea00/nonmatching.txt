@@ -3,3 +3,4 @@
 0065f4d0 58 InitLayout - complete, key-store scheduling and tail-call differ
 0065f580 345 HandleMessage - complete, notification branches approximate
 0065f820 14 WindowSet4::Set - complete, one pParent load scheduled before the two stores
+0065ef30  959  cSPUIFeedEdit::LoadFilter complete (module flags /O2 /MD /Gy /TP /arch:SSE for this function; clear sets, filter lookup, constraint query, asset population, page count, window updates); frame slot layout of query temporaries and register allocation differ [equiv: WEAK 14% coverage, no mismatch]

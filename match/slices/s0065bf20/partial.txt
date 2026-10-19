@@ -1,2 +1,1 @@
 0065bf20  1176  cSPUIFeedEdit message handler: large wcsncmp/wcsstr branches approximated
-0065cb90  193  UpdateStrings: cString temporary plumbing approximated

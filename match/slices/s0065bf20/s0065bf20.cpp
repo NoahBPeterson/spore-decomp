@@ -397,18 +397,31 @@ void cSPUIFeedEdit::FUN_0065cae0() {
     (*(FnP2)Vslot(w, 0x7c))(w, 2, v);
 }
 
+struct FeedStr {                      // SP::cString, 0x14 bytes
+  uint32_t raw[5];
+  FeedStr(uint32_t table, uint32_t id, const wchar_t* dflt);   // 0x006b5770
+  const wchar_t* GetText();                                    // 0x006b55c0
+  ~FeedStr();                                                  // 0x006b5240
+};
+struct FeedWin {
+  virtual void fa0(); virtual void fa1(); virtual void fa2(); virtual void fa3(); virtual void fa4(); virtual void fa5(); virtual void fa6(); virtual void fa7(); virtual void fa8(); virtual void fa9(); virtual void fa10(); virtual void fa11(); virtual void fa12(); virtual void fa13(); virtual void fa14(); virtual void fa15(); virtual void fa16(); virtual void fa17(); virtual void fa18(); virtual void fa19(); virtual void fa20(); virtual void fa21(); virtual void fa22(); virtual void fa23(); virtual void fa24(); virtual void fa25(); virtual void fa26(); virtual void fa27(); virtual void fa28(); virtual void fa29(); virtual void fa30(); virtual void fa31();
+  virtual void SetText(const wchar_t* s);                      // 0x80
+  virtual void fb0(); virtual void fb1(); virtual void fb2(); virtual void fb3(); virtual void fb4(); virtual void fb5(); virtual void fb6(); virtual void fb7(); virtual void fb8(); virtual void fb9(); virtual void fb10(); virtual void fb11(); virtual void fb12(); virtual void fb13(); virtual void fb14(); virtual void fb15(); virtual void fb16(); virtual void fb17(); virtual void fb18(); virtual void fb19(); virtual void fb20(); virtual void fb21(); virtual void fb22(); virtual void fb23(); virtual void fb24(); virtual void fb25(); virtual void fb26();
+  virtual FeedWin* FindWin(uint32_t id, int recursive);        // 0xf0
+};
+
 // @ 0x0065cb90
 void cSPUIFeedEdit::UpdateStrings() {
   char* p = (char*)this;
-  void* o = *(void**)(p + 0x80);
-  void* w1 = (*(FnRetPi)Vslot(o, 0xf0))(o, 0x58b5d48);
+  FeedWin* w1 = (*(FeedWin**)(p + 0x80))->FindWin(0x58b5d48, 1);
   if (w1) {
-    // cString temporary; assign to control text
-    (*(FnP)Vslot(w1, 0x80))(w1);
+    FeedStr s(0xa153f7a1, 0x58b5d48, L"Items Added (~feededitnumitems~):");
+    w1->SetText(s.GetText());
   }
-  void* w2 = (*(FnRetPi)Vslot(o, 0xf0))(o, 0x58b5d50);
+  FeedWin* w2 = (*(FeedWin**)(p + 0x80))->FindWin(0x58b5d50, 1);
   if (w2) {
-    (*(FnP)Vslot(w2, 0x80))(w2);
+    FeedStr s(0xa153f7a1, 0x58b5d50, L"(~feededitcurpage~/~feededitnumpages~)");
+    w2->SetText(s.GetText());
   }
 }
 

@@ -415,7 +415,75 @@ bool ReadPropRecords(void* src, int dflt) {
     ((void (__thiscall*)(void*))VT(src)[2])(src);
     return false;
 }
-extern "C" void ReadPropRecords2(void* self, int* rd) {
-    (void)self; (void)rd;
-    // (full body not reconstructed; see partial.txt)
+// =====================================================================
+// 0x00686d90  open a package archive record, build its path, hand it to ReadPropRecords
+// =====================================================================
+struct IRefSub { virtual void AddRef(); virtual void Release(); };
+struct DPFile {
+    void* vtbl;          // +0
+    IRefSub sub;         // +4
+    char pad08[0x388 - 8];
+    DPFile(const wchar_t* path, void* alloc);                                   // 0x008d9f80
+    static void* operator new(size_t, const char*, int, int, int, int);         // 0x00926020
+    static void operator delete(void*, const char*, int, int, int, int);
+};
+struct DPFile;
+struct RefGuard {
+    DPFile* p;
+    RefGuard(DPFile* q);
+    ~RefGuard();
+};
+struct WPath {
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCap;
+    WPath(const wchar_t* s) : mpBegin(0), mpEnd(0), mpCap(0) { RangeInitialize(s); }
+    ~WPath() { if ((int)(((char*)mpCap - (char*)mpBegin) & 0xfffffffe) > 2 && mpBegin) EASTL_dealloc(mpBegin); }
+    void RangeInitialize(const wchar_t* s);                                     // 0x00579a90
+    void Append(const wchar_t* first, const wchar_t* last);                     // 0x00429580
+    WPath& operator+=(const wchar_t* s) {
+        const wchar_t* e = s;
+        while (*e) ++e;
+        int n = (int)(e - s);
+        Append(s, s + n);
+        return *this;
+    }
+};
+struct WEmpty {
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCap;
+    WEmpty() : mpBegin((wchar_t*)0x1667bac), mpEnd((wchar_t*)0x1667bac), mpCap((wchar_t*)0x1667bae) {}
+    ~WEmpty() { if ((int)(((char*)mpCap - (char*)mpBegin) & 0xfffffffe) > 2 && mpBegin) EASTL_dealloc(mpBegin); }
+};
+void __cdecl SPNameFromKeyW(const ResKey* key, void* outStr, const wchar_t* sfx);   // 0x0068d0d0
+bool ReadPropRecords(void* src, int dflt);   // 0x006866f0
+
+inline RefGuard::RefGuard(DPFile* q) : p(q) { p->sub.AddRef(); }
+inline RefGuard::~RefGuard() { p->sub.Release(); }
+extern const wchar_t kSlash[];   // 0x013fa030 L"/"
+
+// @ 0x00686d90
+bool OpenPackageRecord(const ResKey* key, void* src, DPFile** pOut, int dflt, bool process) {
+    RecPtr rec;
+    if (SrcOpen(src, (void*)key, &rec.p)) {
+    DPFile* dpf = new ("App/DatabasePackedFile", 0, 0, 0, 0) DPFile(0, 0);
+    if (dpf)
+        dpf->sub.AddRef();
+    RefGuard guard(dpf);
+    *pOut = dpf;
+    bool result = ((bool (__thiscall*)(void*))VT(dpf)[1])(dpf);
+    WPath path(((const wchar_t* (__thiscall*)(void*))VT(src)[0x28 / 4])(src));
+    WEmpty name;
+    SPNameFromKeyW(key, &name, 0);
+    path += kSlash;
+    path.Append(name.mpBegin, name.mpEnd);
+    ((void (__thiscall*)(void*, const wchar_t*))VT(dpf)[0x2c / 4])(dpf, path.mpBegin);
+    ((void (__thiscall*)(void*, void*))VT(dpf)[0x50 / 4])(dpf, RecStream(rec.p));
+    if (((bool (__thiscall*)(void*, int, int, int))VT(dpf)[0x18 / 4])(dpf, 1, 3, 0)) {
+        if (process)
+            ReadPropRecords(dpf, dflt);
+    } else {
+        result = false;
+        ((void (__thiscall*)(void*))VT(dpf)[2])(dpf);
+    }
+    return result;
+    }
+    return false;
 }

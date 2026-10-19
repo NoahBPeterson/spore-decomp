@@ -359,73 +359,88 @@ void cHintManager::dtor()
 // ===========================================================================
 // @ 0x0067A6E0  hint-manager message handler
 // ===========================================================================
-extern "C" void __cdecl BeginModal(void*, int, int);   // SPUIHelpers::BeginModal
-extern "C" void __cdecl EndModal(void*, int, int);     // SPUIHelpers::EndModal
+extern "C" void __cdecl BeginModal(void*, int, int);   // 0x008099a0 SPUIHelpers::BeginModal
+extern "C" void __cdecl EndModal(void*, int, int);     // 0x00809c50 SPUIHelpers::EndModal
 extern "C" float __cdecl sinf_(float);
 
-struct Layout2;
+struct Pt2 {
+    float x, y;
+    Pt2() {}
+    Pt2(float a, float b) : x(a), y(b) {}
+    Pt2(const Pt2& o) : x(o.x), y(o.y) {}
+    Pt2& operator=(const Pt2& o) { x = o.x; y = o.y; return *this; }
+};
+struct HMsg {
+    int d0, d4;
+    int type;      // +0x8
+    float px, py;  // +0xc
+    int d14, d18;
+};
+struct HitParent {
+    virtual void hp0(); virtual void hp1(); virtual void hp2(); virtual void hp3(); virtual void hp4(); virtual void hp5(); virtual void hp6(); virtual void hp7(); virtual void hp8(); virtual void hp9(); virtual void hp10(); virtual void hp11(); virtual void hp12(); virtual void hp13(); virtual void hp14(); virtual void hp15(); virtual void hp16();
+    virtual void* HitTest(Pt2* pt);   // +0x44
+};
+struct HintWin {
+    virtual void wa0(); virtual void wa1(); virtual void wa2(); virtual void wa3(); virtual void wa4();
+    virtual HitParent* GetParent();   // +0x14
+    virtual void wb0(); virtual void wb1(); virtual void wb2(); virtual void wb3(); virtual void wb4(); virtual void wb5(); virtual void wb6(); virtual void wb7(); virtual void wb8(); virtual void wb9(); virtual void wb10(); virtual void wb11(); virtual void wb12(); virtual void wb13(); virtual void wb14(); virtual void wb15(); virtual void wb16(); virtual void wb17(); virtual void wb18(); virtual void wb19(); virtual void wb20(); virtual void wb21(); virtual void wb22(); virtual void wb23(); virtual void wb24(); virtual void wb25(); virtual void wb26(); virtual void wb27(); virtual void wb28(); virtual void wb29(); virtual void wb30(); virtual void wb31(); virtual void wb32(); virtual void wb33(); virtual void wb34(); virtual void wb35(); virtual void wb36(); virtual void wb37(); virtual void wb38(); virtual void wb39(); virtual void wb40(); virtual void wb41();
+    virtual Pt2 ToLocal(Pt2 pt);      // +0xc0
+};
+struct WinMgr {
+    virtual void ma0(); virtual void ma1(); virtual void ma2(); virtual void ma3(); virtual void ma4(); virtual void ma5();
+    virtual void Send(int a, int b, HMsg* m);   // +0x18
+    virtual void mb0(); virtual void mb1(); virtual void mb2(); virtual void mb3(); virtual void mb4(); virtual void mb5(); virtual void mb6(); virtual void mb7(); virtual void mb8(); virtual void mb9(); virtual void mb10(); virtual void mb11(); virtual void mb12(); virtual void mb13(); virtual void mb14(); virtual void mb15(); virtual void mb16(); virtual void mb17(); virtual void mb18(); virtual void mb19(); virtual void mb20(); virtual void mb21(); virtual void mb22(); virtual void mb23(); virtual void mb24();
+    virtual char IsModal(void* w);    // +0x80
+};
+struct CbSub {
+    void Cancel();   // 0x00929c60 EA::CallbackSystem::Callback::Cancel
+};
 struct HM6e0 {
     char pad0[0xec];
     void* p_ec;          // +0xec
     char padF0[0x199 - 0xf0];
     char b199;           // +0x199
     char pad19a[0x1f4 - 0x19a];
-    char sub1f4[4];      // +0x1f4
-    bool handle(void* a, int* b);
+    CbSub sub1f4;        // +0x1f4
+    bool handle(HintWin* win, HMsg* msg);
 };
 
-bool HM6e0::handle(void* a, int* b)
+// @ 0x0067A6E0
+bool HM6e0::handle(HintWin* win, HMsg* msg)
 {
-    if (!p_ec)
-        return false;
-    int type = b[2];
-    if (type != 8) {
-        if (type != 6 && type != 0x287259f6)
-            return false;
-        if (a != p_ec)
-            return false;
-        b199 = 1;
-        ((C_a590_fwd*)((char*)this - 8))->possibly(0, 0);
-        ((VecHM*)((char*)this + 0x1f4))->clear(0, 0);
-        return false;
-    }
-    float v0 = *(float*)((char*)b + 0xc);
-    float v1 = *(float*)((char*)b + 0x10);
-    float loc[2];
-    loc[0] = v0;
-    loc[1] = v1;
-    float out[2];
-    ((void (__thiscall*)(void*, float*, float, float))VT(a)[0xc0 / 4])(a, out, v0, v1);
-    void* p2 = ((void* (__thiscall*)(void*))VT(a)[0x14 / 4])(a);
-    void* p3 = ((void* (__thiscall*)(void*, float*))VT(p2)[0x44 / 4])(p2, loc);
-    void* m = GetManager();
-    int c = ((int (__thiscall*)(void*, void*))VT(m)[0x80 / 4])(m, p_ec);
-    void* cur = p_ec;
-    if (cur == a) {
-        if (c == 0) {
-            if (p3 != cur)
-                return false;
-            BeginModal(cur, 0, 0);
-        } else {
-            if (p3 == cur)
-                return false;
-            EndModal(cur, 0, 0);
+    if (p_ec) {
+        if (msg->type == 8) {
+            Pt2 loc(msg->px, msg->py);
+            loc = win->ToLocal(loc);
+            void* hit = win->GetParent()->HitTest(&loc);
+            char modal = ((WinMgr*)GetManager())->IsModal(p_ec);
+            void* cur = p_ec;
+            if (cur == win || modal) {
+                if (cur != win)
+                    return false;
+                if (!modal || hit == cur)
+                    return false;
+                EndModal(cur, 0, 0);
+            } else {
+                if (hit != cur)
+                    return false;
+                BeginModal(cur, 0, 0);
+            }
+            HMsg out = *msg;
+            out.px = loc.x;
+            out.py = loc.y;
+            ((WinMgr*)GetManager())->Send(0, 0, &out);
+            return true;
         }
-    } else {
-        if (c != 0)
-            return false;
-        if (p3 != cur)
-            return false;
-        BeginModal(cur, 0, 0);
+        if (msg->type == 6 || msg->type == 0x287259f6) {
+            if (win == p_ec) {
+                b199 = 1;
+                ((C_a590_fwd*)((char*)this - 8))->possibly(0, 0);
+                sub1f4.Cancel();
+            }
+        }
     }
-    float saved = loc[1];
-    for (int i = 0; i < 7; ++i)
-        ((int*)loc)[i] = b[i];
-    loc[0] = v1;
-    loc[1] = out[0];
-    void* m2 = GetManager();
-    ((void (__thiscall*)(void*, int, int, float*))VT(m2)[0x18 / 4])(m2, 0, 0, loc);
-    return true;
+    return false;
 }
 
 // ===========================================================================
