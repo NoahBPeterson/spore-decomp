@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00638790 65 complete, not byte-exact (best symbol UpdateBabyCelebrationTimes, 120 bytes)
+006388e0 2 complete, not byte-exact (best symbol SetWalkAnimation, 193 bytes)
+0063a0a0 2015 Update: complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-); identical call/vslot/imm sequence and frame (0xb8), residual regalloc/scheduling; equiv WEAK 530 valid no mismatch
+0063aa90 1159 complete, not byte-exact (best symbol HandleButton, 1916 bytes)

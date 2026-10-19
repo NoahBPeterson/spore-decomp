@@ -1,5 +1,15 @@
 00637f80 SP::cSPPlayModeUI::LayoutYouTubeUploadButton  # loads "YouTube Upload (PLACEHOLDER)", splits on <youtubeicon>, lays out two windows (card name cString::~cString is wrong)
 00638430 ?ShowMovieSavedDialogCustom@cSPPlayModeUI_s0063_7f80@SP@@QAEXXZ  # cSPPlayModeUI_s0063_7f80::ShowMovieSavedDialogCustom migrated from s00637f80 (verbatim, slice spelling)
-00638790 SP::cSPPlayModeSubModeAction::UpdateBabyCelebrationTimes  # PDB candidate caller-single
-006389b0 SP::cSPPlayModeSubModeAction::AnyKeyDown  # ORs the six mKeyInputButtonState bytes
-00638e10 RayPlaneIntersectZ  # ray/plane intersection at z=planeZ
+00638750 ?OnMouseUp@cSPPlayModeSubModeAction@SP@@UAE_NIMMI@Z  # SP::cSPPlayModeSubModeAction::OnMouseUp migrated from s00637f80
+00638770 ?OnMouseMove@cSPPlayModeSubModeAction@SP@@UAE_NMMI@Z  # SP::cSPPlayModeSubModeAction::OnMouseMove migrated from s00637f80
+00638790 ?UpdateBabyCelebrationTimes@cSPPlayModeSubModeAction@SP@@QAEXI@Z  # SP::cSPPlayModeSubModeAction::UpdateBabyCelebrationTimes migrated from s00637f80
+00638810 ?ReachedMomTargetAngle@cSPPlayModeSubModeAction_s0063_7f80@SP@@QAE_NI@Z  # cSPPlayModeSubModeAction_s0063_7f80::ReachedMomTargetAngle migrated from s00637f80 (verbatim, slice spelling)
+00638890 ?IsLookAroundIdle@cSPPlayModeSubModeAction@SP@@QAE_NI@Z  # SP::cSPPlayModeSubModeAction::IsLookAroundIdle migrated from s00637f80
+006388e0 ?SetWalkAnimation@cSPPlayModeSubModeAction_s0063_7f80@SP@@QAEXPAVcAnimatingCreature_s0063_7f80@@I@Z  # cSPPlayModeSubModeAction_s0063_7f80::SetWalkAnimation migrated from s00637f80 (verbatim, slice spelling)
+006389b0 ?AnyKeyDown@cSPPlayModeSubModeAction_s0063_7f80@SP@@QAE_NXZ  # cSPPlayModeSubModeAction_s0063_7f80::AnyKeyDown migrated from s00637f80 (verbatim, slice spelling)
+00638a00 ?HandleExpansionAnim@cSPPlayModeSubModeAction_s0063_7f80@SP@@QAEXI@Z  # cSPPlayModeSubModeAction_s0063_7f80::HandleExpansionAnim migrated from s00637f80 (verbatim, slice spelling)
+00638ad0 ?Shutdown@cSPPlayModeSubModeAction_s0063_7f80@SP@@QAEXXZ  # cSPPlayModeSubModeAction_s0063_7f80::Shutdown migrated from s00637f80 (verbatim, slice spelling)
+00638ba0 ?OnMouseDown@cSPPlayModeSubModeAction_s0063_7f80@SP@@QAE_NHMMH@Z  # cSPPlayModeSubModeAction_s0063_7f80::OnMouseDown migrated from s00637f80 (verbatim, slice spelling)
+00638c90 ?OnKeyUp@cSPPlayModeSubModeAction_s0063_7f80@SP@@QAE_NII@Z  # cSPPlayModeSubModeAction_s0063_7f80::OnKeyUp migrated from s00637f80 (verbatim, slice spelling)
+00638d90 ?IsIdle@cSPPlayModeSubModeAction_s0063_7f80@SP@@QAE_NXZ  # cSPPlayModeSubModeAction_s0063_7f80::IsIdle migrated from s00637f80 (verbatim, slice spelling)
+00638e10 ?RayPlaneIntersectZ@@YA_NPBUVec3f@@0PAU1@M@Z  # RayPlaneIntersectZ migrated from s00637f80 (verbatim, slice spelling)

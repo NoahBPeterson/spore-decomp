@@ -1,5 +1,16 @@
-00638e90 SP::cSPPlayModeSubModeAction::HasRequiredPart  # PDB name
-00638fd0 SP::cSPPlayModeSubModeAction::SetIdleAnimation  # PDB name
-006392e0 SP::cSPPlayModeSubModeAction::StartBoredAnimation  # PDB candidate (caller-single)
-006398f0 SP::cSPPlayModeSubModeAction::MarkKeyInputKeyDown  # PDB candidate (caller-single)
-00639a10 SP::cSPPlayModeSubModeAction::CaptureGIF  # PDB name (anchor)
+00635520 ?ResetSendEmailWindow@cSPPlayModeUI@SP@@AAEXXZ  # SP::cSPPlayModeUI::ResetSendEmailWindow (callee of s00638e90, named from the dev publics; slice address comment)
+00636260 ?HideYouTubeLoginDialog@cSPPlayModeUI@SP@@QAEXXZ  # SP::cSPPlayModeUI::HideYouTubeLoginDialog (callee of s00638e90, named from the dev publics; slice address comment)
+00636320 ?EnablePhotoViewerButton@cSPPlayModeUI@SP@@QAEX_N@Z  # SP::cSPPlayModeUI::EnablePhotoViewerButton (callee of s00638e90, named from the dev publics; slice address comment)
+006364a0 ?HideMovieSavedDialogCustom@cSPPlayModeUI@SP@@QAEXXZ  # SP::cSPPlayModeUI::HideMovieSavedDialogCustom (callee of s00638e90, named from the dev publics; slice address comment)
+006374b0 ?SetYTUsername@cSPPlayModeUI@SP@@QAEXABV?$basic_string@DVallocator@eastl@@@eastl@@@Z  # SP::cSPPlayModeUI::SetYTUsername (callee of s00638e90, named from the dev publics; slice address comment)
+00637510 ?SetYTPassword@cSPPlayModeUI@SP@@QAEXABV?$basic_string@DVallocator@eastl@@@eastl@@@Z  # SP::cSPPlayModeUI::SetYTPassword (callee of s00638e90, named from the dev publics; slice address comment)
+00637800 ?GetYTUsername@cSPPlayModeUI@SP@@QAEXAAV?$basic_string@DVallocator@eastl@@@eastl@@@Z  # SP::cSPPlayModeUI::GetYTUsername (callee of s00638e90, named from the dev publics; slice address comment)
+00637830 ?GetYTPassword@cSPPlayModeUI@SP@@QAEXAAV?$basic_string@DVallocator@eastl@@@eastl@@@Z  # SP::cSPPlayModeUI::GetYTPassword (callee of s00638e90, named from the dev publics; slice address comment)
+00637860 ?Show@cSPPlayModeUI@SP@@QAEXXZ  # SP::cSPPlayModeUI::Show (callee of s00638e90, named from the dev publics; slice address comment)
+00638e90 ?HasRequiredPart@cSPPlayModeSubModeAction@SP@@QAE_NH@Z  # SP::cSPPlayModeSubModeAction::HasRequiredPart migrated from s00638e90
+00638fd0 ?SetIdleAnimation@cSPPlayModeSubModeAction@SP@@QAEMPAUcAnimatingCreature@2@I_N1@Z  # SP::cSPPlayModeSubModeAction::SetIdleAnimation migrated from s00638e90
+006392e0 ?StartBoredAnimation@cSPPlayModeSubModeAction@SP@@QAEXI@Z  # SP::cSPPlayModeSubModeAction::StartBoredAnimation migrated from s00638e90
+00639350 ?FUN_00639350@cSPPlayModeSubModeAction@@QAEXXZ  # cSPPlayModeSubModeAction::FUN_00639350 migrated from s00638e90 (verbatim, slice spelling)
+006398f0 ?MarkKeyInputKeyDown@cSPPlayModeSubModeAction@SP@@QAEXI@Z  # SP::cSPPlayModeSubModeAction::MarkKeyInputKeyDown migrated from s00638e90
+00639a10 ?CaptureGIF@cSPPlayModeSubModeAction@SP@@QAEXXZ  # SP::cSPPlayModeSubModeAction::CaptureGIF migrated from s00638e90
+00639b70 ?FUN_00639b70@cSPPlayModeSubModeAction@@QAEXXZ  # cSPPlayModeSubModeAction::FUN_00639b70 migrated from s00638e90 (verbatim, slice spelling)

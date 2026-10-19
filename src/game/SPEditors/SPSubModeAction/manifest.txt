@@ -1,0 +1,14 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPSubModeAction.cpp  ?OnMouseUp@cSPPlayModeSubModeAction@SP@@UAE_NIMMI@Z  00638750  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeAction.cpp  ?OnMouseMove@cSPPlayModeSubModeAction@SP@@UAE_NMMI@Z  00638770  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeAction.cpp  ?ReachedMomTargetAngle@cSPPlayModeSubModeAction_s0063_7f80@SP@@QAE_NI@Z  00638810  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeAction.cpp  ?IsLookAroundIdle@cSPPlayModeSubModeAction@SP@@QAE_NI@Z  00638890  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeAction.cpp  ?AnyKeyDown@cSPPlayModeSubModeAction_s0063_7f80@SP@@QAE_NXZ  006389b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeAction.cpp  ?HandleExpansionAnim@cSPPlayModeSubModeAction_s0063_7f80@SP@@QAEXI@Z  00638a00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeAction.cpp  ?Shutdown@cSPPlayModeSubModeAction_s0063_7f80@SP@@QAEXXZ  00638ad0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeAction.cpp  ?OnMouseDown@cSPPlayModeSubModeAction_s0063_7f80@SP@@QAE_NHMMH@Z  00638ba0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeAction.cpp  ?OnKeyUp@cSPPlayModeSubModeAction_s0063_7f80@SP@@QAE_NII@Z  00638c90  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeAction.cpp  ?IsIdle@cSPPlayModeSubModeAction_s0063_7f80@SP@@QAE_NXZ  00638d90  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeAction.cpp  ?RayPlaneIntersectZ@@YA_NPBUVec3f@@0PAU1@M@Z  00638e10  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeAction.cpp  ?OnKeyDown@cSPPlayModeSubModeAction_s0063_9bd0@@QAE_NHH@Z  00639ec0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeAction.cpp  ??0cSPPlayModeSubModeAction_s0063_aa90@@QAE@XZ  0063b210  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
