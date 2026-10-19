@@ -3361,6 +3361,13 @@ class Rewrite:
                 self.notes.append(("hold-ignored", "0x%08x %s: stale PARTIAL hold ignored, the slice no longer lists it as partial" % (
                     c.va, c.name)))
                 self.manual["leave_in_slice"].pop("%08x" % c.va)
+            bvl = getattr(self, "batch_vas", None)
+            if why and re.search(r"(?i)\bnot (?:in|one of)\b[^;]*\bbatch\b|\bnot a mig\w* entry", why) and bvl and "%08x" % c.va in bvl[1] \
+                    and "%08x" % c.va in self.manual.get("leave_in_slice", {}):
+                # a hold whose reason was "not in batch migN's list" (mig17 HTTPClient: four functions held by mig2-era rows);
+                # the current batch lists the function, so the reason no longer holds. The verdict gates still apply
+                self.notes.append(("hold-ignored", "0x%08x %s: stale batch-list hold ignored, batch %s lists it" % (c.va, c.name, bvl[0])))
+                self.manual["leave_in_slice"].pop("%08x" % c.va)
             if "%08x" % c.va in self.manual.get("exclude", {}):
                 # manual `exclude` {va: why}: modmap puts the function in this module on evidence the slice contradicts
                 # (a wrong xmatch anchor name); it stays in the slice
