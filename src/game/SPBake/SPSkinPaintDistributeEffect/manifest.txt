@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPSkinPaintDistributeEffect.cpp  ?SetWorld@cSPSkinPaintDistributeEffect@@QAEXPAX00@Z  00531360  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPSkinPaintDistributeEffect.cpp  ?Start@cSPSkinPaintDistributeEffect@@QAEXPAX@Z  005313c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPSkinPaintDistributeEffect.cpp  ?LengthSquared@@YAMABUVector3T@@@Z  00532f80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinPaintDistributeEffect.cpp  ?GetElement@@YAPAUcElement8C@@PAUcElementOwner@@I@Z  005332f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

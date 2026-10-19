@@ -1,1 +1,1 @@
-00531510 cSPSkinPaintDistributeEffect::ApplyEffect  # ModAPI IComponent slot 0x14 ApplyEffect(float,float,cComponentStats*), ret 0xc; uses mpDesc fields mLimit/mSpacing/mRegionFlags/mParticleSelect
+00531510 ?ApplyEffect@cSPSkinPaintDistributeEffect_s0053_1510@@QAEXMMPAUcComponentStats@@@Z  # cSPSkinPaintDistributeEffect_s0053_1510::ApplyEffect migrated from s00531510 (verbatim, slice spelling)
