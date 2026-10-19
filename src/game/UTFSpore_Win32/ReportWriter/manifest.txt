@@ -13,3 +13,4 @@
 ../src/game/UTFSpore_Win32/ReportWriter.cpp  ?GetComputerNameHelper@@YGHPADI@Z  0091ed40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/ReportWriter.cpp  ?WriteRegisterValues@ReportWriter@Debug@EA@@QAE_NPBX@Z  0091fa10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/ReportWriter.cpp  ?WriteRegisterMemoryView@ReportWriter@Debug@EA@@QAE_NPBX@Z  0091fbd0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?WriteCallStack@ReportWriter@Debug@EA@@QAE_NPBX@Z  0091fca0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

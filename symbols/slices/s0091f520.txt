@@ -1,8 +1,8 @@
 0091f520 EA::Debug::ReportWriter::WriteMemoryView  # PDB name
-0091f7c0 EA::Debug::ReportWriter::WriteModuleList  # PDB name
+0091f7c0 ?WriteModuleList@ReportWriter_s0091_f520@@QAE_NXZ  # ReportWriter_s0091_f520::WriteModuleList migrated from s0091f520 (verbatim, slice spelling)
 0091fa10 ?WriteRegisterValues@ReportWriter@Debug@EA@@QAE_NPBX@Z  # EA::Debug::ReportWriter::WriteRegisterValues migrated from s0091f520
 0091fbd0 ?WriteRegisterMemoryView@ReportWriter@Debug@EA@@QAE_NPBX@Z  # EA::Debug::ReportWriter::WriteRegisterMemoryView migrated from s0091f520
-0091fca0 EA::Debug::ReportWriter::WriteCallStack  # PDB name
+0091fca0 ?WriteCallStack@ReportWriter@Debug@EA@@QAE_NPBX@Z  # EA::Debug::ReportWriter::WriteCallStack migrated from s0091f520
 0091fe40 EA::Debug::FileReportWriter::~FileReportWriter  # vtable store + fclose
 0091fe60 ?WriteStackMemoryView@ReportWriter@Debug@EA@@QAE_NPBEI@Z  # EA::Debug::ReportWriter::WriteStackMemoryView migrated from s0091f520
 0091ff10 EA::Debug::FileReportWriter::ScalarDeletingDtor  # vtable store + fclose + delete

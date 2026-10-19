@@ -6,6 +6,7 @@
 #include "EA/Debug/ReportWriter.h"
 #include <stdarg.h>
 #include "EA/Dasm/DisassemblerX86.h"
+#include <string.h>
 
 // ---- items of slice s0091e650 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef void* HMODULE;
@@ -109,10 +110,68 @@ extern "C" __declspec(dllimport) BOOL __stdcall GetFileVersionInfoA(LPCSTR, DWOR
 extern "C" __declspec(dllimport) BOOL __stdcall VerQueryValueA(const void*, LPCSTR, void**, UINT*);
 // ---- items of slice s0091e650 end
 
-
-
 // ---- items of slice s0091f520 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" __declspec(dllimport) void* __stdcall LoadLibraryA(const char*);
+extern "C" __declspec(dllimport) void* __stdcall GetProcAddress(void*, const char*);
+extern "C" __declspec(dllimport) void* __stdcall GetCurrentProcess();
+#pragma intrinsic(__readfsdword)
 unsigned long __cdecl __readfsdword(unsigned);
+struct MODULEINFO {
+    void*    lpBaseOfDll;   // +0
+    uint32_t SizeOfImage;   // +4
+    void*    EntryPoint;    // +8
+};
+struct ReportWriter_s0091_f520 {
+    virtual void v00();                              // 0x00
+    virtual void v04();                              // 0x04
+    virtual int  v08(int, int);                      // 0x08
+    virtual int  v0c(int);                           // 0x0c
+    virtual int  v10(int, int*);                     // 0x10
+    virtual int  v14(int);                           // 0x14
+    virtual void v18(const char*);                   // 0x18
+    virtual void v1c(const char*);                   // 0x1c
+    virtual void v20(const char*, int);              // 0x20
+    virtual void v24(const char*, ...);              // 0x24 (variadic -> cdecl, this first)
+    virtual void v28(const char*, const char*);      // 0x28
+    virtual void v2c();                              // 0x2c
+    virtual int  v30();                              // 0x30
+    virtual void v34(const char*, int);              // 0x34
+
+    bool WriteMemoryView(uint8_t* base, int len, uint8_t* mark, const char* label); // 0x0091f520
+    bool WriteStackMemoryView(unsigned lo, int len);                                 // 0x0091fe60
+    bool WriteRegisterMemoryView(int* ctx);                                          // 0x0091fbd0
+    bool WriteRegisterValues(int* ctx);                                              // 0x0091fa10
+    bool WriteModuleList();                                                          // 0x0091f7c0
+    bool WriteCallStack(int* ctx);                                                   // 0x0091fca0
+};
+static inline unsigned CStrLen(const char* s)
+{
+    const char* e = s + 1;
+    char c;
+    do { c = *s; ++s; } while (c != 0);
+    return (unsigned)(s - e);
+}
+typedef int (__stdcall *EnumProcessModules_t)(void*, void**, unsigned, unsigned*);
+typedef int (__stdcall *GetModuleFileNameExA_t)(void*, void*, char*, unsigned);
+typedef int (__stdcall *GetModuleBaseNameA_t)(void*, void*, char*, unsigned);
+typedef int (__stdcall *GetModuleInformation_t)(void*, void*, void*, unsigned);
+static inline void AppendQuote(char* s)
+{
+    // terminate one past the end, then put the closing quote over the old terminator
+    unsigned n1 = CStrLen(s);
+    s[n1 + 1] = 0;
+    unsigned n2 = CStrLen(s);
+    s[n2] = '"';
+}
+struct AddressRepCache {                              // EA::Callstack::AddressRepCache (0x44 bytes)
+    uint32_t d[0x11];
+    void Init();                                      // 0x0091b2f0
+    void Shutdown();                                  // 0x0091b090
+    unsigned GetRep(int kind, uint32_t addr, void* a, void* b, int flag);   // 0x0091b0f0 (ret 0x14)
+};
+extern "C" unsigned __cdecl CS_GetCallstack(uint32_t*, int, void*); // 0x0091b3d0
+extern "C" AddressRepCache* __cdecl CS_a1c0();                      // 0x0091a1c0
+extern "C" void __cdecl CS_b580(uint32_t, char*, int);              // 0x0091b580
 // ---- items of slice s0091f520 end
 
 // @ 0x0091e990
@@ -404,6 +463,55 @@ bool ReportWriter::WriteDisassembly(void* start, unsigned n, void* eip)
     return true;
 }
 
+// @ 0x0091f7c0
+bool ReportWriter_s0091_f520::WriteModuleList()
+{
+    void* h = LoadLibraryA("psapi.dll");
+    if (!h) {
+        v20("PSAPI is not available. Cannot dump module list.\r\n", 0);
+        return false;
+    }
+    EnumProcessModules_t      epm = (EnumProcessModules_t)GetProcAddress(h, "EnumProcessModules");
+    GetModuleFileNameExA_t    gmf = (GetModuleFileNameExA_t)GetProcAddress(h, "GetModuleFileNameExA");
+    GetModuleBaseNameA_t      gmb = (GetModuleBaseNameA_t)GetProcAddress(h, "GetModuleBaseNameA");
+    GetModuleInformation_t    gmi = (GetModuleInformation_t)GetProcAddress(h, "GetModuleInformation");
+    void* proc = GetCurrentProcess();
+    MODULEINFO mi;
+    unsigned needed;
+    char q1[0x105];   // 0x108 in size; declared smaller so it lands below q2 as in the original
+    char q2[0x108];
+    char out[0x28c];
+    void* mods[256];
+    if (epm(proc, mods, sizeof(mods), &needed)) {
+        unsigned count = needed >> 2;
+        if (count > 0x100) {
+            v20("Module count exceeds our enumeration limit of 256. Only 256 will be displayed.\r\n", 0);
+            count = 0x100;
+        }
+        for (unsigned i = 0; i < count; ++i) {
+            if (!gmi(proc, mods[i], &mi, sizeof(mi))) {
+                mi.EntryPoint = 0;
+                mi.lpBaseOfDll = 0;
+                mi.SizeOfImage = 0;
+            }
+            q1[0] = '"';
+            if (!gmb(proc, mods[i], q1 + 1, 0x104))
+                strcpy(q1 + 1, "<unknown>");
+            AppendQuote(q1);
+            q2[0] = '"';
+            if (!gmf(proc, mods[i], q2 + 1, 0x104))
+                strcpy(q2 + 1, "<unknown>");
+            AppendQuote(q2);
+            sprintf(out, "base 0x%08x size 0x%08x entry 0x%08x %-48s %s",
+                    (unsigned)mi.lpBaseOfDll, mi.SizeOfImage, (unsigned)mi.EntryPoint, q1, q2);
+            v20(out, 1);
+        }
+        return true;
+    }
+    v20("Failed to enumerate modules.\r\n", 0);
+    return true;
+}
+
 // @ 0x0091fa10
 bool EA::Debug::ReportWriter::WriteRegisterValues(void const * ctx)
 {
@@ -420,8 +528,6 @@ bool EA::Debug::ReportWriter::WriteRegisterValues(void const * ctx)
     sprintf(buf, "%08x", *(unsigned*)((char*)ctx + 0xc4)); WriteKeyValue("esp", buf);
     return true;
 }
-
-
 
 // @ 0x0091fbd0
 bool EA::Debug::ReportWriter::WriteRegisterMemoryView(void const * ctx)
@@ -444,7 +550,41 @@ bool EA::Debug::ReportWriter::WriteRegisterMemoryView(void const * ctx)
     return true;
 }
 
-
+// @ 0x0091fca0
+bool EA::Debug::ReportWriter::WriteCallStack(void const * ctx)
+{
+    uint32_t frame[3];
+    uint32_t a[4];
+    uint32_t b[4];
+    AddressRepCache repc;
+    uint32_t addrs[0x80];
+    char line[0x200];
+    frame[0] = *(uint32_t*)((char*)ctx + 0xb8);
+    frame[1] = *(uint32_t*)((char*)ctx + 0xc4);
+    frame[2] = *(uint32_t*)((char*)ctx + 0xb4);
+    unsigned n = CS_GetCallstack(addrs, 0x80, frame);
+    if (n != 0) {
+        AddressRepCache* cache = CS_a1c0();
+        repc.Init();
+        if (cache == 0)
+            cache = &repc;
+        for (unsigned i = 0; i < n; i++) {
+            unsigned flags = cache->GetRep(0xf, addrs[i], a, b, 1);
+            BeginSection("Callstack entry");
+            CS_b580(addrs[i], line, 0x200);
+            WriteText(line, 1);
+            if (flags & 8) WriteText((const char*)a[3], 1);
+            if (flags & 1) WriteFormatted("%s: %d\r\n", a[0], b[0]);
+            if (flags & 2) WriteFormatted("%s + %d\r\n", a[1], b[1]);
+            if (flags & 4) WriteText((const char*)a[2], 1);
+            EndSection("Callstack entry");
+        }
+        repc.Shutdown();
+        return true;
+    }
+    WriteText("Callstack not available\r\n", 0);
+    return true;
+}
 
 // @ 0x0091fe60
 bool EA::Debug::ReportWriter::WriteStackMemoryView(unsigned char const * lo, unsigned int len)
