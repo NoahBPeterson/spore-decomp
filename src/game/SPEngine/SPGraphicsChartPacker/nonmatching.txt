@@ -1,0 +1,14 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+006df470 80 eastl::partial_sort<SortKeyObj**,SortKeyGreater>; make_heap/select/sort_heap shape matches, pointer register schedule differs
+006df530 80 eastl::partial_sort<SortKeyObj**,SortKeyLess>; mirrored variant, same schedule difference
+006df5a0 271 eastl::partial_sort<cClusterRect*>; make_heap/adjust_heap/sort_heap calls all present, value-copy and call-argument schedule differ
+006df700 97 eastl::copy<RefPtr*>; intrusive-pointer element assign reproduced, schedule differs
+006df770 90 eastl::quick_sort_impl<SortKeyObj**,int,SortKeyGreater>; median-of-three/get_partition/recursion reproduced, pivot register assignment (eax/esi/ebp) differs
+006df830 90 eastl::quick_sort_impl<SortKeyObj**,int,SortKeyLess>; mirrored variant, same register assignment difference
+006df8f0 229 eastl::get_partition<cClusterRect*>; pivot-by-value partition reproduced, cl keeps the pivot copy as a frame temp instead of reusing the argument slots
+006dfb00 181 eastl::quick_sort_impl<cClusterRect*,int,cRectAreaSort>; median/partition/recursion reproduced, value partition schedule differs
+006dfc30 69 cluster-map add callback; every path/field and the area accumulation reproduced, vector push schedule differs; equiv: FAIL (5/89 inputs mismatched, memory pool)
+006dfca0 72 Elem16 vector erase-range; copy + release + size adjust reproduced, helper scheduling differs; equiv: WEAK (374 valid, 56.8% coverage)
+006dfd00 75 eastl::quick_sort<cClusterRect*>; Log2/quick_sort_impl/insertion_sort dispatch present, helper call schedule differs
+006dfd90 389 Elem16 vector DoInsertValues; all grow in-place branches reproduced (source complete, 462 vs 547 bytes), helper/temp schedule differs; equiv: WEAK (502 valid, 14.3% coverage)
+006dffc0 82 cluster-map constructor; all 20 stores reproduced, register/ordering differs
