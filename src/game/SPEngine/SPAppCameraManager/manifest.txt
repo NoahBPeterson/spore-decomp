@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPAppCameraManager.cpp  ?ActiveControllerID@cCameraManager@@QAEXXZ  007c6150  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPAppCameraManager.cpp  ?ActiveController@cCameraManager@SP@@UAEPAVcICameraController@2@XZ  007c61a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

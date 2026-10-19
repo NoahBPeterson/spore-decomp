@@ -1,0 +1,13 @@
+# va  diff-bytes  reason
+007c6110 77 cCameraManager::SetActiveController(name); vtable + SPKeyFromName shape differs
+007c6200 57 UpdateFromControllerProperties; vtable property fetch differs (now member, ECX this; equiv UNSUPPORTED: 0/1200 valid inputs)
+007c6370 17 scalar deleting destructor; operator_delete call shape differs
+007c63a0 43 cCameraManager::Update; vtable walks differ
+007c6420 64 SetActiveControllerByIndex; vtable order differs
+007c65a0 5 VariantTypeTraits::GetTPTR; lazy static init differs
+007c6610 106 cCameraManager::HandleMessage; hashtable find not reproduced
+007c66b0 40 SetActiveController(id); hashtable find not reproduced
+007c6700 34 cCameraManager::Controller; hashtable find not reproduced
+007c6db0 97 Shutdown; message/cheat unregister path differences
+007c6eb0 78 ClearControllers; hashtable rehash/callback path differences
+007c75e0 52 cCameraManager ctor; EASTL hashtable/string init not reproduced
