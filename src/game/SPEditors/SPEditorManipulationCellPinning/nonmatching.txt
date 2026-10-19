@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+005aa5d0 236 ClampToPinned: loop reg alloc (ebx vs ebp) and flag test shr/test vs test imm
+005aac30 99 CellPinning ctor: vptr stores scheduled late; difftest PASS after mapping the vtables (??_7cCellPinning@@6BcManipBase@@@ 0x13f70e4, ...6BcRC@@@ 0x13f70d4, ??_7cRC@@6B@ 0x13ec458) in symbols/slices/s005a9d40.txt
+005ab1b0 33 GetPileList (vector<AutoRefCount<cSPEditorBlock>> by value): passed as a 5-argument out-of-line uninitialized_copy helper (hidden copy_result sret + first/last/dest/out) and cl reloads the out pointer; mine emits a 4-argument helper and keeps the destination in edi

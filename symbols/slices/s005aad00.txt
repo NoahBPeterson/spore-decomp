@@ -1,5 +1,5 @@
-005aad00 SP::cSPEditorManipulationCellPinning::~cSPEditorManipulationCellPinning  # PDB 00d64040; byte-exact
-005aada0 SP::cSPEditorManipulationCellPinning::OnMouseUp  # PDB 00d632b0; vtable slot 4
-005ab1b0 SP::cSPEditorManipulationCellPinning::GetPileList  # vtable slot 11; returns mPileList by value
-005ab220 SP::cSPEditorManipulationCellPinning::RecalculateMouseOffset  # PDB 00d64780; vtable call site 005ab747
-005ab5c0 SP::cSPEditorManipulationCellPinning::DoOnMouseDown  # PDB 00d64ae0; vtable slot 6
+005aad00 ??1cSPEditorManipulationCellPinning@SP@@UAE@XZ  # cSPEditorManipulationCellPinning::~cSPEditorManipulationCellPinning migrated from s005aad00 (verbatim, slice spelling)
+005aada0 ?OnMouseUp@cSPEditorManipulationCellPinning@SP@@UAE_NHMMH@Z  # cSPEditorManipulationCellPinning::OnMouseUp migrated from s005aad00 (verbatim, slice spelling)
+005ab1b0 ?GetPileList@cSPEditorManipulationCellPinning@SP@@UAE?AV?$sp_vector@V?$AutoRefCount_s005a_ad00@VcSPEditorBlock_s005a_ad00@SP@@@EA@@@eastl@@XZ  # cSPEditorManipulationCellPinning::GetPileList migrated from s005aad00 (verbatim, slice spelling)
+005ab220 ?RecalculateMouseOffset@cSPEditorManipulationCellPinning@SP@@QAEXMM@Z  # cSPEditorManipulationCellPinning::RecalculateMouseOffset migrated from s005aad00 (verbatim, slice spelling)
+005ab5c0 ?DoOnMouseDown@cSPEditorManipulationCellPinning@SP@@UAE_NHMMH@Z  # cSPEditorManipulationCellPinning::DoOnMouseDown migrated from s005aad00 (verbatim, slice spelling)
