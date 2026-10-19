@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+004763a0 47 complete source; uninitialized_copy+destruct<8-byte>, NOT byte-exact
+0050d4e0 294 eastl::vector<float,sp_vector_allocator>::operator=: complete reimplementation; EASTL internals/schedule differ
+0083cdd0 28 complete: AppProps ctor; movss constant loads and member store order differ

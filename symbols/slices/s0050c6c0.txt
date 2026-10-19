@@ -1,1 +1,2 @@
 0050c6c0 Skin::Append  # Claude-coined; appends another Skin mesh, rebasing indices (class from slice s00507670)
+0050d4e0 ?FloatVec_Assign@@YIPAIPAI0@Z  # FloatVec_Assign migrated from s0050c6c0 (verbatim, slice spelling)
