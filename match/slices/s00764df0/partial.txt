@@ -1,3 +1,0 @@
-00765230  133  partial: destroy array of 0x7c-stride records via 0x422fd0; EH frame not reproduced
-007652c0  554  partial: async request start (cJob x3, callback structs); not translated
-007654f0  142  partial: resource-factory ctor (vtable, atomic lock at +4, new 0x40 Graphics object + AddRef); not translated

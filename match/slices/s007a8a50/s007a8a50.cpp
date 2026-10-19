@@ -328,11 +328,7 @@ DequeIter2& DequeIter2::operator+=(int n)
     return *it;
 }
 
-// @ 0x007a9080  (draw glyph run)
-void FUN_007a9080()
-{
-    // behavioral body in FUN_007a9080_impl (omitted details)
-}
+// (see SP::cTextRenderer::AddGlyphRun at the end of this file)
 
 // ---------------------------------------------------------------------------
 // cTextRenderer-side helpers (slice 32's class)
@@ -368,38 +364,9 @@ int FUN_007a9130(int param_1, int param_2)
     return 0;
 }
 
-// @ 0x007a91b0  (draw a wide string; uses the run emitter or the immediate path)
-void FUN_007a91b0(int param_1, float a, float b, const unsigned short* s)
-{
-    // (behavioural; helper signatures approximated)
-    (void)param_1; (void)a; (void)b; (void)s;
-}
+// (see SP::cTextRenderer::DrawString at the end of this file)
 
-// @ 0x007a9280  GlyphCache texture creation + push_back
-void FUN_007a9280(int param_1, int param_2)
-{
-    *(int*)(param_2 + 0x44) = 3;
-    int* mgr = (int*)FUN_0067dd60();
-    unsigned int seed = (*(unsigned char*)0x01634c78) | 0x40222900;
-    unsigned int h = FUN_00932e80_hash("GlyphCache", 0x811c9dc5, 1);
-    unsigned int v = ((unsigned int(__thiscall*)(void*, unsigned int, unsigned int, int, int,
-                        int, int, int, int))((void**)mgr)[0x3c / 4])
-        (mgr, h, seed, *(int*)(param_2 + 0x48), *(int*)(param_2 + 0x48), 1, 8, 0x33545844, 0);
-    (*(int*)0x01634c78)++;
-    if (v) {
-        _InterlockedExchangeAdd((volatile long*)((char*)(size_t)v + 8), 1);
-    }
-    // push_back into vector at param_1+0x190
-    int* end = *(int**)(param_1 + 0x194);
-    if (end < *(int**)(param_1 + 0x198)) {
-        *(int**)(param_1 + 0x194) = end + 1;
-        if (end) {
-            *end = v;
-            if (v)
-                _InterlockedExchangeAdd((volatile long*)((char*)(size_t)v + 8), 1);
-        }
-    }
-}
+// (see SP::cTextRenderer::CreateGlyphCacheTexture at the end of this file)
 
 // @ 0x007a8a50  EA::Text::Render_RenderWare::DrawGlyphs (1569 bytes, __thiscall ret 0x10)
 //
@@ -644,3 +611,179 @@ int Render_RenderWare::DrawGlyphs(const GlyphDisplayEntry* pGDEArray, unsigned i
 }
 
 }  // namespace DrawGlyphsImpl
+
+// ===========================================================================
+// SP::cTextRenderer  --  0x007a9080 AddGlyphRun / 0x007a91b0 DrawString /
+//                        0x007a9280 CreateGlyphCacheTexture
+//
+// Layout (from EnsureBuffers 0x007a8310 and Init 0x007a84d0):
+//   +0x0000  unsigned char* mGlyphRuns   new(0x14000,"Graphics") = 0x800 * 0x28 glyph entries
+//   +0x0004  unsigned int*  mColors      new(0x2000, "Graphics") = 0x800 * 4
+//   +0x0008  int            mNumRuns
+//   +0x000c  bool           mInitialised
+//   +0x0010  Render_RenderWare* mRenderer   (DrawGlyphs `this`; a font lives at +0xa000)
+//   +0x0014  FontRunner*    mFont           (`this` for 0x0088f860 / 0x0088ffa0)
+//   +0x0018  unsigned char* mStyle          (colour array at +0x224)
+//   +0x001c  bool           mStyleDirty
+//   +0x0190  eastl::vector<AutoRefCount<SP::cTextureInstance>> mTextures
+// ===========================================================================
+
+namespace SP {
+
+// __thiscall 0x0088f860 -- builds `n` 0x28-byte glyph-display entries for the string into `dest`.
+// `this` is the font owner; argument 5 is the font (0 => take *(this->[0x1c]+0x10)).
+// __thiscall 0x0088ffa0 -- resets the font/settings owner (this).
+struct FontRunner {
+    int  MakeGlyphRun(const unsigned short* s, unsigned n, float x, float y,
+                      void* font, void* dest);          // 0x0088f860
+    void Reset(void* a, void* b, void* c);              // 0x0088ffa0
+};
+
+// EA::AutoRefCount<SP::cTextureInstance> -- the instance refcount lives at +8.
+struct TextureRef {
+    int* mpObject;
+    explicit TextureRef(int* p) : mpObject(p)
+    {
+        if (p)
+            _InterlockedExchangeAdd((volatile long*)((char*)p + 8), 1);
+    }
+    ~TextureRef()
+    {
+        if (mpObject) {
+            volatile long* rc = (volatile long*)((char*)mpObject + 8);
+            _InterlockedExchangeAdd(rc, -1);
+            long cur = _InterlockedExchangeAdd(rc, 0);
+            if (cur < 1)
+                _InterlockedExchangeAdd(rc, 1);
+            else
+                _InterlockedExchangeAdd(rc, 0);
+        }
+    }
+};
+
+// eastl::vector<AutoRefCount<SP::cTextureInstance>> (the tail of cTextRenderer)
+struct TextureVector {
+    int** mpBegin;
+    int** mpEnd;
+    int** mpCapacity;
+    void DoInsertValue(int** position, const TextureRef& value);   // 0x00425a80
+};
+
+struct cTextRenderer {
+    unsigned char* mGlyphRuns;      // +0x0000
+    unsigned int*  mColors;         // +0x0004
+    int            mNumRuns;        // +0x0008
+    unsigned char  mInitialised;    // +0x000c
+    char  pad0d[3];
+    DrawGlyphsImpl::Render_RenderWare* mRenderer;   // +0x0010
+    FontRunner*    mFont;           // +0x0014
+    unsigned char* mStyle;          // +0x0018
+    unsigned char  mStyleDirty;     // +0x001c
+    char  pad1d[0x190 - 0x1d];
+    int** mpVecBegin;               // +0x0190
+    int** mpVecEnd;                 // +0x0194
+    int** mpVecCapacity;            // +0x0198
+
+    void AddGlyphRun(const unsigned short* s, unsigned n, float x, float y);   // 0x007a9080
+    void DrawString(float x, float y, const unsigned short* s);                // 0x007a91b0
+    unsigned int CreateGlyphCacheTexture(void* p);                             // 0x007a9280
+
+    void EnsureBuffers();           // 0x007a8310
+    void Init();                    // 0x007a84d0
+};
+
+}  // namespace SP
+
+// @ 0x007a9080  SP::cTextRenderer::AddGlyphRun
+void SP::cTextRenderer::AddGlyphRun(const unsigned short* s, unsigned n, float x, float y)
+{
+    if (n > 0x800)
+        return;
+
+    if (mNumRuns + n > 0x800) {
+        if (mNumRuns > 0)
+            mRenderer->DrawGlyphs((const DrawGlyphsImpl::GlyphDisplayEntry*)mGlyphRuns,
+                                  (unsigned int)mNumRuns, mColors, true);
+        mNumRuns = -1;
+        EnsureBuffers();
+    }
+
+    void* font = (void*)*(int*)(*(int*)((char*)mFont + 0x1c) + 0x10);
+    int nMade = mFont->MakeGlyphRun(s, n, x, y, font, (char*)mGlyphRuns + mNumRuns * 0x28);
+    FUN_0092cb00_Memset32((unsigned int)((char*)mColors + mNumRuns * 4),
+                          *(unsigned int*)((char*)mStyle + 0x224), (unsigned int)nMade);
+    mNumRuns += nMade;
+}
+
+// __thiscall 0x0088f860 helper (inlined by the original at both DrawString sites).
+static __forceinline unsigned int StrLenW(const unsigned short* s)
+{
+    const unsigned short* e = s;
+    while (*e++)
+        ;
+    return (unsigned int)(e - s) - 1;
+}
+
+// @ 0x007a91b0  SP::cTextRenderer::DrawString
+void SP::cTextRenderer::DrawString(float x, float y, const unsigned short* s)
+{
+    if (!mInitialised)
+        Init();
+    if (mStyleDirty) {
+        mFont->Reset(mStyle, 0, 0);
+        mStyleDirty = 0;
+    }
+
+    const unsigned short* e0 = s;
+    if (mNumRuns >= 0) {
+        const unsigned short* e = e0;
+        const unsigned short* e1 = e + 1;
+        while (*e++)
+            ;
+        unsigned n = (unsigned)(e - e1);
+        AddGlyphRun(s, n, x, y);
+    } else {
+        const unsigned short* e = e0;
+        while (*e++)
+            ;
+        unsigned n = (unsigned)(e - e0) - 1;
+        void* font = (void*)*(int*)(*(int*)((char*)mFont + 0x1c) + 0x10);
+        int nMade = ((FontRunner*)((char*)mRenderer + 0xa000))->MakeGlyphRun(
+                        s, n, x, y, font, (void*)mRenderer);
+        mRenderer->DrawGlyphs((const DrawGlyphsImpl::GlyphDisplayEntry*)mRenderer, (unsigned int)nMade,
+                              (const unsigned int*)((char*)mStyle + 0x224), false);
+    }
+}
+
+// @ 0x007a9280  SP::cTextRenderer::CreateGlyphCacheTexture
+unsigned int SP::cTextRenderer::CreateGlyphCacheTexture(void* p)
+{
+    *(int*)((char*)p + 0x44) = 3;
+
+    void* mgr = FUN_0067dd60();
+    unsigned int seed = (unsigned int)(*(unsigned char*)0x01634c78) | 0x40222900u;
+    unsigned int h = FUN_00932e80_hash("GlyphCache", 0x811c9dc5, 1);
+    int param48 = *(int*)((char*)p + 0x48);
+    unsigned int tex = ((unsigned int(__thiscall*)(void*, unsigned int, unsigned int, int, int,
+                            int, int, int, int))((void**)*(void**)mgr)[0x3c / 4])
+        (mgr, h, seed, param48, param48, 1, 8, 0x33545844, 0);
+    (*(int*)0x01634c78)++;
+
+    {
+        TextureRef value((int*)tex);
+        if (mpVecEnd < mpVecCapacity) {
+            *mpVecEnd++ = value.mpObject;
+            if (value.mpObject)
+                _InterlockedExchangeAdd((volatile long*)((char*)value.mpObject + 8), 1);
+        } else {
+            ((TextureVector*)mpVecBegin)->DoInsertValue(mpVecEnd, value);
+        }
+    }
+
+    if (((*(unsigned char*)((char*)tex + 4)) & 1) == 0) {
+        void* mgr2 = FUN_0067dd60();
+        ((void(__thiscall*)(void*, void*))((void**)mgr2)[0x34 / 4])(mgr2, (void*)tex);
+    }
+
+    return *(unsigned int*)tex;
+}

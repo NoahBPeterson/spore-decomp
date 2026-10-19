@@ -1,4 +1,1 @@
 # va  diff-bytes  reason   (incomplete / approximate)
-00828740  -  func20h (769-byte routine) not reconstructed
-00828a50  -  routine not reconstructed
-00828be0  -  routine not reconstructed

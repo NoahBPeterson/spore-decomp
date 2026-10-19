@@ -2,6 +2,7 @@
 // SP::cGraphicsResourceFactory raster/game-mesh/arena serialization tail.
 // flags: /O2 /MD /Gy /EHsc /TP /GS-
 #include <intrin.h>
+#include <new>
 #include "types.h"
 
 // ---------------------------------------------------------------------------
@@ -520,7 +521,103 @@ bool AsyncReqC::Start(JobRefL* out) {
 }
 
 // ===========================================================================
-// partial stubs
-void __cdecl FUN_765230(void* a, int n, void* c) { (void)a; (void)n; (void)c; }     // 00765230
-int  __cdecl FUN_7652c0(void* p) { (void)p; return 0; }                             // 007652c0
-void __cdecl FUN_7654f0(void* p) { (void)p; }                                       // 007654f0
+// fill a run of 0x7c-byte records at 0x00765230 by copy-construct
+struct Rec7c { char raw[0x7c]; Rec7c(const Rec7c& o); void Assign(const Rec7c& o); };   // 0x00422fd0 thiscall, ret 4
+// @ 0x00765230
+void __cdecl FUN_765230(Rec7c* p, unsigned count, const Rec7c& value) {
+    for (unsigned i = count; i > 0; --i) {
+        if (p)
+            new ((void*)p) Rec7c(value);
+        p = (Rec7c*)((char*)p + 0x7c);
+    }
+}
+
+// ===========================================================================
+// async request start at 0x007652c0 (two chained jobs)
+void __cdecl FUN_764700(void*);
+void __cdecl FUN_764710(void*);
+struct AsyncReqA {
+    char pad0[0x10];
+    IKeyObj* obj;               // +0x10
+    void* f14;                  // +0x14
+    uint32_t id18;              // +0x18
+    char pad1c[0x10];
+    uint32_t f2c;               // +0x2c
+    char pad30[0x14];
+    void* f44;                  // +0x44
+    char pad48[0xb4];
+    uint32_t state;             // +0xfc
+    bool Start(JobRefL* out);
+};
+// @ 0x007652c0
+bool AsyncReqA::Start(JobRefL* out) {
+    if (id18 != 0x2f4e681c)
+        return false;
+    state = 1;
+    f44 = 0;
+    if (obj->Info()->f4 != 0x2f7d0004)
+        return false;
+    f2c = 4;
+    JobLockL lock(GetJobManager());
+    JobRefL a;
+    {
+        IJobMgr* m = GetJobManager();
+        a.Reset();
+        if (!m->CreateJob(&a))
+            return false;
+    }
+    JobRefL b;
+    {
+        IJobMgr* m = GetJobManager();
+        b.Reset();
+        if (!m->CreateJob(&b))
+            return false;
+    }
+    a.p->SetCallback((void*)FUN_764700, this);
+    a.p->mFlags = 4;
+    a.p->SetOwner(this);
+    a.p->Queue();
+    b.p->SetCallback((void*)FUN_764710, this);
+    b.p->mFlags = 1;
+    b.p->SetOwner(this);
+    b.p->AddDependency(a.p);
+    b.p->Queue();
+    out->p = b.p;
+    b.p = 0;
+    return true;
+}
+
+// ===========================================================================
+// cGraphicsResourceFactory ctor at 0x007654f0 (base Factory + locked cJobLock at +8)
+namespace EA {
+struct AtomicInt { long mValue; long operator++(int) { volatile long* r = &mValue; return _InterlockedExchangeAdd(r, 1); } };
+struct RefCountTemplate {
+    RefCountTemplate() { volatile long* r = &mnRefCount.mValue; _InterlockedExchange(r, 0); }
+    virtual ~RefCountTemplate() {}
+    int AddRef() { return mnRefCount++ + 1; }
+    int Release();
+    AtomicInt mnRefCount;               // +4
+};
+template<class T> struct AutoRefCountX {
+    T* mpObject;
+    AutoRefCountX() : mpObject(0) {}
+    AutoRefCountX(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCountX() { if (mpObject) mpObject->Release(); }
+};
+namespace ResourceMan {
+struct Factory : EA::RefCountTemplate {};
+}
+}
+struct cJobLock : EA::RefCountTemplate {          // size 0x40
+    char pad8[0x38];
+    cJobLock();                                   // 0x0068eff0
+};
+void* operator new(size_t, const char*, int, int, int, int);
+void operator delete(void*, const char*, int, int, int, int) throw();
+struct GrfCtor : EA::ResourceMan::Factory {
+    EA::AutoRefCountX<cJobLock> mPrestreamMemoryBufferLock;   // +8
+    GrfCtor();
+};
+// @ 0x007654f0
+GrfCtor::GrfCtor()
+    : mPrestreamMemoryBufferLock(new ("Graphics", 0, 0, 0, 0) cJobLock()) {}

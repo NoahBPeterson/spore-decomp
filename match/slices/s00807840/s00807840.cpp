@@ -88,7 +88,7 @@ struct W {
     S(94) S(98) S(9c) S(a0) S(a4) S(a8) S(ac) S(b0) S(b4) S(b8) S(bc) S(c0)
     S(c4) S(c8)
     virtual void  mCc(void*);        // +0xcc
-    virtual void* vD0();             // +0xd0
+    virtual void* vD0(void*);        // +0xd0
     S(d4) S(d8) S(dc) S(e0) S(e4) S(e8) S(ec) S(f0) S(f4) S(f8) S(fc) S(100)
     virtual void  m104(void*);       // +0x104
 };
@@ -98,7 +98,13 @@ static inline void* VSlot(void* p, unsigned byteOff) {
 }
 
 struct XAlign { void Update(void*, void*); };
-int VisitWindowTreeDepthFirst(W*, int (*)(W*, void*), void*);
+bool VisitWindowTreeDepthFirst(W*, bool (*)(W*, void*), void*);
+
+// Child-window list node: [0] = next, the owning window sits at node + DAT_1440aec.
+struct ChildNode { ChildNode* mpNext; };
+extern int DAT_1440aec;                       // 0x01440aec (runtime member offset)
+struct RectOps { char FUN_0064e6b0(); };      // 0x0064e6b0: empty-rect test (thiscall)
+float* FUN_00808370(float* out, W* w, void* flag);
 
 // @ 0x00807840
 void FUN_00807840(int a, int b, int c, int d, int e, int f, int g) {
@@ -159,7 +165,7 @@ void* SetWindowSPShader(W* w, unsigned char flag, void* shader) {
             if (old != 0) (*(void(__thiscall**)(void*, int))VSlot(old, 4))(old, 0);
         }
     }
-    VisitWindowTreeDepthFirst(w, (int (*)(W*, void*))FUN_00806db0, &local);
+    VisitWindowTreeDepthFirst(w, (bool (*)(W*, void*))FUN_00806db0, &local);
     void* r = local;
     if (local != 0) (*(void(__thiscall**)(void*, int))VSlot(local, 4))(local, 0);
     return r;
@@ -356,54 +362,57 @@ struct WinButtonCtor { void* ctor(); };
 struct ButtonDrawableCtor { void* ctor(); };
 
 // @ 0x00807880
-int* FUN_00807880(float* p) {
-    float local[3];
-    local[0] = p[0];
-    local[2] = p[2];
-    local[1] = 2.3010222e-10f;
+int* FUN_00807880(float* key, float x, float y, void* parent) {
+    float v[4];
+    W* win = 0;
     void* img = 0;
-    CreateImageFromResource(local, &img, 0, 0xffffffff, 0xffffffff);
-    int* result = 0;
+    ((uint32_t*)v)[0] = ((uint32_t*)key)[0];
+    ((uint32_t*)v)[1] = 0x2f7d0004u;
+    ((uint32_t*)v)[2] = ((uint32_t*)key)[2];
+    CreateImageFromResource(v, &img, 0, 0xffffffff, 0xffffffff);
     if (img != 0) {
         void* alloc = FUN_009512c0();
         void* mem = FUN_009512d0(0x50, 4, "UI/ImageDrawable", alloc);
         int* d = 0;
-        if (mem != 0) d = (int*)((ImageDrawableCtor*)mem)->ctor();
-        if (d != 0) {
-            (*(void(__thiscall**)(void*))VSlot(d, 0))(d);
-            (*(void(__thiscall**)(void*, void*, int))VSlot(d, 0x14))(d, img, 0);
-            void* wa = FUN_009512c0();
-            void* wm = FUN_009512d0(0x20c, 4, "UI/Window", wa);
-            W* win = 0;
-            if (wm != 0) {
-                void* o = ((WindowCtor*)wm)->ctor();
-                win = o ? (W*)((char*)o + 4) : 0;
+        if (mem != 0) {
+            d = (int*)((ImageDrawableCtor*)mem)->ctor();
+            if (d != 0) {
+                (*(void(__thiscall**)(void*))VSlot(d, 0))(d);
+                (*(void(__thiscall**)(void*, void*))VSlot((char*)d + 0xc, 0x14))((char*)d + 0xc, img);
+                void* wa = FUN_009512c0();
+                void* wm = FUN_009512d0(0x20c, 4, "UI/Window", wa);
+                if (wm != 0) {
+                    void* o = ((WindowCtor*)wm)->ctor();
+                    if (o != 0) win = (W*)((char*)o + 4);
+                }
+                if (win != 0) {
+                    (*(void(__thiscall**)(void*, int))VSlot(win, 0x54))(win, 0);
+                    (*(void(__thiscall**)(void*, int))VSlot(win, 0x50))(win, 0);
+                    int b = *(int*)((char*)img + 0x20);
+                    int a = *(int*)((char*)img + 0x1c);
+                    v[0] = 0.0f;
+                    v[1] = 0.0f;
+                    v[2] = (float)a;
+                    v[3] = (float)b;
+                    (*(void(__thiscall**)(void*, float*))VSlot(win, 0x60))(win, v);
+                    (*(void(__thiscall**)(void*, float, float))VSlot(win, 0x64))(win, x, y);
+                    (*(void(__thiscall**)(void*, int))VSlot(win, 0x5c))(win, -1);
+                    (*(void(__thiscall**)(void*, int))VSlot(win, 0xac))(win, 0xffffff);
+                    (*(void(__thiscall**)(void*, int, int))VSlot(win, 0x7c))(win, 1, 1);
+                    (*(void(__thiscall**)(void*, int, int))VSlot(win, 0x7c))(win, 0x10, 0);
+                    (*(void(__thiscall**)(void*, int, int))VSlot(win, 0x7c))(win, 2, 1);
+                    (*(void(__thiscall**)(void*, void*))VSlot(win, 0xb0))(win, d);
+                    if (parent != 0)
+                        (*(void(__thiscall**)(void*, void*))VSlot(parent, 0xd8))(parent, win);
+                    (*(void(__thiscall**)(void*))VSlot(win, 0x90))(win);
+                }
+                (*(void(__thiscall**)(void*))VSlot(d, 4))(d);
             }
-            if (win != 0) {
-                win->v54();
-                win->v50();
-                float r[4];
-                r[0] = (float)d[7];
-                r[1] = (float)d[8];
-                r[2] = local[2];
-                r[3] = 0.0f;
-                (void)r;
-                win->v60();
-                win->v64();
-                (*(void(__thiscall**)(void*, int))VSlot(win, 0x5c))(win, -1);
-                (*(void(__thiscall**)(void*, int))VSlot(win, 0xac))(win, 0xffffff);
-                (*(void(__thiscall**)(void*, int, int))VSlot(win, 0x7c))(win, 1, 1);
-                (*(void(__thiscall**)(void*, int, int))VSlot(win, 0x7c))(win, 0x10, 0);
-                (*(void(__thiscall**)(void*, int, int))VSlot(win, 0x7c))(win, 2, 1);
-                (*(void(__thiscall**)(void*, void*))VSlot(win, 0xb0))(win, d);
-                win->v90();
-                result = (int*)win;
-            }
-            (*(void(__thiscall**)(void*, int))VSlot(d, 4))(d, 0);
         }
-        (*(void(__thiscall**)(void*, int))VSlot(img, 4))(img, 0);
     }
-    return result;
+    if (img != 0)
+        (*(void(__thiscall**)(void*))VSlot(img, 4))(img);
+    return (int*)win;
 }
 
 // @ 0x00807a50
@@ -455,21 +464,61 @@ int* FUN_00807a50(void* p1, int type, void* p3) {
 }
 
 // @ 0x00807d30 SPUIHelpers::VisitWindowTreeDepthFirst
-int VisitWindowTreeDepthFirst(W* w, int (*fn)(W*, void*), void* ctx) {
-    if (fn(w, ctx) == 0) return 0;
-    w->mCc(&fn);
-    int* end = (int*)w->vD0();
-    (void)end;
+bool VisitWindowTreeDepthFirst(W* w, bool (*fn)(W*, void*), void* ctx) {
+    if (!fn(w, ctx)) return 0;
+    ChildNode* cur;
+    ChildNode* end;
+    w->mCc(&cur);
+    while (cur != *(ChildNode**)w->vD0(&end)) {
+        ChildNode* next = cur->mpNext;
+        W* child = (W*)((char*)cur + DAT_1440aec);
+        cur = next;
+        if (!VisitWindowTreeDepthFirst(child, fn, ctx))
+            return 0;
+    }
     return 1;
 }
 
 // @ 0x00808370
 float* FUN_00808370(float* out, W* w, void* flag) {
-    out[0] = 0; out[1] = 0; out[2] = 0; out[3] = 0;
+    out[0] = 0.0f;
+    out[1] = 0.0f;
+    out[2] = 0.0f;
+    out[3] = 0.0f;
     if ((char)flag == 0 || (((int)w->v28()) & 1) != 0) {
-        w->mCc(&out);
-        int* end = (int*)w->vD0();
-        (void)end;
+        ChildNode* cur;
+        ChildNode* end;
+        w->mCc(&cur);
+        if (cur != *(ChildNode**)w->vD0(&end)) {
+            do {
+                W* child = (W*)((char*)cur + DAT_1440aec);
+                cur = cur->mpNext;
+                float r[4];
+                FUN_00808370(r, child, flag);
+                if (r[0] != r[2] && r[1] != r[3]) {
+                    if (((RectOps*)out)->FUN_0064e6b0()) {
+                        out[0] = r[0];
+                        out[1] = r[1];
+                        out[2] = r[2];
+                        out[3] = r[3];
+                    } else {
+                        out[0] = out[0] < r[0] ? out[0] : r[0];
+                        out[1] = r[1] < out[1] ? r[1] : out[1];
+                        out[2] = out[2] > r[2] ? out[2] : r[2];
+                        out[3] = out[3] > r[3] ? out[3] : r[3];
+                    }
+                }
+            } while (cur != *(ChildNode**)w->vD0(&end));
+        }
+        float* p = (float*)w->v38();
+        float x0 = out[0] + p[0];
+        float x1 = out[1] + p[1];
+        float x2 = out[2] + p[0];
+        float x3 = out[3] + p[1];
+        out[0] = x0 < p[0] ? x0 : p[0];
+        out[1] = x1 < p[1] ? x1 : p[1];
+        out[2] = x2 < p[2] ? x2 : p[2];
+        out[3] = x3 < p[3] ? x3 : p[3];
     }
     return out;
 }

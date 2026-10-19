@@ -1,11 +1,14 @@
+00807880  36  complete: CreateImageWindow - resource-key pack + ImageDrawable/Window composition; only the v[2]/v[3] int->float store schedule differs; equiv: WEAK 248 valid inputs, 15.8% coverage (early-return path dominates)
 00807a50  244 complete; button-drawable selection/register schedule differs
 00807bb0  159 complete; SSE/call scheduling differs
 00807cb0  93  complete; register/scheduling differences
+00807d30  52  complete: SPUIHelpers::VisitWindowTreeDepthFirst - callback test + child-list walk; differs only in the loop-body instruction order and the shrink-wrapped push edi; equiv: PASS 314 valid inputs, 75.8% coverage
 00807dc0  107 complete; shader refcount/loop scheduling differs
 00807f50  185 complete; rotation switch/register differences
 00808050  166 complete; transform update SSE schedule differs
 00808190  24  complete; only vtable-load scheduling differs
 00808230  96  complete; float compare schedule differs
 008082f0  23  complete; only vtable-load scheduling differs
+00808370  368 complete: recursive union-of-bounds walk (v28/v38/vtable 0xcc/0xd0 + FUN_0064e6b0 empty-rect test + min/max merge); original batches all four addss before the compare chain, ours interleaves; equiv: UNSUPPORTED 0/400 valid inputs (needs a live window + child list)
 008085d0  59  complete; ctor field-store/register differences
 00808660  209 complete; property/stream loop register differences

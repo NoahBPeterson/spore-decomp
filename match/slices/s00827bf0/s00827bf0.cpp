@@ -4,6 +4,7 @@
 // minus /EHsc; the original has no EH frame for them (see manifest.txt / nonmatching.txt).
 #include "types.h"
 #include <new>
+#include <intrin.h>
 
 struct Key { unsigned int a, b, c; };
 void SPKeyFromName(Key* out, const wchar_t* name, unsigned int ns, int id);
@@ -95,7 +96,7 @@ struct WinProcBase {
   virtual bool DoMessage(int, void*);  // +0x18
   virtual bool Init();  // +0x1c
   virtual void func20h();  // +0x20
-  virtual void func24h();  // +0x24
+  virtual bool func24h();  // +0x24
 };
 
 WinMgr* WindowManager();                         // 0x0067caa0
@@ -265,21 +266,66 @@ bool SP::cPropertyUI::DoMessage(int, Msg* m) {
 // ===========================================================================
 // retail cSPUIPropertyLayout (offsets confirmed from disassembly)
 // ===========================================================================
+extern void (*g_TimerFunc)(unsigned __int64*);   // 0x013cc2b8 (QueryPerformanceCounter)
+extern float g_PropDefaultValue;                 // 0x015d1168 (default "value" variant)
+
 struct Stopwatch {
-  char pad0[0x14];            // +0x0
+  unsigned mStartLo;          // +0x0
+  unsigned mStartHi;          // +0x4
+  unsigned mAccLo;            // +0x8
+  unsigned mAccHi;            // +0xc
+  int mMode;                  // +0x10 (1 == rdtsc)
   float mUnitsPerSecond;      // +0x14
   Stopwatch(int units, bool b);    // 0x0093a560 (callee pops)
-  __int64 GetElapsedTime();
+  __int64 GetElapsedTime();        // 0x0093a3a0
+  void Reset();
 };
 
+inline void Stopwatch::Reset() {
+  unsigned __int64 t;
+  if (mMode == 1) t = __rdtsc();
+  else g_TimerFunc(&t);
+  mStartLo = (unsigned)t;
+  mStartHi = (unsigned)(t >> 32);
+  mAccLo = 0;
+  mAccHi = 0;
+}
+
 struct Variant {
-  char pad[0x10];
-  unsigned short mFlags;
-  unsigned short mTypeId;
+  union {
+    void* mpValue;
+    unsigned uValue;
+    float fValue;
+    char raw[0x10];
+  };
+  unsigned short mFlags;      // +0x10
+  unsigned short mTypeId;     // +0x12
   Variant() { mFlags = 0; mTypeId = 0; }
   Variant& operator=(const Variant&);   // 0x00542b80
   void Destruct(int);
 };
+
+// "value pointer" of a Variant: the inline union holds a pointer when the
+// indirect flag is set, otherwise the variant's own address is the payload.
+static void* VarData(const Variant* v) {
+  if (v->mFlags & 0x30) return *(void**)(void*)v;
+  return v->mTypeId ? (void*)v : 0;
+}
+
+// eastl-style string used for the text branches of func20h
+struct EStringView { const char* mpBegin; const char* mpEnd; };
+struct EString {
+  void* mpBegin;   // +0x0
+  void* mpEnd;     // +0x4
+  void* mpCap;     // +0x8
+  EString();                       // 0x006b5060
+  ~EString();                      // 0x006b5240
+  const char* c_str();             // 0x006b55c0
+};
+extern void StringAssign(const EStringView* src, EString* dst);  // 0x006b56d0
+extern const EStringView* GetEmptyStringView();                  // 0x006bb660
+extern unsigned* GetDefaultPropValue();                          // 0x0068a2e0
+extern void FormatFloat(double v, char* dst, unsigned size, const wchar_t* fmt); // 0x00881ea0
 
 struct IRefThing { virtual int AddRef(); virtual int Release(); };
 
@@ -304,6 +350,8 @@ struct ElemVec {
     if (mpBegin) operator delete(mpBegin);
   }
   void DoDestroyValues(Elem* first, Elem* last);
+  void clear();
+  Elem* insert(Elem* position, const Elem& value);
 };
 
 struct RefCountBase {
@@ -334,6 +382,8 @@ struct CPL : WinProcBase, RefCountBase {
   virtual unsigned GetEventMask();
   virtual bool DoMessage(int, void*);
   virtual bool Init();
+  virtual void func20h();
+  virtual bool func24h();
   void SetKey(const wchar_t* name, int uid);
   void SetFlag(bool b);
   void* GetRootWindow();
@@ -557,4 +607,127 @@ CPL::~CPL() {
 CPL::CPL() : mKey24(-1), mKey28(-1), mbInitialized(false), mRootWinId(0), mInterval(1.0f), mStopwatch(5, false) {
   mTime = 1.0e30f;
   mbFlag = true;
+}
+
+// ===========================================================================
+// 00828a50 / erase  eastl vector<pair<unsigned, cProperty>> insert / erase
+// (erase is only ever reached inlined, from func24h)
+// ===========================================================================
+// clear() -- destroy every element and reset the end pointer.  The original
+// expands the inlined erase(begin(), end()) into exactly this: the move range
+// [last, mpEnd) is empty, so the copy only computes the new end.
+void ElemVec::clear() {
+  Elem* first = mpBegin;
+  Elem* last = mpEnd;
+  Elem* newEnd = ElemCopy(last, last, first);
+  DoDestroyValues(newEnd, mpEnd);
+  mpEnd -= (last - first);
+}
+
+// @ 0x00828a50
+Elem* ElemVec::insert(Elem* position, const Elem& value) {
+  if (mpEnd != mpCapacity) {
+    Elem* pv = (Elem*)&value;
+    if (pv >= position && pv < mpEnd) pv = pv + 1;
+    if (mpEnd) ::new ((void*)mpEnd) Elem(*(mpEnd - 1));
+    ElemCopyBackward(position, mpEnd - 1, mpEnd);
+    *position = *pv;
+    ++mpEnd;
+  } else {
+    unsigned n = (unsigned)(mpEnd - mpBegin);
+    unsigned newCap = (n == 0) ? 1u : n * 2;
+    Elem* pNew = 0;
+    if (newCap) {
+      pNew = (Elem*)((void* (*)(unsigned, void*, int, int, void*, int))0xf473a0)(
+          newCap * 0x20, (void*)0x13f6b3c, 0, 0, (void*)0x13ebb38, 0xd1);
+    }
+    Elem* pEnd = ElemMoveStart(mpBegin, position, pNew);
+    ElemDestroyRange(mpBegin, position, pNew);
+    if (pEnd) ::new ((void*)pEnd) Elem(value);
+    Elem* q = ElemMoveStart(position, mpEnd, pEnd + 1);
+    ElemDestroyRange(position, mpEnd, pEnd + 1);
+    if (mpBegin) ((void (*)(void*))0xf47380)(mpBegin);
+    mpBegin = pNew;
+    mpEnd = q;
+    mpCapacity = pNew + newCap;
+  }
+  return position;
+}
+
+// ===========================================================================
+// 00828740  CPL::func20h  (vtable +0x20) -- interval property refresh
+// Walks the property vector; for every entry whose low flag bits are set it
+// re-applies the stored value to the window bound to the property id
+// (progress clamp / formatted text / string / integer), then restarts the
+// interval stopwatch.
+// ===========================================================================
+// @ 0x00828740
+void CPL::func20h() {
+  for (Elem* it = mProperties.mpBegin; it != mProperties.mpEnd; ++it) {
+    if ((it->mLast & 5) == 0) continue;
+    it->mLast &= ~4;
+    Variant tmp;
+    Variant* src = &it->mVariant;
+    if (it->mVariant.mTypeId == 0x1d00) {
+      void* obj = VarData(&it->mVariant);
+      bool (*fn)(Variant*, void*) = obj ? *(bool (**)(Variant*, void*))obj : 0;
+      if (!fn) continue;
+      if (!fn(&tmp, *(void**)((char*)obj + 4))) continue;
+      src = &tmp;
+    }
+    IWindow* w = (IWindow*)mLayout.FindWindowByID((int)it->first, 1);
+    if (!w) continue;
+    if (src->mTypeId > 5 && src->mTypeId < 0xf) {
+      Variant conv;
+      conv.mFlags = 2;
+      conv.mTypeId = 0xd;
+      conv = *src;
+      const void* pv = (conv.mTypeId == 0xd || conv.mTypeId == 0x10)
+                           ? VarData(&conv)
+                           : (const void*)&g_PropDefaultValue;
+      float val = *(const float*)pv;
+      if (conv.mFlags & 4) conv.Destruct(0);
+      IWindow* bar = (IWindow*)w->Cast(0x10edf11);
+      if ((it->mLast & 2) && bar) {
+        float c = val;
+        if (c > 100.0f) c = 100.0f;
+        else if (c < 0.0f) c = 0.0f;
+        ((void(__thiscall*)(IWindow*, float))((*(void***)bar)[1]))(bar, c);
+      } else {
+        char buf[0x20];
+        FormatFloat((double)val, buf, 0x20, L"%-F%-p");
+        w->Set80((unsigned)(size_t)buf);
+      }
+    } else if (src->mTypeId == 0x22) {
+      EString s;
+      const void* pv = (src->mTypeId == 0x22 || src->mTypeId == 0x10)
+                           ? VarData(src)
+                           : (const void*)GetEmptyStringView();
+      StringAssign((const EStringView*)pv, &s);
+      w->Set80((unsigned)(size_t)s.c_str());
+      s.~EString();
+    } else {
+      const void* pv = (src->mTypeId == 0x13 || src->mTypeId == 0x10)
+                           ? VarData(src)
+                           : (const void*)GetDefaultPropValue();
+      w->Set80(*(const unsigned*)pv);
+    }
+  }
+  Stopwatch& sw = mStopwatch;
+  sw.Reset();
+  mTime = (float)sw.GetElapsedTime() * sw.mUnitsPerSecond;
+}
+
+// ===========================================================================
+// 00828be0  CPL::func24h  (vtable +0x24) -- shutdown: tear the layout down and
+// release every property
+// ===========================================================================
+// @ 0x00828be0
+bool CPL::func24h() {
+  if (mbInitialized) {
+    mLayout.Shutdown(1);
+    mProperties.clear();
+  }
+  mbInitialized = false;
+  return true;
 }

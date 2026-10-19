@@ -17,3 +17,6 @@
 008285e0 ?ElemCopyBackward@@YAPAUElem@@PAU1@00@Z  # ElemCopyBackward migrated from s00827bf0 (verbatim, slice spelling)
 00828670 ??1CPL@@QAE@XZ  # CPL::~CPL migrated from s00827bf0 (verbatim, slice spelling)
 008286d0 ??0CPL@@QAE@XZ  # CPL::CPL migrated from s00827bf0 (verbatim, slice spelling)
+00828740 ?func20h@CPL@@UAEXXZ  # CPL::func20h (vtable +0x20) migrated from s00827bf0 (verbatim, slice spelling)
+00828a50 ?insert@ElemVec@@QAEPAUElem@@PAU2@ABU2@@Z  # ElemVec::insert migrated from s00827bf0 (verbatim, slice spelling)
+00828be0 ?func24h@CPL@@UAE_NXZ  # CPL::func24h (vtable +0x24) migrated from s00827bf0 (verbatim, slice spelling)
