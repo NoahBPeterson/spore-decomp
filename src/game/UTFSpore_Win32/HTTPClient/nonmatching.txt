@@ -10,8 +10,12 @@
 00942690 479 HTTPClient::ReadResponseData: complete; 64-bit accumulation + buffer growth call sequence differs; difftest FAIL (1/325 valid, 38.0% coverage)
 00942b40 304 HTTPClient::ReadResponseBody: complete; content-length/chunked dispatch schedule differs; difftest FAIL (5/5 valid, 50.6% coverage)
 00942e50 213 eastl::StrStub::assignRange: complete; growth/memmove sequence differs; difftest UNSUPPORTED (0/400 valid inputs, all faulted)
+00942ff0 922 HTTPClient::ConnectToServer: complete (URL host/port/scheme, socket reuse or allocate, resolve, buffer tuning loops, connect); register allocation and stack-slot assignment differ, string copy-ctor schedule differs [equiv: UNSUPPORTED 0/400 valid]
 00943480 91 CookieNode list destroy: complete; refcount release emits redundant test + push ecx prologue, and n/next register roles differ; difftest UNSUPPORTED (0/400 valid inputs, 0% coverage)
 00943650 69 Job::Job copy ctor: complete; compiler CSEs mBuffer+0x40 with &second; register/schedule differs; difftest WEAK (152 valid inputs, 100% coverage)
+00943710 48 UninitializedCopyJob: complete; inlined Job/StrStub copy-ctor register allocation differs; difftest WEAK (104 valid inputs, 14% coverage)
+00943910 10 HTTPClient::CancelJob: complete; only unlink register choice differs (iterator reload through next->prev) [equiv: WEAK 49 valid, 63.2% coverage]
+00943a30 38 HTTPClient::CancelAllJobs: complete; else-branch placement of the infinite-timeout wait and mutex-this hoist differ [equiv: UNSUPPORTED 0/400 valid]
 00943bd0 285 HTTPClient::ParseResponseStatus: complete; param/job caching and line-scan register schedule differ; difftest UNSUPPORTED (unresolved __imp_strncmp/__imp_atol)
 00943d70 85 CellHolder::AddCell: complete; vector pointer caching + register roles differ; difftest WEAK (174 valid inputs, 95% coverage)
 00943de0 124 HTTPRequest ctor: complete; SSO blob capacity folded from base + scheduling order differs; difftest PASS (400 valid inputs, 100% coverage)

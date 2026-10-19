@@ -1,4 +1,4 @@
-00942ff0 ?ConnectToServer@ReportClient@@QAE_NPAUWorkerInfo@@@Z  # EA::Internet::HTTPClient::ConnectToServer (retail), complete non-exact
+00942ff0 ?ConnectToServer@ReportClient@@QAE_NPAUWorkerInfo@@@Z  # ReportClient::ConnectToServer migrated from s00942ff0 (verbatim, slice spelling)
 00943420 ?JobDestroyRange@@YGXPAUJob@@0@Z  # JobDestroyRange migrated from s00942ff0 (verbatim, slice spelling)
 00943480 ?ListDestroy@@YIXPAUCookieNode@@@Z  # ListDestroy migrated from s00942ff0 (verbatim, slice spelling)
 00943500 ?JobDestroyRangeDst@@YAPAUJob@@PAU1@00@Z  # JobDestroyRangeDst migrated from s00942ff0 (verbatim, slice spelling)
@@ -7,12 +7,12 @@
 00943600 ?insertBeforeSelf@CookieNode@@QAEXABUCookie40_s0094_2ff0@@@Z  # CookieNode::insertBeforeSelf migrated from s00942ff0 (verbatim, slice spelling)
 00943650 ??0Job@@QAE@ABU0@@Z  # Job::Job migrated from s00942ff0 (verbatim, slice spelling)
 009436b0 ??4Job@@QAEAAU0@ABU0@@Z  # Job::operator= migrated from s00942ff0 (verbatim, slice spelling)
-00943710 UninitializedCopyJob  # dc: copy-construct Job range (first,last,dst)
+00943710 ?UninitializedCopyJob@@YAPAUJob@@PAU1@00@Z  # UninitializedCopyJob migrated from s00942ff0 (verbatim, slice spelling)
 009437a0 ?CopyJob@@YAPAUJob@@PAU1@00@Z  # CopyJob migrated from s00942ff0 (verbatim, slice spelling)
 00943830 ?CopyBackwardJob@@YAPAUJob@@PAU1@00@Z  # CopyBackwardJob migrated from s00942ff0 (verbatim, slice spelling)
 009438c0 ?SetMethod@HTTPRequest@@QAEXH@Z  # HTTPRequest::SetMethod migrated from s00942ff0 (verbatim, slice spelling)
-00943910 ?CancelJob@ReportClient@@QAE_NI@Z  # EA::Internet::HTTPClient::CancelJob (PDB ?CancelJob@HTTPClient@Internet@EA@@QAE_NI@Z)
-00943a30 ?CancelAllJobs@ReportClient@@QAE_N_NI@Z  # HTTPClient cancel-all-jobs + optional wait for worker thread end
+00943910 ?CancelJob@ReportClient@@QAE_NI@Z  # ReportClient::CancelJob migrated from s00942ff0 (verbatim, slice spelling)
+00943a30 ?CancelAllJobs@ReportClient@@QAE_N_NI@Z  # ReportClient::CancelAllJobs migrated from s00942ff0 (verbatim, slice spelling)
 00943bd0 ?ParseResponseStatus@HTTPClient_s0094_2ff0@@QAEHPAUWorkerThreadInfo@@@Z  # HTTPClient_s0094_2ff0::ParseResponseStatus migrated from s00942ff0 (verbatim, slice spelling)
 00943d70 ?AddCell@CellHolder@@QAE_NPAUCellData@@@Z  # CellHolder::AddCell migrated from s00942ff0 (verbatim, slice spelling)
 00943de0 ??0HTTPRequest@@QAE@XZ  # HTTPRequest::HTTPRequest migrated from s00942ff0 (verbatim, slice spelling)
