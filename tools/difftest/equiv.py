@@ -84,6 +84,11 @@ def prepare(sid, va, flags_override=None, log=print, src=None):
     t.verdict = None
     t.unresolved, t.eh_unresolved, t.conflicts, t.methods = [], [], [], {}
     t.flags, t.flags_how = S.choose_flags(sid, va, flags_override)
+    # an override of only include/define options (`--flags "/Isrc/game/include"`, a flags-less manifest row) is an addition
+    # to the defaults, not a replacement: alone it compiled without /O2 /MD /Gy /EHsc /TP and every callee read unresolved
+    # (mig14 SPGraphicsLightingManager: bogus "34 unresolved reference(s)" UNSUPPORTED)
+    if flags_override and t.flags and all(f.startswith(("/I", "-I", "/D", "-D")) for f in t.flags):
+        t.flags, t.flags_how = list(S.DEFAULT_FLAGS) + [f for f in t.flags if f not in S.DEFAULT_FLAGS], t.flags_how + "+defaults"
     src = src or S.source_path(sid)
     t.src = src
     # a module TU (src/game/<dir>/<Stem>.cpp) includes `game/types.h` and the canonical headers: without /Isrc/game/include
