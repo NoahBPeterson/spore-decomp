@@ -1,7 +1,7 @@
 # source  symbol  va  flags
 ../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?EnterMoveMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  0062fda0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?EnterDeleteMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  0062fe40  /O2 /MD /Gy /TP /GS- /Isrc/game/include
-../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?SelectAll@cSPPlayModePhotoBrowser@@QAEX_N@Z  00630090  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?SelectAll@cSPPlayModePhotoBrowser@SP@@QAEX_N@Z  00630090  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?GetImageFromRaster@cSPPlayModePhotoBrowser@@SGPAUUIImageView@@PAX@Z  006300d0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?ExitDeleteMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  006301a0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?ExitMoveMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  00630280  /O2 /MD /Gy /TP /GS- /Isrc/game/include
@@ -9,7 +9,7 @@
 ../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?CancelAllPendingLoadJobs@cSPPlayModePhotoBrowser@@QAEPAUcJob@@XZ  00630410  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?AnyWriteJobActive@cSPPlayModePhotoBrowser@@QAE_NXZ  006304e0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ??4JobRef@@QAEAAU0@ABU0@@Z  00630540  /O2 /MD /Gy /TP /GS- /Isrc/game/include
-../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?Update@cSPPlayModePhotoBrowser@SP@@QAEXI@Z  00630580  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?UpdatePageButtons@cSPPlayModePhotoBrowser@@QAEXH@Z  00630580  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?find_first_of@wstring16@@QBEIPB_WI@Z  00630630  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?compare@wstring16@@QBEHIIPB_W@Z  00630690  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?PushLoaded@cSPPlayModePhotoBrowser_s0063_2780@@QAEXI@Z  00632ab0  /O2 /MD /Gy /TP /GS- /Isrc/game/include

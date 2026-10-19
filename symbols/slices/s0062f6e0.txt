@@ -5,7 +5,7 @@
 0062fda0 ?EnterMoveMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  # SP::cSPPlayModePhotoBrowser::EnterMoveMode migrated from s0062f6e0
 0062fe40 ?EnterDeleteMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  # SP::cSPPlayModePhotoBrowser::EnterDeleteMode migrated from s0062f6e0
 0062fee0 ?GetHeaderInfo@@YGHPAXH@Z  # GetHeaderInfo migrated from s0062f6e0 (verbatim, slice spelling)
-00630090 ?SelectAll@cSPPlayModePhotoBrowser@@QAEX_N@Z  # cSPPlayModePhotoBrowser::SelectAll migrated from s0062f6e0 (verbatim, slice spelling)
+00630090 ?SelectAll@cSPPlayModePhotoBrowser@SP@@QAEX_N@Z  # SP::cSPPlayModePhotoBrowser::SelectAll migrated from s0062f6e0
 006300d0 ?GetImageFromRaster@cSPPlayModePhotoBrowser@@SGPAUUIImageView@@PAX@Z  # cSPPlayModePhotoBrowser::GetImageFromRaster migrated from s0062f6e0 (verbatim, slice spelling)
 006301a0 ?ExitDeleteMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  # SP::cSPPlayModePhotoBrowser::ExitDeleteMode migrated from s0062f6e0
 00630280 ?ExitMoveMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  # SP::cSPPlayModePhotoBrowser::ExitMoveMode migrated from s0062f6e0
@@ -15,7 +15,9 @@
 00630470 ?IsPhotosWriting@cSPPlayModePhotoBrowser@@QAEHXZ  # cSPPlayModePhotoBrowser::IsPhotosWriting migrated from s0062f6e0 (verbatim, slice spelling)
 006304e0 ?AnyWriteJobActive@cSPPlayModePhotoBrowser@@QAE_NXZ  # cSPPlayModePhotoBrowser::AnyWriteJobActive migrated from s0062f6e0 (verbatim, slice spelling)
 00630540 ??4JobRef@@QAEAAU0@ABU0@@Z  # JobRef::operator= migrated from s0062f6e0 (verbatim, slice spelling)
-00630580 ?Update@cSPPlayModePhotoBrowser@SP@@QAEXI@Z  # SP::cSPPlayModePhotoBrowser::Update migrated from s0062f6e0
+00630580 ?UpdatePageButtons@cSPPlayModePhotoBrowser@@QAEXH@Z  # cSPPlayModePhotoBrowser::UpdatePageButtons migrated from s0062f6e0 (verbatim, slice spelling)
 00630630 ?find_first_of@wstring16@@QBEIPB_WI@Z  # wstring16::find_first_of migrated from s0062f6e0 (verbatim, slice spelling)
 00630690 ?compare@wstring16@@QBEHIIPB_W@Z  # wstring16::compare migrated from s0062f6e0 (verbatim, slice spelling)
 006306f0 ??1LocaleMsg@@UAE@XZ  # LocaleMsg::~LocaleMsg migrated from s0062f6e0 (verbatim, slice spelling)
+0068f950 ?AddRef@cJob@SP@@QAEHXZ  # SP::cJob::AddRef (callee of s0062f6e0, named from the dev publics; slice address comment)
+00692400 ?Cancel@cJob@SP@@QAE_N_N@Z  # SP::cJob::Cancel (callee of s0062f6e0, named from the dev publics; slice address comment)

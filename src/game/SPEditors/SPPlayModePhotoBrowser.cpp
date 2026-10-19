@@ -13,6 +13,7 @@
 #include <string.h>
 #include "EA/IO/FileStream.h"
 #include "SP/cPlayModePhoto.h"
+#include "SP/cJob.h"
 #pragma intrinsic(_InterlockedExchangeAdd, _InterlockedDecrement, _rotl)
 
 // ---- items of slice s0062f6e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -390,24 +391,24 @@ struct cSPPlayModePhotoBrowser_s0063_2780 {
     int GetHeaderInfo(void* stream, int kind);  // 0x0062fee0 (cSPPlayModePhotoBrowser::GetHeaderInfo)
 
     // this slice
-    bool CheckGuidAndType(wstring16_s0063_2780 a, uint32_t u, int kind, wstring16_s0063_2780 b);
-    void AddPhoto(uint32_t guid, int kind);
-    bool CopyPixelsToRaster(int idx, uint32_t a, uint32_t b);
-    void PushLoaded(uint32_t guid);
-    void ClearLoadedPhotos();
+    bool CheckGuidAndType(wstring16_s0063_2780 a, uint32_t u, int kind, wstring16_s0063_2780 b);  // 0x00632780 (cSPPlayModePhotoBrowser::CheckGuidAndType)
+    void AddPhoto(uint32_t guid, int kind);  // 0x00632900 (cSPPlayModePhotoBrowser::AddPhoto)
+    bool CopyPixelsToRaster(int idx, uint32_t a, uint32_t b);  // 0x006329b0 (cSPPlayModePhotoBrowser::CopyPixelsToRaster)
+    void PushLoaded(uint32_t guid);  // 0x00632ab0 (cSPPlayModePhotoBrowser::PushLoaded)
+    void ClearLoadedPhotos();  // 0x00632b00 (cSPPlayModePhotoBrowser::ClearLoadedPhotos)
     void DeleteAll();  // 0x00632ba0 (cSPPlayModePhotoBrowser::DeleteAll)
     void MoveAll();  // 0x00632c00 (cSPPlayModePhotoBrowser::MoveAll)
     void DeleteOne();  // 0x00632c60 (cSPPlayModePhotoBrowser::DeleteOne)
     void MoveOne();  // 0x00632ce0 (cSPPlayModePhotoBrowser::MoveOne)
-    bool SaveThumbnail(void* data);
-    bool ResetPhotoMap();
+    bool SaveThumbnail(void* data);  // 0x00632d60 (cSPPlayModePhotoBrowser::SaveThumbnail)
+    bool ResetPhotoMap();  // 0x00632e40 (cSPPlayModePhotoBrowser::ResetPhotoMap)
     void Shutdown();  // 0x00632f30 (cSPPlayModePhotoBrowser::Shutdown)
     void Deactivate();  // 0x00632fe0 (cSPPlayModePhotoBrowser::Deactivate)
     void SetToLastPage();  // 0x00633080 (cSPPlayModePhotoBrowser::SetToLastPage)
-    bool LoadPhotoThumb(uint32_t idx);
+    bool LoadPhotoThumb(uint32_t idx);  // 0x006330b0 (cSPPlayModePhotoBrowser::LoadPhotoThumb)
     bool MarkPhotoTypeForGuid(uint32_t guid, int kind, ResourceKey key);  // 0x00633230 (cSPPlayModePhotoBrowser::MarkPhotoTypeForGuid)
-    bool LoadPhotoByKey(const ResourceKey* key);
-    void CapturePixels(int idx, void* stream, uint32_t arg3);
+    bool LoadPhotoByKey(const ResourceKey* key);  // 0x006332c0 (cSPPlayModePhotoBrowser::LoadPhotoByKey)
+    void CapturePixels(int idx, void* stream, uint32_t arg3);  // 0x00633440 (cSPPlayModePhotoBrowser::CapturePixels)
 
     // external members
     bool FUN_00631810(HeaderInfo* hdr, uint32_t u, int kind, wstring16_s0063_2780 s);
@@ -448,7 +449,6 @@ void SP::cSPPlayModePhotoBrowser::EnterMoveMode()
 
 
 
-
 // @ 0x0062fe40
 void SP::cSPPlayModePhotoBrowser::EnterDeleteMode()
 {
@@ -463,7 +463,6 @@ void SP::cSPPlayModePhotoBrowser::EnterDeleteMode()
     mUI->SetUIGroupVisible(0x41a30c0, false);
     mUI->SetUIGroupVisible(0x410cf00, false);
 }
-
 
 
 
@@ -497,12 +496,11 @@ int __stdcall GetHeaderInfo(void* data, int kind)
 
 
 
-
 // @ 0x00630090
-void cSPPlayModePhotoBrowser::SelectAll(bool v)
+void SP::cSPPlayModePhotoBrowser::SelectAll(bool v)
 {
     for (uint32_t i = 0; i < mPhotos.size(); ++i) {
-        cPlayModePhoto* p;
+        SP::cPlayModePhoto* p;
         if (i < mPhotos.size())
             p = mPhotos.mpBegin[i].mpObject;
         else
@@ -510,7 +508,6 @@ void cSPPlayModePhotoBrowser::SelectAll(bool v)
         p->bIsSelected = v;
     }
 }
-
 
 
 
@@ -546,7 +543,6 @@ UIImageView* __stdcall cSPPlayModePhotoBrowser::GetImageFromRaster(void* raster)
 
 
 
-
 // @ 0x006301a0
 void SP::cSPPlayModePhotoBrowser::ExitDeleteMode()
 {
@@ -567,7 +563,6 @@ void SP::cSPPlayModePhotoBrowser::ExitDeleteMode()
     mUI->ToggleUIGroup(0x3f6c188, false);
     mUI->ToggleUIGroup(0x3f6c1b4, false);
 }
-
 
 
 
@@ -598,7 +593,6 @@ void SP::cSPPlayModePhotoBrowser::ExitMoveMode()
 
 
 
-
 // @ 0x00630360
 cPlayModePhoto* cSPPlayModePhotoBrowser::FindPhotoByGuid(uint32_t guid)
 {
@@ -620,7 +614,6 @@ cPlayModePhoto* cSPPlayModePhotoBrowser::FindPhotoByGuid(uint32_t guid)
 
 
 
-
 // @ 0x006303a0
 void cSPPlayModePhotoBrowser::ReleaseAsyncHandle()
 {
@@ -636,7 +629,6 @@ void cSPPlayModePhotoBrowser::ReleaseAsyncHandle()
         mAsyncHandle = 0;
     }
 }
-
 
 
 
@@ -665,7 +657,6 @@ cJob* cSPPlayModePhotoBrowser::CancelAllPendingLoadJobs()
 
 
 
-
 // @ 0x00630470
 int cSPPlayModePhotoBrowser::IsPhotosWriting()
 {
@@ -685,7 +676,6 @@ int cSPPlayModePhotoBrowser::IsPhotosWriting()
     }
     return 0;
 }
-
 
 
 
@@ -719,7 +709,6 @@ bool cSPPlayModePhotoBrowser::AnyWriteJobActive()
 
 
 
-
 // @ 0x00630540
 JobRef& JobRef::operator=(const JobRef& rhs)
 {
@@ -739,9 +728,8 @@ JobRef& JobRef::operator=(const JobRef& rhs)
 
 
 
-
 // @ 0x00630580
-void SP::cSPPlayModePhotoBrowser::Update(unsigned int unused)
+void cSPPlayModePhotoBrowser::UpdatePageButtons(int unused)
 {
     if (mUI) {
         uint32_t lastPage = 0;
@@ -754,7 +742,6 @@ void SP::cSPPlayModePhotoBrowser::Update(unsigned int unused)
         mUI->SetEditorUIEnabled(0x447b968, mCurrentSelectedPhotoIndex < mPhotos.size() - 1);
     }
 }
-
 
 
 
@@ -778,14 +765,12 @@ uint32_t wstring16::find_first_of(const wchar_t* p, uint32_t position) const
 
 
 
-
 // @ 0x00630690
 int wstring16::compare(uint32_t pos, uint32_t n, const wchar_t* p) const
 {
     uint32_t len = (uint32_t)(mpEnd - mpBegin) - pos;
     return CompareW(mpBegin + pos, mpBegin + pos + min_alt(len, n), p, p + CharStrlen(p));
 }
-
 
 
 
@@ -826,7 +811,6 @@ void* __fastcall FUN_00630750(void* self, short* first, short* last, int)
 
 
 
-
 // @ 0x006307a0
 void __fastcall FUN_006307a0(void* self, int* out, int* pos, unsigned* val, char flag)
 {
@@ -849,7 +833,6 @@ void __fastcall FUN_006307a0(void* self, int* out, int* pos, unsigned* val, char
   ++*(int*)(s + 0x14);
   *out = (int)node;
 }
-
 
 
 
@@ -880,11 +863,9 @@ void* __fastcall FUN_006308d0(void* self, char flag)
 
 
 
-
 // @ 0x00630930
 void __fastcall FUN_00630930(void* self)
 { (void)self; }
-
 
 
 
@@ -905,7 +886,6 @@ void* __cdecl FUN_006309e0(void* out, const short* lhs, const WStr* rhs)
   o->Append(rhs->begin, rhs->end);
   return out;
 }
-
 
 
 
@@ -955,7 +935,6 @@ void __fastcall FUN_00630a50(void* self)
 
 
 
-
 // @ 0x00630b30
 void __fastcall FUN_00630b30(void* self, int* pos, int* val)
 {
@@ -991,7 +970,6 @@ void __fastcall FUN_00630b30(void* self, int* pos, int* val)
 
 
 
-
 // @ 0x00630d10
 void __fastcall FUN_00630d10(void* self)
 { (void)self; }
@@ -999,11 +977,9 @@ void __fastcall FUN_00630d10(void* self)
 
 
 
-
 // @ 0x00630f20
 void __fastcall FUN_00630f20(void* self)
 { (void)self; }
-
 
 
 
@@ -1081,6 +1057,7 @@ __declspec(noinline) void __fastcall FUN_006320d0(void*, int, int)
 // @ 0x00632320
 void __fastcall FUN_00632320(void* self, int)
 { (void)self; }
+
 
 
 // @ 0x00632780
@@ -1505,6 +1482,7 @@ void cSPPlayModePhotoBrowser_s0063_2780::CapturePixels(int idx, void* stream, ui
         }
     }
 }
+
 
 // @ 0x00633560
 void __fastcall FUN_00633560(void* self)
