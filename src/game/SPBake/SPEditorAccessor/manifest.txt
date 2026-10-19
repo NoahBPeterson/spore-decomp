@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPEditorAccessor.cpp  ?GetSetting3@@YAHXZ  00401030  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorAccessor.cpp  ?GetSetting4@@YAHXZ  00401040  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorAccessor.cpp  ?GetSetting5@@YAHXZ  00401050  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorAccessor.cpp  ?GetSetting6@@YAHXZ  00401060  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorAccessor.cpp  ?GetSetting7@@YAHXZ  00401070  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
