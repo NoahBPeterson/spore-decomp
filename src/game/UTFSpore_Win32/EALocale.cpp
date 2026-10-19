@@ -112,10 +112,12 @@ int FUN_0087d5d0(wchar_t* dst, int n, const wchar_t* src, const wchar_t* srcEnd)
 // ---- items of slice s0087d6d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" __declspec(dllimport) long     __cdecl wcstol(const wchar_t*, wchar_t**, int);
 extern "C" __declspec(dllimport) int      __cdecl tolower(int);
+extern const wchar_t* g_localeEnUS[];   // 0x01548c20
 extern const wchar_t* g_localeCht[];    // 0x01548ec8
 extern const wchar_t* g_localeAus[];    // 0x01548f28
 extern wchar_t*       g_grpSepBegin;    // 0x016507b0
 extern "C" __declspec(dllimport) wchar_t* __cdecl wcschr_s0087_d6d0(const wchar_t*, wchar_t);
+extern "C" __declspec(dllimport) int      __cdecl iswctype_s0087_d6d0(wchar_t, unsigned);
 int __cdecl LocFieldToken(int idx, const wchar_t* src, wchar_t* dst, int cap, wchar_t sep);
 void __cdecl LocFree(void* p);                                    // 0x00f47380
 void* __cdecl LocNew(unsigned size, const char* name, int flags, int align,
@@ -146,6 +148,7 @@ struct FixedBuf {
     }
 };
 struct LocView { wchar_t* mpBegin; wchar_t* mpEnd; };
+struct LocInfo { uint32_t lcid; uint16_t base; uint16_t script; };
 struct LocField {
     uint8_t  pad00[0x34 - 0x00];  // 0x00
     uint32_t flags;               // 0x34
@@ -223,12 +226,24 @@ extern int         e_compare(const wchar_t*, const wchar_t*, const wchar_t*, con
 extern void*       e_inc(void*);                    // 0x921580 RBTreeIncrement
 extern void*       e_dec(void*);                    // 0x9215c0 RBTreeDecrement
 extern void        e_opdel(void*);                  // 0xf47380
+extern int         e_fmt(int, const wchar_t*, wchar_t*, int, wchar_t); // 0x87d620
 extern char        e_fieldparse(const wchar_t*, void*, int*, void*);   // 0x87d6d0
+extern char        e_mkstr(const wchar_t*, const wchar_t*);            // 0x87da10
+extern void*       e_findshort(const wchar_t*, const wchar_t*);        // 0x87dc40
+extern unsigned    e_mkloc(int, int);                                  // 0x87d9a0
 extern void*       e_f210(void*, const wchar_t*);                      // 0x87f210
 extern void*       e_edd0(void*, int*);                                // 0x87edd0
 extern void*       e_ee50(void*, int*);                                // 0x87ee50
 extern void        e_repchar(int, int);                                // 0x68c8c0
+extern void        e_fixstr(void*);                                    // 0x6962a0
+extern "C" char* __cdecl setlocale(int, const char*);
+extern "C" int   __cdecl _setmbcp(int);
 extern char       g_end_015491a0;
+extern wchar_t*   g_lb_016510b8;
+extern wchar_t*   g_le_016510bc;
+extern const wchar_t* g_short_01548fb8[];
+extern void e_wfbappend(void* self, const wchar_t* b, const wchar_t* e); // 0x42f9d0
+extern "C" int   __cdecl iswctype_s0087_f370(int, int);
 template<int N>
 struct Loc {
     wchar_t* f00;
@@ -315,6 +330,7 @@ struct FmtElem {
     int f44;
     int f48;
 };
+typedef unsigned short shrt;
 struct NumFmt {
     Loc<16> s;   // +0x00
     int  f34;    // +0x34
@@ -542,6 +558,32 @@ LocFmt* LocFmt::Assign(const LocFmt* src)
     *mSecond.mpBegin   = 0;
     mSecond.AppendElement(src->mSecond.mpBegin, src->mSecond.mpEnd);
     return this;
+}
+
+// @ 0x0087e130
+bool Locale_FindByLcid(const LocInfo* info, LocBuf* out)
+{
+    for (const wchar_t** pp = g_localeEnUS; *pp; ++pp) {
+        wchar_t buf2[0x20];
+        wchar_t buf[0x80];
+        LocFieldToken(1, *pp, buf, 0x80, L'^');
+        unsigned v = (unsigned)wcstol(buf, 0, 0x10);
+        if (v == *(const uint16_t*)((const char*)info + 4)) {
+            int n = LocFieldToken(0, *pp, buf2, 0x20, L'^');
+            if (n > 0 && iswctype_s0087_d6d0(buf2[0], 0x103) != 0) {
+                wchar_t* p = out->mpBegin;
+                if (p != buf2) {
+                    if (p != out->mpEnd) { *p = 0; out->mpEnd = out->mpBegin; }
+                    wchar_t* e = buf2;
+                    while (*e) ++e;
+                    int len = (int)(e - buf2);
+                    out->AppendElement(buf2, buf2 + len);
+                }
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 // @ 0x0087e230
@@ -918,6 +960,100 @@ bool IsLocaleAvailable(int* param_1)
 }
 }}  // namespace EA::Locale
 
+// @ 0x0087f700
+namespace EA { namespace Locale {
+namespace
+{
+int CRTFindAliasDataByLocaleId(int* param_1) {
+    Loc<16> la;
+    wchar_t buf[128];
+    e_f210(&la, (const wchar_t*)*param_1);
+    int len = (int)(param_1[1] - param_1[0]) >> 1;
+    if (len == 2) {
+        const wchar_t** p = g_short_01548fb8;
+        while (*p != 0) {
+            if (e_fmt(5, *p, buf, 0x80, 0x5e) > 0 && e_mkstr(buf, (const wchar_t*)param_1)) {
+                e_fmt(0, *p, buf, 0x80, 0x5e);
+                Loc<16> lx;
+                lx.InitCap(16);
+                const wchar_t* end = buf;
+                while (*end != 0) ++end;
+                lx.AppendElement(buf, end);
+                int r = CRTFindAliasDataByLocaleId((int*)&lx);
+                lx.Release();
+                la.Release();
+                return r;
+            }
+            ++p;
+        }
+    } else if (len > 2) {
+        void* f = e_findshort((const wchar_t*)g_short_01548fb8, (const wchar_t*)param_1);
+        if (f != 0 && e_fmt(1, (const wchar_t*)f, buf, 0x80, 0x5e) > 0 &&
+            iswctype_s0087_f370((int)buf[0], 0x103) != 0) {
+            Loc<16> lxx;
+            lxx.InitCap(16);
+            e_fixstr(&lxx);
+            void* r = e_findshort((const wchar_t*)g_short_01548fb8, (const wchar_t*)&lxx);
+            lxx.Release();
+            la.Release();
+            return (int)r;
+        }
+    }
+    la.Release();
+    return 0;
+}
+}
+}}  // namespace EA::Locale
+
+// @ 0x0087f900
+unsigned FUN_0087f900(int* param_1)
+{
+    int* ps = (int*)EA::Locale::CRTFindAliasDataByLocaleId(param_1);
+    if (ps == 0)
+        return 0;
+    char local_200[256];
+    char local_100[256];
+    char local_280[128];
+    unsigned u3 = (unsigned)e_fmt(2, (const wchar_t*)ps, (wchar_t*)local_200, 0x80, 0x5e);
+    unsigned u4 = (unsigned)e_fmt(3, (const wchar_t*)ps, (wchar_t*)local_100, 0x80, 0x5e);
+    if ((int)u3 >= 0x81 || (int)u4 >= 0x81)
+        return 0;
+    int j = 0;
+    for (unsigned i = 0; i < u3; ++i)
+        local_280[j++] = local_200[i * 2];
+    local_280[j++] = '_';
+    for (unsigned i = 0; i < u4; ++i)
+        local_280[j++] = local_100[i * 2];
+    local_280[j] = 0;
+    if (setlocale(1, local_280) == 0)
+        goto fail;
+    if (setlocale(3, local_280) == 0)
+        goto fail;
+    if (setlocale(4, local_280) == 0)
+        goto fail;
+    if (setlocale(5, local_280) == 0)
+        goto fail;
+    if (g_lb_016510b8 != (wchar_t*)ps) {
+        if (g_lb_016510b8 != g_le_016510bc) {
+            *g_lb_016510b8 = 0;
+            g_le_016510bc = g_lb_016510b8;
+        }
+        const wchar_t* e = (const wchar_t*)ps;
+        while (*e != 0)
+            ++e;
+        e_wfbappend((void*)0x16510b8, (const wchar_t*)ps, e);
+    }
+    _setmbcp(-4);
+    return 1;
+fail:
+    setlocale(0, "");
+    if (g_lb_016510b8 != g_le_016510bc) {
+        *g_lb_016510b8 = 0;
+        g_le_016510bc = g_lb_016510b8;
+    }
+    return 1;
+}
+
 // @ 0x0087fbe0
 void LocaleTree::FindOrInsert(void** out, const wchar_t** key, unsigned flag)
 {
@@ -971,6 +1107,44 @@ LAB2:
         *out = tmp;
         ((char*)out)[4] = 1;
     }
+}
+
+// @ 0x0087fd10
+unsigned FUN_0087fd10(int* param_1, int* param_2, char param_3)
+{
+    if (param_3 == 0)
+        return e_mkloc((int)param_1, (int)param_2);
+    int* a = (int*)EA::Locale::CRTFindAliasDataByLocaleId(param_1);
+    int* b = (int*)EA::Locale::CRTFindAliasDataByLocaleId(param_2);
+    if (a == 0 || b == 0)
+        return 0;
+    shrt local_200[128];
+    shrt local_100[128];
+    if ((int)e_fmt(0, (const wchar_t*)a, (wchar_t*)local_100, 0x80, 0x5e) < 1)
+        return 0;
+    if ((int)e_fmt(0, (const wchar_t*)b, (wchar_t*)local_200, 0x80, 0x5e) < 1)
+        return 0;
+    shrt* puVar5 = local_100;
+    shrt* puVar6 = local_200;
+    int bVar7;
+    for (;;) {
+        shrt uVar1 = *puVar5;
+        bVar7 = uVar1 < *puVar6;
+        if (uVar1 != *puVar6)
+            break;
+        if (uVar1 == 0)
+            return 1;
+        uVar1 = puVar5[1];
+        bVar7 = uVar1 < puVar6[1];
+        if (uVar1 != puVar6[1])
+            break;
+        puVar5 += 2;
+        puVar6 += 2;
+        if (uVar1 == 0)
+            return 1;
+    }
+    int iVar2 = (1 - (unsigned)bVar7) - (unsigned)(bVar7 != 0);
+    return (unsigned)(iVar2 & 0xffffff00) | (unsigned)(iVar2 == 0);
 }
 
 // @ 0x0087fe10
