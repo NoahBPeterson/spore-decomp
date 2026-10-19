@@ -7,3 +7,5 @@
 00813120  83  complete: sInitDropShadowQuality; property-variant branch shape differs
 00813300  76  complete: cSPUIMainWin::ApplyToFocus; test-then-reload vs load-once register allocation
 00813370  74  complete: cSPUIMainWin::RouteKey; callee-saved register assignment differs
+008124a0  966 complete: cSPUILayoutCheat::Execute; full list/load/unload/textures + optional id-attach paths restored, but the EASTL string/map plumbing (key-buffer alloc, pair build, map insert/erase) keeps a different frame/register/schedule - [equiv: WEAK, 157 valid inputs, no mismatch]
+00812c90  18  complete: PostMouseEdgeMsg; body byte-identical except the `env.payload = 0` store which cl schedules before the inlined memcpy instead of after it (source uses memset to keep the store alive) - [equiv: WEAK, 400 valid inputs, no mismatch]

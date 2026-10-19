@@ -5,3 +5,5 @@
 007ceec0  93    eastl copy-backward helper; same release intrinsic + schedule differences
 007cef60  44    VVec dtor 58 bytes vs 102; original carries an EH frame the source does not reproduce; equiv: WEAK (779 valid, 76.3% coverage)
 007cefd0  74    eastl __stdcall destruct-range helper; release intrinsic register allocation differs
+007cf030  346   eastl vector<8B>::insert(pos,n,value); block layout + this/mpEnd callee-saved register swap differ (esi/edi); flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 [equiv: WEAK]
+007cf1f0  187   eastl vector<8B>::insert(pos,value); grow path register schedule + (mpEnd-8)-pos vs (mpEnd-pos)-8 reassociation; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 [equiv: WEAK]

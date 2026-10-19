@@ -88,8 +88,8 @@ struct Q12 {
     virtual void q12(int, int, int);
 };
 
-extern "C" Canvas* SP_Canvas();
-extern "C" void*   SP_MessageServer();
+extern "C" Canvas* SP_Canvas();        // 0x0067dcf0
+extern "C" void*   SP_MessageServer(); // 0x0067dcc0
 extern "C" void*   SP_CheatManager();
 
 #define sMouseXScale (*(float*)0x15451e8)
@@ -368,27 +368,31 @@ bool MainWin::RouteKey(int, int key, int mod) {
     return false;
 }
 
-// @ 0x00812c90  (free, partial: simplified message envelope)
+extern "C" void* __cdecl memcpy(void*, const void*, size_t);   // 0x011e0744
+extern "C" void* __cdecl memset(void*, int, size_t);
 struct MsgEnv {
-    uint32_t id;
-    Canvas* canvas;
-    void* p;
-    uint32_t payload[8];
+    uint32_t  id;        // +0x0
+    Canvas*   canvas;    // +0x4
+    uint32_t* payload;   // +0x8
+    uint32_t  data[8];   // +0xc
 };
 
+// @ 0x00812c90  (free, __cdecl, 1 arg)
 void __cdecl PostMouseEdgeMsg(void* data) {
     Canvas* c = SP_Canvas();
-    if (!c || !data) return;
-    MsgEnv msg;
-    msg.canvas = c;
-    msg.p = 0;
-    for (int i = 0; i < 8; ++i) msg.payload[i] = ((uint32_t*)data)[i];
-    msg.id = 0x1ee1001;
-    msg.p = &msg.payload;
-    void* s = SP_MessageServer();
-    typedef void (__thiscall *MsgPostFn)(void*, uint32_t, void*, int);
-    if (s)
-        ((MsgPostFn*)(*(void**)s))[0x14 / 4](s, msg.id, &msg, 0);
+    if (c == 0) return;
+    if (data == 0) return;
+    MsgEnv env;
+    env.canvas = c;
+    memset(&env.payload, 0, sizeof(env.payload));
+    memcpy(env.data, data, 32);
+    env.id = 0x1ee1001;
+    env.payload = env.data;
+    if (SP_MessageServer() != 0) {
+        void* s = SP_MessageServer();
+        typedef void (__thiscall *MsgPostFn)(void*, uint32_t, void*, int);
+        ((MsgPostFn*)(*(void**)s))[0x14 / 4](s, env.id, &env, 0);
+    }
 }
 
 // @ 0x00812f70
@@ -490,11 +494,11 @@ void sInitDropShadowQuality() {
 // ===========================================================================
 namespace EA { namespace ArgScript {
 struct cArguments {
-    void  MainArguments(int);
-    int   NumArguments();
-    char* OptionArguments(const char* name, int a, int b, int c);
-    char* OptionArguments(const char* name, int a);
-    bool  HasFlag(const char* name);
+    void    MainArguments(int);                                  // 0x00838320
+    int     NumArguments();                                      // 0x00837f30
+    char**  OptionArguments(const char* name, int* pNum, int a, int b); // 0x00838130
+    char**  OptionArguments(const char* name, int a);            // 0x00838330
+    bool    HasFlag(const char* name);                           // 0x008380b0
 };
 struct cCommandBase {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
@@ -525,7 +529,7 @@ struct cSPUILayoutCheat : cCommandBase {
     void Execute(cArguments* args);
 };
 
-extern "C" void EA_ArgScript_Output(char* parser, const char* fmt, ...);
+extern "C" void EA_ArgScript_Output(char* parser, const char* fmt, ...);   // 0x00841000
 
 cSPUILayoutCheat::cSPUILayoutCheat() {
     mParser = 0;
@@ -540,24 +544,219 @@ cSPUILayoutCheat::cSPUILayoutCheat() {
 
 // @ 0x00812990  scalar deleting destructor (implicit virtual dtor)
 
-// @ 0x008124a0  (partial: main paths only)
+// @ 0x008124a0  cSPUILayoutCheat::Execute
+struct LayoutNode;                     // RB node; the payload lives at +0x20
+struct cSPUILayout {
+    void** mpVtbl;                                                   // +0x0
+    void*  mp4;                                                      // +0x4
+    void*  mp8;                                                      // +0x8
+    void*  mpC;                                                      // +0xc
+    void*  mp10;                                                     // +0x10
+    void*  mpCollection;                                             // +0x14
+    bool Init(const uint16_t* name, int flags, bool b, unsigned x);  // 0x00812160
+    void Shutdown(unsigned flags);                                   // 0x00811ad0
+};
+struct cLayoutCollection {
+    void* FindWindowByID(int id, char flag);                         // 0x00810200
+};
+struct LayoutMapObj {                    // the EASTL-ish map at this+0x10
+    void Find(void* key, void** out);                                // 0x00b20930
+    void Insert(void* hint, void* pair);                             // 0x00812470
+    void Erase(void** hint, void* node);                             // 0x00812310
+};
+struct MapPairBuilder {
+    void* Build(void* key, void* val);                               // 0x006a3f40
+};
+struct AutoRefCountObj {
+    void Ctor(void* p);                                              // 0x00572660
+};
+struct Str16 { uint16_t* mBegin; uint16_t* mEnd; };
+
+extern "C" unsigned long __cdecl strtoul(const char*, char**, int);
+void* EA_op_new(size_t size, void* alloc, int a, int b, const char* file, int line); // 0x00f473a0
+void  EA_op_free(void* p);                                           // 0x00f47380
+void* RBTreeIncrement(void* node);                                   // 0x00921580
+Str16* ConvertToString16(Str16* out, const char* src, unsigned len); // 0x0093c5a0
+void* SP_UI_Global();                                                // 0x00920090
+void* SP_SkinManagerFrom(void* x);                                   // 0x008121f0
+void* SP_ResourceMan_GetManager();                                   // 0x0067dcd0
+
+static const char kEASTLAllocFile[] =
+    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
+
 void cSPUILayoutCheat::Execute(cArguments* args) {
+    char*   self   = (char*)this;
+    char*   parser = *(char**)(self + 4);
+    void*   map    = self + 0x10;
+    void*   anchor = self + 0x14;
+
     args->MainArguments(0);
     int n = args->NumArguments();
+
     if (n < 2) {
-        EA_ArgScript_Output(mParser, "List of loaded UI layouts:\n");
+        // ---- list ----
+        EA_ArgScript_Output(parser, "List of loaded UI layouts:\n");
+        if (*(int*)(self + 0x24) == 0) {
+            EA_ArgScript_Output(parser, "\tNone found.\n");
+            return;
+        }
+        char* node = *(char**)(self + 0x18);
+        if (node == anchor) return;
+        do {
+            char* next = (char*)RBTreeIncrement(node);
+            EA_ArgScript_Output(parser, "\t Layout @ %p\n", *(void**)(node + 0x20));
+            node = next;
+        } while (node != anchor);
         return;
     }
-    char* load = args->OptionArguments("load", 1, 3, 0);
-    if (load) {
+
+    int num = n;
+    char** opt = args->OptionArguments("load", &num, 1, 3);
+    if (opt != 0) {
+        // ---- load ----
+        const char* name = opt[0];
+        size_t len = 0;
+        while (name[len] != 0) ++len;
+
+        char* buf;
+        char* bend;
+        if (len + 1 < 2) {
+            buf = (char*)0x1667bac;
+            bend = (char*)0x1667bad;
+        } else {
+            buf = (char*)EA_op_new(len + 1, (void*)0x13f6b3c, 0, 0, kEASTLAllocFile, 0xd1);
+            bend = buf + len + 1;
+        }
+        memcpy(buf, name, len);
+        buf[len] = 0;
+
+        char* found = 0;
+        ((LayoutMapObj*)map)->Find(buf, (void**)&found);
+        if (bend - buf > 1 && buf != 0) EA_op_free(buf);
+
+        if (found == anchor) {
+            EA_ArgScript_Output(parser, "\tUI layout '%s' not found. \n", (void*)opt[0]);
+            return;
+        }
+
+        cSPUILayout* layout = (cSPUILayout*)EA_op_new(0x18, (void*)0x13f6b3c, 0, 0, 0, 0);
+        if (layout == 0) {
+            layout = 0;
+        } else {
+            layout->mpVtbl = (void**)0x14181b0;
+            layout->mp4 = 0;
+            layout->mp8 = 0;
+            layout->mpC = 0;
+            layout->mp10 = 0;
+            layout->mpCollection = 0;
+        }
+
+        Str16 wname;
+        ConvertToString16(&wname, opt[0], 0xffffffff);
+        bool ok = layout->Init(wname.mBegin, 0x40464100, true, 0x5b598fa);
+        if ((((int)(char*)wname.mEnd - (int)(char*)wname.mBegin) & ~1) > 2 && wname.mBegin != 0) {
+            EA_op_free(wname.mBegin);
+        }
+
+        if (!ok) {
+            EA_ArgScript_Output(parser, "\tUI layout '%s' failed to initialize. \n", (void*)opt[0]);
+            if (layout != 0) {
+                ((void(__thiscall*)(void*, int))layout->mpVtbl[0])(layout, 1);
+            }
+            return;
+        }
+
+        // register the freshly-initialised layout under its name
+        char* kbuf;
+        char* kend;
+        if (len + 1 < 2) {
+            kbuf = (char*)0x1667bac;
+            kend = (char*)0x1667bad;
+        } else {
+            kbuf = (char*)EA_op_new(len + 1, (void*)0x13f6b3c, 0, 0, kEASTLAllocFile, 0xd1);
+            kend = kbuf + len + 1;
+        }
+        memcpy(kbuf, name, len);
+        kbuf[len] = 0;
+
+        cSPUILayout* keyv = layout;
+        void* pair = ((MapPairBuilder*)&keyv)->Build(kbuf, &keyv);
+        void* hint = 0;
+        ((LayoutMapObj*)map)->Insert(&hint, pair);
+        if (kend - kbuf > 1 && kbuf != 0) EA_op_free(kbuf);
+
+        if (num > 2) {
+            // optional: attach the object named by the two hex ids to a window
+            unsigned id1 = (unsigned)strtoul(opt[1], 0, 0x10);
+            unsigned id2 = (unsigned)strtoul(opt[2], 0, 0x10);
+            void* coll = layout->mpCollection;
+            if (coll != 0) {
+                void* win = ((cLayoutCollection*)coll)->FindWindowByID((int)id1, 1);
+                if (win != 0) {
+                    if (SP_UI_Global() != 0) {
+                        void* mgr = SP_UI_Global();
+                        void** vt = *(void***)mgr;
+                        void* res = ((void*(__thiscall*)(void*, unsigned, void*, void*))vt[0x24 / 4])(mgr, id2, 0, 0);
+                        void* sk = SP_SkinManagerFrom(res);
+                        void* slot[4] = { 0, 0, 0, 0 };
+                        ((AutoRefCountObj*)slot)->Ctor(sk);
+                        void* obj = slot[0];
+                        if (obj != 0) {
+                            void** wvt = *(void***)win;
+                            ((void(__thiscall*)(void*, void*))wvt[0x104 / 4])(win, obj);
+                            void** ovt = *(void***)obj;
+                            ((void(__thiscall*)(void*))ovt[1])(obj);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
         return;
     }
-    char* unload = args->OptionArguments("unload", 1);
-    if (unload) {
+
+    char** unload = args->OptionArguments("unload", 1);
+    if (unload != 0) {
+        // ---- unload ----
+        const char* name = unload[0];
+        size_t len = 0;
+        while (name[len] != 0) ++len;
+
+        char* buf;
+        char* bend;
+        if (len + 1 < 2) {
+            buf = (char*)0x1667bac;
+            bend = (char*)0x1667bad;
+        } else {
+            buf = (char*)EA_op_new(len + 1, (void*)0x13f6b3c, 0, 0, kEASTLAllocFile, 0xd1);
+            bend = buf + len + 1;
+        }
+        memcpy(buf, name, len);
+        buf[len] = 0;
+
+        char* found = 0;
+        ((LayoutMapObj*)map)->Find(buf, (void**)&found);
+        if (bend - buf > 1 && buf != 0) EA_op_free(buf);
+
+        if (found == anchor) {
+            EA_ArgScript_Output(parser, "\tUI layout '%s' not found. \n", unload[0]);
+            return;
+        }
+
+        cSPUILayout* layout = *(cSPUILayout**)(found + 0x20);
+        layout->Shutdown(1);
+        if (layout != 0) {
+            ((void(__thiscall*)(void*, int))layout->mpVtbl[0])(layout, 1);
+        }
+        void* hint = found;
+        ((LayoutMapObj*)map)->Erase(&hint, found);
         return;
     }
+
     if (args->HasFlag("textures")) {
-        SP_CheatManager();
+        // ---- textures ----
+        SP_ResourceMan_GetManager();
+        return;
     }
 }
 

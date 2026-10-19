@@ -55,6 +55,7 @@ struct string8 {
     }
     void RangeInitialize(unsigned n);
     void assign(const string8& x);
+    void assign(const char* first, const char* last);   // 0x00454cb0
     ~string8(); // 0x00530670
 };
 bool operator==(const string8& s, const char* lit);   // 0x00555020
@@ -291,28 +292,77 @@ cIParser* __fastcall FileParser_Parser(int* self) {
     return (cIParser*)self[4];
 }
 
+// ---------------------------------------------------------------------------
+// EA::Stopwatch / timing + parser message payload (used by ParseFiles)
+// ---------------------------------------------------------------------------
+struct Stopwatch {
+    long long mnStartTime;                     // +0x00
+    long long mnTotalElapsedTime;              // +0x08
+    int       mnUnits;                         // +0x10
+    float     mfCyclesToUnitsCoefficient;      // +0x14
+    long long GetElapsedTimeFloat();           // 0x0093a3a0
+    void      Reset() { mnStartTime = 0; mnTotalElapsedTime = 0; }
+};
+
+union LARGE_INTEGER {
+    long long QuadPart;
+    struct { int LowPart; int HighPart; };
+};
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(LARGE_INTEGER* counter);
+extern "C" unsigned __int64 __rdtsc(void);
+
+struct ParseFilesMessage {
+    int   mnFailed;         // +0x00
+    int   mnPad04;          // +0x04
+    void* mpFileParser;     // +0x08
+    int   mnPad0C;          // +0x0c
+    void* mpParser;         // +0x10
+};
+
 // ===========================================================================
 // 0x0083f790  EA::ArgScript::cFileParser::ParseFiles
 // ===========================================================================
 // @ 0x0083f790
 bool __fastcall FileParser_ParseFiles(int* self) {
-    cIParser* parser = (cIParser*)self[4];
-    if (parser != 0) {
-        ((void(__thiscall*)(cIParser*))(*(void***)parser->vftable)[12])(parser);
-        int* specsBegin = (int*)self[5];      // vector begin at +0x14
-        int* specsEnd = (int*)self[6];
-        unsigned count = (unsigned)((char*)specsEnd - (char*)specsBegin) / 0x14;
-        for (unsigned i = 0; i < count; ++i) {
-            ((void(__thiscall*)(cIParser*, void*))(*(void***)((cIParser*)self[4])->vftable)[14])(
-                (cIParser*)self[4], (void*)specsBegin[i * 5]);
+    bool failed = false;
+    cIParser* pParser = (cIParser*)self[4];
+    if (pParser != 0) {
+        ((void(__thiscall*)(cIParser*))(*(void***)pParser)[12])(pParser);
+        float total = 0.0f;
+        for (unsigned i = 0; i < (unsigned)((int)(self[6] - self[5]) / 0x14); ++i) {
+            Stopwatch* timer = (Stopwatch*)((char*)self + 0x50);
+            if (timer->mnStartTime == 0) {
+                if (timer->mnUnits == 1) {
+                    timer->mnStartTime = (long long)__rdtsc();
+                } else {
+                    LARGE_INTEGER counter;
+                    QueryPerformanceCounter(&counter);
+                    timer->mnStartTime = counter.QuadPart;
+                }
+            }
+            int* spec = (int*)((char*)self[5] + i * 0x14);
+            try {
+                void* fn = (*(void***)pParser)[14];
+                ((void(__thiscall*)(cIParser*, void*))fn)(pParser, (void*)*spec);
+            } catch (...) {
+                if (*((unsigned char*)spec + 0x10) & 1)
+                    failed = true;
+            }
+            total += (float)timer->GetElapsedTimeFloat() * timer->mfCyclesToUnitsCoefficient;
+            timer->Reset();
         }
         int* server = (int*)Messaging_GetServer();
         if (server) {
-            int flag = 1;
-            ((void(__thiscall*)(int*, int, int*, int))(*(void***)server)[5])(server, 0x4b3bc676, &flag, 0);
+            ParseFilesMessage msg;
+            msg.mpParser = (void*)self[4];
+            msg.mpFileParser = self;
+            msg.mnFailed = failed;
+            ((void(__thiscall*)(int*, int, ParseFilesMessage*, int))(*(void***)server)[5])(
+                server, 0x4b3bc676, &msg, 0);
         }
     }
-    return false;
+    *((unsigned char*)self + 0x28) = 0;
+    return !failed;
 }
 
 // ===========================================================================
@@ -554,36 +604,40 @@ int __fastcall HashmapFileNotifyLookup(int* self, int, int key) {
 // ===========================================================================
 // 0x0083fff0  vector<cInputFileSpec>::insert/emplace at position
 // ===========================================================================
+int* __cdecl DestroySpecsRange(int* first, int* last);   // 0x009fc390
+
+#pragma warning(disable: 4530)
 // @ 0x0083fff0
 void* __fastcall VectorSpecInsert(int* self, int, void* pos, void* val) {
     char* end = (char*)self[1];
     if (end != (char*)self[2]) {
-        if ((char*)pos <= (char*)val && (char*)val < end)
-            val = (char*)val + 0x14;
-        if (end)
-            InputFileSpecCopy((void**)end - 5, 0, (void**)(end - 0x14));
-        CopyBackwardSpecsRev((int*)pos, (int*)(self[1] - 0x14), (int*)self[1]);
-        if (val != pos)
-            ((eastl::string8*)val)->assign(*(eastl::string8*)pos);
-        *(uint16*)((char*)val + 0x10) = *(uint16*)((char*)pos + 0x10);
+        char* value = (char*)val;
+        if ((char*)pos <= value && value < end)
+            value += 0x14;
+        InputFileSpecCopy((void**)end, 0, (void**)(end - 0x14));
+        CopyBackwardSpecsRev((int*)pos, (int*)(end - 0x14), (int*)end);
+        if (value != (char*)pos)
+            ((eastl::string8*)pos)->assign(((eastl::string8*)value)->mpBegin,
+                                           ((eastl::string8*)value)->mpEnd);
+        *(uint16*)((char*)pos + 0x10) = *(uint16*)(value + 0x10);
         self[1] += 0x14;
         return pos;
     }
-    int cap = (int)((char*)end - (char*)self[0]) / 0x14;
-    if (cap == 0)
-        cap = 1;
-    else
-        cap *= 2;
-    char* buf = cap ? (char*)EASTL_allocator_allocate(cap * 0x14, g_allocName, 0, 0, g_allocFile, 0xd1) : 0;
-    int* mid = UninitCopySpecs((int*)self[0], (int*)pos, (int*)buf);
-    if (mid)
-        InputFileSpecCopy((void**)mid, 0, (void**)val);
-    int* mid2 = UninitCopySpecs((int*)pos, (int*)self[1], mid + 5);
+    int nPrevSize = (int)(end - (char*)self[0]) / 0x14;
+    int nNewSize = nPrevSize ? nPrevSize * 2 : 1;
+    char* pNewData = nNewSize
+        ? (char*)EASTL_allocator_allocate(nNewSize * 0x14, g_allocName, 0, 0, g_allocFile, 0xd1) : 0;
+    int* pNewEnd = UninitCopySpecs((int*)self[0], (int*)pos, (int*)pNewData);
+    DestroySpecsRange((int*)self[0], (int*)pos);
+    InputFileSpecCopy((void**)pNewEnd, 0, (void**)val);
+    int* pNewEnd2 = pNewEnd + 5;
+    pNewEnd = UninitCopySpecs((int*)pos, (int*)self[1], pNewEnd2);
+    DestroySpecsRange((int*)pos, (int*)self[1]);
     if (self[0] && *(int*)((char*)self[0] - 4))
         EASTL_allocator_deallocate((void*)self[0]);
-    self[1] = (int)mid2;
-    self[0] = (int)buf;
-    self[2] = (int)(buf + cap * 0x14);
+    self[1] = (int)pNewEnd;
+    self[0] = (int)pNewData;
+    self[2] = (int)(pNewData + nNewSize * 0x14);
     return pos;
 }
 // --- equivalence checker address annotations

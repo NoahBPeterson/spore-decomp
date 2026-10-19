@@ -8,3 +8,5 @@
 007e3030  91   cAppStateManager::StateIDFromName; hashtable find call/inline differs
 007e30a0  68   hashtable lookup + FUN_007e2ce0; find call schedule differs; equiv: FAIL (fake-arity/callee, member fix)
 007e3160  191  eastl::vector<cActionMessage>::operator=; branch layout differs; equiv: FAIL (member fix)
+007e29d0  197  hashtable insert (lookup + grow + relink + rehash); cl keeps key in ebp and reloads key->p/field4 in the walk while mine caches them (ebx/edi); h0 spill slot differs; equiv: PASS (91.6% coverage)
+007e2ae0  208  cAppStateManager copy ctor (2 vector copies + string copy + trailing int); MSVC EH/SEH frame (states 0/1/2) and register schedule differ; equiv: UNSUPPORTED (0 valid inputs; original SEH prologue faults under the harness)

@@ -12,7 +12,7 @@ extern "C" void* __cdecl EAlloc(uint32_t size, const char* name, int flags, int 
                                 const char* file, int line);   // 0x00f473a0
 extern "C" void  __cdecl EFree(void* p);                       // 0x00f47380
 extern "C" double __cdecl sqrt(double);
-extern "C" void* __cdecl memmove(void*, const void*, unsigned int);
+extern "C" __declspec(dllimport) void* __cdecl memmove(void*, const void*, unsigned int);
 
 // ===========================================================================
 // 0x007ce500  anonymous_namespace::GroundCoverCirclePhysics
@@ -435,6 +435,7 @@ void ForceEmit_VecDtor(VVec* v) { delete v; }
 // ===========================================================================
 struct P8 { uint32_t a, b; };
 extern "C" void* __cdecl FUN_0099efa0(void* src, void* end, void* dst); // uninitialized_copy
+extern "C" void* __cdecl FUN_011e0744(void* dst, const void* src, unsigned int n); // 0x011e0744 memcpy
 extern "C" void  __cdecl FUN_0076ffd0(void* a, void* b, void* c, void* d, void* e);
 extern "C" void  __cdecl FUN_0073fe50(void* a, void* b, void* c);
 extern "C" void  __cdecl FUN_00a52da0(void* a, void* b, void* c);
@@ -451,46 +452,44 @@ struct Vec8 {
 // @ 0x007cf030  insert(pos, n, value)
 void Vec8::insert(P8* pos, uint32_t n, const P8& value)
 {
-    if ((uint32_t)(mpEndCap - mpEnd) < n) {
-        uint32_t len = (uint32_t)(mpEnd - mpBegin);
-        uint32_t newCap = len * 2;
-        if (len == 0) newCap = 1;
-        uint32_t need = len + n;
-        if (need > newCap) newCap = need;
-        P8* nb = newCap ? (P8*)EAlloc(newCap * 8, "App", 0, 0,
+    if (n <= (uint32_t)(mpEndCap - mpEnd)) {
+        if (n > 0) {
+            P8 local = value;
+            P8* const end = mpEnd;
+            const uint32_t tail = (uint32_t)(end - pos);
+            if (n < tail) {
+                const uint32_t nn = n * 8;
+                P8* const src = (P8*)((char*)end - nn);
+                FUN_0076ffd0(&pos, src, end, end, src);
+                mpEnd = (P8*)((char*)mpEnd + nn);
+                FUN_0073fe50(pos, src, end);
+                FUN_00a52da0(pos, (char*)pos + nn, &local);
+            } else {
+                const uint32_t extra = n - tail;
+                FUN_006ac440(end, extra, &local);
+                mpEnd = (P8*)((char*)mpEnd + extra * 8);
+                FUN_0076ffd0(&pos, pos, end, mpEnd, (void*)tail);
+                mpEnd = (P8*)((char*)mpEnd + tail * 8);
+                FUN_00a52da0(pos, end, &local);
+            }
+        }
+    } else {
+        const uint32_t nPrevSize = (uint32_t)(mpEnd - mpBegin);
+        const uint32_t nGrowSize = (nPrevSize > 0) ? (2 * nPrevSize) : 1;
+        const uint32_t nNewSize  = (nGrowSize > (nPrevSize + n)) ? nGrowSize : (nPrevSize + n);
+        P8* const nb = nNewSize ? (P8*)EAlloc(nNewSize * 8, "App", 0, 0,
              "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
         P8* mid = (P8*)FUN_0099efa0(mpBegin, pos, nb);
-        P8* fill = mid;
         for (uint32_t i = n; i != 0; --i) {
-            if (fill) { fill->a = value.a; fill->b = value.b; }
-            fill++;
+            if (mid) { mid->a = value.a; mid->b = value.b; }
+            mid++;
         }
-        P8* ne = (P8*)FUN_0099efa0(pos, mpEnd, fill);
-        P8* old = mpBegin;
-        if (old && *(int*)((char*)old - 4) != 0)
-            EFree(old);
+        P8* ne = (P8*)FUN_0099efa0(pos, mpEnd, mid);
+        if (mpBegin && *(int*)((char*)mpBegin - 4) != 0)
+            EFree(mpBegin);
         mpBegin = nb;
         mpEnd = ne;
-        mpEndCap = nb + newCap;
-    } else if (n != 0) {
-        P8 local = value;
-        P8* end = mpEnd;
-        uint32_t tail = (uint32_t)(end - pos);
-        if (n < tail) {
-            uint32_t nn = n * 8;
-            P8* src = (P8*)((char*)end - nn);
-            FUN_0076ffd0(&pos, src, end, end, src);
-            mpEnd = (P8*)((char*)mpEnd + nn);
-            FUN_0073fe50(pos, src, end);
-            FUN_00a52da0(pos, (char*)pos + nn, &local);
-        } else {
-            uint32_t extra = n - tail;
-            FUN_006ac440(end, extra, &local);
-            mpEnd = (P8*)((char*)mpEnd + extra * 8);
-            FUN_0076ffd0(&pos, pos, end, mpEnd, (void*)tail);
-            mpEnd = (P8*)((char*)mpEnd + tail * 8);
-            FUN_00a52da0(pos, end, &local);
-        }
+        mpEndCap = (P8*)((char*)nb + nNewSize * 8);
     }
 }
 
@@ -498,33 +497,29 @@ void Vec8::insert(P8* pos, uint32_t n, const P8& value)
 void Vec8::insert(P8* pos, const P8& value)
 {
     if (mpEnd != mpEndCap) {
-        if (pos <= &value && &value < mpEnd)
-            pos += 1;
-        if (mpEnd) {
-            mpEnd->a = mpEnd[-1].a;
-            mpEnd->b = mpEnd[-1].b;
-        }
+        const P8* pValue = &value;
+        if (pValue >= pos && pValue < mpEnd)
+            ++pValue;
+        if (mpEnd)
+            mpEnd[0] = mpEnd[-1];
         char* src = (char*)pos;
-        int n = (int)((char*)mpEnd - 8 - src);
-        memmove((char*)mpEnd + (n >> 3) * -8, src, n);
-        *pos = value;
+        int n = (int)((char*)(mpEnd - 1) - src);
+        memmove((char*)mpEnd - (n >> 3) * 8, src, n);
+        *pos = *pValue;
         mpEnd = (P8*)((char*)mpEnd + 8);
         return;
     }
-    uint32_t len = (uint32_t)(mpEnd - mpBegin);
-    uint32_t newCap;
-    if (len == 0) newCap = 1;
-    else { newCap = len * 2; if (newCap == 0) newCap = 1; }
-    P8* nb = (P8*)EAlloc(newCap * 8, "App", 0, 0,
-        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
-    // first half
-    int s1 = (int)((char*)pos - (char*)mpBegin);
-    char* d1 = (char*)FUN_0099efa0(mpBegin, pos, nb);
-    P8* mid = (P8*)(d1 + (s1 >> 3) * 8);
+    const uint32_t nPrevSize = (uint32_t)(mpEnd - mpBegin);
+    const uint32_t nNewSize = (nPrevSize > 0) ? (2 * nPrevSize) : 1;
+    P8* const nb = nNewSize ? (P8*)EAlloc(nNewSize * 8, "App", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+    const uint32_t off1 = (uint32_t)((char*)pos - (char*)mpBegin);
+    P8* mid = (P8*)((char*)FUN_011e0744(nb, mpBegin, off1) + off1);
     if (mid) { mid->a = value.a; mid->b = value.b; }
-    P8* ne = (P8*)FUN_0099efa0(pos, mpEnd, mid + 1);
+    const uint32_t off2 = (uint32_t)((char*)mpEnd - (char*)pos);
+    P8* ne = (P8*)((char*)FUN_011e0744((char*)mid + 8, pos, off2) + off2);
     if (mpBegin) EFree(mpBegin);
     mpBegin = nb;
-    mpEnd = (P8*)((char*)ne + ((char*)mpEnd - (char*)pos >> 3) * 8);
-    mpEndCap = nb + newCap;
+    mpEnd = ne;
+    mpEndCap = (P8*)((char*)nb + nNewSize * 8);
 }

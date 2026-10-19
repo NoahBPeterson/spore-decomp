@@ -19,3 +19,5 @@
 0083fde0  207  complete: hashtable<FileChangeNotification>::DoInsertValue; hash walk/EH differ
 0083fee0  59   complete: hashtable<FileChangeNotification>::DoFreeNodes; node dtor scheduling differs
 0083ff30  144  complete: hash_map<FileChangeNotification>::operator[]; insert/find scheduling differ
+0083f790  -    complete: cFileParser::ParseFiles (timer lazy-start/QPC-vs-rdtsc, per-spec parse+exn guard, accumulated time, reset, message post, return !failed); cl pins the object in edi where the original used esi (and keeps an extra parser spill), so every [reg+disp] operand differs -- callee-saved allocation not reproducible from equivalent C++; instruction stream/size otherwise matches - [equiv: WEAK, 281 valid inputs, no mismatch]
+0083fff0  -    complete: vector<cInputFileSpec>::DoInsertValue (no-realloc relocate path + realloc: grow, uninit copy, construct, destroy-range pass, free, re-point begin/end/capacity); MSVC C++EH frame (SEH/scopetable, trylevel 0/1 around the copy regions) not reproducible from an equivalent hand-written body - [equiv: UNSUPPORTED, 0 valid inputs (pointer args fault under the harness)]

@@ -312,27 +312,65 @@ void cTransitionCommand::OnRegister(void* a, void* childState) {
 }
 
 // =============================================================== 0x007e29d0
-struct HashTable2 {
-    char pad0[4];
-    int* mpBuckets;      // +0x4
-    int  mnBucketCount;  // +0x8
-    int  mnElementCount; // +0xc
+struct HKey {
+    RefObj* p;       // +0x0
+    int     field4;  // +0x4
+    int     field8;  // +0x8
 };
-void* FUN_00921440(void* out, void* ecx_holder, int a, int b);   // 0x00921440
-void* HashInsert(void* self, void* out, const AutoRef* key, int* hint); // 0x007e29d0
+struct HashNode {
+    HKey       key;      // +0x0 .. +0xb
+    HashNode*  mpNext;   // +0xc
+};
+struct HashGrowResult {
+    uint8_t need;        // +0x0
+    int     newCount;    // +0x4
+};
+struct HashGrow {
+    void grow(HashGrowResult* out, int buckets, int elements, int flag);  // 0x00921440
+};
+struct HashTable3 : HashTable {
+    void* insert(void* pOut, const HKey* key, void* hint);
+};
 // @ 0x007e29d0
-void* HashInsert(void* self, void* out, const AutoRef* key, int* hint) {
-    HashTable2* t = (HashTable2*)self;
-    char* dummy = 0;
-    unsigned h = ((uint32_t)key->p ^ (uint32_t)key->field4) % t->mnBucketCount;
-    char* node = *(char**)((char*)t->mpBuckets + h * 4);
+void* HashTable3::insert(void* pOut, const HKey* key, void* hint)
+{
+    (void)hint;
+    const HKey* k = key;
+    uint32_t h0 = (uint32_t)k->p ^ (uint32_t)k->field4;
+    unsigned hv = h0 % (unsigned)mnBucketCount;
+    HashNode** slot0 = (HashNode**)(mpBuckets + hv);
+    HashNode* node = *slot0;
     while (node) {
-        if (*(uint32_t*)node == (uint32_t)key->p && *(uint32_t*)(node + 4) == (uint32_t)key->field4)
-            break;
-        node = *(char**)(node + 0xc);
+        if (node->key.p == k->p && node->key.field4 == k->field4) {
+            *(HashNode**)pOut = node;
+            *(uint8_t*)((char*)pOut + 8) = 0;
+            *(HashNode***)((char*)pOut + 4) = slot0;
+            return pOut;
+        }
+        node = node->mpNext;
     }
-    (void)hint; (void)dummy; (void)out;
-    return node;
+    HashGrowResult gr;
+    ((HashGrow*)((char*)this + 0x10))->grow(&gr, mnBucketCount, mnElementCount, 1);
+    node = (HashNode*)operator new(0x10, "App", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+    if (node) {
+        node->key.p = k->p;
+        node->key.field4 = k->field4;
+        node->key.field8 = k->field8;
+    }
+    node->mpNext = 0;
+    if (gr.need) {
+        hv = h0 % (unsigned)gr.newCount;
+        rehash(gr.newCount);
+    }
+    HashNode** slot = (HashNode**)(mpBuckets + hv);
+    node->mpNext = *slot;
+    *slot = node;
+    mnElementCount = mnElementCount + 1;
+    *(HashNode**)pOut = node;
+    *(HashNode***)((char*)pOut + 4) = slot;
+    *(uint8_t*)((char*)pOut + 8) = 1;
+    return pOut;
 }
 
 // =============================================================== 0x007e2fb0
@@ -374,6 +412,7 @@ struct cAppStateManagerX {
     char pad104[0x60];
     eastl::EString mName;       // +0x164
     int StateIDFromName(const char* name);
+    cAppStateManagerX* CopyCtor(char* src);      // 0x007e2ae0
 };
 void hashtablefind(void* out, void* table, eastl::EString* key);  // 0x007e2ea0
 // @ 0x007e3030
@@ -409,27 +448,40 @@ void cTransitionMgr::FUN_007e30a0(int a, int b) {
 }
 
 // =============================================================== 0x007e2ae0
-void FUN_007e2520(void* a, void* b);              // 0x007e2520
-void FUN_006a40a0(int n, void* a);                // 0x006a40a0
+struct VecCopy2 {                                    // vector<AutoRef>-style copy ctor target
+    void copyCtorFrom(const void* src);              // 0x007e2520
+};
+struct RawVec {
+    char* mpBegin; char* mpEnd; char* mpCap; void* mpAlloc;
+    void DoAllocate(int n, const void* alloc);       // 0x006a40a0
+};
+struct RawStr {
+    char* mpBegin; char* mpEnd; char* mpCap;
+    void RangeInitialize(unsigned n);                // 0x00475ab0
+};
 void* eastl_copy(void* out, void* f, void* l, void* d, void* a); // 0x0076ffd0
-void RangeInitialize(eastl::EString* s, unsigned n); // 0x00475ab0
-void VectorBoolInsert(void* pos, void* f, unsigned n); // 0x011e0744
+void* memcpyE(void* dst, const void* src, size_t n); // 0x011e0744
 // @ 0x007e2ae0
-cAppStateManagerX* FUN_007e2ae0(cAppStateManagerX* self, char* src) {
-    FUN_007e2520(self, src);
-    FUN_007e2520((char*)self + 0x14, src + 0x14);
-    FUN_006a40a0((*(int*)(src + 0x2c) - *(int*)(src + 0x28)) >> 3, src + 0x34);
-    eastl_copy(0, src + 0x28, src + 0x2c, 0, 0);
-    *(void**)((char*)self + 0x2c) = 0;
-    *(void**)((char*)self + 0x3c) = 0;
-    *(void**)((char*)self + 0x40) = 0;
-    *(void**)((char*)self + 0x44) = 0;
-    unsigned n = *(int*)(src + 0x40) - *(int*)(src + 0x3c);
-    eastl::EString* s = (eastl::EString*)((char*)self + 0x3c);
-    RangeInitialize(s, n + 1);
-    VectorBoolInsert(*(void**)((char*)self + 0x40), *(void**)(src + 0x3c), n);
-    *(int*)((char*)self + 0x4c) = *(int*)(src + 0x4c);
-    return self;
+cAppStateManagerX* cAppStateManagerX::CopyCtor(char* src) {
+    ((VecCopy2*)this)->copyCtorFrom(src);
+    ((VecCopy2*)((char*)this + 0x14))->copyCtorFrom(src + 0x14);
+    RawVec* dstVec = (RawVec*)((char*)this + 0x28);
+    int n = (*(int*)(src + 0x2c) - *(int*)(src + 0x28)) >> 3;
+    dstVec->DoAllocate(n, src + 0x34);
+    void* pEnd = 0;
+    eastl_copy(&pEnd, src + 0x28, src + 0x2c, dstVec->mpBegin, src);
+    dstVec->mpEnd = (char*)pEnd;
+    RawStr* dstStr = (RawStr*)((char*)this + 0x3c);
+    dstStr->mpBegin = 0;
+    dstStr->mpEnd = 0;
+    dstStr->mpCap = 0;
+    unsigned len = *(int*)(src + 0x40) - *(int*)(src + 0x3c);
+    dstStr->RangeInitialize(len + 1);
+    memcpyE(dstStr->mpBegin, *(void**)(src + 0x3c), len);
+    dstStr->mpEnd = dstStr->mpBegin + len;
+    dstStr->mpBegin[len] = 0;
+    *(int*)((char*)this + 0x4c) = *(int*)(src + 0x4c);
+    return this;
 }
 
 // =============================================================== 0x007e2ce0
