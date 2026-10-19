@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPFiledropWin32.cpp  ?FUN_006bb890@@YGJPAJ@Z  006bb890  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPFiledropWin32.cpp  ?FUN_006bb8b0@@YGJPAURefObj@@@Z  006bb8b0  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPFiledropWin32.cpp  ?FUN_006bba40@@YGHPAX@Z  006bba40  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /Isrc/game/include

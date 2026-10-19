@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+006bb7b0 110 GUID equality inline - skeleton
+006bb830 84 cFileDropWin32::QueryInterface - skeleton
+006bb8e0 204 drop-target drag handler - skeleton
+006bb9b0 129 drop-target helper - skeleton
+006bba70 150 ScreenToClient drag helper - skeleton

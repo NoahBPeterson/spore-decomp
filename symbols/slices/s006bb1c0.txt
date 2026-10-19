@@ -1,9 +1,13 @@
 006bb690 DebugMessage::~DebugMessage  # PDB callee-scored
+006bb7b0 ?FUN_006bb7b0@@YA_NPBX0@Z  # FUN_006bb7b0 migrated from s006bb1c0 (verbatim, slice spelling)
 006bb820 FUN_006bb820  # ReleaseStgMedium member (+0x1c)
-006bb830 SP::cFileDropWin32::QueryInterface  # PDB anchor
-006bb890 FUN_006bb890  # InterlockedIncrement thunk (+4)
-006bb8b0 FUN_006bb8b0  # InterlockedDecrement + virtual release
-006bba40 FUN_006bba40  # ReleaseStgMedium + helper
+006bb830 ?FUN_006bb830@@YAXPAX@Z  # FUN_006bb830 migrated from s006bb1c0 (verbatim, slice spelling)
+006bb890 ?FUN_006bb890@@YGJPAJ@Z  # FUN_006bb890 migrated from s006bb1c0 (verbatim, slice spelling)
+006bb8b0 ?FUN_006bb8b0@@YGJPAURefObj@@@Z  # FUN_006bb8b0 migrated from s006bb1c0 (verbatim, slice spelling)
+006bb8e0 ?FUN_006bb8e0@@YAXPAX@Z  # FUN_006bb8e0 migrated from s006bb1c0 (verbatim, slice spelling)
+006bb9b0 ?FUN_006bb9b0@@YAXPAX@Z  # FUN_006bb9b0 migrated from s006bb1c0 (verbatim, slice spelling)
+006bba40 ?FUN_006bba40@@YGHPAX@Z  # FUN_006bba40 migrated from s006bb1c0 (verbatim, slice spelling)
+006bba70 ?FUN_006bba70@@YAXPAX@Z  # FUN_006bba70 migrated from s006bb1c0 (verbatim, slice spelling)
 006bbdd0 ?Init@DatabasePackedFile@ResourceMan@EA@@UAE_NXZ  # EA::ResourceMan::DatabasePackedFile::Init migrated from s006bb1c0
 006bbde0 ?FUN_006bbde0@@YAXPAX@Z  # FUN_006bbde0 migrated from s006bb1c0 (verbatim, slice spelling)
 006bbe20 EA::ResourceMan::DatabasePackedFile::AsInterface  # PDB gap-align
