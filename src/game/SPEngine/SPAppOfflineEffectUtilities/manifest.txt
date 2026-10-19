@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPAppOfflineEffectUtilities.cpp  ?SetEffectSeed@SP@@YAXI@Z  007dade0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include

@@ -6,7 +6,7 @@
 007da910 ?StartDrag@cMouseCameraController_s007d_a2d0@SP@@QAE_NHHHH@Z  # cMouseCameraController_s007d_a2d0::StartDrag migrated from s007da2d0 (verbatim, slice spelling)
 007da9f0 ?Update@cMouseCameraController_s007d_a2d0@SP@@QAEXHPAX@Z  # cMouseCameraController_s007d_a2d0::Update migrated from s007da2d0 (verbatim, slice spelling)
 007dad80  SP::CreateOfflineEffect  # virtual lookup of "OfflineEffects" effect object
-007dade0  SP::SetEffectSeed  # PDB name
+007dade0 ?SetEffectSeed@SP@@YAXI@Z  # SP::SetEffectSeed migrated from s007da2d0
 007dae20  SP::RunOfflineWorld  # PDB caller-scored
 007db060  ManifestSource::Load  # sscanf "%x" manifest callback loader
 007db0c0  PluginManager::Load  # LoadLibrary/oaPluginInit plugin loader
