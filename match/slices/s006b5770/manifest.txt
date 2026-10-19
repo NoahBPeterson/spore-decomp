@@ -6,3 +6,6 @@ slices/s006b5770/s006b5770.cpp  ?FindTokenTranslation@cStringDetokenizer@App@@UA
 slices/s006b5770/s006b5770.cpp  ?func34h@cStringDetokenizer@App@@UAEXPBGI@Z  006b5950  /O2 /MD /Gy /EHsc /TP
 slices/s006b5770/s006b5770.cpp  ?erase@TranslatorVector@App@@QAEPAUintrusive_ptr@2@PAU32@@Z  006b5990  /O2 /MD /Gy /EHsc /TP
 slices/s006b5770/s006b5770.cpp  ?GetSupportedTypes@cStringTableResourceFactory@SP@@UAEHPAIH@Z  006b6540  /O2 /MD /Gy /EHsc /TP
+slices/s006b5770/s006b5770.cpp  ?ProcessString@cStringDetokenizer@App@@UAE_NPBGAAUstring16@eastl@@@Z  006b5bd0  /O2 /MD /Gy /EHsc /TP
+slices/s006b5770/s006b5770.cpp  ?func30h@cStringDetokenizer@App@@UAE_NPAUSPCString@2@PAUTokenEntry@2@I@Z  006b5c50  /O2 /MD /Gy /EHsc /TP
+slices/s006b5770/s006b5770.cpp  ?TranslateToken@cStringDetokenizer@App@@UAE_NPBGAAUstring16@eastl@@@Z  006b6160  /O2 /MD /Gy /EHsc /TP /GS-

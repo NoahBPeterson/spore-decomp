@@ -1,1 +1,5 @@
 006b5b80  46  App::cStringDetokenizer::RemoveTranslator: complete; only the search-loop branch layout and the inlined vector-erase argument registers differ
+006b59d0  186  complete (flags /GS-); alloc size is add/add in the original but lea here, plus two register picks (edx/ecx) [equiv: WEAK, no mismatch]
+006b5d20  462  complete (flags /GS-); register allocation differs (this is spilled and table/count live in ebx/esi in the original; bInToken lives in the dead pStr arg slot), block order otherwise follows [equiv: WEAK, no mismatch]
+006b6000  84  complete (flags /GS-); original keeps a null test on this before AddRef, cl drops it here [equiv: PASS]
+006b6080  166  complete (flags /GS-); original reuses the dead t arg slot for both intrusive_ptr temporaries (frame 0xc vs 0x10 here) and different callee-saved picks [equiv: WEAK, no mismatch]
