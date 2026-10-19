@@ -5,8 +5,8 @@
 0059d930 EA::RefCountVTemplate<EA::Thread::AtomicInt<int> >::GetRefCount  # PDB name
 0059d960 SP::cSPEditorAnimatedEventInfo::cSPEditorAnimatedEventInfo  # ctor; PDB name "ColorRGBToU32" is misassigned
 0059da20 pair/field equality helper  # two int field compares
-0059da80 double RandomRange(float)  # RandomDoubleUniform * range clamp
+0059da80 ?RandomRange@@YANM@Z  # RandomRange migrated from s0059d300 (verbatim, slice spelling)
 0059dac0 SP::cSPEditorAnimationManager::cSPEditorAnimationManager  # ctor (alloc 0x20 in 0059c060)
 0059db00 scalar deleting destructor  # vtable resets + conditional dealloc
-0059db40 SP::cSPEditorAnimationManager::Init  # PDB name
-0059dc70 SP::cSPEditorAnimationManager::GetAnimation  # PDB name
+0059db40 ?Init@cSPEditorAnimationManager@SP@@QAEXXZ  # SP::cSPEditorAnimationManager::Init migrated from s0059d300
+0059dc70 ?GetAnimation@cSPEditorAnimationManager_s0059_d300@SP@@QAE_NPAUAnimRequest@2@PAUAnimResult@2@PAUAnimContext@2@@Z  # cSPEditorAnimationManager_s0059_d300::GetAnimation migrated from s0059d300 (verbatim, slice spelling)
