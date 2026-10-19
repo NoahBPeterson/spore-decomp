@@ -4,12 +4,14 @@
 007e5ab0 cStateCommand::OnEndBlock  # PDB/decomp name (anonymous namespace)
 007e5bc0 ?OnEndBlock@cTransitionCommandC@@QAEXD@Z  # cTransitionCommandC::OnEndBlock migrated from s007e5220 (verbatim, slice spelling)
 007e5c40 SP::cAppStateManager::Update  # PDB name
-007e5d90 LockToSingleCore  # decomp name
-007e5ed0 SP::cAppSystem::DeactivateApp  # PDB name
-007e5f00 SP::cAppSystem::ToggleFullscreen  # PDB name
-007e5f30 SP::cAppSystem::ToggleDisplay  # PDB name
-007e5f60 SuppressAppSwitchProc  # decomp name
-007e5fd0 SP::cAppSystem::LockToDevice  # PDB name
-007e6020 SP::cAppSystem::UnlockFromDevice  # PDB name
-007e6050 SP::cAppSystem::SetEffectCollectionIDs  # PDB name
-007e6090 SP::cAppSystem::LoaderCommandHandler  # PDB name
+007e5d90 ?LockToSingleCore@@YAXXZ  # LockToSingleCore migrated from s007e5220 (verbatim, slice spelling)
+007e5e10 ?FUN_007e5e10@@YAXXZ  # FUN_007e5e10 migrated from s007e5220 (verbatim, slice spelling)
+007e5e80 ?FUN_007e5e80@cAppSystem@@QAEHXZ  # cAppSystem::FUN_007e5e80 migrated from s007e5220 (verbatim, slice spelling)
+007e5ed0 ?DeactivateApp@cAppSystem@@QAEXXZ  # cAppSystem::DeactivateApp migrated from s007e5220 (verbatim, slice spelling)
+007e5f00 ?ToggleFullscreen@cAppSystem@@QAEXXZ  # cAppSystem::ToggleFullscreen migrated from s007e5220 (verbatim, slice spelling)
+007e5f30 ?ToggleDisplay@cAppSystem@@QAEXXZ  # cAppSystem::ToggleDisplay migrated from s007e5220 (verbatim, slice spelling)
+007e5f60 ?SuppressAppSwitchProc@@YGJHIJ@Z  # SuppressAppSwitchProc migrated from s007e5220 (verbatim, slice spelling)
+007e5fd0 ?LockToDevice@cAppSystem@@QAEXXZ  # cAppSystem::LockToDevice migrated from s007e5220 (verbatim, slice spelling)
+007e6020 ?UnlockFromDevice@cAppSystem@@QAEXXZ  # cAppSystem::UnlockFromDevice migrated from s007e5220 (verbatim, slice spelling)
+007e6050 ?SetEffectCollectionIDs@cAppSystem@@QAEXPAIPAX@Z  # cAppSystem::SetEffectCollectionIDs migrated from s007e5220 (verbatim, slice spelling)
+007e6090 ?LoaderCommandHandler@cAppSystem@@QAEXXZ  # cAppSystem::LoaderCommandHandler migrated from s007e5220 (verbatim, slice spelling)

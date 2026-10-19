@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+007e5f60 56 GetAsyncKeyState result materialisation (cwde+sar 15) not reproduced by any of ~6 source spellings; rest identical
+007e6470 235 cAppSystem::PreShutdown complete behavioural reconstruction (vtable teardown); virtual-call register/order schedule differs
+007e66a0 10 PropWatcher::Check complete; only diff is the missing ecx=local argument load before FUN_004e41c0 (thiscall-vs-free mismatch)
+007e6720 60 PropWatcher::Read complete; type-tag selection compiled as setne instead of neg/sbb, plus ecx/eax register choice
+007e7260 50 PropWatcher constructor: behaviour complete but the original carries an SEH frame (state 0) around the vf0/Read calls; no destructor-bearing local in the reconstruction
+007e72d0 99 cQuitCheat::Execute complete; register allocation (ebx/edi) and crafted-object field-store order differ
+007e7d00 1709 complete SetupDirectories; EASTL string inline/EH-state layout differs from original
+007e8760 269 complete LoadPlugins; WString copy ctor/EH state stores differ
+007e89c0 286 complete vector<AutoRefCount>::DoInsertValue; EH unwind-state stores differ; difftest WEAK with --alias 0.5 --inputs 600 (197 valid, 45.7% coverage, no mismatch; 0 valid without --alias) after annotating operator_new/operator_delete__/kEastlAllocFile
+007e8ba0 1218 PreInit complete (all paths/calls); frame layout differs (EH string temps, SYSTEM_INFO zero-init schedule, ok?-arm pushes) flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

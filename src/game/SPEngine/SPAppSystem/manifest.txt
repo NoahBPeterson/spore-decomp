@@ -1,0 +1,18 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPAppSystem.cpp  ?LockToSingleCore@@YAXXZ  007e5d90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?FUN_007e5e10@@YAXXZ  007e5e10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?FUN_007e5e80@cAppSystem@@QAEHXZ  007e5e80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?DeactivateApp@cAppSystem@@QAEXXZ  007e5ed0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?ToggleFullscreen@cAppSystem@@QAEXXZ  007e5f00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?ToggleDisplay@cAppSystem@@QAEXXZ  007e5f30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?LockToDevice@cAppSystem@@QAEXXZ  007e5fd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?UnlockFromDevice@cAppSystem@@QAEXXZ  007e6020  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?SetEffectCollectionIDs@cAppSystem@@QAEXPAIPAX@Z  007e6050  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?LoaderCommandHandler@cAppSystem@@QAEXXZ  007e6090  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?FUN_007e65d0@cAppSystem@@QAEX_N@Z  007e65d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?FUN_007e6630@cAppSystem@@QAE_NXZ  007e6630  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?RunJobs@cAppSystem@@QAEXH@Z  007e6650  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?del@PtrDel@@QAEXXZ  007e6690  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?InitPlugins@cAppSystem_s007e_8ba0@@QAE_NPAX@Z  007e9300  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?SetUserDirNames@cAppSystem_s007e_8ba0@@QAEXPA_W0@Z  007e93d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?OpenURL@cAppSystem@@QAEXPB_W@Z  007e9d00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include

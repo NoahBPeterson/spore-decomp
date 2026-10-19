@@ -1,5 +1,4 @@
-# va Name  # evidence
-007e9a00 SP::cAppSystem::LoadEffectCollections  # PDB name
-007e9d00 SP::cAppSystem::OpenURL  # PDB candidate (caller-scored)
-007e9db0 SP::cAppSystem::Update  # PDB name
-007ea2f0 cheat ctor (cArgumentSpec registration)  # decompile
+007e9a00 ?cAppSystemLoadEffectCollections@@YAHPAX@Z  # cAppSystemLoadEffectCollections migrated from s007e9a00 (verbatim, slice spelling)
+007e9d00 ?OpenURL@cAppSystem@@QAEXPB_W@Z  # cAppSystem::OpenURL migrated from s007e9a00 (verbatim, slice spelling)
+007e9db0 ?cAppSystemUpdate@@YAXPAX@Z  # cAppSystemUpdate migrated from s007e9a00 (verbatim, slice spelling)
+007ea2f0 ?FUN_007ea2f0@@YAXPAX@Z  # FUN_007ea2f0 migrated from s007e9a00 (verbatim, slice spelling)

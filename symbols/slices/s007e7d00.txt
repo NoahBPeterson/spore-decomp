@@ -1,4 +1,3 @@
-# va Name  # evidence
-007e7d00 SP::cAppSystem::SetupDirectories  # PDB name
-007e8760 SP::cAppSystem::LoadPlugins  # PDB name
-007e89c0 FUN_007e89c0  # unnamed
+007e7d00 ?SetupDirectories@cAppSystem_s007e_7d00@@QAEXPAUCommandLine_s007e_7d00@@@Z  # cAppSystem_s007e_7d00::SetupDirectories migrated from s007e7d00 (verbatim, slice spelling)
+007e8760 ?LoadPlugins@cAppSystem_s007e_7d00@@QAE_NXZ  # cAppSystem_s007e_7d00::LoadPlugins migrated from s007e7d00 (verbatim, slice spelling)
+007e89c0 ?DoInsertValue@RCVec@@QAEXPAPAURCObj@@PBQAU2@@Z  # RCVec::DoInsertValue migrated from s007e7d00 (verbatim, slice spelling)
