@@ -31,6 +31,8 @@
 #include "SP/cSPPaletteItemUISelectable.h"
 #include "SP/cSPUIAssetBrowserCallback.h"
 #include "SP/cString.h"
+#include "cSPUILayout.h"
+#include "cSPUITooltipWinProc.h"
 
 // ---- items of slice s005bfb90 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV(n) virtual void pv##n();
@@ -280,8 +282,8 @@ class cSPUILayout_s005c_0c00 {
 };
 class cSPUITooltipWinProc_s005c_0c00 : public IWinProc_s005c_0c00 {
  public:
-  cSPUITooltipWinProc_s005c_0c00(const wchar_t* name, uint32_t id, const wchar_t* text, int a, const void* b, int c);  // UI::Tooltip::Tooltip
-  void SetText(const wchar_t* text);  // 0x00835ed0 (cSPUITooltipWinProc::SetText)
+  cSPUITooltipWinProc_s005c_0c00(const wchar_t* name, uint32_t id, const wchar_t* text, float* pos, uint32_t a, const wchar_t* b, uint32_t c);  // 0x00835e30
+  void SetText(const wchar_t* text, void* arg, char flag);  // 0x00835ed0 (ret 0xc)
 };
 struct cDirectPropertyList_s005c_0c00 {
   char pad[0x3c];
