@@ -1,1 +1,1 @@
-009f09a0 IKRigidFollow  # name guessed: re-poses all descendants of an IK body by the best-fit rotation+stretch of its reference bodies
+009f09a0 ?IKRigidFollow@@YGXPAUIKCtx@@PAUBody@@@Z  # IKRigidFollow migrated from s009f09a0 (verbatim, slice spelling)

@@ -1,1 +1,1 @@
-009f1990 IKContext::Update  # dc: per-particle IK leash/ground clamp + orientation/pivot rebuild
+009f1990 ?Update@IKContext@@QAEXPAUIKParticle@@@Z  # IKContext::Update migrated from s009f1990 (verbatim, slice spelling)
