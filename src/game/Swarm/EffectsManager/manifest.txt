@@ -1,0 +1,19 @@
+# source  symbol  va  flags
+../src/game/Swarm/EffectsManager.cpp  ?SetFlag@cEffectsManager@@QAEXHD@Z  00a6c940  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?GetFlag@cEffectsManager@@QAE_NH@Z  00a6c970  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?SetParams@cEffectsManager@@QAEXPBUFXParams@@@Z  00a6c9b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?SetResources@cEffectsManager@@QAEXPAUICollBase@@@Z  00a6ca10  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?SetComponent@cEffectsManager@@QAEXPAUICollBase@@H@Z  00a6ca90  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?GetComponent@cEffectsManager@@QAEPAXH@Z  00a6cb10  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?Comp8@cEffectsManager@@QAEXHHH@Z  00a6cb30  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?Comp14@cEffectsManager@@QAEXMH@Z  00a6cb70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?ResetState@cEffectsManager@@QAEXXZ  00a6cba0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?LookupA@cEffectsManager@@QAEPAXHHH@Z  00a6cc20  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?LookupB@cEffectsManager@@QAEPAXHHH@Z  00a6cc50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?Decal30@cEffectsManager@@QAEXHHH@Z  00a6cc80  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?Decal28@cEffectsManager@@QAEXHH@Z  00a6cca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?Coll10@cEffectsManager@@QAEXHHHH@Z  00a6ccc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?Decal34@cEffectsManager@@QAEXHHH@Z  00a6cd10  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?Decal2c@cEffectsManager@@QAEXHH@Z  00a6cd30  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?Coll14@cEffectsManager@@QAEXHHH@Z  00a6cd50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?ScalarDeletingDestructor@GmeRefCount@@QAEHI@Z  00a6d000  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
