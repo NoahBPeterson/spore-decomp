@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorHandleSpine.cpp  ?Init@cSPEditorHandleSpine_s005a_7d00@SP@@QAEXPAXPBUcSPVector3@2@PBUcSPMatrix3@2@@Z  005a8970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

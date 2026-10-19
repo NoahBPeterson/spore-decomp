@@ -5,7 +5,7 @@
 005a88a0 36-byte struct assignment  # rep movsd 9 dwords
 005a8900 EditorTuning Vector3 accessor (__stdcall)  # returns EditorTuning()+0x60
 005a8930 SP::cSPEditorHandleSpine scalar deleting destructor  # Shutdown + base dtor
-005a8970 SP::cSPEditorHandleSpine::Init  # PDB anchor
+005a8970 ?Init@cSPEditorHandleSpine_s005a_7d00@SP@@QAEXPAXPBUcSPVector3@2@PBUcSPMatrix3@2@@Z  # cSPEditorHandleSpine_s005a_7d00::Init migrated from s005a7d00 (verbatim, slice spelling)
 005a8a60 cHandleish::SetState  # fields 0x10/0x14/0x18
 005a8a80 cHandleish::SetEnabled  # fields 0x10/0x14/0x18, vcalls 0x14/0x30
 005a8ad0 SP::cSPEditorHandleSpine::cSPEditorHandleSpine  # base ctor + mOffset(0x50)/mOrient(0x5c)
