@@ -509,6 +509,9 @@ class Resolution:
         self.notes = []
 
 
+RENAME_SFX = re.compile(r"_s[0-9a-f]{4}_[0-9a-f]{4}(?=[@:]|$)")
+
+
 class Resolver:
     def __init__(self, image, symdb):
         self.img = image
@@ -715,7 +718,7 @@ class Resolver:
             name = s.name
             wf = want_func(s)
             if name.startswith("__imp_"):
-                va = self.by_import(name)
+                va = self.by_import(name) or self.by_import(RENAME_SFX.sub("", name))
                 return (va, "import") if va else (None, None)
             if name == "__except_list":
                 # MSVC's name for the SEH chain head: an absolute symbol equal to 0 in the CRT
@@ -734,6 +737,17 @@ class Resolver:
             if va:
                 return va, how
             note = how
+            # a slice stub renamed for a module TU (`System_s0113_88f0`, `string8_s0083_f140`): its methods keep the slice
+            # spelling in symbols/ and in the `// 0x` annotations, so the suffix is stripped and the name retried
+            # (mig9/mig10 holds: renamed stubs lost the callee bindings the slice had)
+            base = RENAME_SFX.sub("", name)
+            if base != name:
+                bq = demangle_qual(base)
+                va, how2 = self.by_symbols(base, {bq: our_quals.get(demangle_qual(name), 0)} if bq else {}, wf)
+                if not va:
+                    va, how2 = self.by_annotation(base, annots, wf)
+                if va:
+                    return va, "%s (rename suffix stripped)" % how2
             va = self.by_import(name)
             if va:
                 return va, "import-thunk"
