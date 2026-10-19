@@ -6,3 +6,4 @@
 0056cde0 SP::Traits::cSwatchColorLookup::Init  # pdb callee-scored name
 0056cf70 eastl::vector<float,eastl::sp_vector_allocator>::operator[]  # pdb callee-single name
 0056d080 SP::Traits::cTextureClassifier::ExtractTraits  # pdb caller-scored name
+0056cb30 SP::Traits::cFeedClassifier::ExtractTraits  # pdb caller-scored name; pairs with DescribeTraits 0056cc50 (same feature id 0x518b883)

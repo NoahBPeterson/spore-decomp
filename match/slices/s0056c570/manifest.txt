@@ -1,1 +1,10 @@
 # source  symbol  original VA  [cl flags override]
+slices/s0056c570/s0056c570.cpp  ?ExtractTraits@cAuthorClassifier@@  0056c570  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056c570/s0056c570.cpp  ?DescribeTraits@cAuthorClassifier@@  0056c670  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056c570/s0056c570.cpp  ?ExtractParameters@cMetadataSummarizer@@  0056c7d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056c570/s0056c570.cpp  ?SetMetadata@cAssetMetadata@@  0056c910  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056c570/s0056c570.cpp  ?ExtractTraits@cFeedClassifier@@  0056cb30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056c570/s0056c570.cpp  ?DescribeTraits@cFeedClassifier@@  0056cc50  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056c570/s0056c570.cpp  ?Init@cSwatchColorLookup@@  0056cde0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056c570/s0056c570.cpp  ?GetAllocated@VecFloat@@  0056cf70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056c570/s0056c570.cpp  ?ExtractTraits@cTextureClassifier@@  0056d080  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
