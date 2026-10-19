@@ -12,6 +12,7 @@
 007af5d0 34 COMPLETE conditional copy/fill loop over 0x20-byte endpoints; loop-carried `first`/`dest` land in the opposite registers (ecx/eax swapped), so every operand byte differs.
 007af6d0 33 COMPLETE backward copy over 0x20-byte endpoints; loop-carried `last`/`dest` land in the opposite registers.
 007af720 88 COMPLETE DxtImage::WriteStream (open key stream, 0x18-byte header, per-mip size + data, close); n/writer land in esi/ebx swapped relative to the original, shifting the loop operands [equiv: UNSUPPORTED (0/400 valid inputs; fake-arity/faults)]
+007af8b0 491 sprite alpha blit (by-value ImgRef params, /GS-): loop register allocation / dst base spill differs [equiv: WEAK 55.7% coverage]
 007afb70 564 SP::cDXTCompressJobData::DXTCompressRow: full row/block copy + eadxt calls, loop/register shape differs
 007afe10 130 SP::cDXTCompressJobData::RunJob: full row loop + completion, scheduling differs
 007aff00 191 SP::WriteImageDataAsTexture: full texture upload + per-mip sizing, register/loop shape differs

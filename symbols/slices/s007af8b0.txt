@@ -1,4 +1,5 @@
 006926b0 ?Wait@cJob@SP@@QAEXXZ  # SP::cJob::Wait (callee of s007af8b0, named from the dev publics; slice address comment)
+007af8b0 ?FUN_007af8b0@@YA_NUImgRef@@0@Z  # FUN_007af8b0 migrated from s007af8b0 (verbatim, slice spelling)
 007afae0 ?StepDown@cRowJobData@@QAE_NPAUCJob@@@Z  # cRowJobData::StepDown migrated from s007af8b0 (verbatim, slice spelling)
 007afb70 ?DXTCompressRow@cDXTCompressJobData@@QAEHH@Z  # cDXTCompressJobData::DXTCompressRow migrated from s007af8b0 (verbatim, slice spelling)
 007afe10 ?RunJob@cDXTCompressJobData@@QAE_NPAUCJob@@@Z  # cDXTCompressJobData::RunJob migrated from s007af8b0 (verbatim, slice spelling)

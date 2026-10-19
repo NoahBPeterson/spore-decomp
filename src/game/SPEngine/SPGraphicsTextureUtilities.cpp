@@ -589,6 +589,7 @@ public:
 // ---- items of slice s007aea30 end
 
 // ---- items of slice s007af8b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma intrinsic(_InterlockedExchangeAdd)
 void  __cdecl EAFree(void* p);                                   // 0x00F47380
 void  __cdecl eadxt(void* dst, void* src, int stride, int count, int mode, int quality); // 0x007AF490
 void  __cdecl FUN_007ad0c0(void* a, void* b);                    // 0x007AD0C0
@@ -654,6 +655,32 @@ struct cRowJobData {
     bool StepDown(CJob* job);
     bool StepUp(CJob* job);
 };
+struct ImgTex {
+    int mFormat;              // +0x0
+    char pad4[8];
+    unsigned short mWidth;    // +0xc
+    unsigned short mHeight;   // +0xe
+    int Lock(int mode, int zero, int* out);   // 0x011EF750 __thiscall
+    void Unlock(int* buf);                    // 0x011EF880 __thiscall
+};
+struct ImgObj {
+    ImgTex* mTex;             // +0
+    unsigned mFlags;          // +4
+    volatile long mRef;       // +8
+    void Release()
+    {
+        _InterlockedExchangeAdd(&mRef, -1);
+        if (_InterlockedExchangeAdd(&mRef, 0) < 1)
+            _InterlockedExchangeAdd(&mRef, 1);
+        else
+            _InterlockedExchangeAdd(&mRef, 0);
+    }
+};
+struct ImgRef {
+    ImgObj* p;
+    ~ImgRef() { if (p) p->Release(); }
+};
+IFac* __cdecl GetTexFactory();   // 0x0067DD60
 namespace __equiv_ann1 {
 struct VecReserve {
     void Reserve();   // 0x004e0880 (equiv t2)
@@ -1583,6 +1610,42 @@ bool DxtImage::WriteStream(int unused)
         }
         stream.mp->Close();
         return true;
+    }
+    return false;
+}
+
+// @ 0x007af8b0
+bool FUN_007af8b0(ImgRef a, ImgRef b)
+{
+    if (a.p) {
+        if (b.p) {
+            ImgObj* oa = a.p;
+            if (!(oa->mFlags & 1)) GetTexFactory()->v13(oa);
+            ImgTex* ta = oa->mTex;
+            ImgObj* ob = b.p;
+            if (!(ob->mFlags & 1)) GetTexFactory()->v13(ob);
+            ImgTex* tb = ob->mTex;
+            if (ta && tb) {
+                unsigned short w = ta->mWidth;
+                unsigned short h = ta->mHeight;
+                if (w == tb->mWidth && h == tb->mHeight && ta->mFormat == 0x15 && tb->mFormat == 0x1c) {
+                    int dstBuf[7];
+                    int srcBuf[7];
+                    if (tb->Lock(2, 0, dstBuf)) {
+                        if (ta->Lock(1, 0, srcBuf)) {
+                            for (int y = 0; y < (int)h; ++y) {
+                                int row = h - y - 1;
+                                for (int x = 0; x < (int)w; ++x)
+                                    ((unsigned char*)dstBuf[0])[row * w + x] = ((unsigned char*)srcBuf[0])[(row * w + x) * 4 + 3];
+                            }
+                            ta->Unlock(srcBuf);
+                        }
+                        tb->Unlock(dstBuf);
+                    }
+                    return true;
+                }
+            }
+        }
     }
     return false;
 }
