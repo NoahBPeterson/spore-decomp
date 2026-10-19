@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPAudio/AudioSound.cpp  ?ConfigurePrimitives@Sound@@QAE_NXZ  00a1c460  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSound.cpp  ?ReleaseAllCells@Sound74@@QAEXXZ  00a1e660  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSound.cpp  ?Release@Sound@Audio@EA@@UAEHXZ  00a37c10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,4 +1,4 @@
-00a20060 EA::Audio::Sound::ConfigureSound  # PDB anchor
+00a20060 ?ConfigureSound@Sound_s00a2_0060@@QAE_NXZ  # Sound_s00a2_0060::ConfigureSound migrated from s00a20060 (verbatim, slice spelling)
 00a20700 EA::Audio::ConstructEmitterSndPlayer  # PDB gap-align
 00a207a0 ?ReleaseSub@Sys@@QAEHXZ  # Sys::ReleaseSub migrated from s00a20060 (verbatim, slice spelling)
 00a207d0 ?Shutdown@Sys@@QAE_NXZ  # Sys::Shutdown migrated from s00a20060 (verbatim, slice spelling)

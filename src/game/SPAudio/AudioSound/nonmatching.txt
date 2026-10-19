@@ -1,0 +1,15 @@
+# va  diff-bytes  reason
+00a1c710 1177 Sound::TickInternal: complete; emitter vcall register pairing (eax/edx) and flag reload/CSE differ throughout
+00a1cf10 2 NodePool::Insert: complete, allocator-size load uses eax instead of ecx; difftest PASS after fixing the operator_new file-name literal (was abbreviated "EASTL/allocator.h", original passes the full c:\BuildAgent path)
+00a1cf60 230 Sound::UpdatePropertiesFromPrimitives: complete; retail dispatches through its own vtable slot 0x98 with the prim node's key as the receiver and the iteration end as arg0 (faithful __thiscall function-pointer call); equiv PASS (245 valid, 100% coverage)
+00a1d080 32 Sound::CommitAllProperties: complete; trailing SetData arg loads are CSE'd in mine, reloaded in original
+00a1d310 54 Sound::SetData: complete, switch/register/vcall schedule differs; difftest PASS (fixed: 0xa1aad0 helper is thiscall on the curve object, was declared as a cdecl free function; annotated assign/GetSystemAT)
+00a1e320 82 complete; EA::Audio factory ctor (eastl fixed_hashtable + fixed_pool, EH frame); reconstruction, not byte-exact; difftest FAIL (5/5 inputs, ours faults on a write the original does not) after ECX-this fix (now Sound74 member)
+00a1e420 84 complete; EA::Audio factory ctor (larger fixed hashtable + fixed_pool); reconstruction, not byte-exact; difftest FAIL (5/5 inputs, ours faults in memset where the original returns) after ECX-this fix (now Sound74 member)
+00a1e520 155 complete; eastl vector<T>::operator= / assign; register-allocation and clone/move-tail layout differ from the original builtin
+00a1e5f0 83 complete; SP::SimpleVector<CellData*>::push_back; cl register allocation (this->edi / p->esi) not reproducible from plain source
+00a1e6d0 699 complete; Sound per-frame cell accumulator update (large float/global/vtable reconstruction), not byte-exact
+00a1eb50 279 complete; Sound::ConfigureNote property/zone lookup (EH frame + magic property hashes), not byte-exact
+00a1eef0 550 complete; Sound teardown (multi-hashtable drain + refcounted vector release), reconstruction not byte-exact
+00a1f180 235 complete; Sound::SubscribeToGroupsFromSymbol; cl hoists the isalnum import into ebp and uses a different hash register than the reconstruction
+00a20060 1368 Sound::ConfigureSound: complete (all config keys, groups, bitvec, fx); register allocation/stack layout differs, needs /GS-
