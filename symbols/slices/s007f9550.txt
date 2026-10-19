@@ -1,9 +1,9 @@
-007f9550 ?Release@cSPUIBehaviorEventBase@@UAEHXZ  # cSPUIBehaviorEventBase::Release migrated from s007f9550
-007f97a0 ?AsInterface@cSPUIBehaviorEventBase@@UAEPAXW4InterfaceId@COM@EA@@@Z  # cSPUIBehaviorEventBase::AsInterface migrated from s007f9550
+007f9550 ?Eval@Ev@@QAE_NXZ  # Ev::Eval migrated from s007f9550 (verbatim, slice spelling)
+007f97a0 ?AsA@Ev@@QAEPAXH@Z  # Ev::AsA migrated from s007f9550 (verbatim, slice spelling)
 007f9800 ?AsB@Ev@@QAEPAXH@Z  # Ev::AsB migrated from s007f9550 (verbatim, slice spelling)
 007f9860 ?Sub10@Ev@@QAEPAXXZ  # Ev::Sub10 migrated from s007f9550 (verbatim, slice spelling)
 007f9890 ?AsC@Ev@@QAEPAXH@Z  # Ev::AsC migrated from s007f9550 (verbatim, slice spelling)
-007f99c0 ?SetStateInt@cSPUIBehaviorEventBase@@UAE_NH@Z  # cSPUIBehaviorEventBase::SetStateInt migrated from s007f9550
+007f99c0 ?Set14@Ev@@QAE_NH@Z  # Ev::Set14 migrated from s007f9550 (verbatim, slice spelling)
 007f99e0 ?AsD@Ev@@QAEPAXH@Z  # Ev::AsD migrated from s007f9550 (verbatim, slice spelling)
 007f9a40 ?Refresh@Cont@@QAEXXZ  # Cont::Refresh migrated from s007f9550 (verbatim, slice spelling)
 007f9ae0 ?SetValue@Cont@@QAE_NH@Z  # Cont::SetValue migrated from s007f9550 (verbatim, slice spelling)
@@ -12,8 +12,8 @@
 007f9c10 ?AddB@Cont@@QAE_NPAX@Z  # Cont::AddB migrated from s007f9550 (verbatim, slice spelling)
 007f9c90 ?RemoveB@Cont@@QAE_NPAX@Z  # Cont::RemoveB migrated from s007f9550 (verbatim, slice spelling)
 007f9d00 ?RemoveAllB@Cont@@QAE_NXZ  # Cont::RemoveAllB migrated from s007f9550 (verbatim, slice spelling)
-007f9d90 cSPUIBehaviorEventBase::AddPredicate  # PDB symbol name
-007f9e20 cSPUIBehaviorEventBase::AddAction  # PDB symbol name
+007f9d90 ?AddPredicate@CB@@UAE_NPAUPredO@@@Z  # CB::AddPredicate migrated from s007f9550 (verbatim, slice spelling)
+007f9e20 ?AddAction@CB@@UAE_NPAUActO@@@Z  # CB::AddAction migrated from s007f9550 (verbatim, slice spelling)
 007f9ee0 ?RemovePredicate@cSPUIBehaviorEventBase@@UAE_NPAVcISPUIBehaviorPredicate@@@Z  # cSPUIBehaviorEventBase::RemovePredicate migrated from s007f9550
 007f9f60 ?RemoveAction@cSPUIBehaviorEventBase@@UAE_NPAVcISPUIBehaviorAction@@@Z  # cSPUIBehaviorEventBase::RemoveAction migrated from s007f9550
 007f9fe0 ?RemoveAllPredicates@cSPUIBehaviorEventBase@@UAE_NXZ  # cSPUIBehaviorEventBase::RemoveAllPredicates migrated from s007f9550
@@ -22,9 +22,9 @@
 007fa130 ?Call93a0@Ev@@QAEXXZ  # Ev::Call93a0 migrated from s007f9550 (verbatim, slice spelling)
 007fa150 ?Flags@Ev@@QAEIXZ  # Ev::Flags migrated from s007f9550 (verbatim, slice spelling)
 007fa180 ?AsInterface@Ev@@QAEPAXH@Z  # Ev::AsInterface migrated from s007f9550 (verbatim, slice spelling)
-007fa1d0 cSPUIBehaviorEventBase::SerUpdate  # PDB symbol name
+007fa1d0 ?SerUpdate@CB@@QAEXXZ  # CB::SerUpdate migrated from s007f9550 (verbatim, slice spelling)
 007fa350 ?SetGlobal@Ev@@QAEPAU1@XZ  # Ev::SetGlobal migrated from s007f9550 (verbatim, slice spelling)
 007fa370 ?ClearGlobal@Ev@@QAEXXZ  # Ev::ClearGlobal migrated from s007f9550 (verbatim, slice spelling)
 007fa390 ?FUN_007fa390@@YAHIPAXD@Z  # FUN_007fa390 migrated from s007f9550 (verbatim, slice spelling)
-007fa4c0 _FUN_007fa4c0  # FUN_007fa4c0 migrated from s007f9550 (verbatim, slice spelling)
-007fa4f0 _FUN_007fa4f0  # FUN_007fa4f0 migrated from s007f9550 (verbatim, slice spelling)
+007fa4c0 ?FUN_007fa4c0@@YAPAHPAHH@Z  # FUN_007fa4c0 migrated from s007f9550 (verbatim, slice spelling)
+007fa4f0 ?FUN_007fa4f0@@YAXHHH@Z  # FUN_007fa4f0 migrated from s007f9550 (verbatim, slice spelling)

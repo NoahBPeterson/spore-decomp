@@ -1,14 +1,18 @@
+007fb7b0 ?f_7fb7b0@@YAXPAUIWorldHost@@@Z  # f_7fb7b0 migrated from s007fb7b0 (verbatim, slice spelling)
 007fb880 ?Ctor@C_7fb880@@QAEPAXXZ  # C_7fb880::Ctor migrated from s007fb7b0 (verbatim, slice spelling)
 007fba00 ?Ctor@C_7fba00@@QAEPAXXZ  # C_7fba00::Ctor migrated from s007fb7b0 (verbatim, slice spelling)
 007fba80 ?Ctor@C_7fba80@@QAEPAXXZ  # C_7fba80::Ctor migrated from s007fb7b0 (verbatim, slice spelling)
 007fbb20 ?Ctor@C_7fbb20@@QAEPAXXZ  # C_7fbb20::Ctor migrated from s007fb7b0 (verbatim, slice spelling)
 007fbbc0 ?Ctor@C_7fbbc0@@QAEPAXXZ  # C_7fbbc0::Ctor migrated from s007fb7b0 (verbatim, slice spelling)
 007fbce0 ?Dtor@C_7fbce0@@QAEXXZ  # C_7fc200::Dtor migrated from s007fb7b0 (verbatim, slice spelling)
+007fbd50 ??0Holder7fbd50@@QAE@XZ  # Holder7fbd50::Holder7fbd50 migrated from s007fb7b0 (verbatim, slice spelling)
+007fbdb0 ?f_7fbdb0@@YAPAUPair8@@PAU1@00@Z  # f_7fbdb0 migrated from s007fb7b0 (verbatim, slice spelling)
 007fbe70 ?GetClassId@C_7fbe70@@QAEHXZ  # C_7fbe70::GetClassId migrated from s007fb7b0 (verbatim, slice spelling)
 007fbed0 EA::UTFWin::SerMarshaller<cSPUIPluginProc>::SetSource  # SerItem bind with base=this-4
 007fbf40 UTFWin::cSPUIBehaviorEventBase::cSPUIBehaviorEventBase  # dev-PDB name; full event-base ctor
 007fc200 UTFWin::cSPUIBehaviorEventBase::~cSPUIBehaviorEventBase  # dev-PDB candidate; RemoveAllPredicates/Actions, mStateString at +0x68
 007fc2a0 ?Ctor@C_7fc2a0@@QAEPAXXZ  # C_7fc2a0::Ctor migrated from s007fb7b0 (verbatim, slice spelling)
+007fc4b0 ?OnMessage@Handler7fc4b0@@QAE_NHPAX@Z  # Handler7fc4b0::OnMessage migrated from s007fb7b0 (verbatim, slice spelling)
 007fc600 ?f_7fc600@Obj7fc600@@QAEIHH@Z  # Obj7fc600::f_7fc600 migrated from s007fb7b0 (verbatim, slice spelling)
 007fc690 ?f_7fc690@@YAHPAX0@Z  # f_7fc690 migrated from s007fb7b0 (verbatim, slice spelling)
 007fc790 ?f_7fc790@@YAHPAX0@Z  # f_7fc790 migrated from s007fb7b0 (verbatim, slice spelling)

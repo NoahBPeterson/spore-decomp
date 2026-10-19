@@ -7,6 +7,7 @@
 #include "cSPUIBehaviorValueInterpolator.h"
 #include <cstddef>
 #include <math.h>
+#include "EA/Messaging/Server.h"
 
 // ---- items of slice s007f8540_od begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct AnimMgr {
@@ -32,8 +33,6 @@ struct AnimMgr {
 // ---- items of slice s007f8540_od end
 
 // ---- items of slice s007f9550 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" int* __cdecl FUN_007fa4c0(int* p, int v);
-extern "C" void __cdecl FUN_007fa4f0(int p, int a2, int p3);
 extern "C" void* __cdecl EA_Messaging_GetServer();
 extern "C" void __cdecl FUN_00e4a9c0(void*);
 struct Ev {
@@ -53,7 +52,6 @@ struct Ev {
     Ev*   SetGlobal();      // @ 0x007fa350
     void  ClearGlobal();    // @ 0x007fa370
     bool  Eval();           // @ 0x007f9550
-    void  SerUpdate();      // @ 0x007fa1d0
     int** SlotB(int i);     // FUN_007f93b0
     int** SlotC(int i);     // FUN_007f93c0
     int** SlotD(int i);     // FUN_007f93d0
@@ -77,6 +75,35 @@ inline void VCall1(void* o, int off, void* a) {
     ((void(__thiscall*)(void*, void*))(*(void**)((char*)*(void**)o + off)))(o, a);
 }
 void* g_evGlobal = 0;
+struct B0 { virtual void b0(); uint32_t pad[5]; };
+struct IfB;
+struct PredO { virtual void AddRef(); virtual void Release();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+  virtual void v8(); virtual void v9(); virtual void v10(); virtual void* GetOwner(); virtual void SetOwner(IfB*); };
+struct ActO { virtual void AddRef(); virtual void Release();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual bool IsStarted();
+virtual void SetStarted(bool);
+  virtual void v8(); virtual void* GetOwner(); virtual void SetOwner(IfB*); };
+struct IfB { virtual bool AddPredicate(PredO*) = 0; virtual bool AddAction(ActO*) = 0; };
+struct CB : B0, IfB {
+    PredO** SlotC(int i);
+    ActO** SlotD(int i);
+    bool AddPredicate(PredO* pred);
+    bool AddAction(ActO* act);
+    void SerUpdate();
+    char fill[0x5c - 0x1c];
+    bool mActive;
+    int mLast;
+};
 // ---- items of slice s007f9550 end
 
 // ---- items of slice s007fa520 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -218,6 +245,9 @@ struct Sub7fb480 { bool f_7fb480(unsigned char b); };
 // ---- items of slice s007fa520 end
 
 // ---- items of slice s007fb7b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern unsigned char g_164b1f0;
+extern void* g_164b410;
+extern int   g_164b1f4;
 extern char tf_a[], tf_b[], tf_c[], tf_d[];
 extern char vi_a[], vi_b[], vi_c[], vi_d[];
 extern char v2_a[], v2_b[], v2_c[], v2_d[];
@@ -233,8 +263,95 @@ void  wstring_assign(void* s, void* a, void* b);
 void  wstring_freebuffer(void* p);
 void* string_ctor_copy(void* s, void* other);
 void** GetActSlot(void* self, int i);
+void  f_7fc330(void* p);
 void  f_7fc2a0_ctor(void* p);
 void  f_7fbce0_dtor(void* p);
+struct Ev7f93 {
+  void ClearGlobal();                 // 0x007fa370
+  ~Ev7f93() { ClearGlobal(); }
+};
+Ev7f93* GetEv7f93();                  // 0x007f93e0
+struct IMsgServer {
+  virtual ~IMsgServer();              // slot 0
+  virtual void s1();
+  virtual void Shutdown();            // slot 2 (+8)
+};
+IMsgServer* GetMsgServer();           // 0x00883860
+void SetMsgServer(IMsgServer* s);     // 0x00883870
+struct IModelWorld7fb {
+virtual void s0();
+virtual void s1();
+virtual void s02();
+virtual void s03();
+virtual void s04();
+virtual void s05();
+virtual void s06();
+virtual void s07();
+virtual void s08();
+virtual void s09();
+virtual void s0a();
+virtual void s0b();
+virtual void s0c();
+virtual void s0d();
+virtual void s0e();
+virtual void s0f();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s1a();
+virtual void s1b();
+virtual void s1c();
+virtual void s1d();
+virtual void s1e();
+virtual void s1f();
+virtual void s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void s24();
+virtual void s25();
+virtual void s26();
+virtual void s27();
+virtual void s28();
+virtual void s29();
+virtual void s2a();
+virtual void s2b();
+virtual void s2c();
+virtual void s2d();
+virtual void s2e();
+virtual void s2f();
+virtual void s30();
+virtual void s31();
+virtual void s32();
+virtual void s33();
+virtual void s34();
+virtual void s35();
+virtual void s36();
+virtual void s37();
+virtual void s38();
+virtual void s39();
+virtual void s3a();
+virtual void s3b();
+virtual void s3c();
+virtual void s3d();
+virtual void s3e();
+virtual void s3f();
+virtual void s40();
+virtual void s41();
+  virtual void SetCurrent(void* p);   // +0x108
+};
+struct IWorldHost {
+  virtual void s0();
+  virtual IModelWorld7fb* GetWorld();  // +4
+};
+void f_7fb7b0(IWorldHost* param);
 struct C_7fb880 { char pad[4]; void BaseCtor(); void* Ctor(); };
 struct C_7fba00 { char pad[4]; void BaseCtor(); void* Ctor(); };
 struct C_7fbb20 { char pad[4]; void BaseCtor(); void* Ctor(); };
@@ -260,11 +377,56 @@ struct C_7fbe70 { int GetClassId(); };
 struct C_7fc860 { void g(int a, int b); void f(int a, int b); };
 void C_7fc860::f(int a, int b) { g(a, b); }
 struct C_7fbbc0 { char pad[4]; void BaseCtor(); void** GetSlot(int i); void* Ctor(); };
+struct Alloc7fbd50 {
+  Alloc7fbd50(const char* name);                 // 0x00e5cac0 (ret 4, returns this; the copy ctor is the same body)
+  Alloc7fbd50(const Alloc7fbd50& o);             // 0x00e5cac0
+  void set_name(const char* name);               // 0x010829f0 (ret 4)
+};
+void* operator new(size_t n, void* p);           // 0x008ac360 (cdecl placement new)
+struct VecMap7fbd50 {
+  void* mBegin; void* mEnd; void* mCap; Alloc7fbd50 mAlloc;
+  VecMap7fbd50(const Alloc7fbd50& a = Alloc7fbd50("UI/vector"))
+    : mBegin(0), mEnd(0), mCap(0), mAlloc(a) { mAlloc.set_name("UI/vector_map"); }
+};
+struct Holder7fbd50 {
+  VecMap7fbd50 v;
+  Holder7fbd50();
+};
+struct Pair8 { unsigned first; unsigned second; };
 struct Sub18 { void Ctor(); void RemoveAllPredicates(); void RemoveAllActions(); void BaseDtor(); };
 struct Sub68 { void FreeBuffer(); };
 struct WinProcInit { void Dtor(); };
 struct C_7fc200 { char pad[4]; void Dtor(); };
 struct C_7fc2a0 { char pad[4]; void BaseCtor(); void* Ctor(); };
+struct IRefHost {
+  virtual void AddRef();                   // 0x00
+  virtual void Release();                  // 0x04
+virtual void s2();
+virtual void s3();
+virtual void s4();
+  virtual IWorldHost* GetHost();           // 0x14
+};
+IRefHost* f_11b7240_ref(void* arg);        // 0x011b7240 (cdecl)
+template <class T>
+struct RefPtr7fc4b0 {
+  T* mpObject;
+  T* operator->() const { return mpObject; }
+  operator T*() const { return mpObject; }
+  RefPtr7fc4b0& operator=(T* p) {
+    if (p != mpObject) {
+      T* pOld = mpObject;
+      if (p) p->AddRef();
+      mpObject = p;
+      if (pOld) pOld->Release();
+    }
+    return *this;
+  }
+};
+struct Handler7fc4b0 {
+  char pad[4];
+  RefPtr7fc4b0<IRefHost> mpHost;           // +4
+  bool OnMessage(int msg, void* arg);
+};
 struct Obj7fc600 { unsigned f_7fc600(int a, int b); };
 // ---- items of slice s007fb7b0 end
 
@@ -279,29 +441,11 @@ void AnimMgr::Reset()
     f3c = 0.0f;
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x007f9430
 void AnimMgr::AddTime(float dt)
 {
     f3c = f3c + dt;
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x007f9460
 bool AnimMgr::Set(int key, float value)
@@ -314,15 +458,6 @@ bool AnimMgr::Set(int key, float value)
     return p != 0;
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x007f94b0
 bool AnimMgr::Get(int key, float* out)
 {
@@ -333,29 +468,11 @@ bool AnimMgr::Get(int key, float* out)
     return p != 0;
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x007f9500
 bool AnimMgr::Has(int key)
 {
     return Find(key) != 0;
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x007f9530
 void AnimMgr::Clear()
@@ -363,16 +480,8 @@ void AnimMgr::Clear()
     Shutdown();
 }
 
-
-
-
-
-
-
-
-
 // @ 0x007f9550
-int cSPUIBehaviorEventBase::Release()
+bool Ev::Eval()
 {
     *(char*)((char*)this + 0x3a) = 0;
     VCallR(this, 0x24);
@@ -407,16 +516,8 @@ int cSPUIBehaviorEventBase::Release()
     return true;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x007f97a0
-void * cSPUIBehaviorEventBase::AsInterface(EA::COM::InterfaceId id)
+void* Ev::AsA(int id)
 {
     int v = id;
     if (v == (int)0xeec58382) return this;
@@ -425,14 +526,6 @@ void * cSPUIBehaviorEventBase::AsInterface(EA::COM::InterfaceId id)
     if (v == (int)0x0243a853) return this;
     return 0;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x007f9800
 void* Ev::AsB(int id)
@@ -444,27 +537,11 @@ void* Ev::AsB(int id)
     return 0;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x007f9860
 void* Ev::Sub10()
 {
     return this ? (void*)((char*)this + 0x10) : 0;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x007f9890
 void* Ev::AsC(int id)
@@ -476,28 +553,12 @@ void* Ev::AsC(int id)
     return 0;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x007f99c0
-bool cSPUIBehaviorEventBase::SetStateInt(int value)
+bool Ev::Set14(int value)
 {
-    *(int*)((char*)this + 0x2c) = value;
+    *(int*)((char*)this + 0x14) = value;
     return true;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x007f99e0
 void* Ev::AsD(int id)
@@ -508,14 +569,6 @@ void* Ev::AsD(int id)
     if (id == (int)0x024b5c98) return this;
     return 0;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x007f9a40
 void Cont::Refresh()
@@ -532,14 +585,6 @@ void Cont::Refresh()
     *(int*)((char*)this + 0x34) = -1;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x007f9ae0
 bool Cont::SetValue(int v)
 {
@@ -553,27 +598,11 @@ bool Cont::SetValue(int v)
     return true;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x007f9b90
 bool Ev::Test1()
 {
     return (*(uint32_t*)((char*)this + 0x10) & 1) != 0;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x007f9bb0
 void* Ev::AsE(int id)
@@ -584,14 +613,6 @@ void* Ev::AsE(int id)
     if (id == (int)0x02439c2f) return this;
     return 0;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x007f9c10
 bool Cont::AddB(void* obj)
@@ -608,14 +629,6 @@ bool Cont::AddB(void* obj)
     return false;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x007f9c90
 bool Cont::RemoveB(void* obj)
 {
@@ -631,14 +644,6 @@ bool Cont::RemoveB(void* obj)
     return false;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x007f9d00
 bool Cont::RemoveAllB()
 {
@@ -652,13 +657,38 @@ bool Cont::RemoveAllB()
     return true;
 }
 
+// @ 0x007f9d90
+bool CB::AddPredicate(PredO* pred)
+{
+    for (int i = 0; i < 4; ++i) {
+        PredO** slot = SlotC(i);
+        if (*slot == 0) {
+            *slot = pred;
+            (*slot)->AddRef();
+            (*slot)->SetOwner(this);
+            return true;
+        }
+    }
+    return false;
+}
 
-
-
-
-
-
-
+// @ 0x007f9e20
+bool CB::AddAction(ActO* act)
+{
+    for (int i = 0; i < 4; ++i) {
+        ActO** slot = SlotD(i);
+        if (*slot == 0) {
+            *slot = act;
+            act->AddRef();
+            act->SetOwner(this);
+            if (mActive) {
+                if (!act->IsStarted()) act->SetStarted(true);
+            }
+            return true;
+        }
+    }
+    return false;
+}
 
 // @ 0x007f9ee0
 bool cSPUIBehaviorEventBase::RemovePredicate(cISPUIBehaviorPredicate * pred)
@@ -675,14 +705,6 @@ bool cSPUIBehaviorEventBase::RemovePredicate(cISPUIBehaviorPredicate * pred)
     return false;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x007f9f60
 bool cSPUIBehaviorEventBase::RemoveAction(cISPUIBehaviorAction * act)
 {
@@ -698,14 +720,6 @@ bool cSPUIBehaviorEventBase::RemoveAction(cISPUIBehaviorAction * act)
     return false;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x007f9fe0
 bool cSPUIBehaviorEventBase::RemoveAllPredicates()
 {
@@ -719,14 +733,6 @@ bool cSPUIBehaviorEventBase::RemoveAllPredicates()
     }
     return true;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x007fa060
 bool cSPUIBehaviorEventBase::RemoveAllActions()
@@ -742,41 +748,17 @@ bool cSPUIBehaviorEventBase::RemoveAllActions()
     return true;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x007fa120
 bool Ev::False()
 {
     return false;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x007fa130
 void Ev::Call93a0()
 {
     ((EvSub*)this)->M();
 }
-
-
-
-
-
-
-
-
 
 // @ 0x007fa150
 uint32_t Ev::Flags()
@@ -785,14 +767,6 @@ uint32_t Ev::Flags()
     uint32_t part = -(uint32_t)(c != 0) & 2u;
     return (((EvSub*)this)->ExtFlags() & 0xfffffffd) | part;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x007fa180
 void* Ev::AsInterface(int id)
@@ -806,13 +780,30 @@ void* Ev::AsInterface(int id)
     return r;
 }
 
-
-
-
-
-
-
-
+// @ 0x007fa1d0
+void CB::SerUpdate()
+{
+    for (int i = 0; i < 4; ++i) {
+        PredO** slot = SlotC(i);
+        if (*slot != 0) {
+            if ((*slot)->GetOwner() != (IfB*)this) {
+                (*slot)->SetOwner(this);
+            }
+        }
+    }
+    for (int j = 0; j < 4; ++j) {
+        ActO** slot = SlotD(j);
+        if (*slot != 0) {
+            if ((*slot)->GetOwner() != (IfB*)this) {
+                (*slot)->SetOwner(this);
+                if (mActive) {
+                    if (!(*slot)->IsStarted()) (*slot)->SetStarted(true);
+                }
+            }
+        }
+    }
+    mLast = -1;
+}
 
 // @ 0x007fa350
 Ev* Ev::SetGlobal()
@@ -821,27 +812,11 @@ Ev* Ev::SetGlobal()
     return this;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x007fa370
 void Ev::ClearGlobal()
 {
     g_evGlobal = 0;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x007fa390
 int __cdecl FUN_007fa390(uint32_t msg, void* data, char flag)
@@ -867,14 +842,6 @@ int __cdecl FUN_007fa390(uint32_t msg, void* data, char flag)
     return 1;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x007fa4c0
 int* FUN_007fa4c0(int* p, int v)
 {
@@ -884,14 +851,6 @@ int* FUN_007fa4c0(int* p, int v)
     return p;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x007fa4f0
 void FUN_007fa4f0(int p, int a2, int p3)
 {
@@ -899,13 +858,6 @@ void FUN_007fa4f0(int p, int a2, int p3)
     *(int*)((char*)p + 0x18) = p3;
     FUN_007fa4c0((int*)p, *(int*)((char*)p3 + 8));
 }
-
-
-
-
-
-
-
 
 // @ 0x007fa520
 bool f_7fa520(Pred*** arr, int n, int* counter)
@@ -934,18 +886,12 @@ bool f_7fa520(Pred*** arr, int n, int* counter)
   return result;
 }
 
-
-
-
 // @ 0x007fa690
 RCObj* C_7fa690::GetAt(int i)
 {
   if (i >= 0 && i < 4 && flags[i]) return elems[i].p;
   return 0;
 }
-
-
-
 
 // @ 0x007fa6d0
 bool C_7fa690::SetAt(int i, RCObj* p)
@@ -959,9 +905,6 @@ bool C_7fa690::SetAt(int i, RCObj* p)
   }
   return false;
 }
-
-
-
 
 // @ 0x007fa780
 bool f_7fa780(C53* self, P2* p2, P3* p3)
@@ -982,9 +925,6 @@ bool f_7fa780(C53* self, P2* p2, P3* p3)
   return true;
 }
 
-
-
-
 // @ 0x007fa840
 bool f_7fa840(void** p, C53* a, Y* b, IAlloc* c)
 {
@@ -1002,9 +942,6 @@ bool f_7fa840(void** p, C53* a, Y* b, IAlloc* c)
   return false;
 }
 
-
-
-
 // @ 0x007fa8e0
 bool f_7fa8e0(void** p, C53* a, Y* b)
 {
@@ -1014,29 +951,17 @@ bool f_7fa8e0(void** p, C53* a, Y* b)
   return true;
 }
 
-
-
-
 // @ 0x007fa950
 void f_7fa950(VC22* p)
 { p->v21(); }
-
-
-
 
 // @ 0x007fa9b0
 void f_7fa9b0(VC22* p)
 { p->v15(); }
 
-
-
-
 // @ 0x007faa10
 void f_7faa10(VC22* p)
 { p->v18(); }
-
-
-
 
 // @ 0x007faa30
 void C_7faa30::f(SerItem* p)
@@ -1047,9 +972,6 @@ void C_7faa30::f(SerItem* p)
   p->extra = vf();
 }
 
-
-
-
 // @ 0x007faa70
 void C_7faa70::Dtor()
 {
@@ -1058,9 +980,6 @@ void C_7faa70::Dtor()
   *(void**)((char*)this + 4) = (void*)g_7faa70_c;
   Base();
 }
-
-
-
 
 // @ 0x007faad0
 float C_TF::Evaluate(float f)
@@ -1071,29 +990,17 @@ float C_TF::Evaluate(float f)
   return r;
 }
 
-
-
-
 // @ 0x007fab20
 float C_TF::f20()
 { return Evaluate(mtime); }
-
-
-
 
 // @ 0x007fab40
 float C_TF::f40()
 { return Evaluate(duration); }
 
-
-
-
 // @ 0x007fab60
 float C_TF::f60()
 { return Evaluate(0.0f); }
-
-
-
 
 // @ 0x007fab80
 void C_TF::SetNegated(unsigned char b)
@@ -1119,9 +1026,6 @@ void C_TF::SetNegated(unsigned char b)
   mtime = t;
 }
 
-
-
-
 // @ 0x007facf0
 bool C_TF::IsValid()
 {
@@ -1129,18 +1033,12 @@ bool C_TF::IsValid()
   return 1e9f > duration;
 }
 
-
-
-
 // @ 0x007fad40
 bool C_TF::IsValid2()
 {
   if (dirty) Update();
   return mtime > duration;
 }
-
-
-
 
 // @ 0x007fad90
 void* C_TF::GetMember(int i)
@@ -1163,9 +1061,6 @@ void* C_TF::GetMember(int i)
   return p;
 }
 
-
-
-
 // @ 0x007fae90
 float C_TF::Ease(float f)
 {
@@ -1181,9 +1076,6 @@ float C_TF::Ease(float f)
   return f;
 }
 
-
-
-
 // @ 0x007fb000
 void C_7fb000::Dtor()
 {
@@ -1193,9 +1085,6 @@ void C_7fb000::Dtor()
   Base();
 }
 
-
-
-
 // @ 0x007fb040
 void f_7fb040(void** p, void* a)
 {
@@ -1204,15 +1093,9 @@ void f_7fb040(void** p, void* a)
   p[2] = (void*)1;
 }
 
-
-
-
 // @ 0x007fb0b0
 void f_7fb0b0(VC22* p)
 { p->v09(); }
-
-
-
 
 // @ 0x007fb110
 void C_7fb110::Dtor()
@@ -1229,9 +1112,6 @@ void C_7fb110::Dtor()
   Base();
 }
 
-
-
-
 // @ 0x007fb1a0
 void f_7fb1a0(void** p, void* a)
 {
@@ -1239,9 +1119,6 @@ void f_7fb1a0(void** p, void* a)
   p[1] = a;
   p[2] = (void*)1;
 }
-
-
-
 
 // @ 0x007fb250
 void C_7fb250::f(SerItem* p)
@@ -1252,9 +1129,6 @@ void C_7fb250::f(SerItem* p)
   p->extra = vf();
 }
 
-
-
-
 // @ 0x007fb290
 void C_7fb290::Dtor()
 {
@@ -1264,9 +1138,6 @@ void C_7fb290::Dtor()
   Base();
 }
 
-
-
-
 // @ 0x007fb2e0
 void C_7fb2e0::f(SerItem* p)
 {
@@ -1275,9 +1146,6 @@ void C_7fb2e0::f(SerItem* p)
   p->count = 1;
   p->extra = vf();
 }
-
-
-
 
 // @ 0x007fb320
 void C_7fb320::Dtor()
@@ -1291,9 +1159,6 @@ void C_7fb320::Dtor()
   Base();
 }
 
-
-
-
 // @ 0x007fb3b0
 bool C_7fb3b0::f(unsigned char b)
 {
@@ -1303,9 +1168,6 @@ bool C_7fb3b0::f(unsigned char b)
   return b == v6();
 }
 
-
-
-
 // @ 0x007fb440
 void C_7fb440::f(SerItem* p)
 {
@@ -1314,9 +1176,6 @@ void C_7fb440::f(SerItem* p)
   p->count = 1;
   p->extra = vf();
 }
-
-
-
 
 // @ 0x007fb480
 bool Sub7fb480::f_7fb480(unsigned char b)
@@ -1353,9 +1212,6 @@ bool Sub7fb480::f_7fb480(unsigned char b)
   return true;
 }
 
-
-
-
 // @ 0x007fb6a0
 void C_7fb6a0::Clear()
 {
@@ -1366,8 +1222,19 @@ void C_7fb6a0::Clear()
     alloc.Free(begin, (unsigned)(((int)(cap - begin) >> 3) << 3));
 }
 
-
-
+// @ 0x007fb7b0
+void f_7fb7b0(IWorldHost* param)
+{
+  delete GetEv7f93();
+  if (g_164b1f0) {
+    IModelWorld7fb* ptr = param->GetWorld();
+    ptr->SetCurrent(g_164b410);
+    IMsgServer* w = GetMsgServer();
+    SetMsgServer(0);
+    w->Shutdown();
+    delete w;
+  }
+}
 
 // @ 0x007fb880
 void* C_7fb880::Ctor()
@@ -1399,8 +1266,6 @@ void* C_7fb880::Ctor()
   return this;
 }
 
-
-
 // @ 0x007fba00
 void* C_7fba00::Ctor()
 {
@@ -1413,8 +1278,6 @@ void* C_7fba00::Ctor()
   *(void**)((char*)this + 4) = (void*)vi_d;
   return this;
 }
-
-
 
 // @ 0x007fba80
 void* C_7fba80::Ctor()
@@ -1436,8 +1299,7 @@ void* C_7fba80::Ctor()
   c[0] = 0;
   return this;
 }
-
-
+#pragma pack(push,1)
 
 // @ 0x007fbb20
 void* C_7fbb20::Ctor()
@@ -1454,8 +1316,6 @@ void* C_7fbb20::Ctor()
   *(void**)((char*)this + 0x14) = 0;
   return this;
 }
-
-
 
 // @ 0x007fbbc0
 void* C_7fbbc0::Ctor()
@@ -1482,8 +1342,6 @@ void* C_7fbbc0::Ctor()
   return this;
 }
 
-
-
 // @ 0x007fbce0
 void C_7fc200::Dtor()
 {
@@ -1501,13 +1359,34 @@ void C_7fc200::Dtor()
   ((WinProcInit*)this)->Dtor();
 }
 
+// @ 0x007fbd50
+Holder7fbd50::Holder7fbd50()
+{}
 
+// @ 0x007fbdb0
+Pair8* f_7fbdb0(Pair8* first, Pair8* last, Pair8* dest)
+{
+  Pair8* result;
+  {
+    bool bSuccess = false;
+    Pair8* d = dest;
+    for (Pair8* it = first; it != last; ++it, ++d) {
+      new (d) Pair8(*it);
+    }
+    result = d;
+  }
+  {
+    bool b2 = false;
+    Pair8* d2 = dest;
+    for (Pair8* it2 = first; it2 != last; ++it2, ++d2) {
+    }
+  }
+  return result;
+}
 
 // @ 0x007fbe70
 int C_7fbe70::GetClassId()
 { return 0x24b899e; }
-
-
 
 // @ 0x007fc2a0
 void* C_7fc2a0::Ctor()
@@ -1523,7 +1402,23 @@ void* C_7fc2a0::Ctor()
   return this;
 }
 
-
+// @ 0x007fc4b0
+bool Handler7fc4b0::OnMessage(int msg, void* arg)
+{
+  switch (msg) {
+    case 0x11:
+      mpHost = f_11b7240_ref(arg);
+      if (g_164b1f4++ == 0)
+        f_7fc330(mpHost->GetHost());
+      break;
+    case 0x12:
+      if (--g_164b1f4 == 0 && mpHost)
+        f_7fb7b0(mpHost->GetHost());
+      mpHost = 0;
+      break;
+  }
+  return false;
+}
 
 // @ 0x007fc600
 unsigned Obj7fc600::f_7fc600(int a, int b)
@@ -1537,8 +1432,6 @@ unsigned Obj7fc600::f_7fc600(int a, int b)
   f_7fbce0_dtor(buf);
   return 0;
 }
-
-
 
 // @ 0x007fc690
 int f_7fc690(void* self, void* param)
@@ -1562,8 +1455,6 @@ int f_7fc690(void* self, void* param)
   return 1;
 }
 
-
-
 // @ 0x007fc790
 int f_7fc790(void* self, void* param)
 {
@@ -1584,15 +1475,12 @@ int f_7fc790(void* self, void* param)
   return 1;
 }
 
-
-
 // @ 0x007fcc40
 void Factory(BehaviorMessage** out, int arg)
 {
     *out = new ("UI/BehaviorMessage", 0, 0, 0, 0) BehaviorMessage();
     f_7fa4c0(*out, arg);
 }
-
 
 // @ 0x012f6e50
 void init_154279c()

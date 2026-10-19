@@ -1,5 +1,5 @@
-# va  diff-bytes  reason
-007f9550 469 complete Eval clamp/scale routine; float branch scheduling differs
+# va diff reason
+007f9550 466 complete Eval clamp/scale routine; float branch scheduling differs
 007f97a0 59 complete interface query; cl switch-tree lowering differs (shared vs per-case case bodies)
 007f9800 68 complete interface query; cl switch-tree lowering differs
 007f9890 134 complete interface query (this/this+4 cases); cl switch-tree lowering differs
@@ -18,6 +18,7 @@
 007fb440 6 C_7fb440::f — complete; `(char*)this - 4` base store makes cl reload `this` via a scratch reg for the vcall instead of reusing ecx/edx like the sibling binds at 007faa30/007fb250/007fb2e0
 007fb480 378 C_TF-subobject "set active" — complete behaviour (MI subobject method at real+0x18; predicate combine, per-action vcalls 0x18/0x1c, event release, callback) but 406 bytes vs original 473; equiv: FAIL (5/5 mismatched, ecx fixed via member)
 007fbbc0 8 initialiser — complete; local-name slot assignment for the two sub-object pointers and the 4-iteration slot loop differs
+007fbdb0 13 uninitialized_copy of 8-byte pairs — complete (placement-new copy loop + trivial destroy loop); /Od slot order of the new-expression temp differs [equiv: PASS]
 007fc2a0 10 UI::BehaviorMessage ctor — complete; one reserved frame slot (inlined base ctor) missing
 007fc600 86 BehaviorMessage dispatch — complete; the local message buffer and vtable dispatch schedule differ; equiv: FAIL (5/5 mismatched on eax, ecx fixed via member)
 007fc690 196 cSPUIBehaviorEventBase::SetStateString — complete; eastl string temporaries / inlined helper frames differ
