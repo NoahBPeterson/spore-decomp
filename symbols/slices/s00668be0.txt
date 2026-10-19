@@ -1,1 +1,6 @@
-006693c0 FUN_006693c0  # asset-count wrapper; __declspec(noinline) on the definition defeats the marker parser
+00668be0 ?FUN_00668be0@FeedItem_s0066_8be0@@QAE_NPA_W@Z  # FeedItem_s0066_8be0::FUN_00668be0 migrated from s00668be0 (verbatim, slice spelling)
+00668c80 ?FUN_00668c80@FeedItem_s0066_8be0@@QAEXPAX0@Z  # FeedItem_s0066_8be0::FUN_00668c80 migrated from s00668be0 (verbatim, slice spelling)
+00668d90 ?FUN_00668d90@FeedItem_s0066_8be0@@QAEXPAUVec@@@Z  # FeedItem_s0066_8be0::FUN_00668d90 migrated from s00668be0 (verbatim, slice spelling)
+00669360 ?init@Obj9360@@QAEPAU1@HPAUVec@@@Z  # Obj9360::init migrated from s00668be0 (verbatim, slice spelling)
+006693c0 ?FUN_006693c0@FeedItem_s0066_8be0@@QAEHXZ  # FeedItem_s0066_8be0::FUN_006693c0 migrated from s00668be0 (verbatim, slice spelling)
+00669410 ?FUN_00669410@@YIXPAX@Z  # FUN_00669410 migrated from s00668be0 (verbatim, slice spelling)

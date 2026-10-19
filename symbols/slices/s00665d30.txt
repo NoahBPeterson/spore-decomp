@@ -1,3 +1,12 @@
 00665d30 ?ReloadCallback@@YAXPAUCFull@@PAXD@Z  # ReloadCallback migrated from s00665d30 (verbatim, slice spelling)
 006661d0 ?Init@CCat@@QAE_NPAX0H@Z  # CCat::Init migrated from s00665d30 (verbatim, slice spelling)
-006666c0 SP::cSPUIFeedListItem::Refresh  # PDB candidate (caller-scored) on card
+00666420 ?IsKnownID@CFeed@@QBE_NXZ  # CFeed::IsKnownID migrated from s00665d30 (verbatim, slice spelling)
+00666450 ?IsKnownState@CFeed@@QBE_NXZ  # CFeed::IsKnownState migrated from s00665d30 (verbatim, slice spelling)
+00666490 ?SetDefault@CFeed@@QAEXH@Z  # CFeed::SetDefault migrated from s00665d30 (verbatim, slice spelling)
+006664f0 ?Teardown@CFeed@@QAEXXZ  # CFeed::Teardown migrated from s00665d30 (verbatim, slice spelling)
+00666590 ?SetIconKey@CFeed@@QAEXPBM@Z  # CFeed::SetIconKey migrated from s00665d30 (verbatim, slice spelling)
+006665e0 ?GetIconKey@CFeed@@QAEPAMPAM@Z  # CFeed::GetIconKey migrated from s00665d30 (verbatim, slice spelling)
+00666630 ?Reserve@CFeed@@QAEXHH@Z  # CFeed::Reserve migrated from s00665d30 (verbatim, slice spelling)
+00666680 ?CheckFlag@CFeed@@QAE_N_N@Z  # CFeed::CheckFlag migrated from s00665d30 (verbatim, slice spelling)
+006666c0 ?Refresh@CItem@@QAEXPAG@Z  # CItem::Refresh migrated from s00665d30 (verbatim, slice spelling)
+00666b20 ?GetVec4@@YAPAMPAMPAUProp@@HMMMM@Z  # GetVec4 migrated from s00665d30 (verbatim, slice spelling)

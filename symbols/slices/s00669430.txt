@@ -1,1 +1,2 @@
-00669430 ReloadCallback  # SP::cSPUIFeedListItem::ReloadCallback
+00669430 ?ReloadCallback@@YAXPAUFeedItem_s0066_9430@@H_N@Z  # ReloadCallback migrated from s00669430 (verbatim, slice spelling)
+00669c90 ?FUN_00669c90@@YI_NPAXHPAI@Z  # FUN_00669c90 migrated from s00669430 (verbatim, slice spelling)

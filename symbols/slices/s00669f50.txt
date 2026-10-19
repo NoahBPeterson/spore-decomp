@@ -1,5 +1,6 @@
-00669f50 SP::cSPUIFeedListItem::Init  # card/PDB name; 1640-byte property/key init
+00669f50 ?Init@FeedItemInit@@QAE_NPAX0I0H@Z  # FeedItemInit::Init migrated from s00669f50 (verbatim, slice spelling)
 0066a680 ?RCmpA680  # CmpA680::operator(); tagged-float vt[38] comparator (switch 0..4)
 0066a830 ?RSorter830  # Sorter830::operator(); sort predicate over [0x1c]/[0x1d] + member comparators
 0066ad10 CItem default member comparator  # vt[14] int compare, CItem& args
 0066ada0 ?RCmpAd  # CmpAd::operator(); Lookup + vt[38] float compare
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00669f50, named from the dev publics; slice address comment)

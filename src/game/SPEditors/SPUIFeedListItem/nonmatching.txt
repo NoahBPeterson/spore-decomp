@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00666630 7 vector reserve: functionally complete; cl keeps vector ptr in eax+pushes before load, original loads ecx first (scheduling)
+006666c0 375 cSPUIFeedListItem::Refresh: complete behaviour incl. area math; wcscmp/rect scheduling differs
+00666b20 126 GetVec4: complete behaviour; property/vtable call shape differs
+00667c40 4 WString assign wrapper: p[1]/p[0] land in ecx/edx instead of the original edx/eax
+00668c80 213 feed iteration: complete list walk + vector push/DoInsertValue path; register allocation and the EA::ResourceMan::GetManager vtable probe differ (and the original returns with a caller-clean frame)
+00669360 61 vector-copy constructor: vtable store, reserve(), DoInsertValue and field stores all present; this lands in esi instead of the original ebx/edi pair
+006693c0 22 asset-count wrapper: complete GetAssetList + guard + deallocate + >>4; equivalence WEAK (no mismatch, 18/23 insns under --require-all, dealloc path unreached). Fix: the original is a different-TU caller, so cl zeroes the vector and tests the guard with immediates and never writes edx; a same-TU call let cl keep edx==0 across the call (xor edx,edx). FUN_006693c0 now calls a declared-only twin `AssetListSource::GetAssetList` annotated 0x00668d90, restoring the immediates shape (edx untouched); FUN_00668d90's real definition is unchanged flags /O2 /MD /Gy /TP /arch:SSE /GS-
+00669430 1648 Complete SP::cSPUIFeedListItem::ReloadCallback (flags /O2 /MD /Gy /TP /arch:SSE /GS-); register allocation and scheduling differ
+00669f50 1254 FeedItemInit::Init (cSPUIFeedListItem::Init): complete behaviour (all property lookups, switch arms, string/layout setup, message subscription); arm tail-calls of GetPropertyAsKeyInstance are cross-jumped (67 vs 70 calls) and register allocation differs; flags /O2 /MD /Gy /TP /arch:SSE /GS-
