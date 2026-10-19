@@ -1,2 +1,2 @@
-008f1c40 EA::XHTML::Layout::Table::MeasureContent  # PDB candidate; vtable slot +0x20, (SizingContext&, StyleState&) ret 8; folds cell min/max/percent widths into columns
 008f1960 EA::XHTML::Layout::Table::Build  # PDB candidate; thiscall no args, run once (mBuilt flag at +0x108)
+008f1c40 ?MeasureContent@Table_s008f_16c0@Layout@XHTML@EA@@UAEXAAVSizingContext@234@AAVStyleState_s008f_16c0@Style@34@@Z  # Table_s008f_16c0::MeasureContent migrated from s008f16c0 (verbatim, slice spelling)
