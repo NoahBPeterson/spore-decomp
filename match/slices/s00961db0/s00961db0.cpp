@@ -51,12 +51,24 @@ extern void FUN_011f3130();
 extern int  FUN_011f2e70(void*, void*);
 extern void FUN_011f21a0();
 extern int   g_16f8afc;
-struct S95e7a0 { void f(); };
-struct S925f30 { void f(void*); };
-struct S962da0c { void f(); };
-struct S11f36a0 { void f(); };
-struct S925e60 { void f(); };
-struct S620230 { void f(); };
+struct S95e7a0 {
+  void f();                            // 0x0095e7a0
+};
+struct S925f30 {
+  void f(void*);                       // 0x00925f30
+};
+struct S962da0c {
+  void f();                            // 0x00962da0
+};
+struct S11f36a0 {
+  void f();                            // 0x011f36a0
+};
+struct S925e60 {
+  void f();                            // 0x00925e60
+};
+struct S620230 {
+  void f();                            // 0x00620230
+};
 struct Vtbl190 { char pad[0x190]; int (__stdcall *fn)(void*, int, int, int, int); };
 struct Vtbl1a0 { char pad[0x1a0]; int (__stdcall *fn)(void*, int); };
 struct Vtbl144 { char pad[0x144]; void (__stdcall *fn)(void*, int, int, int); };
@@ -73,18 +85,53 @@ struct S962100 { int* f(void*); void g(void*); };
 struct S962180 { void* f(void*, void*, void*); };
 struct S962360 { void* f(int, int, int); };
 struct S9625f0 { void f(void*); };
-// out-of-slice callees
-struct S959e00 { void f(void*); };
-struct S959add0 { void f(void*); };
-struct S960b40 { void f(); };
-struct S960ae0 { void f(); };
-struct S961450 { void f(); };
-struct S961b40 { void f(void*); };
-struct S965fcc0 { void* f(int, int, int); };
-struct S961c80 { void f(void*, void*, int); };
-struct S9613e0 { void f(); };
-struct S645ed0 { void find(void*, void*); };
-struct S423650 { void assign(wchar_t*, wchar_t*); };
+struct Vec3 { int* begin; int* end; int* cap; };   // small vector's {begin,end,cap} frame slots
+// out-of-slice callees (VAs annotated on the member decls so the equivalence harness resolves them)
+struct S959e00 {
+  void f(void*);                       // 0x00959e00
+};
+struct S959add0 {
+  void f(void*);                       // 0x0095add0
+};
+struct S960b40 {
+  void f();                            // 0x00960b40
+};
+struct S960ae0 {
+  void f();                            // 0x00960ae0
+};
+struct S961450 {
+  void f();                            // 0x00961450
+};
+struct S961b40 {
+  void f(void*);                       // 0x00961b40
+};
+struct S9615c0 {
+  void f(void*, void*, void*);         // 0x009615c0  (thiscall, pops 0xc)
+};
+struct S95fcc0 {
+  void* f(int, int, int);              // 0x0095fcc0
+};
+struct S961c80 {
+  void f(void*, void*, int);           // 0x00961c80
+};
+struct S9613e0 {
+  void f();                            // 0x009613e0
+};
+struct S962210 {
+  void f(void* end, void* val);        // 0x00962210  (out-of-line vector grow path)
+};
+struct Se25bd0 {
+  void erase(void*, void*);            // 0x00e25bd0  (eastl vector range erase)
+};
+struct S8e2b20 {
+  void Free();                         // 0x008e2b20  (Vec2b::Free)
+};
+struct S645ed0 {
+  void find(void*, void*);             // 0x00645ed0
+};
+struct S423650 {
+  void assign(wchar_t*, wchar_t*);        // 0x00423650
+};
 
 // functions defined here
 struct S962580 { void f(int, int); };
@@ -200,11 +247,13 @@ void S961f20::f(void* key) {
   ((VObj90*)self)->v90();
   int* m = *(int**)(self + 0x30);
   if (m) {
-    void* base = self;
-    int tmp[2];
-    tmp[0] = 0xe; tmp[1] = 2;
+    // the this-adjust yields `this` when `this - 4` is non-null, else 0; the callee gets a
+    // pointer to a 16-byte local whose *upper* half holds {0xe, 2}
+    void* adj = ((char*)self - 4) ? self : 0;
+    int tmp[4];
+    tmp[2] = 0xe; tmp[3] = 2;
     ((void(__thiscall*)(void*, int, int, void*, int))((void**)(*(void***)m))[4])(
-        m, (int)(uint32_t)(size_t)base, (int)(uint32_t)(size_t)base, tmp, 0);
+        m, (int)(uint32_t)(size_t)adj, (int)(uint32_t)(size_t)adj, tmp, 0);
   }
 }
 
@@ -257,16 +306,18 @@ void S961fc0::f(void* win) {
 // ---------------------------------------------------------------------------
 int* S962100::f(void* key) {
   char* self = (char*)this;
-  int found;
-  ((S645ed0*)self)->find(&found, key);
+  int iter[2];      // find()'s hidden-return iterator: {node, refcount owner} - 8 bytes, must be adjacent
+  int res[3];       // inserted-node result triple
+  ((S645ed0*)self)->find(iter, key);
   int cnt = *(int*)(self + 8);
   int* buckets = *(int**)(self + 4);
-  if ((void*)(uint32_t)found != (void*)buckets[cnt])
-    return (int*)((char*)(uint32_t)found + 4);
-  int k = *(int*)key;
-  int local[3];
-  FUN_009615c0(local, &k, 0);
-  return (int*)((char*)(uint32_t)local[0] + 4);
+  if ((void*)(uint32_t)iter[0] != (void*)buckets[cnt])
+    return (int*)((char*)(uint32_t)iter[0] + 4);
+  iter[0] = *(int*)key;
+  iter[1] = 0;
+  ((S9615c0*)self)->f(res, &iter[0], (void*)((size_t)key & 0xffffff00));
+  if (iter[1]) ((RefObj*)iter[1])->Release();
+  return (int*)((char*)(uint32_t)res[0] + 4);
 }
 
 // ---------------------------------------------------------------------------
@@ -323,7 +374,7 @@ void* S962360::f(int a, int b, int c) {
     if (*(RefObj**)((char*)node + 8)) ((RefObj*)*(void**)((char*)node + 8))->Release();
     FUN_00a7bf40(&local_1c, &local_1c);
   }
-  void* found = ((S965fcc0*)self)->f(a, b, c);
+  void* found = ((S95fcc0*)self)->f(a, b, c);
   return found;
 }
 
@@ -370,9 +421,9 @@ void S962530::f(int a, int b) {
 // ---------------------------------------------------------------------------
 void S9625f0::f(void* win) {
   char* self = (char*)this;
-  int local_vec[64];
-  int* vecBegin = local_vec;
-  int* vecEnd = local_vec;
+  int buf[64];                     // inline buffer (cap = buf + 64)
+  Vec3 v;                          // {begin, end, cap}: contiguous, like the original's frame slots
+  v.begin = buf; v.end = buf; v.cap = buf + 64;
   int** buckets = *(int***)(self + 4);
   int* it = *buckets;
   int** bit = buckets;
@@ -389,19 +440,26 @@ void S9625f0::f(void* win) {
       while (!next) { bit2++; next = *(int**)bit2; }
       char* ci = (char*)it + 8;
       if (*(void**)it == win || *(void**)(ci + 0) == win || *(void**)(ci + 4) == win) {
-        int w = *(int*)(ci + 0);
-        if (vecEnd < local_vec + 64) { *vecEnd++ = w; if (w) ((RefObj*)(uint32_t)w)->r0(); }
-        else { int tmp[2]; tmp[0] = w; ((S9613e0*)self)->f(); }
-        int wp = *(int*)(ci + 4);
-        if (vecEnd < local_vec + 64) { *vecEnd++ = wp; if (wp) ((RefObj*)(uint32_t)wp)->r0(); }
-        else { int tmp[2]; tmp[0] = wp; ((S9613e0*)self)->f(); }
+        if (v.end < v.cap) {
+          *v.end = *(int*)ci; v.end++;
+          if (*(int*)ci) ((RefObj*)(uint32_t)*(int*)ci)->r0();
+        } else {
+          ((S962210*)&v)->f(v.end, ci);          // grow; the value source is the node field itself
+        }
+        if (v.end < v.cap) {
+          *v.end = *(int*)(ci + 4); v.end++;
+          if (*(int*)(ci + 4)) ((RefObj*)(uint32_t)*(int*)(ci + 4))->r0();
+        } else {
+          ((S962210*)&v)->f(v.end, ci + 4);
+        }
         ((S962180*)self)->f(0, it, bit2);
       }
       bit = bit2;
       it = next;
     } while ((void*)it != (void*)buckets[count]);
   }
-  volatile int dummy = 0; (void)dummy;
+  ((Se25bd0*)&v)->erase(v.begin, v.end);     // drop every cached entry the caller asked to remove
+  ((S8e2b20*)&v)->Free();
 }
 
 // ---------------------------------------------------------------------------
@@ -412,7 +470,8 @@ void S962740::f() {
   *self = (int)0x1440b44;
   *(int*)((char*)self + 4) = (int)0x14431f8;
   ((S961e80*)self)->f();
-  ((S961db0*)((char*)self + 0x1ec))->f((void**)*(void**)((char*)self + 0x1f0), *(unsigned*)((char*)self + 0x1f4));
+  char* lst = (char*)self + 0x1ec;
+  ((S961db0*)lst)->f((void**)*(void**)((char*)self + 0x1f0), *(unsigned*)((char*)self + 0x1f4));
   *(int*)((char*)self + 0x1f8) = 0;
   if (*(unsigned*)((char*)self + 0x1f4) > 1) g_free_16f4aec(*(void**)((char*)self + 0x1f0));
   RefObj* p;
@@ -466,7 +525,7 @@ bool S962840::f(void* win) {
     ((S961450*)((char*)self - 4))->f();
     return true;
   }
-  ((void(__thiscall*)(void*, int))((void**)(*(void***)self))[0x38])(self, (int)(size_t)p4 + 4);
+  ((void(__thiscall*)(void*, int))((void**)(*(void***)self))[0x38])(self, (int)(size_t)obj + 4);
   return false;
 }
 
@@ -497,7 +556,8 @@ void S9628f0::f(void* win) {
 void S962950::f() {
   char* self = (char*)this;
   int tmp[8];
-  ((S961b40*)tmp)->f(self);
+  char* tmpb = (char*)tmp;
+  ((S961b40*)tmpb)->f(self);
   ((S961db0*)self)->f((void**)*(void**)(self + 4), *(unsigned*)(self + 8));
   *(int*)(self + 0xc) = 0;
   if (*(unsigned*)(self + 8) > 1) {
@@ -513,11 +573,12 @@ void S962950::f() {
   *(int*)(self + 4) = (int)0x154df28;
   *(int*)(self + 0xc) = 0;
   *(int*)(self + 0x18) = 0;
-  unsigned n = *(unsigned*)((char*)tmp + 8);
+  ((S961db0*)tmpb)->f((void**)*(void**)(tmpb + 4), *(unsigned*)(tmpb + 8));
+  unsigned n = *(unsigned*)(tmpb + 8);
   if (n > 1) {
-    void* alloc = *(void**)((char*)tmp + 0x10);
+    void* alloc = *(void**)(tmpb + 0x10);
     ((void(__thiscall*)(void*, void*, unsigned))((void**)(*(void***)alloc))[3])(
-        alloc, *(void**)((char*)tmp + 4), n * 4 + 4);
+        alloc, *(void**)(tmpb + 4), n * 4 + 4);
   }
 }
 
