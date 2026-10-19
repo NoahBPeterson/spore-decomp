@@ -1,9 +1,11 @@
-00996f10 eastl::deque<EA::UTFWinExtras::cXHTMLFrameSet::JobEntry,eastl::allocator,16>::erase  # 2008 dev-PDB name
-00997210 EA::UTFWinExtras::cXHTMLFrameSet::GetJobInfo  # 2008 dev-PDB name
-009972a0 EA::UTFWinExtras::cXHTMLFrameSet::LoadRequestCallback  # PDB candidate caller-single
-00997350 eastl::vector_map<unsigned int,EA::UTFWinExtras::WinXHTML_*,...>::insert  # dev-PDB name
-00997730 EA::UTFWinExtras::cXHTMLFrameSet::HandleLocationChange  # 2008 dev-PDB name
-009978b0 EA::UTFWinExtras::cXHTMLFrameSet::HandleFormSubmit  # 2008 dev-PDB name
+00996f10 ?erase@JobDeque@@QAEPAUDqIter@@PAU2@U2@@Z  # JobDeque::erase migrated from s00996f10 (verbatim, slice spelling)
+00997140 ?ClearJobs@FrameSetJobs@@QAE_NXZ  # FrameSetJobs::ClearJobs migrated from s00996f10 (verbatim, slice spelling)
+00997210 ?GetJobInfo@cXHTMLFrameSet@@QAEPAUWinXHTML@@PAXPA_N@Z  # cXHTMLFrameSet::GetJobInfo migrated from s00996f10 (verbatim, slice spelling)
+009972a0 ?LoadRequestCallback@cXHTMLFrameSet@@QAEXPAH@Z  # cXHTMLFrameSet::LoadRequestCallback migrated from s00996f10 (verbatim, slice spelling)
+00997350 ?insert@FrameMapVM@@QAE_NPAXPB_W@Z  # FrameMapVM::insert migrated from s00996f10 (verbatim, slice spelling)
+009973e0 ?CreateFrame@FrameSet@@QAEPAXPAX@Z  # FrameSet::CreateFrame migrated from s00996f10 (verbatim, slice spelling)
+00997730 ?HandleLocationChange@FrameSet@@QAE_NPAHPAXPA_WH@Z  # FrameSet::HandleLocationChange migrated from s00996f10 (verbatim, slice spelling)
+009978b0 ?HandleFormSubmit@cXHTMLFrameSet@UTFWinExtras@EA@@QAE_NPAVIWindow@UTFWin@3@PAVForm@DOM@XHTML@3@@Z  # EA::UTFWinExtras::cXHTMLFrameSet::HandleFormSubmit migrated from s00996f10
 00997bf0 EA::UTFWinTools::HitMaskBinder::Bind  # PDB candidate caller-scored
 00997d40 ?GetSupportedTypes@Obj33@@QAEHPAII@Z  # Obj33::GetSupportedTypes migrated from s00996f10 (verbatim, slice spelling)
 00997d80 ?CanConvert@Obj33@@QAE_NHH@Z  # Obj33::CanConvert migrated from s00996f10 (verbatim, slice spelling)

@@ -1,0 +1,8 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+00996f10 368 JobDeque::erase: complete; iterator-by-value copy/arg schedule differs
+00997140 39 cXHTMLFrameSet job cleanup (FrameSetJobs::ClearJobs): deque walk and copy-back schedule differs; difftest WEAK (199 valid, 53.8% coverage: provider/deque paths rarely reached) after making it a thiscall member returning true (was a cdecl free function taking self), calling 0x996460/0x993390 as thiscall, and reloading the vector end after the loop
+00997210 69 cXHTMLFrameSet::GetJobInfo: iterator walk/erase block layout differs; difftest PASS after making it a thiscall member (was a cdecl free function taking self)
+00997350 88 vector_map::insert (FrameMapVM::insert): lower_bound/hash call schedule differs; difftest PASS after making it a thiscall member, passing a {hash, win} pair to the thiscall 0x9970e0 insert, and calling slot 0x104 on win+4 (was on win)
+009973e0 354 FrameSet::CreateFrame: complete; vcall sequence written as a loop over flag bits (not unrolled)
+00997730 302 FrameSet::HandleLocationChange: complete; reg alloc/schedule differs; difftest WEAK after fixing lower_bound 0xd01260 arity (4 args incl. by-value compare object, not 5)
+009978b0 230 cXHTMLFrameSet::HandleFormSubmit (FrameSetForm::HandleFormSubmit): wide-string and param callback schedule differs; difftest WEAK (1135/3000 valid, 30.5% coverage: 0x8e4b10 needs a real DOM element) after rewriting it as a thiscall member with the stack fixed_string<wchar_t,96>, thiscall callees, RangeInitialize(1 arg) and HandleLocationChange(p, s.begin, 0, 0)
