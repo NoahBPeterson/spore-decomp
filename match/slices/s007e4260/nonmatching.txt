@@ -1,5 +1,18 @@
-007e4260  77   cGotoStateCommand::Execute; BehaviorMessage ctor/vtable + InterlockedExchange init schedule differs
-007e46f0  77   cCheatCommand::Execute; same BehaviorMessage construction schedule differs
-007e48f0  83   cLightingCommand::Execute; same BehaviorMessage construction schedule differs
-007e4970  83   cCameraCommand::Execute; same BehaviorMessage construction schedule differs
-007e4550  92   cKillEffectCommand::Execute; same + softStop flag arg order differs
+# Slice s007e4260 (dec2) - completed, non-byte-exact functions.
+# Format: <va> <diff-bytes> <reason incl. compiler flags> [equiv: <VERDICT>]
+# Flags (all rows): /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+# Run:  .venv/bin/python tools/difftest/equiv.py s007e4260   (UNSUPPORTED = unresolved callees / no valid inputs)
+007e4260  2    cGotoStateCommand::Execute; BehaviorMessage ctor emits field30=0 before the base-vptr store, cl emits it after [equiv: UNSUPPORTED]
+007e46f0  2    cCheatCommand::Execute; same ctor store order [equiv: UNSUPPORTED]
+007e48f0  4    cLightingCommand::Execute; same ctor store order + message id kept in esi [equiv: UNSUPPORTED]
+007e4970  4    cCameraCommand::Execute; same ctor store order + message id kept in esi [equiv: UNSUPPORTED]
+007e4550  3    cKillEffectCommand::Execute; same ctor store order + softStop flag argument order [equiv: UNSUPPORTED]
+007e44c0  7    cEffectCommand::Execute; same ctor store order + `add`/`sub` encoding of the 0xcef220dd base [equiv: UNSUPPORTED]
+007e49f0  2    cBoolPropCommand::Execute; BehaviorMessage ctor field30=0 store vs base-vptr store order [equiv: UNSUPPORTED]
+007e4a80  2    cIntPropCommand::Execute; BehaviorMessage ctor field30=0 store vs base-vptr store order [equiv: UNSUPPORTED]
+007e4b20  2    cFloatPropCommand::Execute; BehaviorMessage ctor field30=0 store vs base-vptr store order [equiv: UNSUPPORTED]
+007e42d0  346  cMessageCommand::Execute; no SEH frame (inlined ctor is provably non-throwing so cl drops the `new` cleanup frame) + ctor store order [equiv: UNSUPPORTED]
+007e45e0  211  cModeCommand::Execute; no SEH frame + AddRef hoisted out of both branches + merged cm stores [equiv: UNSUPPORTED]
+007e4760  293  cLoadResourceCommand::Execute; no SEH frame + register allocation [equiv: UNSUPPORTED]
+007e4e00  124  cStateHash::EnumStrings; bucket skip-loop shape + register allocation [equiv: WEAK]
+007e4e90  62   SP::cAppStateCheat::cAppStateCheat; missing base-ctor call + EH state stores [equiv: UNSUPPORTED]

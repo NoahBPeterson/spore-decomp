@@ -44,6 +44,24 @@ struct IObj4 {
     virtual void Release8();  // +0x8
 };
 
+// Node value: identical 16-byte layout to the queue entry, but its copy constructor
+// AddRefs the two ref-counted members (the queue entry itself is copied as a POD).
+struct NodeValue {
+    uint32_t    mKey0;   // +0x00
+    IObj4*      mpA;     // +0x04  AddRef through virtual slot +4
+    RefCounted* mpB;     // +0x08  AddRef through the interlked count at +4
+    uint16_t    mFlags;  // +0x0c
+    NodeValue() {}
+    __forceinline NodeValue(const NodeValue& x) {
+        mKey0 = x.mKey0;
+        mpA = x.mpA;
+        if (mpA) mpA->AddRef4();
+        mpB = x.mpB;
+        if (mpB) _InterlockedExchangeAdd((volatile long*)((char*)mpB + 4), 1);
+        mFlags = x.mFlags;
+    }
+};
+
 // A trivial 16-byte value (3 dwords + 2 flag bytes) for the upload queue.
 struct QValue {
     uint32_t mKey0;  // +0x0
@@ -70,7 +88,7 @@ struct UploadQueue {
     QValue* mpCapacity;  // +0x8
     uint32_t mPad0c;     // +0xc
 
-    void DoInsertValue(QValue* position, const QValue* value);  // 0x0060ec20
+    void DoInsertValue(QValue* value, const QValue* position);  // 0x0060ec20
     void push_back(const QValue& value);                        // 0x0060f080
 };
 
@@ -88,49 +106,51 @@ void UploadQueue::push_back(const QValue& value) {
 void FUN_00edba80(void* dest, const void* src, const void* srcEnd);  // 0x00edba80
 
 // @ 0x60ec20
-void UploadQueue::DoInsertValue(QValue* position, const QValue* value) {
+void UploadQueue::DoInsertValue(QValue* value, const QValue* position) {
     if (mpEnd != mpCapacity) {
-        if (value >= position && value < mpEnd) value = (const QValue*)((const char*)value + 16);
+        if (position >= value && position < mpEnd) position = (const QValue*)((const char*)position + 16);
         if (mpEnd) ::new (mpEnd) QValue(*(QValue*)((char*)mpEnd - 16));
-        FUN_00edba80(position, (char*)mpEnd - 16, mpEnd);
-        *position = *value;
+        FUN_00edba80(value, (char*)mpEnd - 16, mpEnd);
+        *value = *position;
         ++mpEnd;
         return;
     }
-    int n = (int)(mpEnd - mpBegin);
+    int n = (int)((mpEnd - mpBegin) >> 4);
     if (n <= 0)
         n = 1;
     else
         n = n * 2;
     QValue* pNew = 0;
     if (n != 0) pNew = (QValue*)EASTL_allocator_allocate(n * 16, "Editor", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1);
-    QValue* pMid = QValue_copy(mpBegin, position, pNew);
-    if (pMid) *pMid = *value;
-    QValue* pEndNew = QValue_copy(position, mpEnd, pMid + 1);
-    if (mpBegin) EASTL_allocator_deallocate(mpBegin);
+    QValue* pMid = QValue_copy(mpBegin, value, pNew);
+    if (pMid) *pMid = *position;
+    QValue* pEndNew = QValue_copy(value, mpEnd, pMid + 1);
+    if (mpBegin && *(int*)((char*)mpBegin - 4) != 0) EASTL_allocator_deallocate(mpBegin);
     mpEnd = pEndNew;
     mpCapacity = pNew + n;
     mpBegin = pNew;
 }
 
 // @ 0x60ea40
-QValue* MakeNode(const QValue* src) {
+void* __stdcall MakeNode(const NodeValue* src) {
     char* const pNode = (char*)EASTL_allocator_allocate(0x20, "Editor", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1);
-    QValue* const pValue = (QValue*)(pNode + 0x10);
-    if (pValue) *pValue = *src;
-    return (QValue*)pNode;
+    NodeValue* const pValue = (NodeValue*)(pNode + 0x10);
+    if (pValue) ::new (pValue) NodeValue(*src);
+    return pNode;
 }
 
 // @ 0x60eab0 : static empty-string / empty-container initializer.
+// A function-local static 12-byte object {begin=empty, end=empty, capacity=empty+1} whose
+// non-trivial destructor makes cl emit the onexit/atexit registration for it.
 struct EmptyQueue {
     char* mpBegin;  // +0x0
     char* mpEnd;    // +0x4
     char* mpCap;    // +0x8
+    ~EmptyQueue();
 };
 extern char gEmpty263[];  // 0x01667bac
-extern volatile int gInitFlag5f497c;  // artificial; the real guard lives in .data
 EmptyQueue* GetEmptyQueueSingleton() {
-    static EmptyQueue s = {0, 0, 0};
+    static EmptyQueue s = {gEmpty263, gEmpty263, gEmpty263 + 1};
     return &s;
 }
 
