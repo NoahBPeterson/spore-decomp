@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/HitMaskFactory.cpp  ?GetSupportedTypes@Obj33@@QAEHPAII@Z  00997d40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/HitMaskFactory.cpp  ?CanConvert@Obj33@@QAE_NHH@Z  00997d80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/HitMaskFactory.cpp  ?ctor2@Obj33@@QAEPAXXZ  00997f30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

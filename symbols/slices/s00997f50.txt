@@ -1,5 +1,6 @@
-00997f50 EA::UTFWinTools::HitMaskResource::HitMaskResource  # 2008 dev-PDB name
-00998050 EA::UTFWinTools::HitMaskFactory::CreateResource  # 2008 dev-PDB name
+00997f50 ?ctor@Obj34@@QAEPAXXZ  # Obj34::ctor migrated from s00997f50 (verbatim, slice spelling)
+00998000 ?ScalarDtor@Obj34@@QAEPAXI@Z  # Obj34::ScalarDtor migrated from s00997f50 (verbatim, slice spelling)
+00998050 ?CreateResource@HMFactory@@QAE_NHPAPAXPAX1@Z  # HMFactory::CreateResource migrated from s00997f50 (verbatim, slice spelling)
 009980d0 ?FUN_009980d0@@YAII@Z  # FUN_009980d0 migrated from s00997f50 (verbatim, slice spelling)
 00998100 ?AsInterface@Misc34@@QAEHH@Z  # Misc34::AsInterface migrated from s00997f50 (verbatim, slice spelling)
 00998140 ?f98140@Misc34@@QAEXXZ  # Misc34::f98140 migrated from s00997f50 (verbatim, slice spelling)

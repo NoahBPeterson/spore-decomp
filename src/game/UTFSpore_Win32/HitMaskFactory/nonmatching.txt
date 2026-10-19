@@ -1,0 +1,6 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+00997d90 32 Obj33::Release: lock/dec scheduling and branch layout differ
+00997dc0 245 HitMaskFactory::ReadResource: image decode arg/loop schedule differs
+00997f50 46 HitMaskResource::HitMaskResource: ctor returns `this` in eax (caller reads it); vtable/zero-init store scheduling differs
+00998000 5 HitMaskResource scalar deleting dtor: member load hoisted before the vtable store
+00998050 165 HitMaskFactory::CreateResource: vcall/arg-block schedule differs

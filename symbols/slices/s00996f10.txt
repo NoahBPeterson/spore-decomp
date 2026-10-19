@@ -5,7 +5,8 @@
 00997730 EA::UTFWinExtras::cXHTMLFrameSet::HandleLocationChange  # 2008 dev-PDB name
 009978b0 EA::UTFWinExtras::cXHTMLFrameSet::HandleFormSubmit  # 2008 dev-PDB name
 00997bf0 EA::UTFWinTools::HitMaskBinder::Bind  # PDB candidate caller-scored
-00997d40 EA::UTFWinTools::HitMaskFactory::GetSupportedTypes  # 2008 dev-PDB name
-00997d80 EA::UTFWinTools::HitMaskFactory::CanConvert  # 2008 dev-PDB name
-00997dc0 EA::UTFWinTools::HitMaskFactory::ReadResource  # 2008 dev-PDB name
-00997f30 EA::UTFWinTools::HitMaskFactory ctor  # vtable setup
+00997d40 ?GetSupportedTypes@Obj33@@QAEHPAII@Z  # Obj33::GetSupportedTypes migrated from s00996f10 (verbatim, slice spelling)
+00997d80 ?CanConvert@Obj33@@QAE_NHH@Z  # Obj33::CanConvert migrated from s00996f10 (verbatim, slice spelling)
+00997d90 ?Release@Obj33@@QAEHXZ  # Obj33::Release migrated from s00996f10 (verbatim, slice spelling)
+00997dc0 ?ReadResource@@YA_NPAD0PAX@Z  # ReadResource migrated from s00996f10 (verbatim, slice spelling)
+00997f30 ?ctor2@Obj33@@QAEPAXXZ  # Obj33::ctor2 migrated from s00996f10 (verbatim, slice spelling)
