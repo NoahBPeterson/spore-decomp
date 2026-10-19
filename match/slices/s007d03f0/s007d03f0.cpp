@@ -278,15 +278,48 @@ void __stdcall NukeRange2(Item68* begin, Item68* end)
 }
 
 // ===========================================================================
-// 0x007d0c10 / 0x007d0c80  read helpers (partial)
+// 0x007d0c10 / 0x007d0c80  read helpers
 // ===========================================================================
-void ReadC10(void* stream)
+bool RI32(void* stream, void* dst, int count, int flag);   // 0x0093a780
+bool RU16(void* stream, void* dst, int count, int flag);   // 0x0093a700
+bool RBytes(void* stream, void* dst, int count);           // 0x0093a6c0
+struct IByteStream {
+    virtual void s0();  virtual void s1();  virtual void s2();  virtual void s3();
+    virtual void s4();  virtual void s5();  virtual void s6();  virtual void s7();
+    virtual void s8();  virtual void s9();  virtual void s10(); virtual void s11();
+    virtual int ReadAt(void* dst, int n);                  // slot 12 (offset 0x30)
+};
+struct RBTreeFind {
+    void* DoInsert(void* out, const int* key, int value);  // 0x007d0850 (ret 0xc)
+};
+
+// @ 0x007d0c10
+void ReadC10(void* stream, RBTreeFind* tree)
 {
-    (void)stream;
+    unsigned int count;
+    RI32(stream, &count, 1, 0);
+    for (unsigned int i = 0; i < count; i++) {
+        union { int v; char c; } value;
+        int key;
+        struct { void* node; unsigned int valid; } out;
+        RI32(stream, &key, 1, 0);
+        value.c = 0;
+        tree->DoInsert(&out, &key, value.v);
+    }
 }
+
+// @ 0x007d0c80
 void ReadC80(void* stream, char* p)
 {
-    (void)stream; (void)p;
+    RBytes(stream, p, 1);
+    RI32(stream, p + 4, 1, 0);
+    char* q = p + 8;
+    RU16(stream, q, 1, 0);
+    RI32(stream, q + 0x10, 1, 0);
+    ((IByteStream*)stream)->ReadAt(q + 0x14, 0x24);
+    ((IByteStream*)stream)->ReadAt(q + 4, 0xc);
+    ReadC10(stream, (RBTreeFind*)(p + 0x4c));
+    ((IByteStream*)stream)->ReadAt(p + 0x40, 0xc);
 }
 
 // ===========================================================================
@@ -578,11 +611,137 @@ char* CopyBack1510(char* first, char* last, char* dst)
 }
 
 // ===========================================================================
-// 0x007d1570  (841 bytes, unknown) -- partial
+// 0x007d1570  cGroupGameModelCommand::Execute
 // ===========================================================================
-void FUN_007d1570(int self, int a, int b)
+void EADelete(void* p);   // 0x00f47380
+struct EAString16 {
+    void* mBegin; void* mEnd; void* mCapacity;
+    ~EAString16() {
+        if ((((int)mCapacity - (int)mBegin) & ~1) > 2 && mBegin != 0)
+            EADelete(mBegin);
+    }
+};
+struct NameKey { unsigned int a, b, c; };
+struct Vec3 { float x, y, z; };
+struct cArguments;
+struct ModelObjV {
+    virtual void s0();  virtual void s1();  virtual void s2();  virtual void s3();
+    virtual void s4();  virtual void s5();  virtual void s6();  virtual void s7();
+    virtual void s8();  virtual void s9();  virtual void s10(); virtual void s11();
+    virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15();
+    virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
+    virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23();
+    virtual void s24(); virtual void s25(); virtual void s26(); virtual void s27();
+    virtual void s28(); virtual void s29(); virtual void s30(); virtual void s31();
+    virtual void s32(); virtual void s33(); virtual void s34(); virtual void s35();
+    virtual void s36(); virtual void s37();
+    virtual float GetF(const void* in);             // slot 38 (0x98)
+    virtual void s39(); virtual void s40(); virtual void s41();
+    virtual void s42(); virtual void s43();
+    virtual void GetVec(Vec3* out, const void* in); // slot 44 (0xb0)
+};
+struct cEffectsParser {
+    void AddAnonDescription(cArguments* args, int type, cGameModelDescription* d, int flag);  // 0x00a6fd40
+    void AddDescription(cArguments* args, const void* key, int type, int flag);               // 0x00a6fc30
+};
+struct EAError { EAError(const char* msg); };
+struct cArguments {
+    char** MainArguments(int* count, int a, int b);  // 0x00838020
+    void** MainArguments(int);                       // 0x00838320
+    bool   HasFlag(const char*);                     // 0x008380b0
+    char** OptionArguments(const char* name, int);   // 0x00838330
+};
+EAString16* EAConvertToString16(EAString16* out, const char* in, int len);   // 0x0093c5a0
+void        SPKeyFromName(NameKey* out, const void* name, int a, int b);     // 0x0068d840
+void*       EANew(int size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
+void        EADelete(void* p);                                               // 0x00f47380
+typedef void (__thiscall *ReleaseFn)(void* self, int flag);
+struct cGroupGameModelCommand { void Execute(cArguments* args); };
+// @ 0x007d1570
+void cGroupGameModelCommand::Execute(cArguments* args)
 {
-    (void)self; (void)a; (void)b;
+    int self = (int)this;
+    int count = 0;
+    char** argv = args->MainArguments(&count, 0, 1);
+    if (count != 0) {
+        ((cEffectsParser*)*(int*)(self + 0xc))->AddDescription(args, argv[0], 0x25, 0);
+        return;
+    }
+
+    cGameModelDescription* desc = (cGameModelDescription*)EANew(0x8c, "Swarm", 0, 0, 0, 0);
+    if (desc != 0)
+        desc = new (desc) cGameModelDescription();
+    if (desc != 0)
+        desc->mRefCount++;
+
+    char** a = args->OptionArguments("name", 1);
+    if (a == 0)
+        throw EAError("Need at least -name for anonymous modelEffect");
+    NameKey key; key.a = 0; key.b = 0; key.c = 0;
+    {
+        EAString16 s;
+        EAConvertToString16(&s, a[0], -1);
+        SPKeyFromName(&key, s.mBegin, 0, 0);
+    }
+    desc->mInstanceID = (int)key.a;
+    desc->mGroupID = (int)key.c;
+
+    a = args->OptionArguments("size", 1);
+    if (a != 0)
+        desc->mSize = (*(ModelObjV**)(self + 4))->GetF(a[0]);
+
+    a = args->OptionArguments("color", 1);
+    if (a != 0) {
+        Vec3 v;
+        (*(ModelObjV**)(self + 4))->GetVec(&v, a[0]);
+        desc->mCX = v.x;
+        desc->mCY = v.y;
+        desc->mCZ = v.z;
+    }
+
+    a = args->OptionArguments("alpha", 1);
+    if (a != 0)
+        desc->mAlpha = (*(ModelObjV**)(self + 4))->GetF(a[0]);
+
+    a = args->OptionArguments("world", 1);
+    if (a != 0) {
+        NameKey key; key.a = 0; key.b = 0; key.c = 0;
+        {
+            EAString16 s;
+            EAConvertToString16(&s, a[0], -1);
+            SPKeyFromName(&key, s.mBegin, 0, 0);
+        }
+        desc->mWorldID = (int)key.a;
+    }
+
+    a = args->OptionArguments("group", 1);
+    if (a != 0) {
+        NameKey key; key.a = 0; key.b = 0; key.c = 0;
+        {
+            EAString16 s;
+            EAConvertToString16(&s, a[0], -1);
+            SPKeyFromName(&key, s.mBegin, 0, 0);
+        }
+        desc->mGroupID = (int)key.a;
+    }
+
+    a = args->OptionArguments("message", 1);
+    if (a != 0) {
+        NameKey key; key.a = 0; key.b = 0; key.c = 0;
+        {
+            EAString16 s;
+            EAConvertToString16(&s, a[0], -1);
+            SPKeyFromName(&key, s.mBegin, 0, 0);
+        }
+        desc->a88 = (int)key.a;
+        desc->mFlags |= 4;
+    }
+
+    ((cEffectsParser*)*(int*)(self + 0xc))->AddAnonDescription(args, 0x25, desc, 0);
+    if (--desc->mRefCount == 0) {
+        desc->mRefCount = 1;
+        ((ReleaseFn)(desc->vftable))(desc, 1);
+    }
 }
 
 // ===========================================================================
@@ -611,18 +770,30 @@ GameModelEffect::GameModelEffect()
 }
 
 // ===========================================================================
-// 0x007d1910  cGameModelSizeCommand::Execute (partial)
+// 0x007d1910  cGameModelSizeCommand::Execute
 // ===========================================================================
-void FUN_007d1910(int self, void* args)
+struct ModelCmdData { char pad[0x10]; unsigned int flags; float f14; };
+struct GameModelSizeCommand { void Execute(cArguments* args); };
+// @ 0x007d1910
+typedef float (__thiscall *ModelGetFFn)(void* self, const void* in);
+void GameModelSizeCommand::Execute(cArguments* args)
 {
-    (void)self; (void)args;
+    int self = (int)this;
+    int vtbl = **(int**)(self + 4);
+    void** a = args->MainArguments(1);
+    *(float*)(*(int*)(self + 0xc) + 0x14) = ((ModelGetFFn)*(void**)(vtbl + 0x98))(*(void**)(self + 4), *a);
+    bool fixed = args->HasFlag("fixed");
+    unsigned int* pf = (unsigned int*)(*(int*)(self + 0xc) + 0x10);
+    if (fixed)
+        *pf |= 0x10;
+    else
+        *pf &= ~0x10;
 }
 
 // ===========================================================================
 // @ 0x007d1970  command Execute
 // ===========================================================================
 struct V3 { int a, b, c; };
-struct cArguments { void** MainArguments(int); };   // 0x00838320 thiscall
 struct ObjV {
     virtual void s0();  virtual void s1();  virtual void s2();  virtual void s3();
     virtual void s4();  virtual void s5();  virtual void s6();  virtual void s7();

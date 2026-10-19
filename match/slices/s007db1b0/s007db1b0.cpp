@@ -179,7 +179,7 @@ struct cSmoothCameraController {
 };
 
 extern int g_16389dc, g_16389e0, g_16389e4;
-extern int g_16389d0;
+extern bool g_16389d0;
 
 bool cSmoothCameraController::Init(int)
 {
@@ -371,84 +371,90 @@ void cSmoothCameraController::SetCurrentDiscreteOrientation(int orient)
 // ---------------------------------------------------------------------------
 bool cSmoothCameraController::HandleMessage(int msg, void* data)
 {
-    float* d = (float*)data;
-    switch (msg) {
-    case 0x101d51f:
-        *(float*)&mTracking = d[0];
-        mStartMouseWheelLevel = (int)d[1];
-        mKeyboardRotation.mCurrent = d[2];
-        mKeyboardRotation.mTarget = d[3];
-        mRelativeOrientation.mCurrent.w = d[0];
-        mRelativeOrientation.mSteps = (uint32_t)d[1];
-        mRelativeOrientation.mMinChange = d[2];
-        mHeadingRelative = d[3];
-        break;
-    case 0x101b542:
-        mBufferedLookAtPosition.mTarget.z = d[0];
-        mBufferedLookAtPosition.mSteps = (uint32_t)d[1];
-        mBufferedLookAtPosition.mMinChange = d[2];
-        mFOVLevels.mpBegin = *(void**)&d[0];
-        mFOVLevels.mpEnd = *(void**)&d[1];
-        mFOVLevels.mpCapacity = *(void**)&d[2];
+    unsigned int* p = (unsigned int*)data;
+    switch ((unsigned int)msg) {
+    case 0x101b534:                                   // buffered look-at current
+        *(unsigned int*)((char*)this + 0x100) = p[0];
+        *(unsigned int*)((char*)this + 0x104) = p[1];
+        *(unsigned int*)((char*)this + 0x108) = p[2];
+        return false;
+    case 0x101b537:                                   // subject target + look-at current
+        *(unsigned int*)((char*)this + 0x0f4) = p[0];
+        *(unsigned int*)((char*)this + 0x0f8) = p[1];
+        *(unsigned int*)((char*)this + 0x0fc) = p[2];
+        *(unsigned int*)((char*)this + 0x100) = p[0];
+        *(unsigned int*)((char*)this + 0x104) = p[1];
+        *(unsigned int*)((char*)this + 0x108) = p[2];
+        return false;
+    case 0x101b541:                                   // look-at target
+        *(unsigned int*)((char*)this + 0x114) = p[0];
+        *(unsigned int*)((char*)this + 0x118) = p[1];
+        *(unsigned int*)((char*)this + 0x11c) = p[2];
         g_16389d0 = 1;
-        break;
-    case 0x101b534:
-        mBufferedLookAtPosition.mCurrent.x = d[0];
-        mBufferedLookAtPosition.mCurrent.y = d[1];
-        mBufferedLookAtPosition.mCurrent.z = d[2];
-        break;
-    case 0x101b537:
-        mBufferedSubjectPosition.mTarget.z = d[0];
-        mBufferedSubjectPosition.mSteps = (uint32_t)d[1];
-        mBufferedSubjectPosition.mMinChange = d[2];
-        mBufferedLookAtPosition.mCurrent.x = d[0];
-        mBufferedLookAtPosition.mCurrent.y = d[1];
-        mBufferedLookAtPosition.mCurrent.z = d[2];
-        break;
+        return false;
+    case 0x101b542:                                   // look-at target + FOV levels
+        *(unsigned int*)((char*)this + 0x114) = p[0];
+        *(unsigned int*)((char*)this + 0x118) = p[1];
+        *(unsigned int*)((char*)this + 0x11c) = p[2];
+        *(unsigned int*)((char*)this + 0x120) = p[0];
+        *(unsigned int*)((char*)this + 0x124) = p[1];
+        *(unsigned int*)((char*)this + 0x128) = p[2];
+        g_16389d0 = 1;
+        return false;
     case 0x101b543:
-        *(float*)&mTracking = d[0];
-        mStartMouseWheelLevel = (int)d[1];
-        mKeyboardRotation.mCurrent = d[2];
-        mKeyboardRotation.mTarget = d[3];
-        break;
-    case 0x101d445:
-        mContinuousZoomDistance = d[0];
-        mBufferedNearClip.mTarget = d[0];
-        break;
+    case 0x101d576:                                   // orientation (4 words)
+        *(unsigned int*)((char*)this + 0x190) = p[0];
+        *(unsigned int*)((char*)this + 0x194) = p[1];
+        *(unsigned int*)((char*)this + 0x198) = p[2];
+        *(unsigned int*)((char*)this + 0x19c) = p[3];
+        return false;
+    case 0x101d445:                                   // continuous zoom distance + near clip
+        *(float*)((char*)this + 0x28) = *(float*)data;
+        *(float*)((char*)this + 0xa4) = *(float*)data;
+        return false;
     case 0x101d4c7:
-        mContinuousZoomDistance = d[0];
-        break;
+        *(float*)((char*)this + 0x28) = *(float*)data;
+        return false;
+    case 0x101d51f:                                   // tracking + buffered look-at
+        *(unsigned int*)((char*)this + 0x190) = p[0];
+        *(unsigned int*)((char*)this + 0x194) = p[1];
+        *(unsigned int*)((char*)this + 0x198) = p[2];
+        *(unsigned int*)((char*)this + 0x19c) = p[3];
+        *(unsigned int*)((char*)this + 0x180) = p[0];
+        *(unsigned int*)((char*)this + 0x184) = p[1];
+        *(unsigned int*)((char*)this + 0x188) = p[2];
+        *(unsigned int*)((char*)this + 0x18c) = p[3];
+        return false;
     case 0x109d1af:
-        if (d[0] > 0.0f) mBufferedFOV.mSteps = (uint32_t)d[0];
-        break;
-    case 0x109d174:
-        if (d[0] > 0.0f) mBufferedPitchParam.mSteps = (uint32_t)d[0];
-        break;
-    case 0x109d1aa:
-        if (d[0] > 0.0f) mBufferedFarClip.mSteps = (uint32_t)d[0];
-        break;
+        if (*(float*)data > 0.0f) *(float*)((char*)this + 0xc8) = *(float*)data;
+        return false;
+    case 0x109d574:
+        if (*(float*)data > 0.0f) *(float*)((char*)this + 0xd8) = *(float*)data;
+        return false;
+    case 0x109d5aa:
+        if (*(float*)data > 0.0f) *(float*)((char*)this + 0xb8) = *(float*)data;
+        return false;
     case 0x109d352:
-        if (d[0] > 0.0f) {
-            mBufferedPitchParam.mTarget = d[0];
-            mBufferedPitchParam.mSteps = (uint32_t)d[0];
+        if (*(float*)data > 0.0f) {
+            *(float*)((char*)this + 0xd4) = *(float*)data;
+            *(float*)((char*)this + 0xd8) = *(float*)data;
         }
-        break;
+        return false;
     case 0x109d372:
-        if (d[0] > 0.0f) {
-            mBufferedFarClip.mSteps = (uint32_t)d[0];
-            mBufferedFarClip.mTarget = d[0];
+        if (*(float*)data > 0.0f) {
+            *(float*)((char*)this + 0xb8) = *(float*)data;
+            *(float*)((char*)this + 0xb4) = *(float*)data;
         }
-        break;
+        return false;
     case 0x109d375:
-        if (d[0] > 0.0f) {
-            mBufferedFOV.mSteps = (uint32_t)d[0];
-            mBufferedFOV.mTarget = d[0];
+        if (*(float*)data > 0.0f) {
+            *(float*)((char*)this + 0xc8) = *(float*)data;
+            *(float*)((char*)this + 0xc4) = *(float*)data;
         }
-        break;
+        return false;
     default:
-        break;
+        return false;
     }
-    return false;
 }
 
 // ---------------------------------------------------------------------------
@@ -458,14 +464,17 @@ struct IConfigManager2 {
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
     virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
     virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11(int);
+    virtual unsigned int v12(unsigned int);   // slot 12 (0x30), returns an id
 };
 void* SP_ConfigManager();   // 0x0067dd30
 
-struct Str {
+void EDealloc(void* p);      // 0x00f47380
+struct Str {                 // EA::string8 (cString8)
     char* mpBegin;
     char* mpEnd;
     char* mpCapacity;
     void* mAlloc;
+    ~Str() { if ((int)(mpCapacity - mpBegin) > 1 && mpBegin != 0) EDealloc(mpBegin); }
 };
 
 void Sprintf8(char*, const char*, ...);      // 0x00938470
@@ -499,8 +508,20 @@ void ManifestSource2::Load()
 // ---------------------------------------------------------------------------
 // 0x007db1b0 / 0x007db2a0  run config-configured automate commands.
 // ---------------------------------------------------------------------------
+void EDealloc(void* p);      // 0x00f47380
+struct SimVecU {             // SP::SimpleVector<unsigned int> (0x004cd3c0 = resize)
+    unsigned int* mpBegin;
+    unsigned int* mpEnd;
+    unsigned int* mpCapacity;
+    void resize(unsigned int n);          // 0x004cd3c0
+    ~SimVecU() { if (mpBegin[-1] != 0) EDealloc(mpBegin); }
+};
+
 struct AutomateRunner {
-    char pad[0x28];
+    char pad0[0xc];
+    void (__cdecl* mLog2)(void*);                          // +0xc
+    void (__cdecl* mLog1)(char*, int, unsigned int*);      // +0x10
+    char pad1[0x18];
     HMODULE mModule;        // +0x2c
     void ListCommands();    // 007db1b0
     void ListCommands2();   // 007db2a0
@@ -513,24 +534,56 @@ void AutomateRunner::ListCommands()
     IConfigManager2* cm = (IConfigManager2*)SP_ConfigManager();
     if (!cm)
         return;
-    int ids[3] = { 0x46170a6, 0x461709e, 0x9f };
-    for (int i = 0; i < 3; ++i) {
-        cm->v08();
-        char buf[64];
-        Sprintf8(buf, "%x", ids[i]);
+    SimVecU v;
+    v.mpBegin = 0; v.mpEnd = 0; v.mpCapacity = 0;
+    v.resize(9);
+    v.mpBegin[0] = 0x046170a6;
+    v.mpBegin[1] = 0x0461709e;
+    v.mpBegin[2] = 0x0461709f;
+    unsigned int n = (unsigned int)(((int)v.mpEnd - (int)v.mpBegin) >> 2);
+    for (unsigned int i = 0; i < n; ++i) {
+        unsigned int id = cm->v12(v.mpBegin[i]);
+        char buf[36];
+        Sprintf8(buf, "%x", v.mpBegin[i]);
+        mLog1(buf, 2, &id);
     }
 }
+
+struct CmdMsg {
+    int mType;        // +0x00
+    char* mText;      // +0x04
+    int a08;          // +0x08
+    int a0c;          // +0x0c
+    int a10;          // +0x10
+    int a14;          // +0x14
+    int a18;          // +0x18
+    int a1c;          // +0x1c
+    int a20;          // +0x20
+    char pad[0x14];   // +0x24 .. +0x38
+};
 
 void AutomateRunner::ListCommands2()
 {
     IConfigManager2* cm = (IConfigManager2*)SP_ConfigManager();
     if (!cm)
         return;
-    int ids[3] = { 0x46170a6, 0x461709e, 0x9f };
-    for (int i = 0; i < 3; ++i) {
-        char buf[64];
-        Sprintf8(buf, "%x", ids[i]);
-        cm->v11(ids[i]);
+    SimVecU v;
+    v.mpBegin = 0; v.mpEnd = 0; v.mpCapacity = 0;
+    v.resize(9);
+    v.mpBegin[0] = 0x046170a6;
+    v.mpBegin[1] = 0x0461709e;
+    v.mpBegin[2] = 0x0461709f;
+    unsigned int n = (unsigned int)(((int)v.mpEnd - (int)v.mpBegin) >> 2);
+    for (unsigned int i = 0; i < n; ++i) {
+        char buf[32];
+        Sprintf8(buf, "%x", v.mpBegin[i]);
+        CmdMsg m = {};
+        m.mType = 2;
+        m.mText = buf;
+        m.a10 = 1;
+        m.a18 = 3;
+        m.a20 = 3;
+        mLog2(&m);
     }
 }
 
@@ -541,10 +594,20 @@ int FUN_0092b200(const wchar_t*, int, int, int, int);  // 0x0092b200
 int FUN_008d3ac0();                                    // 0x008d3ac0
 void* FUN_0092b1b0(int);                               // 0x0092b1b0
 void  EA_ConvertToString8(void*, void*);               // 0x0093c570
+extern "C" int __stdcall FreeLibrary(void*);           // kernel32
+
+struct WideStr {                 // EA::string16-like object returned by 0x0092b1b0
+    const wchar_t* mpBegin;
+    const wchar_t* mpEnd;
+};
+
+struct PluginLoader {            // 0x007db0c0  (Loads a plugin DLL by name)
+    bool Load(const char* name, char* afterSemi);
+};
 
 struct CommandRunner {
     char pad0[4];
-    int (__cdecl* mReadArg)(int*);   // +0x4
+    int (__cdecl* mReadCmd)(int*);   // +0x4
     char pad2[0x24];
     HMODULE mModule;                 // +0x2c
     bool Run(const char* args, char* flagOut);
@@ -560,10 +623,46 @@ bool CommandRunner::Run(const char* args, char* flagOut)
     if (idx + 1 >= FUN_008d3ac0())
         return false;
     *flagOut = 1;
-    Str tmp;
-    EA_ConvertToString8(&tmp, FUN_0092b1b0(idx + 1));
-    SP_PluginLoad(this, "", 0);
-    return true;
+    WideStr* ws = (WideStr*)FUN_0092b1b0(idx + 1);
+    const wchar_t* wp = ws->mpBegin;
+    unsigned int wcount = (unsigned int)(ws->mpEnd - wp) >> 1;
+    int semi = -1;
+    for (unsigned int k = 0; k < wcount; ++k) {
+        if (wp[k] == L';') { semi = (int)k; break; }
+    }
+    Str s;
+    EA_ConvertToString8(&s, ws);
+    char buf[1024];
+    strcpy(buf, s.mpBegin);
+    char* rest = buf + (int)(s.mpEnd - s.mpBegin);
+    if (semi >= 0) {
+        buf[semi] = 0;
+        rest = buf + semi + 1;
+    }
+    if (((PluginLoader*)this)->Load(buf, rest)) {
+        *flagOut = 0;
+        int c = 0;
+        for (;;) {
+            c = 0;
+            c = ((int (__cdecl*)(int*))*(void**)((char*)this + 4))(&c);
+            switch (c) {
+            case 0: *flagOut = 1; goto flush;
+            case 2: ((AutomateRunner*)this)->ListCommands2(); break;
+            case 3: ((AutomateRunner*)this)->ListCommands(); break;
+            case 4: ((ManifestSource2*)this)->Load(); break;
+            }
+            if (*flagOut) goto flush;
+            if (c == 1) break;
+        }
+flush:
+        if (mModule) {
+            FreeLibrary(mModule);
+            mModule = 0;
+            memset(this, 0, 0x2c);
+        }
+        return true;
+    }
+    return false;
 }
 
 // ---------------------------------------------------------------------------

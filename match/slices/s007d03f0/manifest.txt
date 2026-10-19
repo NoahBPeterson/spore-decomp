@@ -10,3 +10,6 @@ slices/s007d03f0/s007d03f0.cpp  ?CopyBack1450@@YAPAUS2C@@PAU1@00@Z 007d1450  /O2
 slices/s007d03f0/s007d03f0.cpp  ?AssignRange14B0@@YAXPAD00@Z      007d14b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
 slices/s007d03f0/s007d03f0.cpp  ?CopyBack1510@@YAPADPAD00@Z       007d1510  /O2 /MD /Gy /EHsc /TP /arch:SSE2
 slices/s007d03f0/s007d03f0.cpp  ?ReadVec@@YAPAXPAXPAURdVec@@@Z  007d10d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007d03f0/s007d03f0.cpp  ?ReadC10@@YAXPAXPAURBTreeFind@@@Z 007d0c10  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007d03f0/s007d03f0.cpp  ?ReadC80@@YAXPAXPAD@Z             007d0c80  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007d03f0/s007d03f0.cpp  ?Execute@GameModelSizeCommand@@QAEXPAUcArguments@@@Z 007d1910  /O2 /MD /Gy /EHsc /TP /arch:SSE2

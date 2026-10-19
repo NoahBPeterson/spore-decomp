@@ -1,4 +1,0 @@
-007db1b0  -  AutomateRunner::ListCommands; config/vector command listing approximated
-007db2a0  -  AutomateRunner::ListCommands2; config/vector command listing approximated
-007db3a0  -  CommandRunner::Run; "-openautomate" parsing skeleton only
-007db950  -  cSmoothCameraController::HandleMessage; message switch reproduced, exact field mapping approximate

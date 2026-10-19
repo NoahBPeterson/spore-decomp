@@ -391,9 +391,62 @@ bool DoManagerUpdateImpl(void* a, int b, int c, int d, int e, char f)
     return true;   // partial placeholder; see partial.txt
 }
 
-// @ 0x0075dd30 -- partial: EH-heavy light-info merge scan.
+// ---- helpers used by MergeLocalLights (0x0075dd30) ----
+extern int g_adapterCount;                                   // @ 0x01712438
+struct SPAllocPool {
+    void* LockedAligned(unsigned int size, int a, int b, int c,
+                        int d, int e, int f, int g);         // @ 0x00928a30 (ret 0x20)
+    void Free(void* elem);                                   // @ 0x009276c0 (ret 4)
+};
+extern SPAllocPool* g_pAllocPool;                            // @ 0x016c8b44
+extern int  GetAdapterCount();                               // @ 0x011f8300
+extern void GetFormats(unsigned int* out, int count);        // @ 0x011f8a40
+struct AdapterSet { void* p; unsigned int a, b, c; };
+extern void* GetAdapterInfo(AdapterSet* set, int count);     // @ 0x011f88c0
+struct LightFormat { unsigned int a, b; ~LightFormat() {} }; // empty dtor (0x00c2e4e0)
+
+// @ 0x0075dd30
 bool MergeLocalLights(int param_1, int param_2, int param_3, int param_4)
 {
-    (void)param_2; (void)param_3; (void)param_4;
-    return param_1 >= 0;   // partial placeholder; see partial.txt
+    int count = GetAdapterCount();
+    if (param_1 < 0 || param_1 >= count)
+        return false;
+
+    LightFormat info[4];
+    GetFormats((unsigned int*)info, count);
+
+    AdapterSet set;
+    set.p = g_pAllocPool->LockedAligned(info[0].a, (int)info[0].b, 0, 0, 0, 0, 0, 0);
+    set.a = 0;
+    set.b = 0;
+    set.c = 0;
+
+    char* base = (char*)GetAdapterInfo(&set, count);
+    base += param_1 * 0x44;
+
+    bool found = false;
+    unsigned int n = *(unsigned int*)(base + 0x10);
+    if (n != 0) {
+        char* mode = base + 0x14;
+        unsigned int c = n;
+        do {
+            int type = *(int*)mode;
+            if (type == 0x15 || type == 0x16 || type == 0x21) {
+                unsigned int m = *(unsigned int*)(mode + 4);
+                if (m != 0) {
+                    int* res = *(int**)(mode + 8);
+                    for (unsigned int i = 0; i < m; i++, res += 4) {
+                        if (res[0] == param_2 && res[1] == param_3 && res[2] == param_4) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            mode += 0xc;
+        } while (--c);
+    }
+
+    g_pAllocPool->Free(set.p);
+    return found;
 }

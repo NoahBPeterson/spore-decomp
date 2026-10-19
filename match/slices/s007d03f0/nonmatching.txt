@@ -9,3 +9,4 @@
 007d1140  -     S1140 copy ctor; vector copy uses operator= rather than reserve+DoInsertValue [equiv: UNSUPPORTED (SVec::operator= callee unresolved; original calls 0x4aa350 reserve)]
 007d18c0  26    GameModelEffect ctor; placement-new null check and vtable/f34 store order differ
 007d1970  -     command Execute; vtable slot 44 sret call shape differs [equiv: UNSUPPORTED (0 valid inputs: _CxxThrowException discards)]
+007d1570  676   cGroupGameModelCommand::Execute; SEH EH-frame/state machine + string16 temp lifetimes differ [equiv: UNSUPPORTED - 1 unresolved reference(s): ??0EAError@@QAE@PBD@Z]

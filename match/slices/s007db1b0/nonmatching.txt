@@ -6,3 +6,7 @@
 007db650  458  cPackManager::Init complete (flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast); stack-slot order (keys/filter/key temp) and local spill layout differ [equiv: WEAK 22.9% coverage]
 007dbf20  5  RestoreCameraPosition complete (retail offsets); only vtable fn-pointer register swap (eax/edx) [equiv: PASS]
 007dbfe0  279  SetCurrentZoomLevel complete (retail offsets); size() CSE and lea residue differ [equiv: UNSUPPORTED fake-arity]
+007db1b0  188  AutomateRunner::ListCommands complete (flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /GS-); EH unwind funclets + const-pool copy of the 3 command ids differ [equiv: WEAK 400 valid inputs, 26.7% coverage (need 60%)]
+007db2a0  173  AutomateRunner::ListCommands2 complete (flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /GS-); 0x38-byte msg zero-init and string16 conversion schedule differ [equiv: WEAK 400 valid inputs, 22.4% coverage (need 60%)]
+007db3a0  355  CommandRunner::Run complete (flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /GS-); jump-table switch + EH frame + string16 temp lifetimes differ [equiv: UNSUPPORTED - 2 unresolved reference(s): ?Load@PluginLoader@@QAE_NPBDPAD@Z, _FreeLibrary@4]
+007db950  325  cSmoothCameraController::HandleMessage complete (flags /O2 /MD /Gy /TP /arch:SSE2 /fp:fast); 15-case tree matches, per-case FP copy form (x87 vs movss) and branch displacements differ [equiv: WEAK 400 valid inputs, 13.5% coverage (need 60%)]

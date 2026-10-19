@@ -4,3 +4,6 @@
 007c7050  37  hashtable DoFreeNodes; loop/codegen differs
 007c75e0  -  cCameraManager ctor; EASTL hashtable/string init not reproduced
 007c7770  86  bit-length/lookup-table initializer; codegen differs -- equiv FAIL after making it a cBitLength member (ECX this): 5/7 inputs mismatch (shift steps in the bit-length ladder missing)
+007c70b0  142  cCameraManager::Init complete (flags /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE2); EH state numbering + this/controller register assignment (esi/edi) and vtable-store scheduling differ [equiv: WEAK 302 valid inputs, 14.0% coverage (need 60%)]
+007c6b80  242  cCameraManager::LoadControllers complete (flags /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE2); property-group re-fetch/EH-state schedule + factory indirect-call convention (__thiscall callee-clean vs cdecl) differ [equiv: FAIL - mis-paired, find_symbol bound VA 007c6b80 to ~PropGroup because our mangled name lacks the original's `cCameraManager@SP@@UAE` spelling]
+007c7270  226  RegisterController complete (flags /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE2); this/controller register assignment + hashtable-find scheduling differ [equiv: FAIL - ours faults (UC_ERR_READ_UNMAPPED eip=3000007c) on the 3 of 5 valid inputs that survive argument synthesis; original returned normally]

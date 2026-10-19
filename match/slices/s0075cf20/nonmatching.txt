@@ -9,3 +9,4 @@
 0075dc10  12  complete; tail-jmp guard (`if (!flag) ReleaseDevice()`), cl outlined/tail-called differently; equiv: PASS
 0075dc20  82  complete; palette table build (pow loop + d3d9 SetPalette via [vtbl+0x54]), frame/reg layout differs; equiv: UNSUPPORTED (ecx read is only a nop lea ecx,[ecx] pad; fn is stdcall ret 4, left as is)
 0075dca0  87  complete; cRenderer::InitShaders caps check + state flags, frame/allocation differs
+0075dd30  152  complete; MergeLocalLights (flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS-, no /GS cookie in original); EH-state store scheduled before LockedAligned (cl hoists it after), adapter-light scan loop reg/guard form differs; equiv: WEAK 400 valid inputs, 22.1% coverage (need 60%)
