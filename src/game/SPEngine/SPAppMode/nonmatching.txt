@@ -1,0 +1,21 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE)
+007d8060 155 SP::cApp::Init; complete (camera manager, cheat command alloc, 3 message registrations), new-expression/EH schedule differs
+007d8180 95 SP::cApp::HandleMessage (IHandlerRC subobject); complete 3 message cases, register/call shape differs
+007d81f0 34 SP::cApp::PreInitAppModes; complete loop over modes calling vtable+0xc, count/register shape differs
+007d8230 56 SP::cApp::InitAppModes; complete loop over modes calling vtable+0x10, count/register shape differs
+007d8270 61 SP::cApp::AppMode(unsigned); complete linear search by mID, byte-diff count/register shape differs
+007d82c0 44 SP::cApp::AppMode(); complete bounds-checked mModeIndex lookup, count computation picks edi vs original edx
+007d8300 44 SP::cApp::AppModeID(); complete bounds-checked mModeIndex lookup, count computation picks edi vs original edx
+007d8360 93 SP::cApp::SetAppModeByName; complete _stricmp search + SetAppModeByIndex vcall, schedule differs
+007d83d0 58 SP::cApp::AppModeID(int); complete bounds-checked lookup, count computation picks edi vs original edx
+007d8410 60 SP::cApp::AppModeName(int); complete bounds-checked lookup, count computation picks edi vs original edx
+007d8470 160 SP::cApp::SwitchMode; complete (leave mode, build/send 2 messages, clear index), message ctor/EH schedule differs
+007d85b0 274 SP::cApp::ApplyAppMode; complete (leave old mode, set index, send 2 app-mode messages, enter new mode), MessageBasicRC/EH schedule differs
+007d8ab0 169 `anonymous namespace'::cAppModeCheat::Execute; complete (find-by-name, list flag, current-mode print + no-such-mode throw), vtable/EH schedule differs
+007d8c30 65 SP::cApp::SetAppMode(unsigned); complete linear search + ApplyAppMode, count caching picks esi instead of original edx
+007d8d40 68 SP::cApp::~cApp; complete (vtables, viewer release, mAppModes vector dtor, base vtable restore), EH prologue/vtable store order differs
+007d8dc0 35 SP::CreateApp; complete factory (size 0x34, 3 vtables, member init), store order/scheduling differs
+007d8e40 213 SP::cApp::InsertAppMode; complete in-place shift + grow/reallocate paths, call/inlining schedule differs
+007d8ff0 42 SP::cApp::RemoveAppMode; complete (leave mode, shift-assign, pop_back destroy), register/count shape differs
+007d9120 163 SP::cApp::Shutdown; complete (unregister 3 messages, leave mode, cheat, mode Apply/assign/destroy, viewer release), EH/schedule differs
+007d9260 151 SP::cApp::AddAppMode; complete (build cAppModeInfo, string assign, push to vector), EH/register schedule differs

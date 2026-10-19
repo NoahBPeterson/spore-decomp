@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPAppMode.cpp  ?SetMainViewer@cApp@SP@@QAEXPAX@Z  007d8450  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppMode.cpp  ?VectorOwnerDestroy@@YIXPAPAX@Z  007d8580  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppMode.cpp  ?cAppModeInfoDestroyRange@@YGXPAUcAppModeInfo_s007d_85b0@@0@Z  007d87e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppMode.cpp  ?cAppModeInfoDestroyMove@@YAPAUcAppModeInfo_s007d_85b0@@PAU1@00@Z  007d8920  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppMode.cpp  ?SetAppModeByIndex@cApp_s007d_85b0@SP@@QAE_NH@Z  007d8c80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
