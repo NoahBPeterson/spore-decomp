@@ -3374,7 +3374,9 @@ class Rewrite:
             dl = c.defline
             mq = re.search(r"(?<![\w:])([A-Za-z_]\w*)\s*::\s*~?\s*\w+\s*\(", dl)
             if mq:
-                c.defline = self.qualify_names(dl[:mq.start()], n) + dl[mq.start():]
+                # ... and the parameter list after it (mig8 s007e6210 0x7e67a0 `bool cAppSystemEx::Init(CommandLine* cmd)`
+                # after `using namespace AppInit;`: C2065 'CommandLine')
+                c.defline = self.qualify_names(dl[:mq.start()], n) + dl[mq.start():mq.end()] + self.qualify_names(dl[mq.end():], n)
             else:
                 c.defline = self.qualify_names(dl, n)
 
