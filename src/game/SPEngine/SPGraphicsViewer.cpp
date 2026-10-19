@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPGraphicsViewer.cpp -- migrated from slice(s) s007c4be0, s007c3ba0 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsViewer.cpp -- migrated from slice(s) s004b8af0, s007c4be0, s007c3ba0 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsViewer.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -14,6 +14,12 @@ extern void g_FUN_007c4940_body();
 #include <math.h>
 #include "SP/cShaderDataRenderType.h"
 #include "rw/core/arena/Arena.h"
+#include "SP/cISPEditorNameProvider.h"
+#include "SP/cSPEditorModel.h"
+#include "hkVector4.h"
+#include "hkCollisionFilter.h"
+#include "hkWorldCinfo.h"
+#include "hkWorld.h"
 
 // ---- items of slice s007c3ba0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Vec4 { float x, y, z, w; };
@@ -156,6 +162,256 @@ extern u8    g_forceAspect;                  // 0x153c988
 struct cShaderDataRenderType { u8 mType; u8 pad[3]; int mVariation; };
 // ---- items of slice s007c4be0 end
 
+// ---- items of slice s004b8af0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma pack(push, 4)
+inline void* operator new(unsigned int, void* p) { return p; }
+typedef float hkReal;
+class hkMemory {
+public:
+virtual void _v0();
+virtual void _v1();
+virtual void _v2();
+virtual void _v3();
+    virtual void* allocateChunk(int nbytes, int cl);                 // 0x10
+    virtual void deallocateChunk(void* p, int nbytes, int cl);       // 0x14
+    static hkMemory* s_instance;                                     // 0x016E4178
+    static hkMemory& getInstance() { return *s_instance; }
+};
+#define HK_DECLARE_CLASS_ALLOCATOR(CLS) \
+    void* operator new(unsigned int nbytes) { \
+        hkReferencedObject_s004b_8af0* b = static_cast<hkReferencedObject_s004b_8af0*>(hkMemory::getInstance().allocateChunk(nbytes, CLS)); \
+        b->m_memSizeAndFlags = (unsigned short)nbytes; \
+        return b; } \
+    void operator delete(void* p) { \
+        hkReferencedObject_s004b_8af0* b = static_cast<hkReferencedObject_s004b_8af0*>(p); \
+        hkMemory::getInstance().deallocateChunk(p, b->m_memSizeAndFlags, CLS); }
+class hkBaseObject_s004b_8af0 {
+public:
+    virtual ~hkBaseObject_s004b_8af0() {}
+};
+class hkReferencedObject_s004b_8af0 : public hkBaseObject_s004b_8af0 {
+public:
+    HK_DECLARE_CLASS_ALLOCATOR(0x12)
+    unsigned short m_memSizeAndFlags;           // +0x4
+    short m_referenceCount;                     // +0x6
+    hkReferencedObject_s004b_8af0() : m_referenceCount(1) {}
+    virtual ~hkReferencedObject_s004b_8af0() {}
+    // Havok's HK_FORCE_INLINE: a plain inline containing `delete this` is never inlined by cl at /Ob1
+    __forceinline void removeReference()
+    {
+        if (m_memSizeAndFlags != 0) {
+            --m_referenceCount;
+            if (m_referenceCount == 0)
+                delete this;
+        }
+    }
+};
+class hkBool_s004b_8af0 {
+public:
+    char m_bool;
+    hkBool_s004b_8af0() {}
+    hkBool_s004b_8af0(bool b) { m_bool = (char)b; }
+    hkBool_s004b_8af0& operator=(bool e) { m_bool = (char)e; return *this; }
+};
+class __declspec(align(16)) hkVector4_s004b_8af0 {
+public:
+    hkReal x, y, z, w;
+    hkVector4_s004b_8af0() {}
+    hkVector4_s004b_8af0(hkReal a, hkReal b, hkReal c, hkReal d = 0.0f) { x = a; y = b; z = c; w = d; }
+    void operator=(const hkVector4_s004b_8af0& v) { x = v.x; y = v.y; z = v.z; w = v.w; }
+    void set(hkReal a, hkReal b, hkReal c, hkReal d = 0.0f) { x = a; y = b; z = c; w = d; }
+};
+class hkCollidableCollidableFilter_s004b_8af0 { public: virtual ~hkCollidableCollidableFilter_s004b_8af0() {} virtual void isCollisionEnabled() = 0; };
+class hkShapeCollectionFilter_s004b_8af0 { public: virtual ~hkShapeCollectionFilter_s004b_8af0() {} virtual void isCollisionEnabled2() = 0; };
+class hkRayShapeCollectionFilter_s004b_8af0 { public: virtual ~hkRayShapeCollectionFilter_s004b_8af0() {} virtual void isCollisionEnabled3() = 0; };
+class hkRayCollidableFilter_s004b_8af0 { public: virtual ~hkRayCollidableFilter_s004b_8af0() {} virtual void isCollisionEnabled4() = 0; };
+class hkCollisionFilter_s004b_8af0 : public hkReferencedObject_s004b_8af0, public hkCollidableCollidableFilter_s004b_8af0,
+                          public hkShapeCollectionFilter_s004b_8af0, public hkRayShapeCollectionFilter_s004b_8af0,
+                          public hkRayCollidableFilter_s004b_8af0 {
+public:
+    HK_DECLARE_CLASS_ALLOCATOR(0x24)
+};
+namespace SP {
+class SPEditorCollisionFilter : public hkCollisionFilter_s004b_8af0 {
+public:
+    virtual void isCollisionEnabled();
+    virtual void isCollisionEnabled2();
+    virtual void isCollisionEnabled3();
+    virtual void isCollisionEnabled4();
+};
+}
+class hkWorldCinfo_s004b_8af0 : public hkReferencedObject_s004b_8af0 {
+public:
+    char pad08[0x10 - 0x8];
+    hkVector4_s004b_8af0 m_gravity;                        // +0x10
+    char pad20[0xa0 - 0x20];
+    hkWorldCinfo_s004b_8af0();                                                  // 0x010880E0
+    virtual ~hkWorldCinfo_s004b_8af0() {}
+    void setupSolverInfo(int st);                                    // 0x01087FD0
+    void setBroadPhaseWorldSize(hkReal size);                        // 0x010881D0
+};
+class hkCollisionDispatcher_s004b_8af0;
+struct hkAgentRegisterUtil { static void registerAllAgents(hkCollisionDispatcher_s004b_8af0* dis); };  // 0x010C25A0
+class hkShape_s004b_8af0 : public hkReferencedObject_s004b_8af0 { public: int m_userData; };
+struct hkTypedBroadPhaseHandle_s004b_8af0 { int m_id; char m_type, m_ownerOffset; unsigned short m_objectQualityType; unsigned int m_collisionFilterInfo; };
+class hkCollidable_s004b_8af0 {
+public:
+    char pad00[0x14];
+    hkTypedBroadPhaseHandle_s004b_8af0 m_broadPhaseHandle; // +0x14
+    hkReal m_allowedPenetrationDepth;           // +0x20
+    void setCollisionFilterInfo(unsigned int info) { m_broadPhaseHandle.m_collisionFilterInfo = info; }
+};
+struct hkMaterial_s004b_8af0 { signed char m_responseType; hkReal m_friction; hkReal m_restitution; };
+class hkWorld_s004b_8af0;
+class hkWorldObject_s004b_8af0 : public hkReferencedObject_s004b_8af0 {
+public:
+    hkWorld_s004b_8af0* m_world;                           // +0x8
+    void* m_userData;                           // +0xc
+    char* m_name;                               // +0x10
+    uint32_t m_multithreadLock[2];              // +0x14
+    hkCollidable_s004b_8af0 m_collidable;                  // +0x1c
+    char pad40[0x58 - 0x40];
+    hkCollidable_s004b_8af0* getCollidableRw() { return &m_collidable; }
+};
+class hkEntity_s004b_8af0 : public hkWorldObject_s004b_8af0 {
+public:
+    void* m_motion;                             // +0x58
+    void* m_simulationIsland;                   // +0x5c
+    hkMaterial_s004b_8af0 m_material;                      // +0x60
+    char pad6c[0xd0 - 0x6c];
+};
+struct hkRigidBodyCinfo {
+    unsigned int m_collisionFilterInfo;         // +0x0
+    hkShape_s004b_8af0* m_shape;                           // +0x4
+    char pad08[0x10 - 0x8];
+    hkVector4_s004b_8af0 m_position;                       // +0x10
+    char pad20[0xa0 - 0x20];
+    hkReal m_restitution;                       // +0xa0
+    char padA4[0xb0 - 0xa4];
+    signed char m_motionType;                   // +0xb0
+    char padB1[0xc0 - 0xb1];
+    hkRigidBodyCinfo();                                              // 0x01087ED0
+};
+class hkRigidBody_s004b_8af0 : public hkEntity_s004b_8af0 {
+public:
+    HK_DECLARE_CLASS_ALLOCATOR(0x2a)
+    hkRigidBody_s004b_8af0(const hkRigidBodyCinfo& info);                       // 0x010878B0
+    void removeReference();                                          // 0x0109AE60 (out of line)
+};
+class hkWorld_s004b_8af0 : public hkReferencedObject_s004b_8af0 {
+public:
+    HK_DECLARE_CLASS_ALLOCATOR(0x2c)
+    char pad08[0x80 - 0x8];
+    hkCollisionDispatcher_s004b_8af0* m_collisionDispatcher;   // +0x80
+    char pad84[0xb5 - 0x84];
+    hkBool_s004b_8af0 m_wantDeactivation;                  // +0xb5
+    char padB6[0x2f0 - 0xb6];
+    hkWorld_s004b_8af0(const hkWorldCinfo_s004b_8af0& info, unsigned int sdkVersion);      // 0x010840E0
+    hkCollisionDispatcher_s004b_8af0* getCollisionDispatcher() { return m_collisionDispatcher; }
+    void setCollisionFilter(hkCollisionFilter_s004b_8af0* filter, hkBool_s004b_8af0 runUpdate, int updateMode, int collectionMode);  // 0x01086F80
+    void updateCollisionFilterOnWorld(int updateMode, int collectionMode);  // 0x010869E0
+    void addEntity(hkRigidBody_s004b_8af0* entity, int activation);             // 0x01082EE0
+    void stepDeltaTime(hkReal dt);                                   // 0x01082A90
+};
+namespace EA {
+template <class T> class RefCountTemplate_s004b_8af0 {
+public:
+    virtual ~RefCountTemplate_s004b_8af0() {}
+    T mRefCount;                                // +0x4
+    RefCountTemplate_s004b_8af0() : mRefCount(0) {}
+    T AddRef() { return mRefCount++ + 1; }
+    // Contains `delete this`, so cl declines to inline it, yet callers still reserve its frame.
+    T Release()                                                      // 0x00453540
+    {
+        T r = mRefCount-- - 1;
+        if (r)
+            return r;
+        mRefCount = 1;
+        delete this;
+        return 0;
+    }
+};
+}
+namespace EA {
+template <class T> class AutoRefCount_s004b_8af0 {
+public:
+    T* mpObject;
+    AutoRefCount_s004b_8af0(T* pObject = 0) : mpObject(pObject) { if (mpObject) mpObject->AddRef(); }
+    AutoRefCount_s004b_8af0(const AutoRefCount_s004b_8af0& x) : mpObject(x.mpObject) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCount_s004b_8af0() { if (mpObject) mpObject->Release(); }
+    operator T*() const { return mpObject; }
+    T* operator->() const { return mpObject; }
+    AutoRefCount_s004b_8af0& operator=(T* pObject)                              // 0x0041D980
+    {
+        if (pObject != mpObject) {
+            T* const pTemp = mpObject;
+            if (pObject) pObject->AddRef();
+            mpObject = pObject;
+            if (pTemp) pTemp->Release();
+        }
+        return *this;
+    }
+    AutoRefCount_s004b_8af0& operator=(const AutoRefCount_s004b_8af0& x) { return operator=(x.mpObject); }
+};
+}
+namespace SP {
+class cISPEditorNameProvider_s004b_8af0 { public: virtual void _v0(); };
+}
+namespace SP {
+class cSPEditorModel_s004b_8af0 : public cISPEditorNameProvider_s004b_8af0, public EA::RefCountTemplate_s004b_8af0<int> {
+public:
+    void NumberBlocks();                                             // 0x004AD4E0
+};
+}
+namespace SP {
+typedef EA::AutoRefCount_s004b_8af0<cSPEditorModel_s004b_8af0> ModelRef;
+}
+namespace SP {
+class cSPEditorPhysicsWorld_s004b_8af0 : public EA::RefCountTemplate_s004b_8af0<int> {
+public:
+    hkWorld_s004b_8af0* mPhysicsWorld;                     // +0x8
+    hkRigidBody_s004b_8af0* mFloor;                        // +0xc
+    float mGravity;                             // +0x10
+    float mLapseTime;                           // +0x14
+    eastl::vector<ModelRef> mModels;            // +0x18
+    bool mUseDynamics;                          // +0x2c
+
+    cSPEditorPhysicsWorld_s004b_8af0();
+    virtual ~cSPEditorPhysicsWorld_s004b_8af0();
+    void Clear();
+    void Init();  // 0x007c4dd0 (SP::cSPEditorPhysicsWorld::Init)
+    hkWorld_s004b_8af0* World();                                                // 0x004B91C0
+    void CreateFloor(float size);
+    void UpdateCollisionFilters();
+    void SetFloorFilter(unsigned int filter);
+    void SetDefaultFloorFilter();
+    void AddModel(cSPEditorModel_s004b_8af0* model);
+    void RemoveModel(cSPEditorModel_s004b_8af0* model);
+    void UpdatePhysics(unsigned int deltaMs);
+};
+}
+// ---- items of slice s004b8af0 end
+
+// @ 0x004b8c10
+namespace SP {
+void cSPEditorPhysicsWorld_s004b_8af0::Init()
+{
+    Clear();
+    hkWorldCinfo_s004b_8af0 info;
+    info.setupSolverInfo(5);
+    info.m_gravity = hkVector4_s004b_8af0(0.0f, 0.0f, -mGravity);
+    info.setBroadPhaseWorldSize(300.0f);
+    mPhysicsWorld = new hkWorld_s004b_8af0(info, 0x765c);
+    mPhysicsWorld->m_wantDeactivation = false;
+    hkAgentRegisterUtil::registerAllAgents(mPhysicsWorld->getCollisionDispatcher());
+    hkCollisionFilter_s004b_8af0* filter = new SPEditorCollisionFilter();
+    mPhysicsWorld->setCollisionFilter(filter, true, 0, 1);
+    filter->removeReference();
+    mLapseTime = 0.0f;
+    CreateFloor(15.0f);
+}
+}  // namespace SP
+
 // @ 0x007c3d30
 void SP::cViewer::GetCameraLocationInfo(cSPVector3 * w, cSPVector3 * y, cSPVector3 * z, cSPVector3 * x) const
 {
@@ -177,7 +433,6 @@ void SP::cViewer::GetCameraLocationInfo(cSPVector3 * w, cSPVector3 * y, cSPVecto
     }
 }
 
-
 // @ 0x007c3da0
 void Matrix44::FUN_007c3da0(float* dst)
 {
@@ -189,11 +444,9 @@ void Matrix44::FUN_007c3da0(float* dst)
     d[0] = s[0]; d[1] = s[1]; d[2] = s[2];
 }
 
-
 // @ 0x007c3de0
 void FUN_007c3de0(void* a, void* b)
 { (void)a; (void)b; }
-
 
 // @ 0x007c3f70
 cViewer* cViewer::FUN_007c3f70()
@@ -215,14 +468,12 @@ cViewer* cViewer::FUN_007c3f70()
     return this;
 }
 
-
 // @ 0x007c4000
 void cViewer::FUN_007c4000()
 {
     if (mCamera != 0)
         FUN_007c3ba0();
 }
-
 
 // @ 0x007c4010
 void cViewer::FUN_007c4010(unsigned* out)
@@ -238,7 +489,6 @@ void cViewer::FUN_007c4010(unsigned* out)
     out[3] = (unsigned)h + (unsigned)y;
 }
 
-
 // @ 0x007c4050
 float cViewer::FUN_007c4050()
 {
@@ -248,13 +498,11 @@ float cViewer::FUN_007c4050()
     return (360.0f / g_153c7a8) * atan2f(a, 1.0f);
 }
 
-
 // @ 0x007c40a0
 float cViewer::FUN_007c40a0()
 {
     return (360.0f / g_153c7a8) * atan2f(mCamera->f60, 1.0f);
 }
-
 
 // @ 0x007c40c0
 void cViewer::FUN_007c40c0(float* a, float* b)
@@ -263,58 +511,47 @@ void cViewer::FUN_007c40c0(float* a, float* b)
     *b = mCamera->f60;
 }
 
-
 // @ 0x007c40e0
 float cViewer::FUN_007c40e0()
 {
     return mCamera->f5c / mCamera->f60;
 }
 
-
 // @ 0x007c40f0
 void FUN_007c40f0(void* a, void* b)
 { (void)a; (void)b; }
-
 
 // @ 0x007c4180
 void FUN_007c4180(void* a, void* b, void* c)
 { (void)a; (void)b; (void)c; }
 
-
 // @ 0x007c42a0
 void FUN_007c42a0(void* a, void* b)
 { (void)a; (void)b; }
-
 
 // @ 0x007c43e0
 void FUN_007c43e0(void* a)
 { (void)a; }
 
-
 // @ 0x007c4510
 void FUN_007c4510(void* a)
 { (void)a; }
-
 
 // @ 0x007c46f0
 void FUN_007c46f0(void* a, void* b, void* c)
 { (void)a; (void)b; (void)c; }
 
-
 // @ 0x007c4730
 void FUN_007c4730(void* a)
 { (void)a; }
-
 
 // @ 0x007c4900
 void FUN_007c4900(void* a, void* b, void* c)
 { (void)a; (void)b; (void)c; }
 
-
 // @ 0x007c4940
 __declspec(noinline) void cViewer::FUN_007c4940()
 { g_FUN_007c4940_body(); }
-
 
 // @ 0x007c4a60
 void cViewer::FUN_007c4a60(unsigned short* p)
@@ -333,7 +570,6 @@ void cViewer::FUN_007c4a60(unsigned short* p)
     FUN_007c4940();
 }
 
-
 // @ 0x007c4ad0
 void cViewer::FUN_007c4ad0(float a, float b)
 {
@@ -342,7 +578,6 @@ void cViewer::FUN_007c4ad0(float a, float b)
     c->f58 = b;
     FUN_007c4940();
 }
-
 
 // @ 0x007c4b00
 void cViewer::FUN_007c4b00(float a, float b)
@@ -354,7 +589,6 @@ void cViewer::FUN_007c4b00(float a, float b)
     c->f68 = 1.0f / b;
     FUN_007c4940();
 }
-
 
 // @ 0x007c4b50
 void cViewer::FUN_007c4b50(float a)
@@ -371,11 +605,9 @@ void cViewer::FUN_007c4b50(float a)
     FUN_007c4940();
 }
 
-
 // @ 0x007c4ba0
 void cViewer::FUN_007c4ba0(float a)
 { Camera* c = mCamera; c->f70 = a; FUN_007c4940(); }
-
 
 // @ 0x007c4bc0
 void cViewer::FUN_007c4bc0(float a)

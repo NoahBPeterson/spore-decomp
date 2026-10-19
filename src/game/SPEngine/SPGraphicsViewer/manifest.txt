@@ -1,4 +1,5 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsViewer.cpp  ?Init@cSPEditorPhysicsWorld_s004b_8af0@SP@@QAEXXZ  004b8c10  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsViewer.cpp  ?GetCameraLocationInfo@cViewer@SP@@QBEXPAUcSPVector3@@000@Z  007c3d30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsViewer.cpp  ?FUN_007c4000@cViewer@@QAEXXZ  007c4000  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsViewer.cpp  ?FUN_007c4050@cViewer@@QAEMXZ  007c4050  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
