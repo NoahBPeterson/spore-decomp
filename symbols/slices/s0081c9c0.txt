@@ -1,5 +1,6 @@
-0081cd50 cSPUIPopupMenuScrollButton::ScrollButtonSelected  # PDB name
-0081ce60 cSPUIPopupMenuScrollButton::OnButtonClicked  # PDB candidate
+0081cce0 ?Reset@MB@@QAEXXZ  # MB::Reset migrated from s0081c9c0 (verbatim, slice spelling)
+0081cd50 ?ScrollButtonSelected@SB@@QAEXH@Z  # SB::ScrollButtonSelected migrated from s0081c9c0 (verbatim, slice spelling)
+0081ce60 ?OnButtonClicked2@ScrollBtn2@@QAEXH@Z  # ScrollBtn2::OnButtonClicked2 migrated from s0081c9c0 (verbatim, slice spelling)
 0081d020 UTFWin::cSPUIProgressBarGradientWin::cSPUIProgressBarGradientWin  # PDB name
 0081d510 UTFWin::cSPUIProgressBarWin::cSPUIProgressBarWin  # PDB name
 0081d7a0 ?Reset@Variant@@QAEPAU1@H@Z  # Variant::Reset migrated from s0081c9c0 (verbatim, slice spelling)

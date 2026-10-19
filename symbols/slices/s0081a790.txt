@@ -1,16 +1,17 @@
 0081a790 ?get_unused_item@cSPUIPieMenu_s0081_a790@@QAEPAUcSPUIPieMenuItem_s0081_a790@@XZ  # cSPUIPieMenu_s0081_a790::get_unused_item migrated from s0081a790 (verbatim, slice spelling)
 0081a940 ?AddItem@cSPUIPieMenu_s0081_a790@@QAEHHHHH@Z  # cSPUIPieMenu_s0081_a790::AddItem migrated from s0081a790 (verbatim, slice spelling)
-0081aa80 cSPUIPopupMenuScrollButton::OnFocusLost  # PDB name; vcall+0xc/OnChar tail call
-0081aad0 cSPUIPopupMenuWin::Reset  # clears 4 flags at +0x8c0..+0x8c3, centered := selected
-0081ad50 cSPUIPopupMenuItemWin::OnAttach  # PDB name
-0081ae40 cSPUIPopupMenuItemWin::SomeFunc  # vcall+0x7c(1,0) then OnAttach
-0081ae90 cSPUIPopupMenuScrollButton::cSPUIPopupMenuScrollButton  # PDB name
-0081af30 cSPUIPopupMenuScrollButton::OnMouseWheel  # PDB name
-0081afb0 cSPUIPopupMenuScrollButton::OnFocusAcquired  # PDB name
-0081b000 cSPUIPopupMenuWin::cSPUIPopupMenuWin  # PDB name
-0081b100 PopupWinDtor::Dtor  # our class stub name for cSPUIPopupMenuWin::~cSPUIPopupMenuWin
-0081b510 cSPUIPopupMenuWin::OnDetach  # PDB name
-0081b650 cSPUIPopupMenuWin::AddMenuItem  # PDB name
-0081b750 cSPUIPopupMenuWin::FindChild  # iterator + query 0x4c058cf
-0081b7d0 cSPUIPopupMenuWin::RemoveChild  # iterator + reindex child ids
-0081b8b0 cSPUIPopupMenuWin::HideMenuItems  # recursive, query 0x4c058d5
+0081aa80 ?OnFocusLost@cSPUIPopupMenuScrollButton@@QAEXHH@Z  # cSPUIPopupMenuScrollButton::OnFocusLost migrated from s0081a790 (verbatim, slice spelling)
+0081aad0 ?Reset@cSPUIPopupMenuWin@@QAEXXZ  # cSPUIPopupMenuWin::Reset migrated from s0081a790 (verbatim, slice spelling)
+0081ad50 ?OnAttach@cSPUIPopupMenuItemWin@@QAEXXZ  # cSPUIPopupMenuItemWin::OnAttach migrated from s0081a790 (verbatim, slice spelling)
+0081ae40 ?SomeFunc@cSPUIPopupMenuItemWin@@QAEXXZ  # cSPUIPopupMenuItemWin::SomeFunc migrated from s0081a790 (verbatim, slice spelling)
+0081ae90 ?Ctor@ScrollBtnCtor@@QAEXXZ  # ScrollBtnCtor::Ctor migrated from s0081a790 (verbatim, slice spelling)
+0081af30 ?OnMouseWheel@cSPUIPopupMenuScrollButton@@QAEXMMHH@Z  # cSPUIPopupMenuScrollButton::OnMouseWheel migrated from s0081a790 (verbatim, slice spelling)
+0081afb0 ?OnFocusAcquired@cSPUIPopupMenuScrollButton@@QAEXHH@Z  # cSPUIPopupMenuScrollButton::OnFocusAcquired migrated from s0081a790 (verbatim, slice spelling)
+0081b000 ?Ctor@PopupWinCtor@@QAEXXZ  # PopupWinCtor::Ctor migrated from s0081a790 (verbatim, slice spelling)
+0081b100 ?ReleaseRef@@YAXPAX@Z  # ReleaseRef migrated from s0081a790 (verbatim, slice spelling)
+0081b510 ?OnDetach@PopupWinDetach@@QAEXXZ  # PopupWinDetach::OnDetach migrated from s0081a790 (verbatim, slice spelling)
+0081b650 ?AddMenuItem2@cSPUIPopupMenuWin@@QAEXPAUcSPUIPopupMenuItemWin@@_N@Z  # cSPUIPopupMenuWin::AddMenuItem2 migrated from s0081a790 (verbatim, slice spelling)
+0081b6a0 ?AddMenuItem3@cSPUIPopupMenuWin2@@QAEPAXHHH_N@Z  # cSPUIPopupMenuWin2::AddMenuItem3 migrated from s0081a790 (verbatim, slice spelling)
+0081b750 ?FindChild@cSPUIPopupMenuWin@@QAEPAXH@Z  # cSPUIPopupMenuWin::FindChild migrated from s0081a790 (verbatim, slice spelling)
+0081b7d0 ?RemoveChild@cSPUIPopupMenuWin@@QAEXH@Z  # cSPUIPopupMenuWin::RemoveChild migrated from s0081a790 (verbatim, slice spelling)
+0081b8b0 ?HideMenuItems@cSPUIPopupMenuWin@@QAEX_N0@Z  # cSPUIPopupMenuWin::HideMenuItems migrated from s0081a790 (verbatim, slice spelling)
