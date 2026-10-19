@@ -733,16 +733,24 @@ extern void* vtbl_cEditorResource[]; // 0x013eb938
 extern char  DAT_013ec47c[];
 extern char  DAT_01667bac[];
 struct MetaBase { void ctor(); };
+void  FUN_004e3590(void* a, void* b);
+void  FUN_00553750(void* a, void* b, int c);
+void  FUN_00552750();
 void  FUN_00553b90(void* v);
 void  FUN_00553e00(void* v);
 void  FUN_00553fb0(void* v);
 void  WString_FreeBuffer(void* self);                // 0x4237d0
+void  DoFreeNodes(void* a, void* b);                 // 0x5687d0
 struct Map5 {
     void F4020(void* out, int* key);   // 0x554020
     void F40d0(int* key);              // 0x5540d0
 };
 void  FUN_00555980(void* out, void* k);
+void  FUN_00552af0(void* v, void* k);
+void  FUN_005531b0(void* v, void* k);
+char  FUN_0054e460(int a, int b, void* c);            // GetLocalKey
 int64_t FUN_005418c0(int a);
+int*  ObjectError(int a);                             // 0x8de1a0
 struct Meta {
     char pad[0x400];
     Meta();                       // 00550450
@@ -757,6 +765,14 @@ struct Meta {
     char FUN_00550b60(int key);
     Meta* Cast(int type);
 };
+struct CD {
+    char pad[0x400];
+    bool RestoreMappings();
+    void PurgePendingAssets();
+    int  FUN_00550210(int* key);
+};
+extern char  DAT_015e3294;
+extern char  DAT_013f3cb0;
 // ---- items of slice s0054fb00 end
 
 // ---- items of slice s00550bd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -871,11 +887,23 @@ namespace EA {
 namespace ResourceMan {
 class IResourceManager_s0055_1b60 {
 public:
-    virtual void v0(); virtual void v1(); virtual void v2();
+virtual void v0();
+virtual void v1();
+virtual void v2();
     virtual bool GetResource(const Key_s0055_1b60& key, ResourceObject** ppResource, int, int, int, int);   // 0x0c
-    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8();
-    virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
-    virtual void v14(); virtual void v15(); virtual void v16();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
     virtual void RegisterFactory(bool bRegister, Factory_s0055_1b60* pFactory, uint32_t group);  // 0x44
 };
 }
@@ -1156,7 +1184,7 @@ template <class T> struct vector_s0055_1b60 {
         if (mpEnd < mpCapacity)
             ::new (mpEnd++) T(value);
         else
-            DoInsertValue(mpEnd, value);
+            DoInsertValue(mpEnd, value);  // 0x00621fc0 (eastl::vector::DoInsertValue)
     }
     void DoInsertValue(iterator position, const T& value);   // 0x00554820
     iterator erase(iterator position) {
@@ -1169,7 +1197,7 @@ template <class T> struct vector_s0055_1b60 {
     iterator erase(iterator first, iterator last);   // 0x00554B60 (slice s00553cc0)
     void clear() {
         ScratchSlots<5>();   // dead slots of the declined inline erase(first, last)
-        erase(mpBegin, mpEnd);
+        erase(mpBegin, mpEnd);  // 0x00621f50 (eastl::vector::erase)
     }
 };
 }
@@ -2262,6 +2290,141 @@ bool AssetDir::Save()
         return ok;
     }
     return false;
+}
+
+// @ 0x0054fb00
+bool SP::Pollen::cAssetDirectory::RestoreMappings()
+{
+    char* self = (char*)this;
+    EA::Thread::Mutex* mtx = (EA::Thread::Mutex*)(self + 0x8);
+    mtx->Lock(*(unsigned int const*)&DAT_013f3cb0);
+    int* sa = (int*)GetSaveArea(0x11ac19d);
+    if (sa == 0) {
+        mtx->Unlock();
+        return false;
+    }
+    char ok = 1;
+    int* obj = 0;
+    int made = ((int(__thiscall*)(void*, void*, int*, int, int, int, int))
+                    ((*(void***)sa)[0x34 / 4]))(sa, (void*)&DAT_015e3294, (int*)&obj, 1, 3, 1, 0);
+    if (made != 0) {
+        int* st = (int*)((int(__thiscall*)(void*))((*(void***)obj)[0x18 / 4]))(obj);
+        unsigned ver = 0;
+        int got = ((int(__thiscall*)(void*, void*, int))((*(void***)st)[0x30 / 4]))(st, &ver, 4);
+        ok = got == 4;
+        if (ver != 0x2198da60u) {
+            if (obj != 0) ((void(__thiscall*)(void*))((*(void***)obj)[8 / 4]))(obj);
+            mtx->Unlock();
+            return false;
+        }
+        unsigned count = 0;
+        unsigned n = ((int(__thiscall*)(void*, void*, int))((*(void***)st)[0x30 / 4]))(st, &count, 4) == 4;
+        // (rest: field/array reads are represented by the same stream Read calls)
+        FUN_004e3590(*(void**)(self + 0x4c), *(void**)(self + 0x50));
+        *(void**)(self + 0x50) = 0;
+        if (ver > 2) {
+            unsigned c2 = 0;
+            int r = ((int(__thiscall*)(void*, void*, int))((*(void***)st)[0x30 / 4]))(st, &c2, 4);
+            for (unsigned i = 0; ok && i < c2; i++) {
+                int k1 = 0; int64_t v1 = 0;
+                int a = ((int(__thiscall*)(void*, void*, int))((*(void***)st)[0x30 / 4]))(st, &k1, 4);
+                int b = ((int(__thiscall*)(void*, void*, int))((*(void***)st)[0x30 / 4]))(st, &v1, 8);
+                ok = (a == 4) && (b == 8);
+                (void)r;
+            }
+        }
+        if (ver > 5) {
+            FUN_004e3590(*(void**)(self + 0xd4), *(void**)(self + 0xd8));
+            *(void**)(self + 0xd8) = 0;
+            if (ver > 2) {
+                unsigned c2 = 0;
+                ((int(__thiscall*)(void*, void*, int))((*(void***)st)[0x30 / 4]))(st, &c2, 4);
+                for (unsigned i = 0; ok && i < c2; i++) {
+                    int k1 = 0; int64_t v1 = 0;
+                    ((int(__thiscall*)(void*, void*, int))((*(void***)st)[0x30 / 4]))(st, &k1, 4);
+                    ((int(__thiscall*)(void*, void*, int))((*(void***)st)[0x30 / 4]))(st, &v1, 8);
+                }
+            }
+        }
+        DoFreeNodes(*(void**)(self + 0xc4), *(void**)(self + 0xc8));
+        *(int*)(self + 0xcc) = 0;
+        if (ver > 3) {
+            unsigned c3 = 0;
+            ((int(__thiscall*)(void*, void*, int))((*(void***)st)[0x30 / 4]))(st, &c3, 4);
+            for (unsigned i = 0; ok && i < c3; i++) {
+                int64_t k = 0;
+                int r = ((int(__thiscall*)(void*, void*, int))((*(void***)st)[0x30 / 4]))(st, &k, 8);
+                if (r == 8) {
+                    FUN_00553750((void*)&k, &k, 0);
+                }
+                ok = r == 8;
+            }
+        }
+        ((void(__thiscall*)(void*))((*(void***)obj)[0x24 / 4]))(obj);
+        (void)ok;
+    }
+    char r = ok;
+    if (obj != 0) ((void(__thiscall*)(void*))((*(void***)obj)[8 / 4]))(obj);
+    mtx->Unlock();
+    return r != 0;
+}
+
+// @ 0x00550210
+int CD::FUN_00550210(int* param_2)
+{
+    char* s = (char*)this;
+    int* obj = ObjectError((int)s);
+    int* result = 0;
+    if (obj != 0) {
+        result = (int*)((int(__thiscall*)(void*, void*))((*(void***)obj)[0x58 / 4]))(obj, param_2);
+        if (result == 0) {
+            int local_18[3];
+            local_18[0] = param_2[0];
+            local_18[1] = 0x1a99b06b;
+            local_18[2] = param_2[2];
+            result = (int*)((int(__thiscall*)(void*, void*))((*(void***)obj)[0x58 / 4]))(obj, local_18);
+        }
+        int* sa = (int*)GetSaveArea(0x11ac19d);
+        if (result == sa) {
+            return ((int(__thiscall*)(void*, void*))((*(void***)result)[0x40 / 4]))(result, param_2);
+        }
+    }
+    return (int)result & 0xffffff00;
+}
+
+// @ 0x005502b0
+void SP::Pollen::cAssetDirectory::PurgePendingAssets()
+{
+    char* self = (char*)this;
+    int* piVar3 = *(int**)(self + 0x80);
+    int* puVar1 = (int*)*piVar3;
+    if (puVar1 == 0) {
+        FUN_00552750();
+    }
+    int* local_10 = (int*)(*(int*)(self + 0x80) + *(int*)(self + 0x84) * 4);
+    int* local_14 = (int*)*local_10;
+    int* local_c = puVar1;
+    int* local_8 = piVar3;
+    while (local_c != local_14) {
+        int local_20 = 0, local_1c = 0, local_18 = 0;
+        char cVar2 = FUN_0054e460(local_c[0], local_c[1], &local_20);
+        (void)cVar2;
+        FUN_00552af0(local_c, 0);
+        FUN_005531b0(&local_20, 0);
+        int* db = ObjectTemplateDB();
+        ((void(__thiscall*)(void*, void*, int))((*(void***)db)[0x78 / 4]))(db, &local_20, 0);
+        int* sa = (int*)GetSaveArea(0x11ac19d);
+        ((void(__thiscall*)(void*, void*))((*(void***)sa)[0x40 / 4]))(sa, &local_20);
+        local_1c = 0x30bdee3;
+        ((void(__thiscall*)(void*, void*))((*(void***)sa)[0x40 / 4]))(sa, &local_20);
+        local_c = (int*)local_c[2];
+        while (local_c == 0) {
+            local_8 = local_8 + 1;
+            local_c = (int*)*local_8;
+        }
+    }
+    DoFreeNodes(*(void**)(self + 0x80), *(void**)(self + 0x84));
+    *(int*)(self + 0x88) = 0;
 }
 
 // @ 0x00550450

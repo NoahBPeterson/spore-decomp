@@ -1,6 +1,6 @@
-0054fb00  SP::Pollen::cAssetDirectory::RestoreMappings  # pdb anchor
-00550210  SP::Pollen::cAssetDirectory (map find + GetSaveArea(vt[0x40]))  # dc
-005502b0  SP::Pollen::cAssetDirectory::PurgePendingAssets  # pdb candidate (caller-scored)
+0054fb00 ?RestoreMappings@cAssetDirectory@Pollen@SP@@QAE_NXZ  # SP::Pollen::cAssetDirectory::RestoreMappings migrated from s0054fb00
+00550210 ?FUN_00550210@CD@@QAEHPAH@Z  # CD::FUN_00550210 migrated from s0054fb00 (verbatim, slice spelling)
+005502b0 ?PurgePendingAssets@cAssetDirectory@Pollen@SP@@QAEXXZ  # SP::Pollen::cAssetDirectory::PurgePendingAssets migrated from s0054fb00
 00550450 ??0Meta@@QAE@XZ  # Meta::Meta migrated from s0054fb00 (verbatim, slice spelling)
 005506c0 ?FUN_005506c0@Meta@@QAEXXZ  # Meta::FUN_005506c0 migrated from s0054fb00 (verbatim, slice spelling)
 00550740 ?AsInterface@cAssetMetadata@Pollen@SP@@UAEPAXW4InterfaceId@COM@EA@@@Z  # SP::Pollen::cAssetMetadata::AsInterface migrated from s0054fb00
