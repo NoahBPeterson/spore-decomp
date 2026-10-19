@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPPaletteItemUIPlannerEdit.cpp  ?Cast@cSPPaletteItemUIPlannerEdit@SP@@UBEPAXI@Z  005ef1b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIPlannerEdit.cpp  ?Shutdown@cSPPaletteItemUIPlannerEdit@SP@@UAEXXZ  005ef1f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIPlannerEdit.cpp  ?SetLocked@cSPPaletteItemUIPlannerEdit@SP@@QAEX_N@Z  005ef250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIPlannerEdit.cpp  ?OnRollover@cSPPaletteItemUIPlannerEdit@SP@@UAEXXZ  005ef2d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIPlannerEdit.cpp  ?OffRollover@cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@UAEXXZ  005ef440  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIPlannerEdit.cpp  ?SetLocked@cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@QAEX_N@Z  005ef470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIPlannerEdit.cpp  ?HandleMessage@cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@UAE_NIPAX@Z  005ef590  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIPlannerEdit.cpp  ??0cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@QAE@XZ  005ef6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIPlannerEdit.cpp  ??1cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@UAE@XZ  005ef760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemUIPlannerEdit.cpp  ?DoMessage@cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@UAE_NPAVIWindow_s005e_f440@UTFWin@EA@@ABUMessage_s005e_f440@45@@Z  005efcb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

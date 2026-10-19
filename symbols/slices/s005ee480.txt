@@ -21,7 +21,9 @@
 005ef0b0 ?OnRollover@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  # cSPPaletteItemUIOneClickPaint_s005e_e480::OnRollover migrated from s005ee480 (verbatim, slice spelling)
 005ef0f0 ?OffRollover@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  # cSPPaletteItemUIOneClickPaint_s005e_e480::OffRollover migrated from s005ee480 (verbatim, slice spelling)
 005ef130 ?SendPaintMessage@cSPPaletteItemUIOneClickPaint_s005e_e480@SP@@UAEXXZ  # cSPPaletteItemUIOneClickPaint_s005e_e480::SendPaintMessage migrated from s005ee480 (verbatim, slice spelling)
-005ef1b0 SP::cSPPaletteItemUIPlannerEdit::Cast  # type id 0xb4e4f69b, byte-exact
-005ef2d0 SP::cSPPaletteItemUIPlannerEdit::OnRollover  # mirrors cSPPaletteItemRollover::OnRollover, byte-exact
+005ef1b0 ?Cast@cSPPaletteItemUIPlannerEdit@SP@@UBEPAXI@Z  # cSPPaletteItemUIPlannerEdit::Cast migrated from s005ee480 (verbatim, slice spelling)
+005ef1f0 ?Shutdown@cSPPaletteItemUIPlannerEdit@SP@@UAEXXZ  # cSPPaletteItemUIPlannerEdit::Shutdown migrated from s005ee480 (verbatim, slice spelling)
+005ef250 ?SetLocked@cSPPaletteItemUIPlannerEdit@SP@@QAEX_N@Z  # cSPPaletteItemUIPlannerEdit::SetLocked migrated from s005ee480 (verbatim, slice spelling)
+005ef2d0 ?OnRollover@cSPPaletteItemUIPlannerEdit@SP@@UAEXXZ  # cSPPaletteItemUIPlannerEdit::OnRollover migrated from s005ee480 (verbatim, slice spelling)
 005f4f80 ?Init@cSPSwatch@SP@@QAEXABVKey@ResourceMan@EA@@PAVIWindow@UTFWin@5@_N2W4eLODType@cAnimatingCreature@2@2@Z  # SP::cSPSwatch::Init (callee of s005ee480, named from the dev publics; slice address comment)
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005ee480, named from the dev publics; slice address comment)

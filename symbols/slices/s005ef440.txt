@@ -1,7 +1,13 @@
-005ef440 SP::cSPPaletteItemUIPlannerEdit::OffRollover  # tail-calls cSPPaletteItemUI::OffRollover, vtable slot
-005ef470 SP::cSPPaletteItemUIPlannerEdit::SetLocked  # writes mLocked (+0x68), toggles mWinLockedIcon/mWinIcon/mWinSwatch/mWinEditButton
-005ef590 SP::cSPPaletteItemUIPlannerEdit::HandleMessage  # IHandlerRC thunk at +0x20, message 0x53850baf
-005efcb0 SP::cSPPaletteItemUIPlannerEdit::DoMessage  # IWinProc override, calls cSPPaletteItemUI::DoMessage
+00596e10 ?Lock@cCollectableItems@SP@@QAE_N_K@Z  # SP::cCollectableItems::Lock (callee of s005ef440, named from the dev publics; slice address comment)
+005c6ca0 ?Init@cSPPaletteItemUI@SP@@UAEXPAVcSPPaletteItem@2@PAVIWindow@UTFWin@EA@@1PAUcSPPaletteInfo@2@@Z  # SP::cSPPaletteItemUI::Init (callee of s005ef440, named from the dev publics; slice address comment)
+005ed6c0 ?Hide@cSPPaletteItemRollover@SP@@QAEXXZ  # SP::cSPPaletteItemRollover::Hide (callee of s005ef440, named from the dev publics; slice address comment)
+005ef440 ?OffRollover@cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@UAEXXZ  # cSPPaletteItemUIPlannerEdit_s005e_f440::OffRollover migrated from s005ef440 (verbatim, slice spelling)
+005ef470 ?SetLocked@cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@QAEX_N@Z  # cSPPaletteItemUIPlannerEdit_s005e_f440::SetLocked migrated from s005ef440 (verbatim, slice spelling)
+005ef590 ?HandleMessage@cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@UAE_NIPAX@Z  # cSPPaletteItemUIPlannerEdit_s005e_f440::HandleMessage migrated from s005ef440 (verbatim, slice spelling)
+005ef6b0 ??0cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@QAE@XZ  # cSPPaletteItemUIPlannerEdit_s005e_f440::cSPPaletteItemUIPlannerEdit migrated from s005ef440 (verbatim, slice spelling)
+005ef760 ??1cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@UAE@XZ  # cSPPaletteItemUIPlannerEdit_s005e_f440::~cSPPaletteItemUIPlannerEdit migrated from s005ef440 (verbatim, slice spelling)
+005ef850 ?Init@cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@UAEXPAVcSPPaletteItem_s005e_f440@2@PAVIWindow_s005e_f440@UTFWin@EA@@HPAUcSPPaletteInfo_s005e_f440@2@@Z  # cSPPaletteItemUIPlannerEdit_s005e_f440::Init migrated from s005ef440 (verbatim, slice spelling)
+005efcb0 ?DoMessage@cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@UAE_NPAVIWindow_s005e_f440@UTFWin@EA@@ABUMessage_s005e_f440@45@@Z  # cSPPaletteItemUIPlannerEdit_s005e_f440::DoMessage migrated from s005ef440 (verbatim, slice spelling)
 005efd40 hkCollisionFilter::~hkCollisionFilter  # interface vtable restores, hkBaseObject vptr
 005efd80 SP::SPSpineCollisionFilter::isCollisionEnabled  # (infoA, infoB) layer table at +0x1c, hkpGroupFilter layout
 005efe30 SP::SPSpineCollisionFilter::isCollisionEnabled  # hkpShapeCollectionFilter override (this-0xc)
@@ -11,3 +17,5 @@
 005effe0 SP::SPSpineCollisionFilter::SPSpineCollisionFilter  # table filled with -1, m_nextFreeSystemGroup=0
 005f00f0 hkCollisionFilter::`scalar deleting destructor'  # hkMemory deallocateChunk(p, m_memSizeAndFlags, 0x24)
 005f0390 eastl::rbtree<unsigned_int,pair<unsigned_int_const,AutoRefCount<SP::cSPSwatch>>>::DoInsertValueImpl  # mIDToSwatchMap node insert
+005f4f80 ?Init@cSPSwatch@SP@@QAEXABVKey@ResourceMan@EA@@PAVIWindow@UTFWin@5@_N2W4eLODType@cAnimatingCreature@2@2@Z  # SP::cSPSwatch::Init (callee of s005ef440, named from the dev publics; slice address comment)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005ef440, named from the dev publics; slice address comment)
