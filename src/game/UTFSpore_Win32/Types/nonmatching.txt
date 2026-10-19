@@ -3,4 +3,5 @@
 0095f0f0 61 CM::BuildMat33: complete; aligned frame and movss copy order differ
 0095f1c0 230 CM::TransformPoint4: complete; reciprocal branch and SSE schedule differ
 0095f320 270 BuildRotation: complete; sin/cos x87 interleave with SSE differs
+0095f490  268  rw::math::fpu::Inverse (Inv3) complete; scheduling hoists SSE loads (uses xmm3-7, original xmm0-2) and folds the %3 into imul where the original keeps idiv [equiv: FAIL xmm3 clobber only]
 0095f5c0 178 CM::SetRotationAtLeast2: complete; frame/register schedule differs

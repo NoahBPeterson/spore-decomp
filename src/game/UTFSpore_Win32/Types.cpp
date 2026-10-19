@@ -9,7 +9,7 @@ extern "C" __declspec(dllimport) double __cdecl sin(double);
 extern "C" __declspec(dllimport) double __cdecl cos(double);
 extern "C" char __cdecl MatInvertFull(void*, void*);                    // 0x0095E0B0
 extern "C" void __cdecl FUN_0045EAC0(void* out, const void* a, const void* b); // 0x0045EAC0
-extern "C" void __cdecl Inv3(float* out, float* in, float* det);        // 0x0095F490
+extern "C" double __cdecl Det33(const float* m);                          // 0x0095E040
 extern "C" long _InterlockedExchangeAdd(volatile long*, long);
 #pragma intrinsic(_InterlockedExchangeAdd)
 
@@ -18,20 +18,26 @@ extern "C" __declspec(dllimport) double __cdecl sin(double);
 extern "C" __declspec(dllimport) double __cdecl cos(double);
 extern "C" char __cdecl MatInvertFull(void*, void*);                    // 0x0095E0B0
 extern "C" void __cdecl FUN_0045EAC0(void* out, const void* a, const void* b); // 0x0045EAC0
-extern "C" void __cdecl Inv3(float* out, float* in, float* det);        // 0x0095F490
+struct CM;
+struct CMV { void BuildMat33V(const float* src); };  // 0x0095F0F0 (callee result unused by Inv3)
+extern "C" double __cdecl Det33(const float* m);                          // 0x0095E040
+extern "C" CM* __cdecl Inv3(CM* out, const float* in, float* det);       // 0x0095F490
 struct CM {
     float m[16];
 
     void  TransformPoint3(float* out, const float* v);
     void  TransformPoint3B(float* out, const float* v);
     float* TransformPoint4(float* out, const float* v);
-    void* BuildMat33(const float* src);
+    __declspec(noinline) void* BuildMat33(const float* src);
     void  SetRotationAtLeast2(float* axis, float angle);
     void  Invert();
     void  Multiply(const float* o);
     CM*   SetAxes(float* a, float* b, float* c);
 };
 // ---- items of slice s0095eeb0 end
+
+// unnamed retail callees and globals that name local stubs (address in the comment)
+extern "C" CM* __cdecl Inv3(CM* out, const float* in, float* det);       // 0x0095F490
 
 // @ 0x0095f090
 CM* CM::SetAxes(float* a, float* b, float* c)
@@ -97,6 +103,31 @@ void BuildRotation(float* out, float* axis, float angle)
     out[15] = 1.0f;
 }
 
+// @ 0x0095f490
+extern "C" CM* __cdecl Inv3(CM* out, const float* in, float* det)
+{
+    double d = *det = (float)Det33(in);
+    if (d == 0.0)
+        return out;
+    float inv = 1.0f / *det;
+    __declspec(align(16)) float tmp[12];
+    float* p = tmp;
+    volatile int i = 2;
+    volatile int n = 3;
+    do {
+        int a = (i - 1) % 3;
+        int b = i % 3;
+        p[0] = (in[a * 4 + 1] * in[b * 4 + 2] - in[a * 4 + 2] * in[b * 4 + 1]) * inv;
+        p[4] = (in[a * 4 + 2] * in[b * 4] - in[b * 4 + 2] * in[a * 4]) * inv;
+        p[8] = (in[b * 4 + 1] * in[a * 4] - in[a * 4 + 1] * in[b * 4]) * inv;
+        i++;
+        n--;
+        p++;
+    } while (n != 0);
+    ((CMV*)out)->BuildMat33V(tmp);
+    return out;
+}
+
 // @ 0x0095f5c0
 void CM::SetRotationAtLeast2(float* axis, float angle)
 {
@@ -132,7 +163,7 @@ void CM::Invert()
         ((CM*)axes)->SetAxes(m + 8, m + 4, m);
         float inv[12];
         float det;
-        Inv3(inv, axes, &det);
+        Inv3((CM*)inv, axes, &det);
         for (int i = 0; i < 12; i++)
             m[i] = inv[i];
         m[3] = 0.0f; m[7] = 0.0f; m[11] = 0.0f;

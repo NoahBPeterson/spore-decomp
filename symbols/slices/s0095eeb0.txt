@@ -8,7 +8,7 @@
 0095f5c0 ?SetRotationAtLeast2@CM@@QAEXPAMM@Z  # CM::SetRotationAtLeast2 migrated from s0095eeb0 (verbatim, slice spelling)
 0095f620 ?Invert@CM@@QAEXXZ  # CM::Invert migrated from s0095eeb0 (verbatim, slice spelling)
 0095f860 rw::math::fpu::Matrix43::Multiply  # dc: 17-dword concat
-0095f8c0 EA::UTFWin::ModulateARGB32  # pdb callee-scored
+0095f8c0 ?ModulateARGB32@UTFWin@EA@@YAIII@Z  # EA::UTFWin::ModulateARGB32 migrated from s0095eeb0
 0095f960 ?AsInterface@Window@UTFWin@EA@@UAEPAXW4InterfaceId@COM@3@@Z  # EA::UTFWin::Window::AsInterface migrated from s0095eeb0
 0095f9a0 ?Release@Window@@QAEHXZ  # Window::Release migrated from s0095eeb0 (verbatim, slice spelling)
 0095f9d0 ?GetAt34@Window@@QAEHXZ  # Window::GetAt34 migrated from s0095eeb0 (verbatim, slice spelling)
