@@ -41,6 +41,10 @@
 0049a0c0 349 block-direction picker (GetDir of owner+0x28, -1 sentinel test, normalized -dir or dir-delta): complete; /Od frame has extra reserved slots and by-value temps ordered differently; difftest PASS
 0049cb90 509 complete; /Od frame/slot layout and tracker call shapes differ
 0049ce40 243 complete; /Od frame 0x100 vs 0xa8, temp/slot layout differs
+0049de30 1934 complete (block-offset rescale + limb refix); only /Od frame holes (0x240 vs 0x280) differ ; equiv WEAK (339 valid, 30% coverage; operator*(Vec3,cSPMatrix3) mapped to 0x41daf0 by mangled name in symbols/slices/s0049de30.txt). Recheck FAIL was a symbol-misresolution artifact: the prototype block carried trailing `// @ 0x<va>` markers so find_symbol skipped the declaration and picked FUN_49ec40; dropped the `@` on those prototypes.
+0049e6a0 43 complete (SetBlockScale); /Od frame 0x54 vs 0x70, temp slot order
+0049e880 308 complete (basis re-orthonormalize); /Od frame 0x11c vs 0x174 and length^2 add order (z,y,x loads); equiv WEAK (397 valid, 92.4% coverage) after dropping the prototype `// @` markers (recheck FAIL was symbol misresolution, same as 0049de30)
+0049ec40 18 complete; /Od frame 0x68 vs 0x4c, extra temp slots
 0049fbd0 485 COMPLETE RepinBlockToTorso; /Od frame slot layout and by-value arg temps differ; difftest PASS (mapped ctor annotations; touched vector now uses the AutoRefCount vector dtor 0x453eb0 that releases elements)
 0049fee0 247 COMPLETE limb-structure FixAllJoints loop; /Od slot order differs; difftest WEAK (38.6% coverage; LimbVec/LimbStructure annotations fixed)
 004a0020 456 COMPLETE GetAllLimbs; /Od slot order (vector locals, inline operator[] temps) differs; difftest WEAK (44.3% coverage; LimbVec annotations fixed)

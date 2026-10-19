@@ -1,1 +1,5 @@
 0041daf0  ??D@YA?AUcSPVector3@@ABUVec3@@ABUcSPMatrix3@@@Z  # cSPVector3 operator*(const Vec3&, const cSPMatrix3&) as declared in s0049de30.cpp
+0049de30 ?FUN_49de30@@YAXPAUcSPEditorBlock_s0049_de30@@MMPAUBlockVector_s0049_de30@@_N@Z  # FUN_49de30 migrated from s0049de30 (verbatim, slice spelling)
+0049e6a0 ?SetBlockScale@@YAXPAUcSPEditorBlock_s0049_de30@@M_N1@Z  # SetBlockScale migrated from s0049de30 (verbatim, slice spelling)
+0049e880 ?FUN_49e880@@YA?AUcSPMatrix3_s0049_de30@@PAUcSPEditorBlock_s0049_de30@@U1@@Z  # FUN_49e880 migrated from s0049de30 (verbatim, slice spelling)
+0049ec40 ?FUN_49ec40@@YAXPAUcSPEditorBlock_s0049_de30@@PAMIPAUcSPMatrix3_s0049_de30@@_N@Z  # FUN_49ec40 migrated from s0049de30 (verbatim, slice spelling)

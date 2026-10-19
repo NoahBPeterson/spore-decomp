@@ -1,4 +1,4 @@
-// src/game/SPBake/SPEditorManipulationUtilities.cpp -- migrated from slice(s) s004a6690, s004a5970, s004a3760, s004a29a0, s004a0b70, s0049efc0, s0049ecf0, s0049cfd0, s0049c210, s0048ef30, s0048e590, s0048dcd0, s0048d010, s004a9920, s004a3dc0, s004a1a70, s0049fbd0, s0049a2a0, s006414e0, s004a89e0, s004a7c30, s004a6f10, s0049b340, s00499410, s00498470, s004974e0, s00496d30, s00496300, s004956b0, s004942b0, s00493640, s004928d0, s00491900, s00490a70, s0048fde0, s00481f00, s00453250, s00435d40 by tools/migrate/rewrite.py
+// src/game/SPBake/SPEditorManipulationUtilities.cpp -- migrated from slice(s) s0049de30, s004a6690, s004a5970, s004a3760, s004a29a0, s004a0b70, s0049efc0, s0049ecf0, s0049cfd0, s0049c210, s0048ef30, s0048e590, s0048dcd0, s0048d010, s004a9920, s004a3dc0, s004a1a70, s0049fbd0, s0049a2a0, s006414e0, s004a89e0, s004a7c30, s004a6f10, s0049b340, s00499410, s00498470, s004974e0, s00496d30, s00496300, s004956b0, s004942b0, s00493640, s004928d0, s00491900, s00490a70, s0048fde0, s00481f00, s00453250, s00435d40 by tools/migrate/rewrite.py
 // Object file: SPBake/SPEditorManipulationUtilities.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -80,7 +80,6 @@ inline bool IsNaNF(float f)
     return (*(uint32_t*)&f & 0x7fffffff) > 0x7f800000u;
 }
 // ---- items of slice s00481f00 end
-
 
 // ---- items of slice s00490a70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 template<int N> inline void ScratchSlots() { uint32_t s[N]; }
@@ -279,7 +278,6 @@ struct cSPEditorBlock2 {
 void Snap_004928d0(cSPEditorBlock2* blk, Vec3W pos, Matrix3_s0049_28d0 rot, Vec3W* outPos, Matrix3_s0049_28d0* outRot, int idx);
 // ---- items of slice s004928d0 end
 
-
 // ---- items of slice s00493640 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Matrix3_s0049_3640 {
     float m[9];
@@ -315,8 +313,6 @@ extern V3 kVecB;                                   // 0x015d63f4
 void FUN_00493ce0(void* a, void* b, Matrix3_s0049_3640 m);
 int ClassifyAgainstSymmetryPlane(V3* p, float width, float zmin, float zmax, Basis* out);
 // ---- items of slice s00493640 end
-
-
 
 // ---- items of slice s004942b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" double __cdecl fabs(double);
@@ -702,7 +698,6 @@ __forceinline hkVector4_s0049_56b0 ToHkVector4(const cSPVector3_s0049_56b0& v)
 }
 // ---- items of slice s004956b0 end
 
-
 // ---- items of slice s00496300 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Vector3_s0049_6300 {
     float x, y, z;
@@ -732,7 +727,6 @@ struct HolderA {
     void* Get();                          // 0x0047e6c0
 };
 // ---- items of slice s00496300 end
-
 
 // ---- items of slice s00496d30 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Matrix3_s0049_6d30 {
@@ -1129,7 +1123,6 @@ struct Y9c0 {
 };
 // ---- items of slice s0049b340 end
 
-
 // ---- items of slice s004a6f10 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Vector3T_s004a_6f10 {
     float x, y, z;
@@ -1416,7 +1409,6 @@ struct M3 {
        float g, float h, float i);
 };
 // ---- items of slice s004a89e0 end
-
 
 // ---- items of slice s006414e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct ResourceKey {
@@ -1947,8 +1939,6 @@ rwVec3* Vec3Lerp(rwVec3* out, const rwVec3* a, const rwVec3* b, float t);   // 0
 float Vec3Length(const rwVec3* v);                                 // 0x4885d0
 // ---- items of slice s004a1a70 end
 
-
-
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 bool FUN_4a2560(cSPEditorModel_s004a_1a70* model);  // 0x004a2560 (stays in the slice: not this object's)
 void FUN_4a1a70(void* unused, cSPEditorBlock_s004a_1a70* block);  // 0x004a1a70 (stays in the slice: not this object's)
@@ -2256,8 +2246,6 @@ namespace SP {
 struct cSPEditorPart;
 }
 // ---- items of slice s004a9920 end
-
-
 
 // ---- items of slice s0048d010 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #pragma intrinsic(fabs_s0048_d010)
@@ -2927,7 +2915,6 @@ struct cSPEditorBlock_s0048_ef30 : RefObj {
 };
 inline bool IsNaN(float f) { uint32_t bits = *(uint32_t*)&f; return 0x7f800000 < (bits & 0x7fffffff); }
 // ---- items of slice s0048ef30 end
-
 
 // forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
 
@@ -3811,6 +3798,148 @@ struct cSPEditorModel_s004a_6690 : cSPEditorModelBase, RefCountTemplate_s004a_66
 bool GetSymmetricPile(cSPEditorBlock_s004a_6690* block, BlockVector_s004a_6690* list, bool b);   // 0x0049dd20
 // ---- items of slice s004a6690 end
 
+// ---- items of slice s0049de30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Vec3_s0049_de30 { float x, y, z; };          // raw struct (implicit copies = dword moves)
+struct Vector3T_s0049_de30 : Vec3_s0049_de30 {
+    Vector3T_s0049_de30() {}
+    Vector3T_s0049_de30(const Vector3T_s0049_de30& v) { x = v.x; y = v.y; z = v.z; }
+    float& operator[](int i) { return (&x)[i]; }
+    float GetZ() const { return z; }
+};
+struct Matrix33T_s0049_de30 {
+    Vector3T_s0049_de30 xAxis, yAxis, zAxis;
+    Matrix33T_s0049_de30() {}
+    Matrix33T_s0049_de30(const Matrix33T_s0049_de30& m);        // 0x41cb40 (Matrix3::Assign)
+};
+struct Matrix33Const { float f[9]; };
+extern Matrix33Const g_DefaultMatrix;    // 0x15d63a8
+struct cSPVector3_s0049_de30 : Vector3T_s0049_de30 {
+    cSPVector3_s0049_de30() {}
+    cSPVector3_s0049_de30(const Vector3T_s0049_de30& v) { x = v.x; y = v.y; z = v.z; }
+    cSPVector3_s0049_de30(const cSPVector3_s0049_de30& v) { x = v.x; y = v.y; z = v.z; }
+    cSPVector3_s0049_de30& operator=(const cSPVector3_s0049_de30& v) { x = v.x; y = v.y; z = v.z; return *this; }
+    cSPVector3_s0049_de30& operator=(const Vector3T_s0049_de30& v) { x = v.x; y = v.y; z = v.z; return *this; }
+};
+struct cSPMatrix3_s0049_de30 : Matrix33T_s0049_de30 {
+    cSPMatrix3_s0049_de30() {}
+    cSPMatrix3_s0049_de30(const cSPMatrix3_s0049_de30& m) : Matrix33T_s0049_de30(m) {}
+    cSPMatrix3_s0049_de30(const Matrix33Const& g);   // 0x449cc0
+};
+struct RawMat { float f[9]; };            // implicit-copy 36 bytes (rep movsd)
+namespace eastl {
+ struct sp_vector_allocator_s0049_de30 { sp_vector_allocator_s0049_de30() {} }; struct bitset60_s0049_de30 {
+    uint32_t mWord[2];
+    bool test(uint32_t i) const {
+        if (i < 60) {
+            uint32_t w = mWord[i >> 5];
+            return (w & (1u << (i % 32))) != 0;
+        }
+        return false;
+    }
+}; 
+}
+struct cSPEditorBlock_s0049_de30;
+namespace EA {
+template <class T> struct AutoRefCount_s0049_de30 {
+    T* mpObject;
+    operator T*() const { return mpObject; }
+    T* operator->() const { return mpObject; }
+};
+}
+struct BlockVector_s0049_de30 {   // eastl::vector<EA::AutoRefCount<cSPEditorBlock>, sp_vector_allocator>
+    EA::AutoRefCount_s0049_de30<cSPEditorBlock_s0049_de30>* mpBegin;
+    EA::AutoRefCount_s0049_de30<cSPEditorBlock_s0049_de30>* mpEnd;
+    EA::AutoRefCount_s0049_de30<cSPEditorBlock_s0049_de30>* mpCapacity;
+    int mAllocator;
+    BlockVector_s0049_de30(const eastl::sp_vector_allocator_s0049_de30& a);                    // 0x00540470
+    BlockVector_s0049_de30() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~BlockVector_s0049_de30();                                                      // 0x00453eb0
+    EA::AutoRefCount_s0049_de30<cSPEditorBlock_s0049_de30>& operator[](int i) { return mpBegin[i]; }
+    void erase(EA::AutoRefCount_s0049_de30<cSPEditorBlock_s0049_de30>* first, EA::AutoRefCount_s0049_de30<cSPEditorBlock_s0049_de30>* last);  // 0x00454280
+};
+struct RefCountTemplate_s0049_de30 {                // EA::RefCountTemplate<int> (at +4 of the owner)
+    virtual ~RefCountTemplate_s0049_de30() {}
+    int mnRefCount;
+    int AddRef() { return mnRefCount++ + 1; }
+    // Contains `delete this`, so cl declines to inline it, yet callers still reserve its frame.
+    int Release()                                                        // 0x00453540
+    {
+        int r = mnRefCount-- - 1;
+        if (r)
+            return r;
+        mnRefCount = 1;
+        delete this;
+        return 0;
+    }
+};
+struct cSPEditorModel_s0049_de30 {
+    int vt;
+    RefCountTemplate_s0049_de30 rc;                 // +4
+    int GetBlockCount();                 // 0x004accf0
+    cSPEditorBlock_s0049_de30* GetBlock(int i);     // 0x004accb0
+    bool IsSymmetryEnabled();            // 0x004adc40
+};
+struct ModelRef_s0049_de30 {                        // EA::AutoRefCount<cSPEditorModel>
+    cSPEditorModel_s0049_de30* mp;
+    ModelRef_s0049_de30(cSPEditorModel_s0049_de30* p) : mp(p) { if (mp) mp->rc.AddRef(); }
+    ~ModelRef_s0049_de30() { if (mp) mp->rc.Release(); }
+    cSPEditorModel_s0049_de30* operator->() const { return mp; }
+};
+struct cSPEditorLimbStructure_s0049_de30 {
+    char pad[0x58];
+    cSPEditorLimbStructure_s0049_de30();                                            // 0x00488850
+    ~cSPEditorLimbStructure_s0049_de30();                                           // 0x00488900
+    void Init(cSPEditorBlock_s0049_de30* block, bool isBase, bool b);               // 0x004891a0
+    void FixAllJoints();                                                 // 0x00489ae0
+    void Clear();                                                        // 0x00488980
+};
+struct cSPEditorBlock_s0049_de30 {
+    virtual int _v0();
+    char pad04[0x28 - 4];
+    cSPEditorModel_s0049_de30* mEditorModel;                // +0x28
+    char pad2c[0x48 - 0x2c];
+    cSPVector3_s0049_de30 mPosition;                        // +0x48
+    Vec3_s0049_de30 mPrevPosition;                          // +0x54
+    RawMat mOrientation;                         // +0x60
+    RawMat mPrevOrientation;                     // +0x84
+    RawMat mBaseOrientation;                     // +0xa8
+    RawMat mPrevBaseOrientation;                 // +0xcc
+    char pad0f0[0x1d8 - 0xf0];
+    float mScale;                                // +0x1d8
+    char pad1dc[0x33c - 0x1dc];
+    cSPEditorBlock_s0049_de30* mSymmetricBlock;             // +0x33c
+    BlockVector_s0049_de30 mChildren;                       // +0x340
+    char pad350[0x3e0 - 0x350];
+    cSPEditorBlock_s0049_de30* mLinkedBlock;                // +0x3e0
+    char pad3e4[0xdc8 - 0x3e4];
+    eastl::bitset60_s0049_de30 mFlags;                      // +0xdc8
+
+    cSPEditorModel_s0049_de30* GetEditorModel() { return mEditorModel; }
+    cSPEditorBlock_s0049_de30* GetLinkedBlock() { return mLinkedBlock; }
+    cSPEditorBlock_s0049_de30* GetSymmetricBlock() { return mSymmetricBlock; }
+    bool HasAnyBlockFlag();                                              // 0x00435d40
+    void FUN_44c0e0(int* a, int* b, int* c);                             // 0x0044c0e0
+};
+void FUN_4942b0(cSPEditorBlock_s0049_de30* block, float* out, uint32_t scale, cSPVector3_s0049_de30 pos, int a, int b);  // 0x4942b0
+cSPMatrix3_s0049_de30 FUN_49e880(cSPEditorBlock_s0049_de30* block, cSPMatrix3_s0049_de30 m);                                       // 0x49e880
+void FUN_49de30(cSPEditorBlock_s0049_de30* block, float newScale, float oldScale, BlockVector_s0049_de30* blocks, bool flag);  // 0x49de30
+float ClampAndSetScale(cSPEditorBlock_s0049_de30* block, float value, bool clamp);                           // 0x49dca0
+bool FUN_49dd20(cSPEditorBlock_s0049_de30* block, BlockVector_s0049_de30* out, int flags);                              // 0x49dd20
+void BuildPileList(cSPEditorBlock_s0049_de30* block, BlockVector_s0049_de30* out, int flags);                           // 0x48c790
+void RepinBlockToTorso(cSPEditorBlock_s0049_de30* block, cSPVector3_s0049_de30 pos, cSPMatrix3_s0049_de30 orient, int a);           // 0x49fbd0
+bool FUN_4a6120(cSPEditorBlock_s0049_de30* block);                                                           // 0x4a6120
+cSPEditorBlock_s0049_de30* GetLimbRoot(cSPEditorBlock_s0049_de30* block);                                               // 0x4a5e10
+cSPVector3_s0049_de30 FUN_4a06c0(cSPEditorBlock_s0049_de30* block);                                                     // 0x4a06c0
+cSPVector3_s0049_de30 operator-(const Vec3_s0049_de30& a, const Vec3_s0049_de30& b);                                   // 0x41db10
+cSPVector3_s0049_de30 operator+(const Vec3_s0049_de30& a, const Vec3_s0049_de30& b);                                   // 0x41dc10
+cSPVector3_s0049_de30 operator*(const Vec3_s0049_de30& a, const float& s);                                        // 0x41dca0
+cSPVector3_s0049_de30 operator/(const Vec3_s0049_de30& a, const float& s);                                        // 0x453880
+cSPVector3_s0049_de30 operator*(const Vec3_s0049_de30& v, const cSPMatrix3_s0049_de30& m);                                   // 0x41daf0
+cSPMatrix3_s0049_de30 Transposed(const cSPMatrix3_s0049_de30& m);                                                       // 0x41ded0
+cSPVector3_s0049_de30 normalized_safe(const Vec3_s0049_de30& v);                                                              // 0x449c20
+cSPVector3_s0049_de30 Cross(const Vec3_s0049_de30& a, const Vec3_s0049_de30& b);                                                   // 0x44e460
+// ---- items of slice s0049de30 end
+
 // @ 0x00435f40
 void RecordEvent4(uint32_t a, uint32_t b, float c, uint32_t d)
 {
@@ -3824,57 +3953,6 @@ void RecordEvent4(uint32_t a, uint32_t b, float c, uint32_t d)
         r->End();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00453250
 namespace SP { namespace EditorUtils {
@@ -3894,56 +3972,6 @@ HavokTransform* __fastcall GetHavokTransformFromMatrix(HavokTransform* t)
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00481f00
 bool IsNAN(const float* v)
 {
@@ -3954,55 +3982,6 @@ bool IsNAN(const float* v)
         n35 = 0;
     return n35;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0048d010
 hkRigidBody_s0048_d010* MoveBlockLowAngleStacking(cSPEditorBlock_s0048_d010* block, BlockList& piles, cSPVector3_s0048_d010 position, cSPVector3_s0048_d010 direction, cSPVector3_s0048_d010& outPosition, Matrix3_s0048_d010 orientation, bool unused)
@@ -4086,33 +4065,6 @@ hkRigidBody_s0048_d010* MoveBlockLowAngleStacking(cSPEditorBlock_s0048_d010* blo
     return result;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0048db10
 void* HkObj::F_48db10(unsigned flags)
 {
@@ -4124,33 +4076,6 @@ void* HkObj::F_48db10(unsigned flags)
     return this;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0048db60
 void HkObj::F_48db60()
 {
@@ -4159,33 +4084,6 @@ void HkObj::F_48db60()
     mArray[3] = k;
     mField4 = *(float*)0x13ef4f8;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0048dbb0
 void* HkObj::F_48dbb0(unsigned flags)
@@ -4199,33 +4097,6 @@ void* HkObj::F_48dbb0(unsigned flags)
     return this;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0048dc50
 void* HkObj::F_48dc50(HkObj* src)
 {
@@ -4238,33 +4109,6 @@ void* HkObj::F_48dc50(HkObj* src)
     s[0] = d[0]; s[1] = d[1]; s[2] = d[2]; s[3] = d[3];
     return this;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0048dcd0
 namespace SP { namespace EditorUtils {
@@ -4336,32 +4180,6 @@ bool GetMissStackingPosition(cSPEditorBlock_s0048_dcd0* block, BlockList& piles,
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0048e510
 float* F_48e510(float* out, Vec4T& src)
 {
@@ -4374,32 +4192,6 @@ float* F_48e510(float* out, Vec4T& src)
     out[3] = 0.0f;
     return out;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0048e590
 float F_48e590(Block_s0048_e590* self, BlockList_s0048_e590* blocks, Vector3_s0048_e590* out, float scale)
@@ -4492,31 +4284,6 @@ float F_48e590(Block_s0048_e590* self, BlockList_s0048_e590* blocks, Vector3_s00
     return bestScore;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0048ef30
 float GetLateralAlignmentPosition(cSPEditorBlock_s0048_ef30* self, BlockList_s0048_ef30* list, Vector3_s0048_ef30* outPos, Matrix3_s0048_ef30* outBasis, float k)
 {
@@ -4591,30 +4358,6 @@ float GetLateralAlignmentPosition(cSPEditorBlock_s0048_ef30* self, BlockList_s00
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0048f790
 void UpdateSymmetryRec(cSPEditorBlock_s0048_ef30* block, int sign)
 {
@@ -4671,30 +4414,6 @@ void UpdateSymmetryRec(cSPEditorBlock_s0048_ef30* block, int sign)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0048fde0
 void FUN_0048fde0(cSPEditorBlock* block)
 {
@@ -4718,21 +4437,6 @@ void FUN_0048fde0(cSPEditorBlock* block)
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0048fee0
 float FUN_0048fee0(cSPEditorBlock* p, ModelType* model, Vector3* out, float scale)
@@ -4780,21 +4484,6 @@ float FUN_0048fee0(cSPEditorBlock* p, ModelType* model, Vector3* out, float scal
     return -1.0f;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004902c0
 bool FUN_004902c0(cSPEditorBlock* a, cSPEditorBlock* b)
 {
@@ -4806,21 +4495,6 @@ bool FUN_004902c0(cSPEditorBlock* a, cSPEditorBlock* b)
     ExpandBy(&bbB, 1.1f);
     return bbB.Intersects(bbA);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00490330
 bool BoundingBox::Intersects(const BoundingBox& b) const
@@ -4834,21 +4508,6 @@ bool BoundingBox::Intersects(const BoundingBox& b) const
         r = 1;
     return r;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00490420
 bool FUN_00490420(cSPEditorBlock* a, cSPEditorBlock* b, int type)
@@ -4871,21 +4530,6 @@ bool FUN_00490420(cSPEditorBlock* a, cSPEditorBlock* b, int type)
     }
     return false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004904a0
 void FUN_004904a0(cSPEditorBlock* self, void** vec, PtrBag* bag, int type)
@@ -4914,21 +4558,6 @@ void FUN_004904a0(cSPEditorBlock* self, void** vec, PtrBag* bag, int type)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004905d0
 void FUN_004905d0(cSPEditorBlock* self, void** vec, PtrBag* bag)
 {
@@ -4955,21 +4584,6 @@ void FUN_004905d0(cSPEditorBlock* self, void** vec, PtrBag* bag)
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004906e0
 Matrix3_s0048_fde0* FUN_004906e0(Matrix3_s0048_fde0* out, Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4)
@@ -5015,21 +4629,6 @@ Matrix3_s0048_fde0* FUN_004906e0(Matrix3_s0048_fde0* out, Vector3 v0, Vector3 v1
     return out;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004909d0
 Vector3* FUN_004909d0(Vector3* out, const Vector3* a, const Vector3* b)
 {
@@ -5040,21 +4639,6 @@ Vector3* FUN_004909d0(Vector3* out, const Vector3* a, const Vector3* b)
     *out = *z;
     return out;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00490a70
 float GetAlignmentPosition(cSPEditorBlock_s0049_0a70* self, Mgr* mgr, Vec3 v, Matrix3 m, RwVec3* outPos, Matrix3* outBasis, bool* outFlag, uint8_t flag, Matrix3 m2)
@@ -5159,54 +4743,6 @@ float GetAlignmentPosition(cSPEditorBlock_s0049_0a70* self, Mgr* mgr, Vec3 v, Ma
     return -1.0f;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00491350
 int CountPileWeight(cSPEditorBlock_s0049_0a70* self, int mode)
 {
@@ -5251,53 +4787,6 @@ int CountPileWeight(cSPEditorBlock_s0049_0a70* self, int mode)
     ScratchSlots<2>();
     return n8;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00491900
 int FUN_00491900(Vec* p1, Vec* p2)
@@ -5350,52 +4839,6 @@ int FUN_00491900(Vec* p1, Vec* p2)
     return (int)(p2->end - p2->begin);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004928d0
 void FUN_004928d0(cSPEditorBlock_s0049_28d0* p, int a, int b, int c)
 {
@@ -5407,24 +4850,6 @@ void FUN_004928d0(cSPEditorBlock_s0049_28d0* p, int a, int b, int c)
     (void)b;
     (void)c;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00492de0
 bool FUN_00492de0(cSPEditorBlock_s0049_28d0* p)
@@ -5441,24 +4866,6 @@ bool FUN_00492de0(cSPEditorBlock_s0049_28d0* p)
         return true;
     return false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00492e70
 float FUN_00492e70(cSPEditorBlock2* p, Vec3W* outPos, Matrix3_s0049_28d0* outRot, int* outIdx, float scale, char flag)
@@ -5527,47 +4934,11 @@ float FUN_00492e70(cSPEditorBlock2* p, Vec3W* outPos, Matrix3_s0049_28d0* outRot
     return -1.0f;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004934d0
 void FUN_004934d0(int p)
 {
     (void)p;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004935f0
 Vector3_s0049_28d0 S935::Sub() const
@@ -5576,24 +4947,6 @@ Vector3_s0049_28d0 S935::Sub() const
     Vector3_s0049_28d0* t29 = Vector3_Sub_s0049_28d0(&p30, &b, &a);
     return *t29;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00493640
 int ClassifyAgainstSymmetryPlane(V3* p, float width, float zmin, float zmax, Basis* out)
@@ -5680,25 +5033,6 @@ int ClassifyAgainstSymmetryPlane(V3* p, float width, float zmin, float zmax, Bas
     return p18;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00494270
 void* FUN_00494270(void* a, void* b)
 {
@@ -5707,25 +5041,6 @@ void* FUN_00494270(void* a, void* b)
     FUN_00493ce0(a, b, *(Matrix3_s0049_3640*)((char*)b + 0xa8));
     return a;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004942b0
 namespace SP { namespace EditorUtils {
@@ -5885,49 +5200,6 @@ bool GetRotationAndPositionBasedOnBehavior(cSPEditorBlock_s0049_42b0* block, cSP
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004956b0
 void SettleBlock(cSPEditorBlock_s0049_56b0* block, BlockVec_s0049_56b0* ignore)
 {
@@ -6000,27 +5272,6 @@ void SettleBlock(cSPEditorBlock_s0049_56b0* block, BlockVec_s0049_56b0* ignore)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00495f90
 void* D95::Del(unsigned flags)
 {
@@ -6032,27 +5283,6 @@ void* D95::Del(unsigned flags)
     }
     return this;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00495fe0
 void* D95fe0::Ctor()
@@ -6071,27 +5301,6 @@ void* D95fe0::Ctor()
     return this;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00496090
 void* D960::Del(unsigned flags)
 {
@@ -6102,27 +5311,6 @@ void* D960::Del(unsigned flags)
     }
     return this;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004960d0
 void D960::Dtor()
@@ -6136,27 +5324,6 @@ void D960::Dtor()
     }
     this->vptr = &g_vtbl_13ef534;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00496140
 int* D961::Find(int* out, int key)
@@ -6176,27 +5343,6 @@ int* D961::Find(int* out, int key)
     out[1] = *(int*)((char*)this->data + i * 0x10 + 0xc);
     return out;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004961d0
 void FUN_004961d0(char* save, Vec_s0049_56b0* vec)
@@ -6223,27 +5369,6 @@ void FUN_004961d0(char* save, Vec_s0049_56b0* vec)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00496300
 void FUN_00496300(void* p, void* a, void* b)
 {
@@ -6252,56 +5377,12 @@ void FUN_00496300(void* p, void* a, void* b)
     (void)b;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00496760
 void FUN_00496760(void* p, void* a)
 {
     (void)p;
     (void)a;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00496b60
 void FUN_00496b60(HolderA* a, float f)
@@ -6314,28 +5395,6 @@ void FUN_00496b60(HolderA* a, float f)
     ls.F();
     ls.~LimbStructure();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00496bb0
 int FUN_00496bb0(char* p, float f)
@@ -6361,28 +5420,6 @@ int FUN_00496bb0(char* p, float f)
     }
     return c;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00496d30
 void FUN_00496d30(EditorBlockRay* self, V3_s0049_6d30 A, V3_s0049_6d30 B, V3_s0049_6d30* out1, V3_s0049_6d30* out2)
@@ -6410,47 +5447,6 @@ void FUN_00496d30(EditorBlockRay* self, V3_s0049_6d30 A, V3_s0049_6d30 B, V3_s00
         *out2 = H2;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004973f0
 char FUN_004973f0(X973* p, void* mat, float f, char flag)
@@ -6480,46 +5476,6 @@ char FUN_004973f0(X973* p, void* mat, float f, char flag)
     }
     return result;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004974e0
 bool FUN_004974e0(X982* p, Vec3O_s0049_74e0 v, Vec3O_s0049_74e0* outHit, bool* outFlag, float tol, char force)
@@ -6626,46 +5582,6 @@ bool FUN_004974e0(X982* p, Vec3O_s0049_74e0 v, Vec3O_s0049_74e0* outHit, bool* o
     return r;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00497f20
 bool FUN_00497f20(Vector3_s0049_74e0 v, Vec3O_s0049_74e0* out, float step)
 {
@@ -6701,46 +5617,6 @@ bool FUN_00497f20(Vector3_s0049_74e0 v, Vec3O_s0049_74e0* out, float step)
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00498230
 void FUN_00498230(int p, char flag)
 {
@@ -6754,46 +5630,6 @@ void FUN_00498230(int p, char flag)
         FUN_00498230(child, flag);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004982b0
 bool FUN_004982b0(X982* p, char a, float b, char c)
@@ -6809,46 +5645,6 @@ bool FUN_004982b0(X982* p, char a, float b, char c)
     return r;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004983d0
 void FUN_004983d0(X982* p, uint8_t flag)
 {
@@ -6860,45 +5656,6 @@ void FUN_004983d0(X982* p, uint8_t flag)
             ((X5ae40*)FUN_00401050(0x3f1bf56, 0, (int)p, 0))->F();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00498470
 bool FUN_00498470(Block* blk, P3* pos, Matrix3_s0049_8470* m1, Matrix3_s0049_8470* m2, bool e, float f, uint8_t g, char h)
@@ -6938,45 +5695,6 @@ bool FUN_00498470(Block* blk, P3* pos, Matrix3_s0049_8470* m1, Matrix3_s0049_847
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004986d0
 bool FUN_004986d0(Block* blk)
 {
@@ -6995,45 +5713,6 @@ bool FUN_004986d0(Block* blk)
     }
     return false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00498850
 bool FUN_00498850(Handle* h, AutoRef<IPicker> picker)
@@ -7126,45 +5805,6 @@ bool FUN_00498850(Handle* h, AutoRef<IPicker> picker)
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00498f10
 Block* FUN_00498f10(Block* blk, Vec3_s0049_8470 origin, Vec3_s0049_8470 dir, AutoRef<IPicker> picker, P3* outHit, P3* outNormal, int a30, int a34, int a38)
 {
@@ -7215,44 +5855,6 @@ Block* FUN_00498f10(Block* blk, Vec3_s0049_8470 origin, Vec3_s0049_8470 dir, Aut
     }
     return result;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00499410
 Block* FUN_00499410(Entity* e, Vector3_s0049_9410 org, Vector3_s0049_9410 dir, AutoRefCountSkinMgr skin, Vector3_s0049_9410* outPt, Vector3_s0049_9410* outN, unsigned arg30)
@@ -7331,44 +5933,6 @@ Block* FUN_00499410(Entity* e, Vector3_s0049_9410 org, Vector3_s0049_9410 dir, A
     return p30;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00499b40
 Vector3_s0049_9410 FUN_00499b40(Vector3_s0049_9410 a, Vector3_s0049_9410 b, Vector3_s0049_9410 c, Vector3_s0049_9410 p)
 {
@@ -7401,44 +5965,6 @@ Vector3_s0049_9410 FUN_00499b40(Vector3_s0049_9410 a, Vector3_s0049_9410 b, Vect
     return Vector3_s0049_9410(0.33f, 0.33f, 0.33f);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00499f10
 Vector3_s0049_9410* FUN_00499f10(Vector3_s0049_9410* ret, Vector3_s0049_9410 a, Vector3_s0049_9410 b, Vector3_s0049_9410 c)
 {
@@ -7453,44 +5979,6 @@ Vector3_s0049_9410* FUN_00499f10(Vector3_s0049_9410* ret, Vector3_s0049_9410 a, 
     ScratchSlots_s0049_9410<6>();
     return ret;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0049a030
 bool FUN_0049a030(Vector3_s0049_9410 origin, Vector3_s0049_9410 dir, Vector3_s0049_9410* out)
@@ -7507,44 +5995,6 @@ bool FUN_0049a030(Vector3_s0049_9410 origin, Vector3_s0049_9410 dir, Vector3_s00
     *out = r;
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0049a0c0
 Vector3_s0049_9410* FUN_0049a0c0(Vector3_s0049_9410* ret, DirOwner* o)
@@ -7569,43 +6019,6 @@ Vector3_s0049_9410* FUN_0049a0c0(Vector3_s0049_9410* ret, DirOwner* o)
     ret->z = g_15d64d8.z;
     return ret;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0049a2a0
 namespace SP { namespace EditorUtils {
@@ -7767,38 +6180,6 @@ bool MoveBlockOrientToSurfaces(cSPEditorBlock_s0049_a2a0* block, BlockVector_s00
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0049b340
 bool FUN_0049b340(BitOwner* p)
 {
@@ -7813,39 +6194,11 @@ bool FUN_0049b340(BitOwner* p)
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0049b460
 void FUN_0049b460(void* p, void* a, void* b)
 {
     (void)p; (void)a; (void)b;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0049b8b0
 void FUN_0049b8b0(void* p, void* a, void* b)
@@ -7853,39 +6206,11 @@ void FUN_0049b8b0(void* p, void* a, void* b)
     (void)p; (void)a; (void)b;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0049bcc0
 void FUN_0049bcc0(void* p, void* a, void* b)
 {
     (void)p; (void)a; (void)b;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0049c0f0
 void Y9c0::Set(char v)
@@ -7898,39 +6223,11 @@ void Y9c0::Set(char v)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0049c140
 void FUN_0049c140(void* out, void* p, float x, float y, float z)
 {
     (void)out; (void)p; (void)x; (void)y; (void)z;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0049c210
 namespace SP { namespace EditorUtils {
@@ -7948,19 +6245,6 @@ cSPMatrix3_s0049_c210* FUN_49c210(cSPMatrix3_s0049_c210* out, cSPEditorBlock_s00
     return out;
 }
 }}  // namespace SP::EditorUtils
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0049c570
 namespace SP { namespace EditorUtils {
@@ -7984,19 +6268,6 @@ cSPEditorBlock_s0049_c210* FindClosestSymmetry(cSPVector3_s0049_c210 point, cSPE
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0049c630
 namespace SP { namespace EditorUtils {
 cSPVector3_s0049_c210* FUN_49c630(cSPVector3_s0049_c210* out, float x, float y, float z, cSPEditorModel* model)
@@ -8007,19 +6278,6 @@ cSPVector3_s0049_c210* FUN_49c630(cSPVector3_s0049_c210* out, float x, float y, 
     return out;
 }
 }}  // namespace SP::EditorUtils
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0049c8f0
 namespace SP { namespace EditorUtils {
@@ -8047,19 +6305,6 @@ void BuildBlockTransforms(cSPEditorBlock_s0049_c210* block, vector<TrackerRecord
     }
 }
 }}  // namespace SP::EditorUtils
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0049cb90
 namespace SP { namespace EditorUtils {
@@ -8089,19 +6334,6 @@ void FUN_49cb90(vector<TrackerRecord>* list)
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0049ce40
 namespace SP { namespace EditorUtils {
 void RepinBlocks(vector<TrackerRecord>* list)
@@ -8122,82 +6354,21 @@ void RepinBlocks(vector<TrackerRecord>* list)
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0049cfd0
 void FUN_49cfd0(cSPEditorBlock_s0049_cfd0* block)
 { (void)block; }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0049d1f0
 void FUN_49d1f0(cSPEditorBlock_s0049_cfd0* block, float scale, bool a, bool b)
 { (void)block; (void)scale; (void)a; (void)b; }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0049d390
 void FUN_49d390(cSPEditorBlock_s0049_cfd0* block)
 { (void)block; }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0049d550
 void FUN_49d550(cSPEditorBlock_s0049_cfd0* block)
 { (void)block; }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0049d640
 void cSPTransform_s0049_cfd0::TransformVector(cSPVector3_s0049_cfd0* out)
@@ -8208,33 +6379,9 @@ void cSPTransform_s0049_cfd0::TransformVector(cSPVector3_s0049_cfd0* out)
     ScaleVector(out, mScale);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0049d6b0
 void FUN_49d6b0(cSPEditorBlock_s0049_cfd0* block)
 { (void)block; }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0049dca0
 float ClampAndSetScale(cSPEditorBlock_s0049_cfd0* block, float value, bool clamp)
@@ -8249,48 +6396,139 @@ float ClampAndSetScale(cSPEditorBlock_s0049_cfd0* block, float value, bool clamp
     return value;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0049dd20
 bool FUN_49dd20(cSPEditorBlock_s0049_cfd0* block, void* param, bool b)
 { (void)block; (void)param; (void)b; return false; }
 
+// @ 0x0049de30
+void FUN_49de30(cSPEditorBlock_s0049_de30* block, float newScale, float oldScale, BlockVector_s0049_de30* blocks, bool flag)
+{
+    if (newScale != oldScale) {
+    float fDelta = newScale - oldScale;
+    int unused;   // reserved frame slot (unused local in the original)
+    BlockVector_s0049_de30 pile((eastl::sp_vector_allocator_s0049_de30()));
+    int num = (int)(blocks->mpEnd - blocks->mpBegin);
+    for (int i = 0; i < num; i++) {
+        if (!((cSPEditorBlock_s0049_de30*)(*blocks)[i])->mFlags.test(7)) {
+            pile.erase(pile.mpBegin, pile.mpEnd);
+            BuildPileList((*blocks)[i], &pile, 0);
+            cSPVector3_s0049_de30 d;
+            d = ((*blocks)[i]->mPrevPosition - block->mPrevPosition) / oldScale;
+            cSPVector3_s0049_de30 newPos;
+            if (block->mFlags.test(7)) {
+                cSPVector3_s0049_de30 tmp;
+                tmp = d * Transposed(*(cSPMatrix3_s0049_de30*)&block->mPrevOrientation);
+                tmp[0] *= newScale;
+                tmp[1] *= oldScale;
+                tmp[2] *= newScale;
+                d = tmp * *(cSPMatrix3_s0049_de30*)&block->mOrientation;
+                newPos = block->mPosition + d;
+            } else {
+                newPos = block->mPosition + d * newScale;
+            }
+            RepinBlockToTorso((*blocks)[i], newPos, *(cSPMatrix3_s0049_de30*)&(*blocks)[i]->mBaseOrientation, 0);
+        }
+    }
+    if (FUN_4a6120(block)) {
+        cSPEditorBlock_s0049_de30* limb = GetLimbRoot(block);
+        if (flag && limb) {
+            if (!block->mFlags.test(7)) {
+                if (limb->mFlags.test(7) || (limb->GetSymmetricBlock() && limb->GetSymmetricBlock()->mFlags.test(7))) {
+                    cSPEditorLimbStructure_s0049_de30 a;
+                    cSPEditorLimbStructure_s0049_de30 b;
+                    a.Init(block, 0, 0);
+                    if (block->GetLinkedBlock()) b.Init(block->GetLinkedBlock(), 0, 0);
+                    a.FixAllJoints();
+                    if (block->GetLinkedBlock()) {
+                        b.FixAllJoints();
+                        b.Clear();
+                    }
+                    a.Clear();
+                }
+            }
+        }
+        if (block->mFlags.test(0x2d) && !block->HasAnyBlockFlag()) {
+            cSPVector3_s0049_de30 g = FUN_4a06c0(block);
+            cSPVector3_s0049_de30 pos2;
+            pos2 = block->mPosition;
+            pos2.z = g.GetZ();
+            RepinBlockToTorso(block, pos2, *(cSPMatrix3_s0049_de30*)&block->mOrientation, 0);
+        }
+    }
+    }
+}
 
+// @ 0x0049e6a0
+void SetBlockScale(cSPEditorBlock_s0049_de30* block, float scale, bool clamp, bool flag)
+{
+    float oldScale = block->mScale;
+    ModelRef_s0049_de30 model(block->GetEditorModel());
+    int n = model->GetBlockCount();
+    for (int i = 0; i < n; i++) {
+        cSPEditorBlock_s0049_de30* b = model->GetBlock(i);
+        b->mPrevPosition = *(Vec3_s0049_de30*)&b->mPosition;
+        b->mPrevOrientation = b->mOrientation;
+        b->mPrevBaseOrientation = b->mBaseOrientation;
+    }
+    scale = ClampAndSetScale(block, scale, clamp);
+    FUN_49de30(block, scale, oldScale, &block->mChildren, flag);
+    BlockVector_s0049_de30 vec;
+    if (block->GetLinkedBlock()) {
+        if (block->GetEditorModel()->IsSymmetryEnabled()) {
+            if (FUN_49dd20(block->GetLinkedBlock(), &vec, 0))
+                FUN_49de30(block->GetLinkedBlock(), scale, oldScale, &vec, flag);
+        }
+    }
+}
 
+// @ 0x0049e880
+cSPMatrix3_s0049_de30 FUN_49e880(cSPEditorBlock_s0049_de30* block, cSPMatrix3_s0049_de30 m)
+{
+    cSPMatrix3_s0049_de30 orig(m);
+    int a, b, c;
+    block->FUN_44c0e0(&a, &b, &c);
+    Vec3_s0049_de30 v0 = ((Vec3_s0049_de30*)&m)[c];
+    Vec3_s0049_de30 v1 = ((Vec3_s0049_de30*)&m)[b];
+    Vec3_s0049_de30 v2 = ((Vec3_s0049_de30*)&m)[a];
+    ((float*)&v0)[a] = 0.0f;
+    ((float*)&v1)[a] = 0.0f;
+    v1 = normalized_safe(v1);
+    v0 = normalized_safe(v0);
+    if (v0.x * v0.x + v0.y * v0.y + v0.z * v0.z > 0.9f && v1.x * v1.x + v1.y * v1.y + v1.z * v1.z > 0.9f) {
+        switch (a) {
+        case 0: v2 = normalized_safe(Cross(v1, v0)); break;
+        case 1: v2 = normalized_safe(Cross(v0, v1)); break;
+        case 2: v2 = normalized_safe(Cross(v0, v1)); break;
+        }
+        switch (c) {
+        case 0: v0 = normalized_safe(Cross(v1, v2)); break;
+        case 1: v0 = normalized_safe(Cross(v1, v2)); break;
+        case 2:
+            if (b < a) v0 = normalized_safe(Cross(v1, v2));
+            else v0 = normalized_safe(Cross(v2, v1));
+            break;
+        }
+        ((Vec3_s0049_de30*)&m)[a] = v2;
+        ((Vec3_s0049_de30*)&m)[b] = v1;
+        ((Vec3_s0049_de30*)&m)[c] = v0;
+        return cSPMatrix3_s0049_de30(m);
+    }
+    return cSPMatrix3_s0049_de30(g_DefaultMatrix);
+}
 
-
-
-
-
-
-
-
-
+// @ 0x0049ec40
+void FUN_49ec40(cSPEditorBlock_s0049_de30* block, float* out, uint32_t scale, cSPMatrix3_s0049_de30* mat, bool flag)
+{
+    if (flag) {
+        FUN_4942b0(block, out, scale, block->mPosition, 1, 0);
+        *mat = FUN_49e880(block, *mat);
+    }
+    out[0] = 0.0f;
+}
 
 // @ 0x0049ecf0
 void FUN_49ecf0(cSPEditorBlock_s0049_ecf0* block)
 { (void)block; }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0049ef80
 void FUN_49ef80(cSomeTracker* self, cSPVector3_s0049_ecf0* vecs)
@@ -8300,17 +6538,6 @@ void FUN_49ef80(cSomeTracker* self, cSPVector3_s0049_ecf0* vecs)
     }
     ScratchSlots<4>();
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0049efc0
 void MoveBlocks(cSPEditorBlock_s0049_efc0* root, Vector3T_s0049_efc0 oldPos, Vector3T_s0049_efc0 newPos, Matrix33T_s0049_efc0 oldRot, Matrix33T_s0049_efc0 newRot, BlockVec_s0049_efc0* blocks)
@@ -8377,16 +6604,6 @@ void MoveBlocks(cSPEditorBlock_s0049_efc0* root, Vector3T_s0049_efc0 oldPos, Vec
     ScratchSlots<12>();
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x0049fbd0
 void RepinBlockToTorso(cSPEditorBlock_s0049_fbd0* block, cSPVector3_s0049_fbd0 t, cSPMatrix3_s0049_fbd0 r, bool flag)
 {
@@ -8421,15 +6638,6 @@ void RepinBlockToTorso(cSPEditorBlock_s0049_fbd0* block, cSPVector3_s0049_fbd0 t
     }
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x0049fee0
 void FUN_49fee0(cSPEditorBlock_s0049_fbd0* block, bool unique)
 {
@@ -8446,15 +6654,6 @@ void FUN_49fee0(cSPEditorBlock_s0049_fbd0* block, bool unique)
         }
     }
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x004a0020
 void GetAllLimbs(cSPEditorBlock_s0049_fbd0* block, LimbVec<cSPEditorBlock_s0049_fbd0*>* out, bool unique)
@@ -8495,15 +6694,6 @@ void GetAllLimbs(cSPEditorBlock_s0049_fbd0* block, LimbVec<cSPEditorBlock_s0049_
     }
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x004a02b0
 void FUN_4a02b0(cSPEditorBlock_s0049_fbd0* block, cSPVector3_s0049_fbd0 p, cSPVector3_s0049_fbd0 q)
 {
@@ -8540,15 +6730,6 @@ void FUN_4a02b0(cSPEditorBlock_s0049_fbd0* block, cSPVector3_s0049_fbd0 p, cSPVe
     }
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x004a06c0
 Vector3T_s0049_fbd0* FUN_4a06c0(Vector3T_s0049_fbd0* ret, cSPEditorBlock_s0049_fbd0* block)
 {
@@ -8584,15 +6765,6 @@ Vector3T_s0049_fbd0* FUN_4a06c0(Vector3T_s0049_fbd0* ret, cSPEditorBlock_s0049_f
     return ret;
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x004a0900
 bool FUN_4a0900(cSPEditorBlock_s0049_fbd0* block, void* p2, cSPVector3_s0049_fbd0 a, cSPVector3_s0049_fbd0 b, Vector3T_s0049_fbd0* out)
 {
@@ -8623,15 +6795,6 @@ bool FUN_4a0900(cSPEditorBlock_s0049_fbd0* block, void* p2, cSPVector3_s0049_fbd
     return result;
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x004a0ac0
 bool FUN_4a0ac0(cSPEditorModel_s0049_fbd0* model)
 {
@@ -8647,15 +6810,6 @@ bool FUN_4a0ac0(cSPEditorModel_s0049_fbd0* model)
     return h;
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x004a0b70
 cSPEditorBlock_s004a_0b70* FUN_4a0b70(int world, int idx, float scale)
 {
@@ -8664,14 +6818,6 @@ cSPEditorBlock_s004a_0b70* FUN_4a0b70(int world, int idx, float scale)
     block->SetBooleanAttribute(0x14, true);
     return block;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x004a0bf0
 void FUN_4a0bf0(cSPEditorBlock_s004a_0b70* block)
@@ -8732,14 +6878,6 @@ void FUN_4a0bf0(cSPEditorBlock_s004a_0b70* block)
     }
 }
 
-
-
-
-
-
-
-
-
 // @ 0x004a1020
 void FUN_4a1020(cSPEditorModel_s004a_0b70* model)
 {
@@ -8749,14 +6887,6 @@ void FUN_4a1020(cSPEditorModel_s004a_0b70* model)
         model->GetBlock(tmp)->FUN_451360();
     }
 }
-
-
-
-
-
-
-
-
 
 // @ 0x004a1070
 void FUN_4a1070(cSPEditorBlock_s004a_0b70* block)
@@ -8845,14 +6975,6 @@ void FUN_4a1070(cSPEditorBlock_s004a_0b70* block)
     (void)liveBlock;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x004a18b0
 bool FUN_4a18b0(cSPEditorBlock_s004a_0b70* a, cSPEditorBlock_s004a_0b70* b, float f)
 {
@@ -8878,14 +7000,6 @@ bool FUN_4a18b0(cSPEditorBlock_s004a_0b70* a, cSPEditorBlock_s004a_0b70* b, floa
     }
     return false;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x004a1a70
 void FUN_4a1a70(void* unused, cSPEditorBlock_s004a_1a70* block)
@@ -8939,13 +7053,6 @@ void FUN_4a1a70(void* unused, cSPEditorBlock_s004a_1a70* block)
     }
 }
 
-
-
-
-
-
-
-
 // @ 0x004a1d60
 void cSPEditorBlock_s004a_1a70::FUN_4a1d60(const cSPVector3_s004a_1a70* p)
 {
@@ -8956,13 +7063,6 @@ void cSPEditorBlock_s004a_1a70::FUN_4a1d60(const cSPVector3_s004a_1a70* p)
         mPinTarget->mField144 = v;
     }
 }
-
-
-
-
-
-
-
 
 // @ 0x004a1e10
 bool FUN_4a1e10(cSPEditorBlock_s004a_1a70* block)
@@ -9006,13 +7106,6 @@ bool FUN_4a1e10(cSPEditorBlock_s004a_1a70* block)
     return result;
 }
 
-
-
-
-
-
-
-
 // @ 0x004a2060
 bool FUN_4a2060(cSPEditorBlock_s004a_1a70* block)
 {
@@ -9024,13 +7117,6 @@ bool FUN_4a2060(cSPEditorBlock_s004a_1a70* block)
         return false;
     }
 }
-
-
-
-
-
-
-
 
 // @ 0x004a2180
 rwVec3* FUN_4a2180(rwVec3* ret, cSPEditorBlock_s004a_1a70* a, cSPEditorBlock_s004a_1a70* b)
@@ -9063,13 +7149,6 @@ rwVec3* FUN_4a2180(rwVec3* ret, cSPEditorBlock_s004a_1a70* a, cSPEditorBlock_s00
     new (ret) rwVec3(d);
     return ret;
 }
-
-
-
-
-
-
-
 
 // @ 0x004a2350
 bool FUN_4a2350(cSPEditorBlock_s004a_1a70* editor, cSPEditorBlock_s004a_1a70* src, rwVec3* outPos, float* outMat)
@@ -9106,13 +7185,6 @@ bool FUN_4a2350(cSPEditorBlock_s004a_1a70* editor, cSPEditorBlock_s004a_1a70* sr
     return result;
 }
 
-
-
-
-
-
-
-
 // @ 0x004a2560
 bool FUN_4a2560(cSPEditorModel_s004a_1a70* model)
 {
@@ -9128,13 +7200,6 @@ bool FUN_4a2560(cSPEditorModel_s004a_1a70* model)
     }
     return result;
 }
-
-
-
-
-
-
-
 
 // @ 0x004a25f0
 rwMat3 FUN_4a25f0(rwMat3 m, int mode)
@@ -9183,13 +7248,6 @@ rwMat3 FUN_4a25f0(rwMat3 m, int mode)
     result[2] = z;
     return result;
 }
-
-
-
-
-
-
-
 
 // @ 0x004a29a0
 void SnapBlockToSocket(cSPEditorBlock_s004a_29a0* block, int unused, cSPEditorBlock_s004a_29a0* target)
@@ -9312,47 +7370,21 @@ void SnapBlockToSocket(cSPEditorBlock_s004a_29a0* block, int unused, cSPEditorBl
     }
 }
 
-
-
-
-
-
-
 // @ 0x004a3760
 void FUN_4a3760(int param, float* a, float* b)
 { (void)param; (void)a; (void)b; }
-
-
-
-
-
 
 // @ 0x004a37f0
 void FUN_4a37f0(cSPEditorBlock_s004a_3760* block)
 { (void)block; }
 
-
-
-
-
-
 // @ 0x004a3920
 void FUN_4a3920(cSPEditorBlock_s004a_3760* block)
 { (void)block; }
 
-
-
-
-
-
 // @ 0x004a3c70
 cSPEditorBlock_s004a_3760* FUN_4a3c70(cSPEditorBlock_s004a_3760* block)
 { (void)block; return 0; }
-
-
-
-
-
 
 // @ 0x004a3dc0
 cSPEditorBlock_s004a_3dc0* FUN_4a3dc0(cSPEditorBlock_s004a_3dc0* block, BlockVec_s004a_3dc0* exclude, Vec3_s004a_3dc0 origin, Vec3_s004a_3dc0 dir, Vec3_s004a_3dc0* outPos)
@@ -9445,10 +7477,6 @@ cSPEditorBlock_s004a_3dc0* FUN_4a3dc0(cSPEditorBlock_s004a_3dc0* block, BlockVec
     return 0;
 }
 
-
-
-
-
 // @ 0x004a4840
 void* PickBlocks(PickVec* blocks, Vec3_s004a_3dc0 origin, Vec3_s004a_3dc0 dir, int a24, int a28, int a2c, bool* outFlag, int* pState)
 {
@@ -9495,10 +7523,6 @@ void* PickBlocks(PickVec* blocks, Vec3_s004a_3dc0 origin, Vec3_s004a_3dc0 dir, i
     return 0;
 }
 
-
-
-
-
 // @ 0x004a4c70
 cSPEditorPickInfo::cSPEditorPickInfo()
 {
@@ -9506,10 +7530,6 @@ cSPEditorPickInfo::cSPEditorPickInfo()
     m14 = 0;
     m15 = 0;
 }
-
-
-
-
 
 // @ 0x004a4cf0
 cSPEditorBlock_s004a_3dc0* FUN_4a4cf0(cSPEditorModel_s004a_3dc0* model, int id)
@@ -9527,10 +7547,6 @@ cSPEditorBlock_s004a_3dc0* FUN_4a4cf0(cSPEditorModel_s004a_3dc0* model, int id)
     return 0;
 }
 
-
-
-
-
 // @ 0x004a5a70
 namespace SP { namespace EditorUtils {
 cSPEditorBlock_s004a_5970* FindRootSpine(cSPEditorModel_s004a_5970* model)
@@ -9543,9 +7559,6 @@ cSPEditorBlock_s004a_5970* FindRootSpine(cSPEditorModel_s004a_5970* model)
     return 0;
 }
 }}  // namespace SP::EditorUtils
-
-
-
 
 // @ 0x004a5b70
 namespace SP {
@@ -9560,9 +7573,6 @@ float GetExactSkinRadiusFromVertebra(float scale)
 }
 }  // namespace SP::EditorUtils
 
-
-
-
 // @ 0x004a5bd0
 namespace SP { namespace EditorUtils {
 float GetExactSkinRadius(cSPEditorBlock_s004a_5970* block)
@@ -9570,9 +7580,6 @@ float GetExactSkinRadius(cSPEditorBlock_s004a_5970* block)
     return GetExactSkinRadiusFromVertebra(block->GetScale());
 }
 }}  // namespace SP::EditorUtils
-
-
-
 
 // @ 0x004a5c00
 namespace SP { namespace EditorUtils {
@@ -9584,9 +7591,6 @@ float GetSkinRadiusFromVertebra(float scale)
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
 // @ 0x004a5c40
 namespace SP { namespace EditorUtils {
 float GetSkinRadius(cSPEditorBlock_s004a_5970* block)
@@ -9594,9 +7598,6 @@ float GetSkinRadius(cSPEditorBlock_s004a_5970* block)
     return GetSkinRadiusFromVertebra(block->GetScale());
 }
 }}  // namespace SP::EditorUtils
-
-
-
 
 // @ 0x004a5c70
 namespace SP { namespace EditorUtils {
@@ -9608,9 +7609,6 @@ cSPVector3_s004a_5970 GetSkinPoint(const cSPVector3_s004a_5970& pos, const cSPVe
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
 // @ 0x004a5d10
 namespace SP { namespace EditorUtils {
 cSPVector3_s004a_5970 GetSkinTip(cSPEditorBlock_s004a_5970* block)
@@ -9620,9 +7618,6 @@ cSPVector3_s004a_5970 GetSkinTip(cSPEditorBlock_s004a_5970* block)
     return GetSkinPoint(pos, dir, block->GetScale());
 }
 }}  // namespace SP::EditorUtils
-
-
-
 
 // @ 0x004a5db0
 namespace SP { namespace EditorUtils {
@@ -9639,9 +7634,6 @@ cSPEditorBlock_s004a_5970* GetRootBlock(cSPEditorBlock_s004a_5970* block)
     }
 }
 }}  // namespace SP::EditorUtils
-
-
-
 
 // @ 0x004a5e10
 namespace SP { namespace EditorUtils {
@@ -9660,9 +7652,6 @@ cSPEditorBlock_s004a_5970* GetLimbRoot(cSPEditorBlock_s004a_5970* block)
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
 // @ 0x004a5fe0
 namespace SP { namespace EditorUtils {
 bool HasSymmetricLimb(cSPEditorBlock_s004a_5970* block)
@@ -9677,9 +7666,6 @@ bool HasSymmetricLimb(cSPEditorBlock_s004a_5970* block)
     return false;
 }
 }}  // namespace SP::EditorUtils
-
-
-
 
 // @ 0x004a60a0
 namespace SP { namespace EditorUtils {
@@ -9696,9 +7682,6 @@ bool AreInSameLimb(cSPEditorBlock_s004a_5970* a, cSPEditorBlock_s004a_5970* b)
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
 // @ 0x004a6120
 namespace SP { namespace EditorUtils {
 bool IsLimbConnected(cSPEditorBlock_s004a_5970* block)
@@ -9711,9 +7694,6 @@ bool IsLimbConnected(cSPEditorBlock_s004a_5970* block)
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
 // @ 0x004a6270
 namespace SP { namespace EditorUtils {
 bool IsLimbPart(cSPEditorBlock_s004a_5970* block)
@@ -9725,9 +7705,6 @@ bool IsLimbPart(cSPEditorBlock_s004a_5970* block)
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
 // @ 0x004a6310
 namespace SP { namespace EditorUtils {
 cSPEditorBlock_s004a_5970* GetSymmetryRoot(cSPEditorBlock_s004a_5970* block)
@@ -9738,9 +7715,6 @@ cSPEditorBlock_s004a_5970* GetSymmetryRoot(cSPEditorBlock_s004a_5970* block)
     else return GetSymmetryRoot(block->GetParent());
 }
 }}  // namespace SP::EditorUtils
-
-
-
 
 // @ 0x004a63c0
 namespace SP { namespace EditorUtils {
@@ -9760,9 +7734,6 @@ void RebuildSkins(cSPEditorBlock_s004a_5970* block, cSkinOwner* owner)
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
 // @ 0x004a6520
 namespace SP { namespace EditorUtils {
 void RefreshSkins(cSPEditorBlock_s004a_5970* block, cSPEditorBlock_s004a_5970* except)
@@ -9779,9 +7750,6 @@ void RefreshSkins(cSPEditorBlock_s004a_5970* block, cSPEditorBlock_s004a_5970* e
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
 // @ 0x004a6640
 namespace SP { namespace EditorUtils {
 void RebuildLimbSkins(cSPEditorBlock_s004a_5970* block, cSkinOwner* owner)
@@ -9789,9 +7757,6 @@ void RebuildLimbSkins(cSPEditorBlock_s004a_5970* block, cSkinOwner* owner)
     RebuildSkins(GetLimbRoot(block), owner);
 }
 }}  // namespace SP::EditorUtils
-
-
-
 
 // @ 0x004a6660
 namespace SP { namespace EditorUtils {
@@ -9801,9 +7766,6 @@ void RefreshLimbSkins(cSPEditorBlock_s004a_5970* block, bool includeSelf)
     RefreshSkins(GetLimbRoot(block), except);
 }
 }}  // namespace SP::EditorUtils
-
-
-
 
 // @ 0x004a6690
 void AssignCollisionGroups(cSPEditorBlock_s004a_6690* block, BlockVector_s004a_6690* list, int grpAll, int grpSel, bool floorAll)
@@ -9860,8 +7822,6 @@ void AssignCollisionGroups(cSPEditorBlock_s004a_6690* block, BlockVector_s004a_6
     }
 }
 
-
-
 // @ 0x004a6ca0
 void FUN_4a6ca0(cSPEditorModel_s004a_6690* model, int value)
 {
@@ -9876,13 +7836,9 @@ void FUN_4a6ca0(cSPEditorModel_s004a_6690* model, int value)
     model->FUN_4adc20(saved);
 }
 
-
-
 // @ 0x004a6d20
 void FUN_4a6d20(cSPEditorBlock_s004a_6690* block)
 { (void)block; }
-
-
 
 // @ 0x004a6f10
 namespace SP { namespace EditorUtils {
@@ -9993,41 +7949,6 @@ void DeleteInvalidBlocks(cSPEditorBlock_s004a_6f10* block)
 }
 }}  // namespace SP::EditorUtils
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004a7c30
 bool SameKey(ResKeySource* a, ResKeySource* b)
 {
@@ -10037,41 +7958,6 @@ bool SameKey(ResKeySource* a, ResKeySource* b)
         && first.mType == src.mType
         && first.mGroup == src.mGroup;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004a7c90
 void GatherBlocks(cSPEditorBlock_s004a_7c30* param_1, UIntVector* param_2)
@@ -10098,82 +7984,12 @@ void GatherBlocks(cSPEditorBlock_s004a_7c30* param_1, UIntVector* param_2)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004a7dd0
 bool EntHasFlag(cSPEditorBlock_s004a_7c30* e)
 {
     if (e != 0) { if (e->IsFlagSet(8)) { return true; } else { return EntHasFlag(e->GetParent()); } }
     else { return false; }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004a7e60
 bool BlockBlocked(cSPEditorBlock_s004a_7c30* b)
@@ -10188,41 +8004,6 @@ bool BlockBlocked(cSPEditorBlock_s004a_7c30* b)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004a7ea0
 bool AdjacentDir(int a, int b, unsigned char flipped)
 {
@@ -10236,41 +8017,6 @@ bool AdjacentDir(int a, int b, unsigned char flipped)
     else if ((a == 1) && (b == -1)) result = true;
     return result;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004a7f30
 void SetSymmetricBlocksUIState(cSPEditorBlock_s004a_7c30* b, unsigned int param_2, unsigned char p3)
@@ -10349,41 +8095,6 @@ void SetSymmetricBlocksUIState(cSPEditorBlock_s004a_7c30* b, unsigned int param_
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004a8860
 void ReleaseRefs(RefObj_s004a_7c30* b, UIntVector* list)
 {
@@ -10400,41 +8111,6 @@ void ReleaseRefs(RefObj_s004a_7c30* b, UIntVector* list)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004a88d0
 void KillSeti(int arg)
 {
@@ -10442,41 +8118,6 @@ void KillSeti(int arg)
     int b;
     KillSetiEffects(arg, GetRecorderState());
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004a88f0
 bool PostXformEffect(unsigned int id, char* src, void** out)
@@ -10502,40 +8143,6 @@ bool PostXformEffect(unsigned int id, char* src, void** out)
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004a89e0
 void* BuildSomeMatrix(void* param_1, void* param_2, void* param_3)
 {
@@ -10554,7 +8161,6 @@ void* BuildSomeMatrix(void* param_1, void* param_2, void* param_3)
     return param_1;
 }
 
-
 // @ 0x004a8d70
 M3::M3(float a, float b, float c, float d, float e, float f, float g, float h, float i)
 {
@@ -10562,7 +8168,6 @@ M3::M3(float a, float b, float c, float d, float e, float f, float g, float h, f
     m[1].x = d; m[1].y = e; m[1].z = f;
     m[2].x = g; m[2].y = h; m[2].z = i;
 }
-
 
 // @ 0x004a8e10
 void* BuildFacingMatrix(void* param_1, void* param_2, unsigned char param_3)
@@ -10587,7 +8192,6 @@ void* BuildFacingMatrix(void* param_1, void* param_2, unsigned char param_3)
     return param_1;
 }
 
-
 // @ 0x004a8f40
 V3_s004a_89e0* NegateX(V3_s004a_89e0* param_1, V3_s004a_89e0* param_2)
 {
@@ -10601,7 +8205,6 @@ V3_s004a_89e0* NegateX(V3_s004a_89e0* param_1, V3_s004a_89e0* param_2)
     param_1->z = v.z;
     return param_1;
 }
-
 
 // @ 0x004a8fc0
 void TransposeInto(float* param_1, float* param_2)
@@ -10628,14 +8231,12 @@ void TransposeInto(float* param_1, float* param_2)
     param_2[11] = 0.0f;
 }
 
-
 // @ 0x004a92c0
 void HavokAlignedRoutine(void* param_1, void* param_2)
 {
     (void)param_1;
     (void)param_2;
 }
-
 
 // @ 0x004a9610
 void ConvertToMatrix(void* param_1, void* param_2)
@@ -10652,7 +8253,6 @@ void ConvertToMatrix(void* param_1, void* param_2)
     for (int i = 0; i < 9; ++i) dst[i] = src[i];
 }
 
-
 // @ 0x004a96d0
 bool AllChildrenNoFlag(cSPEditorBlock_s004a_89e0* param_1)
 {
@@ -10667,7 +8267,6 @@ bool AllChildrenNoFlag(cSPEditorBlock_s004a_89e0* param_1)
     }
     return true;
 }
-
 
 // @ 0x004a9840
 cSPEditorBlock_s004a_89e0* GetFirstFootBlock(cSPEditorBlock_s004a_89e0* param_1)
@@ -10684,7 +8283,6 @@ cSPEditorBlock_s004a_89e0* GetFirstFootBlock(cSPEditorBlock_s004a_89e0* param_1)
     }
     return 0;
 }
-
 
 // @ 0x004a9920
 namespace SP { namespace EditorUtils {
