@@ -112,8 +112,6 @@ struct Element68 {
 };
 // ---- items of slice s00720290 end
 
-
-
 // ---- items of slice s00721240 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void  __cdecl qsort(void* base, uint32_t n, uint32_t sz, int (__cdecl* cmp)(const void*, const void*));
 extern "C" int   __cdecl ComparePairs(const void* a, const void* b);
@@ -169,7 +167,6 @@ struct CMeshClusterer2 {
 
 // ---- items of slice s00722410 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void __stdcall VectorAppend8(void* dstEnd, void* val);      // 00722410
-extern "C" void* __cdecl AllocConstruct38(int n, const void* a, const void* b); // 00722990
 struct Vec8 { float x, y; };
 struct VecAny { int* begin; int* end; int* cap; void Assign(int n, int value, int dummy); void Push8(Vec8* val); };
 // ---- items of slice s00722410 end
@@ -177,7 +174,6 @@ struct VecAny { int* begin; int* end; int* cap; void Assign(int n, int value, in
 // ---- items of slice s00723140 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __cdecl memcpy(void*, const void*, size_t);
 extern "C" void* __cdecl memset(void*, int, size_t);
-extern "C" long __cdecl _InterlockedExchange(long volatile*, long);
 extern const char kEastlAllocFile[];  // 0x13ebb38 ".../EASTL/allocator.h"
 extern uint32_t gBitMask[];  // 0x140d0ac: per-format value masks, indexed by BufView::maskIdx
 #pragma intrinsic(_InterlockedExchange)
@@ -454,7 +450,7 @@ struct cMeshClusterer_s0072_4100 {
     char pad84[4];
     int mNumClusters;        // +0x88
     void CalcError(cFaceCluster_s0072_4100* a, cFaceCluster_s0072_4100* b, float* out);  // 0x00720700
-    void Setup();
+    void Setup();  // 0x00724100 (cMeshClusterer::Setup)
 };
 // ---- items of slice s00724100 end
 
@@ -998,7 +994,6 @@ struct cMeshClusterer_s0072_5e40 {
 }
 // ---- items of slice s00725e40 end
 
-
 // ---- items of slice s00728c90 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace UV {
 struct Vec2 { float x, y; };                       // POD: copies go through integer registers
@@ -1161,6 +1156,18 @@ void __cdecl FinishMesh(void* mesh);                               // 0x00735a90
 }
 // ---- items of slice s00728c90 end
 
+
+
+
+
+
+
+
+
+
+
+
+
 // ---- items of slice s007249f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" int   FUN_0071ddc0(void* p, int a, int b, int c, int d);   // 0x71ddc0
 extern "C" int   FUN_0071e040(void* p, int idx, int id);              // 0x71e040
@@ -1237,17 +1244,9 @@ void Obj15_20070(void* a)
 
 
 
-
-
-
-
 // @ 0x007200f0
 void Obj15_200f0(void* a, void* b, void* c)
 { (void)a; (void)b; (void)c; }
-
-
-
-
 
 
 
@@ -1283,10 +1282,6 @@ void Obj15_copy(const Obj15* src, Obj15* dst)
 
 
 
-
-
-
-
 // @ 0x007201d0
 void Obj15_copyAssign(const Obj15* src, Obj15* dst)
 {
@@ -1295,9 +1290,6 @@ void Obj15_copyAssign(const Obj15* src, Obj15* dst)
     Obj15_Init(dst);
     Obj15_Assign((void*)src, dst, 0);
 }
-
-
-
 
 
 
@@ -1381,6 +1373,18 @@ void MeshAdj::AddTri(int a, int n, int c, int* in, Pair16* out, int d)
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00720590
 uint32_t __cdecl HashVec(const float* v)
 {
@@ -1401,6 +1405,18 @@ uint32_t __cdecl HashVec(const float* v)
     } while (q < e);
     return h;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 // @ 0x00720620
 void SP::cHeap::HeapifyDown(int i)
@@ -1435,6 +1451,18 @@ void SP::cHeap::HeapifyDown(int i)
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007206b0
 void SP::cHeap::HeapifyUp(int i)
 {
@@ -1456,6 +1484,18 @@ void SP::cHeap::HeapifyUp(int i)
         parent = (i - 1) >> 1;
     } while (parent >= 0);
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 // @ 0x00720700
 void cMeshClusterer::CalcError(cFaceCluster* a, cFaceCluster* b, float* out)
@@ -1503,6 +1543,18 @@ void cMeshClusterer::CalcError(cFaceCluster* a, cFaceCluster* b, float* out)
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00720920
 void __cdecl MinMaxIndices(const float* const* v, int* minOut, int* maxOut)
 {
@@ -1522,6 +1574,18 @@ void __cdecl MinMaxIndices(const float* const* v, int* minOut, int* maxOut)
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00720b10
 void Element68::Dtor()
 {
@@ -1532,6 +1596,18 @@ void Element68::Dtor()
     if (v14 != 0 && ((int*)v14)[-1] != 0)
         EASTL_allocator_deallocate(v14);
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 // @ 0x00720b60
 void HashTable::Grow(uint32_t newSize)
@@ -1563,6 +1639,18 @@ void HashTable::Grow(uint32_t newSize)
     mCount = newSize;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00720c20
 Element68* __cdecl DestroyRange68(Element68* first, Element68* last, Element68* dst)
 {
@@ -1580,6 +1668,18 @@ Element68* __cdecl DestroyRange68(Element68* first, Element68* last, Element68* 
     } while (first != last);
     return dst;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 // @ 0x00720c90
 void __cdecl UninitCopyFace28(cFaceCluster** out, const cFaceCluster* first, const cFaceCluster* last, cFaceCluster* dst)
@@ -1603,6 +1703,18 @@ void __cdecl UninitCopyFace28(cFaceCluster** out, const cFaceCluster* first, con
     *out = dst;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00720d10
 void __cdecl FillFace28(cFaceCluster* dst, uint32_t n, const cFaceCluster* src)
 {
@@ -1625,6 +1737,18 @@ void __cdecl FillFace28(cFaceCluster* dst, uint32_t n, const cFaceCluster* src)
     } while (n != 0);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00720d70
 void __cdecl UninitCopyDual18(cDualEdge** out, const cDualEdge* first, const cDualEdge* last, cDualEdge* dst)
 {
@@ -1637,6 +1761,18 @@ void __cdecl UninitCopyDual18(cDualEdge** out, const cDualEdge* first, const cDu
     }
     *out = dst;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 // @ 0x00720dd0
 void* __cdecl MoveCopy34(void* first, void* last, void* dst)
@@ -1667,6 +1803,18 @@ void* __cdecl MoveCopy34(void* first, void* last, void* dst)
     return dst;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00720ea0
 void* __cdecl CopyFace28(void* first, void* last, void* dst)
 {
@@ -1692,6 +1840,18 @@ void* __cdecl CopyFace28(void* first, void* last, void* dst)
     } while (first != last);
     return dst;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 // @ 0x00720f40
 void cMeshClusterer::MergeEdgeLists(int param_2, int param_3)
@@ -1782,6 +1942,18 @@ void cMeshClusterer::MergeEdgeLists(int param_2, int param_3)
     *plink = -1;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00721240
 void __cdecl SortFloatsByDist(void* v)
 {
@@ -1833,9 +2005,6 @@ void __cdecl SortFloatsByDist(void* v)
 
 
 
-
-
-
 // @ 0x00721340
 void __cdecl ChartSolve(int n, int stride, int* a, int* b, float* out)
 {
@@ -1843,9 +2012,6 @@ void __cdecl ChartSolve(int n, int stride, int* a, int* b, float* out)
     out[0] = 1.0f;
     out[1] = 0.0f;
 }
-
-
-
 
 
 
@@ -1870,9 +2036,6 @@ ChartRef* ChartVec::MakeChartRef(ChartRef* out)
     out->mOwner = this_;
     return out;
 }
-
-
-
 
 
 
@@ -1924,9 +2087,6 @@ void ChartHash::GrowF(uint32_t newSize)
 
 
 
-
-
-
 // @ 0x00721910
 void __stdcall DestroyChartRange(Chart68* first, Chart68* last)
 {
@@ -1939,9 +2099,6 @@ void __stdcall DestroyChartRange(Chart68* first, Chart68* last)
             EASTL_allocator_deallocate(first->v14);
     }
 }
-
-
-
 
 
 
@@ -1975,9 +2132,6 @@ void* __cdecl DeleteTwoVtbl(TwoVtbl* this_, uint32_t flags)
 
 
 
-
-
-
 // @ 0x007219f0
 void ChartHash::FindF(int* out, float* key)
 {
@@ -1998,9 +2152,6 @@ void ChartHash::FindF(int* out, float* key)
     out[0] = (int)*slot;
     out[1] = (int)slot;
 }
-
-
-
 
 
 
@@ -2057,9 +2208,6 @@ void ChartHash::InsertF(int* out, float* key)
 
 
 
-
-
-
 // @ 0x00721bb0
 void ChartHash::FindI(int* out, int* key)
 {
@@ -2078,9 +2226,6 @@ void ChartHash::FindI(int* out, int* key)
     out[0] = (int)*slot;
     out[1] = (int)slot;
 }
-
-
-
 
 
 
@@ -2137,9 +2282,6 @@ void ChartHash::InsertI(int* out, int* key)
 
 
 
-
-
-
 // @ 0x00721d80
 void* __cdecl CopyChart68(void* dst, void* src)
 {
@@ -2149,9 +2291,6 @@ void* __cdecl CopyChart68(void* dst, void* src)
         *(int*)(d + i) = *(int*)(s + i);
     return dst;
 }
-
-
-
 
 
 
@@ -2183,18 +2322,12 @@ void __cdecl InitChartHash(ChartHash* this_)
 
 
 
-
-
-
 // @ 0x007220c0
 void __cdecl FreeChartThing(ChartHash* this_)
 {
     if (this_->mBuckets != 0 && ((int*)this_->mBuckets)[-1] != 0)
         EASTL_allocator_deallocate(this_->mBuckets);
 }
-
-
-
 
 
 
@@ -2253,9 +2386,6 @@ void CMeshClusterer2::CollapseEdges()
 
 
 
-
-
-
 // @ 0x007222f0
 void* __cdecl Insert34Vec(void* v, void* pos, void* val)
 {
@@ -2274,16 +2404,11 @@ void* __cdecl Insert34Vec(void* v, void* pos, void* val)
 
 
 
-
-
 // @ 0x00722410
 void __cdecl VectorAppend8Impl(void* dstEnd, void* val)
 {
     (void)dstEnd; (void)val;
 }
-
-
-
 
 
 
@@ -2324,9 +2449,6 @@ void __thiscall VecAny::Assign(int n, int value, int dummy)
 
 
 
-
-
-
 // @ 0x00722580
 void __cdecl VecInsert18(int* v, void* pos, uint32_t n, void* val)
 {
@@ -2343,17 +2465,11 @@ void __cdecl VecInsert18(int* v, void* pos, uint32_t n, void* val)
 
 
 
-
-
-
 // @ 0x00722770
 void __cdecl VecInsert28(int* v, void* pos, uint32_t n, void* val)
 {
     (void)v; (void)pos; (void)n; (void)val;
 }
-
-
-
 
 
 
@@ -2388,9 +2504,6 @@ void* __cdecl AllocConstruct38(int n, const void* a, const void* b)
 
 
 
-
-
-
 // @ 0x007229f0
 void* __cdecl CopyChartRecord(void* dst, void* src)
 {
@@ -2400,9 +2513,6 @@ void* __cdecl CopyChartRecord(void* dst, void* src)
         *(int*)(d + i) = *(int*)(s + i);
     return dst;
 }
-
-
-
 
 
 
@@ -2432,9 +2542,6 @@ int __cdecl FindOrInsertF(void* hash, float* key)
 
 
 
-
-
-
 // @ 0x00722ba0
 void __cdecl SwapVecIfOwned(int* a, int* b)
 {
@@ -2442,9 +2549,6 @@ void __cdecl SwapVecIfOwned(int* a, int* b)
     a[0] = b[0]; a[1] = b[1]; a[2] = b[2];
     b[0] = (int)t0; b[1] = (int)t1; b[2] = (int)t2;
 }
-
-
-
 
 
 
@@ -2482,9 +2586,6 @@ void __thiscall VecAny::Push8(Vec8* val)
 
 
 
-
-
-
 // @ 0x00722ca0
 int* __cdecl ConstructIntVec(int* v, int n, int val)
 {
@@ -2503,16 +2604,11 @@ int* __cdecl ConstructIntVec(int* v, int n, int val)
 
 
 
-
-
-
 // @ 0x00722d00
 void __cdecl BuildTextureChart(int param_1)
 {
     (void)param_1;
 }
-
-
 
 
 
@@ -2616,9 +2712,6 @@ void MeshBuild::Build()
 
 
 
-
-
-
 // @ 0x00723680
 IntVecObj::IntVecObj(int n)
 {
@@ -2640,18 +2733,12 @@ IntVecObj::IntVecObj(int n)
 
 
 
-
-
-
 // @ 0x00723720
 IntVecObj::IntVecObj(int n, const int* v)
 {
     mVec.Fill(n, *v);
     mField20 = 0;
 }
-
-
-
 
 
 
@@ -2686,9 +2773,6 @@ void Vec24::resize(uint32_t n)
 
 
 
-
-
-
 // @ 0x007238b0
 void Vec24::resize(uint32_t n, const Vertex3D* val)
 {
@@ -2702,9 +2786,6 @@ void Vec24::resize(uint32_t n, const Vertex3D* val)
     CopyVertex3D(pEnd, pEnd, pNewEnd);
     mpEnd = mpEnd - (pEnd - pNewEnd);
 }
-
-
-
 
 
 
@@ -2758,9 +2839,6 @@ ChartRec::ChartRec(const ChartRec& o)
 
 
 
-
-
-
 // @ 0x00723a70
 ChartRec& ChartRec::operator=(const ChartRec& o)
 {
@@ -2780,9 +2858,6 @@ ChartRec& ChartRec::operator=(const ChartRec& o)
     i64 = o.i64;
     return *this;
 }
-
-
-
 
 
 
@@ -2827,9 +2902,6 @@ void Vec56::DoAssign(const Xform56* first, const Xform56* last, int tag)
 
 
 
-
-
-
 // @ 0x00723cf0
 void PairVec::Reset(uint32_t nVerts, uint32_t nPairs, int a, int b, uint8_t flag)
 {
@@ -2849,9 +2921,6 @@ void PairVec::Reset(uint32_t nVerts, uint32_t nPairs, int a, int b, uint8_t flag
     mField38 = b;
     mFlag3C = flag;
 }
-
-
-
 
 
 
@@ -2946,8 +3015,6 @@ void __cdecl ExportSubMeshRemap(MeshData* mesh)
     if (pv.mVerts.mpBegin && ((int*)pv.mVerts.mpBegin)[-1] != 0) operator_delete__(pv.mVerts.mpBegin);
     if (pv.mpBegin && ((int*)pv.mpBegin)[-1] != 0) operator_delete__(pv.mpBegin);
 }
-
-
 
 
 
@@ -3074,9 +3141,6 @@ void cMeshClusterer_s0072_4100::Setup()
 
 
 
-
-
-
 // @ 0x00724700
 void __cdecl FUN_00724700(void* this_)
 { (void)this_; }
@@ -3089,14 +3153,9 @@ void __cdecl FUN_00724700(void* this_)
 
 
 
-
-
-
 // @ 0x007247c0
 void __cdecl FUN_007247c0()
 {}
-
-
 
 
 
@@ -3297,6 +3356,10 @@ void FUN_007249f0(MeshContext* ctx)
 
 
 
+
+
+
+
 // @ 0x00725130
 namespace SP {
 void CreateEdges(cMeshData_s0072_5130* mesh)
@@ -3447,9 +3510,6 @@ void CreateEdges(cMeshData_s0072_5130* mesh)
 
 
 
-
-
-
 // @ 0x00725e40
 namespace SP {
 void cMeshClusterer_s0072_5e40::AssignCharts(int texCoordSet, bool normalize, bool alignToBoundary)
@@ -3569,10 +3629,6 @@ void cMeshClusterer_s0072_5e40::AssignCharts(int texCoordSet, bool normalize, bo
 
 
 
-
-
-
-
 // @ 0x007269b0
 void FUN_007269b0(int* param_1, int param_2, unsigned param_3, int param_4)
 {
@@ -3633,9 +3689,6 @@ void FUN_007269b0(int* param_1, int param_2, unsigned param_3, int param_4)
 
 
 
-
-
-
 // @ 0x00728020
 void FUN_00728020(MeshCtx* ctx, float f, int mode, void* p4)
 {
@@ -3657,11 +3710,15 @@ void FUN_00728020(MeshCtx* ctx, float f, int mode, void* p4)
 
 
 
+
+
 // @ 0x007280b0
 void FUN_007280b0(void* self, void* param_2, int param_3, int param_4, int param_5)
 {
     (void)self; (void)param_2; (void)param_3; (void)param_4; (void)param_5;
 }
+
+
 
 
 
@@ -3673,11 +3730,15 @@ void FUN_007281d0(void* self)
 
 
 
+
+
 // @ 0x00728330
 void FUN_00728330(void* self, unsigned n)
 {
     (void)self; (void)n;
 }
+
+
 
 
 
@@ -3689,11 +3750,15 @@ void FUN_00728400(void* self, unsigned a, unsigned b)
 
 
 
+
+
 // @ 0x007285a0
 void FUN_007285a0(void* self)
 {
     (void)self;
 }
+
+
 
 
 
@@ -3705,11 +3770,15 @@ void FUN_007289a0(void* self)
 
 
 
+
+
 // @ 0x00728af0
 void FUN_00728af0(void* self, void* meshData, int n)
 {
     (void)self; (void)meshData; (void)n;
 }
+
+
 
 
 
@@ -3796,19 +3865,12 @@ void __cdecl FUN_00728c90(UV::PtrVec* meshes, float clusterParam, const float* s
 
 
 
-
-
-
-
 // @ 0x00729290
 int FUN_00729290(void* self)
 {
     (void)self;
     return 1;
 }
-
-
-
 
 
 
@@ -3821,19 +3883,12 @@ void FUN_00735470(void)
 
 
 
-
-
-
-
 // @ 0x00735960
 void FUN_00735960(int* param_1, int* param_2)
 {
     // PARTIAL: refcounted element list builder with EH; skeleton only.
     (void)param_1; (void)param_2;
 }
-
-
-
 
 
 
@@ -3845,19 +3900,12 @@ void FUN_007366e0(int param_1)
 }
 
 
-
-
-
-
 // @ 0x007368a0
 void FUN_007368a0(int* param_1)
 {
     // PARTIAL: rebuild reverse index streams with refcounted EltArrays; skeleton only.
     (void)param_1;
 }
-
-
-
 
 
 // @ 0x0073a4b0
