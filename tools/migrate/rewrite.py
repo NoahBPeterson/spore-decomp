@@ -3908,6 +3908,7 @@ class Rewrite:
             self.tu_rel = "src/game/%s/%s.cpp" % (d, stem)
             tu = W(*self.tu_rel.split("/"))
             os.makedirs(os.path.dirname(tu), exist_ok=True)
+            self.drop_annotation_dummies(tu)
             self.rename_shadowed_stubs(fns)
             self.resolve_conflicts(fns, tu)
             pre = self.render_preamble(fns)
@@ -4456,6 +4457,27 @@ class Rewrite:
                 {n for kind, t in self.items if kind == "other" and RS.mask(RS.unwrap_namespaces(t)[1]).lstrip().startswith(("struct", "class", "union"))
                  for n in RS.item_names(kind, t)}
         return mm.group(1) in self._stub_struct_names
+
+    DUMMY_RE = re.compile(r"^\s*(?:extern\s+)?void\s+(?:__\w+\s+)?([A-Za-z_]\w*)\s*\(\s*\.\.\.\s*\)\s*;\s*//\s*(?:@\s*)?0x[0-9a-fA-F]+")
+
+    def drop_annotation_dummies(self, tu):
+        """`void GetMaterialManager(...); // 0x0067dd70`: an equivalence-checker address annotation, not a declaration of the
+        function.  Where the slice or the TU declares the function for real it overloads that one, and the verbatim calls
+        are ambiguous (mig9 s00a0f350 0xa0f350 C2668; also GetSystemAT, GetStyleManager, SetCreatureAnimManager drops).
+        The real declaration carries the address comment the resolver needs, so the dummy is dropped."""
+        old = mask(open(tu).read()) if os.path.exists(tu) else ""
+        texts = [RS.mask(RS.unwrap_namespaces(t)[1]) for _k, t in self.items]
+        keep = []
+        for (kind, text), mt in zip(self.items, texts):
+            md = self.DUMMY_RE.match(RS.unwrap_namespaces(text)[1])
+            if md:
+                n = md.group(1)
+                real = re.compile(r"(?<![\w:.>])%s\s*\((?!\s*\.\.\.\s*\))" % re.escape(n))
+                if any(real.search(t2) for t2 in texts if t2 is not mt) or real.search(old):
+                    self.notes.append(("annotation-dummy", "%s(...) dropped: the slice or the TU declares %s" % (n, n)))
+                    continue
+            keep.append((kind, text))
+        self.items = keep
 
     def rename_namespace(self, fns, old_n):
         """This slice's top-level `namespace X` -> `X_sNNNN_NNNN` in its items and verbatim functions (the module TU has a
