@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPCreatureAnim/gait_record.cpp  ?OnRegister@cGaitKeyBlockCommand@?A0xd4e43742@@QAEXPAUcIParser_s009d_e8b0@ArgScript@EA@@PAUcState_s009d_e8b0@45@@Z  009de8b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

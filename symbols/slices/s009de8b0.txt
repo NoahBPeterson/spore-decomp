@@ -1,1 +1,1 @@
-009de8b0 `anonymous namespace'::cGaitKeyBlockCommand::OnRegister  # retail name from card; byte-exact, registers 43 ArgScript gait sub-commands
+009de8b0 ?OnRegister@cGaitKeyBlockCommand@?A0xd4e43742@@QAEXPAUcIParser_s009d_e8b0@ArgScript@EA@@PAUcState_s009d_e8b0@45@@Z  # OnRegister migrated from s009de8b0 (verbatim, slice spelling)
