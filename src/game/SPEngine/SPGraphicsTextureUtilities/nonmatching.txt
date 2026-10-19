@@ -14,7 +14,7 @@
 007afb70 564 SP::cDXTCompressJobData::DXTCompressRow: full row/block copy + eadxt calls, loop/register shape differs
 007afe10 130 SP::cDXTCompressJobData::RunJob: full row loop + completion, scheduling differs
 007aff00 191 SP::WriteImageDataAsTexture: full texture upload + per-mip sizing, register/loop shape differs
-007b07e0 73 SP::cTexturePreload ctor: EH state + burn/final vptr ordering differs
+007b07e0 75 SP::cTexturePreload ctor: EH state + burn/final vptr ordering differs
 007b0980 164 eastl vector assignment: helper call arg order/scheduling differs
 007b0a70 315 eastl::vector<T20>::grow/DoInsertValue: allocation + move helpers, scheduling differs
 007b0da0 100 eastl::vector<Ref4>::assign: copy/destroy call ordering differs

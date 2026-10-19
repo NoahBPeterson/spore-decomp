@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPGraphicsTextureUtilities.cpp -- migrated from slice(s) s007b19c0, s007b0a70, s007af8b0, s007aea30, s007ada40, s004e01d0 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsTextureUtilities.cpp -- migrated from slice(s) s007acbb0, s007b19c0, s007b0a70, s007af8b0, s007aea30, s007ada40, s004e01d0 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsTextureUtilities.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -523,9 +523,16 @@ struct VecAssignOp { void Assign(void*, void*, void*, void*, void*); }; // 0x004
 struct VecGrow  { void* Grow(int n, void* a, void* b); };        // 0x007B0370 __thiscall
 struct RasterOps{ void GetMipSize(void* p, int mip); };          // 0x011F0270 __thiscall
 struct IFac { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-              virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
-              virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
-              virtual void v12(); virtual void v13(void*);      // +0x34
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13(void*);
               virtual void v14();
               virtual void* v15(int,int,int,int,int,int,int,int); // +0x3C
               virtual void v16(); };
@@ -601,8 +608,13 @@ struct C4 {
 // ---- items of slice s007b19c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct S3 { int a, b, c; };
 struct IFac_s007b_19c0 {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-    virtual void v4(); virtual void v5(); virtual void v6();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
     virtual void* v7(S3 s, int z);                  // +0x1C
     virtual void* v8(int,int);                      // +0x20 (RTT create)
 };
@@ -632,9 +644,47 @@ template <class T> void eastl::vector_s004e_01d0<T>::reserve(uint32_t n)
 }
 template void eastl::vector_s004e_01d0<EA::AutoRefCount_s004e_01d0<SP::cTextureInstance_s004e_01d0> >::reserve(uint32_t);
 
+// @ 0x007ad0c0
+extern "C" uint32_t FUN_007ad0c0(void)
+{
+    // PARTIAL: DXT3 alpha-block expansion into RGBA4444.
+    return 0;
+}
 
+// @ 0x007ad2e0
+extern "C" uint32_t mappixel(void)
+{
+    // PARTIAL: map a pixel against four DXT candidates (EAX/ECX register convention).
+    return 0;
+}
 
+// @ 0x007ad400
+extern "C" uint32_t mappixeltransparent(void)
+{
+    // PARTIAL: like mappixel but including alpha in the error metric.
+    return 0;
+}
 
+// @ 0x007ad610
+extern "C" uint32_t trymappixel(void)
+{
+    // PARTIAL: minimum squared error against four candidates.
+    return 0;
+}
+
+// @ 0x007ad760
+extern "C" uint32_t rbmappixel(void)
+{
+    // PARTIAL: reciprocal min-error variant.
+    return 0;
+}
+
+// @ 0x007ad950
+extern "C" uint32_t trymapblockfast(void)
+{
+    // PARTIAL: MMX fast path for trymapblock.
+    return 0;
+}
 
 // @ 0x007ada40
 void mapblock(const uint32_t* src, uint8_t* dst, uint32_t c0, uint32_t c1, int mode)
@@ -671,10 +721,6 @@ void mapblock(const uint32_t* src, uint8_t* dst, uint32_t c0, uint32_t c1, int m
         }
     }
 }
-
-
-
-
 
 // @ 0x007adcf0
 void FUN_007adcf0(const uint32_t* src, uint8_t* dst, uint32_t cB, uint32_t cA)
@@ -721,10 +767,6 @@ void FUN_007adcf0(const uint32_t* src, uint8_t* dst, uint32_t cB, uint32_t cA)
     *(uint32_t*)(dst + 4) = result;
 }
 
-
-
-
-
 // @ 0x007ade70
 uint32_t rtrymapblock(const uint32_t* src, uint32_t raw0, uint32_t raw1)
 {
@@ -749,10 +791,6 @@ uint32_t rtrymapblock(const uint32_t* src, uint32_t raw0, uint32_t raw1)
     return total;
 }
 
-
-
-
-
 // @ 0x007ae0b0
 uint32_t rbtrymapblock(const uint32_t* src, uint32_t raw0, uint32_t raw1)
 {
@@ -765,10 +803,6 @@ uint32_t rbtrymapblock(const uint32_t* src, uint32_t raw0, uint32_t raw1)
         total += rbmappixel(src[i], pal);
     return total;
 }
-
-
-
-
 
 // @ 0x007ae2a0
 uint32_t RefineMinMaxColors(const uint32_t* px, uint32_t* out)
@@ -803,10 +837,6 @@ uint32_t RefineMinMaxColors(const uint32_t* px, uint32_t* out)
     return best;
 }
 
-
-
-
-
 // @ 0x007ae5b0
 void FUN_007ae5b0(const uint8_t* src, uint8_t* dst, int stride)
 {
@@ -817,10 +847,6 @@ void FUN_007ae5b0(const uint8_t* src, uint8_t* dst, int stride)
         p += stride;
     }
 }
-
-
-
-
 
 // @ 0x007ae660
 void InterpolatedAlphaBlock(int hi, int lo, const uint8_t* src, uint8_t* dst)
@@ -852,10 +878,6 @@ void InterpolatedAlphaBlock(int hi, int lo, const uint8_t* src, uint8_t* dst)
     dst[6] = (uint8_t)(hi24 >> 8);
     dst[7] = (uint8_t)(hi24 >> 16);
 }
-
-
-
-
 
 // @ 0x007ae840
 void FUN_007ae840(const uint8_t* src, int stride, __m64* copy, uint32_t* out)
@@ -889,10 +911,6 @@ void FUN_007ae840(const uint8_t* src, int stride, __m64* copy, uint32_t* out)
     out[1] = (uint32_t)_mm_cvtsi64_si32(mx);
 }
 
-
-
-
-
 // @ 0x007ae920
 void Span::Init(int x, int y, int dx, int dy, int extra)
 {
@@ -907,19 +925,11 @@ void Span::Init(int x, int y, int dx, int dy, int extra)
     ((uint8_t*)this)[0x1c] = 0;
 }
 
-
-
-
-
 // @ 0x007ae960
 uint8_t FlagHolder::IsSet()
 {
     return mpData->mFlag;
 }
-
-
-
-
 
 // @ 0x007ae980
 #pragma auto_inline(off)
@@ -928,18 +938,11 @@ void DestroyDxtSurface(DxtSurface* p)
     p->~DxtSurface();
 }
 
-
-
-
-
 // @ 0x007ae9f0
 DxtSurface::DxtSurface()
 : mC(0), m10(0), m24(0)
 {
 }
-
-
-
 
 // @ 0x007aeab0
 uint32_t EndpointColors::findendpoints(const uint32_t* pixels, uint32_t* out0, uint32_t* out1, int alpha, int quality)
@@ -1167,9 +1170,6 @@ done:
     return best;
 }
 
-
-
-
 // @ 0x007af5d0
 void FUN_007af5d0(Endpoint* first, Endpoint* last, Endpoint* dest)
 {
@@ -1188,9 +1188,6 @@ void FUN_007af5d0(Endpoint* first, Endpoint* last, Endpoint* dest)
     }
 }
 
-
-
-
 // @ 0x007af620
 void FUN_007af620(Endpoint* first, Endpoint* last, const Endpoint* src)
 {
@@ -1205,9 +1202,6 @@ void FUN_007af620(Endpoint* first, Endpoint* last, const Endpoint* src)
         first->c    = src->c;
     }
 }
-
-
-
 
 // @ 0x007af670
 void FUN_007af670(Endpoint* dest, uint32_t n, const Endpoint* src)
@@ -1229,9 +1223,6 @@ void FUN_007af670(Endpoint* dest, uint32_t n, const Endpoint* src)
     }
 }
 
-
-
-
 // @ 0x007af6d0
 void FUN_007af6d0(Endpoint* first, Endpoint* last, Endpoint* dest)
 {
@@ -1248,8 +1239,6 @@ void FUN_007af6d0(Endpoint* first, Endpoint* last, Endpoint* dest)
         dest->c    = last->c;
     }
 }
-
-
 
 // @ 0x007afae0
 bool cRowJobData::StepDown(CJob* job)
@@ -1272,8 +1261,6 @@ bool cRowJobData::StepDown(CJob* job)
     job->mSlot = slot;
     return job->Continuation((void*)&FUN_007ae910, this);
 }
-
-
 
 // @ 0x007afb70
 int cDXTCompressJobData::DXTCompressRow(int row)
@@ -1349,8 +1336,6 @@ int cDXTCompressJobData::DXTCompressRow(int row)
     return src->mHeight - row;
 }
 
-
-
 // @ 0x007afe10
 bool cDXTCompressJobData::RunJob(CJob* job)
 {
@@ -1378,8 +1363,6 @@ bool cDXTCompressJobData::RunJob(CJob* job)
     job->mSlot = row;
     return job->Continuation((void*)&FUN_007b0030, this);
 }
-
-
 
 // @ 0x007aff00
 bool WriteImageDataAsTexture(void* ppData, int a, int b, void** out)
@@ -1410,8 +1393,6 @@ bool WriteImageDataAsTexture(void* ppData, int a, int b, void** out)
     return true;
 }
 
-
-
 // @ 0x007b07e0
 SP::cTexturePreload::cTexturePreload(int n)
 {
@@ -1420,8 +1401,6 @@ SP::cTexturePreload::cTexturePreload(int n)
         ((VecReserve*)&mInProgress)->Reserve(n);
     }
 }
-
-
 
 // @ 0x007b0980
 void** VecAssign(void** self, void** other)
@@ -1450,7 +1429,6 @@ void** VecAssign(void** self, void** other)
     }
     return self;
 }
-
 
 // @ 0x007b0a70
 void C20::grow(T20* pos, const T20& v)
@@ -1484,7 +1462,6 @@ void C20::grow(T20* pos, const T20& v)
     begin = p;
 }
 
-
 // @ 0x007b0da0
 void C4::assign(void** first, void** last)
 {
@@ -1511,7 +1488,6 @@ void C4::assign(void** first, void** last)
     end = (void**)((char*)end + (n - cur)*4);
 }
 
-
 // @ 0x007b0f40
 void C20::push_back(const T20& v)
 {
@@ -1524,7 +1500,6 @@ void C20::push_back(const T20& v)
         grow(p, v);
     }
 }
-
 
 // @ 0x007b1040
 void C20::resize(int n)
@@ -1539,7 +1514,6 @@ void C20::resize(int n)
         end = (T20*)((char*)end - ((char*)end - (char*)ne));
     }
 }
-
 
 // @ 0x007b10a0
 int C20::Alloc()
