@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00641500 29 GetThumbnailBackdrop (28-entry type switch): complete; case tree identical, only the vtable load (GetAssetType) is hoisted above the three key stores in the original
