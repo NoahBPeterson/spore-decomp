@@ -1,1 +1,10 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/xmltok.cpp  ?big2_getAtts@@YAHPBUencoding_s0091_59b0@@PBDHPAUATTRIBUTE@@@Z  009159b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/xmltok.cpp  ?big2_predefinedEntityName@@YAHPBUencoding_s0091_59b0@@PBD1@Z  00915c50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/xmltok.cpp  ?big2_sameName@@YAHPBUencoding_s0091_59b0@@PBD1@Z  00915d70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/xmltok.cpp  ?big2_nameMatchesAscii@@YAHPBUencoding_s0091_59b0@@PBD11@Z  00915e90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/xmltok.cpp  ?big2_nameLength@@YAHPBUencoding_s0091_59b0@@PBD@Z  00915ed0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/xmltok.cpp  ?big2_skipS@@YAPBDPBUencoding_s0091_59b0@@PBD@Z  00915f60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/xmltok.cpp  ?big2_updatePosition@@YAXPBUencoding_s0091_59b0@@PBD1PAUposition_s0091_59b0@@@Z  00915fb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/xmltok.cpp  ?XmlUtf8Encode@@YAHHPAD@Z  00916700  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/xmltok.cpp  ?XmlUtf16Encode@@YAHHPAG@Z  009167c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
