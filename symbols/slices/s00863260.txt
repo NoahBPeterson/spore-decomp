@@ -1,9 +1,9 @@
-00863260 FUN_00863260   # libjpeg jmemmgr alloc_small: allocate + link a control block; byte-exact
+00863260 ?FUN_00863260@@YAPAHPAXHHHHH@Z  # FUN_00863260 migrated from s00863260 (verbatim, slice spelling)
 008634e0 FUN_008634e0   # realize one virtual array (element size from control block); complete nonmatching
 00863580 FUN_00863580   # realize one virtual array (128-byte items); complete nonmatching
 00863620 FUN_00863620   # access_virt_barray; complete nonmatching
 00863770 FUN_00863770   # access_virt_sarray; complete nonmatching
-008638c0 FUN_008638c0   # free the small/large pools of the memory manager (jpeg_mem_term); byte-exact
+008638c0 _FUN_008638c0  # FUN_008638c0 migrated from s00863260 (verbatim, slice spelling)
 00863b10 FUN_00863b10   # invert one packed 4-byte pixel to 3-byte; complete nonmatching
 00863b70 FUN_00863b70   # null color conversion / sample reorder; complete nonmatching
 00863c50 FUN_00863c50   # APP0/GIMEX marker reader; complete nonmatching
