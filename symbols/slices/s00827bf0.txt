@@ -5,15 +5,15 @@
 00828020 cSPUIPropertyLayout::SetFlag (bool +0x74 + window vcalls)
 00828070 ?GetEventMask@CPL@@UAEIXZ  # CPL::GetEventMask migrated from s00827bf0 (verbatim, slice spelling)
 00828080 ?DoMessage@CPL@@UAE_NHPAX@Z  # CPL::DoMessage migrated from s00827bf0 (verbatim, slice spelling)
-00828100 ?GetRootWindow@CPL@@QAEPAXXZ  # CPL::GetRootWindow migrated from s00827bf0 (verbatim, slice spelling)
-00828110 ?ForceVisibleLocation@CPL@@QAEXXZ  # cSPUIPropertyLayout::ForceVisibleLocation (dev PDB name; mirrors the window back inside the main window)
-00828250 ?Init@CPL@@UAE_NXZ  # cSPUIPropertyLayout::Init (vtable slot 7; layout Init + root window lookup + Attach)
+00828100 ?GetRootWindow@cSPUIPropertyLayout@@QAEPAVIWindow@UTFWin@EA@@XZ  # cSPUIPropertyLayout::GetRootWindow migrated from s00827bf0
+00828110 ?ForceVisibleLocation@CPL@@QAEXXZ  # CPL::ForceVisibleLocation migrated from s00827bf0 (verbatim, slice spelling)
+00828250 ?Init@CPL@@UAE_NXZ  # CPL::Init migrated from s00827bf0 (verbatim, slice spelling)
 008283a0 ?SetPositionAndOffset@CPL@@QAEXMMMM@Z  # CPL::SetPositionAndOffset migrated from s00827bf0 (verbatim, slice spelling)
-00828410 ?DoDestroyValues@ElemVec@@QAEXPAUElem@@0@Z  # eastl::vector<pair<uint,cProperty>>::DoDestroyValues (thiscall member; was a stdcall free function with the same body)
+00828410 ?DoDestroyValues@ElemVec@@QAEXPAUElem@@0@Z  # ElemVec::DoDestroyValues migrated from s00827bf0 (verbatim, slice spelling)
 00828450 ??0Elem@@QAE@ABU0@@Z  # Elem::Elem migrated from s00827bf0 (verbatim, slice spelling)
 008284a0 ?4Elem  # Elem::operator= (base identifier so the matcher finds it)
-008284f0 ?ElemMoveStart@@YAPAUElem@@PAU1@00@Z  # eastl::uninitialized_move_impl<0,random_access>::do_move_start<pair<uint,cProperty>*,...>
-00828560 ?ElemCopy@@YAPAUElem@@PAU1@00@Z  # eastl::copy_impl<0,random_access>::do_copy<pair<uint,cProperty>*,...>
-008285e0 ?ElemCopyBackward@@YAPAUElem@@PAU1@00@Z  # eastl::copy_backward_impl<0,random_access>::do_copy<pair<uint,cProperty>*,...>
-00828670 ??1CPL@@QAE@XZ  # cSPUIPropertyLayout::~cSPUIPropertyLayout
-008286d0 ??0CPL@@QAE@XZ  # cSPUIPropertyLayout::cSPUIPropertyLayout
+008284f0 ?ElemMoveStart@@YAPAUElem@@PAU1@00@Z  # ElemMoveStart migrated from s00827bf0 (verbatim, slice spelling)
+00828560 ?ElemCopy@@YAPAUElem@@PAU1@00@Z  # ElemCopy migrated from s00827bf0 (verbatim, slice spelling)
+008285e0 ?ElemCopyBackward@@YAPAUElem@@PAU1@00@Z  # ElemCopyBackward migrated from s00827bf0 (verbatim, slice spelling)
+00828670 ??1CPL@@QAE@XZ  # CPL::~CPL migrated from s00827bf0 (verbatim, slice spelling)
+008286d0 ??0CPL@@QAE@XZ  # CPL::CPL migrated from s00827bf0 (verbatim, slice spelling)
