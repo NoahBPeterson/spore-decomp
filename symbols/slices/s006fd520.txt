@@ -1,8 +1,8 @@
 006fd730  ActiveState_SetSamplerState  # m_d3d9Device vfn+0x114, m_samplerStateShadow/m_samplerStateDelta
 006fd7b0  ActiveState_FlushSomeStates  # 3 calls + tail jump to FUN_006fb920
 006fd990  ActiveState_InstallFlushCB  # stores &FUN_006fd7d0 at +0x14
-006fd9a0  SP::TextCopy  # PDB name
-006fd9c0  SP::TextCopySubstitute  # PDB name, isalpha/isdigit
+006fd9a0 ?TextCopy@SP@@YAPADPADPBD@Z  # SP::TextCopy migrated from s006fd520
+006fd9c0 ?SP_TextCopySubstitute@@YAPADPADPBDHHHH@Z  # __declspec migrated from s006fd520 (verbatim, slice spelling)
 006fdab0 ?BinaryFindPixelShader@@YAHPBDPBUShaderBlob@@I@Z  # BinaryFindPixelShader migrated from s006fd520 (verbatim, slice spelling)
 006fdb90  `anonymous namespace'::GenerateInputStruct  # PDB name
 006fdd50  `anonymous namespace'::GenerateCurrentStruct  # PDB name

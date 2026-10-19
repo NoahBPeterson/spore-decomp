@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsFragmentUtilities.cpp  ?TextCopy@SP@@YAPADPADPBD@Z  006fd9a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentUtilities.cpp  ?SP_TextCopySubstitute@@YAPADPADPBDHHHH@Z  006fd9c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
