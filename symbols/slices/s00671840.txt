@@ -1,12 +1,13 @@
 00671840 SP::cSPUIMissingExpansionPackPage::ShowMissingExpansionPacks  # card PDB name
-00671c00 SP::cSPUISearchBox::Shutdown  # card PDB name
-00671c50 SP::cSPUISearchBox  # __thiscall, WindowManager cascade
-00671ca0 SP::cSPUISearchBox::ReloadCallback  # card PDB candidate (caller-scored)
-00671ec0 SP::cSPUISearchBox::cSPUISearchBox  # card PDB name
-00671f70 SP::cSPUISearchBox::~cSPUISearchBox  # card PDB name
-00672040 SP::cSPUISearchBox::Update  # card PDB name
-006720e0 SP::cSPUISearchBox  # clears mSearchString and pushes to mWinSearchBox
-00672120 SP::cSPUISearchBox::DoMessage  # card PDB candidate (caller-scored)
+00671c00 ?Shutdown@cSPUISearchBox@SP@@QAEXXZ  # SP::cSPUISearchBox::Shutdown migrated from s00671840
+00671c50 ?OnSearchChanged@cSPUISearchBox@@QAEXXZ  # cSPUISearchBox::OnSearchChanged migrated from s00671840 (verbatim, slice spelling)
+00671ca0 ?ReloadCallback@cSPUISearchBox@@QAEXPAXD@Z  # cSPUISearchBox::ReloadCallback migrated from s00671840 (verbatim, slice spelling)
+00671da0 ?SetParentWindow@cSPUISearchBox@@QAEXPAX@Z  # cSPUISearchBox::SetParentWindow migrated from s00671840 (verbatim, slice spelling)
+00671ec0 ??0cSPUISearchBox@@QAE@XZ  # cSPUISearchBox::cSPUISearchBox migrated from s00671840 (verbatim, slice spelling)
+00671f70 ??1cSPUISearchBox@@QAE@XZ  # cSPUISearchBox::~cSPUISearchBox migrated from s00671840 (verbatim, slice spelling)
+00672040 ?Update_@cSPUISearchBox@@QAEXH@Z  # cSPUISearchBox::Update_ migrated from s00671840 (verbatim, slice spelling)
+006720e0 ?EmptySearch@cSPUISearchBox@@QAEXXZ  # cSPUISearchBox::EmptySearch migrated from s00671840 (verbatim, slice spelling)
+00672120 ?DoMessage@cSPUISearchBox@@QAE_NHPAH@Z  # cSPUISearchBox::DoMessage migrated from s00671840 (verbatim, slice spelling)
 00672200 `anonymous namespace'::cTextureCheat::Execute  # card PDB candidate (caller-scored)
 00672480 ?Init@GuidePage@@QAE_NPAX@Z  # GuidePage::Init migrated from s00671840 (verbatim, slice spelling)
 006725a0 ?OnRelease@GuidePage@@QAE_NXZ  # GuidePage::OnRelease migrated from s00671840 (verbatim, slice spelling)

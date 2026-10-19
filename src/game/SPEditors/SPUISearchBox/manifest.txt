@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPUISearchBox.cpp  ?Shutdown@cSPUISearchBox@SP@@QAEXXZ  00671c00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUISearchBox.cpp  ?OnSearchChanged@cSPUISearchBox@@QAEXXZ  00671c50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUISearchBox.cpp  ??1cSPUISearchBox@@QAE@XZ  00671f70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUISearchBox.cpp  ?EmptySearch@cSPUISearchBox@@QAEXXZ  006720e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
