@@ -47,16 +47,21 @@ struct RBNode {
 
 struct P550; struct P_ecc0;
 struct Iter { RBNode* n; Iter() {} Iter(RBNode* p) : n(p) {} Iter(const Iter& o) : n(o.n) {} };
+
+// EASTL rbtree: the anchor lives at +4 (after the allocator/compare pointer).
 struct Tree {
-    void* pad0;             // +0
-    RBNode* mpNodeLeft;     // +4   (anchor)
-    RBNode* mpNodeRight;    // +8
-    RBNode* mpNodeParent;   // +0xc
-    unsigned char mColor;   // +0x10
-    char pad1[3];
+    void* mAllocator;       // +0
+    RBNode mAnchor;         // +4
     unsigned int mnSize;    // +0x14
     int pad2;               // +0x18
-    // rbtree member functions (receive the tree in ECX)
+    Tree() : mAnchor() {
+        mAnchor.mpNodeLeft = &mAnchor;
+        mAnchor.mpNodeRight = &mAnchor;
+        mAnchor.mpNodeParent = 0;
+        mAnchor.mColor = 0;
+        mnSize = 0;
+    }
+    ~Tree();
     RBNode* AllocA(P550* src);
     RBNode* CopyA(RBNode* pNode, RBNode* pParent);
     RBNode* AllocB(P_ecc0* src);
@@ -216,8 +221,8 @@ void CComSer::dtor()
         EASTL_allocator_deallocate(a);
     if (p50)
         ((void(__thiscall*)(void*))(*(void***)p50)[4 / 4])(p50);
-    mTree2.Nuke(mTree2.mpNodeParent);
-    mTree1.Nuke(mTree1.mpNodeParent);
+    mTree2.Nuke(mTree2.mAnchor.mpNodeParent);
+    mTree1.Nuke(mTree1.mAnchor.mpNodeParent);
     vt8 = g_vtbl_13eb938;
     vt0 = g_vtbl_13ec458;
 }
@@ -229,17 +234,17 @@ void CComSer::dtor()
 void CComSer::reset()
 {
     flag_c = 0;
-    mTree1.Nuke(mTree1.mpNodeParent);
-    mTree1.mpNodeLeft = (RBNode*)&mTree1.mpNodeLeft;
-    mTree1.mpNodeRight = (RBNode*)&mTree1.mpNodeLeft;
-    mTree1.mpNodeParent = 0;
-    mTree1.mColor = 0;
+    mTree1.Nuke(mTree1.mAnchor.mpNodeParent);
+    mTree1.mAnchor.mpNodeLeft = &mTree1.mAnchor;
+    mTree1.mAnchor.mpNodeRight = &mTree1.mAnchor;
+    mTree1.mAnchor.mpNodeParent = 0;
+    mTree1.mAnchor.mColor = 0;
     mTree1.mnSize = 0;
-    mTree2.Nuke(mTree2.mpNodeParent);
-    mTree2.mpNodeLeft = (RBNode*)&mTree2.mpNodeLeft;
-    mTree2.mpNodeRight = (RBNode*)&mTree2.mpNodeLeft;
-    mTree2.mpNodeParent = 0;
-    mTree2.mColor = 0;
+    mTree2.Nuke(mTree2.mAnchor.mpNodeParent);
+    mTree2.mAnchor.mpNodeLeft = &mTree2.mAnchor;
+    mTree2.mAnchor.mpNodeRight = &mTree2.mAnchor;
+    mTree2.mAnchor.mpNodeParent = 0;
+    mTree2.mAnchor.mColor = 0;
     mTree2.mnSize = 0;
     b4c = 0;
     b4d = 0;
@@ -319,7 +324,7 @@ bool cObjDB::OpenOStream(int a, void** out, int b)
         *(void**)((char*)p + 8) = g_vtbl_14085f0;
         *(void**)p = g_vtbl_1408668;
         *(void**)((char*)p + 8) = g_vtbl_140862c;
-        *(void**)((char*)p + 0xc) = 0;
+        *(unsigned char*)((char*)p + 0xc) = 0;
         *(void**)((char*)p + 0x10) = 0;
         *(unsigned char*)((char*)p + 0x14) = 1;
     }
@@ -351,8 +356,8 @@ bool cObjDB::HasKey(const ResKey* key)
 // @ 0x0069eb60
 void* Tree::IndexID(const unsigned* key)
 {
-    RBNode* lb = (RBNode*)&mpNodeLeft;
-    RBNode* cur = mpNodeParent;
+    RBNode* lb = &mAnchor;
+    RBNode* cur = mAnchor.mpNodeParent;
     while (cur) {
         if (*(unsigned*)((char*)cur + 0x10) >= *key) {
             lb = cur;
@@ -361,7 +366,7 @@ void* Tree::IndexID(const unsigned* key)
             cur = cur->mpNodeLeft;
         }
     }
-    if (lb == (RBNode*)&mpNodeLeft || *key < *(unsigned*)((char*)lb + 0x10)) {
+    if (lb == &mAnchor || *key < *(unsigned*)((char*)lb + 0x10)) {
         AR tmp;
         IDPair v(*key, tmp);
         Iter r;
@@ -380,11 +385,11 @@ bool F_e9e0::f(void** out, unsigned instanceID, unsigned classID)
     *out = 0;
     RBNode* itC;
     t2.find(&itC, &classID);
-    if (itC != (RBNode*)&t2.mpNodeLeft) {
+    if (itC != &t2.mAnchor) {
         Tree* sub = (Tree*)((char*)itC + 0x1c);
         RBNode* itI;
         sub->find(&itI, &instanceID);
-        if (itI == (RBNode*)&sub->mpNodeLeft) {
+        if (itI == &sub->mAnchor) {
             void* fac = FUN_00920090();
             *out = ((void*(__thiscall*)(void*, unsigned, int, int, int))(*(void***)fac)[0x20 / 4])(fac, classID, 0x179c807, 0, 0);
             if (!*out)
@@ -464,6 +469,7 @@ struct ClassPair {  // pair<const uint, cClassInfo>
     ClassPair(unsigned k, const ClassInfo& c) : first(k), read(c.read), inst(c.inst), map(c.map) {}
 };
 
+// Full-object view: 0x0069f840's real `this` is the cICOMSerializer base (this+8).
 struct CS8 {
     char pad0[0x24];
     Tree t2;                // +0x24 (real +0x2c) mClassIDMap
@@ -515,8 +521,8 @@ bool CS8::LoadClassObjects(void* progress)
             } else if (ok) {
                 SRef s2;
                 unsigned idx = 0;
-                RBNode* it = t2.mpNodeRight;
-                RBNode* end = (RBNode*)&t2.mpNodeLeft;
+                RBNode* it = t2.mAnchor.mpNodeRight;
+                RBNode* end = &t2.mAnchor;
                 Key3 k2 = { 0x0179d304u, 0x0179d310u, 0 };
                 float total = (float)t2.mnSize;
                 if (it != end) {
@@ -591,16 +597,60 @@ bool CS8::LoadClassObjects(void* progress)
     return ok;
 }
 
+// ---------------------------------------------------------------------------
 // 0x0069f840  cCOMSerializer::cCOMSerializer (behaviour)
-CComSer* FUN_0069f840(CComSer* self, void* param);
-CComSer* FUN_0069f840(CComSer* self, void* param)
+// The object carries two vtables: the base cICOMSerializer vptr at +8 (set to
+// LRUCache then to the real serializer table) and the singleton mixin vptr at
+// +0; the two rbtrees at +0x10/+0x2c default-construct their anchors, then the
+// body zeroes the remaining scalars, calls reset(), and assigns the database
+// smart reference (AddRef the new, Release the old).
+// ---------------------------------------------------------------------------
+struct CComSerBase {
+    VP vt0;                 // +0
+    int mRefCount;          // +4
+    VP vt8;                 // +8
+    unsigned char flag_c;   // +0xc
+    char pad0[3];
+    CComSerBase()
+    {
+        mRefCount = 0;
+        *(VP volatile*)&vt8 = g_vtbl_14095cc;   // LRUCache base vptr (must stay)
+        vt0 = g_vtbl_1408750;
+        vt8 = g_vtbl_1408728;
+        flag_c = 0;
+    }
+    ~CComSerBase();
+};
+
+struct CtorSer : CComSerBase {
+    Tree mTree1;            // +0x10
+    Tree mTree2;            // +0x2c
+    int mMode;              // +0x48
+    unsigned char b4c;      // +0x4c
+    unsigned char b4d;      // +0x4d
+    char pad2[2];
+    void* p50;              // +0x50
+    void* p54;
+    void* p58;
+    void* p5c;
+    CtorSer(void* param);
+};
+
+// @ 0x0069f840
+CtorSer::CtorSer(void* param)
 {
-    self->mRefCount = 0;
-    self->vt8 = g_vtbl_14095cc;
-    self->vt0 = g_vtbl_1408750;
-    self->vt8 = g_vtbl_1408728;
-    self->flag_c = 0;
-    // trees initialised by reset()
-    self->reset();
-    return self;
+    mMode = 0;
+    b4c = 0;
+    b4d = 0;
+    p50 = 0;
+    p54 = 0;
+    p58 = 0;
+    p5c = 0;
+    ((CComSer*)this)->reset();
+    void* old = p50;
+    if (param != old) {
+        if (param) ((void(__thiscall*)(void*))(*(void***)param)[0])(param);
+        p50 = param;
+        if (old) ((void(__thiscall*)(void*))(*(void***)old)[1])(old);
+    }
 }

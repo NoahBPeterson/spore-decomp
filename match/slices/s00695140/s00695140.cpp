@@ -435,6 +435,7 @@ struct cVarListSerializer {
     unsigned int mSignature;                                // +0xa08
     void* mpObject;                                         // +0xa0c
     cDataSerializerGeneric* mpSerializerList;               // +0xa10
+    cVarListSerializer(void* object, cDataSerializerGeneric* serializerList, unsigned int signature);   // 0x00692880 (thiscall, ret 0xc)
     int GetFields(FieldVec& out);
     int Execute(FieldReport* report);
 };
@@ -533,6 +534,7 @@ struct Parent {
     char pad0[4];
     NodePtrVec mChildren;                           // +0x04
     Node* GetOrCreate(unsigned key, const wchar_t* name);
+    bool AddChild(unsigned obj, const void* desc, const wchar_t* name);   // 0x00695b40
 };
 
 struct HashIter {
@@ -663,10 +665,22 @@ Node* Parent::GetOrCreate(unsigned key, const wchar_t* name)
 
 
 // =====================================================================
-// Remaining body recorded as partial.
+// @ 0x00695b40  link a child node into this writer (create+execute if new)
 // =====================================================================
-// @ 0x00695b40
-extern "C" void FUN_00695b40() { /* serializer helper: summarised */ }
+bool Parent::AddChild(unsigned obj, const void* desc, const wchar_t* name)
+{
+    HashIter it = gNodeTable.find(obj);
+    if (it == gNodeTable.end()) {
+        Node* node = GetOrCreate(obj, name);
+        SP::cVarListSerializer local((void*)obj, (SP::cDataSerializerGeneric*)desc, 0x1a80d26);
+        return local.Execute((FieldReport*)node) != 0;
+    }
+    HashPair* entry = (HashPair*)it.mpNode;
+    mChildren.push_back(entry->second);
+    Node* node = entry->second;
+    node->mParents.push_back(this);
+    return true;
+}
 // --- equivalence checker address annotations
 
 // --- equivalence checker address annotations (dummy declarations) ---

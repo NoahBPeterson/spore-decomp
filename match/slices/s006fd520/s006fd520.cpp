@@ -9,8 +9,10 @@
 // ---- external callees -------------------------------------------------------------------
 void  __cdecl FUN_006fd330(void* dst, unsigned n, void* value);
 void  __cdecl FUN_00d73090(void* first, void* last);
-void  __cdecl FUN_006fcdc0(void* self, void* stream, int value);
 void  __cdecl FUN_0093a6c0(void* stream, const void* data, int n);
+void  __cdecl FUN_0093a780(void* stream, void* data, int n, int flag);
+bool  __cdecl FUN_00777840(void* stream, unsigned flag, void* arg);
+void  __cdecl FUN_006fd990(void* self);
 void* __cdecl FUN_006fcb90(int n, void* first, int b);
 void  __cdecl FUN_006fefe0();
 void  __cdecl FUN_006fb960();
@@ -62,6 +64,9 @@ struct Elem1c {
     unsigned int  i;      // +0x14
     unsigned char stream; // +0x18
     Elem1c() : a(0), b(0), c(0), d(0), e(0), f(0), g(0), h(0), i(0) {}
+    // cVertDecl::WriteBinary (0x006fcdc0): emits the leading name byte(s) of
+    // this declaration element plus its stream field into `stream`.
+    void WriteBinary(void* stream, void* arg);
 };
 
 // @ 0x006fd520
@@ -78,13 +83,47 @@ void Vec1c::Resize(unsigned n) {
 // @ 0x006fd5d0
 struct StreamCtx {
     char pad00[0x48];
-    Vec1c decls[1];   // +0x48
-    bool ReadDecls(void* stream, unsigned flag, int b);
+    // two arrays of 0x14-byte vertex-declaration vectors (ElementVec), at
+    // +0x48 and +0x188; each holds 0x1c-byte cVertDecl elements.
+    bool ReadDecls(void* stream, unsigned flag, void* arg);
 };
 
-bool StreamCtx::ReadDecls(void* stream, unsigned flag, int b) {
-    (void)stream; (void)flag; (void)b;
-    return false;
+bool StreamCtx::ReadDecls(void* stream, unsigned flag, void* arg) {
+    if (!FUN_00777840(stream, flag, arg))
+        return false;
+    FUN_0093a6c0(stream, &flag, 1);
+    while ((unsigned char)flag != 0xff) {
+        unsigned count;
+        FUN_0093a780(stream, &count, 1, 0);
+        Vec1c* v0 = (Vec1c*)((char*)this + 0x48 + (flag & 0xff) * 0x14);
+        v0->Resize(count);
+        if ((int)count > 0) {
+            char* base = v0->begin;
+            Elem1c* e = (Elem1c*)base;
+            unsigned n = count;
+            do {
+                e->WriteBinary(stream, arg);
+                FUN_0093a6c0(stream, e, 1);
+                ++e;
+            } while (--n != 0);
+        }
+        FUN_0093a780(stream, &count, 1, 0);
+        Vec1c* v1 = (Vec1c*)((char*)this + 0x188 + (flag & 0xff) * 0x14);
+        v1->Resize(count);
+        if ((int)count > 0) {
+            char* base = v1->begin;
+            Elem1c* e = (Elem1c*)base;
+            unsigned n = count;
+            do {
+                e->WriteBinary(stream, arg);
+                FUN_0093a6c0(stream, e, 1);
+                ++e;
+            } while (--n != 0);
+        }
+        FUN_0093a6c0(stream, &flag, 1);
+    }
+    FUN_006fd990(this);
+    return true;
 }
 
 // @ 0x006fd730

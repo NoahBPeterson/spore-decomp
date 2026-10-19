@@ -11,8 +11,8 @@ extern "C" void  EASTL_dealloc(void*);                            // 0x0f47380
 extern "C" void* EASTL_alloc6(uint32_t, void*, uint32_t, uint32_t, const char*, uint32_t); // 0x0f473a0
 extern "C" char  g_allocTag[];
 extern "C" char  g_fileEASTL[];
-extern "C" void __cdecl ReadInt32(void*, void*, int, int);        // 0x093a780
-extern "C" void __cdecl ReadByte2(void*, void*, int, int);        // 0x093a700
+extern "C" bool __cdecl ReadInt32(void*, void*, int, int);        // 0x093a780
+extern "C" bool __cdecl ReadByte2(void*, void*, int, int);        // 0x093a700
 extern "C" void __cdecl WStrAssign(void* dst, const wchar_t* first, const wchar_t* last); // 0x0423650
 extern "C" void __cdecl WideAppend(void* self, const wchar_t* first, const wchar_t* last); // 0x042f9d0
 extern "C" void __cdecl FreeNodesHashtable(void*);                // 0x0685ed0
@@ -191,7 +191,12 @@ WFixed* WFixed::Append(const wchar_t* s) {
 // =====================================================================
 // @ 0x00686430  allocate+zero a flat buffer {begin,end,cap}
 // =====================================================================
-struct VecBuf { int* b; int* e; int* c; int* Init(uint32_t n, void* tag); };
+struct VecBuf {
+    int* b; int* e; int* c;
+    uint32_t padc, pad10;                    // allocator (0x14-byte object)
+    int* Init(uint32_t n, void* tag);
+    ~VecBuf() { if (b && b[-1]) EASTL_dealloc(b); }
+};
 int* VecBuf::Init(uint32_t n, void* tag) {
     (void)tag;
     void* p = n ? EASTL_alloc6(n, g_allocTag, 0, 0, g_fileEASTL, 0xd1) : 0;
@@ -229,15 +234,53 @@ extern "C" int OpenRecordAsStream(int arg) {
 }
 
 // =====================================================================
-// @ 0x00686520  RSA/record decode helper (partial)
+// @ 0x00686520  record decode helper: read header, then RSA/SHA1 verify
 // =====================================================================
-__declspec(noinline) bool DecodeRecord(void* rd, int arg, uint32_t size, uint8_t flag) {
-    // (full body not reconstructed; see partial.txt)
-    int i0, i1;
-    ReadInt32(rd, &i0, 1, 0);
-    ReadInt32(rd, &i1, 1, 0);
-    (void)size; (void)flag;
-    return false;
+void __cdecl SHA1(const void* data, int len, void* md);                            // 0x0117b180
+void* __cdecl FUN_01179f50();                                                      // 0x01179f50 (RSA_new)
+void* __cdecl FUN_0117ac80(const void* s, int len, void* ret);                     // 0x0117ac80 (BN_bin2bn)
+int  __cdecl BN_dec2bn(void** a, const char* str);                                 // 0x0117a720
+int  __cdecl FUN_0117a150(int type, const void* m, uint32_t mlen, void* sig, uint32_t siglen, void* rsa); // 0x0117a150 (RSA_verify)
+struct RSAKey { uint32_t pad[4]; void* n; void* e; };                              // +0x10 n, +0x14 e
+
+__declspec(noinline) unsigned char DecodeRecord(void* rd, uint32_t key, uint32_t size, uint8_t flag) {
+    uint32_t b0, b1, ver, zero, n0, n1;
+    if (!ReadInt32(rd, &ver, 1, 0))
+        goto done;
+    if (!ReadInt32(rd, &zero, 1, 0))
+        goto done;
+    if (zero != 0)
+        goto done;
+    flag = 0;
+    {
+        ReadByte2(rd, &b0, 1, 0);
+        ReadByte2(rd, &b1, 1, 0);
+        ReadInt32(rd, &n0, 1, 0);
+        ReadInt32(rd, &n1, 1, 0);
+        uint32_t sz = n0 * n1;
+        if (sz != size)
+            goto done;
+        VecBuf data;
+        data.Init(sz, &flag);
+        if (((int (__thiscall*)(void*, void*, int))VT(rd)[0x30 / 4])(rd, data.b, (int)sz) == (int)sz) {
+            int m = -((int (__thiscall*)(void*, int))VT(rd)[0x24 / 4])(rd, 2);
+            {
+                VecBuf sig;
+                sig.Init((uint32_t)m, &flag);
+                ((int (__thiscall*)(void*, void*, int))VT(rd)[0x30 / 4])(rd, sig.b, m);
+                unsigned char digest[20];
+                SHA1(sig.b, m, digest);
+                RSAKey* rsa = (RSAKey*)FUN_01179f50();
+                rsa->n = FUN_0117ac80((const void*)key, (int)size, 0);
+                BN_dec2bn(&rsa->e, "65537");
+                if (FUN_0117a150(0x40, digest, 0x14, data.b, sz, rsa) != 0)
+                    flag = 1;
+            }
+        }
+    }
+done:
+    ((void (__thiscall*)(void*, int, int))VT(rd)[0x28 / 4])(rd, 0, 0);
+    return flag;
 }
 
 // =====================================================================
