@@ -1,4 +1,3 @@
-007776c0 SP::VSProfileFromVersion
 00776730 SP::... # shader/model-builder routine (skeleton)
 00776920 SP::... # skeleton
 00776a60 SP::... # skeleton
@@ -10,6 +9,8 @@
 00777290 SP::... # skeleton
 007773c0 SP::... # skeleton
 007775a0 SP::... # skeleton
+007776c0 ?VSProfileFromVersion@SP@@YAPADI@Z  # SP::VSProfileFromVersion migrated from s00776730
+007c4dd0 ?Init@cViewer@SP@@QAE_N_N@Z  # SP::cViewer::Init (callee of s00776730, named from the dev publics; slice address comment)
 013eb384 ??_7cListenerBase@@6B@
 0140e660 ??_7cShaderPreviewA@@6BcListenerBase@@@
 0140e670 ??_7cShaderPreviewA@@6BcRefObjBase@@@

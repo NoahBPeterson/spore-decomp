@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00777720 - virtual-call wrapper over a shader object; skeleton
+00777740 - virtual-call wrapper over a shader object; skeleton
+00777760 - SP::cShaderBase::Write (serialization, 6x WriteUint32); skeleton

@@ -1,7 +1,7 @@
-007776f0 SP::PSProfileFromVersion
-00777720 virtual-call wrapper
-00777740 virtual-call wrapper
-00777760 SP::cShaderBase::Write
+007776f0 ?PSProfileFromVersion@SP@@YAPADI@Z  # SP::PSProfileFromVersion migrated from s007776f0
+00777720 ?FUN_00777720@@YAXPAHHH@Z  # FUN_00777720 migrated from s007776f0 (verbatim, slice spelling)
+00777740 ?FUN_00777740@@YAHPAH@Z  # FUN_00777740 migrated from s007776f0 (verbatim, slice spelling)
+00777760 ?FUN_00777760@@YAHHH@Z  # FUN_00777760 migrated from s007776f0 (verbatim, slice spelling)
 00777840 SP::cShaderBase::Read
 007779e0 Mat44::assignTo
 00777a10 shader vertex-format max count query
