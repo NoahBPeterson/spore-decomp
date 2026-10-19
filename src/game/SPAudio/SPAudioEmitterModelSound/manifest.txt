@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPAudio/SPAudioEmitterModelSound.cpp  ?ComputeGainAttenuation@cEmitterModelSound@@QAEMPAX000@Z  00a37b70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
