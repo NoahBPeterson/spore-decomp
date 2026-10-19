@@ -807,3 +807,20 @@ Round 7 (29 objects, commits 60a260fb..46e5d89a) is landed, byte-exact and asm-c
 - `rewrite.py` without `--quiet` now also prints the methods of other mapped structs with their reasons, and
   `work/claude/night_sweep.sh` + `night_cmp.py` diff two dry sweeps of the mig7 entries.
 - Header item found: EA::UTFWin::CustomWinProc's header notes only 2 of 32 retail slots agree with the dev vtable.
+
+### 8j. Fix pass 6, parts C/F so far (2026-10-18 night, during wave mig8): what changed for landing agents
+
+- **Second sources** (C7): a slice dir with another `<slice>*.cpp` (s0062da00_ui.cpp, s00634490b.cpp) is a variant source. A plain
+  run prints `VARIANT SOURCE: ... run the same commands with --variant X` for the batch functions that live there; run steps 1-5
+  again with that `--variant`. A function without a manifest row belongs to the source whose marker defines it. Slice-named
+  local headers (`s00634490_ui.h`) are expanded like `sXXXXXXXX.h`.
+- **`#if 0` blocks** in slice text and headers are dropped (s007de7d0: a disabled annotation struct became a second FloatVec).
+- **Stub member definitions** (C13): `bool F_ec20::f(..) {..}` is no stub item of its own (the clash loop renamed `f` in the
+  declaration only: C2039; also SwatchStrategies' `inline void cMWModel::Release()` holds). Holds whose reason is the clash loop
+  can be deleted from the renames file and the entry re-applied.
+- **using-directives**: one inside a namespace block declares nothing (s0056df80: `SP::Traits::eastl::`, C3083); a verbatim
+  definition after a dropped `using namespace N;` gets `N::` in its parameter list too (0x7e67a0 `CommandLine`, C2065).
+- **Crashes fixed**: `proto_key` on `__declspec(thread)` variables; the variant hint KeyError.
+- **run_all --manifest** (F26) uses its own object dir, lock and results file per manifest: module runs no longer wait.
+- **Reports**: name them `work/migrate/report_<slice>_<Obj>.md` (one slice can feed several objects).
+- Agents: start every shell command with `cd <repo root> &&` (the session's working directory can move).
