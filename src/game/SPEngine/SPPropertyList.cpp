@@ -20,6 +20,8 @@ extern "C" long _InterlockedExchange(volatile long*, long);
 #include <new>
 #include "EA/IO/FileStream.h"
 #include <string.h>
+#include "SP/FunctionalMatch/Constraint.h"
+#include "SP/cPollinator.h"
 
 // ---- items of slice s006a11b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace EA {
@@ -215,13 +217,30 @@ public:
 // ---- items of slice s006a11b0 end
 
 // ---- items of slice s006a22a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern EA::Variant g_sNullVariant;  // 0x016027d0
+namespace EA {
+namespace IO {
+struct IStream;
+}
+}
+    void Memset32(...); // 0x0092cb00
 namespace SP {
 class cPropertyList_s006a_22a0;
 }
 namespace EA {
 namespace IO {
-struct IStream;
+struct IStream_s006a_22a0;
+}
+}
+namespace EA {
+namespace Allocator {
+class ZoneObject_s006a_22a0 {
+public:
+  virtual ~ZoneObject_s006a_22a0();
+  static void* operator new(unsigned int n, const char* pName, int flags = 0,
+                            unsigned int debugFlags = 0, const char* pFile = 0,
+                            int line = 0);
+  static void operator delete(void* p); // 0x00f47380
+};  // namespace Allocator
 }
 }
 namespace EA {
@@ -235,22 +254,31 @@ public:
 }
 }
 namespace EA {
+namespace ResourceMan {
+struct Key_s006a_22a0 {
+  uint32_t mInstance;
+  uint32_t mType;
+  uint32_t mGroup;
+};  // namespace ResourceMan
+}
+}
+namespace EA {
 struct Variant_s006a_22a0 {
   Variant_s006a_22a0() : mFlags(0), mTypeId(0) {}
   Variant_s006a_22a0(const int& v);
   Variant_s006a_22a0(const float& v);
   Variant_s006a_22a0(const bool& v);
   Variant_s006a_22a0& operator=(const Variant_s006a_22a0& o);
-  Variant_s006a_22a0& operator=(const ResourceMan::Key& k);
-  void Destruct(int flags);
+  Variant_s006a_22a0& operator=(const ResourceMan::Key_s006a_22a0& k);
+  void Destruct(int flags);  // 0x0093db80 (EA::Variant::Destruct)
   ~Variant_s006a_22a0() {
     if (mFlags & 4) Destruct(0);
   }
   uint32_t mData[4];  // +0x0
   uint16_t mFlags;    // +0x10
   uint16_t mTypeId;   // +0x12
-  void* GetString8();
-  void* GetKey();
+  void* GetString8();  // 0x0060ebf0 (EA::Variant::GetString8)
+  void* GetKey();  // 0x006a1030 (EA::Variant::GetKey)
 };
 }
 struct VariantPair_s006a_22a0 {
@@ -264,8 +292,8 @@ VariantPair_s006a_22a0* lower_bound(VariantPair_s006a_22a0* first, VariantPair_s
 namespace SP {
 class cResourceBase_s006a_22a0 {
 public:
-  virtual int AddRef();
-  virtual int Release();
+  virtual int AddRef();  // 0x00432be0 (SP::cResourceBase::AddRef)
+  virtual int Release();  // 0x00432b50 (SP::cResourceBase::Release)
   virtual ~cResourceBase_s006a_22a0();
   virtual void* Cast(unsigned int);
   virtual int GetReferenceCount();
@@ -296,20 +324,20 @@ struct VariantMap {
 namespace SP {
 class cPropertyList_s006a_22a0 : public cResourceBase_s006a_22a0 {
 public:
-  virtual void SetProperty(unsigned int key, EA::Variant_s006a_22a0* value);  // 5
-  virtual void RemoveProperty(unsigned int key);                    // 6
-  virtual bool HasProperty(unsigned int key) const;                 // 7
+  virtual void SetProperty(unsigned int key, EA::Variant_s006a_22a0* value);  // 5 0x006a2e20
+  virtual void RemoveProperty(unsigned int key);                    // 6 0x006a2ef0
+  virtual bool HasProperty(unsigned int key) const;                 // 7 0x006a2470
   virtual bool GetPropertyA(unsigned int key, EA::Variant_s006a_22a0** out);   // 8
   virtual bool GetProperty(unsigned int key, EA::Variant_s006a_22a0** out) const;  // 9
-  virtual EA::Variant_s006a_22a0* GetPropertyValue(unsigned int key) const;    // 10
+  virtual EA::Variant_s006a_22a0* GetPropertyValue(unsigned int key) const;    // 10 0x006a24d0
   virtual void Copy(cPropertyList_s006a_22a0* src);                            // 11
   virtual void v12(cPropertyList_s006a_22a0* src);                            // 12
-  virtual void DeepCopy(cPropertyList_s006a_22a0* src);                       // 13
-  virtual void DeepAdd(cPropertyList_s006a_22a0* src);                        // 14
-  virtual bool Read(EA::IO::IStream* stream);                      // 15
-  virtual bool Write(EA::IO::IStream* stream) const;               // 16
-  virtual unsigned int GetPropertyIDs(unsigned int* ids);          // 17
-  virtual void Clear();                                            // 18
+  virtual void DeepCopy(cPropertyList_s006a_22a0* src);                       // 13 0x006a14d0
+  virtual void DeepAdd(cPropertyList_s006a_22a0* src);                        // 14 0x006a1510
+  virtual bool Read(EA::IO::IStream_s006a_22a0* stream);                      // 15 0x006a2f60
+  virtual bool Write(EA::IO::IStream_s006a_22a0* stream) const;               // 16 0x006a1540
+  virtual unsigned int GetPropertyIDs(unsigned int* ids);          // 17 0x006a3070
+  virtual void Clear();                                            // 18 0x006a2a80
 
   VariantMap mPropertyMap;        // +0x18
   cPropertyList_s006a_22a0* mParent;         // +0x30
@@ -318,7 +346,7 @@ public:
   cPropertyList_s006a_22a0(const char* name);
   cPropertyList_s006a_22a0();
   void SetParent(cPropertyList_s006a_22a0* parent);
-  void ClearMapOnly();
+  void ClearMapOnly();  // 0x006a28f0 (SP::cPropertyList::ClearMapOnly)
 };
 }
 namespace SP {
@@ -329,23 +357,23 @@ public:
   EA::Variant_s006a_22a0 mTempDirectVariant;  // +0x40
 
   virtual void SetProperty(unsigned int index, EA::Variant_s006a_22a0* value);         // 5
-  virtual bool HasProperty(unsigned int index) const;                       // 7
+  virtual bool HasProperty(unsigned int index) const;                       // 7 0x006a27d0
   virtual bool GetPropertyA(unsigned int index, EA::Variant_s006a_22a0** out);         // 8
   virtual bool GetProperty(unsigned int index, EA::Variant_s006a_22a0** out) const;    // 9
   virtual EA::Variant_s006a_22a0* GetPropertyValue(unsigned int index) const;          // 10
-  virtual void Copy(cPropertyList_s006a_22a0* src);                                    // 11
-  virtual void Add(cPropertyList_s006a_22a0* src);                                     // 12
-  virtual unsigned int GetPropertyIDs(unsigned int* ids);                   // 17
-  virtual void Clear();                                                     // 18
+  virtual void Copy(cPropertyList_s006a_22a0* src);                                    // 11 0x006a2ad0
+  virtual void Add(cPropertyList_s006a_22a0* src);                                     // 12 0x006a1600
+  virtual unsigned int GetPropertyIDs(unsigned int* ids);                   // 17 0x006a3180
+  virtual void Clear();                                                     // 18 0x006a2b20
 
   cDirectPropertyList_s006a_22a0(unsigned int count);
   virtual ~cDirectPropertyList_s006a_22a0();
-  void SetBoolProperty(unsigned int index, bool value);
-  void SetIntProperty(unsigned int index, int value);
-  void SetFloatProperty(unsigned int index, float value);
-  int GetIntProperty(unsigned int index) const;
-  float GetFloatProperty(unsigned int index) const;
-  bool GetDescription(unsigned int index) const;
+  void SetBoolProperty(unsigned int index, bool value);  // 0x0093a2e0 (SP::cDirectPropertyList::SetBoolProperty)
+  void SetIntProperty(unsigned int index, int value);  // 0x006a1880 (SP::cDirectPropertyList::SetIntProperty)
+  void SetFloatProperty(unsigned int index, float value);  // 0x006a1910 (SP::cDirectPropertyList::SetFloatProperty)
+  int GetIntProperty(unsigned int index) const;  // 0x006a2660 (SP::cDirectPropertyList::GetIntProperty)
+  float GetFloatProperty(unsigned int index) const;  // 0x006a2710 (SP::cDirectPropertyList::GetFloatProperty)
+  bool GetDescription(unsigned int index) const;  // 0x006a25a0 (SP::cDirectPropertyList::GetDescription)
 };
 }
 namespace eastl {
@@ -359,16 +387,17 @@ public:
   pvector_s006a_22a0& operator=(const pvector_s006a_22a0& x);
   void resize(unsigned int n);
   VariantPair_s006a_22a0* erase(VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last);
-  VariantPair_s006a_22a0* insert(VariantPair_s006a_22a0* position, const VariantPair_s006a_22a0& value);
-  void DoInsertValue(VariantPair_s006a_22a0* position, const VariantPair_s006a_22a0& value);
-  void DoInsertValues(VariantPair_s006a_22a0* position, unsigned int n, const VariantPair_s006a_22a0& value);
+  VariantPair_s006a_22a0* insert(VariantPair_s006a_22a0* position, const VariantPair_s006a_22a0& value);  // 0x006a2940 (eastl::pvector::insert)
+  void DoInsertValue(VariantPair_s006a_22a0* position, const VariantPair_s006a_22a0& value);  // 0x006a22a0 (eastl::pvector::DoInsertValue)
+  void DoInsertValues(VariantPair_s006a_22a0* position, unsigned int n, const VariantPair_s006a_22a0& value);  // 0x006a2010 (eastl::pvector::DoInsertValues)
 };  // namespace eastl
 }
+extern EA::Variant_s006a_22a0 g_sNullVariant;  // 0x016027d0
 void* PropertyManager();            // 0x0067de30
-bool WriteVariant(EA::IO::IStream* stream, EA::Variant_s006a_22a0* value, int flags);
+bool WriteVariant(EA::IO::IStream_s006a_22a0* stream, EA::Variant_s006a_22a0* value, int flags);
 namespace EA {
 namespace IO {
-bool ReadInt32(IStream* stream, void* pData, unsigned int count, int flags);
+bool ReadInt32(IStream_s006a_22a0* stream, void* pData, unsigned int count, int flags);
 }
 }
 static VariantPair_s006a_22a0* PairsAllocate(unsigned int n) {
@@ -399,7 +428,7 @@ VariantPair_s006a_22a0* SP::VariantMap::insert_pos(VariantPair_s006a_22a0* posit
   p[n] = value;
   PairsCopy(p + n + 1, position, mpEnd);
   PairsDestroy_s006a_22a0(mpBegin, mpEnd);
-  if (mpBegin) EA::Allocator::ZoneObject::operator delete(mpBegin);
+  if (mpBegin) EA::Allocator::ZoneObject_s006a_22a0::operator delete(mpBegin);
   mpBegin = p;
   mpEnd = p + cur + 1;
   mpCapacity = p + newCap;
@@ -422,18 +451,60 @@ void eastl::pvector_s006a_22a0::DoInsertValues(VariantPair_s006a_22a0* position,
   for (unsigned int i = 0; i < n; ++i) p[idx + i] = value;
   PairsCopy(p + idx + n, position, mpEnd);
   PairsDestroy_s006a_22a0(mpBegin, mpEnd);
-  if (mpBegin) EA::Allocator::ZoneObject::operator delete(mpBegin);
+  if (mpBegin) EA::Allocator::ZoneObject_s006a_22a0::operator delete(mpBegin);
   mpBegin = p;
   mpEnd = p + cur + n;
   mpCapacity = p + cur + n;
 }
-    void Memset32(...); // 0x0092cb00
+    void* operator new[](unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
 // ---- items of slice s006a22a0 end
-
-
 
 // ---- items of slice s00612270 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void __cdecl EASTL_allocator_deallocate(void* p);                                                                                  // 0x00f47380
+namespace EA {
+struct Variant_s0061_2270 {
+    char mData[16];
+    uint16_t mFlags;
+    uint16_t mTypeId;
+    Variant_s0061_2270& operator=(const Variant_s0061_2270& x);  // 0x00542b80
+    void Destruct(int);                    // 0x0093db80
+    Variant_s0061_2270() : mFlags(0), mTypeId(0) {}
+    Variant_s0061_2270(const Variant_s0061_2270& x) : mFlags(0), mTypeId(0) { *this = x; }
+    ~Variant_s0061_2270() {
+        if (mFlags & 4) Destruct(0);
+    }
+};
+}
+namespace EA {
+namespace IO {
+struct IStream_s0061_2270;
+}
+}
+namespace EA {
+namespace IO {
+bool WriteUint32(IStream_s0061_2270* pStream, const uint32_t* pData, uint32_t count, int endian);  // 0x0093aa70
+}
+}
+namespace EA {
+namespace IO {
+bool WriteUint64(IStream_s0061_2270* pStream, const uint64_t* pData, uint32_t count, int endian);  // 0x0093ab10
+}
+}
+namespace eastl {
+template <class T1, class T2>
+struct pair_s0061_2270 {
+    T1 first;
+    T2 second;
+    pair_s0061_2270() : second() {}
+    pair_s0061_2270(const pair_s0061_2270& x) : first(x.first), second(x.second) {}
+    pair_s0061_2270& operator=(const pair_s0061_2270& x) {
+        first = x.first;
+        second = x.second;
+        return *this;
+    }
+};
+}
+typedef eastl::pair_s0061_2270<uint32_t, EA::Variant_s0061_2270> PropPair;
 struct IRefObj {
     virtual int AddRef();
     virtual int Release();
@@ -460,13 +531,92 @@ struct Elem16VectorD {
         if (mpBegin) EASTL_allocator_deallocate(mpBegin);
     }
 };
+template struct eastl::pair_s0061_2270<uint32_t, EA::Variant_s0061_2270>;
+struct cStreamWriter {
+    EA::IO::IStream_s0061_2270* mpStream;
+    int mEndian;
+    bool mbOk;
+    char pad[7];
+    cStreamWriter(EA::IO::IStream_s0061_2270* pStream, bool bBigEndian);  // 0x006b4f60
+    void Accumulate(bool bResult);                              // 0x006b4f90
+    void WriteVariant(const EA::Variant_s0061_2270* v);                    // 0x006b4fa0
+    ~cStreamWriter();                                           // 0x006b5000
+};
+struct RefCountBase {
+    virtual ~RefCountBase() {}
+    volatile long mRefCount;
+    RefCountBase() { _InterlockedExchange(&mRefCount, 0); }
+};
+struct PropertyBagBase : public RefCountBase {
+    uint32_t pad8, padC, pad10, pad14;
+    uint32_t mField18;
+    PropertyBagBase(uint32_t a) : pad8(0), padC(0), pad10(0), pad14(0), mField18(a) {}
+};
+struct cPropertyBag : public PropertyBagBase {
+    uint32_t mField1C;
+    PropPair* mpBegin;       // +0x20
+    PropPair* mpEnd;         // +0x24
+    PropPair* mpCapacity;    // +0x28
+    uint32_t mAllocName;     // +0x2c
+    void* mpPoolBegin;       // +0x30
+    char pad34[4];
+    char mFixedBuffer[0xf0]; // +0x38
+    cPropertyBag(uint32_t a, uint32_t b);  // 0x00612f00
+    virtual ~cPropertyBag() {}
+};
+struct cPropertyListWriter {
+    bool Write(EA::IO::IStream_s0061_2270* pStream, const cPropertyBag* pBag);  // 0x00612ba0
+    bool WriteResource(void* pObject, void* pStreamHolder, int unused, uint32_t typeId);  // 0x00612e50
+};
 // ---- items of slice s00612270 end
+
+// @ 0x00612ba0
+bool cPropertyListWriter::Write(EA::IO::IStream_s0061_2270* pStream, const cPropertyBag* pBag)
+{
+    cStreamWriter w(pStream, true);
+    uint32_t version = 3;
+    if (w.mbOk) w.Accumulate(EA::IO::WriteUint32(w.mpStream, &version, 1, w.mEndian));
+    uint64_t id = *(const uint64_t*)&pBag->mField18;
+    if (w.mbOk) w.Accumulate(EA::IO::WriteUint64(w.mpStream, &id, 1, w.mEndian));
+    uint32_t count = (uint32_t)(pBag->mpEnd - pBag->mpBegin);
+    if (w.mbOk) w.Accumulate(EA::IO::WriteUint32(w.mpStream, &count, 1, w.mEndian));
+    for (const PropPair* it = pBag->mpBegin; it != pBag->mpEnd; ++it) {
+        PropPair tmp;
+        tmp = *it;
+        if (w.mbOk) w.Accumulate(EA::IO::WriteUint32(w.mpStream, &tmp.first, 1, w.mEndian));
+        w.WriteVariant(&tmp.second);
+    }
+    return w.mbOk;
+}
 
 // @ 0x00612d10
 void DestroyElem16VectorD(Elem16VectorD* v)
 { v->~Elem16VectorD(); }
 
+// @ 0x00612d50
+__declspec(noinline) PropPair* UninitializedCopy(const PropPair* first, const PropPair* last, PropPair* dest)
+{
+    for (; first != last; ++first, ++dest) ::new (dest) PropPair(*first);
+    return dest;
+}
 
+// @ 0x00612db0
+const PropPair* LowerBound(const PropPair* first, const PropPair* last, const uint32_t& value)
+{
+    int length = (int)(last - first);
+    while (length > 0) {
+        const int half = length >> 1;
+        const PropPair* const middle = first + half;
+        if (middle->first < value) {
+            first = middle;
+            ++first;
+            length = length - half - 1;
+        } else {
+            length = half;
+        }
+    }
+    return first;
+}
 
 // @ 0x006a14d0
 void SP::cPropertyList::DeepCopy(SP::cPropertyList * src)
@@ -481,14 +631,12 @@ void SP::cPropertyList::DeepCopy(SP::cPropertyList * src)
   DeepAdd(src);
 }
 
-
 // @ 0x006a1510
 void SP::cPropertyList::DeepAdd(SP::cPropertyList * src)
 {
   if (src->mParent.mpObject) DeepAdd(src->mParent.mpObject);
   Add(src);
 }
-
 
 // @ 0x006a1540
 bool SP::cPropertyList_s006a_11b0::Write(EA::IO::IStream* stream) const
@@ -508,7 +656,6 @@ bool SP::cPropertyList_s006a_11b0::Write(EA::IO::IStream* stream) const
   return bResult;
 }
 
-
 // @ 0x006a1600
 void SP::cDirectPropertyList::Add(SP::cPropertyList * src)
 {
@@ -520,7 +667,6 @@ void SP::cDirectPropertyList::Add(SP::cPropertyList * src)
   }
   mModificationCount++;
 }
-
 
 // @ 0x006a1a70
 VariantPair* PairsUninitMoveStart(VariantPair** dest, VariantPair* first, VariantPair* last, VariantPair* out)
@@ -539,7 +685,6 @@ VariantPair* PairsUninitMoveStart(VariantPair** dest, VariantPair* first, Varian
   return *dest;
 }
 
-
 // @ 0x006a1b00
 VariantPair* PairsFillN(VariantPair* dest, unsigned int n, const VariantPair& value)
 {
@@ -554,12 +699,10 @@ VariantPair* PairsFillN(VariantPair* dest, unsigned int n, const VariantPair& va
   return dest;
 }
 
-
 // @ 0x006a1b90
 SP::cPropertyList::cPropertyList(char const * name)
 
 : SP::cResourceBase(), mParent(), mModificationCount(0) {}
-
 
 // @ 0x006a1bd0
 SP::cDirectPropertyList::~cDirectPropertyList()
@@ -567,12 +710,10 @@ SP::cDirectPropertyList::~cDirectPropertyList()
   EA::Allocator::ZoneObject::operator delete(mDirectProps); // 0x00f47380
 }
 
-
 // @ 0x006a1c40
 SP::cPropertyList::cPropertyList()
 
 : SP::cResourceBase(), mParent(), mModificationCount(0) {}
-
 
 // @ 0x006a1ca0
 SP::cDirectPropertyList::cDirectPropertyList(int count)
@@ -584,7 +725,6 @@ SP::cDirectPropertyList::cDirectPropertyList(int count)
     Memset32(mDirectProps, 0, mNumDirectProps);
   }
 }
-
 
 // @ 0x006a1de0
 bool SP::cPropertyList::GetProperty(unsigned int key, EA::Variant ** out)
@@ -603,7 +743,6 @@ bool SP::cPropertyList::GetProperty(unsigned int key, EA::Variant ** out)
   return false;
 }
 
-
 // @ 0x006a1e50
 bool SP::cDirectPropertyList::GetProperty(unsigned int key, EA::Variant ** out)
 {
@@ -613,7 +752,6 @@ bool SP::cDirectPropertyList::GetProperty(unsigned int key, EA::Variant ** out)
   }
   return cPropertyList::GetProperty(key, out);
 }
-
 
 // @ 0x006a1e80
 eastl::pvector& eastl::pvector::operator=(const eastl::pvector& x)
@@ -649,7 +787,6 @@ eastl::pvector& eastl::pvector::operator=(const eastl::pvector& x)
   return *this;
 }
 
-
 // @ 0x006a2010
 void eastl::pvector::DoInsertValues(VariantPair* position, unsigned int n, const VariantPair& value)
 {
@@ -673,7 +810,6 @@ void eastl::pvector::DoInsertValues(VariantPair* position, unsigned int n, const
   mpCapacity = p + newCap;
 }
 
-
 // @ 0x006a22a0
 void eastl::pvector_s006a_22a0::DoInsertValue(VariantPair_s006a_22a0* position, const VariantPair_s006a_22a0& value)
 {
@@ -691,7 +827,7 @@ void eastl::pvector_s006a_22a0::DoInsertValue(VariantPair_s006a_22a0* position, 
   p[n] = value;
   PairsCopy(p + n + 1, position, mpEnd);
   PairsDestroy_s006a_22a0(mpBegin, mpEnd);
-  if (mpBegin) EA::Allocator::ZoneObject::operator delete(mpBegin);
+  if (mpBegin) EA::Allocator::ZoneObject_s006a_22a0::operator delete(mpBegin);
   mpBegin = p;
   mpEnd = p + cur + 1;
   mpCapacity = p + newCap;
@@ -712,17 +848,17 @@ bool SP::cPropertyList::HasProperty(unsigned int key) const
 }
 
 // @ 0x006a24d0
-EA::Variant const & SP::cPropertyList::GetProperty(unsigned int key) const
+EA::Variant_s006a_22a0* SP::cPropertyList_s006a_22a0::GetPropertyValue(unsigned int key) const
 {
-  eastl::pair<unsigned int,EA::Variant>* end = mPropertyMap.mpEnd;
-  eastl::pair<unsigned int,EA::Variant>* it = eastl::lower_bound(mPropertyMap.mpBegin, end, &key, (*(unsigned char *)&mPropertyMap.mCompare));
+  VariantPair_s006a_22a0* end = mPropertyMap.mpEnd;
+  VariantPair_s006a_22a0* it = eastl::lower_bound(mPropertyMap.mpBegin, end, &key, mPropertyMap.mCompare);
   if (it == end || key < it->first)
     it = end;
   else if (it == it + 1)
     it = end;
-  if (it != end) return it->second;
-  if (mParent.mpObject) return mParent.mpObject->GetProperty(key);
-  return g_sNullVariant;
+  if (it != end) return &it->second;
+  if (mParent) return mParent->GetPropertyValue(key);
+  return &g_sNullVariant;
 }
 
 // @ 0x006a2530
@@ -882,7 +1018,7 @@ void SP::cPropertyList::RemoveProperty(unsigned int key)
 }
 
 // @ 0x006a2f60
-bool SP::cPropertyList_s006a_22a0::Read(EA::IO::IStream* stream)
+bool SP::cPropertyList_s006a_22a0::Read(EA::IO::IStream_s006a_22a0* stream)
 {
   int nCount = 0;
   bool bResult = EA::IO::ReadInt32(stream, &nCount, 1, 0);

@@ -1,6 +1,6 @@
 006a22a0 ?DoInsertValue@pvector_s006a_22a0@eastl@@QAEXPAUVariantPair_s006a_22a0@@ABU3@@Z  # pvector_s006a_22a0::DoInsertValue migrated from s006a22a0 (verbatim, slice spelling)
 006a2470 ?HasProperty@cPropertyList@SP@@UBE_NI@Z  # SP::cPropertyList::HasProperty migrated from s006a22a0
-006a24d0 ?GetProperty@cPropertyList@SP@@UBEABUVariant@EA@@I@Z  # SP::cPropertyList::GetProperty migrated from s006a22a0
+006a24d0 ?GetPropertyValue@cPropertyList_s006a_22a0@SP@@UBEPAUVariant_s006a_22a0@EA@@I@Z  # cPropertyList_s006a_22a0::GetPropertyValue migrated from s006a22a0 (verbatim, slice spelling)
 006a2530 ?GetProperty@cPropertyList@SP@@UBE_NIPAPBUVariant@EA@@@Z  # SP::cPropertyList::GetProperty migrated from s006a22a0
 006a25a0 ?GetDescription@cDirectPropertyList_s006a_22a0@SP@@QBE_NI@Z  # cDirectPropertyList_s006a_22a0::GetDescription migrated from s006a22a0 (verbatim, slice spelling)
 006a2660 ?GetIntProperty@cDirectPropertyList@SP@@QBEHI@Z  # SP::cDirectPropertyList::GetIntProperty migrated from s006a22a0
@@ -21,7 +21,7 @@
 006a2e20 SP::cPropertyList::SetProperty  # PDB ?SetProperty@cPropertyList@SP@@UAEXIABUVariant@EA@@@Z
 006a2ef0 ?RemoveProperty@cPropertyList@SP@@UAEXI@Z  # SP::cPropertyList::RemoveProperty migrated from s006a22a0
 006a2f10 SP::cPropertyList::v12  # merge/add used by DeepAdd; slot 12
-006a2f60 SP::cPropertyList::Read  # PDB candidate SP::cPropertyList::Read
-006a3070 SP::cPropertyList::GetPropertyIDs  # slot 17
+006a2f60 ?Read@cPropertyList_s006a_22a0@SP@@UAE_NPAUIStream_s006a_22a0@IO@EA@@@Z  # cPropertyList_s006a_22a0::Read migrated from s006a22a0 (verbatim, slice spelling)
+006a3070 ?GetPropertyIDs@cPropertyList_s006a_22a0@SP@@UAEIPAI@Z  # cPropertyList_s006a_22a0::GetPropertyIDs migrated from s006a22a0 (verbatim, slice spelling)
 006a30c0 SP::cDirectPropertyList::SetProperty  # slot 5 override
 006a3180 ?GetPropertyIDs@cDirectPropertyList_s006a_22a0@SP@@UAEIPAI@Z  # cDirectPropertyList_s006a_22a0::GetPropertyIDs migrated from s006a22a0 (verbatim, slice spelling)

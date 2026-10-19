@@ -1,5 +1,6 @@
 # source  symbol  va  flags
 ../src/game/SPEngine/SPPropertyList.cpp  ??1Elem16VectorD@@QAE@XZ  00612d10  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyList.cpp  ?LowerBound@@YAPBU?$pair_s0061_2270@IUVariant_s0061_2270@EA@@@eastl@@PBU12@0ABI@Z  00612db0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPPropertyList.cpp  ?DeepCopy@cPropertyList@SP@@UAEXPAV12@@Z  006a14d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPPropertyList.cpp  ?DeepAdd@cPropertyList@SP@@UAEXPAV12@@Z  006a1510  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPPropertyList.cpp  ?Add@cDirectPropertyList@SP@@UAEXPAVcPropertyList@2@@Z  006a1600  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

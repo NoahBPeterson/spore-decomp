@@ -1,4 +1,5 @@
 # va  diff-bytes  reason
+00612ba0 93 frame 0x34 vs 0x30: count local not sharing dead param slot
 006a1540 134 SP::cPropertyList::Write - complete; recomputed count + per-element WriteUint32/WriteVariant loop present, schedule differs
 006a1a70 73 eastl pair uninitialized-move-start helper - complete loop; EH frame and argument spill differ
 006a1b00 62 eastl fill_n helper - complete loop (71 vs 130 bytes; original carries an EH frame)
@@ -19,5 +20,5 @@
 006a2b20 58 SP::cDirectPropertyList::Clear - complete
 006a2c50 70 eastl::vector_map::insert(value) - complete
 006a2cb0 82 eastl::vector_map::erase(key) - complete
-006a3070  62   SP::cPropertyList::GetPropertyIDs - complete
+006a3070 55 SP::cPropertyList::GetPropertyIDs - complete
 006a3180 81 SP::cDirectPropertyList::GetPropertyIDs - complete
