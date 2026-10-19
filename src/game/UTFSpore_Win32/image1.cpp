@@ -15,6 +15,7 @@ extern char g_vtblImageDrawable2;
 extern char g_vtblImageDrawable3;
 extern char g_vtblEditorResource;
 #include <math.h>
+#include <new>
 
 // ---- items of slice s0097cea0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void  FUN_00951330(void*);              // MultiHeapObject::operator_delete
@@ -50,9 +51,12 @@ struct cDropShadowDescriptor {          // 0x28 bytes
     unsigned int mSize, mStrength, mQuality;
     float mOffsetX, mOffsetY, mSizeX, mSizeY, mSmoothness, mSaturation;
     unsigned int mColor;
-    cDropShadowDescriptor()
-        : mSize(0), mStrength(2), mQuality(3), mOffsetX(0.0f), mOffsetY(0.0f), mSizeX(0.0f), mSizeY(0.0f), mColor(0)
-    { SetMode(2); }
+    cDropShadowDescriptor() {
+        mSize = 0; mStrength = 2; mQuality = 3;
+        mSizeX = 0.0f; mSizeY = 0.0f; mOffsetX = 0.0f; mOffsetY = 0.0f;
+        mColor = 0;
+        SetMode(2);
+    }
     void SetMode(int mode);             // 0x830150, thiscall ret 4 (sets +4, +0x1c, +0x20)
     static void CopyWithQualityAdjustment(cDropShadowDescriptor* dst, const cDropShadowDescriptor* src, int q); // 0x96e3a0 cdecl
 };
@@ -73,8 +77,94 @@ struct ImageDrawable {
     void CreateRenderables(Cr::RenderContext* ctx, const float* rc, int unused);
 };
 }
-static __forceinline void DrawTiling(Cr::ImageDrawable* d, Cr::Target2D* t, const float* dst, const float* expanded);  // 0x0097d270 (defined below; used by a stub's inline body)
-void Cr::ImageDrawable::CreateRenderables(Cr::RenderContext* ctx, const float* rc, int unused) {
+static __forceinline void DrawTiling(Cr::ImageDrawable* d, Cr::Target2D* t, const float* dst, const float* expanded) {
+    if (d->mnTiling == 2) {
+        float inner[4]; float uv[4];
+        inner[0] = 1.0f / 3.0f; inner[1] = 1.0f / 3.0f; inner[2] = 2.0f / 3.0f; inner[3] = 2.0f / 3.0f;
+        uv[0] = 0.0f; uv[1] = 0.0f; uv[2] = 1.0f; uv[3] = 1.0f;
+        DrawImage9Slice(t, dst, uv, d->mpImage, inner, d->mfScale, d->mfScale);
+    } else if (d->mnTiling == 1) {
+        DrawImageTiled(t, dst, d->mpImage, d->mfScale, d->mfScale, 0.0f, 0.0f);
+    } else {
+        DrawImageStretch(t, dst, d->mpImage, expanded);
+    }
+}
+namespace Cur {
+struct IRef {                            // AutoRefCount target: slot 0 AddRef, slot 1 Release
+    virtual int AddRef() throw();
+    virtual int Release() throw();
+};
+}
+namespace Cur {
+struct Target2D {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+    virtual void DrawImage(float x, float y, IRef* img);          // slot 24
+};
+}
+namespace Cur {
+struct RenderContext {
+    Target2D* Begin2D(int);              // 0x95bc10, thiscall ret 4
+    void End2D();                        // 0x95bb20, thiscall
+};
+}
+// ---- items of slice s0097cea0 end
+
+// unnamed retail callees and globals that name local stubs (address in the comment)
+extern "C" void DrawImageTiled(Cr::Target2D*, const float* rect, Cr::Image*, float sx, float sy, float ox, float oy); // 0x95c420 cdecl
+extern "C" void DrawImage9Slice(Cr::Target2D*, const float* dst, const float* uv, Cr::Image*, const float* inner, float sx, float sy); // 0x95ca40 cdecl
+extern "C" void DrawImageStretch(Cr::Target2D*, const float* dst, Cr::Image*, const float* src); // 0x95c0d0 cdecl
+
+// @ 0x0097d100
+void IntrusiveHolder::SetIntrusive18(void* p)
+{
+    void* self = this;
+    if (*(void**)((char*)self + 0x18) != p) {
+        if (p) ((void(__thiscall*)(void*))((void**)*(void**)p)[0])(p);
+        void* old = *(void**)((char*)self + 0x18);
+        if (old) ((void(__thiscall*)(void*))((void**)*(void**)old)[1])(old);
+        *(void**)((char*)self + 0x18) = p;
+    }
+}
+
+// @ 0x0097d170
+bool NaturalSizeHolder::GetNaturalSize(int* outW, int* outH, int unused)
+{
+    void* self = this; (void)unused;
+    if (*(void**)((char*)self + 0x24) == 0) return false;
+    (void)outW; (void)outH;
+    return true;   // approximated
+}
+
+// @ 0x0097d1a0
+int ImageDrawable_GetWidth(void* self)
+{ return self ? *(int*)((char*)self + 0x14) : 0; }
+
+// @ 0x0097d270
+void Cr::ImageDrawable::CreateRenderables(Cr::RenderContext* ctx, const float* rc, int unused)
+{
     if (!mpImage) return;
     Cr::Target2D* t = ctx->Begin2D(0);
     t->SetColor(0xffffffff);
@@ -133,51 +223,28 @@ void Cr::ImageDrawable::CreateRenderables(Cr::RenderContext* ctx, const float* r
     t->SetColor(0xffffffff);
     DrawTiling(this, t, r, ex);
 }
-// ---- items of slice s0097cea0 end
 
-// unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" void DrawImageTiled(Cr::Target2D*, const float* rect, Cr::Image*, float sx, float sy, float ox, float oy); // 0x95c420 cdecl
-extern "C" void DrawImage9Slice(Cr::Target2D*, const float* dst, const float* uv, Cr::Image*, const float* inner, float sx, float sy); // 0x95ca40 cdecl
-extern "C" void DrawImageStretch(Cr::Target2D*, const float* dst, Cr::Image*, const float* src); // 0x95c0d0 cdecl
-
-// @ 0x0097d100
-void IntrusiveHolder::SetIntrusive18(void* p)
+// @ 0x0097d8d0
+namespace Cr
 {
-    void* self = this;
-    if (*(void**)((char*)self + 0x18) != p) {
-        if (p) ((void(__thiscall*)(void*))((void**)*(void**)p)[0])(p);
-        void* old = *(void**)((char*)self + 0x18);
-        if (old) ((void(__thiscall*)(void*))((void**)*(void**)old)[1])(old);
-        *(void**)((char*)self + 0x18) = p;
-    }
-}
-
-// @ 0x0097d170
-bool NaturalSizeHolder::GetNaturalSize(int* outW, int* outH, int unused)
-{
-    void* self = this; (void)unused;
-    if (*(void**)((char*)self + 0x24) == 0) return false;
-    (void)outW; (void)outH;
-    return true;   // approximated
-}
-
-// @ 0x0097d1a0
-int ImageDrawable_GetWidth(void* self)
-{ return self ? *(int*)((char*)self + 0x14) : 0; }
-
-// @ 0x0097d270
-static __forceinline void DrawTiling(Cr::ImageDrawable* d, Cr::Target2D* t, const float* dst, const float* expanded)
-{
-    if (d->mnTiling == 2) {
-        float inner[4]; float uv[4];
-        inner[0] = 1.0f / 3.0f; inner[1] = 1.0f / 3.0f; inner[2] = 2.0f / 3.0f; inner[3] = 2.0f / 3.0f;
-        uv[0] = 0.0f; uv[1] = 0.0f; uv[2] = 1.0f; uv[3] = 1.0f;
-        DrawImage9Slice(t, dst, uv, d->mpImage, inner, d->mfScale, d->mfScale);
-    } else if (d->mnTiling == 1) {
-        DrawImageTiled(t, dst, d->mpImage, d->mfScale, d->mfScale, 0.0f, 0.0f);
-    } else {
-        DrawImageStretch(t, dst, d->mpImage, expanded);
-    }
+struct P0  { virtual void p0(); };
+struct P4  { virtual void p4(); int mRefCount; P4() : mRefCount(0) {} };   // +4, +8
+struct P12 { virtual void p12(); };                                         // +0xc
+struct CustomDrawableX : P0, P4, P12 {
+    float mfScale;                     // +0x10
+    CustomDrawableX() : mfScale(1.0f) {}
+};
+struct ImageDrawableCtor : CustomDrawableX {
+    unsigned int mnFlags;              // +0x14
+    unsigned int mnTiling;             // +0x18
+    unsigned int mnAlignmentH;         // +0x1c
+    unsigned int mnAlignmentV;         // +0x20
+    void*        mpImage;              // +0x24
+    cDropShadowDescriptor mDropShadow; // +0x28
+    ImageDrawableCtor();
+};
+ImageDrawableCtor::ImageDrawableCtor()
+    : mnFlags(0), mnTiling(0), mnAlignmentH(3), mnAlignmentV(3), mpImage(0) {}
 }
 
 // @ 0x0097d950
