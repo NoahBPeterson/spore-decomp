@@ -17,5 +17,6 @@
 ../src/game/SPEngine/SPObjectDatabase.cpp  ?bind@Cdfc0@@QAE_NPAXH@Z  0069dfc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPObjectDatabase.cpp  ?ctor@C_e040@@QAEPAU1@XZ  0069e040  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPObjectDatabase.cpp  ?ctor@C_e210@@QAEPAU1@XZ  0069e210  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?f@F940@@QAE_NXZ  0069f940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPObjectDatabase.cpp  ?WriteSerializableObject@cICOMSerializer@@QAEHPAUSerStream@@PAUISerializable@@@Z  006a05f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPObjectDatabase.cpp  ?ReadSerializableObject@cICOMSerializer@@QAEHPAUSerStream@@PAPAUISerializable@@D@Z  006a06a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

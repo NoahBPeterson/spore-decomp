@@ -5,6 +5,7 @@
 0069e6c0 ?CopyA@Tree@@QAEPAURBNode@@PAU2@0@Z  # Tree::CopyA migrated from s0069e3a0 (verbatim, slice spelling)
 0069e9e0 SP::cCOMSerializer::onGetSPSerializable  # PDB name
 0069eb60 eastl::map<unsigned int,SP::cCOMSerializer::cIDInfo,...>::operator[]  # PDB name
+0069ec20 ?f@F_ec20@@QAE_NPAHI@Z  # F_ec20::f migrated from s0069e3a0 (verbatim, slice spelling)
 0069ecc0 ?AllocB@Tree@@QAEPAURBNode@@PAUP_ecc0@@@Z  # Tree::AllocB migrated from s0069e3a0 (verbatim, slice spelling)
 0069edb0 ?CopyB@Tree@@QAEPAURBNode@@PAU2@0@Z  # Tree::CopyB migrated from s0069e3a0 (verbatim, slice spelling)
 0069ee60 ?Nuke@Tree@@QAEXPAURBNode@@@Z  # Tree::Nuke migrated from s0069e3a0 (verbatim, slice spelling)
@@ -12,3 +13,4 @@
 0069f160 ?reset@CComSer@@QAEXXZ  # CComSer::reset migrated from s0069e3a0 (verbatim, slice spelling)
 0069f1d0 SP::cCOMSerializer::LoadClassObjects  # PDB name
 0069f840 ?FUN_0069f840@@YAPAUCComSer@@PAU1@PAX@Z  # FUN_0069f840 migrated from s0069e3a0 (verbatim, slice spelling)
+0069f940 ?f@F940@@QAE_NXZ  # F_eb60::f migrated from s0069e3a0 (verbatim, slice spelling)

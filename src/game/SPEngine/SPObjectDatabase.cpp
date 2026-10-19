@@ -189,11 +189,14 @@ struct S_e260 {
 // ---- items of slice s0069e3a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* EASTL_allocator_allocate(unsigned size, const char* name, int, int, const char* file, int line); // 0x00f473a0
 extern "C" void  EASTL_allocator_deallocate(void* p); // 0x00f47380
+extern "C" void  FUN_00932da0();
+extern "C" void  FUN_004c0410(int);
 extern "C" void  FUN_0069e880(void*);
 extern char g_vtbl_1408750[];
 extern char g_vtbl_1408728[];
 extern char g_vtbl_14095cc[];
 extern "C" void FUN_d0c930(void* value, void* arg);
+extern "C" void FUN_00e5c780(void*, int*, int*);
 static const char kEastlAllocH[] =
     "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
 struct RBNode {
@@ -242,8 +245,24 @@ struct CComSer {
     void dtor();
     void reset();
 };
+struct F940 { bool f(); };
+bool F940::f()
+{
+    ((CComSer*)((char*)this - 8))->reset();
+    return true;
+}
+struct F_e9e0 { int f(char* a, int b, int c); };
+int F_e9e0::f(char* a, int b, int c)
+{
+    *(int*)a = 0;
+    FUN_00e5c780(this, 0, 0);
+    return 0;
+}
+struct F_eb60 { int f(int* key); };
+struct F_ec20 { bool f(int* io, unsigned index); };
 CComSer* FUN_0069f840(CComSer* self, void* param);
 // ---- items of slice s0069e3a0 end
+
 
 // ---- items of slice s0069f950 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern uint32_t kMaxCRCDataLength;   // 0x014084ec (1000000)
@@ -473,6 +492,7 @@ bool C2a::f(int, int)
 
 
 
+
 // @ 0x0069d210
 bool C3::read(int size)
 {
@@ -492,9 +512,11 @@ bool C3::read(int size)
 
 
 
+
 // @ 0x0069d280
 bool C2b::g(int, int)
 { flag = 0; return false; }
+
 
 
 
@@ -503,6 +525,7 @@ void __stdcall FUN_0069d2c0(void* p)
 {
     ((void(__thiscall*)(void*))(*(void***)p)[0x14 / 4])(p);
 }
+
 
 
 
@@ -519,6 +542,7 @@ void C5::setProgress(float v)
 
 
 
+
 // @ 0x0069d360
 VP C6::asInterface(int iid)
 {
@@ -526,6 +550,7 @@ VP C6::asInterface(int iid)
         return 0;
     return ((char*)this - 4) ? this : 0;
 }
+
 
 
 
@@ -546,11 +571,13 @@ int C7::Release()
 
 
 
+
 // @ 0x0069d3f0
 int EA::ResourceMan::Database::GetRefCount()
 {
     return (int)_InterlockedExchangeAdd((long*)((char*)this + 8), 0);
 }
+
 
 
 
@@ -574,11 +601,13 @@ bool Holder::reset()
 
 
 
+
 // @ 0x0069d4d0
 bool Holder::valid()
 {
     return p0c != 0 && p10 != 0;
 }
+
 
 
 
@@ -600,6 +629,7 @@ void Holder::conditional(int a, int b)
 
 
 
+
 // @ 0x0069d830
 void C830::f(int a, int b)
 {
@@ -607,6 +637,7 @@ void C830::f(int a, int b)
     int r = ((int(__thiscall*)(void*, int, int))(*(void***)pi)[0x30 / 4])(pi, a, b);
     flag = (unsigned char)(r == b);
 }
+
 
 
 
@@ -630,11 +661,13 @@ bool Holder8::reset()
 
 
 
+
 // @ 0x0069d930
 bool Holder8::valid()
 {
     return p4 != 0 && p8 != 0;
 }
+
 
 
 
@@ -646,6 +679,7 @@ void C950::emit(void* p)
         u = ((void*(__thiscall*)(void*, int))(*(void***)p)[0xc / 4])(p, 0x179c807);
     ((void(__thiscall*)(void*, void*))(*(void***)this)[0x2c / 4])(this, u);
 }
+
 
 
 
@@ -675,6 +709,7 @@ void cObjectDatabase::dtor()
 
 
 
+
 // @ 0x0069ddc0
 int Cddc0::get()
 {
@@ -686,6 +721,7 @@ int Cddc0::get()
 
 
 
+
 // @ 0x0069dea0
 char Cdea0::get()
 {
@@ -694,6 +730,7 @@ char Cdea0::get()
         return ((char(__thiscall*)(void*))(*(void***)o)[0x1c / 4])(o);
     return 0;
 }
+
 
 
 
@@ -718,6 +755,7 @@ char Cded0::flush()
 
 
 
+
 // @ 0x0069df20
 bool Cdf20::begin(char flag)
 {
@@ -735,6 +773,7 @@ bool Cdf20::begin(char flag)
 
 
 
+
 // @ 0x0069df90
 bool Cdf90::ok()
 {
@@ -743,6 +782,7 @@ bool Cdf90::ok()
         return false;
     return c1;
 }
+
 
 
 
@@ -773,6 +813,7 @@ void S_e260::bind(void* p, int a, int b)
 
 
 
+
 // @ 0x0069e040
 C_e040* C_e040::ctor()
 {
@@ -787,6 +828,7 @@ C_e040* C_e040::ctor()
     p18 = 0;
     return this;
 }
+
 
 
 
@@ -805,6 +847,7 @@ C_e210* C_e210::ctor()
 }
 
 
+
 // @ 0x0069e550
 RBNode* Tree::AllocA(P550* src)
 {
@@ -816,7 +859,6 @@ RBNode* Tree::AllocA(P550* src)
         ((void(__thiscall*)(void*))(*(void***)o)[0])(o);
     return n;
 }
-
 
 // @ 0x0069e6c0
 RBNode* Tree::CopyA(RBNode* pNode, RBNode* pParent)
@@ -843,6 +885,25 @@ RBNode* Tree::CopyA(RBNode* pNode, RBNode* pParent)
     return pNew;
 }
 
+// @ 0x0069ec20
+bool F_ec20::f(int* io, unsigned index)
+{
+    if (index > 0xf4240)
+        return false;
+    void* p = ((void*(__thiscall*)(void*))(*(void***)io)[0x18 / 4])(io);
+    ((void(__thiscall*)(void*, int))(*(void***)p)[0x24 / 4])(p, 0);
+    FUN_004c0410(index + 1);
+    p = ((void*(__thiscall*)(void*))(*(void***)io)[0x18 / 4])(io);
+    int r = ((int(__thiscall*)(void*, void*, unsigned))(*(void***)p)[0x30 / 4])(p, this, index);
+    bool ok = r != 0;
+    if (ok) {
+        *(unsigned char*)((char*)this + index) = 0;
+        FUN_00932da0();
+    }
+    p = ((void*(__thiscall*)(void*))(*(void***)io)[0x18 / 4])(io);
+    ((void(__thiscall*)(void*, int, int))(*(void***)p)[0x28 / 4])(p, 0, 0);
+    return ok;
+}
 
 // @ 0x0069ecc0
 RBNode* Tree::AllocB(P_ecc0* src)
@@ -854,7 +915,6 @@ RBNode* Tree::AllocB(P_ecc0* src)
     FUN_0069e880(src->rest);
     return n;
 }
-
 
 // @ 0x0069edb0
 RBNode* Tree::CopyB(RBNode* pNode, RBNode* pParent)
@@ -881,7 +941,6 @@ RBNode* Tree::CopyB(RBNode* pNode, RBNode* pParent)
     return pNew;
 }
 
-
 // @ 0x0069ee60
 void Tree::Nuke(RBNode* pNode)
 {
@@ -893,7 +952,6 @@ void Tree::Nuke(RBNode* pNode)
         pNode = pRight;
     }
 }
-
 
 // @ 0x0069f0b0
 void CComSer::dtor()
@@ -910,7 +968,6 @@ void CComSer::dtor()
     vt8 = g_vtbl_13eb938;
     vt0 = g_vtbl_13ec458;
 }
-
 
 // @ 0x0069f160
 void CComSer::reset()
@@ -937,7 +994,6 @@ void CComSer::reset()
     }
 }
 
-
 // @ 0x0069f840
 CComSer* FUN_0069f840(CComSer* self, void* param)
 {
@@ -949,6 +1005,12 @@ CComSer* FUN_0069f840(CComSer* self, void* param)
     // trees initialised by reset()
     self->reset();
     return self;
+}
+
+// @ 0x0069f940
+int F_eb60::f(int* key)
+{
+    return 0;
 }
 
 // @ 0x0069f950
@@ -973,6 +1035,7 @@ ClassInfo& ClassMap::Subscript(const uint32_t& key)
     return ((ClassNode*)pRangeEnd)->mValue.second;
 }
 
+
 // @ 0x0069fa60
 cObjectDatabase_s0069_f950::cObjectDatabase_s0069_f950(Database* database)
 {
@@ -992,6 +1055,7 @@ cObjectDatabase_s0069_f950::cObjectDatabase_s0069_f950(Database* database)
     mpCOMSerializer.Assign(ser ? (IUnk*)&ser->mI : 0);
     mpDatabase.Assign((char*)database);
 }
+
 
 // @ 0x0069fb90
 bool cICOMSerializer::SaveClassObjects()
@@ -1094,6 +1158,7 @@ bool cICOMSerializer::SaveClassObjects()
     return true;
 }
 
+
 // @ 0x006a0110
 bool cCOMSerializer::onSetSPSerializable(ISerializable* obj, uint32_t id, uint32_t classID)
 {
@@ -1130,6 +1195,7 @@ bool cCOMSerializer::onSetSPSerializable(ISerializable* obj, uint32_t id, uint32
     }
     return true;
 }
+
 
 // @ 0x006a0360
 bool cCOMSerializer::loadSingleObject(ISerializable* obj, uint32_t id, uint32_t classID)
@@ -1183,6 +1249,7 @@ bool cCOMSerializer::loadSingleObject(ISerializable* obj, uint32_t id, uint32_t 
     return ok;
 }
 
+
 // @ 0x006a05f0
 int cICOMSerializer::WriteSerializableObject(SerStream* s, ISerializable* obj)
 {
@@ -1200,6 +1267,7 @@ int cICOMSerializer::WriteSerializableObject(SerStream* s, ISerializable* obj)
     }
     return 0;
 }
+
 
 // @ 0x006a06a0
 int cICOMSerializer::ReadSerializableObject(SerStream* s, ISerializable** out, char deep)

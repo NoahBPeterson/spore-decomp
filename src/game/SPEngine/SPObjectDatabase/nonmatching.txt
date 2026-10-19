@@ -7,6 +7,7 @@
 0069df90 26 two virtual predicates; complete behaviour, but cl makes the final bool branchless where the original uses branches; equiv UNSUPPORTED: 0/1200 valid inputs (fake-arity)
 0069e550 37 rbtree node copy-allocation (pair<key,AutoRefCount>): complete behaviour, but the original compiler EH frame/state around the allocator call is not reproduced; equiv PASS: 1013 valid inputs, 100% coverage
 0069e6c0 205 rbtree<...cFeedbackEvent...>::DoCopySubtree: complete behaviour (recursive copy of left spine + right iteration), but cl emits call/jump structure and EH differing from the original; equiv WEAK: 486 valid inputs, 82.3% coverage
+0069ec20 117 decode one huge-blob entry through a virtual IO object; complete behaviour, but the this+0x54 member and register scheduling differ; equiv FAIL: esp after return differs (orig +0x10, ours +0xc; stack-arg count)
 0069ecc0 39 rbtree cClassInfo node allocation: complete behaviour, compiler EH frame around the allocator call differs; equiv FAIL: ours write-faults in callee 0x69e880 where original succeeds
 0069edb0 203 rbtree<...cClassInfo...>::DoCopySubtree: complete behaviour, but cl's call/loop scheduling and EH differ; equiv FAIL: ours write-faults in callee 0x69e880 where original succeeds
 0069ee60 25 rbtree<...cClassInfo...>::DoNukeSubtree: complete behaviour, but node value offset (0x1c) / node-dtor shape and the ebx=this member register differ; equiv FAIL: callee 0xd0c930 call-site/arity differs

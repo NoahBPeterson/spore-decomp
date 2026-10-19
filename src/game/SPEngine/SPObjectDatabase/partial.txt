@@ -1,2 +1,2 @@
-# va  reason
+# va  diff-bytes  reason
 0069f840  177  cCOMSerializer::cCOMSerializer: vptr/field init + reset + assigned database; summarised, tree/anchor init and EH frame omitted
