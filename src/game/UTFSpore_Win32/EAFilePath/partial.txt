@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+0092fee0  329  partial; StripPathComponent switch translation reconstructed from decompile; case internals approximate
+00930070  228  partial; SplitPathPtrs translation reconstructed from decompile; UNC/drive splitting approximate
+00930480  452  approximate: FullPath wrapper (cwd-mangling + drive parsing) not fully faithful
+00930670  654  approximate: FullPath join (. / .. handling) reconstructed loosely, may miss paths

@@ -1,5 +1,6 @@
 0092f220 EA::IO::DirectoryIterator::ReadRecursive  # pdb_candidates caller-scored + DirectoryIterator layout (mnListSize/mnRecursionIndex/mpBaseDirectory/mBaseDirectoryLength)
-0092fcd0 EA::IO::FilePath::SafeReplace  # pdb_names callee-single
-0092fe00 EA::IO::EnsureTrailingPathSeparator  # pdb_names callee-single + ModAPI IO::Constants.h
-0092fe60 EA::IO::ConcatenatePathComponents  # pdb_names callee-single + ModAPI IO::Constants.h
-00930070 EA::IO::SplitPathPtrs  # pdb_names callee-single
+0092fcd0 ?SafeReplace@FilePath@IO@EA@@QAE_NPBG000GG@Z  # FilePath::SafeReplace migrated from s0092f220 (verbatim, slice spelling)
+0092fe00 ?EnsureTrailingPathSeparator@@YA_NPAGH@Z  # EnsureTrailingPathSeparator migrated from s0092f220 (verbatim, slice spelling)
+0092fe60 ?ConcatenatePathComponents@@YAHPAGPBG1@Z  # ConcatenatePathComponents migrated from s0092f220 (verbatim, slice spelling)
+0092fee0 ?StripPathComponent@@YAHPAGH@Z  # StripPathComponent migrated from s0092f220 (verbatim, slice spelling)
+00930070 ?SplitPathPtrs@@YAXPAGPAPAX11@Z  # SplitPathPtrs migrated from s0092f220 (verbatim, slice spelling)

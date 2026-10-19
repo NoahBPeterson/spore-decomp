@@ -1,21 +1,21 @@
-00930180 SplitPath  # dev-PDB gap-align EA::IO::SplitPath
-009302b0 SplitDirectory  # dev-PDB gap-align EA::IO::SplitDirectory
-00930480 FullPath  # dev-PDB gap-align EA::IO::FullPath (cwd wrapper)
-00930670 FullPath  # dev-PDB gap-align EA::IO::FullPath (join)
-00930950 FUN_00930950  # no PDB name; iswctype-based absolute-path test
-009309b0 FUN_009309b0  # no PDB name
-00930a30 FUN_00930a30  # no PDB name; separator normalizer
-00930ab0 IsSubdirectory  # dev-PDB gap-align EA::IO::IsSubdirectory
-00930ba0 FUN_00930ba0  # no PDB name
-00930bf0 FUN_00930bf0  # no PDB name; path boundary accessor
-00930c10 GetExtension  # dev-PDB gap-align EA::IO::FilePath::GetExtension (retail returns ext ptr)
-00930c30 GetDirectory  # dev-PDB gap-align EA::IO::FilePath::GetDirectory
-00930cb0 GetFileName  # dev-PDB gap-align EA::IO::FilePath::GetFileName
-00930d20 GetDriveAndDirectory  # dev-PDB gap-align EA::IO::FilePath::GetDriveAndDirectory
-00930da0 FUN_00930da0  # no PDB name
-00930dd0 FUN_00930dd0  # no PDB name; SplitPathPtrs passthrough
-00930f60 FUN_00930f60  # no PDB name
-00930f90 AppendDirectory  # dev-PDB gap-align EA::IO::FilePath::AppendDirectory
-00930fc0 ReplacePathComponent  # dev-PDB gap-align EA::IO::FilePath::ReplacePathComponent
-00931100 FUN_00931100  # no PDB name; ReplacePathComponent(2,4,...) wrapper
-00931250 MakeFileNameValid  # dev-PDB callee-single EA::IO::MakeFileNameValid
+00930180 ?SplitPath@IO@EA@@YAXPB_WPA_W111@Z  # SplitPath migrated from s00930180 (verbatim, slice spelling)
+009302b0 ?SplitDirectory@IO@EA@@YAIPB_WPA_WI@Z  # SplitDirectory migrated from s00930180 (verbatim, slice spelling)
+00930480 ?FullPath@IO@EA@@YAPA_WPA_WPB_W1H@Z  # FullPath migrated from s00930180 (verbatim, slice spelling)
+00930670 ?FullPath@IO@EA@@YAXPA_WPB_WIH@Z  # FullPath migrated from s00930180 (verbatim, slice spelling)
+00930950 ?FUN_00930950@IO@EA@@YA_NPB_WH@Z  # FUN_00930950 migrated from s00930180 (verbatim, slice spelling)
+009309b0 ?FUN_009309b0@IO@EA@@YAPA_WPA_WPB_W1H@Z  # FUN_009309b0 migrated from s00930180 (verbatim, slice spelling)
+00930a30 ?FUN_00930a30@IO@EA@@YAPA_WPB_WPA_W_W@Z  # FUN_00930a30 migrated from s00930180 (verbatim, slice spelling)
+00930ab0 ?IsSubdirectory@IO@EA@@YA_NPB_W0H@Z  # IsSubdirectory migrated from s00930180 (verbatim, slice spelling)
+00930ba0 ?FUN_00930ba0@IO@EA@@YAPB_WPB_W000@Z  # FUN_00930ba0 migrated from s00930180 (verbatim, slice spelling)
+00930bf0 ?FUN_00930bf0@IO@EA@@YIPB_WPB_W@Z  # FUN_00930bf0 migrated from s00930180 (verbatim, slice spelling)
+00930c10 ?GetExtension@FilePath_s0093_0180@IO@EA@@QAEPB_WXZ  # FilePath_s0093_0180::GetExtension migrated from s00930180 (verbatim, slice spelling)
+00930c30 ?GetDirectory@FilePath_s0093_0180@IO@EA@@QAEIPA_WI@Z  # FilePath_s0093_0180::GetDirectory migrated from s00930180 (verbatim, slice spelling)
+00930cb0 ?GetFileName@FilePath_s0093_0180@IO@EA@@QAEIPA_WI@Z  # FilePath_s0093_0180::GetFileName migrated from s00930180 (verbatim, slice spelling)
+00930d20 ?GetDriveAndDirectory@FilePath_s0093_0180@IO@EA@@QAEIPA_WI@Z  # FilePath_s0093_0180::GetDriveAndDirectory migrated from s00930180 (verbatim, slice spelling)
+00930da0 ?FUN_00930da0@FilePath_s0093_0180@IO@EA@@QAE_NPB_W@Z  # FilePath_s0093_0180::FUN_00930da0 migrated from s00930180 (verbatim, slice spelling)
+00930dd0 ?FUN_00930dd0@IO@EA@@YAXPB_WPAPB_W11@Z  # FUN_00930dd0 migrated from s00930180 (verbatim, slice spelling)
+00930f60 ?FUN_00930f60@FilePath_s0093_0180@IO@EA@@QAEPA_WPB_W@Z  # FilePath_s0093_0180::FUN_00930f60 migrated from s00930180 (verbatim, slice spelling)
+00930f90 ?AppendDirectory@FilePath_s0093_0180@IO@EA@@QAEXXZ  # FilePath_s0093_0180::AppendDirectory migrated from s00930180 (verbatim, slice spelling)
+00930fc0 ?ReplacePathComponent@FilePath_s0093_0180@IO@EA@@QAEXHHPB_W_N@Z  # FilePath_s0093_0180::ReplacePathComponent migrated from s00930180 (verbatim, slice spelling)
+00931100 ?FUN_00931100@FilePath_s0093_0180@IO@EA@@QAEXPB_W_N@Z  # FilePath_s0093_0180::FUN_00931100 migrated from s00930180 (verbatim, slice spelling)
+00931250 ?MakeFileNameValid@IO@EA@@YA_NPB_WPA_W@Z  # MakeFileNameValid migrated from s00930180 (verbatim, slice spelling)

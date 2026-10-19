@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAFilePath.cpp  ?FUN_00930950@IO@EA@@YA_NPB_WH@Z  00930950  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFilePath.cpp  ?FUN_00930bf0@IO@EA@@YIPB_WPB_W@Z  00930bf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFilePath.cpp  ?GetExtension@FilePath_s0093_0180@IO@EA@@QAEPB_WXZ  00930c10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFilePath.cpp  ?GetDirectory@FilePath_s0093_0180@IO@EA@@QAEIPA_WI@Z  00930c30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFilePath.cpp  ?GetDriveAndDirectory@FilePath_s0093_0180@IO@EA@@QAEIPA_WI@Z  00930d20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFilePath.cpp  ?FUN_00930da0@FilePath_s0093_0180@IO@EA@@QAE_NPB_W@Z  00930da0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFilePath.cpp  ?FUN_00930dd0@IO@EA@@YAXPB_WPAPB_W11@Z  00930dd0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFilePath.cpp  ?FUN_00930f60@FilePath_s0093_0180@IO@EA@@QAEPA_WPB_W@Z  00930f60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFilePath.cpp  ?AppendDirectory@FilePath_s0093_0180@IO@EA@@QAEXXZ  00930f90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFilePath.cpp  ?FUN_00931100@FilePath_s0093_0180@IO@EA@@QAEXPB_W_N@Z  00931100  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
