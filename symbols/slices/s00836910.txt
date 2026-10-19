@@ -3,7 +3,7 @@
 008369e0  RawFixed::AssignCStr  # assign(const wchar_t*): reset + scan + AssignStr
 00836a30  RawFixed::SubstrInto  # builds a 256-wide fixed string from a substring (WideFixedBuf::append)
 00836a90  RawFixed::Swap  # swap layout of two fixed strings, copy+assign on the non-inline path
-00836bd0  cSPUIXHTMLUTFResourceHandler::ProcessRequest  # PDB candidate (caller-single)
+00836bd0 ?FUN_00836bd0@@YAHHH@Z  # FUN_00836bd0 migrated from s00836910 (verbatim, slice spelling)
 00836d50  cDataURI::init  # parses data: URI scheme/charset, sets mEncoding/mbBase64
 00837020  RawFixed::Reserve  # allocate n bytes, copy, free old (with SSO buffer sentinel check)
 008371e0  cDataURI::cDataURI  # sets up both SSO buffers then calls init

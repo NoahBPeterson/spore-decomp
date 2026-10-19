@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorSystem.cpp  ?PreShutdown@cEditorSystem@SP@@QAE_NXZ  005d6190  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSystem.cpp  ?HandleMessage@cEditorSystem_s005d_61b0@SP@@UAE_NIPAX@Z  005d6510  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSystem.cpp  ?Update@cEditorSystem_s005d_61b0@SP@@QAEXH@Z  005d65d0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSystem.cpp  ??0cEditorSystem_s005d_61b0@SP@@QAE@XZ  005d67f0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSystem.cpp  ??0hkDefaultError@@QAE@P6AXPBDPAX@Z1@Z  005d6ae0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSystem.cpp  ?message@cSPHavokError@@UAEXW4Message@hkError@@HPBD1H@Z  005d6dc0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSystem.cpp  ?PreInit@cEditorSystem_s005d_61b0@SP@@QAE_NH@Z  005d6f90  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSystem.cpp  ??0cHashedResourceTable@@QAE@H@Z  005d7240  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSystem.cpp  ?GetProtocolName@cSPUIXHTMLFileResourceHandler@@UAEPB_WH@Z  005d7330  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSystem.cpp  ?GetProtocolName@cSPUIXHTMLUTFResourceHandler@@UAEPB_WH@Z  005d73d0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

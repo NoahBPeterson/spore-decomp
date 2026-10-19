@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00836bd0  -  partial: cSPUIXHTMLUTFResourceHandler::ProcessRequest - body summarised to a stub (property lookup + stream dispatch omitted)
