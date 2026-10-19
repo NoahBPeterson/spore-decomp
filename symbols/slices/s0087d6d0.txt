@@ -1,4 +1,4 @@
-0087d6d0 EA::Locale::FieldParse  # parses printf-style fields into LocField array
+0087d6d0 ?Locale_ParseFormat@@YAEPA_WPAULocField@@PAHPAPA_W@Z  # Locale_ParseFormat migrated from s0087d6d0 (verbatim, slice spelling)
 0087d9a0 ?Locale_MakeLocaleAvailable@@YAHPBULocView@@0@Z  # Locale_MakeLocaleAvailable migrated from s0087d6d0 (verbatim, slice spelling)
 0087da10 EA::Locale::MakeLocaleAvailableStr  # same compare core, NUL-terminated input
 0087da90 EA::Locale::GetSystemLocaleName  # GetSystemDefaultLCID + en-US table

@@ -115,6 +115,7 @@ extern "C" __declspec(dllimport) int      __cdecl tolower(int);
 extern const wchar_t* g_localeCht[];    // 0x01548ec8
 extern const wchar_t* g_localeAus[];    // 0x01548f28
 extern wchar_t*       g_grpSepBegin;    // 0x016507b0
+extern "C" __declspec(dllimport) wchar_t* __cdecl wcschr_s0087_d6d0(const wchar_t*, wchar_t);
 int __cdecl LocFieldToken(int idx, const wchar_t* src, wchar_t* dst, int cap, wchar_t sep);
 void __cdecl LocFree(void* p);                                    // 0x00f47380
 void* __cdecl LocNew(unsigned size, const char* name, int flags, int align,
@@ -145,6 +146,15 @@ struct FixedBuf {
     }
 };
 struct LocView { wchar_t* mpBegin; wchar_t* mpEnd; };
+struct LocField {
+    uint8_t  pad00[0x34 - 0x00];  // 0x00
+    uint32_t flags;               // 0x34
+    uint32_t type;                // 0x38
+    uint32_t width;               // 0x3c
+    uint32_t prec;                // 0x40
+    wchar_t* begin;               // 0x44
+    wchar_t* end;                 // 0x48
+};
 LocBuf* LocBuf::Assign(const wchar_t* s)
 {
     wchar_t* p = mpBegin;
@@ -165,7 +175,6 @@ struct LocFmt : FixedBuf<16> {
     LocFmt* Assign(const LocFmt* src);
 };
 // ---- items of slice s0087d6d0 end
-
 
 // ---- items of slice s0087e510 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" wchar_t*   wcsncpy(wchar_t*, const wchar_t*, unsigned int);
@@ -314,7 +323,6 @@ struct NumFmt {
 };
 // ---- items of slice s0087f370 end
 
-
 // ---- items of slice s00881730 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern const wchar_t* DAT_01650540;
 extern const wchar_t* DAT_01650574;
@@ -329,12 +337,6 @@ void __cdecl FUN_00881f30(u16* a, u16* b, int c, int d, int e, int f);
 template <> eastl::fixed_string<wchar_t, 16, true>::~fixed_string()
 {
 }
-
-
-
-
-
-
 
 // @ 0x0087d620
 int FUN_0087d620(int limit, const wchar_t* str, wchar_t* dst, int cap, wchar_t sep)
@@ -359,12 +361,6 @@ int FUN_0087d620(int limit, const wchar_t* str, wchar_t* dst, int cap, wchar_t s
     return FUN_0087d5d0(dst, cap, (const wchar_t*)psVar1, (const wchar_t*)psVar4);
 }
 
-
-
-
-
-
-
 // @ 0x0087d690
 int FUN_0087d690(int limit, const wchar_t* str, wchar_t sep)
 {
@@ -373,10 +369,87 @@ int FUN_0087d690(int limit, const wchar_t* str, wchar_t sep)
     return (int)wcstol(buf, 0, 10);
 }
 
-
-
-
-
+// @ 0x0087d6d0
+uint8_t Locale_ParseFormat(wchar_t* s, LocField* fields, int* pCount, wchar_t** pOut)
+{
+    int       count = 0;
+    uint8_t   ret = 1;
+    wchar_t*  p = s;
+    LocField* f = fields;
+    wchar_t*  last = 0;
+    if (*pCount > 0) {
+        for (;;) {
+            bool bWidth = false;
+            bool bDot = false;
+            bool bPrec = false;
+            wchar_t* pc = wcschr_s0087_d6d0(p, L'%');
+            if (pc == 0) break;
+            last = pc;
+            f->begin = pc;
+            f->end   = pc;
+            p = pc + 1;
+            f->flags = 0;
+            f->type  = 0;
+            f->width = (uint32_t)-1;
+            f->prec  = (uint32_t)-1;
+            for (;;) {
+                wchar_t c = *p;
+                if (c == 0) { f->type = 0; ret = 0; break; }
+                switch (c) {
+                case L'#': f->flags |= 0x40; break;
+                case L'$': f->type = 0xc; goto done;
+                case L'%': f->type = 0xe; goto done;
+                case L'+': f->flags |= 0x04; break;
+                case L'-': f->flags |= 0x20; break;
+                case L'.': bWidth = true; bDot = true; break;
+                case L'<': f->flags |= 0x10; break;
+                case L'>': f->flags |= 0x08; break;
+                case L'?': f->flags |= 0x01; break;
+                case L'@': f->flags |= 0x80; break;
+                case L'A': f->type = 8;   goto done;
+                case L'F': f->type = 3;   goto done;
+                case L'H': f->type = 5;   goto done;
+                case L'M': f->type = 6;   goto done;
+                case L'N': f->type = 1;   goto done;
+                case L'S': f->type = 7;   goto done;
+                case L'W': f->type = 2;   goto done;
+                case L'd': f->type = 9;   goto done;
+                case L'h': f->type = 4;   goto done;
+                case L'm': f->type = 10;  goto done;
+                case L'p': f->type = 0xd; goto done;
+                case L'y': f->type = 0xb; goto done;
+                default:
+                    if (c >= L'0' && c <= L'9') {
+                        if (c == L'0') {
+                            if (bDot) f->prec = 0;
+                            else      f->flags |= 0x02;
+                        } else if (bWidth) {
+                            if (!bPrec) { bPrec = true; f->prec = (uint32_t)(c - L'0'); }
+                        } else {
+                            bWidth = true;
+                            f->width = (uint32_t)(c - L'0');
+                        }
+                    }
+                    break;
+                }
+                p++;
+            }
+        done:
+            f->end = p;
+            last = p;
+            f++;
+            if (++count >= *pCount) break;
+            p++;
+        }
+    }
+    *pCount = count;
+    if (*pOut != 0) {
+        *pOut = 0;
+        if (last != 0 && *last != 0 && last[1] != 0)
+            *pOut = last + 1;
+    }
+    return ret;
+}
 
 // @ 0x0087d9a0
 int Locale_MakeLocaleAvailable(const LocView* a, const LocView* b)
@@ -404,7 +477,6 @@ int Locale_MakeLocaleAvailable(const LocView* a, const LocView* b)
     return 1;
 }
 
-
 // @ 0x0087db80
 int Locale_FindInCht(const wchar_t* name, wchar_t* out, int cap)
 {
@@ -423,7 +495,6 @@ int Locale_FindInCht(const wchar_t* name, wchar_t* out, int cap)
     }
     return -1;
 }
-
 
 // @ 0x0087dc40
 const wchar_t* Locale_FindByShortName(const wchar_t** table, const LocView* name)
@@ -454,7 +525,6 @@ const wchar_t* Locale_FindByShortName(const wchar_t** table, const LocView* name
     }
 }
 
-
 // @ 0x0087e080
 LocFmt* LocFmt::Assign(const LocFmt* src)
 {
@@ -473,7 +543,6 @@ LocFmt* LocFmt::Assign(const LocFmt* src)
     mSecond.AppendElement(src->mSecond.mpBegin, src->mSecond.mpEnd);
     return this;
 }
-
 
 // @ 0x0087e230
 uint32_t Locale_FindLower(const wchar_t* name, wchar_t* out, int cap)
@@ -549,7 +618,6 @@ uint32_t Locale_FindLower(const wchar_t* name, wchar_t* out, int cap)
     return (uint32_t)-1;
 }
 
-
 // @ 0x0087e510
 LangPrefixObj* __fastcall FUN_0087e510(LangPrefixObj* self)
 {
@@ -568,10 +636,6 @@ LangPrefixObj* __fastcall FUN_0087e510(LangPrefixObj* self)
     return self;
 }
 
-
-
-
-
 // @ 0x0087e8f0
 void __fastcall FUN_0087e8f0(LangPrefixObj* self)
 {
@@ -587,10 +651,6 @@ void __fastcall FUN_0087e8f0(LangPrefixObj* self)
     DESTROY(self->m1);  DESTROY(self->m0);
 #undef DESTROY
 }
-
-
-
-
 
 // @ 0x0087ed70
 void* FUN_0087ed70(Loc16* dst, int* src)
@@ -612,10 +672,6 @@ void* FUN_0087ed70(Loc16* dst, int* src)
     dst->AppendElement(g_01549118, g_0154911c);
     return dst;
 }
-
-
-
-
 
 // @ 0x0087edd0
 void* FUN_0087edd0(Loc16* dst, int* src)
@@ -646,10 +702,6 @@ void* FUN_0087edd0(Loc16* dst, int* src)
     dst->AppendElement((const wchar_t*)begin, (const wchar_t*)(begin + 4));
     return dst;
 }
-
-
-
-
 
 // @ 0x0087ee50
 namespace EA { namespace Locale {
@@ -701,10 +753,6 @@ void* GetClosestLanguageId(void* dst_, int* key)
 }
 }}  // namespace EA::Locale
 
-
-
-
-
 // @ 0x0087f100
 LocaleFormatObj* __fastcall FUN_0087f100(LocaleFormatObj* self)
 {
@@ -722,10 +770,6 @@ LocaleFormatObj* __fastcall FUN_0087f100(LocaleFormatObj* self)
 #undef INIT512
     return self;
 }
-
-
-
-
 
 // @ 0x0087f210
 void* FUN_0087f210(Loc16* dst, const wchar_t* src)
@@ -765,19 +809,12 @@ void* FUN_0087f210(Loc16* dst, const wchar_t* src)
     return dst;
 }
 
-
-
-
-
 // @ 0x0087f350
 void* FUN_0087f350(Loc16* dst, wchar_t** src)
 {
     FUN_0087f210(dst, *src);
     return dst;
 }
-
-
-
 
 // @ 0x0087f370
 namespace EA { namespace Locale {
@@ -1041,15 +1078,11 @@ __declspec(noinline) int FUN_00881730(void)
     return 0;
 }
 
-
-
 // @ 0x00881ae0
 __declspec(noinline) int FUN_00881ae0(void)
 {
     return 0;
 }
-
-
 
 // @ 0x00881c50
 __declspec(noinline) int FUN_00881c50(double a, int b, int c, int d, const wchar_t* fmt)
@@ -1059,15 +1092,11 @@ __declspec(noinline) int FUN_00881c50(double a, int b, int c, int d, const wchar
     return sink;
 }
 
-
-
 // @ 0x00881ea0
 void __cdecl FUN_00881ea0(double a, int b, int c, int d)
 {
     FUN_00881c50(a, b, c, d, L"%N%?p%?2F");
 }
-
-
 
 // @ 0x00881ed0
 void __cdecl FUN_00881ed0(double a, int b, int c, int d)
@@ -1075,15 +1104,11 @@ void __cdecl FUN_00881ed0(double a, int b, int c, int d)
     FUN_00881c50(a, b, c, d, DAT_01650540);
 }
 
-
-
 // @ 0x00881f00
 void __cdecl FUN_00881f00(double a, int b, int c, int d)
 {
     FUN_00881c50(a, b, c, d, DAT_01650574);
 }
-
-
 
 // @ 0x00881f30
 __declspec(noinline) void FUN_00881f30(u16* a, u16* b, int c, int d, int e, int f)
@@ -1091,8 +1116,6 @@ __declspec(noinline) void FUN_00881f30(u16* a, u16* b, int c, int d, int e, int 
     static volatile int sink;
     sink = (a != 0) + (b != 0) + c + d + e + f;
 }
-
-
 
 // @ 0x008822e0
 void __cdecl FUN_008822e0(double a, int p2, int p3, int p4, int p5)
@@ -1115,8 +1138,6 @@ void __cdecl FUN_008822e0(double a, int p2, int p3, int p4, int p5)
         ++p;
     }
 }
-
-
 
 // @ 0x00882380
 __declspec(noinline) int FUN_00882380(void* a, int b)
