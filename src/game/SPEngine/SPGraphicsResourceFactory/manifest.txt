@@ -7,10 +7,18 @@
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?ReadTriplets@@YG_NPAXHHH@Z  007638a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Init@cGraphicsResourceFactory@SP@@UAE_NXZ  007641c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ??1D7642c0@@QAE@XZ  007642c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?FUN_764320@@YGEPAURasterLoadState@@PAXPAUOutRec@@@Z  00764320  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?FixupArena@cGraphicsResourceFactory_s0076_3cb0@SP@@QAE_NPAUArenaOwner@@@Z  00764580  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Wrap670@Loader@@QAEXH@Z  00764670  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Load820@Loader@@QAE_NH@Z  00764820  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?ReadResourceArena@cGraphicsResourceFactory_s0076_3cb0@SP@@QAE_NPAUD7642c0@@PAUStm7@@PAURegistry@@@Z  00764a50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?FUN_764f60@@YG_NPAUGameMeshes@@PAUIStream_@@@Z  00764f60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Fn7650f0@LoaderF0@@QAE_NH@Z  007650f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?WrapDf0@Loader29@@QAEXH@Z  00765150  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Fn7655f0@cGraphicsResourceFactory_s0076_4df0@SP@@QAE_NPAX00@Z  007655f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?grow@HVec@@QAEXI@Z  00765980  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ??1D765ac0@@QAE@XZ  00765ac0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Start@AsyncReqC@@QAE_NPAUJobRefL@@@Z  00765d30  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?AsInterfaceFC@@YIPAXPAXHH@Z  00766030  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Method66070@ResB@@QAEXHH@Z  00766070  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Method660b0@ResB@@QAEXXZ  007660b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

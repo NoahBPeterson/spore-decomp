@@ -1,8 +1,16 @@
 # va  diff-bytes  reason
 007635b0 67 complete: EH destructor iterating two EhItem[4] arrays at +0x44/+0x64; frame layout differs
 00763770 67 complete: raster-from-gimmmex create; original uses early-return branch layout, ours merges the two checks
+00764220 70 complete: rw::core::arena::Arena default ctor (two EH-vector-constructed ResourceDescriptors); original keeps 1 in eax after the vec-ctor call, ours stores imm 1 and hoists xor differently [equiv: PASS]
+00764430 25 complete: serialize 0x7c-byte records via stream vslot 14; 12-byte temp copy is scheduled load/store interleaved in original, ours hoists loads [equiv: UNSUPPORTED (0/400 valid inputs, vtable-driven)]
 007646a0 18 complete: state->Load(&state[0x2c], p28, p14); original keeps p28 in esi, ours edx; equiv PASS (1187 valid inputs, 100% coverage)
+00764760 4 complete: ctor with two Blk blocks, flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE; stores of +0x70/+0x74/+0x78 ordered differently [equiv: PASS]
+007649f0 4 complete: async request complete; register choice (ecx vs edx) for arg of 0x6ae2f0 [equiv: UNSUPPORTED (0/400 valid inputs, vtable-driven)]
+00764ce0 13 complete: arena wrapper build/teardown; original keeps this in esi and first block in edi, ours swapped [equiv: UNSUPPORTED (0/400 valid inputs)]
+00764df0 196 complete: CreateRasterFromArena (loader Get, 0x20003 exported-object scan, EH vector ctor/dtor); original spills the object count and the arena resource to stack slots and aligns the loop head, ours keeps them in registers [equiv: WEAK, 43% coverage]
 007650d0 18 complete: state->ReadArena(&state[0x2c], p28, p14); original copies this to eax and mutates it (add eax,0x2c)
+007656c0 280 complete: game-mesh record stream writer (inlined lock-xadd handle copy/release per 0x20d slot); only the xadd address/value register pairing and one index operand order differ [equiv: UNSUPPORTED, fake-arity/fault(read) on all 400 inputs]
+00765b30 14 complete: two chained cJobs started under the job-manager lock; only the prologue push/store interleave differs [equiv: WEAK, 10% coverage]
 00765f10 47 complete: cPropertyList-style ctor (base vptr, zeroed fields, derived vptr, AddRef arg at +0x1c); no EH frame/register order differs | equiv UNSUPPORTED (vtable address constant differs; needs symbol mapping)
 00765f80 16 deleting dtor: EH prolog + vptr-store schedule not reproduced
 00765fe0 7 ResB ctor: only zeroing-store order differs (0x18/0x20/0x24/0x28/0x2c)

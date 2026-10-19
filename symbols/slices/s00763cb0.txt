@@ -1,9 +1,13 @@
 007641c0 ?Init@cGraphicsResourceFactory@SP@@UAE_NXZ  # SP::cGraphicsResourceFactory::Init migrated from s00763cb0
+00764220 ??0Arena98@@QAE@XZ  # Arena98::Arena98 migrated from s00763cb0 (verbatim, slice spelling)
 007642c0 ??1D7642c0@@QAE@XZ  # D7642c0::~D7642c0 migrated from s00763cb0 (verbatim, slice spelling)
-00764670 ?Wrap670@Loader@@QAEXH@Z  # Loader::Wrap670 migrated from s00763cb0 (verbatim, slice spelling)
+00764320 ?FUN_764320@@YGEPAURasterLoadState@@PAXPAUOutRec@@@Z  # FUN_764320 migrated from s00763cb0 (verbatim, slice spelling)
+00764430 ?FUN_764430@@YGEPAUWStream@@PAURecSrc@@@Z  # FUN_764430 migrated from s00763cb0 (verbatim, slice spelling)
+00764580 ?FixupArena@cGraphicsResourceFactory_s0076_3cb0@SP@@QAE_NPAUArenaOwner@@@Z  # cGraphicsResourceFactory_s0076_3cb0::FixupArena migrated from s00763cb0 (verbatim, slice spelling)
+00764670 ?Wrap670@Loader@@QAEXH@Z  # PoolAlloc migrated from s00763cb0 (verbatim, slice spelling)
 007646a0 ?Wrap6a0@Loader@@QAEXH@Z  # Loader::Wrap6a0 migrated from s00763cb0 (verbatim, slice spelling)
-00764220 rw::core::arena::Arena::Arena  # 0x98-byte Arena default ctor (two ResourceDescriptor vec-ctors + 4 zero ints at +0x84); dtor is 0x7635b0
-00764580 SP::cGraphicsResourceFactory::FixupArena  # ArenaStart/FixupNext loop, DestructNext on refusal; called from 0x764ce0
-00764a50 SP::cGraphicsResourceFactory::ReadResourceArena_1  # PDB candidate; reads 0x98-byte arena header + 4 spans
-00764ce0 SP::cGraphicsResourceFactory::BuildArena  # ReadResourceArena + FixupArena + store block ptr and 12-byte key into mArenaResource
-00764820 Loader::Load820  # reads whole stream into SharedBuf, wraps in GraphicsFactoryAsyncRequest
+00764760 ?Init@Ctor764760@@QAEPAU1@I@Z  # Ctor764760::Init migrated from s00763cb0 (verbatim, slice spelling)
+00764820 ?Load820@Loader@@QAE_NH@Z  # Loader::Load820 migrated from s00763cb0 (verbatim, slice spelling)
+007649f0 ?Complete@Loader@@QAE_NPAD@Z  # Loader::Complete migrated from s00763cb0 (verbatim, slice spelling)
+00764a50 ?ReadResourceArena@cGraphicsResourceFactory_s0076_3cb0@SP@@QAE_NPAUD7642c0@@PAUStm7@@PAURegistry@@@Z  # cGraphicsResourceFactory_s0076_3cb0::ReadResourceArena migrated from s00763cb0 (verbatim, slice spelling)
+00764ce0 ?BuildArena@cGraphicsResourceFactory_s0076_3cb0@SP@@QAE_NPAUStm7@@PAURegistry@@PBUV3u@@@Z  # cGraphicsResourceFactory_s0076_3cb0::BuildArena migrated from s00763cb0 (verbatim, slice spelling)

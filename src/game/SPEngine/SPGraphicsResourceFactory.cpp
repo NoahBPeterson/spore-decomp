@@ -13,6 +13,7 @@
 #include <new>
 #include "rw/graphics/IndexBuffer.h"
 #include "rw/graphics/VertexBuffer.h"
+#include "SP/cJob.h"
 
 // ---- items of slice s00682f40 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct RefCounted {
@@ -76,34 +77,225 @@ extern "C" void  __cdecl RemoveRegistrationCallback(int id, void* cb);          
 // ---- items of slice s00762d70 end
 
 // ---- items of slice s00763cb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_one_01485720;    // 0x01485720
+#pragma pack(push, 1)
+#pragma pack(pop)
 struct RasterCtx { char Create(void* a, void* b, void* c); };
 struct Ctx63620 { char Load(void* a, void* b, void* c); };
 struct Ctx63770 { char Fill(void* a, void* b, void* c); };
-struct RefObj { virtual void s0(); virtual void s1(); virtual void s2(); };
-struct AutoRef { RefObj* p; ~AutoRef() { if (p) p->s1(); } };
-struct D7642c0 {
-    char pad4[4];
-    AutoRef a;                 // +4
-    AutoRef b;                 // +8
-    ~D7642c0();
+struct V3u { uint32_t x, y, z; };
+struct IfA {
+    virtual void AddRef();
+    virtual void Release();
+    uint32_t pad04;
+    V3u v08;                   // +8
+    uint32_t pad14;
+    void* f18;                 // +0x18
 };
+struct Z4 { uint32_t a, b, c, d; };
+struct BRD {                                            // rw::BaseResourceDescriptor
+    uint32_t size, align;
+    BRD();      // 0x006c0fa0
+    ~BRD();     // 0x00c2e4e0
+};
+struct BRDs { BRD d[4]; };                              // rw::BaseResourceDescriptors<4>
+struct RDesc : BRDs { RDesc() { d[0].size = 0; d[0].align = 1; } };   // rw::ResourceDescriptor
+struct IfB {
+    virtual void AddRef();
+    virtual void Release();
+    virtual void v2();
+    virtual void v3();
+    virtual void Alloc(const RDesc* rd, int z);   // slot 4
+    virtual void Done();                          // slot 5
+    virtual void Reset(Z4* z);                    // slot 6
+    virtual char** Blocks();                      // slot 7
+};
+struct Registry { virtual void v0(); virtual void v1(); virtual void v2(); virtual void* Query(uint32_t id); };   // slot 3
+struct Stm7 {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+    virtual uint32_t Size();                       // slot 7
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+    virtual uint32_t Read(void* p, uint32_t n);    // slot 12
+};
+template <class T> struct AutoRefT { T* p; ~AutoRefT() { if (p) p->Release(); } };
+struct D7642c0 {                    // SP::cGraphicsResourceFactory::cArenaLoadState
+    uint32_t size;                 // +0 mRecordSize
+    AutoRefT<IfA> a;               // +4 mArenaResource
+    AutoRefT<IfB> b;               // +8 mRwAllocator
+    D7642c0() { a.p = 0; b.p = 0; }
+    __declspec(noinline) ~D7642c0();
+};
+struct TR { uint32_t a, b, c, d; TR() { a = 0; b = 0; c = 0; d = 0; } };   // rw::TargetResource
+struct Arena98 {
+    uint32_t hdr[0x44 / 4];
+    RDesc a;                       // +0x44 m_resourceDescriptor
+    RDesc b;                       // +0x64 m_resourcesUsed
+    TR r;                          // +0x84 m_resource
+    uint32_t grp;                  // +0x94 m_arenaGroup
+    __declspec(noinline) Arena98();   // 0x00764220
+    ~Arena98();                       // 0x007635b0
+};
+void* __cdecl SP_CreateRaster(int, int, int, int, int);   // 0x00761420
+void __cdecl FreeMem(void* p);                             // 0x00f47380
+struct RasterObj { char pad[0x12]; uint8_t face; void SetMipLevelData(void* data, uint32_t level); };   // 0x011f0270
+struct RasterLoadState {
+    uint32_t pad0[1];
+    int w, h, nml, tp, fm;     // +4
+    uint8_t isCube; uint8_t pad19[3];
+    uint32_t numFaces;         // +0x1c
+    uint32_t pad20[0x58 / 4];
+    void** pix;                // +0x78
+};
+struct OutRec { char pad[0x18]; void* raster; };
+struct T3 { uint32_t x, y, z; T3(uint32_t a, uint32_t b, uint32_t c) : x(a), y(b), z(c) {} };
+struct WStream {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+    virtual uint32_t Write(const void* p, uint32_t n);   // slot 14 (+0x38)
+};
+struct Cell { void* GetChildID(uint32_t* count); };   // 0x00700360 thiscall (ret 4)
+struct P74 { char pad[8]; T3 v; };
+struct Rec7c { char a[0x38]; char b[0x38]; uint32_t f70; P74* p74; Cell* p78; };
+struct RecSrc { char pad[0x108]; char* begin; char* end; };
+struct Matrix3 { float m[9]; Matrix3& Assign(const Matrix3& o); };   // 0x0041cb40 thiscall
+struct V3g { float x, y, z; };
+extern V3g g_v3_01630408;       // 0x01630408
+extern Matrix3 g_mat_01630560;  // 0x01630560
+struct Blk {
+    uint16_t a, b;       // +0
+    V3g pos;             // +4
+    float w;             // +0x10
+    Matrix3 m;           // +0x14
+};
+struct Ctor764760 {
+    Blk blk0;            // +0
+    Blk blk1;            // +0x38
+    uint32_t p70, p74, p78;
+    Ctor764760* Init(uint32_t v);
+};
+static void InitBlk(Blk* b) {
+    b->a = 0; b->b = 0;
+    b->pos.x = g_v3_01630408.x; b->pos.y = g_v3_01630408.y; b->pos.z = g_v3_01630408.z;
+    b->w = g_one_01485720;
+    b->m.Assign(g_mat_01630560);
+}
+struct Slot9 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+               virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); };
+struct cSPMemPool { void* LockedAlloc(uint32_t size, int a, int b, int c, int d, int e); };   // 0x009289f0 (ret 0x18)
+extern cSPMemPool* g_pSPMemPool;                                                              // 0x016c8b44
+void* __cdecl ZoneObject_new(int size, const char* name, int a, int b, int c, int d);         // 0x00926020
+void* __cdecl TaggedNew(uint32_t size, const char* name, int a, int b, int c, int d);         // 0x00f473a0
+struct Rc { virtual void Del(int); long rc; };
+struct SharedBuf {                       // EA::IO::SharedPointer-like buffer holder, 0x18 bytes
+    void* vptr0; Rc rcb; void* pad0c; void* data; int pad14;
+    SharedBuf(void* a, void* b, uint8_t c);   // 0x0093bc40
+    static void* operator new(size_t n, const char* name, int a, int b, int c, int d) { return ZoneObject_new((int)n, name, a, b, c, d); }
+    static void operator delete(void*, const char*, int, int, int, int) {}
+    static void operator delete(void*) {}
+};
+struct SBHandle {
+    SharedBuf* p;
+    SBHandle(SharedBuf* q) : p(q) { if (p) _InterlockedIncrement(&p->rcb.rc); }
+    ~SBHandle() {
+        Rc* r = &p->rcb;
+        long n = _InterlockedDecrement(&r->rc);
+        if (n == 0) {
+            _InterlockedExchange(&r->rc, 1);
+            if (r) r->Del(1);
+        }
+    }
+};
+struct Stm {                                  // memory stream held at Loader::p28
+virtual void v0();
+virtual void AddRef();
+virtual void Release();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+    virtual int GetSize();                    // slot 11
+    virtual int Read(void* p, uint32_t n);    // slot 12
+};
+struct AsyncReq : Stm {                       // Graphics::GraphicsFactoryAsyncRequest, 0x24 bytes
+    char pad[0x24 - 4];
+    AsyncReq(SharedBuf* sp, uint32_t size, const char* name);   // 0x0093c270
+    static void* operator new(size_t n, const char* name, int a, int b, int c, int d) { return TaggedNew((uint32_t)n, name, a, b, c, d); }
+    static void operator delete(void*, const char*, int, int, int, int) {}
+    static void operator delete(void*) {}
+};
+struct AsyncMgr { void RequestComplete(void* req, void* arg); };   // 0x006ae880 thiscall (ret 8)
+AsyncMgr* __cdecl GetAsyncMgr();                                    // 0x0067de70
+bool __cdecl FUN_6ae2f0(char* a, void* b);                          // 0x006ae2f0 cdecl
 struct Loader {
     char pad0[0xc];
     void* pC;                  // +0xc
-    char pad10[4];
+    Slot9* p10;                // +0x10
     void* p14;                 // +0x14
-    char pad18[0x10];
-    void* p28;                 // +0x28
+    char pad18[4];
+    char r1c[0xc];             // +0x1c
+    Stm* p28;                  // +0x28
     char p2c[0x308];           // +0x2c
     unsigned char b334;        // +0x334
     void Wrap670(int);
     void Wrap6a0(int);
     void Wrap6c0(int);
+    bool Load820(int);         // 0x764820
+    bool Complete(char* a);    // 0x7649f0
 };
+void Loader::Wrap670(int) {
+    RasterCtx* ctx = (RasterCtx*)pC;
+    char ok = ctx->Create(p2c, p28, p14);
+    if (ok)
+        b334 = 1;
+}
 void Loader::Wrap6c0(int) {
     if (((Ctx63770*)pC)->Fill(p2c, p28, p14))
         b334 = 1;
 }
+struct ArenaOwner { void* arena; };
+struct ArenaIter { char pad[0x134]; uint32_t f134; char pad2[0x40];
+void Init();
+void Done();
+    ArenaIter() { Init(); f134 = 0; } ~ArenaIter() { Done(); } };
+int __cdecl ArenaStart(void* arena, ArenaIter* it, void* owner, int* flag);   // 0x011e3c70
+unsigned int __cdecl FixupNext(ArenaIter*);     // 0x011e39e0 rw::core::arena::Arena::FixupNext
+unsigned int __cdecl DestructNext(ArenaIter*);  // 0x011e2330 rw::core::arena::Arena::DestructNext
+bool __cdecl FUN_763fd0(void* arena);           // 0x00763fd0 (partial below)
+namespace SP {
+class cGraphicsResourceFactory_s0076_3cb0 {
+public:
+    bool Init();                                            // 007641c0 0x007641c0
+    bool FixupArena(ArenaOwner* p);                         // 00764580
+    bool ReadResourceArena(D7642c0* st, Stm7* s, Registry* reg);   // 00764a50
+    bool BuildArena(Stm7* s, Registry* reg, const V3u* pv); // 00764ce0
+};
+}
+__declspec(noinline) bool __cdecl FUN_763fd0(void* arena) { (void)arena; return false; }       // 00763fd0
 extern "C" void* __cdecl AddRegistrationCallback(int id, void* cb);   // 0x06adfe0
 extern "C" void* __cdecl ArenaTypeRegGetType(int t);                   // 0x011e22c0
 extern "C" void* __cdecl GetManager();                                 // 0x067dcd0
@@ -142,11 +334,229 @@ struct Resource_s0076_4df0 : IUnknown32 {
     AtomicInt mRefCount; int k0, k1, k2;
     Resource_s0076_4df0() { mRefCount = 0; k0 = 0; k1 = 0; k2 = 0; }
 };
-struct cResourceBase : Resource_s0076_4df0 { int* cb; cResourceBase() { cb = 0; } };
-struct D765f10 : cResourceBase {
+struct cResourceBase_s0076_4df0 : Resource_s0076_4df0 { int* cb; cResourceBase_s0076_4df0() { cb = 0; } };
+struct D765f10 : cResourceBase_s0076_4df0 {
     int f18;
     void* f1c;
     D765f10(void* arg);
+};
+struct RefIface { virtual void AddRef(); virtual void Release(); };
+struct ArenaHolder : RefIface { char pad[0x14]; void* arenaPtr; };   // +0x18 arena (rw::core::arena::Arena*)
+struct Elem { uint32_t a, b; Elem(); ~Elem(); };               // 0x006c0fa0 / 0x00c2e4e0
+struct Res16 { void* m[4]; Res16() { for (int i = 0; i < 4; i++) m[i] = 0; } };
+struct RDesc2 { Elem d[4]; RDesc2() { d[0].a = 0; d[0].b = 1; } };
+__declspec(noinline) Elem::Elem() { a = 0; b = 1; }     // 0x006c0fa0
+__declspec(noinline) Elem::~Elem() {}                    // 0x00c2e4e0
+struct ExpObj { uint32_t type; void* obj; Res16 res; RDesc2 rd;
+    ExpObj() : type(0), obj(0) {}
+};
+struct Arena_s0076_4df0 {
+    int GetNumExportedObjects();                           // 0x011e23a0
+    void GetExportedObjectByIndex(int idx, ExpObj* out);   // 0x011e28e0
+};
+bool __cdecl SetCachingType(int type, void* obj);          // 0x006ac040
+struct RefObj2 { virtual void s0(); virtual void s1(); virtual void s2(); };
+struct D7643d0 {                  // two refcounted handles (release = slot 1)
+    RefObj2* a;                   // +0
+    RefObj2* b;                   // +4
+    D7643d0() { a = 0; b = 0; }
+    ~D7643d0();                   // 0x007643d0
+    RefObj2** ResetB() { if (b) { RefObj2* t = b; b = 0; t->s1(); } return &b; }
+};
+struct ArenaSrc { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+                  virtual void Get(RefIface** out); };      // slot 5
+struct CreateRasterIn { ArenaSrc* loader; ArenaHolder* res; };
+struct CreateRasterOut { char pad[0x18]; void* cell; RefIface* ref; };     // +0x18, +0x1c
+namespace SP {
+class cGraphicsResourceFactory_s0076_4df0 {
+public:
+    bool CreateRasterFromArena(CreateRasterIn* in, void* z, CreateRasterOut* out);   // 00764df0 0x00764df0
+    bool Fn7655f0(void* a, void* b, void* c);                                        // 007655f0
+};
+}
+struct ResMgr { virtual void v0(); virtual void v1(); virtual void v2();
+                virtual char Get(void* a, RefObj2** out, int z, void* b, void* self, void* c); };   // slot 3, ret 0x18
+struct Obj34 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+               virtual void Fn5(); virtual void v6(); virtual ArenaOwner* Fn7(); };
+struct Rec30 { char pad[0x18]; void* f18; };
+namespace SP {
+ class cGraphicsResourceFactory2 { public: bool FixupArena(ArenaOwner* p); };   // 0x00764580
+}
+struct LoaderF0 {
+    char pad0[0xc];
+    SP::cGraphicsResourceFactory2* pC;    // +0xc
+    char pad10[0x20];
+    Rec30* p30;                           // +0x30
+    Obj34* p34;                           // +0x34
+    char pad38[0x334 - 0x38];
+    unsigned char b334;
+    bool Fn7650f0(int);
+};
+struct IStream_;
+struct Mesh764 { char pad[8]; char* recs; };               // +8 record array (0x20 stride)
+struct GameMeshes { char pad[8]; char f8[0x10]; Mesh764** begin; Mesh764** end; };   // +8 object, +0x18/+0x1c vector
+bool __cdecl WriteUint32(IStream_* s, const uint32_t* p, uint32_t n, int endian);       // 0x0093aa70
+bool __cdecl WriteMesh(IStream_* s, Mesh764* m);                                        // 0x0071e390
+int  __cdecl FUN_71ddc0(Mesh764* m, int a, int b, int c, int d);                        // 0x0071ddc0
+struct MatRec { uint32_t a, b; uint16_t c, d; RefIface* e;
+    MatRec(const MatRec& o) : a(o.a), b(o.b), c(o.c), d(o.d), e(o.e) { if (e) e->AddRef(); }
+    ~MatRec() { if (e) e->Release(); } };
+struct MaterialMgr { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+    virtual void Fn17(uint32_t a, uint32_t b, IStream_* s, void* c); };            // slot 0x44
+MaterialMgr* __cdecl GetMaterialManager();                                              // 0x0067dd70
+static __forceinline void W32(IStream_* s, uint32_t x) { WriteUint32(s, &x, 1, 0); }
+struct AtomicL {
+    volatile long v;
+    __forceinline long Increment() { return _InterlockedExchangeAdd(&v, 1) + 1; }
+    __forceinline long Decrement() { return _InterlockedExchangeAdd(&v, -1) - 1; }
+    __forceinline long GetValue() { return _InterlockedExchangeAdd(&v, 0); }
+};
+struct RcObj { uint32_t p0, p4; AtomicL rc; };
+static __forceinline void RcAddRef(RcObj* p) { p->rc.Increment(); }
+static __forceinline void RcRelease(RcObj* p) {
+    p->rc.Decrement();
+    if (p->rc.GetValue() < 1)
+        p->rc.Increment();
+    else
+        p->rc.GetValue();
+}
+struct RcRef {
+    RcObj* p;
+    RcRef(RcObj* q) : p(q) { if (p) RcAddRef(p); }
+    ~RcRef() { if (p) RcRelease(p); }
+    void Reset() { if (p) { RcObj* t = p; p = 0; RcRelease(t); } }
+    void Assign(RcObj* q) {
+        RcObj* old = p;
+        if (q != old) {
+            if (q) RcAddRef(q);
+            p = q;
+            if (old) RcRelease(old);
+        }
+    }
+};
+struct SlotEnt { uint32_t a; RcObj* ref; uint32_t c, d; };
+struct MeshS { char pad4[4]; uint16_t w4; uint16_t w6; void* p8; uint32_t cnt; SlotEnt ents[1]; };   // ents at +0x10
+struct MeshVec { char pad[8]; MeshS** begin; MeshS** end; };
+struct WStream7 {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+    virtual uint32_t Write(const void* p, uint32_t n);   // slot 14 (+0x38)
+};
+struct KeyOut { uint32_t instance, type, group; };
+struct KeyMgr { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+    virtual void GetKey(KeyOut* out, RcObj* h); };      // slot 11 (+0x2c)
+KeyMgr* __cdecl FUN_67dd60();                           // 0x0067dd60
+uint32_t __cdecl FUN_778050(uint32_t t);                // 0x00778050
+struct cJob_s0076_4df0 {
+    void* mpCallback;           // +0
+    void* mpCallbackData;       // +4
+    char pad08[0x10];
+    uint32_t mFlags;            // +0x18
+    void SetCallback(void* f, void* d) { mpCallback = f; mpCallbackData = d; }
+    int  Release();                       // 0x00690120
+    void Queue();                         // 0x006909b0
+    void SetOwner(void* o);               // 0x0068f9b0 (AddRefs the owner into mpExtraObject)
+    void AddDependency(cJob_s0076_4df0* other);      // 0x00691380
+};
+struct JobRefL {
+    cJob_s0076_4df0* p;
+    JobRefL() : p(0) {}
+    ~JobRefL() { if (p) p->Release(); }
+    void Reset() { if (p) { cJob_s0076_4df0* t = p; p = 0; t->Release(); } }
+};
+struct IJobMgr {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+    virtual bool CreateJob(JobRefL* out);     // slot 4 (+0x10)
+virtual void v5();
+virtual void v6();
+virtual void v7();
+    virtual void Lock();                      // slot 8 (+0x20)
+    virtual void Unlock();                    // slot 9 (+0x24)
+};
+IJobMgr* __cdecl GetJobManager();             // 0x0068f4d0
+struct JobLockL {
+    IJobMgr* m;
+    JobLockL(IJobMgr* x) : m(x) { m->Lock(); }
+    ~JobLockL() { m->Unlock(); }
+};
+void __cdecl Job7651a0(void*);                // 0x007651a0
+void __cdecl Job7651b0(void*);                // 0x007651b0
+void __cdecl Job7651c0(void*);                // 0x007651c0
+struct IRef2 { virtual void v0(); virtual void Release(); virtual void v2(); virtual void* Query(uint32_t id); };   // slot 3 = Query
+struct ReqState {
+    IRef2* a;                   // +0
+    IRef2* b;                   // +4
+    uint32_t c;                 // +8
+    char padc[0xd0 - 0xc];
+    uint32_t state;             // +0xd0
+    __forceinline IRef2** Init() { state = 2; a = 0; IRef2** pb = &b; *pb = 0; return pb; }
+};
+struct AsyncReqB {
+    char pad0[0x18];
+    uint32_t id18;              // +0x18
+    char pad1c[0x10];
+    ReqState st;                // +0x2c
+    bool Start(JobRefL* out);
+};
+struct DomNode { cJob_s0076_4df0* Type(); };                                      // 0x00fc7e50
+struct RecInfo { uint32_t f0, f4; };
+struct IKeyObj {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+    virtual RecInfo* Info();                 // slot 4 (+0x10)
+virtual void v5();
+virtual void v6();
+    virtual void* Aux();                     // slot 7 (+0x1c)
+};
+struct IMgr8 {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+    virtual bool Get(RecInfo* a, IRef2** r1, IRef2** r2, int z0, int z1, void* aux, uint32_t v, int z2);   // slot 4, ret 0x20
+};
+struct AsyncReqC {
+    char pad0[0xc];
+    uint32_t f0c;               // +0xc
+    IKeyObj* obj;               // +0x10
+    char pad14[4];
+    uint32_t id18;              // +0x18
+    char pad1c[0x10];
+    ReqState st;                // +0x2c
+    bool Start(JobRefL* out);
 };
 // ---- items of slice s00764df0 end
 
@@ -719,18 +1129,82 @@ bool SP::cGraphicsResourceFactory::Init()
     return true;
 }
 
+// @ 0x00764220
+Arena98::Arena98()
+{}
+
 // @ 0x007642c0
 D7642c0::~D7642c0()
 {}
 
-// @ 0x00764670
-void Loader::Wrap670(int)
+// @ 0x00764320
+unsigned char __stdcall FUN_764320(RasterLoadState* s, void* unused, OutRec* out)
 {
-    RasterCtx* ctx = (RasterCtx*)pC;
-    char ok = ctx->Create(p2c, p28, p14);
-    if (ok)
-        b334 = 1;
+    RasterObj* r = (RasterObj*)SP_CreateRaster(s->w, s->h, s->nml, s->tp, s->fm);
+    uint32_t idx = 0;
+    for (uint32_t j = 0; j < (uint32_t)s->nml; j++) {
+        for (uint32_t i = 0; i < s->numFaces; i++) {
+            if (s->isCube) r->face = (uint8_t)i;
+            r->SetMipLevelData(s->pix[idx], j);
+            FreeMem(s->pix[idx]);
+            s->pix[idx] = 0;
+            idx++;
+        }
+    }
+    if (s->isCube) r->face = 0;
+    out->raster = r;
+    return 1;
 }
+
+// @ 0x00764430
+unsigned char __stdcall FUN_764430(WStream* s, RecSrc* o)
+{
+    uint32_t count = (int)(o->end - o->begin) / 0x7c;
+    s->Write(&count, 4);
+    uint32_t off = 0;
+    for (uint32_t i = 0; i < count; i++) {
+        Rec7c* r = (Rec7c*)(o->begin + off);
+        s->Write(r, 0x38);
+        s->Write(r->b, 0x38);
+        s->Write(&r->f70, 4);
+        P74* q = r->p74;
+        if (q) {
+            T3 t = q->v;
+            s->Write(&t, 0xc);
+        } else {
+            T3 u(0xffffffff, 0xffffffff, 0xffffffff);
+            s->Write(&u, 0xc);
+        }
+        uint32_t flag = r->p78 != 0;
+        s->Write(&flag, 4);
+        if (r->p78) {
+            uint32_t n;
+            void* d = r->p78->GetChildID(&n);
+            s->Write(&n, 4);
+            s->Write(d, n * 0xa0);
+        }
+        off += 0x7c;
+    }
+    return 1;
+}
+
+// @ 0x00764580
+bool SP::cGraphicsResourceFactory_s0076_3cb0::FixupArena(ArenaOwner* p)
+{
+    ArenaIter it;
+    void* a = p->arena;
+    int flag = 1;
+    if (ArenaStart(a, &it, p, &flag)) {
+        while (FixupNext(&it)) {}
+        if (flag) return true;
+        while (DestructNext(&it)) {}
+    }
+    return false;
+}
+
+// @ 0x00764670
+static __forceinline void* PoolAlloc(uint32_t n)
+{ return g_pSPMemPool->LockedAlloc(n, 0, 0, 0, 0, 0); }
 
 // @ 0x007646a0
 void Loader::Wrap6a0(int)
@@ -738,10 +1212,195 @@ void Loader::Wrap6a0(int)
     ((Ctx63620*)pC)->Load(p2c, p28, p14);
 }
 
+// @ 0x00764760
+Ctor764760* Ctor764760::Init(uint32_t v)
+{
+    InitBlk(&blk0);
+    InitBlk(&blk1);
+    p74 = p78 = 0;
+    p70 = v;
+    return this;
+}
+
+// @ 0x00764820
+bool Loader::Load820(int)
+{
+    uint32_t size = p28->GetSize();
+    if (size == (uint32_t)-1) return false;
+    SharedBuf* sb = new ("Graphics", 0, 0, 0, 0) SharedBuf(PoolAlloc(size), (void*)1, 0);
+    SBHandle h(sb);
+    char* dst = (char*)sb->data;
+    uint32_t left = size;
+    while (left > 0) {
+        int n = p28->Read(dst, left);
+        if (n == -1) break;
+        left -= n;
+        dst += n;
+    }
+    if (left != 0) return false;
+    AsyncReq* req = new ("Graphics/GraphicsFactoryAsyncRequest", 0, 0, 0, 0) AsyncReq(sb, size, "UTF/MemoryStream");
+    Stm* old = p28;
+    if (req != old) {
+        if (req) req->AddRef();
+        p28 = req;
+        if (old) old->Release();
+    }
+    return true;
+}
+
+// @ 0x007649f0
+bool Loader::Complete(char* a)
+{
+    p10->v9();
+    if (!b334) {
+        GetAsyncMgr()->RequestComplete(r1c, 0);
+        return false;
+    }
+    GetAsyncMgr()->RequestComplete(r1c, p14);
+    void* q = p14;
+    return FUN_6ae2f0(a, q);
+}
+
+// @ 0x00764a50
+bool SP::cGraphicsResourceFactory_s0076_3cb0::ReadResourceArena(D7642c0* st, Stm7* s, Registry* reg)
+{
+    st->size = s->Size();
+    {
+        IfA* nw = reg ? (IfA*)reg->Query(0x2f4e681b) : 0;
+        IfA* old = st->a.p;
+        if (nw != old) { if (nw) nw->AddRef(); st->a.p = nw; if (old) old->Release(); }
+    }
+    {
+        IfB* nw = reg ? (IfB*)reg->Query(0x034c84e9) : 0;
+        IfB* old = st->b.p;
+        if (nw != old) { if (nw) nw->AddRef(); st->b.p = nw; if (old) old->Release(); }
+    }
+    if (st->a.p && st->b.p) {
+        if (st->a.p->f18) {
+            Z4 z; z.b = 0; z.c = 0; z.d = 0; z.a = 0;
+            st->b.p->Reset(&z);
+            IfA* q = st->a.p;
+            q->f18 = 0;
+        }
+        Arena98 holder;
+        if (st->size < 0x98) return false;
+        if (s->Read(&holder, 0x98) != 0x98) return false;
+        st->size -= 0x98;
+        RDesc rd = holder.a;
+        if (holder.a.d[0].size < 0x98) return false;
+        st->b.p->Alloc(&rd, 0);
+        char** blocks = st->b.p->Blocks();
+        *(Arena98*)blocks[0] = holder;
+        for (uint32_t i = 0; i < 4; i++) {
+            uint32_t n = rd.d[i].size;
+            char* p = blocks[i];
+            if (i == 0) { n -= 0x98; p += 0x98; }
+            if (st->size < n) return false;
+            if (n > 0) {
+                if (s->Read(p, n) != n) return false;
+                st->size -= n;
+            }
+        }
+        if (st->size != 0) return false;
+        return true;
+    }
+    return false;
+}
+
+// @ 0x00764ce0
+bool SP::cGraphicsResourceFactory_s0076_3cb0::BuildArena(Stm7* s, Registry* reg, const V3u* pv)
+{
+    D7642c0 st;
+    if (!ReadResourceArena(&st, s, reg)) return false;
+    char** blocks = st.b.p->Blocks();
+    char* first = blocks[0];
+    if (FixupArena((ArenaOwner*)blocks)) {
+        if (FUN_763fd0(first)) st.b.p->Done();
+        st.a.p->f18 = first;
+        st.a.p->v08 = *pv;
+        return true;
+    }
+    return false;
+}
+
+// @ 0x00764df0
+bool SP::cGraphicsResourceFactory_s0076_4df0::CreateRasterFromArena(CreateRasterIn* in, void* z, CreateRasterOut* out)
+{
+    ArenaSrc* ld = in->loader;
+    if (ld) {
+        ArenaHolder* old = in->res;
+        if (old) { in->res = 0; old->Release(); }
+        ld->Get((RefIface**)&in->res);
+    }
+    ArenaHolder* res = in->res;
+    if (res) {
+        Arena_s0076_4df0* arena = (Arena_s0076_4df0*)res->arenaPtr;
+        SetCachingType(2, res);
+        uint32_t n = arena->GetNumExportedObjects();
+        for (uint32_t i = 0; i < n; i++) {
+            void* cell;
+            {
+                ExpObj e;
+                arena->GetExportedObjectByIndex(i, &e);
+                if (e.type != 0x20003) continue;
+                cell = e.obj;
+            }
+            if (!cell) break;
+            out->cell = cell;
+            RefIface* old = out->ref;
+            if ((RefIface*)res != old) {
+                res->AddRef();
+                out->ref = res;
+                if (old) old->Release();
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x00764f60
+bool __stdcall FUN_764f60(GameMeshes* g, IStream_* s)
+{
+    int n = (int)(g->end - g->begin);
+    W32(s, 1);
+    W32(s, n);
+    for (int i = 0; i < n; i++) {
+        Mesh764** pp = g->begin + i;
+        if (!WriteMesh(s, *pp))
+            return false;
+    }
+    for (int i = 0; i < n; i++) {
+        Mesh764* m = g->begin[i];
+        int idx = FUN_71ddc0(m, 0x15, 0, 6, 8);
+        if (idx >= 0) {
+            MatRec* r = (MatRec*)(m->recs + idx * 0x20 + 0x10);
+            MatRec copy(*r);
+            GetMaterialManager()->Fn17(copy.a, copy.b, s, g->f8);
+        }
+    }
+    return true;
+}
+
 // @ 0x007650d0
 void Loader29::WrapA50(int)
 {
     ((Ctx764a50*)pC)->ReadArena(p2c, p28, p14);
+}
+
+// @ 0x007650f0
+bool LoaderF0::Fn7650f0(int)
+{
+    SP::cGraphicsResourceFactory2* f = pC;
+    ArenaOwner* o = p34->Fn7();
+    void* arena = o->arena;
+    if (!f->FixupArena(o))
+        return false;
+    if (FUN_763fd0(arena))
+        p34->Fn5();
+    p30->f18 = arena;
+    b334 = 1;
+    return true;
 }
 
 // @ 0x00765150
@@ -751,6 +1410,48 @@ void Loader29::WrapDf0(int)
     char ok = ctx->CreateRaster(p2c, p28, p14);
     if (ok)
         b334 = 1;
+}
+
+// @ 0x007655f0
+bool SP::cGraphicsResourceFactory_s0076_4df0::Fn7655f0(void* a, void* b, void* c)
+{
+    D7643d0 d;
+    ResMgr* mgr = (ResMgr*)GetManager();
+    if (mgr->Get(c, d.ResetB(), 0, a, this, c))
+        return CreateRasterFromArena((CreateRasterIn*)&d, 0, (CreateRasterOut*)b);
+    return 0;
+}
+
+// @ 0x007656c0
+bool __stdcall FUN_7656c0(WStream7* s, MeshVec* o)
+{
+    uint32_t count = (uint32_t)(o->end - o->begin);
+    s->Write(&count, 4);
+    for (uint32_t i = 0; i < count; i++) {
+        uint32_t t = (*(o->begin + i))->w4;
+        s->Write(&t, 4);
+        if (t != 0x20d) {
+            MeshS** pp = o->begin + i;
+            s->Write((*pp)->p8, FUN_778050(t));
+        } else {
+            MeshS* m = o->begin[i];
+            uint32_t n = m->cnt;
+            s->Write(&n, 4);
+            for (uint32_t j = 0; j < n; j++) {
+                SlotEnt* e = &m->ents[j];
+                RcRef h(e->ref);
+                RcRef* er = (RcRef*)&e->ref;
+                er->Reset();
+                s->Write(e, 0x10);
+                KeyOut k;
+                FUN_67dd60()->GetKey(&k, h.p);
+                s->Write(&k.instance, 4);
+                s->Write(&k.group, 4);
+                er->Assign(h.p);
+            }
+        }
+    }
+    return true;
 }
 
 // @ 0x00765980
@@ -781,6 +1482,79 @@ D765ac0::~D765ac0()
         EA_Delete(v78.b);
     if (v20.b && v20.b != v20.inlinebuf)
         EA_Delete(v20.b);
+}
+
+// @ 0x00765b30
+bool AsyncReqB::Start(JobRefL* out)
+{
+    if (id18 != 0x2f4e681b)
+        return false;
+    st.state = 5;
+    st.b = 0;
+    st.c = 0;
+    JobLockL lock(GetJobManager());
+    JobRefL a;
+    {
+        IJobMgr* m = GetJobManager();
+        a.Reset();
+        if (!m->CreateJob(&a))
+            return false;
+    }
+    JobRefL b;
+    {
+        IJobMgr* m = GetJobManager();
+        b.Reset();
+        if (!m->CreateJob(&b))
+            return false;
+    }
+    a.p->SetCallback((void*)Job7651a0, this);
+    a.p->mFlags = 4;
+    a.p->SetOwner(this);
+    a.p->Queue();
+    b.p->SetCallback((void*)Job7651b0, this);
+    b.p->mFlags = 1;
+    b.p->SetOwner(this);
+    b.p->AddDependency(a.p);
+    b.p->Queue();
+    out->p = b.p;
+    b.p = 0;
+    return true;
+}
+
+// @ 0x00765d30
+bool AsyncReqC::Start(JobRefL* out)
+{
+    if (id18 != 0x2f4e681c)
+        return false;
+    if (obj->Info()->f4 != 0x2f4e681b)
+        return false;
+    IRef2** pb = st.Init();
+    IKeyObj* o = obj;
+    IMgr8* mgr = (IMgr8*)GetManager();
+    uint32_t v = f0c;
+    if (*pb) { IRef2* t = *pb; *pb = 0; t->Release(); }
+    if (st.a) { IRef2* t = st.a; st.a = 0; t->Release(); }
+    if (!mgr->Get(o->Info(), &st.a, pb, 0, 0, o->Aux(), v, 0))
+        return false;
+    JobRefL job;
+    IJobMgr* jm = GetJobManager();
+    job.Reset();
+    if (!jm->CreateJob(&job))
+        return false;
+    if (st.a) {
+        void* x = st.a->Query(0x3a212ac);
+        if (x) {
+            cJob_s0076_4df0* jp = job.p;
+            jp->AddDependency(((DomNode*)x)->Type());
+        }
+    }
+    job.p->SetCallback((void*)Job7651c0, this);
+    job.p->mFlags = 1;
+    job.p->SetOwner(this);
+    job.p->Queue();
+    out->p = job.p;
+    job.p = 0;
+    return true;
 }
 
 // @ 0x00765f10
