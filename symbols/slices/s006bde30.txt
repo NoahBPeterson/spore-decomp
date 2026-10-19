@@ -1,3 +1,5 @@
+006bde30 ?OpenRecord@DatabasePackedFile_s006b_de30@@QAE_NPAXPAPAXIHD0@Z  # DatabasePackedFile_s006b_de30::OpenRecord migrated from s006bde30 (verbatim, slice spelling)
+006be1d0 ?FUN_006be1d0@DatabasePackedFile_s006b_de30@@QAE_NXZ  # DatabasePackedFile_s006b_de30::FUN_006be1d0 migrated from s006bde30 (verbatim, slice spelling)
 006be640 ?DoFreeNodes@HT@@QAEXPAII@Z  # HT::DoFreeNodes migrated from s006bde30 (verbatim, slice spelling)
 006be690 ?FUN_006be690@@YAXPAI0@Z  # FUN_006be690 migrated from s006bde30 (verbatim, slice spelling)
 006be6e0 ?FUN_006be6e0@@YAXPAI0@Z  # FUN_006be6e0 migrated from s006bde30 (verbatim, slice spelling)

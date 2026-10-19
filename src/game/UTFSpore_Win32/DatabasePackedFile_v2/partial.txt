@@ -1,1 +1,5 @@
 # va  diff-bytes  reason
+006bd300  0  partial: destructor skeleton (eastl multimap / hole-table / allocator teardown not written)
+006bd690  0  partial: OpenRecord skeleton (open-record multimap lookup + decompress + index update omitted)
+006bde30  0  partial: OpenRecord skeleton (open-record multimap + decompress + record factory omitted)
+006be1d0  0  partial: read/rebuild index record omitted
