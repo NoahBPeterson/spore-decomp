@@ -1,1 +1,2 @@
-006478c0 SP::cSPUIAssetBrowser::SetLargeCardVisibililty  # anchor PDB name (card.py)
+006470b0 ?CreateLargeAssetViews@cSPUIAssetBrowser_s0064_70b0@@QAEXXZ  # cSPUIAssetBrowser_s0064_70b0::CreateLargeAssetViews migrated from s006470b0 (verbatim, slice spelling)
+006478c0 ?SetLargeCardVisibililty@cSPUIAssetBrowser_s0064_70b0@@QAEX_NPBM0@Z  # cSPUIAssetBrowser_s0064_70b0::SetLargeCardVisibililty migrated from s006470b0 (verbatim, slice spelling)

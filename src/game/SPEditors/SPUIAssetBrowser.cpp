@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPUIAssetBrowser.cpp -- migrated from slice(s) s0064bc50, s0064acd0, s00649f60, s00647f40, s00646370, s00645620, s00644b90 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPUIAssetBrowser.cpp -- migrated from slice(s) s006470b0, s0064bc50, s0064acd0, s00649f60, s00647f40, s00646370, s00645620, s00644b90 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPUIAssetBrowser.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -16,6 +16,7 @@
 #include "SP/cSPUIFeedListItem.h"
 #include "EA/Audio/FactoryBinarySampleData.h"
 #include "EA/UTFWin/IWindow.h"
+#include "cSPUIAnimator.h"
 
 // ---- items of slice s00644b90 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* EASTL_allocator_allocate(size_t, const char*, int, int, const char*, int); // 0x00f473a0
@@ -24,10 +25,27 @@ void* EASTL_allocator_allocate(size_t, const char*, int, int, const char*, int);
 struct IRC { virtual void AddRef(); virtual void Release(); };
 struct Key3;
 struct RCObj {
-    virtual void v0(); virtual void v1(const void*); virtual void v2(); virtual void v3(); virtual void v4();
-    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual uint32_t v9();
-    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
-    virtual void v15(); virtual Key3* v16(); virtual void v17(const void*); virtual bool v18(); virtual void v19(); virtual void v20();
+virtual void v0();
+virtual void v1(const void*);
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual uint32_t v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual Key3* v16();
+virtual void v17(const void*);
+virtual bool v18();
+virtual void v19();
+virtual void v20();
     uint32_t pad[3];
     void AddRef() { ((IRC*)((char*)this + 0x10))->AddRef(); }
     void Release() { ((IRC*)((char*)this + 0x10))->Release(); }
@@ -40,6 +58,19 @@ struct Key3 {
         return b < o.b;
     }
 };
+struct MsgServer {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void Send(uint32_t id, void* data, int);
+virtual void v6();
+virtual void v7();
+virtual void v8();
+    virtual void Register(void* listener, uint32_t id);
+};
+MsgServer* MessageServer_s0064_4b90();
 #define VSLOT(o, byteoff) ((*(void***)(o))[(byteoff) / 4])
 typedef int   (__thiscall *Fn_i0)(void*);
 typedef void* (__thiscall *Fn_p2)(void*, uint32_t, uint32_t);
@@ -192,10 +223,38 @@ struct Node12 { uint32_t a; PlainRC* b; uint32_t c; };
 struct Ent20x : Ent20 { Ent20x* Copy(const Ent20* o); };
 struct cString { char buf[20]; cString(); const short* c_str(); const short* ValueOrDefault(); };
 struct MsgHandlerObj {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();
-    virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15();
-    virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19(); virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23();
-    virtual void s24(); virtual void s25(); virtual void s26(); virtual void s27(); virtual void s28(); virtual void s29(); virtual void s30(); virtual void s31();
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void s24();
+virtual void s25();
+virtual void s26();
+virtual void s27();
+virtual void s28();
+virtual void s29();
+virtual void s30();
+virtual void s31();
     virtual void SetText(const short* t);
 };
 void GetPropertyAsText(void* list, uint32_t id, cString* out);   // SP::GetPropertyAsText (0x6a1360)
@@ -212,14 +271,9 @@ struct WebBrowser {
     void SetActive();   // 0x0065b2a0 (equiv t2)
 };
 }
-extern Key3 g1525894, g15258a0;
 // ---- items of slice s00644b90 end
 
-
-
-
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern Key3 g1525894, g15258a0;
 
 // ---- items of slice s00645620 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern void gPartialCall3();
@@ -791,6 +845,216 @@ struct LaunchParams {
 extern "C" void __cdecl AdvancedLaunch(LaunchParams* p);   // 0x0064a990
 // ---- items of slice s0064bc50 end
 
+// ---- items of slice s006470b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char g_allocTag[];                       // 0x13f6b3c
+extern char g_animTargetVtbl[];                 // 0x13f6400
+extern char g_animTargetVtbl2[];                // 0x13f63fc
+void* __cdecl operator new(unsigned size, const void* tag, int, int, int, int);   // 0xf473a0
+struct IRefCounted {
+    virtual int AddRef();
+    virtual int Release();
+};
+struct IRefCounted2 {
+    virtual int AddRef();
+    virtual int Release();
+};
+struct cISPLargeAssetView : IRefCounted2 {      // secondary interface living at +0xc of the concrete view
+    virtual void Show(int a, int b, int c, int d, int e);   // slot 2
+    virtual void Hide();                                    // slot 3
+};
+struct LargeViewBase0 { virtual void Reserved(); int pad; };
+struct LargeAssetView : IRefCounted, LargeViewBase0, cISPLargeAssetView {
+    char pad[0xd0 - 0x14];
+    LargeAssetView* __thiscall Construct(int n);   // 0x66cbd0 (returns this)
+};
+struct LargeViewMap {
+    cISPLargeAssetView*& __thiscall operator[](const unsigned int& key);   // 0x646f40
+};
+struct LargeViewRef {                           // AutoRefCount<cISPLargeAssetView>
+    cISPLargeAssetView* p;
+    void __thiscall Assign(cISPLargeAssetView** src);                        // 0xac9480
+};
+struct IWindowS {
+    virtual int AddRef();
+    virtual int Release();
+    virtual void vpad2();
+    virtual void vpad3();
+    virtual IWindowS* GetParent();
+    virtual void vpad5();
+    virtual void vpad6();
+    virtual void vpad7();
+    virtual void vpad8();
+    virtual void vpad9();
+    virtual void vpad10();
+    virtual void vpad11();
+    virtual void vpad12();
+    virtual void vpad13();
+    virtual const float* GetArea();
+    virtual void vpad15();
+    virtual void vpad16();
+    virtual void vpad17();
+    virtual void vpad18();
+    virtual void vpad19();
+    virtual void vpad20();
+    virtual void vpad21();
+    virtual void vpad22();
+    virtual void vpad23();
+    virtual void vpad24();
+    virtual void SetLocation(float x, float y);
+    virtual void vpad26();
+    virtual void vpad27();
+    virtual void vpad28();
+    virtual void vpad29();
+    virtual void vpad30();
+    virtual void SetFlag(int flag, int on);
+    virtual void vpad32();
+    virtual void vpad33();
+    virtual void vpad34();
+    virtual void vpad35();
+    virtual void vpad36();
+    virtual void vpad37();
+    virtual void vpad38();
+    virtual void vpad39();
+    virtual void vpad40();
+    virtual void vpad41();
+    virtual void vpad42();
+    virtual void vpad43();
+    virtual void vpad44();
+    virtual void vpad45();
+    virtual void vpad46();
+    virtual void vpad47();
+    virtual void vpad48();
+    virtual float* ToLocal(float* out, float x, float y);
+};
+struct IAssetViewS {   // selected-asset object returned by FUN_00645300
+    virtual void vpad0();
+    virtual void vpad1();
+    virtual void vpad2();
+    virtual void vpad3();
+    virtual void vpad4();
+    virtual void vpad5();
+    virtual void vpad6();
+    virtual void vpad7();
+    virtual void vpad8();
+    virtual unsigned GetID();
+    virtual void vpad10();
+    virtual void vpad11();
+    virtual void vpad12();
+    virtual void vpad13();
+    virtual void vpad14();
+    virtual void vpad15();
+    virtual void vpad16();
+    virtual void vpad17();
+    virtual void vpad18();
+    virtual void vpad19();
+    virtual void vpad20();
+    virtual void vpad21();
+    virtual void vpad22();
+    virtual void vpad23();
+    virtual bool IsReady();
+};
+struct AnimTarget {    // temporary animation target; its inlined dtor resets two vptrs and releases a window ref
+    void* vtbl;
+    int pad;
+    void* vtbl2;
+    IWindowS* pWin;
+    ~AnimTarget() { vtbl = g_animTargetVtbl; vtbl2 = g_animTargetVtbl2; if (pWin) pWin->Release(); }
+};
+struct cSPUIAnimator_s0064_70b0 {
+    void __thiscall RemoveAnimation(IWindowS* win, int channel);                 // 0x7f6210
+    void __thiscall AddAnimation(AnimTarget* t, IWindowS* win, int channel);     // 0x7f8d10
+};
+struct IMessageServer_s0064_70b0 {
+virtual void vpad0();
+virtual void vpad1();
+virtual void vpad2();
+virtual void vpad3();
+virtual void vpad4();
+    virtual void PostMessage(unsigned id, int a, int b);                         // slot 5
+};
+struct IAudioSystem {
+virtual void vpad0();
+virtual void vpad1();
+virtual void vpad2();
+virtual void vpad3();
+virtual void vpad4();
+virtual void vpad5();
+virtual void vpad6();
+virtual void vpad7();
+virtual int GetSetiHandle();
+};
+struct cSPUIAssetBrowser_s0064_70b0 {
+    char pad0[0x14];
+    cSPUIAnimator_s0064_70b0* mAnimator;                      // +0x14
+    char pad1[0x24 - 0x18];
+    bool mFlag24;                                  // +0x24
+    char pad2[0x3c - 0x25];
+    float mLargeCardHideTime;                      // +0x3c
+    char pad3[0x84 - 0x40];
+    IWindowS* mWinLargeCardInputBlocker;           // +0x84
+    char pad4[0x9c - 0x88];
+    IWindowS* mWinLargeCard;                       // +0x9c
+    void* mpMsgServerHandle;                       // +0xa0
+    char pad5[0x138 - 0xa4];
+    LargeViewMap mLargeAssetViews;                 // +0x138 (retail layout)
+    char pad6[0x158 - 0x13c];
+    LargeViewRef mCurrentLargeAssetView;           // +0x158
+    char pad7[0x1a8 - 0x15c];
+    int mCallerID;                                 // +0x1a8
+    char pad8[0x23d - 0x1ac];
+    bool mFlag23d;                                 // +0x23d
+    void __thiscall CreateLargeAssetViews();
+    void __thiscall SetLargeCardVisibililty(bool visible, const float* rect, bool immediate);  // 0x006478c0 (cSPUIAssetBrowser::SetLargeCardVisibililty)
+    IAssetViewS* __thiscall GetSelectedAsset();    // 0x645300
+};
+cSPUIAssetBrowser_s0064_70b0* __cdecl AssetBrowser_s0064_70b0();         // SP::AssetBrowser (0x401030)
+IMessageServer_s0064_70b0* __cdecl MessageServer();           // SP::MessageServer (0x67dcc0)
+IAudioSystem* __cdecl GetSystemAT();               // EA::Audio::GetSystemAT (0xa206f0)
+void __cdecl KillSetiEffects(unsigned id, int handle);   // SP::cSPUISpace::KillSetiEffects (0x435ed0)
+float __cdecl GetElapsedSeconds(float duration, int zero);                        // SPUIHelpers::GetElapsedSeconds (0x805080)
+AnimTarget* __cdecl CreatePositionTarget(AnimTarget* out, IWindowS* win, float x, float y, float dur);   // 0x7f80d0
+AnimTarget* __cdecl CreateShadeAlphaTarget(AnimTarget* out, IWindowS* win, int alpha, float dur);        // 0x7f8290
+AnimTarget* __cdecl CreateScaleTarget(AnimTarget* out, IWindowS* win, float scale, float dur);           // 0x7f81d0
+void __cdecl SetWindowAlpha(IWindowS* win, float a);                                                     // 0x804fc0
+void __cdecl SetScale(IWindowS* win, float sx, float sy);                                                // UI::cWindowTransform::SetScale (0x808190)
+#define ASSIGN(k) { \
+        key = (k); \
+        cISPLargeAssetView*& slot = mLargeAssetViews[key]; \
+        cISPLargeAssetView* old = slot; \
+        if (p != old) { if (p) p->AddRef(); slot = p; if (old) old->Release(); } }
+#define NEXT_P() { LargeAssetView* t = view; p = t ? static_cast<cISPLargeAssetView*>(t) : 0; }
+    void* operator new(unsigned int, void*, int, int, int, int); // 0x00f473a0
+// ---- items of slice s006470b0 end
+
+// @ 0x00644b90
+void SP::cSPUIAssetBrowser::SetWebBrowserVisibility(bool vis, unsigned int x)
+{
+    void* am = AuthManager();
+    uint8_t bl = ((Fn_b0)VSLOT(am, 0x24))(am);
+    ListDataV* ld = AT(ListDataV*, 0x64);
+    if (ld) {
+        WinV* w = ld->GetWin(0x561e0a8, 1);
+        if (w) {
+            uint8_t f;
+            if (bl && vis) f = 1; else f = 0;
+            w->SetFlag(1, f != 0);
+        }
+    }
+    WinV* lv = AT(WinV*, 0x90);
+    if (lv) {
+        uint8_t f;
+        if (!bl && vis) f = 1; else f = 0;
+        lv->SetFlag(1, f != 0);
+    }
+    WebBrowser* wb = AT(WebBrowser*, 0x21c);
+    if (wb) {
+        uint8_t f;
+        if (!bl && vis) f = 1; else f = 0;
+        wb->SetActive(f);
+        if (!bl && vis) MessageServer_s0064_4b90()->Send(0xd4231540, &x, 0);
+    }
+}
+
 // @ 0x00644c50
 void Browser::Fn_c50(char vis, uint32_t a, uint32_t b)
 {
@@ -1125,34 +1389,13 @@ void Browser::SetCallToActionMessage(const short* msg)
 void SP::cSPUIAssetBrowser::LoadConfigFile(SP::cSPUIAssetBrowserLaunch const & a1, bool & a2)
 {}
 
-
-
-
-
-
-
-
 // @ 0x00645bf0
 void cSPUIAssetBrowser::FUN_00645bf0()
 {}
 
-
-
-
-
-
-
-
 // @ 0x00645cc0
 void cSPUIAssetBrowser::FUN_00645cc0_()
 {}
-
-
-
-
-
-
-
 
 // @ 0x00645d90
 int cSPUIAssetBrowser::FUN_00645d90()
@@ -1166,34 +1409,13 @@ int cSPUIAssetBrowser::FUN_00645d90()
     return r;
 }
 
-
-
-
-
-
-
-
 // @ 0x00645db0
 void cSPUIAssetBrowser::FUN_00645db0(Elem* other)
 { other->a = 0; }
 
-
-
-
-
-
-
-
 // @ 0x00645e20
 __declspec(noinline) void cSPUIAssetBrowser::FUN_00645e20()
 { gPartialCall3(); }
-
-
-
-
-
-
-
 
 // @ 0x00645ff0
 void __stdcall FUN_00645ff0(Elem* first, Elem* last)
@@ -1208,23 +1430,9 @@ void __stdcall FUN_00645ff0(Elem* first, Elem* last)
     }
 }
 
-
-
-
-
-
-
-
 // @ 0x00646030
 Elem* cSPUIAssetBrowser::FUN_00646030(Elem* first, Elem* last, uint32_t* key)
 { (void)last; (void)key; return first; }
-
-
-
-
-
-
-
 
 // @ 0x006460b0
 void cSPUIAssetBrowser::FUN_006460b0(Elem* first, Elem* last, Elem* src)
@@ -1249,13 +1457,6 @@ void cSPUIAssetBrowser::FUN_006460b0(Elem* first, Elem* last, Elem* src)
         }
     }
 }
-
-
-
-
-
-
-
 
 // @ 0x00646140
 Elem* cSPUIAssetBrowser::FUN_00646140(Elem* first, Elem* last, Elem* dst)
@@ -1284,13 +1485,6 @@ Elem* cSPUIAssetBrowser::FUN_00646140(Elem* first, Elem* last, Elem* dst)
     return dst;
 }
 
-
-
-
-
-
-
-
 // @ 0x006461d0
 Elem* cSPUIAssetBrowser::FUN_006461d0(Elem* first, Elem* last, Elem* dst)
 {
@@ -1318,13 +1512,6 @@ Elem* cSPUIAssetBrowser::FUN_006461d0(Elem* first, Elem* last, Elem* dst)
     return dst;
 }
 
-
-
-
-
-
-
-
 // @ 0x00646260
 void cSPUIAssetBrowser::FUN_00646260()
 {
@@ -1338,23 +1525,9 @@ void cSPUIAssetBrowser::FUN_00646260()
     mField230 = 0;
 }
 
-
-
-
-
-
-
-
 // @ 0x006462b0
 void cSPUIAssetBrowser::FUN_006462b0(void* p)
 { (void)p; }
-
-
-
-
-
-
-
 
 // @ 0x00646370
 bool __stdcall CloneModelAsset(Key key, Key* pOutKey, int size, bool bKeepParent)
@@ -1473,22 +1646,10 @@ bool __stdcall CloneModelAsset(Key key, Key* pOutKey, int size, bool bKeepParent
     return true;
 }
 
-
-
-
-
-
-
 // @ 0x00646ae0
 void __fastcall sub_646ae0(void*)
 {
 }
-
-
-
-
-
-
 
 // @ 0x00646d10
 void MapFindSelf::Find(OutPair* out, const OutPair* key)
@@ -1510,12 +1671,6 @@ void MapFindSelf::Find(OutPair* out, const OutPair* key)
     out->second = p;
 }
 
-
-
-
-
-
-
 // @ 0x00646d70
 void __stdcall sub_646d70(uint8_t* first, uint8_t* last)
 {
@@ -1525,12 +1680,6 @@ void __stdcall sub_646d70(uint8_t* first, uint8_t* last)
     }
 }
 
-
-
-
-
-
-
 // @ 0x00646dc0
 bool Owner::Insert118(uint32_t a, uint32_t b)
 {
@@ -1539,12 +1688,6 @@ bool Owner::Insert118(uint32_t a, uint32_t b)
     return r.inserted;
 }
 
-
-
-
-
-
-
 // @ 0x00646e00
 bool Owner::Insert0F8(uint32_t a, uint32_t b)
 {
@@ -1552,12 +1695,6 @@ bool Owner::Insert0F8(uint32_t a, uint32_t b)
     InsertResult r = m0F8.find_insert(key, EmptyTag());
     return r.inserted;
 }
-
-
-
-
-
-
 
 // @ 0x00646e40
 bool Owner::Insert138(uint32_t a, IRef* b)
@@ -1571,12 +1708,6 @@ bool Owner::Insert138(uint32_t a, IRef* b)
     return r.inserted;
 }
 
-
-
-
-
-
-
 // @ 0x00646ec0
 bool Owner::Insert15C(uint32_t a, IRef* b)
 {
@@ -1589,12 +1720,6 @@ bool Owner::Insert15C(uint32_t a, IRef* b)
     return r.inserted;
 }
 
-
-
-
-
-
-
 // @ 0x00646f40
 uint32_t* MapFindInsert::FindOrInsert(uint32_t* key)
 {
@@ -1606,12 +1731,6 @@ uint32_t* MapFindInsert::FindOrInsert(uint32_t* key)
     insert(&r, &keyCopy, EmptyTag());
     return (uint32_t*)r.node + 1;
 }
-
-
-
-
-
-
 
 // @ 0x00646fc0
 void Vec14::reserve(uint32_t n)
@@ -1637,52 +1756,195 @@ void Vec14::reserve(uint32_t n)
     }
 }
 
+// @ 0x006470b0
+void __thiscall cSPUIAssetBrowser_s0064_70b0::CreateLargeAssetViews()
+{
+    unsigned int key;
+    LargeAssetView* volatile view;
+    LargeAssetView* v;
+    cISPLargeAssetView* p;
+    void* mem = operator new(0xd0, g_allocTag, 0, 0, 0, 0);
+    if (mem == 0) {
+        view = 0;
+    } else {
+        v = ((LargeAssetView*)mem)->Construct(1);
+        view = v;
+        if (v) {
+            ((IRefCounted*)v)->AddRef();
+            p = static_cast<cISPLargeAssetView*>(v);
+            goto have_p;
+        }
+    }
+    p = 0;
+have_p:
+    ASSIGN(0xdfad9f51);
+    NEXT_P();
+    ASSIGN(0x9ea3031a);
+    NEXT_P();
+    ASSIGN(0x372e2c04);
+    NEXT_P();
+    ASSIGN(0xccc35c46);
+    NEXT_P();
+    ASSIGN(0x65672ade);
+    NEXT_P();
+    ASSIGN(0x99e92f05);
+    NEXT_P();
+    ASSIGN(0x4e3f7777);
+    NEXT_P();
+    ASSIGN(0xbdd15f3d);
+    NEXT_P();
+    ASSIGN(0x47c10953);
+    NEXT_P();
+    ASSIGN(0x72c49181);
+    NEXT_P();
+    ASSIGN(0x7d433fad);
+    NEXT_P();
+    ASSIGN(0xf670aa43);
+    NEXT_P();
+    ASSIGN(0x9ad7d4aa);
+    NEXT_P();
+    ASSIGN(0xbc1041e6);
+    NEXT_P();
+    ASSIGN(0xc0b74287);
+    NEXT_P();
+    ASSIGN(0x8f963dcb);
+    NEXT_P();
+    ASSIGN(0x2a5147a9);
+    NEXT_P();
+    ASSIGN(0x1f2a25b6);
+    NEXT_P();
+    ASSIGN(0xc15695da);
+    NEXT_P();
+    ASSIGN(0x441cd3e6);
+    NEXT_P();
+    ASSIGN(0x1a4e0708);
+    NEXT_P();
+    ASSIGN(0x449c040f);
+    NEXT_P();
+    ASSIGN(0x2090a11b);
+    NEXT_P();
+    ASSIGN(0x98e03c0d);
+    NEXT_P();
+    ASSIGN(0xbcd73e89);
+    NEXT_P();
+    ASSIGN(0xb8669ec9);
+    NEXT_P();
+    ASSIGN(0x37148141);
+    NEXT_P();
+    ASSIGN(0xffffffff);
+    { LargeAssetView* t = view; if (t) ((IRefCounted*)t)->Release(); }
+}
 
-
-
-
-
+// @ 0x006478c0
+void __thiscall cSPUIAssetBrowser_s0064_70b0::SetLargeCardVisibililty(bool visible, const float* rect, bool immediate)
+{
+    cSPUIAnimator_s0064_70b0* anim = AssetBrowser_s0064_70b0() ? AssetBrowser_s0064_70b0()->mAnimator : 0;
+    if (mWinLargeCard == 0) return;
+    if (anim) {
+        anim->RemoveAnimation(mWinLargeCard, -1);
+        anim->RemoveAnimation(mWinLargeCardInputBlocker, -1);
+    }
+    if (visible) {
+        if (mWinLargeCardInputBlocker) mWinLargeCardInputBlocker->SetFlag(1, visible);
+        if (anim) {
+            if (rect) {
+                const float* area = mWinLargeCard->GetArea();
+                float ch = area[3] - area[1];
+                float sy = (rect[3] - rect[1]) / ch;
+                float cw = area[2] - area[0];
+                float sx = (rect[2] - rect[0]) / cw;
+                SetScale(mWinLargeCard, sx, sy);
+                const float* pt;
+                float tmp[2];
+                float centre[2];
+                IWindowS* parent = mWinLargeCard->GetParent();
+                if (parent) {
+                    pt = mWinLargeCard->GetParent()->ToLocal(tmp, (rect[2] + rect[0]) * 0.5f, (rect[3] + rect[1]) * 0.5f);
+                } else {
+                    centre[0] = (rect[2] + rect[0]) * 0.5f;
+                    centre[1] = (rect[3] + rect[1]) * 0.5f;
+                    pt = centre;
+                }
+                float px = pt[0] - cw * 0.5f;
+                float py = pt[1] - ch * 0.5f;
+                mWinLargeCard->SetLocation(px, py);
+                AnimTarget t;
+                float d = GetElapsedSeconds(0.3f, 0);
+                anim->AddAnimation(CreatePositionTarget(&t, mWinLargeCard, 0.0f, 0.0f, d), mWinLargeCard, 1);
+            }
+        }
+        if (anim) {
+            mWinLargeCard->SetLocation(0.0f, 0.0f);
+            { AnimTarget t; float d = GetElapsedSeconds(0.3f, 0);
+              anim->AddAnimation(CreateShadeAlphaTarget(&t, mWinLargeCard, 0xff, d), mWinLargeCard, 2); }
+            { AnimTarget t; float d = GetElapsedSeconds(0.3f, 0);
+              anim->AddAnimation(CreateScaleTarget(&t, mWinLargeCard, 1.0f, d), mWinLargeCard, 0); }
+            SetWindowAlpha(mWinLargeCardInputBlocker, 0.0f);
+            { AnimTarget t; float d = GetElapsedSeconds(0.15f, 0) + 0.3f;
+              anim->AddAnimation(CreateShadeAlphaTarget(&t, mWinLargeCardInputBlocker, 0xff, d), mWinLargeCardInputBlocker, 2); }
+        }
+        IAssetViewS* cur = GetSelectedAsset();
+        unsigned id = cur->GetID();
+        cISPLargeAssetView*& slot = mLargeAssetViews[id];
+        cISPLargeAssetView* old = mCurrentLargeAssetView.p;
+        cISPLargeAssetView* nu = slot;
+        if (nu != old) {
+            if (nu) nu->AddRef();
+            mCurrentLargeAssetView.p = nu;
+            if (old) old->Release();
+        }
+        if (mCurrentLargeAssetView.p == 0) {
+            unsigned defKey = 0xffffffff;
+            mCurrentLargeAssetView.Assign(&mLargeAssetViews[defKey]);
+        }
+        bool flag = false;
+        if (mFlag24) flag = cur->IsReady() ? true : false;
+        mCurrentLargeAssetView.p->Show((int)mpMsgServerHandle, (int)cur, mCallerID, flag, mFlag23d);
+        IAudioSystem* audio = GetSystemAT();
+        KillSetiEffects(0x6c329b06, audio ? audio->GetSetiHandle() : 0);
+        MessageServer()->PostMessage(0x5c81b19, 0, 0);
+        return;
+    }
+    if (anim && !immediate) {
+        { AnimTarget t; float d = GetElapsedSeconds(0.1f, 0);
+          anim->AddAnimation(CreateScaleTarget(&t, mWinLargeCard, 0.001f, d), mWinLargeCard, 0); }
+        { AnimTarget t; float d = GetElapsedSeconds(0.1f, 0);
+          anim->AddAnimation(CreateShadeAlphaTarget(&t, mWinLargeCard, 0, d), mWinLargeCard, 2); }
+        { AnimTarget t; float d = GetElapsedSeconds(0.1f, 0);
+          anim->AddAnimation(CreateShadeAlphaTarget(&t, mWinLargeCardInputBlocker, 0, d), mWinLargeCardInputBlocker, 2); }
+        mLargeCardHideTime = 0.1f;
+    } else {
+        if (mWinLargeCardInputBlocker) mWinLargeCardInputBlocker->SetFlag(1, 0);
+    }
+    if (mCurrentLargeAssetView.p == 0) return;
+    mCurrentLargeAssetView.p->Hide();
+    cISPLargeAssetView* v = mCurrentLargeAssetView.p;
+    if (v) {
+        mCurrentLargeAssetView.p = 0;
+        v->Release();
+    }
+    MessageServer()->PostMessage(0x5c81b25, 0, 0);
+}
 
 // @ 0x00648ce0
 void __cdecl sub_648ce0()
 {}
 
-
-
-
-
-
 // @ 0x00649f60
 void __fastcall sub_649f60(void*)
 {}
-
-
-
-
 
 // @ 0x0064a220
 void __fastcall sub_64a220(void*)
 {}
 
-
-
-
-
 // @ 0x0064a400
 void __fastcall sub_64a400(void*)
 {}
 
-
-
-
-
 // @ 0x0064a990
 void __fastcall sub_64a990(void*)
 {}
-
-
-
-
 
 // @ 0x0064ab20
 void cSPUIAssetBrowser_s0064_9f60::Update()
@@ -1706,17 +1968,9 @@ void cSPUIAssetBrowser_s0064_9f60::Update()
     UpdateMouseFocus(1);
 }
 
-
-
-
-
 // @ 0x0064aba0
 void __fastcall sub_64aba0(void*)
 {}
-
-
-
-
 
 // @ 0x0064acd0
 void cSPUIAssetBrowser_s0064_acd0::LaunchEditorEnd()
@@ -1904,9 +2158,6 @@ finish:
     FreeStr(tmpStr);
 }
 
-
-
-
 // @ 0x0064b4b0
 void cSPUIAssetBrowser_s0064_acd0::BanItem()
 {
@@ -1950,17 +2201,11 @@ void cSPUIAssetBrowser_s0064_acd0::BanItem()
     }
 }
 
-
-
-
 // @ 0x0064b6a0
 void cSPUIAssetBrowser_s0064_acd0::ShowSporeGuide()
 {
     LaunchSporeGuide(mField19C);
 }
-
-
-
 
 // @ 0x0064b6b0
 void cSPUIAssetBrowser_s0064_acd0::HandleMessage(Msg* m)
@@ -2130,9 +2375,6 @@ void cSPUIAssetBrowser_s0064_acd0::HandleMessage(Msg* m)
     if (m->b31)
         feedList->FUN_00662ad0();
 }
-
-
-
 
 // @ 0x0064bc50
 void __cdecl Launch(uint32_t a, uint32_t b, uint32_t c)

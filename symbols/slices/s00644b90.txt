@@ -1,4 +1,4 @@
-00644b90 SP::cSPUIAssetBrowser::SetWebBrowserVisibility  # PDB name on card, matches class layout
+00644b90 ?SetWebBrowserVisibility@cSPUIAssetBrowser@SP@@QAEX_NI@Z  # SP::cSPUIAssetBrowser::SetWebBrowserVisibility migrated from s00644b90
 00644c50 ?Fn_c50@Browser@@QAEXDII@Z  # Browser::Fn_c50 migrated from s00644b90 (verbatim, slice spelling)
 00644d10 ?Fn_d10@Browser@@QAEXDH@Z  # Browser::Fn_d10 migrated from s00644b90 (verbatim, slice spelling)
 00644db0 ?IsA@Browser@@QAEHXZ  # Browser::IsA migrated from s00644b90 (verbatim, slice spelling)

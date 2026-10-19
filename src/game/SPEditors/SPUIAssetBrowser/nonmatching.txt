@@ -1,4 +1,5 @@
 # va  diff-bytes  reason
+00644b90 134 cSPUIAssetBrowser::SetWebBrowserVisibility: complete; original passes the bool byte unwidened (mov cl,1/push ecx) and loads vtable slot after the pushes
 00644c50 131 sibling of SetWebBrowserVisibility (+Navigate call): complete; same bool-arg/vcall scheduling difference
 00644d10 80 same visibility helper with the SubA toggle: complete; same bool-arg scheduling difference
 00644eb0 169 font-size fit loop (style/rect compare): complete; SSE scheduling and stack slot layout of the two rects differ
@@ -15,6 +16,8 @@
 00646370 578 CloneModelAsset (stdcall, ResourceKey by value): complete, all 68 calls/vcalls in original order; remaining diff is stack-slot layout of the Key temporaries and register assignment; flags /O2 /MD /Gy /TP
 00646d10 75 map find instantiation: complete, comparator short-circuit codegen differs
 00646f40 50 hashtable find-or-insert: complete, frame/scheduling near-miss
+006470b0 1812 complete: creates one large-asset view and registers it under 28 type keys; cl duplicates the first block / differs in spill layout
+006478c0 1219 complete: SetLargeCardVisibililty; cl emits x87 rect math where original used SSE via inline helpers; difftest WEAK (229 valid, 10.4% cov: AssetBrowser animator is an image global, so the animation paths are unreachable); fixed: AddRef/Release on the current view were qualified non-virtual IRefCounted2:: calls, original calls through the vtable
 00648ce0 1 sorted-vector operator[]: complete, branch block layout differs
 0064ab20 85 cSPUIAssetBrowser::Update visibility logic: complete, bool local register vs stack differs
 0064acd0 1503 LaunchEditorEnd: complete; register allocation / frame layout diffs (largest function)
