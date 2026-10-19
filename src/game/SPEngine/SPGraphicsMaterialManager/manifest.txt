@@ -16,5 +16,7 @@
 ../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?Teardown@FVecB@@QAEXXZ  0070f890  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?Teardown@FVecC@@QAEXXZ  0070fa30  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?DoInsertValue@VecFixed@@QAEXPAUAutoRef14_s0071_01f0@@ABU2@@Z  007103e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?WriteExternalReferences@MaterialManagerBig@@QAEHHPAIPAUStream@@PAX@Z  00711490  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?RemoveAllRegisteredMaterials@MaterialManagerBig@@QAEXXZ  00711d10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?GetMaterial@MaterialManager3@@QAEPAEI@Z  00712c20  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?GetMaterialInstance@MaterialManager3@@QAEPAEIPAX@Z  00712d60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

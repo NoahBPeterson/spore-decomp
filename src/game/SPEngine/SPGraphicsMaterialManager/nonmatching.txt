@@ -33,6 +33,9 @@
 00711220 69 vector::resize(uint32_t); inlined resize(n,value_type()) call shape and slot order not reproduced
 007112c0 28 hashtable::DoFreeNodes; only inner-loop register assignment differs (node copy in edi vs esi)
 00711400 69 cMaterialManager::GetTexturesFromMaterial; atomic AutoRefCount assignment dance not reproduced
+00711630 104 cMaterialManager::GetExternalReferenceKeys; Key temp/loop counter live in memory in original (frame 4 bytes larger) [equiv: WEAK]
+00711780 737 cMaterialManager::ReadMaterials; complete (all paths), register allocation/block layout differs [equiv: WEAK]
+00711b80 223 cMaterialManager::UnregisterArenaContents; complete, arena param kept in ebp in original, ExportDesc zero-init order differs [equiv: WEAK]
 00712320 88 hashtable::DoFreeNodes variant (node +0x24/+0x28/+0x34/+0x4c); register allocation differs
 00712760 39 fixed_vector copy ctor (inline buffer at +0x14/+0x18); buffer/pool stores and assign call shape off
 007127d0 150 state object copy (9 dwords + fixed-vector ctor); field-copy schedule not reproduced

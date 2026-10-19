@@ -2,8 +2,8 @@
 007112c0 ?DoFreeNodes@@YGXPAPAUFreeNode@@I@Z  # DoFreeNodes migrated from s00711220 (verbatim, slice spelling)
 00711380 ?clear@FixedClear@@QAEXXZ  # FixedClear::clear migrated from s00711220 (verbatim, slice spelling)
 00711400 ?GetTexturesFromMaterial@@YGXPAXPAUTextureVec@@P6A_N0@Z@Z  # GetTexturesFromMaterial migrated from s00711220 (verbatim, slice spelling)
-00711490 SP::cMaterialManager::WriteExternalReferences  # PDB candidate (caller-single)
-00711630 SP::cMaterialManager::GetExternalReferenceKeys  # PDB candidate (caller-scored)
-00711780 SP::cMaterialManager::ReadMaterials  # PDB candidate (caller-scored)
-00711b80 SP::cMaterialManager::UnregisterArenaContents  # PDB candidate (caller-scored)
-00711d10 SP::cMaterialManager::RemoveAllRegisteredMaterials  # PDB name
+00711490 ?WriteExternalReferences@MaterialManagerBig@@QAEHHPAIPAUStream@@PAX@Z  # MaterialManagerBig::WriteExternalReferences migrated from s00711220 (verbatim, slice spelling)
+00711630 ?GetExternalReferenceKeys@MaterialManagerBig@@QAEHHPAIPAUKeyVec@@PAX@Z  # MaterialManagerBig::GetExternalReferenceKeys migrated from s00711220 (verbatim, slice spelling)
+00711780 ?ReadMaterials@MaterialManagerBig@@QAEHPAUStream@@HPAIPAPAXPAUResKey@@@Z  # MaterialManagerBig::ReadMaterials migrated from s00711220 (verbatim, slice spelling)
+00711b80 ?UnregisterArenaContents@MaterialManagerBig@@QAEXPAX@Z  # MaterialManagerBig::UnregisterArenaContents migrated from s00711220 (verbatim, slice spelling)
+00711d10 ?RemoveAllRegisteredMaterials@MaterialManagerBig@@QAEXXZ  # MaterialManagerBig::RemoveAllRegisteredMaterials migrated from s00711220 (verbatim, slice spelling)
