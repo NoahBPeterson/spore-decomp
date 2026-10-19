@@ -1,1 +1,1 @@
-009cbee0 InitCreatureStaticDataFromResource  # PDB name on card
+009cbee0 ?InitCreatureStaticDataFromResource@nSPCreatureAnim@@YADPAUcreature_static_data_s009c_bee0@1@PAX@Z  # InitCreatureStaticDataFromResource migrated from s009cbee0 (verbatim, slice spelling)
