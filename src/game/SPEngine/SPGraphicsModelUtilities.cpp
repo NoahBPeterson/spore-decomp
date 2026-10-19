@@ -141,8 +141,13 @@ struct PropertyListValue {
     float* GetFloat();   // 0x0041EA70
 };
 struct PropertyList_s0043_0320 : Object {
-    virtual void v08(); virtual void v0C(); virtual void v10(); virtual void v14();
-    virtual void v18(); virtual void v1C(); virtual void v20();
+virtual void v08();
+virtual void v0C();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1C();
+virtual void v20();
     virtual bool GetProperty(uint32_t id, PropertyListValue** dst);   // +0x24
 };
 struct PropertyListPtr {
@@ -172,17 +177,31 @@ inline GroupKey MakeGroupKey(GroupKey base, uint8_t kind, uint8_t slot)
     return base;
 }
 struct PropManager {
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0C();
-    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1C();
-    virtual void v20(); virtual void v24(); virtual void v28();
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0C();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1C();
+virtual void v20();
+virtual void v24();
+virtual void v28();
     virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, PropertyList_s0043_0320** dst);   // +0x2C
     static PropManager* GetImpl();   // 0x0067DE30
 };
 bool TryGetUIntProperty(PropertyList_s0043_0320* list, uint32_t propId, int* out);   // 0x00410370
 struct TextureHandle;
 struct TextureManager {   // 0x0067DD60
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0C();
-    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1C();
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0C();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1C();
     virtual TextureHandle* GetTexture(uint32_t instanceID, uint32_t groupID, int flags);   // +0x20
     static TextureManager* GetImpl();
 };
@@ -213,26 +232,72 @@ struct MaterialList {
 struct Alloc { const char* name; uint32_t flags; };
 struct ResKey2 { uint32_t a, b; ResKey2() : a(0xffffffff), b(0xffffffff) {} };
 struct KeyProvider {
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0C();
-    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1C();
-    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2C();
-    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3C();
-    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4C();
-    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5C();
-    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6C();
-    virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7C();
-    virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8C();
-    virtual void v90(); virtual void v94(); virtual void v98(); virtual void v9C();
-    virtual void vA0(); virtual void vA4(); virtual void vA8(); virtual void vAC();
-    virtual void vB0(); virtual void vB4(); virtual void vB8();
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0C();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1C();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2C();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3C();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4C();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5C();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6C();
+virtual void v70();
+virtual void v74();
+virtual void v78();
+virtual void v7C();
+virtual void v80();
+virtual void v84();
+virtual void v88();
+virtual void v8C();
+virtual void v90();
+virtual void v94();
+virtual void v98();
+virtual void v9C();
+virtual void vA0();
+virtual void vA4();
+virtual void vA8();
+virtual void vAC();
+virtual void vB0();
+virtual void vB4();
+virtual void vB8();
     virtual void FillKey(ResKey2* key);   // +0xBC
     static KeyProvider* Get();   // 0x0067DD40
 };
 struct Notifier {
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0C();
-    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1C();
-    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2C();
-    virtual void v30(); virtual void v34(); virtual void v38();
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0C();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1C();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2C();
+virtual void v30();
+virtual void v34();
+virtual void v38();
     virtual void Post(ResKey2* key, uint32_t a, uint32_t b, uint32_t evt, uint32_t c, uint8_t d);   // +0x3C
     static Notifier* Get();   // 0x0067DDB0
 };
@@ -867,6 +932,32 @@ S_754250* S_754250::FUN_00754250(int param_2)
   m12 = 0x39;
   FUN_0093dd80_754250(0x39, 0, param_2, 0x18, 1);
   return this;
+}
+
+// @ 0x007542b0
+bool FUN_007542b0(int param_1, int param_2)
+{
+  void (FUN_00753fc0)(void*);
+  if (param_2 != 0) {
+    ++*(int*)(param_2 + 4);
+    void* fn = *(void**)(param_1 + 0x24);
+    void* a = *(void**)(param_1 + 0x20);
+    *(int*)(param_1 + 0x20) = param_2;
+    *(void**)(param_1 + 0x24) = (void*)&FUN_00753fc0;
+    if (fn != 0) {
+      ((void(__cdecl*)(void*))fn)(a);
+    }
+  } else {
+    void* fn = *(void**)(param_1 + 0x24);
+    void* a = *(void**)(param_1 + 0x20);
+    *(void**)(param_1 + 0x20) = 0;
+    *(void**)(param_1 + 0x24) = 0;
+    if (fn != 0) {
+      ((void(__cdecl*)(void*))fn)(a);
+      return true;
+    }
+  }
+  return true;
 }
 
 // @ 0x00754310
