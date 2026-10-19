@@ -1,5 +1,5 @@
 006108a0 ?FUN_006108a0@@YAXPAX00@Z  # FUN_006108a0 migrated from s006108a0 (verbatim, slice spelling)
-00610c20  SP::cPollinator::GetAssetFeedEx candidate  # poster pattern
+00610c20 ?PostGetAssetFeedEx@cPollinator_s0061_08a0@SP@@QAEXPAX0@Z  # cPollinator_s0061_08a0::PostGetAssetFeedEx migrated from s006108a0 (verbatim, slice spelling)
 00610cb0 ?FUN_00610cb0@@YAXPAX00@Z  # FUN_00610cb0 migrated from s006108a0 (verbatim, slice spelling)
 00610d40 ?FUN_00610d40@@YAXPAX00@Z  # FUN_00610d40 migrated from s006108a0 (verbatim, slice spelling)
 00610df0 ?FUN_00610df0@@YAXPAXH@Z  # FUN_00610df0 migrated from s006108a0 (verbatim, slice spelling)

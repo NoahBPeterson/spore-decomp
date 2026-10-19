@@ -35,11 +35,6 @@ extern const char kJobResultMessageType[];  // 0x0164d214
 #pragma intrinsic(_InterlockedExchangeAdd)
 
 // ---- items of slice s0060c780 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
-extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags, unsigned debugFlags,
-                                          const char* file, int line);
-extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);  // E8 call (0x011e0744)
-extern "C" long __cdecl _InterlockedExchange(long volatile*, long);
 void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);
 void operator delete(void*);
 inline void* operator new(unsigned int, void* p) { return p; }
@@ -67,7 +62,6 @@ struct ResourceKey {
   uint32_t groupID;
 };
 void operator delete(void* p, const char*);
-extern "C" long __cdecl _InterlockedExchangeAdd(long volatile*, long);
 namespace EA {
 namespace IO {
 class IStream_s0060_c780 {
@@ -350,7 +344,6 @@ class IMessagingServer {
   virtual void Post(const void* pMessageType, void* pMessage, int, int);  // +0x18
 };
 IMessagingServer* GetMessagingServer();  // 0x00883860
-extern const char kJobResultMessageType[];  // 0x0164d214
 namespace SP {
 struct cCommandBase {
   ~cCommandBase();  // 0x0083c750
@@ -649,6 +642,13 @@ struct deque_s0061_08a0 {
 typedef deque_s0061_08a0<AutoRefCount<cITransaction>, 64> TransactionDeque_s0061_08a0;
 struct RbNodeBase { RbNodeBase* mpRight; RbNodeBase* mpLeft; RbNodeBase* mpParent; char mColor; };
 RbNodeBase* RBTreeIncrementNode(RbNodeBase* node);  // 0x00921580
+struct TxnMem_s0061_08a0 {
+    cITransaction* GetAssetFeedEx(void* a, void* b);  // 0x0061a8b0
+};
+void* __cdecl Alloc0x110(size_t);
+namespace SP {
+void ProcessTransactionQueueGlobal();
+}
 namespace SP {
 struct cPollinator_s0061_08a0 {
     virtual void v0();
@@ -829,7 +829,6 @@ UploadEntry::UploadEntry(const ResourceKey& key, bool bFlag0, bool bFlag1)
 
 
 
-
 // @ 0x0060ccf0
 namespace SP {
 bool GetTypeFromName(const char* pName, uint32_t* pType)
@@ -870,7 +869,6 @@ bool GetTypeFromName(const char* pName, uint32_t* pType)
   return false;
 }
 }  // namespace SP
-
 
 
 
@@ -917,7 +915,6 @@ int ClassifyCommand(short nCommand, cAchievementSource* pSource)
 
 
 
-
 // @ 0x0060cec0
 namespace SP {
 void cPollinator_s0060_c780::SetEnabledState(int nState)
@@ -944,7 +941,6 @@ void cPollinator_s0060_c780::SetEnabledState(int nState)
   if (!bWasEnabled && mbPollinationEnabled) MessageServer()->MessageSend(0x3743e04, 0, 0);
 }
 }  // namespace SP
-
 
 
 
@@ -977,7 +973,6 @@ void __stdcall OnGameEvent(cGameEventMessage* pMessage)
 
 
 
-
 // @ 0x0060cfa0
 VariantHelper& VariantHelper::operator=(const uint64_t& value)
 {
@@ -991,7 +986,6 @@ VariantHelper& VariantHelper::operator=(const uint64_t& value)
   mFlags = mFlags & 2;
   return *this;
 }
-
 
 
 
@@ -1014,7 +1008,6 @@ ListenerIterator FindAndNotify(ListenerIterator first, ListenerIterator last, Li
 
 
 
-
 // @ 0x0060d0a0
 ListenerIterator FindReadyAndNotify(ListenerIterator first, ListenerIterator last, void* pData)
 {
@@ -1032,7 +1025,6 @@ ListenerIterator FindReadyAndNotify(ListenerIterator first, ListenerIterator las
 
 
 
-
 // @ 0x0060d140
 namespace SP {
 UploadEntry* uninitialized_copy_entries(const UploadEntry* first, const UploadEntry* last, UploadEntry* dest)
@@ -1041,7 +1033,6 @@ UploadEntry* uninitialized_copy_entries(const UploadEntry* first, const UploadEn
   return dest;
 }
 }  // namespace SP
-
 
 
 
@@ -1062,13 +1053,11 @@ cPollinatorCheat_s0060_c780* cPollinatorCheat_s0060_c780::DeletingDtor(unsigned 
 
 
 
-
 // @ 0x0060d1e0
 namespace SP {
 void __stdcall SendNotificationMessage(void*)
 { MessageServer()->MessageSend(0x6299932, 0, 0); }
 }  // namespace SP
-
 
 
 
@@ -1086,7 +1075,6 @@ AtomicRef::~AtomicRef()
 
 
 
-
 // @ 0x0060d240
 namespace SP {
 AtomicRef& AtomicRef::reset()
@@ -1099,7 +1087,6 @@ AtomicRef& AtomicRef::reset()
   return *this;
 }
 }  // namespace SP
-
 
 
 
@@ -1123,7 +1110,6 @@ void DequeBase::clear()
   mItEnd = mItBegin;
 }
 }  // namespace StreamDeque
-
 
 
 
@@ -1163,7 +1149,6 @@ void DequeBase::DoReallocPtrArray(unsigned int nAdditionalCapacity, Side allocat
 
 
 
-
 // @ 0x0060d5d0
 namespace SP {
 int distance(HashIterator first, HashIterator last)
@@ -1176,7 +1161,6 @@ int distance(HashIterator first, HashIterator last)
   return n;
 }
 }  // namespace SP
-
 
 
 
@@ -1199,7 +1183,6 @@ Iterator copy(Iterator first, Iterator last, Iterator result)
 
 
 
-
 // @ 0x0060d6e0
 namespace StreamDeque {
 Iterator copy_backward(Iterator first, Iterator last, Iterator resultEnd)
@@ -1217,7 +1200,6 @@ Iterator copy_backward(Iterator first, Iterator last, Iterator resultEnd)
 
 
 
-
 // @ 0x0060d7a0
 namespace Pollinator {
 cJobResultMessage::cJobResultMessage(uint32_t nJobID, uint32_t nResult, SP::AtomicRefCounted* pData)
@@ -1225,7 +1207,6 @@ cJobResultMessage::cJobResultMessage(uint32_t nJobID, uint32_t nResult, SP::Atom
   if (pData) pData->AddRef();
 }
 }  // namespace Pollinator
-
 
 
 
@@ -1418,6 +1399,7 @@ void RbTreeNukeSubtree(RbTree* self, RbNode* node)
 
 
 
+
 // @ 0x0060f910
 void cPollinatorInit(void* self)
 { (void)self; }
@@ -1433,6 +1415,25 @@ void FeedHelper00610070(void* self, void* a)
 // @ 0x00610140
 void SP::cPollinator::ProcessTransactionQueue()
 {}
+
+
+
+// @ 0x006103d0
+namespace SP {
+void cPollinator_s0060_f910::PostGetAssetFeed(void* a, void* b)
+{
+    if (mEnabled == 0) return;
+    cITransaction* t = 0;
+    void* const mem = Alloc0xf0(0xf0);
+    if (mem) t = ((TxnMem*)mem)->GetAssetFeed(a, b);
+    if (t) {
+        AutoRefCount<cITransaction> ref(t);
+        mTransactionQueue.push_front(ref);
+        t->Release();
+    }
+    ProcessTransactionQueue();
+}
+}  // namespace SP
 
 
 
@@ -1554,9 +1555,33 @@ void cPollinator_s0060_f910::UnsubscribeToFeed(void* a)
 }  // namespace SP
 
 
+
 // @ 0x006108a0
 void FUN_006108a0(void* self, void* a, void* b)
 { (void)self; (void)a; (void)b; }
+
+
+// @ 0x00610c20
+namespace SP {
+void cPollinator_s0061_08a0::PostGetAssetFeedEx(void* a, void* b)
+{
+    if (mEnabled == 0) return;
+    cITransaction* t = 0;
+    void* const mem = Alloc0x110(0x110);
+    if (mem) t = ((TxnMem_s0061_08a0*)mem)->GetAssetFeedEx(a, b);
+    if (t) {
+        AutoRefCount<cITransaction> ref(t);
+        if (mTransactionQueue.mItBegin.mpCurrent == mTransactionQueue.mItBegin.mpBegin) {
+            PushFrontSlowHelper(&ref);
+        } else {
+            --mTransactionQueue.mItBegin.mpCurrent;
+            *mTransactionQueue.mItBegin.mpCurrent = ref;
+        }
+        t->Release();
+    }
+    ProcessTransactionQueueGlobal();
+}
+}  // namespace SP
 
 
 // @ 0x00610cb0
@@ -1630,6 +1655,7 @@ void FUN_00611580(void* self, void* a)
 // @ 0x006116c0
 void FUN_006116c0(void* self)
 { (void)self; }
+
 
 // @ 0x00612980
 bool FloodHandler::HandleMessage(uint32_t id, void* pMessage)
