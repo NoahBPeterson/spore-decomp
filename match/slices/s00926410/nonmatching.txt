@@ -1,7 +1,14 @@
 00926410  44   hashtable critical-section teardown: complete; list-walk/DeleteCriticalSection schedule differs
+00926460  329  StringPool::Intern (hash-bucket walk + inline node allocate): complete; frame matches except the 1-arg core-allocator call is emitted with 2 args, and several load/compare orders differ [equiv: PASS 308 valid, 93.5% cov]
 009265b0  32   retirement-list drain: complete; loop/return schedule differs
 00926650  56   FixedAllocatorBase::AddCore: complete; the `while (nSize==0)` gets cl's loop-inversion (test at bottom) vs original top-test/jmp
+00926960  174  FreePool::BinInsert (small/large bin insert): complete; small-bin path and bin-map bit set match, the large-bin walk and bit-set schedule differ [equiv: PASS 384 valid, 100% cov]
 00926a30  5    Pool::Find: complete; `end`/`cur` load order swapped after the (p>=cur) test
 00926a60  62   block free callback: complete; indirect-callback arg schedule differs
 00926ab0  2    Pool::Contains: complete; comparison encoded as `cmp edx,esi;ja` instead of `cmp esi,edx;jb`
+00926af0  303  FreePool::SplitChunk (aligned block split + unsorted relink): complete; original keeps `this` in a `push ecx`/`pop ecx` spill slot, ours keeps it in ecx, so ours leaves ecx=span|1 at exit [equiv: FAIL 5/5 - ecx register clobber only, memory+return match]
+00926c20  396  FreePool::NewSegment (VirtualAlloc arena -> segment node): complete; VirtualAlloc-only function, equivalence harness cannot model the import [equiv: UNSUPPORTED, 0/400 inputs valid]
+00926db0  350  FreePool::Trim (release wholly-committed segment tails): complete; VirtualFree-heavy function, harness cannot model the import [equiv: UNSUPPORTED, 0/400 valid]
+00926f10  181  FreePool::AllocSegment (mmap chunk + trailing header link): complete; VirtualAlloc call and tail-store schedule differ [equiv: WEAK 266 valid, 25% cov]
 00926fd0  168  FreePool::Free (heap free: fast bin, coalescing, top, mapped release, trim) complete; register choice for head temp and unlink temporaries differs [equiv: PASS 207 valid, 73.6% cov]
+00927140  381  FreePool::CreateSegment (adopt/allocate arena, install top chunk): complete; bool return + segment header/flag stores match, chunk-header store schedule differs [equiv: PASS 304 valid, 80.2% cov]

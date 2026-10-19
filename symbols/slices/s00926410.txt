@@ -2,3 +2,12 @@
 00926650 ?AddCore@FixedAllocatorBase_s0092_6410@Allocator@EA@@QAE_NPAUCoreBlock_s0092_6410@23@I@Z  # FixedAllocatorBase_s0092_6410::AddCore migrated from s00926410 (verbatim, slice spelling)
 009266b0 ?Init@FixedAllocatorBase_s0092_6410@Allocator@EA@@QAE_NIIIPAUCoreBlock_s0092_6410@23@IP6APAXIPAX@ZP6AX11@Z1@Z  # FixedAllocatorBase_s0092_6410::Init migrated from s00926410 (verbatim, slice spelling)
 00926720 ??0FixedAllocatorBase_s0092_6410@Allocator@EA@@QAE@IIIPAUCoreBlock_s0092_6410@12@IP6APAXIPAX@ZP6AX11@Z1@Z  # FixedAllocatorBase_s0092_6410::FixedAllocatorBase migrated from s00926410 (verbatim, slice spelling)
+00926460 ?Intern@StringPool@Allocator@EA@@QAEPAXPBD@Z  # StringPool::Intern (interned-string pool lookup/insert)
+00926840 ?SetTopAndLink@FreePool@Allocator@EA@@QAEXPAUFreeChunk@23@D@Z  # FreePool::SetTopAndLink
+009268b0 ?SetTop@FreePool@Allocator@EA@@QAEXPAUFreeChunk@23@I@Z  # FreePool::SetTop
+00926960 ?BinInsert@FreePool@Allocator@EA@@QAEXPAUFreeChunk@23@ID@Z  # FreePool::BinInsert
+00926af0 ?SplitChunk@FreePool@Allocator@EA@@QAEXPAUFreeChunk@23@HIIID@Z  # FreePool::SplitChunk
+00926c20 ?NewSegment@FreePool@Allocator@EA@@QAEPAUSegNode@23@ID@Z  # FreePool::NewSegment
+00926db0 ?Trim@FreePool@Allocator@EA@@QAEHI@Z  # FreePool::Trim
+00926f10 ?AllocSegment@FreePool@Allocator@EA@@QAEPAXI@Z  # FreePool::AllocSegment
+00927140 ?CreateSegment@FreePool@Allocator@EA@@QAE_NPAIIDDII@Z  # FreePool::CreateSegment
