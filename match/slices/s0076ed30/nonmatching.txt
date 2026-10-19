@@ -4,3 +4,11 @@
 0076f920  70   CopyElem30: 0x30 element uninitialized copy complete; pointer setup/offset schedule differs
 0076f990  68   CopyElem30InPlace: 0x30 element copy complete; pointer setup/offset schedule differs
 0076fa70  70   CopyElem30Back: backward 0x30 element copy complete; pointer setup/offset schedule differs
+0076ed30  66   ??_G scalar deleting destructor: cl emits an out-of-line ??1cRTTCheat (82B) + a 30B ??_G that CALLS it, while the original inlines the body (member ~cArgumentSpec call, base ~cCommandBase call, conditional operator delete, mov eax,esi, ret 4). Forcing ??_G emission keys the vtable and forces ??1. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: FAIL-as-artifact]
+0076edf0  372  BigVec::Insert: 0x3c-record insert complete; growth/relocate shape differs (382B vs 475B). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: UNSUPPORTED]
+0076f050  332  cRTTManager::RTTCheatInit: allocate/append/cheat/message sequence complete; EH-state + regalloc differ (395B vs 447B). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: UNSUPPORTED]
+0076f280  446  cRTTManager::RTTBigJob: find/allocate/append/capture sequence complete; scan-loop flag-test order and EH frame differ (703B original). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: FAIL]
+0076f700  166  InsertionSort20b: shifting insertion sort complete; original keeps the less-fn in ebp and p in edi across the call, cl spills p to [esp+0x28]. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: UNSUPPORTED]
+0076fb10  205  BakeToArena: arena bake complete; EH base/derived ctor-dtor sequence differs (241B vs 262B). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: UNSUPPORTED]
+0076fc20  87   per-element alias compare complete; original merges the y==-1 and else paths into one shared jne carrying the compare in FLAGS; any named bool/int makes cl materialise via setcc. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: PASS]
+0076fc90  227  HelperFC90: 7-arg helper complete; call/index schedule differs (217B vs 297B). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: WEAK]
