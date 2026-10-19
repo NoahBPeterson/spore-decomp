@@ -1,6 +1,18 @@
-008fe830 EA::XHTML::Resource::ResourceCache::ResourceCache  # ctor: memset(mMap,0,0x100), LRU list self-link, PDB class layout (+0x14 mMap, +0x120 mLRUList)
-008fe8b0 EA::XHTML::Resource::ResourceCache::Remove  # PDB name on card, byte-exact
-008feae0 EA::XHTML::Resource::ResourceCache::Clear  # frees every LRU entry then mSize=0
-008feba0 EA::XHTML::Resource::ResourceCache::Find  # PDB candidate on card, moves hit to LRU front
-008fec20 EA::XHTML::Resource::ResourceCache::Insert  # PDB name on card
-008ff170 EA::XHTML::Resource::ResourceProvider::CreateResource  # PDB name on card
+008fe610 ?DoInsertValue@IHTable_s008f_e610@@QAEPAUIterR@@PAU2@PAUCacheEntry@@UTagT@@@Z  # IHTable_s008f_e610::DoInsertValue migrated from s008fe610 (verbatim, slice spelling)
+008fe6a0 ?Find@ListHdr@@QAEXPAPAXPAX@Z  # ListHdr::Find migrated from s008fe610 (verbatim, slice spelling)
+008fe6d0 ?Splice@@YGXPAX00@Z  # Splice migrated from s008fe610 (verbatim, slice spelling)
+008fe7e0 ?DoFindNode@SMap@@QAEPAUSNode@@PAU2@PBQBGI@Z  # SMap::DoFindNode migrated from s008fe610 (verbatim, slice spelling)
+008fe830 ??0ResourceCache@@QAE@PAUIAlloc@@IG@Z  # ResourceCache::ResourceCache migrated from s008fe610 (verbatim, slice spelling)
+008fe8b0 ?Remove@ResourceCache@@QAEXPAUCacheEntry@@@Z  # ResourceCache::Remove migrated from s008fe610 (verbatim, slice spelling)
+008fe930 ?SetGlobalProvider@@YAPAURCObjN@@PAU1@@Z  # SetGlobalProvider migrated from s008fe610 (verbatim, slice spelling)
+008fe9a0 ?find@SMap@@QAEXPAUSIter@@PBQBG@Z  # SMap::find migrated from s008fe610 (verbatim, slice spelling)
+008fea30 ?AllocHNode@@YGPAUHNode@@PAUSrcNode@@@Z  # AllocHNode migrated from s008fe610 (verbatim, slice spelling)
+008feae0 ?Clear@ResourceCache@@QAEXXZ  # ResourceCache::Clear migrated from s008fe610 (verbatim, slice spelling)
+008feba0 ?Find@ResourceCache@@QAEPAUIUnk@@PBG@Z  # ResourceCache::Find migrated from s008fe610 (verbatim, slice spelling)
+008fec20 ?Insert@ResourceCache@@QAE_NPBGPAUIUnk@@I@Z  # ResourceCache::Insert migrated from s008fe610 (verbatim, slice spelling)
+008fedb0 ?DoInsertValue@PMap@@QAEPAUPIter@@PAU2@PAUSrcNode@@UTagT@@@Z  # PMap::DoInsertValue migrated from s008fe610 (verbatim, slice spelling)
+008feef0 ?Resolve@HolderMap@@QAEPAXPBG@Z  # HolderMap::Resolve migrated from s008fe610 (verbatim, slice spelling)
+008fefb0 ?erase@PMap@@QAEIPBQBG@Z  # PMap::erase migrated from s008fe610 (verbatim, slice spelling)
+008ff0b0 ?CopyCtor@VObj@@QAEPAU1@PAU1@@Z  # VObj::CopyCtor migrated from s008fe610 (verbatim, slice spelling)
+008ff110 ?FreeBuckets@@YGXPAPAUBucketNode@@I@Z  # FreeBuckets migrated from s008fe610 (verbatim, slice spelling)
+008ff170 ?CreateResource@ResourceProvider@@QAEHIIPAUCreateCtx@@@Z  # ResourceProvider::CreateResource migrated from s008fe610 (verbatim, slice spelling)

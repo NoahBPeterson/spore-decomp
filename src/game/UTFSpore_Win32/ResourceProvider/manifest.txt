@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/ResourceProvider.cpp  ?DoFindNode@IHTableW@@QBEPAHPAHPAPBG@Z  008fe430  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/ResourceProvider.cpp  ?find@IHTableW@@QAE?AUIHTableWIter@@PAPBG@Z  008fe490  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/ResourceProvider.cpp  ?erase@IHTable@@QAEIABQB_W@Z  008fe510  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/ResourceProvider.cpp  ?DoFindNode@SMap@@QAEPAUSNode@@PAU2@PBQBGI@Z  008fe7e0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/ResourceProvider.cpp  ?Remove@ResourceCache@@QAEXPAUCacheEntry@@@Z  008fe8b0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/ResourceProvider.cpp  ?AllocHNode@@YGPAUHNode@@PAUSrcNode@@@Z  008fea30  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
