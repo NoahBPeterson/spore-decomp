@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?ShouldTick@TickState@@QAE_NXZ  00522720  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?ClearPtr100@TickState@@QAEXXZ  005227a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?Set@PaintReq@@QAEXHHHHDDD@Z  00522ad0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?Get@Model@@QAEHH@Z  005247b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?AddPair@Y@@QAEXHH@Z  00524870  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ??4PoolPtr@@QAEAAU0@PAUPooledObj@@@Z  00525d90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

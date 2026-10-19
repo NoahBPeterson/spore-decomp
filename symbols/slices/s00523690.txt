@@ -1,4 +1,4 @@
-00523690 FUN_00523690  # renderer helper
-00523900 FUN_00523900  # large render body
-005240e0 FUN_005240e0  # draw helper with Vector2 temp
-00524150 FUN_00524150  # draw helper with Vector2 temp
+00523690 ?FUN_00523690@@YAXPAX@Z  # FUN_00523690 migrated from s00523690 (verbatim, slice spelling)
+00523900 ?BuildHit@Ctx9@@QAEXPAUHitRec9@@PAUParam9@@UcMeshPos9@@I@Z  # Ctx9::BuildHit migrated from s00523690 (verbatim, slice spelling)
+005240e0 ?FUN_005240e0@@YAXPAX@Z  # FUN_005240e0 migrated from s00523690 (verbatim, slice spelling)
+00524150 ?FUN_00524150@@YAXPAX@Z  # FUN_00524150 migrated from s00523690 (verbatim, slice spelling)

@@ -1,0 +1,10 @@
+# <va>  <diff-bytes>  <reason>
+0051fb90  1404  /Od body not reconstructed (entry skeleton only)
+00522800  444   /Od body not reconstructed (entry skeleton only)
+00522a40  135  /Od body not reconstructed (entry skeleton only); equiv UNSUPPORTED: our symbol >5x smaller than original
+005235c0  203   /Od body not reconstructed (entry skeleton only)
+00523690  612   /Od body not reconstructed (entry skeleton only)
+005240e0  109   inline Vector2 stack temporary + call; not reconstructed
+00524150  130   inline Vector2 stack temporary + call; not reconstructed
+005241e0  1486  nSPSkinner::cPaintSystem::ParticleTickJobCallback; entry skeleton only
+005248a0  425   /Od ParticleTickJobCallback body not reconstructed (entry skeleton only)

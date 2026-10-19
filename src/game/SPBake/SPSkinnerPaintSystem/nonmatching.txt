@@ -1,0 +1,14 @@
+# va  diff-bytes  reason
+00520110 24 one dead jump in the bit-unpack helper differs; complete
+00520140 187 /Od x87-sqrt normalize schedule differs; complete
+00520220 166 /Od temp-frame / helper return schedule differs; complete
+005218e0 13 /Od copy-assign complete (flags /Od /Ob1 /MD /Gy /TP /arch:SSE), member-wise like a compiler-generated operator=; only the frame differs (original reserves two more unused slots); difftest PASS after fixing the 0x525d90 smart-pointer assign declared cdecl instead of thiscall
+005219d0 142 /Od message handler complete (flags /Od /Ob1 /MD /Gy /TP /arch:SSE); instructions match, only the /Od stack-slot layout differs; difftest WEAK after fixing the missing second parameter (ret 8), thiscall AtomicRefCounted::Release and thiscall EASTL erase/assign/ctor/DoFree helpers that were declared cdecl
+00521ba0 264 /Od per-frame update complete; AutoRefCount temp layout differs
+00521d70 1702 nSPSkinner::cPaintSystem::HandleUpdateMessage complete; /Od layout differs
+005229c0 126 /Od stack-temp Vector3 pass schedule differs; complete global user-colour setter
+00522b40 1478 /Od frame: original has ~0xc0 more temp slots (inline ref/copy temps); complete SetCreatureSkin, same calls in order (fabs inline needs /Oi)
+00523570 11 /Od mem/this/result slot permutation only; complete alloc factory
+00523900 1650 Ctx9::BuildHit complete (29 calls = original 29, all targets/order equal; size 1952 vs 2012): only /Od frame-slot/temp placement differs (orig frame 0x344 vs ours 0x198) and the 0-2/default switch folds to a table starting at 3; difftest WEAK (31% coverage, 0 mismatches) (compiled with /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast)
+005247d0 129 /Od packed-value unpack inlining / slot layout differs; complete GetChecked
+00524a50 1494 /Od frame slot layout (large inlined-helper frame 0x188); behaviorally complete, frame offsets diverge

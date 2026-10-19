@@ -1,1 +1,1 @@
-00524a50 nSPSkinner::cPaintSystem::BuildMeshJobCallback  # PDB anchor 00c97870
+00524a50 ?BuildMeshJobCallback@@YA_NPAUSPcJob@@PAUBuildMeshContext@@@Z  # BuildMeshJobCallback migrated from s00524a50 (verbatim, slice spelling)
