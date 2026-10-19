@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEngine/blendshape.cpp  ?RegisterArenaReadCallbacks@@YAXXZ  006c12a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
