@@ -1321,6 +1321,10 @@ struct creature_instance_data_s009c_4a30 {
 }
 // ---- items of slice s009c4a30 end
 
+// @ 0x009b3180
+void __fastcall FUN_009b3180(void* self)
+{ (void)self; }
+
 // @ 0x009b3460
 namespace nSPCreatureAnim {
 int __cdecl FUN_009b3460(int obj)
@@ -1336,6 +1340,10 @@ int __cdecl FUN_009b3460(int obj)
 }
 }  // namespace nSPCreatureAnim
 
+// @ 0x009b3850
+void __fastcall FUN_009b3850(void* self)
+{ (void)self; }
+
 // @ 0x009b3920
 namespace nSPCreatureAnim {
 void TargetFrame::Set(const float* a, const float* b)
@@ -1349,6 +1357,14 @@ void TargetFrame::Set(const float* a, const float* b)
   posB[3] = b[3];
 }
 }  // namespace nSPCreatureAnim
+
+// @ 0x009b3970
+void __fastcall FUN_009b3970(void* self)
+{ (void)self; }
+
+// @ 0x009b39e0
+void __fastcall FUN_009b39e0(void* self)
+{ (void)self; }
 
 // @ 0x009b3ab0
 namespace nSPCreatureAnim {
@@ -1373,6 +1389,10 @@ CopyBlock& CopyBlock::operator=(const CopyBlock& src)
 }
 }  // namespace nSPCreatureAnim
 
+// @ 0x009b3b20
+void __fastcall FUN_009b3b20(void* self)
+{ (void)self; }
+
 // @ 0x009b3bc0
 namespace nSPCreatureAnim {
 void __cdecl FUN_009b3bc0(int obj)
@@ -1382,6 +1402,10 @@ void __cdecl FUN_009b3bc0(int obj)
     p[i] = 0.0f;
 }
 }  // namespace nSPCreatureAnim
+
+// @ 0x009b3c10
+void __fastcall FUN_009b3c10(void* self)
+{ (void)self; }
 
 // @ 0x009b3c80
 namespace nSPCreatureAnim {
@@ -1402,6 +1426,10 @@ Transform30& Transform30::operator=(const Transform30& src)
   return *this;
 }
 }  // namespace nSPCreatureAnim
+
+// @ 0x009b3cd0
+void __fastcall FUN_009b3cd0(void* self)
+{ (void)self; }
 
 // @ 0x009b6450
 bool RayCastParts(const float* org, const float* dir, RC::Owner* obj, unsigned* pIndex, float* pT, float* pHit, float* pNormal)

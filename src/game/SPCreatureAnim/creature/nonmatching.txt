@@ -1,4 +1,4 @@
-# nonmatching: compiles and is behaviourally equivalent to the original (difftest PASS/WEAK)
+# va  diff-bytes  reason
 009b3460 5 complete; recursive pointer-walk; outer/inner register allocation (eax vs ecx) differs
 009b6450 1609 RayCastParts: complete (loop over parts, quaternion-local ray, box test, hit/normal outputs); SSE scheduling and register allocation differ
 009b6b10 2429 oriented-box bounds over owner+0x384 parts (3216 B, mine 2944): no calls; same 8 corners (4 quaternion-rotated half-extent vectors, centre -/+ each) merged into min/max with identical compare semantics, same constants (FLT_MAX, -0 mask, 2.0); orig keeps more inline temporaries on the stack (frame 0x140 vs 0xd8) and schedules the quaternion products differently. Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (668 valid inputs, 100% coverage) after adding @ marker

@@ -1,8 +1,14 @@
+009b3180 ?FUN_009b3180@@YIXPAX@Z  # FUN_009b3180 migrated from s009b3180 (verbatim, slice spelling)
 009b33f0  nSPCreatureAnim::GetAnimationBlend  # dc: 0.375*f438 + 0.625*f434
 009b3430  FUN_009b3430  # dc: (b-a)>>3 + 1 >= 4
 009b3460 ?FUN_009b3460@nSPCreatureAnim@@YAHH@Z  # FUN_009b3460 migrated from s009b3180 (verbatim, slice spelling)
-009b3850  nSPCreatureAnim::creature_instance_data::ComposeGaitFileName  # pdb name
+009b3850 ?FUN_009b3850@@YIXPAX@Z  # FUN_009b3850 migrated from s009b3180 (verbatim, slice spelling)
 009b3920 ?Set@TargetFrame@nSPCreatureAnim@@QAEXPBM0@Z  # TargetFrame::Set migrated from s009b3180 (verbatim, slice spelling)
+009b3970 ?FUN_009b3970@@YIXPAX@Z  # FUN_009b3970 migrated from s009b3180 (verbatim, slice spelling)
+009b39e0 ?FUN_009b39e0@@YIXPAX@Z  # FUN_009b39e0 migrated from s009b3180 (verbatim, slice spelling)
 009b3ab0 ??4CopyBlock@nSPCreatureAnim@@QAEAAU01@ABU01@@Z  # CopyBlock::operator= migrated from s009b3180 (verbatim, slice spelling)
+009b3b20 ?FUN_009b3b20@@YIXPAX@Z  # FUN_009b3b20 migrated from s009b3180 (verbatim, slice spelling)
 009b3bc0 ?FUN_009b3bc0@nSPCreatureAnim@@YAXH@Z  # FUN_009b3bc0 migrated from s009b3180 (verbatim, slice spelling)
+009b3c10 ?FUN_009b3c10@@YIXPAX@Z  # FUN_009b3c10 migrated from s009b3180 (verbatim, slice spelling)
 009b3c80 ??4Transform30@nSPCreatureAnim@@QAEAAU01@ABU01@@Z  # Transform30::operator= migrated from s009b3180 (verbatim, slice spelling)
+009b3cd0 ?FUN_009b3cd0@@YIXPAX@Z  # FUN_009b3cd0 migrated from s009b3180 (verbatim, slice spelling)
