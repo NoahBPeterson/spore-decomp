@@ -4006,8 +4006,8 @@ class Rewrite:
         return results
 
     PNEW_GUARD = "#define __PLACEMENT_NEW_INLINE   // the slices' own placement new/delete win over <new>'s (rewrite.py)"
-    PNEW_RE = r"(?m)^\s*inline\s+void\s*\*\s*operator\s+new\s*\(\s*(?:unsigned\s+int|size_t|unsigned)\s*,\s*void\s*\*\s*\w*\s*\)\s*\{"
-    PDEL_RE = r"(?m)^\s*inline\s+void\s+operator\s+delete\s*\(\s*void\s*\*\s*\w*\s*,\s*void\s*\*\s*\w*\s*\)\s*\{"
+    PNEW_RE = r"(?m)^\s*inline\s+void\s*\*\s*operator\s+new\s*\(\s*(?:unsigned\s+int|size_t\w*|unsigned)\s*\w*\s*,\s*void\s*\*\s*\w*\s*\)\s*(?:throw\s*\(\s*\)\s*)?\{"
+    PDEL_RE = r"(?m)^\s*inline\s+void\s+operator\s+delete\s*\(\s*void\s*\*\s*\w*\s*,\s*void\s*\*\s*\w*\s*\)\s*(?:throw\s*\(\s*\)\s*)?\{"
 
     def placement_new_guard(self, pre):
         """A TU that includes <new> and holds a slice's own inline placement `operator new(size_t, void*)` (without <new>'s
