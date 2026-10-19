@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPGraphicsEffectsRenderer.cpp -- migrated from slice(s) s006f1770, s006f0890, s006ef990, s006ee1f0, s006ed2c0, s006ea030, s006e80d0, s006e7110, s006e6100 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsEffectsRenderer.cpp -- migrated from slice(s) s006ec0c0, s006eae40, s006e8f90, s006f1770, s006f0890, s006ef990, s006ee1f0, s006ed2c0, s006ea030, s006e80d0, s006e7110, s006e6100 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsEffectsRenderer.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -15,6 +15,13 @@ extern "C" void* FUN_0067dd50();
 #include "SP/cViewer.h"
 #include "rw/graphics/GlobalState.h"
 #include <new>
+#include "SP/cEffectsCameraManager.h"
+#include "rw/graphics/EmbeddedState.h"
+#include "SP/cFrustumCull.h"
+#include "rw/graphics/VertexBuffer.h"
+#include "rw/graphics/ActiveState.h"
+#include <xmmintrin.h>
+#include <stdlib.h>
 
 // ---- items of slice s006e6100 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Inner {
@@ -622,6 +629,128 @@ void PushSet(E70** vec, const E70* v);  // 0x006f0810
     void EaDelete(...); // 0x00f47380
 // ---- items of slice s006f0890 end
 
+// ---- items of slice s006e8f90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void*  g1618f60;
+extern "C" double sqrt(double);
+struct E5 {
+    void  r7c5350(float);
+    void  r7c4ba0(float);
+    void  r7c4bc0(float);
+    int   r7c4010(void*);
+    void  r41cb40(void*);     // rw::math::Matrix33::Assign
+    void  r76c210(int);
+    void  r76ba30(int, int, int, int, int, int, int, int, int, int, int, int);
+    void  r7c50b0(int, int, int);
+};
+struct S5 {
+    char m_unk[0x240];
+
+    // 0x6e8f90
+    void m8f90(float a, float b, float c, unsigned char flags);
+    // 0x6e9120
+    int  m9120(uint a, uint b);
+    // 0x6e9150
+    void m9150(int i);
+    // 0x6e91c0
+    void m91c0();
+    // 0x6e91e0
+    void m91e0(int a, int b);
+    // 0x6e9230
+    void m9230(void* src);
+    // 0x6e9330
+    void m9330(void* src);
+    // 0x6e94a0 (free, but declared here for convenience) -- not used
+    // 0x6e9530
+    void m9530();
+    // 0x6e95a0
+    void m95a0(unsigned char* p);
+    // 0x6e9910
+    void m9910(float d);
+    // 0x6e9990
+    void m9990();
+    // 0x6e9a30
+    void m9a30();
+    // 0x6e9b00
+    S5* m9b00();
+    // 0x6e9bf0
+    S5* m9bf0();
+    // 0x6e9cc0
+    void* m9cc0();
+    // 0x6e9d50
+    void m9d50(void* out);
+};
+// ---- items of slice s006e8f90 end
+
+// ---- items of slice s006eae40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void   f_f47380(void*);
+extern void   f7c4d00(int);
+struct Vec3 { float x, y, z; };
+static inline Vec3 MakeV3(float c) { Vec3 v; v.x = c; v.y = c; v.z = c; return v; }
+struct E7 {
+    void GetImageResource(void*);   // refcount-copy helper (0x576650)
+    void r41cb40(void*);            // rw::math::Matrix33::Assign
+};
+void __stdcall f990(char* p1, char* p2);             // 0x6eb990
+void f9d0(uint* p1, uint* p2, int extra);            // 0x6eb9d0
+void fbe50(uint* p1, uint* p2, uint v);              // 0x6ebe50
+void fbea0(uint* p1, uint* p2, uint* p3, int p4);    // 0x6ebea0
+extern void f_ac2060(uint*, int, int, int, uint, uint, int);
+extern void f_ac3fa0(uint*, uint*, int);
+struct CEM7 {
+    char m[0x20];
+    void UpdateCameraView(int a, uint flags);
+};
+struct S7 {
+    char m_unk[0x240];
+    void m6eb8c0(void* src);
+    S7*  m6ebb80(void* src);
+    S7*  mebf50();
+    void mec000();
+    void mec090();
+};
+// ---- items of slice s006eae40 end
+
+// ---- items of slice s006ec0c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern int    f_7c3af0(int);
+extern void   f_6ebd20(int, int);
+extern void   f_6f66a0(int*);
+extern void   f_grow4(void*, int*);
+extern void*  f_f47380_s006e_c0c0(void*);
+extern int    f_ac3fa0_s006e_c0c0(uint*, uint*, int);
+extern int    f_6ebe50(uint*, int, uint, uint, int);
+struct VecC {
+    int* b;
+    int* e;
+    int* cap;
+    void DoInsert(int* pos, int* v);   // 0x6ec260
+};
+struct S8 {
+    char m_unk[0x30d80];
+
+    void m0c0(int a, int b, int c, int d, int e, void* f);  // 0x6ec0c0
+    void mecc0();                                           // 0x6ec0c0 helper? (unused)
+    void m260();                                            // placeholder
+    void m4a0();                                            // 0x6ec4a0 (declared via VecC helper)
+    void m660(void* src);                                   // 0x6ec660
+    S8*  m730();                                            // 0x6ec730
+    void m840(int a, int b);                                // 0x6ec840
+    void m8a0();                                            // 0x6ec8a0
+    void maa0();                                            // 0x6ecaa0
+    void mb40();                                            // 0x6ecb40
+    void mdd0(int a, int b);                                // 0x6ecdd0
+    void me30(int a, int b, int c);                         // 0x6ece30
+    void me90(int n, int* a, int* b);                       // 0x6ece90
+    void mf10();                                            // 0x6ecf10
+    void mfc0(void* src);                                   // 0x6ecfc0
+    void md070();                                           // 0x6ed070
+    void md1a0(int idx, char v);                            // 0x6ed1a0
+    void md210(int idx);                                    // 0x6ed210
+};
+int  __cdecl f6d0(int p1, int p2, int p3);     // 0x6ec6d0
+void __stdcall fca50(char* p1, char* p2);      // 0x6eca50
+void f5b0(uint* p1, int p2, int p3, int p4);   // 0x6ec5b0
+// ---- items of slice s006ec0c0 end
+
 // @ 0x006e6840
 void __stdcall GetLayout(int type, unsigned char* out)
 {
@@ -644,14 +773,6 @@ void __stdcall GetLayout(int type, unsigned char* out)
         break;
     }
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006e68e0
 int __stdcall FindKnownValue(int* p)
@@ -676,14 +797,6 @@ int __stdcall FindKnownValue(int* p)
     }
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006e6930
 void ShaderHost::CallF1(float b)
 {
@@ -692,14 +805,6 @@ void ShaderHost::CallF1(float b)
         p->F1(b);
     }
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006e6970
 void ShaderHost::CallF3(int a, float b, int c)
@@ -710,14 +815,6 @@ void ShaderHost::CallF3(int a, float b, int c)
     }
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006e69a0
 void ShaderHost::CallF2(int a, float b)
 {
@@ -726,14 +823,6 @@ void ShaderHost::CallF2(int a, float b)
         p->F2(a, b);
     }
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006e69e0
 void ShaderHost::SetMode(int mode)
@@ -746,14 +835,6 @@ void ShaderHost::SetMode(int mode)
         }
     }
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006e6b70
 void ShaderHost::SetParams(int a, int b, char c1, char c2, char c3)
@@ -773,14 +854,6 @@ void ShaderHost::SetParams(int a, int b, char c1, char c2, char c3)
     }
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006e6c20
 void ShaderHost::CallIface(int v)
 {
@@ -788,14 +861,6 @@ void ShaderHost::CallIface(int v)
     VirtualFn3 fn = (VirtualFn3)((void**)o->vtbl)[0xa8 / 4];
     fn(o, 0, v, 0);
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006e6ca0
 void SortPairsA(uint32_t* begin, uint32_t* end)
@@ -817,14 +882,6 @@ void SortPairsA(uint32_t* begin, uint32_t* end)
     }
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006e6cf0
 void SortPairsB(uint32_t* begin, uint32_t* end)
 {
@@ -844,26 +901,11 @@ void SortPairsB(uint32_t* begin, uint32_t* end)
     }
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006e7450
 char Host3::Method7450(unsigned char)
 {
     return 0;
 }
-
-
-
-
-
-
-
 
 // @ 0x006e7880
 void Host3::Method7880(int arg)
@@ -878,24 +920,10 @@ void Host3::Method7880(int arg)
     }
 }
 
-
-
-
-
-
-
-
 // @ 0x006e7b50
 void Host3::Method7b50(void*)
 {
 }
-
-
-
-
-
-
-
 
 // @ 0x006e7c60
 char Host3::Method7c60()
@@ -907,13 +935,6 @@ char Host3::Method7c60()
     return 0;
 }
 
-
-
-
-
-
-
-
 // @ 0x006e7c80
 char Host3::Method7c80(int a, int b, int c, int d, int e, int f)
 {
@@ -924,13 +945,6 @@ char Host3::Method7c80(int a, int b, int c, int d, int e, int f)
     return 0;
 }
 
-
-
-
-
-
-
-
 // @ 0x006e7cc0
 void Host3::Method7cc0(int a, int b, int c, int d)
 {
@@ -940,13 +954,6 @@ void Host3::Method7cc0(int a, int b, int c, int d)
     }
 }
 
-
-
-
-
-
-
-
 // @ 0x006e7d00
 void Host3::Method7d00(float v)
 {
@@ -955,13 +962,6 @@ void Host3::Method7d00(float v)
         p->FF(v);
     }
 }
-
-
-
-
-
-
-
 
 // @ 0x006e7d40
 void Host3::Method7d40(int index, uint32_t* v, float w)
@@ -977,24 +977,10 @@ void Host3::Method7d40(int index, uint32_t* v, float w)
     }
 }
 
-
-
-
-
-
-
-
 // @ 0x006e7dd0
 void Host3::Method7dd0(int, float*, float)
 {
 }
-
-
-
-
-
-
-
 
 // @ 0x006e7ed0
 void Host3::Method7ed0(int index, uint32_t* v, float w)
@@ -1010,24 +996,10 @@ void Host3::Method7ed0(int index, uint32_t* v, float w)
     }
 }
 
-
-
-
-
-
-
-
 // @ 0x006e7f30
 void Host3::Method7f30()
 {
 }
-
-
-
-
-
-
-
 
 // @ 0x006e7fa0
 int Host3::Method7fa0(int index, int value)
@@ -1046,13 +1018,6 @@ int Host3::Method7fa0(int index, int value)
     }
     return (int)this;
 }
-
-
-
-
-
-
-
 
 // @ 0x006e8000
 void Host3::Method8000(int index, float* v, float w)
@@ -1075,13 +1040,6 @@ void Host3::Method8000(int index, float* v, float w)
     }
 }
 
-
-
-
-
-
-
-
 // @ 0x006e8090
 void Host3::Method8090(int index, int a, float b)
 {
@@ -1091,13 +1049,6 @@ void Host3::Method8090(int index, int a, float b)
         fn(p, index, a, b);
     }
 }
-
-
-
-
-
-
-
 
 // @ 0x006e80d0
 void CCreature::m80d0(int idx, int a, int b)
@@ -1122,12 +1073,6 @@ void CCreature::m80d0(int idx, int a, int b)
     *(uint*)((char*)base + 0x54) = (uint)v;
 }
 
-
-
-
-
-
-
 // @ 0x006e8160
 void CCreature::m8160(float a, float b)
 {
@@ -1141,12 +1086,6 @@ void CCreature::m8160(float a, float b)
     if (*(void**)((char*)this + 0x360))
         ((Ext*)(*(void**)((char*)this + 0x360)))->r776420(-x, -y);
 }
-
-
-
-
-
-
 
 // @ 0x006e8200
 char CCreature::m8200(char* p, int a)
@@ -1172,12 +1111,6 @@ char CCreature::m8200(char* p, int a)
         return 1;
     return 0;
 }
-
-
-
-
-
-
 
 // @ 0x006e82b0
 void CCreature::m82b0(int a, int b, float c, float d)
@@ -1206,12 +1139,6 @@ void CCreature::m82b0(int a, int b, float c, float d)
             ((Ext*)h2)->r776520(a, b, c, d);
     }
 }
-
-
-
-
-
-
 
 // @ 0x006e8360
 void CCreature::m8360(int a)
@@ -1244,12 +1171,6 @@ done:
     }
 }
 
-
-
-
-
-
-
 // @ 0x006e8420
 void CCreature::m8420(int a, void* b)
 {
@@ -1271,12 +1192,6 @@ void CCreature::m8420(int a, void* b)
     if (*(void**)(self + 0x35c))
         ((Ext*)(*(void**)(self + 0x35c)))->r6f3ee0(a);
 }
-
-
-
-
-
-
 
 // @ 0x006e8480
 void CCreature::m8480(void* b)
@@ -1380,12 +1295,6 @@ void CCreature::m8480(void* b)
     }
 }
 
-
-
-
-
-
-
 // @ 0x006e8d70
 void CCreature::m8d70(int a2, int a3, void* a4, int a5, int a6, int a7, int a8, int a9, int a10, int a11)
 {
@@ -1395,12 +1304,6 @@ void CCreature::m8d70(int a2, int a3, void* a4, int a5, int a6, int a7, int a8, 
         f76d5c0();
 }
 
-
-
-
-
-
-
 // @ 0x006e8dd0
 void CCreature::m8dd0(int, int, int, int, void*, int, int, int, int, int, int, int, int)
 {
@@ -1409,11 +1312,180 @@ void CCreature::m8dd0(int, int, int, int, void*, int, int, int, int, int, int, i
         f76d6e0();
 }
 
+// @ 0x006e9b00
+S5* S5::m9b00()
+{
+    char* p = (char*)this;
+    *(uint*)(p + 0) = 0;
+    *(int*)(p + 8) = -1;
+    *(int*)(p + 0xc) = -1;
+    *(uchar*)(p + 0x10) = 0;
+    *(uchar*)(p + 0x11) = 0;
+    *(uchar*)(p + 0x12) = 0;
+    *(uchar*)(p + 0x13) = 0;
+    *(ushort*)(p + 0x14) = 0;
+    *(float*)(p + 0x18) = 0.0f;
+    *(int*)(p + 0x20) = -1;
+    *(int*)(p + 0x24) = -1;
+    *(int*)(p + 0x28) = 0;
+    *(int*)(p + 0x2c) = 0;
+    float C = g1533c74;
+    *(float*)(p + 0x30) = C;
+    *(float*)(p + 0x34) = C;
+    *(float*)(p + 0x38) = C;
+    float N = -C;
+    *(float*)(p + 0x3c) = N;
+    *(float*)(p + 0x40) = N;
+    *(float*)(p + 0x44) = N;
+    *(uchar*)(p + 0x48) = 0;
+    *(uchar*)(p + 0x49) = 0;
+    float one = 1.0f;
+    *(float*)(p + 0x4c) = one;
+    *(float*)(p + 0x50) = one;
+    *(float*)(p + 0x54) = one;
+    *(float*)(p + 0x58) = one;
+    *(int*)(p + 0x5c) = 0;
+    *(int*)(p + 0x60) = 0;
+    *(int*)(p + 0x64) = 0;
+    *(int*)(p + 0x68) = 0;
+    *(int*)(p + 0x6c) = 0;
+    return this;
+}
 
+// @ 0x006e9bf0
+S5* S5::m9bf0()
+{
+    char* p = (char*)this;
+    *(uint*)(p + 0) = 0;
+    *(float*)(p + 0x18) = 0.0f;
+    float C = g1533c74;
+    *(uchar*)(p + 0x10) = 0;
+    *(uchar*)(p + 0x11) = 0;
+    *(uchar*)(p + 0x12) = 0;
+    *(uchar*)(p + 0x13) = 0;
+    *(int*)(p + 8) = -1;
+    *(int*)(p + 0xc) = -1;
+    *(int*)(p + 0x20) = -1;
+    *(int*)(p + 0x24) = -1;
+    *(ushort*)(p + 0x14) = 0;
+    *(int*)(p + 0x28) = 0;
+    *(float*)(p + 0x2c) = C;
+    *(float*)(p + 0x30) = C;
+    *(float*)(p + 0x34) = C;
+    float N = -C;
+    *(float*)(p + 0x38) = N;
+    *(float*)(p + 0x3c) = N;
+    *(float*)(p + 0x40) = N;
+    float one = 1.0f;
+    *(float*)(p + 0x44) = one;
+    *(uchar*)(p + 0x48) = 0;
+    *(uchar*)(p + 0x49) = 0;
+    *(float*)(p + 0x4c) = one;
+    *(float*)(p + 0x50) = one;
+    *(float*)(p + 0x54) = one;
+    *(float*)(p + 0x58) = one;
+    *(int*)(p + 0x5c) = 0;
+    *(int*)(p + 0x60) = 0;
+    *(int*)(p + 0x64) = 0;
+    *(int*)(p + 0x68) = 0;
+    return this;
+}
 
+// @ 0x006e9cc0
+void* S5::m9cc0()
+{
+    char* p = (char*)this;
+    float one = 1.0f;
+    *(uint*)(p + 0) = 0;
+    *(float*)(p + 4) = one;
+    *(float*)(p + 8) = one;
+    *(float*)(p + 0xc) = one;
+    *(float*)(p + 0x10) = one;
+    *(float*)(p + 0x14) = one;
+    *(ushort*)(p + 0x1a) = 0;
+    *(ushort*)(p + 0x18) = 0;
+    *(float*)(p + 0x1c) = *(float*)0x1618de0;
+    *(float*)(p + 0x20) = *(float*)0x1618de4;
+    *(float*)(p + 0x24) = *(float*)0x1618de8;
+    *(float*)(p + 0x28) = one;
+    ((E5*)(p + 0x2c))->r41cb40(&g1618f60);
+    *(uchar*)(p + 0x50) = 0;
+    *(uchar*)(p + 0x51) = 0;
+    *(int*)(p + 0x54) = 0;
+    *(int*)(p + 0x58) = 0;
+    *(int*)(p + 0x5c) = 0;
+    *(int*)(p + 0x60) = 0;
+    *(int*)(p + 0x64) = -1;
+    return this;
+}
 
-
-
+// @ 0x006e9d50
+void S5::m9d50(void* out)
+{
+    char* self = (char*)this;
+    char* o = (char*)out;
+    int* src = *(int**)(self + 0x20);
+    if (!src)
+        return;
+    *(int*)(o + 0x5c) = src[0];
+    *(int*)(o + 0x60) = src[1];
+    *(int*)(o + 0x64) = src[2];
+    *(int*)(o + 0x68) = src[4];
+    *(int*)(o + 0x6c) = src[5];
+    *(int*)(o + 0x70) = src[6];
+    *(int*)(o + 0x74) = src[8];
+    *(int*)(o + 0x78) = src[9];
+    *(int*)(o + 0x7c) = src[10];
+    *(int*)(o + 0x80) = src[0xc];
+    *(int*)(o + 0x84) = src[0xd];
+    *(int*)(o + 0x88) = src[0xe];
+    if (*(char*)(self + 0x1e5) == 0) {
+        *(int*)(o + 0x8c) = src[0xc];
+        *(int*)(o + 0x90) = src[0xd];
+        *(int*)(o + 0x94) = src[0xe];
+    } else {
+        *(int*)(o + 0x8c) = *(int*)(self + 0x1e8);
+        *(int*)(o + 0x90) = *(int*)(self + 0x1ec);
+        *(int*)(o + 0x94) = *(int*)(self + 0x1f0);
+    }
+    int* s = (int*)(*(int*)(self + 0x20) + 0xc0);
+    int* d = (int*)(o + 0x1c);
+    for (int i = 0; i < 0x10; i++)
+        d[i] = s[i];
+    if (*(char*)(self + 0x1f4) == 0) {
+        *(char*)(o + 0xb0) = 0;
+        *(int*)(self + 0x44) = (int)o;
+        *(char*)(self + 0x1f4) = 0;
+        return;
+    }
+    int rect[4];
+    ((E5*)(*(void**)(self + 0x20)))->r7c4010(rect);
+    int v1 = *(int*)(self + 0x1f8);
+    int v2 = *(int*)(self + 0x1fc);
+    *(int*)(o + 0x98) = *(int*)(o + 0x80);
+    *(int*)(o + 0x9c) = *(int*)(o + 0x84);
+    *(int*)(o + 0xa0) = *(int*)(o + 0x88);
+    int m = *(int*)(self + 0x20);
+    float fy = (float)((rect[2] - v2) * 2) / (float)(rect[3] - rect[2]) + 1.0f;
+    float fx = (float)((v1 - rect[0]) * 2) / (float)(rect[1] - rect[0]) - 1.0f;
+    float w = 1.0f / (((*(float*)(m + 0x11c) * fy + *(float*)(m + 0x10c) * fx) +
+                       *(float*)(m + 0x13c)) + *(float*)(m + 0x12c));
+    float fz = (((*(float*)(m + 0x118) * fy + *(float*)(m + 0x108) * fx) +
+                 *(float*)(m + 0x138)) + *(float*)(m + 0x128)) * w - *(float*)(o + 0xa0);
+    float fyy = (((*(float*)(m + 0x114) * fy + *(float*)(m + 0x104) * fx) +
+                  *(float*)(m + 0x134)) + *(float*)(m + 0x124)) * w - *(float*)(o + 0x9c);
+    float fxx = (((*(float*)(m + 0x110) * fy + *(float*)(m + 0x100) * fx) +
+                  *(float*)(m + 0x130)) + *(float*)(m + 0x120)) * w - *(float*)(o + 0x98);
+    *(char*)(o + 0xb0) = 1;
+    float n = 1.0f / (float)sqrt((double)((fxx * fxx + (fyy * fyy + fz * fz)) + 1e-08f));
+    *(float*)(o + 0xa4) = n * fxx;
+    *(float*)(o + 0xa8) = fyy * n;
+    *(float*)(o + 0xac) = fz * n;
+    *(uint*)(o + 0xb8) = *(uint*)(o + 0xb4) ^ *(uint*)(self + 0x200);
+    *(uint*)(o + 0xb4) = *(uint*)(self + 0x200);
+    *(int*)(self + 0x44) = (int)o;
+    *(char*)(self + 0x1f4) = 0;
+}
 
 // @ 0x006ea920
 void S6::m920()
@@ -1435,11 +1507,6 @@ void S6::m920()
             (*rc)++;
     }
 }
-
-
-
-
-
 
 // @ 0x006ea9e0
 void S6::m9e0(int idx, float* box, float pad)
@@ -1492,11 +1559,6 @@ void S6::m9e0(int idx, float* box, float pad)
     }
 }
 
-
-
-
-
-
 // @ 0x006eabc0
 R70* R70::mabc0(const R70& src)
 {
@@ -1539,11 +1601,6 @@ R70* R70::mabc0(const R70& src)
     return this;
 }
 
-
-
-
-
-
 // @ 0x006ead40
 void S6::mad40(int idx, void* xf)
 {
@@ -1579,10 +1636,578 @@ void S6::mad40(int idx, void* xf)
     }
 }
 
+// @ 0x006eb6e0
+void CEM7::UpdateCameraView(int a, uint flags)
+{
+    char* self = (char*)this;
+    void* cam = *(void**)(self + 0xc);
+    if (cam == 0 || ((int(__thiscall*)(void*))VFN(cam, 0x3c))(cam) == 0) {
+        f7c4d00(a);
+        return;
+    }
+    float v[3];
+    v[0] = *(float*)(a + 4);
+    v[1] = *(float*)(a + 8);
+    v[2] = *(float*)(a + 0xc);
+    if (flags & 1) {
+        if (flags & 0x10)
+            ((void(__thiscall*)(void*, int, void*))VFN(cam, 4))(cam, 0x101b542, v);
+        else
+            ((void(__thiscall*)(void*, int, void*))VFN(cam, 4))(cam, 0x101b541, v);
+    } else {
+        if (flags & 0x10)
+            ((void(__thiscall*)(void*, int, void*))VFN(cam, 4))(cam, 0x101b537, v);
+        else
+            ((void(__thiscall*)(void*, int, void*))VFN(cam, 4))(cam, 0x101b534, v);
+    }
+    if (flags & 8) {
+        cam = *(void**)(self + 0xc);
+        float q = *(float*)(a + 0x10);
+        if (flags & 0x10)
+            ((void(__thiscall*)(void*, int, void*))VFN(cam, 4))(cam, 0x101d445, &q);
+        else
+            ((void(__thiscall*)(void*, int, void*))VFN(cam, 4))(cam, 0x101d4c7, &q);
+    }
+    if (flags & 2) {
+        cam = *(void**)(self + 0xc);
+        float q[4];
+        q[0] = *(float*)(a + 0x18);
+        q[1] = *(float*)(a + 0x1c);
+        q[2] = *(float*)(a + 0x20);
+        q[3] = *(float*)(a + 0x24);
+        if (flags & 0x10)
+            ((void(__thiscall*)(void*, int, void*))VFN(cam, 4))(cam, 0x101d51f, q);
+        else
+            ((void(__thiscall*)(void*, int, void*))VFN(cam, 4))(cam, 0x101d576, q);
+    }
+}
 
+// @ 0x006eb8c0
+void S7::m6eb8c0(void* src)
+{
+    char* d = (char*)this;
+    char* s = (char*)src;
+    *(void**)d = *(void**)s;
+    if (*(void**)d)
+        (*(int*)((char*)*(void**)d + 4))++;
+    for (int off = 4; off <= 0x28; off += 4)
+        *(uint*)(d + off) = *(uint*)(s + off);
+    ((E7*)(d + 0x2c))->r41cb40(s + 0x2c);
+    *(uchar*)(d + 0x50) = *(uchar*)(s + 0x50);
+    *(uchar*)(d + 0x51) = *(uchar*)(s + 0x51);
+    *(uint*)(d + 0x54) = *(uint*)(s + 0x54);
+    *(uint*)(d + 0x58) = *(uint*)(s + 0x58);
+    *(uint*)(d + 0x5c) = *(uint*)(s + 0x5c);
+    *(void**)(d + 0x60) = *(void**)(s + 0x60);
+    if (*(void**)(d + 0x60))
+        ((void(__thiscall*)(void*))VFN(*(void**)(d + 0x60), 0))(*(void**)(d + 0x60));
+    *(uint*)(d + 0x64) = *(uint*)(s + 0x64);
+}
 
+// @ 0x006eb990
+void __stdcall f990(char* p1, char* p2)
+{
+    for (; p1 < p2; p1 += 0x70) {
+        void* r = *(void**)(p1 + 0x28);
+        if (r != 0) {
+            int v = (*(volatile int*)((char*)r + 4) += -1);
+            if (v == 0) {
+                *(int*)((char*)r + 4) = 1;
+                _ReadWriteBarrier();
+                ((void(__thiscall*)(void*, int))VFN(r, 0))(r, 1);
+            }
+        }
+    }
+}
 
+// @ 0x006eb9d0
+void f9d0(uint* p1, uint* p2, int extra)
+{
+    int n = (int)p2 - (int)p1 >> 3;
+    if (n > 1) {
+        uint* e = p2 - 2;
+        do {
+            uint a = e[0], b = e[1];
+            e[0] = p1[0];
+            e[1] = p1[1];
+            f_ac2060(p1, 0, n - 1, 0, a, b, extra);
+            e -= 2;
+            n = (8 - (int)p1) + (int)e >> 3;
+        } while (n > 1);
+    }
+}
 
+// @ 0x006ebb80
+S7* S7::m6ebb80(void* src)
+{
+    char* d = (char*)this;
+    char* s = (char*)src;
+    *(uint*)d = *(uint*)s;
+    memcpy(d + 8, s + 8, 32);
+    ((E7*)(d + 0x28))->GetImageResource(*(void**)(s + 0x28));
+    ((E7*)(d + 0x2c))->GetImageResource(*(void**)(s + 0x2c));
+    *(uint*)(d + 0x3c) = *(uint*)(s + 0x3c);
+    *(uint*)(d + 0x40) = *(uint*)(s + 0x40);
+    *(uint*)(d + 0x44) = *(uint*)(s + 0x44);
+    *(uint*)(d + 0x30) = *(uint*)(s + 0x30);
+    *(uint*)(d + 0x34) = *(uint*)(s + 0x34);
+    *(uint*)(d + 0x38) = *(uint*)(s + 0x38);
+    *(uchar*)(d + 0x48) = *(uchar*)(s + 0x48);
+    *(uchar*)(d + 0x49) = *(uchar*)(s + 0x49);
+    *(uint*)(d + 0x4c) = *(uint*)(s + 0x4c);
+    *(uint*)(d + 0x50) = *(uint*)(s + 0x50);
+    *(uint*)(d + 0x54) = *(uint*)(s + 0x54);
+    *(float*)(d + 0x58) = *(float*)(s + 0x58);
+    *(uint*)(d + 0x5c) = *(uint*)(s + 0x5c);
+    *(uint*)(d + 0x60) = *(uint*)(s + 0x60);
+    *(uint*)(d + 0x64) = *(uint*)(s + 0x64);
+    *(uint*)(d + 0x68) = *(uint*)(s + 0x68);
+    void* n = *(void**)(s + 0x6c);
+    _ReadWriteBarrier();
+    void* o = *(void**)(d + 0x6c);
+    if (n != o) {
+        if (n)
+            ((void(__thiscall*)(void*))VFN(n, 4))(n);
+        *(void**)(d + 0x6c) = n;
+        if (o)
+            ((void(__thiscall*)(void*))VFN(o, 8))(o);
+    }
+    return this;
+}
+
+// @ 0x006ebe50
+void fbe50(uint* p1, uint* p2, uint v)
+{
+    while (1) {
+        while (*p1 > v)
+            p1 += 2;
+        p2 -= 2;
+        while (*p2 < v)
+            p2 -= 2;
+        if (p2 <= p1)
+            break;
+        uint a = p1[0], b = p1[1];
+        p1[0] = p2[0];
+        p1[1] = p2[1];
+        p2[0] = a;
+        p2[1] = b;
+        p1 += 2;
+    }
+}
+
+// @ 0x006ebea0
+void fbea0(uint* p1, uint* p2, uint* p3, int p4)
+{
+    f_ac3fa0(p1, p2, p4);
+    for (uint* it = p2; it < p3; it += 2) {
+        uint a = *it;
+        if (*p1 < a) {
+            uint b = it[1];
+            *it = *p1;
+            it[1] = p1[1];
+            f_ac2060(p1, 0, ((int)p2 - (int)p1) >> 3, 0, a, b, p4);
+        }
+    }
+    f9d0(p1, p2, p4);
+}
+
+// @ 0x006ebf50
+S7* S7::mebf50()
+{
+    char* p = (char*)this;
+    float C = g1533c74;
+    *(void**)p = (void*)0x140afd4;
+    *(int*)(p + 4) = 0;
+    char* q = p + 0x20;
+    *(void**)(p + 0x18) = q;
+    *(void**)(p + 0xc) = q;
+    *(void**)(p + 8) = q;
+    *(void**)(p + 0x10) = p + 0x50;
+    *(Vec3*)(p + 0x50) = MakeV3(C);
+    *(Vec3*)(p + 0x5c) = MakeV3(-C);
+    *(float*)(p + 0x68) = 0.0f;
+    *(int*)(p + 0x6c) = 0;
+    char* q2 = p + 0x88;
+    *(void**)(p + 0x80) = q2;
+    *(void**)(p + 0x74) = q2;
+    *(void**)(p + 0x70) = q2;
+    *(void**)(p + 0x78) = p + 0x98;
+    return this;
+}
+
+// @ 0x006ec000
+void S7::mec000()
+{
+    char* p = (char*)this;
+    // vector dtor at +0x70 + refcount/vector teardown (EH); approximated
+    *(void**)p = (void*)0x13ef094;
+    void* r = *(void**)(p + 0x6c);
+    if (r)
+        ((void(__thiscall*)(void*))VFN(r, 4))(r);
+    int b = *(int*)(p + 8);
+    if (b != 0 && b != *(int*)(p + 0x18))
+        f_f47380((void*)b);
+}
+
+// @ 0x006ec090
+void S7::mec090()
+{
+    char* p = (char*)this;
+    int i = *(int*)(p + 4);
+    if ((int)((*(int*)(p + 0xc) - i) & 0xfffffffe) > 2 && i != 0 && i != *(int*)(p + 0x14))
+        f_f47380((void*)i);
+}
+
+// @ 0x006ec0c0
+void S8::m0c0(int a, int b, int c, int d, int e, void* f)
+{
+    // 253-byte skill/effect resource installer; body omitted (partial).
+    (void)a; (void)b; (void)c; (void)d; (void)e; (void)f;
+}
+
+// @ 0x006ec260
+void VecC::DoInsert(int* pos, int* v)
+{
+    int* end = e;
+    if (end != cap) {
+        if (pos <= v && v < end)
+            v += 3;
+        if (end) {
+            end[0] = end[-3];
+            end[1] = end[-2];
+            end[2] = end[-1];
+        }
+        int* d = e;
+        int* s = e;
+        while (s - 3 != pos) {
+            d[-3] = s[-6];
+            d[-2] = s[-5];
+            d[-1] = s[-4];
+            d -= 3;
+            s -= 3;
+        }
+        pos[0] = v[0];
+        pos[1] = v[1];
+        pos[2] = v[2];
+        e = e + 3;
+        return;
+    }
+    int n = ((int)end - (int)b) / 0xc;
+    if (n == 0)
+        n = 1;
+    else
+        n = n * 2;
+    int* dst = (int*)malloc(n * 0xc);
+    memcpy(dst, b, (int)pos - (int)b);
+    int* mid = dst + ((int)pos - (int)b) / 4;
+    if (mid) {
+        mid[0] = v[0];
+        mid[1] = v[1];
+        mid[2] = v[2];
+    }
+    memcpy(mid + 3, pos, (int)end - (int)pos);
+    if (b != 0)
+        free(b);
+    int* ne = (int*)((char*)mid + 0xc + ((int)end - (int)pos));
+    b = dst;
+    e = ne;
+    cap = (int*)((char*)dst + n * 0xc);
+}
+
+// @ 0x006ec4a0
+void S8::m4a0()
+{ }
+
+// @ 0x006ec5b0
+void f5b0(uint* p1, int p2, int p3, int p4)
+{
+    uint d = p2 - (int)p1;
+    while ((int)(d & 0xfffffff8) > 0xe0 && p3 > 0) {
+        uint a = *p1;
+        int i = (p2 - (int)p1) >> 3;
+        i = (i - (i >> 0x1f)) >> 1;
+        uint x = p1[i * 2];
+        uint y = x;
+        uint* m = p1 + i * 2;
+        uint* p = p1;
+        if (x < a) { y = a; m = p1; p = p1 + i * 2; a = x; }
+        if (a <= *(uint*)(p2 - 8) && *(uint*)(p2 - 8) < y)
+            p = (uint*)(p2 - 8);
+        int r = f_6ebe50(p1, p2, *p, p[1], p4);
+        p3--;
+        f5b0((uint*)r, p2, p3, p4);
+        d = r - (int)p1;
+        p2 = r;
+    }
+    if (p3 == 0)
+        f_ac3fa0_s006e_c0c0(p1, (uint*)p2, p4);
+}
+
+// @ 0x006ec660
+void S8::m660(void* src)
+{
+    char* d = (char*)this;
+    char* s = (char*)src;
+    char* q = d + 0x14;
+    *(void**)(d + 0x10) = q;
+    *(void**)(d + 4) = q;
+    *(void**)d = q;
+    *(void**)(d + 8) = d + 0x94;
+    *(ushort*)q = 0;
+    f_6ebd20(*(int*)s, *((int*)s + 1));
+}
+
+// @ 0x006ec6d0
+int __cdecl f6d0(int p1, int p2, int p3)
+{
+    if (p1 != p2) {
+        do {
+            int i = *(int*)(p1 + 4);
+            if ((int)((*(int*)(p1 + 0xc) - i) & 0xfffffffe) > 2 && i != 0 &&
+                i != *(int*)(p1 + 0x14))
+                f_f47380_s006e_c0c0((void*)i);
+            p1 += 0xc0;
+            p3 += 0xc0;
+        } while (p1 != p2);
+    }
+    return p3;
+}
+
+// @ 0x006ec730
+S8* S8::m730()
+{
+    char* p = (char*)this;
+    *(uchar*)p = 0;
+    char* q = p + 0x18;
+    *(void**)(p + 0x14) = q;
+    *(void**)(p + 8) = q;
+    *(void**)(p + 4) = q;
+    *(void**)(p + 0xc) = p + 0x98;
+    *(ushort*)q = 0;
+    *(int*)(p + 0x98) = 0;
+    *(int*)(p + 0x9c) = 0;
+    *(float*)(p + 0xa8) = 12.0f;
+    *(int*)(p + 0xa0) = -1;
+    *(int*)(p + 0xa4) = -1;
+    float one = 1.0f;
+    *(float*)(p + 0xac) = one;
+    *(float*)(p + 0xb0) = one;
+    *(float*)(p + 0xb4) = one;
+    *(float*)(p + 0xb8) = one;
+    *(float*)(p + 0xbc) = one;
+    return this;
+}
+
+// @ 0x006ec840
+void S8::m840(int a, int b)
+{
+    char* self = (char*)this;
+    // eastl::vector<AutoRefCount<...>>::erase + release tail; approximate
+    int* end = *(int**)(self + 4);
+    int* it = end;
+    for (; it < end; it++) { }
+    (void)a; (void)b;
+}
+
+// @ 0x006ec8a0
+void S8::m8a0()
+{ }
+
+// @ 0x006eca50
+void __stdcall fca50(char* p1, char* p2)
+{
+    for (; p1 < p2; p1 += 0xc0) {
+        int i = *(int*)(p1 + 4);
+        if (((2 < (int)(*(int*)(p1 + 0xc) - i & 0xfffffffeU)) && (i != 0)) &&
+            (i != *(int*)(p1 + 0x14)))
+            f_f47380_s006e_c0c0((void*)i);
+    }
+}
+
+// @ 0x006ecaa0
+void S8::maa0()
+{ }
+
+// @ 0x006ecb40
+void S8::mb40()
+{ }
+
+// @ 0x006ecdd0
+void S8::mdd0(int a, int b)
+{
+    int loc[3];
+    loc[0] = a; loc[1] = b; loc[2] = 0;
+    char* self = (char*)this;
+    int* p = *(int**)(self + 0xc);
+    if (p < *(int**)(self + 0x10)) {
+        *(int**)(self + 0xc) = p + 3;
+        if (p != 0) {
+            p[0] = loc[0];
+            p[1] = loc[1];
+            p[2] = loc[2];
+            return;
+        }
+    }
+    ((VecC*)(self + 8))->DoInsert(p, loc);
+}
+
+// @ 0x006ece30
+void S8::me30(int a, int b, int c)
+{
+    int loc[3];
+    loc[0] = a; loc[1] = b; loc[2] = c;
+    char* self = (char*)this;
+    int* p = *(int**)(self + 0xc);
+    if (p < *(int**)(self + 0x10)) {
+        *(int**)(self + 0xc) = p + 3;
+        if (p != 0) {
+            p[0] = loc[0];
+            p[1] = loc[1];
+            p[2] = loc[2];
+            return;
+        }
+    }
+    ((VecC*)(self + 8))->DoInsert(p, loc);
+}
+
+// @ 0x006ece90
+void S8::me90(int n, int* a, int* b)
+{
+    char* self = (char*)this;
+    while (n != 0) {
+        int loc[3];
+        loc[1] = *b;
+        int* p = *(int**)(self + 0xc);
+        loc[0] = *a;
+        loc[2] = 0;
+        n--;
+        if (p < *(int**)(self + 0x10)) {
+            *(int**)(self + 0xc) = p + 3;
+            if (p != 0) {
+                p[0] = loc[0]; p[1] = loc[1]; p[2] = 0;
+            }
+        } else {
+            ((VecC*)(self + 8))->DoInsert(p, loc);
+        }
+        b++;
+        a++;
+    }
+}
+
+// @ 0x006ecf10
+void S8::mf10()
+{
+    char* self = (char*)this;
+    for (int i = 0; i < 0x28; i += 4) {
+        int r = f_7c3af0(*(int*)(i + 0x1533cd0));
+        VecC* v = (VecC*)(self + 0x30d54);
+        int* p = v->e;
+        if (p < v->cap) {
+            v->e = p + 1;
+            if (p)
+                *p = r;
+        } else {
+            int loc = r;
+            f_grow4(v, &loc);
+        }
+    }
+    for (int i = 0; i < 0x28; i += 4) {
+        int r = f_7c3af0(*(int*)(i + 0x1533ca8));
+        VecC* v = (VecC*)(self + 0x30d68);
+        int* p = v->e;
+        if (p < v->cap) {
+            v->e = p + 1;
+            if (p)
+                *p = r;
+        } else {
+            int loc = r;
+            f_grow4(v, &loc);
+        }
+    }
+}
+
+// @ 0x006ecfc0
+void S8::mfc0(void* src)
+{
+    char* d = (char*)this;
+    char* s = (char*)src;
+    *(uchar*)d = *(uchar*)s;
+    if (d + 4 != s + 4) {
+        if (*(ushort*)(d + 4) != *(ushort*)(d + 8)) {
+            **(ushort**)(d + 4) = 0;
+            *(uint*)(d + 8) = *(uint*)(d + 4);
+        }
+        f_6ebd20(*(int*)(s + 4), *(int*)(s + 8));
+    }
+    *(float*)(d + 0x98) = *(float*)(s + 0x98);
+    *(float*)(d + 0x9c) = *(float*)(s + 0x9c);
+    *(uint*)(d + 0xa0) = *(uint*)(s + 0xa0);
+    *(uint*)(d + 0xa4) = *(uint*)(s + 0xa4);
+    *(float*)(d + 0xa8) = *(float*)(s + 0xa8);
+    *(float*)(d + 0xac) = *(float*)(s + 0xac);
+    *(uint*)(d + 0xb0) = *(uint*)(s + 0xb0);
+    *(uint*)(d + 0xb4) = *(uint*)(s + 0xb4);
+    *(uint*)(d + 0xb8) = *(uint*)(s + 0xb8);
+    *(uint*)(d + 0xbc) = *(uint*)(s + 0xbc);
+}
+
+// @ 0x006ed070
+void S8::md070()
+{ }
+
+// @ 0x006ed1a0
+void S8::md1a0(int idx, char v)
+{
+    char* self = (char*)this;
+    if (idx < 0)
+        return;
+    if (idx >= (*(int*)(self + 0x4c) - *(int*)(self + 0x48)) / 0x70)
+        return;
+    int off = idx * 0x70;
+    char* p = (char*)(*(int*)(self + 0x48) + 0x48 + off);
+    if (*p != v) {
+        *p = v;
+        if (v != 0 && *(char*)(*(int*)(self + 0x48) + 0x49 + off) == 0) {
+            int t = idx & 0xffff;
+            f_6f66a0(&t);
+            *(char*)(*(int*)(self + 0x48) + 0x49 + off) = 1;
+        }
+    }
+}
+
+// @ 0x006ed210
+void S8::md210(int idx)
+{
+    char* self = (char*)this;
+    if (idx < 0)
+        return;
+    if (idx >= (*(int*)(self + 0x178) - *(int*)(self + 0x174)) / 0x70)
+        return;
+    int off = idx * 0x70;
+    char* e = (char*)(*(int*)(self + 0x174) + off);
+    if (*(int*)e == 0)
+        return;
+    *(int*)e = 0;
+    *(uchar*)(e + 0x48) = 0;
+    int v = *(int*)(e + 0x64);
+    if (v != 0) {
+        void* h = *(void**)(self + 0x1e0);
+        if (h)
+            ((void(__thiscall*)(void*, int))VFN(h, 0x20))(h, v);
+        *(int*)(e + 0x64) = 0;
+    }
+    VecC* vv = (VecC*)(self + 0x19c);
+    int* p = vv->e;
+    if (p < vv->cap) {
+        vv->e = p + 1;
+        if (p) {
+            *p = idx;
+            return;
+        }
+    }
+    int loc = idx;
+    f_grow4(vv, &loc);
+}
 
 // @ 0x006ed2c0
 void cEffectsRenderer::SetTextureParticleActive(int index, bool active)
@@ -1600,10 +2225,6 @@ void cEffectsRenderer::SetTextureParticleActive(int index, bool active)
     mActiveTextureParticleSets.push_back((unsigned short)index);
     p.mInActiveList = 1;
 }
-
-
-
-
 
 // @ 0x006ed340
 void cEffectsRenderer::RemoveParticleSet(int index)
@@ -1632,10 +2253,6 @@ void cEffectsRenderer::RemoveParticleSet(int index)
     mFreeIDs.push_back(index);
 }
 
-
-
-
-
 // @ 0x006ed8d0
 cEffectsModel::cEffectsModel(unsigned, unsigned, unsigned, const float* box)
 {
@@ -1648,18 +2265,11 @@ cEffectsModel::cEffectsModel(unsigned, unsigned, unsigned, const float* box)
     }
 }
 
-
-
-
-
 // @ 0x006eeb60
 void vector_insert_stub(void* self, void* a, void* b)
 {
     (void)self; (void)a; (void)b;
 }
-
-
-
 
 // @ 0x006ef990
 void Release(cEffectsModelR* self)
@@ -1677,8 +2287,6 @@ void Release(cEffectsModelR* self)
         ((void (__thiscall*)(void*, int))self->mpVtable[0])(self, 1);
     }
 }
-
-
 
 // @ 0x006ef9e0
 bool cEffectsRendererSystem::Init()
@@ -1709,22 +2317,16 @@ bool cEffectsRendererSystem::Init()
     return true;
 }
 
-
-
 // @ 0x006efa90
 char cEffectsRendererSystem::Shutdown()
 {
     return 1;
 }
 
-
-
 // @ 0x006efb90
 void CreateEffectsRendererSystem()
 {
 }
-
-
 
 // @ 0x006efc10
 void DestroyEffectsRendererSystem()
@@ -1738,35 +2340,25 @@ void DestroyEffectsRendererSystem()
     g_pEffectsRendererSystem = 0;
 }
 
-
-
 // @ 0x006efc70
 void RenderSomething(int)
 {
 }
-
-
 
 // @ 0x006efe90
 void RenderTextureParticlesStub()
 {
 }
 
-
-
 // @ 0x006f0320
 void EffectsHelper320(int)
 {
 }
 
-
-
 // @ 0x006f05a0
 void EffectsHelper5a0(int)
 {
 }
-
-
 
 // @ 0x006f0890
 bool Effects890::Shutdown()
@@ -1855,7 +2447,6 @@ bool Effects890::Shutdown()
     }
     return true;
 }
-
 
 // @ 0x006f0b90
 void Effects0B90::Render(unsigned flags, Region** pr, int arg)
@@ -1972,7 +2563,6 @@ void Effects0B90::Render(unsigned flags, Region** pr, int arg)
     }
 }
 
-
 // @ 0x006f0fb0
 bool Effects0FB0::AddParticleSet(int id, const SetDesc* d, int* outIndex)
 {
@@ -2051,7 +2641,6 @@ bool Effects0FB0::AddParticleSet(int id, const SetDesc* d, int* outIndex)
     ((unsigned char*)s)[0x49] = keep;
     return true;
 }
-
 
 // @ 0x006f1770
 bool AddParticleSet(int a, int b, int c, int d)

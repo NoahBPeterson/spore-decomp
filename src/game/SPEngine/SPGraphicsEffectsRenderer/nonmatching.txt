@@ -12,8 +12,27 @@
 006e8160 97 complete; x87 div scheduled as fld+fidiv instead of fild+fdivr (source-expression dependent)
 006e8200 50 complete; byte-arg movzx and register assignment in the two thiscall input handlers
 006e8480 639 complete; cl hoisted xor ebx/loop-pointer setup and reordered the three destroy/rebuild loops
+006e9b00 121 ctor-style field init (0x00..0x6c); declared to return this (S5*) so eax matches the original's `mov eax,ecx`; equiv: PASS 400/400, 100% coverage (original's C++ EH prolog not reproduced)
+006e9bf0 123 ctor-style field init (other layout, 0x00..0x68); declared to return this (S5*) so eax matches the original; equiv: PASS 400/400, 100% coverage
+006e9cc0 91 complete; field-init order/schedule differ
+006e9d50 692 complete; projection math schedule differs
 006ea9e0 364 complete; entity box setter (vtable pool alloc + transform), schedule and compare layout differ
 006ead40 196 complete; transform setter, cSPTransform call and update-index schedule differ
+006eb6e0 308 complete; cEffectsCameraManager::UpdateCameraView, vcall argument/schedule layout differs
+006eb9d0 46 complete; pivot/rotate helper, loop rotation and register assignment differ
+006ebe50 60 complete; Hoare partition, loop rotation and operand order differ
+006ebea0 81 complete; sort helper, register assignment/loop shape differ
+006ebf50 137 ctor pointer-init + Vector3 splat; declared to return this (S7*) so eax matches the original's `mov eax,ecx`; equiv: PASS 400/400, 100% coverage
+006ec5b0 143 complete; quicksort median-of-three driver, scheduling/register layout differs
+006ec660 38 complete; string setup + FUN_006ebd20 ctor, stack layout differs
+006ec730 99 complete; state ctor, register/temp ordering differs (extra esi zero reg)
+006ecdd0 69 complete; vector<Pair3> push_back, local temp placement/`add ecx,8` differs
+006ece30 57 complete; vector<Pair3> push_back(3 args), temp placement differs
+006ece90 106 complete; vector<Pair3> fill_n loop, schedule differs
+006ecf10 97 complete; builds two resource-vector lists, loop shape/register differs
+006ecfc0 126 complete; struct copy-assign, field schedule differs
+006ed1a0 87 complete; per-entity enable flag, register/schedule differs
+006ed210 147 complete; per-entity teardown + free-id push, schedule differs
 006ed2c0 63 complete; cl folds the element pointer as `imul esi; add esi,[ecx+0x174]` (11B) instead of the original `mov eax,[ecx+0x174]; mov edx,edi; imul edx,edx,0x70; lea esi,[edx+eax]` (14B), shifting every following byte.
 006efc10 7 complete; cl keeps the object in esi and moves to ecx for the destructor call, original reloads the global into ecx and spills a copy to esi.
 006f0890 684 complete cEffectsRenderer shutdown; register allocation/store scheduling differ (loop locals, hoisted stores)

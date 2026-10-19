@@ -1,2 +1,12 @@
-006eb6e0 SP::cEffectsCameraManager::UpdateCameraView  # pdb_names.json + card.py header
+006dd250 ?Lock@VertexBuffer@graphics@rw@@QAEPAV123@IAAVBatchIterator@123@AAIII@Z  # rw::graphics::VertexBuffer::Lock (callee of s006eae40, named from the dev publics; slice address comment)
 006eae40 SP::cEffectsRenderer::ReleaseAndDrawModelBuffer  # PDB candidate; flushes buffered model instances (instanced draw via SetStreamSourceFreq, or per-instance frustum-culled dispatch)
+006eb6e0 ?UpdateCameraView@CEM7@@QAEXHI@Z  # CEM7::UpdateCameraView migrated from s006eae40 (verbatim, slice spelling)
+006eb8c0 ?m6eb8c0@S7@@QAEXPAX@Z  # S7::m6eb8c0 migrated from s006eae40 (verbatim, slice spelling)
+006eb990 ?f990@@YGXPAD0@Z  # f990 migrated from s006eae40 (verbatim, slice spelling)
+006eb9d0 ?f9d0@@YAXPAI0H@Z  # f9d0 migrated from s006eae40 (verbatim, slice spelling)
+006ebb80 ?m6ebb80@S7@@QAEPAU1@PAX@Z  # S7::m6ebb80 migrated from s006eae40 (verbatim, slice spelling)
+006ebe50 ?fbe50@@YAXPAI0I@Z  # fbe50 migrated from s006eae40 (verbatim, slice spelling)
+006ebea0 ?fbea0@@YAXPAI00H@Z  # fbea0 migrated from s006eae40 (verbatim, slice spelling)
+006ebf50 ?mebf50@S7@@QAEPAU1@XZ  # S7::mebf50 migrated from s006eae40 (verbatim, slice spelling)
+006ec000 ?mec000@S7@@QAEXXZ  # S7::mec000 migrated from s006eae40 (verbatim, slice spelling)
+006ec090 ?mec090@S7@@QAEXXZ  # S7::mec090 migrated from s006eae40 (verbatim, slice spelling)

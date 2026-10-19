@@ -6,6 +6,16 @@
 006e8d70  9  Vector3-by-value forwarder; body stubbed (calls the inner object but does not pack args)
 006e8dd0  9  Vector3-by-value forwarder; body stubbed (calls the inner object but does not pack args)
 006ea920  61  EH destructor; unwind funclet / refcount release detail approximated
+006eb8c0  115  EH copy-ctor; refcount/Matrix33-assign/EH-frame detail approximated
+006ec000  37  EH destructor; vector-dtor call and unwind funclet omitted
+006ec0c0  253  skill/effect resource installer; body omitted (entry shape only)
+006ec260  286  VecC::DoInsert growth path approximated (malloc instead of EA operator new)
+006ec4a0  269  eastl::vector<bool> DoInsertValue; body omitted
+006ec840  82  vector<AutoRefCount>::erase + release tail; body stubbed
+006ec8a0  422  vector<AutoRefCount<visual effect>>::DoInsertValue; body omitted
+006ecaa0  151  vector<AutoRefCount>::~vector; body omitted
+006ecb40  505  vector<AutoRefCount>::DoInsertValues; body omitted
+006ed070  300  eastl::vector<AutoRefCount<Resource>>::DoInsertValue; body omitted
 006ed340  -  approximate: two-path particle-set removal reconstructed without exact intrusive-refcount/EH shapes.
 006ed8d0  -  approximate: cEffectsModel ctor; bounding-box corner/radius SSE selection not reproduced exactly.
 006eeb60  -  skeleton: eastl vector<cTextureParticleSet> insert (stride 0x70 realloc path) not reconstructed.
