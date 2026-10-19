@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/Spui/SPUIBehaviorWinInterpolator.cpp  ?Init@ShadeColor@@QAEXII@Z  007ff5d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIBehaviorWinInterpolator.cpp  ?CopyFromWindow@ShadeColor@@QAEXXZ  007ff600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIBehaviorWinInterpolator.cpp  ?Set@Scale@@QAEXMM@Z  007ff690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIBehaviorWinInterpolator.cpp  ?Set2@Scale@@QAEXM@Z  007ff6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIBehaviorWinInterpolator.cpp  ?SetDefault@Scale@@QAEXXZ  007ff6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
