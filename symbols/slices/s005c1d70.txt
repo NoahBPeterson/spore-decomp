@@ -1,5 +1,6 @@
 005c1d70 SP::cSPPaletteCategory::FindSubCategory  # recursive search over mSubCategories by mCategoryId
-005c2020 SP::cSPPaletteCategory::cSPPaletteCategory  # field defaults match PDB layout
+005c1e20 ?Init@cSPPaletteCategory_s005c_1d70@SP@@QAE_NABUKey_s005c_1d70@ResourceMan@EA@@I@Z  # cSPPaletteCategory_s005c_1d70::Init migrated from s005c1d70 (verbatim, slice spelling)
+005c2020 ??0cSPPaletteCategory_s005c_1d70@SP@@QAE@XZ  # cSPPaletteCategory_s005c_1d70::cSPPaletteCategory migrated from s005c1d70 (verbatim, slice spelling)
 005c20b0 SP::cSPPaletteCategory::~cSPPaletteCategory  # destroys mCategoryName/vectors
 005c2170 ?erase@?$sp_ref_vector@VcSPPalettePage_s005c_1d70@SP@@@eastl@@QAEPAV?$AutoRefCount_s005c_1d70@VcSPPalettePage_s005c_1d70@SP@@@EA@@PAV34@0@Z  # erase migrated from s005c1d70 (verbatim, slice spelling)
 005c2230 SP::cSPPaletteCategory::Shutdown  # dev-build symbol exists; clears pages/packs/subcategories
