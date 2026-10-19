@@ -1,1 +1,3 @@
 slices/s005628d0/s005628d0.cpp  ?FindAssetIndex@LookupDB@SP@@QAEHABUResourceKey@@@Z  005631e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005628d0/s005628d0.cpp  ?FUN_00562d50@LookupDB@SP@@QAEXPAX0@Z  00562d50  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005628d0/s005628d0.cpp  ?FUN_00562e90@LookupDB@SP@@QAE_NPAX00@Z  00562e90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
