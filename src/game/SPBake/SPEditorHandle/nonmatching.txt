@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+0047d950 402 LoadProps: inlined GetPropertyT/GetPropertyAsKey templates and /Od slots differ; equiv WEAK (103 valid, 29% cov) after vtable double-deref fix (pm/mPropList slots)
+0047db30 1661 Init: complete (27/27 calls, all vtable slots 0x16c/0x58/0x48/0x40/0x44/0x38/0x3c, size 1889 vs 1925); /Od local slot order and a few accessor temporaries differ
+0047e2c0 326 Shutdown: inlined AutoRefCount release sequences and /Od slots differ
+0047e6e0 261 GetHandleAlphaForState: switch body layout and inlined-helper local slots differ
+0047e830 261 GetOverdrawHandleAlphaForState: switch body layout and inlined-helper local slots differ
+0047e980 143 GetHandleColorForState: switch body layout and /Od local slots differ
+0047eaa0 143 GetOverdrawHandleColorForState: switch body layout and /Od local slots differ
