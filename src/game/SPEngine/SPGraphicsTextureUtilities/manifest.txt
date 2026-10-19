@@ -3,9 +3,16 @@
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?IsSet@FlagHolder@@QAEEXZ  007ae960  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ??1DxtSurface@@UAE@XZ  007ae980  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ??0DxtSurface@@QAE@XZ  007ae9f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ??1DxtSurfaceEx@@UAE@XZ  007aea30  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?FUN_007af620@@YAXPAUEndpoint@@0PBU1@@Z  007af620  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?FUN_007af670@@YAXPAUEndpoint@@IPBU1@@Z  007af670  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?StepDown@cRowJobData@@QAE_NPAUCJob@@@Z  007afae0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?push_back@C20@@QAEXABUT20@@@Z  007b0f40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?AddNode@C20@@QAEXHH@Z  007b0fa0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?SP_DXTCompress@@YA_NPAUImg@@PAUVecDst@@PAXPAUICom@@@Z  007b1710  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?FUN_007b1830@@YA_NPAUImg@@PAUVecDst@@PAXPAUICom@@@Z  007b1830  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?clear@C20@@QAEXXZ  007b1950  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?f@W1da0@@QAEXPAUS3@@@Z  007b1da0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?PreloadTextureList@TexPreload@@QAEXPAX@Z  007b1de0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?f@W1e70@@QAEXPAX0@Z  007b1e70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?PreloadTextureList@TexPreload@@QAEXPAUPropKey@@@Z  007b1e90  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

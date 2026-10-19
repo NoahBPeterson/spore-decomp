@@ -484,6 +484,20 @@ struct Endpoint {
     int      v[7];   // +0x00
     uint8_t  c;      // +0x1c
 };
+class DxtRefCount_s007a_ea30 { public: long mCount; };
+template<class T> struct RelPtr_s007a_ea30 {
+    T* mp;
+    ~RelPtr_s007a_ea30() { if (mp) mp->Release(); }
+};
+class DxtSurfaceEx : public DxtBase1, public DxtBase2, public DxtRefCount_s007a_ea30 {
+public:
+    RelPtr_s007a_ea30<IRel1> mC;    // +0x0c
+    RelPtr_s007a_ea30<IRel1> m10;   // +0x10
+    int m14[4];          // +0x14
+    RelPtr_s007a_ea30<IRel2> m24;   // +0x24
+    DxtSurfaceEx();
+};
+DxtSurfaceEx::DxtSurfaceEx() { mC.mp = 0; m10.mp = 0; m24.mp = 0; }   // forces the vtable / dtor emission
 uint32_t rtrymapblock(const uint32_t* src, uint32_t raw0, uint32_t raw1);  // 0x7ade70
 uint32_t rbtrymapblock(const uint32_t* src, uint32_t raw0, uint32_t raw1); // 0x7ae0b0
 union DxtColor {
@@ -500,6 +514,77 @@ struct Rgb565 {
 struct EndpointColors {
     uint32_t v[2];
     uint32_t findendpoints(const uint32_t* pixels, uint32_t* out0, uint32_t* out1, int alpha, int quality);
+};
+struct IDxtWriter {
+virtual void w0();
+virtual void w1();
+virtual void w2();
+virtual void w3();
+virtual void w4();
+virtual void w5();
+virtual void w6();
+virtual void w7();
+virtual void w8();
+virtual void w9();
+virtual void w10();
+virtual void w11();
+virtual void w12();
+virtual void w13();
+    virtual void Write(const void* data, int size);   // slot 14 (+0x38)
+};
+struct IDxtStream {
+virtual void s0();
+virtual void s1();
+    virtual void Release();                           // slot 2 (+8)
+virtual void s3();
+virtual void s4();
+virtual void s5();
+    virtual IDxtWriter* GetWriter();                  // slot 6 (+0x18)
+virtual void s7();
+virtual void s8();
+    virtual void Close();                             // slot 9 (+0x24)
+};
+struct DxtKey { uint32_t instance, type, group; };
+struct IDxtStreamMgr {
+virtual void m0();
+virtual void m1();
+virtual void m2();
+virtual void m3();
+virtual void m4();
+virtual void m5();
+virtual void m6();
+virtual void m7();
+virtual void m8();
+virtual void m9();
+virtual void m10();
+virtual void m11();
+    virtual void m12();
+    virtual bool Open(const DxtKey* key, IDxtStream** out, int a, int b, int c, int d);   // slot 13 (+0x34)
+};
+struct DxtMip {
+    char pad00[0x1c];
+    int mWidth;      // +0x1c
+    int mHeight;     // +0x20
+    int pad24;
+    void* mpData;    // +0x28
+};
+template <class T> struct StreamRef {
+    T* mp;
+    StreamRef() : mp(0) {}
+    ~StreamRef() { if (mp) mp->Release(); }
+};
+class DxtImage {
+public:
+    char pad00[0xc];
+    DxtMip** mpMipBegin;       // +0x0c
+    DxtMip** mpMipEnd;         // +0x10
+    char pad14[0xc];
+    IDxtStreamMgr* mpMgr;      // +0x20
+    DxtKey mKey;               // +0x24
+    uint32_t mFormat;          // +0x30
+    int mBlockBytes;           // +0x34
+    int mPixelBytes;           // +0x38
+    bool WriteStream(int unused);
 };
 // ---- items of slice s007aea30 end
 
@@ -580,6 +665,7 @@ struct VecReserve {
 #pragma intrinsic(_InterlockedExchange)
 void* __cdecl EAAlloc(unsigned n, const char* name, int a, int b, const char* f, int l); // 0x00F473A0
 void  __cdecl DestroyElems(void* first, void* last);              // 0x00B007F0
+void** __cdecl CopyIntrusive(void** first, void** last, void** dest); // 0x006F43E0
 void  __cdecl RemoveIf(void* a, void* b, void* c);                // 0x0076DE80
 void* __cdecl MoveNodes(void* a, void* b, void* c);               // 0x007AF5D0
 void  __cdecl MoveNodes2(void* a, void* b, void* c);              // 0x007AF6D0
@@ -601,6 +687,11 @@ struct UVec {
         else DoInsertValue(p, v);
     }
 };
+void* __cdecl MemMove(void* d, const void* s, unsigned n);          // 0x011E0744 (CRT memmove thunk)
+void  __cdecl UninitCopy(struct T20** out, struct T20* a, struct T20* b, struct T20* c, struct T20* d); // 0x0076DE20
+void  __cdecl FillRange(struct T20* a, struct T20* b, const struct T20* v); // 0x007AF620
+void  __cdecl FillN(struct T20* d, unsigned n, const struct T20* v);        // 0x007AF670
+void  __cdecl FillN(struct T20* d, unsigned n, const struct T20* v, struct T20* extra); // 0x007AF670
 struct T20 {
     int a,b,c,d,e,f,g; char h;
     T20& operator=(const T20& o) { a=o.a;b=o.b;c=o.c;d=o.d;e=o.e;f=o.f;g=o.g;h=o.h; return *this; }
@@ -625,6 +716,103 @@ struct C4 {
     void** begin; void** end; void** cap;
     void assign(void** first, void** last, void* tag);            // 0x007b0da0 (ret 0xc; tag unused)
 };
+void* operator new(unsigned int, const char*, int, int, int, int);     // 0x00F473A0
+struct IRc { virtual int AddRef(); virtual int Release(); };           // EA::COM::IUnknown32 shape (slots 0,1)
+struct AtomicLong {
+    volatile long v;
+    AtomicLong() { _InterlockedExchange(&v, 0); }
+};
+struct RcTpl {                                                          // EA::RefCountTemplate<int>
+virtual int AddRef();
+virtual int Release();
+    AtomicLong mRefCount;
+};
+struct ICom { virtual long QueryInterface(); virtual int AddRef(); virtual int Release(); };
+template<class T> struct RcPtr {
+    T* p;
+    void operator=(T* q) {
+        T* old = p;
+        if (q != old) {
+            if (q) q->AddRef();
+            p = q;
+            if (old) old->Release();
+        }
+    }
+};
+template<class T> struct AutoRC {
+    T* p;
+    AutoRC(T* q) : p(q) { if (p) p->AddRef(); }
+    ~AutoRC() { if (p) p->Release(); }
+};
+struct Img : IRc { uint32_t pad[6]; int mWidth; int mHeight; int mFormat; void* mData; };   // +0x1c/+0x20/+0x24/+0x28
+struct ImgA : Img { ImgA(int w, int h); };                              // 0x007A9E10 (format 1 chain)
+struct ImgB : Img { ImgB(int w, int h); };                              // 0x004328D0
+struct ImgVec { Img** b; Img** e; };                                    // the caller's image list
+struct cJob {
+    void* mpCallback;           // +0x0
+    void* mpCallbackData;       // +0x4
+    IRc*  mpExtraObject;        // +0x8
+    char* mpDebugName;          // +0xc
+    int   mPriority;            // +0x10
+    int   mStatus;              // +0x14
+    unsigned mThreadAffinity;   // +0x18
+    int   mSlot;                // +0x1c
+    void* mpReturnValue;        // +0x20
+    void* mpCleanupReturnValue; // +0x24
+    int  Release();             // 0x00690120
+    void Attach(IRc* d);        // 0x0068F9B0
+    void GetStatus() const;     // 0x006909B0
+    void Wait();                // 0x006926B0
+};
+struct AutoJob {
+    cJob* p;
+    AutoJob() : p(0) {}
+    ~AutoJob() { if (p) p->Release(); }
+    void Reset() { cJob* t = p; if (t) { p = 0; t->Release(); } }
+};
+struct VecDst { void** Assign(struct MipVec* other); };                // 0x007B0980 __thiscall (eastl vector assignment)
+struct Sched {                                                          // job scheduler singleton
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+    virtual bool Acquire(AutoJob* out);                                 // vtable +0x10
+};
+Sched* __cdecl GetSched();                                              // 0x0068F4D0
+void   __cdecl DispatchAsync(cJob* j);                                  // 0x006B47A0
+bool   __cdecl FUN_007b0020();
+bool   __cdecl FUN_007b03d0();
+struct MipVec {
+    RcPtr<Img>* b; RcPtr<Img>* e; RcPtr<Img>* c;
+    MipVec() : b(0), e(0), c(0) {}
+    void resize(unsigned n);                                            // 0x00421BF0 __thiscall
+};
+struct MipChain : MipVec, IRc, RcTpl {                                  // 0x20 bytes, vtables 0x140FC04/0x140FC00
+    uint32_t pad[2];
+virtual int AddRef();
+virtual int Release();
+};
+struct DxtData : IRc, RcTpl {                                           // 0x1c bytes, vtables 0x140FBDC/0x140FBD8
+    RcPtr<MipChain> chain;                                              // +0xc
+    int   mMessage;                                                     // +0x10
+    RcPtr<ICom> mHandler;                                               // +0x14
+    char  mFlag;                                                        // +0x18
+    DxtData() { chain.p = 0; mHandler.p = 0; }
+virtual int AddRef();
+virtual int Release();
+};
+struct Owner { void* vt0; IRc sub; };                                   // refcount interface lives at +4
+struct TexVec : C4 { TexVec() { begin = 0; end = 0; cap = 0; } };
+struct TexData : TexVec, IRc, RcTpl {                                   // 0x3c bytes, vtables 0x140FC18/0x140FC14
+    uint32_t pad[2];
+    Owner* mOwner;                                                      // +0x20
+    int mSize[3];                                                       // +0x24
+    int mFmt; int mBlockBytes; int mBytesPerPixel;                      // +0x30
+    TexData() { mOwner = 0; mSize[0] = 0; mSize[1] = 0; mSize[2] = 0; }
+    bool Upload(int flag);                                              // 0x007AF720 __thiscall
+virtual int AddRef();
+virtual int Release();
+};
 // ---- items of slice s007b0a70 end
 
 // ---- items of slice s007b19c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -647,6 +835,87 @@ struct W1e70 {
 struct W1da0 {
     void Handler(void* r);                          // 0x007B1AF0 __thiscall
     void f(S3* p);
+};
+long AtomicAdd(volatile long* p, long v);  // 0x007b26a0 (defined below; used by a stub's inline body)
+struct cTexInst {
+    void* vt; unsigned flags; volatile long refCount;
+    void AddRef() { AtomicAdd(&refCount, 1); }
+    void Release()
+    {
+        volatile long* rc = &refCount;
+        AtomicAdd(rc, -1);
+        long v = AtomicAdd(rc, 0);
+        if (v < 1)
+            AtomicAdd(rc, 1);
+        else
+            AtomicAdd(rc, 0);
+    }
+};
+struct TexRef {
+    cTexInst* p;
+    TexRef() : p(0) {}
+    TexRef(cTexInst* o) : p(o) { if (o) o->AddRef(); }
+    TexRef(const TexRef& o) : p(o.p) { if (p) p->AddRef(); }
+    ~TexRef() { if (p) p->Release(); }
+};
+struct TexRefVec {
+    TexRef* mpBegin; TexRef* mpEnd; TexRef* mpCap;
+    void DoInsertValue(TexRef* pos, const TexRef* v);   // 0x00425a80
+    void push_back(cTexInst* raw, const TexRef& v) {
+        if (mpEnd < mpCap) {
+            TexRef* d = mpEnd;
+            mpEnd = d + 1;
+            if (d) {
+                d->p = raw;
+                raw->AddRef();
+            }
+        } else {
+            DoInsertValue(mpEnd, &v);
+        }
+    }
+    void push_back(const TexRef& v) {
+        if (mpEnd < mpCap) {
+            TexRef* d = mpEnd;
+            mpEnd = d + 1;
+            if (d) new (d) TexRef(v);
+        } else {
+            DoInsertValue(mpEnd, &v);
+        }
+    }
+};
+struct IPropList { virtual void v0(); virtual void Release(); };
+struct PropListRef {
+    IPropList* p;
+    PropListRef() : p(0) {}
+    ~PropListRef() { if (p) p->Release(); }
+    void reset() { if (p) { IPropList* q = p; p = 0; q->Release(); } }
+};
+struct IPropMgr {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+    virtual bool GetPropertyList(unsigned grp, unsigned inst, PropListRef* out);   // +0x2c
+};
+IPropMgr* __cdecl PropertyManager();                 // 0x0067DE30
+bool __cdecl GetPropArray(void* list, unsigned id, int* count, char** data);   // 0x006A0AE0
+struct PropKey { unsigned group, x, inst; };
+struct TexPreload {
+    char pad0[0xc];
+    TexRefVec mQueue;                               // +0x0c
+    char pad1[8];
+    TexRefVec mReady;                               // +0x20
+    bool MoveReady();                               // 0x007B19C0
+    void Push(cTexInst* t);                         // 0x007B1AF0
+    void PreloadTextureList(void* list);            // 0x007B1DE0
+    void PreloadTextureList(PropKey* key);          // 0x007B1E90
 };
 struct Span_s007b_19c0 {  // 0x007AE920
     int d[8];
@@ -982,6 +1251,14 @@ DxtSurface::DxtSurface()
 {
 }
 
+// @ 0x007aea30
+#pragma auto_inline(off)
+void DestroyDxtSurfaceEx(DxtSurfaceEx* p)
+{
+    p->~DxtSurfaceEx();
+}
+#pragma auto_inline(on)
+
 // @ 0x007aeab0
 uint32_t EndpointColors::findendpoints(const uint32_t* pixels, uint32_t* out0, uint32_t* out1, int alpha, int quality)
 {
@@ -1278,6 +1555,38 @@ void FUN_007af6d0(Endpoint* first, Endpoint* last, Endpoint* dest)
     }
 }
 
+// @ 0x007af720
+bool DxtImage::WriteStream(int unused)
+{
+    (void)unused;
+    StreamRef<IDxtStream> stream;
+    if (mpMgr->Open(&mKey, &stream.mp, 2, 2, 1, 0)) {
+        IDxtWriter* w = stream.mp->GetWriter();
+        int n = (int)(mpMipEnd - mpMipBegin);
+        uint32_t hdr[6];
+        hdr[0] = 1;
+        hdr[1] = (uint32_t)mpMipBegin[0]->mWidth;
+        hdr[2] = (uint32_t)mpMipBegin[0]->mHeight;
+        hdr[3] = (uint32_t)n;
+        hdr[4] = 8;
+        hdr[5] = mFormat;
+        w->Write(hdr, 0x18);
+        for (int i = 0; i < n; ++i) {
+            DxtMip* mip = mpMipBegin[i];
+            int size;
+            if (mBlockBytes != 0)
+                size = ((mip->mHeight + 3) / 4) * ((mip->mWidth + 3) / 4) * mBlockBytes;
+            else
+                size = mip->mHeight * mip->mWidth * mPixelBytes;
+            w->Write(&size, 4);
+            w->Write(mip->mpData, size);
+        }
+        stream.mp->Close();
+        return true;
+    }
+    return false;
+}
+
 // @ 0x007afae0
 bool cRowJobData::StepDown(CJob* job)
 {
@@ -1500,6 +1809,49 @@ void C20::grow(T20* pos, const T20& v)
     begin = p;
 }
 
+// @ 0x007b0be0
+void C20::InsertN(T20* pos, unsigned n, const T20* v)
+{
+    unsigned n0 = n;
+    T20* e = end;
+    if (n0 <= (unsigned)(cap - e)) {
+        if (n0 > 0) {
+            T20 tmp;
+            unsigned after = (unsigned)(e - pos);
+            T20* e2 = end;
+            tmp = *v;
+            if (n0 < after) {
+                T20* src = e2 - n0;
+                UninitCopy(&pos, src, e2, e2, pos);
+                end += n0;
+                MoveNodes2(pos, src, e2);
+                FillRange(pos, pos + n0, &tmp);
+            } else {
+                FillN(e2, n0 - after, &tmp);
+                end += n0 - after;
+                UninitCopy(&pos, pos, e2, end, pos);
+                end += after;
+                FillRange(pos, e2, &tmp);
+            }
+        }
+    } else {
+        unsigned cnt = (unsigned)(e - begin);
+        unsigned nc = cnt ? cnt * 2 : 1;
+        n = cnt + n0;
+        if (n < nc) n = nc;
+        T20* p = n ? (T20*)EAAlloc(n << 5, "Graphics", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+        T20* q = (T20*)MoveNodes(begin, pos, p);
+        FillN(q, n0, v, pos);
+        T20* ne = (T20*)MoveNodes(pos, end, q + n0);
+        if (begin && ((int*)begin)[-1])
+            EAFree(begin);
+        begin = p;
+        end = ne;
+        cap = p + n;
+    }
+}
+
 // @ 0x007b0da0
 void C4::assign(void** first, void** last, void* tag)
 {
@@ -1526,6 +1878,27 @@ void C4::assign(void** first, void** last, void* tag)
     end = (void**)((char*)end + (n - cur)*4);
 }
 
+// @ 0x007b0e60
+void C20::Reap(int idx)
+{
+    unsigned a;
+    begin[idx].h = 0;
+    int p = begin[idx].e;
+    while (p >= 0) {
+        a = begin[p].f;
+        idx = begin[p].g;
+        if (begin[a].f >= 0) return;
+        if (begin[a].h) return;
+        if (begin[idx].f >= 0) return;
+        if (begin[idx].h) return;
+        begin[p].f = -1;
+        begin[p].g = -1;
+        fv.push_back(a);
+        fv.push_back(idx);
+        p = begin[p].e;
+    }
+}
+
 // @ 0x007b0f40
 void C20::push_back(const T20& v)
 {
@@ -1537,6 +1910,25 @@ void C20::push_back(const T20& v)
     } else {
         grow(p, v);
     }
+}
+
+// @ 0x007b0fa0
+void C20::AddNode(int a, int b)
+{
+    T20* b0 = begin;
+    T20* e0 = end;
+    RemoveIf(e0, e0, b0);
+    end -= (e0 - b0);
+    UVec* f = &fv;
+    unsigned* fe = f->e;
+    unsigned* fb = f->b;
+    MemMove(fb, fe, (char*)f->e - (char*)fe);
+    f->e -= (fe - fb);
+    Reserve(16);
+    f->reserve(16);
+    T20 t;
+    t.a = 0; t.b = 0; t.c = a; t.d = b; t.e = -1; t.f = -1; t.g = -1; t.h = 0;
+    push_back(t);
 }
 
 // @ 0x007b1040
@@ -1564,6 +1956,174 @@ int C20::Alloc()
     int n = (int)(end - begin);
     resize(n + 1);
     return n;
+}
+
+// @ 0x007b10d0
+bool SP_RegisterImagesAsTexture(ImgVec* images, int* size, Owner* owner, bool async)
+{
+    Img** it = images->b;
+    int n = (int)(images->e - it);
+    Img* first = *it;
+    unsigned w = first->mWidth;
+    if (w != (unsigned)first->mHeight || (w & (w - 1)) != 0)
+        return false;
+    for (int i = 1; i < n; ++i) {
+        Img* cur = it[i];
+        Img* prev = it[i - 1];
+        if (cur->mFormat != prev->mFormat || cur->mWidth != prev->mWidth / 2 || cur->mHeight != prev->mHeight / 2)
+            return false;
+    }
+    int fmt = 0, blockBytes = 0, bpp = 0;
+    switch (first->mFormat) {
+    case 1: fmt = 0x1c; bpp = 1; break;
+    case 2: fmt = 0x15; bpp = 4; break;
+    case 4: fmt = 0x31545844; blockBytes = 8; break;
+    case 5: fmt = 0x33545844; blockBytes = 16; break;
+    case 6: fmt = 0x35545844; blockBytes = 16; break;
+    default: return false;
+    }
+    TexData* o = new("Graphics", 0, 0, 0, 0) TexData;
+    AutoRC<TexData> h((TexData*)o);
+    o->assign((void**)images->b, (void**)images->e, images);
+    {
+        Owner* old = o->mOwner;
+        if (owner != old) {
+            if (owner) owner->sub.AddRef();
+            o->mOwner = owner;
+            if (old) old->sub.Release();
+        }
+    }
+    o->mSize[0] = size[0];
+    o->mSize[1] = size[1];
+    o->mSize[2] = size[2];
+    o->mFmt = fmt;
+    o->mBlockBytes = blockBytes;
+    o->mBytesPerPixel = bpp;
+    bool ok = false;
+    if (async) {
+        AutoJob job;
+        Sched* s = GetSched();
+        job.Reset();
+        if (s->Acquire(&job)) {
+            job.p->Attach(o);
+            job.p->mpCallback = (void*)&FUN_007b0020;
+            job.p->mpCallbackData = o;
+            job.p->mThreadAffinity = 4;
+            DispatchAsync(job.p);
+            job.p->GetStatus();
+            ok = true;
+        }
+    } else {
+        ok = o->Upload(0);
+    }
+    return ok;
+}
+
+// @ 0x007b13b0
+bool FUN_007b13b0(Img* img, cJob** out, char flag)
+{
+    unsigned w = img->mWidth;
+    if (w != (unsigned)img->mHeight || (w & (w - 1)) != 0)
+        return false;
+    if ((flag != 0 || img->mFormat != 1) && img->mFormat != 2)
+        return false;
+    int mips = 0;
+    for (int t = (int)w; t != 0; t >>= 1)
+        ++mips;
+    AutoJob job;
+    Sched* s = GetSched();
+    job.Reset();
+    if (s->Acquire(&job)) {
+    MipChain* mc = new("Graphics", 0, 0, 0, 0) MipChain;
+    AutoRC<MipChain> list(mc);
+    list.p->resize(mips);
+    list.p->b[0] = img;
+    for (int i = 1; i < mips; ++i) {
+        Img* src = list.p->b[i - 1].p;
+        Img* r;
+        if (img->mFormat == 1)
+            r = new("Graphics", 0, 0, 0, 0) ImgA(src->mWidth / 2, src->mHeight / 2);
+        else
+            r = new("Graphics", 0, 0, 0, 0) ImgB(src->mWidth / 2, src->mHeight / 2);
+        list.p->b[i] = r;
+    }
+    DxtData* d = new("Graphics", 0, 0, 0, 0) DxtData;
+    AutoRC<DxtData> data(d);
+    data.p->chain = list.p;
+    data.p->mMessage = 0;
+    ICom* t = data.p->mHandler.p;
+    if (t) {
+        data.p->mHandler.p = 0;
+        t->Release();
+    }
+    data.p->mFlag = flag;
+    job.p->Attach(data.p);
+    job.p->mSlot = 1;
+    job.p->mpCallback = (void*)&FUN_007b03d0;
+    job.p->mpCallbackData = data.p;
+    job.p->mThreadAffinity = 1;
+    *out = job.p;
+    job.p = 0;
+    return true;
+    }
+    return false;
+}
+
+// @ 0x007b1710
+bool SP_DXTCompress(Img* image, VecDst* outImages, void* message, ICom* handler)
+{
+    AutoJob job;
+    if (!FUN_007b13b0(image, &job.p, 0))
+        return false;
+    DxtData* d = (DxtData*)job.p->mpExtraObject;
+    d->mMessage = (int)message;
+    d->mHandler = handler;
+    MipVec* v = d->chain.p;
+    outImages->Assign(v);
+    job.p->GetStatus();
+    if (!message) {
+        job.p->Wait();
+        void* r = job.p->mpReturnValue;
+        return r == d->chain.p;
+    }
+    return true;
+}
+
+// @ 0x007b1830
+bool FUN_007b1830(Img* image, VecDst* outImages, void* message, ICom* handler)
+{
+    AutoJob job;
+    if (!FUN_007b13b0(image, &job.p, 1))
+        return false;
+    DxtData* d = (DxtData*)job.p->mpExtraObject;
+    d->mMessage = (int)message;
+    d->mHandler = handler;
+    MipVec* v = d->chain.p;
+    outImages->Assign(v);
+    job.p->GetStatus();
+    if (!message) {
+        job.p->Wait();
+        void* r = job.p->mpReturnValue;
+        return r == d->chain.p;
+    }
+    return true;
+}
+
+// @ 0x007b1950
+void C20::clear()
+{
+    void** b1 = v0.b;
+    void** e1 = v0.e;
+    PVec* p = &v0;
+    void** r = CopyIntrusive(e1, e1, b1);
+    p->DestroyRange(r, p->e);
+    p->e -= (e1 - b1);
+    void** e2 = v2.e;
+    p = &v2;
+    void** b2 = p->b;
+    r = CopyIntrusive(e2, e2, b2);
+    p->DestroyRange(r, p->e);
+    p->e -= (e2 - b2);
 }
 
 // @ 0x007b1bb0
@@ -1619,6 +2179,34 @@ void W1da0::f(S3* p)
     Handler(fac->v7(*p, 0));
 }
 
+// @ 0x007b1de0
+void TexPreload::PreloadTextureList(void* list)
+{
+    char* data = 0;
+    int count = 0;
+    if (GetPropArray(list, 0x85155a0c, &count, &data)) {
+        int off = 0;
+        for (int i = 0; i < count; i++) {
+            S3* e = (S3*)(data + off);
+            IFac_s007b_19c0* fac = (IFac_s007b_19c0*)FUN_0067dd60();
+            Push((cTexInst*)fac->v7(*e, 0));
+            off += 12;
+        }
+    }
+}
+
 // @ 0x007b1e70
 void W1e70::f(void* a, void* b)
 { helper(0, a, b); }
+
+// @ 0x007b1e90
+void TexPreload::PreloadTextureList(PropKey* key)
+{
+    unsigned id = key->inst;
+    if (id == 0x40464100) id = 0x40464200;
+    PropListRef list;
+    IPropMgr* mgr = PropertyManager();
+    list.reset();
+    if (mgr->GetPropertyList(key->group, id, &list))
+        PreloadTextureList((void*)list.p);
+}

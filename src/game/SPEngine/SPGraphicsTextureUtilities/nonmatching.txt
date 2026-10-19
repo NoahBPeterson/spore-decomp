@@ -11,13 +11,18 @@
 007aeab0 2281 COMPLETE findendpoints (equiv now FAIL: 5/5 mismatched, ours faults at 0x7ad81e in trymapblock; made EndpointColors member so colors arrive in ECX) (DXT 565 endpoint search, all quality tiers/early-outs/skip heuristics). Not byte-exact: the original's same-TU helpers use compiler-chosen register conventions (colors in ecx; trymapblock c0/c1 in ecx/eax) that need trymapblock's body (slice s007acbb0) in this TU; here cdecl with the same argument values.
 007af5d0 34 COMPLETE conditional copy/fill loop over 0x20-byte endpoints; loop-carried `first`/`dest` land in the opposite registers (ecx/eax swapped), so every operand byte differs.
 007af6d0 33 COMPLETE backward copy over 0x20-byte endpoints; loop-carried `last`/`dest` land in the opposite registers.
+007af720 88 COMPLETE DxtImage::WriteStream (open key stream, 0x18-byte header, per-mip size + data, close); n/writer land in esi/ebx swapped relative to the original, shifting the loop operands [equiv: UNSUPPORTED (0/400 valid inputs; fake-arity/faults)]
 007afb70 564 SP::cDXTCompressJobData::DXTCompressRow: full row/block copy + eadxt calls, loop/register shape differs
 007afe10 130 SP::cDXTCompressJobData::RunJob: full row loop + completion, scheduling differs
 007aff00 191 SP::WriteImageDataAsTexture: full texture upload + per-mip sizing, register/loop shape differs
 007b07e0 75 SP::cTexturePreload ctor: EH state + burn/final vptr ordering differs
 007b0980 164 eastl vector assignment: helper call arg order/scheduling differs
 007b0a70 315 eastl::vector<T20>::grow/DoInsertValue: allocation + move helpers, scheduling differs
+007b0be0 332 C20::InsertN (eastl DoInsertValues): complete; end/cap register roles and block order differ [equiv: WEAK]
 007b0da0 99 eastl::vector<Ref4>::assign: copy/destroy call ordering differs
+007b0e60 174 C20::Reap tree-node reap: complete; a/b spill and register allocation differ [equiv: WEAK]
 007b1040 36 eastl::vector<T20>::resize: grow path uses DoInsert helper, not byte-exact
 007b10a0 30 slot allocator (free-list pop else resize+index): register scheduling differs
+007b10d0 538 SP::RegisterImagesAsTexture: complete; register allocation (null const reg) differs, flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: WEAK]
+007b13b0 588 DXT mip-chain job creation: complete; register allocation (null const reg) and failure-path placement differ, flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: WEAK]
 007b1bb0 399 PackTree::Place - complete, loop rotation/register allocation differs; equiv WEAK (32% coverage)

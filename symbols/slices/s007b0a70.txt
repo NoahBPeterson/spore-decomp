@@ -1,15 +1,15 @@
 006909b0 ?GetStatus@cJob@SP@@QBE?AW4tJobStatus@2@XZ  # SP::cJob::GetStatus (callee of s007b0a70, named from the dev publics; slice address comment)
 006926b0 ?Wait@cJob@SP@@QAEXXZ  # SP::cJob::Wait (callee of s007b0a70, named from the dev publics; slice address comment)
 007b0a70 ?grow@C20@@QAEXPAUT20@@ABU2@@Z  # C20::grow migrated from s007b0a70 (verbatim, slice spelling)
-007b0be0 ?InsertN@C20@@QAEXPAUT20@@IPBU2@@Z  # eastl vector<T20>::DoInsertValues(pos, n, value): fill/insert n copies (0x20-byte nodes)
+007b0be0 ?InsertN@C20@@QAEXPAUT20@@IPBU2@@Z  # C20::InsertN migrated from s007b0a70 (verbatim, slice spelling)
 007b0da0 ?assign@C4@@QAEXPAPAX0PAX@Z  # C4::assign migrated from s007b0a70 (verbatim, slice spelling)
-007b0e60 ?Reap@C20@@QAEXH@Z  # tree-node reap: folds childless parents, pushes freed indices on the +0x14 free list
+007b0e60 ?Reap@C20@@QAEXH@Z  # C20::Reap migrated from s007b0a70 (verbatim, slice spelling)
 007b0f40 ?push_back@C20@@QAEXABUT20@@@Z  # C20::push_back migrated from s007b0a70 (verbatim, slice spelling)
-007b0fa0 ?AddNode@C20@@QAEXHH@Z  # resets both vectors, reserves 16, pushes a fresh node (c=a, d=b, links -1)
+007b0fa0 ?AddNode@C20@@QAEXHH@Z  # C20::AddNode migrated from s007b0a70 (verbatim, slice spelling)
 007b1040 ?resize@C20@@QAEXH@Z  # C20::resize migrated from s007b0a70 (verbatim, slice spelling)
 007b10a0 ?Alloc@C20@@QAEHXZ  # C20::Alloc migrated from s007b0a70 (verbatim, slice spelling)
-007b10d0 SP::RegisterImagesAsTexture  # PDB name
-007b13b0 SP::CreateMipChainJob  # builds the mip-chain image list + cJob (callback 0x7b03d0); called by DXTCompress
-007b1710 SP::DXTCompress  # PDB name
-007b1830 SP::DXTCompressNoAlpha  # DXTCompress with job flag 1 (same body)
-007b1950 SP::cTexturePreload::PreloadTextureList  # PDB-adjacent (two-vector clear)
+007b10d0 ?SP_RegisterImagesAsTexture@@YA_NPAUImgVec@@PAHPAUOwner@@_N@Z  # SP_RegisterImagesAsTexture migrated from s007b0a70 (verbatim, slice spelling)
+007b13b0 ?FUN_007b13b0@@YA_NPAUImg@@PAPAUcJob@@D@Z  # FUN_007b13b0 migrated from s007b0a70 (verbatim, slice spelling)
+007b1710 ?SP_DXTCompress@@YA_NPAUImg@@PAUVecDst@@PAXPAUICom@@@Z  # SP_DXTCompress migrated from s007b0a70 (verbatim, slice spelling)
+007b1830 ?FUN_007b1830@@YA_NPAUImg@@PAUVecDst@@PAXPAUICom@@@Z  # FUN_007b1830 migrated from s007b0a70 (verbatim, slice spelling)
+007b1950 ?clear@C20@@QAEXXZ  # C20::clear migrated from s007b0a70 (verbatim, slice spelling)

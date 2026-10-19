@@ -1,6 +1,8 @@
+007aea30 ??1DxtSurfaceEx@@UAE@XZ  # DestroyDxtSurfaceEx migrated from s007aea30 (verbatim, slice spelling)
 007aeab0 ?findendpoints@EndpointColors@@QAEIPBIPAI1HH@Z  # EndpointColors::findendpoints migrated from s007aea30 (verbatim, slice spelling)
 007af490 eadxt  # card name
 007af5d0 ?FUN_007af5d0@@YAXPAUEndpoint@@00@Z  # FUN_007af5d0 migrated from s007aea30 (verbatim, slice spelling)
 007af620 ?FUN_007af620@@YAXPAUEndpoint@@0PBU1@@Z  # FUN_007af620 migrated from s007aea30 (verbatim, slice spelling)
 007af670 ?FUN_007af670@@YAXPAUEndpoint@@IPBU1@@Z  # FUN_007af670 migrated from s007aea30 (verbatim, slice spelling)
 007af6d0 ?FUN_007af6d0@@YAXPAUEndpoint@@00@Z  # FUN_007af6d0 migrated from s007aea30 (verbatim, slice spelling)
+007af720 ?WriteStream@DxtImage@@QAE_NH@Z  # DxtImage::WriteStream migrated from s007aea30 (verbatim, slice spelling)
