@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00a46050 12 bool-normalisation / vcall register choice
+00a46080 12 bool-normalisation / vcall register choice
+00a460b0 2 tail-jmp target register differs
+00a46690 29 branch orientation and bool materialisation

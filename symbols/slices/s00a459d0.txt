@@ -1,4 +1,11 @@
-00a45fd0 EA::Audio GetAudioTime  # float time helper
+00a45fd0 ?GetAudioTime@@YANXZ  # GetAudioTime migrated from s00a459d0 (verbatim, slice spelling)
+00a45ff0 ?AudioFunc98@@YGXH@Z  # AudioFunc98 migrated from s00a459d0 (verbatim, slice spelling)
+00a46010 ?AudioFunc9c@@YGXHH@Z  # AudioFunc9c migrated from s00a459d0 (verbatim, slice spelling)
+00a46040 ?AudioCopyPtr@@YG_NHHPAPAX@Z  # AudioCopyPtr migrated from s00a459d0 (verbatim, slice spelling)
+00a46050 ?AudioFuncAC@@YG_NHHHM@Z  # AudioFuncAC migrated from s00a459d0 (verbatim, slice spelling)
+00a46080 ?AudioFuncA8@@YG_NHHHHH@Z  # AudioFuncA8 migrated from s00a459d0 (verbatim, slice spelling)
+00a460b0 ?AudioFuncB4@@YAXXZ  # AudioFuncB4 migrated from s00a459d0 (verbatim, slice spelling)
+00a46690 ?AtomCheckPtr@@YGHPAHI@Z  # AtomCheckPtr migrated from s00a459d0 (verbatim, slice spelling)
 00a46760 EA::Audio::Eapd::atom_getfloat  # PDB name
 00a46790 EA::Audio::Eapd::atom_getsymbol  # PDB name
 00a467c0 EA::Audio::Eapd::atom_gensym  # PDB name
