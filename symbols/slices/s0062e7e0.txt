@@ -6,6 +6,8 @@
 0062efb0 SP::cSPPlayModeAnimation::LoadPanelInfo  # PDB name
 0062f1e0 SP::cSPPlayModeAnimation::LoadAllAnimInfoFromGroup  # PDB candidate
 0062f2a0 ?Init@cSPPlayModeAnimation_s0062_e7e0@@QAEXPAXPAUcSPPlayModeUI_s0062_e7e0@@@Z  # cSPPlayModeAnimation_s0062_e7e0::Init migrated from s0062e7e0 (verbatim, slice spelling)
-0062f340 SP::cSPPlayModeBGMgr::SetBGHilite  # PDB name
-0062f480 SP::cSPPlayModeBGMgr::UpdateBGHilite  # PDB name
-0062f540 SP::cSPPlayModeBGMgr::UpdateBGCountText  # PDB name
+0062f340 ?SetBGHilite@cSPPlayModeBGMgr@SP@@QAEXI@Z  # SP::cSPPlayModeBGMgr::SetBGHilite migrated from s0062e7e0
+0062f480 ?UpdateBGHilite@cSPPlayModeBGMgr@SP@@QAEXXZ  # SP::cSPPlayModeBGMgr::UpdateBGHilite migrated from s0062e7e0
+0062f540 ?UpdateBGCountText@cSPPlayModeBGMgr@@QAEXXZ  # cSPPlayModeBGMgr::UpdateBGCountText migrated from s0062e7e0 (verbatim, slice spelling)
+0062f610 ?FUN_0062f610@cSPPlayModeBGMgr@@QAEXXZ  # cSPPlayModeBGMgr::FUN_0062f610 migrated from s0062e7e0 (verbatim, slice spelling)
+0062f6c0 ?FUN_0062f6c0@cSPPlayModeBGMgr@@QAE_NXZ  # cSPPlayModeBGMgr::FUN_0062f6c0 migrated from s0062e7e0 (verbatim, slice spelling)

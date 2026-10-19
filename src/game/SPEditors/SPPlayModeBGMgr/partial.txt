@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00b1e0c0 836  SP::cSPPlayModeBGMgr::InitiateChangeEnviroment: 836-byte environmental transition not reconstructed

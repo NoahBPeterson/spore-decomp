@@ -1,6 +1,11 @@
-0062f7f0 SP::cSPPlayModeBGMgr::HandleButton  # card: PDB candidate (caller-single); switch over the 4 thumbnail buttons + prev/next page ids
-0062f8c0 SharedLibList::SharedLibList  # vtable + empty eastl::vector ctor; dtor at 0062f8e0 calls ~vector
-0062fbc0 SP::cSPPlayModeBGMgr::LoadAllBGInfoFromGroup  # card: PDB candidate (caller-single); enumerates resource keys then calls LoadBackground
+0062f6e0 ?ShowBGThumbnails@cSPPlayModeBGMgr@SP@@QAEXXZ  # SP::cSPPlayModeBGMgr::ShowBGThumbnails migrated from s0062f6e0
+0062f7f0 ?HandleButton@cSPPlayModeBGMgr_s0062_f6e0@@QAE_NI@Z  # cSPPlayModeBGMgr_s0062_f6e0::HandleButton migrated from s0062f6e0 (verbatim, slice spelling)
+0062f8c0 ??0SharedLibList@@QAE@XZ  # SharedLibList::SharedLibList migrated from s0062f6e0 (verbatim, slice spelling)
+0062f8e0 ??1SharedLibList@@QAE@XZ  # SharedLibList::~SharedLibList migrated from s0062f6e0 (verbatim, slice spelling)
+0062f920 ?Shutdown@cSPPlayModeBGMgr_s0062_f6e0@@QAEXXZ  # cSPPlayModeBGMgr_s0062_f6e0::Shutdown migrated from s0062f6e0 (verbatim, slice spelling)
+0062f9f0 ?LoadBackground@cSPPlayModeBGMgr_s0062_f6e0@@QAEXPBUResourceKey@@@Z  # cSPPlayModeBGMgr_s0062_f6e0::LoadBackground migrated from s0062f6e0 (verbatim, slice spelling)
+0062fbc0 ?LoadAllBGInfoFromGroup@cSPPlayModeBGMgr_s0062_f6e0@@QAEXE@Z  # cSPPlayModeBGMgr_s0062_f6e0::LoadAllBGInfoFromGroup migrated from s0062f6e0 (verbatim, slice spelling)
+0062fc90 ?Init@cSPPlayModeBGMgr_s0062_f6e0@@QAEXIIIIE@Z  # cSPPlayModeBGMgr_s0062_f6e0::Init migrated from s0062f6e0 (verbatim, slice spelling)
 0062fd60 SP::cSPPlayModePhotoBrowser::IsSendPhotoWinVisible  # card: PDB candidate (caller-single); tests visibility of editor window 0x3f67620
 0062fda0 ?EnterMoveMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  # SP::cSPPlayModePhotoBrowser::EnterMoveMode migrated from s0062f6e0
 0062fe40 ?EnterDeleteMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  # SP::cSPPlayModePhotoBrowser::EnterDeleteMode migrated from s0062f6e0

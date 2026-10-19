@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+0062f610 113 BGMgr UpdateBackground: complete; orig reloads vector begin/end from memory after stores
+0062f6e0 35 ShowBGThumbnails: complete; remaining diff is load/store scheduling of the img AutoRef init and thumbnail id
+0062f7f0 172 HandleButton: complete; original shares the hilite tail between the 4 button cases, register/bl allocation differs
+0062f920 29 Shutdown: complete; effect-id local load order / register assignment (esi/edi swap)
+0062f9f0 404 LoadBackground: complete; register allocation (ebx zero reg, this in esi) and slot order differ

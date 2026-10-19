@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPPlayModeBGMgr.cpp  ?SetBGHilite@cSPPlayModeBGMgr@SP@@QAEXI@Z  0062f340  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPPlayModeBGMgr.cpp  ?UpdateBGHilite@cSPPlayModeBGMgr@SP@@QAEXXZ  0062f480  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPPlayModeBGMgr.cpp  ?UpdateBGCountText@cSPPlayModeBGMgr@@QAEXXZ  0062f540  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPPlayModeBGMgr.cpp  ?FUN_0062f6c0@cSPPlayModeBGMgr@@QAE_NXZ  0062f6c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPPlayModeBGMgr.cpp  ??0SharedLibList@@QAE@XZ  0062f8c0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeBGMgr.cpp  ??1SharedLibList@@QAE@XZ  0062f8e0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeBGMgr.cpp  ?LoadAllBGInfoFromGroup@cSPPlayModeBGMgr_s0062_f6e0@@QAEXE@Z  0062fbc0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeBGMgr.cpp  ?Init@cSPPlayModeBGMgr_s0062_f6e0@@QAEXIIIIE@Z  0062fc90  /O2 /MD /Gy /TP /GS- /Isrc/game/include
