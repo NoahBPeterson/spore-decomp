@@ -1,1 +1,1 @@
-00eaa9a0 SP::Audio::cMixModeManager::Init  # PDB name; registers message handler + mix-mode factory, loads mix-mode records
+00eaa9a0 ?Init@cMixModeManager_s00ea_a9a0@Audio@SP@@QAE_NXZ  # cMixModeManager_s00ea_a9a0::Init migrated from s00eaa9a0 (verbatim, slice spelling)
