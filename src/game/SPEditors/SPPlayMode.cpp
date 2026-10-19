@@ -392,9 +392,9 @@ static inline void** Vt(void* p) { return *(void***)p; }
 static inline void Release2(void* p) { if (p) ((void(__thiscall*)(void*))Vt(p)[2])(p); }
 struct cSPPlayMode_s0062_9c50 {
   char pad[0x3620];
-  bool HasActivePath(int creatureID);
-  uint8_t OnMouseDown(void* a, void* b, void* c, void* d);
-  void SetAllBabySitState();
+  bool HasActivePath(int creatureID);  // 0x0062a360 (cSPPlayMode::HasActivePath)
+  uint8_t OnMouseDown(void* a, void* b, void* c, void* d);  // 0x0062a7f0 (cSPPlayMode::OnMouseDown)
+  void SetAllBabySitState();  // 0x0062ab80 (cSPPlayMode::SetAllBabySitState)
 };
 void* __cdecl FUN_0062cb20(const float* p, float a, int b, float c);   // 0x62cb20
 void  __cdecl FUN_0062cb90();                                        // 0x62cb90
@@ -585,6 +585,115 @@ class cSPPlayModeAnimation_s0062_da00__ui {
   float StartNewAnimation(uint32_t creatureId, uint32_t anim, bool flag, uint32_t param, uint32_t* outHandle);
 };
 // ---- items of slice s0062da00_ui end
+
+
+
+
+
+
+
+// ---- items of slice s0062e7e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct ResourceKey;
+class cString {
+ public:
+  uint32_t mData[5];
+  cString();
+  ~cString();
+  void Load(uint32_t table, uint32_t group, const wchar_t* def);
+  const wchar_t* c_str();
+};
+struct RefCountVTemplate {
+  int mRefCount;
+  RefCountVTemplate() : mRefCount(0) {}
+  virtual ~RefCountVTemplate() {}
+  virtual int AddRef() { return ++mRefCount; }
+  virtual int Release();
+};
+struct IWindow_s0062_e7e0 {
+  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+  virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+  virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
+  virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+  virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24();
+  virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29();
+  virtual void v30();
+  virtual void SetFlag(int flag, bool value);          // +0x7c
+  virtual void SetCaption(const wchar_t* text);        // +0x80
+};
+struct UITooltip_s0062_e7e0 {
+  void SetText(const wchar_t* text, int a, int b);    // cSPUITooltipWinProc::SetText
+};
+struct cSPPlayModeUI_s0062_e7e0 {
+  IWindow_s0062_e7e0* FindPlayModeUIWindow(uint32_t id);  // 0x00634dc0 (cSPPlayModeUI::FindPlayModeUIWindow)
+  void SetUIGroupVisible(uint32_t group, bool visible);  // 0x00635760 (cSPPlayModeUI::SetUIGroupVisible)
+  bool IsUIGroupEnabled(uint32_t group);  // 0x00635890 (cSPPlayModeUI::IsUIGroupEnabled)
+  void SetAnimButtonsEnabled(bool enabled);  // 0x00635f00 (cSPPlayModeUI::SetAnimButtonsEnabled)
+  void SetExpansionAnimButtonsEnabled(bool enabled);  // 0x00635ff0 (cSPPlayModeUI::SetExpansionAnimButtonsEnabled)
+};
+class cSPPlayModeAnimLoadInfo;
+struct LoadInfoVector_s0062_e7e0 {
+  cSPPlayModeAnimLoadInfo** mpBegin;
+  cSPPlayModeAnimLoadInfo** mpEnd;
+  cSPPlayModeAnimLoadInfo** mpCapacity;
+  uint32_t mAllocator;
+  LoadInfoVector_s0062_e7e0() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+  ~LoadInfoVector_s0062_e7e0();     // out of line (0x005c7f10)
+  void DoInsertValue(cSPPlayModeAnimLoadInfo** pos, cSPPlayModeAnimLoadInfo* const& v);   // 0x005c8480
+};
+class cSPPlayModeAnimPanelInfo : public RefCountVTemplate {
+ public:
+  uint32_t mOrder;                  // +0x08
+  uint32_t mIconID;                 // +0x0c
+  uint32_t mIconShadowID;           // +0x10
+  LoadInfoVector_s0062_e7e0 mAnimLoadInfo;     // +0x14
+  uint32_t mPad24;                  // +0x24
+  virtual ~cSPPlayModeAnimPanelInfo();
+};
+struct PanelVector_s0062_e7e0 {
+  cSPPlayModeAnimPanelInfo** mpBegin;
+  cSPPlayModeAnimPanelInfo** mpEnd;
+  cSPPlayModeAnimPanelInfo** mpCapacity;
+  uint32_t mAllocator;
+  void DoInsertValue(cSPPlayModeAnimPanelInfo** pos, cSPPlayModeAnimPanelInfo* const& v);   // 0x005c8480
+  void Insert(cSPPlayModeAnimPanelInfo** pos, cSPPlayModeAnimPanelInfo* const& v);          // 0x005c21d0
+};
+class cSPPlayModeAnimation_s0062_e7e0 {
+ public:
+  void* vftable;
+  void* mEditorBase;             // +0x04
+  uint32_t mCurrAnimID;          // +0x08
+  PanelVector_s0062_e7e0 mAnimPanelInfo;    // +0x0c
+  uint32_t pad1c;                // +0x1c
+  uint32_t mPageCount;           // +0x20
+  uint32_t mNumPages;            // +0x24
+  cSPPlayModeUI_s0062_e7e0* mUI;            // +0x28
+  UITooltip_s0062_e7e0* pTooltip[24];       // +0x2c
+
+  int GetAnimCount();  // 0x0062e4b0 (cSPPlayModeAnimation::GetAnimCount)
+  void UpdateButtonImages();  // 0x0062e7e0 (cSPPlayModeAnimation::UpdateButtonImages)
+  void UpdatePageCount();  // 0x0062e600 (cSPPlayModeAnimation::UpdatePageCount)
+  void NextAnimWindowSet();
+  void PreviousAnimWindowSet();
+  void LoadAllAnimInfo();
+  void LoadPanelInfo(const ResourceKey& key);  // 0x0062efb0 (cSPPlayModeAnimation::LoadPanelInfo)
+  void LoadAnimInfo(cSPPlayModeAnimPanelInfo* panel, ResourceKey* key);  // 0x0062ec90 (cSPPlayModeAnimation::LoadAnimInfo)
+  void Init(void* editorBase, cSPPlayModeUI_s0062_e7e0* ui);  // 0x0062f2a0 (cSPPlayModeAnimation::Init)
+};
+struct ResourceKey { uint32_t instanceID, typeID, groupID; };
+class cSPPlayModeAnimLoadInfo : public RefCountVTemplate {
+ public:
+  uint32_t mAnimID;           // +0x08
+  uint32_t mAnimBabyID;       // +0x0c
+  float mAnimBabySpeed;       // +0x10
+  float mAnimBabyDelay;       // +0x14
+  uint32_t mImage[4];         // +0x18
+  uint32_t mIconID;           // +0x28
+  uint32_t mProp[4];          // +0x2c (loaded from 0x703212d, 0x70338db, 0x70338e4, 0x70338e9)
+  cString mName;              // +0x3c
+  virtual ~cSPPlayModeAnimLoadInfo();
+  cSPPlayModeAnimLoadInfo() {}
+};
+// ---- items of slice s0062e7e0 end
 
 // @ 0x00628610
 namespace SP {
@@ -848,6 +957,7 @@ void cAppModeEditorBaseT::SendButtonEventToBabies(int arg)
     }
 }
 }  // namespace SP
+
 
 
 
@@ -1282,6 +1392,7 @@ float cSPPlayMode::FUN_00629bd0(CreatureStruct* s)
 
 
 
+
 // @ 0x00629c50
 void FUN_00629c50(cSPPlayMode_s0062_9c50* m)
 { (void)m; }
@@ -1516,6 +1627,7 @@ void cSPPlayMode_s0062_9c50::SetAllBabySitState()
 
 
 
+
 // @ 0x0062abd0
 void __fastcall cSPPlayMode_MakeCreaturesFaceCamera(void* self)
 {
@@ -1698,6 +1810,7 @@ void __fastcall cSPPlayMode_IsEventForBaby(void* self, int)
 
 
 
+
 // @ 0x0062bb40
 __declspec(noinline) void PM::FUN_0062bb40(int, int)
 {}
@@ -1778,6 +1891,7 @@ void SP::cSPPlayMode::Update(unsigned int a0)
 {}
 
 
+
 // @ 0x0062e2e0
 float cSPPlayModeAnimation_s0062_da00__ui::StartNewAnimation(uint32_t creatureId, uint32_t anim, bool flag, uint32_t param, uint32_t* outHandle)
 {
@@ -1825,17 +1939,17 @@ float cSPPlayModeAnimation_s0062_da00__ui::StartNewAnimation(uint32_t creatureId
 }
 
 // @ 0x0062f2a0
-void SP::cSPPlayModeAnimation::Init(SP::cAppModeEditorBase * editorBase, SP::cSPPlayModeUI * ui)
+void cSPPlayModeAnimation_s0062_e7e0::Init(void* editorBase, cSPPlayModeUI_s0062_e7e0* ui)
 {
   mUI = ui;
-  mEditorBase = (SP::cAppModeEditorBase*)editorBase;
+  mEditorBase = editorBase;
   mCurrAnimID = 0xffffffff;
-  LoadAllAnimInfoFromGroup();
+  LoadAllAnimInfo();
   uint32_t n = (uint32_t)(mAnimPanelInfo.mpEnd - mAnimPanelInfo.mpBegin) >> 2;
   uint32_t pages = n + 1;
-  mPageCount = pages;
+  mNumPages = pages;
   if (((char*)mAnimPanelInfo.mpEnd - (char*)mAnimPanelInfo.mpBegin) & 0xc) {
     pages++;
-    mPageCount = pages;
+    mNumPages = pages;
   }
 }
