@@ -44,6 +44,7 @@
 ../src/game/SPBake/SPEditorBlock.cpp  ?F40e00@cSPEditorBlock_s0044_0110@SP@@QAEXPAU12@@Z  00440e00  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?F41080@cSPEditorBlock_s0044_1080@SP@@QAEXXZ  00441080  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?Sub_446ff0@@YIPAHPAH@Z  00446ff0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?InitializeHandleData@cSPEditorBlock_s0044_7150@SP@@QAEXPAVcPropertyList_s0044_7150@@@Z  00447150  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?A4a070@Blk_s0044_9ed0@@QAEXXZ  0044a070  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?B550@Blk_s0044_ae00@@QAEPAUV3_s0044_ae00@@PAU2@@Z  0044b550  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?B640@Blk_s0044_ae00@@QAEXH@Z  0044b640  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include

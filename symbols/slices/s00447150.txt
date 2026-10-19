@@ -1,2 +1,3 @@
-00447150 SP::cSPEditorBlock::InitializeHandleData  # pdb_names.json
+0043c0a0 ?GetModelSignModifier@cSPEditorBlock@SP@@QAEHXZ  # SP::cSPEditorBlock::GetModelSignModifier (callee of s00447150, named from the dev publics; slice address comment)
+00447150 ?InitializeHandleData@cSPEditorBlock_s0044_7150@SP@@QAEXPAVcPropertyList_s0044_7150@@@Z  # cSPEditorBlock_s0044_7150::InitializeHandleData migrated from s00447150 (verbatim, slice spelling)
 00533360 eastl::fixed_vector<SP::cSPEditorHandleDeform*,8>::fixed_vector  # ctor: mpBegin/mpEnd = inline buffer at +0x18, capacity = +0x38 (8 pointers); called from 0x00447150

@@ -1,2 +1,8 @@
+0044bcf0 ?Abcf0@Blk_s0044_bcf0@@QAEXXZ  # Blk_s0044_bcf0::Abcf0 migrated from s0044bcf0 (verbatim, slice spelling)
 0044c050 ?C050@Blk_s0044_bcf0@@QAEHXZ  # Blk_s0044_bcf0::C050 migrated from s0044bcf0 (verbatim, slice spelling)
+0044c0e0 ?C0e0@Blk_s0044_bcf0@@QAEXXZ  # Blk_s0044_bcf0::C0e0 migrated from s0044bcf0 (verbatim, slice spelling)
+0044c270 ?C270@Blk_s0044_bcf0@@QAEXXZ  # Blk_s0044_bcf0::C270 migrated from s0044bcf0 (verbatim, slice spelling)
+0044c450 ?C450@Blk_s0044_bcf0@@QAEHXZ  # Blk_s0044_bcf0::C450 migrated from s0044bcf0 (verbatim, slice spelling)
 0044c480 ?C480@Blk_s0044_bcf0@@QAEXH@Z  # Blk_s0044_bcf0::C480 migrated from s0044bcf0 (verbatim, slice spelling)
+0044c4d0 ?C4d0@Blk_s0044_bcf0@@QAEXH@Z  # Blk_s0044_bcf0::C4d0 migrated from s0044bcf0 (verbatim, slice spelling)
+0044c5a0 ?C5a0@Blk_s0044_bcf0@@QAEXH@Z  # Blk_s0044_bcf0::C5a0 migrated from s0044bcf0 (verbatim, slice spelling)

@@ -1,1 +1,4 @@
 0043d690 ?SetMorphHandleWeight@cSPEditorBlock_s0043_d690@SP@@QAE_NHMH_N0@Z  # cSPEditorBlock_s0043_d690::SetMorphHandleWeight migrated from s0043d690 (verbatim, slice spelling)
+0043e080 ?F3e080@cSPEditorBlockStub@SP@@QAEPAUVec3@2@PAU32@@Z  # cSPEditorBlockStub::F3e080 migrated from s0043d690 (verbatim, slice spelling)
+0043e0f0 ?F3e0f0@cSPEditorBlockStub@SP@@QAE_NPAH@Z  # cSPEditorBlockStub::F3e0f0 migrated from s0043d690 (verbatim, slice spelling)
+0043e2b0 ?F3e2b0@cSPEditorBlockStub@SP@@QAEXXZ  # cSPEditorBlockStub::F3e2b0 migrated from s0043d690 (verbatim, slice spelling)

@@ -1,4 +1,4 @@
-// src/game/SPBake/SPEditorBlock.cpp -- migrated from slice(s) s00439110, s00451ef0, s00450f70, s0044f7c0, s0044f420, s0044e460, s0044d4f0, s0044bcf0, s0044ae00, s00449ed0, s00448380, s00446ff0, s00441440, s00441080, s00440110, s0043f3a0, s0043e3f0, s0043d690, s0043cad0, s0043bbc0, s0043ac40, s0043a460, s00438440 by tools/migrate/rewrite.py
+// src/game/SPBake/SPEditorBlock.cpp -- migrated from slice(s) s00447150, s00439110, s00451ef0, s00450f70, s0044f7c0, s0044f420, s0044e460, s0044d4f0, s0044bcf0, s0044ae00, s00449ed0, s00448380, s00446ff0, s00441440, s00441080, s00440110, s0043f3a0, s0043e3f0, s0043d690, s0043cad0, s0043bbc0, s0043ac40, s0043a460, s00438440 by tools/migrate/rewrite.py
 // Object file: SPBake/SPEditorBlock.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -512,9 +512,18 @@ struct cSPEditorBlock_s0043_bbc0 {
 // ---- items of slice s0043cad0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace SP {
 struct Blk {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
-    virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();
-    virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11();
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
+virtual void s11();
     virtual void SetState(int a, int b);   // vtbl +0x30
 };
 }
@@ -560,9 +569,89 @@ struct cSPEditorBlock_s0043_cad0 {
 namespace SP {
 void* Sub_401060();                       // 00401060 (app/manager singleton)
 }
+namespace SP {
+bool  Sub_4ADB80();                       // 004ADB80
+}
+namespace SP {
+bool  Sub_4ADBC0();                       // 004ADBC0
+}
+namespace SP {
+bool  Sub_4A6120(void* self);             // 004A6120
+}
+namespace SP {
+void  Sub_4A6660(void* self, uint8_t v);  // 004A6660
+}
+namespace SP {
+void  Sub_4A88D0(int id);                 // 004A88D0
+}
+namespace SP {
+void  GetBBox(void* self, void* out, int a, int b, int c);  // 0044AE00
+}
+namespace SP {
+void  BoundingBox_GetCenter(void* box);   // 00409B90
+}
+namespace SP {
+void* Sub_41DCA0(void* out, void* table, const float* key);  // 0041DCA0
+}
 // ---- items of slice s0043cad0 end
 
 // ---- items of slice s0043d690 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+struct Blk_s0043_d690 {
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
+virtual void s11();
+    virtual void SetState(int a, int b);      // +0x30
+    virtual void Refresh();                    // +0x14
+};
+}
+namespace SP {
+struct cSPEditorBlockStub {
+    char     pad00[0x10];
+    void*    mModel;        // +0x10
+    char     pad14[0x18 - 0x14];
+    void*    p18;           // +0x18
+    char     pad1c[0x154 - 0x1c];
+    Blk_s0043_d690*     slots[3];      // +0x154
+    char     pad160[0x1A8 - 0x160];
+    uint8_t  f1a8;          // +0x1A8
+    char     pad1a9[0x1B0 - 0x1A9];
+    int      f1b0;          // +0x1B0
+    char     pad1b4[0x330 - 0x1B4];
+    int      f330;          // +0x330
+    char     pad334[0x3F0 - 0x334];
+    void*    p3f0;          // +0x3F0
+    char     pad3f4[0x40C - 0x3F4];
+    Vec3     v40c;          // +0x40C
+    char     pad418[0x43C - 0x418];
+    int      f43c;          // +0x43C
+    float    f440;          // +0x440
+    float    f444;          // +0x444
+    char     pad448[0x6CC - 0x448];
+    void**   vec6cc;        // +0x6CC
+    void**   vec6d0;        // +0x6D0
+    char     pad6d4[0xDC8 - 0x6D4];
+    uint32_t flags0;        // +0xDC8
+    uint32_t flags1;        // +0xDCC
+
+    int  F3d690(int idx, int a3, int a4, char a5, char a6);  // 0043D690
+    Vec3* F3e080(Vec3* out);                                 // 0043E080
+    bool F3e0f0(int* out);                                   // 0043E0F0
+    void F3e2b0();                                           // 0043E2B0
+};
+}
+namespace SP {
+void* Sub_41DAF0(void* out, void* v);
+}
 namespace SP {
 template <int N> inline void ScratchSlots() { uint32_t slots[N]; }
 }
@@ -667,28 +756,72 @@ class cMWModel_s0043_d690;
 namespace SP {
 class IModelWorld {
 public:
-    virtual int AddRef(); virtual int Release();
-    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
-    virtual void v18(); virtual void v1c(); virtual void v20(); virtual void v24();
-    virtual void v28(); virtual void v2c(); virtual void v30(); virtual void v34();
-    virtual void v38(); virtual void v3c(); virtual void v40(); virtual void v44();
-    virtual void v48(); virtual void v4c(); virtual void v50(); virtual void v54();
-    virtual void v58(); virtual void v5c(); virtual void v60(); virtual void v64();
-    virtual void v68(); virtual void v6c(); virtual void v70();
+virtual int AddRef();
+virtual int Release();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6c();
+virtual void v70();
     virtual void MoveToTime(cMWModel_s0043_d690* model, uint32_t animID, float time, int animationGroup);   // 0x74
-    virtual void v78(); virtual void v7c();
+virtual void v78();
+virtual void v7c();
     virtual void GetAnimationRange(cMWModel_s0043_d690* model, uint32_t animID, float* start, float* end, int animationGroup);  // 0x80
     virtual int GetNumBones(cMWModel_s0043_d690* model);                              // 0x84
     virtual void v88();
     virtual int GetBoneTransforms(cMWModel_s0043_d690* model, BoneTransform* dst);    // 0x8c
-    virtual void v90(); virtual void v94(); virtual void v98(); virtual void v9c();
-    virtual void va0(); virtual void va4(); virtual void va8(); virtual void vac();
-    virtual void vb0(); virtual void vb4(); virtual void vb8(); virtual void vbc();
-    virtual void vc0(); virtual void vc4(); virtual void vc8(); virtual void vcc();
-    virtual void vd0(); virtual void vd4(); virtual void vd8(); virtual void vdc();
-    virtual void ve0(); virtual void ve4(); virtual void ve8(); virtual void vec();
-    virtual void vf0(); virtual void vf4(); virtual void vf8(); virtual void vfc();
-    virtual void v100(); virtual void v104();
+virtual void v90();
+virtual void v94();
+virtual void v98();
+virtual void v9c();
+virtual void va0();
+virtual void va4();
+virtual void va8();
+virtual void vac();
+virtual void vb0();
+virtual void vb4();
+virtual void vb8();
+virtual void vbc();
+virtual void vc0();
+virtual void vc4();
+virtual void vc8();
+virtual void vcc();
+virtual void vd0();
+virtual void vd4();
+virtual void vd8();
+virtual void vdc();
+virtual void ve0();
+virtual void ve4();
+virtual void ve8();
+virtual void vec();
+virtual void vf0();
+virtual void vf4();
+virtual void vf8();
+virtual void vfc();
+virtual void v100();
+virtual void v104();
     virtual Transform* GetMeshTransform(cMWModel_s0043_d690* model);                  // 0x108
 };
 }
@@ -708,7 +841,9 @@ class cSPEditorHandle_s0043_d690 {
 public:
     virtual int AddRef();          // 0x00
     virtual int Release();         // 0x04 0x0051e380
-    virtual void v08(); virtual void v0c(); virtual void v10();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
     virtual void Update();         // 0x14
     void UpdatePosition();         // 0x00485650
 };
@@ -1005,6 +1140,9 @@ namespace SP {
 struct Matrix3_s0043_f3a0 { float m[9]; Matrix3_s0043_f3a0() {} Matrix3_s0043_f3a0(const Matrix3_s0043_f3a0&); };
 }
 namespace SP {
+struct DefaultRefCounted { void Release(); };
+}
+namespace SP {
 struct BitSet60_s0043_f3a0 {
     uint32_t data[2];
     bool Get(int i) {
@@ -1059,6 +1197,12 @@ void  Matrix3_Assign(Matrix3_s0043_f3a0* dst, const Matrix3_s0043_f3a0* src);   
 }
 namespace SP {
 void  Sub_4A8E10(Matrix3_s0043_f3a0* out, const void* a, int b);
+}
+namespace SP {
+int   Sub_493640(void* v, float f);
+}
+namespace SP {
+void  Sub_4ADC20(int v);
 }
 // ---- items of slice s0043f3a0 end
 
@@ -1970,7 +2114,7 @@ struct Blk_s0044_8380 {
     float A8380();
     bool A8480(int index, char flag);
     bool A84f0();
-    void A85d0();
+    void A85d0();  // 0x004485d0 (Blk::A85d0)
     void A8690(int a, int b, int c, int d);
     void A88c0();
     void A8a80();
@@ -2423,11 +2567,11 @@ struct Blk_s0044_bcf0 {
     Blk_s0044_bcf0* Child() { return m3e0; }
 
     void Abcf0();
-    int C050();
+    int C050();  // 0x0044c050 (Blk::C050)
     void C0e0();
     void C270();
     int C450();
-    void C480(int v);
+    void C480(int v);  // 0x0044c480 (Blk::C480)
     void C4d0(int a);
     void C5a0(int a);
 };
@@ -3456,6 +3600,174 @@ void __cdecl MirrorChildTransformB(cSPEditorBlock_s0043_9110* child, Transform_s
 }
 // ---- items of slice s00439110 end
 
+// ---- items of slice s00447150 begin (TODO(rewrite): local stubs, replace by canonical classes)
+template <class T>
+struct AutoRefCount_s0044_7150 {
+    T* mpObject;
+    T* operator->() const { return mpObject; }
+    operator T*() const { return mpObject; }
+};
+template <int N>
+inline void ScratchSlots_s0044_7150()
+{
+    uint32_t s[N];
+}
+template <class T>
+struct vector {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    uint32_t mAllocator;
+
+    int size() const { return (int)(mpEnd - mpBegin); }
+    T& operator[](int i) { return mpBegin[i]; }
+    void push_back(const T& value);     // out of line (0x005402c0)
+};
+template <class T, int N>
+struct fixed_vector_s0044_7150 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    uint32_t mAllocator[3];
+    T mBuffer[N];
+
+    fixed_vector_s0044_7150();  // out of line (0x00533360)
+    ~fixed_vector_s0044_7150()
+    {
+        for (T* p = mpBegin; p < mpEnd; ++p)
+            p->~T();
+        ScratchSlots_s0044_7150<3>();  // DoFree's frame (declined inline)
+        DoFree();
+    }
+    void DoFree();  // out of line (0x004c0b80): frees mpBegin unless it is the inline buffer
+
+    int size() const { return (int)(mpEnd - mpBegin); }
+    T& operator[](int i) { return mpBegin[i]; }
+    void resize(unsigned int n);        // out of line (0x00454b80)
+};
+struct string8 {
+    char* mpBegin;
+    char* mpEnd;
+    char* mpCapacity;
+    uint32_t mAllocator;
+
+    void assign(const char* pBegin, const char* pEnd);  // 0x00454cb0
+    string8& operator=(const string8& x)
+    {
+        if (&x != this)
+            assign(x.mpBegin, x.mpEnd);
+        return *this;
+    }
+};
+template <class T1, class T2>
+struct pair {
+    T1 first;
+    T2 second;
+    pair() : first(), second() {}
+};
+struct Property_s0044_7150 {
+    void* mpData;        // +0x00 (array data, or the inline value itself)
+    uint32_t pad04;
+    int mnItemCount;     // +0x08
+    uint32_t pad0c;
+    uint16_t mnFlags;    // +0x10 (0x30 = array)
+    uint16_t mnType;     // +0x12
+
+    unsigned int GetItemCount()
+    {
+        if (mnFlags & 0x30)
+            return mnItemCount;
+        else if (mnType != 0)
+            return 1;
+        return 0;
+    }
+    void* GetItems()
+    {
+        if (mnFlags & 0x30)
+            return mpData;
+        else if (mnType != 0)
+            return this;
+        return 0;
+    }
+};
+class cPropertyList_s0044_7150 {
+public:
+    virtual int AddRef();
+    virtual int Release();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void SetProperty(uint32_t id, const Property_s0044_7150* p);  // 0x006a2e20 (cPropertyList::SetProperty)
+    virtual int RemoveProperty(uint32_t id);  // 0x006a2ef0 (cPropertyList::RemoveProperty)
+    virtual bool HasProperty(uint32_t id);                       // 0x1c 0x006a2470
+    virtual bool GetPropertyAlt(uint32_t id, Property_s0044_7150*& result); // 0x20
+    virtual bool GetProperty(uint32_t id, Property_s0044_7150*& result);    // 0x24
+    virtual Property_s0044_7150* GetPropertyObject(uint32_t id);            // 0x28
+};
+bool GetArrayBool(cPropertyList_s0044_7150* list, uint32_t id, int& cnt, bool*& values);  // 0x006a0760
+namespace SP {
+struct cSPEditorHandleDeform_s0044_7150 {
+    uint32_t pad000[0x8c / 4];
+    uint32_t mHandleID;                      // +0x8c (cModelDeformationHandle id)
+    uint32_t pad090[(0xac - 0x90) / 4];
+    uint32_t mPinningType;                   // +0xac
+    uint32_t mAxisToIgnore;                  // +0xb0
+    cSPEditorHandleDeform_s0044_7150* mSymmetricHandle; // +0xb4
+    uint32_t pad0b8[(0x11c - 0xb8) / 4];
+    string8 mSoundString;                    // +0x11c
+    uint32_t pad12c[(0x1d4 - 0x12c) / 4];
+    bool mIsHiddenHandle;                    // +0x1d4
+    bool mDoNotPlaceHandle;                  // +0x1d5
+};
+}
+namespace SP {
+struct UIntMap {  // eastl::map<uint32_t, uint32_t>
+    uint32_t mData[7];
+    void Reserve(int n);                      // 0x00454640
+    uint32_t& operator[](const uint32_t& key);  // 0x00454750
+};
+}
+namespace SP {
+typedef vector<pair<uint32_t, cSPEditorHandleDeform_s0044_7150*> > SoundParamVector;
+}
+namespace SP {
+struct SoundParameterMap {  // eastl::map<uint32_t, vector<pair<uint32_t, cSPEditorHandleDeform*> > >
+    uint32_t mData[7];
+    SoundParamVector& operator[](const uint32_t& key);  // 0x004544d0
+};
+}
+namespace SP {
+extern uint32_t kModelSignModifierHandleID;  // 0x015d25b0
+}
+namespace SP {
+extern uint32_t kLimbTypeHandleID;           // 0x015d2180
+}
+namespace SP {
+extern uint32_t kMuscleScaleHandleID;        // 0x015d22a4
+}
+namespace SP {
+class cSPEditorBlock_s0044_7150 {
+public:
+    int GetModelSignModifier();              // 0x0043c0a0
+    int FindDeformHandleIndex(uint32_t id);  // 0x0043c120
+    void InitializeHandleData(cPropertyList_s0044_7150* propList);  // 0x00447150 (SP::cSPEditorBlock::InitializeHandleData)
+
+    uint32_t pad000[3];
+    AutoRefCount_s0044_7150<cPropertyList_s0044_7150> mPropList;   // +0x0c
+    uint32_t pad010[(0x1b0 - 0x10) / 4];
+    int mModelSignModifier;                  // +0x1b0
+    int mModelSignModifierHandle;            // +0x1b4
+    int mLimbTypeHandle;                     // +0x1b8
+    int mMuscleScaleHandle;                  // +0x1bc
+    uint32_t pad1c0[(0x614 - 0x1c0) / 4];
+    SoundParameterMap mSoundParameterMap;    // +0x614
+    UIntMap mAnimationSoundMap;              // +0x630
+    uint32_t pad64c[(0x6cc - 0x64c) / 4];
+    vector<AutoRefCount_s0044_7150<cSPEditorHandleDeform_s0044_7150> > mDeformationHandles;  // +0x6cc
+};
+}
+// ---- items of slice s00447150 end
+
 // @ 0x004388b0
 namespace SP {
 void cContentValidationSummarizer::Attach(cContentValidationSummarizer* e)
@@ -3477,28 +3789,6 @@ void cContentValidationSummarizer::Attach(cContentValidationSummarizer* e)
     }
 }
 }  // namespace SP
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00438b10
 namespace SP {
@@ -3529,27 +3819,6 @@ void cContentValidationSummarizer::Detach(cContentValidationSummarizer* e)
     }
 }
 }  // namespace SP
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00439110
 namespace SP {
@@ -3772,27 +4041,6 @@ int cSPEditorBlock_s0043_a460::GetSkinIdentifierForPicking()
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043a9a0
 namespace SP {
 void cSPEditorBlock_s0043_a460::F9a0(uint8_t a, uint8_t b)
@@ -3802,27 +4050,6 @@ void cSPEditorBlock_s0043_a460::F9a0(uint8_t a, uint8_t b)
     }
 }
 }  // namespace SP
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043a9e0
 namespace SP {
@@ -3849,27 +4076,6 @@ bool cSPEditorBlock_s0043_a460::F9e0(uint8_t a, uint8_t b)
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043ab90
 namespace SP {
 bool cSPEditorBlock_s0043_a460::Fb90(uint8_t p)
@@ -3888,26 +4094,6 @@ bool cSPEditorBlock_s0043_a460::Fb90(uint8_t p)
     return true;
 }
 }  // namespace SP
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043ac40
 namespace SP {
@@ -3967,70 +4153,13 @@ bool cSPEditorBlock_s0043_ac40::F3AC40(int type, uint8_t a, uint8_t b)
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043bbc0
 bool SP::cSPEditorBlock_s0043_bbc0::F_43bbc0(int)
 { return mField3c9 || mFlags.test(8); }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043bc40
 void SP::cSPEditorBlock_s0043_bbc0::F_43bc40(float v)
 { F_43bc70(mPosition[0], v); }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043bc70
 bool SP::cSPEditorBlock_s0043_bbc0::F_43bc70(float a, float b)
@@ -4047,70 +4176,13 @@ bool SP::cSPEditorBlock_s0043_bbc0::F_43bc70(float a, float b)
     return x < hi * b;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043bcf0
 bool SP::cSPEditorBlock_s0043_bbc0::F_43bcf0(float a, float b)
 { float t = fabsf(a); return mTolB * mScale * b > t; }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043bd50
 void SP::cSPEditorBlock_s0043_bbc0::F_43bd50(cSPVector3_s0043_bbc0 v, float s)
 { F_43bc70(v[0], s); }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043bd80
 bool SP::cSPEditorBlock_s0043_bbc0::F_43bd80(cSPMatrix3_s0043_bbc0 m, float s)
@@ -4129,25 +4201,6 @@ bool SP::cSPEditorBlock_s0043_bbc0::F_43bd80(cSPMatrix3_s0043_bbc0 m, float s)
     else return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043bf20
 bool SP::cSPEditorBlock_s0043_bbc0::F_43bf20(uint32_t out)
 {
@@ -4156,49 +4209,11 @@ bool SP::cSPEditorBlock_s0043_bbc0::F_43bf20(uint32_t out)
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043bf90
 void SP::cSPEditorBlock_s0043_bbc0::F_43bf90(uint32_t bit, bool on)
 {
     if (mModel) mModel->mGroups.set(bit, on);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043c040
 int SP::cSPEditorBlock_s0043_bbc0::F_43c040()
@@ -4206,25 +4221,6 @@ int SP::cSPEditorBlock_s0043_bbc0::F_43c040()
     if (mModel) return mDeformationHandles.size();
     return mSavedHandleDeltas.size();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043c0a0
 int SP::cSPEditorBlock_s0043_bbc0::F_43c0a0()
@@ -4234,25 +4230,6 @@ int SP::cSPEditorBlock_s0043_bbc0::F_43c0a0()
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043c120
 int SP::cSPEditorBlock_s0043_bbc0::F_43c120(uint32_t id)
 {
@@ -4261,139 +4238,25 @@ int SP::cSPEditorBlock_s0043_bbc0::F_43c120(uint32_t id)
     return -1;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043c1a0
 SP::cSPEditorHandleDeform_s0043_bbc0* SP::cSPEditorBlock_s0043_bbc0::F_43c1a0()
 { if (mHandleIndex[0] == -1) return F_43c270(0); else return F_43c270(mHandleIndex[0]); }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043c1e0
 SP::cSPEditorHandleDeform_s0043_bbc0* SP::cSPEditorBlock_s0043_bbc0::F_43c1e0()
 { if (mHandleIndex[1] == -1) return 0; else return F_43c270(mHandleIndex[1]); }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043c210
 SP::cSPEditorHandleDeform_s0043_bbc0* SP::cSPEditorBlock_s0043_bbc0::F_43c210()
 { if (mHandleIndex[2] == -1) return 0; else return F_43c270(mHandleIndex[2]); }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043c240
 SP::cSPEditorHandleDeform_s0043_bbc0* SP::cSPEditorBlock_s0043_bbc0::F_43c240()
 { if (mHandleIndex[3] == -1) return 0; else return F_43c270(mHandleIndex[3]); }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043c270
 SP::cSPEditorHandleDeform_s0043_bbc0* SP::cSPEditorBlock_s0043_bbc0::F_43c270(int i)
 { if (i < mDeformationHandles.size() && i >= 0) return mDeformationHandles[i].get(); else return 0; }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043c2d0
 float SP::cSPEditorBlock_s0043_bbc0::F_43c2d0(uint32_t i)
@@ -4405,25 +4268,6 @@ float SP::cSPEditorBlock_s0043_bbc0::F_43c2d0(uint32_t i)
     return 0.0f;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043c340
 uint32_t SP::cSPEditorBlock_s0043_bbc0::F_43c340(uint32_t i)
 {
@@ -4433,25 +4277,6 @@ uint32_t SP::cSPEditorBlock_s0043_bbc0::F_43c340(uint32_t i)
     }
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043c3d0
 int SP::cSPEditorBlock_s0043_bbc0::F_43c3d0(cSPEditorHandleDeform_s0043_bbc0* c)
@@ -4463,25 +4288,6 @@ int SP::cSPEditorBlock_s0043_bbc0::F_43c3d0(cSPEditorHandleDeform_s0043_bbc0* c)
     }
     return -1;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043c450
 bool SP::cSPEditorBlock_s0043_bbc0::F_43c450(cSPEditorHandleDeform_s0043_bbc0* c, float f, float* a, bool b)
@@ -4498,25 +4304,6 @@ bool SP::cSPEditorBlock_s0043_bbc0::F_43c450(cSPEditorHandleDeform_s0043_bbc0* c
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043c510
 bool SP::cSPEditorBlock_s0043_bbc0::F_43c510()
 {
@@ -4528,25 +4315,6 @@ bool SP::cSPEditorBlock_s0043_bbc0::F_43c510()
         } else return mFlags.test(0);
     } else return mFlags.test(0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043c710
 void SP::cSPEditorBlock_s0043_bbc0::F_43c710()
@@ -4578,46 +4346,49 @@ void SP::cSPEditorBlock_s0043_bbc0::F_43c710()
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043ca10
 bool SP::cSPEditorBlock_s0043_bbc0::F_43ca10()
 { return !mFlags.test(7) && !mFlags.test(20); }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// @ 0x0043cad0
+namespace SP {
+void cSPEditorBlock_s0043_cad0::F3cad0()
+{
+    bool f6 = false, f5 = false;
+    if (node != 0) {
+        f6 = Sub_4ADB80() ? true : false;
+        f5 = Sub_4ADBC0() ? true : false;
+    }
+    bool changed = false;
+    if (!f6) F3ce40();
+    if ((flags0 & 0x2000000u) == 0) {
+        for (int i = 0; i < 3; i++) {
+            Blk* b = slots[i];
+            if (b != 0 && (*(uint8_t*)((char*)b + 0x92) == 0 || f6)) {
+                b->SetState(3, 1);
+                changed = true;
+            }
+        }
+        if (slot160 != 0 && (*(uint8_t*)((char*)slot160 + 0x5D) == 0 || f6)) {
+            slot160->SetState(3, 1);
+            changed = true;
+        }
+    }
+    if ((flags0 & 0x1000000u) == 0) {
+        int skip = -1;
+        if ((flags0 & 0x800u) != 0 && !f5) skip = f1b0;
+        int count = (int)(vec6d0 - vec6cc);
+        for (int i = 0; i < count; i++) {
+            Blk* b = *(Blk**)((char*)vec6cc + i * 4);
+            if (i != skip && (*(uint8_t*)((char*)b + 0x1D4) == 0 || f6)) {
+                b->SetState(3, 1);
+                changed = true;
+            }
+        }
+    }
+    if (changed) Sub_4A88D0(0xD0A55625);
+}
+}  // namespace SP
 
 // @ 0x0043ce00
 namespace SP {
@@ -4630,24 +4401,6 @@ Blk* cSPEditorBlock_s0043_cad0::GetSlot(int i)
     return 0;
 }
 }  // namespace SP
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043ce40
 namespace SP {
@@ -4667,22 +4420,68 @@ void cSPEditorBlock_s0043_cad0::F3ce40()
 }
 }  // namespace SP
 
+// @ 0x0043cfc0
+namespace SP {
+void cSPEditorBlock_s0043_cad0::F3cfc0(int p2, char p3)
+{
+    if (Sub_401060() == 0) return;
+    if ((flags0 & 0x2000000u) == 0) {
+        for (int i = 0; i < 3; i++) {
+            Blk* b = slots[i];
+            if (b != 0 && (void*)b != (void*)p2) b->SetState(1, 1);
+        }
+        if (slot160 != 0 && (void*)slot160 != (void*)p2) slot160->SetState(1, 1);
+    }
+    if (p3 != 0 && Sub_4A6120(this)) {
+        uint8_t d = 0;
+        if (p2 != 0 && (void*)p2 == p3ec) d = 1;
+        Sub_4A6660(this, d);
+    }
+    if ((flags0 & 0x1000000u) == 0) {
+        int count = (int)(vec6d0 - vec6cc);
+        for (int i = 0; i < count; i++) {
+            void* e = *(void**)((char*)vec6cc + i * 4);
+            if ((void*)p2 != e) ((Blk*)e)->SetState(1, 1);
+        }
+    }
+}
+}  // namespace SP
 
+// @ 0x0043d240
+namespace SP {
+Vec3* cSPEditorBlock_s0043_cad0::F3d240(Vec3* out, char p3)
+{
+    void* mdl = mModel;
+    uint8_t large = ((uint32_t)mdl & 0x400000) != 0;
+    if (large) {
+        if (p3 == 0) {
+            float key = *(float*)((char*)mdl + 0x18);
+            Vec3* r = (Vec3*)0;
+            r = (Vec3*)Sub_41DCA0(out, (char*)this + 0x2FC, &key);
+            out->x = r->x; out->y = r->y; out->z = r->z;
+        } else {
+            out->x = out->y = out->z = 0.0f;
+        }
+    } else if (p3 == 0) {
+        GetBBox(this, out, 1, 0, 0);
+        BoundingBox_GetCenter(out);
+    } else {
+        GetBBox(this, out, 0, 0, 0);
+        BoundingBox_GetCenter(out);
+    }
+    return out;
+}
+}  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// @ 0x0043d420
+namespace SP {
+void cSPEditorBlock_s0043_cad0::F3d420()
+{
+    if (mModel == 0) return;
+    if ((flags1 & 0x80u) == 0) return;
+    if (f2bc == -1) return;
+}
+}  // namespace SP
 
 // @ 0x0043d690
 namespace SP {
@@ -4757,21 +4556,49 @@ bool cSPEditorBlock_s0043_d690::SetMorphHandleWeight(int index, float weight, in
 }
 }  // namespace SP
 
+// @ 0x0043e080
+namespace SP {
+Vec3* cSPEditorBlockStub::F3e080(Vec3* out)
+{
+    void* r = Sub_41DCA0(&v40c, (char*)this + 0x1D8, &v40c.x);
+    Vec3* p = (Vec3*)Sub_41DAF0(out, r);
+    out->x = p->x;
+    out->y = p->y;
+    out->z = p->z;
+    return out;
+}
+}  // namespace SP
 
+// @ 0x0043e0f0
+namespace SP {
+bool cSPEditorBlockStub::F3e0f0(int* out)
+{
+    int n = 0;
+    (void)n;
+    int count = (int)(vec6d0 - vec6cc);
+    if (out == 0 || count <= 0) return false;
+    return false;
+}
+}  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+// @ 0x0043e2b0
+namespace SP {
+void cSPEditorBlockStub::F3e2b0()
+{
+    int count = (int)(vec6d0 - vec6cc);
+    f440 = 0.4f;
+    f444 = -0.35f;
+    if (count > 0) {
+        f43c = 0;
+        for (int i = 0; i < count; i++) {
+            if ((flags0 & 0x800u) == 0 || i != 0) {
+                Blk_s0043_d690* b = *(Blk_s0043_d690**)((char*)vec6cc + i * 4);
+                F3d690(i, *(int*)((char*)b + 0xA8), 0, 0, 1);
+            }
+        }
+    }
+}
+}  // namespace SP
 
 // @ 0x0043e3f0
 void SP::cSPEditorBlock_s0043_e3f0::F_43e3f0(float dt, uint32_t index)
@@ -4802,22 +4629,6 @@ void SP::cSPEditorBlock_s0043_e3f0::F_43e3f0(float dt, uint32_t index)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043e760
 void SP::cSPEditorBlock_s0043_e3f0::F_43e760(uint32_t index)
 {
@@ -4828,22 +4639,6 @@ void SP::cSPEditorBlock_s0043_e3f0::F_43e760(uint32_t index)
         mField448 = 0.0f;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043e7e0
 void SP::cSPEditorBlock_s0043_e3f0::F_43e7e0(uint32_t index, bool b)
@@ -4858,61 +4653,13 @@ void SP::cSPEditorBlock_s0043_e3f0::F_43e7e0(uint32_t index, bool b)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043e8d0
 bool SP::cSPEditorBlock_s0043_e3f0::F_43e8d0(int id)
 { return mFadeId == id && mFader.IsActive(); }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043e920
 bool SP::cSPEditorBlock_s0043_e3f0::F_43e920()
 { return mFader.IsActive(); }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043e940
 void SP::cSPEditorBlock_s0043_e3f0::F_43e940(uint32_t a, uint32_t b, int id)
@@ -4926,22 +4673,6 @@ void SP::cSPEditorBlock_s0043_e3f0::F_43e940(uint32_t a, uint32_t b, int id)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043e9c0
 void SP::cSPEditorBlock_s0043_e3f0::F_43e9c0()
 {
@@ -4950,41 +4681,9 @@ void SP::cSPEditorBlock_s0043_e3f0::F_43e9c0()
         mSymmetricBlock->F_43ea20();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043ea20
 void SP::cSPEditorBlock_s0043_e3f0::F_43ea20()
 { mFader.Stop(); }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043ea40
 void SP::cSPEditorBlock_s0043_e3f0::F_43ea40(int id)
@@ -4994,43 +4693,11 @@ void SP::cSPEditorBlock_s0043_e3f0::F_43ea40(int id)
         mSymmetricBlock->F_43eaa0(id);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043eaa0
 void SP::cSPEditorBlock_s0043_e3f0::F_43eaa0(int id)
 {
     if (mField604) F_43e940(mField604, mField608, id);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043eae0
 void SP::cSPEditorBlock_s0043_e3f0::F_43eae0(float v)
@@ -5040,22 +4707,6 @@ void SP::cSPEditorBlock_s0043_e3f0::F_43eae0(float v)
         mSymmetricBlock->F_440390(v);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043eb50
 void SP::cSPEditorBlock_s0043_e3f0::F_43eb50(float v)
 {
@@ -5063,22 +4714,6 @@ void SP::cSPEditorBlock_s0043_e3f0::F_43eb50(float v)
     if (mEditorModel && mEditorModel->Func4adc40() && mSymmetricBlock)
         mSymmetricBlock->F_440110(v);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043ebc0
 bool SP::cSPEditorBlock_s0043_e3f0::F_43ebc0()
@@ -5096,22 +4731,6 @@ bool SP::cSPEditorBlock_s0043_e3f0::F_43ebc0()
     }
     return result;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043ecb0
 bool SP::cSPEditorBlock_s0043_e3f0::F_43ecb0()
@@ -5142,22 +4761,6 @@ bool SP::cSPEditorBlock_s0043_e3f0::F_43ecb0()
     return result;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043eef0
 cSPBoundingBox_s0043_e3f0 SP::cSPEditorBlock_s0043_e3f0::F_43eef0()
 {
@@ -5169,22 +4772,6 @@ cSPBoundingBox_s0043_e3f0 SP::cSPEditorBlock_s0043_e3f0::F_43eef0()
         box.Add(GetBBox(true, false, false));
     return box;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043f050
 void cSPBoundingBox_s0043_e3f0::Add(const cSPBoundingBox_s0043_e3f0& o)
@@ -5202,44 +4789,12 @@ void cSPBoundingBox_s0043_e3f0::Add(const cSPBoundingBox_s0043_e3f0& o)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043f250
 float SP::cSPEditorBlock_s0043_e3f0::F_43f250()
 {
     cSPBoundingBox_s0043_e3f0 box = F_43eef0();
     return Length(box.GetCorner(0)) / 2.0f;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043f290
 cSPVector3_s0043_e3f0 cSPBoundingBox_s0043_e3f0::GetCorner(uint32_t mask) const
@@ -5250,21 +4805,6 @@ cSPVector3_s0043_e3f0 cSPBoundingBox_s0043_e3f0::GetCorner(uint32_t mask) const
     v[2] = (mask & 4) ? mMax[2] : mMin[2];
     return v;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043f3a0
 namespace SP {
@@ -5277,21 +4817,6 @@ float cSPEditorBlock_s0043_f3a0::F3a0()
     return 0.0f;
 }
 }  // namespace SP
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043f3f0
 namespace SP {
@@ -5306,21 +4831,6 @@ float cSPEditorBlock_s0043_f3a0::F3f0()
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0043f4d0
 namespace SP {
 float cSPEditorBlock_s0043_f3a0::F4d0()
@@ -5333,21 +4843,6 @@ float cSPEditorBlock_s0043_f3a0::F4d0()
     return 1.0f;
 }
 }  // namespace SP
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0043f5b0
 namespace SP {
@@ -5374,20 +4869,52 @@ void cSPEditorBlock_s0043_f3a0::F5b0(Vec3* out, float a, float b, float c, int f
 }
 }  // namespace SP
 
+// @ 0x0043f6b0
+namespace SP {
+void cSPEditorBlock_s0043_f3a0::SetValid(char valid, int arg)
+{
+    uint8_t wasLinked = (uint8_t)((bits.data[1] & 2u) != 0);
+    F3a5e0(1, (uint8_t)(valid == 0), 1, 0);
+    if (valid == 0) {
+        F3a5e0(1, 1, 0, 1);
+        if (arg != 0 && (bits.data[1] & 0x400u) != 0) { }
+        return;
+    }
+    F3a5e0(0, 1, 0, 0);
+    if (arg != 0 && (bits.data[1] & 0x400u) != 0) { }
+    (void)wasLinked;
+}
+}  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+// @ 0x0043fc20
+namespace SP {
+bool cSPEditorBlock_s0043_f3a0::F3fc20(void* pos)
+{
+    int n = (int)node;
+    if (n != 0) *(int*)(n + 8) = *(int*)(n + 8) + 1;
+    uint8_t saved = node ? (uint8_t)(node->Check() ? 1 : 0) : 0;
+    Sub_4ADC20(0);
+    bool flag = (bits.data[1] & 0x80000u) != 0;
+    uint8_t result = 0;
+    if ((bits.data[0] & 0x80u) == 0) {
+        Vec3* src = pos ? (Vec3*)pos : (Vec3*)((char*)this + 0x48);
+        Vec3 local = *src;
+        float f = F3eed0();
+        (void)f;
+        int r = Sub_493640(&local, f);
+        uint8_t notThree = (uint8_t)(r != 3);
+        if (notThree && !flag) result = 1;
+        if (link33c == 0 && !F49b340()) result = 1;
+        if ((bits.data[0] & 0x100000u) != 0) result = 0;
+        if ((bits.data[1] & 0x400u) != 0) result = 1;
+        if (link33c != 0 && (link33c->bits.data[0] & 2u) != 0) result = 1;
+    }
+    Sub_4ADC20((int)saved);
+    bool b = result == 0;
+    if (n != 0) ((DefaultRefCounted*)(n + 4))->Release();
+    return b;
+}
+}  // namespace SP
 
 // @ 0x0043ffa0
 namespace SP {
@@ -5404,21 +4931,6 @@ void cSPEditorBlock_s0043_f3a0::FFa0(Matrix3_s0043_f3a0 m)
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00440020
 namespace SP {
 void cSPEditorBlock_s0043_f3a0::F4020(float v, uint8_t b)
@@ -5432,21 +4944,6 @@ void cSPEditorBlock_s0043_f3a0::F4020(float v, uint8_t b)
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00440090
 namespace SP {
 void cSPEditorBlock_s0043_f3a0::F4090(float v, uint8_t b)
@@ -5459,20 +4956,6 @@ void cSPEditorBlock_s0043_f3a0::F4090(float v, uint8_t b)
     }
 }
 }  // namespace SP
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00440390
 namespace SP {
@@ -5488,20 +4971,6 @@ void cSPEditorBlock_s0044_0110::F40390(float f)
     }
 }
 }  // namespace SP
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00440420
 namespace SP {
@@ -5520,20 +4989,6 @@ void cSPEditorBlock_s0044_0110::F40420(float f, char b)
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004404f0
 namespace SP {
 void cSPEditorBlock_s0044_0110::F404f0(Matrix3_s0044_0110 m)
@@ -5544,20 +4999,6 @@ void cSPEditorBlock_s0044_0110::F404f0(Matrix3_s0044_0110 m)
     for (int i = 0; i < 9; i++) dst[i] = src[i];
 }
 }  // namespace SP
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00440520
 namespace SP {
@@ -5609,20 +5050,6 @@ void cSPEditorBlock_s0044_0110::SetUniformScale(float scale, bool b, bool force)
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00440b90
 namespace SP {
 Vec3* cSPEditorBlock_s0044_0110::F40b90(Vec3* out)
@@ -5631,20 +5058,6 @@ Vec3* cSPEditorBlock_s0044_0110::F40b90(Vec3* out)
     return out;
 }
 }  // namespace SP
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00440bc0
 namespace SP {
@@ -5657,20 +5070,6 @@ void cSPEditorBlock_s0044_0110::F40bc0(const Vec3* v)
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00440c00
 namespace SP {
 void cSPEditorBlock_s0044_0110::F40c00(float f)
@@ -5681,20 +5080,6 @@ void cSPEditorBlock_s0044_0110::F40c00(float f)
     }
 }
 }  // namespace SP
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00440e00
 namespace SP {
@@ -5708,20 +5093,6 @@ void cSPEditorBlock_s0044_0110::F40e00(cSPEditorBlock_s0044_0110* o)
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00440f60
 namespace SP {
 Trans::Trans()
@@ -5732,20 +5103,6 @@ Trans::Trans()
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00440ff0
 namespace SP {
 Trans::Trans(const Trans& o)
@@ -5755,19 +5112,6 @@ Trans::Trans(const Trans& o)
     b = o.b;
 }
 }  // namespace SP
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00441080
 namespace SP {
@@ -5780,18 +5124,6 @@ void cSPEditorBlock_s0044_1080::F41080()
     }
 }
 }  // namespace SP
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00441440
 bool SP::cSPEditorBlock_s0044_1440::BuildBlock(uint32_t instanceID, uint32_t groupID, IModelWorld_s0044_1440* pWorld, cSPEditorBlock_s0044_1440* pParent, float field30, bool bInteractive, bool bCreateModel, bool bModelFlag)
@@ -6532,17 +5864,6 @@ bool SP::cSPEditorBlock_s0044_1440::BuildBlock(uint32_t instanceID, uint32_t gro
     return result;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00446ff0
 int* __fastcall Sub_446ff0(int* p)
 {
@@ -6554,17 +5875,6 @@ int* __fastcall Sub_446ff0(int* p)
     }
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00447030
 void Binder::Method(unsigned char param2)
@@ -6583,15 +5893,196 @@ void Binder::Method(unsigned char param2)
         mTargets[i]->Apply(&scratch[i], param2);
 }
 
+// @ 0x00447150
+namespace SP {
+void cSPEditorBlock_s0044_7150::InitializeHandleData(cPropertyList_s0044_7150* propList)
+{
+    fixed_vector_s0044_7150<cSPEditorHandleDeform_s0044_7150*, 8> handles;
+    ScratchSlots_s0044_7150<2>();
 
+    mModelSignModifier = GetModelSignModifier();
 
+    mModelSignModifierHandle = FindDeformHandleIndex(kModelSignModifierHandleID);
+    if (mModelSignModifierHandle != -1)
+        mDeformationHandles[mModelSignModifierHandle]->mDoNotPlaceHandle = true;
+    mLimbTypeHandle = FindDeformHandleIndex(kLimbTypeHandleID);
+    if (mLimbTypeHandle != -1)
+        mDeformationHandles[mLimbTypeHandle]->mDoNotPlaceHandle = true;
+    mMuscleScaleHandle = FindDeformHandleIndex(kMuscleScaleHandleID);
+    if (mMuscleScaleHandle != -1)
+        mDeformationHandles[mMuscleScaleHandle]->mDoNotPlaceHandle = true;
 
+    int nNumHandles = mDeformationHandles.size();
 
+    if (propList->HasProperty(0x8ecb344a)) {  // modelHandleKeys
+        Property_s0044_7150* prop = propList->GetPropertyObject(0x8ecb344a);
+        int cnt = prop->GetItemCount();
+        ResourceKey* keyArray = (ResourceKey*)prop->GetItems();
+        ScratchSlots_s0044_7150<3>();
+        handles.resize(cnt);
+        for (int i = 0; i < cnt; i++) {
+            uint32_t id = keyArray[i].instanceID;
+            handles[i] = 0;
+            for (int j = 0; j < nNumHandles; j++) {
+                if (mDeformationHandles[j]->mHandleID == id)
+                    handles[i] = mDeformationHandles[j];
+            }
+        }
+    }
 
+    if (propList->HasProperty(0x3644a2c5)) {  // modelHandleStretchSounds
+        Property_s0044_7150* prop = propList->GetPropertyObject(0x3644a2c5);
+        if (prop->mnType == 0x12) {
+            int cnt = prop->GetItemCount();
+            string8* sounds = (string8*)prop->GetItems();
+            for (int i = 0; i < cnt; i++) {
+                if (i < handles.size() && handles[i] != 0)
+                    handles[i]->mSoundString = sounds[i];
+            }
+        }
+    }
 
+    if (propList->HasProperty(0x04604b04)) {  // modelHandleIsHidden
+        int cnt = 0;
+        bool* hidden;
+        GetArrayBool(mPropList, 0x04604b04, cnt, hidden);
+        for (int i = 0; i < cnt; i++) {
+            if (i < handles.size() && handles[i] != 0)
+                handles[i]->mIsHiddenHandle = hidden[i];
+        }
+    }
 
+    if (propList->HasProperty(0x87fe8a14)) {  // modelHandleLinkedHandlesTemplate
+        Property_s0044_7150* prop = propList->GetPropertyObject(0x87fe8a14);
+        int cnt = prop->GetItemCount();
+        ResourceKey* keyArray = (ResourceKey*)prop->GetItems();
+        for (int i = 0; i < cnt; i++) {
+            uint32_t idA = keyArray[i].groupID;
+            uint32_t idB = keyArray[i].instanceID;
+            cSPEditorHandleDeform_s0044_7150* handleA = 0;
+            cSPEditorHandleDeform_s0044_7150* handleB = 0;
+            for (int j = 0; j < nNumHandles; j++) {
+                if (mDeformationHandles[j]->mHandleID == idA)
+                    handleA = mDeformationHandles[j];
+                if (mDeformationHandles[j]->mHandleID == idB)
+                    handleB = mDeformationHandles[j];
+            }
+            if (handleB != 0 && handleA != 0) {
+                handleA->mSymmetricHandle = handleB;
+                handleB->mSymmetricHandle = handleA;
+            }
+        }
+    }
 
+    if (propList->HasProperty(0x45101f3e)) {  // modelHandleLinkedHandles
+        Property_s0044_7150* prop = propList->GetPropertyObject(0x45101f3e);
+        int cnt = prop->GetItemCount();
+        ResourceKey* keyArray = (ResourceKey*)prop->GetItems();
+        for (int i = 0; i < cnt; i++) {
+            uint32_t idA = keyArray[i].groupID;
+            uint32_t idB = keyArray[i].instanceID;
+            cSPEditorHandleDeform_s0044_7150* handleA = 0;
+            cSPEditorHandleDeform_s0044_7150* handleB = 0;
+            bool bClear = idB == 0x2ca33bdb;  // "None"
+            for (int j = 0; j < nNumHandles; j++) {
+                if (mDeformationHandles[j]->mHandleID == idA)
+                    handleA = mDeformationHandles[j];
+                if (!bClear && mDeformationHandles[j]->mHandleID == idB)
+                    handleB = mDeformationHandles[j];
+            }
+            if (handleB != 0 && handleA != 0) {
+                handleA->mSymmetricHandle = handleB;
+                handleB->mSymmetricHandle = handleA;
+            } else if (bClear && handleA != 0) {
+                if (handleA->mSymmetricHandle != 0)
+                    handleA->mSymmetricHandle->mSymmetricHandle = 0;
+                handleA->mSymmetricHandle = 0;
+            }
+        }
+    }
 
+    if (propList->HasProperty(0x3b58c554)) {  // modelHandlePlacementTypesTemplate
+        Property_s0044_7150* prop = propList->GetPropertyObject(0x3b58c554);
+        int cnt = prop->GetItemCount();
+        ResourceKey* keyArray = (ResourceKey*)prop->GetItems();
+        for (int i = 0; i < cnt; i++) {
+            uint32_t placementType = keyArray[i].instanceID;
+            uint32_t id = keyArray[i].groupID;
+            for (int j = 0; j < nNumHandles; j++) {
+                if (mDeformationHandles[j]->mHandleID == id) {
+                    mDeformationHandles[j]->mPinningType = placementType;
+                    if (placementType == 0x9e6e561c)  // IgnoreAxis
+                        mDeformationHandles[j]->mAxisToIgnore = keyArray[i].typeID;
+                }
+            }
+        }
+    }
+
+    if (propList->HasProperty(0x23fc767e)) {  // modelHandlePlacementTypes
+        Property_s0044_7150* prop = propList->GetPropertyObject(0x23fc767e);
+        int cnt = prop->GetItemCount();
+        ResourceKey* keyArray = (ResourceKey*)prop->GetItems();
+        for (int i = 0; i < cnt; i++) {
+            uint32_t placementType = keyArray[i].instanceID;
+            uint32_t id = keyArray[i].groupID;
+            for (int j = 0; j < nNumHandles; j++) {
+                if (mDeformationHandles[j]->mHandleID == id) {
+                    mDeformationHandles[j]->mPinningType = placementType;
+                    if (placementType == 0x9e6e561c)  // IgnoreAxis
+                        mDeformationHandles[j]->mAxisToIgnore = keyArray[i].typeID;
+                }
+            }
+        }
+    }
+
+    if (propList->HasProperty(0xb75fd502)) {  // modelAnimationSoundLinks
+        Property_s0044_7150* prop = propList->GetPropertyObject(0xb75fd502);
+        int cnt = prop->GetItemCount();
+        ResourceKey* keyArray = (ResourceKey*)prop->GetItems();
+        ScratchSlots_s0044_7150<8>();
+        mAnimationSoundMap.Reserve(cnt);
+        for (int i = 0; i < cnt; i++) {
+            uint32_t sound = keyArray[i].instanceID;
+            uint32_t anim = keyArray[i].groupID;
+            mAnimationSoundMap[anim] = sound;
+        }
+    }
+
+    if (propList->HasProperty(0x41f72519)) {  // modelSoundParameters
+        Property_s0044_7150* prop = propList->GetPropertyObject(0x41f72519);
+        int cnt = prop->GetItemCount();
+        ResourceKey* keyArray = (ResourceKey*)prop->GetItems();
+        for (int i = 0; i < cnt; i++) {
+            uint32_t group = keyArray[i].groupID;
+            uint32_t handleId = keyArray[i].typeID;
+            uint32_t parameterID = keyArray[i].instanceID;
+            cSPEditorHandleDeform_s0044_7150* foundHandle = 0;
+            for (int j = 0; j < nNumHandles; j++) {
+                if (mDeformationHandles[j]->mHandleID == handleId)
+                    foundHandle = mDeformationHandles[j];
+            }
+            pair<uint32_t, cSPEditorHandleDeform_s0044_7150*> entry;
+            entry.first = parameterID;
+            entry.second = foundHandle;
+            ScratchSlots_s0044_7150<63>();
+            mSoundParameterMap[group].push_back(entry);
+        }
+    }
+}
+}  // namespace SP
+
+// @ 0x004484f0
+bool Blk_s0044_8380::A84f0()
+{
+    bool result = true;
+    if ((mBits & 0x800) == 0) {
+        for (int i = 0; i < (int)(mItemsEnd - mItems); i++) {
+            bool r = A8480(i, 1);
+            result = (result && r);
+        }
+    }
+    return result;
+}
 
 // @ 0x004485d0
 void Blk_s0044_8380::A85d0()
@@ -6601,15 +6092,6 @@ void Blk_s0044_8380::A85d0()
             mItems[i]->Method();
     }
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x00449ed0
 void Blk_s0044_9ed0::A49ed0()
@@ -6632,15 +6114,6 @@ void Blk_s0044_9ed0::A49ed0()
     }
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x0044a070
 void Blk_s0044_9ed0::A4a070()
 {
@@ -6654,14 +6127,6 @@ void Blk_s0044_9ed0::A4a070()
         Sub44b6b0();
     }
 }
-
-
-
-
-
-
-
-
 
 // @ 0x0044ae00
 BBox_s0044_ae00 Blk_s0044_ae00::GetBBox(int type, bool a, bool b)
@@ -6727,14 +6192,6 @@ BBox_s0044_ae00 Blk_s0044_ae00::GetBBox(int type, bool a, bool b)
     return box;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x0044b550
 V3_s0044_ae00* Blk_s0044_ae00::B550(V3_s0044_ae00* out)
 {
@@ -6742,28 +6199,12 @@ V3_s0044_ae00* Blk_s0044_ae00::B550(V3_s0044_ae00* out)
     return out;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x0044b590
 M3_s0044_ae00* Blk_s0044_ae00::B590(M3_s0044_ae00* out)
 {
     *out = mMat;
     return out;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x0044b5c0
 float Blk_s0044_ae00::GetDefaultScale()
@@ -6781,14 +6222,6 @@ float Blk_s0044_ae00::GetDefaultScale()
     return 1.0f;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x0044b640
 void Blk_s0044_ae00::B640(int)
 {
@@ -6799,14 +6232,6 @@ void Blk_s0044_ae00::B640(int)
         }
     }
 }
-
-
-
-
-
-
-
-
 
 // @ 0x0044b6b0
 void Blk_s0044_ae00::B6b0()
@@ -6824,14 +6249,6 @@ void Blk_s0044_ae00::B6b0()
     }
 }
 
-
-
-
-
-
-
-
-
 // @ 0x0044b780
 bool Blk_s0044_ae00::B780()
 {
@@ -6841,14 +6258,6 @@ bool Blk_s0044_ae00::B780()
         return true;
     return false;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x0044b7b0
 void Blk_s0044_ae00::B7b0(unsigned ms)
@@ -6884,14 +6293,6 @@ void Blk_s0044_ae00::B7b0(unsigned ms)
     }
 }
 
-
-
-
-
-
-
-
-
 // @ 0x0044ba20
 void Blk_s0044_ae00::Ba20(bool a, bool b)
 {
@@ -6923,12 +6324,10 @@ void Blk_s0044_ae00::Ba20(bool a, bool b)
     }
 }
 
-
-
-
-
-
-
+// @ 0x0044bcf0
+void Blk_s0044_bcf0::Abcf0()
+{
+}
 
 // @ 0x0044c050
 int Blk_s0044_bcf0::C050()
@@ -6944,12 +6343,21 @@ int Blk_s0044_bcf0::C050()
     return n;
 }
 
+// @ 0x0044c0e0
+void Blk_s0044_bcf0::C0e0()
+{
+}
 
+// @ 0x0044c270
+void Blk_s0044_bcf0::C270()
+{
+}
 
-
-
-
-
+// @ 0x0044c450
+int Blk_s0044_bcf0::C450()
+{
+    return 0;
+}
 
 // @ 0x0044c480
 void Blk_s0044_bcf0::C480(int v)
@@ -6959,11 +6367,15 @@ void Blk_s0044_bcf0::C480(int v)
         Child()->m1c4 = v;
 }
 
+// @ 0x0044c4d0
+void Blk_s0044_bcf0::C4d0(int)
+{
+}
 
-
-
-
-
+// @ 0x0044c5a0
+void Blk_s0044_bcf0::C5a0(int)
+{
+}
 
 // @ 0x0044d570
 void Blk_s0044_d4f0::D570()
@@ -6996,11 +6408,6 @@ void Blk_s0044_d4f0::D570()
     }
 }
 
-
-
-
-
-
 // @ 0x0044f130
 void cSPEditorBlock::SetScaleType(int type)
 {
@@ -7015,11 +6422,6 @@ void cSPEditorBlock::SetScaleType(int type)
         mScaleType = 3;
     }
 }
-
-
-
-
-
 
 // @ 0x0044f240
 int cSPEditorBlock::CalculateSymmetrySign()
@@ -7054,10 +6456,6 @@ int cSPEditorBlock::CalculateSymmetrySign()
     }
     return result;
 }
-
-
-
-
 
 // @ 0x0044f420
 cSPEditorBlock_s0044_f420* cSPEditorBlock_s0044_f420::Split(int type)
@@ -7118,9 +6516,6 @@ cSPEditorBlock_s0044_f420* cSPEditorBlock_s0044_f420::Split(int type)
     VecDtor(&vA);
     return nb;
 }
-
-
-
 
 // @ 0x0044f7c0
 cSPEditorBlock_s0044_f7c0* cSPEditorBlock_s0044_f7c0::CloneBlock(int type, cSPEditorBlock_s0044_f7c0* root, BlockRefVector& originals, BlockRefVector& copies)
@@ -7306,8 +6701,6 @@ cSPEditorBlock_s0044_f7c0* cSPEditorBlock_s0044_f7c0::CloneBlock(int type, cSPEd
     return 0;
 }
 
-
-
 // @ 0x00450f70
 unsigned char Block2::Rebuild(int a, int b, float c, char d, unsigned char e)
 {
@@ -7327,16 +6720,12 @@ unsigned char Block2::Rebuild(int a, int b, float c, char d, unsigned char e)
     return r;
 }
 
-
-
 // @ 0x004511f0
 int Block2::GetA()
 {
     int result = (int)mTracker->field4;
     return result;
 }
-
-
 
 // @ 0x00451210
 int Block2::GetB()
@@ -7348,16 +6737,12 @@ int Block2::GetB()
     }
 }
 
-
-
 // @ 0x00451240
 void Block2::SetF(void* a, unsigned char b)
 {
     void* tmp = mPtr33c;
     mTracker->Call(tmp, (int)a, b);
 }
-
-
 
 // @ 0x00451280
 void Block2::SetRef(RCObj* p)
@@ -7372,8 +6757,6 @@ void Block2::SetRef(RCObj* p)
     }
 }
 
-
-
 // @ 0x004512e0
 Vec3_s0045_0f70* Block2::GetVec14(Vec3_s0045_0f70* out)
 {
@@ -7384,8 +6767,6 @@ Vec3_s0045_0f70* Block2::GetVec14(Vec3_s0045_0f70* out)
     return out;
 }
 
-
-
 // @ 0x00451330
 void Block2::SetVec194(int x, int y, int z)
 {
@@ -7395,16 +6776,12 @@ void Block2::SetVec194(int x, int y, int z)
     mFlag1a0 = true;
 }
 
-
-
 // @ 0x00451360
 void Block2::ResetVec194()
 {
     mVec194 = mVec48;
     mFlag1a0 = false;
 }
-
-
 
 // @ 0x004513a0
 Vec3_s0045_0f70* Block2::GetVec194(Vec3_s0045_0f70* out)
@@ -7415,8 +6792,6 @@ Vec3_s0045_0f70* Block2::GetVec194(Vec3_s0045_0f70* out)
     out->z = p->z;
     return out;
 }
-
-
 
 // @ 0x00451400
 namespace SP {
@@ -7499,16 +6874,12 @@ void cSPEditorBlock_s0045_0f70::Shutdown2()
 }
 }  // namespace SP
 
-
-
 // @ 0x00451e20
 void Block2::SetPtr188(void* p)
 {
     mPtr188 = p;
     FUN_00452040();
 }
-
-
 
 // @ 0x00451e50
 void Block2::SetSub38(void* p)
@@ -7518,8 +6889,6 @@ void Block2::SetSub38(void* p)
         q->field = p;
     }
 }
-
-
 
 // @ 0x00451e90
 void* Block2::GetSub38()
@@ -7533,15 +6902,12 @@ void* Block2::GetSub38()
     }
 }
 
-
-
 // @ 0x00451ed0
 void Block2::Reset188()
 {
     FUN_00451fe0();
     mPtr188 = 0;
 }
-
 
 // @ 0x00451ef0
 void cSPEditorBlock_s0045_1ef0::FUN_00451ef0(void* obj)
@@ -7564,7 +6930,6 @@ void cSPEditorBlock_s0045_1ef0::FUN_00451ef0(void* obj)
     }
 }
 
-
 // @ 0x00451fe0
 void cSPEditorBlock_s0045_1ef0::FUN_00451fe0()
 {
@@ -7576,7 +6941,6 @@ void cSPEditorBlock_s0045_1ef0::FUN_00451fe0()
     }
     mPhysObj = 0;
 }
-
 
 // @ 0x00452040
 void cSPEditorBlock_s0045_1ef0::FUN_00452040()

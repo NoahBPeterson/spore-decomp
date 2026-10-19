@@ -1,2 +1,6 @@
+0043cad0 ?F3cad0@cSPEditorBlock_s0043_cad0@SP@@QAEXXZ  # cSPEditorBlock_s0043_cad0::F3cad0 migrated from s0043cad0 (verbatim, slice spelling)
 0043ce00 ?GetSlot@cSPEditorBlock_s0043_cad0@SP@@QAEPAUBlk@2@H@Z  # cSPEditorBlock_s0043_cad0::GetSlot migrated from s0043cad0 (verbatim, slice spelling)
 0043ce40 ?F3ce40@cSPEditorBlock_s0043_cad0@SP@@QAEXXZ  # cSPEditorBlock_s0043_cad0::F3ce40 migrated from s0043cad0 (verbatim, slice spelling)
+0043cfc0 ?F3cfc0@cSPEditorBlock_s0043_cad0@SP@@QAEXHD@Z  # cSPEditorBlock_s0043_cad0::F3cfc0 migrated from s0043cad0 (verbatim, slice spelling)
+0043d240 ?F3d240@cSPEditorBlock_s0043_cad0@SP@@QAEPAUVec3@2@PAU32@D@Z  # cSPEditorBlock_s0043_cad0::F3d240 migrated from s0043cad0 (verbatim, slice spelling)
+0043d420 ?F3d420@cSPEditorBlock_s0043_cad0@SP@@QAEXXZ  # cSPEditorBlock_s0043_cad0::F3d420 migrated from s0043cad0 (verbatim, slice spelling)
