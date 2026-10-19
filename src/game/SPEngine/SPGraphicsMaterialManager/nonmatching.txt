@@ -1,4 +1,4 @@
-# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE)
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS-)
 006e5bd0 156 ShaderState::Reset complete; erase loop is strength-reduced in mine, original keeps separate src/dst increments
 0070e3e0 19 eastl::copy_backward<AutoRefCount>; register assignment differs
 0070e430 19 eastl::copy_backward<AutoRefCount>; register assignment differs

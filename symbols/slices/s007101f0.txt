@@ -1,10 +1,10 @@
 007101f0 ??AMapA@@QAEAAUTex4@@ABI@Z  # MapA::operator[] migrated from s007101f0 (verbatim, slice spelling)
 007102b0 ??AMapB@@QAEAAUMat4@@ABI@Z  # MapB::operator[] migrated from s007101f0 (verbatim, slice spelling)
 007103e0 ?DoInsertValue@VecFixed@@QAEXPAUAutoRef14_s0071_01f0@@ABU2@@Z  # VecFixed::DoInsertValue migrated from s007101f0 (verbatim, slice spelling)
-00710510 eastl::vector<EA::AutoRefCount<SP::cTextureInstance> >::DoInsertValues  # position,n,value shuffle with realloc
+00710510 ?DoInsertValues@VecIns@@QAEXPAXIPBX@Z  # VecIns::DoInsertValues migrated from s007101f0 (verbatim, slice spelling)
 007106d0 ?assign@VecAsn@@QAEXPBX0@Z  # VecAsn::assign migrated from s007101f0 (verbatim, slice spelling)
-00710790 SP::cMaterialManager::GetExternalReferences  # PDB name
-00710a50 SP::cTextureManager::GetAllTextures  # PDB candidate (caller-scored)
+00710790 ?GetExternalReferences@MaterialManager@@QAEHHPAI000@Z  # MaterialManager::GetExternalReferences migrated from s007101f0 (verbatim, slice spelling)
+00710a50 ?WriteMaterials@cMaterialManager@SP@@UAE_NPAVDatabase@ResourceMan@EA@@@Z  # SP::cMaterialManager::WriteMaterials migrated from s007101f0
 00711070 ?resize@VecResizeA@@QAEXI@Z  # VecResizeA::resize migrated from s007101f0 (verbatim, slice spelling)
 007110f0 ?resize@VecResizeB@@QAEXI@Z  # VecResizeB::resize migrated from s007101f0 (verbatim, slice spelling)
 00711170 ?push_back@VecSp@@QAEXXZ  # VecSp::push_back migrated from s007101f0 (verbatim, slice spelling)

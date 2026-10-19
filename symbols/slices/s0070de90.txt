@@ -9,6 +9,7 @@
 0070e390 ?AssignCopyB@@YAPAPAXPAPAX00@Z  # AssignCopyB migrated from s0070de90 (verbatim, slice spelling)
 0070e3e0 ?CopyBackwardA@@YAPAPAXPAPAX00@Z  # CopyBackwardA migrated from s0070de90 (verbatim, slice spelling)
 0070e430 ?CopyBackwardB@@YAPAPAXPAPAX00@Z  # CopyBackwardB migrated from s0070de90 (verbatim, slice spelling)
+0070e480 ?MakeFixedArray@@YAPAXPAXPBX@Z  # MakeFixedArray migrated from s0070de90 (verbatim, slice spelling)
 0070e4c0 ?Get@Holder@@QAEHXZ  # Holder::Get migrated from s0070de90 (verbatim, slice spelling)
 0070e4e0 ?RecreateShaders@cMaterialManager@SP@@UAEXXZ  # SP::cMaterialManager::RecreateShaders migrated from s0070de90
 0070e5e0 ?RebuildResources2@@YAXH@Z  # RebuildResources2 migrated from s0070de90 (verbatim, slice spelling)
@@ -25,4 +26,5 @@
 0070ebb0 ?FillWeak14@@YAXPAPAX00@Z  # FillWeak14 migrated from s0070de90 (verbatim, slice spelling)
 0070ebf0 ?AssignWeak14@@YAXPAPAX00@Z  # AssignWeak14 migrated from s0070de90 (verbatim, slice spelling)
 0070ec30 ?CopyBackwardWeak14@@YAXPAPAX00@Z  # CopyBackwardWeak14 migrated from s0070de90 (verbatim, slice spelling)
+0070ec80 ?cMaterialManager_Init@@YADPAX@Z  # cMaterialManager_Init migrated from s0070de90 (verbatim, slice spelling)
 0070eea0 ?WriteShaders@cMaterialManager@SP@@UAE_NPAVDatabase@ResourceMan@EA@@@Z  # SP::cMaterialManager::WriteShaders migrated from s0070de90

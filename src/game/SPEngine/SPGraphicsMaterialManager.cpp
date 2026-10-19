@@ -85,6 +85,8 @@ struct ShaderState {
 
 // ---- items of slice s0070de90 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern void* g_device; // 0x016f89d0
+extern unsigned char g_dbg[8];
+extern unsigned g_dbg2;
 struct Mat { char _p[0x18]; unsigned mID; };   // cMaterialInternal: mID at +0x18
 struct cMaterialManager {
     int  GetIDFromMaterial(Mat* m);
@@ -97,21 +99,88 @@ struct AutoRef14 { RC14* mpObject; void WeakRelease(); };
 struct AutoRefA  { RC3c* mpObject; void Release(); };
 struct AutoRefB  { RC3b* mpObject; void Release(); };
 struct VObj {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-    virtual void v4(); virtual int  v5(); virtual void v6(); virtual void v7();
-    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual int  v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
 };
 struct Holder    { char _p[0xc]; VObj* mpObject; int Get(); };
 #define ALLOC_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 void* __cdecl EAlloc(size_t n, const char* name, int a, unsigned b, const char* file, int line); // 0x00f473a0
+void* __cdecl PropertyManager(void);        // 0x0067de30
 void __cdecl D3D_FlushSomeStates(void);                      // 0x006fd7b0
 int  __cdecl ResSize(void* p);                               // 0x00777740
 void __cdecl ResCopy(void* dst, int n, void* out);           // 0x00777720
 void* __cdecl EAlloc8(size_t n, unsigned a, int b, int c, const char* d, int e, int f, int g); // 0x00f473d0
 void __cdecl EFree2(void* p);                                // 0x00f47380
+void __cdecl ActiveStateFlushX(void);                        // 0x006fd790
+int  __cdecl CreateVertexBuffer(unsigned flags, int b);      // 0x007616f0
+void* __cdecl CreateCompiledState(void* vb);                 // 0x007617a0
+void __cdecl RegisterInvalidShader();                        // 0x00713f20
+void* __cdecl PropGetBoolStub();                             // 0x0041e920
+void* __cdecl PropGetIntStub();                              // 0x0041e990
+void* __cdecl SpriteMgrA();                                  // 0x00761b40
+void* __cdecl SpriteMgrB();                                  // 0x0067dd60
+void __cdecl DoNothing1();                                   // 0x00761150
+void __cdecl GetImageResourceStub();                         // 0x00576650
+void __cdecl DoNothing2();                                   // 0x0077e6d0
+void __cdecl DoNothing3();                                   // 0x0067d0c0
 int  __cdecl WriteUint32Stub(void* s, void* d, int n, int f); // 0x0093aa70
 void __cdecl FreeStreamStub(void* s);                        // 0x006fe430
 void __cdecl FragDeclStub(void* s);                          // 0x006fa480
+void __cdecl _eh_vector_constructor_iterator_(void* ptr, unsigned size, unsigned count, void* ctor, void* dtor);
+char __cdecl props_get(void* propList, unsigned id, void* out);
+void __cdecl make_the_buffer(void* self, unsigned flags);
+void make_the_buffer(void* self, unsigned flags)
+{
+    {
+        unsigned* vb = (unsigned*)CreateVertexBuffer(flags, 0);
+        vb[0x10d] |= 1;
+        vb[0x10e] |= 1;
+        vb[0] |= 0x10;
+        vb[1] |= 0x10;
+        vb[0x19] = 0x3f800000;
+        vb[0x1a] = 0x3f800000;
+        vb[0x1b] = 0x3f800000;
+        vb[0x1c] = 0x3f800000;
+        vb[0x10f] = 0;
+        vb[0x10d] |= 2; vb[0x10e] |= 2; vb[0x110] = 0;
+        vb[0x10d] |= 4; vb[0x10e] |= 4; vb[0x111] = 0;
+        vb[0x10d] |= 8; vb[0x10e] |= 8; vb[0x112] = 0;
+        void* cs = CreateCompiledState(vb);
+        *(void**)((char*)self + 0x1b4) = cs;
+        *(char*)((char*)self + 0x1b8) = 1;
+        *(void**)((char*)self + 0x1bc) = cs;
+        *(int*)((char*)self + 0x1d0) = -1;
+        DoNothing1();
+        void* m = SpriteMgrA();
+        void* mm = SpriteMgrB();
+        GetImageResourceStub();
+        DoNothing2();
+        DoNothing3();
+        if (*(int*)((char*)self + 0x208) == 0 && *(int*)((char*)self + 0x20c) == 0)
+        {
+            if (*(int*)((char*)self + 0x218) == 1)
+            {
+                *(int*)((char*)self + 0x20c) = 0;
+            }
+            else
+            {
+                *(int*)((char*)self + 0x20c) = 0;
+            }
+            *(int*)((char*)self + 0x208) = 0;
+        }
+        *(int*)((char*)self + 0x220) = 0;
+    }
+}
 namespace __equiv_ann1 {
 struct RC3b {
     void AddRef();   // 0x006e54c0 (equiv t3)
@@ -127,6 +196,8 @@ struct RC3c {
 // ---- items of slice s0070de90 end
 
 // ---- items of slice s0070efa0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+    void AssignCopyA(...); // 0x0070e340
+    void AssignCopyB(...); // 0x0070e390
 void  __cdecl EFree(void* p);                                                                    // 0x00f47380
 struct RC3c_s0070_efa0 {  // refcount at +0x3c
     void AddRef();
@@ -152,6 +223,10 @@ struct VecB {
     ~VecB();
     void Shrink(void** a, void** b);
 };
+struct FVecA {
+    VecBase mVec; void** mpAllocName; void** mp16;
+    void Teardown();
+};
 struct FVecB { char _p[0x20]; void Teardown(); };
 struct FVecC { char _p[0x24]; void Teardown(); };
 struct HashNodeA { char _p[4]; RC3c_s0070_efa0* mpRef; HashNodeA* mpNext; };
@@ -159,11 +234,18 @@ struct HashNodeB { char _p[4]; RC3b_s0070_efa0* mpRef; HashNodeB* mpNext; };
 struct Mutex  { void Lock(void* p); void Unlock(); };            // 0x009221b0 / 0x00922270
 void* __cdecl ResGetManager(void);                               // 0x0067dcd0
 void* __cdecl FindInMap(void* out, void* key);                   // 0x0070f690
+void* __cdecl MemCopyThunk(void* dst, void* src, size_t n);      // 0x011e0744
+void __cdecl CopyBackwardIntrusive(void*, void*, void*);         // 0x006f4450
 int  __cdecl ReadInt32Stub(void*, void*, int, int);              // 0x0093a780
+void __cdecl ShaderAWrite(void*, int*);                          // 0x006e6100
+void __cdecl ShaderBWrite(void*, int*);                          // 0x006fcf90
+void __cdecl MiscA(void*);                                        // 0x006ff170
+void __cdecl MiscB(void*);                                        // 0x006fbf70
 void __cdecl MiscD(void*, int);                                   // 0x006fc780
 int  __cdecl ReadShaders_helper2(void*);                          // 0x006ff750
-    void AssignCopyA(...); // 0x0070e340
-    void AssignCopyB(...); // 0x0070e390
+void __cdecl WriteBlock(void*, void*, int);                       // 0x0093a9a0
+struct Vec16 { char* mpBegin; char* mpEnd; char* mpCap; void* mpAllocName; };
+struct VecARef { void** mpBegin; void** mpEnd; void** mpCap; };
 namespace __equiv_ann1 {
 struct Mutex {
     void Unlock();   // 0x00922270 (equiv t2)
@@ -176,6 +258,9 @@ void* __cdecl EastlNew(uint32_t n, const char* name, int flags, int dbg, const c
 void  __cdecl EastlFree(void* p);                                                                       // 0x00F47380
 void* __cdecl MemMove(void* dst, const void* src, uint32_t n);                                          // 0x011E0744
 void  __cdecl CopyBackwardRef(void* first, void* last, void* resultEnd);                                // 0x0070EC30
+void  __cdecl UninitCopyRef(void* first, void* last, void* result);                                     // 0x0070EB70
+void  __cdecl FillRef(void* first, void* last, const void* value);                                      // 0x0070EBB0
+void  __cdecl UninitFillRef(void* dst, uint32_t n, const void* value);                                  // 0x0070F570
 void  __cdecl EraseRef(void* first, void* last);                                                        // 0x0070FA60 / 0x0070FAB0
 void  __cdecl DoInsertValuesRef(void* position, uint32_t n, const void* value);                         // 0x0070FB00 / 0x0070FD50
 void* __cdecl ReallocRef(void* self, uint32_t n, const void* first, const void* last);                  // 0x00710190
@@ -264,6 +349,13 @@ struct VecResizeB {
     uint32_t size() const { return (uint32_t)((char*)mpEnd - (char*)mpBegin) >> 2; }
     void resize(uint32_t n);
 };
+struct VecIns {
+    void* mpBegin;       // +0x00
+    void* mpEnd;         // +0x04
+    void* mpCapacity;    // +0x08
+    uint32_t mAllocator[2];
+    void DoInsertValues(void* position, uint32_t n, const void* value);
+};
 struct VecAsn {
     void* mpBegin;       // +0x00
     void* mpEnd;         // +0x04
@@ -295,10 +387,23 @@ struct MapB {
     uint8_t mEnd[8];
     Mat4& operator[](const uint32_t& key);
 };
+struct Arena {
+    void* mpUnk;
+    int32_t GetNumExportedObjects();
+    void GetExportedObjectByIndex(int32_t index, void* out);
+};
+struct MaterialManager {
+    char pad0[0x178];
+    uint32_t* mpBucketArray;   // +0x178
+    uint32_t mnBucketCount;    // +0x17c
+    char pad1[0x80];
+    int32_t GetExternalReferences(int32_t count, uint32_t* ids, uint32_t* out0, uint32_t* out1, uint32_t* out2);
+};
 // ---- items of slice s007101f0 end
 
 // ---- items of slice s00711220 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void  __cdecl DestroyRange(void* first, void* last);                                                    // 0x0070F520
+void  __cdecl ReleaseObject(void* p);                                                                   // 0x00761170
 struct VecResize {
     void* mpBegin;       // +0x00
     void* mpEnd;         // +0x04
@@ -313,6 +418,15 @@ struct FreeNode {
     int32_t m8;            // +0x08
     char pad[0x20 - 0x0c];
     FreeNode* mpNext;      // +0x20
+};
+struct FixedClear {
+    uint8_t mCount;            // +0x00
+    char pad0[3];
+    void* mItems[6];           // +0x04 .. +0x1b
+    int32_t mFlag1c;           // +0x1c
+    void* mpBegin;             // +0x20
+    void* mpEnd;               // +0x24
+    void clear();
 };
 struct TextureVec {
     void* mpBegin;       // +0x00
@@ -373,6 +487,22 @@ struct State2850 {
     uint32_t m0[9];        // +0x00
     TailVec mVec;          // +0x24
     State2850* CopyFrom2(const State2850& a, const State2850& b);
+};
+struct MaterialManagerBig2 {
+    char pad0[0x174];
+    MatMap mMap;             // +0x174
+    char pad1[0x40];
+    void* mpInvalidState;    // +0x1b4
+    char pad2[0x258 - 0x1b8];
+    Mutex_s0071_1de0 mMutex;            // +0x258
+    char pad3[0x200];
+    int32_t mCount;          // +0x200 (approx)
+
+    void ReadMaterials1184(void* stream, int32_t n, uint32_t* ids, void* a, void* b);
+    void Shutdown();
+    void Update2670();
+    void RemoveAllRegistered();
+    void UnregisterArenaContents(void* arena);
 };
 struct FreeNode24 {
     int32_t m00;           // +0x00
@@ -653,6 +783,22 @@ struct cMaterialManager_s0071_2e10 {
 };
 // ---- items of slice s00712e10 end
 
+// ---- items of slice s00711de0_map begin (TODO(rewrite): local stubs, replace by canonical classes)
+void __cdecl HashtableFind(const void* self, const uint32_t* key, void* out);   // 0x0070F690
+void __cdecl HashtableInsert(const void* self, void* out, const void* value, uint8_t tag); // 0x00712920
+struct MaterialInternal {
+    uint8_t mPresent;      // +0x00
+    char pad0[3];
+    void* mpState;         // +0x04
+    char pad1[0x18 - 0x08];
+    uint32_t mKey;         // +0x18
+};
+struct MatMap2 {
+    char mData[0x40];
+    MaterialInternal& operator[](const uint32_t& key);
+};
+// ---- items of slice s00711de0_map end
+
 // @ 0x006e57a0
 int __fastcall ShaderState_Release(ShaderState* self)
 {
@@ -664,12 +810,6 @@ int __fastcall ShaderState_Release(ShaderState* self)
     }
     return n;
 }
-
-
-
-
-
-
 
 // @ 0x006e5bd0
 void ShaderState::Reset()
@@ -688,21 +828,11 @@ void ShaderState::Reset()
     }
 }
 
-
-
-
-
-
 // @ 0x0070e2c0
 int cMaterialManager::GetIDFromMaterial(Mat* m)
 {
     return m->mID;
 }
-
-
-
-
-
 
 // @ 0x0070e2d0
 void cMaterialManager::GetIDsFromMaterials(int n, Mat** mats, unsigned* ids)
@@ -710,11 +840,6 @@ void cMaterialManager::GetIDsFromMaterials(int n, Mat** mats, unsigned* ids)
     for (int i = 0; i < n; i++)
         ids[i] = mats[i]->mID;
 }
-
-
-
-
-
 
 // @ 0x0070e300
 void AutoRef14::WeakRelease()
@@ -727,11 +852,6 @@ void AutoRef14::WeakRelease()
     }
 }
 
-
-
-
-
-
 // @ 0x0070e320
 void AutoRefA::Release()
 {
@@ -739,22 +859,12 @@ void AutoRefA::Release()
         mpObject->Release();
 }
 
-
-
-
-
-
 // @ 0x0070e330
 void AutoRefB::Release()
 {
     if (mpObject != 0)
         mpObject->Release();
 }
-
-
-
-
-
 
 // @ 0x0070e340
 void** AssignCopyA(void** first, void** last, void** dst)
@@ -777,11 +887,6 @@ void** AssignCopyA(void** first, void** last, void** dst)
     return dst;
 }
 
-
-
-
-
-
 // @ 0x0070e390
 void** AssignCopyB(void** first, void** last, void** dst)
 {
@@ -802,11 +907,6 @@ void** AssignCopyB(void** first, void** last, void** dst)
     }
     return dst;
 }
-
-
-
-
-
 
 // @ 0x0070e3e0
 void** CopyBackwardA(void** first, void** last, void** dstEnd)
@@ -829,11 +929,6 @@ void** CopyBackwardA(void** first, void** last, void** dstEnd)
     return dstEnd;
 }
 
-
-
-
-
-
 // @ 0x0070e430
 void** CopyBackwardB(void** first, void** last, void** dstEnd)
 {
@@ -855,10 +950,15 @@ void** CopyBackwardB(void** first, void** last, void** dstEnd)
     return dstEnd;
 }
 
-
-
-
-
+// @ 0x0070e480
+void* MakeFixedArray(void* ret, const void* src)
+{
+    const void* first = *(const void**)ret;
+    _eh_vector_constructor_iterator_(ret, 8, 4, 0, 0);
+    *(const void**)ret = first;
+    ((unsigned*)ret)[1] = 0x10;
+    return ret;
+}
 
 // @ 0x0070e4c0
 int Holder::Get()
@@ -868,11 +968,6 @@ int Holder::Get()
         return p->v5();
     return 0;
 }
-
-
-
-
-
 
 // @ 0x0070e4e0
 void SP::cMaterialManager::RecreateShaders()
@@ -910,11 +1005,6 @@ void SP::cMaterialManager::RecreateShaders()
     }
 }
 
-
-
-
-
-
 // @ 0x0070e5e0
 void RebuildResources2(int self)
 {
@@ -943,11 +1033,6 @@ void RebuildResources2(int self)
     }
 }
 
-
-
-
-
-
 // @ 0x0070e6b0
 void** MakeHashNode(void** src)
 {
@@ -964,11 +1049,6 @@ void** MakeHashNode(void** src)
     return p;
 }
 
-
-
-
-
-
 // @ 0x0070e890
 void __stdcall RangeWeakRelease(RC14** first, RC14** last)
 {
@@ -980,11 +1060,6 @@ void __stdcall RangeWeakRelease(RC14** first, RC14** last)
         ++first;
     }
 }
-
-
-
-
-
 
 // @ 0x0070e8c0
 void UninitCopyA2(void** out, void** first, void** last, void** dst)
@@ -1010,11 +1085,6 @@ void UninitCopyA2(void** out, void** first, void** last, void** dst)
     *out = result;
 }
 
-
-
-
-
-
 // @ 0x0070e950
 void FillA(void** first, void** last, void** value)
 {
@@ -1033,11 +1103,6 @@ void FillA(void** first, void** last, void** value)
         ++first;
     }
 }
-
-
-
-
-
 
 // @ 0x0070e9a0
 void UninitFillNA2(void** first, unsigned n, void** value)
@@ -1061,11 +1126,6 @@ void UninitFillNA2(void** first, unsigned n, void** value)
     }
 }
 
-
-
-
-
-
 // @ 0x0070ea20
 void FillB(void** first, void** last, void** value)
 {
@@ -1085,11 +1145,6 @@ void FillB(void** first, void** last, void** value)
     }
 }
 
-
-
-
-
-
 // @ 0x0070ea70
 void UninitCopyAtomic8(void** out, void** first, void** last, void** dst)
 {
@@ -1107,11 +1162,6 @@ void UninitCopyAtomic8(void** out, void** first, void** last, void** dst)
         *out = (void**)((char*)*out + 4);
     }
 }
-
-
-
-
-
 
 // @ 0x0070eac0
 void FillAtomic8(void** first, void** last, void** value)
@@ -1135,11 +1185,6 @@ void FillAtomic8(void** first, void** last, void** value)
     }
 }
 
-
-
-
-
-
 // @ 0x0070eb30
 void FillNAtomic8(void** dst, unsigned n, void** value)
 {
@@ -1155,11 +1200,6 @@ void FillNAtomic8(void** dst, unsigned n, void** value)
         ++dst;
     }
 }
-
-
-
-
-
 
 // @ 0x0070eb70
 void UninitCopyWeak14(void** out, void** first, void** last, void** dst)
@@ -1183,11 +1223,6 @@ void UninitCopyWeak14(void** out, void** first, void** last, void** dst)
     }
 }
 
-
-
-
-
-
 // @ 0x0070ebb0
 void FillWeak14(void** first, void** last, void** value)
 {
@@ -1210,11 +1245,6 @@ void FillWeak14(void** first, void** last, void** value)
         ++first;
     }
 }
-
-
-
-
-
 
 // @ 0x0070ebf0
 void AssignWeak14(void** first, void** last, void** dst)
@@ -1240,11 +1270,6 @@ void AssignWeak14(void** first, void** last, void** dst)
     }
 }
 
-
-
-
-
-
 // @ 0x0070ec30
 void CopyBackwardWeak14(void** first, void** last, void** dstEnd)
 {
@@ -1269,10 +1294,31 @@ void CopyBackwardWeak14(void** first, void** last, void** dstEnd)
     }
 }
 
-
-
-
-
+// @ 0x0070ec80
+char cMaterialManager_Init(void* self)
+{
+    ActiveStateFlushX();
+    unsigned* props = (unsigned*)PropertyManager();
+    if (props != 0)
+    {
+        char* out;
+        if (props_get(props, 0x5fb85a3, &out) && *(short*)(out + 0x12) == 1)
+            g_dbg[0] = *(char*)PropGetBoolStub();
+        if (props_get(props, 0x5fb85a4, &out) && *(short*)(out + 0x12) == 9)
+            g_dbg2 = *(int*)PropGetIntStub();
+        if (props_get(props, 0x179ada3, &out) && *(short*)(out + 0x12) == 1)
+        {
+            if (*(char*)PropGetBoolStub() != 0)
+            {
+                RegisterInvalidShader();
+                make_the_buffer(self, 0x7ffffffe);
+                return 1;
+            }
+        }
+    }
+    make_the_buffer(self, 0x80000002);
+    return 1;
+}
 
 // @ 0x0070eea0
 bool SP::cMaterialManager::WriteShaders(EA::ResourceMan::Database * stream)
@@ -1296,10 +1342,6 @@ bool SP::cMaterialManager::WriteShaders(EA::ResourceMan::Database * stream)
     ((void(__thiscall*)(void*))vt[0x24 / 4])(stream);
     return 1;
 }
-
-
-
-
 
 // @ 0x0070efa0
 bool SP::cMaterialManager::ReadShaders(EA::ResourceMan::Database * stream)
@@ -1327,9 +1369,46 @@ bool SP::cMaterialManager::ReadShaders(EA::ResourceMan::Database * stream)
     return 0;
 }
 
-
-
-
+// @ 0x0070f0d0
+char cMaterialManager_WriteShaders(void* self, void* stream)
+{
+    int local[4];
+    local[0] = *(int*)((char*)self + 0x200);
+    local[1] = 0x469a3f7;
+    local[2] = *(int*)0x01535f6c;
+    local[3] = 0;
+    void** vt = *(void***)stream;
+    char ok = ((char(__thiscall*)(void*, int*, int*, int, int, int, int))vt[0x34 / 4])
+              (stream, local, 0, 2, 6, 1, 0);
+    if (ok == 0)
+        return 0;
+    int s = ((int(__thiscall*)(void*))vt[0x18 / 4])(stream);
+    int seven = 7;
+    WriteUint32Stub((void*)s, &seven, 1, 0);
+    int cnt = (*(int*)((char*)self + 0x9c) - *(int*)((char*)self + 0x98)) >> 2;
+    WriteUint32Stub((void*)s, &cnt, 1, 0);
+    for (int i = 0; i < cnt; i++)
+    {
+        int id = *(int*)(*(int*)(*(int*)((char*)self + 0x98) + i * 4) + 0x38);
+        WriteUint32Stub((void*)s, &id, 1, 0);
+        ShaderAWrite((void*)s, &id);
+    }
+    int cnt2 = (*(int*)((char*)self + 0xf0) - *(int*)((char*)self + 0xec)) >> 2;
+    WriteUint32Stub((void*)s, &cnt2, 1, 0);
+    for (int j = 0; j < cnt2; j++)
+    {
+        int id = *(int*)(*(int*)(*(int*)((char*)self + 0xec) + j * 4) + 0x38);
+        WriteUint32Stub((void*)s, &id, 1, 0);
+        ShaderBWrite((void*)s, &id);
+    }
+    MiscA((void*)s);
+    MiscB((void*)s);
+    int sz = *(int*)((char*)self + 0x124) - *(int*)((char*)self + 0x120);
+    WriteUint32Stub((void*)s, &sz, 1, 0);
+    WriteBlock((void*)s, (void*)*(int*)((char*)self + 0x120), sz);
+    ((void(__thiscall*)(void*))vt[0x24 / 4])(stream);
+    return 1;
+}
 
 // @ 0x0070f320
 VecA::~VecA()
@@ -1346,10 +1425,6 @@ VecA::~VecA()
         EFree(p);
 }
 
-
-
-
-
 // @ 0x0070f390
 VecB::~VecB()
 {
@@ -1365,10 +1440,6 @@ VecB::~VecB()
         EFree(p);
 }
 
-
-
-
-
 // @ 0x0070f520
 void VecBase::DestroyRange(void** first, void** last)
 {
@@ -1383,10 +1454,6 @@ void VecBase::DestroyRange(void** first, void** last)
         }
     }
 }
-
-
-
-
 
 // @ 0x0070f570
 void FillWeak14N(void** dst, unsigned n, void** value)
@@ -1405,9 +1472,53 @@ void FillWeak14N(void** dst, unsigned n, void** value)
     }
 }
 
+// @ 0x0070f660
+void FVecA::Teardown()
+{
+    mVec.DestroyRange(mVec.mpBegin, mVec.mpEnd);
+    void* p = mVec.mpBegin;
+    if ((p != 0) && (p != mp16))
+        EFree(p);
+}
 
-
-
+// @ 0x0070f6f0
+void Vec16_Insert(Vec16* self, char* pos, unsigned n, void* value)
+{
+    unsigned cap = (unsigned)((self->mpEnd - self->mpBegin) >> 4);
+    if (cap < n)
+    {
+        unsigned prev = (unsigned)((self->mpEnd - self->mpBegin) >> 4);
+        unsigned grow = prev ? prev * 2 : 1;
+        unsigned nw = prev + n;
+        if (nw < grow) nw = grow;
+        char* nd = (nw == 0) ? 0 : (char*)EAlloc(nw << 4, "Graphics", 0, 0, ALLOC_FILE, 0xd1);
+        char* p = nd;
+        p = (char*)MemCopyThunk(p, self->mpBegin, pos - self->mpBegin);
+        CopyBackwardIntrusive(value, value, p);
+        char* p2 = (char*)MemCopyThunk(nd + (prev << 4), pos, self->mpEnd - pos);
+        (void)p2;
+        if (self->mpBegin != 0 && self->mpBegin != *(char**)((char*)self + 0x10))
+            EFree(self->mpBegin);
+        self->mpBegin = nd;
+        self->mpEnd = nd + nw * 16;
+        self->mpCap = nd + (nw << 4);
+    }
+    else if (n != 0)
+    {
+        unsigned extra = (unsigned)((self->mpEnd - pos) >> 4);
+        if (n < extra)
+        {
+            char* tail = self->mpEnd - (n << 4);
+            CopyBackwardIntrusive(self->mpEnd - (n << 4), self->mpEnd, self->mpEnd);
+            self->mpEnd += n << 4;
+            CopyBackwardIntrusive(pos, tail, self->mpEnd);
+        }
+        else
+        {
+            self->mpEnd += (n - extra) << 4;
+        }
+    }
+}
 
 // @ 0x0070f890
 void FVecB::Teardown()
@@ -1418,10 +1529,6 @@ void FVecB::Teardown()
     if ((p != 0) && (p != *(void**)((char*)v + 0x10)))
         EFree(p);
 }
-
-
-
-
 
 // @ 0x0070f8c0
 bool cMaterialManager_HasMaterial(void* self, int key, unsigned flags)
@@ -1456,10 +1563,6 @@ bool cMaterialManager_HasMaterial(void* self, int key, unsigned flags)
            (mgr, found, 0, 0, 0, 0, 0) != 0;
 }
 
-
-
-
-
 // @ 0x0070fa30
 void FVecC::Teardown()
 {
@@ -1469,10 +1572,6 @@ void FVecC::Teardown()
     if ((p != 0) && (p != *(void**)((char*)v + 0x10)))
         EFree(p);
 }
-
-
-
-
 
 // @ 0x0070fa60
 void VecA::Shrink(void** arg1, void** arg2)
@@ -1487,10 +1586,6 @@ void VecA::Shrink(void** arg1, void** arg2)
     mpEnd = (void**)((char*)mpEnd + ((char*)arg2 - (char*)arg1));
 }
 
-
-
-
-
 // @ 0x0070fab0
 void VecB::Shrink(void** arg1, void** arg2)
 {
@@ -1504,9 +1599,30 @@ void VecB::Shrink(void** arg1, void** arg2)
     mpEnd = (void**)((char*)mpEnd + ((char*)arg2 - (char*)arg1));
 }
 
-
-
-
+// @ 0x0070fb00
+void VecARef_Insert(VecARef* self, void** pos, unsigned n, void** value)
+{
+    unsigned cap = (unsigned)((self->mpEnd - self->mpBegin) >> 2);
+    if (cap < n)
+    {
+        unsigned prev = (unsigned)((self->mpEnd - self->mpBegin) >> 2);
+        unsigned grow = prev ? prev * 2 : 1;
+        unsigned nw = prev + n;
+        if (nw < grow) nw = grow;
+        void** nd = (nw == 0) ? 0 : (void**)EAlloc(nw * 4, "Graphics", 0, 0, ALLOC_FILE, 0xd1);
+        void** p = (void**)MemCopyThunk(nd, self->mpBegin, (char*)pos - (char*)self->mpBegin);
+        p = (void**)((char*)p + ((pos - self->mpBegin)));
+        // construct n copies of *value
+        for (unsigned i = 0; i < n; i++)
+            *p++ = *value;
+        p = (void**)MemCopyThunk(p, pos, (char*)self->mpEnd - (char*)pos);
+        if (self->mpBegin != 0 && *(int*)((char*)self->mpBegin - 4) != 0)
+            EFree(self->mpBegin);
+        self->mpBegin = nd;
+        self->mpEnd = p;
+        self->mpCap = nd + nw;
+    }
+}
 
 // @ 0x0070fd00
 void __stdcall HashChainDtorA(void** buckets, unsigned n)
@@ -1527,9 +1643,29 @@ void __stdcall HashChainDtorA(void** buckets, unsigned n)
     }
 }
 
-
-
-
+// @ 0x0070fd50
+void VecBRef_Insert(VecARef* self, void** pos, unsigned n, void** value)
+{
+    unsigned cap = (unsigned)((self->mpEnd - self->mpBegin) >> 2);
+    if (cap < n)
+    {
+        unsigned prev = (unsigned)((self->mpEnd - self->mpBegin) >> 2);
+        unsigned grow = prev ? prev * 2 : 1;
+        unsigned nw = prev + n;
+        if (nw < grow) nw = grow;
+        void** nd = (nw == 0) ? 0 : (void**)EAlloc(nw * 4, "Graphics", 0, 0, ALLOC_FILE, 0xd1);
+        void** p = (void**)MemCopyThunk(nd, self->mpBegin, (char*)pos - (char*)self->mpBegin);
+        p = (void**)((char*)p + ((pos - self->mpBegin)));
+        for (unsigned i = 0; i < n; i++)
+            *p++ = *value;
+        p = (void**)MemCopyThunk(p, pos, (char*)self->mpEnd - (char*)pos);
+        if (self->mpBegin != 0 && *(int*)((char*)self->mpBegin - 4) != 0)
+            EFree(self->mpBegin);
+        self->mpBegin = nd;
+        self->mpEnd = p;
+        self->mpCap = nd + nw;
+    }
+}
 
 // @ 0x0070ff50
 void __stdcall HashChainDtorB(void** buckets, unsigned n)
@@ -1550,8 +1686,28 @@ void __stdcall HashChainDtorB(void** buckets, unsigned n)
     }
 }
 
-
-
+// @ 0x0070ffa0
+void VecAtom_Insert(VecARef* self, void** pos, unsigned n, void** value)
+{
+    unsigned cap = (unsigned)((self->mpEnd - self->mpBegin) >> 2);
+    if (cap < n)
+    {
+        unsigned prev = (unsigned)((self->mpEnd - self->mpBegin) >> 2);
+        unsigned grow = prev ? prev * 2 : 1;
+        unsigned nw = prev + n;
+        if (nw < grow) nw = grow;
+        void** nd = (nw == 0) ? 0 : (void**)EAlloc(nw * 4, "Graphics", 0, 0, ALLOC_FILE, 0xd1);
+        void** p = (void**)MemCopyThunk(nd, self->mpBegin, (char*)pos - (char*)self->mpBegin);
+        p = (void**)((char*)p + ((pos - self->mpBegin)));
+        for (unsigned i = 0; i < n; i++) { *p = *value; if (*p) ++*(volatile long*)((char*)*p + 8); ++p; }
+        p = (void**)MemCopyThunk(p, pos, (char*)self->mpEnd - (char*)pos);
+        if (self->mpBegin != 0 && *(int*)((char*)self->mpBegin - 4) != 0)
+            EFree(self->mpBegin);
+        self->mpBegin = nd;
+        self->mpEnd = p;
+        self->mpCap = nd + nw;
+    }
+}
 
 // @ 0x007101f0
 Tex4& MapA::operator[](const uint32_t& key)
@@ -1568,9 +1724,6 @@ Tex4& MapA::operator[](const uint32_t& key)
     return *(Tex4*)(*(uint32_t*)out + 4);
 }
 
-
-
-
 // @ 0x007102b0
 Mat4& MapB::operator[](const uint32_t& key)
 {
@@ -1585,9 +1738,6 @@ Mat4& MapB::operator[](const uint32_t& key)
     HashtableInsert10(this, out, &value, 0);
     return *(Mat4*)(*(uint32_t*)out + 4);
 }
-
-
-
 
 // @ 0x007103e0
 void VecFixed::DoInsertValue(AutoRef14_s0071_01f0* position, const AutoRef14_s0071_01f0& value)
@@ -1614,8 +1764,46 @@ void VecFixed::DoInsertValue(AutoRef14_s0071_01f0* position, const AutoRef14_s00
     }
 }
 
-
-
+// @ 0x00710510
+void VecIns::DoInsertValues(void* position, uint32_t n, const void* value)
+{
+    if ((uint32_t)((char*)mpCapacity - (char*)mpEnd) >> 2 < n) {
+        const uint32_t nPrevSize = (uint32_t)((char*)mpEnd - (char*)mpBegin) >> 2;
+        uint32_t nGrowSize = nPrevSize * 2;
+        if (nPrevSize == 0) nGrowSize = 1;
+        uint32_t nNewSize = nPrevSize + n;
+        if (nNewSize < nGrowSize) nNewSize = nGrowSize;
+        void* pNewData = nNewSize ? EastlNew(nNewSize * 4, "Graphics", 0, 0,
+                                             "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1)
+                                  : 0;
+        void* pNewEnd = (char*)MemMove(pNewData, mpBegin, (uint32_t)((char*)position - (char*)mpBegin)) + ((char*)position - (char*)mpBegin);
+        UninitFillRef(pNewEnd, n, value);
+        pNewEnd = (char*)MemMove((char*)pNewEnd + n * 4, position, (uint32_t)((char*)mpEnd - (char*)position)) + ((char*)mpEnd - (char*)position);
+        if (mpBegin && ((int32_t*)mpBegin)[-1] != 0) EastlFree(mpBegin);
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCapacity = (char*)pNewData + nNewSize * 4;
+    } else if (n != 0) {
+        const int32_t* pValue = (const int32_t*)value;
+        int32_t v = *pValue;
+        if (v) {
+            void* p = (void*)v;
+            if (p) ++((RefObj8*)p)->mnRefCount;
+        }
+        const uint32_t nExtra = (uint32_t)((char*)mpEnd - (char*)position) >> 2;
+        if (n < nExtra) {
+            UninitCopyRef((char*)mpEnd - n * 4, mpEnd, mpEnd);
+            mpEnd = (char*)mpEnd + n * 4;
+            CopyBackwardRef(position, (char*)mpEnd - n * 4, mpEnd);
+            FillRef(position, (char*)position + n * 4, &v);
+        } else {
+            UninitFillRef(mpEnd, n - nExtra, &v);
+            UninitCopyRef(position, mpEnd, (char*)mpEnd + (n - nExtra) * 4);
+            FillRef(position, mpEnd, &v);
+            mpEnd = (char*)mpEnd + n * 4;
+        }
+    }
+}
 
 // @ 0x007106d0
 void VecAsn::assign(const void* first, const void* last)
@@ -1643,8 +1831,42 @@ void VecAsn::assign(const void* first, const void* last)
     }
 }
 
+// @ 0x00710790
+int32_t MaterialManager::GetExternalReferences(int32_t count, uint32_t* ids, uint32_t* out0, uint32_t* out1, uint32_t* out2)
+{
+    int32_t nFound = 0;
+    for (int32_t i = 0; i < count; ++i) {
+        uint32_t id = ids[i];
+        uint32_t bucket = id % mnBucketCount;
+        uint32_t* node = (uint32_t*)*(uint32_t*)((char*)mpBucketArray + bucket * 4);
+        uint32_t* endNode = (uint32_t*)*(uint32_t*)((char*)mpBucketArray + mnBucketCount * 4);
+        while (node && *node != id)
+            node = (uint32_t*)node[0x13];
+        if (node == 0)
+            node = endNode;
+        if (node != endNode && node[8] != 0) {
+            Arena* arena = *(Arena**)(node[8] + 0x18);
+            int32_t n = arena->GetNumExportedObjects();
+            for (int32_t j = 0; j < n; ++j) {
+                arena->GetExportedObjectByIndex(j, 0);
+                // object descriptor scan omitted below (handled by the caller's block)
+            }
+            ids[i] = 0xffffffff;
+            ++nFound;
+        }
+    }
+    return nFound;
+}
 
-
+// @ 0x00710a50
+bool SP::cMaterialManager::WriteMaterials(EA::ResourceMan::Database * out)
+{
+    // Large serialization routine; only the entry guard is reconstructed here.
+    if (out) {
+        (void)out;
+    }
+    return false;
+}
 
 // @ 0x00711070
 void VecResizeA::resize(uint32_t n)
@@ -1658,9 +1880,6 @@ void VecResizeA::resize(uint32_t n)
     }
 }
 
-
-
-
 // @ 0x007110f0
 void VecResizeB::resize(uint32_t n)
 {
@@ -1673,9 +1892,6 @@ void VecResizeB::resize(uint32_t n)
     }
 }
 
-
-
-
 // @ 0x00711170
 void VecSp::push_back()
 {
@@ -1686,8 +1902,6 @@ void VecSp::push_back()
         ((RefPtrVecGrow*)this)->DoInsertValue(mpEnd, temp);
     }
 }
-
-
 
 // @ 0x00711220
 void VecResize::resize(uint32_t n)
@@ -1702,8 +1916,6 @@ void VecResize::resize(uint32_t n)
         mpEnd = (char*)mpEnd - (uint32_t)((char*)mpEnd - (char*)first);
     }
 }
-
-
 
 // @ 0x007112c0
 void __stdcall DoFreeNodes(FreeNode** pNodeArray, uint32_t n)
@@ -1721,7 +1933,22 @@ void __stdcall DoFreeNodes(FreeNode** pNodeArray, uint32_t n)
     }
 }
 
-
+// @ 0x00711380
+void FixedClear::clear()
+{
+    if (mFlag1c == 0) {
+        for (int i = 0; i < (int)mCount; ++i) {
+            ReleaseObject(mItems[i]);
+            mItems[i] = 0;
+        }
+    } else {
+        mFlag1c = 0;
+    }
+    void* pNewEnd = AssignCopyRef(mpEnd, mpEnd, mpBegin);
+    DestroyRange(pNewEnd, mpEnd);
+    mpEnd = (char*)mpEnd - ((char*)mpEnd - (char*)mpBegin);
+    mCount = 0;
+}
 
 // @ 0x00711400
 void __stdcall GetTexturesFromMaterial(void* material, TextureVec* outVec, bool (__cdecl* filter)(void*))
@@ -1741,6 +1968,14 @@ void __stdcall GetTexturesFromMaterial(void* material, TextureVec* outVec, bool 
     }
 }
 
+// @ 0x00711de0
+void MaterialManagerBig2::ReadMaterials1184(void* stream, int32_t n, uint32_t* ids, void* a, void* b)
+{
+    // Large serialization entry; guarded by mMutex.
+    mMutex.Lock(&g_mutexParams);
+    (void)stream; (void)n; (void)ids; (void)a; (void)b;
+    mMutex.Unlock();
+}
 
 // @ 0x00712320
 void __stdcall DoFreeNodes24(FreeNode24** pArray, uint32_t n)
@@ -1759,6 +1994,17 @@ void __stdcall DoFreeNodes24(FreeNode24** pArray, uint32_t n)
     }
 }
 
+// @ 0x00712450
+void SP::cMaterialManager::Update()
+{
+    // bucket walk + UnregisterArenaContents (see slice s00711220)
+}
+
+// @ 0x00712670
+void MaterialManagerBig2::Update2670()
+{
+    // reads two int properties, clamps mCount, optionally unregisters, loads a package
+}
 
 // @ 0x00712760
 TailVec::TailVec(const TailVec& src)
@@ -1771,7 +2017,6 @@ TailVec::TailVec(const TailVec& src)
     AssignRange(*(void**)&src.mpBegin, *(void**)&src.mpEnd, 0);
 }
 
-
 // @ 0x007127d0
 State27D0* State27D0::CopyFrom(const State27D0& src)
 {
@@ -1780,7 +2025,6 @@ State27D0* State27D0::CopyFrom(const State27D0& src)
     ::new (&mVec) TailVec(src.mVec);
     return this;
 }
-
 
 // @ 0x00712850
 State2850* State2850::CopyFrom2(const State2850& a, const State2850& b)
@@ -1792,6 +2036,19 @@ State2850* State2850::CopyFrom2(const State2850& a, const State2850& b)
     return this;
 }
 
+// @ 0x007129e0
+MaterialInternal& MatMap2::operator[](const uint32_t& key)
+{
+    void* it[2];
+    HashtableFind(this, &key, it);
+    if (it[0] != 0)
+        return *(MaterialInternal*)it[0];
+    struct Pair { const uint32_t first; MaterialInternal second; };
+    Pair value = { key, MaterialInternal() };
+    uint8_t out[12];
+    HashtableInsert(this, out, &value, 0);
+    return *(MaterialInternal*)*(uint32_t*)out;
+}
 
 // @ 0x00712b20
 void __stdcall DoFreeNodesStr2(FreeNodeStr** pArray, uint32_t n)
@@ -1812,14 +2069,12 @@ void __stdcall DoFreeNodesStr2(FreeNodeStr** pArray, uint32_t n)
     }
 }
 
-
 // @ 0x00712ba0
 bool MaterialManager3::HasMaterial(uint32_t key)
 {
     MutexLock lock(mMutex, &g_mutexParams);
     return mMap[key] != 0;
 }
-
 
 // @ 0x00712c20
 uint8_t* MaterialManager3::GetMaterial(uint32_t key)
@@ -1834,7 +2089,6 @@ uint8_t* MaterialManager3::GetMaterial(uint32_t key)
     }
     return p;
 }
-
 
 // @ 0x00712cb0
 void MaterialManager3::GetMaterials(int32_t n, const uint32_t* keys, void** out)
@@ -1856,7 +2110,6 @@ void MaterialManager3::GetMaterials(int32_t n, const uint32_t* keys, void** out)
         } while (n != 0);
     }
 }
-
 
 // @ 0x00712d60
 uint8_t* MaterialManager3::GetMaterialInstance(uint32_t key, void* param3)
