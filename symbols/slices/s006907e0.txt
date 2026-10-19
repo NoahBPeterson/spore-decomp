@@ -6,6 +6,7 @@
 006909e0 ?ProfTable_DoInsertValue@@YAPAXPAX00@Z  # ProfTable_DoInsertValue migrated from s006907e0 (verbatim, slice spelling)
 00690b50 ?CheckDependentPriority@cJobManager_s0069_07e0@@QAEXPAUcJobData_s0069_07e0@@H@Z  # cJobManager_s0069_07e0::CheckDependentPriority migrated from s006907e0 (verbatim, slice spelling)
 00690b80 ?WaitingList1_Insert@@YAXPAX00@Z  # WaitingList1_Insert migrated from s006907e0 (verbatim, slice spelling)
+00690c90 ?DoInsertValue@WaitingList2@@QAEXPAPAUcJob_s0069_07e0@@ABQAU2@@Z  # WaitingList2::DoInsertValue migrated from s006907e0 (verbatim, slice spelling)
 00690da0 ?CreateJobThread@cJobManager@SP@@UAEPAVcJobThread@2@I_NH@Z  # SP::cJobManager::CreateJobThread migrated from s006907e0
 00690f60 ?FailJob@cJobManager@SP@@QAEXAAVcJobData@2@@Z  # SP::cJobManager::FailJob migrated from s006907e0
 006910a0 ?FailNonRunnableJobs@cJobManager@SP@@QAEXXZ  # SP::cJobManager::FailNonRunnableJobs migrated from s006907e0

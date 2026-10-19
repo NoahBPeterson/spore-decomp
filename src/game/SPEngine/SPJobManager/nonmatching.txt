@@ -13,11 +13,12 @@
 006900b0 28 complete; wrapper call shape near-miss (FreeJobUnderLock args)
 00690120 17 complete; Release refcount decrement shape differs
 00690540 3 complete; ScheduleJob signalling shape near-miss
-006907e0 86 complete; QueueJobUnderLock EH/register near-miss
+006907e0 102 complete; QueueJobUnderLock EH/register near-miss
 006908a0 104 complete; PromoteJobPriorityUnderLock register near-miss
 00690930 83 complete; SetJobPriorityUnderLock register near-miss
 006909b0 14 complete; Queue two-step manager load near-miss
 00690b50 62 complete; CheckDependentPriority near-miss
+00690c90 194 eastl vector DoInsertValue (waiting list 2): complete; register allocation differs (original spills nNewSize to [esp+0x10] and keeps pNewData in ebp) [equiv: WEAK 61.8% coverage, no mismatch]
 00691260 149 complete; AddJobDependency (deps/dependents list splice) near-miss
 00691380 27 complete; AddDependency wrapper shape near-miss
 006913c0 28 complete; AddWeakDependency wrapper shape near-miss

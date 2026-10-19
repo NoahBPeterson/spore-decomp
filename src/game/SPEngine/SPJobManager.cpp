@@ -17,6 +17,7 @@
 #include "SP/cJobThread.h"
 #include <new>
 #include "EA/Thread/Thread.h"
+#include <string.h>
 
 // ---- items of slice s0068e670 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __cdecl SemaphorePost(void* self, int n);        // 0x0922740
@@ -238,7 +239,7 @@ struct cJob_s0069_07e0 {
     int mSlot;                      // +0x1c
     void* mpReturnValue;            // +0x20
     void* mpCleanupReturnValue;     // +0x24
-    int AddRef();
+    int AddRef();  // 0x0068f950 (cJob::AddRef)
     void Queue();  // 0x006909b0 (cJob::Queue)
     void AddDependency(cJob_s0069_07e0* other);  // 0x00691380 (cJob::AddDependency)
     void AddWeakDependency(cJob_s0069_07e0* other);  // 0x006913c0 (cJob::AddWeakDependency)
@@ -305,17 +306,37 @@ public:
     void PromoteJobPriorityUnderLock(cJobData_s0069_07e0* job, int priority);  // 0x006908a0 (cJobManager::PromoteJobPriorityUnderLock)
     void SetJobPriorityUnderLock(cJobData_s0069_07e0* job, int priority);  // 0x00690930 (cJobManager::SetJobPriorityUnderLock)
     void CheckDependentPriority(cJobData_s0069_07e0* job, int priority);  // 0x00690b50 (cJobManager::CheckDependentPriority)
-    void InsertWaitingThread(cJobThread_s0069_07e0* t, int priority);
+    void InsertWaitingThread(cJobThread_s0069_07e0* t, int priority);  // 0x00691500 (cJobManager::InsertWaitingThread)
     void ScheduleJob(cJobData_s0069_07e0* job);  // 0x00690540 (cJobManager::ScheduleJob)
     void FailJob(cJobData_s0069_07e0* job);  // 0x00690f60 (cJobManager::FailJob)
     void FailNonRunnableJobs();  // 0x006910a0 (cJobManager::FailNonRunnableJobs)
     void FailJobDependents(cJobData_s0069_07e0* job, bool weakOnly);  // 0x00690630 (cJobManager::FailJobDependents)
     __declspec(noinline) void AddJobDependency(cJobData_s0069_07e0* dependent, cJobData_s0069_07e0* dependency, bool weak);  // 0x00691260 (cJobManager::AddJobDependency)
     cJobLink_s0069_07e0* GetFreeLink();  // 0x00690050 (cJobManager::GetFreeLink)
-    void FlushWaitingLists();
+    void FlushWaitingLists();  // 0x006915c0 (cJobManager::FlushWaitingLists)
     void RebuildWaitingLists();
 };
 unsigned int GetMaxDependentPriority_s0069_07e0(cJobData_s0069_07e0* job);
+void* operator new(size_t, const char* name, int, unsigned, const char* file, int line);   // 0x00f473a0
+void  EASTL_allocator_deallocate(void* p);   // 0x00f47380
+#define EASTL_ALLOC_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
+struct WaitingList2 {
+    cJob_s0069_07e0** mpBegin;          // +0
+    cJob_s0069_07e0** mpEnd;            // +4
+    cJob_s0069_07e0** mpCapacity;       // +8
+    int mOverflowAllocator;  // +0xc
+    void* mpPoolBegin;       // +0x10
+    cJob_s0069_07e0** DoAllocate(const size_t& n) {
+        if (n)
+            return (cJob_s0069_07e0**)::operator new(n * sizeof(cJob_s0069_07e0*), "App", 0, 0, EASTL_ALLOC_FILE, 0xd1);
+        return 0;
+    }
+    void DoFree(cJob_s0069_07e0** p) {
+        if (p && p != mpPoolBegin)
+            EASTL_allocator_deallocate(p);
+    }
+    void DoInsertValue(cJob_s0069_07e0** position, cJob_s0069_07e0* const& value);
+};
 unsigned int GetMaxDependentPriority_s0069_07e0(cJobData_s0069_07e0* job) {
     unsigned int maxPri = (unsigned int)job->mPriority;
     IntrusiveList_s0069_07e0* pAnchor = &job->mDependents;
@@ -1321,6 +1342,32 @@ void cJobManager_s0069_07e0::CheckDependentPriority(cJobData_s0069_07e0* job, in
 void WaitingList1_Insert(void* vec, void* pos, void* value)
 {
     (void)vec; (void)pos; (void)value;
+}
+
+// @ 0x00690c90
+void WaitingList2::DoInsertValue(cJob_s0069_07e0** position, cJob_s0069_07e0* const& value)
+{
+    if (mpEnd != mpCapacity) {
+        cJob_s0069_07e0* const* pValue = &value;
+        if ((pValue >= position) && (pValue < mpEnd))
+            ++pValue;
+        ::new (mpEnd) cJob_s0069_07e0*(*(mpEnd - 1));
+        memmove(mpEnd - ((mpEnd - 1) - position), position, (size_t)((char*)(mpEnd - 1) - (char*)position));
+        *position = *pValue;
+        ++mpEnd;
+    } else {
+        const size_t nPrevSize = (size_t)(mpEnd - mpBegin);
+        const size_t nNewSize = (nPrevSize > 0) ? (2 * nPrevSize) : 1;
+        cJob_s0069_07e0** const pNewData = DoAllocate(nNewSize);
+        cJob_s0069_07e0** pNewEnd = (cJob_s0069_07e0**)memcpy(pNewData, mpBegin, (size_t)((char*)position - (char*)mpBegin)) + (position - mpBegin);
+        ::new (pNewEnd) cJob_s0069_07e0*(value);
+        ++pNewEnd;
+        pNewEnd = (cJob_s0069_07e0**)memcpy(pNewEnd, position, (size_t)((char*)mpEnd - (char*)position)) + (mpEnd - position);
+        DoFree(mpBegin);
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCapacity = pNewData + nNewSize;
+    }
 }
 
 // @ 0x00690da0
