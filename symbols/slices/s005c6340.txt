@@ -1,4 +1,5 @@
 005c6340 ?Init@cSPPalette_s005c_6340@SP@@QAE_NABUKey_s005c_6340@ResourceMan@EA@@IIIIHW4eModelType_s005c_6340@2@@Z  # cSPPalette_s005c_6340::Init migrated from s005c6340 (verbatim, slice spelling)
+005c6810 ?Init@cSPPaletteItem_s005c_6340@SP@@QAE_NABUKey_s005c_6340@ResourceMan@EA@@HI@Z  # cSPPaletteItem_s005c_6340::Init migrated from s005c6340 (verbatim, slice spelling)
 005c6a30 ?Cast@cSPPaletteItemUI_s005c_6340@SP@@UBEPAXI@Z  # cSPPaletteItemUI_s005c_6340::Cast migrated from s005c6340 (verbatim, slice spelling)
 005c6a70 SP::cSPPaletteItemUISelectable::Cast  # adds 0x47a9a1c then defers to cSPPaletteItemUI::Cast; byte-exact
 005c6ad0 SP::cSPPaletteItemUISelectable::SetIsSelected  # PDB caller-scored candidate; posts 0x47a9a20 / clears mSelected
