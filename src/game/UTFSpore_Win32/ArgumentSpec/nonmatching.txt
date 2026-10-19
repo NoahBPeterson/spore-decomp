@@ -1,13 +1,15 @@
 # va  diff-bytes  reason
 008387a0 5 StrEqualI2 - complete _stricmp(*p,b)==0 wrapper; only register naming (eax/ecx/edx) differs
+008387c0 144 cArgumentSpec::ArgTypeFromName - complete; only name/this register swap (ebx/edi); equiv: WEAK (53% cov, no mismatch, /EHsc /GS-)
 008389f0 68 RawStr::RawStr(const RawStr&,pos,n) - complete substr ctor; register allocation/lea folding differs
 00838a60 65 RawStr::Find - complete substring find; call arg setup / register choice differs
 00838ab0 92 Ent copy-ctor - complete string copy + field copies; register allocation differs; equiv: PASS (member CopyFrom, 533 valid, 100% cov)
 00838b90 55 CopyVec2 - complete eastl copy for a 2-float element with user operator=; offset-loop shape differs
-00838de0 40 RawStr sub-range assign - complete; min_alt reference + call setup differs
+00838de0 39 RawStr::AssignSub (thiscall ret 0xc, this=ecx forwarded to Assign) - complete; min_alt reference + call setup differs; equiv: WEAK (95.5% cov, no mismatch)
 00838f20 3 CopyEntsFwd - complete; only the order of the four pointer increments differs
 00838f80 3 CopyEntsBwd - complete; argument register assignment (arg1/arg2) swapped
 00839040 2 CopyEnts2Bwd - complete; argument register assignment swapped
+008397a0 104 cArgumentSpec::NameFromArgType - complete; edi/ebp for type + vector base hoisted (CSE) vs reload; equiv: WEAK (67% cov, no mismatch)
 00839950 54 complete: eastl::vector<cArgInfo> copy ctor; /GS- EH prologue and this/arg register swap not reproduced
 00839c00 189 complete: cArgumentSpec::AddArgDocs; append/SprintfAppend scheduling and loop register allocation differ
 00839f90 275 complete: cArgumentSpec::CreateHelpString; large, string temp construction differs

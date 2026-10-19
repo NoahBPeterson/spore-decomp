@@ -3,6 +3,7 @@
 ../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?StrNEqualI@@YA_NPBD0I@Z  00838780  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?DestroyEnts@@YAPAUEnt@@PAU1@00@Z  00838e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?CopyEnts2Fwd@@YAPAUEnt2@@PAU1@00@Z  00838ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?AddEnumDocs@@YAXPAURawStr@@PBDPAUEnumVec@@H@Z  008393a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?DoInsertValue@V8@@QAEXPAUE8@@ABU2@@Z  008399d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?DoInsertValue@V16@@QAEXPAUE16@@ABU2@@Z  00839ae0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?push_back@V8@@QAEXABUE8@@@Z  00839d80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

@@ -12,6 +12,7 @@
 #include "EA/ArgScript/cOptionsSpec.h"
 #include "EA/ArgScript/cCommandBase.h"
 #include "EA/ArgScript/cError.h"
+#include <string.h>
 
 // ---- items of slice s00837820 begin (TODO(rewrite): local stubs, replace by canonical classes)
 __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
@@ -19,7 +20,8 @@ __declspec(dllimport) int __cdecl _strnicmp(const char*, const char*, unsigned i
 // ---- items of slice s00837820 end
 
 // ---- items of slice s008387c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-void  __cdecl operator_delete__(void*);
+extern char gDocSep[];   // 0x1401b70 (1-char separator)
+void  __cdecl operator_delete__(void*);                          // 0x00f47380
 void  __cdecl DoInsertValue(char*, const char*, uint32_t);   // 0x11e0744
 char* __cdecl SearchStr(void*, void*, void*, void*);         // 0x609d50
 template <typename T> static const T& min_alt(const T& a, const T& b) { return b < a ? b : a; }
@@ -31,8 +33,14 @@ struct RawStr {
 
     void RangeInitialize(uint32_t n);                 // 0x475ab0
     void Assign(const char* first, const char* last); // 0x454cb0
+    RawStr() {}
     RawStr(const RawStr& s, uint32_t pos, uint32_t n); // 0x8389f0
     int  Find(const char* p, uint32_t pos);           // 0x838a60
+    void AssignSub(const RawStr& s, uint32_t pos, uint32_t n); // 0x838de0
+    RawStr* CopyCtor(const RawStr& s);                // 0x57cb10
+    void AppendRange(const char* first, const char* last); // 0x455d60
+    void Erase(uint32_t pos, uint32_t n);             // 0x61e200
+    RawStr* AppendStr(const char* s);                 // 0x60c4e0
 };
 struct Ent {                 // 0x20 bytes
     int    field0;           // +0
@@ -52,6 +60,27 @@ struct Vec2 {
     float x, y;
     Vec2& operator=(const Vec2& o) { x = o.x; y = o.y; return *this; }
 };
+bool __cdecl StrEqualI(const char*, const char*);                    // 0x838760
+bool __cdecl StrNEqualI(const char*, const char*, unsigned int);     // 0x838780
+bool __cdecl StrEqualI2(const char**, const char*);                  // 0x8387a0
+struct ArgumentSpec {        // EA::ArgScript::cArgumentSpec (retail layout, 0xb0)
+    char  pad0[0x58];
+    Ent2* mEnumBegin;        // +0x58
+    Ent2* mEnumEnd;          // +0x5c
+    unsigned int ArgTypeFromName(const char* name);   // 0x8387c0
+    void NameFromArgType(unsigned int type, RawStr* out);   // 0x8397a0
+    void FindNameAndTypeFromOption(RawStr* option, unsigned int* typeOut, RawStr* nameOut);   // 0x839540
+};
+void __cdecl SprintfAppend(RawStr* dst, const char* fmt, ...);       // 0x840c70
+struct EnumVal1 { const char* name; int x; };                       // stride 8
+struct EnumVal2 { const char* name; int x; const char* desc; };     // stride 0xc
+struct EnumSpec {            // EA::ArgScript::cEnumSpec (0x18)
+    const char* name;        // +0
+    char        pad[0xc];
+    EnumVal1*   vals;        // +0x10
+    EnumVal2*   descVals;    // +0x14
+};
+struct EnumVec { EnumSpec* mpBegin; EnumSpec* mpEnd; };
 // ---- items of slice s008387c0 end
 
 // ---- items of slice s00839950 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -516,19 +545,11 @@ bool StrEqualI(const char* a, const char* b)
     return _stricmp(a, b) == 0;
 }
 
-
-
-
-
 // @ 0x00838780
 bool StrNEqualI(const char* a, const char* b, unsigned int n)
 {
     return _strnicmp(a, b, n) == 0;
 }
-
-
-
-
 
 // @ 0x008387a0
 bool StrEqualI2(const char** p, const char* b)
@@ -536,8 +557,31 @@ bool StrEqualI2(const char** p, const char* b)
     return _stricmp(*p, b) == 0;
 }
 
-
-
+// @ 0x008387c0
+unsigned int ArgumentSpec::ArgTypeFromName(const char* name)
+{
+    unsigned int flags = 0;
+    unsigned int len = (unsigned int)strlen(name);
+    if (len > 2 && name[len - 2] == '[' && name[len - 1] == ']') {
+        flags = 0x4000;
+        len -= 2;
+    }
+    if (_strnicmp(name, "bool", len) == 0) return flags | 1;
+    if (_strnicmp(name, "int", len) == 0) return flags | 2;
+    if (_strnicmp(name, "float", len) == 0) return flags | 3;
+    if (_strnicmp(name, "double", len) == 0) return flags | 4;
+    if (_strnicmp(name, "string", len) == 0) return flags | 6;
+    if (StrNEqualI(name, "cstr", len) || StrNEqualI(name, "cstring", len)) return flags | 5;
+    if (StrNEqualI(name, "vector2", len)) return flags | 7;
+    if (StrNEqualI(name, "vector3", len)) return flags | 8;
+    if (StrNEqualI(name, "vector4", len)) return flags | 9;
+    if (StrEqualI(name, "colorRGB, typeLen")) return flags | 10;
+    if (StrNEqualI(name, "colorRGBA", len)) return flags | 11;
+    for (unsigned int i = 0; i < (unsigned int)(mEnumEnd - mEnumBegin); ++i) {
+        if (StrEqualI2((const char**)&mEnumBegin[i], name)) return (i + 12) | flags;
+    }
+    return 0;
+}
 
 // @ 0x008389f0
 RawStr::RawStr(const RawStr& s, uint32_t pos, uint32_t n)
@@ -557,9 +601,6 @@ RawStr::RawStr(const RawStr& s, uint32_t pos, uint32_t n)
     *mpEnd = 0;
 }
 
-
-
-
 // @ 0x00838a60
 int RawStr::Find(const char* p, uint32_t pos)
 {
@@ -573,9 +614,6 @@ int RawStr::Find(const char* p, uint32_t pos)
     }
     return -1;
 }
-
-
-
 
 // @ 0x00838ab0
 Ent* Ent::CopyFrom(const Ent* src)
@@ -597,9 +635,6 @@ Ent* Ent::CopyFrom(const Ent* src)
     return dst;
 }
 
-
-
-
 // @ 0x00838b90
 Vec2* CopyVec2(Vec2* first, Vec2* last, Vec2* dst)
 {
@@ -613,20 +648,14 @@ Vec2* CopyVec2(Vec2* first, Vec2* last, Vec2* dst)
     return dst;
 }
 
-
-
-
 // @ 0x00838de0
-void FUN_00838de0(RawStr* p, uint32_t pos, uint32_t n)
+void RawStr::AssignSub(const RawStr& s, uint32_t pos, uint32_t n)
 {
-    char* begin = p->mpBegin;
-    uint32_t rem = (uint32_t)(p->mpEnd - begin) - pos;
+    char* begin = s.mpBegin;
+    uint32_t rem = (uint32_t)(s.mpEnd - begin) - pos;
     const uint32_t& cnt = min_alt(rem, n);
-    p->Assign(begin + pos, begin + pos + cnt);
+    Assign(begin + pos, begin + pos + cnt);
 }
-
-
-
 
 // @ 0x00838e80
 Ent* DestroyEnts(Ent* first, Ent* last, Ent* dst)
@@ -641,9 +670,6 @@ Ent* DestroyEnts(Ent* first, Ent* last, Ent* dst)
     }
     return dst;
 }
-
-
-
 
 // @ 0x00838f20
 Ent* CopyEntsFwd(Ent* first, Ent* last, Ent* dst)
@@ -662,9 +688,6 @@ Ent* CopyEntsFwd(Ent* first, Ent* last, Ent* dst)
     return dst;
 }
 
-
-
-
 // @ 0x00838f80
 Ent* CopyEntsBwd(Ent* first, Ent* last, Ent* dst)
 {
@@ -682,9 +705,6 @@ Ent* CopyEntsBwd(Ent* first, Ent* last, Ent* dst)
     return dst;
 }
 
-
-
-
 // @ 0x00838ff0
 Ent2* CopyEnts2Fwd(Ent2* first, Ent2* last, Ent2* dst)
 {
@@ -699,9 +719,6 @@ Ent2* CopyEnts2Fwd(Ent2* first, Ent2* last, Ent2* dst)
     }
     return dst;
 }
-
-
-
 
 // @ 0x00839040
 Ent2* CopyEnts2Bwd(Ent2* first, Ent2* last, Ent2* dst)
@@ -718,7 +735,57 @@ Ent2* CopyEnts2Bwd(Ent2* first, Ent2* last, Ent2* dst)
     return dst;
 }
 
+// @ 0x008393a0
+void AddEnumDocs(RawStr* out, const char* prefix, EnumVec* v, int mode)
+{
+    out->AppendRange(gDocSep, gDocSep + 1);
+    for (uint32_t i = 0; i < (uint32_t)(v->mpEnd - v->mpBegin); ++i) {
+        if (v->mpBegin[i].vals != 0) {
+            if (mode == 2) SprintfAppend(out, "<p><b>%s</b></p><blockquote><i>", v->mpBegin[i].name);
+            else SprintfAppend(out, "%s%s:\n", prefix, v->mpBegin[i].name);
+            for (EnumVal1* p = v->mpBegin[i].vals; p->name; ++p) {
+                if (mode == 2) SprintfAppend(out, "%s</br>\n", p->name);
+                else SprintfAppend(out, "%s   %s\n", prefix, p->name);
+            }
+        } else {
+            if (mode == 2) SprintfAppend(out, "<p><b>%s</b></p><blockquote><i>", v->mpBegin[i].name);
+            else SprintfAppend(out, "%s%s:\n", prefix, v->mpBegin[i].name);
+            for (EnumVal2* p = v->mpBegin[i].descVals; p->name; ++p) {
+                if (mode == 2) SprintfAppend(out, "%s: %s</br>\n", p->name, p->desc);
+                else SprintfAppend(out, "%s   %s: %s\n", prefix, p->name, p->desc);
+            }
+        }
+        if (mode == 2) SprintfAppend(out, "</i></blockquote>");
+    }
+}
 
+// @ 0x008397a0
+void ArgumentSpec::NameFromArgType(unsigned int type, RawStr* out)
+{
+    unsigned int n = type & 0x3fff;
+    switch (n) {
+    case 1:  out->AppendStr("bool"); break;
+    case 2:  out->AppendStr("int"); break;
+    case 3:  out->AppendStr("float"); break;
+    case 4:  out->AppendStr("double"); break;
+    case 5:
+    case 6:  out->AppendStr("string"); break;
+    case 7:  out->AppendStr("vector2"); break;
+    case 8:  out->AppendStr("vector3"); break;
+    case 9:  out->AppendStr("vector4"); break;
+    case 10: out->AppendStr("rgb"); break;
+    case 11: out->AppendStr("rgba"); break;
+    case 0:  out->AppendStr("invalid"); break;
+    default:
+        if (n - 0xc <= 0xff && n - 0xc < (unsigned int)(mEnumEnd - mEnumBegin)) {
+            Ent2* e = &mEnumBegin[n - 0xc];
+            out->AppendRange(e->name.mpBegin, e->name.mpEnd);
+        } else {
+            out->AppendRange("unknown", "unknown" + 7);
+        }
+    }
+    if ((type & 0xc000) == 0x4000) out->AppendRange("[]", "[]" + 2);
+}
 
 // @ 0x00839950
 VecArgInfo::VecArgInfo(const VecArgInfo& x)
@@ -728,8 +795,6 @@ VecArgInfo::VecArgInfo(const VecArgInfo& x)
     UninitCopyArgEH(&pEnd, x.mpBegin, x.mpEnd, mpBegin, &x);
     mpEnd = pEnd;
 }
-
-
 
 // @ 0x008399d0
 void V8::DoInsertValue(E8* pos, const E8& v)
@@ -755,8 +820,6 @@ void V8::DoInsertValue(E8* pos, const E8& v)
     }
 }
 
-
-
 // @ 0x00839ae0
 void V16::DoInsertValue(E16* pos, const E16& v)
 {
@@ -781,8 +844,6 @@ void V16::DoInsertValue(E16* pos, const E16& v)
         mpBegin = nb; mpEnd = np; mpCapacity = nb + n;
     }
 }
-
-
 
 // @ 0x00839c00
 void cArgumentSpec::AddArgDocs(eastl::string8_s0083_9950* out, VecArgInfo* args, int style)
@@ -821,8 +882,6 @@ void cArgumentSpec::AddArgDocs(eastl::string8_s0083_9950* out, VecArgInfo* args,
     out->append("\n", "\n" + 1);
 }
 
-
-
 // @ 0x00839d80
 void V8::push_back(const E8& v)
 {
@@ -833,8 +892,6 @@ void V8::push_back(const E8& v)
     }
 }
 
-
-
 // @ 0x00839dc0
 void V16::push_back(const E16& v)
 {
@@ -844,8 +901,6 @@ void V16::push_back(const E16& v)
         DoInsertValue(mpEnd, v);
     }
 }
-
-
 
 // @ 0x00839f90
 void cArgumentSpec::CreateHelpString(const char* name, eastl::string8_s0083_9950* out, int style)
@@ -900,16 +955,12 @@ void cArgumentSpec::CreateHelpString(const char* name, eastl::string8_s0083_9950
         out->append("</blockquote></td></tr>", "</blockquote></td></tr>" + 21);
 }
 
-
-
 // @ 0x0083a2f0
 const char* cArgumentSpec::HelpString(const char* name, int style)
 {
     CreateHelpString(name, &mErrorString, style);
     return mErrorString.mpBegin;
 }
-
-
 
 // @ 0x0083a310
 cOptionsSpec* __cdecl DestroyOptionsRange(cOptionsSpec* first, cOptionsSpec* last, cOptionsSpec* result)
@@ -935,8 +986,6 @@ cOptionsSpec* __cdecl DestroyOptionsRange(cOptionsSpec* first, cOptionsSpec* las
     return result;
 }
 
-
-
 // @ 0x0083a3c0
 void VecArgInfo::DoInsertValue(cArgInfo* pos, const cArgInfo& v)
 {
@@ -960,8 +1009,6 @@ void VecArgInfo::DoInsertValue(cArgInfo* pos, const cArgInfo& v)
         mpBegin = nb; mpEnd = ne; mpCapacity = nb + n;
     }
 }
-
-
 
 // @ 0x0083a580
 void VecEnumSpec::DoInsertValue(cEnumSpec* pos, const cEnumSpec& v)
@@ -989,8 +1036,6 @@ void VecEnumSpec::DoInsertValue(cEnumSpec* pos, const cEnumSpec& v)
     }
 }
 
-
-
 // @ 0x0083a740
 VecArgInfo& VecArgInfo::operator=(const VecArgInfo& x)
 {
@@ -1016,8 +1061,6 @@ VecArgInfo& VecArgInfo::operator=(const VecArgInfo& x)
     return *this;
 }
 
-
-
 // @ 0x0083a8b0
 cOptionsSpec& cOptionsSpec::operator=(const cOptionsSpec& x)
 {
@@ -1029,8 +1072,6 @@ cOptionsSpec& cOptionsSpec::operator=(const cOptionsSpec& x)
     mFlagToSet = x.mFlagToSet;
     return *this;
 }
-
-
 
 // @ 0x0083a900
 cOptionsSpec* __cdecl CopyOptionsRange(cOptionsSpec* first, cOptionsSpec* last, cOptionsSpec* result)
@@ -1049,8 +1090,6 @@ cOptionsSpec* __cdecl CopyOptionsRange(cOptionsSpec* first, cOptionsSpec* last, 
     }
     return result;
 }
-
-
 
 // @ 0x0083a970
 cOptionsSpec* __cdecl CopyBackwardOptionsRange(cOptionsSpec* first, cOptionsSpec* last, cOptionsSpec* resultEnd)
@@ -1071,13 +1110,11 @@ cOptionsSpec* __cdecl CopyBackwardOptionsRange(cOptionsSpec* first, cOptionsSpec
     return resultEnd;
 }
 
-
 // @ 0x0083a9f0
 EA::ArgScript::cArgumentSpec::cArgumentSpec(bool respectHelp)
 
 : mCommandName(), mBriefDescription(), mFullDescription(), mDefaultArguments(), mOptions(), mEnumSpecs(), mRespectHelp(respectHelp), mFlags(0), mVectorArgs(), mErrorString() {
 }
-
 
 // @ 0x0083aaa0
 int cArgumentSpec_s0083_a9f0::ParseVectorArgument(cArgInfo_s0083_a9f0* ai, const char* str)
@@ -1122,7 +1159,6 @@ int cArgumentSpec_s0083_a9f0::ParseVectorArgument(cArgInfo_s0083_a9f0* ai, const
     Sprintf(&mErrorString, "Unknown vector arg type %d", ai->mType);
     return 4;
 }
-
 
 // @ 0x0083ac80
 int cArgumentSpec_s0083_a9f0::ParseVectorArgument(cArgInfo_s0083_a9f0* ai, const char* str, ArgParser* p)
@@ -1204,7 +1240,6 @@ int cArgumentSpec_s0083_a9f0::ParseVectorArgument(cArgInfo_s0083_a9f0* ai, const
     return 4;
 }
 
-
 // @ 0x0083afc0
 int cArgumentSpec_s0083_a9f0::ParseArgument(cArgInfo_s0083_a9f0* ai, const char* str)
 {
@@ -1255,7 +1290,6 @@ int cArgumentSpec_s0083_a9f0::ParseArgument(cArgInfo_s0083_a9f0* ai, const char*
     Sprintf(&mErrorString, "Unknown arg type %d", type);
     return 4;
 }
-
 
 // @ 0x0083b1d0
 int cArgumentSpec_s0083_a9f0::ParseArgumentEx(cArgInfo_s0083_a9f0* ai, const char* str, ArgParser* p)
@@ -1355,7 +1389,6 @@ int cArgumentSpec_s0083_a9f0::ParseArgumentEx(cArgInfo_s0083_a9f0* ai, const cha
     return 4;
 }
 
-
 // @ 0x0083b580
 int cArgumentSpec_s0083_a9f0::ParseOptionArgs(cOptionsSpec_s0083_a9f0* opt, int** ppArgs, const char** ppEnd, ArgParser* p)
 {
@@ -1387,7 +1420,6 @@ int cArgumentSpec_s0083_a9f0::ParseOptionArgs(cOptionsSpec_s0083_a9f0* opt, int*
     }
     return 0;
 }
-
 
 // @ 0x0083b6d0
 int cArgumentSpec_s0083_a9f0::ParseOption(int** ppArgs, const char** ppEnd, ArgParser* p)
