@@ -1,20 +1,21 @@
-00a7d540 _FUN_00a7d540  # vector element copy-construct helper (thiscall: dst=ecx, src=arg)
-00a7d580 _FUN_00a7d580  # vector element construct-from-value helper (thiscall)
-00a7d5e0 _FUN_00a7d5e0  # vector range copy (cdecl: dst/src/end)
-00a7d640 _FUN_00a7d640  # vector range copy-backward (cdecl)
-00a7eb60 _FUN_00a7eb60  # vector range copy (cdecl, second half of insert)
-00a71410 _FUN_00a71410  # effect-object factory (thiscall)
-00a0a360 _FUN_00a0a360  # 4-byte pointer-vector append (thiscall)
 0041cb40 ?Assign@Matrix33@@QAEXPBX@Z  # rw::math::fpu::Matrix33Template<float> Assign
 00539440 _FUN_00539440  # EA::Swarm::normalized (float3 -> float3, cdecl)
 007ed920 _FUN_007ed920  # IO read helper (stream, dst)
 009360d0 _FUN_009360d0  # EA::Random::RandomLinearCongruential::RandomDoubleUniform (thiscall)
 0093a780 _FUN_0093a780  # EA::IO::ReadInt32 (stream, dst, n, pad)
 0093a800 _FUN_0093a800  # EA::IO::ReadUInt64 (stream, dst, n, pad)
+00a0a360 _FUN_00a0a360  # 4-byte pointer-vector append (thiscall)
+00a71410 _FUN_00a71410  # effect-object factory (thiscall)
+00a7d540 _FUN_00a7d540  # vector element copy-construct helper (thiscall: dst=ecx, src=arg)
+00a7d580 _FUN_00a7d580  # vector element construct-from-value helper (thiscall)
+00a7d5e0 _FUN_00a7d5e0  # vector range copy (cdecl: dst/src/end)
+00a7d640 _FUN_00a7d640  # vector range copy-backward (cdecl)
+00a7eb60 _FUN_00a7eb60  # vector range copy (cdecl, second half of insert)
+00a7fe20 ?FUN_00a7fe20@Owner@@QAEXPAX@Z  # Owner::FUN_00a7fe20 migrated from s00a7f2e0 (verbatim, slice spelling)
+01485720 _DAT_01485720  # 1.0f constant
+01564c98 _DAT_01564c98  # flag mask used by FUN_00a7fc10
 0167764c _DAT_0167764c  # float const used in effect config
 01677650 _DAT_01677650  # float const used in effect config
 01677654 _DAT_01677654  # float const used in effect config
 016776f8 _DAT_016776f8  # Matrix33 constant (9 floats) source for Assign
-01485720 _DAT_01485720  # 1.0f constant
-01564c98 _DAT_01564c98  # flag mask used by FUN_00a7fc10
 016778dc _DAT_016778dc  # EA::Random::RandomLinearCongruential instance
