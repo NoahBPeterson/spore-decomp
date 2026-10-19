@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPMovie/videorenderer_rw4.cpp  ?f9460@Vid@@QAEXPAX@Z  00fd9460  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

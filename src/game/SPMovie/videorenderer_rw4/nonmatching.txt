@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not byte-exact)
+00fd9610 80 VideoRenderer part reset: complete and equivalence PASSes (257 valid, 100% coverage); the loop folds the combined (uStack_10/_c/_8/_4) stores differently. flags /O2 /MD /Gy /TP /arch:SSE
