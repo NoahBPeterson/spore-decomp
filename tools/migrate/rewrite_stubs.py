@@ -392,8 +392,9 @@ def item_names(kind, text):
         mm = re.match(r"\s*(?:template\s*<(?:[^<>]|<[^<>]*>)*>\s*)?(?:struct|class|union)\s+(?:__declspec\s*\((?:[^()]|\([^()]*\))*\)\s*)?(\w+)", m)
         return [mm.group(1)] if mm else []
     if kind == "typedef":
-        # function-pointer typedef: `(*Name)(` or `(__thiscall *Name)(` (the calling convention comes first)
-        mm = re.search(r"\(\s*(?:__\w+\s*)?\*?\s*(?:__\w+\s+)?(\w+)\s*\)\s*\(", m)
+        # function-pointer typedef: `(*Name)(` or `(__thiscall *Name)(` (the calling convention comes first), or a calling-
+        # convention macro (`typedef int (PTRCALL *SCANNER)(..)`, mig10 s009159b0 xmltok: SCANNER was pruned, C2146)
+        mm = re.search(r"\(\s*(?:__\w+\s*|\w+\s*(?=\*))?\*?\s*(?:__\w+\s+)?(\w+)\s*\)\s*\(", m)
         if mm:
             return [mm.group(1)]
         mm = re.search(r"(\w+)\s*(?:\[[^\]]*\])?\s*;\s*$", m.strip())
