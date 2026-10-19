@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/HTTPBase.cpp  ?HTTPMethodToString@Internet@EA@@YAPBDW4HTTPMethod@12@@Z  00941bc0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/HTTPBase.cpp  ?HeaderFieldToFieldString@Internet@EA@@YAPBDW4HTTPHeaderField@12@@Z  00941c40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
