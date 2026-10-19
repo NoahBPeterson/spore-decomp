@@ -1496,6 +1496,30 @@ class Rewrite:
                 clash += 1
         return clash, agree
 
+    def stub_has_library_members(self, sname, depth=0):
+        """Does the slice's stub `sname` (or a slice struct it holds by value) hold a canonical class by value (FileStream,
+        Mutex, eastl containers)?  Those members take the canonical size in the module TU and move every later offset."""
+        view = self.views.get(sname) or getattr(self, "included_views", {}).get(sname)
+        if not view or depth > 4:
+            return True                       # unknown layout: treat as hazardous
+        for b in view.get("base_layout", []):
+            if b["name"] not in self.structs or self.stub_has_library_members(b["name"], depth + 1):
+                return True
+        for m in view["members"]:
+            if m.get("pad"):
+                continue
+            bt, ptr = base_type(m["type"])
+            bt = re.sub(r"\[.*$", "", bt).strip()
+            if ptr or bt in SCALARS or bt in ("uint32_t", "int32_t", "uint16_t", "int16_t", "uint8_t", "int8_t", "uint64_t",
+                                               "int64_t", "size_t", "wchar_t", "bool", "float", "double", "char"):
+                continue
+            if bt in self.structs:
+                if self.stub_has_library_members(bt, depth + 1):
+                    return True
+                continue
+            return True                       # a canonical / library type held by value
+        return False
+
     def namesake(self, sname, cls):
         """another canonical class whose name is exactly the slice struct's (class_key), when `cls` is not"""
         if class_key(cls) == class_key(sname):
@@ -3222,6 +3246,18 @@ class Rewrite:
                 # s006bc1b0 hazard below (a verbatim copy whose library members change size) cannot pass unseen
                 self.make_verbatim(c)
                 self.notes.append(("verbatim", "0x%08x %s::%s: slice layout refused for mapping, byte-exact in the slice: %s" % (
+                    c.va, c.cls, c.name, self.refused[c.cls])))
+                self.fns.append(c)
+                continue
+            if c.cls in getattr(self, "refused", {}) and not self.stub_has_library_members(c.cls) and \
+                    "%08x" % c.va not in self.manual.get("leave_in_slice", {}) and \
+                    (not getattr(self, "batch_vas", None) or "%08x" % c.va in self.batch_vas[1]):
+                # fix pass 6 D (2026-10-19): the s006bc1b0 hazard below needs by-value members of canonical library classes in
+                # the slice's stub; a stub of scalars, pointers and slice-local types keeps its own layout in the module TU, so the
+                # non-exact function lands verbatim like the byte-exact ones (the landing agent's equiv check is the gate).
+                # mig8/mig9: DatabasePackedFile_v2 22, SPEditorPaintTheme 14, SPPlayMode 9 functions were held by the guard
+                self.make_verbatim(c)
+                self.notes.append(("verbatim", "0x%08x %s::%s: slice layout refused for mapping, stub has no library members: %s" % (
                     c.va, c.cls, c.name, self.refused[c.cls])))
                 self.fns.append(c)
                 continue
