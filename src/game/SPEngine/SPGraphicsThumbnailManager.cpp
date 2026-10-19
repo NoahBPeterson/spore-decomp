@@ -110,10 +110,6 @@ struct W39d0 {
 };
 // ---- items of slice s007b29a0 end
 
-
-
-
-
 // ---- items of slice s007b3a70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern int   g_renderState;      // 0x16fa38c
 extern int   DAT_016f9218;
@@ -231,7 +227,6 @@ struct ItemList {
     void Fn(int a, int b, int c, int d);
 };
 // ---- items of slice s007b49f0 end
-
 
 // ---- items of slice s007b55f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern float g_defaultPosX;   // 0x01635648
@@ -1248,7 +1243,6 @@ struct cThumbnailManager {
 };
 // ---- items of slice s007b7ac0 end
 
-
 // ---- items of slice s007b87f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern void* g_vtbl_1410024[];
 extern void* g_vtbl_1410014[];
@@ -1536,11 +1530,9 @@ struct cThumbnailManager_s007b_b670 {
     cFilterChainJob_s007b_b670* mFilterChain;   // +0x10fc
     Thumb* mThumbs[1024];        // +0x1100
 
-    void HandleSomething(void* msg);
+    void HandleSomething(void* msg);  // 0x007bbde0 (cThumbnailManager::HandleSomething)
 };
 // ---- items of slice s007bb670 end
-
-
 
 // ---- items of slice s007bbf80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern float gDefaultFloat;                                   // 0x15d1168
@@ -3245,10 +3237,6 @@ struct cThumbnailManagerAO_s007c_0780 {
 }
 // ---- items of slice s007c0780 end
 
-
-
-
-
 // ---- items of slice s007c1c10 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace SPL {
 struct RectID_s007c_1c10 { int mPageID; int mAllocID; };
@@ -3723,51 +3711,9 @@ typedef EA::AutoRefCount_s007b_a350<cThumbnailManager_s007b_a350::cJobPostFilter
 UintArray* UintArray::Self()
 { return this; }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b2600
 void FUN_007b2600(void*)
 {}
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b2680
 void SP::cThumbnailManager::GetThumbRectID(SP::cRenderTargetRectID & out)
@@ -3776,33 +3722,9 @@ void SP::cThumbnailManager::GetThumbRectID(SP::cRenderTargetRectID & out)
     out.mAllocID = mThumbRectID.mAllocID;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b26a0
 void FUN_007b26a0(void*)
 {}
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b27a0
 void W27a0::f(int a, int b, int c, int d)
@@ -3810,35 +3732,11 @@ void W27a0::f(int a, int b, int c, int d)
     m98 = a; m9c = b; ma0 = c; m82 = 1; ma4 = d;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b27e0
 void W27e0::f(int a, int b, int c, int d, int e)
 {
     m84 = a; m88 = b; m8c = c; m83 = 1; m90 = d; m94 = e;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b2820
 void W2820::set(Pair* pa, Pair* pb, Pair* pc, Pair* pd, float v)
@@ -3850,49 +3748,13 @@ void W2820::set(Pair* pa, Pair* pb, Pair* pc, Pair* pd, float v)
     f = v;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b2890
 D2890::~D2890()
 { if (mObj) ((IObj2*)mObj)->Release(); }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b2900
 D2900::~D2900()
 { if (mObj) ((IObj2*)mObj)->Release(); }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b2970
 void __stdcall FUN_007b2970(P2970* p)
@@ -3905,227 +3767,61 @@ void __stdcall FUN_007b2970(P2970* p)
         node->mFlag = 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b29a0
 void FUN_007b29a0(void*)
 {}
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b2ab0
 void FUN_007b2ab0(void*)
 {}
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b2ca0
 void FUN_007b2ca0(void*)
 {}
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b2e10
 void FUN_007b2e10(void*)
 {}
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b2eb0
 void FUN_007b2eb0(void*)
 {}
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b2f40
 void FUN_007b2f40(void*)
 {}
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b3090
 void FUN_007b3090(void*)
 {}
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b31f0
 void FUN_007b31f0(void*)
 {}
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b32e0
 void FUN_007b32e0(void*)
 {}
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b3340
 void FUN_007b3340(void*)
 {}
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b35a0
 void FUN_007b35a0(void*)
 {}
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b3630
 void FUN_007b3630(void*)
 {}
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b3760
 void FUN_007b3760(void*)
 {}
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b3820
 void FUN_007b3820(void*)
 {}
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b39d0
 void W39d0::f()
@@ -4143,17 +3839,6 @@ void W39d0::f()
     m70 = 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b3a30
 void W3a30::set(int idx, float* v)
 {
@@ -4165,17 +3850,6 @@ void W3a30::set(int idx, float* v)
     p[o + 2] = v[2];
     p[o + 3] = v[3];
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b3a70
 void cShowTexturesLayer::DrawLayer(int a1, int a2, int* a3, int a4)
@@ -4442,33 +4116,6 @@ restore:
     m_viewer->End();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b49f0
 void ItemList::Fn(int a, int b, int c, int d)
 {
@@ -4480,43 +4127,13 @@ void ItemList::Fn(int a, int b, int c, int d)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b4a50
 void partial_007b4a50(void)
 {}
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b4b10
 void partial_007b4b10(void)
 {}
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b4c10
 void Bounds6::Expand(const Vector3* p, int n, int stride)
@@ -4538,99 +4155,29 @@ void Bounds6::Expand(const Vector3* p, int n, int stride)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b4cd0
 void partial_007b4cd0(void)
 {}
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b4d70
 void partial_007b4d70(void)
 {}
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b4e10
 void partial_007b4e10(void)
 {}
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b4ee0
 void partial_007b4ee0(void)
 {}
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b5090
 void partial_007b5090(void)
 {}
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b5320
 void partial_007b5320(void)
 {}
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b55f0
 void __stdcall FitViewerToBounds(const float* b, FitViewer* v, int target, float yaw)
@@ -4716,32 +4263,6 @@ void __stdcall FitViewerToBounds(const float* b, FitViewer* v, int target, float
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b5ad0
 void __stdcall PostRenderJob(IRefObj* owner, int arg14, int arg18, int tagv, int arg10)
 {
@@ -4781,32 +4302,6 @@ void __stdcall PostRenderJob(IRefObj* owner, int arg14, int arg18, int tagv, int
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b5c80
 void __stdcall MeshBoundingSphere(MeshVec* v, Vector3_s007b_55f0* outCenter, float* outRadius)
 {
@@ -4828,32 +4323,6 @@ void __stdcall MeshBoundingSphere(MeshVec* v, Vector3_s007b_55f0* outCenter, flo
     *outCenter = Vector3_s007b_55f0((b.mx.x + b.mn.x) * 0.5f, (b.mx.y + b.mn.y) * 0.5f, (b.mx.z + b.mn.z) * 0.5f);
     *outRadius = sqrtf(dx * dx + dy * dy + dz * dz) * 0.5f + 1.0f;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b5e20
 void FrameJob::Fit()
@@ -4897,32 +4366,6 @@ void FrameJob::Fit()
     p->z = 0.0f;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b6010
 void RtJobA::Run()
 {
@@ -4933,32 +4376,6 @@ void RtJobA::Run()
         GetTargetFactory()->Register(obj);
     UploadTargetA(obj);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b6160
 void FrameJob::FitAspect()
@@ -5008,32 +4425,6 @@ void FrameJob::FitAspect()
     p->z = 0.0f;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b63b0
 void RtJobB::Run()
 {
@@ -5044,32 +4435,6 @@ void RtJobB::Run()
         GetTargetFactory()->Register(obj);
     UploadTargetB(obj);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b64f0
 void __fastcall RefHolder_Reset(RefHolder* h)
@@ -5082,31 +4447,6 @@ void __fastcall RefHolder_Reset(RefHolder* h)
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b6570
 void ThumbA::Run6570(int a1, int a2, int* a3, int a4)
@@ -5130,31 +4470,6 @@ void ThumbA::Run6570(int a1, int a2, int* a3, int a4)
     Gfx_67ddb0()->f22(a, b, a4, 1.0f);
     Fn35a0();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b6730
 void ThumbB::Run6730(int a1, int a2, int a3, int a4)
@@ -5193,31 +4508,6 @@ void ThumbB::Run6730(int a1, int a2, int a3, int a4)
     g->f25((int)oc0, a1, a2, a3, a4);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b68f0
 void ThumbC::Run68f0(int flag, int a2, int a3, int a4, int a5)
 {
@@ -5227,31 +4517,6 @@ void ThumbC::Run68f0(int flag, int a2, int a3, int a4, int a5)
     ViewerRef ctx = { (int)viewer, 0, 0, 0 };
     next->Fn49f0(a2, a3, &ctx, a5);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b6980
 void ThumbD::Run6980(int a, int b, int c, int d)
@@ -5282,31 +4547,6 @@ void ThumbD::Run6980(int a, int b, int c, int d)
         SP_MessageServer()->f6(msgId, msgArg, 0, 0);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b6a90
 void ItemList2::Fn(int a, int b, int c, int d)
 {
@@ -5321,90 +4561,15 @@ void ItemList2::Fn(int a, int b, int c, int d)
     Other();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b6b60
 RefVec::~RefVec()
 {
     DestroyRange(mBegin, mEnd);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b6bd0
 AbilityA::~AbilityA()
 {}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b6c70
 AbilityB::~AbilityB()
@@ -5412,31 +4577,6 @@ AbilityB::~AbilityB()
     if (mCap - mBegin > 1 && mBegin)
         operator_delete__(mBegin);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b6d50
 char FitJob::Fit6d50(SphereVec* v, cViewer_s007b_6570* vw, const float* c, const float* off, float* fov)
@@ -5498,31 +4638,6 @@ char FitJob::Fit6d50(SphereVec* v, cViewer_s007b_6570* vw, const float* c, const
     vw->F4d00(&xf);
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b7270
 void FitJob::Run7270(SphereVec* v, cViewer_s007b_6570* vw, int target, const float* c, float k, float yaw)
@@ -5589,94 +4704,25 @@ void FitJob::Run7270(SphereVec* v, cViewer_s007b_6570* vw, int target, const flo
     vw->SetViewAngleY(fov);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b7530
 void partial_007b7530(void)
 {}
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b77a0
 void partial_007b77a0(void)
 {}
 
-
-
-
-
-
-
-
-
-
 // @ 0x007b7830
 void partial_007b7830(void)
 {}
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b7920
 void partial_007b7920(void)
 {}
 
-
-
-
-
-
-
-
-
-
 // @ 0x007b7a20
 void partial_007b7a20(void)
 {}
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b7ac0
 void cThumbnailManager::Render(int p1, int p2, const RenderInfo* ri, int p4)
@@ -5818,61 +4864,21 @@ void cThumbnailManager::Render(int p1, int p2, const RenderInfo* ri, int p4)
     SetShaderData(0x223, savedShaderData, 1);
 }
 
-
-
-
-
-
-
-
-
 // @ 0x007b8550
 void partial_007b8550(void)
 {}
-
-
-
-
-
-
-
-
 
 // @ 0x007b8680
 void partial_007b8680(void)
 {}
 
-
-
-
-
-
-
-
-
 // @ 0x007b8700
 void partial_007b8700(void)
 {}
 
-
-
-
-
-
-
-
-
 // @ 0x007b8780
 void partial_007b8780(void)
 {}
-
-
-
-
-
-
-
-
 
 // @ 0x007b87f0
 void __stdcall ComputeBoundingSphere(void* obj, float* outCenter, float* outRadius)
@@ -5925,29 +4931,6 @@ void __stdcall ComputeBoundingSphere(void* obj, float* outCenter, float* outRadi
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b8b30
 cFilterRes* cFilterRes::Ctor()
 {
@@ -5967,29 +4950,6 @@ cFilterRes* cFilterRes::Ctor()
     return this;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b8be0
 void cFilterRes::Dtor()
 {
@@ -6001,29 +4961,6 @@ void cFilterRes::Dtor()
     vtbl0 = g_vtbl_13eb938;
     vtbl1 = g_vtbl_13ec458;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b8cb0
 void cCSAThumbnailJob::RenderLargeTiledImage(int a0, int a1, int* a2, int a3)
@@ -6131,29 +5068,6 @@ void cCSAThumbnailJob::RenderLargeTiledImage(int a0, int a1, int* a2, int a3)
     img->Release();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b91f0
 #pragma float_control(precise, off, push)
 void cPlanetCapture::Setup(CaptureCam* cam)
@@ -6195,29 +5109,6 @@ void cPlanetCapture::Setup(CaptureCam* cam)
 }
 #pragma float_control(pop)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b9420
 void cJobPostFilter::Init(bool b)
 {
@@ -6234,29 +5125,6 @@ void cJobPostFilter::Init(bool b)
     for (int i = 0; i < 16; i++) z[i] = 0;
     m_flag = true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b9510
 void cJobPostFilter::Init(int a, const int* p, const int* q, bool b)
@@ -6281,29 +5149,6 @@ void cJobPostFilter::Init(int a, const int* p, const int* q, bool b)
     m_flag = true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b9620
 void cJobPostFilter::Shutdown()
 {
@@ -6325,57 +5170,11 @@ void cJobPostFilter::Shutdown()
     m_flag = false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b9690
 void VecPair::Push(Pair2* p)
 {
     v.push_back(p);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007b96d0
 void cFilterChainJob::Shutdown()
@@ -6393,29 +5192,6 @@ void cFilterChainJob::Shutdown()
     mInitialized = false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b9750
 int cFilterChainJob::AddFilter(IRel* p)
 {
@@ -6426,60 +5202,17 @@ int cFilterChainJob::AddFilter(IRel* p)
     return (int)mFilters.size() - 1;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007b97d0
 void partial_007b97d0(void)
 {}
-
-
-
-
-
-
-
 
 // @ 0x007b9990
 void partial_007b9990(void)
 {}
 
-
-
-
-
-
-
-
 // @ 0x007b9b00
 void partial_007b9b00(void)
 {}
-
-
-
-
-
-
-
 
 // @ 0x007b9e80
 void TerrainMgr::Teardown()
@@ -6514,34 +5247,13 @@ void TerrainMgr::Teardown()
     m_terrainFilterInitialized = false;
 }
 
-
-
-
-
-
-
-
 // @ 0x007b9f30
 void partial_007b9f30(void)
 {}
 
-
-
-
-
-
-
-
 // @ 0x007ba0b0
 void partial_007ba0b0(void)
 {}
-
-
-
-
-
-
-
 
 // @ 0x007ba350
 namespace SP {
@@ -6769,12 +5481,6 @@ void cThumbnailManager_s007b_a350::InitPostProcessEffect(int type, cFilterChainJ
     }
 }
 }  // namespace SP
-
-
-
-
-
-
 
 // @ 0x007bb670
 #pragma intrinsic(_InterlockedExchange)
@@ -7060,11 +5766,6 @@ void __thiscall cThumbnailManager_s007b_b670::DilateSetup(int arg)
 
 }
 
-
-
-
-
-
 // @ 0x007bbde0
 void cThumbnailManager_s007b_b670::HandleSomething(void* msg)
 {
@@ -7115,11 +5816,6 @@ void cThumbnailManager_s007b_b670::HandleSomething(void* msg)
         if (bm) bm->v2();
     }
 }
-
-
-
-
-
 
 // @ 0x007bbf80
 void cThumbnailManager_s007b_bf80::DilateStart(DilateReq* req)
@@ -7304,25 +6000,6 @@ void cThumbnailManager_s007b_bf80::DilateStart(DilateReq* req)
     mgr->Post(cs.mpObject, 0, &msg);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007bced0
 void cThumbnailManager_s007b_ced0::DilateWithoutAOStart(DilateReq_s007b_ced0* req)
 {
@@ -7386,25 +6063,6 @@ void cThumbnailManager_s007b_ced0::DilateWithoutAOStart(DilateReq_s007b_ced0* re
     mgr->Post(cs.mpObject, 0, &msg);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007bd4c0
 void cThumbnailManager_s007b_ced0::DilateWithoutAODone(DilateMsg* msg)
 {
@@ -7413,25 +6071,6 @@ void cThumbnailManager_s007b_ced0::DilateWithoutAODone(DilateMsg* msg)
     mCurrentlyCapturingAO = false;
     SP_MessageServer_s007b_ced0()->Send(u, 0, 0, 0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007bd500
 void __stdcall PaletteJobInfo_Shutdown(cPaletteJobInfo* pInfo)
@@ -7442,25 +6081,6 @@ void __stdcall PaletteJobInfo_Shutdown(cPaletteJobInfo* pInfo)
     pcVar1->Release();
     SP_MessageServer_s007b_ced0()->Send(uVar2, 0, 0, 0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007bd540
 void cPaletteThumbnailJob::Shutdown()
@@ -7491,25 +6111,6 @@ void cPaletteThumbnailJob::Shutdown()
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007bd5d0
 void cEditorJobInfo::Shutdown()
 {
@@ -7521,25 +6122,6 @@ void cEditorJobInfo::Shutdown()
         mThumbnailTex = 0;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007bd640
 void cEditorThumbnailJob::Shutdown()
@@ -7565,25 +6147,6 @@ void cEditorThumbnailJob::Shutdown()
         mInitialized = false;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007bd6b0
 void cCSAThumbnailJob_s007b_ced0::Shutdown()
@@ -7619,47 +6182,9 @@ void cCSAThumbnailJob_s007b_ced0::Shutdown()
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007bd750
 __forceinline int RoundToInt(float f)
 { __asm cvtss2si eax, f }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007bdd70
 void cGameThumbnailJob::Shutdown()
@@ -7686,25 +6211,6 @@ void cGameThumbnailJob::Shutdown()
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007bdde0
 void __fastcall FUN_007bdde0(void* p)
 {
@@ -7719,24 +6225,6 @@ void __fastcall FUN_007bdde0(void* p)
         *(char*)((char*)p + 0x78) = 0;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007be430
 void cThumbnailManager_s007b_de20::CapturePaletteThumbnail(cCaptureCtx* ctx, cPaletteRequest* req)
@@ -7832,10 +6320,6 @@ void cThumbnailManager_s007b_de20::CapturePaletteThumbnail(cCaptureCtx* ctx, cPa
     GetManager2()->Dispatch(handle);
 }
 
-
-
-
-
 // @ 0x007bea00
 void cThumbnailManager_s007b_de20::CapturePaletteImageThumbnail(cCaptureCtx* ctx, cPaletteImageRequest* req)
 {
@@ -7899,23 +6383,13 @@ void cThumbnailManager_s007b_de20::CapturePaletteImageThumbnail(cCaptureCtx* ctx
     GetManager2()->Dispatch(handle);
 }
 
-
-
-
-
 // @ 0x007bedb0
 void FUN_007bedb0(void* a, void* b, void* c)
 { (void)a; (void)b; (void)c; }
 
-
-
-
 // @ 0x007bf300
 void FUN_007bf300(void* a)
 { (void)a; }
-
-
-
 
 // @ 0x007bf610
 void cThumbnailManager_s007b_edb0::ThumbnailDone(DoneMsg_s007b_edb0* msg)
@@ -7945,9 +6419,6 @@ void cThumbnailManager_s007b_edb0::ThumbnailDone(DoneMsg_s007b_edb0* msg)
         r->Free(mCSAAntiAliasRectID.mPageID, mCSAAntiAliasRectID.mAllocID);
 }
 
-
-
-
 // @ 0x007bf9c0
 void SetterBlock::Set(void* a1, int a2, int a3, int a4, Pair* a5, Pair* a6, int a7, char a8)
 {
@@ -7971,14 +6442,9 @@ void SetterBlock::Set(void* a1, int a2, int a3, int a4, Pair* a5, Pair* a6, int 
     }
 }
 
-
-
-
 // @ 0x007bfeb0
 void __stdcall FUN_007bfeb0(int a, int b, int c, int d, int e)
 { (void)a; (void)b; (void)c; (void)d; (void)e; }
-
-
 
 // @ 0x007bfee0
 namespace AO {
@@ -8123,8 +6589,6 @@ bool cThumbnailManagerAO::CaptureAmbientOcclusionB(RectID* shadowRect, IModelWor
     return true;
 }
 }  // namespace AO
-
-
 
 // @ 0x007c0780
 namespace AO {
@@ -8280,7 +6744,6 @@ bool cThumbnailManagerAO_s007c_0780::CaptureAmbientOcclusion(uint32_t instanceID
 }
 }  // namespace AO
 
-
 // @ 0x007c1170
 bool IHandlerRC::HandleMessage(unsigned int msgId, void* arg)
 {
@@ -8299,7 +6762,6 @@ bool IHandlerRC::HandleMessage(unsigned int msgId, void* arg)
     }
     return false;
 }
-
 
 // @ 0x007c13f0
 void FUN_007c13f0(void* a)
