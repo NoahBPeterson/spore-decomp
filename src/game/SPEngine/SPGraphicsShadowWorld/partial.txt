@@ -1,0 +1,8 @@
+# va  diff-bytes  reason   (none: every function has complete source)
+0077f380  -  skeleton only; SP::cRenderConvolutionShadow::BuildBasisMap not reproduced
+0077f6a0  -  skeleton only; SP::cShadowWorld::SetLightingWorld property load not reproduced
+0077f980  -  stub only; global raster-stage dirty flags setup not reproduced
+0077fa70  -  skeleton only; body not reproduced
+0077fb10  -  skeleton only; body not reproduced
+0077fbb0  -  skeleton only; body not reproduced
+0077fde0  -  skeleton only; body not reproduced

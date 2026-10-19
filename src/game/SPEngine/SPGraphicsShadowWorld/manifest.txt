@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsShadowWorld.cpp  ?FUN_0077f510@ShadowCtx@@QAEXH@Z  0077f510  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsShadowWorld.cpp  ?FUN_0077f640@@YIXPAD@Z  0077f640  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsShadowWorld.cpp  ?SetLightingWorld@LightingRefHolder@@QAEXPAUIRefCounted@@@Z  00780210  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsShadowWorld.cpp  ?SetFlag@BoolFlagHolder@@QAEX_N@Z  00780250  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

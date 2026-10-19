@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0077f5a0 59 shadow-proximity update complete; SSE register scheduling and the dx/dy/dz vs r*r evaluation order differ
+0077ff30 3 complete: full DrawLayer control flow (viewer matrices, render-state save/restore, BuildBasisMap sequence) translated; size 524 vs 728 because inlined copy/inline scheduling differs
+00780270 64 complete: raster + render-target-rect creation and basis-map loops translated; inlined AutoRefCount/EASTL scheduling not reproduced
