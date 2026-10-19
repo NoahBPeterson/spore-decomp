@@ -54,7 +54,7 @@ union PackedKeyUnion {
 // ---- items of slice s004bd850 end
 
 // ---- items of slice s005dbd20 begin (TODO(rewrite): local stubs, replace by canonical classes)
-#pragma inline_depth(254)
+void* operator new(unsigned int n, const char* pName, int flags = 0, unsigned int debugFlags = 0, const char* pFile = 0, int line = 0) throw();   // 0x00F473A0
 namespace EA {
 namespace ResourceMan {
 struct Key_s005d_bd20 { uint32_t mInstance, mType, mGroup; };
@@ -199,6 +199,9 @@ template <class T> struct AutoRefCount_s005d_bd20 {
 };
 }
 namespace SP {
+EA::Messaging::IMessageServer* MessageServer_s005d_bd20();   // 0x0067DCC0
+}
+namespace SP {
 class cSPUILayout {
 public:
     ~cSPUILayout();                                       // 0x00811FE0
@@ -331,6 +334,14 @@ namespace SP {
 extern const Key_s005d_bd20 kEditorKeyB;                     // 0x0151994C
 }
 namespace SP {
+namespace EditorUtils {
+bool GetCreatorType(const Key_s005d_bd20* pKey);             // 0x00641900
+}
+}
+namespace SP {
+int GetUploadState(const Key_s005d_bd20* pKey);              // 0x00552300
+}
+namespace SP {
 class cEditorPlayModeController {
 public:
 #define PH(n) virtual void ph##n();
@@ -439,7 +450,11 @@ public:
     EA::Messaging::AutoHandler_s005d_bd20 mAutoMsgHandler;    // +0x118
 };
 }
+namespace SP {
+extern const uint32_t kEditorUIMessageIDs[7];      // 0x013F9240
+}
 // ---- items of slice s005dbd20 end
+
 
 // ---- items of slice s005dcd80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV(n) virtual void _pv##n();
@@ -1490,6 +1505,7 @@ uint32_t FUN_004bd850(uint32_t key)
 
 
 
+
 // @ 0x005dc190
 bool SP::cSPEditorUI_s005d_bd20::OnPaletteDrop(SP::cRect16 a, SP::cRect16 b, Key_s005d_bd20 key)
 {
@@ -1505,21 +1521,11 @@ bool SP::cSPEditorUI_s005d_bd20::OnPaletteDrop(SP::cRect16 a, SP::cRect16 b, Key
     return false;
 }
 
-
-
-
-
-
 // @ 0x005dc250
 bool SP::cSPEditorUI_s005d_bd20::IsLoadDialog(uint32_t dialogID)
 {
     return dialogID == 0x102 || dialogID == 0x103 || dialogID == 0x107;
 }
-
-
-
-
-
 
 // @ 0x005dc280
 void SP::cSPEditorUI_s005d_bd20::SetLoadDialogOptions(bool bUseDialog, int source, bool bFlag)
@@ -1528,11 +1534,6 @@ void SP::cSPEditorUI_s005d_bd20::SetLoadDialogOptions(bool bUseDialog, int sourc
     mLoadDialogSource = source;
     mbLoadDialogOption = bFlag;
 }
-
-
-
-
-
 
 // @ 0x005dc340
 void SP::cSPEditorUI_s005d_bd20::SetWindowVisibility(uint32_t id, bool bVisible)
@@ -1544,10 +1545,33 @@ void SP::cSPEditorUI_s005d_bd20::SetWindowVisibility(uint32_t id, bool bVisible)
         pWindow->SetFlag(1, bVisible);
 }
 
+// @ 0x005dc380
+void SP::cSPEditorUI_s005d_bd20::StartListeningToMessages()
+{
+    if (!mHandlerInstalled) {
+        EA::Messaging::IMessageServer* const pServer = SP::MessageServer_s005d_bd20();
+        mAutoMsgHandler.Register(pServer, this, SP::kEditorUIMessageIDs, 7, 0);
+        mHandlerInstalled = true;
+    }
+}
 
+// @ 0x005dc400
+void SP::cSPEditorUI_s005d_bd20::StopListeningToMessages()
+{
+    if (mHandlerInstalled) {
+        mAutoMsgHandler.Unregister();
+        mHandlerInstalled = false;
+    }
+}
 
-
-
+// @ 0x005dc460
+void SP::cSPEditorUI_s005d_bd20::ShowGeneralMessage(const wchar_t* pText)
+{
+    if (FindWindowByID(0x3088953B)) {
+        FindWindowByID(0x3088953B)->SetCaption(pText);
+        mGeneralMessageFadeTimer = 7000;
+    }
+}
 
 // @ 0x005dc4d0
 void SP::cSPEditorUI_s005d_bd20::HandleRequestedPostSaveAction(uint32_t action)
@@ -1564,22 +1588,12 @@ void SP::cSPEditorUI_s005d_bd20::HandleRequestedPostSaveAction(uint32_t action)
     SP::cSPUIAssetBrowser_s005d_bd20::AdvancedLaunch(info);
 }
 
-
-
-
-
-
 // @ 0x005dc560
 void SP::cSPEditorUI_s005d_bd20::SelectKeyA()
 {
     mKeyToLoadType = SP::kEditorKeyA.mInstance;
     SP::AssignKey(&mKeyToLoad, &SP::kEditorKeyA);
 }
-
-
-
-
-
 
 // @ 0x005dc580
 void SP::cSPEditorUI_s005d_bd20::SelectKeyB()
@@ -1588,20 +1602,75 @@ void SP::cSPEditorUI_s005d_bd20::SelectKeyB()
     SP::AssignKey(&mKeyToLoad, &SP::kEditorKeyB);
 }
 
-
-
-
-
+// @ 0x005dc610
+void SP::cSPEditorUI_s005d_bd20::EnableUIButton(uint32_t id, bool bEnable)
+{
+    if (IWindow_s005d_bd20* pWindow = FindWindowByID(id)) {
+        pWindow->SetFlag(2, bEnable);
+        pWindow->SetFlag(0x10, !bEnable);
+        if (bEnable)
+            pWindow->SetShadeColor(0xFFFFFFFF);
+        else
+            pWindow->SetShadeColor(0xA0A0A0A0);
+        pWindow->Invalidate();
+    }
+}
 
 // @ 0x005dc6c0
 SP::cSPEditorUI_s005d_bd20::~cSPEditorUI_s005d_bd20()
 {
 }
 
+// @ 0x005dc800
+void SP::cSPEditorUI_s005d_bd20::UpdateSaveButtons()
+{
+    bool bSave = true;
+    bool bSaveAs = false;
+    bool bEnabled = true;
+    const Key_s005d_bd20* pKey = &mApp->GetEditorModel()->mKey;
+    if (EditorUtils::GetCreatorType(pKey)) {
+        bSaveAs = true;
+        bSave = false;
+        bEnabled = false;
+    }
+    if (mApp->GetEditorSaveability() != 3) {
+        bSave = true;
+        bEnabled = false;
+        bSaveAs = false;
+    } else if (SP::GetUploadState(pKey) != 1) {
+        bSave = false;
+        bSaveAs = false;
+    }
+    if (!mbCanSave)
+        bEnabled = false;
+    if (!mbSaveAllowed) {
+        bSave = false;
+        bSaveAs = false;
+    }
+    if (IWindow_s005d_bd20* pWindow = FindWindowByID(0x0612EFEA)) {
+        pWindow->SetFlag(1, bSave);
+        pWindow->SetFlag(2, bEnabled);
+        SP::cString_s005d_bd20 text;
+        if (bEnabled)
+            text.Load(0xC0152A6D, 0x0612F6B6, 0);
+        else
+            text.Load(0xC0152A6D, 0x0615DD1C, 0);
+        mSaveTooltip->SetText(text.GetText(-1), true);
+    }
+    if (IWindow_s005d_bd20* pWindow = FindWindowByID(0x0612EFEB))
+        pWindow->SetFlag(1, bSaveAs);
+}
 
-
-
-
+// @ 0x005dc970
+void SP::cSPEditorUI_s005d_bd20::EnableUndoRedo(bool bEnable)
+{
+    if (!mbUndoRedoAllowed)
+        bEnable = false;
+    if (IWindow_s005d_bd20* pWindow = FindWindowByID(0x055FDCA8))
+        pWindow->SetFlag(2, bEnable);
+    if (IWindow_s005d_bd20* pWindow = FindWindowByID(0x047BC958))
+        pWindow->SetFlag(2, bEnable);
+}
 
 // @ 0x005dca00
 void SP::cSPEditorUI_s005d_bd20::OnPaletteClick(SP::cRect16 a)
@@ -1613,10 +1682,64 @@ void SP::cSPEditorUI_s005d_bd20::OnPaletteClick(SP::cRect16 a)
         mApp->mpPlayModeController->Activate(true);
 }
 
+// @ 0x005dcaa0
+void SP::cSPEditorUI_s005d_bd20::OpenDialog(uint32_t dialogID, bool bFlag)
+{
+    mCurrentDialogID = dialogID;
+    if (IsLoadDialog(dialogID)) {
+        if (mbUseLoadDialog) {
+            mKeyToLoadType = 0x061C7098;
+            mLoadDialog = new ("Editor") SP::cSPEditorLoadDialog(&mKeyToLoad);
+            mLoadDialog->Setup(mLoadDialogSource, mbLoadDialogOption);
+            mLoadDialog->Show();
+            mbLoadDialogFlag = bFlag;
+        } else {
+            mCurrentDialogID = 0;
+            mApp->ShowDialog(0, 2, bFlag);
+        }
+    } else {
+        mApp->ExecuteCommand(bFlag, 0);
+    }
+}
 
+// @ 0x005dcba0
+void SP::cSPEditorUI_s005d_bd20::SetShowNew(bool bShow)
+{
+    mShowNew = bShow;
+    if (IWindow_s005d_bd20* pWindow = FindWindowByID(0x04766FF0))
+        pWindow->SetFlag(1, bShow);
+}
 
+// @ 0x005dcbf0
+void SP::cSPEditorUI_s005d_bd20::SetShowSave(bool bShow)
+{
+    mShowSave = bShow;
+    if (IWindow_s005d_bd20* pWindow = FindWindowByID(0x063C290C))
+        pWindow->SetFlag(1, bShow);
+}
 
+// @ 0x005dcc40
+void SP::cSPEditorUI_s005d_bd20::SetShowPublish(bool bShow)
+{
+    mShowPublish = bShow;
+    if (IWindow_s005d_bd20* pWindow = FindWindowByID(0x90439D7C))
+        pWindow->SetFlag(1, mShowPublish);
+}
 
+// @ 0x005dcc90
+void SP::cSPEditorUI_s005d_bd20::SetShowLoad(bool bShow)
+{
+    mShowLoad = bShow;
+    const bool bHide = !bShow;
+    if (IWindow_s005d_bd20* pWindow = FindWindowByID(0x05B6E49C))
+        pWindow->SetFlag(1, bShow);
+    if (IWindow_s005d_bd20* pWindow = FindWindowByID(0x04766FE0))
+        pWindow->SetFlag(1, bShow);
+    if (IWindow_s005d_bd20* pWindow = FindWindowByID(0x06313DEA))
+        pWindow->SetFlag(1, bHide);
+    if (IWindow_s005d_bd20* pWindow = FindWindowByID(0x06313DEB))
+        pWindow->SetFlag(1, bHide);
+}
 
 // @ 0x005dcd80
 namespace SP {
@@ -1630,6 +1753,7 @@ void cSPEditorUI_s005d_cd80::SetUIDisabled(bool disabled)
   UpdateUndoRedo(mUIDisabled);
 }
 }  // namespace SP
+
 
 
 
@@ -1652,6 +1776,7 @@ void cSPEditorUI_s005d_cd80::EnableRedoButton(bool enable)
 
 
 
+
 // @ 0x005dceb0
 namespace SP {
 void cSPEditorUI_s005d_cd80::EnableUndoButton(bool enable)
@@ -1664,6 +1789,7 @@ void cSPEditorUI_s005d_cd80::EnableUndoButton(bool enable)
   }
 }
 }  // namespace SP
+
 
 
 
@@ -1683,6 +1809,7 @@ void cSPEditorUI_s005d_cd80::SetSelected(uint32_t id, bool selected, bool alsoSt
   }
 }
 }  // namespace SP
+
 
 
 
@@ -1712,6 +1839,7 @@ void cSPEditorUI_s005d_cd80::EnablePlayModeButton(bool enable)
 
 
 
+
 // @ 0x005dd050
 void SP::cSPEditorUI::Hide()
 {
@@ -1724,6 +1852,7 @@ void SP::cSPEditorUI::Hide()
 
 
 
+
 // @ 0x005dd070
 void SP::cSPEditorUI::Show()
 {
@@ -1731,6 +1860,7 @@ void SP::cSPEditorUI::Show()
   mLayout.SetVisibility(true);
   mSharedLayout.SetVisibility(true);
 }
+
 
 
 
@@ -1768,6 +1898,7 @@ void cSPEditorUI_s005d_cd80::SetInputBlocked(bool blocked)
 
 
 
+
 // @ 0x005dd1d0
 namespace SP {
 void cSPEditorUI_s005d_cd80::SelectCurrentTypeInGrid()
@@ -1785,6 +1916,7 @@ void cSPEditorUI_s005d_cd80::SelectCurrentTypeInGrid()
   }
 }
 }  // namespace SP
+
 
 
 
@@ -1813,6 +1945,7 @@ void cSPEditorUI_s005d_cd80::ShowSaveDialog()
 
 
 
+
 // @ 0x005dd300
 namespace SP {
 void cSPEditorUI_s005d_cd80::OnSaveRequested()
@@ -1834,6 +1967,7 @@ void cSPEditorUI_s005d_cd80::OnSaveRequested()
 
 
 
+
 // @ 0x005dd360
 namespace SP {
 void cSPEditorUI_s005d_cd80::OnLoginResult(bool success)
@@ -1846,6 +1980,7 @@ void cSPEditorUI_s005d_cd80::OnLoginResult(bool success)
   }
 }
 }  // namespace SP
+
 
 
 
@@ -1870,6 +2005,7 @@ void cSPEditorUI_s005d_cd80::CloseModalLayout()
   }
 }
 }  // namespace SP
+
 
 
 
@@ -1905,6 +2041,7 @@ void cSPEditorUI_s005d_cd80::OpenModalLayout()
 
 
 
+
 // @ 0x005dd610
 namespace SP {
 void cSPEditorUI_s005d_cd80::SetPaintMode(bool paint)
@@ -1931,6 +2068,7 @@ void cSPEditorUI_s005d_cd80::SetPaintMode(bool paint)
   }
 }
 }  // namespace SP
+
 
 
 
@@ -1973,6 +2111,7 @@ void cSPEditorUI_s005d_cd80::UpdateUIBasedOnModelSaveability()
 
 
 
+
 // @ 0x005dd860
 namespace SP {
 uint32_t cSPEditorUI_s005d_cd80::GetWarning(bitset128 flags)
@@ -1991,6 +2130,7 @@ uint32_t cSPEditorUI_s005d_cd80::GetWarning(bitset128 flags)
   return 0;
 }
 }  // namespace SP
+
 
 
 
@@ -2080,6 +2220,7 @@ void cSPEditorUI_s005d_cd80::SetMode(int mode)
   mUIEditorMode = mode;
 }
 }  // namespace SP
+
 
 
 
@@ -2209,6 +2350,7 @@ bool EditorUI::Init(AppMode* app, int a2, unsigned a3, int a4)
 
 
 
+
 // @ 0x005de450
 void EditorUI::Update(int dt)
 {
@@ -2259,6 +2401,7 @@ void EditorUI::Update(int dt)
 
 
 
+
 // @ 0x005de690
 void EditorUI::EnableBasicEditorButtons(int a, char b)
 {
@@ -2290,6 +2433,7 @@ void EditorUI::EnableBasicEditorButtons(int a, char b)
 
 
 
+
 // @ 0x005de870
 bool EditorUI::Shutdown()
 {
@@ -2317,6 +2461,7 @@ bool EditorUI::Shutdown()
 
 
 
+
 // @ 0x005de9e0
 void EditorUI::FUN_005de9e0()
 {
@@ -2330,6 +2475,7 @@ void EditorUI::FUN_005de9e0()
         w->Notify();
     }
 }
+
 
 
 
@@ -2363,6 +2509,7 @@ EditorUI* EditorUI::Construct()
     fb8 = this;
     return this;
 }
+
 
 
 
@@ -2422,6 +2569,7 @@ void EUI::FUN_005dec10(uint32_t a)
 
 
 
+
 // @ 0x005dee70
 bool HandlerSub::HandleMessage(uint32_t msg, int data)
 {
@@ -2452,6 +2600,7 @@ bool HandlerSub::HandleMessage(uint32_t msg, int data)
     }
     return false;
 }
+
 
 
 
@@ -2567,12 +2716,14 @@ void EUI::FUN_005df470(uint32_t cmd, int b)
 
 
 
+
 // @ 0x005df8d0
 void EditorFrame::FUN_005df8d0()
 {
     mcc = 0x103;
     FUN_005df470(0x103, 1);
 }
+
 
 
 
@@ -2620,11 +2771,13 @@ bool EUI::FUN_005df8f0(Key12 key)
 
 
 
+
 // @ 0x005dfb30
 void EditorFrame2::FUN_005dfb30(int a, int b)
 {
     mpTarget->DoDialogEnd(b);
 }
+
 
 
 
@@ -2647,9 +2800,11 @@ void EditorUI2::DoSaveAndExit()
 
 
 
+
 // @ 0x005dfbb0
 void FUN_005dfbb0(void* self)
 { (void)self; }
+
 
 
 // @ 0x005dfd00
@@ -2657,9 +2812,11 @@ void FUN_005dfd00(void* self, int cmd)
 { (void)self; (void)cmd; }
 
 
+
 // @ 0x005e0000
 void FUN_005e0000(void* self)
 { (void)self; }
+
 
 
 // @ 0x00de8ad0
