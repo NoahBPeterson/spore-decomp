@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/ImageCursorProvider.cpp  ?AsInterface@ImageCursorProvider@@QAEPAXI@Z  0097da60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
