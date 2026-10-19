@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+008e53a0 46 eastl::lower_bound; complete; register allocation differs; now returns the iterator in eax (declared char*); difftest PASS (/O2 /MD /Gy /EHsc /TP /arch:SSE, --require-all, 383 valid, 100% coverage); callerdeps: eax DEPENDS, read at 008e556b after the call at 008e5559 in 008e5480
+008e5410 75 eastl::upper_bound; complete; register allocation differs; now returns the iterator in eax (declared char*); difftest PASS (/O2 /MD /Gy /EHsc /TP /arch:SSE, --require-all, 383 valid, 100% coverage); callerdeps: eax DEPENDS, read at 008e5551 after the call at 008e554b in 008e5480
+008e5580 35 LookupStandardHTMLEntity; local frame/arg arrange differ (equiv WEAK: 87% coverage)

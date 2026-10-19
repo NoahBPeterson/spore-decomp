@@ -1,4 +1,6 @@
-008e5580 Fn8e5580  # marker line is followed by __declspec(noinline), which the name parser misreads
+008e53a0 ?Fn8e53a0@@YAPADPAD0PBX@Z  # Fn8e53a0 migrated from s008e5320 (verbatim, slice spelling)
+008e5410 ?Fn8e5410@@YAPADPAD0PBX@Z  # Fn8e5410 migrated from s008e5320 (verbatim, slice spelling)
+008e5580 ?LookupStandardHTMLEntity@DOM@XHTML@EA@@YA_WPB_W@Z  # EA::XHTML::DOM::LookupStandardHTMLEntity migrated from s008e5320
 008e59a0 ?Fn8e59a0@XmlParser@@QAEXD@Z  # XmlParser::Fn8e59a0 migrated from s008e5320 (verbatim, slice spelling)
 008e5a20 ?Fn8e5a20@XmlParser@@QAEHPBDHH@Z  # XmlParser::Fn8e5a20 migrated from s008e5320 (verbatim, slice spelling)
 008e5c50 ?Fn8e5c50@@YAXPAX@Z  # Fn8e5c50 migrated from s008e5320 (verbatim, slice spelling)
