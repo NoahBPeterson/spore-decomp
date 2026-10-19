@@ -4,3 +4,12 @@ slices/s00a68140/s00a68140.cpp  ?RandomUint32Uniform@RandomLinearCongruential@@Q
 slices/s00a68140/s00a68140.cpp  ?AddSize@SizeHolder@@QAE_NHH@Z  00a69150
 slices/s00a68140/s00a68140.cpp  ?GetA@TableHolder@@QAEHHH@Z  00a69180
 slices/s00a68140/s00a68140.cpp  ?GetB@TableHolder2@@QAEHHH@Z  00a691a0
+slices/s00a68140/s00a68140.cpp  ??1NodePool@@QAE@XZ  00a687f0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00a68140/s00a68140.cpp  ?GetInfoA@EapdInfo@@QAEXPAH@Z  00a68140
+slices/s00a68140/s00a68140.cpp  ?GetInfoB@EapdInfo@@QAEXPAH@Z  00a68190
+slices/s00a68140/s00a68140.cpp  ?RemoveKey@KeyList@@QAEXPBH@Z  00a68280
+slices/s00a68140/s00a68140.cpp  ?Allocate@NodePool@@QAEPAXPBH@Z  00a682d0
+slices/s00a68140/s00a68140.cpp  ?FreeChains@NodePool@@QAEXPAPAUPoolNode@@I@Z  00a68330
+slices/s00a68140/s00a68140.cpp  ?PushTask@EapdTasks@@QAEXPAX@Z  00a685a0
+slices/s00a68140/s00a68140.cpp  ?Init@EapdAssets@@QAE_NHHH@Z  00a685e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a68140/s00a68140.cpp  ??1EapdSystemFull@@UAE@XZ  00a68dd0  /O2 /MD /Gy /EHsc /TP /GS-

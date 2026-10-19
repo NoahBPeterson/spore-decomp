@@ -2,3 +2,9 @@
 00a69020  999  needs /arch:SSE scalar float compare
 00a69070  8    refcount store scheduled after vtable load
 00a690d0  53   backward intrusive_ptr assignment register schedule
+00a681e0  11  singleton teardown; local allocator-guard reg allocation (esi vs ecx reload), EH frame [equiv: WEAK 31.8% cov]
+00a683b0  1  CallbackManager dtor; EH state index (n dtor under state 2, original 0) [equiv: UNSUPPORTED unresolved dtor refs]
+00a68670  80  hashtable remove; listener null-test form (cmp mem,0 + reload) and bl result [equiv: PASS]
+00a686e0  73  hashtable remove; listener null-test form (cmp mem,0 + reload) and bl result [equiv: WEAK 190 valid]
+00a68740  126  hashtable erase + callback; register allocation (node in ebx), result kept in param slot [equiv: PASS]
+00a68990  189  map insert-or-push; key/false-arg share the param slot, register allocation [equiv: WEAK 46.4% cov]
