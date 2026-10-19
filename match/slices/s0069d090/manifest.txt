@@ -18,3 +18,6 @@ slices/s0069d090/s0069d090.cpp  ?flush@Cded0@@QAEDXZ  0069ded0 /O2 /MD /Gy /EHsc
 slices/s0069d090/s0069d090.cpp  ?bind@Cdfc0@@QAE_NPAXH@Z  0069dfc0 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s0069d090/s0069d090.cpp  ?ctor@C_e040@@QAEPAU1@XZ  0069e040 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s0069d090/s0069d090.cpp  ?ctor@C_e210@@QAEPAU1@XZ  0069e210 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?bind@S_e090@@QAE_NPAUHeld@@H@Z  0069e090 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?create@S_e170@@QAEDPAXPAPAXH@Z  0069e170 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?bind@S_e260@@QAE_NPAUHeld@@HD@Z  0069e260 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

@@ -24,11 +24,15 @@ extern char g_vtbl_13ec458[];
 // EA::Variant (0x14 bytes) as seen by the serializers.
 struct Variant {
     void* mPtr;             // +0
-    int   mField4;          // +4
-    int   mCount;           // +8
-    int   mFieldC;          // +0xc
+    unsigned mElem;         // +4
+    unsigned mCount;        // +8
+    unsigned mFieldC;       // +0xc
     unsigned short mFlags;  // +0x10
     unsigned short mTypeId; // +0x12
+    Variant() : mFlags(0), mTypeId(0) {}
+    ~Variant() { if (mFlags & 4) Destruct(false); }
+    Variant& operator=(const Variant&);   // 0x542b80
+    void Destruct(bool);                  // 0x93db80
 };
 
 extern "C" void* memcpy(void*, const void*, unsigned int);
@@ -533,221 +537,294 @@ void cObjectDatabase::dtor()
 }
 
 // ---------------------------------------------------------------------------
-// 0x0069df20 left over: variant / IO helpers (external, relocations masked)
+// Variant (de)serialisation: SP::cObjectDatabaseOStream / IStream
 // ---------------------------------------------------------------------------
-extern "C" char FUN_0093ac80(void*);
-extern "C" char FUN_0093a700(void*, void*, int, int);
-extern "C" char IO_ReadInt32(void*, void*, int, int);
-extern "C" char IO_WriteUint16(void*, void*, int, int);
-extern "C" char IO_WriteUint32(void*, void*, int, int);
-extern "C" char IO_operator_shl(void*, void*, int);
-extern "C" void* EAAllocate(unsigned, const char*, int, int, int, int);
-extern "C" void Variant_assign(Variant*, Variant*);
-extern "C" void Variant_destruct(Variant*, int);
-extern "C" char WriteTypedVariant(void*);
-extern "C" char WriteUnknownVariant(void*);
-extern "C" void FUN_005766e0(void*);
+struct IOS;                                              // EA::IO stream (opaque)
+bool __cdecl StreamWrite(IOS*, void*, int);              // 0x93a9a0
+bool __cdecl WriteVariantTyped(IOS*, Variant*, int);     // 0x693390
+bool __cdecl WriteUint16(IOS*, const void*, int, int);   // 0x93a9d0
+bool __cdecl WriteUint32(IOS*, const void*, int, int);   // 0x93aa70
 
-static unsigned operator_new_count(Variant* v);
-
-// ---------------------------------------------------------------------------
-// 0x0069d540  read a Variant (best-effort transcription of the original flow)
-// ---------------------------------------------------------------------------
-struct R540 {
-    VP vt0; unsigned char flag; char pad[7]; void* stream;
-    bool readVariant(Variant* v);
-    void fail();
+struct StreamHolder {
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5();
+    virtual IOS* GetStream();   // 0x18
+};
+struct Iface {
+    virtual void i0(); virtual void i1(); virtual void i2();
+    virtual void* Query(unsigned iid);   // 0xc
 };
 
-void R540::fail() { flag = 0; }
-
-bool R540::readVariant(Variant* v)
-{
-    char present = 0;
-    bool ok = flag != 0;
-    if (ok) {
-        void* p = ((void*(__thiscall*)(void*, char*))(*(void***)stream)[0x18 / 4])(stream, &present);
-        ok = FUN_0093ac80(p) != 0;
-    }
-    flag = (unsigned char)ok;
-    if (present != 0) {
-        if (ok) {
-            void* p = ((void*(__thiscall*)(void*, Variant*, int))(*(void***)stream)[0x18 / 4])(stream, v, 0);
-            if (WriteUnknownVariant(p)) { flag = 1; return true; }
-        }
-        flag = 0;
-        return false;
-    }
-    if (v->mTypeId != 0) {
-        Variant tmp;
-        Variant_assign(v, &tmp);
-        Variant_destruct(&tmp, 0);
-    }
-    v->mTypeId = 0x11;
-    if (flag) {
-        void* p = ((void*(__thiscall*)(void*))(*(void***)stream)[0x18 / 4])(stream);
-        ok = FUN_0093a700(p, &v->mFlags, 1, 0) != 0;
-    } else ok = false;
-    flag = (unsigned char)ok;
-    if ((v->mFlags & 0x50) == 0) {
-        if ((v->mFlags & 0x20) == 0) {
-            flag = 0;
-            return false;
-        }
-        if (ok) {
-            void* p = ((void*(__thiscall*)(void*))(*(void***)stream)[0x18 / 4])(stream);
-            ok = IO_ReadInt32(p, &v->mCount, 1, 0) != 0;
-        } else ok = false;
-        flag = (unsigned char)ok;
-        if (ok) {
-            void* p = ((void*(__thiscall*)(void*))(*(void***)stream)[0x18 / 4])(stream);
-            ok = IO_ReadInt32(p, &v->mFieldC, 1, 0) != 0;
-        } else ok = false;
-        flag = (unsigned char)ok;
-        if (ok && ((char(__thiscall*)(void*, int, Variant*, int))(*(void***)this)[0x28 / 4])(this, (int)0xee3f516e, v, 0)) {
-            flag = 1;
-            return true;
-        }
-        flag = 0;
-        return false;
-    }
-    if (ok) {
-        void* p = ((void*(__thiscall*)(void*))(*(void***)stream)[0x18 / 4])(stream);
-        ok = IO_ReadInt32(p, &v->mCount, 1, 0) != 0;
-    } else ok = false;
-    flag = (unsigned char)ok;
-    if (ok) {
-        void* p = ((void*(__thiscall*)(void*))(*(void***)stream)[0x18 / 4])(stream);
-        ok = IO_ReadInt32(p, &v->mFieldC, 1, 0) != 0;
-    } else ok = false;
-    flag = (unsigned char)ok;
-    unsigned count = operator_new_count(v);
-    v->mPtr = (void*)count;
-    return ok;
-}
-
-// placeholder used above
-static unsigned operator_new_count(Variant* v)
-{
-    void* p = EAAllocate((unsigned)(v->mCount * v->mFieldC), "App/PropertyList/Variant/PointerPtr", 0, 0, 0, 0);
-    return (unsigned)(unsigned long)p;
-}
-
-// ---------------------------------------------------------------------------
-// 0x0069d9d0  write a Variant (summarised)
-// ---------------------------------------------------------------------------
 struct W9d0 {
-    VP vt0; void* stream; unsigned char flag;
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+    virtual bool WriteObj(void* o);      // 0x28
+    StreamHolder* stream;                // +4
+    char pad8[4];
+    unsigned char flag;                  // +0xc
     bool writeVariant(Variant* v);
 };
 
+// @ 0x0069d9d0
 bool W9d0::writeVariant(Variant* v)
 {
+    IOS* io;
+    unsigned tmp;
     bool notVariant = v->mTypeId != 0x11;
-    bool ok = flag != 0;
-    if (ok) {
-        void* p = ((void*(__thiscall*)(void*))(*(void***)stream)[0x18 / 4])(stream);
-        ok = IO_operator_shl(p, &notVariant, 1) != 0;
-    }
-    flag = (unsigned char)ok;
+    bool t = notVariant;
+    flag = flag && (io = stream->GetStream(), StreamWrite(io, &t, 1));
     if (notVariant) {
-        if (ok) {
-            void* p = ((void*(__thiscall*)(void*, Variant*, int))(*(void***)stream)[0x18 / 4])(stream, v, 0);
-            if (WriteTypedVariant(p)) { flag = 1; return true; }
+        if (flag && (io = stream->GetStream(), WriteVariantTyped(io, v, 0))) {
+            int r = 1;
+            flag = r;
+            return r;
         }
-        flag = 0;
-        return false;
+        int r = 0;
+        flag = r;
+        return r;
     }
-    if (ok) {
-        unsigned short f = v->mFlags;
-        void* p = ((void*(__thiscall*)(void*))(*(void***)stream)[0x18 / 4])(stream);
-        ok = IO_WriteUint16(p, &f, 1, 0) != 0;
-    } else ok = false;
-    flag = (unsigned char)ok;
-    if (ok) {
-        void* p = ((void*(__thiscall*)(void*))(*(void***)stream)[0x18 / 4])(stream);
-        ok = IO_WriteUint32(p, &v->mCount, 1, 0) != 0;
-    } else ok = false;
-    flag = (unsigned char)ok;
-    if (ok) {
-        void* p = ((void*(__thiscall*)(void*))(*(void***)stream)[0x18 / 4])(stream);
-        ok = IO_WriteUint32(p, &v->mField4, 1, 0) != 0;
-    } else ok = false;
-    flag = (unsigned char)ok;
-    return ok;
+    flag = flag && (tmp = v->mFlags, io = stream->GetStream(), WriteUint16(io, &tmp, 1, 0));
+    if ((v->mFlags & 0x50) == 0) {
+        if ((v->mFlags & 0x20) == 0) {
+            flag = 0;
+            return flag;
+        }
+        flag = flag && (tmp = v->mCount, io = stream->GetStream(), WriteUint32(io, &tmp, 1, 0));
+        flag = flag && (tmp = v->mElem, io = stream->GetStream(), WriteUint32(io, &tmp, 1, 0));
+        Iface* o = 0;
+        if (v->mFlags & 0x30) o = (Iface*)v->mPtr;
+        else if (v->mTypeId) o = (Iface*)v;
+        void* r = o ? o->Query(0xee3f516e) : 0;
+        if (flag && WriteObj(r)) {
+            int one = 1;
+            flag = one;
+            return one;
+        }
+        int zero = 0;
+        flag = zero;
+        return zero;
+    }
+    flag = flag && (tmp = v->mCount, io = stream->GetStream(), WriteUint32(io, &tmp, 1, 0));
+    flag = flag && (tmp = v->mElem, io = stream->GetStream(), WriteUint32(io, &tmp, 1, 0));
+    Iface** arr = (Iface**)((v->mFlags & 0x30) ? v->mPtr : (v->mTypeId ? (void*)v : 0));
+    unsigned i = 0;
+    if (v->mCount != 0) {
+        while (flag) {
+            Iface* e = arr[i];
+            void* r = e ? e->Query(0xee3f516e) : 0;
+            flag = flag && WriteObj(r);
+            i++;
+            if (i >= v->mCount) return flag;
+        }
+    }
+    return flag;
 }
 
 // ---------------------------------------------------------------------------
-// 0x0069e090 / 0x0069e170 / 0x0069e260  serializer EH wrappers (summarised)
+// 0x0069d540  SP::cObjectDatabaseIStream::ReadVariant (EH frame: temp Variant)
 // ---------------------------------------------------------------------------
-struct S_e090 {
-    VP vt0; unsigned char flag; char pad[7]; void* p0c; void* p10;
-    void bind(void* p, int x);
+bool __cdecl ReadBool(IOS*, bool*);                          // 0x93ac80
+bool __cdecl ReadVariantTyped(IOS*, Variant*, int);          // 0x694440
+bool __cdecl ReadUint16(IOS*, void*, int, int);              // 0x93a700
+bool __cdecl ReadInt32(IOS*, void*, int, int);               // 0x93a780
+void* __cdecl OpNew(unsigned, const char*, int, int, int, int);  // 0xf473a0
+extern char kName_PointerPtr[];                              // 0x1403974
+
+struct R540 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+    virtual bool ReadObj(unsigned iid, void* dst, int);      // 0x28
+    unsigned char flag;                                      // +4
+    char pad5[7];
+    StreamHolder* stream;                                    // +0xc
+    bool readVariant(Variant* v);
 };
-void S_e090::bind(void* p, int)
+
+// @ 0x0069d540
+bool R540::readVariant(Variant* v)
 {
-    if (!((char(__thiscall*)(void*))(*(void***)this)[0x14 / 4])(this))
-        return;
-    if (p) {
-        void* old = p10;
-        if (p != old) {
-            ((void(__thiscall*)(void*))(*(void***)p)[0])(p);
-            p10 = p;
-            if (old) ((void(__thiscall*)(void*))(*(void***)old)[4 / 4])(old);
+    bool present;
+    IOS* io;
+    flag = flag && ReadBool(stream->GetStream(), &present);
+    if (present) {
+        if (flag && ReadVariantTyped(stream->GetStream(), v, 0)) {
+            int r = 1;
+            flag = r;
+            return r;
         }
-        void* pi = ((void*(__thiscall*)(void*))(*(void***)p10)[0x10 / 4])(p10);
-        void* tmp = 0;
-        if (((char(__thiscall*)(void*, int, void**, int, int, int, int))(*(void***)pi)[0x34 / 4])(pi, 0, &tmp, 1, 6, 1, 0))
-            FUN_005766e0(&tmp);
-        if (tmp) ((void(__thiscall*)(void*))(*(void***)tmp)[8 / 4])(tmp);
+        int r = 0;
+        flag = r;
+        return r;
     }
-    flag = (unsigned char)(p0c != 0);
+    unsigned i = 0;
+    if (v->mTypeId != 0) {
+        Variant tmp;
+        *v = tmp;
+    }
+    v->mTypeId = 0x11;
+    flag = flag && (io = stream->GetStream(), ReadUint16(io, &v->mFlags, 1, 0));
+    if ((v->mFlags & 0x50) == 0) {
+        if ((v->mFlags & 0x20) == 0) {
+            flag = 0;
+            return flag;
+        }
+        flag = flag && (io = stream->GetStream(), ReadInt32(io, &v->mCount, 1, 0));
+        flag = flag && (io = stream->GetStream(), ReadInt32(io, &v->mElem, 1, 0));
+        if (flag && ReadObj(0xee3f516e, v, 0)) {
+            int r = 1;
+            flag = r;
+            return r;
+        }
+        int r = 0;
+        flag = r;
+        return r;
+    }
+    flag = flag && (io = stream->GetStream(), ReadInt32(io, &v->mCount, 1, 0));
+    flag = flag && (io = stream->GetStream(), ReadInt32(io, &v->mElem, 1, 0));
+    v->mPtr = OpNew(v->mElem * v->mCount, kName_PointerPtr, 0, 0, 0, 0);
+    char* arr = (char*)((v->mFlags & 0x30) ? v->mPtr : (v->mTypeId ? (void*)v : 0));
+    if (v->mCount != 0) {
+        while (flag) {
+            bool b = ReadObj(0xee3f516e, arr, 0) != 0;
+            i++;
+            flag = b;
+            arr += 4;
+            if (i >= v->mCount) return b;
+        }
+    }
+    return flag;
 }
 
+// ---------------------------------------------------------------------------
+// 0x0069e090 / 0x0069e170 / 0x0069e260  serializer wrappers with a smart-pointer temp (EH frame)
+// ---------------------------------------------------------------------------
+struct Tmp8 {   // object released through vtable slot 2 (+8)
+    virtual void t0(); virtual void t1(); virtual void Release();
+};
+struct Tmp8Ref {   // AutoRefCount-style temp: zero-initialised, released in the dtor
+    Tmp8* p;
+    Tmp8Ref() : p(0) {}
+    ~Tmp8Ref() { if (p) p->Release(); }
+};
+struct PiBind {   // factory interface; slot 0x34 binds a value into the temp
+    virtual void p00(); virtual void p01(); virtual void p02(); virtual void p03();
+    virtual void p04(); virtual void p05(); virtual void p06(); virtual void p07();
+    virtual void p08(); virtual void p09(); virtual void p0a(); virtual void p0b();
+    virtual void p0c();
+    virtual bool Bind(int a, Tmp8Ref* out, int, int, int, int);   // 0x34
+};
+struct Held {     // reference-counted holder target
+    virtual void AddRef(); virtual void Release(); virtual void h2(); virtual void h3();
+    virtual PiBind* GetBinder();   // 0x10
+};
+struct SmartSlot { void* p; void Attach(Tmp8Ref* src); };    // 0x5766e0 (thiscall, 1 arg)
+
+struct S_e090 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual bool Ready();          // 0x14
+    unsigned char flag;            // +4
+    char pad5[7];
+    SmartSlot slot;                // +0xc
+    Held* p10;                     // +0x10
+    bool bind(Held* p, int x);
+};
+
+// @ 0x0069e090
+bool S_e090::bind(Held* p, int x)
+{
+    if (!Ready()) return false;
+    if (p) {
+        Held* old = p10;
+        if (p != old) {
+            p->AddRef();
+            p10 = p;
+            if (old) old->Release();
+        }
+        PiBind* b = p10->GetBinder();
+        Tmp8Ref tmp;
+        if (b->Bind(x, &tmp, 1, 6, 1, 0))
+            slot.Attach(&tmp);
+    }
+    return flag = slot.p != 0;
+}
+
+struct IfaceA {   // p4 target: slot 0x18 returns an object whose slot 0x1c yields a value and slot 0x28 consumes it
+    virtual void a00(); virtual void a01(); virtual void a02(); virtual void a03();
+    virtual void a04(); virtual void a05();
+    virtual struct IfaceB* Get();      // 0x18
+};
+struct IfaceB {
+    virtual void b00(); virtual void b01(); virtual void b02(); virtual void b03();
+    virtual void b04(); virtual void b05(); virtual void b06();
+    virtual int  Value();              // 0x1c
+    virtual void b08(); virtual void b09();
+    virtual void Put(int v, int);      // 0x28
+};
+struct SmartSlotA { IfaceA* p; void Attach(Tmp8Ref* src); };  // 0x5766e0 (thiscall, 1 arg)
+
+struct S_e260 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual bool Ready();          // 0x14
+    SmartSlotA slot;               // +4
+    Held* p8;                      // +8
+    unsigned char flag;            // +0xc
+    bool bind(Held* p, int a, char b);
+};
+
+// @ 0x0069e260
+bool S_e260::bind(Held* p, int a, char b)
+{
+    if (!Ready()) return false;
+    if (p) {
+        Held* old = p8;
+        if (p != old) {
+            p->AddRef();
+            p8 = p;
+            if (old) old->Release();
+        }
+        PiBind* bd = p8->GetBinder();
+        Tmp8Ref tmp;
+        if (bd->Bind(a, &tmp, 2, 4, 1, 0)) {
+            slot.Attach(&tmp);
+            int v;
+            if (b) v = 0;
+            else v = slot.p->Get()->Value();
+            slot.p->Get()->Put(v, 0);
+        }
+    }
+    return flag = slot.p != 0;
+}
+
+struct Own4 {   // owner released through slot 1 (+4), add-ref'd through slot 0
+    virtual void AddRef(); virtual void Release(); virtual void o2();
+    virtual void* Make(void* p);     // 0xc
+};
+struct Own4Ref {
+    Own4* p;
+    Own4Ref() : p(0) {}
+    ~Own4Ref() { if (p) p->Release(); }
+};
 struct S_e170 {
-    char pad0[0x14]; void* p14;
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+    virtual void va();
+    virtual char Fetch(Own4Ref* out, int x);   // 0x2c
     char create(void* p, void** pp, int x);
 };
+
+// @ 0x0069e170
 char S_e170::create(void* p, void** pp, int x)
 {
     *pp = 0;
-    void* tmp = 0;
-    char ok = ((char(__thiscall*)(void*, void**, int))(*(void***)this)[0x2c / 4])(this, &tmp, x);
-    if (ok && p) {
-        int r = ((int(__thiscall*)(void*, void*))(*(void***)p)[0xc / 4])(p, tmp);
-        if (r) {
-            ((void(__thiscall*)(void*))(*(void***)p)[0])(p);
-            *pp = (void*)r;
+    Own4Ref tmp;
+    char ok = Fetch(&tmp, x);
+    if (ok) {
+        if (tmp.p) {
+            void* r = tmp.p->Make(p);
+            if (r) {
+                tmp.p->AddRef();
+                *pp = r;
+            }
         }
     }
-    if (p) ((void(__thiscall*)(void*))(*(void***)p)[4 / 4])(p);
     return ok;
-}
-
-struct S_e260 {
-    VP vt0; void* p4; void* p8; unsigned char flag;
-    void bind(void* p, int a, int b);
-};
-void S_e260::bind(void* p, int a, int b)
-{
-    if (!((char(__thiscall*)(void*))(*(void***)this)[0x14 / 4])(this))
-        return;
-    if (p) {
-        void* old = p8;
-        if (p != old) {
-            ((void(__thiscall*)(void*))(*(void***)p)[0])(p);
-            p8 = p;
-            if (old) ((void(__thiscall*)(void*))(*(void***)old)[4 / 4])(old);
-        }
-        void* pi = ((void*(__thiscall*)(void*))(*(void***)p8)[0x10 / 4])(p8);
-        void* tmp = 0;
-        if (((char(__thiscall*)(void*, int, void**, int, int, int, int))(*(void***)pi)[0x34 / 4])(pi, a, &tmp, 2, 4, 1, 0)) {
-            FUN_005766e0(&tmp);
-            int v = (b == 0) ? 0 : ((int(__thiscall*)(void*))(*(void***)(void*)p4)[0x1c / 4])(p4);
-            pi = ((void*(__thiscall*)(void*))(*(void***)p4)[0x18 / 4])(p4);
-            ((void(__thiscall*)(void*, int, int))(*(void***)pi)[0x28 / 4])(pi, v, 0);
-        }
-        if (tmp) ((void(__thiscall*)(void*))(*(void***)tmp)[8 / 4])(tmp);
-    }
-    flag = (unsigned char)(p4 != 0);
 }

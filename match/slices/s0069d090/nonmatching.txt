@@ -6,3 +6,5 @@
 0069dc60  11  conditional two-arg write helper; complete behaviour, only the store order of the false return path differs (store-0 then xor vs xor then store-al)
 0069df20  95  serializer guard/begin helper; complete behaviour, but the this+4/this+0x18/this+0x1c register allocation differs; equiv UNSUPPORTED: 0/1200 valid inputs (fake-arity)
 0069df90  32  two virtual predicates; complete behaviour, but cl makes the final bool branchless where the original uses branches; equiv UNSUPPORTED: 0/1200 valid inputs (fake-arity)
+0069d540  636  complete: Variant reader (all paths: bool/typed/flags 0x50 array/0x20 object, temp Variant EH); code order / eax-vs-al schedule and arg push order differ [equiv: WEAK, 0 mismatches over 1515 valid inputs, 8% coverage]
+0069d9d0  602  complete: WriteVariant (all paths); temp bool arg-slot reuse and flag/ok register schedule differ [equiv: WEAK, 0 mismatches over 1540 valid inputs, 8% coverage]

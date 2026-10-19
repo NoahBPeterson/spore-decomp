@@ -13,3 +13,5 @@
 00813e70 cSPUIMainWin::DoMessage  # PDB candidate on card
 00814090 cSPUIMainWin::KeyHandler  # card FUN, key/message switch
 008141b0 ?MainWin_Ctor@@YAPAXPAUMainWin_s0081_33f0@@@Z  # MainWin_Ctor migrated from s008133f0 (verbatim, slice spelling)
+00813e70 cSPUIMainWin::DoMessage  # card real name
+00814090 cSPUIMainWin::KeyHandler  # card real name

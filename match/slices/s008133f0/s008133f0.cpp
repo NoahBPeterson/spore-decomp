@@ -7,11 +7,11 @@
 static inline void** Vtbl(void* o) { return *(void***)o; }
 
 // ---------------------------------------------------------------------------
-extern "C" void* __cdecl GetManager();
-extern "C" void* __cdecl SP_WindowManager();
-extern "C" void* __cdecl SP_CheatManager();
-extern "C" void* __cdecl SP_AppSystem();
-extern "C" void* __cdecl SP_MessageServer();
+extern "C" void* __cdecl GetManager();  // 0x0067dcd0
+extern "C" void* __cdecl SP_WindowManager();  // 0x0067caa0
+extern "C" void* __cdecl SP_CheatManager();  // 0x0067de20
+extern "C" void* __cdecl SP_AppSystem();  // 0x0067dd00
+extern "C" void* __cdecl SP_MessageServer();  // 0x0067dcc0
 
 void* __cdecl ZoneObjectNew(int size, const char* name, int a, int b, int c, int d); // 0x926020
 void* __cdecl StringManCtor(void*, void*);    // 0x999820
@@ -78,6 +78,105 @@ struct MainWin;
 struct WinBase { void SetArea(int); };
 struct WinSub : WinBase { void SetAreaNotify(int a); };
 
+struct SW {
+    long long GetElapsedTimeFloat();   // 0x93a3a0
+    char p0[0x14];
+    float scale;                       // +0x14
+    char p1[4];
+};
+struct MsgSrv {
+    virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03(); virtual void s04();
+    virtual void Send(uint32_t id, void* msg, int);            // 0x14
+    virtual void Send4(uint32_t id, void* msg, int, int);      // 0x18
+};
+// SP::MessageBasicRC<5> as laid out on the stack (0x3c bytes)
+struct Msg {
+    void* vtbl;           // +0
+    volatile long rc;     // +4
+    uint32_t f08, f0c, f10, f14, f18, f1c;
+    uint32_t pad20[4];
+    uint32_t id;          // +0x30
+    uint32_t pad34;
+    uint32_t f38;         // +0x38
+    uint32_t f3c;
+    void Destruct();      // 0x421cf0
+};
+extern char vtbl_BehaviorMessage[];  // 0x13eb90c
+extern char vtbl_MessageBasicRC5[];  // 0x13eb844
+extern "C" long _InterlockedExchange(volatile long*, long);
+#pragma intrinsic(_InterlockedExchange)
+extern int g_DAT_01545184;           // 0x1545184
+void* __cdecl OpNew(int size, const char* name, int, int, int, int);  // 0xf473a0
+extern char kName_013f6b3c[];        // 0x13f6b3c
+static inline MsgSrv* MS() { return (MsgSrv*)SP_MessageServer(); }
+struct Fn801410 { void FUN_00801410(bool b); };  // 0x801410
+void* __cdecl FUN_0067cab0();                   // 0x67cab0
+
+// 0x8133f0/0x813550 callee shapes (per vtable slot)
+struct YK1 { virtual void y00(); virtual void y01(); virtual void y02(); virtual void y03();
+    virtual void y04(); virtual void y05(); virtual void y06(); virtual void y07();
+    virtual void y08(); virtual void y09(); virtual void y0a();
+    virtual bool y0b(int, float, float, int);   // 0x2c
+    virtual bool y0c(int, float, float, int);   // 0x30
+    virtual bool y0d(int, float, float, int);   // 0x34
+};
+struct XK1 { virtual void x00(); virtual void x01(); virtual void x02(); virtual void x03();
+    virtual void x04(); virtual void x05(); virtual void x06(); virtual void x07();
+    virtual void x08(); virtual void x09(); virtual void x0a();
+    virtual YK1* x0b();     // 0x2c
+    virtual void x0c(); virtual void x0d();
+    virtual int  x0e();     // 0x38
+};
+struct XK2 { virtual void x00(); virtual void x01(); virtual void x02(); virtual void x03();
+    virtual void x04(); virtual void x05(); virtual void x06(); virtual void x07();
+    virtual void x08(); virtual void x09(); virtual void x0a(); virtual void x0b();
+    virtual void x0c(); virtual void x0d();
+    virtual YK1* x0e();     // 0x38
+};
+struct WinV { virtual void w00(); virtual void w01(); virtual void w02(); virtual void w03();
+    virtual void w04();
+    virtual struct WinO* w05();   // 0x14
+};
+struct WinO { virtual void o00(); virtual void o01(); virtual void o02(); virtual void o03();
+    virtual void o04(); virtual void o05(); virtual void o06(); virtual void o07();
+    virtual void o08(); virtual void o09(); virtual void o0a(); virtual void o0b();
+    virtual void o0c(); virtual void o0d(); virtual void o0e(); virtual void o0f();
+    virtual void o10(); virtual void o11(); virtual void o12();
+    virtual void o13(int, void*); };   // 0x4c
+
+struct FocusSvc { virtual void f00(); virtual void f01(); virtual void f02(); virtual void f03();
+    virtual void f04(); virtual void f05(); virtual void f06(); virtual void f07();
+    virtual void f08(); virtual void f09(); virtual void f0a(); virtual void f0b();
+    virtual void f0c(); virtual void f0d(); virtual void f0e(); virtual void f0f();
+    virtual void f10(); virtual void f11(); virtual void f12(); virtual void f13();
+    virtual void f14();
+    virtual void* f15(int);               // 0x54
+    virtual void  f16(int, void*);        // 0x58
+    virtual void  f17(int, void*);        // 0x5c
+};
+
+struct SrcV {
+    virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
+    virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
+    virtual int  s08();   // 0x20
+};
+struct SrcO {
+    virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
+    virtual void s04(); virtual void s05(); virtual void s06();
+    virtual int  s07();   // 0x1c
+    virtual int  s08();   // 0x20
+    virtual void s09(); virtual void s0a();
+    virtual int  s0b();   // 0x2c
+};
+struct UIMsg {
+    SrcO* src;       // +0
+    int   pad4;
+    uint32_t id;     // +8
+    int   kind;      // +0xc
+    int   p10, p14;
+    void* target;    // +0x18
+};
+
 struct MainWin {
     char pad0[0x4];
     WinSub win;                 // +0x4
@@ -88,14 +187,16 @@ struct MainWin {
     int   i21c;                 // +0x21c
     uint8_t b220;               // +0x220
     uint8_t b221, b222, b223;   // +0x221..0x223
-    char pad3[0x244 - 0x224];
+    char pad3[0x228 - 0x224];
+    SW sw;                      // +0x228 (EA::Stopwatch, scale float at +0x14)
     void* mp244;                // +0x244
-    char pad4[0x268 - 0x248];
+    int   i248, i24c;           // +0x248, +0x24c
+    uint64_t u250, u258;        // +0x250, +0x258
+    char pad4[0x268 - 0x260];
     void* mp268;                // +0x268
     void* mp26c;                // +0x26c
     char pad5[0x287 - 0x270];
-    int   i287;                 // +0x287
-    uint8_t b28b;               // +0x28b
+    uint8_t fl[5];              // +0x287..0x28b (key-held flags)
     uint8_t b28c;               // +0x28c
     uint8_t b28d;               // +0x28d
     void* mp290;                // +0x290
@@ -110,9 +211,12 @@ struct MainWin {
     bool InitStringFactories();    // 0x8137f0
     bool ShutdownStringFactories();// 0x8138e0
     bool InitTitleScreen();        // 0x813980
-    void DoMessage(int* msg);      // 0x813e70
-    bool KeyRouted(int a, int b, int c, int d);   // 0x8133f0
-    bool FocusInput(int a, int b, int c, int d);  // 0x813550
+    void DoMessage(UIMsg* msg);    // 0x813e70
+    bool KeyRouted(float a, float b, int c, int d);   // 0x8133f0
+    bool FocusInput(float a, float b, int c, int d);  // 0x813550
+    static bool __stdcall KeyHandler(int, int key, int kind);  // 0x814090
+    void ApplyToFocus(bool b);      // 0x813300
+    void FUN_00950bb0(UIMsg* m);   // 0x950bb0
     void Dtor();                   // 0x813ca0
 };
 
@@ -220,23 +324,230 @@ bool MainWin::ShutdownStringFactories() {
 }
 
 // ---------------------------------------------------------------------------
-// 0x8133f0 / 0x813550 : key capture + focus dispatch (approximate, vcalls)
+// 0x8133f0 / 0x813550 : key capture + focus dispatch
 // ---------------------------------------------------------------------------
-bool MainWin::KeyRouted(int a, int b, int c, int d) {
+// @ 0x008133f0
+bool MainWin::KeyRouted(float a, float b, int c, int d) {
     if (b28d) return true;
+    WinV* w = (WinV*)&win;
+    w->w05()->o13(1, w);
+    w->w05()->o13(0, w);
+    bool hit = false;
     if (mp268) {
-        // capture / release then route
+        XK1* p = (XK1*)mp268;
+        if (p->x0b()->y0b(c, a, b, d)) hit = true;
+        else goto second;
+    } else {
+    second:
+        if (mp26c) {
+            XK2* q = (XK2*)mp26c;
+            if (q->x0e()->y0c(c, a, b, d)) hit = true;
+        }
+    }
+    if (mp268) {
+        XK1* p = (XK1*)mp268;
+        if (p->x0e() != g_DAT_01545184 && hit) {
+            void* cur = ((FocusSvc*)mp34)->f15(1);
+            if (!cur || cur == w) {
+                ((FocusSvc*)mp34)->f16(1, w);
+                for (int i = 0; i < 5; i++) {
+                    uint8_t* f = &fl[i];
+                    int key = (int)(f - (uint8_t*)this) + 0x161;
+                    if (!*f) {
+                        unsigned mask = 0;
+                        switch (key) {
+                        case 1000: mask = 8; break;
+                        case 1001: mask = 0x10; break;
+                        case 1002: mask = 0x20; break;
+                        }
+                        if (d & mask) *f = 1;
+                    }
+                }
+            }
+            return true;
+        }
     }
     return false;
 }
 
-bool MainWin::FocusInput(int a, int b, int c, int d) {
+// @ 0x00813550
+bool MainWin::FocusInput(float a, float b, int c, int d) {
     if (b28d) return true;
     if (mp268) {
-        void* q = ((void*(__thiscall*)(void*))Vtbl(mp268)[0x2c / 4])(mp268);
-        if (q) return true;
+        XK1* p = (XK1*)mp268;
+        uint8_t* flags = (uint8_t*)this + c - 0x161;
+        if (p->x0e() != g_DAT_01545184 && *flags) {
+            *flags = 0;
+            unsigned i = 0;
+            do {
+                if (fl[i]) goto skip;
+                i++;
+            } while (i < 5);
+            {
+                FocusSvc* f = (FocusSvc*)mp34;
+                WinV* w = (WinV*)&win;
+                f->f17(1, w);
+            }
+        }
+    }
+skip:
+    XK1* p2 = (XK1*)mp268;
+    if (p2) {
+        if (p2->x0b()->y0c(c, a, b, d)) return true;
+    }
+    XK2* q2 = (XK2*)mp26c;
+    if (q2) {
+        if (q2->x0e()->y0d(c, a, b, d)) return true;
     }
     return false;
+}
+
+// @ 0x00814090
+bool __stdcall MainWin::KeyHandler(int, int key, int kind) {
+    if (kind == 3 && key == 0x43) {
+        void* wm = SP_WindowManager();
+        if (!((int(__thiscall*)(void*))Vtbl(wm)[0x84 / 4])(wm)) {
+            void* cm = SP_CheatManager();
+            ((void(__thiscall*)(void*, int))Vtbl(cm)[0x44 / 4])(cm, 1);
+        }
+        return true;
+    }
+    if (key == 0xd) {
+        if (kind == 4) {
+            void* as = SP_AppSystem();
+            ((void(__thiscall*)(void*))Vtbl(as)[0x64 / 4])(as);
+            MS()->Send(0x62752d3, 0, 0);
+            return true;
+        }
+        if (kind == 5) {
+            void* as = SP_AppSystem();
+            ((void(__thiscall*)(void*))Vtbl(as)[0x68 / 4])(as);
+            return true;
+        }
+    } else if (key == 0x73 && kind == 4) {
+        Msg m;
+        m.id = 0x657abe5;
+        m.vtbl = vtbl_BehaviorMessage;
+        _InterlockedExchange(&m.rc, 0);
+        m.vtbl = vtbl_MessageBasicRC5;
+        m.f38 = 0;
+        m.f08 = 1;
+        MS()->Send(m.id, &m, 0);
+        if (m.f08 != 0) MS()->Send(0x153c326, 0, 0);
+        m.Destruct();
+    }
+    return false;
+}
+
+// ---- DoMessage 0x813e70 ----
+__forceinline int TruncToInt(float f) { __asm cvttss2si eax, f }
+inline void* operator new(unsigned int, void* p) { return p; }
+struct IM { virtual void m0(); virtual void AddRef(); virtual void Release(); };
+struct MRC : IM {
+    volatile long rc; uint32_t d[10]; uint32_t id; uint32_t pad34;
+    __forceinline MRC(uint32_t i) : id(i) { _InterlockedExchange(&rc, 0); }
+};
+struct HMsg : MRC { uint32_t flags; __forceinline HMsg(uint32_t i) : MRC(i), flags(0) {} };
+
+// @ 0x00813e70
+void MainWin::DoMessage(UIMsg* msg) {
+    SW* s = &sw;
+    long long el = s->GetElapsedTimeFloat();
+    int t = TruncToInt((float)el * s->scale);
+    unsigned delta = t - i248;
+    i248 = t;
+    i24c = 0;
+    if (delta < 0xf) u250 += delta;
+    else u258 += delta;
+    if (msg->id == 0x287259f6 && msg->kind != 0 && msg->src != 0) {
+        void* mem = OpNew(0x40, kName_013f6b3c, 0, 0, 0, 0);
+        HMsg* o = mem ? new (mem) HMsg(msg->src->s08()) : 0;
+        if (mem) o->AddRef();
+        o->d[0] = msg->src->s07();
+        o->d[2] = msg->src->s0b();
+        MS()->Send4(o->id, o, 0, 0);
+        o->Release();
+    }
+    if (msg->id == 10) {
+        if (msg->kind == 1) {
+            Msg m;
+            m.id = 0x255abf5;
+            m.vtbl = vtbl_BehaviorMessage;
+            _InterlockedExchange(&m.rc, 0);
+            bool on = msg->target == (void*)&win;
+            m.vtbl = vtbl_MessageBasicRC5;
+            m.f08 = on ? 1u : 0u;
+            m.f38 = 0;
+            MS()->Send(m.id, &m, 0);
+            void* p = FUN_0067cab0();
+            if (p) ((Fn801410*)p)->FUN_00801410(on);
+            m.Destruct();
+        }
+        if (msg->id == 10 && msg->kind == 0) {
+            bool on = msg->target == (void*)&win;
+            if (b220 && b223 != on) ApplyToFocus(on);
+            b223 = on;
+        }
+    }
+    if (mp268) {
+        if (((XK1*)mp268)->x0e() != g_DAT_01545184 && msg->id == 0xb && msg->target != (void*)&win && msg->kind == 1) {
+            *(int*)fl = 0;
+            fl[4] = 0;
+        }
+    }
+    FUN_00950bb0(msg);
+}
+
+// ---- Tooltip manager init 0x813b20 ----
+struct TKey { uint32_t inst, type, group; };
+struct TRes {
+    virtual void t0(); virtual void Release(); virtual void t2();
+    virtual struct TObj* Find(uint32_t id);   // 0xc
+};
+struct TIter { uint32_t d[2]; void Ctor(); };     // 0xb90720
+struct TObj {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void Begin();                                  // 0x18
+    virtual bool Next(TIter*, void** key, void** val);     // 0x1c
+};
+struct TMgr {
+    virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3();
+    virtual void m4(); virtual void m5(); virtual void m6();
+    virtual int Get(TKey*, TRes** out, int, int, int, int); // 0x1c
+};
+void __cdecl FUN_00888480();                                // 0x888480
+uint32_t __cdecl FNV1_String8(const char*, uint32_t, int);  // 0x932e80
+void __cdecl FUN_00889d90(void*);                           // 0x889d90
+extern char kStr_dnt[];                                     // 0x14186a4 "dnt_no_word_break_dictionary"
+struct cSPUITooltipManager { static void Init(); };
+
+// @ 0x00813b20
+void cSPUITooltipManager::Init() {
+    FUN_00888480();
+    TRes* volatile res = 0;
+    TMgr* m = (TMgr*)GetManager();
+    {
+        TRes* t = res;
+        if (t) { res = 0; t->Release(); }
+    }
+    TKey key;
+    key.inst = FNV1_String8(kStr_dnt, 0x811c9dc5, 1);
+    key.type = 0x2fac0b6;
+    key.group = 0x2fabf01;
+    m->Get(&key, (TRes**)&res, 0, 0, 0, 0);
+    TRes* r = res;
+    if (r) {
+        TObj* o = r->Find(0x30410fc);
+        if (o) {
+            o->Begin();
+            TIter it;
+            it.Ctor();
+            void* k; void* v;
+            while (o->Next(&it, &k, &v)) FUN_00889d90(k);
+        }
+        TRes* t = res;
+        if (t) t->Release();
+    }
 }
 
 // ---------------------------------------------------------------------------
