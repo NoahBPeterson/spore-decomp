@@ -1,8 +1,11 @@
+007f42e0 ?Update@IMEProxyS@@QAE_NXZ  # IMEProxyS::Update migrated from s007f42e0 (verbatim, slice spelling)
 007f4500 Sims3::UI::IMEProxy::StartCandidateList  # PDB name in card
-007f4710 Sims3::UI::IMEService::Init  # PDB name in card
-007f4860 Sims3::UI::IMEServiceShutdown  # PDB name in card
-007f4920 Sims3::UI::IMEComposition::IMEComposition  # vtable/field offsets match IMEComposition layout
+007f45b0 ?Dtor@IMECompositionS@@QAEXXZ  # IMECompositionS::Dtor migrated from s007f42e0 (verbatim, slice spelling)
+007f4630 ?SetFlag@IMECompositionS@@QAEXH@Z  # IMECompositionS::SetFlag migrated from s007f42e0 (verbatim, slice spelling)
+007f4710 ?Init@IMEServiceS@@QAE_NXZ  # IMEServiceS::Init migrated from s007f42e0 (verbatim, slice spelling)
+007f4860 ?IMEServiceShutdown@UI@Sims3@@YAXXZ  # Sims3::UI::IMEServiceShutdown migrated from s007f42e0
+007f48d0 ??0WideFixedBuf@@QAE@PBG@Z  # WideFixedBuf::WideFixedBuf migrated from s007f42e0 (verbatim, slice spelling)
+007f4920 ?Construct@IMECompositionS@@QAEPAU1@XZ  # IMECompositionS::Construct migrated from s007f42e0 (verbatim, slice spelling)
+007f49b0 ?IMECandidateListS_SetupWindow@@YAXPAX@Z  # IMECandidateListS_SetupWindow migrated from s007f42e0 (verbatim, slice spelling)
 007f50f0 Sims3::UI::IMEProxy::StartComposition  # PDB name in card
-007f5220 Sims3::UI::IMEProxy::HandleMessage  # PDB candidate in card
-007f48d0 WideFixedBuf::WideFixedBuf  # layout matches 0x0042F9D0 append
-007f4630 Sims3::UI::IMEComposition::SetFlag  # calls embedded +0x208 object vtable slot 0x60
+007f5220 ?HandleMessage@IMEProxyS@@QAE_NIPAX@Z  # IMEProxyS::HandleMessage migrated from s007f42e0 (verbatim, slice spelling)

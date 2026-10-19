@@ -1,4 +1,4 @@
-007f5300 vtable region; PDB candidate Sims3::UI::IMEComposition::SetCompositionString
+007f5300 ?M5300@Obj@@QAEXPAX@Z  # Obj::M5300 migrated from s007f5300 (verbatim, slice spelling)
 007f53d0 UTFWin icon-window init flag; calls Window::Initialize
 007f5410 AsInterface-style cast by 3 message/type ids
 007f54b0 slider position setter (ms -> fraction)

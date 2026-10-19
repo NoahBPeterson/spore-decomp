@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/Spui/IMESupport.cpp  ?Init@IMEProxy@@QAE_NPAXH@Z  007f30e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/IMESupport.cpp  ?ShutdownCandidateListImpl@IMEProxy2@@QAEXXZ  007f3380  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/IMESupport.cpp  ?HandleMessage@IMEComp@@QAE_NHPAX@Z  007f36e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/IMESupport.cpp  ?Helper@IMEComp3@@QAEXH@Z  007f3be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/IMESupport.cpp  ?HandleMessage@IMECand@@QAE_NHPAX@Z  007f4170  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/IMESupport.cpp  ?Shutdown@IMEProxy2@@QAE_NXZ  007f4250  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/IMESupport.cpp  ?SetFlag@IMECompositionS@@QAEXH@Z  007f4630  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Spui/IMESupport.cpp  ?IMEServiceShutdown@UI@Sims3@@YAXXZ  007f4860  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Spui/IMESupport.cpp  ?HandleMessage@IMEProxyS@@QAE_NIPAX@Z  007f5220  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

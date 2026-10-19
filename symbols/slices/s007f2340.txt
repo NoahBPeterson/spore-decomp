@@ -5,6 +5,6 @@
 007f29e0 ArithReadWrapper  # two virtual calls + forward to ArithReadThing
 007f2a10 Vec4::push_back  # 4-byte float vector push_back (new-element guard)
 007f2a40 VecU::push_back  # 4-byte integer vector push_back
-007f30e0 Sims3::UI::IMEProxy::Init  # PDB name; registers four message ids
-007f31e0 Sims3::UI::IMEProxy::SetupDefaultFonts  # PDB name
-007f3320 IMEProxy::Shutdown  # release secondary object
+007f30e0 ?Init@IMEProxy@@QAE_NPAXH@Z  # IMEProxy::Init migrated from s007f2340 (verbatim, slice spelling)
+007f31e0 ?SetupDefaultFonts@IMEProxy@@QAEXXZ  # IMEProxy::SetupDefaultFonts migrated from s007f2340 (verbatim, slice spelling)
+007f3320 ?Shutdown@IMEProxy@@QAEXXZ  # IMEProxy::Shutdown migrated from s007f2340 (verbatim, slice spelling)

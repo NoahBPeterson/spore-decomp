@@ -1,0 +1,13 @@
+# va  diff-bytes  reason
+007f31e0 0 Sims3::UI::IMEProxy::SetupDefaultFonts - style manager / font setup, skeleton
+007f3320 0 IMEProxy::Shutdown - secondary-object release with tail jump, skeleton
+007f33d0 0 Sims3::UI::IMEComposition::Init - 506-byte window/style setup, skeleton
+007f35d0 0 Sims3::UI::IMEComposition::Shutdown - 271-byte teardown, skeleton
+007f3750 0 IMEComposition message/font handler - 832 bytes, skeleton
+007f3c10 0 Sims3::UI::IMECandidateList::IMECandidateList - multiple-inheritance vptr schedule, skeleton
+007f3cc0 0 Sims3::UI::IMECandidateList::~IMECandidateList - member releases + base dtor tail, skeleton
+007f3d20 0 IMECandidateList paint/layout - 880 bytes, skeleton
+007f4090 0 Sims3::UI::IMECandidateList::Shutdown - 211-byte teardown, skeleton
+007f4200 0 IMECandidateList scalar deleting destructor - vptr/base schedule, skeleton
+007f42e0  533  best-effort Update; the EASTL hashtable lookup and message-box paths are not reproduced faithfully
+007f49b0  1855  stub only; the float/typesetter candidate-list layout routine is not reproduced

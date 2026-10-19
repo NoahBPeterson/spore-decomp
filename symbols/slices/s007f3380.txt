@@ -1,12 +1,16 @@
-007f3380 IMEProxy::ShutdownCandidateList  # releases the candidate list through its vtable
-007f33d0 Sims3::UI::IMEComposition::Init  # PDB name (506 bytes)
-007f35d0 Sims3::UI::IMEComposition::Shutdown  # PDB name
-007f36e0 Sims3::UI::IMEComposition::HandleMessage  # PDB name; message ids 0x2ac44c14/1a/1b
-007f3a90 Sims3::UI::IMEComposition::SetWindowColors  # PDB name
-007f3b00 Sims3::UI::IMEComposition::CalculateTextSize  # PDB name (static)
-007f3b70 Sims3::UI::IMEComposition::OnChar  # PDB name
-007f3c10 Sims3::UI::IMECandidateList::IMECandidateList  # PDB name
-007f3cc0 Sims3::UI::IMECandidateList::~IMECandidateList  # PDB name
-007f4090 Sims3::UI::IMECandidateList::Shutdown  # PDB name
-007f4170 Sims3::UI::IMECandidateList::HandleMessage  # PDB name; ids 0x2ac44ed8/ef0
-007f4250 Sims3::UI::IMEProxy::Shutdown  # PDB name
+007f3380 ?ShutdownCandidateListImpl@IMEProxy2@@QAEXXZ  # IMEProxy2::ShutdownCandidateListImpl migrated from s007f3380 (verbatim, slice spelling)
+007f33d0 ?IMECompositionInit@@YAXPAXHH@Z  # IMECompositionInit migrated from s007f3380 (verbatim, slice spelling)
+007f35d0 ?IMECompositionShutdown@@YAXPAX@Z  # IMECompositionShutdown migrated from s007f3380 (verbatim, slice spelling)
+007f36e0 ?HandleMessage@IMEComp@@QAE_NHPAX@Z  # IMEComp::HandleMessage migrated from s007f3380 (verbatim, slice spelling)
+007f3750 ?IMECompositionBig@@YAXPAXHH@Z  # IMECompositionBig migrated from s007f3380 (verbatim, slice spelling)
+007f3a90 ?SetWindowColors@IMECompColors@@QAEXXZ  # IMECompColors::SetWindowColors migrated from s007f3380 (verbatim, slice spelling)
+007f3b00 ?CalculateTextSize@@YAPAXPAXHHH0@Z  # CalculateTextSize migrated from s007f3380 (verbatim, slice spelling)
+007f3b70 ?OnChar@IMEC@@QAE_NHG@Z  # IMEC::OnChar migrated from s007f3380 (verbatim, slice spelling)
+007f3be0 ?Helper@IMEComp3@@QAEXH@Z  # IMEComp3::Helper migrated from s007f3380 (verbatim, slice spelling)
+007f3c10 ?IMECandidateListCtor@@YAXPAX@Z  # IMECandidateListCtor migrated from s007f3380 (verbatim, slice spelling)
+007f3cc0 ?IMECandidateListDtor@@YAXPAX@Z  # IMECandidateListDtor migrated from s007f3380 (verbatim, slice spelling)
+007f3d20 ?IMECandidateListPaint@@YAXPAXHH@Z  # IMECandidateListPaint migrated from s007f3380 (verbatim, slice spelling)
+007f4090 ?IMECandidateListShutdown@@YAXPAX@Z  # IMECandidateListShutdown migrated from s007f3380 (verbatim, slice spelling)
+007f4170 ?HandleMessage@IMECand@@QAE_NHPAX@Z  # IMECand::HandleMessage migrated from s007f3380 (verbatim, slice spelling)
+007f4200 ?IMECandidateListScalarDtor@@YAXPAXI@Z  # IMECandidateListScalarDtor migrated from s007f3380 (verbatim, slice spelling)
+007f4250 ?Shutdown@IMEProxy2@@QAE_NXZ  # IMEProxy2::Shutdown migrated from s007f3380 (verbatim, slice spelling)
