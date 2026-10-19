@@ -1,1 +1,1 @@
-00fbce30 RenderState::operator=  # implicit copy-assign: 14 image refs (GetImageResource 576650), 8 refptrs, scalars; byte-exact
+00fbce30 ??4RenderState@@QAEAAU0@ABU0@@Z  # RenderState::operator= migrated from s00fbce30 (verbatim, slice spelling)
