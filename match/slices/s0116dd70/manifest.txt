@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# No byte-exact functions in this slice: the rw0 RenderWare audio core (0x0112c500 .. 0x01176a90)
+# was linked with /GL + /LTCG, so the register allocation and constant-hoisting of the two leaf
+# functions here cannot be reproduced from a single-object compile.  Both are recorded complete in
+# nonmatching.txt.  The byte-identical sibling logic in s01145d10 (CMpegLayer3Base::Reorder /
+# ::Antialias) is recorded the same way.
