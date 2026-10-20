@@ -1,0 +1,22 @@
+00973dd0 ?DoInsertValueImpl_1c@RBTree@@QAEXPAPAURBNode@@PAU2@PBUV28@@D@Z  # eastl rbtree<int,28-byte-value> insert-impl; no PDB name
+00973e60 ?DoInsertValueImpl_40@RBTree@@QAEXPAPAURBNode@@PAU2@PBUV40@@D@Z  # eastl rbtree insert-impl, 0x40-byte value; no PDB name
+00973ef0 ?DoInsertValueImpl_0c@RBTree@@QAEXPAPAURBNode@@PAU2@PBUV0c@@D@Z  # eastl rbtree insert-impl, 0xc-byte value; no PDB name
+00973f80 ?DoCopySubtree_40@RBTree@@QAEPAURBNode@@PBU2@PAU2@@Z  # eastl rbtree deep-copy, 0x40-byte value; no PDB name
+00974050 ?DoCopySubtree_0c@RBTree@@QAEPAURBNode@@PBU2@PAU2@@Z  # eastl rbtree deep-copy, 0xc-byte value; no PDB name
+00974110 ?SerializeProp@@YA_NPAPAXHH0@Z  # UTF property serializer helper; no PDB name
+009741c0 ?OnKeyDown@WinGrid@@QAE_NHII@Z  # EA::UTFWinControls::WinGrid::OnKeyDown; no PDB name
+009743e0 ?GetSelectionCount@IWinGrid@@QAEHXZ  # EA::UTFWinControls::WinGrid::GetSelectionCount (PDB)
+00974400 ?GetSelection@IWinGrid@@QAE_NPAUCellCoordinates@@PAH@Z  # EA::UTFWinControls::WinGrid::GetSelection (PDB)
+00974460 ?SetSelection@IWinGrid@@QAE_NHH@Z  # EA::UTFWinControls::WinGrid::SetSelection (PDB)
+00974510 ?GetCellUsedRange@IWinGrid@@QAE_NPAURect@@@Z  # EA::UTFWinControls::WinGrid::GetCellUsedRange; no PDB name
+009745b0 ?GetCellType@IWinGrid@@QAE_NHHPAH@Z  # EA::UTFWinControls::WinGrid::GetCellType (PDB)
+009745f0 ?GetCellFormat@IWinGrid@@QAE_NHHPAUCellFormat@@@Z  # EA::UTFWinControls::WinGrid::GetCellFormat (PDB)
+00974860 ?GetColCellFormatExtra@IWinGrid@@QAE_NHPAPAUCellFormatExtra@@@Z  # EA::UTFWinControls::WinGrid::GetColCellFormatExtra (PDB)
+009748f0 ?GetRowCellFormatExtra@IWinGrid@@QAE_NHPAPAUCellFormatExtra@@@Z  # EA::UTFWinControls::WinGrid::GetRowCellFormatExtra (PDB)
+00974980 ?GetCellTextValue@IWinGrid@@QAE_NHHPAPAX@Z  # EA::UTFWinControls::WinGrid::GetCellTextValue (PDB)
+009749d0 ?GetCellImage@IWinGrid@@QAE_NHHPAPAX@Z  # EA::UTFWinControls::WinGrid::GetCellImage (PDB)
+00974a20 ?GetCellWindow@IWinGrid@@QAE_NHHPAPAX@Z  # EA::UTFWinControls::WinGrid::GetCellWindow (PDB)
+00974a60 ?DoWindowRemoval@WinGrid@@QAEXHHPAX@Z  # EA::UTFWinControls::WinGrid::DoWindowRemoval (PDB)
+00974b00 ?PlaceAllCellWindows@WinGrid@@QAEXXZ  # EA::UTFWinControls::WinGrid::PlaceAllCellWindows (PDB)
+00974bf0 ?GetCellExtraData@IWinGrid@@QAEHHH@Z  # EA::UTFWinControls::WinGrid::GetCellExtraData (PDB)
+00974c30 ?Comparator@@YAHPAUCellData@@0@Z  # WinGrid cell-window list comparator; calls 0x614950 with ecx = a->pCellData; no PDB name
