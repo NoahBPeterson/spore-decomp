@@ -1,0 +1,12 @@
+00f87b30  ?SetCell@?$cTerrainMap@M@SP@@QAEXABUcCubeMapIndex@2@M@Z  # SP::cTerrainMap<float>::SetCell(cCubeMapIndex const&, float)
+00f87b60  ?GetRelativeIndex@?$cTerrainMap@M@SP@@QAEHHHHHH@Z  # SP::cTerrainMap<float>::GetRelativeIndex(int,int,int,int,int)
+00f87bd0  ?SetCell@?$cTerrainMap@UcSPVector3@SP@@@SP@@QAEXABUcCubeMapIndex@2@UcSPVector3@2@@Z  # SP::cTerrainMap<SP::cSPVector3>::SetCell
+00f87c10  ?Direction4fToDirection4c@SP@@YAIPBM@Z  # SP::Direction4fToDirection4c(float const*)
+00f87d20  ?Convolve@?$cTerrainMap@M@SP@@QAEXHHHPAMPBMH@Z  # SP::cTerrainMap<float>::Convolve(int,int,int,float*,float const*,int)
+00f87ea0  ?DownSampleMap@?$cTerrainMap@M@SP@@QAEXABU12@@Z  # SP::cTerrainMap<float>::DownSampleMap(cTerrainMap<float> const&)
+00f88090  ?FaceTangentBasis@@YAXPAMHMMMM@Z  # FaceTangentBasis(float*,int,float,float,float,float)
+00f88360  ?CopyMap@?$cTerrainMap@M@SP@@QAEXABU12@@Z  # SP::cTerrainMap<float>::CopyMap(cTerrainMap<float> const&)
+00f88400  ?CopyMap@?$cTerrainMap@UcSPVector3@SP@@@SP@@QAEXABU12@@Z  # SP::cTerrainMap<SP::cSPVector3>::CopyMap
+00f884a0  ?IntersectRaySphere@@YA_NPBM0MPAM1@Z  # IntersectRaySphere(float const*,float const*,float,float*,float*)
+00f885b0  ?ToVector3@@YAXPAMI@Z  # ToVector3(float*,unsigned int)
+00f885f0  ?ToVector4@@YAXPAMI@Z  # ToVector4(float*,unsigned int)

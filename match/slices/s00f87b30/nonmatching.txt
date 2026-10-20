@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+00f87b60  -1  cTerrainMap<float>::GetRelativeIndex: complete; register scheduling differs (equiv PASS, 352 valid, 100% coverage)
+00f87c10  -1  SP::Direction4fToDirection4c: complete; saturation done via out-of-line SatRgb/SatA so xmm4-xmm7 stay untouched, function much smaller than the original (equiv PASS, 100% coverage)
+00f87d20  -1  cTerrainMap<float>::Convolve: complete; register allocation differs (equiv PASS, 288 valid, 100% coverage)
+00f87ea0  -1  cTerrainMap<float>::DownSampleMap: complete; size 386 vs 491, register scheduling differs (equiv WEAK, 319 valid, 14.9% coverage)
+00f88090  -1  FaceTangentBasis: complete; face>5 is UB (original reads uninitialised locals) matched with a volatile xyz[3]; size/regs differ (equiv PASS, 100% coverage)
+00f884a0  -1  IntersectRaySphere: complete; register allocation/size differ (equiv PASS, 400 valid, 100% coverage)
+00f885b0  -1  ToVector3: complete; MSVC 2008 emits x87 fild/fstp for int->float under /arch:SSE where the original restructured (equiv PASS, 100% coverage)
+00f885f0  -1  ToVector4: complete; x87 unsigned->float sequence + one reordered store differ (equiv PASS, 96.2% coverage)
