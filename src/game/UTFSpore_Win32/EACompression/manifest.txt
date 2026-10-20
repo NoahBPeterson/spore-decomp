@@ -1,3 +1,5 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/EACompression.cpp  ?WriteToBigEndian@Util@EA@@YAXPAXIH@Z  0092c2d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EACompression.cpp  ?DeflateBuf@Refpack@EA@@YAHPAXHPBXHI@Z  0092c8e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACompression.cpp  ?Refpack_CompressData@@YGHHHHHI@Z  0092c9f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EACompression.cpp  ?Refpack_Decompress@@YGIPAGHHIH@Z  0092ca60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

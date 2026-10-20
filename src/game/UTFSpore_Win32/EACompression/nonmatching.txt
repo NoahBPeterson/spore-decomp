@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+0092c510 928 EA::Refpack::iCompress LZ77/refpack compressor complete: all paths (pending-literal flush, match search with hash-chain walk, 2/3/4-byte match encoding, hash insert), calls memset 0x11e073e + memcpy 0x11e0744 present; frame/regalloc and instruction scheduling differ (/O2); flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: UNSUPPORTED (0/400 valid, fault=400: pointer args hash/link are not set up by the harness)]
