@@ -1,0 +1,7 @@
+slices/s00aa0ed0/s00aa0ed0.cpp  ?EmitBurst@cMetaParticlesEffect@@QAEXM@Z  0x00aa14f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00aa0ed0/s00aa0ed0.cpp  ?Init@cMetaParticlesEffect@@QAEXPAUcEffectsWorld@@0PAUcEffectParams@@@Z  0x00aa15c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00aa0ed0/s00aa0ed0.cpp  ?SetDescription@cMetaParticlesEffect@@QAEXPAUcMetaParticlesDescription@@@Z  0x00aa15f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00aa0ed0/s00aa0ed0.cpp  ?Destroy@cModelDescription@@QAEPAXI@Z  0x00aa1c70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00aa0ed0/s00aa0ed0.cpp  ?CopyCurveRange@@YAPAUcAnimationCurve@@PAU1@00@Z  0x00aa1db0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00aa0ed0/s00aa0ed0.cpp  ?FillCurveRange@@YAXPAUcAnimationCurve@@0PBU1@@Z  0x00aa1e10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00aa0ed0/s00aa0ed0.cpp  ?CopyCurveRangeBackward@@YAPAUcAnimationCurve@@PAU1@00@Z  0x00aa1e60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

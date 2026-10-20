@@ -1,0 +1,4 @@
+0x00aa0ed0  803  complete; codegen diverges (target uses and esp,-16 aligned frame, SSE loop math, different block layout); equiv gate FAILs on fake-state inputs
+0x00aa1290  375  complete; codegen diverges (target aligned frame and esp,-8, SSE rate multiply); equiv PASS 332 valid inputs / 80% coverage
+0x00aa1cc0   52  complete; register allocation only (count in ecx vs ebx); equiv WEAK 133 valid / 100% coverage
+0x00aa1610  1227  complete; large codegen divergence (target 1353 bytes, SSE force math); equiv UNSUPPORTED (harness cannot build valid fake-state inputs)

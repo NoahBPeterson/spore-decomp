@@ -1,0 +1,11 @@
+00aa0ed0 cMetaParticlesEffect::EmitDefault  # vtable-mode dispatch from ApplyEffect; retrigger/clamp math in card
+00aa1290 cMetaParticlesEffect::EmitRate  # rate-curve emission loop; ApplyEffect mode bit1
+00aa14f0 cMetaParticlesEffect::EmitBurst  # burst emission; ApplyEffect mode bit2
+00aa15c0 cMetaParticlesEffect::Init  # stores world/params and rebinds world
+00aa15f0 cMetaParticlesEffect::SetDescription  # assigns mDesc (+0x8), rebinds world
+00aa1610 cMetaParticlesEffect::ApplyEffect  # vtable slot 6; per-frame effect entry
+00aa1c70 cModelDescription::Destroy  # deleting destructor, ret 4
+00aa1cc0 cAnimationCurve::CopyFrom  # allocates and memmoves the curve vector
+00aa1db0 CopyCurveRange  # free helper over a cAnimationCurve range
+00aa1e10 FillCurveRange  # free helper, forward fill
+00aa1e60 CopyCurveRangeBackward  # free helper, reverse copy
