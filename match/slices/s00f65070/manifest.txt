@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f65070/s00f65070.cpp  ??0cTerrainDistributeEffect@SP@@QAE@PAUcTerrainDistributeDescription@1@H@Z  00f65070  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f65070/s00f65070.cpp  ?SetTransforms@cTerrainDistributeEffect@SP@@QAEXPBX0@Z  00f65150  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f65070/s00f65070.cpp  ?SetIntParams@cTerrainDistributeEffect@SP@@QAE_NHHH@Z  00f65180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f65070/s00f65070.cpp  ?SetUnknownParam@cTerrainDistributeEffect@SP@@QAE_NHPAUIUnknown32@COM@EA@@@Z  00f651e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f65070/s00f65070.cpp  ??0cActiveCellInfo@SP@@QAE@ABU01@@Z  00f65260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f65070/s00f65070.cpp  ?next@slot_deque@SP@@QAEII@Z  00f652c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f65070/s00f65070.cpp  ?Stop@cTerrainDistributeEffect@SP@@QAEXH@Z  00f658a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f65070/s00f65070.cpp  ?SetFloatParams@cTerrainDistributeEffect@SP@@QAE_NHHH@Z  00f658c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f65070/s00f65070.cpp  ?DeactivateCell@cDistGrid@SP@@QAEXPAUcCell@2@@Z  00f65a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f65070/s00f65070.cpp  ?Start@cTerrainDistributeEffect@SP@@QAEXH@Z  00f65fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
