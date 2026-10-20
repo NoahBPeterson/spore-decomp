@@ -1,0 +1,7 @@
+00f67e70 Init  # SP::cTerrainEditor::Init
+00f67ff0 Enable  # SP::cTerrainEditor::Enable
+00f684c0 UpdateRange  # SP::cTerrainEditor::UpdateRange
+00f68070 BuildBrush  # SP::cTerrainEditor::BuildBrush
+00f68650 DrawUnitQuad  # SP::cTerrainEditor::DrawUnitQuad
+00f687f0 TessellateBrush  # SP::cTerrainEditor::TessellateBrush (Ghidra card comment)
+00f68c80 DrawRaster  # SP::cTerrainEditor::DrawRaster
