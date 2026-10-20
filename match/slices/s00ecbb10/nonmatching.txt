@@ -1,0 +1,12 @@
+00ecbb10 1508 message dispatcher: not reconstructed (stub)
+00ecc100 60 sporepedia hashtable lookup: complete; 41 diff, missing `push esi`/zero-register and trailing block layout; equivalence PASS 81.8% coverage
+00ecc140 974 palette-item init: not reconstructed (stub)
+00ecc550 164 property-refresh: complete; 136 diff, vtable-slot call schedule and property-type compares differ; equivalence WEAK (19% coverage)
+00ecc620 87 card destructor: complete; 16 diff, vtable-store encoding (c7 06 imm vs mov [reg],0) ordering differs; equivalence PASS 100% coverage
+00ecc680 252 card copy-constructor: complete; 190 diff, member-copy/addref schedule differs; equivalence WEAK (no mismatch, 100% coverage)
+00ecc780 74 card constructor: complete; 11 diff, vtable-store order relative to the empty-string load differs; equivalence UNSUPPORTED (extern eastl string symbols)
+00ecc7d0 102 captain-asset factory: complete; 8 diff, vtable-slot target register (edx vs eax) differs; equivalence WEAK (81.8% coverage)
+00ecc8b0 93 string-to-variant: complete; 6 diff, loop-register copy (lea edi,[eax+2] vs edx) and mov cx vs movzx ecx; equivalence UNSUPPORTED (member callees)
+00ecc920 52 field initialiser: complete; 18 diff, store order of the zero/int/float groups and movss scheduling differ; equivalence PASS 100% coverage
+00ecc960 194 card-image property query: complete; 128 diff, temp register assignment (ebx vs edi) and local frame differ; equivalence UNSUPPORTED (0 valid inputs)
+00ecca30 179 card-model property query: complete; 150 diff, local frame layout and reserve call shape differ; equivalence FAIL (generated callee differs)
