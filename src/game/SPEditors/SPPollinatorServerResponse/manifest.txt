@@ -16,6 +16,7 @@
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?insert@HandlerMap_s0061_4f20@@QAE?AUHandlerInsertResult@@ABUHandlerPair_s0061_4f20@@@Z  00615080  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?DoNukeSubtree@StrMap_s0061_4f20@@QAEXPAUStrNode_s0061_4f20@@@Z  00615110  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?DefaultEndTag@cServerResponse_s0061_4f20@Pollen@SP@@QAEXPB_W@Z  00615180  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPPollinatorServerResponse.cpp  ??1cServerResponse_s0061_4f20@Pollen@SP@@UAE@XZ  00615380  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?Read@cServerResponse@Pollen@SP@@UAEIPAXI@Z  00615430  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?Open@cServerResponse_s0061_4f20@Pollen@SP@@QAE_NXZ  00615450  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?SetPosition@cServerResponse@Pollen@SP@@UAE_NJW4PositionType@IO@EA@@@Z  006154c0  /O2 /MD /Gy /TP /Isrc/game/include

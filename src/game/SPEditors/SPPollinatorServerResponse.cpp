@@ -386,9 +386,12 @@ struct HandlerPair_s0061_4f20 {
     int pad;
     mem_fun_t_s0061_4f20 second;
 };
+struct char16less_s0061_4f20 {
+    bool operator()(const wchar_t* a, const wchar_t* b) const { return wcscmp(a, b) < 0; }
+};
 struct HandlerRange_s0061_4f20 { HandlerPair_s0061_4f20* first; HandlerPair_s0061_4f20* second; };
 struct HandlerInsertResult { HandlerPair_s0061_4f20* first; bool second; HandlerInsertResult(HandlerPair_s0061_4f20* f, bool s) : first(f), second(s) {} };
-HandlerPair_s0061_4f20* lower_bound_s0061_4f20(HandlerPair_s0061_4f20* first, HandlerPair_s0061_4f20* last, const wchar_t* const& value, char16less c);   // 0x00614a30
+HandlerPair_s0061_4f20* lower_bound_s0061_4f20(HandlerPair_s0061_4f20* first, HandlerPair_s0061_4f20* last, const wchar_t* const& value, char16less_s0061_4f20 c);   // 0x00614a30
 HandlerPair_s0061_4f20* CopyPairs(HandlerPair_s0061_4f20* first, HandlerPair_s0061_4f20* last, HandlerPair_s0061_4f20* dest);   // eastl::copy_impl do_copy 0x00705250
 struct HandlerMap_s0061_4f20 {
     HandlerPair_s0061_4f20* mpBegin;
@@ -396,7 +399,7 @@ struct HandlerMap_s0061_4f20 {
     HandlerPair_s0061_4f20* mpCapacity;
     int mAlloc;
     int pad4;
-    char16less mCompare;     // +0x14
+    char16less_s0061_4f20 mCompare;     // +0x14
     HandlerRange_s0061_4f20 equal_range(const wchar_t* const& k);             // 0x00614d20
     void reserve(size_type n);                                     // 0x00614c40
     HandlerPair_s0061_4f20* vector_insert(HandlerPair_s0061_4f20* pos, const HandlerPair_s0061_4f20& v);   // 0x00676370
@@ -564,8 +567,6 @@ bool SP::Pollen::cServerResponse_s0061_4050::Write(const void* pData, size_type 
     return false;
 }
 
-
-
 // @ 0x00614880
 bool SP::Pollen::cServerResponse_s0061_4050::Close()
 {
@@ -578,15 +579,11 @@ bool SP::Pollen::cServerResponse_s0061_4050::Close()
     return true;
 }
 
-
-
 // @ 0x006148c0
 int SP::Pollen::cServerResponse::GetAccessFlags() const
 {
     return mbOpen ? 2 : 0;
 }
-
-
 
 // @ 0x006148d0
 int SP::Pollen::cServerResponse_s0061_4050::GetState() const
@@ -598,8 +595,6 @@ int SP::Pollen::cServerResponse_s0061_4050::GetState() const
     return -2;
 }
 
-
-
 // @ 0x00614900
 long SP::Pollen::cServerResponse::GetPosition(EA::IO::PositionType positionType) const
 {
@@ -610,8 +605,6 @@ long SP::Pollen::cServerResponse::GetPosition(EA::IO::PositionType positionType)
     }
     return -1;
 }
-
-
 
 // @ 0x00614a30
 HandlerPair* lower_bound(HandlerPair* first, HandlerPair* last, const wchar_t* const& value, char16less compare)
@@ -629,8 +622,6 @@ HandlerPair* lower_bound(HandlerPair* first, HandlerPair* last, const wchar_t* c
     return first;
 }
 
-
-
 // @ 0x00614ab0
 void SP::Pollen::cServerResponse_s0061_4050::GetStatus()
 {
@@ -643,13 +634,9 @@ void SP::Pollen::cServerResponse_s0061_4050::GetStatus()
         mnReturnCode = 1;
 }
 
-
-
 // @ 0x00614c00
 StrPair::~StrPair()
 {}
-
-
 
 // @ 0x00614c40
 void HandlerMap::DoReallocate(size_type n)
@@ -666,15 +653,11 @@ void HandlerMap::DoReallocate(size_type n)
     }
 }
 
-
-
 // @ 0x00614cc0
 StrPair MakeStrPair(string16 a, string16 b)
 {
     return StrPair(a, b);
 }
-
-
 
 // @ 0x00614d20
 HandlerRange HandlerMap::equal_range(const wchar_t* const& k)
@@ -691,15 +674,11 @@ HandlerRange HandlerMap::equal_range(const wchar_t* const& k)
     return r;
 }
 
-
-
 // @ 0x00614da0
 void SP::Pollen::cServerResponse_s0061_4050::CharacterData(SP::Pollen::cServerResponse_s0061_4050* self, const wchar_t* s, int len)
 {
     self->mCharacterData.append(s, s + len);
 }
-
-
 
 // @ 0x00614dc0
 StrMapIter StrMap::DoInsertValueImpl(RBNode* pNodeParent, const StrPair& value, bool bForceToLeft)
@@ -719,8 +698,6 @@ StrMapIter StrMap::DoInsertValueImpl(RBNode* pNodeParent, const StrPair& value, 
     return it;
 }
 
-
-
 // @ 0x00614e50
 const wchar_t* SP::Pollen::cServerResponse_s0061_4050::GetField(const wchar_t* name)
 {
@@ -736,8 +713,6 @@ const wchar_t* SP::Pollen::cServerResponse_s0061_4050::GetField(const wchar_t* n
     return 0;
 }
 
-
-
 // @ 0x00614ed0
 void SP::Pollen::cServerResponse_s0061_4050::StartElement(SP::Pollen::cServerResponse_s0061_4050* self, const wchar_t* name)
 {
@@ -748,7 +723,6 @@ void SP::Pollen::cServerResponse_s0061_4050::StartElement(SP::Pollen::cServerRes
         ((Fn)r.first->second.fn)((char*)self + r.first->second.adj);
     }
 }
-
 
 // @ 0x00614f20
 StrInsertResult StrMap_s0061_4f20::DoInsertValue(const StrPair_s0061_4f20& value, TrueTag)
@@ -785,7 +759,6 @@ StrInsertResult StrMap_s0061_4f20::DoInsertValue(const StrPair_s0061_4f20& value
     return StrInsertResult(pLowerBound, false);
 }
 
-
 // @ 0x00615080
 HandlerInsertResult HandlerMap_s0061_4f20::insert(const HandlerPair_s0061_4f20& value)
 {
@@ -795,7 +768,6 @@ HandlerInsertResult HandlerMap_s0061_4f20::insert(const HandlerPair_s0061_4f20& 
         return HandlerInsertResult(it, false);
     return HandlerInsertResult(vector_insert(it, value), true);
 }
-
 
 // @ 0x00615110
 void StrMap_s0061_4f20::DoNukeSubtree(StrNode_s0061_4f20* pNode)
@@ -809,7 +781,6 @@ void StrMap_s0061_4f20::DoNukeSubtree(StrNode_s0061_4f20* pNode)
     }
 }
 
-
 // @ 0x00615180
 void SP::Pollen::cServerResponse_s0061_4f20::DefaultEndTag(const wchar_t* tag)
 {
@@ -817,7 +788,6 @@ void SP::Pollen::cServerResponse_s0061_4f20::DefaultEndTag(const wchar_t* tag)
     mCharacterData.erase(mCharacterData.find_last_not_of(L" \t\n\f\r") + 1, (size_type)-1);
     mFieldDict.insert(MakeStrPair(string16_s0061_4f20(tag), mCharacterData));
 }
-
 
 // @ 0x00615330
 void SP::Pollen::cServerResponse_s0061_4f20::EndElementHandler(SP::Pollen::cServerResponse_s0061_4f20* self, const wchar_t* name)
@@ -831,13 +801,21 @@ void SP::Pollen::cServerResponse_s0061_4f20::EndElementHandler(SP::Pollen::cServ
     ((Fn)r.first->second.fn)((char*)self + r.first->second.adj);
 }
 
+// @ 0x00615380
+SP::Pollen::cServerResponse_s0061_4f20::~cServerResponse_s0061_4f20()
+{
+    if (mbOpen) {
+        mParseStatus = XML_Parse((XML_ParserStruct_s0061_4050*)mpXMLParser, 0, 0, 1);
+        XML_ParserFree((XML_ParserStruct_s0061_4050*)mpXMLParser);
+        mbOpen = false;
+    }
+}
 
 // @ 0x00615430
 unsigned int SP::Pollen::cServerResponse::Read(void * pData, unsigned int nSize)
 {
     return (size_type)-1;
 }
-
 
 // @ 0x00615450
 bool SP::Pollen::cServerResponse_s0061_4f20::Open()
@@ -856,7 +834,6 @@ bool SP::Pollen::cServerResponse_s0061_4f20::Open()
     return mbOpen;
 }
 
-
 // @ 0x006154c0
 bool SP::Pollen::cServerResponse::SetPosition(long position, EA::IO::PositionType positionType)
 {
@@ -869,7 +846,6 @@ bool SP::Pollen::cServerResponse::SetPosition(long position, EA::IO::PositionTyp
     return false;
 }
 
-
 // @ 0x00615520
 void SP::Pollen::cServerResponse_s0061_4f20::IDListElement()
 {
@@ -877,7 +853,6 @@ void SP::Pollen::cServerResponse_s0061_4f20::IDListElement()
     mCharacterData.erase(mCharacterData.find_last_not_of(L" \t\n\f\r") + 1, (size_type)-1);
     mAssetList.push_back(mCharacterData);
 }
-
 
 // @ 0x006155f0
 void SP::Pollen::cServerResponse_s0061_4f20::SetupDict()
