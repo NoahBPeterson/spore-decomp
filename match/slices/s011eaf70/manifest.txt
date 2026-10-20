@@ -1,0 +1,2 @@
+slices/s011eaf70/s011eaf70.cpp  ?FUN_011eb060@@YAXPAH@Z  011eb060  /O2 /MD /Gy /EHsc /TP
+slices/s011eaf70/s011eaf70.cpp  ?rw_ArenaTypeRegistry_Open@@YAPAIHH@Z  011eb0e0  /O2 /MD /Gy /EHsc /TP
