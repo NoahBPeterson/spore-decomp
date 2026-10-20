@@ -1,2 +1,3 @@
 # va  diff-bytes  reason
 009415f0 322 EncodeBase64: complete; group/line-wrap loop register schedule and tail-padding branches differ
+00941790 414 DecodeBase64Core: complete; loop index/bound registers swapped (original keeps bound in esi, index in edx); equiv PASS (95.4% cov, 380 inputs)
