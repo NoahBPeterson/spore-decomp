@@ -1,0 +1,2 @@
+# <va>  <dl>  <reason>   (incomplete / not equivalent)
+00f9a7c0  604vs1011  ?RenderLightingRegion@cTerrainSphere141@@QAEXPAX0@Z (/O2 /MD /Gy /TP /arch:SSE /fp:fast): terrain-sphere lighting-region emit rebuilt from the decompile but not byte-exact (my 604 vs orig 1011 bytes) and not equivalent (difftest equiv: FAIL, 5/5 inputs, fault write to unmapped memory in the vertex-build loop); the original unrolls the per-vertex transform/back-transform and the four quad-vertex colour stores that I compressed into a loop.
