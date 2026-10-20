@@ -1,0 +1,16 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00985ad0/s00985ad0.cpp  ??0WinSlider@UTFWinControls@EA@@QAE@XZ  00985ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00985ad0/s00985ad0.cpp  ?SetDrawable@IWinSpinner@UTFWinControls@EA@@UAEXPAX@Z  00985cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00985ad0/s00985ad0.cpp  ?SetValue@IWinSpinner@UTFWinControls@EA@@UAEXHD@Z  00985d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00985ad0/s00985ad0.cpp  ?SetMinimumValue@IWinSpinner@UTFWinControls@EA@@UAEXHH@Z  00985dc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00985ad0/s00985ad0.cpp  ?SetMaximumValue@IWinSpinner@UTFWinControls@EA@@UAEXHH@Z  00985df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00985ad0/s00985ad0.cpp  ?SetMode@IWinSpinner@UTFWinControls@EA@@UAEXH@Z  00985e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00985ad0/s00985ad0.cpp  ?OnMouseDown@WinSpinner@UTFWinControls@EA@@QAE_NMMHH@Z  00985e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00985ad0/s00985ad0.cpp  ?OnMouseMove@WinSpinner@UTFWinControls@EA@@QAE_NMMH@Z  00985fc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00985ad0/s00985ad0.cpp  ?OnTick@WinSpinner@UTFWinControls@EA@@QAE_NXZ  00986000  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00985ad0/s00985ad0.cpp  ?GetNaturalSize@SpinnerDrawable@UTFWinControls@EA@@QAE_NPAMHH@Z  00986120  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00985ad0/s00985ad0.cpp  ?GetDrawable@IWinSpinner@UTFWinControls@EA@@UAEPAXXZ  00986360  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00985ad0/s00985ad0.cpp  ?SetComponentDrawable@IWinSpinner@UTFWinControls@EA@@UAEXPAUImage@23@@Z  00986380  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00985ad0/s00985ad0.cpp  ?OnRebuild@WinSpinner@UTFWinControls@EA@@QAE_NH@Z  009863c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00985ad0/s00985ad0.cpp  ?RenderComponent@WinSpinner@UTFWinControls@EA@@UAEXHI@Z  00986420  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00985ad0/s00985ad0.cpp  ?PickComponent@WinSpinner@UTFWinControls@EA@@UAEHMM@Z  00986510  /O2 /MD /Gy /TP /arch:SSE /fp:fast

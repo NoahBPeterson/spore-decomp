@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+009861a0  -  WinSpinner::GetPreferredSize: complete source written, but difftest UNSUPPORTED (harness generated 0/400 valid inputs: fake-arity=400, cannot fabricate the float* out pointer).  Size computation (mode-1 vs else combine + smax(...,14.0f)); original keeps a/b in xmm0/xmm1 while ours allocates a in xmm1 and rematerialises the component-height difference instead of reloading it.  Not byte-exact and not behaviourally verified.

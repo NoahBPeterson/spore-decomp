@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00985bd0  -  BasicFactory_SliderDrawable::CreateInstance: complete; original keeps the dead AsyncBase vptr stores (pre-set Resource::Async then overwritten by SliderDrawable vtables) that our compiler DSEs; difftest PASS (293 valid, 100% coverage)
+00985f30  -  WinSpinner::OnMouseUp: complete; the conditional mgr->ReleaseCapture(1, iw) call assigns the vtable to edx in original vs eax in ours (vptr-load/argument scheduling swap); difftest PASS (358 valid, 83.3% coverage)
