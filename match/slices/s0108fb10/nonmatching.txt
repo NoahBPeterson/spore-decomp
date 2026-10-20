@@ -1,0 +1,15 @@
+# Havok 3.1.0 slice s0108fb10 - complete, not byte-exact. Flags /vc71 /O2 /MD /Gy /TP.
+0108fb40  8   complete; hkStiffSpringChainData::`scalar deleting destructor'. Only residual diff is the vptr
+                 store order - the original writes vtable 0x014a195c *before* loading +0x14, cl hoists the
+                 load above the store (same near-miss as 006b4400 in s006b37d0). equiv WEAK: 219/400 valid,
+                 59.4% coverage (the extra reads fault; the original's own path faults on 181 inputs too).
+01090810  0   complete; hkSpringDamperConstraintMotor::calcMotorData. Saturation clamps via
+                 fcom/fnstsw/test ah branches; the 0..1 limit and the this+8/this+0xc force copies are all
+                 present. equiv PASS: 400/400 valid, 100.0% coverage.
+01090910  0   complete; hkSphereMotion::getInertiaWorld. My cl zeroes through ecx and has no 16-byte aligned
+                 frame (the original has `and esp,-16` and 12 explicit mov stores + fst/fst/fstp diagonals).
+                 Residual: dead eax at exit only. equiv: memory result matches at 100% coverage.
+01090960  0   complete; hkSphereMotion::setInertiaLocal (x87 compare order). equiv PASS: 400/400 valid, 100%.
+010909d0  0   complete; hkSphereMotion::setInertiaInvLocal. equiv PASS: 400/400 valid, 100.0% coverage.
+01090a20  0   complete; hkSphereMotion::getInertiaLocal. Same zero-fill / aligned-frame difference as
+                 01090910; residual: dead eax at exit only.

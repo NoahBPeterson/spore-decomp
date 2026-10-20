@@ -1,0 +1,15 @@
+0108fb10 ?hkStiffSpringChainData_ctor@@YAXPAVhkStiffSpringChainData@@@Z  # hkStiffSpringChainData ctor helper (compiler-emitted for the array-new path)
+016e4174 ?g_hkThreadMemoryTls@@3KA  # Havok thread-memory TLS slot read by the scalar deleting destructor
+0108fb40 ?scalarDeletingDtor@hkStiffSpringChainData@@QAEPAXI@Z  # ??_GhkStiffSpringChainData@@UAEPAXI@Z, body spelled as a real thiscall member
+0108fba0 ?buildJacobian@hkStiffSpringChainData@@UAEXABUhkConstraintQueryIn@@AAUhkConstraintQueryOut@@@Z  # hkStiffSpringChainData::buildJacobian
+0108ff50 ?clone@hkStabilizedSphereMotionEx@@UBEPAVhkMotion@@XZ  # hkStabilizedSphereMotion::clone
+0108ffc0 ?applyAccumulator@hkStabilizedSphereMotionEx@@UAEPBVhkVelocityAccumulator@@ABUhkStepInfo@@PBV2@@Z  # hkStabilizedSphereMotion::applyAccumulator
+01090370 ??0hkStabilizedBoxMotion@@QAE@ABUhkVector4@@0@Z  # hkStabilizedBoxMotion::hkStabilizedBoxMotion(position, rotation)
+01090390 ?clone@hkStabilizedBoxMotionEx@@UBEPAVhkMotion@@XZ  # hkStabilizedBoxMotion::clone
+01090400 ?applyAccumulator@hkStabilizedBoxMotionEx@@UAEPBVhkVelocityAccumulator@@ABUhkStepInfo@@PBV2@@Z  # hkStabilizedBoxMotion::applyAccumulator
+01090810 ?calcMotorData@hkSpringDamperConstraintMotorEx@@UAEXABUhkConstraintMotorInput@@AAUhkConstraintMotorOutput@@@Z  # hkSpringDamperConstraintMotor::calcMotorData
+010908c0 ?clone@hkSpringDamperConstraintMotorEx@@UBEPAVhkConstraintMotor@@XZ  # hkSpringDamperConstraintMotor::clone
+01090910 ?getInertiaWorld@hkSphereMotionEx@@UBEXAAUhkMatrix3@@@Z  # hkSphereMotion::getInertiaWorld
+01090960 ?setInertiaLocal@hkSphereMotionEx@@UAEXABUhkMatrix3@@@Z  # hkSphereMotion::setInertiaLocal
+010909d0 ?setInertiaInvLocal@hkSphereMotionEx@@UAEXABUhkMatrix3@@@Z  # hkSphereMotion::setInertiaInvLocal
+01090a20 ?getInertiaLocal@hkSphereMotionEx@@UBEXAAUhkMatrix3@@@Z  # hkSphereMotion::getInertiaLocal

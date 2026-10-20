@@ -1,0 +1,17 @@
+# Incomplete / approximate: the bodies below reproduce the *shape* of the original (all calls and the
+# control flow are present) but not its arithmetic, so they are not equivalence-clean. Left as partial
+# rather than claimed done. Flags /vc71 /O2 /MD /Gy /TP.
+0108fba0  partial  hkStiffSpringChainData::buildJacobian (935 B). LTCG-inlined megafunction: hkBeginConstraints,
+                   a per-link arm-offset table (hkArray<hkVector4> grown through hkArrayUtil::_reserveMore),
+                   hkVector4::setTransformedPos per link, an x87 normalization chain
+                   (fsqrt/fdiv/fmul over the 4 components on the FP stack), _hk1dLinearBilateralConstraint
+                   BuildJacobian and hkEndConstraints. My source keeps the call sequence and the array walk
+                   but does not rebuild the exact arm table, so it faults on inputs the original survives
+                   (equiv: 5/7 valid, 36% coverage, fault at 010aa8ae). Needs the real body to finish.
+0108ffc0  partial  hkStabilizedSphereMotion::applyAccumulator (939 B). My body copies the step velocities and
+                   clamps the linear speed but drops the stabilised angular-impulse clamp and the quaternion
+                   integration (hkQuaternion::setMul + normalize + hkRotation::set at +0x70). equiv FAIL:
+                   memory result differs at 100% coverage. Needs the real x87 sequence.
+01090400  partial  hkStabilizedBoxMotion::applyAccumulator (994 B). Same as 0108ffc0: the linear part of the
+                   stabilised box integration is present, the angular/clamped part is not. equiv FAIL:
+                   memory result differs at 99.7% coverage.
