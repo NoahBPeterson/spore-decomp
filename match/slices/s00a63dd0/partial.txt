@@ -1,0 +1,6 @@
+# slice s00a63dd0 -- incomplete functions
+# flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+# <va> <reason>
+00a63dd0 EapdAssetManager::Load(const char*, unsigned, PgSymbol*): 1185-byte asset-file loader; only
+         a stub (`return false`) could be written -- the on-disk container format is not yet
+         recovered, so no faithful body is available. Not byte-exact, not equivalent.

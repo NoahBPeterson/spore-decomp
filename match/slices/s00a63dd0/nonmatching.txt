@@ -1,0 +1,34 @@
+# slice s00a63dd0 -- complete but not byte-exact (equivalence-checked)
+# flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+# <va> <diff> <reason incl. difftest verdict>
+00a64280 81  EapdAssetManager::ReleaseEntryNode: 81 diff bytes; the body matches instruction-for-
+          instruction but the original is wrapped in an MSVC __ehhandler frame (scope-table
+          prologue, 0/-1 try-level stores) that our source cannot trigger.
+          difftest: WEAK (194/400 valid inputs, 100.0% coverage).
+00a642f0 79  EapdAssetManager::ReleaseNodeAt34: 79 diff; body matches (tree find via 0xe5c780 thiscall,
+          RBTreeIncrement/Erase, allocator free at this+0x4c); only the 4-byte `push ecx` frame vs our
+          8-byte `sub esp,8` frame differs, plus the resulting local-slot offsets.
+          difftest: WEAK (366/400 valid inputs, 49.3% coverage).
+00a643b0 23  EapdAssetManager::NewEntryNode: 23 diff (76 vs 74 bytes); the alloc-call and list
+          splice now match, MSVC only reorders the four field stores around the head `lea`
+          ([eax+0xc] before the two zero stores). difftest:
+          UNSUPPORTED (0/400 valid inputs; unresolved ?NewEntryNode arity/fake-arity).
+00a64470 57  AssetSlot::Ctor: 57 diff; compiler reorders the constant-field stores; source order and
+          register (ecx=this) match. Store-scheduling artifact. difftest: PASS.
+00a64560 51  EapdAssetManager::FreeAll: 51 diff; list unlink+free loop matches; MSVC hoists the
+          [cur+4] load ahead of the [cur] load. difftest: UNSUPPORTED (0/400 valid; synthetic list
+          head is unmapped => fault(write)).
+00a645c0 201 EapdAssetManager::RearrangeLists: 201 diff; two circular-list splice loops; original
+          has a longer inlined form. difftest: UNSUPPORTED (0/400 valid; write/fetch faults).
+00a649b0 9   EapdAssetManager::GetTwoWords: 9 diff; original keeps p in ecx and reads [p+0x64] first;
+          MSVC reassigns p to eax in ours. Register-allocation artifact. difftest: PASS.
+00a64ad0 142 ObjectHashMap::Resize: 142 diff; rehash loop reconstruction diverges from the original's
+          inlined chain relink. difftest: UNSUPPORTED (0/400 valid; import:memset unresolved).
+00a64b70 79  ObjectHashMap::Dtor: 79 diff; original is an SEH-framed destructor; ours is unframed.
+          Body already calls DisposeArray + allocator freeth. difftest: PASS.
+00a64be0 89  ObjectHashMap::Erase: 89 diff; bucket-chain unlink+free matches semantically; original
+          uses a different register/loop decomposition. difftest: PASS.
+00a64cf0 95  ObjectHashMap::Insert: 95 diff; unlink+relocate reconstruction now matches the original's
+          semantics (bucket-slot walk from `out`, chain unlink, ResetAndClear at node+4, allocator
+          free at this+0x1c, --size at +0xc); MSVC picks ebx=this where retail uses ebp=this and
+          ebx=node. difftest: UNSUPPORTED (0/400 valid; read faults / budget exceeded).

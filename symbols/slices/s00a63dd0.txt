@@ -1,0 +1,34 @@
+00a63dd0  EA::Audio::Eapd::EapdAssetManager::Load  # 1185-byte asset container loader -- STUB ONLY (format unknown, see partial.txt)
+00a64280  EA::Audio::Eapd::EapdAssetManager::ReleaseEntryNode  # SEH-framed node teardown: destroy inner map at +0x10, clear tag, vtbl[3](this,node)
+00a642f0  EA::Audio::Eapd::EapdAssetManager::ReleaseNodeAt34  # decrement refcount of the +0x34 rb-tree node; drop entry when it hits 0
+00a64390  EA::Audio::Eapd::EapdAssetManager::FreeSlot  # tail-call allocator free of a 0x1c-byte slot
+00a643b0  EA::Audio::Eapd::EapdAssetManager::NewEntryNode  # allocate a 0x1c AssetEntry and link it into the +0x4c list
+00a64400  EA::Audio::Eapd::EapdAssetManager::AllocFromPool  # pop a free node off +0x28 or allocate; update high-water mark at +0x30
+00a64470  EA::Audio::Eapd::AssetSlot::Ctor  # construct an AssetSlot (two embedded self-linked lists at +0x44/+0x4c)
+00a644e0  EA::Audio::Eapd::AssetSlot::Free  # unlink a node and tail-call the +0xc allocator free
+00a64510  EA::Audio::Eapd::EapdAssetManager::DetachList  # walk a circular list and free every node whose field +0xc == key
+00a64560  EA::Audio::Eapd::EapdAssetManager::FreeAll  # free every node of the +0x4c list; returns true if it was empty
+00a645c0  EA::Audio::Eapd::EapdAssetManager::RearrangeLists  # splice the +0x44 and +0x4c circular lists together
+00a646a0  EA::Audio::Eapd::EapdAssetManager::ClearLists  # DetachList on both +0x44 and +0x4c lists
+00a646d0  EA::Audio::Eapd::ThrowHelper  # tail-jump to the global throw target
+00a646f0  EA::Audio::Eapd::IterHelper::MakeEntryIter  # write a 2-word iterator payload into out
+00a64710  EA::Audio::Eapd::EapdAssetManager::ResetAndClear  # ClearLists(this) via the global asset manager
+00a64730  EA::Audio::Eapd::EapdAssetManager::PushNode  # link a node at the head of the +0x4 list if its tag matches
+00a64750  EA::Audio::Eapd::EapdAssetManager::RemoveNode  # unlink a node from the +0x4 list
+00a647b0  EA::Audio::Eapd::SendFloatToAll  # broadcast a float to every outlet of every entry (depth-guarded)
+00a64820  EA::Audio::Eapd::SendSymbolToAll  # broadcast a t_symbol to every outlet of every entry
+00a64870  EA::Audio::Eapd::SendSymbolList  # broadcast an outlet_list to every entry
+00a648a0  EA::Audio::Eapd::EapdAssetManager::MakeFloatHandler  # register a float-handler entry (kind 0)
+00a648f0  EA::Audio::Eapd::EapdAssetManager::MakeSymbolHandler  # register a symbol-handler entry (kind 1)
+00a64950  EA::Audio::Eapd::EapdAssetManager::MakeListHandler  # register a list-handler entry (kind 2)
+00a649b0  EA::Audio::Eapd::EapdAssetManager::GetTwoWords  # read the 2-word payload at [this+0x70]+0x64
+00a649d0  EA::Audio::Eapd::EapdAssetManager::RealizeDollar  # resolve a dollar-arg through canvas_realizedollar2
+00a64a10  EA::Audio::Eapd::PauseCanvas  # pause the canvas of an entry
+00a64a50  EA::Audio::Eapd::EapdAssetManager::DisposeArray  # free every node of an array of bucket chains
+00a64aa0  EA::Audio::Eapd::EapdAssetManager::MakeFloatHandler2  # register a converted-char float-handler entry
+00a64ad0  EA::Audio::Eapd::ObjectHashMap::Resize  # rehash into a new bucket array
+00a64b70  EA::Audio::Eapd::ObjectHashMap::Dtor  # SEH-framed destructor: dispose buckets, free old array, reset allocator
+00a64be0  EA::Audio::Eapd::ObjectHashMap::Erase  # unlink+free every node matching a key; returns the number removed
+00a64c50  EA::Audio::Eapd::ObjectHashMap::DisposeArray2  # per-node ResetAndClear + allocator free over an array
+00a64cb0  EA::Audio::Eapd::ObjectHashMap::GetGroup  # hash-lookup a PgSymbol in the +0xc sub-container; return the group at node+8 (0 if the bucket sentinel matched)
+00a64cf0  EA::Audio::Eapd::ObjectHashMap::Insert  # insert a node into its bucket chain
