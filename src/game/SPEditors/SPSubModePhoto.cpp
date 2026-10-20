@@ -78,7 +78,6 @@ extern uint32_t gPhotoGlobal;          // 0x01524A10
 extern const wchar_t gFmtW[];          // 0x013F5C04
 extern "C" long _InterlockedExchangeAdd(long volatile*, long);
 #pragma intrinsic(__rdtsc)
-#pragma intrinsic(_InterlockedExchangeAdd)
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
 void  operator delete[](void* p);
 void* operator new(size_t size, int align, const char* name, void* alloc);   // 0x009512D0
@@ -129,16 +128,72 @@ typedef basic_string_s0063_e880<wchar_t> string16_s0063_e880;
 }
 struct IRefCounted { virtual int AddRef(); virtual int Release(); virtual void s2(); virtual void Stop(int a); };
 struct IRangeTarget { virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
-    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11();
-    virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18();
-    virtual void s19(); virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23(); virtual void s24(); virtual void s25();
-    virtual void s26(); virtual void s27(); virtual void s28(); virtual void s29(); virtual void s30(); virtual void s31(); virtual void s32();
-    virtual void s33(); virtual void s34(); virtual void s35(); virtual void s36(); virtual void s37(); virtual void s38(); virtual void s39();
-    virtual void s40(); virtual void s41(); virtual void s42(); virtual void s43(); virtual void s44(); virtual void s45(); virtual void s46();
-    virtual void s47(); virtual void s48(); virtual void s49(); virtual void s50(); virtual void s51(); virtual void s52(); virtual void s53();
-    virtual void s54(); virtual void s55(); virtual void s56(); virtual void s57(); virtual void s58(); virtual void s59(); virtual void s60();
-    virtual void s61(); virtual void s62(); virtual void s63(); virtual void s64(); virtual void s65(); virtual void s66(); virtual void s67();
-    virtual void s68(); virtual void s69(); virtual void s70();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void s24();
+virtual void s25();
+virtual void s26();
+virtual void s27();
+virtual void s28();
+virtual void s29();
+virtual void s30();
+virtual void s31();
+virtual void s32();
+virtual void s33();
+virtual void s34();
+virtual void s35();
+virtual void s36();
+virtual void s37();
+virtual void s38();
+virtual void s39();
+virtual void s40();
+virtual void s41();
+virtual void s42();
+virtual void s43();
+virtual void s44();
+virtual void s45();
+virtual void s46();
+virtual void s47();
+virtual void s48();
+virtual void s49();
+virtual void s50();
+virtual void s51();
+virtual void s52();
+virtual void s53();
+virtual void s54();
+virtual void s55();
+virtual void s56();
+virtual void s57();
+virtual void s58();
+virtual void s59();
+virtual void s60();
+virtual void s61();
+virtual void s62();
+virtual void s63();
+virtual void s64();
+virtual void s65();
+virtual void s66();
+virtual void s67();
+virtual void s68();
+virtual void s69();
+virtual void s70();
     virtual void SetRange(const uint64_t* a, const uint64_t* b, int mode);   // +0x11C
 };
 template <class T>
@@ -160,23 +215,70 @@ struct AutoRef {
 struct IWindow {   // UTFWin window (slots used by this module)
     virtual int AddRef();
     virtual int Release();
-    virtual void s02(); virtual void s03(); virtual void s04(); virtual void s05(); virtual void s06();
+virtual void s02();
+virtual void s03();
+virtual void s04();
+virtual void s05();
+virtual void s06();
     virtual uint32_t GetControlID();   // +0x1C
-    virtual void s08(); virtual void s09(); virtual uint32_t GetFlags(); virtual void s11();   // GetFlags +0x28
-    virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15(); virtual void s16();
-    virtual void s17(); virtual void s18(); virtual void s19(); virtual void s20(); virtual void s21();
-    virtual void s22(); virtual void s23(); virtual void s24(); virtual void s25(); virtual void s26();
-    virtual void s27(); virtual void s28(); virtual void s29(); virtual void s30();
+virtual void s08();
+virtual void s09();
+virtual uint32_t GetFlags();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void s24();
+virtual void s25();
+virtual void s26();
+virtual void s27();
+virtual void s28();
+virtual void s29();
+virtual void s30();
     virtual void SetFlag(int flag, int on);                    // +0x7C
     virtual void SetCaption(const wchar_t* text);              // +0x80
-    virtual void s33(); virtual void s34(); virtual void s35(); virtual void s36(); virtual void s37();
-    virtual void s38(); virtual void s39(); virtual void s40(); virtual void s41(); virtual void s42();
-    virtual void s43(); virtual void s44(); virtual void s45(); virtual void s46(); virtual void s47();
-    virtual void s48(); virtual void s49(); virtual void s50(); virtual void s51(); virtual void s52();
-    virtual void s53(); virtual void s54(); virtual void s55(); virtual void s56(); virtual void s57();
-    virtual void s58(); virtual void s59();
+virtual void s33();
+virtual void s34();
+virtual void s35();
+virtual void s36();
+virtual void s37();
+virtual void s38();
+virtual void s39();
+virtual void s40();
+virtual void s41();
+virtual void s42();
+virtual void s43();
+virtual void s44();
+virtual void s45();
+virtual void s46();
+virtual void s47();
+virtual void s48();
+virtual void s49();
+virtual void s50();
+virtual void s51();
+virtual void s52();
+virtual void s53();
+virtual void s54();
+virtual void s55();
+virtual void s56();
+virtual void s57();
+virtual void s58();
+virtual void s59();
     virtual IWindow* FindWindowByID(uint32_t id, bool recurse);   // +0xF0
-    virtual void s61(); virtual void s62(); virtual void s63(); virtual void s64(); virtual void s65();
+virtual void s61();
+virtual void s62();
+virtual void s63();
+virtual void s64();
+virtual void s65();
     virtual void RemoveWinProc(void* proc);                       // +0x108
 };
 void  EndModal(IWindow* w, int a, int b);           // 0x00809C50 (cdecl)
@@ -228,7 +330,12 @@ struct cSPPlayModeUI {   // retail layout (partial)
     const wchar_t* GetPhotoName(wchar_t* buf, int n);   // 0x00634E50 (original: caller cleans the 2 args)
 };
 struct IMovieSystemObj { virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
-    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9(); virtual void s10();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
     virtual void s11(); virtual bool IsRecording(); };    // +0x30
 IMovieSystemObj* GetMovieSystem();                         // 0x0067CB10
 void ShowMessageBoxEx(const void* a, const void* b);       // 0x00809DB0 (cdecl)
@@ -292,8 +399,8 @@ struct cSPPlayModeSubModePhoto_s0063_e880 : cSPPlayModeSubModeBase, IHandler {
 
     cSPPlayModeSubModePhoto_s0063_e880();
     virtual ~cSPPlayModeSubModePhoto_s0063_e880();
-    void FUN_0063f060();
-    void SavePhoto(uint16_t a);
+    void FUN_0063f060();  // 0x0063f060 (cSPPlayModeSubModePhoto::FUN_0063f060)
+    void SavePhoto(uint16_t a);  // 0x0063f420 (cSPPlayModeSubModePhoto::SavePhoto)
     void SavePhotoSimple();
     void Update(uint32_t dt);  // 0x0063e880 (cSPPlayModeSubModePhoto::Update)
     void ShowErrorDialog(uint32_t id, int unused);  // 0x0063eb30 (cSPPlayModeSubModePhoto::ShowErrorDialog)
@@ -304,17 +411,32 @@ struct cSPPlayModeSubModePhoto_s0063_e880 : cSPPlayModeSubModeBase, IHandler {
     static void DefaultPathB();
     void Init(void* arg);  // 0x0063ee30 (cSPPlayModeSubModePhoto::Init)
     void Shutdown();  // 0x0063eef0 (cSPPlayModeSubModePhoto::Shutdown)
-    bool HandleKey(uint32_t id, int unused);
+    bool HandleKey(uint32_t id, int unused);  // 0x0063ef30 (cSPPlayModeSubModePhoto::HandleKey)
     void StartCameraFlash();  // 0x0063ef70 (cSPPlayModeSubModePhoto::StartCameraFlash)
 };
 struct IAudioSystemAT {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
-    virtual void s5(); virtual void s6(); virtual void s7(); virtual int GetValue();     // +0x20
-    virtual void s9(); virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13();
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual int GetValue();
+virtual void s9();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
     virtual void SetMode(uint32_t id);                                                   // +0x38
     virtual void s15();
     virtual void SetParam(uint32_t id, int v);                                           // +0x40
-    virtual void s17(); virtual void s18(); virtual void s19(); virtual void s20(); virtual void s21();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+virtual void s21();
     virtual void Commit();                                                               // +0x58
 };
 IAudioSystemAT* GetSystemAT();   // 0x00A206F0
@@ -357,8 +479,15 @@ struct cIDGenerator {
 };
 cIDGenerator* GetIDGenerator();     // 0x0067DE60
 struct cMsgDispatcher {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
-    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8();
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
     virtual void Dispatch(uint32_t a, uint32_t b, uint32_t c, cPhotoMsg* msg);   // +0x24
 };
 cMsgDispatcher* GetMsgDispatcher();   // 0x0067DDB0
@@ -378,9 +507,32 @@ struct cSimpleMsg : cMsgBaseA {
 };
 struct cRefCountedAsset { uint32_t pad[2]; volatile long mRefCount; };
 struct cPhotoAssetManager {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
     virtual cRefCountedAsset* Lookup(uint32_t a, uint32_t b, uint32_t c);   // +0x20
-    virtual void s9(); virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19(); virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23(); virtual void s24(); virtual void s25();
+virtual void s9();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void s24();
+virtual void s25();
     virtual void Register(cRefCountedAsset* a);   // +0x68
 };
 // ---- items of slice s0063e880 end
@@ -889,6 +1041,7 @@ void cSPPlayModeSubModePhoto_s0063_e880::SavePhoto(uint16_t a)
 }
 
 // @ 0x0063f5c0
+#pragma intrinsic(_InterlockedExchangeAdd)
 void cSPPlayModeSubModePhoto_s0063_e880::SavePhotoSimple()
 {
     wchar_t name[0x100];
