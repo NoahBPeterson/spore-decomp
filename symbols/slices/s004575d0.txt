@@ -1,5 +1,6 @@
 00457950 ?AsInterface@cSPEditorBudget@SP@@UAEPAXW4InterfaceId@COM@EA@@@Z  # SP::cSPEditorBudget::AsInterface migrated from s004575d0
-004579a0 ?FUN_004579a0@@YAXPAH@Z  # FUN_004579a0 migrated from s004575d0 (verbatim, slice spelling)
-00457af0  SP::cSPEditorBudget::Init
+004579a0 ?FUN_004579a0@@YIDPAHHH0@Z  # FUN_004579a0 migrated from s004575d0 (verbatim, slice spelling)
+00457af0 ?Init@cSPEditorBudget@@QAEXPBXPAUcSPEditorEconomy@@GPAUIWinX@@PB_W@Z  # cSPEditorBudget::Init migrated from s004575d0 (verbatim, slice spelling)
 004580c0  SP::ColorRGBAToU32
 004581d0 ?Shutdown@cSPEditorBudget@SP@@QAEXXZ  # SP::cSPEditorBudget::Shutdown migrated from s004575d0
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s004575d0, named from the dev publics; slice address comment)

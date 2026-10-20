@@ -1,3 +1,5 @@
 # va  diff-bytes  reason
 00457950 84 AsInterface: QueryInterface id dispatch; /Od branch/local layout not exact
+004579a0 220 message handler: complete (ids 0x3150c27/0x522f9cd/0x522f9ce, GetWealth vcall + fabs/div, 0x458b80 lookup + vtbl[0x10] vcall, tooltip flag byte); /Od local layout differs (272 vs 329 bytes)
+00457af0 858 cSPEditorBudget::Init complete (economy/layout/window ARC assigns, 3 message registrations, bar-window loop with money strings, optional tooltip); call and vtable sequence follows the original, /Od frame is 0xdc vs 0x134 (hidden inline slots not reproduced) [equiv: UNSUPPORTED (0/400 valid inputs, deep object graph)]
 004581d0 100 Shutdown: layout refcount release and MessageServer sends not reproduced exactly
