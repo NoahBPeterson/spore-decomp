@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00a8a450  2629  complete (equiv WEAK: 347/400 valid, 0 mismatch, 13.4% cov); cl contracts the whole streaming loop to 798 bytes vs the original's 2660 (full unrolled 4x3 matrix/colour stores with different register allocation, frame 0x7c vs 0xa8); flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch=SSE

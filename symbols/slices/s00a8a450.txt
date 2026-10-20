@@ -1,0 +1,2 @@
+00a8a450 EA::Swarm::Stream_Quad_V3F_C4B_T2F  # cDistributeEffect member: writes 4x3 matrix + RGBA per sample
+00a8a8b0 FUN_00a8a8b0  # function boundary after 0x00a8a450 (separate sibling function, not in this slice)
