@@ -1,0 +1,9 @@
+00aa6880 ?ExecuteColorList@cCommand@@QAEXPAUcArguments@ArgScript@EA@@@Z  # colour command Execute (FUN_00aa6880)
+00aa6960 ?ExecuteLoopBoxColor@cCommand@@QAEXPAUcArguments@ArgScript@EA@@@Z  # cParticleLoopBoxColorCommand::Execute
+00aa6a60 ?ExecuteMetaLoopBoxColor@cCommand@@QAEXPAUcArguments@ArgScript@EA@@@Z  # cMetaParticleLoopBoxColorCommand::Execute
+00aa6bf0 ?CreateParticlesDescriptionCommand@@YAPAXPAX@Z  # EA::Swarm::CreateParticlesDescriptionCommand
+00aa6c60 ??0ParticlesDescription@@QAE@ABU0@@Z  # Swarm::ParticlesDescription::ParticlesDescription(const&)
+00aa7220 ?ExecuteSingleColor@cCommand@@QAEXPAUcArguments@ArgScript@EA@@@Z  # single-colour command Execute (FUN_00aa7220)
+00aa72a0 ?ExecuteColorRamp@cCommand@@QAEXPAUcArguments@ArgScript@EA@@@Z  # colour + delay/ramp command Execute (FUN_00aa72a0)
+00aa73b0 ?BuildDescription@cCommand@@QAEX_N@Z  # ensure-description (FUN_00aa73b0)
+00a6f9c0 ?Install@DescInstaller@@QAEXPAXH0@Z  # install a built description (FUN_00a6f9c0)
