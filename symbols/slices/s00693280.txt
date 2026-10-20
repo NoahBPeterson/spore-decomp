@@ -1,5 +1,5 @@
-00693280 _FUN_00693280  # __declspec migrated from s00693280 (verbatim, slice spelling)
-00693320 _FUN_00693320  # __declspec migrated from s00693280 (verbatim, slice spelling)
+00693280 _FUN_00693280  # FUN_00693280 migrated from s00693280 (verbatim, slice spelling)
+00693320 _FUN_00693320  # FUN_00693320 migrated from s00693280 (verbatim, slice spelling)
 00693390 SP::cVariant::Write  # writes type and flags then the value, or stride/count plus each element for arrays (guess at name; behaviour read from the card)
 006939b0 ?bindA@C3@@QAEHPAX000@Z  # C3::bindA migrated from s00693280 (verbatim, slice spelling)
 00693aa0 ?bindB@C3@@QAEHPAX000@Z  # C3::bindB migrated from s00693280 (verbatim, slice spelling)

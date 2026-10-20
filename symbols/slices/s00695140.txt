@@ -1,4 +1,4 @@
-00695140 Parent::GetOrCreate  # hashtable find at 0x152d69c, node 0x74 "Simulator", name suffix " @ 0x%08x"
+00695140 ?GetOrCreate@Parent@@QAEPAUNode@@IPB_W@Z  # Parent::GetOrCreate migrated from s00695140 (verbatim, slice spelling)
 00695450 ?run@Sorter@@QAEPAXPAD@Z  # Sorter::run migrated from s00695140 (verbatim, slice spelling)
 00695490 ?reserve@Vec60@@QAEXI@Z  # Vec60::reserve migrated from s00695140 (verbatim, slice spelling)
 00695550 ?DoInsertValue@Vec60b@@QAEXPAUObj60_s0069_5140@@ABU2@@Z  # Vec60b::DoInsertValue migrated from s00695140 (verbatim, slice spelling)

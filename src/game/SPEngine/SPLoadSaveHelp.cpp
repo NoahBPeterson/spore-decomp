@@ -429,8 +429,9 @@ struct cVarListSerializer_s0069_5140 {
     unsigned int mSignature;                                // +0xa08
     void* mpObject;                                         // +0xa0c
     cDataSerializerGeneric_s0069_5140* mpSerializerList;               // +0xa10
+    cVarListSerializer_s0069_5140(void* object, cDataSerializerGeneric_s0069_5140* serializerList, unsigned int signature);   // 0x00692880 (thiscall, ret 0xc)
     int GetFields(FieldVec& out);  // 0x00695960 (SP::cVarListSerializer::GetFields)
-    int Execute(FieldReport* report);
+    int Execute(FieldReport* report);  // 0x00695770 (SP::cVarListSerializer::Execute)
 };
 }
 struct Obj60_s0069_5140 {
@@ -450,6 +451,90 @@ struct Vec60b {
     }
     void DoInsertValue(Obj60_s0069_5140* position, const Obj60_s0069_5140& value);
 };
+void* EASTL_alloc(size_t sz, const char* name, int a, int b, const char* file, int line);  // 0xf473a0
+struct WStr {                                       // eastl::basic_string<wchar_t> (16 bytes)
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; eastl::allocator_s0069_5140 mAllocator;
+    WStr() { mpBegin = (wchar_t*)gEmptyString; mpEnd = mpBegin; mpCapacity = (wchar_t*)(gEmptyString + 2); }
+    ~WStr()
+    {
+        if ((int)(((unsigned)((char*)mpCapacity - (char*)mpBegin)) & 0xfffffffeu) > 2 && mpBegin)
+            mAllocator.deallocate(mpBegin, 0);
+    }
+    WStr& sprintf(const wchar_t* fmt, ...);         // 0x0041e050 (cdecl, this pushed)
+    WStr& assign(const wchar_t* b, const wchar_t* e);   // 0x00423650 (thiscall, ret 8)
+    WStr& operator=(const WStr& x)
+    {
+        if (&x != this)
+            assign(x.mpBegin, x.mpEnd);
+        return *this;
+    }
+};
+struct cWString {                                   // RangeInitialize-constructed copy
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity;
+    cWString(const wchar_t* s) : mpBegin(0), mpEnd(0), mpCapacity(0) { RangeInitialize(s); }
+    ~cWString()
+    {
+        if ((int)(((unsigned)((char*)mpCapacity - (char*)mpBegin)) & 0xfffffffeu) > 2 && mpBegin)
+            delete[] (char*)mpBegin;
+    }
+    void RangeInitialize(const wchar_t* s);         // 0x00579a90 (thiscall, ret 4)
+};
+WStr WStrConcat(const cWString& a, const WStr& b);   // 0x00688f00 (cdecl, sret first)
+struct Node;
+struct NodePtrVec {                                 // eastl::vector<T*>
+    Node** mpBegin; Node** mpEnd; Node** mpCapacity;
+    void DoInsertValue(Node** pos, Node*& value);    // 0x00690b80 (thiscall, ret 8)
+    void push_back(Node* const& value)
+    {
+        if (mpEnd < mpCapacity)
+            ::new(mpEnd++) Node*(value);
+        else
+            DoInsertValue(mpEnd, (Node*&)value);
+    }
+};
+struct Parent;
+struct ParentPtrVec {
+    Parent** mpBegin; Parent** mpEnd; Parent** mpCapacity;
+    void DoInsertValue(Parent** pos, Parent*& value);    // 0x00690b80 (thiscall, ret 8)
+    void push_back(Parent* const& value)
+    {
+        if (mpEnd < mpCapacity)
+            ::new(mpEnd++) Parent*(value);
+        else
+            DoInsertValue(mpEnd, (Parent*&)value);
+    }
+};
+struct Node {                                       // 0x74 bytes
+    char pad0[0x18];
+    ParentPtrVec mParents;                          // +0x18
+    char pad1[0x2c - 0x24];
+    WStr mName;                                     // +0x2c
+    WStr mOpenTag;                                  // +0x3c
+    WStr mCloseTag;                                 // +0x4c
+    char pad2[0x74 - 0x5c];
+    Node* init(unsigned key);                       // 0x00694e60 (thiscall, ret 4)
+};
+struct Parent {
+    char pad0[4];
+    NodePtrVec mChildren;                           // +0x04
+    Node* GetOrCreate(unsigned key, const wchar_t* name);
+    bool AddChild(unsigned obj, const void* desc, const wchar_t* name);   // 0x00695b40
+};
+struct HashIter {
+    void* mpNode; void** mpBucket;
+    bool operator==(const HashIter& x) const { return mpNode == x.mpNode; }
+};
+struct HashPair { unsigned first; Node* second; };
+struct HashResult { HashIter mIter; bool mbInserted; };
+struct NodeTable {
+    void* pad0;
+    void** mpBucketArray;                           // +4
+    unsigned mnBucketCount;                         // +8
+    HashIter end() const { HashIter i; i.mpNode = mpBucketArray[mnBucketCount]; i.mpBucket = mpBucketArray + mnBucketCount; return i; }
+    HashIter find(const unsigned& key) const;       // 0x00645ed0 (thiscall, ret 8)
+    HashResult insert(const HashPair& value, bool b);   // 0x007c3990 (thiscall, ret 0xc)
+};
+extern NodeTable gNodeTable;                        // 0x0152d69c
 // ---- items of slice s00695140 end
 
 // @ 0x00692880
@@ -1447,6 +1532,36 @@ void FUN_006950b0(Elem* first, Elem* last, int cmp)
         return;
     }
     FUN_00692cb0(first, last, cmp);
+}
+
+// @ 0x00695140
+Node* Parent::GetOrCreate(unsigned key, const wchar_t* name)
+{
+    HashIter it = gNodeTable.find(key);
+    Node* node;
+    if (it == gNodeTable.end()) {
+        Node* mem = (Node*)EASTL_alloc(0x74, "Simulator", 0, 0, 0, 0);
+        node = mem ? mem->init(key) : 0;
+        WStr suffix;
+        suffix.sprintf(L" @ 0x%08x", key);
+        {
+            cWString full(name);
+            node->mName = WStrConcat(full, suffix);
+        }
+        mChildren.push_back(node);
+        node->mParents.push_back(this);
+        HashPair pair; pair.first = key; pair.second = node;
+        gNodeTable.insert(pair, false);
+        if (g_bTextFlag) {
+            node->mOpenTag.sprintf(L"<%s>", name);
+            node->mCloseTag.sprintf(L"</%s>", name);
+        }
+    } else {
+        node = ((HashPair*)it.mpNode)->second;
+        mChildren.push_back(node);
+        node->mParents.push_back(this);
+    }
+    return node;
 }
 
 // @ 0x00695450

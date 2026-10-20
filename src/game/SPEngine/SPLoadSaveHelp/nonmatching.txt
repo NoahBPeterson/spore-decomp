@@ -25,6 +25,7 @@
 00694d00  186  introsort: size/depth cutoff, median-of-three pivot and recursive partition all present; register/loop scheduling differ
 00694e60 51 fixed-size table init: all 24 field stores present; this/arg register assignment and store order differ
 006950b0 74 introsort entry: depth computation and 0x1c split reproduced; bit-count loop register allocation differs
+00695140 440 Parent::GetOrCreate complete (hashtable find, node create/name, two vector push_backs, insert, tag strings); register allocation and EH slot layout differ [equiv: FAIL only on call #9 third stack arg of 0x7c3990 = uninitialised high bytes of a reused arg slot in the original, callee ignores it]
 00695450 14 short-circuit range scan + sort entry; only the bool-literal argument materialisation differs
 00695490 111 vector reserve: allocate/copy/destroy/pointer fix-up all present; allocator-arg and ratio scheduling differ
 00695550 216 vector<Obj60>::DoInsertValue complete (in-place shift and reallocating path); original spills pData/nNewSize to the frame (3 locals vs 2) and the EH state slots differ [equiv: UNSUPPORTED 0/400 valid inputs (faults)]
