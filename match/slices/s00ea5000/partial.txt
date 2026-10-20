@@ -1,0 +1,2 @@
+00ea5000  837  GetSurfaceTypeAt: complete but equiv UNSUPPORTED (unresolved refs ?GetHeightAt@TerrainMapSet@@QAEMXZ, ??0AutoRef@@QAE@PAX@Z); large decision tree, schedule differs
+00ea58c0  230  Update2: complete but equiv FAIL (clobbers xmm2 on 5/103 inputs); local stack layout + fild/fabs flag compare differ

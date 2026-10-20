@@ -1,0 +1,8 @@
+00ea5440  175  ClosestObjectSearch: complete, SSE reg/accumulation order + frame size differ
+00ea55b0  97  Ctor0 (space): complete, x87/SSE value-store schedule differs
+00ea57c0  104  HandlerSub::Handle: complete, v/f34 movss/xmm1 schedule differs
+00ea5830  89  Ctor1 (time): complete, value-store schedule differs
+00ea59b0  123  Ctor2 (planet): complete, value-store schedule differs
+00ea5bc0  268  Update4: complete, x87 normalize/distance schedule differs
+00ea60a0  255  Update9: complete, local frame + SSE/x87 schedule differs
+00ea6230  125  Update10: complete, x87 square/sqrt accumulation schedule differs
