@@ -1,0 +1,7 @@
+009e6e10 nSPCreatureAnim::ComputeAltitudeLine  # name guessed; (const vector_3& A, B, C, float* outDist, vector_3* outNormal) -> bool, perpendicular distance C->line AB
+009e6fa0 nSPCreatureAnim::ComputeAltitudePlane  # name guessed; (const vector_3& A, B, C, D, float* outDist, vector_3* outNormal) -> bool, signed distance D from plane ABC
+009e7100 nSPCreatureAnim::SolveAltitudeLine  # name guessed; (body* b0, b1, b2, float dist, float weight), 2 free params == 1 altitude
+009e72b0 nSPCreatureAnim::SolveAltitudePlane  # name guessed; (body* b0, b1, b2, b3, float dist, float weight), 3 free params == 1 altitude
+009e7510 nSPCreatureAnim::EnforceAltitudes  # real PDB name (symbols/pdb_names.json: dev 0138a110); (ik_constraint* con, int seed)
+009e7840 nSPCreatureAnim::SolveSoftDistance  # name guessed; (ik_constraint* con, int seed, float weight), soft-distance / chord solver
+009e7a60 nSPCreatureAnim::SetConstraintAltitudes  # name guessed; (body* a, b, c, d, ik_constraint* con), fills con->altitudes[4] from the rest particles
