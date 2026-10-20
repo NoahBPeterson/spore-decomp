@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f114a0/s00f114a0.cpp  ?FUN_00f11ac0@cCreatureModeInputStrategy@@QAEXH@Z  00f11ac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f114a0/s00f114a0.cpp  ?FUN_00f11b10@cCreatureModeInputStrategy@@QAE_NII@Z  00f11b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f114a0/s00f114a0.cpp  ?FUN_00f11b40@@YGXI@Z  00f11b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f114a0/s00f114a0.cpp  ?FUN_00f12090@QI@@QAEII@Z  00f12090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f114a0/s00f114a0.cpp  ?FUN_00f120c0@KeyForwarder@@QAEXI@Z  00f120c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f114a0/s00f114a0.cpp  ?Shutdown@cScenarioUnlockItemUI@@QAEXXZ  00f12270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
