@@ -1,0 +1,31 @@
+00ea63f0 Ability_63f0  # inventory key predicate (player inventory vtable +0x74)
+00ea6610 Ability_6610  # register handler: PrimBase::Init then MessageServer Post 0x5cbe8ff
+00ea6660 Ability_6660  # unregister handler: MessageServer Send 0x5cbe8ff then Shutdown
+00ea66a0 Ability_66a0  # message handler: forwards float arg at +0 to Commit (+0x34)
+00ea6760 Ability_6760  # camera distance to planet model radius
+00ea68d0 Ability_68d0  # units moved recently (SimCtx::Perf/Count)
+00ea69e0 Ability_69e0  # SimCtx::Perf/Count variant
+00ea6ae0 Ability_6ae0  # Init + Post 0x248975f
+00ea6b20 Ability_6b20  # Send 0x248975f + Shutdown
+00ea6b60 Ability_6b60  # message handler: zero then (Count()>0)
+00ea6c40 Ability_6c40  # terraforming stage -> 1/2/3/4/5/8
+00ea6dd0 Ability_6dd0  # game-phase indicator (GameTimeManager times/state)
+00ea6f20 Ability_6f20  # planet terraform progress bitfield
+00ea7020 Ability_7020  # predicate: noun +0x120 slot +0x58
+00ea7040 Ability_7040  # nearest object to ctx satisfying predicate
+00ea7190 Ability_7190  # tribe-mode strategy value when app state 0x1654c02
+00ea72a0 Ability_72a0  # primitive value handler
+00ea7690 Ability_7690
+00ea7830 Ability_7830
+00ea7870 Ability_7870
+00ea79a0 Ability_79a0
+00ea7ab0 Ability_7ab0
+00ea7ae0 Ability_7ae0
+00ea7b20 Ability_7b20
+00ea7be0 Ability_7be0
+00ea7cd0 Ability_7cd0
+00ea7db0 Ability_7db0
+00ea7e90 Ability_7e90  # same body as 7db0
+00ea7f70 Ability_7f70
+00ea80a0 Ability_80a0
+00ea8100 GmeEditorResBase_dtor  # deleting destructor

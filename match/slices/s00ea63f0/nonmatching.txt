@@ -1,0 +1,6 @@
+# Complete (all paths present) but not byte-exact.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+# va  diff-bytes  reason
+00ea63f0 147 inventory-key predicate: body and call order match; equiv: WEAK 399 valid, 12.3% coverage; cl15 folds the kItemKey element addresses into small immediates (push 0x18/0x24/...) where the original pushes the relocated absolute address, and the not-hit tails differ.
+00ea6b60 60    message handler: correct body; equiv: WEAK 398 valid, 19.4% coverage; cl defers the push esi save past the id test, producing three epilogues (91 bytes) where the original saves esi in the prologue and has one (80 bytes).  diff is against a same-size neighbour symbol because 91 falls outside chk's size window.
+00ea7040 79    nearest-object picker: equiv: WEAK 203 valid, 29.3% coverage; correct body and virtual slot +0x2c; frame is 4 bytes (push ecx) where the original reserves 8 (sub esp,8), so all local offsets shift by 4 and the SSE distance terms are scheduled in a different order.
+00ea7190 60    state-gated tribe value: equiv: WEAK 378 valid, 56.4% coverage; two commit sites now match; the original materialises &inst->m1c8 (add eax,0x1c8) at both singleton calls, cl folds it into the member displacement.
