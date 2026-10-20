@@ -1,0 +1,11 @@
+008b81a0 _tsi_T1CodeToGlyphIndex  # Adobe code -> glyph index (code array at +0x38, then the hash class)
+008b8230 _tsi_T1GetGlyphByIndex  # build the glyph/charstring for an index (returns a GlyphClass)
+008b83d0 _tsi_T1GetArray  # integer array from a /name dictionary entry
+008b84d0 _tsi_T1GetArray_2  # integer-array reader bounded to t->limit
+008b85e0 _tsi_T1GetFixedArray  # fixed-point array reader
+008b8680 _GetT1FontMatrix  # parse /FontMatrix into the fixed matrix at +0x204
+008b87e0 _GetT1NameProperty  # kind-th string of a /name array property
+008b8890 _BuildMetricsEtc  # FontBBox/underline/italic/isFixedPitch metrics extraction
+008b8c80 _FF_GetAW_T1Class  # advance width of a glyph index
+008b8cc0 _BuildSubrs  # build the Subrs subroutine pointer table
+008b8e20 _T1stringsAreEqual  # hash-class name-comparison callback
