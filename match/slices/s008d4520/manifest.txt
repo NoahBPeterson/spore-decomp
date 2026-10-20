@@ -1,0 +1,8 @@
+slices/s008d4520/s008d4520.cpp  _FUN_008d4cd0                                       008d4cd0
+slices/s008d4520/s008d4520.cpp  _FUN_008d4d20                                       008d4d20
+slices/s008d4520/s008d4520.cpp  ?release@StrField@@QAEXXZ                          008d4c60
+slices/s008d4520/s008d4520.cpp  ?MatchWhileIdent@TokenReader@@QAEXPAX@Z             008d4df0
+slices/s008d4520/s008d4520.cpp  ?MatchWhileHex@TokenReader@@QAEXPAX@Z               008d4ea0
+slices/s008d4520/s008d4520.cpp  ?MatchPunc@TokenReader@@QAEEC@Z                     008d5160
+slices/s008d4520/s008d4520.cpp  ?MatchCStr@TokenReader@@QAEEPBD@Z                   008d4e40
+slices/s008d4520/s008d4520.cpp  ?toLower@ByteRange@@QAEXXZ                          008d4aa0

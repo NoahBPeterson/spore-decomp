@@ -1,0 +1,26 @@
+# Slice s008d4520 names. EA text lexer (Lexer::TokenReader<char, CharStream<char>>) and the
+# small containers/string-table helpers it uses. 6/24 byte-exact.
+008d4520 ?push_back@Rect20Vec@@QAEXPAH0@Z  # Rect20Vec::push_back - grow-or-insert a 5-dword {x,y,w,h,id} record
+008d4680 FUN_008d4680  # expression-parser token resolver (nested-offset token walk) # no (WEAK)
+008d47b0 ?lookupFlags@SortedTable@@QAEHPAHPAI0@Z  # SortedTable::lookupFlags - lazy sort (+0x2c dirty) then binary search # no (PASS)
+008d4850 ?lookup400@SortedTable@@QAEHPAHPAI@Z  # SortedTable::lookup400 - same over the 0x400-stride second span # no (PASS)
+008d48d0 ?push@SmallVec@@QAEXPAX@Z  # SmallVec::push - bump end/cap at +8/+0xc or grow via 0x008d4400 # no (PASS)
+008d4920 ?push@BigObj@@QAEXHPAHI@Z  # BigObj::push - grow-or-append into the vector at +0x18 # no (PASS)
+008d49b0 ?clear@ClearTwo@@QAEXXZ  # ClearTwo::clear - erase-all over the Quad16 [abase,aend) and Rec20 [bbase,bend) spans # no (diff 14, PASS)
+008d4a10 FUN_008d4a10  # platform-name abbreviation (argument arrives in esi) # no (UNSUPPORTED)
+008d4aa0 ?toLower@ByteRange@@QAEXXZ  # ByteRange::toLower - in-place tolower over [begin,end) # byte-exact
+008d4ad0 FUN_008d4ad0  # lower bound over the 8-byte {char* str; int} pair array # no (PASS)
+008d4b30 FUN_008d4b30  # upper bound over the same array (returns final a in eax) # no (PASS)
+008d4b90 FUN_008d4b90  # equal_range walk over the string-keyed table (calls 008d4ad0 + 008d4b30) # no (FAIL)
+008d4c60 ?release@StrField@@QAEXXZ  # StrField::release - free the owned string at +0x10 # byte-exact
+008d4c80 ?SkipSpace@TokenReader@@QAEEPAX@Z  # TokenReader::SkipSpace - skip the isspace run, optionally recording # no (WEAK)
+008d4cd0 FUN_008d4cd0  # equal_range lookup in the table at table+0x90 then read the pair payload # byte-exact
+008d4d20 FUN_008d4d20  # twin of 008d4cd0 over the table at table+0x758 # byte-exact
+008d4d70 ?lookup@ExprTable@@QAEEPADPAH@Z  # ExprTable::lookup - walk the +4 chain, hashtable find at +0x1c # no (WEAK)
+008d4df0 ?MatchWhileIdent@TokenReader@@QAEXPAX@Z  # TokenReader::MatchWhile<Identifier> # byte-exact
+008d4e40 ?MatchCStr@TokenReader@@QAEEPBD@Z  # TokenReader::MatchCStr - match a literal, recording it # byte-exact
+008d4ea0 ?MatchWhileHex@TokenReader@@QAEXPAX@Z  # TokenReader::MatchWhile<HexDigit> # byte-exact
+008d4ef0 ?Advance@TokenReader@@QAEEXZ  # TokenReader::Advance - main lexer step # no (UNSUPPORTED)
+008d5160 ?MatchPunc@TokenReader@@QAEEC@Z  # TokenReader::MatchPunc - consume one punctuation char # byte-exact
+008d5180 FUN_008d5180  # scan a quoted string into matchText with escape decoding # no (FAIL, benign arg upper bits)
+008d52f0 ?MatchString@TokenReader@@QAEEXZ  # TokenReader::MatchString - FNV-1 the matched quoted string into mTokenValue # no (WEAK)
