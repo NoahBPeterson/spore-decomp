@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00a50150  350  complete; gatom_key - same size area; the %s... buffer build (sprintf), the atom triple setup and the binbuf/gobj_vis call batching are inlined differently
+00a503a0  464  complete; gatom_param - the six atom_get*/unescapit loads, the inlet/outlet teardown and the realizedollar/pd_bind/gobj_vis tail are inlined differently
+00a50600  628  complete; canvas_atom - pd_new/binbuf_new init, the argc>1 path (atom reads, realizedollar/pd_bind, outlet/inlet) and the editmode pd_vmess path inlined differently
+00a509f0  38  complete; gatom_free - size exact; only register coloring of the realizedollar arg setup and the sys_vgui tail differs
+00a50a40  -  complete; gatom_properties - sizeof 185 vs 154; the sprintf("pdtk_gatom_dialog ...") vararg promotion and the three gatom_escapit calls are batched differently
+00a50ae0  243  complete; text_getrect - the canvas_gettext/sys_font* branch, the glist_findrtext width/height math and the text_xpix/ypix tail are scheduled differently
+00a50c70  47  complete; text_shouldvis - same size; the original shares one tail block for the canvas-class and widgetbehavior compares; ours emits separate early-return blocks
+00a50cc0  266  complete; text_click - the gensym("click")/zgetfn probe, the pd_vmess("fffff") and the gatom_click/message_click dispatch are inlined differently
+00a50e00  431  complete; text_save - the saveto/zgetfn special case, the gatom_escapit + binbuf_addv("ssiiifffsss") tail and the obj/msg/text/meta cases are laid out differently

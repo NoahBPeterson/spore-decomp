@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a50150/s00a50150.cpp  ?gatom_click@Eapd@Audio@EA@@YAXHMMMHM@Z  00a502d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a50150/s00a50150.cpp  ?canvas_symbolatom@Eapd@Audio@EA@@YAXPAX0000@Z  00a509c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a50150/s00a50150.cpp  ?text_activate@Eapd@Audio@EA@@YAXPAHPAUt_glist@123@H@Z  00a50c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
