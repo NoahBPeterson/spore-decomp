@@ -1,0 +1,12 @@
+# va  diff-bytes  reason (complete source, not byte-exact)
+00a6d020  731  cEffectsManager::DoUpdate: complete; whole-body scheduling/register allocation differ (timer branch, hash walk, per-value v54 loop); flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest PENDING
+00a6d3b0  162  cEffectsManager::FUN_00a6d3b0: complete; collection-scan + hashtable-walk scheduling/register allocation differ; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest PENDING
+00a6d480  82   cEffectsManager::FUN_00a6d480: complete; mpBucketArray load hoisted above prologue in ours vs this-relative in original; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest PENDING
+00a6d4e0  97   cEffectsManager::FUN_00a6d4e0: complete; CompMap::find two 8-byte locals force stack realign (and esp,-8) in ours, original has none; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest PENDING
+00a6d5a0  158  cEffectsManager::FUN_00a6d5a0: complete; CompMap::find two 8-byte locals force stack realign in ours, original has none; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest PENDING
+00a6d730  50   cEffectsManager::GetEffectInfo: complete; pure ebx/ebp register permutation (name ptr vs loop counter swapped); flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest PENDING
+00a6d7b0  94   cEffectsManager::FUN_00a6d7b0: complete; CompMap::find two 8-byte locals force stack realign in ours, original has none; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest PENDING
+00a6d950  203  cEffectsManager::Shutdown: complete; dispatch-table loops + hashtable teardown scheduling/register allocation differ; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest PENDING
+00a6da80  69   cEffectsManager::FUN_00a6da80: complete; hashtable erase iterator copy: original builds an 8-byte by-value temp, ours passes the iterator by pointer; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest PENDING
+00a6db40  192  cEffectsManager::~cEffectsManager: complete; member teardown ordering/scheduling and allocator calls differ; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest PENDING
+00a6dc60  415  cEffectsManager::Init: complete; four object-construction blocks + dispatch-table loops + world insertion scheduling differ; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest PENDING

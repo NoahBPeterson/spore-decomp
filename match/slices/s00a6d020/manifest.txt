@@ -1,0 +1,6 @@
+slices/s00a6d020/s00a6d020.cpp  ?GetStatsString@cEffectsManager@Swarm@EA@@QAEPBDXZ  00a6d640  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE
+slices/s00a6d020/s00a6d020.cpp  ?FUN_00a6d840@cEffectsManager@Swarm@EA@@QAEIPBD@Z  00a6d840  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE
+slices/s00a6d020/s00a6d020.cpp  ?FUN_00a6d8c0@Swarm@EA@@YAPAUCopyRec@12@PAU312@00@Z  00a6d8c0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE
+slices/s00a6d020/s00a6d020.cpp  ?FUN_00a6db00@cEffectsManager@Swarm@EA@@QAE_NHHI@Z  00a6db00  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE
+slices/s00a6d020/s00a6d020.cpp  ?SetRenderer@cEffectsManager@Swarm@EA@@QAEXPAUIRenderer@23@@Z  00a6ded0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE
+slices/s00a6d020/s00a6d020.cpp  ?CreateWorld@cEffectsManager@Swarm@EA@@QAEPAUIWorld@23@II@Z  00a6df30  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE
