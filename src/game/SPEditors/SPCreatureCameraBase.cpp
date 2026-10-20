@@ -234,6 +234,9 @@ extern uint32_t gCameraTuningGroup;           // 0x01521b5c
 extern const float kDegToRad;                 // 0x013fdec8 (0.017453292)
 extern float gTune_1521888, gTune_152188c, gTune_1521890, gTune_152187c, gTune_1521880,
     gTune_1521884, gTune_1521894, gTune_1521898, gTune_152189c;
+extern float gUpX;    // 0x15f66f8
+extern float gUpY;    // 0x15f66fc
+extern float gUpZ;    // 0x15f6700
 extern float gT0;     // 0x15f65fc
 extern float gT1;     // 0x15f6600
 extern float gT2;     // 0x15f6604
@@ -249,16 +252,29 @@ class PropertyList {
  public:
   virtual void AddRef();
   virtual void Release();
-  virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6();
-  virtual void v7(); virtual void v8();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
   virtual bool GetProperty(uint32_t id, Property*& result);         // +0x24
 };
 }
 namespace App {
 class IPropertyManager {
  public:
-  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
-  virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
   virtual void v10();
   virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, PropertyList*& result);  // +0x2c
 };
@@ -333,7 +349,10 @@ struct tCameraData {
   bool  bTransitioning;              // +0xb8
 };
 class cICameraController { public: virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3(); };
-class IRef2_s0062_5e70 { public: virtual void r0(); virtual void r1(); };
+class IRef2_s0062_5e70 {
+    public: virtual void r0();
+    virtual void r1();
+};
 struct Depends { char pad[0x78]; cVec3 mActualCameraPositionOffset; };  // +0x78 within depends
 class cCreatureCameraBase : public cICameraController, public IRef2_s0062_5e70 {
 public:
@@ -372,9 +391,7 @@ public:
 };
 void* __cdecl QuaternionFromFacingAndUp(void* out, const float* facing, const float* up);  // 0x69b600
 float __cdecl FUN_00625560(uint32_t a, uint32_t b, uint32_t c);                  // 0x625560
-extern float gUpX;    // 0x15f66f8
-extern float gUpY;    // 0x15f66fc
-extern float gUpZ;    // 0x15f6700
+cVec3 QuatRotate(const cVec3& v, const cQuat& q);   // 0x0059AED0 (hidden return pointer, cdecl)
 // ---- items of slice s00625e70 end
 
 // ---- items of slice s00626db0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -633,10 +650,6 @@ bool SP::cCreatureCameraBase::Shutdown()
     return true;
 }
 
-
-
-
-
 // @ 0x00624ec0
 void SP::cCreatureCameraBase::Deactivate()
 {
@@ -654,10 +667,6 @@ void SP::cCreatureCameraBase::Deactivate()
     }
 }
 
-
-
-
-
 // @ 0x00624f20
 bool SP::cCreatureCameraBase::OnKeyDown(unsigned int a, unsigned int b)
 {
@@ -670,10 +679,6 @@ bool SP::cCreatureCameraBase::OnKeyDown(unsigned int a, unsigned int b)
     return false;
 }
 
-
-
-
-
 // @ 0x00624f70
 bool SP::cCreatureCameraBase::OnKeyUp(unsigned int a, unsigned int b)
 {
@@ -682,19 +687,12 @@ bool SP::cCreatureCameraBase::OnKeyUp(unsigned int a, unsigned int b)
     return false;
 }
 
-
-
-
-
 // @ 0x00624f90
 void SP::cCreatureCameraBase::OnFocusChange(bool v)
 {
     if (!v)
         mCameraInputState = (SP::cCreatureCameraBase::eCameraInputState)(0);
 }
-
-
-
 
 // @ 0x00624fb0
 bool SP::cCreatureCameraBase::OnMouseUp(unsigned int button, float x, float y, unsigned int state)
@@ -716,9 +714,6 @@ bool SP::cCreatureCameraBase::OnMouseUp(unsigned int button, float x, float y, u
     mMouseY = y;
     return false;
 }
-
-
-
 
 // @ 0x00625010
 bool SP::cCreatureCameraBase::OnMouseMove(float x, float y, unsigned int state)
@@ -751,9 +746,6 @@ bool SP::cCreatureCameraBase::OnMouseMove(float x, float y, unsigned int state)
     return false;
 }
 
-
-
-
 // @ 0x006251f0
 bool SP::cCreatureCameraBase::OnMouseWheel(int delta, float x, float y, unsigned int state)
 {
@@ -770,26 +762,17 @@ bool SP::cCreatureCameraBase::OnMouseWheel(int delta, float x, float y, unsigned
     return false;
 }
 
-
-
-
 // @ 0x00625270
 void SP::cCreatureCameraBase::Zoom(float f)
 {
     mCameraData.desiredPlayerDistance = (f + 1.0f) * mCameraData.desiredPlayerDistance;
 }
 
-
-
-
 // @ 0x006252a0
 void SP::cCreatureCameraBase::RotateLeftRight(float f)
 {
     mCameraData.desiredPlayerTheta = f + mCameraData.desiredPlayerTheta;
 }
-
-
-
 
 // @ 0x006252c0
 #include <math.h>
@@ -812,9 +795,6 @@ void SP::cCreatureCameraBase::NormalizeTheta()
     }
 }
 
-
-
-
 // @ 0x00625350
 namespace SP {
 void cCreatureCameraBase_s0062_4fb0::SetHeightCallback(void* fn, void* pUser)
@@ -824,9 +804,6 @@ void cCreatureCameraBase_s0062_4fb0::SetHeightCallback(void* fn, void* pUser)
     mCachedHeight = 0.0f;
 }
 }  // namespace SP
-
-
-
 
 // @ 0x006254f0
 bool SP::cCreatureCameraBase::OnMouseDown(unsigned int button, float x, float y, unsigned int state)
@@ -851,9 +828,6 @@ bool SP::cCreatureCameraBase::OnMouseDown(unsigned int button, float x, float y,
     return true;
 }
 
-
-
-
 // @ 0x00625560
 void SP::cCreatureCameraBase::SetCurrentPolarCoords(float theta, float phi, float dist)
 {
@@ -863,9 +837,6 @@ void SP::cCreatureCameraBase::SetCurrentPolarCoords(float theta, float phi, floa
     mTransformNeedsUpdating = true;
     mCameraData.currentPlayerDistance = d;
 }
-
-
-
 
 // @ 0x00625600
 namespace SP {
@@ -884,9 +855,6 @@ float cCreatureCameraBase_s0062_4fb0::QueryHeight(const cSPVector3_s0062_4fb0* p
 }
 }  // namespace SP
 
-
-
-
 // @ 0x006256a0
 namespace SP {
 void cCreatureCameraDepends_s0062_4fb0::InitAvatarData()
@@ -902,9 +870,6 @@ void cCreatureCameraDepends_s0062_4fb0::InitAvatarData()
 }
 }  // namespace SP
 
-
-
-
 // @ 0x00625750
 namespace SP {
 void cCreatureCameraDepends_s0062_4fb0::UpdateOffsets(float dt)
@@ -918,9 +883,6 @@ void cCreatureCameraDepends_s0062_4fb0::UpdateOffsets(float dt)
     mActualCameraPositionOffset.z = (mTargetCameraPositionOffset.z - mActualCameraPositionOffset.z) * t * 10.0f + mActualCameraPositionOffset.z;
 }
 }  // namespace SP
-
-
-
 
 // @ 0x00625830
 namespace SP {
@@ -955,9 +917,6 @@ void cCreatureCameraBase_s0062_4fb0::InitCameraData()
 }
 }  // namespace SP
 
-
-
-
 // @ 0x00625a90
 void SP::cCreatureCameraBase::UpdateDesiredLookAt()
 {
@@ -972,9 +931,6 @@ void SP::cCreatureCameraBase::UpdateDesiredLookAt()
     mCameraData.avatarPosition.y = ((mDepends.mAvatar.mPosition.y + kAvatarUp.y * d) - ay) * t + ay;
     mCameraData.avatarPosition.z = ((mDepends.mAvatar.mPosition.z + kAvatarUp.z * d) - az) * t + az;
 }
-
-
-
 
 // @ 0x00625bf0
 #include <math.h>
@@ -1017,8 +973,6 @@ void cCreatureCameraBase_s0062_4fb0::UpdateVelocity()
 }
 }  // namespace SP
 
-
-
 // @ 0x00625e70
 void SP::cCreatureCameraBase::AimTowardsTarget(bool unused)
 {
@@ -1039,7 +993,56 @@ void SP::cCreatureCameraBase::AimTowardsTarget(bool unused)
   (void)unused;
 }
 
-
+// @ 0x00625f70
+void cCreatureCameraBase::FUN_00625f70()
+{
+  float minDist = mMinCameraDistance;
+  float* sel = &mCameraData.desiredPlayerDistance;
+  if (mCameraData.desiredPlayerDistance <= minDist)
+    sel = &minDist;
+  float target = *sel;
+  float dt = mCameraData.dt;
+  mCameraData.desiredPlayerDistance = target;
+  double k = exp((double)(dt / mTuning188) * -0.30103f);
+  double nd = ((double)target - (double)mCameraData.currentPlayerDistance) * (1.0 - k)
+              + (double)mCameraData.currentPlayerDistance;
+  mCameraData.currentPlayerDistance = (float)nd;
+  float dist = (float)nd;
+  cVec3 up;
+  up.x = gUpX;
+  up.y = gUpY;
+  up.z = gUpZ;
+  double k2 = exp((double)(dt / mTuning180) * -0.30103f);
+  double theta = (double)mCameraData.currentPlayerTheta
+                 + ((double)mCameraData.desiredPlayerTheta - (double)mCameraData.currentPlayerTheta) * (1.0 - k2);
+  mCameraData.currentPlayerTheta = (float)theta;
+  double half = theta * 0.5f;
+  cVec3 diff;
+  diff.x = mCameraData.desiredLookAt.x - mCameraData.desiredPosition.x;
+  diff.y = mCameraData.desiredLookAt.y - mCameraData.desiredPosition.y;
+  diff.z = mCameraData.desiredLookAt.z - mCameraData.desiredPosition.z;
+  float sh = (float)sin(half);
+  cQuat q;
+  q.x = up.x * sh;
+  q.y = up.y * sh;
+  q.z = up.z * sh;
+  q.w = (float)cos(half);
+  cVec3 r = QuatRotate(diff, q);
+  float d = r.z * up.z + r.y * up.y + r.x * up.x;
+  float vx = r.x - d * up.x;
+  float vy = r.y - up.y * d;
+  float vz = r.z - up.z * d;
+  float inv = (float)(1.0 / sqrt((double)vx * vx + ((double)vy * vy + (double)vz * vz)));
+  double k3 = exp((double)(dt / mTuning184) * -0.30103f);
+  double pitch = (double)mCameraData.currentPlayerPitch
+                 + ((double)mCameraData.desiredPlayerPitch - (double)mCameraData.currentPlayerPitch) * (1.0 - k3);
+  mCameraData.currentPlayerPitch = (float)pitch;
+  float sy = (float)(sin(pitch) * dist);
+  float cy = (float)(cos(pitch) * dist);
+  mCameraData.desiredPosition.x = (mCameraData.desiredLookAt.x - (inv * vx) * cy) + up.x * sy;
+  mCameraData.desiredPosition.y = (mCameraData.desiredLookAt.y - (vy * inv) * cy) + up.y * sy;
+  mCameraData.desiredPosition.z = (mCameraData.desiredLookAt.z - (vz * inv) * cy) + up.z * sy;
+}
 
 // @ 0x00626290
 void cCreatureCameraBase::ReloadTuning()
@@ -1084,8 +1087,6 @@ void cCreatureCameraBase::ReloadTuning()
     ReadFloat(list.mpObject, 0xf7e0935e, gTune_152189c);
   }
 }
-
-
 
 // @ 0x006268a0
 void cCreatureCameraBase::CalculateCameraToWorldMatrix()
@@ -1132,8 +1133,6 @@ void cCreatureCameraBase::CalculateCameraToWorldMatrix()
   *(uint8_t*)((char*)this + 0x1cc) = 0;
 }
 
-
-
 // @ 0x00626b50
 void cCreatureCameraBase::SetInitialCameraValues(uint32_t a, uint32_t b, uint32_t c, const float* v)
 {
@@ -1176,7 +1175,6 @@ void cCreatureCameraBase::SetInitialCameraValues(uint32_t a, uint32_t b, uint32_
   mCameraData.bTransitioning = true;
 }
 
-
 // @ 0x00626db0
 void cCreatureCameraBase_s0062_6db0::GetCurrentCameraPosition(float* out)
 {
@@ -1200,7 +1198,6 @@ void cCreatureCameraBase_s0062_6db0::GetCurrentCameraPosition(float* out)
   out[1] = s * out[1] + mCameraToWorld.mTranslation.y;
   out[2] = out[2] * s + mCameraToWorld.mTranslation.z;
 }
-
 
 // @ 0x00626ee0
 void cCreatureCameraBase_s0062_6db0::UpdateCamera_StandardControl(float dt)
@@ -1229,7 +1226,6 @@ void cCreatureCameraBase_s0062_6db0::UpdateCamera_StandardControl(float dt)
   platformOrientation(this) = newPlatformOrientation(this);
 }
 
-
 // @ 0x00627000
 void cCreatureCameraBase_s0062_6db0::GetAudioAnchorPosition(float* out)
 {
@@ -1239,7 +1235,6 @@ void cCreatureCameraBase_s0062_6db0::GetAudioAnchorPosition(float* out)
   out[1] = avatarY + uy * f;
   out[2] = avatarZ + uz * f;
 }
-
 
 // @ 0x00627060
 void SP::cCreatureCameraBase::InitCreatureData(SP::cAnimatingCreature * pCreature)
@@ -1268,7 +1263,6 @@ void SP::cCreatureCameraBase::InitCreatureData(SP::cAnimatingCreature * pCreatur
   InitCameraData();
 }
 
-
 // @ 0x006271a0
 void* __cdecl translateTransform(void* dst, void* src, void* outDst)
 {
@@ -1282,7 +1276,6 @@ void* __cdecl translateTransform(void* dst, void* src, void* outDst)
   Modifier_Accumulate(dst, src);
   return dst;
 }
-
 
 // @ 0x00627660
 void cCreatureCameraBase_s0062_6db0::FUN_00627660()
@@ -1357,7 +1350,6 @@ void cCreatureCameraBase_s0062_6db0::FUN_00627660()
   }
   cv->bPenetrating = false;
 }
-
 
 // @ 0x00627ca0
 void cCreatureCameraBase_s0062_6db0::Activate()

@@ -1,4 +1,4 @@
-# va  diff-bytes  reason
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 00624ec0 8 cCreatureCameraBase::Deactivate; complete; pServer load is hoisted above the three bool stores in mine
 006252c0 46 NormalizeTheta; complete, register allocation differs (c/K/t in different xmm regs)
 00625750 93 UpdateOffsets (depends); complete, original interleaves the 3-component lerp through Vector3 operators
@@ -6,6 +6,7 @@
 00625a90 199 camera look-at lerp; complete, original uses Vector3 operator temps (different register scheduling)
 00625bf0 546 platform velocity integrator; complete, x87/SSE mix and temp scheduling differ
 00625e70 98 AimTowardsTarget: complete; compiler coalesces the six transient stack slots and schedules the x87 rsqrt differently
+00625f70 608 COMPLETE FUN_00625f70 (distance/theta/pitch exponential damping + quaternion-rotated look vector); x87/SSE interleave and register allocation differ [equiv: FAIL 5/146 float-rounding only, denormal-range cancellation in desiredPosition.x; call trace and esp match]
 00626290 22 ReloadTuning: complete (all 24 tuning-property reads); only the SSE register choice of the two phi *= deg-to-rad multiplies differs (orig loads member into xmm1, const into xmm0)
 006268a0 485 CalculateCameraToWorldMatrix: complete; cTransform field offsets/matrix expression order (x87 vs SSE) differ
 00626b50 414 SetInitialCameraValues: complete; same cTransform/matrix transcription differences

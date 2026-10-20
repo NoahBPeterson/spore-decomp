@@ -1,6 +1,6 @@
 004099b0 ?PreRotateY@cTransform@Swarm@EA@@QAEXM@Z  # EA::Swarm::cTransform::PreRotateY (callee of s00625e70, named from the dev publics; slice address comment)
 00625e70 ?AimTowardsTarget@cCreatureCameraBase@SP@@QAEX_N@Z  # SP::cCreatureCameraBase::AimTowardsTarget migrated from s00625e70
-00625f70 SP::cCreatureCameraBase::FUN_00625f70  # orbit/walk damping toward target
+00625f70 ?FUN_00625f70@cCreatureCameraBase@@QAEXXZ  # cCreatureCameraBase::FUN_00625f70 migrated from s00625e70 (verbatim, slice spelling)
 00626290 ?ReloadTuning@cCreatureCameraBase@@QAEXXZ  # cCreatureCameraBase::ReloadTuning migrated from s00625e70 (verbatim, slice spelling)
 006268a0 ?CalculateCameraToWorldMatrix@cCreatureCameraBase@@QAEXXZ  # cCreatureCameraBase::CalculateCameraToWorldMatrix migrated from s00625e70 (verbatim, slice spelling)
 00626b50 ?SetInitialCameraValues@cCreatureCameraBase@@QAEXIIIPBM@Z  # cCreatureCameraBase::SetInitialCameraValues migrated from s00625e70 (verbatim, slice spelling)
