@@ -20,12 +20,15 @@ extern "C" void  FUN_00440f60(void* out);
 extern "C" void  FUN_00440ff0(void* obj);
 extern "C" void  FUN_00440c40(void* obj, int a);
 extern "C" void  FUN_004b8180();
-extern "C" void  FUN_004098a0(void* dst, const void* src);
 extern "C" void  FUN_00425990(void* vec);
+extern "C" void  FUN_004b3c20(int a);
 extern uint32_t DAT_015d6e2c, DAT_015d6e30, DAT_015d6e34;
 extern uint32_t DAT_015d6b98, DAT_015d6b9c, DAT_015d6ba0;
 extern uint32_t DAT_015d6cc8, DAT_015d6f64;
+extern "C" void* FUN_004bb860(void* a);
+extern "C" char  FUN_0041dd30(void* a, void* b);
 extern "C" void  FUN_004553b0(void* out, void* key);
+inline void* operator new(unsigned int, void* p) { return p; }
 template<int N> inline void ScratchSlots() { uint32_t s[N]; }
 struct cSPColorRGB_s004b_2320 { uint32_t x, y, z; };
 struct PropObj;
@@ -46,16 +49,41 @@ struct Asset {
 struct PropObj {
     virtual void v0();                                // 0 (+0)
     virtual void Release();                           // 1 (+4)
-    virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
     virtual char Has(uint32_t id);                    // 7 (+0x1c)
-    virtual void v8(); virtual void v9();
+virtual void v8();
+virtual void v9();
     virtual void* Get(uint32_t id);                   // 10 (+0x28)
 };
 struct PropMgr {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
-    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
     virtual void v10();
     virtual char GetPropertyList(int id, uint32_t type, void** out);   // 11 (+0x2c)
+};
+struct PropEntry { uint32_t v; float x, y, z; };
+struct Vec3_s004b_2320 {  // 0x004098a0
+    float x, y, z;
+    Vec3_s004b_2320(const Vec3_s004b_2320& v);
+};
+struct Trans { uint32_t f0; float a[3]; float b[3]; };
+struct PaintPropRef {
+    PropObj* mpRef;                                             // +0
+    PaintPropRef() : mpRef(0) { if (mpRef) mpRef->v0(); }
+    ~PaintPropRef() { if (mpRef) mpRef->Release(); }
+    void* AsPPVoidParam();                                      // 0x0041d870
 };
 namespace SP {
 struct PaintVector {
@@ -101,19 +129,22 @@ public:
     ~cSPEditorPaintTheme_s004b_2320();
     void* AsInterface(int type);  // 0x004b26a0 (SP::cSPEditorPaintTheme::AsInterface)
     void  SetSource(int source);  // 0x004b26e0 (SP::cSPEditorPaintTheme::SetSource)
-    void  Reset();
+    void  Reset();  // 0x004b2710 (SP::cSPEditorPaintTheme::Reset)
     void  Reset2();  // 0x004b27c0 (SP::cSPEditorPaintTheme::Reset2)
     uint32_t ReadFromAsset(Asset* asset);
-    uint32_t ReadFromProp2(int prop, char useColors);
-    uint32_t ReadFromProp(int prop);
+    uint32_t ReadFromProp2(int prop, char useColors);  // 0x004b29b0 (SP::cSPEditorPaintTheme::ReadFromProp2)
+    bool ReadFromProp(uint32_t prop);  // 0x004b2bb0 (SP::cSPEditorPaintTheme::ReadFromProp)
     void  WriteToProp(Asset* asset, int resourceType);
     void  ApplyToAsset(int asset, int view);  // 0x004b3190 (SP::cSPEditorPaintTheme::ApplyToAsset)
     void  Apply(int a, int b, int c, int d);  // 0x004b31d0 (SP::cSPEditorPaintTheme::Apply)
     void  InitClosestRegions(void* a, void* b);  // 0x004b3730 (SP::cSPEditorPaintTheme::InitClosestRegions)
 };
 }
+extern "C" void  FUN_004add30(Asset* a, int i, cSPColorRGB_s004b_2320* c);
+extern "C" void  FUN_004adcf0(Asset* a, int i, uint32_t v);
+extern "C" void  FUN_004add10(Asset* a, int i, uint32_t v);
+extern "C" void  FUN_004ae250(Asset* a);
 // ---- items of slice s004b2320 end
-
 
 // ---- items of slice s004b4930 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __cdecl InitVerbCollection(void* a);    // 0x4bb860
@@ -406,6 +437,9 @@ public:
 }
 // ---- items of slice s004b3e10 end
 
+// forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
+bool FUN_004bbe90(uint32_t type);   // defined at 0x004bbe90, called earlier in the TU
+
 // @ 0x004b26a0
 void* SP::cSPEditorPaintTheme_s004b_2320::AsInterface(int type)
 {
@@ -416,16 +450,12 @@ void* SP::cSPEditorPaintTheme_s004b_2320::AsInterface(int type)
     }
 }
 
-
-
 // @ 0x004b26e0
 void SP::cSPEditorPaintTheme_s004b_2320::SetSource(int source)
 {
     mSourceRef = source;
     Reset();
 }
-
-
 
 // @ 0x004b2710
 void SP::cSPEditorPaintTheme_s004b_2320::Reset()
@@ -443,8 +473,6 @@ void SP::cSPEditorPaintTheme_s004b_2320::Reset()
     }
 }
 
-
-
 // @ 0x004b27c0
 void SP::cSPEditorPaintTheme_s004b_2320::Reset2()
 {
@@ -453,7 +481,38 @@ void SP::cSPEditorPaintTheme_s004b_2320::Reset2()
     mPropTheme.Clear();
 }
 
-
+// @ 0x004b2800
+uint32_t SP::cSPEditorPaintTheme_s004b_2320::ReadFromAsset(Asset* asset)
+{
+    Reset();
+    if (asset != 0) {
+        void* view = FUN_004bb860(*(void**)((char*)asset + 0x58));
+        if (FUN_004bbe90((uint32_t)view)) {
+            if (!FUN_004bbe90((uint32_t)mSourceRef))
+                return 0;
+            mResourceType = (uint32_t)asset;
+            for (int i = 0; i < 3; i++) {
+                cSPColorRGB_s004b_2320 col;
+                asset->GetColor(i, &col);
+                mSkinColors[i] = col;
+                mSkinEffects[i] = asset->GetEffect(i);
+                mSkinEffectSeeds[i] = asset->GetSeed(i);
+            }
+            return 1;
+        }
+        if (FUN_004bbed0(view)) {
+            if (!FUN_004bbed0((void*)mSourceRef))
+                return 0;
+            mResourceType = (uint32_t)asset;
+            int n = asset->ModelCount();
+            for (int i = 0; i < n; i++)
+                FUN_004b3c20((int)asset->ModelAt(i));
+            InitClosestRegions((void*)mSourceRef, (void*)mResourceType);
+            return 1;
+        }
+    }
+    return 0;
+}
 
 // @ 0x004b29b0
 uint32_t SP::cSPEditorPaintTheme_s004b_2320::ReadFromProp2(int prop, char useColors)
@@ -501,82 +560,108 @@ uint32_t SP::cSPEditorPaintTheme_s004b_2320::ReadFromProp2(int prop, char useCol
     return 1;
 }
 
-
-
 // @ 0x004b2bb0
-uint32_t SP::cSPEditorPaintTheme_s004b_2320::ReadFromProp(int prop)
+bool SP::cSPEditorPaintTheme_s004b_2320::ReadFromProp(uint32_t prop)
 {
+    PaintPropRef ref;
+
+    void* colors = 0;
+    void* colorA = 0;
+    void* colorB = 0;
+    int count = 0;
+
     mModelTheme.Nuke(*(void**)((char*)&mModelTheme + 0xc));
     mModelTheme.ResetFast();
     mPropTheme.Erase(mPropTheme.mpBegin, mPropTheme.mpEnd);
 
     PropMgr* mgr = (PropMgr*)SP_PropertyManager();
-    PropObj* list = 0;
-    void* key = 0;
-    mgr->GetPropertyList(prop, DAT_015d6cc8, (void**)&key);
-    list = (PropObj*)key;
-    if (list == 0)
-        return 0;
+    mgr->GetPropertyList(prop, DAT_015d6cc8, (void**)ref.AsPPVoidParam());
+    if (ref.mpRef == 0)
+        return false;
 
-    void* colors = 0;
-    int count = 0;
-    if (list->Has(0xb0e066a7)) {
-        void* p = list->Get(0xb0e066a7);
-        if ((*(uint16_t*)((char*)p + 0x10) & 0x30) == 0) {
-            count = (*(int16_t*)((char*)p + 0x12) != 0) ? 1 : 0;
-        } else {
-            count = *(int*)((char*)p + 8);
-        }
-        colors = p;
+    if (ref.mpRef->Has(0xb0e066a7)) {
+        void* p = ref.mpRef->Get(0xb0e066a7);
+        count = (*(uint16_t*)((char*)p + 0x10) & 0x30)
+                    ? *(int*)((char*)p + 8)
+                    : ((*(int16_t*)((char*)p + 0x12) != 0) ? 1 : 0);
+        colors = (*(uint16_t*)((char*)p + 0x10) & 0x30)
+                     ? *(void**)p
+                     : ((*(int16_t*)((char*)p + 0x12) != 0) ? p : 0);
     }
-    void* colorA = 0;
-    void* colorB = 0;
-    if (list->Has(0xb0e066a8)) {
-        void* p = list->Get(0xb0e066a8);
-        colorA = p;
-        if ((*(uint16_t*)((char*)p + 0x10) & 0x30) == 0) {
-            if (*(int16_t*)((char*)p + 0x12) == 0)
-                colorA = 0;
-        } else {
-            colorA = *(void**)p;
-        }
+    if (ref.mpRef->Has(0xb0e066a8)) {
+        void* p = ref.mpRef->Get(0xb0e066a8);
+        colorA = (*(uint16_t*)((char*)p + 0x10) & 0x30)
+                     ? *(void**)p
+                     : ((*(int16_t*)((char*)p + 0x12) != 0) ? p : 0);
     }
-    if (list->Has(0xb0e066a9)) {
-        void* p = list->Get(0xb0e066a9);
-        colorB = p;
-        if ((*(uint16_t*)((char*)p + 0x10) & 0x30) == 0) {
-            if (*(int16_t*)((char*)p + 0x12) == 0)
-                colorB = 0;
-        } else {
-            colorB = *(void**)p;
-        }
+    if (ref.mpRef->Has(0xb0e066a9)) {
+        void* p = ref.mpRef->Get(0xb0e066a9);
+        colorB = (*(uint16_t*)((char*)p + 0x10) & 0x30)
+                     ? *(void**)p
+                     : ((*(int16_t*)((char*)p + 0x12) != 0) ? p : 0);
     }
-    (void)colors;
-    for (int i = 0; i < count; i++) {
-        int v = *(int*)((char*)colorA + i * 0xc);
-        if (v != 0 && v != (int)0xe960add1) {
-            uint32_t out[7];
-            out[0] = v;
-            uint32_t* cb = (uint32_t*)colorB + i * 3;
-            out[1] = cb[0];
-            out[2] = cb[1];
-            out[3] = cb[2];
-            cSPColorRGB_s004b_2320 col;
-            FUN_004098a0(&col, (char*)colorA + i * 0xc + 4);
-            (void)col;
-            uint32_t* dst = (uint32_t*)mPropTheme.Insert(out);
-            for (int k = 0; k < 7; k++)
-                dst[k] = out[k];
+
+    int i = 0;
+    while (i < count) {
+        uint32_t v = *(uint32_t*)((char*)colors + i * 0xc);
+        if (v == 0 || v == 0xe960add1) {
+            i++;
+            continue;
         }
+        // colorB is evaluated first and the payload's second vector is constructed in place:
+        // that is the original's evaluation order (see the 0x004b2bb0 disassembly).
+        PropEntry* eb = (PropEntry*)((char*)colorB + i * 0xc);
+        PropEntry* ea = (PropEntry*)((char*)colorA + i * 0xc);
+        Trans t;
+        t.f0 = v;
+        t.a[0] = ea->x;
+        t.a[1] = ea->y;
+        t.a[2] = ea->z;
+        new ((void*)&t.b) Vec3_s004b_2320(*(Vec3_s004b_2320*)&eb->x);
+        uint32_t* dst = (uint32_t*)mPropTheme.Insert(&i);
+        *(Trans*)dst = t;
+        i++;
     }
+
     mPropThemeID = (uint32_t)prop;
     InitClosestRegions((void*)mSourceRef, (void*)mSourceRef);
-    if (list)
-        list->Release();
-    return 1;
+    return true;
 }
 
-
+// @ 0x004b2f80
+void SP::cSPEditorPaintTheme_s004b_2320::WriteToProp(Asset* asset, int resourceType)
+{
+    if (asset == 0)
+        return;
+    void* view = FUN_004bb860(*(void**)((char*)asset + 0x58));
+    if (FUN_004bbe90((uint32_t)view)) {
+        for (int i = 0; i < 3; i++) {
+            if (mSkinEffects[i] == 0)
+                continue;
+            if (FUN_0041dd30(&DAT_015d6b98, &mSkinColors[i]))
+                FUN_004add30(asset, i, &mSkinColors[i]);
+            FUN_004adcf0(asset, i, mSkinEffects[i]);
+            FUN_004add10(asset, i, mSkinEffectSeeds[i]);
+        }
+    } else if (FUN_004bbed0(view)) {
+        PropObj* list = 0;
+        if (resourceType != -1) {
+            PropMgr* mgr = (PropMgr*)SP_PropertyManager();
+            if (list)
+                list->Release();
+            mgr->GetPropertyList(resourceType, DAT_015d6f64, (void**)&list);
+        }
+        FUN_004ae250(asset);
+        int n = asset->ModelCount();
+        for (int i = 0; i < n; i++) {
+            void* model = asset->ModelAt(i);
+            ApplyToAsset((int)model, (int)list);
+        }
+        FUN_004ae250(asset);
+        if (list)
+            list->Release();
+    }
+}
 
 // @ 0x004b3190
 void SP::cSPEditorPaintTheme_s004b_2320::ApplyToAsset(int p, int x)
@@ -587,8 +672,6 @@ void SP::cSPEditorPaintTheme_s004b_2320::ApplyToAsset(int p, int x)
         Apply(a10, b18, x, p);
     }
 }
-
-
 
 // @ 0x004b31d0
 void SP::cSPEditorPaintTheme_s004b_2320::Apply(int a, int b, int c, int d)
@@ -634,8 +717,6 @@ void SP::cSPEditorPaintTheme_s004b_2320::Apply(int a, int b, int c, int d)
     FUN_00425990(vec);
 }
 
-
-
 // @ 0x004b33e0
 int FUN_004b33e0(int* out, int* range, int key)
 {
@@ -643,14 +724,12 @@ int FUN_004b33e0(int* out, int* range, int key)
     return 0;
 }
 
-
 // @ 0x004b3660
 int FUN_004b3660(int self, int* out, int key)
 {
     (void)self; (void)out; (void)key;
     return 0;
 }
-
 
 // @ 0x004b3730
 void SP::cSPEditorPaintTheme_s004b_33e0::InitClosestRegions(int a, int b)
@@ -689,7 +768,6 @@ void SP::cSPEditorPaintTheme_s004b_33e0::InitClosestRegions(int a, int b)
     }
 }
 
-
 // @ 0x004b3910
 char SP::cSPEditorPaintTheme_s004b_33e0::FUN_004b3910(int* out, int key, int arg3)
 {
@@ -719,7 +797,6 @@ char SP::cSPEditorPaintTheme_s004b_33e0::FUN_004b3910(int* out, int key, int arg
     return 0;
 }
 
-
 // @ 0x004b3a50
 char SP::cSPEditorPaintTheme_s004b_33e0::FUN_004b3a50(int out, int key, int arg3)
 {
@@ -744,7 +821,6 @@ char SP::cSPEditorPaintTheme_s004b_33e0::FUN_004b3a50(int out, int key, int arg3
     }
     return 0;
 }
-
 
 // @ 0x004b3b20
 char SP::cSPEditorPaintTheme_s004b_33e0::FUN_004b3b20(int key, int* outCount, int* outPtr)
@@ -775,7 +851,6 @@ char SP::cSPEditorPaintTheme_s004b_33e0::FUN_004b3b20(int key, int* outCount, in
     return 1;
 }
 
-
 // @ 0x004b3c20
 void SP::cSPEditorPaintTheme_s004b_33e0::FUN_004b3c20(int model)
 {
@@ -788,7 +863,6 @@ void SP::cSPEditorPaintTheme_s004b_33e0::FUN_004b3c20(int model)
         ((SP::PaintVector_s004b_33e0*)r)->FUN_004b4fa0(&local2);
     }
 }
-
 
 // @ 0x004b3c70
 void SP::cSPEditorPaintTheme_s004b_33e0::SetRegionColor(int a, int b, int c, int d)
@@ -819,7 +893,6 @@ void SP::cSPEditorPaintTheme_s004b_33e0::SetRegionColor(int a, int b, int c, int
     if (list)
         list->Release();
 }
-
 
 // @ 0x004b3e10
 void SP::cSPEditorPaintTheme_s004b_3e10::GenerateSkinPaint(cSPEditorModel_s004b_3e10* model)
@@ -993,22 +1066,12 @@ bool PaintTheme::ExtractRegionPaintData(AssetView* asset, void* palette, uint32_
     return true;
 }
 
-
-
-
-
-
 // @ 0x004b4f70
 void C70::Release()
 {
     if (mp != 0)
         mp->v2();
 }
-
-
-
-
-
 
 // @ 0x004b4fa0
 void RecVec11c::FUN_004b4fa0(Rec11c* a)
@@ -1025,11 +1088,6 @@ void RecVec11c::FUN_004b4fa0(Rec11c* a)
     }
 }
 
-
-
-
-
-
 // @ 0x004b5030
 void Tree::Reset()
 {
@@ -1041,11 +1099,6 @@ void Tree::Reset()
     x14 = 0;
 }
 
-
-
-
-
-
 // @ 0x004b5080
 int __fastcall FUN_004b5080(void* self, uint32_t* key)
 {
@@ -1053,19 +1106,12 @@ int __fastcall FUN_004b5080(void* self, uint32_t* key)
     return 0;
 }
 
-
-
-
-
 // @ 0x004badd0
 int FUN_004badd0(void* self, int* a, void* b)
 {
     (void)self; (void)a; (void)b;
     return 0;
 }
-
-
-
 
 // @ 0x004bbe90
 bool FUN_004bbe90(uint32_t type)

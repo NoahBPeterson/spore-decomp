@@ -5,9 +5,9 @@
 004b26e0 ?SetSource@cSPEditorPaintTheme_s004b_2320@SP@@QAEXH@Z  # cSPEditorPaintTheme_s004b_2320::SetSource migrated from s004b2320 (verbatim, slice spelling)
 004b2710 ?Reset@cSPEditorPaintTheme_s004b_2320@SP@@QAEXXZ  # cSPEditorPaintTheme_s004b_2320::Reset migrated from s004b2320 (verbatim, slice spelling)
 004b27c0 ?Reset2@cSPEditorPaintTheme_s004b_2320@SP@@QAEXXZ  # cSPEditorPaintTheme_s004b_2320::Reset2 migrated from s004b2320 (verbatim, slice spelling)
-004b2800  SP::cSPEditorPaintTheme::ReadFromAsset
+004b2800 ?ReadFromAsset@cSPEditorPaintTheme_s004b_2320@SP@@QAEIPAUAsset@@@Z  # cSPEditorPaintTheme_s004b_2320::ReadFromAsset migrated from s004b2320 (verbatim, slice spelling)
 004b29b0 ?ReadFromProp2@cSPEditorPaintTheme_s004b_2320@SP@@QAEIHD@Z  # cSPEditorPaintTheme_s004b_2320::ReadFromProp2 migrated from s004b2320 (verbatim, slice spelling)
-004b2bb0 ?ReadFromProp@cSPEditorPaintTheme_s004b_2320@SP@@QAE_NI@Z  # cSPEditorPaintTheme_s004b_2320::ReadFromProp; return type corrected to bool (byte return in the original: `mov al,[ebp-0x41]`; matches dev publics in symbols/slices/s00591fa0.txt)
-004b2f80  SP::cSPEditorPaintTheme::WriteToProp
+004b2bb0 ?ReadFromProp@cSPEditorPaintTheme_s004b_2320@SP@@QAE_NI@Z  # cSPEditorPaintTheme_s004b_2320::ReadFromProp migrated from s004b2320 (verbatim, slice spelling)
+004b2f80 ?WriteToProp@cSPEditorPaintTheme_s004b_2320@SP@@QAEXPAUAsset@@H@Z  # cSPEditorPaintTheme_s004b_2320::WriteToProp migrated from s004b2320 (verbatim, slice spelling)
 004b3190 ?ApplyToAsset@cSPEditorPaintTheme_s004b_2320@SP@@QAEXHH@Z  # cSPEditorPaintTheme_s004b_2320::ApplyToAsset migrated from s004b2320 (verbatim, slice spelling)
 004b31d0 ?Apply@cSPEditorPaintTheme_s004b_2320@SP@@QAEXHHHH@Z  # cSPEditorPaintTheme_s004b_2320::Apply migrated from s004b2320 (verbatim, slice spelling)

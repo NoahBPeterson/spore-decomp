@@ -1,6 +1,9 @@
 # va  diff-bytes  reason
 004b2710 67 Reset; inline-buffer clear holes and loop layout differ
+004b2800 312 ReadFromAsset; many inlined-helper frames/register choices differ
 004b29b0 424 ReadFromProp2; many inlined-helper frames/register choices differ
+004b2bb0 738 ReadFromProp; /Od frame, inlined value-accessor temps and placement-new null check differ (equivalence PASS at reduced coverage)
+004b2f80 355 WriteToProp; many inlined-helper frames/register choices differ
 004b31d0 379 Apply; many inlined-helper frames/register choices differ
 004b3730 280 InitClosestRegions; control flow complete, inlined GetPropertyAsIntArray / vector frames differ
 004b3910 266 region lookup; full calls present, /Od frame holes and register choices differ [equiv: WEAK 562 valid inputs, 13.9% coverage]

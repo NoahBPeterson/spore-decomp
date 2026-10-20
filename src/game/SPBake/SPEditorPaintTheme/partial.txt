@@ -1,5 +1,4 @@
-# va  diff-bytes  reason
-004b2bb0  651  ReadFromProp: prop decoding ported behaviorally but the EA::Variant/value accessor paths and inline-helper frames are not fully reproduced
+# <va>  <diff-bytes>  <reason>   (partial: source present and compilable, but not a faithful/complete reconstruction)
 004b33e0  n/a  per-block paint accumulation: skeleton only (return 0); heavy inlined EASTL paths omitted
 004b3660  n/a  prop lookup helper: skeleton only (return 0); inlined EASTL map paths omitted
 004b4470  n/a  ReadSkinThemeFromProp: summarized control flow; the large inlined EASTL/RNG/property body (skin colours, model enumeration) is not reproduced
