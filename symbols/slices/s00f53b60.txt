@@ -1,0 +1,10 @@
+00f53b60  `anonymous namespace'::cCloudSourceCommand::Execute  # PDB `anonymous namespace'::cCloudSourceCommand::Execute
+00f54040  `anonymous namespace'::cCloudSourceCommand::Speed  # FUN_00f54040
+00f54290  `anonymous namespace'::cCloudSourceCommand::Delay  # FUN_00f54290
+00f544d0  `anonymous namespace'::cCloudSourceCommand::Duration  # FUN_00f544d0
+00f545c0  `anonymous namespace'::cCloudSourceCommand::SetCount  # FUN_00f545c0
+00f54670  `anonymous namespace'::cCloudSourceCommand::Tile  # FUN_00f54670
+00f547a0  `anonymous namespace'::cCloudSourceCommand::Material  # FUN_00f547a0
+00f54880  `anonymous namespace'::cCloudSourceCommand::Count  # FUN_00f54880
+00f54980  `anonymous namespace'::cCloudSourceCommand::HeightRange  # FUN_00f54980
+00f54ab0  `anonymous namespace'::cCloudSourceCommand::SetHeightRange  # FUN_00f54ab0
