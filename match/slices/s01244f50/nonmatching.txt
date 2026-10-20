@@ -1,0 +1,29 @@
+# va  diff-bytes  reason
+# Equivalence gate (default inputs) run once at end of slice:
+#   PASS        : 0124aab0 0124aae0 0124ab10 01261040 0126c8c0 0126c8f0
+#   FAIL(eax)   : 01250330 012503b0 0125dbc0  -- stored constant identical (0x40626000);
+#                 the only reported mismatch is scratch eax (void function, not an observable
+#                 result) -> false positive.
+#   UNSUPPORTED : 01244f50 (unresolved extern annotation), 0125bd80 (unresolved virtual),
+#                 0126dae0/0126db20/0126db60 (import _decode_pointer), 01277f40/012817b0/01281800
+#                 (harness could not bind the object symbol)
+01244f50  256  init_150c720: complete; table layout correct, but the 12-byte row offsets (index*12) are constant-folded by cl 15 at /Od whereas the original keeps the runtime `imul r,r,12` for indices 0..2
+0124aab0   14  init_15d9834: complete; /Od float global->global copy is x87 (fld/fstp), original is SSE (movss/movss) even with /arch:SSE /fp:fast
+0124aae0   14  init_15d9764: complete; same SSE-vs-x87 float-copy issue as 0124aab0
+0124ab10   14  init_15d9a68: complete; same SSE-vs-x87 float-copy issue as 0124aab0
+01250330   61  init_15dacc8: complete; bitfield RMW merge differs (cl folds the two field constants into one mask; original emits the per-field value/mask/shift then merge)
+012503b0   61  init_15dabcc: complete; same bitfield RMW merge issue as 01250330
+0125bd80   16  init_15de138: complete; frame/local slot layout for the inlined operator-new forwarder differs ([ebp-0xc] vs [ebp-0x18])
+0125dbc0   37  init_15de57c: complete; same bitfield RMW merge issue as 01250330 (2 of 3 ops identical)
+01261040   56  init_15df0f0: complete; same SSE-vs-x87 float-copy issue as 0124aab0 (nine copies)
+0126c8c0   19  init_15e2d08: complete; empty-ctor array-init loop: cl emits njs+jmp instead of the original js-taken exit shape
+0126c8f0   28  init_15e2a38: complete; same array-init loop shape issue as 0126c8c0
+0126dae0   12  init_15e2e48: complete; bool tag slot is [ebp-1] (`mov byte [ebp-1],0`) where the original writes [ebp-2] via `xor eax,eax; mov [ebp-2],al`
+0126db20   12  init_15e2da8: complete; same bool tag slot issue as 0126dae0
+0126db60   12  init_15e2f54: complete; same bool tag slot issue as 0126dae0
+01277f40  296  init_150d100: complete; 8 record copies into the descriptor table; per-record field/store schedule differs
+012817b0    3  init_15e8840: complete; identical except the position of `pop edi` relative to the three stores
+01281800    3  init_15e89f8: complete; identical except the position of `pop edi` relative to the three stores
+
+# 16 of the 31 VAs are byte-exact (14 via manifest.txt with its /Od /Ob1 rows, plus
+# 0125fa80 and 0126ecd0 which also verify under the file's /Od /Ob1 recipe).

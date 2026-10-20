@@ -1,0 +1,35 @@
+# slice s01244f50 -- VA to symbol map (frozen gold3 k=64, /Od batch)
+# 14 byte-exact (manifest.txt, 2 sources: /Od /Ob1 main + /O2 tail), 17 complete-but-diff
+# (nonmatching.txt), 0 partial.
+# Note: 0125fa80 / 0126ecd0 additionally verify byte-exact under the file's own
+#       /Od /Ob1 /MD /Gy /TP /arch:SSE recipe; they are kept out of manifest.txt so the
+#       default-flag run_all pass stays green (see nonmatching.txt footer).
+#
+# va          symbol                              source fn     status
+01244f50 init_150c720  # Simulator field-descriptor table at 0x150c720 (14 entries + 2 tail dwords)
+0124aa60 init_15d98f0  # stores (float)log(1e-6f) at 0x15d98f0
+0124aab0 init_15d9834  # copies float pair from 0x15d9bc4 to 0x15d9834
+0124aae0 init_15d9764  # copies float pair from 0x15d9bc4 to 0x15d9764
+0124ab10 init_15d9a68  # copies float pair from 0x15d9bc4 to 0x15d9a68
+0124ab80 init_15d992c  # stores 1.0f into 0x15d992c/0x15d9930
+01250270 init_15da7d4  # eastl utf16 empty-string bootstrap + atexit
+012502d0 init_15da960  # eastl rbtree ctor + atexit
+01250300 init_15da884  # eastl rbtree ctor + atexit
+01250330 init_15dacc8  # packed colour key (0x40626000) written to 0x15dacd0
+012503b0 init_15dabcc  # packed colour key (0x40626000) written to 0x15dabd4
+01259610 init_15dd784  # reciprocal of 0x15dd6e0*0.3f
+0125bd80 init_15de138  # inline operator-new forwarder
+0125dbc0 init_15de57c  # packed colour key variant
+0125fa80 init_15dec08  # zero three dwords at 0x15dec08            MATCH (/Od /Ob1 recipe)
+01261040 init_15df0f0  # nine float pair copies
+0126c8c0 init_15e2d08  # empty-ctor array init
+0126c8f0 init_15e2a38  # empty-ctor array init
+0126dae0 init_15e2e48  # bool tag slot init
+0126db20 init_15e2da8  # bool tag slot init
+0126db60 init_15e2f54  # bool tag slot init
+0126ecd0 init_15e3294  # const triple (0x1749a6e,0x1749a6e,1) at 0x15e3294  MATCH (/Od /Ob1 recipe)
+01277f40 init_150d100  # descriptor-table record copies
+012817b0 init_15e8840  # three stores (pop edi placement differs)
+01281800 init_15e89f8  # three stores (pop edi placement differs)
+012967b0 init_15f9e8c  # 0x15f9e8c table bootstrap
+0127caa0 init_15d5ff4  # 0x15d5ff4 bootstrap
