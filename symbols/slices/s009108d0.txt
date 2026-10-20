@@ -1,0 +1,6 @@
+009108d0 little2_cdataSectionTok  # expat 2.0.1 xmltok_impl.c cdataSectionTok (little2)
+00910ac0 little2_scanEndTag  # expat 2.0.1 xmltok_impl.c scanEndTag (little2)
+00910cd0 little2_scanHexCharRef  # expat 2.0.1 xmltok_impl.c scanHexCharRef (little2)
+00910d40 little2_scanCharRef  # expat 2.0.1 xmltok_impl.c scanCharRef (little2)
+00910dd0 little2_scanRef  # expat 2.0.1 xmltok_impl.c scanRef (little2)
+00910fa0 little2_scanAtts  # expat 2.0.1 xmltok_impl.c scanAtts (little2, XML_NS)
