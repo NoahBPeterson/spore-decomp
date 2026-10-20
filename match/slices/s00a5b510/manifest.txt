@@ -1,0 +1,11 @@
+slices/s00a5b510/s00a5b510.cpp  ?trigger_symbol@Eapd@Audio@EA@@YAXPADUt_symbol@123@@Z  00a5b510  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5b510/s00a5b510.cpp  ?spigot_bang@Eapd@Audio@EA@@YAXPAD@Z  00a5b670  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5b510/s00a5b510.cpp  ?spigot_symbol@Eapd@Audio@EA@@YAXPADUt_symbol@123@@Z  00a5b700  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5b510/s00a5b510.cpp  ?spigot_list@Eapd@Audio@EA@@YAXPADUt_symbol@123@HPAX@Z  00a5b730  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5b510/s00a5b510.cpp  ?spigot_anything@Eapd@Audio@EA@@YAXPADUt_symbol@123@HPAX@Z  00a5b770  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5b510/s00a5b510.cpp  ?gate_free@Eapd@Audio@EA@@YAXPAD@Z  00a5b920  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5b510/s00a5b510.cpp  ?switch_free@Eapd@Audio@EA@@YAXPAD@Z  00a5bc70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5b510/s00a5b510.cpp  ?switch_float@Eapd@Audio@EA@@YAXPADM@Z  00a5bc90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5b510/s00a5b510.cpp  ?until_bang@Eapd@Audio@EA@@YAXPAD@Z  00a5bf20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5b510/s00a5b510.cpp  ?until_float@Eapd@Audio@EA@@YAXPADM@Z  00a5bf60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5b510/s00a5b510.cpp  ?until_bang2@Eapd@Audio@EA@@YAXPAD@Z  00a5bfa0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
