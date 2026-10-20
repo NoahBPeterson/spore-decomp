@@ -1,20 +1,21 @@
+008e5320 ?Fn8e5320@@YGDPAM@Z  # GUI metric reader
 008e53a0 ?Fn8e53a0@@YAPADPAD0PBX@Z  # Fn8e53a0 migrated from s008e5320 (verbatim, slice spelling)
 008e5410 ?Fn8e5410@@YAPADPAD0PBX@Z  # Fn8e5410 migrated from s008e5320 (verbatim, slice spelling)
+008e5480 ?Fn8e5480@@YAXPAUStaticRange@@PAUStaticDef@@1PAPBG@Z  # eastl::equal_range
 008e5580 ?LookupStandardHTMLEntity@DOM@XHTML@EA@@YA_WPB_W@Z  # EA::XHTML::DOM::LookupStandardHTMLEntity migrated from s008e5320
+008e5670 ?Fn8e5670@XmlParser@@QAEPAGXZ  # XmlParser::Fn8e5670
+008e5730 ?Fn8e5730@XmlParser@@QAEHPAX0@Z  # XmlParser::Fn8e5730
+008e5930 ?Fn8e5930@@YAXPAXPBG@Z  # expat default handler at 0x8e5930 (not a slice target; fixes bounds for 008e5730)
 008e59a0 ?Fn8e59a0@XmlParser@@QAEXD@Z  # XmlParser::Fn8e59a0 migrated from s008e5320 (verbatim, slice spelling)
 008e5a20 ?Fn8e5a20@XmlParser@@QAEHPBDHH@Z  # XmlParser::Fn8e5a20 migrated from s008e5320 (verbatim, slice spelling)
+008e5a70 ?Fn8e5a70@@YA_NPAX0PBD1H@Z  # Fn8e5a70 migrated from s008e5320 (verbatim, slice spelling)
+008e5b90 ?Fn8e5b90@@YAXPAXPBGPAPBG@Z  # Fn8e5b90 migrated from s008e5320 (verbatim, slice spelling)
 008e5c50 ?Fn8e5c50@@YAXPAX@Z  # Fn8e5c50 migrated from s008e5320 (verbatim, slice spelling)
 008e5ca0 ?Fn8e5ca0@XmlParser@@QAEXXZ  # XmlParser::Fn8e5ca0 migrated from s008e5320 (verbatim, slice spelling)
 008e5da0 ?Fn8e5da0@XmlParser@@QAEXPAGH@Z  # XmlParser::Fn8e5da0 migrated from s008e5320 (verbatim, slice spelling)
 008e5e20 ?Fn8e5e20@@YAXPAXPAGH@Z  # Fn8e5e20 migrated from s008e5320 (verbatim, slice spelling)
+008e5e50 ?Fn8e5e50@@YAXPAXHI@Z  # Fn8e5e50 migrated from s008e5320 (verbatim, slice spelling)
+008e5ea0 ?Fn8e5ea0@XmlParser@@QAEPAXPAX@Z  # XmlParser::Fn8e5ea0 migrated from s008e5320 (verbatim, slice spelling)
 008e5fb0 ?Fn8e5fb0@XmlParser@@QAEXXZ  # XmlParser::Fn8e5fb0 migrated from s008e5320 (verbatim, slice spelling)
-008e5930 ?Fn8e5930@@YAXPAXPBG@Z  # expat default handler at 0x8e5930 (not a slice target; fixes bounds for 008e5730)
-008e5320 ?Fn8e5320@@YGDPAM@Z  # GUI metric reader
-008e5480 ?Fn8e5480@@YAXPAUStaticRange@@PAUStaticDef@@1PAPBG@Z  # eastl::equal_range
-008e5670 ?Fn8e5670@XmlParser@@QAEPAGXZ  # XmlParser::Fn8e5670
-008e5730 ?Fn8e5730@XmlParser@@QAEHPAX0@Z  # XmlParser::Fn8e5730
-008e5a70 ?Fn8e5a70@@YA_NPAX0PBD1H@Z  # expat external entity ref handler
-008e5b90 ?Fn8e5b90@@YAXPAXPBGPAPBG@Z  # expat start element handler
-008e5ea0 ?Fn8e5ea0@XmlParser@@QAEPAXPAX@Z  # XmlParser constructor
-008e60a0 ?Fn8e60a0@XmlParser@@QAEHPAX@Z  # XmlParser::Parse
+008e60a0 ?Fn8e60a0@XmlParser@@QAEHPAX@Z  # XmlParser::Fn8e60a0 migrated from s008e5320 (verbatim, slice spelling)
 008e61b0 ?Fn8e61b0@@YAXPAPAXURectF@@PAXPAU1@@Z  # GUI rect scatter

@@ -2,3 +2,4 @@
 008e59a0 89 XmlParser::FlushText; codegen differs (equiv WEAK: 22% coverage)
 008e5a20 61 XmlParser::Parse(uint8*); codegen+XML_Parse stub differ (equiv FAIL: 5/5 valid inputs mismatched, eax)
 008e5c50 11 EndElementHandler; tail-call/virtual dispatch differ (equiv UNSUPPORTED: unresolved externs)
+008e5e50 36 SkippedEntityHandler; inlined entity lookup/arg arrange differ (equiv PASS)
