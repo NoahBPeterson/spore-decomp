@@ -1,0 +1,9 @@
+010fd4c0 hkCapsuleTriangleAgent3::process  // ?process@hkCapsuleTriangleAgent3@@..., port of hkPredGskAgent3::process, callee hkCollideCapsuleUtilManifoldCapsVsTriangle (0x01107270)
+010fda70 hkCapsuleTriangleAgent3::registerAgent3  // unnamed static in Havok; registers shape types (8,6) via hkCollisionDispatcher::registerAgent3 (0x010cd4c0)
+010fdae0 hkBoxBoxAgent3::removePoint  // ?removePoint@hkBoxBoxAgent3@@YAXPAUhkAgentEntry@@PAXG@Z
+010fdb20 hkBoxBoxAgent3::commitPotential  // ?commitPotential@hkBoxBoxAgent3@@...
+010fdb50 hkBoxBoxAgent3::create  // ?create@hkBoxBoxAgent3@@..., calls hkBoxBoxManifold::init (0x010ec500)
+010fdb70 hkBoxBoxAgent3::destroy  // ?destroy@hkBoxBoxAgent3@@YAXPAUhkAgentEntry@@PAXPAVhkContactMgr@@@Z
+010fdbe0 hkBoxBoxAgent3::process  // ?process@hkBoxBoxAgent3@@..., calls hkBoxBoxCollisionDetection::calcManifold (0x0110b3a0)
+010fdec0 hkBoxBoxAgent3::registerAgent3  // unnamed static; registers shape types (7,7)
+010fdf30 hkPredGskCylinderAgent3::create  // ?create@hkPredGskCylinderAgent3@@..., calls hkGsk_cacheInit (0x010ff820)

@@ -1,0 +1,9 @@
+# va  diff-bytes  reason   [equiv verdict]
+# flags /O2 /MD /Gy /TP for every row (Havok 3.1.0 as compiled in the exe; the whole slice is cl15-shaped)
+010fd4c0 1292 port of hkPredGskAgent3::process (0x010ff9e0, itself nonmatching): x87 evaluation order, cl15 scratch-register rotation, 0x7f7fffee extraRadius. equiv: FAIL (garbage-input artefact, 13 repairs, 84% coverage)
+010fda70 14 registration: identical store set and order, but cl schedules the two constant push 8/6 before the hkBool/pointer zeros while the original emits them after the pushes; frame base off by 4. equiv: UNSUPPORTED (registration touches dispatcher tables)
+010fdb20 39 commitPotential: correct body; cl indexes ([edx+eax*2+2]) where the original walks a pointer (add ecx,4) with the count in a register. equiv: PASS (400 inputs, 89.5% coverage)
+010fdb70 74 destroy: correct body and return value; cl keeps the loop count in a scratch register and moves it into a local slot, while the original re-loads m_numPoints each pass. equiv: FAIL (5/46 pointery inputs: call-trace artefact, our garbage-vtable removeContactPoint resolves to an image address; 100% coverage)
+010fdbe0 723 box/box process: builds hkBoxBoxCollisionDetection on the stack and calls calcManifold (0x0110b3a0, itself nonmatching); the 723-byte inlined body is not reproduced (cl15 declines the callee inlining). equiv: FAIL (garbage-input memory-pool value)
+010fdec0 25 registration: same shape as 010fda70 (shape types 7/7, no sepNormal), same push/zero scheduling difference. equiv: FAIL (resolution conflict: our hkBoxBoxAgent3_process annotation aligns to 010fdbd0 on garbage input)
+010fdf30 51 predictive-GSK cylinder create: body and call order correct; cl keeps the getType vtable target in eax (mov eax,[edx+8]; call eax) where the original calls memory-indirect (call [edx+8]). equiv: UNSUPPORTED (0/400 valid; callee hkGsk_cacheInit faults on generated input)
