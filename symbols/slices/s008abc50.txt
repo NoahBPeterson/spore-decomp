@@ -1,0 +1,30 @@
+008abc50 ?SetupGlobalHints@@YAXPAUFFT1HintClass@@HPAHHHH11HHH1H1@Z  # FF T1 global blue-zone + snap setup (12 real args + 2 phantom LTCG leading params)
+008abf90 fnt_SuperRound_Err  # BlueShiftPix overflow -> longjmp(buf,0x1101)
+008abfe0 FUN_008abfe0  # rounding grid mode, step 0x40 / bias 0x00
+008ac010 FUN_008ac010  # rounding grid mode, step 0x40 / bias 0x3f
+008ac040 fnt_RoundToGrid  # rounding grid mode, step 0x40 / bias 0x20
+008ac070 fnt_RoundToHalfGrid  # rounding grid mode, 0xffffffe0 base + 0x20
+008ac0b0 FUN_008ac0b0  # blue-zone rounding mode, mask at p+0x74, half-width p+0x7e/p+0x80
+008ac100 fnt_Super45Round  # super 45-degree rounding (FixDiv by (p+0x74)>>14, FixMul back)
+008ac1a0 fnt_MovePoint  # (state,idx,delta,flag) move point along the current axis
+008ac2a0 FUN_008ac2a0  # add delta to cx[idx], set mark bit 1
+008ac2d0 FUN_008ac2d0  # add delta to cy[idx], set mark bit 2
+008ac300 fnt_Project  # project (x,y) with the current 2x2 matrix
+008ac330 fnt_OldProject  # project (x,y) with the dual 2x2 matrix
+008ac370 fnt_GetCVTScale  # CVT scale blend from +0xb8/+0xbc
+008ac3e0 FUN_008ac3e0  # CVT entry fetch
+008ac400 fnt_GetCVTEntrySlow  # scaled CVT entry (FixMul(entry*2,scale)+1)>>1
+008ac430 FUN_008ac430  # single-width fetch
+008ac440 fnt_GetSingleWidthSlow  # scaled single width
+008ac460 fnt_ChangeCvt  # change CVT entry (scaled delta when +0xb6==0)
+008ac4c0 fnt_InterpChars  # charstring interpreter loop with rounding-mode dispatch
+008ac5c0 fnt_NoInterpChars  # charstring interpreter loop (no rounding hooks)
+008ac600 fnt_Execute  # build the T1 decode context and run the charstring
+008ac7a0 fnt_ComputeAndCheck_PF_Proj  # compute + snap the projection scale
+008ac800 FUN_008ac800  # reset vector state to identity (vertical)
+008ac840 FUN_008ac840  # reset vector state to identity (horizontal)
+008ac880 fnt_SPVTCA  # SPVTCA opcode
+008ac900 fnt_SFVTCA  # SFVTCA opcode
+008ac970 fnt_SPVTL  # SPVTL opcode
+008aca20 fnt_SDPVTL  # SDPVTL opcode
+008acb50 fnt_SFVTL  # SFVTL opcode

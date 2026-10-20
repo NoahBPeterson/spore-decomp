@@ -1,0 +1,25 @@
+# va  diff-bytes  reason
+008abc50  799  complete; SetupGlobalHints with 12 real args + 2 phantom LTCG leading params (uninitialised eax). Body reconstructed from the dev source layout (blue-zone bubble sorts, TCB snap, StdHW/VW + SetupStemWeights/SetupInput tail calls); /O2 codegen differs throughout the sort loops.
+008abf90  82  BlueShiftPix overflow handler; original tail-calls longjmp(buf,0x1101) so it has no ordinary epilogue (best candidate is a different symbol).
+008abfe0  14  complete; rounding grid step 0x40/0x00, only register-allocation differences from `lea`.
+008ac010  23  complete; rounding grid step 0x40/0x3f, only register-allocation/clobber differences.
+008ac040  23  complete; RoundToGrid step 0x40/0x20, same shape as 008ac010.
+008ac070  45  complete; RoundToHalfGrid (0xffffffe0 base + 0x20), register differences only.
+008ac0b0  73  complete; blue-zone rounding mode reading the zone half-width at p+0x80/p+0x7e and the mask at p+0x74.
+008ac100  145  complete; fnt_Super45Round uses FixDiv by (p+0x74)>>14 then FixMul back; register differences only.
+008ac1a0  219  complete; fnt_MovePoint. Original re-reads the state pointer fields per branch and spills `delta` to a stack slot; our /O2 keeps them in registers, so instruction selection differs though semantics match (4-arg cdecl, dy==0x4000 direct short-frac path vs FixDiv/FixMul path).
+008ac370  98  complete; GetCVTScale scale blend (cx^2/cy^2 weighted by +0xb8/+0xbc); register differences.
+008ac400  17  complete; GetCVTEntrySlow = FixMul(entry*2, CVTScale)+1 >> 1.
+008ac440  17  complete; GetSingleWidthSlow = FixMul(singleWidth, CVTScale).
+008ac460  73  complete; ChangeCvt (scaled delta when +0xb6==0).
+008ac4c0  189  complete; fnt_InterpChars interpreter loop, including the 8-way rounding-mode dispatch written into word[st+0x3c].
+008ac5c0  26  complete; fnt_NoInterpChars interpreter loop; loop shape differs by two instructions.
+008ac600  380  complete; fnt_Execute. /Od-style 0xa0 frame building the T1Decode context, setjmp3(cblock,0), cblock/EH tail, and the interp vs no-interp loop selection via the callback. Byte layout cannot match a /O2 rebuild because the original is an /Od function inside an /O2 module.
+008ac7a0  92  complete; fnt_ComputeAndCheck_PF_Proj short-matrix projection + projection-scale snap; two extra register moves.
+008ac800  39  complete; identity vector state (0x10cca50 projection, 0x8ac2d0 point op); store ordering differs.
+008ac840  25  complete; identity vector state (0x8ac360, 0x8ac2a0); register differences.
+008ac880  19  complete; fnt_SPVTCA (SetProjectionVectorToCoordinateAxis); extra `mov ecx,edx` before the scale store.
+008ac900  10  complete; fnt_SFVTCA; single extra `mov ecx,edx` before the scale store.
+008ac970  125  complete; fnt_SPVTL (pop two stack indices, distance*0x400, FixDiv, >>2, negate on opcode bit0); register differences.
+008aca20  274  complete; fnt_SDPVTL (both projection and dual-projection axes).
+008acb50  118  complete; fnt_SFVTL.

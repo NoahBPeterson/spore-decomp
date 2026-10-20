@@ -1,0 +1,7 @@
+# source  symbol  original VA  [flags override]
+slices/s008abc50/s008abc50.cpp  ?FUN_008ac2a0@@YAPAHHPAPAXHH@Z  008ac2a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008abc50/s008abc50.cpp  ?FUN_008ac2d0@@YAPAHHPAPAXHH@Z  008ac2d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008abc50/s008abc50.cpp  ?fnt_Project@@YAHPAXHH@Z  008ac300  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008abc50/s008abc50.cpp  ?fnt_OldProject@@YAHPAXHH@Z  008ac330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008abc50/s008abc50.cpp  ?FUN_008ac3e0@@YAHPAUT1Exec@@H@Z  008ac3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008abc50/s008abc50.cpp  ?FUN_008ac430@@YAHPAUT1Exec@@@Z  008ac430  /O2 /MD /Gy /TP /arch:SSE /fp:fast
