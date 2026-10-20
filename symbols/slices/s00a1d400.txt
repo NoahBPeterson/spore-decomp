@@ -1,0 +1,8 @@
+00a1d400 ?GetPropertyInternal@Sound@@QAE_NIPAM@Z  # Sound::GetPropertyInternal (vtable slot 0xac)
+00a1d6d0 ?HasProperty@Sound@@QAE_NI@Z  # Sound::HasProperty
+00a1d710 ?CompareProperties@Sound@@QAE_NPAX@Z  # Sound::CompareProperties (vtable slot 0xc4)
+00a1d830 ?SetProperty@Sound@@QAEXIMI@Z  # Sound::SetProperty
+00a1d9c0 ?SetPropertyInternal@Sound@@QAEXIM_N@Z  # Sound::SetPropertyInternal (vtable slot 0x98)
+00a1df20 ?ConnectPrimitive@Sound@@QAE_NIPAX@Z  # Sound::ConnectPrimitive
+00a1e140 ?DisconnectPrimitive@Sound@@QAEXIPAX@Z  # Sound::DisconnectPrimitive
+00a1e1d0 ?Route@Sound@@QAEXIIPAX@Z  # Sound::Route (vtable slot 0xb4)

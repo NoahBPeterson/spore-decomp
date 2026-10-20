@@ -1,0 +1,2 @@
+slices/s00a1d400/s00a1d400.cpp  ?GetPropertyInternal@Sound@@QAE_NIPAM@Z  00a1d400  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00a1d400/s00a1d400.cpp  ?HasProperty@Sound@@QAE_NI@Z  00a1d6d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
