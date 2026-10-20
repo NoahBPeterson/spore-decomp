@@ -31,6 +31,9 @@ extern int* g_devCaps;     // @ 0x016fa39c
 extern int g_devCapsDword; // @ 0x016f9448
 
 // ---- items of slice s0075cf20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void __cdecl EAThreadSleep(unsigned int* t);   // @ 0x00921df0
+extern int  GetAdapterCount();                               // @ 0x011f8300
+extern void GetFormats(unsigned int* out, int count);        // @ 0x011f8a40
 void* SP_MessageServer();   // @ 0x0067dcc0
 struct MONITORINFO { unsigned int cbSize; long rc[4]; long rcWork[4]; unsigned int dwFlags; };
 extern "C" __declspec(dllimport) int __stdcall GetMonitorInfoA(void*, MONITORINFO*);  // @ user32
@@ -64,15 +67,19 @@ struct DevLatch {
 };
 struct D3DCAPS9;
 extern D3DCAPS9* DevCapsManager_GetD3DCAPS9();   // @ 0x011f8af0
-extern "C" __declspec(dllimport) int __stdcall GetMonitorInfoA(void*, MONITORINFO*);  // @ user32
+struct SPAllocPool {
+    void* LockedAligned(unsigned int size, int a, int b, int c,
+                        int d, int e, int f, int g);         // @ 0x00928a30 (ret 0x20)
+    void Free(void* elem);                                   // @ 0x009276c0 (ret 4)
+};
+extern SPAllocPool* g_pAllocPool;                            // @ 0x016c8b44
+struct AdapterSet { void* p; unsigned int a, b, c; };
+extern void* GetAdapterInfo(AdapterSet* set, int count);     // @ 0x011f88c0
+struct LightFormat { unsigned int a, b; ~LightFormat() {} }; // empty dtor (0x00c2e4e0)
 extern void ReleaseDevice();   // @ 0x011f81d0
-extern D3DCAPS9* DevCapsManager_GetD3DCAPS9();   // @ 0x011f8af0
 // ---- items of slice s0075cf20 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" __declspec(dllimport) int __stdcall GetMonitorInfoA(void*, MONITORINFO*);  // @ user32
-extern void ReleaseDevice();   // @ 0x011f81d0
-extern D3DCAPS9* DevCapsManager_GetD3DCAPS9();   // @ 0x011f8af0
 
 // ---- items of slice s0075de80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern int* g_sAppProperties;   // @ 0x015fd918
@@ -579,6 +586,21 @@ void* cRenderer::GetRenderStats(int idx)
     return r;
 }
 
+// @ 0x0075db00
+void __stdcall RendererFlush(bool noSleep)
+{
+    int* d = g_deviceGlobal;
+    if (d != 0) {
+        ((void (__stdcall*)(void*, int))*(void**)(*d + 0x18))(d, 1);
+        while (((int (__stdcall*)(void*, int, int, int))*(void**)(*g_deviceGlobal + 0x1c))(g_deviceGlobal, 0, 0, 1) == 1) {
+            if (!noSleep) {
+                unsigned int t = 0;
+                EAThreadSleep(&t);
+            }
+        }
+    }
+}
+
 // @ 0x0075db70
 void cRenderer::NumLayers(int* out)
 {
@@ -662,8 +684,47 @@ bool cRenderer_InitShaders()
 // @ 0x0075dd30
 bool MergeLocalLights(int param_1, int param_2, int param_3, int param_4)
 {
-    (void)param_2; (void)param_3; (void)param_4;
-    return param_1 >= 0;   // partial placeholder; see partial.txt
+    int count = GetAdapterCount();
+    if (param_1 < 0 || param_1 >= count)
+        return false;
+
+    LightFormat info[4];
+    GetFormats((unsigned int*)info, count);
+
+    AdapterSet set;
+    set.p = g_pAllocPool->LockedAligned(info[0].a, (int)info[0].b, 0, 0, 0, 0, 0, 0);
+    set.a = 0;
+    set.b = 0;
+    set.c = 0;
+
+    char* base = (char*)GetAdapterInfo(&set, count);
+    base += param_1 * 0x44;
+
+    bool found = false;
+    unsigned int n = *(unsigned int*)(base + 0x10);
+    if (n != 0) {
+        char* mode = base + 0x14;
+        unsigned int c = n;
+        do {
+            int type = *(int*)mode;
+            if (type == 0x15 || type == 0x16 || type == 0x21) {
+                unsigned int m = *(unsigned int*)(mode + 4);
+                if (m != 0) {
+                    int* res = *(int**)(mode + 8);
+                    for (unsigned int i = 0; i < m; i++, res += 4) {
+                        if (res[0] == param_2 && res[1] == param_3 && res[2] == param_4) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            mode += 0xc;
+        } while (--c);
+    }
+
+    g_pAllocPool->Free(set.p);
+    return found;
 }
 
 // @ 0x0075de80

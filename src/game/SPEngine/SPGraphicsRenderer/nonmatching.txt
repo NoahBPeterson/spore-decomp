@@ -5,6 +5,7 @@
 0075db70 45 complete; cRenderer::NumLayers rep-movsd copy under mutex, register/allocation differs; equiv: PASS
 0075dc20 133 complete; palette table build (pow loop + d3d9 SetPalette via [vtbl+0x54]), frame/reg layout differs; equiv: UNSUPPORTED (ecx read is only a nop lea ecx,[ecx] pad; fn is stdcall ret 4, left as is)
 0075dca0 74 complete; cRenderer::InitShaders caps check + state flags, frame/allocation differs
+0075dd30 148 complete; MergeLocalLights (flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS-, no /GS cookie in original); EH-state store scheduled before LockedAligned (cl hoists it after), adapter-light scan loop reg/guard form differs; equiv: WEAK 400 valid inputs, 22.1% coverage (need 60%)
 0075de80 173 complete; render-settings property lookup (sAppProperties) + ScreenAspectRatio fallback, property/EH layout differs; equiv: FAIL (ours faults at eip=3000008e) after making it cRenderer member
 0075df60 109 complete; canvas-rect based window sizing, register/frame layout differs; equiv: UNSUPPORTED (import GetCursorPos, 0/1200 valid inputs) after cRenderer member fix
 0075dff0 139 complete; cRenderer::SubRender layer walk + virtual draw, argument/register layout differs

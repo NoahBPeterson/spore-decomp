@@ -8,7 +8,7 @@
 0075da90 ?GetDisplayName@@YGXH@Z  # GetDisplayName migrated from s0075cf20 (verbatim, slice spelling)
 0075daa0 ?SetViewer@cRenderer@@QAEXHPAX@Z  # cRenderer::SetViewer migrated from s0075cf20 (verbatim, slice spelling)
 0075dad0 ?GetRenderStats@cRenderer@@QAEPAXH@Z  # cRenderer::GetRenderStats migrated from s0075cf20 (verbatim, slice spelling)
-0075db00 SP::cRenderer::Flush  # PDB (card)
+0075db00 ?RendererFlush@@YGX_N@Z  # RendererFlush migrated from s0075cf20 (verbatim, slice spelling)
 0075db70 ?NumLayers@cRenderer@@QAEXPAH@Z  # cRenderer::NumLayers migrated from s0075cf20 (verbatim, slice spelling)
 0075dbb0 ?LayerAtIndex@cRenderer@@QAEXH@Z  # cRenderer::LayerAtIndex migrated from s0075cf20 (verbatim, slice spelling)
 0075dbe0 ?CheckDeviceReady@DevLatch@@QAE_NXZ  # DevLatch::CheckDeviceReady migrated from s0075cf20 (verbatim, slice spelling)
