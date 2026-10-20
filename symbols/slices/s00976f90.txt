@@ -1,0 +1,11 @@
+# Slice s00976f90 symbol map (retail EA::UTFWinControls::WinGrid / SparseMatrix)
+# VA        symbol / member
+00976f90  EA::UTFWinControls::SparseMatrix<EA::UTFWinControls::IWinGrid::CellData_*>::InsertCell
+009770e0  EA::UTFWinControls::WinGrid::WinGrid            (constructor)
+00977600  EA::UTFWinControls::WinGrid::~WinGrid           (destructor)
+009777c0  EA::UTFWinControls::WinGrid::Shutdown
+00977830  EA::UTFWinControls::WinGrid::SetDefaultTextColorByColumns
+00977970  EA::UTFWinControls::WinGrid::SetDefaultTextColorByRows
+00977ab0  EA::UTFWinControls::WinGrid::SetDefaultAlignmentByColumns
+00977be0  EA::UTFWinControls::WinGrid::SetDefaultAlignmentByRows
+00977d10  EA::UTFWinControls::WinGrid::SetColumnWidth

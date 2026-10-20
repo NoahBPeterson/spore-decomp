@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Slice s00976f90 (EA::UTFWinControls::WinGrid ctor/dtor, default-format setters,
+# SparseMatrix<CellData*>::InsertCell and SetColumnWidth): 0 of 9 functions are
+# byte-exact. All nine are complete, compilable, semantically faithful
+# reconstructions and are recorded in nonmatching.txt.
