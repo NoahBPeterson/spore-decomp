@@ -143,6 +143,7 @@ void* VectorDoAllocate(void* self, unsigned n, void* alloc);                    
 void* UninitCopyPtr(void* first, void* last, void* dst);                                   // 0x00a88250
 void* MovePtr(void* first, void* last, void* dst);                                         // 0x00a882a0
 void* MoveBackPtr(void* first, void* last, void* dstEnd);                                  // 0x00a882f0
+void  CopyBack(void* first, void* last, void* dstEnd);                                     // 0x00cc8b50
 void  UninitMovePtr(void* out, void* first, void* last, void* dst);                        // 0x00a898a0
 void  CopyPtrAssign(void* first, void* last, void* value);                                 // 0x00a898f0
 void  UninitFillPtr(void* dst, unsigned n, void* value);                                   // 0x00a89940
@@ -230,9 +231,20 @@ void RegisterMeshStreamers(bool install)
 
 // ================================================================================
 // Ref-counted object pointer: releases through vtable slot 1 / 0.
+// A reference-counted object: AddRef at vtable +0x34, Release at vtable +0x38.
 struct RefCounted {
-  virtual void AddRef();    // +0x34 slot used by move
-  virtual void Release();   // +0x38 slot used by move
+  virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+  virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+  virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+  virtual void v12();
+  virtual void AddRef();    // at vtable offset 0x34
+  virtual void Release();   // at vtable offset 0x38
+};
+
+// The object referenced by a RefVertex: AddRef at vtable +0x00, Release at +0x04.
+struct RefVertexObj {
+  virtual void AddRef();    // at vtable offset 0x00
+  virtual void Release();   // at vtable offset 0x04
 };
 
 // 0x18-byte streamed vertex: a referenced vertex buffer plus its parameter.
@@ -283,10 +295,10 @@ RefVertex* UninitCopyVertex(RefVertex* first, RefVertex* last, RefVertex* dst)
     void* ov = dst->mp;
     if (nv != ov) {
       if (nv)
-        ((RefCounted*)nv)->AddRef();
+        ((RefVertexObj*)nv)->AddRef();
       dst->mp = nv;
       if (ov)
-        ((RefCounted*)ov)->Release();
+        ((RefVertexObj*)ov)->Release();
     }
     dst->mPad[0] = first->mPad[0];
     dst->mPad[1] = first->mPad[1];
@@ -368,7 +380,7 @@ SpVector<T>::~SpVector()
     do {
       void* obj = ((RefVertex*)p)->mp;
       if (obj)
-        ((RefCounted*)obj)->Release();
+        ((RefVertexObj*)obj)->AddRef();
       p = (T*)((uint8_t*)p + sizeof(T));
     } while (p < end);
   }
@@ -412,14 +424,14 @@ struct PtrVector {
 // @ 0x00a8c4e0
 RefPtr* PtrVector::erase(RefPtr* first, RefPtr* last)
 {
-  RefPtr* p = (RefPtr*)MovePtr(first, mpEnd, last);
+  RefPtr* p = (RefPtr*)MovePtr(last, mpEnd, first);
   RefPtr* end = mpEnd;
   while (p < end) {
     if (p->mp)
       ((RefCounted*)p->mp)->Release();
     ++p;
   }
-  mpEnd -= (last - first);
+  mpEnd -= last - first;
   return first;
 }
 
@@ -490,7 +502,7 @@ void SpVector<T>::insert(T* position, const T& value)
       e->mPad[3] = mpEnd[-1].mPad[3];
       e->mPad[4] = mpEnd[-1].mPad[4];
     }
-    MemMove(position + 1, position, (uint8_t*)(mpEnd - 1) - (uint8_t*)position);
+    CopyBack(position, mpEnd - 1, mpEnd);
     position->mp = src->mp;
     position->mPad[0] = src->mPad[0];
     position->mPad[1] = src->mPad[1];

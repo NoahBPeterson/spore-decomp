@@ -1,2 +1,1 @@
-# source  symbol  original VA  [flags override]
-# No byte-exact functions in slice s00a8b940 (see nonmatching.txt).
+slices/s00a8b940/s00a8b940.cpp  ??1?$SpVector@URefVertex@Swarm@EA@@@Swarm@EA@@QAE@XZ  00a8c440  /O2 /MD /Gy /TP /arch:SSE /fp:fast
