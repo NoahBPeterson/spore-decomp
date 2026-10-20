@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00914b70/s00914b70.cpp  ?big2_scanPoundName@@YAHPBUencoding@@PBD1PAPBD@Z  00914b70
+slices/s00914b70/s00914b70.cpp  ?big2_scanLit@@YAHHPBUencoding@@PBD1PAPBD@Z  00914d20
+slices/s00914b70/s00914b70.cpp  ?big2_prologTok@@YAHPBUencoding@@PBD1PAPBD@Z  00914e40
+slices/s00914b70/s00914b70.cpp  ?big2_attributeValueTok@@YAHPBUencoding@@PBD1PAPBD@Z  009154e0
+slices/s00914b70/s00914b70.cpp  ?big2_entityValueTok@@YAHPBUencoding@@PBD1PAPBD@Z  00915630
+slices/s00914b70/s00914b70.cpp  ?big2_ignoreSectionTok@@YAHPBUencoding@@PBD1PAPBD@Z  00915790
+slices/s00914b70/s00914b70.cpp  ?big2_isPublicId@@YAHPBUencoding@@PBD1PAPBD@Z  009158d0

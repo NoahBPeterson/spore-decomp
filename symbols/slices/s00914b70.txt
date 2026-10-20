@@ -1,0 +1,7 @@
+00914b70 big2_scanPoundName  # expat 2.0.1 xmltok_impl.c scanPoundName (big2, internal static)
+00914d20 big2_scanLit  # expat 2.0.1 xmltok_impl.c scanLit (big2, internal static)
+00914e40 big2_prologTok  # expat 2.0.1 xmltok_impl.c prologTok (big2, ENCODING vtable entry)
+009154e0 big2_attributeValueTok  # expat 2.0.1 xmltok_impl.c attributeValueTok (big2, vtable entry)
+00915630 big2_entityValueTok  # expat 2.0.1 xmltok_impl.c entityValueTok (big2, vtable entry)
+00915790 big2_ignoreSectionTok  # expat 2.0.1 xmltok_impl.c ignoreSectionTok (big2, vtable entry, XML_DTD)
+009158d0 big2_isPublicId  # expat 2.0.1 xmltok_impl.c isPublicId (big2, vtable entry)
