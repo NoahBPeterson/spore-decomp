@@ -1,0 +1,7 @@
+00bfed50 183 destructor: complete; 110 diff, callee-saved register assignment and intrusive-refcount decrement path differ; difftest WEAK (155 valid inputs, 63.8% coverage, no mismatch)
+00bff010 300 constructor: complete; 202 diff, vtable store order, container zeroing (absolute offsets vs lea ecx) and timer ctor schedule differ; difftest UNSUPPORTED (unresolved external ctor symbols)
+00bff140 110 intrusive_ptr push_back: complete; 81 diff, container pointer and element pointer use swapped callee-saved registers (original: cont=edi, p=esi); difftest PASS (217 valid, 73.9% coverage)
+00bff220 112 find-key loop: complete; 21 diff, begin/last local pointers use swapped registers (original: begin=edx, last=esi); difftest UNSUPPORTED (only 4/10 valid inputs; ABI corrected so the container helper is called with ecx=container)
+00bff290 61 erase-by-key: complete; 52 diff, this is copied to eax and the container address lives in ecx (original keeps this in ecx and computes lea eax); difftest PASS (218 valid, 100.0% coverage)
+00bff2d0 1038 mine-state dispatcher: not reconstructed (external stub declared, no definition)
+00bff7a0 816 per-tick mine update: not reconstructed (stub)
