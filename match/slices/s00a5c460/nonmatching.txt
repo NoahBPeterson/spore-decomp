@@ -1,0 +1,9 @@
+00a5c6a0  38  class pointer load scheduled after the two key loads (register pressure in the 3-arg tail call)
+00a5c8e0  49  original copies argv with an offset cursor, ours uses an indexed self->atoms[i+1] store
+00a5c9e0  16  argument push order in the inlet_new tail differs by one load slot
+00a5cb40  194  alloca/grow copy loops keep different induction registers than the original
+00a5ca60  155  alloca/grow copy loops keep different induction registers than the original
+00a5ccb0  16  argument push order in the inlet_new tail differs by one load slot
+00a5ce20  206  alloca/grow copy loops keep different induction registers than the original
+00a5cd30  168  alloca/grow copy loops keep different induction registers than the original
+00a5d0d0  125  alloca/grow copy loops keep different induction registers than the original

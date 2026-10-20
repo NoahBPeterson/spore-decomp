@@ -1,0 +1,31 @@
+0x00a5c460  change_float  # float handler: store and forward to all outlets with recursion guard
+0x00a5c4c0  change_set  # unconditional value store
+0x00a5c4d0  change_setup  # class_new(change) + bang/float/set methods
+0x00a5c570  value_get  # find-or-create shared value cell, increment refcount
+0x00a5c5d0  value_new  # value object: bind key and create float outlet
+0x00a5c620  value_bang  # emit the shared value to all outlets
+0x00a5c680  value_float  # store into the shared value cell
+0x00a5c6a0  value_free  # drop the shared cell; delete it at refcount zero
+0x00a5c6f0  value_setup  # value/float/vcommon classes
+0x00a5c7c0  x_connective_setup  # aggregate setup for the pd connector classes
+0x00a5c860  alist_list  # replace stored atom array from a list
+0x00a5c8e0  alist_anything  # replace stored atom array with selector + arguments
+0x00a5c980  alist_setup  # list-inlet helper class
+0x00a5c9e0  list_append_new  # list append object constructor
+0x00a5ca60  list_append_list  # append incoming list to stored atoms, emit
+0x00a5cb40  list_append_anything  # append selector+args to stored atoms, emit
+0x00a5cc30  list_append_setup  # list append class
+0x00a5ccb0  list_prepend_new  # list prepend object constructor
+0x00a5cd30  list_prepend_list  # prepend stored atoms to incoming list, emit
+0x00a5ce20  list_prepend_anything  # prepend stored atoms to selector+args, emit
+0x00a5cf20  list_prepend_free  # release stored atom array
+0x00a5cf40  list_prepend_setup  # list prepend class
+0x00a5cfc0  list_split_new  # list split constructor: three outlets + float inlet
+0x00a5d040  list_split_list  # split a list at the float index
+0x00a5d0d0  list_split_anything  # wrap selector+args as a list and split
+0x00a5d180  list_split_setup  # list split class
+0x00a5d200  list_trim_new  # list trim constructor
+0x00a5d290  list_trim_setup  # list trim class
+0x00a5d310  list_message_new  # list message constructor: symbol inlet + anything outlet
+0x00a5d360  list_message_list  # forward with selector, or promote stored selector
+0x00a5d230  list_trim_list  # trim handler, referenced by list_trim_setup; boundary helper just past this slice
