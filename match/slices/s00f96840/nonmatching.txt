@@ -1,0 +1,13 @@
+# va  diff-bytes  reason
+00f96840  2  vtable tail-call forwarder: fn-ptr register differs (target mov edx,[eax+0x84]; jmp edx vs ours eax)
+00f96920  238  colour sample (9 args): inline-asm cvtss2si (correct rounding) but frame/reg-alloc differs from target's spill; equiv PASS
+00f96b40  11  InitializeStaticRTTTextures: scheduling of mov [0x16c9e68],eax relative to push 0x100; equiv WEAK
+00f96d80  85  insertion sort (guarded): 116 B vs 104 B, one register spill (v3); reg-alloc differs
+00f96df0  102  insertion sort (unguarded): 113 B vs 124 B, spills v1/v3 differently
+00f96eb0  14  heap sift-up: tail scheduling (pop edi placement, store order c[2]/c[1])
+00f97130  604  terrain-map bundle (922 B): vectorised/oversized vs target scalar EAAllocate chain
+00f974d0  69  ray-cast setup: first global->out copy via x87 fld/fstp vs target movss
+00f97530  136  bounds-mask loop: register allocation (this in ecx vs target ebp)
+00f975d0  102  id lookup: loop counter unsigned (matches target jb) but MSVC reg-alloc/reload differs
+00f97700  76  id lookup: MSVC CSE/reg-alloc, member reload vs cached register
+00f97750  60  object scan loop: target cmp [esi+0xfc],0 + reload vs ours mov reg,[mem];test (loop rotation)

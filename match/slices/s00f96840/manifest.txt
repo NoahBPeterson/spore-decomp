@@ -1,0 +1,17 @@
+# source (relative to match/)   symbol   original VA   cl flags override
+slices/s00f96840/s00f96840.cpp  ?m00f96870@cTerrainSphere@SP@@QAEHXZ  00f96870  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f96840/s00f96840.cpp  ?m00f968b0@cTerrainSphere@SP@@QAEHPAD@Z  00f968b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f96840/s00f96840.cpp  ?FUN_00f96910@@YGHH@Z  00f96910  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f96840/s00f96840.cpp  ?FUN_00f96a00@@YAHXZ  00f96a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f96840/s00f96840.cpp  ?FUN_00f96a10@@YG_NHHPAHH@Z  00f96a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f96840/s00f96840.cpp  ?m00f96a20@cTerrainSphere@SP@@QAEXH@Z  00f96a20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f96840/s00f96840.cpp  ?m00f96a90@cTerrainSphere@SP@@QAEXHHM@Z  00f96a90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f96840/s00f96840.cpp  ?FUN_00f96c60@@YAXXZ  00f96c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f96840/s00f96840.cpp  ?m00f96cd0@cTerrainSphere@SP@@QAE_NPAXH@Z  00f96cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f96840/s00f96840.cpp  ?FUN_00f96d20@@YA_NHH@Z  00f96d20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f96840/s00f96840.cpp  ?m00f96d40@cTerrainSphere@SP@@QAEXXZ  00f96d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f96840/s00f96840.cpp  ?FUN_00f96e70@@YAXPAUE20@@0PBU1@@Z  00f96e70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f96840/s00f96840.cpp  ?m00f96f90@cTerrainSphere@SP@@QAEXXZ  00f96f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f96840/s00f96840.cpp  ?m00f97660@cTerrainSphere@SP@@QAEXXZ  00f97660  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f96840/s00f96840.cpp  ?m00f97690@cTerrainSphere@SP@@QAEHPAH@Z  00f97690  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f96840/s00f96840.cpp  ?m00f976c0@cTerrainSphere@SP@@QAEHPAH0@Z  00f976c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
