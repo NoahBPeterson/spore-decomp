@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00911f60/s00911f60.cpp  ?little2_prologTok@@YAHPBUencoding@@PBD1PAPBD@Z  00911f60
+slices/s00911f60/s00911f60.cpp  ?little2_attributeValueTok@@YAHPBUencoding@@PBD1PAPBD@Z  009125f0
+slices/s00911f60/s00911f60.cpp  ?little2_entityValueTok@@YAHPBUencoding@@PBD1PAPBD@Z  00912750
+slices/s00911f60/s00911f60.cpp  ?little2_ignoreSectionTok@@YAHPBUencoding@@PBD1PAPBD@Z  009128b0
+slices/s00911f60/s00911f60.cpp  ?little2_isPublicId@@YAHPBUencoding@@PBD1PAPBD@Z  009129f0
+slices/s00911f60/s00911f60.cpp  ?little2_getAtts@@YAHPBUencoding@@PBDHPAUATTRIBUTE@@@Z  00912ad0
+slices/s00911f60/s00911f60.cpp  ?little2_predefinedEntityName@@YAHPBUencoding@@PBD1@Z  00912d70

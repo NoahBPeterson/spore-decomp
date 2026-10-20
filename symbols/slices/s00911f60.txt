@@ -1,0 +1,7 @@
+00911f60 little2_prologTok  # expat 2.0.1 xmltok_impl.c prologTok instantiated for little2; PDB candidate (caller-single)
+009125f0 little2_attributeValueTok  # expat 2.0.1 xmltok_impl.c attributeValueTok (little2)
+00912750 little2_entityValueTok  # expat 2.0.1 xmltok_impl.c entityValueTok (little2)
+009128b0 little2_ignoreSectionTok  # expat 2.0.1 xmltok_impl.c ignoreSectionTok (little2, XML_DTD)
+009129f0 little2_isPublicId  # expat 2.0.1 xmltok_impl.c isPublicId (little2)
+00912ad0 little2_getAtts  # expat 2.0.1 xmltok_impl.c getAtts (little2)
+00912d70 little2_predefinedEntityName  # expat 2.0.1 xmltok_impl.c predefinedEntityName (little2)
