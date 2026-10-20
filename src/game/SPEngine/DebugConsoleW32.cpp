@@ -6,16 +6,27 @@
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" __declspec(dllimport) long __stdcall InterlockedDecrement(long*);
+void __cdecl EASTL_dealloc(void*) throw();
 
 // ---- items of slice s006bb1c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" __declspec(dllimport) long __stdcall InterlockedDecrement(long*);
-void __cdecl EASTL_dealloc(void*);
-struct AppMsgBase { void* vtbl; virtual ~AppMsgBase() { } };
-struct DebugMessage : AppMsgBase {
+struct BaseA2 { virtual ~BaseA2() {} };
+struct WStr16 {            // eastl::basic_string<wchar_t>: begin, end, capacity + allocator word
     wchar_t* mpBegin;
     wchar_t* mpEnd;
     wchar_t* mpCapacity;
-    virtual ~DebugMessage();
+    int      mAlloc;
+    void AllocateSelf(int n);                                   // 0x00429760
+    ~WStr16()
+    {
+        if ((int)(((char*)mpCapacity - (char*)mpBegin) & 0xfffffffe) > 2 && mpBegin) EASTL_dealloc(mpBegin);
+    }
+};
+struct DebugMessage : BaseA2 {
+    WStr16 mText;
+    long   mRef;
+    DebugMessage() : mRef(0) {}
+    DebugMessage(const wchar_t* src, int count);
+    virtual ~DebugMessage();   // ~DebugMessage 0x6bb690; its ??_G 0x6bb760 is compiler generated from it
 };
 // ---- items of slice s006bb1c0 end
 
@@ -29,7 +40,6 @@ int __fastcall FUN_006bb670(void* self)
 }
 
 // @ 0x006bb690
+// @ 0x006bb760
 DebugMessage::~DebugMessage()
-{
-    if ((((char*)mpCapacity - (char*)mpBegin) & 0xfffffffe) > 2 && mpBegin) EASTL_dealloc(mpBegin);
-}
+{}
