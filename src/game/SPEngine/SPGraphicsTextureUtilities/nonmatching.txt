@@ -1,4 +1,10 @@
-# va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
+# va  diff-bytes  reason
+007ad0c0 502 COMPLETE DXT3 alpha-block expansion to RGBA4444; index-form vs retail pointer-form addressing gives an equivalent but differently-scheduled loop body. [equiv: WEAK 398 valid inputs, 15.5% coverage].
+007ad2e0 235 COMPLETE mappixel; original passes the candidate-colour array in eax+ecx and the out-index on the stack (LTCG custom register ABI). Behaviour reproduced with a plain cdecl signature; the ABI itself cannot be expressed in C++. [equiv: UNSUPPORTED — original reads eax at entry].
+007ad400 443 COMPLETE mappixeltransparent; plain cdecl in retail, so behaviour is fully reproduced (register/scheduling diff only). [equiv: PASS 400/400 valid inputs, 100.0% coverage].
+007ad610 279 COMPLETE trymappixel; original passes the pixel in eax (LTCG custom register ABI); behaviour reproduced with a stack signature. [equiv: UNSUPPORTED — original reads eax at entry].
+007ad760 188 COMPLETE rbmappixel; original passes the pixel in edx and the colour table in esi (LTCG custom register ABI); behaviour reproduced with a stack signature. [equiv: UNSUPPORTED — original reads edx at entry].
+007ad950  226  COMPLETE trymapblockfast (MMX); c0/c1 arrive in eax/ecx and four candidates on the stack (LTCG custom register ABI). MMX 565 unpack, pshufw broadcast, pmulhw ±1/3, pmaddwd distances and threshold bail-out all reproduced. [equiv: FAIL 5/5 valid, eax divergence — harness cannot supply the register ABI].
 007ada40 369 COMPLETE mapblock (DXT1 index mapper); original uses custom register convention for mappixel and different loop scheduling; difftest FAIL is a checker artifact: the callee mappixel (0x007ad2e0) takes pix in ecx and pal in eax (usercall); our __fastcall stand-in passes pal in edx, so the call into the real original callee reads a garbage eax and faults
 007adcf0 433 COMPLETE MMX nearest-endpoint mapper via intrinsics; cl adds ebp frame/spills the original does not have
 007ade70 285 COMPLETE rtrymapblock (byte-channel error sum); palette build scheduling differs

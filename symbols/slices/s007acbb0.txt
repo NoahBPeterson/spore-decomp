@@ -5,9 +5,10 @@
 007acef0 rw::graphics::dxt::AverageBlock2x2Dwords  # inferred
 007acfa0 rw::graphics::dxt::AverageBlock2x1Dwords  # inferred
 007acfe0 rw::graphics::dxt::DownsampleSurface  # inferred dispatcher
-007ad2e0 mappixel  # card name
-007ad400 mappixeltransparent  # card name
-007ad610 trymappixel  # card name
-007ad760 rbmappixel  # card name
+007ad0c0 ?FUN_007ad0c0@@YA_NPAUDXTDesc@@0@Z  # FUN_007ad0c0 migrated from s007acbb0 (verbatim, slice spelling)
+007ad2e0 ?mappixel@@YAIPAII0@Z  # mappixel migrated from s007acbb0 (verbatim, slice spelling)
+007ad400 ?mappixeltransparent@@YAIIPAI0@Z  # mappixeltransparent migrated from s007acbb0 (verbatim, slice spelling)
+007ad610 ?trymappixel@@YAIIPAI@Z  # trymappixel migrated from s007acbb0 (verbatim, slice spelling)
+007ad760 ?rbmappixel@@YAIIPAI@Z  # rbmappixel migrated from s007acbb0 (verbatim, slice spelling)
 007ad810 trymapblock  # card name
 007ad950 trymapblockfast  # card name
