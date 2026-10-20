@@ -1,0 +1,8 @@
+slices/s00a6ff50/s00a6ff50.cpp  ?StopStopped@cEffectsWorld@@QAEXXZ  00a70330  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE
+slices/s00a6ff50/s00a6ff50.cpp  ?CopyRange@@YAPAUParamElem@@PAU1@00@Z  00a70730  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE
+slices/s00a6ff50/s00a6ff50.cpp  ??1cEffectsWorld@@QAE@XZ  00a70870  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE
+slices/s00a6ff50/s00a6ff50.cpp  ?Ctor@Desc58@@QAEPAU1@XZ  00a70910  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE
+slices/s00a6ff50/s00a6ff50.cpp  ?DestroyRange@@YGXPAUParamElem@@0@Z  00a70980  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE
+slices/s00a6ff50/s00a6ff50.cpp  ?SetRenderer@cEffectsWorld@@QAEXPAX@Z  00a70da0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE
+slices/s00a6ff50/s00a6ff50_x87.cpp  ?Apply@ParamUpdate@@QAEXXZ  00a6ff50  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast
+slices/s00a6ff50/s00a6ff50_x87.cpp  ?Ctor@cGlobalParams@@QAEPAU1@PBU1@@Z  00a704b0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast
