@@ -410,13 +410,24 @@ extern "C" void* EASTL_allocator_allocate(uint32_t n, const char* name, int flag
 extern "C" void EASTL_allocator_deallocate(void* p);                     // 0x00f47380
 void* EASTL_Allocate(void* allocator, size_t size, int align, int flags); // 0x0042dee0
 struct IStream {
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
-    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
     virtual int Read(void* data, uint32_t size);                  // +0x30
     virtual void v13();
     virtual bool Write(const void* data, uint32_t size);          // +0x38
 };
+bool ReadInt32(IStream* s, int32_t* p, uint32_t count, int endian);   // 0x0093a780
+bool ReadBool8(IStream* s, bool* p);                                  // 0x0093ac80
 bool WriteUint32(IStream* s, const uint32_t* p, uint32_t count, int endian); // 0x0093aa70
 bool WriteBool8(IStream* s, const bool* p, uint32_t count);           // 0x0093a9a0
 struct StrAllocator {
@@ -457,6 +468,26 @@ struct VectorIF {
     void DoInsertValues(PairIF* position, uint32_t n, const PairIF& value);      // @ 0x00530db0
 };
 PairIF* uninitialized_copy(const PairIF* first, const PairIF* last, PairIF* dest, bool tag); // @ 0x005311a0
+struct cDescription {
+    void* mVT;
+    int mRefCount;
+};
+struct cSPSkinPaintDistributeDescription_s0053_00d0 : cDescription {
+    string mEffect;                           // +0x08
+    int mParticleDescId;                      // +0x18
+    float mSpacing;                           // +0x1c
+    uint32_t mLimit;                          // +0x20
+    uint32_t mRegionFlags;                    // +0x24
+    float mBackCutoff;                        // +0x28
+    float mBellyCutoff;                       // +0x2c
+    float mSpineRange[2];                     // +0x30
+    bool mInvertRegions;                      // +0x38
+    bool mCenterOnly;                         // +0x39
+    bool mExtraCover;                         // +0x3a
+    bool mNonRandom;                          // +0x3b
+    VectorIF mParticleSelect;                 // +0x3c
+    bool mParticleSelectIndependent;          // +0x50
+};
 inline bool WriteValue32(IStream* s, uint32_t value) { return WriteUint32(s, &value, 1, 0); }
 inline bool Write(IStream* s, uint32_t value) { return WriteValue32(s, value); }
 inline bool Write(IStream* s, int value) { return WriteValue32(s, (uint32_t)value); }
@@ -464,97 +495,6 @@ inline bool WriteFloat32(IStream* s, float value) { return WriteUint32(s, (uint3
 inline bool Write(IStream* s, float value) { return WriteFloat32(s, value); }
 inline bool WriteBool(IStream* s, uint8_t value) { return WriteBool8(s, (const bool*)&value, 1); }
 inline bool Write(IStream* s, bool value) { return WriteBool(s, value ? 1 : 0); }
-string::~string()
-{
-    DeallocateSelf();
-}
-void string::push_back(char c)
-{
-    if (mpEnd + 1 == mpCapacity) {
-        uint32_t nRequired = (uint32_t)(mpEnd - mpBegin) + 1;
-        uint32_t nCapacity = (uint32_t)(mpCapacity - mpBegin) - 1;
-        uint32_t nNewCapacity = (nCapacity > 8) ? nCapacity * 2 : 8;
-        reserve(nRequired < nNewCapacity ? nNewCapacity : nRequired);
-    }
-    *mpEnd = c;
-    mpEnd = mpEnd + 1;
-    *mpEnd = 0;
-}
-PairIF* VectorIF::erase(PairIF* first, PairIF* last)
-{
-    PairIF* pEnd = mpEnd;
-    PairIF* p = first;
-    for (PairIF* q = last; q != pEnd; ++q, ++p)
-        *p = *q;
-    for (PairIF* q = p; q < mpEnd; ++q) {
-    }
-    mpEnd = mpEnd - (last - first);
-    return first;
-}
-void VectorIF::resize(uint32_t n)
-{
-    if ((uint32_t)(mpEnd - mpBegin) < n) {
-        PairIF value;
-        DoInsertValues(mpEnd, n - (uint32_t)(mpEnd - mpBegin), value);
-    } else {
-        erase(mpBegin + n, mpEnd);
-    }
-}
-PairIF* VectorIF::DoAllocateCopy(uint32_t n, const PairIF* first, const PairIF* last)
-{
-    PairIF* p;
-    if (n == 0)
-        p = 0;
-    else
-        p = (PairIF*)EASTL_Allocate(mAlloc, n * 8, 4, 0);
-    PairIF* result = p;
-    uninitialized_copy(first, last, p, false);
-    return result;
-}
-VectorIF::VectorIF(const VectorIF& x)
-{
-    uint32_t n = (uint32_t)(x.mpEnd - x.mpBegin);
-    PairIF* p;
-    if (n == 0)
-        p = 0;
-    else
-        p = (PairIF*)EASTL_Allocate(mAlloc, n * 8, 4, 0);
-    mpBegin = p;
-    mpEnd = p;
-    mpCapacity = p + n;
-    mpEnd = uninitialized_copy(x.mpBegin, x.mpEnd, mpBegin, false);
-}
-VectorIF& VectorIF::operator=(const VectorIF& x)
-{
-    if (&x != this) {
-        uint32_t n = (uint32_t)(x.mpEnd - x.mpBegin);
-        if ((uint32_t)(mpCapacity - mpBegin) < n) {
-            PairIF* p = DoAllocateCopy(n, x.mpBegin, x.mpEnd);
-            for (PairIF* q = mpBegin; q < mpEnd; ++q) {
-            }
-            if (mpBegin != 0 && ((uint32_t*)mpBegin)[-1] != 0)
-                EASTL_allocator_deallocate(mpBegin);
-            mpBegin = p;
-            mpCapacity = mpBegin + n;
-        } else if ((uint32_t)(mpEnd - mpBegin) < n) {
-            PairIF* pEnd = mpEnd;
-            PairIF* pSrc = x.mpBegin + (mpEnd - mpBegin);
-            PairIF* pSrcEnd = x.mpBegin;
-            PairIF* pDst = mpBegin;
-            for (PairIF* q = pSrcEnd; q != pSrc; ++q, ++pDst)
-                *pDst = *q;
-            uninitialized_copy(pSrc, x.mpEnd, mpEnd, false);
-        } else {
-            PairIF* pDst = mpBegin;
-            for (PairIF* q = x.mpBegin; q != x.mpEnd; ++q, ++pDst)
-                *pDst = *q;
-            for (PairIF* q = pDst; q < mpEnd; ++q) {
-            }
-        }
-        mpEnd = mpBegin + n;
-    }
-    return *this;
-}
 struct CMetaCommandBase {
     char pad[0x0c];
     void OnRegister(void* parser, void* state);   // 0x0083c7f0
@@ -564,6 +504,10 @@ struct CmdStateMeta : CMetaCommandBase {
     void OnRegister(void* parser, void* state);
 };
 // ---- items of slice s005300d0 end
+
+// forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
+IStream* ReadString(IStream* stream, string* str);   // defined at 0x005302b0, called earlier in the TU
+IStream* WriteString(IStream* stream, string* str);   // defined at 0x005305c0, called earlier in the TU
 
 // @ 0x0052ea60
 inline cSPSkinPaintDistributeDescription::cSPSkinPaintDistributeDescription()
@@ -895,6 +839,75 @@ void DistributeInline_Execute(int param_1, cArguments_s0052_f170* args)
     }
 }
 
+// @ 0x005300d0
+void ReadDistributeDescription(IStream* stream, int version, cSPSkinPaintDistributeDescription_s0053_00d0* d)
+{
+    ReadString(stream, &d->mEffect);
+    ReadInt32(stream, &d->mParticleDescId, 1, 0);
+    ReadInt32(stream, (int32_t*)&d->mSpacing, 1, 0);
+    ReadInt32(stream, (int32_t*)&d->mLimit, 1, 0);
+    ReadInt32(stream, (int32_t*)&d->mRegionFlags, 1, 0);
+    ReadInt32(stream, (int32_t*)&d->mBackCutoff, 1, 0);
+    ReadInt32(stream, (int32_t*)&d->mBellyCutoff, 1, 0);
+    stream->Read(&d->mSpineRange, 8);
+    ReadBool8(stream, &d->mInvertRegions);
+    ReadBool8(stream, &d->mCenterOnly);
+    ReadBool8(stream, &d->mExtraCover);
+    ReadBool8(stream, &d->mNonRandom);
+    if (version < 2) {
+        d->mParticleSelect.erase(d->mParticleSelect.mpBegin, d->mParticleSelect.mpEnd);
+        d->mParticleSelectIndependent = false;
+    } else {
+        int count;
+        ReadInt32(stream, &count, 1, 0);
+        d->mParticleSelect.resize((uint32_t)count);
+        for (int i = 0; i < count; ++i) {
+            PairIF* p = d->mParticleSelect.mpBegin + i;
+            ReadInt32(stream, &p->first, 1, 0);
+            ReadInt32(stream, (int32_t*)&p->second, 1, 0);
+        }
+        ReadBool8(stream, &d->mParticleSelectIndependent);
+    }
+}
+
+// @ 0x005302b0
+IStream* ReadString(IStream* stream, string* str)
+{
+    if (str->mpBegin != str->mpEnd) {
+        str->mpBegin[0] = 0;
+        str->mpEnd = str->mpBegin;
+    }
+    char c;
+    while (stream->Read(&c, 1) == 1 && c != 0)
+        str->push_back(c);
+    return stream;
+}
+
+// @ 0x00530310
+void WriteDistributeDescription(IStream* stream, cSPSkinPaintDistributeDescription_s0053_00d0* d)
+{
+    WriteString(stream, &d->mEffect);
+    Write(stream, d->mParticleDescId);
+    Write(stream, d->mSpacing);
+    Write(stream, d->mLimit);
+    Write(stream, d->mRegionFlags);
+    Write(stream, d->mBackCutoff);
+    Write(stream, d->mBellyCutoff);
+    stream->Write(&d->mSpineRange, 8);
+    Write(stream, d->mInvertRegions);
+    Write(stream, d->mCenterOnly);
+    Write(stream, d->mExtraCover);
+    Write(stream, d->mNonRandom);
+    int32_t count = (int32_t)(d->mParticleSelect.mpEnd - d->mParticleSelect.mpBegin);
+    Write(stream, count);
+    for (int i = 0; i < count; ++i) {
+        PairIF* p = d->mParticleSelect.mpBegin + i;
+        Write(stream, p->first);
+        Write(stream, p->second);
+    }
+    Write(stream, d->mParticleSelectIndependent);
+}
+
 // @ 0x005305c0
 IStream* WriteString(IStream* stream, string* str)
 {
@@ -906,9 +919,48 @@ IStream* WriteString(IStream* stream, string* str)
     return stream;
 }
 
+// @ 0x00530770
+VectorIF::VectorIF(const VectorIF& x)
+{
+    uint32_t n = (uint32_t)(x.mpEnd - x.mpBegin);
+    PairIF* p;
+    if (n == 0)
+        p = 0;
+    else
+        p = (PairIF*)EASTL_Allocate(mAlloc, n * 8, 4, 0);
+    mpBegin = p;
+    mpEnd = p;
+    mpCapacity = p + n;
+    mpEnd = uninitialized_copy(x.mpBegin, x.mpEnd, mpBegin, false);
+}
+
+// @ 0x00530b70
+void VectorIF::resize(uint32_t n)
+{
+    if ((uint32_t)(mpEnd - mpBegin) < n) {
+        PairIF value;
+        DoInsertValues(mpEnd, n - (uint32_t)(mpEnd - mpBegin), value);
+    } else {
+        erase(mpBegin + n, mpEnd);
+    }
+}
+
 // @ 0x00530c40
 void CmdStateMeta::OnRegister(void* parser, void* state)
 {
     mState = state ? (void*)((char*)state - 0x34) : 0;
     CMetaCommandBase::OnRegister(parser, state);
+}
+
+// @ 0x00530c80
+PairIF* VectorIF::erase(PairIF* first, PairIF* last)
+{
+    PairIF* pEnd = mpEnd;
+    PairIF* p = first;
+    for (PairIF* q = last; q != pEnd; ++q, ++p)
+        *p = *q;
+    for (PairIF* q = p; q < mpEnd; ++q) {
+    }
+    mpEnd = mpEnd - (last - first);
+    return first;
 }

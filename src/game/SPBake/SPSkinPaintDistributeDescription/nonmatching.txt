@@ -10,3 +10,9 @@
 0052fb20 124 copy params; complete but byte layout differs; equiv: UNSUPPORTED (ecx fixed; 0/1200 inputs valid, fault(read))
 0052fc10 116 swarm effect ctor; complete but byte layout differs; equiv: FAIL (ecx fixed; 5/5 mismatched)
 0052fd80 33 command dtor; complete but byte layout differs
+005300d0 148 Read description: /Od temp schedule of the eight ReadInt32 calls differs
+005302b0 82 ReadString: helper frame (orig 0x14 vs 0x4) and loop shape differ
+00530310 221 Write description: /Od write-helper temp schedule differs
+00530770 127 vector copy ctor: EH frame + uninitialized_copy shape (mine 146 vs orig 241)
+00530b70 70 vector resize: DoInsertValues reserved frame differs
+00530c80 127 vector erase: missing eastl::copy three tag locals

@@ -1,13 +1,13 @@
-005300d0 cSPSkinPaintDistributeDescription Read  # called by ?ReadDistributeDescriptionCommand (0052e9d0); reads mEffect then fields
-005302b0 eastl::basic_string<char,eastl::allocator> ReadString  # reads bytes until NUL into *str (PDB: basic_string push_back callee)
-00530310 cSPSkinPaintDistributeDescription Write  # called by ?WriteDistributeDescriptionCommand (0052ec20)
+005300d0 ?ReadDistributeDescription@@YAXPAUIStream@@HPAUcSPSkinPaintDistributeDescription_s0053_00d0@@@Z  # ReadDistributeDescription migrated from s005300d0 (verbatim, slice spelling)
+005302b0 ?ReadString@@YAPAUIStream@@PAU1@PAUstring@@@Z  # ReadString migrated from s005300d0 (verbatim, slice spelling)
+00530310 ?WriteDistributeDescription@@YAXPAUIStream@@PAUcSPSkinPaintDistributeDescription_s0053_00d0@@@Z  # WriteDistributeDescription migrated from s005300d0 (verbatim, slice spelling)
 005305c0 ?WriteString@@YAPAUIStream@@PAU1@PAUstring@@@Z  # WriteString migrated from s005300d0 (verbatim, slice spelling)
 00530670 eastl::basic_string<char,eastl::allocator>::~basic_string  # PDB name
 005306c0 eastl::basic_string<char,eastl::allocator>::push_back  # PDB name
-00530770 eastl::vector<eastl::pair<int,float>,eastl::sp_vector_allocator>::vector  # copy ctor; alloc at +0xc
+00530770 ??0VectorIF@@QAE@ABU0@@Z  # VectorIF::VectorIF migrated from s005300d0 (verbatim, slice spelling)
 00530870 ?4VectorIF  # three-branch assign
-00530b70 eastl::vector<eastl::pair<int,float>,eastl::sp_vector_allocator>::resize  # calls 00530db0 / erase
+00530b70 ?resize@VectorIF@@QAEXI@Z  # VectorIF::resize migrated from s005300d0 (verbatim, slice spelling)
 00530c00 EA::ArgScript::cCommandStateT<...,EA::ArgScript::cBlockCommandBase>::OnRegister  # mState(+0x30)=state-0xc, base OnRegister 0x83c780
 00530c40 ?OnRegister@CmdStateMeta@@QAEXPAX0@Z  # CmdStateMeta::OnRegister migrated from s005300d0 (verbatim, slice spelling)
-00530c80 eastl::vector<eastl::pair<int,float>,eastl::sp_vector_allocator>::erase  # PDB name
+00530c80 ?erase@VectorIF@@QAEPAUPairIF@@PAU2@0@Z  # VectorIF::erase migrated from s005300d0 (verbatim, slice spelling)
 00530d20 eastl::vector<eastl::pair<int,float>,eastl::sp_vector_allocator>::allocate+uninitialized_copy  # called by operator= (00530870)
