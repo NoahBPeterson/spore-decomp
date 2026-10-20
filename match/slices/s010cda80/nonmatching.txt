@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+010cdac0  57  hkBvTreeStreamAgent::updateShapeCollectionFilter: cl packs the 5-dword argument block at esp+0..0x10 and orders the stores differently from the original's esp+4..0x14; behavior identical; difftest WEAK (147 valid, 100% cov)
+010cdc20  108 hkAlgorithm::quickSortRecursive<uint, less>: original uses an aligned frame (push ebp/and esp,-16) and re-reads the pivot element per comparison; cl 14.0 emits a frameless loop with a hoisted load; behavior identical; difftest PASS (310 valid, 100% cov)

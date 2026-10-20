@@ -1,0 +1,9 @@
+# va  name  # evidence
+# Havok hkBvTreeStreamAgent (VC .NET 2003 /vc71); names taken from the retail string
+# literals in calcStatistics and the agent1n-machine callees.
+010cda80  hkBvTreeStreamAgent::invalidateTim  # forwards to hkAgent1nMachine_InvalidateTim (0x1103850) with this+0x30
+010cdaa0  hkBvTreeStreamAgent::warpTime  # forwards to hkAgent1nMachine_WarpTime (0x1103930) with this+0x30
+010cdac0  hkBvTreeStreamAgent::updateShapeCollectionFilter  # builds a 5-dword block, calls 0x1104740
+010cdc20  hkAlgorithm::quickSortRecursive<unsigned int, hkAlgorithm::less<unsigned int> >  # self-recursive at 0x10cdc20
+010cdca0  hkBvTreeStreamAgent::scalarDeletingDtor  # stores vtable 0x13ef534, hkMemory dealloc(ret 0xc)
+010cdcd0  hkBvTreeStreamAgent::calcStatistics  # "BvTreeAgt3"/"SectorPtrs" literals; calls 0x10fce10

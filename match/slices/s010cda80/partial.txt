@@ -1,0 +1,2 @@
+# va  reason
+010cdcd0  hkBvTreeStreamAgent::calcStatistics: cannot be made equivalent -- difftest UNSUPPORTED (0/400 inputs valid; discards fault(read)=234, budget=154, fake-arity=10).  Also not byte-exact: the original masks the sector cap with `and eax,0x3fffffff` before `shl eax,2`, which cl 14.0 elides once the preceding signed guard proves the sign bit clear; the remaining delta is collector/this register-role swapping (51 diff bytes).
