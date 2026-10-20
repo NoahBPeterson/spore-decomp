@@ -8,6 +8,6 @@
 006863e0 ?Append@WFixed@@QAEPAU1@PB_W@Z  # WFixed::Append migrated from s006860e0 (verbatim, slice spelling)
 00686430 ?Init@VecBuf@@QAEPAHIPAX@Z  # VecBuf::Init migrated from s006860e0 (verbatim, slice spelling)
 00686490 SP::OpenRecordAsStream  # manager->open, hash_map insert, return id
-00686520 DecodeRecord  # record decode: read header then RSA/SHA1 verify
-006866f0 ReadPropRecords  # Editor::cPropertyList record reader
-00686d90 OpenPackageRecord # opens the package record, builds its path, hands the DatabasePackedFile to ReadPropRecords
+00686520 ?DecodeRecord@@YAEPAXIIE@Z  # DecodeRecord migrated from s006860e0 (verbatim, slice spelling)
+006866f0 ?RecStream@@YAPAXPAX@Z  # RecStream migrated from s006860e0 (verbatim, slice spelling)
+00686d90 ?OpenPackageRecord@@YA_NPBUResKey@@PAXPAPAUDPFile@@H_N@Z  # OpenPackageRecord migrated from s006860e0 (verbatim, slice spelling)

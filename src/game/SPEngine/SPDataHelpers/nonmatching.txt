@@ -1,5 +1,10 @@
 # va  diff-bytes  reason
 00686380 59 complete: hash_map<unsigned,pair<Record*,int>>::operator[]; local layout/scheduling differs; equiv: FAIL (5/5 valid inputs mismatched; our fake-arity: no call site before callee)
 00686490  112  complete: SP::OpenRecordAsStream; global/vtable call shapes differ
-006866f0  1363  complete: load property-list record + Blessed/BlessID check; layout/EH-state/branch order differ, call and vtable-slot sequence identical
+00686520 346 complete: record header read + RSA/SHA1 verify; stack-slot permutation, EH handler address and register schedule differ; flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: WEAK]
+006866f0 3 complete: load property-list record + Blessed/BlessID check; layout/EH-state/branch order differ, call and vtable-slot sequence identical
+00686d90 411 complete: package-record open + path build + ReadPropRecords; size 580 vs 692 (tail-duplicated cleanup, smart-pointer slot/state order, edi/ebp allocation differ), call and vtable-slot sequence identical [equiv: UNSUPPORTED fake-arity]
+006870a0 345 vector<Elem28>::DoInsertValues complete; spill-via-push of position and tail-duplicated epilogues differ, extra 4-byte frame slot [equiv: WEAK 15% coverage, no mismatch]
+006872f0  487  complete: directory scan (DirectoryIterator::Read + deque walk) and DatabasePackedFile dispatch; inlined WideFixedBuf/deque EH frame and vtable-call scheduling differ (/O2 /MD /Gy /EHsc /TP /GS-) [equiv: UNSUPPORTED 0/400 valid, original reaches import FindFirstFileW via DirectoryIterator::Read]
 006875b0  52   complete: iterate package array + RegisterPackages; loop/flag switch scheduling differs
+00687610  493  complete: register packages, then Preload.package + ResourceMan database directory; sp_vector/EH frame and manager vtable-call scheduling differ (/O2 /MD /Gy /EHsc /TP /GS-) [equiv: UNSUPPORTED 0/400 valid, original touches filesystem/globals and faults]

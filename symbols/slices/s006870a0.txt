@@ -1,4 +1,4 @@
-006870a0 Vec28::ResizeLoop  # 0x28-stride element vector grow/insert loop; helpers 0x685a60/0x685b40/0x685bc0/0x685c40
+006870a0 ?ResizeLoop@Vec28@@QAEXPAUElem28@@IABU2@@Z  # Vec28::ResizeLoop migrated from s006870a0 (verbatim, slice spelling)
 006872f0 anonymous_namespace::RegisterPackages  # scan/register package archives; wildcard L"*.package"
 00687590 _Thunk_687590  # Thunk_687590 migrated from s006870a0 (verbatim, slice spelling)
 006875b0 IteratePackages  # loop over global array 0x15fea00 (count 0x152b348), register populated entries
