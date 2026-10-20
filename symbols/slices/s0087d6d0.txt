@@ -8,7 +8,7 @@
 0087de40 EA::Locale::SplitFieldInto  # extracts Nth '^' field and appends it
 0087deb0 EA::Locale::FormatGroupedNumber  # digit grouping with locale separator
 0087e060 EA::Locale::AppendLocaleView  # Appends a {begin,end} wide range
-0087e080 ?Assign@LocBuf@@QAEPAU1@PB_W@Z  # LocFmt::Assign migrated from s0087d6d0 (verbatim, slice spelling)
-0087e0d0 EA::Locale::LocaleFormatter::Assign  # copy two fixed wide buffers
+0087e080 ?Assign@LocBuf@@QAEPAU1@PB_W@Z  # LocBuf::Assign migrated from s0087d6d0 (verbatim, slice spelling)
+0087e0d0 ?Assign@LocFmt@@QAEPAU1@PBU1@@Z  # LocFmt::Assign migrated from s0087d6d0 (verbatim, slice spelling)
 0087e130 ?Locale_FindByLcid@@YA_NPBULocInfo@@PAULocBuf@@@Z  # Locale_FindByLcid migrated from s0087d6d0 (verbatim, slice spelling)
 0087e230 ?Locale_FindLower@@YAIPB_WPA_WH@Z  # Locale_FindLower migrated from s0087d6d0 (verbatim, slice spelling)

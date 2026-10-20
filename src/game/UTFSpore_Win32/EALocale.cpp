@@ -109,6 +109,12 @@ public:
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 int FUN_0087d5d0(wchar_t* dst, int n, const wchar_t* src, const wchar_t* srcEnd);  // 0x0087d5d0 (stays in the slice: not this object's)
 
+// renamed CRT-clash stub used by function 0087e130 (rewrite.py drops the slice's extern "C" on re-apply)
+extern "C" __declspec(dllimport) int __cdecl iswctype_s0087_d6d0(wchar_t, unsigned);
+
+// renamed CRT-clash stub used by function 0087f700 (rewrite.py drops the slice's extern "C" on re-apply)
+extern "C" int __cdecl iswctype_s0087_f370(int, int);
+
 // ---- items of slice s0087d6d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" __declspec(dllimport) long     __cdecl wcstol(const wchar_t*, wchar_t**, int);
 extern "C" __declspec(dllimport) int      __cdecl tolower(int);
@@ -117,7 +123,6 @@ extern const wchar_t* g_localeCht[];    // 0x01548ec8
 extern const wchar_t* g_localeAus[];    // 0x01548f28
 extern wchar_t*       g_grpSepBegin;    // 0x016507b0
 extern "C" __declspec(dllimport) wchar_t* __cdecl wcschr_s0087_d6d0(const wchar_t*, wchar_t);
-extern "C" __declspec(dllimport) int      __cdecl iswctype_s0087_d6d0(wchar_t, unsigned);
 int __cdecl LocFieldToken(int idx, const wchar_t* src, wchar_t* dst, int cap, wchar_t sep);
 void __cdecl LocFree(void* p);                                    // 0x00f47380
 void* __cdecl LocNew(unsigned size, const char* name, int flags, int align,
@@ -158,21 +163,6 @@ struct LocField {
     wchar_t* begin;               // 0x44
     wchar_t* end;                 // 0x48
 };
-LocBuf* LocBuf::Assign(const wchar_t* s)
-{
-    wchar_t* p = mpBegin;
-    if (p != s) {
-        if (p != mpEnd) {
-            *p = 0;
-            mpEnd = mpBegin;
-        }
-        const wchar_t* e = s;
-        while (*e) ++e;
-        int n = (int)(e - s);
-        AppendElement(s, s + n);
-    }
-    return this;
-}
 struct LocFmt : FixedBuf<16> {
     FixedBuf<512> mSecond;   // +0x34
     LocFmt* Assign(const LocFmt* src);
@@ -243,7 +233,6 @@ extern wchar_t*   g_lb_016510b8;
 extern wchar_t*   g_le_016510bc;
 extern const wchar_t* g_short_01548fb8[];
 extern void e_wfbappend(void* self, const wchar_t* b, const wchar_t* e); // 0x42f9d0
-extern "C" int   __cdecl iswctype_s0087_f370(int, int);
 template<int N>
 struct Loc {
     wchar_t* f00;
@@ -257,6 +246,8 @@ struct Loc {
     void append(const wchar_t* b, const wchar_t* e);          // 0x42f9d0
     void Assign(const wchar_t** key);                         // 0x87e0d0
     void FUN_0087fab0(int c);                                 // 0x87fab0
+
+    void* FUN_0087f550(const Loc* src);                       // 0x87f550 (defined out of line below, for the @ marker)
 
     void Release() {
         int d = (int)((char*)f08 - (char*)f00);
@@ -272,21 +263,22 @@ struct Loc {
         f08 = p + n;
         *p = 0;
     }
-
-    // @ 0x0087f550
-    void* FUN_0087f550(const Loc* src) {
-        if (this != src) {
-            if (f00 != f04) {
-                *f00 = 0;
-                f04 = f00;
-            }
-            append(src->f00, src->f04);
-        }
-        return this;
-    }
 };
 template struct Loc<16>;
 template struct Loc<512>;
+
+// @ 0x0087f550
+template<int N>
+void* Loc<N>::FUN_0087f550(const Loc* src) {
+    if (this != src) {
+        if (f00 != f04) {
+            *f00 = 0;
+            f04 = f00;
+        }
+        append(src->f00, src->f04);
+    }
+    return this;
+}
 struct Loc16Ex {
     Loc<16> s;              // +0
     int f34, f38, f3c, f40, f44, f48;
@@ -542,6 +534,23 @@ const wchar_t* Locale_FindByShortName(const wchar_t** table, const LocView* name
 }
 
 // @ 0x0087e080
+LocBuf* LocBuf::Assign(const wchar_t* s)
+{
+    wchar_t* p = mpBegin;
+    if (p != s) {
+        if (p != mpEnd) {
+            *p = 0;
+            mpEnd = mpBegin;
+        }
+        const wchar_t* e = s;
+        while (*e) ++e;
+        int n = (int)(e - s);
+        AppendElement(s, s + n);
+    }
+    return this;
+}
+
+// @ 0x0087e0d0
 LocFmt* LocFmt::Assign(const LocFmt* src)
 {
     mpInline   = mBuf;
@@ -601,13 +610,18 @@ uint32_t Locale_FindLower(const wchar_t* name, wchar_t* out, int cap)
                 return LocFieldToken(1, *pp, out, cap, L'^');
 
             wchar_t taiwan[8];
-            taiwan[0] = (wchar_t)(0x59d3 ^ 0x59a7);
-            taiwan[1] = (wchar_t)(0x59c6 ^ 0x59a7);
-            taiwan[2] = (wchar_t)(0x59ce ^ 0x59a7);
-            taiwan[3] = (wchar_t)(0x59d0 ^ 0x59a7);
-            taiwan[4] = (wchar_t)(0x59c6 ^ 0x59a7);
-            taiwan[5] = (wchar_t)(0x59c9 ^ 0x59a7);
+            taiwan[0] = (wchar_t)0x59d3;
+            taiwan[1] = (wchar_t)0x59c6;
+            taiwan[2] = (wchar_t)0x59ce;
+            taiwan[3] = (wchar_t)0x59d0;
+            taiwan[4] = (wchar_t)0x59c6;
+            taiwan[5] = (wchar_t)0x59c9;
             taiwan[6] = 0;
+            wchar_t* pt = taiwan;
+            do {
+                *pt ^= (wchar_t)0x59a7;
+                ++pt;
+            } while (*pt);
 
             const wchar_t* e = b;
             while (*e) ++e;

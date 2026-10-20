@@ -5,5 +5,6 @@
 ../src/game/UTFSpore_Win32/EALocale.cpp  ?Assign@LocBuf@@QAEPAU1@PB_W@Z  0087e080  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EALocale.cpp  ?FUN_0087e8f0@@YIXPAULangPrefixObj@@@Z  0087e8f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EALocale.cpp  ?FUN_0087f350@@YAPAXPAU?$LocT@$0BA@@@PAPA_W@Z  0087f350  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EALocale.cpp  ?FUN_0087f550@?$Loc@$0BA@@@QAEPAXPBU1@@Z  0087f550  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EALocale.cpp  ?Clear@LocaleTree@@QAEXPAURbtNode@@@Z  0087fe10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EALocale.cpp  ?FUN_00881ea0@@YAXNHHH@Z  00881ea0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
