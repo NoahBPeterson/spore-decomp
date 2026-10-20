@@ -1,0 +1,3 @@
+00fbc290 1053 diff; complete; difftest FAIL (5/24 valid, coverage 98.9% 278/281 insns) — only difference is sign of zero (out[1]/out[2] 0.0 vs -0.0, 0 ulp apart); whole lighting pipeline byte-identical in shape; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00fbc770 1087 diff; complete; difftest FAIL (5/5 valid, coverage 88.6% 226/255 insns) — mLightColor[0] group values differ though positional HSLToRGB argument code is byte-identical (register/x87-stack ordering plateau); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00fbcc20 300 diff; complete; difftest WEAK (146 valid, 16.7% coverage 20/120 insns) — ctor-dependent (reads this+0x348), only 20 instructions reached with harness inputs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,5 @@
+00fbc130 ?UpdateFromDefinition@cTerrainStateMgr@@QAEXPAUcPropertyList@@@Z  # SP::cTerrainStateMgr::UpdateFromDefinition, texture-key / property reads
+00fbc290 ?ComputeLightColors@cTerrainStateMgr@@QAEXPAM_N@Z  # SP::cTerrainStateMgr::ComputeLightColors (ret 8), blend + HSL mix
+00fbc770 ?UpdateLightColors@cTerrainStateMgr@@QAEXM_N@Z  # SP::cTerrainStateMgr::UpdateLightColors (ret 8), blend + HSL mix, writes mLightColor/mLightScale
+00fbcc20 ?SetTemperature@cTerrainStateMgr@@QAEXM@Z  # SP::cTerrainStateMgr::SetTemperature, planet-type transition + effect
+00fbcd80 ?DestroySubObjects@cTerrainStateMgr@@QAEXXZ  # SP::cTerrainStateMgr::DestroySubObjects

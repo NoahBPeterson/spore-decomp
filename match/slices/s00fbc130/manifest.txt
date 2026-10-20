@@ -1,0 +1,2 @@
+slices/s00fbc130/s00fbc130.cpp  ?UpdateFromDefinition@cTerrainStateMgr@@QAEXPAUcPropertyList@@@Z  00fbc130  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fbc130/s00fbc130.cpp  ?DestroySubObjects@cTerrainStateMgr@@QAEXXZ  00fbcd80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
