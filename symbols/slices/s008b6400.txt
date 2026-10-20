@@ -1,0 +1,20 @@
+008b6400 ?IsPFR@@YAHPAUInputStream@@@Z  # PFR sniffer: header 'PFR'
+008b6460 ?IsOTF@@YAHPAUInputStream@@@Z  # OpenType/CFF sniffer: sfnt version or 'OTTO' + DSIG/CFF table
+008b6570 ?IsTT@@YAHPAUInputStream@@@Z  # TrueType sniffer: sfnt version/'OTTO' + acol/cols/TDBE/colb, else ttcf/true
+008b6710 ?IsT1@@YAHPAUInputStream@@@Z  # Type 1 sniffer: '%!' within the first 13 bytes
+008b6780 ?IsCFF@@YAHPAUInputStream@@@Z  # bare CFF sniffer (header byte 0 == 1)
+008b6800 ?ff_FontTypeFromStream@@YAHPAUInputStream@@@Z  # sniffer dispatcher: 7/2/3/0x16/1/-1
+008b6870 _FF_FontTypeFromStream  # setjmp wrapper around ff_FontTypeFromStream (out param)
+008b68c0 GetGlyphYMax  # max int16 in the point array at +0x48 (count at +0x38); object in eax
+008b68f0 GetGlyphYMin  # min int16 in the point array at +0x48 (count at +0x38); object in eax
+008b6920 _FlipContourDirection  # reverse each contour's point run (x/y/flags)
+008b6a20 ?ATOI@@YAFPBE@Z  # parse a signed decimal from a byte stream (leading junk skipped)
+008b6a70 ATOFixed  # parse fixed-point with optional .frac/Eexp; string in eax, exponent on stack
+008b6b50 _backwardsATOI  # parse the decimal ending at p[0]
+008b6bb0 DecryptData  # Type 1 eexec decryption (hex or binary); string in esi, length on stack
+008b6e90 _tsi_T1Find  # substring search in the T1 blob byte range
+008b6f00 TransformData  # locate "ntfile eexec" and optionally eexec-decrypt in place
+008b6f90 _tsi_PSNameToAppleCode  # Adobe standard-encoding name -> (code0, code2, code4, index)
+008b7030 _PSNameToCodeFromEncodingVector  # walk an encoding vector's "dup N /name" pairs for a name
+008b7130 GetNthNameFromEncodingVector  # return the N-th "dup N /name" name in the encoding vector
+008b71a0 _tsi_T1GetGlyphIndexFromAdobeCode  # index of an Adobe code in the glyph code array

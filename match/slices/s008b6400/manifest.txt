@@ -1,0 +1,4 @@
+# source  symbol  original VA  [cl flags override]
+slices/s008b6400/s008b6400.cpp  ?IsCFF@@YAHPAUInputStream@@@Z  008b6780  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s008b6400/s008b6400.cpp  ?ATOI@@YAFPBE@Z  008b6a20  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s008b6400/s008b6400.cpp  _backwardsATOI  008b6b50  /O2 /MD /Gy /EHsc /TP /GS-
