@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+009c56c0  1469  creature_instance_data default constructor: reproduced the two in-place sub-object constructions (+0x2f8 and +0x17a0), the +0x14 flag and Clear(true), but not the ~250 individual member stores (the embedded gait-record block alone is ~450 zero-byte stores), so the body is incomplete
