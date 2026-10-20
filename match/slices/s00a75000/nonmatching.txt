@@ -1,0 +1,16 @@
+# Slice s00a75000 (EA::Swarm::cMapInfo) — complete but not byte-exact.
+# Format: <va> <diff> <reason>
+00a75020  241  MapToCell: codegen differs. Original uses the inlined floorf idiom (cvtss2si + ucomiss + cmovb) and spills u/v to the stack; ours uses cvttss2si + comiss/jbe/dec and produces a 160-byte body vs 241. Semantically correct. [equiv PASS 389 valid, 100% cov]
+00a75120   29  Normalize: instruction set identical, scheduling/register order differs (mpPixels40 += m4c placed earlier than the original's post-subss add). [equiv WEAK 352 valid, 20% cov]
+00a753b0    3  cMapInfo_SortRect2: only branch-opcode polarity (jae/jb vs ja/jbe) after comiss; arg load order matches. [equiv FAIL 2/400 (memory-pool artifact)]
+00a75410   10  cMapInfo_SortRect3: branch-opcode polarity on the selection chain. [equiv FAIL 1/400 (memory-pool artifact)]
+00a75480    8  cMapInfo_SortRect3R: branch-opcode polarity + arg load order. [equiv FAIL 3/400 (memory-pool artifact)]
+00a754f0   38  UnpackColor: original converts int->float via x87 (fild/fstp) from per-channel int temps; ours uses cvtsi2ss from the masked uint32. [equiv PASS 320 valid, 96.7% cov]
+00a75560  318  ClassifyOrientation: incomplete reconstruction (94 bytes vs 318); the original is a large multi-branch classifier. [equiv FAIL 5/5 (eax)]
+00a75750  104  GetBounds-style writer: builds a 6-float stack temp then copies to out; original's store scheduling (0xc,0x10,0,0x14,4,8) differs from ours. [equiv FAIL 5/5 (xmm1 untouched by original)]
+00a757c0   55  Contains: compare/reload scheduling and operand order differ (original keeps x in xmm0 and reuses it). [equiv PASS 400 valid, 100% cov]
+00a75810  115  InitA: reconstruction incomplete (142 bytes vs 152); field/arg ordering not yet exact. [equiv UNSUPPORTED 0/400 (fake-arity)]
+00a758b0  130  InitB: reconstruction incomplete (89 bytes vs 170). [equiv UNSUPPORTED 0/400 (fake-arity)]
+00a75960  168  SampleBilinear: reconstruction incomplete; original is a full bilinear texel fetch with x87 final blend. [equiv FAIL 5/79 (st0)]
+00a75a30  709  SampleBicubic: stub (returns zeros); original is a full 4x4 bicubic sampler. [equiv FAIL 5/5 (memory pool)]
+00a75d00  115  NormalizeVec: instruction set identical but the 0x1c frame vs 0x18 shifts every stack offset; register allocation differs. [equiv UNSUPPORTED 0/400 (fault(write))]

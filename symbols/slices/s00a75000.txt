@@ -1,0 +1,47 @@
+# Slice s00a75000 — EA::Swarm::cMapInfo (MapInfo component), retail vftable 0x014575d4
+# class string "Swarm/MapInfo"; related strings: Swarm/MapDescription, Swarm/MaterialParams,
+# Swarm/MaterialDescription.  Not present in the PDB, so names are string-derived.
+# All functions are members of EA::Swarm::cMapInfo unless marked __cdecl free helpers.
+00a75000  ?cMapInfo_One@Swarm@EA@@YGMPAX@Z                       float __stdcall cMapInfo_One(void*)                 [MATCH]
+00a75020  ?MapToCell@cMapInfo@Swarm@EA@@QAEXMMPAH0PAM1@Z          void MapToCell(float,float,int*,int*,float*,float*) [nonmatching]
+00a75120  ?Normalize@cMapInfo@Swarm@EA@@QAEXXZ                    void Normalize()                                    [nonmatching]
+00a751a0  ?NormalizeNoWrap@cMapInfo@Swarm@EA@@QAEXXZ              void NormalizeNoWrap()                              [MATCH]
+00a75200  ?NormalizeFloor@cMapInfo@Swarm@EA@@QAEXXZ               void NormalizeFloor()                               [MATCH]
+00a75270  ?NormalizeRound@cMapInfo@Swarm@EA@@QAEXXZ               void NormalizeRound()                               [MATCH]
+00a752d0  ?SetColor@cMapInfo@Swarm@EA@@QAEXHPBUVec4@23@@Z         void SetColor(int, const Vec4*)                     [MATCH]
+00a75340  ?SetPoint@cMapInfo@Swarm@EA@@QAEXHII@Z                   void SetPoint(int, uint32_t, uint32_t)              [MATCH]
+00a75390  ?cMapInfo_ResetGrid@Swarm@EA@@YAXPAXPAI@Z               void __cdecl cMapInfo_ResetGrid(void*, uint32_t*)   [MATCH]
+00a753b0  ?cMapInfo_SortRect2@Swarm@EA@@YAXPAMPBM1@Z              void __cdecl SortRect2(float*,const float*,const float*) [nonmatching]
+00a75410  ?cMapInfo_SortRect3@Swarm@EA@@YAXPAMPBM1@Z              void __cdecl SortRect3(float*,const float*,const float*) [nonmatching]
+00a75480  ?cMapInfo_SortRect3R@Swarm@EA@@YAXPAMPBM1@Z             void __cdecl SortRect3R(float*,const float*,const float*) [nonmatching]
+00a754f0  ?UnpackColor@cMapInfo@Swarm@EA@@QAEXPAMHI@Z             void UnpackColor(float*, int, uint32_t)             [nonmatching]
+00a75560  ?ClassifyOrientation@cMapInfo@Swarm@EA@@QAEHPBMPAH@Z    int ClassifyOrientation(const float*, int*)         [nonmatching]
+00a756d0  ?MulScale@cMapInfo@Swarm@EA@@QAEPAMPAM0@Z                float* MulScale(float*, float*)                     [MATCH]
+00a75720  ?Fill@cMapInfo@Swarm@EA@@QAEXPAMI@Z                      void Fill(float*, uint32_t)                         [MATCH]
+00a75750  ?GetBounds@cMapInfo@Swarm@EA@@QAEXPAM@Z                  void GetBounds(float*)                              [nonmatching]
+00a757c0  ?Contains@cMapInfo@Swarm@EA@@QAE_NPBM@Z                  bool Contains(const float*)                         [nonmatching]
+00a75810  ?InitA@cMapInfo@Swarm@EA@@QAEXPBMEPAXHE@Z               void InitA(const float*, uint8_t, void*, int, uint8_t) [nonmatching]
+00a758b0  ?InitB@cMapInfo@Swarm@EA@@QAEXPBMEPAXHEH@Z              void InitB(const float*, uint8_t, void*, int, uint8_t, int) [nonmatching]
+00a75960  ?SampleBilinear@cMapInfo@Swarm@EA@@QAEMPB M@Z            float SampleBilinear(const float*)                  [nonmatching]
+00a75a30  ?SampleBicubic@cMapInfo@Swarm@EA@@QAEXPAMPBM@Z           void SampleBicubic(float*, const float*)            [nonmatching]
+00a75d00  ?NormalizeVec@cMapInfo@Swarm@EA@@QAEXPAMI@Z              void NormalizeVec(float*, uint32_t)                 [nonmatching]
+#
+# Field map (offsets from this):
+#   +0x0c/+0x10/+0x14/+0x18  bounds (minX,minY,maxX,maxY)
+#   +0x1c                    byte, set from arg (wrap flag in InitA)
+#   +0x20 / +0x24            grid cols / rows (counts)
+#   +0x28 / +0x2c            scaleX / scaleY (float), aliased as uint32 by SetPoint
+#   +0x30                    grid-source object (passed as arg1 to the +0x38 vtable slot)
+#   +0x38                    grid-owner object (vtable slot 0x18 = RequestGrid)
+#   +0x3c                    byte wrap flag
+#   +0x40                    pixel data pointer (uint32*)
+#   +0x44                    stride (bytes) / m44
+#   +0x48                    shift / m48
+#   +0x4c                    byte offset added to the pixel pointer in Normalize
+#   +0x50/+0x54/+0x58/+0x5c  Vec4 #1 (SetColor idx 1)
+#   +0x60/+0x64/+0x68/+0x6c  Vec4 #2 (SetColor idx 2)
+#   +0x28/+0x2c, +0x30/+0x34, +0x38/+0x3c  float pairs (SetPoint)
+#
+# Vtable slots used: 0x20 -> float/double scale fn, 0x24 -> Vec3 fn, 0x2c -> vec fetch,
+#                    0x88 -> grid request fn (cMapInfo_ResetGrid).
+# Constants: 0x1485720 = 1.0f, 0x1470f1c = 2.0f, 0x13ec4b8 = 1e-9f, 0x13eecd4 = 1/255.

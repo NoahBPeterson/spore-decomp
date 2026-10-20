@@ -1,0 +1,9 @@
+slices/s00a75000/s00a75000.cpp  ?cMapInfo_One@Swarm@EA@@YGMPAX@Z                     00a75000  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a75000/s00a75000.cpp  ?NormalizeNoWrap@cMapInfo@Swarm@EA@@QAEXXZ              00a751a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a75000/s00a75000.cpp  ?NormalizeFloor@cMapInfo@Swarm@EA@@QAEXXZ               00a75200  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a75000/s00a75000.cpp  ?NormalizeRound@cMapInfo@Swarm@EA@@QAEXXZ               00a75270  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a75000/s00a75000.cpp  ?SetColor@cMapInfo@Swarm@EA@@QAEXHPBUVec4@23@@Z         00a752d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a75000/s00a75000.cpp  ?SetPoint@cMapInfo@Swarm@EA@@QAEXHII@Z                   00a75340  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a75000/s00a75000.cpp  ?cMapInfo_ResetGrid@Swarm@EA@@YAXPAXPAI@Z               00a75390  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a75000/s00a75000.cpp  ?MulScale@cMapInfo@Swarm@EA@@QAEPAMPAM0@Z                00a756d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a75000/s00a75000.cpp  ?Fill@cMapInfo@Swarm@EA@@QAEXPAMI@Z                      00a75720  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
