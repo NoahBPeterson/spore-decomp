@@ -1,0 +1,2 @@
+# source  symbol  original VA  [cl flags override]
+slices/s009559a0/s009559a0.cpp  ?FUN_00956830@Draw2D@UTFWin@EA@@QAEXPBU?$RectT@M@3@PAUIVt4@Text@3@0@Z  00956830  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
