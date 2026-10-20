@@ -1,0 +1,3 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00a8aec0  1250  complete EA::Swarm::Stream_Quad_V4F_N4F_C4B_T2F: quadrant streamer (Acquire/Commit, per sample post-transform + packed colour + 4 quad corners); frame 0xb4 vs 0xf4 (cl reuses the transform-copy and colour temporaries) and regalloc differ; equiv WEAK (344/400 valid, 0 mismatch, 10.1% coverage)
+00a8b420  1186  complete EA::Swarm::Stream_Quad_V4F_N4F_C4B_T4B: same body with an LCG-derived packed texcoord (frame, corner) per quad; frame/regalloc differ; equiv WEAK (330/400 valid, 0 mismatch, 9.7% coverage)
