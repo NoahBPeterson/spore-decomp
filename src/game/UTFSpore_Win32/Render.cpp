@@ -57,18 +57,36 @@ struct IWin {
     virtual void i1d();
     virtual void i1e();
     virtual void vSetFlags(int a, int b);              // vtbl+0x7c (31)
-    virtual void i32(); virtual void i33(); virtual void i34(); virtual void i35();
-    virtual void i36(); virtual void i37(); virtual void i38(); virtual void i39();
-    virtual void i40(); virtual void i41(); virtual void i42(); virtual void i43();
-    virtual void i44(); virtual void i45(); virtual void i46();
+virtual void i32();
+virtual void i33();
+virtual void i34();
+virtual void i35();
+virtual void i36();
+virtual void i37();
+virtual void i38();
+virtual void i39();
+virtual void i40();
+virtual void i41();
+virtual void i42();
+virtual void i43();
+virtual void i44();
+virtual void i45();
+virtual void i46();
     virtual bool vHitLocal(V2 p);                      // vtbl+0xbc (47)
     virtual void i48();
     virtual V2 vToLocal(V2 p);                         // vtbl+0xc4 (49)
     virtual bool vHit(V2 p, V2* out);                  // vtbl+0xc8 (50)
-    virtual void i51(); virtual void i52(); virtual void i53(); virtual void i54();
-    virtual void i55(); virtual void i56(); virtual void i57();
+virtual void i51();
+virtual void i52();
+virtual void i53();
+virtual void i54();
+virtual void i55();
+virtual void i56();
+virtual void i57();
     virtual void vSetOwner(IWin* w);                   // vtbl+0xe8 (58)
-    virtual void i59(); virtual void i60(); virtual void i61();
+virtual void i59();
+virtual void i60();
+virtual void i61();
     virtual bool vAccepts(IWin* w);                    // vtbl+0xf8 (62)
 };
 struct ChunkItem { IRel* obj; u32 b; };
@@ -91,21 +109,38 @@ struct IRenderable {
     virtual void Render(RenderCtx* c);                              // +0xc
 };
 struct IRenderMode {
-    virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3();
+virtual void m0();
+virtual void m1();
+virtual void m2();
+virtual void m3();
     virtual void Begin();                                           // +0x10
     virtual void Render(IRenderable* r, RenderCtx* c);              // +0x14
     virtual void End();                                             // +0x18
     virtual bool vFlag();                                           // +0x1c
 };
 struct IRenderer {
-    virtual void AddRef(); virtual void Release(); virtual void r2();
+virtual void AddRef();
+virtual void Release();
+virtual void r2();
     virtual bool NeedsPrepass();                                    // +0xc
     virtual void* CreateData(IWin* w);                              // +0x10
     virtual void  FreeData(void* d);                                // +0x14
     virtual void  RenderBatch(void* data, RenderCtx* c, Node** begin, int n, int flag);   // +0x18
-    virtual void r7(); virtual void r8(); virtual void r9(); virtual void r10(); virtual void r11();
-    virtual void r12(); virtual void r13(); virtual void r14(); virtual void r15(); virtual void r16();
-    virtual void r17(); virtual void r18(); virtual void r19(); virtual void r20(); virtual void r21();
+virtual void r7();
+virtual void r8();
+virtual void r9();
+virtual void r10();
+virtual void r11();
+virtual void r12();
+virtual void r13();
+virtual void r14();
+virtual void r15();
+virtual void r16();
+virtual void r17();
+virtual void r18();
+virtual void r19();
+virtual void r20();
+virtual void r21();
     virtual void DrawRect(const RectF* dst, const RectF* clip, const RectF* uv);   // +0x58
 };
 struct Base2D {                                                  // size 0x24
