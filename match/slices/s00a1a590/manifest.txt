@@ -1,0 +1,7 @@
+slices/s00a1a590/s00a1a590.cpp  ?IsFlag2@Sound@@QAE_NXZ  00a1ad40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a1a590/s00a1a590.cpp  ?PausedIgnoring@Sound@@QAE_NI@Z  00a1ae00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a1a590/s00a1a590.cpp  ?IsFlag80@Sound@@QAE_NXZ  00a1ae20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a1a590/s00a1a590.cpp  ?GetDoubleC8@Sound@@QAENXZ  00a1ae40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a1a590/s00a1a590.cpp  ?Bit3@Sound@@QAEEXZ  00a1af50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a1a590/s00a1a590.cpp  ?ShouldPauseForLowGain@Sound@@QAE_NM@Z  00a1af80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a1a590/s00a1a590.cpp  ?Contains@SoundGraph@@QAE_NPAX@Z  00a1b440  /O2 /MD /Gy /TP /arch:SSE /fp:fast
