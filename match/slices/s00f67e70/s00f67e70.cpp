@@ -1,5 +1,5 @@
 // Slice s00f67e70 -- SPTerrain/SPTerrainEditor.obj  (terrain-editor render helpers + TessellateBrush)
-// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+// Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 
 typedef unsigned char  u8;
 typedef unsigned short u16;
@@ -7,7 +7,6 @@ typedef unsigned int   u32;
 
 struct Vec3 { float x, y, z; Vec3() {} Vec3(float a, float b, float c) : x(a), y(b), z(c) {} };
 struct V4 { float x, y, z, w; V4(float a, float b, float c, float d) : x(a), y(b), z(c), w(d) {} };
-struct RectF { float l, t, r, b; };
 
 namespace SP {
 
@@ -17,7 +16,7 @@ struct cViewer {
     bool     Init(bool flag);                                 // 0x007c4dd0
     void     SetA(float v);                                   // 0x007c4ba0
     void     SetB(float v);                                   // 0x007c4bc0
-    void     Viewport(int x, int y, int w, int h);            // 0x007c5310
+    void     ViewportRectArgs(int x, int y, int w, int h);    // 0x007c5310
     void     SetC(float a, float b);                          // 0x007c4b00
     void     SetRasterDirect(void* r);                        // 0x007c3cb0
     void     Clear(u32 flags);                                // 0x007c3cc0
@@ -79,18 +78,34 @@ struct Binding {
 
 // ---- terrain brush face ---------------------------------------------------------------------
 struct FaceVertex { float f0, y, z, f0c, f10, f14, f18; };   // 0x1c
+struct FaceOrIdx { int count; int* data; };                  // the original keeps a raw union here
 struct Face { int count; FaceVertex v[16]; };                // 0x1c4
 struct FaceVec { Face* mpBegin; Face* mpEnd; };
 
 // ---- externs --------------------------------------------------------------------------------
 extern "C" void* __cdecl memset(void* dst, int val, unsigned int n);        // 0x011e073e
+extern "C" void* __cdecl memcpy(void* dst, const void* src, unsigned int n);
 extern "C" void  __cdecl VecInsert(void* self, const void* data, int n);    // 0x011e0744
 void* __cdecl EAAllocate(u32 size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
 void __cdecl FUN_00777ae0(int slot, const void* data, int zero);            // 0x00777ae0
 int  __stdcall FUN_00f67770(u32 a, int* b);                                 // 0x00f67770
+char __stdcall FUN_00f6779a(int zone, float* out);                         // 0x00f6779a
+inline int zip(u32 zone)
+{
+    float f[8];
+    FUN_00f6779a((int)zone, f);
+    f[7] = 0.0f;
+    return *(int*)&f[0];
+}
 
 extern const float C_13f9428;   // 0x013f9428
-extern const float C_13f6d90;   // 0x013f6d90
+extern const float C_13f6d90;   // 0x013f6d90   (= 100000.0f)
+extern const float C_1473c70;   // 0x01473c70   (= 10.0f)
+extern const float C_1485720;   // 0x01485720   (= 1.0f)
+extern const float C_13eb1bc;   // 0x013eb1bc   (= -1.0f)
+extern const float C_148f6cc;   // 0x0148f6cc   (= 0.001953125f)
+extern const float C_1470f1c;   // 0x01470f1c   (= 2.0f)
+extern const float C_1471064;   // 0x01471064   (= 0.5f)
 extern const u8    T_148f608[]; // 0x0148f608 texture-axis table
 extern void*       g_gate;      // 0x015b0e48 self-referencing sentinel
 
@@ -107,7 +122,7 @@ struct cTerrainEditor {
     RasterDesc mRasterDesc[6]; // +0x38: six 8-byte raster descriptors
     u32        mHandle68;      // +0x68
     char       pad6c[0x80 - 0x6c];
-    RectF      mDirty[6];      // +0x80
+    float      mDirty[24];     // +0x80
     char       padE0[0x164 - 0xe0];
     float      mF164;          // +0x164
     char       pad168[0x1d0 - 0x168];
@@ -135,24 +150,24 @@ void cTerrainEditor::Init()
         return;
 
     cViewer* v = (cViewer*)EAAllocate(0x174, "Terrain/TerrainEditor/cViewer", 0, 0, 0, 0);
-    mViewer = v ? v->FUN_007c3f70() : 0;
+    mViewer = (v != 0) ? v->FUN_007c3f70() : 0;
     mViewer->Init(true);
     Raster* r = mRaster0;
     mViewer->SetA(C_13f9428);
     mViewer->SetB(C_13f6d90);
-    mViewer->Viewport(0, 0, r->width, r->height);
+    mViewer->ViewportRectArgs(0, 0, r->width, r->height);
     mViewer->SetC(0.5f, 0.5f);
     mViewer->SetRasterDirect(r);
     mViewer->Clear(0);
     Refresh();
 
-    float* d = (float*)mDirty;
-    d[0] = 0.0f;  d[1] = 0.0f;  d[2] = 0.0f;  d[3] = 0.0f;
-    d[4] = 0.0f;  d[5] = 0.0f;  d[6] = 0.0f;  d[7] = 0.0f;
-    d[8] = 0.0f;  d[9] = 0.0f;  d[10] = 0.0f; d[11] = 0.0f;
-    d[12] = 0.0f; d[13] = 0.0f; d[14] = 0.0f; d[15] = 0.0f;
-    d[16] = 0.0f; d[17] = 0.0f; d[18] = 0.0f; d[19] = 0.0f;
-    d[20] = 0.0f; d[21] = 0.0f; d[22] = 0.0f; d[23] = 0.0f;
+    const float zero = 0.0f;
+    mDirty[0] = zero;  mDirty[1] = zero;  mDirty[2] = zero;  mDirty[3] = zero;
+    mDirty[4] = zero;  mDirty[5] = zero;  mDirty[6] = zero;  mDirty[7] = zero;
+    mDirty[8] = zero;  mDirty[9] = zero;  mDirty[10] = zero; mDirty[11] = zero;
+    mDirty[12] = zero; mDirty[13] = zero; mDirty[14] = zero; mDirty[15] = zero;
+    mDirty[16] = zero; mDirty[17] = zero; mDirty[18] = zero; mDirty[19] = zero;
+    mDirty[20] = zero; mDirty[21] = zero; mDirty[22] = zero; mDirty[23] = zero;
 }
 
 struct MsgBlk { u32 a; u32 b; u8 c; u8 pad[3]; u32 d[8]; };   // 0x2c
@@ -161,57 +176,65 @@ struct MsgBlk { u32 a; u32 b; u8 c; u8 pad[3]; u32 d[8]; };   // 0x2c
 void cTerrainEditor::Enable(int unused)
 {
     (void)unused;
-    if (g_gate != (void*)&g_gate) {
-        mF164 = 10.0f;
-        void* self = (char*)this + 4;
-        GlobalObj* o = FUN_0067dd50();
-        MsgBlk blk;
-        blk.a = 1;
-        blk.c = 1;
-        blk.b = 0;
-        for (int i = 0; i < 8; ++i)
-            blk.d[i] = 0;
-        o->Send(self, 0, &blk);
-    }
+    if (g_gate == (void*)&g_gate)
+        return;
+    mF164 = C_1473c70;
+    void* self = (char*)this + 4;
+    GlobalObj* o = FUN_0067dd50();
+    MsgBlk blk;
+    blk.a = 1;
+    blk.b = 0;
+    blk.c = 1;
+    for (int i = 0; i < 8; ++i)
+        blk.d[i] = 0;
+    o->Send(self, 0, &blk);
 }
+
+// The original keeps the vertex-count / index-array pair in one stack slot (a union).
+struct FaceOrIdxSentinel { int count; int* beg; };
 
 // @ 0x00f68070
 bool cTerrainEditor::BuildBrush(FaceVec* faces, u32 flipIdx, u32 a3, u32 a4)
 {
-    int desc[4];
-    desc[3] = (int)this;
+    union { int* idx; int count; } nVertexIdx;
+    nVertexIdx.idx = 0;
+    int n0 = 0, n2 = 0, total = 0;
+    int idxData = 0;
+    int* unused26 = 0;
     const int n = (int)(((char*)faces->mpEnd - (char*)faces->mpBegin) / 0x1c4);
-    int vertsA = 0, vertsB = 0;
-    int nA = 0, lastCount = 0, vertsC = 0;
-    desc[0] = 0;
-    desc[1] = 0;
-    desc[2] = 0;
+    int rest[2];
+    rest[0] = 0;
+    rest[1] = 0;
     if (n >= 2) {
         Face* f = faces->mpBegin;
         int iters = ((n - 2) >> 1) + 1;
-        nA = iters * 2;
+        nVertexIdx.count = iters * 2;
         do {
-            desc[1] += f->count;
-            vertsA += f->count * 3 - 6;
-            desc[2] += f[1].count;
-            vertsB += f[1].count * 3 - 6;
+            rest[0] += f->count;
+            n0 += f->count * 3 - 6;
+            rest[1] += f[1].count;
+            n2 += f[1].count * 3 - 6;
             f += 2;
         } while (--iters);
     }
-    if ((u32)nA < (u32)n) {
-        lastCount = faces->mpBegin[nA].count;
-        vertsC = lastCount * 3 - 6;
+    const u32 nVi = (u32)nVertexIdx.count;
+    if (nVi < (u32)n) {
+        idxData = ((FaceOrIdx*)faces->mpBegin)[nVi].count;
+        total = idxData * 3 - 6;
     }
+    n0 += n2;
+    n0 += total;
     void* out = 0;
-    if (!mBatch2->BigAlloc(&out, 0x2c, desc[1] + desc[2] + lastCount, desc, vertsA + vertsB + vertsC, 1))
+    if (!mBatch2->BigAlloc(&out, 0x2c, rest[0] + rest[1] + idxData, (const int*)&nVertexIdx, n0, 1))
         return false;
 
-    const float eps = 0.001953125f;
-    const float two = 2.0f;
-    const float half = 0.5f;
+    const float one = C_1485720;
+    const float eps = C_148f6cc;
+    const float two = C_1470f1c;
+    const float half = C_1471064;
     const u8* te = &T_148f608[(flipIdx >> 1) * 4];
     float arr[3];
-    arr[0] = (flipIdx & 1) ? -1.0f : 1.0f;
+    arr[0] = (flipIdx & 1) ? C_13eb1bc : one;
     arr[2] = arr[0];
     arr[1] = 1.0f;
     float t0 = arr[te[0]];
@@ -231,15 +254,16 @@ bool cTerrainEditor::BuildBrush(FaceVec* faces, u32 flipIdx, u32 a3, u32 a4)
                 FaceVertex* fv = &faces->mpBegin[fi].v[vi];
                 float px = fv->y * eps;
                 float py = 1.0f - fv->z * eps;
-                float one = 1.0f;
                 *(float*)(vo + 0x00) = px;
                 *(float*)(vo + 0x04) = py;
-                *(float*)(vo + 0x08) = one;
-                *(float*)(vo + 0x0c) = one;
+                *(float*)(vo + 0x08) = 1.0f;
+                *(float*)(vo + 0x0c) = 1.0f;
                 arr[0] = *(float*)(vo + 0x00);
                 arr[1] = 1.0f - *(float*)(vo + 0x04);
-                arr[2] = 1.0f;
+                float r1 = arr[te[1]];
+                float r0 = arr[te[0]];
                 *(float*)(vo + 0x24) = fv->f10;
+                float r2 = arr[te[2]];
                 *(float*)(vo + 0x28) = fv->f14;
                 tb[0] = fv->f18;
                 *(float*)(vo + 0x10) = tb[0];
@@ -247,31 +271,32 @@ bool cTerrainEditor::BuildBrush(FaceVec* faces, u32 flipIdx, u32 a3, u32 a4)
                 *(float*)(vo + 0x18) = tb[2];
                 *(float*)(vo + 0x1c) = tb[3];
                 float rgb[3];
-                rgb[0] = ((arr[te[0]] * two - one) * t0) * half + half;
-                rgb[1] = ((arr[te[1]] * two - one) * t1) * half + half;
-                rgb[2] = ((arr[te[2]] * two - one) * t2) * half + half;
+                rgb[0] = ((r0 * two - one) * t0) * half + half;
+                rgb[1] = ((r1 * two - one) * t1) * half + half;
+                rgb[2] = ((r2 * two - one) * t2) * half + half;
                 *(u32*)(vo + 0x20) = ColorRGBToU32(rgb);
                 ++written;
                 vo += 0x2c;
+                arr[2] = 1.0f;
             } while (++vi < faces->mpBegin[fi].count);
         }
     }
 
-    u16* pidx = (u16*)desc[0];
+    u16* pidx = (u16*)idxData;
     u32 cursor = 0;
     u32 base = 0;
     u32 fc = 0;
     for (; fc < (u32)(((char*)faces->mpEnd - (char*)faces->mpBegin) / 0x1c4); ++fc) {
         int k = 0;
-        int n2 = faces->mpBegin[fc].count - 2;
-        if (n2 > 0) {
+        int n3 = faces->mpBegin[fc].count - 2;
+        if (n3 > 0) {
             do {
                 pidx[cursor] = (u16)base;
                 pidx[cursor + 1] = (u16)(base + k + 1);
                 pidx[cursor + 2] = (u16)(base + k + 2);
                 ++k;
                 cursor += 3;
-            } while (k < n2);
+            } while (k < n3);
         }
         base += faces->mpBegin[fc].count;
     }
@@ -470,16 +495,19 @@ void __stdcall cTerrainEditor::TessellateBrush(void* out, void* vec, const float
 // @ 0x00f68c80
 void cTerrainEditor::DrawRaster(int idx, u32 a, int* handle, u32 b)
 {
-    int sh = FUN_00f67770(a, handle);
-    ShaderIds* sid = GetShaderTable()->table[sh];
-    u32 shader = sid->id;
+    zip((int)a);
 
+    int sh = FUN_00f67770(a, handle);
+    ShaderIds* zsid = GetShaderTable()->table[sh];
+    u32 shader = zsid->id;
     Binding b0;
     b0.Init(shader, 0, mHandle68);
 
     void* h = (void*)*handle;
-    u32 resolved = 0;
-    if (h) {
+    u32 resolved;
+    if (h == 0) {
+        resolved = 0;
+    } else {
         if ((*(u8*)((char*)h + 4) & 1) == 0)
             FUN_0067dd60()->Resolve(h);
         resolved = *(u32*)h;
@@ -497,5 +525,4 @@ void cTerrainEditor::DrawRaster(int idx, u32 a, int* handle, u32 b)
     b1.Done();
     b0.Done();
 }
-
 } // namespace SP
