@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPAppEffects.cpp  ?InitAppEffects@SP@@YAXXZ  007cec80  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

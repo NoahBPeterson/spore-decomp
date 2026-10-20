@@ -1,3 +1,3 @@
 007ce500 ?GroundCoverCirclePhysics@@YAHPADM00@Z  # GroundCoverCirclePhysics migrated from s007ce500 (verbatim, slice spelling)
-007cec80 SP::InitAppEffects  # PDB (callee-scored)
+007cec80 ?InitAppEffects@SP@@YAXXZ  # SP::InitAppEffects migrated from s007ce500
 007cef60 ??1VVec@@QAE@XZ  # VVec::~VVec migrated from s007ce500 (verbatim, slice spelling)

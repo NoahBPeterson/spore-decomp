@@ -43,6 +43,53 @@ struct IVec3Provider {
     virtual void Get2(float* out, float* v);   // slot 9 (0x24)
     virtual void Sub(float* out, float* v);    // slot 10 (0x28)
 };
+struct IPropertyManager {
+    virtual void slot0();
+    virtual void slot1();
+    virtual void slot2();
+    virtual void slot3();
+    virtual void slot4();
+    virtual void slot5();
+    virtual void slot6();
+    virtual void slot7();
+    virtual void slot8();
+    virtual void slot9();
+    virtual void slot10();
+    virtual bool GetProperty(uint32_t key, uint32_t hash, void* out);  // 0x2c
+};
+struct GroundCoverConfig;
+template <typename T> struct AutoRefT {
+    T* mpObject;
+    AutoRefT& operator=(T* p)
+    {
+        if (p != mpObject) {
+            T* pTemp = mpObject;
+            if (p) p->AddRef();
+            mpObject = p;
+            if (pTemp) pTemp->Release();
+        }
+        return *this;
+    }
+};
+struct GroundCoverConfig {
+    virtual int AddRef();           // slot 0
+    virtual int Release();          // slot 1 (0x4)
+};
+extern "C" IPropertyManager* PropertyManager();   // 0x0067de30
+extern AutoRefT<GroundCoverConfig> sGroundCoverConfig;   // 0x01636e18
+extern "C" void FUN_007d4460();
+extern "C" void FUN_007d5ff0();
+extern "C" void FUN_007e09a0();
+extern "C" void FUN_007e12a0();
+extern "C" void FUN_007ef270();
+extern "C" void FUN_007efa10();
+extern "C" void FUN_007edc10();
+extern "C" void FUN_007ee450();
+extern "C" void FUN_00a99150();
+extern "C" void FUN_007d7f40();
+extern "C" void FUN_007cdff0();
+extern "C" void FUN_00aa7fa0(int, void (*)());
+extern "C" void UpdateFromGroundCoverConfig();
 // ---- items of slice s007ce500 end
 
 // @ 0x007cdb90
@@ -197,3 +244,26 @@ int GroundCoverCirclePhysics(char* self, float dt, char* p3, char* p4)
     }
     return 1;
 }
+
+// @ 0x007cec80
+namespace SP {
+void InitAppEffects()
+{
+    FUN_007d4460();
+    FUN_007d5ff0();
+    FUN_007e09a0();
+    FUN_007e12a0();
+    FUN_007ef270();
+    FUN_007efa10();
+    FUN_007edc10();
+    FUN_007ee450();
+    FUN_00a99150();
+    FUN_007d7f40();
+    FUN_00aa7fa0(3, FUN_007cdff0);
+    FUN_00aa7fa0(4, FUN_007cdff0);
+    IPropertyManager* pm = PropertyManager();
+    sGroundCoverConfig = (GroundCoverConfig*)0;
+    if (pm->GetProperty(0xc6db66f9, 0xea5118b1, &sGroundCoverConfig))
+        UpdateFromGroundCoverConfig();
+}
+}  // namespace SP
