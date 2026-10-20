@@ -1,0 +1,26 @@
+# source  symbol  original VA  [flags override]
+slices/s00847200/s00847200.cpp  ?FUN_00847950@@YGHPAX0PBDPAUWNDCLASSEXA@@@Z  00847950  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?LockUpdate@Canvas@@QAEX_N@Z  00847970  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?Update@Canvas@@QAEXXZ  008479c0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?Clear@Canvas@@QAEXXZ  008479f0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?SetOptions@Canvas@@QAEXI@Z  00847a40  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?IsActive@Canvas@@QAE_NXZ  00847a70  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?SetActive@Canvas@@QAEX_N@Z  00847a90  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?GetVisible@Canvas@@QAE_NXZ  00847ab0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?SetVisible@Canvas@@QAEX_N@Z  00847ad0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?IsMinimized@Canvas@@QAE_NXZ  00847af0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?IsMaximized@Canvas@@QAE_NXZ  00847b10  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?GetClassAtom@Canvas@@QAEGXZ  00847b40  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?GetActiveMonitor@Canvas@@QAEPAXXZ  00847b50  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?OnEraseBackground@Canvas@@QAEHPAX0@Z  00847b60  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?FUN_00847c70@Canvas@@QAEXHH@Z  00847c70  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?FUN_00847da0@Canvas@@QAEXHIH@Z  00847da0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?FUN_00847e20@Canvas@@QAEXG@Z  00847e20  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?SendCanvasEvent@Canvas@@QAEXPAUCanvasEvent@@@Z  00847e70  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?SetSystemCursorVisible@Canvas@@QAEX_N@Z  00847ef0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?SetSystemCursorPosition@Canvas@@QAEXGG@Z  00847f10  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?SetSystemCursorShape@Canvas@@QAEXJ@Z  00847f40  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?FUN_00847f60@@YGHHPAXPAURECT@@PAH@Z  00847f60  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?FUN_00847f90@@YAHE@Z  00847f90  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?Shutdown@Canvas@@QAE_NXZ  00848020  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00847200/s00847200.cpp  ?GetClientArea@Canvas@@QAEXPAJ@Z  00848190  /O2 /MD /Gy /EHsc /TP /GS-

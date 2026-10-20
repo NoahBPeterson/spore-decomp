@@ -1,0 +1,7 @@
+00847200 655 cParser::~cParser: complete; member-based dtor schedule differs (hashtable frees, string16 teardown order); difftest UNSUPPORTED (unresolved eastl::Hashtable DoFreeNodes)
+00847490 505 cParser::cParser: complete; member-based ctor schedule differs (hashtable init, string16 setup order); difftest UNSUPPORTED (unresolved cExpression/cArguments ctors)
+008476b0 350 FUN_008476b0: complete; SEH-framed include-command bootstrap; string16/vtable dispatch scheduling differs; difftest WEAK (236 valid, 23.8% coverage)
+00847bb0 189 Canvas::OnMouseEnter: complete; original keeps dead zero stores to cbSize/dwFlags/hwndTrack, ours eliminates them; difftest WEAK (254 valid, 14.0% coverage)
+00847cc0 220 FUN_00847cc0: complete; resize-edge switch; original precomputes all four deltas in callee-saved regs, ours recomputes per case; difftest WEAK (355 valid, 8.9% coverage)
+00848100 18 Canvas::GetMinClientArea: complete; second member load scheduled before first store in original; difftest PASS (400 valid, 100% coverage)
+00848120 110 Canvas::SetMinClientArea: complete; register allocation (w/h in ebx/edi) and clamp branch structure differ; difftest UNSUPPORTED (fake-arity)
