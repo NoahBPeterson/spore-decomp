@@ -182,6 +182,8 @@ extern "C" int   util_FixDiv(int a, int b);                         // 0x008d16d
 struct tsiMemObject;
 struct GlyphClass;
 extern "C" void  tsi_DeAllocMem(tsiMemObject* mem, void* p);        // 0x008d1440
+extern "C" void  DoVStrokes(FFT1HintClass* h, int first, int count, short* hint_array,
+                            int* hint_pix, int flag);               // 0x008a8180
 void FlipContourDirection(GlyphClass* g, short dir);                // 0x008a77b0
 void DoHStrokes(FFT1HintClass* h, int first, int count, short* hint_array, int* hint_pix, int nb);
 static void InterpolateAxis(FFT1HintClass* h, int start, short* markers, short* nInt, hints_t* hints,
@@ -543,6 +545,53 @@ void DoHStrokes(FFT1HintClass* h, int first, int count, short* hint_array, int* 
             hint_pix[i] = edgeLo;
             break;
         }
+    }
+}
+
+// @ 0x008a8590
+void DoExtraStrokes(FFT1HintClass* h, short* nxh, short* xhint, int* xpix, short* nyh, short* yhint, int* ypix, short* nxs, short* xs, short* nys, short* ys)
+{
+    bool   second = false;
+    short* cnt   = nxh;
+    short* arr   = xhint;
+    int*   pix   = xpix;
+    short* ecnt  = nxs;
+    short* earr  = xs;
+    for (;;) {
+        int n = *cnt;                 // hint count before appending
+        int cur = n;                  // running count
+        int pos = 0;                  // cursor into the existing pairs
+        if (*ecnt > 0) {
+            for (int k = 0; k < *ecnt; k += 2) {
+                short lo = earr[k];
+                short hi = earr[k + 1];
+                arr[cur] = lo;
+                arr[cur + 1] = hi;
+                if (pos < n) {
+                    const short* p = &arr[pos + 1];
+                    do {
+                        if (lo <= *p) break;
+                        pos += 2;
+                        p += 2;
+                    } while (pos < n);
+                }
+                int nb;
+                if (n <= pos || (nb = pos, hi <= arr[pos]))
+                    nb = 0;
+                if (second)
+                    DoHStrokes(h, cur, cur + 2, arr, pix, nb);
+                else
+                    DoVStrokes(h, cur, cur + 2, arr, pix, nb);
+                cur += 2;
+            }
+        }
+        if (second) {
+            *cnt = (short)cur;
+            return;
+        }
+        *cnt = (short)cur;
+        second = true;
+        cnt = nyh; arr = yhint; pix = ypix; ecnt = nys; earr = ys;
     }
 }
 

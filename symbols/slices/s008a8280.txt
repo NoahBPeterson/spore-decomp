@@ -1,5 +1,5 @@
 008a8280 ?DoHStrokes@@YAXPAUFFT1HintClass@@HHPAFPAHH@Z  # DoHStrokes migrated from s008a8280 (verbatim, slice spelling)
-008a8590 DoExtraStrokes  # 2008 dev PDB candidate (caller-single); appends extra strokes and fits them
+008a8590 ?DoExtraStrokes@@YAXPAUFFT1HintClass@@PAF1PAH1121111@Z  # DoExtraStrokes migrated from s008a8280 (verbatim, slice spelling)
 008a8700 ?DoExtraEdges@@YAXPAUFFT1HintClass@@PAF1PAH11211111111@Z  # DoExtraEdges migrated from s008a8280 (verbatim, slice spelling)
 008a8830 ?SetScale_FFT1HintClass@@YAXPAUFFT1HintClass@@HH@Z  # SetScale_FFT1HintClass migrated from s008a8280 (verbatim, slice spelling)
 008a8880 ?ApplyHints_FFT1HintClass@@YAXPAUFFT1HintClass@@FFPAUGlyphClass@@@Z  # ApplyHints_FFT1HintClass migrated from s008a8280 (verbatim, slice spelling)
