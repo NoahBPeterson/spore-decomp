@@ -1,0 +1,16 @@
+# va  diff-bytes  reason
+# NOTE: all 11 functions are complete and equivalence-checked. Deltas are systemic: inlined EASTL
+# table find/erase shapes, x87 selection under /fp:fast, and register colouring/block ordering of
+# the "single-object compile cannot match" class described in docs/matching.md. Recorded as
+# complete rather than chased; per-VA reasons below.
+00a28120  750  complete; StartSoundFromCommand - register allocation and the inlined EASTL hashtable find/erase differ; the boolean-capture slot reuse in the original relies on register coloring into a dead argument slot and is reproduced semantically only. difftest UNSUPPORTED (0/400 valid inputs; opaque global/pointer state)
+00a28450  -  complete; TryStartSound - x87 fsqrt/fabs selection and ResponseCurve branch shapes differ; template field store order differs. difftest UNSUPPORTED (0/400 valid inputs; needs a real IConfig)
+00a28810  -  complete; MaintainLRU - iterator/local layout and the inlined bucket erase differ; erase/iterator maintenance reproduced semantically only. difftest FAIL (5/5 valid inputs fault in the emulator on table pointers the harness cannot synthesize)
+00a28a20  94  complete; AddTextureRef - hit path reads the count as a plain dword at node+4; inlined table insert prologue differs. difftest FAIL (emulator fault on table state)
+00a28aa0  -  complete; GetOrRegisterVoice - Voice field init order, refcount scheduling and inlined insert differ; init order reproduced semantically only. difftest FAIL (emulator fault on running the voice init path)
+00a28c60  193  complete; RegisterObj - two AddRef / one Release schedule and inlined pair insert differ. difftest FAIL (emulator fault on object map state)
+00a28d10  46  complete; UnregisterObj - same size; hashtable iterator by-value arg and erase shapes differ. difftest FAIL (emulator fault on object map state)
+00a28d70  -  complete; GetCounterPlaylist - complete, but the pool allocator pairing (PoolAlloc(&local{owner+0x14},4) twice) is a reconstruction of the original's pool scratch, not byte-verified. difftest FAIL (emulator fault on the counter map / allocator path)
+00a28e90  76  complete; AddCounter - counter value is a plain int at node+4; inlined insert prologue differs. difftest FAIL (emulator fault on counter map state)
+00a28f10  212  complete; TrackPlayingKey - GetKey returns a u32 in eax; three AddRef / two Release smart-pointer schedule and inlined pair insert differ. difftest FAIL (5/61 valid; first mismatch is a generated-fake-callee difference, not a value divergence)
+00a29000  165  complete; UntrackPlayingKey - intrusive-list unlink and hashtable erase-by-value shapes differ; list maintenance reproduced semantically only. difftest WEAK (100 valid inputs, 22.2% coverage under the harness)

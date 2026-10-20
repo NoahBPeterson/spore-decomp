@@ -1,0 +1,11 @@
+00a28120 ?StartSoundFromCommand@Sys@@QAE_NAAUCommand@@I@Z  # Sys::StartSoundFromCommand, dev PDB name
+00a28450 ?TryStartSound@Sys@@QAE_NPADIPAUIConfig@@PAUVec3@@I@Z  # Sys::TryStartSound, dev PDB name
+00a28810 ?MaintainLRU@Sys@@QAEXXZ  # Sys::MaintainLRU
+00a28a20 ?AddTextureRef@Sys@@QAEXPAUKey4@@@Z  # Sys::AddTextureRef
+00a28aa0 ?GetOrRegisterVoice@Sys@@QAE_NIPAPAUVoice@@HPAX@Z  # Sys::GetOrRegisterVoice
+00a28c60 ?RegisterObj@Sys@@QAEXPAUSnd@@@Z  # Sys::RegisterObj
+00a28d10 ?UnregisterObj@Sys@@QAE_NI@Z  # Sys::UnregisterObj
+00a28d70 ?GetCounterPlaylist@Sys@@QAEHI@Z  # Sys::GetCounterPlaylist
+00a28e90 ?AddCounter@Sys@@QAEHIH@Z  # Sys::AddCounter
+00a28f10 ?TrackPlayingKey@Sys@@QAE_NPAUSnd@@@Z  # Sys::TrackPlayingKey
+00a29000 ?UntrackPlayingKey@Sys@@QAE_NPAUSnd@@@Z  # Sys::UntrackPlayingKey
