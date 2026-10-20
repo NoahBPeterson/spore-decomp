@@ -1,0 +1,13 @@
+010a32c0 0 havok-equivalent; equiv UNSUPPORTED (unresolved refs: hkMemoryWatchdog_getMaxAllowedMemory/getUsedMemory annotation-implausible, hkWorld_integrateIslandsAtPsi)
+010a3760 0 havok-equivalent; equiv FAIL: leaves edx where original clobbers it (imm16 store vs reg + empty-vtable vptr store); fields at +6/+8 correct
+010a3780 0 havok-equivalent; equiv UNSUPPORTED: unresolved ref calculateCombinedCollisionQuality [annotation-implausible 010cd600]
+010a3810 0 havok-equivalent; equiv FAIL 5/14: eax
+010a3890 0 havok-equivalent; equiv PASS 288 valid inputs 100% coverage (chk 40/48 bytes = push order / regalloc only)
+010a38c0 0 havok-equivalent; equiv PASS 283 valid inputs 100% coverage (chk 85/94 bytes = regalloc / x87 spill only)
+010a3920 0 havok-equivalent; equiv UNSUPPORTED: 0/400 valid inputs (register-ABI __forceinline hkAgentNnMachine helper)
+010a39f0 0 havok-equivalent; equiv UNSUPPORTED: 0/400 valid inputs (register-ABI __forceinline hkAgentNnMachine helper)
+010a3a90 0 havok-equivalent; equiv FAIL: 5/43, atan2fApproximation arg ULP (x87 vs folded constant)
+010a3c10 0 havok-equivalent; equiv PASS 400 valid inputs 100% coverage (chk 27/33 bytes = load/store fold)
+010a3c40 0 havok-equivalent; equiv FAIL: memory pool divergence (loop body/scale shape)
+010a3c90 0 havok-equivalent; equiv FAIL: 5/5, ours faults at 010a7767 (hkSetInvMassBuildJacobian scratch sizing)
+010a3e70 0 havok-equivalent; equiv PASS 400 valid inputs 100% coverage (chk 54/91 bytes = add/sub imm8 encoding only)
