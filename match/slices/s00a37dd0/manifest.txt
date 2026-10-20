@@ -1,0 +1,12 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a37dd0/s00a37dd0.cpp  ?Init@cEmitterModelSound@Audio@SP@@QAE_NXZ  00a37f20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a37dd0/s00a37dd0.cpp  ?Stop@cEmitterModelSound@Audio@SP@@QAE_NXZ  00a381d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a37dd0/s00a37dd0.cpp  ?SetFlags@cEmitterModelSound@Audio@SP@@QAEXI@Z  00a38290  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a37dd0/s00a37dd0.cpp  ?SetConfiguration@cEmitterModelSound@Audio@SP@@QAEXPAX@Z  00a382c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a37dd0/s00a37dd0.cpp  ?SetProperty@cEmitterModelSound@Audio@SP@@QAE_NHMI@Z  00a38310  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a37dd0/s00a37dd0.cpp  ?SetData@cEmitterModelSound@Audio@SP@@QAE_NIII@Z  00a383b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a37dd0/s00a37dd0.cpp  ?ReadTuningValues@cEmitterModelSound@Audio@SP@@QAEXXZ  00a383f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a37dd0/s00a37dd0.cpp  ??0cEmitterSndPlayer@Audio@SP@@QAE@XZ  00a38d90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a37dd0/s00a37dd0.cpp  ?Create@cEmitterSndPlayer@Audio@SP@@QAE_NXZ  00a38dd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a37dd0/s00a37dd0.cpp  ?SetProperty@cEmitterSndPlayer@Audio@SP@@QAE_NHMI@Z  00a38de0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a37dd0/s00a37dd0.cpp  ?UpdateParameters@cEmitterSndPlayer@Audio@SP@@QAEXMI@Z  00a38e20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
