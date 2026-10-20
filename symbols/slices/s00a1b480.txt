@@ -1,0 +1,10 @@
+00a1b480 ?StartEmitter@Sound@@QAE_NM@Z  # Sound::StartEmitter (vtable slot 0x70)
+00a1b660 ?Set@LerpF@@QAEXABMM@Z  # LerpF::Set
+00a1b730 ?Init@Sound@@QAE_NXZ  # Sound::Init (vtable slot 0x0c)
+00a1b8a0 ?Start@Sound@@QAE_NN@Z  # Sound::Start (vtable slot 0x14)
+00a1bba0 ?Stop@Sound@@QAE_NH_N@Z  # Sound::Stop (vtable slot 0x18)
+00a1be10 ?ShutdownImpl@Sound@@QAE_NXZ  # Sound::ShutdownImpl (vtable slot 0x8c)
+00a1bf50 ?Pause@Sound@@QAEH_NIM0@Z  # Sound::Pause (vtable slot 0x1c)
+00a1c120 ?UpdateGainAndDistance@Sound@@QAEXM@Z  # Sound::UpdateGainAndDistance (vtable slot 0x5c)
+00a1c290 ?CalculateDistanceToListener@Sound@@QAE_NXZ  # Sound::CalculateDistanceToListener (vtable slot 0xc0)
+00a1c2f0 ?CreateEmitter@Sound@@QAE_NXZ  # Sound::CreateEmitter (vtable slot 0x6c)

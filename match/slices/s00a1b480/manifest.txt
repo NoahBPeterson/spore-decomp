@@ -1,0 +1,3 @@
+slices/s00a1b480/s00a1b480.cpp  ?Set@LerpF@@QAEXABMM@Z  00a1b660  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00a1b480/s00a1b480.cpp  ?CalculateDistanceToListener@Sound@@QAE_NXZ  00a1c290  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00a1b480/s00a1b480.cpp  ?Pause@Sound@@QAEH_NIM0@Z  00a1bf50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
