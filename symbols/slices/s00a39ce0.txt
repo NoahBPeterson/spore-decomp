@@ -3,9 +3,10 @@
 00a3a070 ??0cEventModifierPrimitiveMouthType@Audio@SP@@QAE@PBD@Z  # cEventModifierPrimitiveMouthType::cEventModifierPrimitiveMouthType migrated from s00a39ce0 (verbatim, slice spelling)
 00a3a0e0 SP::Audio::cEventModifierPrimitiveMouthType::~cEventModifierPrimitiveMouthType  # implicit dtor (hashtable member + base), called by the deleting dtor at 0xa3a160
 00a3a180 ?Init@cEventModifier_s00a3_9ce0@Audio@SP@@QAE_NXZ  # cEventModifier_s00a3_9ce0::Init migrated from s00a39ce0 (verbatim, slice spelling)
-00a3a4b0 ?Init@cEventModifierPrimitive_s00a3_9ce0@Audio@SP@@UAE_NXZ  # cEventModifierPrimitive_s00a3_9ce0::Init migrated from s00a39ce0 (verbatim, slice spelling)
+00a3a4b0 ?Init@cEventModifierPrimitive@Audio@SP@@UAE_NXZ  # SP::Audio::cEventModifierPrimitive::Init migrated from s00a39ce0
 00a3a4c0 ?Append@cEventModifierPrimitive_s00a3_9ce0@Audio@SP@@QAEXPADH0_N@Z  # cEventModifierPrimitive_s00a3_9ce0::Append migrated from s00a39ce0 (verbatim, slice spelling)
 00a3a5b0 SP::Audio::cEventModifierPrimitive::__scalar_deleting_dtor  # scalar deleting destructor of the primitive base
+00a3a610 ?ReadTuningValues@cEventModifierPrimitive_s00a3_9ce0@Audio@SP@@UAE_NPBUResourceKey@@@Z  # cEventModifierPrimitive_s00a3_9ce0::ReadTuningValues migrated from s00a39ce0 (verbatim, slice spelling)
 00a3a670 ?ModifyEvent@cEventModifierPrimitiveAlias@Audio@SP@@UAEXPAUCommand_s00a3_9ce0@2EA@@HPADH@Z  # cEventModifierPrimitiveAlias::ModifyEvent migrated from s00a39ce0 (verbatim, slice spelling)
 00a3a9a0 ?AStrMap  # StrMap::operator[] (??A, written as base identifier so the checker finds it); lower_bound + insert of the uint->string map
 00a3aa80 SP::Audio::cEventModifierPrimitiveAlias::ReadTuningValues  # vtable slot 4 of the alias primitive (0x14535fc)

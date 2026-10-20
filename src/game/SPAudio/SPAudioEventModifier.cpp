@@ -360,15 +360,7 @@ struct RbTree : RbTreeData_s00a3_9ce0 {
 };
 }
 namespace EA {
-struct RbTreeS : RbTreeData_s00a3_9ce0 {
-    ~RbTreeS() { DoNukeSubtree(mAnchor.mpParent); }
-};
-}
-namespace EA {
 typedef RbTree KeyList;
-}
-namespace EA {
-typedef RbTreeS KeyListS;
 }
 namespace EA {
 struct IConfiguration_s00a3_9ce0 {
@@ -565,19 +557,6 @@ struct cEventModifierPrimitive_s00a3_9ce0 : RefCountBase, IEventModifier_s00a3_9
 }
 namespace SP {
 namespace Audio {
-bool cEventModifierPrimitive_s00a3_9ce0::ReadTuningValues(const ResourceKey* key) {
-    if (key->instanceID == mKey.instanceID && key->typeID == mKey.typeID &&
-        key->groupID == mKey.groupID) {
-        AudioSystem_s00a3_9ce0* sys = GetSystemAT_s00a3_9ce0();
-        mConfiguration.Reset();
-        return sys->GetConfiguration(mKey.instanceID, &mConfiguration, 0x21407ee);
-    }
-    return false;
-}
-}
-}
-namespace SP {
-namespace Audio {
 extern char gMouthTable[];   // 0x0154df28 (the hashtable's shared empty bucket array)
 }
 }
@@ -645,29 +624,6 @@ struct cEventModifierPrimitiveAlias : cEventModifierPrimitive_s00a3_9ce0 {
     virtual void ModifyEvent(Command_s00a3_9ce0* cmd, int a, char* name, int capacity);   // 0xa3a670
     virtual bool ReadTuningValues(const ResourceKey* key);              // 0xa3aa80
 };
-}
-}
-namespace SP {
-namespace Audio {
-bool cEventModifierPrimitiveAlias::ReadTuningValues(const ResourceKey* key) {
-    if (!cEventModifierPrimitive_s00a3_9ce0::ReadTuningValues(key)) return false;
-    if (mConfiguration.mp) {
-        KeyListS keys;
-        mConfiguration.mp->GetKeys(&keys, 1);
-        RbNode* it = keys.mAnchor.mpLeft;
-        RbNode* end = (RbNode*)&keys.mAnchor;
-        while (it != end) {
-            uint32_t k = it->mKey;
-            const char* str = mConfiguration.mp->GetString(k);
-            if (str) {
-                String8 s(str);
-                mMap[k] = s;
-            }
-            it = RBTreeIncrement(it);
-        }
-    }
-    return true;
-}
 }
 }
 namespace SP {
@@ -1016,6 +972,20 @@ bool cEventModifier_s00a3_9ce0::LoadEventModifiersMap()
         it = RBTreeIncrement(it);
     }
     return true;
+}
+}}  // namespace SP::Audio
+
+// @ 0x00a39f90
+namespace SP { namespace Audio {
+void cEventModifier_s00a3_9ce0::ReadTuningValues(const ResourceKey* key)
+{
+    if (key->instanceID == gEventModifiersKey.instanceID && key->typeID == gEventModifiersKey.typeID &&
+        key->groupID == gEventModifiersKey.groupID)
+        LoadEventModifiersMap();
+    for (int i = 0; i < 0x18; i += 4) {
+        cEventModifierPrimitive_s00a3_9ce0** p = (cEventModifierPrimitive_s00a3_9ce0**)((char*)mEventModifiers.mpBegin + i);
+        if (*p) (*p)->ReadTuningValues(key);
+    }
 }
 }}  // namespace SP::Audio
 
