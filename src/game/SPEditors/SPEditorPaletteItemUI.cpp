@@ -29,7 +29,6 @@ extern "C" void EASTL_allocator_deallocate(void* p);                       // 0x
 #include "SP/cString.h"
 
 // ---- items of slice s005c6340 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void EASTL_allocator_deallocate(void* p);                       // 0x00f47380
 void* operator new(unsigned int n, const char* name, int flags, unsigned int debugFlags,
                      const char* file, int line);                           // 0x00f473a0
 #define PV(n) virtual void pv##n();
