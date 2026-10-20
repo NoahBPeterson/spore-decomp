@@ -21,10 +21,10 @@ extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 #include <string.h>
 
 // ---- items of slice s005b7460 begin (TODO(rewrite): local stubs, replace by canonical classes)
-void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);
-extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
-void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags, int debugFlags, const char* file, int line); // 0x00f473a0
 #define PV(n) virtual void pv##n();
+void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);
+void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags, int debugFlags, const char* file, int line); // 0x00f473a0
+#define PV_s005b_7460(n) virtual void pv##n();
 namespace rw {
 namespace math {
 namespace fpu {
@@ -102,8 +102,8 @@ class cViewer_s005b_7460 {
 namespace SP {
 class cSPApp {
  public:
-  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
-  PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21)
+  PV_s005b_7460(0) PV_s005b_7460(1) PV_s005b_7460(2) PV_s005b_7460(3) PV_s005b_7460(4) PV_s005b_7460(5) PV_s005b_7460(6) PV_s005b_7460(7) PV_s005b_7460(8) PV_s005b_7460(9) PV_s005b_7460(10)
+  PV_s005b_7460(11) PV_s005b_7460(12) PV_s005b_7460(13) PV_s005b_7460(14) PV_s005b_7460(15) PV_s005b_7460(16) PV_s005b_7460(17) PV_s005b_7460(18) PV_s005b_7460(19) PV_s005b_7460(20) PV_s005b_7460(21)
   virtual cViewer_s005b_7460* GetViewer();
 };
 }
@@ -127,7 +127,7 @@ class RefCountedBase {
 };
 }
 namespace SP {
-class cSPEditorModelBase { public: PV(0) };
+class cSPEditorModelBase { public: PV_s005b_7460(0) };
 }
 namespace SP {
 class cSPEditorModel_s005b_7460 : public cSPEditorModelBase, public RefCountedBase {
@@ -177,7 +177,7 @@ class cSPEditorLimbStructure_s005b_7460 { public: void Rebuild(); /* FUN_0048a4c
 namespace SP {
 class cSPEditorSpinePart {
  public:
-  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11)
+  PV_s005b_7460(0) PV_s005b_7460(1) PV_s005b_7460(2) PV_s005b_7460(3) PV_s005b_7460(4) PV_s005b_7460(5) PV_s005b_7460(6) PV_s005b_7460(7) PV_s005b_7460(8) PV_s005b_7460(9) PV_s005b_7460(10) PV_s005b_7460(11)
   virtual void SetState(int a, int b);  // +0x30
 };
 }
@@ -775,8 +775,6 @@ template <typename RandomAccessIterator> void insertion_sort(RandomAccessIterato
 }
 }  // namespace eastl
 
-
-
 // @ 0x005b78d0
 namespace eastl {
 template <typename RandomAccessIterator> void insertion_sort_simple(RandomAccessIterator first, RandomAccessIterator last)
@@ -790,8 +788,6 @@ template <typename RandomAccessIterator> void insertion_sort_simple(RandomAccess
   }
 }
 }  // namespace eastl
-
-
 
 // @ 0x005b7920
 namespace SP {
@@ -817,8 +813,6 @@ bool cSPEditorManipulationSpineResize::OnMouseUp(int button, float x, float y, i
 }
 }  // namespace SP
 
-
-
 // @ 0x005b7a40
 namespace SP {
 cSPEditorBlock_s005b_7460* cSPEditorManipulationSpineResize::GetNextVertebra()
@@ -831,8 +825,6 @@ cSPEditorBlock_s005b_7460* cSPEditorManipulationSpineResize::GetNextVertebra()
 }
 }  // namespace SP
 
-
-
 // @ 0x005b7a70
 namespace SP {
 void cSPEditorManipulationSpineResize::Init(cSPEditorBlock_s005b_7460* block, cSPVector3_s005b_7460 mouseOffset, cSPEditorSpine_s005b_7460* spine, cSPEditorSkinManager_s005b_7460* skinManager, cSPEditorAppEconomy_s005b_7460* economy)
@@ -844,8 +836,6 @@ void cSPEditorManipulationSpineResize::Init(cSPEditorBlock_s005b_7460* block, cS
   mEconomy = economy;
 }
 }  // namespace SP
-
-
 
 // @ 0x005b7af0
 namespace eastl {
@@ -865,8 +855,6 @@ template <typename RandomAccessIterator, typename Distance, typename T> void adj
   eastl::promote_heap<RandomAccessIterator, Distance, T>(first, topPosition, position, value);
 }
 }  // namespace eastl
-
-
 
 // @ 0x005b7b80
 namespace SP {
@@ -898,8 +886,6 @@ void cSPEditorManipulationSpineResize::UpdatePlanePoint(float x, float y)
 }
 }  // namespace SP
 
-
-
 // @ 0x005b7cf0
 namespace SP {
 void cSPEditorManipulationSpineResize::RepinSimple()
@@ -920,8 +906,6 @@ void cSPEditorManipulationSpineResize::RepinSimple()
   }
 }
 }  // namespace SP
-
-
 
 // @ 0x005b7f70
 namespace SP {
@@ -951,8 +935,6 @@ void cSPEditorManipulationSpineResize::SetBlockHighlight(cSPEditorBlock_s005b_74
 }
 }  // namespace SP
 
-
-
 // @ 0x005b8070
 namespace eastl {
 rbtree_iterator_s005b_7460 BlockLimbMap::DoInsertValueImpl(rbtree_node_base_s005b_7460* pNodeParent, const BlockLimbPair& value, bool bForceToLeft)
@@ -968,8 +950,6 @@ rbtree_iterator_s005b_7460 BlockLimbMap::DoInsertValueImpl(rbtree_node_base_s005
   return rbtree_iterator_s005b_7460(pNodeNew);
 }
 }  // namespace eastl
-
-
 
 // @ 0x005b81a0
 namespace eastl {
@@ -987,8 +967,6 @@ template <typename RandomAccessIterator> void make_heap(RandomAccessIterator fir
 }
 }  // namespace eastl
 
-
-
 // @ 0x005b81e0
 namespace eastl {
 template <typename RandomAccessIterator> void sort_heap(RandomAccessIterator first, RandomAccessIterator last)
@@ -998,8 +976,6 @@ template <typename RandomAccessIterator> void sort_heap(RandomAccessIterator fir
 }
 }  // namespace eastl
 
-
-
 // @ 0x005b8230
 namespace SP {
 bool cSPEditorManipulationSpineResize::DoOnMouseDown(float x, float y, int modifiers)
@@ -1008,8 +984,6 @@ bool cSPEditorManipulationSpineResize::DoOnMouseDown(float x, float y, int modif
   return true;
 }
 }  // namespace SP
-
-
 
 // @ 0x005b8250
 namespace eastl {
@@ -1024,8 +998,6 @@ void BlockLimbMap::DoNukeSubtree(rbtree_node_s005b_7460* pNode)
   }
 }
 }  // namespace eastl
-
-
 
 // @ 0x005b82a0
 namespace eastl {
@@ -1043,8 +1015,6 @@ template <typename RandomAccessIterator> void partial_sort(RandomAccessIterator 
 }
 }  // namespace eastl
 
-
-
 // @ 0x005b8310
 namespace eastl {
 void BlockLimbMap::clear()
@@ -1054,14 +1024,11 @@ void BlockLimbMap::clear()
 }
 }  // namespace eastl
 
-
-
 // @ 0x005b84f0
 namespace SP {
 cSPEditorManipulationSpineResize::~cSPEditorManipulationSpineResize()
 {}
 }  // namespace SP
-
 
 // @ 0x005b85d0
 namespace SP {
@@ -1073,7 +1040,6 @@ cSPEditorManipulationSpineResize_s005b_85d0::cSPEditorManipulationSpineResize_s0
   mUseDeadZone = false;
 }
 }  // namespace SP
-
 
 // @ 0x005b8690
 namespace SP {
@@ -1116,7 +1082,6 @@ bool cSPEditorManipulationSpineResize_s005b_85d0::OnMouseDown(int button, float 
 }
 }  // namespace SP
 
-
 // @ 0x005b87f0
 namespace SP {
 void cSPEditorManipulationSpineResize_s005b_85d0::Shutdown()
@@ -1146,7 +1111,6 @@ void cSPEditorManipulationSpineResize_s005b_85d0::Shutdown()
 }
 }  // namespace SP
 
-
 // @ 0x005b88d0
 namespace eastl {
 EA::AutoRefCount_s005b_85d0<SP::cSPEditorSkinPart_s005b_85d0>* BlockLimbMap_s005b_85d0::FindOrCreate(SP::cSPEditorBlock_s005b_85d0* key)
@@ -1173,7 +1137,6 @@ EA::AutoRefCount_s005b_85d0<SP::cSPEditorSkinPart_s005b_85d0>* BlockLimbMap_s005
 }
 }  // namespace eastl
 
-
 // @ 0x005b8950
 namespace SP {
 bool cSPEditorManipulationSpineResize_s005b_85d0::RepinBlocks()
@@ -1181,7 +1144,6 @@ bool cSPEditorManipulationSpineResize_s005b_85d0::RepinBlocks()
   return false;
 }
 }  // namespace SP
-
 
 // @ 0x005b8da0
 namespace SP {
@@ -1228,7 +1190,6 @@ void cSPEditorManipulationSpineResize_s005b_85d0::GenerateLimbs(cSPEditorBlock_s
 }
 }  // namespace SP
 
-
 // @ 0x005b8f20
 namespace SP {
 bool cSPEditorManipulationSpineResize_s005b_85d0::HighlightDeleteBlockers(cSPEditorBlock_s005b_85d0* block)
@@ -1248,13 +1209,11 @@ bool cSPEditorManipulationSpineResize_s005b_85d0::HighlightDeleteBlockers(cSPEdi
 }
 }  // namespace SP
 
-
 // @ 0x005b8fb0
 namespace SP {
 __declspec(noinline) void cSPEditorManipulationSpineResize_s005b_85d0::DoOnMouseMove()
 { g_scratch_s005b85d0 = 1; }
 }  // namespace SP
-
 
 // @ 0x005b9430
 namespace SP {
