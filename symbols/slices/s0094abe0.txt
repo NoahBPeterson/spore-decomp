@@ -1,0 +1,13 @@
+0094abe0 ?ParseURLMailTo@URL@Internet@EA@@QAE_NAAUStr@@@Z  # retail PDB (module: UTFSpore_Win32 HTTPClient); EA::Internet::URL::ParseURLMailTo
+0094ac90 ?ParseURLUnknown@URL@Internet@EA@@QAE_NAAUStr@@@Z  # retail PDB; EA::Internet::URL::ParseURLUnknown
+0094acc0 ?assign@?$basic_string@DU?$char_traits@D@eastl@@V?$allocator@D@2@@eastl@@QAEAAV12@ID@Z  # eastl::basic_string<char>::assign(size_type, value_type)
+0094ad40 ?ParseScheme@URL@Internet@EA@@QAE_NAAUStr@@@Z  # retail PDB; EA::Internet::URL::ParseScheme
+0094b050 ?ParseServerAndPort@URL@Internet@EA@@QAE_NAAUStr@@@Z  # retail PDB; EA::Internet::URL::ParseServerAndPort
+0094b2a0 ?ParseURLHTTP@URL@Internet@EA@@QAE_NAAUStr@@@Z  # retail PDB; EA::Internet::URL::ParseURLHTTP
+0094b510 ?ParseURLFTP@URL@Internet@EA@@QAE_NAAUStr@@@Z  # retail PDB; EA::Internet::URL::ParseURLFTP
+0094b610 ?ConvertPathToEncodedForm@URL@Internet@EA@@SA_NPBDAAUStr@@0@Z  # retail PDB; EA::Internet::URL::ConvertPathToEncodedForm
+0094b760 Fn94b760  # unnamed in retail; PDB caller-single candidate EA::Internet::URL::ParseURL
+0094b8e0 Fn94b8e0  # unnamed in retail; URL::MakeURLStringFromComponents (lazy ParseURL + rebuild)
+0094ba30 Fn94ba30  # unnamed in retail; URL::IsURLRelative(char const*)
+0094baa0 Fn94baa0  # unnamed in retail; URL::GetURLType
+0094baf0 Fn94baf0  # unnamed in retail; URL::GetPart(int) (returns &msComponent[start-2])
