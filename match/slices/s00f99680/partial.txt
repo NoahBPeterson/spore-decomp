@@ -1,0 +1,3 @@
+# <va>  <dl>  <reason>   (incomplete / not equivalent)
+00f99680  546vs618  ?InitializeVBInfoArray@cTerrainSphere@@QAEXXZ (/O2 /MD /Gy /TP /arch:SSE /fp:fast): index/vertex-buffer setup rebuilt from decompile but not byte-exact (my 546 vs orig 618 bytes) and not equivalent (difftest equiv: UNSUPPORTED, 0/400 valid inputs, fault read/write + import VirtualAlloc); original unrolls the per-i index-pointer recomputation.
+00f9a040  1160vs1356  ?FUN_00f9a040@cTerrainSphere@@QAEXPAVIRefObj32@@PAX_N@Z (/O2 /MD /Gy /TP /arch:SSE /fp:fast): 6-face 17x17 terrain-patch emit rebuilt from decompile but not byte-exact (my 1160 vs orig 1356 bytes) and not equivalent (difftest equiv: UNSUPPORTED, 0/400 valid inputs, fault fetch/read); original fully unrolls the vtable push loops.

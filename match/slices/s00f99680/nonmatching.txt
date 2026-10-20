@@ -1,0 +1,4 @@
+# <va>  <diff-bytes>  <reason>   (none: all functions byte-exact)
+00f999e0  350  ?IsEditorReady@cTerrainSphere@@QAE_NXZ (/O2 /MD /Gy /TP /arch:SSE /fp:fast): same control flow, size 350 vs 350; 6 nested rect-degenerate tests with repeated base recomputation, register allocation differs (difftest equiv: WEAK, 400/400 valid inputs, 12.5% coverage)
+00f99ac0  796  ?MarkFaceDirty@cTerrainSphere@@QAEXHPBM@Z (/O2 /MD /Gy /TP /arch:SSE /fp:fast): size 796 vs 796; xmm2 register clobber across the min/max union path, 5/5 probe inputs mismatch (difftest equiv: FAIL, 95.2% coverage)
+00f99ba0  448  ?FUN_00f99ba0@cTerrainSphere@@QAEXH@Z (/O2 /MD /Gy /TP /arch:SSE /fp:fast): size 448 vs 448; eax return-value liveness differs, 5/54 probe mismatches (difftest equiv: FAIL, 100% coverage)

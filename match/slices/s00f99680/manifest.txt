@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f99680/s00f99680.cpp  ?EditorTeardown@cTerrainSphere@@QAEXXZ                   00f998f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f99680/s00f99680.cpp  ?JobTeardown@cTerrainSphere@@QAEXXZ                      00f99980  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f99680/s00f99680.cpp  ?UpdateControlMapParams@cTerrainSphere@@QAEXXZ           00f99d20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f99680/s00f99680.cpp  ?FUN_00f99f20@cTerrainSphere@@QAEXPAUIRefObj32@@HHPAH@Z  00f99f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f99680/s00f99680.cpp  ?FUN_00f99ff0@cTerrainSphere@@QAEXXZ                    00f99ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f99680/s00f99680.cpp  ?SetCloudType@cTerrainSphere@@QAEXXZ                     00f9a590  /O2 /MD /Gy /TP /arch:SSE /fp:fast
