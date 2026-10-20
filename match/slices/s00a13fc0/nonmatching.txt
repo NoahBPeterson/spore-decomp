@@ -1,0 +1,8 @@
+00a13fc0 502 EA::Audio::Group ctor: complete; no symbol of similar size, large nested FHT/pool construction not reproduced; difftest FAIL (5/192, ours faults where original returns)
+00a141c0 354 EA::Audio::Group dtor: complete; 321 diff, HTable teardown/EH frame shape differs; difftest FAIL (FreeBuckets this/args differ)
+00a14380 302 EA::Audio::Group::Shutdown: complete; 248 diff, hash-table clear loop and call schedule differ; difftest PASS (79.8% coverage)
+00a144c0 250 HTable28 ctor: complete; no symbol of similar size, fixed_pool_base init/rehash inlining not reproduced; difftest FAIL (ours faults in FUN_009212a8)
+00a145c0 158 EA::Audio::Group ctor body / HTable28: complete; 101 diff, inline member-ctor argument stores differ; difftest PASS
+00a146a0 61 Playlist::Choose: complete; 31 diff, rand scaling/remainder schedule differs (closest of 9 probed shapes); difftest PASS
+00a14810 291 MixChannel: complete; 192 diff, float/SSE conversion schedule and loop unrolling differ; difftest FAIL (5/284, rounding at pool @4d590004)
+00a14a10 77 Chorus dtor: complete; 38 diff, vector destructor iterator call and vptr store shape differ; difftest UNSUPPORTED (our base vtable is a local copy; map the symbol)

@@ -1,0 +1,7 @@
+slices/s00a13fc0/s00a13fc0.cpp  ?FUN_00a14680@@YAHH@Z  00a14680  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00a13fc0/s00a13fc0.cpp  ?FUN_00a146e0@@YAXPAI0AAUpointer_to_unary_function@@@Z  00a146e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00a13fc0/s00a13fc0.cpp  ?Shuffle@Playlist@@QAEXXZ  00a14730  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00a13fc0/s00a13fc0.cpp  ?Clear@Playlist@@QAE_NXZ  00a147b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00a13fc0/s00a13fc0.cpp  ?FUN_00a14940@@YA_NPAX@Z  00a14940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00a13fc0/s00a13fc0.cpp  ??0tDelayLine@@QAE@XZ  00a14980  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00a13fc0/s00a13fc0.cpp  ??0Chorus@@QAE@XZ  00a149b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
