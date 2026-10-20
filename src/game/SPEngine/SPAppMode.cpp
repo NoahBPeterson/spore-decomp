@@ -72,13 +72,13 @@ struct cApp {
 // ---- items of slice s007d76d0 end
 
 // ---- items of slice s007d85b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+    void ea_free(...); // 0x00f47380
 typedef unsigned int size_type;
 void* GetServer883860();
 void  ErrorNoSuchMode(const char* fmt);                  // cError ctor/throw site
 int  Sub_7d8890(void* first, void* last, void* dest);    // uninitialized copy
 void Sub_7d90a0(void* value);                            // add to vector
 struct cAppModeInfo_s007d_85b0;
-cAppModeInfo_s007d_85b0* Sub_7d8740(cAppModeInfo_s007d_85b0* self, const cAppModeInfo_s007d_85b0* src);
 struct Str16 {
     char* mpBegin;      // +0x00
     char* mpEnd;        // +0x04
@@ -96,6 +96,9 @@ struct cAppModeInfo_s007d_85b0 {                 // size 0x18
 inline void ModeInfoRelease(void* obj) {
     if (obj) ((void(__thiscall*)(void*))(*(void***)obj)[1])(obj);
 }
+inline void ModeInfoAddRef(void* obj) {
+    if (obj) ((void(__thiscall*)(void*))(*(void***)obj)[0])(obj);
+}
 inline bool ModeInfoFreeName(cAppModeInfo_s007d_85b0* e) {
     if ((int)(e->mName.mpCapacity - e->mName.mpBegin) > 1 && e->mName.mpBegin != 0) {
         ea_free(e->mName.mpBegin);
@@ -107,6 +110,26 @@ inline void ModeInfoDestroy(cAppModeInfo_s007d_85b0* e) {
     ModeInfoFreeName(e);
     ModeInfoRelease(e->mpMode);
 }
+void* __cdecl Memmove_11e0744(void* dst, const void* src, unsigned n);   // 0x011e0744 (static CRT)
+struct RefInit {
+    void* p;
+    RefInit(void* q) : p(q) { ModeInfoAddRef(p); }
+};
+struct StrD {
+    char* mpBegin;
+    char* mpEnd;
+    char* mpCapacity;
+    int   mAlloc;
+    StrD() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~StrD() { if ((int)(mpCapacity - mpBegin) > 1 && mpBegin != 0) ea_free(mpBegin); }
+    void RangeInitialize(unsigned n);   // @ 0x00475ab0 (thiscall)
+};
+struct cAppModeInfoC {
+    RefInit  mpMode;
+    unsigned mID;
+    StrD     mName;
+    cAppModeInfoC(const cAppModeInfoC& src);   // @ 0x007d8740
+};
 namespace SP {
 struct cApp_s007d_85b0;
 }
@@ -144,7 +167,6 @@ struct cAppModeCheat {
     void Execute(void* args);         // @ 0x007d8ab0
 };
 }
-    void ea_free(...); // 0x00f47380
 // ---- items of slice s007d85b0 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
@@ -186,9 +208,6 @@ bool SP::cApp::Init()
     return true;
 }
 
-
-
-
 // @ 0x007d8180
 bool SP::IHandlerRC::HandleMessage(int msg, void* data)
 {
@@ -212,9 +231,6 @@ bool SP::IHandlerRC::HandleMessage(int msg, void* data)
     return false;
 }
 
-
-
-
 // @ 0x007d81f0
 bool SP::cApp::PreInitAppModes()
 {
@@ -229,9 +245,6 @@ bool SP::cApp::PreInitAppModes()
     }
     return true;
 }
-
-
-
 
 // @ 0x007d8230
 bool SP::cApp::InitAppModes()
@@ -248,9 +261,6 @@ bool SP::cApp::InitAppModes()
     return true;
 }
 
-
-
-
 // @ 0x007d8270
 void* SP::cApp::AppMode(unsigned id)
 {
@@ -263,9 +273,6 @@ void* SP::cApp::AppMode(unsigned id)
     return 0;
 }
 
-
-
-
 // @ 0x007d82c0
 void* SP::cApp::AppMode()
 {
@@ -276,9 +283,6 @@ void* SP::cApp::AppMode()
     return 0;
 }
 
-
-
-
 // @ 0x007d8300
 unsigned SP::cApp::AppModeID()
 {
@@ -288,9 +292,6 @@ unsigned SP::cApp::AppModeID()
     }
     return 0;
 }
-
-
-
 
 // @ 0x007d8360
 bool SP::cApp::SetAppModeByName(const char* name)
@@ -309,9 +310,6 @@ bool SP::cApp::SetAppModeByName(const char* name)
     return false;
 }
 
-
-
-
 // @ 0x007d83d0
 void* SP::cApp::AppModeID(int index)
 {
@@ -321,9 +319,6 @@ void* SP::cApp::AppModeID(int index)
         return 0;
     return mAppModesBegin[index].mpMode;
 }
-
-
-
 
 // @ 0x007d8410
 unsigned SP::cApp::AppModeName(int index)
@@ -335,9 +330,6 @@ unsigned SP::cApp::AppModeName(int index)
     return mAppModesBegin[index].mID;
 }
 
-
-
-
 // @ 0x007d8450
 void SP::cApp::SetMainViewer(void* v)
 {
@@ -346,9 +338,6 @@ void SP::cApp::SetMainViewer(void* v)
     void** vt = *(void***)viewer;
     ((void(__thiscall*)(void*, void*))vt[0x18 / 4])(viewer, v);
 }
-
-
-
 
 // @ 0x007d8470
 bool SP::cApp::SwitchMode()
@@ -376,9 +365,6 @@ bool SP::cApp::SwitchMode()
     return true;
 }
 
-
-
-
 // @ 0x007d8580
 void __fastcall VectorOwnerDestroy(void** self)
 {
@@ -392,8 +378,6 @@ void __fastcall VectorOwnerDestroy(void** self)
         ((void(__thiscall*)(void*))vt[1])((void*)obj);
     }
 }
-
-
 
 // @ 0x007d85b0
 void SP::cApp_s007d_85b0::ApplyAppMode(int index)
@@ -441,6 +425,20 @@ void SP::cApp_s007d_85b0::ApplyAppMode(int index)
         ((void(__thiscall*)(void*, int, void*, int))vt[0x14 / 4])(server, 0x22d1adc, msg, 0);
         SlotMessageDestruct(msg);
     }
+}
+
+// @ 0x007d8740
+cAppModeInfoC::cAppModeInfoC(const cAppModeInfoC& src)
+: mpMode(src.mpMode.p), mID(src.mID) {
+    StrD* t = &mName;
+    const char* sb = src.mName.mpBegin;
+    const char* se = src.mName.mpEnd;
+    unsigned n = se - sb;
+    t->RangeInitialize(n + 1);
+    char* d = t->mpBegin;
+    Memmove_11e0744(d, sb, n);
+    t->mpEnd = d + (se - sb);
+    *t->mpEnd = 0;
 }
 
 // @ 0x007d87e0
@@ -571,7 +569,7 @@ void SP::cApp_s007d_85b0::InsertAppMode(cAppModeInfo_s007d_85b0* position, const
         if ((char*)&value >= (char*)position && (char*)&value < (char*)mAppModesEnd)
             p = (const cAppModeInfo_s007d_85b0*)((char*)&value + 0x18);
         if (mAppModesEnd != 0)
-            Sub_7d8740(mAppModesEnd, mAppModesEnd - 1);
+            new (mAppModesEnd) cAppModeInfoC(*(cAppModeInfoC*)(mAppModesEnd - 1));
         cAppModeInfoAssignBackward(position, mAppModesEnd - 1, mAppModesEnd);
         position->operator=(*p);
         mAppModesEnd = mAppModesEnd + 1;
@@ -582,7 +580,7 @@ void SP::cApp_s007d_85b0::InsertAppMode(cAppModeInfo_s007d_85b0* position, const
         size_type posIndex = (size_type)((char*)position - (char*)mAppModesBegin);
         cAppModeInfo_s007d_85b0* mid = (cAppModeInfo_s007d_85b0*)Sub_7d8890(mAppModesBegin, position, newBuf);
         cAppModeInfoDestroyRange(mAppModesBegin, position);
-        Sub_7d8740(mid, &value);
+        new (mid) cAppModeInfoC(*(const cAppModeInfoC*)&value);
         cAppModeInfo_s007d_85b0* end = (cAppModeInfo_s007d_85b0*)Sub_7d8890(position, mAppModesEnd, mid + 1);
         cAppModeInfoDestroyRange(position, mAppModesEnd);
         if (mAppModesBegin != 0 && ((int*)mAppModesBegin)[-1] != 0)

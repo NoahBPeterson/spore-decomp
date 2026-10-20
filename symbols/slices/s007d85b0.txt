@@ -1,4 +1,5 @@
 007d85b0 ?ApplyAppMode@cApp_s007d_85b0@SP@@QAEXH@Z  # cApp_s007d_85b0::ApplyAppMode migrated from s007d85b0 (verbatim, slice spelling)
+007d8740 ??0cAppModeInfoC@@QAE@ABU0@@Z  # cAppModeInfoC::cAppModeInfoC migrated from s007d85b0 (verbatim, slice spelling)
 007d87e0 ?cAppModeInfoDestroyRange@@YGXPAUcAppModeInfo_s007d_85b0@@0@Z  # cAppModeInfoDestroyRange migrated from s007d85b0 (verbatim, slice spelling)
 007d8830 ?4cAppModeInfo
 007d8920 ?cAppModeInfoDestroyMove@@YAPAUcAppModeInfo_s007d_85b0@@PAU1@00@Z  # cAppModeInfoDestroyMove migrated from s007d85b0 (verbatim, slice spelling)
