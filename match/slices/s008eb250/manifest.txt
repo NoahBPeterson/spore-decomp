@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008eb250/s008eb250.cpp  ??0TextItem@Layout@XHTML@EA@@QAE@PAVPage@123@PB_WH@Z  008eb6f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008eb250/s008eb250.cpp  ?Init@NodeSizeIter@@QAEPAU1@PAXHH@Z  008eb720  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008eb250/s008eb250.cpp  ?IsSpace@@YA_N_W@Z  008eb760  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008eb250/s008eb250.cpp  ?NotifyImagesAbandoned@Page@Layout@XHTML@EA@@QAEXXZ  008eb7a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008eb250/s008eb250.cpp  ?SetImageRequester@Page@Layout@XHTML@EA@@QAEXPAXH@Z  008eb7e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008eb250/s008eb250.cpp  ?SetSelectionRange@Page@Layout@XHTML@EA@@QAEXII@Z  008eba20  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008eb250/s008eb250.cpp  ??0TableCell@Layout@XHTML@EA@@QAE@PAVPage@123@PAX@Z  008ebca0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008eb250/s008eb250.cpp  ?FindNodeInBucket@TextStyleHashtable@Layout@XHTML@EA@@SGPAXPAXPBXI@Z  008ec130  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

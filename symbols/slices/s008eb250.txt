@@ -1,0 +1,26 @@
+008eb250 EA::XHTML::Layout::ListItem::ListItem  # ctor: Block(pPage,pElement,5) then the ImageRequester base vtable at +0xc4, zero mpVf1/mnJobId/mListStyleType/mMarkerImageURI, kStr_None triple for the marker buffer (+0xd8/+0xdc/+0xe0 = kStr_None/kStr_None/kStr_None+2), mpTextStyle=0, mImageTableIndex=-1
+008eb2e0 EA::XHTML::Layout::ListItem::~ListItem  # free the marker buffer when its byte extent & ~1 > 2, then reset mMarkerImageURI and mMarkerTextBegin to kStr_None
+008eb350 EA::XHTML::Layout::ListItem::FormatMarkerText  # switch on mListStyleType: 0/1 kStr_None, 2 disc, 3 circle, 4 decimal format (index), 5/6 roman (lower/upper 13-entry size table + '.'), 7/8 alpha/ALPHA ('a'+index/'A'+index with '?' fallback)
+008eb520 EA::XHTML::Layout::ListItem::PlaceContent  # counter=list; copy style; image path (GetResource icon lookup, ImageRequest_Request on &this[0xc4], 16.0f marker width or the icon's +4 width) else text path (GetTextStyle, FormatMarkerText, Typesetter Reset/SetWidth/LayoutLine, mMarkerWidth = line+0x98); PlaceBlock either way
+008eb6f0 EA::XHTML::Layout::TextItem::TextItem  # Item(pPage,1) then mpCharData=pText, mLength=nLength, mpTextStyle=0
+008eb720 NodeSizeIter::Init  # store mValue=0/mpNode/mCount/mTotal then sum each node's vtable+8 size over the mpNext chain, return this
+008eb760 IsSpace  # true for 0x20, 0x09, 0x0c, 0x0d, 0x0a, 0x200b
+008eb7a0 EA::XHTML::Layout::Page::NotifyImagesAbandoned  # while the resource list at +0x258 is non-null call mpImageRequester's vtable+8 with each node's +8 pointer, always re-reading the head
+008eb7e0 EA::XHTML::Layout::Page::SetImageRequester  # clear the old focus item's +0xc flag, store the new requester in mpFocusItem, set its +0xc to flag
+008eb870 EA::XHTML::Layout::Page::Render  # with a root item: build a RenderingContext and dispatch vtable+0x14 then destroy it; otherwise reset the typesetter and set its rect
+008eb910 EA::XHTML::Layout::Page::SetChildItem  # bounds-check index against the +0x44 vector's element count, addref the incoming item, store it in the slot, release the old one with argument 1
+008eb980 EA::XHTML::Layout::Page::ImageRequestCallback  # walk the +0x258 list for the entry whose +8 key equals pMsg[1], invoke its vtable+4 with pMsg[4] (when pMsg[0]==2) or 0, notify the selection interface when pMsg[0]!=4 and the pMsg[1] byte is clear, then advance the link slot
+008eba20 EA::XHTML::Layout::Page::SetSelectionRange  # store start/end, then min/max into +0x274/+0x278 through reference-returning helpers
+008eba70 IntRange_Equals  # 0 when the two ranges have equal byte lengths and equal dwords, 1 otherwise
+008ebb30 EA::XHTML::Layout::TextStyleHashtable::DoRehash  # relink every node of every bucket into the new bucket array by style hash, then either refill the free list (in-pool old array) or free it
+008ebc50 EA::XHTML::Layout::InlineItem::InlineItem  # Item(pPage,type), self-link the child list at +0x18, zero +0x24/+0x28/+0x34/+0x38/+0x3c/+0x40/+0x44, mpElement, then the class vtable
+008ebca0 EA::XHTML::Layout::TableCell::TableCell  # Block(pPage,pElement,7), mRowSpan=mColSpan=1, mRow=mCol=0, class vtable, mMinWidth=mMaxWidth=0
+008ebd00 EA::XHTML::Layout::TableGroup::TableGroup  # Item(pPage,9), self-link child list, zero the placement/colour/border fields, mpElement, class vtable, +0x5c = the second constructor argument
+008ebd50 EA::XHTML::Layout::Page::DestroyItem  # recurse over a container's child list, unlinking each node before recursing, then dispatch the vtable+4 destructor on the container
+008ebde0 EA::XHTML::Layout::Page::CreateAttributeStyles  # walk the element's attribute list and, per attribute kind and element kind, emit CreateAttributeStyleFn for the matching style attribute
+008ec0e0 EA::XHTML::Layout::TextStyleHashtable::AllocNode  # pop a node from the free list or allocate one from the pool, copy-construct the style into it and clear its next link
+008ec130 EA::XHTML::Layout::TextStyleHashtable::FindNodeInBucket  # return the first node in a bucket whose style equals pStyle, or null
+008ec170 EA::XHTML::Layout::TableRow::TableRow  # Item(pPage,8), self-link child list, zero placement/colour/border fields, then the three cell-vector pointers
+008ec1c0 EA::XHTML::Layout::TextStyleHashtable::Destroy  # free the secondary array, release the intrusive list and optionally operator delete[] this
+008ec200 EA::XHTML::Layout::TextStyleHashtable::Find  # return (node, bucket-slot) for the style, or the end sentinel pair when absent
+008ec280 EA::XHTML::Layout::TextStyleHashtable::DoInsertValue  # insert the style: return the existing (node, slot, false) triple, else consult the rehash hint, rehash if needed, link the new node and return (node, slot, true)
