@@ -1,0 +1,3 @@
+009bb360 ?UpdateHitWiggles@creature_instance_data@nSPCreatureAnim@@QAEXHMMM@Z  # creature_instance_data::UpdateHitWiggles(this,int,float,float,float)
+009bb4f0 ?UpdateWiggles@creature_instance_data@nSPCreatureAnim@@QAEXMM@Z  # creature_instance_data::UpdateWiggles(this,float,float)
+009bb680 ?HitBody@creature_instance_data@nSPCreatureAnim@@QAEXKABUvector_3@checkerlib@@I_NM@Z  # creature_instance_data::HitBody(this,unsigned long,const vector_3&,unsigned long,bool,float)
