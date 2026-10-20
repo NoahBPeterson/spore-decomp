@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00abd170  54  Swarm blob list deserialize: loop induction/register allocation differ (ours 120 B vs 104 B); equiv UNSUPPORTED (0/400 valid inputs, fake-arity/read faults)
+00abd1f0  41  effect option flags: original writes the a/c params in reverse order, uses movzx (not mov+shl) and returns the last shift result in eax; equiv FAIL (eax differs on 5/7 inputs)
+00abd290  82  enable/disable children: false case still materialises an extra sete/movzx to edx (we reuse ebx); equiv PASS
+00abd300  104  list walk + vcall(0x2c): original spills the list/count into separate stack slots, ours keeps them in registers; equiv WEAK (365 valid, 32.8% coverage)
+00abd390  25  assign sub-transforms: original keeps the child pointer in ecx and reloads it before the second vcall, ours hoists it into esi; equiv PASS
+00abd590  93  detach + purge children: original walks the vector through esi with inline size recomputation, ours through the Vector object; equiv WEAK (216 valid, 51.6% coverage)
+00abd640  127  compact live children: original orders the loop and index slots differently (esi/ebp/edi roles); equiv WEAK (222 valid, 39.1% coverage)
+00abd6f0  393  effect update: overall control flow matches but the entry test emits jmp+comiss ordering differences; equiv FAIL (xmm1 clobber on 5/6 inputs)
+00abda70  1  random range lerp: only the final fcomi/jb sense differs (fcomi st(1) vs the original double-compare sequence, 1 byte); equiv UNSUPPORTED (unresolved RandomDoubleUniform ref)
+00abdbb0  943  effect sample/emit: curve sampling, floor, table lerp and attenuation scheduling all differ; equiv FAIL (5/5 mismatch, first call arg)

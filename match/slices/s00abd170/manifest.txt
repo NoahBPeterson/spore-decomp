@@ -1,0 +1,12 @@
+# source  symbol  original VA  [flags override]
+slices/s00abd170/s00abd170.cpp  ?FUN_00abd230@Eff@@QAEXH@Z  00abd230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abd170/s00abd170.cpp  ?FUN_00abd270@Eff@@QAEHXZ  00abd270  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abd170/s00abd170.cpp  ?FUN_00abd3e0@Eff@@QAEPAXHH@Z  00abd3e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abd170/s00abd170.cpp  ?FUN_00abd540@Eff@@QAEPAXD@Z  00abd540  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abd170/s00abd170.cpp  ?FUN_00abd8d0@@YAPAXPAH@Z  00abd8d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abd170/s00abd170.cpp  ?FUN_00abd970@Eff@@QAEPAXD@Z  00abd970  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abd170/s00abd170.cpp  ?FUN_00abd9c0@@YAXPAHHPAD@Z  00abd9c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abd170/s00abd170.cpp  ?FUN_00abdb20@Eff@@QAEXH@Z  00abdb20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abd170/s00abd170.cpp  ?FUN_00abdb70@Eff@@QAEDHPAXH@Z  00abdb70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abd170/s00abd170.cpp  ?FUN_00abe010@@YAPAXH@Z  00abe010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abd170/s00abd170.cpp  ?FUN_00abe090@Eff@@QAEXPAUCTrans@@0@Z  00abe090  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
