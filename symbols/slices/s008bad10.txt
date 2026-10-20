@@ -1,0 +1,5 @@
+008bad10 _tsi_NewCFFIndexClass  # decode a CFF INDEX (count, offSize, offsets[]) from the stream
+008bae70 _tsi_GetCFFData  # fetch INDEX member data into a fresh NUL-terminated buffer
+008baee0 _GetT2NameProperty  # name-property accessor (kind 4 -> name index)
+008baf10 _tsi_ParsePrivateDictData  # parse a CFF Private DICT (defaultWidthX/nominalWidthX)
+008bb0d0 _tsi_ParseCFFTopDict  # parse the CFF Top DICT into the class
