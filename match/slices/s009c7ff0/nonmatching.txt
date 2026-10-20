@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+009c7ff0  71  Clear: end-=0x14 form gives a negative-magic division (0x99999999) that cl cannot emit from any source form; semantically identical; difftest FAIL (harness fake-arity on tiny inputs)
+009c8050  238 Bind: cl scheduling of the refcount/AssignKeyModel path differs; difftest WEAK (216 valid, 55.3% cov)
+009c8170  135 SetBodyCount: sp_vector resize/erase clone; cl register allocation differs; difftest PASS (258 valid, 100% cov)
+009c8460  83  Dispose: cl instruction scheduling differs; difftest PASS (400 valid, 100% cov)
+009c8510  51  Elem28 copy-forward: pure register permutation of the 8-dword block move; difftest FAIL (only eax leftover register differs)
+009c8630  170 MinClearance: original uses loop strength reduction + SSE mulss/addss with x87 fabs; not reproducible; difftest PASS (299 valid, 100% cov)
+009c86e0  226 MinClearanceIdx: same strength-reduction body; difftest FAIL (only eax leftover register differs)
+009c87e0  137 BodyToWorld: cl codegen of the quaternion transform differs; difftest PASS (400 valid, 100% cov)
+009c8890  27  SetWorldState: cl scheduling of the world-state update differs; difftest WEAK (245 valid, 52.8% cov)
+009c89d0  76  Elem28 fill-n: copy loop register allocation differs; difftest PASS (315 valid, 100% cov)

@@ -1,0 +1,4 @@
+# va  reason
+009c8230  Init: cannot be equivalent -- difftest UNSUPPORTED (0/400 valid inputs; discards fault(read)=268, fake-arity=114, fault(pool-limit)=14)
+009c85c0  Elem28 copy-back: cannot be equivalent -- difftest UNSUPPORTED (0/400 valid inputs; discards fault(read)=387, fault(write)=13)
+009c8970  Elem28 construct-range: cannot be equivalent -- difftest UNSUPPORTED (9/400 valid inputs; discards fault(pool-limit)=389, budget=2)

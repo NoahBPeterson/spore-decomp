@@ -1,0 +1,15 @@
+009c7ff0 ?Clear@creature_mesh_instance_data@@QAEXXZ  # nSPCreatureAnim::creature_mesh_instance_data::Clear (name read from callers; no PDB symbol)
+009c8050 ?Bind@creature_mesh_instance_data@@QAE_NPAUcreature_instance_data@@PAUcIModelWorld@@PAXPAUResKey@@_N@Z  # creature_mesh_instance_data::Bind
+009c8170 ?SetBodyCount@creature_mesh_instance_data@@QAEXK@Z  # creature_mesh_instance_data::SetBodyCount
+009c8200 ?ctor@creature_mesh_instance_data@@QAEPAU1@XZ  # creature_mesh_instance_data::ctor
+009c8230 ?Init@creature_mesh_instance_data@@QAE_NPAUcreature_instance_data@@PAUcIModelWorld@@PAX@Z  # creature_mesh_instance_data::Init
+009c8460 ?Dispose@creature_mesh_instance_data@@QAEXXZ  # creature_mesh_instance_data::Dispose
+009c8510 ?Elem28CopyFwd@@YAXPAUElem28@@00@Z  # copy-construct range forward (record 0x28)
+009c85c0 ?Elem28CopyBack@@YAXPAUElem28@@00@Z  # copy-construct range backward (record 0x28)
+009c8630 ?MinClearance@creature_mesh_instance_data@@SAXPAMPAUcreature_static_data@@@Z  # creature_mesh_instance_data::MinClearance (void: original never loads st0)
+009c86e0 ?MinClearanceIdx@creature_mesh_instance_data@@SAXPAMPAIPAUcreature_static_data@@@Z  # creature_mesh_instance_data::MinClearanceIdx (void: original never loads st0)
+009c87e0 ?BodyToWorld@creature_mesh_instance_data@@SAXPAMPAIPAUbody_static_data@@@Z  # creature_mesh_instance_data::BodyToWorld
+009c8890 ?SetWorldState@creature_mesh_instance_data@@QAEXXZ  # creature_mesh_instance_data::SetWorldState (no stack args: original ends with plain `ret`)
+009c8900 ?RefreshWorldState@creature_mesh_instance_data@@QAEXXZ  # creature_mesh_instance_data::RefreshWorldState
+009c8970 ?Elem28ConstructRange@@YAXPAUElem28@@0PBU1@@Z  # copy-construct n records from one source
+009c89d0 ?Elem28FillN@@YAXPAUElem28@@KPBU1@@Z  # fill n records from one source (0x009c89d0)
