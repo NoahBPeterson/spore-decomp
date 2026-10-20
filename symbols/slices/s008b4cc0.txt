@@ -1,0 +1,2 @@
+008b4cc0 tsi_PFRGetGlyphByIndex  # PDB candidate (caller-scored), from card
+008b4f00 BuildPFRMetricsEtc      # PDB candidate (caller-single), from card
