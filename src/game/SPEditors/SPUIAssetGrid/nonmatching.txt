@@ -1,4 +1,4 @@
-# va  diff-bytes  reason (complete, not byte-exact)
+# va  diff-bytes  reason
 0064e5d0 97 complete cell-position helper; float->int conversion (original cvtss2si-from-memory vs our cvttss2si) and register allocation differ, not byte-exact
 0064f730 48 UninitCopyOut complete; the Entry copy ctor is emitted out-of-line and called instead of inlined, and the fourth-arg pointer loses its home-slot spill, not byte-exact
 006505d0 47 cSPUIAssetGrid::Find(id): complete, branch/register layout differs

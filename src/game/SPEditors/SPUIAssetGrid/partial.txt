@@ -1,4 +1,4 @@
-# va  diff-bytes  reason (incomplete/approximate)
+# va  diff-bytes  reason
 00648aa0  66    outline only: ClearAssetViews (stubbed)
 00648bb0  164   outline only: eastl::make_heap (stubbed)
 0064e7d0  164  visibility/bounds predicate; comparison shape reproduced but virtual-call argument ABI not reproduced
