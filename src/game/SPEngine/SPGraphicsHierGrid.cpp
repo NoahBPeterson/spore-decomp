@@ -248,7 +248,23 @@ struct SlotVectorStub { char pad[0x18]; unsigned create(const void* value); }; /
 struct ListStub { void CopyFrom(ListStub* other); };                 // 0x00701170
 void __stdcall HashTable_ClearBuckets(void** buckets, unsigned count); // 0x00702660
 struct HashTableStub { void clearBuckets(void** buckets, unsigned count); };
+void __cdecl GetParentChildInfo(unsigned cellID, unsigned* parent, unsigned* child); // 0x00700b70
 void __cdecl memset0(void* dst, int v, unsigned n);                   // 0x011e073e
+struct CellInfo_s0070_2980 {
+    ObjListNode mHead;
+    unsigned char mOctantFlags;
+    CellInfo_s0070_2980() { mHead.pNext = &mHead; mHead.pPrev = &mHead; mOctantFlags = 0; }
+    ~CellInfo_s0070_2980() {
+        ObjListNode* p = mHead.pNext;
+        while (p != &mHead) {
+            ObjListNode* n = p->pNext;
+            operator delete(p);
+            p = n;
+        }
+    }
+};
+struct CellNode_s0070_2980 { unsigned mKey; CellInfo_s0070_2980 mInfo; CellNode_s0070_2980* mpNext; };  // next at +0x14
+struct HashIter_s0070_2980 { CellNode_s0070_2980* mpNode; void** mpBucket; unsigned char mFlag; };
 struct CellMap {
     unsigned m0;             // +0x00
     void**   mpBuckets;      // +0x04
@@ -256,10 +272,13 @@ struct CellMap {
     unsigned mnElementCount; // +0x0c
     unsigned m10, m14, m18;  // +0x10..0x18
 
-    void* CloneEntry(CellNode* src);          // 0x702980
+    void* CloneEntry(CellNode_s0070_2980* src);          // 0x702980
     void CopyConstruct(const CellMap& src);   // 0x702a10
     CellMap& Assign(const CellMap& src);      // 0x702f60
-    CellInfo* Index(unsigned* key);           // 0x703360
+    CellInfo_s0070_2980* Index(unsigned* key);           // 0x703360
+    void Find(HashIter_s0070_2980* out, const unsigned* key);                 // 0x00a3b2c0
+    CellNode_s0070_2980* Insert(HashIter_s0070_2980* out, CellNode_s0070_2980* node, bool growFlag);// 0x00702ea0
+    HashIter_s0070_2980* Erase(HashIter_s0070_2980* out, CellNode_s0070_2980* node, void** bucket); // 0x007028e0
 };
 struct cGrid_s0070_2980 {
     float mCellSize;         // +0x00
@@ -278,15 +297,23 @@ struct cGrid_s0070_2980 {
     void Destroy();                           // 0x702ff0
 };
 struct HierGridStub {
-    char pad0[0x20];
+    char pad0[0x18];
+    int mTopLevel;                            // +0x18
+    int mLeafLevel;                           // +0x1c
     int mNumObjects;                          // +0x20
-    char pad24[0x60 - 0x24];
+    cGrid_s0070_2980* mGrids;                            // +0x24
+    char pad28[0x60 - 0x28];
     SlotVecStub mSlots;                       // +0x60
     char pad64[0x78 - 0x64];
     unsigned mSlotFree;                       // +0x78
     unsigned mSlotNext;                       // +0x7c
     int  Clear(unsigned index);               // 0x702af0
     void Remove(unsigned index);              // 0x702da0
+};
+struct SlotRec {            // 0x10-byte slot record, +4 of the slot (slot link word is at +0)
+    int      mGrid;         // +0x04
+    unsigned mKey;          // +0x08   (0xffffffff when the slot is free)
+    void*    mPtr;          // +0x0c
 };
 struct Vec3 { float x, y, z; };
 namespace __equiv_ann1 {
@@ -368,10 +395,6 @@ void GetParentChildInfo(unsigned a, unsigned* p2, unsigned* p3)
     *p2 = (a >> 1) & 0x7ff7fdff;
 }
 
-
-
-
-
 // @ 0x00700bb0
 void ChildCellIDs(unsigned a, int* p)
 {
@@ -386,10 +409,6 @@ void ChildCellIDs(unsigned a, int* p)
     p[7] = v + 0x100401;
 }
 
-
-
-
-
 // @ 0x00700c00
 unsigned int __cdecl FUN_00700c00(unsigned int a)
 {
@@ -400,19 +419,12 @@ unsigned int __cdecl FUN_00700c00(unsigned int a)
              g_cellTable[mid & 0x1f]) * 2) | g_cellTable[a & 0x1f];
 }
 
-
-
-
-
 // @ 0x00700c80
 float __cdecl FUN_00700c80(float* a, float* b, float* c, float d)
 {
     (void)a; (void)b; (void)c; (void)d;
     return 0.0f;
 }
-
-
-
 
 // @ 0x00700da0
 unsigned __thiscall cHierGrid::CellFromPos(float px, float py, float pz, unsigned char level)
@@ -437,18 +449,12 @@ unsigned __thiscall cHierGrid::CellFromPos(float px, float py, float pz, unsigne
     return ((iz & 0x3ff) << 10 | (iy & 0x3ff)) << 10 | (ix & 0x3ff);
 }
 
-
-
-
 // @ 0x00700ed0
 void __fastcall free_holder(void** holder)
 {
     if (*holder)
         operator delete(*holder);
 }
-
-
-
 
 // @ 0x00700f90
 void __fastcall list_free_anchor0(ObjListNode* self)
@@ -462,9 +468,6 @@ void __fastcall list_free_anchor0(ObjListNode* self)
         operator delete(cur);
     } while (n != self);
 }
-
-
-
 
 // @ 0x00700fc0
 void __fastcall list_free_anchor4(void* self)
@@ -480,9 +483,6 @@ void __fastcall list_free_anchor4(void* self)
     } while (n != anchor);
 }
 
-
-
-
 // @ 0x00700ff0
 unsigned __thiscall SlotVectorBase::destroy(unsigned index)
 {
@@ -497,9 +497,6 @@ unsigned __thiscall SlotVectorBase::destroy(unsigned index)
     } while ((int)info < 0);
     return index;
 }
-
-
-
 
 // @ 0x00701050
 ListNode** __stdcall list_insert_before(ListNode** out, ListIterator position, void** value)
@@ -517,9 +514,6 @@ ListNode** __stdcall list_insert_before(ListNode** out, ListIterator position, v
     return r;
 }
 
-
-
-
 // @ 0x007010b0
 void __stdcall list_insert_range(ListNode* pos, ListIterator first, ListIterator last, int tag)
 {
@@ -535,9 +529,6 @@ void __stdcall list_insert_range(ListNode* pos, ListIterator first, ListIterator
     }
 }
 
-
-
-
 // @ 0x00701110
 bool __fastcall hashtable_bucket_nonempty(HashTable* t, const unsigned* key)
 {
@@ -549,9 +540,6 @@ bool __fastcall hashtable_bucket_nonempty(HashTable* t, const unsigned* key)
     return node != end;
 }
 
-
-
-
 // @ 0x00701170
 void __thiscall ObjList::CopyFrom(const ObjList& other)
 {
@@ -562,9 +550,6 @@ void __thiscall ObjList::CopyFrom(const ObjList& other)
                       *(ListIterator*)&other,
                       0);
 }
-
-
-
 
 // @ 0x007011d0
 bool __thiscall cHierGrid::CullCellList(void* frustum, unsigned clipFlags, unsigned cellID, int level)
@@ -662,9 +647,6 @@ bool __thiscall cHierGrid::CullCellList(void* frustum, unsigned clipFlags, unsig
     return bits != 0;
 }
 
-
-
-
 // @ 0x007014c0
 void __thiscall cHierGrid::QueryCells(float radius, float* pos)
 {
@@ -743,8 +725,6 @@ void __thiscall cHierGrid::QueryCells(float radius, float* pos)
     }
 }
 
-
-
 // @ 0x00701a00
 void __thiscall cHierGrid_s0070_1a00::QuerySegment(float* p0, float* p1)
 {
@@ -810,8 +790,6 @@ void __thiscall cHierGrid_s0070_1a00::QuerySegment(float* p0, float* p1)
             break;
     }
 }
-
-
 
 // @ 0x00701e40
 void __thiscall cHierGrid_s0070_1a00::Query3(float* p0, float* p1, float r)
@@ -887,8 +865,6 @@ void __thiscall cHierGrid_s0070_1a00::Query3(float* p0, float* p1, float r)
     } while (level <= mLeafLevel);
 }
 
-
-
 // @ 0x00702500
 void __fastcall list_dtor_with_eh(int* p)
 {
@@ -897,8 +873,6 @@ void __fastcall list_dtor_with_eh(int* p)
     if (*p)
         operator delete((void*)*p);
 }
-
-
 
 // @ 0x00702550
 void __thiscall PtrVec::insert(void** pos, void** value)
@@ -929,8 +903,6 @@ void __thiscall PtrVec::insert(void** pos, void** value)
     mpCap = (void**)((char*)dst + cap * 4);
 }
 
-
-
 // @ 0x00702660
 void __stdcall HashTable_ClearBuckets(CellNode** buckets, unsigned count)
 {
@@ -951,8 +923,6 @@ void __stdcall HashTable_ClearBuckets(CellNode** buckets, unsigned count)
         buckets[i] = 0;
     }
 }
-
-
 
 // @ 0x007026d0
 int __thiscall cHierGrid_s0070_1a00::FrustumQuery(void* frustum, int count, void** buffer)
@@ -981,8 +951,6 @@ int __thiscall cHierGrid_s0070_1a00::FrustumQuery(void* frustum, int count, void
     return result >> 2;
 }
 
-
-
 // @ 0x00702760
 int __thiscall cHierGrid_s0070_1a00::QuerySphereResult(float radius, float* pos, int count, void** buffer)
 {
@@ -1006,8 +974,6 @@ int __thiscall cHierGrid_s0070_1a00::QuerySphereResult(float radius, float* pos,
     mQueryListEnd = 0;
     return result >> 2;
 }
-
-
 
 // @ 0x007027e0
 int __thiscall cHierGrid_s0070_1a00::QuerySegmentResult(float* p0, float* p1, int count, void** buffer)
@@ -1033,8 +999,6 @@ int __thiscall cHierGrid_s0070_1a00::QuerySegmentResult(float* p0, float* p1, in
     return result >> 2;
 }
 
-
-
 // @ 0x00702860
 int __thiscall cHierGrid_s0070_1a00::Query3Result(float* p0, float* p1, float r, int count, void** buffer)
 {
@@ -1058,8 +1022,6 @@ int __thiscall cHierGrid_s0070_1a00::Query3Result(float* p0, float* p1, float r,
     mQueryListEnd = 0;
     return result >> 2;
 }
-
-
 
 // @ 0x007028e0
 HashIter* __thiscall HashTable_s0070_1a00::erase(HashIter* out, CellNode* node, void** bucket)
@@ -1093,9 +1055,8 @@ HashIter* __thiscall HashTable_s0070_1a00::erase(HashIter* out, CellNode* node, 
     return out;
 }
 
-
 // @ 0x00702980
-void* __thiscall CellMap::CloneEntry(CellNode* src)
+void* __thiscall CellMap::CloneEntry(CellNode_s0070_2980* src)
 {
     void* node = operator new(0x18, "Graphics", 0, 0, ALLOC_FILE, 0xd1);
     if (node) {
@@ -1106,7 +1067,6 @@ void* __thiscall CellMap::CloneEntry(CellNode* src)
     *(unsigned*)((char*)node + 0x14) = 0;
     return node;
 }
-
 
 // @ 0x00702a10
 void __thiscall CellMap::CopyConstruct(const CellMap& src)
@@ -1126,7 +1086,7 @@ void __thiscall CellMap::CopyConstruct(const CellMap& src)
         unsigned i = 0;
         if (mnBucketCount != 0) {
             do {
-                CellNode* cur = (CellNode*)src.mpBuckets[i];
+                CellNode_s0070_2980* cur = (CellNode_s0070_2980*)src.mpBuckets[i];
                 int* p = (int*)((char*)mpBuckets + i * 4);
                 for (; cur != 0; cur = cur->mpNext) {
                     void* e = CloneEntry(cur);
@@ -1144,15 +1104,101 @@ void __thiscall CellMap::CopyConstruct(const CellMap& src)
     }
 }
 
-
 // @ 0x00702af0
 int __thiscall HierGridStub::Clear(unsigned index)
 {
     int result = 0;
-    (void)index;
+    void** blocks = (void**)mSlots.mBlocks;
+    SlotRec* s = (SlotRec*)((char*)blocks[index >> 7] + (index & 0x7f) * 0x10 + 4);
+
+    if (s->mKey == 0xffffffffu) {
+        // free slot: unlink and release the cached node, return its object count
+        char* R = *(char**)&s->mPtr;
+        int n = *(int*)(R + 8);
+        ObjListNode* a = *(ObjListNode**)(*(char**)R + 4);
+        a->pNext->pPrev = a->pPrev;
+        a->pPrev->pNext = a->pNext;
+        operator delete(a);
+        return n;
+    }
+
+    cGrid_s0070_2980* grid = (cGrid_s0070_2980*)((char*)mGrids + s->mGrid * 0x44);
+    HashIter_s0070_2980 it;
+    grid->mCells.Find(&it, (unsigned*)&s->mKey);
+    if (it.mpNode == (CellNode_s0070_2980*)grid->mCells.mpBuckets[grid->mCells.mnBucketCount])
+        return result;
+
+    {
+        char* R = *(char**)&s->mPtr;
+        result = *(int*)(R + 8);
+        ObjListNode* a = *(ObjListNode**)(*(char**)R + 4);
+        a->pNext->pPrev = a->pPrev;
+        a->pPrev->pNext = a->pNext;
+        operator delete(a);
+    }
+
+    if (it.mpNode->mInfo.mHead.pNext == &it.mpNode->mInfo.mHead) {
+        if (s->mGrid > 0 && it.mpNode->mInfo.mOctantFlags == 0) {
+            unsigned parent = 0;
+            unsigned child = 0;
+            GetParentChildInfo(s->mKey, &parent, &child);
+            cGrid_s0070_2980* pg = (cGrid_s0070_2980*)((char*)mGrids + (s->mGrid - 1) * 0x44);
+            HashIter_s0070_2980 it2;
+            pg->mCells.Find(&it2, &parent);
+            if (it2.mpNode != (CellNode_s0070_2980*)pg->mCells.mpBuckets[pg->mCells.mnBucketCount])
+                it2.mpNode->mInfo.mOctantFlags &= (unsigned char)~(1 << child);
+        }
+        if (grid->mMask != 0) {
+            unsigned h = CellMaskHash(s->mKey);
+            int w = (int)(h >> 3);
+            unsigned char bit = 1;
+            bit <<= (h & 7);
+            grid->mMask[w] &= (unsigned char)~bit;
+            int lvl = s->mGrid;
+            while (lvl > 0 &&
+                   ((cGrid_s0070_2980*)((char*)mGrids + (lvl - 1) * 0x44))->mMask != 0 &&
+                   ((cGrid_s0070_2980*)((char*)mGrids + lvl * 0x44))->mMask[w] == 0 &&
+                   ((cGrid_s0070_2980*)((char*)mGrids + lvl * 0x44))->mChildMask[w] == 0) {
+                lvl = lvl - 1;
+                unsigned char b = (unsigned char)w;
+                w = w >> 3;
+                unsigned char m = (unsigned char)(1 << (b & 7));
+                ((cGrid_s0070_2980*)((char*)mGrids + lvl * 0x44))->mChildMask[w] &= (unsigned char)~m;
+            }
+        }
+        HashIter_s0070_2980 out;
+        grid->mCells.Erase(&out, it.mpNode, it.mpBucket);
+        if (grid->mCells.mnElementCount == 0) {
+            int lvl = s->mGrid;
+            int leaf = mLeafLevel;
+            if (lvl == mLeafLevel) {
+                if (lvl == mTopLevel) {
+                    mLeafLevel = 0;
+                    mTopLevel = 1000;
+                    return result;
+                }
+            }
+            if (lvl == leaf) {
+                mLeafLevel = leaf - 1;
+                while (mLeafLevel >= mTopLevel) {
+                    if (((cGrid_s0070_2980*)((char*)mGrids + mLeafLevel * 0x44))->mCells.mnElementCount != 0)
+                        return result;
+                    mLeafLevel = mLeafLevel - 1;
+                }
+                return result;
+            }
+            if (lvl == mTopLevel) {
+                mTopLevel = mTopLevel + 1;
+                while (mTopLevel < mLeafLevel) {
+                    if (((cGrid_s0070_2980*)((char*)mGrids + mTopLevel * 0x44))->mCells.mnElementCount != 0)
+                        return result;
+                    mTopLevel = mTopLevel + 1;
+                }
+            }
+        }
+    }
     return result;
 }
-
 
 // @ 0x00702da0
 void __thiscall HierGridStub::Remove(unsigned index)
@@ -1170,7 +1216,6 @@ void __thiscall HierGridStub::Remove(unsigned index)
     Clear(index);
 }
 
-
 // @ 0x00702f60
 CellMap& __thiscall CellMap::Assign(const CellMap& src)
 {
@@ -1185,7 +1230,6 @@ CellMap& __thiscall CellMap::Assign(const CellMap& src)
     }
     return *this;
 }
-
 
 // @ 0x00702ff0
 void __thiscall cGrid_s0070_2980::Destroy()
@@ -1203,7 +1247,6 @@ void __thiscall cGrid_s0070_2980::Destroy()
         operator delete(c->mpBuckets);
 }
 
-
 // @ 0x00703050
 cGrid_s0070_2980* __thiscall cGrid_s0070_2980::CopyConstruct(const cGrid_s0070_2980& src)
 {
@@ -1220,7 +1263,6 @@ cGrid_s0070_2980* __thiscall cGrid_s0070_2980::CopyConstruct(const cGrid_s0070_2
     return this;
 }
 
-
 // @ 0x007030a0
 cGrid_s0070_2980* __cdecl grid_uninit_copy(cGrid_s0070_2980* first, cGrid_s0070_2980* last, cGrid_s0070_2980* dst)
 {
@@ -1232,7 +1274,6 @@ cGrid_s0070_2980* __cdecl grid_uninit_copy(cGrid_s0070_2980* first, cGrid_s0070_
     return out;
 }
 
-
 // @ 0x00703160
 void __cdecl grid_fill_n(unsigned n, cGrid_s0070_2980* dst, const cGrid_s0070_2980* value)
 {
@@ -1242,7 +1283,6 @@ void __cdecl grid_fill_n(unsigned n, cGrid_s0070_2980* dst, const cGrid_s0070_29
     }
 }
 
-
 // @ 0x007032e0
 cGrid_s0070_2980* __cdecl grid_destroy_range(cGrid_s0070_2980* first, cGrid_s0070_2980* last, cGrid_s0070_2980* ended)
 {
@@ -1251,15 +1291,28 @@ cGrid_s0070_2980* __cdecl grid_destroy_range(cGrid_s0070_2980* first, cGrid_s007
     return ended;
 }
 
-
 // @ 0x00703360
-CellInfo* __thiscall CellMap::Index(unsigned* key)
+CellInfo_s0070_2980* __thiscall CellMap::Index(unsigned* key)
 {
-    char local[8];
-    HashFind_Cell(local, key);
-    return 0;
-}
+    HashIter_s0070_2980 it;
+    Find(&it, key);
+    if (it.mpNode != (CellNode_s0070_2980*)mpBuckets[mnBucketCount])
+        return (CellInfo_s0070_2980*)((char*)it.mpNode + 4);
 
+    CellInfo_s0070_2980 info;
+
+    CellNode_s0070_2980 node;
+    node.mKey = *key;
+    ((ListStub*)&node.mInfo)->CopyFrom((ListStub*)&info);
+    node.mInfo.mOctantFlags = info.mOctantFlags;
+
+    // NB: the original spills this bool literal into the (dead) incoming `key` argument slot
+    // and then reloads it as a dword, so its pushed value is (key & 0xffffff00) rather than 0.
+    // The callee only tests the low byte, so the value is the same `false`.
+    Insert(&it, &node, false);
+
+    return (CellInfo_s0070_2980*)((char*)it.mpNode + 4);
+}
 
 // @ 0x00703470
 unsigned __thiscall SlotVectorStub::create(const void* value)
@@ -1304,7 +1357,6 @@ unsigned __thiscall SlotVectorStub::create(const void* value)
     return index;
 }
 
-
 // @ 0x007035a0
 void __stdcall grid_destroy_count(cGrid_s0070_2980* first, cGrid_s0070_2980* last)
 {
@@ -1318,7 +1370,6 @@ void __stdcall grid_destroy_count(cGrid_s0070_2980* first, cGrid_s0070_2980* las
         } while (n != 0);
     }
 }
-
 
 // @ 0x00703620
 cGrid_s0070_2980* __cdecl grid_copy_forward(cGrid_s0070_2980* first, cGrid_s0070_2980* last, cGrid_s0070_2980* dst)
@@ -1335,7 +1386,6 @@ cGrid_s0070_2980* __cdecl grid_copy_forward(cGrid_s0070_2980* first, cGrid_s0070
     }
     return dst;
 }
-
 
 // @ 0x00703690
 cGrid_s0070_2980* __cdecl grid_assign_backward(cGrid_s0070_2980* first, cGrid_s0070_2980* last, cGrid_s0070_2980* dstEnd)

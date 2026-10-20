@@ -20,11 +20,13 @@
 007028e0 88 eastl hashtable erase; structurally complete, register allocation differs
 00702980 45 CellMap::CloneEntry (allocate + copy one hash node); full reconstruction, schedule differs
 00702a10 226 CellMap copy constructor; complete, allocation/copy schedule differs
-00702da0 50 SP::cHierGrid::Remove; complete behaviour, register allocation differs
+00702af0 565 SP::cHierGrid::Clear; complete (slot free-list unlink, mask propagation, level trim) but register allocation and local-slot layout differ throughout. equiv WEAK: 695 valid, 25.5% coverage, no mismatch (exact source vs original, /O2 /MD /Gy /EHsc /TP /arch:SSE)
+00702da0 49 SP::cHierGrid::Remove; complete behaviour, register allocation differs
 00702f60 65 CellMap::operator= (copy-and-swap); complete, temp/inline schedule differs
 007030a0 91 uninitialized_copy of cGrid range; complete, destination-pointer iteration differs
 00703160 89 fill_n of cGrid; complete, loop/register shape differs
 007032e0 87 destroy range of cGrid; complete, register allocation differs
+00703360 253 CellMap::Index (find-or-insert); complete, size 300 vs 271: original has no /GS cookie and its bool literal is spilled to the dead incoming `key` argument slot then reloaded as a dword, so the original pushes (key & 0xffffff00) as Insert's 3rd argument where we push a clean 0 (the callee only tests the low byte). equiv FAIL: 5/5 valid inputs, first mismatch is that call #2 3rd argument value; no other divergence seen on 73.6% coverage
 00703470 228 slot_vector_base::create; complete, register allocation differs
 007035a0 33 destroy range of cGrid by pointer delta; complete, prefix scheduling and pop order differ
 00703690 159 assign-copy cGrid range backwards; complete, register allocation differs
