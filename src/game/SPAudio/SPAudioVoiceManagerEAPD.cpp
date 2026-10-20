@@ -254,6 +254,7 @@ public:
                     int instId, int unused2, int* out);    // 0x00a46160 (vtable slot 2)
 };
 double SPAudioVoiceManagerEAPD::GetTime() { return 0.0; }
+void* operator new(unsigned, const char*, int, int, int, int);         // 0x00f473a0
 // ---- items of slice s00a459d0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
