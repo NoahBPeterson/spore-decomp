@@ -4690,6 +4690,22 @@ class Rewrite:
                                     open(os.path.join(INC, p0), encoding="utf-8", errors="replace").read()):
                                 hdr = p0
                                 break
+                        # ... or defined in another header of that namespace the TU includes (mig19 s0052e1f0: the global stub
+                        # `struct sp_vector_allocator { uint32_t mFlags[2]; }` is used inside the kept `namespace eastl {..}`
+                        # vector stub, where eastl/allocator.h's 4-byte eastl::sp_vector_allocator hid it: the vector shrank
+                        # from 0x14 to 0x10 and two functions moved a member to +0x4c; the session renamed it by hand)
+                        for sc in ([] if hdr else sorted(scopes)):
+                            d0 = sc.replace("::", "/") + "/"
+                            for p0 in sorted(x for x in inc if x.startswith(d0)):
+                                try:
+                                    t0 = open(os.path.join(INC, p0), encoding="utf-8", errors="replace").read()
+                                except OSError:
+                                    continue
+                                if re.search(r"\b(?:struct|class|union)\s+%s\b[^;{]*\{" % re.escape(nm0[0]), t0):
+                                    hdr = p0
+                                    break
+                            if hdr:
+                                break
             if not hdr:
                 # a namespaced stub the slice hoists to global scope (`namespace SP { struct cSPColorRGB {..}; }` +
                 # `using SP::cSPColorRGB;`) collides with a canonical GLOBAL class of that name (cSPColorRGB.h): C2874,
