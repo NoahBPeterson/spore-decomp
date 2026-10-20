@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+008df050  75  AutoRefFactory range move-assign (backward, virtual AddRef/Release); size 96 vs 87, loop/regalloc differs (equiv WEAK, flags /O2 /MD /Gy /TP /GS- /arch:SSE)
+008df0b0  -  Manager::GetResourceInternal; my size 699 vs 890, declared arity mismatched so no size-plausible candidate (equiv UNSUPPORTED fake-arity=397, flags /O2 /MD /Gy /TP /GS- /arch:SSE)
+008df460  716  Manager::GetResourceAsync; my size 733 vs 825, arity/decl mismatch (equiv UNSUPPORTED fake-arity=400, flags /O2 /MD /Gy /TP /GS- /arch:SSE)
+008df7a0  391  Manager::ReloadResource; my size 422 vs 410, register allocation/instruction order differs (equiv WEAK, flags /O2 /MD /Gy /TP /GS- /arch:SSE)
+008df9b0  270  Manager::FindResourceFactory; my size 405 vs 361, factory-vector walk codegen differs (equiv PASS, flags /O2 /MD /Gy /TP /GS- /arch:SSE)
+008dfb20  -  Manager::FindFactory; size differs enough that no size-plausible candidate was found (equiv PASS 100% coverage, flags /O2 /MD /Gy /TP /GS- /arch:SSE)
+008dfba0  -  Manager::GetTypeFromTypename; mutex pointer stays in a register instead of being spilled (equiv WEAK, flags /O2 /MD /Gy /TP /GS- /arch:SSE)
+008dfcd0  193  hashtable::insertNode3; my size 269 vs 268, rehash/alloc codegen differs (equiv PASS 91%, flags /O2 /MD /Gy /TP /GS- /arch:SSE)
+008dfde0  208  rbtree<ChangeNotificationInfo>::DoInsertValue; my size 226 vs 238, regalloc differs (equiv PASS 83%, flags /O2 /MD /Gy /TP /GS- /arch:SSE)
+008dfed0  69  AutoRefVec assign-from-range (VecOwner::AssignRange); my size 79 vs 81, callee arg count/regalloc differs (equiv PASS 100%, flags /O2 /MD /Gy /TP /GS- /arch:SSE)
