@@ -1,0 +1,8 @@
+slices/s00a17690/s00a17690.cpp  ?GetSupportedTypes@FactoryConfiguration@@SGHPAIH@Z  00a17690  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a17690/s00a17690.cpp  ?GetPropertyAsBool@ResourceConfiguration@@QAE_NIPAE@Z  00a176f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a17690/s00a17690.cpp  ?GetPropertyAsInt@ResourceConfiguration@@QAE_NIPAH@Z  00a17730  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a17690/s00a17690.cpp  ?GetPropertyAsUint32@ResourceConfiguration@@QAE_NIPAI@Z  00a17770  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a17690/s00a17690.cpp  ?GetPropertyAsFloat@ResourceConfiguration@@QAE_NIPAM@Z  00a177b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a17690/s00a17690.cpp  ??$do_fill@PAUAnalysisInfo@Text@EA@@U123@@?$fill_imp@$0A@@eastl@@SAXPAUAnalysisInfo@Text@EA@@0ABU234@@Z  00a177f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a17690/s00a17690.cpp  ?GetPropertyAsChar16Ptr@ResourceConfiguration@@QAEPAXI@Z  00a186e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a17690/s00a17690.cpp  ?GetPropertyAsChar8Ptr@ResourceConfiguration@@QAEPAXI@Z  00a18720  /O2 /MD /Gy /TP /arch:SSE /fp:fast
