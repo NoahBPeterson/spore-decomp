@@ -1,0 +1,5 @@
+00848210 302 Canvas::Tick: complete; original uses aligned prologue (push ebp/mov ebp,esp/and esp,-8) and inlines SendCanvasEvent only here; scheduling differs; difftest UNSUPPORTED (unresolved SendCanvasEvent)
+00848340 257 Canvas::OnPaint: complete; stack packing differs (original reuses the ThreadSleep int slot for info and the RECT slot for the event; ours keeps them separate, +4 frame) plus flag register allocation; difftest UNSUPPORTED (imports BeginPaint/SleepEx)
+00848870 235 Canvas::OnMouseWheel: complete; unsigned->float conversion and payload slot layout differ (original fild's the SPI result in place); difftest UNSUPPORTED (imports GetModuleHandleA/ScreenToClient)
+00848bb0 112 Canvas::FUN_00848bb0: complete; MSVC reassociates the four-term width/height expressions into a different add order than the original (independent of source term order); difftest UNSUPPORTED (import AdjustWindowRectEx)
+00848ed0 260 Canvas::FUN_00848ed0: complete; register allocation/hoisting of the w/h sums differs (original keeps x in edx, computes mLeft+w in eax); difftest WEAK (340 valid, 29.5% coverage)

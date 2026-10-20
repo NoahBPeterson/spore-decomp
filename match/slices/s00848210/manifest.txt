@@ -1,0 +1,25 @@
+# source  symbol  original VA  [flags override]
+slices/s00848210/s00848210.cpp  ?SetClientRect@Canvas@@QAEXXZ  00848450  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?TrackClientRect@Canvas@@QAEXXZ  008484f0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?OnKeyDown@Canvas@@QAEXPAXIIII@Z  00848540  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?OnKeyUp@Canvas@@QAEXPAXIIII@Z  00848620  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?OnWChar@Canvas@@QAEXPAXGG@Z  008486f0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?OnMouseMove@Canvas@@QAEXPAXHHI@Z  00848750  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?OnMouseLeave@Canvas@@QAEXPAX@Z  008487f0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?OnMouseButtonChange@Canvas@@QAEXHEIHHI@Z  00848960  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?OnLButtonDown@Canvas@@QAEXPAXIHHI@Z  008489e0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?OnMButtonDown@Canvas@@QAEXPAXIHHI@Z  00848a20  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?OnRButtonDown@Canvas@@QAEXPAXIHHI@Z  00848a60  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?OnLButtonUp@Canvas@@QAEXPAXHHI@Z  00848aa0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?OnMButtonUp@Canvas@@QAEXPAXHHI@Z  00848ae0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?OnRButtonUp@Canvas@@QAEXPAXHHI@Z  00848b20  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?OnClose@Canvas@@QAEXPAX@Z  00848b60  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?OnSize@Canvas@@QAEXPAXHHH@Z  00848c20  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?OnExitSizeMove@Canvas@@QAEXH@Z  00848cb0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?OnActivate@Canvas@@QAEXHH@Z  00848d40  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?FUN_00848d70@Canvas@@QAEXHHHH@Z  00848d70  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?FUN_00848de0@Canvas@@QAEXHHH@Z  00848de0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?FUN_00848e10@Canvas@@QAEXHHHH@Z  00848e10  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?FUN_00848e40@Canvas@@QAEXHPAX@Z  00848e40  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?SetFullscreen@Canvas@@QAEXDHH@Z  00848fe0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00848210/s00848210.cpp  ?Show@Canvas@@QAEXXZ  008490d0  /O2 /MD /Gy /EHsc /TP /GS-
