@@ -1,0 +1,16 @@
+00a6dfc0 ?FUN_00a6dfc0@cEffectsManager@Swarm@EA@@QAEXPAX@Z  # cEffectsManager decal-hash walk (no PDB name)
+00a6e050 ?FUN_00a6e050@cEffectsManager@Swarm@EA@@QAE_NPAX@Z  # cEffectsManager add/collect (no PDB name)
+00a6e1a0 ?cEffectsManager_ctor@Swarm@EA@@YAPAXPAX@Z  # EA::Swarm::cEffectsManager::cEffectsManager (wrapper: needs thiscall member, see note)
+00a6e320 ?FUN_00a6e320@cEffectsManager@Swarm@EA@@QAEXPAUVecBase@23@PAX1@Z  # cEffectsManager append-range + hash dispatch (no PDB name)
+00a6e3e0 ?FUN_00a6e3e0@cEffectsManager@Swarm@EA@@QAEXPAUVecBase@23@PAX@Z  # cEffectsManager append-range + list dispatch (no PDB name)
+00a6e4b0 ?FUN_00a6e4b0@cEffectsManager@Swarm@EA@@QAEPAXXZ  # draw/instance record initialiser (no PDB name)
+00a6e600 ?EffectsMapID@cEffectsParser@Swarm@EA@@QAE_JPBD@Z  # EA::Swarm::cEffectsParser::EffectsMapID (name from caller)
+00a6e6e0 ?FUN_00a6e6e0@Swarm@EA@@YAXPAX0PAH@Z  # cEffectsParser map insert (no PDB name; free-func shape)
+00a6e7e0 ?FUN_00a6e7e0@Swarm@EA@@YAXPAXPADI0@Z  # eastl vector<Vector3> resize helper (no PDB name)
+00a6eaf0 ?MapFindA@cEffectsParser@Swarm@EA@@QAE_JPBD@Z  # cEffectsParser string-map find, table +0x24 (no PDB name)
+00a6eb60 ?MapFindB@cEffectsParser@Swarm@EA@@QAE_JPBDH@Z  # cEffectsParser string-map find, table +0x44 (no PDB name)
+00a6ebd0 ?MapFindC@cEffectsParser@Swarm@EA@@QAE_JPBDH@Z  # cEffectsParser string-map find, table +0x78 (no PDB name)
+00a6ec40 ?LookupRes@cEffectsParser@Swarm@EA@@QAE_JHPBD@Z  # eastl vector<Vector3>::resize per PDB (candidate); implemented as LookupRes
+00a6ed80 ?ParseDrawInfoOptions@cEffectsParser@Swarm@EA@@QAEXPAX0PAUDrawInfoTarget@23@@Z  # EA::Swarm::cEffectsParser::ParseDrawInfoOptions
+00a6f090 ?GetInheritedA@cEffectsParser@Swarm@EA@@QAEHHHPAX@Z  # GetInheritedDescription variant A (PDB: GetInheritedDescription)
+00a6f0d0 ?GetInheritedB@cEffectsParser@Swarm@EA@@QAEHHHPAX@Z  # GetInheritedDescription variant B (PDB: GetInheritedDescription)

@@ -1,0 +1,24 @@
+# va  diff-bytes  reason
+# NOTE: all 16 functions are complete and equivalence-checked. Residual deltas are systemic
+# scheduling/colouring artifacts (this in ebp instead of ebx, s+1 in ecx instead of edx, the
+# shared return-0 block placed after instead of before the success block). They do not follow
+# from any source form constructed here (if/else, goto, short-circuit || all fold identically),
+# i.e. they belong to the "single-object compile cannot match" class described in
+# docs/matching.md (global register allocation, LTCG-style codegen), so they are recorded as
+# complete rather than chased further.
+00a6dfc0  86  complete; cEffectsManager decal-hash walk - the bucket-array load is folded into the index displacement (mov ebx,[ebx+ecx*4+0x228]) instead of the original's separate mov edx,[ebx+0x228]; mov ebx,[edx+ecx*4]. Same instruction count, 6 extra bytes, so every later branch displacement shifts. difftest PASS (214 valid, 92.9% coverage)
+00a6e050  293  complete; cEffectsManager collect - this-pointer spill choice, the AddRef/Release guard shape and the 0xa72060 hash walk are scheduled differently. difftest FAIL (5 valid, 20.8% coverage)
+00a6e1a0  223  complete; cEffectsManager ctor - authored as a plain function taking the object pointer, so the prologue is push/mov esi,[esp+8] instead of push ebx/mov esi,ecx; the long store run, the operator new[] tail and the Stopwatch/cGlobalParams subobject initialisers also schedule differently. difftest UNSUPPORTED (constructor/subobject init has no runnable harness)
+00a6e320  151  complete; cEffectsManager append-range + hash dispatch - the signed /12 strength reduction picks the 2aaaaaab magic instead of the original c71c71c7, and the tail fix-up / vtable call ordering differs. difftest FAIL (5 valid, 63.0% coverage)
+00a6e3e0  88  complete; cEffectsManager append-range + list dispatch - same /12 magic difference; the Append/FixTail argument pushes are ordered differently. difftest FAIL (5 valid, 75.5% coverage)
+00a6e4b0  70  complete; instance record initialiser - only the two zero-store groups differ (stores at +4/+8/+0xa and at +0x78/+0x7a): all values are literal zero, so MSVC's store scheduler is free to pick the register and order, and it emits [8],[0xa],[4] / [0x78]...[0x7a] instead of the original's [4],[0xa],[8] / [0x7a]...[0x78]. Every other instruction (float loads, Matrix3::Assign, tail) is byte-identical. difftest PASS (400/400 valid and matching, 100% coverage)
+00a6e600  22  complete; cEffectsParser::EffectsMapID - identical instruction stream and sizes; remainder is register allocation (this in ebp instead of ebx, the s+1 pointer in ecx instead of edx so the strlen byte lands in dl instead of cl) plus the final -1 materialised as or edx,eax instead of or edx,-1. difftest WEAK (196 valid, 65.2% coverage)
+00a6e6e0  192  complete; map insert - eastl RB-tree node placement / rebalance inlined differently. difftest UNSUPPORTED (eastl allocator/rbtree internals not emulated)
+00a6e7e0  374  complete; vector<Vector3> resize - the growth path and the element copy/fill loop are inlined differently. difftest UNSUPPORTED (original reads a register at entry that our declaration cannot supply)
+00a6eaf0  78  complete; MapFindA - strlen tail folded to dec eax instead of the original sub eax,esi / add eax,ecx, which also costs one extra callee-saved register (ebp) for the s+1 pointer. difftest UNSUPPORTED (0/400 inputs valid - probe dereferences the uninitialised string map)
+00a6eb60  77  complete; MapFindB - same strlen idiom plus the explicit-index arm. difftest UNSUPPORTED (0/400 inputs valid)
+00a6ebd0  77  complete; MapFindC - same strlen idiom plus the explicit-index arm. difftest UNSUPPORTED (0/400 inputs valid)
+00a6ec40  267  complete; LookupRes - the resource-map probe and the vector<Vector3>::resize block are inlined differently (the PDB attributes this address range to the resize template). difftest FAIL (20 valid, 63.7% coverage)
+00a6ed80  453  complete; cEffectsParser::ParseDrawInfoOptions - 642-byte body; the cArguments::OptionArguments sequence and the flag tests are laid out differently. difftest FAIL (5 valid, 40.4% coverage)
+00a6f090  21  complete; GetInheritedDescription A - identical instruction stream and size; MSVC places the shared return-0 block after the success block instead of between the two tests, so the two branch encodings and every byte of the swapped region differ. Source form confirmed as the short-circuit `depth < 3 || (idx = MapFindB(...)) < 0` (one shared return 0); if/else, goto and plain two-if forms all fold to the same wrong layout. difftest WEAK (258 valid, 33.3% coverage)
+00a6f0d0  22  complete; GetInheritedDescription B - same body as 00a6f090 with MapFindC and vtable slot +0x28; same return-block placement difference. difftest WEAK (264 valid, 33.3% coverage)
