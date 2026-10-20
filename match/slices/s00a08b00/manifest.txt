@@ -1,0 +1,10 @@
+slices/s00a08b00/s00a08b00.cpp  ?scalar_deleting_destructor@cAnimatingCreature@@QAEPAXE@Z  00a08cb0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a08b00/s00a08b00.cpp  ?OnRegisterAnimCommand@OnRegObj@@QAEXPAXH@Z  00a08cf0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a08b00/s00a08b00.cpp  ?OnRegisterAnim@OnRegObj@@QAEXPAXH@Z  00a08fc0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a08b00/s00a08b00.cpp  ?OnRegisterChoice@OnRegObj@@QAEXPAXH@Z  00a09020  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a08b00/s00a08b00.cpp  ?FUN_00a09630@@YAPAURec@@PAU1@00@Z  00a09630  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a08b00/s00a08b00.cpp  ?FUN_00a09680@@YAPAURec@@PAU1@00@Z  00a09680  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a08b00/s00a08b00.cpp  ?FUN_00a096e0@@YAPAURec@@PAU1@00@Z  00a096e0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a08b00/s00a08b00.cpp  ?FUN_00a09810@@YGXPAURec@@0@Z  00a09810  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a08b00/s00a08b00.cpp  ?Destroy@MapA@@QAEXPAUMapNodeA@@@Z  00a09850  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a08b00/s00a08b00.cpp  ?Destroy@MapB@@QAEXPAUMapNodeB@@@Z  00a09890  /O2 /MD /Gy /TP /arch:SSE
