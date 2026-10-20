@@ -1,0 +1,25 @@
+00a5e0f0 poly_doaddfloat  # PD x_arithmetic.c poly_doAddFloat; 3 guarded outlet sends (0x38/0x34/0xc), 0x28 nelt, 0x2c pelts, 0x30 steer, 0x3c voice counter, 0x40 steal flag
+00a5e630 poly_list  # PD poly_doList; lists live voices then clears them
+00a5e7a0 poly_clear  # PD poly_clear (clears pitch+voice per voice, 0xc stride)
+00a5e7d0 poly_free  # PD poly_free (Free(pelts, nelt*0xc))
+00a5e7f0 poly_setup  # class_new("poly"), "stop"=poly_list, "clear"=poly_clear
+00a5e8a0 bag_new  # class_new("bag") allocator; list at +0x2c
+00a5e8f0 bag_float  # PD bag_float (append or remove by value)
+00a5e9c0 bag_flush  # PD bag_flush (drain list, free each element)
+00a5ea40 bag_clear  # PD bag_clear
+00a5ea70 bag_setup  # class_new("bag"), "flush"/"clear" methods
+00a5eb20 x_note_setup  # makenote + stripnote + poly + bag registration chain
+00a5eb50 print_new  # class_new("print") allocator; stores the help symbol at +0x28
+00a5ebb0 print_anything  # PD print_anything (postargs into a 1000-byte buffer)
+00a5ebe0 print_setup  # class_new("print"); bang/float/symbol route to sys_gui, list/anything to print_anything
+00a5ec90 random_uniform  # RandomLinearCongruential::RandomUint32UniformN on sSystemRandom
+00a5ecb0 random_seed  # SetSeed on sSystemRandom
+00a5ecc0 random_seed_method  # PD random "seed" method (SetSeed on x+0x2c); merged into the 0xa5ecb0 slice row by the analyser
+00a5ece0 random_new  # class_new("random") allocator; seeds from the global stream
+00a5ed40 frandom_new  # class_new("frandom") allocator; identical body to random_new
+00a5eda0 random_bang  # PD random_bang (RandomUint32UniformN, then float out)
+00a5ee30 frandom_bang  # PD frandom_bang (value * NextFloat)
+00a5eea0 x_random_setup  # registers "random"/"frandom" classes and the shared "seed" method; seeds from GetThreadTime
+00a5efd0 spin_bang  # clock objects: re-arm unless paused
+00a5f000 spin_stop  # clock objects: unset unless paused
+00a5f030 spin_float  # clock objects: clamp period to >=0 unless paused

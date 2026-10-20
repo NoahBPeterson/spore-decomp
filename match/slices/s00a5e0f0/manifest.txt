@@ -1,0 +1,14 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a5e0f0/s00a5e0f0.cpp  ?poly_free@Eapd@Audio@EA@@YAXPAD@Z  00a5e7d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5e0f0/s00a5e0f0.cpp  ?bag_new@Eapd@Audio@EA@@YAPAXXZ  00a5e8a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5e0f0/s00a5e0f0.cpp  ?bag_flush@Eapd@Audio@EA@@YAXPAD@Z  00a5e9c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5e0f0/s00a5e0f0.cpp  ?bag_clear@Eapd@Audio@EA@@YAXPAD@Z  00a5ea40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5e0f0/s00a5e0f0.cpp  ?x_note_setup@Eapd@Audio@EA@@YA_NXZ  00a5eb20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5e0f0/s00a5e0f0.cpp  ?print_new@Eapd@Audio@EA@@YAPAXUt_symbol@123@@Z  00a5eb50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5e0f0/s00a5e0f0.cpp  ?print_anything@Eapd@Audio@EA@@YAXPADUt_symbol@123@HPAUt_atom@123@@Z  00a5ebb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5e0f0/s00a5e0f0.cpp  ?random_uniform@Eapd@Audio@EA@@YAII@Z  00a5ec90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5e0f0/s00a5e0f0.cpp  ?random_new@Eapd@Audio@EA@@YAPAXM@Z  00a5ece0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5e0f0/s00a5e0f0.cpp  ?frandom_new@Eapd@Audio@EA@@YAPAXM@Z  00a5ed40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5e0f0/s00a5e0f0.cpp  ?spin_bang@Eapd@Audio@EA@@YAXPAD@Z  00a5efd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5e0f0/s00a5e0f0.cpp  ?spin_stop@Eapd@Audio@EA@@YAXPAD@Z  00a5f000  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5e0f0/s00a5e0f0.cpp  ?spin_float@Eapd@Audio@EA@@YAXPADM@Z  00a5f030  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
