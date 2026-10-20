@@ -1,0 +1,20 @@
+00fca300 MovieEncoder_Avi::Shutdown  # free the compression buffer via mAllocator->Free and null it
+00fca360 MovieEncoder_Avi::EndEncoding  # capture stopwatch stop time, stop both encoders, flush idx1 index + count, walk AVI index blocks, FlushRemote/WriteAVIHeaders/Flush, FreeAVIIndexEntries, Stopwatch::Stop
+00fca460 EncodeAudioData  # (data, size, MovieEncoder_Avi*): write '00dd' fourcc + size + data + 0xff pad, add index entry, advance chunk offsets (4 args, self dead-last)
+00fca510 EncodeVideoData  # (data, size, type, MovieEncoder_Avi*): write video fourcc + size + data + pad, add index entry, advance chunk offsets
+00fca5c0 MovieEncoder_Avi::AllocateBuffer  # allocate mCompressionBuffer from the allocator, log + clear if it fails
+00fca640 MovieEncoder_Avi::Init  # store allocator, AllocateBuffer, numIndexEntriesPerBlock = 60000000/frameUs, allocate + construct the Stopwatch
+00fca6a0 MovieEncoder_Avi::SetAudioEncoder  # store mAudioEncoder; on non-null set its output-buffer callback (vtable+0x1c) to the AVI audio writer
+00fca6c0 MovieEncoder_Avi::SetVideoEncoder  # store mVideoEncoder; on non-null set its output-buffer callback to the AVI video writer and read back the frame rate
+00fca720 MoviePlayer::MoviePlayer  # construct the streaming contexts, null every field, then allocate+construct MovieDecoder/MovieRenderer/MovieTimer (state 0) or set state 7 when the allocator is null
+00fca9b0 MoviePlayer::SetDataCallback  # state <= 1: store the data callback at +0x40
+00fca9d0 MoviePlayer::SetVideoFilter  # state <= 1: store the streamer video callback at +0x44
+00fca9f0 MoviePlayer::SetAudioCallback  # state <= 1: store the streamer subtitle callback at +0x4c
+00fcaa10 MoviePlayer::SetStreamerSubtitleFilter  # state <= 1: store the data-preload callback at +0x50 and forward it to the MovieTimer
+00fcaa40 MoviePlayer::SetAudioStreamFilter  # state <= 1: store the audio-preload callback at +0x58 and forward it to the MovieDecoder
+00fcaa70 MoviePlayer::ConfigureVideo  # state==0 guard: validate the path, store path/size/offset, resolve the data size via FUN_011ea850 when (c|d)==0, set the ".avi" suffix flag at +0x15c
+00fcab70 MoviePlayer::OpenFiles  # state==0: for audio/video/subtitle paths allocate stream buffers, build Streams, set filters, queue file or preload memory, then mState = FILESOPENED
+00fcb150 MoviePlayer::SetVideoPositionX  # state <= 4: store the float and forward to the MovieRenderer
+00fcb180 MoviePlayer::SetVideoPositionY  # state <= 4: store the float and forward to the MovieRenderer
+00fcb1b0 MoviePlayer::SetVideoScaleX  # state <= 4: store the float and forward to the MovieRenderer
+00fcb1e0 MoviePlayer::SetVideoScaleY  # state <= 4: store the float and forward to the MovieRenderer
