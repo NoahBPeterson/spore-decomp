@@ -1,0 +1,10 @@
+slices/s011e8640/s011e8640.cpp  ?SetPriority@AsyncOp@@QAEXH@Z  011e8710  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011e8640/s011e8640.cpp  ?GetStatus@AsyncOp@@QAEHABI@Z  011e8740  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011e8640/s011e8640.cpp  ?GetResultHandle@AsyncOp@@QAEPAXXZ  011e8770  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011e8640/s011e8640.cpp  ?GetResultSize@AsyncOp@@QAE_KXZ  011e87a0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011e8640/s011e8640.cpp  ?StringCopy@@YAPADPADPBD@Z  011e8b20  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011e8640/s011e8640.cpp  ?StringCompare@@YAHPBD0@Z  011e8b90  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011e8640/s011e8640.cpp  ?StringCompareNoCase@@YAHPBD0@Z  011e8bd0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011e8640/s011e8640.cpp  ?StringLength@@YAHPBD@Z  011e8c40  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011e8640/s011e8640.cpp  ?StringFindChar@@YAPADPBDD@Z  011e8c60  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011e8640/s011e8640.cpp  ?TrimZeros@@YAPADPAD@Z  011e9170  /vc71 /O2 /MD /Gy /EHsc /TP
