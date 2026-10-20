@@ -1858,10 +1858,80 @@ void __thiscall FocusListX::InsertFront(const void* value)
     first->prev = (Node*)n;
 }
 
+// @ 0x0095a870
+MsgListX* __thiscall MsgListX::AssignFrom(MsgListX* src)
+{
+    if (this == src) return this;
+    Node* d = anchor.next;
+    Node* s = src->anchor.next;
+    for (;;) {
+        if (d == &anchor) break;
+        if (s == &src->anchor) {
+            EraseRange(MkIter(d), MkIter((Node*)this));
+            return this;
+        }
+        ((MsgNode_s0095_8a70*)d)->msg = ((MsgNode_s0095_8a70*)s)->msg;
+        d = d->next;
+        s = s->next;
+    }
+    if (s != &src->anchor)
+        InsertRange(&anchor, MkIter(s), MkIter((Node*)src), (int)src);
+    return this;
+}
+
+// @ 0x0095a8e0
+void __thiscall WindowMgr::SetViewportSize(float vw, float vh)
+{
+    LMUTEX();
+    Msg msg;
+    msg.src = 0;
+    msg.dst = 0;
+    msg.rest[0] = 0x4ecd5687;
+    *(float*)&msg.rest[1] = vw;
+    *(float*)&msg.rest[2] = vh;
+    Node* first = q0.anchor.next;
+    MsgNode_s0095_8a70* n = (MsgNode_s0095_8a70*)q0.alloc->Alloc(0x24, 0, q0.allocFlags);
+    Msg* pm = &n->msg;
+    if (pm != 0)
+        *(Msg*)pm = msg;
+    n->link.next = first;
+    n->link.prev = first->prev;
+    first->prev->next = &n->link;
+    first->prev = &n->link;
+    UMUTEX();
+}
+
 // @ 0x0095a980
 bool __thiscall WindowMgr::SendMsg(IWin* src, IWin* win, Msg* m, bool a4)
 {
     return SendMsgFull(src, win, m, a4, false);
+}
+
+// @ 0x0095a9a0
+void __thiscall WindowMgr::PostMsg(IWin* src, IWin* dst, const Msg* m)
+{
+    MutexOps* mx = (MutexOps*)&mxC;
+    mx->Lock((const void*)0x1440688);
+    if (q4.anchor.next == &q4.anchor) {
+        MsgNode_s0095_8a70* n = (MsgNode_s0095_8a70*)q0.alloc->Alloc(0x24, 0, q0.allocFlags);
+        Msg* pm = &n->msg;
+        if (pm != 0) *pm = *m;
+        n->link.next = &q0.anchor;
+        n->link.prev = q0.anchor.prev;
+        q0.anchor.prev->next = &n->link;
+        q0.anchor.prev = &n->link;
+    } else {
+        Node* first = q4.anchor.next;
+        Node* second = first->next;
+        if (&q0.anchor != first && &q0.anchor != second)
+            Splice(&q0.anchor, first, second);
+        ((MsgNode_s0095_8a70*)q0.anchor.prev)->msg = *m;
+        f124--;
+    }
+    MsgNode_s0095_8a70* last = (MsgNode_s0095_8a70*)q0.anchor.prev;
+    last->msg.src = src;
+    last->msg.dst = dst;
+    mx->Unlock();
 }
 
 // @ 0x0095aa80

@@ -14,6 +14,8 @@
 009594b0 152 PopFocus complete; original reloads cur member (no CSE) and different branch layout
 00959cf0 126 cf0: complete (slot-change notify via vtable slot 0x4c + GameViewManager event 0xb); regalloc/branch layout differ; difftest PASS (217 valid inputs, 64.2% coverage)
 0095a580 359 BuildDisplayList complete; original inlines the DLEntry fill at both bit0x10 sites (~260B, no FillDLEntry helper) and uses a 0x3c38 chkstk frame; call/reg layout differs
+0095a870 60 AssignFrom complete; erase/insert call sites construct Iter temporaries with the MSVC push-ecx aggregate idiom, loop is a do-while with a shared erase epilogue; regs/flow differ
+0095a9a0 195 PostMsg complete; original spills &mxC to a push-ecx stack slot and schedules the two rep-movsd copies differently; difftest PASS (equivalence)
 0095aa80 728 ProcessMessages complete; large register/scheduling differences across the merge, per-context and tickable loops
 0095afd0 85 Swap complete; mismatch path uses a tag local reusing the arg1 home slot and the push-ecx InsertRange idiom; regs differ
 0095b080 494 SetMainWindow complete; large register/flow differences (vtable call scheduling, separate old/old2 paths); difftest WEAK

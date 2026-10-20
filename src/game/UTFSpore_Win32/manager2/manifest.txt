@@ -19,6 +19,7 @@
 ../src/game/UTFSpore_Win32/manager2.cpp  ?InsertRange@MsgList@@QAEXPAUNode@@UIter@@1H@Z  009595e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager2.cpp  ?a0b0@W_s0095_9780@@QAEXHPAH@Z  0095a0b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager2.cpp  ?InsertFront@FocusListX@@QAEXPBX@Z  0095a820  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/manager2.cpp  ?SetViewportSize@WindowMgr@@QAEXMM@Z  0095a8e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager2.cpp  ?SendMsg@WindowMgr@@QAE_NPAUIWin@@0PAUMsg@@_N@Z  0095a980  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager2.cpp  ?AttachWindow@WindowMgr@@QAEXPAUWin@@@Z  0095add0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager2.cpp  ?UpdateWindowCachedTransforms@WindowMgr@UTFWin@EA@@QAEXAAVWindow@23@@Z  0095af00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
