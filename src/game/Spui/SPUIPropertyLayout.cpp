@@ -4,11 +4,13 @@
 
 #include "game/types.h"
 #include "cSPUIPropertyLayout.h"
+#include "SP/cString.h"
 #include "EA/Stopwatch.h"
 #include "EA/Variant.h"
 #include "SP/cPropertyUI.h"
 #include "cSPUILayout.h"
 #include <new>
+#include <intrin.h>
 
 // ---- items of slice s00827bf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Key { unsigned int a, b, c; };
@@ -199,7 +201,7 @@ struct WinProcBase {
   virtual bool DoMessage(int, void*);  // +0x18
   virtual bool Init();  // +0x1c
   virtual void func20h();  // +0x20
-  virtual void func24h();  // +0x24
+  virtual bool func24h();  // +0x24
 };
 WinMgr* WindowManager();                         // 0x0067caa0
 Rect2* FUN_00808370(Rect2* out, UIObj* w, int flag);   // 0x00808370 (cdecl)
@@ -217,16 +219,36 @@ struct cSPUILayout_s0082_7bf0 {
   int mRefCount;              // +0x4
   void* mpObject;             // +0x8
 };
+extern void (*g_TimerFunc)(unsigned __int64*);   // 0x013cc2b8 (QueryPerformanceCounter)
 struct Stopwatch {
-  char pad0[0x14];            // +0x0
+  unsigned mStartLo;          // +0x0
+  unsigned mStartHi;          // +0x4
+  unsigned mAccLo;            // +0x8
+  unsigned mAccHi;            // +0xc
+  int mMode;                  // +0x10 (1 == rdtsc)
   float mUnitsPerSecond;      // +0x14
   Stopwatch(int units, bool b);    // 0x0093a560 (callee pops)
-  __int64 GetElapsedTime();
+  __int64 GetElapsedTime();        // 0x0093a3a0
+  void Reset();
 };
+inline void Stopwatch::Reset() {
+  unsigned __int64 t;
+  if (mMode == 1) t = __rdtsc();
+  else g_TimerFunc(&t);
+  mStartLo = (unsigned)t;
+  mStartHi = (unsigned)(t >> 32);
+  mAccLo = 0;
+  mAccHi = 0;
+}
 struct Variant {
-  char pad[0x10];
-  unsigned short mFlags;
-  unsigned short mTypeId;
+  union {
+    void* mpValue;
+    unsigned uValue;
+    float fValue;
+    char raw[0x10];
+  };
+  unsigned short mFlags;      // +0x10
+  unsigned short mTypeId;     // +0x12
   Variant() { mFlags = 0; mTypeId = 0; }
   Variant& operator=(const Variant&);   // 0x00542b80
   void Destruct(int);
@@ -250,6 +272,8 @@ struct ElemVec {
     if (mpBegin) operator delete(mpBegin);
   }
   void DoDestroyValues(Elem* first, Elem* last);
+  void clear();
+  Elem* insert(Elem* position, const Elem& value);
 };
 struct RefCountBase {
   RefCountBase() : mRefCount(0) {}
@@ -281,6 +305,8 @@ struct CPL : WinProcBase, RefCountBase {
   virtual unsigned GetEventMask();
   virtual bool DoMessage(int, void*);
   virtual bool Init();
+  virtual void func20h();
+  virtual bool func24h();
   void SetKey(const wchar_t* name, int uid);
   void SetFlag(bool b);
   void* GetRootWindow();
@@ -299,6 +325,14 @@ Elem& Elem::operator=(const Elem& o) {
   mVariant = o.mVariant;
   mLast = o.mLast;
   return *this;
+}
+Elem* ElemCopy(Elem* first, Elem* last, Elem* dst);  // 0x00828560 (defined below; used by a stub's inline body)
+void ElemVec::clear() {
+  Elem* first = mpBegin;
+  Elem* last = mpEnd;
+  Elem* newEnd = ElemCopy(last, last, first);
+  DoDestroyValues(newEnd, mpEnd);
+  mpEnd -= (last - first);
 }
 // ---- items of slice s00827bf0 end
 
