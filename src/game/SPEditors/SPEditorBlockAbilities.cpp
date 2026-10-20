@@ -881,7 +881,7 @@ template SP::cSPEditorVerbIconData_s0059_e360__b* eastl::uninitialized_relocate_
 ;
 
 // @ 0x0059efa0
-SP::cSPEditorVerbIconData_s0059_e360__b::~cSPEditorVerbIconData_s0059_e360__b()
+SP::cSPEditorVerbIconData::~cSPEditorVerbIconData()
 {
 }
 
