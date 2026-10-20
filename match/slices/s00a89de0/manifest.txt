@@ -1,0 +1,3 @@
+slices/s00a89de0/s00a89de0.cpp  ??0cDistributeSample@@QAE@ABU0@@Z  00a89de0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch=SSE
+slices/s00a89de0/s00a89de0.cpp  ?FUN_00a8a0a0@@YAPAUcDistributeSample@@PAU1@00@Z  00a8a0a0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch=SSE
+slices/s00a89de0/s00a89de0.cpp  ?FUN_00a8a0f0@@YAPAUcDistributeSample@@PAU1@00@Z  00a8a0f0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch=SSE
