@@ -1,0 +1,13 @@
+slices/s00fcd210/s00fcd210.cpp  ?Ctor3E0@Vp6Ext@@QAEXHHH@Z  00fcd3e0  /O2 /MD /Gy /EHsc /TP
+slices/s00fcd210/s00fcd210.cpp  _FUN_00fcd970  00fcd970  /O2 /MD /Gy /EHsc /TP
+slices/s00fcd210/s00fcd210.cpp  _FUN_00fcd9a0  00fcd9a0  /O2 /MD /Gy /EHsc /TP
+slices/s00fcd210/s00fcd210.cpp  _FUN_00fcd9e0  00fcd9e0  /O2 /MD /Gy /EHsc /TP
+slices/s00fcd210/s00fcd210.cpp  _FUN_00fcda10  00fcda10  /O2 /MD /Gy /EHsc /TP
+slices/s00fcd210/s00fcd210.cpp  ?Init@VideoEncoder_Jpeg@@QAEXPAUICoreAllocator@@@Z  00fcda60  /O2 /MD /Gy /EHsc /TP
+slices/s00fcd210/s00fcd210.cpp  ?GetSuggestedDecoderBufferSize@VideoEncoder_Jpeg@@QAEIXZ  00fcdb00  /O2 /MD /Gy /EHsc /TP
+slices/s00fcd210/s00fcd210.cpp  ?SetBitsPerSecond@VideoEncoder_Jpeg@@QAEXI@Z  00fcdc40  /O2 /MD /Gy /EHsc /TP
+slices/s00fcd210/s00fcd210.cpp  ?GetBitsPerSecond@VideoEncoder_Jpeg@@QAEIXZ  00fcdc60  /O2 /MD /Gy /EHsc /TP
+slices/s00fcd210/s00fcd210.cpp  ?SetQuality@VideoEncoder_Jpeg@@QAEXI@Z  00fcdc80  /O2 /MD /Gy /EHsc /TP
+slices/s00fcd210/s00fcd210.cpp  ??0VideoRenderable@@QAE@XZ  00fcdec0  /O2 /MD /Gy /EHsc /TP
+slices/s00fcd210/s00fcd210.cpp  @FUN_00fcdf10@4  00fcdf10  /O2 /MD /Gy /EHsc /TP
+slices/s00fcd210/s00fcd210.cpp  ?rw_movie_VideoRenderable_GetDataBufSizes@@YAXHHHHPAI@Z  00fcdf40  /O2 /MD /Gy /EHsc /TP
