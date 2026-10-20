@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a7a580/s00a7a580.cpp  ?OnRegister@cPathCommand@SwarmImpl@@UAEXPAVcIParser@ArgScript@EA@@PAUcState@45@@Z  00a7a580  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a7a580/s00a7a580.cpp  ??_GcPathCommand@SwarmImpl@@UAEPAXI@Z  00a7a8a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a7a580/s00a7a580.cpp  ?RegisterPathCommand@Swarm@EA@@YAXPAVcBlockCommandBase@ArgScript@2@HPA_NH@Z  00a7a8d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a7a580/s00a7a580.cpp  ?cResourceOverridesParam_Create@Swarm@EA@@YAPAXH@Z  00a7a960  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a7a580/s00a7a580.cpp  ?DoInsertValue@SampleVec@?A0xa45a9f00@@QAEXPAUcPathSample@2@ABU32@@Z  00a7a9d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a7a580/s00a7a580.cpp  ?Execute@cPathPointCommand@SwarmImpl@@UAEXPAVcArguments@ArgScript@EA@@@Z  00a7af50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a7a580/s00a7a580.cpp  ?Execute@cPathVelocityCommand@SwarmImpl@@UAEXPAVcArguments@ArgScript@EA@@@Z  00a7b0d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a7a580/s00a7a580.cpp  ?Execute@cPathSpeedCommand@SwarmImpl@@UAEXPAVcArguments@ArgScript@EA@@@Z  00a7b140  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a7a580/s00a7a580.cpp  ?Execute@cPathTimeCommand@SwarmImpl@@UAEXPAVcArguments@ArgScript@EA@@@Z  00a7b1a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a7a580/s00a7a580.cpp  ?Execute@cPathCommand@SwarmImpl@@UAEXPAVcArguments@ArgScript@EA@@@Z  00a7b2d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
