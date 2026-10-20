@@ -1,3 +1,4 @@
 # va  diff-bytes  reason
+00928ba0 73 StackAllocator::AllocateNewBlock: complete; block-link/copy schedule differs
 00928c40 101 StackAllocator::Reset(begin): complete; block-walk/bookmark loop schedule differs
 00928cd0 76 StackAllocator ctor: complete; default alloc/free setup + conditional Init differs
