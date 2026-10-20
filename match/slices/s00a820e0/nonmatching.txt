@@ -1,0 +1,37 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+# Slice s00a820e0 is Spore cVisualEffect code.  The original was built with SSE2 codegen
+# (/arch:SSE2 is required: plain flags emit x87 in SetDescription).  Diff counts are the byte
+# difference against the correctly resolved symbol (tools/matching/chk.py picks a same-size
+# sibling for some rows).  Equiv verdicts are from tools/difftest/equiv.py default inputs.
+00a820e0   18  cVisualEffect::SetIsHidden: complete; only the store order / register choice for
+               the two flag bytes differs.  Equiv WEAK (90 valid inputs, 46.7% coverage), no
+               behavioural mismatch.
+00a821e0   10  cVisualEffect::SetVectorParams: complete.  Ends in a jmp-style tail call in the
+               original (LTCG sibling call); a single-object /O2 build emits call+ret.
+               Equiv UNSUPPORTED (0/400 valid inputs, harness rejects the generated `this`).
+00a82370   72  cVisualEffect::SetDescription: complete; member-reload and stack-frame differences
+               (the original keeps the description in eax/tail-jumps to UpdateDescription).
+               Equiv FAIL: return value differs on 5/9 valid inputs because the harness binds
+               the neighbour call to real original code (the call clobbers eax differently).
+00a823e0   20  cVisualEffect::UpdateDescription: complete; ours keeps the string pointer in a
+               different register.  Equiv FAIL for the same harness-binding reason as above
+               (return value, 5/5 valid inputs); coverage 100%.
+00a82430  183  cVisualEffect::CheckIfStopped: complete; the original's message-server call is
+               inlined into a different shape (smaller stack frame).  Equiv FAIL 1/398 valid
+               inputs: our extra call (inline-calls tolerated 2) is the only difference.
+00a82500  157  cVisualEffect::SelectDescriptionState: complete; the jump table/branch layout and
+               the two flag stores are scheduled differently.  Equiv WEAK (239 valid, 19.4%
+               coverage; most generated inputs fault on read before reaching the body).
+00a825c0  311  cVisualEffect::PrerollEffect: complete; the original uses x87 sqrtf and a tighter
+               frame.  Equiv FAIL 5/182 valid inputs: xmm2 is written by our build and not by
+               the original (an LTCG caller may keep a live value there); no data mismatch.
+00a82700  235  cVisualEffect::Start: complete; the local message struct is built with a smaller
+               frame than the original's 0x28 and the server call is scheduled differently.
+               Equiv PASS (290 valid inputs, 76.3% coverage).
+00a828a0  338  cVisualEffect::ApplyParams: complete; the original re-loads members after every
+               uploader call (aliasing) and uses a larger frame.  Equiv WEAK (198 valid, 49.1%).
+00a82a10 1026  cVisualEffect::ApplyCursorControl: complete (688 original bytes vs our 885).
+               Equiv FAIL 5/5 valid inputs: ecx clobber only (ours writes a register the
+               original leaves untouched); the float matrix results agree.
+00a82cc0  172  cVisualEffect::SetUnknownParam: complete; inlined UnknownStore call and count
+               update ordered differently.  Equiv WEAK (347 valid, 55.3% coverage).

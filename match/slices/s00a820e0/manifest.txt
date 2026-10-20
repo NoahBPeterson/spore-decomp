@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Byte-exact matches for slice s00a820e0 (cVisualEffect parameters/bones).  Everything else in
+# the slice is a behavioural reconstruction, see nonmatching.txt.
+slices/s00a820e0/s00a820e0.cpp  ?SetBone@cVisualEffect@@QAEXPAXH@Z  00a82130  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00a820e0/s00a820e0.cpp  ?GetBone@cVisualEffect@@QAEPAXH@Z  00a821c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00a820e0/s00a820e0.cpp  ?GetVectorParams@cVisualEffect@@QAEPAIIPAI@Z  00a82200  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00a820e0/s00a820e0.cpp  ?GetFloatParams@cVisualEffect@@QAEPAIIPAI@Z  00a82260  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00a820e0/s00a820e0.cpp  ?GetIntParams@cVisualEffect@@QAEPAIIPAI@Z  00a822b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00a820e0/s00a820e0.cpp  ?GetUnknownParam@cVisualEffect@@QAEII@Z  00a82300  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00a820e0/s00a820e0.cpp  ?SetIsVisible@cVisualEffect@@QAEXH@Z  00a82330  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00a820e0/s00a820e0.cpp  ?GetIntParam@cEffectParams@@QAE_NHPAHPAI@Z  00a826c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00a820e0/s00a820e0.cpp  ?SetRigidTransform@cVisualEffect@@QAEXPBX@Z  00a82830  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00a820e0/s00a820e0.cpp  ?SetSourceTransform@cVisualEffect@@QAEXPBX@Z  00a82850  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00a820e0/s00a820e0.cpp  ?GetTransform@cVisualEffect@@QAEXPAX@Z  00a82870  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00a820e0/s00a820e0.cpp  ?GetSourceTransform@cVisualEffect@@QAEXPAX@Z  00a82880  /O2 /MD /Gy /EHsc /TP /arch:SSE2

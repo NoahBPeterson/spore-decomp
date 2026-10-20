@@ -1,0 +1,28 @@
+# va  name  # evidence
+# Spore visual-effect slice (cVisualEffect: vft0/vft1 at +0, description at +0x28, flags at
+# +0x2c, bone/param tables and the world/LOD pointers at +0x140..+0x180, float matrix at +0x64).
+# Names are reconstructions from the cards except where the object's mangled name is in
+# manifest.txt.
+00a820e0  cVisualEffect::SetIsHidden
+00a82130  cVisualEffect::SetBone
+00a821c0  cVisualEffect::GetBone
+00a821e0  cVisualEffect::SetVectorParams
+00a82200  cVisualEffect::GetVectorParams
+00a82260  cVisualEffect::GetFloatParams
+00a822b0  cVisualEffect::GetIntParams
+00a82300  cVisualEffect::GetUnknownParam
+00a82330  cVisualEffect::SetIsVisible
+00a82370  cVisualEffect::SetDescription
+00a823e0  cVisualEffect::UpdateDescription
+00a82430  cVisualEffect::CheckIfStopped
+00a82500  cVisualEffect::SelectDescriptionState
+00a825c0  cVisualEffect::PrerollEffect
+00a826c0  cEffectParams::GetIntParam
+00a82700  cVisualEffect::Start
+00a82830  cVisualEffect::SetRigidTransform
+00a82850  cVisualEffect::SetSourceTransform
+00a82870  cVisualEffect::GetTransform
+00a82880  cVisualEffect::GetSourceTransform
+00a828a0  cVisualEffect::ApplyParams
+00a82a10  cVisualEffect::ApplyCursorControl
+00a82cc0  cVisualEffect::SetUnknownParam
