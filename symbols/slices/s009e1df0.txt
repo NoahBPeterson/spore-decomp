@@ -1,0 +1,15 @@
+# slice s009e1df0 symbol hints (VA -> name)
+009e1df0 ??0Inner@@QAE@XZ  # Inner default ctor (scalars + 26 tune floats + empty item/gait lists)
+009e1fe0 ?AssignGaitsN@Inner@@QAEXPBU1@I@Z  # copy up to n gaits from another Inner
+009e2140 ?AssignGaitsF@Inner@@QAEXPBU1@I@Z  # copy gait list (flags & 0x4000000 skips the element copy)
+009e22f0 ?AssignGaits@Inner@@QAEXPBU1@@Z  # copy gait list
+009e0cd0 ?Copy40@@YAPAUElem40@@PAU1@00@Z  # eastl::copy for 0x40-stride elements
+009de770 ?destroy@?$Vec@UGait@@@@QAEXPAUGait@@0@Z  # destroy range of gaits (frees three key lists)
+009e18f0 ?reserve@?$Vec@UGait@@@@QAEXH@Z  # vector<Gait>::reserve
+009e1990 ?realloc_insert@?$Vec@UGait@@@@QAEXPAUGait@@ABU2@@Z  # vector<Gait> grow-and-insert
+009dfda0 ??4Vec44@@QAEAAU0@ABU0@@Z  # vector<GaitA>::operator=
+009dfec0 ??4Vec58@@QAEAAU0@ABU0@@Z  # vector<GaitB>::operator=
+009dffe0 ??4Vec1C@@QAEAAU0@ABU0@@Z  # vector<GaitC>::operator=
+009e0480 ?erase@Vec0C@@QAEPAUElem0C@@PAU2@0@Z  # vector<0x0c>::erase range
+00f47380 ??_V@YAXPAX@Z  # operator delete[]
+015515dc g_15515dc  # alloc-debug flag guarding the gait-list clear

@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s009e1df0 = the nSPCreatureAnim Inner aggregate: its default constructor and the three
+# gait-list copy helpers. The three copy helpers are byte-exact (manifest.txt). The constructor
+# is complete and behaviourally identical but cl assigns ebx to the tune-address base and edi to
+# the zero constant (the original the other way round) and hoists the item-list erase arguments
+# into the float-store block, so ~205 of its 488 bytes differ.
+009e1df0  205  Inner::Inner(): complete (scalars, 26 tune floats loaded from their global slots, empty item/gait lists, guarded gait-list teardown); only ebx/edi register-role swap plus the erase-argument hoist differ | difftest PASS (400 valid, 100% coverage)
