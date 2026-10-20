@@ -3,3 +3,5 @@
 0113eda0 78 SND global-state init/copy complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED (callee imports GetVersionExA, no handler)
 0113ee40 77 SND global-state apply complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (257 valid, 95.5% coverage)
 0113ef00  35  SNDSYS_restore complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 12.2% coverage)
+0113ef90  131  SNDSYSI_chanpubinit complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (398 valid, 56.6% coverage)
+0113f060  188  SNDSYSI_init complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED (callee imports GetVersionExA, no handler)

@@ -18,7 +18,14 @@ void  __cdecl Sub_1142690(void);                       // 0x1142690
 void  __cdecl SNDPLATFORM_restore(void);               // 0x1140870
 void  __cdecl Sub_1133450(void);                       // 0x1133450
 void  __cdecl Sub_1133460(void);                       // 0x1133460
+int   __cdecl SNDPLATFORM_init(void);                  // 0x1140810
+void  __cdecl Sub_1156480(int a);                      // 0x1156480
+void  __cdecl Sub_11563b0(void);                       // 0x11563b0
+void  __cdecl SNDI_precalcaztospkrvol(void);           // 0x1155f40
+void  __cdecl MIX_create(void* desc);                  // 0x1142a80
 void  __fastcall Sys16_Free(void* self, int pad, void* p, int z);   // 0x112c850
+void* __fastcall Sys16_Alloc(void* self, int pad, unsigned size, const char* name,
+                             unsigned align, unsigned zero);        // 0x112c820
 // ---- items of slice s0113ec90 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
@@ -127,6 +134,86 @@ int SNDSYS_restore()
     Sys16_Free(sys, 0, Ap(0x16e7c7c), 0);
     Sub_1133460();
     g_16e7c1c = 0;
+    return 0;
+}
+}  // namespace 
+
+// @ 0x0113ef90
+namespace  {
+int SNDSYSI_chanpubinit()
+{
+    int nch = (int)(short)A16(0x16e7c20);
+    int chan = A32(0x15bfe38) + 0x21;
+    int size = chan * nch * 4;
+    void* sys = Ap(0x16e61a8);
+    void* base = Sys16_Alloc(sys, 0, (unsigned)size, "Common Voice State", 0x10, 0);
+    A32(0x16e7c78) = (unsigned)base;
+    SNDMEMI_alloc((char *)base, size);
+    int stride = A32(0x15bfe38);
+    int off = nch * 0x84 + (int)base;
+    int i = 0;
+    if (nch > 0) {
+        do {
+            *(int*)(A32(0x16e7c78) + i * 0x84 + 0x64) = off;
+            int n = A32(0x15bfe38);
+            int j = 0;
+            if (n > 0) {
+                do {
+                    *(float*)(*(int*)(A32(0x16e7c78) + i * 0x84 + 0x64) + j * 4) = 1.0f;
+                    j++;
+                } while (j < (int)A32(0x15bfe38));
+            }
+            i++;
+            off += A32(0x15bfe38) * 4;
+        } while (i < nch);
+    }
+    return 0;
+}
+}  // namespace 
+
+// @ 0x0113f060
+namespace  {
+int SNDSYSI_init()
+{
+    if (g_16e7c1c != 0) return 0;
+    if (A16(0x16e7c20) == 0) {
+        int r = F_0113eda0((unsigned*)0x16e7bf0);
+        if (r < 0) return r;
+        F_0113ee40((unsigned*)0x16e7bf0);
+    }
+    Sub_1156480((int)A32(0x16e7bf4));
+    g_16e7c1c = 1;
+    Sub_1133450();
+    SNDSYSI_chanpubinit();
+    unsigned sz = (unsigned)A16(0x16e7bf8) * 8;
+    void* sys = Ap(0x16e61a8);
+    void* p = Sys16_Alloc(sys, 0, sz, "Bank List Array", 0x10, 0);
+    A32(0x16e7c7c) = (unsigned)p;
+    SNDMEMI_alloc((char *)p, (int)sz);
+    Sub_1133460();
+    A32(0x16e7c24) = 0;
+    Af(0x15bfe34) = 1.0f;
+    A8(0x16e7c22) = 0;
+    A8(0x16e7c1d) = 0;
+    A8(0x16e7c1e) = 0;
+    int r = SNDPLATFORM_init();
+    if (r < 0) {
+        SNDPLATFORM_restore();
+        g_16e7c1c = 0;
+        return r;
+    }
+    unsigned char body[0x14];
+    *(unsigned char*)&body[0] = A8(0x16e7bfa);
+    *(unsigned char*)&body[1] = (unsigned char)(A8(0x16e7c00) + A8(0x16e7bff));
+    float sr = Af((unsigned)Ap(0x16e61a8) + 0xc0);
+    *(int*)&body[2] = (int)sr;
+    void* fp = (void*)0x1141020;
+    *(void**)&body[6] = fp;
+    body[0x0a] = 0;
+    MIX_create(body);
+    A8(0x16e7be4) = (unsigned char)(A8(0x16e7c00) + A8(0x16e7bff));
+    Sub_11563b0();
+    SNDI_precalcaztospkrvol();
     return 0;
 }
 }  // namespace 
