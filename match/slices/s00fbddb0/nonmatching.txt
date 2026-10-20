@@ -1,0 +1,18 @@
+# va  diff-bytes  reason
+# All three are COMPLETE, behaviourally-equivalent source (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast, from the
+# .cpp header comment); they are not byte-exact.
+00fbe130  51  cTerrainStateMgr::cTerrainStateMgr — /O2 scheduler places the shared -1.0f/0.5f/1.0f constant loads two
+               instructions earlier than the original (m600/m604/m608/m60c block: original interleaves the
+               xmm constant loads around the m5f8/m5fc int stores). Diff flat at 51 across 4 rounds; no lever.
+               difftest: UNSUPPORTED (fake-arity: 0/400 valid inputs — the ctor's virtual call on
+               mpTerrainSphere (slot +0x0c) can only be exercised through a generated vtable whose arity
+               disagrees; object-heavy ctor, see docs/equivalence.md "Known limitations").
+00fbe410  9   StateOutputParms copy ctor — single-instruction schedule swap: original emits
+               `lea ecx,[edi+0x34]` after `mov eax,[edi+0x30]`, ours before `mov [esi+0x2c],edx`
+               (two sub-object operator= call argument addresses). difftest: WEAK (115 valid inputs,
+               100.0% coverage, no mismatch).
+00fbe4f0  688  cTerrainStateMgr::~cTerrainStateMgr — the four inlined eastl vector erase loops: original
+               keeps `last` cached in eax and advances two pointers (ecx/edx), ours strength-reduces to
+               [offset+index] addressing and spills the begin pointer (frame 8 bytes larger). Tried a
+               plain erase, a cached-end local, an EASTL-style move helper and erase-returns-first
+               (688 -> 740 -> 688), flat; no lever. difftest: PASS (213 valid inputs, 85.6% coverage).

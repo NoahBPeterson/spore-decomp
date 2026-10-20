@@ -1,0 +1,7 @@
+00fbddb0  SP::cTerrainStateMgr::SetTerraformValues  # PDB name; clamps a/b, sets m02c/m28, calls 0xfc2040 + 0xfc2300
+00fbdee0  SP::cTerrainStateMgr::RefreshTerraformValues  # recomputes m02c from m030 and pushes scale to this+4
+00fbe050  CoreState::Reset  # zeroes the 0x2f4-layout block at cTerrainStateMgr+8 (sub-object)
+00fbe130  SP::cTerrainStateMgr::cTerrainStateMgr  # ctor; caches sphere->vtable[3] into +4; memsets 4x0x180 blocks (0x11e073e)
+00fbe390  PlanarDef::PlanarDef(const PlanarDef&)  # copy ctor, 5 floats + 4x20-byte + 2x20-byte sub-object operator=
+00fbe410  StateOutputParms::StateOutputParms(const StateOutputParms&)  # copy ctor; calls Elem4B::operator= 0x50d4e0 and Elem12B::operator= 0x473500
+00fbe4f0  SP::cTerrainStateMgr::~cTerrainStateMgr  # clears 4 vec12 + 2 vec8 + 2 vec12; releases 6 refcounted slots + 2 IEffect, calls 0x67de00->vbc(1.0f), 0x67ddd0->v50(0x23541242)
