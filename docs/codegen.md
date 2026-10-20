@@ -866,6 +866,11 @@ The dec1 and mig waves (reports in `work/claude/dec1_reports/`, requests in `wor
 - `/arch:SSE2` turns 0x24-byte by-value copies into `movq`, where the original uses `rep movsd`. Use `/arch:SSE` for such functions (0x65ef30).
 - `_ReadWriteBarrier()` also pins a load after earlier stores (0x7cde80, 15 diff bytes to 0).
 
+**Not a lever: member access vs raw offset casts** (controlled test, 2026-10-19, `work/claude/exp_style/`)
+- Rewriting `p->mX` as `*(T*)((char*)p + OFF)` with the same `T` and `OFF`, or the reverse, changed nothing in 40 of 41 functions: 14 of 15 byte-exact functions stayed exact, 15 of 15 non-exact and 11 of 11 cast-to-member functions kept their exact diff byte count. MSVC 2008 folds both forms into the same addressing. Prefer member access for readability, but do not spend rounds on it to chase bytes.
+- The exception (0x452080, `/Od`): a `float` member read passed as a call argument went from `fld/fstp` to `movss` when written as a cast, and an inline method called on a cast lvalue (`OFF(hkVector4,&info,0x10).set(...)`) spilled an extra pointer temporary, growing the frame. Under `/Od`, keep float member reads and method receivers as member access.
+- What does move bytes is what the casts usually stand in for: a wrong member TYPE (`void*` locals vs a typed self-referential node), a wrong layout or padding, and missing language constructs (arrays of destructible objects, `bool` returns, base destructors). The higher exact rate of member-style code in the slices comes from those, not from the syntax.
+
 **Still without a lever**
 - the `sub eax,N / je` dispatch chain (0x7e0340, 0x7e05e0), where switch, if-chain and unsigned switch all give range compares;
 - the property-UI `Modify*` frame of 0x60 against the original's 0x4c (nine functions);
