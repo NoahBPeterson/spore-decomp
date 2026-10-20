@@ -1,0 +1,3 @@
+00a73ef0 ??0cEffectCheat@Swarm@EA@@QAE@PAVcEffectsManager@12@@Z  # cEffectCheat ctor: base ctor, vftable, mManager, mTestEffects=0, cArgumentSpec(true), one ~100-arg ConstructSpec
+00a74150 ??1cEffectCheat@Swarm@EA@@UAE@XZ  # cEffectCheat implicit virtual dtor: frees mIntParams/mFloatParams/mOverrideRanges/mOverrideSets, ~StringVector mOverrideNames, ~cArgumentSpec, ~EffectVector, base dtor
+00a74230 ??_GcEffectsManagerCheat@Swarm@EA@@UAEPAXI@Z  # cEffectsManagerCheat scalar deleting dtor: ~cArgumentSpec(+0x14), base dtor, operator delete when flag&1

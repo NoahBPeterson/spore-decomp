@@ -1,0 +1,1 @@
+# va  diff-bytes  reason   (none: all 3 functions byte-exact at /O2 /MD /Gy /TP /arch:SSE /fp:fast)
