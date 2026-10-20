@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0098c880/s0098c880.cpp  ?push_back@ParagraphVector@UTFWinControls@EA@@QAEXABUParagraph@23@@Z  0098cb20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0098c880/s0098c880.cpp  ?Init@WinTextEdit@UTFWinControls@EA@@QAE_NXZ  0098cc70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0098c880/s0098c880.cpp  ?OnAutoSize@WinTextEdit@UTFWinControls@EA@@QAE_NIPAM@Z  0098d5b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

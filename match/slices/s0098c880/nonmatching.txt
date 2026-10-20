@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+0098c880  272  IWinTextEdit::Undo: complete; eastl deque pop_front/push_front inlined but register allocation and instruction scheduling differ (original keeps this in esi and the deque value in edi; ours reuses registers differently, and the block-advance emits add dword [esi+0x330],4 vs the original load/add/store); difftest PASS (216 valid, 77.2% coverage)
+0098c9d0  272  IWinTextEdit::Redo: complete; same codegen differences as Undo (only ApplyRedo vs ApplyUndo and mUndo/mRedo swap); difftest PASS (205 valid, 83.7% coverage)
+0098cbb0  122  WinTextEdit::~WinTextEdit: complete; original releases the four ref objects through a 2-iteration loop over a 0x14-stride array (ebx count-down, sub esi,0x14) while ours unrolls the four mRefObjA..D releases; also the IWinTextEdit subobject vptr store ordering differs; difftest UNSUPPORTED (0/400 valid, callees fault under emulation)
+0098cd00  338  WinTextEdit::SetParagraphCache: complete; typesetter loop frame/register allocation and the line-break push_back differ; difftest UNSUPPORTED (0/400 valid)
+0098ceb0  172  WinTextEdit::LayoutLine: complete; SetBounds width expression computed identically but register allocation differs (ours spills mVisLeft to a stack slot and reloads); difftest FAIL only on a 2-ulp float (orig 40000002 vs ours 40000000) in a typesetter temp at pool 406d0510 (float-rounding)
+0098cfd0  220  WinTextEdit::HitTest: complete; floor/fistp line-index sequence and the pt[0] compare/register allocation differ; difftest UNSUPPORTED (0/400 valid)
+0098d110  431  WinTextEdit::RecalculateLineBreaks: complete; paragraph rebuild loop, TextRunIterator frame and line-wrap store differ; difftest UNSUPPORTED (0/400 valid)
+0098d320  144  WinTextEdit::Pick: complete; upper_bound arg setup, the yy/mTextExtentY comiss operand order and block layout differ; difftest WEAK (242 valid, 52.7% coverage)
+0098d420  217  WinTextEdit::OnMouseDown: complete; the (flags>>6)&1 test is folded to test al,0x40 here vs shr eax,6/test al,1 in the original, and the double-click Stopwatch frame differs; difftest PASS (221 valid, 100% coverage)
+0098d540  65  WinTextEdit::OnMouseMove: complete; the only difference is the (flags>>6)&1 test folding to test al,0x40 vs the original's shr eax,6/test al,1; difftest UNSUPPORTED (0/400 valid, fake-arity 311)
