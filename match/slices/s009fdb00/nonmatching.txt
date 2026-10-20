@@ -1,0 +1,17 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s009fdb00 = SPCreatureAnim/parts_caps TU: capability_name vector/map/sort
+# instantiations, four AnimCommand Execute bodies, the registry teardown and the binary reader.
+# Three small leaf functions are byte-exact (manifest.txt); the rest are complete and
+# behaviourally equivalent but the inlined EASTL growth/sort loop-rotation shapes and the
+# virtual-dispatch scheduling do not reproduce cl 14.x output byte-for-byte.
+009fdb00  424  CapVec::DoInsertValues: complete grow+copy (EAAllocate + memcpy + tail); loop rotation/inline differs | difftest WEAK (25 valid, 13.2% cov)
+009fdd10  -    eastl::quick_sort<CapName*,less>: complete median-of-three partition + recursion; no similarly sized candidate symbol (inlined/merged) | difftest WEAK (36 valid, 17.2% cov)
+009fdec0  42   cRemapCommand::Execute: complete arg fetch + remap store; virtual dispatch scheduling differs | difftest WEAK (21 valid, 11.5% cov)
+009fdf80  108  cDeformBlocksEnabledCommand::Execute(bool): complete; branch layout differs | difftest WEAK (51 valid, 100% cov)
+009fe010  13   eastl::sort<CapName*,less> shell over quick_sort/insertion; thin wrapper scheduling differs | difftest UNSUPPORTED (0 valid inputs: write/read faults, memcpy imports)
+009fe1a0  221  PurgeCapabilityTables: complete registry teardown (VirtualFree + table clears); inline frame differs | difftest UNSUPPORTED (0 valid inputs: read/write faults, VirtualFree)
+009fe390  141  cAddCapabilityCommand::Execute: complete; virtual dispatch + scheduling differ | difftest WEAK (26 valid, 7.9% cov)
+009fe560  140  rbtree<u32,SimpleVector<u32>>::operator[]: complete find-or-insert; branch layout differs | difftest WEAK (33 valid, 50.0% cov)
+009fe6c0  957  ReadPartsCapsBinary: complete binary reader (format scan + append); large inline frame differs | difftest UNSUPPORTED (0 valid inputs: fake-arity/read/write faults)
