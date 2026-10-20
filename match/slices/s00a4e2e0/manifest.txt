@@ -1,0 +1,14 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a4e2e0/s00a4e2e0.cpp  ?graph_delete@Eapd@Audio@EA@@YAXPAUt_glist@123@0@Z  00a4e520  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4e2e0/s00a4e2e0.cpp  ?glist_redraw@Eapd@Audio@EA@@YAXPAUt_glist@123@@Z  00a4e560  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4e2e0/s00a4e2e0.cpp  ?graph_displace@Eapd@Audio@EA@@YAXPAUt_gobj@123@PAUt_glist@123@HH@Z  00a4e660  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4e2e0/s00a4e2e0.cpp  ?guiconnect_unlink@Eapd@Audio@EA@@YAXPAX@Z  00a4e750  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4e2e0/s00a4e2e0.cpp  ?guiconnect_signoff@Eapd@Audio@EA@@YAXPAUt_guiconnect@123@@Z  00a4e7a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4e2e0/s00a4e2e0.cpp  ?guiconnect_anything@Eapd@Audio@EA@@YAXPAUt_guiconnect@123@Ut_symbol@123@HPAUt_atom@123@@Z  00a4e7e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4e2e0/s00a4e2e0.cpp  ?rtext_free@Eapd@Audio@EA@@YAXPAUt_rtext@123@@Z  00a4e920  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4e2e0/s00a4e2e0.cpp  ?rtext_gettag@Eapd@Audio@EA@@YAPBDPAUt_rtext@123@@Z  00a4e990  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4e2e0/s00a4e2e0.cpp  ?rtext_measures@Eapd@Audio@EA@@YAXPAH00@Z  00a4e9a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4e2e0/s00a4e2e0.cpp  ?glist_findrtext@Eapd@Audio@EA@@YAPAUt_rtext@123@PAUt_glist@123@PAUt_text@123@@Z  00a4efb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4e2e0/s00a4e2e0.cpp  ?rtext_erase@Eapd@Audio@EA@@YAXPAUt_rtext@123@@Z  00a4f080  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4e2e0/s00a4e2e0.cpp  ?rtext_displace@Eapd@Audio@EA@@YAXPAUt_rtext@123@HH@Z  00a4f0b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4e2e0/s00a4e2e0.cpp  ?rtext_select@Eapd@Audio@EA@@YAXPAUt_rtext@123@H@Z  00a4f0e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
