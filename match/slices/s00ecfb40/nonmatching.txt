@@ -1,0 +1,10 @@
+0x00ecfb40  168  complete; block layout/scheduling only (cold show-branch not sunk; 168/254 bytes differ); equiv WEAK 323 valid / 51.8% coverage
+0x00ecfc40  170  complete; stack-frame and register allocation differ (0x1c vs 0x2c frame, vtable loads hoisted); equiv UNSUPPORTED (0/400 valid, fake-state read faults)
+0x00ecfe30  22  complete; jump-table register allocation only (index in eax vs target edx/esi); equiv PASS 400 valid / 100% coverage
+0x00ed0030  280  complete; large codegen divergence in the meter/color path (target SSE clamp and float compare sequences); equiv UNSUPPORTED (unresolved g_colorG/g_colorB references)
+0x00ed01a0  151  complete; compiler inlines/duplicates the message branches differently (compiled size no longer matches 180-byte target); equiv UNSUPPORTED (0/400 valid, virtual-call arity)
+0x00ed02c0  4  complete; constructor store scheduling only (target emits the two base-vtable stores before `xor ecx,ecx`); equiv PASS 400 valid / 100% coverage
+0x00ed0340  85  complete; refcount teardown and vtable-reset ordering differ; equiv PASS 260 valid / 100% coverage
+0x00ed0400  489  complete; heavy approximation of the layout/window/rollover setup (target 594 bytes with many more vtable edges); equiv UNSUPPORTED (0/400 valid, fake-state write faults)
+0x00ed0660  85  complete; release ordering differs from target (target clears members before each release, other call order); equiv PASS 294 valid / 100% coverage
+0x00ed0750  678  complete; large approximation of the rollover/event geometry path (target 861 bytes, many string/variant temporaries); equiv WEAK 400 valid / 5.8% coverage

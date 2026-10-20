@@ -1,0 +1,22 @@
+0x00ecfb40  cVerbTrayPage::Refresh  # per-frame verb-tray refresh; visibility/render-target state and three layout windows
+0x00ecfc40  cPageControls::RefreshFromSelection  # pulls selection pairs/strings and rebinds the page base
+0x00ecfd50  cEditorResource2::Destroy  # deleting destructor, ret 4
+0x00ecfd90  cVerbTrayPage::RefreshAndFlush  # Refresh + base Refresh
+0x00ecfdb0  cPageControls::SetPageId  # stores page id, dispatches on -1, refreshes inner page
+0x00ecfdf0  cPageControls::OnChanged  # refresh + post 0x796d3a0 changed message
+0x00ecfe30  cEconomyValues::GetValue  # indexed economy value, 8-entry switch
+0x00ecfe70  cEconomyValues::AddValue  # indexed add followed by changed message
+0x00ecfec0  cEconomyValues::SetValue  # indexed store with equality test
+0x00ecff30  LoadEconomySettings  # free __stdcall settings-reset helper
+0x00ecff90  cSmallRef::cSmallRef  # ref-counted holder constructor
+0x00ecffd0  cSmallRef::Load  # settings-reset helper using the holder's server
+0x00ed0030  cEditorPage::Update  # complexity-meter update; percent clamp and pulsing colour
+0x00ed01a0  cEditorPage::HandleMessage  # three editor messages for the complexity slider
+0x00ed0260  cEditorPage::AsInterface  # returns slider interface for an id
+0x00ed02c0  cEditorPage::cEditorPage  # three-vtable constructor
+0x00ed0340  cEditorPage::Destroy  # non-deleting destructor; removes handler and releases children
+0x00ed0400  cEditorPage::Init  # layout/dialog/window/rollover setup and message-handler registration
+0x00ed0660  cEditorPage::Shutdown  # releases windows, layout, rollover and data
+0x00ed0750  cEditorPage::HandleEvent  # frame event; builds rollover strings/variants and positions it
+0x00ed0ab0  cMeterChild::cMeterChild  # two-vtable meter child constructor
+0x00ed0b00  cMeterChild::Destroy  # non-deleting destructor; removes handler and releases children

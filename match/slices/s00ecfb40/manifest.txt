@@ -1,0 +1,12 @@
+slices/s00ecfb40/s00ecfb40.cpp  ?Destroy@cEditorResource2@@QAEPAXI@Z  0x00ecfd50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ecfb40/s00ecfb40.cpp  ?RefreshAndFlush@cVerbTrayPage@@QAEXH@Z  0x00ecfd90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ecfb40/s00ecfb40.cpp  ?SetPageId@cPageControls@@QAEXH@Z  0x00ecfdb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ecfb40/s00ecfb40.cpp  ?OnChanged@cPageControls@@QAEXXZ  0x00ecfdf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ecfb40/s00ecfb40.cpp  ?AddValue@cEconomyValues@@QAEXHH@Z  0x00ecfe70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ecfb40/s00ecfb40.cpp  ?SetValue@cEconomyValues@@QAEXHH@Z  0x00ecfec0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ecfb40/s00ecfb40.cpp  ?LoadEconomySettings@@YGIHPAUcSettingsBlock@@@Z  0x00ecff30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ecfb40/s00ecfb40.cpp  ??0cSmallRef@@QAE@PAUcSelectionServer@@@Z  0x00ecff90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ecfb40/s00ecfb40.cpp  ?Load@cSmallRef@@QAEIHPAUcSettingsBlock@@@Z  0x00ecffd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ecfb40/s00ecfb40.cpp  ?AsInterface@cEditorPage@@QAEPAXH@Z  0x00ed0260  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ecfb40/s00ecfb40.cpp  ??0cMeterChild@@QAE@XZ  0x00ed0ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ecfb40/s00ecfb40.cpp  ?Destroy@cMeterChild@@QAEXXZ  0x00ed0b00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
