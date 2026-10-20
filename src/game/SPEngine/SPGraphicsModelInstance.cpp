@@ -773,6 +773,7 @@ inline void RcRelease(RC_s0073_f320* p) {
     long r = _InterlockedDecrement((volatile long*)&p->mnRefCount);
     if (r == 0) { _InterlockedExchange((volatile long*)&p->mnRefCount, 1); p->v0(1); }
 }
+struct T8 { int a, b; };
 struct RefPair {
     int value;                       // +0x0
     RC_s0073_f320* p;                           // +0x4
@@ -2712,6 +2713,14 @@ int ModelInstanceDispatch::Dispatch(int a2, int a3)
     if (l)
         l->OnDispatch(this, &c, a2);
     return c.result;
+}
+
+// @ 0x0073fe50
+void __cdecl copy_backward8(T8* first, T8* last, T8* result)
+{
+    while (last != first) {
+        *--result = *--last;
+    }
 }
 
 // @ 0x0073fe80

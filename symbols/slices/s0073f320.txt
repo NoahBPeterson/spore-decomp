@@ -4,6 +4,7 @@
 0073f540 ?PickLine@cModelInstanceQ@@QAE_NPBMMPBUcSPTransform_s0073_f320@@_N@Z  # cModelInstanceQ::PickLine migrated from s0073f320 (verbatim, slice spelling)
 0073f910 ?IntersectsSphere@cModelInstanceQ@@QAE_NPBUcSPBoundingBox_s0073_f320@@PBUcSPTransform_s0073_f320@@_N@Z  # cModelInstanceQ::IntersectsSphere migrated from s0073f320 (verbatim, slice spelling)
 0073fd20 ?Dispatch@ModelInstanceDispatch@@QAEHHH@Z  # ModelInstanceDispatch::Dispatch migrated from s0073f320 (verbatim, slice spelling)
+0073fe50 ?copy_backward8@@YAXPAUT8@@00@Z  # copy_backward8 migrated from s0073f320 (verbatim, slice spelling)
 0073fe80 ?ValidateA@@YI_NPAD@Z  # ValidateA migrated from s0073f320 (verbatim, slice spelling)
 0073ffb0 ?ValidateB@@YI_NPAD@Z  # ValidateB migrated from s0073f320 (verbatim, slice spelling)
 007400f0 ??0BindingSet@@QAE@XZ  # BindingSet::BindingSet migrated from s0073f320 (verbatim, slice spelling)
