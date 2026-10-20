@@ -1,0 +1,1 @@
+009f41b0 nSPCreatureAnim::AddCrossConstraints  # name from symbols/slices/s009f4660.txt; __cdecl (creature_instance_data* creature, creature_body_instance_data* body, unsigned long flags) -> unsigned long; build the cross IK constraints of one body and return its goal-bearing child count
