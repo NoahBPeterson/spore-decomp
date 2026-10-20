@@ -139,10 +139,93 @@ namespace EA {
 namespace UTFWinTools {
 namespace UTFWinToolsInternal {
 struct XmlObj094 {
-    virtual void pv00(); virtual void pv01(); virtual void pv02(); virtual void pv03();
+virtual void pv00();
+virtual void pv01();
+virtual void pv02();
+virtual void pv03();
     virtual void* v10(void* a);          // +0x10
     virtual void* v14(void* a);          // +0x14
     void* FUN_0113ae10(void* r);         // 0x113ae10
+};
+}
+}
+}
+namespace EA {
+namespace UTFWinTools {
+namespace UTFWinToolsInternal {
+struct Key {
+    uint32_t mInstance;    // +0x00
+    uint32_t mType;        // +0x04
+    uint32_t mGroup;       // +0x08
+};
+}
+}
+}
+namespace EA {
+namespace UTFWinTools {
+namespace UTFWinToolsInternal {
+struct SerItem_s0099_a050 {
+    uint32_t w[3];
+};
+}
+}
+}
+namespace EA {
+namespace UTFWinTools {
+namespace UTFWinToolsInternal {
+struct IList;
+}
+}
+}
+namespace EA {
+namespace UTFWinTools {
+namespace UTFWinToolsInternal {
+struct SerItem_s0099_a050;
+}
+}
+}
+namespace EA {
+namespace UTFWinTools {
+namespace UTFWinToolsInternal {
+struct IDataBinder_s0099_a050 {
+    virtual void bv0();  // +0x00
+    virtual void bv4();  // +0x04
+    virtual void bv8();  // +0x08
+    virtual void bvc();  // +0x0c
+    virtual bool BindKey(SerItem_s0099_a050* out, int typeCode, Key* key);   // +0x10
+};
+}
+}
+}
+namespace EA {
+namespace UTFWinTools {
+namespace UTFWinToolsInternal {
+struct XmlReader {
+    virtual void v00();                                    // +0x00
+    virtual void v04();                                    // +0x04
+    virtual void v08();                                    // +0x08
+    virtual bool Next();                                   // +0x0c  0x9013e0
+    virtual const void* GetPos(void* ctx);                 // +0x10
+    virtual void* GetLine(const void* pos);                // +0x14
+    const wchar_t* GetAttribute(const wchar_t* name);      // 0x900720
+    int            GetNodeType();                          // 0x900660
+    const wchar_t* GetName();                              // 0x900690
+    void           EndElement();                           // 0x9007b0
+    uint32_t       GetErrorCode();                         // 0xfcc210
+    int            FUN_00900680();                         // 0x900680
+    const wchar_t* FUN_009008f0();                         // 0x9008f0
+    const wchar_t* ReadString(void* alloc, void* pOut);    // 0x900800
+};
+}
+}
+}
+namespace EA {
+namespace UTFWinTools {
+namespace UTFWinToolsInternal {
+struct BinderVec_s0099_a050 {
+    IDataBinder_s0099_a050** mpBegin;   // +0x00
+    IDataBinder_s0099_a050** mpEnd;     // +0x04
+    IDataBinder_s0099_a050** mpCap;     // +0x08
 };
 }
 }
@@ -159,13 +242,102 @@ struct XmlReaderState {
     void  ReportResult(void* param_2);
     // 0x99a9d0
     void  Splice(void* param_2);
-    // large entry points (partial)
-    unsigned ReadObjectArray(int param_2);                                  // 0x99a4c0
-    unsigned ReadStructArray(int* param_2, unsigned param_3);               // 0x99a7c0
-    unsigned ParsePropertyValue(double* param_2, unsigned param_3, wchar_t* param_4);  // 0x99aa20
-    unsigned ReadPropertyValueArray(void* param_2);                         // 0x99ac80
+
+    bool ReadObjectArray(int param_2);                                  // 0x99a4c0
+    bool ReadStructArray(int* param_2, unsigned param_3);               // 0x99a7c0
+    bool ParsePropertyValue(double* param_2, unsigned param_3, wchar_t* param_4);  // 0x99aa20
+    bool ReadPropertyValueArray(void* param_2);                         // 0x99ac80
+
+    // 0x99b730  ReadPropertyList(SerItem*, IList*)
+    bool ReadPropertyList(SerItem_s0099_a050* param_2, IList* param_3);
+    // 0x99b8a0  ReadObject(unsigned*)
+    void* ReadObject(unsigned* param_2);
+
+    // The reader cursor pointer lives at +0x94.
+    XmlReader* Reader() { return *(XmlReader**)((char*)this + 0x94); }
 };
 }
+}
+}
+namespace EA {
+namespace ResourceMan {
+bool ReadKey(const wchar_t* name, EA::UTFWinTools::UTFWinToolsInternal::Key& key);  // namespace ResourceMan
+}
+}
+namespace EA {
+namespace UTFWinTools {
+namespace UTFWinToolsInternal {
+unsigned FUN_0099a380(const wchar_t* key);
+}
+}
+}
+namespace EA {
+namespace UTFWinTools {
+namespace UTFWinToolsInternal {
+bool __fastcall FUN_0099a3f0(unsigned param_1, unsigned param_2);
+}
+}
+}
+namespace EA {
+namespace UTFWinTools {
+namespace UTFWinToolsInternal {
+extern "C" int __cdecl _wcsicmp(const wchar_t*, const wchar_t*);
+}
+}
+}
+namespace EA {
+namespace UTFWinTools {
+namespace UTFWinToolsInternal {
+extern "C" unsigned long __cdecl wcstoul(const wchar_t*, wchar_t**, int);
+}
+}
+}
+namespace EA {
+namespace UTFWinTools {
+namespace UTFWinToolsInternal {
+extern "C" long          __cdecl wcstol(const wchar_t*, wchar_t**, int);
+}
+}
+}
+namespace EA {
+namespace UTFWinTools {
+namespace UTFWinToolsInternal {
+extern "C" double        __cdecl wcstod(const wchar_t*, wchar_t**);
+}
+}
+}
+namespace EA {
+namespace UTFWinTools {
+namespace UTFWinToolsInternal {
+extern "C" int           __cdecl swscanf(const wchar_t*, const wchar_t*, ...);
+}
+}
+}
+namespace EA {
+namespace UTFWinTools {
+namespace UTFWinToolsInternal {
+extern "C" __int64       __cdecl StrtoI6416(const wchar_t*, wchar_t**, int);
+}
+}
+}
+namespace EA {
+namespace UTFWinTools {
+namespace UTFWinToolsInternal {
+extern "C" unsigned __int64 __cdecl StrtoU6416(const wchar_t*, wchar_t**, int);
+}
+}
+}
+namespace EA {
+namespace UTFWinTools {
+namespace UTFWinToolsInternal {
+namespace {
+struct NameEntry {
+    const wchar_t* name;
+    int value;
+};
+const NameEntry* const kNameTable = (const NameEntry*)0x15503d0;
+} // namespace
+}  // namespace EA
 }
 }
 // ---- items of slice s0099a050 end
@@ -364,10 +536,37 @@ uint32_t cSPUIDeserializer::Read(IStream* stream, int a1, void* output, int a3, 
     return XmlDeserializer::Read(stream, a1, output, a3, a4, a5);
 }
 
+// @ 0x0099a380
+namespace EA { namespace UTFWinTools { namespace UTFWinToolsInternal {
+unsigned FUN_0099a380(const wchar_t* key)
+{
+    struct NameEntry { const wchar_t* name; int value; };
+    const NameEntry* const kNameTable = (const NameEntry*)0x15503d0;
+    int hi = 0x16;
+    int lo;
+    lo = 0;
+    do {
+        int mid = (hi + lo) / 2;
+        int c = wcscmp(key, kNameTable[mid].name);
+        if (c == 0)
+            return (unsigned)kNameTable[mid].value;
+        if (c < 0)
+            hi = mid;
+        else
+            lo = mid + 1;
+    } while (hi > lo);
+    return 0;
+}
+}}}  // namespace EA::UTFWinTools::UTFWinToolsInternal
+
 // @ 0x0099a3f0
 namespace EA { namespace UTFWinTools { namespace UTFWinToolsInternal {
 bool __fastcall FUN_0099a3f0(unsigned param_1, unsigned param_2)
 {
+    if (param_1 > 0x3ff)
+        return param_1 == param_2;
+    if (param_1 >= 0x3fd)
+        return param_2 == 0x13;
     switch (param_1) {
     case 3:
     case 7:
@@ -378,10 +577,6 @@ bool __fastcall FUN_0099a3f0(unsigned param_1, unsigned param_2)
     case 5:
     case 9:
         return param_2 == 5 || param_2 == 9;
-    case 0x3fd:
-    case 0x3fe:
-    case 0x3ff:
-        return param_2 == 0x13;
     default:
         return param_1 == param_2;
     }
@@ -406,16 +601,135 @@ void XmlReaderState::ReportResult(void* param_2)
 
 // @ 0x0099a4c0
 namespace EA { namespace UTFWinTools { namespace UTFWinToolsInternal {
-unsigned XmlReaderState::ReadObjectArray(int)
+bool XmlReaderState::ReadObjectArray(int param_2)
 {
+    unsigned* const ids = *(unsigned**)((char*)(uintptr_t)param_2 + 0x2c);
+    const unsigned  count = *(unsigned*)((char*)(uintptr_t)param_2 + 0x30);
+    XmlReader* r = *(XmlReader**)((char*)this + 0x94);
+
+    const wchar_t* valAttr = r->GetAttribute(L"value");
+    if (count == 1 && valAttr != 0) {
+        if (wcscmp(valAttr, L"null") == 0)
+            return 1;
+        unsigned v = wcstoul(valAttr, 0, 0);
+        if (v != 0)
+            *ids = v;
+        return 1;
+    }
+
+    unsigned n = 0;
+    if (!r->Next())
+        goto failTail;
+    for (;;) {
+        r = *(XmlReader**)((char*)this + 0x94);
+        if (r->GetNodeType() == 1) {
+            if (wcscmp(r->GetName(), L"value") != 0)
+                goto objectPath;
+
+            const wchar_t* typeAttr = r->GetAttribute(L"type");
+            const wchar_t* va       = r->GetAttribute(L"value");
+            const wchar_t* keyAttr  = r->GetAttribute(L"key");
+
+            if (n >= count) {
+                ReportResult((void*)0x2fc50007);
+                return 0;
+            }
+            if (wcscmp(typeAttr, L"object") != 0) {
+                ReportResult((void*)0x2fc50005);
+                return 0;
+            }
+            if (keyAttr != 0) {
+                ids[n] = 0;
+                r->EndElement();
+                ++n;
+            } else {
+                if (va == 0) {
+                    va = r->FUN_009008f0();
+                    if (va == 0) {
+                        ReportResult((void*)0x2fc50006);
+                        return 0;
+                    }
+                }
+                unsigned v = wcstoul(va, 0, 0);
+                if (v != 0)
+                    ids[n] = v;
+                r->EndElement();
+                ++n;
+            }
+        } else {
+            if (r->GetNodeType() == 2) {
+                if (n == count)
+                    return 1;
+                ReportResult((void*)0x2fc50007);
+                return 0;
+            }
+        }
+    next:
+        r = *(XmlReader**)((char*)this + 0x94);
+        if (!r->Next())
+            break;
+        continue;
+
+    objectPath:
+        if (wcscmp(r->GetName(), L"object") != 0) {
+            ReportResult((void*)0x2fc50001);
+            return 0;
+        }
+        {
+            unsigned localId = 0;
+            if (ReadObject(&localId) == 0)
+                return 0;
+            if (localId != 0)
+                ids[n] = localId;
+            ++n;
+        }
+        goto next;
+    }
+
+failTail:
+    ReportResult((void*)(*(XmlReader**)((char*)this + 0x94))->GetErrorCode());
     return 0;
 }
 }}}  // namespace EA::UTFWinTools::UTFWinToolsInternal
 
 // @ 0x0099a7c0
 namespace EA { namespace UTFWinTools { namespace UTFWinToolsInternal {
-unsigned XmlReaderState::ReadStructArray(int*, unsigned)
+bool XmlReaderState::ReadStructArray(int* param_2, unsigned param_3)
 {
+    unsigned n        = 0;
+    int      stride   = param_2[1];
+    int      elemSize = *(int*)(param_2[0] + 8);
+    if (!Reader()->Next())
+        goto failTail;
+    while (true) {
+        if (Reader()->GetNodeType() == 1) {
+            if (wcscmp(Reader()->GetName(), L"struct") != 0) {
+                ReportResult((void*)0x2fc50001);
+                return 0;
+            }
+            if (n >= (unsigned)param_2[2]) {
+                ReportResult((void*)0x2fc50007);
+                return 0;
+            }
+            SerItem_s0099_a050 item;
+            item.w[1] = (uint32_t)stride;
+            item.w[0] = (uint32_t)param_2[0];
+            item.w[2] = 1;
+            if (!ReadPropertyList(&item, (IList*)param_3))
+                return 0;
+            stride += elemSize;
+            ++n;
+        } else if (Reader()->GetNodeType() == 2) {
+            if (n == (unsigned)param_2[2])
+                return 1;
+            ReportResult((void*)0x2fc50007);
+            return 0;
+        }
+        if (!Reader()->Next())
+            break;
+    }
+failTail:
+    ReportResult((void*)Reader()->GetErrorCode());
     return 0;
 }
 }}}  // namespace EA::UTFWinTools::UTFWinToolsInternal
@@ -491,16 +805,192 @@ void XmlReaderState::Splice(void* param_2)
 
 // @ 0x0099aa20
 namespace EA { namespace UTFWinTools { namespace UTFWinToolsInternal {
-unsigned XmlReaderState::ParsePropertyValue(double*, unsigned, wchar_t*)
+bool XmlReaderState::ParsePropertyValue(double* param_2, unsigned param_3, wchar_t* param_4)
 {
-    return 0;
+    switch (param_3) {
+    case 2:
+        *(bool*)param_2 = (_wcsicmp(param_4, L"true") == 0);
+        return 1;
+    case 3:
+        *(char*)param_2 = (char)wcstol(param_4, 0, 0);
+        return 1;
+    case 4:
+        *(short*)param_2 = (short)wcstol(param_4, 0, 0);
+        return 1;
+    case 5:
+        *(uint32_t*)param_2 = (uint32_t)wcstol(param_4, 0, 0);
+        return 1;
+    case 6:
+        *(long long*)param_2 = (long long)StrtoI6416(param_4, 0, 0);
+        return 1;
+    case 7:
+        *(char*)param_2 = (char)wcstoul(param_4, 0, 0);
+        return 1;
+    case 8:
+        *(short*)param_2 = (short)wcstoul(param_4, 0, 0);
+        return 1;
+    case 9:
+        *(uint32_t*)param_2 = (uint32_t)wcstoul(param_4, 0, 0);
+        return 1;
+    case 10:
+        *(unsigned long long*)param_2 = (unsigned long long)StrtoU6416(param_4, 0, 0);
+        return 1;
+    case 11:
+        *(float*)param_2 = (float)wcstod(param_4, 0);
+        return 1;
+    case 12:
+        *param_2 = wcstod(param_4, 0);
+        return 1;
+    case 13:
+    case 18:
+        *(void**)param_2 = StrDup(param_4);
+        return 1;
+    case 14: {
+        int n = swscanf(param_4, L"%d,%d,%d,%d", (char*)param_2, (char*)param_2 + 4,
+                            (char*)param_2 + 8, (char*)param_2 + 12);
+        if (n != 4) {
+            *(void**)((char*)this + 0x58) = (void*)0x2fc50006;
+            return 0;
+        }
+        return 1;
+    }
+    case 15: {
+        int n = swscanf(param_4, L"%d,%d", (char*)param_2, (char*)param_2 + 4);
+        if (n != 2) {
+            *(void**)((char*)this + 0x58) = (void*)0x2fc50006;
+            return 0;
+        }
+        return 1;
+    }
+    case 16: {
+        int n = swscanf(param_4, L"%g,%g,%g,%g", (char*)param_2, (char*)param_2 + 4,
+                            (char*)param_2 + 8, (char*)param_2 + 12);
+        if (n != 4) {
+            *(void**)((char*)this + 0x58) = (void*)0x2fc50006;
+            return 0;
+        }
+        return 1;
+    }
+    case 17: {
+        int n = swscanf(param_4, L"%g,%g", (char*)param_2, (char*)param_2 + 4);
+        if (n != 2) {
+            *(void**)((char*)this + 0x58) = (void*)0x2fc50006;
+            return 0;
+        }
+        return 1;
+    }
+    case 19:
+    case 20:
+        *(void**)((char*)this + 0x58) = (void*)0x2fc50006;
+        return 0;
+    default:
+        return 0;
+    }
 }
 }}}  // namespace EA::UTFWinTools::UTFWinToolsInternal
 
 // @ 0x0099ac80
 namespace EA { namespace UTFWinTools { namespace UTFWinToolsInternal {
-unsigned XmlReaderState::ReadPropertyValueArray(void*)
+bool XmlReaderState::ReadPropertyValueArray(void* param_2)
 {
+    uint32_t* const p    = (uint32_t*)param_2;
+    const unsigned short typeCode = *(unsigned short*)(uintptr_t)p[0];
+    const int  elemSize  = *(int*)((char*)(uintptr_t)p[0] + 8);
+    const unsigned count = p[2];
+
+    SerItem_s0099_a050 item;
+    item.w[0] = p[0];
+    item.w[1] = p[1];
+    item.w[2] = 1;
+
+    XmlReader* r = *(XmlReader**)((char*)this + 0x94);
+    unsigned idx = 0;
+    int iVar6 = r->FUN_00900680();
+    if (!r->Next())
+        goto failTail;
+
+    for (;;) {
+        r = *(XmlReader**)((char*)this + 0x94);
+        if (r->GetNodeType() == 1) {
+            if (wcscmp(r->GetName(), L"value") != 0) {
+                *(void**)((char*)this + 0x58) = (void*)0x2fc50001;
+                goto reportTail;
+            }
+            const wchar_t* va      = r->GetAttribute(L"value");
+            const wchar_t* typeAttr = r->GetAttribute(L"type");
+            const wchar_t* keyAttr = r->GetAttribute(L"key");
+
+            if (idx >= count) {
+                *(void**)((char*)this + 0x58) = (void*)0x2fc50007;
+                goto reportTail;
+            }
+            unsigned t = 0;
+            if (typeAttr != 0) {
+                t = FUN_0099a380(typeAttr);
+                if (t == 0) {
+                    ReportResult((void*)0x2fc50004);
+                    return 0;
+                }
+                if (!FUN_0099a3f0(t, typeCode)) {
+                    ReportResult((void*)0x2fc50005);
+                    r->EndElement();
+                    return 1;
+                }
+            }
+            if (keyAttr != 0) {
+                Key key;
+                key.mInstance = 0;
+                key.mType = 0;
+                key.mGroup = 0;
+                if (EA::ResourceMan::ReadKey(keyAttr, key)) {
+                    BinderVec_s0099_a050* b = *(BinderVec_s0099_a050**)((char*)this + 0x88);
+                    IDataBinder_s0099_a050** it = b->mpBegin;
+                    if (it != b->mpEnd) {
+                        for (;;) {
+                            if ((*it)->BindKey(&item, (int)t, &key))
+                                goto advance;
+                            ReportResult((void*)0x2fc50009);
+                            ++it;
+                            if (it == (*(BinderVec_s0099_a050**)((char*)this + 0x88))->mpEnd)
+                                break;
+                        }
+                    }
+                }
+            } else {
+                const wchar_t* s = va;
+                if (s == 0) {
+                    s = r->FUN_009008f0();
+                    if (s == 0)
+                        s = L"";
+                }
+                if (!ParsePropertyValue((double*)(uintptr_t)item.w[1], typeCode, (wchar_t*)s)) {
+                    ReportResult(*(void**)((char*)this + 0x58));
+                    r->EndElement();
+                    return 1;
+                }
+            }
+        advance:
+            item.w[1] += (uint32_t)elemSize;
+            ++idx;
+        } else if (r->GetNodeType() == 2) {
+            if (r->FUN_00900680() == iVar6) {
+                if (idx == count)
+                    return 1;
+                ReportResult((void*)0x2fc50007);
+                return 0;
+            }
+        }
+
+        r = *(XmlReader**)((char*)this + 0x94);
+        if (!r->Next())
+            break;
+    }
+
+failTail:
+    *(void**)((char*)this + 0x58) =
+        (void*)(*(XmlReader**)((char*)this + 0x94))->GetErrorCode();
+reportTail:
+    ReportResult(*(void**)((char*)this + 0x58));
     return 0;
 }
 }}}  // namespace EA::UTFWinTools::UTFWinToolsInternal
