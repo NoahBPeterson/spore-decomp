@@ -1,0 +1,2 @@
+# partial.txt -- functions that are only partially implemented.
+# (none for slice s009886d0: every VA is either byte-exact or complete-but-diff)

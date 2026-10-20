@@ -1,0 +1,23 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009886d0/s009886d0.cpp  ?m_988780@WinText@@QAEXH@Z        00988780
+slices/s009886d0/s009886d0.cpp  ?m_988890@WinText@@QAEXXZ        00988890
+slices/s009886d0/s009886d0.cpp  ?m_9888c0@WinText@@QAEXI@Z        009888c0
+slices/s009886d0/s009886d0.cpp  ?m_988f60@WinText@@QAEDIPAM@Z     00988f60
+slices/s009886d0/s009886d0.cpp  ?m_988f90@WinText@@QAEXXZ        00988f90
+slices/s009886d0/s009886d0.cpp  ?m_9890d0@WinText@@QAEPAU1@E@Z    009890d0
+slices/s009886d0/s009886d0.cpp  ?m_989240@WinText@@QAEXI@Z        00989240
+slices/s009886d0/s009886d0.cpp  ?m_989290@WinText@@QAEII@Z        00989290
+slices/s009886d0/s009886d0.cpp  ?m_9892b0@WinText@@QAEXII@Z       009892b0
+slices/s009886d0/s009886d0.cpp  ?m_989370@WinText@@QAEXI@Z        00989370
+slices/s009886d0/s009886d0.cpp  ?m_989390@WinText@@QAEXIII@Z      00989390
+slices/s009886d0/s009886d0.cpp  ?m_9893b0@WinText@@QAEXII@Z       009893b0
+slices/s009886d0/s009886d0.cpp  ?m_9893d0@WinText@@QAEXI@Z        009893d0
+slices/s009886d0/s009886d0.cpp  ?m_989450@WinText@@QAEHHHHHH@Z    00989450
+slices/s009886d0/s009886d0.cpp  ?m_989460@WinText@@QAEXI@Z        00989460
+slices/s009886d0/s009886d0.cpp  ?m_9894a0@WinText@@QAEII@Z        009894a0
+slices/s009886d0/s009886d0.cpp  ?m_9894c0@WinText@@QAEDHHHH@Z     009894c0
+slices/s009886d0/s009886d0.cpp  ?m_988760@WinText@@QAEXPAX@Z        00988760
+slices/s009886d0/s009886d0.cpp  ?m_9886d0@WinText@@QAEXPAH@Z       009886d0
+slices/s009886d0/s009886d0.cpp  ?m_988860@WinText@@QAEXI@Z        00988860
+slices/s009886d0/s009886d0.cpp  ?m_988c40@WinText@@QAEXI@Z        00988c40
+slices/s009886d0/s009886d0.cpp  ?m_988c90@WinText@@QAEXI@Z        00988c90
