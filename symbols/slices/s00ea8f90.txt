@@ -1,0 +1,16 @@
+00ea8f90 SP::Audio::cMixMode::Start  # PDB FUN_00ea8f90
+00ea9260 SP::Audio::cMixMode::Stop(bool)  # PDB FUN_00ea9260 (card label "Group::Subscribe" is wrong)
+00ea9320 SP::Audio::cMixMode::cMixMode(SP::Audio::cMixModeManager*, EA::ResourceMan::Key)  # PDB FUN_00ea9320
+00ea93c0 SP::Audio::cMixMode::~cMixMode  # PDB FUN_00ea93c0
+00ea9440 eastl::vector<unsigned int, SP_STL_Sound>::DoInsertValue  # PDB FUN_00ea9440 (SoundVector insert helper)
+00ea9550 SP::Audio::cMixMode::ConfigurePrimitive  # PDB FUN_00ea9550
+00ea9790 SP::Audio::IsMixableKey(unsigned int)  # PDB FUN_00ea9790 (__stdcall)
+00ea9880 SP::Audio::cMixModeManager::UpdateSounds(float)  # PDB FUN_00ea9880
+00ea99a0 SP::Audio::cMixModeManager::RemoveSound(unsigned int, bool)  # PDB FUN_00ea99a0
+00ea9a40 SP::Audio::cMixModeManager::StartMode(unsigned int)  # PDB FUN_00ea9a40
+00ea9a80 SP::Audio::cMixModeManager::StopMode(unsigned int, bool)  # PDB FUN_00ea9a80
+00ea9ac0 SP::Audio::cMixModeManager::IsModeActive(unsigned int)  # PDB FUN_00ea9ac0
+00ea9b00 SP::Audio::cMixModeManager::RegisterSound(unsigned int)  # PDB FUN_00ea9b00
+00ea9bb0 SP::Audio::MessageModeMap::find(unsigned int) const  # PDB FUN_00ea9bb0
+00ea9c20 SP::Audio::`anonymous namespace'::cFactoryMixMode::scalar_deleting_destructor  # PDB FUN_00ea9c20
+00ea9c70 SP::Audio::cMixModeManager::Shutdown  # PDB FUN_00ea9c70

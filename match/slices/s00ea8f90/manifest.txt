@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00ea8f90/s00ea8f90.cpp  ??1cMixMode@Audio@SP@@QAE@XZ              00ea93c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ea8f90/s00ea8f90.cpp  ?IsMixableKey@Audio@SP@@YG_NI@Z           00ea9790  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ea8f90/s00ea8f90.cpp  ?StartMode@cMixModeManager@Audio@SP@@QAEXI@Z       00ea9a40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ea8f90/s00ea8f90.cpp  ?StopMode@cMixModeManager@Audio@SP@@QAEXI_N@Z     00ea9a80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ea8f90/s00ea8f90.cpp  ?IsModeActive@cMixModeManager@Audio@SP@@QAE_NI@Z  00ea9ac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ea8f90/s00ea8f90.cpp  ?find@MessageModeMap@Audio@SP@@QBEPAUKeyModePair@23@ABI@Z  00ea9bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
