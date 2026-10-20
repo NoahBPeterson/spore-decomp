@@ -10,9 +10,6 @@
 00806e40  0  partial; second-argument (extra horizontal offset) handling not exact
 008070d0  0  partial; anchor flag logic approximated
 00807340  0  partial; anchor rect construction approximated
-00807880  0  partial; ImageDrawable+Window composition approximated
-00807d30  0  partial; child-list iteration (vtable 0xcc/0xd0) not reconstructed
-00808370  0  partial; recursive union-of-bounds not reconstructed
 00809700  -  modal-window state machine: not reconstructed
 008099a0  -  SPUIHelpers::BeginModal: not reconstructed
 00809c50  -  SPUIHelpers::EndModal: not reconstructed

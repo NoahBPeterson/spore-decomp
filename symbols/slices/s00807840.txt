@@ -1,10 +1,10 @@
 00807840 ?FUN_00807840@@YAXHHHHHHH@Z  # FUN_00807840 migrated from s00807840 (verbatim, slice spelling)
-00807880 ?FUN_00807880@@YAPAHPAM@Z  # FUN_00807880 migrated from s00807840 (verbatim, slice spelling)
+00807880 ?FUN_00807880@@YAPAHPAMMMPAX@Z  # FUN_00807880 migrated from s00807840 (verbatim, slice spelling)
 00807a50 ?FUN_00807a50@@YAPAHPAXH0@Z  # FUN_00807a50 migrated from s00807840 (verbatim, slice spelling)
-00807bb0 SPUIHelpers::SetWindowImage  # PDB dev 00fb8ec0
-00807c70 SPUIHelpers::SetImageFromLayout  # wrapper over GetImageFromLayout + SetImageIcon
-00807cb0 SPUIHelpers::SetWindowImageResource  # unlabeled; SetImageIcon variant
-00807d30 ?VisitWindowTreeDepthFirst@@YAHPAUW_s0080_7840@@P6AH0PAX@Z1@Z  # VisitWindowTreeDepthFirst migrated from s00807840 (verbatim, slice spelling)
+00807bb0 ?SetWindowImage@@YAEPAUW_s0080_7840@@PAXH@Z  # SetWindowImage migrated from s00807840 (verbatim, slice spelling)
+00807c70 ?FUN_00807c70@@YADPAUW_s0080_7840@@PAXHH@Z  # FUN_00807c70 migrated from s00807840 (verbatim, slice spelling)
+00807cb0 ?FUN_00807cb0@@YAEPAUW_s0080_7840@@PAXH@Z  # FUN_00807cb0 migrated from s00807840 (verbatim, slice spelling)
+00807d30 ?VisitWindowTreeDepthFirst@@YA_NPAUW_s0080_7840@@P6A_N0PAX@Z1@Z  # VisitWindowTreeDepthFirst migrated from s00807840 (verbatim, slice spelling)
 00807dc0 ?SetWindowSPShader@@YAPAXPAUW_s0080_7840@@EPAX@Z  # SetWindowSPShader migrated from s00807840 (verbatim, slice spelling)
 00807e50 ?WindowTransform_ctor@@YIPAXPAUXform@@@Z  # WindowTransform_ctor migrated from s00807840 (verbatim, slice spelling)
 00807ed0 ?FUN_00807ed0@@YGDPAUW_s0080_7840@@@Z  # FUN_00807ed0 migrated from s00807840 (verbatim, slice spelling)

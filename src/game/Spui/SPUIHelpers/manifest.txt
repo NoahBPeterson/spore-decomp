@@ -19,6 +19,7 @@
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00807040@@YAXPAUW_s0080_68d0@@@Z  00807040  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?DoErase@@YIXPAX@Z  008077f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00807840@@YAXHHHHHHH@Z  00807840  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FUN_00807c70@@YADPAUW_s0080_7840@@PAXHH@Z  00807c70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?WindowTransform_ctor@@YIPAXPAUXform@@@Z  00807e50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00807ed0@@YGDPAUW_s0080_7840@@@Z  00807ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?SetWindowScale@@YAXPAUW_s0080_7840@@M@Z  00808210  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
