@@ -1,0 +1,1 @@
+slices/s00a114a0/s00a114a0.cpp  ?ParseResource@EmitterSndPlayer@@QAE_NXZ  00a12120  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

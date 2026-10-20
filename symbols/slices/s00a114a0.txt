@@ -1,0 +1,6 @@
+00a114a0 ?Start@EmitterSndPlayer@@QAE_NN@Z  # EmitterSndPlayer::Start(double) (vtable slot 5)
+00a116f0 ?SetProperty@EmitterSndPlayer@@QAE_NIM_N@Z  # EmitterSndPlayer::SetProperty(uint,float,bool) (vtable slot 11)
+00a11a60 ?GetProperty@EmitterSndPlayer@@QAE_NIPAM@Z  # EmitterSndPlayer::GetProperty(uint,float*) (vtable slot 12)
+00a11e10 ?Tick@EmitterSndPlayer2@@QAEXHM@Z  # EmitterSndPlayer second-interface Tick(int,float) (object+4)
+00a11f50 ?UpdateParameters@EmitterSndPlayer@@QAEXM_N@Z  # EmitterSndPlayer::UpdateParameters(float,bool) (vtable slot 0x70)
+00a12120 ?ParseResource@EmitterSndPlayer@@QAE_NXZ  # EmitterSndPlayer::ParseResource()
