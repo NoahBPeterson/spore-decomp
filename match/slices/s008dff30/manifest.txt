@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+#
+# Byte-exact: none.  Slice s008dff30 is EA::ResourceMan::Manager's database/factory lists, the
+# change-notification registration and the eastl hashtable node insert/erase/free helpers used by
+# the manager's maps.  All 20 addresses are recorded in nonmatching.txt / partial.txt
+# (0 matched / 18 nonmatching / 2 partial); see symbols/slices/s008dff30.txt.
+#
+# Build flags (all rows): /O2 /MD /Gy /TP /GS- /arch:SSE

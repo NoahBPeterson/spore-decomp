@@ -1,0 +1,29 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /GS- /arch:SSE
+#
+# Slice s008dff30 = EA::ResourceMan::Manager database/factory lists, change-notification
+# registration, and the eastl hashtable node helpers.  No ResourceMan source ships in the
+# available drops, so these are hand reconstructions from the image (Manager field layout plus the
+# observable hash-table / DBList / vector algorithms).  difftest verdicts from
+# tools/difftest/equiv.py (DEFAULT inputs).
+#
+008dff30  326  reconstruction (Manager::Fn8dff30, hash-table lookup); flags /O2 /MD /Gy /TP /GS- /arch:SSE; difftest WEAK (185 valid inputs, 20.5% coverage) -- equivalent on the covered paths
+008e00b0   52  reconstruction (Manager::GetDatabaseList); flags as above; difftest PASS (281 valid inputs, 100% coverage)
+008e0140   75  reconstruction (Manager::Fn8e0140, list head); flags as above; difftest WEAK (212 valid, 30.4% coverage) -- equivalent on the covered paths
+008e01c0    7  reconstruction (Manager::GetNameFromKey); flags as above; difftest WEAK (143 valid, 69.1% coverage); remaining diff is a pure ebp/ebx register-allocation swap
+008e0250   33  reconstruction (VecOwner::CopyFrom); flags as above; difftest WEAK (152 valid, 100% coverage); retail reads the first argument from EAX (LTCG register ABI) so the this/arg codegen differs
+008e02b0    5  reconstruction (HashTable::insertNode18); flags as above; difftest WEAK (187 valid, 90.7% coverage); 5-byte diff is one store-order scheduling swap (`*pOut = pNew` before reloading mpBucketArray for pOut+1)
+008e0390  207  reconstruction (HashTable::insertNode20); flags as above; difftest WEAK (135 valid, 78.8% coverage) -- equivalent on the covered paths
+008e04a0  152  reconstruction (Manager::RegisterChangeNotification); flags as above; difftest FAIL (5/6 valid inputs mismatched; ours faults at 008deecb where the original returns) -- not proven equivalent
+008e0550    5  reconstruction (HashTable::insertNode1c); flags as above; difftest WEAK (181 valid, 38.4% coverage); 5-byte diff is the same store-order scheduling swap as insertNode18
+008e0630   66  reconstruction (HashTable::eraseKey); flags as above; difftest FAIL (5/26 valid inputs mismatched: fake call #0 arg 1) -- not proven equivalent
+008e06d0    4  reconstruction (HashTable::DoFreeNodes18); flags as above; difftest PASS (215 valid inputs, 100% coverage); 4-byte diff is the `mov edi,esi` copy the compiler hoisted above the first field load
+008e0740    4  reconstruction (HashTable::DoFreeNodes20); flags as above; difftest WEAK (155 valid, 100% coverage); same 4-byte scheduling diff; equivalent
+008e07b0  110  reconstruction (DBList::Erase); flags as above; difftest PASS (262 valid inputs, 60% coverage)
+008e0840   93  reconstruction (DBList::Flush); flags as above; difftest WEAK (213 valid, 42% coverage) -- equivalent on the covered paths
+008e08c0  108  reconstruction (Manager::Fn8e08c0, U32Vec list); flags as above; difftest WEAK (195 valid, 69.2% coverage) -- equivalent on the covered paths
+008e0950  201  reconstruction (Manager::Fn8e0950, KeyVec list); flags as above; difftest WEAK (223 valid, 34.5% coverage) -- equivalent on the covered paths
+008e0a30  479  reconstruction (Manager::Fn8e0a30, KeyVec/PtrVec insert); flags as above; difftest WEAK (367 valid, 51.3% coverage) -- equivalent on the covered paths
+008e0c10  263  reconstruction (Manager::Fn8e0c10, KeyVec erase); flags as above; difftest FAIL (5/29 valid inputs mismatched; first: eax) -- not proven equivalent
+008e0d30  201  reconstruction (Manager::RegisterDatabase); flags as above; difftest WEAK (322 valid, 42.4% coverage) -- equivalent on the covered paths
+008e0e10   69  reconstruction (HashTable::refKey, find); flags as above; difftest FAIL (5/50 valid inputs mismatched: call #2 (depth 1)) -- not proven equivalent
