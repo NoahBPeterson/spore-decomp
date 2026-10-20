@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00912e90/s00912e90.cpp  ?little2_sameName@@YAHPBUencoding@@PBD1@Z  00912e90
+slices/s00912e90/s00912e90.cpp  ?little2_nameMatchesAscii@@YAHPBUencoding@@PBD11@Z  00912fa0
+slices/s00912e90/s00912e90.cpp  ?little2_nameLength@@YAHPBUencoding@@PBD@Z  00912fe0
+slices/s00912e90/s00912e90.cpp  ?little2_skipS@@YAPBDPBUencoding@@PBD@Z  00913060
+slices/s00912e90/s00912e90.cpp  ?little2_updatePosition@@YAXPBUencoding@@PBD1PAUposition@@@Z  009130a0
+slices/s00912e90/s00912e90.cpp  ?big2_scanComment@@YAHPBUencoding@@PBD1PAPBD@Z  00913150
+slices/s00912e90/s00912e90.cpp  ?big2_scanDecl@@YAHPBUencoding@@PBD1PAPBD@Z  00913270
+slices/s00912e90/s00912e90.cpp  ?big2_checkPiTarget@@YAHPBUencoding@@PBD1PAH@Z  009133c0
+slices/s00912e90/s00912e90.cpp  ?big2_scanPi@@YAHPBUencoding@@PBD1PAPBD@Z  00913440
+slices/s00912e90/s00912e90.cpp  ?big2_scanCdataSection@@YAHPBUencoding@@PBD1PAPBD@Z  00913750
+slices/s00912e90/s00912e90.cpp  ?big2_cdataSectionTok@@YAHPBUencoding@@PBD1PAPBD@Z  00913790
+slices/s00912e90/s00912e90.cpp  ?big2_scanEndTag@@YAHPBUencoding@@PBD1PAPBD@Z  00913980
+slices/s00912e90/s00912e90.cpp  ?big2_scanHexCharRef@@YAHPBUencoding@@PBD1PAPBD@Z  00913b90
+slices/s00912e90/s00912e90.cpp  ?big2_scanCharRef@@YAHPBUencoding@@PBD1PAPBD@Z  00913c10
