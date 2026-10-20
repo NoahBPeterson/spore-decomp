@@ -1,0 +1,12 @@
+01209060  347  complete  SSE box builder (this + 3 stack args); identical results, but regalloc uses ecx as scratch and the original leaves this in ecx [equiv: UNSUPPORTED]
+01209220  n/a  n/a  not a function: static Havok class-descriptor data (34 8f 4f 01 ...), no code emitted
+01209540  n/a  complete  hkUnionFind::addEdge loop-form/regalloc differs (186 vs 215 bytes), identical behaviour [equiv: PASS]
+01209620  49  complete  hkUnionFind::collapseTree; load/loop rotation differs (59 vs 61 bytes) [equiv: PASS]
+012096c0  100  complete  hkUnionFind::assignGroups; register allocation + loop entry differ [equiv: WEAK]
+012098f0  2  complete  hkStringMapBase::isValid; only the scratch register holding the out pointer differs (eax vs edx); the branch outcome and every stored value match, equiv only objects to that dead caller-saved register [equiv: UNSUPPORTED]
+01209910  141  complete  hkStringMapBase::insert; hash-loop register allocation differs (175 vs 166 bytes) [equiv: PASS]
+012099c0  47  complete  hkStringMapBase::findKey; hash-loop register allocation differs, same size [equiv: WEAK]
+01209a40  36  complete  hkStringMapBase::getWithDefault; default value kept in edi by the original, reloaded from the stack here [equiv: PASS]
+01209ad0  76  complete  hkStringMapBase::resizeTable; loop-entry test (test vs cmp) shifts the rest [equiv: UNSUPPORTED]
+01209b90  22  complete  hkSweptTransformUtil::setCentreOfRotationLocal; x87 delta/store scheduling differs, same size [equiv: PASS]
+01209c50  577  complete  hkSweptTransformUtil::lerp2; x87 excess-precision spill pattern differs, results agree to <=4 ulp; equiv's mismatch is one dword of the shared scratch pool (freed between runs and rebuilt with different intermediate values), not a function result [equiv: UNSUPPORTED]
