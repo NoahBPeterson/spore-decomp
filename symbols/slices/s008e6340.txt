@@ -1,0 +1,8 @@
+008e6340 EA::XHTML::Layout::BltTiled  # tiles an image over a rect per BackgroundRepeat; Image/BltTiled.cpp
+008e6710 EA::XHTML::Layout::Background::Draw  # positions + blits a background image for a box; Background.cpp
+008e68f0 EA::XHTML::Layout::Background::SetStyle  # pulls background style from StyleState, starts image load
+008e69b0 ?Fn8e69b0@...  # unnamed 4-arg store/ctor helper building a hit-test target from node+point (thiscall ret 0x10)
+008e6a20 EA::XHTML::Layout::Block::DrawContent  # draws a content element (v14/v18 predicates) or the children
+008e6b70 EA::XHTML::Layout::Block::PickContent  # hit-tests a point against a block then its children
+008e6c60 EA::XHTML::Layout::Block::PlaceControls  # offsets rects the element wants placed
+008e6d30 EA::XHTML::Layout::Block::Layout  # Block vtable slot +0x34; places block in a StackingContext, grows bounds
