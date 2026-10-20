@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/HitMaskFactory.cpp -- migrated from slice(s) s00997f50, s00996f10 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/HitMaskFactory.cpp -- migrated from slice(s) s009568c0, s00997f50, s00996f10 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/HitMaskFactory.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -10,6 +10,7 @@
 #include "EA/UTFWinTools/SerCollection.h"
 #include "EA/UTFWinTools/SerScope.h"
 #include "EA/ResourceMan/Key.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" long _InterlockedExchangeAdd(volatile long*, long);
@@ -63,6 +64,10 @@ struct Obj34 {
 };
 struct HMFactory { bool CreateResource(int param2, void** out, void* p4, void* p5); };
 // ---- items of slice s00997f50 end
+
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+const unsigned short* __cdecl FUN_00957080(const unsigned short* first, const unsigned short* last, const unsigned int* pKey);  // 0x00957080 (stays in the slice: not this object's)
 
 // @ 0x00997d40
 int Obj33::GetSupportedTypes(unsigned* out, unsigned n)

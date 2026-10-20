@@ -10,7 +10,7 @@
 00956fa0 ?FreeDisplayListEntries@@YAXPAUDLNode@@@Z  # FreeDisplayListEntries migrated from s009568c0 (verbatim, slice spelling)
 00956ff0 ?AllocDisplayListEntry@@YAPAUDisplayList@@XZ  # AllocDisplayListEntry migrated from s009568c0 (verbatim, slice spelling)
 00957080 EA::UTFWin::UpperBound16  # upper_bound over a uint16 run table
-009570c0 EA::UTFWin::HitMask::Contains  # parity of upper_bound(runs, y*w+x)
+009570c0 ?Contains@HitMask@@QAE_NPBH@Z  # HitMask::Contains migrated from s009568c0 (verbatim, slice spelling)
 00957110 eastl::vector<unsigned short>::DoAllocateAndCopy  # new(n*2,"EASTL") + memcpy
 00957160 eastl::vector<unsigned short>::operator=  # copy assignment
 00957230 EA::UTFWin::HitMask::BuildFromMask  # byte mask -> run table
