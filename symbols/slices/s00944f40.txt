@@ -1,0 +1,6 @@
+00944f40 Fn944f40  # unnamed in retail PDB (module: UTFSpore_Win32 HTTPClient); HTTPClient worker helper
+009453f0 Fn9453f0  # unnamed in retail PDB; HTTPClient worker helper (response status line + headers)
+009458c0 Fn9458c0  # unnamed in retail PDB; HTTPClient worker helper (redirect re-issue)
+00945a10 Fn945a10  # unnamed in retail PDB; HTTPClient worker helper (status -> job result)
+00945b20 ?CreateHTTPPostRequest@HTTPRequest@Internet@EA@@SA_NPBD_NAAPAVIStream@2@0PAPAVHTTPRequest@12@@Z  # retail PDB name (EA::Internet::HTTPRequest::CreateHTTPPostRequest)
+00945c80 ?WriteRequestBody@HTTPClient@Internet@EA@@QAE_NPAUWorkerThreadInfo@123@@Z  # retail PDB name (EA::Internet::HTTPClient::WriteRequestBody)
