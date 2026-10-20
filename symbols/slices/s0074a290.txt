@@ -1,11 +1,11 @@
-0074a290 ?SetExternalEffectsTransform@cModelWorld_s0074_a290@SP@@SAXPAX00@Z  # cModelWorld_s0074_a290::SetExternalEffectsTransform migrated from s0074a290 (verbatim, slice spelling)
-0074a490 ?GetHullBoundingBox@cModelWorld@SP@@UAEXPAUcMWModel@2@PAUcSPBoundingBox@@@Z  # SP::cModelWorld::GetHullBoundingBox migrated from s0074a290
-0074a650 ?ReleaseTransformedHull@cModelWorld_s0074_a290@SP@@QAEXPAPAX@Z  # cModelWorld_s0074_a290::ReleaseTransformedHull migrated from s0074a290 (verbatim, slice spelling)
-0074a690 ?GetBakedMeshes@cModelWorld_s0074_a290@SP@@QAE_NPAX0@Z  # cModelWorld_s0074_a290::GetBakedMeshes migrated from s0074a290 (verbatim, slice spelling)
-0074a700 ?GetBakedMeshesUnscaled@cModelWorld_s0074_a290@SP@@QAE_NPAX0@Z  # cModelWorld_s0074_a290::GetBakedMeshesUnscaled migrated from s0074a290 (verbatim, slice spelling)
-0074a780 ?GetBakedMeshes2@cModelWorld_s0074_a290@SP@@QAE_NPAX0PAUcSPTransform_s0074_a290@@@Z  # cModelWorld_s0074_a290::GetBakedMeshes2 migrated from s0074a290 (verbatim, slice spelling)
-0074a850 ?GetMeshes@cModelWorld_s0074_a290@SP@@QAE_NPAX0PAUcSPTransform_s0074_a290@@@Z  # cModelWorld_s0074_a290::GetMeshes migrated from s0074a290 (verbatim, slice spelling)
+0074a290 ?SetExternalEffectsTransform@cModelWorld_s0074_a290_s0074_a290@SP@@SGXPAX00@Z  # cModelWorld_s0074_a290_s0074_a290::SetExternalEffectsTransform migrated from s0074a290 (verbatim, slice spelling)
+0074a490 ?SubA490@cModelWorld_s0074_a290_s0074_a290@SP@@QAEXPAX0@Z  # cModelWorld_s0074_a290_s0074_a290::SubA490 migrated from s0074a290 (verbatim, slice spelling)
+0074a650 ?ReleaseTransformedHull@cModelWorld_s0074_a290_s0074_a290@SP@@QAEXPAPAX@Z  # cModelWorld_s0074_a290_s0074_a290::ReleaseTransformedHull migrated from s0074a290 (verbatim, slice spelling)
+0074a690 ?GetBakedMeshes@cModelWorld_s0074_a290_s0074_a290@SP@@QAE_NPAX0@Z  # cModelWorld_s0074_a290_s0074_a290::GetBakedMeshes migrated from s0074a290 (verbatim, slice spelling)
+0074a700 ?GetBakedMeshesUnscaled@cModelWorld_s0074_a290_s0074_a290@SP@@QAE_NPAX0@Z  # cModelWorld_s0074_a290_s0074_a290::GetBakedMeshesUnscaled migrated from s0074a290 (verbatim, slice spelling)
+0074a780 ?GetBakedMeshes2@cModelWorld_s0074_a290_s0074_a290@SP@@QAE_NPAX0PAUcSPTransform_s0074_a290_s0074_a290@@@Z  # cModelWorld_s0074_a290_s0074_a290::GetBakedMeshes2 migrated from s0074a290 (verbatim, slice spelling)
+0074a850 ?GetMeshes@cModelWorld_s0074_a290_s0074_a290@SP@@QAE_NPAX0PAUcSPTransform_s0074_a290_s0074_a290@@@Z  # cModelWorld_s0074_a290_s0074_a290::GetMeshes migrated from s0074a290 (verbatim, slice spelling)
 0074a8c0  SP::cModelWorld::RemoveOccluder  # gap-align PDB name
-0074a920 ?SubA920@cModelWorld_s0074_a290@SP@@QAEXPAX0@Z  # cModelWorld_s0074_a290::SubA920 migrated from s0074a290 (verbatim, slice spelling)
-0074ac80  SP::cModelWorld::AddAttachments  # anchor PDB name
-0074b150 ?FreeTransformedBuffer@cModelWorld_s0074_a290@SP@@QAEXXZ  # cModelWorld_s0074_a290::FreeTransformedBuffer migrated from s0074a290 (verbatim, slice spelling)
+0074a920 ?SubA920@cModelWorld_s0074_a290_s0074_a290@SP@@QAEXPAX0I@Z  # cModelWorld_s0074_a290_s0074_a290::SubA920 migrated from s0074a290 (verbatim, slice spelling)
+0074ac80 ?AddAttachments@cModelWorld_s0074_a290_s0074_a290@SP@@QAEXPAD@Z  # cModelWorld_s0074_a290_s0074_a290::AddAttachments migrated from s0074a290 (verbatim, slice spelling)
+0074b150 ?FreeTransformedBuffer@cModelWorld_s0074_a290_s0074_a290@SP@@QAEXXZ  # cModelWorld_s0074_a290_s0074_a290::FreeTransformedBuffer migrated from s0074a290 (verbatim, slice spelling)

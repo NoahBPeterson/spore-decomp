@@ -11,7 +11,7 @@
 00743f60 ?PromoteF60@@YAXPAUPair8@@HHU1@@Z  # PromoteF60 migrated from s00743b20 (verbatim, slice spelling)
 00743fb0 ?BoxDistSq@@YAIPBMM0@Z  # BoxDistSq migrated from s00743b20 (verbatim, slice spelling)
 00744050 ?TransformTwo@@YAXPBUcSPVector3_s0074_3b20@@0PBUcSPTransform_s0074_3b20@@HH@Z  # TransformTwo migrated from s00743b20 (verbatim, slice spelling)
-007442c0 ?TransformTwoOffset@@YA_NPBUcSPVector3@@0PBUcSPTransform@@U1@2HM@Z  # bool(const cSPVector3*, const cSPVector3*, const cSPTransform*, cSPVector3 a, cSPVector3 b, int, float): arg list/return taken from the 0074df1e call site (3 pointers, a, b, int, float, and `test al,al` after the call); the recorded "slice spelling" ?...YAX...@@U1@M2@Z (6 args, float before b) is not the ABI this code uses
+007442c0 ?TransformTwoOffset@@YA_NPBUcSPVector3_s0074_3b20@@0PBUcSPTransform_s0074_3b20@@U1@2HM@Z  # TransformTwoOffset migrated from s00743b20 (verbatim, slice spelling)
 007445b0 ?CallOnLoad@cModelWorld@@UAE_NPAUModel@@PAX1@Z  # cModelWorld::CallOnLoad migrated from s00743b20 (verbatim, slice spelling)
 00744680 ?ModelsHavePreloaded@cModelWorld@SP@@UBE_NH@Z  # SP::cModelWorld::ModelsHavePreloaded migrated from s00743b20
 007446a0 ?StallGetBoundingBox@cModelWorld@@QAEMPAUModel@@@Z  # cModelWorld::StallGetBoundingBox migrated from s00743b20 (verbatim, slice spelling)

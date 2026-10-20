@@ -1,6 +1,4 @@
 # va  diff-bytes  reason
-007442c0  625 cSPTransform two-point transform with per-point offset: extra output adjustment approximated
-007445b0  140 cModelWorld::CallOnLoad: segmented load-queue vector traversal approximated
 00745340  -   cModelWorld release-refs destructor: EH frame omitted, approximated
 007453d0  249 model-instance factory: allocation/ctor/property lookup paths approximated via stubs
 007457a0  -   deque insert/grow: DoInsertValue dispatch + reallocation path approximated
@@ -19,10 +17,6 @@
 00747980 175 deque push_back approximated (block allocator details)
 00748530 327 FilterModelSphere approximated (transform/pick protocol guessed)
 00748ad0 241 model pick/distance helper approximated
-0074a290  -  partial: SetExternalEffectsTransform slot/transform walk stubbed (signature + call shape only).
-0074a490  -  partial: SubA490 EASTL vector build path stubbed (signature + call shape only).
-0074a780  -  partial: GetBakedMeshes2 identity-transform construction approximate (extra temp, frame 0x70 vs 0x38).
-0074a920  -  partial: SubA920 refcount/list walk stubbed (signature + call shape only).
 0074b170  -  partial: cLoadQueue reset/clear (307B, refcount/list walk) stubbed.
 0074b390  -  partial: eastl::partial_sort<cOccluder*> (254B template) stubbed.
 0074bda0  -  partial: slot-list find helper (152B) stubbed.

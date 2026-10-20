@@ -70,26 +70,6 @@ struct cModelWorld56 {
 // ---- items of slice s00742b30 end
 
 // ---- items of slice s00743b20 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct RefCounted { virtual void AddRef(); virtual void Release(); };
-struct Elem28 {
-    uint32_t    m0;
-    RefCounted* mRef;
-    uint32_t    m8, mC, m10, m14, m18;
-    Elem28(const Elem28& o);
-};
-Elem28::Elem28(const Elem28& o) {
-    m0 = o.m0;
-    mRef = o.mRef;
-    if (mRef)
-        mRef->AddRef();
-    m8 = o.m8;
-    mC = o.mC;
-    m10 = o.m10;
-    m14 = o.m14;
-    m18 = o.m18;
-}
-struct ResInfo { char pad[8]; uint32_t field8; uint32_t fieldC; uint32_t field10; };
-struct ResHolder { ResInfo* Get(); };
 struct intrusive_node { intrusive_node* mpNext; intrusive_node* mpPrev; };
 struct Model {
     void*    mpWorld;                 // +0x00
@@ -115,7 +95,7 @@ struct cModelInstance {
     void MoveToTime(int a, int b, float c);
     void SetWeight(int a, int b, float c);
 };
-void __cdecl LineClip(const void*, const void*, int, int);  // 0x006989d0
+bool __cdecl LineClip(const void*, const void*, int, int);  // 0x006989d0
 struct cSPVector3_s0074_3b20 { float x, y, z; };
 struct cSPMatrix3_s0074_3b20 { float m[9]; };
 struct cSPTransform_s0074_3b20 {
@@ -124,6 +104,8 @@ struct cSPTransform_s0074_3b20 {
     cSPVector3_s0074_3b20 mTranslation;   // +0x04
     float      mScale;         // +0x10
     cSPMatrix3_s0074_3b20 mRotation;      // +0x14
+    float      mMatrix30;      // +0x38
+    uint32_t   mData3C;        // +0x3c
 };
 struct cMWModelInternal : intrusive_node, Model {
     void* mpField9c;                  // abs +0x9c
@@ -188,8 +170,28 @@ struct cModelWorld : IModelWorld {
     void* VecClear();
     bool  CallOnLoad(Model*, void*, void*);
 };
+struct RefCounted { virtual void AddRef(); virtual void Release(); };
+struct Elem28 {
+    uint32_t    m0;
+    RefCounted* mRef;
+    uint32_t    m8, mC, m10, m14, m18;
+    Elem28(const Elem28& o);
+};
+Elem28::Elem28(const Elem28& o) {
+    m0 = o.m0;
+    mRef = o.mRef;
+    if (mRef)
+        mRef->AddRef();
+    m8 = o.m8;
+    mC = o.mC;
+    m10 = o.m10;
+    m14 = o.m14;
+    m18 = o.m18;
+}
 struct Pair8 { uint32_t val; float key; };
 struct cOccluder6 { uint32_t d[6]; };
+struct ResInfo { char pad[8]; uint32_t field8; uint32_t fieldC; uint32_t field10; };
+struct ResHolder { ResInfo* Get(); };
 // ---- items of slice s00743b20 end
 
 // ---- items of slice s00744ad0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -358,8 +360,6 @@ struct RCObj_s0074_4ad0 {
 void* __fastcall GetThing(void*);   // 0x00bddd00
 struct Small7 { uint32_t d[7]; uint8_t b; void* Init(); };
 // ---- items of slice s00744ad0 end
-
-
 
 // ---- hand-kept items of s00745ac0 begin (functions of this slice that mig7 skips stay in the TU and need them; rewrite.py drops items only they use)
     extern float g_f1485720; // 0x01485720
@@ -2431,7 +2431,92 @@ struct PickSrc { unsigned short f0, f1; float a, b, c; int d; float rot[9]; };
 // ---- items of slice s0074a290 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern float g_162eb0c, g_162eb10, g_162eb14, g_1485720;
 extern char g_162ec4c[];
-struct Matrix3_s0074_a290 { void Assign(const void* src); };
+extern void __cdecl PropGetTransforms(void* list, unsigned key, int* count, void* out);  // 0x6a0c30
+extern "C" void* __cdecl GfxAlloc(unsigned size, const char* name, int, int, int, int);  // 0xf473a0
+extern bool __cdecl CreateModelInstance(unsigned id, unsigned idx, void** out, unsigned flags); // 0x754ba0
+extern void __cdecl Sub7340(void* obj);                              // 0x747340
+extern "C" float __cdecl sqrtf(float);
+extern "C" void* __cdecl EffectsManager();     // 0x67ddd0
+extern bool __cdecl PropReserve(void* list, unsigned key, int* count, void* out);     // 0x6a0ae0
+extern bool __cdecl PropGetFloats(void* list, unsigned key, int* count, void* out);   // 0x6a08b0
+extern bool __cdecl PropGetInts(void* list, unsigned key, int* count, void* out);     // 0x6a0990
+extern "C" void* __cdecl memset(void*, int, unsigned);
+static __forceinline void ReleaseSlot(void** slot)
+{
+    void* q = *slot;
+    if (q) {
+        *slot = 0;
+        uint32_t* rc = (uint32_t*)((char*)q + 4);
+        if (--*rc == 0) {
+            *rc = 1;
+            ((void(__thiscall*)(void*, int))VT(q)[0])(q, 1);
+        }
+    }
+}
+struct cSPTransform_s0074_a290_s0074_a290 {
+    uint16_t f0;
+    uint16_t f2;
+    float    f4;
+    float    f8;
+    float    fc;
+    float    f10;
+    float    m[9];        // +0x14
+    void operator=(const cSPTransform_s0074_a290_s0074_a290& o);   // 0x537dc0
+    void Compose(const cSPTransform_s0074_a290_s0074_a290* o);   // ComposeTransforms 0x40ccb0
+};
+extern cSPTransform_s0074_a290_s0074_a290 translateTransform_s0074_a290(const void* xform, const void* src);   // 0x6271a0
+struct Matrix3_s0074_a290 {
+    float m[9];
+    void Assign(const void* src);   // 0x41cb40
+};
+struct cModelInstance_s0074_a290_s0074_a290 {
+    bool BuildBaked(cSPTransform_s0074_a290_s0074_a290* t, void* arg);   // FUN_00743270
+    bool GetMeshesX(void* arg);       // FUN_0073eb90
+};
+namespace SP {
+struct cModelWorld_s0074_a290_s0074_a290 {
+    char pad[0x800];
+
+    void ReleaseTransformedHull(void** pp);              // 0074a650
+    void FreeTransformedBuffer();                        // 0074b150
+    void RemoveOccluder(int idx);                        // 0074a8c0
+    bool GetBakedMeshes(void* model, void* arg2);        // 0074a690
+    bool GetBakedMeshesUnscaled(void* model, void* arg2); // 0074a700
+    bool GetBakedMeshes2(void* model, void* arg2, cSPTransform_s0074_a290_s0074_a290* out);  // 0074a780
+    bool GetMeshes(void* model, void* arg2, cSPTransform_s0074_a290_s0074_a290* out);        // 0074a850
+    static void __stdcall SetExternalEffectsTransform(void* a, void* b, void* c);  // 0074a290
+    void SubA490(void* a, void* b);                      // 0074a490
+    void SubA920(void* list, void* obj, uint32_t flags); // 0074a920
+    void AddAttachments(char* model);                    // 0074ac80
+};  // namespace SP
+}
+struct EffRec {
+    uint32_t id;       // +0x00
+    uint32_t id2;      // +0x04
+    void*    obj;      // +0x08
+    cSPTransform_s0074_a290_s0074_a290 xf;   // +0x0c
+    uint32_t pad;      // +0x44
+};
+typedef void (__cdecl *Sub9510Fn)(void*, unsigned, void*, unsigned);   // 0x6b9510
+typedef void (__cdecl *VecCopyFn)(void*, const void*, unsigned);       // 0x11e0744
+struct PropKey { uint32_t id; uint32_t id2; int idx; };             // 0xc bytes
+extern bool __cdecl GetPropertyAsKey(void* list, unsigned key, PropKey* out);   // 0x6a1250
+struct cSPBoundingBox_s0074_a290 {
+    float w[6];
+    void TransformBy(const void* xf);   // 0x409dd0
+};
+struct IRel { virtual void v0(); virtual void Release(); };
+struct Rec48_s0074_a290 {
+    uint32_t id;       // +0
+    uint32_t id2;      // +4
+    IRel*    obj;      // +8
+    cSPTransform_s0074_a290_s0074_a290 xf;   // +0xc
+    uint8_t  flag;     // +0x44
+    Rec48_s0074_a290();                                    // 0x746de0
+    ~Rec48_s0074_a290() { if (obj) obj->Release(); }       // 0xae9670
+};
+void* operator new[](size_t, const char*, int, int, int, int);   // 0xf473a0
+#define VCALL(T, obj, off) ((T)VT(obj)[(off) / 4])
 // ---- items of slice s0074a290 end
 
 // @ 0x00743940
@@ -2440,35 +2525,6 @@ int cModelWorld56::Adjustor(int unused)
     (void)unused;
     return (int)((char*)this - 0xc);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00743950
 void __stdcall SetTimeScale(int param_1, float scale)
@@ -2480,35 +2536,6 @@ void __stdcall SetTimeScale(int param_1, float scale)
     *(float*)0x11c = scale;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007439b0
 int __stdcall OffsetOrE4(int param_1)
 {
@@ -2516,35 +2543,6 @@ int __stdcall OffsetOrE4(int param_1)
         return param_1 + 0xdc;
     return 0xe4;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007439d0
 void cModelWorld56::SetCurveSegment(int* a, int* b, int index)
@@ -2558,35 +2556,6 @@ void cModelWorld56::SetCurveSegment(int* a, int* b, int index)
         *(int*)(p + 0x1b4) = 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00743a20
 void cModelWorld56::GetCurveSegment(int* a, int* b, int index)
 {
@@ -2597,35 +2566,6 @@ void cModelWorld56::GetCurveSegment(int* a, int* b, int index)
     b[1] = *(int*)(p + 0x1c8);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00743a60
 void cModelWorld56::SetCurveRange(int index, int begin, int end)
 {
@@ -2633,35 +2573,6 @@ void cModelWorld56::SetCurveRange(int index, int begin, int end)
     *(int*)(p + 0x1b4) = begin;
     *(int*)(p + 0x1b8) = end;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00743a80
 void cModelWorld56::GetCurveRange(int index, int* begin, int* end)
@@ -2672,35 +2583,6 @@ void cModelWorld56::GetCurveRange(int index, int* begin, int* end)
         *end = *(int*)((char*)this + index * 0x20 + 0x1b8);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00743b00
 void SP::cModelWorld::ResetHighlightCurve()
 {
@@ -2709,34 +2591,6 @@ void SP::cModelWorld::ResetHighlightCurve()
     *(float*)((char*)this + 0x860) = 0.0f;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00743b20
 uint32_t Getb20(Model* model)
 {
@@ -2744,34 +2598,12 @@ uint32_t Getb20(Model* model)
     return ~(m->mFlags138 >> 4) & 1;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00743b50
 void* cModelWorld::VecClear()
 {
     *(uint32_t*)this = 0;
     return this;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00743bb0
 void __stdcall DestroyPtrRange(void** first, void** last)
@@ -2781,17 +2613,6 @@ void __stdcall DestroyPtrRange(void** first, void** last)
             EA_Free(*first);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00743be0
 void SortDescGuarded(Pair8* first, Pair8* last)
@@ -2817,17 +2638,6 @@ void SortDescGuarded(Pair8* first, Pair8* last)
     } while (iSorted != last);
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00743c50
 void SortDescUnguarded(Pair8* first, Pair8* last)
 {
@@ -2843,34 +2653,6 @@ void SortDescUnguarded(Pair8* first, Pair8* last)
         *end = value;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00743cb0
 void SortAscGuarded(Pair8* first, Pair8* last)
@@ -2896,17 +2678,6 @@ void SortAscGuarded(Pair8* first, Pair8* last)
     } while (iSorted != last);
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00743d20
 void SortAscUnguarded(Pair8* first, Pair8* last)
 {
@@ -2923,34 +2694,6 @@ void SortAscUnguarded(Pair8* first, Pair8* last)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00743d90
 Elem28* UninitCopy(const Elem28* first, const Elem28* last, Elem28* dst)
 {
@@ -2958,34 +2701,6 @@ Elem28* UninitCopy(const Elem28* first, const Elem28* last, Elem28* dst)
         new (dst) Elem28(*first);
     return dst;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00743e50
 void PromoteCocc(cOccluder6* first, int top, int pos, cOccluder6 value, bool (*compare)(const cOccluder6&, const cOccluder6&))
@@ -2999,17 +2714,6 @@ void PromoteCocc(cOccluder6* first, int top, int pos, cOccluder6 value, bool (*c
     first[pos] = value;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00743f00
 void PromoteF00(Pair8* first, int top, int pos, Pair8 value)
 {
@@ -3022,17 +2726,6 @@ void PromoteF00(Pair8* first, int top, int pos, Pair8 value)
     first[pos] = value;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00743f60
 void PromoteF60(Pair8* first, int top, int pos, Pair8 value)
 {
@@ -3044,17 +2737,6 @@ void PromoteF60(Pair8* first, int top, int pos, Pair8 value)
     }
     first[pos] = value;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00743fb0
 uint32_t BoxDistSq(const float* p, float radius, const float* box)
@@ -3072,17 +2754,6 @@ uint32_t BoxDistSq(const float* p, float radius, const float* box)
     }
     return d2 <= radius * radius;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00744050
 void TransformTwo(const cSPVector3_s0074_3b20* p1, const cSPVector3_s0074_3b20* p2, const cSPTransform_s0074_3b20* t, int a, int b)
@@ -3129,53 +2800,25 @@ void TransformTwo(const cSPVector3_s0074_3b20* p1, const cSPVector3_s0074_3b20* 
     LineClip(&r1, &r2, a, b);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007442c0
-void TransformTwoOffset(const cSPVector3_s0074_3b20* p1, const cSPVector3_s0074_3b20* p2, const cSPTransform_s0074_3b20* t, cSPVector3_s0074_3b20 a, float pad, cSPVector3_s0074_3b20 b)
+bool TransformTwoOffset(const cSPVector3_s0074_3b20* p1, const cSPVector3_s0074_3b20* p2, const cSPTransform_s0074_3b20* t, cSPVector3_s0074_3b20 a, cSPVector3_s0074_3b20 b, int flag, float pad)
 {
-    cSPVector3_s0074_3b20 r1, r2;
+    cSPVector3_s0074_3b20 r2, r1;
     {
         const cSPVector3_s0074_3b20* p = p1;
         cSPVector3_s0074_3b20 v;
         v.x = p->x - t->mTranslation.x;
         v.y = p->y - t->mTranslation.y;
         v.z = p->z - t->mTranslation.z;
-        float s = t->mScale;
-        if (s != 1.0f) {
-            float inv = 1.0f / s;
+        if (t->mScale != 1.0f) {
+            float inv = 1.0f / t->mScale;
             v.x *= inv; v.y *= inv; v.z *= inv;
         }
         if (t->mFlags & 2) {
-            r1.x = t->mRotation.m[0]*v.x + t->mRotation.m[1]*v.y + t->mRotation.m[2]*v.z;
-            r1.y = t->mRotation.m[3]*v.x + t->mRotation.m[4]*v.y + t->mRotation.m[5]*v.z;
-            r1.z = t->mRotation.m[6]*v.x + t->mRotation.m[7]*v.y + t->mRotation.m[8]*v.z;
+            // The original multiplies the z term first, then y, then x.
+            r1.x = t->mRotation.m[2]*v.z + t->mRotation.m[1]*v.y + t->mRotation.m[0]*v.x;
+            r1.y = t->mRotation.m[5]*v.z + t->mRotation.m[4]*v.y + t->mRotation.m[3]*v.x;
+            r1.z = t->mRotation.m[8]*v.z + t->mRotation.m[7]*v.y + t->mRotation.m[6]*v.x;
         } else {
             r1 = v;
         }
@@ -3186,15 +2829,14 @@ void TransformTwoOffset(const cSPVector3_s0074_3b20* p1, const cSPVector3_s0074_
         v.x = p->x - t->mTranslation.x;
         v.y = p->y - t->mTranslation.y;
         v.z = p->z - t->mTranslation.z;
-        float s = t->mScale;
-        if (s != 1.0f) {
-            float inv = 1.0f / s;
+        if (t->mScale != 1.0f) {
+            float inv = 1.0f / t->mScale;
             v.x *= inv; v.y *= inv; v.z *= inv;
         }
         if (t->mFlags & 2) {
-            r2.x = t->mRotation.m[0]*v.x + t->mRotation.m[1]*v.y + t->mRotation.m[2]*v.z;
-            r2.y = t->mRotation.m[3]*v.x + t->mRotation.m[4]*v.y + t->mRotation.m[5]*v.z;
-            r2.z = t->mRotation.m[6]*v.x + t->mRotation.m[7]*v.y + t->mRotation.m[8]*v.z;
+            r2.x = t->mRotation.m[2]*v.z + t->mRotation.m[1]*v.y + t->mRotation.m[0]*v.x;
+            r2.y = t->mRotation.m[5]*v.z + t->mRotation.m[4]*v.y + t->mRotation.m[3]*v.x;
+            r2.z = t->mRotation.m[8]*v.z + t->mRotation.m[7]*v.y + t->mRotation.m[6]*v.x;
         } else {
             r2 = v;
         }
@@ -3204,31 +2846,22 @@ void TransformTwoOffset(const cSPVector3_s0074_3b20* p1, const cSPVector3_s0074_
         a.x -= off; a.y -= off; a.z -= off;
         b.x += off; b.y += off; b.z += off;
     }
-    LineClip(&r1, &r2, *(int*)&a, 0);
+    return LineClip(&r1, &r2, (int)&a, flag);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007445b0
 bool cModelWorld::CallOnLoad(Model* model, void* cb, void* data)
 {
-    if (((model->mFlags >> 14) & 1) != 0) {
+    bool onLoad = (model->mFlags >> 14) & 1;   // bool, like StallGetBoundingBox: the original reads
+                                               // mFlags into eax, shr 0xe, then test al,1
+    if (onLoad != 0) {
         ((void (__cdecl*)(Model*, void*))cb)(model, data);
         return true;
     }
-    for (int i = 0; i < 8; ++i) {
+    for (uint32_t i = 0; i < 8; ++i) {
         char* e = (char*)this + 0x318 + i * 0x50;
         if (*(Model**)e == model) {
-            for (int j = 0; j < 8; ++j) {
+            for (uint32_t j = 0; j < 8; ++j) {
                 char* f = (char*)this + 0x318 + j * 0x50;
                 if (*(Model**)f == model) {
                     *(void**)(f + 0x14) = cb;
@@ -3251,24 +2884,12 @@ bool cModelWorld::CallOnLoad(Model* model, void* cb, void* data)
         }
         begin += 0x1c;
         if (begin == segEnd) {
-            begin = *(char**)((char*)segTable + 4);
-            segTable = (char**)((char*)segTable + 4);
-            segEnd = *(char**)(begin + 0xe0);
+            begin = *++segTable;
+            segEnd = begin + 0xe0;
         }
     }
     return false;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00744680
 bool SP::cModelWorld::ModelsHavePreloaded(int i) const
@@ -3277,17 +2898,6 @@ bool SP::cModelWorld::ModelsHavePreloaded(int i) const
     Entry* v = (Entry*)((char*)this + 0x5d0 + i * 0x14);
     return v->p0 == v->p1;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007446a0
 float cModelWorld::StallGetBoundingBox(Model* model)
@@ -3298,17 +2908,6 @@ float cModelWorld::StallGetBoundingBox(Model* model)
     return model->mDefaultBoundingRadius;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007446c0
 void* cModelWorld::GetNumAnimationGroups(Model* model)
 {
@@ -3316,17 +2915,6 @@ void* cModelWorld::GetNumAnimationGroups(Model* model)
         this->StallUntilLoaded(model);
     return (char*)model + 0x70;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007446e0
 void cModelWorld::GetModelResourceIDs(Model* model, uint32_t* pInstance, uint32_t* pGroup)
@@ -3358,33 +2946,6 @@ void cModelWorld::GetModelResourceIDs(Model* model, uint32_t* pInstance, uint32_
         *pGroup = group;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00744760
 void cModelWorld::StallUntilLoaded2(Model* model, uint32_t a)
 {
@@ -3393,17 +2954,6 @@ void cModelWorld::StallUntilLoaded2(Model* model, uint32_t a)
     if (q)
         q->StallUntilLoaded(a);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00744790
 int cModelWorld::GetNumAnimations(Model* model)
@@ -3419,17 +2969,6 @@ int cModelWorld::GetNumAnimations(Model* model)
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007447c0
 int cModelWorld::GetAnimationIDs(Model* model, uint32_t* dst)
 {
@@ -3443,17 +2982,6 @@ int cModelWorld::GetAnimationIDs(Model* model, uint32_t* dst)
     }
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007447f0
 int cModelWorld::GetAnimationMoveToTimes(Model* model, int a, int b)
@@ -3469,17 +2997,6 @@ int cModelWorld::GetAnimationMoveToTimes(Model* model, int a, int b)
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00744830
 int cModelWorld::GetDeformationAnimationIDs(Model* model, int a, int b)
 {
@@ -3487,17 +3004,6 @@ int cModelWorld::GetDeformationAnimationIDs(Model* model, int a, int b)
     cModelInstance* inst = m->mAnim[0];
     return inst ? inst->GetAnimMoveToTimes(b, a, 0) : 0;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00744870
 void cModelWorld::AnimAction(Model* model, int arga, int argb, float argc, int argd)
@@ -3523,17 +3029,6 @@ void cModelWorld::AnimAction(Model* model, int arga, int argb, float argc, int a
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00744900
 void cModelWorld::MoveToTime(Model* model, int a, float b, int c)
 {
@@ -3549,17 +3044,6 @@ void cModelWorld::MoveToTime(Model* model, int a, float b, int c)
         ++p;
     } while (i < 6);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00744950
 void cModelWorld::SetWeight(Model* model, int a, float b, int c)
@@ -3577,17 +3061,6 @@ void cModelWorld::SetWeight(Model* model, int a, float b, int c)
     } while (i < 4);
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007449a0
 bool cModelWorld::GetAnimationRange(Model* model, int a, int b, float& c, float& d)
 {
@@ -3598,17 +3071,6 @@ bool cModelWorld::GetAnimationRange(Model* model, int a, int b, float& c, float&
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007449e0
 int cModelWorld::GetNumBones(Model* model)
 {
@@ -3616,17 +3078,6 @@ int cModelWorld::GetNumBones(Model* model)
     cModelInstance* inst = m->mAnim[0];
     return inst ? inst->GetNumBones() : 0;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00744a10
 int cModelWorld::GetPoseTransforms(Model* model, void* dst, int original)
@@ -3636,17 +3087,6 @@ int cModelWorld::GetPoseTransforms(Model* model, void* dst, int original)
     return inst ? inst->GetPoseTransforms(dst, original) : 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00744a40
 int cModelWorld::GetBoneTransforms(Model* model, void* dst)
 {
@@ -3654,17 +3094,6 @@ int cModelWorld::GetBoneTransforms(Model* model, void* dst)
     cModelInstance* inst = m->mAnim[0];
     return inst ? inst->GetBoneTransforms(dst) : 0;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00744a70
 int cModelWorld::GetBoneIDs(Model* model, void* dst)
@@ -3674,17 +3103,6 @@ int cModelWorld::GetBoneIDs(Model* model, void* dst)
     return inst ? inst->GetBoneIDs(dst) : 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00744aa0
 int cModelWorld::GetBoneParents(Model* model, void* dst)
 {
@@ -3692,17 +3110,6 @@ int cModelWorld::GetBoneParents(Model* model, void* dst)
     cModelInstance* inst = m->mAnim[0];
     return inst ? inst->GetBoneParents(dst) : 0;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00744ad0
 void cModelWorld_s0074_4ad0::SetBoneTable(Model_s0074_4ad0* model, int a, int b)
@@ -3720,16 +3127,6 @@ void cModelWorld_s0074_4ad0::SetBoneTable(Model_s0074_4ad0* model, int a, int b)
     } while (i < 4);
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00744b10
 void cModelWorld_s0074_4ad0::SetBoneCallback(Model_s0074_4ad0* model, int a, int b, int c, int d)
 {
@@ -3745,16 +3142,6 @@ void cModelWorld_s0074_4ad0::SetBoneCallback(Model_s0074_4ad0* model, int a, int
         ++p;
     } while (i < 4);
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00744b60
 void cModelWorld_s0074_4ad0::SetAnimationGroupTransform(Model_s0074_4ad0* model, int a, int b)
@@ -3772,16 +3159,6 @@ void cModelWorld_s0074_4ad0::SetAnimationGroupTransform(Model_s0074_4ad0* model,
     } while (i < 4);
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00744ba0
 int cModelWorld_s0074_4ad0::GetMaterialInfo(Model_s0074_4ad0* model, int region)
 {
@@ -3791,16 +3168,6 @@ int cModelWorld_s0074_4ad0::GetMaterialInfo(Model_s0074_4ad0* model, int region)
     cModelInstance_s0074_4ad0* inst = *(cModelInstance_s0074_4ad0**)((char*)m + 0x9c);
     return inst->GetRegionMaterialInfo(region);
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00744be0
 void cModelWorld_s0074_4ad0::SetDynamicDraw(Model_s0074_4ad0* model, int a, int b)
@@ -3814,16 +3181,6 @@ void cModelWorld_s0074_4ad0::SetDynamicDraw(Model_s0074_4ad0* model, int a, int 
         ++p;
     } while (--n);
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00744c30
 int cModelWorld_s0074_4ad0::GetNumLODs(Model_s0074_4ad0* model)
@@ -3840,16 +3197,6 @@ int cModelWorld_s0074_4ad0::GetNumLODs(Model_s0074_4ad0* model)
     } while (i < 4);
     return count;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00744c70
 void cModelWorld_s0074_4ad0::SetLOD(Model_s0074_4ad0* model, int lod)
@@ -3872,16 +3219,6 @@ void cModelWorld_s0074_4ad0::SetLOD(Model_s0074_4ad0* model, int lod)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00744cf0
 void cModelWorld_s0074_4ad0::SetSomeFloat(Model_s0074_4ad0* model, float v)
 {
@@ -3901,33 +3238,6 @@ void cModelWorld_s0074_4ad0::SetSomeFloat(Model_s0074_4ad0* model, float v)
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00744d80
 void cModelWorld_s0074_4ad0::SetEffectEnabled(Model_s0074_4ad0* model, char a, char b, int id)
@@ -3951,33 +3261,6 @@ void cModelWorld_s0074_4ad0::SetEffectEnabled(Model_s0074_4ad0* model, char a, c
     } while (e->mpInner);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00744e10
 char cModelWorld_s0074_4ad0::ForEachEffectA(Model_s0074_4ad0* model, int a, int b, int c, int id)
 {
@@ -3997,33 +3280,6 @@ char cModelWorld_s0074_4ad0::ForEachEffectA(Model_s0074_4ad0* model, int a, int 
     }
     return result;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00744e90
 char cModelWorld_s0074_4ad0::ForEachEffectB(Model_s0074_4ad0* model, int a, int b, int c, int id)
@@ -4045,33 +3301,6 @@ char cModelWorld_s0074_4ad0::ForEachEffectB(Model_s0074_4ad0* model, int a, int 
     return result;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00744f10
 char cModelWorld_s0074_4ad0::ForEachEffectC(Model_s0074_4ad0* model, int a, int b, int id)
 {
@@ -4092,33 +3321,6 @@ char cModelWorld_s0074_4ad0::ForEachEffectC(Model_s0074_4ad0* model, int a, int 
     return result;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00744f80
 int cModelWorld_s0074_4ad0::GetDeformationHandles(Model_s0074_4ad0* model, void* a, void* b)
 {
@@ -4130,16 +3332,6 @@ int cModelWorld_s0074_4ad0::GetDeformationHandles(Model_s0074_4ad0* model, void*
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x00744fc0
 bool cModelWorld_s0074_4ad0::GetRuntimeMeshes(Model_s0074_4ad0* model, int a, int b, int c, int d)
 {
@@ -4150,16 +3342,6 @@ bool cModelWorld_s0074_4ad0::GetRuntimeMeshes(Model_s0074_4ad0* model, int a, in
         return RuntimeModelBuilder_GetRuntimeMeshes(inst, a, b, c, d);
     return false;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00745010
 bool cModelWorld_s0074_4ad0::CheckFlag(Model_s0074_4ad0* model, int a)
@@ -4174,33 +3356,6 @@ bool cModelWorld_s0074_4ad0::CheckFlag(Model_s0074_4ad0* model, int a)
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00745050
 bool cModelWorld_s0074_4ad0::SelectMesh(Model_s0074_4ad0* model, int a, int b, char c)
 {
@@ -4213,48 +3368,11 @@ bool cModelWorld_s0074_4ad0::SelectMesh(Model_s0074_4ad0* model, int a, int b, c
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007450a0
 uint32_t cModelWorld_s0074_4ad0::GetSlot(int i)
 {
     return *(uint32_t*)((char*)this + 0x1cc + i * 0x20);
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00745110
 SP::cArenaResource * SP::cModelWorld::HACK_GetArenaResource(SP::cMWModel * model)
@@ -4265,16 +3383,6 @@ SP::cArenaResource * SP::cModelWorld::HACK_GetArenaResource(SP::cMWModel * model
         return inst->GetArenaResource();
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00745140
 void cModelWorld_s0074_4ad0::FillColor(int* out)
@@ -4311,33 +3419,6 @@ void cModelWorld_s0074_4ad0::FillColor(int* out)
     out[4] = *(int*)&w;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00745340
 void cModelWorld_s0074_4ad0::ReleaseRefs()
 {
@@ -4349,16 +3430,6 @@ void cModelWorld_s0074_4ad0::ReleaseRefs()
         b->Release();
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x007453a0
 void* Small7::Init()
 {
@@ -4367,16 +3438,6 @@ void* Small7::Init()
     b = 1;
     return this;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007453d0
 bool __cdecl FactoryNew(void** out, void* arg2, unsigned flags)
@@ -4401,16 +3462,6 @@ bool __cdecl FactoryNew(void** out, void* arg2, unsigned flags)
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x007454f0
 AutoRef* AutoRef::Release()
 {
@@ -4426,33 +3477,6 @@ AutoRef* AutoRef::Release()
     return this;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00745520
 int SlotVec::next(int idx)
 {
@@ -4467,33 +3491,6 @@ int SlotVec::next(int idx)
     } while ((int)v < 0);
     return idx;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00745560
 void ChunkFind(uint32_t* out, int* cur, int* start, int* end, int** seg, int key)
@@ -4513,33 +3510,6 @@ void ChunkFind(uint32_t* out, int* cur, int* start, int* end, int** seg, int key
     out[1] = (uint32_t)start;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007455e0
 void __fastcall DestroyChunk(int param_1)
 {
@@ -4556,33 +3526,6 @@ void __fastcall DestroyChunk(int param_1)
     *(int*)(param_1 + 8) = *(int*)(param_1 + 0xc);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00745630
 void __fastcall DequeDoPopFront(int* self)
 {
@@ -4592,16 +3535,6 @@ void __fastcall DequeDoPopFront(int* self)
             EA_Free((void*)*self);
     }
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00745660
 int SlotCount(uint32_t* first, uint32_t* last)
@@ -4624,33 +3557,6 @@ int SlotCount(uint32_t* first, uint32_t* last)
         ++n;
     } while (true);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007456a0
 void SlotCell::Assign(int* src)
@@ -4676,33 +3582,6 @@ void SlotCell::Assign(int* src)
     *dst = *src;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00745710
 int* DequeIter::Advance(int n)
 {
@@ -4721,33 +3600,6 @@ int* DequeIter::Advance(int n)
     self[0] = self[1] + (d - i * 8) * 0x1c;
     return self;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007457a0
 void DequeInsert(int* self, unsigned count, int flag)
@@ -4785,16 +3637,6 @@ void DequeInsert(int* self, unsigned count, int flag)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x007458d0
 void DequeInit(int* self, unsigned count)
 {
@@ -4821,33 +3663,6 @@ void DequeInit(int* self, unsigned count)
     self[6] = self[7] + (count & 7) * 0x1c;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007459c0
 void Sort18(uint32_t* first, uint32_t* last, bool (*compare)(const void*, const void*))
 {
@@ -4872,32 +3687,6 @@ void Sort18(uint32_t* first, uint32_t* last, bool (*compare)(const void*, const 
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00745ac0
 void Sort24(P6* first, P6* last, Compare24 compare)
 {
@@ -4911,32 +3700,6 @@ void Sort24(P6* first, P6* last, Compare24 compare)
         *j = temp;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00745bb0
 E20* Copy20(E20* first, E20* last, E20* dest)
@@ -4955,32 +3718,6 @@ E20* Copy20(E20* first, E20* last, E20* dest)
     return dest;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00745c20
 Node18* CreateNode18(const uint32_t* value)
 {
@@ -4995,32 +3732,6 @@ Node18* CreateNode18(const uint32_t* value)
     return p;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00745ca0
 Vec6* UninitCopy24(Vec6* first, Vec6* last, Vec6* dest)
 {
@@ -5029,32 +3740,6 @@ Vec6* UninitCopy24(Vec6* first, Vec6* last, Vec6* dest)
     }
     return dest;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00745cf0
 void PromoteOccluder(cOccluder_s0074_5ac0* first, int topPosition, int position, cOccluder_s0074_5ac0 value, cOccluderCompare compare)
@@ -5068,32 +3753,6 @@ void PromoteOccluder(cOccluder_s0074_5ac0* first, int topPosition, int position,
     first[position] = value;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00745e00
 void PromotePairGt(FloatKeyPair* first, int topPosition, int position, FloatKeyPair value, FloatKeyGreater compare)
 {
@@ -5106,32 +3765,6 @@ void PromotePairGt(FloatKeyPair* first, int topPosition, int position, FloatKeyP
     first[position] = value;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00745e80
 void PromotePairLt(FloatKeyPair* first, int topPosition, int position, FloatKeyPair value, FloatKeyLess compare)
 {
@@ -5143,32 +3776,6 @@ void PromotePairLt(FloatKeyPair* first, int topPosition, int position, FloatKeyP
     }
     first[position] = value;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00745f90
 DrawRecord* DrawRecord_Ctor(DrawRecord* self, void* owner)
@@ -5205,32 +3812,6 @@ DrawRecord* DrawRecord_Ctor(DrawRecord* self, void* owner)
     self->mLast = 0;
     return self;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007460b0
 int FilterModelFrustum(CullModel* model, void* culler, FrustumFilterArg* arg)
@@ -5284,32 +3865,6 @@ int FilterModelFrustum(CullModel* model, void* culler, FrustumFilterArg* arg)
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00746250
 void cModelWorld_SetMaterialInfo(void* /*this*/, void* handle, void* info, int idx)
 {
@@ -5324,32 +3879,6 @@ void cModelWorld_SetMaterialInfo(void* /*this*/, void* handle, void* info, int i
         p->mSlots[i]->F(idx, handle);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007462b0
 void FUN_007462b0(void* /*this*/, void* handle, VecField* v)
@@ -5374,15 +3903,6 @@ void FUN_007462b0(void* /*this*/, void* handle, VecField* v)
         v->mStore = EASTL_allocator_allocate(n * 0xc, "Graphics", 0, 0, 0, 0);
     }
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x00746360
 void cModelWorld_GetHull(void* self, HullQuery* out)
@@ -5421,15 +3941,6 @@ void cModelWorld_GetHull(void* self, HullQuery* out)
     }
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x00746560
 void CModelWorldStub::GetHullBoundingBox(void* handle, cSPBoundingBox_s0074_5ac0* out)
 {
@@ -5447,32 +3958,6 @@ void CModelWorldStub::GetHullBoundingBox(void* handle, cSPBoundingBox_s0074_5ac0
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00746610
 int cModelWorld_GetRuntimeModel(void* self, void* handle, int* params)
 {
@@ -5487,15 +3972,6 @@ int cModelWorld_GetRuntimeModel(void* self, void* handle, int* params)
     }
     return 3;
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x007466e0
 int FUN_007466e0(void* self, void* handle)
@@ -5527,15 +4003,6 @@ int FUN_007466e0(void* self, void* handle)
     return 1;
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x007467f0
 int FUN_007467f0(void* self, void* a, void* b, Vec3* out1, Vec3* out2, Vec3* out3)
 {
@@ -5559,15 +4026,6 @@ int FUN_007467f0(void* self, void* a, void* b, Vec3* out1, Vec3* out2, Vec3* out
     if (local) (*(void(__thiscall**)(void*))((char*)(*(void**)local) + 4))(local);
     return 1;
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x00746910
 void GroupWorld::AssignGroup(void* newObj, int idx, bool flag)
@@ -5593,31 +4051,6 @@ void GroupWorld::AssignGroup(void* newObj, int idx, bool flag)
     if (s->mCount < 0)
         s->mCount = 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007469b0
 void CModelWorld::SetWorldBounds(Vec3 bounds[2], float param_3, float param_4)
@@ -5648,45 +4081,12 @@ void CModelWorld::SetWorldBounds(Vec3 bounds[2], float param_3, float param_4)
     }
 }
 
-
-
-
-
-
-
-
-
 // @ 0x00746b40
 void CModelWorld::UpdateOccluder(int idx, Vec3* pos, float radius)
 {
     mOccluders[idx].mPosition = *pos;
     mOccluders[idx].mRadius = radius;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00746b90
 void cModelWorld_ShutdownModel(CModelWorld* self, int model)
@@ -5736,31 +4136,6 @@ void cModelWorld_ShutdownModel(CModelWorld* self, int model)
         (*(void(__thiscall**)(void*, void*))((char*)(**(void***)l) + 4))(*(void**)l, (void*)(model + 8));
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00746cc0
 int FUN_00746cc0(int self, int key)
 {
@@ -5772,14 +4147,6 @@ int FUN_00746cc0(int self, int key)
         return *(int*)(it + 0x14);
     return 0;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x00746cf0
 int FUN_00746cf0(int self, int a, float b)
@@ -5809,14 +4176,6 @@ int FUN_00746cf0(int self, int a, float b)
     return hit != 0;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x00746de0
 Rec48::Rec48()
 {
@@ -5832,31 +4191,6 @@ Rec48::Rec48()
     rot.Assign(&g_f162ec38);
     f = 1;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00746e50
 void FUN_00746e50(void* self, void* owner)
@@ -5892,14 +4226,6 @@ void FUN_00746e50(void* self, void* owner)
     *(short*)(b + 0xd0) = (short)0xffff;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x00746fc0
 void FUN_00746fc0(void* self)
 {
@@ -5926,31 +4252,6 @@ void FUN_00746fc0(void* self)
     FUN_00745340();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007470c0
 void Stub007470c0::F()
 {
@@ -5973,31 +4274,6 @@ void Stub007470c0::F()
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00747190
 void* Stub00747190::F(int* src)
 {
@@ -6018,31 +4294,6 @@ void* Stub00747190::F(int* src)
     return dst;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007471f0
 void FUN_007471f0(void* self)
 {
@@ -6057,14 +4308,6 @@ void FUN_007471f0(void* self)
     *(int*)(b + 0x30) = 0;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x00747270
 void Stub00747270::F()
 {
@@ -6078,31 +4321,6 @@ void Stub00747270::F()
     RCObj* q = (RCObj*)*(void**)(b + 0x10);
     if (q && --q->mRefCount == 0) { q->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)q))(q, 1); }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00747340
 void FUN_00747340(int param_1)
@@ -6149,14 +4367,6 @@ void FUN_00747340(int param_1)
     }
 }
 
-
-
-
-
-
-
-
-
 // @ 0x00747640
 int FUN_00747640(int self, int* key)
 {
@@ -6167,14 +4377,6 @@ int FUN_00747640(int self, int* key)
                  *(int*)(b + 0x2a4), *(int*)(b + 0x2a8), *key);
     return local[0] != *(int*)(b + 0x29c);
 }
-
-
-
-
-
-
-
-
 
 // @ 0x00747720
 void FUN_00747720(int* d)
@@ -6195,31 +4397,6 @@ void FUN_00747720(int* d)
         operator_delete_((void*)*d);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007477d0
 void FUN_007477d0(int self)
@@ -6262,31 +4439,6 @@ void FUN_007477d0(int self)
     *(int*)(b + 0x24) = *(int*)(b + 0x14);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x007478b0
 void FUN_007478b0(uint32_t* v)
 {
@@ -6298,30 +4450,6 @@ void FUN_007478b0(uint32_t* v)
     if (*v != 0 && *v != v[4])
         operator_delete_((void*)*v);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00747920
 void Stub00747920::F()
@@ -6347,30 +4475,6 @@ void Stub00747920::F()
         if (r) (*(void(__thiscall**)(RCObj*, int))((char*)(*(void**)r) + 4))(r, 1);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00747980
 void FUN_00747980(int* d, int* entry)
@@ -6403,13 +4507,6 @@ void FUN_00747980(int* d, int* entry)
     RelObj(o);
 }
 
-
-
-
-
-
-
-
 // @ 0x00747ac0
 Rec38* Rec38Stub::F(Rec38* src)
 {
@@ -6424,30 +4521,6 @@ Rec38* Rec38Stub::F(Rec38* src)
     new (&dst->rot) Mat3_s0074_7920(src->rot);
     return dst;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00747b70
 void FUN_00747b70(E3CResult* res, E3C* first, E3C* last, E3C* dst)
@@ -6481,30 +4554,6 @@ void FUN_00747b70(E3CResult* res, E3C* first, E3C* last, E3C* dst)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00747c90
 void FUN_00747c90(E3C* dst, int n, E3C* value)
 {
@@ -6528,30 +4577,6 @@ void FUN_00747c90(E3C* dst, int n, E3C* value)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00747eb0
 void MakeHeapOccluder(Occluder* first, Occluder* last, OccluderCmp compare)
 {
@@ -6566,30 +4591,6 @@ void MakeHeapOccluder(Occluder* first, Occluder* last, OccluderCmp compare)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00747f30
 void PopHeapOccluder(Occluder4* first, Occluder4* last, OccluderCmp compare)
 {
@@ -6599,30 +4600,6 @@ void PopHeapOccluder(Occluder4* first, Occluder4* last, OccluderCmp compare)
     if (n > 0)
         AdjustHeapOccluder((Occluder*)first, 0, n, 0, *(Occluder*)&temp, compare);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00748010
 void MakeHeapGt(FKP* first, FKP* last, CmpGt compare)
@@ -6638,30 +4615,6 @@ void MakeHeapGt(FKP* first, FKP* last, CmpGt compare)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00748060
 void SortHeapGt(FKP* first, FKP* last, CmpGt compare)
 {
@@ -6671,30 +4624,6 @@ void SortHeapGt(FKP* first, FKP* last, CmpGt compare)
         FUN_00745e00(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, &compare);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007480c0
 void MakeHeapLt(FKP* first, FKP* last, CmpLt compare)
@@ -6710,30 +4639,6 @@ void MakeHeapLt(FKP* first, FKP* last, CmpLt compare)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00748110
 void SortHeapLt(FKP* first, FKP* last, CmpLt compare)
 {
@@ -6743,30 +4648,6 @@ void SortHeapLt(FKP* first, FKP* last, CmpLt compare)
         FUN_00745e80(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, &compare);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00748170
 void FUN_00748170(int* first, int* last, int* dst)
@@ -6793,30 +4674,6 @@ void FUN_00748170(int* first, int* last, int* dst)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00748280
 void FUN_00748280(int* out, int* first, int* a, int* last, int* mapFirst, int* mapLast)
 {
@@ -6838,30 +4695,6 @@ void FUN_00748280(int* out, int* first, int* a, int* last, int* mapFirst, int* m
     out[1] = (int)dst;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00748380
 void FUN_00748380(int* out, int* last)
 {
@@ -6882,30 +4715,6 @@ void FUN_00748380(int* out, int* last)
     }
     out[1] = (int)dst;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00748470
 int* FUN_00748470(int first, int last, int* dst)
@@ -6935,29 +4744,6 @@ int* FUN_00748470(int first, int last, int* dst)
     } while (last != first);
     return result;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00748530
 int FilterModelSphere(CullModel_s0074_7920* model, float* pos, SphereArg* arg)
@@ -6993,13 +4779,6 @@ int FilterModelSphere(CullModel_s0074_7920* model, float* pos, SphereArg* arg)
     }
     return 1;
 }
-
-
-
-
-
-
-
 
 // @ 0x00748800
 int FilterModelSphere2(CullModel_s0074_8800* model, float* pos, SphereArg* arg)
@@ -7067,29 +4846,6 @@ int FilterModelSphere2(CullModel_s0074_8800* model, float* pos, SphereArg* arg)
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00748ad0
 int FUN_00748ad0(float* a, int b, unsigned short* src, int param_4, int param_5, int model, int idx, int param_8, float radius)
 {
@@ -7116,12 +4872,6 @@ int FUN_00748ad0(float* a, int b, unsigned short* src, int param_4, int param_5,
     }
     return 0;
 }
-
-
-
-
-
-
 
 // @ 0x00748c30
 void* cModelWorld_s0074_8800::FindClosest(int a, int b, float* outDist, QueryArg* q)
@@ -7151,28 +4901,6 @@ void* cModelWorld_s0074_8800::FindClosest(int a, int b, float* outDist, QueryArg
     if (outDist) *outDist = best;
     return (char*)bestM + 8;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00749bd0
 int FindModelsInFrustum(const void* frustumA, const void* frustumB, CMWModel* model, void* out, FilterArg* arg)
@@ -7227,28 +4955,6 @@ int FindModelsInFrustum(const void* frustumA, const void* frustumB, CMWModel* mo
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00749e50
 int PickAgainstModel(float* pos, float radius, CMWModel* model, FilterArg* arg)
 {
@@ -7293,28 +4999,6 @@ int PickAgainstModel(float* pos, float radius, CMWModel* model, FilterArg* arg)
     }
     return 1;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074a070
 int FUN_0074a070(float* pos, CMWModel* model, FilterArg* arg)
@@ -7370,51 +5054,124 @@ int FUN_0074a070(float* pos, CMWModel* model, FilterArg* arg)
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0074a290
-void SP::cModelWorld_s0074_a290::SetExternalEffectsTransform(void* a, void* b, void* c)
+void SP::cModelWorld_s0074_a290_s0074_a290::SetExternalEffectsTransform(void* a, void* b, void* c)
 {
-    (void)a; (void)b; (void)c;
+    char* model = a ? (char*)a - 8 : 0;
+    EffRec* rec = *(EffRec**)(model + 0xdc);
+    if (rec == 0)
+        return;
+
+    if (b != 0) {
+        if (rec->obj == 0)
+            return;
+        do {
+            if (c == 0 || (c == (void*)rec->id && rec->id2 == 0)) {
+                rec->xf = *(cSPTransform_s0074_a290_s0074_a290*)b;
+                void* obj = rec->obj;
+                cSPTransform_s0074_a290_s0074_a290 t;
+                t.f0 = *(uint16_t*)((char*)a + 8);
+                t.f2 = *(uint16_t*)((char*)a + 0xa);
+                t.f4 = *(float*)((char*)a + 0xc);
+                t.f8 = *(float*)((char*)a + 0x10);
+                t.fc = *(float*)((char*)a + 0x14);
+                t.f10 = *(float*)((char*)a + 0x18);
+                ((Matrix3_s0074_a290*)&t.m[0])->Assign((char*)a + 0x1c);
+                t.Compose(&rec->xf);
+                ((void(__thiscall*)(void*, cSPTransform_s0074_a290_s0074_a290*))VT(obj)[0x18 / 4])(obj, &t);
+            }
+            rec++;
+        } while (rec->obj);
+        return;
+    }
+
+    int count = 0;
+    void* data = 0;
+    PropGetTransforms(*(void**)((char*)a + 0x90), 0x2a907b6, &count, &data);
+    rec = *(EffRec**)(model + 0xdc);
+    if (rec->obj == 0)
+        return;
+    int i = 0;
+    do {
+        if (c == 0 || (c == (void*)rec->id && rec->id2 == 0)) {
+            void* obj = rec->obj;
+            void* arg;
+            if (i < count) {
+                rec->xf = ((cSPTransform_s0074_a290_s0074_a290*)data)[i];
+                cSPTransform_s0074_a290_s0074_a290 t = translateTransform_s0074_a290(&rec->xf, (char*)a + 8);
+                arg = &t;
+            } else {
+                rec->xf.f0 = 0;
+                rec->xf.f2 = 0;
+                rec->xf.f4 = g_162eb0c;
+                rec->xf.f8 = g_162eb10;
+                rec->xf.fc = g_162eb14;
+                rec->xf.f10 = g_1485720;
+                *(Matrix3_s0074_a290*)&rec->xf.m[0] = *(Matrix3_s0074_a290*)g_162ec4c;
+                arg = (char*)a + 8;
+            }
+            ((void(__thiscall*)(void*, void*))VT(obj)[0x18 / 4])(obj, arg);
+        }
+        i++;
+        rec++;
+    } while (rec->obj);
 }
-
-
-
-
-
 
 // @ 0x0074a490
-void SP::cModelWorld::GetHullBoundingBox(SP::cMWModel * a, cSPBoundingBox * b)
+void SP::cModelWorld_s0074_a290_s0074_a290::SubA490(void* model, void* outp)
 {
-    (void)a; (void)b;
+    ((void(__thiscall*)(void*, void*))VT(this)[0x58 / 4])(this, model);
+    char* base = model ? (char*)model - 8 : 0;
+    uint32_t* p = *(uint32_t**)outp;
+    if (p == 0) {
+        p = (uint32_t*)GfxAlloc(0x28, "Graphics", 0, 0, 0, 0);
+        if (p) {
+            p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0; p[4] = 0;
+            p[5] = 0; p[6] = 0; p[7] = 0; p[8] = 0; p[9] = 0;
+        }
+        void* arg = base ? base + 8 : 0;
+        ((void(__thiscall*)(void*, void*, void*))VT(this)[0xd8 / 4])(this, arg, p);
+        p[8] = p[0];
+        p[9] = p[4];
+        p[7] = p[2];
+        uint32_t n = p[2];
+        p[0] = 0xc;
+        p[4] = (uint32_t)GfxAlloc(n * 0xc, "Graphics", 0, 0, 0, 0);
+        *(uint32_t**)outp = p;
+    } else {
+        ((void(__thiscall*)(void*, void*, void*))VT(this)[0x17c / 4])(this, model, p);
+    }
+
+    cSPTransform_s0074_a290_s0074_a290 t;
+    t.f0 = *(uint16_t*)(base + 0x10);
+    t.f2 = *(uint16_t*)(base + 0x12);
+    t.f4 = *(float*)(base + 0x14);
+    t.f8 = *(float*)(base + 0x18);
+    t.fc = *(float*)(base + 0x1c);
+    t.f10 = *(float*)(base + 0x20);
+    ((Matrix3_s0074_a290*)&t.m[0])->Assign(base + 0x24);
+    t.Compose((cSPTransform_s0074_a290_s0074_a290*)(base + 0xe4));
+
+    void* src = (void*)p[9];
+    void* dst = (void*)p[4];
+    if (p[8] == p[0]) {
+        ((VecCopyFn)0x11e0744)(dst, src, p[2] * p[0]);
+    } else {
+        uint32_t* s = (uint32_t*)src;
+        uint32_t* d = (uint32_t*)dst;
+        for (uint32_t k = p[2]; k > 0; k--) {
+            d[0] = s[0];
+            d[1] = s[1];
+            d[2] = s[2];
+            s = (uint32_t*)((char*)s + p[8]);
+            d += 3;
+        }
+    }
+    ((Sub9510Fn)0x6b9510)(&t, p[2], (void*)p[4], 0xc);
 }
 
-
-
-
-
-
 // @ 0x0074a650
-void SP::cModelWorld_s0074_a290::ReleaseTransformedHull(void** pp)
+void SP::cModelWorld_s0074_a290_s0074_a290::ReleaseTransformedHull(void** pp)
 {
     TransformedHull* h = (TransformedHull*)*pp;
     if (h) {
@@ -7426,195 +5183,271 @@ void SP::cModelWorld_s0074_a290::ReleaseTransformedHull(void** pp)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0074a690
-bool SP::cModelWorld_s0074_a290::GetBakedMeshes(void* model, void* arg2)
+bool SP::cModelWorld_s0074_a290_s0074_a290::GetBakedMeshes(void* model, void* arg2)
 {
     ((void(__thiscall*)(void*, void*))VT(this)[0x58 / 4])(this, model);
     char* base = model ? (char*)model - 8 : 0;
     if (*(int*)(base + 0x9c) != 0) {
-        cSPTransform_s0074_a290 t = translateTransform(base + 0xe4, base + 0x10);
-        cModelInstance_s0074_a290* inst = *(cModelInstance_s0074_a290**)(base + 0x9c);
+        cSPTransform_s0074_a290_s0074_a290 t = translateTransform_s0074_a290(base + 0xe4, base + 0x10);
+        cModelInstance_s0074_a290_s0074_a290* inst = *(cModelInstance_s0074_a290_s0074_a290**)(base + 0x9c);
         return inst->BuildBaked(&t, arg2);
     }
     return false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074a700
-bool SP::cModelWorld_s0074_a290::GetBakedMeshesUnscaled(void* model, void* arg2)
+bool SP::cModelWorld_s0074_a290_s0074_a290::GetBakedMeshesUnscaled(void* model, void* arg2)
 {
     ((void(__thiscall*)(void*, void*))VT(this)[0x58 / 4])(this, model);
     char* base = model ? (char*)model - 8 : 0;
     if (*(int*)(base + 0x9c) != 0) {
-        cSPTransform_s0074_a290 t = translateTransform(base + 0xe4, base + 0x10);
+        cSPTransform_s0074_a290_s0074_a290 t = translateTransform_s0074_a290(base + 0xe4, base + 0x10);
         ++t.f2;
         t.f10 = 1.0f;
-        cModelInstance_s0074_a290* inst = *(cModelInstance_s0074_a290**)(base + 0x9c);
+        cModelInstance_s0074_a290_s0074_a290* inst = *(cModelInstance_s0074_a290_s0074_a290**)(base + 0x9c);
         return inst->BuildBaked(&t, arg2);
     }
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0074a780
-bool SP::cModelWorld_s0074_a290::GetBakedMeshes2(void* model, void* arg2, cSPTransform_s0074_a290* out)
+bool SP::cModelWorld_s0074_a290_s0074_a290::GetBakedMeshes2(void* model, void* arg2, cSPTransform_s0074_a290_s0074_a290* out)
 {
     ((void(__thiscall*)(void*, void*))VT(this)[0x58 / 4])(this, model);
     char* base = model ? (char*)model - 8 : 0;
     if (*(int*)(base + 0x9c) != 0) {
-        *out = translateTransform(base + 0xe4, base + 0x10);
-        cSPTransform_s0074_a290 r;
+        cSPTransform_s0074_a290_s0074_a290 r = translateTransform_s0074_a290(base + 0xe4, base + 0x10);
+        *out = r;
         r.f0 = 0;
         r.f2 = 0;
         r.f4 = g_162eb0c;
         r.f8 = g_162eb10;
         r.fc = g_162eb14;
         r.f10 = g_1485720;
-        ((Matrix3_s0074_a290*)((char*)&r + 0x14))->Assign((const void*)g_162ec4c);
-        cModelInstance_s0074_a290* inst = *(cModelInstance_s0074_a290**)(base + 0x9c);
+        ((Matrix3_s0074_a290*)&r.m[0])->Assign((const void*)g_162ec4c);
+        cModelInstance_s0074_a290_s0074_a290* inst = *(cModelInstance_s0074_a290_s0074_a290**)(base + 0x9c);
         return inst->BuildBaked(&r, arg2);
     }
     return false;
 }
 
-
-
-
-
-
 // @ 0x0074a850
-bool SP::cModelWorld_s0074_a290::GetMeshes(void* model, void* arg2, cSPTransform_s0074_a290* out)
+bool SP::cModelWorld_s0074_a290_s0074_a290::GetMeshes(void* model, void* arg2, cSPTransform_s0074_a290_s0074_a290* out)
 {
     ((void(__thiscall*)(void*, void*))VT(this)[0x58 / 4])(this, model);
     char* base = model ? (char*)model - 8 : 0;
     if (*(int*)(base + 0x9c) != 0) {
-        *out = translateTransform(base + 0xe4, base + 0x10);
-        cModelInstance_s0074_a290* inst = *(cModelInstance_s0074_a290**)(base + 0x9c);
+        *out = translateTransform_s0074_a290(base + 0xe4, base + 0x10);
+        cModelInstance_s0074_a290_s0074_a290* inst = *(cModelInstance_s0074_a290_s0074_a290**)(base + 0x9c);
         return inst->GetMeshesX(arg2);
     }
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0074a920
-void SP::cModelWorld_s0074_a290::SubA920(void* a, void* b)
+void SP::cModelWorld_s0074_a290_s0074_a290::SubA920(void* list, void* obj, uint32_t flags)
 {
-    (void)a; (void)b;
+    char* o = (char*)obj;
+    for (int i = 0; i < 6; i++) {
+        ReleaseSlot((void**)(o + 0x9c + i * 4));
+        ReleaseSlot((void**)(o + 0xb4 + i * 4));
+        *(uint8_t*)(o + 0xcc + i) = 0xff;
+    }
+
+    PropKey k;
+    k.id = 0; k.id2 = 0; k.idx = 0;
+    for (int i = 0; i < 4; i++) {
+        if (!GetPropertyAsKey(list, i + 0xf9efbb, &k))
+            break;
+        void** slot = (void**)(o + 0x9c + i * 4);
+        ReleaseSlot(slot);
+        int idx = (k.idx == -1) ? *(int*)((char*)list + 0x10) : k.idx;
+        CreateModelInstance(k.id, idx, slot, flags);
+    }
+
+    if ((flags & 0x20) && GetPropertyAsKey(list, 0xf9efc1, &k)) {
+        void** slot = (void**)(o + 0xb0);
+        int idx = (k.idx == -1) ? *(int*)((char*)list + 0x10) : k.idx;
+        ReleaseSlot(slot);
+        CreateModelInstance(k.id, idx, slot, 0);
+    }
+
+    if (GetPropertyAsKey(list, 0xf9efc0, &k)) {
+        void** slot = (void**)(o + 0xac);
+        int idx = (k.idx == -1) ? 0 : k.idx;
+        ReleaseSlot(slot);
+        CreateModelInstance(k.id, idx, slot, 0);
+    }
+
+    Sub7340(obj);
+
+    void** pslot = (void**)(o + 0x9c);
+    if (*pslot == 0)
+        pslot = (void**)(o + 0xac);
+    void* src = *pslot;
+    if (src == 0)
+        goto tail;
+
+    if (!(*(uint8_t*)(o + 0xe) & 1)) {
+        *(uint32_t*)(o + 0x84) = *(uint32_t*)((char*)src + 0xb4);
+        *(uint32_t*)(o + 0x88) = *(uint32_t*)((char*)src + 0xb8);
+        *(uint32_t*)(o + 0x8c) = *(uint32_t*)((char*)src + 0xbc);
+        *(uint32_t*)(o + 0x78) = *(uint32_t*)((char*)src + 0xa8);
+        *(uint32_t*)(o + 0x7c) = *(uint32_t*)((char*)src + 0xac);
+        *(uint32_t*)(o + 0x80) = *(uint32_t*)((char*)src + 0xb0);
+        if (*(float*)(o + 0xf4) != 1.0f || (*(uint8_t*)(o + 0xe4) & 6))
+            ((cSPBoundingBox_s0074_a290*)(o + 0x78))->TransformBy(o + 0xe4);
+    }
+
+    if (!((*(uint32_t*)(o + 0xc) >> 0x11) & 1)) {
+        float v = *(float*)((char*)src + 0xc0);
+        *(float*)(o + 0x74) = v;
+        if (*(float*)(o + 0xf4) != 1.0f || (*(uint8_t*)(o + 0xe4) & 6)) {
+            v = *(float*)(o + 0xf4) * *(float*)(o + 0x74);
+            *(float*)(o + 0x74) = v;
+            float dx = *(float*)(o + 0xe8);
+            float dy = *(float*)(o + 0xec);
+            float dz = *(float*)(o + 0xf0);
+            *(float*)(o + 0x74) = sqrtf(dx * dx + dy * dy + dz * dz) + v;
+        }
+    }
+
+tail:
+    *(uint32_t*)(o + 0xc) |= 0x4000;
+    ++*(uint16_t*)(o + 0x70);
+    void* q = *(void**)(o + 0x6c);
+    if (q) {
+        void* r = ((void*(__thiscall*)(void*, unsigned))VT(q)[0xc / 4])(q, 0x7bbc4ff);
+        if (r)
+            ((void(__thiscall*)(void*, void*))VT(r)[0])(r, o + 8);
+    }
 }
 
-
-
-
-
+// @ 0x0074ac80
+void SP::cModelWorld_s0074_a290_s0074_a290::AddAttachments(char* m)
+{
+    cSPTransform_s0074_a290_s0074_a290 t;
+    Rec48_s0074_a290* r;
+    char* var;
+    int n; int first; int c2;
+    int cnt1; void* data1; int cnt2; void* data2; int cnt3; void* data3;
+    uint32_t flags = *(uint32_t*)(m + 0x138);
+    if (!(flags & 8)) {
+        void* list = *(void**)(m + 0x98);
+        if (!(flags & 4) && PropReserve(list, 0x2a907b5, &cnt1, &data1)) {
+            int good = 0;
+            cnt2 = 0;
+            PropGetTransforms(list, 0x2a907b6, &cnt2, &data2);
+            cnt3 = 0;
+            data3 = 0;
+            PropReserve(list, 0x2a907b9, &cnt3, &data3);
+            void* defModel = *(void**)((char*)this + 0x5c8);
+            if (defModel == 0) {
+                void* e = EffectsManager();
+                defModel = VCALL(void*(__thiscall*)(void*), e, 0x5c)(e);
+            }
+            for (int i = 0; i < cnt1; i++) {
+                void* e = EffectsManager();
+                if (VCALL(bool(__thiscall*)(void*, unsigned, int), e, 0x28)(e, *(unsigned*)((char*)data1 + i * 12), 0))
+                    good++;
+            }
+            Rec48_s0074_a290* recs = new ("Graphics", 0, 0, 0, 0) Rec48_s0074_a290[good + 1];
+            *(Rec48_s0074_a290**)(m + 0xdc) = recs;
+            int j = 0;
+            for (int i = 0; i < cnt1; i++) {
+                r = (Rec48_s0074_a290*)(*(char**)(m + 0xdc) + j * 0x48);
+                void* mdl;
+                if (i < cnt3) {
+                    void* e = EffectsManager();
+                    mdl = VCALL(void*(__thiscall*)(void*, unsigned), e, 0x54)(e, *(unsigned*)((char*)data3 + i * 12));
+                    if (mdl == 0) mdl = defModel;
+                } else {
+                    mdl = defModel;
+                }
+                if (r->obj) {
+                    IRel* o = r->obj;
+                    r->obj = 0;
+                    o->Release();
+                }
+                if (VCALL(bool(__thiscall*)(void*, unsigned, int, void*), mdl, 8)(mdl, *(unsigned*)((char*)data1 + i * 12), 0, &r->obj)) {
+                    void* o = r->obj;
+                    VCALL(void(__thiscall*)(void*, int, void*), o, 0x4c)(o, 6, (char*)this + 0xc);
+                    if (i < cnt2) {
+                        r->xf = ((cSPTransform_s0074_a290_s0074_a290*)data2)[i];
+                        t.f0 = *(uint16_t*)(m + 0x10);
+                        t.f2 = *(uint16_t*)(m + 0x12);
+                        t.f4 = *(float*)(m + 0x14);
+                        t.f8 = *(float*)(m + 0x18);
+                        t.fc = *(float*)(m + 0x1c);
+                        t.f10 = *(float*)(m + 0x20);
+                        ((Matrix3_s0074_a290*)&t.m[0])->Assign(m + 0x24);
+                        t.Compose(&r->xf);
+                        void* o2 = r->obj;
+                        VCALL(void(__thiscall*)(void*, cSPTransform_s0074_a290_s0074_a290*), o2, 0x18)(o2, &t);
+                    } else {
+                        void* o2 = r->obj;
+                        VCALL(void(__thiscall*)(void*, void*), o2, 0x18)(o2, m + 0x10);
+                    }
+                    if ((*(uint32_t*)(m + 0xc) >> 0x13) & 1) {
+                        void* o3 = r->obj;
+                        VCALL(void(__thiscall*)(void*, int), o3, 8)(o3, 0);
+                    }
+                    if (!(*(uint8_t*)(m + 0xc) & 1)) {
+                        void* o4 = r->obj;
+                        VCALL(void(__thiscall*)(void*, int), o4, 0x30)(o4, 1);
+                    }
+                    r->id = *(uint32_t*)((char*)data1 + i * 12);
+                    r->id2 = 0;
+                    j++;
+                }
+            }
+            if (!(*(uint32_t*)(m + 0x138) & 0x20000000)) {
+                *(float*)(m + 0x124) = 0.0f;
+                if (list) {
+                    if (VCALL(bool(__thiscall*)(void*, unsigned, char**), list, 0x24)(list, 0x2a907b8, &var)
+                        && *(uint16_t*)(var + 0x12) == 0xd) {
+                        char* p = var;
+                        if (*(uint8_t*)(var + 0x10) & 0x30) p = *(char**)var;
+                        *(float*)(m + 0x124) = *(float*)p;
+                    }
+                }
+            }
+        }
+        if (*(int*)((char*)this + 0x1cc) != 0) {
+            if (PropGetFloats(list, 0x49fc837, &n, &first)) {
+                unsigned size = n * 4 + 0x14;
+                int* p = (int*)GfxAlloc(size, "Graphics", 0, 0, 0, 0);
+                memset(p, 0, size);
+                p[0] = n;
+                for (int k = 0; k < n; k++) p[5 + k] = -1;
+                *(int**)(m + 0xe0) = p;
+                p[1] = first;
+                if (PropGetInts(list, 0x49fc838, &c2, *(char**)(m + 0xe0) + 8) && c2 != n)
+                    (*(int**)(m + 0xe0))[2] = 0;
+                if (PropGetInts(list, 0x49fc83a, &c2, *(char**)(m + 0xe0) + 0x10) && c2 != n)
+                    (*(int**)(m + 0xe0))[4] = 0;
+                if (PropGetFloats(list, 0x49fc839, &c2, *(char**)(m + 0xe0) + 0xc) && c2 != n)
+                    (*(int**)(m + 0xe0))[3] = 0;
+            }
+        }
+        char* mgr = *(char**)((char*)this + 0x18);
+        void** it = *(void***)(mgr + 0x4c);
+        void** end = *(void***)(mgr + 0x50);
+        for (; it != end; ++it) {
+            void* o = *it;
+            VCALL(void(__thiscall*)(void*, void*), o, 0)(o, m + 8);
+        }
+    }
+}
 
 // @ 0x0074b150
-void SP::cModelWorld_s0074_a290::FreeTransformedBuffer()
+void SP::cModelWorld_s0074_a290_s0074_a290::FreeTransformedBuffer()
 {
     void* p = *(void**)((char*)this + 0x44);
     if (p && p != *(void**)((char*)this + 0x54))
         eastl_dealloc(p);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074b170
 void cloadqueue_b170(void* self)
@@ -7622,43 +5455,15 @@ void cloadqueue_b170(void* self)
     (void)self;
 }
 
-
-
-
-
 // @ 0x0074b2b0
 SP::cLoadQueue::~cLoadQueue()
 {}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074b390
 void partial_sort_b390(void* a, void* b, void* c, void* cmp)
 {
     (void)a; (void)b; (void)c; (void)cmp;
 }
-
-
-
-
 
 // @ 0x0074b690
 void SP::cModelWorld_s0074_b170::SetInWorld(ListNode_s0074_b170* n, bool b)
@@ -7693,26 +5498,6 @@ void SP::cModelWorld_s0074_b170::SetInWorld(ListNode_s0074_b170* n, bool b)
         node->flags &= 0xffff7fff;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0074b760
 __forceinline const float* ValFloat(Property* p)
 {
@@ -7720,34 +5505,11 @@ __forceinline const float* ValFloat(Property* p)
     return &kDefaultFloat;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0074bda0
 void list_find_bda0(void* self, void* key)
 {
     (void)self; (void)key;
 }
-
-
-
-
 
 // @ 0x0074be40
 void list_erase_be40(void* self, int* key)
@@ -7755,19 +5517,11 @@ void list_erase_be40(void* self, int* key)
     (void)self; (void)key;
 }
 
-
-
-
-
 // @ 0x0074bf10
 void vec_insert_bf10(void* self, void* pos, void* val)
 {
     (void)self; (void)pos; (void)val;
 }
-
-
-
-
 
 // @ 0x0074c020
 void vec_insert_c020(void* self, void* pos, void* val)
@@ -7775,78 +5529,17 @@ void vec_insert_c020(void* self, void* pos, void* val)
     (void)self; (void)pos; (void)val;
 }
 
-
-
-
-
 // @ 0x0074c260
 template void eastl::quick_sort_impl<cDrawModelInfo*, int, DrawGreater>(cDrawModelInfo*, cDrawModelInfo*, int, DrawGreater)
 ;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074c370
 template void eastl::quick_sort_impl<cDrawModelInfo*, int, cAlphaSortLessComparator>(cDrawModelInfo*, cDrawModelInfo*, int, cAlphaSortLessComparator)
 ;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0074c580
 template cOccluder_s0074_c260* eastl::get_partition<cOccluder_s0074_c260*, cOccluder_s0074_c260, OccCmp>(cOccluder_s0074_c260*, cOccluder_s0074_c260*, cOccluder_s0074_c260, OccCmp)
 ;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074c670
 bool SP::cModelWorld::ModelIsResidentInMemory(SP::cPropertyList * model)
@@ -7902,25 +5595,6 @@ bool SP::cModelWorld::ModelIsResidentInMemory(SP::cPropertyList * model)
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0074c910
 void cModelWorld_s0074_c260::ScheduleForLoad(ModelEntry* entry, RefCounted* model, uint32_t a4, uint32_t a5)
 {
@@ -7959,25 +5633,6 @@ void cModelWorld_s0074_c260::ScheduleForLoad(ModelEntry* entry, RefCounted* mode
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0074ca70
 bool VecInt::remove_first(int v)
 {
@@ -8000,25 +5655,6 @@ bool VecInt::remove_first(int v)
     }
     return false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074cad0
 bool LoadJob::Step(cJobW* cj)
@@ -8109,25 +5745,6 @@ bool LoadJob::Step(cJobW* cj)
     return cj->Continuation(g_fn74d080, this);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0074cdd0
 void Vec18::push_back(const E18* v)
 {
@@ -8140,25 +5757,6 @@ void Vec18::push_back(const E18* v)
         ((E18Vt*)this)->DoInsert(e, v);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074ce20
 void VecE14::DoInsertValue(E14* pos, const E14& value)
@@ -8189,47 +5787,9 @@ void VecE14::DoInsertValue(E14* pos, const E14& value)
     mCap = newBegin + nNew;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0074d190
 template void eastl::quick_sort_impl<cOccluder_s0074_c260*, int, OccCmp>(cOccluder_s0074_c260*, cOccluder_s0074_c260*, int, OccCmp)
 ;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074d2c0
 bool cModelWorldMsg::HandleMessage(uint32_t msgId, MsgHeader* msg)
@@ -8279,24 +5839,6 @@ bool cModelWorldMsg::HandleMessage(uint32_t msgId, MsgHeader* msg)
     }
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074d4b0
 void* cModelWorld_s0074_d4b0::CreateModel(uint32_t a, uint32_t b, uint32_t flags)
@@ -8384,24 +5926,6 @@ void* cModelWorld_s0074_d4b0::CreateModel(uint32_t a, uint32_t b, uint32_t flags
   return n->Obj();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0074d870
 bool cModelWorld_s0074_d4b0::CollectModels(PtrVec* out, const cModelFilter* f)
 {
@@ -8425,23 +5949,6 @@ bool cModelWorld_s0074_d4b0::CollectModels(PtrVec* out, const cModelFilter* f)
   }
   return out->mpBegin != out->mpEnd;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074eb70
 bool cModelWorld_s0074_e2b0::FindModelsInShape(const void* p, float f, ModelVec* out, void* ctx)
@@ -8473,23 +5980,6 @@ bool cModelWorld_s0074_e2b0::FindModelsInShape(const void* p, float f, ModelVec*
     return out->mpBegin != out->mpEnd;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0074ed00
 bool cModelWorld_s0074_e2b0::FindModelsInSphere(const void* sphere, ModelVec* out, void* ctx)
 {
@@ -8519,23 +6009,6 @@ bool cModelWorld_s0074_e2b0::FindModelsInSphere(const void* sphere, ModelVec* ou
     }
     return out->mpBegin != out->mpEnd;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074ee80
 bool cModelWorld_s0074_e2b0::FindModelsInBox(const void* frustum, ModelVec* out, void* ctx)
@@ -8567,43 +6040,9 @@ bool cModelWorld_s0074_e2b0::FindModelsInBox(const void* frustum, ModelVec* out,
     return out->mpBegin != out->mpEnd;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0074f010
 EditorResource::~EditorResource()
 {}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074f0c0
 bool EditorResource::Shutdown()
@@ -8614,23 +6053,6 @@ bool EditorResource::Shutdown()
     mListeners.clear();
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074f1a0
 bool VecIntAdd::add_unique(int x)
@@ -8643,22 +6065,6 @@ bool VecIntAdd::add_unique(int x)
     vec.push_back(x);
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074f200
 cFeedbackEvent*& CompactMapUU::Subscript(const uint32_t& key)
@@ -8680,22 +6086,6 @@ cFeedbackEvent*& CompactMapUU::Subscript(const uint32_t& key)
     return itLowerBound.mpNode->mValue;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0074f3a0
 void quick_sort(cOccluder_s0074_f200* first, cOccluder_s0074_f200* last, OccluderCompare compare)
 {
@@ -8709,22 +6099,6 @@ void quick_sort(cOccluder_s0074_f200* first, cOccluder_s0074_f200* last, Occlude
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074f420
 void VecElem1C::DoInsertValue(Elem1C* position, const Elem1C& value)
@@ -8754,22 +6128,6 @@ void VecElem1C::DoInsertValue(Elem1C* position, const Elem1C& value)
         mpCapacity = pNewData + nNewSize;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074f5d0
 void VecModelInfo::DoInsertValues(ModelInfo* position, uint32_t n, const ModelInfo& value)
@@ -8813,22 +6171,6 @@ void VecModelInfo::DoInsertValues(ModelInfo* position, uint32_t n, const ModelIn
         mpCapacity = pNewData + nNewSize;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074f800
 void cModelWorld_s0074_f200::DrawLayer(bool bAlpha, DrawList* pList, uint32_t flags, void* pArg, Camera* pCamera)
@@ -8953,22 +6295,6 @@ void cModelWorld_s0074_f200::DrawLayer(bool bAlpha, DrawList* pList, uint32_t fl
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x0074fd90
 cFeedbackMgr::cFeedbackMgr()
 {
@@ -8978,22 +6304,6 @@ cFeedbackMgr::cFeedbackMgr()
     mn50 = 0;
     mn54 = 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074fe10
 int SlotAllocator::Allocate(uint32_t key, uint32_t unused)
@@ -9010,22 +6320,6 @@ int SlotAllocator::Allocate(uint32_t key, uint32_t unused)
     }
     return -1;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x0074fea0
 bool cFeedbackJobs::Start(void** pSource)
@@ -9058,22 +6352,6 @@ bool cFeedbackJobs::Start(void** pSource)
     mJobA.mp->Start();
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x00750030
 uint32_t SlotVectorOccluder::create(const cOccluderInfo& item)
@@ -9117,48 +6395,21 @@ uint32_t SlotVectorOccluder::create(const cOccluderInfo& item)
     return nIndex;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00750180
 void helper_50180(void* self)
 { (void)self; }
-
-
-
 
 // @ 0x00750310
 void dtor_50310(void* self)
 { (void)self; }
 
-
-
-
 // @ 0x007503a0
 void dtor_503a0(void* self)
 { (void)self; }
 
-
-
-
 // @ 0x007505a0
 void preload_505a0(void* self)
 { (void)self; }
-
-
-
 
 // @ 0x00750780
 void MW6::AddOccluder(int* src, float f)
@@ -9172,20 +6423,6 @@ void MW6::AddOccluder(int* src, float f)
     *(int*)(base + off + 0xc) = src[2];
     *(float*)((char*)vec.mBegin + off + 0x10) = f;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x007507e0
 namespace SP {
@@ -9412,19 +6649,6 @@ void cModelWorld_s0075_07e0::UpdateVisibility(uint32_t flags, cCamera* camera, i
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00751560
 namespace SP {
 void cModelWorld_FinishBackgroundLoad(void* self)
@@ -9433,15 +6657,11 @@ void cModelWorld_FinishBackgroundLoad(void* self)
 }
 }  // namespace SP
 
-
-
 // @ 0x00751b30
 namespace SP {
 void cModelWorld_UpdateHighlightProps(void* self)
 { (void)self; }
 }  // namespace SP
-
-
 
 // @ 0x00751d00
 namespace SP {
@@ -9466,25 +6686,11 @@ void MWGroupDtorStub::F()
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00751de0
 namespace SP {
 void FUN_00751de0(void* self)
 { (void)self; }
 }  // namespace SP
-
-
 
 // @ 0x00751ed0
 namespace SP {
@@ -9492,15 +6698,11 @@ void FUN_00751ed0(void* self)
 { (void)self; }
 }  // namespace SP
 
-
-
 // @ 0x00751ff0
 namespace SP {
 void cModelWorld_Init(void* self)
 { (void)self; }
 }  // namespace SP
-
-
 
 // @ 0x007520e0
 namespace SP {
@@ -9508,14 +6710,11 @@ void cModelWorld_Shutdown(void* self)
 { (void)self; }
 }  // namespace SP
 
-
-
 // @ 0x007523a0
 namespace SP {
 void cEffectsRenderer_RenderMainEffectsLayer(void* self)
 { (void)self; }
 }  // namespace SP
-
 
 // @ 0x00753540
 void TreeWalker_00753540::ForEach(float a, float b)
