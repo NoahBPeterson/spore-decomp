@@ -1,0 +1,11 @@
+# Slice s008f85e0 (gold2 28) -- functions that are complete + equivalence-verified but
+# not byte-exact.  Format: <VA> <diff-bytes> <reason>
+# Flags for every entry: /O2 /MD /Gy /EHsc /TP /arch:SSE
+#
+# diff-bytes are from `chk.py` with the exact mangled symbol bound to each VA.
+
+008f8cb0    4  CSSParser::ParsePropertyByID -- all 152 bytes match except the two tail argument loads before `call 0x8f85e0`: the original hoists pList -> edx / propID -> eax, cl picks pList -> ecx / propID -> edx (everything up to `call Advance` is byte-identical; only the final two `mov reg,[esp+..]` + two `push` register choices differ).  Whole-function virtual-register rotation, not reachable from source: hoisting the two args into named locals, pre-declaring `bool result`, and swapping init order did not flip the pool.  difftest PASS (272 valid inputs, 100% coverage).
+
+008f8e00  326  CSSParser::ParsePropertyCollection -- semantics fully reconstructed (brace loop, WS skip, `!important` test via inlined wcscmp, per-list head walk, open-brace error path).  cl lays the loop out un-rotated (`while (p->mpNext != 0)`) where the original has the rotated tail-walk, places the open-brace Error block between the inlined-wcscmp equal-path jmp and its sbb continuation, and uses different alignment fillers (`lea ebx,[ebx]`/`nop`).  A `do/while` + for-tail walk reproduces the rotation but not the block layout or the head-load register choice.  Block-layout + regalloc artifacts.  difftest WEAK (338 valid inputs, no mismatch; 7.6% coverage -- the parser needs a valid token stream the fuzzer rarely builds).
+
+008f9000  208  CSSParser::ParsePropertyCollectionFrom -- 536 bytes/158 insns, same length as the original.  Two artifacts: (1) the init block's register assignment (original uses edx for pAllocator / eax for the two empty-string pointers and rematerialises the end pointer, ours rotates to ecx/edx/eax); (2) the tail list-walk head load (`mov edx,[esp+0x7c]; cmp edx,edi; mov eax,edx` vs ours `mov eax,[esp+0x7c]; mov edx,eax; cmp eax,edi`).  POST-string init reorderings, per-string vs grouped init and string-last assignments had no effect (77-98 instruction-diff lines).  Register-allocation artifact.  difftest WEAK (292 valid inputs, no mismatch; 26.6% coverage).

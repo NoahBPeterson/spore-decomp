@@ -1,0 +1,6 @@
+# Slice s008f85e0 (gold2 28) byte-exact functions.
+# Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE   (the original CSSParser methods are built
+#   /EHsc: ParsePropertyByID constructs a local CSSParser object and calls its dtor
+#   explicitly on the fall-through path, with no unwind funclet in the original.)
+slices/s008f85e0/s008f85e0.cpp  ?ParsePropertyValue@CSSParser@Style@XHTML@EA@@QAE_NHPAVPropertyList@234@@Z  008f85e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s008f85e0/s008f85e0.cpp  ?ParseProperty@CSSParser@Style@XHTML@EA@@QAE_NPAVPropertyList@234@@Z  008f8d50  /O2 /MD /Gy /EHsc /TP /arch:SSE
