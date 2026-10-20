@@ -1,0 +1,5 @@
+# SP::cTerrainSphere layer-draw entry points, object SPTerrain/SPTerrainSphere.obj.
+# No PDB names for these VAs; names below are descriptive (the guard fields at +0xa44/+0xa48,
+# the dirty flags at +0x348, the two shader-data blocks at +0x4f4/+0x6c4, the enable flags +0x4f0/+0x4f1).
+00fa7450  cTerrainSphere::DrawLayerBackgroundUpdate  # guard +0xa48, visibility 0x00f97e60, UpdateCPUFromGPU 0x00f6bd70 on SP::TerrainEditor 0x00f48a70, UpdateLightingRegions 0x00fa6870, +0x348 clear via 0x00f67580/0x00f6a3a0, 0x00f9bb50, tail 0x00f9fe70
+00fa74d0  cTerrainSphere::DrawLayer                  # guard +0xa44, property 0x2955532f via 0x006a25a0/0x006a17e0, guard +0x208 and app-props +0x3c/+0x10, sky 0x00f9ba40/0x00f98970, shader bindings 0x00777ae0 (0x305/0x306), type 0x21 -> DrawLayerBackgroundUpdate, flags +0x4f0/+0x4f1 -> 0x006dd2a0 then type 7/8 -> 0x00fa5cc0/0x00f9bd00
