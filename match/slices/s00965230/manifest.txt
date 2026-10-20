@@ -1,0 +1,2 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00965230/s00965230.cpp  ?FUN_00965670@ButtonDrawableRadio@@QAEXXZ  00965670  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
