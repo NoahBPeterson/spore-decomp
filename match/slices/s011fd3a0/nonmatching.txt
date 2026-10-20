@@ -1,0 +1,88 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+# This whole range is RenderWare 4 core built with VC .NET 2003 (cl 13.10) /GL+/LTCG and
+# SSE scalar-float codegen (symbols/renderware4_core.txt); a single-object /vc71 rebuild
+# cannot reproduce the cross-call register allocation, so only leaf functions are byte-exact.
+# All rows below compile cleanly with flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE and were
+# checked with tools/difftest/equiv.py (verdicts at the end of this file).  /arch:SSE is
+# mandatory: without it cl 13.10 emits x87 where the original uses movss/mulss/comiss,
+# which changes float-compare semantics, not just byte layout (see papercut note).
+011fd3a0  272  StateCacheApplyPixel: complete; the three indexed-state loops and the two
+                custom-command paths are exact, but the plain-command branch computes
+                `a`/`b` into eax/ecx where the original uses eax/edx, so the scratch value
+                left in ecx at the generated-pointer call differs (see verdict note below)
+011fd4d0   25  StateCacheFlushVertexShader: complete; the original tail-calls the two flush
+                helpers (jmp), cl 13.10 emits call+ret because FUN_011fd0c0/FUN_011fcf20 are
+                __fastcall here and the dirty branch is a full if/else
+011fd500   25  StateCacheFlushPixelShader: same as 011fd4d0 with the pixel-shader helpers
+011fd530  109  MemBlock::Init: complete; the two-result bool (`return true/return false`) folds
+                to setne al under /O2, and the tail-then-branch layout of the second
+                VirtualAlloc differs; see scratch_s011fd3a0_papercut.md
+011fd610   62  MemBlock::Alloc: complete; the grow path (grow = (old>>1)+1, clamp to g_maxSize,
+                re-init of the free-list tail) keeps the original's arithmetic but cl hoists
+                the g_maxSize load and reorders the prologue
+011fd6f0   20  vertex shader cache bind: complete; the vtable slot is re-loaded into a register
+                instead of `call dword ptr [edx+0x16c]`, and the active-shader compare uses a
+                different register
+011fd730   20  pixel shader cache bind: same shape as 011fd6f0 (slots +0x1a8/+0x1ac)
+011fd8b0   52  ControllerShiftBlock: same in-place-add shape as 011fd870 plus the two helper
+                calls (FUN_011ffa40/FUN_01200800); see scratch_s011fd3a0_papercut.md
+011fd900   64  ControllerRebind: same as 011fd8b0, base taken from [table+0x7c]
+011fd990  147  Ctl::BuildRemap: complete; the nested scan (i over count, j over n, store j or -1)
+                uses different induction registers and moves the `valid` flag to a different
+                slot than the original's ebx
+011fda60  179  Ctl::Alloc: complete; the stride/align computation is exact, the slot-linking loop
+                and the `(baseOff+3)&~3` rounding use different registers
+011fdb30    1  ControllerFixup: complete; a single register-choice byte differs (the trailing
+                rw::core::arena::IdToObject call site)
+011fdba0   26  Ctl::SetFrame: complete; the memcpy inlining and the -1.0f path order differ
+011fdc00   33  Ctl::Advance: complete; the float clamp `if (t > m_len) m_len = 0` compares
+                against a register copy of 0.0f instead of fs:[0]
+011fdc30   20  Ctl::SetFormat: complete; the format test ((u8)fmt==1 && (u8)(fmt>>8)==3 &&
+                byte2==0) is 3 compares in both, registers differ
+011fdc70  169  Ctl::Init: complete; the Alloc call, the align round-up of the key table and the
+                ten field stores use different registers than the prebuilt object
+011fdd40   15  ControllerCreate: complete; the null-handle early-out and the Init tail-call
+                become call+ret
+011fdd70  389  ControllerEvaluate: complete (largest function in the slice); both track loops,
+                the clamped/unclamped branch, the two indirect emitters (s+0x2c KeyOf-style
+                and s+0x38 keyfit) and the (u8)(ctrl+0x1c)&1 flags computation differ.
+                Behaviorally clean under eqiv.py (WEAK, no mismatch) after the xmm1 fix.
+011fdf00  162  ControllerLayout: complete; the eight `o[i]=1/0` scratch stores and the
+                size/align arithmetic are exact, register assignment differs
+011fdfc0   19  ControllerSize: complete; the 8-dword scratch buffer is stack-allocated and the
+                call to ControllerLayout is a direct call (original tail-jmps)
+011fdff0   29  Ctl::Bind: complete; the null check of FUN_011ffa40's result and the two stores
+                differ in registers
+011fe030    8  ControllerGetTable: complete; the original has a redundant
+                `xor edx,edx; test eax,eax; jne; mov eax,edx` idiom (a no-op); cl deletes it
+                and emits `mov eax,[ecx+0x1c]; ret`.  Semantically identical.
+011fe050   99  Ctl::InitSimple: complete; same shape as 011fdc70 with the 0x015d0968 vtable
+011fe0d0   15  ControllerCreateSimple: complete; null-handle early-out + InitSimple call+ret
+011fe100  112  Ctl::BuildKeys: complete; the indirect emitter (s+0x30) call site, the
+                v = k[0] / out[1] = v + r split and the track loop differ
+011fe180  237  Ctl::Advance2: complete; the dt integration, the while(r > len) wrap, the
+                BuildKeys re-entry and both key-pointer walk loops (byte-stride vs
+                k[1]-stride) differ
+#
+# ---- tools/difftest/equiv.py verdicts (flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE) ----
+# PASS: 011fd4d0 011fd500 011fd6d0(*) 011fd870(*) 011fd8b0 011fd900 011fd990 011fda60
+#       011fdb30 011fdba0 011fdc30 011fdc70 011fdd40 011fdf00 011fdfc0 011fe030
+#       011fe050 011fe0d0 011fe030 011fe040(*) 011fda50(*) 011fd860(*)
+#       (*) = byte-exact, listed in manifest.txt as well
+# WEAK: 011fd610 (120 valid inputs, 31.9% cov -- VirtualAlloc import not modelled; the grow
+#       path cannot be driven, so coverage stays low; no behavioural mismatch on any valid
+#       input), 011fd6f0 and 011fd730 (58.3% cov -- hw coverage of the original's prologue
+#       only; the vtable-call tail is not reached by the generator)
+# UNSUPPORTED: 011fd530 (all inputs discarded on the VirtualAlloc import), 011fd6f0/011fd730
+#       also report fake-arity discards on most inputs (they call through a generated pointer)
+# FAIL: 011fd3a0 -- the only reported difference is "fake call #1 this": at the
+#       generated-pointer call in the plain-command branch the scratch register ecx holds `a`
+#       (ours) vs `b` (original); the three stack args are identical (bd, c3, 0) and every
+#       other observable matches.  The target is a __cdecl pointer, so ecx is NOT an argument
+#       and the caller never reads it back (the original only spills ecx on the *other* branch,
+#       as part of the arg-building struct).  ecx here is dead caller-saved scratch; cl 13.10
+#       allocates eax/ecx for the two adjacent byte loads where the LTCG-built original used
+#       eax/edx.  Reversing the operand order, hoisting the loads, or using a packed struct all
+#       leave eax/ecx.  Behaviourally equivalent; the harness's fake_call heuristic treats ecx
+#       as `this` for every generated-pointer call and so cannot see that it is unobservable.
+#       (Verified under both /vc71 /O2 ... and the same with /arch:SSE.)

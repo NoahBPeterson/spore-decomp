@@ -1,0 +1,43 @@
+# va  name  # evidence
+# RenderWare 4 core (rwgdrvgraph / state cache + old-animation interpolator controller),
+# built with VC .NET 2003 (cl 13.10) /GL+/LTCG; equivalence-only per symbols/renderware4_core.txt.
+011fd6d0  rw::graphics::D3D9TextCopy
+011fe040  # controller wrapper refresh (BuildRemap)
+# remaining names are reconstructions from the cards (no dev-PDB symbol in this range):
+011fd3a0  StateCacheApplyPixel
+011fd4d0  StateCacheFlushVertexShader
+011fd500  StateCacheFlushPixelShader
+011fd530  MemBlock::Init
+011fd5d0  MemBlock::Deinit
+011fd610  MemBlock::Alloc
+011fd6b0  MemBlock::Free
+011fd6f0  vertex shader cache bind
+011fd730  pixel shader cache bind
+011fd770  StateCacheReset
+011fd790  StateCacheVertexStride
+011fd7b0  StateCacheDispatch
+011fd7d0  StateCacheClearCount
+011fd7e0  StateCacheBegin
+011fd820  StateCacheEnd
+011fd860  Ctl::KeyOf
+011fd870  ControllerShiftForward
+011fd8b0  ControllerShiftBlock
+011fd900  ControllerRebind
+011fd990  Ctl::BuildRemap
+011fda50  Ctl::FrameAt
+011fda60  Ctl::Alloc
+011fdb30  ControllerFixup
+011fdba0  Ctl::SetFrame
+011fdc00  Ctl::Advance
+011fdc30  Ctl::SetFormat
+011fdc70  Ctl::Init
+011fdd40  ControllerCreate
+011fdd70  ControllerEvaluate
+011fdf00  ControllerLayout
+011fdfc0  ControllerSize
+011fdff0  Ctl::Bind
+011fe030  ControllerGetTable
+011fe050  Ctl::InitSimple
+011fe0d0  ControllerCreateSimple
+011fe100  Ctl::BuildKeys
+011fe180  Ctl::Advance2

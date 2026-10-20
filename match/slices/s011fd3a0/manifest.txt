@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Byte-exact matches (leaf functions; identical bytes under /vc71).
+slices/s011fd3a0/s011fd3a0.cpp  ?Deinit@MemBlock@@QAEXXZ  011fd5d0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011fd3a0/s011fd3a0.cpp  ?Free@MemBlock@@QAEXPAX@Z  011fd6b0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011fd3a0/s011fd3a0.cpp  ?rw__graphics__D3D9TextCopy@@YAPADPADPBD@Z  011fd6d0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011fd3a0/s011fd3a0.cpp  ?StateCacheReset@@YAHXZ  011fd770  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011fd3a0/s011fd3a0.cpp  ?StateCacheVertexStride@@YAIPAX@Z  011fd790  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011fd3a0/s011fd3a0.cpp  ?StateCacheDispatch@@YAXPAX@Z  011fd7b0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011fd3a0/s011fd3a0.cpp  ?StateCacheClearCount@@YAXXZ  011fd7d0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011fd3a0/s011fd3a0.cpp  ?StateCacheBegin@@YAPAXPAX@Z  011fd7e0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011fd3a0/s011fd3a0.cpp  ?StateCacheEnd@@YAXXZ  011fd820  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011fd3a0/s011fd3a0.cpp  ?KeyOf@Ctl@@QAEPAXI@Z  011fd860  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011fd3a0/s011fd3a0.cpp  ?ControllerShiftForward@@YAPAXPAX0@Z  011fd870  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011fd3a0/s011fd3a0.cpp  ?FrameAt@Ctl@@QAEPAEI@Z  011fda50  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011fd3a0/s011fd3a0.cpp  ?ControllerRebuild@@YIXPAX@Z  011fe040  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
