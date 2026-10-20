@@ -1,0 +1,37 @@
+# va  name  # evidence
+# RenderWare 4 core (BuildState / D3D9 shader-data cache / Shader registry / compiled-state
+# arena callbacks / ActiveState constant uploaders), built with VC .NET 2003 (cl 13.10)
+# /GL+/LTCG; equivalence-only per symbols/renderware4_core.txt.  Names are reconstructions
+# from the cards except where the object's own mangled name is listed in manifest.txt.
+011f9b10  BuildState::Release
+011f9ba0  BuildState::D3D9SetRenderState
+011f9c40  BuildState::D3D9HasVertexDescriptor
+011f9c50  BuildState::D3D9UpdateSoftStateBehaviour
+011f9cb0  BuildState::D3D9SetShaderData
+011f9e20  BuildState::D3D9SetVertexDescriptor
+011f9e50  BuildStateGetResourceDescriptor
+011f9eb0  BuildStateInitialize
+011f9f90  ResetShaderRegistry
+011f9fb0  InsertShader
+011fa000  BuildStateLookupShader
+011fa050  RemoveShader
+011fa0b0  ReleaseShaderRegistry
+011fa100  MemBlockFree
+011fa170  MemBlockValidate
+011fa230  MeshCompiledStateLinkArenaRead
+011fa280  RegisterMeshCompiledStateLinkArenaRead
+011fa2d0  MeshCompiledStateLinkCreate
+011fa310  ActiveStateSetBlendConstant
+011fa370  ActiveStateSetSkinConstants
+011fa410  ActiveStateSetBoolConstants
+011fa480  ActiveStateSetTransformConstantA
+011fa4f0  ActiveStateSetTransposedTransform
+011fa5a0  ActiveStateSetTransposedTransformB
+011fa630  ActiveStateSetTransformConstantB
+011fa6d0  ActiveStateSetTransformConstantC
+011fa8c0  ActiveStateSetLiveTransform
+011fa8f0  ActiveStateSetCachedMatrixC70
+011fa920  ActiveStateSetTransposedMatrixA
+011fa9d0  ActiveStateSetTransposedMatrixB
+011faa50  ActiveStateSetCachedMatrixBE0
+011faa80  ActiveStateSetMatrixA5B8

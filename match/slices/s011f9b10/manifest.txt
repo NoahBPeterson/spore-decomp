@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Byte-exact matches (leaf functions; identical bytes under /vc71).
+# This whole range is RenderWare 4 core (VC .NET 2003, /GL+/LTCG); only leaves that make no
+# calls can reproduce the original single-object bytes.  Everything else is behavioural
+# reconstruction, see nonmatching.txt.
+slices/s011f9b10/s011f9b10.cpp  ?D3D9HasVertexDescriptor@BuildState@@QBEIXZ  011f9c40  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011f9b10/s011f9b10.cpp  ?D3D9SetVertexDescriptor@BuildState@@QAEXPBXH@Z  011f9e20  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011f9b10/s011f9b10.cpp  ?ResetShaderRegistry@@YAXXZ  011f9f90  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011f9b10/s011f9b10.cpp  ?ReleaseShaderRegistry@@YAXXZ  011fa0b0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011f9b10/s011f9b10.cpp  ?MeshCompiledStateLinkArenaRead@@YAHPAUArenaReadDesc@@PAE@Z  011fa230  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011f9b10/s011f9b10.cpp  ?RegisterMeshCompiledStateLinkArenaRead@@YAXXZ  011fa280  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011f9b10/s011f9b10.cpp  ?ActiveStateSetBlendConstant@@YAXI@Z  011fa310  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011f9b10/s011f9b10.cpp  ?ActiveStateSetLiveTransform@@YAXIIH@Z  011fa8c0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011f9b10/s011f9b10.cpp  ?ActiveStateSetCachedMatrixC70@@YAXIIH@Z  011fa8f0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011f9b10/s011f9b10.cpp  ?ActiveStateSetCachedMatrixBE0@@YAXIIH@Z  011faa50  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE

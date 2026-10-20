@@ -1,0 +1,65 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+# This whole range is RenderWare 4 core built with VC .NET 2003 (cl 13.10) /GL+/LTCG
+# (symbols/renderware4_core.txt); a single-object /vc71 rebuild cannot reproduce the
+# cross-call register allocation, so only leaf functions are byte-exact (see manifest.txt).
+# All rows below compile cleanly with flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE and were
+# checked with tools/difftest/equiv.py (verdicts at the end of this file).
+011f9b10   59  BuildState::Release: complete; the 17-entry raster clear loop and the
+               shader-data free loop differ only in register allocation/scheduling.
+011f9ba0   77  BuildState::D3D9SetRenderState: complete; the original hoists `this` into eax
+               (`mov eax,ecx`) and uses eax as the member base, ours uses ecx.  Equiv's only
+               reported difference is that scratch eax (reported as "return value" of a void
+               function): nothing reads it.
+011f9c50   34  BuildState::D3D9UpdateSoftStateBehaviour: complete; equiv PASS (100%).
+               The three mask updates and the behaviour switch differ in scheduling only.
+011f9cb0  n/a  BuildState::D3D9SetShaderData: complete (ours 296 B vs 367 B; the original is
+               LTCG-inlined/scheduled).  Equiv FAIL only on ecx: our build clobbers ecx, the
+               original leaves it untouched (LTCG caller may keep a live value there).  Memory
+               effects, the free/realloc/static paths and the returned void are identical.
+011f9e50   73  BuildStateGetResourceDescriptor: complete; equiv PASS (100%).  The 0x1250
+               base size, the shader-data array size/alignment arithmetic and the four
+               descriptors are exact; only the constant materialisation differs.
+011f9eb0  n/a  BuildStateInitialize: complete (ours 299 B vs 210 B; LTCG inlining of the
+               zero-fill/descriptor stores).  Equiv PASS (348 valid inputs, 100% coverage).
+011f9fb0   34  InsertShader: complete; equiv PASS (75% coverage, no mismatch).
+011fa000   38  BuildStateLookupShader: complete; equiv WEAK (36% coverage -- the generator
+               rarely produces a hash chain that walks), no behavioural mismatch.
+011fa050   57  RemoveShader: complete; equiv WEAK (12% coverage -- only the early-out paths
+               are reachable with generated inputs), no behavioural mismatch.
+011fa100   70  MemBlockFree: complete; equiv PASS (100% coverage).
+011fa170  116  MemBlockValidate: complete; equiv WEAK (158/200 valid, 88.5% coverage), no
+               behavioural mismatch reported.
+011fa2d0  n/a  MeshCompiledStateLinkCreate: complete (ours 28 B vs 59 B; the original inlines
+               the 0x40-byte zero fill).  Equiv PASS (100% coverage, return value identical).
+011fa370   56  ActiveStateSetSkinConstants: complete; equiv UNSUPPORTED (harness fault:
+               UC_ERR_READ_UNMAPPED while generating inputs), so it could not be scored.
+011fa410   67  ActiveStateSetBoolConstants: complete; equiv PASS (100% coverage).
+011fa480   66  ActiveStateSetTransformConstantA: complete; equiv UNSUPPORTED (the
+               D3DXMatrixMultiply import is not modelled by the harness).
+011fa4f0  107  ActiveStateSetTransposedTransform: complete; equiv UNSUPPORTED (unresolved
+               D3DXMatrixTranspose/D3DXMatrixMultiply imports).
+011fa5a0   86  ActiveStateSetTransposedTransformB: complete; equiv UNSUPPORTED (unresolved
+               D3DXMatrixTranspose import).
+011fa630  111  ActiveStateSetTransformConstantB: complete; equiv UNSUPPORTED (unresolved
+               D3DXMatrixTranspose/D3DXMatrixMultiply imports).
+011fa6d0  n/a  ActiveStateSetTransformConstantC: complete; the original inlines the whole
+               SSE 4x4 multiply (485 B) while we call D3DXMatrixMultiply (96 B).  Equiv
+               UNSUPPORTED (unresolved D3DXMatrixMultiply import).
+011fa920  112  ActiveStateSetTransposedMatrixA: complete; equiv UNSUPPORTED (unresolved
+               D3DXMatrixTranspose import).
+011fa9d0   78  ActiveStateSetTransposedMatrixB: complete; equiv UNSUPPORTED (unresolved
+               D3DXMatrixTranspose import).
+011faa80  104  ActiveStateSetMatrixA5B8: complete; the original copies the 0x40-byte matrix to
+               the stack before the vtable call, we pass the pointer (the callee only reads
+               it).  Equiv FAIL only on the fake-call heuristic ("fake-arity: no call site
+               before 0x139"); the vtable call site and all four arguments are present.
+#
+# ---- tools/difftest/equiv.py verdicts (flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE) ----
+# PASS: 011f9c50 011f9e50 011f9eb0 011f9fb0 011fa100 011fa2d0 011fa410
+# WEAK (no behavioural mismatch; low validity/coverage): 011f9b10 (92 valid, 100% cov),
+#       011fa000 (36% cov), 011fa050 (12% cov), 011fa170 (158 valid, 88.5% cov)
+# UNSUPPORTED: 011fa370 (harness read fault), 011fa480 011fa4f0 011fa5a0 011fa630 011fa6d0
+#       011fa920 011fa9d0 (D3DXMatrixTranspose / D3DXMatrixMultiply imports not modelled)
+# FAIL (non-semantic only): 011f9ba0 (scratch eax / "return value" of a void function),
+#       011f9cb0 (ecx clobber; original preserves ecx), 011faa80 (fake-call arity heuristic:
+#       our direct pointer argument vs the original's stack copy; no data difference)
