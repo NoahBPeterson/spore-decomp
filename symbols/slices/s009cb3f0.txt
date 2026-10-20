@@ -1,0 +1,10 @@
+009cb3f0 ?EraseEffect@creature_instance_data@nSPCreatureAnim@@QAE?AUhashtable_iterator@2@U32@@Z
+009cb460 ?RemoveEffect@creature_instance_data@nSPCreatureAnim@@QAEXPAUcreature_effect@2@@Z
+009cb4f0 ?ClearAllEffects@creature_instance_data@nSPCreatureAnim@@QAEXXZ
+009cb5a0 ?AttachEffect@creature_instance_data@nSPCreatureAnim@@QAEXPAUhashtable_iterator@2@PAU12@PAUeffect_node@2@PAPAU42@K0@Z
+009cb760 ?FUN_009cb760@nSPCreatureAnim@@YAXPAUcreature_instance_data@1@@Z
+009cb840 ?resize@body_static_vec@nSPCreatureAnim@@QAEXK@Z
+009cb8f0 ?resize@effect_item_vec@nSPCreatureAnim@@QAEXK@Z
+009cb9b0 ?Execute@cNumBlocksCommand@?A0x6012a564@@UAEXAAUcArguments@2@@Z
+009cb9f0 ?FUN_009cb9f0@nSPCreatureAnim@@YAXPAMPAKPAD@Z
+009cbdb0 ?FUN_009cbdb0@nSPCreatureAnim@@YAXPAD@Z
