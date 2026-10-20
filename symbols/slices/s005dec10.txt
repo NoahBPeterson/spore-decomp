@@ -1,6 +1,6 @@
 005dec10 ?FUN_005dec10@EUI@@QAEXI@Z  # EUI::FUN_005dec10 migrated from s005dec10 (verbatim, slice spelling)
 005dee70 ?HandleMessage@HandlerSub@@QAE_NIH@Z  # HandlerSub::HandleMessage migrated from s005dec10 (verbatim, slice spelling)
-005def30  SP::cSPEditorUI::DoDialogEnd  # card
+005def30 ?FUN_005def30@EUI@@QAEXI@Z  # EUI::FUN_005def30 migrated from s005dec10 (verbatim, slice spelling)
 005df470 ?FUN_005df470@EUI@@QAEXIH@Z  # EUI::FUN_005df470 migrated from s005dec10 (verbatim, slice spelling)
 005df8d0 ?FUN_005df8d0@EditorFrame@@QAEXXZ  # EditorFrame::FUN_005df8d0 migrated from s005dec10 (verbatim, slice spelling)
 005df8f0 ?FUN_005df8f0@EUI@@QAE_NUKey12@@@Z  # EUI::FUN_005df8f0 migrated from s005dec10 (verbatim, slice spelling)

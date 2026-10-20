@@ -394,18 +394,18 @@ public:
     void HandleRequestedPostSaveAction(uint32_t action);  // 0x005dc4d0 (SP::cSPEditorUI::HandleRequestedPostSaveAction)
     void EnableUIButton(uint32_t id, bool bEnable);  // 0x005dc610 (SP::cSPEditorUI::EnableUIButton)
     void SetShowNew(bool bShow);  // 0x005dcba0 (SP::cSPEditorUI::SetShowNew)
-    void SetShowSave(bool bShow);
-    void SetShowPublish(bool bShow);
+    void SetShowSave(bool bShow);  // 0x005dcbf0 (SP::cSPEditorUI::SetShowSave)
+    void SetShowPublish(bool bShow);  // 0x005dcc40 (SP::cSPEditorUI::SetShowPublish)
     void SetShowLoad(bool bShow);  // 0x005dcc90 (SP::cSPEditorUI::SetShowLoad)
     bool IsLoadDialog(uint32_t dialogID);  // 0x005dc250 (SP::cSPEditorUI::IsLoadDialog)
     void SetLoadDialogOptions(bool bUseDialog, int source, bool bFlag);  // 0x005dc280 (SP::cSPEditorUI::SetLoadDialogOptions)
     bool OnPaletteDrop(cRect16 a, cRect16 b, Key_s005d_bd20 key);  // 0x005dc190 (SP::cSPEditorUI::OnPaletteDrop)
     void SelectKeyA();  // 0x005dc560 (SP::cSPEditorUI::SelectKeyA)
     void SelectKeyB();  // 0x005dc580 (SP::cSPEditorUI::SelectKeyB)
-    void UpdateSaveButtons();
-    void EnableUndoRedo(bool bEnable);
+    void UpdateSaveButtons();  // 0x005dc800 (SP::cSPEditorUI::UpdateSaveButtons)
+    void EnableUndoRedo(bool bEnable);  // 0x005dc970 (SP::cSPEditorUI::EnableUndoRedo)
     void OnPaletteClick(cRect16 a);  // 0x005dca00 (SP::cSPEditorUI::OnPaletteClick)
-    void OpenDialog(uint32_t dialogID, bool bFlag);
+    void OpenDialog(uint32_t dialogID, bool bFlag);  // 0x005dcaa0 (SP::cSPEditorUI::OpenDialog)
 
     cSPUILayout mLayout;                           // +0x14
     cSPUILayout mSharedLayout;                     // +0x2c
@@ -454,7 +454,6 @@ namespace SP {
 extern const uint32_t kEditorUIMessageIDs[7];      // 0x013F9240
 }
 // ---- items of slice s005dbd20 end
-
 
 // ---- items of slice s005dcd80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV(n) virtual void _pv##n();
@@ -1119,15 +1118,23 @@ static __forceinline void DetachPair(Widget** pOwner, Widget** pProc)
 // ---- items of slice s005ddd60 end
 
 // ---- items of slice s005dec10 begin (TODO(rewrite): local stubs, replace by canonical classes)
+    void CalloutMessageBox(...); // 0x00809db0
 #undef ui
 struct Layout_s005d_ec10 {
     void* FindWindowByID(int, int);   // 0x8105b0
     char pad[0x18];
 };
 struct Widget_s005d_ec10 {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
-    virtual void v8(); virtual void v9();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
     virtual char Slot10();         // +0x28
 };
 __forceinline Widget_s005d_ec10* FindWindowRaw(void* base, int id)
@@ -1170,13 +1177,62 @@ struct Res {
 };
 struct EditorRes { char pad[0x18]; uint32_t mType; };
 struct ResMgr {
-    virtual void v0(); virtual void v1(); virtual void v2();
+virtual void v0();
+virtual void v1();
+virtual void v2();
     virtual bool GetResource(const Key12* key, Res** out, int, int, int, int);   // +0xc
 };
 struct MsgServer {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-    virtual void v4(); virtual void v5();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
     virtual void Post(uint32_t id, int, int, int);      // +0x18
+};
+struct ConfigMgr {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+    virtual void SetValue(uint32_t id, int v);          // +0x2c
+virtual void v12();
+virtual void v13();
+virtual void v14();
+    virtual void Commit();                              // +0x3c
+};
+struct AudioSys {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+    virtual uint32_t GetValue();                        // +0x20
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+    virtual void v13();
+    virtual void Begin(uint32_t id);                    // +0x38
+    virtual void v15();
+    virtual void SetParam(uint32_t id, uint32_t v);     // +0x40
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+    virtual void v21();
+    virtual void End();                                 // +0x58
 };
 struct WinObj {
     virtual void v0();
@@ -1213,6 +1269,8 @@ struct AppBase {
 };
 ResMgr* __cdecl GetManager();   // 0x67dcd0
 MsgServer* __cdecl GetMessageServer();   // 0x67dcc0
+ConfigMgr* __cdecl GetConfigManager();   // 0x67dd30
+AudioSys* __cdecl GetSystemAT();   // 0xa206f0
 uint32_t __cdecl RemapTypeId(uint32_t t);   // 0x432f10
 EditorRes* __cdecl interface_cast_EditorRes(Res** r);   // 0x421eb0
 struct Obj67 { void FUN_0067c830(); };
@@ -1221,9 +1279,11 @@ struct Obj45 { void FUN_0045ae10(); };
 Obj45* __stdcall FUN_00401050(uint32_t id, int x);
 void __cdecl CalloutMessageBox(void* where, const Key12* key);   // 0x809db0
 bool __cdecl FUN_004f3d60(Key16 a, Key16 b);
+void __cdecl FUN_004a88d0_(uint32_t id);
 extern Key12 g1519958, g1519964, g1519970, g151997c, g1519988, g15199a0, g15199b8, g15199c4,
     g15199dc, g15199e8, g15199f4, g1519a0c, g1519a3c, g15199d0, g15199ec, g1519994, g1519a00;
 struct EditorResOps : EditorRes { void FUN_004bac30(Key16* out, Key16 k, int f); };
+void __cdecl AssetBrowserLaunch(uint32_t a, void* b, uint32_t c);
 struct EUI {
     char pad0[0x5c];
     AppBase* app;                 // +0x5c
@@ -1271,9 +1331,6 @@ struct HandlerSub {
     bool HandleMessage(uint32_t msg, int data);
 };
     void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
-    void CalloutMessageBox(...); // 0x00809db0
-    void RemapTypeId(...); // 0x00432f10
-    void interface_cast_EditorRes(...); // 0x00421eb0
 // ---- items of slice s005dec10 end
 
 // ---- items of slice s00de8ad0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1498,13 +1555,6 @@ uint32_t FUN_004bd850(uint32_t key)
     default: return key;
     }
 }
-
-
-
-
-
-
-
 
 // @ 0x005dc190
 bool SP::cSPEditorUI_s005d_bd20::OnPaletteDrop(SP::cRect16 a, SP::cRect16 b, Key_s005d_bd20 key)
@@ -1754,11 +1804,6 @@ void cSPEditorUI_s005d_cd80::SetUIDisabled(bool disabled)
 }
 }  // namespace SP
 
-
-
-
-
-
 // @ 0x005dce40
 namespace SP {
 void cSPEditorUI_s005d_cd80::EnableRedoButton(bool enable)
@@ -1772,11 +1817,6 @@ void cSPEditorUI_s005d_cd80::EnableRedoButton(bool enable)
 }
 }  // namespace SP
 
-
-
-
-
-
 // @ 0x005dceb0
 namespace SP {
 void cSPEditorUI_s005d_cd80::EnableUndoButton(bool enable)
@@ -1789,11 +1829,6 @@ void cSPEditorUI_s005d_cd80::EnableUndoButton(bool enable)
   }
 }
 }  // namespace SP
-
-
-
-
-
 
 // @ 0x005dcf20
 namespace SP {
@@ -1809,11 +1844,6 @@ void cSPEditorUI_s005d_cd80::SetSelected(uint32_t id, bool selected, bool alsoSt
   }
 }
 }  // namespace SP
-
-
-
-
-
 
 // @ 0x005dcf90
 namespace SP {
@@ -1835,11 +1865,6 @@ void cSPEditorUI_s005d_cd80::EnablePlayModeButton(bool enable)
 }
 }  // namespace SP
 
-
-
-
-
-
 // @ 0x005dd050
 void SP::cSPEditorUI::Hide()
 {
@@ -1848,11 +1873,6 @@ void SP::cSPEditorUI::Hide()
   StopListeningToMessages();
 }
 
-
-
-
-
-
 // @ 0x005dd070
 void SP::cSPEditorUI::Show()
 {
@@ -1860,11 +1880,6 @@ void SP::cSPEditorUI::Show()
   mLayout.SetVisibility(true);
   mSharedLayout.SetVisibility(true);
 }
-
-
-
-
-
 
 // @ 0x005dd090
 namespace SP {
@@ -1894,11 +1909,6 @@ void cSPEditorUI_s005d_cd80::SetInputBlocked(bool blocked)
 }
 }  // namespace SP
 
-
-
-
-
-
 // @ 0x005dd1d0
 namespace SP {
 void cSPEditorUI_s005d_cd80::SelectCurrentTypeInGrid()
@@ -1916,11 +1926,6 @@ void cSPEditorUI_s005d_cd80::SelectCurrentTypeInGrid()
   }
 }
 }  // namespace SP
-
-
-
-
-
 
 // @ 0x005dd250
 namespace SP {
@@ -1941,11 +1946,6 @@ void cSPEditorUI_s005d_cd80::ShowSaveDialog()
 }
 }  // namespace SP
 
-
-
-
-
-
 // @ 0x005dd300
 namespace SP {
 void cSPEditorUI_s005d_cd80::OnSaveRequested()
@@ -1963,11 +1963,6 @@ void cSPEditorUI_s005d_cd80::OnSaveRequested()
 }
 }  // namespace SP
 
-
-
-
-
-
 // @ 0x005dd360
 namespace SP {
 void cSPEditorUI_s005d_cd80::OnLoginResult(bool success)
@@ -1980,11 +1975,6 @@ void cSPEditorUI_s005d_cd80::OnLoginResult(bool success)
   }
 }
 }  // namespace SP
-
-
-
-
-
 
 // @ 0x005dd390
 namespace SP {
@@ -2005,11 +1995,6 @@ void cSPEditorUI_s005d_cd80::CloseModalLayout()
   }
 }
 }  // namespace SP
-
-
-
-
-
 
 // @ 0x005dd4a0
 namespace SP {
@@ -2037,11 +2022,6 @@ void cSPEditorUI_s005d_cd80::OpenModalLayout()
 }
 }  // namespace SP
 
-
-
-
-
-
 // @ 0x005dd610
 namespace SP {
 void cSPEditorUI_s005d_cd80::SetPaintMode(bool paint)
@@ -2068,11 +2048,6 @@ void cSPEditorUI_s005d_cd80::SetPaintMode(bool paint)
   }
 }
 }  // namespace SP
-
-
-
-
-
 
 // @ 0x005dd7a0
 namespace SP {
@@ -2107,11 +2082,6 @@ void cSPEditorUI_s005d_cd80::UpdateUIBasedOnModelSaveability()
 }
 }  // namespace SP
 
-
-
-
-
-
 // @ 0x005dd860
 namespace SP {
 uint32_t cSPEditorUI_s005d_cd80::GetWarning(bitset128 flags)
@@ -2130,11 +2100,6 @@ uint32_t cSPEditorUI_s005d_cd80::GetWarning(bitset128 flags)
   return 0;
 }
 }  // namespace SP
-
-
-
-
-
 
 // @ 0x005dda30
 namespace SP {
@@ -2220,11 +2185,6 @@ void cSPEditorUI_s005d_cd80::SetMode(int mode)
   mUIEditorMode = mode;
 }
 }  // namespace SP
-
-
-
-
-
 
 // @ 0x005ddd60
 bool EditorUI::Init(AppMode* app, int a2, unsigned a3, int a4)
@@ -2347,10 +2307,6 @@ bool EditorUI::Init(AppMode* app, int a2, unsigned a3, int a4)
     return a4 != 0;
 }
 
-
-
-
-
 // @ 0x005de450
 void EditorUI::Update(int dt)
 {
@@ -2398,10 +2354,6 @@ void EditorUI::Update(int dt)
     }
 }
 
-
-
-
-
 // @ 0x005de690
 void EditorUI::EnableBasicEditorButtons(int a, char b)
 {
@@ -2430,10 +2382,6 @@ void EditorUI::EnableBasicEditorButtons(int a, char b)
     FUN_005dc970(a);
 }
 
-
-
-
-
 // @ 0x005de870
 bool EditorUI::Shutdown()
 {
@@ -2458,10 +2406,6 @@ bool EditorUI::Shutdown()
     return true;
 }
 
-
-
-
-
 // @ 0x005de9e0
 void EditorUI::FUN_005de9e0()
 {
@@ -2475,10 +2419,6 @@ void EditorUI::FUN_005de9e0()
         w->Notify();
     }
 }
-
-
-
-
 
 // @ 0x005dea60
 EditorUI* EditorUI::Construct()
@@ -2509,10 +2449,6 @@ EditorUI* EditorUI::Construct()
     fb8 = this;
     return this;
 }
-
-
-
-
 
 // @ 0x005dec10
 void EUI::FUN_005dec10(uint32_t a)
@@ -2567,9 +2503,6 @@ void EUI::FUN_005dec10(uint32_t a)
     }
 }
 
-
-
-
 // @ 0x005dee70
 bool HandlerSub::HandleMessage(uint32_t msg, int data)
 {
@@ -2601,8 +2534,146 @@ bool HandlerSub::HandleMessage(uint32_t msg, int data)
     return false;
 }
 
-
-
+// @ 0x005def30
+void EUI::FUN_005def30(uint32_t param)
+{
+    AudioSys* au = GetSystemAT();
+    uint32_t v = au ? au->GetValue() : 0;
+    au = GetSystemAT();
+    if (au) {
+        au->Begin(0x3475365);
+        au->SetParam(0x3475381, 0xa03e74b2);
+        au->SetParam(0x3475385, v);
+        au->End();
+    }
+    switch (mc8) {
+    case 0x61c7098:
+        if (!me8.p)
+            return;
+        if (me8.p->FUN_005fe5f0()) {
+            mcc = 0;
+        } else {
+            mf8 = me8.p->GetAccessFlags();
+            mfc = me8.p->FUN_006c0200();
+            app->LoadModel(0, 2, me5);
+        }
+        if (me8.p) {
+            WinObj* o = me8.p;
+            me8.p = 0;
+            o->Release();
+        }
+        return;
+    case 0x604fa6b:
+    case 0x604fab1:
+        if (param == 0x5107b17) {
+            GetConfigManager()->SetValue(0x604a51a, 0);
+            GetConfigManager()->Commit();
+        }
+        if (mc8 == 0x604fa6b) {
+            mcc = 0x100;
+            FUN_004a88d0_(0xa03e74b2);
+            FUN_005dc4d0(0);
+            return;
+        }
+        if (mc8 == 0x604fab1) {
+            mcc = 0x105;
+            FUN_004a88d0_(0xa03e74b2);
+            AssetBrowserLaunch(0xdb184acb, this, 0x54acb9f1);
+        }
+        return;
+    case 0x3b182dc3:
+    case 0x9a24fbe5:
+        mcc = 0;
+        return;
+    case 0x7b355311:
+    case 0xa1520d7f:
+    case 0xb129f37e:
+    case 0xf207647f:
+        if (param == 0x5107b1a)
+            FUN_005dcaa0(mcc, me5);
+        return;
+    case 0x3a5ea067:
+    case 0x5cd172a9:
+    case 0xc6bdfccc:
+    case 0xe6c74f99:
+    case 0xf46fbea9:
+        if (param == 0x5107b1a)
+            FUN_005dec10(mcc);
+        return;
+    case 0x3cc9f2f3:
+        FUN_005dec10(mcc);
+        return;
+    case 0xa2509b6a:
+        if (param == 0x5107b19) {
+            mcc = 0;
+        } else if (param == 0x5107b1a) {
+            app->FUN_00573fb0();
+        }
+        return;
+    case 0x811778da:
+        if (param == 0x5107b19) {
+            if (me4) {
+                mc8 = FUN_005dd860(msaved);
+                me5 = 1;
+            } else {
+                FUN_005dcaa0(mcc, 1);
+            }
+        } else if (param == 0x5107b1a) {
+            if (me4) {
+                mc8 = FUN_005dd860(msaved);
+                me5 = 0;
+            } else {
+                FUN_005dcaa0(mcc, 0);
+            }
+        }
+        return;
+    case 0x12b8ba66:
+    case 0x8bf4d3f2:
+    case 0x9d533cda:
+    case 0xbe186a9a:
+        if (param == 0x5107b17) {
+            FUN_005dec10(mcc);
+        } else if (param == 0x5107b19) {
+            if (me4) {
+                mc8 = FUN_005dd860(msaved);
+                me5 = 1;
+            } else {
+                FUN_005dcaa0(mcc, 1);
+            }
+        } else if (param == 0x5107b1a) {
+            if (me4) {
+                mc8 = FUN_005dd860(msaved);
+                me5 = 0;
+            } else {
+                FUN_005dcaa0(mcc, 0);
+            }
+        }
+        return;
+    case 0x48ee60f0:
+    case 0x53830374:
+    case 0x7c1ea6a4:
+    case 0xb016b570:
+    case 0xc2b30789:
+    case 0xcf4c3d25:
+    case 0xeb3bc709:
+    case 0xebdc80d5: {
+        uint8_t flag = 0;
+        if (mc8 == 0xebdc80d5 || mc8 == 0xc2b30789 || mc8 == 0xcf4c3d25 || mc8 == 0xeb3bc709)
+            flag = 1;
+        if (param == 0x5107b17) {
+            FUN_005dec10(mcc);
+        } else if (param == 0x5107b1a) {
+            if (me4) {
+                mc8 = FUN_005dd860(msaved);
+                me5 = flag;
+            } else {
+                FUN_005dcaa0(mcc, flag);
+            }
+        }
+        return;
+    }
+    }
+}
 
 // @ 0x005df470
 void EUI::FUN_005df470(uint32_t cmd, int b)
@@ -2714,18 +2785,12 @@ void EUI::FUN_005df470(uint32_t cmd, int b)
     CalloutMessageBox(mb4, &g1519970);
 }
 
-
-
-
 // @ 0x005df8d0
 void EditorFrame::FUN_005df8d0()
 {
     mcc = 0x103;
     FUN_005df470(0x103, 1);
 }
-
-
-
 
 // @ 0x005df8f0
 bool EUI::FUN_005df8f0(Key12 key)
@@ -2769,17 +2834,11 @@ bool EUI::FUN_005df8f0(Key12 key)
     return false;
 }
 
-
-
-
 // @ 0x005dfb30
 void EditorFrame2::FUN_005dfb30(int a, int b)
 {
     mpTarget->DoDialogEnd(b);
 }
-
-
-
 
 // @ 0x005dfb40
 void EditorUI2::DoSaveAndExit()
@@ -2798,26 +2857,17 @@ void EditorUI2::DoSaveAndExit()
     FUN_005df470(0x102, 1);
 }
 
-
-
-
 // @ 0x005dfbb0
 void FUN_005dfbb0(void* self)
 { (void)self; }
-
-
 
 // @ 0x005dfd00
 void FUN_005dfd00(void* self, int cmd)
 { (void)self; (void)cmd; }
 
-
-
 // @ 0x005e0000
 void FUN_005e0000(void* self)
 { (void)self; }
-
-
 
 // @ 0x00de8ad0
 bool cSPEditorUI::DoMessage(uint32_t messageID, void* pMessage)
