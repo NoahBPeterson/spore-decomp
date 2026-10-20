@@ -1,0 +1,9 @@
+slices/s00a04d20/s00a04d20.cpp  ?GetCurrentAnimation@cAnimatingCreature@@QAEXPAIPAMPAH2@Z  00a05150  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a04d20/s00a04d20.cpp  ?MarkWorldRegion@cAnimatingCreature@@QAEX_N@Z  00a05220  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a04d20/s00a04d20.cpp  ?Release@cAnimatingCreature@@QAEHXZ  00a05270  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a04d20/s00a04d20.cpp  ?GetStateA@AnimPimpl@@QAEHXZ  00a055a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a04d20/s00a04d20.cpp  ?GetStateB@AnimPimpl@@QAEHHH@Z  00a055c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a04d20/s00a04d20.cpp  ?GetStateC@AnimPimpl@@QAEHHH@Z  00a055e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a04d20/s00a04d20.cpp  ?GetStateD@AnimPimpl@@QAEHXZ  00a05610  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a04d20/s00a04d20.cpp  ?GetGlobalThing@@YAPAXXZ  00a056e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a04d20/s00a04d20.cpp  ?SwapStaticData@StaticDataSlot@@QAEPAPAXPAPAUCreatureStaticData@@@Z  00a056f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
