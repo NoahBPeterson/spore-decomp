@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/Expression.cpp -- migrated from slice(s) s0083f140, s0083e1c0, s0083d3d0, s0083c900 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/Expression.cpp -- migrated from slice(s) s00554c30, s0083f140, s0083e1c0, s0083d3d0, s0083c900 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/Expression.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -11,6 +11,13 @@
 #include "SP/cHashFunction.h"
 #include <math.h>
 #include "EA/ArgScript/cIParser.h"
+#include "EA/DateTime/DateTime.h"
+#include "EA/LimitStopwatch.h"
+#include "EA/Thread/Mutex.h"
+#include "EA/Stopwatch.h"
+#include "EA/Allocator/ZoneObject.h"
+#include "eastl/hash_map.h"
+#include "eastl/map.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
