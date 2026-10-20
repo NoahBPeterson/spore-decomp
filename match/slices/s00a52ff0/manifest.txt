@@ -1,0 +1,13 @@
+slices/s00a52ff0/s00a52ff0.cpp  ??1FixedPool@Eapd@Audio@EA@@  00a531b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a52ff0/s00a52ff0.cpp  ?Alloc@FixedPool@Eapd@Audio@EA@@  00a532b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a52ff0/s00a52ff0.cpp  ?Clear@VoiceList@Eapd@Audio@EA@@  00a53450  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a52ff0/s00a52ff0.cpp  ?FreeBuckets@ParamTable@Eapd@Audio@EA@@  00a53490  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a52ff0/s00a52ff0.cpp  ?SetPaused@Play@Eapd@Audio@EA@@  00a53500  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a52ff0/s00a52ff0.cpp  ?artists_play_setpausedf@Eapd@Audio@EA@@  00a53560  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a52ff0/s00a52ff0.cpp  ?PopFront@VoiceList@Eapd@Audio@EA@@  00a535a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a52ff0/s00a52ff0.cpp  ??1VoiceList@Eapd@Audio@EA@@  00a53790  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a52ff0/s00a52ff0.cpp  ?UpdatePlaying@Play@Eapd@Audio@EA@@  00a537e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a52ff0/s00a52ff0.cpp  ?SetPlaying@Play@Eapd@Audio@EA@@  00a53860  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a52ff0/s00a52ff0.cpp  ?artists_play_updateplaying@Eapd@Audio@EA@@  00a538d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a52ff0/s00a52ff0.cpp  ??1ParamTable@Eapd@Audio@EA@@  00a538e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a52ff0/s00a52ff0.cpp  ?PushBack@VoiceList@Eapd@Audio@EA@@  00a53a20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

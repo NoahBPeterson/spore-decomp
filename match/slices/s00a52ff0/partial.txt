@@ -1,0 +1,1 @@
+00a53b20  89  Play::~Play: implicit member teardown inlines VoiceList_CopyCtor body instead of emitting the 0xa53970 call (record at [esp+0x10]=2 confirms sequencing)
