@@ -1,0 +1,21 @@
+# slice s0099cf50 -- VA to symbol map (Simulator stream/anim helpers)
+# 8 byte-exact (manifest.txt), 3 complete-but-diff (nonmatching.txt), 0 partial.
+#
+# va          symbol                                 source fn     status
+0099cf50   ?Ctor@FileStream@@QAEPAU1@XZ           FileStream::Ctor   MATCH
+0099cf70   ?Seek@FileStream@@QAEXJH@Z             FileStream::Seek   MATCH
+0099cf90   ?Tell@FileStream@@QAEJXZ               FileStream::Tell   MATCH
+0099cfb0   ?Read@FileStream@@QAEIPAXI@Z           FileStream::Read   MATCH
+0099cfe0   ?Write@FileStream@@QAEIPBXI@Z          FileStream::Write  MATCH
+0099d010   ?Size@FileStream@@QAEJXZ               FileStream::Size   MATCH
+0099d060   @FUN_0099d060@4                        FUN_0099d060       MATCH  (refcount/delete)
+0099d0b0   _FUN_0099d0b0                          FUN_0099d0b0       nonmatching (252) set-intersect
+0099d1f0   ?Walk@DeformWalk@@QAEXI@Z              DeformWalk::Walk   nonmatching (179) recursive walk
+0099d2b0   _FUN_0099d2b0                          FUN_0099d2b0       MATCH  (forwarder)
+0099d2e0   _FUN_0099d2e0                          FUN_0099d2e0       nonmatching (358) DisableUnusedDeforms
+#
+# Calling-convention notes:
+#   - The FILE* stream wrapper is modelled as class FileStream (this in ecx, FILE* at +4).
+#   - The CRT routines are declared __declspec(dllimport) so cl emits the original
+#     `call dword ptr [__imp_fseek]` IAT form rather than a direct rel32 call.
+#   - FUN_0099d060 is a __fastcall helper (symbol @FUN_0099d060@4).

@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0099cf50/s0099cf50.cpp  ?Ctor@FileStream@@QAEPAU1@XZ      0099cf50  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0099cf50/s0099cf50.cpp  ?Seek@FileStream@@QAEXJH@Z        0099cf70  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0099cf50/s0099cf50.cpp  ?Tell@FileStream@@QAEJXZ          0099cf90  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0099cf50/s0099cf50.cpp  ?Read@FileStream@@QAEIPAXI@Z      0099cfb0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0099cf50/s0099cf50.cpp  ?Write@FileStream@@QAEIPBXI@Z     0099cfe0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0099cf50/s0099cf50.cpp  ?Size@FileStream@@QAEJXZ          0099d010  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0099cf50/s0099cf50.cpp  @FUN_0099d060@4                   0099d060  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0099cf50/s0099cf50.cpp  _FUN_0099d2b0                     0099d2b0  /O2 /MD /Gy /EHsc /TP /arch:SSE

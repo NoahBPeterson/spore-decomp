@@ -1,0 +1,16 @@
+# va  diff-bytes  reason
+#
+# Equivalence gate (default inputs) run once at end of slice:
+#   WEAK        : 0099d0b0 (251 valid inputs, 54.3% cov), 0099d2e0 (184 valid, 17.4% cov)
+#                 -- no mismatching input found, but coverage below the 60% threshold.
+#   UNSUPPORTED : 0099d1f0 (only 3/400 inputs valid: recursive graph walk faults on
+#                 the synthetic pool)
+#
+0099d0b0   252   register assignment: original keeps param1 (the container object) in
+                 ecx and param2 (keys) in edx; cl picks eax/ecx.  Body, masks and the
+                 FUN_0099c600 tail call are identical.
+0099d1f0   179   indexing scale differs: the original keeps a base register at self+0x21c
+                 and addresses records as [base+eax*8]; cl re-materialises the record
+                 pointer and reorders the count==0 test.  Same recursion and updates.
+0099d2e0   358   loop scheduling and register choice across the table copy, the
+                 BehaviorLookup scan and the 9-entry deform match loop; logic identical.
