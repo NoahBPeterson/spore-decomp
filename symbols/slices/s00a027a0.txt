@@ -1,0 +1,17 @@
+# slice s00a027a0 symbol hints (VA -> name)
+00a027a0 ?IsOrientIdleAnim@@YG_NI@Z  # __stdcall bool(uint32): orient idle-anim handle set + orient-stop fallback
+00a02800 ?IsRestIdleAnim@@YG_NI@Z    # __stdcall bool(uint32): rest idle-anim handle set, else orient test
+00a02840 ?IsMoveIdleAnim@@YG_NI@Z    # __stdcall bool(uint32): move idle-anim handle set
+00a02a00 ?Forward@cAnimatingCreature@@QAEXHHH@Z  # thiscall void(int,int,int): forward to the handle table (table,a,b,c)
+00a02ab0 ?Attach@cAnimatingCreature@@QAE_NH@Z    # thiscall bool(int): find slot by handle (or root), detach it, return true
+00a02b00 ?Detach@cAnimatingCreature@@QAE_NH@Z    # thiscall bool(int): remove slot from the table, return true
+00a02b40 ?QueryA@cAnimatingCreature@@QAE_NH@Z    # thiscall bool(int): table query, false when there is no table
+00a02b70 ?QueryB@cAnimatingCreature@@QAE_NH@Z    # thiscall bool(int): table lookup != 0, false when there is no table
+00a02bd0 ?Selector@cAnimatingCreature@@QAEHXZ    # thiscall int(): [0x54], or [0x50] when it is 4
+00a02bf0 ?SetMode@cAnimatingCreature@@QAEXPBHE@Z # thiscall void(const int*,uint8): [0x154]=(b!=0)+1, [0x164..0x16c]=v[0..2]
+00a02c40 ?SetRestIdleAnimHandle@cAnimatingCreature@@QAEXXZ  # thiscall void(): pick the rest idle anim for every live slot
+00a02cd0 ?Swap48@cAnimatingCreature@@QAEEE@Z     # thiscall uint8(uint8): store [0x48], return the previous byte
+00a02ce0 ?Set38@cAnimatingCreature@@QAEXEHH@Z    # thiscall void(uint8,int,int): [0x38]=a, [0x3c]=b, [0x40]=c
+00a02d00 ?SetSel@cAnimatingCreature@@QAEXHH@Z    # thiscall void(int,int): sel50[i]=v
+00a02d40 ?Forward5@@YGXHHHHH@Z                   # __stdcall void(5 dwords): forward to 0x9b2340 with a trailing 0
+00a02d70 ?RootOnly@RootThunk@@QAEPAXPAX@Z        # 1-arg thunk returning RootSlot(p) (16 bytes; the 11 bytes after it are a separate linker virtual-call thunk)

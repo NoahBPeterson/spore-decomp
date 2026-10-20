@@ -1,0 +1,14 @@
+slices/s00a027a0/s00a027a0.cpp  ?IsRestIdleAnim@@YG_NI@Z                          00a02800  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a027a0/s00a027a0.cpp  ?IsMoveIdleAnim@@YG_NI@Z                          00a02840  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a027a0/s00a027a0.cpp  ?Forward@cAnimatingCreature@@QAEXHHH@Z            00a02a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a027a0/s00a027a0.cpp  ?Attach@cAnimatingCreature@@QAE_NH@Z              00a02ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a027a0/s00a027a0.cpp  ?Detach@cAnimatingCreature@@QAE_NH@Z              00a02b00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a027a0/s00a027a0.cpp  ?QueryA@cAnimatingCreature@@QAE_NH@Z              00a02b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a027a0/s00a027a0.cpp  ?QueryB@cAnimatingCreature@@QAE_NH@Z              00a02b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a027a0/s00a027a0.cpp  ?Selector@cAnimatingCreature@@QAEHXZ               00a02bd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a027a0/s00a027a0.cpp  ?SetMode@cAnimatingCreature@@QAEXPBHE@Z          00a02bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a027a0/s00a027a0.cpp  ?Swap48@cAnimatingCreature@@QAEEE@Z               00a02cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a027a0/s00a027a0.cpp  ?Set38@cAnimatingCreature@@QAEXEHH@Z              00a02ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a027a0/s00a027a0.cpp  ?SetSel@cAnimatingCreature@@QAEXHH@Z              00a02d00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a027a0/s00a027a0.cpp  ?Forward5@@YGXHHHHH@Z                             00a02d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a027a0/s00a027a0.cpp  ?RootOnly@RootThunk@@QAEPAXPAX@Z                  00a02d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast

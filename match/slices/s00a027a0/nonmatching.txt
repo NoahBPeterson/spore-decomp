@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s00a027a0 = cAnimatingCreature idle-animation predicate helpers (three free __stdcall
+# tests), the handle-table accessors, the byte/dword field setters and two forwarding thunks.
+# 14 of 16 functions are byte-exact (manifest.txt). The two below are complete and
+# behaviourally identical but differ in codegen.
+#
+00a027a0  88   IsOrientIdleAnim: complete chained handle test + orient-stop fallback; the original keeps the id in edx across the IsOrientStopAnim call (link-time knowledge that the callee preserves edx), a single-TU build must spill it to a callee-saved register (push/pop esi) | difftest PASS (400 valid, 100% coverage)
+00a02c40  113  cAnimatingCreature::SetRestIdleAnimHandle: complete 16-slot scan (live flags, index table, node id match, packed handle store); identical instruction sequence but cl picks ecx/edx/eax roles differently for the spilled `this`, the idx*0xf0 scratch and the packed value, and enters the loop without the latch-head `jmp` | difftest PASS (228 valid, 85.1% coverage)
