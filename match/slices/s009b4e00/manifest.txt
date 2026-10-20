@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009b4e00/s009b4e00.cpp  ?SqX@Solver@nSPCreatureAnim@@QAEMMHH@Z  009b5180  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009b4e00/s009b4e00.cpp  ?SqY@Solver@nSPCreatureAnim@@QAEMMHH@Z  009b51c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

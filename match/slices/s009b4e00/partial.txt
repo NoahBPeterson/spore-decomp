@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+009b53f0  86  Bone_AddScaledVectors: complete; byte-identical length (161). The `(flags & 8)` branch and the three scaled-vector stores match, but the x87 mul/sub scheduling differs.
+009b5700  136  Solver::IsDeeperRatio: complete (guards both `mSizeA` and the XY length with a 1e-06 epsilon via a pointer-to-constant select, then compares the two ratios). 181 vs 176 bytes.
+009b5a00  125  Bone_ResetState: complete (zeroes the record word at +0..+0xf, the float block +0x58..+0x9c, +0x48..+0x50, the byte flags +0x54/+0x55/+0x38/+0x2a0 and +0x144). 132 vs 173 bytes; MSVC used xmm0 zero-stores for the float run where the original uses the same but with a different register window.

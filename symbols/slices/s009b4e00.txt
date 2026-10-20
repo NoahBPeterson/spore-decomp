@@ -1,0 +1,19 @@
+009b4e00 ?Bone_ComputeSegment@@YAXPAUSolver@nSPCreatureAnim@@0@Z  # segment vector + length from two bones
+009b4ef0 ?Solver_UpdateSegment@@YAXPAUSolver@nSPCreatureAnim@@PAX0@Z  # FUN_009b4ef0 body not recovered
+009b5080 ?DistX@Solver@nSPCreatureAnim@@QAEMHHM@Z  # (x/z difference over two bone indices)
+009b5100 ?DistY@Solver@nSPCreatureAnim@@QAEMHHM@Z  # (y/z difference over two bone indices)
+009b5180 ?SqX@Solver@nSPCreatureAnim@@QAEMMHH@Z  # k*(dx*dx*k) on +0x10c
+009b51c0 ?SqY@Solver@nSPCreatureAnim@@QAEMMHH@Z  # k*(dy*dy*k) on +0x110
+009b5200 ?AverageSegment@Solver@nSPCreatureAnim@@QAEMXZ  # per-bone segment length sum with 0.01 sentinel
+009b5360 ?AverageSegment@Solver@nSPCreatureAnim@@QAEMXZ  # mean segment length over flag&4 bones
+009b53f0 ?Bone_AddScaledVectors@@YAXPAMPAUBone@nSPCreatureAnim@@M@Z  # out = pos*k (or pos*k - parent*k)
+009b54a0 ?BuildOrderPairs@Solver@nSPCreatureAnim@@QAEXXZ  # emit {Bone*,int} order pairs from root chain
+009b5580 ?MarkDeepBones@Solver@nSPCreatureAnim@@QAEXXZ  # flag bones whose depth below the scaled limit
+009b5700 ?IsDeeperRatio@Solver@nSPCreatureAnim@@QAEHPAPAUBone@2@0@Z  # epsilon-guarded ratio compare
+009b57b0 ?FindMinIndex@Solver@nSPCreatureAnim@@QAEHPAH0@Z  # min-offsetZ scan over a pair sub-range
+009b58b0 ?SortRange@Solver@nSPCreatureAnim@@QAEXPAH0@Z  # guarded sort of a flagged run
+009b5930 ?SortFlaggedRuns@Solver@nSPCreatureAnim@@QAEXXZ  # sort each contiguous flagged run
+009b59c0 ?ShutdownAnims@Solver@nSPCreatureAnim@@QAEXXZ  # AnimA + 24x AnimC destructors
+009b5a00 ?Bone_ResetState@@YAXPAI@Z  # zero one bone/state record
+009b5ab0 ?Bone_IntegrateVelocity@@YAXPAIMPAM1@Z  # integrate velocity + quaternion sign-select
+009b5c50 ?UpdateAvgSegLen@Solver@nSPCreatureAnim@@QAEXXZ  # per-bone avg segment length + jiggle flag
