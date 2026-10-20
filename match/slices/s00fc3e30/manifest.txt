@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00fc3e30/s00fc3e30.cpp  ?GetCloudColor@cWeatherManager_s00fc_3e30@@QAEXPAUColorRGB_s00fc_3e30@@M@Z  00fc3e30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fc3e30/s00fc3e30.cpp  ?SetWeatherOn@cWeatherManager_s00fc_3e30@@QAEX_N@Z  00fc3f00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fc3e30/s00fc3e30.cpp  ?RebuildControlMaps@cWeatherManager_s00fc_3e30@@QAEXPAX@Z  00fc42a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
