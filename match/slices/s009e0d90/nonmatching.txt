@@ -1,0 +1,24 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s009e0d90 = Outer/Agaits TU: AddGait/AddItem/PushFlag/PushGait/Select/FindOrCreate plus
+# Gait (ctor/copy-ctor) and the EASTL Vec<Gait>/Vec<GaitA..C> + RBTree helpers. Only the small
+# leaf functions are byte-exact (see manifest.txt); the remaining bodies are complete and
+# behaviourally equivalent but the vector-helper / EASTL realloc_insert loop-rotation shapes and
+# the switch-dispatch scheduling do not reproduce cl 14.x output byte-for-byte.
+009e0d90  439  AddGait: complete switch-over-Record::kind dispatch; push_back-inlined per-kind slabs scheduled differently | difftest WEAK (324 valid, 11.7% cov)
+009e0f80  83   AddItem: complete; EASTL push_back inlined, branch layout differs | difftest WEAK (59 valid, 86.8% cov)
+009e1030  169  Gait::Gait(): complete default-id + three CopyX range inits; helper inlining/register allocation differs | difftest PASS (400 valid, 100% cov)
+009e1160  199  AssignItemsN: complete insertion-sort copy loop; cl rotates the inner loop | difftest PASS (201 valid, 77.3% cov)
+009e1260  236  Vec<Gait>::realloc_insert: complete node-growth clone; loop rotation + EH frame differ | difftest UNSUPPORTED (0 valid inputs: budget/pool-limit/write faults)
+009e1370  132  AssignItemsF: complete float-keyed copy loop; scheduling/rotation differ | difftest WEAK (10 valid, 47.4% cov)
+009e1470  366  Combine: complete merge of two Inner item arrays; loop rotation + register allocation differ | difftest WEAK (13 valid, 53.1% cov)
+009e1610  89   ItemArr::Add: complete push_back growth; inlined shape differs | difftest WEAK (33 valid, 91.5% cov)
+009e1690  110  UninitCopyGait: complete construct-range loop; cl unrolls/rotates differently | difftest UNSUPPORTED (0 valid inputs: write/read faults)
+009e1760  91   ItemArr::Build: complete reserve+copy; inlined reserve/realloc differs | difftest WEAK (31 valid, 50.0% cov)
+009e17d0  88   RBTree::find_or_insert: complete tree descent + insert; branch layout differs | difftest PASS (301 valid, 100% cov)
+009e1850  57   FindOrCreate: complete map lookup + CreateByName fallback; call/lea scheduling differs | difftest PASS (230 valid, 80.6% cov)
+009e18c0  29   GaitLoader::LoadGaitFile: complete hash+FindOrCreate; register allocation differs | difftest PASS (280 valid, 100% cov)
+009e1990  323  Vec<Gait>::realloc_insert (second copy): complete; loop rotation + EH frame differ | difftest UNSUPPORTED (0 valid inputs, 100% fault discards)
+009e1b40  339  Select: complete kind selection + _ftol2 float->int id store; indirect-call form + scheduling differ | difftest UNSUPPORTED (unresolved ?MainArguments@CArgs@@QAEPAPAXH@Z)
+009e1cd0  226  PushGait: complete flag early-out + gait/vec push + clear; inlined push_back shape differs | difftest FAIL (float-rounding 920.6762 vs 920.6772, 16 ulp; pool addr collision with ?realloc_insert@?$Vec@PAX@@)
