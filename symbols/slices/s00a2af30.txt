@@ -1,0 +1,8 @@
+00a2af30 ?DoInsertValue@ARVector@@QAEXPAUAR@@PBU2@@Z  # ARVector::DoInsertValue, slice s00a2af30 (verbatim slice spelling)
+00a2b2e0 ?assign@ARVector@@QAEXPBUAR@@00@Z  # ARVector::assign, slice s00a2af30 (verbatim slice spelling)
+00a2b3e0 ?FactoryVoiceTemplate_ReadResource@@YG_NPAXPAUOutRes@@HH@Z  # FactoryVoiceTemplate::ReadResource, slice s00a2af30
+00a2b7d0 ?Init@Submix@@QAE_NPAX@Z  # Submix::Init, slice s00a2af30 (verbatim slice spelling)
+00a2bb30 ?Shutdown@Submix@@QAE_NXZ  # Submix::Shutdown, slice s00a2af30 (verbatim slice spelling)
+00a2bc40 ?FactoryInstrumentBank_ReadResource@@YG_NPAXPAUInstOut@@HH@Z  # FactoryInstrumentBank::ReadResource, slice s00a2af30
+00a2be10 ?StopAllSounds@System@@QAEXH@Z  # System::StopAllSounds, slice s00a2af30 (verbatim slice spelling)
+00a2bf30 ?InsertSound@System@@QAEXPAX@Z  # System::InsertSound, slice s00a2af30 (verbatim slice spelling)

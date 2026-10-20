@@ -1,0 +1,9 @@
+# va  diff-bytes  reason   flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a2af30  277  ARVector::DoInsertValue: complete EASTL vector insert (both branches); this/pos register allocation differs and SEH frame size 0xc vs 0x8 (462 vs 482 bytes); difftest UNSUPPORTED (0/400 valid, read/write/pool faults on random inputs)
+00a2b2e0  55  ARVector::assign: complete; original keeps first in ebp vs ours last, cmp operand order now matches (n>cap); 3rd unused arg added for ret 0xc; difftest WEAK (36 valid, 49.5% cov, no mismatch)
+00a2b3e0  930  FactoryVoiceTemplate::ReadResource: complete gauntlet parser (ReadLine/atol/tokenizer/vtable-interning loops + SEH); retail field offsets and vtable slots reconstructed, PDB layout not used; difftest WEAK (207 valid, 4.4% cov, no mismatch)
+00a2b7d0  753  Submix::Init: complete; retail field offsets (self+0x970/0x988/0x15f8/0x1608) and vtable slots reconstructed; difftest WEAK (400 valid, 7.9% cov, no mismatch)
+00a2bb30  219  Submix::Shutdown: complete; eastl vector erase modelled as thiscall member (ecx=vec+0x18) and disconnect as __fastcall (arg in ecx), which fixed the crash; difftest PASS (215 valid, 84.0% cov)
+00a2bc40  187  FactoryInstrumentBank::ReadResource: complete sscanf 12-field zone parser + push_back; difftest WEAK (197 valid, 10.4% cov, no mismatch)
+00a2be10  261  System::StopAllSounds: complete; intrusive list link field is at node+0x10 (stored ptr = obj+0x10, next = *stored); SEH release frame omitted (187 vs 277 bytes, raw masked diff 171); difftest UNSUPPORTED (0/400 valid, read/write faults on random inputs)
+00a2bf30  85  System::InsertSound: complete free-list-backed intrusive-list push (node[0]=list, node[1]=list->prev, body=node+2); MSVC keeps item in ebx vs original edi (no ebx save in orig); difftest WEAK (94 valid, 23.1% cov, no mismatch)
