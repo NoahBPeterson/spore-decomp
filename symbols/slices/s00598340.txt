@@ -1,7 +1,7 @@
 00598340 SP::cCollectableItems rbtree lower_bound/insert helper  # EASTL RBTreeInsert/RBTreeDecrement
 00598470 SP::cCollectableItems pool ctor  # eastl::fixed_pool_base::init
-00598540 SP::cCollectableItems::EnsureBaseUnlocksForEditor  # PDB name
-00598b50 ?FUN_00598b50@cCollectableItems_s0059_8340@SP@@QAEPAXPAX000@Z  # cCollectableItems_s0059_8340::FUN_00598b50 migrated from s00598340 (verbatim, slice spelling)
-00598cb0 ?FUN_00598cb0@cCollectableItems_s0059_8340@SP@@QAEHPAX@Z  # cCollectableItems_s0059_8340::FUN_00598cb0 migrated from s00598340 (verbatim, slice spelling)
+00598540 ?EnsureBaseUnlocksForEditor@cCollectableItems_s0059_8340@SP@@QAEXI@Z  # cCollectableItems_s0059_8340::EnsureBaseUnlocksForEditor migrated from s00598340 (verbatim, slice spelling)
+00598b50 ?insert_hint@RowMap@@QAEPAXPAXPAURowNode@@PBURowValue@@0@Z  # RowMap::insert_hint migrated from s00598340 (verbatim, slice spelling)
+00598cb0 ?find_or_insert@RowMap@@QAEPAUFixedVec4@@AB_K@Z  # RowMap::find_or_insert migrated from s00598340 (verbatim, slice spelling)
 00598db0 ?FUN_00598db0@cCollectableItems_s0059_8340@SP@@QAEXHHHHHHHHH@Z  # cCollectableItems_s0059_8340::FUN_00598db0 migrated from s00598340 (verbatim, slice spelling)
-00598e90 ?AddCollectableItemInfo@cCollectableItems_s0059_8340@SP@@QAEXHHHHHHH@Z  # cCollectableItems_s0059_8340::AddCollectableItemInfo migrated from s00598340 (verbatim, slice spelling)
+00598e90 ?AddCollectableItemInfo@cCollectableItems_s0059_8340@SP@@QAE_NHHHHHHH@Z  # cCollectableItems_s0059_8340::AddCollectableItemInfo migrated from s00598340 (verbatim, slice spelling)

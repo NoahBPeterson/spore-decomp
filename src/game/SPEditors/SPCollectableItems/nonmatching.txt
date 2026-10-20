@@ -1,1 +1,6 @@
-# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /GS-)
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc)
+00598540 1298 EnsureBaseUnlocksForEditor: complete; register allocation/stack slots and inlined hashtable-find/ctz shapes differ
+00598b50 307 insert_hint: complete; ours 282B vs 342B (block ordering + register allocation differ); equivalence UNSUPPORTED (unresolved DoInsertValueImpl/DoCreateNode)
+00598cb0 129 find_or_insert: complete; ours 197B vs 252B (RowValue temp copy + register allocation differ); equivalence FAIL (faked DoAssignFromIterator memcpy dest differs)
+00598db0 38 FUN_00598db0: complete; ours 220B == 220B (only register assignment encoding differs); equivalence UNSUPPORTED (stores address of own row-vector tag copy)
+00598e90 354 AddCollectableItemInfo: complete; ours 476B vs 418B (EH unwind funclets + call scheduling differ); equivalence PASS (272 inputs)
