@@ -5,3 +5,8 @@ slices/s008abc50/s008abc50.cpp  ?fnt_Project@@YAHPAXHH@Z  008ac300  /O2 /MD /Gy 
 slices/s008abc50/s008abc50.cpp  ?fnt_OldProject@@YAHPAXHH@Z  008ac330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s008abc50/s008abc50.cpp  ?FUN_008ac3e0@@YAHPAUT1Exec@@H@Z  008ac3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s008abc50/s008abc50.cpp  ?FUN_008ac430@@YAHPAUT1Exec@@@Z  008ac430  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008abc50/s008abc50.cpp  ?FUN_008abfe0@@YAIHHH@Z  008abfe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008abc50/s008abc50.cpp  _FUN_008ac010  008ac010  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008abc50/s008abc50.cpp  _fnt_RoundToGrid  008ac040  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008abc50/s008abc50.cpp  ?fnt_GetCVTEntrySlow@@YAHPAUT1Exec@@H@Z  008ac400  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008abc50/s008abc50.cpp  ?fnt_GetSingleWidthSlow@@YAHPAUT1Exec@@@Z  008ac440  /O2 /MD /Gy /TP /arch:SSE /fp:fast

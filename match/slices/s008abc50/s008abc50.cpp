@@ -348,10 +348,10 @@ uint32 FUN_008abfe0(int unused, int d, int a)
 {
     (void)unused;
     uint32 r;
-    if (d < 0) {
-        r = (uint32)(0u - ((unsigned)(a - d) & 0xffffffc0u));
-    } else {
+    if (d >= 0) {
         r = (uint32)((a + d) & 0xffffffc0u);
+    } else {
+        r = (uint32)(0u - ((unsigned)(a - d) & 0xffffffc0u));
     }
     if ((int)(r ^ (uint32)d) < 0 && d != 0)
         r = 0;
@@ -363,10 +363,10 @@ uint32 FUN_008ac010(int unused, int d, int a)
 {
     (void)unused;
     uint32 r;
-    if (d < 0)
-        r = (uint32)(0u - ((unsigned)(0x3f + (a - d)) & 0xffffffc0u));
-    else
+    if (d >= 0)
         r = (uint32)((d + a + 0x3f) & 0xffffffc0u);
+    else
+        r = (uint32)(0u - ((unsigned)(0x3f + (a - d)) & 0xffffffc0u));
     if ((int)(r ^ (uint32)d) < 0 && d != 0)
         r = 0;
     return r;
@@ -377,10 +377,10 @@ uint32 fnt_RoundToGrid(int unused, int d, int a)
 {
     (void)unused;
     uint32 r;
-    if (d < 0)
-        r = (uint32)(0u - ((unsigned)(0x20 + (a - d)) & 0xffffffc0u));
-    else
+    if (d >= 0)
         r = (uint32)((d + a + 0x20) & 0xffffffc0u);
+    else
+        r = (uint32)(0u - ((unsigned)(0x20 + (a - d)) & 0xffffffc0u));
     if ((int)(r ^ (uint32)d) < 0 && d != 0)
         r = 0;
     return r;
@@ -391,12 +391,12 @@ uint32 fnt_RoundToHalfGrid(int unused, int d, int a)
 {
     (void)unused;
     uint32 r;
-    if (d < 0)
-        r = (uint32)(0xffffffe0u - ((unsigned)(a - d) & 0xffffffc0u));
-    else
+    if (d >= 0)
         r = (uint32)(((a + d) & 0xffffffc0u) + 0x20);
+    else
+        r = (uint32)(0xffffffe0u - ((unsigned)(a - d) & 0xffffffc0u));
     if ((int)(r ^ (uint32)d) < 0 && d != 0)
-        r = (uint32)(((d < 1 ? 0 : -1) & 0x40) - 0x20);
+        r = (uint32)((((int)(d <= 0) - 1) & 0x40) + 0xFFFFFFE0u);
     return r;
 }
 
@@ -408,10 +408,10 @@ uint32 FUN_008abfb0(int unused, int d, int a)
 {
     (void)unused;
     uint32 r;
-    if (d < 0)
-        r = (uint32)(0u - ((unsigned)(0x10 + (a - d)) & 0xffffffe0u));
-    else
+    if (d >= 0)
         r = (uint32)((d + a + 0x10) & 0xffffffe0u);
+    else
+        r = (uint32)(0u - ((unsigned)(0x10 + (a - d)) & 0xffffffe0u));
     if ((int)(r ^ (uint32)d) < 0 && d != 0)
         r = 0;
     return r;
@@ -425,13 +425,13 @@ int FUN_008ac0b0(void* st, int d, int a)
     int  m  = *(int*)((char*)p + 0x74);
     int  e  = *(short*)((char*)p + 0x7e);
     int  r;
-    if (d < 0) {
-        r = 0u - (((unsigned)(c8 - d + a) & (unsigned)m) + e);
-    } else {
+    if (d >= 0) {
         r = ((unsigned)(c8 + d + a) & (unsigned)m) + e;
+    } else {
+        r = 0u - (((unsigned)(c8 - d + a) & (unsigned)m) + e);
     }
     if ((r ^ d) < 0 && d != 0)
-        r = (e < 1) ? (d < 1 ? e : -e) : e;
+        r = (e < 1) ? (d <= 0 ? e : -e) : e;
     return r;
 }
 
@@ -443,20 +443,20 @@ int FUN_008ac100(void* st, int d, int a)
     int  u  = *(int*)((char*)p + 0x74) >> 14;
     int  e  = *(short*)((char*)p + 0x7e);
     int  r;
-    if (d < 0)
-        r = -(util_FixMul(util_FixDiv(c8 - d + a, u) & 0xffffffc0, u) + e);
-    else
+    if (d >= 0)
         r = util_FixMul(util_FixDiv(c8 + d + a, u) & 0xffffffc0, u) + e;
+    else
+        r = -(util_FixMul(util_FixDiv(c8 - d + a, u) & 0xffffffc0, u) + e);
     if ((r ^ d) < 0 && d != 0)
-        r = (e < 1) ? (d < 1 ? e : -e) : e;
+        r = (e < 1) ? (d <= 0 ? e : -e) : e;
     return r;
 }
 
 // @ 0x008ac1a0  (fnt_MovePoint)
 // (state, idx, delta, flag): moves the point at `idx` by `delta` along the
 // current x/y axis, using the direct short-fraction path when the axis scale is
-// exactly 0x4000 and the fixmul/fixdiv path otherwise.
-void fnt_MovePoint(void* st, int idx, int delta, int flag)
+// exactly 0x4000 and the fixmul/fixdiv path otherwise.  Returns the mark byte.
+char* fnt_MovePoint(void* st, int idx, int delta, int flag)
 {
     int   v0 = *(unsigned short*)((char*)st + 0x18);
     int   v1 = *(unsigned short*)((char*)st + 0x1a);
@@ -465,26 +465,34 @@ void fnt_MovePoint(void* st, int idx, int delta, int flag)
     int*   cx    = (int*)sp[0];
     int*   cy    = (int*)sp[1];
     char*  marks = (char*)sp[10];
+    char*  r     = 0;
 
     if (dy == 0x4000) {
         if (v0 != 0) {
             cx[idx] += util_ShortFracMul(delta, v0);
-            marks[idx] |= 1;
+            r = marks + idx;
+            *r |= 1;
         }
         if (v1 != 0) {
             cy[idx] += util_ShortFracMul(delta, v1);
-            marks[idx] |= 2;
+            r = marks + idx;
+            *r |= 2;
+            return r;
         }
     } else {
         if (v0 != 0) {
             cx[idx] += (util_FixMul(delta, util_FixDiv((short)v0 << 4, (int)dy)) + 4) >> 4;
-            marks[idx] |= 1;
+            r = marks + idx;
+            *r |= 1;
         }
         if (v1 != 0) {
             cy[idx] += (util_FixMul(delta, util_FixDiv((short)v1 << 4, (int)dy)) + 4) >> 4;
-            marks[idx] |= 2;
+            r = marks + idx;
+            *r |= 2;
+            return r;
         }
     }
+    return r;
 }
 
 // @ 0x008ac2a0
@@ -526,7 +534,7 @@ int fnt_OldProject(void* st, int x, int y)
 }
 
 // @ 0x008ac370  (fnt_GetCVTScale) — the vector state is the first argument.
-int fnt_GetCVTScale(T1Exec* s)
+static int fnt_GetCVTScale(T1Exec* s)
 {
     int  cx = *(unsigned short*)((char*)s + 0x14);
     int* p  = *(int**)((char*)s + 0x28);
@@ -596,7 +604,7 @@ static inline int SnapProjScale(unsigned short c)
 }
 
 // @ 0x008ac7a0  (fnt_ComputeAndCheck_PF_Proj)
-void fnt_ComputeAndCheck_PF_Proj(void* s)
+static void fnt_ComputeAndCheck_PF_Proj(void* s)
 {
     int a = *(short*)((char*)s + 0x1a) * *(short*)((char*)s + 0x16) + 0x2000;
     int b = *(short*)((char*)s + 0x18) * *(short*)((char*)s + 0x14) + 0x2000;
