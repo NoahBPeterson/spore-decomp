@@ -1,0 +1,7 @@
+008bdb70 tsi_DeleteCFFClass  # pdb_names.json gap-align (dev 01219ce0); frees the T2K/CFF reader's CFFClass and its index/hash members
+008bdca0 tsi_T2GetGlyphByIndex  # pdb_candidates.json caller-single (dev 01219e10); decodes one glyph via Type2BuildChar then builds the awx/metric points
+008bdec0 ShellSortT2Cmap  # pdb_names.json callee-single (dev 0121a030); shell-sorts a sidCode[] cmap by sid
+008bdf80 T2_FindSID  # no PDB name; card FUN_008bdf80, binary-search of T2_CMAPTable by sid, returns unsigned char + the found glyphIndex
+008bdfe0 T2_CharCodeToGlyphIndex  # no PDB name; card FUN_008bdfe0, char-code -> glyph index via charCodeToSID + T2_FindSID, sets glyphExists
+008be080 BuildT2MetricsEtc  # pdb_names.json callee-scored (dev 0121a260); recomputes upem/scale, ascent/descent/lineGap and maxPointCount
+008be220 FF_GetAW_CFFClass  # pdb_candidates.json caller-single (dev 0121a490); returns one glyph's advance width via tsi_T2GetGlyphByIndex

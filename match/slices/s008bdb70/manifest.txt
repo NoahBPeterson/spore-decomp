@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+slices/s008bdb70/s008bdb70.cpp  _tsi_DeleteCFFClass  008bdb70  /O2 /MD /Gy /TC
+slices/s008bdb70/s008bdb70.cpp  _ShellSortT2Cmap     008bdec0  /O2 /MD /Gy /TC
+slices/s008bdb70/s008bdb70.cpp  _BuildT2MetricsEtc   008be080  /O2 /MD /Gy /TC
+slices/s008bdb70/s008bdb70.cpp  _FF_GetAW_CFFClass   008be220  /O2 /MD /Gy /TC
