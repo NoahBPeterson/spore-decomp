@@ -1,0 +1,13 @@
+008f2e10  116  WStrLess_KeyElem (bsearch_less wrapper: compare a wide key against *elem): complete + equivalence-checked; only the placement of `movzx edi,ax` and the comparison tail remain (retail uses sbb/neg, cl emits setb/neg). flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+008f2e90  116  WStrLess_ElemKey (bsearch_less wrapper: compare *elem against a wide key): complete + equivalence-checked; same tail artifact as WStrLess_KeyElem.
+008f2f10  104  TextRun::Fn8f2f10 (build a wide text run from a paragraph, count = (mpTextEnd-mpText)>>1): complete + equivalence-checked; cl hoists the mpPresenter null-test into a register (ebx) while retail tests the member directly (`cmp [esi+0x48],0`); argument setup otherwise identical.
+008f2f80   93  CSSParser::TokenValue (copy a parsed token span into the output buffer): complete + equivalence-checked; retail keeps `this` in ebx and uses ecx for the calls, cl spills `this` to the frame.
+008f3020  103  CreatePropertyFunc<float> (allocate a Property, set vtable/setter/context/args): complete + equivalence-checked; cl moves the fail/store block (the `return 0` tail) to the middle of the function and reorders the member stores.
+008f3090  106  CreatePropertyFunc<Length> (Property for a Length value): complete + equivalence-checked; same fail-block placement / member-store ordering artifact as CreatePropertyFunc<float>.
+008f3100  110  CreatePropertyFunc<ushort,ushort> (Property for two ushort args): complete + equivalence-checked; same fail-block placement / member-store ordering artifact.
+008f3170  113  CreatePropertyFunc<Length,EdgeIndex> (alloc 0x28, Property for Length + EdgeIndex): complete + equivalence-checked; same fail-block placement / member-store ordering artifact.
+008f31f0  216  CSSParser::SetEdgeProperties<Length> (thiscall + 7 stack args, ret 0x1c): complete + equivalence-checked; retail marshals the 8-arg CreatePropertyFunc call with a single `sub esp,0x10` + block stores, cl emits individual pushes.
+008f32d0  195  CSSParser::SetEdgeProperties<unsigned int>: complete + equivalence-checked; same call-argument marshalling artifact as SetEdgeProperties<Length> (retail `sub esp,0x10` block vs cl pushes).
+008f33a0   99  CreatePropertyFunc<unsigned int>: complete + equivalence-checked; same fail-block placement / member-store ordering artifact.
+008f3410  106  CreatePropertyFunc<unsigned int,EdgeIndex>: complete + equivalence-checked; same fail-block placement / member-store ordering artifact.
+008f3480   76  CharStream::MatchAscii (case-insensitive ascii prefix match, advance mpPos): complete + equivalence-checked; 4-byte diff, retail orders `movsx`/`movzx` differently (only `movzx edi,di` vs `movsx eax,al`).

@@ -1,0 +1,40 @@
+008f2660 EA::XHTML::Style::PropArg::Fn8f2660  # named ctor-ish helper: builds a PropArg from a Length edge arg + count; PropArg.cpp
+008f26b0 EA::XHTML::Style::StyleState::SetFontFamilies  # stores a font-family list pointer (max 8) + count into the style
+008f2740 EA::XHTML::Style::StyleState::SetFontWeight  # float overload: stores mfWeight
+008f2760 EA::XHTML::Style::StyleState::SetFontWeight  # int overload: converts to float and stores mfWeight
+008f2780 EA::XHTML::Style::StyleState::SetFontSize  # stores the Length mFontSize
+008f27a0 EA::XHTML::Style::StyleState::SetStretch  # stores mfStretch
+008f27c0 EA::XHTML::Style::StyleState::SetFontSmoothThresh  # stores the Length mFontSmoothThresh
+008f27f0 EA::XHTML::Style::StyleState::SetBackgroundColor  # stores mBgColor and clears mColorInherited
+008f28c0 EA::XHTML::Style::StyleState::SetDecorationFlags  # stores the decoration flags (ushort,ushort)
+008f2910 EA::XHTML::Style::StyleState::SetVerticalAlign  # stores the Length mVerticalAlign, sets mVerticalAlignKW=8
+008f29b0 EA::XHTML::Style::StyleState::SetMargin  # writes a Length into mEdges[edge].mMargin (edge==4 sets all four)
+008f2a20 EA::XHTML::Style::StyleState::SetPadding  # writes a Length into mEdges[edge].mPadding
+008f2a90 EA::XHTML::Style::StyleState::SetBorderWidth  # writes a Length into mEdges[edge].mBorder
+008f2b00 EA::XHTML::Style::StyleState::SetBorderColor  # writes a color into mEdges[edge].mBorderColor
+008f2b40 EA::XHTML::Style::StyleState::SetBorderStyle  # writes a border style into mEdges[edge].mBorderStyle
+008f2bc0 EA::XHTML::Style::StyleState::SetBorderSpacing  # stores mBorderSpacingH / mBorderSpacingV
+008f2c60 EA::XHTML::Style::StyleState::SetBoxOffset  # writes a Length into mBoxOffset[edge]
+008f2ce0 EA::XHTML::Style::MakeColor  # packs four bytes (a,r,g,b) into a 32-bit color
+008f2d10 EA::XHTML::Style::CharStream::CopyWideLine  # copies up to n wide chars from src into buf, stops at newline; returns whether src was non-null
+008f2d70 EA::XHTML::Style::PropFunc_Uint::Apply  # applies a stored uint property (calls setter with the value)
+008f2d90 EA::XHTML::Style::PropFunc_Float::Apply  # applies a stored float property
+008f2db0 EA::XHTML::Style::PropFunc_2UShort::Apply  # applies a stored (ushort,ushort) property
+008f2dd0 EA::XHTML::Style::PropFunc_3Uint::Apply  # applies a stored 3-uint property
+008f2df0 EA::XHTML::Style::PropFunc_2Uint::Apply  # applies a stored 2-uint property
+008f2e10 EA::XHTML::Style::WStrLess_KeyElem  # bsearch_less comparator: wide key vs *elem
+008f2e90 EA::XHTML::Style::WStrLess_ElemKey  # bsearch_less comparator: *elem vs wide key
+008f2f10 EA::XHTML::Style::TextRun::Fn8f2f10  # builds a wide text run from a paragraph into a caller buffer
+008f2f80 EA::XHTML::Style::CSSParser::TokenValue  # copies the current token span into the output buffer
+008f2fe0 EA::XHTML::Style::CharStream::NextChar  # reads and advances one wide char (returns 0 at end)
+008f3000 EA::XHTML::Style::CharStream::MatchChar  # matches one char and advances mpPos on success
+008f3020 EA::XHTML::Style::CreatePropertyFunc<float>  # allocates a Property node and binds the setter/context/arg
+008f3090 EA::XHTML::Style::CreatePropertyFunc<EA::XHTML::Style::Length>  # Property node for a Length value
+008f3100 EA::XHTML::Style::CreatePropertyFunc<unsigned short,unsigned short>  # Property node for two ushort args
+008f3170 EA::XHTML::Style::CreatePropertyFunc<EA::XHTML::Style::Length,enum EA::XHTML::Style::EdgeIndex>  # Property node (alloc 0x28) for Length + edge
+008f31f0 EA::XHTML::Style::CSSParser::SetEdgeProperties<EA::XHTML::Style::Length>  # builds+links Property nodes for each edge (thiscall ret 0x1c)
+008f32d0 EA::XHTML::Style::CSSParser::SetEdgeProperties<unsigned int>  # uint variant of SetEdgeProperties
+008f33a0 EA::XHTML::Style::CreatePropertyFunc<unsigned int>  # Property node for a uint value
+008f3410 EA::XHTML::Style::CreatePropertyFunc<unsigned int,enum EA::XHTML::Style::EdgeIndex>  # Property node for uint + edge
+008f3480 EA::XHTML::Style::CharStream::MatchAscii  # case-insensitive ascii prefix match, advances mpPos
+008f34d0 EA::XHTML::Style::CharStream::MatchWide  # wide-string prefix match, advances mpPos
