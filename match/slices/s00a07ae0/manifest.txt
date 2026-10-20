@@ -1,0 +1,8 @@
+slices/s00a07ae0/s00a07ae0.cpp  ?Set0c@Cmd@@QAEXPAUCArgs@@@Z  00a07ae0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a07ae0/s00a07ae0.cpp  ?Set34@Cmd@@QAEXPAUCArgs@@@Z  00a07b70  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a07ae0/s00a07ae0.cpp  ?Set28@Cmd@@QAEXPAUCArgs@@@Z  00a07ba0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a07ae0/s00a07ae0.cpp  ?Set29@Cmd@@QAEXPAUCArgs@@@Z  00a07c00  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a07ae0/s00a07ae0.cpp  ?Mask2c@Cmd@@QAEXPAUCArgs@@@Z  00a07c30  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a07ae0/s00a07ae0.cpp  ?Mask30@Cmd@@QAEXPAUCArgs@@@Z  00a07cb0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a07ae0/s00a07ae0.cpp  ?Set2a@Cmd@@QAEXPAUCArgs@@@Z  00a07d60  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a07ae0/s00a07ae0.cpp  ?FUN_00a08180@@YGPAXPBI@Z  00a08180  /O2 /MD /Gy /TP /arch:SSE
