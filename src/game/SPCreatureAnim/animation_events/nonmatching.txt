@@ -10,3 +10,4 @@
 009a5650 406 complete nSPCreatureAnim::ComputeEventLocationData; switch on event flags&0xf producing target loc/vec; equiv PASS 392/392
 009a5860 274 complete nSPCreatureAnim::GetEventDataAs32Bits; selects a table entry / bone pose value by event kind; equiv PASS 339/339
 009a59a0 51 complete nSPCreatureAnim::GetEventDataAsFloat; forwards to GetEventDataAs32Bits, returns the raw float bits; equiv FAIL 1/356 (input passes a garbage table index 0xb3cc3050, an out-of-range read that is UB in the original as well)
+009a59e0 3503 complete ComputeEventLocationState; layouts via AT() offsets, callee conventions guessed, codegen not iterated (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast)
