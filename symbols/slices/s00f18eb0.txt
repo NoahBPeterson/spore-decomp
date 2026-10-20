@@ -1,0 +1,65 @@
+# Slice s00f18eb0 — UI::cScenarioPlayProgressBar (Spore UI scenario progress bar).
+# Primary vftable 0x0148c180; secondary bases 0x0148c178 (+0x04) and 0x0148c168 (+0x08).
+# Not present in the PDB for this VA range, so member names are descriptive.
+# Status: 10 byte-exact, 8 complete-but-inexact, 11 incomplete.
+00f18eb0  ??0cScenarioPlayProgressBar@UI@@QAE@XZ        cScenarioPlayProgressBar::cScenarioPlayProgressBar()        [nonmatching]
+00f18f50  ??1cScenarioPlayProgressBar@UI@@QAE@XZ        cScenarioPlayProgressBar::~cScenarioPlayProgressBar()       [nonmatching]
+00f18ff0  ?cScenarioPlayProgressBar_HasFlag@UI@@YA_NXZ  bool __cdecl ...HasFlag()                                    [MATCH]
+00f19050  ?Tick@cScenarioPlayProgressBar@UI@@QAEXXZ     void cScenarioPlayProgressBar::Tick()                       [nonmatching]
+00f190a0  ?Reset@cScenarioPlayProgressBar@UI@@QAEXXZ    void cScenarioPlayProgressBar::Reset()                      [nonmatching]
+00f19130  ?Release@cScenarioPlayProgressBar@UI@@QAEXXZ  void cScenarioPlayProgressBar::Release()                    [MATCH]
+00f19160  ?GetProgressF@cScenarioPlayProgressBar@UI@@QAEMXZ float cScenarioPlayProgressBar::GetProgressF()          [MATCH]
+00f191a0  ?IsEnabled@cScenarioPlayProgressBar@UI@@QAEPAXXZ void* cScenarioPlayProgressBar::IsEnabled()              [MATCH]
+00f19220  ?cScenarioPlayProgressBar_KindOk@UI@@YA_NPAX@Z bool __cdecl ...KindOk(void*)                              [partial]
+00f19270  ?cScenarioPlayProgressBar_Merge@UI@@YAXPAX0@Z  void __cdecl ...Merge(void*, void*)                         [partial]
+00f19530  ?cScenarioPlayProgressBar_SetAttr@UI@@YAXPAX@Z void __cdecl ...SetAttr(void*)                              [partial]
+00f195a0  ?cScenarioPlayProgressBar_Link@UI@@YAXPAX@Z   void __cdecl ...Link(void*)                                  [nonmatching]
+00f19640  ?cScenarioPlayProgressBar_IsReady@UI@@YA_NXZ  bool __cdecl ...IsReady()                                   [MATCH]
+00f19660  ?EachChild@cScenarioPlayProgressBar@UI@@QAEXPAIH@Z void cScenarioPlayProgressBar::EachChild(uint32_t*,uint32_t) [partial]
+00f196f0  ?cScenarioPlayProgressBar_EachChild2@UI@@YAXPAX@Z void __cdecl ...EachChild2(void*)                       [partial]
+00f19840  ?cScenarioPlayProgressBar_ByIndex@UI@@YAHPAX@Z int __cdecl ...ByIndex(void*)                              [partial]
+00f198f0  ?Apply@cScenarioPlayProgressBar@UI@@QAEX_N@Z  void cScenarioPlayProgressBar::Apply(bool)                  [partial]
+00f19940  ?Setup@cScenarioPlayProgressBar@UI@@QAEXIIIIIIIII@Z void cScenarioPlayProgressBar::Setup(9 x uint32_t)     [partial]
+00f19ac0  ?Remove@cScenarioPlayProgressBar@UI@@QAEXPAXI@Z void cScenarioPlayProgressBar::Remove(void*, uint32_t)     [partial]
+00f19b80  ?IsActive@cScenarioPlayProgressBar@UI@@QAE_NXZ bool cScenarioPlayProgressBar::IsActive()                  [nonmatching]
+00f19be0  ?GetByte@cScenarioPlayProgressBar@UI@@QAEEH@Z  uint8_t cScenarioPlayProgressBar::GetByte(int)             [MATCH]
+00f19c00  ?GetField@cScenarioPlayProgressBar@UI@@QAEHH@Z int cScenarioPlayProgressBar::GetField(int)                [MATCH]
+00f19c20  ?GetField2@cScenarioPlayProgressBar@UI@@QAEHH@Z int cScenarioPlayProgressBar::GetField2(int)              [MATCH]
+00f19c40  ?GetField3@cScenarioPlayProgressBar@UI@@QAEHH@Z int cScenarioPlayProgressBar::GetField3(int)              [MATCH]
+00f19c60  ?GetDelta@cScenarioPlayProgressBar@UI@@QAEHH@Z int cScenarioPlayProgressBar::GetDelta(int)                [MATCH]
+00f19c80  ?GetKind@cScenarioPlayProgressBar@UI@@QAEEH@Z  uint8_t cScenarioPlayProgressBar::GetKind(int)             [nonmatching]
+00f19cc0  ?IsKindAb@cScenarioPlayProgressBar@UI@@QAE_NH@Z bool cScenarioPlayProgressBar::IsKindAb(int)              [nonmatching]
+00f19d10  ?ScanFrac@cScenarioPlayProgressBar@UI@@QAEMXZ  float cScenarioPlayProgressBar::ScanFrac()                [partial]
+00f19e00  ?cScenarioPlayProgressBar_Pred@UI@@YA_NPAX@Z  bool __cdecl ...Pred(void*)                                 [partial]
+#
+# Object layout (offsets from this):
+#   +0x00 / +0x04 / +0x08   vftables 0x148c180 / 0x148c178 / 0x148c168
+#   +0x0c / +0x10 / +0x14   pointers; +0x10 and +0x14 are refcounted (released in dtor)
+#   +0x18 .. +0x2c          floats; +0x28 == 1.0f
+#   +0x30 / +0x31           flag bytes
+#   +0x34 .. +0x53          embedded member (ctor 0x007f83e0, dtor 0x007f8c20)
+#   +0x54 .. +0x64          five pointers freed together via 0x00571db0
+#   +0x64                   element-array base, element stride 0x1ac
+#   +0x68                   element-array end
+#   +0x90                   state enum (2 = reset, 3 = removed, 5 = enabled, 5..6 = ticking)
+#   +0x94                   in-flight guard (non-zero suppresses Tick)
+#   +0x98                   sub-object passed to 0x0093a2e0
+#   +0xb8                   id handed to 0x00f3be60
+#   +0xbc                   int progress counter (GetProgressF = * 0.001f)
+#   +0xc0                   int cleared by Reset
+#   +0xc4                   handle tested by IsEnabled
+#   +0xec                   byte cleared by Reset
+#   +0xf0 / +0xf4           pointer pair released by Release (0x00572020)
+#
+# Element layout (stride 0x1ac, base at +0x64):
+#   +0x00   byte kind (GetKind)
+#   +0x04   int (GetField2)
+#   +0x24   int kind (GetField, compared against 0xa/0xb by IsKindAb)
+#   +0x30   int (GetField3; GetDelta = [+0x30] - [+0x04])
+#   +0x34   byte (GetByte)
+#
+# External callees: 0x571db0 0x572020 0x7f83e0 0x7f8c20 0x93a2e0 0xb1fdb0 0xb320d0
+#   0xb32250 0xb3d300 0xb3d350 0xb3d380 0xb7f250 0xbfc640 0xc15d50 0xc88940 0xc8a110
+#   0xeec2b0 0xefcae0 0xf3be60.  Globals: 0x16c7aa4 (app/UI singleton).
+# Constants: 0x1485720 = 1.0f, 0x13f9428 = 0.001f, 0x13ec4b8 = 1e-9f, 0x4c8f8d29 = magic
+#   for /0x1ac.  Names: 0x1186577, 0x7b0f76d, 0x175cdc9, 0xce9f6639, 0x137e8e0.

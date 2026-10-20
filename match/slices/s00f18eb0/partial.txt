@@ -1,0 +1,13 @@
+# Slice s00f18eb0 (UI::cScenarioPlayProgressBar) — incomplete.
+# Format: <va> <diff> <reason>
+00f19220  -    KindOk: prologue (null test, vtable slot 0xb8 lookup of 0x175cdc9, null test, field +0x38, subtract 6) is correct, but the original then runs a 10-entry switch via a byte table at 0xf19264 and a jump table at 0xf1925c. The reconstruction currently returns true unconditionally — switch table not decoded.
+00f19270  -    Merge (two-object merge, 690 bytes): body not reconstructed. Uses vtable slots 0xc (FindControl by name 0x1186577), 0x74 (GetValue, x87 float), 0x2c (GetPosition/Vec3), 0x44, plus 0xeec2b0, 0xb3d350/0xb7f250/0xbfc640 helpers.
+00f19530  -    SetAttr (105 bytes): body not reconstructed. Looks up 0x1186577, tests 0x7b0f76d via 0xc88940, then vtable slot 0x70 and 0xc8a110.
+00f19660  -    EachChild (135 bytes, ret 8): body not reconstructed. Iterates the 0x1ac-stride array calling a callback per element.
+00f196f0  -    EachChild2 (333 bytes): body not reconstructed.
+00f19840  -    ByIndex (168 bytes, ret 4): body not reconstructed.
+00f198f0  -    Apply (68 bytes, ret 8): body not reconstructed.
+00f19940  -    Setup (374 bytes, ret 0x24 — 9 stack args): body not reconstructed.
+00f19ac0  -    Remove (187 bytes, ret 8): body not reconstructed. Tests m90 == 3, resolves the singleton via 0xb3d300/0xb1fdb0 and walks vtable slot 0x2c.
+00f19d10  -    ScanFrac (228 bytes): body not reconstructed. Ends with an x87 fdivr against the argument at [esp+8] (a ratio of two accumulated distances).
+00f19e00  -    Pred (100 bytes): body not reconstructed.
