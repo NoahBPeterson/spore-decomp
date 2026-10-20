@@ -230,7 +230,7 @@ void cDistributeEffect::FUN_00a87fb0(void* stream, int base)
     }
 }
 
-// @ 0x00a88220 -- returns the 8-byte (edx:eax) pair (a, b)
+// @ 0x00a88220
 __int64 cDistributeEffect::FUN_00a88220()
 {
     uint32_t a = *(uint32_t*)((char*)this + 0xf0);
@@ -283,7 +283,7 @@ int cDistributeEffect::FUN_00a88390(int count, void** outBegin, void** outStride
     return count;
 }
 
-// @ 0x00a88490 -- SquareToRing(float* out, float x, float y, float z)
+// @ 0x00a88490
 void FUN_00a88490(float* out, float param_2, float param_3, float param_4)
 {
     float fVar3 = param_3 * 2.0f - DAT_01678264;
@@ -319,7 +319,7 @@ void FUN_00a88490(float* out, float param_2, float param_3, float param_4)
     out[1] = ((c2 - (c1 * fVar4) * DAT_01471064) * fVar4 + c1) * a;
 }
 
-// @ 0x00a88640 -- call renderer vtable slots for active sub-surfaces
+// @ 0x00a88640
 void FUN_00a88640(int base, void* renderer)
 {
     short* p = (short*)(base + 2);
@@ -353,7 +353,7 @@ void FUN_00a88640(int base, void* renderer)
     }
 }
 
-// @ 0x00a886f0 (EA::Swarm::cDistributeEffect::SetIsVisible)
+// @ 0x00a886f0
 void cDistributeEffect::FUN_00a886f0(int visible)
 {
     if ((visible & 0xff) == 0)

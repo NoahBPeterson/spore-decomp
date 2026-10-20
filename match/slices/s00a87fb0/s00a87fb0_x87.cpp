@@ -85,11 +85,11 @@ struct cDistributeEffect {
 };
 
 // ===========================================================================
-// @ 0x00a88400 -- anonymous-namespace'::CubeToSphereSurface(float* out, const float* p)
+// @ 0x00a88400
 void FUN_00a88400(float* out, const float* p)
 {
     float inv = 1.0f / sqrtf(p[1] * p[1] + p[0] * p[0] + 1.0f);
-    int sel = (int)p[2];
+    int sel = _mm_cvt_ss2si(_mm_set_ss(p[2]));
     int idx = (sel >> 1) * 4;
     float s = inv;
     if (sel & 1)
@@ -100,8 +100,8 @@ void FUN_00a88400(float* out, const float* p)
 }
 
 // ===========================================================================
-// @ 0x00a88250 -- copy [first,last) 0x18-byte transform records into dst
-void FUN_00a88250(uint32_t* first, uint32_t* last, uint32_t* dst)
+// @ 0x00a88250
+uint32_t* FUN_00a88250(uint32_t* first, uint32_t* last, uint32_t* dst)
 {
     if (first != last) {
         uint32_t* d5 = dst + 5;
@@ -121,4 +121,5 @@ void FUN_00a88250(uint32_t* first, uint32_t* last, uint32_t* dst)
             d5 = d5 + 6;
         } while (first != last);
     }
+    return dst;
 }
