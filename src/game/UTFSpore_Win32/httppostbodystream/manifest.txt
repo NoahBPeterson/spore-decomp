@@ -5,7 +5,7 @@
 ../src/game/UTFSpore_Win32/httppostbodystream.cpp  ?Write@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UAE_NPBXI@Z  009467d0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/httppostbodystream.cpp  ?GetSize@HTTPMultipartFormDataPostBodyStream@Internet@EA@@UBEIXZ  009467e0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/httppostbodystream.cpp  ?SetSize@HTTPMultipartRelatedPostBodyStream@Internet@EA@@UAE_NI@Z  00946800  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
-../src/game/UTFSpore_Win32/httppostbodystream.cpp  ?Close@HTTPFormURLEncodedPostBodyStream_s0094_5ed0@Internet@EA@@QAE_NXZ  00946810  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/httppostbodystream.cpp  ?Close@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UAE_NXZ  00946810  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/httppostbodystream.cpp  ?GetSize@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UBEIXZ  00946830  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/httppostbodystream.cpp  ?SetPosition@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UAE_NJW4PositionType@IO@3@@Z  00946890  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/httppostbodystream.cpp  ?Read@HTTPFormURLEncodedPostBodyStream_s0094_5ed0@Internet@EA@@QAEHPAXI@Z  00946920  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include

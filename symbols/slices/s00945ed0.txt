@@ -7,7 +7,7 @@
 009467d0 ?Write@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UAE_NPBXI@Z  # EA::Internet::HTTPFormURLEncodedPostBodyStream::Write migrated from s00945ed0
 009467e0 ?GetSize@HTTPMultipartFormDataPostBodyStream@Internet@EA@@UBEIXZ  # EA::Internet::HTTPMultipartFormDataPostBodyStream::GetSize migrated from s00945ed0
 00946800 ?SetSize@HTTPMultipartRelatedPostBodyStream@Internet@EA@@UAE_NI@Z  # EA::Internet::HTTPMultipartRelatedPostBodyStream::SetSize migrated from s00945ed0
-00946810 ?Close@HTTPFormURLEncodedPostBodyStream_s0094_5ed0@Internet@EA@@QAE_NXZ  # HTTPFormURLEncodedPostBodyStream_s0094_5ed0::Close migrated from s00945ed0 (verbatim, slice spelling)
+00946810 ?Close@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UAE_NXZ  # EA::Internet::HTTPFormURLEncodedPostBodyStream::Close migrated from s00945ed0
 00946830 ?GetSize@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UBEIXZ  # EA::Internet::HTTPFormURLEncodedPostBodyStream::GetSize migrated from s00945ed0
 00946850 ?GetPosition@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UBEJW4PositionType@IO@3@@Z  # EA::Internet::HTTPFormURLEncodedPostBodyStream::GetPosition migrated from s00945ed0
 00946890 ?SetPosition@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UAE_NJW4PositionType@IO@3@@Z  # EA::Internet::HTTPFormURLEncodedPostBodyStream::SetPosition migrated from s00945ed0

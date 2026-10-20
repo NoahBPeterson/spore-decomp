@@ -20,6 +20,7 @@
 #include "EA/Thread/Mutex.h"
 #include "EA/Thread/Thread.h"
 #include <intrin.h>
+#include "EA/IO/FileStream.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
@@ -309,14 +310,20 @@ void __cdecl EncodeFormURL(const char* s, eastl::StrStub* out);
 namespace EA {
 namespace Internet {
 struct IStr {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
     virtual int  GetState();                        // 5  (+0x14)
     virtual void v6();
     virtual unsigned GetSize();                     // 7  (+0x1c)
     virtual void v8();
     virtual int  GetPos(int);                       // 9  (+0x24)
     virtual bool SetPos(int, int);                  // 10 (+0x28)
-    virtual void v11(); virtual void v12(); virtual void v13();
+virtual void v11();
+virtual void v12();
+virtual void v13();
     virtual int  Write(const void*, unsigned);      // 14 (+0x38)
 };
 }
@@ -325,12 +332,27 @@ namespace EA {
 namespace Internet {
 struct IStreamBase {
     virtual ~IStreamBase() {}
-    virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
-    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
     virtual void v10();
     virtual int  VGetAvailable();                   // 11 (+0x2c)
-    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16();
-    virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
     virtual void WriteStr(const char*, IStr*);      // 22 (+0x58)
     virtual bool Finish();                          // 23 (+0x5c)
     virtual bool Finish2();                         // 24 (+0x60)
@@ -360,12 +382,12 @@ public:
     bool Fn9467d0(int, int);
     bool Close();  // 0x00946810 (EA::Internet::HTTPFormURLEncodedPostBodyStream::Close)
     int  GetSize();  // 0x00946830 (EA::Internet::HTTPFormURLEncodedPostBodyStream::GetSize)
-    int  GetPosition(int origin);
-    bool SetPosition(int pos, int origin);
+    int  GetPosition(int origin);  // 0x00946850 (EA::Internet::HTTPFormURLEncodedPostBodyStream::GetPosition)
+    bool SetPosition(int pos, int origin);  // 0x00946890 (EA::Internet::HTTPFormURLEncodedPostBodyStream::SetPosition)
     int  GetAvailable();  // 0x00946900 (EA::Internet::HTTPFormURLEncodedPostBodyStream::GetAvailable)
     int  Read(void* buf, unsigned n);
     bool GetContentTypeString(eastl::StrStub* out);  // 0x00946d20 (EA::Internet::HTTPFormURLEncodedPostBodyStream::GetContentTypeString)
-    bool Write(const char* name, const char* value);
+    bool Write(const char* name, const char* value);  // 0x009467d0 (EA::Internet::HTTPFormURLEncodedPostBodyStream::Write)
     bool Fn946cc0();
     HTTPFormURLEncodedPostBodyStream_s0094_5ed0();
 };
@@ -492,8 +514,7 @@ bool EA::Internet::HTTPMultipartRelatedPostBodyStream::SetSize(unsigned int a0)
 }
 
 // @ 0x00946810
-namespace EA { namespace Internet {
-bool HTTPFormURLEncodedPostBodyStream_s0094_5ed0::Close()
+bool EA::Internet::HTTPFormURLEncodedPostBodyStream::Close()
 {
     mnState = -2;
     _ReadWriteBarrier();
@@ -503,7 +524,6 @@ bool HTTPFormURLEncodedPostBodyStream_s0094_5ed0::Close()
     }
     return true;
 }
-}}  // namespace EA::Internet
 
 // @ 0x00946830
 unsigned int EA::Internet::HTTPFormURLEncodedPostBodyStream::GetSize() const
