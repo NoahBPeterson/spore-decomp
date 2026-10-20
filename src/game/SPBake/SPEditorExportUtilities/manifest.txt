@@ -1,5 +1,6 @@
 # source  symbol  va  flags
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?FUN_00460b50@@YAXPAUBone@@HHUVec3_s0046_04f0@@@Z  00460b50  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorExportUtilities.cpp  ?Ctor@C460f80@@QAEPAU1@XZ  00460f80  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?AddRef@RefCounted@@QAEHXZ  00461290  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?GetGlobalFlag@@YAEXZ  00461510  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?UseName@@YAXH@Z  004615b0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
@@ -20,6 +21,7 @@
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?ExportCreatureBlocksFile@EditorUtils@SP@@YAXPB_WPAUCreatureBlocks@@@Z  0046e450  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?DumpEditorModelZPR@EditorUtils@SP@@YAXPAUEditorModelSource@@PB_W@Z  0046eae0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?init@Desc@@QAEPAU1@HHPAUBaseDesc@@H@Z  0046f140  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorExportUtilities.cpp  ??0Batch_s0046_e450@@QAE@XZ  0046f1b0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?init0@Desc@@QAEPAU1@XZ  0046f1f0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?FUN_0046f260@@YIHPAUSf260@@@Z  0046f260  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?FUN_00470f20@@YAMPAUVec4@@@Z  00470f20  /Od /Ob1 /arch:SSE /fp:fast /MD /Gy /EHsc /TP /GS- /Isrc/game/include

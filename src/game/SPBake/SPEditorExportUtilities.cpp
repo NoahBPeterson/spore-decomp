@@ -2514,6 +2514,7 @@ struct DescVec {
     StreamDesc_s0046_e450* mpEnd;
     StreamDesc_s0046_e450* mpCapacity;
     uint32_t mAllocator[2];
+    DescVec();                                                // 0x004725d0 (fixed_vector ctor)
     void resize(unsigned n);                                  // 0x004751a0
     StreamDesc_s0046_e450& operator[](int i) { return mpBegin[i]; }
 };
@@ -2522,12 +2523,16 @@ struct IndexVec_s0046_e450 {
     StreamIndex* mpEnd;
     StreamIndex* mpCapacity;
     uint32_t mAllocator[2];
+    IndexVec_s0046_e450();                                               // 0x00472560 (fixed_vector ctor)
     void push_back(const StreamIndex& v);                     // 0x00475130
+};
+struct DescInit : Desc {
+    DescInit() { init0(); }
 };
 struct __declspec(align(4)) Batch_s0046_e450 {                            // 0x8c bytes
     Batch_s0046_e450();                              // 0x0046f1b0
     ~Batch_s0046_e450();                             // 0x0041f940
-    uint32_t mIndices[4];                 // +0x00 (StreamDesc)
+    DescInit mDesc;                       // +0x00 (StreamDesc, zeroed by Desc::init0)
     int mVertexCount;                     // +0x10
     IndexVec_s0046_e450 mStreamIndices;              // +0x14
     uint32_t pad28[(0x44 - 0x28) / 4];
@@ -2960,6 +2965,7 @@ struct RefHolderB {
 
 // ---- items of slice s004604f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
+extern char g_sentinel2;   // 0x01667bac
 extern void __cdecl GetFloatProperty(int owner, int key, float* out);     // 0x40cf10
 extern float g_const_1486114;       // 0x1486114
 extern int   g_3e8c[3];             // 0x15d3e8c
@@ -2972,6 +2978,21 @@ struct RefCounted {
     char         pad[8];
     volatile long mnRefCount;
     int AddRef();
+};
+struct Sub {
+    void* b;
+    void* e;
+    void* c;
+};
+struct C461400 {
+    char  pad0[4];
+    Sub   sub1;       // +0x04
+    char  pad1[0x18];
+    Sub   sub2;       // +0x28
+    char  pad2[8];
+    void* p3c;        // +0x3c
+    void* p40;        // +0x40
+    C461400* Ctor();
 };
 struct Vec3_s0046_04f0 { float x, y, z; Vec3_s0046_04f0() {} Vec3_s0046_04f0(const Vec3_s0046_04f0& o) { x = o.x; y = o.y; z = o.z; } };
 extern Vec3_s0046_04f0* __cdecl Vector3_Add(Vec3_s0046_04f0* a, const Vec3_s0046_04f0* b);                           // 0x41ddb0
@@ -2986,13 +3007,34 @@ struct Bone {
     Vec3_s0046_04f0  pos;         // +0x54
     char  pad3[0x8c - 0x60];
 };
+template<int N> inline void ScratchSlots_s0046_04f0() { unsigned int s[N]; }
 struct EmptyAlloc { EmptyAlloc() {} };
 struct Alloc {
     int a, b;
     Alloc() {}
     Alloc* __thiscall Copy(const EmptyAlloc& o);   // 0x429360 (copy ctor)
 };
+template <class T> struct Vec_s0046_04f0 {         // vector with a real allocator sub-object (0x14 bytes)
+    T* b; T* e; T* c;
+    Alloc al;
+    void Init(const EmptyAlloc& a) { b = 0; e = 0; c = 0; al.Copy(a); }
+};
+template <class T> struct VecPlain {    // vector with an empty allocator (0x14 bytes)
+    T* b; T* e; T* c;
+    int pad[2];
+    void Init() { b = 0; e = 0; c = 0; }
+};
 void* operator new(unsigned n, const char* name, int, int, int, int);   // 0xf473a0
+struct C460f80 {
+    Vec_s0046_04f0<int>       v0;      // 0x00
+    Vec_s0046_04f0<int>       v1;      // 0x14
+    Vec_s0046_04f0<int>       v2;      // 0x28
+    VecPlain<int>  v3;      // 0x3c
+    VecPlain<int>  v4;      // 0x50
+    VecPlain<int>  v5;      // 0x64
+    VecPlain<int>  v6;      // 0x78
+    C460f80* __thiscall Ctor();
+};
 struct Piece { int a, b; };
 struct PieceVec {                       // 0x14: vector<Piece>
     Piece* b; Piece* e; Piece* c; Alloc al;
@@ -3298,10 +3340,46 @@ void FUN_00460d40(int p1, int p2, int p3, int p4, int p5, int p6, int p7)
     }
 }
 
+// @ 0x00460f80
+C460f80* C460f80::Ctor()
+{
+    char t2, t1, t0;
+    ScratchSlots_s0046_04f0<1>();
+    v0.Init(*(const EmptyAlloc*)&t2);
+    v1.Init(*(const EmptyAlloc*)&t1);
+    v2.Init(*(const EmptyAlloc*)&t0);
+    v3.Init();
+    v4.Init();
+    v5.Init();
+    v6.Init();
+    return this;
+}
+
 // @ 0x00461290
 int RefCounted::AddRef()
 {
     return _InterlockedIncrement(&mnRefCount);
+}
+
+// @ 0x00461400
+C461400* C461400::Ctor()
+{
+    Sub* s1 = &sub1;
+    s1->b = 0;
+    s1->e = 0;
+    s1->c = 0;
+    s1->b = &g_sentinel2;
+    s1->e = s1->b;
+    s1->c = (char*)s1->b + 2;
+    Sub* s2 = &sub2;
+    s2->b = 0;
+    s2->e = 0;
+    s2->c = 0;
+    void** p3 = &p3c;
+    *p3 = 0;
+    void** p4 = &p40;
+    *p4 = 0;
+    return this;
 }
 
 // @ 0x004614b0
@@ -4993,6 +5071,13 @@ Desc* Desc::init(int a_, int b_, BaseDesc* r_, int)
     if (*local)
         (*local)->v0();
     return this;
+}
+
+// @ 0x0046f1b0
+Batch_s0046_e450::Batch_s0046_e450()
+: mVertexCount(0)
+{
+    ScratchSlots<7>();
 }
 
 // @ 0x0046f1f0
