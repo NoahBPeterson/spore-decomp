@@ -1,0 +1,2 @@
+00d2a630 SP::cCreatureCamera::UpdateCamera_StandardControl  # PDB FUN_00d2a630; standard-control per-frame camera update
+00d2a980 SP::cCreatureCamera::SetTransform  # PDB FUN_00d2a980; card label "cViewer::SetTransform" is wrong -- it is cCreatureCamera::SetTransform(float)
