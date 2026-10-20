@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a62ec0/s00a62ec0.cpp  ?pause_float@Eapd@Audio@EA@@YAXPAUXInput@123@M@Z  00a63090  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a62ec0/s00a62ec0.cpp  ?busy_float@Eapd@Audio@EA@@YAXPAUXThisInstance@123@M@Z  00a63310  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a62ec0/s00a62ec0.cpp  ?StoreFlag@XThisInstance@Eapd@Audio@EA@@QAE_NE@Z  00a633e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a62ec0/s00a62ec0.cpp  ?DestroyAll@EapdMapBase@Eapd@Audio@EA@@QAEXPAX@Z  00a63640  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a62ec0/s00a62ec0.cpp  ?HasKeyEvent@EapdMapBase@Eapd@Audio@EA@@QAE_NI@Z  00a63680  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a62ec0/s00a62ec0.cpp  ?HasKeyField@EapdMapBase@Eapd@Audio@EA@@QAE_NIH@Z  00a636b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a62ec0/s00a62ec0.cpp  ?FindOrInsert28@EapdMapBase@Eapd@Audio@EA@@QAEPAXPAPAXPAI@Z  00a63bf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
