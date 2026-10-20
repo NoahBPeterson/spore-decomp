@@ -1,0 +1,15 @@
+008f6620 EA::XHTML::Style::CSSParser::ParseStretch  # inferred (unnamed in PDB; MatchSymbol over 0x154da78 with fValue=1.0f, StyleState::SetStretch 0x8f27a0); CSSParser.cpp
+008f66a0 EA::XHTML::Style::CSSParser::ParseFont  # font shorthand: style/variant/weight/size/line-height/family
+008f69a0 EA::XHTML::Style::CSSParser::ParseColor  # parses a color and stores it (SetColor 0x8f27e0)
+008f6a00 EA::XHTML::Style::CSSParser::ParseBackgroundColor  # parses a color (SetBackgroundColor 0x8f27f0)
+008f6ad0 EA::XHTML::Style::CSSParser::ParseBackgroundPosition  # background-position: one or two Length/percentages
+008f6da0 EA::XHTML::Style::CSSParser::ParseBackground  # background shorthand loop: color/image/repeat/attachment/position
+008f6eb0 EA::XHTML::Style::CSSParser::ParseWordSpacing  # word-spacing: Length or `normal`
+008f6f50 EA::XHTML::Style::CSSParser::ParseLetterSpacing  # letter-spacing: Length or `normal`
+008f6ff0 EA::XHTML::Style::CSSParser::ParseTextDecoration  # text-decoration: OR of keywords, or `none`
+008f7130 EA::XHTML::Style::CSSParser::ParseVerticalAlign  # vertical-align: Length or keyword
+008f72e0 EA::XHTML::Style::CSSParser::ParseTextIndent  # text-indent: Length or `inherit`
+008f7380 EA::XHTML::Style::CSSParser::ParseLineHeight  # line-height: Length, `normal` (1.0), or `inherit`
+008f7430 EA::XHTML::Style::CSSParser::ParseMarginEdge  # one margin edge (int index); `auto` allowed
+008f7500 EA::XHTML::Style::CSSParser::ParseMargin  # up to 4 margin edges
+008f7610 EA::XHTML::Style::CSSParser::ParsePaddingEdge  # one padding edge (int index)
