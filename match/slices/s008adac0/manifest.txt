@@ -1,0 +1,11 @@
+slices/s008adac0/s008adac0.cpp  ?fnt_MDAP0@@YAXPAUTTExecCtx@@@Z  008adf40  /O2 /MD /Gy /EHsc /TP
+slices/s008adac0/s008adac0.cpp  ?fnt_svtca_lo@@YAXPAUTTExecCtx@@@Z  008ae420  /O2 /MD /Gy /EHsc /TP
+slices/s008adac0/s008adac0.cpp  ?fnt_MD1@@YAXPAUTTExecCtx@@@Z  008ae540  /O2 /MD /Gy /EHsc /TP
+slices/s008adac0/s008adac0.cpp  ?fnt_MD0@@YAXPAUTTExecCtx@@@Z  008ae560  /O2 /MD /Gy /EHsc /TP
+slices/s008adac0/s008adac0.cpp  ?fnt_RS@@YAXPAUTTExecCtx@@@Z  008ae5d0  /O2 /MD /Gy /EHsc /TP
+slices/s008adac0/s008adac0.cpp  ?fnt_GC@@YAXPAUTTExecCtx@@@Z  008ae630  /O2 /MD /Gy /EHsc /TP
+slices/s008adac0/s008adac0.cpp  ?fnt_MD@@YAXPAUTTExecCtx@@@Z  008ae690  /O2 /MD /Gy /EHsc /TP
+slices/s008adac0/s008adac0.cpp  ?fnt_MPS@@YAXPAUTTExecCtx@@@Z  008ae7f0  /O2 /MD /Gy /EHsc /TP
+slices/s008adac0/s008adac0.cpp  ?fnt_INSTRCTRL_ON@@YAXPAUTTExecCtx@@@Z  008ae860  /O2 /MD /Gy /EHsc /TP
+slices/s008adac0/s008adac0.cpp  ?fnt_INSTRCTRL_OFF@@YAXPAUTTExecCtx@@@Z  008ae870  /O2 /MD /Gy /EHsc /TP
+slices/s008adac0/s008adac0.cpp  ?fnt_POP_NOOP@@YAXPAUTTExecCtx@@@Z  008ae880  /O2 /MD /Gy /EHsc /TP
