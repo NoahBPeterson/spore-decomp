@@ -5,6 +5,8 @@
 007e1950 131 hashtable rehash; bucket-walk codegen differs
 007e1a80 63 description dtor; member-destroy schedule differs
 007e1b00 75 eastl copy<AutoRef>; release/AddRef inlining differs
+007e29d0 187 hashtable insert (lookup + grow + relink + rehash); cl keeps key in ebp and reloads key->p/field4 in the walk while mine caches them (ebx/edi); h0 spill slot differs; equiv: PASS (91.6% coverage)
+007e2ae0 134 cAppStateManager copy ctor (2 vector copies + string copy + trailing int); MSVC EH/SEH frame (states 0/1/2) and register schedule differ; equiv: UNSUPPORTED (0 valid inputs; original SEH prologue faults under the harness)
 007e2ce0 355 cTransitionCommand instance dispatch; vtable/loop codegen differs; equiv: WEAK (40% coverage, member fix)
 007e2fb0 70 cTransitionListCommand::Execute; int parse (v39) register schedule differs
 007e3030 89 cAppStateManager::StateIDFromName; hashtable find call/inline differs
