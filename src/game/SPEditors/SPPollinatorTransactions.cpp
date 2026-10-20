@@ -2486,11 +2486,6 @@ void* AllocateAndCopy70(unsigned int n, void* a, void* b);
 // ---- items of slice s0061b3b0 end
 
 // ---- items of slice s0061c350 begin (TODO(rewrite): local stubs, replace by canonical classes)
-namespace SP {
-namespace Pollen {
-void RemoveFeedFromAll(void* a, void* b);                              // 0x6175c0 cdecl
-}
-}
 #define PV(n) virtual void pv##n();
 struct ICoreAllocator;
 void* operator new(unsigned int size, int alignment, const char* name, ICoreAllocator* pAllocator);
@@ -2662,6 +2657,56 @@ class cITransaction_s0061_c350 : public EA::RefCountVTemplate_s0061_c350<int> {
 }
 namespace SP {
 namespace Pollen {
+struct FixedPtrVector_s0061_c350 {
+  void** mpBegin;
+  void** mpEnd;
+  void** mpCapacity;
+  uint32_t pad[2];
+  uint32_t mOverflow;
+  void* mBuffer[40];
+  FixedPtrVector_s0061_c350() : mpBegin(mBuffer), mpEnd(mBuffer), mpCapacity(mBuffer + 40), mOverflow(0) {}
+  FixedPtrVector_s0061_c350& operator=(const FixedPtrVector_s0061_c350& x);  // 0x0061c070
+};
+}
+}
+namespace SP {
+namespace Pollen {
+class cFeedTransactionBase_s0061_c350 : public cITransaction_s0061_c350 {
+ public:
+  uint32_t mpFeed;         // +0x8
+  uint32_t mFeedType;      // +0xc
+  uint32_t mnIntParam;     // +0x10
+  uint32_t mnCount;        // +0x14
+  uint32_t mUnk18;         // +0x18
+  string8_s0061_c350 mStringParam;    // +0x1c
+  uint32_t pad28[1];
+  FixedPtrVector_s0061_c350 mAssets;  // +0x30
+  uint8_t mFlag;           // +0xe8
+  cFeedTransactionBase_s0061_c350(uint32_t type, const FixedPtrVector_s0061_c350& assets);
+  virtual ~cFeedTransactionBase_s0061_c350();
+};
+}
+}
+namespace SP {
+namespace Pollen {
+class cGetAssetFeedTransaction_s0061_c350 : public cFeedTransactionBase_s0061_c350 {
+ public:
+  cGetAssetFeedTransaction_s0061_c350(const FixedPtrVector_s0061_c350& assets);
+  virtual ~cGetAssetFeedTransaction_s0061_c350();
+  bool HandleResult(int code, void* result, struct Deque* queue);  // 0x0061cf60 (SP::Pollen::cGetAssetFeedTransaction::HandleResult)
+};
+}
+}
+namespace SP {
+namespace Pollen {
+class cEditFeedTransaction_s0061_c350 : public cFeedTransactionBase_s0061_c350 {
+ public:
+  bool HandleResult(int code, void* result, struct Deque* queue);
+};
+}
+}
+namespace SP {
+namespace Pollen {
 #define VFN(o, off, R, args) ((R (__thiscall*)args)(*(void***)(o))[(off) / 4])
 }
 }
@@ -2754,6 +2799,27 @@ void operator_delete_arr(void* p);                            // 0xf47380
 namespace SP {
 namespace Pollen {
 struct Deque { void Push(void* tx, int addref); };            // 0x60eaf0 deque<TransactionPtr,64>::PushSlow
+}
+}
+namespace SP {
+namespace Pollen {
+struct FeedDescription_s0061_c350 {
+  unsigned lo, hi;
+  uint32_t pad[0x19];
+  int tail;
+  FeedDescription_s0061_c350();    // 0x546630
+  ~FeedDescription_s0061_c350();   // 0x547840
+};
+}
+}
+namespace SP {
+namespace Pollen {
+void FillFeedInfo(void* feed, FeedDescription_s0061_c350* out);          // 0x618c70, cdecl
+}
+}
+namespace SP {
+namespace Pollen {
+struct DateTimeLike { void Set(int now); };                   // 0x92e3d0
 }
 }
 namespace SP {
@@ -2918,6 +2984,21 @@ void WStr_Format(void* wstr, const wchar_t* fmt, ...);                 // 0x41e0
 namespace SP {
 namespace Pollen {
 extern wchar_t gEmptyWide[];   // 0x01667bac (shared empty string)
+}
+}
+namespace SP {
+namespace Pollen {
+struct TxC { TxC* Init(int a, unsigned b, unsigned c, void* d); };      // 0x618d40
+}
+}
+namespace SP {
+namespace Pollen {
+void* AllocTxF0(unsigned size);                                        // 0x6158b0
+}
+}
+namespace SP {
+namespace Pollen {
+void RemoveFeedFromAll(void* a, void* b);                              // 0x6175c0 cdecl
 }
 }
 namespace SP {
@@ -4715,6 +4796,72 @@ unsigned RequestAssetsFromFeed(void* feed, unsigned maxCount, Deque* queue, char
   }
   if (idx.mpBegin && ((int*)idx.mpBegin)[-1]) operator_delete_arr(idx.mpBegin);
   return count;
+}
+}}  // namespace SP::Pollen
+
+// @ 0x0061cf60
+namespace SP { namespace Pollen {
+bool cGetAssetFeedTransaction_s0061_c350::HandleResult(int code, void* result, Deque* queue)
+{
+  if (result) {
+    void* o = PI(result, 0xf3c);
+    if (o) VFN(o, 0x18, void, (void*))(o);
+  }
+  GetPollenMgr();
+  bool ret = false;
+  if (code != 0) {
+    if (mFeedType == 1) GetMessageServer_s0061_c350()->Post(0x3d1cd0b, 0, 0);
+    return ret;
+  }
+  {
+    FeedDescription_s0061_c350 desc;
+    FillFeedInfo((void*)mpFeed, &desc);
+    if (mFeedType == 1) {
+      GetPollenMgr()->Notify(0x3d1cd0b, &desc);
+      GetMessageServer_s0061_c350()->Post(0x3d1cd0b, &desc, 0);
+    }
+    unsigned want = 0xffffffff;
+    if (mFeedType == 0) want = mnCount;
+    unsigned got = RequestAssetsFromFeed((void*)mpFeed, want, queue, mFlag);
+    ((DateTimeLike*)&desc)->Set(1);
+    GetPollenMgr()->mpDirectory->FUN_0054e970(desc.tail, desc.lo, desc.hi);
+    if (mFeedType == 0 && got < mnCount && PI((void*)mpFeed, 0x60) != PI((void*)mpFeed, 0x64)) {
+      TxC* t = (TxC*)AllocTxF0(0xf0);
+      void* r = t ? t->Init(0, mnIntParam, mnCount - got, (void*)(mUnk18 + 1)) : 0;
+      queue->Push(r, 0);
+    }
+    ret = true;
+  }
+  return ret;
+}
+}}  // namespace SP::Pollen
+
+// @ 0x0061d0d0
+namespace SP { namespace Pollen {
+bool cEditFeedTransaction_s0061_c350::HandleResult(int code, void* result, Deque* queue)
+{
+  if (result) {
+    void* o = PI(result, 0xf3c);
+    if (o) VFN(o, 0x18, void, (void*))(o);
+  }
+  GetPollenMgr();
+  bool ret = false;
+  if (code == 0) {
+    FeedDescription_s0061_c350 desc;
+    FillFeedInfo((void*)mpFeed, &desc);
+    if (mFeedType == 0) {
+      GetPollenMgr()->Notify(0x3cdd5f9, &desc);
+      GetMessageServer_s0061_c350()->Post(0x3cdd5f9, &desc, 0);
+    }
+    if (mFeedType == 1) {
+      GetMessageServer_s0061_c350()->Post(0x49a3777, &desc, 0);
+      if (PI(this, 0x5c))
+        RemoveFeedFromAll((char*)this + 0x50, (char*)this + 0x10);
+    }
+    RequestAssetsFromFeed((void*)mpFeed, 0xffffffff, queue, 0);
+    ret = true;
+  }
+  return ret;
 }
 }}  // namespace SP::Pollen
 

@@ -3,7 +3,7 @@
 0061c5e0 SP::Pollen::cGetAssetFeedTransaction::cGetAssetFeedTransaction  # base(4,assets); vtable 0x13fc604; mFlag=1
 0061c610 eastl::vector<SP::Feed::FeedDescription>::insert/DoInsertValues  # 0x70 stride, DoAllocate via 0x61c1c0
 0061c880 ?RequestAssetsFromFeed@Pollen@SP@@YAIPAXIPAUDeque@12@D@Z  # RequestAssetsFromFeed migrated from s0061c350 (verbatim, slice spelling)
-0061cf60 SP::Pollen::cGetAssetFeedTransaction::HandleResult  # PDB anchor
-0061d0d0 SP::Pollen::cEditFeedTransaction::HandleResult  # PDB candidate (caller-scored)
+0061cf60 ?HandleResult@cGetAssetFeedTransaction_s0061_c350@Pollen@SP@@QAE_NHPAXPAUDeque@23@@Z  # cGetAssetFeedTransaction_s0061_c350::HandleResult migrated from s0061c350 (verbatim, slice spelling)
+0061d0d0 ?HandleResult@cEditFeedTransaction_s0061_c350@Pollen@SP@@QAE_NHPAXPAUDeque@23@@Z  # cEditFeedTransaction_s0061_c350::HandleResult migrated from s0061c350 (verbatim, slice spelling)
 0061d1c0 ??0cFeedStateTransaction@Pollen@SP@@QAE@XZ  # cFeedStateTransaction::cFeedStateTransaction migrated from s0061c350 (verbatim, slice spelling)
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s0061c350, named from the dev publics; slice address comment)

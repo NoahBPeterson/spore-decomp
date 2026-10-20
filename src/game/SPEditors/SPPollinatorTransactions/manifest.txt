@@ -39,4 +39,5 @@
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ??0cYouTubeAuthenticationTransaction_s0061_9150@Pollen@SP@@QAE@PBD00_N@Z  00619300  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ??0cYouTubeVideoUploadTransaction_s0061_9150@Pollen@SP@@QAE@PBD0000UKey@12@0@Z  00619390  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ??0cYouTubeVideoURLTransaction_s0061_9150@Pollen@SP@@QAE@PBD000@Z  00619470  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPPollinatorTransactions.cpp  ?HandleResult@cEditFeedTransaction_s0061_c350@Pollen@SP@@QAE_NHPAXPAUDeque@23@@Z  0061d0d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ??0cFeedStateTransaction@Pollen@SP@@QAE@XZ  0061d1c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

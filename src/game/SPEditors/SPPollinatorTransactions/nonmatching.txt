@@ -31,3 +31,4 @@
 0061bbc0 80 eastl::quick_sort_impl<unsigned*, TimeGreater>: complete; register allocation around median/get_partition (compare kept in esi vs ecx)
 0061c350 363 complete: asset-feed HandleResult (local key lookup, pooled FeedEvent push, sorted key insert); inlined pool/lower_bound scheduling differs; difftest WEAK (no difference; 21% coverage, feed-key match rarely hit by random inputs; fix: pool AddCore was declared cdecl with the pool as an arg, it is thiscall 0x926650 on 0x15f5254)
 0061c880 1434 complete: RequestAssetsFromFeed full port (sort, local/remote branches, variant map, notifications); register/scheduling not exact; difftest WEAK (no difference; 13% coverage)
+0061cf60 269 complete: cGetAssetFeedTransaction::HandleResult; original keeps the bool result in ebx and a 8-byte-larger frame
