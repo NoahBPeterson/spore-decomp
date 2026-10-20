@@ -1,0 +1,47 @@
+# Complete (all paths present) but not byte-exact.
+# Every function in this slice is an MSVC 2008 /EHsc-generated EH unwind/cleanup funclet
+# (lea ecx,[ebp-N]; jmp dtor / push 0 x4; push tag; push obj; call operator_delete__(0x00f47410)
+# / ??_M vector-dtor iterators via eh_vector_destructor_iterator 0x011e0b22 / __CxxFrameHandler3
+# tails). cl emits these while compiling the owning /O2 function (0x01210e80..0x01212900), so the
+# byte stream is not reproducible from standalone C++ (no source spelling yields a bare
+# `lea ecx; jmp` thunk), and the implied __ehhandler FuncInfo records are unreachable too.
+# flags /O2 /MD /Gy /EHsc /TP /GS-. difftest: UNSUPPORTED "only 0/400 inputs valid
+# (fault(read)=400)" — the funclet runs on a caller frame the input generator cannot synthesise,
+# so the ORIGINAL faults on every generated input (same as the neighbouring slice s01214320).
+# va  diff-bytes  reason
+01211010 607  complete EH cleanup funclet chain (eastl::VectorBase dtors + SetSerializer); compiler-generated; difftest UNSUPPORTED (0/400 valid, fault(read))
+01211270 206  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01211360 146  complete EH cleanup funclet (operator_delete__ chain, tag 0x13eb8a4); compiler-generated; difftest UNSUPPORTED
+01211400 110  complete EH cleanup funclet (operator_delete__ chain); compiler-generated; difftest UNSUPPORTED
+01211470 60  complete EH cleanup funclet (operator_delete__ chain); compiler-generated; difftest UNSUPPORTED
+012114d0 42  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01211500 52  complete EH cleanup funclet (operator_delete__ chain); compiler-generated; difftest UNSUPPORTED
+01211540 44  complete EH cleanup funclet (operator_delete__ chain); compiler-generated; difftest UNSUPPORTED
+01211600 124  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+012116a0 26  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01211750 109  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+012118d0 106  complete EH cleanup funclet chain (four sub-object dtors at +0,+0x14,+0x28,+0x3c); compiler-generated; difftest UNSUPPORTED
+01211980 44  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+012119b0 34  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01211a70 152  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01211b60 58  complete EH cleanup funclet (RefVector::~RefVector); compiler-generated; difftest UNSUPPORTED
+01211ba0 44  complete EH cleanup funclet (operator_delete__ chain, tag 0x140d6d0); compiler-generated; difftest UNSUPPORTED
+01211c30 45  complete EH cleanup funclet (sub-object +8 dtor, then ??_M at +0x9c); compiler-generated; difftest UNSUPPORTED
+01211c60 83  complete EH cleanup funclet (sub-object +8 dtor, then ??_M at +0x9c); compiler-generated; difftest UNSUPPORTED
+01211d00 63  complete EH cleanup funclet (??_M vector dtor iterator); compiler-generated; difftest UNSUPPORTED
+01211d60 38  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01211e10 53  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01211e50 60  complete EH cleanup funclet (AutoRefCountV dtor); compiler-generated; difftest UNSUPPORTED
+01211f40 306  complete EH cleanup funclet chain (AutoRefCountV x3 + T_7c6190 across a pointer element); compiler-generated; difftest UNSUPPORTED
+012120a0 77  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01212160 282  complete EH cleanup funclet (??_M 8x0x50 + sub-object dtor); compiler-generated; difftest UNSUPPORTED
+012122f0 60  complete EH cleanup funclet (AutoRefCountV dtor); compiler-generated; difftest UNSUPPORTED
+01212350 44  complete EH cleanup funclet (operator_delete__ chain); compiler-generated; difftest UNSUPPORTED
+01212410 93  complete EH cleanup funclet (AutoRefCountV dtors + ??_M 4x4 at +0x44); compiler-generated; difftest UNSUPPORTED
+012124d0 52  complete EH cleanup funclet (operator_delete__ chain); compiler-generated; difftest UNSUPPORTED
+01212530 203  complete EH cleanup funclet chain (AutoRefCountV dtors + ??_M 4x4); compiler-generated; difftest UNSUPPORTED
+01212620 60  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01212660 26  complete EH cleanup funclet (two sub-object dtors on outgoing args); compiler-generated; difftest UNSUPPORTED
+012126a0 70  complete EH cleanup funclet (operator_delete__ chain on an outgoing arg); compiler-generated; difftest UNSUPPORTED
+012126f0 44  complete EH cleanup funclet (operator_delete__ chain on an outgoing arg); compiler-generated; difftest UNSUPPORTED
+01212740 158  complete EH cleanup funclet chain (AutoRefCountV dtor + operator_delete__); compiler-generated; difftest UNSUPPORTED
