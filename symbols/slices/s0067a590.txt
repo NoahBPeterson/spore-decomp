@@ -1,7 +1,7 @@
 0067a590 ?possibly@HM590@@QAEXDD@Z  # HM590::possibly migrated from s0067a590 (verbatim, slice spelling)
 0067a680 ?cb_67a680@@YGXPAX0@Z  # cb_67a680 migrated from s0067a590 (verbatim, slice spelling)
-0067a6a0 ?handle@C_a6a0@@QAE_NHPAX@Z  # HM6e0::handle migrated from s0067a590 (verbatim, slice spelling)
-0067a6e0 UI::HintManager::HandleHintMessage  # PDB cUIHints::UpdateVisibleHint-adjacent; handles types 6/8/0x287259f6
+0067a6a0 ?handle@C_a6a0@@QAE_NHPAX@Z  # C_a6a0::handle migrated from s0067a590 (verbatim, slice spelling)
+0067a6e0 ?handle@HM6e0@@QAE_NPAUHintWin@@PAUHMsg@@@Z  # HM6e0::handle migrated from s0067a590 (verbatim, slice spelling)
 0067a850 ?cb_67a850@@YAXPAX@Z  # cb_67a850 migrated from s0067a590 (verbatim, slice spelling)
 0067a880 UI::HintManager::Init  # sets up CalloutTimer smooth-ramp timers + MessageServer handler
 0067aae0 UI::HintManager::AddHint  # inserts a 0x134-byte hint element

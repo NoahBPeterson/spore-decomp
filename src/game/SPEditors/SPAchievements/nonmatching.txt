@@ -3,3 +3,4 @@
 0067a090 116 SP::Achievements::Controller::Shutdown: complete behaviour; cl shrink-wraps the epilogue (pops edi/esi early) shifting the local by 8 bytes
 0067a120 124 destroy-every-element: complete behaviour; same early-epilogue shrink-wrap plus FUN_00679e50 call scheduling differs
 0067a590 122 complete: register/frame scheduling and temp-slot placement differ (cl used a different loop/temp layout)
+0067a6e0 166 HintManager::HandleHintMessage complete; branch layout (End block out of line, redundant cur!=win test) and ebx/esi/edi allocation differ [equiv: WEAK 22% coverage]
