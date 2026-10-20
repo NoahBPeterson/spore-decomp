@@ -1,4 +1,5 @@
 # source  symbol  va  flags
 ../src/game/SPEngine/SPGraphicsSystem.cpp  ?GetBufferTexture@cGraphicsSystem@@QAEPAXHD@Z  007a6870  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsSystem.cpp  ?GetBufferRectID@cGraphicsSystem@@QAEXHPAUBufferRect@@D@Z  007a68c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsSystem.cpp  ?CreateBuiltinModels@cGraphicsSystem_s007a_7210@SP@@QAEXXZ  007a7210  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsSystem.cpp  _FUN_007a8360  007a8360  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

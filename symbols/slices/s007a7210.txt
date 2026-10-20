@@ -1,1 +1,1 @@
-007a7210 SP::cGraphicsSystem::CreateBuiltinModels  # pdb_names.json
+007a7210 ?CreateBuiltinModels@cGraphicsSystem_s007a_7210@SP@@QAEXXZ  # cGraphicsSystem_s007a_7210::CreateBuiltinModels migrated from s007a7210 (verbatim, slice spelling)

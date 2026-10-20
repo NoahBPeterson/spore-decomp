@@ -1,9 +1,12 @@
-// src/game/SPEngine/SPGraphicsSystem.cpp -- migrated from slice(s) s007a7d50, s007a62c0 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsSystem.cpp -- migrated from slice(s) s007a7210, s007a7d50, s007a62c0 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsSystem.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include "SP/cGraphicsSystem.h"
+#include "SP/cGameModelResource.h"
+#include "EA/AutoRefCount.h"
+#include "cSPVector3.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags,
@@ -232,6 +235,134 @@ struct cTextRenderer {
 extern "C" void FUN_007a7d50(cTextRenderer*);
 // ---- items of slice s007a7d50 end
 
+// ---- items of slice s007a7210 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* operator new(unsigned int n, const char* name, int flags, unsigned debugFlags,
+                   const char* file, int line);
+void  operator delete(void* p, const char* name, int flags, unsigned debugFlags,
+                      const char* file, int line);
+namespace EA {
+template <typename T>
+class AutoRefCount_s007a_7210 {
+public:
+    T* mpObject;
+    AutoRefCount_s007a_7210(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCount_s007a_7210() { if (mpObject) mpObject->Release(); }
+    operator T*() const { return mpObject; }
+    T* operator->() const { return mpObject; }
+    T* get() const { return mpObject; }
+};
+}
+struct cSPVector3_s007a_7210 {
+    float x, y, z;
+    cSPVector3_s007a_7210() {}
+    cSPVector3_s007a_7210(float a, float b, float c) : x(a), y(b), z(c) {}
+    cSPVector3_s007a_7210 operator-() const { return cSPVector3_s007a_7210(-x, -y, -z); }
+};
+namespace SP {
+class cMeshData_s007a_7210;
+}
+namespace SP {
+class cIMeshBuilder {
+public:
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+    virtual void v02() = 0; virtual void v03() = 0; virtual void v04() = 0; virtual void v05() = 0;
+    virtual void v06() = 0; virtual void v07() = 0; virtual void v08() = 0; virtual void v09() = 0;
+    virtual void v10() = 0; virtual void v11() = 0; virtual void v12() = 0; virtual void v13() = 0;
+    virtual void v14() = 0; virtual void v15() = 0; virtual void v16() = 0; virtual void v17() = 0;
+    virtual void v18() = 0; virtual void v19() = 0; virtual void v20() = 0; virtual void v21() = 0;
+    virtual void v22() = 0; virtual void v23() = 0; virtual void v24() = 0; virtual void v25() = 0;
+    virtual void v26() = 0; virtual void v27() = 0; virtual void v28() = 0; virtual void v29() = 0;
+    virtual void v30() = 0; virtual void v31() = 0; virtual void v32() = 0; virtual void v33() = 0;
+    virtual void v34() = 0; virtual void v35() = 0; virtual void v36() = 0; virtual void v37() = 0;
+    virtual void v38() = 0; virtual void v39() = 0; virtual void v40() = 0; virtual void v41() = 0;
+    virtual void v42() = 0;
+    virtual cMeshData_s007a_7210* GetMeshData() = 0;   // +0xac
+};
+}
+namespace SP {
+class cGameModelResource_s007a_7210 {
+public:
+    virtual int AddRef();
+    virtual int Release();
+    cGameModelResource_s007a_7210();                    // 0x007004d0
+    uint32_t mData[0x13c / 4];
+};
+}
+namespace SP {
+cIMeshBuilder* CreateMeshBuilder();                                                  // 0x00715de0
+}
+namespace SP {
+void CreateBoxMesh(cIMeshBuilder* mb, const cSPVector3_s007a_7210& vmin, const cSPVector3_s007a_7210& vmax);  // 0x0071cde0
+}
+namespace SP {
+void CreateMesh_c900(cIMeshBuilder* mb);                                             // 0x0071c900
+}
+namespace SP {
+void CreateDiscMesh(cIMeshBuilder* mb, float radius, int segments);                 // 0x0071c9e0
+}
+namespace SP {
+void CreateQuadMesh(cIMeshBuilder* mb, const cSPVector3_s007a_7210& vmin, const cSPVector3_s007a_7210& vmax); // 0x0071cc20
+}
+namespace SP {
+void CreateMesh_d550(cIMeshBuilder* mb, float a, float b, int c, int d, int e, int f); // 0x0071d550
+}
+namespace SP {
+void CreateMesh_d960(cIMeshBuilder* mb, float a, float b, int c, int d);           // 0x0071d960
+}
+namespace SP {
+void CreateArrowheadMesh(cIMeshBuilder* mb, float size);                            // 0x0071d0d0
+}
+namespace SP {
+void CreateMesh_d2f0(cIMeshBuilder* mb, float size);                                // 0x0071d2f0
+}
+namespace SP {
+void CompileMeshData(cMeshData_s007a_7210* data, cGameModelResource_s007a_7210* model, int a, int b);     // 0x0072c0a0
+}
+namespace SP {
+bool RegisterModel(cGameModelResource_s007a_7210* model, uint32_t instanceID, uint32_t groupID); // 0x00754310
+}
+namespace SP {
+extern const cSPVector3_s007a_7210 kOneVector;   // 0x0153b70c  (1,1,1)
+}
+namespace SP {
+struct BuiltinModelVector {
+    EA::AutoRefCount_s007a_7210<cGameModelResource_s007a_7210>* mpBegin;
+    EA::AutoRefCount_s007a_7210<cGameModelResource_s007a_7210>* mpEnd;
+    EA::AutoRefCount_s007a_7210<cGameModelResource_s007a_7210>* mpCapacity;
+    uint32_t mAllocator;
+
+    void reserve(unsigned int n);                                         // 0x007658f0
+    void push_back(const EA::AutoRefCount_s007a_7210<cGameModelResource_s007a_7210>& value);    // 0x007a6ac0
+    EA::AutoRefCount_s007a_7210<cGameModelResource_s007a_7210>& back() { return *(mpEnd - 1); }
+};
+}
+namespace SP {
+class cGraphicsSystem_s007a_7210 {
+public:
+    uint32_t pad00[0x40 / 4];
+    BuiltinModelVector mBuiltinModels;   // +0x40
+
+    void CreateBuiltinModels();  // 0x007a7210 (SP::cGraphicsSystem::CreateBuiltinModels)
+    void AddBuiltinModel(cIMeshBuilder* mb, uint32_t instanceID);
+};
+}
+namespace SP {
+static const uint32_t kBuiltinModelGroup = 0xd94352ed;
+}
+namespace SP {
+__forceinline void cGraphicsSystem_s007a_7210::AddBuiltinModel(cIMeshBuilder* mb, uint32_t instanceID)
+{
+    {
+        cGameModelResource_s007a_7210* model = new ("Graphics", 0, 0, 0, 0) cGameModelResource_s007a_7210();
+        mBuiltinModels.push_back(model);
+    }
+    CompileMeshData(mb->GetMeshData(), mBuiltinModels.back(), -1, 0);
+    RegisterModel(mBuiltinModels.back(), instanceID, kBuiltinModelGroup);
+}
+}
+// ---- items of slice s007a7210 end
+
 // @ 0x007a62c0
 cGraphicsSystem::~cGraphicsSystem()
 {
@@ -273,7 +404,6 @@ cGraphicsSystem::~cGraphicsSystem()
     this->vtbl1 = (void*)VT_RefCountBase;
 }
 
-
 // @ 0x007a66c0
 void cGraphicsSystem::InitBufferTexture(int index)
 {
@@ -313,7 +443,6 @@ void cGraphicsSystem::InitBufferTexture(int index)
     }
 }
 
-
 // @ 0x007a6870
 void* cGraphicsSystem::GetBufferTexture(int index, char param_3)
 {
@@ -326,7 +455,6 @@ void* cGraphicsSystem::GetBufferTexture(int index, char param_3)
     return this->mBufferTextures[index + 1];
 }
 
-
 // @ 0x007a68c0
 void cGraphicsSystem::GetBufferRectID(int index, BufferRect* out, char param_4)
 {
@@ -337,7 +465,6 @@ void cGraphicsSystem::GetBufferRectID(int index, BufferRect* out, char param_4)
     out->mAllocID = this->mBufferTextureRectIDs[index].mAllocID;
     out->mPageID  = this->mBufferTextureRectIDs[index + 1].mPageID;
 }
-
 
 // @ 0x007a6910
 void ModelVector::InsertAt(void* position, void* value)
@@ -403,7 +530,6 @@ void ModelVector::InsertAt(void* position, void* value)
     this->mpBegin = newBegin;
     this->mpCapacity = (char*)newBegin + newCap * 4;
 }
-
 
 // @ 0x007a6b40
 void* cGraphicsSystem::Shutdown()
@@ -539,6 +665,65 @@ void* cGraphicsSystem::Shutdown()
     }
     return (void*)1;
 }
+
+// @ 0x007a7210
+namespace SP {
+void cGraphicsSystem_s007a_7210::CreateBuiltinModels()
+{
+    mBuiltinModels.reserve(16);
+
+    EA::AutoRefCount_s007a_7210<cIMeshBuilder> mb(CreateMeshBuilder());
+
+    {
+        cSPVector3_s007a_7210 boxMin(-0.1f, -0.1f, -0.1f);
+        cSPVector3_s007a_7210 boxMax(0.1f, 0.1f, 0.1f);
+        CreateBoxMesh(mb, boxMin, boxMax);
+    }
+    AddBuiltinModel(mb, 0x1565205f);
+
+    CreateMesh_c900(mb);
+    AddBuiltinModel(mb, 0x2ebcd6a6);
+
+    CreateDiscMesh(mb, 1.0f, 10);
+    AddBuiltinModel(mb, 0xcf571b4e);
+
+    CreateDiscMesh(mb, 1.0f, 64);
+    AddBuiltinModel(mb, 0xcd672bca);
+
+    CreateQuadMesh(mb, cSPVector3_s007a_7210(-1.0f, -1.0f, 0.0f), cSPVector3_s007a_7210(1.0f, 1.0f, 0.0f));
+    AddBuiltinModel(mb, 0xf24b36e0);
+
+    CreateBoxMesh(mb, -kOneVector, kOneVector);
+    AddBuiltinModel(mb, 0x2099b900);
+
+    CreateMesh_d550(mb, 1.0f, 4.0f, 10, 2, 2, 0);
+    AddBuiltinModel(mb, 0xc7862c87);
+
+    CreateMesh_d960(mb, 1.0f, 4.0f, 1, 10);
+    AddBuiltinModel(mb, 0xddc5a098);
+
+    CreateArrowheadMesh(mb, 1.0f);
+    AddBuiltinModel(mb, 0x7990c40a);
+
+    CreateMesh_d2f0(mb, 1.0f);
+    AddBuiltinModel(mb, 0xafa8492a);
+
+    CreateDiscMesh(mb, 1.0f, 16);
+    AddBuiltinModel(mb, 0xd622470c);
+
+    CreateDiscMesh(mb, 1.0f, 32);
+    AddBuiltinModel(mb, 0xd622470f);
+
+    CreateDiscMesh(mb, 1.0f, 48);
+    AddBuiltinModel(mb, 0xd622470e);
+
+    CreateDiscMesh(mb, 1.0f, 64);
+    AddBuiltinModel(mb, 0xd6224709);
+
+    CreateDiscMesh(mb, 1.0f, 96);
+    AddBuiltinModel(mb, 0xd6224708);
+}
+}  // namespace SP
 
 // @ 0x007a7d50
 extern "C" void FUN_007a7d50(cTextRenderer* self)
