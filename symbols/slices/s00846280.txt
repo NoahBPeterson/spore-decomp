@@ -1,0 +1,21 @@
+00846280 ?DefineMacro@cParser_s0084_6280@ArgScript@EA@@QAEXPBD0@Z  # define <name> <text>; inserts into the macro hash_map
+00846420 ?LookupMacroText@cParser_s0084_6280@ArgScript@EA@@QAEPBDPBD@Z  # find the macro body for a name, or 0
+00846530 ?ExecuteBody@cSetV3Command_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  # FNV-1a macro-table find (closest emitted symbol; VA 00846530 has no dedicated emitted name)
+00846630 ?ExecuteBody@cSetV3Command_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  # hashtable DoFreeNodes; nearest emitted symbol only
+00846680 ?ExecuteBody@cSetCommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  # set <name> <text>; byte-exact
+008466b0 ?ExecuteBody@cSetECommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  # setE <name> <enumName> <value>
+00846770 ?ExecuteBody@cSetBCommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  # setB <name> <expr>
+008467c0 ?ExecuteBody@cSetICommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  # setI <name> <expr>
+00846810 ?ExecuteBody@cSetFCommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  # setF <name> <expr>; byte-exact
+00846870 ?ExecuteBody@cSetCCommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  # setC <name> <expr>
+008468f0 ?ExecuteBody@cSetV2Command_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  # setV2 <name> <expr>
+00846960 ?ExecuteBody@cSetV3Command_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  # setV3 <name> <expr>
+008469d0 ?ExecuteBody@cSetV4Command_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  # setV4 <name> <expr>
+00846a50 ?DefineMacroLine@cParser_s0084_6280@ArgScript@EA@@QAE_NPBD@Z  # anonymous-namespace macro helper; nearest emitted symbol only
+00846b00 ?DefineMacroLine@cParser_s0084_6280@ArgScript@EA@@QAE_NPBD@Z  # macro-define line handler; nearest emitted symbol only
+00846c00 ?ExecuteBody@cSetV2Command_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  # hashtable node erase; nearest emitted symbol only
+00846c80 ?ExecuteBody@cUndefineCommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  # undefine <name>
+00846db0 ?Shutdown@cParser_s0084_6280@ArgScript@EA@@QAEXXZ  # tear down the parser tables
+00846f10 ?ParseBegin@cParser_s0084_6280@ArgScript@EA@@QAEXXZ  # reset the per-parse state
+00847060 ?ExecuteBody@cUndefineCommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  # hash_map::operator[]; nearest emitted symbol only
+00847120 ?ExecuteBody@cUndefineCommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  # hashtable DoRehash; nearest emitted symbol only
