@@ -116,11 +116,17 @@ extern "C" int EVP_EncryptInit_ex(evp_cipher_ctx_st_s0060_b730* ctx, const evp_c
 const unsigned char* iv);  // 0x01176d50
 extern "C" int EVP_EncryptUpdate(evp_cipher_ctx_st_s0060_b730* ctx, unsigned char* out, int* outl, const unsigned char* in, int inl);  // 0x01176610
 extern "C" int EVP_EncryptFinal_ex(evp_cipher_ctx_st_s0060_b730* ctx, unsigned char* out, int* outl);  // 0x01176770
+extern "C" int EVP_DecryptInit_ex(evp_cipher_ctx_st_s0060_b730* ctx, const evp_cipher_st* type, void* impl, const unsigned char* key,
+const unsigned char* iv);  // 0x01176d80
+extern "C" int EVP_DecryptUpdate(evp_cipher_ctx_st_s0060_b730* ctx, unsigned char* out, int* outl, const unsigned char* in, int inl);  // 0x01176820
+extern "C" int EVP_DecryptFinal_ex(evp_cipher_ctx_st_s0060_b730* ctx, unsigned char* out, int* outl);  // 0x01176910
 extern "C" const bio_method_st* BIO_f_base64();                 // 0x01177970
 extern "C" const bio_method_st* BIO_s_mem();                    // 0x011774f0
 extern "C" bio_st_s0060_b730* BIO_new(const bio_method_st* type);          // 0x01177470
+extern "C" bio_st_s0060_b730* BIO_new_mem_buf(void* buf, int len);         // 0x01177500
 extern "C" void BIO_set_flags(bio_st_s0060_b730* b, int flags);            // 0x01176fb0
 extern "C" bio_st_s0060_b730* BIO_push(bio_st_s0060_b730* b, bio_st_s0060_b730* append);         // 0x01177380
+extern "C" int BIO_read(bio_st_s0060_b730* b, void* data, int len);        // 0x01176fc0
 extern "C" int BIO_write(bio_st_s0060_b730* b, const void* data, int len); // 0x01177070
 extern "C" long BIO_ctrl(bio_st_s0060_b730* b, int cmd, long larg, void* parg);  // 0x01177260
 extern "C" void BIO_free_all(bio_st_s0060_b730* a);                        // 0x01177420
@@ -136,18 +142,23 @@ extern "C" int EVP_EncryptInit_ex(evp_cipher_ctx_st_s0060_b730* ctx, const evp_c
 const unsigned char* iv);  // 0x01176d50
 extern "C" int EVP_EncryptUpdate(evp_cipher_ctx_st_s0060_b730* ctx, unsigned char* out, int* outl, const unsigned char* in, int inl);  // 0x01176610
 extern "C" int EVP_EncryptFinal_ex(evp_cipher_ctx_st_s0060_b730* ctx, unsigned char* out, int* outl);  // 0x01176770
+extern "C" int EVP_DecryptInit_ex(evp_cipher_ctx_st_s0060_b730* ctx, const evp_cipher_st* type, void* impl, const unsigned char* key,
+const unsigned char* iv);  // 0x01176d80
+extern "C" int EVP_DecryptUpdate(evp_cipher_ctx_st_s0060_b730* ctx, unsigned char* out, int* outl, const unsigned char* in, int inl);  // 0x01176820
+extern "C" int EVP_DecryptFinal_ex(evp_cipher_ctx_st_s0060_b730* ctx, unsigned char* out, int* outl);  // 0x01176910
 extern "C" const bio_method_st* BIO_f_base64();                 // 0x01177970
 extern "C" const bio_method_st* BIO_s_mem();                    // 0x011774f0
 extern "C" bio_st_s0060_b730* BIO_new(const bio_method_st* type);          // 0x01177470
+extern "C" bio_st_s0060_b730* BIO_new_mem_buf(void* buf, int len);         // 0x01177500
 extern "C" void BIO_set_flags(bio_st_s0060_b730* b, int flags);            // 0x01176fb0
 extern "C" bio_st_s0060_b730* BIO_push(bio_st_s0060_b730* b, bio_st_s0060_b730* append);         // 0x01177380
+extern "C" int BIO_read(bio_st_s0060_b730* b, void* data, int len);        // 0x01176fc0
 extern "C" int BIO_write(bio_st_s0060_b730* b, const void* data, int len); // 0x01177070
 extern "C" long BIO_ctrl(bio_st_s0060_b730* b, int cmd, long larg, void* parg);  // 0x01177260
 extern "C" void BIO_free_all(bio_st_s0060_b730* a);                        // 0x01177420
 
 // @ 0x0060bc90
-namespace  {
-void GetAESKey(unsigned char * pKey)
+void GetAESKey(unsigned int * pKey)
 {
   pKey[0] = 0x44db12e;
   pKey[1] = 0x5005f78;
@@ -158,7 +169,6 @@ void GetAESKey(unsigned char * pKey)
   pKey[6] = 0x662d9ed;
   pKey[7] = 0x5005f78;
 }
-}  // namespace 
 
 // @ 0x0060bcd0
 template <> string8& string8::assign(const char* p, size_type n)
@@ -217,4 +227,47 @@ void Encrypt(const string8& plain, string8& out)
   }
   Memset32(key, 0, kAESKeyWords);
   EVP_CIPHER_CTX_cleanup(&ctx);
+}
+
+// @ 0x0060bf00
+void Decrypt(const string8& encrypted, string8& out)
+{
+  if (encrypted.size() == 0) {
+    out.assign("", "");
+    return;
+  }
+  bio_st_s0060_b730* const pBase64 = BIO_new(BIO_f_base64());
+  bio_st_s0060_b730* const pSource = BIO_new_mem_buf((void*)encrypted.c_str(), -1);
+  BIO_set_flags(pBase64, 0x100);
+  bio_st_s0060_b730* const pChain = BIO_push(pBase64, pSource);
+  if (pChain) {
+    struct {
+      unsigned char iv[16];
+      unsigned char data[0x70];
+    } packet;
+    int nRead = BIO_read(pChain, &packet, 0x80);
+    if (nRead > 0x10) {
+      uint32_t iv[4];
+      iv[0] = ((uint32_t*)packet.iv)[0];
+      iv[1] = ((uint32_t*)packet.iv)[1];
+      iv[2] = ((uint32_t*)packet.iv)[2];
+      iv[3] = ((uint32_t*)packet.iv)[3];
+      evp_cipher_ctx_st_s0060_b730 ctx;
+      EVP_CIPHER_CTX_init(&ctx);
+      uint32_t key[64];
+      GetAESKey(key);
+      if (EVP_DecryptInit_ex(&ctx, EVP_aes_256_cbc(), 0, (const unsigned char*)key, (const unsigned char*)iv) > 0) {
+        unsigned char plain[0x80];
+        int nOut = 0x80;
+        if (EVP_DecryptUpdate(&ctx, plain, &nOut, packet.data, nRead - 0x10) > 0) {
+          const int nFirst = nOut;
+          nOut = 0x80 - nOut;
+          if (EVP_DecryptFinal_ex(&ctx, plain + nFirst, &nOut) > 0) out.sprintf("%.*s", nFirst + nOut, plain);
+        }
+      }
+      Memset32(key, 0, kAESKeyWords);
+      EVP_CIPHER_CTX_cleanup(&ctx);
+    }
+  }
+  BIO_free_all(pChain);
 }
