@@ -1,0 +1,4 @@
+009370d0 ReadFormat8  # 2008 dev-build PDB (module: EAStdC EASprintf)
+00937510 WriteInteger8  # EAStdC EASprintf (wide sibling WriteInteger16 is at 00938980)
+00937720 WriteInteger64_8  # EAStdC EASprintf (wide sibling WriteInteger64_16 is at 00938bc0)
+00937970 WriteDouble8  # EAStdC EASprintf (wide sibling WriteDouble16 is at 00938e60)
