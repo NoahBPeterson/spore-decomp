@@ -5363,6 +5363,7 @@ public:
 // ---- items of slice s00587a20 end
 
 // ---- items of slice s00589ce0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct UIHints { void SetEnabled(); };               // 0x0067C420
 extern wchar_t gDelimiters[];          // 0x013F5CA8
 struct Key16 { uint a, b, c, d; };
 struct Key12 { uint inst, type, group; };
@@ -5401,12 +5402,22 @@ struct FileStream {
     virtual void v0();
     virtual void AddRef();     // +4
     virtual void Release();    // +8
-    virtual void v3(); virtual void v4(); virtual void v5();
+virtual void v3();
+virtual void v4();
+virtual void v5();
     virtual void Close();      // +0x18
-    virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10();
-    virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
     virtual void SetPath(const wchar_t* path);   // +0x3c
-    virtual void v16(); virtual void v17(); virtual void v18();
+virtual void v16();
+virtual void v17();
+virtual void v18();
     virtual bool Open(int access, int mode, int share, int flags);   // +0x4c
     FileStream* Init(int path);   // 0x00931DA0 (PFRecordWrite/FileStream ctor)
 };
@@ -5497,25 +5508,46 @@ void* __cdecl RBTreeIncrement(void* node);                                      
 bool __cdecl FUN_004edf40(int a, int b);
 struct SkinManager { SkinManager* GetSkin(int a); };       // 0x004C49E0
 struct AnimCreatureMgr { bool HandleAnimatedEvent(AnimEventInfo_s0058_9ce0* e); };   // 0x0059D300
-struct UIHints { void SetEnabled(); };               // 0x0067C420
+struct UIHints_s0058_9ce0 { void SetEnabled(); };               // 0x0067C420
 struct AuthMgr { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-                 virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
                  virtual void v8(); virtual bool IsX(); };   // +0x24
 AuthMgr* __cdecl GetAuthManager();                   // 0x00607A60
-UIHints* __stdcall GetUIHints(int a, int b);         // 0x0067CAC0
+UIHints_s0058_9ce0* __stdcall GetUIHints(int a, int b);         // 0x0067CAC0
 int  __cdecl FUN_00552300(void* key);
 bool __cdecl GetCreatorType(void* key);              // 0x00641900
 struct CamController { void SetCenterCameraOffset(); };   // 0x005A2370
 struct IFace3 { virtual void v0(); virtual void v1(); virtual void v2(); virtual CamController* Cast(uint id); };
 struct IFace2 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-                virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
-                virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
                 virtual void v12(); virtual void v13(); virtual IFace3* GetCtl(); };   // +0x38
 struct IFace1 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-                virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
-                virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
-                virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
-                virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
                 virtual IFace2* GetCam(); };   // +0x50
 struct EditorUIEx : EditorUI_s0058_9ce0 {
     bool FUN_005dc450();                       // 0x005DC450

@@ -1,4 +1,4 @@
-# va  diff-bytes  reason
+# <va> <diff-bytes> <reason>
 00572110 55 switch on 5 hashes: same compares, default block laid out after last case (tried switch/if orders)
 00572cf0 416 EditorGroundSampler: normalize done fully in x87 (orig x87 sqrt + SSE scale), creature-path layout differs
 00573070 9 CanUseModel: mpModel lands in eax instead of reusing ebp (this); one extra jmp in group-pair test
