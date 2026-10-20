@@ -1,0 +1,13 @@
+# source  symbol  original VA  [flags override]
+slices/s00c61390/s00c61390.cpp  ?FUN_00c61550@Mission@@QAEXXZ  00c61550  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c61390/s00c61390.cpp  ?FUN_00c61570@Mission@@QAEXXZ  00c61570  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c61390/s00c61390.cpp  ?FUN_00c61bb0@Mission@@QAEPAXXZ  00c61bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c61390/s00c61390.cpp  ?FUN_00c61d70@Mission@@QAEDXZ  00c61d70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c61390/s00c61390.cpp  ?FUN_00c61dd0@Mission@@QAEHH@Z  00c61dd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c61390/s00c61390.cpp  ?FUN_00c61f20@Mission@@QAEPAXXZ  00c61f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c61390/s00c61390.cpp  ?FUN_00c62100@Mission@@QAEXXZ  00c62100  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c61390/s00c61390.cpp  ?FUN_00c62180@Mission@@QAEXPAH0@Z  00c62180  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c61390/s00c61390.cpp  ?FUN_00c62200@Mission@@QAEDXZ  00c62200  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c61390/s00c61390.cpp  ?FUN_00c62370@Mission@@QAEPAXXZ  00c62370  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c61390/s00c61390.cpp  ?FUN_00c624c0@Mission@@QAEDXZ  00c624c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c61390/s00c61390.cpp  ?FUN_00c62540@Mission@@QAEHH@Z  00c62540  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

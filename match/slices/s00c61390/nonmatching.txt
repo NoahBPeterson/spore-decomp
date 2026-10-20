@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00c61390  15  complete; difftest WEAK (391 valid, 19.7% cov). vector-construct temp loop; compiler hoists/pushes ebx+edi and keeps begin/end in eax/esi instead of ebx/edi, and the delete check uses the iterator register.
+00c61450  181  complete; difftest WEAK (399 valid, 47.7% cov). message dispatch; switch lowered as a jump table/compare chain with different case ordering and callee-saved assignment than the original goto chain.
+00c615c0  1076  complete; difftest WEAK (272 valid, 3.0% cov). large per-mission-tag logic; branch layout, inlined accessors and register allocation differ throughout the 1492-byte body.
+00c61e20  51  complete; difftest PASS (400 valid, 61.8% cov). msg/arg kept in ebx/edi swapped relative to the original and the final two pushes are ordered differently.
+00c61e80  17  complete; difftest PASS (334 valid, 100.0% cov). this/gd land in edi/ebx; the original keeps this in esi and gd in edi.
+00c620c0  45  complete; difftest PASS (400 valid, 100.0% cov). returns id & 0xffffff00 with `and eax,0xffffff00`; the original clears the low byte with the 2-byte `xor al,al`, shifting branch offsets.
+00c62250  227  complete; difftest FAIL (first mismatch: edx clobbered, original leaves it untouched). large message handler; branch/call ordering and scratch-register usage differ.
+00c62590  45  complete; difftest PASS (395 valid, 79.4% cov). arg/this in esi/ebx swapped vs ebx/esi, and `(u>>3)&1` folded to `test byte [mem],8` instead of mov/shr/test.
+00c62710  17  complete; difftest PASS (400 valid, 87.5% cov). loop is correct (n=esi, i=edx, flags=edi); the compiler hoists the flags load and `push edi` above the n<=0 test. (chk picks a wrong 55-byte symbol here; diff measured against ?FUN_00c62710@Mission@@QAEHXZ.)
+00c62750  136  complete; difftest WEAK (400 valid, 36.6% cov). record-driven message handler; branch order and inlined accessor scheduling differ.
