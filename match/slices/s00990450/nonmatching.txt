@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00990450  105  WinTreeView::PickRow: complete; equiv PASS (321 valid, 93.5% cov). Original keeps `this` in ebp because the loop body needs ecx for the visible-line-count load; ours keeps it in ecx (also a 3-byte lea-padding nop differs).
+00990530  220  WinTreeView::OnMouseMove: complete; equiv PASS (303 valid, 99.0% cov). Real 3-argument function (ret 0xc); frame/register scheduling differs and the x87 indent/expander arithmetic is ordered differently.
+009906b0  945  WinTreeView::DrawTreeLines: complete; equiv FAIL (first: execution; ours faults on an indirect call the original guards elsewhere). Compiled length matches the original 992 bytes exactly; the x87 floor/indent arithmetic and the two-phase node walk are ordered differently.
+00990a90  -  WinTreeView::OnRebuild: complete (background, line pass, iterative DFS caption draw). Not attempted byte-exact (1256 bytes). equiv UNSUPPORTED: 0/400 valid inputs (fault(read)=201, fault(write)=159, import:_decode_pointer=16).
+00990ff0  -  WinTreeView::CreateScrollbar: complete (drawable teardown, scrollbar + drawable creation, preferred size, manager wiring). Not attempted byte-exact (487 bytes). equiv FAIL (ours faults on an indirect call at eip 0x3000002b).
+009912e0  142  TreeNode::CollectVisible: complete; equiv UNSUPPORTED (0/400 valid, fault(read)=398). end-iterator spills to the frame instead of staying in a callee-saved register, so register allocation differs throughout.
+00991380  -  BasicFactory_TreeExpanderDrawable::CreateInstance: complete; equiv PASS (248 valid, 100.0% cov). 70 bytes and byte-comparable, but chk sizes it at 58 so the size filter rejects it, and the three vtable immediates are unresolved externs here.

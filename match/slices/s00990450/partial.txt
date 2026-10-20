@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+009911e0  26  TreeNode::Attach: complete and byte-identical in length (80) and in the tail (ret 4); only callee-saved register assignment differs (end in ebx vs the original's edi, tree in edi vs ebx). chk.py cannot score it because the batch function table sizes 0x9911e0 at 148 (it swallows the adjacent Detach at 0x991230); a direct masked byte diff is 26/80.
