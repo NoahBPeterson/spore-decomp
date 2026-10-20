@@ -1,4 +1,5 @@
 # va  diff-bytes  reason
+00a17520 3 GetPropertyAsKeyInstance: complete, value/out register naming differs
 00a196f0 952 complete; large EA::Variant array read switch (scalar + array cases, 0x34728492 object tag); ghidra-driven reconstruction, not byte-exact
 00a19d60 69 complete; EA::Audio::FactoryConfiguration constructor (EH frame, xchg-based member reset, Mutex + intrusive list init); no exact source form for the SEH/register shape
 00a19e00 43 complete; EA::Audio::FactoryConfiguration destructor (EH frame, vector delete + rbtree nuke + Mutex dtor); EH prologue not reproduced

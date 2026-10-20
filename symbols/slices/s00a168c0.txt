@@ -12,7 +12,7 @@
 00a16f00 ?HandleMessage@PrimBase@@QAE_NHPAX@Z  # PrimBase::HandleMessage migrated from s00a168c0 (verbatim, slice spelling)
 00a16f60 EA::Audio::PrimitiveBase::Init  # PDB caller-scored
 00a174d0 ?GetPropertyAsKey@RC@@QAE_NIPAUKey@@@Z  # RC::GetPropertyAsKey migrated from s00a168c0 (verbatim, slice spelling)
-00a17520 EA::Audio::ResourceConfiguration::GetPropertyAsKeyInstance  # PDB vtable-slot
+00a17520 ?GetPropertyAsKeyInstance@RC@@QAE_NIPAI@Z  # RC::GetPropertyAsKeyInstance migrated from s00a168c0 (verbatim, slice spelling)
 00a17560 ?GetPropertyAsFloatArray@RC@@QAE_NIPAIPAPBX@Z  # RC::GetPropertyAsFloatArray migrated from s00a168c0 (verbatim, slice spelling)
 00a175c0 ?GetPropertyAsUint32Array@RC@@QAE_NIPAIPAPBX@Z  # RC::GetPropertyAsUint32Array migrated from s00a168c0 (verbatim, slice spelling)
 00a17620 ?GetPropertyAsKeyArray@RC@@QAE_NIPAIPAPBX@Z  # RC::GetPropertyAsKeyArray migrated from s00a168c0 (verbatim, slice spelling)

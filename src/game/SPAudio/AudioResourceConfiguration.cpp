@@ -39,17 +39,6 @@ struct RC {
         return f(this, key, v);
     }
 };
-bool RC::GetPropertyAsKeyInstance(u32 key, u32* out)
-{
-    Variant const* v;
-    if (GetProperty(key, v) && v->mTypeId == 0x20) {
-        const void* src = (v->mFlags & 0x30) ? v->p : (const void*)v;
-        u32 value = *(const u32*)src;
-        *out = value;
-        return true;
-    }
-    return false;
-}
 // ---- items of slice s00a168c0 end
 
 // ---- items of slice s00a187f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -154,6 +143,19 @@ bool RC::GetPropertyAsKey(u32 key, Key* out)
     if (GetProperty(key, v) && v->mTypeId == 0x20) {
         const void* src = (v->mFlags & 0x30) ? v->p : (const void*)v;
         *out = *(const Key*)src;
+        return true;
+    }
+    return false;
+}
+
+// @ 0x00a17520
+bool RC::GetPropertyAsKeyInstance(u32 key, u32* out)
+{
+    Variant const* v;
+    if (GetProperty(key, v) && v->mTypeId == 0x20) {
+        const void* src = (v->mFlags & 0x30) ? v->p : (const void*)v;
+        u32 value = *(const u32*)src;
+        *out = value;
         return true;
     }
     return false;
