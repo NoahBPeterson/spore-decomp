@@ -32,9 +32,11 @@ struct HTTPClient {
 
 // ---- items of slice s00942290 begin (TODO(rewrite): local stubs, replace by canonical classes)
 __declspec(dllimport) int __cdecl strncmp(const char*, const char*, size_t);
+extern "C" __declspec(dllimport) void* __cdecl memmove(void*, const void*, unsigned int);
+extern "C" __declspec(dllimport) int __cdecl isxdigit(int);
 void* __cdecl operator new(unsigned int, const char*, int, int, const char*, int);  // 0x00F473A0
 void  __cdecl operator_delete__(void*) throw();                                     // 0x00F47380
-extern "C" __declspec(dllimport) void* __cdecl memmove(void*, const void*, unsigned int);
+void* __cdecl memmove(void*, const void*, unsigned int);                            // 0x011E0744
 int __cdecl GetTime64();
 const char* __cdecl HeaderFieldToFieldString(int field);
 __int64 __cdecl ParseInt64(const char* s, int, int);
@@ -128,13 +130,13 @@ public:
     char* mpWriteBuffer;                  // +0x148
     unsigned int mnWriteBufferSize;       // +0x14c
 
-    int   ReadRawBody(WorkerThreadInfo_s0094_2290* wti, char* pBuf);                          // 00942290
-    int   ReadResponseLine(WorkerThreadInfo_s0094_2290* wti, char* pBuf, int nMax, char tr);  // 009423D0
+    int   ReadRawBody(WorkerThreadInfo_s0094_2290* wti, char* pBuf);                          // 00942290 0x00942290
+    int   ReadResponseLine(WorkerThreadInfo_s0094_2290* wti, char* pBuf, int nMax, char tr);  // 009423D0 0x009423d0
     int   DoJobUpdate(int job, unsigned doneLo, unsigned doneHi,
                       unsigned totalLo, int totalHi, unsigned* progress);          // 00942530
     int   ReadResponseData(WorkerThreadInfo_s0094_2290* wti, unsigned totalLo,
                            unsigned totalHi, char notify);                          // 00942690
-    int   ReadChunkedResponseData(WorkerThreadInfo_s0094_2290* wti);                           // 009428B0
+    __int64 ReadChunkedResponseData(WorkerThreadInfo_s0094_2290* wti);                         // 009428B0 0x009428b0
     int   ReadResponseBody(WorkerThreadInfo_s0094_2290* wti);                                 // 00942B40 0x00942b40
     bool  FindHeader(const char* name, void** out, int index);                     // 00942050 0x00942050
     bool  FindHeaderByField(int field, void** out, int index);                     // 009420E0
@@ -201,6 +203,9 @@ static int StrLen(const char* s) {
     while (*p) ++p;
     return (int)(p - s);
 }
+struct HTTPClientRd64 {
+    __int64 ReadResponseData64(EA::Internet::WorkerThreadInfo_s0094_2290* wti, unsigned totalLo, unsigned totalHi, char notify); // 0x00942690
+};
 struct URLClass {
     char data[0x90];
     void  SetURL(const char* url, int force);   // 0x0094A6A0
@@ -213,7 +218,7 @@ struct UrlHolder {
     eastl::FixedStub mString;   // +0xe0
     void  SetURL(const char* url);
 };
-
+extern "C" unsigned int __cdecl strlen(const char*);
 // ---- items of slice s00942290 end
 
 // ---- items of slice s00942ff0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1164,12 +1169,12 @@ void HTTPClient::Pump(int* stream)
 }
 
 // @ 0x00942290
-int EA::Internet::HTTPClient_s0094_2290::ReadRawBody(WorkerThreadInfo_s0094_2290* wti, char* pBuf)
+int EA::Internet::HTTPClient_s0094_2290::ReadRawBody(EA::Internet::WorkerThreadInfo_s0094_2290* wti, char* pBuf)
 {
     int remaining = StrLen(pBuf);
     unsigned consumed = 0;
     while (remaining != 0 && wti->mbCancelCurrent == 0 && wti->mbShouldQuit == 0) {
-        Job_s0094_2290* job = (Job_s0094_2290*)wti->mpCurrentJob;
+        EA::Internet::Job_s0094_2290* job = (EA::Internet::Job_s0094_2290*)wti->mpCurrentJob;
         if (job->mTimeoutTimeSeconds > 0) {
             int now = GetTime64();
             if (job->mTimeoutTimeSeconds < now) { job->mResult = 6; return 0; }
@@ -1201,17 +1206,17 @@ int EA::Internet::HTTPClient_s0094_2290::ReadRawBody(WorkerThreadInfo_s0094_2290
 }
 
 // @ 0x009423d0
-int EA::Internet::HTTPClient::ReadLine(EA::Internet::HTTPClient::WorkerThreadInfo * wti, char * pBuf, unsigned int nMax, bool trim)
+int EA::Internet::HTTPClient_s0094_2290::ReadResponseLine(EA::Internet::WorkerThreadInfo_s0094_2290* wti, char* pBuf, int nMax, char trim)
 {
-    if (pBuf == 0 || nMax < 1) { ((Job*)wti->mpCurrentJob)->mResult = (EA::Internet::HTTPClient::JobResult)(3); return -1; }
+    if (pBuf == 0 || nMax < 1) { ((EA::Internet::Job_s0094_2290*)wti->mpCurrentJob)->mResult = 3; return -1; }
     int nReadOK = 0;
     int i = 0;
     char* p = pBuf;
     for (;;) {
-        Job* job = (Job*)wti->mpCurrentJob;
+        EA::Internet::Job_s0094_2290* job = (EA::Internet::Job_s0094_2290*)wti->mpCurrentJob;
         if (job->mTimeoutTimeSeconds > 0) {
             int now = GetTime64();
-            if (job->mTimeoutTimeSeconds < now) { job->mResult = (EA::Internet::HTTPClient::JobResult)(6); return -1; }
+            if (job->mTimeoutTimeSeconds < now) { job->mResult = 6; return -1; }
             if (nReadOK > 0) { job->mTimeoutTimeSeconds = job->mStartTimeSeconds + now; nReadOK = 0; }
         }
         void* sock = wti->mpSocket;
@@ -1223,9 +1228,9 @@ int EA::Internet::HTTPClient::ReadLine(EA::Internet::HTTPClient::WorkerThreadInf
         }
         if (doRead) {
             nReadOK = VC3(sock, 0x44, p, 1, 0);
-            if (nReadOK < 1) { job->mResult = (EA::Internet::HTTPClient::JobResult)(7); return nReadOK; }
+            if (nReadOK < 1) { job->mResult = 7; return nReadOK; }
             if (mnLoggingEnabled > 0)
-                ((VFV2)VSLOT(mpReadLogStream.mpObject, 0x38))(mpReadLogStream.mpObject, p, 1);
+                ((VFV2)VSLOT(mpReadLogStream, 0x38))(mpReadLogStream, p, 1);
             unsigned old = (unsigned)mnBytesReceived;
             mnBytesReceived += 1;
             *(unsigned*)((char*)&mnBytesReceived + 4) += (old > 0xfffffffeu);
@@ -1286,7 +1291,7 @@ void rwForceEmit_Cookie40_dtor(Cookie40* p)
 #pragma auto_inline(on)
 
 // @ 0x00942690
-int EA::Internet::HTTPClient_s0094_2290::ReadResponseData(WorkerThreadInfo_s0094_2290* wti, unsigned totalLo, unsigned totalHi, char notify)
+int EA::Internet::HTTPClient_s0094_2290::ReadResponseData(EA::Internet::WorkerThreadInfo_s0094_2290* wti, unsigned totalLo, unsigned totalHi, char notify)
 {
     unsigned remainLo = totalLo, remainHi = totalHi;
     int   doneLo = 0, doneHi = 0;
@@ -1295,7 +1300,7 @@ int EA::Internet::HTTPClient_s0094_2290::ReadResponseData(WorkerThreadInfo_s0094
         if ((remainLo == 0 && remainHi == 0) ||
             wti->mbCancelCurrent != 0 || wti->mbShouldQuit != 0)
             break;
-        Job_s0094_2290* job = (Job_s0094_2290*)wti->mpCurrentJob;
+        EA::Internet::Job_s0094_2290* job = (EA::Internet::Job_s0094_2290*)wti->mpCurrentJob;
         if (job->mTimeoutTimeSeconds > 0) {
             int now = GetTime64();
             if (job->mTimeoutTimeSeconds < now) { job->mResult = 6; doneLo = -1; doneHi = -1; break; }
@@ -1337,15 +1342,67 @@ int EA::Internet::HTTPClient_s0094_2290::ReadResponseData(WorkerThreadInfo_s0094
         if (notify != 0)
             DoJobUpdate((int)job, (unsigned)doneLo, (unsigned)doneHi, totalLo, totalHi, &prog);
     }
-    Job_s0094_2290* jb = (Job_s0094_2290*)wti->mpCurrentJob;
+    EA::Internet::Job_s0094_2290* jb = (EA::Internet::Job_s0094_2290*)wti->mpCurrentJob;
     jb->mnLastNotifySize = ((unsigned __int64)(unsigned)doneHi << 32) | (unsigned)doneLo;
     return doneLo;
 }
 
-// @ 0x00942b40
-int EA::Internet::HTTPClient_s0094_2290::ReadResponseBody(WorkerThreadInfo_s0094_2290* wti)
+// @ 0x009428b0
+__int64 EA::Internet::HTTPClient_s0094_2290::ReadChunkedResponseData(EA::Internet::WorkerThreadInfo_s0094_2290* wti)
 {
-    Job_s0094_2290* job = (Job_s0094_2290*)wti->mpCurrentJob;
+    __int64 total = 0;
+    for (;;) {
+        __int64 n = ReadResponseLine(wti, mpReadBuffer, mnReadBufferSize, 0);
+        if (n < 0) { total = n; break; }
+        // scan the hex digits of the chunk-size line
+        __int64 i;
+        for (i = 0; i < n && isxdigit(mpReadBuffer[i]); ++i) {}
+        if (i <= 0 || i == n) {
+            ((EA::Internet::Job_s0094_2290*)wti->mpCurrentJob)->mResult = 0xd;
+            total = -1;
+            break;
+        }
+        mpReadBuffer[i] = 0;
+        __int64 chunk = ParseInt64(mpReadBuffer, 0, 16);
+        if (n == (__int64)(int)mnReadBufferSize) {
+            // the size line filled the buffer: drain the rest of the line
+            while (mpReadBuffer[mnReadBufferSize - 1] != '\n') {
+                __int64 r = ReadResponseLine(wti, mpReadBuffer, mnReadBufferSize, 0);
+                if (r < 0) { total = r; break; }
+                if (r != (__int64)(int)mnReadBufferSize) break;
+            }
+        }
+        __int64 got = ((HTTPClientRd64*)this)->ReadResponseData64(wti, (unsigned)chunk, (unsigned)(chunk >> 32), 0);
+        if (got < chunk) { total = got; break; }
+        total += got;
+        if (chunk == 0) {
+            // last chunk: consume the trailer lines
+            for (;;) {
+                __int64 r = ReadResponseLine(wti, mpReadBuffer, mnReadBufferSize, 1);
+                if (r < 0) { total = r; break; }
+                bool full = (r == (__int64)(int)mnReadBufferSize);
+                if (r == 0 || full) break;
+            }
+            break;
+        }
+        // CRLF that terminates the chunk data
+        __int64 t = ReadResponseLine(wti, mpReadBuffer, mnReadBufferSize, 0);
+        if (t < 0) { total = t; break; }
+        if (t < 1 || t > 2) {
+            ((EA::Internet::Job_s0094_2290*)wti->mpCurrentJob)->mResult = 0xd;
+            total = -1;
+            break;
+        }
+        if (wti->mbCancelCurrent != 0 || wti->mbShouldQuit != 0) break;
+    }
+    ((EA::Internet::Job_s0094_2290*)wti->mpCurrentJob)->mnLastNotifySize = (unsigned __int64)total;
+    return total;
+}
+
+// @ 0x00942b40
+int EA::Internet::HTTPClient_s0094_2290::ReadResponseBody(EA::Internet::WorkerThreadInfo_s0094_2290* wti)
+{
+    EA::Internet::Job_s0094_2290* job = (EA::Internet::Job_s0094_2290*)wti->mpCurrentJob;
     if (*(int*)(*(int*)((char*)wti + 0x1c) + 0x2c) == 3) return 1;
     if (*(int*)(*(int*)((char*)wti + 0x24) + 0xf3c) == 0) { job->mResult = 0xb; return 0; }
 
@@ -1373,10 +1430,10 @@ int EA::Internet::HTTPClient_s0094_2290::ReadResponseBody(WorkerThreadInfo_s0094
             if ((unsigned)(code - 200) > 99) return 1;
             len = 0x7fffffffffffffffLL;
         }
-        job = (Job_s0094_2290*)wti->mpCurrentJob;
+        job = (EA::Internet::Job_s0094_2290*)wti->mpCurrentJob;
         job->mnLastNotifySize = 0;
         int r;
-        if (chunked) r = ReadChunkedResponseData(wti);
+        if (chunked) r = (int)ReadChunkedResponseData(wti);
         else        r = ReadResponseData(wti, (unsigned)len, (unsigned)(len >> 32), 1);
         if (wti->mbCancelCurrent == 0 && wti->mbShouldQuit == 0 && r < 0) return 0;
     }

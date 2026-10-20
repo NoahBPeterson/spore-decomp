@@ -8,7 +8,8 @@
 00942530 212 HTTPClient::DoJobUpdate: complete; timeout/notify branch layout differs; difftest FAIL (5/22 valid inputs, 20.9% coverage)
 00942630 48 Cookie40::~Cookie40: complete; one redundant null-check/test around the second refcount release differs
 00942690 479 HTTPClient::ReadResponseData: complete; 64-bit accumulation + buffer growth call sequence differs; difftest FAIL (1/325 valid, 38.0% coverage)
-00942b40 304 HTTPClient::ReadResponseBody: complete; content-length/chunked dispatch schedule differs; difftest FAIL (5/5 valid, 50.6% coverage)
+009428b0 624 HTTPClient::ReadChunkedResponseData: complete (int64 return, all paths); loop/branch layout and register allocation differ [equiv: WEAK 304 valid, 31.8% coverage]
+00942b40 306 HTTPClient::ReadResponseBody: complete; content-length/chunked dispatch schedule differs; difftest FAIL (5/5 valid, 50.6% coverage)
 00942e50 213 eastl::StrStub::assignRange: complete; growth/memmove sequence differs; difftest UNSUPPORTED (0/400 valid inputs, all faulted)
 00942ff0 922 HTTPClient::ConnectToServer: complete (URL host/port/scheme, socket reuse or allocate, resolve, buffer tuning loops, connect); register allocation and stack-slot assignment differ, string copy-ctor schedule differs [equiv: UNSUPPORTED 0/400 valid]
 00943480 91 CookieNode list destroy: complete; refcount release emits redundant test + push ecx prologue, and n/next register roles differ; difftest UNSUPPORTED (0/400 valid inputs, 0% coverage)

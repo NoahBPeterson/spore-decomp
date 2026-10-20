@@ -1,9 +1,9 @@
 00942290 ?ReadRawBody@HTTPClient_s0094_2290@Internet@EA@@QAEHPAUWorkerThreadInfo_s0094_2290@23@PAD@Z  # HTTPClient_s0094_2290::ReadRawBody migrated from s00942290 (verbatim, slice spelling)
-009423d0 ?ReadLine@HTTPClient@Internet@EA@@QAEHPAUWorkerThreadInfo@123@PADI_N@Z  # EA::Internet::HTTPClient::ReadLine migrated from s00942290
+009423d0 ?ReadResponseLine@HTTPClient_s0094_2290@Internet@EA@@QAEHPAUWorkerThreadInfo_s0094_2290@23@PADHD@Z  # HTTPClient_s0094_2290::ReadResponseLine migrated from s00942290 (verbatim, slice spelling)
 00942530 ?DoJobUpdate@HTTPClient_s0094_2290@Internet@EA@@QAEHHIIIHPAI@Z  # HTTPClient_s0094_2290::DoJobUpdate migrated from s00942290 (verbatim, slice spelling)
 00942630 ??1Cookie40@@QAE@XZ  # Cookie40::~Cookie40 migrated from s00942290 (verbatim, slice spelling)
 00942690 ?ReadResponseData@HTTPClient_s0094_2290@Internet@EA@@QAEHPAUWorkerThreadInfo_s0094_2290@23@IID@Z  # HTTPClient_s0094_2290::ReadResponseData migrated from s00942290 (verbatim, slice spelling)
-009428b0 EA::Internet::HTTPClient::ReadChunkedResponseData  # pdb caller-single
+009428b0 ?ReadChunkedResponseData@HTTPClient_s0094_2290@Internet@EA@@QAE_JPAUWorkerThreadInfo_s0094_2290@23@@Z  # HTTPClient_s0094_2290::ReadChunkedResponseData migrated from s00942290 (verbatim, slice spelling)
 00942b40 ?ReadResponseBody@HTTPClient_s0094_2290@Internet@EA@@QAEHPAUWorkerThreadInfo_s0094_2290@23@@Z  # HTTPClient_s0094_2290::ReadResponseBody migrated from s00942290 (verbatim, slice spelling)
 00942ce0 ??0Cookie40@@QAE@ABU0@@Z  # Cookie40::Cookie40 migrated from s00942290 (verbatim, slice spelling)
 00942d70 ??4Cookie40@@QAEAAU0@ABU0@@Z  # Cookie40::operator= migrated from s00942290 (verbatim, slice spelling)
