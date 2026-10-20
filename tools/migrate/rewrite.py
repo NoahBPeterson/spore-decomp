@@ -1047,6 +1047,12 @@ def parse_preamble(pre):
                 break
             if seen_brace and depth == 0 and ms.rstrip().endswith("}"):       # a function definition or a namespace block
                 break
+            # a macro invocation without `;` (`FIXED_CTOR(E12, 0x00a2a3c0)`): complete once its parentheses close. It used to
+            # run on into the next definition, and the struct it swallowed was dropped with the item (mig19 s00a2a020 E12,
+            # s00a2e650 MappedVal: C2143, the whole batch failed to compile)
+            if not seen_brace and depth == 0 and re.match(r"^\s*[A-Z_][A-Z0-9_]*\s*\(", mask(buf[0])) \
+                    and ms.split("//")[0].rstrip().endswith(")"):
+                break
             j += 1
         text = "\n".join(buf)
         kind = "typedef" if s.startswith("typedef") else ("extern" if s.startswith("extern") else "other")
