@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-005cae60  503   palette helper: body not reconstructed (stub)

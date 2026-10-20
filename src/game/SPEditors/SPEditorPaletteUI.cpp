@@ -22,9 +22,12 @@
 #include <intrin.h>
 
 // ---- items of slice s005ca070 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl FUN_011e0744(void* dst, const void* src, unsigned int n); // 0x011e0744
 void* operator new(unsigned int n, const char* name, int flags, unsigned int debugFlags,
                    const char* file, int line); // 0x00f473a0
 #define PV(n) virtual void pv##n();
+struct Vector2_s005c_a070;
+struct Pt2;
 namespace EA {
 namespace UTFWin {
 class IUnknown32 {
@@ -83,7 +86,9 @@ namespace EA {
 namespace UTFWin {
 class IWindow_s005c_a070 : public IUnknown32 {
  public:
-  PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12)
+  PV(2) PV(3)
+  virtual IWindow_s005c_a070* GetSlot4();  // +0x10
+  PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12)
   virtual const Rect& GetArea();      // +0x34
   virtual const Rect& GetRealArea();  // +0x38
   PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23)
@@ -98,13 +103,31 @@ class IWindow_s005c_a070 : public IUnknown32 {
   virtual void Invalidate();                     // +0x90
   PV(37) PV(38) PV(39) PV(40) PV(41)
   virtual IDrawable_s005c_a070* GetDrawable();              // +0xa8
-  PV(43) PV(44) PV(45) PV(46) PV(47) PV(48) PV(49) PV(50) PV(51) PV(52) PV(53) PV(54) PV(55)
+  PV(43) PV(44) PV(45) PV(46) PV(47)
+  virtual const Vector2_s005c_a070 TransformA(Vector2_s005c_a070 v);  // +0xc0
+  virtual const Vector2_s005c_a070 TransformB(Vector2_s005c_a070 v);  // +0xc4
+  PV(50) PV(51) PV(52) PV(53) PV(54) PV(55)
   PV(56) PV(57) PV(58) PV(59) PV(60) PV(61) PV(62) PV(63) PV(64)
   virtual void AddWinProc(IWinProc_s005c_a070* proc);       // +0x104
+  virtual void RemoveWinProc(IWinProc_s005c_a070* proc);    // +0x108
+};
+}
+}
+namespace EA {
+namespace UTFWin {
+class IWinButton : public IUnknown32 {
+ public:
+  PV(2) PV(3)
+  virtual IWindow_s005c_a070* ToWindow();  // +0x10
+  PV(5) PV(6) PV(7) PV(8) PV(9)
+  virtual void SetButtonStateFlag(int flag, bool value);  // +0x28
+  PV(11) PV(12) PV(13) PV(14) PV(15) PV(16)
+  virtual void SetButtonGroupID(unsigned int id);         // +0x44
 };
 }
 }
 using EA::UTFWin::IWindow_s005c_a070;
+using EA::UTFWin::IWinButton;
 using EA::UTFWin::IWinProc_s005c_a070;
 using EA::UTFWin::Rect;
 namespace eastl {
@@ -133,6 +156,7 @@ class cSPPaletteCategoryUI {
   cSPPaletteCategoryUI();                                                   // 0x005c3e00
   void Init(cSPPaletteCategory* data, IWindow_s005c_a070* parent, unsigned int arg3);  // 0x005c53c0
   void SetVisibility(bool visible);                                         // 0x005c2960
+  void SetPackPaneVisible(bool visible);                                    // 0x005c2ec0
   void Update(int deltaTime);    // 0x005c28b0
   void Shutdown();               // 0x005c4e40
   bool IsPaintByNumber();        // 0x005c2cd0
@@ -141,24 +165,63 @@ class cSPPaletteUI {
  public:
   char pad0[0xc];                                        // vtable + refcount bases
   cSPUILayout_s005c_a070* mLayout;                                  // +0xc
-  char pad10[0x34 - 0x10];
+  IWindow_s005c_a070* mWinCategoryIcons;                            // +0x10
+  IWindow_s005c_a070* mLeftBackground;                              // +0x14
+  IWindow_s005c_a070* mRightBackground;                             // +0x18
+  IWindow_s005c_a070* mFullBackground;                              // +0x1c
+  struct SelBg { IWindow_s005c_a070* AsWindow() { return (IWindow_s005c_a070*)((char*)this + 4); } };
+  SelBg* mWinSelectedCategoryBackground;                 // +0x20 (IWindow is a secondary base at +4)
+  char pad24[0x34 - 0x24];
   eastl::sp_vector<cSPPaletteCategoryUI*> mCategories;   // +0x34
-  eastl::sp_vector<int*> mVec48;                         // +0x48
+  eastl::sp_vector<IWinButton*> mVec48;                  // +0x48
   int mPad5c;                                            // +0x5c
   int mVisibleChunk;                                     // +0x60
   cSPPaletteCategoryUI* mSelectedCategory;               // +0x64
 
   void UpdateCategories(int deltaTime);                  // 0x005ca980
-  int FindCategoryIndex();                               // 0x005ca9c0
+  void SetButtonPositions();                             // 0x005cae60
+  __declspec(noinline) int FindCategoryIndex();          // 0x005ca9c0
+  __forceinline bool ShowChunkButtons() {
+    if (((unsigned int)((char*)mVec48.mpEnd - (char*)mVec48.mpBegin) >> 2) != 0) {
+      for (unsigned int i = 0; i < (unsigned int)(mVec48.mpEnd - mVec48.mpBegin); i++) {
+        if (i / 9 != (unsigned int)mVisibleChunk)
+          mVec48.mpBegin[i]->ToWindow()->SetFlag(1, false);
+        else
+          mVec48.mpBegin[i]->ToWindow()->SetFlag(1, true);
+      }
+      int idx = FindCategoryIndexInline();
+      if ((unsigned int)idx / 9 == (unsigned int)mVisibleChunk)
+        return true;
+    }
+    return false;
+  }
+  __forceinline int FindCategoryIndexInline() {          // same body, inlined at the first use
+    int count = (int)(mCategories.mpEnd - mCategories.mpBegin);
+    for (int i = 0; i < count; i++) {
+      if (mCategories.mpBegin[i] == mSelectedCategory)
+        return i;
+    }
+    return -1;
+  }
   bool IsPaintByNumber();                                // 0x005ca920
   void SetVisibleChunk(int value);                       // 0x005cadb0
   void UpdateNavigationVisiblity();                      // 0x005ca9f0 (out of line)
 };
-struct Key {
+struct Key_s005c_a070 {
   unsigned int mInstance, mType, mGroup;
-  Key() {}
-  Key(unsigned int instance, unsigned int type, unsigned int group)
+  Key_s005c_a070() {}
+  Key_s005c_a070(unsigned int instance, unsigned int type, unsigned int group)
       : mInstance(instance), mType(type), mGroup(group) {}
+};
+struct Pt2 {
+  float x, y;
+  Pt2(const Pt2& v) : x(v.x), y(v.y) {}
+};
+struct Vector2_s005c_a070 {
+  float x, y;
+  Vector2_s005c_a070(float x_, float y_) : x(x_), y(y_) {}
+  Vector2_s005c_a070(const Vector2_s005c_a070& v) : x(v.x), y(v.y) {}
+  Vector2_s005c_a070(const Pt2& v) : x(v.x), y(v.y) {}
 };
 namespace eastl {
 template <typename T>
@@ -169,6 +232,14 @@ class sp_vec {  // vector<T, sp_vector_allocator>: begin/end/capacity + 2-word a
   T* mpCapacity;
   int mAllocator[2];
   unsigned int size() const { return (unsigned int)(mpEnd - mpBegin); }
+  T& operator[](unsigned int i) { return mpBegin[i]; }
+  void clear() {
+    T* last = mpEnd;
+    T* first = mpBegin;
+    FUN_011e0744(first, last, (unsigned int)((char*)mpEnd - (char*)last));
+    mpEnd = mpEnd + (-(last - first));
+  }
+  T* erase(T* first, T* last);  // 0x00663430
   void DoInsertValue(T* position, const T& value);
   void push_back(const T& value) {
     if (mpEnd < mpCapacity)
@@ -189,7 +260,7 @@ class cSPPaletteCategory {  // retail layout (RefCountVTemplate + IUnknown32 bas
   char pad48[0x5c - 0x48];
   cString mCategoryName;                              // +0x5c
   char pad6c[0x7c - 0x5c - 0x14];
-  Key mButtonImageKey;                                // +0x7c
+  Key_s005c_a070 mButtonImageKey;                                // +0x7c
   cSPPaletteCategory* GetSubCategory(int index);      // 0x005cae30
 };
     void* operator new(unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
@@ -599,6 +670,53 @@ struct VecAutoRef {
 };
 // ---- items of slice s00662d70 end
 
+// @ 0x005ca9f0
+void cSPPaletteUI::UpdateNavigationVisiblity()
+{
+  if (!ShowChunkButtons()) {
+    if (mFullBackground)
+      mFullBackground->SetFlag(1, true);
+    if (mLeftBackground)
+      mLeftBackground->SetFlag(1, false);
+    if (mRightBackground)
+      mRightBackground->SetFlag(1, false);
+    if (mWinSelectedCategoryBackground)
+      mWinSelectedCategoryBackground->AsWindow()->SetFlag(1, false);
+    if (mSelectedCategory)
+      mSelectedCategory->SetPackPaneVisible(false);
+  } else {
+    if (mFullBackground)
+      mFullBackground->SetFlag(1, false);
+    if (mLeftBackground && mRightBackground && mWinSelectedCategoryBackground) {
+      mWinSelectedCategoryBackground->AsWindow()->SetFlag(1, true);
+      mLeftBackground->SetFlag(1, true);
+      mRightBackground->SetFlag(1, true);
+      IWindow_s005c_a070* catWin = mVec48.mpBegin[FindCategoryIndex()]->ToWindow();
+      const Rect* catArea = &catWin->GetRealArea();
+      float width = (catArea->mRight - catArea->mLeft) + 3.0f;
+      IWindow_s005c_a070* leftWin = mLeftBackground->GetSlot4();
+      const Rect* leftArea = &leftWin->GetRealArea();
+      float x1 = leftWin->TransformB(catWin->TransformA(Vector2_s005c_a070(-3.0f, 0.0f))).x;
+      float x2 = leftWin->TransformB(catWin->TransformA(Vector2_s005c_a070(width, 0.0f))).x;
+      Rect r1 = mLeftBackground->GetArea();
+      r1.mLeft = 0.0f;
+      r1.mRight = x1;
+      mLeftBackground->SetArea(r1);
+      Rect r2 = mRightBackground->GetArea();
+      r2.mLeft = x2;
+      r2.mRight = leftArea->mRight - leftArea->mLeft;
+      mRightBackground->SetArea(r2);
+      IWindow_s005c_a070* selWin = mWinSelectedCategoryBackground->AsWindow();
+      Rect r3 = selWin->GetArea();
+      r3.mLeft = x1;
+      r3.mRight = x2;
+      selWin->SetArea(r3);
+    }
+    if (mSelectedCategory)
+      mSelectedCategory->SetPackPaneVisible(true);
+  }
+}
+
 // @ 0x005cadb0
 void cSPPaletteUI::SetVisibleChunk(int value)
 {
@@ -615,10 +733,51 @@ void cSPPaletteUI::SetVisibleChunk(int value)
 }
 
 // @ 0x005cae60
-void cPaletteBig(void* a, void* b)
+void cSPPaletteUI::SetButtonPositions()
 {
-  (void)a;
-  (void)b;
+  if (!mWinCategoryIcons)
+    return;
+  if (mVec48.mpBegin == mVec48.mpEnd)
+    return;
+
+  const Rect& iconFrame = mWinCategoryIcons->GetRealArea();
+  float iconW = iconFrame.mRight - iconFrame.mLeft;
+  const Rect& iconFrame2 = mWinCategoryIcons->GetRealArea();
+  float iconH = iconFrame2.mBottom - iconFrame2.mTop;
+
+  IWindow_s005c_a070* firstBtn = mVec48.mpBegin[0]->ToWindow();
+  const Rect& btnRect = firstBtn->GetArea();
+  float btnW = btnRect.mRight - btnRect.mLeft;
+  IWindow_s005c_a070* firstBtn2 = mVec48.mpBegin[0]->ToWindow();
+  const Rect& btnRect2 = firstBtn2->GetArea();
+  float btnH = btnRect2.mBottom - btnRect2.mTop;
+
+  const unsigned int total = (unsigned int)(mVec48.mpEnd - mVec48.mpBegin);
+  unsigned int n = total;
+  if (n > 9)
+    n = 9;
+  if (iconW < (float)n * btnW) {
+    float scale = iconW / ((float)n * btnW);
+    btnW = scale * btnW;
+    btnH = scale * btnH;
+  }
+  if (iconH < btnH) {
+    float scale = iconH / btnH;
+    btnW = scale * btnW;
+    btnH = scale * btnH;
+  }
+  float step = (iconW - (float)n * btnW) / (float)(n + 1);
+  float gap = (iconH - btnH) * 0.5f;
+  int count = (int)(mVec48.mpEnd - mVec48.mpBegin);
+  for (int i = 0; i < count; i++) {
+    IWindow_s005c_a070* btnWin = mVec48.mpBegin[i]->ToWindow();
+    Rect area = btnWin->GetArea();
+    area.mLeft = (float)(i % n + 1) * step + (float)(i % n) * btnW;
+    area.mTop = gap;
+    area.mRight = area.mLeft + btnW;
+    area.mBottom = area.mTop + btnH;
+    btnWin->SetArea(area);
+  }
 }
 
 // @ 0x005cb060

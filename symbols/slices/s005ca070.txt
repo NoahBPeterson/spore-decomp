@@ -7,7 +7,7 @@
 005ca920 SP::cSPPaletteUI::IsPaintByNumber  # forwards to the selected category UI
 005ca980 SP::cSPPaletteUI::UpdateCategories  # calls Update(delta) on every category UI
 005ca9c0 SP::cSPPaletteUI::FindCategoryIndex  # index of mSelectedCategory in mCategories, else -1
-005ca9f0 SP::cSPPaletteUI::UpdateNavigationVisiblity  # dev-build symbol (spelling as in the PDB)
+005ca9f0 ?UpdateNavigationVisiblity@cSPPaletteUI@@QAEXXZ  # cSPPaletteUI::UpdateNavigationVisiblity migrated from s005ca070 (verbatim, slice spelling)
 005cadb0 ?SetVisibleChunk@cSPPaletteUI@@QAEXH@Z  # cSPPaletteUI::SetVisibleChunk migrated from s005ca070 (verbatim, slice spelling)
 005cae30 ?GetSubCategory@cSPPaletteCategory@SP@@QAEPAV12@H@Z  # SP::cSPPaletteCategory::GetSubCategory (callee of s005ca070, named from the dev publics; slice address comment)
-005cae60 ?SetButtonPositions@cSPPaletteUI@SP@@QAEXXZ  # SP::cSPPaletteUI::SetButtonPositions (corrected: the earlier ?cPaletteBig@@YAXPAX0@Z was a mis-map; dev VA 0x00d177f0, size 477, right after SetVisibleChunk)
+005cae60 ?SetButtonPositions@cSPPaletteUI@@QAEXXZ  # cSPPaletteUI::SetButtonPositions migrated from s005ca070 (verbatim, slice spelling)
