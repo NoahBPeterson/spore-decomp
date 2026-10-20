@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00913ca0/s00913ca0.cpp  ?big2_scanRef@@YAHPBUencoding@@PBD1PAPBD@Z  00913ca0
+slices/s00913ca0/s00913ca0.cpp  ?big2_scanAtts@@YAHPBUencoding@@PBD1PAPBD@Z  00913e60
+slices/s00913ca0/s00913ca0.cpp  ?big2_scanLt@@YAHPBUencoding@@PBD1PAPBD@Z  00914360
+slices/s00913ca0/s00913ca0.cpp  ?big2_contentTok@@YAHPBUencoding@@PBD1PAPBD@Z  00914760
+slices/s00913ca0/s00913ca0.cpp  ?big2_scanPercent@@YAHPBUencoding@@PBD1PAPBD@Z  009149c0

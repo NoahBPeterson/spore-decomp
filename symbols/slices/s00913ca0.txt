@@ -1,0 +1,5 @@
+00913ca0 big2_scanRef  # expat 2.0.1 xmltok_impl.c scanRef (big2, internal static)
+00913e60 big2_scanAtts  # expat 2.0.1 xmltok_impl.c scanAtts (big2, internal static)
+00914360 big2_scanLt  # expat 2.0.1 xmltok_impl.c scanLt (big2, internal static)
+00914760 big2_contentTok  # expat 2.0.1 xmltok_impl.c contentTok (big2, ENCODING vtable entry)
+009149c0 big2_scanPercent  # expat 2.0.1 xmltok_impl.c scanPercent (big2, internal static)
