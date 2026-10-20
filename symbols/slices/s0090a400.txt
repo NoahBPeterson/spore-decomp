@@ -1,0 +1,26 @@
+# va  name  # evidence
+# Expat 2.0.1 xmlparse.c parser lifecycle (parserCreate/parserInit/XML_ParserReset/
+# XML_ParserCreate/XML_ParserCreate_MM/XML_ExternalEntityParserCreate and the prolog /
+# external-parser-entity processor entry points) plus the xmlrole.c prolog handlers
+# entity5/condSect1/condSect2/declClose/entity6/notation3/notation4, as linked into
+# SporeApp.exe.  Names are the upstream expat function names; the exact decorated names
+# of the byte-exact ones are in manifest.txt, diff counts in nonmatching.txt.
+0090a400  prologProcessor
+0090a460  parserInit
+0090a5e0  prologInitProcessor
+0090a620  externalParEntProcessor
+0090a6f0  parserInit        (second instantiation / TU-static helper)
+0090a870  XML_ParserReset
+0090a990  externalParEntInitProcessor
+0090a9f0  parserCreate
+0090ac10  XML_ExternalEntityParserCreate
+0090aed0  XML_ParserCreate_MM
+0090af20  XML_ParserCreate
+0090af70  prolog2           (externalParEntProcessor alias at 00a620)
+0090b040  entity5
+0090b0e0  condSect1
+0090b120  condSect2
+0090b160  declClose
+0090b1c0  entity6
+0090b250  notation3
+0090b2a0  notation4

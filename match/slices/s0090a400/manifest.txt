@@ -1,0 +1,19 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Byte-exact matches for slice s0090a400 (expat 2.0.1 xmlparse.c parser lifecycle:
+# prologProcessor/prologInitProcessor/parserInit/externalParEnt{Processor,InitProcessor},
+# parserInit and the xmlrole.c prolog handlers entity5/condSect1/condSect2/declClose/
+# entity6/notation3/notation4).  parserCreate/parserInit/XML_ParserReset/
+# XML_ExternalEntityParserCreate/XML_ParserCreate{,_MM}/externalParEntProcessor are
+# behavioural reconstructions, see nonmatching.txt.  Default flags (/O2 /MD /Gy /EHsc /TP).
+slices/s0090a400/s0090a400.cpp  ?prologProcessor@@YA?AW4XML_Error@@PAUXML_ParserStruct@@PBD1PAPBD@Z  0090a400
+slices/s0090a400/s0090a400.cpp  ?prologInitProcessor@@YA?AW4XML_Error@@PAUXML_ParserStruct@@PBD1PAPBD@Z  0090a5e0
+slices/s0090a400/s0090a400.cpp  ?externalParEntProcessor@@YA?AW4XML_Error@@PAUXML_ParserStruct@@PBD1PAPBD@Z  0090a620
+slices/s0090a400/s0090a400.cpp  ?parserInit@@YAXPAUXML_ParserStruct@@PBD@Z  0090a6f0
+slices/s0090a400/s0090a400.cpp  ?externalParEntInitProcessor@@YA?AW4XML_Error@@PAUXML_ParserStruct@@PBD1PAPBD@Z  0090a990
+slices/s0090a400/s0090a400.cpp  ?entity5@@YAHPAUprolog_state@@HPBD1PBUencoding@@@Z  0090b040
+slices/s0090a400/s0090a400.cpp  ?condSect1@@YAHPAUprolog_state@@HPBD1PBUencoding@@@Z  0090b0e0
+slices/s0090a400/s0090a400.cpp  ?condSect2@@YAHPAUprolog_state@@HPBD1PBUencoding@@@Z  0090b120
+slices/s0090a400/s0090a400.cpp  ?declClose@@YAHPAUprolog_state@@HPBD1PBUencoding@@@Z  0090b160
+slices/s0090a400/s0090a400.cpp  ?entity6@@YAHPAUprolog_state@@HPBD1PBUencoding@@@Z  0090b1c0
+slices/s0090a400/s0090a400.cpp  ?notation3@@YAHPAUprolog_state@@HPBD1PBUencoding@@@Z  0090b250
+slices/s0090a400/s0090a400.cpp  ?notation4@@YAHPAUprolog_state@@HPBD1PBUencoding@@@Z  0090b2a0
