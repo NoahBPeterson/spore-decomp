@@ -1,0 +1,2 @@
+# va  reason
+00dc40a0 city-needs target pick: original copies the noun vector into a stack buffer and sorts it (FUN_00b93c60 + FUN_00829110) before scanning; copy/sort stage not reconstructed (618 B vs 753 B)

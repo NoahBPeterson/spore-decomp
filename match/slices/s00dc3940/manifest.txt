@@ -1,0 +1,24 @@
+# source  symbol  original VA  [flags override]
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc3e10@@YANHHHHPAUStim@@PAD@Z  00dc3e10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc3eb0@@YANXZ  00dc3eb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc43a0@@YANPAXHHHPAUStim@@PAD@Z  00dc43a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc4460@@YADPAX@Z  00dc4460  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc4560@@YAXPAXMMM@Z  00dc4560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc45a0@@YAXPAX@Z  00dc45a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc4610@@YAXPAX@Z  00dc4610  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc4670@@YANPAX@Z  00dc4670  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc4690@@YANPAX@Z  00dc4690  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc46b0@@YANPAX@Z  00dc46b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc46d0@@YADPAX@Z  00dc46d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+# 00dc4710 is 16 bytes in work/decomp_all/index_*.csv, but the following function
+# (00dc4720) is absent from the index, so chk.py's bounds() reports 158 bytes and
+# rejects the 16-byte candidate. The body below is byte-identical over its 16 bytes
+# (only the masked call rel32 differs); run_all.py verifies the compiled 16 bytes.
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc4710@@YAXPAX@Z  00dc4710  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc47b0@@YAXPAX@Z  00dc47b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc47d0@@YAXPAX@Z  00dc47d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc47e0@@YADHHHHHPAM@Z  00dc47e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc4800@@YANPAX@Z  00dc4800  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc4820@@YAXPAX@Z  00dc4820  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc4870@@YADHHHHHPAM@Z  00dc4870  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc3940/s00dc3940.cpp  ?FUN_00dc4890@@YADPAXHHHHPAMHM@Z  00dc4890  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

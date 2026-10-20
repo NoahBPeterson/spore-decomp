@@ -1,0 +1,1 @@
+00dc4720 FUN_00dc4720  # orphan function start (absent from decomp index); bounds 00dc4710

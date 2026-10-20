@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00dc3940 234 UFO group spawn/spread: loop body and x87 sin/cos scheduling differ (self/tmp stack slots, vector indexing); equiv UNSUPPORTED (0/400 inputs valid, read fault)
+00dc3af0 270 UFO escape/panic update: loop and callback ordering not fully recovered; equiv UNSUPPORTED (unresolved GetAvatar/Notify refs)
+00dc3c20 389 attack formation placement: normalise/count and loop body scheduling differ; equiv FAIL (5/5 mismatch, execution fault)
+00dc3f10 182 nearest-UFO pick: inner duplicate scan and register/spill layout differ; equiv UNSUPPORTED (unresolved GetGameDataVector ref)
