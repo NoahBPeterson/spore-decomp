@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+# Complete, behaviourally-equivalent source (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast, .cpp header comment).
+00fc3000  95  cJetStreamMap::SetValues — the 3-way branch (JetStream key / PressureMap key / else) is emitted in a
+               different block order than the original: ours puts the PressureMap arm (which calls the
+               out-of-line RefCountedPtr::operator= 0x00572680) before the `else` release block; the original
+               puts the else block before the call arm. Same instructions, only jump displacements differ
+               (the two `cmp dword ptr [<addr>]` rows are unresolved key globals, not real diffs).
+               Diff flat at 95 across the slice's rounds; branch-block layout, no lever.
+               difftest: WEAK (400 valid inputs, no mismatch, 56.5% coverage — just under the 60% threshold).

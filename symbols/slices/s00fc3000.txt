@@ -1,0 +1,3 @@
+00fc3000  SP::cJetStreamMap::SetValues  # sets mMapId and selects mMaps[5] (JetStream) / mMaps[6] pressure via 0x572680
+00fc30f0  SP::cJetStreamMap::~cJetStreamMap  # restores base vtables 0x14915c4/0x14915c0 then 0x13ef094, releases mMap + mTerrainMapSet
+00fc3150  SP::cJetStreamMap::SetValuesPressure  # sets mMapId and selects mMaps[4]; else releases mMap
