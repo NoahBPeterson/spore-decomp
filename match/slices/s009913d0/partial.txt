@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00991400  4  WinTreeView::OnTick (FUN_00991400): complete; byte-identical length (8). `mov ecx,[esp+4]` + tail `jmp Refresh` + `mov al,1; ret 4`; the 4 diffs are the arg-load/return-shape scheduling only.
+00991410  38  TreeNode::~TreeNode: complete (vtable restores, mpUserData/mpIcon release, caption-free, mChildren teardown, base vtable restores). Byte-identical length (87) but the compiler scheduled the member teardown in a different order and used different registers.
+00991490  -  TreeNode::SetFlag: complete (flag set/clear, mFlags compare, node-changed virtual at slot +0x18, CalcVisibleLines on bit 1, window notify w36/w31). chk.py scores it against ~WinTreeView (table size collision, n0=132); a direct diff is 100/132. Not byte-exact.
+009916f0  -  TreeNode_Expand: complete (`SetFlag(this, 2, true)`). Original is a 10-byte wrapper that calls the out-of-line SetFlag; MSVC inlined SetFlag into our copy, so length (91) and structure differ. Needs __declspec(noinline) on SetFlag or -Ob1 for this TU.
+00991700  -  TreeNode_Collapse: same as 0x9916f0 (`SetFlag(this, 2, false)`); SetFlag inlined, length/structure differ.
+009917b0  50  WinTreeView::InvalidateLayout (FUN_009917b0): complete (tail-calls TreeViewExtra::CalculateVisibleArea at 0x98fbe0). Byte-identical length (54) but the `this`-adjustment (sub 0x20c) and tail-jump are scheduled differently.
+009918b0  107  WinTreeView::OnMouseDown: complete (pick-node -> expander toggle / select with flag check + window notify). Same length (115); the branch layout and register assignment differ.
+00991990  32  WinTreeView::SetScrollbarEnabled: complete (mScrollbars[which].mEnabled = v; CreateScrollbar(1); CreateScrollbar(0)). Byte-identical length (43); register allocation only.
+009919e0  56  BasicFactory_TreeNode::CreateInstance: complete (allocator fallback, 0x50-byte alloc, vtable/field init through p[19]). Length 127 vs 134; field-init ordering/registers differ.

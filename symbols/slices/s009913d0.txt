@@ -1,0 +1,26 @@
+009913d0 ?GetSelection@WinTreeView@UTFWinControls@EA@@QAEHH@Z  # WinTreeView::GetSelection (tail-jumps TreeNode::CollectVisible)
+00991400 ?WinTreeView_OnTick@@YA_NPAUWinTreeView@UTFWinControls@EA@@@Z  # FUN_00991400 -> Refresh tail-call, returns true
+00991410 ??1TreeNode@UTFWinControls@EA@@QAE@XZ  # EA::UTFWinControls::TreeNode::~TreeNode
+00991470 ?IsExpanded@TreeNode@UTFWinControls@EA@@QAE_NXZ  # TreeNode::IsExpanded (bit 1)
+00991490 ?SetFlag@TreeNode@UTFWinControls@EA@@QAEXI_N@Z  # TreeNode::SetFlag
+00991520 ?SetFlagRecursive@TreeNode@UTFWinControls@EA@@QAEXI_N@Z  # TreeNode::SetFlagRecursive
+00991580 ?ChildInsert@TreeNode@UTFWinControls@EA@@QAEXPAUintrusive_list_node@eastl@@PAU123@@Z  # TreeNode::ChildInsert
+00991600 ?ChildRemoveAll@TreeNode@UTFWinControls@EA@@QAEXXZ  # TreeNode::ChildRemoveAll
+009916b0 ?SerUpdate@@YAXPAUTreeNode@UTFWinControls@EA@@@Z  # free helper: CalcVisibleLines + window notify
+009916f0 ?TreeNode_Expand@@YAXPAUTreeNode@UTFWinControls@EA@@@Z  # FUN_009916f0 -> SetFlag(2,true) wrapper
+00991700 ?TreeNode_Collapse@@YAXPAUTreeNode@UTFWinControls@EA@@@Z  # FUN_00991700 -> SetFlag(2,false) wrapper
+00991710 ?Read@TreeNodeListMarshaller@UTFWinControls@EA@@QAE_NPAX00@Z  # TreeNodeListMarshaller::Read
+009917b0 ?InvalidateLayout@WinTreeView@UTFWinControls@EA@@QAEXXZ  # FUN_009917b0 -> TreeViewExtra::CalculateVisibleArea
+009917f0 ?SetBorders@WinTreeView@UTFWinControls@EA@@QAEXPAURectF@UTFWin@3@@Z  # WinTreeView::SetBorders
+00991860 ?ClearSelection@WinTreeView@UTFWinControls@EA@@QAEXXZ  # WinTreeView::ClearSelection
+009918b0 ?OnMouseDown@WinTreeView@UTFWinControls@EA@@QAEXXZ  # WinTreeView::OnMouseDown
+00991930 ?SetScrollbarDrawable@WinTreeView@UTFWinControls@EA@@QAEXHPAX@Z  # WinTreeView::SetScrollbarDrawable
+00991990 ?SetScrollbarEnabled@WinTreeView@UTFWinControls@EA@@QAEXHH@Z  # WinTreeView::SetScrollbarEnabled
+009919e0 ?CreateInstance@BasicFactory_TreeNode@UTFWinControls@EA@@QAEPAXPAX0@Z  # BasicFactory_TreeNode::CreateInstance (__stdcall ret 8)
+00991a70 ??0WinTreeView@UTFWinControls@EA@@QAE@XZ  # WinTreeView::WinTreeView
+00991df0 ??1WinTreeView@UTFWinControls@EA@@QAE@XZ  # WinTreeView::~WinTreeView
+00991f90 ?Clear@WatchGraph@UTFWinControls@EA@@QAEXXZ  # WatchGraph::Clear
+00991ff0 ??0WatchGraph@UTFWinControls@EA@@QAE@XZ  # WatchGraph::WatchGraph
+00992080 ?SetHistorySize@WatchGraph@UTFWinControls@EA@@QAEXI@Z  # WatchGraph::SetHistorySize
+00992140 ?OnAreaChanged@WatchGraph@UTFWinControls@EA@@QAEXPAURectF@UTFWin@3@@Z  # WatchGraph::OnAreaChanged
+00992180 ?OnRebuild@WatchGraph@UTFWinControls@EA@@QAE_NPAX@Z  # WatchGraph::OnRebuild
