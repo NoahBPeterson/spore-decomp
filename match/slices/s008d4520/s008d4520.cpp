@@ -4,6 +4,7 @@
 // Most routines here are __thiscall (`mov esi, ecx` at entry), so they are
 // modelled as member functions; the remaining ones take plain stack arguments.
 #include "types.h"
+#include <intrin.h>
 typedef unsigned char uint8; typedef signed char int8; typedef unsigned short uint16;
 typedef short int16; typedef unsigned int uint; typedef unsigned int uint32;
 typedef int int32;
@@ -243,21 +244,20 @@ struct SmallVec {
 
 void SmallVec::push(void* value)
 {
-    int* p = (int*)end;
-    if (p < (int*)cap) {
-        end = p + 4;
+    VecCore* core = (VecCore*)((char*)this + 4);
+    void* p = core->end;
+    if (p < core->cap) {
+        core->end = (char*)p + 0x10;
         if (p != 0) {
-            p[0] = ((int*)value)[0];
-            p[1] = ((int*)value)[1];
-            p[2] = ((int*)value)[2];
-            p[3] = ((int*)value)[3];
+            ((int*)p)[0] = ((int*)value)[0];
+            ((int*)p)[1] = ((int*)value)[1];
+            ((int*)p)[2] = ((int*)value)[2];
+            ((int*)p)[3] = ((int*)value)[3];
             dirty = 1;
             return;
         }
     } else {
-        ((VecCore*)((char*)this + 4))->grow(p, value);
-        dirty = 1;
-        return;
+        core->grow(p, value);
     }
     dirty = 1;
 }
@@ -323,6 +323,7 @@ void ClearTwo::clear()
     int a1 = (int)aend;
     copy_Quad16((Quad16*)a1, (Quad16*)a1, (Quad16*)a0);
     aend = (void*)((int)aend + ((a1 - a0) >> 4) * -0x10);
+    _ReadWriteBarrier();
 
     int b0 = (int)bbase;
     int b1 = (int)bend;
@@ -371,20 +372,22 @@ void ByteRange::toLower()
 extern "C" char* FUN_008d4ad0(char* a, char* b, char** key)
 {
     int n = (int)(b - a) >> 3;
-    while (n > 0) {
-        int half = n >> 1;
-        char* s = *(char**)(a + half * 8);
-        char* t = *key;
-        char  c = *s;
-        while (c != 0 && c == *t) {
-            c = s[1]; s++; t++;
-        }
-        if (*s < *t) {
-            a += 8 + half * 8;
-            n = n + (-1 - half);
-        } else {
-            n = half;
-        }
+    if (n > 0) {
+        char* k = *key;
+        do {
+            int half = n >> 1;
+            char* s = *(char**)(a + half * 8);
+            char* t = k;
+            while (*s != 0 && *s == *t) {
+                ++s; ++t;
+            }
+            if (*s < *t) {
+                a += 8 + half * 8;
+                n = n + (-1 - half);
+            } else {
+                n = half;
+            }
+        } while (n > 0);
     }
     return a;
 }
@@ -399,21 +402,18 @@ extern "C" char* FUN_008d4b30(char* a, char* b, char** key)
     if (n > 0) {
         char* k = *key;
         do {
-            int   half = n >> 1;
-            char* e = *(char**)(a + half * 8);
-            char  c = *k;
+            int half = n >> 1;
+            char* s = *(char**)(a + half * 8);
             char* t = k;
-            char* p = e;
-            while (c != 0 && c == *p) {
-                c = t[1];
-                t++;
-                p++;
+            while (*s != 0 && *s == *t) {
+                ++s; ++t;
             }
-            if (*p <= *t) {
+            if (*s <= *t) {
                 a += 8 + half * 8;
-                half = n + (-1 - half);
+                n = n + (-1 - half);
+            } else {
+                n = half;
             }
-            n = half;
         } while (n > 0);
     }
     return a;
@@ -445,11 +445,9 @@ extern "C" char** FUN_008d4b90(char** out, char* a, char* b, char** key)
             while (c != 0 && c == *s2) {
                 c = t2[1]; t2++; s2++;
             }
-            if (*t2 <= *s2) {
-                char* hi = FUN_008d4b30((char*)slot + 8, b, key);
-                char* lo = FUN_008d4ad0(a, (char*)slot, key);
-                out[1] = hi;
-                out[0] = lo;
+            if (*s2 <= *t2) {
+                out[1] = FUN_008d4b30((char*)slot + 8, b, key);
+                out[0] = FUN_008d4ad0(a, (char*)slot, key);
                 return out;
             }
             b = (char*)slot;
@@ -643,10 +641,10 @@ void TokenReader::MatchWhileHex(void* pred)
 // @ 0x008d4ef0
 // TriggerTokenReader::Advance -- produce the next token.
 // ---------------------------------------------------------------------------
-extern "C" uint FUN_008d4e30(TokenReader* t, const char* s);    // Skip<char>
-extern "C" void FUN_008d50b0(TokenReader* t);                   // SkipToEoL
-extern "C" uint FUN_008d51c0(TokenReader* t, const char* s);    // SkipUntil<n>
-extern "C" void FUN_00895770(TokenReader* t, const char* s);    // Match<Alternative>
+extern "C" uint FUN_00894e30(TokenReader* t, const char* s);    // 0x00894e30  Skip<char>
+extern "C" void FUN_008950b0(TokenReader* t);                   // 0x008950b0  SkipToEoL
+extern "C" uint FUN_008951c0(TokenReader* t, const char* s);    // 0x008951c0  SkipUntil<n>
+extern "C" void FUN_00895770(TokenReader* t, const char* s);    // 0x00895770  Match<Alternative>
 
 extern "C" uint32 g_1667a78;
 extern char g_142ef10[];
@@ -671,13 +669,13 @@ uint8 TokenReader::Advance()
             break;
     }
 
-    if (FUN_008d4e30(this, g_142ef10)) {
-        FUN_008d50b0(this);
+    if (FUN_00894e30(this, g_142ef10)) {
+        FUN_008950b0(this);
         mToken = 1;
         return 1;
     }
-    if (FUN_008d4e30(this, g_142ef0c)) {
-        FUN_008d51c0(this, g_142ef08);
+    if (FUN_00894e30(this, g_142ef0c)) {
+        FUN_008951c0(this, g_142ef08);
         mToken = 1;
         return 1;
     }
@@ -847,9 +845,8 @@ uint8 TokenReader::MatchString()
         matchText.mpEnd = matchText.mpBegin;
     }
     if (FUN_008d5180(this, '"')) {
-        char* end = matchText.mpEnd;
         mTokenValue = (int)FNV1Hash(matchText.mpBegin,
-                                    (int)(end - matchText.mpBegin),
+                                    (int)(matchText.mpEnd - matchText.mpBegin),
                                     0x811c9dc5);
         Advance();
         return 1;
