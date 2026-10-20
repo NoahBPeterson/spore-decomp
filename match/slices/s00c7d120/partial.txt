@@ -1,0 +1,3 @@
+# va  incomplete-bytes  reason
+00c7d240  UpdateTarget (partial): the target-selection body is reconstructed against opaque model distance/visibility predicates, but the call argument staging and cache-branch order are not reproduced, leaving size and instruction differences; equiv UNSUPPORTED (0/400 valid)
+00c7dcb0  Update (partial): the per-entry update/expiry loop is reconstructed from the disassembly, but the surrounding predicate calls and branch ordering are not fully resolved, so much of the body is not byte-verified; equiv WEAK (213 valid, 35.3% cov)
