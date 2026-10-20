@@ -1,0 +1,9 @@
+00aa3a30 ?Execute@cParticleSourceCommand@@UAEXAAUcArguments@ArgScript@EA@@@Z  # cParticleSourceCommand::Execute (PDB)
+00aa3f30 ?Execute@cParticleEmitCommand@@UAEXAAUcArguments@ArgScript@EA@@@Z  # cParticleEmitCommand::Execute
+00aa4180 ?Execute@cParticleForceCommand@@UAEXAAUcArguments@ArgScript@EA@@@Z  # cParticleForceCommand::Execute
+00aa43c0 ?Execute@cParticleLifeCommand@@UAEXAAUcArguments@ArgScript@EA@@@Z  # cParticleLifeCommand::Execute (PDB)
+00aa44f0 ?Execute@cParticleTextureCommand@@UAEXAAUcArguments@ArgScript@EA@@@Z  # cParticleTextureCommand::Execute
+00aa45a0 ?Execute@cParticleFramesCommand@@UAEXAAUcArguments@ArgScript@EA@@@Z  # cParticleFramesCommand::Execute
+00aa46e0 ?Execute@cParticleModelCommand@@UAEXAAUcArguments@ArgScript@EA@@@Z  # cParticleModelCommand::Execute
+00aa47e0 ?Execute@cParticleRateCommand@@UAEXAAUcArguments@ArgScript@EA@@@Z  # cParticleRateCommand::Execute
+00aa48e0 ?Execute@cParticleSurfaceCommand@@UAEXAAUcArguments@ArgScript@EA@@@Z  # cParticleSurfaceCommand::Execute
