@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPAppVolumeDescription.cpp  ??_GcVolumeEffectCommand@@UAEPAXI@Z  007ef220  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

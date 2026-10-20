@@ -2,5 +2,7 @@
 007ee630 SP::VolumeRead  # PDB candidate (caller-scored)
 007ee700 ?Alpha@VolumeCmd@@QAEXPAVcArguments_s007e_e060@ArgScript@EA@@@Z  # VolumeCmd::Alpha migrated from s007ee060 (verbatim, slice spelling)
 007ee730 ?Color@VolumeCmd@@QAEXPAVcArguments_s007e_e060@ArgScript@EA@@@Z  # VolumeCmd::Color migrated from s007ee060 (verbatim, slice spelling)
+007ee9f0 ?Copy@MapDescription@@QAEPAXH@Z  # MapDescription::Copy migrated from s007ee060 (verbatim, slice spelling)
 007eea90 `anonymous namespace'::cVolumeEffectCommand::OnRegister  # PDB candidate (caller-scored)
 007eec80 ?Register@VolumeRegistrar@@QAEXD@Z  # VolumeRegistrar::Register migrated from s007ee060 (verbatim, slice spelling)
+0083c780 ?OnRegister@cCommandBase@ArgScript@EA@@UAEXPAVcIParser@23@PAUcState@23@@Z  # EA::ArgScript::cCommandBase::OnRegister (callee of s007ee060, named from the dev publics; slice address comment)

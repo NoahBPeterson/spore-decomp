@@ -1,6 +1,7 @@
-007eed10 cVolumeSetCommand::Execute  # __thiscall ret 4; ArgScript volume-set command (slice spelling ?VolumeSetExecute@@YAXPAX0@Z is wrong for these bytes)
-007ef080 cVolumeEffectCommand::Execute  # __thiscall ret 4; string assign + inherited description (slice spelling ?VolumeEffectExecute@@YAXPAX0@Z is wrong)
+007eed10 ?Execute@cVolumeSetCommand@@UAEXPAUcArguments_s007e_ed10@ArgScript@EA@@@Z  # cVolumeSetCommand::Execute migrated from s007eed10 (verbatim, slice spelling)
+007ef080 ?Execute@cVolumeEffectCommand@@UAEXPAX@Z  # cVolumeEffectCommand::Execute migrated from s007eed10 (verbatim, slice spelling)
 007ef120 RegisterVolumeCommands  # cdecl, 2 args, SEH frame; allocates the two ArgScript commands and registers them
+007ef220 ??_GcVolumeEffectCommand@@UAEPAXI@Z  # ForceVolumeEffect migrated from s007eed10 (verbatim, slice spelling)
 007ef2a0 CTrack::Slot0  # vtable 0x01414920 slot 0; __thiscall ret 0xc; binds this+0x14 interface from two manager objects
 007ef350 CTrack::Slot1  # vtable 0x01414920 slot 1
 007ef370 CTrack::Slot2  # vtable 0x01414920 slot 2

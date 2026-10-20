@@ -1,4 +1,2 @@
 # va diff reason
 007eea90 485 cVolumeEffectCommand::OnRegister - ArgScript command table construction approximated
-007eed10 0 cVolumeSetCommand::Execute - ArgScript switch/argument paths approximated (skeleton)
-007ef080 0 cVolumeEffectCommand::Execute - string assign + inherited-description copy approximated

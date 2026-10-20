@@ -3,11 +3,17 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "EA/ArgScript/cCommandBase.h"
+#include "EA/ArgScript/cArguments.h"
 #define __PLACEMENT_NEW_INLINE   // the slices' own placement new/delete win over <new>'s (rewrite.py)
 #include <new>
 inline void operator delete(void*, void*) {}   // placement delete (<new>'s is skipped, rewrite.py)
 
 // ---- items of slice s007ee060 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct CommandBase {
+  void* vtable;
+};
+void CommandBaseCtor(CommandBase*);
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags,
                      const char* file, int line);
 void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags,
@@ -60,7 +66,7 @@ struct cDescription_s007e_e060 {
   int mRefCount;
   cDescription_s007e_e060() : mRefCount(0) {}
 };  // namespace Swarm
-}  // namespace EA
+}
 }
 namespace SP {
 struct cVolumeDescription : public EA::Swarm::cDescription_s007e_e060 {
@@ -94,10 +100,6 @@ struct MapDescription {
   VolumeCorner corners[8];
   void* Copy(int src);
 };
-struct CommandBase {
-  void* vtable;
-};
-void CommandBaseCtor(CommandBase*);
 struct VolumeRegistrar {
   void Register(char flag);
 };
@@ -105,15 +107,74 @@ struct VolumeRegistrar {
 // ---- items of slice s007ee060 end
 
 // ---- items of slice s007eed10 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern void* ArgMainArguments(void* args, void* out, int a, int b);
-extern int ArgParseEnum(void* s, const char* name);
-extern void ArgThrow(void* err, const char* msg);
-extern void* GetInherited(void* parser, void* args, int n, int size);
+extern void  cErrorCtor(void* buf, const char* msg);   // 0x0052df30
+extern void  CxxThrow(void* obj, void* info);          // 0x011e0912
+extern char  TypeInfo_cError;                          // 0x014f9174
 struct HeapNode {
   double d;
   uint32_t x, y;
 };
 inline bool operator<(const HeapNode& a, const HeapNode& b) { return a.d < b.d; }
+struct EString {
+  char* mpBegin;  // +0
+  char* mpEnd;    // +4
+  char* mpCap;    // +8
+  ~EString() {
+    if (mpCap - mpBegin > 1 && mpBegin != 0) operator delete[](mpBegin);
+  }
+};
+struct cVolumeDescLite {
+  virtual ~cVolumeDescLite() {}
+  int mRef;
+};
+struct cBlockCommandBase {
+  virtual ~cBlockCommandBase() throw();   // 0x0083cd90
+  char pad[0x34];
+};
+struct cVolumeStateLite {
+  char pad[8];
+  cVolumeDescLite mDesc;   // +0x40 in the derived object
+  void InitDesc(const void* src);   // 0x007ee7f0
+  char pad2[0x130 - 0x48];
+};
+struct cVolumeEffectCommand : cBlockCommandBase {
+  cVolumeStateLite mVolumeState;  // +0x38
+  EString mDescName;              // +0x130
+  virtual void Execute(void* args);
+};
+struct ArgErrBuf { void* m[4]; };
+#define ARG_THROW(msg) do { ArgErrBuf _eb; cErrorCtor(&_eb, (msg)); CxxThrow(&_eb, (void*)&TypeInfo_cError); } while (0)
+namespace EA {
+namespace ArgScript {
+  int ParseEnum(void* s, const char* name);                      // 0x00840bb0
+}
+}
+namespace EA {
+namespace ArgScript {
+  struct cArguments_s007e_ed10 {
+    void* MainArguments(int* out, int a, int b);                 // 0x00838020
+  };
+}
+}
+namespace EA {
+namespace Swarm {
+  struct cEffectsParser {
+    void* GetInheritedDescription(void* args, int n, int size);  // 0x00a6f090
+  };
+}
+}
+namespace SP {
+  struct cVolumeDescription_s007e_ed10 {
+    cVolumeDescription_s007e_ed10();                                        // 0x007ee540
+    char pad[0x24];
+  };
+}
+struct EStringLite {
+  void assign(const char* first, const char* last);              // 0x00454cb0
+};
+struct cVolumeSetCommand {
+  virtual void Execute(EA::ArgScript::cArguments_s007e_ed10* args);
+};
 // ---- items of slice s007eed10 end
 
 // @ 0x007ee540
@@ -198,6 +259,27 @@ extern "C" void CopyVolumeDescription(int dst, int src)
   for (int off = 8; off <= 0xe8; off += 4) *(uint32_t*)(dst + off) = *(uint32_t*)(src + off);
 }
 
+// @ 0x007ee9f0
+extern "C" void CopySix(void*, void*);   // 0x007ee6d0 (stays in the slice)
+void* MapDescription::Copy(int src)
+{
+  MapDescription* self = this;
+  self->refcount = 0;
+  self->f08 = *(uint32_t*)(src + 8);
+  self->f0c = *(uint32_t*)(src + 0xc);
+  self->f10 = *(uint32_t*)(src + 0x10);
+  self->f14 = *(uint32_t*)(src + 0x14);
+  self->f18 = *(uint32_t*)(src + 0x18);
+  self->f1c = *(uint32_t*)(src + 0x1c);
+  self->f20 = *(uint32_t*)(src + 0x20);
+  self->f24 = *(uint32_t*)(src + 0x24);
+  self->f28 = *(uint32_t*)(src + 0x28);
+  self->f2c = *(uint32_t*)(src + 0x2c);
+  extern void CopyArray(void*, void*, int, int, void*);
+  CopyArray(&self->corners, (void*)(src + 0x30), 0x18, 8, (void*)&CopySix);
+  return self;
+}
+
 // @ 0x007eea90
 extern "C" void VolumeEffectOnRegister(char* font, void* arg, int param3)
 {
@@ -227,40 +309,122 @@ void VolumeRegistrar::Register(char flag)
 }
 
 // @ 0x007eed10
-void VolumeSetExecute(void* self, void* args)
+void cVolumeSetCommand::Execute(EA::ArgScript::cArguments_s007e_ed10* args)
 {
-  int count = 0;
-  void** a = (void**)ArgMainArguments(args, &count, 2, 8);
-  int sel = ArgParseEnum(a[0], "corner");
+  int count;
+  char** a = (char**)args->MainArguments(&count, 2, 8);
+  int sel = EA::ArgScript::ParseEnum(a[0], "corner");
+  void* mgr = *(void**)((char*)this + 4);
+  char* data = *(char**)((char*)this + 0xc);
   switch (sel) {
-    case 0: {
-      if (count < 5) ArgThrow(0, "Wrong number of arguments.");
-      int* dst = *(int**)((char*)self + 0xc);
-      dst[0] = 0;  // corner 0
-      break;
+  case 0: {
+    if (count < 5) ARG_THROW("Wrong number of arguments.");
+    unsigned n = ((unsigned(__thiscall*)(void*, void*))VSLOT(mgr, 0xa0))(mgr, a[1]);
+    unsigned m = n;
+    if ((int)n > 8) {
+      m = 0;
+      if (n & 1) m = 1;
+      if (((int)n / 10) & 1) m |= 2;
+      if ((int)n >= 100) m |= 4;
     }
-    case 1:
-    case 2:
-    case 3:
-      if (count < 2) ArgThrow(0, "Wrong number of arguments.");
-      break;
-    default:
-      break;
+    float f4 = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[4]);
+    float f3 = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[3]);
+    float f2 = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[2]);
+    unsigned off = m * 0x18;
+    *(float*)(data + off + 0x38) = f2;
+    *(float*)(data + off + 0x3c) = f3;
+    *(float*)(data + off + 0x40) = f4;
+    if (count >= 8) {
+      float g7 = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[7]);
+      float g6 = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[6]);
+      float g5 = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[5]);
+      *(float*)(data + off + 0x44) = g5;
+      *(float*)(data + off + 0x48) = g7;
+      *(float*)(data + off + 0x4c) = g6;
+    }
+    break;
+  }
+  case 1: {
+    if (count < 2) ARG_THROW("Wrong number of arguments.");
+    float v = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[1]);
+    *(float*)(data + 0x40) = v;
+    *(float*)(data + 0x58) = v;
+    *(float*)(data + 0x70) = v;
+    *(float*)(data + 0x88) = v;
+    if (count >= 3) {
+      float w = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[2]);
+      *(float*)(data + 0x4c) = w;
+      *(float*)(data + 0x64) = w;
+      *(float*)(data + 0x7c) = w;
+      *(float*)(data + 0x94) = w;
+    }
+    break;
+  }
+  case 2: {
+    if (count < 2) ARG_THROW("Wrong number of arguments.");
+    float v = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[1]);
+    *(float*)(data + 0xa0) = v;
+    *(float*)(data + 0xb8) = v;
+    *(float*)(data + 0xd0) = v;
+    *(float*)(data + 0xe8) = v;
+    if (count >= 3) {
+      float w = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[2]);
+      *(float*)(data + 0xac) = w;
+      *(float*)(data + 0xc4) = w;
+      *(float*)(data + 0xdc) = w;
+      *(float*)(data + 0xf4) = w;
+    }
+    break;
+  }
+  case 3: {
+    if (count < 2) ARG_THROW("Wrong number of arguments.");
+    float h = ((float(__thiscall*)(void*, void*))VSLOT(mgr, 0x98))(mgr, a[1]) * 0.5f;
+    *(float*)(data + 0x38) = -h;
+    *(float*)(data + 0x3c) = -h;
+    *(float*)(data + 0x50) = h;
+    *(float*)(data + 0x54) = -h;
+    *(float*)(data + 0x68) = -h;
+    *(float*)(data + 0x6c) = h;
+    *(float*)(data + 0x80) = h;
+    *(float*)(data + 0x84) = h;
+    *(float*)(data + 0x98) = -h;
+    *(float*)(data + 0x9c) = -h;
+    *(float*)(data + 0xb0) = h;
+    *(float*)(data + 0xb4) = -h;
+    *(float*)(data + 0xc8) = -h;
+    *(float*)(data + 0xcc) = h;
+    *(float*)(data + 0xe0) = h;
+    *(float*)(data + 0xe4) = h;
+    break;
+  }
+  default:
+    break;
   }
 }
 
 // @ 0x007ef080
-void VolumeEffectExecute(void* self, void* args)
+void cVolumeEffectCommand::Execute(void* args)
 {
   int count = 0;
-  void** a = (void**)ArgMainArguments(args, &count, 1, 3);
-  const char* name = (const char*)a[0];
-  int n = 0;
-  while (name[n] != 0) ++n;
-  ((void(__thiscall*)(void*, const char*, int))VSLOT((char*)self + 0x130, 0))(0, name, n);
+  char** a = (char**)((EA::ArgScript::cArguments_s007e_ed10*)args)->MainArguments(&count, 1, 3);
+  const char* s = a[0];
+  const char* e = s;
+  while (*e != 0) ++e;
+  ((EStringLite*)((char*)this + 0x130))->assign(s, e);
+  SP::cVolumeDescription_s007e_ed10 tmp;
+  void* t = &tmp;
+  mVolumeState.InitDesc(t);
   if (count > 1) {
-    void* inh = GetInherited(*(void**)((char*)self + 0x30), a, count, 0x28);
-    (void)inh;
+    void* inh = ((EA::Swarm::cEffectsParser*)(*(void**)((char*)this + 0x30)))->GetInheritedDescription(a, count, 0x28);
+    if (inh) mVolumeState.InitDesc(inh);
   }
-  ((void(__thiscall*)(void*))VSLOT(*(void**)((char*)self + 4), 0x8c))(self);
+  void* mgr = *(void**)((char*)this + 4);
+  ((void(__thiscall*)(void*, void*))VSLOT(mgr, 0x8c))(mgr, this);
+}
+
+// @ 0x007ef220
+void rwForceEmit_cVolumeEffectCommand_sdtor() { (void)new cVolumeEffectCommand; }   // forces ??_GcVolumeEffectCommand@@UAEPAXI@Z (the slice's markerless ForceVolumeEffectNew did this)
+void ForceVolumeEffect(cVolumeEffectCommand* p)
+{
+  delete p;
 }
