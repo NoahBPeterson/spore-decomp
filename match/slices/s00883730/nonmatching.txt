@@ -1,0 +1,15 @@
+# va  diff-bytes  reason
+# Thirteen functions are complete (compile cleanly) but not byte-exact. difftest verdicts noted per line.
+00883a30   15  HandlerInfo copy/insert scheduling: MSVC reorders the five member stores and the context word lands in a different register; behaviour identical. equiv PASS 400 valid 100% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00883b00  112  DequeIterator::operator+= block ordering: original tests `u < 8` and falls through to the fast path, MSVC lays the two arms out in the opposite order plus different register allocation; identical result. equiv PASS 279 valid 100% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00883b80   84  DequeIterator copy-backward loop: register allocation / pointer-reload pessimism (orig keeps cur in a register across the body, MSVC reloads from memory). equiv WEAK 225 valid 20.3% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00883c60   91  DequeIterator copy-forward loop: same register-allocation/aliasing difference as 00883b80. equiv WEAK 220 valid 22.8% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00883de0  255  Deque::grow reallocation: frame size and callee-saved set differ, allocator call sequence scheduled differently; logic (new block, move old elements, free) transcribed. equiv WEAK 144 valid 65.5% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00883f10   86  Deque::init / block allocation scheduling: register allocation and call ordering differ, stores identical. equiv PASS 232 valid 100% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00884100  100  ProcessQueueTimeout: QPC import modelled via __declspec(dllimport); original emits `call dword ptr [IAT]`, MSVC still forms a direct thunk, plus loop register allocation differs. equiv PASS 386 valid 96.4% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00884260   35  Deque::insertNode: node-init/store ordering differs (six int stores interleaved with the deque link update). equiv PASS 338 valid 100% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+008842e0   71  Deque::pushFrontAux: block-boundary handling uses a different register for the iterator and the copy is scalarised differently. equiv PASS 335 valid 100% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00884390   48  Deque::pushBackAux: same iterator-register / copy-scheduling difference as 008842e0. equiv PASS 277 valid 100% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00884550  111  Deque::GetNextMessage: register allocation and pointer-reload pessimism; logic identical. equiv PASS 400 valid 61.7% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+008845d0  255  Server::RemoveHandlerInternal: frame size, callee-saved set and map/list erase scheduling differ; logic transcribed. equiv WEAK 231 valid 29.8% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00884700  368  Server::ProcessQueueRun: large dispatch loop; frame layout, register allocation and virtual-call scheduling differ. equiv WEAK 210 valid 52.2% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
