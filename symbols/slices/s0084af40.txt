@@ -1,0 +1,13 @@
+0084af40 ?RebuildCandidates@IMECompositionStringDataEx@@QAEXXZ  # IMECompositionStringDataEx::RebuildCandidates
+0084afc0 ?InsertCandidates@IMECompositionStringDataEx@@QAEPAXPAUWString@@IPBU2@@Z  # IMECompositionStringDataEx::InsertCandidates
+0084b1a0 ?Reset@IMECompositionStringDataEx@@QAEXXZ  # IMECompositionStringDataEx::Reset
+0084b1f0 ?Clear@IMECompositionStringDataEx@@QAEXXZ  # IMECompositionStringDataEx::Clear
+0084b260 ?ResizeCandidates@IMECompositionStringDataEx@@QAEXI@Z  # IMECompositionStringDataEx::ResizeCandidates
+0084b2e0 ?IMEServerWin32Ctor@@YAPAXPAX@Z  # EA::App::IMEServerWin32::IMEServerWin32
+0084b390 ?SetIMECandidateListData@IMEServerWin32@@QAEXI@Z  # EA::App::IMEServerWin32::SetIMECandidateListData
+0084b600 ?WinProc@IMEServerWin32@@QAEJPAXIIJ@Z  # EA::App::IMEServerWin32::WinProc
+0084bc80 ?DGifGetCodeNext@@YAHPAUGifFileType@@PAPAE@Z  # giflib DGifGetCodeNext
+0084bce0 ?DGifCloseFile@@YAHPAUGifFileType@@@Z  # giflib DGifCloseFile
+0084bd20 ?DGifSetupDecompress@@YAHPAUGifFileType@@@Z  # giflib DGifSetupDecompress
+0084bd90 ?DGifGetPrefixChar@@YAHPAHHH@Z  # giflib DGifGetPrefixChar
+0084bdb0 ?DGifDecompressInput@@YAHPAUGifFileType@@PAH@Z  # giflib DGifDecompressInput

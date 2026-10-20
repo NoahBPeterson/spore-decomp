@@ -1,0 +1,5 @@
+0084bdb0   78  giflib DGifDecompressInput: bit-accumulation loop reconstructed, not transcribed. flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: UNSUPPORTED 0/400 valid]
+0084b390  619  EA::App::IMEServerWin32::SetIMECandidateListData: skeleton of the IMM32 candidate-list flow. flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: UNSUPPORTED 0/400 valid]
+0084b600  1589  EA::App::IMEServerWin32::WinProc: message dispatch only; the 8-entry jump table and composition marshalling are absent. flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: FAIL 5/5 valid, 6% coverage]
+0084afc0  200  IMECompositionStringDataEx::InsertCandidates: grow/insert reconstruction, not the retail allocation/copy schedule. flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: UNSUPPORTED custom/LTCG register ABI]
+0084b260  143  IMECompositionStringDataEx::ResizeCandidates: behaviourally complete but the tail-move/destroy sequencing is a reconstruction. flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: UNSUPPORTED custom/LTCG register ABI]
