@@ -1,0 +1,2 @@
+# slice s00a91860 (batch gold3, slice 53)
+slices/s00a91860/s00a91860.cpp  ?Start@cDistributeEffect@Swarm@EA@@QAEXH@Z  0x00a92310  /O2 /MD /Gy /TP /arch:SSE /fp:fast

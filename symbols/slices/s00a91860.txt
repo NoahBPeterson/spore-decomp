@@ -1,0 +1,6 @@
+00a91860 ?PinSamplesToSurface@cDistributeEffect@Swarm@EA@@QAEXHH@Z  # EA::Swarm::cDistributeEffect::PinSamplesToSurface
+00a91bc0 ?CreateRenderSet@cDistributeEffect@Swarm@EA@@QAEXXZ  # EA::Swarm::cDistributeEffect::CreateRenderSet
+00a91e40 ?Start@cDistributeEffect@Swarm@EA@@QAEXPAX0PAH@Z  # EA::Swarm::cDistributeEffect::Start
+00a921c0 ?Shutdown@cDistributeEffect@Swarm@EA@@QAEXXZ  # EA::Swarm::cDistributeEffect::Shutdown
+00a92310 ?Start@cDistributeEffect@Swarm@EA@@QAEXH@Z  # EA::Swarm::cDistributeEffect::StartEffect
+00a92360 ?Stop@cDistributeEffect@Swarm@EA@@QAEXH@Z  # EA::Swarm::cDistributeEffect::Stop
