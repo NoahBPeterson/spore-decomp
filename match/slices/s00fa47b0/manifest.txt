@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00fa47b0/s00fa47b0.cpp  ?ReleaseManaged@cTerrainSphere@@QAEXXZ  0x00fa5440

@@ -1,0 +1,11 @@
+# SP::cTerrainSphere relevel / decal-node / teardown helpers, object SPTerrain/SPTerrainSphere.obj.
+# No PDB names for these VAs; names below are descriptive (type-4 decal nodes, the cRelevel vectors at
+# +0x770/+0x784/+0x798 whose element key is at +0xa8, stride 0xac).
+00fa47b0  DoInsertValue_vector_cRelevel   # eastl::vector<cRelevel,sp_vector_allocator>::DoInsertValue; element 0xac; same EASTL-2008 idiom as match/slices/s005e9440 (0xac == sizeof(cRelevel))
+00fa48d0  cTerrainSphere::Shutdown       # full teardown: viewer, jobs, editor/scene/raster deregistration, decal lists + id freelists, 5x6 pointer arrays, refraction vectors, pending lists, scatter raster
+00fa4e90  cTerrainSphere::UpdateDecalNode # node+0x68 type dispatch: 4 = (re)project decal (0x00fa45c0/0x00f9a680/0x00f9a760/0x00f9a6f0), 5 = skip, other = base object at node-8 bbox refresh (0x00fae800/0x00facfc0)
+00fa4fc0  cTerrainSphere::DestroyDecalNode # type 4/5 dispatch (0x00fa4660/0x00fa44d0) else intrusive release + RemoveDecal 0x00fa29b0
+00fa5040  cTerrainSphere::RemoveRelevel   # erase cRelevel by key from mRelevels (+0x784) else the +0x770 vector, with optional per-face decal overlap removal, then operator= shift-down
+00fa5440  cTerrainSphere::ReleaseManaged  # release every element of the +0x7ec pointer vector (slot 3(1)) then deallocate via 0x00533500
+00fa5490  cTerrainSphere::FlushManaged    # 0x00fc6d10 on mWorld+0xac, ReleaseManaged + the +0x800 pointer vector + the +0x7d8 model vector (slot 91(0))
+00fa5580  cTerrainSphere::EraseRelevel    # erase cRelevel by key from the +0x798 vector, CopyRelevels 0x00f9f770 tail shift, end -= 0xac
