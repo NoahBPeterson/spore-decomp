@@ -1,0 +1,4 @@
+00a2bfa0 ?GetTextureInstance@Sys@@QAE_NPBUKey@@PAPAX@Z  # Sys::GetTextureInstance (texture-instance hashtable find-or-create), slice s00a2bfa0
+00a2c140 ?Update@Sys@@QAEXXZ  # Sys::Update (sound-list update loop), slice s00a2bfa0
+00a2c450 ?GetAudioA@Sys@@QAE_NII@Z  # Sys::GetAudioA (audio hashtable find-or-create + set), slice s00a2bfa0
+00a2c590 ?GetAudioB@Sys@@QAE_NI@Z  # Sys::GetAudioB (audio hashtable find-or-create), slice s00a2bfa0
