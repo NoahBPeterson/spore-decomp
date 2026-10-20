@@ -1,0 +1,25 @@
+# source  symbol  original VA  [flags override]
+slices/s00841370/s00841370.cpp  ?cParser_InstantiateMacroNoThrow@@YI_NPAHHPBDPAUcArguments_s0084_1370@ArgScript@EA@@@Z  00841370  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?OnRegister@cCommandStateMeta_s0084_1370@?A0x0896e07e@@UAEXPAXPAUcState@ArgScript@EA@@@Z  00841410  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?OnRegister@cCommandStateBlock_s0084_1370@?A0x0896e07e@@UAEXPAXPAUcState@ArgScript@EA@@@Z  00841440  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?SetFlag@cParser_s0084_1370@ArgScript@EA@@QAEXW4tFlag@123@_N@Z  00841490  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?LineLocationInfo@cParser_s0084_1370@ArgScript@EA@@UAEPBDXZ  008414d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?ParseVector2@cParser_s0084_1370@ArgScript@EA@@QAEPAMPAMPBD@Z  00841540  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?ParseVector3@cParser_s0084_1370@ArgScript@EA@@QAEPAMPAMPBD@Z  00841590  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?ParseRGBA@cParser_s0084_1370@ArgScript@EA@@QAEPAMPAMPBD@Z  00841610  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?ParseRGB@cParser_s0084_1370@ArgScript@EA@@QAEPAMPAMPBD@Z  008416b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?Execute@cEvalCommand_s0084_1370@?A0x0896e07e@@QAEXPAUcArguments_s0084_1370@ArgScript@EA@@@Z  008418b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ??0cSetECommand_s0084_1370@?A0x0896e07e@@QAE@XZ  00841900  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?Execute@cNamespaceCommand_s0084_1370@?A0x0896e07e@@UAEXPAUcArguments_s0084_1370@ArgScript@EA@@@Z  008419d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?OnEndBlock@cNamespaceCommand_s0084_1370@?A0x0896e07e@@QAEX_N@Z  00841a10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?Execute@cCreateCommand_s0084_1370@?A0x0896e07e@@UAEXPAUcArguments_s0084_1370@ArgScript@EA@@@Z  00841a50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?Execute@cSCreateCommand_s0084_1370@?A0x0896e07e@@UAEXPAUcArguments_s0084_1370@ArgScript@EA@@@Z  00841ae0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?Execute@cShowArgumentsCommand_s0084_1370@?A0x0896e07e@@QAEXPAUcArguments_s0084_1370@ArgScript@EA@@@Z  00841b70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?Execute@cTraceCommand_s0084_1370@?A0x0896e07e@@QAEXPAUcArguments_s0084_1370@ArgScript@EA@@@Z  00841bf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ??_GcSetECommand_s0084_1370@?A0x0896e07e@@UAEPAXI@Z  00841c30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ??1cMacroDefinition_s0084_1370@?A0x0896e07e@@QAE@XZ  00841fd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?Execute@cArrayCreateCommand_s0084_1370@?A0x0896e07e@@QAEXPAUcArguments_s0084_1370@ArgScript@EA@@@Z  00842230  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?EvalInt@cVariableExistsFunction_s0084_1370@?A0x0896e07e@@QAEHPAPBDPAUcExpression_s0084_1370@ArgScript@EA@@@Z  00842310  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?EvalInt@cDefinitionExistsFunction_s0084_1370@?A0x0896e07e@@QAEHPAPBDPAUcExpression_s0084_1370@ArgScript@EA@@@Z  008423c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?EvalInt@cCommandExistsFunction_s0084_1370@?A0x0896e07e@@QAEHPAPBDPAUcExpression_s0084_1370@ArgScript@EA@@@Z  00842470  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00841370/s00841370.cpp  ?EvalInt@cEqFunction_s0084_1370@?A0x0896e07e@@QAEHPAPBDPAUcExpression_s0084_1370@ArgScript@EA@@@Z  00842520  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2

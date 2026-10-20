@@ -1,0 +1,30 @@
+00841370 ?cParser_InstantiateMacroNoThrow@@YI_NPAHHPBDPAUcArguments_s0084_1370@ArgScript@EA@@@Z  # cParser::InstantiateMacroNoThrow (free __fastcall stand-in: register-arg)
+00841410 ?OnRegister@cCommandStateMeta_s0084_1370@?A0x0896e07e@@UAEXPAXPAUcState@ArgScript@EA@@@Z  # cCommandStateT<cParser,cMetaCommandBase>::OnRegister
+00841440 ?OnRegister@cCommandStateBlock_s0084_1370@?A0x0896e07e@@UAEXPAXPAUcState@ArgScript@EA@@@Z  # cCommandStateT<cParser,cBlockCommandBase>::OnRegister
+00841490 ?SetFlag@cParser_s0084_1370@ArgScript@EA@@QAEXW4tFlag@123@_N@Z  # cParser::SetFlag
+008414d0 ?LineLocationInfo@cParser_s0084_1370@ArgScript@EA@@UAEPBDXZ  # cParser::LineLocationInfo
+00841540 ?ParseVector2@cParser_s0084_1370@ArgScript@EA@@QAEPAMPAMPBD@Z  # cParser::ParseVector2
+00841590 ?ParseVector3@cParser_s0084_1370@ArgScript@EA@@QAEPAMPAMPBD@Z  # cParser::ParseVector3
+00841610 ?ParseRGBA@cParser_s0084_1370@ArgScript@EA@@QAEPAMPAMPBD@Z  # cParser::ParseRGBA
+008416b0 ?ParseRGB@cParser_s0084_1370@ArgScript@EA@@QAEPAMPAMPBD@Z  # cParser::ParseRGB
+008417c0 ?compare@string8_s0084_1370@eastl@@QBEHIIPBD@Z  # eastl::string8::compare
+008418b0 ?Execute@cEvalCommand_s0084_1370@?A0x0896e07e@@QAEXPAUcArguments_s0084_1370@ArgScript@EA@@@Z  # cEvalCommand::Execute
+00841900 ??0cSetECommand_s0084_1370@?A0x0896e07e@@QAE@XZ  # cSetECommand::cSetECommand
+008419d0 ?Execute@cNamespaceCommand_s0084_1370@?A0x0896e07e@@UAEXPAUcArguments_s0084_1370@ArgScript@EA@@@Z  # cNamespaceCommand::Execute
+00841a10 ?OnEndBlock@cNamespaceCommand_s0084_1370@?A0x0896e07e@@QAEX_N@Z  # cNamespaceCommand::OnEndBlock
+00841a50 ?Execute@cCreateCommand_s0084_1370@?A0x0896e07e@@UAEXPAUcArguments_s0084_1370@ArgScript@EA@@@Z  # cCreateCommand::Execute
+00841ae0 ?Execute@cSCreateCommand_s0084_1370@?A0x0896e07e@@UAEXPAUcArguments_s0084_1370@ArgScript@EA@@@Z  # cSCreateCommand::Execute
+00841b70 ?Execute@cShowArgumentsCommand_s0084_1370@?A0x0896e07e@@QAEXPAUcArguments_s0084_1370@ArgScript@EA@@@Z  # cShowArgumentsCommand::Execute
+00841bf0 ?Execute@cTraceCommand_s0084_1370@?A0x0896e07e@@QAEXPAUcArguments_s0084_1370@ArgScript@EA@@@Z  # cTraceCommand::Execute
+00841c30 ??_GcSetECommand_s0084_1370@?A0x0896e07e@@UAEPAXI@Z  # cSetECommand::`scalar deleting destructor' (compiler-generated)
+00841c90 ?PopNamespace@cParser_s0084_1370@ArgScript@EA@@UAEXXZ  # cParser::PopNamespace
+00841d00 ?find@string8_s0084_1370@eastl@@QBEHPBDI@Z  # eastl::string8::find
+00841d60 ??0StringPair_s0084_1370@?A0x0896e07e@@QAE@ABUstring8_s0084_1370@eastl@@0@Z  # StringPair::StringPair(const string8&, const string8&)
+00841f00 ??0StringPair_s0084_1370@?A0x0896e07e@@QAE@ABU01@@Z  # StringPair::StringPair(const StringPair&)
+00841fd0 ??1cMacroDefinition_s0084_1370@?A0x0896e07e@@QAE@XZ  # cMacroDefinition::~cMacroDefinition
+00842080 ?Execute@cHelpCommand_s0084_1370@?A0x0896e07e@@QAEXPAUcArguments_s0084_1370@ArgScript@EA@@@Z  # cHelpCommand::Execute
+00842230 ?Execute@cArrayCreateCommand_s0084_1370@?A0x0896e07e@@QAEXPAUcArguments_s0084_1370@ArgScript@EA@@@Z  # cArrayCreateCommand::Execute
+00842310 ?EvalInt@cVariableExistsFunction_s0084_1370@?A0x0896e07e@@QAEHPAPBDPAUcExpression_s0084_1370@ArgScript@EA@@@Z  # cVariableExistsFunction::EvalInt
+008423c0 ?EvalInt@cDefinitionExistsFunction_s0084_1370@?A0x0896e07e@@QAEHPAPBDPAUcExpression_s0084_1370@ArgScript@EA@@@Z  # cDefinitionExistsFunction::EvalInt
+00842470 ?EvalInt@cCommandExistsFunction_s0084_1370@?A0x0896e07e@@QAEHPAPBDPAUcExpression_s0084_1370@ArgScript@EA@@@Z  # cCommandExistsFunction::EvalInt
+00842520 ?EvalInt@cEqFunction_s0084_1370@?A0x0896e07e@@QAEHPAPBDPAUcExpression_s0084_1370@ArgScript@EA@@@Z  # cEqFunction::EvalInt
