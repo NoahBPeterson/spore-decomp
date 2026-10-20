@@ -191,10 +191,13 @@ void __cdecl operator delete(void* p);                                 // 0x00f4
 // ---- items of slice s006b27f0 end
 
 // ---- items of slice s006b37d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+    void CreateDirectorySave(...); // 0x006b2620
 extern char g_editorMode6;         // 0x16046d8
 extern char g_serverMode6;         // 0x152fbcc
 extern char g_gfxMode6;            // 0x152fbcd
 extern const char g_dir13ec468[];  // 0x13ec468
+extern "C" __declspec(dllimport) int __cdecl _wcsicmp(const wchar_t*, const wchar_t*);
+void operator delete[](void* p);   // 0x00f47380
 struct IRef6_s006b_37d0 {
     virtual void v0();
     virtual void Release();
@@ -224,11 +227,55 @@ struct PropListFn6 {
   char pad[0x3c]; PropDesc6* desc;
 };
 extern PropListFn6* g_appProps6;   // 0x15fd918
+struct WStr6 {
+  wchar_t* b; wchar_t* e; wchar_t* cap; void* alloc;
+  void Init(const wchar_t* s);   // 0x00579a90
+  int rfind(wchar_t c, int pos);   // 0x0041dfc0
+  void push_back(wchar_t c);   // 0x004f6510
+  void append(const wchar_t* s);   // 0x00599bb0
+  ~WStr6() { if ((((char*)cap - (char*)b) & ~1) > 2 && b) operator delete[](b); }   // byte capacity, signed compare
+};
+struct Key3 { uint32_t inst, type, group; };
+struct KeyRef6 { uint32_t pad[2]; uint32_t inst, type, group; };
+#define V6(n) virtual void v##n();
+struct ResMgr6 {
+  V6(0) V6(1) V6(2) V6(3) V6(4) V6(5) V6(6) V6(7) V6(8) V6(9) V6(10) V6(11) V6(12) V6(13) V6(14) V6(15)
+  V6(16) V6(17)
+  virtual void* GetFormat(uint32_t type, int n);   // 0x48
+  V6(19) V6(20) V6(21) V6(22) V6(23) V6(24) V6(25) V6(26) V6(27) V6(28) V6(29) V6(30) V6(31)
+  virtual void SetName(void* key, const wchar_t* name);   // 0x80
+  V6(33) V6(34)
+  virtual const wchar_t* GetExt(uint32_t type);           // 0x8c
+};
+struct IStream6 {
+  V6(0) V6(1)
+  virtual void Release();   // 0x08
+  V6(3) V6(4) V6(5) V6(6) V6(7) V6(8)
+  virtual void Close();     // 0x24
+};
+struct Res6 {
+  V6(0) V6(1) V6(2)
+  virtual uint32_t GetKind();          // 0x0c
+  V6(4) V6(5) V6(6) V6(7) V6(8) V6(9) V6(10) V6(11) V6(12)
+  virtual bool Open(void* key, IStream6** out, int a, int b, int c, int d);   // 0x34
+  V6(14) V6(15) V6(16) V6(17) V6(18)
+  virtual void SetName(const wchar_t* n, uint32_t type);   // 0x4c
+  V6(20) V6(21) V6(22) V6(23)
+  virtual const wchar_t* GetName(uint32_t type);           // 0x60
+  virtual bool GetPath(void* key, wchar_t* buf);           // 0x64
+  V6(26)
+  virtual uint32_t GetGroup();                             // 0x6c
+};
+struct Fmt6 {
+  V6(0) V6(1) V6(2) V6(3) V6(4) V6(5) V6(6) V6(7) V6(8) V6(9)
+  virtual bool Write(void* key, IStream6* strm, int z, uint32_t type);   // 0x28
+};
+ResMgr6* GetResMgr6();   // 0x0067dcd0
+void FormatHex6(WStr6* s, const wchar_t* fmt, uint32_t v);   // 0x004e0850
+void SPKeyFromName(void* k, const wchar_t* name, uint32_t type, uint32_t group);   // 0x0068d840
 #define REL6(s) do { if (s) { out.p = 0; (s)->ref.Release(); } } while (0)
 #define SAVE_DIR6(root, nm, key) \
   ok = CreateDirectorySave(root, nm, &out.p, key); s = out.p; if (ok) RegisterSaveArea(key, s, 0)
-    void CreateDirectorySave(...); // 0x006b2620
-    void RegisterSaveArea(...); // 0x006b3760
 // ---- items of slice s006b37d0 end
 
 // @ 0x006b1d50
@@ -850,4 +897,58 @@ void SP_CreateDefaultSaveAreas()
   }
   RegisterSaveArea(0x11ac1ac, out.p, out2.p);
 done:;
+}
+
+// @ 0x006b4010
+bool SP_SaveNamedResource(KeyRef6* key, const wchar_t* name, Res6* res)
+{
+  if (res == 0) return false;
+  ResMgr6* mgr = GetResMgr6();
+  WStr6 str;
+  Key3 k;
+  int dot;
+  k.inst = key->inst;
+  k.type = key->type;
+  k.group = key->group;
+  str.b = str.e = str.cap = 0;
+  str.Init(name);
+  dot = str.rfind(L'.', -1);
+  Res6* r2 = 0;
+  if (res->GetKind() == 0x34728492) {
+    k.group = res->GetGroup();
+    r2 = res;
+  }
+  if (dot == -1 && r2) {
+    const wchar_t* ext = r2->GetName(k.type);
+    if (ext == 0) {
+      ext = mgr->GetExt(k.type);
+      if (ext) r2->SetName(ext, k.type);
+    }
+    str.push_back(L'.');
+    if (ext) str.append(ext);
+    else FormatHex6(&str, L"0x%08x", k.type);
+  }
+  SPKeyFromName(&k.inst, str.b, k.type, k.group);
+  if (r2) {
+    wchar_t buf[256];
+    if (r2->GetPath(&k.inst, buf)) {
+      if (_wcsicmp(buf, str.b) != 0) return false;
+    } else {
+      mgr->SetName(&k.inst, str.b);
+    }
+  }
+  key->inst = k.inst;
+  key->type = k.type;
+  key->group = k.group;
+  Fmt6* fmt = (Fmt6*)mgr->GetFormat(k.type, -1);
+  if (fmt == 0) return false;
+  IStream6* strm = 0;
+  if (res->Open(&k.inst, &strm, 2, 2, 1, 0)) {
+    bool r = fmt->Write(key, strm, 0, k.type);
+    strm->Close();
+    if (strm) strm->Release();
+    return r;
+  }
+  if (strm) strm->Release();
+  return false;
 }
