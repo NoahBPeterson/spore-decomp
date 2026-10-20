@@ -1,1 +1,1 @@
-00a8d450 EA::Swarm::cDistributeEffect::CreateSamples2D  # name shown by card.py (retail symbol data); 2D Halton sample creation, sibling of 0x00a8e7c0
+00a8d450 ?CreateSamples2D@cDistributeEffect_s00a8_d450@Swarm@EA@@QAEXHHH@Z  # cDistributeEffect_s00a8_d450::CreateSamples2D migrated from s00a8d450 (verbatim, slice spelling)

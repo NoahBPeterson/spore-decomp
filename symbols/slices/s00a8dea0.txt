@@ -1,1 +1,2 @@
-00a8dea0 CreateClusteredSamples2D  # PDB-derived name
+00537f40 ?PreTransformBy@cTransform@Swarm@EA@@QAEXABU123@@Z  # EA::Swarm::cTransform::PreTransformBy (callee of s00a8dea0, named from the dev publics; slice address comment)
+00a8dea0 ?CreateClusteredSamples2D@cDistributeEffect_s00a8_dea0@Swarm@EA@@QAEXHHH@Z  # cDistributeEffect_s00a8_dea0::CreateClusteredSamples2D migrated from s00a8dea0 (verbatim, slice spelling)

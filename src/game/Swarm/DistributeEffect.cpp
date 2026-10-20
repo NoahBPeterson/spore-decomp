@@ -1,4 +1,4 @@
-// src/game/Swarm/DistributeEffect.cpp -- migrated from slice(s) s00a8f6a0, s00a8e7c0, s00a8c850, s00a88d50, s007046e0 by tools/migrate/rewrite.py
+// src/game/Swarm/DistributeEffect.cpp -- migrated from slice(s) s00a8dea0, s00a8d450, s00a8f6a0, s00a8e7c0, s00a8c850, s00a88d50, s007046e0 by tools/migrate/rewrite.py
 // Object file: Swarm/DistributeEffect.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -7,6 +7,7 @@
 #include <xmmintrin.h>
 #include <math.h>
 #include <new>
+#include "EA/Swarm/cTransform.h"
 #pragma intrinsic(_InterlockedExchange)
 
 // ---- items of slice s007046e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -460,6 +461,368 @@ struct Sample {
 };
 // ---- items of slice s00a8f6a0 end
 
+// ---- items of slice s00a8d450 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float kSampleColor[4];                   // 0x01678318 (default sample color)
+struct Vector2_s00a8_d450 {
+  float x, y;
+  Vector2_s00a8_d450() {}
+  Vector2_s00a8_d450(float _x, float _y) : x(_x), y(_y) {}
+  Vector2_s00a8_d450(const Vector2_s00a8_d450& v) : x(v.x), y(v.y) {}
+};
+struct Matrix3_s00a8_d450 {
+  Vector3 row[3];
+  Matrix3_s00a8_d450(const Matrix3_s00a8_d450& m);                          // 0x0041cb40
+};
+extern const Vector2_s00a8_d450 kVector2Zero_s00a8_d450;                    // 0x0167824c
+extern const Vector2_s00a8_d450 kVector2One_s00a8_d450;                     // 0x01678260
+extern const Matrix3_s00a8_d450 kMatrix3Identity_s00a8_d450;                // 0x01678328
+static inline void FastSinCos_s00a8_d450(float a, float& s, float& c) {
+  float t = a * gSinCosInvStep + 12582912.0f;
+  int bits = *(int*)&t;
+  float r = a - (float)(bits - 0x4b400000) * gSinCosStep;
+  int i = (bits & 0xf) * 2;
+  float s0 = gSinCosTable[i];
+  float c0 = gSinCosTable[i + 1];
+  c = c0 - (r * c0 * 0.5f + s0) * r;
+  s = (c0 - r * s0 * 0.5f) * r + s0;
+}
+static inline Vector3 Rotate_s00a8_d450(const Vector3& v, const Matrix3_s00a8_d450& m) {
+  return Vector3(m.row[0].x * v.x + m.row[2].x * v.z + m.row[1].x * v.y,
+                 m.row[1].y * v.y + m.row[2].y * v.z + m.row[0].y * v.x,
+                 m.row[2].z * v.z + m.row[1].z * v.y + m.row[0].z * v.x);
+}
+namespace EA {
+namespace Swarm {
+Vector2_s00a8_d450 SquareToCircle(Vector2_s00a8_d450 p);                    // 0x00a7c630 (cdecl, by value)
+}
+}
+namespace EA {
+namespace Swarm {
+struct cTransformData {
+  enum { kScale = 1, kRotation = 2, kOffset = 4 };
+  uint16_t mFlags;                                    // +0x00
+  uint16_t mModCount;                                 // +0x02
+  float mOffset[3];                                   // +0x04
+  float mScale;                                       // +0x10
+  float mRotation[9];                                 // +0x14
+  void PreTransformBy(const struct cTransform_s00a8_d450& t);    // 0x00537f40
+};
+}
+}
+namespace EA {
+namespace Swarm {
+struct cTransform_s00a8_d450 {
+  enum { kScale = 1, kRotation = 2, kOffset = 4 };
+  uint16_t mFlags;                                    // +0x00
+  uint16_t mModCount;                                 // +0x02
+  Vector3 mOffset;                                    // +0x04
+  float mScale;                                       // +0x10
+  Matrix3_s00a8_d450 mRotation;                                  // +0x14
+
+  cTransform_s00a8_d450() : mFlags(0), mModCount(0), mRotation(kMatrix3Identity_s00a8_d450) {}
+  cTransform_s00a8_d450(const cTransform_s00a8_d450& t)
+      : mFlags(t.mFlags), mModCount(t.mModCount), mOffset(t.mOffset), mScale(t.mScale),
+        mRotation(t.mRotation) {}
+  cTransform_s00a8_d450& operator=(const cTransform_s00a8_d450& t);         // 0x00537dc0
+  void SetRotation(const Matrix3_s00a8_d450& m) {
+    mRotation.row[0] = m.row[0];
+    mRotation.row[1] = m.row[1];
+    mRotation.row[2] = m.row[2];
+    mFlags |= kRotation;
+    ++mModCount;
+  }
+  void SetScale(float s) {
+    mScale = s;
+    ++mModCount;
+  }
+  void SetOffset(const Vector3& v) {
+    mOffset.x = v.x;
+    mOffset.y = v.y;
+    mOffset.z = v.z;
+    mFlags |= kOffset;
+    ++mModCount;
+  }
+  __forceinline void CopyTo(cTransformData& d) const {
+    d.mFlags = mFlags;
+    d.mModCount = mModCount;
+    d.mOffset[0] = mOffset.x;
+    d.mOffset[1] = mOffset.y;
+    d.mOffset[2] = mOffset.z;
+    d.mScale = mScale;
+    d.mRotation[0] = mRotation.row[0].x;
+    d.mRotation[1] = mRotation.row[0].y;
+    d.mRotation[2] = mRotation.row[0].z;
+    d.mRotation[3] = mRotation.row[1].x;
+    d.mRotation[4] = mRotation.row[1].y;
+    d.mRotation[5] = mRotation.row[1].z;
+    d.mRotation[6] = mRotation.row[2].x;
+    d.mRotation[7] = mRotation.row[2].y;
+    d.mRotation[8] = mRotation.row[2].z;
+  }
+};
+}
+}
+namespace EA {
+namespace Swarm {
+struct cHalton2D_s00a8_d450 {
+  Vector2_s00a8_d450 mValue;                                     // +0x00
+  int mIndex;                                         // +0x08
+  int mDigits3;                                       // +0x0c
+  cHalton2D_s00a8_d450() : mValue(kVector2Zero_s00a8_d450), mIndex(0), mDigits3(0) {}
+  void Seed(int index);                               // 0x00a7c3d0
+  int Next();                                         // 0x00a7c350
+};
+}
+}
+namespace EA {
+namespace Swarm {
+struct cDistributeDescription_s00a8_d450 {
+  uint32_t pad00[2];
+  uint32_t mFlags;                                    // +0x08 (bit 13: reseed every 256)
+  uint32_t pad0c[3];
+  int mSeed;                                          // +0x18
+  uint8_t mSourceType;                                // +0x1c (2D shape: square, circle, ring)
+  uint8_t pad1d[3];
+  float mScale;                                       // +0x20
+  cTransform_s00a8_d450 mTransform;                              // +0x24
+  float mRingInnerRadius;                             // +0x5c
+};
+}
+}
+namespace EA {
+namespace Swarm {
+struct cDistributeSample_s00a8_d450 {
+  cTransformData mTransform;                          // +0x00
+  float mColor[4];                                    // +0x38
+  int mIndex;                                         // +0x48
+  cDistributeSample_s00a8_d450() {}
+  cDistributeSample_s00a8_d450(const cDistributeSample_s00a8_d450& s);      // 0x00a89de0
+};
+}
+}
+namespace EA {
+namespace Swarm {
+struct SampleVector_s00a8_d450 {
+  cDistributeSample_s00a8_d450* mpBegin;
+  cDistributeSample_s00a8_d450* mpEnd;
+  cDistributeSample_s00a8_d450* mpCapacity;
+  uint32_t mAllocator[2];
+  void DoInsertValue(cDistributeSample_s00a8_d450* position, const cDistributeSample_s00a8_d450& value);  // 0x00a8ce30
+  void push_back(const cDistributeSample_s00a8_d450& value) {
+    if (mpEnd < mpCapacity)
+      ::new (mpEnd++) cDistributeSample_s00a8_d450(value);
+    else
+      DoInsertValue(mpEnd, value);
+  }
+};
+}
+}
+namespace EA {
+namespace Swarm {
+struct cDistributeEffect_s00a8_d450 {
+  uint32_t pad00[0x14 / 4];
+  cDistributeDescription_s00a8_d450* mDesc;                      // +0x014
+  uint32_t pad18[(0x28 - 0x18) / 4];
+  uint32_t mFlags;                                    // +0x028 (bit 4: sphere band, bit 5: cube sphere)
+  cTransform_s00a8_d450 mSourceTransform;                        // +0x02c
+  uint32_t pad64[(0xbc - 0x64) / 4];
+  SampleVector_s00a8_d450 mSamples;                              // +0x0bc
+  uint32_t padd0[(0x100 - 0xd0) / 4];
+  Vector3 mSubdivOffset;                              // +0x100
+  Vector3 mSubdivScale;                               // +0x10c
+  struct cSubdivOwner { uint32_t pad[4]; cTransform_s00a8_d450* mpTransform; }* mSubdivOwner;  // +0x118
+  uint32_t pad11c[(0x15c - 0x11c) / 4];
+  void* mEmitMap;                                     // +0x15c
+  void* mColorMap;                                    // +0x160
+  void* mPinMap;                                      // +0x164
+  uint32_t pad168[(0x18c - 0x168) / 4];
+  float mSizeScale;                                   // +0x18c
+
+  bool IsMaskedOut(const Vector3& pos, int index, int count);  // 0x00a89a90
+  void PinToMap(Vector3& pos);                        // 0x00a89ce0
+  void CreateSamples2D(int count, int first, int last);  // 0x00a8d450 (EA::Swarm::cDistributeEffect::CreateSamples2D)
+};
+}
+}
+// ---- items of slice s00a8d450 end
+
+// ---- items of slice s00a8dea0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Vector2_s00a8_dea0 {
+  float x, y;
+  Vector2_s00a8_dea0() {}
+  Vector2_s00a8_dea0(float _x, float _y) : x(_x), y(_y) {}
+  Vector2_s00a8_dea0(const Vector2_s00a8_dea0& v) : x(v.x), y(v.y) {}
+};
+struct Matrix3_s00a8_dea0 {
+  Vector3 row[3];
+  Matrix3_s00a8_dea0(const Matrix3_s00a8_dea0& m);                          // 0x0041cb40
+};
+extern const Vector2_s00a8_dea0 kVector2Zero_s00a8_dea0;                    // 0x0167824c
+extern const Vector2_s00a8_dea0 kVector2One_s00a8_dea0;                     // 0x01678260
+extern const Vector3 kVector3Zero_s00a8_dea0;                    // 0x0167827c
+extern const Matrix3_s00a8_dea0 kMatrix3Identity_s00a8_dea0;                // 0x01678328
+static inline void FastSinCos_s00a8_dea0(float a, float& s, float& c) {
+  float t = a * gSinCosInvStep + 12582912.0f;
+  int bits = *(int*)&t;
+  float r = a - (float)(bits - 0x4b400000) * gSinCosStep;
+  int i = (bits & 0xf) * 2;
+  float s0 = gSinCosTable[i];
+  float c0 = gSinCosTable[i + 1];
+  c = c0 - (r * c0 * 0.5f + s0) * r;
+  s = (c0 - r * s0 * 0.5f) * r + s0;
+}
+static inline Vector3 Rotate_s00a8_dea0(const Vector3& v, const Matrix3_s00a8_dea0& m) {
+  return Vector3(m.row[0].x * v.x + m.row[2].x * v.z + m.row[1].x * v.y,
+                 m.row[1].y * v.y + m.row[2].y * v.z + m.row[0].y * v.x,
+                 m.row[2].z * v.z + m.row[1].z * v.y + m.row[0].z * v.x);
+}
+namespace EA {
+namespace Swarm {
+Vector2_s00a8_dea0 SquareToCircle(Vector2_s00a8_dea0 p);                    // 0x00a7c630 (cdecl, by value)
+}
+}
+namespace EA {
+namespace Swarm {
+struct cTransform_s00a8_dea0 {
+  enum { kScale = 1, kRotation = 2, kOffset = 4 };
+  uint16_t mFlags;                                    // +0x00
+  uint16_t mModCount;                                 // +0x02
+  Vector3 mOffset;                                    // +0x04
+  float mScale;                                       // +0x10
+  Matrix3_s00a8_dea0 mRotation;                                  // +0x14
+
+  cTransform_s00a8_dea0()
+      : mFlags(0), mModCount(0), mOffset(kVector3Zero_s00a8_dea0), mScale(1.0f),
+        mRotation(kMatrix3Identity_s00a8_dea0) {}
+  cTransform_s00a8_dea0(const cTransform_s00a8_dea0& t)
+      : mFlags(t.mFlags), mModCount(t.mModCount), mOffset(t.mOffset), mScale(t.mScale),
+        mRotation(t.mRotation) {}
+  cTransform_s00a8_dea0& operator=(const cTransform_s00a8_dea0& t);         // 0x00537dc0
+  // retail: rotation and offset setters bump the modification count
+  void SetRotation(const Matrix3_s00a8_dea0& m) {
+    mRotation = m;
+    mFlags |= kRotation;
+    ++mModCount;
+  }
+  void SetScale(float s) {
+    mScale = s;
+    ++mModCount;
+  }
+  void SetOffset(const Vector3& v) {
+    mOffset = v;
+    mFlags |= kOffset;
+    ++mModCount;
+  }
+  void PreTransformBy(const cTransform_s00a8_dea0& t);           // 0x00537f40
+};
+}
+}
+namespace EA {
+namespace Swarm {
+struct cHalton2D_s00a8_dea0 {
+  Vector2_s00a8_dea0 mValue;                                     // +0x00
+  int mIndex;                                         // +0x08
+  int mDigits3;                                       // +0x0c
+  cHalton2D_s00a8_dea0() : mValue(kVector2Zero_s00a8_dea0), mIndex(0), mDigits3(0) {}
+  void Seed(int index);                               // 0x00a7c3d0
+  int Next();                                         // 0x00a7c350
+};
+}
+}
+namespace EA {
+namespace Swarm {
+struct cDistributeDescription_s00a8_dea0 {
+  uint32_t pad00[2];
+  uint32_t mFlags;                                    // +0x08 (bit 13: reseed every 256)
+  uint32_t pad0c[3];
+  int mSeed;                                          // +0x18
+  uint8_t mSourceType;                                // +0x1c
+  uint8_t pad1d[3];
+  float mScale;                                       // +0x20
+  cTransform_s00a8_dea0 mTransform;                              // +0x24
+  float mRingInnerRadius;                             // +0x5c
+  uint8_t pad60[0x160 - 0x60];
+  int mNumClusters;                                   // +0x160 (cells N)
+  int mClusterStart;                                  // +0x164 (first cell index)
+  float mClusterScale;                                // +0x168
+  float* mCurveBegin;                                 // +0x16c (size curve)
+  float* mCurveEnd;                                   // +0x170
+};
+}
+}
+namespace EA {
+namespace Swarm {
+struct cDistributeSample_s00a8_dea0 {
+  uint32_t data[0x4c / 4];
+  cDistributeSample_s00a8_dea0(const cTransform_s00a8_dea0& t, int index);  // 0x00a89980
+  cDistributeSample_s00a8_dea0(const cDistributeSample_s00a8_dea0& s);      // 0x00a89de0
+};
+}
+}
+namespace EA {
+namespace Swarm {
+struct SampleVector_s00a8_dea0 {
+  cDistributeSample_s00a8_dea0* mpBegin;
+  cDistributeSample_s00a8_dea0* mpEnd;
+  cDistributeSample_s00a8_dea0* mpCapacity;
+  uint32_t mAllocator[2];
+  void DoInsertValue(cDistributeSample_s00a8_dea0* position, const cDistributeSample_s00a8_dea0& value);  // 0x00a8ce30
+  void push_back(const cDistributeSample_s00a8_dea0& value) {
+    if (mpEnd < mpCapacity)
+      ::new (mpEnd++) cDistributeSample_s00a8_dea0(value);
+    else
+      DoInsertValue(mpEnd, value);
+  }
+};
+}
+}
+namespace EA {
+namespace Swarm {
+struct cDistributeEffect_s00a8_dea0 {
+  uint32_t pad00[0x14 / 4];
+  cDistributeDescription_s00a8_dea0* mDesc;                      // +0x014
+  uint32_t pad18[(0x28 - 0x18) / 4];
+  uint32_t mFlags;                                    // +0x028 (bit 4: sphere band, bit 5: cube sphere)
+  cTransform_s00a8_dea0 mSourceTransform;                        // +0x02c
+  uint32_t pad64[(0xbc - 0x64) / 4];
+  SampleVector_s00a8_dea0 mSamples;                              // +0x0bc
+  uint32_t padd0[(0x100 - 0xd0) / 4];
+  Vector3 mSubdivOffset;                              // +0x100
+  Vector3 mSubdivScale;                               // +0x10c
+  struct cSubdivOwner { uint32_t pad[4]; cTransform_s00a8_dea0* mpTransform; }* mSubdivOwner;  // +0x118
+  uint32_t pad11c[(0x15c - 0x11c) / 4];
+  void* mEmitMap;                                     // +0x15c
+  void* mColorMap;                                    // +0x160
+  void* mPinMap;                                      // +0x164
+  uint32_t pad168[(0x18c - 0x168) / 4];
+  float mSizeScale;                                   // +0x18c
+
+  bool IsMaskedOut(const Vector3& pos, int index, int count);  // 0x00a89a90
+  void PinToMap(Vector3& pos);                        // 0x00a89ce0
+  void CreateClusteredSamples2D(int count, int first, int last);  // 0x00a8dea0 (EA::Swarm::cDistributeEffect::CreateClusteredSamples2D)
+  inline void AddSample_s00a8_dea0(cTransform_s00a8_dea0& sampleTransform, Vector3& pos, int index, int count);
+};
+}
+}
+namespace EA {
+namespace Swarm {
+static inline float SampleCurve(const float* begin, const float* end, float t) {
+  unsigned n = (unsigned)(end - begin) - 1;
+  if (n == 0)
+    return begin[0];
+  float f = (float)n * t;
+  int idx = (int)f;
+  float frac = f - (float)idx;
+  if (frac > 0.0f) {
+    float a = begin[idx];
+    return (begin[idx + 1] - a) * frac + a;
+  }
+  return begin[idx];
+}
+}
+}
+// ---- items of slice s00a8dea0 end
+
 // @ 0x00705290
 void mul_705290(V3* a, V3* b)
 {
@@ -555,6 +918,202 @@ cDistributeEffect_s00a8_c850::~cDistributeEffect_s00a8_c850()
     mVtblIComponent = 0x13f21d4;
     mVtblRefCount = 0x13ef094;
 }
+
+// @ 0x00a8d450
+namespace EA { namespace Swarm {
+void cDistributeEffect_s00a8_d450::CreateSamples2D(int count, int first, int last)
+{
+  Vector2_s00a8_d450 SquareToRing(Vector2_s00a8_d450 p, float innerRadius);  // 0x00a88490
+  Vector3 CubeToSphereSurface(const Vector3& v);  // 0x00a88400
+  cTransform_s00a8_d450 tf(mSourceTransform);
+  if (mSubdivOwner)
+    tf = *mSubdivOwner->mpTransform;
+
+  cTransform_s00a8_d450 sampleTransform;
+  sampleTransform.SetRotation(tf.mRotation);
+  sampleTransform.SetScale(mSizeScale);
+
+  cHalton2D_s00a8_d450 gen;
+  gen.Seed(mDesc->mSeed + first);
+  bool bReseed = (mDesc->mFlags >> 13) & 1;
+  for (int i = first; i < last; ++i) {
+    gen.Next();
+    if (bReseed && (uint8_t)gen.mIndex == 0)
+      gen.Seed(mDesc->mSeed + i + 1);
+
+    Vector2_s00a8_d450 p;
+    p = gen.mValue;
+    switch (mDesc->mSourceType) {
+      case 0:
+        p = Vector2_s00a8_d450(gen.mValue.x * 2.0f - kVector2One_s00a8_d450.x, gen.mValue.y * 2.0f - kVector2One_s00a8_d450.y);
+        break;
+      case 1:
+        p = SquareToCircle(gen.mValue);
+        break;
+      case 2:
+        p = SquareToRing(gen.mValue, mDesc->mRingInnerRadius);
+        break;
+    }
+
+    Vector3 pos;
+    pos = Vector3(mSubdivScale.x * p.x, mSubdivScale.y * p.y, mSubdivScale.z * 0.0f);
+    pos.x = mSubdivOffset.x + pos.x;
+    pos.y = mSubdivOffset.y + pos.y;
+    pos.z = mSubdivOffset.z + pos.z;
+
+    if (mFlags & 0x10) {
+      // sphere band: z from x, longitude from y
+      float z = pos.x;
+      float angle = pos.y * 3.14159265f;
+      float radius = sqrtf(1.0f - z * z);
+      float s, c;
+      FastSinCos_s00a8_d450(angle, s, c);
+      pos = Vector3(c * radius, s * radius, z);
+    } else if (mFlags & 0x20) {
+      pos = CubeToSphereSurface(pos);
+    }
+
+    if (tf.mFlags & cTransform_s00a8_d450::kRotation)
+      pos = Rotate_s00a8_d450(pos, tf.mRotation);
+    pos.x = tf.mOffset.x + tf.mScale * pos.x;
+    pos.y = tf.mOffset.y + pos.y * tf.mScale;
+    pos.z = tf.mOffset.z + pos.z * tf.mScale;
+
+    if (mEmitMap && IsMaskedOut(pos, i, count))
+      continue;
+    if (mPinMap)
+      PinToMap(pos);
+    sampleTransform.SetOffset(pos);
+
+    const cTransform_s00a8_d450& descTransform = mDesc->mTransform;
+    cDistributeSample_s00a8_d450 sample;
+    if (descTransform.mScale == 1.0f &&
+        !(descTransform.mFlags & (cTransform_s00a8_d450::kRotation | cTransform_s00a8_d450::kOffset))) {
+      sampleTransform.CopyTo(sample.mTransform);
+    } else {
+      cTransformData t;
+      sampleTransform.CopyTo(t);
+      t.PreTransformBy(descTransform);
+      sample.mTransform = t;
+    }
+    sample.mColor[0] = kSampleColor[0];
+    sample.mColor[1] = kSampleColor[1];
+    sample.mColor[2] = kSampleColor[2];
+    sample.mColor[3] = kSampleColor[3];
+    sample.mIndex = i;
+    mSamples.push_back(sample);
+  }
+}
+}}  // namespace EA::Swarm
+
+// @ 0x00a8dea0
+namespace EA { namespace Swarm {
+void cDistributeEffect_s00a8_dea0::CreateClusteredSamples2D(int count, int first, int last)
+{
+  Vector2_s00a8_dea0 SquareToRing(Vector2_s00a8_dea0 p, float innerRadius);  // 0x00a88490
+  Vector3 CubeToSphereSurface_00a88400(const Vector3& v);  // 0x00a88400
+  cTransform_s00a8_dea0 tf(mSourceTransform);
+  if (mSubdivOwner)
+    tf = *mSubdivOwner->mpTransform;
+
+  cTransform_s00a8_dea0 sampleTransform;
+  sampleTransform.SetRotation(tf.mRotation);
+  sampleTransform.SetScale(mSizeScale);
+
+  int n = mDesc->mNumClusters;
+  int base = mDesc->mClusterStart;
+  int seedIndex = mDesc->mSeed + first;
+  int cell = seedIndex / n;
+  cHalton2D_s00a8_dea0 cellGen;
+  cHalton2D_s00a8_dea0 subGen;
+  cellGen.Seed(seedIndex % n + base);
+  unsigned step = 0x50000000 / n;
+  unsigned phase = (seedIndex - cell * n) * step;
+  subGen.Seed((phase >> 24) + cell * 5);
+  phase &= 0xfffffff;
+  bool bReseed = (mDesc->mFlags >> 13) & 1;
+  float invN = 1.0f / (float)n;
+
+  for (int i = first; i < last; ++i) {
+    cellGen.Next();
+    if (bReseed && (uint8_t)cellGen.mIndex == 0) {
+      cellGen.Seed((mDesc->mSeed + i + 1) % n + base);
+    } else if (cellGen.mIndex == base + n) {
+      cellGen.Seed(base);
+      if (phase != 0) {
+        subGen.Next();
+        phase = 0;
+      }
+    }
+    phase += step;
+    float dx = subGen.mValue.x - 0.5f;
+    float dy = subGen.mValue.y - 0.5f;
+    while (phase & 0xf0000000) {
+      subGen.Next();
+      phase -= 0x10000000;
+    }
+
+    float radius = SampleCurve(mDesc->mCurveBegin, mDesc->mCurveEnd,
+                               (float)(unsigned)(cellGen.mIndex - base) * invN) * 0.5f;
+    if (dx * dx + dy * dy > radius * radius)
+      continue;
+
+    Vector2_s00a8_dea0 p;
+    p.x = dx * mDesc->mClusterScale + cellGen.mValue.x;
+    p.y = cellGen.mValue.y + dy * mDesc->mClusterScale;
+    switch (mDesc->mSourceType) {
+      case 0:
+        p = Vector2_s00a8_dea0(p.x * 2.0f - kVector2One_s00a8_dea0.x, p.y * 2.0f - kVector2One_s00a8_dea0.y);
+        break;
+      case 1:
+        p = SquareToCircle(p);
+        break;
+      case 2:
+        p = SquareToRing(p, mDesc->mRingInnerRadius);
+        break;
+    }
+
+    Vector3 pos;
+    pos = Vector3(mSubdivScale.x * p.x, mSubdivScale.y * p.y, mSubdivScale.z * 0.0f);
+    pos.x = mSubdivOffset.x + pos.x;
+    pos.y = mSubdivOffset.y + pos.y;
+    pos.z = mSubdivOffset.z + pos.z;
+
+    if (mFlags & 0x10) {
+      float z = pos.x;
+      float angle = pos.y * 3.14159265f;
+      float r = sqrtf(1.0f - z * z);
+      float s, c;
+      FastSinCos_s00a8_dea0(angle, s, c);
+      pos = Vector3(c * r, s * r, z);
+    } else if (mFlags & 0x20) {
+      pos = CubeToSphereSurface_00a88400(pos);
+    }
+
+    if (tf.mFlags & cTransform_s00a8_dea0::kRotation)
+      pos = Rotate_s00a8_dea0(pos, tf.mRotation);
+    pos.x = tf.mOffset.x + tf.mScale * pos.x;
+    pos.y = tf.mOffset.y + pos.y * tf.mScale;
+    pos.z = tf.mOffset.z + pos.z * tf.mScale;
+    if (!(mEmitMap && IsMaskedOut(pos, i, count))) {
+      if (mPinMap)
+        PinToMap(pos);
+      sampleTransform.SetOffset(pos);
+      const cTransform_s00a8_dea0& descTransform = mDesc->mTransform;
+      if (descTransform.mScale != 1.0f ||
+          (descTransform.mFlags & (cTransform_s00a8_dea0::kRotation | cTransform_s00a8_dea0::kOffset))) {
+        cTransform_s00a8_dea0 t(sampleTransform);
+        t.PreTransformBy(descTransform);
+        cDistributeSample_s00a8_dea0 sample(t, i);
+        mSamples.push_back(sample);
+      } else {
+        cDistributeSample_s00a8_dea0 sample(sampleTransform, i);
+        mSamples.push_back(sample);
+      }
+    }
+  }
+}
+}}  // namespace EA::Swarm
 
 // @ 0x00a8e7c0
 namespace EA { namespace Swarm {
