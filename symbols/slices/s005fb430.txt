@@ -1,3 +1,4 @@
-005fb430 ?UpdateExportThumb@cImportExportRetail@@QAEEPAX@Z  # cImportExportRetail::UpdateExportThumb migrated from s005fb430 (verbatim, slice spelling)
+005fb430 ?UpdateExportThumb@cImportExportView@@QAEEPAX@Z  # cImportExportView::UpdateExportThumb migrated from s005fb430 (verbatim, slice spelling)
 005fb900 ??1cImportExportRetail@@UAE@XZ  # cImportExportRetail::~cImportExportRetail migrated from s005fb430 (verbatim, slice spelling)
-005fbb00 SP::Thumbnail::cImportExport::ReadImportInfo  # evidence: this+0x88 range decoder, "spore" header parse into cImportInfo (ctor 005f8e00 / dtor 005f8e40 / operator= 005fb350); old name cIDGenerator::CreateKey was a wrong PDB candidate
+005fbb00 ?ReadImportInfo@cImportExportEmbedded@@QAE_NPBXPAUImportInfoData@ImportRead@@PAPAUIStream_s005f_b430@3@@Z  # cImportExportEmbedded::ReadImportInfo migrated from s005fb430 (verbatim, slice spelling)
+01667bac ?gEmptyString16@eastl@@3PA_WA  # eastl::gEmptyString16 (2 wchar_t): address from the s005fb430 slice preamble (extern ... // 0x01667BAC); the module TU extern lost the comment
