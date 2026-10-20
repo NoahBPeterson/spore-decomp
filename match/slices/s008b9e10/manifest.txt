@@ -1,0 +1,2 @@
+# source  symbol  original VA  [cl flags override]
+slices/s008b9e10/s008b9e10.cpp  _tsi_DeleteT1Class  008b9f20  /O2 /MD /Gy /EHsc /TP /GS-

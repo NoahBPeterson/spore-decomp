@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+008b9e10  152  tsi_NewT1Class: complete (allocate the T1Class, GetEntireStreamIntoMemory, TransformData eexec-decrypt, then BuildCMAP/BuildSubrs/BuildMetricsEtc); block layout and allocator sequence differ (ours 152 vs 260 bytes); difftest UNSUPPORTED (every generated InputStream faults) [equiv: UNSUPPORTED]
+008b9fa0  129  ReadOfffset1: complete (inline byte reader: callback path when ptr==0, direct when fn==0, else prime + ptr[curpos-primeBase]); original reads the stream from [esp+8] and keeps it in esi, ours leaf-inlines; difftest FAIL (60 valid, 83.1% coverage; the return value differs only in its undefined high half, orig 00000000 vs ours 00009300) [equiv: FAIL]
+008ba050  -  ReadOfffset2: complete (two-byte big-endian offset reader); no emitted symbol within chk's size tolerance (the shared byte-reader is inlined differently); difftest WEAK (277 valid, 55.3% coverage) [equiv: WEAK]
+008ba1c0  -  ReadOfffset3: complete (three-byte big-endian offset reader); no emitted symbol within size tolerance; difftest WEAK (286 valid, 54.0% coverage) [equiv: WEAK]
+008ba3d0  -  ReadOfffset4: complete (four-byte big-endian offset reader); no emitted symbol within size tolerance; difftest WEAK (281 valid, 54.7% coverage) [equiv: WEAK]
+008ba680  -  READ_REAL: complete (CFF real operand: nibble-decode the 0x1e/0xf-terminated DICT real); original takes the stream in edi; difftest UNSUPPORTED (every generated stream faults on read) [equiv: UNSUPPORTED]
+008ba7c0  -  READ_INTEGER: complete (CFF integer operand decoded from the 1-4 byte tag byte); original takes the stream in esi and the tag in eax; difftest UNSUPPORTED (original reads eax at entry) [equiv: UNSUPPORTED]

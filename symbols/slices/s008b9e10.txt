@@ -1,0 +1,8 @@
+008b9e10 _tsi_NewT1Class  # construct the T1Class (read the sfnt/T1 header, build cmap/hash)
+008b9f20 _tsi_DeleteT1Class  # free the T1Class sub-objects + the class
+008b9fa0 _ReadOfffset1  # read a 1-byte CFF INDEX offset
+008ba050 _ReadOfffset2  # read a 2-byte big-endian CFF INDEX offset
+008ba1c0 _ReadOfffset3  # read a 3-byte big-endian CFF INDEX offset
+008ba3d0 _ReadOfffset4  # read a 4-byte big-endian CFF INDEX offset
+008ba680 _READ_REAL  # decode a CFF real (DICT) operand
+008ba7c0 _READ_INTEGER  # decode a CFF integer DICT operand from its tag byte
