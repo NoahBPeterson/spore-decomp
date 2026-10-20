@@ -1,0 +1,14 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s011b1520/s011b1520.cpp  ?ec_group_precompute_mult@@YAPAXPAX@Z  011b1ef0  /vc71 /O2 /MD /Gy /TP
+slices/s011b1520/s011b1520.cpp  ?ec_group_make_affine@@YAPAXPAX@Z  011b1f20  /vc71 /O2 /MD /Gy /TP
+slices/s011b1520/s011b1520.cpp  ?ec_group_points_clear@@YAPAXPAX@Z  011b1f50  /vc71 /O2 /MD /Gy /TP
+slices/s011b1520/s011b1520.cpp  ?ec_compare_public_key@@YAHPAX0@Z  011b2240  /vc71 /O2 /MD /Gy /TP
+slices/s011b1520/s011b1520.cpp  ?ec_precompute_mult2@@YAHPAX0@Z  011b2300  /vc71 /O2 /MD /Gy /TP
+slices/s011b1520/s011b1520.cpp  ?ec_group_op_38@@YAHPAX00000@Z  011b2350  /vc71 /O2 /MD /Gy /TP
+slices/s011b1520/s011b1520.cpp  ?ec_group_op_4c@@YAHPAX00000@Z  011b25f0  /vc71 /O2 /MD /Gy /TP
+slices/s011b1520/s011b1520.cpp  ?ec_group_op_54@@YAHPAX0000@Z  011b26b0  /vc71 /O2 /MD /Gy /TP
+slices/s011b1520/s011b1520.cpp  ?ec_group_op_58@@YAHPAX000@Z  011b2720  /vc71 /O2 /MD /Gy /TP
+slices/s011b1520/s011b1520.cpp  ?ec_group_op_60@@YAHPAX0@Z  011b27e0  /vc71 /O2 /MD /Gy /TP
+slices/s011b1520/s011b1520.cpp  ?ec_group_op_64@@YAHPAX00@Z  011b2830  /vc71 /O2 /MD /Gy /TP
+slices/s011b1520/s011b1520.cpp  ?ec_group_op_68@@YAHPAX000@Z  011b2880  /vc71 /O2 /MD /Gy /TP
+slices/s011b1520/s011b1520.cpp  ?ec_group_op_6c@@YAHPAX00@Z  011b28e0  /vc71 /O2 /MD /Gy /TP

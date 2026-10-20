@@ -1,0 +1,24 @@
+011b1520 bn_sqr_comba4  # 16-bit half-limb comba squaring: 4-word input -> 8-word output with explicit carry chains (SQR_TERM / MUL_TERM style, unrolled).
+011b1c70 ASN1_TIME_set_string  # OPENSSL_gmtime then GENERALIZEDTIME encoder (0x011c9210) when 0x31 < tm->tm_year < 0x96, else UTCTIME encoder (0x011c8ff0).
+011b1d20 EC_KEY_new_by_curve_name  # malloc 0xa8, install the method, zero the ex_data/point slots, BN_init +0x8 and +0x1c, run method->init.
+011b1ef0 EC_GROUP_precompute_mult  # method slot +0x14 dispatcher, ERR 0x6d/0x42.
+011b1f20 EC_GROUP_make_affine  # method slot +0x14 dispatcher, ERR 0xb0/0x42.
+011b1f50 EC_GROUP_points_clear  # method slot +0x1c dispatcher, ERR 0xad/0x42.
+011b1f80 EC_EX_DATA_set_data  # reject duplicate (dup,set,free) triple (ERR 0xd3/0x6c), else malloc 0x14 and push {next,data,dup,set,free} onto the head.
+011b2140 EC_KEY_new_method  # malloc 0x44, call method->init (slot +0x24), free on failure.
+011b2240 EC_KEY_check_key / compare  # method slot +0x30 dispatcher with an identity check (ERR 0x72/0x42, 0x72/0x65) and a self short-circuit returning 1.
+011b2300 EC_KEY_precompute_mult  # method slot +0x34 dispatcher, ERR 0x7f.
+011b2350 EC_GROUP slot +0x38 dispatcher  # six-argument method call, ERR 0x7e.
+011b25f0 EC_GROUP slot +0x4c dispatcher  # six-argument method call, ERR 0x7b.
+011b26b0 EC_GROUP slot +0x54 dispatcher  # five-argument method call, all pointers must share the method, ERR 0x70.
+011b2720 EC_GROUP slot +0x58 dispatcher  # four-argument method call, ERR 0x73.
+011b2780 EC_GROUP slot +0x5c dispatcher  # three-argument method call, ERR 0xd2.
+011b27e0 EC_GROUP slot +0x60 dispatcher  # two-argument method call, ERR 0x76.
+011b2830 EC_GROUP slot +0x64 dispatcher  # three-argument method call, ERR 0x77.
+011b2880 EC_GROUP slot +0x68 dispatcher  # four-argument method call, ERR 0x71.
+011b28e0 EC_GROUP slot +0x6c dispatcher  # three-argument method call, ERR 0x78.
+011b2930 EC_GROUP slot +0x70 dispatcher  # validate that every group in the `n`-element array shares the method (ERR 0x88), then call slot 0x70.
+011b2b70 EC_KEY_copy  # deep copy: ex_data chain, public point, two BIGNUMs, the +0x30/+0x34/+0x38 words, the +0x3c/+0x40 blob, then method->+0x10.
+011b2d60 EC_KEY_set_public_key_affine_coordinates  # lazily create the public key, verify its method, BN_copy/BN_set_word the two coordinates.
+011b3030 ECDSA_SIG_new  # malloc 0x18, default engine at +0xc, ECDSA_METHOD wrap, method->+0x10 at +8, CRYPTO_new_ex_data(0xc,...,+0x10).
+011b3460 ASN.1 INTEGER decode  # <=4-byte signed big-endian -> u32, reject the reserved maximum at param6+0x14, ERR 0xd/0xa6/0x80.
