@@ -98,8 +98,14 @@ public:
 };
 class IButton {
 public:
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
     virtual uint8_t GetButtonStateFlags();      // +0x20
     virtual void v9();
     virtual void SetStateFlag(int flag, bool v);    // +0x28
@@ -170,31 +176,34 @@ struct WinRef {
     WinRef& operator=(IWindow* q) { p = q; return *this; }
 };
 struct IWinProcBase {                     // EA::UTFWin::IWinProc, +0x0
-    virtual int AddRef(); virtual int Release(); virtual void* Cast(uint32_t t);
+virtual int AddRef();
+virtual int Release();
+virtual void* Cast(uint32_t t);
     virtual ~IWinProcBase() {}
 };
 struct RefCountVBase {                    // EA::RefCountVTemplate<int>, +0x4
-    virtual int AddRef(); virtual int Release();
+virtual int AddRef();
+virtual int Release();
     virtual ~RefCountVBase() {}
     int mnRefCount;
 };
 namespace SP {
 class cSPPlayModeUI_s0063_54c0 : public IWinProcBase, public RefCountVBase {
 public:
-    cSPPlayModeUI_s0063_54c0();
+    cSPPlayModeUI_s0063_54c0();  // 0x00635700 (SP::cSPPlayModeUI::cSPPlayModeUI_s0063_54c0)
     virtual __forceinline ~cSPPlayModeUI_s0063_54c0() {}
     IWindow* FindPlayModeUIWindow(uint32_t id);                                            // 0x00634DC0
     void AddToolTip(uint32_t id, uint32_t strId, const wchar_t* text, int a, int b);       // 0x00635040
     void AddEditorUIToolTip(uint32_t id, uint32_t strId, const wchar_t* text, int a, int b);// 0x00635160
     void SetUpSendEmailWindow();  // 0x006354c0 (SP::cSPPlayModeUI::SetUpSendEmailWindow)
-    void ResetSendEmailWindow();
+    void ResetSendEmailWindow();  // 0x00635520 (SP::cSPPlayModeUI::ResetSendEmailWindow)
     void SetEnableNewCreatureButton(bool b);  // 0x00635580 (SP::cSPPlayModeUI::SetEnableNewCreatureButton)
     void SetEnableTakePictureButton(bool b);  // 0x00635600 (SP::cSPPlayModeUI::SetEnableTakePictureButton)
     void SetEnableRecordMovieButton(bool b);  // 0x00635680 (SP::cSPPlayModeUI::SetEnableRecordMovieButton)
     void SetUIGroupVisible(uint32_t id, bool b);  // 0x00635760 (SP::cSPPlayModeUI::SetUIGroupVisible)
     void SetEditorUIGroupVisible(uint32_t id, bool b);  // 0x00635790 (SP::cSPPlayModeUI::SetEditorUIGroupVisible)
     void ToggleUIGroup(uint32_t id, bool b);  // 0x006357c0 (SP::cSPPlayModeUI::ToggleUIGroup)
-    void SetCheckButtonSelected(uint32_t id, bool b);
+    void SetCheckButtonSelected(uint32_t id, bool b);  // 0x00635810 (SP::cSPPlayModeUI::SetCheckButtonSelected)
     bool IsCheckButtonSelected(uint32_t id);  // 0x00635850 (SP::cSPPlayModeUI::IsCheckButtonSelected)
     bool IsUIGroupEnabled(uint32_t id);  // 0x00635890 (SP::cSPPlayModeUI::IsUIGroupEnabled)
     bool Init(cAppModeEditorBase_s0063_54c0* app, cSPPlayMode_s0063_54c0* pm);  // 0x006358c0 (SP::cSPPlayModeUI::Init)
@@ -202,8 +211,8 @@ public:
     void SetTabIndentOn();  // 0x00635e80 (SP::cSPPlayModeUI::SetTabIndentOn)
     void SetAnimButtonsEnabled(bool b);  // 0x00635f00 (SP::cSPPlayModeUI::SetAnimButtonsEnabled)
     void SetExpansionAnimButtonsEnabled(bool b);  // 0x00635ff0 (SP::cSPPlayModeUI::SetExpansionAnimButtonsEnabled)
-    void ShowYouTubeLoginDialog();
-    void HideYouTubeLoginDialog();
+    void ShowYouTubeLoginDialog();  // 0x006360e0 (SP::cSPPlayModeUI::ShowYouTubeLoginDialog)
+    void HideYouTubeLoginDialog();  // 0x00636260 (SP::cSPPlayModeUI::HideYouTubeLoginDialog)
     void FUN_00634b10();
 
     cAppModeEditorBase_s0063_54c0* mApp;                                                              // +0xc
@@ -230,7 +239,6 @@ public:
 // ---- items of slice s006354c0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern cAppPropsHolder* sAppProperties;                                                    // 0x015FD918
 
 // ---- items of slice s00636320 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct IWindow_s0063_6320;
@@ -1023,7 +1031,6 @@ void cSPPlayModeUI_s0063_4490::AttachWinProc()
         w->SetTooltip(this);
 }
 
-
 // @ 0x00634b60
 bool RectF::Intersect(const RectF& a, const RectF& b)
 {
@@ -1048,7 +1055,6 @@ cSPPlayModeUI_s0063_4490::cSPPlayModeUI_s0063_4490()
     mField64 = 0;
     mField68 = 0;
 }
-
 
 // @ 0x00634c80
 void cSPPlayModeUI_s0063_4490::UpdateButtonEffects(int unused)
@@ -1091,7 +1097,6 @@ void cSPPlayModeUI_s0063_4490::UpdateButtonEffects(int unused)
     }
 }
 
-
 // @ 0x00634dc0
 UIWin* cSPPlayModeUI_s0063_4490::FindPlayModeUIWindow(uint32_t id)
 {
@@ -1113,7 +1118,6 @@ UIWin* cSPPlayModeUI_s0063_4490::FindPlayModeUIWindow(uint32_t id)
     return 0;
 }
 
-
 // @ 0x00634e40
 UIWin* cSPPlayModeUI_s0063_4490::FindEditorUIWindow(uint32_t id)
 {
@@ -1121,13 +1125,11 @@ UIWin* cSPPlayModeUI_s0063_4490::FindEditorUIWindow(uint32_t id)
     return ed->FindWindowByID(id);
 }
 
-
 // @ 0x00634e50
 int cSPPlayModeUI_s0063_4490::FUN_00634e50()
 {
     return mApp->mObj98->Release();
 }
-
 
 // @ 0x00634e60
 uint8_t cSPPlayModeUI_s0063_4490::IsItemVisible(uint32_t id)
@@ -1141,7 +1143,6 @@ uint8_t cSPPlayModeUI_s0063_4490::IsItemVisible(uint32_t id)
     return result;
 }
 
-
 // @ 0x00634e90
 void cSPPlayModeUI_s0063_4490::SetHighlight(uint32_t id, bool v)
 {
@@ -1149,7 +1150,6 @@ void cSPPlayModeUI_s0063_4490::SetHighlight(uint32_t id, bool v)
     if (w)
         w->QueryProc(0x8ed27e7a)->SetFlags(8, v);
 }
-
 
 // @ 0x00634ec0
 void cSPPlayModeUI_s0063_4490::SetSelected(uint32_t id, bool v)
@@ -1159,7 +1159,6 @@ void cSPPlayModeUI_s0063_4490::SetSelected(uint32_t id, bool v)
         w->QueryProc(0x8ed27e7a)->SetFlags(4, v);
 }
 
-
 // @ 0x00634ef0
 void cSPPlayModeUI_s0063_4490::SetEnabled(uint32_t id, bool v)
 {
@@ -1167,7 +1166,6 @@ void cSPPlayModeUI_s0063_4490::SetEnabled(uint32_t id, bool v)
     if (w)
         w->SetFlag(2, v);
 }
-
 
 // @ 0x00634f20
 void cSPPlayModeUI_s0063_4490::SetEditorUIEnabled(uint32_t id, bool v)
@@ -1177,7 +1175,6 @@ void cSPPlayModeUI_s0063_4490::SetEditorUIEnabled(uint32_t id, bool v)
     if (w)
         w->SetFlag(2, v);
 }
-
 
 // @ 0x00634f50
 void cSPPlayModeUI_s0063_4490::SetHideOut(uint32_t id, bool v)
@@ -1207,7 +1204,6 @@ void cSPPlayModeUI_s0063_4490::SetHideOut(uint32_t id, bool v)
     }
 }
 
-
 // @ 0x00635010
 void cSPPlayModeUI_s0063_4490::SetEditorText(uint32_t id, const wchar_t** text)
 {
@@ -1215,7 +1211,6 @@ void cSPPlayModeUI_s0063_4490::SetEditorText(uint32_t id, const wchar_t** text)
     UIWin* w = ed->FindWindowByID(id);
     w->SetText(*text);
 }
-
 
 // @ 0x00635040
 void cSPPlayModeUI_s0063_4490_b::ShowToolTip(uint32_t id, uint32_t a2, uint32_t a3, cSPUITooltipWinProc_s0063_4490_b* existing, float* pos)
@@ -1298,20 +1293,17 @@ void cSPPlayModeUI_s0063_4490::RemoveTooltip(uint32_t id, void* tip)
     }
 }
 
-
 // @ 0x006352d0
 void cSPPlayModeUI_s0063_4490::DoCommand103()
 {
     mApp->mEditorUI->DoCommand(0x103);
 }
 
-
 // @ 0x006352f0
 void cSPPlayModeUI_s0063_4490::DoCommand102()
 {
     mApp->mEditorUI->DoCommand(0x102);
 }
-
 
 // @ 0x00635310
 void cSPPlayModeUI_s0063_4490::SetPrompt(uint32_t v)
@@ -1326,7 +1318,6 @@ void cSPPlayModeUI_s0063_4490::SetPrompt(uint32_t v)
     }
 }
 
-
 // @ 0x00635350
 void cSPPlayModeUI_s0063_4490::FUN_00635350(uint32_t a, uint32_t b)
 {
@@ -1334,13 +1325,11 @@ void cSPPlayModeUI_s0063_4490::FUN_00635350(uint32_t a, uint32_t b)
     mApp->mEditorUI->EnableUIButton(0x58b74e8, a);
 }
 
-
 // @ 0x00635380
 void cSPPlayModeUI_s0063_4490::ShowEditor()
 {
     mApp->mEditorUI->Show();
 }
-
 
 // @ 0x00635390
 void cSPPlayModeUI_s0063_4490::ToggleNameAndDescribe(bool v)
@@ -1354,7 +1343,6 @@ void cSPPlayModeUI_s0063_4490::ToggleNameAndDescribe(bool v)
     }
 }
 
-
 // @ 0x006353e0
 void cSPPlayModeUI_s0063_4490::SetTagField(uint32_t v)
 {
@@ -1362,7 +1350,6 @@ void cSPPlayModeUI_s0063_4490::SetTagField(uint32_t v)
     if (n)
         n->SetTagField(v);
 }
-
 
 // @ 0x00635400
 void cSPPlayModeUI_s0063_4490::SetSendEmailDialogVisibility(bool v)
@@ -1382,7 +1369,6 @@ void cSPPlayModeUI_s0063_4490::SetSendEmailDialogVisibility(bool v)
     }
 }
 
-
 // @ 0x006354c0
 void SP::cSPPlayModeUI_s0063_54c0::SetUpSendEmailWindow()
 {
@@ -1392,13 +1378,6 @@ void SP::cSPPlayModeUI_s0063_54c0::SetUpSendEmailWindow()
     mApp->mpEditorUI->FindWindowByID(-1)->AddWindow(w);
     w->Release();
 }
-
-
-
-
-
-
-
 
 // @ 0x00635520
 void SP::cSPPlayModeUI_s0063_54c0::ResetSendEmailWindow()
@@ -1410,25 +1389,11 @@ void SP::cSPPlayModeUI_s0063_54c0::ResetSendEmailWindow()
     w->Release();
 }
 
-
-
-
-
-
-
-
 // @ 0x00635580
 void SP::cSPPlayModeUI_s0063_54c0::SetEnableNewCreatureButton(bool b)
 {
     SET_ENABLE_BODY(0x4766ff0, )
 }
-
-
-
-
-
-
-
 
 // @ 0x00635600
 void SP::cSPPlayModeUI_s0063_54c0::SetEnableTakePictureButton(bool b)
@@ -1436,25 +1401,11 @@ void SP::cSPPlayModeUI_s0063_54c0::SetEnableTakePictureButton(bool b)
     SET_ENABLE_BODY(0x3a8ede4, SPUIHelpers::UpdateMouseFocus(true);)
 }
 
-
-
-
-
-
-
-
 // @ 0x00635680
 void SP::cSPPlayModeUI_s0063_54c0::SetEnableRecordMovieButton(bool b)
 {
     SET_ENABLE_BODY(0x3fc1740, )
 }
-
-
-
-
-
-
-
 
 // @ 0x00635760
 void SP::cSPPlayModeUI_s0063_54c0::SetUIGroupVisible(uint32_t id, bool b)
@@ -1463,13 +1414,6 @@ void SP::cSPPlayModeUI_s0063_54c0::SetUIGroupVisible(uint32_t id, bool b)
     if (w) w->SetFlag(1, b);
 }
 
-
-
-
-
-
-
-
 // @ 0x00635790
 void SP::cSPPlayModeUI_s0063_54c0::SetEditorUIGroupVisible(uint32_t id, bool b)
 {
@@ -1477,13 +1421,6 @@ void SP::cSPPlayModeUI_s0063_54c0::SetEditorUIGroupVisible(uint32_t id, bool b)
     IWindow* w = ui->FindWindowByID(id);
     if (w) w->SetFlag(1, b);
 }
-
-
-
-
-
-
-
 
 // @ 0x006357c0
 void SP::cSPPlayModeUI_s0063_54c0::ToggleUIGroup(uint32_t id, bool b)
@@ -1497,13 +1434,6 @@ void SP::cSPPlayModeUI_s0063_54c0::ToggleUIGroup(uint32_t id, bool b)
     }
 }
 
-
-
-
-
-
-
-
 // @ 0x00635810
 void SP::cSPPlayModeUI_s0063_54c0::SetCheckButtonSelected(uint32_t id, bool b)
 {
@@ -1511,13 +1441,6 @@ void SP::cSPPlayModeUI_s0063_54c0::SetCheckButtonSelected(uint32_t id, bool b)
     IButton* btn = w ? (IButton*)w->Cast(0x8ed27e7a) : 0;
     btn->SetStateFlag(4, b);
 }
-
-
-
-
-
-
-
 
 // @ 0x00635850
 bool SP::cSPPlayModeUI_s0063_54c0::IsCheckButtonSelected(uint32_t id)
@@ -1530,13 +1453,6 @@ bool SP::cSPPlayModeUI_s0063_54c0::IsCheckButtonSelected(uint32_t id)
     return f;
 }
 
-
-
-
-
-
-
-
 // @ 0x00635890
 bool SP::cSPPlayModeUI_s0063_54c0::IsUIGroupEnabled(uint32_t id)
 {
@@ -1546,15 +1462,8 @@ bool SP::cSPPlayModeUI_s0063_54c0::IsUIGroupEnabled(uint32_t id)
     return false;
 }
 
-
-
-
-
-
-
-
 // @ 0x006358c0
-bool SP::cSPPlayModeUI_s0063_54c0::Init(cAppModeEditorBase_s0063_54c0* app, cSPPlayMode_s0063_54c0* pm)
+bool SP::cSPPlayModeUI_s0063_54c0::Init(SP::cAppModeEditorBase_s0063_54c0* app, SP::cSPPlayMode_s0063_54c0* pm)
 {
     IWindow* root;
     IWindow* w;
@@ -1636,13 +1545,6 @@ bool SP::cSPPlayModeUI_s0063_54c0::Init(cAppModeEditorBase_s0063_54c0* app, cSPP
     }
 }
 
-
-
-
-
-
-
-
 // @ 0x00635dc0
 void SP::cSPPlayModeUI_s0063_54c0::SetTabIndentOff(uint32_t id)
 {
@@ -1667,13 +1569,6 @@ void SP::cSPPlayModeUI_s0063_54c0::SetTabIndentOff(uint32_t id)
     }
 }
 
-
-
-
-
-
-
-
 // @ 0x00635e80
 void SP::cSPPlayModeUI_s0063_54c0::SetTabIndentOn()
 {
@@ -1686,13 +1581,6 @@ void SP::cSPPlayModeUI_s0063_54c0::SetTabIndentOn()
     w = FindPlayModeUIWindow(0x46db980);
     if (w) w->SetFlag(1, false);
 }
-
-
-
-
-
-
-
 
 // @ 0x00635f00
 void SP::cSPPlayModeUI_s0063_54c0::SetAnimButtonsEnabled(bool b)
@@ -1708,13 +1596,6 @@ void SP::cSPPlayModeUI_s0063_54c0::SetAnimButtonsEnabled(bool b)
     w = FindPlayModeUIWindow(0x480e170); if (w) w->SetFlag(1, b);
 }
 
-
-
-
-
-
-
-
 // @ 0x00635ff0
 void SP::cSPPlayModeUI_s0063_54c0::SetExpansionAnimButtonsEnabled(bool b)
 {
@@ -1728,13 +1609,6 @@ void SP::cSPPlayModeUI_s0063_54c0::SetExpansionAnimButtonsEnabled(bool b)
     w = FindPlayModeUIWindow(0x48667c8); if (w) w->SetFlag(1, b);
     w = FindPlayModeUIWindow(0x48667e0); if (w) w->SetFlag(1, b);
 }
-
-
-
-
-
-
-
 
 // @ 0x006360e0
 void SP::cSPPlayModeUI_s0063_54c0::ShowYouTubeLoginDialog()
@@ -1771,13 +1645,6 @@ void SP::cSPPlayModeUI_s0063_54c0::ShowYouTubeLoginDialog()
     o->mpSub->Func(false);
 }
 
-
-
-
-
-
-
-
 // @ 0x00636260
 void SP::cSPPlayModeUI_s0063_54c0::HideYouTubeLoginDialog()
 {
@@ -1799,12 +1666,6 @@ void SP::cSPPlayModeUI_s0063_54c0::HideYouTubeLoginDialog()
     w = FindPlayModeUIWindow(0x5650568);
     if (w) w->SetFlag(1, false);
 }
-
-
-
-
-
-
 
 // @ 0x00636320
 void cSPPlayModeUI::EnablePhotoViewerButton(bool b)
@@ -1855,12 +1716,6 @@ void cSPPlayModeUI::EnablePhotoViewerButton(bool b)
     }
 }
 
-
-
-
-
-
-
 // @ 0x006364a0
 void cSPPlayModeUI::HideMovieSavedDialogCustom()
 {
@@ -1890,11 +1745,6 @@ void cSPPlayModeUI::HideMovieSavedDialogCustom()
     if (w)
         w->SetFlag(1, 0);
 }
-
-
-
-
-
 
 // @ 0x00636560
 bool cSPPlayModeUI_s0063_6560::DoMessageInternal(uint32_t a, UIMessage* msg)
@@ -2106,9 +1956,6 @@ bool cSPPlayModeUI_s0063_6560::DoMessageInternal(uint32_t a, UIMessage* msg)
     }
 }
 
-
-
-
 // @ 0x006373e0
 bool cSPPlayModeUI_s0063_73e0::Shutdown()
 {
@@ -2136,9 +1983,6 @@ bool cSPPlayModeUI_s0063_73e0::Shutdown()
     return true;
 }
 
-
-
-
 // @ 0x006374b0
 void cSPPlayModeUI_s0063_73e0::SetYTUsername(const eastl::string_s0063_73e0& s)
 {
@@ -2147,9 +1991,6 @@ void cSPPlayModeUI_s0063_73e0::SetYTUsername(const eastl::string_s0063_73e0& s)
     IWindow_s0063_73e0* win = FindPlayModeUIWindow(0x5650498);
     win->SetCaption(p);
 }
-
-
-
 
 // @ 0x00637510
 void cSPPlayModeUI_s0063_73e0::SetYTPassword(const eastl::string_s0063_73e0& s)
@@ -2160,18 +2001,12 @@ void cSPPlayModeUI_s0063_73e0::SetYTPassword(const eastl::string_s0063_73e0& s)
     win->SetCaption(p);
 }
 
-
-
-
 // @ 0x006375e0
 char FindParentDir2(int a, int b, int c)
 {
     (void)a; (void)b; (void)c;
     return 0;
 }
-
-
-
 
 // @ 0x006377d0
 void cSPPlayModeUI_s0063_73e0::GetEditorText(uint32_t id, eastl::string_s0063_73e0* out)
@@ -2181,18 +2016,12 @@ void cSPPlayModeUI_s0063_73e0::GetEditorText(uint32_t id, eastl::string_s0063_73
     out->sprintf("%ls", w->GetText());
 }
 
-
-
-
 // @ 0x00637800
 void cSPPlayModeUI_s0063_73e0::GetYTUsername(eastl::string_s0063_73e0* out)
 {
     IWindow_s0063_73e0* w = FindPlayModeUIWindow(0x5650498);
     out->sprintf("%ls", w->GetText());
 }
-
-
-
 
 // @ 0x00637830
 void cSPPlayModeUI_s0063_73e0::GetYTPassword(eastl::string_s0063_73e0* out)
@@ -2201,23 +2030,15 @@ void cSPPlayModeUI_s0063_73e0::GetYTPassword(eastl::string_s0063_73e0* out)
     out->sprintf("%ls", w->GetText());
 }
 
-
-
-
 // @ 0x00637860
 void SP::cSPPlayModeUI::Show()
 {
 }
 
-
-
-
 // @ 0x00637c90
 void cSPPlayModeUI_s0063_73e0::SendVideoURLInfoToServer()
 {
 }
-
-
 
 // @ 0x00638430
 void SP::cSPPlayModeUI_s0063_7f80::ShowMovieSavedDialogCustom()
