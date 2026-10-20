@@ -1,0 +1,12 @@
+# SP::cTerrainSphere lighting-region / decal / model helpers, object SPTerrain/SPTerrainSphere.obj.
+# No PDB names for these VAs; names below are descriptive (the lighting-region vector at +0x2e0, the
+# node vector at +0x2f4, the cRelevel vectors at +0x770/+0x784/+0x798, stride 0xac, key +0xa8).
+00fa6480  cTerrainSphere::AddLightingRegion        # alloc 0x1d8 "Terrain/Sphere/cTerrainSphereLightingRegion", decal-id registration, viewer init, XForm2 at +0x178 built from FUN_00fa28b0 result, per-node overlap insert
+00fa6870  cTerrainSphere::UpdateLightingRegions    # for each node, sync it into every region (0x00f9abc0 overlap test / 0x00fa23d0 remove / 0x00b96600 insert), then RenderLightingRegion 0x00f9a7c0 for dirty regions
+00fa6a50  cTerrainSphere::CreateDecal              # type 4/5 -> cLightDecal alloc 0x74 "Terrain/Sphere/cLightDecal" (0x00f9f950), Assign 0x00537dc0; else effect lookup FUN_0067dd60 vtbl, AddBeltDecal 0x00fa2920 / AddDecal 0x00fa28b0
+00fa6c60  cTerrainSphere::AddModelFootprint        # copy xform XForm2, two property queries (0x589e78c/0xc5ae63ed), FUN_00f9ada0+scale, cRelevel build 0x00f9b2b0, ApplyModelFootprint 0x00fa3c10, bump 0x814/0x818
+00fa6ec0  cTerrainSphere::ClearRelevels            # shrink the +0x770 and +0x784 cRelevel vectors via CopyRelevels 0x00f9f770, ++0x814
+00fa6f40  cTerrainSphere::ReleaseBackgroundModels  # reserve tag 0x3abb0af on the +0x7ec vector, EffectsManager vtbl+0x54, per-entry release/assign
+00fa7010  cTerrainSphere::AddModelsAndEffects      # guard 0x76c, ReleaseBackgroundModels, reserve 0x40539d4 on +0x800, then per-model Assign 0x00537dc0 + 0x7d8 vector, PinModelsToTerrain 0x00f99520
+00fa7220  cTerrainSphere::AddPlayerModification    # EffectsManager vtbl+0x54/vtbl+2 object build, sAppProperties 0x3a8b697 count, resize the +0x798 cRelevel ring, push_back, bump 0x814/0x818
+00fa73c0  cTerrainSphere::ClearPlayerModifications # shrink the +0x798 cRelevel vector, three message-server unsubscribes on +0x28, 0x00fbaf10/0x00fbaf50 on +0x20c, ++0x814
