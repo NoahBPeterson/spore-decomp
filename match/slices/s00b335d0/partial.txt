@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00b335d0  789  stub only (large state dispatcher, not reconstructed)
+00b33970  693  stub only (large state dispatcher, not reconstructed)
+00b33f50  815  stub only (render/viewer state handler, not reconstructed)
+00b34380  644  stub only (per-noun draw pass, not reconstructed)

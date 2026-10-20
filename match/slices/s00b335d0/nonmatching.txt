@@ -1,0 +1,10 @@
+00b335d0 789 front-end state dispatcher: 789-byte switch dispatch over state tags; not reconstructed (stub)
+00b338f0 122 star-database reload loop: complete; 125 diff, index/count and mpBegin reload schedule differs
+00b33970 693 front-end state dispatcher (second half): not reconstructed (stub)
+00b33c70 11 adjusting thunk: 2 diff, vtable-slot target stays in edx in the original (ours uses eax)
+00b33d00 30 state transition A: 2 diff, vtable-slot target stays in edx in the original (ours uses eax)
+00b33d20 17 state transition B: 2 diff, vtable-slot target stays in edx in the original (ours uses eax)
+00b33d40 134 state setter: 5 diff, case/default block order after the jump table is inverted
+00b33f50 815 render/viewer state handler: not reconstructed (stub)
+00b34280 245 terrain height query: complete; 258 diff, x87/SSE mix and local-vector frame layout differ
+00b34380 644 per-noun draw pass: not reconstructed (stub)
