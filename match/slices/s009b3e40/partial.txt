@@ -1,0 +1,2 @@
+# va  reason
+# (empty) all 20 slice-68 functions are implemented and compile; none are incomplete.
