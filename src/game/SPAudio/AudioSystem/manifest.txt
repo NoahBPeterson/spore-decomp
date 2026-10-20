@@ -49,6 +49,8 @@
 ../src/game/SPAudio/AudioSystem.cpp  ??_GAbilityList@@UAEPAXI@Z  00a27290  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?DoFreeNodes@SubTable@@QAEXPAPAUSubNode_s00a2_6e10@@I@Z  00a276e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?Dtor@SmallStubs@@QAEXXZ  00a2aa70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?pushEmpty@Vec18@@QAEXXZ  00a2ab80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?push_back@ZoneVec@@QAEXPBUZone_s00a2_a020@@@Z  00a2abe0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?FUN_00a2d990@AudioSystem@@QAEHPAX@Z  00a2d990  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?PostEvent@MgrBase@@QAEXIIIIPAX@Z  00a2ee40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?SetTypePriority@cTypeMapHolder@@QAEXII@Z  00a2f180  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

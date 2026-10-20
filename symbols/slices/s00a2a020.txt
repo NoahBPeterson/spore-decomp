@@ -8,4 +8,7 @@
 00a2a770 FixedMap::a770
 00a2a870 FixedMap::a870
 00a2aa70 ?Dtor@SmallStubs@@QAEXXZ  # SmallStubs::Dtor migrated from s00a2a020 (verbatim, slice spelling)
+00a2ab40 ?pushEmpty@Vec12@@QAEXXZ  # Vec12::pushEmpty migrated from s00a2a020 (verbatim, slice spelling)
+00a2ab80 ?pushEmpty@Vec18@@QAEXXZ  # Vec18::pushEmpty migrated from s00a2a020 (verbatim, slice spelling)
+00a2abe0 ?push_back@ZoneVec@@QAEXPBUZone_s00a2_a020@@@Z  # ZoneVec::push_back migrated from s00a2a020 (verbatim, slice spelling)
 00a2ae90 ?EraseRange@SmallStubs@@QAEHHH@Z  # SmallStubs::EraseRange migrated from s00a2a020 (verbatim, slice spelling)

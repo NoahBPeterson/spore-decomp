@@ -874,6 +874,7 @@ struct System_s00a2_4e10 : ISystem0, IHandlerRC {
 // ---- items of slice s00a24e10 end
 
 // ---- items of slice s00a2a020 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#undef FIXED_CTOR
 void __cdecl FUN_00a136f0(void*, void*, void*);                  // 0x00a136f0
 struct HashBase {
     void ctorA(u32, void*, void*, void*, u32, void*, void*);   // 0x00a23570
@@ -903,6 +904,30 @@ struct SmallStubs {
     void DestroyBuckets(int param_2, u32 param_3);
     int  EraseRange(int param_2, int param_3);
     int* VecIntInsert(int* param_2, int* param_3);
+};
+struct E12 { u32 a, b, c; };
+struct Vec12 {
+    void* mpBegin;   // +0
+    E12*  mpEnd;     // +4
+    E12*  mpCap;     // +8
+    void pushEmpty();
+    void DoInsertValue(E12* pos, void* val);   // 0x00a27910
+};
+struct E18 { int a; int b; float f; int c; int d; int e; };
+struct Vec18 {
+    void* mpBegin;   // +0
+    E18*  mpEnd;     // +4
+    E18*  mpCap;     // +8
+    void pushEmpty();
+    void DoInsertValue(E18* pos, E18* val);   // 0x00a27a40
+};
+struct Zone_s00a2_a020 { u32 d[0xb]; };
+struct ZoneVec {
+    void* mpBegin;   // +0
+    u8*   mpEnd;     // +4
+    u8*   mpCap;     // +8
+    void push_back(const Zone_s00a2_a020* v);
+    void DoInsertValue(u8* pos, const Zone_s00a2_a020* val);   // 0x00a27b90
 };
 struct ArrOwner { void* FindInsertPos(void*, void*, void*); };  // 0x00a22730
 // ---- items of slice s00a2a020 end
@@ -1150,6 +1175,7 @@ extern "C" void  FUN_0112c620();
 
 // ---- items of slice s00a2e650 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern void* __cdecl ObjectError();  // 0x008de1a0
+void* __cdecl EaNew(unsigned size, const char* name, int a, int b, const char* file, int line);  // 0xf473a0
 void __cdecl EaDelete(void* p);                                                                    // 0xf47380
 struct MapUU {
     int& operator[](const uint32_t& key);  // 0x00a2e060
@@ -1285,6 +1311,11 @@ struct MgrBase {
     bool RemoveEntry(void* obj);                                                       // 0xa2eed0
     void Rebuild();                                                                    // 0xa2ef60
 };
+struct EntryVal {
+    char pad[0x18];
+    int m18;
+    void Assign(void* v);  // 0x00a25000
+};
 struct EventMsg {
     unsigned a, b, c, d;
     void* ref;
@@ -1370,6 +1401,26 @@ public:
     MapUU mMap;                                               // +0x118a5c
     void SetTypePriority(uint32_t type, uint32_t priority);   // 0xa2f180
     void InitDefaultPriorities();                             // 0xa2f1a0
+};
+struct MappedVal {
+    char d[0x1e0];
+    MappedVal(const MappedVal& o);  // 0x00a2e2f0
+};
+struct HNodeV {
+    unsigned key;
+    MappedVal val;
+    int m1e4;
+};
+struct SrcPair {
+    unsigned key;
+    MappedVal val;
+};
+struct NodePool_s00a2_e650 {
+    char pad[0x1c];
+    void* mpHead;  // +0x1c
+    char pad20[0x2c - 0x20];
+    unsigned mnNodeSize;  // +0x2c
+    HNodeV* Alloc(const SrcPair* src);  // 0x00a27010 (NodePool::Alloc)
 };
 // ---- items of slice s00a2e650 end
 
@@ -4727,6 +4778,53 @@ void SmallStubs::Dtor()
     }
 }
 
+// @ 0x00a2ab40
+void Vec12::pushEmpty()
+{
+    E12* e = mpEnd;
+    if (e < mpCap) {
+        mpEnd = e + 1;
+        if (e) {
+            e->a = 0; e->b = 0; e->c = 0;
+            return;
+        }
+    } else {
+        E12 tmp = {0, 0, 0};
+        DoInsertValue(e, &tmp);
+    }
+}
+
+// @ 0x00a2ab80
+void Vec18::pushEmpty()
+{
+    E18* e = mpEnd;
+    if (e < mpCap) {
+        mpEnd = e + 1;
+        if (e) {
+            e->a = 0; e->b = 0; e->f = 0.0f;
+            e->c = 0; e->d = 0; e->e = 0;
+        }
+    } else {
+        E18 tmp;
+        tmp.a = 0; tmp.b = 0; tmp.f = 0.0f;
+        tmp.c = 0; tmp.d = 0; tmp.e = 0;
+        DoInsertValue(e, &tmp);
+    }
+}
+
+// @ 0x00a2abe0
+void ZoneVec::push_back(const Zone_s00a2_a020* v)
+{
+    u8* e = mpEnd;
+    if (e < mpCap) {
+        mpEnd = e + 0x2c;
+        if (e)
+            *(Zone_s00a2_a020*)e = *v;
+    } else {
+        DoInsertValue(e, v);
+    }
+}
+
 // @ 0x00a2ae90
 int SmallStubs::EraseRange(int param_2, int param_3)
 {
@@ -5548,6 +5646,19 @@ bool MgrBase::Create(unsigned name, unsigned id, void* existing, float* pos, voi
     return true;
 }
 
+// @ 0x00a2edd0
+void MgrBase::SetEntry(unsigned key, void* val)
+{
+    HT1* m = &AT(HT1, this, 0x1277b4);
+    HIter it = m->find(key);
+    if (it.node != m->End()) {
+        EntryVal* ev = (EntryVal*)((char*)it.node + 4);
+        ev->Assign(val);
+        if (ev->m18 == 0)
+            it = m->erase(it);
+    }
+}
+
 // @ 0x00a2ee40
 void MgrBase::PostEvent(unsigned a, unsigned b, unsigned c, unsigned d, void* ref)
 {
@@ -5618,6 +5729,24 @@ void cTypeMapHolder::InitDefaultPriorities()
     mMap[0x3055f61] = 0;
     mMap[0x2b9f662] = 1;
     mMap[0x1a527db] = 2;
+}
+
+// @ 0x00a2f5d0
+HNodeV* NodePool_s00a2_e650::Alloc(const SrcPair* src)
+{
+    HNodeV* n = (HNodeV*)mpHead;
+    if (n == 0)
+        n = (HNodeV*)EaNew(mnNodeSize, "EASTL", 0, 0,
+                           "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+                           0xd1);
+    else
+        mpHead = *(void**)n;
+    if (n) {
+        n->key = src->key;
+        new (&n->val) MappedVal(src->val);
+    }
+    n->m1e4 = 0;
+    return n;
 }
 
 // @ 0x00a30460

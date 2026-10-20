@@ -63,6 +63,7 @@
 00a27ff0 189 complete; pair value layout guessed, EH temps differ; difftest WEAK after making it the thiscall member EvOwner::Register (this in ecx, ret 0x14); coverage 29% because the create path needs the real hashtable find to miss
 00a2a020 209 EA::Audio::System::ConnectSubmixTree (/O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast): structural reconstruction of the SEH signature; equiv now UNSUPPORTED (only 0/1200 inputs valid, read faults)
 00a2a150 79 eastl::hashtable find-or-insert helper (/O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast): structural reconstruction; equiv now FAIL (5/5 valid inputs mismatched)
+00a2ab40 9 eastl::vector<E12>::pushEmpty wrapper (/O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast): equivalent, but MSVC picks `test eax,eax; je` / zero via ecx where we emit `xor edx,edx; cmp eax,edx; je` / zero via edx (register tie-break); equiv now PASS (777 inputs, 100% coverage)
 00a2ae90 88 eastl::hashtable erase-range (FindInsertPos 0x00a22730, element Release, count fixup) (/O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast): structural; equiv now FAIL (5/5 valid inputs mismatched)
 00a2c6c0 3526 complete; frame/spill layout differs (original reuses the cmd arg slot as an out-param local), switch tree and vcall arg ordering differ
 00a2d790 195 complete; virtual-call schedule + hashtable find not byte-identical
@@ -74,9 +75,11 @@
 00a2e260 66 complete; vector push_back of 0x14 node, schedule differs
 00a2e420 57 complete; pool node alloc, EH/pool order differs
 00a2e650 1433 complete effect-creation routine; frame/register allocation and EH state layout differ (structure aligned)
+00a2edd0 88 complete hashtable find+erase wrapper; temp/iterator slot reuse and callee-saved regs differ
 00a2eed0 9 complete hashtable remove wrapper; iterator temp slot reuse (frame 8 vs 0x10)
 00a2ef60 388 complete stopwatch-timed table rebuild; locals/regs and EH layout differ; difftest WEAK (19% coverage: ObjectError() returns global 0x1667aa0, null in the image, so the body is unreachable)
 00a2f1a0 13 eastl::map operator[] assignment/store scheduling differs; difftest PASS (mapped MapUU::operator[] to 0x00a2e060, removed stray "@" markers in class decl)
+00a2f5d0 86 complete pool node alloc+construct; EH object frame (placement-new temp) differs
 00a310b0 37 FixedVec11b::ctor (fixed_vector<uint32,250> ctor): equivalent; difftest WEAK (168 valid inputs, 100.0% coverage); MSVC emits an SEH frame in the original that we do not reproduce
 00a31170 700 SP::Audio::cSystem::InitAT: complete (factory registration, rw System create, fs/stream-pool setup, plugin params, mute, id pool seed, polyphony table load); call and vtable-slot sequences identical to the original (58 calls, same vslots), size 1680; register allocation (this in esi vs edi), stack offsets and EH state numbering differ (flags /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast)
 00a31f20 632 DoCommandMainThread: complete; stack slot of the two stack messages not shared, mask-or order folded; difftest WEAK (2000 valid, 27% cov: GetServer() is null in emulation, so the message paths are unreached); ListB::Push annotated
