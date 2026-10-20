@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00980b70  25  BasicFactory_RelativeNavigator::CreateInstance: complete; original keeps the dead base-vptr store to +0x18 (async vtable overwritten later) that our compiler DSEs; difftest PASS
+00980e30  28  RotateEffect ctor: complete; original keeps the dead base-vptr store to +0x60 and schedules the vtable stores before the float stores; difftest PASS
+00980ea0  37  BasicFactory_RotateEffect::CreateInstance: complete; inlined ctor's dead base-vptr store + float/vtable store order differ; difftest PASS
+009810a0  3   IWinScrollbar::SetValue: complete; final refresh call uses eax/edx swapped (obj in edx vs eax); difftest PASS
+00981220  520 OnMouseDown: complete; large function, many stack-temp/vtable-load scheduling differences; difftest WEAK (4.7% coverage)
+00981430  93  OnMouseUp: complete; stack-temp and vptr-load scheduling differ; difftest PASS
+009814c0  22  OnFocusChange: complete; 0xff immediate vs register reuse and vptr-load order differ; difftest PASS
+009816e0  14  IsActive: complete; original ORs the two timer dwords with jne to a shared block, ours folds to a branchless bool; difftest PASS
+00981700  92  SetRefreshFlag: complete; register allocation (this in edi vs esi) and bool-materialisation differ; difftest PASS
+00981770  36  SetRefresh: complete; original holds the IWindow vptr in edi across the IsActive call, ours reloads; difftest WEAK

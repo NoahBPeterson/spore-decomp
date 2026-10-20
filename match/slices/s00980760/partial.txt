@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00980760  -  Navigator::Navigate: complete source written, but difftest UNSUPPORTED (harness generated 0/400 valid inputs: fake-arity=302, fault(read)=97, fault=1).  Large (912B) mode-switch routine; source is a best-effort transcription of the Ghidra decompile and is NOT yet verified behaviourally equivalent.
+00981500  -  WinScrollbar::OnTick: complete source written, but difftest UNSUPPORTED (harness generated 0/400 valid inputs: fake-arity=399, fault(read)=1).  Timer/selection switch; source follows the decompile but is not verified.

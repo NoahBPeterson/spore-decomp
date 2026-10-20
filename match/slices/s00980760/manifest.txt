@@ -1,0 +1,14 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00980760/s00980760.cpp  ??1RotateEffect@UTFWinControls@EA@@QAE@XZ  00980c00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00980760/s00980760.cpp  ?SetRotation@RotateEffect@UTFWinControls@EA@@QAEXPAXPAUXCM@@M@Z  00980cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00980760/s00980760.cpp  ?UpdateAndSync@WinScrollbar@UTFWinControls@EA@@QAEXXZ  00980fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00980760/s00980760.cpp  ?SetOrientation@IWinScrollbar@UTFWinControls@EA@@QAEXH@Z  00981000  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00980760/s00980760.cpp  ?SetFlags@IWinScrollbar@UTFWinControls@EA@@QAEXID@Z  00981030  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00980760/s00980760.cpp  ?SetDrawable@IWinScrollbar@UTFWinControls@EA@@QAEXPAX@Z  00981060  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00980760/s00980760.cpp  ?SetMinimumValue@IWinScrollbar@UTFWinControls@EA@@QAEXHH@Z  00981130  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00980760/s00980760.cpp  ?SetMaximumValue@IWinScrollbar@UTFWinControls@EA@@QAEXHH@Z  00981170  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00980760/s00980760.cpp  ?SetVisibleRange@IWinScrollbar@UTFWinControls@EA@@QAEXHH@Z  009811b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00980760/s00980760.cpp  ?SetPageOverlap@IWinScrollbar@UTFWinControls@EA@@QAEXH@Z  00981200  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00980760/s00980760.cpp  ?InvalidateLayoutNoArgs@IWinSB2@UTFWinControls@EA@@QAEXXZ  009816c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00980760/s00980760.cpp  ?GetNaturalSize@ScrollbarDrawable@UTFWinControls@EA@@QAE_NPAMHH@Z  00981800  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00980760/s00980760.cpp  ?SetComponentImage@IScrollbarDrawable@UTFWinControls@EA@@QAEXIPAUImage@@@Z  00981860  /O2 /MD /Gy /TP /arch:SSE /fp:fast
