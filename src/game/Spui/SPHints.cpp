@@ -20,7 +20,6 @@ extern "C" void __cdecl FUN_00a690d0(void*, void*, void*);           // a690d0
 
 // ---- items of slice s0067a590 begin (TODO(rewrite): local stubs, replace by canonical classes)
 static inline void** VT(void* p) { return *(void***)p; }
-extern "C" __declspec(dllimport) void* __cdecl memmove(void*, const void*, unsigned int);
 struct E_aee0 { char pad[8]; int id; };
 struct C_aee0 {
     char pad0[0x20];
@@ -68,9 +67,6 @@ bool C_af::Check(void* a)
         return false;
     return true;
 }
-extern char g_vtbl_cHint[];          // 0x14014ec
-extern char g_vtbl_cHint_base[];     // 0x13ef094
-extern "C" void* __cdecl EASTL_deallocate(void*);   // f47380
 struct cString14 {
     char d[0x14];
     void construct();      // 6b5060
@@ -96,9 +92,6 @@ struct cHint {
     cHint* init();
     void dtor();
 };
-extern char g_HM_14426a0[];   // 0x14426a0
-extern char g_HM_1401510[];   // 0x1401510
-extern char g_HM_14014f4[];   // 0x14014f4
 struct cHintManager {
     void* vt0; int f4; void* vt8;   // +0x00
     int* p0c; int* p10; int* p14;   // +0x0c
@@ -110,9 +103,6 @@ struct cHintManager {
     cHintManager* init();
     void dtor();
 };
-extern "C" int* __cdecl EASTL_alloc16(unsigned int, const char*, int, int, const char*, int); // f473a0
-extern "C" void __cdecl DoInsertValueVec(int*, void*, unsigned int);  // 11e0744
-extern "C" void __cdecl FUN_00a690d0(void*, void*, void*);           // a690d0
 struct Vec16 {
     char* begin; char* end; char* cap;
     char* insert(char* pos, unsigned short v);
