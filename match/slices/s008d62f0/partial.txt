@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /GS- /GR- /TP /arch:SSE
+#
+# Slice s008d62f0 partial: none.  Every one of the 21 addresses has a full reconstruction in
+# s008d62f0.cpp (all compile); see nonmatching.txt for the 19 nonmatching and 2 equivalent rows.
+#

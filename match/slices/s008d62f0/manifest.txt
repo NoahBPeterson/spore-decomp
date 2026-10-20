@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+#
+# Byte-exact: none.  Slice s008d62f0 is EA::ResourceMan::DatabaseDirectoryFiles' extension/record
+# map (the eastl::rbtree<string16,uint32> extension tree, the eastl::rbtree<Key,DDFRecordListData>
+# record map) plus ReadExtensionToTypeMapFile.  All 21 addresses are recorded in nonmatching.txt
+# (0 matched / 19 nonmatching / 2 equivalent); see symbols/slices/s008d62f0.txt.
+#
+# Build flags (all rows): /O2 /MD /GS- /GR- /TP /arch:SSE

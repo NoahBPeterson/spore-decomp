@@ -1,0 +1,31 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /GS- /GR- /TP /arch:SSE
+#
+# Slice s008d62f0 = the DatabaseDirectoryFiles extension map + record map member functions
+# (spore ResourceMan).  No ResourceMan source ships in the available drops, so these are hand
+# reconstructions from the image: the retail class layout (two vtable pointers, extension fixed
+# pool at 0x2c, record fixed pool at 0x4c, extension tree at 0x6c, record tree at 0x8c, mutex at
+# 0x138) and the observable EASTL rbtree semantics (lower_bound walk, DoInsertValueImpl,
+# DoNukeSubtree, erase).  difftest verdicts from tools/difftest/equiv.py (DEFAULT inputs).
+#
+008d62f0  208  reconstruction (DatabaseDirectoryFiles::RemoveRecord); flags /O2 /MD /GS- /GR- /TP /arch:SSE; difftest UNSUPPORTED (1 unresolved reference: SetSource, defined in the sibling migrated slice s008d7220)
+008d6410   31  reconstruction (DatabaseDirectoryFiles::CloseUnreferencedRecords); flags as above; difftest UNSUPPORTED (0/400 valid inputs: the record stream path blocks on import:WaitForSingleObject)
+008d64a0   79  reconstruction (KeyTreeErase); flags as above; difftest FAIL (5/5 valid inputs mismatched; ours faults at 00a21dd6 = retail rbtree::find where the original returns)
+008d6510   91  reconstruction (ListRefAppend); flags as above; difftest FAIL (5/5 valid inputs mismatched: execution diverges inside the copied list nodes)
+008d6580   76  reconstruction (ExtPair::Construct); flags as above; difftest FAIL (5/5 valid inputs mismatched; ours faults at 009289f4 = retail WStr::AllocateSelf where the original returns)
+008d65e0   87  reconstruction (DDFRecordListDataConstruct); flags as above; difftest FAIL (5/5 valid inputs mismatched; first: esp)
+008d6650   35  reconstruction (DatabaseDirectoryFiles::SetLocation); flags as above; difftest WEAK (321 valid inputs, 31.0% coverage) -- equivalent on the covered paths
+008d66a0  165  reconstruction (DatabaseDirectoryFiles::AddExtensionMapping); flags as above; difftest FAIL (5/5 valid inputs mismatched: execution)
+008d6770  149  reconstruction (DatabaseDirectoryFiles::CloseOpenRecords); flags as above; difftest UNSUPPORTED (0/400 valid inputs: import:WaitForSingleObject)
+008d6830  111  reconstruction (eastl::rbtree<string,pair<const string,uint>>::DoInsertValueImpl); flags as above; difftest UNSUPPORTED (original reads ecx at entry; our declaration passes nothing there -- LTCG register ABI)
+008d68c0  142  reconstruction (eastl::rbtree<Key,pair<const Key,DDFRecordListData>>::DoInsertValue? / record-map helper); flags as above; difftest UNSUPPORTED (original reads ecx at entry; LTCG register ABI)
+008d6970  110  reconstruction (DatabaseDirectoryFiles::GetRecordCount); flags as above; difftest UNSUPPORTED (original reads ecx at entry; LTCG register ABI)
+008d69f0   295  reconstruction (eastl::rbtree<Key,pair<const Key,DDFRecordListData>>::DoInsertValue); flags as above; difftest UNSUPPORTED (original reads ecx at entry; LTCG register ABI)
+008d6b20  141  reconstruction (DatabaseDirectoryFiles::GetKeyList); flags as above; difftest UNSUPPORTED (0/400 valid inputs: mutex import + pool limit)
+008d6be0   71  reconstruction (eastl::rbtree<string,pair<const string,uint>>::DoNukeSubtree); flags as above; difftest UNSUPPORTED (original reads ecx at entry; LTCG register ABI)
+008d6c40  173  reconstruction (DatabaseDirectoryFiles::AddExtensionMapping? overload); flags as above; difftest FAIL (5/190 valid inputs mismatched: execution)
+008d6d20   81  reconstruction (eastl::rbtree<Key,pair<const Key,DDFRecordListData>>::erase); flags as above; difftest UNSUPPORTED (original reads ecx at entry; LTCG register ABI)
+008d6d90  118  reconstruction (eastl::rbtree<Key,pair<const Key,DDFRecordListData>>::DoNukeSubtree); flags as above; difftest UNSUPPORTED (original reads ecx at entry; LTCG register ABI)
+008d6e20  140  reconstruction (eastl::rbtree<Key,pair<const Key,DDFRecordListData>>::DoInsertValueImpl); flags as above; difftest UNSUPPORTED (original reads ecx at entry; LTCG register ABI)
+008d6ed0  653  reconstruction (DatabaseDirectoryFiles::ReadExtensionToTypeMapFile); flags as above; difftest WEAK (299 valid inputs, 4.9% coverage) -- equivalent on the covered paths
+008d7200   23  reconstruction (eastl::map<Key,DDFRecordListData>::erase wrapper); flags as above; difftest UNSUPPORTED (0/400 valid inputs: the wrapper thread-local/iterator path faults on read); retail uses an LTCG hidden out-parameter slot (push ecx / mov [eax],edx) that the 2-arg reconstruction cannot express

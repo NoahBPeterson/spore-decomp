@@ -1,0 +1,25 @@
+# Recovered real symbol names for slice s008d62f0 (EA::ResourceMan::DatabaseDirectoryFiles extension
+# map + record map).  Rows marked "PDB" are recovered from symbols/pdb_names.json; the rest are
+# inferred from the callee signature and are recorded here as best-effort names.
+008d6770 ?CloseOpenRecords@DatabaseDirectoryFiles@ResourceMan@EA@@QAEXXZ  # PDB: DatabaseDirectoryFiles::CloseOpenRecords
+008d6830 ?DoInsertValueImpl@?$rbtree@V?$basic_string@_WV?$allocator@X@eastl@@@eastl@@U?$pair@$$CBV?$basic_string@_WV?$allocator@X@eastl@@@eastl@@I@2@U?$less@V?$basic_string@_WV?$allocator@X@eastl@@@eastl@@@2@VEASTLCoreAllocator@Allocator@EA@@U?$use_first@U?$pair@$$CBV?$basic_string@_WV?$allocator@X@eastl@@@eastl@@I@eastl@@@2@$00$00@eastl@@  # PDB: rbtree<string,pair<const string,uint>>::DoInsertValueImpl
+008d6970 ??0?$pair@$$CBUKey@ResourceMan@EA@@UDDFRecordListData@23@@eastl@@QAE@ABUKey@ResourceMan@EA@@ABUDDFRecordListData@45@@Z  # PDB: pair<const Key,DDFRecordListData>::pair
+008d69f0 ?DoInsertValue@?$rbtree@V?$basic_string@_WV?$allocator@X@eastl@@@eastl@@U?$pair@$$CBV?$basic_string@_WV?$allocator@X@eastl@@@eastl@@I@2@U?$less@V?$basic_string@_WV?$allocator@X@eastl@@@eastl@@@2@VEASTLCoreAllocator@Allocator@EA@@U?$use_first@U?$pair@$$CBV?$basic_string@_WV?$allocator@X@eastl@@@eastl@@I@eastl@@@2@$00$00@eastl@@  # PDB: rbtree<string,pair<const string,uint>>::DoInsertValue
+008d6b20 ?GetKeyList@DatabaseDirectoryFiles@ResourceMan@EA@@QAEHPAX0@Z  # PDB: DatabaseDirectoryFiles::GetKeyList
+008d6be0 ?DoNukeSubtree@?$rbtree@V?$basic_string@_WV?$allocator@X@eastl@@@eastl@@U?$pair@$$CBV?$basic_string@_WV?$allocator@X@eastl@@@eastl@@I@2@U?$less@V?$basic_string@_WV?$allocator@X@eastl@@@eastl@@@2@VEASTLCoreAllocator@Allocator@EA@@U?$use_first@U?$pair@$$CBV?$basic_string@_WV?$allocator@X@eastl@@@eastl@@I@eastl@@@2@$00$00@eastl@@  # PDB: rbtree<string,pair<const string,uint>>::DoNukeSubtree
+008d6c40 ?AddExtensionMapping@DatabaseDirectoryFiles@ResourceMan@EA@@QAE_NPB_WI@Z  # PDB: DatabaseDirectoryFiles::AddExtensionMapping
+008d6d20 ?erase@?$rbtree@UKey@ResourceMan@EA@@U?$pair@$$CBUKey@ResourceMan@EA@@UDDFRecordListData@23@@eastl@@U?$less@UKey@ResourceMan@EA@@@4@VEASTLCoreAllocator@Allocator@EA@@U?$use_first@U?$pair@$$CBUKey@ResourceMan@EA@@UDDFRecordListData@23@@eastl@@@4@$00$00@eastl@@  # PDB: rbtree<Key,pair<const Key,DDFRecordListData>>::erase
+008d6d90 ?DoNukeSubtree@?$rbtree@UKey@ResourceMan@EA@@U?$pair@$$CBUKey@ResourceMan@EA@@UDDFRecordListData@23@@eastl@@U?$less@UKey@ResourceMan@EA@@@4@VEASTLCoreAllocator@Allocator@EA@@U?$use_first@U?$pair@$$CBUKey@ResourceMan@EA@@UDDFRecordListData@23@@eastl@@@4@$00$00@eastl@@  # PDB: rbtree<Key,pair<const Key,DDFRecordListData>>::DoNukeSubtree
+008d6e20 ?DoInsertValueImpl@?$rbtree@UKey@ResourceMan@EA@@U?$pair@$$CBUKey@ResourceMan@EA@@UDDFRecordListData@23@@eastl@@U?$less@UKey@ResourceMan@EA@@@4@VEASTLCoreAllocator@Allocator@EA@@U?$use_first@U?$pair@$$CBUKey@ResourceMan@EA@@UDDFRecordListData@23@@eastl@@@4@$00$00@eastl@@  # PDB: rbtree<Key,pair<const Key,DDFRecordListData>>::DoInsertValueImpl
+008d6ed0 ?ReadExtensionToTypeMapFile@DatabaseDirectoryFiles@ResourceMan@EA@@QAE_NXZ  # PDB: DatabaseDirectoryFiles::ReadExtensionToTypeMapFile
+# inferred (no PDB row):
+008d62f0 ?RemoveRecord@DatabaseDirectoryFiles@ResourceMan@EA@@QAE_NPAVDDFRecord@23@@Z  # inferred: DatabaseDirectoryFiles::RemoveRecord
+008d6410 ?CloseUnreferencedRecords@DatabaseDirectoryFiles@ResourceMan@EA@@QAE_NXZ  # inferred: DatabaseDirectoryFiles::CloseUnreferencedRecords
+008d64a0 ?KeyTreeErase@ResourceMan@EA@@YAPAURBNode@12@PAURBTree@12@PAU312@@Z  # inferred helper name used in the reconstruction
+008d6510 ?ListRefAppend@ResourceMan@EA@@YAXPAUListAnchor@12@PAUListRefNode@12@1_N@Z  # inferred helper name used in the reconstruction
+008d6580 ?Construct@ExtPair@ResourceMan@EA@@QAEPAU123@ABUString16@23@ABI@Z  # inferred helper name used in the reconstruction
+008d65e0 ?DDFRecordListDataConstruct@ResourceMan@EA@@YAPAUDDFRecordListData@12@PAU312@PBU312@@Z  # inferred helper name used in the reconstruction
+008d6650 ?SetLocation@DatabaseDirectoryFiles@ResourceMan@EA@@QAE_NPB_W@Z  # inferred: DatabaseDirectoryFiles::SetLocation
+008d66a0 ?AddExtensionMapping@DatabaseDirectoryFiles@ResourceMan@EA@@QAE_NPB_WI@Z  # inferred: DatabaseDirectoryFiles::AddExtensionMapping (record-tree overload)
+008d68c0 ?GetRecordName@DatabaseDirectoryFiles@ResourceMan@EA@@QAE_NABUKey_s008d_62f0@23@PA_W@Z  # inferred: DatabaseDirectoryFiles::GetRecordName
+008d7200 ?erase@?$map@UKey@ResourceMan@EA@@UDDFRecordListData@23@U?$less@UKey@ResourceMan@EA@@@4@VEASTLCoreAllocator@Allocator@EA@@@eastl@@  # PDB candidate: eastl::map<Key,DDFRecordListData>::erase
