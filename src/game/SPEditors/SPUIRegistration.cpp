@@ -35,14 +35,9 @@ extern void* gLocationChangeParam;       // 0x01520a0c
 
 // ---- items of slice s0061fbd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV(n) virtual void pv##n();
-extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
-extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags, unsigned debugFlags,
-                                          const char* file, int line);
 void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);
 struct ICoreAllocator;
 void* operator new(unsigned int size, int alignment, const char* name, ICoreAllocator* pAllocator);
-extern "C" void* __cdecl memmove(void*, const void*, unsigned int);
-extern char gEmptyString[];  // 0x01667bac (shared "" for char and wchar_t strings)
 namespace eastl {
 struct allocator_s0061_fbd0 {
   allocator_s0061_fbd0() {}
@@ -434,7 +429,6 @@ namespace Pollen {
 IAuthManager* AuthManager();  // 0x00607a60
 }
 }
-extern "C" __declspec(dllimport) int __cdecl _wcsicmp(const wchar_t*, const wchar_t*);
 namespace EA {
 namespace UTFWinExtras {
 class cXHTMLFrameSet_s0061_fbd0 {
@@ -448,7 +442,7 @@ class cXHTMLFrameSet_s0061_fbd0 {
   void HandleLocationChange(int a, const wchar_t* url, void* p, int b);  // 0x00997730
   uint32_t pad[24];
 };  // namespace UTFWinExtras
-}  // namespace EA
+}
 }
 using EA::AutoRefCount_s0061_fbd0;
 using EA::UTFWinExtras::cXHTMLFrameSet_s0061_fbd0;
@@ -463,10 +457,6 @@ struct UIRoot {
 extern UIRoot* gpUIRoot;  // 0x015fd918
 void FUN_00809930(bool b);
 void FUN_00809950(EA::UTFWin::IWindow_s0061_fbd0* w);
-extern const wchar_t* gParamUserName;    // 0x01520a10
-extern const wchar_t* gParamScreenName;  // 0x01520a14
-extern const wchar_t* gParamPassword;    // 0x01520a18
-extern void* gLocationChangeParam;       // 0x01520a0c
 namespace SP {
 namespace Pollen {
 using namespace EA;
@@ -525,16 +515,6 @@ struct intrusive_list_base_s0061_fbd0 {
   intrusive_list_node_s0061_fbd0 mAnchor;
   ~intrusive_list_base_s0061_fbd0();
 };
-}
-namespace SP {
-namespace Pollen {
-using namespace EA;
-}
-}
-namespace SP {
-namespace Pollen {
-using namespace EA::UTFWin;
-}
 }
 namespace SP {
 namespace Pollen {
@@ -616,7 +596,6 @@ class cXHTMLRegistrationHandler : public XHTMLHandlerBase {
 // ---- items of slice s0061fbd0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern UIRoot* gpUIRoot;  // 0x015fd918
 
 // ---- items of slice s00620bd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void  __cdecl FUN_00620050(int b);                                                  // 0x620050

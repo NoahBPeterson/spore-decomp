@@ -1,2 +1,2 @@
-# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+# va  diff-bytes  reason
 00620ef0 1383  cTOSDialog::DoMessage: skeleton; most message branches (window enabling, layout moves, cancel-confirmation dialog path) are approximated

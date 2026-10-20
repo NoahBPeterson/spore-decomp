@@ -1,4 +1,4 @@
-# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+# va  diff-bytes  reason
 00620270 77 cCancelConfirmationDialog::Init: complete; the second SetPosition arg goes through an x87 spill in the original (movss then fld/fstp)
 00620690 16 cXHTMLRegistrationHandler::FindFirstTaggedElement: complete; original keeps the top-tested loop (jmp back) rather than loop inversion
 00620dc0 11 OnModalEnd: complete; ConfirmLogin/Submit call layout and cRegDialog subobject adjust differ; equiv FAIL (memory mismatch, 5/17 inputs)
