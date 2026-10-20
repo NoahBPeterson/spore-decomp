@@ -1,0 +1,40 @@
+00a488d0  EA::Audio::Eapd::zgetfn  # returns +8 of the matching t_methodentry (stride 0x24)
+00a48910  EA::Audio::Eapd::class_addfloat  # flat float->symbol class method writer (arm order differs)
+00a48980  EA::Audio::Eapd::class_addcreator  # 5-way selector dispatch: bang/float/symbol direct, list/anything via addlist/addanything, else class_addmethod
+00a48a30  EA::Audio::Eapd::class_addmethod (0 leading type atoms)
+00a48a80  EA::Audio::Eapd::class_addmethod (1 leading type atom)
+00a48ad0  EA::Audio::Eapd::class_addmethod (2 leading type atoms)
+00a48b30  EA::Audio::Eapd::class_addmethod (4 leading type atoms)
+00a48b90  EA::Audio::Eapd::class_addmethod (5 leading type atoms)
+00a48bf0  EA::Audio::Eapd::class_new  # allocates 0x50 t_class, fills name/helpname/methods/defaults/flags, links into gclasslist
+00a48db0  EA::Audio::Eapd::class_addcreator (varargs, 1 atom)
+00a48e00  EA::Audio::Eapd::class_addcreator (varargs, 2 atoms)
+00a48e50  EA::Audio::Eapd::class_new (varargs, 1 type)
+00a48ea0  EA::Audio::Eapd::class_new (varargs, 2 types)
+00a48f00  EA::Audio::Eapd::class_new (varargs, 3 types)
+00a48f60  EA::Audio::Eapd::mess_init  # creates the "list" object/template classes, sets the object anymethod
+00a49080  EA::Audio::Eapd::clock_new  # getbytes(0x18); c_settime=0x1454410, c_set=0, owner, method, next=0
+00a490b0  EA::Audio::Eapd::clock_unset  # unlink c from s_clocklist if c_set==1
+00a490f0  EA::Audio::Eapd::clock_set  # t=max(s_time,arg); ordered insert into s_clocklist; c_set=1
+00a49170  EA::Audio::Eapd::clock_pause  # if c_set==1: c_settime=c_settime-s_time; unset; c_set=2
+00a491a0  EA::Audio::Eapd::clock_unpause  # if c_set==2: clock_set(c, c_settime+s_time)
+00a491d0  EA::Audio::Eapd::clock_ispaused  # c_set==2
+00a491e0  EA::Audio::Eapd::clock_delay  # clock_set(c, delay*0.001f + s_time)
+00a49210  EA::Audio::Eapd::clock_getlogicaltime  # s_time
+00a49220  EA::Audio::Eapd::clock_gettimesince  # (s_time-systime)*0x1454428
+00a49240  EA::Audio::Eapd::clock_getlogicaltimeafter  # s_time + arg (via 0x1454428 scaling)
+00a49260  EA::Audio::Eapd::clock_free  # unlink + freebytes(c,0x18)
+00a492c0  EA::Audio::Eapd::clock_setftime  # s_time=s_realtime=arg
+00a492e0  EA::Audio::Eapd::sched_tick  # advance s_systime/s_time and drain due clocks (sys_lock + method(owner))
+00a49390  EA::Audio::Eapd::pd_new  # getbytes(c_size); g_pd=c; if c_patchable init save/gop/anything fields
+00a493d0  EA::Audio::Eapd::pd_free  # freemethod; drain save/gop/binbuf when patchable; freebytes
+00a49450  EA::Audio::Eapd::sys_register_loader  # register a loader node against s_stack key globals
+00a49490  EA::Audio::Eapd::pd_pushsym  # alloc 0x10 sys stack node, link, sys_gui acquire/release
+00a49500  EA::Audio::Eapd::pd_popsym  # pop s_stack node, free it, sys_gui acquire/release
+00a49560  EA::Audio::Eapd::pd_bang  # dispatch bang method
+00a49570  EA::Audio::Eapd::outlet_float  # dispatch float method
+00a49590  EA::Audio::Eapd::pd_symbol  # dispatch symbol method
+00a495b0  EA::Audio::Eapd::pd_list  # dispatch list method with the "list" t_symbol
+00a495e0  EA::Audio::Eapd::conf_init  # size-class stub
+00a49610  EA::Audio::Eapd::getbytes  # pdinstance()->alloc(n,tag) then memfill
+00a49650  EA::Audio::Eapd::freebytes  # pdinstance()->freemem(p)

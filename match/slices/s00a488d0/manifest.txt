@@ -1,0 +1,27 @@
+# source (relative to match/)   symbol   original VA   cl flags override
+slices/s00a488d0/s00a488d0.cpp  ?zgetfn@Eapd@Audio@EA@@YAPAXPAPAUt_class@123@PAX@Z  00a488d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?class_addmethod0@Eapd@Audio@EA@@YA_NPAUt_class@123@PAXUt_symbol@123@1@Z  00a48a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?class_addmethod1@Eapd@Audio@EA@@YA_NPAUt_class@123@PAXUt_symbol@123@11@Z  00a48a80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?class_addmethod2@Eapd@Audio@EA@@YA_NPAUt_class@123@PAXUt_symbol@123@111@Z  00a48ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?class_addmethod4@Eapd@Audio@EA@@YA_NPAUt_class@123@PAXUt_symbol@123@11111@Z  00a48b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?class_addmethod5@Eapd@Audio@EA@@YA_NPAUt_class@123@PAXUt_symbol@123@111111@Z  00a48b90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?class_addcreator_m@Eapd@Audio@EA@@YA_NPAX0000@Z  00a48db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?class_addcreator_m2@Eapd@Audio@EA@@YA_NPAX0000@Z  00a48e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?class_new_m1@Eapd@Audio@EA@@YAPAUt_class@123@Ut_symbol@123@PAX1HH1@Z  00a48e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?class_new_m2@Eapd@Audio@EA@@YAPAUt_class@123@Ut_symbol@123@PAX1HH11@Z  00a48ea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?class_new_m3@Eapd@Audio@EA@@YAPAUt_class@123@Ut_symbol@123@PAX1HH111@Z  00a48f00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?clock_new@Eapd@Audio@EA@@YAPAUt_clock@123@PAX0@Z  00a49080  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?clock_unset@Eapd@Audio@EA@@YAXPAUt_clock@123@@Z  00a490b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?clock_pause@Eapd@Audio@EA@@YAXPAUt_clock@123@@Z  00a49170  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?clock_unpause@Eapd@Audio@EA@@YAXPAUt_clock@123@@Z  00a491a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?clock_ispaused@Eapd@Audio@EA@@YA_NPAUt_clock@123@@Z  00a491d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?clock_delay@Eapd@Audio@EA@@YAXPAUt_clock@123@M@Z  00a491e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?clock_getlogicaltime@Eapd@Audio@EA@@YANXZ  00a49210  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?clock_gettimesince@Eapd@Audio@EA@@YANN@Z  00a49220  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?clock_getlogicaltimeafter@Eapd@Audio@EA@@YANM@Z  00a49240  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?clock_setftime@Eapd@Audio@EA@@YAXN@Z  00a492c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?pd_bang@Eapd@Audio@EA@@YAXPAUt_gobj@123@@Z  00a49560  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?outlet_float@Eapd@Audio@EA@@YAXPAUt_gobj@123@M@Z  00a49570  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?pd_symbol@Eapd@Audio@EA@@YAXPAUt_gobj@123@Ut_symbol@123@@Z  00a49590  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?getbytes@Eapd@Audio@EA@@YAPAXHPBD@Z  00a49610  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a488d0/s00a488d0.cpp  ?freebytes@Eapd@Audio@EA@@YAXPAXH@Z  00a49650  /O2 /MD /Gy /TP /arch:SSE /fp:fast
