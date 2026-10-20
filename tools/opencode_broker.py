@@ -32,7 +32,7 @@ MODULES = sorted({s["module"] for s in _recs if s.get("module")})
 if MODULES:
     MODS = "(?:" + "|".join(map(re.escape, MODULES)) + ")"
     ALLOWED_PATH = re.compile(r"^(?:%s/)?(?:src/game/%s(?:\.cpp|/[^/]+)|symbols/slices/%s\.txt|work/match/.*|"
-                              r"work/migrate/(?:renames_%s\.json|rewrite_%s[^/]*\.json|report_%s\.md|scratch_%s(?:/.*)?))$"
+                              r"work/migrate/(?:renames_%s\.json|rewrite_%s[^/]*\.json|report_%s(?:_\w+)?\.md|scratch_%s(?:/.*)?))$"
                               % (re.escape(ROOT), MODS, IDS, IDS, IDS, IDS, IDS))
     MIGRATE_TOOL = r"tools/migrate/rewrite\.py|"
 else:
