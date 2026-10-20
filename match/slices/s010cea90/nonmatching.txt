@@ -1,0 +1,15 @@
+# va  diff-bytes  reason
+010cea90  58  complete; difftest PASS (226 valid, 61.3% cov). Deleting hkBvTreeStreamAgent dtor; array-release branch layout and TLS-spill scheduling differ.
+010ceaf0  66  complete; difftest FAIL (faults inside hkAgent1nMachine::Create with synthetic input; both call Create with the +0x30 array). Constructor store order differs (cap before begin/count, zero-fill grouping).
+010ceb50  50  complete; difftest PASS (225 valid, 100% cov). createShapeBvAgent; the word-sized class-tag store and the argument shuffle into the ctor differ.
+010ceb90  38  complete; difftest WEAK (203 valid, 42.9% cov). Non-deleting dtor; same array-release branch and TLS-spill scheduling gap as 010cea90.
+010cec70  111  complete; difftest WEAK (229 valid, 59.5% cov). processCollision wrapper + inlined setFlipped loop; x87 value kept in memory instead of st(0) and loop rotated differently.
+010cecf0  99  complete; difftest PASS (400 valid, 100% cov). hkContactPoint::setFlipped; original keeps d in st(0) and emits fmul [mem] with an ebp/and-esp,-16 frame, ours spills d and reuses st(1).
+010ced60  273  complete; difftest PASS (307 valid, 100% cov). Two-collector rebuild; 12-float copy + collector stack layout and branch order differ.
+010ceea0  42  complete; difftest UNSUPPORTED (0/400 valid: allocation write faults on synthetic self). Alloc/construct wrapper; imm16 size-tag store and vtable store order differ.
+010cf090  42  complete; difftest FAIL (call #7 target differs under fake inputs). cleanup; unsigned-short id release loop wants cmp ax,0xffff (MSVC emits mov ecx,0xffff; cmp ax,cx) and call [reg+0x10] (MSVC loads the slot first).
+010cf0d0  -  complete; difftest FAIL (fault in hkTransform::setMulInverseMul under synthetic body). Full 924-byte getClosestPoints body emitted at 806 bytes: transform setup and the two transformed 16-byte vectors are scheduled/spilled differently, so no same-size symbol is produced.
+010cf470  -  complete; difftest FAIL (same inlined-body gap). Static getClosestPoints; identical to 010cf0d0 apart from the ABI.
+010cf850  106  complete; difftest PASS (282 valid, 79.1% cov). hkMultiRayConvexAgent ctor; tag/flags words now at +4/+6, array growth branch and zero-fill loop layout differ.
+010cf8d0  -  complete; difftest FAIL (fault in setMulInverseMul under synthetic body). processCollision body emitted at 780 bytes vs 922: same transform/vector scheduling and matrix-store ordering gap, no same-size symbol.
+010cfc70  50  complete; difftest WEAK (195 valid, 100% cov). createShape agent; alloc + word tag store + ctor forward.
