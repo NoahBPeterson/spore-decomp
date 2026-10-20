@@ -17,13 +17,6 @@ extern "C" void __cdecl FUN_008304a0(void *, void *);                      // 0x
 extern "C" double __cdecl TypesetterValidate(double);                      // 0x11e0906
 
 // ---- items of slice s0082f9a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern char g_vtblImgInfo;      // 0x141a760 (primary)
-extern char g_vtblImgInfoSec;   // 0x141a750
-extern char g_vtblDrawable;     // 0x141a7d8
-extern char g_vtblDrawableSec;  // 0x141a7c0
-extern char g_vtblDrawableThr;  // 0x141a780
-extern char g_vtblEditorResource; // 0x13eb938
-extern char g_vtblContentValidation;   // 0x13ec458
 struct ShadowDesc {
     uint32_t mode1;   // +0x00
     uint32_t mode2;   // +0x04
@@ -46,8 +39,6 @@ struct DrawableTail {
     float  f3c;   // +0x3c
     void SetPoint(const float *p);   // 0x00830af0
 };
-extern "C" void __cdecl FUN_008304a0(void *, void *);                      // 0x8304a0
-extern "C" double __cdecl TypesetterValidate(double);                      // 0x11e0906
 struct StdBase { void ctor(); void dtor(); };
 struct FactoryRegistry {
     void *vptr;   // +0
@@ -65,7 +56,6 @@ struct ImageInfo {
     ShadowDesc halo;     // +0x70
     ImageInfo *Construct();   // 0x00830810
 };
-extern char g_vtblContentValidation;   // 0x13ec458
 struct SmallSet {
     char  pad0[4];
     void  Do(int param_2);   // 0x00830910
@@ -85,7 +75,6 @@ struct Drawable {
 // ---- items of slice s0082f9a0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern ShadowDesc g_shadowDefaults;   // 0x1547690
 
 // ---- items of slice s00830c00 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" int  __cdecl FUN_00920090(int, void *, int, int);   // 0x920090
@@ -180,9 +169,6 @@ void FillDefaults(ShadowDesc *dst, const ShadowDesc *src)
     if (dst->s20 == g_shadowDefaults.s20) dst->s20 = src->s20;
 }
 
-
-
-
 // @ 0x008304c0
 int *FactoryRegistry::CreateInstance(int **out, int a1, int a2, int a3)
 {
@@ -200,9 +186,6 @@ int *FactoryRegistry::CreateInstance(int **out, int a1, int a2, int a3)
     }
     return p;
 }
-
-
-
 
 // @ 0x008306a0
 void FUN_008306a0(ImageInfoFull *p)
@@ -232,9 +215,6 @@ float *FUN_008306e0(float *dst, float *a, float *b, float *c)
     return dst;
 }
 
-
-
-
 // @ 0x00830810
 ImageInfo *ImageInfo::Construct()
 {
@@ -262,9 +242,6 @@ ImageInfo *ImageInfo::Construct()
     return this;
 }
 
-
-
-
 // @ 0x00830910
 void SmallSet::Do(int param_2)
 {
@@ -272,9 +249,6 @@ void SmallSet::Do(int param_2)
     int v = ((int (__thiscall *)(void *))(*(void ***)this)[0x14 / 4])(this);
     *(int *)(param_2 + 0xc) = v;
 }
-
-
-
 
 // @ 0x00830950
 Drawable *Drawable::Construct()
@@ -314,18 +288,12 @@ Drawable *Drawable::Construct()
     return this;
 }
 
-
-
-
 // @ 0x00830af0
 void DrawableTail::SetPoint(const float *p)
 {
     f38 = p[0];
     f3c = p[1];
 }
-
-
-
 
 // @ 0x00830b30
 void Drawable::Destroy()
@@ -365,8 +333,6 @@ void Drawable::Destroy()
     ((StdBase *)this)->dtor();
 }
 
-
-
 // @ 0x00830c00
 void *Drawable_s0083_0c00::GetImageInfo(int index)
 {
@@ -386,23 +352,17 @@ void *Drawable_s0083_0c00::GetImageInfo(int index)
     return mImageInfos[index];
 }
 
-
-
 // @ 0x00830c60
 int DSub::GetFieldC(int index)
 {
     return *(int *)((char *)((Drawable_s0083_0c00 *)((char *)this - 0xc))->GetImageInfo(index) + 0xc);
 }
 
-
-
 // @ 0x00830c80
 int DSub::GetField14(int index)
 {
     return *(int *)((char *)((Drawable_s0083_0c00 *)((char *)this - 0xc))->GetImageInfo(index) + 0x14);
 }
-
-
 
 // @ 0x00830c90
 void DSub::GetPair28(float *out, int index)
@@ -412,8 +372,6 @@ void DSub::GetPair28(float *out, int index)
     out[1] = *(float *)(p + 0x2c);
 }
 
-
-
 // @ 0x00830cc0
 void DSub::GetPair30(float *out, int index)
 {
@@ -422,15 +380,11 @@ void DSub::GetPair30(float *out, int index)
     out[1] = *(float *)(p + 0x34);
 }
 
-
-
 // @ 0x00830cf0
 int DSub::GetField10(int index)
 {
     return *(int *)((char *)((Drawable_s0083_0c00 *)((char *)this - 0xc))->GetImageInfo(index) + 0x10);
 }
-
-
 
 // @ 0x00830d10
 int DSub::GetField18(int index)
@@ -438,15 +392,11 @@ int DSub::GetField18(int index)
     return *(int *)((char *)((Drawable_s0083_0c00 *)((char *)this - 0xc))->GetImageInfo(index) + 0x18);
 }
 
-
-
 // @ 0x00830d20
 int DSub::GetField20(int index)
 {
     return *(int *)((char *)((Drawable_s0083_0c00 *)((char *)this - 0xc))->GetImageInfo(index) + 0x20);
 }
-
-
 
 // @ 0x00830d30
 void DSub::GetPair38(float *out, int index)
@@ -456,8 +406,6 @@ void DSub::GetPair38(float *out, int index)
     out[1] = *(float *)(p + 0x3c);
 }
 
-
-
 // @ 0x00830d60
 void DSub::GetPair40(float *out, int index)
 {
@@ -466,14 +414,10 @@ void DSub::GetPair40(float *out, int index)
     out[1] = *(float *)(p + 0x44);
 }
 
-
-
 // @ 0x00830d90
 void FUN_00830d90(void * /*this*/, void * /*a*/, void * /*b*/, void * /*c*/, int /*mode*/)
 {
 }
-
-
 
 // @ 0x00831030
 void *ImageInfo2::ScalarDtor(unsigned flags)
@@ -490,8 +434,6 @@ void *ImageInfo2::ScalarDtor(unsigned flags)
         MultiHeap_delete(this);
     return this;
 }
-
-
 
 // @ 0x008310a0
 void ImageInfo2::CopyFrom(const ImageInfo2 *src)
@@ -520,8 +462,6 @@ void ImageInfo2::CopyFrom(const ImageInfo2 *src)
                 ((const uint32_t *)((const char *)src + 0x48 + b * 0x28))[i];
 }
 
-
-
 // @ 0x00831170
 void Drawable_s0083_0c00::SetImageColor(int index, int color)
 {
@@ -537,8 +477,6 @@ void Drawable_s0083_0c00::SetImageColor(int index, int color)
     }
     mbHasUserDefaults = 1;
 }
-
-
 
 // @ 0x008311f0
 void Drawable_s0083_0c00::SetField18At(int index, int v)
@@ -556,8 +494,6 @@ void Drawable_s0083_0c00::SetField18At(int index, int v)
     mbHasUserDefaults = 1;
 }
 
-
-
 // @ 0x00831270
 void Drawable_s0083_0c00::SetField20At(int index, int v)
 {
@@ -573,8 +509,6 @@ void Drawable_s0083_0c00::SetField20At(int index, int v)
     }
     mbHasUserDefaults = 1;
 }
-
-
 
 // @ 0x008312f0
 void Drawable_s0083_0c00::SetPair38At(int index, float *v)
@@ -593,8 +527,6 @@ void Drawable_s0083_0c00::SetPair38At(int index, float *v)
     mbHasUserDefaults = 1;
 }
 
-
-
 // @ 0x00831380
 void Drawable_s0083_0c00::SetPair40At(int index, float *v)
 {
@@ -611,8 +543,6 @@ void Drawable_s0083_0c00::SetPair40At(int index, float *v)
     }
     mbHasUserDefaults = 1;
 }
-
-
 
 // @ 0x00831410
 void *Drawable_s0083_0c00::PickImageInfo(int flags, void *dst)
@@ -656,8 +586,6 @@ void *Drawable_s0083_0c00::PickImageInfo(int flags, void *dst)
     return info;
 }
 
-
-
 // @ 0x00831530
 float *FUN_00831530(void * /*this*/, float *out, int /*index*/)
 {
@@ -666,15 +594,11 @@ float *FUN_00831530(void * /*this*/, float *out, int /*index*/)
     return out;
 }
 
-
-
 // @ 0x008315c0
 bool FUN_008315c0(void * /*this*/, int /*a*/, int /*b*/)
 {
     return false;
 }
-
-
 
 // @ 0x00831650
 void Drawable_s0083_0c00::EnsureImageInfo0()
@@ -694,8 +618,6 @@ void Drawable_s0083_0c00::EnsureImageInfo0()
     }
     ((ImageInfo2 *)mImageInfos[0])->CopyFrom((ImageInfo2 *)def);
 }
-
-
 
 // @ 0x008316b0
 void DSub::SetImage(int index, void *img)
@@ -723,8 +645,6 @@ void DSub::SetImage(int index, void *img)
     self->EnsureImageInfo0();
 }
 
-
-
 // @ 0x00831760
 void Drawable_s0083_0c00::SetImageIcon(int index, void *img)
 {
@@ -749,7 +669,6 @@ void Drawable_s0083_0c00::SetImageIcon(int index, void *img)
     mbHasUserDefaults = v;
     EnsureImageInfo0();
 }
-
 
 // @ 0x012fe300
 void init_15476e4()
