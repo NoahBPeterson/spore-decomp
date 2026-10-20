@@ -51,7 +51,8 @@ struct CharacterBreakIterator : BreakIteratorBase {
 namespace EA {
 namespace Clipboard {
 struct IData {
-    virtual void m0(); virtual void m4();
+virtual void m0();
+virtual void m4();
     virtual void Release();                         // 0x08
     virtual void mc();
     virtual const wchar_t* GetData();               // 0x10
