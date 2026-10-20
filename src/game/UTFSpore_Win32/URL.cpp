@@ -81,7 +81,7 @@ public:
 
     void SetURL(const char* p, bool b);
     void SetComponent(int index, const char* p);
-    void SetPort(unsigned int port);
+    void SetPort(unsigned int port);  // 0x0094a750 (EA::Internet::URL::SetPort)
     unsigned int GetPort();
     bool ParseUsernameAndPassword(string* pstr);  // 0x0094a9f0 (EA::Internet::URL::ParseUsernameAndPassword)
     bool ParseURLFILE(string* pstr);  // 0x0094aae0 (EA::Internet::URL::ParseURLFILE)
