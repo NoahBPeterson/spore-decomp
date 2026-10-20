@@ -11,6 +11,7 @@ extern char g_layerFlag0d;     // 0x164e90d
 #include <math.h>
 #include "cSPUIShaderProxy.h"
 #include <new>
+#include <string.h>
 
 // ---- items of slice s0082dc00 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern int* sLayerRCs;         // 0x154744c : pointer to layer reference counts
