@@ -1,4 +1,4 @@
-// src/game/SPBake/SPFeedXml.cpp -- migrated from slice(s) s00547e90, s00545220 by tools/migrate/rewrite.py
+// src/game/SPBake/SPFeedXml.cpp -- migrated from slice(s) s00546160, s00547e90, s00545220 by tools/migrate/rewrite.py
 // Object file: SPBake/SPFeedXml.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -12,6 +12,7 @@
 #include "SP/Feed/Person.h"
 #include "EA/Variant.h"
 #include <string.h>
+#include <wchar.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" int __cdecl wcscmp(const wchar_t*, const wchar_t*);
@@ -274,6 +275,29 @@ struct Obj43 {
 };
 // ---- items of slice s00547e90 end
 
+// ---- items of slice s00546160 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern short gFeedEndTable[];       // @ 0x13f3ae0
+unsigned int FNV1_String16(const wchar_t* s, unsigned int hash, int b); // 0x00932f30
+short* FUN_00547900(const void* table, int a, int b);
+short* FUN_00547970(const void* table, int a, int b);
+void   FUN_004228e0(int a, unsigned int b);
+void FUN_00545aa0(...);
+void FUN_00545b20(...);
+void FUN_00545bf0(...);
+void FUN_00545cc0(...);
+void FUN_00545ce0(...);
+void FUN_00545d30(...);
+void FUN_00545d80(...);
+void FUN_00545c10(...);
+void FUN_00545c60(...);
+void FUN_00545fa0(...);
+void FUN_00546020(...);
+void FUN_00546050(...);
+void FUN_00546090(...);
+void FUN_005460d0(...);
+void FUN_00546110(...);
+// ---- items of slice s00546160 end
+
 // @ 0x005460d0
 namespace SP { namespace Feed {
 void HandshakeParser_s0054_5220::EndField20()
@@ -291,6 +315,78 @@ void HandshakeParser_s0054_5220::EndScreenName()
         mpHandshakeData->mScreenName = mCharacterData;
 }
 }}  // namespace SP::Feed
+
+// @ 0x005462f0
+void FUN_005462f0(int param_1, const wchar_t* name)
+{
+    short* local_14 = gFeedEndTable;
+    while (*local_14 != 0) local_14 = local_14 + 1;
+    unsigned int uVar1 = (unsigned int)FUN_00547900(gFeedEndTable, 0, (int)(local_14 - gFeedEndTable));
+    FUN_004228e0(0, uVar1);
+    short* local_20 = gFeedEndTable;
+    while (*local_20 != 0) local_20 = local_20 + 1;
+    uVar1 = 0xffffffff;
+    int iVar2 = (int)FUN_00547970(gFeedEndTable, -1, (int)(local_20 - gFeedEndTable));
+    FUN_004228e0(iVar2 + 1, uVar1);
+
+    unsigned int u = FNV1_String16(name, 0x811c9dc5, 0);
+    if (0x714baa66 < u) {
+        if (u < 0xce191a63) {
+            if (u != 0xce191a62) {
+                if (u < 0x97bbab5d) {
+                    if (u == 0x97bbab5c) { FUN_00545c60(); return; }
+                    if (u == 0x725b8629) { FUN_00545cc0(); return; }
+                    if (u != 0x8231a2b3) {
+                        if (u != 0x845b3524) return;
+                        FUN_00546050(); return;
+                    }
+                } else if (u != 0xc3753dfe) {
+                    if (u != 0xcb74142a) return;
+                    FUN_00546020(); return;
+                }
+                FUN_00545b20(); return;
+            }
+        } else {
+            if (0xe647c99b < u) {
+                if (u == 0xecce3150) { FUN_00545bf0(); return; }
+                if (u != 0xffb4ae9f) return;
+                FUN_00545cc0(); return;
+            }
+            if (u == 0xe647c99b) { FUN_00546110(); return; }
+            if (u != 0xd6360d71) {
+                if (u != 0xdce0e62d) return;
+                FUN_00545ce0(); return;
+            }
+        }
+        FUN_00545d30(); return;
+    }
+    if (u == 0x714baa66) { FUN_00545d80(); return; }
+    if (u < 0x2f8b3bf5) {
+        if (u != 0x2f8b3bf4) {
+            if (0x13f23f45 < u) {
+                if (u != 0x1966dc85) { if (u != 0x1ea2edbc) return; FUN_00545ce0(); return; }
+                FUN_00545fa0(); return;
+            }
+            if (u == 0x13f23f45) { FUN_00545d80(); return; }
+            if (u == 0x214b72f) { FUN_00546020(); return; }
+            if (u != 0x7319b23) { if (u != 0xedb4507) return; FUN_00545bf0(); return; }
+        }
+        FUN_00545c10();
+    } else {
+        if (u < 0x5cca0011) {
+            if (u == 0x5cca0010) { FUN_00545aa0(); return; }
+            if (u != 0x3b6a85ad) {
+                if (u == 0x4cc1948a) { FUN_00546090(); return; }
+                if (u != 0x5be92a85) return;
+                FUN_005460d0(); return;
+            }
+            FUN_00545c60(); return;
+        }
+        if (u == 0x603ddcb1) { FUN_00545cc0(); return; }
+        if (u != 0x687720a6) return;
+        FUN_00545fa0();
+    }
+}
 
 // @ 0x00548910
 void* Obj43::FUN_00548910(int* param_2, int* param_3)
