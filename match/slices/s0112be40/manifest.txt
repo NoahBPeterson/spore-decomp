@@ -1,0 +1,17 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0112be40/s0112be40.cpp  ??1AllocatedData@hkPackfileReader@@QAE@XZ  0112bec0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s0112be40/s0112be40.cpp  ??0hkStructureLayout@@QAE@XZ  0112bf90  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0112be40/s0112be40.cpp  ?registerClass@hkVtableClassRegistry@@QAEXPAUhkClass@@PAUhkPointerMap@@@Z  0112c4c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0112be40/s0112be40.cpp  ?lockVoiceList@System@@QAEXXZ  0112c560  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0112be40/s0112be40.cpp  ?setValue@System@@QAEXPAI@Z  0112c5f0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0112be40/s0112be40.cpp  ?Lock@System@@QAEXXZ  0112c600  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0112be40/s0112be40.cpp  ?Unlock@System@@QAEXXZ  0112c620  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0112be40/s0112be40.cpp  ?Alloc@System@@QAEPAXIIHPAUICoreAllocator@@@Z  0112c820  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0112be40/s0112be40.cpp  ?Free@System@@QAEXPAXPAUICoreAllocator@@@Z  0112c850  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0112be40/s0112be40.cpp  ?getFloat@AttributeSet@@QAEXHPAM@Z  0112cc80  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0112be40/s0112be40.cpp  ?getDouble@AttributeSet@@QAEXHPAN@Z  0112cca0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0112be40/s0112be40.cpp  ?execute@RtCommandHandler@@SAIPAUCompiledCmd@@@Z  0112ccd0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0112be40/s0112be40.cpp  ?IsCommandComplete@AudioObject@@QAEXIM@Z  0112ccf0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0112be40/s0112be40.cpp  ?audio_createObject@@YAPAEPAEIPAUFactory@@PBUInitData@@E@Z  0112cc10  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0112be40/s0112be40.cpp  ?freeSelf@AllocNode@@QAEXXZ  0112cdf0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0112be40/s0112be40.cpp  ?getOrCreate@VoiceList@@QAEPAXXZ  0112ce00  /O2 /MD /Gy /EHsc /TP /arch:SSE

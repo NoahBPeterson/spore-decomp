@@ -1,0 +1,34 @@
+# va  name  # evidence
+# 0112be40-0112c4f0 Havok packfile reader (hkPackfileReader/hkStructureLayout/hkVtableClassRegistry),
+# VC .NET 2003 (cl 13.10); 0112c500-0112ce00 RenderWare 4 rwaudio core (System/VoiceList/NodeList).
+# Equivalence-only range per symbols/renderware4_core.txt; only leaves are byte-exact.
+0112be40  hkPackfileReader::convertClassVersion1Inplace
+0112bec0  hkPackfileReader::AllocatedData::~AllocatedData
+0112bf90  hkStructureLayout::hkStructureLayout
+0112bfa0  hkStructureLayout::getMemberSize
+0112c150  hkStructureLayout::getMemberAlignment
+0112c220  hkStructureLayout::computeMemberOffsets
+0112c4c0  hkVtableClassRegistry::registerClass
+0112c4f0  hkVtableClassRegistry::registerList
+0112c560  System::lockVoiceList
+0112c5a0  audio_cmd_releaseVoices
+0112c5f0  System::setValue
+0112c600  System::Lock
+0112c620  System::Unlock
+0112c640  System::someCheck
+0112c690  System::updateVoices
+0112c6e0  System::pump
+0112c820  System::Alloc
+0112c850  System::Free
+0112c880  System::shutdown
+0112c9e0  System::CreateInstance
+0112cc10  audio_createObject
+0112cc80  AttributeSet::getFloat
+0112cca0  AttributeSet::getDouble
+0112ccd0  RtCommandHandler::execute
+0112ccf0  AudioObject::IsCommandComplete
+0112cd30  NodeList::find
+0112cd60  NodeList::insert
+0112cdb0  audio_allocNode
+0112cdf0  AllocNode::freeSelf
+0112ce00  VoiceList::getOrCreate

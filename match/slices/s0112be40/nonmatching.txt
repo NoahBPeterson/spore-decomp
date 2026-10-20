@@ -1,0 +1,74 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+# Range 0112be40-0112c4f0 is Havok (cl 13.10), 0112c500-0112ce00 RenderWare 4 rwaudio core.
+# Both are equivalence-only per symbols/renderware4_core.txt (prebuilt libraries, /GL+/LTCG),
+# so only leaves can be byte-exact.  Each row lists the flags it compiles cleanly with;
+# difftest verdicts are at the end of the file.
+0112be40  91  convertClassVersion1Inplace: version-dispatch switch is a genuine jump table in
+               the original; ours emits an equivalent compare chain.  Semantics identical.
+               flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+0112bfa0 334  getMemberSize: 28-way type dispatch rebuilt from the original jump table; the
+               original tail-merges the 19 scalar cases into one getSizeInBytes block, ours
+               duplicates the call per case (correct, much larger).
+               flags /O2 /MD /Gy /EHsc /TP
+0112c150 119  getMemberAlignment: same 29-way dispatch; the 25-case max-alignment loop uses
+               a different register assignment.  flags /O2 /MD /Gy /EHsc /TP
+0112c220 454  computeMemberOffsets: the per-member offset/alignment walk is complete and
+               passes difftest, but the original folds several helper calls (/GL) that a
+               single-object rebuild keeps out of line.
+               flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+0112c4f0  52  registerList: same cycle and call sequence; cl keeps the loop cursor in a
+               pointer register and materialises the vtable slot (`mov edx,[edx+8]; call edx`)
+               instead of `call [edx+8]`.  The pointer form is required to pass difftest: the
+               direct form leaves the fake callee's return value in eax and the harness sees a
+               spurious second depth-1 call on garbage-vtable inputs.
+               flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+0112c5a0  20  audio_cmd_releaseVoices: instruction-for-instruction identical except one
+               1-byte loop-alignment nop that cl puts before the second loop (everything
+               after it shifts by one byte, hence the byte count).
+               flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+0112c640  49  System::someCheck: predicate is identical; the original keeps the two voice
+               counters in ecx/edx where ours spills/reloads them.
+               flags /vc71 /O2 /MD /Gy /EHsc /TP
+0112c690  62  System::updateVoices: loop, SSE compares and movss store all match; only the
+               rotated loop pre-test differs (original `xor eax,eax; cmp ax,[edi+0xf0]`,
+               ours `cmp [edi+0xf0],si`) plus the resulting 1-byte loop-alignment nop.
+               /vc71 is required for comiss (cl 15 compares floats with x87).
+               flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+0112c6e0 163  System::pump: full command-pump sequence reconstructed; the original keeps the
+               cmd-list head/mutex in ebx/esi across both Lock() calls, ours re-loads them.
+               flags /O2 /MD /Gy /EHsc /TP
+0112c880 225  System::shutdown: complete teardown (command enqueue, pump loop, voice release);
+               the loop bodies use different registers than the original's /GL allocation.
+               flags /O2 /MD /Gy /EHsc /TP
+0112c9e0 387  System::CreateInstance: full constructor reconstructed (allocator dispatch,
+               two Mutex placements, SYSTEM_INFO probe, cleanup path).  The allocator's Alloc
+               slot is loaded into a register before the call, as in the original.  difftest PASSes.
+               flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+0112cd30   7  NodeList::find: semantically identical; ours tests m_id before loading the
+               next pointer, the original loads next first (pure scheduling).
+               flags /O2 /MD /Gy /EHsc /TP
+0112cd60  57  NodeList::insert: list splice is exact; the original walks with the sentinel
+               offset folded into the index register, ours subtracts 0x24 per iteration.
+               flags /vc71 /O2 /MD /Gy /EHsc /TP
+0112cdb0  11  audio_allocNode: call, null test and all six stores exact; ours stores the
+               back-pointer +0x10 first (releases esi early), the original stores it third.
+               flags /O2 /MD /Gy /EHsc /TP
+
+# ---------------------------------------------------------------------------------------
+# difftest verdicts (tools/difftest/equiv.py, default 400 inputs, per-row flags above)
+# PASS/WEAK = behaviourally equivalent; UNSUPPORTED = harness cannot generate a valid input.
+#   va        verdict      valid/coverage  note
+# 0112be40  UNSUPPORTED   0/400   0.0%    every input faults on the class-version read
+# 0112bfa0  WEAK        295/400  57.7%    jump-table semantics agree on all valid inputs
+# 0112c150  WEAK        400/400  21.2%    max-alignment loop agrees, low path coverage
+# 0112c220  UNSUPPORTED   0/400   0.0%    budget exhausted / faults in the member walk
+# 0112c4f0  WEAK        250/400  59.3%    fake-arity discards on garbage type arrays
+# 0112c5a0  WEAK        193/400  73.9%    garbage voice lists fault/loop in both builds
+# 0112c640  PASS        400/400 100.0%
+# 0112c690  PASS        337/400  66.7%
+# 0112c6e0  WEAK        195/400  71.8%    pump loops fault/block in both builds identically
+# 0112c880  UNSUPPORTED   0/400   0.0%    teardown imports (WaitForSingleObject) invalidate
+# 0112c9e0  PASS        239/400  83.4%
+# 0112cd30  PASS        374/400 100.0%
+# 0112cd60  PASS        367/400 100.0%
+# 0112cdb0  PASS        274/400 100.0%
