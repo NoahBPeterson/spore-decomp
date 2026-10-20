@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00975ea0/s00975ea0.cpp  ?GetColumnExtraData@IWinGridIface@@QAEPAXI@Z  00975f80  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00975ea0/s00975ea0.cpp  ?GetRowExtraData@IWinGridIface@@QAEPAXI@Z  00975ff0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00975ea0/s00975ea0.cpp  ??0PairRowCD@@QAE@PBH0@Z  00976390  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00975ea0/s00975ea0.cpp  ??0PairRowCF@@QAE@PBH0@Z  009763c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00975ea0/s00975ea0.cpp  ?SetRowHeading@IWinGridIface@@QAEXIPAPAX@Z  00976670  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00975ea0/s00975ea0.cpp  ?GetColumnHeading@IWinGridIface@@QAEXIPAPAX@Z  009766f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

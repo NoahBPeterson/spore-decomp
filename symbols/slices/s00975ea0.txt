@@ -1,0 +1,26 @@
+00975ea0 ?DoWindowAddition@WinGrid@@QAEXHHPAXHH@Z  # EA::UTFWinControls::WinGrid::DoWindowAddition derived in s00975ea0
+00975f30 ?SetColumnExtraData@IWinGridIface@@QAE_NIPAX@Z  # EA::UTFWinControls::IWinGrid::SetColumnExtraData derived in s00975ea0 (slot 0xcc, map +0x1c8)
+00975f80 ?GetColumnExtraData@IWinGridIface@@QAEPAXI@Z  # EA::UTFWinControls::IWinGrid::GetColumnExtraData derived in s00975ea0
+00975fa0 ?SetRowExtraData@IWinGridIface@@QAE_NIPAX@Z  # EA::UTFWinControls::IWinGrid::SetRowExtraData derived in s00975ea0 (slot 0xd0, map +0x1a8)
+00975ff0 ?GetRowExtraData@IWinGridIface@@QAEPAXI@Z  # EA::UTFWinControls::IWinGrid::GetRowExtraData derived in s00975ea0
+00976010 ?CopyCellData@WinGrid@@QAE_NHHPAUCellData@UTFWinControls@EA@@HH0@Z  # EA::UTFWinControls::WinGrid::CopyCellData derived in s00975ea0
+00976160 ?MergeSortWork@@YAXUSortPack@@PAH11@Z  # eastl merge-sort recursive worker derived in s00975ea0
+00976310 ?MergeSortShell@@YAXPAH0000@Z  # eastl merge_sort shell derived in s00975ea0
+00976390 ??0PairRowCD@@QAE@PBH0@Z  # eastl::pair<int,MatrixRow<CellData*>> copy ctor derived in s00975ea0
+009763c0 ??0PairRowCF@@QAE@PBH0@Z  # eastl::pair<int,MatrixRow<CellFormatExtra>> copy ctor derived in s00975ea0
+00976450 ?DoNukeSubtree@CellsMatrix@@QAEXPAURBN@UTFWinControls@EA@@@Z  # eastl rbtree<...CellFormatExtra...>::DoNukeSubtree derived in s00975ea0
+009764c0 ?InsertValue@RowTreeCD@@QAEXPAPAUPairRowCD@@PAURBN@UTFWinControls@EA@@PBU2@_N@Z  # eastl rbtree insert-with-hint (CellData* row map) derived in s00975ea0
+00976550 ?InsertValue@RowTreeCF@@QAEXPAPAUPairRowCF@@PAURBN@UTFWinControls@EA@@PBU2@_N@Z  # eastl rbtree insert-with-hint (CellFormatExtra row map) derived in s00975ea0
+009765e0 ?BulkAssignHeadings@@YAHPAXPBX1@Z  # heading-map bulk assign helper derived in s00975ea0
+00976670 ?SetRowHeading@IWinGridIface@@QAEXIPAPAX@Z  # EA::UTFWinControls::IWinGrid heading getter (map +0x228) derived in s00975ea0
+009766a0 ?SetColumnHeading@IWinGridIface@@QAEXIPB_W@Z  # EA::UTFWinControls::IWinGrid heading assign (map +0x228) derived in s00975ea0
+009766f0 ?GetColumnHeading@IWinGridIface@@QAEXIPAPAX@Z  # EA::UTFWinControls::IWinGrid heading getter (map +0x208) derived in s00975ea0
+00976720 ?SetColumnHeading2@IWinGridIface@@QAEXIPB_W@Z  # EA::UTFWinControls::IWinGrid heading assign (map +0x208) derived in s00975ea0
+00976770 ?EraseRow@CellsMatrix@@QAEXPAPAURBN@UTFWinControls@EA@@PAU234@@Z  # eastl::map<int,MatrixRow<CellData*>>::erase derived in s00975ea0
+009768e0 ?RemoveCell@CellsMatrix@@QAE_NHHPAPAUCellData@UTFWinControls@EA@@@Z  # EA::UTFWinControls::SparseMatrix<CellData*>::RemoveCell derived in s00975ea0
+00976980 ?RemoveRow@CellsMatrix@@QAE_NHH@Z  # EA::UTFWinControls::SparseMatrix<CellData*>::RemoveRow derived in s00975ea0
+00976a40 ?RemoveCol@CellsMatrix@@QAE_NHH@Z  # EA::UTFWinControls::SparseMatrix<CellData*>::RemoveCol derived in s00975ea0
+00976bc0 ?ClearCell@IWinGridIface@@QAE_NHH@Z  # EA::UTFWinControls::WinGrid::ClearCell derived in s00975ea0
+00976c60 ?ClearCellFormat@IWinGridIface@@QAE_NHH@Z  # EA::UTFWinControls::WinGrid::ClearCellFormat derived in s00975ea0
+00976d20 ?DisposeOfAllCellData@WinGrid@@QAEXXZ  # EA::UTFWinControls::WinGrid::DisposeOfAllCellData derived in s00975ea0
+00976dd0 ?InsertCellFmt@@YA_NPAUFmtTree@@HHPBUFmtExtra@@PAU2@@Z  # EA::UTFWinControls::SparseMatrix<CellFormatExtra>::InsertCell derived in s00975ea0
