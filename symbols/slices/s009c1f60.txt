@@ -6,4 +6,4 @@
 009c25f0 ?resize@wiggle_instance_vec@nSPCreatureAnim@@QAEXI@Z  # wiggle_instance_vec::resize migrated from s009c1f60 (verbatim, slice spelling)
 009c26a0 ?Release@creature_static_data_s009c_1f60@nSPCreatureAnim@@QAEHXZ  # creature_static_data_s009c_1f60::Release migrated from s009c1f60 (verbatim, slice spelling)
 009c26f0 ?InitWiggles@creature_static_data_s009c_1f60@nSPCreatureAnim@@QAEXXZ  # creature_static_data_s009c_1f60::InitWiggles migrated from s009c1f60 (verbatim, slice spelling)
-009c2c20 nSPCreatureAnim::creature_instance_data::InitWiggles  # resize instance mWiggles; per static wiggle link + local(rest_center*scale) rotated by orientation quat + position; tail builds desc_a/desc_b and flag/descriptor pointers
+009c2c20 ?InitWiggles@creature_instance_data_s009c_1f60@nSPCreatureAnim@@QAEXXZ  # creature_instance_data_s009c_1f60::InitWiggles migrated from s009c1f60 (verbatim, slice spelling)

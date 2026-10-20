@@ -2968,6 +2968,72 @@ void creature_static_data_s009c_1f60::InitWiggles()
 }
 }  // namespace nSPCreatureAnim
 
+// @ 0x009c2c20
+namespace nSPCreatureAnim {
+void creature_instance_data_s009c_1f60::InitWiggles()
+{
+    unsigned n = (unsigned)(static_data->mWiggles.mpEnd - static_data->mWiggles.mpBegin);
+    mWiggles.resize(n);
+
+    unsigned count = (unsigned)(mWiggles.mpEnd - mWiggles.mpBegin);
+    for (unsigned i = 0; i < count; ++i) {
+        wiggle_instance_data* e = &mWiggles.mpBegin[i];
+        wiggle_static_data* sw = &static_data->mWiggles.mpBegin[i];
+        e->flag4 = 0;
+        e->flag5 = 0;
+        e->wiggle = sw;
+
+        creature_body_static_data_s009c_1f60* bsd = Bodies.mpBegin[sw->body].static_data;
+        float scale = requested_scale;
+        float Y = bsd->rest_center.y * scale;
+        float X = scale * bsd->rest_center.x;
+        float Z = bsd->rest_center.z * scale;
+        e->zero.x = e->zero.y = e->zero.z = 0.0f;
+
+        float q0 = orientation.x, q1 = orientation.y, q2 = orientation.z, q3 = orientation.w;
+        float q1q3 = q1 * q3;
+        float q0q3 = q0 * q3;
+        float q2q3 = q2 * q3;
+        float nq0q0 = -(q0 * q0);
+        float q1q0 = q1 * q0;
+        float q2q0 = q2 * q0;
+        float nq1q1 = -(q1 * q1);
+        float q2q1 = q2 * q1;
+        float nq2q2 = -(q2 * q2);
+
+        float A = nq2q2 + nq0q0;
+        float B = nq2q2 + nq1q1;
+        float C = q2q0 + q1q3;
+        float D = q1q0 - q2q3;
+        float E = q1q0 + q2q3;
+        float F = q2q1 - q0q3;
+        float G = q2q0 - q1q3;
+        float H = nq1q1 + nq0q0;
+        float J = q2q1 + q0q3;
+
+        float T1 = ((B * X + C * Z) + D * Y) * 2.0f + X;
+        float T2 = ((E * X + A * Y) + F * Z) * 2.0f + Y;
+        float T3 = ((G * X + H * Z) + J * Y) * 2.0f + Z;
+
+        e->pos.x = position.x + T1;
+        e->pos.y = position.y + T2;
+        e->pos.z = position.z + T3;
+        e->pos_copy = e->pos;
+    }
+
+    f_16a8 = 0.0f;
+    inst_a.flag4 = 0;
+    inst_a.flag5 = 1;
+    inst_a.wiggle = &desc_a;
+    CreateWiggle(static_data, 0, &desc_b, 1, 0, 0, 0, 0, 0);
+    inst_b.wiggle = &desc_b;
+    inst_b.flag4 = 0;
+    inst_b.flag5 = 1;
+    flag_168e = 1;
+    f_1690 = 0.0f;
+}
+}  // namespace nSPCreatureAnim
+
 // @ 0x009c32c0
 namespace nSPCreatureAnim {
 bool ComputeHierarchy(creature_static_data_s009c_32c0* c, uint32_s009c_32c0 target)
