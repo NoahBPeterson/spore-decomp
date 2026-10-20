@@ -1,0 +1,45 @@
+# Complete (all paths present) but not byte-exact.
+# Every function in this slice is an MSVC 2008 /EHsc-generated EH unwind/cleanup funclet
+# (lea ecx,[ebp-N]; jmp dtor / operator_delete__(...,"Tag",0,0,0,0) / ??_M vector-dtor
+# iterators). cl emits these while compiling the owning function, so the byte stream is not
+# reproducible from standalone C++ (no source spelling yields a bare `lea ecx; jmp` thunk),
+# and the implied `__ehhandler` FuncInfo records are unreachable too.
+# flags /O2 /MD /Gy /EHsc /TP /GS-. difftest: UNSUPPORTED "only 0/400 inputs valid
+# (fault(read)=400)" — the funclet runs on a caller frame the input generator cannot
+# synthesise, so the ORIGINAL faults on every generated input (checked on 01214580, 012144d0).
+01214320  42  complete EH cleanup funclet; not reproducible from standalone C++; difftest UNSUPPORTED (0/400 valid, fault(read))
+01214420  74  complete EH funclet (??_M vector dtor iterator); compiler-generated; difftest UNSUPPORTED
+012144d0  20  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED (0/400 valid, fault(read))
+01214580  17  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED (0/400 valid, fault(read))
+012145c0  26  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01214650  48  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01214850 178  complete EH cleanup funclet chain; compiler-generated; difftest UNSUPPORTED
+01214970 176  complete EH cleanup funclet chain; compiler-generated; difftest UNSUPPORTED
+01214c50  28  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01214c90  20  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01214cc0  32  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01214d30  26  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01214d60  66  complete EH cleanup funclet chain; compiler-generated; difftest UNSUPPORTED
+01214df0  47  complete EH cleanup funclet chain; compiler-generated; difftest UNSUPPORTED
+01214e50  70  complete EH cleanup funclet chain; compiler-generated; difftest UNSUPPORTED
+01214ee0  41  complete EH cleanup funclet chain; compiler-generated; difftest UNSUPPORTED
+01214f50  34  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01214fa0  34  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01214ff0  25  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01215020  25  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+012150f0  95  complete EH cleanup funclet chain (RefVector/Elem24Vec/free_holder); compiler-generated; difftest UNSUPPORTED
+01215150 115  complete EH cleanup funclet (9x delete "Graphics"); compiler-generated; difftest UNSUPPORTED
+01215230  70  complete EH cleanup funclet chain; compiler-generated; difftest UNSUPPORTED
+012152a0  32  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01215350  28  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01215390  26  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01215450 166  complete EH cleanup funclet (6x delete "ArgScript/Option*"); compiler-generated; difftest UNSUPPORTED
+01215530 146  complete EH cleanup funclet (10x delete ArgScript); compiler-generated; difftest UNSUPPORTED
+01215680  71  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01215710  30  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01215770  12  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01215790  34  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+012158f0  43  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01215950  68  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01215a80  39  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01215b60 177  complete EH cleanup funclet (12x delete "ArgScript/GameModel*"); compiler-generated; difftest UNSUPPORTED
