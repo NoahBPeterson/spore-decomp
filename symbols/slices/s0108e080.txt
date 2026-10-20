@@ -1,0 +1,15 @@
+0108e080 hkAabbPhantom::clone  # hkPhantom* clone() const; allocate 0xa0 through hkMemory::s_instance->vtbl[4](0xa0,0x2e), stamp the size word at +4, re-run hkAabbPhantom::hkAabbPhantom(m_aabb, collisionFilterInfo), then deep-copy m_overlapListeners and m_phantomListeners and call hkWorldObject::copyProperties.
+0108e1d0 hkAabbPhantom::deallocateInternalArrays  # free m_overlappingCollidables (array at +0x90) when its size is 0, reset it to the owned-empty state, then tail-call hkPhantom::deallocateInternalArrays.
+0108e250 hkAabbPhantom::scalarDeletingDestructor  # `??_G`: set vtable 0x0149e51c, free the collidables array, run ~hkPhantom, then hkMemory::s_instance->vtbl[5](this, memSize, 0x2e) when flags&1.
+0108e2c0 hkPhantom::overlapRemoveNulls  # hkArray<void*>::removeNulls on the array at +0x58 (register-argument entry point: the array base arrives in eax).
+0108e300 hkPhantom::firePhantomRemoved  # fan out listener->vtbl[0x08](this) backwards over m_phantomListeners, then compact the cleared entries.
+0108e370 hkPhantom::firePhantomAdded  # same as firePhantomRemoved with vtable slot +0x04.
+0108e3e0 hkPhantom::firePhantomShapeSet  # same with vtable slot +0x0c.
+0108e450 hkPhantom::overlapRemoveAtValue  # hkArray<void*>::removeAtValue (find the value in m_overlapListeners, shift the tail down).
+0108e4a0 hkPhantom::overlapPushBack  # hkArray<void*>::pushBack on m_overlapListeners (grow via hkArrayUtil::_reserveMore when size == capacity&0x3fffffff).
+0108e4e0 hkAabbPhantom::calcStatistics  # hkWorldObject::calcStatistics(c) followed by collector->addArray("OvrlapLisPtr",4,...) and ("PhantmLisPtr",4,...).
+0108e550 hkPhantom::~hkPhantom  # set vtable 0x0149e34c, fan out listener->vtbl[0x10], free m_phantomListeners and m_overlapListeners, hkWorldObject::~hkWorldObject.
+0108e5e0 hkPhantom::deallocateInternalArrays  # free m_overlapListeners and m_phantomListeners when each is empty.
+0108e680 hkPhantom::updateBroadPhase  # deferred notification or a synchronous broad-phase update of the phantom's AABB (lock, dispatcher query, merge, compact, unlock, leave, free scratch).
+0108e940 hkWheelConstraintData::getRuntimeInfo  # write the RuntimeInfo size pair (this=0x30, all=6) when hkBool is true, else zeroes; ret 8.
+0108e970 hkWheelConstraintData::isValid  # x87 orthogonality + unit-length checks against 1e-5 and hkMath::equal against 0x3727c5ac, plus the min<=max ordering check; hkBool returned through the hidden result pointer.
