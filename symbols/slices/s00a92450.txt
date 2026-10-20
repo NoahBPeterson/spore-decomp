@@ -1,0 +1,3 @@
+00a92450 ?SetFloatParams@cDistributeEffect@@QAE_NHPBMH@Z  # cDistributeEffect::SetFloatParams (IVisualEffect vtable slot +0x1c)
+00a92920 ?SetIntParams@cDistributeEffect@@QAE_NHPBHH@Z  # cDistributeEffect::SetIntParams (IVisualEffect vtable slot +0x20)
+00a92b80 ?SetUnknownParam@cDistributeEffect@@QAE_NHPAX@Z  # cDistributeEffect::SetUnknownParam (IVisualEffect vtable slot +0x24)

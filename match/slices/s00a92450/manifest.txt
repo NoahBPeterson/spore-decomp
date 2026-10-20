@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+#
+# Byte-exact: none.  All 3 addresses of slice s00a92450 are recorded in
+# nonmatching.txt (0 matched / 3 nonmatching / 0 partial); see
+# symbols/slices/s00a92450.txt for identities.
+#
+# flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
