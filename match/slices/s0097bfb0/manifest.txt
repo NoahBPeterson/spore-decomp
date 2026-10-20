@@ -1,0 +1,6 @@
+slices/s0097bfb0/s0097bfb0.cpp  ?MakeRoomForRow@WinGrid@Gr@@QAE_NHHH@Z  0097c4f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0097bfb0/s0097bfb0.cpp  ?GetColumnWidth@WinGridIface@Gr@@QAEMHH@Z  0097c630  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0097bfb0/s0097bfb0.cpp  ?GetRowHeight@WinGridIface@Gr@@QAEMHH@Z  0097c680  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0097bfb0/s0097bfb0.cpp  ?Init@WinGrid@Gr@@QAE_NXZ  0097c6d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0097bfb0/s0097bfb0.cpp  ?OnTick@WinGrid@Gr@@QAE_NXZ  0097c6f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0097bfb0/s0097bfb0.cpp  ?MakeCellVisible@WinGridIface@Gr@@QAE_NHH@Z  0097ca70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
