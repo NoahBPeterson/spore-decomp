@@ -1,0 +1,20 @@
+009dfc40 ??1AnimA@@QAE@XZ  # container destructor (vector of 0x40 at +0x20)
+009dfc90 ??1AnimB@@QAE@XZ  # container destructor (vector of 0x40 at +0x13c)
+009dfd30 ??1AnimC@@QAE@XZ  # container destructor (vector of 0x40 at +0x28)
+009dfda0 ??4Vec44@@QAEAAU0@ABU0@@Z  # vector<0x44>::operator=
+009dffe0 ??4Vec1C@@QAEAAU0@ABU0@@Z  # vector<0x1c>::operator=
+009e0110 ?DoInsertValue@Vec44@@QAEXPAUElem44@@ABU2@@Z  # vector<0x44> grow-and-insert
+009e0230 ?DoInsertValue@Vec58@@QAEXPAUElem58@@ABU2@@Z  # vector<0x58> grow-and-insert
+009e0330 ?DoInsertValue@Vec1C@@QAEXPAUElem1C@@ABU2@@Z  # vector<0x1c> grow-and-insert
+009e0480 ?erase@Vec0C@@QAEPAUElem0C@@PAU2@0@Z  # vector<0x0c> erase range
+009e04e0 ?DoInsertValue@Vec0C@@QAEXPAUElem0C@@ABU2@@Z  # vector<0x0c> grow-and-insert (Vector3)
+009e06a0 ?DoInsertValue@Vec0CS@@QAEXPAUElem0CS@@ABU2@@Z  # vector<0x0c> grow-and-insert ({float,float,bool})
+009e07d0 ?DestroyRangeA4@@YAPAUElemA4@@PAU1@00@Z  # destruct-range for 0xa4-stride entry (returns end)
+009e0940 ?clear@Vec44@@QAEXXZ  # vector<0x44>::clear
+009e0980 ?clear@Vec58@@QAEXXZ  # vector<0x58>::clear
+009e09c0 ?clear@Vec1C@@QAEXXZ  # vector<0x1c>::clear
+009e0a00 ?resize@Vec0C@@QAEXIABUElem0C@@@Z  # vector<0x0c>::resize(n, value)
+009e0b20 ?insert@Vec0CS@@QAEPAUElem0CS@@PAU2@ABU2@@Z  # vector<0x0c> insert(pos, value)
+009e0b90 ?DestroyRangeA4n@@YGXPAUElemA4@@0@Z  # destruct-range (count form, stdcall)
+009e0cd0 ?Copy40@@YAPAUElem40@@PAU1@00@Z  # eastl::copy forward for 0x40-stride
+009e0d30 ?CopyBack40@@YAPAUElem40@@PAU1@00@Z  # eastl::copy_backward for 0x40-stride
