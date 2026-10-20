@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0116ff30/s0116ff30.cpp  ?ScalarDeletingDtor@CMpegBase@@QAEPAXE@Z  011700e0
+slices/s0116ff30/s0116ff30.cpp  ?Seek@CMpegBase@@QAEXPAE@Z  01170120
+slices/s0116ff30/s0116ff30.cpp  ?Ctor@CMpegBase@@QAEPAU1@XZ  01170210
+slices/s0116ff30/s0116ff30.cpp  ?OpenSynth@CMpegBase@@QAEHXZ  01170230
+slices/s0116ff30/s0116ff30.cpp  ?OpenLayer@CMpegBase@@QAEHXZ  011704d0
+slices/s0116ff30/s0116ff30.cpp  ?FUN_01170500@CMpegBase@@QAEXXZ  01170500
+slices/s0116ff30/s0116ff30.cpp  ?FUN_01170510@CMpegBase@@QAEHXZ  01170510
+slices/s0116ff30/s0116ff30.cpp  ?FUN_01170540@CMpegBase@@QAEXXZ  01170540
+slices/s0116ff30/s0116ff30.cpp  ?ScalarDeletingDtor2@CMpegBase@@QAEPAXE@Z  01170570
+slices/s0116ff30/s0116ff30.cpp  ?Open@CMpegBase@@QAEHHH@Z  011705b0
