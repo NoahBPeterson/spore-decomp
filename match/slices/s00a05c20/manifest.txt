@@ -1,0 +1,1 @@
+slices/s00a05c20/s00a05c20.cpp  ??0anim_creature@@QAE@ABUVector3@@ABUVector4@@@Z  00a05d60  /O2 /MD /Gy /TP /arch:SSE
