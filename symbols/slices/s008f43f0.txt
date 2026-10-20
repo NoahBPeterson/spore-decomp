@@ -1,0 +1,17 @@
+# Recovered real symbol names for slice s008f43f0 (EA::XHTML::Style::CSSParser property parsers).
+# Rows marked "PDB" are recovered from symbols/pdb_names.json; the rest are inferred from the
+# callee signature / reconstruction and recorded here as best-effort names.
+008f4600 ?ParseFontFamily@CSSParser@Style@XHTML@EA@@QAE_NPAPAUProperty@234@@Z  # PDB: CSSParser::ParseFontFamily
+008f47e0 ?ParseFontVariant@CSSParser@Style@XHTML@EA@@QAE_NPAPAUProperty@234@@Z  # PDB: CSSParser::ParseFontVariant
+008f4890 ?ParseBackgroundImage@CSSParser@Style@XHTML@EA@@QAE_NPAPAUProperty@234@@Z  # PDB: CSSParser::ParseBackgroundImage
+008f4930 ?ParseBackgroundAttachment@CSSParser@Style@XHTML@EA@@QAE_NPAPAUProperty@234@@Z  # PDB: CSSParser::ParseBackgroundAttachment
+008f49e0 ?ParseListStyleImage@CSSParser@Style@XHTML@EA@@QAE_NPAPAUProperty@234@@Z  # PDB: CSSParser::ParseListStyleImage
+008f4aa0 ?ParseListStylePosition@CSSParser@Style@XHTML@EA@@QAE_NPAPAUProperty@234@@Z  # PDB: CSSParser::ParseListStylePosition
+008f4fc0 ?ParseDirection@CSSParser@Style@XHTML@EA@@QAE_NPAPAUProperty@234@@Z  # PDB: CSSParser::ParseDirection
+008f5080 ?ParseTextOverflow@CSSParser@Style@XHTML@EA@@QAE_NPAPAUProperty@234@@Z  # PDB: CSSParser::ParseTextOverflow
+008f53e0 ?MatchSymbol@?$MatchSymbol@U?$IStaticDefinition@$$CB_W$07BackgroundRepeat@Style@XHTML@EA@@@Lexer@Text@EA@@$03@CSSParser@Style@XHTML@EA@@QAE_NPBXPAM@Z  # PDB: CSSParser::MatchSymbol<...,BackgroundRepeat,4>
+008f5560 ?MatchLength@CSSParser@Style@XHTML@EA@@QAE_NPAULength@234@@Z  # PDB: CSSParser::MatchLength
+# inferred (no PDB row):
+008f43f0 ?MatchURL@CSSParser@Style@XHTML@EA@@QAE_NXZ  # inferred: CSSParser::MatchURL
+008f4b80 ?ParseCounterReset@CSSParser@Style@XHTML@EA@@QAE_NPAPAUProperty@234@@Z  # inferred: CSSParser::ParseCounterReset
+008f4da0 ?ParseCounterIncrement@CSSParser@Style@XHTML@EA@@QAE_NPAPAUProperty@234@@Z  # inferred: CSSParser::ParseCounterIncrement

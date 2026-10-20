@@ -1,0 +1,15 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /GS- /arch:SSE
+#
+# Slice s008f43f0 = EA::XHTML::Style::CSSParser URL / font / list / counter / direction /
+# text-overflow property parsers plus the wide-string symbol matchers they use.  Reconstructed
+# from the image (CSSParser field layout + observable token/Advance/MatchIdent flow); 7 of the 13
+# are byte-exact and listed in manifest.txt.  difftest verdicts from tools/difftest/equiv.py
+# (DEFAULT inputs).
+#
+008f43f0  368  reconstruction (CSSParser::MatchURL); flags /O2 /MD /Gy /TP /GS- /arch:SSE; difftest UNSUPPORTED (1 unresolved reference: __imp_?iswctype@@YAHII@Z) -- not proven equivalent
+008f4600  319  reconstruction (CSSParser::ParseFontFamily); flags as above; difftest WEAK (243 valid inputs, 33.3% coverage) -- equivalent on the covered paths
+008f4930   75  reconstruction (CSSParser::ParseBackgroundAttachment); flags as above; difftest WEAK (400 valid inputs, 39.1% coverage); remaining diff is the this-register choice (retail keeps this in esi, cl keeps ebx) plus the PropCtx zero-register allocation
+008f4b80  423  reconstruction (CSSParser::ParseCounterReset); flags as above; difftest WEAK (391 valid inputs, 14.0% coverage) -- equivalent on the covered paths
+008f4da0  423  reconstruction (CSSParser::ParseCounterIncrement); flags as above; difftest WEAK (395 valid inputs, 14.0% coverage) -- equivalent on the covered paths
+008f5560   19  reconstruction (CSSParser::MatchLength); flags as above; difftest WEAK (396 valid inputs, 14.3% coverage); remaining diff is register allocation in the mDefaultUnits store and the mTokenValue/mMatchText swap order
