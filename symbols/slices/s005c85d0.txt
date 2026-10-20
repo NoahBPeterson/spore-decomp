@@ -5,10 +5,10 @@
 005c8c50 ?GetAndAssign@cSPPalettePageUI@@QAEPAVcRefObj@@HPAV?$AutoRefCount_s005c_85d0@VcRefObj@@@EA@@HH@Z  # cSPPalettePageUI::GetAndAssign migrated from s005c85d0 (verbatim, slice spelling)
 005c8cc0 ?Shutdown@cSPPalettePageUI@@QAEXXZ  # cSPPalettePageUI::Shutdown migrated from s005c85d0 (verbatim, slice spelling)
 005c8d30 ?Accept@cSPPalettePageUI@@QAEXH@Z  # cSPPalettePageUI::Accept migrated from s005c85d0 (verbatim, slice spelling)
-005c8d70 ?cPagePartBig@@YAXHHH@Z  # cPagePartBig migrated from s005c85d0 (verbatim, slice spelling)
+005c8d70 ?cPagePartBig@PagePartDef@@QAEXPAMH@Z  # PagePartDef::cPagePartBig migrated from s005c85d0 (verbatim, slice spelling)
 005c8fd0 ??1cRefVector@@QAE@XZ  # cRefVector::~cRefVector migrated from s005c85d0 (verbatim, slice spelling)
 005c9010 ??0cSPPalettePageUI@@QAE@XZ  # cSPPalettePageUI::cSPPalettePageUI migrated from s005c85d0 (verbatim, slice spelling)
 005c9070  ?_GcSPPalettePageUI  # page-UI scalar deleting dtor (??_G; base identifier form)
-005c90d0 ?cVectorInsertBig@@YAXPAX0@Z  # cVectorInsertBig migrated from s005c85d0 (verbatim, slice spelling)
+005c90d0 ?cVectorInsertBig@@YAXPAX00@Z  # cVectorInsertBig migrated from s005c85d0 (verbatim, slice spelling)
 013eb938  ??_7cUIVtblA@@6B@  # base vtable stored by the deleting dtor 005c9070
 013ec458  ??_7cUIVtblB@@6B@  # base vtable stored at +4 by 005c9070

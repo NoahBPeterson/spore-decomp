@@ -1,2 +1,4 @@
-# va  diff-bytes  reason   (none: all reconstructed functions byte-exact)
+# va  diff-bytes  reason
+005c8d70 463 PagePartDef::cPagePartBig: complete body (explicit-border inset path + grid-slot path); /O2 xmm allocation differs and the comiss max is emitted as compare-and-reassign rather than a conditional swap. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: FAIL 5/52 inputs mismatched (NaN/comiss canonicalisation)]
 005c9010 45 cSPPalettePageUI ctor: g_one load scheduling + derived/base vptr store order differ
+005c90d0 275 cVectorInsertBig: complete body (eastl::vector<AutoRefPtr>::insert: grow-to-2*size path, copy_backward, intrusive AddRef/Release fixups); ecx-vector ABI + inline traffic differ. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: UNSUPPORTED original reads ecx at entry]

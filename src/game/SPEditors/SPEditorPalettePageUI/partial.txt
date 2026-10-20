@@ -1,4 +1,2 @@
 # va  diff-bytes  reason
-005c8d70  592   page-part builder: body not reconstructed (signature-only stub)
-005c90d0  343   refcounted-vector insert: body not reconstructed (signature-only stub)
 005c9230  1444  cSPPalettePageUI::Init: body not reconstructed (signature-only stub)
