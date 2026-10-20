@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009ca4b0/s009ca4b0.cpp  ?OnRegister@cBlockBlockCommand@?A0xca04ad88@@QAEXPAUcIParser@ArgScript@EA@@PAUcState@45@@Z  009ca4b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009ca4b0/s009ca4b0.cpp  ?Init@creature_effect@nSPCreatureAnim@@QAEXPAUcIVisualEffect@2@KK@Z  009caa40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009ca4b0/s009ca4b0.cpp  ?Init@creature_effect@nSPCreatureAnim@@QAEXKKK@Z  009caa90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009ca4b0/s009ca4b0.cpp  ??0creature_effect@nSPCreatureAnim@@QAE@XZ  009caac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009ca4b0/s009ca4b0.cpp  ?LookupEffect@creature_instance_data_full@nSPCreatureAnim@@QAEPAHK@Z  009cab60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009ca4b0/s009ca4b0.cpp  ?FUN_009cabb0@@YAXPAUcreature_effect@nSPCreatureAnim@@@Z  009cabb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009ca4b0/s009ca4b0.cpp  ??4creature_effect@nSPCreatureAnim@@QAEAAU01@ABU01@@Z  009cabd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
