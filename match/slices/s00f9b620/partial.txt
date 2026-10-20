@@ -1,0 +1,2 @@
+# <va>  <dl>  <reason>   (incomplete / not equivalent)
+00f9c0d0  919 target  ?FUN_00f9c0d0@cTS142@@QAEXPAX@Z (/O2 /MD /Gy /TP /arch:SSE /fp:fast): UpdateColorMap over the particle/ribbon emitter (919 bytes); current source decompiles only the first half of the routine (the emitter draw setup + colour-key scan); the remaining per-particle emission loop and its VT-table calls are not yet reconstructed, so it produces no symbol of a comparable size and cannot be checked.
