@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+# (slice 143 has no partial/incomplete functions: every one of the 28 VAs has a
+#  complete source body with the right control flow and side effects; the 16
+#  non-matching entries in nonmatching.txt are codegen-only residues.)

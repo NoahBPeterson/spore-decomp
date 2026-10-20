@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba5df0@@YAXPAH0@Z            00ba5df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba5ee0@@YAHH@Z               00ba5ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba6230@@YGHH@Z               00ba6230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba5650/s00ba5650.cpp  ?PostGameModeTransition2@cGonzagoSubsystem@@QAEXHH@Z  00ba63d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba5650/s00ba5650.cpp  ?PreGameModeTransition2@cGonzagoSubsystem@@QAEXHH@Z   00ba6400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba6440@@YGII@Z               00ba6440  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba6460@@YGHPAUPlanetObj@@@Z   00ba6460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba5650/s00ba5650.cpp  ?AllocID@PlanetObj@@QAEID@Z          00ba6630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba6650@@YAII@Z               00ba6650  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba6660@@YGXH@Z               00ba6660  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba6710@@YADHPAPAH@Z          00ba6710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba6730@@YADHPAPAH@Z          00ba6730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
