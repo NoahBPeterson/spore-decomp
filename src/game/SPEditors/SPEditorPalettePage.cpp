@@ -16,8 +16,14 @@
 #include <new>
 #include "EA/UTFWin/IWindow.h"
 #include "SP/cSPPalettePageUI.h"
+#include "SP/cPropertyList.h"
+#include "EA/AutoRefCount.h"
 
 // ---- items of slice s005c7500 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char* g_pEditor;  // 0x015fd918
+void* operator new(unsigned int n, const char* name, int flags, unsigned int debugFlags,
+                   const char* file, int line);
+#define PV(n) virtual void pv##n();
 namespace EA {
 template <typename T>
 class AutoRefCount_s005c_7500 {
@@ -38,6 +44,7 @@ class AutoRefCount_s005c_7500 {
     }
     return *this;
   }
+  AutoRefCount_s005c_7500& operator=(const AutoRefCount_s005c_7500& x);  // 0x005766e0 (out of line)
   T*& AsOutParam() {
     if (mpObject) {
       T* const p = mpObject;
@@ -73,7 +80,8 @@ class IUnknown32_s005c_7500 {
 }
 namespace EA {
 namespace ResourceMan {
-struct Key_s005c_7500 {
+class Key_s005c_7500 {
+ public:
   unsigned int mInstance, mType, mGroup;
   Key_s005c_7500() {}
   Key_s005c_7500(unsigned int i, unsigned int t, unsigned int g) : mInstance(i), mType(t), mGroup(g) {}
@@ -93,6 +101,58 @@ class sp_vector0 {
   T* end() { return mpEnd; }
 };
 }
+namespace eastl {
+extern wchar_t gEmptyWString;  // 0x01667bac
+}
+namespace eastl {
+class wstring {
+ public:
+  wchar_t* mpBegin;
+  wchar_t* mpEnd;
+  wchar_t* mpCapacity;
+  wstring()
+      : mpBegin(&gEmptyWString), mpEnd(&gEmptyWString), mpCapacity(&gEmptyWString + 1) {}
+  ~wstring() { DeallocateSelf(); }
+  void DeallocateSelf();  // 0x00933960
+};
+}
+namespace EA {
+template <class T>
+const T& min(const T& a, const T& b) {
+  return b < a ? b : a;
+}
+}
+namespace EA {
+namespace ResourceMan {
+class IManager {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12)
+  PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23)
+  PV(24) PV(25) PV(26) PV(27) PV(28) PV(29) PV(30)
+  virtual void GetKeyName(const Key_s005c_7500& key, eastl::wstring* out);  // +0x7c
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+IManager* GetManager();  // 0x0067dcd0
+}
+}
+class cPropertyList_s005c_7500 {
+ public:
+  virtual int AddRef();
+  virtual int Release();
+};
+class IPropertyManager {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
+  virtual void GetPropertyList(uint32_t instance, uint32_t group, cPropertyList_s005c_7500*& out);  // +0x2c
+};
+IPropertyManager* PropertyManager();  // 0x0067de30
+bool GetPropertyAsKeyInstance(void* list, uint32_t id, uint32_t* out);              // 0x006a12a0
+bool GetPropertyAsKeyArray(void* list, uint32_t id, uint32_t* count, void** data);  // 0x006a0ae0
+bool GetPropertyAsIntArray(void* list, uint32_t id, uint32_t* count, void** data);  // 0x006a07d0
+bool GetPropertyAsInt(void* list, uint32_t id, int* out);                           // 0x00410370
 using EA::AutoRefCount_s005c_7500;
 namespace SP {
 class cSPPalettePage_s005c_7500;
@@ -105,6 +165,8 @@ class cSPPaletteItem_s005c_7500 : public EA::RefCountVTemplate_s005c_7500<int>, 
  public:
   using EA::RefCountVTemplate_s005c_7500<int>::AddRef;
   using EA::RefCountVTemplate_s005c_7500<int>::Release;
+  cSPPaletteItem_s005c_7500();  // 0x005c66a0
+  bool Init(const EA::ResourceMan::Key_s005c_7500& key, int index, uint32_t thumbnailGroupID);  // 0x005c6810
   enum eItemType {
     kItemTypeUnknown = -1,
     kBlock = 0xa2e50993,
@@ -138,7 +200,9 @@ class cSPPalettePage_s005c_7500 : public EA::RefCountVTemplate_s005c_7500<int>, 
   virtual ~cSPPalettePage_s005c_7500();
   void Shutdown();  // 0x005c7ed0
   int GetItemIndex(int itemIndex);  // 0x005c7f00
-  void ProcessPagePart(int a, void* b, int c);  // 0x005c7ff0
+  void ProcessPagePart(const EA::ResourceMan::Key_s005c_7500& pageName,
+                       const EA::ResourceMan::Key_s005c_7500& moduleName,
+                       uint32_t thumbnailGroupID);  // 0x005c7ff0
 
   uint32_t mLayoutInstanceID;  // +0xc
   int mField10;                // +0x10
@@ -156,8 +220,8 @@ class cSPPalettePage_s005c_7500 : public EA::RefCountVTemplate_s005c_7500<int>, 
   bool mBool4a;  // +0x4a
   char pad4b;
   float mFloat4c;              // +0x4c
-  int mField50;                // +0x50
-  int mField54;                // +0x54
+  int mnNumRows;               // +0x50
+  int mnNumColumns;            // +0x54
   uint32_t mField58;           // +0x58
   int mField5c;                // +0x5c
   int mCategoryKey0;           // +0x60
@@ -203,8 +267,8 @@ cSPPalettePage_s005c_7500::cSPPalettePage_s005c_7500()
       mBool49(false),
       mBool4a(false),
       mFloat4c(g_one),
-      mField50(0),
-      mField54(0),
+      mnNumRows(0),
+      mnNumColumns(0),
       mField58(0),
       mField5c(0),
       mCategoryKey0(-1),
@@ -214,13 +278,91 @@ cSPPalettePage_s005c_7500::cSPPalettePage_s005c_7500()
 }  // namespace SP
 
 // @ 0x005c7ff0
-void SP::cSPPalettePage::ProcessPagePart(EA::ResourceMan::Key const & a, EA::ResourceMan::Key const & b, unsigned int c)
+namespace SP {
+void cSPPalettePage_s005c_7500::ProcessPagePart(const EA::ResourceMan::Key_s005c_7500& pageName, const EA::ResourceMan::Key_s005c_7500& moduleName, uint32_t thumbnailGroupID)
 {
-  // Partial: full body (1104 bytes) not reconstructed.
-  (void)a;
-  (void)b;
-  (void)c;
+  AutoRefCount_s005c_7500<cPropertyList_s005c_7500> propList;
+  PropertyManager()->GetPropertyList(moduleName.mInstance, moduleName.mGroup,
+                                     propList.AsOutParam());
+  if (propList.mpObject == 0)
+    return;
+
+  uint32_t keyInst;
+  if (!GetPropertyAsKeyInstance(propList.mpObject, 0x1f7d3cf3, &keyInst)) {
+    eastl::wstring name;
+    EA::ResourceMan::GetManager()->GetKeyName(moduleName, &name);
+  }
+  if (keyInst != pageName.mInstance)
+    return;
+
+  uint32_t keyCount = 0;
+  uint32_t rowCount = 0;
+  uint32_t colCount = 0;
+  void* keyData = 0;
+  void* rowData = 0;
+  void* colData = 0;
+  int propInt = 0;
+
+  GetPropertyAsKeyArray(propList.mpObject, 0xeeead734, &keyCount, &keyData);
+  GetPropertyAsIntArray(propList.mpObject, 0xf8e99c4f, &rowCount, &rowData);
+  GetPropertyAsIntArray(propList.mpObject, 0x22c47931, &colCount, &colData);
+  if (*(int*)(*(char**)(g_pEditor + 0x3c) + 0x118) != 0)
+    GetPropertyAsInt(propList.mpObject, 0x5383435, &propInt);
+
+  if (keyCount != rowCount) {
+    eastl::wstring name;
+    EA::ResourceMan::GetManager()->GetKeyName(moduleName, &name);
+    keyCount = EA::min(keyCount, rowCount);
+  }
+  if (keyCount != colCount) {
+    eastl::wstring name;
+    EA::ResourceMan::GetManager()->GetKeyName(moduleName, &name);
+    keyCount = EA::min(keyCount, colCount);
+  }
+
+  for (int i = 0; i < (int)keyCount; i++) {
+    int row = ((int*)rowData)[i];
+    int col = ((int*)colData)[i];
+    if (row < 0 || row >= mnNumRows) {
+      eastl::wstring name;
+      EA::ResourceMan::GetManager()->GetKeyName(moduleName, &name);
+      continue;
+    }
+    if (col < 0 || col >= mnNumColumns) {
+      eastl::wstring name;
+      EA::ResourceMan::GetManager()->GetKeyName(moduleName, &name);
+      continue;
+    }
+    int index = mnNumRows * col + row;
+    cSPPaletteItem_s005c_7500* oldItem = mItems.mpBegin[index].mpObject;
+    if (oldItem != 0) {
+      oldItem->AddRef();
+      if (oldItem->mIndex >= propInt) {
+        if (oldItem->mIndex == propInt) {
+          eastl::wstring name;
+          EA::ResourceMan::GetManager()->GetKeyName(moduleName, &name);
+        }
+        oldItem->Release();
+        continue;
+      }
+    }
+    {
+      AutoRefCount_s005c_7500<cSPPaletteItem_s005c_7500> item(new ("Editor", 0, 0, 0, 0) cSPPaletteItem_s005c_7500());
+      if (item.mpObject != 0) {
+        if (item->Init(((const EA::ResourceMan::Key_s005c_7500*)keyData)[i], propInt,
+                       thumbnailGroupID))
+          mItems.mpBegin[index] = item;
+        else {
+          eastl::wstring name;
+          EA::ResourceMan::GetManager()->GetKeyName(moduleName, &name);
+        }
+      }
+    }
+    if (oldItem != 0)
+      oldItem->Release();
+  }
 }
+}  // namespace SP
 
 // @ 0x005c85d0
 bool cSPPalettePage::CommonInit(int a, int b)

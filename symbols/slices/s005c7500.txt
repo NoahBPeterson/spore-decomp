@@ -1,5 +1,6 @@
 005c1ce0 ?GetPage@cSPPaletteCategory@SP@@QAEPAVcSPPalettePage@2@H@Z  # SP::cSPPaletteCategory::GetPage (callee of s005c7500, named from the dev publics; slice address comment)
 005c5de0 ?GetCategory@cSPPalette@SP@@QAEPAVcSPPaletteCategory@2@H@Z  # SP::cSPPalette::GetCategory (callee of s005c7500, named from the dev publics; slice address comment)
+005c6810 ?Init@cSPPaletteItem@SP@@QAE_NABVKey@ResourceMan@EA@@HI@Z  # SP::cSPPaletteItem::Init (callee of s005c7500, named from the dev publics; slice address comment)
 005c7500 ?Init@cSPOLDPaletteItemUI_s005c_7500@SP@@QAEXPAVcSPPaletteItem_s005c_7500@2@PAVUIWindow@2@HPAVcSPSwatch_s005c_7500@2@@Z  # cSPOLDPaletteItemUI_s005c_7500::Init migrated from s005c7500 (verbatim, slice spelling)
 005c7b80  ??0cSPPaletteCursor@SP@@QAE@XZ  # palette cursor ctor (base vptrs + zeroed indices), byte-exact
 005c7bc0  ?SetPalette@cSPPaletteCursor@SP@@QAEXPAVcSPPalette@2@@Z  # sets refcounted mPalette @+0xc, resets indices
@@ -8,7 +9,7 @@
 005c7e20  ?Next@cSPPaletteCursor@SP@@QAEHPAXPAH11@Z  # Advance + Current until non-null
 005c7ed0  ?Shutdown@cSPPalettePage@SP@@QAEXXZ  # calls cSPPaletteItem::Shutdown on mItems @+0x70
 005c7f50 ??0cSPPalettePage_s005c_7500@SP@@QAE@XZ  # cSPPalettePage_s005c_7500::cSPPalettePage migrated from s005c7500 (verbatim, slice spelling)
-005c7ff0 ?ProcessPagePart@cSPPalettePage@SP@@QAEXABVKey@ResourceMan@EA@@0I@Z  # SP::cSPPalettePage::ProcessPagePart migrated from s005c7500
+005c7ff0 ?ProcessPagePart@cSPPalettePage_s005c_7500@SP@@QAEXABVKey_s005c_7500@ResourceMan@EA@@0I@Z  # cSPPalettePage_s005c_7500::ProcessPagePart migrated from s005c7500 (verbatim, slice spelling)
 005c8440  ??_GcSPPalettePage@SP@@UAEPAXI@Z  # cSPPalettePage scalar deleting dtor (vector @+0x70)
 005cae30 ?GetSubCategory@cSPPaletteCategory@SP@@QAEPAV12@H@Z  # SP::cSPPaletteCategory::GetSubCategory (callee of s005c7500, named from the dev publics; slice address comment)
 00641770 ?GetPriority@cSPPaletteItem@SP@@QBEHXZ  # SP::cSPPaletteItem::GetPriority (callee of s005c7500, named from the dev publics; slice address comment)

@@ -1,2 +1,3 @@
 # va  diff-bytes  reason
 005c7f50 52 cSPPalettePage ctor: derived-vptr stores scheduled before float member inits instead of after
+005c7ff0 834 cSPPalettePage::ProcessPagePart: complete (all branches); frame/register allocation differ (orig frame 0x74, unconditional ebx/ebp/esi/edi saves, hoisted empty-wstring begin->ebp/cap->esi, 4 warn slots; ours shrink-wraps ebp, rematerialises empty-wstring constants, reuses warn slots)
