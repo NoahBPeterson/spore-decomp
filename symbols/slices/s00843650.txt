@@ -1,0 +1,9 @@
+00843650 ?SubstituteVariables@cParser_s0084_3650@ArgScript@EA@@QAEXPAUstring8_s0084_3650@eastl@@H@Z  # $/${} variable expansion, throws cError
+00843920 ?CommandLookup@cParser_s0084_3650@ArgScript@EA@@QAEPAUcICommand_s0084_3650@23@PBD@Z  # block-stack MatchName scan then mCommands.find
+008439b0 ?insert@HashTable_s0084_3650@eastl@@QAE?AUInsertResult_s0084_3650@2@PBUstring8_s0084_3650@2@PAURehashLocal_s0084_3650@2@@Z  # macro hashtable find-or-insert (FNV-1a)
+00843ab0 ?DoInsertValue@VecPtr_s0084_3650@eastl@@QAEPAPAXPAPAXPBQAPAX@Z  # vec<void*>::insert at position
+00843bc0 ?push_back@bool_vec_s0084_3650@eastl@@QAEXPB_N@Z  # vector<bool,fixed_allocator> insert/append
+00843cc0 ?ExecuteBody@cIncludeCommand_s0084_3650@ArgScript@EA@@QAEXPAUcArguments_s0084_3650@23@@Z  # include: resolve path, RunFile
+00843e50 ?ExecuteBody@cIncludeIfExistsCommand_s0084_3650@ArgScript@EA@@QAEXPAUcArguments_s0084_3650@23@@Z  # include-if-exists: as above + _stat64i32 guard
+00843ff0 ?ParseBody@cIfCommand_s0084_3650@ArgScript@EA@@QAE_NABUstring8_s0084_3650@eastl@@@Z  # if/else/elseif continuation line
+008440d0 ?ParseCommand@cParser_s0084_3650@ArgScript@EA@@QAEXPBD@Z  # one command line: strip, meta, substitute, split, lookup, execute
