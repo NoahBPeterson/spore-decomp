@@ -3,16 +3,15 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
-#include "SP/cEditorsTokenTranslator.h"
 #include "SP/cStringTokenTranslator.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void EASTL_allocator_deallocate(void* p);                       // 0x00f47380
 #include <new>
 #include <math.h>
+#include "SP/cEditorsTokenTranslator.h"
 
 // ---- items of slice s005d53e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void EASTL_allocator_deallocate(void* p);                       // 0x00f47380
 namespace eastl {
 class string16_s005d_53e0 {
  public:
