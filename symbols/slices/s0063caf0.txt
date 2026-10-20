@@ -9,7 +9,7 @@
 00637860 ?Show@cSPPlayModeUI@SP@@QAEXXZ  # SP::cSPPlayModeUI::Show (callee of s0063caf0, named from the dev publics; slice address comment)
 0063b270 ?Init@cSPPlayModeSubModeBase@SP@@UAEXPAUSubModeParams_t@2@@Z  # SP::cSPPlayModeSubModeBase::Init (callee of s0063caf0, named from the dev publics; slice address comment)
 0063bec0 ?ShowYouTubeLoginDialog@cSPPlayModeSubModeMovie@SP@@AAEXXZ  # SP::cSPPlayModeSubModeMovie::ShowYouTubeLoginDialog (callee of s0063caf0, named from the dev publics; slice address comment)
-0063caf0 SP::cSPPlayModeSubModeMovie::Init  # PDB candidate (caller-single): calls base Init 0x63b270, reads 0x456f974..979 props, registers 12 messages
+0063caf0 ?FUN_0063caf0@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXPAUSubModeParams@@@Z  # cSPPlayModeSubModeMovie_s0063_caf0::FUN_0063caf0 migrated from s0063caf0 (verbatim, slice spelling)
 0063cd30 ?FUN_0063cd30@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXXZ  # cSPPlayModeSubModeMovie_s0063_caf0::FUN_0063cd30 migrated from s0063caf0 (verbatim, slice spelling)
 0063ced0 ?CheckYouTubeRegistration@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXXZ  # cSPPlayModeSubModeMovie_s0063_caf0::CheckYouTubeRegistration migrated from s0063caf0 (verbatim, slice spelling)
 0063cf90 ?FUN_0063cf90@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXXZ  # cSPPlayModeSubModeMovie_s0063_caf0::FUN_0063cf90 migrated from s0063caf0 (verbatim, slice spelling)

@@ -473,6 +473,7 @@ extern IPropList* gAppProperties;   // 0x015FD918
 extern const wchar_t gDfltText[];   // 0x013EC468
 extern const wchar_t gDflt13fe144[];   // 0x013FE144
 extern const wchar_t gFmt13fe12c[];    // 0x013FE12C
+extern const uint32_t gMsgTable[12];   // 0x013FF09C
 extern void* gCalloutWhere;                                          // 0x0152481C
 extern const wchar_t gUrlDelims[];   // 0x013FA030
 extern char* gRecordingStopped;                       // 0x0152443C
@@ -756,6 +757,23 @@ virtual void m10();
 virtual void m11();
     virtual bool IsRecording();                                      // +0x30
 };
+IMovieSystem_s0063_caf0* MovieSystem();   // 0x0067CB10
+struct IConfigMgr_s0063_caf0 {
+virtual void c0();
+virtual void c1();
+virtual void c2();
+virtual void c3();
+virtual void c4();
+virtual void c5();
+virtual void c6();
+virtual void c7();
+virtual void c8();
+virtual void c9();
+virtual void c10();
+virtual void c11();
+    virtual int GetValue(uint32_t id);                               // +0x30
+};
+IConfigMgr_s0063_caf0* GetConfigManager_s0063_caf0();   // 0x0067DD30
 struct IAuthManager_s0063_caf0 {
 virtual void a0();
 virtual void a1();
@@ -953,6 +971,10 @@ virtual void a7();
     virtual uint32_t v8();                            // +0x20
 };
 IAudioSystem* GetSystemAT();                          // 0x00A206F0
+static __forceinline bool GetTyped(IPropList_s0063_caf0* pl, uint32_t id, short type, void** out)
+{
+    return pl->GetProp(id, out) && ((cProp*)*out)->mType == type;
+}
 #define CLOSE_DIALOG do { mState = 0; BeginProfScope(1, 1)->End(); return true; } while (0)
 // ---- items of slice s0063caf0 end
 
@@ -1784,6 +1806,55 @@ void cSPPlayModeSubModeMovie_s0063_ba50::OnMovieRecorded()
     mRecordingIndicator ^= true;
     mIndicatorTimer = 0;
     GetMessageServer()->PostMessage(0x52f180, (void*)0x21, 0);
+}
+
+// @ 0x0063caf0
+void cSPPlayModeSubModeMovie_s0063_caf0::FUN_0063caf0(SubModeParams* p)
+{
+    Init(p);
+    mUI = p->mUI;
+    mMovieSystem = MovieSystem();
+    mb22c0 = false;
+    mb22c1 = false;
+    mCurrFilename[0] = 0;
+    mCurrPathname[0] = 0;
+    mb235d = false;
+    mb235e = false;
+    IPropList_s0063_caf0* pl = gAppProperties_s0063_caf0;
+    if (pl) {
+        void* pr;
+        if (GetTyped(pl, 0x456f974, 0xd, &pr))
+            mTime = *((cProp*)pr)->GetFloat();
+        if (GetTyped(pl, 0x456f975, 10, &pr))
+            mWidth = *((cProp*)pr)->GetUInt();
+        if (GetTyped(pl, 0x456f976, 10, &pr))
+            mHeight = *((cProp*)pr)->GetUInt();
+        if (GetTyped(pl, 0x456f977, 0xd, &pr))
+            mFPS = *((cProp*)pr)->GetFloat();
+        if (GetTyped(pl, 0x456f978, 0xd, &pr))
+            mQuality = *((cProp*)pr)->GetFloat();
+        if (GetTyped(pl, 0x456f979, 1, &pr))
+            mAudio = *((cProp*)pr)->GetBool();
+    }
+    mField22c8 = mWidth;
+    mField22cc = mHeight;
+    LoadYouTubeCredentials();
+    mUI->SetYTUsername(*(eastl::string_s0063_caf0*)&mField22fc);
+    mUI->SetYTPassword(*(eastl::string_s0063_caf0*)&mField234c);
+    mUI->SetYTPrompt(GetConfigManager_s0063_caf0()->GetValue(0x5664a8b) != 0);
+    IMessageServer_s0063_caf0* ms = (IMessageServer_s0063_caf0*)GetMessageServer_s0063_caf0();
+    void* h = (char*)this + 0x14;
+    mAutoServer = ms;
+    mAutoHandler = h;
+    mAutoTable = gMsgTable;
+    mAutoCount = 0xc;
+    mAutoE = 0;
+    if (ms && h) {
+        for (uint32_t i = 0; i < 12; ++i)
+            ms->AddHandler(h, gMsgTable[i]);
+    }
+    if (mMovieSystem->IsRecording())
+        OnMovieRecorded();
 }
 
 // @ 0x0063cd30
