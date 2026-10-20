@@ -290,11 +290,14 @@ struct AppProps {
 namespace SP {
 struct Vec20 { void* p0; void* p1; void* p2; void* p3; void* p4; };
 }
+extern "C" int __cdecl isdigit(int);
 extern const char* kVisibleCommands[];                   // 0x153d728
+extern const char* kDeformHandleCommands[];              // 0x153d678
 extern const char* kModelSplitterTypeCommands[];         // 0x153d7c8
 extern const char* kModelSplitterFuzzyModeCommands[];    // 0x153d7e8
 extern void* g_cmdGameModel; // 0x153d644
 #pragma intrinsic(sin, cos)
+#undef SUBCOMMAND
 void  operator delete[](void* p);
 namespace eastl {
 extern wchar_t gEmptyString16[2];
@@ -538,6 +541,10 @@ struct cGameModelNameCommand : EA::ArgScript::cCommandBase_s007d_19c0 {
     void Execute(EA::ArgScript::cArguments_s007d_19c0& args);
 };
 struct cGameModelWorldCommand : EA::ArgScript::cCommandBase_s007d_19c0 {
+    SP::cGameModelState* mState;
+    void Execute(EA::ArgScript::cArguments_s007d_19c0& args);
+};
+struct cGameModelDeformCommand : EA::ArgScript::cCommandBase_s007d_19c0 {
     SP::cGameModelState* mState;
     void Execute(EA::ArgScript::cArguments_s007d_19c0& args);
 };
@@ -1122,6 +1129,28 @@ void cGameModelWorldCommand::Execute(EA::ArgScript::cArguments_s007d_19c0& args)
     EA::ResourceKey key;
     EA::SPKeyFromName(&key, s.c_str(), 0, 0);
     mState->mDesc.mWorldID = key.a;
+}
+
+// @ 0x007d2330
+void cGameModelDeformCommand::Execute(EA::ArgScript::cArguments_s007d_19c0& args)
+{
+    int count;
+    const char** av = args.MainArguments(&count, 1, 0x7fffffff);
+    for (int i = 0; i < count; ++i) {
+        uint32_t v;
+        if (isdigit((unsigned char)av[i][0]))
+            v = mParser->v40(av[i]);
+        else
+            v = EA::ArgScript::ParseEnum(av[i], kDeformHandleCommands);
+        UVec* g = (UVec*)&mState->mDesc.mGroups;
+        uint32_t* end = g->mpEnd;
+        if (end < g->mpCapacity) {
+            g->mpEnd = end + 1;
+            if (end) *end = v;
+        } else {
+            g->DoInsertValue(end, v);
+        }
+    }
 }
 
 // @ 0x007d23d0

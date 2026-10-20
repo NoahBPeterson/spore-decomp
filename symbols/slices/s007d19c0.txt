@@ -5,7 +5,7 @@
 007d1cc0 ?Execute@cGameModelNameCommand@@QAEXAAVcArguments_s007d_19c0@ArgScript@EA@@@Z  # cGameModelNameCommand::Execute migrated from s007d19c0 (verbatim, slice spelling)
 007d1e40 ?Execute@cGameModelWorldCommand@@QAEXAAVcArguments_s007d_19c0@ArgScript@EA@@@Z  # cGameModelWorldCommand::Execute migrated from s007d19c0 (verbatim, slice spelling)
 007d1f20  cGameModelEffectCommand::OnRegister  # registers the 12 GameModel sub-commands via AddCommand (slot 0x18)
-007d2330  cGameModelDeformCommand::Execute  # ParseEnum/ParseInt per arg, appended to mDesc.mGroups
+007d2330 ?Execute@cGameModelDeformCommand@@QAEXAAVcArguments_s007d_19c0@ArgScript@EA@@@Z  # cGameModelDeformCommand::Execute migrated from s007d19c0 (verbatim, slice spelling)
 007d23d0 ?Execute@cGameModelSplitterCommand@@QAEXAAVcArguments_s007d_19c0@ArgScript@EA@@@Z  # cGameModelSplitterCommand::Execute migrated from s007d19c0 (verbatim, slice spelling)
 007d2490 ??1cGameModelEffectCommand@@QAE@XZ  # cGameModelEffectCommand::~cGameModelEffectCommand migrated from s007d19c0 (verbatim, slice spelling)
 007d2580 ?CopySplitControllerVector@Vec20_s007d_19c0@SP@@QAEPAU12@PBU12@@Z  # Vec20_s007d_19c0::CopySplitControllerVector migrated from s007d19c0 (verbatim, slice spelling)
