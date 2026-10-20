@@ -21,6 +21,7 @@ extern "C" void ShaderStateUnlockHook();
 #include "EA/ResourceMan/Key.h"
 #include "EA/ResourceMan/Resource.h"
 #include "EA/ResourceMan/Manager.h"
+#include "SP/cDirectPropertyList.h"
 #pragma function(memcpy)
 
 // ---- items of slice s006e51b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -586,6 +587,28 @@ void* operator new(size_t n, const char* name, int a, int b, int c, int d);     
 
 // ---- items of slice s00711de0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern char g_mutexParams;                  // DAT_0140C860 (relocated constant passed to Lock)
+extern "C" uint32_t g_1535f60;                                 // 0x1535f60
+extern "C" void*    GetManager67dcd0();                        // 0x67dcd0
+extern "C" void     FUN_006fd7b0();                            // 0x6fd7b0
+extern "C" int      FUN_006bb1c0(const char* msg, int a, int b, int c); // 0x6bb1c0
+extern "C" bool   FUN_006e54c0(void* p);                                  // 0x6E54C0 add-ref/release
+extern "C" bool   FUN_006e57a0(void* p);                                  // 0x6E57A0 ShaderState_Release
+extern "C" void   FUN_006e5bd0(void* p);                                  // 0x6E5BD0 ShaderState::Reset
+extern "C" void*  FUN_006e57d0();                                         // 0x6E57D0 ShaderState ctor
+extern "C" bool   FUN_006e5d50(void* obj, uint32_t a, uint32_t b);        // 0x6E5D50
+extern "C" void*  FUN_006fd280();                                         // 0x6FD280 shader-array ctor
+extern "C" bool   FUN_006fd300(void* p);                                  // 0x6FD300 refcount release
+extern "C" bool   FUN_006fd5d0(void* obj, uint32_t a, uint32_t b);        // 0x6FD5D0
+extern "C" void   FUN_006ff3f0(void* stream);                             // 0x6FF3F0
+extern "C" void   FUN_006fc1f0(void* stream);                             // 0x6FC1F0 ReadShaderCache
+extern "C" void   FUN_00711070(void* self);                               // 0x711070 VecResizeA::resize
+extern "C" void   FUN_007110f0(void* self);                               // 0x7110F0 VecResizeB::resize
+extern "C" void   FUN_0070fa60(void* begin, void* end);                   // 0x70FA60 VecA::Shrink
+extern "C" void   FUN_0093a6c0(void* a, const void* b, uint32_t n);       // 0x93A6C0 write blob
+extern "C" void   FUN_0093a780(void* a, void* b, uint32_t n, int flags);  // 0x93A780 read blob
+extern "C" void   FUN_0047bf30(void* str, uint32_t n, char c);            // string::resize
+extern "C" void*  memmove(void*, const void*, unsigned int);
+extern "C" uint32_t g_1535f6c;                                            // 0x1535F6C
 void __cdecl AssignRange(void* first, void* last, const void* tag); // 0x7106D0
 struct Mutex_s0071_1de0 {
     char mData[0x40];
@@ -649,21 +672,35 @@ struct MaterialManagerBig2 {
     char pad10[4];
     char* mpInvalidTexture;       // +0x14 (cTextureInstance; refcount at +8)
     char pad18[0x174 - 0x18];
-    MatMap mMap;             // +0x174
-    char pad1b4[4];
+    MatMap mMap;             // +0x174 (bucket/anchor storage; +0x180 == mMap+0xc)
+    char* mpInvalidState;    // +0x1b4
     FixedClear_s0071_1de0 mFixed;       // +0x1b8
-    char pad1b9[0x258 - 0x1b9];
+    char pad1b9[0x200 - 0x1b9];
+    int32_t mCount;          // +0x200
+    char pad204[0x258 - 0x204];
     Mutex_s0071_1de0 mMutex;            // +0x258
-    char pad3[0x200];
-    int32_t mCount;          // +0x200 (approx)
 
-    void ReadMaterials1184(void* stream, int32_t n, uint32_t* ids, void* a, void* b);
+    uint8_t ReadMaterials1184(void* stream);
     bool Shutdown();
-    void Update2670();
+    bool Update2670();
+    void Update();
     void RemoveAllRegistered();
     void RemoveAllRegisteredMaterials();   // 0x00711d10 (thiscall)
     void UnregisterArenaContents(void* arena);
 };
+namespace SP {
+ struct cDirectPropertyList_s0071_1de0 { int GetIntProperty(uint32_t key) const; };   // 0x6a2660
+}
+extern "C" SP::cDirectPropertyList_s0071_1de0* g_sAppProps;                 // 0x15fd918 (_sAppProperties)
+void* __cdecl    FUN_00f473a0(uint32_t n, const char* name, int a, int b, const char* file, int c);
+typedef void* (__thiscall *HashFindFn)(void* ht, void* out, const uint32_t* key);
+typedef void* (__thiscall *MapIndexFn)(void* map, const uint32_t* key);
+typedef long long (__thiscall *StopwatchElapsedFn)(void* self);          // 0x0093A3A0
+typedef void      (__cdecl    *ShaderSetFn)(int id, const void* value, int flags); // 0x00777AE0
+typedef void*     (__cdecl    *GetManagerFn)(void);                      // 0x0067DD50
+typedef void      (__thiscall *SetRasterFn)(void* state, int index, void* raster); // 0x011EE6B0
+typedef void      (__thiscall *VecResizeFn)(void* self, uint32_t n);     // 0x00712280
+typedef bool      (__thiscall *IsBusyFn)(void* self);                    // vtable slot 0x28
 struct FreeNode24 {
     int32_t m00;           // +0x00
     char pad0[0x24 - 0x04];
@@ -2265,12 +2302,140 @@ void MaterialManagerBig::RemoveAllRegisteredMaterials()
 }
 
 // @ 0x00711de0
-void MaterialManagerBig2::ReadMaterials1184(void* stream, int32_t n, uint32_t* ids, void* a, void* b)
+uint8_t MaterialManagerBig2::ReadMaterials1184(void* stream)
 {
-    // Large serialization entry; guarded by mMutex.
-    mMutex.Lock(&g_mutexParams);
-    (void)stream; (void)n; (void)ids; (void)a; (void)b;
-    mMutex.Unlock();
+    char* const self = (char*)this;
+    MutexLock lock(mMutex, &g_mutexParams);
+
+    uint8_t ok = 1;
+
+    // Ask the stream to resolve { mCount, serTag, 0x1535F6C } and hand back the reader object.
+    uint32_t key[3];
+    key[0] = *(uint32_t*)(self + 0x200);
+    key[1] = 0x0469a3f7u;
+    key[2] = g_1535f6c;
+    void* reader = 0;
+    uint32_t tag = 0;
+    if (!((bool (__thiscall*)(void*, uint32_t*, void**, int))
+              *(void**)(*(char**)stream + 0x34))(stream, key, &reader, 1))
+        return 0;
+
+    // vtable+0x18 opens the IO channel; all reads go through 0x93A780(obj, &dst, 1, 0)
+    char* io = (char*)((void* (__thiscall*)(void*))*(void**)(*(char**)stream + 0x18))(stream);
+    uint32_t version = 0;
+    FUN_0093a780(io, &version, 1, 0);
+    if (version - 6 > 1u) {
+        if (stream) ((void (__thiscall*)(void*))*(void**)(*(char**)stream + 8))(stream);
+        return 0;
+    }
+
+    // ---- type table ----
+    char* typeVec = self + 0x98;
+    char* typeMap = self + 0xcc;
+    FUN_0070fa60(*(void**)(self + 0x98), *(void**)(self + 0x9c));
+    uint32_t nTypes = 0;
+    FUN_0093a780(io, &nTypes, 1, 0);
+    FUN_00711070(typeVec);
+    int typeCount = (int)((*(uint32_t*)(self + 0x9c) - *(uint32_t*)(self + 0x98)) >> 2);
+    for (int i = 0; i < typeCount; ++i) {
+        uint32_t id = 0;
+        FUN_0093a780(io, &id, 1, 0);
+        void* it[2];
+        ((HashFindFn)0x00645ed0)(typeMap, it, &id);
+        char* obj;
+        if (it[0] == *(void**)(*(char**)(typeMap + 4) + *(int*)(typeMap + 8) * 4)) {
+            obj = (char*)FUN_00f473a0(0x348, "Graphics", 0, 0, 0, 0);
+            obj = obj ? (char*)FUN_006e57d0() : 0;
+            if (id < 0x70000000u || (int)id < 0) {
+                void** slot = (void**)((MapIndexFn)0x007101f0)(typeMap, &id);
+                char* prev = (char*)*slot;
+                if (obj != prev) {
+                    if (obj) FUN_006e54c0(obj);
+                    *slot = obj;
+                    if (prev) FUN_006e57a0(prev);
+                }
+            }
+        } else {
+            obj = *(char**)((char*)it[0] + 4);
+            FUN_006e5bd0(obj);
+        }
+        if (!FUN_006e5d50(obj, key[1], version))
+            ok = 0;
+        char** arr = *(char***)typeVec;
+        char* old = arr[i];
+        if (obj != old) {
+            if (obj) FUN_006e54c0(obj);
+            arr[i] = obj;
+            if (old) FUN_006e57a0(old);
+        }
+        FUN_006e57a0(obj);
+    }
+
+    // ---- instance table ----
+    char* instVec = self + 0xec;
+    char* instMap = self + 0x100;
+    uint32_t nInst = 0;
+    FUN_0093a780(io, &nInst, 1, 0);
+    FUN_007110f0(instVec);
+    int instCount = (int)((*(uint32_t*)(self + 0xf0) - *(uint32_t*)(self + 0xec)) >> 2);
+    for (int i = 0; i < instCount; ++i) {
+        uint32_t id = 0;
+        FUN_0093a780(io, &id, 1, 0);
+        void* it[2];
+        ((HashFindFn)0x00645ed0)(instMap, it, &id);
+        char* obj;
+        if (it[0] == *(void**)(*(char**)(instMap + 4) + *(int*)(instMap + 8) * 4)) {
+            obj = (char*)FUN_00f473a0(0x2c8, "Graphics", 0, 0, 0, 0);
+            obj = obj ? (char*)FUN_006fd280() : 0;
+            if (id < 0x70000000u || (int)id < 0) {
+                void** slot = (void**)((MapIndexFn)0x007102b0)(instMap, &id);
+                char* prev = (char*)*slot;
+                if (obj != prev) {
+                    if (obj) FUN_006e54c0(obj);
+                    *slot = obj;
+                    if (prev) FUN_006fd300(prev);
+                }
+            }
+        } else {
+            obj = *(char**)((char*)it[0] + 4);
+        }
+        if (!FUN_006fd5d0(obj, key[1], version))
+            ok = 0;
+        char** arr = *(char***)instVec;
+        char* old = arr[i];
+        if (obj != old) {
+            if (obj) FUN_006e54c0(obj);
+            arr[i] = obj;
+            if (old) FUN_006fd300(old);
+        }
+        FUN_006fd300(obj);
+    }
+
+    FUN_006ff3f0(stream);
+    FUN_006fc1f0(stream);
+
+    // ---- trailing shader-cache blob (version > 3) ----
+    if (version > 3) {
+        uint32_t len = 0;
+        FUN_0093a780(io, &len, 1, 0);
+        char** str = (char**)(self + 0x120);
+        char* end = str[1];
+        uint32_t cur = (uint32_t)(end - str[0]);
+        if (len < cur) {
+            char* dst = str[0] + len;
+            if (dst != end) {
+                memmove(dst, end, (size_t)((end - end) + 1));
+                str[1] += dst - end;
+            }
+        } else if (len > cur) {
+            FUN_0047bf30(str, len - cur, 0);
+        }
+        FUN_0093a6c0(io, str[0], (uint32_t)(str[1] - str[0]));
+    }
+
+    if (stream)
+        ((void (__thiscall*)(void*))*(void**)(*(char**)stream + 0x24))(stream);
+    return ok;
 }
 
 // @ 0x00712320
@@ -2322,15 +2487,114 @@ bool MaterialManagerBig2::Shutdown()
 }
 
 // @ 0x00712450
-void SP::cMaterialManager::Update()
+void MaterialManagerBig2::Update()
 {
-    // bucket walk + UnregisterArenaContents (see slice s00711220)
+    char* const self = (char*)this;
+
+    // frame timing / shader constants
+    long long ticks = ((StopwatchElapsedFn)0x0093A3A0)(self + 0x208);
+    uint32_t frame = *(uint32_t*)(self + 0x220);
+    *(uint32_t*)(self + 0x228) = frame;
+    *(uint32_t*)(self + 0x220) = frame + 1;
+    *(float*)(self + 0x224) = (float)ticks * *(float*)(self + 0x21c);
+    ((ShaderSetFn)0x00777AE0)(0x203, self + 0x224, 0);
+    ((ShaderSetFn)0x00777AE0)(0x256, (const void*)1, 0);
+
+    void* mgr = ((GetManagerFn)0x0067DD50)();
+    int* dims = (int*)((void* (__thiscall*)(void*))*(void**)(*(char**)mgr + 0x1c))(mgr);
+    *(float*)(self + 0x22c) = (float)dims[0];
+    *(float*)(self + 0x230) = (float)dims[1];
+    float fx = *(float*)(self + 0x22c);
+    float fy = *(float*)(self + 0x230);
+    *(float*)(self + 0x234) = (fx <= 0.0f) ? 0.0f : 1.0f / fx;
+    *(float*)(self + 0x238) = (fy <= 0.0f) ? 0.0f : 1.0f / fy;
+    ((ShaderSetFn)0x00777AE0)(0x204, self + 0x22c, 0);
+
+    // walk the registered materials, refresh the rasters of the live ones and compact the vector
+    int n = (int)((*(uint32_t*)(self + 0x248) - *(uint32_t*)(self + 0x244)) >> 2);
+    int keep = 0;
+    for (int i = 0; i < n; ++i) {
+        char* mat = (char*)(*(void***)(self + 0x244))[i];
+        int nTex = (int)((*(uint32_t*)(mat + 0x24) - *(uint32_t*)(mat + 0x20)) >> 2);
+        bool stale = false;
+        for (int j = 0; j < nTex; ++j) {
+            char* tex = (char*)(*(void***)(mat + 0x20))[j];
+            if (tex != 0) {
+                if ((*(uint8_t*)(tex + 4) & 1) == 0)
+                    stale = true;
+                else
+                    ((SetRasterFn)0x011EE6B0)(*(void**)(mat + 4), j, *(void**)tex);
+            }
+        }
+        if (stale) {
+            if (keep < i) {
+                void** v = *(void***)(self + 0x244);
+                char* src = (char*)v[i];
+                char* dst = (char*)v[keep];
+                if (src != dst) {
+                    if (src != 0)
+                        ++*(int*)(src + 0x14);
+                    v[keep] = src;
+                    if (dst != 0 && *(int*)(dst + 0x14) > 1)
+                        --*(int*)(dst + 0x14);
+                }
+            }
+            ++keep;
+        }
+    }
+    ((VecResizeFn)0x00712280)(self + 0x244, (uint32_t)keep);
+
+    // only re-create the material state when the configured budget changed
+    SP::cDirectPropertyList_s0071_1de0* props = g_sAppProps;
+    int a = props->GetIntProperty(0x1a34e253u);
+    int b = props->GetIntProperty(0xe1408308u);
+    if (b >= 0 && a > b)
+        a = b;
+
+    if (*(int*)(self + 0x200) == a) {
+        void* parser = *(void**)(self + 0xc);
+        if (parser == 0 || !((IsBusyFn)*(void**)(*(char**)parser + 0x28))(parser))
+            return;
+    }
+    ((void (__thiscall*)(void*))*(void**)(*(char**)this + 0x1c))(this);
 }
 
 // @ 0x00712670
-void MaterialManagerBig2::Update2670()
+bool MaterialManagerBig2::Update2670()
 {
-    // reads two int properties, clamps mCount, optionally unregisters, loads a package
+    SP::cDirectPropertyList_s0071_1de0* props = g_sAppProps;
+    int a = props->GetIntProperty(0x1a34e253u);
+    int b = props->GetIntProperty(0xe1408308u);
+    mCount = (b < 0 || a <= b) ? a : b;
+
+    bool ok = false;
+
+    if (*(void**)((char*)this + 0x180) != 0) {
+        RemoveAllRegisteredMaterials();
+        FUN_006fd7b0();
+    }
+
+    struct PkgKey { uint32_t a; uint32_t b; uint32_t c; };
+    PkgKey key;
+    key.a = (uint32_t)mCount;
+    key.b = 0x469a3f7u;
+    key.c = g_1535f60;
+
+    void* mgr = GetManager67dcd0();
+    void* res = ((void* (__thiscall*)(void*, void*))*(void**)(*(char**)mgr + 0x58))(mgr, &key);
+    if (res != 0) {
+        bool v80 = ((bool (__thiscall*)(void*, void*))*(void**)(*(char**)this + 0x80))(this, res);
+        bool v78 = ((bool (__thiscall*)(void*, void*))*(void**)(*(char**)this + 0x78))(this, res);
+        ok = (v78 && v80) ? true : false;
+        bool v7c = ((bool (__thiscall*)(void*, void*))*(void**)(*(char**)this + 0x7c))(this, res);
+        if (v7c && ok)
+            return true;
+    }
+
+    ok = false;
+    FUN_006bb1c0("Could not find a needed package.\n\nThe data directory is missing or corrupt.",
+                 0x3ec, 1, 0);
+    return ok;
 }
 
 // @ 0x00712760

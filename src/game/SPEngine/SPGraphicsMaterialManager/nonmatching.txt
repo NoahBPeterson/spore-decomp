@@ -36,8 +36,11 @@
 00711630 104 cMaterialManager::GetExternalReferenceKeys; Key temp/loop counter live in memory in original (frame 4 bytes larger) [equiv: WEAK]
 00711780 737 cMaterialManager::ReadMaterials; complete (all paths), register allocation/block layout differs [equiv: WEAK]
 00711b80 3 cMaterialManager::UnregisterArenaContents; complete, arena param kept in ebp in original, ExportDesc zero-init order differs [equiv: WEAK]
+00711de0 996 cMaterialManager::ReadMaterials1184 serialization entry (complete: resolves the stream reader via vtable+0x34, version check, type table and instance table rebuild with hashtable find/insert and AutoRefCount add-ref/release, ReadShaderCache, and the version>3 shader-cache blob memmove/resize path); per-object read call shape and EH frame differ [equiv: UNSUPPORTED]
 00712320 88 hashtable::DoFreeNodes variant (node +0x24/+0x28/+0x34/+0x4c); register allocation differs
 007123a0 59 cMaterialManager::Shutdown (complete: remove materials, clear fixed table, release file parser and invalid texture, clear 255 PS fragments twice); atomic refcount release block takes different registers (rc kept in ecx not eax) [equiv: WEAK]
+00712450 507 MaterialManagerBig2::Update (complete: stopwatch elapsed * scale, frame counter, 3 shader-constant writes, viewport dims and reciprocal clamps, registered-material walk with SetRaster + vector compaction, property-driven count, tail vtable+0x1c call); register allocation and indirect-call literal loads differ; equiv faults in the synthetic null-vtable scenario [equiv: FAIL]
+00712670 144 MaterialManagerBig2::Update2670 (complete: clamp mCount from the two property reads, optional RemoveAllRegisteredMaterials, package key lookup via manager vtable+0x58, three package checks, error log); register allocation and CSE shape differ [equiv: WEAK]
 00712760 39 fixed_vector copy ctor (inline buffer at +0x14/+0x18); buffer/pool stores and assign call shape off
 007127d0 150 state object copy (9 dwords + fixed-vector ctor); field-copy schedule not reproduced
 00712850 140 state object copy (a[0] + b[1..8] + fixed-vector ctor); field-copy schedule not reproduced

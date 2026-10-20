@@ -1,10 +1,10 @@
 00711b80 ?UnregisterArenaContents@cMaterialManager@SP@@UAEXPAVcArenaResource@2@@Z  # SP::cMaterialManager::UnregisterArenaContents migrated from s00711de0
-00711de0 ?ReadMaterials1184@MaterialManagerBig2@@QAEXPAXHPAI00@Z  # MaterialManagerBig2::ReadMaterials1184 migrated from s00711de0 (verbatim, slice spelling)
+00711de0 ?ReadMaterials1184@MaterialManagerBig2@@QAEEPAX@Z  # MaterialManagerBig2::ReadMaterials1184 migrated from s00711de0 (verbatim, slice spelling)
 00712280 eastl::vector<EA::AutoRefCount<SP::cMaterialInternal> >::resize  # resize(n) -> resize(n,T())
 00712320 ?DoFreeNodes24@@YGXPAPAUFreeNode24@@I@Z  # DoFreeNodes24 migrated from s00711de0 (verbatim, slice spelling)
 007123a0 ?Shutdown@MaterialManagerBig2@@QAE_NXZ  # MaterialManagerBig2::Shutdown migrated from s00711de0 (verbatim, slice spelling)
-00712450 ?Update@cMaterialManager@SP@@UAEXXZ  # SP::cMaterialManager::Update migrated from s00711de0
-00712670 ?Update2670@MaterialManagerBig2@@QAEXXZ  # MaterialManagerBig2::Update2670 migrated from s00711de0 (verbatim, slice spelling)
+00712450 ?Update@MaterialManagerBig2@@QAEXXZ  # MaterialManagerBig2::Update migrated from s00711de0 (verbatim, slice spelling)
+00712670 ?Update2670@MaterialManagerBig2@@QAE_NXZ  # MaterialManagerBig2::Update2670 migrated from s00711de0 (verbatim, slice spelling)
 00712760 ??0TailVec@@QAE@ABU0@@Z  # TailVec::TailVec migrated from s00711de0 (verbatim, slice spelling)
 007127d0 ?CopyFrom@State27D0@@QAEPAU1@ABU1@@Z  # State27D0::CopyFrom migrated from s00711de0 (verbatim, slice spelling)
 00712850 ?CopyFrom2@State2850@@QAEPAU1@ABU1@0@Z  # State2850::CopyFrom2 migrated from s00711de0 (verbatim, slice spelling)
