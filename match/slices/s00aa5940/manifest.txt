@@ -1,0 +1,2 @@
+# slice s00aa5940 (batch gold3, slice 54)
+# No byte-exact functions.

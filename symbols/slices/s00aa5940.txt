@@ -1,0 +1,7 @@
+00aa5940 ?ExecuteColor@cCommand@@QAEXPAUcArguments@ArgScript@EA@@@Z  # particle colour/opacity command Execute (FUN_00aa5940)
+00aa5ab0 ?cParticleSizeExecute@cCommand@@QAEXPAUcArguments@ArgScript@EA@@@Z  # cParticleSizeCommand::Execute
+00aa5bb0 ?cParticleAspectExecute@cCommand@@QAEXPAUcArguments@ArgScript@EA@@@Z  # cParticleAspectCommand::Execute
+00aa5cb0 ?cParticleRotateExecute@cCommand@@QAEXPAUcArguments@ArgScript@EA@@@Z  # cParticleRotateCommand::Execute
+00aa5de0 ?cParticleForceExecute@cCommand@@QAEXPAUcArguments@ArgScript@EA@@@Z  # cParticleForceCommand::Execute
+00aa61c0 ?cParticleWarpExecute@cCommand@@QAEXPAUcArguments@ArgScript@EA@@@Z  # cParticleWarpCommand::Execute
+00aa6590 ?cParticleLifeExecute@cCommand@@QAEXPAUcArguments@ArgScript@EA@@@Z  # cParticleLifeCommand::Execute
