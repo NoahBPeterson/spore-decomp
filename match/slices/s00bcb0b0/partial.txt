@@ -1,0 +1,3 @@
+# va  incomplete-bytes  reason
+00bcb730  ReadListProperty (partial): the loop body is reconstructed from the disassembly but the 0x90-byte serialized record and its EA::Variant refcount/destruct layout are opaque, so the copied-in record and the destruct ordering are not byte-verified; size 463 vs 489, 356 differing bytes; equiv UNSUPPORTED (unresolved Variant::Destruct, RawList::Clear/Serialize resolution conflicts)
+00bcbc80  cAnimalTrap::Update (partial): state-update body reconstructed against opaque engine helpers (EffectsManager, NounManagerCall, property lookup, spatial query); size 674 vs 906, so roughly a quarter of the original instructions are not yet reproduced; equiv WEAK (301 valid, 6.4% cov)
