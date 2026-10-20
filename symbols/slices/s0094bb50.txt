@@ -7,7 +7,7 @@
 0094c380 ?GetMaxSockets@Manager@Sockets@EA@@UAEHXZ  # EA::Sockets::Manager::GetMaxSockets migrated from s0094bb50
 0094c3c0 ?Init@Manager@Sockets@EA@@UAE_NXZ  # EA::Sockets::Manager::Init migrated from s0094bb50
 0094c420 ?Shutdown@Manager@Sockets@EA@@UAE_NXZ  # EA::Sockets::Manager::Shutdown migrated from s0094bb50
-0094c450 EA::Sockets::Manager::IsNetworkConnected  # dc: driver check + name lookup
+0094c450 ?IsNetworkConnected@Manager@Sockets@EA@@UAE_NPBD_N@Z  # EA::Sockets::Manager::IsNetworkConnected migrated from s0094bb50
 0094c490 ?CreateSocket@Manager@@QAEPAXH@Z  # Manager::CreateSocket migrated from s0094bb50 (verbatim, slice spelling)
 0094c510 ?GetAutoDialEnabled@Manager@Sockets@EA@@UAE_NXZ  # EA::Sockets::Manager::GetAutoDialEnabled migrated from s0094bb50
 0094c580 ?SetAutoDialEnabled@Manager@Sockets@EA@@UAE_N_N@Z  # EA::Sockets::Manager::SetAutoDialEnabled migrated from s0094bb50

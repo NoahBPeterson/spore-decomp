@@ -7,6 +7,7 @@
 #include "EA/Sockets/DatagramSocket.h"
 #include "EA/Sockets/IPAddress.h"
 #include "EA/Sockets/StreamSocket.h"
+#include "EA/Internet/URL.h"
 #include "WSAData.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -112,6 +113,9 @@ extern "C" __declspec(dllimport) long __stdcall RegSetValueExA(void* hKey, const
 unsigned long type, const unsigned char* data, unsigned long cbData);     // advapi32
 extern "C" __declspec(dllimport) long __stdcall RegCloseKey(void* hKey);                     // advapi32
 
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+unsigned int __declspec(noinline) Sockets_LookupName(const char* name, unsigned int timeout);  // 0x0094c1b0 (stays in the slice: not this object's)
+
 // @ 0x0094c260
 Manager::Manager()
 {
@@ -186,6 +190,17 @@ bool EA::Sockets::Manager::Shutdown()
         }
     }
     return true;
+}
+
+// @ 0x0094c450
+bool EA::Sockets::Manager::IsNetworkConnected(char const * p, bool q)
+{
+    int p_v = (int)p;
+    (void)p_v;
+    char c = ((char(__thiscall*)(Manager*))((*(void***)this)[7]))(this);
+    if (c != 0 && q == 0)
+        ((void(__thiscall*)(Manager*, int))((*(void***)this)[8]))(this, 0);
+    return Sockets_LookupName("www.ea.com", 10000) != 0;
 }
 
 // @ 0x0094c490
