@@ -16,18 +16,18 @@
 00936550 ?ExecuteCommandAll@SharedLibraryRegistry@EA@@UAEIPBDPAX111@Z  # EA::SharedLibraryRegistry::ExecuteCommandAll migrated from s00936090
 009365d0 ?GetMainLibrary@SharedLibraryRegistry@EA@@UAEPAVSharedLibrary@2@XZ  # EA::SharedLibraryRegistry::GetMainLibrary migrated from s00936090
 009365e0 ?Load@SharedLibrary@EA@@UAE_NXZ  # EA::SharedLibrary::Load migrated from s00936090
-009366d0 EA::SharedLibrary::Unregister  # pdb vtable-slot
+009366d0 ?Unregister@SharedLibrary_s0093_6090@EA@@QAE_NPAX@Z  # SharedLibrary_s0093_6090::Unregister migrated from s00936090 (verbatim, slice spelling)
 00936710 ?ExecuteCommand@SharedLibrary@EA@@UBE_NPBDPAX111@Z  # EA::SharedLibrary::ExecuteCommand migrated from s00936090
 00936740 ??1SharedLibraryRegistry@EA@@UAE@XZ  # EA::SharedLibraryRegistry::~SharedLibraryRegistry migrated from s00936090
 00936760 EA::SharedLibraryRegistry::RemoveLibrary  # pdb gap-align
 00936820 EA::SharedLibraryRegistry::GetLibraries  # pdb gap-align
 009368f0 EA::SharedLibraryRegistry::SharedLibraryRegistry  # dc: vtable + Mutex(0,1)
 00936920 EA::SharedLibraryRegistry::scalar_deleting_destructor  # pdb gap-align
-00936950 ?SetPath@SharedLibrary@EA@@UAE_NPB_W_N@Z  # EA::SharedLibrary::SetPath migrated from s00936090
-00936b70 EA::SharedLibrary::Unload  # pdb anchor
-00936c00 EA::SharedLibrary::Register  # pdb callee-single
+00936950 ?SetPath@SharedLibrary_s0093_6090@EA@@QAE_NPB_W_N@Z  # SharedLibrary_s0093_6090::SetPath migrated from s00936090 (verbatim, slice spelling)
+00936b70 ?Unload@SharedLibrary_s0093_6090@EA@@QAE_NH@Z  # SharedLibrary_s0093_6090::Unload migrated from s00936090 (verbatim, slice spelling)
+00936c00 ?Register@SharedLibrary_s0093_6090@EA@@QAE_NPAX0@Z  # SharedLibrary_s0093_6090::Register migrated from s00936090 (verbatim, slice spelling)
 00936c80 EA::SharedLibrary::SharedLibrary  # pdb gap-align
-00936ce0 EA::SharedLibrary::~SharedLibrary  # pdb candidate caller-single
+00936ce0 ??1SharedLibrary_s0093_6090@EA@@QAE@XZ  # SharedLibrary_s0093_6090::~SharedLibrary migrated from s00936090 (verbatim, slice spelling)
 00936d50 EA::SharedLibraryRegistry::Init  # pdb gap-align
 00936e10 ?Shutdown@SharedLibraryRegistry@EA@@UAE_NXZ  # EA::SharedLibraryRegistry::Shutdown migrated from s00936090
 00936e50 EA::SharedLibraryRegistry::LoadPath/AddLibrary  # pdb gap-align

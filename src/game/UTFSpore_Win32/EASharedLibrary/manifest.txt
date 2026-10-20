@@ -4,4 +4,5 @@
 ../src/game/UTFSpore_Win32/EASharedLibrary.cpp  ?GetMainLibrary@SharedLibraryRegistry@EA@@UAEPAVSharedLibrary@2@XZ  009365d0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EASharedLibrary.cpp  ?ExecuteCommand@SharedLibrary@EA@@UBE_NPBDPAX111@Z  00936710  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EASharedLibrary.cpp  ??1SharedLibraryRegistry@EA@@UAE@XZ  00936740  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EASharedLibrary.cpp  ?SetPath@SharedLibrary_s0093_6090@EA@@QAE_NPB_W_N@Z  00936950  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EASharedLibrary.cpp  ?Shutdown@SharedLibraryRegistry@EA@@UAE_NXZ  00936e10  /O2 /MD /Gy /TP /GS- /Isrc/game/include

@@ -135,14 +135,112 @@ extern "C" long _InterlockedExchange(volatile long*, long);
 // ---- items of slice s008dd0d0 end
 
 // ---- items of slice s00936090 begin (TODO(rewrite): local stubs, replace by canonical classes)
-namespace EA {
-extern void* gpRegistryMutexName;   // 0x0143e98c
-}
-extern "C" void* gpSharedLibraryRegistry;   // 0x01669948
-extern "C" const char kDefaultSharedLibraryVersionInfo[];   // 0x0143e990
+extern "C" unsigned __int64 __rdtsc(void);
+extern "C" void FreeMem(void*);   // 0x00f47380 (equiv t2)
 extern "C" __declspec(dllimport) void* __stdcall LoadLibraryW(const wchar_t*);
 extern "C" __declspec(dllimport) void* __stdcall GetProcAddress(void*, const char*);
 extern "C" __declspec(dllimport) int   __stdcall FreeLibrary(void*);
+#pragma intrinsic(__rdtsc)
+namespace EA {
+namespace Thread {
+class Mutex_s0093_6090 {
+public:
+    void Construct(int a, int b);
+    void Destroy();
+    void Lock(const void* name);  // 0x009221b0 (EA::Thread::Mutex::Lock)
+    void Unlock();  // 0x00922270 (EA::Thread::Mutex::Unlock)
+    char mData[0x30];
+};
+}
+}
+namespace EA {
+struct ILibraryCommand {
+    virtual void v0();                                        // +0x00
+    virtual int  AddRef();                                    // +0x04
+    virtual int  Release();                                   // +0x08
+    virtual void v10();                                       // +0x0c
+    virtual bool v11();                                       // +0x10
+    virtual char v14(int);                                    // +0x14
+    virtual char v18(int);                                    // +0x18
+    virtual int  IsLoaded();                                  // +0x1c
+    virtual char CanReload();                                 // +0x20
+    virtual void v24(void*, void*);                           // +0x24
+    virtual void v28();                                       // +0x28
+    virtual bool ExecuteCommand(const char*, void*, int, int, int);  // +0x2c
+    virtual void v30();                                       // +0x30
+    virtual const wchar_t* GetName();                         // +0x34
+    virtual void v38();                                       // +0x38
+};
+}
+namespace EA {
+extern "C" void FreeMem(void*);
+}
+namespace EA {
+struct WPathString {
+    wchar_t* mpBegin;     // +0x00
+    wchar_t* mpEnd;       // +0x04
+    wchar_t* mpCapacity;  // +0x08
+    uint32_t mAllocator;  // +0x0c (stateless EAIOPathStringCoreAllocator)
+    WPathString(const WPathString& other);          // 0x0056e2d0
+    WPathString& append(const wchar_t* s);          // 0x005c3d90
+    WPathString& operator=(const WPathString& o);   // 0x0057cb60
+    void DeallocateSelf();                          // 0x00933960
+    __forceinline void DeallocateSelfInline() {
+        wchar_t* b = mpBegin;
+        if ((int)((int)mpCapacity - (int)b & 0xfffffffeU) > 2 && b)
+            FreeMem(b);
+    }
+};
+}
+namespace EA {
+class SharedLibrary_s0093_6090 : public ILibraryCommand {
+public:
+    int    mnRefCount;      // +0x04  (atomic)
+    void*  mHandle;         // +0x08
+    wchar_t* mpPathBegin;   // +0x0c
+    wchar_t* mpPathEnd;     // +0x10
+    wchar_t* mpPathCap;     // +0x14
+    int    m18;             // +0x18
+    void*  mHandlerBegin;   // +0x1c
+    void*  mHandlerEnd;     // +0x20
+    void*  mHandlerCap;     // +0x24
+    int    m28;             // +0x28
+    int    m2c;             // +0x2c
+    Thread::Mutex_s0093_6090 mMutex;   // +0x30
+
+    void Construct(uint32_t a, uint32_t b);
+    bool Load();                                  // 0x009365E0
+    bool Reload(int flag);                        // 0x00936380
+    bool CanUnload();                             // 0x00936330
+    const void* GetVersionInfo();                 // 0x009363B0
+    int  IsLoaded();                              // 0x00936420
+    bool Unregister(void* fn);                    // 0x009366D0
+    bool ExecuteCmd(const char* name, void* a, int b, int c, int d);  // 0x00936710
+    bool Unload(int force);                       // 0x00936B70
+    bool Register(void* fn, void* user);          // 0x00936C00
+    SharedLibrary_s0093_6090(uint32_t a, uint32_t b);        // 0x00936C80
+    ~SharedLibrary_s0093_6090();                             // 0x00936CE0
+    bool SetPath(const wchar_t* path, bool flag);  // 0x00936950
+};
+}
+namespace EA {
+struct ObjectVector {
+    void* mpBegin;   // +0x00
+    void* mpEnd;     // +0x04
+    void* mpCap;     // +0x08
+    void erase(void* first, void* last);   // 0x00d018d0 (equiv t2)
+    void Destruct();   // 0x005c7f10 (equiv t3)
+    void push_back_impl(void* value);
+};
+}
+namespace EA {
+extern void* gpRegistryMutexName;   // 0x0143e98c
+}
+EA::SharedLibrary_s0093_6090::SharedLibrary_s0093_6090(uint32_t a, uint32_t b) {
+    Construct(a, b);
+}
+extern "C" void* gpSharedLibraryRegistry;   // 0x01669948
+extern "C" const char kDefaultSharedLibraryVersionInfo[];   // 0x0143e990
 // ---- items of slice s00936090 end
 
 // @ 0x005c2170
@@ -301,6 +399,27 @@ bool EA::SharedLibrary::Load()
     return false;
 }
 
+// @ 0x009366d0
+bool EA::SharedLibrary_s0093_6090::Unregister(void* fn)
+{
+    if (fn == 0)
+        return false;
+    char** begin = (char**)mHandlerBegin;
+    char** end = (char**)mHandlerEnd;
+    char** it = begin;
+    while (it != end) {
+        if (*it == fn)
+            break;
+        it += 2;
+    }
+    if (it == end)
+        return false;
+    it[0] = end[-2];
+    it[1] = end[-1];
+    mHandlerEnd = (char*)mHandlerEnd - 8;
+    return true;
+}
+
 // @ 0x00936710
 bool EA::SharedLibrary::ExecuteCommand(char const * name, void * a, void * b, void * c, void * d) const
 {
@@ -317,24 +436,92 @@ EA::SharedLibraryRegistry::~SharedLibraryRegistry()
 }
 
 // @ 0x00936950
-bool EA::SharedLibrary::SetPath(wchar_t const * path, bool flag)
+bool EA::SharedLibrary_s0093_6090::SetPath(const wchar_t* path, bool flag)
 {
     if (path == 0)
         return false;
-    if (!CanUnload())
+    if (CanReload()) {
+        void* h = LoadLibraryW(path);
+        if (h != 0) {
+            bool ok = GetProcAddress(h, "EASharedLibraryStartupFunction") != 0;
+            FreeLibrary(h);
+            if (ok) {
+                WPathString& p = *(WPathString*)&mpPathBegin;
+                WPathString temp(p);
+                p.append(path);
+                if (flag == 0 || v14(0)) {
+                    temp.DeallocateSelfInline();
+                    return true;
+                }
+                p = temp;
+                temp.DeallocateSelf();
+            }
+        }
+    }
+    return false;
+}
+
+// @ 0x00936b70
+bool EA::SharedLibrary_s0093_6090::Unload(int force)
+{
+    if (!IsLoaded())
+        return true;
+    char canReload = CanReload();
+    if (force == 0 && canReload == 0)
         return false;
-    void* h = LoadLibraryW(path);
-    if (h == 0)
-        return false;
-    void* fn = GetProcAddress(h, "EASharedLibraryStartupFunction");
-    FreeLibrary(h);
+    if (mHandle == 0) {
+        ((ObjectVector*)&mHandlerBegin)->erase(mHandlerBegin, mHandlerEnd);
+    } else {
+        int ctx = 0;
+        ExecuteCommand("OnSharedLibraryUnload", &ctx, 0, 0, 0);
+        ((ObjectVector*)&mHandlerBegin)->erase(mHandlerBegin, mHandlerEnd);
+        void* h = mHandle;
+        mHandle = 0;
+        if (h != 0) {
+            FreeLibrary(h);
+            return true;
+        }
+    }
+    return true;
+}
+
+// @ 0x00936c00
+bool EA::SharedLibrary_s0093_6090::Register(void* fn, void* user)
+{
     if (fn == 0)
         return false;
-    mPath.mpBegin = 0;
-    mPath.mpEnd = 0;
-    mPath.mpCapacity = 0;
-    (void)flag;
+    char** begin = (char**)mHandlerBegin;
+    char** end = (char**)mHandlerEnd;
+    char** it = begin;
+    while (it != end) {
+        if (*it == fn)
+            return true;
+        it += 2;
+    }
+    if (mHandlerEnd < mHandlerCap) {
+        char** slot = (char**)mHandlerEnd;
+        mHandlerEnd = slot + 2;
+        if (slot != 0) {
+            slot[1] = (char*)user;
+            slot[0] = (char*)fn;
+        }
+        return true;
+    }
+    ((ObjectVector*)&mHandlerBegin)->push_back_impl(&fn);
     return true;
+}
+
+// @ 0x00936ce0
+EA::SharedLibrary_s0093_6090::~SharedLibrary_s0093_6090()
+{
+    if (mHandle != 0 || mHandlerBegin != mHandlerEnd)
+        Unload(1);
+    mMutex.Destroy();
+    if (mHandlerBegin != 0 && ((int*)mHandlerBegin)[-1] != 0)
+        FreeMem(mHandlerBegin);
+    wchar_t* p = mpPathBegin;
+    if ((((char*)mpPathCap - (char*)p) & 0xfffffffe) > 2 && p != 0)
+        FreeMem(p);
 }
 
 // @ 0x00936e10

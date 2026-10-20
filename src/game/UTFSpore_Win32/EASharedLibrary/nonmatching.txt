@@ -6,3 +6,7 @@
 009364f0 61 SharedLibraryRegistry::RemoveAllLibraries: complete; eastl vector erase/locking schedule differs
 00936550 21 SharedLibraryRegistry::ExecuteCommandAll: complete; loop counter and vtable arg reload schedule differ
 009365e0 159 SharedLibrary::Load: complete; registry vtable call, startup callback and command-dispatch sequence differ
+009366d0 67 SharedLibrary::Unregister: complete; pair erase tail moves differ
+00936b70 71 SharedLibrary::Unload: complete; eastl pair-vector erase schedule differs
+00936c00 80 SharedLibrary::Register: complete; eastl pair push_back shape differs
+00936ce0 14 SharedLibrary::~SharedLibrary: complete; eastl string/vector teardown schedule differs
