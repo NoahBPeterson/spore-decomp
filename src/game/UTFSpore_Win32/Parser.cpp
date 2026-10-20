@@ -168,7 +168,11 @@ struct AutoRefCount {
 namespace EA {
 namespace ArgScript {
 struct cICommand_s0084_4270 {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
     virtual void EndBlock(bool b);   // +0x14
     virtual void EndMeta(bool b);    // +0x18
 };
