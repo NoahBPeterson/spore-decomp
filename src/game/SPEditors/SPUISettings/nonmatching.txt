@@ -7,5 +7,6 @@
 006031c0 116 SP::cSPUISettings::AddTab: complete; tab ptr is reloaded from the stack in ours (address-taken param) vs held in esi.
 00603260 630 SP::cSPUISettings::Init: complete; scheduling/regalloc differ (float rotation compare, AddTab call sequence).
 006035d0 50 SP::ShowSettingsWindow: complete; the nothrow-new null path (xor esi,esi) was folded differently so the byte image does not converge.
+00603650 167 SP::cGraphicsTab::init_profile_data: complete; register allocation differs (edi vs ebp zero reg, loop shape).
 00603f10 1 cGraphicsTab checkbox->canvas sync (setne variant): complete; the key-temp scheduling above the Canvas call does not converge.
 00603fe0 1 cGraphicsTab checkbox->canvas sync (sete variant): complete; same key-temp scheduling difference.

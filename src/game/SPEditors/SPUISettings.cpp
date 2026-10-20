@@ -1355,6 +1355,7 @@ struct pair_s0060_2940 {
   T2 second;
   pair_s0060_2940(const T1& x, const T2& y) : first(x), second(y) {}
   pair_s0060_2940(const pair_s0060_2940& p) : first(p.first), second(p.second) {}
+  pair_s0060_2940() {}
   ~pair_s0060_2940() {}
 };
 }
@@ -1363,6 +1364,39 @@ template <typename Value>
 struct hash_node_s0060_2940 {
   Value mValue;
   hash_node_s0060_2940* mpNext;
+};
+}
+namespace eastl {
+template <typename Node>
+struct hashtable_iterator_base_s0060_2940 {
+  Node* mpNode;
+  Node** mpBucket;
+  hashtable_iterator_base_s0060_2940() {}
+  hashtable_iterator_base_s0060_2940(Node* pNode, Node** pBucket) : mpNode(pNode), mpBucket(pBucket) {}
+};
+}
+namespace eastl {
+template <typename T, typename Node>
+struct hashtable_iterator_s0060_2940 : public hashtable_iterator_base_s0060_2940<Node> {
+  typedef hashtable_iterator_base_s0060_2940<Node> base_type;
+  hashtable_iterator_s0060_2940() {}
+  hashtable_iterator_s0060_2940(Node* pNode, Node** pBucket) : base_type(pNode, pBucket) {}
+  explicit hashtable_iterator_s0060_2940(Node** pBucket) : base_type(*pBucket, pBucket) {}
+  hashtable_iterator_s0060_2940(const hashtable_iterator_s0060_2940& x) : base_type(x.mpNode, x.mpBucket) {}
+  template <typename U>
+  hashtable_iterator_s0060_2940(const hashtable_iterator_s0060_2940<U, Node>& x) : base_type(x.mpNode, x.mpBucket) {}
+  void increment() {
+    this->mpNode = this->mpNode->mpNext;
+    while (this->mpNode == 0) this->mpNode = *++this->mpBucket;
+  }
+  void increment_bucket() {
+    ++this->mpBucket;
+    while (*this->mpBucket == 0) ++this->mpBucket;
+    this->mpNode = *this->mpBucket;
+  }
+  bool operator!=(const hashtable_iterator_s0060_2940& x) const { return this->mpNode != x.mpNode; }
+  bool operator==(const hashtable_iterator_s0060_2940& x) const { return this->mpNode == x.mpNode; }
+  hashtable_iterator_s0060_2940& operator++() { increment(); return *this; }
 };
 }
 namespace eastl {
@@ -1378,8 +1412,8 @@ template <typename Value, typename KeyT, typename Hash, typename Equal = equal_t
 class hashtable_s0060_2940 {
  public:
   typedef hash_node_s0060_2940<Value> node_type;
-  typedef hashtable_iterator<Value, node_type> iterator;
-  typedef hashtable_iterator<const Value, node_type> const_iterator;
+  typedef hashtable_iterator_s0060_2940<Value, node_type> iterator;
+  typedef hashtable_iterator_s0060_2940<const Value, node_type> const_iterator;
   struct insert_return_type {
     iterator first;
     bool second;
@@ -1408,7 +1442,7 @@ class hashtable_s0060_2940 {
   void DoFreeNode(node_type* pNode) { pNode->~node_type(); mAllocator.deallocate(pNode); }
 
   iterator find(const KeyT& k);
-  pair_s0060_2940<iterator, iterator> equal_range(const KeyT& k);
+  void equal_range(pair_s0060_2940<iterator, iterator>* pResult, const KeyT& k);
   uint32_t erase(const KeyT& k);
   iterator erase(const_iterator i);
   void DoFreeNodes(node_type** pBucketArray, uint32_t n);
@@ -1433,8 +1467,7 @@ typename hashtable_s0060_2940<V, K, H, E>::iterator hashtable_s0060_2940<V, K, H
 }
 namespace eastl {
 template <typename V, typename K, typename H, typename E>
-pair_s0060_2940<typename hashtable_s0060_2940<V, K, H, E>::iterator, typename hashtable_s0060_2940<V, K, H, E>::iterator>
-hashtable_s0060_2940<V, K, H, E>::equal_range(const K& k) {
+void hashtable_s0060_2940<V, K, H, E>::equal_range(pair_s0060_2940<iterator, iterator>* pResult, const K& k) {
   const uint32_t n = mHash(k) % mnBucketCount;
   node_type** head = mpBucketArray + n;
   node_type* pNode = DoFindNode(*head, k);
@@ -1445,9 +1478,11 @@ hashtable_s0060_2940<V, K, H, E>::equal_range(const K& k) {
     iterator first(pNode, head);
     iterator last(p1, head);
     if (!p1) last.increment_bucket();
-    return pair_s0060_2940<iterator, iterator>(first, last);
+    *pResult = pair_s0060_2940<iterator, iterator>(first, last);
+    return;
   }
-  return pair_s0060_2940<iterator, iterator>(iterator(mpBucketArray + mnBucketCount), iterator(mpBucketArray + mnBucketCount));
+  *pResult = pair_s0060_2940<iterator, iterator>(iterator(mpBucketArray + mnBucketCount),
+                                      iterator(mpBucketArray + mnBucketCount));
 }
 }
 namespace eastl {
@@ -1670,6 +1705,26 @@ struct cSPUISettings13 {
   bool Shutdown();                // 0x00601e60
   bool Apply();                   // 0x00600ab0
   char pad[0x248 - 4];
+};
+struct IRefObj { virtual int AddRef(); virtual int Release(); };
+struct IPropMgr {
+  PV5 PV5 PV1
+  virtual bool GetPropertyList(uint32_t id, uint32_t group, IRefObj** out);   // +0x2c
+};
+IPropMgr* __cdecl PropertyManager();                                          // 0x0067de30
+struct Str16 { wchar_t* b; wchar_t* e; wchar_t* c; uint32_t alloc; };   // 16-byte eastl string
+bool __cdecl GetPropertyAsString16Array(IRefObj* props, uint32_t id, int* count, Str16** data);  // 0x006a0bc0
+uint32_t __cdecl FNV1_String16(const wchar_t* s, uint32_t start, int lower);  // 0x00932f30 EA::Hash::FNV1_String16
+struct ProfPair { uint32_t hash_s0060_2940, value; };
+struct cProfVec {
+  ProfPair* mpBegin; ProfPair* mpEnd; ProfPair* mpCapacity;
+  void erase(ProfPair* a, ProfPair* b);                                       // 0x00d018d0
+  void DoInsertValue(ProfPair* pos, const ProfPair& v);                       // 0x00601b40
+};
+struct cGraphicsTab_s0060_2940 {
+  char pad[0x40];
+  cProfVec mProfiles;                                                         // +0x40
+  void init_profile_data();                                                   // 0x00603650
 };
     void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
 // ---- items of slice s00602940 end
@@ -2045,12 +2100,6 @@ void cTimedObject::RestartTimer()
   mStopwatch.mbRunning = false;
 }
 
-
-
-
-
-
-
 // @ 0x005ff2a0
 void SP::cAudioTab::Shutdown()
 {
@@ -2060,12 +2109,6 @@ void SP::cAudioTab::Shutdown()
   }
   mLayout.Shutdown(true);
 }
-
-
-
-
-
-
 
 // @ 0x005ff2d0
 void SP::cAudioTab_s005f_f230::RestoreSettingsFromEntry()
@@ -2084,12 +2127,6 @@ void SP::cAudioTab_s005f_f230::RestoreSettingsFromEntry()
   }
 }
 
-
-
-
-
-
-
 // @ 0x005ff370
 bool SP::cGameTab_s005f_f230::DoMessageTab(IWindow_s005f_f230* window, const Message_s005f_f230* message)
 {
@@ -2106,12 +2143,6 @@ bool SP::cGameTab_s005f_f230::DoMessageTab(IWindow_s005f_f230* window, const Mes
   return false;
 }
 
-
-
-
-
-
-
 // @ 0x005ff460
 void SP::cGameTab::RestoreSettingsFromEntry()
 {
@@ -2122,12 +2153,6 @@ void SP::cGameTab::RestoreSettingsFromEntry()
   ConfigManager()->SetValue(0x473b8cc, mInitialPhotoRes);
 }
 
-
-
-
-
-
-
 // @ 0x005ff4e0
 void SP::cOnlineTab_s005f_f230::Shutdown()
 {
@@ -2136,12 +2161,6 @@ void SP::cOnlineTab_s005f_f230::Shutdown()
   SP::MessageServer()->RemoveHandler(this, 0x5c5594a, -9999);
   mLayout.Shutdown(true);
 }
-
-
-
-
-
-
 
 // @ 0x005ff560
 void SP::cOnlineTab_s005f_f230::RestoreSettingsFromEntry()
@@ -2156,23 +2175,11 @@ void SP::cOnlineTab_s005f_f230::RestoreSettingsFromEntry()
   SP::ConfigManager()->SetValue(0x685a63c, mInitial[7]);
 }
 
-
-
-
-
-
-
 // @ 0x005ff630
 void SP::cGameTab::Shutdown()
 {
   mLayout.Shutdown(true);
 }
-
-
-
-
-
-
 
 // @ 0x005ff640
 void SP::cOptionTab::RestoreSettingsFromEntry()
@@ -2180,12 +2187,6 @@ void SP::cOptionTab::RestoreSettingsFromEntry()
   SP::ConfigManager()->SetValue(mPropertyID, mInitialValue);
   SP::MessageServer()->PostMSG(0x679c40d, 0, 0);
 }
-
-
-
-
-
-
 
 // @ 0x005ff700
 void SP::cSPUISettings_s005f_f230::BeginClose()
@@ -2217,12 +2218,6 @@ void SP::cSPUISettings_s005f_f230::BeginClose()
   SP::MessageServer()->PostMSG(0x4519b5a, 0, 0);
 }
 
-
-
-
-
-
-
 // @ 0x005ff850
 void SP::cSPUISettings_s005f_f230::SaveOnlineSettings()
 {
@@ -2239,12 +2234,6 @@ void SP::cSPUISettings_s005f_f230::SaveOnlineSettings()
     SP::MessageServer()->PostMSG(0x5de7b4a, 0, 0);
 }
 
-
-
-
-
-
-
 // @ 0x005ff8e0
 void SP::cSettingsTab_s005f_f230::Init(uint32_t layoutID, IWinProc_s005f_f230* winProc, uint32_t tabID)
 {
@@ -2254,12 +2243,6 @@ void SP::cSettingsTab_s005f_f230::Init(uint32_t layoutID, IWinProc_s005f_f230* w
   mLayout.GetObjects();
   mLayout.FindWindowByID(mTabID, true)->AddWinProc(mWinProc);
 }
-
-
-
-
-
-
 
 // @ 0x005ff940
 void SP::cGraphicsTab_s005f_f230::Shutdown()
@@ -2277,12 +2260,6 @@ void SP::cGraphicsTab_s005f_f230::Shutdown()
     (*(SP::cProfileEntry* volatile*)&mpBegin)[i].Shutdown();
   mLayout.Shutdown(true);
 }
-
-
-
-
-
-
 
 // @ 0x005ffa30
 void SP::cAudioTab_s005f_f230::Init(uint32_t layoutID, IWinProc_s005f_f230* winProc, uint32_t tabID)
@@ -2389,12 +2366,6 @@ void SP::cAudioTab_s005f_f230::Init(uint32_t layoutID, IWinProc_s005f_f230* winP
   }
 }
 
-
-
-
-
-
-
 // @ 0x005ffee0
 bool SP::cAudioTab_s005f_f230::DoMessageTab(IWindow_s005f_f230* window, const Message_s005f_f230* message)
 {
@@ -2461,12 +2432,6 @@ bool SP::cAudioTab_s005f_f230::DoMessageTab(IWindow_s005f_f230* window, const Me
   return handled;
 }
 
-
-
-
-
-
-
 // @ 0x00600180
 void SP::cGraphicsTab_s005f_f230::UpdateFullscreenControls()
 {
@@ -2487,11 +2452,6 @@ void SP::cGraphicsTab_s005f_f230::UpdateFullscreenControls()
   }
 }
 
-
-
-
-
-
 // @ 0x00600260
 void OnlineTabStub::DoMessageTab()
 {
@@ -2504,119 +2464,57 @@ void OnlineTabStub::DoMessageTab()
   }
 }
 
-
-
-
-
-
 // @ 0x006002d0
 void FUN_006002d0()
 {}
-
-
-
-
-
 
 // @ 0x006008c0
 void FUN_006008c0()
 {}
 
-
-
-
-
-
 // @ 0x00600ab0
 void FUN_00600ab0()
 {}
-
-
-
-
-
 
 // @ 0x00600c00
 void FUN_00600c00()
 {}
 
-
-
-
-
-
 // @ 0x00600da0
 void FUN_00600da0()
 {}
-
-
-
-
-
 
 // @ 0x00600df0
 void FUN_00600df0()
 {}
 
-
-
-
-
 // @ 0x00600e80
 void FUN_00600e80()
 {}
-
-
-
-
 
 // @ 0x006012e0
 void FUN_006012e0()
 {}
 
-
-
-
-
 // @ 0x006016c0
 void FUN_006016c0()
 {}
-
-
-
-
 
 // @ 0x00601730
 void FUN_00601730()
 {}
 
-
-
-
-
 // @ 0x00601790
 void FUN_00601790()
 {}
-
-
-
-
 
 // @ 0x00601930
 void FUN_00601930()
 {}
 
-
-
-
-
 // @ 0x00601a70
 void FUN_00601a70()
 {}
-
-
-
-
 
 // @ 0x00601c50
 SettingsRecord& SettingsRecord::operator=(const SettingsRecord& o)
@@ -2633,10 +2531,6 @@ SettingsRecord& SettingsRecord::operator=(const SettingsRecord& o)
   return *this;
 }
 
-
-
-
-
 // @ 0x00601e60
 bool SPUISettingsStub::Shutdown()
 {
@@ -2650,16 +2544,9 @@ bool SPUISettingsStub::Shutdown()
   return true;
 }
 
-
-
-
-
 // @ 0x00601f00
 void FUN_00601f00()
 {}
-
-
-
 
 // @ 0x00601fd0
 void SP::cGameTab_s0060_1fd0::Init(uint32_t layoutID, IWinProc_s0060_1fd0* winProc, uint32_t tabID)
@@ -2783,16 +2670,11 @@ void SP::cGameTab_s0060_1fd0::Init(uint32_t layoutID, IWinProc_s0060_1fd0* winPr
   }
 }
 
-
-
-
 // @ 0x006026f0
 bool cTerrainUILoadScriptFromGrid()
 {
   return false;
 }
-
-
 
 // @ 0x00602940
 void cOnlineTab_s0060_2940::InitUIState(uint8_t b)
@@ -2919,8 +2801,6 @@ void cOnlineTab_s0060_2940::InitUIState(uint8_t b)
   lay->FindWindowByID(0x56648e8, 1)->SetCaption(sLabel.GetText());
 }
 
-
-
 // @ 0x00603170
 bool Handler13::HandleMessage(uint32_t msg, int p3)
 {
@@ -2930,8 +2810,6 @@ bool Handler13::HandleMessage(uint32_t msg, int p3)
   ((cOnlineTab_s0060_2940*)((char*)this - 0x24))->InitUIState(b);
   return true;
 }
-
-
 
 // @ 0x006031c0
 void cSPUISettings_s0060_2940::AddTab(cSettingsTab_s0060_2940* tab, const wchar_t* ui, uint32_t id)
@@ -2943,8 +2821,6 @@ void cSPUISettings_s0060_2940::AddTab(cSettingsTab_s0060_2940* tab, const wchar_
   SPUIHelpers::SetWindowAreaToParent(tl->FindWindowByID(tab->mWinID, 1));
   mTabs.push_back(tab);
 }
-
-
 
 // @ 0x00603260
 bool cSPUISettings_s0060_2940::Init(int a)
@@ -3020,8 +2896,6 @@ bool cSPUISettings_s0060_2940::Init(int a)
   return true;
 }
 
-
-
 // @ 0x006035d0
 bool ShowSettingsWindow(int param)
 {
@@ -3038,7 +2912,40 @@ bool ShowSettingsWindow(int param)
   return false;
 }
 
-
+// @ 0x00603650
+void cGraphicsTab_s0060_2940::init_profile_data()
+{
+  IRefObj* props = 0;
+  IPropMgr* pm = PropertyManager();
+  if (props) {
+    IRefObj* t = props;
+    props = 0;
+    t->Release();
+  }
+  pm->GetPropertyList(0xe280c622, 0, &props);
+  if (props) {
+    int count = 0;
+    Str16* data = 0;
+    if (GetPropertyAsString16Array(props, 0x9f9c97de, &count, &data) && count > 0) {
+      mProfiles.erase(mProfiles.mpBegin, mProfiles.mpEnd);
+      for (int i = 0; i < count; i += 2) {
+        ProfPair pr;
+        pr.hash_s0060_2940 = FNV1_String16(data[i].b, 0x811c9dc5, 1);
+        pr.value = wcstoul(data[i + 1].b + 2, 0, 16);
+        if (pr.hash_s0060_2940 && pr.value) {
+          if (mProfiles.mpEnd < mProfiles.mpCapacity) {
+            ProfPair* e = mProfiles.mpEnd;
+            mProfiles.mpEnd = e + 1;
+            if (e) *e = pr;
+          } else {
+            mProfiles.DoInsertValue(mProfiles.mpEnd, pr);
+          }
+        }
+      }
+    }
+    if (props) props->Release();
+  }
+}
 
 // @ 0x00603780
 void cOnlineTab_s0060_2940::Init(const wchar_t* ui, void* winproc, uint32_t id)
@@ -3056,36 +2963,29 @@ void cOnlineTab_s0060_2940::Init(const wchar_t* ui, void* winproc, uint32_t id)
   MessageServer_s0060_2940()->AddListener(h, 0x5c5594a);
 }
 
-
 // @ 0x00603820
 void FUN_00603820()
 {}
-
 
 // @ 0x00603920
 void FUN_00603920()
 {}
 
-
 // @ 0x00603a10
 void FUN_00603a10()
 {}
-
 
 // @ 0x00603de0
 void FUN_00603de0()
 {}
 
-
 // @ 0x00603f10
 void FUN_00603f10()
 {}
 
-
 // @ 0x00603fe0
 void FUN_00603fe0()
 {}
-
 
 // @ 0x006041f0
 bool Handler14::HandleMessage(uint32_t msg, void* unused)
@@ -3105,26 +3005,21 @@ bool Handler14::HandleMessage(uint32_t msg, void* unused)
   return false;
 }
 
-
 // @ 0x00604260
 void FUN_00604260()
 {}
-
 
 // @ 0x006044b0
 void FUN_006044b0()
 {}
 
-
 // @ 0x00604520
 void FUN_00604520()
 {}
 
-
 // @ 0x006045c0
 void FUN_006045c0()
 {}
-
 
 // @ 0x00604860
 void cSPUISettings14::SaveAllSettings()

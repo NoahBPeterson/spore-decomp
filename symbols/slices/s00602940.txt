@@ -3,7 +3,7 @@
 006031c0 ?AddTab@cSPUISettings_s0060_2940@@QAEXPAUcSettingsTab_s0060_2940@@PB_WI@Z  # cSPUISettings_s0060_2940::AddTab migrated from s00602940 (verbatim, slice spelling)
 00603260 ?Init@cSPUISettings_s0060_2940@@QAE_NH@Z  # cSPUISettings_s0060_2940::Init migrated from s00602940 (verbatim, slice spelling)
 006035d0 ?ShowSettingsWindow@@YA_NH@Z  # ShowSettingsWindow migrated from s00602940 (verbatim, slice spelling)
-00603650 SP::cGraphicsTab::init_profile_data  # PDB candidate (callee-scored)
+00603650 ?init_profile_data@cGraphicsTab_s0060_2940@@QAEXXZ  # cGraphicsTab_s0060_2940::init_profile_data migrated from s00602940 (verbatim, slice spelling)
 00603780 ?Init@cOnlineTab_s0060_2940@@UAEXPB_WPAXI@Z  # cOnlineTab_s0060_2940::Init migrated from s00602940 (verbatim, slice spelling)
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00602940, named from the dev publics; slice address comment)
 00812160 ?Init@cSPUILayout@@QAE_NPB_WH_NI@Z  # cSPUILayout::Init (callee of s00602940, named from the dev publics; slice address comment)
