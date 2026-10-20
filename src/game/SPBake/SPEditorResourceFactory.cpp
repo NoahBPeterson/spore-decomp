@@ -38,7 +38,6 @@ extern "C" long _InterlockedExchange(volatile long* Target, long Value);
 #pragma intrinsic(_InterlockedExchange)
 
 // ---- items of slice s004bbfb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern void* GetManager();  // 0x67dcd0
 struct StreamObject;
 struct cSPEditorResourceFactory {
     virtual void v0();
@@ -69,51 +68,34 @@ struct TypeEntry {
     uint32_t pad[4];
 };
 struct IResourceManager2 {
-    virtual void v0(); virtual void v4(); virtual void v8();
+virtual void v0();
+virtual void v4();
+virtual void v8();
     virtual void vC();
-    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1C();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1C();
     virtual void v20();
     virtual void Register(uint32_t type, uint32_t* pair, int count);  // +0x24
 };
-extern uint32_t EA_Hash_FNV1_String16(const void* s, uint32_t hash, int);  // 0x932f30
-extern void FUN_004c07e0(void* begin, void* end, char flag);               // 0x4c07e0
-extern void FUN_006adc60(int, int);                                        // 0x6adc60
-extern bool g_typeTableInit;                                               // 0x15d8600
-extern TypeEntry g_typeTable[];                                            // 0x150c518
-extern TypeEntry g_typeTableEnd[];                                         // 0x150c878
-int cSPEditorResourceFactory::Init() {
-    if (!g_typeTableInit) {
-        for (TypeEntry* e = g_typeTable; e != g_typeTableEnd;
-             e = (TypeEntry*)((char*)e + 0x18)) {
-            e->mHash = EA_Hash_FNV1_String16(e->mName, 0x811c9dc5, 0);
-        }
-        FUN_004c07e0(g_typeTable, g_typeTableEnd, 0);
-        g_typeTableInit = true;
-    }
-    IResourceManager2* mgr = (IResourceManager2*)GetManager();
-    uint32_t local_c = 0x1a99b06b;
-    uint32_t local_8;
-    local_8 = 0x2399be55; mgr->Register(0x2399be55, &local_c, 2);
-    local_8 = 0x2b978c46; mgr->Register(0x2b978c46, &local_c, 2);
-    local_8 = 0x3d97a8e4; mgr->Register(0x3d97a8e4, &local_c, 2);
-    local_8 = 0x438f6347; mgr->Register(0x438f6347, &local_c, 2);
-    local_8 = 0x24682294; mgr->Register(0x24682294, &local_c, 2);
-    local_8 = 0x476a98c7; mgr->Register(0x476a98c7, &local_c, 2);
-    FUN_006adc60(10, 0x14);
-    FUN_006adc60(9, 0x20);
-    return 1;
-}
 struct RefCounted_s004b_bfb0 {
     virtual void v0();       // +0
     virtual void Release();  // +4
 };
 struct StreamObject {
-    virtual void v0(); virtual void v4(); virtual void v8(); virtual void vC();
+virtual void v0();
+virtual void v4();
+virtual void v8();
+virtual void vC();
     virtual int* v10();                                  // +0x10
     virtual void v14();
     virtual int v18(int a, int b);                       // +0x18
     virtual void v1C();
-    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2C();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2C();
     virtual int v30(int* buf, int n);                    // +0x30
 };
 struct EditorCreature : RefCounted_s004b_bfb0 {
@@ -122,25 +104,10 @@ struct EditorCreature : RefCounted_s004b_bfb0 {
 };
 extern RefCounted_s004b_bfb0* FUN_004b9c70(void* self);                       // 0x4b9c70
 extern RefCounted_s004b_bfb0* FUN_004b9da0(void* self);                       // 0x4b9da0
-extern int* FUN_004c0500(uint32_t key);                            // 0x4c0500
-extern void FUN_006ac0a0(int type, uint32_t key, char flag, int);  // 0x6ac0a0
-extern bool FUN_004bdc00(int n);                                   // 0x4bdc00
-extern bool FUN_004bdae0();                                        // 0x4bdae0
-extern int FUN_004bd9f0(int);                                      // 0x4bd9f0
-extern bool FUN_004bdc60(int a, int b, bool c);                    // 0x4bdc60
-extern bool FUN_004be5d0();                                        // 0x4be5d0
-extern int ReadRuntimeCreatureData(int data);                      // 0x4bf430
-extern bool WriteRuntimeCreatureData(int* data);                   // 0x4bf770
-extern int WriteBinaryEditorModel(int data);                       // 0x4b0010
-extern bool ReadBinaryEditorModel(int* a, int b);                  // 0x4bf9f0
-extern bool SetAssetData(uint32_t type, uint8_t flag);             // 0x4bbe20
-extern void SetCachingType2(int, void*);                           // 0x6ac040
-extern void DestroyFixedBufferShared(void*);                       // 0x4bca10
 static inline void ReleaseRef(RefCounted_s004b_bfb0* p) {
     if (p)
         p->Release();
 }
-extern void* EditorAlloc(uint32_t size, const char* name, int, int, int, int);  // 0xf473a0
 namespace EA {
 namespace Allocator {
 struct FixedBufferAllocator_s004b_bfb0 {
@@ -154,7 +121,7 @@ struct FixedBufferAllocator_s004b_bfb0 {
     buffer_info* mpBufferInfo;   // +0x0
 
     FixedBufferAllocator_s004b_bfb0* Create(void* pBuffer, uint32_t size, uint8_t bShared);  // 004bc8a0
-    bool IsValid();                                                           // 004bc990
+    bool IsValid();                                                           // 004bc990 0x004bc990
     void destroy_shared();                                                    // 004bca10 0x004bca10
     void Free(void* p);                                                       // 004bcab0 0x004bcab0
 };
@@ -172,10 +139,6 @@ namespace Allocator {
 extern GlobalAllocator* g_pGlobalAllocator;  // 0x016c8b44
 }
 }
-extern char g_vtbl_Anim_BackgroundLoading[];
-extern char g_vtbl_Resource_PFRecordRead[];
-extern char g_vtbl_scalar_deleting_dtor[];
-extern "C" void FreeMemory(void* p);   // 0x926060
 struct FactoryObject {
     void* vptr;          // +0x0
     int32_t mnRefCount;  // +0x4
@@ -183,13 +146,11 @@ struct FactoryObject {
     FactoryObject* Init();                 // 004bbfb0
     FactoryObject* Destroy(uint32_t p);    // 004bc030
 };
+extern TypeEntry g_typeTable[];                                            // 0x150c518
+extern TypeEntry g_typeTableEnd[];                                         // 0x150c878
 // ---- items of slice s004bbfb0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern TypeEntry g_typeTable[];                                            // 0x150c518
-extern TypeEntry g_typeTableEnd[];                                         // 0x150c878
-extern RefCounted_s004b_bfb0* FUN_004b9c70(void* self);                       // 0x4b9c70
-extern RefCounted_s004b_bfb0* FUN_004b9da0(void* self);                       // 0x4b9da0
 
 // ---- items of slice s004bcc50 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #pragma pack(push, 4)
@@ -606,6 +567,31 @@ FactoryObject* FactoryObject::Destroy(uint32_t param_2)
     if (param_2 & 1)
         FreeMemory(this);
     return this;
+}
+
+// @ 0x004bc080
+bool SP::cSPEditorResourceFactory::Init()
+{
+    if (!g_typeTableInit) {
+        for (TypeEntry* e = g_typeTable; e != g_typeTableEnd;
+             e = (TypeEntry*)((char*)e + 0x18)) {
+            e->mHash = EA_Hash_FNV1_String16(e->mName, 0x811c9dc5, 0);
+        }
+        FUN_004c07e0(g_typeTable, g_typeTableEnd, 0);
+        g_typeTableInit = true;
+    }
+    IResourceManager2* mgr = (IResourceManager2*)GetManager();
+    uint32_t local_c = 0x1a99b06b;
+    uint32_t local_8;
+    local_8 = 0x2399be55; mgr->Register(0x2399be55, &local_c, 2);
+    local_8 = 0x2b978c46; mgr->Register(0x2b978c46, &local_c, 2);
+    local_8 = 0x3d97a8e4; mgr->Register(0x3d97a8e4, &local_c, 2);
+    local_8 = 0x438f6347; mgr->Register(0x438f6347, &local_c, 2);
+    local_8 = 0x24682294; mgr->Register(0x24682294, &local_c, 2);
+    local_8 = 0x476a98c7; mgr->Register(0x476a98c7, &local_c, 2);
+    FUN_006adc60(10, 0x14);
+    FUN_006adc60(9, 0x20);
+    return 1;
 }
 
 // @ 0x004bc210

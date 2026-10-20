@@ -1,6 +1,6 @@
 004bbfb0 SP::cSPEditorResourceFactory::cSPEditorResourceFactory  # base-vtable chain + atomic refcount init (card: FUN_004bbfb0)
 004bc030 ?Destroy@FactoryObject@@QAEPAU1@I@Z  # FactoryObject::Destroy migrated from s004bbfb0 (verbatim, slice spelling)
-004bc080 SP::cSPEditorResourceFactory::Init  # PDB candidate (caller-scored)
+004bc080 ?Init@cSPEditorResourceFactory@SP@@UAE_NXZ  # SP::cSPEditorResourceFactory::Init migrated from s004bbfb0
 004bc210 ?GetSupportedTypes@cSPEditorResourceFactory@SP@@UAEIPAII@Z  # SP::cSPEditorResourceFactory::GetSupportedTypes migrated from s004bbfb0
 004bc290 ?CanConvert@cSPEditorResourceFactory@SP@@UBE_NII@Z  # SP::cSPEditorResourceFactory::CanConvert migrated from s004bbfb0
 004bc300 ?CreateResource@cSPEditorResourceFactory@@QAE_NPAUStreamObject@@PAHIH@Z  # cSPEditorResourceFactory::CreateResource migrated from s004bbfb0 (verbatim, slice spelling)

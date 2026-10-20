@@ -1,4 +1,5 @@
 # va  diff-bytes  reason
+004bc080 255 SP::cSPEditorResourceFactory::Init: complete (static hash-table init + 6 manager vcalls + 2 FUN_006adc60); our manager/table stubs change the frame
 004bc300 297 SP::cSPEditorResourceFactory::CreateResource: complete (bakeable -> 0xac ctor, resource -> 0x128 ctor, vcall +0x24, field copy); stub object model diverges
 004bc540 203 SP::cSPEditorResourceFactory::ReadResource: complete; stream vtable slot types guessed
 004bc620 147 SP::cSPEditorResourceFactory::WriteResource: complete; stream vtable slot types guessed
