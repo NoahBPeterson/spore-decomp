@@ -1,0 +1,5 @@
+slices/s00842620/s00842620.cpp  ?EvalInt@cMatchFunction_s0084_2620@?A0xa80141ec@@QAEHPAPBDPAUcExpression_s0084_2620@ArgScript@EA@@@Z  00842620  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00842620/s00842620.cpp  ??1StringStringPair_s0084_2620@?A0xa80141ec@@QAE@XZ  00842720  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00842620/s00842620.cpp  ?insert@string8_s0084_2620@eastl@@QAEAAU12@IABU12@@Z  00842760  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00842620/s00842620.cpp  ??0If_s0084_2620@?A0xa80141ec@@QAE@XZ  00842ac0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00842620/s00842620.cpp  ?Command@cParser_s0084_2620@ArgScript@EA@@UBEPAXPBD@Z  00842c10  /O2 /MD /Gy /EHsc /TP /GS-

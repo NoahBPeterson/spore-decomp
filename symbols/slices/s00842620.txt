@@ -1,0 +1,18 @@
+00842620 ?EvalInt@cMatchFunction_s0084_2620@?A0xa80141ec@@QAEHPAPBDPAUcExpression_s0084_2620@ArgScript@EA@@@Z  # WildcardMatch(a,b,false) as int; byte-exact
+00842720 ??1StringStringPair_s0084_2620@?A0xa80141ec@@QAE@XZ  # eastl::pair<string8,string8> dtor; byte-exact
+00842760 ?insert@string8_s0084_2620@eastl@@QAEAAU12@IABU12@@Z  # string8::insert; byte-exact
+008428b0 ?FindParentDir@?A0xa80141ec@@YAXPBDPAUstring8_s0084_2620@eastl@@@Z  # strips the last path element into pOut
+00842910 ?Execute@cEndCommand_s0084_2620@?A0xa80141ec@@UAEXPAUcArguments_s0084_2620@ArgScript@EA@@@Z  # pops the block stack, tail-calls OnEndBlock(false)
+00842980 ?Execute@cPurgeCommand_s0084_2620@?A0xa80141ec@@UAEXPAUcArguments_s0084_2620@ArgScript@EA@@@Z  # requires a trailing ':' scope, then PurgeNamespace
+00842a00 ?Execute@cVersionCommand_s0084_2620@?A0xa80141ec@@UAEXPAUcArguments_s0084_2620@ArgScript@EA@@@Z  # sets/validates mCurrentVersion against min/max
+00842a90 ?EvalReal@cMatchFunction_s0084_2620@?A0xa80141ec@@QAEXXZ  # stub (unused EvalReal overload); byte-exact
+00842ac0 ??0If_s0084_2620@?A0xa80141ec@@QAE@XZ  # If meta-command ctor; byte-exact
+00842b50 ?OnEndParse@If_s0084_2620@?A0xa80141ec@@UAEX_N@Z  # pops both fixed vectors when non-empty
+00842b70 ??1If_s0084_2620@?A0xa80141ec@@UAE@XZ  # If dtor; compiler generated
+00842c10 ?Command@cParser_s0084_2620@ArgScript@EA@@UBEPAXPBD@Z  # case-insensitive command lookup; byte-exact
+00842c60 ?ParseFile@cParser_s0084_2620@ArgScript@EA@@UAEXPBD@Z  # file parse loop (fopen/feof/fgets), try/catch
+00842f50 ?ParseStream@cParser_s0084_2620@ArgScript@EA@@UAEXPAX@Z  # stream parse loop over IOStream
+00843240 ?GetLineLocationInfo@cParser_s0084_2620@ArgScript@EA@@UBEXPAUstring8_s0084_2620@eastl@@PAH@Z  # current path/line out-params
+00843280 ?DefinitionExists@cParser_s0084_2620@ArgScript@EA@@UBE_NPBD@Z  # mCommands.find != bucket end
+008432d0 ?HasName6c@cParser_s0084_2620@ArgScript@EA@@QBE_NPBD@Z  # mTable6c.find != bucket end
+00843320 ?LookupName@cParser_s0084_2620@ArgScript@EA@@QBEPBDPBD@Z  # scoped name lookup over mScopeOffsets/mTableAc

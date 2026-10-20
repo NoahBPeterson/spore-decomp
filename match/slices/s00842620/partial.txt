@@ -1,0 +1,3 @@
+00842c60  598  cParser::ParseFile: complete behaviourally (magic fopen/feof/fgets/fclose loop, try/catch, the two unbalanced-stack throws, savedBaseDir restore) but the whole body schedule differs (EXCEPTION frame, loop shape, string temps) — not yet reproduced. flags /O2 /MD /Gy /EHsc /TP /GS-
+00842f50  594  cParser::ParseStream: complete behaviourally (IOStream IsValid/IsEOF/HasData loop, ReadLine, same try/catch and throws) but not byte-reproduced. flags /O2 /MD /Gy /EHsc /TP /GS-
+00843320  685  cParser::LookupName: complete behaviourally (':' scope lookup, scoped name construction over mScopeOffsets, mTableAc fallback, mIncludeHandler::Resolve) but not byte-reproduced. flags /O2 /MD /Gy /EHsc /TP /GS-
