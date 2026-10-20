@@ -1,0 +1,30 @@
+# va  name  # evidence
+# Spore space-tool slice (the object with the 0xc-byte refcounted entry vector at +0x24,
+# selected entry at +0x20, hashtable at +0x40, bool at +0x60 and id at +0x74).  Names are
+# reconstructions from the cards except where the object's mangled name is in manifest.txt.
+00ae9490  SpaceTool::FindBest
+00ae9500  SpaceTool::FindBestByPlanet
+00ae9590  FUN_00ae9590
+00ae9640  E12::Init
+00ae9680  E12::Write
+00ae9700  E12::Read
+00ae9790  AutoRef::Reset
+00ae97e0  copy_addref
+00ae9870  move_assign
+00ae98d0  move_backward
+00ae9930  FUN_00ae9930
+00ae9b90  SpaceTool::Select
+00ae9c10  SpaceTool::Has
+00ae9c50  GmeEditorRes::Destroy
+00ae9c90  FUN_00ae9c90
+00ae9d40  Entry::Differs
+00ae9da0  Entry::GetCiv
+00ae9e60  write_vec
+00ae9ed0  visit_vec
+00ae9f10  SpaceTool::MatchesCiv
+00ae9f50  SpaceTool::OnShutdown0
+00aea210  CommManager::CloseCommEvent
+00aea230  SpaceTool::AssignString
+00aea250  Entry::ctor
+00aea310  Entry::dtor
+00aea3d0  SpaceTool::CheckEntry

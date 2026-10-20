@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Byte-exact matches for slice s00ae9490 (Spore space-tool object).  Everything else in the
+# slice is a behavioural reconstruction, see nonmatching.txt.
+slices/s00ae9490/s00ae9490.cpp  ?FindBestByPlanet@SpaceTool@@QAEPAXHHH@Z  00ae9500  /O2 /MD /Gy /EHsc /TP
+slices/s00ae9490/s00ae9490.cpp  ?Init@E12@@QAEPAU1@IIPAX@Z  00ae9640  /O2 /MD /Gy /EHsc /TP
+slices/s00ae9490/s00ae9490.cpp  ?Reset@AutoRef@@QAEPAU1@XZ  00ae9790  /O2 /MD /Gy /EHsc /TP
+slices/s00ae9490/s00ae9490.cpp  ?Destroy@GmeEditorRes@@QAEPAXE@Z  00ae9c50  /O2 /MD /Gy /EHsc /TP
+slices/s00ae9490/s00ae9490.cpp  ?GetCiv@Entry@@QAEHXZ  00ae9da0  /O2 /MD /Gy /EHsc /TP
+slices/s00ae9490/s00ae9490.cpp  ?visit_vec@@YA_NPAXPAUVec12@@@Z  00ae9ed0  /O2 /MD /Gy /EHsc /TP
+slices/s00ae9490/s00ae9490.cpp  ?CloseCommEvent@CommManager@@QAEXXZ  00aea210  /O2 /MD /Gy /EHsc /TP
+slices/s00ae9490/s00ae9490.cpp  ?AssignString@SpaceTool@@QAEXPAUString64@@@Z  00aea230  /O2 /MD /Gy /EHsc /TP

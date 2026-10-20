@@ -1,0 +1,37 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+# Slice s00ae9490 is Spore space-tool code built with the default VS2008 toolchain
+# (/O2 /MD /Gy /EHsc /TP).  All functions below compile and are complete; the diffs are
+# register-allocation/scheduling/inlining differences (EASTL vector inlining, raw vtable
+# dispatch and the original LTCG tail calls, which a single-object /O2 build does not emit).
+# Equiv verdicts are from tools/difftest/equiv.py with default inputs.
+00ae9490  99  SpaceTool::FindBest: complete.  Only the element-count computation is ordered
+               differently (ours derives (end-begin)>>2 begin-first, original end-first).
+               Equiv WEAK, 26.1% coverage, no behavioural mismatch.
+00ae9590  95  FUN_00ae9590 (entry-list filter): complete.  Equiv WEAK 37.2% coverage.
+00ae9680 101  E12::Write: complete.  Equiv UNSUPPORTED (harness cannot construct a valid
+               stream object: 398/400 inputs fault on read).  No behavioural mismatch seen.
+00ae9700 109  E12::Read: complete.  Equiv UNSUPPORTED (394/400 inputs fault on read).
+00ae97e0  55  copy_addref: complete.  Equiv WEAK 29.4% coverage (31 valid inputs), no mismatch.
+00ae9870  79  move_assign: complete.  Equiv UNSUPPORTED (all inputs fault: the generated
+               source range is not a mapped E12 array).
+00ae98d0  86  move_backward: complete.  Equiv UNSUPPORTED (all inputs fault, as above).
+00ae9930 440  FUN_00ae9930 (mission/event lookup): complete.  Equiv UNSUPPORTED (all inputs
+               fault on read before reaching the body).
+00ae9b90   6  SpaceTool::Select: complete; only branch layout and the count computation
+               differ.  Equiv WEAK 26.8% coverage.
+00ae9c10  27  SpaceTool::Has: complete.  Equiv PASS, 100% coverage.
+00ae9c90  27  FUN_00ae9c90: complete.  Equiv UNSUPPORTED (all inputs fault on read).
+00ae9d40  81  Entry::Differs: complete.  Equiv PASS, 62.9% coverage, no mismatch.
+00ae9e60  47  write_vec: complete.  Equiv UNSUPPORTED (stream/vector inputs fault).
+00ae9f10  44  SpaceTool::MatchesCiv: complete.  Equiv WEAK 33.3% coverage.
+00ae9f50 386  SpaceTool::OnShutdown0: complete (kept noinline).  Equiv WEAK 7.1% coverage
+               (only the early-out paths are reachable with generated inputs).
+00aea250 105  Entry::ctor: complete.  Equiv PASS, 100% coverage.
+00aea310  97  Entry::dtor: complete.  Equiv FAIL only because the harness binds the
+               unresolved neighbour call FUN_00aea170 to the real original code, which then
+               reads a pointer field of our separately-allocated test object (UC_ERR_READ_
+               UNMAPPED at eip=00aea174).  The field order, delete guards, vtable releases
+               and vtable restores match the original call sequence.
+00aea3d0 267  SpaceTool::CheckEntry: complete.  Equiv FAIL for the same harness reason:
+               FUN_00aea1b0 (neighbouring hashtable find) executes the original body against
+               our test object and faults at eip=00aea1b8.
