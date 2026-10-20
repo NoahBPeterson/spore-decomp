@@ -1,0 +1,2 @@
+009f16a0 IKCtx::FollowBodyRig  # name guessed; __thiscall (ECX=IKCtx*), (Body* node) -> void; walk children, run IKRigidFollow when node is goal_mode 1, recurse into sub-rigs
+009f1730 IKCtx::ComputeBodyParticles  # name guessed; __thiscall (ECX=IKCtx*), (Body* node) -> void; compose each child's world particle from parent local pos/quat, store to particle & particle_goal

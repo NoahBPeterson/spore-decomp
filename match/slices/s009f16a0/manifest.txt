@@ -1,0 +1,4 @@
+# source  symbol  original VA  [flags override]
+# No byte-exact functions in slice s009f16a0 (see nonmatching.txt).
+# ik_solver.obj is /GL (LTCG)-linked, so no single function in this module reproduces byte-for-byte;
+# both functions are behaviorally complete and equivalence-checked instead.
