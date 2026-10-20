@@ -1,0 +1,44 @@
+# va  name  # evidence
+# SporeApp static-initialiser / technique-table block (compiled /O2 /arch:SSE /fp:fast).  Names are
+# descriptive; only 012f5e60 has a PDB name ($E115) and the lib_crt array-ctor stubs are identified
+# by their atexit registration (??_L@YGXPAXIHP6EX0@Z1@Z @ 0x011e0b85).
+012b4a70  CrossGameData_InitProps        # copies five 0x3c PropDesc records into 0x1529330 stride 0x3c; "mAchievementSet" etc.
+012c5ae0  RegList_Init                  # lib_crt array ctor: 0x16032a8, 0x150 objs of 0xb, ctor 0x6ac770, dtor 0x6ac6f0, atexit 0x13bed40
+012c7900  Mask_1                       # bit-mask write into mask table lane 1
+012c7920  Mask_2                       # bit-mask write into mask table lane 2
+012c7930  Mask_3                       # bit-mask write into mask table lane 3
+012c7940  Mask_4                       # bit-mask write into mask table lane 4
+012c7950  Mask_5                       # bit-mask write into mask table lane 5
+012cc270  CopyVec4_1                    # 4-float block copy to 0x1606ac0
+012cc320  CopyVec4_2                    # 4-float block copy to 0x1606ad0
+012cc370  CopyVec3_AndMatrix            # 3-float copy + Matrix3::Assign (0x41cb40)
+012cc3b0  SetVec3Pair                   # two Vec3 broadcasts via inlined Make3 into 0x1606ae0/0x1606aec
+012d1c80  Particles_RegisterTechniques  # FNV-1 (0x811c9dc5) of 12 technique names -> 0x1618f88..0x1618fb4, then 4 zero slots
+012d1db0  ParticlesLightFog_RegisterTechniques  # FNV-1 of 11 names -> 0x1618fc8..0x1618ff0, then 5 zero slots
+012d3830  PixelFrag_Init                # lib_crt array ctor: 0x16198c0, 0x64 objs of 0x100, atexit 0x13bf360
+012d3890  PoolAllocPS_Init              # StackAllocator ctor 0x928cd0, self 0x161fda4, ctx "Graphics/PSDecls", atexit 0x13bf2f0
+012d51f0  VertexFrag_Init               # lib_crt array ctor: 0x1624710, 0x44 objs of 0x100, atexit 0x13bf480
+012d5250  PoolAlloc_Init                # StackAllocator ctor 0x928cd0, self 0x1628b98, ctx "Graphics/VSDecls", atexit 0x13bf410
+012d7850  SetRecipSqrt_1                # 1/sqrt broadcast into recip-sqrt lane 1
+012dde20  SetOneMinus                   # 1-x broadcast
+012e1190  Placeholder_RegisterMaps      # FNV-1 names -> 0x16304c8/0x16304d4 (+0 / 0x40002700 interleaved)
+012e2af0  Screen_RegisterTechniques     # FNV-1 of 10 technique names -> 0x1631058..0x163107c
+012e3860  SetIdentityMatrix             # __m128 identity matrix store to 0x1606a80
+012e3f10  BuildBasis_RegisterTechniques # FNV-1 of 4 names -> 0x1633e34..0x1633e40
+012e45f0  SetRecipSqrt_2                # 1/sqrt broadcast into recip-sqrt lane 2
+012e4930  SetRecipSqrt_3                # 1/sqrt broadcast into recip-sqrt lane 3
+012f5e60  InitDescTable                 # $E115 in PDB: 3 descriptor records at 0x15424bc/0x15424e0/0x15424f8
+012f61e0  SetColor_1                    # UintArray::Self(0x164b394) + RGB {1,1,1}
+012f6210  SetColor_2                    # 0x164b200 {0,0,0}
+012f6240  SetColor_3                    # 0x164b3e4 {1,0,0}
+012f6270  SetColor_4                    # 0x164b298 {0,1,0}
+012f62a0  SetColor_5                    # 0x164b4b8 {0,0,1}
+012f62d0  SetColor_6                    # 0x164b378 {1,0,1}
+012f6300  SetColor_7                    # 0x164b4d4 {1,1,0}
+012f6330  SetColor_8                    # 0x164b504 {0,1,1}
+012f6360  SetColor_9                    # 0x164b2c4 {1,[0x1471064],0}
+012f63a0  SetColor_10                   # 0x164b4c4 RGBA {1,1,1,1}
+012f63e0  SetColor_11                   # 0x164b330 {0,0,0,1}
+012f6420  SetColor_12                   # 0x164b26c {1,0,0,1}
+012f6460  SetColor_13                   # 0x164b2a4 {0,1,0,1}
+012f64a0  SetColor_14                   # 0x164b448 {0,0,1,1}

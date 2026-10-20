@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+012cc3b0  3  SetVec3Pair: same 113-byte body (inline Make3 struct temp + copy), cl schedules the second source float load after the first destination copy instead of before it.  Identical instruction set/registers; difftest PASS.
+012f5e60  119  InitDescTable: retail is a compiler-generated aggregate-initialiser lowering (frame pointer + one `mov dword ptr [mem], imm32` per field); writing the same stores as statements makes cl hoist the repeated 0/1 constants into eax/ecx and drop the frame pointer (149 vs 200 bytes).  Same values written to the same 0x15424bc..0x1542504 slots; difftest PASS.
+012f6270  4  SetColor_4: cl sinks the `movss xmm1,[0x1485720]` load below the first colour store; the retail has it above.  Same instructions and registers, scheduling only; difftest PASS.
+012f6460  6  SetColor_13: cl assigns zero to xmm1 and one to xmm0 (retail: zero in xmm0) and also sinks the one load below the first store.  Register-role permutation only; difftest PASS.
