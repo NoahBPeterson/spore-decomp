@@ -64,7 +64,10 @@ for f in glob.glob(W("match/synth/*.manifest")):
 for line in [l for m in [W("match/manifest.txt")] + glob.glob(W("match/slices/*/manifest.txt")) for l in open(m)]:
     p = line.split("#", 1)[0].split()
     if len(p) >= 3:
-        exact.add(int(p[2], 16))
+        try:
+            exact.add(int(p[2], 16))
+        except ValueError:      # a malformed row in a slice an agent is still writing (`va size symbol`): not counted
+            pass
 # Module TUs under src/game/<dir>/<obj>.cpp (docs/migration.md): their bookkeeping files have the
 # slice row formats. A function is counted once whichever files list it (sets by VA); migrated
 # functions keep their slice rows until the slice is retired, so coverage never double counts and
