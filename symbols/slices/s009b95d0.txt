@@ -1,0 +1,65 @@
+# symbols recovered for slice s009b95d0 (0x009b95d0-0x009ba180)
+#
+# All six are nSPCreatureAnim helpers operating on a bone/instance record whose
+# first word points at a body/transform block.  None carry a library symbol in
+# the retail image (they are all FUN_*), so names below are functional.
+
+009b95d0  nSPCreatureAnim::UpdateRootPosition      __fastcall(inst, unused, dt, owner, scale)  485 B
+          - inst+0x00 -> body; body+0x7c..+0x88 velocity, +0x8c..+0x98 radius, +0x9c blend
+          - inst+0x24 byte selects the owner-root-quaternion path over the body path
+          - calls FUN_009b9250, FUN_009b9340, FUN_009d3530, FUN_009d0460
+          - tail writes the 2-bit set at body+0x1b8 + (idx>>2)
+
+009b97c0  nSPCreatureAnim::BuildOrientation         __thiscall(out, inst, spatial, owner, scale)  563 B
+          - spatial extents at +0x3c/+0x40/+0x44; owner scale at +0x70
+          - footprint radius ratio with 0.1 / 0.01 / 0.75 sentinels
+          - clamped per-axis scale using g_1550d7c/d80/d84 and g_1550d04
+          - calls GetFootprintRadius, FUN_009d3530, FUN_009ce700, FUN_009d0a40
+
+009b9a00  nSPCreatureAnim::QuatFromAxisAngle        __fastcall(angle, out(esi), unused)  180 B
+          - identity quat seeded from 0x1550d2c/30/34/38
+          - |angle| > 1e-06 -> half-angle sin/cos times axis 0x1550d14/18/1c
+
+009b9ac0  nSPCreatureAnim::IntegrateOrientation     __thiscall(inst, h, prim, dt)  1400 B
+          - BuildOrientation then QuatFromAxisAngle(self+0x15c4), compose via qmul
+          - FUN_0099cae0 quaternion normalise on both the seed and accumulate paths
+          - sign select on the dot, accumulate blend, tail bit-set as in 0x9b95d0
+
+009ba040  nSPCreatureAnim::UpdateRoots              __fastcall(self, unused, dt)  309 B
+          - requires !(0.0 > dt) and byte self+0x262
+          - outer count (p[1]-p[0])/0x104 via GetPoliticalID(self+0x15b8)
+          - inner count /0x38 via FUN_00ff3ba0(self+0x15b8)
+          - per node: 0.0 < *(float*)(node+0x4c) and no bit 4 of *(*node+0x150)
+          - g_15509e4 gates FUN_009b95d0, g_15509e8 gates FUN_009b9ac0
+
+009ba180  nSPCreatureAnim::FindRootChain            __fastcall(self, out, a, b, node, dbg, hasParent, checkKids, a9, a10, a11)  817 B
+          - rejects node+0x154 bit 4 when a10 == 0
+          - rejects when a11 == 0 and any +0x214 parent chain link has +0x154 bit 4
+          - checkKids: walk node+0x204/+0x208 children, reject on child+0xb8 or FUN_009b3110
+          - 32-slot scan of the node+0x158 int array; `c8 != 0 && nflags == 0` rejects
+          - dbg path emits {node+0x1f8, -1} into out
+
+# constants referenced
+014471fc 0.0f   01485720 1.0f   01485378 0.1f   01488874 sentinel
+01485544 0.75f  013eb960 0.01f 01471064 0.5f   013eb8b0 sign mask
+01550d2c/30/34/38  base quaternion
+01550d14/18/1c     axis
+01550d04           clamp high
+01550d7c/80/84     per-axis scale
+015509e4           root-update enable
+015509e8           extra-update enable
+01550c2c           flag source select
+
+# external callees
+009b9250  FUN_009b9250  quat from body+0x10
+009b9340  FUN_009b9340  quat from instance
+009b3110  FUN_009b3110  child predicate (float return)
+009b39e0  FUN_009b39e0  angle quantise
+0099cae0  FUN_0099cae0  quaternion normalise
+009d0460  FUN_009d0460
+009d3530  FUN_009d3530  owner root angle
+009ce700  FUN_009ce700
+009d0a40  FUN_009d0a40  spatial position
+00ff3ba0  FUN_00ff3ba0
+0097e850  Simulator::cGameData::GetPoliticalID
+00c37030  GetFootprintRadius
