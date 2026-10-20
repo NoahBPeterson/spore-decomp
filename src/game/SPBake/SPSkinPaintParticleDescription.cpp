@@ -169,8 +169,6 @@ struct cSPSkinPaintParticlebumpColorCommand : EA::ArgScript::cCommandBase_s0053_
 }  // namespace
 // ---- items of slice s00538e90 end
 
-
-
 // ---- items of slice s00539d70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
 extern char gEmptyString[];                                       // @ 0x1667bac
@@ -387,9 +385,18 @@ void WriteEvalList(EA::IO::IStream_s0053_acc0*, char*);                       //
 void ReadDescBase(EA::IO::IStream_s0053_acc0*, char*);                        // @ 0x53bc90
 void WriteDescBase(EA::IO::IStream_s0053_acc0*, char*);                       // @ 0x53bd00
 struct IStreamV {
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
-    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
     virtual bool ReadBytes(void* p, unsigned n);                   // +0x30
     virtual void v13();
     virtual bool WriteBytes(const void* p, unsigned n);            // +0x38
@@ -744,10 +751,6 @@ void cSPSkinPaintParticleinheritCommand::Execute(EA::ArgScript::cArguments_s0053
     }
 }
 
-
-
-
-
 // @ 0x00539ed0
 void SWARM_SPSkinPaintParticleAddCommands(IRegB* a, IRegA* b)
 {
@@ -765,10 +768,6 @@ void SWARM_SPSkinPaintParticleAddCommands(IRegB* a, IRegA* b)
     a->AddCommand(kParticleKeyword, q);
 }
 
-
-
-
-
 // @ 0x00539f90
 cSPSkinPaintParticleEffectBlockCommand_s0053_9d70::cSPSkinPaintParticleEffectBlockCommand_s0053_9d70()
 : mCurrentModifier(0), mpEvalList(0) {
@@ -778,10 +777,6 @@ cSPSkinPaintParticleEffectBlockCommand_s0053_9d70::cSPSkinPaintParticleEffectBlo
     mName.mpCapacity = mName.mpBegin + 1;
     mpDesc = 0;
 }
-
-
-
-
 
 // @ 0x0053a030
 void cSPSkinPaintParticleEffectBlockCommand_s0053_9d70::Parse(EA::ArgScript::cArguments_s0053_9d70& args)
@@ -811,10 +806,6 @@ void cSPSkinPaintParticleEffectBlockCommand_s0053_9d70::Parse(EA::ArgScript::cAr
     mParser->V35();
 }
 
-
-
-
-
 // @ 0x0053a1a0
 void cSPSkinPaintParticleEffectBlockCommand_s0053_9d70::SetChild(int b)
 {
@@ -822,10 +813,6 @@ void cSPSkinPaintParticleEffectBlockCommand_s0053_9d70::SetChild(int b)
         FUN_00a6f9c0(mState, 0x26, mpDesc.mpObject);
     mpDesc = (cSPSkinPaintParticleDescription_s0053_9d70*)0;
 }
-
-
-
-
 
 // @ 0x0053a220
 cSPSkinPaintParticleEffectBlockCommand_s0053_9d70::~cSPSkinPaintParticleEffectBlockCommand_s0053_9d70()
@@ -835,10 +822,6 @@ cSPSkinPaintParticleEffectBlockCommand_s0053_9d70::~cSPSkinPaintParticleEffectBl
         ((void(__thiscall*)(char*))vt[2])((char*)mpDesc.mpObject + 8);
     }
 }
-
-
-
-
 
 // @ 0x0053a2b0
 BrushDesc_s0053_9d70& BrushDesc_s0053_9d70::operator=(const BrushDesc_s0053_9d70& o)
@@ -867,10 +850,6 @@ BrushDesc_s0053_9d70& BrushDesc_s0053_9d70::operator=(const BrushDesc_s0053_9d70
     return *this;
 }
 
-
-
-
-
 // @ 0x0053a420
 __declspec(noinline) EvalList& EvalList::operator=(const EvalList& o)
 {
@@ -880,10 +859,6 @@ __declspec(noinline) EvalList& EvalList::operator=(const EvalList& o)
     return *this;
 }
 
-
-
-
-
 // @ 0x0053a460
 void cSPSkinPaintParticleAddDescCommand::AddDesc(EA::ArgScript::cArguments_s0053_9d70& args)
 {
@@ -891,10 +866,6 @@ void cSPSkinPaintParticleAddDescCommand::AddDesc(EA::ArgScript::cArguments_s0053
     EA::Swarm::cEffectsParser* parser = mpParser;
     parser->AddDescription(args, argv[0], 0x26, 0);
 }
-
-
-
-
 
 // @ 0x0053a4a0
 cSPSkinPaintParticleDescription_s0053_9d70* BrushDesc_s0053_9d70::GetRuntimeDesc()
@@ -908,10 +879,6 @@ cSPSkinPaintParticleDescription_s0053_9d70* BrushDesc_s0053_9d70::GetRuntimeDesc
     *(int*)(res + 0xb4) = b->mRuntimeComponentId;
     return (cSPSkinPaintParticleDescription_s0053_9d70*)(res ? res + 8 : 0);
 }
-
-
-
-
 
 // @ 0x0053a530
 void BrushDesc_s0053_9d70::Init()
@@ -936,10 +903,6 @@ void BrushDesc_s0053_9d70::Init()
     mBlend1 = 0;
     mBlend2 = 0;
 }
-
-
-
-
 
 // @ 0x0053a6d0
 EA::IO::IStream_s0053_9d70* ReadEvalList(EA::IO::IStream_s0053_9d70* stream, EvalList* e)
@@ -980,10 +943,6 @@ EA::IO::IStream_s0053_9d70* ReadEvalList(EA::IO::IStream_s0053_9d70* stream, Eva
     return stream;
 }
 
-
-
-
-
 // @ 0x0053a930
 EA::IO::IStream_s0053_9d70* WriteEvalList(EA::IO::IStream_s0053_9d70* stream, EvalList* e)
 {
@@ -1022,9 +981,6 @@ EA::IO::IStream_s0053_9d70* WriteEvalList(EA::IO::IStream_s0053_9d70* stream, Ev
     return stream;
 }
 
-
-
-
 // @ 0x0053acc0
 void ReadParticleDescription(EA::IO::IStream_s0053_acc0* s, char* d)
 {
@@ -1050,9 +1006,6 @@ void ReadParticleDescription(EA::IO::IStream_s0053_acc0* s, char* d)
     ReadUInt8(s, (uint8_t*)(d + 0xb1), 1);
     ReadUInt8(s, (uint8_t*)(d + 0xb2), 1);
 }
-
-
-
 
 // @ 0x0053aea0
 void WriteParticleDescription(EA::IO::IStream_s0053_acc0* s, char* d)
@@ -1081,9 +1034,6 @@ void WriteParticleDescription(EA::IO::IStream_s0053_acc0* s, char* d)
     WriteUInt8(s, (uint8_t*)(d + 0xb2), 1);
 }
 
-
-
-
 // @ 0x0053b160
 AutoRefSlot* AutoRefSlot::AutoRefCountAssign(void* p)
 {
@@ -1098,9 +1048,6 @@ AutoRefSlot* AutoRefSlot::AutoRefCountAssign(void* p)
     return this;
 }
 
-
-
-
 // @ 0x0053b1c0
 PaintCompatA* PaintCompatA::Ctor1b0()
 {
@@ -1109,9 +1056,6 @@ PaintCompatA* PaintCompatA::Ctor1b0()
     return this;
 }
 
-
-
-
 // @ 0x0053b1f0
 PaintCompatB* PaintCompatB::Ctor1f0()
 {
@@ -1119,17 +1063,11 @@ PaintCompatB* PaintCompatB::Ctor1f0()
     return this;
 }
 
-
-
-
 // @ 0x0053b210
 BlobVec* BlobVec::Vector16Assign(const BlobVec* o)
 {
     return BlobAssign<0x10>(this, o);
 }
-
-
-
 
 // @ 0x0053b520
 void BlobVec::Vector16Resize(unsigned n)
@@ -1137,16 +1075,17 @@ void BlobVec::Vector16Resize(unsigned n)
     BlobResize<0x10>(this, n);
 }
 
-
-
-
 // @ 0x0053b5a0
 BlobVec* BlobVec::Vector20Assign(const BlobVec* o)
 {
     return BlobAssign<0x14>(this, o);
 }
 
-
+// @ 0x0053b8a0
+void BlobVec::Vector20Resize(unsigned n)
+{
+    BlobResize<0x14>(this, n);
+}
 
 // @ 0x0053b930
 void RegisterPaintEvalCommands(EA::ArgScript::cCommandBase_s0053_b930* cmds)
