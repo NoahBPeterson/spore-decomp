@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00a55d50  18  tOutNode::getShl: cl keeps the shift count in ecx across the broadcast so the guard counter lands in esi; the original frees ecx (shift consumed first) and uses it for the guard.  Same instruction set, register-role permutation only; difftest PASS (367 valid, 100% cov).
+00a55dc0  45  tOutNode::setShl: as getShl; the store of mValue is scheduled after the guard load instead of before it.  difftest PASS (360 valid, 100% cov).
+00a55e80  18  tOutNode::getShr: as getShl (sar form).  difftest PASS (363 valid, 100% cov).
+00a55ef0  45  tOutNode::setShr: as setShl (sar form).  difftest PASS (373 valid, 100% cov).
+00a55fb0  85  tOutNode::getMod: the original materialises the 0->1 divisor guard in edi and pushes edi, mine uses esi and shorter addressing; also the original re-tests the divisor after the branch.  difftest PASS (357 valid, 92.3% cov).
+00a56030  80  tOutNode::setMod: as getMod plus the store placement.  difftest PASS (348 valid, 92.7% cov).
+00a561f0  48  tOutNode::getIntDiv: the floor-fixup sequence uses edx for the negated divisor in the original and esi in mine; same math.  difftest PASS (372 valid, 100% cov).
+00a56290  0  spSin class entry (137 bytes = 48-byte factory + 7-byte int3 pad + 89-byte perform).  Both parts are byte-exact in isolation (?spSinClassFactory@@YAHXZ @ 00a56290 = 48 bytes 0 diffs; ?spSinPerform@@YAXPAUtOutNode@@M@Z @ 00a562c0 = 89 bytes 0 diffs); only the inter-function int3 padding is not reproduced because /Gy emits each in its own COMDAT section.  difftest PASS (363 valid, 93.3% cov).
+00a56320  0  spCos class entry (137 bytes, same split as spSin).  Factory 48 bytes 0 diffs, perform 89 bytes 0 diffs; only the pad differs.  difftest PASS (357 valid, 100% cov).
+00a563b0  0  spTan class entry (174 bytes = 48-byte factory + 7-byte int3 pad + 126-byte perform).  Factory 48 bytes 0 diffs, perform 126 bytes 0 diffs; only the pad differs.  difftest PASS (353 valid, 84.8% cov).

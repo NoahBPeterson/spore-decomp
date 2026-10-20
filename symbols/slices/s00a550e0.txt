@@ -1,0 +1,42 @@
+# va  name  # evidence
+# EA::Audio::Eapd float-outlet scalar node family (Pure Data port).  The accessors are
+# free functions taking the node pointer as their first argument (the original loads it
+# from [esp+4]); the node keeps a float at +0x28, another at +0x2c and a bound-outlet
+# binder at +0x0c whose +0x08 is the outlet list head.  Names are descriptive; only the
+# sin/cos/tan factories have retail string/name evidence.
+00a550e0  tOutNode::getEq        # float == broadcast
+00a55150  tOutNode::setEq        # store + == broadcast
+00a55220  tOutNode::getNe        # float != broadcast
+00a55290  tOutNode::setNe        # store + != broadcast
+00a55360  tOutNode::getGt        # comiss; jbe->0 (mValue > mOperand bytes)
+00a553d0  tOutNode::setGt        # comiss; jbe->0
+00a554a0  tOutNode::getGe        # comiss; jbe->0
+00a55510  tOutNode::setGe        # comiss; jbe->0
+00a555e0  tOutNode::getLt        # comiss; jb->0
+00a55650  tOutNode::setLt        # comiss; jb->0
+00a55720  tOutNode::getLe        # comiss; jb->0
+00a55790  tOutNode::setLe        # comiss; jb->0
+00a55860  tOutNode::getBitAnd    # cvttss2si pair, and, cvtsi2ss
+00a558d0  tOutNode::setBitAnd    # store + and broadcast
+00a55990  tOutNode::getDiv       # nonzero && nonzero -> 0/1 broadcast
+00a55a10  tOutNode::setDiv       # store + nonzero && nonzero
+00a55ae0  tOutNode::getBitOr     # cvttss2si pair, or, cvtsi2ss
+00a55b50  tOutNode::setBitOr     # store + or broadcast
+00a55c10  tOutNode::getAndL      # logical-or of two nonzero tests
+00a55c80  tOutNode::setAndL      # store + logical-or of two nonzero tests
+00a55d50  tOutNode::getShl       # shl broadcast
+00a55dc0  tOutNode::setShl       # store + shl broadcast
+00a55e80  tOutNode::getShr       # sar broadcast
+00a55ef0  tOutNode::setShr       # store + sar broadcast
+00a55fb0  tOutNode::getMod       # int remainder with 0->1 divisor guard
+00a56030  tOutNode::setMod       # store + int remainder
+00a56100  tOutNode::getFmod      # abs/0->1 divisor, non-negative modulo
+00a56180  tOutNode::setFmod      # store, tail-calls getFmod
+00a561f0  tOutNode::getIntDiv    # signed integer division with floor fixup
+00a56270  tOutNode::setIntDiv    # store, tail-calls getIntDiv
+00a56290  spSinClassFactory      # pd_new(spSinClass) + outlet_new
+00a562c0  spSinPerform           # fsin broadcast body following the sin factory
+00a56320  spCosClassFactory      # pd_new(spCosClass) + outlet_new
+00a56350  spCosPerform           # fcos broadcast body following the cos factory
+00a563b0  spTanClassFactory      # pd_new(spTanClass) + outlet_new
+00a563e0  spTanPerform           # sin/cos ratio broadcast body following the tan factory
