@@ -1,0 +1,22 @@
+# va  name  # evidence
+# Expat 2.0.1 xmlrole.c prolog state machine (roles/prolog handlers) plus the UTF-8
+# character-class predicates and the normal_* scanners instantiated from xmltok_impl.c.
+# Names are the upstream expat function names; the exact decorated names of the
+# byte-exact ones are in manifest.txt.
+0090c240  internalSubset
+0090c4e0  externalSubset
+0090c510  XmlPrologStateInitExternalEntity
+0090c5b0  doctype1
+0090c700  prolog1
+0090c8d0  XmlPrologStateInit
+0090c8f0  utf8_isName2
+0090c930  utf8_isName3
+0090c980  utf8_isNmstrt2
+0090c9c0  utf8_isNmstrt3
+0090ca10  utf8_isInvalid2
+0090ca30  utf8_isInvalid3
+0090cab0  utf8_isInvalid4
+0090cb20  normal_scanComment
+0090cc60  normal_scanDecl
+0090cd70  normal_checkPiTarget
+0090cdd0  normal_scanAtts

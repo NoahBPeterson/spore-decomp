@@ -1,0 +1,16 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Byte-exact matches for slice s0090c240 (expat 2.0.1 xmlrole.c prolog state
+# machine + xmltok.c UTF-8 character-class predicates).  The four normal_*
+# scanners and internalSubset are behavioural reconstructions, see nonmatching.txt.
+slices/s0090c240/s0090c240.cpp  ?externalSubset@@YAHPAUprolog_state@@HPBD1PBUencoding@@@Z  0090c4e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0090c240/s0090c240.cpp  ?XmlPrologStateInitExternalEntity@@YAXPAUprolog_state@@@Z  0090c510  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0090c240/s0090c240.cpp  ?doctype1@@YAHPAUprolog_state@@HPBD1PBUencoding@@@Z  0090c5b0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0090c240/s0090c240.cpp  ?prolog1@@YAHPAUprolog_state@@HPBD1PBUencoding@@@Z  0090c700  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0090c240/s0090c240.cpp  ?XmlPrologStateInit@@YAXPAUprolog_state@@@Z  0090c8d0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0090c240/s0090c240.cpp  ?utf8_isName2@@YAHPBUencoding@@PBD@Z  0090c8f0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0090c240/s0090c240.cpp  ?utf8_isName3@@YAHPBUencoding@@PBD@Z  0090c930  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0090c240/s0090c240.cpp  ?utf8_isNmstrt2@@YAHPBUencoding@@PBD@Z  0090c980  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0090c240/s0090c240.cpp  ?utf8_isNmstrt3@@YAHPBUencoding@@PBD@Z  0090c9c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0090c240/s0090c240.cpp  ?utf8_isInvalid2@@YAHPBUencoding@@PBD@Z  0090ca10  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0090c240/s0090c240.cpp  ?utf8_isInvalid3@@YAHPBUencoding@@PBD@Z  0090ca30  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0090c240/s0090c240.cpp  ?utf8_isInvalid4@@YAHPBUencoding@@PBD@Z  0090cab0  /O2 /MD /Gy /EHsc /TP /arch:SSE

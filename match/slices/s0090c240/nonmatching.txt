@@ -1,0 +1,33 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+# Slice s0090c240 is expat 2.0.1 xmlrole.c + the xmltok.c UTF-8 predicates.  The five
+# functions below are complete compilable reconstructions whose remaining byte differences
+# come from the original being an LTCG (/GL) build; cl.exe in single-object /O2 mode cannot
+# reproduce them.  Diff counts are masked byte differences against the correctly resolved
+# symbol (tools/matching/chk.py pairs same-size siblings for some of these VAs, so its
+# counts are not used here).  Equiv verdicts are from tools/difftest/equiv.py default inputs.
+0090c240    7  internalSubset: complete.  Every instruction matches the original; the only
+               difference is block placement.  cl.exe assigns the minimum switch value
+               (XML_TOK_NONE = -4) jump-table slot 0 and emits that case's 7-byte
+               `return XML_ROLE_NONE` block last, while the LTCG build emitted it first
+               (0x90c240+0x22).  Shifting the two regions reproduces the original bytes
+               exactly apart from relocation immediates (verified with a masked diff).
+               Equiv UNSUPPORTED: the two handler addresses it stores (element0 0x90c1a0,
+               doctype5 0x90aff0) are real functions in the binary but are not function
+               starts in the symbol database, so the harness cannot resolve them.
+0090cb20  265  normal_scanComment: complete (upstream xmltok_impl.c body).  The original is
+               entered with ptr in eax and the ENCODING in ebx, with no standard
+               argument setup: an interprocedural LTCG register convention for a static
+               only called inside xmltok.c.  Our cdecl/low-argument build therefore has a
+               different prologue and register allocation throughout.
+               Equiv UNSUPPORTED (harness rejects the custom register ABI: the original
+               reads eax at entry, our declaration passes nothing there).
+0090cc60  167  normal_scanDecl: complete (upstream xmltok_impl.c body).  Same LTCG custom
+               register ABI as normal_scanComment (ptr in eax, ENCODING in ebx).
+               Equiv UNSUPPORTED for the same reason.
+0090cd70  108  normal_checkPiTarget: complete (upstream xmltok_impl.c body).  Same LTCG
+               custom register ABI as normal_scanComment.
+               Equiv UNSUPPORTED for the same reason.
+0090cdd0  936  normal_scanAtts: complete 1253-byte reconstruction (upstream xmltok_impl.c
+               body).  Same LTCG custom register ABI as normal_scanComment; the whole
+               function's register allocation and branch layout differ.
+               Equiv UNSUPPORTED for the same reason.
