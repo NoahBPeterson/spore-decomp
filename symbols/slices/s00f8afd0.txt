@@ -1,0 +1,1 @@
+00f8afd0  ?ComputeThresholdFraction@@YAXABUMapU32@@ABUMapU16@@MPAM222@Z  # ComputeThresholdFraction(MapU32 const&, MapU16 const&, float, float*, float*, float*, float*)
