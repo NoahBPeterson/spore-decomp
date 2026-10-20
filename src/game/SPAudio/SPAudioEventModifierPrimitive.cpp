@@ -7,9 +7,7 @@
 #include "EA/Audio/Command.h"
 #include "EA/Audio/IConfiguration.h"
 #include "EA/Audio/ResponseCurve.h"
-
-// unnamed retail callees and globals (address in the comment)
-extern char gStrEmpty[];                 // 0x1667bac (shared empty eastl string)
+#include "SP/Audio/cEventModifier.h"
 #include <ctype.h>
 #include <string.h>
 
@@ -19,17 +17,6 @@ extern char gStrEmpty[];                 // 0x1667bac (shared empty eastl string
 #define V virtual void CAT(pad_, __COUNTER__)();
 #define V4 V V V V
 #define V16 V4 V4 V4 V4
-void* operator new(unsigned int, const char*, int, int, int, int);
-void* operator new(unsigned int, const char*, int, int, const char*, int);   // 0x00f473a0
-void* operator new(unsigned int);
-void operator delete(void*) throw();     // 0x00f47380
-void operator delete[](void*);   // 0x00f47380
-void operator delete(void*, const char*, int, int, int, int);
-void operator delete(void*, const char*, int, int, const char*, int);
-inline void* operator new(unsigned int, void* p) { return p; }
-inline void operator delete(void*, void*) {}
-#define kEastlFile \
-    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 struct ResourceKey {
     uint32_t instanceID, typeID, groupID;
     ResourceKey(uint32_t i, uint32_t t, uint32_t g) : instanceID(i), typeID(t), groupID(g) {}
@@ -78,14 +65,6 @@ struct RbTreeData {
 };
 }
 namespace EA {
-struct RbTreeS : RbTreeData {
-    ~RbTreeS() { DoNukeSubtree(mAnchor.mpParent); }
-};
-}
-namespace EA {
-typedef RbTreeS KeyListS;
-}
-namespace EA {
 struct IConfiguration {
     virtual void v0();
     virtual void Release();
@@ -112,49 +91,7 @@ struct AutoRefConfig {
 };
 }
 namespace EA {
-struct String8 {
-    char* mpBegin;
-    char* mpEnd;
-    char* mpCapacity;
-    int mAlloc;
-    String8() {
-        mpBegin = gStrEmpty;
-        mpEnd = gStrEmpty;
-        mpCapacity = gStrEmpty + 1;
-    }
-    String8(const char* s) {
-        const char* e = s;
-        while (*e++) {}
-        unsigned n = (unsigned)(e - (s + 1));
-        unsigned size = n + 1;
-        char* p;
-        char* cap;
-        if (size > 1) {
-            p = (char*)operator new(size, "EASTL", 0, 0, kEastlFile, 0xd1);
-            cap = p + size;
-        } else {
-            p = gStrEmpty;
-            cap = gStrEmpty + 1;
-        }
-        mpBegin = p;
-        mpCapacity = cap;
-        memcpy(p, s, n);
-        mpEnd = p + n;
-        *mpEnd = 0;
-    }
-    ~String8() { if (mpCapacity - mpBegin > 1 && mpBegin) operator delete[](mpBegin); }
-    void assign(const char* b, const char* e);   // 0x00454cb0
-    String8& operator=(const String8& x) {
-        if (this != &x) assign(x.mpBegin, x.mpEnd);
-        return *this;
-    }
-};
-}
-namespace EA {
 uint32_t FNV1_String8(const char* s, uint32_t seed, int flag);
-}
-namespace EA {
-RbNode* RBTreeIncrement(RbNode* n);   // 0x00921580
 }
 namespace EA {
 namespace Audio {
@@ -194,51 +131,6 @@ using namespace EA::Audio;
 }
 namespace SP {
 namespace Audio {
-struct StrPair {
-    uint32_t first;
-    String8 second;
-    StrPair() {}
-    StrPair(const uint32_t& key, const String8& value);   // 0x00b209f0
-    StrPair(const StrPair& other);   // 0xb20b90 (register-convention helper in the original)
-};
-}
-}
-namespace SP {
-namespace Audio {
-struct RbIter {
-    RbNode* mpNode;
-    RbIter() {}
-    RbIter(const RbIter& x) : mpNode(x.mpNode) {}
-};
-}
-}
-namespace SP {
-namespace Audio {
-struct TrueType {};
-}
-}
-namespace SP {
-namespace Audio {
-struct StrNode : RbNode {
-    String8 mValue;   // +0x14 (mKey at +0x10)
-};
-}
-}
-namespace SP {
-namespace Audio {
-struct StrMap : RbTreeData {
-    ~StrMap() { DoNukeSubtree(mAnchor.mpParent); }
-    void DoNukeSubtree(RbNode* node);   // 0x00e4b990 (string-valued node nuke)
-    StrNode* DoCreateNode(const StrPair& value);   // 0xa3a6d0
-    String8& operator[](const uint32_t& key);      // 0xa3a9a0
-    RbIter find(const uint32_t& key);
-    RbIter DoInsertValue(RbIter hint, const StrPair& v, TrueType unique);   // 0x00a3a8b0
-    RbNode* anchor() { return (RbNode*)&mAnchor; }
-};
-}
-}
-namespace SP {
-namespace Audio {
 struct IEventModifier {
     virtual ~IEventModifier() {}
     virtual bool Init() = 0;
@@ -274,67 +166,14 @@ struct cEventModifierPrimitive_s00a3_9ce0 : RefCountBase, IEventModifier {
 };
 }
 }
-namespace SP {
-namespace Audio {
-bool cEventModifierPrimitive_s00a3_9ce0::ReadTuningValues(const ResourceKey* key) {
-    if (key->instanceID == mKey.instanceID && key->typeID == mKey.typeID &&
-        key->groupID == mKey.groupID) {
-        AudioSystem* sys = GetSystemAT();
-        mConfiguration.Reset();
-        return sys->GetConfiguration(mKey.instanceID, &mConfiguration, 0x21407ee);
-    }
-    return false;
-}
-}
-}
-namespace SP {
-namespace Audio {
-struct cEventModifierPrimitiveAlias : cEventModifierPrimitive_s00a3_9ce0 {
-    StrMap mMap;   // +0x18 (allocator slot) .. +0x2c
-    int mPad30;
-    cEventModifierPrimitiveAlias() : cEventModifierPrimitive_s00a3_9ce0("alias") {}
-    virtual void ModifyEvent(Command_s00a3_9ce0* cmd, int a, char* name, int capacity);   // 0xa3a670
-    virtual bool ReadTuningValues(const ResourceKey* key);              // 0xa3aa80
-};
-}
-}
-namespace SP {
-namespace Audio {
-bool cEventModifierPrimitiveAlias::ReadTuningValues(const ResourceKey* key) {
-    if (!cEventModifierPrimitive_s00a3_9ce0::ReadTuningValues(key)) return false;
-    if (mConfiguration.mp) {
-        KeyListS keys;
-        mConfiguration.mp->GetKeys(&keys, 1);
-        RbNode* it = keys.mAnchor.mpLeft;
-        RbNode* end = (RbNode*)&keys.mAnchor;
-        while (it != end) {
-            uint32_t k = it->mKey;
-            const char* str = mConfiguration.mp->GetString(k);
-            if (str) {
-                String8 s(str);
-                mMap[k] = s;
-            }
-            it = RBTreeIncrement(it);
-        }
-    }
-    return true;
-}
-}
-}
-    void* operator new(unsigned int, char*, int, int, char*, int); // 0x00f473a0
 // ---- items of slice s00a39ce0 end
 
-// unnamed retail callees and globals that name local stubs (address in the comment)
-extern ResourceKey gEventModifiersKey;   // 0x15535ac
-
 // @ 0x00a3a4b0
-namespace SP { namespace Audio {
-bool cEventModifierPrimitive_s00a3_9ce0::Init()
+bool SP::Audio::cEventModifierPrimitive::Init()
 {
-    ReadTuningValues(&mKey);
+    ReadTuningValues(mKey);
     return true;
 }
-}}  // namespace SP::Audio
 
 // @ 0x00a3a4c0
 namespace SP { namespace Audio {
@@ -346,5 +185,19 @@ void cEventModifierPrimitive_s00a3_9ce0::Append(char* dst, int capacity, char* s
         if (sep) dst[dstLen++] = '_';
         strcpy(dst + dstLen, str);
     }
+}
+}}  // namespace SP::Audio
+
+// @ 0x00a3a610
+namespace SP { namespace Audio {
+bool cEventModifierPrimitive_s00a3_9ce0::ReadTuningValues(const ResourceKey* key)
+{
+    if (key->instanceID == mKey.instanceID && key->typeID == mKey.typeID &&
+        key->groupID == mKey.groupID) {
+        AudioSystem* sys = GetSystemAT();
+        mConfiguration.Reset();
+        return sys->GetConfiguration(mKey.instanceID, &mConfiguration, 0x21407ee);
+    }
+    return false;
 }
 }}  // namespace SP::Audio

@@ -1,3 +1,4 @@
 # source  symbol  va  flags
-../src/game/SPAudio/SPAudioEventModifierPrimitive.cpp  ?Init@cEventModifierPrimitive_s00a3_9ce0@Audio@SP@@UAE_NXZ  00a3a4b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEventModifierPrimitive.cpp  ?Init@cEventModifierPrimitive@Audio@SP@@UAE_NXZ  00a3a4b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioEventModifierPrimitive.cpp  ?Append@cEventModifierPrimitive_s00a3_9ce0@Audio@SP@@QAEXPADH0_N@Z  00a3a4c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEventModifierPrimitive.cpp  ?ReadTuningValues@cEventModifierPrimitive_s00a3_9ce0@Audio@SP@@UAE_NPBUResourceKey@@@Z  00a3a610  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
