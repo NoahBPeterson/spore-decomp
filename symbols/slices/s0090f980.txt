@@ -1,0 +1,17 @@
+0090f980 normal_skipS  # expat 2.0.1 xmltok_impl.c skipS (normal_)
+0090f9b0 normal_updatePosition  # expat 2.0.1 xmltok_impl.c updatePosition (normal_)
+0090fa40 utf8_toUtf8  # expat 2.0.1 xmltok.c utf8_toUtf8
+0090fab0 utf8_toUtf16  # expat 2.0.1 xmltok.c utf8_toUtf16
+0090fbe0 latin1_toUtf8  # expat 2.0.1 xmltok.c latin1_toUtf8
+0090fc40 latin1_toUtf16  # expat 2.0.1 xmltok.c latin1_toUtf16
+0090fc80 ascii_toUtf8  # expat 2.0.1 xmltok.c ascii_toUtf8
+0090fcb0 unicode_byte_type  # expat 2.0.1 xmltok.c unicode_byte_type
+0090fd30 little2_toUtf8  # expat 2.0.1 xmltok.c DEFINE_UTF16_TO_UTF8(little2_)
+0090ff70 little2_toUtf16  # expat 2.0.1 xmltok.c DEFINE_UTF16_TO_UTF16(little2_)
+0090ffe0 big2_toUtf8  # expat 2.0.1 xmltok.c DEFINE_UTF16_TO_UTF8(big2_)
+00910220 big2_toUtf16  # expat 2.0.1 xmltok.c DEFINE_UTF16_TO_UTF16(big2_)
+00910290 little2_scanComment  # expat 2.0.1 xmltok_impl.c scanComment (little2)
+009103a0 little2_scanDecl  # expat 2.0.1 xmltok_impl.c scanDecl (little2, XML_DTD)
+009104f0 little2_checkPiTarget  # expat 2.0.1 xmltok_impl.c checkPiTarget (little2)
+00910570 little2_scanPi  # expat 2.0.1 xmltok_impl.c scanPi (little2)
+00910890 little2_scanCdataSection  # expat 2.0.1 xmltok_impl.c scanCdataSection (little2)
