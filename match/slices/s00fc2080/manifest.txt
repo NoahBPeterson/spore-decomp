@@ -1,0 +1,9 @@
+slices/s00fc2080/s00fc2080.cpp  ?TerraDistClass@@YAIMM@Z  00fc2080  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fc2080/s00fc2080.cpp  ?Assign@RasterState@@QAEXPAUEmbeddedState@graphics@rw@@II@Z  00fc27e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fc2080/s00fc2080.cpp  ?Clear@RasterState@@QAEXXZ  00fc2830  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fc2080/s00fc2080.cpp  ?Construct@RasterState@@QAEPAV1@PAUEmbeddedState@graphics@rw@@II@Z  00fc2c10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fc2080/s00fc2080.cpp  ?Zero3@SpTerraFill@@QAEXPAMI@Z  00fc2ec0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fc2080/s00fc2080.cpp  ?CopyCorners@SpTerraBounds@@QAEXPAI@Z  00fc2ee0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fc2080/s00fc2080.cpp  ?SetBlendIndex@SpTerraConfig@@QAEXI@Z  00fc2f10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fc2080/s00fc2080.cpp  ?SetWeather@SpTerraConfig@@QAEXI@Z  00fc2f30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fc2080/s00fc2080.cpp  ?GetTerraClass@SpTerraConfig@@QAEIXZ  00fc2f50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

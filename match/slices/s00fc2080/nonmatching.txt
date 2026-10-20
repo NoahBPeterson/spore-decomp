@@ -1,0 +1,14 @@
+00fc20e0  364  TerraBlend: radial strength blend; reworked to variable-pointer min/max selects. Last MEASURED diff 364 bytes; the source was then rewound once more and NOT re-measured (no compiler access in the session that wrote this row). Treated as nonmatching.
+00fc2300  125  TerraStrengthPick: wraps TerraBlend then clamps + lava term. Last MEASURED diff 125 bytes; not re-measured after the TerraBlend rework.
+00fc23b0  ?    UpdateTerrainTerraformTuning: SP property-table lookups writing the .rdata terraform radius constants (0x15b1658/5c/60 and neighbours). STUB BODY ONLY - not translated, not compiled, not measured. Written as `return false;` so the slice still compiles.
+00fc2870  ?    TerraPaint: cross-product + normalise + clamp feeding 0x11e08c8. STUB BODY ONLY - not translated, not compiled, not measured.
+00fc2ab0  ?    TerraScatter: SP::LightingManager vtable[0x24] query, fsqrt/1-x normalise, fpatan angle. STUB BODY ONLY - not translated, not compiled, not measured.
+00fc2c70  ?    TerraSmooth: per-sample plane test + interior TerraPaint passes over a 0x200-byte scratch array. STUB BODY ONLY - not translated, not compiled, not measured.
+00fc2f90  22  SpTerraRefOwner::~SpTerraRefOwner: two GmeRefCount releases; the residual 22-byte diff is the vftable-constant materialisation plus the decrement register form. Last MEASURED diff 22 bytes.
+
+NOTE ON COMPLETENESS: this slice was NOT finished to the usual standard. The
+session that produced these rows had no shell, so chk.py, run_all.py and
+equiv.py could not be run for slice s00fc2080. The manifest rows above are the
+functions that last MEASURED as byte-exact (9/16) before shell access was lost;
+the rows in this file are the remainder. No equivalence verdicts were collected
+for this slice. Rows marked `?` were never compiled at all.
