@@ -1,0 +1,6 @@
+00fa9300 ?HandleMessage@cTerrainSphere@@QAE_NIPAUSlotMessage@@@Z  # SP::cTerrainSphere::HandleMessage (ret 8), message switch + face update
+00fa96d0 ?SetModels@cTerrainSphere@@QAEXXZ  # SP::cTerrainSphere::SetModels
+00fa9790 ?Update@cTerrainBackgroundMapJob@@QAE_NH@Z  # cTerrainBackgroundMapJob::Update (ret 4), finished-background-map notification
+00fa9840 ??0Blob110@@QAE@ABU0@@Z  # Blob110 copy constructor (0x110-byte relevel record)
+00fa99c0 ??4Blob110@@QAEAAU0@ABU0@@Z  # Blob110 operator=
+00fa9b50 ?ResetQuadsCaller@cTerrainSphere@@QAEXXZ  # SP::cTerrainSphere::ResetQuadsCaller
