@@ -1,0 +1,122 @@
+slice s00bca040 -- cAgentOrder / cAgentOrderManager (Spore agent order queue).
+
+VA list (31 functions, 0x00bca040 .. 0x00bcafe0)
+  00bca040  cAgentOrderManager::DeactivateSlot(int id)
+  00bca0c0  cAgentOrderManager::FindSlot(int a,int b,int c,int d)
+  00bca120  cAgentOrder::~cAgentOrder()
+  00bca180  cAgentOrder::operator==(cAgentOrder const&)
+  00bca280  cAgentOrderManager::IsSourceAtEnd()
+  00bca2a0  cAgentOrderManager::IsSourceEmpty()
+  00bca2c0  cAgentOrderManager::FirstPending()      -> always null (empty list)
+  00bca350  cAgentOrderManager::Tick(float)
+  00bca3d0  cAgentOrder::operator=(cAgentOrder const&)
+  00bca470  cAgentOrder::cAgentOrder()
+  00bca4e0  cAgentOrder::Serialize(cOutStream*)
+  00bca620  cAgentOrderManager::FindNode(int, bool(*)(cAgentOrder*,void*), void*)
+  00bca670  cAgentOrderManager::SourceChangedCb()
+  00bca6a0  cAgentOrderManager::SourceGoneCb()
+  00bca6f0  cAgentOrderManager::RegisterClassCallbacks()
+  00bca7a0  cAgentOrderManager::SaveList(cSerializer*, list*)
+  00bca7e0  cAgentOrderManager::SaveListOne(cSerializer*, cAgentOrder**)
+  00bca810  cAgentOrderManager::Activate(int,int,ISimulator*,float,void*,ISimulator*)
+  00bca960  cAgentOrderManager::ActivateOne(cSerializer*, cAgentOrder**)
+  00bca990  cAgentOrderManager::SaveList2(cOutStream*, list*)
+  00bcaa00  cAgentOrderManager::FreeAll()
+  00bcaa50  cAgentOrderManager::ReleaseNode(list*, list::iterator*)
+  00bcaab0  cAgentOrderManager::AllocNode()
+  00bcab00  cAgentOrderManager::ClearList()
+  00bcab80  cAgentOrder::CopyConstruct(cAgentOrder const&)
+  00bcac60  cAgentOrderManager::AllocLink()
+  00bcacb0  cAgentOrderManager::Erase(list*, cAgentOrder*)
+  00bcacf0  eastl::vector<16-byte>::DoInsertValues(...)
+  00bcae90  cAgentOrderManager::~cAgentOrderManager()
+  00bcaf40  cAgentOrderManager::PopFront()
+  00bcaf70  cAgentOrderManager::PushBack(void*, ISimulator*, bool)
+  00bcafe0  cAgentOrderManager::ReleaseQueueObject(void*, unsigned)
+
+----------------------------------------------------------------------------
+cAgentOrder  (size 0x88, stride in list/detail arrays: 0x44)
+  +0x00  int           mId          (0xffffffff when empty)
+  +0x08  cGonzagoTimer mTimer       (sized 0x20: 0x08..0x27)
+  +0x28  IRefCount*     mSource      (released through vtbl+4)
+  +0x2c  float         mTimeLeft
+  +0x30  float         mF1
+  +0x34  float         mF2
+  +0x38  char          mFlag
+  +0x39  EA::Variant   mVariant0    (size 0x14, tag short at +0x12)
+  +0x4d  EA::Variant   mVariant1
+  +0x61  EA::Variant   mVariant2
+  +0x75  EA::Variant   mVariant3
+  (VTBL of the value at +0x08 is cGonzagoTimer's; when a cAgentOrder is the
+   head object of a 0x230-byte queue node the same fields sit at node+0x08 and
+   the variant tag bytes land at node+0x8d/0x79/0x65/0x51.)
+
+EA::Variant (size 0x14): +0x10 short count/flags, +0x12 short tag, +0x00 16-byte payload.
+  Destruct(Variant*, bool)      @0x0093db80   (EA::Variant::Destruct)
+  operator=(Variant*, Variant*) @0x00542b80
+
+----------------------------------------------------------------------------
+cAgentOrderManager (size 0x668)
+  +0x00  cAgentOrder mSlots[8]         (stride 0x44): per slot
+           +0x20 short mId   (slot id counter value)
+           +0x24 int   mState (== -1 when inactive)
+           +0x28 int   mType  (template index)
+           +0x2c float mTimeLeft
+           +0x30 void(*)(cAgentOrder*) mOnActivate
+           +0x34 bool(*)(cAgentOrder*,float) mOnTick
+           +0x38 char  mRawHeader[0x20]  (raw 0x20-byte header copied in Activate)
+           +0x3c IRefCount* mPtr1 (addref/release via vtbl 0 / vtbl+4)
+           +0x40 IRefCount* mPtr2
+  (Wait: +0x30 mOnActivate, +0x34 mOnTick, +0x38..0x57 header, +0x3c mPtr1,
+   +0x40 mPtr2 - all lay inside [slot, slot+0x44) as used by the raw layout.)
+  +0x220 void** mTemplates            (mTemplates[type], stride 0x44)
+  +0x22c uint   mActiveMask           (bit i == slot i active)
+  +0x5e8 void*  mArray                (EAAllocate'd, length prefix at -4)
+  +0x600 IRefCount* mSource
+  +0x604 int    mSourceStamp
+  +0x60c list   mList0                (EASTL intrusive list: head +0x60c, tail +0x610,
+                                       size +0x614)
+  +0x624 void*  mFree0                (free list head)
+  +0x634 list   mList1                (head +0x634, tail +0x638, size +0x63c)
+  +0x64c void*  mFree1                (free list head)
+  +0x65c void*  mArrayBegin
+  +0x664 void*  mArrayEnd
+
+Note: the 8 slot records (stride 0x44 = 0x8*0x44 = 0x220) overlap, as seen in
+the destructor, the region [0x38 .. 0x1f4) of VPtr holders at stride 0x38; the
+destructor loop 'release this+0x34+0x38*i' reads the *last* dword of each 0x38
+record.  Represented in source with an explanatory comment + flat uint array.
+
+----------------------------------------------------------------------------
+Externs (annotated so the difftest resolver can bind them)
+  SP::cGonzagoTimer::cGonzagoTimer()   @0x00b63890
+  SP::cGonzagoTimer::~cGonzagoTimer()  @0x00b638b0
+  EA::Variant::Destruct(Variant*,bool) @0x0093db80
+  EA::Variant::operator=               @0x00542b80
+  FUN_00bc8fa0                         @0x00bc8fa0
+  cVarListSerializer ctor              @0x00692f90
+  cVarListSerializer::Serialize        @0x00692 900 (see source)
+  cSerializer::SaveObject              @0x00695b40
+  EA::IO::WriteUint32                  @0x0093aa70
+  EA::Allocator::FixedAllocatorBase::AddCore @0x00926650
+  EA::Allocator::FixedAllocatorBase::~FixedAllocatorBase @0x009265b0
+  EAAllocate                          @0x00f473a0
+  operator delete                     @0x00f47380
+  UninitCopy16                        @0x007f1890
+  eastl::copy_backward_impl do_copy   @0x00edba80
+  eastl::fill_imp do_fill             @0x00898580
+  eastl::uninitialized_fill_n_impl    @0x0088f820
+  FUN_00c7ea30                        @0x00c7ea30
+
+Globals
+  0x146697c  float  kFloatMax (3.4028235e38)
+  0x1485378  float  0.0f
+  0x156d290  short  gAgentOrderIdCounter
+  0x156d2a8  cDataSerializerGenericDesc for cAgentOrder
+  0x168b54c  void(*)(int)  gSourceChangedCb
+  0x168b550  void(*)(int)  gSourceGoneCb
+  0x168b580/584/588 float defaults for cAgentOrder::mTimeLeft/mF1/mF2
+  0x1466980  L"cAgentOrder"
+  0x1465d54 / 0x1464450 / 0x1466998 / 0x13ec458  vtables
+  0x13ebb38  allocator file string, 0x13f09b4 "Simulator"
+  0x1590800..0x15aa9e8  descriptor records passed to FUN_00bc8fa0
