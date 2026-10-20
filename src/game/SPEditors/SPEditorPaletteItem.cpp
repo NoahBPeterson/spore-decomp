@@ -17,6 +17,7 @@
 #include "SP/cSPPaletteItemUISelectable.h"
 #include "cSPUIPropertyLayout.h"
 #include <new>
+#include "EA/AutoRefCount.h"
 
 // ---- items of slice s005c6340 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV(n) virtual void pv##n();
