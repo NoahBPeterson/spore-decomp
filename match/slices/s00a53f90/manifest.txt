@@ -1,0 +1,16 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a53f90/s00a53f90.cpp  ?play_free@Eapd@Audio@EA@@YAXPAUt_play@123@@Z  00a53f90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a53f90/s00a53f90.cpp  ?play_anything@Eapd@Audio@EA@@YAXPAUt_play@123@IPBDHPAUPgAtomArg@123@@Z  00a53fc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a53f90/s00a53f90.cpp  ?add_bang@Eapd@Audio@EA@@YAXPAUFAtom@123@@Z  00a54890  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a53f90/s00a53f90.cpp  ?add_float@Eapd@Audio@EA@@YAXPAUFAtom@123@M@Z  00a548f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a53f90/s00a53f90.cpp  ?sub_bang@Eapd@Audio@EA@@YAXPAUFAtom@123@@Z  00a549b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a53f90/s00a53f90.cpp  ?sub_float@Eapd@Audio@EA@@YAXPAUFAtom@123@M@Z  00a54a10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a53f90/s00a53f90.cpp  ?mul_bang@Eapd@Audio@EA@@YAXPAUFAtom@123@@Z  00a54ad0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a53f90/s00a53f90.cpp  ?mul_float@Eapd@Audio@EA@@YAXPAUFAtom@123@M@Z  00a54b30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a53f90/s00a53f90.cpp  ?div_float@Eapd@Audio@EA@@YAXPAUFAtom@123@M@Z  00a54c60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a53f90/s00a53f90.cpp  ?pow_bang@Eapd@Audio@EA@@YAXPAUFAtom@123@@Z  00a54d30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a53f90/s00a53f90.cpp  ?pow_float@Eapd@Audio@EA@@YAXPAUFAtom@123@M@Z  00a54db0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a53f90/s00a53f90.cpp  ?max_bang@Eapd@Audio@EA@@YAXPAUFAtom@123@@Z  00a54e80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a53f90/s00a53f90.cpp  ?max_float@Eapd@Audio@EA@@YAXPAUFAtom@123@M@Z  00a54ef0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a53f90/s00a53f90.cpp  ?min_bang@Eapd@Audio@EA@@YAXPAUFAtom@123@@Z  00a54fb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a53f90/s00a53f90.cpp  ?min_float@Eapd@Audio@EA@@YAXPAUFAtom@123@M@Z  00a55020  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

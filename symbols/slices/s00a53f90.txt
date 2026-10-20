@@ -1,0 +1,24 @@
+00a53f90 play_free  # (t_play*): Play_GetUpdateManager(); if pUpdateCallback (t_play+0xe0) -> UpdateManager::RemoveCallback(cb); tail-jump to Play::~Play (0xa53b20) on &x->play (+0x28)
+00a53fc0 play_anything  # (t_play*, selHash, selName, argc, argv): if argc==1 -> (&x->play)->Dolist(selHash, selName, argv); else AtomsToString(argc, argv, buf[1000], 1000)
+00a54020 Play::Ctor  # (ecx=this Play*, voiceMgr, instance, nameHash, name, steal, updatePlaying, stepRule, object) ret 0x20: EapdVoiceList_Init(this,"EAPd/VoiceList"), EapdParamTable_Init(this+0x38,"EAPd/ParameterMap"), store +0x98 voiceMgr +0x9c instance +0xa0 hash +0xa4 name +0xa8 steal==1 +0xa9 updatePlaying==0 +0xac stepRule +0xb4 object, zero +0x8c/0x90/0x94, +0xaa paused=0, +0xb0 lastGroupID=-1
+00a540f0 Play::Start  # (ecx=this Play*, float time): group=Instance_GetGroup(mInstance,mName); if !group -> gPlaySymbol=Play_GetLocation(), Play_Dispatch(mpObject, name, time); else idx by step rule (random/inorder/norepeat), gPlaySymbol=Group_Location, sample=Group_Sample(group,idx), lastGroupID=idx, Play_Dispatch(sample, time)
+00a54200 Play::StartSelect  # (ecx=this Play*, unsigned group, float time): g=Instance_GetGroup; if !g return; sample=Group_Sample(g,group); if sample.mHash==gEmptySymbol.mHash return; gPlaySymbol=Group_Location(g); Play_Dispatch(sample, time); lastGroupID=group
+00a54290 play_new  # (nameHash, name, unused, argc, argv) -> t_play*: scan argv for first symbol / steal / block / setplaying / setnext / inorder / random / norepeat / float; build via pd_new(gpPlayClass), Play::Ctor, Play::Init(allocator, floatArg, gUpdateTicks), outlet_new(x, gBangSymbol); return 0 on any failure
+00a54520 play_start  # (t_play*, float time): x->play.Start(time); if !x->pUpdateCallback -> x->pUpdateCallback = UpdateManager(Play_GetUpdateManager())->AddCallback(x, play_update)
+00a54560 play_startselect  # (t_play*, float group, float time): x->play.StartSelect((unsigned)(__int64)group, time); if !x->pUpdateCallback -> AddCallback(x, play_update)
+00a545d0 a_play_setup  # (): gensym play/steal/block/setplaying/setnext/inorder/random/norepeat; gpPlayClass=class_new(gPlaySymbol, play_new, play_free, 0xec,0,9,0); addcreator(play_new,"dplay",9,0); addmethod start/startselect/stop/pause/use; addanything(play_anything); return ok
+00a54890 add_bang   # FAtom: broadcast mF1+mF2
+00a548f0 add_float  # FAtom: mF1=f; broadcast mF2+f
+00a549b0 sub_bang   # FAtom: broadcast mF1-mF2
+00a54a10 sub_float  # FAtom: mF1=f; broadcast f-mF2
+00a54ad0 mul_bang   # FAtom: broadcast mF1*mF2
+00a54b30 mul_float  # FAtom: mF1=f; broadcast mF2*f
+00a54bf0 div_bang   # FAtom: broadcast (mF2!=0 ? mF1/mF2 : 0)
+00a54c60 div_float  # FAtom: mF1=f; broadcast (mF2!=0 ? f/mF2 : 0)
+00a54d30 pow_bang   # FAtom: broadcast (mF1>0 ? pow(mF1,mF2) : 0)
+00a54db0 pow_float  # FAtom: mF1=f; broadcast (f>0 ? pow(f,mF2) : 0)
+00a54e80 max_bang   # FAtom: broadcast max(mF1,mF2)
+00a54ef0 max_float  # FAtom: mF1=f; broadcast max(f,mF2)
+00a54fb0 min_bang   # FAtom: broadcast min(mF1,mF2)
+00a55020 min_float  # FAtom: mF1=f; broadcast min(f,mF2)
+00a54f60 FAtom_bang/float shared tail  # shared class factory tail reached after max_bang/min_bang extent (pd_new(pd_new-class) etc.); not a slice function start
