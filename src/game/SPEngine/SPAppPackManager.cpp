@@ -29,6 +29,8 @@ void* PtrVec::Find(int key)
     }
     return 0;
 }
+void EDealloc(void* p);      // 0x00f47380
+void EDealloc(void* p);      // 0x00f47380
 extern void* vtPropFilter[];                  // 0x013f662c
 extern void* vtIMsgHandler[];                 // 0x013eb394
 extern int g_153ed8c;                         // filter argument
