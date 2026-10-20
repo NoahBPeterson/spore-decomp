@@ -1,0 +1,34 @@
+# va  mangled name  # evidence
+# 008acbf0-008ada00 TrueType bytecode interpreter handlers (FreeType-derived), one TU.
+# Layout: TTExecCtx +0x08/0x0c/0x10 zp0/zp1/zp2, +0x20 operand stack, +0x24 zone array
+# (stride 0x2c), +0x28 graphics state; TTRoundState at ctx->mGS+0x58 (round fn +0x18).
+# cl 15.00 (/O2 /MD /Gy /EHsc /TP) confirmed: 16/29 byte-exact.
+008acbf0  ?fnt_WPV@@YAXPAUTTExecCtx@@@Z
+008acc30  ?fnt_WFV@@YAXPAUTTExecCtx@@@Z
+008acc60  ?fnt_GPV@@YAXPAUTTExecCtx@@@Z
+008acc90  ?fnt_GFV@@YAXPAUTTExecCtx@@@Z
+008accc0  ?fnt_SFVTPV@@YAXPAUTTExecCtx@@@Z
+008acce0  ?fnt_ISECT@@YAXPAUTTExecCtx@@@Z
+008acf70  ?fnt_SCVTCI@@YAXPAUTTExecCtx@@@Z
+008acf90  ?fnt_SSWCI@@YAXPAUTTExecCtx@@@Z
+008acfb0  ?fnt_SSW@@YAXPAUTTExecCtx@@@Z
+008acfd0  ?fnt_SMD@@YAXPAUTTExecCtx@@@Z
+008ad000  ?fnt_SRP@@YAXPAUTTExecCtx@@@Z
+008ad060  ?fnt_SZP@@YAXPAUTTExecCtx@@@Z
+008ad0b0  ?fnt_SetRoundMode@@YAXPAUTTExecCtx@@@Z
+008ad190  ?fnt_SetRoundValues@@YAXPAUTTExecCtx@@IH@Z
+008ad2f0  ?fnt_ContourTailDelta@@YAHPAUTTExecCtx@@@Z
+008ad320  ?fnt_DUP@@YAXPAUTTExecCtx@@@Z
+008ad340  ?fnt_CLEAR@@YAXPAUTTExecCtx@@@Z
+008ad350  ?fnt_SWAP@@YAXPAUTTExecCtx@@@Z
+008ad380  ?fnt_DEPTH@@YAXPAUTTExecCtx@@@Z
+008ad3a0  ?fnt_CINDEX@@YAXPAUTTExecCtx@@@Z
+008ad3c0  ?fnt_MINDEX@@YAXPAUTTExecCtx@@@Z
+008ad400  ?fnt_ROLL@@YAXPAUTTExecCtx@@@Z
+008ad430  ?fnt_MDAP@@YAXPAUTTExecCtx@@@Z
+008ad4b0  ?fnt_MIAP@@YAXPAUTTExecCtx@@@Z
+008ad590  ?fnt_IUP@@YAXPAUTTExecCtx@@@Z
+008ad850  ?fnt_SH_Common@@YAPAUTTZone@@PAUTTExecCtx@@PAH11@Z
+008ad950  ?fnt_SHP_Common@@YAXPAUTTExecCtx@@HH@Z
+008ad9c0  ?fnt_SHP@@YAXPAUTTExecCtx@@@Z
+008ada00  ?fnt_SHC@@YAXPAUTTExecCtx@@@Z
