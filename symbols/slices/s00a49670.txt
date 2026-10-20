@@ -1,0 +1,41 @@
+00a49670 resizebytes  # (ptr, oldsize, newsize, tag): clamp both sizes to >=1, alloc via System::GetAllocator()->Alloc, zero-fill, grow/shrink copy split, Free(ptr)
+00a49720 inlet_setempty  # (t_inlet*, t_symbol): sets i_symempty (0x167589c companion setter; symbol by value)
+00a49740 inlet_new  # (owner, dest, s1, s2): t_inlet at +0x28 via pd_new(spInletClass); appends to owner->te_inlet; i_symempty = gEmptySymbol
+00a497d0 inlet_bang  # i_symfrom == gBangSymbol -> pd_vmess(dest, u.i_symto, ""); == gEmptySymbol -> pd_bang(dest)
+00a49810 inlet_float  # i_symfrom == gFloatSymbol -> pd_vmess(dest, u.i_symto, "f", f); == gEmptySymbol -> outlet_float(dest, f).  (merged extent with inlet_symbol at 0xa49860)
+00a49860 inlet_symbol  # registered by obj_init via class_addsymbol(spInletClass, 0xa49860); not a function start in the image
+00a498c0 inlet_list  # from in {gListSymbol,gFloatSymbol,gSymbolSymbol} -> pd_typedmess(dest, u.i_symto); == gEmptySymbol -> pd_list(dest, s, argc, argv)
+00a49930 inlet_anything  # from in {gBangSymbol,gFloatSymbol,gSymbolSymbol,gListSymbol,anything} -> pd_vmess(dest, u.i_symto, "a", argc, argv); == gEmptySymbol -> pd_typedmess(dest, s, argc, argv)
+00a49990 inlet_free  # unlink x from owner->te_inlet (head or scan) then freebytes(x, 0x28)
+00a499e0 floatinlet_float  # x->i_dest is a float*; *i_dest = f
+00a49a00 floatinlet_new  # (owner, float*): t_inlet with i_dest = ptr, i_symfrom = "float" symbol, u.i_symto = ptr, i_symempty = gEmptySymbol
+00a49a90 symbolinlet_symbol  # x->u.i_symto = s; x->i_symempty = gEmptySymbol
+00a49ab0 symbolinlet_new  # (owner, t_symbol*): t_inlet with i_symfrom/i_symto = the "symbol" symbol
+00a49b40 obj_list  # send argv[1..argc-1] to each inlet (outlet_float / pd_symbol), then argv[0] to x itself
+00a49be0 obj_init  # one-time setup: gensym "inlet", 4 inlet classes via class_new (size 0x28) + class_addbang/doaddfloat/addsymbol/addlist/addanything; registers inlet_float (0xa49810) and inlet_symbol (0xa49860)
+00a49d00 obj_refcount_inc  # ++gObjCount (0x167544c)
+00a49d10 outlet_setempty  # sets o_symto (0x1675474 companion setter; symbol by value)
+00a49d30 outlet_new  # (owner, t_symbol): t_outlet at +0x1c via getbytes("EAPd/t_outlet"); appends to owner->te_outlet; o_connections = 0; o_symfrom = s; o_symto = gEmptySymbol
+00a49da0 outlet_bang  # if (++gOutletCount < 1000) for each o_connections pd_bang(oc_to); --gOutletCount
+00a49df0 outlet_symbol  # same guard; pd_symbol(oc_to, s)
+00a49e40 outlet_list  # same guard; pd_list(oc_to, s, argc, argv)
+00a49eb0 outlet_anything  # same guard; pd_typedmess(oc_to, s, argc, argv)
+00a49f20 outlet_free  # unlink x from owner->te_outlet (head or scan) then freebytes(x, 0x1c)
+00a49f70 obj_connect  # (src, outno, sink, inno) -> t_outconnect*: resolve outlet/inlet honouring c_firstin, append connection, set oc_to
+00a4a010 obj_disconnect  # (src, outno, sink, inno): find and unlink the connection, freebytes(oc, 8)
+00a4a0b0 obj_noutlets  # count owner->te_outlet chain
+00a4a0d0 obj_ninlets  # count owner->te_inlet chain, +1 when class->c_firstin
+00a4a100 obj_outlet_connections  # (x, t_outlet** out, which): *out = which-th outlet (null-guarded walk); return its o_connections or 0
+00a4a130 obj_connectioninfo  # (oc, t_object** sink, t_inlet** inlet, int* inno) -> oc->oc_next: classify the connection endpoint; inlet classes map to owner+index, else sink = pd itself
+00a4a1c0 pd_checkobject  # (*x)->c_isobject (+0x49) ? (t_object*)x : 0
+00a4a1e0 obj_moveinletfirst  # move inlet i to the head of x->te_inlet
+00a4a220 obj_moveoutletfirst  # move outlet o to the head of x->te_outlet
+00a4a260 glist_doupdatewindowlist  # (glist, buf): if gl_havewindow and strlen(buf)+strlen(gl_name)+100 <= 1024 sprintf "{%s .x%lx} " and strcat; recurse into gl_list members whose g_pd == gpCanvasClass
+00a4a320 canvas_updatewindowlist  # buf = "pdtk_updatewindowlist {", walk gpCanvasList via gl_nextwin, append "}\n", sys_gui(buf)
+00a4a3c0 canvas_removewindow  # remove x from gpCanvasList (head or gl_nextwin scan); arg2 in edx (LTCG register ABI)
+00a4a3f0 set_newfilename_symbol2  # gSymNewFile2 (0x167547c) = s
+00a4a410 set_newfilename_symbol  # gSymNewFile (0x1675474) = s
+00a4a430 canvas_getcurrent  # pd_findbyclass(gHashXSymbol, gpCanvasClass)
+00a4a450 canvas_getcurrentinstance  # canvas_getcurrent()->gl_instance (+0x7c)
+00a4a490 canvas_getenv  # walk gl_owner until gl_env, return it
+00a4a4b0 canvas_getdollarzero  # canvas_getcurrent()->gl_env->ce_dollarzero (+0x10), or 0
