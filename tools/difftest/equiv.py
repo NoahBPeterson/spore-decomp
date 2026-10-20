@@ -1784,7 +1784,8 @@ def _test_function(sid, va, opts, log=print):
     cov = 100.0 * len(covered) / total if total else 0.0
     out.update(inputs=ran, valid=valid, discarded=discarded, mismatches=mism, first_mismatch=first,
                coverage={"covered_insns": len(covered), "total_insns": total, "pct": round(cov, 1),
-                         "all": len(covered) >= total},
+                         "all": len(covered) >= total,
+                         "missed": ["%08x" % a for a in sorted(set(t.orig_insns) - covered)][:64]},
                tolerated=cmp_.tolerated, ours_traps=traps)
     if opts.ulp:
         out["ulp"] = opts.ulp

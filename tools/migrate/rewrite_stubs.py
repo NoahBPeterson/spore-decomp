@@ -265,6 +265,8 @@ def insert_missing_markers(lines, sid, known_vas=()):
     import bisect
     marker = re.compile(r"^//\s*@\s*0x[0-9a-fA-F]+\b")
     inserts = []
+    taken = set()                                        # VAs given out here: never stamp one VA on two definitions
+    marked_vas = {int(m_.group(1), 16) for m_ in (re.match(r"^//\s*@\s*0x([0-9a-fA-F]+)\b", l) for l in lines) if m_}
     prev_end_line = -1
     for (s, e, head) in defs:
         ln = bisect.bisect_right(starts, s) - 1          # line index of the signature start
@@ -283,13 +285,14 @@ def insert_missing_markers(lines, sid, known_vas=()):
         m = re.search(r"\bFUN_([0-9a-fA-F]{8})\b", head)
         if m:
             va, how = int(m.group(1), 16), "FUN_ name"
-        if va is None and name:
-            comps = name.split("::")
-            for key in (tuple(comps[-2:]), (comps[-1],)):
-                cands = by_path.get(key, [])
-                if len(set(cands)) == 1:
-                    va, how = cands[0], "manifest symbol %s" % "::".join(key)
-                    break
+        comps = name.split("::") if name else []
+        if va is None and comps:
+            # the full Class::name key first; the bare short name only after the banner lookup below, so that several
+            # `X::ReadTuningValues` in one slice are not all stamped with the one manifest ReadTuningValues (mig19
+            # s00a39ce0: cEventModifier::ReadTuningValues at 0xa39f90 was marked 0xa3a610, the real 0xa3a610 body never landed)
+            cands = by_path.get(tuple(comps[-2:]), [])
+            if len(set(cands)) == 1:
+                va, how = cands[0], "manifest symbol %s" % "::".join(comps[-2:])
         if va is None:
             # the comment block between the previous definition and this one
             for q in range(ln - 1, max(prev_end_line, ln - 40), -1):
@@ -322,7 +325,12 @@ def insert_missing_markers(lines, sid, known_vas=()):
                 if nb and short and nb.group(1).split("::")[-1] == short and int(nb.group(2), 16) in rows:
                     va, how = int(nb.group(2), 16), "name (0xVA) banner line %d" % (q + 1)
                     break
-        if va is not None and va in rows:
+        if va is None and len(comps) > 1:
+            cands = by_path.get((comps[-1],), [])
+            if len(set(cands)) == 1 and cands[0] not in taken and cands[0] not in marked_vas:
+                va, how = cands[0], "manifest symbol %s (short name)" % comps[-1]
+        if va is not None and va in rows and va not in taken:
+            taken.add(va)
             inserts.append((ln, va, name or head[:30], how))
         prev_end_line = bisect.bisect_right(starts, e - 1) - 1
     if not inserts and len(rows) == 1 and not any(marker.match(l) for l in lines):
