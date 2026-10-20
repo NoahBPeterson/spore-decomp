@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a5fff0/s00a5fff0.cpp  ?pipe_flush@Eapd@Audio@EA@@YAXPAX@Z          00a5fff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a5fff0/s00a5fff0.cpp  ?pipe_clear@Eapd@Audio@EA@@YAXPAD@Z          00a60020  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a5fff0/s00a5fff0.cpp  ?pipe_pause@Eapd@Audio@EA@@YAXPADM@Z         00a60050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a5fff0/s00a5fff0.cpp  ?x_time_setup@Eapd@Audio@EA@@YA_NXZ       00a60470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a5fff0/s00a5fff0.cpp  ?function_inrange@Eapd@Audio@EA@@YAXPADMM@Z  00a604a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a5fff0/s00a5fff0.cpp  ?function_outrange@Eapd@Audio@EA@@YAXPADMM@Z  00a604e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
