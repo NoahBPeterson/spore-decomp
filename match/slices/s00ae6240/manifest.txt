@@ -1,0 +1,6 @@
+slices/s00ae6240/s00ae6240.cpp  ?PostMsg@cCitySimulator@@QAEXXZ  00ae6570  /O2 /MD /Gy /EHsc /TP
+slices/s00ae6240/s00ae6240.cpp  ?Release@RefHolder@@QAEXXZ  00ae6670  /O2 /MD /Gy /EHsc /TP
+slices/s00ae6240/s00ae6240.cpp  ?push_back@VecT@@QAEXABQAUIRefA@@@Z  00ae7020  /O2 /MD /Gy /EHsc /TP
+slices/s00ae6240/s00ae6240.cpp  ?VecT_clear_cb@@YAXPAX@Z  00ae7060  /O2 /MD /Gy /EHsc /TP
+slices/s00ae6240/s00ae6240.cpp  ?GetSubsystemVec@cGameNounManager@@QAEPAHPAX@Z  00ae7200  /O2 /MD /Gy /EHsc /TP
+slices/s00ae6240/s00ae6240.cpp  ?VecTB_clear_cb@@YAXPAX@Z  00ae7230  /O2 /MD /Gy /EHsc /TP

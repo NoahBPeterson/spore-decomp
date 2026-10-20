@@ -1,0 +1,2 @@
+# slice s00ae6240 -- partial (incomplete)
+# (none: every function in this slice is defined and compiles)

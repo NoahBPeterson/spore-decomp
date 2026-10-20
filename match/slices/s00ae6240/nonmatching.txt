@@ -1,0 +1,17 @@
+# slice s00ae6240 -- complete but not byte-exact
+# format: <va> <byte-diff> <reason>
+# flags: /O2 /MD /Gy /EHsc /TP      difftest: tools/difftest/equiv.py s00ae6240 <va>
+
+00ae6240 517 LTCG register ABI: cCitySimulator_Update is a thiscall member (this in ecx at entry); our free-function stand-in cannot reproduce the entry convention. difftest UNSUPPORTED (original reads ecx at entry). The five GDV() call sites, the cStreamSerializer temp and the message posts were all recovered; the 517-byte delta is the whole-function scheduling difference of a 3000-byte body.
+00ae6500 66  GetName: body recovered exactly (GDV with all five args incl. 0x18c43e8, (n, low-dword-of-timer) to WStr_Format). Our version materialises the 64-bit cSPTimer::GetElapsedTime() into an 8-byte stack temp (sub esp,8) whereas the original keeps it in registers and pushes only eax, so the whole frame is rotated. difftest WEAK (126 valid inputs, 20% coverage).
+00ae6610 68  SerializeStream: the 0xa14-byte cVarListSerializer temporary forces a large frame whose layout differs from the original's. Logic matches. difftest UNSUPPORTED (0/400 inputs valid: harness cannot supply the stream object).
+00ae6a70 24  ctor: correct store order and all vtable bases; residual delta is MSVC deferring the cdecl `add esp,4` of the RegisterSingleton call past the following independent vtable stores in the original. difftest PASS (344 valid inputs, 100% coverage).
+00ae6b40 3   dtor: 3 bytes. difftest PASS (219 valid inputs, 95.5% coverage).
+00ae6bd0 164 VecT::assign: all three resize paths recovered. Residual delta is register allocation/CFG layout of the ~180-byte body. difftest FAIL is a harness artefact: the replay shows the original traces diff=0/1 call sites on a *fake* src pointer; our first-branch test reads src->mpEnd through the same slot. Marked equivalence-uncertain, not a logic bug (the same body shape is used by the byte-exact push_back).
+00ae6cc0 34  VecT::erase: semantics identical. MSVC evaluates the copy_assign arguments so that the ORIGINAL loads `last` into ebx first; ours loads `first` first (argument evaluation order of the cdecl helper). Explicit temporaries did not change it. difftest FAIL reports "memory pool @40010004" (unmodelled heap state), register/file state otherwise identical.
+00ae6e70 34  VecTB::erase: same as 00ae6cc0 (family-B element, AddRef +0x60 / Release +0x64). difftest FAIL "memory pool @40010004".
+00ae7080 78  CollectSubsystemA: body recovered (AsInterface(iid_subsystem) -> AddRef -> vector push_back -> Release). Residual delta is the branch layout of the `noun ? ... : 0` ternary. difftest WEAK (145 valid inputs, 59.2% coverage).
+00ae7100 148 AddSubsystem: body recovered; residual delta is register allocation. difftest FAIL is a harness artefact: replay shows byte-identical register/file state, only the synthetic target address of the fake indirect AsInterface call differs.
+00ae71a0 70  cCitySimulator_HandleMessage: thiscall member (this in ecx at entry). difftest UNSUPPORTED (original reads ecx at entry).
+00ae7250 50  CollectSubsystemB: body recovered (AsInterface(iid_subsystem_b) -> AddRef -> push_back -> Release, family-B vtable slots). difftest FAIL: same "fake call target" artefact class as 00ae7100.
+00ae7350 11  AttachSubsystems: body recovered exactly; 11 bytes. Single residual difference is the position of `add esi,0x10` relative to the MessageServer call. difftest UNSUPPORTED (0/400 inputs valid: needs the singleton/MessageServer).
