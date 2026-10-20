@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0116c170/s0116c170.cpp  ?InitReaderInterface_s0116c170@@YAXPAH0@Z  0116c170  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0116c170/s0116c170.cpp  ??0HELPER_CMpegLayer3Base_s0116c170@@QAE@XZ  0116c330  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0116c170/s0116c170.cpp  ??1HELPER_CMpegLayer3Base_s0116c170@@QAE@XZ  0116c390  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
