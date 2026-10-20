@@ -3,15 +3,16 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
-#include "SP/cSPEditorAnimationManager.h"
 #include "EA/Variant.h"
 #include "SP/cPropertyList.h"
 #include "SP/cSPEditorAnimatedCreatureManager.h"
 #include "SP/cSPEditorAnimatedEventInfo.h"
+#include "SP/cSPEditorAnimationManager.h"
 #include "SP/cSPEditorBlock.h"
 #include "SP/cSPEditorModel.h"
 #include <intrin.h>
 #include <string.h>
+#include <math.h>
 
 // ---- items of slice s0059d300 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
@@ -69,6 +70,24 @@ public:
 }
 struct RandomLinearCongruential { double RandomDoubleUniform(); };
 extern RandomLinearCongruential sMathRandom;   // 0x1601760
+namespace SP {
+extern void* GetManagerImpl();                                    // 0x0067dcd0
+}
+namespace SP {
+extern void* PropertyManagerImpl();                               // 0x0067de30
+}
+namespace SP {
+extern void  DoInsertValueImpl(void* end, const void* value);     // 0x004b6000
+}
+namespace SP {
+extern void  FreeAllocImpl(void* p);                              // 0x00f47380
+}
+namespace SP {
+extern unsigned int kResFilterField4;   // 0x00b1b104
+}
+namespace SP {
+extern unsigned int kResFilterGroup;    // 0x0150e79c
+}
 namespace SP {
 class cPropertyList_s0059_d300;
 }
@@ -266,8 +285,66 @@ SP::cSPEditorAnimationManager_s0059_d300::cSPEditorAnimationManager_s0059_d300()
 {}
 
 // @ 0x0059db40
-void SP::cSPEditorAnimationManager::Init()
-{}
+void SP::cSPEditorAnimationManager_s0059_d300::Init()
+{
+    void* rm = SP::GetManagerImpl();
+
+    // Output vector of ResourceKeys (12 bytes each) filled by the manager.
+    void* outBegin = 0;
+    void* outEnd = 0;
+    void* outCap = 0;
+
+    // Resource-list filter argument (vptr + two fields).
+    struct ResFilter {
+        void* mpVtbl;
+        unsigned int m4;
+        unsigned int m8;
+    } filter;
+    filter.m8 = SP::kResFilterGroup;
+    filter.m4 = SP::kResFilterField4;
+    filter.mpVtbl = (void*)&outBegin;   // placeholder; see note below
+
+    // rm->v38(res&, filter&, 0) -- fill outBegin/outEnd.
+    typedef void (__thiscall *V38)(void*, void**, void*, int);
+    ((V38)(*(void***)rm)[0x38 / 4])(rm, &outBegin, &filter, 0);
+
+    int count = (int)((char*)outEnd - (char*)outBegin) / 0x0c;
+    for (int i = 0; i < count; ++i) {
+        char* elem = (char*)outBegin + i * 0x0c;
+        unsigned int key0 = *(unsigned int*)(elem + 0x00);
+        unsigned int key2 = *(unsigned int*)(elem + 0x08);
+
+        void* temp = 0;
+        void* pm = SP::PropertyManagerImpl();
+        typedef char (__thiscall *V2C)(void*, unsigned int, unsigned int, void**);
+        char ok = ((V2C)(*(void***)pm)[0x2c / 4])(pm, key0, key2, &temp);
+        if (ok != 0) {
+            // mAnimations.push_back(AutoRefCount(temp))
+            void** pend = (void**)((char*)this + 0x10);
+            if (*pend < *(void**)((char*)this + 0x14)) {
+                void** slot = (void**)*pend;
+                *(void**)((char*)this + 0x10) =
+                    (void*)((char*)slot + 4);
+                if (slot != 0) {
+                    *slot = temp;
+                    if (temp != 0) {
+                        (*(int(__thiscall**)(void*))(*(char**)temp))(temp);
+                    }
+                }
+            } else {
+                SP::DoInsertValueImpl(*pend, &temp);
+            }
+        }
+        if (temp != 0) {
+            (*(int(__thiscall**)(void*))((*(char**)temp) + 0x04))(temp);
+        }
+    }
+
+    // ~SpVector: free the allocation if it owns one.
+    if (outBegin != 0 && *((void**)outBegin - 1) != 0) {
+        SP::FreeAllocImpl(outBegin);
+    }
+}
 
 // @ 0x0059dc70
 bool SP::cSPEditorAnimationManager_s0059_d300::GetAnimation(SP::AnimRequest* req, SP::AnimResult* out, SP::AnimContext* ctx)

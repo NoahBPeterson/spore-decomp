@@ -8,5 +8,5 @@
 0059da80 ?RandomRange@@YANM@Z  # RandomRange migrated from s0059d300 (verbatim, slice spelling)
 0059dac0 ??0cSPEditorAnimationManager_s0059_d300@SP@@QAE@XZ  # cSPEditorAnimationManager_s0059_d300::cSPEditorAnimationManager migrated from s0059d300 (verbatim, slice spelling)
 0059db00 scalar deleting destructor  # vtable resets + conditional dealloc
-0059db40 ?Init@cSPEditorAnimationManager@SP@@QAEXXZ  # SP::cSPEditorAnimationManager::Init migrated from s0059d300
+0059db40 ?Init@cSPEditorAnimationManager_s0059_d300@SP@@QAEXXZ  # cSPEditorAnimationManager_s0059_d300::Init migrated from s0059d300 (verbatim, slice spelling)
 0059dc70 ?GetAnimation@cSPEditorAnimationManager_s0059_d300@SP@@QAE_NPAUAnimRequest@2@PAUAnimResult@2@PAUAnimContext@2@@Z  # cSPEditorAnimationManager_s0059_d300::GetAnimation migrated from s0059d300 (verbatim, slice spelling)

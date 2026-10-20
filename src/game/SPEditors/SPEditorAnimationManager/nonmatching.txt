@@ -1,3 +1,4 @@
 # va  diff-bytes  reason
 0059da80 19 RandomRange: complete; float/double conversion schedule differs
+0059db40 213 cSPEditorAnimationManager::Init (249): complete; the resource-filter local object's vptr/dtor and the inlined push_back register shape differ, size 249 vs 298; equiv UNSUPPORTED (unresolved extern kResFilterField4)
 0059dc70 1587 GetAnimation: complete; register allocation/frame (0x70 vs 0x90) differs, all 36 calls/vtable slots in order, size 1801 vs 1763
