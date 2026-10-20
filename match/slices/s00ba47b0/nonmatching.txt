@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+00ba5350 54 range helper: argument/loop register layout differs; equiv FAIL 5/5 (eax)
+00ba53b0 95 range helper without sentinel test: loop/register layout differs; equiv FAIL 5/5 (eax)
+00ba5470 116 hash lookup + first-range call: temp-arg/stack layout differs; equiv FAIL 5/5 (call #0)
+00ba54f0 116 hash lookup + last-range call: stack layout differs; equiv FAIL 5/5 (execution)
+00ba55d0 84 hash entry update: register allocation/stack params differ; equiv WEAK (37.8% cov)
+00ba5270 158 save-data vector builder: eastl insert and callee conventions not reconstructed; equiv UNSUPPORTED (unresolved helpers)
+00ba4c70 261 vector grow/insert: operator_new EASTL allocator args not reconstructed; equiv UNSUPPORTED (0/400 valid)
+00ba4e60 154 map find-or-insert: EASTL iterator/temp layout differs; equiv FAIL 5/9 valid

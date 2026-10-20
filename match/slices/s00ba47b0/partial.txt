@@ -1,0 +1,4 @@
+# va  reason
+00ba47b0 mode-vector rebuild: 165 B vs 246 B; EASTL temp vector construction/cleanup not recovered
+00ba48b0 mode switch dispatcher: 1036 B vs 948 B; jump-table cases and helper signatures approximate
+00ba4f30 embassy/scan handler: 566 B vs 691 B; EASTL hashtable insert and achievement path not reconstructed

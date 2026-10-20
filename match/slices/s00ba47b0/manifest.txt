@@ -1,0 +1,6 @@
+# source  symbol  original VA  [flags override]
+slices/s00ba47b0/s00ba47b0.cpp  ?Emplace@GoalVec@@QAEPAHPAD0@Z  00ba4de0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ba47b0/s00ba47b0.cpp  ?FUN_00ba51f0@@YAXXZ  00ba51f0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ba47b0/s00ba47b0.cpp  ?FUN_00ba5220@@YAHXZ  00ba5220  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ba47b0/s00ba47b0.cpp  ?FindByField10@CursorProvider@@QAEPADIH@Z  00ba5410  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ba47b0/s00ba47b0.cpp  ?FindByField24@CursorProvider@@QAEPADIH@Z  00ba5570  /O2 /MD /Gy /EHsc /TP /arch:SSE
