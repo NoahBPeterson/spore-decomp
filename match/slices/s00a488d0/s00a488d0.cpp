@@ -139,8 +139,8 @@ void  sys_lock();                                                              /
 void  free_save_list(void* p);                                                 // 0xa49f20
 void  free_gop_list(void* p);                                                  // 0xa49990
 void  class_freemethod(void* o);                                               // 0xa46c50
-void  sys_gui_acquire(void* sel_a, void* sel_b, void* obj);                    // 0xa671b0
-void  sys_gui_release(void* sel_a, void* sel_b, void* obj);                    // 0xa67620
+void  sys_gui_acquire(void* obj, void* sel_a, void* sel_b);                    // 0xa671b0
+void  sys_gui_release(void* obj, void* sel_a, void* sel_b);                    // 0xa67620
 t_pdinstance* pdinstance();                                                    // 0xa67cb0
 char  glob_init();                                                             // 0xa49be0
 char  glob_setup();                                                            // 0xa51f40
@@ -171,16 +171,16 @@ void* zgetfn(t_class** pp, void* name)
 void class_addfloat(void* x, float f)
 {
     t_class* c = *(t_class**)x;
-    int atoms[3];
-    atoms[0] = 1;
-    *(float*)&atoms[1] = f;
-    atoms[2] = 0;
+    t_atom atoms[1];
+    atoms[0].a_type = 1;
+    atoms[0].a_w = f;
     if (c->c_listmethod != (void*)0x00a47d70) {
-        typedef void (*ListFn)(void*, t_symbol, void*);
-        ((ListFn)c->c_listmethod)(x, gListSym2, (void*)0x16758b0);
+        typedef void (*ListFn)(void*, void*, void*, int, void*);
+        ((ListFn)c->c_listmethod)(x, gListSym2.s_name, gListSym2.s_thing, 1, atoms);
     } else {
-        typedef void (*SymFn)(void*, t_symbol, void*, int, int*);
-        ((SymFn)c->c_symbolmethod)(x, gFloatSymbol, (void*)0x16758c8, 1, atoms);    }
+        typedef void (*SymFn)(void*, void*, void*, int, void*);
+        ((SymFn)c->c_symbolmethod)(x, gFloatSymbol.s_name, gFloatSymbol.s_thing, 1, atoms);
+    }
 }
 
 // @ 0x00a48980
@@ -409,7 +409,7 @@ bool mess_init()
     t_class* c2 = class_new(*s2, 0, 0, 4, 0, (t_atom*)atoms);
     gpTemplateMaker = c2;
     ok &= (char)(c2 != 0);
-    sys_gui_release(gObjectSym.s_name, gObjectSym.s_thing, &gpTemplateMaker);
+    sys_gui_release(&gpTemplateMaker, gObjectSym.s_name, gObjectSym.s_thing);
     char al = 0;
     if (gpObjectMaker != 0 && (void*)0x00a48050 != 0) {
         gpObjectMaker->c_anymethod = (void*)0x00a48050;
@@ -577,11 +577,12 @@ void sched_tick(float nexttime)
 // @ 0x00a49390
 void* pd_new(t_class* c)
 {
-    t_gobj* o = (t_gobj*)getbytes(c->c_size, (const char*)"pd_object");
+    const char* tag = (const char*)c->c_helpname;
+    t_gobj* o = (t_gobj*)getbytes(c->c_size, tag);
     o->g_pd = c;
     if (c->c_patchable) {
-        *(void**)((char*)o + 0x0c) = 0;
         *(void**)((char*)o + 0x10) = 0;
+        *(void**)((char*)o + 0x0c) = 0;
         *(void**)((char*)o + 0x20) = gAnythingSym.s_name;
         *(void**)((char*)o + 0x24) = gAnythingSym.s_thing;
     }
@@ -616,9 +617,10 @@ void pd_free(t_gobj* o)
 // @ 0x00a49450
 bool sys_register_loader(void* a, void* b)
 {
-    s_stack->s_sym_a = (t_symbol*)a;
-    s_stack->s_sym_b = (t_symbol*)b;
-    t_sysstack* r = s_stack->s_next;
+    t_sysstack* s = s_stack;
+    s->s_sym_a = (t_symbol*)a;
+    s->s_sym_b = (t_symbol*)b;
+    t_sysstack* r = s->s_next;
     while (r) {
         if (r->s_sym_a == (t_symbol*)a)
             return true;
@@ -631,13 +633,14 @@ bool sys_register_loader(void* a, void* b)
 void pd_pushsym(t_gobj* x)
 {
     if (s_stack)
-        sys_gui_acquire(gSysSym.s_name, gSysSym.s_thing, *(void**)s_stack);
-    sys_gui_release(gSysSym.s_name, gSysSym.s_thing, x);
+        sys_gui_acquire(*(void**)s_stack, gSysSym.s_name, gSysSym.s_thing);
+    sys_gui_release(x, gSysSym.s_name, gSysSym.s_thing);
     t_sysstack* s = (t_sysstack*)getbytes(0x10, "sysstack");
+    t_sysstack* next = s_stack;
     s->s_what = x;
+    s->s_next = next;
     s->s_sym_a = (t_symbol*)gAnythingSym.s_name;
     s->s_sym_b = (t_symbol*)gAnythingSym.s_thing;
-    s->s_next = s_stack;
     s_stack = s;
 }
 
@@ -647,9 +650,9 @@ void pd_popsym(t_gobj* x)
     t_sysstack* s = s_stack;
     s_stack = s->s_next;
     freebytes(s, 0x10);
-    sys_gui_acquire(gSysSym.s_name, gSysSym.s_thing, x);
+    sys_gui_acquire(x, gSysSym.s_name, gSysSym.s_thing);
     if (s_stack)
-        sys_gui_release(gSysSym.s_name, gSysSym.s_thing, *(void**)s_stack);
+        sys_gui_release(*(void**)s_stack, gSysSym.s_name, gSysSym.s_thing);
 }
 
 // @ 0x00a49560
@@ -687,12 +690,12 @@ void pd_list(t_gobj* x, int a1, int a2, int n, void* argv)
 // @ 0x00a495e0
 bool conf_init()
 {
-    char ok = (char)(mess_init() & 1);
-    ok &= glob_init();
-    ok &= glob_setup();
-    ok &= s_loader_setup();
-    ok &= s_list_setup();
-    return ok != 0;
+    bool ok = (mess_init() & 1) != 0;
+    ok = ok & glob_init();
+    ok = ok & glob_setup();
+    ok = ok & s_loader_setup();
+    ok = ok & s_list_setup();
+    return ok;
 }
 
 // @ 0x00a49610
@@ -707,7 +710,7 @@ __declspec(noinline) void* getbytes(int n, const char* tag)
 }
 
 // @ 0x00a49650
-void freebytes(void* p, int n)
+__declspec(noinline) void freebytes(void* p, int n)
 {
     pdinstance()->freemem(p);
 }
