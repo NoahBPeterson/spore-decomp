@@ -1,0 +1,15 @@
+# va  diff-bytes  reason
+00ebfad0  234  complete; difftest WEAK (195 valid, 24.3% cov). Two-phase UI-layout teardown; the inlined eastl vector<bool> erase (DoInsertValue triple) and copy+swap destructor (0x00ebf480) sequences differ in scheduling and temp-allocator handling.
+00ebfc20  198  complete; difftest PASS (301 valid, 74.1% cov). Same vector<bool> erase/swap idiom; original emits the first erase unconditionally and re-tests before the second.
+00ebfd50  61  complete; difftest PASS (400/400). Creature-info string id selector; branch layout and table indexing differ.
+00ebfec0  52  complete; difftest PASS. Decider predicate over the animation state block; codegen differs in load scheduling.
+00ebff50  28  complete; difftest PASS. Sim-singleton getter; branch polarity/layout differs.
+00ec0010  30  complete; difftest PASS. 167 bytes vs 195 original: constant folding removed a redundant stage test, so no same-size candidate.
+00ec00e0  7  complete; difftest PASS. Store-after-comiss scheduling (one instruction moved).
+00ec0270  87  complete; difftest UNSUPPORTED (all inputs discarded: fault-read). Distance-between-objects predicate; pointer/float mix makes the harness fault on every generated input.
+00ec0340  100  complete; difftest FAIL (eax). Decider returning char via `al` only: original's obj==0 path does `xor al,al` leaving stale eax = 0x40454800, while ours clears the full register; shape differs throughout.
+00ec0430  255  complete; difftest UNSUPPORTED (all inputs discarded: fault-read). Victim-selection predicate walking several object pointers; every generated input dereferences an invalid address.
+00ec0530  436  complete; difftest UNSUPPORTED (all inputs discarded: fault-read). Nearest-eligible-combatant search arming the multistage attraction; multi-level pointer chase faults on all inputs.
+00ec0740  3  complete; difftest WEAK. `lea ecx,[esi+0xc0]` in the original vs `add esi,0xc0` in ours.
+00ec08d0  72  complete; difftest WEAK. Inspect-object decider creating the stimulus; stimuli call layout differs.
+00ec0970  158  complete; difftest WEAK. Second inspect-object decider; same stimulus-construction differences plus branch layout.
