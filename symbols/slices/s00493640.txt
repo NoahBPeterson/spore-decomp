@@ -1,2 +1,3 @@
 00493640 ?ClassifyAgainstSymmetryPlane@@YAHPAUV3@@MMMPAUBasis@@@Z  # ClassifyAgainstSymmetryPlane migrated from s00493640 (verbatim, slice spelling)
+00493ce0 ?FUN_00493ce0@@YAPAUMatrix3_s0049_3640@@PAU1@PAUcSPEditorBlock_s0049_3640@@U1@@Z  # FUN_00493ce0 migrated from s00493640 (verbatim, slice spelling)
 00494270 ?FUN_00494270@@YAPAXPAX0@Z  # FUN_00494270 migrated from s00493640 (verbatim, slice spelling)

@@ -17,6 +17,7 @@
 00491900 387 complete vector-insert-with-refcount routine; logic and all calls present, but the /Od frame (0x7c vs 0x30) and the intermediate pointer locals differ
 00492de0 130 complete: tracker offset check; only /Od local-slot assignment differs (frame 0x34 vs 0x30) and the bb.mx[2] offset
 00492e70 1230 complete: all 22 calls in original order (size 0.967x); /Od local-slot layout and a few spill temps differ (frame 0x194 vs 0x1ec); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Oi
+00493ce0 814 MoveBlockAndTranslateSnappedBlocks complete (flag bits, basis build, Cross/Normalize, direction-index flips, Matrix3 copy-out); /Od frame slot order not fitted (frame 0xe8 vs 0x14c), f1 local coalesced with the test() temp [equiv: PASS]
 004942b0 3496 SP::EditorUtils::GetRotationAndPositionBasedOnBehavior: complete (same 71 direct calls in order, all field offsets match); /Od Vector3 copy flavours (movss/int/fld) and local slot layout differ, 4219 vs 5113 bytes; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00495f90 8 complete scalar-deleting-dtor; only the /Od slot of the cached hkMemory instance vs the `this` spill is swapped (frame otherwise identical)
 00496090 8 complete deleting-dtor (calls the array dtor then deallocates); only the `this` spill slot differs
