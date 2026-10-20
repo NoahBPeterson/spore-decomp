@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00fd1f70  INCOMPLETE  vp6_filter_row_sse2_a: only the leading 4x pmullw stage (m[0..31] * h[0..31]) is reconstructed; the 1.2 KB of SSE2 butterfly that follows (pmulhw/paddw/psubsw/paddsw/psraw pairs against the constant tables at 0x15b3aa0/0x15b3ac0, 8 output rows) is not written, so the emitted symbol is 92 bytes instead of 1272.  Not listed as decompiled.
+00fd2470  INCOMPLETE  vp6_filter_row_sse2_b: same as 0xfd1f70 (second of the two 1122-byte VP6 SIMD filter kernels); only the pmullw pre-stage is present.
