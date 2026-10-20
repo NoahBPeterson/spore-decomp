@@ -1,0 +1,3 @@
+# partial: source exists and compiles, but the translation is not verified complete / not
+# behaviourally equivalent under tools/difftest/equiv.py (default inputs).
+# fields: <va> <realized/orig bytes> <flags> <difftest> <reason>
