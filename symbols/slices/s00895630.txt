@@ -1,0 +1,22 @@
+00895630 TokenReader::Match<identifier-continuation>  # explicit instantiation, lexer continuation run
+00895680 TokenReader::Match<Character2<'-','+'> >  # explicit instantiation
+008956c0 TokenReader::Match<Range<'0','9'> >  # explicit instantiation, digit
+008956f0 TokenReader::Match<Character2<'x','X'> >  # explicit instantiation, hex prefix
+00895730 TokenReader::Match<hex-digit-alternative>  # explicit instantiation, [0-9a-fA-F]
+00895770 TokenReader::MatchWhile<Range<'0','9'> >  # explicit instantiation, digit run
+008957b0 TextStyleReader::MatchString  # quoted string token
+00895810 TextStyleReader::Advance  # next token dispatch over six function-local statics
+00895cc0 TextStyleReader::SkipCommand  # ;-terminated command skip
+00895d00 TextStyleReader::MatchToken
+00895d40 TextStyleReader::MatchSymbol(const char*)
+00895d90 TextStyleReader::MatchFloat
+00895dd0 TextStyleReader::MatchInteger
+00895e30 TextStyleReader::MatchColor  # #rgb/#rrggbb/#rrggbbaa and rgb()
+00896120 TextStyleReader::ParseFontFamilies  # writes up to 4 string-family slots
+00896210 eastl::hash_map<fixed_string<char,12,1>,uint32_t,...>::operator[]
+008962d0 TextStyleReader::MatchSymbol<IStaticDefinition<char,Effect>,6>  # unit table
+00896330 TextStyleReader::MatchSymbol<IStaticDefinition<char,TextStylePropertyID>,7>  # font sizes
+008963f0 TextStyleReader::MatchSymbol<IStaticDefinition<char,float>,4>  # font weights
+00896450 TextStyleReader::MatchSymbol<IStaticDefinition<char,unsigned short>,4>  # variants
+008966f0 TextStyleReader::MatchLength
+00896770 TextStyleReader::ParseFontSize  # keyword size or percentage
