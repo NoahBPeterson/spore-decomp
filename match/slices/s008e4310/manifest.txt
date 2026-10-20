@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008e4310/s008e4310.cpp  ?ScalarDeletingDtor@Element@@QAEPAXE@Z  008e4450
+slices/s008e4310/s008e4310.cpp  ?OnAdded@Element@@QAEXXZ  008e4a70
+slices/s008e4310/s008e4310.cpp  ?OnRemoved@Element@@QAEXXZ  008e4a90
+slices/s008e4310/s008e4310.cpp  ?DispatchA@Element@@QAEXPAX@Z  008e4ab0
+slices/s008e4310/s008e4310.cpp  ?DispatchB@Element@@QAEEPAX@Z  008e4ad0
+slices/s008e4310/s008e4310.cpp  ?DispatchC@Element@@QAEXPAX@Z  008e4af0
+slices/s008e4310/s008e4310.cpp  ?Dtor2@Element@@QAEXXZ  008e4ba0
+slices/s008e4310/s008e4310.cpp  ?GatherValues@Element@@QAEXPAX0@Z  008e4f00
+slices/s008e4310/s008e4310.cpp  ?AsElement@Node@@QAEPAUElement@@XZ  008e52f0
