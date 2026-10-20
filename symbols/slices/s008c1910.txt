@@ -1,0 +1,7 @@
+008c1910 T2K_GetSbits  # pdb_candidates.json caller-single (dev 0121a6e0); static helper, object passed in ESI, refreshes the glyph bitmap cache for one char and copies out the metrics
+008c1c30 T2K_RenderGlyph  # pdb_names.json callee-single (dev 0121a720); renders one glyph into the T2K target through the setjmp/tsi_EmergencyShutDown guard
+008c1e20 T2K_SetNameString  # pdb_names.json callee-single (dev 0121a750); refetches the glyph/face name strings from the T1/T2/PFR/TT name tables
+008c1f20 DeleteT2K  # pdb_names.json callee-single (dev 0121a780); tears a T2K instance down, freeing its glyph class, buffers and allocator block
+008c2070 T2K_GetGlyphIndex  # pdb_names.json callee-single (dev 0121a7b0); char code -> glyph index
+008c20d0 FF_GlyphExists  # pdb_candidates.json caller-single (dev 0121a7e0); glyph present for a char code? also fetches the metrics
+008c21c0 T2K_CastRaysOfLightAndDarkness  # pdb_candidates.json caller-single (dev 0121a810); static helper, target/colour struct passed in EAX, two-pass edge/colour-keyed scan over a pixel region

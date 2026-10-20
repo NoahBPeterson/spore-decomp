@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+slices/s008c1910/s008c1910.cpp  _T2K_RenderGlyph      008c1c30  /O2 /MD /Gy /TP
+slices/s008c1910/s008c1910.cpp  _T2K_SetNameString    008c1e20  /O2 /MD /Gy /TP
+slices/s008c1910/s008c1910.cpp  _DeleteT2K            008c1f20  /O2 /MD /Gy /TP
+slices/s008c1910/s008c1910.cpp  _T2K_GetGlyphIndex    008c2070  /O2 /MD /Gy /TP
+slices/s008c1910/s008c1910.cpp  _FF_GlyphExists       008c20d0  /O2 /MD /Gy /TP
