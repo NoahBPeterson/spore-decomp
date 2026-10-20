@@ -219,14 +219,38 @@ struct cEditorObjectRegistry {     // +0x2c (retail-only member)
 }
 namespace SP {
 struct IWindowManager {
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
-    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
-    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
-    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
-    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
-    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
-    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+virtual void v25();
+virtual void v26();
+virtual void v27();
+virtual void v28();
+virtual void v29();
+virtual void v30();
+virtual void v31();
     virtual void v32();
     virtual int IsModal();
 };
@@ -337,7 +361,9 @@ namespace SP {
 struct cObjectTemplateDB {
     virtual void v0();
     virtual int Release();
-    virtual void v2(); virtual void v3(); virtual void v4();
+virtual void v2();
+virtual void v3();
+virtual void v4();
     virtual void Shutdown();
 };
 }
@@ -378,8 +404,14 @@ void SetHavokWorld(void*);              // 0x0092AC90
 }
 namespace SP {
 struct ICommandServer {
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
     virtual void v08();
     virtual void AddCommandHandler(void* pFunction, int flags);
     virtual void RemoveCommandHandler(void* pFunction);
@@ -387,8 +419,14 @@ struct ICommandServer {
 }
 namespace SP {
 struct IApp {
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
     virtual void v08();
     virtual ICommandServer* GetCommandServer();
 };
@@ -404,7 +442,11 @@ void InitEditorMessages();              // 0x00525CE0
 }
 namespace SP {
 struct IEditorUpdatable {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
     virtual void Update(int deltaTime);
 };
 }
@@ -430,7 +472,10 @@ namespace EA {
 namespace XHTML {
 namespace Resource {
 struct IResourceProvider {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
     virtual void Shutdown();
 };
 }
@@ -647,7 +692,10 @@ struct hkBool_s005d_61b0 {
     operator bool() const { return m_bool != 0; }
 };
 struct hkMemory {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
     virtual void* allocateChunk(int nbytes, int cl);
     virtual void deallocateChunk(void* p, int nbytes, int cl);
     static hkMemory* s_instance;   // 0x016E4178
@@ -781,9 +829,18 @@ extern void (*hkSystemFree)(void*);       // 0x015B9A38
 void HavokErrorReport(const char* s, void* obj);   // 0x00C2E4E0
 struct hkPoolMemory {
     hkPoolMemory();   // 0x0107F910
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
-    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
     virtual void v12();
     virtual ~hkPoolMemory();
     void removeReference() {
@@ -815,7 +872,7 @@ struct IProtocolHandler {
 }
 }
 }
-struct sp_vector_allocator {
+struct sp_vector_allocator_s005d_61b0 {
     uint32_t mUnknown[2];
     void deallocate(void* p, uint32_t) {
         if (((int*)p)[-1] != 0)
@@ -826,7 +883,7 @@ template <class T> struct sp_vector {
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
-    sp_vector_allocator mAllocator;
+    sp_vector_allocator_s005d_61b0 mAllocator;
     ~sp_vector() {
         DoDestroyValues(mpBegin, mpEnd);
         if (mpBegin)
@@ -839,7 +896,7 @@ struct sp_vector_trivial {
     void* mpBegin;
     void* mpEnd;
     void* mpCapacity;
-    sp_vector_allocator mAllocator;
+    sp_vector_allocator_s005d_61b0 mAllocator;
     ~sp_vector_trivial() {
         if (mpBegin)
             mAllocator.deallocate(mpBegin, 0);
@@ -888,7 +945,6 @@ struct cXHTMLLocalizedStrings {
 };
 // ---- items of slice s005d61b0 end
 
-
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 void InitHavokBaseSystem();  // 0x005d6de0 (stays in the slice: not this object's)
 
@@ -901,8 +957,6 @@ bool cEditorSystem::PreShutdown()
   return true;
 }
 }  // namespace SP
-
-
 
 // @ 0x005d61b0
 bool SP::cEditorSystem_s005d_61b0::Shutdown()
