@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f05ee0/s00f05ee0.cpp  ?ShowUploadProgressDialog@cSPPlayModeSubModeMovie@SP@@QAEXXZ  00f065d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f05ee0/s00f05ee0.cpp  ?ShowSendVideoURLDialog@cSPPlayModeSubModeMovie@SP@@QAEXXZ   00f06660  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f05ee0/s00f05ee0.cpp  ?RegisterMessageHandlers@cSPPlayModeSubModeMovie@SP@@QAEXXZ 00f06ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
