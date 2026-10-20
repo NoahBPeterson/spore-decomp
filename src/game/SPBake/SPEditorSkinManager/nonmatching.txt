@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+004c3030  18  complete cSPEditorSkinManager::AsInterface; switch case-body layout differs by 18B

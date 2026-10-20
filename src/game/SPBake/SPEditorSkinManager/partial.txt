@@ -1,4 +1,4 @@
-# va  reason
+# va  diff-bytes  reason
 004c3070  0  partial: create_ui_raster skeleton
 004c38e0  0  partial: cSPEditorSkinManager::Update top-level flow only (UpdateTorso call, mModel check, UpdatePaintedSkin tail); missing asm 0x4c3912..0x4c4270 (block loop, mLimbSkins find/insert, complete-skin update, cleanup loops)
 004c4290  0  partial: UpdatePaintedSkin skeleton

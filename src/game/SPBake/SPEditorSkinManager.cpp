@@ -391,6 +391,21 @@ public:
 };
 // ---- items of slice s005002d0 end
 
+// @ 0x004c3030
+namespace SP
+{
+void* cSPEditorSkinManager::AsInterface(EA::COM::InterfaceId id)
+{
+    switch (id) {
+    case 0xcfeb4c03:
+        return this;
+    case 0xee3f516e:
+        return this;
+    }
+    return 0;
+}
+}
+
 // @ 0x004c3070
 void create_ui_raster(void* self, void* a, void* b, void* c)
 {
