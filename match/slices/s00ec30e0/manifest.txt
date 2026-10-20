@@ -1,0 +1,15 @@
+# source  symbol  original VA  [flags override]
+slices/s00ec30e0/s00ec30e0.cpp  ?FUN_00ec3580@@YAXHHHHHPAPAX@Z  00ec3580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ec30e0/s00ec30e0.cpp  ?FUN_00ec37f0@@YAMPAUCCreature@@HHHHHPAX@Z  00ec37f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ec30e0/s00ec30e0.cpp  ?FUN_00ec3b20@@YGXPAUKey3@@@Z  00ec3b20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ec30e0/s00ec30e0.cpp  ?IsIdle@JumpFlags@@QAE_NXZ  00ec3b40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ec30e0/s00ec30e0.cpp  ?HasOtherKind@JumpFlags@@QAE_NXZ  00ec3b60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ec30e0/s00ec30e0.cpp  ?ShouldRun@JumpFlags@@QAE_NXZ  00ec3b70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ec30e0/s00ec30e0.cpp  ?Kick@CObj20@@QAEXXZ  00ec3bc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ec30e0/s00ec30e0.cpp  ?HandleMessage@JumpFlags@@QAEXPAUMsg@@@Z  00ec3be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ec30e0/s00ec30e0.cpp  ?FUN_00ec3ca0@@YAHM@Z  00ec3ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ec30e0/s00ec30e0.cpp  ?FUN_00ec3d20@@YGIPAUHolder@@0@Z  00ec3d20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ec30e0/s00ec30e0.cpp  ?FUN_00ec3dd0@@YGIPAUHolder@@0@Z  00ec3dd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ec30e0/s00ec30e0.cpp  ?GetKind@CObj8@@QAEHXZ  00ec3e50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ec30e0/s00ec30e0.cpp  ?Send@CNode@@QAEXHH@Z  00ec3e90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ec30e0/s00ec30e0.cpp  ?SendForce@CNode@@QAEXHH@Z  00ec3eb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

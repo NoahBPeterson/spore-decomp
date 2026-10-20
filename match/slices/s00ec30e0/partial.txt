@@ -1,0 +1,4 @@
+# va  reason
+00ec30e0 jump-command update: 8-arg action reconstructed best-effort (1226 B vs 1078 B); nav/value dispatch not fully recovered
+00ec35a0 navigation goal-request stack object not reconstructed (145 B vs 585 B)
+00ec3880 jump target scan/collector loop not reconstructed (597 B vs 636 B)

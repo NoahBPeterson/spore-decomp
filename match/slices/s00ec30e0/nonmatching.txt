@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00ec3520 59 State::Init rand clamp: x87 double ordering (fxch/jb vs fcomi/jbe) differs; equiv PASS (400/400)
+00ec3ed0 523 CNode::Compare: property-bag float/int compare paths and branch layout not reconstructed; equiv WEAK (252 valid, 44.6% cov)
