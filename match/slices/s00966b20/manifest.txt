@@ -1,0 +1,20 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00966b20/s00966b20.cpp  ?m@S_966df0@@QAEPAXE@Z              00966df0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  ?m@S_966e40@@QAEXXZ                 00966e40  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  ?m@S_967120@@QAEPAXE@Z              00967120  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  ?m@S_967300@@QAEXM@Z                00967300  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  ?m@S_967320@@QAEXM@Z                00967320  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  ?m@S_967690@@QAEXXZ                 00967690  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  ?m@S_9676f0@@QAEXIPBD@Z             009676f0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  ?m@S_967770@@QAEII@Z                00967770  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  ?m@S_9677d0@@QAEPAII@Z              009677d0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  _FUN_00967890                        00967890  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  _FUN_009678f0                        009678f0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  ?m@S_967980@@QAEXXZ                 00967980  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  ?m@S_9679c0@@QAE_NXZ                009679c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  ?m@S_967ac0@@QAEXPAX@Z              00967ac0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  ?m@S_967c90@@QAEEMMI@Z              00967c90  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  ?m@S_967cd0@@QAEEHPAX@Z             00967cd0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  ?m@S_967d10@@QAEEXZ                 00967d10  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  ?m@S_967d20@@QAEXXZ                 00967d20  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00966b20/s00966b20.cpp  ?m@S_967a60@@QAEXI@Z              00967a60  /O2 /MD /Gy /EHsc /TP /arch:SSE

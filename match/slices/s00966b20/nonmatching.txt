@@ -1,0 +1,35 @@
+# va  diff-bytes  reason
+#
+# Complete-but-diff functions (semantically faithful, not byte-exact).
+# Equivalence gate (default inputs) run once at end of slice:
+#   PASS         : 00966b20, 00966bb0, 00966dc0, 00966ed0, 00966f30,
+#                  009671c0, 009675c0, 009676a0
+#   WEAK         : 00966c70, 00967b10, 00967bc0 (no mismatches on the covered paths)
+#   UNSUPPORTED  : 00966f90, 009673b0 (helper symbols cannot be resolved by the
+#                  harness)
+#
+00966b20  switch/table and register allocation match; the unsigned->float
+          conversion uses fild where the original uses cvtsi2ss, because the
+          byte-cast case expression loses VC8's 0..3 range proof.
+00966bb0  param/idx register roles swap (param lands in edx, original keeps it
+          in ecx so each case can `and cl,8`); byte-mask codegen differs.
+00966c70  std::list walk over the child's drawables; same control flow, but
+          VC8 assigns the tree/iterator registers differently (loop body
+          complete: begin/end iterators, RTTI cast, vcall 0x28 on the match).
+00966dc0  /O2 removes the two dead base-vtable stores at +4/+0xc that the
+          original keeps (inlined-base-ctor DSE, same as the factories).
+00966ed0  same dead base-vtable stores at +4/+0xc removed by /O2.
+00966f30  same dead base-vtable stores at +4/+0xc removed by /O2.
+00966f90  WinButton ctor; store/call scheduling around the embedded subobjects
+          (thiscall bases at +0x280/+0x7b0/+0x860 modelled correctly now).
+009671c0  WinButton::CreateDefault; behaviour matches (3 stack args, ctor return
+          value, d+0xc secondary subobject to slot 0x60), but VC8 lays the
+          merged `return 0` block out inline instead of at 0x96727c.
+009673b0  CascadeEffect::DoMessage; same algorithm, VC8 keeps the elapsed-time
+          float in x87 instead of spilling it to a stack slot for SSE compares.
+009675c0  CascadeEffect ctor; dead base-vtable stores removed by /O2.
+009676a0  alignment helper: VC8 folds ((n-1)|7)+1-1 into a plain mask, while the
+          original keeps the inc/dec pair and tail-merges the two zero exits.
+00967b10  WinComboBox::OnMouseDown; bool return and 4-arg ABI match, but the
+          original marshals the two float args through x87 stack slots.
+00967bc0  WinComboBox::OnMouseUp; same float-argument marshalling difference.

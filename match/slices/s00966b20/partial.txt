@@ -1,0 +1,4 @@
+# va  reason
+#
+# No partial functions: every function in this slice is either byte-exact
+# (manifest.txt) or complete-but-diff (nonmatching.txt).
