@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0091b5d0/s0091b5d0.cpp  ?Dtor@DisassemblerX86@@QAEXXZ           0091b6b0
+slices/s0091b5d0/s0091b5d0.cpp  ?ScalarDtor@DisassemblerX86@@QAEPAEE@Z   0091b810
+slices/s0091b5d0/s0091b5d0.cpp  ?Open@MapFile@@QAEEPAX@Z                0091bd40
+slices/s0091b5d0/s0091b5d0.cpp  ?Reset@MapFile@@QAEEXZ                  0091beb0
+slices/s0091b5d0/s0091b5d0.cpp  ?CtorEmpty@MapFile@@QAEPAXXZ            0091c0a0
+slices/s0091b5d0/s0091b5d0.cpp  ?FreeStringsA@MapFile@@QAEXXZ           0091c0c0
+slices/s0091b5d0/s0091b5d0.cpp  ?FreeStringsB@MapFile@@QAEXXZ           0091c100
+slices/s0091b5d0/s0091b5d0.cpp  ?RbtreeValCtor@MapFile@@QAEPAXPAIPBX@Z  0091c310
+slices/s0091b5d0/s0091b5d0.cpp  ?Push@Vec12@@QAEXPBI@Z                  0091c490
