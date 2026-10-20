@@ -1,0 +1,27 @@
+008dc1a0 ?Insert@HoleSet@@QAE_NHH@Z  # HoleSet::Insert migrated from s008dc1a0
+008dc2b0 ?ReserveRange@PFIndexModifiable@@QAE_NPAUHoleSet@@II@Z  # PFIndexModifiable::ReserveRange migrated from s008dc1a0
+008dc350 ?ForwardGetSize@PFRecordReadIstream@@QAEXXZ  # PFRecordReadIstream::ForwardGetSize migrated from s008dc1a0
+008dc370 ?GetAccessFlags@PFRecordReadIstream@@QAEIXZ  # PFRecordReadIstream::GetAccessFlags migrated from s008dc1a0
+008dc380 ?GetSize@PFRecordReadIstream@@QAEHH@Z  # PFRecordReadIstream::GetSize migrated from s008dc1a0
+008dc3c0 ?GetSize0@PFRecordReadIstream@@QAEHXZ  # PFRecordReadIstream::GetSize0 migrated from s008dc1a0
+008dc3f0 ?ReadSpan@PFRecordRead@@QAEDPAXII@Z  # PFRecordRead::ReadSpan migrated from s008dc1a0
+008dc510 ?EnsureLoaded@PFRecordRead@@QAEXXZ  # PFRecordRead::EnsureLoaded migrated from s008dc1a0
+008dc5e0 ?GetBuffer@PFRecordRead@@QAEPAXXZ  # PFRecordRead::GetBuffer migrated from s008dc1a0
+008dc600 ?OpenTempFile@PFRecordWrite@@QAEDXZ  # PFRecordWrite::OpenTempFile migrated from s008dc1a0
+008dc740 ?DeleteTempFile@PFRecordWrite@@QAEXXZ  # PFRecordWrite::DeleteTempFile migrated from s008dc1a0
+008dc7b0 ?Close@PFRecordWriteIstream@@QAEXXZ  # PFRecordWriteIstream::Close migrated from s008dc1a0
+008dc7e0 ?SetSize@PFRecordWriteIstream@@QAEXH@Z  # PFRecordWriteIstream::SetSize migrated from s008dc1a0
+008dc820 ?SetPosition@PFRecordWriteIstream@@QAEXHH@Z  # PFRecordWriteIstream::SetPosition migrated from s008dc1a0
+008dc860 ?Flush@PFRecordWriteIstream@@QAEXXZ  # PFRecordWriteIstream::Flush migrated from s008dc1a0
+008dc890 ?WriteRecordToParent@PFRecordWrite@@QAEDPAXI@Z  # PFRecordWrite::WriteRecordToParent migrated from s008dc1a0
+008dca00 ?IStreamDestroy@PFRecordRead@@QAEXXZ  # PFRecordRead::IStreamDestroy migrated from s008dc1a0
+008dca50 ?IStreamAddRef@PFRecordReadIstream@@QAE_NXZ  # PFRecordReadIstream::IStreamAddRef migrated from s008dc1a0
+008dca70 ?IStreamRelease@PFRecordReadIstream@@QAE_NXZ  # PFRecordReadIstream::IStreamRelease migrated from s008dc1a0
+008dcab0 ?SetPosition@PFRecordReadIstream@@QAE_NHH@Z  # PFRecordReadIstream::SetPosition migrated from s008dc1a0
+008dcb70 ?Read@PFRecordReadIstream@@QAEHPAXH@Z  # PFRecordReadIstream::Read migrated from s008dc1a0
+008dcbf0 ?IStreamDestroy@PFRecordWrite@@QAEXXZ  # PFRecordWrite::IStreamDestroy migrated from s008dc1a0
+008dcc50 ?IStreamAddRef@PFRecordWrite@@QAE_NXZ  # PFRecordWrite::IStreamAddRef migrated from s008dc1a0
+008dcc80 ??0PFRecordRead@@QAE@ABU0@ABUKey@@PAUDatabasePackedFile@@@Z  # PFRecordRead::PFRecordRead(copy) migrated from s008dc1a0
+008dcd70 ?Destroy@PFRecordRead@@QAEPAXI@Z  # PFRecordRead::Destroy (scalar deleting destructor) migrated from s008dc1a0
+008dcdc0 ??0PFRecordRead@@QAE@ABUPFRecordInfo@@ABUKey@@PAUDatabasePackedFile@@@Z  # PFRecordRead::PFRecordRead(info) migrated from s008dc1a0
+008dcea0 ??0PFRecordWrite@@QAE@IIABUKey@@PAUDatabasePackedFile@@@Z  # PFRecordWrite::PFRecordWrite migrated from s008dc1a0

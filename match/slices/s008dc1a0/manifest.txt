@@ -1,0 +1,14 @@
+# source (relative to match/)   symbol   original VA   cl flags override
+slices/s008dc1a0/s008dc1a0.cpp  ?ForwardGetSize@PFRecordReadIstream@@QAEXXZ  008dc350  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008dc1a0/s008dc1a0.cpp  ?GetAccessFlags@PFRecordReadIstream@@QAEIXZ  008dc370  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008dc1a0/s008dc1a0.cpp  ?DeleteTempFile@PFRecordWrite@@QAEXXZ  008dc740  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008dc1a0/s008dc1a0.cpp  ?Close@PFRecordWriteIstream@@QAEXXZ  008dc7b0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008dc1a0/s008dc1a0.cpp  ?SetSize@PFRecordWriteIstream@@QAEXH@Z  008dc7e0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008dc1a0/s008dc1a0.cpp  ?SetPosition@PFRecordWriteIstream@@QAEXHH@Z  008dc820  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008dc1a0/s008dc1a0.cpp  ?Flush@PFRecordWriteIstream@@QAEXXZ  008dc860  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008dc1a0/s008dc1a0.cpp  ?IStreamDestroy@PFRecordRead@@QAEXXZ  008dca00  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008dc1a0/s008dc1a0.cpp  ?IStreamAddRef@PFRecordReadIstream@@QAE_NXZ  008dca50  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008dc1a0/s008dc1a0.cpp  ?IStreamRelease@PFRecordReadIstream@@QAE_NXZ  008dca70  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008dc1a0/s008dc1a0.cpp  ?IStreamDestroy@PFRecordWrite@@QAEXXZ  008dcbf0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008dc1a0/s008dc1a0.cpp  ?IStreamAddRef@PFRecordWrite@@QAE_NXZ  008dcc50  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008dc1a0/s008dc1a0.cpp  ?Destroy@PFRecordRead@@QAEPAXI@Z  008dcd70  /O2 /MD /Gy /TP /GS- /arch:SSE
