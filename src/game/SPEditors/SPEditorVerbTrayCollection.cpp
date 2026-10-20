@@ -3,14 +3,12 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
-#include "eastl/allocator.h"
 #include "SP/cSPEditorVerbTrayCollection.h"
+#include "eastl/allocator.h"
 #include "cSPUILayout.h"
 #include "SP/cSPVerbTrayCollection.h"
 #include <string.h>
 #include <ctype.h>
-#include "EA/RectT.h"
-#include "EA/UTFWin/IWindow.h"
 
 // ---- items of slice s005e8470 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace eastl {
