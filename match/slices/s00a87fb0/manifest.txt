@@ -1,0 +1,1 @@
+# slice s00a87fb0 -- no byte-exact functions this slice (see nonmatching.txt / partial.txt)
