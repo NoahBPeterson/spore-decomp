@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008aea40/s008aea40.cpp  ?fnt_JMPR@@YAXPAUfnt_Ctx@@@Z           008aec70  /O2 /MD /Gy /TP
+slices/s008aea40/s008aea40.cpp  ?fnt_PopPush@@YAXPAUfnt_Ctx@@@Z        008aed20  /O2 /MD /Gy /TP
+slices/s008aea40/s008aea40.cpp  ?fnt_CALL@@YAXPAUfnt_Ctx@@@Z           008af120  /O2 /MD /Gy /TP
+slices/s008aea40/s008aea40.cpp  ?fnt_ClearPointFlags@@YAXPAUfnt_Ctx@@@Z 008af360 /O2 /MD /Gy /TP
+slices/s008aea40/s008aea40.cpp  ?fnt_SetRp0@@YAXPAUfnt_Ctx@@@Z        008af390  /O2 /MD /Gy /TP
+slices/s008aea40/s008aea40.cpp  ?fnt_SetRp1@@YAXPAUfnt_Ctx@@@Z        008af3b0  /O2 /MD /Gy /TP
+slices/s008aea40/s008aea40.cpp  ?fnt_InitInterp@@YAXPAUfnt_Ctx@@@Z    008af5e0  /O2 /MD /Gy /TP
