@@ -1,0 +1,19 @@
+# Recovered real symbol names for slice s008e0eb0 (EA::ResourceMan::Manager).
+# Rows marked "PDB" are recovered from symbols/pdb_names.json; the rest are inferred from the
+# callee signature and are recorded here as best-effort names.
+008e0eb0 ?operator[]@?$hash_map@UKey@ResourceMan@EA@@V?$basic_string@_WV?$allocator@X@eastl@@@eastl@@UKeyHash@ResourceMan@EA@@U?$equal_to@UKey@ResourceMan@EA@@@4@VEASTLCoreAllocator@Allocator@EA@@$0A@@eastl@@  # PDB: hash_map<Key,string,...>::operator[]
+008e0f50 ?erase@?$hashtable@IU?$pair@$$CBIV?$basic_string@_WV?$allocator@X@eastl@@@eastl@@@eastl@@VEASTLCoreAllocator@Allocator@EA@@U?$use_first@U?$pair@$$CBIV?$basic_string@_WV?$allocator@X@eastl@@@eastl@@@eastl@@@2@U?$equal_to@I@2@U?$hash@I@2@Umod_range_hashing@2@Udefault_ranged_hash@2@Uprime_rehash_policy@2@$0A@$00$00@eastl@@  # PDB: hashtable<uint,pair<const uint,string>>::erase
+008e0fe0 ?erase@?$hashtable@UKey@ResourceMan@EA@@U?$pair@$$CBUKey@ResourceMan@EA@@V?$basic_string@_WV?$allocator@X@eastl@@@eastl@@@eastl@@VEASTLCoreAllocator@Allocator@EA@@U?$use_first@U?$pair@$$CBUKey@ResourceMan@EA@@V?$basic_string@_WV?$allocator@X@eastl@@@eastl@@@eastl@@@2@U?$equal_to@UKey@ResourceMan@EA@@@4@UKeyHash@ResourceMan@EA@@Umod_range_hashing@2@Udefault_ranged_hash@2@Uprime_rehash_policy@2@$0A@$00$00@eastl@@  # PDB: hashtable<Key,pair<const Key,string>>::erase
+008e1420 ??1InternalDatabaseList@Manager@ResourceMan@EA@@QAE@XZ  # PDB: Manager::InternalDatabaseList::~InternalDatabaseList
+008e1480 ?SetKeyName@Manager@ResourceMan@EA@@QAE_NPAUKey@23@PB_W@Z  # PDB: Manager::SetKeyName
+008e14e0 ?ForgetKeyName@Manager@ResourceMan@EA@@QAE_NPAUKey@23@@Z  # PDB: Manager::ForgetKeyName
+008e1560 ?SetTypename@Manager@ResourceMan@EA@@QAE_NIPB_W@Z  # PDB: Manager::SetTypename
+008e1610 ?ResetTypename@Manager@ResourceMan@EA@@QAE_NIPB_W@Z  # PDB: Manager::ResetTypename
+008e1700 ?Shutdown@Manager@ResourceMan@EA@@QAEHXZ  # PDB: Manager::Shutdown
+008e1a50 ?RegisterFactory@Manager@ResourceMan@EA@@QAEHDPAUFactory@23@@Z  # PDB: Manager::RegisterFactory
+# inferred (no PDB row):
+008e1070 ?insertAt@AutoRefVec@ResourceMan@EA@@QAEPAUAutoRefObj@23@PAU423@PBU423@@Z  # inferred: AutoRefVec vector grow/insert helper
+008e1200 ?clearRange@AutoRefVec@ResourceMan@EA@@QAEXPAUAutoRefObj@23@0@Z  # inferred: AutoRefVec range teardown
+008e12c0 ?insertAt@AutoRefVec@ResourceMan@EA@@QAEPAUAutoRefObj@23@PAU423@PBU423@@Z  # inferred: AutoRefVec::insertAt
+008e1690 ?pushBack@AutoRefVec@ResourceMan@EA@@QAEPAUAutoRefObj@23@PAU423@PBU423@@Z  # inferred: AutoRefVec::pushBack
+008e1930 ?Fn8e1930@Manager@ResourceMan@EA@@QAEXIPAII@Z  # inferred: Manager type-id map rebuild helper

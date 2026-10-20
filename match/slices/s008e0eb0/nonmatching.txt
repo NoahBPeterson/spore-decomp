@@ -1,0 +1,23 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /GS- /arch:SSE
+#
+# Slice s008e0eb0 = EA::ResourceMan::Manager key-name / typename hash maps, the factory-map
+# node erase helpers and Shutdown / RegisterFactory / InternalDatabaseList.  No ResourceMan
+# source ships in the available drops, so these are hand reconstructions from the image (Manager
+# field layout plus the observable hashtable / AutoRefVec algorithms).  difftest verdicts from
+# tools/difftest/equiv.py (DEFAULT inputs).
+#
+008e0eb0  112  reconstruction (hash_map<Key,string>::operator[]); flags /O2 /MD /Gy /TP /GS- /arch:SSE; difftest FAIL (5/5 valid inputs mismatched; ours faults where the original returns) -- not proven equivalent
+008e0f50  127  reconstruction (hashtable<uint,string>::erase node-1c variant); flags as above; difftest UNSUPPORTED (0/400 valid inputs: node-chain reads fault on the synthesized iterator)
+008e0fe0  127  reconstruction (hashtable<Key,string>::erase node-20 variant); flags as above; difftest UNSUPPORTED (0/400 valid inputs: node-chain reads fault on the synthesized iterator)
+008e1070  349  reconstruction (AutoRefVec::insert grow path); flags as above; difftest UNSUPPORTED (0/400 valid inputs: the vector allocator call faults under the harness)
+008e1200  134  reconstruction (AutoRefVec::clearRange / intrusive node list teardown); flags as above; difftest FAIL (5/5 valid inputs mismatched) -- not proven equivalent
+008e12c0  329  reconstruction (AutoRefVec::insertAt); flags as above; difftest WEAK (112 valid inputs, 54.1% coverage) -- equivalent on the covered paths
+008e1420   50  reconstruction (InternalDatabaseList::~InternalDatabaseList); flags as above; difftest FAIL (5/5 valid inputs mismatched) -- not proven equivalent
+008e14e0  142  reconstruction (Manager::ForgetKeyName); flags as above; difftest FAIL (5/5 valid inputs mismatched); the map find/erase pair is passed a synthesized 8-byte {node,key} temp in retail, which the reconstruction cannot express
+008e1560  106  reconstruction (Manager::SetTypename); flags as above; difftest FAIL (5/5 valid inputs mismatched) -- not proven equivalent
+008e1610  142  reconstruction (Manager::ResetTypename); flags as above; difftest FAIL (5/5 valid inputs mismatched); same {node,key} temp shape as ForgetKeyName
+008e1690   92  reconstruction (AutoRefVec::pushBack); flags as above; difftest WEAK (65 valid inputs, 60.5% coverage) -- equivalent on the covered paths
+008e1700  n/a  reconstruction (Manager::Shutdown); flags as above; difftest FAIL (5/6 valid inputs mismatched; first: eax) -- not proven equivalent
+008e1930  n/a  reconstruction (Manager::Fn8e1930, type-id map rebuild); flags as above; difftest WEAK (155 valid inputs, 19.0% coverage) -- equivalent on the covered paths
+008e1a50  n/a  reconstruction (Manager::RegisterFactory); flags as above; difftest FAIL (5/5 valid inputs mismatched; first: eax) -- not proven equivalent
