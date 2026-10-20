@@ -1,0 +1,9 @@
+00a12260 ?q12260@EmitterSndPlayer@@QAE_NXZ  # EmitterSndPlayer::q12260() -- resource/key match + voice rebind, returns bool (vtable slot 0x48 region)
+00a124a0 ?DestroyVoice@EmitterSndPlayer@@QAE_NXZ  # EmitterSndPlayer::DestroyVoice() (vtable slot 0x50 region)
+00a12570 ?UpdatePerformanceLevel@EmitterSndPlayer@@QAEXH@Z  # EmitterSndPlayer::UpdatePerformanceLevel(int)
+00a12640 ?Load@EmitterSndPlayer@@QAE_NXZ  # EmitterSndPlayer::Load() -- builds the resource key and binds the voice
+00a12770 ?CommitPosition@EmitterSndPlayer@@QAE_NPAX@Z  # EmitterSndPlayer::CommitPosition(void*) -- transform + listener update
+00a12ad0 ?q12ad0@EmitterSndPlayer@@QAEXXZ  # EmitterSndPlayer destructor body (SEH-wrapped, vtable reset + releases)
+00a12c20 ?q12c20@AttenHelper@@QAEMMMMM@Z  # AttenHelper::q12c20(float,float,float,float) -- distance/attenuation curve
+00a12c90 ?DoInsertValue@Vec12@@QAEXPADPAUElem12@@@Z  # eastl::vector<rw::audio::core::PlugInConfig,...>::DoInsertValue(char*,Elem12*)
+00a12d80 ?ctor@EmitterSndPlayer@@QAEPAU1@XZ  # EmitterSndPlayer::ctor() -- full object construction

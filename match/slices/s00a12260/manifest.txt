@@ -1,0 +1,2 @@
+slices/s00a12260/s00a12260.cpp  ?UpdatePerformanceLevel@EmitterSndPlayer@@QAEXH@Z  00a12570  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00a12260/s00a12260.cpp  ?q12c20@AttenHelper@@QAEMMMMM@Z  00a12c20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
