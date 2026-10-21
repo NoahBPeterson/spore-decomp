@@ -1,0 +1,4 @@
+slices/s00ba6750/s00ba6750.cpp  ?M50@GMStub@@QAEXHH@Z  00ba7050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00ba6750/s00ba6750.cpp  ?M80@GMStub@@QAEXHH@Z  00ba7080  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00ba6750/s00ba6750.cpp  ?Erase@Vec50Obj@@QAEXH@Z  00ba70d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00ba6750/s00ba6750.cpp  ?FUN_00ba7450@@YADHPAD@Z  00ba7450  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
