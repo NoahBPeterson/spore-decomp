@@ -1,0 +1,7 @@
+# va  diff-bytes  reason   (complete but not byte-exact; equivalence verdict in the note)
+00993520  438  WinXHTML::CreateScrollbar: complete; equivalence WEAK (185 valid, 45.9% coverage) -- the near path is right but the drawable teardown/create block order and the size-hint/attach register allocation differ
+009937a0  320  WinXHTML::SetFormControlStyle: complete; equivalence WEAK (214 valid, 3.6% coverage) -- the style key comes from FormControl+0xc (the second stack arg is unused), so ebx is arg1 and the AsInterface branch schedule differs
+00993900  420  WinXHTML::GetFormControlSize: complete; equivalence UNSUPPORTED (2 unresolved references: _wcstol, __wcsicmp) -- the textarea/select/default attribute parse reads correctly but the SSE/attr-call schedule differs
+00993c10  675  WinXHTML::WinXHTML: complete; equivalence FAIL (memory-pool dword shifted by 4: a drawable/child allocation lands one dword early) after one fix attempt (thiscall callees instead of cdecl) -- still 675 bytes off and the pool layout does not match
+00993ff0   40  WinXHTML::Shutdown: complete; equivalence UNSUPPORTED (0/400 valid, all inputs fault on read/fetch) -- the message-struct field stores are scheduled after the vtable slot load and the frame is 8 bytes smaller
+009940f0   94  WinXHTML::CalculateVisibleArea: complete; equivalence PASS (248 valid, 100% coverage) -- original computes both edge deltas before storing the zeroed area and uses x87 fld/fstp for the clamp, whereas the source computes in place

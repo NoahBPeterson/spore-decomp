@@ -1,0 +1,12 @@
+00993520  EA::UTFWinExtras::WinXHTML::CreateScrollbar  # this=WinXHTML, arg=tScrollbar (ret 4); build/tear down the scrollbar+drawable for that slot
+00993720  EA::UTFWinExtras::WinXHTML::DestroyFormControl  # this=WinXHTML (IFormControlMgr), arg=FormControl* (ret 4); unregister style + control
+009937a0  EA::UTFWinExtras::WinXHTML::SetFormControlStyle  # this=WinXHTML, args=FormControl*, StyleState& (ret 8); adds a text style
+00993900  EA::UTFWinExtras::WinXHTML::GetFormControlSize  # this=WinXHTML, args=FormControl*, Point2DT<float>& (ret 8); compute control size from attrs
+00993b70  EA::UTFWinExtras::WinXHTML::SetFormControlArea  # this=WinXHTML, args=FormControl*, RectT<float> const& (ret 8)
+00993ba0  EA::UTFWinExtras::WinXHTML::SetFormControlDrawable  # this=WinXHTML, args=int, IDrawable* (ret 8); AutoRefCount swap into mFormCtrlDrawable
+00993bf0  EA::UTFWinExtras::WinXHTML::SerUpdate  # this=WinXHTML; recreate both scrollbars then tail-call Window::SerUpdate
+00993c10  EA::UTFWinExtras::WinXHTML::WinXHTML  # ctor: Window base + vtables + mPage + drawables + Stopwatch
+00993fa0  EA::UTFWinExtras::WinXHTML::Init  # set flag 0x400, attach content window, create scrollbars, tail-call Window::Initialize
+00993ff0  EA::UTFWinExtras::WinXHTML::Shutdown  # drop doc children/images, release drawables/scrollbars, tail-call Window::Shutdown
+009940f0  EA::UTFWinExtras::WinXHTML::CalculateVisibleArea  # this=WinXHTML; mVisibleArea from window rect minus visible scrollbars
+009941e0  EA::UTFWinExtras::WinXHTML::SetScrollbarDrawable  # this=WinXHTML, args=tScrollbar, IScrollbarDrawable* (ret 8); then recreate both scrollbars
