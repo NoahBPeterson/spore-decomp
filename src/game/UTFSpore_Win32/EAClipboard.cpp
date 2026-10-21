@@ -42,7 +42,7 @@ struct Mutex_s0092_9a70 {
 }
 namespace EA {
 namespace Clipboard {
-struct IData {
+class IData { public:
     virtual void slot0() = 0;
     virtual void AddRef() = 0;
     virtual void Release() = 0;
@@ -51,7 +51,7 @@ struct IData {
 }
 namespace EA {
 namespace Clipboard {
-struct DataText16 : IData {
+class DataText16 : public IData { public:
     unsigned mnType;       // +4
     unsigned mnRefCount;   // +8
     unsigned mnDataSize;   // +0xc
@@ -85,7 +85,7 @@ struct DataInfo {
 }
 namespace EA {
 namespace Clipboard {
-struct Clipboard {
+class Clipboard { public:
     bool mbInitialized;       // +0
     unsigned mnId;            // +4
     void* mpOSData;           // +8
