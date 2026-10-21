@@ -14,4 +14,4 @@ slices/s01080450/s01080450.cpp  ??0hkBufferedStreamWriter@@QAE@PAXHVhkBool@@@Z  
 slices/s01080450/s01080450.cpp  ??1hkBufferedStreamWriter@@UAE@XZ  01080bd0  /vc71 /O2 /MD /Gy /TP
 slices/s01080450/s01080450.cpp  ?hkGetCurrentThreadId@@YA_KXZ  01080cc0  /vc71 /O2 /MD /Gy /TP
 slices/s01080450/s01080450.cpp  ?getCstyleArraySize@hkClassMember@@QBEHXZ  01080cd0  /vc71 /O2 /MD /Gy /TP
-slices/s01080450/s01080450.cpp  ?setInverse@hkTransform@@QAEXABU1@@Z  01080e70  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?setInverse@hkTransform@@QAEXABV1@@Z  01080e70  /vc71 /O2 /MD /Gy /TP
