@@ -1,0 +1,1 @@
+slices/s00c045a0/s00c045a0.cpp  ?SetHerd@CreatureBase@@QAEXPAX@Z  00c045a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
