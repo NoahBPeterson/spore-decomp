@@ -1,0 +1,5 @@
+# source  symbol  original VA  [flags override]
+slices/s010c7100/s010c7100.cpp  ?castRayWithCollector@hkMultiSphereShape@@UBEXABUhkShapeRayCastInput@@ABUhkCdBody@@AAUhkRayHitCollector@@@Z  010c79a0  /vc71 /O2 /MD /Gy /TP
+slices/s010c7100/s010c7100.cpp  ?calcStatistics@hkMultiRayShape@@UBEXPAUhkStatisticsCollector@@@Z  010c7a50  /vc71 /O2 /MD /Gy /TP
+slices/s010c7100/s010c7100.cpp  ?querySphere@hkMoppBvTreeShape@@QBEXABUhkSphere@@AAU?$hkArray@I@@@Z  010c80b0  /vc71 /O2 /MD /Gy /TP
+slices/s010c7100/s010c7100.cpp  ?queryObb@hkMoppBvTreeShape@@QBEXABUhkTransform@@ABVhkVector4@@MAAU?$hkArray@I@@@Z  010c80e0  /vc71 /O2 /MD /Gy /TP
