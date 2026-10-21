@@ -1,0 +1,14 @@
+; slice s00e45760 = 0x00e45760..0x00e46450 (SPUI timeline / property layout) - exact decorated names
+; manifest.txt has no byte-exact rows for this slice; every target is in nonmatching.txt
+00e45760 ?DoMessage@cSPUITimeline@@QAE_NHPAH@Z  # complete, non-exact
+00e45e90 ?FUN_00e45e90@@YAXHPAUIntVector@@IH@Z  # complete, non-exact
+00e45fe0 ?IsMember@VecContainer@@QAE_NH@Z  # complete, non-exact
+00e46020 ?SetVisibleRecursive@VisNode@@QAEXD@Z  # complete, non-exact
+00e460d0 ?FUN_00e460d0@cSPUITimeline@@QAEMXZ  # complete, non-exact
+00e46140 ?FUN_00e46140@cSPUITimeline@@QAEXPAX@Z  # complete, non-exact
+00e46180 ?FUN_00e46180@cSPUITimeline@@QAEXPAX@Z  # complete, non-exact
+00e461c0 ?GetItemColor@cSPUITimeline@@QAEXPAXI@Z  # complete, non-exact
+00e46210 ?SetItemColor@cSPUITimeline@@QAEXIE@Z  # complete, non-exact
+00e46260 ?Construct@PropLayoutCtor@@QAEPAUcSPUIPropertyLayout@@XZ  # complete, non-exact
+00e462c0 ?InitLayout@cSPUIPropertyLayout@@QAEDPAH@Z  # complete, non-exact
+00e463d0 ?OnLayoutMessage@cSPUIPropertyLayout@@QAEIHPAH@Z  # complete, non-exact
