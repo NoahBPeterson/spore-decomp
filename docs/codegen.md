@@ -930,6 +930,11 @@ Mined from the final-report lessons of 127 DeepSeek sessions and 45 `work/match/
 - Under `/Od`, unused scalars get no stack slot; only arrays do. Frame padding must be real arrays.
 - For a "dead" vptr store the original keeps, make just that store volatile: `*(void* volatile*)&mpVtbl = ...` (0x714260, 0x713f90, and the base-ctor case 0xfc4cd0).
 
+**Class-key: take it from the PDB, never from convention**
+- The dev PDB records whether each type was declared `class` or `struct`: `tools/pdb_type.py <Name> --exact` prints it as the first word of the layout. MSVC also mangles it into every symbol that takes the type as a parameter (`PAV<name>@` for a class, `PAU<name>@` for a struct), so the wrong keyword gives a symbol name that differs from the PDB's.
+- EA did not follow the "struct for plain data, class for hierarchies" convention: `cSPVector3` is a `struct` with a base class, and `EA::ResourceMan::Key` is a `class`. Use the recorded keyword even when it looks unconventional. A `class` needs `public:` before members that other code uses.
+- The keyword changes no bytes of code, only mangled names. When you change it, update the manifest rows that name affected symbols in the same edit. `tools/classkey_triage.py` lists every definition in our sources whose keyword differs from the PDB's.
+
 **Signs that an object was built by an older compiler** (stop early; cl15 cannot reproduce them)
 - It materialises the constant 0 as `mov eax,esi; sub eax,esi`.
 - It keeps both null checks of an `if (x && x)` that cl15 merges.
