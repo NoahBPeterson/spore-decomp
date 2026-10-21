@@ -251,7 +251,7 @@ struct cCommandBase_s0053_9d70 : cICommand_s0053_9d70 { cIParser_s0053_9d70* mPa
 }
 namespace EA {
 namespace ArgScript {
-struct cBlockCommandBase : cICommand_s0053_9d70 {
+class cBlockCommandBase : public cICommand_s0053_9d70 { public:
     cIParser_s0053_9d70* mParser; int mRefCount; cState_s0053_9d70* mChildState; char mCommands[0x20];
 };
 }
@@ -263,7 +263,7 @@ template <class T, class B> struct cCommandStateT_s0053_9d70 : B { T* mState; };
 }
 namespace EA {
 namespace ArgScript {
-template <class T> struct cBlockCommandT : cCommandStateT_s0053_9d70<T, cBlockCommandBase> {};
+template <class T> class cBlockCommandT : public cCommandStateT_s0053_9d70<T, cBlockCommandBase> { public:};
 }
 }
 namespace EA {
@@ -273,7 +273,7 @@ struct cSPSkinPaintParticleDescription_s0053_9d70;
 }
 namespace EA {
 namespace Swarm {
-struct cEffectsParser : EA::ArgScript::cCommandBase_s0053_9d70 {
+class cEffectsParser : public EA::ArgScript::cCommandBase_s0053_9d70 { public:
     cSPSkinPaintParticleDescription_s0053_9d70* GetInheritedDescription(const char** a, size_t n, int t); // 0xa6f090
     void AddDescription(EA::ArgScript::cArguments_s0053_9d70& a, const char* n, int t, int f); // 0xa6fc30
 };
