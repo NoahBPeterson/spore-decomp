@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00eeab90  286 View::SampleColor: runs but diverges on degenerate entry-list pointers (guard/NaN branch shape not yet faithful); difftest FAIL (5/16 valid mismatched, 100% cov)
+00eeacc0  527 View::Bake: runs but pTarget vtable slots 1/0x3c call + SampleColor argument schedule not faithful; difftest FAIL (5/5 mismatched)
+00eeaf00  1068 View::Rebuild: runs but faults where the original succeeds on degenerate inputs (incomplete record/insert logic); difftest FAIL (5/5 mismatched)
+00eeb280  645 View::Init: runs but faults where the original succeeds on degenerate inputs (cSPUILayout::Init/SetParentWin wiring incomplete); difftest FAIL (5/5 mismatched)

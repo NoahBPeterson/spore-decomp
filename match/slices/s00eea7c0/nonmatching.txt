@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00eea7c0  183 View::ShowChildren: inlined child-window Show/Hide arg setup tone/reg allocation differs (size 186 vs 158); difftest WEAK (191 valid, 43.5% cov)
+00eea860  3 View::OnAssetChanged: only the vtable-load register is swapped (eax<->edx) in the AsInterface call (size 73 == 73); difftest WEAK (225 valid, 27.3% cov)
+00eea910  47 View::SetEntryColor: original builds the outgoing Entry::SetColor 12-byte Vector3 temp with movss (SSE) + xmm0; our IA32 x87 build uses fld/fstp (size 69 vs 80); difftest WEAK (215 valid, 26.9% cov)
+00eea960  11 View::Dtor: original schedules `mov ecx,[esi+0x50]` after the three vtable stores; ours hoists it (size 190 == 190); difftest PASS (240 valid, 100% cov)
+00eeaa90  57 View::GetEntryColor: original copies the default Vector3 with movss and interleaves `pop esi` into the entry-color x87 stores; ours uses integer moves for the copy and a different epilogue schedule (size 84 vs 101); difftest PASS (225 valid, 100% cov)
+00eeab00  56 View::Ctor: original uses eax as the base (mov eax,ecx) and an SSE xorps zero; ours keeps ecx and x87 fldz (size 81 vs 100); difftest PASS (400 valid, 100% cov)
+00eeb580  442 View::SetPoints: eastl vector growth + insertion scheduling differs (size 418 vs 487); difftest WEAK (400 valid, 15.8% cov)

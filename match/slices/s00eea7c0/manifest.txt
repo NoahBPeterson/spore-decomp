@@ -1,0 +1,5 @@
+# source  symbol  original VA  [flags override]
+slices/s00eea7c0/s00eea7c0.cpp  ?FindByWinID@View@@QAEPAUEntry@@PAX@Z  00eea8b0  /O2 /MD /Gy /EHsc /TP
+slices/s00eea7c0/s00eea7c0.cpp  ?HasWin@View@@QAEEPAX@Z  00eea8e0  /O2 /MD /Gy /EHsc /TP
+slices/s00eea7c0/s00eea7c0.cpp  ?DoMessage@View@@QAEEIPAX@Z  00eeaa40  /O2 /MD /Gy /EHsc /TP
+slices/s00eea7c0/s00eea7c0.cpp  ?ShutdownView@View@@QAEXXZ  00eeae70  /O2 /MD /Gy /EHsc /TP
