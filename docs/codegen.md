@@ -943,6 +943,24 @@ Mined from the final-report lessons of 127 DeepSeek sessions and 45 `work/match/
 - Extended-precision x87 ordering that differs by one ULP.
 - Reordering stores or `lea` temporaries to "match" the disassembly. It made three EAPd functions worse, so revert any experiment that raises the diff.
 
+---
+
+## 17. Levers found in the 2026-10-20/21 gold4 wave
+
+Mined while banking near-miss functions in the gold4 ranges r20/r25/r35. Each item moved at least one function to byte-exact. Items §1–16 or `matching.md` already cover are left out.
+
+**Scheduling and barriers**
+- **Place `_ReadWriteBarrier()` (`<intrin.h>`) between a scheduling-critical store and the hoisted load/store it must precede.** cl's scheduler hoists a load above an earlier store (or sinks a store) when it sees no dependence; the barrier is a compiler fence that emits no code and pins the order. This one lever banked 007997f0, 00f139f0, 008d20c0 and 00b95e90 and shrank 00ec21c0 to a 6-byte diff; it also pins a load after earlier stores (0x7cde80, 15 diff bytes to 0). When cl still CSEs the reload, read the field through a `volatile` access at the one site — but keep `volatile` local, because a `volatile` access anywhere disables stack-slot sharing for the whole function (§15).
+- **Condition polarity is a lever in clamp/compare idioms**, not just x87 NaN masks. `return (r >= amount) ? 1 : 0;` gives `xor ecx,ecx; setge cl; mov al,cl`, where `>` gives `setg`; `if (x <= lo) x = lo;` and `if (x < lo) x = lo;` select opposite `comiss`/branch polarity. Read the original's `setcc`/`jcc` polarity off the asm and mirror it in the source relational, and keep the result in a named `bool` — returning the comparison directly can fold the `setcc` into a `test`/`sbb` normalize (§16 "Return types"). One known ceiling: a `jb` vs `jbe` clamp difference on 00ec21c0 could not be forced even with the barrier, so record it and move on.
+
+**Call and dispatch shape**
+- **Write a vtable call as a bare inline cast, not a helper.** `((void(__thiscall*)(void*,int))((void**)*(void***)self)[N/4])(self,arg)` reproduces the original's `mov ecx,[self]; mov eax,[ecx+N]; call eax` with no extra register; an inline helper that returns the function pointer spills the callee and shifts the allocation (§15). For a call on a known `this`, the first load collapses: `((void**)*(void***)this)[N/4]`.
+- A declared-symbol direct call (`extern "C" void f();`) keeps the `call rel32` shape; holding the address in a function pointer gives `mov reg,imm; call reg`, five bytes longer (§16).
+- A `switch` whose case bodies are outlined after the `ret` reproduces that layout, and the **case order in source controls the block order and jump-table order** — sort the source cases into the original's address order, not ascending value order (§16 "Statement shape").
+
+**Loops**
+- A rotated/do-first loop (`do { body; } while (cond);`) reproduces a loop whose test is at the bottom where a `while`/`for` gave a different block order; keep the induction update in the same position the asm shows (§3).
+
 ## Appendix: where to look
 
 | Need | Tool / doc |

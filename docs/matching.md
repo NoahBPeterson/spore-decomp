@@ -361,7 +361,10 @@ P3. The corpus is a lagging log: several tool bugs it reports are already fixed,
 - cl unrolls a counted loop 4× only when the trip count is a local int read once (`const unsigned n = v.size()`);
   reading a member each pass blocks it — don't hand-unroll.
 - `_ReadWriteBarrier()` pins a vptr/field store ahead of a later load; swapping two member stores or two `if` arms
-  flips /O2 scheduling and can un-tail-merge two virtual calls.
+  flips /O2 scheduling and can un-tail-merge two virtual calls. Place it **between the scheduling-critical store and
+  the hoisted load/store it must precede** — that one placement banked 007997f0, 00f139f0, 008d20c0 and 00b95e90 in
+  the gold4 wave (see `codegen.md` §17). A `volatile` access at the single site clears the CSE cl still does, but
+  keep it local: a `volatile` access anywhere disables stack-slot sharing for the whole function.
 
 **x87 / floating point:**
 - The x87 compare shape follows the source branch **and its NaN polarity**: `if (!(sumR >= dist))` gives
@@ -374,6 +377,12 @@ P3. The corpus is a lagging log: several tool bugs it reports are already fixed,
   unsigned casts, not hand-written source.
 - `_mm_cvtsd_si32(_mm_set_sd(x))` reproduces x87 `fistp dword`, including the 0x80000000 overflow clamp; the
   single-precision intrinsic does not.
+
+**Instruction selection:**
+- Condition **polarity in a clamp/compare is a lever** as much as the x87 NaN mask: `(r >= amount) ? 1 : 0` gives
+  `setge` where `>` gives `setg`, and `if (x <= lo) x = lo` vs `if (x < lo) x = lo` pick opposite `comiss`/branch
+  polarity. Read the original's `setcc`/`jcc` and mirror the relational; keep the result in a named `bool`, or the
+  `setcc` folds into a `test`/`sbb` normalize (gold4; `codegen.md` §17).
 
 **Layouts & padding:**
 - Retail layouts drift from the 2008 dev PDB — read sizes off stack-slot spacing: `SP::cString` 0x14 (not 0x1c),
