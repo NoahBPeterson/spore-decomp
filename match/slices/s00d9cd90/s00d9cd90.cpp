@@ -38,7 +38,6 @@ struct S {
   int   FUN_00d9d840(int idx);                       // 0x00d9d840
   void  FUN_00d9d890(int* first, int* last);         // 0x00d9d890
   void  FUN_00d9d8d0(int* out, int* src, int* end, int* dst); // 0x00d9d8d0
-  void  FUN_00d9d940(void* dst, unsigned n, void* src);       // 0x00d9d940
   void  FUN_00d9d9a0(void* arr, int a, int n, int i, int v,
                      float f1, float f2, float f3, float f4,
                      float f5, float f6, float f7, void* cmp);  // 0x00d9d9a0
@@ -467,17 +466,19 @@ void S::FUN_00d9d8d0(int* out, int* src, int* end, int* dst)
 
 // ===========================================================================
 // @ 0x00d9d940
-void S::FUN_00d9d940(void* dst, unsigned n, void* src)
+struct Elem20 { int a; float f[7]; };
+void __cdecl FUN_00d9d940(void* dst, unsigned n, void* src)
 {
-  int* d = (int*)dst;
-  int* s = (int*)src;
-  while (n != 0) {
+  Elem20* d = (Elem20*)dst;
+  Elem20* s = (Elem20*)src;
+  while (n > 0) {
     if (d != 0) {
-      d[0] = s[0]; d[1] = s[1]; d[2] = s[2]; d[3] = s[3];
-      d[4] = s[4]; d[5] = s[5]; d[6] = s[6]; d[7] = s[7];
+      d->a = s->a;
+      d->f[0] = s->f[0]; d->f[1] = s->f[1]; d->f[2] = s->f[2]; d->f[3] = s->f[3];
+      d->f[4] = s->f[4]; d->f[5] = s->f[5]; d->f[6] = s->f[6];
     }
     --n;
-    d += 8;
+    ++d;
   }
 }
 

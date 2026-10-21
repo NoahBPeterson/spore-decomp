@@ -7,7 +7,7 @@
 00d9d5b0 592 SP::TRIBE_RESET_TOOL_Tick: PlayIdleAnimation(0x1000) + resolve, notify 0x5a8, clear the other members' agent orders and behavior stimuli, then either PlayAnimation(0x2c39200)/PlayAnimation(0x4ffb325) or the targeted move at the summed facing speed; 633 vs 588 bytes
 00d9d840 31 free-slot search over a 0x210-stride array (bit30 tag -> 0x3fffffff, walks until a non-negative tag); 65 vs 77 bytes (structure identical; only MSVC's base-pointer load fold `mov ecx,[ecx]; lea edx,[eax+ecx]` vs `add edx,[ecx]` and the alignment nop differ)
 00d9d8d0 104 uninitialized_copy_n of 0x20-byte elements writing the advanced dst back through the out-param; 91 vs 109 bytes
-00d9d940 45 uninitialized_fill_n of n 0x20-byte elements from one source; 85 vs 83 bytes
+00d9d940 15 free __cdecl uninitialized_fill_n of n 0x20-byte elements (int + 7 floats, x87 fld/fstp) from one source; 83 vs 83 bytes (only the loop-pointer anchor `add eax,0xc` vs `add eax,8` and its store displacements differ)
 00d9d9a0 346 SiftDown over a 0x20-stride array with a comparator callback, taking the 7 float keys and the callback through the stack; 286 vs 216 bytes (our parameter marshalling through the 0x00d9b950 tail differs)
 00d9da80 116 SiftDown over a pointer array with the FUN_00ac0730 comparator and the +0xc0 sub-object projection; 152 vs 164 bytes
 00d9db30 94 uninitialized_copy of 0x20-byte elements between two ranges; 103 vs 100 bytes
