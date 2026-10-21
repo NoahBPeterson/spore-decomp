@@ -264,7 +264,7 @@ public:
 };
 extern cSpaceTokenTranslator* gpSpaceTokenTranslator;                // 0x016E0D08
 
-struct cGameTimeManager {
+class cGameTimeManager { public:
     uint32_t pad00[0x48 / 4];
     uint32_t mFlags;                            // +0x48
 };

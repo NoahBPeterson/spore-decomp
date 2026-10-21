@@ -24,8 +24,8 @@ __declspec(align(16)) struct hkMatrix3Mem
 	float y2, z2;
 };
 
-struct hkMatrix3
-{
+class hkMatrix3
+{ public:
 	hkVector4 c[3];     // three columns of four floats
 
 	__forceinline void setZero()

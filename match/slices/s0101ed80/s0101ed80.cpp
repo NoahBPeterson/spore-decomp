@@ -72,26 +72,26 @@ extern float gPlanetCamTuningLerpRate;    // 0x016dd408
 
 namespace SP {
 
-struct cSpatialObject {   // the UFO's spatial base (cSPGameDataUFO + 0x34)
+class cSpatialObject { public:   // the UFO's spatial base (cSPGameDataUFO + 0x34)
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual void v20(); virtual void v24(); virtual void v28();
     virtual const Vector3* GetPosition();   // +0x2c
 };
 
-struct cSPGameDataUFO {
+class cSPGameDataUFO { public:
     uint32_t pad0[0x34 / 4];
     cSpatialObject mSpatial;                 // +0x34
     uint32_t pad38[(0x74c - 0x38) / 4];
     bool     mbDestroyed;                    // +0x74c
 };
 
-struct cSPSimulatorSpaceGame {
+class cSPSimulatorSpaceGame { public:
     cSPGameDataUFO* GetPlayerInventory();    // 0x00a1ad60
 };
 cSPSimulatorSpaceGame* GetUFOSimulator();    // 0x00ffbe50
 
-struct cPlanetModel {
+class cPlanetModel { public:
     float GetRadius();                       // 0x00b7e4d0
 };
 cPlanetModel* PlanetModel();                 // 0x00b3d350
@@ -101,7 +101,7 @@ struct cAudioListener {
 };
 cAudioListener* AudioListener();             // 0x00b3d280
 
-struct cViewer {
+class cViewer { public:
     void SetNearClip(float v);               // 0x007c4ba0
     void SetFarClip(float v);                // 0x007c4bc0
     void SetViewAngle(float v);              // 0x007c5350

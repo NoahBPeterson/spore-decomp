@@ -94,8 +94,8 @@ public:
 struct hkSolverElemTemp { float m_impulseApplied; };
 
 // ---- velocity accumulator (0x80-byte stride) ----
-struct hkVelocityAccumulator
-{
+class hkVelocityAccumulator
+{ public:
 	hkUint8 m_type;                      // +0x00
 	hkUint8 m_pad01[3];
 	hkUint32 m_deactivationCounter;      // +0x04

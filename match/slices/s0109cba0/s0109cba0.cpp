@@ -119,7 +119,7 @@ struct hkArrayUtil {
 };
 
 template <class T>
-struct hkArray {
+class hkArray { public:
     T* m_data;
     int m_size;
     int m_capacityAndFlags;
@@ -141,7 +141,7 @@ struct hkArray {
     }
 };
 template <class T, int N>
-struct hkInplaceArray : hkArray<T> {
+class hkInplaceArray : public hkArray<T> { public:
     T m_storage[N];
     __forceinline hkInplaceArray()
     {
@@ -153,7 +153,7 @@ struct hkInplaceArray : hkArray<T> {
 
 // ---- dynamics ------------------------------------------------------------------------------------
 struct __declspec(align(16)) hkVector4 { hkReal x, y, z, w; };
-struct hkStepInfo { hkReal m_startTime, m_endTime, m_deltaTime, m_invDeltaTime; };
+class hkStepInfo { public: hkReal m_startTime, m_endTime, m_deltaTime, m_invDeltaTime; };
 struct hkSolverInfo {
     hkReal m_one, m_tau, m_damping, m_frictionTau;
     hkVector4 m_globalAccelerationPerSubStep;                      // +0x10
@@ -187,7 +187,7 @@ struct hkConstraintInternal {                                      // size 0x1c
     hkUint8 pad11[0x1c - 0x11];
 };
 
-struct hkEntity {
+class hkEntity { public:
     hkUint8 pad00[0x58];
     hkMotion* m_motion;                                            // +0x58
     hkUint8 pad5c[0x70 - 0x5c];
@@ -206,7 +206,7 @@ struct hkAgentNnTrack {
     hkUint16 m_sectorSize;                                         // +0x16
 };
 
-struct hkSimulationIsland {
+class hkSimulationIsland { public:
     hkUint8 pad00[0x0c];
     int m_sumSizeOfJacobians;                                      // +0x0c
     hkUint8 pad10[0x3c - 0x10];
@@ -218,7 +218,7 @@ struct hkSimulationIsland {
     int m_numActions;                                              // +0x68
 };
 
-struct hkWorld {
+class hkWorld { public:
     hkUint8 pad00[0x38];
     hkSimulationIsland** m_activeSimulationIslands;                // +0x38
     hkUint8 pad3c[0xa8 - 0x3c];
@@ -228,7 +228,7 @@ struct hkWorld {
 };
 
 struct hkProcessCollisionInput { hkUint8 pad[0x10]; hkStepInfo m_stepInfo; hkUint8 pad20[0xc]; };   // size 0x2c
-struct hkConstraintQueryIn { hkUint8 pad[0x20]; };
+class hkConstraintQueryIn { public: hkUint8 pad[0x20]; };
 
 struct __declspec(align(16)) hkProcessCollisionOutput {
     hkUint8 pad0000[0x3034];

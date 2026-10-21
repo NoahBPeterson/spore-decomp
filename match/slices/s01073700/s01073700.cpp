@@ -360,7 +360,7 @@ public:
 };
 cStarMap* FUN_01046fc0();                                            // 0x01046fc0
 
-struct cGameData {
+class cGameData { public:
     uint32_t pad[0x714 / 4];
     int mType;                                  // +0x714
 };

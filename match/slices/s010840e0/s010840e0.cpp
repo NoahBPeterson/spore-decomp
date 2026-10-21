@@ -60,8 +60,8 @@ public:
 extern unsigned long g_hkThreadMemoryTlsIndex;      // 0x016e4174
 
 // Per-thread free lists, one row per 8-byte size class.
-struct hkThreadMemory
-{
+class hkThreadMemory
+{ public:
     struct Elem { Elem* m_next; };
     uint32_t m_pad0[0xe];
     Elem*    m_freeListHead[17];    // +0x38
@@ -125,8 +125,8 @@ public:
     void operator delete(void*) {}
 
 template <typename T>
-struct hkArray
-{
+class hkArray
+{ public:
     T*  m_data;
     int m_size;
     int m_capacityAndFlags;
@@ -180,7 +180,7 @@ public:
 };
 
 // ---------------------------------------------------------------------------------------------- cinfo
-struct hkAabb { hkVector4 m_min; hkVector4 m_max; };
+class hkAabb { public: hkVector4 m_min; hkVector4 m_max; };
 class hkCollisionFilter;
 class hkWorldMemoryWatchDog;
 
@@ -231,7 +231,7 @@ struct hkWorldCinfo                         // 0xa0 (Spore's Havok reflection da
 };
 
 // ---------------------------------------------------------------------------------------------- solver info
-struct hkStepInfo { hkReal m_startTime, m_endTime, m_deltaTime, m_invDeltaTime; };
+class hkStepInfo { public: hkReal m_startTime, m_endTime, m_deltaTime, m_invDeltaTime; };
 
 struct hkSolverInfo                         // 0x140 (dev PDB)
 {

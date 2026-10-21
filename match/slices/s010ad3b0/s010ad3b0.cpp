@@ -17,7 +17,7 @@
 typedef float hkReal;
 typedef unsigned char hkUint8;
 
-struct hkBool {
+class hkBool { public:
     char m_bool;
 };
 

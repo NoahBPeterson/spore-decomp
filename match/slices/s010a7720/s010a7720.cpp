@@ -22,7 +22,7 @@ extern float HK_CONTACT_EXPONENTIAL_ERROR_RECOVERY_VELOCITY;
 // 0x015b9b20: three unit axes (rows of the identity), 16-byte stride.
 extern const float hkIdentityAxes[3][4];
 
-struct hkVelocityAccumulator {
+class hkVelocityAccumulator { public:
   uint32_t pad00[3];
   uint8_t m_type;            // +0x0c: nonzero = angular part is used unrotated
   uint8_t pad0d[3];
@@ -32,7 +32,7 @@ struct hkVelocityAccumulator {
   float m_rotation[3][4];    // +0x50: columns, world -> core frame
 };
 
-struct hkConstraintQueryIn {
+class hkConstraintQueryIn { public:
   float m_substepDeltaTime;      // +0x00
   float m_substepInvDeltaTime;   // +0x04
   float m_frameDeltaTime;        // +0x08
@@ -52,12 +52,12 @@ struct hkConstraintQueryOut {
   uint32_t* m_jacobianSchemas;  // +4
 };
 
-struct hkContactPoint {
+class hkContactPoint { public:
   float m_position[4];
   float m_separatingNormal[4];  // w = distance
 };
 
-struct hkContactPointProperties {
+class hkContactPointProperties { public:
   float m_impulseApplied;      // +0x00
   float m_internalSolverData;  // +0x04
   uint32_t m_userData;         // +0x08

@@ -45,7 +45,7 @@ public:
 };
 
 // Velocity accumulator (only the fields used here).
-struct hkVelocityAccumulator {
+class hkVelocityAccumulator { public:
     hkVector4 m_header;     // +0x00
     hkVector4 m_linearVel;  // +0x10
     hkVector4 m_angularVel; // +0x20

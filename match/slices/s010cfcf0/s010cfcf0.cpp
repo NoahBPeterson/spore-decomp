@@ -32,12 +32,12 @@ static __forceinline void hkTimerCommand(const char* name)
 
 class __declspec(align(16)) hkVector4 { public: float x, y, z, w; };
 struct hkVector3 { float x, y, z; };
-struct hkTransform { hkVector4 m_col0, m_col1, m_col2, m_translation; };   // 0x40 bytes
+class hkTransform { public: hkVector4 m_col0, m_col1, m_col2, m_translation; };   // 0x40 bytes
 
 // ---- shapes ----
-struct hkShape { virtual ~hkShape(); int m_pad[2]; };                                         // 0xc bytes
-struct hkConvexShape : hkShape { float m_radius; };                                              // radius +0xc
-struct hkTriangleShape : hkConvexShape { hkVector4 m_vertices[3]; };                              // vertices +0x10
+class hkShape { public: virtual ~hkShape(); int m_pad[2]; };                                         // 0xc bytes
+class hkConvexShape : public hkShape { public: float m_radius; };                                              // radius +0xc
+class hkTriangleShape : public hkConvexShape { public: hkVector4 m_vertices[3]; };                              // vertices +0x10
 struct hkMultiSphereShape : hkShape { int m_numSpheres; hkVector4 m_spheres[8]; };               // count +0xc, spheres +0x10
 
 class hkCdBody
@@ -49,7 +49,7 @@ public:
     const hkCdBody* m_parent;      // +0xc
 };
 struct hkCollisionInput { int pad[2]; float m_tolerance; };   // tolerance +8
-struct hkContactPoint { hkVector4 m_position; hkVector4 m_separatingNormal; };   // w = distance
+class hkContactPoint { public: hkVector4 m_position; hkVector4 m_separatingNormal; };   // w = distance
 struct hkCdPoint { hkContactPoint m_contact; const hkCdBody* m_cdBodyA; const hkCdBody* m_cdBodyB; };   // 0x28 bytes
 class hkCdPointCollector
 {

@@ -125,7 +125,7 @@ struct IWinTextRef {
     }
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     char pad[0x18];
     cSPUILayout();                                                   // 0x00810000
     ~cSPUILayout();                                                  // 0x00811fe0

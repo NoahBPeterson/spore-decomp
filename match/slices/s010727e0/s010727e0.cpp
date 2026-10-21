@@ -39,7 +39,7 @@ struct cCommandDeleteCargoButtonState {
     void* Ctor(void* owner, uint32_t window);           // 0x010665c0, thiscall, 2 args; returns this
 };
 
-struct cStarMap {
+class cStarMap { public:
     void FilterHelper(uint32_t filter, uint32_t on);    // 0x01048b40, thiscall, 2 args
 };
 
@@ -47,7 +47,7 @@ struct cFloatOwner {
     void FUN_01015f30(uint32_t value);                  // 0x01015f30, thiscall, 1 arg
 };
 
-struct cSPUISpace {
+class cSPUISpace { public:
     uint8_t  pad00[0x10];
     void*    mpCommandDeleteCargoButtonState;           // +0x10
     uint32_t mDeleteButtonWindow;                       // +0x14

@@ -23,8 +23,8 @@ public:
     char m_bool;
 };
 
-struct hkThreadMemory
-{
+class hkThreadMemory
+{ public:
     void deallocateChunk(void* p, int nbytes, int memClass);     // 0x0107db10
     static hkThreadMemory* getInstance() { return (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTlsIndex); }
 };
@@ -57,8 +57,8 @@ public:
 };
 
 template <typename T>
-struct hkArray
-{
+class hkArray
+{ public:
     T* m_data; int m_size; int m_capacityAndFlags;
     hkArray() {}
     hkArray(T* data, int size, int capacity) : m_data(data), m_size(size), m_capacityAndFlags(capacity | HK_ARRAY_DONT_DEALLOCATE) {}
@@ -78,8 +78,7 @@ struct hkArray
 };
 
 template <typename T, int N>
-struct hkInplaceArray : hkArray<T>
-{
+class hkInplaceArray : public hkArray<T> { public:
     hkInplaceArray() : hkArray<T>(m_storage, 0, N) {}
     T m_storage[N];
 };
@@ -87,7 +86,7 @@ struct hkInplaceArray : hkArray<T>
 __declspec(align(16)) struct hkVector4 { uint32_t m_q[4]; };
 struct hkQuaternion;
 struct hkAabb;
-struct hkShape : hkReferencedObject {};
+class hkShape : public hkReferencedObject { public:};
 class hkWorld; class hkEntity; class hkPhantom; class hkRigidBody; class hkAction; class hkConstraintInstance;
 class hkWorldOperationQueue;
 

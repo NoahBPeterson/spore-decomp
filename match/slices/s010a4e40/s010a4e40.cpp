@@ -10,8 +10,8 @@
 #include "../s010cbaa0/hk31_b005.h"
 
 struct hkSolverObj;
-struct hkEntity;
-struct hkConstraintData;
+class hkEntity;
+class hkConstraintData;
 
 // callees (cdecl)
 int hkSolveConstraints(void* solverInfo, char* schemas, char* accumulators, char* jacobians, char* elemTemp);   // 0x010B8B30
@@ -131,8 +131,8 @@ struct hkSolverObj
 	char m_data[16];                                             // +0x10
 };
 
-struct hkEntity;
-struct hkConstraintData;
+class hkEntity;
+class hkConstraintData;
 
 struct hkQueryOut { char* m_jacobians; char* m_schemas; char* m_elemTemp; };
 
@@ -151,8 +151,8 @@ struct hkQueryIn
 	uint32_t m_userData;         // +0x44
 };
 
-struct hkConstraintData
-{
+class hkConstraintData
+{ public:
 	virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
 	virtual void s4(); virtual void s5(); virtual void s6();
 	virtual void build(hkQueryIn* in, hkQueryOut* out);          // 7 (+0x1c)
@@ -169,8 +169,8 @@ struct hkConstraintInternal                                      // 0x1c bytes
 	uint32_t m_userData;                                         // +0x18
 };
 
-struct hkEntity
-{
+class hkEntity
+{ public:
 	char m_pad0[0x58];
 	hkSolverObj* m_solver;                                       // +0x58
 	char m_pad5c[0x70 - 0x5c];

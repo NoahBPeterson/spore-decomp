@@ -107,7 +107,7 @@ public:
 };
 
 // Building / member objects tested against the UFO (state flags at +0x84 or +0xc0).
-struct cBuilding {
+class cBuilding { public:
     uint32_t pad00[0x34 / 4];
     cSpatialObject mSpatial;                    // +0x34
     uint32_t pad38[(0x84 - 0x38) / 4];

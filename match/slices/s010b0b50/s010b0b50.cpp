@@ -18,7 +18,7 @@
 typedef float hkReal;
 typedef unsigned char hkUint8;
 
-struct hkBool {
+class hkBool { public:
     char m_bool;
 };
 
@@ -87,7 +87,7 @@ public:
 };
 
 // Velocity accumulator of a body (only the field used here).
-struct hkVelocityAccumulator {
+class hkVelocityAccumulator { public:
     hkVector4 m_pad00[3];
     hkVector4 m_invMasses;          // +0x30: inverse inertia (xyz), inverse mass (w)
 };
