@@ -164,6 +164,18 @@ public:
     virtual void setInertiaInvLocal(const hkMatrix3& m);                      // 14
     virtual void getInertiaInvLocal(hkMatrix3& out) const;                    // 15
     virtual void getInertiaInvWorld(hkMatrix3& out) const;                    // 16
+    virtual void getPosition(hkVector4& out) const;                           // 17  0x010882b0
+    virtual void getRotation(hkQuaternion& out) const;                        // 18  0x010882d0
+    virtual void getTransform(hkTransform& out) const;                        // 19  0x010882f0
+    virtual void setPositionAndRotation(const hkVector4& p, const hkQuaternion& q);   // 20  0x01088310
+    virtual void setTransform(const hkTransform& t);                          // 21  0x01088330
+    virtual void setLinearVelocity(const hkVector4& v);                       // 22  0x01088360
+    virtual void setAngularVelocity(const hkVector4& v);                      // 23  0x01088390
+    virtual void applyLinearImpulse(const hkVector4& imp);                    // 24  0x010883c0
+    virtual void applyPointImpulse(const hkVector4& imp, const hkVector4& p); // 25
+    virtual void applyAngularImpulse(const hkVector4& imp);                   // 26
+    virtual void applyForce(float deltaTime, const hkVector4& force, const hkVector4& p);  // 27
+    virtual void applyForce(float deltaTime, const hkVector4& force);         // 28
     hkInt32 m_solverData;                                                     // +0x08
 };
 
