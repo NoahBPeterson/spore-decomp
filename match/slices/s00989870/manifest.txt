@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Byte-exact matches for slice s00989870 (EA::UTFWinControls WinTextEdit / IWinTextEdit
+# text-edit interface and window methods, 0x989870-0x98a7f0).  Module flags:
+# /O2 /MD /Gy /TP /EHsc
+slices/s00989870/s00989870.cpp  ?F989A20@IWinTextEdit@UTFWinControls@EA@@QAEHXZ  0x00989a20  /O2 /MD /Gy /TP /EHsc
+slices/s00989870/s00989870.cpp  ?F989B70@IWinTextEdit@UTFWinControls@EA@@QAEDPAI0@Z  0x00989b70  /O2 /MD /Gy /TP /EHsc
+slices/s00989870/s00989870.cpp  ?F989D10@IWinTextEdit@UTFWinControls@EA@@QAEPAXH@Z  0x00989d10  /O2 /MD /Gy /TP /EHsc
+slices/s00989870/s00989870.cpp  ?F989D30@IWinTextEdit@UTFWinControls@EA@@QAEHH@Z  0x00989d30  /O2 /MD /Gy /TP /EHsc
+slices/s00989870/s00989870.cpp  ?OnFocusChange@WinTextEdit@UTFWinControls@EA@@QAEDHPAX@Z  0x00989e60  /O2 /MD /Gy /TP /EHsc
+slices/s00989870/s00989870.cpp  ?F98A2F0@WinTextEdit@UTFWinControls@EA@@QAEXH@Z  0x0098a2f0  /O2 /MD /Gy /TP /EHsc
+slices/s00989870/s00989870.cpp  ?F98A320@IWinTextEdit@UTFWinControls@EA@@QAEXPAM@Z  0x0098a320  /O2 /MD /Gy /TP /EHsc

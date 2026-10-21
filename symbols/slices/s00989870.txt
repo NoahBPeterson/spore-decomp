@@ -1,0 +1,29 @@
+0x00989870 EA::UTFWinControls::WinTextEdit::CalculateVisibleArea  # card symbol; visible-area recompute
+0x009899b0 EA::UTFWinControls::WinTextEdit::F9899B0  # unnamed window helper
+0x00989a90 EA::UTFWinControls::WinTextEdit::ValidateChange  # card name (iswctype filter + change hook)
+0x00989ec0 EA::UTFWinControls::WinTextEdit::OnKeyChar  # key dispatch
+0x00989fe0 EA::UTFWinControls::WinTextEdit::DoMessage  # window message thunk
+0x0098a090 EA::UTFWinControls::WinTextEdit::F98A090  # scrollbar slot rebuild
+0x0098a270 EA::UTFWinControls::WinTextEdit::F98A270  # visible range
+0x0098a2f0 EA::UTFWinControls::WinTextEdit::F98A2F0  # flag setter
+0x0098a430 EA::UTFWinControls::WinTextEdit::SnapIndex  # arrow-cell snapping
+0x0098a4b0 EA::UTFWinControls::WinTextEdit::F98A4B0  # line index from y
+0x0098a570 EA::UTFWinControls::WinTextEdit::F98A570  # offset from source line
+0x0098a660 EA::UTFWinControls::WinTextEdit::F98A660  # line index from y (variant)
+0x0098a730 EA::UTFWinControls::WinTextEdit::F98A730  # offset from source line (variant)
+0x00989a20 EA::UTFWinControls::IWinTextEdit::F989A20  # interface getter
+0x00989a30 EA::UTFWinControls::IWinTextEdit::F989A30  # text-insert (eastl vector<bool>::DoInsertValue)
+0x00989b00 EA::UTFWinControls::IWinTextEdit::F989B00  # selection setter
+0x00989b70 EA::UTFWinControls::IWinTextEdit::F989B70  # selection getter
+0x00989bb0 EA::UTFWinControls::IWinTextEdit::F989BB0  # flag bit + refresh
+0x00989c60 EA::UTFWinControls::IWinTextEdit::SetScrollPosition  # scroll position setter
+0x00989d10 EA::UTFWinControls::IWinTextEdit::F989D10  # scrollbar drawable getter
+0x00989d30 EA::UTFWinControls::IWinTextEdit::F989D30  # scrollbar enabled getter
+0x00989d70 EA::UTFWinControls::WinTextEdit::F989D70  # line/column -> offset
+0x0098a320 EA::UTFWinControls::IWinTextEdit::F98A320  # scrollbar rect getter
+0x0098a370 EA::UTFWinControls::IWinTextEdit::F98A370  # text replace
+0x0098a3f0 EA::UTFWinControls::IWinTextEdit::F98A3F0  # forward span to window
+0x0098a4b0 EA::UTFWinControls::IWinTextEdit::F98A4B0  # (same VA family as the interface variant)
+0x0098a570 EA::UTFWinControls::IWinTextEdit::F98A570  # (same VA family as the interface variant)
+0x0098a660 EA::UTFWinControls::IWinTextEdit::F98A660  # (same VA family as the interface variant)
+0x0098a730 EA::UTFWinControls::IWinTextEdit::F98A730  # (same VA family as the interface variant)
