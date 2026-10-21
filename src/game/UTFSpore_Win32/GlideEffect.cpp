@@ -32,7 +32,7 @@ struct FloatSink {
 }
 namespace EA {
 namespace UTFWinControls {
-struct GlideEffect {
+class GlideEffect { public:
     char  pad00[0x60];
     void* field60;         // +0x60
     float field64;         // +0x64
@@ -45,7 +45,7 @@ struct GlideEffect {
 }
 namespace EA {
 namespace UTFWinControls {
-struct BasicFactory_GlideEffect {
+class BasicFactory_GlideEffect { public:
     void* CreateInstance(int param1, void* param2);
 };
 }
