@@ -28,9 +28,9 @@ public:
     virtual void endObject();                                                                                  // 6 (+0x18)
 };
 
-struct hkAabb { hkVector4 m_min; hkVector4 m_max; };                        // 0x20
-struct hkCdVertex : public hkVector4 {};                                     // 0x10
-struct hkSphere { hkVector4 m_pos; };                                        // 0x10
+class hkAabb { public: hkVector4 m_min; hkVector4 m_max; };                        // 0x20
+class hkCdVertex : public hkVector4 { public:};                                     // 0x10
+class hkSphere { public: hkVector4 m_pos; };                                        // 0x10
 struct hkCollisionSpheresInfo { int m_numSpheres; bool m_useBuffer; };      // hkSphereRepShape::hkCollisionSpheresInfo
 struct hkShapeRayCastInput                                                   // 0x30
 {

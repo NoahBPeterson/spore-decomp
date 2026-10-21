@@ -19,20 +19,20 @@ static inline hkX87Real hkX87Sqrt(hkX87Real v) { return std::sqrt(v); }   // inl
     static void* operator new(size_t, void* p) { return p; } \
     static void operator delete(void*, void*) {}
 
-struct hkFinishLoadedObjectFlag { int m_finishing; };
+class hkFinishLoadedObjectFlag { public: int m_finishing; };
 
-struct hkQuaternion
-{
+class hkQuaternion
+{ public:
     float x, y, z, w;
     void setMul(const hkQuaternion& a, const hkQuaternion& b);   // 0x01082210: this = a * b
     void normalize();                                              // 0x010821A0 (x*invLen, 0 for zero length)
 };
-struct hkMatrix3 { hkVector4 m_col[3]; };      // 0x30 bytes
-struct hkStepInfo { float m_startTime; float m_endTime; float m_deltaTime; float m_invDeltaTime; };   // deltaTime @+8
+class hkMatrix3 { public: hkVector4 m_col[3]; };      // 0x30 bytes
+class hkStepInfo { public: float m_startTime; float m_endTime; float m_deltaTime; float m_invDeltaTime; };   // deltaTime @+8
 
 // hkSweptTransform (0x50 bytes) and hkMotionState (0xb0 bytes)
-struct hkSweptTransform
-{
+class hkSweptTransform
+{ public:
     hkVector4 m_centerOfMass0;      // +0x00
     hkVector4 m_centerOfMass1;      // +0x10
     hkQuaternion m_rotation0;       // +0x20
@@ -40,8 +40,8 @@ struct hkSweptTransform
     hkVector4 m_centerOfMassLocal;  // +0x40
     hkSweptTransform& operator=(const hkSweptTransform& o);   // 0x01088480 (20 dword copies)
 };
-struct hkMotionState
-{
+class hkMotionState
+{ public:
     hkTransform m_transform;        // +0x00
     hkSweptTransform m_sweptTransform;   // +0x40
     hkVector4 m_deltaAngle;         // +0x90

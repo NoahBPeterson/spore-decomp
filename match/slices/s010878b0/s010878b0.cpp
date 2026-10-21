@@ -15,14 +15,14 @@ public:
     virtual void v1(); virtual void v2(); virtual void v3();
     virtual int getDeactivatorType() const;                       // 4 (+0x10)
 };
-struct hkMaterial
-{
+class hkMaterial
+{ public:
     enum ResponseType { RESPONSE_INVALID = 0, RESPONSE_SIMPLE_CONTACT = 1, RESPONSE_REPORTING = 2, RESPONSE_NONE = 3 };
     int8_t m_responseType;     // +0x00
     float m_friction;          // +0x04
     float m_restitution;       // +0x08
 };
-struct hkProperty { hkUint32 m_key; hkUint32 m_pad; hkUint32 m_value[2]; };   // 0x10 bytes
+class hkProperty { public: hkUint32 m_key; hkUint32 m_pad; hkUint32 m_value[2]; };   // 0x10 bytes
 struct hkConstraintInternal { hkUint32 m_data[7]; };                           // 0x1c bytes
 class hkConstraintInstance; class hkCollisionListener; class hkEntityActivationListener;
 class hkEntityListener; class hkAction; class hkSimulationIsland;
@@ -30,8 +30,8 @@ class hkEntityListener; class hkAction; class hkSimulationIsland;
 struct hkMultiThreadLockStub { hkUint32 m_threadId; int32_t m_lockCount; };    // 8 bytes
 
 // hkLinkedCollidable (0x30 bytes at hkWorldObject +0x1c)
-struct hkLinkedCollidable
-{
+class hkLinkedCollidable
+{ public:
     hkShape* m_shape;                     // +0x1c
     hkUint32 m_shapeKey;                  // +0x20
     hkMotionState* m_motion;              // +0x24
@@ -92,8 +92,8 @@ public:
 };
 
 // hkRigidBodyCinfo (0xc0 bytes)
-struct hkRigidBodyCinfo
-{
+class hkRigidBodyCinfo
+{ public:
     hkRigidBodyCinfo();                                                            // 0x01087ED0
     hkUint32 m_collisionFilterInfo;      // +0x00
     hkShape* m_shape;                    // +0x04
