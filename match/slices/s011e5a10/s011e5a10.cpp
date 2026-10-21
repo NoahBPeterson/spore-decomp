@@ -43,7 +43,7 @@ extern u32 g_driveList[32];               // 0x016f4b88  ?g_driveList@@3PADA
 
 // ---- callees (no recovered mangled names; named by address) ----------------
 void* StreamImpl_new(u32 size);                              // 0x011e6d20
-void  filesys_init(void);                                    // 0x011e5a10
+void  __fastcall filesys_init(void* self);                   // 0x011e5a10
 void  StreamImpl_ctor(void* p, void* a, void* b, void* c);   // 0x011e6d20 (0x30 form)
 void  Mutex_Lock(void* m);                                   // 0x011ec170
 void  Mutex_Unlock(void* m);                                 // 0x011ec230
@@ -60,7 +60,7 @@ u32   SubObject_ctor(void* p);                               // 0x011ec830
 void  SubObject_dtor(void* p);                               // 0x011ec2d0
 void  Mutex_Destroy(void* p);                                // 0x011ec0f0
 void  RefCounted_dtor(void* p);                              // 0x011ecb00
-void  CriticalSection_enter(void* cs);                       // 0x011ecdb0
+void  __fastcall CriticalSection_enter(void* cs);            // 0x011ecdb0
 void  CriticalSection_leave(void* cs);                       // 0x011ecdb0/0x011ecdd0 family
 void  CriticalSection_ctor(void* cs);                        // 0x011ecd90
 void  CriticalSection_ctorD(void* cs);                       // 0x011ecdd0
@@ -84,7 +84,7 @@ void  restartstream(void* s, u32 arg);                       // 0x011e7100
 // allocate the 0x130-byte NullFileDriver stream, then enumerate drive roots.
 // ===========================================================================
 // @ 0x011e5a10
-void filesys_init(void* self)
+void __fastcall filesys_init(void* self)
 {
     void* impl = (void*)ld32(self, 0x20);
     struct { void* p; u32 n; u32 a; u32 b; } req;
@@ -148,7 +148,7 @@ void filesys_init(void* self)
 // the current working directory into the arena path holder.
 // ===========================================================================
 // @ 0x011e5af0
-void filesys_reset(void* self)
+void __fastcall filesys_reset(void* self)
 {
     struct { void* p; u32 n; u32 a; u32 b; u32 c; u32 d; } a;
     a.p = (void*)ld32(self, 0x18);
@@ -619,7 +619,7 @@ void __fastcall StreamImpl_cancelRequest(void* self, int, void* node, u32 reason
 // 0x011e64a0 -- populate a request descriptor (fixed window/defaults).
 // ===========================================================================
 // @ 0x011e64a0
-void __fastcall RequestDesc_init(void* self, int, u32 a, u32 b)
+void __stdcall RequestDesc_init(void* self, u32 a, u32 b)
 {
     st32(self, 0, a);
     st32(self, 4, b);
@@ -633,10 +633,11 @@ void __fastcall RequestDesc_init(void* self, int, u32 a, u32 b)
 // @ 0x011e64c0
 void __fastcall ListHead_clear(void* self)
 {
-    st32(self, 0, 0);
-    st32(self, 4, 0);
-    st32(self, 8, 0);
-    st32(self, 0xc, 0);
+    u32* p = (u32*)self;
+    p[0] = 0;
+    p[1] = 0;
+    p[2] = 0;
+    p[3] = 0;
 }
 
 // ===========================================================================
@@ -698,7 +699,7 @@ void* __fastcall StreamImpl_ctorFull(void* self, int, const char* name, void* ex
 // 0x011e65e0 -- buffer-size validator: >= 0x800 bytes allowed.
 // ===========================================================================
 // @ 0x011e65e0
-u32 __fastcall StreamImpl_validateSize(u32 size, u32, u32, u32, u32* out)
+u32 __cdecl StreamImpl_validateSize(u32, u32 size, u32, u32, u32, u32, u32* out)
 {
     if (size >= 0x800) {
         *out = 0x800;
