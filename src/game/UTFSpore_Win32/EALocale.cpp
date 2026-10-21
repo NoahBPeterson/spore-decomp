@@ -91,7 +91,7 @@ public:
 };
 }
 namespace eastl {
-struct fixed_vector_allocator {
+class fixed_vector_allocator { public:
     allocator_s0057_bfb0 mOverflowAllocator;
     void* mpPoolBegin;
     void deallocate(void* p) { if (p != mpPoolBegin) mOverflowAllocator.deallocate(p); }
