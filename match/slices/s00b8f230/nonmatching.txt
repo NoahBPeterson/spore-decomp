@@ -7,7 +7,6 @@
 00b8fa40 128 cVarListSerializer serialize-to-stream wrapper; 154 vs 141 bytes (0xa14 stack buffer + ctor/serialize call order)
 00b8fad0 169 cVarListSerializer deserialize-from-stream wrapper + GetPlantProfile lookup into +0x94; 178 vs 147 bytes
 00b8fdd0 354 eastl rbtree insert_unique (anchor/root/increment/insert paths); the original's three-way key compare inlines to setb chains, ours reuses stack temporaries so 374 vs 345 bytes
-00b8ff90 47 Simulator::cGonzagoSubsystem ctor with an intrusive list init at +0x20; 62 vs 56 bytes
 00b90010 124 rbtree find-or-insert wrapper returning the +0x1c value slot; 112 vs 140 bytes
 00b900a0 785 Simulator::cPlantSpeciesManager record loader (anonymous namespace::ShowObstacleRadii per PDB candidate): local cPlantCargoInfo, GetPropertyAsKey x5 with the 0x2ebcd6a6 sentinel mask, four float properties, then insert into the species map; 900 vs 873 bytes
 00b90410 104 SP::cPlantSpeciesManager::GetSpeciesFromID: rbtree find, lazy load via GetPlantProfile + FUN_00b900a0 when the +0x38 flag is set, return the +0x1c value; 112 vs 104 bytes

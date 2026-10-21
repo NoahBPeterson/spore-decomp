@@ -4,3 +4,4 @@ slices/s00b8f230/s00b8f230.cpp  ?FUN_00b8ff60@S@@QAEXXZ  00b8ff60  /O2 /MD /Gy /
 slices/s00b8f230/s00b8f230.cpp  ?FUN_00b8ffd0@S@@QAEPAXD@Z  00b8ffd0  /O2 /MD /Gy /EHsc /TP
 slices/s00b8f230/s00b8f230.cpp  ?FUN_00b8f860@S@@QAEHXZ  00b8f860  /O2 /MD /Gy /EHsc /TP
 slices/s00b8f230/s00b8f230.cpp  ?FUN_00b8fb70@S@@QAEDXZ  00b8fb70  /O2 /MD /Gy /EHsc /TP
+slices/s00b8f230/s00b8f230.cpp  ?FUN_00b8ff90@S@@QAEPAXXZ  00b8ff90  /O2 /MD /Gy /EHsc /TP

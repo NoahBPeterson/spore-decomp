@@ -1,4 +1,5 @@
 // s00b8f230.cpp — Simulator::cPlantCargoInfo / cSpaceInventoryItem /
+#include <intrin.h>
 // cGonzagoSubsystem rbtree region, plus the Simulator package loader.
 // Reconstructed from Ghidra decompiles + disassembly.
 //
@@ -481,6 +482,7 @@ void* S::FUN_00b8ff90()
   ((void (__thiscall*)(void*))FUN_00b5b960)(self);       // SP::cGonzagoSubsystem ctor
   *(void**)(self + 0x00) = (void*)0x01465858;
   *(void**)(self + 0x04) = (void*)0x01465850;
+  _ReadWriteBarrier();
   char* eax = self + 0x20;
   *(int*)(eax + 4) = 0;
   *(int*)(eax + 8) = 0;
