@@ -1,0 +1,6 @@
+slices/s00e1df10/s00e1df10.cpp  ?getD4@SearchDlg@@QAEIH@Z  00e1e100  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e1df10/s00e1df10.cpp  ?hideFeed@SearchDlg@@QAEXXZ  00e1e1f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e1df10/s00e1df10.cpp  ?setThing@SearchDlg@@QAEXPAX@Z  00e1e210  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e1df10/s00e1df10.cpp  ?pairCopyConstruct@@YAPAUPair@@PAU1@00@Z  00e1e240  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e1df10/s00e1df10.cpp  ?pairAssign@@YAPAUPair@@PAU1@00@Z  00e1e390  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e1df10/s00e1df10.cpp  ?pairAssignBackward@@YAPAUPair@@PAU1@00@Z  00e1e3f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
