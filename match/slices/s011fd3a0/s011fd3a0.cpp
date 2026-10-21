@@ -88,19 +88,19 @@ struct Ctl
 
 namespace rw { namespace graphics {
 // Minimal stubs so the callee ABIs are right (both are __thiscall members).
-struct EmbeddedState
-{
+class EmbeddedState
+{ public:
     void* SetVertexDescriptor(void);            // 0x011edcd0
 };
-struct CompiledState
-{
+class CompiledState
+{ public:
     void Dispatch(void);                        // 0x011ee580
 };
 }}
 
 namespace rw { namespace core { namespace arena {
-struct Arena
-{
+class Arena
+{ public:
     void* IdToObject(u32 id);         // 0x011e2300 rw::core::arena::Arena::IdToObject (__thiscall)
 };
 }}}

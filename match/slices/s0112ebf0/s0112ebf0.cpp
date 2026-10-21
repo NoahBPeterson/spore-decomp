@@ -25,11 +25,11 @@ static inline int RoundToInt(float f)
 
 namespace rw { namespace audio { namespace core {
 
-struct System;
+class System;
 extern System* g_pAudioSystem; // 0x016e61a8
 
-struct System
-{
+class System
+{ public:
     u8 pad0[0xa8];
     void* mpAssertHandler;      // +0xa8
     void* mGetCsisLibraryType;  // +0xac

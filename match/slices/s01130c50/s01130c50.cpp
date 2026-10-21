@@ -24,7 +24,7 @@ struct Stream {
     void  ReleaseChunk(void* chunk);  // 0x011e7c70
 };
 
-struct System {
+class System { public:
     void* Alloc(unsigned size, const char* name, int align, int flags);  // 0x0112c820
     void  Free(void* p, int flags);                                       // 0x0112c850
 };
@@ -33,7 +33,7 @@ extern System* g_pSystem;    // 0x016e61a8
 int AiffPlayer_checkChunkID(uint32_t id);   // 0x01130be0 (slice s0112fc10)
 
 // ---------------------------------------------------------------- decoder interface
-struct Decoder {
+class Decoder { public:
     virtual int Decode(int offset, int count, int bytes);
     virtual int Fill(void** channels, int bytes);
     virtual int Init(void* header);

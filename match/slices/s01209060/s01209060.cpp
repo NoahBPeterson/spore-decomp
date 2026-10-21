@@ -100,7 +100,7 @@ struct __declspec(align(16)) hkSweptTransform {
     hkVector4    m_translation0;        // +0x40
 };
 
-struct hkMotionState {
+class hkMotionState { public:
     float m[0x24];             // 0x00..0x8f
 };
 

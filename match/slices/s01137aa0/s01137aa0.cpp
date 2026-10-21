@@ -10,17 +10,17 @@ extern "C" void* memcpy(void*, const void*, unsigned int);
 
 namespace rw { namespace audio { namespace core {
 
-struct System;
-struct Voice;
-struct Decoder;
-struct DecoderRegistry;
-struct StreamPool;
+class System;
+class Voice;
+class Decoder;
+class DecoderRegistry;
+class StreamPool;
 struct PlugInDescRunTime;
 struct Stream;
 
 struct Attribute_t { union { double f64; float f32; }; };
 
-struct PlugIn {
+class PlugIn { public:
     void** vftable;                          // +0x00
     System* mpSystem;                        // +0x04
     Voice* mpVoice;                          // +0x08
@@ -34,7 +34,7 @@ struct PlugIn {
     unsigned char pad22[2];
 };
 
-struct TimerHandle {
+class TimerHandle { public:
     void* mItemHandle;              // +0x00
     void* mpCallback;               // +0x04
     void* mpContext;                // +0x08
@@ -62,12 +62,12 @@ struct Stream {
     int  FUN_011e7c70(ChunkInfo*);                               // 0x011e7c70
 };
 
-struct StreamPool {
+class StreamPool { public:
     void* CreateStream(float rate, void* cb, void* ctx);         // 0x0112dfa0
     void  ReleaseStream(void* handle);                           // 0x0112e1e0
 };
 
-struct System {
+class System { public:
     char pad00[0x20];
     char* mpCommandBuffer;       // +0x20
     char pad24[0x90];
@@ -81,13 +81,13 @@ struct System {
     DecoderRegistry* GetDecoderRegistry();                         // 0x0112dc80
 };
 
-struct Voice {
+class Voice { public:
     char pad00[0x38];
     float mPriority;             // +0x38
     void  FUN_0112e450();        // 0x0112e450
 };
 
-struct Decoder {
+class Decoder { public:
     char pad00[0x20];
     unsigned short mNumChannels; // +0x20
     char FUN_0114c8c0(char* data, unsigned int size, int flag,
@@ -95,7 +95,7 @@ struct Decoder {
     void FUN_01133f40();                                         // 0x01133f40
 };
 
-struct DecoderRegistry {
+class DecoderRegistry { public:
     int  FUN_01133ed0(int key);                                  // 0x01133ed0
     Decoder* DecoderFactory(int codecObj, int codec, int a, System* sys); // 0x01133fc0
 };
@@ -153,7 +153,7 @@ struct RequestInternal {
     int    f2C;                    // +0x2c
 };  // 0x30
 
-struct SndPlayer1 : PlugIn {
+class SndPlayer1 : public PlugIn { public:
     Attribute_t mAttribute[3];                    // +0x28
     TimerHandle mTimerHandle;                     // +0x40
     RequestExternal* mpRequestExternal;           // +0x58

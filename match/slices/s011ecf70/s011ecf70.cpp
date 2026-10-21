@@ -54,7 +54,7 @@ struct RwSemaphoreData {
     byte   mbIntraProcess; // +0x0c
 };
 
-struct Semaphore {
+class Semaphore { public:
     RwSemaphoreData mSemaphoreData;
     byte Init(const void* p);        // 0x011ed400
     uint Wait(uint* pTimeout);       // 0x011ed470
@@ -478,7 +478,7 @@ rw::core::thread::Semaphore* rw::core::thread::Semaphore::ctor0(int a2, char a3)
 // --- rw::graphics::EmbeddedState --------------------------------------------
 namespace rw { namespace graphics {
 
-struct EmbeddedState {
+class EmbeddedState { public:
     char  pad00[8];
     uint  m_softStateDirty;   // +0x08
     char  pad0c[8];

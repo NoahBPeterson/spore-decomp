@@ -16,21 +16,21 @@ static inline char* RING(void* sys) { return *(char**)((char*)sys + 0x20) + *(un
 
 namespace rw { namespace audio { namespace core {
 
-struct System;
+class System;
 struct Voice;
-struct Decoder;
-struct DecoderRegistry;
-struct StreamPool;
+class Decoder;
+class DecoderRegistry;
+class StreamPool;
 struct PlugInDescRunTime;
 struct Stream;
 
 struct Attribute_t { union { double f64; float f32; }; };
-struct PlugIn {
+class PlugIn { public:
     void** vftable; System* mpSystem; Voice* mpVoice; Attribute_t* mpAttribute;
     PlugInDescRunTime* mpPlugInDescRunTime; float mLatencyInSamples; float mDecaySamples;
     unsigned int mCpuTicks; unsigned char mInputChannels; unsigned char mOutputChannels; unsigned char pad22[2];
 };
-struct TimerHandle {
+class TimerHandle { public:
     void* mItemHandle; void* mpCallback; void* mpContext; char* mpName;
     unsigned int mCpuTicks; unsigned char mStage; unsigned char mTimerVisibility; unsigned char pad16[2];
 };
@@ -40,17 +40,17 @@ struct Stream {
     int QueueFile(int, int, int, void*, int); ChunkInfo* GetChunk();
     int FUN_011e6bf0(); int FUN_011e6c00(int); int FUN_011e6c40(); int FUN_011e6c80(int); int FUN_011e7c70(ChunkInfo*);
 };
-struct StreamPool { void* CreateStream(float, void*, void*); void ReleaseStream(void*); };
-struct System {
+class StreamPool { public: void* CreateStream(float, void*, void*); void ReleaseStream(void*); };
+class System { public:
     char pad00[0x20]; char* mpCommandBuffer; char pad24[0x90]; unsigned int mCommandIndex; // +0xb4
     void* Alloc(int size, const char* name, int align, int alloc); void Free(void* p, int alloc);
     void RemoveTimer(TimerHandle* t); int Lock(); int Unlock(); DecoderRegistry* GetDecoderRegistry();
 };
-struct Decoder {
+class Decoder { public:
     char pad00[0x20]; unsigned short mNumChannels;
     char FUN_0114c8c0(char*, unsigned, int, int, void*, int); void FUN_01133f40();
 };
-struct DecoderRegistry { int FUN_01133ed0(int); Decoder* DecoderFactory(int, int, int, System*); };
+class DecoderRegistry { public: int FUN_01133ed0(int); Decoder* DecoderFactory(int, int, int, System*); };
 struct RequestExternal {
     double streamFileOffset; char* pSampleData; int loopStartStreamOffset; int gigaSamplesInRam;
     int numSamplesFed; int numBytesFed; char* pStreamLoopFileName; StreamPool* pStreamPool;
@@ -67,7 +67,7 @@ struct RequestInternal {
     double streamFileOffset; Decoder* pDecoder; float handle; float f10; int samplesFed; int f18;
     void* f1C; int f20; int f24; unsigned short numChannels; unsigned char state; unsigned char codec; int f2C;
 };
-struct SndPlayer1 : PlugIn {
+class SndPlayer1 : public PlugIn { public:
     Attribute_t mAttribute[3]; TimerHandle mTimerHandle; RequestExternal* mpRequestExternal;
     FeedDesc mFeedDesc[20]; Decoder* mpLoadedDecoder; float mCurrentRequestHandle; float mCurrentRequestSampleRate;
     int mCurrentRequestSamplesPlayed; int mCurrentRequestNumSamples; float* mpRequestHandle;
@@ -96,7 +96,7 @@ struct AudioObj {
     void F_8b0();              // 0x011398b0
 };
 // SubMix mix-input link/unlink helpers: __thiscall (this = the input node).
-struct SubMix {
+class SubMix { public:
     void FUN_01137420(int, int);   // 0x01137420
     void FUN_01137450(void*);      // 0x01137450
 };

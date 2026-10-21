@@ -14,25 +14,25 @@ template <class T> static inline T& A(void* p, int off) { return *(T*)((char*)p 
 
 namespace rw { namespace audio { namespace core {
 
-struct DelayLine {
+class DelayLine { public:
     int  Init(int a, int b, int size);   // 0x0114d7b0  thiscall, ret 0xc
     void FUN_0114d730();                 // 0x0114d730  ctor
     void FUN_0114d770();                 // 0x0114d770  Release
     void FUN_0114d9d0(int);              // 0x0114d9d0  Reset, ret 4
     int  FUN_0114d840(int);              // 0x0114d840  Resize, ret 4
 };
-struct CombFilter {
+class CombFilter { public:
     void FUN_0114dcb0(float, int, float, float); // 0x0114dcb0 SetGains, ret 0x10
     void FUN_0114dce0();                 // 0x0114dce0  ctor
 };
-struct AllPassFilter {
+class AllPassFilter { public:
     void FUN_0114e230();                 // 0x0114e230  ctor
     void FUN_0114e210(float, float);     // 0x0114e210  ret 8
 };
 struct TimerMgr {
     char AddTimer(void*, void*, void*, const char*, int, int); // 0x0112d8e0
 };
-struct FastFirEngine {
+class FastFirEngine { public:
     int  Reset();                                    // 0x0114e580
     int  Configure(int, int, int, int, int, int, int);// 0x0114e5e0
     int  FUN_0114e210(int, float);                   // 0x0114e210

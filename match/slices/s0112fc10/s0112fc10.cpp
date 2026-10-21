@@ -35,14 +35,14 @@ struct Stream {
 };
 
 // ---------------------------------------------------------------- audio core System singleton
-struct System {
+class System { public:
     void* Alloc(unsigned size, const char* name, int align, int flags);  // 0x0112c820
     void  Free(void* p, int flags);                                       // 0x0112c850
 };
 extern System* g_pSystem;   // 0x016e61a8
 
 // ---------------------------------------------------------------- decoder interface (3 codecs)
-struct Decoder {
+class Decoder { public:
     virtual int Decode(int offset, int count, int bytes);  // slot 0
     virtual int Fill(void** channels, int bytes);          // slot 1
     virtual int Init(void* header);                        // slot 2

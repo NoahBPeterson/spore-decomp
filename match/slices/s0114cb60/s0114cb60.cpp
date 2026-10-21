@@ -50,7 +50,7 @@ struct AudioProcessContext {
     s32   mChannelCount;                 // +0x3002C
 };
 
-struct System {
+class System { public:
     char** mpObjectTable; // +0x00
     void* Alloc(u32 size, const char* tag, int flags, int align); // thiscall on the singleton
     void  Free(void* p, int flags);
@@ -60,12 +60,12 @@ extern System* g_pSystem; // DAT_016e61a8 -- pointer to the shared rwaudio Syste
 // ---------------------------------------------------------------------------------------
 // SubMixConnector (embedded in Send at +0x30, Route at +0x24)
 // ---------------------------------------------------------------------------------------
-struct SubMix {
+class SubMix { public:
     char pad0[0x8C];
     u16 muRefCount; // +0x8C
 };
 
-struct SubMixConnector {
+class SubMixConnector { public:
     char  pad0[8];
     f32*  mpSubMixBuffer;     // +0x08
     SubMix* mpSubMix;         // +0x0C
@@ -78,7 +78,7 @@ struct SubMixConnector {
 // ---------------------------------------------------------------------------------------
 // Send -- 0x0114cb60 = Send::Process
 // ---------------------------------------------------------------------------------------
-struct Send {
+class Send { public:
     char pad0[0x0C];
     void* mpAttributes;       // +0x0C
     char pad10[0x20 - 0x10];
@@ -379,7 +379,7 @@ int Scp0::Process(Scp0* self, AudioProcessContext* ctx)
 // ---------------------------------------------------------------------------------------
 // Route -- descriptor guid 'Rou0'.  0x0114d350 = Route::Process.
 // ---------------------------------------------------------------------------------------
-struct Route {
+class Route { public:
     char pad0[0x24];
     SubMixConnector mSubMixConnector; // +0x24
     f32  mDeClickValue[6];            // +0x38
@@ -807,7 +807,7 @@ void DelayLine::ApplyFilter(s32 count, const AudioChannelBuffer* in, const Audio
 // ---------------------------------------------------------------------------------------
 // ReverbModel1 -- descriptor guid 'RM10'.  0x0114d3e0 = ReverbModel1::Process.
 // ---------------------------------------------------------------------------------------
-struct CombFilter {
+class CombFilter { public:
     void* mpApplyFunc;  // +0x00
     void* mpResetFunc;  // +0x04
     s32   miReadLength; // +0x08
@@ -819,7 +819,7 @@ struct CombFilter {
     f32   mfState;      // +0x20
 };
 
-struct AllPassFilter {
+class AllPassFilter { public:
     void* mpApplyFunc;  // +0x00
     void* mpResetFunc;  // +0x04
     s32   miReadLength; // +0x08
@@ -834,7 +834,7 @@ CombFilter* CombFilterReset(CombFilter* self);                                  
 void* AllPassFilterApply(AllPassFilter* self, s32 count, s32 src, s32 channel, TapContext* ctx); // 0x0114e1b0
 void* AllPassFilterReset(AllPassFilter* self);                                              // 0x00c2e4e0
 
-struct ReverbModel1 {
+class ReverbModel1 { public:
     char pad0[4];             // +0x00 vtable
     System* mpSystem;         // +0x04
     char pad8[0x21 - 0x8];

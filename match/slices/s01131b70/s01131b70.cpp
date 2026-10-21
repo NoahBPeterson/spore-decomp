@@ -26,7 +26,7 @@ struct Stream {
     void  FUN_011e7cf0();             // 0x011e7cf0
 };
 
-struct System {
+class System { public:
     void* Alloc(unsigned size, const char* name, int align, int flags);  // 0x0112c820
     void  Free(void* p, int flags);                                       // 0x0112c850
 };

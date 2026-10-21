@@ -10,4 +10,4 @@ slices/s01209060/s01209060.cpp  ?getValue@hkStringMapBase@@QBEIH@Z  012098a0  /v
 slices/s01209060/s01209060.cpp  ?getNext@hkStringMapBase@@QBEHH@Z  012098c0  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s01209060/s01209060.cpp  ??0hkStringMapBase@@QAE@XZ  01209a70  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s01209060/s01209060.cpp  ??1hkStringMapBase@@QAE@XZ  01209ab0  /vc71 /O2 /MD /Gy /EHsc /TP
-slices/s01209060/s01209060.cpp  ?setTimeInformation@hkSweptTransformUtil@@SAXMMAAUhkMotionState@@@Z  01209b70  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s01209060/s01209060.cpp  ?setTimeInformation@hkSweptTransformUtil@@SAXMMAAVhkMotionState@@@Z  01209b70  /vc71 /O2 /MD /Gy /EHsc /TP
