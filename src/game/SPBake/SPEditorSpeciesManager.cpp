@@ -1945,7 +1945,7 @@ struct fixed_pool_base {
 };
 }
 namespace eastl {
-struct fixed_pool_with_overflow : public fixed_pool_base {
+class fixed_pool_with_overflow : public fixed_pool_base { public:
     void* mpPoolBegin;
     void* mpCapacity;
     uint32_t mnNodeSize;
@@ -1953,7 +1953,7 @@ struct fixed_pool_with_overflow : public fixed_pool_base {
 };
 }
 namespace eastl {
-struct fixed_hashtable_allocator {
+class fixed_hashtable_allocator { public:
     fixed_pool_with_overflow mPool;
     void* mpBucketBuffer;
     fixed_hashtable_allocator(void* pNodeBuffer, uint32_t nodeBufferSize, uint32_t nodeSize, void* pBucketBuffer) {
