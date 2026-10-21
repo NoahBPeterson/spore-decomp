@@ -538,7 +538,7 @@ struct cArgumentSpec_s00a7_4260 {
 }
 namespace EA {
 namespace Swarm {
-class cEffectsManagerCheat {
+struct cEffectsManagerCheat { private:
 public:
     virtual void v0();
     void Execute(const EA::ArgScript::Line& line);
