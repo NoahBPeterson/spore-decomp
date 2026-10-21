@@ -1,0 +1,5 @@
+slices/s0119dd40/s0119dd40.cpp  ?gen_ip_119ea00@@YAPAXPAX0PAD@Z  0119ea00  /O2 /MD /Gy /TP
+slices/s0119dd40/s0119dd40.cpp  ?ia5string_dup_119ebb0@@YAPAXPAXPAI@Z  0119ebb0  /O2 /MD /Gy /TP
+slices/s0119dd40/s0119dd40.cpp  ?gen_conf_method_119ec80@@YAPAXPAX@Z  0119ec80  /O2 /MD /Gy /TP
+slices/s0119dd40/s0119dd40.cpp  ?gname_alloc_119f650@@YAPAXI@Z  0119f650  /O2 /MD /Gy /TP
+slices/s0119dd40/s0119dd40.cpp  ?ssl3_new_119f6a0@@YAHH@Z  0119f6a0  /O2 /MD /Gy /TP

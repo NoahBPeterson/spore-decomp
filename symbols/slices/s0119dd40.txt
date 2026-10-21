@@ -1,0 +1,16 @@
+0119dd40 GENERAL_NAME_print  # switch on the GENERAL_NAME type: print othername/email/DNS/DirName/URI/IP/RID
+0119df30 general_name_split_ext  # delete the subjectAltName extension and append its GENERAL_NAMEs to gen
+0119e010 general_name_copy_email  # copy/delete the emailAddress subject entries into gen as GEN_EMAIL
+0119e1c0 general_name_dirname  # build a GEN_DIRNAME from a v3 conf section via X509V3_NAME_from_section
+0119e2a0 general_name_from_conf  # one GENERAL_NAME from a v3_conf entry (email/URI/DNS/RID/IP/dirName/otherName)
+0119e520 general_names_from_ext  # GENERAL_NAMES stack from a v3 conf, splitting the `issuer:copy` marker
+0119e630 general_names_from_email  # GENERAL_NAMES from the v3 conf email entries (copy/move/other)
+0119e850 general_name_othername  # ASN1_STRING value for `otherName` by walking the conf section list
+0119ea00 general_name_ip  # GEN_IPADD from an a2i/X509V3 bool value via the conf method
+0119ea60 general_name_hash_or_ip  # `hash` value: EVP_Digest of the chosen digest object, else the plain IP path
+0119ebb0 ia5string_dup  # CRYPTO_malloc(len+1) + memcpy + NUL for an IA5 string
+0119ec10 ia5string_new  # ASN1 IA5 string from a NUL-terminated C string
+0119ec80 v3_conf_method  # resolve the conf's method vtable slot and call its getter
+0119f650 ssl3_ctx_cipher  # cipher-suite table entry for index nid (<0x41) — stride 0x28 backwards from 0x15ce770
+0119f6a0 ssl3_new  # allocate and init the 0x39c ssl3 state (two MD_CTX, two BN) then its init callback
+0119f720 ssl3_free  # free the ssl3 state's fields, cleanse and free the 0x39c block
