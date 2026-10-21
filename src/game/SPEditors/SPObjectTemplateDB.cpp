@@ -1489,7 +1489,7 @@ template<typename T> struct less_s0056_1970 { less_s0056_1970() {} };
 }
 namespace eastl {
 template<typename Container>
-struct insert_iterator {
+class insert_iterator { public:
     Container* container;
     typename Container::iterator it;
     insert_iterator(Container& x, typename Container::iterator i) : container(&x), it(i) {}
