@@ -1,0 +1,6 @@
+009db6d0  865  Build (Layout): complete source but difftest FAIL (x87 depth differs)
+009dba90  328  CopyMasked (Inner): complete source but difftest FAIL (eax differs)
+009dbc60  106  Assign (Inner): complete source but difftest FAIL (eax differs)
+009dbd50  40  Total (Track): three-slot accumulator loop matches, but the closing x87 sum keeps only two terms (the zero term is folded), so difftest FAIL (st0)
+009dbe10  8  Set (Grid): identical semantics, only the index/value registers are swapped (mod/lea in eax vs edx), so difftest FAIL (eax)
+009dbf10  205  Eval (Curve): complete source but difftest FAIL (memory pool @40030004)

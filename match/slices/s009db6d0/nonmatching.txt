@@ -1,0 +1,8 @@
+009dbfd0  86  Assign (Rec44): complete, base offsets read from src+0x34 (115 vs 117); difftest PASS
+009dc050  114  Assign (Rec58): complete, base offsets read from src+0x48 (145 vs 147); difftest PASS
+009dc0f0  76  Copy44: complete, differs (90 vs 97); difftest UNSUPPORTED
+009dc160  80  Copy58: complete, differs (96 vs 103); difftest WEAK (105 valid, 19% coverage, no mismatch)
+009dc410  131  All (Blend9): complete, differs; difftest PASS 400 valid inputs 100% coverage
+009dc4f0  405  All (BlendQ): complete, differs (311 vs 185); difftest PASS 321 valid inputs 100% coverage
+009dc6a0  163  TotalItems (Track2): complete, differs (181 vs 184); difftest PASS 280 valid inputs 100% coverage
+009dc5b0  269  SampleAt: destination is the first stack argument (callee-pop, __stdcall), left/right path copies match; difftest PASS 363 valid inputs 100% coverage (size 263 vs 236)

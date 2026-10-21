@@ -1,0 +1,22 @@
+009db6d0 Layout::Build  # splits the layout at the first part with Time()/firstPart > ratio, rescales the particle v0/v1 of the leading parts, then reindexes particles through each part's id list
+009dba20 Blend9::Pos  # in-place position lerp: this = a*(1-t) + b*t over the 3-float block at +0x08 (sub_99CC70 per pair)
+009dba90 Inner::CopyMasked  # masked member copy (one bit per field) over the polymorphic Inner record
+009dbc60 Inner::Assign  # full member copy of Inner
+009dbd50 Track::Total  # weighted sum of the track: pairs w[i]*Channel(i) with the 0xb4-strided channel block at +0x140, x87 tail sum
+009dbe10 Grid::Set  # m[row][col] = value, table base +0x1c
+009dbe30 Rec44::Ctor  # ref <- src->ref, vptr 0x1447cc0, xyz + 0x30-byte payload copy
+009dbe80 Rec58::Ctor  # ref <- src->ref, vptr 0x1447cc4, x/y/z/w + payload copy
+009dbed0 Rec1C::Ctor  # ref <- src->ref, vptr 0x1447cc8, d[0] then 16-byte memcpy of d[1..4]
+009dbf10 Curve::Eval  # keyframe scan + linear interpolation between samples[idx] and samples[i]; CurveOut {v, d, exact}
+009dbfd0 Rec44::Assign  # ref/xyz/12 payload words copied field by field (no vptr store)
+009dc050 Rec58::Assign  # ref/xyz/w/payload copied field by field
+009dc0f0 Copy44  # placement copy of a Rec44 run [first,last) into dst, returns dst+1
+009dc160 Copy58  # placement copy of a Rec58 run [first,last) into dst, returns dst+1
+009dc1d0 Copy1C  # placement copy of a Rec1C run [first,last) into dst, returns dst+1
+009dc2b0 vcopyGaitC  # forward copy of GaitC records (vtable slot preserved from the source element)
+009dc300 CopyVal3b  # forward copy of the 0x0c-byte (x, y, flag) triples
+009dc3c0 vcopyGaitCBack  # reverse copy of GaitC records (used when dst overlaps the source tail)
+009dc410 Blend9::All  # full blend of the position block and the r[3][4] rows (first two floats per row)
+009dc4f0 BlendQ::All  # same blend for the quaternion record (q[4] + r[4][4])
+009dc5b0 SampleAt  # __stdcall free function: destination Val3* is the first stack argument (ecx unused), then index, ValPath* a, float t, ValPath* b; interpolates x (with 1.0 fractional part), y, z = a->z
+009dc6a0 Track2::TotalItems  # number of items in the second track form (count field + per-item stride walk)

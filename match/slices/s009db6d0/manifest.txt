@@ -1,0 +1,8 @@
+slices/s009db6d0/s009db6d0.cpp  ?Pos@Blend9@@QAEXPBU1@M0@Z  009dba20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009db6d0/s009db6d0.cpp  ?Ctor@Rec44@@QAEPAU1@PBU1@@Z  009dbe30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009db6d0/s009db6d0.cpp  ?Ctor@Rec58@@QAEPAU1@PBU1@@Z  009dbe80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009db6d0/s009db6d0.cpp  ?Ctor@Rec1C@@QAEPAU1@PBU1@@Z  009dbed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009db6d0/s009db6d0.cpp  ?Copy1C@@YAPAURec1C@@PBU1@0PAU1@@Z  009dc1d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009db6d0/s009db6d0.cpp  ?vcopyGaitC@@YAPAUGaitC@@PBU1@0PAU1@@Z  009dc2b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009db6d0/s009db6d0.cpp  ?CopyVal3b@@YAPAUVal3b@@PBU1@0PAU1@@Z  009dc300  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009db6d0/s009db6d0.cpp  ?vcopyGaitCBack@@YAPAUGaitC@@PBU1@0PAU1@@Z  009dc3c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
