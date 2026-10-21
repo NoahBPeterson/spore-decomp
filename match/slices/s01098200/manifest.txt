@@ -1,0 +1,4 @@
+# source  symbol  original VA  [flags override]
+slices/s01098200/s01098200.cpp  ?setInertiaLocal@hkBoxMotion@@UAEXABVhkMatrix3@@@Z  01098200  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s01098200/s01098200.cpp  ?setInertiaInvLocal@hkBoxMotion@@UAEXABVhkMatrix3@@@Z  010982b0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s01098200/s01098200.cpp  ?setMassInv@hkBoxMotion@@UAEXM@Z  01098410  /vc71 /O2 /MD /Gy /EHsc /TP
