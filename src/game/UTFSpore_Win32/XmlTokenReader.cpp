@@ -346,7 +346,7 @@ struct MemoryStream : IStream {
 }
 namespace EA {
 namespace XML {
-struct XmlTextReader {
+class XmlTextReader { public:
     unsigned mData[0x22];
     XmlTextReader(EA::Allocator::ICoreAllocator_s0090_2460* alloc);                              // 0x900b30
     ~XmlTextReader();                                                                 // 0x900b70
@@ -368,7 +368,7 @@ extern const unsigned short g_tokenListVersion;                                 
 }
 namespace EA {
 namespace XML {
-struct XmlReader {
+class XmlReader { public:
     virtual void vf0() {}
     virtual void vf1() {}
     char pad[0x68];                                   // +0x4 .. +0x6c
@@ -381,7 +381,7 @@ struct XmlReader {
 }
 namespace EA {
 namespace XML {
-struct XmlTokenReader : XmlReader {
+class XmlTokenReader : public XmlReader { public:
     TokenIOContext_s0090_2460 mCtx;                              // +0x6c
 
     XmlTokenReader(EA::Allocator::ICoreAllocator_s0090_2460* alloc);
