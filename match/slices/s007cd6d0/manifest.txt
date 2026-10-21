@@ -1,4 +1,4 @@
-slices/s007cd6d0/s007cd6d0.cpp  ??$do_copy@PAU?$pair@_KU?$AutoRefCount@VcPropertyList@SP@@@EA@@@eastl@@PAU12@@?$copy_backward_impl@$0A@  007cde80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s007cd6d0/s007cd6d0.cpp  ??$do_copy@PAU?$pair@_KV?$AutoRefCount@VcPropertyList@SP@@@EA@@@eastl@@PAU12@@?$copy_backward_impl@$0A@Urandom_access_iterator_tag@std@@@eastl@@SAPAU?$pair@_KV?$AutoRefCount@VcPropertyList@SP@@@EA@@@1@PAU21@00@Z  007cde80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s007cd6d0/s007cd6d0.cpp  ?Initialize@cConfigManagerS@@QAEXXZ     007cd6d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s007cd6d0/s007cd6d0.cpp  ?TryConfigure@cConfigManagerS@@QAEXXZ   007cd8b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s007cd6d0/s007cd6d0.cpp  ?Configure@cConfigManagerS@@QAE_NXZ      007cd8d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
