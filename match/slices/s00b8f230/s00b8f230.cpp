@@ -372,8 +372,7 @@ char S::FUN_00b8fb70()
   if (p != 0) {
     char* first = *(char**)(p + 0xbc);
     char* last = *(char**)(p + 0xc0);
-    void* vfn = VFn(self, 0x18);
-    void* id = (void*)((void* (__thiscall*)(char*))vfn)(self);
+    void* id = (void*)((void* (__thiscall*)(char*))((void**)*(void***)self)[6])(self);
     void* res = FUN_00ac0d80(first, last, id);
     result = (last != res);
   }
