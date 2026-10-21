@@ -1,4 +1,5 @@
 // slice s00a85c00 -- EA::Swarm distribute emitter helper ("cDistributeEffectSimulator",
+#include <intrin.h>
 // name guessed).  0x00a85c00..0x00a86114 are the methods of one GmeIComponent-derived
 // class (its two vtables are 0x1458130 / 0x145812c); 0x00a86120.. onwards belongs to the
 // sibling distribution-simulator class that shares the same vtable pair.
@@ -522,6 +523,7 @@ void* cDistributeSimulator::Destroy(uint32 flags)
 {
     mVtbl00 = 0x1458130;
     mVtbl04 = 0x145812c;
+    _ReadWriteBarrier();
     if (mpRef8c) {
         cIRefObj* r = mpRef8c;
         (*(void(__thiscall**)(cIRefObj*))(*(uint32*)r + 0xc))(r);
