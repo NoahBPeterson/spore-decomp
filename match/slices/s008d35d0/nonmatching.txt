@@ -1,0 +1,7 @@
+008d38d0 385 FUN_008d38d0(a,b,c): median-of-three comparator on 16-byte glyph keys (sort helper); same results, regalloc/branch layout differ. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (400 valid, 98.3% coverage)
+008d3b70 287 FUN_008d3b70(...): sift-down heap rebuild over 16-byte key records; same results, regalloc/branch layout differ. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (232 valid, 74.7% coverage)
+008d4250 242 FUN_008d4250(a,b,p3,p4,p5): quicksort partition on 16-byte keys; same results, regalloc differs. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (376 valid, 100.0% coverage)
+008d4320 182 FUN_008d4320(a,b,c,p4): intro/heap sort driver; same results, regalloc/branch layout differ. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (309 valid, 100.0% coverage)
+008d3820 157 FUN_008d3820(a,b): insertion sort of 16-byte keys; same results, regalloc differs. flags /O2 /MD /Gy /EHsc /TP; difftest WEAK (88 valid, 12.9% coverage)
+008d40b0 70 FUN_008d40b0(a,b,p3): heapify-all driver (bottom-up sift-down); same results, layout differs. flags /O2 /MD /Gy /EHsc /TP; difftest WEAK (344 valid, 34.9% coverage)
+008d4110 141 FUN_008d4110(a,b,p3): shell/heap extraction pass over 16-byte keys; same results, layout differs. flags /O2 /MD /Gy /EHsc /TP; difftest WEAK (362 valid, 30.5% coverage)
