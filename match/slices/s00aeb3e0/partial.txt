@@ -1,0 +1,6 @@
+00aeb5b0 16 equivalence FAIL: 5/5 valid inputs mismatched; first: execution
+00aeb7b0 167 equivalence FAIL: 5/5 valid inputs mismatched; first: call #0 (depth 1)
+00aeb890 154 equivalence FAIL: 5/5 valid inputs mismatched; first: execution
+00aeb960 187 equivalence FAIL: 5/5 valid inputs mismatched; first: execution
+00aebb30 91 equivalence FAIL: 5/5 valid inputs mismatched; first: execution
+00aebc10 152 equivalence FAIL: 5/14 valid inputs mismatched; first: eax

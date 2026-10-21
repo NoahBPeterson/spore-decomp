@@ -1,0 +1,8 @@
+00aeb3e0 410 equivalence UNSUPPORTED (only 0/170 inputs valid)
+00aeb680 89 equivalence PASS
+00aeb700 5 equivalence PASS
+00aeb720 27 equivalence UNSUPPORTED (only 0/167 inputs valid)
+00aeb760 22 equivalence UNSUPPORTED (only 0/381 inputs valid)
+00aeba50 187 equivalence UNSUPPORTED (only 0/400 inputs valid)
+00aebcd0 230 equivalence WEAK
+00aebde0 93 equivalence UNSUPPORTED (original reads ecx at entry but our declaration passes nothing there)
