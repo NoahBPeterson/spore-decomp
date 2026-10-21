@@ -1,0 +1,41 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast   (no /EHsc: the original ctors/dtors carry no unwind frames)
+#
+# Slice s009e3580 = nSPCreatureAnim gait-command data (Anim::gcmdd, the Channel cells and key table,
+# the keyed Inner/Entry copy helpers).  3/15 byte-exact.  The other 12 are complete, compiling C++
+# that reproduces the original control flow, layout and observable behaviour; the equivalence gate
+# run at this slice's own flags reports 2 PASS (Channel::Channel, Inner::Inner(int,int)), 9 WEAK
+# (no mismatch at all, just fewer than 200 viable random inputs) and 2 UNSUPPORTED (the gcmdd ctor
+# stores our own vtable constant, and EntryAssignRange cannot be given a valid range pair).
+#
+# Two systematic codegen differences account for most of the rows below:
+#  * Inner::Assign 0x009dbc60 / AssignItems 0x009e1370 live in the original's own TU, so MSVC 2008
+#    reuses ecx across the back-to-back __thiscall calls.  Our copies are external declarations and
+#    every call needs its own `mov ecx, this` (1 extra instruction, 2 bytes).  Verified with the
+#    scratch probes work/match/scratch_s009e3580_p1.cpp / _p2.cpp.
+#  * Small `__forceinline` ctors (Slot/GaitA/GaitB/GaitC, ChannelHead) are scheduled slightly
+#    differently by our compiler run than in the original (constant reloads, register choice).
+
+009e3580 342 Anim::gcmdd::gcmdd: complete; inherits GaitC (base at +4, id 0 / half 0.5 at +8), sets its own vptr at +0, then GaitB (+0x1c), GaitA (+0x74), Path (+0xb8), Gait (+0xd0), 0.0f / 0.5f / 0 at +0x110..+0x118, Inner (+0x11c), 0.8f / true / 0.0f at +0x1bc..+0x1c4; total 0x1c8. Differences: MSVC re-loads g_Eps/g_OneMinusEps once per GaitB field (4 loads instead of 2) and schedules the Path/Gait/Inner blocks in a different order, 463 vs 447 B. All stores now land at the original offsets (the earlier missing vtable shifted every field by 4). difftest verdict UNSUPPORTED (memory pool @40010000: our own vtable addresses 300010a8 / 30001004 vs the image's 01447cc8 / 01447cc4; every other dword of the object matches).
+
+009e3790 20 Inner::operator=: complete; `if (this != &o) { Assign(&o); AssignItems(&o); if (g_1515dc) AssignGaits(&o); } return *this;`. The only difference is the extra `mov ecx, esi` before AssignItems (the same-TU ecx reuse described above), 50 vs 48 B. difftest verdict WEAK (113/400 valid inputs, 100.0% coverage, no mismatch).  Resolved by the exact decorated name in symbols/slices/s009e3580.txt; the code is a 2-byte superset of the original.
+
+009e37c0 1157 Inner::Blend: complete; 26 masked fields p[0..25], each `if (!(f0 & mask)) p[i] = (b->p[i] - a->p[i]) * t + a->p[i];` with the original mask constants, plus the keyed BlendKeys path. Same size (1316 vs 1314 B) but the field blocks and the mask tests are scheduled in a different order, so most bytes differ. difftest verdict WEAK (154/400 valid inputs, 92.0% coverage, no mismatch).
+
+009e3cf0 169 Channel::Channel: complete; gain 0.8f, on = true, Inner default ctor at +8, then the default head copied as a dword pair (the original's temporary keeps the 3 pad bytes uninitialised), `in = Inner()`, tail pointers zeroed. Same instruction sequence as the original but our register allocation keeps `1` in bl, which shifts the stack temps by 4 and changes the frame, 223 vs 231 B. difftest verdict PASS (400/400 valid inputs, 84.8% coverage).
+
+009e3de0 93 Channel::Reset: complete; the same default head copy (dword pair, pad left uninitialised), `in = Inner()`, tail.b = 0, tail.e/cap cleared only when non-null. Differences: the def head is materialised at esp+8 instead of esp+4, ecx reloads before AssignItems (same-TU issue) and esi/edi swapped, 227 vs 224 B. difftest verdict WEAK (130/253 valid inputs, 84.4% coverage, no mismatch).
+
+009e4030 454 EntryArr::Sample: complete; scans the entry array for the last key <= `key`, blends the two neighbours `(key - e0->key) / (e1->key - e0->key)` and otherwise copies v[prev].in; sets out->flag = (key == v[prev].key) (the original tests ZF|PF through lahf, i.e. equality, not inequality). Differences: MSVC unrolls our scan 4x (366 vs 229 B) and the copy path goes through Entry::operator= instead of the inlined Inner::Assign pair. difftest verdict WEAK (93/400 valid inputs, 100.0% coverage, no mismatch).
+
+009e4120 44 Entry::Entry(const Entry&): complete; key = o.key then Inner copy-ctor (items/gaits cleared, Assign, AssignItems, AssignGaits). Differences: this/zero live in ebx/edi instead of edi/ebp (the original's `mov edi,ecx; xor ebp,ebp`), the six zero stores are ordered 0x14..0x0c/0x28..0x20 instead of 0x0c..0x14/0x20..0x28, and ecx is reloaded before AssignItems (same-TU issue), 81 vs 79 B. difftest verdict WEAK (146/400 valid inputs, 100% coverage, no mismatch).
+
+009e4170 76 EntryConstructN: complete; `while (n) { if (dst) { key, clear both vectors, Assign, AssignItems, AssignGaits } n--; dst++; }`. Differences: the dst null test is a `cmp esi,0/je` instead of `lea eax,[esi-0x18]/test eax,eax/je`, ecx reloads before AssignItems and AssignGaits (same-TU issue) and the pointers are advanced by 0xa4 rather than through the esi-0x18 form, 108 vs 112 B. difftest verdict WEAK (181/400 valid inputs, 100% coverage, no mismatch).
+
+009e41e0 97 EntryAssignRange: complete; forward range assignment, `dst->key = first->key; if (&dst->in != &first->in) { Assign; AssignItems; if (g_1515dc) AssignGaits; }`. Differences: the loop head is laid out as a `for` with an extra test instead of the original's bottom-tested loop and ecx is reloaded before AssignItems (same-TU issue), 105 vs 128 B. difftest verdict UNSUPPORTED (0/400 valid inputs: the harness cannot build a valid non-overlapping Entry range pair; all tries fault in the pool).
+
+009e4260 59 EntryCopy: complete; the same forward copy as EntryAssignRange but returning the final dst pointer. Differences: ecx reload before AssignItems (same-TU issue) and a different rotation of the loop, 109 vs 107 B. difftest verdict WEAK (97/400 valid inputs, 17.9% coverage, no mismatch).
+
+009e42d0 33 EntryCopyBackward: complete; `while (last != first) { --last; --dstEnd; dstEnd->key = last->key; if (&dstEnd->in != &last->in) {...} } return dstEnd;`. The original reuses ecx for the AssignItems call and only reloads it before AssignGaits; we reload before both (same-TU issue), which shifts every rel8 by 2 bytes, 124 vs 122 B. difftest verdict WEAK (69/400 valid inputs, 17.5% coverage, no mismatch).
+
+009e4350 138 Inner::Inner(int,int): complete; `*this = Inner(); f8 = index; items.reserve(count); Item def = {0.0f, 0.5f, 0}; items.resize(count, def); if (g_1515dc) gaits.reserve(count);`. Differences: the temporary Inner is zeroed through a different store order and ecx is reloaded before the AssignItems/AssignGaits calls inside the inlined operator= (same-TU issue), 251 vs 249 B. difftest verdict PASS (254/400 valid inputs, 87.5% coverage).

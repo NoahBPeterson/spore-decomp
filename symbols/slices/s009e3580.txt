@@ -1,0 +1,17 @@
+; slice s009e3580 = 0x009e3580..0x9e4350 - exact decorated names for the difftest resolver
+; (manifest rows are byte-exact; the rest are the nonmatching.txt entries)
+009e3580 ??0gcmdd@Anim@@QAE@XZ  # Anim::gcmdd::gcmdd
+009e3740 ?Create@gcmddHost@@QAEXH@Z  # byte-exact
+009e3790 ??4Inner@@QAEAAU0@ABU0@@Z  # Inner::operator=
+009e37c0 ?Blend@Inner@@QAEXPBU1@M0@Z  # Inner::Blend
+009e3cf0 ??0Channel@@QAE@XZ  # Channel::Channel
+009e3de0 ?Reset@Channel@@QAEXXZ  # Channel::Reset
+009e3ec0 ??0gcmddTable@@QAE@XZ  # byte-exact
+009e3f70 ?Reset@gcmddTable@@QAEXHH@Z  # byte-exact
+009e4030 ?Sample@EntryArr@@QAEXMPAUInner@@@Z  # EntryArr::Sample
+009e4120 ??0Entry@@QAE@ABU0@@Z  # Entry::Entry(const Entry&)
+009e4170 ?EntryConstructN@@YAXPAUEntry@@IPBU1@@Z  # EntryConstructN
+009e41e0 ?EntryAssignRange@@YAXPAUEntry@@00@Z  # EntryAssignRange
+009e4260 ?EntryCopy@@YAPAUEntry@@PAU1@00@Z  # EntryCopy
+009e42d0 ?EntryCopyBackward@@YAPAUEntry@@PAU1@00@Z  # EntryCopyBackward
+009e4350 ??0Inner@@QAE@HH@Z  # Inner::Inner(int,int)
