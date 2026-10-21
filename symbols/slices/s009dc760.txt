@@ -1,0 +1,75 @@
+# Slice s009dc760 (gold4 slice 102) — animation curve / spline family
+
+## Flags
+/O2 /MD /Gy /EHsc /TP /arch:SSE   (confirmed: reproduces the 3 byte-exact wrappers)
+
+## Overview
+Hermite / Catmull-Rom spline tracks stored as stride-based record vectors
+(`{begin, end}` int pairs).  Every track flavour is one of three shapes:
+
+| shape | stride | components | comp offsets | mode byte | tangent slot | vtbl |
+|-------|--------|-----------:|--------------|-----------|--------------|------|
+| A     | 0x44   | 3          | +8/+0xc/+0x10| +0x1d     | +0x18        | 0x1447cc0 |
+| B     | 0x58   | 1          | +8..+0x14    | +0x14/+0x15| +0xc         | 0x1447cc4 |
+| C     | 0x1c   | 1          | +8           | +0x14/+0x15| +0xc         | 0x1447cc8 |
+
+Common track record: `{ int count; char* data; }` at offset 0 (so `o[0]`,
+`o[1]`, and `count = (o[1]-o[0]) / stride`).
+
+Key record (per flavour): `int time` at +4 (`cvtsi2ss` compare key); value(s)
+at +8..; `u8 mode` (low 2 bits, `& 3`) selects the tangent rule:
+  0 = auto (finite-difference / Catmull-Rom),
+  1 = linear (v - vprev),
+  2 = flat (0),
+  3 = explicit (stored tangent at the slot).
+
+Result record: `void* vtbl; int time; float comps...` then mode/flag bytes.
+
+## Functions
+- 0x009dc760 `Curve760::CopyInto(char* dst)` — count-based copy of 0xc-stride
+  records into `dst+0x10` (count) and interleaved `dst+i*8+0x14/0x18`.
+- 0x009dc7a0 `FUN_009dc7a0(float* v) -> float` — clamp 2-vector length to 12.0f
+  in place, return pre-clamp length.  x87 `fsqrt`, `fadd 4294967296.0f` fixup.
+- 0x009dc860 `Curve3c44::Find(float t, int* out)` — upper-bound search, stride
+  0x44, magic `0x78787879` (sar 5).  Writes `{lo,hi}` clamps.
+- 0x009dc930 `Curve3c44::Eval(void* out, float t, int* range)` — 3-component
+  Hermite evaluator, stride 0x44, result vtbl 0x1447cc0.
+- 0x009dcc50 `Curve3c44::Sample(void* out, float t)` — Find + Eval wrapper.
+- 0x009dcc90 `Curve1c58::Find` — stride 0x58, magic `0x2e8ba2e9` (sar 4).
+- 0x009dcd60 `Curve1c58::Eval` — 1-component, stride 0x58, vtbl 0x1447cc4.
+- 0x009dd0c0 `Curve1c58::Sample`.
+- 0x009dd100 `Curve1c1c::Find` — stride 0x1c, magic `0x92492493`.
+- 0x009dd1d0 `Curve1c1c::Eval` — 1-component, stride 0x1c, vtbl 0x1447cc8,
+  seh-allocated.
+- 0x009dd440 `Curve1c1c::Sample`.
+- 0x009dd480 `CurveStr0a4::Lookup(float t, char** out) -> float` — 0xa4-stride
+  float-time key search returning the interpolation fraction in st0.
+- 0x009dd530 / 0x009dd5b0 / 0x009dd630 — record-range copiers for stride
+  0x44 / 0x58 / 0x1c; `(dstEnd, first, last, dst)`, all `__cdecl`.
+
+## Constants
+- 0x01447c88 = 1e-6f (`0x358637bd`)
+- 0x01447c8c = 12.0f
+- 0x01447ccc = ~1.0f (`0x3f7fffef`)
+- 0x01471064 = 0.5f
+- 0x01470f1c = 2.0f
+- 0x01485720 = 1.0f
+- 0x013eb95c = 3.0f
+- 0x013f4fd0 = 4294967296.0f (negative int→float fixup for `fadd`)
+
+## Callee conventions
+- 0x009dc860 / 0x009dcc90 / 0x009dd100: thiscall, `ret 8`, (float t, int* out).
+- 0x009dc930 / 0x009dcd60 / 0x009dd1d0: thiscall, `ret 0xc`, (void* out, float t, int* range).
+- 0x009dcc50 / 0x009dd0c0 / 0x009dd440: thiscall, `ret 8`, (void* out, float t) → returns out.
+- 0x009dd480: thiscall, `ret 8`, (float t, char** out) → float in st0.
+- 0x009dd530/5b0/630: cdecl, (void** dstEnd, char* first, char* last, char* dst).
+
+## Byte-exactness notes
+3/15 byte-exact: 009dcc50, 009dd0c0, 009dd440 (the three wrappers).
+The dominant blocker for the rest is that the originals were compiled with
+**SSE scalar float** (`movss`/`comiss`/`cvtsi2ss`/`divss`), while
+`/arch:SSE /fp:precise` emits **x87** (`fld`/`fcompi`/`fild`/`fdiv`).
+`/fp:fast` switches the searches to SSE but *shrinks* the code below the
+original size (original has `/fp:precise`-style redundant ops) and breaks the
+three wrappers that currently match.  The record copiers (009dd530/5b0) also
+use a `rep movsd` tail that a plain dword-loop source does not reproduce.

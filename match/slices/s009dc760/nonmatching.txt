@@ -1,0 +1,12 @@
+009dc760  50  register allocation (dst in callee-saved vs scratch); x87 copy sequence otherwise identical
+009dc7a0  160 fixed st0/x87-state float-rounding on the clamp path (21/26 inputs agree); size 197 vs 187
+009dc860  197 upper-bound search: original uses SSE scalar compare (cvtsi2ss/comiss) but /arch:SSE+/fp:precise emits x87
+009dc930  724 3-component Hermite evaluator: stale-eax return (void fn) + SSE compare/branch layout differ
+009dcc90  196 upper-bound search: SSE scalar compare vs x87 (semantically equivalent)
+009dcd60  760 1-component Hermite evaluator (stride 0x58): stale-eax return + SSE compare/branch layout differ
+009dd100  191 upper-bound search: SSE scalar compare vs x87 (semantically equivalent)
+009dd1d0  647 1-component Hermite evaluator (stride 0x1c): stale-eax return + SSE compare/branch layout differ
+009dd480  172 SSE scalar compare/div (movss/comiss/subss/divss) vs x87; size 177 vs 176
+009dd530  108 rep-movsd tail-copy form not reproduced by dword-loop source
+009dd5b0  124 rep-movsd tail-copy form not reproduced; size 138 vs 123
+009dd630  85  register allocation (dst kept in callee-saved esi vs original scratch edx)
