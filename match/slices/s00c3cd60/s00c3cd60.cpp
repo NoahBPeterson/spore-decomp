@@ -48,7 +48,7 @@ struct Transform {
 };
 
 namespace EA { namespace Swarm {
-struct cIVisualEffect {
+class cIVisualEffect { public:
     virtual int  AddRef() = 0;
     virtual int  Release() = 0;
     virtual void Start(int hardStart) = 0;                                  // 0x08
@@ -71,7 +71,7 @@ struct IEffectsManager {
 }}
 
 namespace EA {
-template <class T> struct AutoRefCount {
+template <class T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount() : mpObject(0) {}
     explicit AutoRefCount(T* p);        // 0x61df40 (tool instance)
@@ -81,19 +81,19 @@ template <class T> struct AutoRefCount {
     operator bool() const { return mpObject != 0; }
 };
 namespace Random {
-struct RandomLinearCongruential { double RandomDoubleUniform(); };   // 0x9360d0
+class RandomLinearCongruential { public: double RandomDoubleUniform(); };   // 0x9360d0
 }
 }
 
 namespace SP {
 
-struct cEmpire {
+class cEmpire { public:
     uint32_t pad00[0x58 / 4];
     int      mArchetype;        // +0x58
     const ResourceKey& GetUFOKey();     // 0xc326b0
 };
 
-struct cGameData {
+class cGameData { public:
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual void v20(); virtual void v24(); virtual void v28();
@@ -104,7 +104,7 @@ struct cGameData {
     uint32_t pad04[(0x34 - 4) / 4];
 };
 
-struct cLocomotiveObject {
+class cLocomotiveObject { public:
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual void v20(); virtual void v24(); virtual void v28();
@@ -122,7 +122,7 @@ struct cSpaceToolData {
     bool     mbInUse;           // +0x13c
 };
 
-struct cCombatant {
+class cCombatant { public:
     virtual ~cCombatant();
     virtual bool v04();
     virtual void v08();
@@ -143,7 +143,7 @@ struct cCombatant {
     uint32_t pad3c[(0xc8 - 0x3c) / 4];
 };
 
-struct cGonzagoTimer { void Stop(); };   // 0xbc3110
+class cGonzagoTimer { public: void Stop(); };   // 0xbc3110
 
 struct cMission { uint8_t pad[0x21c]; bool mbIgnoreAwareness; };   // +0x21c
 
@@ -184,7 +184,7 @@ struct cUFOSimulator {
     void RemovePoliticalID(int politicalID, int);           // 0x1001700
 };
 struct cPlayerInventory { cSpaceToolData* GetActiveTool(); };          // 0xff3f00
-struct cSPSimulatorSpaceGame {
+class cSPSimulatorSpaceGame { public:
     cPlayerInventory* GetPlayerInventory();                 // 0xa1ad60
     void f1005180(int);
 };
@@ -192,14 +192,14 @@ struct cSpaceCombatTuning {
     float GetDamageMultiplier();                            // 0x102a5e0
     float GetLootDropChance(int ufoType);                   // 0x102a1d0
 };
-struct cStarManager { cEmpire* GetEmpireByID(int id); };    // 0xba9370
-struct cRelationshipManager {
+class cStarManager { public: cEmpire* GetEmpireByID(int id); };    // 0xba9370
+class cRelationshipManager { public:
     float RecordEvent(int politicalID1, int politicalID2, uint32_t eventType, float scale);   // 0xd06240
 };
-struct cSPUIEventLog {
+class cSPUIEventLog { public:
     void PostFeedbackEvent(uint32_t a, uint32_t b, int c, int d, int e, int f);   // 0xdd8640
 };
-struct cSimulatorUniverse {
+class cSimulatorUniverse { public:
     void AdjustAwareness(int politicalID, int amount);      // 0x1014a80
     void OnPlayerDeath(int attackerPoliticalID);            // 0x100e6e0
     static cSimulatorUniverse* sInstance;                   // 0x16dc798
@@ -208,18 +208,18 @@ struct cAchievementsController {
     void Trigger(uint32_t id, int a, int b);                // 0x676ed0
     void AutoTest(uint32_t id, int a);                      // 0x676e90
 };
-struct cGameViewManager {
+class cGameViewManager { public:
     bool a98020();
     int  GetAccessFlags();                                  // 0xff0420
 };
-struct cPlanet {
+class cPlanet { public:
     bool HasFlag(uint32_t id);                              // 0xc772c0
     void SetFlag(uint32_t id);                              // 0xc77bf0
 };
-struct cTerrainEditor { cPlanet* GetCurrentTerrainSphere(); };   // 0xf67d90
+class cTerrainEditor { public: cPlanet* GetCurrentTerrainSphere(); };   // 0xf67d90
 struct cMissionManager { bool IsRunning(); };               // 0xfeba90
 struct cTutorial { void Trigger(uint32_t id); };            // 0x106dcd0
-struct cSpaceTokenTranslator { uint32_t pad[0x30 / 4]; cGameData* mpDestroyedUFO; };   // +0x30
+class cSpaceTokenTranslator { public: uint32_t pad[0x30 / 4]; cGameData* mpDestroyedUFO; };   // +0x30
 struct cSpatialObject;
 struct cMessageData {
     cMessageData(cLocomotiveObject* obj, int);              // 0xad7a30

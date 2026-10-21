@@ -262,7 +262,7 @@ public:
     uint32_t pad004[(0x568 - 4) / 4];
 };
 
-struct cCreatureAbility {
+class cCreatureAbility { public:
     uint32_t pad00[2];
     int mType;                       // 0x08
     uint32_t pad0c[(0x3c - 0x0c) / 4];
@@ -339,7 +339,7 @@ public:
     virtual void Start(int);                           // 0x08
 };
 
-struct cHerd { uint32_t pad[0x158 / 4]; float mDamageScale; };            // 0x158
+class cHerd { public: uint32_t pad[0x158 / 4]; float mDamageScale; };            // 0x158
 struct cAdventureData { uint32_t pad[0x494 / 4]; float mDamageScale; };   // 0x494
 struct cHungerData { uint8_t pad[0x388]; bool mbBusy; };                  // 0x388
 

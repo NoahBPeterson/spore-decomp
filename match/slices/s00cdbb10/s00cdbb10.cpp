@@ -182,7 +182,7 @@ struct cGameNounManager {
 };
 cGameNounManager* NounManager();                                             // 0x00b3d300
 
-struct cUIHints {
+class cUIHints { public:
     void UpdateHints(int a, int b);                                          // 0x0067c350
     void ShowHint_0067c830(uint32_t id);
 };

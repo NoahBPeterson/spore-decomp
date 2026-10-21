@@ -333,7 +333,7 @@ __forceinline cTerrainEntry& TerrainEntry(cPlanetRecord* record)
 
 namespace SP {
 
-class cSimPlanetLowLOD {
+struct cSimPlanetLowLOD { private:
 public:
     uint32_t pad000[0x4c / 4];
     cPlanet* mpPlanet;                   // +0x4c

@@ -83,10 +83,10 @@ struct cAvatarLocomotion {
     cLocomotionState* GetState();          // 0x00c41ec0
 };
 struct cCreatureAnimal { char pad[0xc0]; cAvatarLocomotion mLocomotion; };
-struct cGameNounManager { cCreatureAnimal* GetAvatar(); };   // 0x00b1fdb0
+class cGameNounManager { public: cCreatureAnimal* GetAvatar(); };   // 0x00b1fdb0
 cGameNounManager* NounManager();                             // 0x00b3d300
 
-struct cGameTimeManager { char pad[0x48]; uint8_t mPauseFlags; };
+class cGameTimeManager { public: char pad[0x48]; uint8_t mPauseFlags; };
 cGameTimeManager* GameTimeManager();                         // 0x00b3d380
 
 struct ITerrain {

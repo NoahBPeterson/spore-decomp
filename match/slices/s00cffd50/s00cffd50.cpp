@@ -61,17 +61,17 @@ struct cPlanetRecordEntry {
   int* mpBegin;  // +0x3c
   int* mpEnd;    // +0x40
 };
-struct cPlanetRecord {
+class cPlanetRecord { public:
   char pad[0x15c];
   int* mpEntriesBegin;  // +0x15c
   int* mpEntriesEnd;    // +0x160
   cPlanetLookup* GetLookup();               // 0x00b8de30
   cPlanetRecordEntry* GetEntry(int index);  // 0x00b8dec0
 };
-struct cEmpire {
+class cEmpire { public:
   cPlanetRecord* GetHomePlanet();  // 0x00c31730
 };
-struct cPlanet {
+class cPlanet { public:
   char pad[0x13c];
   cPlanetRecord* mpRecord;  // +0x13c
   cEmpire* GetEmpire();     // 0x00c71e30
@@ -82,13 +82,13 @@ struct cTuning {
 cTuning* GetTuning();         // 0x0102f810
 int MapPlanetType(int type);  // 0x00c6fe00
 
-struct cCity {
+class cCity { public:
   char pad[0x34];
   cISPEditorNameProvider mNameProviderObj;  // +0x34
   cISPEditorNameProvider* NameProvider() { return &mNameProviderObj; }
   int GetPopulation();                   // 0x00bd8b80 (planet-mode population)
 };
-struct cCivilization {
+class cCivilization { public:
   char pad[0x34];
   cISPEditorNameProvider mNameProviderObj;  // +0x34
   cISPEditorNameProvider* NameProvider() { return &mNameProviderObj; }
@@ -103,7 +103,7 @@ struct cCivilization {
   float GetTradeValue(int a);            // 0x00bf6fa0
 };
 
-struct cGameData {
+class cGameData { public:
   virtual void* pv0();
   virtual void* pv1();
   virtual void* pv2();
@@ -125,7 +125,7 @@ class cGameTokenTranslator : public cStringTokenTranslator {
 };
 
 int GetCurrentGameMode();  // 0x00b5b800
-struct cSPLivingUniverse {
+class cSPLivingUniverse { public:
   static cPlanet* GetActivePlanet();   // 0x01021260
   static cEmpire* GetPlayerEmpire();   // 0x01021300
 };

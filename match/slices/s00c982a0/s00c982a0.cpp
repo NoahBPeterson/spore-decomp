@@ -5,8 +5,8 @@
 #include "types.h"
 
 namespace SP {
-struct cTribe
-{
+class cTribe
+{ public:
     void UpdateToolPosition(int toolType);
     void* GetToolOfType(int toolType);      // 0x00c8f6e0, thiscall, returns a tool pointer
 };

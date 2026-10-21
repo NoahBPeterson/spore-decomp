@@ -22,7 +22,7 @@ void* operator new[](unsigned int n, const char* name, int flags, unsigned int d
 namespace eastl {
 extern char gEmptyString[];   // 0x01667bac
 
-struct allocator {
+class allocator { public:
     void* allocate(unsigned int n) {
         return operator new[](n, "Editor", 0, 0,
             "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
@@ -172,7 +172,7 @@ struct IWinProc {
     PV
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     void Init(const wchar_t* pName, uint32_t typeID, int a, uint32_t instanceID);   // 0x00812160
     IWindow* FindWindowByID(uint32_t controlID, bool recursive);                    // 0x008105b0
 };
@@ -184,7 +184,7 @@ struct IGameInputManager {
 IGameInputManager* GameInputManager();                                              // 0x00b3d250
 
 namespace SP {
-struct cGameEditModeStrategy {
+class cGameEditModeStrategy { public:
     static eastl::string16* GetLastLoadedScenario();                                // 0x00d1bee0
 };
 }

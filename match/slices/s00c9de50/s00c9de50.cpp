@@ -204,7 +204,7 @@ extern const uint32_t kPropM34;             // 0157c5b0
 extern const uint32_t kPropM3c;             // 0157c5b4
 
 namespace SP {
-struct cTribeTool {
+class cTribeTool { public:
     static bool LoadTribeToolData();
 };
 

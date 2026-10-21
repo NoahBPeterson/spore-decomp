@@ -244,7 +244,7 @@ struct cSPUIEventLog {
 };
 cSPUIEventLog* EventLog();                                              // 00b3d3e0
 
-struct cSPUICursorManager { void SetLocalCursor(uint32_t id); };        // 00801bb0
+class cSPUICursorManager { public: void SetLocalCursor(uint32_t id); };        // 00801bb0
 cSPUICursorManager* CursorManager();                                    // 0067cab0
 
 struct cPlanetModel {

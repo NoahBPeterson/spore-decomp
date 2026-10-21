@@ -98,7 +98,7 @@ namespace eastl {
 template <typename T> inline const T& min(const T& a, const T& b) { return (b < a) ? b : a; }
 
 template <typename T>
-struct vector {
+class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
@@ -111,7 +111,7 @@ struct vector {
 
 // fixed_vector<float, 384, true>: three pointers, the overflow allocator, the pool pointer, then the buffer.
 template <typename T, int nodeCount>
-struct fixed_vector {
+class fixed_vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
@@ -151,12 +151,12 @@ extern cGameMode kCivGameMode;   // 0x01654c04
 cGameMode* GetCurrentGameMode(); // 0x00b5b800
 
 struct cCivModeTribe { bool f1540(); };                    // 0x00cf1540
-struct cCivModeStrategy {
+class cCivModeStrategy { public:
     static cCivModeStrategy* Get();                        // 0x00cf74c0
     cCivModeTribe* f74f0();                                // 0x00cf74f0
 };
 
-struct cDefaultBeamProjectile {
+class cDefaultBeamProjectile { public:
     uint32_t pad0[0x16c / 4];
     bool mb16c;                                            // +0x16c
     bool mb16d;                                            // +0x16d
@@ -173,7 +173,7 @@ struct cDefaultBeamProjectile {
     bool IsHittingPlayer();                                // 0x00cb5b70
 };
 
-struct cSpatialObject {
+class cSpatialObject { public:
     // vtable slot 0x2e (+0xb8): Cast
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04();
     virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09();
@@ -195,7 +195,7 @@ struct cSpatialObject {
     void StopEffect(uint32_t id, int hard);                // 0x00c889c0
 };
 
-struct cSpatialObjectView {
+class cSpatialObjectView { public:
     uint32_t pad0[3];
     cSpatialObject* mpObject;                              // +0x0c
     uint32_t pad10[(0x34 - 0x10) / 4];
@@ -204,7 +204,7 @@ struct cSpatialObjectView {
     void HandleSimulationUpdate(int unk, int deltaTime);   // 0x00e92ca0
 };
 
-struct cDefaultBeamProjectileView : cSpatialObjectView {
+class cDefaultBeamProjectileView : public cSpatialObjectView { public:
     bool mbAnyActive;                                      // +0x38
     bool mbHidden;                                         // +0x39
     bool mb16c;                                            // +0x3a

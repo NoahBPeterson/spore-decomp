@@ -39,7 +39,7 @@ template <class T> struct AutoRefCount {
     }
 };
 
-struct cSPSpaceCombatTuning {
+class cSPSpaceCombatTuning { public:
     int   GetWeaponLevel(Vec3 pos);                       // 0x102a360 (ret 0xc)
     float GetBackgroundTurretDPS(int level);              // 0x1029de0
     float GetBackgroundBomberDPS(int level);              // 0x1029d50
@@ -51,7 +51,7 @@ struct cSPSpaceCombatTuning {
 };
 cSPSpaceCombatTuning* GetSpaceCombatTuning();             // 0x1029940
 
-struct cEmpire {
+class cEmpire { public:
     float GetBackgroundFighterDPS();                      // 0xc31890
     float GetBackgroundBomberDPS();                       // 0xc318c0
     float GetBackgroundTurretDPS();                       // 0xc318f0
@@ -59,12 +59,12 @@ struct cEmpire {
     float GetTurretHealth();                              // 0xc31960
 };
 
-struct cStarManager {
+class cStarManager { public:
     cEmpire* GetEmpireByID(int id);                       // 0xba9370
 };
 cStarManager* StarManager();                              // 0xb3d2a0
 
-struct cCivData {
+class cCivData { public:
     const Vec3& GetCities();                              // 0x5c65e0
 };
 
@@ -89,7 +89,7 @@ struct SimpleVectorU {
     }
 };
 
-struct cCity {
+class cCity { public:
     uint8_t  pad00[0x24];
     int      mnCount;               // +0x24
     uint8_t  pad28[0xbc - 0x28];
@@ -126,7 +126,7 @@ struct ForceElem {
     uint8_t  pad08[0x18];
 };
 
-struct cPlanetRecord {
+class cPlanetRecord { public:
     uint8_t  pad00[0x134];
     BuildingRec* mpRecBegin;        // +0x134
     BuildingRec* mpRecEnd;          // +0x138

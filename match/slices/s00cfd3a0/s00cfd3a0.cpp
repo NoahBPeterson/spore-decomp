@@ -324,7 +324,7 @@ extern cCivModeStrategyRaw* gCivModeStrategy;   // 0x0169d2c8
 
 namespace SP {
 
-struct cGonzagoSubsystem {
+class cGonzagoSubsystem { public:
     virtual void s00();
     uint32_t pad04[8];
 };
@@ -332,7 +332,7 @@ struct IMessageListener {
     virtual bool HandleMessage(uint32_t messageID, void* message);
 };
 
-struct cCivModeStrategy : public cGonzagoSubsystem, public IMessageListener {
+class cCivModeStrategy : public cGonzagoSubsystem, public IMessageListener { public:
     bool mbReturningFromEditor;            // +0x28
     uint8_t pad29[3];
     uint32_t pad2c[10];

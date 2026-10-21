@@ -131,7 +131,7 @@ inline float ReadFloatProperty(uint32_t id, float def)
 
 namespace SP {
 
-struct cTribe {
+class cTribe { public:
     static uint32_t SetupHotSpot(const Vector3& dir);
 };
 

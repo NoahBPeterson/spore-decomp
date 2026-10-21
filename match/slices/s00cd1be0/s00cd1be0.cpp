@@ -114,7 +114,7 @@ struct cMessageServer {
     virtual void MessagePost(uint32_t id, void* data, int, void* handler);      // +0x18
 };
 
-struct cUIHints { void SetEnabled(int hint, bool enabled); };   // 0x0067c420 (ret 8)
+class cUIHints { public: void SetEnabled(int hint, bool enabled); };   // 0x0067c420 (ret 8)
 struct cUIHintsB { void Show(int which); };                     // 0x00801930
 
 struct cDisplayStrategy {           // cTribeDisplayStrategy

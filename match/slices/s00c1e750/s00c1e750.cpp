@@ -139,7 +139,7 @@ public:
     virtual uint32_t GetNounID();                      // 0x20
 };
 
-struct cCreatureAbility {
+class cCreatureAbility { public:
     uint32_t pad00[2];
     int mType;                       // 0x08
     uint32_t pad0c[(0x40 - 0x0c) / 4];
@@ -283,7 +283,7 @@ public:
     cSpearTarget mTarget;                              // 0x53c
     void SetInitialVelocity(const Vector3& v);         // 0x00cb7040
 };
-struct cGameNounManager {
+class cGameNounManager { public:
     template <class T> T* CreateNoun();
 };
 template <> cSpear* cGameNounManager::CreateNoun<cSpear>();   // 0x00c0fcd0

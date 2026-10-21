@@ -110,7 +110,7 @@ struct IWindow {
 using UTFWin::IWindow;
 enum { kWinFlagVisible = 1 };
 
-struct cSPUILayout {                                      // 0xc bytes
+class cSPUILayout { public:                                      // 0xc bytes
     uint32_t pad[3];
     void SetVisibility(bool visible);                     // 0x00810590
     IWindow* FindWindowByID(uint32_t controlID, bool recursive); // 0x008105b0
@@ -119,7 +119,7 @@ struct cSPUILayout {                                      // 0xc bytes
 struct CursorAttachmentLayout { void SetWindow(IWindow* w); };   // 0x008017f0
 CursorAttachmentLayout* FUN_0067cab0();
 
-struct cUIHints { uint32_t pad[0x12]; int mState; void UpdateHints(int a, bool b); }; // 0x0067c350
+class cUIHints { public: uint32_t pad[0x12]; int mState; void UpdateHints(int a, bool b); }; // 0x0067c350
 cUIHints* FUN_0067cac0();
 
 struct cSwatchManager {
@@ -131,7 +131,7 @@ cSwatchManager* FUN_0067cad0();
 struct cUnknownCF74 { void FUN_00cf7a30(); };
 cUnknownCF74* FUN_00cf74c0();
 
-struct cSPUIPropertyLayout {                              // city-stats rollover (0xb0 bytes)
+class cSPUIPropertyLayout { public:                              // city-stats rollover (0xb0 bytes)
     virtual void AddRef(); virtual void Release();
     virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
     virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
@@ -213,10 +213,10 @@ extern bool g_bCommunityEditorFirstActivate;              // 0x0158236c
 // ---- game objects ---------------------------------------------------------
 namespace SP {
 
-struct cDirectPropertyList { void SetBoolProperty(uint32_t id, bool value); };  // 0x006a17e0
+class cDirectPropertyList { public: void SetBoolProperty(uint32_t id, bool value); };  // 0x006a17e0
 extern cDirectPropertyList* g_pDirectProps;               // 0x015fd918
 
-struct cGameTimeManager { void IncPauseGate(uint32_t gate); };                 // 0x00b32220
+class cGameTimeManager { public: void IncPauseGate(uint32_t gate); };                 // 0x00b32220
 cGameTimeManager* GameTimeManager();                      // 0x00b3d380
 
 struct cCommunityCamera {                                 // 0x00b3d280 accessor
@@ -243,8 +243,8 @@ struct cEffectsManager {
 cEffectsManager* EffectsManager();                        // 0x0067ddd0
 
 struct cGameNoun;
-struct cCivilization;
-struct cGameNounManager {
+class cCivilization;
+class cGameNounManager { public:
     void RemoveNoun(cGameNoun* noun);                     // 0x00b225d0
     cCivilization* GetPlayerCivilization();               // 0x00b25fb0
     void* GetCurrentTerrainSphere();                      // 0x00f67d90
@@ -261,7 +261,7 @@ struct INameable {                                        // the +0x34 subobject
 
 struct cToolTemplate { uint8_t pad[0x504]; ResourceKey mKey; };   // +0x504
 
-struct cCivilization {
+class cCivilization { public:
     uint8_t   pad00[0x34];
     INameable mNameable;                                  // +0x34
     uint8_t   pad38[0x40 - 0x38];
@@ -272,7 +272,7 @@ struct cCivilization {
 };
 
 struct cEmpireName { const wchar_t* mpBegin; };
-struct cEmpire {
+class cEmpire { public:
     const cEmpireName* GetName();                         // 0x005c65e0
     const ResourceKey* GetUFOKey();                       // 0x00c326b0
 };
@@ -286,7 +286,7 @@ struct cCommunityMode {                                   // community vfunc 0x6
 
 struct cHallNoun { uint8_t pad[0x34]; INameable mSpatial; };
 
-struct cCommunity {
+class cCommunity { public:
     virtual void AddRef();                                // 0x00
     virtual void Release();                               // 0x04
     virtual void v02();
@@ -318,7 +318,7 @@ struct cSpatialNoun {                                     // element of mPreExis
     cModel* FUN_00bce470();
 };
 
-struct cCity : cCommunity {
+class cCity : public cCommunity { public:
     cCivilization* GetCivilization();                     // 0x00bd9bf0
     void FUN_00bdc4a0(int);
     void* GetBuildings();                                 // 0x00c8e810 (vector)
@@ -333,7 +333,7 @@ struct cCity : cCommunity {
 };
 enum { TYPE_cCity = 0xee9b2232, TYPE_cTribe = 0x4f396a66 };
 
-struct cTribe : cCommunity {
+class cTribe : public cCommunity { public:
     uint16_t FUN_00c8e9f0();
     bool     IsHerbivore();                               // 0x00c8e850
     cToolTemplate* FUN_00c8e820(int toolType);
@@ -390,7 +390,7 @@ struct cCityMusicEditor {                                 // SP::Audio (0x114 by
     void Init();                                          // 0x00ea17b0
 };
 
-struct cCollectableItems {                                // 0x6dac bytes
+class cCollectableItems { public:                                // 0x6dac bytes
     virtual void AddRef(); virtual void Release();
     struct Key { uint32_t a, b; };
     uint32_t data[(0x6dac - 4) / 4];
@@ -401,7 +401,7 @@ struct cCollectableItems {                                // 0x6dac bytes
 };
 cCollectableItems::Key FUN_00593980(uint32_t listID, uint32_t itemID);  // cdecl
 
-struct cSPPalette {                                       // 0x40 bytes
+class cSPPalette { public:                                       // 0x40 bytes
     virtual void v0(); virtual void AddRef(); virtual void Release();
     uint32_t data[(0x40 - 4) / 4];
     cSPPalette();                                         // 0x005c5e30
@@ -421,7 +421,7 @@ struct cPaletteInfo {                                     // 0x34 bytes
     cPaletteInfo();                                       // 0x005c64e0
 };
 
-struct cSPPaletteUI {                                     // 0x6c bytes
+class cSPPaletteUI { public:                                     // 0x6c bytes
     virtual void AddRef(); virtual void Release();
     uint32_t data[(0x6c - 4) / 4];
     cSPPaletteUI();                                       // 0x005cb3b0
@@ -429,7 +429,7 @@ struct cSPPaletteUI {                                     // 0x6c bytes
     int  FindCategoryIndex();                             // 0x005ca9c0
 };
 
-struct cSPEditorBudget {                                  // 0x74 bytes
+class cSPEditorBudget { public:                                  // 0x74 bytes
     virtual void v0(); virtual void v1(); virtual void AddRef(); virtual void Release();
     uint32_t data[(0x74 - 4) / 4];
     cSPEditorBudget();                                    // 0x004575d0
@@ -437,7 +437,7 @@ struct cSPEditorBudget {                                  // 0x74 bytes
               IWindow* window, const wchar_t* title);     // 0x00457af0
 };
 
-struct cSPEditorNaming {                                  // 0x38 bytes
+class cSPEditorNaming { public:                                  // 0x38 bytes
     virtual void AddRef(); virtual void Release();
     uint32_t data[(0x38 - 4) / 4];
     cSPEditorNaming();                                    // 0x005bfff0
@@ -457,7 +457,7 @@ struct cLimitMeter {
     virtual void SetLimitType(int type);                  // 0x28
 };
 
-struct cString {
+class cString { public:
     uint32_t data[4];
     cString();                                            // 0x006b5060
     ~cString();                                           // 0x006b5240
@@ -497,10 +497,10 @@ void FUN_00e398e0(uint32_t eventID, const ResourceKey* key, ResourceKey* a, Reso
 void FUN_00ba58e0(cTribe* tribe, int);
 void FUN_00ba5a60(cCivilization* civ, int);
 
-struct cCommunityEditor;
+class cCommunityEditor;
 extern cCommunityEditor* g_pCommunityEditor;              // 0x0169d580
 
-struct cCommunityEditor {
+class cCommunityEditor { public:
     virtual void HandleMessage();                         // IHandlerRC primary base (vptr +0)
     uint32_t pad04[4];
     AutoHandler   mActiveAutoHandler;                     // +0x14

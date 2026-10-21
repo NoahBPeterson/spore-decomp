@@ -16,7 +16,7 @@ void* operator new[](unsigned int n, const char* name, int flags, unsigned int d
 namespace eastl {
 extern char gEmptyString[];   // 0x01667bac
 
-struct allocator {
+class allocator { public:
     void* allocate(unsigned int n) {
         return operator new[](n, "Simulator", 0, 0,
             "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
@@ -113,7 +113,7 @@ int SplitPath(const wchar_t* pPath, wchar_t* pDrive, wchar_t* pDirectory, wchar_
               wchar_t* pExtension, int flags);                                           // 0x00930180
 }
 namespace ResourceMan {
-struct Key {
+class Key { public:
     uint32_t instanceID, typeID, groupID;
     Key(uint32_t i, uint32_t t, uint32_t g) : instanceID(i), typeID(t), groupID(g) {}
 };
@@ -265,7 +265,7 @@ struct IWinScrollbar {
     virtual void SetMaxValue(int value, bool notify);            // +0x34
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     IWindow* FindWindowByID(uint32_t id, bool recursive);   // 0x008105b0
     uint32_t mData[3];
 };

@@ -244,7 +244,7 @@ cSubsysB5e* FUN_00b3d230();
 void* GetCurrentGameMode_00b5b800();
 extern char DAT_01654c02;
 
-struct cUIHints { void UpdateHints_0067c350(int a, int b); };
+class cUIHints { public: void UpdateHints_0067c350(int a, int b); };
 cUIHints* FUN_0067cac0();
 struct cMissionLog { void f_00e2f270(int); };
 cMissionLog* FUN_00b3d4f0();
