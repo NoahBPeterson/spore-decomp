@@ -4,3 +4,4 @@ slices/s00d07770/s00d07770.cpp  ?GetFlag@C103@@QAEHH@Z  00d07d00  /O2 /MD /Gy /E
 slices/s00d07770/s00d07770.cpp  ?SetFlag@C103@@QAEXHH@Z  00d07d20  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00d07770/s00d07770.cpp  ?SetTribeValue@C103@@QAEXHH@Z  00d07e10  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00d07770/s00d07770.cpp  ?GetTribeValue@C103@@QAEHH@Z  00d07d70  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00d07770/s00d07770.cpp  ?CanAffordScalar@C103@@QAEEHH@Z  00d07d50  /O2 /MD /Gy /EHsc /TP /arch:SSE

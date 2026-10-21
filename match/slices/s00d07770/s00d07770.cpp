@@ -328,7 +328,7 @@ void C103::SetFlag(int which, int v) {
 // @ 0x00d07d50
 u8 C103::CanAffordScalar(int desc, int amount) {
     int r = (*(int(__thiscall**)(void*, int))((char*)*(int**)this + 4))(this, desc);
-    return (u8)(r >= amount);
+    return (r >= amount) ? 1 : 0;
 }
 
 // ================================================================ 0x00d07d70
