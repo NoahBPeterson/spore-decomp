@@ -1,0 +1,13 @@
+00ba3860 365 callback-driven scenegoal sync loop transcribed structurally; scheduler/register allocation diverges heavily
+00ba39f0 114 hashtable find-or-insert (Ht at Goal+0x20); compiles and equivalence-WEAK, codegen register allocation differs
+00ba3b10 339 string/list visitor; eastl wstring temp lifetime + bucket-walk induction differ
+00ba3ca0 410 PlayerPlanetData copy ctor; five vector-block copies inlined vs out-of-line, field order differs
+00ba3ef0 43 vtable/float ctor; equivalence-PASS, float loads scheduled differently, vtbl stores reordered by scheduler
+00ba3f90 776 goal-state resolver; large multi-branch fn, register pressure and branch layout diverge
+00ba4290 138 AddCount; equivalence-WEAK, nested thiscall accessor calls reordered
+00ba43b0 110 vector lower_bound+insert; WKeyLess inlined twice vs shared, induction var differs
+00ba4430 167 PlayerPlanetData assign; same inlining/order issues as copy ctor
+00ba4520 36 sorted-vector find-or-add; prologue register order + 16-byte temp frame differ (equiv FAIL: hash-mod sentinel path)
+00ba45a0 54 backward range copy of 0xb0-byte elements; MSVC strength-reduced the dual decrement induction
+00ba4600 140 object post-spawn hookup; equivalence-WEAK, inlined accessors and vector walk diverge
+00ba46f0 35 object flag setter; equivalence-WEAK, thiscall vs stack arg for cGameData accessor differs

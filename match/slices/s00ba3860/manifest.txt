@@ -1,0 +1,5 @@
+slices/s00ba3860/s00ba3860.cpp  ?Field4@Goal@@QAEHPBX@Z  00ba4270  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ba3860/s00ba3860.cpp  ?Clear0c@Goal@@QAEXPBX@Z  00ba4330  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ba3860/s00ba3860.cpp  ?Set10@Goal@@QAEXPBXH@Z  00ba4350  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ba3860/s00ba3860.cpp  ?Field8@Goal@@QAEHPBX@Z  00ba4370  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ba3860/s00ba3860.cpp  ?Field0c@Goal@@QAEHPBX@Z  00ba4390  /O2 /MD /Gy /EHsc /TP /arch:SSE

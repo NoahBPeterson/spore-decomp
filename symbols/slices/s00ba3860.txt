@@ -1,0 +1,46 @@
+// Slice s00ba3860 -- Simulator goal-state container (Goal) and SP::PlayerPlanetData bookkeeping.
+// All 19 VAs have PDB name "None"; class/module identified structurally.
+
+00ba3860  __stdcall   void FUN_00ba3860(void* self)              // scenario-goal callback sync
+00ba39f0  thiscall    void* Ht::GetOrAdd1(const void* key)       // Ht at Goal+0x20 (buckets@+4,count@+8,size@+0xc)
+00ba3a80  thiscall    void* Eh::GetOrAdd2(const void* key)       // eastl::hashtable at Goal+0x40 (buckets@+0,count@+4,size@+8)
+00ba3b10  cdecl       u8 FUN_00ba3b10(void* iface, const char* name, Goal* g)
+00ba3ca0  thiscall    PPD* PPD::CopyCtor(const PPD& src)         // SP::PlayerPlanetData copy ctor (size 0xa4)
+00ba3ef0  fastcall    void* FUN_00ba3ef0(void* self)             // GB1/cGonzagoSubsystem vtable+float ctor
+00ba3f90  thiscall    int Goal::Resolve(const void* key, void* a, void* b)
+00ba4270  thiscall    int Goal::Field4(const void* key)          // = GetOrAdd1(key)[1]
+00ba4290  thiscall    int Goal::AddCount(const void* key, void* obj)
+00ba4330  thiscall    void Goal::Clear0c(const void* key)        // = GetOrAdd1(key)[3]
+00ba4350  thiscall    void Goal::Set10(const void* key, int v)   // = GetOrAdd1(key)[4]
+00ba4370  thiscall    int Goal::Field8(const void* key)          // = GetOrAdd1(key)[2]
+00ba4390  thiscall    int Goal::Field0c(const void* key)         // = GetOrAdd1(key)[3]
+00ba43b0  thiscall    void* VBlk::InsertAt(char* pos, const WKey* key)
+00ba4430  thiscall    PPD* PPD::Assign(const PPD& src)
+00ba4520  thiscall    void* VBlk::FindOrAdd2(const WKey* key)
+00ba45a0  cdecl       void* FUN_00ba45a0(char* begin, char* end, char* dst)  // backward copy of 0xb0-byte records
+00ba4600  cdecl       void FUN_00ba4600(void* obj)
+00ba46f0  cdecl       void FUN_00ba46f0(void* obj, int flag)
+
+// Callees referenced (out of slice):
+//   0x00ba3040 Ht::Find            (thiscall, ret 8)   out{node,bucketptr} = 2 dwords written into out
+//   0x00ba30c0 Ht::Insert          (thiscall, ret 0xc) allocates 0x24-byte node, copies 8 dwords, out{node,bucket,inserted}
+//   0x00ba3250 Ht::Insert2         (thiscall, ret 0xc) eastl::hashtable insert
+//   0x00645ed0 eastl::hashtable::find (thiscall, returns iterator by value)
+//   0x00ba2e50 LowerBound16        (cdecl, 4 args) lower_bound on 0x10-byte WKey records, compare (k0,k2,k1)
+//   0x00b97140 Vec16::InsertSorted (thiscall, ret 8) sorted insert into 0x10-byte records
+//   0x00ba2ec0 VBlk::Reserve       (thiscall, ret 8)
+//   0x00ac20d0 VBlk8::Reserve      (thiscall, ret 8)
+//   0x00ba3550 VBlk::Assign        (thiscall, ret 4)
+//   0x00ba3620 VBlk8::Assign       (thiscall, ret 4)
+//   0x007f1890 UninitCopy16        (cdecl, 5 args)
+//   0x0076ffd0 Copy8               (cdecl, 5 args)
+//   0x00c0c1a0 FUN_00c0c1a0        (thiscall, ctx accessor; returns object with count fields +0x404/0x408/0x40c)
+//   0x00b3d240 SP_GetActivePlanet  (cdecl)
+//   0x00b3d300 SP_NounManager      (cdecl)
+//   0x00b5b800 SP_GetCurrentGameMode (cdecl)
+//   0x00675250 SP_AchievementsController (cdecl)
+//   0x00b5b960 CGZSub::Ctor        (thiscall)
+//   0x00ba5e10 FUN_00ba5e10        (cdecl, 2 args)
+
+// vtables: 0x01465d64 = ??_7PlayerPlanetData@SP@@6B@ (+0x80 timer vtables 0x01465d54/0x01464450)
+//          0x013eb384/0x01465dc8/0x01465d78/0x01465d70 = GB1/cGonzagoSubsystem family
