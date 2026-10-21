@@ -14,16 +14,16 @@ typedef uint8_t hkUint8;
 class hkQuaternion { public: float x, y, z, w; };
 class hkMatrix3 { public: hkVector4 m_col0, m_col1, m_col2; };   // 0x30 bytes
 
-struct hkSweptTransform                                   // 0x50 bytes
-{
+class hkSweptTransform                                   // 0x50 bytes
+{ public:
 	hkVector4 m_centerOfMass0;      // +0   (w = time0)
 	hkVector4 m_centerOfMass1;      // +0x10 (w = invDeltaTime)
 	hkQuaternion m_rotation0;       // +0x20
 	hkQuaternion m_rotation1;       // +0x30
 	hkVector4 m_centerOfMassLocal;  // +0x40
 };
-struct hkMotionState                                      // 0xb0 bytes
-{
+class hkMotionState                                      // 0xb0 bytes
+{ public:
 	hkTransform m_transform;        // +0
 	hkSweptTransform m_sweptTransform;   // +0x40
 	hkVector4 m_deltaAngle;         // +0x90

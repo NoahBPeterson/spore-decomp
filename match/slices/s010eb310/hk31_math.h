@@ -87,8 +87,8 @@ class hkAabb
 };
 
 // Layouts of the cdbody / input / output structures used by the collision and phantom code.
-struct hkMotionState   // size 0xb0 (dev PDB)
-{
+class hkMotionState   // size 0xb0 (dev PDB)
+{ public:
 	hkTransform m_transform;          // +0
 	hkVector4 m_centerOfMass0;        // +0x40  (hkSweptTransform)
 	hkVector4 m_centerOfMass1;        // +0x50

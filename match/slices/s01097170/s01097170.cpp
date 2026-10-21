@@ -253,8 +253,8 @@ public:
 };
 class hkConstraintInstance { public: uint32_t m_vptr; hkInt16 m_memSize; hkInt16 m_refCount; hkConstraintOwner* m_owner; };   // +0x08 owner
 class hkEntity;
-struct hkConstraintQueryIn                                                        // 0x48 bytes (32-bit)
-{
+class hkConstraintQueryIn                                                        // 0x48 bytes (32-bit)
+{ public:
     uint32_t m_pad[10];                   // +0x00..+0x27 (step info etc.)
     hkVelocityAccumulator* m_bodyA;       // +0x28
     hkVelocityAccumulator* m_bodyB;       // +0x2c

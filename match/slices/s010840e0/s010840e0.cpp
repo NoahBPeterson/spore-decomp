@@ -184,8 +184,8 @@ class hkAabb { public: hkVector4 m_min; hkVector4 m_max; };
 class hkCollisionFilter;
 class hkWorldMemoryWatchDog;
 
-struct hkWorldCinfo                         // 0xa0 (Spore's Havok reflection data)
-{
+class hkWorldCinfo                         // 0xa0 (Spore's Havok reflection data)
+{ public:
     enum SimulationType
     {
         SIMULATION_TYPE_INVALID, SIMULATION_TYPE_DISCRETE, SIMULATION_TYPE_ASYNCHRONOUS, SIMULATION_TYPE_HALFSTEP,

@@ -380,8 +380,8 @@ struct hkEntityPerEntityView
 };
 
 class hkContactMgr;
-struct hkCollisionDispatcher                    // hkReferencedObject; only the tail tables matter here
-{
+class hkCollisionDispatcher                    // hkReferencedObject; only the tail tables matter here
+{ public:
     uint32_t m_vptr_memSize[2];                 // +0
     hkContactMgrFactory* m_contactMgrFactories[4];  // +8
     uint8_t m_pad18[0x80 - 0x18];

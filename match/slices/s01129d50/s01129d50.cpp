@@ -33,8 +33,8 @@ public:
     virtual void v2();
     virtual int getType() const;                             // 3 (+0xc)
 };
-struct hkConstraintInstance                                  // 32-bit layout
-{
+class hkConstraintInstance                                  // 32-bit layout
+{ public:
     uint32_t m_vptr; hkInt16 m_memSize; hkInt16 m_refCount;  // +0x00
     uint32_t m_owner;                                        // +0x08
     hkConstraintData* m_data;                                // +0x0c
@@ -56,8 +56,8 @@ public:
     hkArrayPOD<hkEntityListener*> m_entityListeners;         // +0xb4 (data), +0xb8 (size)
 };
 
-struct hkCollidable                                          // hkLinkedCollidable prefix, 32-bit layout
-{
+class hkCollidable                                          // hkLinkedCollidable prefix, 32-bit layout
+{ public:
     hkShape* m_shape;                                        // +0x00
     uint32_t m_shapeKey;                                     // +0x04
     void* m_motion;                                          // +0x08
