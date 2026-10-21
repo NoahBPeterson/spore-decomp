@@ -84,7 +84,7 @@ struct WorldTree {
 struct WorldIter { void* node; };
 
 // ------------------------------------------------------- cSPUILayeredObject -
-struct cSPUILayeredObject {
+class cSPUILayeredObject { public:
     void** vtbl;        // +0
     i32    mRefCount;   // +4
     void*  mpViewer;    // +8
@@ -104,7 +104,7 @@ struct cSPUILayeredObject {
 };
 
 // ------------------------------------------------------- cSPUILayerManager --
-struct cSPUILayerManager {
+class cSPUILayerManager { public:
     void** vtbl;        // +0
     void** vtbl2;       // +4
     u8     pad8[4];
@@ -128,7 +128,7 @@ struct cSPUILayerManager {
 };
 
 // ------------------------------------------------- cSPUILayoutObjectCollection
-struct cSPUILayoutObjectCollection {
+class cSPUILayoutObjectCollection { public:
     void** vtbl;            // +0
     u8     pad4[4];
     void*  p8;              // +8  (SerCollection secondary)
@@ -174,7 +174,7 @@ struct cSPUILayoutObjectCollectionV8 {
 };
 
 // --------------------------------------------------------------- cSPUILayout
-struct cSPUILayout {
+class cSPUILayout { public:
     void** vtbl;            // +0
     i32    mRefCount;       // +4
     u8     pad8[0x14 - 8];
@@ -188,13 +188,13 @@ struct cSPUILayout {
 };
 
 // --------------------------------------------------- cSPUILayoutResourceFactory
-struct cSPUILayoutResourceFactory {
+class cSPUILayoutResourceFactory { public:
     bool  __thiscall Init();                            // 0x80ff50
     void* __thiscall WriteResource(void* a, void* b, int type, void* d); // 0x810460
 };
 
 // ------------------------------------------------------- cSPUILayoutManager
-struct cSPUILayoutManager {
+class cSPUILayoutManager { public:
     void** vtbl;            // +0
     u8     pad4[0xc - 4];
     WorldTree mTree;        // +0xc

@@ -14,7 +14,7 @@ inline void* operator new(size_t, void* p) throw() { return p; }
 
 namespace EA {
 namespace ResourceMan {
-struct Key {
+class Key { public:
   uint32_t instanceID;
   uint32_t typeID;
   uint32_t groupID;
@@ -30,7 +30,7 @@ bool Exists(const wchar_t* path);  // 0x00931fa0
 using EA::ResourceMan::Key;
 
 namespace eastl {
-struct allocator {
+class allocator { public:
   void* allocate(size_t n) { return operator new[](n, "Editor", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1); }
   void deallocate(void* p) { operator delete[](p); }
 };
@@ -652,7 +652,7 @@ struct DequeIterator {
 };
 
 template <typename T, typename Allocator, unsigned kDequeSubarraySize>
-class DequeBase {
+struct DequeBase { private:
  public:
   typedef DequeIterator<T, Allocator, kDequeSubarraySize> iterator;
   T** mpPtrArray;          // +0x00
@@ -691,5 +691,5 @@ void DequeBase<T, Allocator, kDequeSubarraySize>::DoInit(size_t n) {
 struct DequeEntry48 {
   uint32_t mData[12];
 };
-template class DequeBase<DequeEntry48, core_allocator_adapter, 4>;
+template struct DequeBase<DequeEntry48, core_allocator_adapter, 4>;
 }  // namespace eastl

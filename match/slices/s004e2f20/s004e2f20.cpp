@@ -37,7 +37,7 @@ public:
     T* mpObject;
 };
 namespace ResourceMan {
-struct Key {
+class Key { public:
     uint32_t mInstance;
     uint32_t mType;
     uint32_t mGroup;
@@ -67,7 +67,7 @@ template <class T> inline T* uninitialized_copy_ptr(T* first, T* last, T* result
     return p;
 }
 
-template <class T> struct vector {
+template <class T> class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
@@ -127,7 +127,7 @@ template <class Node> struct insert_return_type {
     bool second;
 };
 
-struct allocator {
+class allocator { public:
     void deallocate(void* p, uint32_t) { void* const pMemory = p; EASTLFree(pMemory); }
 };
 
@@ -139,7 +139,7 @@ struct fixed_pool_base {
     Link* mpNext;
     void init(void* pMemory, uint32_t memorySize, uint32_t nodeSize, uint32_t alignment, uint32_t alignmentOffset); // 0x00921260
 };
-struct fixed_pool_with_overflow : public fixed_pool_base {
+class fixed_pool_with_overflow : public fixed_pool_base { public:
     void* mpPoolBegin;
     void* mpCapacity;
     uint32_t mnNodeSize;
@@ -154,7 +154,7 @@ struct fixed_pool_with_overflow : public fixed_pool_base {
     void* allocate();   // 0x004CE850
     static void OverflowFree(void* p, uint32_t n) { (void)&n; void* const pMemory = p; EASTLFree(pMemory); }
 };
-struct fixed_hashtable_allocator {
+class fixed_hashtable_allocator { public:
     fixed_pool_with_overflow mPool;
     void* mpBucketBuffer;
     fixed_hashtable_allocator(const fixed_hashtable_allocator& x);
@@ -437,7 +437,7 @@ struct PartLayout {   // 0x14-byte value of a fixed_hash_map<uint32_t, PartLayou
 
 namespace SP {
 class cSpeciesProfile;
-class cSpeciesArchetype {
+struct cSpeciesArchetype { private:
 public:
     cSpeciesArchetype();                               // 0x004DA440
     cSpeciesArchetype(const cSpeciesArchetype& x);     // 0x004E1CB0
@@ -543,12 +543,12 @@ template struct AutoRefVector<EA::AutoRefCount<SP::cEditorEvent> >;
 // ---------------------------------------------------------------------------
 // vector<FunctionalMatch::Constraint> internals
 // ---------------------------------------------------------------------------
-namespace SP { namespace FunctionalMatch { class Constraint; } }
+namespace SP { namespace FunctionalMatch { struct Constraint; } }
 
 namespace eastl {
 struct false_type { false_type() {} };
 
-template <class It> struct generic_iterator {
+template <class It> class generic_iterator { public:
     It mIterator;
     generic_iterator(const It& x) : mIterator(x) {}
     It base() const { return mIterator; }
@@ -590,7 +590,7 @@ struct ConstraintVector : public ConstraintVectorBase {   // eastl::vector<Funct
 } // namespace eastl
 
 namespace SP { namespace FunctionalMatch {
-class Constraint {
+struct Constraint { private:
 public:
     uint32_t mParameter;    // 0x00
     uint32_t mType;         // 0x04

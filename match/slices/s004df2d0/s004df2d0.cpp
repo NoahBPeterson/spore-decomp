@@ -12,7 +12,7 @@ void* operator new(unsigned int size, const char* pName, int flags, unsigned deb
 void operator delete(void* p);                                                                                      // 0x00F47380
 
 namespace EA { namespace ResourceMan {
-struct Key {
+class Key { public:
     uint32_t mInstance;
     uint32_t mType;
     uint32_t mGroup;
@@ -30,7 +30,7 @@ struct Vector2 { float mData[2]; const float& operator[](int i) const { return m
 
 namespace SP {
 
-class cSpeciesProfile {
+struct cSpeciesProfile { private:
 public:
     cSpeciesProfile(const Key& key, bool bPlant);   // 0x004D3DD0
     ~cSpeciesProfile();                              // 0x004D44E0
@@ -42,7 +42,7 @@ public:
     char pad540[0xA18 - 0x540];
 };
 
-class cSpeciesArchetype;
+struct cSpeciesArchetype;
 
 namespace { void InitStatics(); }   // 0x004D34F0
 bool ResourceExists(const Key* key); // 0x004DA3A0
@@ -150,7 +150,7 @@ namespace SP {
 struct ArchetypeIdVector { uint32_t* mpBegin; uint32_t* mpEnd; uint32_t* mpCapacity; uint32_t mAllocator;
     uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); } };
 
-class cSpeciesArchetype {
+struct cSpeciesArchetype { private:
 public:
     char pad0[0x3C4];
     ArchetypeIdVector mParentIds;   // 0x3C4
@@ -162,7 +162,7 @@ struct ArchetypeNode { uint32_t mKey; SP::cSpeciesArchetype mValue; };
 
 namespace SP {
 
-namespace FunctionalMatch { class Constraint; }
+namespace FunctionalMatch { struct Constraint; }
 struct DefaultAllocTag { DefaultAllocTag() {} };
 struct ConstraintAllocator {
     ConstraintAllocator() {}
@@ -189,7 +189,7 @@ struct ConstraintVector : public ConstraintVectorBase {   // eastl::vector<Funct
     void push_back(const FunctionalMatch::Constraint& value);   // 0x004E18E0
 };
 namespace FunctionalMatch {
-class Constraint {
+struct Constraint { private:
 public:
     Constraint(uint32_t property, uint32_t op, uint32_t value);   // 0x00558960
     uint32_t mData[4];

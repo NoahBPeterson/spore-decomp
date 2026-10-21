@@ -102,7 +102,7 @@ template<int N> struct bitset {
 
 namespace SP {
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     virtual void _v0();
     virtual int Release();
     char pad0[0x33c - 4];
@@ -131,7 +131,7 @@ cSPVector3 Normalize(const Vector3T& v);                                  // @ 0
 Vector3T normalized_safe(const Vector3T& v);                              // @ 0x449c20
 inline float Dot(const Vector3T& a, const Vector3T& b) { return a.x * b.x + a.y * b.y + a.z * b.z; }
 
-struct cSPEditorLimbJoint {
+class cSPEditorLimbJoint { public:
     cSPEditorBlock* mJointBlock;                // +0x00
     cSPEditorLimbJoint* mUpperJoint;            // +0x04
     vector<cSPEditorLimbJoint*> mLowerJoints;   // +0x08
@@ -149,7 +149,7 @@ struct cSPEditorLimbJoint {
     void MoveTarget(Vector3T pos);                           // @ 0x486f50
 };
 
-struct cSPEditorLimbStructure {
+class cSPEditorLimbStructure { public:
     vector<AutoRefCount<cSPEditorBlock> > mPileList;    // +0x00
     cSPEditorBlock* mBaseBlock;                 // +0x14
     cSPEditorLimbJoint* mBaseJoint;             // +0x18

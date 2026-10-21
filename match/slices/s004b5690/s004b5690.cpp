@@ -43,7 +43,7 @@ void* __cdecl allocate_memory(sp_vector_allocator& a, uint32_t n, uint32_t align
 template <typename T> struct has_trivial_assign : public false_type {};
 template <typename T> struct is_integral : public false_type {};
 
-struct fixed_vector_allocator {
+class fixed_vector_allocator { public:
     uint32_t mOverflowAllocator;
     void* mpPoolBegin;
     void deallocate(void* p, uint32_t n)
@@ -57,7 +57,7 @@ struct fixed_vector_allocator {
 void* __cdecl allocate_memory(fixed_vector_allocator& a, uint32_t n, uint32_t alignment, uint32_t alignmentOffset);
 
 template <typename Iterator>
-struct generic_iterator {
+class generic_iterator { public:
     Iterator mIterator;
     explicit generic_iterator(const Iterator& x) : mIterator(x) {}
     typename Iterator_traits_ref<Iterator>::type operator*() const { return *mIterator; }
@@ -210,7 +210,7 @@ struct VectorBase {
 };
 
 template <typename T, typename Allocator>
-struct vector : public VectorBase<T, Allocator> {
+class vector : public VectorBase<T, Allocator> { public:
     typedef VectorBase<T, Allocator> base_type;
     using base_type::mpBegin;
     using base_type::mpEnd;
@@ -333,13 +333,13 @@ Record11c& Record11c::operator=(const Record11c& x)
 
 
 namespace SP {
-struct cPropertyList {
+class cPropertyList { public:
     virtual int AddRef();
     virtual int Release();
 };
 }
 namespace EA {
-template<class T> struct AutoRefCount {
+template<class T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount(const AutoRefCount& x) : mpObject(x.mpObject) { if (mpObject) mpObject->AddRef(); }
     AutoRefCount& operator=(const AutoRefCount& x) { return operator=(x.mpObject); }
@@ -396,7 +396,7 @@ void __cdecl RBTreeInsert(rbtree_node_base* pNode, rbtree_node_base* pNodeParent
 
 enum RBTreeSide { kRBTreeSideLeft, kRBTreeSideRight };
 
-struct allocator {
+class allocator { public:
     void deallocate(void* p, uint32_t n) { void* pBlock = p; EASTL_allocator_deallocate(pBlock); }
 };
 void* __cdecl allocate_memory(allocator& a, uint32_t n, uint32_t alignment, uint32_t alignmentOffset);   // 0x42dee0

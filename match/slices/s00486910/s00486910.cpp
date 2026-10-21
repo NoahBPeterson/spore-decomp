@@ -62,10 +62,10 @@ template<int N> struct bitset {
 
 namespace SP {
 
-struct cSPEditorBlock;
-struct cSPEditorLimbJoint;
+class cSPEditorBlock;
+class cSPEditorLimbJoint;
 
-struct cSPEditorModel {
+class cSPEditorModel { public:
     char pad0[0x38];
     float mScale;                               // +0x38
     float mX3c;                                 // +0x3c
@@ -78,7 +78,7 @@ struct cSPEditorModel {
     cSPEditorBlock* FindNearestFlag7Block(const cSPVector3& pos);   // @ 0x4ac480
 };
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     virtual void _v0();
     virtual int Release();
     char pad0[0x28 - 4];
@@ -104,7 +104,7 @@ float GetExactSkinRadius(cSPEditorBlock* block);                 // @ 0x4a5bd0
 cSPVector3 GetSkinTip(cSPEditorBlock* block);                    // @ 0x4a5d10
 int F_493640(cSPVector3* pos, float f0, float fa, float fb, int i);  // @ 0x493640
 
-struct cSPEditorLimbJoint {
+class cSPEditorLimbJoint { public:
     cSPEditorBlock* mJointBlock;                // +0x00
     cSPEditorLimbJoint* mUpperJoint;            // +0x04
     vector<cSPEditorLimbJoint*> mLowerJoints;   // +0x08

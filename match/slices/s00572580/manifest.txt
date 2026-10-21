@@ -7,7 +7,7 @@ slices/s00572580/s00572580.cpp  ?At@UintArray@@QAEPAIH@Z  00572580  /O2 /MD /Gy 
 slices/s00572580/s00572580.cpp  ?Self@UintArray@@QAEPAU1@XZ  00572590  /O2 /MD /Gy /EHsc /TP
 slices/s00572580/s00572580.cpp  ??0AtomicRefPtr@@QAE@PAUAtomicRefCounted@@@Z  005725b0  /O2 /MD /Gy /EHsc /TP
 slices/s00572580/s00572580.cpp  ??0ObjectPtr@@QAE@ABU0@@Z  005725d0  /O2 /MD /Gy /EHsc /TP
-slices/s00572580/s00572580.cpp  ??4?$RectT@M@EA@@QAEAAU01@ABU01@@Z  00572600  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ??4?$RectT@M@EA@@QAEAAV01@ABV01@@Z  00572600  /O2 /MD /Gy /EHsc /TP
 slices/s00572580/s00572580.cpp  ??0IRefCountPtr@@QAE@PAUIRefCount@@@Z  00572660  /O2 /MD /Gy /EHsc /TP
 slices/s00572580/s00572580.cpp  ?clear@String16@@QAEXXZ  005726c0  /O2 /MD /Gy /EHsc /TP
 slices/s00572580/s00572580.cpp  ?SetIRefCount@?$MessageBasicRC@$04@SP@@QAEXHPAUIRefCount@@@Z  005726e0  /O2 /MD /Gy /EHsc /TP

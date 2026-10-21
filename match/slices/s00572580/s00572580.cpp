@@ -86,7 +86,7 @@ IRefCountPtr::IRefCountPtr(IRefCount* p) : mp(p)
 
 namespace EA {
 template <typename T>
-struct RectT {
+class RectT { public:
     T mLeft, mTop, mRight, mBottom;
     RectT& operator=(const RectT& r);
 };
@@ -101,7 +101,7 @@ RectT<T>& RectT<T>::operator=(const RectT<T>& r)
     mBottom = r.mBottom;
     return *this;
 }
-template struct RectT<float>;
+template class RectT<float>;
 }
 
 struct RefCounted {
@@ -153,7 +153,7 @@ void String16::clear()
 
 namespace SP {
 template <int N>
-struct MessageBasicRC {
+class MessageBasicRC { public:
     union Data {
         void* mpVoid;
         IRefCount* mpRC;
@@ -181,7 +181,7 @@ void MessageBasicRC<N>::SetIRefCount(int i, IRefCount* p)
         p->AddRef();
     mRCFlags |= mask;
 }
-template struct MessageBasicRC<5>;
+template class MessageBasicRC<5>;
 }
 
 // ---------------------------------------------------------------------------
@@ -488,9 +488,9 @@ struct IModelManager {
 struct cCreature { void SetVisible(int); };      // 0xa04a90
 namespace SP {
 IModelManager* ModelManager();
-struct cSPPlayMode { float GetHeightOffset(); };
+class cSPPlayMode { public: float GetHeightOffset(); };
 struct cCreatureStructure { char pad0[0x2c]; Point3 mOffset; };
-struct cSPEditorAnimatedCreatureManager {
+class cSPEditorAnimatedCreatureManager { public:
     cCreatureStructure* GetCreatureStructure(uint32_t id);
     ::cCreature* GetCreature(uint32_t id);
 };

@@ -104,7 +104,7 @@ template<int N> struct bitset {
 
 namespace SP {
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     virtual void _v0();
     virtual int Release();
     char pad0[0x340 - 4];

@@ -3,8 +3,8 @@ slices/s004b5690/s004b5690.cpp  ??4Record11c@@QAEAAU0@ABU0@@Z  004b6340  /Od /Ob
 slices/s004b5690/s004b5690.cpp  ?DoInsertValue@?$vector@UVec3f@@Usp_vector_allocator@eastl@@@eastl@@QAEXPAUVec3f@@ABU3@@Z  004b5ad0  /Od /Ob1 /MD /Gy /TP
 slices/s004b5690/s004b5690.cpp  ??$uninitialized_relocate@URecord11c@@@eastl@@YAPAURecord11c@@PAU1@00@Z  004b64b0  /Od /Ob1 /MD /Gy /TP
 slices/s004b5690/s004b5690.cpp  ??$uninitialized_relocate@UVec3f@@@eastl@@YAPAUVec3f@@PAU1@00@Z  004b66b0  /Od /Ob1 /MD /Gy /TP
-slices/s004b5690/s004b5690.cpp  ?DoInsertValue@?$vector@U?$AutoRefCount@UcPropertyList@SP@@@EA@@Usp_vector_allocator@eastl@@@eastl@@QAEXPAU?$AutoRefCount@UcPropertyList@SP@@@EA@@ABU34@@Z  004b6000  /Od /Ob1 /MD /Gy /TP
-slices/s004b5690/s004b5690.cpp  ??0?$rbtree@UKey16@@U1@U?$less@UKey16@@@eastl@@U?$use_self@UKey16@@@3@@eastl@@QAE@ABUallocator@1@@Z  004b5980  /Od /Ob1 /MD /Gy /TP
+slices/s004b5690/s004b5690.cpp  ?DoInsertValue@?$vector@V?$AutoRefCount@VcPropertyList@SP@@@EA@@Usp_vector_allocator@eastl@@@eastl@@QAEXPAV?$AutoRefCount@VcPropertyList@SP@@@EA@@ABV34@@Z  004b6000  /Od /Ob1 /MD /Gy /TP
+slices/s004b5690/s004b5690.cpp  ??0?$rbtree@UKey16@@U1@U?$less@UKey16@@@eastl@@U?$use_self@UKey16@@@3@@eastl@@QAE@ABVallocator@1@@Z  004b5980  /Od /Ob1 /MD /Gy /TP
 slices/s004b5690/s004b5690.cpp  ?reset@?$rbtree@UKey16@@U1@U?$less@UKey16@@@eastl@@U?$use_self@UKey16@@@3@@eastl@@QAEXXZ  004b5a20  /Od /Ob1 /MD /Gy /TP
 slices/s004b5690/s004b5690.cpp  ?DoNuke@?$rbtree@IU?$pair@$$CBIUNukeMapped@@@eastl@@U?$less@I@2@U?$use_first@U?$pair@$$CBIUNukeMapped@@@eastl@@@2@@eastl@@QAEXPAU?$rbtree_node@U?$pair@$$CBIUNukeMapped@@@eastl@@@2@@Z  004b5a60  /Od /Ob1 /MD /Gy /TP
 slices/s004b5690/s004b5690.cpp  ?lower_bound@?$rbtree@IU?$pair@$$CBIUMapped0@@@eastl@@U?$less@I@2@U?$use_first@U?$pair@$$CBIUMapped0@@@eastl@@@2@@eastl@@QAE?AU?$rbtree_iterator@U?$pair@$$CBIUMapped0@@@eastl@@@2@ABI@Z  004b5e90  /Od /Ob1 /MD /Gy /TP

@@ -1,5 +1,5 @@
-slices/s004a9920/s004a9920.cpp  ?FindSymmetricFoot@EditorUtils@SP@@YAPAUcSPEditorBlock@2@PAU32@@Z  004a9920  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s004a9920/s004a9920.cpp  ?FindSymmetricSkinnedPart@EditorUtils@SP@@YAPAUcSPEditorBlock@2@PAU32@@Z  004a9a00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ?FindSymmetricFoot@EditorUtils@SP@@YAPAVcSPEditorBlock@2@PAV32@@Z  004a9920  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ?FindSymmetricSkinnedPart@EditorUtils@SP@@YAPAVcSPEditorBlock@2@PAV32@@Z  004a9a00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s004a9920/s004a9920.cpp  ?KeyMatches@SP@@YA_NABUResourceKey@1@0@Z  004a9a90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s004a9920/s004a9920.cpp  ??1?$AutoRefCountR@UcRefCountedResource@SP@@@SP@@QAE@XZ  004a9ae0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s004a9920/s004a9920.cpp  ??1?$AutoRefCountV@UcVirtualRefCounted@SP@@@SP@@QAE@XZ  004a9b10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

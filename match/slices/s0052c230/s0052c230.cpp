@@ -37,7 +37,7 @@ typedef integral_constant<bool, true> true_type;
 template <typename T> struct has_trivial_constructor : public false_type {};
 template <> struct has_trivial_constructor<float> : public true_type {};
 
-template <typename T> struct generic_iterator {     // eastl::generic_iterator<T*>
+template <typename T> class generic_iterator { public:     // eastl::generic_iterator<T*>
     T* mIterator;
     generic_iterator(T* const& x) : mIterator(x) {}
     T& operator*() const { return *mIterator; }
@@ -136,7 +136,7 @@ template <typename T> struct VectorBase {
 // @ 0x0052ce90 ??0?$VectorBase@U?$pair@HM@eastl@@@eastl@@
 // (emitted out of line where the inline expansion was declined)
 
-template <typename T> struct vector : VectorBase<T> {
+template <typename T> class vector : public VectorBase<T> { public:
     typedef T value_type;
     typedef uint32_t size_type;
     vector(size_type n, const sp_vector_allocator& allocator);
@@ -332,7 +332,7 @@ struct RefCountTemplateInt {        // EA::RefCountTemplate<int>
     RefCountTemplateInt() : mRefCount(0) {}
 };
 namespace Swarm {
-struct cDescription : RefCountTemplateInt {
+class cDescription : public RefCountTemplateInt { public:
     cDescription() {}
     virtual ~cDescription();
 };

@@ -138,9 +138,9 @@ void __cdecl FUN_006b5040(uint32_t a, uint32_t b, uint32_t c, uint32_t* out)
 // ---------------------------------------------------------------------------
 namespace SP {
 
-struct cString;
-struct cStringDetokenizer;
-struct cStringManager;
+class cString;
+class cStringDetokenizer;
+class cStringManager;
 struct IRefCounted;
 
 struct string16 {
@@ -184,7 +184,7 @@ struct ResourceKey {
     uint32_t groupID;
 };
 
-struct cStringDetokenizer {
+class cStringDetokenizer { public:
     virtual void v0();                                          // +0x00
     virtual void v1();                                          // +0x04
     virtual void v2();                                          // +0x08
@@ -203,7 +203,7 @@ struct cStringDetokenizer {
     virtual bool FindTokenTranslation(const wchar16*, string16&);// +0x3c
 };
 
-struct cStringManager {
+class cStringManager { public:
     virtual ~cStringManager();                                  // +0x00
     virtual void AddString(cString*);                           // +0x04
     virtual void RemoveString(cString*);                        // +0x08
@@ -218,7 +218,7 @@ struct HashMap {
     void erase_key(uint32_t* key);
 };
 
-struct cString {
+class cString { public:
     AutoRefCount mpTableResource; // +0x0
     string16* mpLocalString;      // +0x4
     const wchar16* mpSourceCStr;  // +0x8

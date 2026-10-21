@@ -236,7 +236,7 @@ bool cSPEditorResourceFactory::CanConvert(int inType, int outType) {
 // ---------------------------------------------------------------------------
 namespace EA { namespace Allocator {
 
-struct FixedBufferAllocator {
+class FixedBufferAllocator { public:
     struct buffer_info {
         int32_t mSignature;   // +0x0
         int32_t mSize;        // +0x4

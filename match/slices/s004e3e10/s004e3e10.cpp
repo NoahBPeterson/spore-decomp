@@ -18,7 +18,7 @@ void  __cdecl EASTL_allocator_deallocate(void* p);                              
 template <int N> inline void ScratchSlots() { uint32_t s[N]; }
 
 namespace EA { namespace ResourceMan {
-struct Key {
+class Key { public:
     uint32_t mInstance;
     uint32_t mType;
     uint32_t mGroup;

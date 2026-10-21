@@ -130,7 +130,7 @@ public:
 
 namespace eastl {
 
-struct allocator {};
+class allocator { public:};
 struct sp_vector_allocator {
     uint32_t mData[2];
     sp_vector_allocator() {}
@@ -143,7 +143,7 @@ struct sp_vector_allocator {
 struct true_type {};
 
 template <size_t N>
-struct bitset {
+class bitset { public:
     uint32_t mWord[N / 32];
     bitset() { reset(); }
     void reset() { for (size_t i = 0; i < N / 32; i++) mWord[i] = 0; }
@@ -478,7 +478,7 @@ public:
 };
 cAppMode* App();   // 0x0067DD10
 
-class cEditorLaunchData : public EA::Messaging::IMessageRC, public EA::RefCountTemplate<int> {
+struct cEditorLaunchData : public EA::Messaging::IMessageRC, public EA::RefCountTemplate<int> { private:
 public:
     cEditorLaunchData();
     virtual int AddRef();

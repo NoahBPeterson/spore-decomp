@@ -63,12 +63,12 @@ struct cSPTransform {
 // Ref-counted key types
 namespace EA {
 namespace UTFWin {
-struct IWindow {
+class IWindow { public:
     virtual int AddRef();
     virtual int Release();
 };
 }
-template <class T> struct AutoRefCount {
+template <class T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount() : mpObject(0) {}
     AutoRefCount(const AutoRefCount& x) : mpObject(x.mpObject) {
@@ -82,7 +82,7 @@ template <class T> struct AutoRefCount {
 };
 }
 namespace SP {
-struct cIModelWorld;
+class cIModelWorld;
 struct cMWModel {
     cIModelWorld* mWorld;   // +0x0
     uint32_t mFlags;        // +0x4 (bit 31: allocated by the world)
@@ -91,7 +91,7 @@ struct cMWModel {
     void AddRef() { ++mRefCount; }
     void Release();
 };
-struct cIModelWorld {
+class cIModelWorld { public:
     virtual int AddRef();
     virtual int Release();
 #define PH(n) virtual void ph##n();
@@ -112,7 +112,7 @@ inline void cMWModel::Release()
     else
         mWorld->DestroyModel(this, (mFlags >> 31) & 1);
 }
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     virtual void v0();
     virtual int AddRef();
     virtual int Release();
@@ -127,7 +127,7 @@ template <> inline EA::AutoRefCount<SP::cMWModel>::~AutoRefCount()
 // ---------------------------------------------------------------------------------------------
 // EASTL pieces
 namespace eastl {
-struct allocator {
+class allocator { public:
     allocator() {}
     void* allocate(uint32_t n, int flags = 0) {
         return new ("Editor", flags, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 209) char[n];
@@ -156,7 +156,7 @@ template <class T, class A> struct VectorBase {
             mAllocator.deallocate(mpBegin, (uint32_t)(mpCapacity - mpBegin) * sizeof(T));
     }
 };
-template <class T, class A> struct vector : public VectorBase<T, A> {
+template <class T, class A> class vector : public VectorBase<T, A> { public:
     typedef VectorBase<T, A> base_type;
     vector();
     ~vector() {}

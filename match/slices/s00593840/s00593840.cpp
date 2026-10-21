@@ -29,7 +29,7 @@ inline uint32_t HashOf(uint64_t k) { return (uint32_t)k; }
 
 namespace eastl {
 
-struct allocator {
+class allocator { public:
     void* allocate(size_t n) { return operator new[](n, "Editor", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1); }
     void deallocate(void* p) { operator delete[](p); }
 };
@@ -153,7 +153,7 @@ struct prime_rehash_policy {
 };
 
 // fixed_hashtable_allocator: node pool + embedded bucket buffer
-struct fixed_hashtable_allocator {
+class fixed_hashtable_allocator { public:
     struct Link { Link* mpNext; };
     Link* mpHead;              // +0x00
     Link* mpNext;              // +0x04
@@ -315,7 +315,7 @@ int distance(Iterator first, Iterator last)
 }
 
 template <typename T>
-struct generic_iterator {
+class generic_iterator { public:
     T* mpNode;
     generic_iterator() {}
     explicit generic_iterator(T* p) : mpNode(p) {}

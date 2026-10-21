@@ -9,7 +9,7 @@ slices/s00484e40/s00484e40.cpp  ?SetState@cSPEditorHandleRotationRing@SP@@QAEXH_
 slices/s00484e40/s00484e40.cpp  ?AnimateOn@cSPEditorHandleRotationRing@SP@@QAEXXZ  004856d0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00484e40/s00484e40.cpp  ?SetModelScale@cSPEditorHandleRotationRing@SP@@QAEXM@Z  00485850  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00484e40/s00484e40.cpp  ?Shutdown@cSPEditorHandleRotationRing@SP@@QAEXXZ  004858b0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-slices/s00484e40/s00484e40.cpp  ?GetUpperUpperJoint@cSPEditorLimbJoint@SP@@QAEPAU12@XZ  00485900  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00484e40/s00484e40.cpp  ?GetUpperUpperJoint@cSPEditorLimbJoint@SP@@QAEPAV12@XZ  00485900  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00484e40/s00484e40.cpp  ?SetTargetPosition@cSPEditorLimbJoint@SP@@QAEXUcSPVector3@@@Z  00485930  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00484e40/s00484e40.cpp  ?Move@cSPEditorLimbJoint@SP@@QAEXUcSPVector3@@_N@Z  00485960  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00484e40/s00484e40.cpp  ?MoveLowerJoints@cSPEditorLimbJoint@SP@@QAEXUcSPVector3@@@Z  00485a60  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

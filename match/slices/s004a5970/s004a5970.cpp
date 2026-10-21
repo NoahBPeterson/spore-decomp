@@ -116,9 +116,9 @@ template<class T> struct ArgRef {           // AutoRefCount passed by value (cal
     ArgRef(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
 };
 
-struct cSPEditorModel;
+class cSPEditorModel;
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     virtual void _v0();
     virtual int Release();
     char pad0[0x48 - 4];
@@ -143,7 +143,7 @@ struct cSPEditorBlock {
     int GetSymmetryCount();                                  // @ 0x44f220
 };
 
-struct cSPEditorModel {
+class cSPEditorModel { public:
     cSPEditorBlock* GetBlock(int i);                         // @ 0x4accb0
     int GetBlockCount();                                     // @ 0x4accf0
 };

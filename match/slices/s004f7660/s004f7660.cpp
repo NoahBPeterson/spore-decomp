@@ -25,7 +25,7 @@ template <int N> inline void ScratchSlots() { uint32_t s[N]; }
 struct sp_vector_allocator { const char* mpName; };
 
 namespace EA { namespace ResourceMan {
-struct Key {
+class Key { public:
     uint32_t mInstance;
     uint32_t mType;
     uint32_t mGroup;
