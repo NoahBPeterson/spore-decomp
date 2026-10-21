@@ -4,7 +4,6 @@
 00ae34b0 261 Sim::ReseedTimers: retail keeps `this` in ebp (vs edi) and a different stack-slot layout; algorithm faithful (PASS on equivalence); equiv PASS
 00ae3600 79 Sim::PickLowest: register rotation only, retail differs in scratch/induction register choice; equiv FAIL
 00ae3660 156 TribeCtl::Feedback: stack-slot offsets and x87/SSE operand order differ from retail; algorithm faithful; equiv UNSUPPORTED
-00ae3750 2 Sim::Tally: single scratch-register choice (eax vs ecx) before the FUN_00bef920 call differs from retail; equiv WEAK
 00ae37c0 201 FUN_00ae37c0: MSVC duplicates the null-return epilogue, retail shares it; scheduling differs from retail; equiv UNSUPPORTED
 00ae3a10 8 Desc::CopyFrom: `mov ecx,1` hoisted above `add edi,8` relative to retail (near-miss schedule); equiv PASS
 00ae3b30 433 Sim::Select: large select/trigger reconstructed functionally but approximate; retail call/arg schedule differs; equiv FAIL

@@ -460,7 +460,8 @@ void Sim::Tally(int* a, int* b, int* c)
     Rec* r = mpBegin;
     Rec* e = mpEnd;
     for (; r != e; r = (Rec*)((char*)r + 0x64)) {
-        int k = FUN_00bef920(r->mTimer28);
+        int t = r->mTimer28;
+        int k = FUN_00bef920(t);
         switch (k) {
         case 0: ++*a; break;
         case 1: ++*b; break;
