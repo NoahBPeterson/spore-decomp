@@ -8,3 +8,4 @@ slices/s008d1b30/s008d1b30.cpp  ?EnumDeviceCallback@@YG_NPAX0@Z  008d1da0  /O2 /
 slices/s008d1b30/s008d1b30.cpp  ?SetConfig@InputMan@Input@EA@@QAEXHM@Z  008d2110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s008d1b30/s008d1b30.cpp  ?put_hashClass@@YAXPAUTsiHashClass@@IGPBD@Z  008d1c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s008d1b30/s008d1b30.cpp  ?GetDeviceByType@InputMan@Input@EA@@QAEPAXHI@Z  008d2250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008d1b30/s008d1b30.cpp  ?Shutdown@InputMan@Input@EA@@QAE_NXZ  008d20c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

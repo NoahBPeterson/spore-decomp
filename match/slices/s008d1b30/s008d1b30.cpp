@@ -1,4 +1,5 @@
 // Slice s008d1b30: UTFSpore_Win32/InputMan.obj -- EA::Input.
+#include <intrin.h>
 //
 //   008d1b30..008d1cb0  the EA tsi hash-class helpers (get_using_str_hashClass,
 //                       put_hashClass, Delete_hashClass) and the string/uint16
@@ -436,6 +437,7 @@ bool InputMan::Shutdown()
     mController[1].mpDIController = 0;
     mController[2].mpDIController = 0;
     mController[3].mpDIController = 0;
+    _ReadWriteBarrier();
     IDirectInput8W_* di = mpDI;
     mnDIEnumCount = 0;
     if (di) {
