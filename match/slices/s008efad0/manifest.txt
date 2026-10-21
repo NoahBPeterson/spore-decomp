@@ -1,0 +1,6 @@
+slices/s008efad0/s008efad0.cpp  ??0StackingContext@@QAE@I@Z  008efad0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008efad0/s008efad0.cpp  ?SetContextRect@StackingContext@@QAEXABURectF@@@Z  008efc80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008efad0/s008efad0.cpp  ?Setup@SlotOwner@@QAEXIPAUStyleSource@@@Z  008f0490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008efad0/s008efad0.cpp  ?FillCells@@YAXPAUCell14@@IPBU1@@Z  008f0640  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008efad0/s008efad0.cpp  ?Walk7@ItemListOwner@@QAEXII@Z  008f0680  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008efad0/s008efad0.cpp  ?Walk8@ItemListOwner@@QAEXII@Z  008f06e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
