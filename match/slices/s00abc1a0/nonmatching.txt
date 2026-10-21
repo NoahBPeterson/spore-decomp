@@ -1,0 +1,12 @@
+00abc1a0 137 Vec28::grow: retail keeps mpBegin in ebx live across the FUN_00abbf70 call and indexes' param is hoisted to esi; MSVC allocates esi/edi instead and materialises the temporary-block zeros via a zero register; equiv FAIL
+00abc240 147 Read28List: element loop + grow call reconstructed functionally; stream-read epilogue scheduling and record-field offsets differ from retail; equiv UNSUPPORTED
+00abc2c0 100 ReadDesc: descriptor record reader reconstructed but the call/scheduling pattern and stack temporaries differ from retail; equiv UNSUPPORTED
+00abc440 141 SetActive: near-miss schedule: int/SSE zero-store ordering and the refcount guard layout differ from retail; equiv WEAK
+00abc4e0 117 Activate: near-miss schedule: constant load hoist (`float one = DAT`) plus floating-point store order differ from retail; equiv FAIL
+00abc650 889 Update: large per-frame descriptor update reconstructed functionally but approximate; retail uses LTCG inlining/scheduling; equivalence-only; equiv FAIL
+00abca30 281 EnumGroupOverrides: override-id enumeration reconstructed functionally; register/spill layout and inner loop differ from retail; equiv FAIL
+00abcb60 11 AList ctor: MSVC schedules the two zero-SSE stores above the xor-ecx int store; retail emits the xor-ecx store first (near-miss schedule); equiv PASS
+00abcc50 303 Accumulate: transform-accumulate reconstructed functionally; the matrix/position SSE schedule and handle-read differs from retail; equiv FAIL
+00abce20 49 Func_abce20: retail keeps `first` spilled to the stack and reuses edx as the copy temp (one callee-saved); MSVC promotes to a second callee-saved (edi) and unifies d/f into a bias form; equiv UNSUPPORTED
+00abced0 50 Func_abced0: eastl copy_backward: MSVC strength-reduces the two decrementing pointers into a single induction variable with a d-f bias; retail keeps them independent (near-miss structure); equiv UNSUPPORTED
+00abcf00 433 Vec0C::insert: large insert/grow reconstructed functionally but approximate; retail call/arg order (FUN_00abbf70/FUN_00abbf20) and buffer bookkeeping differ; equiv WEAK
