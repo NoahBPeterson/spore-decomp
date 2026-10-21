@@ -1,0 +1,10 @@
+011e4a20 95 UNSUPPORTED -- rw_ArenaSectionTypes_Initialize: harness discards all inputs (import:_decode_pointer via ArenaManager::Data thunk reached through rw_FindTypeReg)
+011e4b20 120 UNSUPPORTED -- rw_ArenaSectionExternalArenas_Initialize: 0/400 inputs, import:_decode_pointer (ArenaManager::Data slab at [0x0140a57c])
+011e4e70 356 UNSUPPORTED -- rw_ArenaSectionsInitialize: 0/400 inputs, import:_decode_pointer (chains into the Types/ExternalArenas initializers)
+011e50b0 90 UNSUPPORTED -- rw_NullSections_Initialize: 0/400 inputs, import:_decode_pointer (chains into the Types/ExternalArenas initializers)
+011e5170 284 WEAK 268 valid inputs, 54.9% coverage (need 60%) -- rw_section_manifest_walk: no mismatch, loop bodies unreached at default inputs
+011e52b0 82 WEAK 208 valid inputs, 35.0% coverage (need 60%) -- rw_ArenaSectionManifest_Fixup: no mismatch, fixup loop unreached at default inputs
+011e5610 291 UNSUPPORTED -- rw_ArenaSectionAtoms_serialize: 0/400 inputs, fault(write)/import:_decode_pointer (ArenaManager::Data + atom-table walk)
+011e5870 29 UNSUPPORTED -- AtomSingleton::Init: 0/400 inputs, atexit -> _decode_pointer
+011e58c0 11 UNSUPPORTED -- rw_atom_singleton_get: 0/400 inputs, atexit -> _decode_pointer
+011e59b0 48 UNSUPPORTED -- rw_stream_push: 0/400 inputs, fake-arity (indirect stream writer callback)

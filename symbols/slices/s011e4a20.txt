@@ -1,0 +1,39 @@
+; slice s011e4a20 = 0x011e4a20..0x011e59e0 (RenderWare 4 core: rw::core::arena section (de)serialization)
+; module Native Release/rwarenasections.obj -- VC .NET 2003 (cl 13.10) /GL + /LTCG range 0x011e2000..0x0120bc50
+; POLICY: equivalence-only. 2 byte-exact; 15 behavioural-equiv PASS; 2 WEAK; 8 UNSUPPORTED (see manifest/nonmatching/partial).
+; flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+011e4a20 rw_ArenaSectionTypes_Initialize(void**, unsigned int)             ; UNSUPPORTED (import:_decode_pointer)
+011e4aa0 rw_section_types_advance(void*, void*)                           ; equiv PASS
+011e4ad0 rw_section_init_table12(unsigned int*, unsigned int)            ; equiv PASS
+011e4b20 rw_ArenaSectionExternalArenas_Initialize(void**, unsigned int)   ; UNSUPPORTED (import:_decode_pointer)
+011e4bb0 rw_section_ext_advance(void*, void*)                             ; equiv PASS
+011e4be0 rw_section_init_table1c(unsigned int*)                           ; equiv PASS
+011e4c30 rw_section_init_table0c(unsigned int*)                           ; equiv PASS
+011e4c80 rw_section_pad_advance(void*, void*)                             ; equiv PASS
+011e4cd0 rw_ArenaSectionAtoms_Refix(void**, unsigned int, Arena*)         ; equiv PASS
+011e4d70 rw_ArenaSectionAtoms_Fixup(void*, Arena*)                        ; equiv PASS
+011e4db0 AtomsSection::SetAtomTableAndUnfixIt(void*, Arena*)              ; equiv PASS
+011e4dd0 rw_section_init_combined(unsigned int*, unsigned int, unsigned int, unsigned int) ; equiv PASS
+011e4e70 rw_ArenaSectionsInitialize(int*, int, int, int, void*)           ; UNSUPPORTED (import:_decode_pointer)
+011e5000 rw_sections_size(unsigned int, unsigned int, unsigned int)       ; equiv PASS
+011e5090 rw_sections_size_from(void*)                                     ; equiv PASS
+011e50b0 rw_NullSections_Initialize(int*)                                 ; UNSUPPORTED (import:_decode_pointer)
+011e5170 rw_section_manifest_walk(void**, unsigned int, Arena*)           ; WEAK 54.9% coverage
+011e52b0 rw_ArenaSectionManifest_Fixup(int, unsigned int)                 ; WEAK 35.0% coverage
+011e5310 rw_ArenaSectionTypes_Fixup(void**, unsigned int, Arena*)         ; equiv PASS
+011e54a0 rw_ArenaSectionExternalArenas_ser(void**, unsigned int, Arena*)  ; equiv PASS
+011e5610 rw_ArenaSectionAtoms_serialize(void**, int)                      ; UNSUPPORTED (fault(write)/import)
+011e5750 rw_register_section_fixups(void)                                 ; byte-exact (MATCH)
+011e57b0 rw_register_section_writers(void)                                ; byte-exact (MATCH)
+011e5870 AtomSingleton::Init(void)                                        ; UNSUPPORTED (atexit -> _decode_pointer)
+011e58c0 rw_atom_singleton_get(void)                                      ; UNSUPPORTED (atexit -> _decode_pointer)
+011e5900 ArenaPathHolder::Split(char const*)                              ; equiv PASS
+011e59b0 rw_stream_push(int, int)                                         ; UNSUPPORTED (fake-arity)
+; helpers called: rw_FindTypeReg 0x011e21b0, rw_BaseResourceSetupTypeRegPtrs 0x011e45c0,
+;   Arena::IdToObject 0x011e2300, Arena::ObjectToId 0x011e3c30,
+;   atom::StaticAtomTable::Fixup 0x011eb040, ArenaSectionManifest::Initialize 0x011e4910,
+;   ArenaManager::Data thunk slot 0x0140a57c / vftable 0x0140a578,
+;   rw::core::stdc::MemClear 0x011ea8f0, crt::atexit 0x011e07ef, atexit trampoline 0x013cb3f0,
+;   arena write callbacks (arena +0x2c writeNoCtx / +0x30 writeCtx / +0x34 writeCtxArg).
+; Arena layout: +0x28 serial pos (advance callbacks), +0x2c/+0x30/+0x34 write callbacks,
+;   +0x78 current arena object, +0x7c serial pos (Refix), +0xc0 pos, +0xc4 align.

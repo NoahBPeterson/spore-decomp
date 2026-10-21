@@ -1,0 +1,15 @@
+011e4aa0 36 equiv PASS -- rw_section_types_advance: *(+0x28) += count*4+0xc, bytes diverge under LTCG
+011e4ad0 69 equiv PASS -- rw_section_init_table12: table init, byte layout differs
+011e4bb0 36 equiv PASS -- rw_section_ext_advance: *(+0x28) += count*8+0xc
+011e4be0 59 equiv PASS -- rw_section_init_table1c
+011e4c30 59 equiv PASS -- rw_section_init_table0c
+011e4c80 69 equiv PASS -- rw_section_pad_advance: align pos then +0xc
+011e4cd0 130 equiv PASS -- rw_ArenaSectionAtoms_Refix: write-callback via arena +0x2c/+0x30 (ecx = obj[0])
+011e4d70 12 equiv PASS -- rw_ArenaSectionAtoms_Fixup: IdToObject(this=[arena+0x78]) + atom fixup
+011e4db0 8 equiv PASS -- AtomsSection::SetAtomTableAndUnfixIt: ObjectToId(this=[arg2])
+011e4dd0 154 equiv PASS -- rw_section_init_combined: zero-fill + 4 sub-table inits
+011e5000 132 equiv PASS -- rw_sections_size: nested fixed-size walk
+011e5090 14 equiv PASS -- rw_sections_size_from
+011e5310 376 equiv PASS -- rw_ArenaSectionTypes_Fixup: type-table walk + write callbacks (ecx = section[0]/section[2])
+011e54a0 339 equiv PASS -- rw_ArenaSectionExternalArenas_ser: external-arena walk (ecx = section[0]/*slot/writeCtxArg)
+011e5900 107 equiv PASS -- ArenaPathHolder::Split: path tokenizer, calls rw::core::stdc::MemClear
