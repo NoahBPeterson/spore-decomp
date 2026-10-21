@@ -120,15 +120,23 @@ def progress(k):
                     done += 1
                     ok += fl[v.lower()] == "PASS"
             continue
+        # count each of the slice's own VAs once: wrapped notes (an indented line that starts with an
+        # address) and rows for other VAs used to push "done" past the total
+        want = {v.lower().lstrip("0") for v in BATCH[i]["vas"]}
+        seen = {}
         for f, isok in (("manifest.txt", 1), ("nonmatching.txt", 0), ("partial.txt", 0)):
             p = W("match/slices", sid, f)
             if os.path.exists(p):
-                if isok:  # manifest: "<source> <symbol> <va> [flags]"
-                    n = sum(1 for l in open(p) if l.strip() and not l.lstrip().startswith("#"))
-                else:
-                    n = sum(1 for l in open(p) if re.match(r"\s*(?:0x)?[0-9a-fA-F]{6,8}\b", l))
-                done += n
-                ok += n * isok
+                for l in open(p):
+                    parts = l.split("#", 1)[0].split() if l[:1] not in " \t" else []
+                    if not parts:
+                        continue
+                    va = (parts[2] if isok and len(parts) > 2 else parts[0]).lower()
+                    va = (va[2:] if va.startswith("0x") else va).lstrip("0")
+                    if va in want:
+                        seen[va] = max(seen.get(va, 0), isok)
+        done += len(seen)
+        ok += sum(seen.values())
     return tot, done, ok
 
 
