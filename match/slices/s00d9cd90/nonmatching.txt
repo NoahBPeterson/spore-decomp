@@ -5,7 +5,6 @@
 00d9d420 363 idle-animation proximity check: PlayIdleAnimation(0x1000), WatchMemoryBlock->0x00d994c0, the +0x600 array guard and the squared-distance scan over the +0x20/+0xc slots; 371 vs 335 bytes
 00d9d570 138 detach helper: clears +0x1ac if it aliases this, releases the +0x600 manager object via vtable slot 8, calls 0x00bcafe0 and stores -1 to +0x604; 98 vs 49 bytes because the original inlines the whole 0x00bcb430 tail
 00d9d5b0 592 SP::TRIBE_RESET_TOOL_Tick: PlayIdleAnimation(0x1000) + resolve, notify 0x5a8, clear the other members' agent orders and behavior stimuli, then either PlayAnimation(0x2c39200)/PlayAnimation(0x4ffb325) or the targeted move at the summed facing speed; 633 vs 588 bytes
-00d9d800 51 detach+clear helper: same +0x1ac guard then vtable 0x84(0,0,0); 57 vs 55 bytes
 00d9d840 73 free-slot search over a 0x210-stride array (bit30 tag -> 0x3fffffff, walks until a non-negative tag); 61 vs 77 bytes (original emits two different tag tests: shr 0x1e vs shr 0x1f)
 00d9d890 37 destroy range over 0x210-stride records calling vtable slot 0 with 0 for non-negative tags; 49 vs 52 bytes
 00d9d8d0 104 uninitialized_copy_n of 0x20-byte elements writing the advanced dst back through the out-param; 91 vs 109 bytes

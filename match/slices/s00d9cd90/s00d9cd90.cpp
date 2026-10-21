@@ -35,7 +35,6 @@ struct S {
   float FUN_00d9d420(void* creature);                // 0x00d9d420
   void  FUN_00d9d570(void* owner);                   // 0x00d9d570
   char  FUN_00d9d5b0(void* creature, int block);     // 0x00d9d5b0
-  void  FUN_00d9d800(void* owner);                   // 0x00d9d800
   int   FUN_00d9d840(int idx);                       // 0x00d9d840
   void  FUN_00d9d890(int* first, int* last);         // 0x00d9d890
   void  FUN_00d9d8d0(int* out, int* src, int* end, int* dst); // 0x00d9d8d0
@@ -408,12 +407,12 @@ char S::FUN_00d9d5b0(void* creature, int block)
 
 // ===========================================================================
 // @ 0x00d9d800
-void S::FUN_00d9d800(void* owner)
+void __cdecl FUN_00d9d800(void* owner)
 {
-  char* self = (char*)this;
+  char* self = (char*)owner;
   int arr = *(int*)(*(int*)(self + 0xb4c) + 0x600);
   if (arr != 0 && *(int**)(arr + 0x1ac) == (int*)self) *(int*)(arr + 0x1ac) = 0;
-  VCall3(self, 0x84, 0, 0, 0);
+  ((void (__thiscall*)(void*, int, int, int))VFn(self, 0x84))(self, 0, 0, 0);
 }
 
 // ===========================================================================
