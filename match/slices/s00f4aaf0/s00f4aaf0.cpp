@@ -356,7 +356,6 @@ extern VtblObj kBrushEffectCmdVtbl;                  // 0x0148decc
 extern VtblObj kGroupBrushCmdVtbl;                   // 0x0148deb0
 
 // ============================================================ functions =====
-
 // @ 0x00f4aaf0
 void cBrushEffectCommand::Execute(cArguments* args)
 {
