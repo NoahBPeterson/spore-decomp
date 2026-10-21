@@ -1,0 +1,5 @@
+009215c0 ?RBTreeDecrement@eastl@@YAPAUrbtree_node_base@@PBU2@@Z  # RBTreeDecrement migrated from s009215c0 (verbatim, slice spelling)
+00921600 ?RBTreeRotateLeft@eastl@@YAPAUrbtree_node_base@@PAU2@0@Z  # RBTreeRotateLeft migrated from s009215c0 (verbatim, slice spelling)
+00921650 ?RBTreeRotateRight@eastl@@YAPAUrbtree_node_base@@PAU2@0@Z  # RBTreeRotateRight migrated from s009215c0 (verbatim, slice spelling)
+009216a0 ?RBTreeInsert@eastl@@YAXPAUrbtree_node_base@@00W4RBTreeSide@1@@Z  # RBTreeInsert migrated from s009215c0 (verbatim, slice spelling)
+00921880 ?RBTreeErase@eastl@@YAXPAUrbtree_node_base@@0@Z  # RBTreeErase migrated from s009215c0 (verbatim, slice spelling)

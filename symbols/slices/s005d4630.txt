@@ -1,0 +1,2 @@
+005d4ff0 ?CrossSideCcw@@YA_NPAM00@Z  # CrossSideCcw migrated from s005d4630 (verbatim, slice spelling)
+005d5050 ?FUN_005d5050@@YAXH@Z  # FUN_005d5050 migrated from s005d4630 (verbatim, slice spelling)

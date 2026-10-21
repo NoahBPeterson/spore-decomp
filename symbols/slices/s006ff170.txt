@@ -1,0 +1,1 @@
+006ffaf0 ?TestClip1@VertexCtx@@QAEHPBM0@Z  # VertexCtx::TestClip1 migrated from s006ff170 (verbatim, slice spelling)

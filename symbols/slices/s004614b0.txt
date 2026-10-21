@@ -1,0 +1,5 @@
+004614b0 ?Dtor@Holder@@QAEXXZ  # Holder::Dtor migrated from s004614b0 (verbatim, slice spelling)
+00461510 ?GetGlobalFlag@@YAEXZ  # GetGlobalFlag migrated from s004614b0 (verbatim, slice spelling)
+00461520 ?LookupName@@YAPBDH@Z  # LookupName migrated from s004614b0 (verbatim, slice spelling)
+004615b0 ?UseName@@YAXH@Z  # UseName migrated from s004614b0 (verbatim, slice spelling)
+004615e0 ?RegisterCreatureModels@@YAXHIHHH@Z  # RegisterCreatureModels migrated from s004614b0 (verbatim, slice spelling)

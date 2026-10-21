@@ -1,0 +1,7 @@
+00a1a110 ?GetOutputValue@ResponseCurve@Audio@EA@@QBEMM@Z  # EA::Audio::ResponseCurve::GetOutputValue migrated from s00a196f0
+00a1a1a0 ?GetMaxInput@ResponseCurve@@QAE_NPAM@Z  # ResponseCurve::GetMaxInput migrated from s00a196f0 (verbatim, slice spelling)
+00a1a1c0 ?GetMinInput@ResponseCurve@@QAE_NPAM@Z  # ResponseCurve::GetMinInput migrated from s00a196f0 (verbatim, slice spelling)
+00a1a1e0 ?insert@FloatVec@@QAEXPAMABM@Z  # FloatVec::insert migrated from s00a196f0 (verbatim, slice spelling)
+00a1a2f0 ?insertN@RcdVec@@QAEXHIABUResponseCurveData@@@Z  # RcdVec::insertN migrated from s00a196f0 (verbatim, slice spelling)
+00a1a4d0 ?pushBack@FloatVec@@QAEXABM@Z  # FloatVec::pushBack migrated from s00a196f0 (verbatim, slice spelling)
+00a1a500 ?resize@RcdVec@@QAEXI@Z  # RcdVec::resize migrated from s00a196f0 (verbatim, slice spelling)

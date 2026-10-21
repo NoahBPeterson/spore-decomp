@@ -1,0 +1,5 @@
+00fd8190 ?RecordMovie@cMovieSystem_s00fd_8190@@QAE_NHPAH@Z  # cMovieSystem_s00fd_8190::RecordMovie migrated from s00fd8190 (verbatim, slice spelling)
+00fd86f0 ?SubmitFrame@cMovieSystem_s00fd_8190@@QAEXH@Z  # cMovieSystem_s00fd_8190::SubmitFrame migrated from s00fd8190 (verbatim, slice spelling)
+00fd87c0 ?PlayMovie@cMovieSystem_s00fd_8190@@QAE_NHPAH@Z  # cMovieSystem_s00fd_8190::PlayMovie migrated from s00fd8190 (verbatim, slice spelling)
+00fd8c40 ??0cMovieCheat@@QAE@PAX@Z  # cMovieCheat::cMovieCheat migrated from s00fd8190 (verbatim, slice spelling)
+00fd8d80 ?Execute@cMovieCheat@@QAEXH@Z  # cMovieCheat::Execute migrated from s00fd8190 (verbatim, slice spelling)

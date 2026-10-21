@@ -1,0 +1,2 @@
+006c2240 ??0PropertyList@@QAE@PAX@Z  # PropertyList::PropertyList migrated from s006c1cd0 (verbatim, slice spelling)
+006c22b0 ?BakeResourceCtor@@YAPAXPAX0000@Z  # BakeResourceCtor migrated from s006c1cd0 (verbatim, slice spelling)

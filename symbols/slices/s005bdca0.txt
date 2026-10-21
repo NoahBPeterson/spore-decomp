@@ -1,0 +1,2 @@
+005bde60 ?FUN_005bde60@@YAXXZ  # FUN_005bde60 migrated from s005bdca0 (verbatim, slice spelling)
+005be500 ?FUN_005be500@@YAXXZ  # FUN_005be500 migrated from s005bdca0 (verbatim, slice spelling)

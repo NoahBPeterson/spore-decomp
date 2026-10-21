@@ -1,0 +1,3 @@
+008f9fa0 ?Append@Selector@Style@XHTML@EA@@QAEXPAV1234@@Z  # Selector::Append migrated from s008f9220 (verbatim, slice spelling)
+00928b00 ?Init@StackAllocator@Allocator@EA@@QAEXPAXIP6APAXIPAI0@ZP6AX00@Z0@Z  # EA::Allocator::StackAllocator::Init (callee of s008f9220, named from the dev publics; slice address comment)
+00928dc0 ?Reset@StackAllocator@Allocator@EA@@QAEXXZ  # EA::Allocator::StackAllocator::Reset (callee of s008f9220, named from the dev publics; slice address comment)

@@ -1,0 +1,4 @@
+005ed360 ?cSPPaletteItemRolloverCtor@SP@@YAXPAVcSPPaletteItemRollover_s005e_cf80@1@_N@Z  # cSPPaletteItemRolloverCtor migrated from s005ecf80 (verbatim, slice spelling)
+005ed420 ?cSPPaletteItemRolloverInit@SP@@YAXPAVcSPPaletteItemRollover_s005e_cf80@1@@Z  # cSPPaletteItemRolloverInit migrated from s005ecf80 (verbatim, slice spelling)
+005ed650 ?Destroy@cSPPaletteItemRollover_s005e_cf80@SP@@QAEXXZ  # cSPPaletteItemRollover_s005e_cf80::Destroy migrated from s005ecf80 (verbatim, slice spelling)
+005ed700 ?cSPPaletteItemRolloverDtor@SP@@YAXPAVcSPPaletteItemRollover_s005e_cf80@1@I@Z  # cSPPaletteItemRolloverDtor migrated from s005ecf80 (verbatim, slice spelling)

@@ -1,0 +1,3 @@
+005d1f30 ?FUN_005d1f30@cSpine76@SP@@QAEXH@Z  # cSpine76::FUN_005d1f30 migrated from s005d1f30 (verbatim, slice spelling)
+005d2480 ?FUN_005d2480@cSpine76@SP@@QAEXH@Z  # cSpine76::FUN_005d2480 migrated from s005d1f30 (verbatim, slice spelling)
+005d25c0 ?FUN_005d25c0@@YAXH@Z  # FUN_005d25c0 migrated from s005d1f30 (verbatim, slice spelling)

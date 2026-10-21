@@ -1,0 +1,8 @@
+004604f0 ?BuildCreatureMaterialInfo@@YAXPAUPtrVector@@IHHHD@Z  # BuildCreatureMaterialInfo migrated from s004604f0 (verbatim, slice spelling)
+00460a80 ?FUN_00460a80@@YAHHHPAHH@Z  # FUN_00460a80 migrated from s004604f0 (verbatim, slice spelling)
+00460b50 ?FUN_00460b50@@YAXPAUBone@@HHUVec3_s0046_04f0@@@Z  # FUN_00460b50 migrated from s004604f0 (verbatim, slice spelling)
+00460bf0 ?FUN_00460bf0@@YAXPAUBone@@HHM@Z  # FUN_00460bf0 migrated from s004604f0 (verbatim, slice spelling)
+00460d40 ?FUN_00460d40@@YAXHHHHHHH@Z  # FUN_00460d40 migrated from s004604f0 (verbatim, slice spelling)
+00460f80 ?Ctor@C460f80@@QAEPAU1@XZ  # C460f80::Ctor migrated from s004604f0 (verbatim, slice spelling)
+00461290 ?AddRef@RefCounted@@QAEHXZ  # RefCounted::AddRef migrated from s004604f0 (verbatim, slice spelling)
+00461400 ?Ctor@C461400@@QAEPAU1@XZ  # C461400::Ctor migrated from s004604f0 (verbatim, slice spelling)

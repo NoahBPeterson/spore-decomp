@@ -1,0 +1,6 @@
+00657340 ?AsInterface@cSPUIAssetView@SP@@UAEPAXW4InterfaceId@COM@EA@@@Z  # SP::cSPUIAssetView::AsInterface migrated from s00656c70
+00657370 ?LogEvent_4e79d7d1@@YA_NXZ  # LogEvent_4e79d7d1 migrated from s00656c70 (verbatim, slice spelling)
+006573e0 ?GetGlobal_15f9f40@@YAHXZ  # GetGlobal_15f9f40 migrated from s00656c70 (verbatim, slice spelling)
+006573f0 ?Get@Vec3Holder@@QAE?AUVec3@@XZ  # Vec3Holder::Get migrated from s00656c70 (verbatim, slice spelling)
+00657420 ?SetEnabled@@YAXPAUVObj@@H_N@Z  # SetEnabled migrated from s00656c70 (verbatim, slice spelling)
+00657440 ?CastSub@@YAPAXPAPAUOuter@@@Z  # CastSub migrated from s00656c70 (verbatim, slice spelling)

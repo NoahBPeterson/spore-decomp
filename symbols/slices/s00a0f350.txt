@@ -1,0 +1,7 @@
+00a0f6a0 ?AudioAlloc@@YAPAXHHHHPBD@Z  # AudioAlloc migrated from s00a0f350 (verbatim, slice spelling)
+00a0f710 ?AudioAligned@@YAPAXHHHHHHPBD@Z  # AudioAligned migrated from s00a0f350 (verbatim, slice spelling)
+00a0f790 ?AudioAllocA@@YGPAXHPBDH@Z  # AudioAllocA migrated from s00a0f350 (verbatim, slice spelling)
+00a0f7c0 ?AudioAlignedA@@YGPAXHPBDHHH@Z  # AudioAlignedA migrated from s00a0f350 (verbatim, slice spelling)
+00a0f7f0 ?AudioFree@@YGXPAXH@Z  # AudioFree migrated from s00a0f350 (verbatim, slice spelling)
+00a0f810 ?AudioBlockAlloc@@YGPAUAudioBlock@@PAU1@PBHPBD@Z  # AudioBlockAlloc migrated from s00a0f350 (verbatim, slice spelling)
+00a0f860 ?AudioFreeBlock@@YGXPAPAX@Z  # AudioFreeBlock migrated from s00a0f350 (verbatim, slice spelling)

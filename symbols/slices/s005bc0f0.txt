@@ -1,0 +1,6 @@
+005bc630 ?Other2@cSPEditorManipulationStackingSimple@SP@@QAEXXZ  # cSPEditorManipulationStackingSimple::Other2 migrated from s005bc0f0 (verbatim, slice spelling)
+005bc7f0 ?Init@cSPEditorManipulationStackingSimple@SP@@QAEXPAPAVcSPEditorBlock_s005b_c0f0@2@UcSPVector3_s005b_c0f0@@@Z  # cSPEditorManipulationStackingSimple::Init migrated from s005bc0f0 (verbatim, slice spelling)
+005bc860 ??0cSPEditorManipulationStackingSimple@SP@@QAE@XZ  # cSPEditorManipulationStackingSimple::cSPEditorManipulationStackingSimple migrated from s005bc0f0 (verbatim, slice spelling)
+005bc930 ??1cSPEditorManipulationStackingSimple@SP@@UAE@XZ  # cSPEditorManipulationStackingSimple::~cSPEditorManipulationStackingSimple migrated from s005bc0f0 (verbatim, slice spelling)
+005bc9b0 ??4?$AutoRefCount_s005b_c0f0@VcSPEditorBlock_s005b_c0f0@SP@@@EA@@QAEAAV01@PAVcSPEditorBlock_s005b_c0f0@SP@@@Z  # None migrated from s005bc0f0 (verbatim, slice spelling)
+005bcaa0 ?DoOnMouseDown@cSPEditorManipulationStackingSimple@SP@@QAE_NXZ  # cSPEditorManipulationStackingSimple::DoOnMouseDown migrated from s005bc0f0 (verbatim, slice spelling)

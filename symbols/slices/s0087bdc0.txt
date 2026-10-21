@@ -1,0 +1,8 @@
+0087d4a0 ?galloc@@YGPAXH@Z  # galloc migrated from s0087bdc0 (verbatim, slice spelling)
+0087d4c0 ?gfree@@YG_NPAX@Z  # gfree migrated from s0087bdc0 (verbatim, slice spelling)
+0087d4e0 ?gread@@YGHPAX0H@Z  # gread migrated from s0087bdc0 (verbatim, slice spelling)
+0087d510 ?gwrite@@YGIPAX0I@Z  # gwrite migrated from s0087bdc0 (verbatim, slice spelling)
+0087d540 ?gseek@@YGXPAXHH@Z  # gseek migrated from s0087bdc0 (verbatim, slice spelling)
+0087d560 ?glen@@YG_KPAX@Z  # glen migrated from s0087bdc0 (verbatim, slice spelling)
+0087d570 ?gtell@@YG_JPAX@Z  # gtell migrated from s0087bdc0 (verbatim, slice spelling)
+0087d590 ?AddImportFormat@Gimex@EA@@YAXPAVImporter@12@@Z  # EA::Gimex::AddImportFormat migrated from s0087bdc0

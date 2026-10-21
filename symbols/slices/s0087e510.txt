@@ -1,0 +1,8 @@
+0087e510 ?FUN_0087e510@@YIPAULangPrefixObj@@PAU1@@Z  # FUN_0087e510 migrated from s0087e510 (verbatim, slice spelling)
+0087e8f0 ?FUN_0087e8f0@@YIXPAULangPrefixObj@@@Z  # FUN_0087e8f0 migrated from s0087e510 (verbatim, slice spelling)
+0087ed70 ?FUN_0087ed70@@YAPAXPAU?$LocT@$0BA@@@PAH@Z  # FUN_0087ed70 migrated from s0087e510 (verbatim, slice spelling)
+0087edd0 ?FUN_0087edd0@@YAPAXPAU?$LocT@$0BA@@@PAH@Z  # FUN_0087edd0 migrated from s0087e510 (verbatim, slice spelling)
+0087ee50 ?GetClosestLanguageId@Locale@EA@@YAPAXPAXPAH@Z  # GetClosestLanguageId migrated from s0087e510 (verbatim, slice spelling)
+0087f100 ?FUN_0087f100@@YIPAULocaleFormatObj@@PAU1@@Z  # FUN_0087f100 migrated from s0087e510 (verbatim, slice spelling)
+0087f210 ?FUN_0087f210@@YAPAXPAU?$LocT@$0BA@@@PB_W@Z  # FUN_0087f210 migrated from s0087e510 (verbatim, slice spelling)
+0087f350 ?FUN_0087f350@@YAPAXPAU?$LocT@$0BA@@@PAPA_W@Z  # FUN_0087f350 migrated from s0087e510 (verbatim, slice spelling)

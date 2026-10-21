@@ -1,0 +1,1 @@
+0047f720 ?BallConnector_Init@@YIXPAUcSPEditorHandle@@HPAX@Z  # BallConnector_Init migrated from s0047f520 (verbatim, slice spelling)

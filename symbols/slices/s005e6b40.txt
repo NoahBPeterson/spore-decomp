@@ -1,0 +1,9 @@
+005e6b40 ?DoMessage@cSPEditorVerbIconTray_s005e_6b40@SP@@QAEXPAVIWindow_s005e_6b40@UTFWin@EA@@@Z  # cSPEditorVerbIconTray_s005e_6b40::DoMessage migrated from s005e6b40 (verbatim, slice spelling)
+005e6fb0 ?CheckMessage@cSPEditorVerbIconTray_s005e_6b40@SP@@QAE_NPAVIWindow_s005e_6b40@UTFWin@EA@@PAX@Z  # cSPEditorVerbIconTray_s005e_6b40::CheckMessage migrated from s005e6b40 (verbatim, slice spelling)
+005e7030 ?SetLevelText@cSPEditorVerbIconTray@SP@@QAEXM@Z  # SP::cSPEditorVerbIconTray::SetLevelText migrated from s005e6b40
+005e71d0 ?Update@cSPEditorVerbIconTray_s005e_6b40@SP@@QAEXM@Z  # cSPEditorVerbIconTray_s005e_6b40::Update migrated from s005e6b40 (verbatim, slice spelling)
+005e7390 ?VectorDoAllocate@SP@@YAPAXPAXIPBE@Z  # VectorDoAllocate migrated from s005e6b40 (verbatim, slice spelling)
+005e7400 ?VectorDoInsert@SP@@YAXPAXI0@Z  # VectorDoInsert migrated from s005e6b40 (verbatim, slice spelling)
+005e75c0 ?SetBaseStat@cSPEditorVerbIconTray@SP@@UAEXM@Z  # SP::cSPEditorVerbIconTray::SetBaseStat migrated from s005e6b40
+005e76b0 ?Shutdown@cSPEditorVerbIconTray@SP@@UAEXXZ  # SP::cSPEditorVerbIconTray::Shutdown migrated from s005e6b40
+005e77e0 ?VectorResize@SP@@YAXPAXI@Z  # VectorResize migrated from s005e6b40 (verbatim, slice spelling)

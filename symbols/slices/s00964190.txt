@@ -1,0 +1,4 @@
+009643c0 ?OnMouseDown@WB@@QAE_NHHHI@Z  # WB::OnMouseDown migrated from s00964190 (verbatim, slice spelling)
+00964450 ?OnMouseUp@WB@@QAE_NHHHI@Z  # WB::OnMouseUp migrated from s00964190 (verbatim, slice spelling)
+00964c90 ?OnRebuild@WB@@QAE_NPAURenderContext@@@Z  # WB::OnRebuild migrated from s00964190 (verbatim, slice spelling)
+00964f10 ?CalcSize@WB@@QAE_NHPAM@Z  # WB::CalcSize migrated from s00964190 (verbatim, slice spelling)

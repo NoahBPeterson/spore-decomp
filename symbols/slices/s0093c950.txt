@@ -1,0 +1,6 @@
+0093d210 ?ConvertBinaryDataToASCIIArray@Text@EA@@YAXPBXIPA_W@Z  # EA::Text::ConvertBinaryDataToASCIIArray migrated from s0093c950
+0093d280 ?ConvertASCIIArrayToBinaryData@Text@EA@@YA_NPB_WHPAX@Z  # ConvertASCIIArrayToBinaryData migrated from s0093c950 (verbatim, slice spelling)
+0093d320 ?SplitTokenDelimited@Text@EA@@YA_NPB_WI_WPA_WIPAPB_W@Z  # SplitTokenDelimited migrated from s0093c950 (verbatim, slice spelling)
+0093d3a0 ??$MatchPattern@_W@Text@EA@@YA_NPB_W0@Z  # MatchPattern migrated from s0093c950 (verbatim, slice spelling)
+0093d470 ?WildcardMatch@Text@EA@@YA_NPB_W0_N@Z  # EA::Text::WildcardMatch migrated from s0093c950
+0093d5d0 ?WildcardMatch@Text@EA@@YA_NPBD0_N@Z  # EA::Text::WildcardMatch migrated from s0093c950

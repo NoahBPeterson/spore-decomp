@@ -1,0 +1,2 @@
+008859f0 ?FUN_008859f0@@YAHPBM0@Z  # FUN_008859f0 migrated from s00884a20 (verbatim, slice spelling)
+00885a60 ?EA_Text_GetFontServer@@YAPAXD@Z  # EA_Text_GetFontServer migrated from s00884a20 (verbatim, slice spelling)

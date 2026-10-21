@@ -1,0 +1,2 @@
+0092c2d0 ?WriteToBigEndian@Util@EA@@YAXPAXIH@Z  # EA::Util::WriteToBigEndian migrated from s0092b840
+0092c340 ?DecodeUnchecked@@YAHPAEI0@Z  # DecodeUnchecked migrated from s0092b840 (verbatim, slice spelling)

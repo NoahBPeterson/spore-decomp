@@ -1,0 +1,2 @@
+004103c0 ?Bake@BakeRequest@@QAE_NXZ  # BakeRequest::Bake migrated from s004103c0 (verbatim, slice spelling)
+00410cc0 ??0BakeJob@@QAE@II@Z  # BakeJob::BakeJob migrated from s004103c0 (verbatim, slice spelling)

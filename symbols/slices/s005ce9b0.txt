@@ -1,0 +1,4 @@
+005ce9b0 ?FUN_005ce9b0@@YGHPAUOutPath@SP@@PAUCircleVec@2@HMMI@Z  # FUN_005ce9b0 migrated from s005ce9b0 (verbatim, slice spelling)
+005cf110 ?NearestParam@SpineHandle@SP@@QAEPAUVec2@2@PAU32@PAUSpineNode@2@@Z  # SpineHandle::NearestParam migrated from s005ce9b0 (verbatim, slice spelling)
+005cf4f0 ?Extrude@SpineHandle@SP@@QAEXPAUBlock@2@MMH@Z  # SpineHandle::Extrude migrated from s005ce9b0 (verbatim, slice spelling)
+005cf7a0 ?CopyE20@@YA?AUE20Iter@SP@@U12@00@Z  # CopyE20 migrated from s005ce9b0 (verbatim, slice spelling)

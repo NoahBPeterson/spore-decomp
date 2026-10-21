@@ -1,0 +1,7 @@
+008fbac0 ?DoRehash@CounterMap@Style@@QAEXI@Z  # CounterMap::DoRehash migrated from s008fb7e0 (verbatim, slice spelling)
+008fbbc0 ?ClearCounterReset@StyleState@Style@@QAEXXZ  # StyleState::ClearCounterReset migrated from s008fb7e0 (verbatim, slice spelling)
+008fbbf0 ?find@CounterMap@Style@@QAE?AUiterator@12@ABQB_W@Z  # CounterMap::find migrated from s008fb7e0 (verbatim, slice spelling)
+008fbc80 ?insert@CounterMap@Style@@QAE?AUInsertResult@12@ABUvalue_type@12@PB_W@Z  # CounterMap::insert migrated from s008fb7e0 (verbatim, slice spelling)
+008fbda0 ?GetCounter@StyleState@Style@@QAEHPB_W@Z  # StyleState::GetCounter migrated from s008fb7e0 (verbatim, slice spelling)
+008fbe00 ??0StyleState@Style@@QAE@PAVPage@@@Z  # StyleState::StyleState migrated from s008fb7e0 (verbatim, slice spelling)
+008fc130 ??0StyleState@Style@@QAE@ABV01@@Z  # StyleState::StyleState migrated from s008fb7e0 (verbatim, slice spelling)

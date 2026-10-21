@@ -1,0 +1,5 @@
+00464300 ?F_00464300@@YAXXZ  # F_00464300 migrated from s00464300 (verbatim, slice spelling)
+00464480 ?F_00464480@@YAXXZ  # F_00464480 migrated from s00464300 (verbatim, slice spelling)
+00464580 ?F_00464580@@YAXXZ  # F_00464580 migrated from s00464300 (verbatim, slice spelling)
+00464680 ?F_00464680@@YAXXZ  # F_00464680 migrated from s00464300 (verbatim, slice spelling)
+004647b0 ?F_004647b0@@YAXXZ  # F_004647b0 migrated from s00464300 (verbatim, slice spelling)

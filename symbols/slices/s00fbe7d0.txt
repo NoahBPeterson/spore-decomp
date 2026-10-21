@@ -1,0 +1,1 @@
+00fbe7d0 ?Initialize@cTerrainStateMgr@@QAEXXZ  # cTerrainStateMgr::Initialize migrated from s00fbe7d0 (verbatim, slice spelling)

@@ -1,0 +1,1 @@
+00407280 ?BuildGraphicsProperties@SettingsBuilder@@QAEXPAUResourceKey_s0040_7280@@@Z  # SettingsBuilder::BuildGraphicsProperties migrated from s00407280 (verbatim, slice spelling)

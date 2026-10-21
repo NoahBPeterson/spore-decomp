@@ -1,0 +1,3 @@
+004ecec0 ?FUN_004ecec0@@YAXPAX@Z  # FUN_004ecec0 migrated from s004ecec0 (verbatim, slice spelling)
+004ed320 ?FUN_004ed320@@YAXPAX0@Z  # FUN_004ed320 migrated from s004ecec0 (verbatim, slice spelling)
+004ed7f0 ?FUN_004ed7f0@@YAXPAX0@Z  # FUN_004ed7f0 migrated from s004ecec0 (verbatim, slice spelling)

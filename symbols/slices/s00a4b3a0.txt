@@ -1,0 +1,1 @@
+00a4b3a0 ?FUN_00a4b3a0@@YAXPAUcCanvas@@HHHPAUcAtom@@@Z  # FUN_00a4b3a0 migrated from s00a4b3a0 (verbatim, slice spelling)

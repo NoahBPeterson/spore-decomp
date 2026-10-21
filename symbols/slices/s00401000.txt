@@ -1,0 +1,5 @@
+00401030 ?GetSetting3@@YAHXZ  # GetSetting3 migrated from s00401000 (verbatim, slice spelling)
+00401040 ?GetSetting4@@YAHXZ  # GetSetting4 migrated from s00401000 (verbatim, slice spelling)
+00401050 ?GetSetting5@@YAHXZ  # GetSetting5 migrated from s00401000 (verbatim, slice spelling)
+00401060 ?GetSetting6@@YAHXZ  # GetSetting6 migrated from s00401000 (verbatim, slice spelling)
+00401070 ?GetSetting7@@YAHXZ  # GetSetting7 migrated from s00401000 (verbatim, slice spelling)

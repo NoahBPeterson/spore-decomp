@@ -1,0 +1,1 @@
+00a02da0 ?BuildBoxVertices_00a02da0@@YAXPAM0000M@Z  # BuildBoxVertices_00a02da0 migrated from s00a02da0 (verbatim, slice spelling)

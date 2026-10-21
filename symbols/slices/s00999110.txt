@@ -1,0 +1,5 @@
+00928b00 ?Init@StackAllocator@Allocator@EA@@QAEXPAXIP6APAXIPAI0@ZP6AX00@Z0@Z  # EA::Allocator::StackAllocator::Init (callee of s00999110, named from the dev publics; slice address comment)
+009997e0 ??0StringTable@@QAE@XZ  # StringTable::StringTable migrated from s00999110 (verbatim, slice spelling)
+00999820 ??0UIStringMan@@QAE@PAX@Z  # UIStringMan::UIStringMan migrated from s00999110 (verbatim, slice spelling)
+00999850 ??1UIStringMan@@UAE@XZ  # UIStringMan::~UIStringMan migrated from s00999110 (verbatim, slice spelling)
+00999890 ?f@S99890@@QAE_NPAI@Z  # S99890::f migrated from s00999110 (verbatim, slice spelling)

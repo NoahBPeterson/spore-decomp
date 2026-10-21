@@ -1,0 +1,5 @@
+009b3450 ?AddRef@creature_static_data@nSPCreatureAnim@@QBEJXZ  # nSPCreatureAnim::creature_static_data::AddRef (callee of s00a0aca0, named from the dev publics; slice address comment)
+009c26a0 ?Release@creature_static_data@nSPCreatureAnim@@QBEJXZ  # nSPCreatureAnim::creature_static_data::Release (callee of s00a0aca0, named from the dev publics; slice address comment)
+00a00910 ?Init@queued_blender@nSPCreatureAnim@@QAEXPAUcreature_instance_data@2@PAUbaked_anim_manager@2@@Z  # nSPCreatureAnim::queued_blender::Init (callee of s00a0aca0, named from the dev publics; slice address comment)
+00a0b260 ?CreateCreatureController@AnimWorld@@QAEPAUanim_creature@@PBUResourceKey@@PAPAUResourceObject@@PBDIPBUvector_3@@PBUvector_4@@_N@Z  # AnimWorld::CreateCreatureController migrated from s00a0aca0 (verbatim, slice spelling)
+00a17060 ?AddRef@creature_instance_data@nSPCreatureAnim@@QAEJXZ  # nSPCreatureAnim::creature_instance_data::AddRef (callee of s00a0aca0, named from the dev publics; slice address comment)

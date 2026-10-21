@@ -1,0 +1,4 @@
+006e9b00 ?m9b00@S5@@QAEPAU1@XZ  # S5::m9b00 migrated from s006e8f90 (verbatim, slice spelling)
+006e9bf0 ?m9bf0@S5@@QAEPAU1@XZ  # S5::m9bf0 migrated from s006e8f90 (verbatim, slice spelling)
+006e9cc0 ?m9cc0@S5@@QAEPAXXZ  # S5::m9cc0 migrated from s006e8f90 (verbatim, slice spelling)
+006e9d50 ?m9d50@S5@@QAEXPAX@Z  # S5::m9d50 migrated from s006e8f90 (verbatim, slice spelling)

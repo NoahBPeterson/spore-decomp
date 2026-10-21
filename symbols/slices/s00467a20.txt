@@ -1,0 +1,2 @@
+00467a20 ?F_00467a20@@YAXXZ  # F_00467a20 migrated from s00467a20 (verbatim, slice spelling)
+00467ef0 ?F_00467ef0@@YAXXZ  # F_00467ef0 migrated from s00467a20 (verbatim, slice spelling)

@@ -1,0 +1,11 @@
+006a1710 ?SetParent@cPropertyList@SP@@QAEXPAV12@@Z  # SP::cPropertyList::SetParent (callee of s00754310, named from the dev publics; slice address comment)
+00754310 ?SP_RegisterModel_00754310@@YA_NPAXII@Z  # SP_RegisterModel_00754310 migrated from s00754310 (verbatim, slice spelling)
+007544e0 ?FUN_007544e0@@YAXPAXII@Z  # FUN_007544e0 migrated from s00754310 (verbatim, slice spelling)
+007545b0 ?FUN_007545b0@S_007545b0@@QAE_NH@Z  # S_007545b0::FUN_007545b0 migrated from s00754310 (verbatim, slice spelling)
+00754620 ?FUN_00754620@@YA_NII@Z  # FUN_00754620 migrated from s00754310 (verbatim, slice spelling)
+00754770 ?FUN_00754770@S_00754770@@QAE_NPAX@Z  # S_00754770::FUN_00754770 migrated from s00754310 (verbatim, slice spelling)
+00754960 ?FUN_00754960_impl@@YA_NPAUKey@@PAPAURes@@I@Z  # FUN_00754960_impl migrated from s00754310 (verbatim, slice spelling)
+00754ba0 ?CreateModelInstance@SP@@YA_NIIPAPAVcModelInstance@1@I@Z  # SP::CreateModelInstance migrated from s00754310
+00754c20 ?FUN_00754c20@S_00754c20@@QAEXPAUcJob@@@Z  # S_00754c20::FUN_00754c20 migrated from s00754310 (verbatim, slice spelling)
+00754ca0 ?FUN_00754ca0@S_00754ca0@@QAE_NH@Z  # S_00754ca0::FUN_00754ca0 migrated from s00754310 (verbatim, slice spelling)
+007552e0 ?Assign@GlyphVec@@QAEAAU1@ABU1@@Z  # GlyphVec::Assign migrated from s00754310 (verbatim, slice spelling)

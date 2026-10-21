@@ -1,0 +1,1 @@
+00fa5610 ?UpdateQuadsPostCamera@cTerrainSphere_s00fa_5610@@QAEXPAX@Z  # cTerrainSphere_s00fa_5610::UpdateQuadsPostCamera migrated from s00fa5610 (verbatim, slice spelling)

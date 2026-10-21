@@ -1,0 +1,1 @@
+006c12a0 ?RegisterArenaReadCallbacks@@YAXXZ  # RegisterArenaReadCallbacks migrated from s006c0db0 (verbatim, slice spelling)

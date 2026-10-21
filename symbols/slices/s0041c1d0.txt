@@ -1,0 +1,6 @@
+0041c1d0 ?DumpBlockDescriptions@@YAXHH@Z  # DumpBlockDescriptions migrated from s0041c1d0 (verbatim, slice spelling)
+008d8530 ?SetHoleUse@DatabasePackedFile@ResourceMan@EA@@QAE_NHM@Z  # EA::ResourceMan::DatabasePackedFile::SetHoleUse (callee of s0041c1d0, named from the dev publics; slice address comment)
+0093ba70 ?GetData@MemoryStream@IO@EA@@QBEPAXXZ  # EA::IO::MemoryStream::GetData (callee of s0041c1d0, named from the dev publics; slice address comment)
+0093bb40 ?SetOption@MemoryStream@IO@EA@@QAEXW4Options@123@M@Z  # EA::IO::MemoryStream::SetOption (callee of s0041c1d0, named from the dev publics; slice address comment)
+0093c0c0 ?SetPosition@MemoryStream@IO@EA@@UAE_NJW4PositionType@23@@Z  # EA::IO::MemoryStream::SetPosition (callee of s0041c1d0, named from the dev publics; slice address comment)
+0093c370 ?SetSize@MemoryStream@IO@EA@@UAE_NI@Z  # EA::IO::MemoryStream::SetSize (callee of s0041c1d0, named from the dev publics; slice address comment)

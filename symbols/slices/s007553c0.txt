@@ -1,0 +1,5 @@
+007553c0 ?FUN_007553c0@@YAXPAX@Z  # FUN_007553c0 migrated from s007553c0 (verbatim, slice spelling)
+00755470 ?FUN_00755470@@YAXPAX@Z  # FUN_00755470 migrated from s007553c0 (verbatim, slice spelling)
+00755520 ?FUN_00755520@X_755520@@QAE_NPAUcJob_755520@@@Z  # X_755520::FUN_00755520 migrated from s007553c0 (verbatim, slice spelling)
+00755570 ?FUN_00755570@V_755570@@QAEXIH@Z  # V_755570::FUN_00755570 migrated from s007553c0 (verbatim, slice spelling)
+007555d0 ?FUN_007555d0@@YAXPAX@Z  # FUN_007555d0 migrated from s007553c0 (verbatim, slice spelling)

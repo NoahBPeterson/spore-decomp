@@ -1,0 +1,1 @@
+00454b10 ?VariantTypeTraits_Key_GetTPTR@@YIPAXPAUVariant@@@Z  # VariantTypeTraits_Key_GetTPTR migrated from s00454330 (verbatim, slice spelling)

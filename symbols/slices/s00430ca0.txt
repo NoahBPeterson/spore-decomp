@@ -1,0 +1,1 @@
+00430ca0 ?BakeSpriteTextureMips@@YAXPAXHHPAUBakeTarget@@@Z  # BakeSpriteTextureMips migrated from s00430ca0 (verbatim, slice spelling)

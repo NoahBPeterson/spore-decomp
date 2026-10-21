@@ -1,0 +1,1 @@
+00f6a960 ?Draw@Compositor@@QAE_NPAUSource@@PBIHURect@@MMMHPAX@Z  # Compositor::Draw migrated from s00f6a960 (verbatim, slice spelling)
