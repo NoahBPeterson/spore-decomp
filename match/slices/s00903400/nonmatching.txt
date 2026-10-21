@@ -11,6 +11,8 @@
 
 00903400  XmlBufferGrow   size 323 vs 331, 309 diff. Equivalence WEAK (282 valid, 40% coverage). The mode check lowers differently: the original does `sub eax,2; je; sub eax,1; je` (a two-case switch on mode-2) where MSVC emits our `test/jne/cmp`. Remaining body matches structurally.
 
+00903550  XmlSetParsingState  size 66 vs 114, 81 diff. The mode transition (0x1e0 == 2/3 cases, the 0x25/0x24/0x21 status codes, the 0x1e8 final-flag check) is complete; the original measures the region through the following accessor so its byte count is inflated, and the branch on `final` is laid out differently (test/je vs the original's cmp/setne chain).
+
 009036b0  storeRawNames   size 165 vs 152, 177 diff. Equivalence FAIL (eax: the function returns the bool in al, ours in eax, and the eastl DoInsertValue call is indirect in ours). Body is the correct walker.
 
 009037a0  addBinding      size 43 vs 325, 324 diff. Equivalence WEAK (237 valid, 8.9% coverage). Only the name-length prefix is transcribed; the parser state arrives in ebx, and the pool-alloc / rehash tail could not be reproduced.

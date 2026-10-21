@@ -1,0 +1,23 @@
+; slice s00903400 = 0x00903400..0x009041c0 (expat XML parser internals: xmlparse.c / xmltok hashing)
+; manifest.txt rows are byte-exact; the rest are the nonmatching.txt entries
+00903400 ?XmlBufferGrow@@YAHPADI@Z  # complete, non-exact
+00903550 ?XmlSetParsingState@@YAHPADD@Z  # complete, non-exact
+009035d0 ?XmlGetParsingStatus@@YAXPADPAH@Z  # byte-exact
+009035f0 ?XmlGetByteIndex@@YAHPAD@Z  # byte-exact
+00903610 ?XmlFlushTailA@@YAHPAD@Z  # byte-exact
+00903660 ?XmlFlushTailB@@YAHPAD@Z  # byte-exact
+009036b0 ?storeRawNames@@YAHPAD@Z  # complete, non-exact
+00903750 ?externalEntityContentProcessor@@YAHPADPAX11@Z  # complete, non-exact
+009037a0 ?addBinding@@YAHPAHHPAGPAPAX@Z  # complete, non-exact
+009038f0 ?handleUnknownEncoding@@YAHPAD0@Z  # complete, non-exact
+00903a10 ?processInternalEntity@@YAHPADD@Z  # complete, non-exact
+00903b50 ?normalizeLines@@YAXPAG@Z  # complete, non-exact
+00903bb0 ?reportDefault@@YAXPAD00@Z  # complete, non-exact
+00903c60 ?XmlStoreAttsTableInsert@@YAHPADDHDH@Z  # complete, non-exact
+00903d30 ?collapseWhitespace@@YAXPAG@Z  # complete, non-exact
+00903da0 ?XmlHash@@YIIIPAG@Z  # byte-exact
+00903dd0 ?XmlHashTableLookup@@YAPAXPAD@Z  # complete, non-exact
+009040b0 ?XmlHashTableClear@@YAXPAH@Z  # complete, non-exact
+009040f0 ?XmlPoolClear@@YIXPAH@Z  # byte-exact
+00904130 ?XmlPoolDestroy@@YIXPAH@Z  # complete, non-exact
+00904170 ?XmlPoolGrow@@YAXPAD@Z  # complete, non-exact
