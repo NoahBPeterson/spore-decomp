@@ -1,0 +1,14 @@
+; slice s00f23cd0 = 0x00f23cd0..0x00f24ba0 (event tree / scheduler) - exact decorated names
+; manifest.txt rows are byte-exact; the rest are the nonmatching.txt entries
+00f23cd0 ?FUN_00f23cd0@@YADPAH0@Z  # complete, non-exact
+00f23d20 ?FUN_00f23d20@@YAXPAH0@Z  # complete, non-exact
+00f24060 ?FUN_00f24060@@YAHPAH@Z  # complete, non-exact
+00f240d0 ?Destroy@EventTree@@QAEXPAH@Z  # byte-exact
+00f24120 ?Insert@EventTree@@QAEPAIPAI0I@Z  # complete, non-exact
+00f24190 ?FUN_00f24190@@YAXPAH0@Z  # complete, non-exact
+00f24200 ?FUN_00f24200@@YAXXZ  # complete, non-exact
+00f24390 ?FUN_00f24390@@YAXXZ  # complete, non-exact
+00f243c0 ?FUN_00f243c0@@YAXPAHM@Z  # complete, non-exact
+00f24700 ?FUN_00f24700@@YAXPAH0HMMM@Z  # complete, non-exact
+00f248b0 ?FUN_00f248b0@@YAXPAH0@Z  # complete, non-exact
+00f24ae0 ?FUN_00f24ae0@@YAXPAHHM@Z  # complete, non-exact
