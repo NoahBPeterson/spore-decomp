@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f4ef20/s00f4ef20.cpp  ?SubSet@cTerrainTool@SP@@QAEDHM@Z  00f4efe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
