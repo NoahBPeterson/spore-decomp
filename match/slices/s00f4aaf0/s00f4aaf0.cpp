@@ -573,15 +573,16 @@ SWARM_TerrainBrushCreate::~SWARM_TerrainBrushCreate()
 // @ 0x00f4b420
 void cTerrainBrushEffect::Initialize(void*, void*, void*)
 {
+    float epsilon = 0.0001f;                    // xmm0, loaded before the deref
     cTerrainBrushDescription* d = mDesc;
     mLifeTime = d->mLifetime;
-    float epsilon = 0.0001f;
     float* denom = &d->mLifetime;
-    if (d->mLifetime <= 0.0001f)
+    if (!(d->mLifetime > epsilon))              // movss xmm1,[ecx]; comiss; ja
         denom = &epsilon;
     mInvLifetime = 1.0f / *denom;
     mDoSpacing = (d->mSpacingCurve.mpBegin != d->mSpacingCurve.mpEnd);
-    if ((d->mTexture[0] & d->mTexture[1]) != 0xffffffff) {
+    uint32 texLo = d->mTexture[0];              // mov ecx, [eax+0x18]
+    if ((texLo & d->mTexture[1]) != 0xffffffff) {
         void* mgr = Singleton67dd60();
         cTerrainBrushDescription* d2 = mDesc;
         uint64 tex = *(uint64*)&d2->mTexture[0];
