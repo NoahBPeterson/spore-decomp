@@ -117,7 +117,7 @@ static void hkThreadFree(int ptr, int size, int align) {
 // ===========================================================================
 // @ 0x01085a80  hkWorld::removeEntityBatch
 // ===========================================================================
-struct hkWorld {
+class hkWorld { public:
     void FUN_01085a80(int* param_2, u32 param_3);
     int* FUN_01085e60(int* param_2);
     void FUN_01086030(int* param_2);

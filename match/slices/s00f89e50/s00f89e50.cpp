@@ -37,13 +37,13 @@ __forceinline int FloorToInt(float f)
 
 namespace SP {
 
-struct cTerrainMapBase {
+class cTerrainMapBase { public:
     uint32_t pad0[2];
     uint32_t mFaceSize;   // +0x8
     uint32_t mModCount;   // +0xc
 };
 
-template <class T> struct cTerrainMap : cTerrainMapBase {
+template <class T> class cTerrainMap : public cTerrainMapBase { public:
     T* mpBegin;           // +0x10 (vector storage)
     T* mpEnd;
     T* mpCapacity;

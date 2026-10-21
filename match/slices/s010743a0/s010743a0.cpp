@@ -139,7 +139,7 @@ void SoundCb();                  // 0x010701e0
 
 namespace SP {
 
-struct cSPUISpace {
+class cSPUISpace { public:
     char pad000[0x224];
     GlobalUI* mpGlobalUI;                // +0x224
     char pad228[0x568 - 0x228];

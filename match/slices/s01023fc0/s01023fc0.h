@@ -18,7 +18,7 @@ namespace eastl {
 
 extern wchar_t gEmptyString16[2];   // 0x01667BAC
 
-struct allocator { allocator() {} };
+class allocator { public: allocator() {} };
 
 // basic_string<char, allocator> (out-of-line ctor/dtor)
 class string {
@@ -199,13 +199,13 @@ public:
 };
 cUIManager* GetUIManager();                                     // 0x00B3D3F0
 
-struct cSPLivingUniverse {
+class cSPLivingUniverse { public:
     static cPlanet* GetActivePlanet();                          // 0x01021260
 };
 
 namespace nSpaceCheats {
 
-class cCommandMission {
+struct cCommandMission { private:
 public:
     virtual void ParseLine(EA::ArgScript::cArguments* args);
     EA::ArgScript::FormatParser* mpFormatParser;                // +0x04

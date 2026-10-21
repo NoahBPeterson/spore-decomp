@@ -31,7 +31,7 @@ void        RasterStageUpdate(int face);                                        
 bool        RasterViewerUpdate();                                                      // 0x007c4fd0 (this=0x016c9f60)
 void        RasterFlushStage();                                                        // 0x007c3c10 (this=0x016c9f60)
 
-struct cTerrainMapSet;
+class cTerrainMapSet;
 
 class cTerrainEditor {
  public:
@@ -42,7 +42,7 @@ class cTerrainEditor {
 };
 cTerrainEditor* TerrainEditor();                                                       // 0x00f48a70
 
-struct cTerrainMapSet {
+class cTerrainMapSet { public:
   float GetHeightAt(const Vector3& v) const;                                           // 0x00f927c0
 };
 

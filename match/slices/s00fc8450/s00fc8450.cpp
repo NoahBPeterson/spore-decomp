@@ -7,8 +7,8 @@ namespace core {
 namespace filesys {
 
 // rwcore/filesys/asyncop.h (b5-decomp layout, size 0x48).
-struct AsyncOp
-{
+class AsyncOp
+{ public:
     uint8_t mData[0x48];
 
     AsyncOp();                                                          // 0x11e84f0

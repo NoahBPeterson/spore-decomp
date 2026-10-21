@@ -120,7 +120,7 @@ public:
     virtual void ReleaseAndDrawBuffer() = 0;                           // slot 2
 };
 
-struct cParticlesEffect {
+class cParticlesEffect { public:
     u32                    pad000[0x18 / 4];  // vtables + cComponentBase
     cParticle*             mParticlesFirst;   // +0x18 intrusive_list anchor.mpNext
     cParticle*             mParticlesLast;    // +0x1c

@@ -152,7 +152,7 @@ bool GetFloatProperty(cPropertyList* list, uint32_t id, float& out);  // 0x0040c
 
 // ---- the class --------------------------------------------------------------------------
 namespace SP {
-struct cSPSimulatorPlayerUFO {
+class cSPSimulatorPlayerUFO { public:
     uint32_t pad00[0x14 / 4];
     bool mUIButton_ZoomIn;                                    // +0x14
     bool mUIButton_ZoomOut;                                   // +0x15

@@ -47,8 +47,8 @@ bool __cdecl TerrainRayCast(void* map, float, float, Vec3*, Vec3*, Vec3*);  // 0
 
 namespace SP {
 
-struct cTerrainSphere
-{
+class cTerrainSphere
+{ public:
     void  m00f96840();
     int   m00f96870();
     int   m00f968b0(char* other);

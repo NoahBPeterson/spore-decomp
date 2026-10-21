@@ -44,7 +44,7 @@ extern float gPlanetCamSnapDistance;       // 0x016dd410 (added to the planet ra
 
 namespace SP {
 
-struct cGameTimeManager {
+class cGameTimeManager { public:
     uint32_t pad0[0x48 / 4];
     uint8_t  mFlags;   // +0x48, bit 0 = paused
 };
@@ -57,7 +57,7 @@ struct IGameInputManager {
 };
 IGameInputManager* GameInputManager();     // 0x00b3d250
 
-struct cSpatialObject {   // the UFO's spatial base (cSPGameDataUFO + 0x34)
+class cSpatialObject { public:   // the UFO's spatial base (cSPGameDataUFO + 0x34)
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual void v20(); virtual void v24(); virtual void v28();
@@ -65,7 +65,7 @@ struct cSpatialObject {   // the UFO's spatial base (cSPGameDataUFO + 0x34)
     virtual const Quaternion* GetOrientation();   // +0x30
 };
 
-struct cSPGameDataUFO {
+class cSPGameDataUFO { public:
     uint32_t pad0[0x34 / 4];
     cSpatialObject mSpatialStorage;                 // +0x34 (used through Spatial())
     float GetMaxGroundSpeed();                      // 0x00c38840
@@ -73,7 +73,7 @@ struct cSPGameDataUFO {
     template <typename T> T& At(int off) { return *reinterpret_cast<T*>(reinterpret_cast<char*>(this) + off); }
 };
 
-struct cSPSimulatorSpaceGame {
+class cSPSimulatorSpaceGame { public:
     cSPGameDataUFO* GetPlayerInventory();           // 0x00a1ad60
 };
 cSPSimulatorSpaceGame* GetUFOSimulator();           // 0x00ffbe50

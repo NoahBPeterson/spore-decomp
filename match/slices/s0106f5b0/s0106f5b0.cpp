@@ -116,7 +116,7 @@ struct DeletableObj { virtual ~DeletableObj(); };
 extern void* g_16e0d08;                                             // 0x016e0d08
 
 namespace SP {
-struct cSPUISpace : BaseRes, BaseCount, BaseMsg {
+class cSPUISpace : public BaseRes, public BaseCount, public BaseMsg { public:
     uint32_t     pad10[2];            // 0x10
     ArcC0        m018;                // 0x18
     cString      s01c,

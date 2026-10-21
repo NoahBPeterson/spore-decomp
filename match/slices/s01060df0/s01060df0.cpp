@@ -289,7 +289,7 @@ public:
     virtual cCameraManager* GetCameraManager();    // slot 20 (+0x50)
 };
 
-struct cGameTimeManager { uint8_t pad00[0x48]; uint8_t mFlags; };   // bit 0: paused
+class cGameTimeManager { public: uint8_t pad00[0x48]; uint8_t mFlags; };   // bit 0: paused
 struct cGameModeState   { uint32_t pad00[0x2C / 4]; int mState; };
 
 cApp*              App();                          // 0x0067DD10

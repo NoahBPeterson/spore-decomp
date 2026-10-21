@@ -65,7 +65,7 @@ struct hkWorldCallbackUtil
 };
 struct hkEntityCallbackUtil { static void fireEntityShapeSet(hkEntity* entity); };                          // 0x0109E760
 struct hkDiscreteSimulation { static void collideEntitiesBroadPhaseDiscrete(hkEntity** entities, int numEntities, hkWorld* world); };   // 0x01099CD0
-struct hkThreadMemory { void deallocateChunk(void* p, int nbytes, int memClass); };                         // 0x0107DB10
+class hkThreadMemory { public: void deallocateChunk(void* p, int nbytes, int memClass); };                         // 0x0107DB10
 
 // ---------------------------------------------------------------------------------------------------------
 // hkWorld::updateCollisionFilterOnWorld

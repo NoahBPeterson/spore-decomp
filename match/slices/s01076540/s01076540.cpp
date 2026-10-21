@@ -6,7 +6,7 @@
 #define PAD(n) virtual void pad##n()
 
 struct IWindow;
-struct cSPUILayout {
+class cSPUILayout { public:
     IWindow* FindWindowByID(uint32_t id, int recursive);     // 0x008105b0 (ret 8)
 };
 
@@ -84,7 +84,7 @@ uint32_t GetRecorderState();                                  // 0x00435e90
 void KillSetiEffects(uint32_t key, uint32_t state);           // 0x00435ed0 SP::cSPUISpace::KillSetiEffects
 void SetGlobalProperty(uint32_t id, float value);             // 0x005ca880
 
-struct cSPUIAnimator { void Update(); };                      // 0x007f63b0
+class cSPUIAnimator { public: void Update(); };                      // 0x007f63b0
 struct Sub50 {
     void Fn36540();                                           // 0x00e36540
     void Fn36620();                                           // 0x00e36620

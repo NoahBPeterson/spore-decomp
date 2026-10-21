@@ -15,9 +15,9 @@ typedef double hkX87Real;
 typedef float hkReal;
 
 // ------------------------------------------------------------ base types
-struct hkVector4 { float x, y, z, w; };
-struct hkQuaternion { float m_vec[4]; uint32_t set(const struct hkRotation& r); void toQuatImpl(const struct hkRotation& r); };    // x y z w
-struct hkRotation { float m_el[12]; void set(const hkQuaternion& q); void toQuat(hkQuaternion* out) const; };          // 3 columns of 4 floats (col*4+row)
+class hkVector4 { public: float x, y, z, w; };
+class hkQuaternion { public: float m_vec[4]; uint32_t set(const class hkRotation& r); void toQuatImpl(const class hkRotation& r); };    // x y z w
+class hkRotation { public: float m_el[12]; void set(const hkQuaternion& q); void toQuat(hkQuaternion* out) const; };          // 3 columns of 4 floats (col*4+row)
 
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 extern "C" __declspec(dllimport) int __stdcall TlsSetValue(unsigned long, void*);
@@ -26,12 +26,12 @@ extern "C" unsigned __int64 __rdtsc();
 
 enum { HK_ARRAY_FLAG_MASK = 0x3fffffff, HK_ARRAY_DONT_DEALLOCATE = (int)0x80000000 };
 struct hkArrayUtil { static void _reserveMore(void* arr, int elemSize); };
-struct hkThreadMemory { void deallocateChunk(void* p, int nbytes, int memClass); };
+class hkThreadMemory { public: void deallocateChunk(void* p, int nbytes, int memClass); };
 extern unsigned long g_hkThreadMemoryTlsIndex;       // 0x16e4174
 static inline hkThreadMemory* getThreadMemory() { return (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTlsIndex); }
 
 template <typename T>
-struct hkArray {
+class hkArray { public:
     T* m_data; int m_size; int m_capacityAndFlags;
     void pushBack(const T& t) {
         if (m_size == (m_capacityAndFlags & HK_ARRAY_FLAG_MASK)) hkArrayUtil::_reserveMore(this, (int)sizeof(T));
@@ -49,7 +49,7 @@ struct hkArray {
     }
 };
 
-struct hkMemory {
+class hkMemory { public:
     virtual void* allocateChunk(int nbytes, int memClass);
     virtual void s1(); virtual void s2(); virtual void s3();
     virtual void* allocateObject(int nbytes, int memClass);
@@ -66,12 +66,12 @@ extern hkMemory* g_hkMemory; // 0x016e4178
         *(uint16_t*)((char*)p + 4) = (uint16_t)sz; return p; } \
     static void operator delete(void* p) { g_hkMemory->deallocateObject(p, *(uint16_t*)((char*)p + 4), MEMCLASS); }
 
-struct hkReferencedObject {
+class hkReferencedObject { public:
     uint16_t m_memSizeAndFlags;
     uint16_t m_referenceCount;
     hkReferencedObject() : m_referenceCount(1) {}
     virtual ~hkReferencedObject() {}
-    virtual void calcStatistics(struct hkStatisticsCollector* c) const {}
+    virtual void calcStatistics(class hkStatisticsCollector* c) const {}
     void addReference() { if (m_memSizeAndFlags != 0) m_referenceCount = (uint16_t)(m_referenceCount + 1); }   // 0x01082590
     void removeReference() {
         if (m_memSizeAndFlags != 0) {
@@ -194,16 +194,16 @@ void hkRotation::set(const hkQuaternion& q)
 }
 
 // ------------------------------------------------------------ hkWorldObject
-struct hkShape : hkReferencedObject {};
-struct hkStatisticsCollector {
+class hkShape : public hkReferencedObject { public:};
+class hkStatisticsCollector { public:
     virtual void s0(); virtual void s1();
     virtual void addArray(const char* name, int elemSize, const void* ptr, int usedBytes, int allocatedBytes);   // +8
     virtual void addReferencedObject(const char* name, int a, const void* obj);                                    // +0xc
 };
 struct hkPropertyValue { uint32_t m_lo, m_hi; };       // 64-bit payload
-struct hkProperty { uint32_t m_key; uint32_t m_alignmentPadding; hkPropertyValue m_value; };   // 0x10
-struct hkTypedBroadPhaseHandle { uint32_t m_id; uint8_t m_type; int8_t m_ownerOffset; int16_t m_objectQualityType; uint32_t m_collisionFilterInfo; };  // 0xc
-struct hkLinkedCollidable {                            // size 0x30
+class hkProperty { public: uint32_t m_key; uint32_t m_alignmentPadding; hkPropertyValue m_value; };   // 0x10
+class hkTypedBroadPhaseHandle { public: uint32_t m_id; uint8_t m_type; int8_t m_ownerOffset; int16_t m_objectQualityType; uint32_t m_collisionFilterInfo; };  // 0xc
+class hkLinkedCollidable { public:                            // size 0x30
     hkShape* m_shape;                                  // +0x00 (hkCdBody)
     uint32_t m_shapeKey;                               // +0x04
     void* m_motion;                                    // +0x08
@@ -213,7 +213,7 @@ struct hkLinkedCollidable {                            // size 0x30
     float m_allowedPenetrationDepth;                   // +0x20
     hkArray<void*[2]> m_collisionEntries;              // +0x24  (8-byte entries)
 };
-struct hkMultiThreadLock { uint32_t m_threadId; int m_lockCount; };
+class hkMultiThreadLock { public: uint32_t m_threadId; int m_lockCount; };
 class hkBool
 {
 public:
@@ -224,7 +224,7 @@ private:
 };
 
 
-struct hkWorldObject : hkReferencedObject {
+class hkWorldObject : public hkReferencedObject { public:
     void* m_world;                                     // +0x08
     void* m_userData;                                  // +0x0c
     const char* m_name;                                // +0x10
@@ -428,8 +428,8 @@ static inline void hkTimerBeginList(const char* name, const char* name2)
 }
 
 // ------------------------------------------------------------ hkWorld
-struct hkEntity; struct hkPhantom; struct hkWorld; struct hkSimulationIsland;
-struct hkBroadPhase; struct hkCollisionFilter; struct hkProcessCollisionInput; struct hkRayHitCollector;
+class hkEntity; class hkPhantom; class hkWorld; class hkSimulationIsland;
+struct hkBroadPhase; class hkCollisionFilter; struct hkProcessCollisionInput; struct hkRayHitCollector;
 struct hkCdPointCollector; struct hkCollidable; struct hkWorldRayCastInput; struct hkLinearCastInput;
 struct hkWorldMemoryWatchDog { char pad[8]; int m_memoryLimit; virtual void s0(); virtual void s1(); virtual void freeMemory(hkWorld* w); };
 struct hkWorldOperationQueue;
@@ -439,7 +439,7 @@ struct hkSimulation { virtual void s0(); virtual void s1(); virtual int stepDelt
 enum hkEntityActivation { HK_ENTITY_ACTIVATION_DO_NOT_ACTIVATE = 0, HK_ENTITY_ACTIVATION_DO_ACTIVATE = 1 };
 struct hkWorldOperationBase { uint8_t m_type; void* m_object; int m_arg; };   // queued op record
 
-struct hkWorld : hkReferencedObject {
+class hkWorld : public hkReferencedObject { public:
     hkSimulation* m_simulation;                        // +0x08
     uint32_t pad0c[9];                                 // +0x0c..0x2f
     void* m_fixedIsland;                               // +0x30
@@ -479,13 +479,13 @@ struct hkWorld : hkReferencedObject {
 };
 
 // Entities/phantoms as far as these functions see them (hkWorldObject plus a few fields).
-struct hkMotion { char pad[0x10]; char m_motionState[1]; };    // hkMotionState starts at +0x10
-struct hkEntity : hkWorldObject {
+class hkMotion { public: char pad[0x10]; char m_motionState[1]; };    // hkMotionState starts at +0x10
+class hkEntity : public hkWorldObject { public:
     hkMotion* m_motion;                                // +0x58
     uint32_t pad5c[28];                                // +0x5c..0xcb
     uint32_t m_uid;                                    // +0xcc
 };
-struct hkPhantom : hkWorldObject {
+class hkPhantom : public hkWorldObject { public:
     void firePhantomAdded();                           // 0x0108e370
     // hkPhantom virtual slots after the four hkWorldObject ones (used by hkWorld_updatePhantomOverlap, 0x01082910)
     virtual void slot5() = 0;
@@ -574,7 +574,7 @@ int hkWorld::stepDeltaTime(hkReal physicsDeltaTime)
 }
 
 // @ 0x01082b90
-struct hkWorldLinearCaster {
+class hkWorldLinearCaster { public:
     const void* vtbl_;
     uint32_t pad[15];
     float m_shapeInputTolerance;                        // +0x40 = 2^-23 (0x34000000)
@@ -608,7 +608,7 @@ void hkWorld::executePendingOperations()
 
 // @ 0x01082ca0
 // Largest per-island size estimate over the active simulation islands (visited back to front).
-struct hkSimulationIsland {
+class hkSimulationIsland { public:
     uint32_t pad[3];
     int m_c;      // +0x0c
     int m_d;      // +0x10
@@ -659,17 +659,15 @@ void hkNullContactMgrFactory::deletingDtor(unsigned flags)
 // 0x0149DB98 / 0x0149DB90 / 0x0149DB88 / 0x0149DB80 for the four interfaces (slot 0 of each is a shared
 // destructor-like stub, slot 1 is isCollisionEnabled, which the null filter answers with "true").
 // Named from those vtables: the same layout is used by hkWorld::setCollisionFilter(null) (slice s010869e0).
-struct hkCollidableCollidableFilter
-{
+class hkCollidableCollidableFilter
+{ public:
     virtual void s0();
-    virtual hkBool isCollisionEnabled(const struct hkLinkedCollidable& a, const struct hkLinkedCollidable& b) const = 0;   // slot 1
+    virtual hkBool isCollisionEnabled(const class hkLinkedCollidable& a, const class hkLinkedCollidable& b) const = 0;   // slot 1
 };
-struct hkShapeCollectionFilter { virtual void s0(); virtual hkBool isCollisionEnabled(const void* a, const void* b, const void* bContainer, uint32_t bKey) const = 0; };
-struct hkRayShapeCollectionFilter { virtual void s0(); virtual hkBool isCollisionEnabled(const void* input, const void* collection, uint32_t key) const = 0; };
-struct hkRayCollidableFilter { virtual void s0(); virtual hkBool isCollisionEnabled(const void* input, const hkLinkedCollidable& c) const = 0; };
-struct hkCollisionFilter : hkReferencedObject, hkCollidableCollidableFilter, hkShapeCollectionFilter,
-                           hkRayShapeCollectionFilter, hkRayCollidableFilter
-{
+class hkShapeCollectionFilter { public: virtual void s0(); virtual hkBool isCollisionEnabled(const void* a, const void* b, const void* bContainer, uint32_t bKey) const = 0; };
+class hkRayShapeCollectionFilter { public: virtual void s0(); virtual hkBool isCollisionEnabled(const void* input, const void* collection, uint32_t key) const = 0; };
+class hkRayCollidableFilter { public: virtual void s0(); virtual hkBool isCollisionEnabled(const void* input, const hkLinkedCollidable& c) const = 0; };
+class hkCollisionFilter : public hkReferencedObject, public hkCollidableCollidableFilter, public hkShapeCollectionFilter, public hkRayShapeCollectionFilter, public hkRayCollidableFilter { public:
     hkCollisionFilter() {}
 };
 struct hkNullCollisionFilter : hkCollisionFilter
@@ -718,7 +716,7 @@ void hkWorld_updatePhantomOverlap(hkPhantom* phantom, hkLinkedCollidable* other,
 // Register the default contact manager factories (simple constraint, reactive, null) with a
 // collision dispatcher. Original takes the world in EAX (private convention) and the dispatcher
 // on the stack.
-struct hkCollisionDispatcher { void registerContactMgrFactory(hkContactMgrFactory* f, int responseType); };   // 0x10ccbd0
+class hkCollisionDispatcher { public: void registerContactMgrFactory(hkContactMgrFactory* f, int responseType); };   // 0x10ccbd0
 hkContactMgrFactory* hkSimpleConstraintContactMgr_Factory_create(hkWorld* w);       // 0x108d850 ctor
 hkContactMgrFactory* hkReactiveContactMgr_Factory_create(hkWorld* w);               // 0x109e6a0 ctor
 void hkWorld_registerContactMgrFactories(hkWorld* world, hkCollisionDispatcher* d)

@@ -9,23 +9,20 @@
 // ---------------------------------------------------------------------------------------------------------
 // broad phase handle / collidable / filters
 // ---------------------------------------------------------------------------------------------------------
-struct hkBroadPhaseHandle { uint32_t m_id; };
-struct hkTypedBroadPhaseHandle : hkBroadPhaseHandle
-{
+class hkBroadPhaseHandle { public: uint32_t m_id; };
+class hkTypedBroadPhaseHandle : public hkBroadPhaseHandle { public:
 	signed char m_type;               // +4
 	signed char m_ownerOffset;        // +5
 	uint16_t m_objectQualityType;     // +6
 	uint32_t m_collisionFilterInfo;   // +8
 };
-struct hkCollidable : hkCdBody
-{
+class hkCollidable : public hkCdBody { public:
 	int m_ownerOffset;                              // +0x10
 	hkTypedBroadPhaseHandle m_broadPhaseHandle;     // +0x14
 	float m_allowedPenetrationDepth;                // +0x20
 };
 struct hkAgentNnEntry;
-struct hkLinkedCollidable : hkCollidable
-{
+class hkLinkedCollidable : public hkCollidable { public:
 	hkArray<void*[2]> m_collisionEntries;           // +0x24 (8-byte entries: partner collidable, agent entry; 32-bit layout)
 };
 
@@ -65,7 +62,7 @@ class hkCollisionFilter : public hkReferencedObject, public hkCollidableCollidab
 // ---------------------------------------------------------------------------------------------------------
 // motions
 // ---------------------------------------------------------------------------------------------------------
-struct hkMatrix3 { hkVector4 m_col0, m_col1, m_col2; };   // 0x30 bytes
+class hkMatrix3 { public: hkVector4 m_col0, m_col1, m_col2; };   // 0x30 bytes
 typedef hkVector4 hkQuaternion;                           // x,y,z,w
 
 struct hkMotionState                                      // 0xb0 bytes
@@ -198,8 +195,8 @@ class hkSimulationIsland;
 class hkEntity;
 class hkConstraintInstance;
 class hkConstraintOwner;
-struct hkProperty { uint32_t m_key, m_pad, m_lo, m_hi; };
-struct hkMultiThreadLock { uint32_t m_threadId; int m_lockCount; };
+class hkProperty { public: uint32_t m_key, m_pad, m_lo, m_hi; };
+class hkMultiThreadLock { public: uint32_t m_threadId; int m_lockCount; };
 
 namespace hkWorldOperation { enum Result { POSTPONED = 0, DONE = 1 }; }
 
@@ -247,7 +244,7 @@ public:
 // The static "never deactivate" instance at 0x015BA098 (vtable 0x014A1D8C, memSize 0, refcount 1).
 extern char g_hkRigidBodyDeactivatorNever[];    // 0x015BA098: the object itself (an hkRigidBodyDeactivator-derived static instance)
 
-struct hkMaterial { uint32_t m_data[3]; };
+class hkMaterial { public: uint32_t m_data[3]; };
 
 class hkEntity : public hkWorldObject
 {
@@ -318,8 +315,7 @@ struct hkAgentNnEntry                                          // 0x1c bytes in 
 	hkLinkedCollidable* m_collidable[2];    // +0x14
 };
 template <typename T, int N>
-struct hkInplaceArray : hkArray<T>
-{
+class hkInplaceArray : public hkArray<T> { public:
 	T m_storage[N];                // +0xc
 };
 struct hkAgentNnTrack                                          // 0x18 bytes

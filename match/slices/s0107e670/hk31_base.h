@@ -325,8 +325,8 @@ public:
 };
 
 template <typename T>
-struct hkArray
-{
+class hkArray
+{ public:
 	enum { CAPACITY_MASK = 0x3FFFFFFF, DONT_DEALLOCATE_FLAG = (int)0x80000000 };
 	T* m_data;
 	int m_size;
@@ -350,8 +350,8 @@ struct hkArray
 //
 // Monitors, singletons, base system
 //
-struct hkMonitorStream
-{
+class hkMonitorStream
+{ public:
 	static void init();   // 0x01080480
 	static void quit();   // 0x010804C0
 };
@@ -476,8 +476,8 @@ public:
 
 hkUint64 hkGetCurrentThreadId();   // 0x01080CC0 (GetCurrentThreadId zero-extended)
 
-struct hkString
-{
+class hkString
+{ public:
 	static int strCmp(const char* a, const char* b);   // 0x0107F3D0
 	static int strLen(const char* s);                  // 0x0107F420
 	static void memCpy(void* dst, const void* src, int n);   // 0x0107F440
@@ -489,22 +489,22 @@ struct hkString
 //
 // Math
 //
-struct hkVector4
-{
+class hkVector4
+{ public:
 	float x, y, z, w;
 	hkBool isOk3() const;                     // 0x010812B0
 	hkBool isNormalized3(float epsilon) const;// 0x010812F0
-	void setTransformedPos(const struct hkTransform& t, const hkVector4& p);   // 0x01081360
+	void setTransformedPos(const class hkTransform& t, const hkVector4& p);   // 0x01081360
 };
 
-struct hkRotation
-{
+class hkRotation
+{ public:
 	float m[12];   // three hkVector4 columns
 	void setTranspose(const hkRotation& r);   // 0x01081550 (not in these slices)
 };
 
-struct hkTransform
-{
+class hkTransform
+{ public:
 	float m[16];   // rotation (12 floats, columns in hkVector4 slots) + translation hkVector4 at 12..15
 	void setInverse(const hkTransform& t);                          // 0x01080E70
 	void setMul(const hkTransform& a, const hkTransform& b);        // 0x01080EF0

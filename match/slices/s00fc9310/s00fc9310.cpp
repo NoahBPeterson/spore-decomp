@@ -7,8 +7,8 @@ namespace rw {
 namespace movie {
 
 // 0x00fc8580 / 0x00fc8550 / 0x00fc8500: BufferedWriter helpers (PDB: BufferedWriter, size 0x20).
-struct BufferedWriter
-{
+class BufferedWriter
+{ public:
     void* mEncodedDataCallback;      // +0x00
     void* mEncodedDataCallbackData;  // +0x04
     uint8_t* mBuffer;                // +0x08
@@ -24,8 +24,8 @@ struct BufferedWriter
 };
 
 // Encoder interfaces: only the vtable slots used here are named; the rest are placeholders.
-struct IVideoEncoder
-{
+class IVideoEncoder
+{ public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
     virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
     virtual uint32_t GetWidth();        // +0x28
@@ -40,8 +40,8 @@ struct IVideoEncoder
     virtual uint32_t GetSlot5C();       // +0x5c
 };
 
-struct IAudioEncoder
-{
+class IAudioEncoder
+{ public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
     virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
     virtual uint32_t GetSlot28();       // +0x28
@@ -54,8 +54,8 @@ struct IAudioEncoder
     virtual uint32_t GetSlot44();       // +0x44
 };
 
-struct MovieEncoder_Avi
-{
+class MovieEncoder_Avi
+{ public:
     void* vftable;                      // +0x00
     void* mAllocator;                   // +0x04
     void* mEncodingErrorCallback;       // +0x08

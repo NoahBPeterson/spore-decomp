@@ -61,7 +61,7 @@ namespace eastl {
 
 extern wchar_t gEmptyString16[2];   // 0x01667BAC
 
-struct allocator {
+class allocator { public:
     allocator() {}
 };
 
@@ -432,7 +432,7 @@ struct cPlanetData {
 };
 void RebuildPlanetData(cPlanetData* data, int techLevel);       // 0x00B96F40
 
-struct cEllipticalOrbit {
+class cEllipticalOrbit { public:
     char pad0[0x20];
     float mfPeriod;                                             // +0x20
     char pad24[0x50 - 0x24];
@@ -834,7 +834,7 @@ IResourceManager* ResourceManager();                    // 0x0067DCD0
 
 namespace nSpaceCheats {
 
-class cCommandSpace {
+struct cCommandSpace { private:
 public:
     virtual void ParseLine(EA::ArgScript::cArguments* args);
     EA::ArgScript::FormatParser* mpFormatParser;        // +0x04
