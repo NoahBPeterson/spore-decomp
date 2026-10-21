@@ -1,0 +1,16 @@
+00fcfe60 611 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/5 mismatched,execution) VP6 residual/token decode: retail writes the token into a byte table then dispatches a 7-way switch over edge predictions; our reconstruction of the edge-difference accumulators diverges.
+00fd0120 544 /O2 /MD /Gy /TP /arch:SSE equiv=UNSUPPORTED(0/400 valid,fault(read)) per-macroblock reconstruction driver (quantiser + 6 predictor row writes through 0xfcfc70); the harness cannot resolve the filter-pointer table so no input is valid.
+00fd0390 29 /O2 /MD /Gy /TP /arch:SSE equiv=UNSUPPORTED(custom register ABI) rdtsc/cpuid snapshot: retail enters with eax set by the caller and returns the timestamp; not expressible as a normal C function.
+00fd0410 168 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/5 mismatched,eax) 4-tap horizontal MMX filter: instructions line up (pmullw/paddsw/psraw/packuswb/movd) but retail keeps the last pixel group in an extra register and the tail differs, so eax differs.
+00fd04f0 175 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/5 mismatched,eax) 4-tap vertical MMX filter; same kernel shape, retail's row pointers advance at different points.
+00fd05c0 240 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/5 mismatched,eax) 2-tap horizontal MMX filter (psrlq 8 form); cl keeps a different pixel group live across the two movd stores.
+00fd0650 217 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/5 mismatched,eax) 2-tap MMX pair filter; the two 4-pixel groups are interleaved differently by cl.
+00fd06d0 225 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/5 mismatched,eax) 2-tap MMX filter using punpckhbw to process 8 pixels; cl's register schedule for the lo/hi halves differs.
+00fd07d0 55 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/5 mismatched,execution) two-pass expander wrapper; the call/arg shape matches but cl reloads the kernel arg instead of reusing eax and the temp offset is 8 bytes off.
+00fd0830 347 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/5 mismatched,memory pool) per-edge filter dispatcher; the five cases map but cl lays out the case bodies and tail jump differently.
+00fd0a00 186 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/5 mismatched,eax) 4-tap SSE horizontal filter (movdq2q/movq store); cl emits the loads in a different order than retail's 4 vignetted taps.
+00fd0aa0 167 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/5 mismatched,eax) 4-tap SSE vertical filter; same shape, row pointer advance order differs.
+00fd0b40 165 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/5 mismatched,eax) 16-pixel two-row accumulate filter; the 0x80-byte unrolled row block matches but cl's accumulator scheduling differs.
+00fd0c00 109 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/5 mismatched,eax) 2-tap SSE horizontal filter; retail keeps everything in xmm with no frame, cl emits an aligned-stack frame and register-numbered args differ.
+00fd0c60 118 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/5 mismatched,eax) 2-tap SSE vertical filter; same aligned-frame difference as 0c00.
+00fd0cc0 55 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/5 mismatched,execution) two-pass SSE expander wrapper; call shape matches, cl's arg reload and 8-byte temp offset differ.
