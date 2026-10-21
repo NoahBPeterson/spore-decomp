@@ -1,0 +1,11 @@
+# slice s0084faf0 (libjpeg entropy encoder / master control) - confident names
+# VA        name                        note
+0084faf0    EmitSamples                 pack samples into output buffer (register ABI)
+0084feb0    CheckUniformRun             verify 4-byte RGBX run is uniform (register ABI)
+0084ff00    EncodeMcuHuff               encode one MCU with Huffman encoder
+008502a0    jinit_huff_encoder          libjpeg Huffman-encoder init
+00850380    SetTableNext                set next back-pointer on colour/quant tables
+008503f0    finish_pass_huff            libjpeg finish_pass_huff
+00850510    write_raw_dispatch          raw-data write dispatch / state check
+00850570    jpeg_finish_compress2       jpeg_finish_compress (partial)
+008505f0    output_pass_setup           empty_output_buffer / iMCU row accounting

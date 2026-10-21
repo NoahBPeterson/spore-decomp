@@ -1,0 +1,3 @@
+slices/s0084faf0/s0084faf0.cpp  ?SetTableNext@@YAXPAHH@Z  00850380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s0084faf0/s0084faf0.cpp  ?write_raw_dispatch@@YAXPAHHHH@Z  00850510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s0084faf0/s0084faf0.cpp  ?jpeg_finish_compress2@@YAXPAHH@Z  00850570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
