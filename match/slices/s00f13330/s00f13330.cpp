@@ -1,4 +1,5 @@
 // Slice s00f13330 -- 0x00f13330 .. 0x00f143c0 (15 functions).
+#include <intrin.h>
 //
 // Simulator::cScenarioRewardUI -- the scenario "reward" (Sporepedia reward) UI window:
 // its ctor/dtor (both the primary object and the embedded content-validation-summarizer
@@ -131,6 +132,7 @@ extern "C" void* __fastcall FUN_00f13370(void* self, int, uint8_t freeFlag)
     char* s = (char*)self;
     *(void**)(s + 0x00) = (void*)0x148c09c;
     *(void**)(s + 0x04) = (void*)0x148c08c;
+    _ReadWriteBarrier();
     void** p20 = *(void***)(s + 0x20);
     if (p20)
         ((FnV)(*(void***)((char*)p20 + 0x10))[4 / 4])((char*)p20 + 0x10);

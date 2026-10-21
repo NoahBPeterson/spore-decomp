@@ -1,4 +1,3 @@
-00f13370 8 /O2 /MD /Gy /TP equiv PASS -- load-hoisting: orig loads [esi+0x20] after the two vtable stores, ours hoists it before; same insn set (239/400 valid, 100% coverage)
 00f133d0 408 /O2 /MD /Gy /TP equiv FAIL -- complete but not byte-exact (size 392 vs 473); orig returns a nonzero leftover eax, ours returns 0 on the same input (5/5 mismatch, eax); 11.8% coverage
 00f135b0 448 /O2 /MD /Gy /TP equiv UNSUPPORTED -- incomplete reconstruction (size 188 vs 503); 0/400 valid (fault(read)=310, ours-abi-broken(fake)=65, fake-arity=25)
 00f13810 71 /O2 /MD /Gy /TP equiv PASS -- dead-store elimination: orig keeps the two base-vtable stores ([4],[0xc]) before the derived over-writes, ours folds them away (size 79 vs 93); 400/400 valid, 100% coverage
