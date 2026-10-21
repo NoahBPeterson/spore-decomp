@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 # Build flags (all rows): /vc71 /O2 /MD /Gy /EHsc /TP
 #
-# Slice s011e5a10 -- no partial functions: all 25 target VAs have complete compilable
+# Slice s011e5a10 -- no partial functions: all 26 target VAs have complete compilable
 # source in match/slices/s011e5a10/s011e5a10.cpp.  The 4 byte-exact ones are in
-# manifest.txt; the other 21 are complete-but-non-exact in nonmatching.txt.
+# manifest.txt; the other 22 are complete-but-non-exact in nonmatching.txt.
