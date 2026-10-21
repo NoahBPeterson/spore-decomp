@@ -140,7 +140,7 @@ extern EntryVec g_entryVec;                      // 0x15fea00
 
 // ======================= ArgScript =======================
 namespace EA { namespace ArgScript {
-struct cArguments {
+class cArguments { public:
   int NumArguments();                            // 0x837f30
   char* operator[](int i);                       // 0x837f20
 };
