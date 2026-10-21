@@ -216,17 +216,20 @@ void hkSphereCapsuleAgent::processCollision(const hkCdBody& bodyA, const hkCdBod
 			const float ay = hkAbsf(n.y);
 			// x87 `fcomp st(1)` + `test ah,5`/`jp` keeps the taken side on unordered, so the
 			// min/max pick is !(ay < ax), not (ax <= ay).
-			const bool bx = !(ay < ax);
-			const float small = bx ? ax : ay;
-			unsigned keep = 2u;
-			unsigned other = bx ? 0u : 1u;
-			if (hkAbsf(n.z) < small) { keep = bx ? 0u : 1u; other = 2u; }
-			const float from = bx ? (pB.y - pA.y) : (pB.x - pA.x);   // the max-|.| of x,y
-			const float oth  = (keep == 2u) ? (pB.z - pA.z) : (keep == 0u ? (pB.x - pA.x) : (pB.y - pA.y));
-			((float*)&n)[other] = 0.0f;
+			const bool xIsMin = !(ay < ax);
+			const float small = xIsMin ? ax : ay;
+			const unsigned minIdx = xIsMin ? 0u : 1u;
+			const unsigned maxIdx = xIsMin ? 1u : 0u;
+			unsigned zeroIdx = minIdx;
+			unsigned otherIdx = 2u;
+			if (hkAbsf(n.z) < small) { zeroIdx = 2u; otherIdx = minIdx; }
+			const float segMax = xIsMin ? (pB.y - pA.y) : (pB.x - pA.x);
+			const float oth    = (otherIdx == 2u) ? (pB.z - pA.z)
+			                   : (otherIdx == 0u ? (pB.x - pA.x) : (pB.y - pA.y));
+			((float*)&n)[zeroIdx] = 0.0f;
 			n.w = 0.0f;
-			((float*)&n)[bx] = oth;
-			((float*)&n)[keep] = -from;
+			((float*)&n)[maxIdx] = oth;
+			((float*)&n)[otherIdx] = -segMax;
 			distance = 0.0f;
 		}
 		else
@@ -240,15 +243,13 @@ void hkSphereCapsuleAgent::processCollision(const hkCdBody& bodyA, const hkCdBod
 		n.x *= invLen; n.y *= invLen; n.z *= invLen;
 
 		const float k = capsuleShape->m_radius - distance;
-		// the original publishes the normal before it reads the sphere centre, so the store order
-		// is observable when the output contact aliases the body transform
-		contact->m_contact.m_separatingNormal.x = n.x;
-		contact->m_contact.m_separatingNormal.y = n.y;
-		contact->m_contact.m_separatingNormal.z = n.z;
 		contact->m_contact.m_position.x = n.x * k + (sphereTrans + 0xc)[0];
 		contact->m_contact.m_position.y = n.y * k + (sphereTrans + 0xc)[1];
 		contact->m_contact.m_position.z = n.z * k + (sphereTrans + 0xc)[2];
 		contact->m_contact.m_position.w = (n.w * invLen) * k + (sphereTrans + 0xc)[3];
+		contact->m_contact.m_separatingNormal.x = n.x;
+		contact->m_contact.m_separatingNormal.y = n.y;
+		contact->m_contact.m_separatingNormal.z = n.z;
 		contact->m_contact.m_separatingNormal.w = distance - radiusSum;
 
 		if (m_contactPointId == 0xffff)
@@ -306,17 +307,20 @@ void hkSphereCapsuleAgent::getClosestPoints(const hkCdBody& bodyA, const hkCdBod
 			const float ay = hkAbsf(n.y);
 			// x87 `fcomp st(1)` + `test ah,5`/`jp` keeps the taken side on unordered, so the
 			// min/max pick is !(ay < ax), not (ax <= ay).
-			const bool bx = !(ay < ax);
-			const float small = bx ? ax : ay;
-			unsigned keep = 2u;
-			unsigned other = bx ? 0u : 1u;
-			if (hkAbsf(n.z) < small) { keep = bx ? 0u : 1u; other = 2u; }
-			const float from = bx ? (pB.y - pA.y) : (pB.x - pA.x);   // the max-|.| of x,y
-			const float oth  = (keep == 2u) ? (pB.z - pA.z) : (keep == 0u ? (pB.x - pA.x) : (pB.y - pA.y));
-			((float*)&n)[other] = 0.0f;
+			const bool xIsMin = !(ay < ax);
+			const float small = xIsMin ? ax : ay;
+			const unsigned minIdx = xIsMin ? 0u : 1u;
+			const unsigned maxIdx = xIsMin ? 1u : 0u;
+			unsigned zeroIdx = minIdx;
+			unsigned otherIdx = 2u;
+			if (hkAbsf(n.z) < small) { zeroIdx = 2u; otherIdx = minIdx; }
+			const float segMax = xIsMin ? (pB.y - pA.y) : (pB.x - pA.x);
+			const float oth    = (otherIdx == 2u) ? (pB.z - pA.z)
+			                   : (otherIdx == 0u ? (pB.x - pA.x) : (pB.y - pA.y));
+			((float*)&n)[zeroIdx] = 0.0f;
 			n.w = 0.0f;
-			((float*)&n)[bx] = oth;
-			((float*)&n)[keep] = -from;
+			((float*)&n)[maxIdx] = oth;
+			((float*)&n)[otherIdx] = -segMax;
 			distance = 0.0f;
 		}
 		else
@@ -390,17 +394,20 @@ void hkSphereCapsuleAgent::staticGetClosestPoints(const hkCdBody& bodyA, const h
 			const float ay = hkAbsf(n.y);
 			// x87 `fcomp st(1)` + `test ah,5`/`jp` keeps the taken side on unordered, so the
 			// min/max pick is !(ay < ax), not (ax <= ay).
-			const bool bx = !(ay < ax);
-			const float small = bx ? ax : ay;
-			unsigned keep = 2u;
-			unsigned other = bx ? 0u : 1u;
-			if (hkAbsf(n.z) < small) { keep = bx ? 0u : 1u; other = 2u; }
-			const float from = bx ? (pB.y - pA.y) : (pB.x - pA.x);   // the max-|.| of x,y
-			const float oth  = (keep == 2u) ? (pB.z - pA.z) : (keep == 0u ? (pB.x - pA.x) : (pB.y - pA.y));
-			((float*)&n)[other] = 0.0f;
+			const bool xIsMin = !(ay < ax);
+			const float small = xIsMin ? ax : ay;
+			const unsigned minIdx = xIsMin ? 0u : 1u;
+			const unsigned maxIdx = xIsMin ? 1u : 0u;
+			unsigned zeroIdx = minIdx;
+			unsigned otherIdx = 2u;
+			if (hkAbsf(n.z) < small) { zeroIdx = 2u; otherIdx = minIdx; }
+			const float segMax = xIsMin ? (pB.y - pA.y) : (pB.x - pA.x);
+			const float oth    = (otherIdx == 2u) ? (pB.z - pA.z)
+			                   : (otherIdx == 0u ? (pB.x - pA.x) : (pB.y - pA.y));
+			((float*)&n)[zeroIdx] = 0.0f;
 			n.w = 0.0f;
-			((float*)&n)[bx] = oth;
-			((float*)&n)[keep] = -from;
+			((float*)&n)[maxIdx] = oth;
+			((float*)&n)[otherIdx] = -segMax;
 			distance = 0.0f;
 		}
 		else

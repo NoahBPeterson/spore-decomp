@@ -1,0 +1,5 @@
+# source: slices/s010d7570/s010d7570.cpp   flags: /vc71 /O2 /MD /Gy /TP
+# rows: <va>  <diff-bytes>  <reason>
+010d7710  1048  hkSphereCapsuleAgent::processCollision; complete (segment closest point, degenerate segment->normal construction, contact append/removePoint, contact-point id round-trip); the original keeps the whole geometry in one 0xc4 x87 frame with per-scalar spills so the schedule/frame differ (1122 vs 1220); equiv FAIL 2/274 valid inputs -- both are 156-ulp differences in a denormal contact position.w (orig 80005ec9 vs ours 80005f65) on float-special garbage bodies; --ulp 200 gives PASS 274 valid, 92.0% coverage. Not confirmed fixable in source
+010d7be0  996  hkSphereCapsuleAgent::getClosestPoints; complete and behaviourally correct; same body as the passing static variant but the x87 register schedule and frame differ (1077 vs 1178); equiv PASS 276 valid inputs, 91.2% coverage
+010d8080  994  hkSphereCapsuleAgent::staticGetClosestPoints; same body as getClosestPoints plus the HK_TIMER_BEGIN("TtSphereCapsule") prologue; frame/schedule differ (1075 vs 1176); equiv PASS 275 valid inputs, 90.0% coverage
