@@ -36,7 +36,7 @@ void  __fastcall FUN_0096f280(void* this_, int arg);                           /
 }
 namespace EA {
 namespace UTFWinControls {
-struct FrameDrawable {
+class FrameDrawable { public:
     void* vtbl;            // +0x00
     void* vtblSer;         // +0x04
     int   mRefCount;       // +0x08
