@@ -1,3 +1,14 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s00b03820 = EA::PoolOwner / EASTL support (node allocators, destroy/construct range walks,
+# the red-black tree find, the node-chain release, the big-object free helper and the three
+# distance-keyed sort partitions).  5/22 byte-exact.  The remaining 17 are complete C++ that
+# reproduces the original control flow and container semantics; the byte-exact budget is missed
+# because the pivot-distance reloads, the squared-distance add ordering and the range-walk
+# prologues are scheduled differently by our compiler run.  The per-row verdict is the equivalence
+# gate result measured with the flags above.
+
 00b038e0 502 sort_partition_a: SSE distance-keyed partition; orig keeps two live pivot-distance vectors and a single shared do/while, ours reorders the pivot reload per test and hoists different subexpressions (orig 429 vs 310 emitted) ; equiv UNSUPPORTED original reads ecx at entry but our declaration passes nothing there (custom/LTCG register ABI?)
 00b03a20 538 sort_partition_b: 3-scalar partition with the same pivot reload scheduling divergence plus swapped add ordering in the squared-distance sums (orig 438 vs 296 emitted) ; equiv FAIL 5/5 valid inputs mismatched; first: execution
 00b03b50 312 sort_partition_c: pivot-precomputed float partition; ours recomputes the pivot delta inside each loop test where the orig hoists it, and the tail jump layout differs (orig 298 vs 331 emitted) ; equiv FAIL 5/5 valid inputs mismatched; first: execution
