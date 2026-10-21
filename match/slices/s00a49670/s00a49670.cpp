@@ -759,7 +759,7 @@ void __fastcall FUN_00a4a3c0(int unused, t_glist* x)
     g = p->gl_nextwin;
     while (g != x) {
         p = g;
-        g = g->gl_nextwin;
+        g = p->gl_nextwin;
     }
     p->gl_nextwin = x->gl_nextwin;
 }
