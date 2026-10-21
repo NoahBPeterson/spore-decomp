@@ -1,4 +1,5 @@
 // Slice s00abc1a0 -- Spore Swarm distribution descriptor cluster (unnamed FUN_* functions):
+#include <intrin.h>
 // descriptor serialisation (read/write), vector<0x0c> helpers, an AnalysisInfo-list container,
 // and a couple of component vtable ctors/dtors.
 //
