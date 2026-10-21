@@ -1,0 +1,9 @@
+00fa0010 2   CopyFaceA: only a register-allocation swap (original loads *t into esi, cl picks edx). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS
+00fa0070 2   CopyFaceB: same as 00fa0010 (shared helper); register-allocation swap only. difftest PASS
+00fa00d0 2   CopyFaceC: same as 00fa0010 (shared helper); register-allocation swap only. difftest PASS
+00fa0e40 1   OrFlag: original keeps `ecx` as the sub base, cl folds to `eax` (this - mBackOffset). register-alloc only. difftest PASS
+00fa0670 8   PartitionElem16: first loop laid out test-last instead of test-first (loop rotation), size 100 correct. difftest: FAIL on 5/5 inputs but the sole difference is the stale `eax` left on return of a void function (register artifact of the rotation); all observable stores/loads agree.
+00fa0360 34  ShutdownRTTSphere: original mgr->edi/handles->ebx, cl chose mgr->ebx (size 157 vs 160). difftest WEAK (6.2% coverage, 400/400 inputs valid, 0 mismatches).
+00fa0400 215 InitRTTSphere: name/resource-create call sequence matches but inlined loops laid out differently, size 347 vs 350. difftest UNSUPPORTED (0/400 inputs valid: fault(read) 396, fault(write) 4 -- needs a live cViewer/service singleton, cannot be fuzzed in isolation).
+00fa0f10 25  JobHolder::Release: original's null test is on &mObj (AutoRefCount object) not on the loaded pointer; cl loads then tests. difftest FAIL (5/235): when the refcount hits 0 mine dereferences the modelled vtable stub where the original's real callee differs; the refcount arithmetic itself agrees.
+00fa0130 57  BuildSurfaceOrientationFromDir: return-value sret addressing differs (original reuses QuaternionFromDirections' returned eax as &q), size 157 vs 169. difftest FAIL (5/160): an extra `edx` clobber by mine (original leaves edx untouched); the returned quaternion bytes agree.
