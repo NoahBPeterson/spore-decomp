@@ -1,0 +1,16 @@
+00f30800  Payload::CopyFrom       # fieldwise 0x7c payload copy (25 floats fld/fstp + 2 dword + 2 float + 2 byte)
+00f308d0  ImpactList::DestroyRange # release both interface ptrs over [first,last); matches
+00f30910  PairBlock::Assign       # ref-swap two ifaces (AddRef vt[0]/Release vt[4]) + payload copy
+00f30980  RangeDestroyTo          # release both ifaces across range, return advanced dst
+00f30a10  RangeMoveDestroy        # backwards move-destroy with ref-swap + rep movsd payload
+00f30b20  PairBlock::Construct    # AddRef both ifaces + payload copy into dst; matches
+00f30b60  RangeConstruct          # construct-copy each element across range
+00f30bc0  Simulator::SimSingleton::SimSingleton  # cGonzago base + two vtable writes + global publish
+00f30c40  ~Simulator::SimSingleton # vtable rewrites, guarded delete of +0x10, base dtor
+00f30cc0  Scenario_PickNearest    # nearest-combatant search with 4-flag acceptance predicate
+00f311c0  ImpactList_Clear        # shift-move + destroy tail + rewind mpEnd
+00f31220  Simulator_OnEvent       # dispatch on event kind; build PairBlock; TouchDamage/Impact tail
+00f31500  Simulator_GetTuningValue # lazy SpVector<float> fill from terrain tuning, indexed getter
+00f315a0  Simulator_PlaceEffect   # iterate game-data vector, filter, post effect 0x00BC97F0
+00f316d0  DebugDraw3DTerraformBullseye # lava-threshold gate + per-carrier bullseye
+00f31810  TerraformUpdate         # tick->seconds, bullseye draw, drain impact list

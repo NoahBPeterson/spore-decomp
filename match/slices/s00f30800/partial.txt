@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+# All 16 slice targets are complete definitions; see manifest.txt (2 byte-exact)
+# and nonmatching.txt (14 complete-inexact).

@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f30800/s00f30800.cpp  ?DestroyRange@ImpactList@@QAEXPAUPairBlock@@0@Z  00f308d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00f30800/s00f30800.cpp  ?Construct@PairBlock@@QAEPAU1@PBU1@@Z  00f30b20  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
