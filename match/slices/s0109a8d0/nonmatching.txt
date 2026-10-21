@@ -1,0 +1,8 @@
+0109a8d0 427 WEAK /vc71 /O2 /MD /Gy /EHsc /TP difftest WEAK 187 valid, 54.1% coverage; x87 fpu step ordering + monitor-timer inlining not reproduced
+0109aca0 177 WEAK /vc71 /O2 /MD /Gy /EHsc /TP difftest WEAK 149 valid, 72.1% coverage
+0109ae00 83 WEAK /vc71 /O2 /MD /Gy /EHsc /TP difftest WEAK 390 valid, 28.9% coverage; recursive add-ref walker, ecx-only calls
+0109ae80 27 PASS /vc71 /O2 /MD /Gy /EHsc /TP difftest PASS 388 valid, 100.0% coverage; OUT0/OUT1 block order differs
+0109aed0 279 WEAK /vc71 /O2 /MD /Gy /EHsc /TP difftest WEAK 193 valid, 91.4% coverage
+0109afe0 913 WEAK /vc71 /O2 /MD /Gy /EHsc /TP difftest WEAK 178 valid, 22.7% coverage; 0x22-case dispatch + sub-array deep copies differ
+0109b3e0 31 UNSUPPORTED /vc71 /O2 /MD /Gy /EHsc /TP unresolved import InitializeCriticalSectionAndSpinCount
+0109b420 2 WEAK /vc71 /O2 /MD /Gy /EHsc /TP difftest WEAK 214 valid, 38.1% coverage; js vs jl on capacity flags
