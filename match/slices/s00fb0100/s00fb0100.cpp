@@ -8,7 +8,6 @@
 
 #include <math.h>
 #include <string.h>
-#include <xmmintrin.h>
 
 typedef unsigned char  uint8;
 typedef unsigned short uint16;
@@ -304,13 +303,11 @@ void cTerrainSphereQuad::UpdateBoundsAndDraw(int mode)
 
     float scale = 1.0f / (mMaxX - mMinX);
     int   level = 0;
-    for (int n = _mm_cvtss_si32(_mm_set_ss(scale)); n > 1; n /= 2)
+    for (int n = (int)(scale + 0.5f); n > 1; n /= 2)
         ++level;
 
     float outA, outB;
-    range->ComputeSpan(level, mId,
-                       _mm_cvtss_si32(_mm_set_ss(mMinX * scale)),
-                       _mm_cvtss_si32(_mm_set_ss(mMinY * scale)),
+    range->ComputeSpan(level, mId, (int)(mMinX * scale + 0.5f), (int)(mMinY * scale + 0.5f),
                        &outA, &outB);
 
     float lo = outB;
