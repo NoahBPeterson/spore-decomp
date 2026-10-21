@@ -173,7 +173,7 @@ struct FileStream_s0094_7d50 : FileStreamObj {
 }
 namespace EA {
 namespace IO {
-struct IniFile {
+class IniFile { public:
     uint32_t pad[0x47c / 4];
     IniFile(const wchar_t* path, int flag);    // 0x935450
     ~IniFile();                                // 0x935040
