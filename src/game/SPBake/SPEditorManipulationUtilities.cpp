@@ -2285,7 +2285,7 @@ struct cSPVector3_s0048_d010 : Vector3T_s0048_d010 {
     __forceinline cSPVector3_s0048_d010(const Vector3T_s0048_d010& v) { x = v.x; y = v.y; z = v.z; }
     cSPVector3_s0048_d010& operator=(const Vector3T_s0048_d010& v) { x = v.x; y = v.y; z = v.z; return *this; }
 };
-struct hkMemory {
+class hkMemory { public:
     virtual void _v0();
     virtual void _v1();
     virtual void _v2();
