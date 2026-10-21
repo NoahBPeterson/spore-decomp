@@ -8,6 +8,7 @@
 
 #include <math.h>
 #include <string.h>
+#include <xmmintrin.h>
 
 typedef unsigned char  uint8;
 typedef unsigned short uint16;
@@ -303,11 +304,13 @@ void cTerrainSphereQuad::UpdateBoundsAndDraw(int mode)
 
     float scale = 1.0f / (mMaxX - mMinX);
     int   level = 0;
-    for (int n = (int)(scale + 0.5f); n > 1; n /= 2)
+    for (int n = _mm_cvtss_si32(_mm_set_ss(scale)); n > 1; n /= 2)
         ++level;
 
     float outA, outB;
-    range->ComputeSpan(level, mId, (int)(mMinX * scale + 0.5f), (int)(mMinY * scale + 0.5f),
+    range->ComputeSpan(level, mId,
+                       _mm_cvtss_si32(_mm_set_ss(mMinX * scale)),
+                       _mm_cvtss_si32(_mm_set_ss(mMinY * scale)),
                        &outA, &outB);
 
     float lo = outB;
@@ -324,14 +327,14 @@ void cTerrainSphereQuad::TraverseSubdivided(int id, float* rect)
     if (id != node->mId)
         return;
 
+    float cx, cy;
     for (;;) {
         node->UpdateBoundsAndDraw(1);
 
-        float cx = (node->mMinX + node->mMaxX) * 0.5f;
-        float cy = (node->mMinY + node->mMaxY) * 0.5f;
+        cx = (node->mMinX + node->mMaxX) * 0.5f;
+        cy = (node->mMinY + node->mMaxY) * 0.5f;
 
-        if (rect[0] <= cx && cx != rect[0]) {
-            if (rect[1] <= cy && cy != rect[1] && node->mChild0 != 0)
+        if (cx > rect[0]) {            if (cy > rect[1] && node->mChild0 != 0)
                 node->mChild0->TraverseSubdivided(id, rect);
             if (cy <= rect[3] && node->mChild2 != 0)
                 node->mChild2->TraverseSubdivided(id, rect);
@@ -340,7 +343,7 @@ void cTerrainSphereQuad::TraverseSubdivided(int id, float* rect)
         if (rect[2] < cx)
             return;
 
-        if (rect[1] <= cy && cy != rect[1] && node->mChild1 != 0)
+        if (cy > rect[1] && node->mChild1 != 0)
             node->mChild1->TraverseSubdivided(id, rect);
 
         if (rect[3] < cy)
