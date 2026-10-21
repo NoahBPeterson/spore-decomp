@@ -237,13 +237,13 @@ extern "C" void* __cdecl FUN_00b2ba70(void* dst, void* first, void* last)
 void S::FUN_00b2bb90()
 {
   ((void (__thiscall*)(void*, int))FUN_00b2b090)(this, 0);
-  f0 = 0;
-  f4 = 0;
-  f8 = 0;
-  f120 = 0;
-  f124 = 0;
-  void** e = vecEnd;
-  void** it = vecBegin;
+  *(volatile int*)&f0 = 0;
+  *(volatile int*)&f4 = 0;
+  *(volatile int*)&f8 = 0;
+  *(volatile int*)&f120 = 0;
+  *(volatile int*)&f124 = 0;
+  void** e = *(void** volatile*)&vecEnd;
+  void** it = *(void** volatile*)&vecBegin;
   while (it < e) {
     Obj* o = (Obj*)*it;
     if (o) o->release();
