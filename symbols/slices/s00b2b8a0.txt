@@ -1,0 +1,1 @@
+00b2bbe0 SP::cTerrainDistributeInfo::SetInfoFromProps  # PDB candidate (caller-single), dev build 0x012bae40; allocates the 3x3 0x1c-stride type table at +0x44 and fills it from the active planet's species
