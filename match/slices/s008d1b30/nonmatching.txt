@@ -1,0 +1,7 @@
+008d1b30 259 /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; register allocation differs (esi/edi/ebx assignment, extras-loop index regs) and call target held in edx not ecx; difftest WEAK (no mismatch, 300 valid, 52.3% coverage)
+008d1cf0 78 /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; bool return kept in cl not dl, 0xffff held in edx not esi, tail uses xor al,al vs mov al,dl; difftest PASS (400 valid, 100% coverage)
+008d1df0 498 /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; large function, stack-slot and register allocation differ across many call sites; difftest WEAK (283 valid, 3.9% coverage, calls GetModuleHandleA)
+008d20c0 18 /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; mpDI load hoisted above the four mpDIController stores (MSVC scheduler), not source-controllable; difftest PASS (398 valid, 100% coverage)
+008d21a0 5 /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; lea edi,[ecx+0x34] scheduled before mov ebx,ebp (induction ptr vs dst), not source-controllable; difftest PASS (390 valid, 100% coverage)
+008d2330 279 /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; register allocation and stack slots around StrIStrW / DeviceInfo copy differ; difftest UNSUPPORTED (unresolved reference _StrIStrW)
+008d24e0 155 /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; register allocation and stack slots across branchy control flow differ; difftest PASS (373 valid, 100% coverage)

@@ -1,0 +1,10 @@
+slices/s008d1b30/s008d1b30.cpp  ?Delete_hashClass@@YAXPAUTsiHashClass@@@Z  008d1cb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008d1b30/s008d1b30.cpp  ?SetDeviceChangeCallback@InputMan@Input@EA@@QAEPAXPAXH0@Z  008d2290  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008d1b30/s008d1b30.cpp  ?FireDeviceChangeCallback@InputMan@Input@EA@@QAEXHH@Z  008d22b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008d1b30/s008d1b30.cpp  ?SetPollCompletionCallback@InputMan@Input@EA@@QAEPAXPAXH0@Z  008d22d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008d1b30/s008d1b30.cpp  ?SetEventCallback@InputMan@Input@EA@@QAEPAXIPAX0@Z  008d22f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008d1b30/s008d1b30.cpp  ?FireEventCallback@InputMan@Input@EA@@QAEXPAX@Z  008d2310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008d1b30/s008d1b30.cpp  ?EnumDeviceCallback@@YG_NPAX0@Z  008d1da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008d1b30/s008d1b30.cpp  ?SetConfig@InputMan@Input@EA@@QAEXHM@Z  008d2110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008d1b30/s008d1b30.cpp  ?put_hashClass@@YAXPAUTsiHashClass@@IGPBD@Z  008d1c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008d1b30/s008d1b30.cpp  ?GetDeviceByType@InputMan@Input@EA@@QAEPAXHI@Z  008d2250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
