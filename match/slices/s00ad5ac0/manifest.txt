@@ -1,0 +1,4 @@
+slices/s00ad5ac0/s00ad5ac0.cpp  ??0CmdVig@@QAE@XZ  00ad6240  /O2 /MD /Gy /TP /arch:SSE
+slices/s00ad5ac0/s00ad5ac0.cpp  ?ScalarDtor@ResObj@@QAEPAXI@Z  00ad5f40  /O2 /MD /Gy /TP /arch:SSE
+slices/s00ad5ac0/s00ad5ac0.cpp  ??0CmdObjC@@QAE@XZ  00ad66c0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00ad5ac0/s00ad5ac0.cpp  ??0CmdObjP@@QAE@XZ  00ad68e0  /O2 /MD /Gy /TP /arch:SSE
