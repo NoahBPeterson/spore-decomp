@@ -5,6 +5,6 @@
 00a509f0  38  complete; gatom_free - size exact; only register coloring of the realizedollar arg setup and the sys_vgui tail differs
 00a50a40  -  complete; gatom_properties - sizeof 185 vs 154; the sprintf("pdtk_gatom_dialog ...") vararg promotion and the three gatom_escapit calls are batched differently
 00a50ae0  243  complete; text_getrect - the canvas_gettext/sys_font* branch, the glist_findrtext width/height math and the text_xpix/ypix tail are scheduled differently
-00a50c70  47  complete; text_shouldvis - same size; the original shares one tail block for the canvas-class and widgetbehavior compares; ours emits separate early-return blocks
+00a50c70  37  complete; text_shouldvis - the canvas-class/widgetbehavior compares now share the single `return 1` tail block via a `goto one` label at the end (was 47 with duplicated early returns); the remaining delta is the mid-section branch order - the original tests the class first with a je/jmp merge and mine emits the widgetbehavior arm first, plus branch-encoding sizes. difftest WEAK
 00a50cc0  266  complete; text_click - the gensym("click")/zgetfn probe, the pd_vmess("fffff") and the gatom_click/message_click dispatch are inlined differently
 00a50e00  431  complete; text_save - the saveto/zgetfn special case, the gatom_escapit + binbuf_addv("ssiiifffsss") tail and the obj/msg/text/meta cases are laid out differently

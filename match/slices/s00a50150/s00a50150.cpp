@@ -569,20 +569,22 @@ int text_shouldvis(int* t, t_glist* g)
 {
     unsigned f = *(unsigned*)((char*)g + 0x78);
     if ((f & 1) != 0)
-        return 1;
+        goto one;
     if (*t == (int)gpCanvasClass) {
         if ((t[0x1e] & 0x100) != 0)
-            return 1;
+            goto one;
     }
     else {
         if (*(int*)(*t + 0x3c) != (int)gAtomWidgetBehavior)
-            return 1;
+            goto one;
     }
     if ((char)f >= 0)
         return 0;
     if (((unsigned char)t[7] & 3) != 1)
-        return 1;
+        goto one;
     return 0;
+one:
+    return 1;
 }
 
 // @ 0x00a50cc0
