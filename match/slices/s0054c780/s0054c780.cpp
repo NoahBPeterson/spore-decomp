@@ -33,7 +33,7 @@ enum { kEndianBig = 0 };
 
 // ---------------------------------------------------------------- EASTL stand-ins
 namespace eastl {
-struct allocator { uint32_t mName; };
+class allocator { public: uint32_t mName; };
 struct sp_vector_allocator { uint32_t mName; uint32_t mFlags; };
 
 template <typename T>
@@ -61,7 +61,7 @@ typedef basic_string<char>    string8;
 typedef basic_string<wchar_t> string16;
 
 template <typename T>
-struct vector {
+class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;

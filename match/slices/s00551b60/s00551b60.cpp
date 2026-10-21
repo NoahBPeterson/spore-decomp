@@ -85,7 +85,7 @@ public:
 IServer* GetServer();   // 0x00883860
 }
 namespace ResourceMan {
-struct Key {
+class Key { public:
     uint32_t mInstance;
     uint32_t mType;
     uint32_t mGroup;
@@ -135,7 +135,7 @@ using EA::ResourceMan::Key;
 
 namespace eastl {
 void EASTLFree(void* p);   // 0x00F47380
-struct allocator {
+class allocator { public:
     allocator() {}
     void deallocate(void* p, uint32_t) { void* const pMemory = p; EASTLFree(pMemory); }
 };
@@ -367,7 +367,7 @@ struct sp_vector_allocator {
     const char* mpName;
     uint32_t mFlags;
 };
-template <class T> struct vector {
+template <class T> class vector { public:
     typedef T* iterator;
     typedef const T* const_iterator;
     T* mpBegin;

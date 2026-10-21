@@ -21,7 +21,7 @@ Vector16& VectorAssign(Vector16& dst, const Vector16& src);       // @ 0x50d4e0
 void __cdecl EASTL_allocator_deallocate(void* p);                 // 0x00f47380
 
 namespace eastl {
-struct allocator { void deallocate(void* p, size_t) { EASTL_allocator_deallocate(p); } };
+class allocator { public: void deallocate(void* p, size_t) { EASTL_allocator_deallocate(p); } };
 struct basic_string {
     char* mpBegin; char* mpEnd; char* mpCapacity; allocator mAllocator;
     basic_string() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
@@ -48,7 +48,7 @@ bool WriteUInt16(EA::IO::IStream*, const uint16_t*, size_t, int);
 struct cSPSkinPaintParticleDescription;
 
 namespace EA { namespace ArgScript {
-struct cIParser {
+class cIParser { public:
 #define PV(n) virtual void pv##n();
     PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15)
     PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28) PV(29)
@@ -58,25 +58,25 @@ struct cIParser {
     PV(37) virtual float GetFloat(const char*);
 #undef PV
 };
-struct cArguments {
+class cArguments { public:
     const char** MainArguments(size_t* pCount, int min, int max);  // 0x838020
     const char** MainArguments(int count);                         // 0x838320
     const char** OptionArguments(const char* name, int count);     // 0x838330
     bool HasFlag(const char* flag);                                // 0x8380b0
 };
 struct cState { uint32_t mStateID; };
-struct cICommand { virtual void AddRef(); virtual void Release(); virtual void Cast(); };
-struct cCommandBase : cICommand { cIParser* mParser; int mRefCount; };
-struct cBlockCommandBase : cICommand {
+class cICommand { public: virtual void AddRef(); virtual void Release(); virtual void Cast(); };
+class cCommandBase : public cICommand { public: cIParser* mParser; int mRefCount; };
+class cBlockCommandBase : public cICommand { public:
     cIParser* mParser; int mRefCount; cState* mChildState; char mCommands[0x20];
 };
 template <class T, class B> struct cCommandStateT : B { T* mState; };
-template <class T> struct cBlockCommandT : cCommandStateT<T, cBlockCommandBase> {};
+template <class T> class cBlockCommandT : public cCommandStateT<T, cBlockCommandBase> { public:};
 } }  // namespace EA::ArgScript
 
 namespace EA { namespace Swarm {
 struct cSPSkinPaintParticleDescription;
-struct cEffectsParser : EA::ArgScript::cCommandBase {
+class cEffectsParser : public EA::ArgScript::cCommandBase { public:
     cSPSkinPaintParticleDescription* GetInheritedDescription(const char** a, size_t n, int t); // 0xa6f090
     void AddDescription(EA::ArgScript::cArguments& a, const char* n, int t, int f); // 0xa6fc30
 };

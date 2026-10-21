@@ -38,7 +38,7 @@ inline size_type CharStrlen(const wchar_t* s) {
     return (size_type)(p - s);
 }
 namespace eastl {
-struct allocator {
+class allocator { public:
     allocator() {}
     void deallocate(void* p, size_type) { delete[] (char*)p; }
 };
@@ -98,7 +98,7 @@ typedef eastl::basic_string<wchar_t> string16;
 typedef eastl::basic_string<char> string8;
 
 namespace EA {
-template <typename T> struct RefCountTemplate {
+template <typename T> class RefCountTemplate { public:
     RefCountTemplate() : mRefCount(0) {}
     virtual ~RefCountTemplate() {}
     T mRefCount;
@@ -116,7 +116,7 @@ template <typename T> struct RefCountTemplate {
     }
 };
 
-template <typename T> struct AutoRefCount {
+template <typename T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount(T* p = 0) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
     ~AutoRefCount() { if (mpObject) mpObject->Release(); }
@@ -354,21 +354,21 @@ template <typename T1, typename T2> struct pair {
 
 struct binary_function_base {};
 template <typename Result, typename T, typename Argument>
-struct mem_fun1_t : binary_function_base {
+class mem_fun1_t : public binary_function_base { public:
     typedef Result (T::*MemberFunction)(Argument);
     MemberFunction mpMemberFunction;
     Result operator()(T* pT, Argument arg) const { return (pT->*mpMemberFunction)(arg); }
 };
 struct unary_function_base {};
 template <typename Result, typename T>
-struct mem_fun_t : unary_function_base {
+class mem_fun_t : public unary_function_base { public:
     typedef Result (T::*MemberFunction)();
     MemberFunction mpMemberFunction;
     Result operator()(T* pT) const { return (pT->*mpMemberFunction)(); }
 };
 
 template <typename Key, typename T>
-struct vector_map {
+class vector_map { public:
     typedef pair<Key, T> value_type;
     typedef value_type* iterator;
     iterator mpBegin;

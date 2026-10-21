@@ -33,7 +33,7 @@ namespace EA { namespace ArgScript {
 
 #define PV(n) virtual void pv##n();
 
-struct cIParser {
+class cIParser { public:
     PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
     PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19)
     PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28) PV(29)
@@ -44,18 +44,18 @@ struct cIParser {
 };
 #undef PV
 
-struct cArguments {
+class cArguments { public:
     const char** MainArguments(size_t* pCount, int minCount, int maxCount);  // 0x838020
     const char** OptionArguments(const char* name, int count);               // 0x838330
     bool HasFlag(const char* flag);                                          // 0x8380b0
 };
 
-struct cICommand {
+class cICommand { public:
     virtual void AddRef();
     virtual void Release();
     virtual void Cast();
 };
-struct cCommandBase : cICommand {
+class cCommandBase : public cICommand { public:
     cIParser* mParser;      // +0x4
     int mRefCount;          // +0x8
 };

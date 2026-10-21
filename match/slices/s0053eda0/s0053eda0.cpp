@@ -25,7 +25,7 @@ namespace eastl {
 struct sp_vector_allocator { uint32_t mData[2]; };
 struct IntFloat { int mInt; float mFloat; };            // eastl::pair<int,float>
 template<typename T>
-struct vector {
+class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;

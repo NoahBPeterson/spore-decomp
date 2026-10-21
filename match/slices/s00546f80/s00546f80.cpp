@@ -23,7 +23,7 @@ inline size_type CharStrlen(const wchar_t* s) {
 namespace eastl {
 
 // Allocator used by basic_string (empty) and by containers (8 bytes in retail).
-struct allocator {
+class allocator { public:
     allocator() {}
     void deallocate(void* p, size_type) { delete[] (char*)p; }
 };
@@ -112,7 +112,7 @@ template <typename T> struct less {
     bool operator()(const T& a, const T& b) const { return a < b; }
 };
 template <typename Key, typename Value, typename Compare>
-struct map_value_compare {
+class map_value_compare { public:
     Compare c;
     bool operator()(const Value& a, const Value& b) const { return c(a.first, b.first); }
 };
@@ -155,7 +155,7 @@ inline T* copy_backward(T* first, T* last, T* resultEnd) {
 }
 
 template <typename T, typename Allocator = container_allocator>
-struct vector : VectorBase<T, Allocator> {
+class vector : public VectorBase<T, Allocator> { public:
     typedef VectorBase<T, Allocator> base_type;
     using base_type::mpBegin;
     using base_type::mpEnd;
@@ -201,7 +201,7 @@ struct vector : VectorBase<T, Allocator> {
 };
 
 template <typename Key, typename T, typename Compare>
-struct vector_map : vector<pair<Key, T> > {
+class vector_map : public vector<pair<Key, T> > { public:
     typedef vector<pair<Key, T> > base_type;
     typedef pair<Key, T> value_type;
     typedef value_type* iterator;
@@ -239,7 +239,7 @@ struct Variant {
     void Destruct(bool bReconstruct);                              // 0x0093db80
 };
 
-template <typename T> struct RefCountTemplate {
+template <typename T> class RefCountTemplate { public:
     RefCountTemplate() : mRefCount(0) {}
     virtual ~RefCountTemplate() {}
     T mRefCount;
@@ -255,7 +255,7 @@ template <typename T> struct RefCountTemplate {
     }
 };
 
-template <typename T> struct AutoRefCount {
+template <typename T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount(T* p = 0) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
     ~AutoRefCount() { if (mpObject) mpObject->Release(); }

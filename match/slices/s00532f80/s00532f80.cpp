@@ -98,17 +98,17 @@ template<typename Pair> struct greater_second {
     bool operator()(const Pair& a, const Pair& b) const { return a.second > b.second; }
 };
 
-struct allocator {
+class allocator { public:
     uint32_t mFlags;
     void deallocate(void* p, size_t) { delete[] (char*)p; }
 };
-struct fixed_vector_allocator {
+class fixed_vector_allocator { public:
     allocator mOverflowAllocator;
     void* mpPoolBegin;
     void deallocate(void* p, size_t n) { if (p != mpPoolBegin) mOverflowAllocator.deallocate(p, n); }
 };
 
-template<typename T> struct fixed_vector {
+template<typename T> class fixed_vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
@@ -182,7 +182,7 @@ template<typename It, typename T, typename Compare>
 It lower_bound(It first, It last, const T& value, Compare compare);              // @ 0x5701b0
 
 template<typename Key, typename T, typename Compare = less<Key> >
-struct vector_map : public fixed_vector<pair<Key, T> > {
+class vector_map : public fixed_vector<pair<Key, T> > { public:
     typedef fixed_vector<pair<Key, T> > base_type;
     typedef pair<Key, T> value_type;
     typedef value_type* iterator;

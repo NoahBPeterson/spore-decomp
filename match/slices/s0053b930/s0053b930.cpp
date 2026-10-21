@@ -15,7 +15,7 @@ bool ReadInt32(EA::IO::IStream*, int32_t*, size_t, int);           // @ 0x93a780
 bool WriteUInt32(EA::IO::IStream*, const uint32_t*, size_t, int);  // @ 0x93aa70
 
 namespace EA { namespace ArgScript {
-struct cIParser {
+class cIParser { public:
 #define PV(n) virtual void pv##n();
     PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15)
     PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28) PV(29)
@@ -25,15 +25,15 @@ struct cIParser {
     PV(39) PV(40) PV(41) virtual cSPVector3 GetVector(const char*); // +0xa8
 #undef PV
 };
-struct cArguments {
+class cArguments { public:
     const char** MainArguments(size_t* pCount, int min, int max);  // 0x838020
     const char** MainArguments(int count);                         // 0x838320
     const char** OptionArguments(const char* name, int count);     // 0x838330
     bool HasFlag(const char* flag);                                // 0x8380b0
     const char* operator[](int i);
 };
-struct cICommand { virtual void AddRef(); virtual void Release(); virtual void Cast(); };
-struct cCommandBase : cICommand { cIParser* mParser; int mRefCount; };
+class cICommand { public: virtual void AddRef(); virtual void Release(); virtual void Cast(); };
+class cCommandBase : public cICommand { public: cIParser* mParser; int mRefCount; };
 } }
 
 namespace EA { namespace Swarm { class cPaintCompat { public: virtual void v0(); virtual void v1(); }; } }

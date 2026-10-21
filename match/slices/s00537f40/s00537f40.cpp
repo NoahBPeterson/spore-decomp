@@ -121,7 +121,7 @@ uint32_t FNV1_String8(const char* s, uint32_t basis, int flag);   // 0x00932e80
 namespace EA { namespace ArgScript {
 #define PADV(n) virtual void pv##n();
 struct cState { int mID; };
-struct cIParser {
+class cIParser { public:
     PADV(0) PADV(1) PADV(2) PADV(3) PADV(4) PADV(5) PADV(6) PADV(7) PADV(8) PADV(9)
     PADV(10) PADV(11) PADV(12) PADV(13) PADV(14) PADV(15) PADV(16) PADV(17) PADV(18) PADV(19)
     PADV(20) PADV(21) PADV(22) PADV(23) PADV(24) PADV(25) PADV(26) PADV(27) PADV(28) PADV(29)
@@ -129,20 +129,20 @@ struct cIParser {
     PADV(38) PADV(39) PADV(40) PADV(41) PADV(42) PADV(43)
     virtual Vector3T GetVector(const char* text);     // +0xb0
 };
-struct cArguments {
+class cArguments { public:
     const char** MainArguments(size_t* pCount, int minCount, int maxCount) const;  // 0x838020
     bool HasFlag(const char* flag) const;                                          // 0x8380b0
 };
-struct cICommand {
+class cICommand { public:
     virtual void AddRef();
     virtual void Release();
     virtual void Cast();
 };
-struct cCommandBase : cICommand {
+class cCommandBase : public cICommand { public:
     cIParser* mParser;      // +0x4
     int mRefCount;          // +0x8
 };
-struct cBlockCommandBase {
+class cBlockCommandBase { public:
     virtual ~cBlockCommandBase();
     PADV(1) PADV(2) PADV(3) PADV(4) PADV(5)
     virtual void AddCommand(const char* name, cICommand* command);       // +0x18
@@ -155,7 +155,7 @@ struct cBlockCommandBase {
 };
 } }
 namespace EA { namespace Swarm {
-struct cEffectsParser {
+class cEffectsParser { public:
     uint32_t mBase[3];
     EA::ArgScript::cState mState;                        // +0xc
     int FindComponent(const char* name, int type);       // 0x00a6eb60

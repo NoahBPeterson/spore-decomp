@@ -43,7 +43,7 @@ inline float Clamp(float v, float hi)
 // ---------------------------------------------------------------- EASTL / EA
 extern char gEmptyString[];                     // @ 0x1667bac
 namespace eastl {
-struct allocator {
+class allocator { public:
     void deallocate(void* p, size_t) { delete[] (char*)p; }
 };
 struct basic_string {
@@ -66,7 +66,7 @@ struct basic_string {
 } // namespace eastl
 
 namespace EA {
-template<class T> struct AutoRefCount {
+template<class T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount() : mpObject(0) {}
     ~AutoRefCount() { if (mpObject) mpObject->Release(); }
@@ -84,7 +84,7 @@ template<class T> struct AutoRefCount {
     }
 };
 
-struct RefCountTemplate {
+class RefCountTemplate { public:
     virtual ~RefCountTemplate();
     int mnRefCount;
     RefCountTemplate() : mnRefCount(0) {}
@@ -118,7 +118,7 @@ inline bool Write(EA::IO::IStream* s, bool v) { return Write(s, (uint8_t)(v ? 1 
 inline bool Write(EA::IO::IStream* s, int32_t v) { uint32_t t = v; return WriteUInt32(s, &t, 1, 0); }
 
 namespace EA { namespace Swarm {
-struct cDescription : public RefCountTemplate {
+class cDescription : public RefCountTemplate { public:
     cDescription() {}
 };
 }}
@@ -236,9 +236,9 @@ using namespace nSPSkinner;
 namespace EA { namespace ArgScript {
 
 #define PADV(n) virtual void Pad##n();
-struct cICommand;
-struct cIBlockCommand;
-struct cArguments {
+class cICommand;
+class cIBlockCommand;
+class cArguments { public:
     const char** MainArguments(int count) const;                              // @ 0x838320
     const char** MainArguments(size_t* pCount, int minCount, int maxCount) const; // @ 0x838020
 };
@@ -250,7 +250,7 @@ struct cICommandList {
     virtual void AddBlock(const char* name, cIBlockCommand* cmd);         // slot 5
     virtual void AddCommand(const char* name, cICommand* cmd);            // slot 6
 };
-struct cIParser : public cICommandList {
+class cIParser : public cICommandList { public:
     PADV(7) PADV(8) PADV(9) PADV(10) PADV(11) PADV(12) PADV(13) PADV(14) PADV(15) PADV(16)
     PADV(17) PADV(18) PADV(19) PADV(20) PADV(21) PADV(22) PADV(23) PADV(24) PADV(25) PADV(26)
     PADV(27) PADV(28) PADV(29) PADV(30) PADV(31) PADV(32) PADV(33) PADV(34)
@@ -261,17 +261,17 @@ struct cIParser : public cICommandList {
     virtual Vector3T ParseVector3(const char* s);                        // slot 44
 };
 
-struct cICommand {
+class cICommand { public:
     virtual void ParseLine(const cArguments& args);
 };
-struct cCommandBase : public cICommand {
+class cCommandBase : public cICommand { public:
     cIParser* mParser;
     int mRefCount;
     cCommandBase();                                                        // @ 0x83c800
 };
-struct cIBlockCommand : public cICommandList {
+class cIBlockCommand : public cICommandList { public:
 };
-struct cBlockCommandBase : public cIBlockCommand {
+class cBlockCommandBase : public cIBlockCommand { public:
     cIParser* mParser;                  // +0x04
     int mRefCount;                      // +0x08
     cState* mChildState;                // +0x0c
@@ -285,10 +285,10 @@ template<class T, class Base> struct cCommandStateT : public Base {
     T* mState;
     cCommandStateT() {}
 };
-template<class T> struct cCommandT : public cCommandStateT<T, cCommandBase> {
+template<class T> class cCommandT : public cCommandStateT<T, cCommandBase> { public:
     cCommandT() {}
 };
-template<class T> struct cBlockCommandT : public cCommandStateT<T, cBlockCommandBase> {
+template<class T> class cBlockCommandT : public cCommandStateT<T, cBlockCommandBase> { public:
     cBlockCommandT() {}
 };
 struct EnumTable;
@@ -299,7 +299,7 @@ using namespace EA::ArgScript;
 
 namespace EA { namespace Swarm {
 struct cEffectsParserBase { virtual ~cEffectsParserBase(); uint32_t mData[2]; };
-struct cEffectsParser : public cEffectsParserBase, public EA::ArgScript::cState {
+class cEffectsParser : public cEffectsParserBase, public EA::ArgScript::cState { public:
     cDescription* GetInheritedDescription(const char** args, size_t numArgs, int type);   // @ 0xa6f090
     void SetDescription(const char* name, int type, cDescription* desc);                  // @ 0xa6f9c0
     void AddDescription(const cArguments& args, const char* name, int type, cDescription* desc); // @ 0xa6fc30

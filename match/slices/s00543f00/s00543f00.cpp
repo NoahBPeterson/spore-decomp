@@ -109,8 +109,8 @@ namespace eastl
         return first;
     }
 
-    struct allocator
-    {
+    class allocator
+    { public:
         const char* mpName;
         uint32_t    mFlags;
     };

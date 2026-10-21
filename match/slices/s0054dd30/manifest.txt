@@ -4,9 +4,9 @@ slices/s0054dd30/s0054dd30.cpp  ??0cAssetDirectory@Pollen@SP@@QAE@XZ  0054ddf0  
 slices/s0054dd30/s0054dd30.cpp  ?Init@cAssetDirectory@Pollen@SP@@QAE_NXZ  0054df60  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s0054dd30/s0054dd30.cpp  ?Shutdown@cAssetDirectory@Pollen@SP@@QAE_NXZ  0054e020  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s0054dd30/s0054dd30.cpp  ?HandleMessage@cAssetDirectory@Pollen@SP@@UAE_NIPAX@Z  0054e0b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
-slices/s0054dd30/s0054dd30.cpp  ?AddMapping@cAssetDirectory@Pollen@SP@@QAE_N_KABUKey@ResourceMan@EA@@@Z  0054e250  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
-slices/s0054dd30/s0054dd30.cpp  ?GetLocalKey@cAssetDirectory@Pollen@SP@@QBE_N_KPAUKey@ResourceMan@EA@@@Z  0054e460  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
-slices/s0054dd30/s0054dd30.cpp  ?GetServerId@cAssetDirectory@Pollen@SP@@QBE_NABUKey@ResourceMan@EA@@PA_K_N@Z  0054e530  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?AddMapping@cAssetDirectory@Pollen@SP@@QAE_N_KABVKey@ResourceMan@EA@@@Z  0054e250  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?GetLocalKey@cAssetDirectory@Pollen@SP@@QBE_N_KPAVKey@ResourceMan@EA@@@Z  0054e460  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?GetServerId@cAssetDirectory@Pollen@SP@@QBE_NABVKey@ResourceMan@EA@@PA_K_N@Z  0054e530  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s0054dd30/s0054dd30.cpp  ?IsPending@cAssetDirectory@Pollen@SP@@QBE_N_K@Z  0054e740  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s0054dd30/s0054dd30.cpp  ?SetPending@cAssetDirectory@Pollen@SP@@QAEX_K_N@Z  0054e7b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s0054dd30/s0054dd30.cpp  ?IsPending2@cAssetDirectory@Pollen@SP@@QBE_N_K@Z  0054e800  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

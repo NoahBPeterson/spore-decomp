@@ -12,7 +12,7 @@ void* operator new[](size_t); void operator delete[](void*);
 struct cSPVector3 { float x, y, z; cSPVector3() {} cSPVector3(float a, float b, float c) : x(a), y(b), z(c) {} };
 
 namespace EA { namespace ArgScript {
-struct cIParser {
+class cIParser { public:
 #define PV(n) virtual void pv##n();
     PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15)
     PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28) PV(29)
@@ -21,15 +21,15 @@ struct cIParser {
     virtual cSPVector3 GetVector(const char*);
 #undef PV
 };
-struct cArguments {
+class cArguments { public:
     const char** MainArguments(size_t* pCount, int min, int max);
     const char** MainArguments(int count);
     const char** OptionArguments(const char* name, int count);
     bool HasFlag(const char* flag);
     const char* operator[](int i);
 };
-struct cICommand { virtual void AddRef(); virtual void Release(); virtual void Cast(); };
-struct cCommandBase : cICommand { cIParser* mParser; int mRefCount; };
+class cICommand { public: virtual void AddRef(); virtual void Release(); virtual void Cast(); };
+class cCommandBase : public cICommand { public: cIParser* mParser; int mRefCount; };
 } }
 
 void FUN_005370b0(int n, void* p);                                    // 0x5370b0

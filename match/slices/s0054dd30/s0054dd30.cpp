@@ -87,7 +87,7 @@ public:
 IServer* GetServer();   // 0x00883860
 }
 namespace ResourceMan {
-struct Key {
+class Key { public:
     uint32_t mInstance;
     uint32_t mType;
     uint32_t mGroup;
@@ -137,7 +137,7 @@ using EA::ResourceMan::Key;
 
 namespace eastl {
 void EASTLFree(void* p);   // 0x00F47380
-struct allocator {
+class allocator { public:
     allocator() {}
     void deallocate(void* p, uint32_t) { void* const pMemory = p; EASTLFree(pMemory); }
 };

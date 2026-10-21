@@ -38,7 +38,7 @@ inline size_type CharStrlen(const wchar_t* s) {
     return (size_type)(p - s);
 }
 namespace eastl {
-struct allocator {
+class allocator { public:
     allocator() {}
     void deallocate(void* p, size_type) { delete[] (char*)p; }
 };
@@ -79,7 +79,7 @@ struct basic_string {
 typedef eastl::basic_string<wchar_t> string16;
 
 namespace EA {
-template <typename T> struct RefCountTemplate {
+template <typename T> class RefCountTemplate { public:
     RefCountTemplate() : mRefCount(0) {}
     virtual ~RefCountTemplate() {}
     T mRefCount;
@@ -97,7 +97,7 @@ template <typename T> struct RefCountTemplate {
     }
 };
 
-template <typename T> struct AutoRefCount {
+template <typename T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount(T* p = 0) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
     ~AutoRefCount() { if (mpObject) mpObject->Release(); }
