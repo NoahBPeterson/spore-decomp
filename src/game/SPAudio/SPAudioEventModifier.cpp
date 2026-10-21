@@ -111,7 +111,7 @@ uint32_t FNV1_String8(const char* s, uint32_t seed, int flag);
 namespace EA {
 namespace XHTML {
 namespace DOM {
-struct Node {
+class Node { public:
     int Type();   // 0x00fc7e50
 };
 }
@@ -294,7 +294,7 @@ struct SoundHashTable {
 }
 namespace SP {
 namespace Audio {
-struct cEventModifierPrimitiveFootTypeBase : cEventModifierPrimitive_s00a3_8e40 {
+class cEventModifierPrimitiveFootTypeBase : public cEventModifierPrimitive_s00a3_8e40 { public:
     ResponseCurve_s00a3_8e40 mCurves[10];    // +0x18 .. +0x2200
     cEventModifierPrimitiveFootTypeBase(const char* name);   // 0xa39930
     virtual ~cEventModifierPrimitiveFootTypeBase();          // 0xa39770
@@ -608,7 +608,7 @@ struct SoundHashTable_s00a3_9ce0 {
 }
 namespace SP {
 namespace Audio {
-struct cEventModifierPrimitiveMouthType : cEventModifierPrimitive_s00a3_9ce0 {
+class cEventModifierPrimitiveMouthType : public cEventModifierPrimitive_s00a3_9ce0 { public:
     SoundHashTable_s00a3_9ce0 mTable;   // +0x18
     int mPad34;
     __declspec(noinline) cEventModifierPrimitiveMouthType(const char* name);
@@ -617,7 +617,7 @@ struct cEventModifierPrimitiveMouthType : cEventModifierPrimitive_s00a3_9ce0 {
 }
 namespace SP {
 namespace Audio {
-struct cEventModifierPrimitiveAlias : cEventModifierPrimitive_s00a3_9ce0 {
+class cEventModifierPrimitiveAlias : public cEventModifierPrimitive_s00a3_9ce0 { public:
     StrMap mMap;   // +0x18 (allocator slot) .. +0x2c
     int mPad30;
     cEventModifierPrimitiveAlias() : cEventModifierPrimitive_s00a3_9ce0("alias") {}
@@ -639,7 +639,7 @@ struct cEventModifierPrimitiveFootTypeBase_s00a3_9ce0 : cEventModifierPrimitive_
 }
 namespace SP {
 namespace Audio {
-struct cEventModifierPrimitiveFootType : cEventModifierPrimitiveFootTypeBase_s00a3_9ce0 {
+class cEventModifierPrimitiveFootType : public cEventModifierPrimitiveFootTypeBase_s00a3_9ce0 { public:
     cEventModifierPrimitiveFootType() : cEventModifierPrimitiveFootTypeBase_s00a3_9ce0("footsteps") {}
     virtual void ModifyEvent(Command_s00a3_9ce0* cmd, int a, char* dst, int capacity);   // 0xa3aea0
 };
@@ -647,7 +647,7 @@ struct cEventModifierPrimitiveFootType : cEventModifierPrimitiveFootTypeBase_s00
 }
 namespace SP {
 namespace Audio {
-struct cEventModifierPrimitiveEpicFootType : cEventModifierPrimitiveFootTypeBase_s00a3_9ce0 {
+class cEventModifierPrimitiveEpicFootType : public cEventModifierPrimitiveFootTypeBase_s00a3_9ce0 { public:
     cEventModifierPrimitiveEpicFootType() : cEventModifierPrimitiveFootTypeBase_s00a3_9ce0("epicfootsteps") {}
     virtual void ModifyEvent(Command_s00a3_9ce0* cmd, int a, char* dst, int capacity);   // 0xa3af20
     virtual bool ReadTuningValues(const ResourceKey* key);                    // 0xa3af80
@@ -656,7 +656,7 @@ struct cEventModifierPrimitiveEpicFootType : cEventModifierPrimitiveFootTypeBase
 }
 namespace SP {
 namespace Audio {
-struct cEventModifierPrimitiveSurfaceType : cEventModifierPrimitive_s00a3_9ce0 {
+class cEventModifierPrimitiveSurfaceType : public cEventModifierPrimitive_s00a3_9ce0 { public:
     cEventModifierPrimitiveSurfaceType() : cEventModifierPrimitive_s00a3_9ce0("surfacetype") {}
     virtual void ModifyEvent(Command_s00a3_9ce0* cmd, int a, char* dst, int capacity);   // 0xa3b9a0
 };
