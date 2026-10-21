@@ -460,7 +460,7 @@ extern "C" void* FUN_0067dd50_s0081_5dd0();
 extern u32 g_01545188, g_01545198, g_0154519c;
 extern RawObj* g_015fd920;               // command-line object
 extern u8 g_0164d211;                    // zh-cn flag
-struct cSPUIMainWin {
+class cSPUIMainWin { public:
     char  pad_00[4];
     u32   sub4_vt;
     char  pad_08[0x214 - 8];
