@@ -1,0 +1,10 @@
+010d8520 538 havok +vc71; equiv PASS 274 valid 86.3% cov
+010d88c0 25 havok +vc71; equiv PASS 292 valid 78.6% cov
+010d8a00 1 havok +vc71; equiv FAIL ecx/arg-slot: original create() reads mgr from entry+8 (extra stack word); our cdecl reads entry+4
+010d8a30 432 havok +vc71; equiv FAIL contact-point float: orig bfec2631 vs ours 00002631 (distance term)
+010d8c80 380 havok +vc71; equiv PASS 397 valid 83.6% cov
+010d8e90 378 havok +vc71; equiv PASS 396 valid 83.6% cov
+010d90a0 166 havok +vc71; equiv PASS 400 valid 72.0% cov
+010d91a0 164 havok +vc71; equiv PASS 399 valid 72.0% cov
+010d9330 10 havok +vc71; equiv WEAK 170 valid 100% cov
+010d93e0 124 havok +vc71; equiv PASS 400 valid 100% cov
