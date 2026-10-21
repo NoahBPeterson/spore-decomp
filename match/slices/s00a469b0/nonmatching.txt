@@ -1,0 +1,27 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+#
+# Slice s00a469b0 = EA::Audio::Eapd t_binbuf/t_atom helpers (state 3 of Spore's PD-derived
+# EAPd).  6/14 byte-exact.  The remaining 8 are complete, compiling C++ that reproduces the
+# original control flow, but MSVC schedules/reifies them differently (large switch DFAs are
+# re-ordered, stack frames differ by a few bytes); none converge within the 5-round budget.
+# The equivalence gate run at this slice's own flags reports 4 WEAK (every one with zero mismatches:
+# atom_string, binbuf_add, binbuf_addv, binbuf_addtext) and 4 UNSUPPORTED, all because the 400 random
+# argument sets cannot be reinterpreted as valid t_binbuf*/t_symbol-by-value arguments in either
+# binary (100% fault(read) discards) - not a behavioural difference.
+
+00a469b0 264 atom_string: complete; the A_SYMBOL case dispatch order (3,4,1,2,7,8) and the `$`-scan / quote handling are replicated, but MSVC's switch lowering (jump table vs compare chains) and register allocation of bufp/sourceptr differ, leaving 264 differing bytes (524 vs 528 B). difftest verdict WEAK (387/400 valid inputs, 39.3% coverage, no mismatch; 13 inputs discarded on import:sprintf).
+
+00a46cb0 783 binbuf_text: complete; full text->atoms DFA (states 0..8/-1), quoted/slash handling, buffer growth and final resize all reproduce the original semantics, but the frame is 958 vs 972 B and the state-machine branch scheduling differs heavily. difftest verdict UNSUPPORTED (0/400 valid inputs: fault(read) on random bit-pattern t_binbuf* arguments in both binaries).
+
+00a47080 224 binbuf_gettext: complete; builds the same terminated text buffer (separator ' ' for A_SEMI, '\n' otherwise, strcpy-style terminator) but frame is 283 vs 277 B and the separator arithmetic/loop tail is scheduled differently. difftest verdict UNSUPPORTED (0/400 valid inputs: fault(read) on random t_binbuf* arguments).
+
+00a471a0 12 binbuf_add: complete; only the loop tail's instruction scheduling differs (position of `dec edx` and the order of `add ecx`/`add eax`), 12 differing bytes, no size difference; not converging after two rewrite attempts. difftest verdict WEAK (161/400 valid inputs, 72.3% coverage, no mismatch).
+
+00a47220 204 binbuf_addv: complete; varargs walk (float/int/symbol/pointer conversion) matches, but the frame is 320 vs 300 B (reload temp slots) and the per-type dispatch is scheduled differently. difftest verdict WEAK (399/400 valid inputs, 54.1% coverage, no mismatch).
+
+00a47350 320 binbuf_addbinbuf: complete; per-atom conversion (A_SYMBOL gensym of ";" / ",", A_SEMI/A_COMMA gensym, "$%d" / "$%s" sprintf, raw copy otherwise) matches; frame 516 vs 496 B from six t_symbol temporaries and the shared char buf[1000] layout. difftest verdict UNSUPPORTED (0/400 valid inputs: fault(read) on random t_binbuf* arguments).
+
+00a47570 403 binbuf_addtext: complete; entry-guarded arg loop, `$` numeric scan with gensym fallback and sscanf("%d") index parse reproduce the original, but frame is 449 vs 513 B and the A_DOLLAR branch layout differs. difftest verdict WEAK (182/400 valid inputs, 22.4% coverage, no mismatch).
+
+00a477a0 160 binbuf_realizedollsym: complete; 5-parameter signature (symbol, ac, av, max, out) with the `$%d` sprintf + name-concat path matches, but frame 289 vs 268 B and the two formatting paths are scheduled differently. difftest verdict UNSUPPORTED (0/400 valid inputs, all fault - random t_symbol-by-value and pointer arguments are not reinterpretable in either binary).

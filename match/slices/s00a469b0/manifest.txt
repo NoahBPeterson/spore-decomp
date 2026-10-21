@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a469b0/s00a469b0.cpp  ?binbuf_vectortext@Eapd@Audio@EA@@YAXHPBUt_atom@123@PADH@Z  00a46bc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a469b0/s00a469b0.cpp  ?binbuf_new@Eapd@Audio@EA@@YAPAUt_binbuf@123@XZ  00a46c20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a469b0/s00a469b0.cpp  ?binbuf_free@Eapd@Audio@EA@@YAXPAUt_binbuf@123@@Z  00a46c50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a469b0/s00a469b0.cpp  ?binbuf_clear@Eapd@Audio@EA@@YAXPAUt_binbuf@123@@Z  00a46c80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a469b0/s00a469b0.cpp  ?binbuf_addsemi@Eapd@Audio@EA@@YAXPAUt_binbuf@123@@Z  00a47540  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a469b0/s00a469b0.cpp  ?binbuf_gettextbuf@Eapd@Audio@EA@@YAXPAUt_binbuf@123@PADH@Z  00a47780  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
