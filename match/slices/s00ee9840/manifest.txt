@@ -1,0 +1,10 @@
+# source  symbol  original VA  [flags override]
+slices/s00ee9840/s00ee9840.cpp  ?Dtor@Entry@@QAEXXZ  00ee9c70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ee9840/s00ee9840.cpp  ?SetVisible@Entry@@QAEXE@Z  00ee9d00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ee9840/s00ee9840.cpp  ?Update@Entry@@QAEXPAX@Z  00ee9de0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ee9840/s00ee9840.cpp  ?Shutdown@Entry@@QAEXXZ  00ee9e50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ee9840/s00ee9840.cpp  ?SetRect@Entry@@QAEXHPAURectF@@E@Z  00ee9e90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ee9840/s00ee9840.cpp  ?SetColor@Entry@@QAEXUColorRGB@@@Z  00eea190  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ee9840/s00ee9840.cpp  ?NotifyChanged@Entry@@QAEXXZ  00eea260  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ee9840/s00ee9840.cpp  ?OnClick@Entry@@QAEXHH@Z  00eea2f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ee9840/s00ee9840.cpp  ?Entry_PosGreater@@YAHPAUEntry@@0@Z  00eea760  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
