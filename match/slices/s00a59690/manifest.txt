@@ -1,0 +1,11 @@
+# Slice s00a59690 -- EA::Audio::Eapd message-handler leaves that reproduce byte-for-byte.
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a59690/s00a59690.cpp	?pdsymbol_symbol@@YAXPAUPdObject@@@Z	00a59ca0	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a59690/s00a59690.cpp	?bang_new2@@YAPAXXZ	00a59d70	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a59690/s00a59690.cpp	?FUN_00a59db0@@YAXPAX@Z	00a59db0	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a59690/s00a59690.cpp	?FUN_00a59e90@@YAXPAUPdObject@@@Z	00a59e90	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a59690/s00a59690.cpp	?send_symbol@@YAXPAUPdObject@@PAX1@Z	00a59eb0	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a59690/s00a59690.cpp	?FUN_00a59ed0@@YAXPAUPdObject@@PAX111@Z	00a59ed0	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a59690/s00a59690.cpp	?FUN_00a5a000@@YAXPAUPdObject@@M@Z	00a5a000	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a59690/s00a59690.cpp	?FUN_00a5a020@@YAXPAUPdObject@@PAX111@Z	00a5a020	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a59690/s00a59690.cpp	?sel2_symbol@@YAXPAUPdObject@@HPAX@Z	00a5a3c0	/O2 /MD /Gy /TP /arch:SSE /fp:fast

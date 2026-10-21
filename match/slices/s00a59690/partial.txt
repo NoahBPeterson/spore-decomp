@@ -1,0 +1,4 @@
+# Slice s00a59690 -- EA::Audio::Eapd: no partial/incomplete functions.
+# All 34 VAs in this slice are reconstructed and compile: 9 are byte-exact (manifest.txt)
+# and the remaining 25 are complete with their equivalence status recorded in
+# nonmatching.txt.

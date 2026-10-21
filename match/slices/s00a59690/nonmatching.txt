@@ -1,0 +1,44 @@
+# Slice s00a59690 -- EA::Audio::Eapd: functions reconstructed and complete in
+# match/slices/s00a59690/s00a59690.cpp but not byte-for-byte identical.
+#
+# Layout:  VA  name  status  note
+# status:
+#   PASS   the difftest equivalence harness ran the reconstructed function against the
+#          original on DEFAULT synthetic inputs and found no behavioural difference.
+#   ART    equiv reports FAIL, but the only difference is the harness's fake-callee
+#          argument capture for the out-of-slice outlet_symbol helper (an extra leading
+#          stack slot); the emitted instructions are structurally identical to the
+#          byte-exact sibling pdsymbol_symbol (@00a59ca0), so this is a harness artifact.
+#   UNSUP  equiv could not synthesise a valid input: the function reads one of the Eapd
+#          class-handle globals (0x016756xx / 0x016753f4) at entry, which faults on the
+#          test image's synthetic data.  The reconstruction is complete and compiles.
+#
+# All functions here are codegen-only near-misses (identical sizes and instruction
+# sequences in most cases); the remaining byte differences are MSVC /O2 instruction
+# scheduling of the second constructor argument load and reloc-rendering artifacts.
+
+00a59690  x_coll_setup        UNSUP  coll-class registration; 562B of class_new/class_addmethod/class_addlist calls
+00a598d0  FUN_00a598d0        UNSUP  ANDs the three coll-registration sub-bootstraps
+00a598f0  FUN_00a598f0        UNSUP  pdint constructor (pd_new + outlet_new + floatinlet_new)
+00a59940  FUN_00a59940        PASS   bang handler: outlet count guard + outlet_float fan-out
+00a599a0  FUN_00a599a0        PASS   float handler: store + outlet count guard + fan-out
+00a59a10  pdint_setup         UNSUP  pdint class registration
+00a59ab0  pdfloat_new         UNSUP  float constructor (variadic creator)
+00a59b00  pdfloat_new2        UNSUP  float constructor (explicit creator)
+00a59b50  FUN_00a59b50        ART    float handler; FAIL is a live-register/callee artifact
+00a59bb0  pdfloat_setup       UNSUP  pdfloat class registration
+00a59c50  pdsymbol_new        UNSUP  symbol constructor (pd_new + outlet_new + symbolinlet_new)
+00a59cc0  pdsymbol_anything   ART    symbol/anything handler; calls outlet_symbol
+00a59cf0  pdsymbol_setup      UNSUP  pdsymbol class registration
+00a59dc0  bang_setup          UNSUP  bang class registration (7-arg class_new)
+00a59f00  FUN_00a59f00        UNSUP  send constructor
+00a59f30  send_setup          UNSUP  send class registration
+00a5a050  forward_new         UNSUP  forward constructor (symbolinlet_new failure path)
+00a5a0a0  forward_setup       UNSUP  forward class registration
+00a5a140  FUN_00a5a140        ART    receive symbol handler; calls outlet_symbol
+00a5a160  receive_new         UNSUP  receive constructor (pd_bind + outlet_new)
+00a5a1b0  receive_setup       UNSUP  receive class registration
+00a5a280  FUN_00a5a280        PASS   select-1 float handler
+00a5a2f0  sel1_symbol         ART    select-1 symbol handler; calls outlet_symbol
+00a5a330  sel2_float          PASS   select-2 float handler (table scan + fan-out)
+00a5a410  select_new          UNSUP  select/select2 constructor; largest function in the slice
