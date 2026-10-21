@@ -1,0 +1,3 @@
+slices/s010d4730/s010d4730.cpp  ?hkCapsuleCapsuleAgent__registerAgent@@YAXAAUhkCollisionDispatcher@@@Z  010d5320  /vc71 /O2 /MD /Gy /TP
+slices/s010d4730/s010d4730.cpp  _hkSphereBoxAgent__create  010d5370  /vc71 /O2 /MD /Gy /TP
+slices/s010d4730/s010d4730.cpp  _hkSymmetricSphereBoxAgent__create  010d53a0  /vc71 /O2 /MD /Gy /TP

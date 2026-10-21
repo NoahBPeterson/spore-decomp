@@ -1,0 +1,9 @@
+# All 6 target functions of s010d4730 have complete definitions in s010d4730.cpp:
+# 010d4730  hkCapsuleCapsuleAgent::getClosestPoints
+# 010d4b00  hkCapsuleCapsuleAgent::staticGetClosestPoints
+# 010d4ed0  hkCapsuleCapsuleAgent::staticGetPenetrations
+# 010d5320  hkCapsuleCapsuleAgent__registerAgent
+# 010d5370  hkSphereBoxAgent__create
+# 010d53a0  hkSymmetricSphereBoxAgent__create
+# The first three are complete but not byte-exact (listed in nonmatching.txt with
+# reasons); the last three are byte-exact (listed in manifest.txt).

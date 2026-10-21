@@ -1,0 +1,9 @@
+# va  diff-bytes  reason   (compile with /vc71 /O2 /MD /Gy /TP)
+#
+# Complete behaviourally-equivalent source for the capsule/capsule closest-point
+# and penetration paths; none of these three are byte-exact yet (the frame size
+# and x87 schedule differ, the same class of difference that blocks the
+# equivalent hkCapsuleTriangleAgent paths in slice s010d37d0).
+010d4730  790  hkCapsuleCapsuleAgent::getClosestPoints; complete (monitor timer scope, both world-space capsule segments via the 12-scalar transform spelling, hkCollideCapsuleUtilClostestPointCapsVsCaps then collector vtable slot 1 when it reports 0); size 975 vs 969; x87 load schedule/register allocation differ; equiv PASS 399 valid inputs, 90.1% coverage
+010d4b00  788  hkCapsuleCapsuleAgent::staticGetClosestPoints; complete (identical body to 010d4730, static entry so `ret` instead of `ret 0x10`); size 973 vs 967; same x87 schedule difference; equiv PASS 394 valid inputs, 90.1% coverage
+010d4ed0  941  hkCapsuleCapsuleAgent::staticGetPenetrations; complete (4 world-space segment endpoints, direction vectors by subtraction, hkCollideTriangleUtil::closestLineSegLineSeg with a 0x24-byte result, addCdBodyPair when distanceSquared < (rA+rB)^2); size 1109 vs 1072, frame 0xc4 vs 0xe4; remaining diff is x87 schedule plus 32 extra bytes of reserved scratch; equiv PASS 398 valid inputs, 90.8% coverage
