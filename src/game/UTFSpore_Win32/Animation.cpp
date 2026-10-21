@@ -54,7 +54,7 @@ template <typename T> inline const T& min_alt(const T& a, const T& b) { return (
 }
 namespace eastl {
 template <typename T>
-struct generic_iterator {
+class generic_iterator { public:
   T* mIterator;
   explicit generic_iterator(T* x) : mIterator(x) {}
   generic_iterator& operator++() { ++mIterator; return *this; }
