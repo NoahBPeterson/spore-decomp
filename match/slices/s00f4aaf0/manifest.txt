@@ -1,0 +1,8 @@
+# source  symbol  original VA  [flags override]
+slices/s00f4aaf0/s00f4aaf0.cpp  ?Execute@cBrushEffectCommand@@QAEXPAUcArguments@@@Z  00f4aaf0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00f4aaf0/s00f4aaf0.cpp  ?Build@cBrushEffectCommand@@QAEXD@Z  00f4abc0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00f4aaf0/s00f4aaf0.cpp  ?ReadTerrainBrushDesc@@YAXPAUStream@@HPAX@Z  00f4adf0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00f4aaf0/s00f4aaf0.cpp  ?SetParam@cTerrainBrushEffect@@QAE_NHPAMH@Z  00f4b110  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00f4aaf0/s00f4aaf0.cpp  ?back@BrushVertexVector@@QAEPAUcBrushVertex@@XZ  00f4b180  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00f4aaf0/s00f4aaf0.cpp  ?CopyElemsBackward@@YAPAUBrushBigElem@@PAU1@00@Z  00f4b190  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00f4aaf0/s00f4aaf0.cpp  ?CopyF7@@YAPAUF7@@PAU1@00@Z  00f4b1d0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
