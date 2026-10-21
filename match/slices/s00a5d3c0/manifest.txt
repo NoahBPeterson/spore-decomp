@@ -1,0 +1,3 @@
+slices/s00a5d3c0/s00a5d3c0.cpp  ?makenote_free_all@@YAXPAX@Z  00a5ddc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00a5d3c0/s00a5d3c0.cpp  ?serial_new@@YAXM@Z  00a5d770  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00a5d3c0/s00a5d3c0.cpp  ?stripnote_new@@YAPAXXZ  00a5deb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2

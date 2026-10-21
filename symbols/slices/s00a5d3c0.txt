@@ -1,0 +1,23 @@
+00a5d3c0 list_message_setup  # registers the "list message" class, adds the list method and sets the list help symbol
+00a5d430 list_new  # class creator: dispatches "append"/"prepend"/"split"/"trim"/"message", else plain append
+00a5d5a0 x_list_setup  # installs the five list classes and the "list" creator; also holds the unnamed loadbang ctor at 0x00a5d5f0
+00a5d620 loadbang_setup  # registers "loadbang" (size 0x28, flags 8) and adds the bang method
+00a5d690 namcanvas_new  # namecanvas ctor: remembers the canvas, symbol and bind name, and pd_bind's the name
+00a5d6e0 namcanvas_free  # namecanvas free method: sys_vgui a redraw when the bind name is non-empty (range also covers 0x00a5d700)
+00a5d770 serial_new  # serial ctor: clamps the com number to >= 1 and clears the opened flag
+00a5d7a0 serial_setup  # registers "serial" and adds the com serial float method (0x00a5d700)
+00a5d7f0 cputime_bang  # samples GetProcessTimes into the object, zeroing the counters and setting the failure flag
+00a5d840 cputime_bang2  # elapsed kernel+user 100ns delta as 100us float, fanned out to the outlet list
+00a5d900 cputime_new  # cputime ctor: float outlet, bang/bang2 inlet, then the initial cputime_bang sample
+00a5d990 cputime_setup  # registers "cputime" (size 0x40), adds bang and the "bang2" method
+00a5da10 x_misc_setup  # loadbang + namecanvas (new 0x00a5d690, free 0x00a5d6e0) + serial + cputime setup
+00a5da60 makenote_new  # makenote ctor: velocity/duration floats, two inlets, two float outlets, empty tick list
+00a5dae0 makenote_tick  # clock callback: emit note-off and the hung note to the outlets, unlink and free the tick
+00a5dbd0 makenote_float  # note-on: emit velocity and note, then allocate a t_hang tick and clock_delay it
+00a5dcf0 makenote_release_all  # "stop" method: release every hung note (note-off plus its note) and free the ticks
+00a5ddc0 makenote_free_all  # free method / "clear": drop every pending tick without output
+00a5de00 makenote_setup  # registers "makenote" (size 0x3c), adds float, "stop" and "clear"
+00a5deb0 stripnote_new  # stripnote ctor: velocity inlet and two float outlets
+00a5df10 stripnote_float  # forwards note and velocity unless the inlet velocity is zero
+00a5dfc0 stripnote_setup  # registers "stripnote" (size 0x34) and adds the float method
+00a5e010 poly_new  # poly ctor: voice array of (pitch, note, flag), one inlet, three float outlets

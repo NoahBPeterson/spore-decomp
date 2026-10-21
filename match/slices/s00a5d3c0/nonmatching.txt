@@ -1,0 +1,20 @@
+00a5d3c0 36 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; /O2 spills the class_addlist flag across class_sethelpsymbol and drops the `and bl,1` normalisation (size 114 vs 107); Pd externals unresolved so the harness cannot link
+00a5d430 200 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; per-branch global store and selector tests match, gensym call scheduling and the cold default block differ (size 360 vs 367); Pd externals unresolved
+00a5d5a0 83 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; the 128-byte range also covers the unnamed loadbang constructor at 0x00a5d5f0, so one symbol can never fill it (size 134 vs 128)
+00a5d620 15 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; only the `and bl,1` bool normalisation and the movzx of the two flags differ; pd_new/outlet_new unresolved
+00a5d690 40 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; the two parameter reloads are hoisted before canvas_getcurrent instead of after it (size 63 vs 71); pd_new/canvas_getcurrent/pd_bind unresolved
+00a5d6e0 113 /O2 /MD /Gy /TP /arch:SSE2 WEAK - complete/replay-equal on 234 of 400 inputs (38.5% coverage); the 129-byte range covers both namcanvas_free (0x40) and the unnamed serial float at 0x00a5d700, so one symbol cannot match
+00a5d7a0 7 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; the byte-AND return is folded as movzx eax,ecx instead of `and al,bl`; class_new/class_doaddfloat unresolved
+00a5d7f0 15 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; only the callee-saved register holding the object differs (ebx vs esi); replay rejects on the GetCurrentProcess import
+00a5d840 153 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; same 64-bit elapsed-time arithmetic, outlet fan-out is scheduled differently (size 197 vs 183); replay rejects on the GetCurrentProcess import
+00a5d900 4 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; only the frame size differs (0x18 vs 0x10: three gensym scratch slots instead of reusing two); pd_new/outlet_new/inlet_new unresolved
+00a5d990 54 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; the two byte flags are kept in stack slots instead of bl/al (size 129 vs 120); class_new/class_addbang unresolved
+00a5da10 11 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; returns `mov eax,1` where the original emits `mov al,1` (size 76 vs 73); class_new unresolved
+00a5da60 11 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; same instruction set, only the two float stores are scheduled after the argument pushes; pd_new/floatinlet_new/outlet_new unresolved
+00a5dae0 176 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; outlet-count register (eax vs ecx) and the early load of the hung note are scheduled differently (size 194 vs 226); outlet_float/clock_free/freebytes unresolved
+00a5dbd0 166 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; same flow, the two outlet loops and the tick allocation block are scheduled differently (size 253 vs 278); outlet_float/getbytes/clock_new/clock_delay unresolved
+00a5dcf0 132 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; same release loop, counter register and reload positions differ (size 184 vs 200); outlet_float/clock_free/freebytes unresolved
+00a5de00 91 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; the flag chain is spilled to the frame instead of staying in bl (size 191 vs 173); class_new/class_doaddfloat unresolved
+00a5df10 106 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; same two outlet loops over x+0x30 then x+0x2c, scheduling differs (size 147 vs 164); outlet_float unresolved
+00a5dfc0 7 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; the byte-AND return is folded as movzx eax,ecx instead of `and al,bl`; class_new/class_doaddfloat unresolved
+00a5e010 16 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; identical except the voice-zeroing loop decrement sits at the bottom (sub ecx,1) instead of the top (dec ecx); pd_new/getbytes/floatinlet_new/outlet_new unresolved
