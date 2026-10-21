@@ -119,7 +119,7 @@ struct DeserializeHelper {
 struct XmlDeserializer {
     virtual uint32_t Read(IStream* stream, int a1, void* output, int a3, int a4, int a5);   // @ 0x99BE60
 };
-struct cSPUIDeserializer : XmlDeserializer {
+class cSPUIDeserializer : public XmlDeserializer { public:
     virtual uint32_t Read(IStream* stream, int a1, void* output, int a3, int a4, int a5);
 };
 // ---- items of slice s0082cd30 end
@@ -233,7 +233,7 @@ struct BinderVec_s0099_a050 {
 namespace EA {
 namespace UTFWinTools {
 namespace UTFWinToolsInternal {
-struct XmlReaderState {
+class XmlReaderState { public:
     // 0x99a920
     void Allocate(void* param_2, void* param_3);
     // 0x99a940
