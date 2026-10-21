@@ -67,7 +67,7 @@ template <typename T> inline const T& max(const T& a, const T& b) { return (a < 
 
 template <typename T> inline size_t CharStrlen(const T* p) { const T* q = p; while (*q) ++q; return (size_t)(q - p); }
 
-struct allocator {};
+class allocator { public:};
 class wstring {
 public:
     wchar_t* mpBegin;
@@ -111,7 +111,7 @@ public:
 
 namespace EA {
 template <typename T>
-struct AutoRefCount {
+class AutoRefCount { public:
     T* mpObject;
     AutoRefCount() : mpObject(0) {}
     ~AutoRefCount() { if (mpObject) mpObject->Release(); }

@@ -12,7 +12,7 @@
 #include "types.h"
 
 namespace EA { namespace ResourceMan {
-struct Key {
+class Key { public:
     uint32_t instanceID;
     uint32_t typeID;
     uint32_t groupID;
@@ -56,7 +56,7 @@ struct IStdDrawable {
     virtual void v0c();
     virtual void* GetImage(int index);                                   // +0x10
 };
-struct cSPUIStdDrawable : IStdDrawableBase0, IStdDrawable {   // IStdDrawable at +0xc
+class cSPUIStdDrawable : public IStdDrawableBase0, public IStdDrawable { public:   // IStdDrawable at +0xc
     void SetImageColor(int index, uint32_t color);                     // 0x00831170
 };
 
@@ -116,7 +116,7 @@ template <class T> struct intrusive_ptr {
 };
 
 namespace SP {
-struct cPropertyList {
+class cPropertyList { public:
     virtual int AddRef();                                                // +0x00
     virtual int Release();                                               // +0x04
     virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
@@ -124,7 +124,7 @@ struct cPropertyList {
     virtual bool HasProperty(uint32_t id);                               // +0x1c
 };
 
-struct cString {
+class cString { public:
     uint32_t pad[5];
     cString();                                                           // 0x006b5060
     ~cString();                                                          // 0x006b5240
@@ -156,7 +156,7 @@ struct string16 {
 
 namespace SP {
 // Retail 0xC4-byte verb icon record (ModAPI Editors::VerbIconData names).
-struct cSPEditorVerbIconData {
+class cSPEditorVerbIconData { public:
     virtual int AddRef();                                                // +0x00
     virtual int Release();                                               // +0x04
     virtual ~cSPEditorVerbIconData();                                    // +0x08
@@ -228,7 +228,7 @@ void BlockGetAbilities(cSPEditorVerbIconArray* out, const EA::ResourceMan::Key* 
                        uint32_t imageGroup);                             // 0x0059fc60
 }
 
-struct cSPUILayout {
+class cSPUILayout { public:
     uint32_t pad[6];
     cSPUILayout();                                                       // 0x00810000 (folded)
     ~cSPUILayout();                                                      // 0x00811fe0
@@ -290,7 +290,7 @@ extern float kAbilityRowPad;     // 0x0150f178 (6.0)
 extern float kAbilityIconScale;  // 0x0150f17c (1.0)
 
 namespace SP {
-struct cSPEditorBlockAbilities {
+class cSPEditorBlockAbilities { public:
     void* vptr;
     uint32_t pad04[2];
     EA::ResourceMan::Key mBlockKey;              // +0x0c

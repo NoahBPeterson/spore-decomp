@@ -118,12 +118,12 @@ struct cSPEditorModelObject {                          // what cSPEditorHandle::
 };
 
 namespace SP {
-struct cSPEditorHandle {
+class cSPEditorHandle { public:
     bool IsFlagSet();                                  // 0x0047f290
     cSPEditorModelObject* GetModel();                  // 0x0047e680
 };
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     uint32_t         pad_000[0x160 / 4];
     cSPEditorHandle* mpBallHandle;                     // +0x160 (name guessed)
     uint32_t         pad_164[(0xdc8 - 0x164) / 4];
@@ -137,12 +137,12 @@ struct cSPEditorBlock {
     cSPEditorHandle* GetDeformHandle(int i);             // 0x0043c270
 };
 
-struct cSPEditorModel {
+class cSPEditorModel { public:
     int             GetBlockCount();                   // 0x004accf0
     cSPEditorBlock* GetBlock(int i);                   // 0x004accb0
 };
 
-struct cFrustumCull {
+class cFrustumCull { public:
     uint32_t data[0xf0 / 4];
     void Set(const cSPMatrix4& viewProjection);        // 0x006ffe00
     // bit 7 of the result set = outside

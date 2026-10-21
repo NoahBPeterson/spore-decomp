@@ -593,7 +593,7 @@ struct cSPUIPropertyLayoutRefCount {
   virtual void rc0();
   int mRefCount;
 };
-struct cISPUICursorAttachment {
+class cISPUICursorAttachment { public:
   virtual void ca0();
 };
 class cSPUICursorAttachmentLayoutBase : public cSPUIPropertyLayout, public cSPUIPropertyLayoutRefCount {

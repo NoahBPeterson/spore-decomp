@@ -45,7 +45,7 @@ public:
 namespace COM {
 class IUnknown32 { public: virtual int AddRef() = 0; virtual int Release() = 0; };
 }
-struct RectT { float left, top, right, bottom; RectT() {} float Width() const { return right - left; } float Height() const { return bottom - top; } };
+class RectT { public: float left, top, right, bottom; RectT() {} float Width() const { return right - left; } float Height() const { return bottom - top; } };
 }
 
 struct cPropertyList {

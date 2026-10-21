@@ -66,7 +66,7 @@ public:
 
 namespace eastl {
 
-struct allocator {};
+class allocator { public:};
 struct sp_vector_allocator { uint32_t pad[2]; sp_vector_allocator() {} };
 struct true_type {};
 
@@ -198,7 +198,7 @@ public:
     void OnAnimationStarted(int anim);                   // 0x00A006F0
 };
 
-class cAnimatingCreature {
+struct cAnimatingCreature { private:
 public:
     virtual void Unk0();
     virtual int  PlayAnimation(uint32_t animID, int flags);   // slot 1

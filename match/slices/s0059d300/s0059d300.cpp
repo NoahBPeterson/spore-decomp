@@ -36,8 +36,8 @@ struct IMessageRC {
 namespace SP {
 
 enum eAnimatedEvent { kAnimatedEvent0 = 0 };
-struct cSPEditorBlock { char pad[0x10]; };
-struct cSPEditorModel { char pad[0x10]; };
+class cSPEditorBlock { public: char pad[0x10]; };
+class cSPEditorModel { public: char pad[0x10]; };
 
 class cSPEditorAnimatedEventInfo : public IMessageRC, public EA::RefCountVTemplate<int> {
 public:

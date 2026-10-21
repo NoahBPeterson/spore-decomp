@@ -107,7 +107,7 @@ struct cSPBoundingBox {
     void Transform(const cSPBBTransform& t);  // 0x00409dd0
 };
 
-class cMWModel { public: char pad[0x44]; unsigned mGroups[2]; };
+struct cMWModel { private: public: char pad[0x44]; unsigned mGroups[2]; };
 class cModelManager { public: PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
     virtual unsigned GetGroupIndex(unsigned key, int flag); };  // +0x28
 cModelManager* ModelManager();  // 0x0067dd80

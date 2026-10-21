@@ -43,7 +43,7 @@ struct sp_vector_allocator {
   }
 };
 template <typename T>
-class VectorBase {
+struct VectorBase { private:
  public:
   T* mpBegin;
   T* mpEnd;

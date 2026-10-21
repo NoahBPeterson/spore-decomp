@@ -81,7 +81,7 @@ public:
     virtual int Release() = 0;
 };
 }
-struct RectT {
+class RectT { public:
     float left, top, right, bottom;
     RectT() {}
     RectT(float l, float t, float r, float b) : left(l), top(t), right(r), bottom(b) {}

@@ -74,7 +74,7 @@ struct wstring {
 int WStr_Format(eastl::wstring* out, const wchar_t* fmt, ...);   // 0x0041e050
 
 namespace EA {
-template <class T> struct AutoRefCount {
+template <class T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount() : mpObject(0) {}
     AutoRefCount(T* p);                                     // 0x0061df40 / 0x00572660 (out of line)

@@ -9,7 +9,7 @@ void  EASTL_deallocate(void* p);   // 0x00f47380
 // ---------------------------------------------------------------------------
 // cSPUILayout: 0x18-byte record
 // ---------------------------------------------------------------------------
-struct cSPUILayout {
+class cSPUILayout { public:
     char pad[0x18];
     cSPUILayout();                          // 0x00810000
     cSPUILayout(const cSPUILayout& x);      // 0x00810020

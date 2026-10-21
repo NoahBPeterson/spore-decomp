@@ -189,7 +189,7 @@ bool Cam::OnMouseWheel(int a, float b, float x, int y)
 // Lays out one small icon row per block ability (icon + tooltip + optional level text) side by side;
 // falls back to the full LayoutAbilities (0x005a0510) when the count fits mMaxFullRows.
 namespace EA { namespace ResourceMan {
-struct Key {
+class Key { public:
     uint32_t instanceID;
     uint32_t typeID;
     uint32_t groupID;
@@ -273,7 +273,7 @@ struct string16 {
 };
 
 namespace SP {
-struct cPropertyList {
+class cPropertyList { public:
     virtual int AddRef();                                                // +0x00
     virtual int Release();                                               // +0x04
     virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
@@ -284,7 +284,7 @@ struct cPropertyList {
 bool GetPropertyAsKeyInstance(cPropertyList* p, uint32_t id, uint32_t* out);       // 0x006a12a0
 
 // Retail 0xC4-byte verb icon record (ModAPI Editors::VerbIconData names).
-struct cSPEditorVerbIconData {
+class cSPEditorVerbIconData { public:
     virtual int AddRef();                                                // +0x00
     virtual int Release();                                               // +0x04
     virtual ~cSPEditorVerbIconData();                                    // +0x08
@@ -347,7 +347,7 @@ void BlockGetAbilities(cSPEditorVerbIconArray8* out, const EA::ResourceMan::Key*
                        uint32_t imageGroup);                             // 0x0059fc60
 }  // namespace SP
 
-struct cSPUILayout {
+class cSPUILayout { public:
     uint32_t pad[6];
     cSPUILayout();                                                       // 0x00810000
     ~cSPUILayout();                                                      // 0x00811fe0
@@ -394,7 +394,7 @@ void SetTooltipText(IWindow* w, const wchar_t* text, int a, bool b);            
 }
 
 namespace SP {
-struct cSPEditorBlockAbilities {
+class cSPEditorBlockAbilities { public:
     void* vptr;
     uint32_t pad04[2];
     EA::ResourceMan::Key mBlockKey;              // +0x0c

@@ -276,7 +276,7 @@ struct cCreatureAnimData {
     bool mbOrientIdle;      // +0x2d4
 };
 
-class cAnimatingCreature {
+struct cAnimatingCreature { private:
 public:
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
     virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();

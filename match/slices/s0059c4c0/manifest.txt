@@ -4,7 +4,7 @@ slices/s0059c4c0/s0059c4c0.cpp  ??1cSPEditorAnimatedCreatureManager@SP@@UAE@XZ  
 slices/s0059c4c0/s0059c4c0.cpp  ?Shutdown@cSPEditorAnimatedCreatureManager@SP@@QAEXXZ  0059c640  /O2 /MD /Gy /TP /GS- /arch:SSE
 slices/s0059c4c0/s0059c4c0.cpp  ??0cSPEditorAnimatedCreatureManager@SP@@QAE@XZ  0059c7c0  /O2 /MD /Gy /TP /GS- /arch:SSE
 slices/s0059c4c0/s0059c4c0.cpp  ?AddCreature@cSPEditorAnimatedCreatureManager@SP@@QAEIPBX@Z  0059c9c0  /O2 /MD /Gy /TP /GS- /arch:SSE
-slices/s0059c4c0/s0059c4c0.cpp  ?GetCreature@cSPEditorAnimatedCreatureManager@SP@@QAEPAVcAnimatingCreature@2@I@Z  0059ca70  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?GetCreature@cSPEditorAnimatedCreatureManager@SP@@QAEPAUcAnimatingCreature@2@I@Z  0059ca70  /O2 /MD /Gy /TP /GS- /arch:SSE
 slices/s0059c4c0/s0059c4c0.cpp  ?GetCreatureStructure@cSPEditorAnimatedCreatureManager@SP@@  0059cac0  /O2 /MD /Gy /TP /GS- /arch:SSE
 slices/s0059c4c0/s0059c4c0.cpp  ?PlayAnimation@cSPEditorAnimatedCreatureManager@SP@@QAEXII@Z  0059cb10  /O2 /MD /Gy /TP /GS- /arch:SSE
 slices/s0059c4c0/s0059c4c0.cpp  ?AddDelayedEvent@cSPEditorAnimatedCreatureManager@SP@@  0059cb80  /O2 /MD /Gy /TP /GS- /arch:SSE

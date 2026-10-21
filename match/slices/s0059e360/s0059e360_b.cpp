@@ -56,7 +56,7 @@ public:
 
 namespace eastl {
 
-struct allocator {};
+class allocator { public:};
 
 template <typename T>
 class basic_string {
