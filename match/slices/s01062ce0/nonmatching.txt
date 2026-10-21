@@ -1,0 +1,8 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+# flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+01062ce0  264  SP::cUFOLocomotion::UpdateLocomotion: float dt*1000 keeps an SSE movss/mulss into the dt slot and feeds an x87 fld/fistp qword (FloatToInt64 helper) exactly as the original, but the helper's 8-byte result lands 8 bytes higher in the frame and the vector tail (dx*dx+dy*dy+dz*dz compare, 1/dt divide, store order) schedules differently
+01062ff0  555  cUIBadgeCard::Init: state/ctor sub-object allocation and the reuse of the incoming argument slots as scratch for the V3i/rect temporaries differ; frame is 0x28 vs the original 0x10
+01063400   13  cUIBadgeCard::Shutdown: identical except cl hoists `mov ecx,[esi+0x1a8]` above the three vptr stores (original loads it after them)
+010634b0  218  cUIBadgeCard::FillBadgeList: argument scratch slots and virtual-call schedule differ (equivalent behavior)
+010635d0  291  cUIBadgeCard::UpdateFeed: loop-local String16 destructor placement and call schedule differ (equivalent behavior)
+01063740   59  SP::cUIBadgeCard::UpdateDetails: frame 0x24 vs the original 0x28 and the Key/String16 local reuse plus call schedule differ (equivalent behavior)

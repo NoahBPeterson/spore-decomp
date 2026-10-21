@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01062ce0/s01062ce0.cpp  ?f01062e60@UFCmd@@QAEXH@Z  01062e60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s01062ce0/s01062ce0.cpp  ?f01062e70@UFCmd@@QAEXHPBMM@Z  01062e70  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s01062ce0/s01062ce0.cpp  ?f01062ea0@UFCmd@@QAE_NPAHPAM1@Z  01062ea0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s01062ce0/s01062ce0.cpp  ?f01062ee0@UFCmd@@QAEPAU1@XZ  01062ee0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s01062ce0/s01062ce0.cpp  ?f01062f30@@YAXXZ  01062f30  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s01062ce0/s01062ce0.cpp  ?f01062f80@UB@@QAEXXZ  01062f80  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s01062ce0/s01062ce0.cpp  ?f010632b0@UB@@QAEXXZ  010632b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s01062ce0/s01062ce0.cpp  ?f01063330@UB@@QAEXPAX@Z  01063330  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s01062ce0/s01062ce0.cpp  ?f01063360@UB@@QAEPAU1@XZ  01063360  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
