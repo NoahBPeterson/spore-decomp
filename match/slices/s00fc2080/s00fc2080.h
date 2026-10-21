@@ -9,7 +9,7 @@
 // rw::graphics::EmbeddedState (external, other translation units)
 // ---------------------------------------------------------------------------
 namespace rw { namespace graphics {
-struct EmbeddedState {
+class EmbeddedState { public:
     char     pad00[0x10];
     uint32_t mHardStateDirty;   // +0x10
     uint32_t D3D9GetTextureStageState(uint32_t stage);            // 0x11ee870

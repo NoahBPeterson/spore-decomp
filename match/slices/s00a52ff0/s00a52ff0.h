@@ -8,7 +8,7 @@ namespace EA { namespace Audio { namespace Eapd {
 // Allocator / FixedPool (PDB: EA::Audio::Eapd::FixedPool, size 0x30)
 // vtable: +0 dtor, +4 ?, +8 Alloc, +0xc Free
 // ---------------------------------------------------------------------------
-struct Allocator {
+class Allocator { public:
     virtual ~Allocator() {}                       // +0x00
     virtual void  v04();                          // +0x04
     virtual void* v08(uint32_t n);                // +0x08
@@ -17,7 +17,7 @@ struct Allocator {
     void* mpNamePtr;                              // +0x08
 };
 
-struct FixedPool {
+class FixedPool { public:
     Allocator mInitAllocator;                     // +0x00
     Allocator mOverflowAllocator;                 // +0x0c
     uint32_t  mnNodeSize;                         // +0x18
@@ -33,7 +33,7 @@ struct FixedPool {
     void* Alloc();
 };
 
-struct FixedHashtableAllocator : FixedPool {
+class FixedHashtableAllocator : public FixedPool { public:
     uint32_t  mnBucketCount;                      // +0x30
     void*     mpBucketBuffer;                     // +0x34
     // +0x38
@@ -66,7 +66,7 @@ struct VoiceList {
 // ---------------------------------------------------------------------------
 // Parameter hash map
 // ---------------------------------------------------------------------------
-struct Symbol {                 // 8 bytes
+class Symbol { public:                 // 8 bytes
     unsigned    mHash;          // +0x00
     const char* mpName;         // +0x04
 };
@@ -119,7 +119,7 @@ struct ParamIter {
 // ---------------------------------------------------------------------------
 // Play (PDB: EA::Audio::Eapd::Play, 0xb8)
 // ---------------------------------------------------------------------------
-struct Play {
+class Play { public:
     VoiceList   mVoices;         // +0x00
     ParamTable  mParameters;     // +0x38
     unsigned    mnBusyVoices;    // +0x8c
@@ -159,7 +159,7 @@ struct VectorOfSymbol {
     Symbol*   mpEnd;       // +0x04
     void*     mpAlloc;     // +0x08
 };
-struct Group {
+class Group { public:
     VectorOfSymbol mSamples;   // +0x00
     Symbol         mLocation;  // +0x18
     bool Init(void* a2, void* a3, int nAtoms, void* argv);
