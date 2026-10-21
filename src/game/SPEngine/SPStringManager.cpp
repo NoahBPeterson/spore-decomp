@@ -26,7 +26,7 @@ struct Factory {
 };
 }
 namespace SP {
-struct cStringTableResourceFactory : Factory {
+class cStringTableResourceFactory : public Factory { public:
     virtual int GetSupportedTypes(uint32_t* pTypes, int count);
 };
 }
@@ -43,7 +43,7 @@ namespace SP {
 struct cString_s006b_6920 { bool Load(int a, int b, int c); };   // 0x006b54b0
 }
 namespace SP {
-struct cStringDetokenizer {
+class cStringDetokenizer { public:
     cStringDetokenizer();                     // 0x006b6490
     virtual ~cStringDetokenizer();
 };
@@ -228,7 +228,7 @@ struct AutoRefCount {
 };
 }
 namespace SP {
-struct cStringManager {
+class cStringManager { public:
     virtual ~cStringManager();               // vtable slot 0
     virtual bool AddString(cString_s006b_6920* p);      // vtable slot 1
     virtual bool RemoveString(cString_s006b_6920* p);   // vtable slot 2 (see 6b5240)
