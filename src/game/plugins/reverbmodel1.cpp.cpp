@@ -17,7 +17,7 @@ template <class T> static inline T& A(void* p, int off) { return *(T*)((char*)p 
 namespace rw {
 namespace audio {
 namespace core {
-struct DelayLine {
+class DelayLine { public:
     int  Init(int a, int b, int size);   // 0x0114d7b0  thiscall, ret 0xc
     void FUN_0114d730();                 // 0x0114d730  ctor
     void FUN_0114d770();                 // 0x0114d770  Release
@@ -30,7 +30,7 @@ struct DelayLine {
 namespace rw {
 namespace audio {
 namespace core {
-struct CombFilter {
+class CombFilter { public:
     void FUN_0114dcb0(float, int, float, float); // 0x0114dcb0 SetGains, ret 0x10
     void FUN_0114dce0();                 // 0x0114dce0  ctor
 };
@@ -40,7 +40,7 @@ struct CombFilter {
 namespace rw {
 namespace audio {
 namespace core {
-struct AllPassFilter {
+class AllPassFilter { public:
     void FUN_0114e230();                 // 0x0114e230  ctor
     void FUN_0114e210(float, float);     // 0x0114e210  ret 8
 };

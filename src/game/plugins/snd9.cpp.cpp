@@ -32,7 +32,7 @@ struct System_s0113_88f0;
 namespace rw {
 namespace audio {
 namespace core {
-struct Decoder;
+class Decoder;
 }
 }
 }
@@ -71,7 +71,7 @@ DecoderRegistry_s0113_88f0* GetDecoderRegistry();
 namespace rw {
 namespace audio {
 namespace core {
-struct Decoder {
+class Decoder { public:
     char pad00[0x20]; unsigned short mNumChannels;
 char FUN_0114c8c0(char*, unsigned, int, int, void*, int);
 void FUN_01133f40();

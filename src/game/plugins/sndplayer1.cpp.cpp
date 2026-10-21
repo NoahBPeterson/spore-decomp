@@ -248,7 +248,7 @@ struct Voice_s0113_7aa0;
 namespace rw {
 namespace audio {
 namespace core {
-struct Decoder;
+class Decoder;
 }
 }
 }
@@ -392,7 +392,7 @@ struct Voice_s0113_7aa0 {
 namespace rw {
 namespace audio {
 namespace core {
-struct Decoder {
+class Decoder { public:
     char pad00[0x20];
     unsigned short mNumChannels; // +0x20
     char FUN_0114c8c0(char* data, unsigned int size, int flag,
@@ -482,7 +482,7 @@ struct RequestInternal {
 namespace rw {
 namespace audio {
 namespace core {
-struct SndPlayer1 : PlugIn_s0113_7aa0 {
+class SndPlayer1 : public PlugIn_s0113_7aa0 { public:
     Attribute_t_s0113_7aa0 mAttribute[3];                    // +0x28
     TimerHandle_s0113_7aa0 mTimerHandle;                     // +0x40
     RequestExternal* mpRequestExternal;           // +0x58

@@ -49,14 +49,14 @@ extern System_s0114_da70* g_pSystem; // DAT_016e61a8
 namespace rw {
 namespace audio {
 namespace core {
-struct FastFirEngine;
+class FastFirEngine;
 }
 }
 }
 namespace rw {
 namespace audio {
 namespace core {
-struct FastFirEngine {
+class FastFirEngine { public:
     void* mpBuffer;    // +0x00
     f32*  mpInput[2];  // +0x04 / +0x08
     f32*  mpFreq;      // +0x0C
