@@ -1,0 +1,2 @@
+slices/s01204d00/s01204d00.cpp  ?Size@VolPoolSizer@@QAEIXZ  01205670  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01204d00/s01204d00.cpp  ?FUN_012057a0@@YAHXZ  012057a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

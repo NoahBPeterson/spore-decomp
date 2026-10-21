@@ -1,0 +1,3 @@
+# Incomplete functions (not fully reconstructed). None for this slice: all 12 target
+# functions have complete, Ghidra-faithful implementations. The 10 that are not
+# byte-exact are recorded in nonmatching.txt.
