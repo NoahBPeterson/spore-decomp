@@ -29,7 +29,7 @@ extern "C" char  __cdecl FUN_00c87580(void* stream);                            
 extern "C" char  __cdecl FUN_00c879a0(void* stream);                                       // 0x00c879a0
 extern "C" void* __cdecl FUN_00401090(void* key);                                          // 0x00401090
 extern "C" void* __cdecl FUN_004df440(void* mgr, void* key);                               // 0x004df440
-extern "C" void  __cdecl FUN_00ac0d80(void* first, void* last, void* key);                 // 0x00ac0d80
+extern "C" void* __cdecl FUN_00ac0d80(void* first, void* last, void* key);                 // 0x00ac0d80
 extern "C" void* __cdecl FUN_010212a0(void);                                               // 0x010212a0
 extern "C" void* __cdecl FUN_0093aa70(void* stream, void* data, int n, int a);             // 0x0093aa70
 extern "C" void* __cdecl FUN_0093a780(void* stream, void* data, int n, int a);             // 0x0093a780
@@ -367,14 +367,17 @@ char S::FUN_00b8fad0(void* stream)
 char S::FUN_00b8fb70()
 {
   char* self = (char*)this;
-  char b = 0;
-  void* p = FUN_010212a0();
-  if (p == 0) return b;
-  char* first = *(char**)((char*)p + 0xbc);
-  char* last = *(char**)((char*)p + 0xc0);
-  void* id = (void*)((void* (*)(void*))VFn(self, 0x18))(self);
-  FUN_00ac0d80(first, last, id);
-  return (last != first) ? 1 : 0;
+  char result = 0;
+  char* p = (char*)FUN_010212a0();
+  if (p != 0) {
+    char* first = *(char**)(p + 0xbc);
+    char* last = *(char**)(p + 0xc0);
+    void* vfn = VFn(self, 0x18);
+    void* id = (void*)((void* (__thiscall*)(char*))vfn)(self);
+    void* res = FUN_00ac0d80(first, last, id);
+    result = (last != res);
+  }
+  return result;
 }
 
 // ===========================================================================
