@@ -1,4 +1,3 @@
-00799cc0 2 complete vtable+field constructor; returns `this` in eax (2-byte imm reloc)
 00799e00 96 complete reverse refcounted copy; lock/branch schedule differs
 00799e70 0 complete switch dispatcher over DAT_0153b208; case-body layout differs (no same-size symbol)
 0079a0d0 0 complete Ghidra transcription of transform-combine; rep movsd/layout differs
