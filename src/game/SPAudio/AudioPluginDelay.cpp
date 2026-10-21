@@ -97,7 +97,7 @@ struct MultiDelayVoice {          // 0x10 bytes per voice at +0x78
 namespace rw {
 namespace audio {
 namespace core {
-struct MultiDelay {
+class MultiDelay { public:
     static int Process(MultiDelay* fx, MixCtx* ctx);   // 0x00a15220
     char pad00[8];
     EffectOwner* mpOwner;         // +0x08
