@@ -181,7 +181,7 @@ virtual void c3();
 }
 namespace EA {
 namespace ArgScript {
-struct cBlockCommandBase : cCommandBase_s007e_06b0 {
+class cBlockCommandBase : public cCommandBase_s007e_06b0 { public:
     void* mChildState;      // +0xc
     char  mCommands[0x20];  // +0x10
 };
@@ -227,7 +227,7 @@ struct cDescription_s007e_06b0 {
 }
 namespace EA {
 namespace Swarm {
-struct cEffectsParser {
+class cEffectsParser { public:
     void* GetInheritedDescription(void* argv, int count, int type); // 0x00a6f0d0
 };
 }
