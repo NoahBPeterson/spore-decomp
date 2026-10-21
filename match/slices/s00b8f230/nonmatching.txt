@@ -3,7 +3,6 @@
 00b8f690 64 Simulator::cPlantCargoInfo::cPlantCargoInfo; memberwise init + three vtable stores matches, ours is 113 vs 110 bytes (float constant load scheduled differently)
 00b8f730 120 Simulator::cPlantCargoInfo assignment operator (operator= then the 0xa4 tail copy); 143 vs 139 bytes, block order differs
 00b8f7f0 85 Simulator::cSpaceInventoryItem::Duplicate: operator_new(0xa4) + cPlantCargoInfo ctor + FUN_00b8f730 + Release; AddRef/Release around the returned pointer scheduled differently
-00b8f860 35 hash-of-species-kind switch (0xb8669ec9/0xbcd73e89/0x37148141 -> 0x29c388a/0x3a8be428/0x6d60a1cc); 54 vs 55 bytes (one branch inverted)
 00b8f9b0 62 Simulator::cSpaceInventoryItem::GetImageID; reads the +0x57c kind then copies one of three 3-DWORD globals into *out; 54 vs 141 bytes because our zero-fill/return paths fold
 00b8fa40 128 cVarListSerializer serialize-to-stream wrapper; 154 vs 141 bytes (0xa14 stack buffer + ctor/serialize call order)
 00b8fad0 169 cVarListSerializer deserialize-from-stream wrapper + GetPlantProfile lookup into +0x94; 178 vs 147 bytes

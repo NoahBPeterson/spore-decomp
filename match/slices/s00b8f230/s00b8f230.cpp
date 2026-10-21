@@ -289,8 +289,11 @@ int S::FUN_00b8f860()
   int a0 = *(int*)(self + 0xa0);
   if (a0 != 0) {
     int v = *(int*)(a0 + 0x57c);
-    if (v == (int)0xb8669ec9) return 0x29c388a;
-    if (v != (int)0xbcd73e89 && v == 0x37148141) return 0x3a8be428;
+    switch (v) {
+      case (int)0xb8669ec9: return 0x29c388a;
+      case (int)0xbcd73e89: return 0x6d60a1cc;
+      case 0x37148141:      return 0x3a8be428;
+    }
   }
   return 0x6d60a1cc;
 }
