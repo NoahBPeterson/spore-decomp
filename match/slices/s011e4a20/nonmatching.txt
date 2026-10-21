@@ -1,3 +1,18 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s011e4a20 = rw arena section registration and fixup walkers (tables of rw_section_init_* /
+# rw_section_*_advance writers, the arena section manifests, the Atoms/ExternalArenas sections and
+# the arena path tokenizer).  2/27 byte-exact.  The other 25 are complete C++ that reproduces the
+# original control flow, the section layouts and the callback ordering; they are spread over the
+# two bookkeeping files below:
+#   * partial.txt        15 functions that the equivalence gate PASSes at these flags and whose only
+#                        gap is byte layout (LTCG-folded tables, scheduler differences);
+#   * nonmatching.txt    10 functions the gate cannot measure (import:_decode_pointer / fake-arity /
+#                        all-fault inputs) or that pass with WEAK coverage.
+# One helper, rw_ArenaSectionAtoms_fixup at 0x011e56d0, is emitted by this source but is not part of
+# this slice's function list; it is kept because the Atoms serialize path calls it.
+
 011e4a20 95 UNSUPPORTED -- rw_ArenaSectionTypes_Initialize: harness discards all inputs (import:_decode_pointer via ArenaManager::Data thunk reached through rw_FindTypeReg)
 011e4b20 120 UNSUPPORTED -- rw_ArenaSectionExternalArenas_Initialize: 0/400 inputs, import:_decode_pointer (ArenaManager::Data slab at [0x0140a57c])
 011e4e70 356 UNSUPPORTED -- rw_ArenaSectionsInitialize: 0/400 inputs, import:_decode_pointer (chains into the Types/ExternalArenas initializers)
