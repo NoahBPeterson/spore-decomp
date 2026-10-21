@@ -23,21 +23,21 @@ struct Vector3 {
 
 namespace SP {
 
-struct cViewer {
+class cViewer { public:
     void SetNear(float v);                       // 0x007c4ba0 (thiscall, ret 4)
     void SetFar(float v);                        // 0x007c4bc0 (thiscall, ret 4)
     void SetViewAngle(float v);                  // 0x007c5350 (thiscall, ret 4)
     void SetCameraToWorld(const float* m);       // 0x007c4c40 (thiscall, ret 4)
 };
 
-struct cSpatialObject {
+class cSpatialObject { public:
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual void v20(); virtual void v24(); virtual void v28();
     virtual const Vector3* GetPosition();        // +0x2c
 };
 
-struct cSPGameDataUFO {
+class cSPGameDataUFO { public:
     uint32_t pad0[0x34 / 4];
     cSpatialObject mSpatial;                     // +0x34
     uint32_t pad38[(0x718 - 0x38) / 4];
@@ -46,7 +46,7 @@ struct cSPGameDataUFO {
     bool mHasPos;                                // +0x74c
 };
 
-struct cSPSimulatorSpaceGame {
+class cSPSimulatorSpaceGame { public:
     cSPGameDataUFO* GetPlayerInventory();        // 0x00a1ad60
 };
 

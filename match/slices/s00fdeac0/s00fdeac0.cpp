@@ -32,7 +32,7 @@ struct ResourceKey {
 
 namespace eastl {
 
-struct allocator {
+class allocator { public:
     void* allocate(size_t_ n) { return operator new[](n, "Simulator", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1); }
     void deallocate(void* p) { operator delete[](p); }
 };
@@ -437,7 +437,7 @@ extern const ResourceKey kDefaultKey;           // 0x016d9950
 
 namespace SP {
 
-struct cAppModeSpace {
+class cAppModeSpace { public:
     uint32_t pad000[0x144 / 4];
     ModelVector mPlantModels;                   // +0x144
     uint32_t pad154[2];

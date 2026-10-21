@@ -120,7 +120,7 @@ struct cSimPlanetLowLOD {
 	void SetAnimalDensity(int cell, const ResourceKey* species, int density, int flag);       // 0x00C821B0
 };
 
-struct cPlanet {
+class cPlanet { public:
 	uint32_t mPad[0x13c / 4];
 	cPlanetData* mpData;                         // +0x13c
 	cSimPlanetLowLOD* GetSimPlanetLowLOD();      // 0x008414C0
@@ -128,7 +128,7 @@ struct cPlanet {
 	bool HasAnimalSpecies(const ResourceKey& species);   // 0x00C70D10
 };
 
-struct cPlanetRecord {
+class cPlanetRecord { public:
 	int GetKind();                               // 0x00B8DAB0 (compared with 5)
 };
 
@@ -136,19 +136,19 @@ struct cEmpireLookup {                           // returned by 0x01021240
 	int GetOwnerEmpireID();                      // 0x00B1FDB0
 };
 
-struct cSPLivingUniverse {
+class cSPLivingUniverse { public:
 	static cPlanet* GetActivePlanet();           // 0x01021260
 	static cPlanetRecord* GetActivePlanetRecord();   // 0x010212A0
 	static int GetPlayerEmpireID();              // 0x01021090
 };
 cEmpireLookup* GetEmpireLookup();                // 0x01021240
 
-struct cRelationshipManager {
+class cRelationshipManager { public:
 	float RecordEvent(int empireA, int empireB, uint32_t eventID, float scale);              // 0x00D06240
 };
 cRelationshipManager* RelationshipManager();     // 0x00B3D2C0
 
-struct cTerraformingManager {
+class cTerraformingManager { public:
 	void SetGenesisPosition(cPlanet* planet, Vector2 pos, int flag);                          // 0x00BBCF00
 	int GetTerraformLevel(cPlanetData* data);                                                 // 0x00BBC670
 	ResourceKey GetPlantSpecies(int level, uint32_t plantType, cPlanetData* data);           // 0x00BBC870
@@ -157,7 +157,7 @@ struct cTerraformingManager {
 };
 cTerraformingManager* TerraformingManager();     // 0x00B3D430
 
-struct cTerrainSphere {
+class cTerrainSphere { public:
 	void Refresh();                              // 0x00C75570
 };
 struct cNounManager {
@@ -183,7 +183,7 @@ extern const float kGenesisStageDuration;        // 0x015B621C (8.5)
 extern const float kGenesisStartTime;            // 0x015B6218 (14.0)
 extern const float kGenesisMinEndTime;           // 0x015B6214 (39.0)
 
-struct cSPTimer {
+class cSPTimer { public:
 	uint32_t mData[8];
 	uint64_t GetElapsedTime();                   // 0x00BC3190
 };

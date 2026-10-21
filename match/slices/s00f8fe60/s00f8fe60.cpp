@@ -24,9 +24,9 @@ extern Vector4 kVector4One;   // 0x015b0f90 = {1,1,1,1}
 
 namespace eastl {
 
-struct allocator {};
+class allocator { public:};
 
-template <class T, class Allocator = allocator> struct vector {
+template <class T, class Allocator = allocator> class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;

@@ -16,7 +16,7 @@ struct cCubeMapCoord { float u, v; int face; };
 
 namespace rw { namespace graphics {
 struct VBDesc { char pad[0xc]; unsigned short numElements; unsigned char pad2; unsigned char stride; };   // +0xc, +0xf
-struct VertexBuffer {
+class VertexBuffer { public:
     VBDesc* desc;           // +0
     void*   d3dvb;          // +4
     unsigned base;          // +8
@@ -28,11 +28,11 @@ struct VertexBuffer {
 
 namespace SP {
 
-template <class T> struct cTerrainMap {
+template <class T> class cTerrainMap { public:
     float GetFloat(const cCubeMapCoord& c) const;       // 0x00f8d620
 };
 
-struct cTerrainMapSet {
+class cTerrainMapSet { public:
     unsigned pad00[2];
     cTerrainMap<unsigned short>* mHeightMap;   // +0x08
     unsigned pad0c[0x34 / 4 - 3];
@@ -41,7 +41,7 @@ struct cTerrainMapSet {
     float mWaterHeight;                         // +0x3c
 };
 
-struct cTerrainSphere {
+class cTerrainSphere { public:
     virtual void v0();
     virtual void v1();
     virtual void v2();
@@ -49,7 +49,7 @@ struct cTerrainSphere {
     virtual void* GetInfo();                    // +0x10
 };
 
-struct cDirectPropertyList {
+class cDirectPropertyList { public:
     bool  GetBool(unsigned id);                 // 0x006a25a0 (named SP::cPropertyList::GetDescription by Ghidra)
     float GetFloatProperty(unsigned id);        // 0x006a2710
 };
@@ -60,7 +60,7 @@ extern char g_016d66aa;                         // 0x016d66aa
 // wraps a cube-face coordinate that left [0,1] onto the neighbouring face
 void __cdecl WrapCubeCoord(int* face, float* u, float* v, int a, int b, int c);   // 0x00685200
 
-struct cTerrainSphereQuad {
+class cTerrainSphereQuad { public:
     cTerrainSphere* mSphere;        // +0x00
     cTerrainSphereQuad* mParent;    // +0x04
     unsigned pad08[4];

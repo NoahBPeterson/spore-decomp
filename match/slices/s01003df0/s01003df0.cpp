@@ -54,13 +54,13 @@ extern float         gOrbitSpeed;      // 0x016dc720
 
 namespace SP {
 
-struct cSimulatorUniverse {
+class cSimulatorUniverse { public:
     uint32_t pad0[0x10 / 4];
     void*    mpPropList;               // +0x10
 };
 extern cSimulatorUniverse* sSimulatorUniverse;   // 0x016dc798
 
-struct cStarRecord {
+class cStarRecord { public:
     uint32_t pad0[0x70 / 4];
     uint32_t mStarID;                  // +0x70
     const Vector3& GetPosition();      // 0x005c65e0
@@ -72,19 +72,19 @@ struct cPlanetRecordHolder {           // returned by 0x01021240
 };
 cPlanetRecordHolder* GetCurrentStar();   // 0x01021240 (compared with the target star)
 
-struct cEmpire {
+class cEmpire { public:
     bool IsHostileToPlayer();          // 0x00c309e0
     bool IsAtWarWithPlayer();          // 0x00c31640
 };
-struct cStarManager {
+class cStarManager { public:
     cEmpire* GetEmpireByID(int id);    // 0x00ba9370
 };
 cStarManager* StarManager();           // 0x00b3d2a0
 
-struct cTerrainSphere {
+class cTerrainSphere { public:
     bool HasModel(uint32_t id);        // 0x00c772c0
 };
-struct cTerrainEditor {
+class cTerrainEditor { public:
     cTerrainSphere* GetCurrentTerrainSphere();   // 0x00f67d90
 };
 cTerrainEditor* NounManager();         // 0x00b3d300
@@ -97,19 +97,19 @@ cGameMode* GameModeManager();          // 0x00b3d4d0
 void* GetPlayerEmpire();               // 0x01021300
 int   GetUniverseContext();            // 0x01021080
 
-struct cStarMap {
+class cStarMap { public:
     void RemoveVisual(uint32_t starID, uint32_t effectID, int a, int b);   // 0x01045ae0
 };
 cStarMap* StarMap();                   // 0x01046fc0
 
-struct cSpatialObject {   // cSPGameDataUFO + 0x34
+class cSpatialObject { public:   // cSPGameDataUFO + 0x34
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual void v20(); virtual void v24(); virtual void v28();
     virtual const Vector3* GetPosition();   // +0x2c
 };
 
-struct cCombatant {       // cSPGameDataUFO + 0x508
+class cCombatant { public:       // cSPGameDataUFO + 0x508
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
@@ -119,14 +119,14 @@ struct cCombatant {       // cSPGameDataUFO + 0x508
     int GetDamageState();              // 0x008e7f80
 };
 
-struct cSPTimer {
+class cSPTimer { public:
     bool IsRunning();                  // 0x00feba90
     void Restart();                    // 0x00bc3130
     void Reset();                      // 0x00bc3170 (clears times and running flag)
     unsigned __int64 GetElapsedTime(); // 0x00bc3190
 };
 
-struct cSPGameDataUFO {
+class cSPGameDataUFO { public:
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual void v20(); virtual void v24(); virtual void v28();

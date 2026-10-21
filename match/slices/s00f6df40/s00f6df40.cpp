@@ -88,7 +88,7 @@ template <class T, class Allocator> struct VectorBase {
     }
 };
 
-template <class T, class Allocator> struct vector : VectorBase<T, Allocator> {
+template <class T, class Allocator> class vector : public VectorBase<T, Allocator> { public:
     void DoInsertValue(T* position, const T& value);   // 0x00f4c180 (cRibbonBrushPoly instance)
     void push_back(const T& value) {
         if (this->mpEnd < this->mpCapacity)

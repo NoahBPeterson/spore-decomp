@@ -16,7 +16,7 @@ struct cTerrainMapU16 {                     // SP::cTerrainMap<unsigned short>
     float GetFloat(cCubeMapCoord* c);       // @ 0x00f8d620
 };
 
-struct cTerrainMapSet {
+class cTerrainMapSet { public:
     unsigned pad00[2];
     cTerrainMapU16* mHeightMap;   // +0x08
     unsigned pad0c[0x34 / 4 - 3];
@@ -24,7 +24,7 @@ struct cTerrainMapSet {
     float mMaxHeight;                           // +0x38
 };
 
-struct cTerrainSphere {
+class cTerrainSphere { public:
     virtual void v0();
     virtual void v1();
     virtual void v2();
@@ -55,7 +55,7 @@ __forceinline void CubeToSphere(float* out, int face, float qu, float qv, float 
     out[2] = d[2] * h;
 }
 
-struct cTerrainSphereQuad {
+class cTerrainSphereQuad { public:
     cTerrainSphere* mSphere;        // +0x00
     unsigned pad04[5];
     int   mChunkRes;                // +0x18

@@ -42,7 +42,7 @@ struct ListNode : public ListNodeBase {
     T mValue;
 };
 template <typename T>
-struct list {
+class list { public:
     typedef ListNode<T> node_type;
     ListNodeBase mNode;
     uint32_t mAllocator;

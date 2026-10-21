@@ -325,7 +325,7 @@ uint32 SPIDFromName(const char* name);      // 0x571cf0
 void SetGlobalProperty(uint32 id, float f); // 0x5ca880
 
 namespace EA {
-struct Stopwatch {
+class Stopwatch { public:
     uint64 mnStartTime;
     uint64 mnTotalElapsedTime;
     uint32 mnUnits;

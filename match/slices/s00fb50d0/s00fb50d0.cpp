@@ -106,13 +106,13 @@ struct cRibbonFacePoly
     cRibbonFaceVertex   mPatch[4];      // +0xc0 bilinear patch read by InterpolateRibbonPoly
 };
 
-template <class T> struct cTerrainMap
-{
+template <class T> class cTerrainMap
+{ public:
     cSPVector4 GetVector4(const cCubeMapCoord& coord) const;   // cTerrainMap<unsigned int>: 0x00f89e50
 };
 
-struct cTerrainMapSet
-{
+class cTerrainMapSet
+{ public:
     uint32_t                    mPad[3];
     cTerrainMap<unsigned int>*  mNormalMap;     // +0xc
 };
@@ -123,8 +123,8 @@ struct cTerrainSphereInfo
     cSPVector3 mRibbonColor;                    // +0x59c
 };
 
-struct cTerrainSphere
-{
+class cTerrainSphere
+{ public:
     virtual void v0();
     virtual void v1();
     virtual void v2();

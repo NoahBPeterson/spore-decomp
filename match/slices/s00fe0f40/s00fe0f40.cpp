@@ -94,7 +94,7 @@ struct ListNode : public ListNodeBase {
     T mValue;
 };
 template <typename T>
-struct list {
+class list { public:
     typedef ListNode<T> node_type;
     ListNodeBase mNode;
     uint32_t mAllocator;
@@ -112,7 +112,7 @@ struct list {
 }  // namespace eastl
 
 namespace EA {
-struct Stopwatch {
+class Stopwatch { public:
     uint32_t data[6];
     uint64_t GetElapsedTime() const;                          // 0x0093a5e0
 };
@@ -134,7 +134,7 @@ struct IBakeManager {                                         // FUN_00401010()
 };
 IBakeManager* BakeManager();                                  // 0x00401010
 
-struct cTerrainSphere {
+class cTerrainSphere { public:
     PV4
     virtual struct cPlanetCenter* GetCenter();                // +0x10
     PV8 PV4 PV2 PV
@@ -144,7 +144,7 @@ struct cPlanetCenter {
     Vector3 GetPosition();                                    // 0x00fb8db0
 };
 
-struct cPlanetModel {
+class cPlanetModel { public:
     uint32_t pad00[0x24 / 4];
     cTerrainSphere* mpTerrain;                                // +0x24
     void FinishPlanetLoad();                                  // 0x00b84270
@@ -167,7 +167,7 @@ struct cTutorialManager {                                     // FUN_00b3d410()
 cTutorialManager* TutorialManager();                          // 0x00b3d410
 extern const char g_tutorialFinishName[];                     // 0x01654c05
 
-struct cTestSystem {
+class cTestSystem { public:
     uint32_t pad00[0x70 / 4];
     eastl::ListNodeBase mTests;                               // +0x70
 };
@@ -176,8 +176,8 @@ extern cTestSystem* sTestSystem;                              // 0x015fd928
 struct cGameState { uint32_t pad00[0x2c / 4]; int mState; };  // +0x2c
 cGameState* GameState();                                      // 0x00b3d4d0
 
-struct cEmpire { int* GetCities(); };                         // 0x00c30f90
-struct cSPLivingUniverse {
+class cEmpire { public: int* GetCities(); };                         // 0x00c30f90
+class cSPLivingUniverse { public:
     static cEmpire* GetPlayerEmpire();                        // 0x01021300
     static int GetUniverseContext();                          // 0x01021080
 };
@@ -191,7 +191,7 @@ struct cSimulatorSystem {                                     // FUN_00b3d230()
 };
 cSimulatorSystem* SimulatorSystem();                          // 0x00b3d230
 
-struct cGameTimeManager {
+class cGameTimeManager { public:
     uint32_t pad00[0x48 / 4];
     uint8_t mFlags;                                           // +0x48 (bit 0: paused)
     int UpdateTime(int deltaMS);                              // 0x00b31c60
@@ -199,18 +199,18 @@ struct cGameTimeManager {
 cGameTimeManager* GameTimeManager();                          // 0x00b3d380
 void UpdateGameTime(int gameDeltaMS);                         // 0x01022920
 
-struct cSPUISpace { void UpdateUI(int deltaMS); };                   // 0x010743a0
-struct cCommunityEditor {
+class cSPUISpace { public: void UpdateUI(int deltaMS); };                   // 0x010743a0
+class cCommunityEditor { public:
     void HandleSimulationUpdate(int deltaMS);                 // 0x00d124e0
     bool IsOpen();                                            // 0x00d09660
 };
 
-struct cSpatialObject {
+class cSpatialObject { public:
     PV8 PV2 PV
     virtual const Vector3& GetPosition();                     // +0x2c
 };
 
-struct cSPSpaceToolData;
+class cSPSpaceToolData;
 struct cSPPlayerUFO {
     uint32_t pad00[0x34 / 4];
     cSpatialObject mSpatial;                                  // +0x34
@@ -225,7 +225,7 @@ struct cSpaceGameFlags {
     bool IsSet(uint8_t flag) const { return (mBits & flag) != 0; }
 };
 
-struct cSPSimulatorSpaceGame {
+class cSPSimulatorSpaceGame { public:
     uint32_t pad00[0x14 / 4];
     cSPUISpace* mpUI;                                         // +0x14
     uint32_t pad18[2];
@@ -264,7 +264,7 @@ void* GameData_Create();                                      // 0x00cd7d10
 void* GameData_Cast();                                        // 0x00d3d420
 void* GameData_Write();                                       // 0x00cdb110
 void* GameData_Read();                                        // 0x00b1e520
-struct cGameNounManager {
+class cGameNounManager { public:
     cGameDataVector* GetGameDataVector(GameDataFn a, GameDataFn b, GameDataFn c, GameDataFn d, uint32_t type);  // 0x00b21340
 };
 cGameNounManager* NounManager();                              // 0x00b3d300
@@ -275,12 +275,12 @@ struct cToolStrategy {
     PV2 PV
     virtual void GetTargetPosition(Vector3* pos);             // +0x3c
 };
-struct cSPSpaceToolData {
+class cSPSpaceToolData { public:
     cToolStrategy* GetStrategy();                             // 0x0104f930
     bool IsContinuous();                                      // 0x0104bd50
     int GetActiveSlot();                                      // 0x0104be00
 };
-struct cSPToolManager {
+class cSPToolManager { public:
     void UpdateToolEffects();                                 // 0x0104f2a0
     void PlayerUseToolContinuous(cSPSpaceToolData* tool, Vector3* pos, int deltaMS);  // 0x01051090
     void PlayerUseToolStart(cSPSpaceToolData* tool, Vector3* pos, bool b);           // 0x01050bb0
@@ -298,7 +298,7 @@ struct IGameInputManager {
 };
 IGameInputManager* GameInputManager();                        // 0x00b3d250
 
-struct cViewer {
+class cViewer { public:
     Rect GetViewport();                                       // 0x007c4010
     void GetCameraTransform(Transform* t);                    // 0x007c40f0
 };

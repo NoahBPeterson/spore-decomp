@@ -101,13 +101,13 @@ extern bool  gPlanetCamApproachEnable;     // 0x016dd441
 
 namespace SP {
 
-struct cGameTimeManager {
+class cGameTimeManager { public:
     uint32_t pad0[0x48 / 4];
     uint8_t  mFlags;   // +0x48, bit 0 = paused
 };
 cGameTimeManager* GameTimeManager();
 
-struct cSpatialObject {   // the UFO's spatial base (cSPGameDataUFO + 0x34)
+class cSpatialObject { public:   // the UFO's spatial base (cSPGameDataUFO + 0x34)
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual void v20(); virtual void v24(); virtual void v28();
@@ -116,7 +116,7 @@ struct cSpatialObject {   // the UFO's spatial base (cSPGameDataUFO + 0x34)
     void UpdateWhilePaused(uint32_t deltaTime);   // 0x00c431a0
 };
 
-struct cSPGameDataUFO {
+class cSPGameDataUFO { public:
     float GetSimTime();                             // 0x00c37120
     float GetMaxGroundSpeed();                      // 0x00c38840
     void  SetCameraAnchor(const Vector3* p);        // 0x00c3be70
@@ -125,7 +125,7 @@ struct cSPGameDataUFO {
     const Vector3& Velocity() { return *reinterpret_cast<Vector3*>(reinterpret_cast<char*>(this) + 0x724); }
 };
 
-struct cSPSimulatorSpaceGame {
+class cSPSimulatorSpaceGame { public:
     cSPGameDataUFO* GetPlayerInventory();           // 0x00a1ad60
 };
 cSPSimulatorSpaceGame* GetUFOSimulator();           // 0x00ffbe50
@@ -136,7 +136,7 @@ struct cSPPlanetCamera {                            // returned by 0x00c37360
 };
 cSPPlanetCamera* PlanetCamera();                    // 0x00c37360
 
-struct cPlanetModel {
+class cPlanetModel { public:
     Vector3* ProjectToSurface(Vector3* out, const Vector3* p);   // 0x00b81630
     float    GetRadius();                                        // 0x00b7e4d0
     float    GetWaterHeight();                                   // 0x00b7e390
@@ -151,12 +151,12 @@ bool PlanetIsColonized(cPlanet* p);                 // 0x0102c600
 struct cAvatar {
     bool IsOnPlanetSurface();                       // 0x00ff6550
 };
-struct cGameNounManager {
+class cGameNounManager { public:
     cAvatar* GetAvatar();                           // 0x00b1fdb0
 };
 cGameNounManager* SpaceGameGet();                   // 0x01002bd0
 
-struct cTimeOfDay {
+class cTimeOfDay { public:
     static cTimeOfDay* Instance();                  // 0x00bc30b0
     void GetSunDirection(Vector3* out);             // 0x00bc2c00
 };
@@ -166,7 +166,7 @@ struct cAudioListener {
 };
 cAudioListener* AudioListener();                    // 0x00b3d280
 
-struct cViewer {
+class cViewer { public:
     void SetNearClip(float v);                      // 0x007c4ba0
     void SetFarClip(float v);                       // 0x007c4bc0
     void SetViewAngle(float v);                     // 0x007c5350

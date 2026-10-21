@@ -86,7 +86,7 @@ __forceinline float Saturate(float value)
 namespace eastl {
 
 template <int N>
-struct bitset {
+class bitset { public:
     uint32_t mWord[(N + 31) / 32];
     bitset() { for (int i = 0; i < (N + 31) / 32; i++) mWord[i] = 0; }
     void set(uint32_t i)
@@ -107,7 +107,7 @@ extern "C" void* FUN_011e0744(void* dst, const void* src, unsigned n);   // memc
 
 // eastl::fixed_vector<T, N> (0x18-byte header, then the inline buffer)
 template <class T, int N>
-struct fixed_vector {
+class fixed_vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
@@ -181,7 +181,7 @@ public:
     uint32_t mFrustumData[1];    // 0xc0
 };
 
-struct cFrustumCull {
+class cFrustumCull { public:
     void Set(const void* pViewerFrustum);           // 0x006ffe00
 };
 
@@ -240,7 +240,7 @@ public:
 };
 extern cRenderer sRenderer;                 // 0x016ca0d8
 
-struct cTerrainMapSet {
+class cTerrainMapSet { public:
     uint32_t pad00[0x34 / 4];
     float mRadius;          // 0x34
     float mMaxHeight;       // 0x38

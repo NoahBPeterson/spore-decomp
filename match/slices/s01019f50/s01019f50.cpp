@@ -78,7 +78,7 @@ __forceinline float Clamp(float x, float lo, float hi)
 
 namespace SP {
 
-struct cSPLivingUniverse {
+class cSPLivingUniverse { public:
     static int GetUniverseContext();                // 0x01021080
 };
 

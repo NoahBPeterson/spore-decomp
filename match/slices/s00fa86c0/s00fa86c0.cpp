@@ -247,8 +247,8 @@ struct ImpostorState
 
 namespace SP
 {
-struct cTerrainSphere
-{
+class cTerrainSphere
+{ public:
     char           pad0[0x18];
     unsigned       keyInstance;       // +0x18
     unsigned       keyType;           // +0x1c

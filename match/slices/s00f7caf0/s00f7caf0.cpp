@@ -163,8 +163,8 @@ struct intrusive_list
     }
 };
 
-struct cIRenderer
-{
+class cIRenderer
+{ public:
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual void UpdateTextureParticles(int id, const cBoundingBox& box, float maxSize);   // +0x20
@@ -174,8 +174,8 @@ struct cIRenderer
     virtual void StopModelParticles(int id, int arg);                                      // +0x38
 };
 
-struct cIEffectsWorld
-{
+class cIEffectsWorld
+{ public:
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual cIRenderer* GetRenderer();                                                     // +0x20
@@ -212,17 +212,17 @@ typedef bool (*PhysicsUpdateFn)(cParticle* p, float dt, cParticlesDescription* d
 extern PhysicsUpdateFn sPhysicsUpdate[];                          // 0x015B0EBC
 bool UpdatePhysicsTimeStep(cParticle* p, float dt, cParticlesDescription* desc, cParticlesEffect* effect); // 0x00AAE900
 
-struct cITextureParticleStreamer { virtual void StreamTextureParticles(); };
-struct cIModelParticleStreamer { virtual void StreamModelParticles(); };
-struct cIComponent
-{
+class cITextureParticleStreamer { public: virtual void StreamTextureParticles(); };
+class cIModelParticleStreamer { public: virtual void StreamModelParticles(); };
+class cIComponent
+{ public:
     virtual void c00();
     virtual void c04();
     virtual void c08();
     virtual bool Stop(bool hard);                                 // +0x0C
     virtual void ApplyEffect(float deltaTime, float lodFactor, cStats* stats);
 };
-struct cComponentBase : cIComponent { uint32_t mRefCountBase[2]; };
+class cComponentBase : public cIComponent { public: uint32_t mRefCountBase[2]; };
 
 class cParticlesEffect : public cITextureParticleStreamer, public cIModelParticleStreamer, public cComponentBase
 {
