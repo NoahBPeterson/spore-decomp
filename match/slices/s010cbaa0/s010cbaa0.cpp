@@ -206,8 +206,8 @@ hkMoppCode* hkMoppUtility::buildCode(const hkShapeCollection* shapeCollection, c
 // ---------------------------------------------------------------------------------------------------------
 // Ray-hit collectors
 // ---------------------------------------------------------------------------------------------------------
-struct hkClosestRayHitCollector : hkRayHitCollector      // vtable 0x01464944
-{
+class hkClosestRayHitCollector : public hkRayHitCollector { public:  // vtable 0x01464944
+
 	virtual void addRayHit(const hkCdBody& cdBody, const hkShapeRayCastOutput& hitInfo);
 	hkWorldRayCastOutput m_rayHit;                          // +0x10 (hkVector4 is 16-byte aligned)
 };
@@ -300,16 +300,14 @@ void hkAllRayHitCollector::sortHits()
 // ---------------------------------------------------------------------------------------------------------
 // Broad phase types
 // ---------------------------------------------------------------------------------------------------------
-struct hkBroadPhaseHandle { uint32_t m_id; };
-struct hkTypedBroadPhaseHandle : hkBroadPhaseHandle
-{
+class hkBroadPhaseHandle { public: uint32_t m_id; };
+class hkTypedBroadPhaseHandle : public hkBroadPhaseHandle { public:
 	signed char m_type;               // +4
 	signed char m_ownerOffset;        // +5 (byte offset from the handle to its hkCollidable)
 	uint16_t m_objectQualityType;     // +6
 	uint32_t m_collisionFilterInfo;   // +8
 };
-struct hkCollidable : hkCdBody
-{
+class hkCollidable : public hkCdBody { public:
 	int m_ownerOffset;                              // +0x10
 	hkTypedBroadPhaseHandle m_broadPhaseHandle;     // +0x14
 	float m_allowedPenetrationDepth;                // +0x20

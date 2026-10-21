@@ -67,8 +67,8 @@ enum { HK_ARRAY_CAPACITY_MASK = 0x3fffffff };
 
 // hkArray<T>: m_data / m_size / m_capacityAndFlags (bit 31: memory not owned).
 template <typename T>
-struct hkArray
-{
+class hkArray
+{ public:
 	T* m_data;
 	int m_size;
 	int m_capacityAndFlags;
@@ -136,17 +136,17 @@ struct hkMonitorCommand { const char* m_commandAndMonitor; uint32_t m_time0; uin
 #else
 #define HK_ALIGN16 __attribute__((aligned(16)))
 #endif
-struct hkRotation;
+class hkRotation;
 struct HK_ALIGN16 hkVector4
 {
 	float x, y, z, w;
 	void setRotatedInverseDir(const hkRotation& a, const hkVector4& b);     // 0x01081440 (this = transpose(a) * b)
 };
-struct hkAabb { hkVector4 m_min; hkVector4 m_max; };
-struct hkRotation { hkVector4 m_col[3]; };
+class hkAabb { public: hkVector4 m_min; hkVector4 m_max; };
+class hkRotation { public: hkVector4 m_col[3]; };
 // hkMotionState: m_transform is the first member (rotation rows at +0..+0x2f, translation at +0x30).
-struct hkTransform
-{
+class hkTransform
+{ public:
 	hkVector4 m_rot[3];
 	hkVector4 m_trans;
 	void setMulInverseMul(const hkTransform& a, const hkTransform& b);      // 0x010810F0 (this = inverse(a) * b)
@@ -159,7 +159,7 @@ class hkReferencedObject
 {
 public:
 	virtual ~hkReferencedObject() {}                                     // 0
-	virtual void calcStatistics(struct hkStatisticsCollector* c) const {} // 1 (0x0052E650 is the empty default)
+	virtual void calcStatistics(class hkStatisticsCollector* c) const {} // 1 (0x0052E650 is the empty default)
 
 	// HK_DECLARE_CLASS_ALLOCATOR: chunk allocation, size stored in m_memSizeAndFlags.
 	static void* operator new(size_t nbytes)
@@ -195,8 +195,8 @@ protected:
 };
 
 // hkStatisticsCollector vtable slots as called by the binary.
-struct hkStatisticsCollector
-{
+class hkStatisticsCollector
+{ public:
 	virtual void s0();
 	virtual void beginObject(const char* name, int mode, const void* obj);                                     // +4
 	virtual void addArray(const char* name, int elemSize, const void* ptr, int usedBytes, int allocBytes);    // +8
@@ -209,7 +209,7 @@ struct hkStatisticsCollector
 // ---------------------------------------------------------------------------------------------------------
 // shapes and collision bodies
 // ---------------------------------------------------------------------------------------------------------
-struct hkCdBody;
+class hkCdBody;
 struct hkShapeRayCastInput
 {
 	hkVector4 m_from;                          // +0
@@ -240,15 +240,14 @@ struct hkWorldRayCastInput
 };
 
 // A virtual function table with the Havok 3.1 hkRayHitCollector shape: slot 0 addRayHit, slot 1 destructor.
-struct hkRayHitCollector
-{
+class hkRayHitCollector
+{ public:
 	virtual void addRayHit(const hkCdBody& cdBody, const hkShapeRayCastOutput& hitInfo) = 0;   // 0
 	virtual ~hkRayHitCollector() {}                                                              // 1
 	float m_earlyOutHitFraction;               // +4
 };
 
-struct hkShape : hkReferencedObject
-{
+class hkShape : public hkReferencedObject { public:
 	int m_userData;                            // +8
 	virtual int getType() const = 0;                                                                   // 2
 	virtual void getAabb(const hkTransform& localToWorld, float tolerance, hkAabb& out) const = 0;    // 3 (+0xc)
@@ -261,8 +260,8 @@ protected:
 };
 
 // hkCdBody (0x10 bytes in the 32-bit binary).
-struct hkCdBody
-{
+class hkCdBody
+{ public:
 	const hkShape* m_shape;                    // +0
 	uint32_t m_shapeKey;                       // +4
 	const void* m_motion;                      // +8 (hkMotionState*)
