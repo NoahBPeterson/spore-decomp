@@ -1,0 +1,18 @@
+00a987c0 232 Register-allocation/idiom difference; original's OnRegister uses a custom register convention that cannot be produced from plain C++ (mine 410 vs 428).
+00a98990 98 Original has no prologue and uses incoming esi as state (custom convention); plain C++ requires push esi/edi (mine 155 vs 146).
+00a98a80 68 EA arg-enum dispatch idiom mismatch; original inlines comparisons differently (mine 100 vs 113).
+00a98b00 192 Vec3 push via ScaleCurve helper; store scheduling and register allocation differ (mine 196 vs 179).
+00a98bc0 153 FloatVec push_back loop; original re-derives sub pointer per iteration, register allocation differs (mine 202 vs 202).
+00a98c90 153 FloatVec push_back loop; original re-derives sub pointer per iteration, register allocation differs (mine 202 vs 202).
+00a98d60 178 FloatVec push_back loop + penumbra option; store scheduling/register allocation differ (mine 221 vs 214).
+00a98ea0 155 Copy-construct of LightEffectSub; sub-object vector copies and register allocation differ (mine 168 vs 186).
+00a98f60 7 Register tie only (ebx vs ebp, eax/edx swap); byte-equivalent logic, no source change resolves it.
+00a990d0 47 MSVC store-scheduling of deferred [+0]/[+0xc]/[+0x14] stores differs; tried multiple source orderings, no change.
+00a99190 86 x87 7-float rolling copy of Elem1C; register allocation differs (mine 96 vs 85).
+00a991f0 74 Elem1C fill loop; x87 copy + register allocation differ (mine 75 vs 77).
+00a99240 74 Elem1C fill (offset 0x14) loop; x87 copy + register allocation differ (mine 75 vs 77).
+00a99290 64 Elem1C write_vector; x87 copy idiom/register allocation differ (mine 91 vs 93).
+00a992f0 64 Elem1C write_vector2; x87 copy idiom/register allocation differ (mine 91 vs 93).
+00a99350 86 Elem1C ctor_range; x87 copy/register allocation differ (mine 69 vs 94).
+00a993b0 86 Elem1C ctor_range (offset 0x14); x87 copy/register allocation differ (mine 69 vs 94).
+00a99410 469 Elem1C insert; x87 7-float rolling copy + register allocation differ (mine 488 vs 554).

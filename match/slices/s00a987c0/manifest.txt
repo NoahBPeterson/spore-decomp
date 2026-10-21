@@ -1,0 +1,3 @@
+slices/s00a987c0/s00a987c0.cpp  ??4LightEffectSub@@QAEAAU0@ABU0@@Z  00a98e40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s00a987c0/s00a987c0.cpp  ?Install@LightEffect@@QAEXD@Z  00a98fd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s00a987c0/s00a987c0.cpp  ?LightEffectSub_Read@@YAXPAXHPAULightEffectSub@@@Z  00a99040  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
