@@ -1,0 +1,11 @@
+0x00a56460 atan_new    # EA::Audio::Eapd::atan_new; pd_new(spAtanClass)/outlet_new
+0x00a56490 atan_float  # EA::Audio::Eapd::atan_float; fpatan body (not in batch)
+0x00a564f0 atan2_new   # EA::Audio::Eapd::atan2_new
+0x00a56540 atan2_float # EA::Audio::Eapd::atan2_float
+0x00a565d0 sqrt_new    # EA::Audio::Eapd::sqrt_new
+0x00a56670 log_new     # EA::Audio::Eapd::log_new
+0x00a56720 exp_new     # EA::Audio::Eapd::exp_new
+0x00a567e0 abs_new     # EA::Audio::Eapd::abs_new
+0x00a56870 clip_new    # EA::Audio::Eapd::clip_new
+0x00a568d0 clip_float  # EA::Audio::Eapd::clip_float
+0x00a56950 ?clip_setup@Eapd@Audio@EA@@YA_NXZ  # PDB name EA::Audio::Eapd::clip_setup

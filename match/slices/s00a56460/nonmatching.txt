@@ -1,0 +1,6 @@
+00a56460  89  complete; reference has no function boundary at atan_float (0xa56490), so the bound spans atan_new+atan_float and two C++ functions cannot be one 48-byte symbol; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast; equiv UNSUPPORTED (0/400 valid, original faults reading its class global on all generated inputs)
+00a565d0  109  complete; reference bound spans sqrt_new+sqrt_float (0xa56600 has no boundary); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast; equiv UNSUPPORTED (0/400 valid, fault(read))
+00a56670  122  complete; reference bound spans log_new+log_float (0xa566a0 has no boundary); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast; equiv UNSUPPORTED (0/400 valid, fault(read))
+00a56720  137  complete; reference bound spans exp_new+exp_float (0xa56750 has no boundary); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast; equiv UNSUPPORTED (0/400 valid, fault(read))
+00a567e0  89  complete; reference bound spans abs_new+abs_float (0xa56810 has no boundary); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast; equiv UNSUPPORTED (0/400 valid, fault(read))
+00a56950  15  complete; identical code, only the bool-normalize/scheduling of "test eax,eax; setne bl; and bl,1" around the class_doaddfloat call differs (size 79 vs 82); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast; equiv UNSUPPORTED (0/400 valid, fault(read))

@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a56460/s00a56460.cpp  ?atan2_new@Eapd@Audio@EA@@YAPAXXZ  00a564f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a56460/s00a56460.cpp  ?atan2_float@Eapd@Audio@EA@@YAXPAXM@Z  00a56540  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a56460/s00a56460.cpp  ?clip_new@Eapd@Audio@EA@@YAPAXMM@Z  00a56870  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a56460/s00a56460.cpp  ?clip_float@Eapd@Audio@EA@@YAXPAXM@Z  00a568d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
