@@ -76,8 +76,8 @@ struct hkMemory
 
 struct hkArrayUtil
 {
-    static void _reserveMore(void* array, int elementSize);       // 0x0107f530
-    static void _reserve(void* array, int n, int elementSize);    // 0x0107f4a0
+    static void _reserveMore(void* array, int numElements, int elementSize);  // 0x0107f530
+    static void _reserve(void* array, int n, int elementSize, int copy);      // 0x0107f4a0
 };
 
 enum
@@ -511,7 +511,8 @@ struct hkStorageMeshSubpartStorage
     hkArray<hkUint32>              m_materials;           // +0x30
     hkArray<hkUint16>              m_materialIndices16;   // +0x3c
 
-    static hkStorageMeshSubpartStorage* init(hkStorageMeshSubpartStorage* s);  // 0x010c6a40
+    static hkStorageMeshSubpartStorage* init(hkStorageMeshSubpartStorage* s);   // 0x010c6a40
+
     ~hkStorageMeshSubpartStorage();   // 0x010c5de0
 };
 
@@ -624,18 +625,29 @@ void hkStorageMeshShape::addSubpart(const hkMeshShapeSubpart& p)
 {
     hkMeshShapeSubpart* dst;
     hkStorageMeshSubpartStorage* st;
+    hkStorageMeshSubpartStorage* volatile initP;
 
     if (m_subparts.m_size == (int)(m_subparts.m_capacityAndFlags & 0x3fffffff))
-        hkArrayUtil::_reserveMore(&m_subparts, 0x30);
-    dst = (hkMeshShapeSubpart*)((char*)m_subparts.m_data + m_subparts.m_size * 0x30);
+        hkArrayUtil::_reserveMore(&m_subparts, 30, 1);
+    dst = (hkMeshShapeSubpart*)((char*)m_subparts.m_data + m_subparts.m_size * 30, 1);
     m_subparts.m_size = m_subparts.m_size + 1;
 
     st = (hkStorageMeshSubpartStorage*)hkMemory::getInstance()->allocate(0x48, 0x22);
-    if (st != 0)
-        st = hkStorageMeshSubpartStorage::init(st);
+    initP = st;
+    if (st != 0) {
+        hkUint32 zero = 0;
+        hkUint32 neg = 0x80000000;
+        hkUint32* f = (hkUint32*)st;
+        f[0] = zero; f[1] = zero; f[2] = neg;
+        f[3] = zero; f[4] = zero; f[5] = neg;
+        f[6] = zero; f[7] = zero; f[8] = neg;
+        f[9] = zero; f[10] = zero; f[11] = neg;
+        f[12] = zero; f[13] = zero; f[14] = neg;
+        f[15] = zero; f[16] = zero; f[17] = neg;
+    }
 
     if (m_storage.m_size == (int)(m_storage.m_capacityAndFlags & 0x3fffffff))
-        hkArrayUtil::_reserveMore(&m_storage, 4);
+        hkArrayUtil::_reserveMore(&m_storage, 4, 1);
     m_storage.m_data[m_storage.m_size] = st;
     int n = m_storage.m_size + 1;
     m_storage.m_size = n;
@@ -654,7 +666,7 @@ void hkStorageMeshShape::hkStorageMeshShape_addSubpartElements(hkMeshShapeSubpar
         int cap = sp->m_vertices.capacity() * 2;
         if (cap <= vTotal)
             cap = vTotal;
-        hkArrayUtil::_reserve(&sp->m_vertices, cap, 4);
+        hkArrayUtil::_reserve(&sp->m_vertices, cap, 4, 1);
     }
     sp->m_vertices.m_size = vTotal;
     {
@@ -696,7 +708,7 @@ void hkStorageMeshShape::hkStorageMeshShape_addSubpartElements(hkMeshShapeSubpar
             int cap = sp->m_indices16.capacity() * 2;
             if (cap <= total)
                 cap = total;
-            hkArrayUtil::_reserve(&sp->m_indices16, cap, 2);
+            hkArrayUtil::_reserve(&sp->m_indices16, cap, 2, 1);
         }
         sp->m_indices16.m_size = total;
         hkUint16* idst = sp->m_indices16.m_data + old;
@@ -732,7 +744,7 @@ void hkStorageMeshShape::hkStorageMeshShape_addSubpartElements(hkMeshShapeSubpar
             int cap = sp->m_indices32.capacity() * 2;
             if (cap <= total)
                 cap = total;
-            hkArrayUtil::_reserve(&sp->m_indices32, cap, 4);
+            hkArrayUtil::_reserve(&sp->m_indices32, cap, 4, 1);
         }
         sp->m_indices32.m_size = total;
         hkUint32* idst = sp->m_indices32.m_data + old;
@@ -764,7 +776,7 @@ void hkStorageMeshShape::hkStorageMeshShape_addSubpartElements(hkMeshShapeSubpar
         if (p.m_materialType == 1) {
             if (p.m_materialIndexStride == 0) {
                 if (sp->m_materialIndices8.m_size == sp->m_materialIndices8.capacity())
-                    hkArrayUtil::_reserveMore(&sp->m_materialIndices8, 1);
+                    hkArrayUtil::_reserveMore(&sp->m_materialIndices8, 1, 1);
                 int old = sp->m_materialIndices8.m_size;
                 sp->m_materialIndices8.m_data[old] = *(const hkUchar*)matIdx;
                 sp->m_materialIndices8.m_size = old + 1;
@@ -776,7 +788,7 @@ void hkStorageMeshShape::hkStorageMeshShape_addSubpartElements(hkMeshShapeSubpar
                     int cap = sp->m_materialIndices8.capacity() * 2;
                     if (cap <= total)
                         cap = total;
-                    hkArrayUtil::_reserve(&sp->m_materialIndices8, cap, 1);
+                    hkArrayUtil::_reserve(&sp->m_materialIndices8, cap, 1, 1);
                 }
                 sp->m_materialIndices8.m_size = total;
                 hkUchar* d = sp->m_materialIndices8.m_data + old;
@@ -793,7 +805,7 @@ void hkStorageMeshShape::hkStorageMeshShape_addSubpartElements(hkMeshShapeSubpar
             }
         } else if (p.m_materialIndexStride == 0) {
             if (sp->m_materialIndices16.m_size == sp->m_materialIndices16.capacity())
-                hkArrayUtil::_reserveMore(&sp->m_materialIndices16, 2);
+                hkArrayUtil::_reserveMore(&sp->m_materialIndices16, 2, 1);
             int old = sp->m_materialIndices16.m_size;
             sp->m_materialIndices16.m_data[old] = *(const hkUint16*)matIdx;
             sp->m_materialIndices16.m_size = old + 1;
@@ -805,7 +817,7 @@ void hkStorageMeshShape::hkStorageMeshShape_addSubpartElements(hkMeshShapeSubpar
                 int cap = sp->m_materialIndices16.capacity() * 2;
                 if (cap <= total)
                     cap = total;
-                hkArrayUtil::_reserve(&sp->m_materialIndices16, cap, 2);
+                hkArrayUtil::_reserve(&sp->m_materialIndices16, cap, 2, 1);
             }
             sp->m_materialIndices16.m_size = total;
             hkUint16* d = sp->m_materialIndices16.m_data + old;
@@ -845,7 +857,7 @@ void hkStorageMeshShape::hkStorageMeshShape_addSubpartElements(hkMeshShapeSubpar
             int cap = sp->m_materials.capacity() * 2;
             if (cap <= total)
                 cap = total;
-            hkArrayUtil::_reserve(&sp->m_materials, cap, 4);
+            hkArrayUtil::_reserve(&sp->m_materials, cap, 4, 1);
         }
         hkUint32* d = sp->m_materials.m_data;
         sp->m_materials.m_size = total;
@@ -863,7 +875,7 @@ void hkStorageMeshShape::hkStorageMeshShape_addSubpartElements(hkMeshShapeSubpar
         dst->m_materials = sp->m_materials.m_data;
     } else {
         if (sp->m_materials.m_size == sp->m_materials.capacity())
-            hkArrayUtil::_reserveMore(&sp->m_materials, 4);
+            hkArrayUtil::_reserveMore(&sp->m_materials, 4, 1);
         int old = sp->m_materials.m_size;
         sp->m_materials.m_data[old] = *(const hkUint32*)p.m_materials;
         sp->m_materials.m_size = old + 1;
