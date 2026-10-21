@@ -1,0 +1,4 @@
+00a0bcf0 375 ItemVec::DoInsertValue; inlined Rec ctor and EASTL grow bookkeeping diverge (sibling 00a08b00 insertAt / 00a093b0 nonmatching for the same reason); equiv FAIL 5/5 valid inputs
+00a0be60 553 ItemVec::DoInsertValues; EASTL range-insert reallocation dance (FUN_00a09560 / FUN_00a09cc0 argument-slot mapping) not reproducible; equiv WEAK 180/400 valid, 13.3% coverage
+00a0c090 411 ConstructSubCursor; inlined 0x18-element range construct, prologue register assignment and cursor hoist diverge from schedule; equiv UNSUPPORTED only 6/400 inputs valid
+00a0c270 970 anim feedback dispatcher; fixed-buffer vector<Vector3,16> resize and rbtree find prologue schedule diverge; equiv WEAK 5.8% coverage

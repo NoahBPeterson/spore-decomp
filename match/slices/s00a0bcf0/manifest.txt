@@ -1,0 +1,3 @@
+slices/s00a0bcf0/s00a0bcf0.cpp  ?ReverseCopySubs@@YAPAUSub@@PAU1@00@Z  00a0c230  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a0bcf0/s00a0bcf0.cpp  ?c640@AnimFbOwner@@QAEIIPAI@Z  00a0c640  /O2 /MD /Gy /TP /arch:SSE
+slices/s00a0bcf0/s00a0bcf0.cpp  ?c670@AnimFbOwner@@QAEXIPAI@Z  00a0c670  /O2 /MD /Gy /TP /arch:SSE

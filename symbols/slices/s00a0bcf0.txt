@@ -1,0 +1,8 @@
+; slice s00a0bcf0 = 0x00a0bcf0..0x00a0c6a0 (SPCreatureAnim/SPCreatureAnimManager.obj)
+00a0bcf0 ItemVec::DoInsertValue(Rec* position, const Rec& value)
+00a0be60 ItemVec::DoInsertValues(Rec* position, uint n, const Rec& value)
+00a0c090 SubItemVec* ConstructSubCursor(SubItemVec* out, const Sub* first, const Sub* last, Sub* init)
+00a0c230 Sub* ReverseCopySubs(Sub* first, Sub* last, Sub* dst)
+00a0c270 uint32_t FUN_00a0c270(AnimFbOwner* self, uint32_t id, uint32_t* outIndex)
+00a0c640 uint32_t AnimFbOwner::c640(uint32_t id, uint32_t* outIndex)
+00a0c670 void AnimFbOwner::c670(uint32_t id, uint32_t* outIndex)
