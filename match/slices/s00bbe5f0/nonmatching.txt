@@ -1,0 +1,13 @@
+00bbe5f0 210 UNSUPPORTED /O2 /MD /Gy /TP /arch:SSE /fp:fast unresolved _GetSpaceCombatTuning, ?GetModelOffset@ViewSCTuning@@QAEPAMXZ
+00bbe740 199 UNSUPPORTED /O2 /MD /Gy /TP /arch:SSE /fp:fast unresolved ?GetNumBuildings@ViewCity@@QAEHXZ, ?GetNumTurrets@ViewCity@@QAEHXZ
+00bbe850 98 FAIL /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL 5/6 valid inputs mismatched; fake-arity at 44712e2d
+00bbe970 193 FAIL /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL 5/5 valid mismatched; vcall addRef sret shape not reproduced
+00bbea40 158 FAIL /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL 5/35 valid mismatched; vcall addRef sret + FUN_00bbd1f0 call shape
+00bbeb20 53 WEAK /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest WEAK 229 valid, 35.5% coverage
+00bbeb60 56 WEAK /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest WEAK 226 valid, 27.0% coverage
+00bbebb0 32 UNSUPPORTED /O2 /MD /Gy /TP /arch:SSE /fp:fast unresolved ?dtor@ViewVector@@QAEXXZ, ?nuke@ViewRBTree@@QAEXPAX@Z, ?release@ViewHash1c@@QAEXPAX0@Z
+00bbec60 77 UNSUPPORTED /O2 /MD /Gy /TP /arch:SSE /fp:fast unresolved ?find@ViewHash1c@@QAEXPAX0@Z, ?insert@ViewHash1c@@QAEXPBX@Z
+00bbecc0 322 FAIL /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL 5/5 valid mismatched; first ecx untouched by original
+00bbee30 512 FAIL /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL 5/5 valid mismatched; first eax
+00bbf1a0 69 WEAK /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest WEAK 202 valid, 39.5% coverage
+00bbf1f0 114 FAIL /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL 5/5 valid mismatched; first xmm1 untouched by original
