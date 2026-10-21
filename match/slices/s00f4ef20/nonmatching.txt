@@ -1,12 +1,13 @@
-00f4ef20
-00f4ef40
-00f4f000
-00f4f480
-00f4f530
-00f4f5a0
-00f4f630
-00f4f7a0
-00f4fa20
-00f4faa0
-00f4fb00
-00f4fb80
+# va  diff-bytes  reason
+00f4ef20    3  cTerrainBrushEffect::Stop: complete; original has no `xor eax,eax` before `ret 4` (mActive-test body otherwise matches)
+00f4ef40   34  lerpAngle: complete; x87 depth/ordering of the fmodf(hi-lo,2) + range-wrap compare differs
+00f4f000  218  cTerrainTool::RegisterParams: complete; 32 g_paramCtx Set calls match but cl hoists the float-mul chain and the screenW/H division operands differ
+00f4f480   58  cTerrainTool::SampleCurveValue: complete; dot-product reassociation under /fp:fast + fabs constant-load order differ
+00f4f530   47  cChannel::Advance: complete; comiss operand order and mul order of `mArg0*dt*half` differ
+00f4f5a0   71  cTerrainTool::SetMatrix: complete (verified equivalence PASS); cl folds the zero stores and reorders the (x,y,z) column replication
+00f4f630   96  cTerrainTool::SetParams: complete; the two channel Advance blocks match, cl orders the tween constants differently
+00f4f7a0  133  cTerrainTool::OnPointer: complete; clamp/branch shape and the fabs gu.rd differ from the original's temp form
+00f4fa20   85  cTerrainTool::ReadFromScript: complete (equivalence PASS); cl schedules the vtbl slot load and the 0xd sub-code compare differently
+00f4faa0   41  cTerrainTool::GetBrushVector: complete (equivalence PASS); the frame-word latch branch and the xmm operand order differ
+00f4fb00  120  cTerrainTool::UpdateBrushSize: complete; the vtable-slot call plus max() selection is shaped differently by cl
+00f4fb80  167  cTerrainTool::DragUpdate: complete; the four clamp-and-tween blocks match but cl reassociates `mParam29c*dt*5.0f` and reorders the compares
