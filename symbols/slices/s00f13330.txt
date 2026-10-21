@@ -1,0 +1,21 @@
+# Slice s00f13330 -- 0x00f13330 .. 0x00f143c0 (15 functions)
+# SP::Simulator::cScenarioRewardUI and its reward-UI / content-validation-summarizer
+# sub-objects, plus the eastl::fixed_vector<int64_t,32> insert helpers.
+# Names recovered from the dev-build PDB (work/devbuild/symbols.json) where aligned;
+# else FUN_<va>. Targets in the RW4 core range are equivalence-only.
+
+00f13330  FUN_00f13330              # message filter (0x65ff54a) -> FUN_00f12eb0 refresh
+00f13370  FUN_00f13370              # dtor: cContentValidationSummarizer sub-object (free flag)
+00f133d0  cScenarioRewardUI::FUN_00f133d0   # pollinator inbound message handler
+00f135b0  cScenarioRewardUI::FUN_00f135b0   # reward asset availability check (pollinator)
+00f13810  FUN_00f13810              # ctor: reward-UI sub-object
+00f13890  FUN_00f13890              # ctor: embedded content-validation summarizer
+00f138c0  FUN_00f138c0              # dtor: embedded content-validation summarizer
+00f138f0  FUN_00f138f0              # ctor: cScenarioRewardUI
+00f139f0  cScenarioRewardUI::FUN_00f139f0   # dtor: cScenarioRewardUI
+00f13b10  FUN_00f13b10              # build reward UI layout (cSPUILayout bootstrap)
+00f14060  FUN_00f14060              # copy linked-list pairs -> flat array (forward)
+00f14090  FUN_00f14090              # copy linked-list pairs -> flat array (backward)
+00f140c0  FUN_00f140c0              # dtor: reward-UI sub-object (free flag)
+00f14140  eastl::fixed_vector<__int64,32>::DoInsertValue  # vector insert single
+00f143c0  eastl::fixed_vector<__int64,32>::insert         # vector insert range
