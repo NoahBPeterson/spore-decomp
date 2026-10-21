@@ -101,7 +101,7 @@ public:
     hkVector4 m_translation;                    // +0x30
 };
 
-struct hkAabb {
+class hkAabb { public:
     hkVector4 m_min;
     hkVector4 m_max;
 };
@@ -142,7 +142,7 @@ public:
     void removeReference();                                          // 0x0109AE60 (out of line)
 };
 
-struct hkRigidBodyCinfo {
+class hkRigidBodyCinfo { public:
     unsigned int m_collisionFilterInfo;         // +0x0
     hkShape* m_shape;                           // +0x4
     uint32_t pad08[2];

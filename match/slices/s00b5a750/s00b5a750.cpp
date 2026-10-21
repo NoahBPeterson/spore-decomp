@@ -144,7 +144,7 @@ public:
     u8 pad[0x130 - 0x10];
 };
 
-struct hkBool { char m_bool; };
+class hkBool { public: char m_bool; };
 class hkWorld {
 public:
     hkRigidBody* addEntity(hkRigidBody* entity, int activation);             // 0x01082ee0
@@ -152,7 +152,7 @@ public:
     hkPhantom* addPhantom(hkPhantom* phantom);                               // 0x01083320
 };
 
-struct hkRigidBodyCinfo {
+class hkRigidBodyCinfo { public:
     u32 m_collisionFilterInfo;                                               // 0x00
     hkShape* m_shape;                                                        // 0x04
     u8 pad08[0x9c - 8];

@@ -40,7 +40,7 @@ public:
     hkVector4 m_col0, m_col1, m_col2, m_translation;
 };
 
-struct hkMotion {
+class hkMotion { public:
     uint32_t pad00[4];
     hkTransform m_transform;                    // +0x10
 };

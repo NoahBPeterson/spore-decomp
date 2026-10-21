@@ -82,13 +82,13 @@ struct cTerrainHeights {
   uint8_t* mpData;          // +0x10: 4 uint16 samples per cell quad, 0x1000 bytes per cell row
 };
 
-struct cTerrainMap {
+class cTerrainMap { public:
   char pad[8];
   cTerrainHeights* mpHeights;   // +8
   float GetWaterLevel();        // 0x00b7e0a0: fld [this+0x3c]
 };
 
-struct cTerrainSphere {
+class cTerrainSphere { public:
   virtual void v0();
   virtual void v1();
   virtual void v2();

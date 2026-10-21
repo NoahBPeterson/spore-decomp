@@ -31,7 +31,7 @@ struct Vector3 {
 struct Quaternion { float x, y, z, w; };
 
 namespace eastl {
-template <class T> struct vector {
+template <class T> class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;

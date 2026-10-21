@@ -297,7 +297,7 @@ struct fixed_pool_base {
               uint32_t alignmentOffset);   // 0x00921260
 };
 
-struct fixed_pool_with_overflow : fixed_pool_base {
+class fixed_pool_with_overflow : public fixed_pool_base { public:
     void*    mpPoolBegin;   // +8
     void*    mpPoolEnd;     // +0xc
     uint32_t mnNodeSize;    // +0x10

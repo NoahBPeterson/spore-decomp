@@ -58,7 +58,7 @@ public:
     int GetVertexBuffer(int count, RibbonVertex** ppVertices, int* pStride);   // 0x007a47c0
     void Unlock();                                                              // 0x007a4650
 };
-struct cStaticBufferDraw {
+class cStaticBufferDraw { public:
     cStaticBuffer* mpBuffer;
     static cStaticBufferDraw* spInstance;   // 0x015ddc84
 };
@@ -69,7 +69,7 @@ IGrid* DebugDrawGrid();   // 0x00f48aa0
 
 struct cPlanetInfo { uint32_t pad[0x34 / 4]; float mRadius; };      // +0x34
 struct IPlanet { virtual void v00(); virtual void v04(); virtual void v08(); virtual cPlanetInfo* GetInfo(); };
-struct cPlanetModel { uint32_t pad[0x24 / 4]; IPlanet* mpPlanet; };  // +0x24
+class cPlanetModel { public: uint32_t pad[0x24 / 4]; IPlanet* mpPlanet; };  // +0x24
 cPlanetModel* PlanetModel();   // 0x00b3d350
 }
 

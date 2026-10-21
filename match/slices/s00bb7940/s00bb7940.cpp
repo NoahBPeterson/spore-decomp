@@ -25,7 +25,7 @@ class AutoRefCount {
 };
 
 namespace ResourceMan {
-struct Key {
+class Key { public:
   uint32_t mInstance;
   uint32_t mType;
   uint32_t mGroup;
@@ -45,7 +45,7 @@ class IResourceManager {
 IResourceManager* GetManager();   // 0x0067dcd0
 }
 namespace Random {
-struct RandomLinearCongruential {
+class RandomLinearCongruential { public:
   uint32_t mSeed;
   uint32_t RandomUint32Uniform(uint32_t n);   // 0x00a68fb0
 };

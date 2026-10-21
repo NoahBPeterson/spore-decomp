@@ -35,7 +35,7 @@ __forceinline int FloatToInt(float f) { __asm cvttss2si eax, f }
 struct Vec3 { float x, y, z; };
 
 namespace SP {
-struct cTerrainMapSet {
+class cTerrainMapSet { public:
     char  pad[0x34];
     float mBase;      // +0x34
     float mScale;     // +0x38

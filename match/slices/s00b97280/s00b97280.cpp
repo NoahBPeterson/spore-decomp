@@ -84,7 +84,7 @@ void* NounManager();          // 0x00b3d300
 }
 
 namespace EA { namespace Random {
-struct RandomLinearCongruential {
+class RandomLinearCongruential { public:
     unsigned int RandomUint32Uniform(unsigned int n);   // 0x00a68fb0
 };
 } }

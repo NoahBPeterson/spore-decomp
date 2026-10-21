@@ -104,8 +104,8 @@ struct Vector3
 // ---------------------------------------------------------------------------------------------
 // eastl vector (Spore layout: 0x14 bytes)
 namespace eastl {
-template<class T> struct vector
-{
+template<class T> class vector
+{ public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
@@ -245,8 +245,8 @@ template<class K, class V> struct rbtree_iterator
     pair<const K, V>* operator->() const { return &mpNode->mValue; }
 };
 
-template<class K, class V> struct map
-{
+template<class K, class V> class map
+{ public:
     typedef rbtree_node<K, V> node_type;
     typedef rbtree_iterator<K, V> iterator;
 

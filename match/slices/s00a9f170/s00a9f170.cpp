@@ -202,7 +202,7 @@ struct ListNode {
   cParticle* mpPrev;
 };
 
-struct cParticlesEffect {
+class cParticlesEffect { public:
   uint32_t pad00[3];
   cParticlesDescription* mDesc;                       // +0x00c
   uint32_t pad10[2];

@@ -32,7 +32,7 @@ struct __declspec(align(16)) Vector3 {
 // ---- Havok 3.1 pieces ------------------------------------------------------------------------
 extern unsigned long g_hkThreadMemoryTls;       // 0x016E4174
 
-struct hkThreadMemory {
+class hkThreadMemory { public:
     virtual void vslot0();
     virtual void vslot1();
     virtual void vslot2();
@@ -77,7 +77,7 @@ template <typename T> __forceinline void hkDeallocateStack(T* p)
         tm.onStackUnderflow(p);
 }
 
-template <typename T> struct hkArray {
+template <typename T> class hkArray { public:
     enum { CAPACITY_MASK = 0x3fffffff, DONT_DEALLOCATE_FLAG = 0x80000000 };
     T* m_data;
     int m_size;

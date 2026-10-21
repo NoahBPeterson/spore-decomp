@@ -43,7 +43,7 @@ struct __declspec(align(16)) hkVector4 {
     hkVector4(float a, float b, float c, float d) : x(a), y(b), z(c), w(d) {}
     void operator=(const hkVector4& v) { x = v.x; y = v.y; z = v.z; w = v.w; }
 };
-struct hkQuaternion { float x, y, z, w; };
+class hkQuaternion { public: float x, y, z, w; };
 struct __declspec(align(16)) hkRotation {
     hkVector4 m_col0, m_col1, m_col2;
     hkRotation() {}
@@ -54,7 +54,7 @@ struct __declspec(align(16)) hkTransform {
     hkVector4 m_translation;
     hkTransform() {}
 };
-struct hkAabb { hkVector4 m_min, m_max; };
+class hkAabb { public: hkVector4 m_min, m_max; };
 
 class hkMemory {
 public:

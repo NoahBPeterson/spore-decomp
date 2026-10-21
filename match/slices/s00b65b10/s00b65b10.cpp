@@ -41,7 +41,7 @@ private:
 
 extern const hkVector4 g_hkQuadRealMinusHalf;     // 0x0149d620 (-0.5 x4)
 
-struct hkQuaternion {
+class hkQuaternion { public:
     hkVector4 m_vec;
 };
 
@@ -123,21 +123,21 @@ struct hkWorldRayCastInput {
 };
 
 struct hkWorldRayCastOutput : hkShapeRayCastOutput {
-    const struct hkCollidable* m_rootCollidable;
+    const class hkCollidable* m_rootCollidable;
     hkWorldRayCastOutput() : m_rootCollidable(0) {}
 };
 
-struct hkRayHitCollector {
+class hkRayHitCollector { public:
     hkReal m_earlyOutHitFraction;
     hkRayHitCollector() : m_earlyOutHitFraction(1.0f) {}
 };
 
-struct hkClosestRayHitCollector : hkRayHitCollector {
+class hkClosestRayHitCollector : public hkRayHitCollector { public:
     virtual void addRayHit(const hkShapeRayCastOutput& hitInfo);   // vtable 0x01464944
     hkWorldRayCastOutput m_rayHit;
 };
 
-struct hkShape {
+class hkShape { public:
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
     virtual hkBool castRay(const hkShapeRayCastInput& input, hkShapeRayCastOutput& output) const;   // slot 5
 };
@@ -154,18 +154,18 @@ public:
     uint32_t pad10[3];
     hkShape* m_shape;                      // +0x1c
     uint32_t pad20[(0x58 - 0x20) / 4];
-    struct hkMotion* m_motion;             // +0x58
+    class hkMotion* m_motion;             // +0x58
     hkPropertyValue getProperty(uint32_t key) const;     // 0x00496140
 };
 
-struct hkMotion {
+class hkMotion { public:
     uint32_t pad00[4];
     hkTransform m_transform;               // +0x10
     uint32_t pad50[(0x80 - 0x50) / 4];
     hkQuaternion m_rotation;               // +0x80
 };
 
-struct hkCollidable {
+class hkCollidable { public:
     uint32_t pad00[4];
     int m_ownerOffset;                     // +0x10
     uint32_t pad14;
@@ -173,7 +173,7 @@ struct hkCollidable {
     hkEntity* getOwner() const { return (hkEntity*)((char*)this + m_ownerOffset); }
 };
 
-struct hkWorld {
+class hkWorld { public:
     uint32_t pad00[0x7c / 4];
     void* m_collisionFilter;               // +0x7c
     void castRay(const hkWorldRayCastInput& input, hkClosestRayHitCollector& output) const;   // 0x01082990
