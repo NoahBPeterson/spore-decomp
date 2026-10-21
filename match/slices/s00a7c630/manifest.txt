@@ -1,0 +1,3 @@
+slices/s00a7c630/s00a7c630.cpp  ?ZeroStub@@YGMMMM@Z  00a7ca40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a7c630/s00a7c630.cpp  ?Assign@SurfaceSpec@@QAEPAU1@ABU1@@Z  00a7d540  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a7c630/s00a7c630.cpp  ?SwapAssign@SurfaceSpec@@QAEPAU1@ABU1@@Z  00a7d580  /O2 /MD /Gy /TP /arch:SSE /fp:fast

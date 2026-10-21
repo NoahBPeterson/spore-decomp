@@ -1,0 +1,14 @@
+00a7c630  EA::Swarm::SquareToCircle  # cdecl (float* out, float a, float b); warp a square sample onto the unit disk using a runtime (sin,cos) table
+00a7c7c0  OctantClassify  # cdecl (float a, float b, float c) -> int; classify |a|,|b|,|c| into one of six cube-face regions (0..5)
+00a7c860  EA::Swarm::SquareToSphere  # cdecl (float* out, float a, float b, float c); map a cube sample onto the unit sphere (x87 fsin/fsqrt per face)
+00a7ca40  ZeroStub  # stdcall (float,float,float) -> float; returns 0.0 (default sampler stub)
+00a7ca50  cSPTransform::InverseRotate  # thiscall (Vector3& v); rotate v by the transpose of the transform's rotation matrix when flag 2 is set
+00a7cb00  SubtractEdges  # cdecl (int face, const float* verts, const float* ref, float* out); per-corner edge subtraction selected by a face mask
+00a7cb80  ClipSegmentToQuad  # cdecl (float t, const float* src, float* hit, float* exitPt, const float* quad) -> bool; segment/quad crossing test with refracted exit point
+00a7cf50  DistanceFromPlaneSurface  # thiscall (float* p) -> float; distance from a point to the surface meshed ahead of it, else 0
+00a7cfb0  ClampToShell  # cdecl (float* p, float* dir, float radius, void* unused) -> bool; push a point onto a spherical shell, writing the outward direction
+00a7d1a0  RandomSpawnSeed  # stdcall (void* arg, float* outv, void* target); draw a random uniform plus a 0/1 pair and hand a colour to the target
+00a7d210  BuildOrthonormalFrame  # stdcall (const Vector3* n, Vector3* out, Vector3* basis, float, float, const float* z) -> bool; build an orthonormal frame
+00a7d280  EA::Swarm::ParseSurfaceOptions  # cdecl (void* a, void* b, uint32* opts, int* owner); parse surface-emitter options from an ArgScript argument block
+00a7d540  SurfaceSpec::Assign  # thiscall (const SurfaceSpec&) -> SurfaceSpec*; ref-count the incoming handle at +0 then copy the remaining fields
+00a7d580  SurfaceSpec::SwapAssign  # thiscall (const SurfaceSpec&) -> SurfaceSpec*; release the old handle and adopt the incoming one
