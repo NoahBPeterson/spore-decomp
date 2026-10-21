@@ -15,7 +15,7 @@ extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 extern unsigned long g_hkThreadMemoryTls;   // 0x016e4174
 
 // ---- hkThreadMemory -----------------------------------------------------
-struct hkThreadMemory {
+class hkThreadMemory { public:
     void* m_vtable;                     // +0x00
     char  m_pad04[0x1c];                // +0x04
     int   m_stackCurrent;               // +0x20
@@ -31,23 +31,23 @@ struct hkThreadMemory {
 extern "C++" void hkArrayUtil_reserveMore(void* array, int elemSize);
 
 // ---- shared Havok types -------------------------------------------------
-struct hkVector4 { float m_x, m_y, m_z, m_w; };
-struct hkAabb { hkVector4 m_min, m_max; };
+class hkVector4 { public: float m_x, m_y, m_z, m_w; };
+class hkAabb { public: hkVector4 m_min, m_max; };
 
-template<class T> struct hkArray {
+template<class T> class hkArray { public:
     T*      m_data;                 // +0x00
     int32_t m_size;                 // +0x04
     int32_t m_capacityAndFlags;     // +0x08
 };
 
-struct hkReferencedObject {
+class hkReferencedObject { public:
     uint16_t m_memSizeAndFlags;     // +0x04
     int16_t  m_referenceCount;      // +0x06
     virtual ~hkReferencedObject();
     void setVtable(const void* vt) { *(const void**)this = vt; }
 };
 
-struct hkMemory {
+class hkMemory { public:
     virtual ~hkMemory();
     virtual void vslot1();
     virtual void vslot2();
@@ -61,7 +61,7 @@ struct hkMemory {
 extern hkMemory* hkMemory_instance;      // 0x016e4178
 
 // ---- hkStatisticsCollector ----------------------------------------------
-struct hkStatisticsCollector {
+class hkStatisticsCollector { public:
     virtual ~hkStatisticsCollector();
     virtual void beginObject(const char* name, int flags, const void* obj);                              // +4
     // +8
@@ -74,7 +74,7 @@ struct hkStatisticsCollector {
 // ---- hkWorldObject / hkPhantom / hkAabbPhantom ---------------------------
 struct hkShape;
 struct hkWorld;
-struct hkPhantom;
+class hkPhantom;
 
 // @ 0x01082770  hkWorldObject::~hkWorldObject
 void hkWorldObject_dtor(void* self);
@@ -102,7 +102,7 @@ void  hkBroadPhaseNotify(HK_BroadPhaseMsg* msg);
 void  hkStackArrayAlloc(hkArray<void*>* a, unsigned n, unsigned elemSize);
 void  hkStackArrayFree(hkArray<void*>* a);
 
-struct hkPhantom : hkReferencedObject {
+class hkPhantom : public hkReferencedObject { public:
     hkWorld* m_world;                       // +0x08
     uint32_t m_pad0c[4];                    // +0x0c
     hkShape* m_shape;                       // +0x1c
@@ -132,7 +132,7 @@ struct hkPhantom : hkReferencedObject {
     void overlapRemoveNulls();
 };
 
-struct hkAabbPhantom : hkPhantom {
+class hkAabbPhantom : public hkPhantom { public:
     hkAabb m_aabb;                              // +0x70
     hkArray<void*> m_overlappingCollidables;    // +0x90
 
@@ -152,7 +152,7 @@ struct hkAabbPhantom : hkPhantom {
 // The phantom keeps hkPhantomListener* in m_phantomListeners.  The slots the
 // fan-out uses are +0x04 (phantomAdded), +0x08 (phantomRemoved) and
 // +0x0c (phantomShapeSet); the destructor uses +0x10.
-struct hkPhantomListener {
+class hkPhantomListener { public:
     virtual void vslot0();
     virtual void phantomAdded(const hkPhantom* p);        // +0x04
     virtual void phantomRemoved(const hkPhantom* p);      // +0x08
@@ -370,7 +370,7 @@ struct hkConstraintRuntimeInfo {
 typedef unsigned char chkHkBool;
 
 // The member form: `this` in ecx, then (hkBool, RuntimeInfo&) on the stack, ret 8.
-struct hkBool { unsigned char m_bool; };
+class hkBool { public: unsigned char m_bool; };
 
 struct hkWheelConstraintData {
     float m_ref[8];     // +0x00 .. +0x20 (m_ref[0..7] at +0x00, second vec at +0x20)

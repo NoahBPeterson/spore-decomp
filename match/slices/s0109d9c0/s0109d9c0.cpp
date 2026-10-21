@@ -62,7 +62,7 @@ struct hkMonitorListCommand { const char* m_commandAndMonitor; hkUint32 m_time0;
 
 // ---- containers / math -----------------------------------------------------------------------------
 template <class T>
-struct hkArray {
+class hkArray { public:
     T* m_data;
     int m_size;
     int m_capacityAndFlags;
@@ -72,7 +72,7 @@ struct hkArray {
 
 struct __declspec(align(16)) hkVector4 { hkReal x, y, z, w; };
 
-struct hkStepInfo {
+class hkStepInfo { public:
     hkReal m_startTime, m_endTime, m_deltaTime, m_invDeltaTime;
     hkStepInfo() {}
     __forceinline hkStepInfo(hkReal startTime, hkReal endTime)
@@ -108,7 +108,7 @@ public:
     virtual void applyAction(const hkStepInfo& stepInfo);          // 0x08
 };
 
-struct hkSimulationIsland {
+class hkSimulationIsland { public:
     hkUint8 pad00[0x0c];
     int m_sumSizeOfJacobians;                                      // +0x0c
     hkUint8 pad10[0x20 - 0x10];
@@ -117,14 +117,14 @@ struct hkSimulationIsland {
     hkArray<hkAction*> m_actions;                                  // +0x64
 };
 
-struct hkTypedBroadPhaseHandle {                                   // size 0xc
+class hkTypedBroadPhaseHandle { public:                                   // size 0xc
     hkUint32 m_id;
     char m_type;                                                   // +0x04
     char m_ownerOffset;                                            // +0x05
     hkUint16 m_objectQualityType;                                  // +0x06
     hkUint32 m_collisionFilterInfo;                                // +0x08
 };
-struct hkCollidable {                                              // size 0x24
+class hkCollidable { public:                                              // size 0x24
     hkUint8 pad00[0x14];
     hkTypedBroadPhaseHandle m_broadPhaseHandle;                    // +0x14
     hkReal m_allowedPenetrationDepth;                              // +0x20
@@ -132,7 +132,7 @@ struct hkCollidable {                                              // size 0x24
 struct hkBroadPhaseHandlePair { hkTypedBroadPhaseHandle* m_a; hkTypedBroadPhaseHandle* m_b; };
 
 struct hkCollisionQualityInfo { hkUint8 pad00[0x10]; hkUint8 m_createPredictiveAgents; hkUint8 pad11[0x3c - 0x11]; };
-struct hkCollisionDispatcher {
+class hkCollisionDispatcher { public:
     hkUint8 pad00[0x19d4];
     char m_collisionQualityTable[8][8];                            // +0x19d4
     hkCollisionQualityInfo m_collisionQualityInfo[8];              // +0x1a14
@@ -210,7 +210,7 @@ void processAgentEntry(hkAgentNnEntry* entry, hkProcessCollisionInput* input, hk
 void hkNoOp();                                                                                                 // 0x00c2e4e0 (just `ret`)
 
 // ---- critical section / job queue -----------------------------------------------------------------
-struct hkCriticalSection {                                         // 0x20
+class hkCriticalSection { public:                                         // 0x20
     hkUint8 m_section[0x18];
     int m_ownerLo;                                                 // +0x18
     int m_ownerHi;                                                 // +0x1c

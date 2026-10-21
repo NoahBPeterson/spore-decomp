@@ -47,8 +47,8 @@ __forceinline void setRotatedDir(hkVector4& d, const hkRotation& r, const hkVect
 	d.w = 0.0f;
 }
 
-struct hkSolverResults
-{
+class hkSolverResults
+{ public:
 	hkReal m_impulseApplied;        // +0
 	hkReal m_internalSolverData;    // +4
 };

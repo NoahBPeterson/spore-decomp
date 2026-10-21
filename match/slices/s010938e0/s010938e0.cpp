@@ -21,7 +21,7 @@ extern unsigned long g_threadMemoryTls;                         // 0x016e4174: h
 extern const float kZero;                                       // 0x01485378
 extern const float kOne;                                        // 0x01485720
 
-struct hkThreadMemory {
+class hkThreadMemory { public:
 	void deallocateChunk(void* p, int nbytes, int cls);         // 0x0107db10
 };
 
@@ -30,7 +30,7 @@ struct hkArrayUtil {
 	static void _reserveMore(void* array, int elemSize);             // 0x0107f530
 };
 
-template <class T> struct hkArray {
+template <class T> class hkArray { public:
 	enum { CAPACITY_MASK = 0x3fffffff, DONT_DEALLOCATE_FLAG = (int)0x80000000 };
 	T* m_data;
 	int m_size;
@@ -52,7 +52,7 @@ template <class T> struct hkArray {
 	}
 };
 
-template <class T, int N> struct hkInplaceArray : hkArray<T> {
+template <class T, int N> class hkInplaceArray : public hkArray<T> { public:
 	T m_storage[N];
 	hkInplaceArray()
 	{
@@ -109,8 +109,8 @@ __forceinline void setTransformedPos(hkVector4& d, const hkTransform& t, const f
 	d.w = 0.0f;
 }
 
-struct hkSolverResults
-{
+class hkSolverResults
+{ public:
 	hkReal m_impulseApplied;        // +0
 	hkReal m_internalSolverData;    // +4
 	hkSolverResults() : m_impulseApplied(0), m_internalSolverData(0) {}

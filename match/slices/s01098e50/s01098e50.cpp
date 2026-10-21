@@ -19,9 +19,9 @@ typedef uint16_t hkUint16;
 typedef int16_t  hkInt16;
 typedef uint8_t  hkUint8;
 
-struct hkTransform;
-struct hkVector4
-{
+class hkTransform;
+class hkVector4
+{ public:
     float x, y, z, w;
     void setMul(const hkVector4& a, const hkVector4& b);               // quaternion product (0x01082210)
     void normalize();                                                  // 0x010821a0
@@ -29,8 +29,8 @@ struct hkVector4
     void setRotatedInverseDir(const hkTransform& t, const hkVector4& v);
     void setTransformedPos(const hkTransform& t, const hkVector4& p);  // 0x01081360
 };
-struct hkTransform
-{
+class hkTransform
+{ public:
     hkVector4 m_rotation[3];      // +0x00..0x2f
     hkVector4 m_translation;      // +0x30
     void setRotation(const hkVector4& q);                              // hkRotation::set 0x010824a0
@@ -118,8 +118,8 @@ public:
     hkInt16 m_referenceCount;                            // +0x06
 };
 
-struct hkSweptTransform
-{
+class hkSweptTransform
+{ public:
     hkVector4 m_centerOfMass0;      // +0x00
     hkVector4 m_centerOfMass1;      // +0x10
     hkQuaternion m_rotation0;       // +0x20
@@ -127,8 +127,8 @@ struct hkSweptTransform
     hkVector4 m_centerOfMassLocal;  // +0x40
 };
 
-struct hkMotionState
-{
+class hkMotionState
+{ public:
     hkTransform     m_transform;          // +0x00
     hkSweptTransform m_sweptTransform;    // +0x40
     hkVector4       m_deltaAngle;         // +0x90
@@ -139,8 +139,8 @@ struct hkMotionState
     hkUint16        m_deactivationCounter;// +0xae
 };
 
-struct hkStepInfo
-{
+class hkStepInfo
+{ public:
     float m_startTime;     // +0x00
     float m_endTime;       // +0x04
     float m_deltaTime;     // +0x08
@@ -346,8 +346,8 @@ const hkVelocityAccumulator* hkBoxMotion::applyAccumulator(const hkStepInfo& ste
 // ===================================================================================================
 // constraints
 // ===================================================================================================
-struct hkConstraintQueryIn
-{
+class hkConstraintQueryIn
+{ public:
     char    m_pad00[0x30];
     const hkTransform* m_bodyA;             // +0x30 (32-bit two-pointer pair: A at +0x30, B at +0x34)
     const hkTransform* m_bodyB;             // +0x34
@@ -449,8 +449,8 @@ struct hkToiEvent
 
 // hkWorld's leading layout up to the members this slice touches. The original never dereferences the
 // vtable of the world itself, so it is modelled as a plain struct with the vtable pointer at +0.
-struct hkWorld
-{
+class hkWorld
+{ public:
     void*     m_vtable;                        // +0x00
     void*     m_simulation;                    // +0x04
     void*     m_agentNnTrack;                  // +0x08

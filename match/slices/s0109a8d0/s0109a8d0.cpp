@@ -51,7 +51,7 @@ struct hkMonitorCommand { const char* m_commandAndMonitor; hkUint32 m_time0; hkU
 // ---- Havok TLS / memory ----------------------------------------------------------------------------
 extern unsigned long g_hkThreadMemoryTls;                    // 0x016e4174
 
-struct hkThreadMemory {                                      // TLS object
+class hkThreadMemory { public:                                      // TLS object
     hkUint8  pad00[0x20];
     char*    m_stack;                                        // +0x20
     hkUint8  pad24[0x2c - 0x24];
@@ -60,7 +60,7 @@ struct hkThreadMemory {                                      // TLS object
     void deallocateChunk(void* p, int size, int cls);        // 0x0107db10
 };
 
-struct hkMemory {                                            // 0x016e4178 (hkMemory::s_instance)
+class hkMemory { public:                                            // 0x016e4178 (hkMemory::s_instance)
     virtual void  v00();
     virtual void  v04();
     virtual void  v08();
@@ -79,7 +79,7 @@ extern hkMemory* g_hkMemory;                                 // 0x016e4178
 
 // ---- hkArray / hkArrayUtil -------------------------------------------------------------------------
 template <class T>
-struct hkArray {
+class hkArray { public:
     T*  m_data;                 // +0x0
     int m_size;                 // +0x4
     int m_capacityAndFlags;     // +0x8
@@ -95,7 +95,7 @@ extern "C" void hkThreadMemory_deallocateChunk(void* mem, void* p, int n, int cl
 extern "C" void hkCriticalSection_enter(void* cs);                                // 0x0107f820
 
 // ---- world / step ----------------------------------------------------------------------------------
-struct hkStepInfo {
+class hkStepInfo { public:
     hkReal m_startTime, m_endTime, m_deltaTime, m_invDeltaTime;
     hkStepInfo() {}
     __forceinline hkStepInfo(hkReal startTime, hkReal endTime)
@@ -107,7 +107,7 @@ struct hkStepInfo {
     }
 };
 
-struct hkWorldObject;
+class hkWorldObject;
 
 // A referenced object header as touched by the ref-count walkers in this slice.
 struct hkRefBase {
@@ -119,7 +119,7 @@ struct hkRefBase {
 };
 
 // hkWorldObject is exactly hkRefBase for our purposes (25-byte removeReference).
-struct hkWorldObject : public hkRefBase { };
+class hkWorldObject : public hkRefBase { public: };
 static inline void hkWorldObject_addRef(hkWorldObject* o)
 {
     if (o->m_memSizeAndFlags != 0) ++o->m_referenceCount;
@@ -144,7 +144,7 @@ struct hkSimulationStep {
 // hkWorldOperationQueue -----------------------------------------------------------------------------
 // layout: hkArray<op> @0 (+0x0/+0x4/+0x8), ctx @0xc, delayed hkArray<op> @0x10..0x18,
 //         flag @0x1c, hkCriticalSection @0x20 (size 0x20).
-struct hkCriticalSection {
+class hkCriticalSection { public:
     hkUint8 m_section[0x18];
     int     m_ownerLo;           // +0x18
     int     m_ownerHi;           // +0x1c
@@ -175,7 +175,7 @@ struct hkWorldOperationQueue {
 };
 
 // hkDiscreteSimulation ------------------------------------------------------------------------------
-struct hkWorld;
+class hkWorld;
 struct hkDiscreteSimulation {
     virtual void vslot00();
     virtual hkUint32 recoverFromStepFailure(hkWorld* world, int failure);       // vtable +0x4
@@ -185,8 +185,8 @@ struct hkDiscreteSimulation {
 };
 
 // hkWorld (subset touched here).  Offsets per the 3.1 layout.
-struct hkCollisionDispatcher;
-struct hkWorld {
+class hkCollisionDispatcher;
+class hkWorld { public:
     hkUint8  pad00[0x0c];
     hkReal   m_field0c;                  // +0x0c
     hkReal   m_field10;                  // +0x10
@@ -199,7 +199,7 @@ struct hkWorld {
 };
 
 // The vtable used by world->m_collisionDispatcher (slot +0xc = integrate).
-struct hkCollisionDispatcher {
+class hkCollisionDispatcher { public:
     virtual void v00(); virtual void v04(); virtual void v08();
     virtual void integrateWorld(hkWorld* world, const hkStepInfo& info);   // +0xc
 };

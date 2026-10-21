@@ -12,12 +12,12 @@ typedef double hkX87Real;
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 enum { HK_ARRAY_FLAG_MASK = 0x3fffffff, HK_ARRAY_DONT_DEALLOCATE = (int)0x80000000 };
 struct hkArrayUtil { static void _reserveMore(void* arr, int elemSize); };
-struct hkThreadMemory { void deallocateChunk(void* p, int nbytes, int memClass); };
+class hkThreadMemory { public: void deallocateChunk(void* p, int nbytes, int memClass); };
 extern unsigned long g_hkThreadMemoryTlsIndex;       // 0x16e4174
 static inline hkThreadMemory* getThreadMemory() { return (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTlsIndex); }
 
 template <typename T>
-struct hkArray {
+class hkArray { public:
     T* m_data; int m_size; int m_capacityAndFlags;
     void pushBack(const T& t) {
         if (m_size == (m_capacityAndFlags & HK_ARRAY_FLAG_MASK)) hkArrayUtil::_reserveMore(this, (int)sizeof(T));
@@ -43,13 +43,13 @@ struct hkArray {
     }
 };
 
-struct hkVector4 { float x, y, z, w; };
-struct hkReferencedObject {
+class hkVector4 { public: float x, y, z, w; };
+class hkReferencedObject { public:
     uint16_t m_memSizeAndFlags;
     uint16_t m_referenceCount;
     hkReferencedObject() : m_referenceCount(1) {}
     virtual ~hkReferencedObject() {}
-    virtual void calcStatistics(struct hkStatisticsCollector* c) const {}
+    virtual void calcStatistics(class hkStatisticsCollector* c) const {}
     void addReference() { if (m_memSizeAndFlags != 0) m_referenceCount = (uint16_t)(m_referenceCount + 1); }
     void removeReference() {
         if (m_memSizeAndFlags != 0) {
@@ -58,7 +58,7 @@ struct hkReferencedObject {
         }
     }
 };
-struct hkStatisticsCollector {
+class hkStatisticsCollector { public:
     virtual void s0();
     virtual void beginObject(const char* name, int mode, const void* obj);                                     // +4
     virtual void addArray(const char* name, int elemSize, const void* ptr, int usedBytes, int allocBytes);    // +8
@@ -68,10 +68,10 @@ struct hkStatisticsCollector {
 };
 
 // ------------------------------------------------------------ motion
-struct hkMotionState { char m_data[0xb0]; };
+class hkMotionState { public: char m_data[0xb0]; };
 void hkMotionState_assign(hkMotionState* dst, const hkMotionState* src);    // FUN_010888c0: hkMotionState::operator=
-struct hkMotion : hkReferencedObject { int m_solverData; };
-struct hkRigidMotion : hkMotion {
+class hkMotion : public hkReferencedObject { public: int m_solverData; };
+class hkRigidMotion : public hkMotion { public:
     hkMotionState m_motionState;          // +0x10
     float m_massInv;                      // +0xc0
     float m_particleMinInertiaDiagInv;    // +0xc4
@@ -99,14 +99,14 @@ void hkRigidMotion::getMotionStateAndVelocities(hkMotion* motionOut)
 
 // ------------------------------------------------------------ hkWorldObject (as needed here)
 struct hkShape;
-struct hkMultiThreadLock { uint32_t m_threadId; int m_lockCount; };
-struct hkLinkedCollidable {
+class hkMultiThreadLock { public: uint32_t m_threadId; int m_lockCount; };
+class hkLinkedCollidable { public:
     hkShape* m_shape; uint32_t m_shapeKey; void* m_motion; void* m_parent; int m_ownerOffset;
     uint32_t m_handle[3]; float m_allowedPenetrationDepth;
     hkArray<void*[2]> m_collisionEntries;       // +0x24 (8-byte entries)
 };
-struct hkProperty { uint32_t m_key, m_pad, m_lo, m_hi; };
-struct hkWorldObject : hkReferencedObject {
+class hkProperty { public: uint32_t m_key, m_pad, m_lo, m_hi; };
+class hkWorldObject : public hkReferencedObject { public:
     void* m_world;                      // +0x08
     void* m_userData;                   // +0x0c
     const char* m_name;                 // +0x10
@@ -122,23 +122,23 @@ struct hkWorldObject : hkReferencedObject {
 };
 
 // ------------------------------------------------------------ hkEntity
-struct hkSimulationIsland { char pad[0x28]; uint8_t m_active; };
-struct hkEntityDeactivator : hkReferencedObject {};
-struct hkMaterial { uint8_t m_responseType; float m_friction; float m_restitution; };
+class hkSimulationIsland { public: char pad[0x28]; uint8_t m_active; };
+class hkEntityDeactivator : public hkReferencedObject { public:};
+class hkMaterial { public: uint8_t m_responseType; float m_friction; float m_restitution; };
 struct hkEntityListener; struct hkCollisionListener; struct hkEntityActivationListener; struct hkAction;
 struct hkConstraintInternal { char pad[0x1c]; };
 struct hkConstraintInstance;
 struct hkWorld;
-struct hkBool { uint8_t b; };
+class hkBool { public: uint8_t b; };
 struct hkMotionBase;
 
 struct hkWorldOperationUtil {
     static void markIslandActive(hkWorld* w, hkSimulationIsland* i);     // 0x010a0130
     static void markIslandInactive(hkWorld* w, hkSimulationIsland* i);   // 0x010a00e0
 };
-struct hkEntityCallbackUtil { static void fireEntityDeleted(struct hkEntity* e); };    // 0x0109e790
+struct hkEntityCallbackUtil { static void fireEntityDeleted(class hkEntity* e); };    // 0x0109e790
 
-struct hkEntity : hkWorldObject {
+class hkEntity : public hkWorldObject { public:
     hkMotionBase* m_motion;                              // +0x58
     hkSimulationIsland* m_simulationIsland;              // +0x5c
     hkMaterial m_material;                               // +0x60
@@ -346,15 +346,15 @@ L_act2:
 
 // ------------------------------------------------------------ constraint construction kit
 struct hkConstraintInfo { int m_maxSizeOfJacobians, m_sizeOfJacobians, m_sizeOfSchemas, m_numSolverResults; };
-struct hkGenericConstraintDataScheme {
+class hkGenericConstraintDataScheme { public:
     hkConstraintInfo m_info;                 // +0x00
     hkArray<hkVector4> m_data;               // +0x10
     hkArray<int> m_commands;                 // +0x1c
     void* m_modifiers[3];                    // +0x28
     void* m_motors[3];                       // +0x34
 };
-struct hkConstraintData : hkReferencedObject { };
-struct hkGenericConstraintData : hkConstraintData {
+class hkConstraintData : public hkReferencedObject { public: };
+class hkGenericConstraintData : public hkConstraintData { public:
     hkGenericConstraintDataScheme m_scheme;  // +0x0c
     virtual void getConstraintInfo(hkConstraintInfo& out) const;
     struct RuntimeInfo { int m_sizeOfExternalRuntime; int m_numSolverResults; };
@@ -372,7 +372,7 @@ enum {
     CMD_SET_BASIS_A_BODY_FRAME = 10, CMD_SET_BASIS_B_BODY_FRAME = 11, CMD_CONSTRAIN_TO_ANGULAR_DOF = 12
 };
 
-struct hkConstraintConstructionKit {
+class hkConstraintConstructionKit { public:
     hkGenericConstraintData* m_constraint;       // +0x00
     hkGenericConstraintDataScheme* m_scheme;     // +0x04
     int m_stiffnessReference;                    // +0x08

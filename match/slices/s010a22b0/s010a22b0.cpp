@@ -33,15 +33,15 @@ public:
     int8_t m_bool;
 };
 
-struct hkVector4 { float x, y, z, w; };
-struct hkAabb { hkVector4 m_min; hkVector4 m_max; };      // 0x20
+class hkVector4 { public: float x, y, z, w; };
+class hkAabb { public: hkVector4 m_min; hkVector4 m_max; };      // 0x20
 
 inline void hkAabb_set(hkAabb& aabb, hkReal x0, hkReal y0, hkReal z0, hkReal x1, hkReal y1, hkReal z1)
 {
     aabb.m_min.x = x0; aabb.m_min.y = y0; aabb.m_min.z = z0; aabb.m_min.w = 0;
     aabb.m_max.x = x1; aabb.m_max.y = y1; aabb.m_max.z = z1; aabb.m_max.w = 0;
 }
-struct hkStepInfo { hkReal m_startTime, m_endTime, m_deltaTime, m_invDeltaTime; };   // 0x10
+class hkStepInfo { public: hkReal m_startTime, m_endTime, m_deltaTime, m_invDeltaTime; };   // 0x10
 
 class hkStatisticsCollector;
 
@@ -82,8 +82,8 @@ public:
 
 extern unsigned long g_hkThreadMemoryTlsIndex;    // 0x016E4174
 
-struct hkThreadMemory
-{
+class hkThreadMemory
+{ public:
     struct Elem { Elem* m_next; };
     uint32_t m_pad0[0xe];
     Elem*    m_freeListHead[17];                  // +0x38
@@ -144,8 +144,8 @@ static __forceinline void hkMonitorStream_startTimerList(const char* name, const
 void hkArrayUtil__reserveMore(void* array, int sizeofElem);      // 0x0107F530 (hkArrayUtil::_reserveMore)
 
 template <typename T>
-struct hkArray
-{
+class hkArray
+{ public:
     T*  m_data;                                 // +0
     int m_size;                                 // +4
     int m_capacity;                             // +8 (bit 31: the data is inline storage)
@@ -166,8 +166,7 @@ struct hkArray
 };
 
 template <typename T, int N>
-struct hkInplaceArray : hkArray<T>
-{
+class hkInplaceArray : public hkArray<T> { public:
     T m_storage[N];                             // +0xc
 };
 
@@ -204,7 +203,7 @@ class hkAabbPhantom;
 class hkSimulationIsland;
 class hkCollisionDispatcher;
 class hkCollisionFilter;
-class hkProcessCollisionInput;
+struct hkProcessCollisionInput;
 class hkAction;
 class hkWorldDeletionListener;
 struct hkCollidableAddedEvent;
@@ -275,8 +274,8 @@ public:
 
 // One hkCollidable (embedded in an hkEntity at +0x1c). +0x10 holds the offset from the collidable back to
 // its owning entity; +0x18 is the collidable's type; +0x24/+0x28 are its broad-phase pair list.
-struct hkCollidable
-{
+class hkCollidable
+{ public:
     void*    m_vptr;                 // +0
     void*    m_broadPhaseHandle;     // +4
     void*    m_shape;                // +8
@@ -300,7 +299,7 @@ public:
     hkReal   m_time;                 // +0x5c (advanced by resetWorldTime)
 };
 
-struct hkMaterial { uint32_t m_data[3]; };
+class hkMaterial { public: uint32_t m_data[3]; };
 
 class hkEntity
 {
@@ -371,8 +370,8 @@ public:
     hkAabbPhantom(const hkAabb& aabb, uint32_t collisionFilterInfo);    // 0x0108DFE0
 };
 
-class hkProcessCollisionInput
-{
+struct hkProcessCollisionInput
+{ private:
 public:
     void* m_dispatcher;                 // +0
     void* m_filter;                     // +4

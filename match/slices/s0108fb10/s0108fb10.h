@@ -9,8 +9,8 @@
 // ---------------------------------------------------------------------------------------------------------
 // hkString: static memory helpers used by the clone methods (FUN_0107f440 = hkString::memCpy).
 // ---------------------------------------------------------------------------------------------------------
-struct hkString
-{
+class hkString
+{ public:
 	static void* memCpy(void* dst, const void* src, int nbytes);       // 0x0107F440
 };
 
@@ -68,7 +68,7 @@ public:
 };
 
 // motion step input / accumulator returned by applyAccumulator (opaque: only read by the base class).
-struct hkStepInfo { uint32_t m_pad[0x14]; };            // fields used: +8 deltaTime, +0x40..+0x5f velocities
+class hkStepInfo { public: uint32_t m_pad[0x14]; };            // fields used: +8 deltaTime, +0x40..+0x5f velocities
 struct hkVelocityAccumulator;
 
 // This slice owns hkStabilizedSphereMotion::clone/applyAccumulator and hkStabilizedBoxMotion::clone/

@@ -8,7 +8,7 @@ typedef unsigned int uint;
 // ---------------------------------------------------------------------------
 // Common Havok types / externals.
 // ---------------------------------------------------------------------------
-struct hkVector4 {
+class hkVector4 { public:
     float x, y, z, w;
 };
 

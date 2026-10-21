@@ -1,7 +1,7 @@
 slices/s010a22b0/s010a22b0.cpp  ?addAction@hkSimulationIsland@@QAEXPAVhkAction@@@Z  010a24b0  /vc71 /O2 /MD /Gy /TP /GS- /fp:fast
 slices/s010a22b0/s010a22b0.cpp  ?init@hkDefaultWorldMaintenanceMgr@@UAEXPAVhkWorld@@@Z  010a28f0  /vc71 /O2 /MD /Gy /TP /GS- /fp:fast
 slices/s010a22b0/s010a22b0.cpp  ??0hkDefaultWorldMaintenanceMgr@@QAE@XZ  010a2910  /vc71 /O2 /MD /Gy /TP /GS- /fp:fast
-slices/s010a22b0/s010a22b0.cpp  ?checkDeactivation@hkDefaultWorldMaintenanceMgr@@QAEXPAVhkWorld@@ABUhkStepInfo@@@Z  010a2a70  /vc71 /O2 /MD /Gy /TP /GS- /fp:fast
+slices/s010a22b0/s010a22b0.cpp  ?checkDeactivation@hkDefaultWorldMaintenanceMgr@@QAEXPAVhkWorld@@ABVhkStepInfo@@@Z  010a2a70  /vc71 /O2 /MD /Gy /TP /GS- /fp:fast
 slices/s010a22b0/s010a22b0.cpp  ??1hkBroadPhaseBorder@@UAE@XZ  010a2c60  /vc71 /O2 /MD /Gy /TP /GS- /fp:fast
 slices/s010a22b0/s010a22b0.cpp  ?maxPositionExceededCallback@hkBroadPhaseBorder@@UAEXPAVhkEntity@@@Z  010a2cb0  /vc71 /O2 /MD /Gy /TP /GS- /fp:fast
 slices/s010a22b0/s010a22b0.cpp  ?worldDeletedCallback@hkBroadPhaseBorder@@UAEXPAVhkWorld@@@Z  010a2cf0  /vc71 /O2 /MD /Gy /TP /GS- /fp:fast

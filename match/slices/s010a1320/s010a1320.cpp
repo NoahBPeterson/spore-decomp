@@ -15,7 +15,7 @@ class hkSimulationIsland;
 class hkEntity;
 class hkUnionFind;
 struct hkAgentNnEntry;
-struct hkConstraintInstance;
+class hkConstraintInstance;
 
 // hkArrayUtil::_reduce (cdecl): shrinks a heap array to its size, back to the inplace storage when it fits.
 void hkArrayUtil_reduce(void* array, int elemSize, void* inplaceStorage, int inplaceCapacity);   // 0x0107F5D0
@@ -163,13 +163,13 @@ void hkAgentNnTrack_appendCopy(hkAgentNnTrack* track, hkAgentNnEntry* entry);   
 void hkAgentNnTrack_remove(hkAgentNnTrack* track, hkAgentNnEntry* entry);       // 0x010FBC50 (cdecl, name inferred)
 
 struct hkConstraintInfo { int m_maxSizeOfJacobians, m_sizeOfJacobians, m_sizeOfSchemas, m_numSolverResults; };
-struct hkConstraintData
-{
+class hkConstraintData
+{ public:
 	virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
 	virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();
 	virtual void getConstraintInfo(hkConstraintInfo& out) const;   // 8 (+0x20)
 };
-struct hkConstraintInstance { char m_pad0[8]; hkSimulationIsland* m_owner; };   // +8
+class hkConstraintInstance { public: char m_pad0[8]; hkSimulationIsland* m_owner; };   // +8
 struct hkConstraintInternal                                     // 0x1c bytes
 {
 	hkConstraintInstance* m_constraint;                         // +0

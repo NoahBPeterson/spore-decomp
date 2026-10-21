@@ -12,7 +12,7 @@
 #define HK_OFFSET_CHECK(name, cond)
 #endif
 
-template <typename T> struct hkArray { T* m_data; int32_t m_size; int32_t m_capacityAndFlags; };
+template <typename T> class hkArray { public: T* m_data; int32_t m_size; int32_t m_capacityAndFlags; };
 
 // Remove every null entry from a listener array, keeping order; iterates from the back, exactly
 // as the inlined hkArray::removeAtAndCopy sequence does (size is reloaded in the copy loop).
@@ -30,18 +30,18 @@ static inline void hkRemoveNullListeners(hkArray<T*>& a)
 
 struct hkStepInfo;
 struct hkAction;
-struct hkEntity;
+class hkEntity;
 struct hkPhantom;
 struct hkConstraintInstance;
-struct hkSimulationIsland;
-struct hkWorld;
+class hkSimulationIsland;
+class hkWorld;
 struct hkContactPointAddedEvent;
 struct hkContactPointConfirmedEvent;
 struct hkContactPointRemovedEvent;
 struct hkContactProcessEvent;
 
 // ---- listener interfaces (virtual slot order = vtable order in the binary) --------------
-struct hkActionListener {
+class hkActionListener { public:
     virtual void vslot0();
     virtual void actionAddedCallback(hkAction* a);                      // +4
     virtual void actionRemovedCallback(hkAction* a);                    // +8
@@ -63,7 +63,7 @@ struct hkWorldConstraintListener {
     virtual void constraintAddedCallback(hkConstraintInstance* c);      // +4
     virtual void constraintRemovedCallback(hkConstraintInstance* c);    // +8
 };
-struct hkWorldDeletionListener {
+class hkWorldDeletionListener { public:
     virtual void vslot0();
     virtual void worldDeletedCallback(hkWorld* w);                      // +4
 };
@@ -98,7 +98,7 @@ struct hkContactListener {                      // no destructor slot
     virtual void contactPointRemovedCallback(hkContactPointRemovedEvent& e);          // +8
     virtual void contactProcessCallback(hkContactProcessEvent& e);                    // +0xc
 };
-struct hkEntityListener {
+class hkEntityListener { public:
     virtual void vslot0();
     virtual void vslot1();
     virtual void entityRemovedCallback(hkEntity* e);                    // +8
@@ -124,13 +124,13 @@ struct hkContactPointConfirmedEvent   { void* m_bodyA; void* m_bodyB; void* m_ca
 struct hkContactPointRemovedEvent     { uint16_t m_id; uint16_t m_pad; void* m_material; void* m_bodyA; void* m_bodyB; void* m_callbackFiredFrom; /* +0x10 */ };
 struct hkContactProcessEvent          { void* m_bodyA; void* m_bodyB; void* m_callbackFiredFrom; /* +8 */ };
 
-struct hkSimulationIsland {
+class hkSimulationIsland { public:
     uint8_t m_pad[0x3c];
     hkEntity** m_entities;              // +0x3c
     int32_t m_numEntities;              // +0x40
 };
 
-struct hkEntity {
+class hkEntity { public:
     uint8_t m_pad0[0x70];
     hkArray<hkEntityOwnedObject*> m_actions;                    // +0x70
     hkArray<hkEntityOwnedObject*> m_constraints;                // +0x7c (hkConstraintInstance*)
@@ -142,7 +142,7 @@ struct hkEntity {
 };
 HK_OFFSET_CHECK(chk_entity_end, sizeof(hkEntity) == 0xcc || sizeof(void*) != 4);
 
-struct hkWorld {
+class hkWorld { public:
     uint8_t m_pad0[0x88];
     int32_t m_pendingOperationsCount;                           // +0x88
     int32_t m_criticalOperationsLockCount;                      // +0x8c

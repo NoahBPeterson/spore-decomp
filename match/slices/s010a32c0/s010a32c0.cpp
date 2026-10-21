@@ -51,11 +51,11 @@ public:
 };
 
 struct __declspec(align(16)) hkVector4 { float x, y, z, w; };
-struct hkQuaternion { float x, y, z, w; };
-struct hkRotation { hkVector4 m_col0, m_col1, m_col2; };      // 0x30
-struct hkTransform { hkRotation m_rotation; hkVector4 m_translation; };   // 0x40
-struct hkMatrix3 { hkVector4 m_col0, m_col1, m_col2; void mul(hkReal v); };    // mul at 0x01081bb0
-struct hkStepInfo { hkReal m_startTime, m_endTime, m_deltaTime, m_invDeltaTime; };
+class hkQuaternion { public: float x, y, z, w; };
+class hkRotation { public: hkVector4 m_col0, m_col1, m_col2; };      // 0x30
+class hkTransform { public: hkRotation m_rotation; hkVector4 m_translation; };   // 0x40
+class hkMatrix3 { public: hkVector4 m_col0, m_col1, m_col2; void mul(hkReal v); };    // mul at 0x01081bb0
+class hkStepInfo { public: hkReal m_startTime, m_endTime, m_deltaTime, m_invDeltaTime; };
 
 namespace hkMath { float atan2fApproximation(float y, float x); }     // 0x0120adb0
 
@@ -78,8 +78,8 @@ public:
 
 extern unsigned long g_hkThreadMemoryTlsIndex;      // 0x016e4174
 
-struct hkThreadMemory
-{
+class hkThreadMemory
+{ public:
     struct Elem { Elem* m_next; };
     uint32_t m_pad0[0xe];
     Elem*    m_freeListHead[17];    // +0x38
@@ -254,16 +254,15 @@ public:
 };
 
 // ---------------------------------------------------------------------------------------------- agents
-struct hkCollidable
-{
+class hkCollidable
+{ public:
     virtual ~hkCollidable();
     void* m_broadPhaseHandle;                  // +0x04
     void* m_shape;                             // +0x08
     void* m_motion;                            // +0x0c
     void* m_entity;                            // +0x10
 };
-struct hkLinkedCollidable : hkCollidable
-{
+class hkLinkedCollidable : public hkCollidable { public:
     void* m_pairInfo[2];                       // +0x14
 };
 struct hkAgentNnEntry                                          // 0x1c bytes (retail)
@@ -279,12 +278,11 @@ struct hkAgentNnEntry                                          // 0x1c bytes (re
     uint32_t m_contactMgr;         // +0x10
     hkLinkedCollidable* m_collidable[2];    // +0x14
 };
-struct hkBroadPhaseHandle
-{
+class hkBroadPhaseHandle
+{ public:
     virtual ~hkBroadPhaseHandle();
 };
-struct hkTypedBroadPhaseHandle : hkBroadPhaseHandle
-{
+class hkTypedBroadPhaseHandle : public hkBroadPhaseHandle { public:
     int8_t m_type;                             // +0x04
     int8_t m_ownerOffset;                      // +0x05 (the original walks it as a signed byte)
     uint16_t m_objectQualityType;              // +0x06
@@ -314,7 +312,7 @@ struct hkAgentNnTrack                                          // 0x18 bytes
     unsigned short m_sectorSize;   // +0x16
 };
 
-struct hkMaterial { uint32_t m_data[3]; };
+class hkMaterial { public: uint32_t m_data[3]; };
 
 class hkEntity
 {
@@ -734,8 +732,8 @@ struct hkConstraintInfo
 struct hkConstraintData;      // +0x2c/+0x30/+0x3c used by the mass changer and the base info size calc
 
 // hkConstraintQueryIn (dev PDB: 0x48, hkConstraintQueryStepInfo + body/transform pointers).
-struct hkConstraintQueryIn
-{
+class hkConstraintQueryIn
+{ public:
     hkReal  m_substepDeltaTime;        // +0x00
     hkReal  m_substepInvDeltaTime;     // +0x04
     hkReal  m_frameDeltaTime;          // +0x08

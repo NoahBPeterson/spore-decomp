@@ -34,8 +34,8 @@ public:
 	float& operator[](int i) { return (&x)[i]; }
 	const float& operator[](int i) const { return (&x)[i]; }
 
-	void setTransformedPos(const struct hkTransform& t, const hkVector4& v);          // 0x01081360
-	void setTransformedInversePos(const struct hkTransform& t, const hkVector4& v);   // 0x010813d0
+	void setTransformedPos(const class hkTransform& t, const hkVector4& v);          // 0x01081360
+	void setTransformedInversePos(const class hkTransform& t, const hkVector4& v);   // 0x010813d0
 	void setRotatedDir(const struct hkRotation& r, const hkVector4& v);               // 0x010814a0
 };
 
@@ -46,15 +46,15 @@ public:
 };
 class hkRotation : public hkMatrix3 {};
 
-struct hkTransform
-{
+class hkTransform
+{ public:
 	hkRotation m_rotation;     // +0x00
 	hkVector4 m_translation;   // +0x30
 	void setMul(const hkTransform& a, const hkTransform& b);   // 0x01080ef0
 };
 
-struct hkSolverResults
-{
+class hkSolverResults
+{ public:
 	hkReal m_impulseApplied;
 	hkReal m_internalSolverData;
 };

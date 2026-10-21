@@ -11,8 +11,8 @@ typedef uint16_t hkUint16;
 typedef uint8_t hkUint8;
 
 // ---- math / motion state --------------------------------------------------------------------------------------------
-struct hkQuaternion { float x, y, z, w; };
-struct hkMatrix3 { hkVector4 m_col0, m_col1, m_col2; };   // 0x30 bytes
+class hkQuaternion { public: float x, y, z, w; };
+class hkMatrix3 { public: hkVector4 m_col0, m_col1, m_col2; };   // 0x30 bytes
 
 struct hkSweptTransform                                   // 0x50 bytes
 {
@@ -41,8 +41,8 @@ struct hkSweptTransformUtil
 
 // hkMotion (rigid body motion): x86 offsets. Slots used here: 0 deleting dtor, 2 getType, 11 getInertiaLocal,
 // 22 setLinearVelocity, 23 setAngularVelocity, 30 getMotionStateAndVelocities.
-struct hkMotion
-{
+class hkMotion
+{ public:
 	virtual void* destroy(unsigned flags);                                   // 0
 	virtual void s1();
 	virtual int getType() const;                                             // 2 (+8)
@@ -73,12 +73,12 @@ hkMotion* hkRigidBody_createMotion(int motionType, const hkVector4& position, co
                           const hkVector4& centerOfMassLocal, float linearDamping, float angularDamping); // 0x01087290
 
 // ---- world objects ---------------------------------------------------------------------------------------------------
-struct hkWorld;
-struct hkSimulationIsland;
+class hkWorld;
+class hkSimulationIsland;
 struct hkAgentNnEntry;
 struct hkConstraintInstance;
-struct hkAction;
-struct hkEntity;
+class hkAction;
+class hkEntity;
 
 // Agent track (hkAgentNnTrack): opaque here; the two helpers append a copy of an entry / remove an entry.
 struct hkAgentNnTrack { char m_pad[0x24]; };
@@ -92,13 +92,13 @@ struct hkWorldAgentUtil
 };
 struct hkCollisionInputStub { char m_pad[1]; };
 
-struct hkCollidable { char m_pad0[0x10]; int m_ownerOffset; };   // +0x10: offset from the collidable to its owner entity
+class hkCollidable { public: char m_pad0[0x10]; int m_ownerOffset; };   // +0x10: offset from the collidable to its owner entity
 struct hkCollisionEntry { hkAgentNnEntry* m_agentEntry; hkCollidable* m_partner; };   // 8 bytes (32-bit)
 
 struct hkConstraintInternalStub { hkConstraintInstance* m_constraint; char m_pad[0x1c - 4]; };   // 0x1c bytes per entry
 
-struct hkEntity
-{
+class hkEntity
+{ public:
 	char m_pad0[8];
 	hkWorld* m_world;                                   // +8
 	char m_pad1[0x24 - 0xc];
@@ -127,8 +127,8 @@ struct hkEntity
 	int m_actionsSize;                                  // +0xc4
 };
 
-struct hkSimpleConstraintOwner
-{
+class hkSimpleConstraintOwner
+{ public:
 	virtual void* destroy(unsigned flags);               // 0 (scalar deleting destructor)
 	virtual void v1(); virtual void v2();
 	virtual void addConstraintInfo(hkConstraintInstance* c, struct hkConstraintInfo& info);   // 3, 0x0109F9C0
@@ -142,8 +142,8 @@ struct hkSimpleConstraintOwner
 };
 struct hkConstraintInfo { int m_maxSizeOfJacobians, m_sizeOfJacobians, m_sizeOfSchemas, m_numSolverResults; };
 
-struct hkAction
-{
+class hkAction
+{ public:
 	char m_pad0[4];
 	hkUint16 m_memSizeAndFlags;                         // +4
 	hkUint16 m_referenceCount;                          // +6
@@ -151,8 +151,7 @@ struct hkAction
 	hkSimulationIsland* m_island;                       // +0xc
 };
 
-struct hkSimulationIsland : hkSimpleConstraintOwner
-{
+class hkSimulationIsland : public hkSimpleConstraintOwner { public:
 	hkWorld* m_world;                                   // +0x1c
 	hkUint16 m_storageIndex;                            // +0x20
 	hkUint16 m_dirtyListIndex;                          // +0x22 (0xffff = not on the dirty list)
@@ -181,8 +180,8 @@ struct hkSimulationIsland : hkSimpleConstraintOwner
 
 struct hkEntityListenerStub { virtual void v0(); virtual void v1(); virtual void inactiveEntityMovedCallback(hkEntity* entity); };   // slot 2
 
-struct hkWorld
-{
+class hkWorld
+{ public:
 	char m_pad0[0xc];
 	float m_currentTime;                                // +0xc (inferred)
 	char m_pad1[0x30 - 0x10];
@@ -259,14 +258,14 @@ struct hkWorldOperationUtil
 	static void internalDeactivateIsland(hkWorld* world, hkSimulationIsland* island);    // 0x010A0020
 	static void markIslandInactive(hkWorld* world, hkSimulationIsland* island);          // 0x010A00E0
 	static void markIslandActive(hkWorld* world, hkSimulationIsland* island);            // 0x010A0130
-	static void replaceMotionObject(struct hkRigidBody* body, int newMotionType, hkBool newStateNeedsInertia, hkBool oldStateNeedsInertia, hkWorld* world);   // 0x010A0190
+	static void replaceMotionObject(class hkRigidBody* body, int newMotionType, hkBool newStateNeedsInertia, hkBool oldStateNeedsInertia, hkWorld* world);   // 0x010A0190
 	static void removeEntitySI(hkWorld* world, hkEntity* entity);                        // 0x010A03C0
 	static hkSimulationIsland* internalMergeTwoIslands(hkWorld* world, hkSimulationIsland* islandA, hkSimulationIsland* islandB);   // 0x010A0410
 	static inline void putIslandOnDirtyList(hkWorld* world, hkSimulationIsland* island);
 };
 
 // hkRigidBody shares hkEntity's layout up to the fields used here.
-struct hkRigidBody : hkEntity {};
+class hkRigidBody : public hkEntity { public:};
 
 static inline void hkWorldOperationUtil_pushIsland(hkArray<hkSimulationIsland*>& a, hkSimulationIsland* island)
 {

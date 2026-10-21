@@ -24,9 +24,9 @@ typedef uint16_t hkUint16;
 typedef int16_t  hkInt16;
 typedef uint8_t  hkUint8;
 
-struct hkTransform;
-struct hkVector4
-{
+class hkTransform;
+class hkVector4
+{ public:
     float x, y, z, w;
     void setMul(const hkVector4& a, const hkVector4& b);               // quaternion product (0x01082210)
     void normalize();                                                  // 0x010821a0
@@ -50,15 +50,15 @@ public:
     void changeBasis(const hkRotation& r);                         // 0x01082130
 };
 
-struct hkTransform
-{
+class hkTransform
+{ public:
     hkVector4 m_rotation[3];      // +0x00..0x2f (columns)
     hkVector4 m_translation;      // +0x30
     void setRotation(const hkQuaternion& q);                       // hkRotation::set 0x010824a0
 };
 
-struct hkStepInfo
-{
+class hkStepInfo
+{ public:
     float m_startTime;      // +0x00
     float m_endTime;        // +0x04
     float m_deltaTime;      // +0x08
@@ -74,8 +74,8 @@ public:
     hkInt16 m_referenceCount;                             // +0x06
 };
 
-struct hkSweptTransform
-{
+class hkSweptTransform
+{ public:
     hkVector4 m_centerOfMass0;      // +0x00
     hkVector4 m_centerOfMass1;      // +0x10
     hkQuaternion m_rotation0;       // +0x20
@@ -83,8 +83,8 @@ struct hkSweptTransform
     hkVector4 m_centerOfMassLocal;  // +0x40
 };
 
-struct hkMotionState
-{
+class hkMotionState
+{ public:
     hkTransform     m_transform;          // +0x00
     hkSweptTransform m_sweptTransform;    // +0x40
     hkVector4       m_deltaAngle;         // +0x90

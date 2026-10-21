@@ -39,8 +39,8 @@ struct hkArrayUtil
 
 // Layout shared by every hkArray<T>: data, size, capacity | flags.
 template <typename T>
-struct hkArray
-{
+class hkArray
+{ public:
 	enum { CAPACITY_MASK = 0x3FFFFFFF };
 	T* m_data;
 	int m_size;
@@ -57,18 +57,18 @@ struct hkArray
 	}
 };
 
-struct hkVector4 { float x, y, z, w; };
+class hkVector4 { public: float x, y, z, w; };
 
 // hkContactPoint, 32 bytes: position, then separating normal with the distance in w.
-struct hkContactPoint
-{
+class hkContactPoint
+{ public:
 	hkVector4 m_position;           // +0
 	hkVector4 m_separatingNormal;   // +0x10 (w = separating distance)
 };
 
 // 0x14 bytes per contact point; the user-visible hkContactPointProperties part starts at +8.
-struct hkContactPointProperties
-{
+class hkContactPointProperties
+{ public:
 	float m_solverData0;            // +0   (inferred) scratch written by buildJacobian
 	float m_solverData1;            // +4   (inferred)
 	int m_userData;                 // +8   start of the part handed to callbacks
@@ -89,11 +89,11 @@ struct hkConstraintInfo
 	int m_numSolverResults;     // +0xc
 };
 
-struct hkConstraintInstance;
-struct hkCollidable { char m_pad[1]; };
+class hkConstraintInstance;
+class hkCollidable { public: char m_pad[1]; };
 
-struct hkCriticalSection
-{
+class hkCriticalSection
+{ public:
 	void enter();                    // 0x0107F820
 	char m_cs[24];
 	uint64_t m_owner;                // +0x18, thread id while locked, -1 otherwise
@@ -109,8 +109,8 @@ struct hkCriticalSection
 // ---- minimal world / island / entity stubs (x86 offsets) ----------------------------------------------------------
 struct hkSolverInfoWorld { char m_pad[0x70]; float m_contactRestingVelocity; };   // (inferred) float at +0x70
 struct hkCollisionInputStub { char m_pad[0x24]; hkSolverInfoWorld* m_dynamicsInfo; }; // +0x24
-struct hkWorld
-{
+class hkWorld
+{ public:
 	char m_pad0[0x78];
 	hkCollisionInputStub* m_collisionInput;  // +0x78
 };
@@ -131,7 +131,7 @@ struct hkOwnerStub
 	hkWorldStub2* m_world;             // +0x1c
 };
 
-struct hkMotion;
+class hkMotion;
 struct hkEntityStub;
 
 // hkContactPointConfirmedEvent, 0x28 bytes inside the stack frame (esp+0x68..0x8c).
@@ -160,10 +160,10 @@ struct hkSimpleConstraintUtilCollideParams
 };
 
 // hkMotion: only the fields used here (x86 offsets).
-struct hkVelocityAccumulator;
+class hkVelocityAccumulator;
 struct hkStepInfo;
-struct hkMotion
-{
+class hkMotion
+{ public:
 	virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
 	virtual hkVelocityAccumulator* buildAccumulator(const hkStepInfo& stepInfo, hkVelocityAccumulator* acc);   // slot 5 (inferred)
 	virtual void integrateFromAccumulator(const hkStepInfo& stepInfo, hkVelocityAccumulator* acc);              // slot 6 (inferred)
@@ -188,8 +188,8 @@ struct hkEntityStub
 	void* m_contactListeners;          // +0xa0 first dword of the listener array (tested for non-zero)
 };
 
-struct hkConstraintInstance
-{
+class hkConstraintInstance
+{ public:
 	char m_pad0[8];
 	hkOwnerStub* m_owner;              // +8 (hkSimpleConstraintOwner / simulation island)
 	char m_pad1[4];
@@ -197,8 +197,8 @@ struct hkConstraintInstance
 };
 
 // hkVelocityAccumulator: 0x80 bytes. Only the fields touched here are named.
-struct hkVelocityAccumulator
-{
+class hkVelocityAccumulator
+{ public:
 	hkUint8 m_type;                    // +0
 	char m_pad1[0xf];
 	float m_linearVelocity[4];         // +0x10
@@ -210,8 +210,8 @@ struct hkVelocityAccumulator
 };
 
 // hkConstraintQueryIn (0x48 bytes copied by hkSoftContactConstraintData::buildJacobian).
-struct hkConstraintQueryIn
-{
+class hkConstraintQueryIn
+{ public:
 	float m_deltaTime;                              // +0 (inferred: multiplies the -1.3 factor)
 	char m_pad4[0x18 - 4];
 	float m_softScaledA;                            // +0x18 scaled by hkSoftContactConstraintData (inferred)
