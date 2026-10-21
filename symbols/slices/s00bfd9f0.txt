@@ -1,0 +1,31 @@
+; slice s00bfd9f0 = 0x00bfd9f0..0x00bfec30 - exact decorated names for the difftest resolver
+; (manifest.txt rows are byte-exact; the rest are the nonmatching.txt entries)
+00bfd9f0 ?GetNounID@cCommunity@@QAEXPAM@Z  # complete, non-exact (see nonmatching.txt)
+00bfdc50 ?Push@cCommunity@@QAEXPAX0@Z  # complete, non-exact
+00bfddc0 ?EnsureTimer@cCommunity@@QAEXPAX@Z  # complete, non-exact
+00bfde50 ?ReadPhase@cCommunity@@QAEME@Z  # byte-exact
+00bfdea0 ?GetPhaseRatio@cCommunity@@QAEMXZ  # byte-exact
+00bfdeb0 ?ResolveID@cCommunity@@QAEPAXH@Z  # byte-exact
+00bfdf00 ?GetScaledFloat@cCommunity@@QAEMXZ  # complete, non-exact
+00bfdf20 ?AdvancePhase@cCommunity@@QAEXM@Z  # byte-exact
+00bfdf60 ?SetID@cCommunity@@QAEXH@Z  # byte-exact
+00bfdf80 ?GetNoun@cCommunity@@QAEPAXXZ  # complete, non-exact
+00bfdfb0 ?SetState@cCommunity@@QAEXH@Z  # byte-exact
+00bfdff0 ?GetProgress@cCommunity@@QAEMXZ  # complete, non-exact
+00bfe0c0 ?HasNoun@cCommunity@@QAEHXZ  # complete, non-exact
+00bfe0f0 ?Write@cCommunity@@QAEEPAX@Z  # complete, non-exact
+00bfe230 ?FUN_00bfe230@CStub230@@QAEXPAD0@Z  # byte-exact
+00bfe260 ?FillPair@cCommunity@@QAEPAXPAD@Z  # byte-exact
+00bfe310 ?FUN_00bfe310@@YAXPAD@Z  # byte-exact
+00bfe450 ?Activate@cCommunity@@QAEXHPAURefObj@@@Z  # complete, non-exact
+00bfe4d0 ?Deactivate@cCommunity@@QAEXXZ  # complete, non-exact
+00bfe530 ?SetupScenery@cCommunity@@QAEXXZ  # complete, non-exact
+00bfe5d0 ?Read@cCommunity@@QAEEPAX@Z  # complete, non-exact
+00bfe690 ?LoadModel@cCommunity@@QAEXPAX@Z  # complete, non-exact
+00bfe6c0 ?ReleaseTable@cCommunity@@QAEXXZ  # complete, non-exact
+00bfe7c0 ?FUN_00bfe7c0@@YAXPAUSeqIter@@PAPAPAURefObj@@PAPAU2@2PAPAX@Z  # complete, non-exact
+00bfe840 ?FUN_00bfe840@@YAXPAUSeqIter@@00@Z  # complete, non-exact
+00bfe900 ?SpawnAt@cCommunity@@QAEXPAM@Z  # complete, non-exact
+00bfea10 ?Teardown@cCommunity@@QAEXXZ  # complete, non-exact
+00bfeb00 ?InitScenery@cCommunity@@QAEXXZ  # complete, non-exact
+00bfec10 ?Front@cCommunity@@QAEPAXXZ  # complete, non-exact
