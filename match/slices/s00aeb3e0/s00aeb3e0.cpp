@@ -119,7 +119,7 @@ struct SpaceTool {
 
     // neighbouring / intra-slice callees, thiscall on the same object
     void* FUN_00aeb160(int a1, int a2, int a3, int a4, int a5, int a6, int a7); // 0x00aeb160 AddEntry
-    void* FUN_00aeb240(void* obj, void* a2, int a3, int a4, int a5);       // 0x00aeb240 CreateEntry
+    void* FUN_00aeb240(int a1, int a2, int a3, int a4, int a5, int a6);    // 0x00aeb240 CreateEntry
     void  FUN_00aebe90(void* dlg);                               // 0x00aebe90 ShowDialog
     void  FUN_00aeb090();                                        // 0x00aeb090 Cleanup
     void  FUN_00aea850(void* p);                                 // 0x00aea850 ReleaseSelected
@@ -322,8 +322,7 @@ void SpaceTool::FUN_00aeb720(int a1, int a2, int a3, int a4, int a5, int a6)
 // @ 0x00aeb760
 void SpaceTool::FUN_00aeb760(int a1, int a2, int a3, int a4, int a5, int a6)
 {
-    void* dlg = FUN_00aeb240((void*)(size_t)a1, (void*)(size_t)a2, a3, a4, a5);
-    (void)a6;
+    void* dlg = FUN_00aeb240(a1, a2, a3, a4, a5, a6);
     FUN_00aebe90(dlg);
 }
 
@@ -376,13 +375,13 @@ void SpaceTool::FUN_00aeb890(int* msg, int a2, int a3, int a4)
 
     int id = msg[0];
     if (id == (int)0xcaff0f72) {
-        void* dlg = FUN_00aeb240((void*)(size_t)v, (void*)0, 1, (int)0x2ea8fb98, (int)0xc8fbf7d7);
+        void* dlg = FUN_00aeb240(v, 0, 1, (int)0x2ea8fb98, (int)0xc8fbf7d7, 0);
         FUN_00aebe90(dlg);
     } else if (id == 0x1994745) {
         FUN_00ae9f50();
         vt4(SP_MessageServer(), 0x18 / 4, 0x490d429, 0, 0, 0);
     } else if (id == 0x2d5dcec) {
-        void* dlg = FUN_00aeb240((void*)(size_t)a3, (void*)(size_t)a4, 1, msg[1], msg[3]);
+        void* dlg = FUN_00aeb240(a3, a4, 1, msg[1], msg[3], 0);
         FUN_00aebe90(dlg);
     }
 
