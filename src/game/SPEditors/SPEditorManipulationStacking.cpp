@@ -17,11 +17,11 @@ typedef float hkReal;
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 enum { HK_ARRAY_FLAG_MASK = 0x3fffffff, HK_ARRAY_DONT_DEALLOCATE = (int)0x80000000 };
 struct hkArrayUtil { static void _reserveMore(void* arr, int elemSize); };
-struct hkThreadMemory { void deallocateChunk(void* p, int nbytes, int memClass); };
+class hkThreadMemory { public: void deallocateChunk(void* p, int nbytes, int memClass); };
 extern unsigned long g_hkThreadMemoryTlsIndex;       // 0x16e4174
 static inline hkThreadMemory* getThreadMemory() { return (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTlsIndex); }
 template <typename T>
-struct hkArray {
+class hkArray { public:
     T* m_data; int m_size; int m_capacityAndFlags;
     void pushBack(const T& t) {
         if (m_size == (m_capacityAndFlags & HK_ARRAY_FLAG_MASK)) hkArrayUtil::_reserveMore(this, (int)sizeof(T));
@@ -43,7 +43,7 @@ struct hkReferencedObject_s0108_2350 {
     uint16_t m_referenceCount;
     hkReferencedObject_s0108_2350() : m_referenceCount(1) {}
     virtual ~hkReferencedObject_s0108_2350() {}
-    virtual void calcStatistics(struct hkStatisticsCollector* c) const {}
+    virtual void calcStatistics(class hkStatisticsCollector* c) const {}
     void addReference() { if (m_memSizeAndFlags != 0) m_referenceCount = (uint16_t)(m_referenceCount + 1); }   // 0x01082590
     void removeReference() {
         if (m_memSizeAndFlags != 0) {
@@ -53,7 +53,7 @@ struct hkReferencedObject_s0108_2350 {
     }
 };
 struct hkShape_s0108_2350 : hkReferencedObject_s0108_2350 {};
-struct hkStatisticsCollector {
+class hkStatisticsCollector { public:
 virtual void s0();
 virtual void s1();
     virtual void addArray(const char* name, int elemSize, const void* ptr, int usedBytes, int allocatedBytes);   // +8
@@ -165,7 +165,7 @@ struct hkWorldOperationQueue {
     void queueOperation(const hkWorldOperationBase& op);                // 0x109afe0
     void executeAllPending();                                           // 0x109b490
 };
-struct hkWorldLinearCaster {
+class hkWorldLinearCaster { public:
     const void* vtbl_;
     uint32_t pad[15];
     float m_shapeInputTolerance;                        // +0x40 = 2^-23 (0x34000000)
