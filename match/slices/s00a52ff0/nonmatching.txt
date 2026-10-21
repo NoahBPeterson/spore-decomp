@@ -1,7 +1,7 @@
-00a52ff0  434  Group::Init: not emitted as a symbol of similar size (inlined / different COMDAT split); logic modeled from the card
+00a52ff0  434  Group::Init: not emitted as a symbol of similar size (inlined / different COMDAT split); logic modeled from the card ; difftest UNSUPPORTED (0/400 valid inputs; all 400 discard as fault(read) - the Eapd Group layout the harness would have to synthesise is not modelled; 0/168 insns covered)
 00a53210  14  Init@FixedPool: imul scheduled before the mnNodeSize store (2-instruction scheduler swap) ; difftest WEAK (249 valid, 33% cov)
 00a53310  61  artists_play_setname: bIsDynamic-guarded name/groupid update; not chosen as best-size symbol ; difftest PASS (400 valid, 100% cov)
-00a53360  232  FixedHashtableAllocator::InitBuckets: x87 bucket-count computation; no symbol of similar size emitted
+00a53360  232  FixedHashtableAllocator::InitBuckets: x87 bucket-count computation; no symbol of similar size emitted ; difftest UNSUPPORTED (0/400 valid inputs; discards fake-arity=192, fault(write)=182, fault(pool-limit)=23; 0/91 insns covered)
 00a535e0  51  ParamTable::AllocNode: branch polarity and register selection still differ ; difftest FAIL (empty-pool path)
 00a53640  58  ParamIter::ParamIter: vftable store ordering/reduced regalloc still differs ; difftest PASS (327 valid, 100% cov)
 00a536a0  97  ParamIter::Next: tag-test lowering (sub/je chain) and register shape differ ; difftest FAIL
@@ -12,6 +12,6 @@
 00a53b90  97  Play::Init: InitAllocator record build + FixedPool::Init call; frame/register allocation differs. References _g_eapdAlloc so difftest cannot link it
 00a53c20  84  ParamTable::LocateOrInsert: map find/insert path; frame and register allocation differ ; difftest FAIL
 00a53c90  137  VoiceList-init-from-name: temp FixedPool on stack; original reads ecx at entry so difftest cannot run it
-00a53d20  274  Play::StartVoice: voice-manager vtable dispatch + ParamIter walk; per-argument register allocation differs
-00a53e60  250  Play::ParamEvent: symbol/float param insertion via vtable slots +0x18/+0x1c; register/stack ordering differs
-00a53b20  20  complete; listed as byte-exact by the session but run_all shows DIFF 20 bytes; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast 
+00a53d20  274  Play::StartVoice: voice-manager vtable dispatch + ParamIter walk; per-argument register allocation differs ; difftest UNSUPPORTED (harness error: UcError invalid memory read, UC_ERR_READ_UNMAPPED - the voice-manager vtable graph cannot be faked with default inputs)
+00a53e60  250  Play::ParamEvent: symbol/float param insertion via vtable slots +0x18/+0x1c; register/stack ordering differs ; difftest UNSUPPORTED (harness error: UcError invalid memory read, UC_ERR_READ_UNMAPPED - same voice-manager/ParamIter pointer graph)
+00a53b20  20  Play::~Play: UpdatePlaying() inlined call sequence; 20 diff bytes (run_all-measured) ; difftest UNSUPPORTED (0/400 valid inputs; discards fault(write)=184, fault(read)=180, fault(pool-limit)=29; 0/25 insns covered)

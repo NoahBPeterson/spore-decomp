@@ -174,6 +174,81 @@ public:
 };
 
 // ---------------------------------------------------------------------------
+// CursorRegistry (0xa663e0): the owner class of 0xa663e0 is not identified in
+// the PDB, but its layout is visible in the code: an eastl hashtable of cursor
+// records at +0x3c (find instantiated at 0xdb4780) and the instance map at
+// +0x90 that 0xa65cd0 operates on (it passes its own `this` there).
+// ---------------------------------------------------------------------------
+struct CursorLink {
+    void*       mpValue;   // +0x00  (record whose +8 field is an instance id)
+    CursorLink* mpNext;    // +0x04  (intrusive link; == this when the list ends)
+};
+
+// value_type of the +0x3c hashtable: pair<unsigned const, ImageCursor>; the
+// record itself is 8 bytes and the inserted node exposes it at node+8.
+struct CursorValue {
+    uint32_t mKey;     // +0x00
+    uint32_t mValue;   // +0x04
+};
+
+struct CursorIter {
+    void* mpNode;      // +0x00  (node, or the bucket-array sentinel)
+    void* mpTable;     // +0x04
+};
+
+struct InsertResult {
+    void*    mpNode;        // +0x00
+    uint32_t mBucketIndex;  // +0x04
+    uint8_t  mbInserted;    // +0x08
+};
+
+struct CursorTable {
+    void*    mpAllocVtbl;    // +0x00
+    void**   mpBucketArray;  // +0x04
+    uint32_t mnBucketCount;  // +0x08
+    CursorIter  FindNode(const void* value);                         // 0xdb4780 (thiscall)
+    void        Insert(InsertResult* out, const CursorValue* v, bool bInsert);  // 0xa65ed0
+    CursorValue* InsertIfAbsent(const CursorValue* value);           // 0xa66170
+};
+
+struct InstanceReleaser {
+    void Remove(int id);                            // 0xa65cd0 (thiscall)
+};
+
+struct InstanceResetter {
+    void Reset(uint32_t a, uint32_t b, uint32_t c, uint32_t d);   // 0xa655f0 (thiscall)
+};
+
+// Record linked into a per-key cursor list.  The intrusive list node is the
+// first member, so the element address is the node address and +8 is the id
+// that 0xa663e0 / 0xa66410 hand to InstanceReleaser::Remove.
+struct CursorNode {
+    CursorNode* mpNext;   // +0x00
+    CursorNode* mpPrev;   // +0x04
+    uint32_t    mnId;     // +0x08  (instance id)
+};
+
+// List head stored inside each hashtable node at node+8 (that is the pointer
+// InsertIfAbsent returns) and mirrored on the stack for the splice in 0xa66410.
+struct CursorListHead {
+    CursorNode* mpNext;   // +0x00
+    CursorNode* mpPrev;   // +0x04
+};
+
+class CursorRegistry {
+public:
+    void*       mpVtbl;      // +0x00
+    void*       mpField4;    // +0x04
+    char        pad08[0x34]; // +0x08 .. +0x3b
+    CursorTable mCursors;    // +0x3c
+    char        pad48[0x9c]; // +0x48 .. +0xe3
+    uint32_t    mnCurId;     // +0xe4
+    uint32_t    mnCurId2;    // +0xe8
+    void RemoveAllFor(void* key, int unused);            // 0xa663e0
+    void RemoveCurrentClass(CursorValue value);          // 0xa66410
+};
+
+// ---------------------------------------------------------------------------
 // external helpers used in this slice
 // ---------------------------------------------------------------------------
 uint32_t EapdHashString(const char* s);                           // 0xa66970

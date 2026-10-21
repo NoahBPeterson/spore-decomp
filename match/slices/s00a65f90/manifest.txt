@@ -1,3 +1,4 @@
+slices/s00a65f90/s00a65f90.cpp  ?RemoveAllFor@CursorRegistry@@QAEXPAXH@Z  00a663e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a65f90/s00a65f90.cpp  ?Alloc@EapdSystemOverflow@@QAEPAXI@Z  00a66900  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a65f90/s00a65f90.cpp  ?Free@EapdSystemOverflow@@QAEXPAX@Z  00a66930  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a65f90/s00a65f90.cpp  ?EapdHashString@@YAIPBD@Z  00a66970  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

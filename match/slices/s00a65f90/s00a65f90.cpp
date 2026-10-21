@@ -74,6 +74,27 @@ uint32_t InstanceManager::AddInstance(uint32_t glist)
     return id;
 }
 
+// @ 0xa66170
+CursorValue* CursorTable::InsertIfAbsent(const CursorValue* value)
+{
+    CursorIter it = FindNode(value);
+    if (it.mpNode != mpBucketArray[mnBucketCount])
+        return (CursorValue*)((char*)it.mpNode + 8);
+    CursorValue pair = *value;
+    InsertResult res;
+    Insert(&res, &pair, false);
+    return (CursorValue*)((char*)res.mpNode + 8);
+}
+
+// @ 0xa663e0
+void CursorRegistry::RemoveAllFor(void* key, int unused)
+{
+    CursorLink* node = (CursorLink*)mCursors.InsertIfAbsent((const CursorValue*)&key);
+    while (node->mpNext != node)
+        ((InstanceReleaser*)this)->Remove(*(int*)((char*)node->mpValue + 8));
+    (void)unused;
+}
+
 // @ 0xa665f0
 Hashtable* Hashtable::Construct(void* name)
 {
@@ -487,6 +508,53 @@ HashIter Hashtable::erase(HashIter it)
     }
     --mnElementCount;
     return out;
+}
+
+// @ 0xa66410
+void CursorRegistry::RemoveCurrentClass(CursorValue value)
+{
+    uint32_t saved = mnCurId;
+    CursorListHead local;
+    local.mpNext = (CursorNode*)&local;
+    local.mpPrev = (CursorNode*)&local;
+
+    CursorListHead* head = (CursorListHead*)mCursors.InsertIfAbsent(&value);
+
+    // Swap the per-key list with the local head, then repair both ends.
+    CursorNode* hn = head->mpNext;
+    CursorNode* hp = head->mpPrev;
+    CursorNode* ln = local.mpNext;
+    CursorNode* lp = local.mpPrev;
+    head->mpNext = ln;
+    head->mpPrev = lp;
+    local.mpNext = hn;
+    local.mpPrev = hp;
+
+    if (local.mpNext == (CursorNode*)head) {
+        local.mpNext = (CursorNode*)&local;
+        local.mpPrev = (CursorNode*)&local;
+    } else {
+        local.mpPrev->mpNext = (CursorNode*)&local;
+        local.mpNext->mpPrev = (CursorNode*)&local;
+    }
+
+    if (head->mpNext == (CursorNode*)&local) {
+        head->mpNext = (CursorNode*)head;
+        head->mpPrev = (CursorNode*)head;
+    } else {
+        head->mpPrev->mpNext = (CursorNode*)head;
+        head->mpNext->mpPrev = (CursorNode*)head;
+    }
+
+    while (local.mpPrev != (CursorNode*)&local) {
+        uint32_t id = local.mpNext->mnId;
+        ((InstanceReleaser*)this)->Remove((int)id);
+        mnCurId = id;
+        mnCurId2 = 0xFFFFFFFFu;
+        ((InstanceResetter*)this)->Reset(value.mKey, (uint32_t)value.mValue, 0, 0);
+    }
+
+    mnCurId = saved;
 }
 
 // @ 0xa66550

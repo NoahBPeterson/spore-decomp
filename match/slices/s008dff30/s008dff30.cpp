@@ -69,8 +69,7 @@ struct AutoRefVec {
 };
 
 // Shared header of every node-based eastl::hashtable instantiation in this slice.
-struct HashTable {
-    uint32 mUnk0;               // +0x00
+struct HashTable {    uint32 mUnk0;               // +0x00
     void** mpBucketArray;       // +0x04
     uint32 mnBucketCount;       // +0x08
     uint32 mnElementCount;      // +0x0c
