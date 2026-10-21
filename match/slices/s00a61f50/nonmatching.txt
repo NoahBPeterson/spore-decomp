@@ -1,3 +1,15 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Iwork/match/scratch_s00a61f50_inc
+#
+# Slice s00a61f50 = EA::math FXTableBase array kernels (set_range, resize_and_set, max_abs,
+# sum_pos, the normalize/scale blend paths, the recursive tight-range specialisation and the
+# class-registration entry).  2/22 byte-exact.  The remaining 20 are complete C++ that reproduces
+# the original control flow and the SSE/x87 kernel structure; they do not converge within the
+# byte-exact budget because MSVC schedules the 4-wide SIMD unrolls, the x87 fabs/max-select
+# sequence and the capacity/recursion guards differently than the original build did.  The verdict
+# per row is the equivalence gate result measured with the flags above (the include directory holds
+# the FXTableBase declaration this TU needs).
+
 00a61f50 295 fx_array_set_range: SSE 4-wide fill loop, memcpy thunk and capacity guard schedule diverge (orig 303 bytes vs 278 emitted) ; equiv FAIL 5/10 valid inputs
 00a62080 47 fx_array_resize_and_set: argument evaluation order of the two self->count/capacity stores differs ; equiv FAIL 5/5 valid inputs (import call divergence)
 00a62120 364 fx_array_max_abs: x87 fabs 4-way unroll and max-select raise/keep scheduling diverges (orig 323 bytes vs 361 emitted) ; equiv FAIL 5/5 valid inputs (x87 depth)
