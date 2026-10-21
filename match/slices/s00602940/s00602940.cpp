@@ -79,7 +79,7 @@ void __cdecl ResetScrollFrameColor(IWin* w);                    // 0x00807040
 void __cdecl SetRotation(IWin* w, const float* q);              // 0x00808230 UI::cWindowTransform::SetRotation
 }
 IWin* __stdcall GetLayoutManager(uint32_t id);          // 0x00805070 (SPUIHelpers::GetLayoutManager)
-struct cSPUILayoutManager { IWin* GetWorldMainWindow(); };  // 0x00810620
+class cSPUILayoutManager { public: IWin* GetWorldMainWindow(); };  // 0x00810620
 const float* __cdecl FUN_00805260(IWin* w);             // 0x00805260 -> float[4]
 extern float gF1485720;   // 0x01485720
 extern float gF151d728;   // 0x0151d728

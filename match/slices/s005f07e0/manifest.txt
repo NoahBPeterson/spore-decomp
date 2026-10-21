@@ -12,5 +12,5 @@ slices/s005f07e0/s005f07e0.cpp  ?UpdateButtonStatus@cSPSwatchPlanner@SP@@QAEXXZ 
 slices/s005f07e0/s005f07e0.cpp  ?OffRollover@cSPSwatchPlanner@SP@@UAEXXZ  005f1430  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005f07e0/s005f07e0.cpp  ?CanDrag@cSPSwatchPlanner@SP@@QAE_NXZ  005f1460  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005f07e0/s005f07e0.cpp  ?GetImageWindow@cSPSwatchPlanner@SP@@QAEPAVIWindow@UTFWin@EA@@XZ  005f14a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s005f07e0/s005f07e0.cpp  ?SetImage@cSPSwatchPlanner@SP@@QAEXABUKey@ResourceMan@EA@@@Z  005f1500  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f07e0/s005f07e0.cpp  ?SetImage@cSPSwatchPlanner@SP@@QAEXABVKey@ResourceMan@EA@@@Z  005f1500  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005f07e0/s005f07e0.cpp  ?HandleMessage@cSPSwatchPlanner@SP@@UAE_NIPAX@Z  005f1630  /O2 /MD /Gy /TP /arch:SSE /fp:fast

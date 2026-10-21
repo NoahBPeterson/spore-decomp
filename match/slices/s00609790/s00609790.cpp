@@ -26,7 +26,7 @@ inline void* operator new(unsigned int, void* p) { return p; }
 extern char gEmptyString[];  // 0x01667bac
 
 namespace eastl {
-struct allocator {
+class allocator { public:
   allocator() {}
 };
 // fixed_vector_allocator<..., true, eastl::allocator>: overflow allocator + pool pointer.
@@ -347,7 +347,7 @@ int EVP_DecryptUpdate(evp_cipher_ctx_st* ctx, unsigned char* out, int* outl, con
 namespace EA {
 namespace Thread {
 template <typename T>
-struct AtomicInt {
+class AtomicInt { public:
   AtomicInt() { _InterlockedExchange((volatile long*)&mValue, 0); }
   volatile T mValue;
 };
@@ -657,11 +657,11 @@ void DestroyURLParts(cURLParts* p) { p->~cURLParts(); }
 // @ 0x00609e40
 namespace EA {
 namespace Thread {
-struct Futex {
+class Futex { public:
   void* mCS;
   void Unlock();
 };
-struct AutoFutex {
+class AutoFutex { public:
   void* mpFutex;
   ~AutoFutex();
 };
@@ -696,13 +696,13 @@ struct ListIterator {
   }
 };
 template <typename T, typename A = allocator>
-struct ListBase {
+class ListBase { public:
   ListNodeBase mNode;
   A mAllocator;
   void DoClear();
 };
 template <typename T, typename A = allocator>
-struct list : public ListBase<T, A> {
+class list : public ListBase<T, A> { public:
   typedef ListIterator<T> iterator;
   void DoErase(ListNodeBase* pNode) {
     pNode->remove();

@@ -13,7 +13,7 @@ inline void* operator new(size_t, void* p) throw() { return p; }
 
 namespace EA {
 namespace ResourceMan {
-struct Key {
+class Key { public:
   uint32_t instanceID;
   uint32_t typeID;
   uint32_t groupID;
@@ -30,7 +30,7 @@ struct KeyEqual {
 using EA::ResourceMan::Key;
 
 namespace eastl {
-struct allocator {
+class allocator { public:
   void* allocate(size_t n) { return operator new[](n, "Editor", 0, 0, "allocator.h", 0xd1); }
   void deallocate(void* p) { operator delete(p); }
 };

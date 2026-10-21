@@ -116,7 +116,7 @@ using EA::AutoRefCount;
 using EA::UTFWin::IWinProc;
 using EA::UTFWin::IWindow;
 
-struct cSPUILayout {
+class cSPUILayout { public:
   cSPUILayout();  // 0x810000
   bool Init(const ResourceKey* pKey, int, uint32_t);   // 0x8120d0
   void GetObjects();                                   // 0x8100c0
@@ -140,7 +140,7 @@ namespace SPUIHelpers {
 void* __stdcall GetLayoutManager(uint32_t id);  // 0x805070
 }
 
-struct cSPUILayoutManager {
+class cSPUILayoutManager { public:
   virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
   virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
   virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();

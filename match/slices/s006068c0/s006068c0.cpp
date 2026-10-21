@@ -326,7 +326,7 @@ uint32_t FNVHash(const char* s, uint32_t seed, bool lower);  // 0x932e80
 
 namespace EA {
 namespace DateTime {
-struct DateTime {
+class DateTime { public:
   int64_t mnSeconds;
   DateTime(int timeFrame);  // 0x92e3d0
 };

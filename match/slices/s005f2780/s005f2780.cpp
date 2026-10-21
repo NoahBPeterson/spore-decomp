@@ -76,7 +76,7 @@ class IUnknown32 {
 }  // namespace COM
 
 namespace ResourceMan {
-struct Key {
+class Key { public:
   unsigned int mInstance, mType, mGroup;
   bool operator==(const Key& b) const {
     return mInstance == b.mInstance && mType == b.mType && mGroup == b.mGroup;
@@ -99,7 +99,7 @@ struct Point2D {
   }
 };
 
-struct RectT {
+class RectT { public:
   RectT() {}
   float left, top, right, bottom;
   RectT(const RectT& r) : left(r.left), top(r.top), right(r.right), bottom(r.bottom) {}
@@ -136,7 +136,7 @@ class IWindow : public COM::IUnknown32 {
   virtual void RemoveWinProc(IWinProc* proc);  // +0x108
 };
 
-struct Message {
+class Message { public:
   uint32_t pad0[2];
   uint32_t mEventType;                         // +0x8
   union { uint32_t mParam0c; float mX; };      // +0xc
@@ -178,7 +178,7 @@ class Server {
 void RemoveHandler(Server* server, IHandler* handler, const uint32_t* ids, uint32_t count,
                    int priority);  // 0x00571db0
 
-struct AutoHandler {
+class AutoHandler { public:
   Server* mpServer;
   IHandler* mpHandler;
   const uint32_t* mpIdArray;
@@ -240,7 +240,7 @@ class cSPEditorEconomy {
   virtual int GetItemStatus(const Key* key, struct cItemCostInfo* info);  // +0x10
 };
 
-struct cSPPaletteItemRollover;
+class cSPPaletteItemRollover;
 struct cSPPaletteInfo : public EA::RefCountTemplate<int> {
   cSPEditorEconomy* mEconomy;               // +0x8
   void* mTheme;                             // +0xc
@@ -251,7 +251,7 @@ struct cSPPaletteInfo : public EA::RefCountTemplate<int> {
   bool mUseModelKeyForCost;                 // +0x31
 };
 
-struct cSPPaletteItemRollover {
+class cSPPaletteItemRollover { public:
   void Hide();  // 0x005ed6c0
 };
 class cSPSwatchManager {
@@ -344,7 +344,7 @@ class cModelWorld {
  public:
   PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14)
   PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23) PV(24)
-  virtual int GetEffectCount(class cMWModel* model);  // +0x64
+  virtual int GetEffectCount(struct cMWModel* model);  // +0x64
   PV(26) PV(27)
   virtual void StartEffect(cMWModel* model, uint32_t effectID, int a, float b, int index);  // +0x70
   PV(29) PV(30) PV(31) PV(32) PV(33) PV(34) PV(35) PV(36) PV(37) PV(38) PV(39) PV(40) PV(41) PV(42)
@@ -352,9 +352,9 @@ class cModelWorld {
   PV(57) PV(58) PV(59) PV(60) PV(61) PV(62) PV(63) PV(64) PV(65) PV(66) PV(67) PV(68) PV(69) PV(70)
   PV(71) PV(72) PV(73) PV(74) PV(75) PV(76) PV(77) PV(78) PV(79) PV(80) PV(81) PV(82) PV(83) PV(84)
   PV(85) PV(86) PV(87) PV(88) PV(89) PV(90) PV(91)
-  virtual void DestroyModel(class cMWModel* model, bool immediate);  // +0x170
+  virtual void DestroyModel(struct cMWModel* model, bool immediate);  // +0x170
 };
-class cMWModel {
+struct cMWModel { private:
  public:
   cModelWorld* mpWorld;  // +0x0
   uint32_t mFlags;       // +0x4
@@ -392,7 +392,7 @@ class cSwatchRenderer {
   virtual void SetTexture(void* texture);  // +0x88
 };
 
-struct cSwatch3DView {
+class cSwatch3DView { public:
   bool mVisible;                        // +0x10
   cUILayeredObject* mLayeredObject;     // +0x14
   uint32_t pad18[7];

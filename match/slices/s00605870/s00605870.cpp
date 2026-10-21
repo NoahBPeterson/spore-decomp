@@ -92,7 +92,7 @@ using EA::UTFWin::IWindow;
 // ---------------------------------------------------------------------------
 // EASTL subset
 namespace eastl {
-struct allocator {};
+class allocator { public:};
 struct sp_vector_allocator {
   uint32_t mData[2];
   sp_vector_allocator() {}

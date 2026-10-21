@@ -75,7 +75,7 @@ class IUnknown32 {
 }  // namespace COM
 
 namespace ResourceMan {
-struct Key {
+class Key { public:
   unsigned int mInstance, mType, mGroup;
   Key() : mInstance(0), mType(0), mGroup(0) {}
   Key(unsigned int instance, unsigned int type, unsigned int group)
@@ -83,7 +83,7 @@ struct Key {
 };
 }  // namespace ResourceMan
 
-struct RectT {
+class RectT { public:
   float left, top, right, bottom;
   RectT(const RectT& r) : left(r.left), top(r.top), right(r.right), bottom(r.bottom) {}
 };
@@ -110,7 +110,7 @@ class IWindow : public COM::IUnknown32 {
   virtual void RemoveWinProc(IWinProc* proc);  // +0x108
 };
 
-struct Message {
+class Message { public:
   uint32_t pad0[2];
   uint32_t mEventType;  // +0x8
   uint32_t mControlID;  // +0xc
@@ -146,7 +146,7 @@ class Server {
 void RemoveHandler(Server* server, IHandler* handler, const uint32_t* ids, uint32_t count,
                    int priority);  // 0x00571db0
 
-struct AutoHandler {
+class AutoHandler { public:
   Server* mpServer;
   IHandler* mpHandler;
   const uint32_t* mpIdArray;

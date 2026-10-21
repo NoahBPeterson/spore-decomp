@@ -118,7 +118,7 @@ class IWinProc {
   virtual int AddRef();
   virtual int Release();
 };
-struct Message {
+class Message { public:
   IWindow* mpSource;  // +0x0
   uint32_t pad4;
   uint32_t mType;     // +0x8

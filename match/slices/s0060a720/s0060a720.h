@@ -22,7 +22,7 @@ inline void* operator new(unsigned int, void* p) { return p; }
 extern char gEmptyString[];  // 0x01667bac
 
 namespace eastl {
-struct allocator {
+class allocator { public:
   allocator() {}
 };
 int CompareI(const char* p1, const char* p2, unsigned int n);  // 0x005f7870
@@ -76,11 +76,11 @@ typedef eastl::basic_string<char> string8;
 namespace EA {
 namespace Thread {
 template <typename T>
-struct AtomicInt {
+class AtomicInt { public:
   AtomicInt() { _InterlockedExchange((volatile long*)&mValue, 0); }
   volatile T mValue;
 };
-struct Futex {
+class Futex { public:
   uint32_t mCS[6];  // CRITICAL_SECTION
 };
 }  // namespace Thread

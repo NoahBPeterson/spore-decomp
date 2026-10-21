@@ -17,4 +17,4 @@ slices/s005ef440/s005ef440.cpp  ?SetLocked@cSPPaletteItemUIPlannerEdit@SP@@QAEX_
 slices/s005ef440/s005ef440.cpp  ?HandleMessage@cSPPaletteItemUIPlannerEdit@SP@@UAE_NIPAX@Z  005ef590  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005ef440/s005ef440.cpp  ??0cSPPaletteItemUIPlannerEdit@SP@@QAE@XZ  005ef6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005ef440/s005ef440.cpp  ??1cSPPaletteItemUIPlannerEdit@SP@@UAE@XZ  005ef760  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s005ef440/s005ef440.cpp  ?DoMessage@cSPPaletteItemUIPlannerEdit@SP@@UAE_NPAVIWindow@UTFWin@EA@@ABUMessage@45@@Z  005efcb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ef440/s005ef440.cpp  ?DoMessage@cSPPaletteItemUIPlannerEdit@SP@@UAE_NPAVIWindow@UTFWin@EA@@ABVMessage@45@@Z  005efcb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

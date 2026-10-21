@@ -12,14 +12,14 @@ struct ListNodeBase {
 
 namespace EA {
 namespace Thread {
-struct AutoFutex {
+class AutoFutex { public:
   void* mpFutex;
   AutoFutex(void* p) : mpFutex(p) { EnterCriticalSection(p); }
   ~AutoFutex() { LeaveCriticalSection(mpFutex); }
 };
 }  // namespace Thread
 namespace Internet {
-struct HTTPHeaders {
+class HTTPHeaders { public:
   void RemoveHeaderEntry(int fieldID, int index);                        // 0x00944ac0
   bool SetHeaderEntry(int fieldID, const char* pValue);                  // 0x00944db0
   bool GetHeaderEntry(int fieldID, const char** ppValue, int index);     // 0x009420e0

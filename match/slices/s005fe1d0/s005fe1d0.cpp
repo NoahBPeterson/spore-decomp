@@ -17,7 +17,7 @@ extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(int64_t* 
 
 namespace EA {
 namespace ResourceMan {
-struct Key {
+class Key { public:
   uint32_t instanceID;
   uint32_t typeID;
   uint32_t groupID;
@@ -118,7 +118,7 @@ class RefCountVTemplate {
 };
 
 namespace UTFWin {
-struct Message {
+class Message { public:
   class IWindow* source;   // +0x00
   uint32_t pad04;
   uint32_t eventType;      // +0x08
@@ -242,7 +242,7 @@ inline bool IsButtonDown(IWindow* window) {
 namespace eastl {
 extern wchar_t gEmptyString16[2];
 
-struct allocator {};
+class allocator { public:};
 
 class string16 {
  public:

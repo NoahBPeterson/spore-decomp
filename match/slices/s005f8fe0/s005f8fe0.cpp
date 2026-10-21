@@ -65,7 +65,7 @@ void* EASTL_allocator_allocate(unsigned n, const char* name, int a, int b, int c
 
 namespace eastl {
 
-struct allocator {
+class allocator { public:
   void* allocate(size_t n) { return operator new[](n, "Editor", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1); }
   void deallocate(void* p) { operator delete[](p); }
 };
@@ -385,7 +385,7 @@ struct DequeIterator {
 };
 
 template <typename T, typename Allocator, unsigned kDequeSubarraySize>
-class DequeBase {
+struct DequeBase { private:
  public:
   typedef DequeIterator<T, Allocator, kDequeSubarraySize> iterator;
   T** mpPtrArray;         // +0x00
@@ -430,7 +430,7 @@ DequeBase<T, Allocator, kDequeSubarraySize>::~DequeBase() {
   if (mpPtrArray) mAllocator.deallocate(mpPtrArray, mnPtrArraySize * sizeof(T*));
 }
 
-template class DequeBase<DequeItem, core_allocator_adapter, 4>;
+template struct DequeBase<DequeItem, core_allocator_adapter, 4>;
 
 }  // namespace eastl
 

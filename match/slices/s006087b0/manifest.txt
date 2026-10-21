@@ -2,7 +2,7 @@ slices/s006087b0/s006087b0.cpp  ?ShowLoginLayout@cAuthManager@Pollen@SP@@UAEX_N@
 slices/s006087b0/s006087b0.cpp  ?Login@cAuthManager@Pollen@SP@@UAEXXZ  00608ff0  /O2 /MD /Gy /TP /arch:SSE
 slices/s006087b0/s006087b0.cpp  ?ReadLoginLayout@cAuthManager@Pollen@SP@@QAEXXZ  006090e0  /O2 /MD /Gy /TP /arch:SSE
 slices/s006087b0/s006087b0.cpp  ?HandleMessage@cAuthManager@Pollen@SP@@UAE_NIPAX@Z  006091e0  /O2 /MD /Gy /TP /arch:SSE
-slices/s006087b0/s006087b0.cpp  ?HandleUIMessage@cAuthManager@Pollen@SP@@UAE_NPAVIWindow@UTFWin@EA@@ABUMessage@56@@Z  006092b0  /O2 /MD /Gy /TP /arch:SSE
+slices/s006087b0/s006087b0.cpp  ?HandleUIMessage@cAuthManager@Pollen@SP@@UAE_NPAVIWindow@UTFWin@EA@@ABVMessage@56@@Z  006092b0  /O2 /MD /Gy /TP /arch:SSE
 slices/s006087b0/s006087b0.cpp  ?Filter@cCanvasResFilter@Pollen@SP@@UAEXPAURequest@Resource@XHTML@EA@@@Z  00609460  /O2 /MD /Gy /TP /arch:SSE
 slices/s006087b0/s006087b0.cpp  ?Filter@cBuddyModeFilter@Pollen@SP@@UAEXPAURequest@Resource@XHTML@EA@@@Z  00609480  /O2 /MD /Gy /TP /arch:SSE
 slices/s006087b0/s006087b0.cpp  ??0cCanvasResFilter@Pollen@SP@@QAE@XZ  006094a0  /O2 /MD /Gy /TP /arch:SSE
