@@ -1,0 +1,14 @@
+010ac8f0 _hk1dLinearVelocityMotorBuildJacobian  # havok identical-code (symbols/havok_names.txt); cdecl, 5 args (dir,pivot,constraint,row,outInvMass)
+010acb50 _hkSetInvMassBuildJacobian  # havok identical-code; jacobian helper, third arg unused, writes tag 0x40411 + 16-byte row
+010acbb0 _hkAddVelocityBuildJacobian  # havok identical-code; jacobian helper, writes tag 0x40312 + 16-byte row
+010acbf0 _hkStabilizedBallSocketConstraintBuildJacobian  # havok identical-code; 3 identity rows, tau clamp, identity basis table at 0x015b9b20
+010ad020 hkConstraintBuildJacobianAndSetData_160  # template instantiation, 9 args, header 0xb18, calls 0x010abb90, stride 0xa0
+010ad0b0 hkConstraintBuildJacobianAndSetData_16  # template instantiation, 9 args, header 0xa17, calls 0x010ac550, stride 0x10
+010ad140 ??0hkMatrix6@@QAE@ABV0@@Z  # hkMatrix6 copy ctor, thiscall ret 4, 4 blocks x 0x30 bytes
+010ad1c0 _hkPoweredChain_ApplyMotorStatesToRows  # havok identical-code; (motorInfo,notLastRow,a,b) identity/zero rows for disabled motors
+010ad2d0 _hkPoweredChain_DisableMotorInMatrixRow_NextConstraint  # havok identical-code; zeroes prevOffDiagonal rows for disabled motors
+010ad360 _hkPoweredChain_OverwriteVelocityWithExplicitImpulse  # havok identical-code; returns the info pointer left in eax
+014a23a4 _HK_REAL_EPSILON  # FLT_EPSILON 1.1920929e-07 (global float)
+01485720 _HK_REAL_ONE  # 1.0f
+01485378 _HK_REAL_ZERO  # 0.0f
+015b9b20 _hk_identityBasis  # 4 hkVector4: (1,0,0,0),(0,1,0,0),(0,0,1,0),(0,0,0,1)
