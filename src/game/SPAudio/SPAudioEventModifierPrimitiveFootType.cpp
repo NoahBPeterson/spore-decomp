@@ -306,7 +306,7 @@ bool cEventModifierPrimitive_s00a3_9ce0::ReadTuningValues(const ResourceKey* key
 }
 namespace SP {
 namespace Audio {
-struct cEventModifierPrimitiveAlias : cEventModifierPrimitive_s00a3_9ce0 {
+class cEventModifierPrimitiveAlias : public cEventModifierPrimitive_s00a3_9ce0 { public:
     StrMap mMap;   // +0x18 (allocator slot) .. +0x2c
     int mPad30;
     cEventModifierPrimitiveAlias() : cEventModifierPrimitive_s00a3_9ce0("alias") {}
@@ -340,7 +340,7 @@ bool cEventModifierPrimitiveAlias::ReadTuningValues(const ResourceKey* key) {
 }
 namespace SP {
 namespace Audio {
-struct cEventModifierPrimitiveFootTypeBase : cEventModifierPrimitive_s00a3_9ce0 {
+class cEventModifierPrimitiveFootTypeBase : public cEventModifierPrimitive_s00a3_9ce0 { public:
     char mCurves[0x2200 - 0x18];
     cEventModifierPrimitiveFootTypeBase(const char* name);   // 0xa39930
     virtual ~cEventModifierPrimitiveFootTypeBase();
@@ -351,7 +351,7 @@ struct cEventModifierPrimitiveFootTypeBase : cEventModifierPrimitive_s00a3_9ce0 
 }
 namespace SP {
 namespace Audio {
-struct cEventModifierPrimitiveFootType : cEventModifierPrimitiveFootTypeBase {
+class cEventModifierPrimitiveFootType : public cEventModifierPrimitiveFootTypeBase { public:
     cEventModifierPrimitiveFootType() : cEventModifierPrimitiveFootTypeBase("footsteps") {}
     virtual void ModifyEvent(Command_s00a3_9ce0* cmd, int a, char* dst, int capacity);   // 0xa3aea0
 };
@@ -359,7 +359,7 @@ struct cEventModifierPrimitiveFootType : cEventModifierPrimitiveFootTypeBase {
 }
 namespace SP {
 namespace Audio {
-struct cEventModifierPrimitiveEpicFootType : cEventModifierPrimitiveFootTypeBase {
+class cEventModifierPrimitiveEpicFootType : public cEventModifierPrimitiveFootTypeBase { public:
     cEventModifierPrimitiveEpicFootType() : cEventModifierPrimitiveFootTypeBase("epicfootsteps") {}
     virtual void ModifyEvent(Command_s00a3_9ce0* cmd, int a, char* dst, int capacity);   // 0xa3af20
     virtual bool ReadTuningValues(const ResourceKey* key);                    // 0xa3af80
