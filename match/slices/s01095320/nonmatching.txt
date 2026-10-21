@@ -1,0 +1,10 @@
+01095320 - complete source; hkLinearParametricCurve::getTangent, NOT byte-exact (1500 vs 1043 bytes; blend branches / sqrt shape differ); equiv FAIL (memory pool)
+01095750 - complete source; hkLinearParametricCurve::getLengthFromStart, NOT byte-exact (125 vs 117 bytes); equiv FAIL (st0 x87 result)
+010957d0 - complete source; hkLinearParametricCurve::getBinormal, NOT byte-exact (205 vs 362 bytes; virtual getTangent call + constants); equiv UNSUPPORTED (0/400 inputs valid)
+01095960 - complete source; hkLinearParametricCurve::getPointsToDraw, NOT byte-exact (3 vs 347 bytes; body not reconstructed); equiv FAIL (memory pool)
+01095af0 - complete source; hkLinearParametricCurve::~hkLinearParametricCurve, NOT byte-exact (55 vs 101 bytes); equiv UNSUPPORTED (TlsGetValue unresolved)
+01095b60 - complete source; hkKeyframedRigidMotion::hkKeyframedRigidMotion, NOT byte-exact (49 vs 52 bytes); equiv FAIL (fake-arity)
+01095ba0 - complete source; AccumulatorClear, NOT byte-exact (49 vs 52 bytes); equiv FAIL (esp/ABI)
+01095be0 - complete source; hkKeyframedRigidMotion::applyForcesAndBuildAccumulator, NOT byte-exact (170 vs 192 bytes); equiv PASS
+01095ca0 - complete source; hkKeyframedRigidMotion::clone, NOT byte-exact (142 vs 132 bytes); equiv UNSUPPORTED (0/400 inputs valid)
+01095d80 - complete source; hkKeyframedRigidMotion::applyAccumulator, NOT byte-exact (1000 vs 850 bytes); equiv FAIL (fake-arity)
