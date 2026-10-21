@@ -511,6 +511,7 @@ struct hkStorageMeshSubpartStorage
     hkArray<hkUint32>              m_materials;           // +0x30
     hkArray<hkUint16>              m_materialIndices16;   // +0x3c
 
+    static hkStorageMeshSubpartStorage* init(hkStorageMeshSubpartStorage* s);  // 0x010c6a40
     ~hkStorageMeshSubpartStorage();   // 0x010c5de0
 };
 
@@ -570,7 +571,6 @@ hkStorageMeshSubpartStorage::~hkStorageMeshSubpartStorage()
                                                        (m_materials.m_capacityAndFlags & 0x3fffffff) << 2,
                                                        HK_MEMORY_CLASS_ARRAY);
     if (!(m_materialIndices8.m_capacityAndFlags & 0x80000000))
-    if (!(m_materialIndices8.m_capacityAndFlags & 0x80000000))
         hkThreadMemory::getInstance()->deallocateChunk(m_materialIndices8.m_data,
                                                        (int)(m_materialIndices8.m_capacityAndFlags & 0x3fffffff),
                                                        HK_MEMORY_CLASS_ARRAY);
@@ -619,35 +619,20 @@ hkStorageMeshShape* hkStorageMeshShape::finish(hkFinishLoadedObjectFlag f)
     return this;
 }
 
-// Coined name: the "0x30-byte element with an hkArray<u8> at +0x24" storage block of hkStorageMeshShape.
-struct hkStorageMeshShapeSubpartStorage
-{
-    hkUint32 m_pad00[9];          // +0x00..0x20
-    hkArray<hkUchar> m_items;     // +0x24
-
-    static hkStorageMeshShapeSubpartStorage* init(hkStorageMeshShapeSubpartStorage* s);  // 0x010c6a40
-};
-
 // @ 0x010c5f50
 void hkStorageMeshShape::addSubpart(const hkMeshShapeSubpart& p)
 {
-    hkStorageMeshSubpartStorage* st;
     hkMeshShapeSubpart* dst;
-    hkUint32* st_hi = (hkUint32*)0;
+    hkStorageMeshSubpartStorage* st;
 
     if (m_subparts.m_size == (int)(m_subparts.m_capacityAndFlags & 0x3fffffff))
         hkArrayUtil::_reserveMore(&m_subparts, 0x30);
     dst = (hkMeshShapeSubpart*)((char*)m_subparts.m_data + m_subparts.m_size * 0x30);
     m_subparts.m_size = m_subparts.m_size + 1;
 
-    st_hi = (hkUint32*)hkMemory::getInstance()->allocate(0x48, 0x22);
-    st = (hkStorageMeshSubpartStorage*)st_hi;
-    if (st_hi == 0) {
-        st = (hkStorageMeshSubpartStorage*)st_hi;
-    } else {
-        st_hi = (hkUint32*)hkStorageMeshShapeSubpartStorage::init((hkStorageMeshShapeSubpartStorage*)st_hi);
-        st = (hkStorageMeshSubpartStorage*)st_hi;
-    }
+    st = (hkStorageMeshSubpartStorage*)hkMemory::getInstance()->allocate(0x48, 0x22);
+    if (st != 0)
+        st = hkStorageMeshSubpartStorage::init(st);
 
     if (m_storage.m_size == (int)(m_storage.m_capacityAndFlags & 0x3fffffff))
         hkArrayUtil::_reserveMore(&m_storage, 4);
