@@ -214,12 +214,14 @@ void hkSphereCapsuleAgent::processCollision(const hkCdBody& bodyA, const hkCdBod
 			n.w = pB.w - pA.w;
 			const float ax = hkAbsf(n.x);
 			const float ay = hkAbsf(n.y);
-			const bool bx = ax <= ay;
+			// x87 `fcomp st(1)` + `test ah,5`/`jp` keeps the taken side on unordered, so the
+			// min/max pick is !(ay < ax), not (ax <= ay).
+			const bool bx = !(ay < ax);
 			const float small = bx ? ax : ay;
 			unsigned keep = 2u;
 			unsigned other = bx ? 0u : 1u;
 			if (hkAbsf(n.z) < small) { keep = bx ? 0u : 1u; other = 2u; }
-			const float from = bx ? (pB.x - pA.x) : (pB.y - pA.y);
+			const float from = bx ? (pB.y - pA.y) : (pB.x - pA.x);   // the max-|.| of x,y
 			const float oth  = (keep == 2u) ? (pB.z - pA.z) : (keep == 0u ? (pB.x - pA.x) : (pB.y - pA.y));
 			((float*)&n)[other] = 0.0f;
 			n.w = 0.0f;
@@ -300,12 +302,14 @@ void hkSphereCapsuleAgent::getClosestPoints(const hkCdBody& bodyA, const hkCdBod
 			n.w = pB.w - pA.w;
 			const float ax = hkAbsf(n.x);
 			const float ay = hkAbsf(n.y);
-			const bool bx = ax <= ay;
+			// x87 `fcomp st(1)` + `test ah,5`/`jp` keeps the taken side on unordered, so the
+			// min/max pick is !(ay < ax), not (ax <= ay).
+			const bool bx = !(ay < ax);
 			const float small = bx ? ax : ay;
 			unsigned keep = 2u;
 			unsigned other = bx ? 0u : 1u;
 			if (hkAbsf(n.z) < small) { keep = bx ? 0u : 1u; other = 2u; }
-			const float from = bx ? (pB.x - pA.x) : (pB.y - pA.y);
+			const float from = bx ? (pB.y - pA.y) : (pB.x - pA.x);   // the max-|.| of x,y
 			const float oth  = (keep == 2u) ? (pB.z - pA.z) : (keep == 0u ? (pB.x - pA.x) : (pB.y - pA.y));
 			((float*)&n)[other] = 0.0f;
 			n.w = 0.0f;
@@ -382,12 +386,14 @@ void hkSphereCapsuleAgent::staticGetClosestPoints(const hkCdBody& bodyA, const h
 			n.w = pB.w - pA.w;
 			const float ax = hkAbsf(n.x);
 			const float ay = hkAbsf(n.y);
-			const bool bx = ax <= ay;
+			// x87 `fcomp st(1)` + `test ah,5`/`jp` keeps the taken side on unordered, so the
+			// min/max pick is !(ay < ax), not (ax <= ay).
+			const bool bx = !(ay < ax);
 			const float small = bx ? ax : ay;
 			unsigned keep = 2u;
 			unsigned other = bx ? 0u : 1u;
 			if (hkAbsf(n.z) < small) { keep = bx ? 0u : 1u; other = 2u; }
-			const float from = bx ? (pB.x - pA.x) : (pB.y - pA.y);
+			const float from = bx ? (pB.y - pA.y) : (pB.x - pA.x);   // the max-|.| of x,y
 			const float oth  = (keep == 2u) ? (pB.z - pA.z) : (keep == 0u ? (pB.x - pA.x) : (pB.y - pA.y));
 			((float*)&n)[other] = 0.0f;
 			n.w = 0.0f;
