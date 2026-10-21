@@ -1,0 +1,27 @@
+# slice s00a60ef0 (EA::Audio::Eapd externals) -- functions that are NOT byte-exact.
+
+# Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+
+00a60fd0  slider_new        size 408 vs 420, 295 diff. Equivalence UNSUPPORTED (0/400 valid inputs, 100% fault(read)): the function dereferences the pd class registry globals, which are not populated in the harness, so no valid input could be built. Body is the correct pd_new/outlet_new/init shape; register allocation and an extra global reload differ.
+
+00a61180  slider_float       size equal, 75 diff. Equivalence PASS (224 valid, 73.8% coverage). Semantically equivalent; MSVC chose a different xmm/register allocation for the clamp and the outlet walk.
+
+00a61200  slider_setfloat    size 48 vs 68, 22 diff. Equivalence FAIL: ours writes xmm2 which the original never touches (clamp bounds reload register). The slice extent for 0x00a61200 is 68 bytes because it swallows the adjacent 0x00a61230 loadbang handler; with /Gy our COMDAT stops at 48, so the extent can never match.
+
+00a613c0  vinlet_new         size 151 vs 151, only 2 diff bytes at 0xa61411 and 0xa6141c. The two differing bytes are the [esp+0x30]/[esp+0x18] vs [esp+0x38]/[esp+0x20] frame offsets used to reload argc/argv after the pd calls; the instruction stream is otherwise identical. Equivalence UNSUPPORTED (pd globals unpopulated).
+
+00a61530  vinlet_setup       size 196 vs 221, 67 diff. The original normalises each class_add* result with "test al,al; setne al" before "and bl,al"; ours accumulates directly in bl. Equivalence UNSUPPORTED (pd class registry globals unpopulated).
+
+00a61610  voutlet_new       size 162 vs 154, 95 diff. Same early-return restructure as vinlet_new but the inlet_new call has different stack-arg shapes. UNSUPPORTED (pd globals).
+
+00a616b0  voutlet_bang      size 16 vs 93. Our 16 bytes (mov eax,[esp+4]; mov ecx,[eax+0x2c]; mov [esp+4],ecx; jmp outlet_bang) match the original's first 16 bytes exactly; the slice extent is 93 bytes because it swallows the following 0x00a616c0 float variant, which /Gy keeps out of our COMDAT, so the extent can never match. Equivalence PASS (236 valid, 100% coverage).
+
+00a617c0  voutlet_setup     size 196 vs 221, 67 diff. Same setne-per-call pattern as vinlet_setup. UNSUPPORTED (pd globals).
+
+00a618c0  menu_new          size 249 vs 247, 168 diff. Equivalence FAIL (5/5 mismatch on execution). Single-tail rewrite improved it (offset table handling and the atom copy loop still differ). Not byte-exact.
+
+00a619e0  menu_float        size 219 vs 230, 164 diff. Equivalence FAIL (first mismatch eax). The original leaves only al set on its "return 1" paths (stale upper bits, same pattern as slice 32's AdvanceCounter) and shares one epilogue; ours zero-extends. Not byte-exact.
+
+00a61c20  table_new         size 575 vs 549, 409 diff. Equivalence WEAK (330 valid inputs, 31.5% coverage vs the 60% bar). Large init routine; control flow differs.
+
+00a61e50  table_free        size 100 vs 101, 42 diff. Equivalence UNSUPPORTED (pd globals unpopulated). Diff is entirely register choice / global-load order for sys_vgui and EapdBindRemove plus a 1-byte branch displacement.

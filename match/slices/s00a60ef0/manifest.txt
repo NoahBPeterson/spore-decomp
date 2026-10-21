@@ -1,0 +1,14 @@
+slices/s00a60ef0/s00a60ef0.cpp  ?g_toggle_setup@Eapd@@YAEXZ  00a60ef0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a60ef0/s00a60ef0.cpp  ?g_hslider_setup@Eapd@@YAEXZ  00a61250  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a60ef0/s00a60ef0.cpp  ?inlet_float_all@Eapd@@YAXPAUTX@1@M@Z  00a61460  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a60ef0/s00a60ef0.cpp  ?vinlet_free@Eapd@@YAXPAUTX@1@@Z  00a61510  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a60ef0/s00a60ef0.cpp  ?voutlet_symbol@Eapd@@YAXPAUTX@1@Ut_symbol@1@@Z  00a61710  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a60ef0/s00a60ef0.cpp  ?voutlet_free@Eapd@@YAXPAUTX@1@@Z  00a61790  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a60ef0/s00a60ef0.cpp  ?g_io_setup@Eapd@@YAEXZ  00a618a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a60ef0/s00a60ef0.cpp  ?menu_free@Eapd@@YAXPAUTX@1@@Z  00a619c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a60ef0/s00a60ef0.cpp  ?menu_list@Eapd@@YA_NPAUTX@1@Ut_symbol@1@HPAUt_atom@1@@Z  00a61ad0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a60ef0/s00a60ef0.cpp  ?menu_append@Eapd@@YA_NPAUTX@1@Ut_symbol@1@HPAUt_atom@1@@Z  00a61b10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a60ef0/s00a60ef0.cpp  ?menu_clear@Eapd@@YAXPAUTX@1@@Z  00a61b50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a60ef0/s00a60ef0.cpp  ?x_menu_setup@Eapd@@YAEXZ  00a61b60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a60ef0/s00a60ef0.cpp  ?table_select@Eapd@@YAXPAUTX@1@M@Z  00a61ec0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a60ef0/s00a60ef0.cpp  ?table_float@Eapd@@YAXPAUTX@1@M@Z  00a61ee0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

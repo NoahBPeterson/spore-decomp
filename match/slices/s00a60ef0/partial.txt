@@ -1,0 +1,11 @@
+# slice s00a60ef0 (EA::Audio::Eapd externals) -- PARTIAL functions.
+# Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+
+# A function is listed here when it is not byte-exact but the emitted code is a
+# verified subset / semantically-equivalent prefix of the original, or when the
+# extent mismatch is structural (the slice's function extent covers an adjacent
+# function that /Gy keeps in a separate COMDAT).
+
+# (note; row is in nonmatching.txt) 00a613c0  vinlet_new     prefix match: 149 of 151 bytes identical; the only two differing bytes are the frame offsets of the argc/argv reloads. PASSES a manual instruction-by-instruction comparison.
+# (note; row is in nonmatching.txt) 00a616b0  voutlet_bang  prefix match: the first 16 bytes (the whole jmp trampoline) are byte-identical; the remaining 77 bytes of the slice extent belong to the following 0x00a616c0 function.
+# (note; row is in nonmatching.txt) 00a61200  slider_setfloat prefix match: 44 of 48 bytes identical (only the clamp-bound xmm register differs); the remaining 20 bytes of the 68-byte extent belong to the following 0x00a61230 loadbang handler.
