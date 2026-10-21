@@ -35,7 +35,7 @@ struct ResponseCurve_s00a3_8e40 {
 }
 namespace EA {
 namespace Audio {
-struct EmitterSndPlayer {
+class EmitterSndPlayer { public:
     char pad0[0x10];
     ResponseCurve_s00a3_8e40 mAttenuationCurve;   // +0x10..+0x373
     char pad374[0x18];                 // +0x374..+0x38b
@@ -82,7 +82,7 @@ using namespace EA::Audio;
 }
 namespace SP {
 namespace Audio {
-struct cEmitterSndPlayer : EmitterSndPlayer {
+class cEmitterSndPlayer : public EmitterSndPlayer { public:
     void* mpE00;   // +0xe00
     float mE04;    // +0xe04
 
