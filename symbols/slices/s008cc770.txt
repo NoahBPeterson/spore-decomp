@@ -1,0 +1,15 @@
+008cc770 New_T2KTTClass
+008ccb20 FUN_008ccb20   # T2K scale function, mode "shift"
+008ccb40 FUN_008ccb40   # T2K scale function, mode "div"
+008ccb90 fnt_FixRound    # T2K scale function, mode "fixmul"
+008ccbb0 SetScale_T2KTTClass
+008cceb0 GridOutline_T2KTTClass
+008cd0f0 FUN_008cd0f0   # T2KTTClass destructor
+008cd1b0 setT2KScaleFactors
+008cd260 FUN_008cd260   # cmap format-4 glyph lookup
+008cd350 FUN_008cd350   # cmap format-4 binary search
+008cd4b0 FUN_008cd4b0   # cmap sub-header delta
+008cd520 Delete_cmapClass
+008cd580 New_kernSubTable0Data
+008cd610 GetKernSubTable0Value
+008cd660 New_kernSubTable
