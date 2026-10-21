@@ -1,0 +1,6 @@
+# source  symbol  original VA  [flags override]
+slices/s00ab22f0/s00ab22f0.cpp  ?NotifySet@Notice@@QAEXH@Z  00ab2890  /O2 /MD /Gy /EHsc /TP
+slices/s00ab22f0/s00ab22f0.cpp  ?Destroy@Big@@QAEXXZ  00ab2950  /O2 /MD /Gy /EHsc /TP
+slices/s00ab22f0/s00ab22f0.cpp  ?Enable@Ribbon@@QAEXH@Z  00ab3060  /O2 /MD /Gy /EHsc /TP
+slices/s00ab22f0/s00ab22f0.cpp  ?Disable@Ribbon@@QAEXH@Z  00ab3090  /O2 /MD /Gy /EHsc /TP
+slices/s00ab22f0/s00ab22f0.cpp  ?SetValue@Ribbon@@QAEXH@Z  00ab30d0  /O2 /MD /Gy /EHsc /TP

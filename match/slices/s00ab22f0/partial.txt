@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00ab22f0  1267 cRibbonEffect::Refresh: LTCG register ABI (this in ECX, no declared first parameter); difftest UNSUPPORTED (original reads ecx at entry)
+00ab26a0  443 cRibbonEffect notify/attach: LTCG register ABI (this in ECX); difftest UNSUPPORTED (original reads ecx at entry)
+00ab2a50  909 cRibbonEffect ctor (__fastcall, this in ECX, returns this): size 872 vs 1062, later vector appends abbreviated; difftest UNSUPPORTED (original reads ecx at entry)
+00ab2ea0  505 cRibbonEffect::ReadState: second stack argument doubles as the ReadInt32 destination so esi/edi stay live in the original; mandatory `mov ecx,[esp+8]` hoist differs (size 531 vs 435); difftest UNSUPPORTED (0/400 inputs valid)
+00ab3100  484 cRibbonEffect::AddQuad: LTCG register ABI (this in ECX) plus the distortion/branch schedule differs (size 362 vs 509); difftest UNSUPPORTED (original reads ecx at entry)

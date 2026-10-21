@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00ab2910  11 static cRibbonEffect registration: all six stores and the `1` are correct, but MSVC schedules the constant load after the first stores instead of at entry (size 56 == 56); difftest PASS (400/400 inputs, 100.0% coverage)
