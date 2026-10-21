@@ -13,7 +13,7 @@ extern "C" void operator_delete_array(void* p);       // 0x00f47380 (operator de
 
 namespace eastl {
 
-struct allocator { allocator() {} };
+class allocator { public: allocator() {} };
 
 // eastl::basic_string<wchar_t, eastl::allocator>
 struct string16
@@ -60,8 +60,8 @@ struct hashtable_iterator
     }
     hashtable_iterator& operator++() { increment(); return *this; }
 };
-struct hashtable
-{
+class hashtable
+{ public:
     uint        mUnused;
     hash_node** mpBucketArray;        // +0x04
     uint        mnBucketCount;        // +0x08

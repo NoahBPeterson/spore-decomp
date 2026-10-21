@@ -9,7 +9,7 @@ struct cString {
     ~cString();                                        // 0x006b5240 thiscall
     const wchar_t* GetText();                          // 0x006b55c0 thiscall
 };
-struct cSPUILayout {
+class cSPUILayout { public:
     void* FindWindowByID(uint32_t id, int recurse);    // 0x008105b0 thiscall, ret 8
 };
 struct Property {

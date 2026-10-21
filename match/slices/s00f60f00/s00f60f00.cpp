@@ -45,8 +45,8 @@ __forceinline int FloorToInt(float f)
 namespace EA {
 
 namespace Random {
-struct RandomLinearCongruential
-{
+class RandomLinearCongruential
+{ public:
     uint32_t mnSeed;
     double   RandomDoubleUniform();                 // 0x009360d0
 };
@@ -54,7 +54,7 @@ struct RandomLinearCongruential
 namespace SP { extern Random::RandomLinearCongruential sMathRandom; }   // 0x01601760
 
 namespace Allocator {
-struct FixedAllocatorBase { bool AddCore(int pCore, int nSize); };      // 0x00926650
+class FixedAllocatorBase { public: bool AddCore(int pCore, int nSize); };      // 0x00926650
 }
 
 namespace Swarm {
@@ -84,7 +84,7 @@ struct cParticle                    // 0x88 (retail)
     Vector3    mVelocity;           // +0x1c
 };
 
-struct cParticlesEffect;
+class cParticlesEffect;
 
 struct FloatVector                  // eastl::vector<float> (begin/end only)
 {
@@ -132,8 +132,8 @@ struct IStoppable
     virtual void Stop(bool immediate);                      // slot 3
 };
 
-struct cParticlesEffect
-{
+class cParticlesEffect
+{ public:
     uint32_t               mPad0[2];
     IStoppable             mComponent;                      // +0x08 (vtable only)
     uint32_t               mPad0c[2];

@@ -29,7 +29,7 @@ inline void* operator new(unsigned int, void* p) { return p; }
 
 namespace eastl {
 
-struct allocator { allocator() {} };
+class allocator { public: allocator() {} };
 struct bidirectional_iterator_tag { bidirectional_iterator_tag() {} };
 
 // eastl::basic_string<wchar_t, eastl::allocator>
@@ -71,8 +71,8 @@ struct list_iterator
 };
 
 template <typename T>
-struct list
-{
+class list
+{ public:
     ListNode<T>* mpNext;    // anchor
     ListNode<T>* mpPrev;
     unsigned int mSize;
@@ -84,8 +84,8 @@ template <unsigned int size, unsigned int alignment>
 struct aligned_buffer { __declspec(align(8)) char buffer[size]; };
 
 // eastl::fixed_vector<int64_t, 32, true>
-struct fixed_vector_allocator
-{
+class fixed_vector_allocator
+{ public:
     allocator mOverflowAllocator;
     void*     mpPoolBegin;
 };
@@ -228,8 +228,8 @@ public:
 }
 Achievements::Controller* AchievementsController();                // 0x00675250
 
-struct cPollinator
-{
+class cPollinator
+{ public:
     void UpdateProperty2(uint32_t id, const ResourceKey* key, EA::Variant* v);                 // 0x0060d920
     void UpdatePropertyInt(uint32_t id, const ResourceKey* key, uint32_t a, uint32_t b);       // 0x0060e600
 };

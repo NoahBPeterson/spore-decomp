@@ -44,7 +44,7 @@ struct IWindow {
     virtual void p61(); virtual void p62(); virtual void p63(); virtual void p64();
     virtual void AddWinProc(IWinProc* p);
 };
-struct cSPUILayout {
+class cSPUILayout { public:
     virtual void p0();
     virtual void AddRef();
     virtual void Release();

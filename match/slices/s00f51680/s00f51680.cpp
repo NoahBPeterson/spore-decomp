@@ -99,7 +99,7 @@ ICursorSource* SP_CursorSource();                                          // 0x
 cCanvas* SP_Canvas();                                                      // 0x0067dcf0
 
 namespace EA { namespace UTFWin {
-struct IWindowMgr {
+class IWindowMgr { public:
     virtual void v000();
     virtual struct IMainWindow* GetMainWindow();                           // +0x04
 };
@@ -124,8 +124,8 @@ IWindowMgr* GetManager();                                                  // 0x
 
 namespace SP {
 
-struct cTerrainMapSet { float GetHeightAt(const cSPVector3& pos); };       // 0x00f927c0
-struct cTerrainSphere {
+class cTerrainMapSet { public: float GetHeightAt(const cSPVector3& pos); };       // 0x00f927c0
+class cTerrainSphere { public:
     virtual void v0(); virtual void v1(); virtual void v2();
     virtual cTerrainMapSet* GetTerrain();                                  // +0xc
     float GetWaterHeight();                                                // 0x00f987f0
@@ -150,8 +150,8 @@ struct cLocalInputState {
 class cGameCameraController
 {
 public:
-    template <class T> struct cInterpolationData
-    {
+    template <class T> class cInterpolationData
+    { public:
         bool targetChanged;    // +0
         bool targetMoving;     // +1
         float currentTime;     // +4

@@ -74,7 +74,7 @@ struct IWindowManager {
 };
 IWindowManager* WindowManager_0067caa0();
 
-struct cSPUILayout {
+class cSPUILayout { public:
     bool IsVisible_00810070();
     IWindow* FindWindowByID_008105b0(uint32_t id, bool recursive);
 };
@@ -90,7 +90,7 @@ struct __declspec(align(16)) cSPUIWindowAnimation : cSPUIAnimBase0, cSPUIAnimBas
 };
 cSPUIWindowAnimation SPUICreateWindowAnimationTargetPosition_007f80d0(IWindow* w, Point target, float seconds);
 float GetElapsedSeconds_00805080(float base, int a, IWindow* w, int b);   // SPUIHelpers::GetElapsedSeconds
-struct cSPUIAnimator {
+class cSPUIAnimator { public:
     void AddAnimation_007f8d10(const cSPUIWindowAnimation& anim);
     void Update_007f63b0();
 };

@@ -114,7 +114,7 @@ extern "C" void FUN_00eccce0();   // 0x00eccce0 (getter used for the item texts)
 
 // ---------------------------------------------------------------- strings
 namespace SP {
-struct cString {
+class cString { public:
     uint32_t pad[5];
     cString();                    // 0x006b5060
     ~cString();                   // 0x006b5240

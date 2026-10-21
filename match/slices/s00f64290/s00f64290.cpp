@@ -41,20 +41,20 @@ void* __cdecl operator new(unsigned int size, const char* name, int flags, unsig
 namespace EA {
 
 namespace COM {
-struct __declspec(novtable) IUnknown32 {
+class __declspec(novtable) IUnknown32 { public:
     virtual int AddRef() = 0;
     virtual int Release() = 0;
     virtual void* AsInterface(uint32_t id) = 0;
 };
 }
 
-template <class T> struct RefCountTemplate {
+template <class T> class RefCountTemplate { public:
     RefCountTemplate() : mRefCount(0) {}
     virtual ~RefCountTemplate() {}
     T mRefCount;
 };
 
-template <class T> struct AutoRefCount {
+template <class T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount(T* p) : mpObject(p) { if (p) p->AddRef(); }   // 0x00572660 when not inlined
     ~AutoRefCount() { if (mpObject) mpObject->Release(); }

@@ -140,7 +140,7 @@ void GameDataFn_b1e500();
 namespace SP {
 uint32_t GetCurrentGameMode();          // 0x00b5b800
 cPlanetModel* PlanetModel();            // 0x00b3d350
-struct cGameNounManager {
+class cGameNounManager { public:
     cGameDataVector* GetGameDataVector(GameDataFn a, GameDataFn b, GameDataFn c, GameDataFn d,
                                        uint32_t nounID);   // 0x00b21340
 };

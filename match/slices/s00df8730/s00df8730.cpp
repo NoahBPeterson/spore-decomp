@@ -185,12 +185,12 @@ struct IWindow {
     virtual void SetFlag(int flag, bool value);            // 0x7c
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     IWindow* FindWindowByID(uint32_t id, bool recursive);  // 0x008105b0
     uint32_t pad[3];
 };
 
-struct cSPUIGlobalUI {
+class cSPUIGlobalUI { public:
     void SetVisibility(bool visible);                      // 0x00e01350
 };
 

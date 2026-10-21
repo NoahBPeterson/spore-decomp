@@ -68,8 +68,8 @@ namespace SP {
 // SplineInterpolation<float> (plain overload so the call has an address): 0x00B0FC40
 float SplineInterpolation(const float&, const float&, const float&, const float&, float, float);
 
-template <class T> struct cHermiteSplineInterpolation
-{
+template <class T> class cHermiteSplineInterpolation
+{ public:
 	uint32_t mData[15];   // retail size 0x3c
 	T Evaluate(float t);   // 0x0069A5F0 (float), 0x0069A9A0 (cSPVector3), 0x0069AEE0 (cSPQuaternion)
 };
@@ -178,7 +178,7 @@ void cGameCinematicsCameraController::UpdateInterpolation(float deltaTime)
 }
 
 // ---- sCalculateOrientation ----
-struct cTerrainSphere { cSPQuaternion BuildSurfaceOrientation(const cSPVector3& position, const cSPQuaternion& current); };   // 0x00F9C960
+class cTerrainSphere { public: cSPQuaternion BuildSurfaceOrientation(const cSPVector3& position, const cSPQuaternion& current); };   // 0x00F9C960
 cTerrainSphere* GetActiveTerrainSphere();   // 0x00F48AA0 (planet-model getter; name guessed)
 extern bool gSnapToSurface;                 // 0x015A93F4 (name guessed)
 

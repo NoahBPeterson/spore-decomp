@@ -65,7 +65,7 @@ struct cUIHint {
     char pad[0x78];
     cText mText;                                     // +0x78
 };
-struct cUIHints {
+class cUIHints { public:
     cUIHint* FindByID(uint32_t id);                  // 0x0067aee0
     void     ShowHint(uint32_t id);                  // 0x0067c830
 };

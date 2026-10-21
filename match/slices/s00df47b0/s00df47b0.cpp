@@ -28,7 +28,7 @@ extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(int64_t* 
 // ---- EASTL (the parts this function inlines; out-of-line members are declared only) ----
 namespace eastl {
 
-struct allocator {
+class allocator { public:
     allocator() {}
 };
 
@@ -65,7 +65,7 @@ template <typename T> struct basic_string {
 };
 typedef basic_string<wchar_t> string16;
 
-template <typename T> struct vector {
+template <typename T> class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
@@ -234,7 +234,7 @@ struct IWindow {
     virtual void SetFlag(int flag, bool value);     // +0x7c
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     uint32_t pad[3];
     IWindow* FindWindowByID(uint32_t id, bool recursive);   // 0x008105b0
 };

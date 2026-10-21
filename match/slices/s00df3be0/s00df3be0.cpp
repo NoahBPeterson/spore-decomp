@@ -21,7 +21,7 @@ struct IWindow {
     virtual void SetFlag(int flag, bool v);  // +0x7c
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     uint32_t pad[3];
     IWindow* FindWindowByID(uint32_t id, bool recursive);   // 0x008105b0
 };

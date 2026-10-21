@@ -59,8 +59,8 @@ typedef rw::math::fpu::Vector3 Vector3;
 namespace EA {
 
 namespace Random {
-struct RandomLinearCongruential
-{
+class RandomLinearCongruential
+{ public:
     uint32_t mnSeed;
     double   RandomDoubleUniform();                 // 0x009360d0
     uint32_t RandomUint32Uniform(uint32_t nLimit);  // 0x00a68fb0

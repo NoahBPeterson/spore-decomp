@@ -35,7 +35,7 @@
 
 namespace SP {
 
-struct cUIMissionButton {
+class cUIMissionButton { public:
     void SetTracked();
 };
 

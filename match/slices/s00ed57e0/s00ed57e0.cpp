@@ -59,7 +59,7 @@ struct cString {
     const wchar_t* GetText();                                             // 0x006b55c0
 };
 
-struct cSPUILayout : RC12 {
+class cSPUILayout : public RC12 { public:
     char pad[0x14];                                                       // size 0x18
     cSPUILayout();                                                        // 0x00810000
     bool Init(const ResKey* key, bool b, uint instance);                  // 0x008120d0 (ret 0xc)

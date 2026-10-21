@@ -28,7 +28,7 @@ struct sp_vector_allocator {
     sp_vector_allocator() {}
     const char* mpName;
 };
-template <class T> struct vector {
+template <class T> class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
