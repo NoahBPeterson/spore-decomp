@@ -34,7 +34,7 @@ extern "C" void  __cdecl FUN_00829110(void* at, void* dst, void* src, void* end)
 extern "C" void  __cdecl FUN_00affd00(char* first, char* last, char* dst);      // 0x00affd00
 extern "C" void  __cdecl FUN_00ea0350(void* first, void* last, void* at);       // 0x00ea0350
 extern "C" void  __cdecl FUN_00ac97a0(void* first, void* last, void* dst);      // 0x00ac97a0
-extern "C" void* __cdecl FUN_00b2b090(void);                                    // 0x00b2b090
+extern "C" void  FUN_00b2b090();                                                 // 0x00b2b090
 extern "C" void  __cdecl FUN_00b2ada0(void* first, int, int idx);               // 0x00b2ada0
 extern "C" void  __cdecl FUN_00b2af00(void* a, void* b);                        // 0x00b2af00
 extern "C" void  __cdecl FUN_00b2c150(void* first, void* last, float x, float y, float z); // 0x00b2c150
@@ -106,10 +106,13 @@ struct SpeciesMgr {                                // cPlantSpeciesManager, ECX 
 
 // ---- the unnamed class -----------------------------------------------------
 struct S {
-  char pad0[0xc];
+  int    f0;                                      // +0x00
+  int    f4;                                      // +0x04
+  int    f8;                                      // +0x08
   void** vecBegin;                                // +0x0c
   void** vecEnd;                                  // +0x10
   void** vecCap;                                  // +0x14
+  char   gap18[8];                                // +0x18
   char   buf[0x100];                              // +0x20 inline buffer for the +0x0c vector
   int    f120;                                    // +0x120
   int    f124;                                    // +0x124
@@ -117,6 +120,7 @@ struct S {
   void*  treeRoot;                                // +0x1c8
 
   void FUN_00b2bb90();                            // 0x00b2bb90
+  void* FUN_00b2c230();                           // 0x00b2c230
   void FUN_00b2bbe0();                            // 0x00b2bbe0
   void FUN_00b2bf10(char);                        // 0x00b2bf10
   void FUN_00b2bf40(void* key);                   // 0x00b2bf40
@@ -228,19 +232,18 @@ extern "C" void* __cdecl FUN_00b2ba70(void* dst, void* first, void* last)
 
 // ===========================================================================
 // @ 0x00b2bb90
-// @ 0x00b2c230
 // ===========================================================================
 // @ 0x00b2bb90
 void S::FUN_00b2bb90()
 {
-  FUN_00b2b090();
-  vecBegin = 0;
-  vecEnd = 0;
-  vecCap = 0;
+  ((void (__thiscall*)(void*, int))FUN_00b2b090)(this, 0);
+  f0 = 0;
+  f4 = 0;
+  f8 = 0;
   f120 = 0;
   f124 = 0;
-  void** it = vecBegin;
   void** e = vecEnd;
+  void** it = vecBegin;
   while (it < e) {
     Obj* o = (Obj*)*it;
     if (o) o->release();
@@ -366,18 +369,19 @@ void S::FUN_00b2bf10(char force)
 }
 
 // @ 0x00b2c230
-void* __cdecl FUN_00b2c230(void* self)
+void* S::FUN_00b2c230()
 {
-  S* p = (S*)self;
-  p->vecBegin = 0;
-  p->vecEnd = 0;
-  p->vecCap = 0;
-  p->vecEnd = (void**)p->buf;
-  p->vecBegin = (void**)p->buf;
-  p->vecCap = (void**)(p->buf + 0x100);
-  p->f120 = 0;
-  p->f124 = 0;
-  return self;
+  int zero = 0;
+  f0 = zero;
+  f4 = zero;
+  f8 = zero;
+  char* buf = (char*)this + 0x20;
+  vecEnd = (void**)buf;
+  vecBegin = (void**)buf;
+  vecCap = (void**)(buf + 0x100);
+  f120 = zero;
+  f124 = zero;
+  return this;
 }
 
 // ===========================================================================
