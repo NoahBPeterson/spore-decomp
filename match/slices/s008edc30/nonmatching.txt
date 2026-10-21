@@ -1,0 +1,26 @@
+# va  diff-bytes  reason
+008edc30  129  Page::CreatePageLayout: complete; sequential layout/stack-object construction matches, but cl reorders the layout/dtor temp and sizes the stack object frame differently (127 vs 93 bytes)
+008edc90  123  Page::SetDocument: complete; refcount block matches, but cl folds the three trailing stores differently and keeps the layout teardown temps ordered unlike the original (160 vs 152)
+008edd30   8  StyleCtorForward: complete; cl emits `xor edx,edx` + register arg instead of the original's `mov edx,[esp+4]` (23 vs 22 bytes)
+008edd80  19  ScrollbarStyleGet: complete; cl folds the `+0xf8` seam into a single `[eax+0x33c]` load instead of an `add eax,0xf8`
+008eddb0  120  PickingContext::RefreshMargins: complete; the `max(margin, v)` idiom compiles to a different branch/cmov shape than the original's temp+fld/fstp form (116 vs 130)
+008ede40   85  PickingContext::SetContextRect: complete; cl uses movss for the float copies where the original uses fld/fstp (95 vs 99)
+008edeb0  144  PickingContext::SetContextRectRelative: complete; same movss vs fld/fstp divergence plus operand-order changes (134 vs 172)
+008edf60    2  PickingContext::PlaceFloat: complete; only the `mY548 + mExtra55c` add order is reversed by /fp:fast reassociation
+008edfc0   45  PickingContext::lower_bound: complete; cl restructures the eastl lower_bound half/count arithmetic (76 vs 77)
+008ee010  507  PickingContext::Flush: complete; the scroll/flush loop, float-margin walk and lower_bound result use the right fields, but cl hoists the x87 sqrt-free float chain and lays the loop out differently (588 vs 557)
+008ee240  153  PickingContext::PickingContext (from rect): complete; the base-ctor call and all field inits match, but cl orders the zero fills differently (177 vs 175)
+008ee2f0  223  PickingContext::PickingContext (copy): complete; the copy ctor body matches but cl reorders the field copies (268 vs 177)
+008ee400  133  PickingContext::PickTextItem: complete; the vector append + style assigns match, cl reorders the push/assign sequence (156 vs 158)
+008ee4a0  534  PickingContext::FlushAll: complete; the multi-pass flush loop matches, cl lays out the two return paths differently (645 vs 626)
+008ee720   18  RenderingContext::SubStyleSet (this+4): complete; cl omits the original's dead `add ecx,4` subobject step (22 vs 25)
+008ee740   32  RenderingContext::SubStyleSetValue (this+4): complete; same dead `add ecx,4` step and +0xf8 folding as 008edd80
+008ee770   30  RenderingContext::SubStyleGet (this+4): complete; same dead `add ecx,4` step and +0xf8 folding
+008ee7a0    2  RenderingContext::ReleaseScroll: complete and same 9-byte size; cl loads the vtbl slot into edx instead of eax
+008ee7b0    8  RenderingContext::ScrollViewport: complete and correct; cl just assigns the base-pair additions to the other xmm register
+008ee810  161  RenderingContext::RenderingContext (from rects): complete; base ctor + field inits match, cl orders the fills differently (177 vs 173)
+008ee8c0  176  RenderingContext::RenderingContext (copy): complete; field copy order differs (197 vs 195)
+008ee990  121  RenderingContext::Place: complete; the style query + margin update matches, cl lays the temp vector and the two clamp stores out differently (135 vs 150)
+008eea30  120  RenderingContext::RefreshMargins: complete; same max-idiom divergence as 008eddb0
+008eeac0   95  RenderingContext::TestRect: complete; the four clip tests match, cl picks a different compare/branch shape (103 vs 112)
+008eeb30  110  RenderingContext::ScrollRect: complete; the base-pair additions and vtbl+0x38 call match, cl orders the xmm temps differently (84 vs 126)
