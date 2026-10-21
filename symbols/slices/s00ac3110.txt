@@ -1,0 +1,7 @@
+00ac3110  FUN_00ac3110  # terrain height + normalised-cell distance, cell validity/neighbour check, water-depth correction
+00ac3540  FUN_00ac3540  # distance between two cells' terrain-height-scaled directions
+00ac38d0  FUN_00ac38d0  # like FUN_00ac3110 (pos, cell) with water-depth surface lookup via ISphere face-node block
+00ac3db0  FUN_00ac3db0  # distance between two cells' unit directions
+00ac3e30  FUN_00ac3e30  # distance between normalised position and a cell's unit direction
+00ac3ef0  HashCounter::Count  # bucket-walk count of matching keys
+00ac3fa0  FUN_00ac3fa0  # heap sift-down over 8-byte {key,value} entries
