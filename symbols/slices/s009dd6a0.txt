@@ -1,0 +1,10 @@
+009dd6a0 Track2::ItemCount          # sum of all sub-array sizes across the blocks
+009dd780 Track2::Grids              # serialises the Track2 blocks into the flat GAIT blob
+009ddca0 Self::Cmd3                # script command: 3 floats into the block payload
+009ddcf0 Self::Cmd4                # script command: 4 floats into the block payload
+009ddd70 Self::CmdTable8           # script command: byte table by layout mode
+009ddf80 Self::CmdTable16          # script command: word table by layout mode
+009de630 FUN_009de630              # block-vector validity check
+009de6e0 FUN_009de6e0              # allocate + fill + round-trip the GAIT blob
+009de770 FUN_009de770              # Vec<Gait>::destroy (range version, __stdcall)
+009de7d0 FUN_009de7d0              # destroy-and-compact a Gait range, returns new end
