@@ -1,2 +1,3 @@
 slices/s00b11160/s00b11160.cpp  ?FUN_00b11580@@YAXPAUVec4f@@I0@Z  00b11580  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b11160/s00b11160.cpp  ?LoadZoomProgram@cTerrainCameraController@@QAEXPAX@Z  00b11870  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b11160/s00b11160.cpp  ?Destroy@GmeEditorResBase@@QAEXXZ  00b11600  /O2 /MD /Gy /TP /arch:SSE /fp:fast
