@@ -105,7 +105,7 @@ struct WinMsg {
 };
 extern int gChildNodeOff;   // 0x1440aec: node-to-object offset of the child list
 static inline IWin* ChildOf(int* node) { return (IWin*)((char*)node + gChildNodeOff); }
-struct cSPUILaunchScreenWinProc {
+class cSPUILaunchScreenWinProc { public:
     void** vtbl;   // +0
     void** vtbl2;  // +4
     u32    f8;     // +8
