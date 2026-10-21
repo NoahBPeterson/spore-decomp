@@ -1,0 +1,8 @@
+00f2f830  Scenario::SerializeAll   # serialize + rebuild map from vec<0x27e0> and vec<0xc>; cVarListSerializer over `this`
+00f2fda0  Scenario::LoadFrom       # deserialize + refill vec<0x27e0>/vec<0xc>, drain map 0x2bf4
+00f300d0  Scenario_TryLoad        # reject ids, vtable[+0xc] handler, stream vtable[+0x18] -> LoadFrom
+00f301e0  AreaRect                 # a>g_120 && b>g_c4 ? (g_c8*a)*b : 0 (needs /fp:fast); matches
+00f30210  PairBlock::ctor          # zero +0/+4, ctor payload @+8 (0x00B3D8C0), ref-swap two ifaces, copy 0x1f dwords
+00f30290  Scenario_TouchDamage     # impact list -> RayCastParts/HitBody -> normalized_safe + AreaRect -> damage
+00f305d0  Scenario_Impact          # query ifaces via vtable[+0xc], AreaRect(dot,scale), post via q1 vtable[+0x18]
+00f307e0  PairBlock::dtor          # release +0/+4 via vtable[+4], destroy payload; matches
