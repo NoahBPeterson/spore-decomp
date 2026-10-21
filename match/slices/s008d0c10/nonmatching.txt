@@ -1,0 +1,4 @@
+008d1590 101 util_FixMul(a,b): 16.16 fixed multiply via four 16-bit partial products; equal results, register allocation differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (400 valid, 100.0% coverage)
+008d1670 72 util_ShortFracMul(a,b): 16.16 x 2.14 fixed multiply; same math, regalloc/imul scheduling differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (400 valid, 100.0% coverage)
+008d1890 158 util_ComputeIntersection(...): segment intersection via util_FixDiv/FixMul; same results, regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (400 valid, 73.7% coverage)
+008d1ac0 60 get_using_uint16_hashClass(h,key,out): open-address probe of uint16 hash table; same results, regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (230 valid, 75.6% coverage)

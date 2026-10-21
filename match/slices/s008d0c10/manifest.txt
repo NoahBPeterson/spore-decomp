@@ -1,0 +1,7 @@
+slices/s008d0c10/s008d0c10.cpp  _tsi_EmergencyShutDown  008d1210  /O2 /MD /Gy /EHsc /TP
+slices/s008d0c10/s008d0c10.cpp  ?tsi_FastAllocN@@YAPAXHIH@Z  008d14d0  /O2 /MD /Gy /EHsc /TP
+slices/s008d0c10/s008d0c10.cpp  ?tsi_FreeFastMemBlocks@@YAXH@Z  008d1530  /O2 /MD /Gy /EHsc /TP
+slices/s008d0c10/s008d0c10.cpp  ?tsi_DeleteMemhandler@@YAXH@Z  008d1570  /O2 /MD /Gy /EHsc /TP
+slices/s008d0c10/s008d0c10.cpp  ?util_FixDiv@@YAHII@Z  008d16d0  /O2 /MD /Gy /EHsc /TP
+slices/s008d0c10/s008d0c10.cpp  ?util_FixSin@@YAHH@Z  008d1730  /O2 /MD /Gy /EHsc /TP
+slices/s008d0c10/s008d0c10.cpp  ?util_EuclidianDistance@@YAHHH@Z  008d17d0  /O2 /MD /Gy /EHsc /TP
