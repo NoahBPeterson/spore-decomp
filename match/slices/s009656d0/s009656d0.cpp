@@ -17,7 +17,7 @@
 #include "types.h"
 
 namespace EA { namespace UTFWin {
-struct Image { uint32_t pad[8]; };
+class Image { public: uint32_t pad[8]; };
 
 struct Point2 { float x, y; };
 
@@ -35,7 +35,7 @@ struct Graphics2D {
     virtual void DrawImageScaled(const float* area, const Image* image, const float* texCoords);
 };
 
-struct RenderContext {
+class RenderContext { public:
     Graphics2D* __thiscall Begin2D(int flags);   // 0x95bc10
 };
 
@@ -65,7 +65,7 @@ namespace EA { namespace UTFWinControls {
 
 struct DrawState { uint32_t flags; };
 
-struct ButtonDrawable {
+class ButtonDrawable { public:
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual bool GetSourceRect(uint32_t flags, float* out);   // +0x20

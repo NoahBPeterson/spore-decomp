@@ -169,7 +169,7 @@ bool ComputeEventLocationState(char randomize, uint32_t evFlags, uint32_t locFla
                                vector_3* pos2, vector_4* outQuat, float* outScalar,
                                vector_3* outVec, vector_3* dirIn, vector_3* dirIn2, int p15); // 0x009a59e0
 
-class creature_instance_data {
+struct creature_instance_data { private:
 public:
     uint32_t pad00[6];
     vector_3 pos;                       // +0x18

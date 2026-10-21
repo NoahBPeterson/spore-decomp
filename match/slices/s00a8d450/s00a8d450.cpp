@@ -178,7 +178,7 @@ struct SampleVector {
   }
 };
 
-struct cDistributeEffect {
+class cDistributeEffect { public:
   uint32_t pad00[0x14 / 4];
   cDistributeDescription* mDesc;                      // +0x014
   uint32_t pad18[(0x28 - 0x18) / 4];

@@ -81,7 +81,7 @@ void* __cdecl ZoneAlloc(unsigned size, const char* name, int a, int b, int c, in
 extern const char g_audioName[];        // 0x0140a5a0 "Audio"
 
 // resource objects
-class IStream {
+struct IStream { private:
 public:
     virtual void v0(); virtual void v4(); virtual void v8(); virtual void vc();
     virtual void v10(); virtual void v14();

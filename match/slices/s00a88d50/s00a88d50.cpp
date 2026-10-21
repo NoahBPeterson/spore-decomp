@@ -6,7 +6,7 @@
 #include <intrin.h>
 
 namespace EA { namespace Random {
-struct RandomLinearCongruential { double RandomDoubleUniform(); };   // 0x009360d0
+class RandomLinearCongruential { public: double RandomDoubleUniform(); };   // 0x009360d0
 } }
 extern EA::Random::RandomLinearCongruential sRandom_Swarm;           // 0x016778dc
 

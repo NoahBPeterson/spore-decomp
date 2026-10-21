@@ -12,7 +12,7 @@ struct fixed_pool_base {
     void init(void* pMemory, uint32_t memorySize, uint32_t nodeSize, uint32_t alignment, uint32_t alignmentOffset); // 0x00921260
 };
 // fixed_pool_with_overflow: 0x14 bytes
-struct fixed_pool_with_overflow : fixed_pool_base {
+class fixed_pool_with_overflow : public fixed_pool_base { public:
     void* mpPoolBegin;     // +8
     void* mpPoolEnd;       // +0xc
     uint32_t mnNodeSize;   // +0x10
@@ -70,7 +70,7 @@ struct AnalysisInfo { struct TextStyle* mpTextStyle; void* mpFont; int mBits; };
 struct TextStyle { char pad[0x224]; unsigned mColor; char pad2[0x238 - 0x228]; unsigned mDecorations; };
 
 template <typename T> struct cvec { T* mpBegin; T* mpEnd; T* mpCapacity; void* mpAllocator; int mFlags; };
-struct LineLayout {
+class LineLayout { public:
     void* mpCoreAllocator;                          // +0x00
     cvec<wchar_t> mCharArray;                       // +0x04
     cvec<AnalysisInfo> mAnalysisInfoArray;          // +0x18
@@ -94,7 +94,7 @@ struct RunIter {
 }}
 
 namespace EA { namespace Drawing {
-struct IDrawContext {
+class IDrawContext { public:
     virtual void v0();
     virtual void SetColor(unsigned c);                    // +4
     virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
@@ -107,12 +107,12 @@ struct IDrawContext {
 }}
 
 namespace EA { namespace XHTML { namespace Layout {
-struct RenderingContext;
-struct Background {
+class RenderingContext;
+class Background { public:
     char pad[0x44];
     void Draw(RenderingContext* ctx, const float* pen, const float* rect);   // 0x008e6710
 };
-struct InlineItem {
+class InlineItem { public:
     char pad0[0x3c];
     unsigned mColor;                // +0x3c
     char pad1[0x44 - 0x40];
@@ -122,7 +122,7 @@ struct InlineItem {
     unsigned mBegin;                // +0x54
     unsigned mEnd;                  // +0x58
 };
-struct RenderingContext {
+class RenderingContext { public:
     EA::Drawing::IDrawContext* mpDC;       // +0
     char pad0[0x534 - 4];
     float mfOffsetX;                       // +0x534

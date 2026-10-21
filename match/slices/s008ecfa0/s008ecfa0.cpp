@@ -26,7 +26,7 @@ struct intrusive_list_node {
 };
 
 template <typename T>
-struct intrusive_list_iterator {
+class intrusive_list_iterator { public:
     T* mpNode;
     intrusive_list_iterator() {}
     explicit intrusive_list_iterator(T* pNode) : mpNode(pNode) {}
@@ -96,7 +96,7 @@ public:
 };
 
 // eastl::fixed_vector<T, N, true> (overflow to the default allocator: operator delete[]).
-struct allocator {
+class allocator { public:
     allocator() {}
     void deallocate(void* p) { delete[] (char*)p; }
 };

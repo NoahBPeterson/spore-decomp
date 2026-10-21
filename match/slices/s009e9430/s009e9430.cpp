@@ -10,12 +10,12 @@
 
 namespace checkerlib
 {
-struct vector_3
-{
+class vector_3
+{ public:
     float x, y, z;
 };
-struct vector_4
-{
+class vector_4
+{ public:
     float x, y, z, w;
 };
 }  // namespace checkerlib

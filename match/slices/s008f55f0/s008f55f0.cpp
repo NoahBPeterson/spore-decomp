@@ -150,7 +150,7 @@ public:
     int mValueLen;
 };
 
-struct SelectorList {  // head/tail of a singly linked node list
+class SelectorList { public:  // head/tail of a singly linked node list
     Selector* mpFirst;  // +0x0
     Selector* mpLast;   // +0x4
     void Append(Selector* p);  // 0x008f24f0

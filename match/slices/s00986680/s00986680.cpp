@@ -6,7 +6,7 @@
 #include "types.h"
 
 namespace EA { namespace UTFWin {
-struct Image { uint32_t pad[7]; int mWidth; int mHeight; };
+class Image { public: uint32_t pad[7]; int mWidth; int mHeight; };
 
 struct Point2 { float x, y; Point2(float ax, float ay) : x(ax), y(ay) {} };
 
@@ -24,7 +24,7 @@ struct Graphics2D {
     virtual void DrawImageScaled(const float* area, const Image* image, const float* texCoords);
 };
 
-struct RenderContext {
+class RenderContext { public:
     Graphics2D* __thiscall Begin2D(int flags);   // 0x95bc10
 };
 }}
@@ -43,7 +43,7 @@ namespace EA { namespace UTFWinControls {
 
 struct DrawState { uint32_t flags; uint32_t part; };
 
-struct SpinnerDrawable {
+class SpinnerDrawable { public:
     uint32_t pad[4];                        // +0x00 (vptrs, refcount, ...)
     UTFWin::Image* mImages[3];              // +0x10 (indexed by part)
     void __thiscall CreateRenderables(UTFWin::RenderContext* ctx, const float* rc, const DrawState* st);

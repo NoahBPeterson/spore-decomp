@@ -12,7 +12,7 @@ typedef int  (__thiscall *VFI0)(void*);
 #define VCALLI0(p, off)   ((VFI0)VSLOT(p, off))(p)
 
 namespace EA { namespace Thread {
-struct Mutex {
+class Mutex { public:
     void Lock(const void* timeout);   // 0x009221b0
     void Unlock();                    // 0x00922270
 };

@@ -259,13 +259,13 @@ struct cEffectsManager {
 };
 
 namespace EA { namespace ArgScript {
-struct cArgumentSpec {
+class cArgumentSpec { public:
     void Parse(const Line& line, ArgParser* parser);                              // 0x0083b9d0
 };
 } }
 
 namespace EA { namespace Swarm {
-class cEffectsManagerCheat {
+struct cEffectsManagerCheat { private:
 public:
     virtual void v0();
     void Execute(const EA::ArgScript::Line& line);
