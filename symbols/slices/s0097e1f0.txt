@@ -1,0 +1,10 @@
+0x0097e1f0 EA::UTFWinControls::ImageCursorProvider::~ImageCursorProvider  # dev PDB name; dtor of the image-cursor provider (map +0xc, AutoRefCount window +0x75c)
+0x0097e2b0 eastl::fixed_hash_map<unsigned,ImageCursor,64,64,1,...>::fixed_hash_map  # card symbol
+0x0097e380 EA::UTFWinControls::ImageCursorProvider::ImageCursorProvider  # dev PDB name
+0x0097e690 UI::InflateEffect::InflateEffect  # FadeEffect-derived effect ctor
+0x0097e710 EA::UTFWinControls::BasicFactory_InflateEffect::CreateInstance  # card symbol
+0x0097eb90 EA::UTFWinControls::BasicFactory_ProportionalLayout::CreateInstance  # card symbol
+0x0097ec00 EA::UTFWinControls::BasicFactory_SimpleLayout::CreateInstance  # card symbol
+0x0097ec90 EA::UTFWinControls::WinMessageBox::SerUpdate  # card symbol
+0x0097efe0 EA::UTFWinControls::WinMessageBox::DoMessage  # card symbol; thunk on to EA::UTFWinControls::WinDialog::DoMessage (0x0096c430)
+0x0097f130 WinGrid::UpdateArea  # WinGrid main-object area/scroll update

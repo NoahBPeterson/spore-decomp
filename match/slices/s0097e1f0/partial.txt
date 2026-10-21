@@ -1,0 +1,1 @@
+0097f130  385  partial; WinGrid::UpdateArea. Only the Slot35/Slot38/Slot39 prologue, the mRowH*2 limit and the mX/mY clamp are reconstructed; the scrolling-row loop (Slot4/Slot7/Slot26 iteration and the row-height accumulation) is not reproduced - ours is 385 B vs the original 600 B. flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
