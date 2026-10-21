@@ -1,0 +1,7 @@
+011c5230 des_encrypt1  # 16 DES rounds over one block (SP-table version); forward schedule from ks[0], reverse from ks[30]
+011c6c40 des_set_key_unchecked  # DES key schedule: PC1, 16 rotations, table-driven PC2 into 2 words per round
+011c85a0 BN_div_recp  # BN reciprocal division (dv = m / N, rem = m % N) with the 3-correction loop
+011c88e0 general_allocate_prompt  # mallocs the 0x20 UI_STRING and fills type/ui/prompt/min/freeable
+011c8960 general_allocate_string  # prompt alloc plus the UI string stack (sk_new_null/sk_push) and the 3 trailing fields
+011c89e0 UI_add_input_string  # input-string wrapper: type 1, no trailing field
+011c8a10 UI_add_verify_string  # verify-string wrapper: type 2 with the check string

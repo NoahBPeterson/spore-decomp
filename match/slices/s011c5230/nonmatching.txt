@@ -1,0 +1,7 @@
+011c5230 8 /O2 /MD /Gy /TP PASS - complete/replay-equal (347 valid inputs, 100% coverage); only two rotate encodings differ (rol 3 vs the original's ror 29) and the loop counter reuses the `enc` argument slot instead of the `ks` slot
+011c6c40 1360 /O2 /MD /Gy /TP FAIL - complete but the round-key layout differs: the original's PC2 is done with eight 64-entry scatter tables (0x014f12a8..) whose 24-bit placement per word is not the plain libdes packing used here, so the schedule words differ
+011c85a0 451 /O2 /MD /Gy /TP UNSUPPORTED - complete; 9 unresolved references (BN_CTX_start/BN_CTX_get/BN_ucmp/set_word/copy signatures), so the harness cannot link the replay
+011c88e0 121 /O2 /MD /Gy /TP UNSUPPORTED - complete; ui/type arrive in ESI/EBX (LTCG register ABI) and ERR_put_error/CRYPTO_malloc stay unresolved, so no comparison is possible
+011c8960 120 /O2 /MD /Gy /TP UNSUPPORTED - complete; ui/type arrive in ESI/EBX and the remaining args in EAX/ECX/EDX (LTCG register ABI); sk_new_null/sk_push/free_string stay unresolved
+011c89e0 16 /O2 /MD /Gy /TP UNSUPPORTED - complete; the wrapper itself is cdecl but its callee 011c8960 takes registers, so the resolved replay call passes garbage and the callee's heap writes diverge
+011c8a10 23 /O2 /MD /Gy /TP UNSUPPORTED - same register-ABI callee as 011c89e0; only the type constant (2) and the trailing field differ
