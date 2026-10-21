@@ -79,7 +79,7 @@ enum EdgeIndex { kEdgeTop = 0, kEdgeRight = 1, kEdgeBottom = 2, kEdgeLeft = 3 };
 namespace EA {
 namespace XHTML {
 namespace Style {
-struct FontMetrics {
+class FontMetrics { public:
     float mfFontSize, mfEmSize, mfExSize, mfAscent, mfDescent;
 };
 }
