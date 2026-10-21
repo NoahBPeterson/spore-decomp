@@ -1,0 +1,1 @@
+slices/s00b26fb0/s00b26fb0.cpp  ?ResetDefaultSavedGame@@YA_NXZ  00b27170  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,9 +1,8 @@
-00b26fb0
-00b27170
-00b271b0
-00b271f0
-00b27360
-00b274e0
-00b27540
-00b275a0
-00b279e0
+00b26fb0 343 SavedGameHeader_Assign: three-string assign chain, block/register schedule differs
+00b271b0 37 SavedGame_Dtor: retail is __thiscall ret 4 (self in ecx); mangled name is cdecl
+00b271f0 177 LoadSavedGame: switch jump table now emitted; call-arg shapes and tail differ
+00b27360 238 SimSavedGameHandler2: static-init/registration, vtable store schedule differs
+00b274e0 53 CreateSavedGameHeader: dead vtable store to +4 elided by MSVC; retail has ret 8
+00b27540 61 GetSavedGamePath: retail __thiscall ret 4 (self in ecx); cdecl declaration differs
+00b275a0 974 ValidateSavedGameFile: DatabasePackedFile/cObjectDatabase path ported; unresolved externals
+00b279e0 1138 LoadSavedGameStream: same DB path plus variant/serializer logic; unresolved externals

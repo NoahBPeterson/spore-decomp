@@ -22,6 +22,7 @@ extern uint32_t DAT_015689a8;
 extern uint8_t  DAT_0167df50;
 extern void*    DAT_0167df60;
 extern void*    DAT_0167df64;
+extern uint8_t  gDefaultSavedGameFilename;   // 0x0167df50, eastl::wstring
 extern uint8_t  DAT_01654c00;
 extern uint8_t  DAT_01654c01;
 extern uint8_t  DAT_01654c02;
@@ -43,7 +44,7 @@ struct WStringFwd {
     void Assign(const void* first, const void* last);    // 0x00423650
 };
 #define WString_Assign(t, a, b) (((WStringFwd*)(t))->Assign((a), (b)))
-extern void* FUN_00b3d320(const void*);                  // 0x00b3d320
+extern void* __stdcall FUN_00b3d320(const void*);         // 0x00b3d320
 extern void  __fastcall FUN_00b1e410(int x);             // 0x00b1e410
 extern void* SP_StarManager();                           // 0x00b3d2a0
 extern void  FUN_00bad940(void*);                        // 0x00bad940
@@ -59,6 +60,39 @@ extern void  DoNukeSubtree(void*);                       // 0x009a9600 (thiscall
 extern void* SP_GetSaveArea(uint32_t);                   // 0x006b1f90
 extern void  RangeInitialize(void*, const wchar_t*);     // 0x00579a90
 extern void  WString_Assign_CopyCtor(void*, const void*); // 0x0056e2d0
+extern void  FUN_00692f60(int);                          // 0x00692f60 (thiscall-ish)
+extern int   FUN_00ab30c0();                             // 0x00ab30c0
+extern void  FUN_00692850();                             // 0x00692850
+extern void* SP_GetDataDir();                            // 0x00b3d2e0-ish data dir
+extern void  Stopwatch_SetUnits(void*, int);             // 0x00b1e410-style timer
+extern void* SP_MessageServer();                         // 0x00b3d300-like server getter
+extern void  FUN_013c2240();                             // 0x013c2240 atexit callback
+extern void  FUN_013c2230();                             // 0x013c2230 atexit callback
+extern "C" int atexit(void (*)(void));
+extern void* FUN_00688f00(void* out, void* a, void* b);  // 0x00688f00 path normalize
+extern void* FUN_00693cd0(void* a, void* b, void* c, void* d); // 0x00693cd0
+extern void  FUN_00693900();                             // 0x00693900
+extern void  FUN_00692ec0(uint32_t);                     // 0x00692ec0
+extern void  FUN_00692ea0();                             // 0x00692ea0
+extern void* FUN_00b3d230(void);                         // 0x00b3d230
+extern void  FUN_00ba7dc0();                             // 0x00ba7dc0
+extern void  FUN_00b5cd90(void*);                        // 0x00b5cd90
+extern void  FUN_00b22960();                             // 0x00b22960
+extern void* SP_NounManager2();                          // 0x00b3d300
+extern void* FUN_00f48a80();                             // 0x00f48a80
+extern void  FUN_00675250(void*);                        // 0x00675250
+extern void  FUN_006768b0(void*, void*);                 // 0x006768b0
+extern void  FUN_00e61510(void*);                        // 0x00e61510
+extern void  FUN_00d414e0(int);                          // 0x00d414e0
+extern void* PropertyManager();                          // 0x00b3d260
+extern uint32_t g_dat_1568b08;                           // 0x01568b08
+extern void  operator_delete__(void*);                   // 0xf47380
+extern int   File_Exists(const void*);                   // 0x004e5b70-ish EA::IO::File::Exists
+extern void* ZoneObject_New(unsigned size, const char* pool, int a, int b, int c, int d);
+extern void* DatabasePackedFile_Ctor(void*, int, int);
+extern void* cObjectDatabase_Ctor(void*, void*);
+extern void* cVarListSerializer_Ctor(void*, void*, void*, int);
+extern void  cVarListSerializer_Serialize(void*, void*);
 
 static const uint32_t ADDR_df50 = 0x0167df50;
 static const uint32_t ADDR_df60 = 0x0167df60;
@@ -129,14 +163,14 @@ void* SavedGameHeader_Assign(void* pself, void* src)
 // ===========================================================================
 // @ 0x00b27170  reset the default saved-game filename and notify
 // ===========================================================================
-int ResetDefaultSavedGame()
+bool ResetDefaultSavedGame()
 {
-    if ((void*)&DAT_0167df60 != (void*)&DAT_0167df50) {
-        ((WStringFwd*)0x0167df50)->Assign(*(void**)0x0167df60, *(void**)0x0167df64);
+    if ((void*)&DAT_0167df60 != (void*)&gDefaultSavedGameFilename) {
+        ((WStringFwd*)&gDefaultSavedGameFilename)->Assign(DAT_0167df60, DAT_0167df64);
     }
     void* p = FUN_00b3d320(&DAT_01654c08);
     FUN_00b1e410((int)p);
-    return 1;
+    return true;
 }
 
 // ===========================================================================
@@ -147,7 +181,7 @@ void* SavedGame_Dtor(void* self, uint8_t flags)
     uint8_t* s = (uint8_t*)self;
     *(void**)s = (void*)0x0145faa8;
     *(void**)(s + 4) = (void*)0x0145fa98;
-    DoNukeSubtree(*(void**)(s + 0x20));
+    DoNukeSubtree((void*)*(uint32_t*)(s + 0x20));
     *(void**)(s + 4) = (void*)0x013ec458;
     *(void**)s = (void*)0x013eb938;
     if (flags & 1)
@@ -178,10 +212,13 @@ void LoadSavedGame(void* p)
     }
 
     switch (*(uint32_t*)(s + 0xa4)) {
+    case 0: name = (uint8_t*)ADDR_c00; break;
     case 1: name = (uint8_t*)ADDR_c01; break;
     case 2: name = (uint8_t*)ADDR_c02; break;
+    case 3: name = (uint8_t*)ADDR_c00; break;
     case 4: name = (uint8_t*)ADDR_c04; break;
     case 5: name = (uint8_t*)ADDR_c05; break;
+    default: name = (uint8_t*)ADDR_c00; break;
     }
 
     SP_StarManager();
@@ -214,7 +251,59 @@ void LoadSavedGame(void* p)
 // ===========================================================================
 void SimSavedGameHandler2(void* p)
 {
-    (void)p;
+    uint8_t* self = (uint8_t*)p;
+    static uint32_t s_flag094 = 0;
+
+    if ((s_flag094 & 1) == 0) {
+        s_flag094 |= 1;
+        FUN_00692f60(0);
+        *(void**)(0x0167e080) = (void*)0x0145f948;
+        atexit(FUN_013c2240);
+    }
+    if (FUN_00ab30c0() == 0)
+        FUN_00692850();
+
+    if ((s_flag094 & 2) == 0) {
+        s_flag094 |= 2;
+        FUN_00692f60(0);
+        *(void**)(0x0167e06c) = (void*)0x0145f958;
+        atexit(FUN_013c2230);
+    }
+    if (FUN_00ab30c0() == 0)
+        FUN_00692850();
+
+    uint16_t* dir = (uint16_t*)SP_GetDataDir();
+    uint16_t* end = dir;
+    while (*end != 0)
+        ++end;
+    ((WStringFwd*)dir)->Assign(dir, end);
+
+    int local_10[2];
+    int local_8;
+    void* r = FUN_0057cba0(local_10, self + 0x30, L"TestScripts\\");
+    if (r != (void*)(self + 0x30))
+        ((WStringFwd*)(*(void**)r))->Assign(*(void**)r, *(void**)((char*)r + 4));
+    if (((local_8 - local_10[0]) & 0xfffffffeu) > 2 && local_10[0] != 0)
+        operator_delete((void*)local_10[0]);
+
+    Stopwatch_SetUnits((void*)0x0167df70, 4);
+    Stopwatch_SetUnits((void*)0x0167df88, 4);
+
+    int iVar1 = (int)self - 4;
+    int* msgSrv = (int*)SP_MessageServer();
+    *(int*)(self + 0x1c) = (int)msgSrv;
+    *(int*)(self + 0x20) = iVar1;
+    *(uint32_t*)(self + 0x24) = 0x0145f8e0;
+    *(uint32_t*)(self + 0x28) = 4;
+    *(uint32_t*)(self + 0x2c) = 0;
+    if (msgSrv != 0 && iVar1 != 0) {
+        uint32_t off = 0;
+        do {
+            ((void (*)(int, int))*(int*)(*msgSrv + 0x24))(
+                iVar1, *(int*)(0x0145f8e0 + off));
+            off += 4;
+        } while (off < 0x10);
+    }
 }
 
 // ===========================================================================
@@ -237,8 +326,8 @@ void* CreateSavedGameHeader()
         *(uint32_t*)(o + 0x20) = 0;
         o[0x24] = 0;
         *(uint32_t*)(o + 0x28) = 0;
-        *(uint32_t*)(o + 0x1c) = (uint32_t)(int)c;
         *(uint32_t*)(c) = (uint32_t)(int)c;
+        *(uint32_t*)(o + 0x1c) = (uint32_t)(int)c;
         *(uint32_t*)(o + 0x5c) = 0;
         *(uint32_t*)(o + 0x60) = 0;
         *(uint32_t*)(o + 0x64) = 0;
@@ -271,7 +360,89 @@ void* GetSavedGamePath(uint8_t* self, void* outv)
 // ===========================================================================
 void ValidateSavedGameFile(void* self, void* a2, void* a3)
 {
-    (void)self; (void)a2; (void)a3;
+    uint8_t* p = (uint8_t*)self;
+    int* out1 = (int*)a2;
+    int* out2 = (int*)a3;
+    uint32_t local_ab0 = 0, local_aac = 0, local_aa8 = 0;
+    uint32_t flags = 0;
+
+    // build the full saved-game path into a wide string
+    RangeInitialize(p, 0);
+    void* local_aa0 = 0; void* local_a9c = 0; int local_a98 = 0;
+    GetSavedGamePath(p, &local_aa0);
+    void* src = local_aa0;
+    int len = ((int)local_a9c - (int)local_aa0) >> 1;
+
+    wchar_t buf[520];
+    for (int i = 0; i < len; ++i)
+        buf[i] = ((wchar_t*)src)[i];
+    buf[len] = 0;
+
+    void* norm = FUN_00688f00(&buf, &buf, 0);
+    if (norm != &buf)
+        ((WStringFwd*)(*(void**)norm))->Assign(*(void**)norm,
+                                              *(void**)((char*)norm + 4));
+    if (norm != 0)
+        operator_delete__(norm);
+
+    if (File_Exists(buf) == 0) {
+        *out1 = 0;
+        *out2 = 0;
+        if (src) operator_delete__(src);
+        flags = local_aa8 - local_ab0;
+        if (flags > 2 && local_ab0 != 0)
+            operator_delete__((void*)local_ab0);
+        return;
+    }
+
+    void* pHdr = ZoneObject_New(0x388, "Simulator", 0, 0, 0, 0);
+    int res = 0;
+    if (pHdr != 0) {
+        res = (int)DatabasePackedFile_Ctor(pHdr, 0, 0);
+        if (res != 0)
+            (*(void(**)(int))*(int*)(res + 4))(res);
+    }
+    void* pDb = ZoneObject_New(0x24, "Simulator", 0, 0, 0, 0);
+    int* piVar9 = 0;
+    if (pDb != 0) {
+        piVar9 = (int*)cObjectDatabase_Ctor(pDb, (void*)res);
+        if (piVar9 != 0)
+            (*(void(**)(int*))*piVar9)(piVar9);
+    }
+    (*(void(**)(void))(piVar9[1] + 4))();
+    (*(void(**)(int*, wchar_t*))(*(int*)(piVar9 + 1) + 0x2c))(piVar9 + 1, buf);
+    char ok = (*(char(**)(int*, int, int))(*piVar9 + 0x3c))(piVar9, 1, 0);
+    if (ok != 0) {
+        void* local_a8c = 0, *local_a88 = 0;
+        FUN_00693cd0(piVar9, &local_a88, &local_a88, &local_a88);
+        int serial = (int)local_a8c;
+        char sz[0x20];
+        cVarListSerializer_Ctor(sz, &local_a8c, &g_dat_1568b08, 0x1a0d26);
+        cVarListSerializer_Serialize(sz, (void*)serial);
+        FUN_00693900();
+        (*(void(**)(void))(piVar9[1] + 0x1c))();
+        (*(void(**)(void))(piVar9[1] + 8))();
+        *out2 = (int)0x0145fa98;
+        *out1 = (int)0x0145faa8;
+        uint32_t r = (uint32_t)*out1;
+        (*(void(**)(int*))*piVar9)(piVar9);
+        if (res != 0)
+            (*(void(**)(int))*(int*)(res + 4))(res);
+        if (src) operator_delete__(src);
+        flags = local_aa8 - local_ab0;
+        if (flags > 2 && local_ab0 != 0)
+            operator_delete__((void*)local_ab0);
+        return;
+    }
+    *out1 = 0;
+    *out2 = 0;
+    (*(void(**)(int*))*piVar9)(piVar9);
+    if (res != 0)
+        (*(void(**)(int))*(int*)(res + 4))(res);
+    if (src) operator_delete__(src);
+    flags = local_aa8 - local_ab0;
+    if (flags > 2 && local_ab0 != 0)
+        operator_delete__((void*)local_ab0);
 }
 
 // ===========================================================================
@@ -279,5 +450,77 @@ void ValidateSavedGameFile(void* self, void* a2, void* a3)
 // ===========================================================================
 void LoadSavedGameStream(void* self, void* a2)
 {
-    (void)self; (void)a2;
+    uint8_t* p = (uint8_t*)self;
+    int local_adc = 0;
+    uint32_t local_ae0 = 0;
+
+    ValidateSavedGameFile(p, &local_adc, &local_ae0);
+
+    RangeInitialize(p, 0);
+    void* local_aa0 = 0; void* local_a9c = 0; int local_a98 = 0;
+    GetSavedGamePath(p, &local_aa0);
+    void* src = local_aa0;
+    int len = ((int)local_a9c - (int)local_aa0) >> 1;
+
+    wchar_t buf[520];
+    for (int i = 0; i < len; ++i)
+        buf[i] = ((wchar_t*)src)[i];
+    buf[len] = 0;
+
+    void* norm = FUN_00688f00(&buf, &buf, 0);
+    if (norm != &buf)
+        ((WStringFwd*)(*(void**)norm))->Assign(*(void**)norm,
+                                              *(void**)((char*)norm + 4));
+    if (norm != 0)
+        operator_delete__(norm);
+
+    void* pHdr = ZoneObject_New(0x388, "Simulator", 0, 0, 0, 0);
+    int res = 0;
+    if (pHdr != 0) {
+        res = (int)DatabasePackedFile_Ctor(pHdr, 0, 0);
+        local_adc = res;
+        if (res != 0)
+            (*(void(**)(int))*(int*)(res + 4))(res);
+    }
+    void* pDb = ZoneObject_New(0x24, "Simulator", 0, 0, 0, 0);
+    int* piVar6 = 0;
+    if (pDb != 0) {
+        piVar6 = (int*)cObjectDatabase_Ctor(pDb, (void*)res);
+        if (piVar6 != 0)
+            (*(void(**)(int*))*piVar6)(piVar6);
+    }
+    int* piVar1 = piVar6 + 1;
+    (*(void(**)(void))(piVar6[1] + 4))();
+    (*(void(**)(int*, wchar_t*))(*(int*)piVar1 + 0x2c))(piVar1, buf);
+    (*(void(**)(int*, int, int))(*piVar6 + 0x3c))(piVar6, 1, 0);
+
+    void* local_a8c = 0, *local_a88 = 0;
+    FUN_00693cd0(piVar6, &local_a88, &local_a88, &local_a88);
+    int serial = (int)local_a8c;
+    char sz[0x40];
+    cVarListSerializer_Ctor(sz, &local_a8c, &g_dat_1568b08, 0x1a0d26);
+    cVarListSerializer_Serialize(sz, (void*)serial);
+
+    uint32_t packed = ((uint32_t)(unsigned long)local_a88 << 16) |
+                      (uint32_t)(unsigned long)local_a8c;
+    FUN_00692ec0(packed);
+    FUN_00692ea0();
+    void* pm = FUN_00b3d230();
+    FUN_00d414e0((int)pm);
+
+    char ok = (*(char(**)(int*, uint32_t))(*piVar6 + 0x20))(piVar6, packed);
+    if (ok != 0) {
+        int* piVar7 = (int*)PropertyManager();
+        (*(char(**)(int*, uint32_t, void*))(*piVar7 + 0x2c))(piVar7, 0xbb3685dc, 0);
+        void* nm = (void*)FUN_00b3d230();
+        (*(void(**)(void*, void*))(*(int*)nm + 0x4c))(nm, src);
+        FUN_00693900();
+    }
+    FUN_00693900();
+    (*(void(**)(void))(*piVar1 + 0x1c))();
+    (*(void(**)(void))(*piVar1 + 8))();
+    (*(void(**)(int*))(*piVar6))(piVar6);
+    if (res != 0)
+        (*(void(**)(int))*(int*)(res + 4))(res);
+    if (src) operator_delete__(src);
 }
