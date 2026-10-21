@@ -1,0 +1,2 @@
+# Incomplete functions (not fully reconstructed). None for this slice: all 12 target
+# functions are complete (4 byte-exact in manifest.txt, the remaining 8 in nonmatching.txt).

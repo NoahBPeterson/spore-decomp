@@ -1,0 +1,4 @@
+slices/s00aef610/s00aef610.cpp  ?AddToWorld@cHavokLocomotiveController@SP@@QAEXXZ  00aef6e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00aef610/s00aef610.cpp  ?SetPosition@cHavokLocomotiveController@SP@@QAEXABVhkVector4@@@Z  00aef7e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00aef610/s00aef610.cpp  ?FUN_00aefae0@cHavokLocomotiveController@SP@@QAEXXZ  00aefae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00aef610/s00aef610.cpp  ?FUN_00aefb30@cHavokLocomotiveCollisionListener@SP@@QAEPAXI@Z  00aefb30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
