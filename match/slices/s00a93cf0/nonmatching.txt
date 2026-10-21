@@ -1,8 +1,17 @@
-# slices/s00a93cf0/s00a93cf0.cpp	?FUN_00a93cf0@CAbil@@QAEXPAUIoObj@@PAXPAU1@@Z	00a93cf0	/O2 /MD /Gy /TP /arch:SSE /fp:fast
-# slices/s00a93cf0/s00a93cf0.cpp	?FUN_00a93ee0@CAbil@@QAEHHPAHH@Z	00a93ee0	/O2 /MD /Gy /TP /arch:SSE /fp:fast
-# slices/s00a93cf0/s00a93cf0.cpp	?FUN_00a94130@CAbil@@QAEXH@Z	00a94130	/O2 /MD /Gy /TP /arch:SSE /fp:fast
-# slices/s00a93cf0/s00a93cf0.cpp	?FUN_00a94220@CAbil@@QAEHHPAHH@Z	00a94220	/O2 /MD /Gy /TP /arch:SSE /fp:fast
-# slices/s00a93cf0/s00a93cf0.cpp	?FUN_00a943a0@CAbil@@QAEHXZ	00a943a0	/O2 /MD /Gy /TP /arch:SSE /fp:fast
-# slices/s00a93cf0/s00a93cf0.cpp	?FUN_00a94470@CAbil@@QAEPAU1@PAX@Z	00a94470	/O2 /MD /Gy /TP /arch:SSE /fp:fast
-# slices/s00a93cf0/s00a93cf0.cpp	?FUN_00a94800@CAbil@@QAEXPAX0@Z	00a94800	/O2 /MD /Gy /TP /arch:SSE /fp:fast
-# slices/s00a93cf0/s00a93cf0.cpp	?FUN_00a94940@CAbil@@QAEXPAX0@Z	00a94940	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s00a93cf0 = Simulator::cCreatureAbility (deserialiser, owner binding, event/property
+# dispatch, ctor/dtor, init and transform update).  6/14 byte-exact.  The other 8 are complete
+# C++ that reproduces the original control flow, field offsets and call order; they miss
+# byte-exactness because the original build schedules the property jump table, the owner
+# notification calls and the transform stores differently (sizes differ by a handful of bytes).
+
+00a93cf0 264 FUN_00a93cf0: complete; the ability record deserialiser reads the same fields in the same order, but the io-wrapper call setup and the record stores are scheduled differently, 401 vs 418 B.
+00a93ee0 256 FUN_00a93ee0: complete; the comm-event id==1 handler and its two branch paths match, difference is the argument reload and jump layout, 330 vs 328 B.
+00a94130 199 FUN_00a94130: complete; the reset-on-owner-change walk matches, difference is the register allocation across the notify calls, 233 vs 239 B.
+00a94220 310 FUN_00a94220: complete; the property dispatch jump-table shape differs (MSVC lays the cases out in a different order), 367 vs 384 B.
+00a943a0 135 FUN_00a943a0: complete; the scale/speed recompute from the owner matches, difference is the x87 staging and the field store order, 196 vs 201 B.
+00a94470 566 FUN_00a94470: complete; the constructor seeds the same fields and registers the same vtable, difference is the inline base-ctor expansion and store ordering, 787 vs 820 B.
+00a94800 290 FUN_00a94800: complete; Init binds the owner, seeds the fields and registers, difference is the call ordering around the manager registration, 310 vs 318 B.
+00a94940 469 FUN_00a94940: complete; UpdateTransform assigns the transforms and derives the world position, difference is the matrix copy scheduling, 505 vs 558 B.

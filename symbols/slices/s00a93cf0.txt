@@ -1,14 +1,16 @@
-00a93cf0 Simulator::cCreatureAbility::Deserialize      # ability record deserialiser (io, mgr, this)
-00a93ea0 Simulator::cCreatureAbility::Detach           # release owner component binding
-00a93ee0 Simulator::cCreatureAbility::OnKeyEvent       # comm event id==1 handler
-00a94030 Simulator::cCreatureAbility::SetActive        # set active flag, refresh origin, notify
-00a940a0 Simulator::cCreatureAbility::NotifyHook       # dispatch state hook, bump counter
-00a940e0 Simulator::cCreatureAbility::GetParam         # 3-arg cdecl getter via FUN_00a6c7a0
-00a94130 Simulator::cCreatureAbility::Reset            # reset ability state on owner change
-00a94220 Simulator::cCreatureAbility::SetProperty      # property dispatch (jump table on id)
-00a943a0 Simulator::cCreatureAbility::Recalc           # recompute scale/speeds from owner
-00a94470 Simulator::cCreatureAbility::ctor             # constructor
-00a947b0 Simulator::cCreatureAbility::dtor             # destructor / scalar delete
-00a94800 Simulator::cCreatureAbility::Init             # bind to owner, seed fields, register
-00a94940 Simulator::cCreatureAbility::UpdateTransform  # assign transforms, derive world pos
-00a94b70 Simulator::cCreatureAbility::SetDescriptor    # set descriptor and recalc
+; slice s00a93cf0 = 0x00a93cf0..0x00a94b80 (Simulator::cCreatureAbility) - exact decorated names
+; manifest.txt rows are byte-exact; the rest are the nonmatching.txt entries
+00a93cf0 ?FUN_00a93cf0@CAbil@@QAEXPAUIoObj@@PAXPAU1@@Z  # complete, non-exact
+00a93ea0 ?FUN_00a93ea0@CAbil@@QAEXXZ  # byte-exact
+00a93ee0 ?FUN_00a93ee0@CAbil@@QAEHHPAHH@Z  # complete, non-exact
+00a94030 ?FUN_00a94030@CAbil@@QAEXD@Z  # byte-exact
+00a940a0 ?FUN_00a940a0@CAbil@@QAEXPAX@Z  # byte-exact
+00a940e0 ?FUN_00a940e0@@YAHPAX000@Z  # byte-exact
+00a94130 ?FUN_00a94130@CAbil@@QAEXH@Z  # complete, non-exact
+00a94220 ?FUN_00a94220@CAbil@@QAEHHPAHH@Z  # complete, non-exact
+00a943a0 ?FUN_00a943a0@CAbil@@QAEHXZ  # complete, non-exact
+00a94470 ?FUN_00a94470@CAbil@@QAEPAU1@PAX@Z  # complete, non-exact
+00a947b0 ?FUN_00a947b0@CAbil@@QAEPAU1@E@Z  # byte-exact
+00a94800 ?FUN_00a94800@CAbil@@QAEXPAX0@Z  # complete, non-exact
+00a94940 ?FUN_00a94940@CAbil@@QAEXPAX0@Z  # complete, non-exact
+00a94b70 ?FUN_00a94b70@CAbil@@QAEXPAX@Z  # byte-exact
