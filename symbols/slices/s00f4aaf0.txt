@@ -1,0 +1,21 @@
+# va  name  # evidence
+# Slice s00f4aaf0 (gold4 #129) -- the Terrain SWARM brush command set: the ArgScript
+# command objects that register and execute the brush commands, the brush-create
+# component, and the cTerrainBrushEffect runtime that applies a brush transform.  The
+# region is /O2 (no frame pointer) with /arch:SSE float moves; a few object-copy
+# helpers use x87 fld/fstp.  Class layouts follow the 2008 dev PDB with the retail
+# eastl::vector growth applied, matching the neighbouring slices s00f4c300 / s00f47ed0.
+00f4aaf0  cBrushEffectCommand::Execute        # MAJOR: ArgScript entry, reads args via EA::ArgScript::cArguments
+00f4abc0  cBrushEffectCommand::Build          # MAJOR: register the brush effect command on a registrar
+00f4ac10  SWARM_TerrainBrushAddCommands       # MAJOR: registers the four SWARM brush commands (inlined ctors)
+00f4adf0  ReadTerrainBrushDesc                # MAJOR: stream reader for cTerrainBrushDescription fields
+00f4b110  cTerrainBrushEffect::SetParam       # MAJOR: switch on param id 4/0x15/0x16 to set brush fields
+00f4b180  BrushVertexVector::back              # MAJOR: end-1 element of the cBrushVertex vector
+00f4b190  CopyElemsBackward                   # MAJOR: backward range copy of BrushBigElem (0x28-stride)
+00f4b1d0  CopyF7                             # MAJOR: forward range copy of F7 (0x24-stride)
+00f4b220  SWARM_TerrainBrushCreate::SWARM_TerrainBrushCreate   # MAJOR: component ctor, sets two vtbls + GmeRefCount
+00f4b3a0  SWARM_TerrainBrushCreate::~SWARM_TerrainBrushCreate  # MAJOR: component dtor, releases mPc0/mPc4
+00f4b420  cTerrainBrushEffect::Initialize     # MAJOR: seed lifetime/inverse-lifetime, spacing flag, texture ref
+00f4b4c0  CopyElemsForward                    # MAJOR: forward range copy of BrushHugeElem (~0x1c0-stride, x87)
+00f4b6e0  cTerrainBrushEffect::SetTransform   # MAJOR: build transform, pre-transform, init previous values
+00f4b870  cTerrainBrushEffect::Imprint        # MAJOR: fill decal front/params, call terrain decal builder

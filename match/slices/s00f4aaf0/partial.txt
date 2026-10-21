@@ -1,0 +1,3 @@
+# partial.txt -- functions from slice s00f4aaf0 (gold4 #129) not fully reconstructed.
+# (empty: all 14 VAs are complete.  7 are byte-exact in manifest.txt; the other 7
+#  are complete, behaviourally equivalent where testable, and listed in nonmatching.txt.)
