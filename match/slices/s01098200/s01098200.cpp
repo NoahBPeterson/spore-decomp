@@ -417,7 +417,7 @@ void hkBoxMotion::applyForcesAndStep(const hkStepInfo& stepInfo, const hkVector4
 
     // previous position <- current position, then the half-step time stamp
     m_motionState.m_sweptTransform.m_centerOfMass0 = m_motionState.m_sweptTransform.m_centerOfMass1;
-    m_motionState.m_sweptTransform.m_centerOfMass0.w = delta.w;
+    m_motionState.m_sweptTransform.m_centerOfMass0.w = stepInfo.m_startTime;
 
     float lv2 = m_linearVelocity.x * m_linearVelocity.x +
                 (m_linearVelocity.z * m_linearVelocity.z + m_linearVelocity.y * m_linearVelocity.y);
@@ -435,7 +435,7 @@ void hkBoxMotion::applyForcesAndStep(const hkStepInfo& stepInfo, const hkVector4
     m_motionState.m_sweptTransform.m_centerOfMass1.y = dt * m_linearVelocity.y + m_motionState.m_sweptTransform.m_centerOfMass1.y;
     m_motionState.m_sweptTransform.m_centerOfMass1.z = dt * m_linearVelocity.z + m_motionState.m_sweptTransform.m_centerOfMass1.z;
     m_motionState.m_sweptTransform.m_centerOfMass1.w = dt * m_linearVelocity.w + m_motionState.m_sweptTransform.m_centerOfMass1.w;
-    m_motionState.m_sweptTransform.m_centerOfMass1.w = delta.w;
+    m_motionState.m_sweptTransform.m_centerOfMass1.w = stepInfo.m_invDeltaTime;
 
     // rotation1 becomes the motion's rotation, and the half-angle delta quaternion is built from the
     // angular velocity: q = (0.5 * dt * w, 1) * rotation1, normalized, then expanded to the axis/angle pair.
@@ -477,8 +477,8 @@ void hkBoxMotion::applyForcesAndStep(const hkStepInfo& stepInfo, const hkVector4
     m_motionState.m_deltaAngle.w = deltaQ.w + deltaQ.w;
     m_motionState.m_deltaAngle.w = (float)sqrt((double)angleSq) * 3.1415927f;
 
-    m_motionState.m_sweptTransform.m_rotation0 = rotation;
-    m_motionState.m_transform.setRotation((hkQuaternion&)deltaQ);
+    m_motionState.m_sweptTransform.m_rotation1 = deltaQ;
+    m_motionState.m_transform.setRotation(m_motionState.m_sweptTransform.m_rotation1);
 
     // rebuild the transform translation from the centre of mass and the local centre of mass offset
     const hkVector4& r0 = m_motionState.m_transform.m_rotation[0];
