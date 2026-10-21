@@ -6,6 +6,6 @@
 # extent mismatch is structural (the slice's function extent covers an adjacent
 # function that /Gy keeps in a separate COMDAT).
 
-# (note; row is in nonmatching.txt) 00a613c0  vinlet_new     prefix match: 149 of 151 bytes identical; the only two differing bytes are the frame offsets of the argc/argv reloads. PASSES a manual instruction-by-instruction comparison.
-# (note; row is in nonmatching.txt) 00a616b0  voutlet_bang  prefix match: the first 16 bytes (the whole jmp trampoline) are byte-identical; the remaining 77 bytes of the slice extent belong to the following 0x00a616c0 function.
-# (note; row is in nonmatching.txt) 00a61200  slider_setfloat prefix match: 44 of 48 bytes identical (only the clamp-bound xmm register differs); the remaining 20 bytes of the 68-byte extent belong to the following 0x00a61230 loadbang handler.
+# (note; row is in nonmatching.txt) vinlet_new     prefix match: 149 of 151 bytes identical; the only two differing bytes are the frame offsets of the argc/argv reloads. PASSES a manual instruction-by-instruction comparison.
+# (note; row is in nonmatching.txt) voutlet_bang   prefix match: the first 16 bytes (the whole jmp trampoline) are byte-identical; the remaining 77 bytes of the slice extent belong to the following 0x00a616c0 function.
+# (note; row is in nonmatching.txt) slider_setfloat prefix match: 44 of 48 bytes identical (only the clamp-bound xmm register differs); the remaining 20 bytes of the 68-byte extent belong to the following 0x00a61230 loadbang handler.
