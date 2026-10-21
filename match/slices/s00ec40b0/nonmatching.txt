@@ -1,0 +1,29 @@
+00ec40b0  297  complete source; equiv UNSUPPORTED 0/400 valid (write-protect faults: allocator/messaging table) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec41e0   62  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall base ctor) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec42f0   25  complete source; equiv UNSUPPORTED 0/400 valid (fake-arity at vtable dispatch) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4330   70  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4380   96  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4430   36  complete source; equiv PASS 387 valid 100% coverage (regalloc/hoist order) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec44a0   64  complete source; equiv UNSUPPORTED 0/400 valid (budget: long insertion-sort runs on soup data) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4500   82  complete source; equiv WEAK 43 valid (need 200) 25% coverage flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4570   95  complete source; equiv PASS 400 valid 100% coverage (EASTL median-of-three, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec45f0   69  complete source; equiv PASS 355 valid 100% coverage (push_heap, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4650   75  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec46c0  138  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4750  300  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4900  109  complete source; equiv PASS 348 valid 88% coverage (adjust_heap, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4980  142  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall dtor) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4ac0   40  complete source; equiv PASS 399 valid 100% coverage (lower_bound, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4b10   49  complete source; equiv PASS 392 valid 100% coverage (make_heap, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4b50   81  complete source; equiv PASS 388 valid 100% coverage (sort_heap, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4bb0   88  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall ctor) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4c80   75  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4d30   19  complete source; equiv PASS 386 valid 100% coverage (upper_bound, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4d70   71  complete source; equiv PASS 364 valid 100% coverage (partition, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4de0   88  complete source; equiv PASS 351 valid 100% coverage (partial_sort, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4e50   43  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4e80  179  complete source; equiv PASS 394 valid 100% coverage (introsort loop; calls tolerated as inline diffs) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4f00   56  complete source; equiv WEAK 129 valid (need 200) 83% coverage flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4f70  320  complete source; equiv not completed (per-function run exceeded 600s on the object-heavy path) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec5100   81  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec5160   28  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
