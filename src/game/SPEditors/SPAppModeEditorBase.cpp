@@ -542,7 +542,7 @@ struct cSPEditorAnimatedEventInfo_s0057_3520 : IObject {
 };
 }
 namespace SP {
-struct cSPEditorVehicleAbilities : IObject {
+class cSPEditorVehicleAbilities : public IObject { public:
     struct Key { uint32_t a, b, c; };
     uint32_t mData[24];
     cSPEditorVehicleAbilities(Key key, uint32_t type, uint32_t id, int a, int b);
@@ -918,7 +918,7 @@ struct ResourceKey {
 struct BoundingBox_s0057_44b0 { Vector3_s0057_44b0 lower; Vector3_s0057_44b0 upper; };
 namespace eastl {
 template <size_t N>
-struct bitset {
+class bitset { public:
     uint32_t mWord[(N + 31) / 32];
     bitset() { for (size_t i = 0; i < (N + 31) / 32; ++i) mWord[i] = 0; }
     bitset& set(size_t i) { if (i < N) mWord[i >> 5] |= (uint32_t)1 << (i & 31); return *this; }
@@ -3308,7 +3308,7 @@ namespace eastl {
 struct EASTLAllocator { const char* mpName; EASTLAllocator() {} };
 }
 namespace eastl {
-template <class T> struct generic_iterator {
+template <class T> class generic_iterator { public:
     T mIterator;
     explicit generic_iterator(const T& x) : mIterator(x) {}
     const T& base() const { return mIterator; }
@@ -5733,7 +5733,7 @@ namespace SP {
 extern cDirectPropertyList_s0058_be50* sAppProperties_s0058_be50;                           // @ 0x15fd918
 }
 namespace SP {
-struct cTestSystem {
+class cTestSystem { public:
     char pad0[0x70];
     struct ListNode { ListNode* mpNext; ListNode* mpPrev; } mTests;  // +0x70
     bool IsTestingInProgress() const { return mTests.mpNext != &mTests; }
