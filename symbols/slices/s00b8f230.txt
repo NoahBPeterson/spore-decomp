@@ -1,0 +1,6 @@
+00b90410 SP::cPlantSpeciesManager::GetSpeciesFromID  # rbtree find with lazy load through GetPlantProfile + FUN_00b900a0 when the +0x38 flag is set
+00b8f690 Simulator::cPlantCargoInfo::cPlantCargoInfo  # vtable comments (0x01465798/0x01465790/0x0146576c)
+00b8f730 Simulator::cPlantCargoInfo::operator=  # 0xa4 memberwise copy after 0x00c870b0
+00b8f7f0 Simulator::cSpaceInventoryItem::Duplicate
+00b8f9b0 Simulator::cSpaceInventoryItem::GetImageID
+00b8fb70 Simulator::cSpaceInventoryItem::IsAvailableInCurrentPlanet

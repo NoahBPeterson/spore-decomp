@@ -1,0 +1,18 @@
+00b8f230 420 Simulator package loader (cdecl, 4 args): allocate 50000-byte buffer, read a length header from the stream, memorystream + DatabasePackedFile + cObjectDatabase construction, DB load, alloc the 0x1b0 object and store it through the out-param, then tear everything down; our region/stream plumbing collapses the interleaved vtable calls so 420 vs 570 bytes
+00b8f470 459 second Simulator loader path (same skeleton as f230 but with WriteUint32 of the 0x250003 marker and FUN_00b93d60/FUN_00b8db70); 351 vs 543 bytes
+00b8f690 64 Simulator::cPlantCargoInfo::cPlantCargoInfo; memberwise init + three vtable stores matches, ours is 113 vs 110 bytes (float constant load scheduled differently)
+00b8f730 120 Simulator::cPlantCargoInfo assignment operator (operator= then the 0xa4 tail copy); 143 vs 139 bytes, block order differs
+00b8f7f0 85 Simulator::cSpaceInventoryItem::Duplicate: operator_new(0xa4) + cPlantCargoInfo ctor + FUN_00b8f730 + Release; AddRef/Release around the returned pointer scheduled differently
+00b8f860 35 hash-of-species-kind switch (0xb8669ec9/0xbcd73e89/0x37148141 -> 0x29c388a/0x3a8be428/0x6d60a1cc); 54 vs 55 bytes (one branch inverted)
+00b8f9b0 62 Simulator::cSpaceInventoryItem::GetImageID; reads the +0x57c kind then copies one of three 3-DWORD globals into *out; 54 vs 141 bytes because our zero-fill/return paths fold
+00b8fa40 128 cVarListSerializer serialize-to-stream wrapper; 154 vs 141 bytes (0xa14 stack buffer + ctor/serialize call order)
+00b8fad0 169 cVarListSerializer deserialize-from-stream wrapper + GetPlantProfile lookup into +0x94; 178 vs 147 bytes
+00b8fb70 49 cSpaceInventoryItem::IsAvailableInCurrentPlanet: eastl::find over the active planet's 0xbc..0xc0 Key vector; 60 vs 62 bytes
+00b8fbb0 21 rbtree node allocator (0x20 node, copies the 0x10 Key + AddRef the +0x1c value); 86 vs 82 bytes
+00b8fdd0 354 eastl rbtree insert_unique (anchor/root/increment/insert paths); the original's three-way key compare inlines to setb chains, ours reuses stack temporaries so 374 vs 345 bytes
+00b8ff60 43 rbtree clear helper (destroy nodes then reset the anchor/size/color); 43 vs 41 bytes
+00b8ff90 47 Simulator::cGonzagoSubsystem ctor with an intrusive list init at +0x20; 62 vs 56 bytes
+00b8ffd0 48 Simulator::cGonzagoSubsystem vector-deleting destructor; 60 vs 57 bytes
+00b90010 124 rbtree find-or-insert wrapper returning the +0x1c value slot; 112 vs 140 bytes
+00b900a0 785 Simulator::cPlantSpeciesManager record loader (anonymous namespace::ShowObstacleRadii per PDB candidate): local cPlantCargoInfo, GetPropertyAsKey x5 with the 0x2ebcd6a6 sentinel mask, four float properties, then insert into the species map; 900 vs 873 bytes
+00b90410 104 SP::cPlantSpeciesManager::GetSpeciesFromID: rbtree find, lazy load via GetPlantProfile + FUN_00b900a0 when the +0x38 flag is set, return the +0x1c value; 112 vs 104 bytes
