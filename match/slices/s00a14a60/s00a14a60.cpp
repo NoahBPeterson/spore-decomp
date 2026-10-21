@@ -21,7 +21,7 @@ struct MixCtx {
     float tempo;        // +0x30028
 };
 
-struct System {
+class System { public:
     void* Alloc(uint32_t size, const char* name, uint32_t align, uint32_t flags);   // 0x0112c820
     void Free(void* p, uint32_t flags);                                             // 0x0112c850
 };
@@ -52,7 +52,7 @@ struct ChorusLine {               // 0x14 bytes per voice at +0x24
     uint32_t mPhase;              // +0x10 LFO phase, 0..0x0fffffff
 };
 
-struct Chorus {
+class Chorus { public:
     static int Process(Chorus* fx, MixCtx* ctx);   // 0x00a14a60
     char pad00[8];
     EffectOwner* mpOwner;         // +0x08
@@ -216,7 +216,7 @@ struct MultiDelayVoice {          // 0x10 bytes per voice at +0x78
     float pad0c;
 };
 
-struct MultiDelay {
+class MultiDelay { public:
     static int Process(MultiDelay* fx, MixCtx* ctx);   // 0x00a15220
     char pad00[8];
     EffectOwner* mpOwner;         // +0x08

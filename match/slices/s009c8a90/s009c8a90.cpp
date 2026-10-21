@@ -16,11 +16,11 @@
 #include <float.h>
 
 namespace checkerlib {
-struct vector_3 {
+class vector_3 { public:
     float x, y, z;
     vector_3& operator=(const vector_3& o) { x = o.x; y = o.y; z = o.z; return *this; }
 };
-struct vector_4 {
+class vector_4 { public:
     float x, y, z, w;
 };
 inline vector_3 operator+(const vector_3& a, const vector_3& b) { vector_3 r; r.x = a.x + b.x; r.y = a.y + b.y; r.z = a.z + b.z; return r; }
