@@ -2,3 +2,4 @@
 slices/s00ec1830/s00ec1830.cpp  ?FUN_00ec1f80@SP@@YA_NPAUcSPCreatureBase@1@@Z  00ec1f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ec1830/s00ec1830.cpp  ?FUN_00ec2130@SP@@YADPAUcSPCreatureBase@1@PAUPickupTimer@1@M@Z  00ec2130  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ec1830/s00ec1830.cpp  ?FUN_00ec2220@SP@@YADPAUcSPCreatureBase@1@HHHHPAUPickupTimer@1@@Z  00ec2220  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ec1830/s00ec1830.cpp  ?FUN_00ec21c0@SP@@YIPAUPickupTimer@1@PAU21@@Z  00ec21c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
