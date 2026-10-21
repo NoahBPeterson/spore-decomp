@@ -1,4 +1,5 @@
 // Slice s00d07770 — frozen batch gold4 (slice 103)
+#include <intrin.h>
 // SPUI / editor-economy class family: layout setup, city/tribe economy accessors.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 //
@@ -138,6 +139,7 @@ void C103::FillCounts() {
 void* C103::Destroy(u8 flags) {
     int* p = (int*)this;
     *(void**)p = &g_vtbl_14790d0;
+    _ReadWriteBarrier();
     int* a = (int*)p[2];
     if (a != 0) (*(void(__thiscall**)(int*))((char*)*(int**)a + 4))(a);
     int* b = (int*)p[1];
