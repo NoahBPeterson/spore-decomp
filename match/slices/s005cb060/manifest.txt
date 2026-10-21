@@ -4,7 +4,7 @@ slices/s005cb060/s005cb060.cpp  ?GetCategoryInfo@cSPPaletteUI@SP@@QAE?AUcCategor
 slices/s005cb060/s005cb060.cpp  ?SetCurrentCategoryIndex@cSPPaletteUI@SP@@QAEXH@Z  005cb240  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005cb060/s005cb060.cpp  ??0cSPPaletteUI@SP@@QAE@XZ  005cb3b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005cb060/s005cb060.cpp  ??1cSPPaletteUI@SP@@UAE@XZ  005cb420  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s005cb060/s005cb060.cpp  ?DoMessage@cSPPaletteUI@SP@@UAE_NPAVIWindow@UTFWin@EA@@ABUMessage@45@@Z  005cb4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005cb060/s005cb060.cpp  ?DoMessage@cSPPaletteUI@SP@@UAE_NPAVIWindow@UTFWin@EA@@ABVMessage@45@@Z  005cb4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005cb060/s005cb060.cpp  ?Shutdown@cSPPaletteUI@SP@@QAEXXZ  005cba90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005cb060/s005cb060.cpp  ?EditorCommandHandler@SP@@YA_NPBDPAXPAIPAH@Z  005cbb70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005cb060/s005cb060.cpp  ?GetState@cBufferedStream@@UAEHXZ  005cbca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

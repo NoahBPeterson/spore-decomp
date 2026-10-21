@@ -9,7 +9,7 @@ void* operator new(unsigned int n, const char* pName, int flags = 0, unsigned in
 struct cSPColorRGB { float r, g, b; };
 struct cSPColorRGBA { float r, g, b, a; };
 namespace EA { namespace ResourceMan {
-struct Key { uint32_t mInstance, mType, mGroup; };
+class Key { public: uint32_t mInstance, mType, mGroup; };
 } }
 using EA::ResourceMan::Key;
 
@@ -95,7 +95,7 @@ void cSPEditorTuning::LoadTuningValues(App::PropertyList* pList)
 // ---------------------------------------------------------------------------------------------
 // UTFWin
 namespace EA { namespace UTFWin {
-struct Message {
+class Message { public:
     uint32_t pad0[2];
     uint32_t eventType;   // +0x8
     union {
@@ -266,7 +266,7 @@ public:
 #undef PH
     virtual void AddHandler(IHandler* pHandler, uint32_t messageID);   // +0x24
 };
-struct AutoHandler {
+class AutoHandler { public:
     IMessageServer* mpServer;        // +0x0
     IHandler* mpHandler;             // +0x4
     const uint32_t* mpIdArray;       // +0x8
@@ -294,11 +294,11 @@ struct AutoHandler {
 };
 } }
 namespace EA {
-template <class T> struct RefCountVTemplate {
+template <class T> class RefCountVTemplate { public:
     virtual ~RefCountVTemplate() {}
     T mRefCount;
 };
-template <class T> struct AutoRefCount {
+template <class T> class AutoRefCount { public:
     T* mpObject;
     ~AutoRefCount() {
         if (mpObject)

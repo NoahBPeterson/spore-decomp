@@ -46,7 +46,7 @@ struct TipString {
   void append(const wchar_t* s);  // lib_eatext basic_string::append (0x5c3d90)
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
   char pad[0x18];
   cSPUILayout();  // 0x810000
   ~cSPUILayout();  // 0x811fe0
@@ -75,11 +75,11 @@ struct PackVec {
   PackInfo** mpEnd;
 };
 
-struct cSPUIStdDrawable {
+class cSPUIStdDrawable { public:
   void SetImageIcon(int a, void* image);  // 0x831760
 };
 
-struct cSPUITooltipWinProc {
+class cSPUITooltipWinProc { public:
   cSPUITooltipWinProc(const wchar_t* name, uint32_t id, const wchar_t* text, const Vec2* offset, int a, const void* b,
                       int c);  // 0x835e30
 };

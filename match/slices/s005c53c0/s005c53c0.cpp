@@ -478,7 +478,7 @@ struct cSPUILayout {
   IWindow* FindWindowByID(uint32_t id, int a);                         // 0x008105b0
 };
 
-struct cSPEditorPageControls {
+class cSPEditorPageControls { public:
   virtual int AddRef();
   virtual int Release();
   char pad8[0x20];
@@ -487,7 +487,7 @@ struct cSPEditorPageControls {
   void SetFlag(int f);                      // 0x00ed0260
 };
 
-struct cSPEditorColorPicker {
+class cSPEditorColorPicker { public:
   virtual void v0();
   virtual int AddRef();
   virtual int Release();
@@ -502,7 +502,7 @@ struct RCSub {
   virtual int Release();
 };
 
-struct cSPEditorPaintLikeThis {
+class cSPEditorPaintLikeThis { public:
   virtual void v0();
   virtual void Init(cSPPaletteItem* item, IWindow* w, int z, uint32_t arg);
   char pad8[4];
@@ -511,7 +511,7 @@ struct cSPEditorPaintLikeThis {
   cSPEditorPaintLikeThis(uint32_t v);  // 0x005c0f40
 };
 
-struct cSPSwatch {
+class cSPSwatch { public:
   virtual int AddRef();
   virtual int Release();
   virtual void s2();
@@ -528,12 +528,12 @@ struct cSPSwatch {
   void Init(Key* key, IWindow* a, IWindow* b, int c, int d, int e, int f, int g);  // 0x005f5000
   void SetColorId(uint32_t id);                                                    // 0x005f2270
 };
-struct cSPSwatchManager {
+class cSPSwatchManager { public:
   cSPSwatch* CreateSwatch();  // 0x005f0ca0
 };
 cSPSwatchManager* __stdcall GetSwatchManager(int a);  // 0x00401020
 
-struct cSPPaletteSubCategoryUI {
+class cSPPaletteSubCategoryUI { public:
   virtual int AddRef();
   virtual int Release();
   char pad8[0x8c];

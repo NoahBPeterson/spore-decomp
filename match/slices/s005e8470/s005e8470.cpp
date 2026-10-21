@@ -32,7 +32,7 @@ class AutoRefCount {
 void* operator new[](unsigned int n, const char* name, int flags, unsigned int debugFlags,
                      const char* file, int line);  // 0x00f473a0
 namespace eastl {
-struct allocator {
+class allocator { public:
   allocator() {}
   void* allocate(size_t n) {
     return operator new[](n, "Editor", 0, 0, "c:\\EASTL\\include\\EASTL/allocator.h", 0xd1);
@@ -91,7 +91,7 @@ inline wchar_t CharToLower(wchar_t c) {
 
 namespace eastl {
 struct false_type { false_type() {} };
-template <typename It> struct generic_iterator {
+template <typename It> class generic_iterator { public:
   It mIterator;
   generic_iterator() : mIterator(0) {}
   explicit generic_iterator(It p) : mIterator(p) {}
@@ -262,7 +262,7 @@ typedef basic_string<wchar_t> wstring;
 }
 
 namespace EA { namespace ResourceMan {
-struct Key { uint32_t instance, type, group; };
+class Key { public: uint32_t instance, type, group; };
 } }
 
 namespace EA { namespace Random {
@@ -307,7 +307,7 @@ namespace SP { extern EA::Random::RandomLinearCongruential sMathRandom; }  // 0x
 
 
 namespace EA {
-template <typename T> struct RectT {
+template <typename T> class RectT { public:
   T x1, y1, x2, y2;
   RectT() {}
   RectT(const RectT& r) : x1(r.x1), y1(r.y1), x2(r.x2), y2(r.y2) {}

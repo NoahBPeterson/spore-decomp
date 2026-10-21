@@ -278,7 +278,7 @@ void __cdecl SetBlockPileTransform(cSPEditorBlock* block, sp_vector<AutoRefCount
                                    cSPVector3 translation, cSPMatrix3 rotation);          // 0x0049ecf0
 void __cdecl SetBlockScale(cSPEditorBlock* block, float scale, int a, int b);             // 0x0049e6a0
 
-struct cSPUICursorManager {
+class cSPUICursorManager { public:
     void SetLocalCursor(uint32_t id);                                            // 0x00801bb0
 };
 cSPUICursorManager* __cdecl CursorManager();                                    // 0x0067cab0

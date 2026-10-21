@@ -41,7 +41,7 @@ int cVerbIconInterpolationValue::IsAtTarget()
 
 // ---------------------------------------------------------------------------------------------
 namespace SP {
-struct cSPEditorVerbIcon {
+class cSPEditorVerbIcon { public:
     char pad[0x6a];
     char m6a;   // +0x6a
     char m6b;   // +0x6b

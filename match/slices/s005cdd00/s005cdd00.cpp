@@ -13,11 +13,11 @@ struct __declspec(align(16)) hkVector4 {
   hkVector4(float a, float b, float c, float d) : x(a), y(b), z(c), w(d) {}
 };
 
-struct hkTransform {
+class hkTransform { public:
   char pad[0x40];
 };
 
-struct hkMatrix3 {
+class hkMatrix3 { public:
   hkVector4 c0, c1, c2;
   void mul(float s);
 };
@@ -43,7 +43,7 @@ class cHandleish {
   void SetEnabled(int enabled);  // 0x005a8a80
 };
 
-struct hkRigidBodyCinfo {
+class hkRigidBodyCinfo { public:
   char pad[0xd0];
 };
 

@@ -50,14 +50,14 @@ class IUnknown32 {
 }
 
 namespace ResourceMan {
-struct Key {
+class Key { public:
   unsigned int mInstance, mType, mGroup;
   Key() {}
   Key(unsigned int i, unsigned int t, unsigned int g) : mInstance(i), mType(t), mGroup(g) {}
 };
 }
 
-struct RectT {
+class RectT { public:
   float left, top, right, bottom;
   float Width() const { return right - left; }
   float Height() const { return bottom - top; }

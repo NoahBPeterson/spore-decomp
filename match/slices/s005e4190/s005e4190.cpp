@@ -40,7 +40,7 @@ union EmptyString {
 };
 extern EmptyString gEmptyString;
 
-struct allocator {
+class allocator { public:
   allocator() {}
 };
 
@@ -70,7 +70,7 @@ void WStr_Format(eastl::wstring* out, const wchar_t* format, ...);
 
 namespace EA {
 namespace ResourceMan {
-struct Key {
+class Key { public:
   uint32_t instanceID;
   uint32_t typeID;
   uint32_t groupID;
@@ -289,7 +289,7 @@ class cSPEditorVerbIconData {
 
 class cSPEditorVerbIcon : public EA::UTFWin::IWinProc, public EA::RefCountVTemplate<int> {
  public:
-  struct cVerbIconLinearInterpolationValue {
+  class cVerbIconLinearInterpolationValue { public:
     float mTargetValue;
     float mCurrentValue;
     float mElapsedTime;
@@ -310,7 +310,7 @@ class cSPEditorVerbIcon : public EA::UTFWin::IWinProc, public EA::RefCountVTempl
       mElapsedTime = 0.0f;
     }
   };
-  struct cVerbIconInterpolationValue {
+  class cVerbIconInterpolationValue { public:
     float mTargetValue;
     float mCurrentValue;
     float mElapsedTime;
@@ -319,7 +319,7 @@ class cSPEditorVerbIcon : public EA::UTFWin::IWinProc, public EA::RefCountVTempl
     float mOverShoot;
     float mDampenPercent;
   };
-  struct cVerbIconMiddleInterpolationValue {
+  class cVerbIconMiddleInterpolationValue { public:
     float mEndValue;
     float mMiddleValue;
     float mCurrentValue;
@@ -329,7 +329,7 @@ class cSPEditorVerbIcon : public EA::UTFWin::IWinProc, public EA::RefCountVTempl
     float mMiddleEnd;
     float mDuration;
   };
-  struct cVerbIconOscillatingAlpha {
+  class cVerbIconOscillatingAlpha { public:
     float mInitialValue;
     float mEndValue;
     float mCurrentValue;

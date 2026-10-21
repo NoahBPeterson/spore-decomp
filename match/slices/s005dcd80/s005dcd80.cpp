@@ -16,7 +16,7 @@ struct Rectangle {
 
 namespace EA {
 namespace ResourceMan {
-struct Key {
+class Key { public:
   uint32_t instanceID;
   uint32_t typeID;
   uint32_t groupID;

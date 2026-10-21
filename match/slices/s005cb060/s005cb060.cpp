@@ -66,7 +66,7 @@ class IUnknown32 {
 }  // namespace COM
 
 namespace ResourceMan {
-struct Key {
+class Key { public:
   unsigned int mInstance, mType, mGroup;
   Key() {}
   Key(unsigned int instance, unsigned int type, unsigned int group)
@@ -103,7 +103,7 @@ class IWindow : public COM::IUnknown32 {
   virtual void RemoveWinProc(IWinProc* proc);  // +0x108
 };
 
-struct Message {
+class Message { public:
   uint32_t pad0[2];
   uint32_t mEventType;  // +0x8
   int mControlID;       // +0xc
@@ -288,7 +288,7 @@ class cSPPalette : public EA::RefCountVTemplate<int>, public EA::COM::IUnknown32
   cSPPaletteCategory* GetCategory(int index);  // 0x005c5de0
 };
 
-class cSPPaletteInfo : public EA::RefCountVTemplate<int> {};
+struct cSPPaletteInfo : public EA::RefCountVTemplate<int> { private:};
 
 struct cCategoryInfo {
   cCategoryInfo() {}
@@ -645,7 +645,7 @@ cStreamBuffer::cStreamBuffer() {
   }
 }
 
-class IStream {
+struct IStream { private:
  public:
   ~IStream() {}
   virtual int GetState();                          // +0x0

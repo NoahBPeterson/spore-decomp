@@ -44,7 +44,7 @@ void operator delete(void* p, const char*, int, unsigned int, const char*, int) 
 // ---------------------------------------------------------------------------------------------
 // EASTL pieces
 namespace eastl {
-struct allocator {
+class allocator { public:
     void* allocate(unsigned int n)
     {
         return ::operator new[](n, "Editor", 0, 0,
@@ -160,7 +160,7 @@ struct prime_rehash_policy {
 extern void* gpEmptyBucketArray[2];   // 0x0154DF28
 
 // eastl::hash_map<K, const char*>
-template <class K> struct hash_map {
+template <class K> class hash_map { public:
     uint32_t mEmptyBase;              // +0x0
     void** mpBucketArray;             // +0x4
     unsigned int mnBucketCount;       // +0x8
@@ -186,7 +186,7 @@ typedef eastl::fixed_string16<97> PathString;
 // EA framework
 namespace EA {
 namespace Thread {
-struct AtomicInt {
+class AtomicInt { public:
     volatile long mValue;
     long Increment() { return _InterlockedExchangeAdd(&mValue, 1) + 1; }
     long Decrement() { return _InterlockedDecrement(&mValue); }
@@ -195,7 +195,7 @@ struct AtomicInt {
 }
 
 // Generic AutoRefCount: T supplies AddRef/Release.
-template <class T> struct AutoRefCount {
+template <class T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount() : mpObject(0) {}
     AutoRefCount(T* p) : mpObject(p)
@@ -225,7 +225,7 @@ template <class T> struct AutoRefCount {
 };
 
 // Non-atomic intrusive count at +4, delete through the virtual destructor at slot 0.
-struct RefCounted {
+class RefCounted { public:
     RefCounted() : mRefCount(0) {}
     virtual ~RefCounted() {}
     int mRefCount;   // +0x4
@@ -266,7 +266,7 @@ struct IRefCountV {
     virtual int Release();
 };
 
-struct AppCommandLine {
+class AppCommandLine { public:
     int FindSwitch(const wchar_t* pSwitch, bool bCaseSensitive, void* pResult, int nIndex) const;   // 0x0092B300
 };
 
@@ -290,7 +290,7 @@ struct Variant {
 namespace Hash { uint32_t FNV1_String8(const char* p, uint32_t seed, int bCaseConvert); }   // 0x00932E80
 
 namespace Messaging {
-struct IHandler {
+class IHandler { public:
     virtual ~IHandler() {}
     virtual bool HandleMessage(uint32_t messageID, void* pMessage);
     virtual int AddRef();
@@ -302,7 +302,7 @@ struct IMessageServer {
     virtual void v06(); virtual void v07(); virtual void v08();
     virtual void AddHandler(IHandler* pHandler, uint32_t messageID);                   // +0x24
 };
-struct AutoHandler {
+class AutoHandler { public:
     IMessageServer* mpServer;    // +0x0
     IHandler* mpHandler;         // +0x4
     const uint32_t* mpIdArray;   // +0x8
@@ -322,7 +322,7 @@ struct AutoHandler {
 }
 
 namespace Internet {
-struct INetFileCache {
+class INetFileCache { public:
     char pad[0x70];
     INetFileCache();                                          // 0x00949B80
     int AddRef();                                             // 0x0093C3E0
@@ -337,7 +337,7 @@ namespace XHTML { namespace Resource {
 struct IResourceFactory : public EA::RefCounted {
     virtual void v1();
 };
-struct IProtocolHandler {
+class IProtocolHandler { public:
     virtual ~IProtocolHandler() {}
     virtual int AddRef();
     virtual int Release();
@@ -345,7 +345,7 @@ struct IProtocolHandler {
 struct IFilter;
 struct IAuthenticator : public EA::RefCounted {};
 
-struct ResourceProvider {
+class ResourceProvider { public:
     char pad[0x2a8];
     ResourceProvider(void* pAllocator);                                       // 0x008FFE80
     void RegisterFactory(IResourceFactory* pFactory, bool bTakeOwnership);   // 0x008FFD50
@@ -353,15 +353,15 @@ struct ResourceProvider {
 };
 void SetResourceProvider(ResourceProvider* p);                                // 0x008FE930
 
-struct StylesheetFactory : public IResourceFactory {
+class StylesheetFactory : public IResourceFactory { public:
     uint32_t mList[5];            // +0x8 (begin, end, capacity + allocator)
     eastl::string16 mBaseURL;     // +0x1c
     StylesheetFactory() { mList[0] = 0; mList[1] = 0; mList[2] = 0; }
 };
-struct DocumentFactory : public IResourceFactory {};
+class DocumentFactory : public IResourceFactory { public:};
 struct ImageFactory : public IResourceFactory {};
 
-struct HTTPHandler : public IProtocolHandler {
+class HTTPHandler : public IProtocolHandler { public:
     char pad04[0x1dc - 4];
     EA::AutoRefCount<IAuthenticator> mpAuthenticator;   // +0x1dc
     char pad1e0[0x1f8 - 0x1e0];
@@ -379,7 +379,7 @@ struct HTTPHandler : public IProtocolHandler {
 // SP subsystems (only the slots/methods used here)
 namespace SP {
 struct cPropertyBlock { char pad[0x118]; int mbCSAMode; };
-struct cDirectPropertyList {
+class cDirectPropertyList { public:
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04();
     virtual void SetProperty(uint32_t id, const EA::Variant& value);   // +0x14
     virtual void v06();
@@ -390,7 +390,7 @@ struct cDirectPropertyList {
 };
 extern cDirectPropertyList* sAppProperties;   // 0x015FD918
 
-struct cSPEditorResourceFactory {
+class cSPEditorResourceFactory { public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual bool IsValid();       // +0x10
 };
@@ -407,7 +407,7 @@ struct IResourceManager {
 IResourceManager* GetManager();                            // EA::ResourceMan::GetManager 0x0067DCD0 (not the SP::ResourceManager wrapper)
 void InitEditorMemory(int a, int b);                        // 0x006ADC60
 
-struct cPollinator {
+class cPollinator { public:
     virtual ~cPollinator();
     char pad04[0x120 - 4];
     cPollinator();                // 0x00611580
@@ -445,11 +445,11 @@ EA::Messaging::IMessageServer* MessageServer();   // 0x0067DCC0
 
 namespace Pollen {
 void InitURLs();                                // 0x00621830
-struct CookieHandler : public EA::AtomicRefCounted {
+class CookieHandler : public EA::AtomicRefCounted { public:
     char pad08[0x48 - 8];
     CookieHandler(int a, int b);                // 0x0060A990
 };
-struct cCanvasResFilter : public EA::AtomicRefCounted {
+class cCanvasResFilter : public EA::AtomicRefCounted { public:
     char pad08[0x1c - 8];
     cCanvasResFilter();                         // 0x006094A0
     void Init();                                // 0x00609760
@@ -459,7 +459,7 @@ struct cBuddyModeFilter : public EA::AtomicRefCounted {
     cBuddyModeFilter();                         // 0x006094E0
     void Init();                                // 0x00609630
 };
-struct cAuthManager {
+class cAuthManager { public:
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
     virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
     virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
@@ -471,7 +471,7 @@ struct cAuthManager {
 cAuthManager* AuthManager();                    // 0x00607A60
 }
 
-struct cLocaleManager {
+class cLocaleManager { public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
     virtual const eastl::string16& GetLocale();   // +0x14
 };
@@ -512,14 +512,14 @@ struct cSPUIXHTMLDataURIHandler : public EA::XHTML::Resource::IProtocolHandler {
 };
 
 void AddGIFImport();                          // 0x0084BC60
-struct cXHTMLControlAppearance : public EA::IRefCountV {
+class cXHTMLControlAppearance : public EA::IRefCountV { public:
     char pad04[0x24 - 4];
     cXHTMLControlAppearance();                // 0x00621EE0
     void Init();                              // 0x00622130
 };
 void SetXHTMLControlAppearance(cXHTMLControlAppearance*);   // 0x00621C80
 
-struct cISPCreatureAnimManager {   // IRefCount
+class cISPCreatureAnimManager { public:   // IRefCount
     virtual int AddRef();
     virtual int Release();
     virtual void Dispose(bool b);              // +0x8
@@ -537,7 +537,7 @@ struct cHintManager : public EA::IRefCountV {
 void SetHintManager(cHintManager*);            // 0x0067CBC0
 
 namespace EditorValidity { void InitializeValidityData(); }   // 0x004EBE20
-struct cIEditorBaker {
+class cIEditorBaker { public:
     virtual int AddRef();
     virtual int Release();
     virtual void Init();                       // +0x8
@@ -545,7 +545,7 @@ struct cIEditorBaker {
 cIEditorBaker* CreateEditorBaker();            // 0x00417D10
 void SetEditorBaker(cIEditorBaker*);           // 0x004010C0
 
-struct cSPSwatchManager : public EA::RefCounted {
+class cSPSwatchManager : public EA::RefCounted { public:
     char pad08[0x54 - 8];
     cSPSwatchManager();                        // 0x005F0AC0
     void Init();                               // 0x005F0140
@@ -557,7 +557,7 @@ struct cSPUILayoutManager { IWindow* GetWorldMainWindow(uint32_t id); };   // 0x
 cSPUILayoutManager* GetLayoutManager();        // 0x00805070
 void PreloadLayout(uint32_t layoutID);         // 0x00458C60
 
-struct cSPUIAssetBrowser : public EA::Messaging::IHandler {
+class cSPUIAssetBrowser : public EA::Messaging::IHandler { public:
     char pad04[0x250 - 4];
     cSPUIAssetBrowser();                       // 0x00648730
     void Init(IWindow* pParent, bool bSporeGuide);   // 0x00649F60
@@ -566,7 +566,7 @@ struct cSPUIAssetBrowser : public EA::Messaging::IHandler {
 void SetAssetBrowser(cSPUIAssetBrowser*);      // 0x004010E0
 void SetSporeGuide(cSPUIAssetBrowser*);        // 0x004010F0
 
-struct cSPEditorEffects : public EA::IRefCountV {
+class cSPEditorEffects : public EA::IRefCountV { public:
     char pad04[0x28 - 4];
     cSPEditorEffects();                        // 0x0045AA70
     void Init();                               // 0x004AE250
@@ -584,7 +584,7 @@ void SetEditorPartsDB(cEditorPartsDB*);        // 0x00401140
 struct cEditorRigblockDB { char pad[0x40c]; cEditorRigblockDB(); void Init(); }; // 0x005EA970 / 0x005EC7C0
 void SetEditorRigblockDB(cEditorRigblockDB*);  // 0x00401150
 
-struct cContentValidationSummarizer { char pad[8]; cContentValidationSummarizer(); };   // 0x00557FC0
+class cContentValidationSummarizer { public: char pad[8]; cContentValidationSummarizer(); };   // 0x00557FC0
 struct cSummarizerBase {
     virtual void v0();
     int mUnknown4;
@@ -595,7 +595,7 @@ struct cBuildingSummarizer : public cSummarizerBase { virtual void v1(); };
 }
 
 namespace nSPSkinner {
-struct cPaintSystem : public EA::Messaging::IHandler {
+class cPaintSystem : public EA::Messaging::IHandler { public:
     char pad04[0x108 - 4];
     cPaintSystem();                            // 0x0051E180
     void Setup();                              // 0x0051E5B0 (symbols name 0x0075D990 cPaintSystem::Init; this is a different method)
@@ -605,14 +605,14 @@ namespace SP {
 void SetSkinPaintSystem(nSPSkinner::cPaintSystem*);   // 0x00401130
 
 namespace Thumbnail {
-struct cImportExport { void Init(bool bShipDirs); };   // 0x005FD880
+class cImportExport { public: void Init(bool bShipDirs); };   // 0x005FD880
 cImportExport* CreateImporterExporter();               // 0x005FD850
 void SetImporterExporter(cImportExport*);              // 0x005F7920
 }
 }
 
 namespace EA { namespace Clipboard {
-struct Clipboard {
+class Clipboard { public:
     char pad[0x150];
     Clipboard();                               // 0x0092A880
     void SetId(int id);                        // 0x0092B0F0

@@ -40,7 +40,7 @@ inline unsigned int CharStrlen(const wchar_t* p) {
   return (unsigned int)(pCurrent - p);
 }
 
-struct allocator {
+class allocator { public:
   allocator() {}
 };
 
@@ -148,7 +148,7 @@ class RefCountVTemplate {
 };
 
 namespace ResourceMan {
-struct Key {
+class Key { public:
   uint32_t instanceID;
   uint32_t typeID;
   uint32_t groupID;

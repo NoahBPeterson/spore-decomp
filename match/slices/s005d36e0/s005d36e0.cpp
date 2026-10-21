@@ -3,16 +3,16 @@
 #include "types.h"
 
 // ---- local stubs (retail offsets: dev PDB cSPEditorSpine minus 8) ----
-struct hkMemory {
+class hkMemory { public:
   virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
   virtual void* allocate(int size, int type);  // vtbl +0x10
 };
 extern hkMemory* g_hkMemory;  // @ 0x016e4178
 
 __declspec(align(16)) struct hkVector4 { float x, y, z, w; };
-struct hkTransform { float rot[12]; float trans[4]; };
+class hkTransform { public: float rot[12]; float trans[4]; };
 
-struct hkReferencedObject {
+class hkReferencedObject { public:
   virtual void deleteThis(int);
   uint16_t memSizeAndFlags;  // +4
   uint16_t referenceCount;   // +6
@@ -24,26 +24,26 @@ struct hkReferencedObject {
   }
 };
 
-struct hkMouseSpringAction : hkReferencedObject {
+class hkMouseSpringAction : public hkReferencedObject { public:
   uint32_t pad[0x12];
   hkMouseSpringAction* Construct(const hkVector4& posInRb, const hkVector4& mousePos, float damping,
-                                 float elasticity, float maxForce, struct hkRigidBody* rb);  // @ 0x011278b0
+                                 float elasticity, float maxForce, class hkRigidBody* rb);  // @ 0x011278b0
   void setMaxRelativeForce(float f);  // @ 0x00c87bc0 (ICF'd as SetMaxCargoAmount)
 };
 
-struct hkRigidMotion {
+class hkRigidMotion { public:
   uint32_t pad[0x10];
   float pos[4];  // +0x40
   float getMass() const;  // @ 0x01088270
 };
-struct hkRigidBody {
+class hkRigidBody { public:
   uint32_t pad[0x16];
   hkRigidMotion* motion;  // +0x58
   void setMotionType(int type, int a, int b);  // @ 0x01087520
   void addCollisionListener(void* l);          // @ 0x01088c90
   void removeReference();                      // @ 0x0109ae60
 };
-struct hkWorld {
+class hkWorld { public:
   void removeAction(hkMouseSpringAction* a);  // @ 0x01086f40
   void addAction(hkMouseSpringAction* a);     // @ 0x01085e60
   hkRigidBody* addEntity(hkRigidBody* e, int a);  // @ 0x01082ee0

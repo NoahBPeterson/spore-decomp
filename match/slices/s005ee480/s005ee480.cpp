@@ -63,7 +63,7 @@ class IUnknown32 {
 }  // namespace COM
 
 namespace ResourceMan {
-struct Key {
+class Key { public:
   unsigned int mInstance, mType, mGroup;
   Key() {}
   Key(unsigned int instance, unsigned int type, unsigned int group) {
@@ -74,12 +74,12 @@ struct Key {
 };
 }  // namespace ResourceMan
 
-struct RectT {
+class RectT { public:
   float left, top, right, bottom;
   RectT() {}
   RectT(const RectT& r) : left(r.left), top(r.top), right(r.right), bottom(r.bottom) {}
 };
-template <typename T> struct Point2DT {
+template <typename T> class Point2DT { public:
   T x, y;
   Point2DT(T ax, T ay) : x(ax), y(ay) {}
   Point2DT(const Point2DT& p) : x(p.x), y(p.y) {}
@@ -112,7 +112,7 @@ class IWindow : public COM::IUnknown32 {
   virtual void RemoveWinProc(IWinProc* proc);      // +0x108
 };
 
-struct Message {
+class Message { public:
   uint32_t pad0[2];
   int mEventType;
   int mParam0c;

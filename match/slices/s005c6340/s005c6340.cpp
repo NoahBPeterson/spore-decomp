@@ -89,7 +89,7 @@ class IUnknown32 {
 }  // namespace COM
 
 namespace ResourceMan {
-struct Key {
+class Key { public:
   unsigned int mInstance, mType, mGroup;
 };
 
@@ -111,7 +111,7 @@ class StandardFileFilter : public IResourceFilter {
 };
 }  // namespace ResourceMan
 
-struct RectT {
+class RectT { public:
   float left, top, right, bottom;
   RectT(const RectT& r) : left(r.left), top(r.top), right(r.right), bottom(r.bottom) {}
 };
@@ -131,7 +131,7 @@ class IWindow : public COM::IUnknown32 {
   virtual void RemoveWinProc(IWinProc* proc);  // +0x108
 };
 
-struct Message {
+class Message { public:
   uint32_t pad0[2];
   int mEventType;   // +0x8
   int mParam0c;     // +0xc

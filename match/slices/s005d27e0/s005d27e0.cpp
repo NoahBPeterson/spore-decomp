@@ -109,7 +109,7 @@ struct VMap {                       // eastl::map<unsigned, VertVal> at spine+0x
     }
 };
 
-struct hkMotion { float getMass(); };                // 0x01088270 hkRigidMotion::getMass
+class hkMotion { public: float getMass(); };                // 0x01088270 hkRigidMotion::getMass
 struct hkBody { char pad[0x58]; hkMotion* motion; };
 
 struct ModelT { char pad[0x58]; float f58; };     // cMWModel: +0x58 packs mHighlightType/mCustomPickLevel/+0x5a
@@ -168,7 +168,7 @@ struct Ob {
     void FUN_004acab0(BlockT* b, int v);
 };
 
-struct hkTransform { float rot[3][4]; float pos[4]; };
+class hkTransform { public: float rot[3][4]; float pos[4]; };
 struct Mat3 { float m[9]; };
 void FUN_004a92c0(Mat3* rot, hkTransform* xf);   // 0x004a92c0 (cdecl)
 void FUN_005cd670(hkTransform* xf, int axis);    // 0x005cd670 (cdecl)
@@ -184,7 +184,7 @@ struct PointCollector {                             // hkCdPointCollector over a
     CdPoint buf[8];
 };
 extern char vtbl_collector[];                       // 0x013ef55c
-struct hkSimpleShapePhantom : HkRef {
+class hkSimpleShapePhantom : public HkRef { public:
     hkSimpleShapePhantom(HkRef* shape, const hkTransform* xf, unsigned key);   // 0x0108c750
     virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
     virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10();
@@ -238,7 +238,7 @@ struct Spine {
     BlockT* FUN_005d27e0(BlockT* src, float* dir, float* rot);
     HkRef* CreateVertebraShape(float scale);            // 0x005cd9a0
     unsigned MakeVertKey(float scale, int idx);         // 0x005cdb30
-    void FUN_005ce060(VertVal* out, float scale, struct hkTransform* xf);   // 0x005ce060
+    void FUN_005ce060(VertVal* out, float scale, class hkTransform* xf);   // 0x005ce060
     void FUN_005d2790();
     bool FUN_005d3010(unsigned key, int, int, int, int, int, int);
     float FUN_005d3100();

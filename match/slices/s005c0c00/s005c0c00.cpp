@@ -48,7 +48,7 @@ class RefCountVTemplate {
 };
 
 namespace ResourceMan {
-struct Key {
+class Key { public:
   unsigned int mInstance, mType, mGroup;
   Key() {}
   Key(unsigned int i, unsigned int t, unsigned int g) : mInstance(i), mType(t), mGroup(g) {}
@@ -88,7 +88,7 @@ class IWinProc {
   PV(2) PV(3) PV(4)
   virtual bool HandleUIMessage(IWindow* window, const void* message);  // +0x14
 };
-struct Message {
+class Message { public:
   IWindow* mpSource;  // +0x0
   uint32_t pad4;
   int mType;          // +0x8
@@ -229,7 +229,7 @@ class cSPPaletteItem {
   } mIface;  // +0x8
   char pad0c[0x54 - 0xc];
 };
-class cSPPaletteInfo {
+struct cSPPaletteInfo { private:
  public:
   PV(0)
   virtual int AddRef();
@@ -724,7 +724,7 @@ InputIterator find(InputIterator first, InputIterator last, const T& value) {
 }
 template cSPPaletteItem** find<cSPPaletteItem**, cSPPaletteItem*>(cSPPaletteItem**, cSPPaletteItem**, cSPPaletteItem* const&);
 
-struct cSPPaletteCategory {
+class cSPPaletteCategory { public:
   char pad[0xc];
   struct Page { char pad[0x5c]; uint32_t mCategory; }** mPagesBegin;  // +0xc
   Page** mPagesEnd;                                                  // +0x10
