@@ -60,7 +60,7 @@ struct DrawState { uint32_t flags; uint32_t part; };
 }
 namespace EA {
 namespace UTFWinControls {
-struct SpinnerDrawable {
+class SpinnerDrawable { public:
     uint32_t pad[4];                        // +0x00 (vptrs, refcount, ...)
     UTFWin::Image_s0098_6680* mImages[3];              // +0x10 (indexed by part)
     void __thiscall CreateRenderables(UTFWin::RenderContext_s0098_6680* ctx, const float* rc, const DrawState* st);
