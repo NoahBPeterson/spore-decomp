@@ -1,0 +1,20 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+# This whole range is RenderWare 4 core built with VC .NET 2003 (cl 13.10) /GL+/LTCG
+# (symbols/renderware4_core.txt); a single-object /vc71 rebuild cannot reproduce the
+# cross-call register allocation, so only leaf functions are byte-exact.  All rows below
+# compile cleanly with flags /vc71 /O2 /MD /Gy /EHsc /TP and were checked with
+# tools/difftest/equiv.py (verdicts at the end of each line).
+011e6870  264  startnextrequest: complete (lock, pending-request promotion, path/id re-scan). Eq FAIL (harness cannot set ecx-only `this`).
+011e69d0   87  Stream::QueueFile: complete (getfreerequest, StringnCopy, field init, queuerequest, lock, startnextrequest). Eq FAIL (executes unresolved externals).
+011e6aa0  105  Stream::QueueMem: complete (getfreerequest, field init, queuerequest, lock, startnextrequest). Eq FAIL (executes unresolved externals).
+011e6b50  124  Stream::GetChunk: complete (lock, size accounting, free-list walk). Eq FAIL (executes unresolved externals).
+011e6c00   15  lookup request by id, returns +0x130. Eq PASS (100% coverage).
+011e6c40    2  accessor impl->(+0x68). Eq PASS (100% coverage).
+011e6c80   12  lookup request by id, returns +4 or 0. Eq PASS (85% coverage).
+011e6cd0   87  set priority threshold + AsyncOp::SetPriority wake. Eq UNSUPPORTED (needs `this` in ecx; harness ABI).
+011e6d20   67  StreamImpl allocator shim. Eq UNSUPPORTED (harness fake-arity).
+011e6d70  510  parsechunks: complete chunk-walker (per-chunk callback, 0x18-byte node alloc, queue link). Eq UNSUPPORTED (executes callback through allocator slot).
+011e6fc0  379  readcallback: complete (byte accounting, 64-bit total vs need, parsechunks, schedule). Eq UNSUPPORTED (executes unresolved externals).
+011e70f0  669  readcallback thunk (tail-call form). Eq UNSUPPORTED (tail-call convention).
+011e7100  707  restartstream: complete (retire/free chunk nodes, prune pending queue under lock, refill window or issue async read). Eq UNSUPPORTED (executes unresolved externals).
+011e7410  559  Stream ctor: complete (tag, mutex, request-table alloc+link, window limits, list anchors). Eq UNSUPPORTED (executes unresolved externals).

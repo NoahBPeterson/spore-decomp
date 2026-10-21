@@ -1,0 +1,17 @@
+011e6870 startnextrequest  # lock, promote next pending request, prime it, then restartstream or re-scan
+011e69d0 rw::core::filesys::Stream::QueueFile  # getfreerequest + StringnCopy, field init, queuerequest, lock, startnextrequest
+011e6aa0 rw::core::filesys::Stream::QueueMem  # getfreerequest, field init, queuerequest, lock, startnextrequest
+011e6b50 rw::core::filesys::Stream::GetChunk  # lock, size accounting, free-list walk, returns node+4
+011e6c00 request lookup by id (returns +0x130)  # idx=id&0xff < impl[0x34]; match id, non-null +4
+011e6c40 accessor impl->(+0x68)
+011e6c50 idle predicate: impl[0x68]==0 && self[0xc]==0
+011e6c70 remaining byte count: impl[0x64]-impl[0x5c]
+011e6c80 request lookup by id (returns +4 or 0)
+011e6cc0 accessor impl->(+0x208) 64-bit
+011e6cd0 set priority threshold; wake AsyncOp when crossing
+011e6d20 StreamImpl allocator shim (0x14/0x18/0x1e0-blk forms)
+011e6d70 rw::core::filesys::parsechunks  # chunk-walker driving the state machine
+011e6fc0 rw::core::filesys::readcallback  # byte accounting, parsechunks, schedule next
+011e70f0 readcallback thunk: readcallback(*(this+0x14))
+011e7100 rw::core::filesys::restartstream  # retire chunk nodes, prune pending queue, refill window or async read
+011e7410 rw::core::filesys::Stream constructor  # tag "STRM", mutex, request table, window limits, list anchors
