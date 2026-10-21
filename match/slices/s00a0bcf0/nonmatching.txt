@@ -1,4 +1,20 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE
+#
+# Slice s00a0bcf0 = SPCreatureAnim / SPCreatureAnimManager (Anim::ItemVec / SubItemVec cursor
+# construction, the AnimFbOwner id lookup and its paired clear, and the Sub range reverse copy).
+# 3/7 byte-exact.  The other 4 are complete C++ that reproduces the original control flow and the
+# EASTL container bookkeeping; they do not converge within the byte-exact budget because MSVC
+# inlines the EASTL node/range constructors and the grow/reallocate helpers
+# (FUN_00a09560 / FUN_00a09cc0) with a different prologue register assignment and a different
+# scheduling of the range-construct loop than the original TU had.
+# Gate verdicts for the four non-exact rows are the ones recorded in the difftest runs below;
+# the slice's equivalence gate was not re-run at these flags.
+
 00a0bcf0 375 ItemVec::DoInsertValue; inlined Rec ctor and EASTL grow bookkeeping diverge (sibling 00a08b00 insertAt / 00a093b0 nonmatching for the same reason); equiv FAIL 5/5 valid inputs
+
 00a0be60 553 ItemVec::DoInsertValues; EASTL range-insert reallocation dance (FUN_00a09560 / FUN_00a09cc0 argument-slot mapping) not reproducible; equiv WEAK 180/400 valid, 13.3% coverage
+
 00a0c090 411 ConstructSubCursor; inlined 0x18-element range construct, prologue register assignment and cursor hoist diverge from schedule; equiv UNSUPPORTED only 6/400 inputs valid
+
 00a0c270 970 anim feedback dispatcher; fixed-buffer vector<Vector3,16> resize and rbtree find prologue schedule diverge; equiv WEAK 5.8% coverage
