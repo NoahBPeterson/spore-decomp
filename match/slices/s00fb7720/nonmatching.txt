@@ -1,14 +1,13 @@
-00fb7720
-00fb77b0
-00fb78f0
-00fb7920
-00fb79b0
-00fb7a60
-00fb7b30
-00fb7bf0
-00fb7c70
-00fb7dc0
-00fb7f00
-00fb8060
-00fb8100
-00fb8410
+00fb7720 110 QuadFree: register roles + hand-written idiv-by-0x4400; equiv UNSUPPORTED (__allshr)
+00fb77b0 302 QuadSubdivide: 4-child alloc/transform loop; only a reduced body survives DCE; equiv UNSUPPORTED (0/400 inputs valid)
+00fb7920 45 QuadAddRibbonPolys: argument push/eval order only; equiv UNSUPPORTED (intra-slice struct symbols unresolved)
+00fb79b0 145 FUN_00fb79b0_impl: element-wise vector release; equiv UNSUPPORTED (register ABI)
+00fb7a60 36 QuadReleaseVec: marker collapses onto QuadReset; scalar cleanup schedule differs; equiv UNSUPPORTED (no object symbol)
+00fb7a90 123 QuadInitParams: field-init order and FP constant schedule differ; equiv PASS (memory identical)
+00fb7bf0 46 QuadSetHeight: x87 compare ok; p*c1-c2 register schedule + const layout differ; equiv UNSUPPORTED (intra-slice struct symbols unresolved)
+00fb7c70 308 SampleTileA: retail 2-level unrolled split, ours flat integer split; equiv PASS (memory identical)
+00fb7dc0 281 SampleTileB: retail takes a 5th stack arg (alpha byte); the 4-param slice symbol cannot consume it
+00fb7f00 307 SampleTileC: blend arithmetic reordered; equiv memory identical, only leftover eax differs (void fn)
+00fb8060 142 ReplicateRows: nested stride-0x400 copy loop; equiv memory identical, only leftover eax differs (void fn)
+00fb8100 715 BuildQuadTiles: hand-unrolled 4-way lerp loop; unroll/constant layout differ; equiv PASS (memory identical)
+00fb8410 195 CopySubBuffer: stride-4 row copy/expansion; loop tail and extent differ; equiv memory identical, only leftover eax differs

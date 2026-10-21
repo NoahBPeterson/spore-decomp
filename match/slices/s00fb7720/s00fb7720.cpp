@@ -15,7 +15,8 @@ typedef unsigned char  uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int   uint32_t;
 
-static inline float fabsf_(float x) { return x < 0.0f ? -x : x; }
+#include <math.h>
+static inline float fabsf_impl(float x) { return fabs(x); }
 
 // --- external engine entry points ------------------------------------------
 extern void* FUN_00fb65b0(void*, void*, void*);            // 0x00fb65b0
@@ -25,9 +26,12 @@ extern void* EAAllocate(unsigned int, const char*, int, int, int, int); // 0x00f
 extern void  FUN_00fb4c90(void*);                          // 0x00fb4c90
 extern void  FUN_00fb71c0(void*);                          // 0x00fb71c0 (thiscall, 1 arg)
 extern void  FUN_00fb71c0_2(void*, void*);                 // 0x00fb71c0 (thiscall, 2 args)
+struct TCVec { void Set(int arg); void Release(); void ReleaseArg(void* p); };  // 0x00fb71c0 / 0x00fb75b0 / 0x00fb7640
 extern void  FUN_00fb75b0(void*);                          // 0x00fb75b0 (thiscall)
 extern void  FUN_00fb6fb0(void*, void*, void*, void*);     // 0x00fb6fb0
 extern void  FUN_00fb7640(void*, void*);                   // 0x00fb7640
+struct TCVec2 { void Add(void* a, void* b, void* c, void* d); }; // 0x00fb6fb0
+struct TC1Self { void Append(void* p); void Release(); void Set2(void* arg); };
 extern void* operator_delete(void*);                       // 0x00f47380
 extern void  eastl_vector_insert(void*, void*, void*, int); // 0x011e0744
 extern void  FUN_00fb79b0_impl(uint8_t*);                  // defined below (thiscall)
@@ -103,12 +107,25 @@ struct TC1 { void QuadReset(int arg); void QuadSetSplit(float p);
              void QuadSetPair(int* p); void QuadSetHeight(float p);
              void QuadAddRibbonPolys(int* p); };
 
+// Vtable view of the object referenced by *this (slot +0x48 == virtual #18).
+struct VNode {
+    virtual void v0();  virtual void v1();  virtual void v2();  virtual void v3();
+    virtual void v4();  virtual void v5();  virtual void v6();  virtual void v7();
+    virtual void v8();  virtual void v9();  virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(int arg);
+};
+// 0x00ff03c0 -- __thiscall(float), receiver is the quad's 2nd sub-object.
+struct QuadSub { void SetValue(float v); };
+// 0x00fa43e0 -- SP::cTerrainSphere::Relevel, __thiscall(int, int).
+struct QuadSphere { void Relevel(int a, int b); };
+
 void TC1::QuadReset(int arg)
 {
     int* self = (int*)this;
-    FUN_00fb71c0_2((void*)((uint8_t*)self + 0x18c), (void*)arg);
+    ((TCVec*)((uint8_t*)self + 0x18c))->Set(arg);
     if (*(int*)((uint8_t*)self + 8) != 0)
-        FUN_00fb75b0(self);
+        ((TCVec*)self)->Release();
 }
 
 // ===========================================================================
@@ -117,10 +134,11 @@ void TC1::QuadReset(int arg)
 void TC1::QuadAddRibbonPolys(int* p)
 {
     int* self = (int*)this;
-    FUN_00fb6fb0((void*)*(int*)((uint8_t*)self + 0x190),
-                 (void*)p[0], (void*)p[1], (void*)p);
+    ((TCVec2*)((uint8_t*)self + 0x18c))->Add(
+        (void*)*(int*)((uint8_t*)self + 0x190),
+        (void*)p[0], (void*)p[1], (void*)p);
     if (*(int*)((uint8_t*)self + 8) != 0)
-        FUN_00fb7640(self, (void*)p);
+        ((TCVec*)self)->ReleaseArg((void*)p);
 }
 
 // ===========================================================================
@@ -165,6 +183,8 @@ void FUN_00fb79b0_impl(uint8_t* self)
     v[3] -= ((v[3] - v[2]) >> 2) * 4;
 }
 // ===========================================================================
+// @ 0x00fb7a60  release the quad element vector then free its storage
+// ===========================================================================
 void __fastcall QuadReleaseVec(int** self)
 {
     if (self[0] != 0) {
@@ -204,10 +224,9 @@ void TC1::QuadSetSplit(float p)
 {
     int* self = (int*)this;
     float v = (1.0f - p) - *(float*)((uint8_t*)self + 0x624);
-    if (0.001f < fabsf_(*(float*)((uint8_t*)self + 0x2c) - v)) {
+    if (0.001f < fabs(*(float*)((uint8_t*)self + 0x2c) - v)) {
         *(float*)((uint8_t*)self + 0x2c) = v;
-        int* o = (int*)self[0];
-        ((void (*)(int*, int))*(void**)(*o + 0x48))(o, 2);
+        ((VNode*)((void*)self[0]))->v18(2);
     }
 }
 
@@ -235,13 +254,13 @@ void TC1::QuadSetPair(int* p)
 void TC1::QuadSetHeight(float p)
 {
     int* self = (int*)this;
-    if (0.001f <= fabsf_(*(float*)((uint8_t*)self + 0x18) - p)) {
+    if (0.001f <= fabs(*(float*)((uint8_t*)self + 0x18) - p)) {
         *(float*)((uint8_t*)self + 0x18) = p;
-        float v = p * *(float*)0x01470f1c - *(float*)0x01485720;
-        FUN_00ff03c0(v);
-        int* o = (int*)self[0];
-        ((void (*)(int*, int))*(void**)(*o + 0x48))(o, 10);
-        SP_cTerrainSphere_Relevel((void*)self[0], 0, 1);
+        p = p * *(float*)0x01470f1c;
+        p = p - *(float*)0x01485720;
+        ((QuadSub*)(*(void**)((uint8_t*)self + 4)))->SetValue(p);
+        ((VNode*)((void*)self[0]))->v18(10);
+        ((QuadSphere*)((void*)self[0]))->Relevel(0, 1);
     }
 }
 
@@ -250,34 +269,38 @@ void TC1::QuadSetHeight(float p)
 // ===========================================================================
 void SampleTileA(uint8_t* dst, uint8_t* src, int row)
 {
-    const float step = *(float*)0x014911dc;
-    const float one  = *(float*)0x01485720;
-    uint8_t* out = dst + 0x3fc02 + row * 4;
+    int iVar11 = 0;
+    uint8_t* puVar10 = dst + 0x3fc02;
 
-    for (int i = 0; i < 0x100; ++i) {
-        float f  = (float)i * step;
+    do {
+        float f = (float)iVar11 * *(float*)0x014911dc;
         int   fi = (int)f;
         if (f < (float)fi) --fi;
+        int iVar8 = row + (0x3f - fi) * 0x40;
+
+        uint8_t b1 = src[iVar8 * 4 - 0x100];
+        uint8_t b2 = src[iVar8 * 4];
         float frac = f - (float)fi;
+        uint8_t b3 = src[iVar8 * 4 + 1];
+        float om = *(float*)0x01485720 - frac;
+        uint8_t b4 = src[iVar8 * 4 - 0xff];
+        uint8_t b5 = src[iVar8 * 4 + 2];
+        uint8_t b6 = src[iVar8 * 4 - 0xfe];
 
-        int idx = fi * 0x40 + row;
-        int c0 = src[idx * 4 - 0x100];
-        int c1 = src[idx * 4];
-        int c2 = src[idx * 4 + 1];
-        int c3 = src[idx * 4 - 0xff];
-        int c4 = src[idx * 4 + 2];
-        int c5 = src[idx * 4 - 0xfe];
+        int      n = 0x100;
+        uint8_t* puVar9 = puVar10;
+        do {
+            puVar9[-2] = (uint8_t)(int)((float)b1 * frac + (float)b2 * om);
+            puVar9[-1] = (uint8_t)(int)((float)b3 * om + (float)b4 * frac);
+            puVar9[0]  = (uint8_t)(int)((float)b5 * om + (float)b6 * frac);
+            puVar9[1]  = 0;
+            puVar9 += 4;
+            --n;
+        } while (n != 0);
 
-        float r = (float)c0 * frac + (float)c1 * (one - frac);
-        float g = (float)c3 * (one - frac) + (float)c2 * frac;
-        float b = (float)c5 * (one - frac) + (float)c4 * frac;
-
-        out[-2] = (uint8_t)(int)r;
-        out[-1] = (uint8_t)(int)g;
-        out[0]  = (uint8_t)(int)b;
-        out[1]  = 0;
-        out += 4;
-    }
+        ++iVar11;
+        puVar10 -= 0x400;
+    } while (iVar11 < 0x100);
 }
 
 // ===========================================================================
@@ -285,23 +308,33 @@ void SampleTileA(uint8_t* dst, uint8_t* src, int row)
 // ===========================================================================
 void SampleTileB(uint8_t* dst, uint8_t* src, int row, int col)
 {
-    const float step = *(float*)0x014911dc;
-    const float one  = *(float*)0x01485720;
-    uint8_t* out = dst + 0x3fc00 + (row + col) * 4;
+    int iVar9 = 0;
+    uint8_t* puVar8 = dst + 0x3fc02 + col * 4;
+    uint8_t* puVar7 = dst + 0x3fc00 + col * 4;
 
-    for (int i = 0; i < 0x100; ++i) {
-        float f  = (float)i * step;
+    do {
+        float f = (float)iVar9 * *(float*)0x014911dc;
         int   fi = (int)f;
         if (f < (float)fi) --fi;
+        int iVar6 = fi * 0x40 + row;
         float frac = f - (float)fi;
 
-        int idx = fi * 0x40 + col;
-        out[0] = src[idx * 4];
-        out[1] = (uint8_t)i;
-        out[2] = 0;
-        out += 4;
-        (void)one; (void)frac;
-    }
+        uint8_t b1 = src[1 + iVar6 * 4];
+        float   om = *(float*)0x01485720 - frac;
+        uint8_t b2 = src[0x101 + iVar6 * 4];
+        uint8_t b3 = src[2 + iVar6 * 4];
+        uint8_t b4 = src[0x102 + iVar6 * 4];
+
+        *puVar7     = (uint8_t)(int)((float)src[0x100 + iVar6 * 4] * frac +
+                                     (float)src[iVar6 * 4] * om);
+        puVar8[-1]  = (uint8_t)(int)((float)b1 * om + (float)b2 * frac);
+        *puVar8     = (uint8_t)(int)((float)b3 * om + (float)b4 * frac);
+        puVar8[1]   = 0;
+
+        ++iVar9;
+        puVar7 -= 0x400;
+        puVar8 -= 0x400;
+    } while (iVar9 < 0x100);
 }
 
 // ===========================================================================
@@ -309,18 +342,17 @@ void SampleTileB(uint8_t* dst, uint8_t* src, int row, int col)
 // ===========================================================================
 void SampleTileC(uint8_t* dst, uint8_t* src, int a, int b)
 {
-    const float step = *(float*)0x014911dc;
-    const float one  = *(float*)0x01485720;
-    uint8_t* p1 = dst + a + b * 4 + 0x3fc02;
-    uint8_t* p0 = dst + a + b * 4 + 0x3fc00;
+    uint8_t* p1 = dst + 0x3fc02 + b * 4;
+    uint8_t* p0 = dst + 0x3fc00 + b * 4;
 
     for (int i = 0; i < 0x100; ++i) {
-        float f  = (float)i * step;
+        float f  = (float)i * *(float*)0x014911dc;
         int   fi = (int)f;
         if (f < (float)fi) --fi;
         float frac = f - (float)fi;
+        float one = *(float*)0x01485720;
 
-        int idx = fi * 0x40 + b;
+        int idx = fi * 0x40 + a;
         int c0 = src[idx * 4 + 0x100];
         int c1 = src[idx * 4];
         int c2 = src[idx * 4 + 1];
@@ -382,7 +414,82 @@ void ReplicateRows(uint8_t* dst, int col)
 // ===========================================================================
 void BuildQuadTiles(uint8_t* dst, int a, int b, int c)
 {
-    (void)dst; (void)a; (void)b; (void)c;
+    // Faithful port of the retail lerp/unroll loop (param_1 = base buffer,
+    // param_2 = row base index).  The retail body is hand-unrolled by 4.
+    uint8_t* base = dst;
+    int row = a;
+    (void)b; (void)c;
+
+    int local_8 = 0;
+    int local_c = 0xfe00;
+    unsigned uVar2 = 1;
+    int iVar3;
+    do {
+        // --- (uVar2 - 1) ---
+        iVar3 = 0x40 - ((int)(uVar2 - 1) >> 2);
+        int iVar5 = 4 - (int)((uVar2 - 1) & 3);
+        int iVar4 = (iVar3 - local_8) + row;
+        uint8_t* pb = (uint8_t*)(base + 0x400 + (local_c + iVar3 + row) * 4);
+        int t = 4 - iVar5;
+        *pb = (uint8_t)(((unsigned)*(uint8_t*)(base + 0x3fbfc + iVar4 * 4) * iVar5 +
+                         (unsigned)*pb * t) >> 2);
+        *(uint8_t*)(base + 0x3fc01 + iVar4 * 4) = (uint8_t)(
+            ((unsigned)*(uint8_t*)(base + 0x3fbfd + iVar4 * 4) * iVar5 +
+             (unsigned)*(uint8_t*)(base + 0x3fc01 + iVar4 * 4) * t) >> 2);
+        pb = (uint8_t*)(base + 0x3fc02 + iVar4 * 4);
+        *pb = (uint8_t)(((unsigned)*(uint8_t*)(base + 0x3fbfe + iVar4 * 4) * iVar5 +
+                         (unsigned)*pb * t) >> 2);
+
+        // --- (uVar2) ---
+        iVar3 = 0x40 - ((int)uVar2 >> 2);
+        iVar5 = 4 - (int)(uVar2 & 3);
+        iVar4 = (iVar3 - local_8) + row;
+        pb = (uint8_t*)(base + (local_c + iVar3 + row) * 4);
+        t = 4 - iVar5;
+        *pb = (uint8_t)(((unsigned)*(uint8_t*)(base + 0x3f7fc + iVar4 * 4) * iVar5 +
+                         (unsigned)*pb * t) >> 2);
+        *(uint8_t*)(base + 0x3f801 + iVar4 * 4) = (uint8_t)(
+            ((unsigned)*(uint8_t*)(base + 0x3f7fd + iVar4 * 4) * iVar5 +
+             (unsigned)*(uint8_t*)(base + 0x3f801 + iVar4 * 4) * t) >> 2);
+        pb = (uint8_t*)(base + 0x3f802 + iVar4 * 4);
+        *pb = (uint8_t)(((unsigned)*(uint8_t*)(base + 0x3f7fe + iVar4 * 4) * iVar5 +
+                         (unsigned)*pb * t) >> 2);
+
+        // --- (uVar2 + 1) ---
+        iVar3 = 0x40 - ((int)(uVar2 + 1) >> 2);
+        iVar5 = 4 - (int)((uVar2 + 1) & 3);
+        iVar4 = (iVar3 - local_8) + row;
+        pb = (uint8_t*)(base - 0x400 + (local_c + iVar3 + row) * 4);
+        t = 4 - iVar5;
+        *pb = (uint8_t)(((unsigned)*(uint8_t*)(base + 0x3f3fc + iVar4 * 4) * iVar5 +
+                         (unsigned)*pb * t) >> 2);
+        *(uint8_t*)(base + 0x3f401 + iVar4 * 4) = (uint8_t)(
+            ((unsigned)*(uint8_t*)(base + 0x3f3fd + iVar4 * 4) * iVar5 +
+             (unsigned)*(uint8_t*)(base + 0x3f401 + iVar4 * 4) * t) >> 2);
+        pb = (uint8_t*)(base + 0x3f402 + iVar4 * 4);
+        *pb = (uint8_t)(((unsigned)*(uint8_t*)(base + 0x3f3fe + iVar4 * 4) * iVar5 +
+                         (unsigned)*pb * t) >> 2);
+
+        // --- (uVar2 + 2) ---
+        iVar3 = 0x40 - ((int)(uVar2 + 2) >> 2);
+        int iVar6 = 4 - (int)((uVar2 - 2) & 3);
+        iVar4 = (iVar3 - local_8) + row;
+        t = 4 - iVar6;
+        pb = (uint8_t*)(base - 0x800 + (local_c + iVar3 + row) * 4);
+        *pb = (uint8_t)(((unsigned)*(uint8_t*)(base + 0x3effc + iVar4 * 4) * iVar6 +
+                         (unsigned)*pb * t) >> 2);
+        *(uint8_t*)(base + 0x3f001 + iVar4 * 4) = (uint8_t)(
+            ((unsigned)*(uint8_t*)(base + 0x3effd + iVar4 * 4) * iVar6 +
+             (unsigned)*(uint8_t*)(base + 0x3f001 + iVar4 * 4) * t) >> 2);
+        pb = (uint8_t*)(base + 0x3f002 + iVar4 * 4);
+        *pb = (uint8_t)(((unsigned)*(uint8_t*)(base + 0x3effe + iVar4 * 4) * iVar6 +
+                         (unsigned)*pb * t) >> 2);
+
+        local_c = local_c - 0x400;
+        local_8 = local_8 + 0x400;
+        iVar3 = (int)(uVar2 + 3);
+        uVar2 = uVar2 + 4;
+    } while (iVar3 < 0x100);
 }
 
 // ===========================================================================
@@ -390,5 +497,36 @@ void BuildQuadTiles(uint8_t* dst, int a, int b, int c)
 // ===========================================================================
 void CopySubBuffer(uint8_t* dst, uint8_t* src, int a, int b, int c)
 {
-    (void)dst; (void)src; (void)a; (void)b; (void)c;
+    // Faithful port of the retail stride-4 row copy/expansion (param_1 = base
+    // buffer, param_2 = starting row index).
+    uint8_t* base = dst;
+    int startRow = a;
+    (void)src; (void)b; (void)c;
+
+    int local_8 = startRow;
+    int iVar4 = 1;
+    int local_4 = 4;
+    int iVar3 = 0xfb00;
+    do {
+        local_8 = local_8 - 0x400;
+        if (local_4 < 0x100) {
+            uint8_t* puVar2 = (uint8_t*)(base + 0x3fc02 + (local_8 - iVar4) * 4);
+            uint8_t* puVar1 = (uint8_t*)(base + 0x3fc01 + startRow * 4);
+            uint8_t* puVar6 = (uint8_t*)(base + ((iVar3 - iVar4) + startRow) * 4);
+            int iVar5 = 0x100 - local_4;
+            do {
+                puVar6[0]  = puVar1[-1];
+                puVar2[-1] = puVar1[0];
+                puVar2[0]  = puVar1[1];
+                puVar2[1]  = puVar1[2];
+                puVar6 = (uint8_t*)((uint8_t*)puVar6 - 0x400);
+                puVar1 = (uint8_t*)((uint8_t*)puVar1 - 0x400);
+                puVar2 = (uint8_t*)((uint8_t*)puVar2 - 0x400);
+                iVar5 = iVar5 - 1;
+            } while (iVar5 != 0);
+        }
+        local_4 = local_4 + 4;
+        iVar3 = iVar3 - 0x400;
+        iVar4 = iVar4 + 1;
+    } while (-0x100 < iVar3);
 }
