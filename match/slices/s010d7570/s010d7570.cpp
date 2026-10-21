@@ -202,56 +202,56 @@ void hkSphereCapsuleAgent::processCollision(const hkCdBody& bodyA, const hkCdBod
 	}
 	else
 	{
-		float n[4];
+		hkVector4 n;
 		float distance;
 		if (!(distSq > 0.0f))
 		{
 			// sphere centre coincides with the segment: build an axis-aligned direction from the
 			// segment direction by zeroing its smallest component and swapping the other two.
-			n[0] = pB.x - pA.x;
-			n[1] = pB.y - pA.y;
-			n[2] = pB.z - pA.z;
-			n[3] = pB.w - pA.w;
-			const float ax = hkAbsf(n[0]);
-			const float ay = hkAbsf(n[1]);
-			const bool bx = ax <= ay;                          // "smallest of x/y"
+			n.x = pB.x - pA.x;
+			n.y = pB.y - pA.y;
+			n.z = pB.z - pA.z;
+			n.w = pB.w - pA.w;
+			const float ax = hkAbsf(n.x);
+			const float ay = hkAbsf(n.y);
+			const bool bx = ax <= ay;
 			const float small = bx ? ax : ay;
-			unsigned zero = bx ? 0u : 1u;
-			unsigned other = 2u;
-			if (small <= hkAbsf(n[2])) { other = bx ? 0u : 1u; zero = 2u; }
+			unsigned keep = 2u;
+			unsigned other = bx ? 0u : 1u;
+			if (hkAbsf(n.z) < small) { keep = bx ? 0u : 1u; other = 2u; }
 			const float from = bx ? (pB.x - pA.x) : (pB.y - pA.y);
-			const float oth  = (other == 2u) ? (pB.z - pA.z) : (other == 0u ? (pB.x - pA.x) : (pB.y - pA.y));
-			((float*)&n)[zero] = 0.0f;
-			n[3] = 0.0f;
+			const float oth  = (keep == 2u) ? (pB.z - pA.z) : (keep == 0u ? (pB.x - pA.x) : (pB.y - pA.y));
+			((float*)&n)[other] = 0.0f;
+			n.w = 0.0f;
 			((float*)&n)[bx] = oth;
-			((float*)&n)[other] = -from;
+			((float*)&n)[keep] = -from;
 			distance = 0.0f;
 		}
 		else
 		{
 			distance = sqrtf(distSq);
-			n[0] = dx; n[1] = dy; n[2] = dz; n[3] = dw;
+			n.x = dx; n.y = dy; n.z = dz; n.w = dw;
 		}
 
-		const float lenSq = n[0] * n[0] + n[1] * n[1] + n[2] * n[2];
+		const float lenSq = n.x * n.x + n.y * n.y + n.z * n.z;
 		const float invLen = (lenSq == 0.0f) ? 0.0f : 1.0f / sqrtf(lenSq);
-		n[0] *= invLen; n[1] *= invLen; n[2] *= invLen; n[3] *= invLen;
+		n.x *= invLen; n.y *= invLen; n.z *= invLen;
 
 		const float k = capsuleShape->m_radius - distance;
-		contact->m_contact.m_position.x = n[0] * k + (sphereTrans + 0xc)[0];
-		contact->m_contact.m_position.y = n[1] * k + (sphereTrans + 0xc)[1];
-		contact->m_contact.m_position.z = n[2] * k + (sphereTrans + 0xc)[2];
-		contact->m_contact.m_position.w = n[3] * k + (sphereTrans + 0xc)[3];
-		contact->m_contact.m_separatingNormal.x = n[0];
-		contact->m_contact.m_separatingNormal.y = n[1];
-		contact->m_contact.m_separatingNormal.z = n[2];
+		contact->m_contact.m_position.x = n.x * k + (sphereTrans + 0xc)[0];
+		contact->m_contact.m_position.y = n.y * k + (sphereTrans + 0xc)[1];
+		contact->m_contact.m_position.z = n.z * k + (sphereTrans + 0xc)[2];
+		contact->m_contact.m_position.w = (n.w * invLen) * k + (sphereTrans + 0xc)[3];
+		contact->m_contact.m_separatingNormal.x = n.x;
+		contact->m_contact.m_separatingNormal.y = n.y;
+		contact->m_contact.m_separatingNormal.z = n.z;
 		contact->m_contact.m_separatingNormal.w = distance - radiusSum;
 
 		if (m_contactPointId == 0xffff)
 			m_contactPointId = m_contactMgr->addContactPoint(bodyA, bodyB, input, *contact);
 		if (m_contactPointId != 0xffff)
 		{
-			contact->m_extra[0] = m_contactPointId;
+			*(unsigned short*)&contact->m_extra[0] = m_contactPointId;
 			output.m_firstFreeContactPoint = contact + 1;
 		}
 	}
