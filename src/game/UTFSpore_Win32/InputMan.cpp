@@ -85,19 +85,19 @@ struct XINPUT_STATE_ {
 extern unsigned long (__stdcall *g_XInputGetState)(unsigned long, XINPUT_STATE_*);        // 0x1667a5c
 namespace EA {
 namespace Input {
-struct InputMan;
+class InputMan;
 }
 }
 namespace EA {
 namespace Input {
-struct Device {
+class Device { public:
     virtual ~Device() {}
 };
 }
 }
 namespace EA {
 namespace Input {
-struct Controller : Device {
+class Controller : public Device { public:
     InputMan* mpInputMan;
     unsigned mnIndex;
     unsigned short mRepeatCount[24];
@@ -128,7 +128,7 @@ struct Controller : Device {
 bool IsKeyDown(unsigned vk, unsigned modifiers);  // 0x008d3200 (defined below; used by a stub's inline body)
 namespace EA {
 namespace Input {
-struct Keyboard : Device {
+class Keyboard : public Device { public:
     InputMan* mpInputMan;
     unsigned mnIndex;
     bool mbAvailable;
@@ -145,7 +145,7 @@ struct Keyboard : Device {
 }
 namespace EA {
 namespace Input {
-struct Mouse : Device {
+class Mouse : public Device { public:
     InputMan* mpInputMan;
     unsigned mnIndex;
     bool mbAvailable;
@@ -165,7 +165,7 @@ struct Mouse : Device {
 }
 namespace EA {
 namespace Input {
-struct InputMan {
+class InputMan { public:
     virtual ~InputMan();
     virtual void v1();
     virtual void v2();
