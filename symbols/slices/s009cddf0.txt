@@ -1,0 +1,17 @@
+009cddf0 ?FUN_009cddf0@SA@@QAEXHMMMMMMM@Z  # unnamed; SA record constructor (__thiscall, ret 0x20) derived in s009cddf0
+009cdfb0 ?FUN_009cdfb0@SA@@QAEMM@Z  # unnamed; two-key blend of keyed sub-curve lookups (__thiscall) derived in s009cddf0
+009ce010 ?FUN_009ce010@@YAXPAUSA@@M@Z  # unnamed; quaternion Z-rotation (object in EAX, LTCG register ABI) derived in s009cddf0
+009ce100 ?FUN_009ce100@SA@@QAEMD@Z  # unnamed; wrap-aware span accessor (__thiscall) derived in s009cddf0
+009ce150 ?FUN_009ce150@SA@@QAEMHPAHMMM@Z  # unnamed; per-axis curve evaluation / wrap-normalise + atan2 shape (__thiscall) derived in s009cddf0
+009ce370 ?FUN_009ce370@SA@@QAEPAMPAMPAXMMM@Z  # unnamed; three-axis evaluate-into-out (__thiscall, ret 0x14) derived in s009cddf0
+009ce430 ?FUN_009ce430@@YAXPAMHPBM1M@Z  # unnamed; in-place 4-wide lerp (LTCG register ABI) derived in s009cddf0
+009ce560 ?FUN_009ce560@@YAXPAMH@Z  # unnamed; e[0]=1-sum(tail) accumulator (LTCG register ABI) derived in s009cddf0
+009ce5e0 ?FUN_009ce5e0@SA@@QAEXXZ  # unnamed; record rotation/scale scratch reset (__thiscall) derived in s009cddf0
+009ce700 ?FUN_009ce700@@YGMM@Z  # unnamed; saturating blend curve x*0.2/(0.7+x*0.2) (__stdcall) derived in s009cddf0
+009ce720 ?FUN_009ce720@SA@@QAEXPAH0@Z  # unnamed; split f00/f04 into two outputs (__thiscall, ret 8) derived in s009cddf0
+009ce740 ?FUN_009ce740@SA@@QAEXM@Z  # unnamed; f80=clamp(1-x*x,0.15,1.0) (__thiscall) derived in s009cddf0
+009ce790 ?FUN_009ce790@SA@@QAEXPAU1@@Z  # unnamed; member-wise record copy (__thiscall, ret 4) derived in s009cddf0
+009cea00 ?FUN_009cea00@@YAXPAUSA@@0@Z  # unnamed; insertion sort by fac over [begin,end) derived in s009cddf0
+009ceab0 ?FUN_009ceab0@@YAXPAUSA@@0@Z  # unnamed; insertion sort by fac over a tail range derived in s009cddf0
+009ceb50 ?FUN_009ceb50@@YAPAUSA@@PAU1@00@Z  # unnamed; median-of-three by fac derived in s009cddf0
+009ced30 ?FUN_009ced30@@YAXPAUSA@@HHU1@@Z  # unnamed; heap sift-up by fac derived in s009cddf0
