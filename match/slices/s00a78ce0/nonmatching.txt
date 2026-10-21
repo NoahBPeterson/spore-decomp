@@ -1,0 +1,42 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast   (no /EHsc)
+#
+# Slice s00a78ce0 = EA::Swarm steering math: the 16-entry sin/cos table reduction, the polynomial
+# FastAtan2, the transform direction helpers, the random / spherical helpers, the cRWState steering
+# state (per-frame parameter update, force accumulation, keyed impulse table).  4/16 byte-exact.
+# The other 12 are complete, compiling C++ with the original control flow, layout and behaviour;
+# 11 of them reproduce the original exactly on 380+ random inputs each (difftest PASS), the last is
+# WEAK (no mismatch, too many random inputs fault on the 64 KB pool limit).
+#
+# Systematic codegen differences behind the rows below:
+#  * SSE register naming / operand pairing.  For the two transform direction helpers the whole
+#    xmm3/xmm4 accumulator/temp assignment is mirrored and each row's matrix product is emitted in
+#    the reverse order; swapping the textual operand order does not move MSVC's choice (probed:
+#    identical diff counts both ways).
+#  * Clamp() inline expansion: same value, but our run emits a `jbe`-first test with an extra
+#    `fxch st(1)` where the original emits `fcomi st(1) / jb` plus a second `fxch`-based test.
+#  * x87 helpers the original calls out of line (asin, the shared RNG) keep whole functions in x87.
+
+00a78ce0 84 FastSinCos: complete; table reduction `scaled = g_SinFreq*angle + 12582912.0f`, `idx = bits & 0xf`, `ip = bits + 0xB4C00000` (rounded integer), `frac = angle - ip*g_SinPeriod`, then the two cubic corrections against the picked {sin, cos} pair. Differences: our run reorders the two output stores and the entry reloads (lea + [e],[e+4] form kept; ours 172 B vs original 157 B). difftest verdict PASS (400/400 valid inputs, 100.0% coverage).
+
+00a78d90 57 EA::Swarm::FastAtan2: complete; `t = ((|y|+1e-10) - |x|) / (|x| + (|y|+1e-10))`, `r = (0.9817 - t*t*0.1963)*t`, `x < 0` ? `halfpi*3 - r` : `halfpi + r`, `y < 0` ? `-r`, returned through st0. Differences: the original re-loads x / y from the argument slots inside each sign test and hoists `halfpi` into xmm0 before the branch, our run keeps them in registers (ours 163 B vs original 157 B). difftest verdict PASS (400/400 valid inputs, 100.0% coverage); the name is resolved through symbols/slices/s00a78ce0.txt.
+
+00a78e30 83 CopyRec7: complete; `while (first != last) { if (dst) *dst = *first; ++first; ++dst; } return dst;` over 0x1c-byte records - the original returns the advanced destination in eax (it is the same pattern as EntryCopy). Differences: the original copies the 7 floats one at a time through the x87 stack (fld/fstp, with a +0x14 mid-pointer and a per-iteration null test, 85 B); our run recognises the 28-byte block copy and emits rep movsd (48 B). A 7-field scalar copy was compiled and measured at 81 diff bytes, so the block copy was kept. difftest verdict WEAK (87/400 valid inputs - the rest hit fault(pool-limit)/fault(write) on random pointer arguments - 29.4% coverage, no mismatch).
+
+00a78e90 23 Xform::InverseTransformDir: complete; `if (scale != 1.0f) { inv = 1/scale; v *= inv; }` then, when `flags & 2`, the transposed rotation `t.x = (m[1]*y + m[2]*z) + m[0]*x` etc. written through a stack temporary and copied back. Differences: the first two products of each row land in the mirrored register pair (m[1]*y in xmm3 instead of m[2]*z); 57 of 60 instructions identical. difftest verdict PASS (400/400 valid inputs, 100.0% coverage).
+
+00a78f80 17 RandomSymmetric: complete; `lo = -range; hi = range; v = RNG()*(hi-lo) + lo; return Clamp(v, lo, hi);` all in x87 doubles. Differences: the inline Clamp test comes out `jbe`-first with an extra `fxch st(1)` instead of the original's `fcomi st(1) / jb` plus a second `fxch` test; 17 of 71 bytes. The `if (v < lo) return lo;` spelling of Clamp measured 28 diff bytes, so the `lo <= v` form was kept. difftest verdict PASS (400/400 valid inputs, 100.0% coverage).
+
+00a78fd0 167 SphericalDir: complete; `d = x*x + y*y`; when `d < 1e-6f` writes yaw = 0 and pitch = +-pi/2 (z < 0 test, the original's constant is the half-pi copy at 0x01554b58), otherwise `yaw = FastAtan2(y, x)` and `pitch = asin(z / sqrt(d + z*z))` with the sum and the sqrt done in x87 doubles (fsqrt inline, as in the original). Differences: our run does not keep `v` in esi (no push esi), so the whole stack frame is shifted by 4 and the fallback path is laid out first (ours 184 B vs original 202 B). difftest verdict PASS (400/400 valid inputs, 100.0% coverage) - the earlier first-mismatch was our own pi instead of pi/2 in the degenerate-direction fallback.
+
+00a790a0 414 EA::Swarm::cRWState::Update: complete; two Clamped random draws (first accumulates into f0, second drives a/b through the 0.5 weight split), two RandomSymmetric(jitter + 1e-5f) phase/pitch blocks gated on `weight < 1` / `weight > 0` with +-spread*2pi, then the keyed-table advance on 2pi keys (`frame`, mode 0 wraps to 0, mode 1 to n-1, else stays). Same structure and size class, but the x87 Clamp expansions and the block ordering inside the frame differ (ours 581 B vs original 602 B). difftest verdict PASS (390 valid inputs, 90.9% coverage) - the RNG is declared as EA::Random::RandomLinearCongruential so the shared 0x009360d0 method resolves.
+
+00a79300 267 EA::Swarm::cRWState::AccumulateForce: complete; `a == 0` -> x/y += (cos, sin)*b from FastSinCos(phase); `b == 0` -> z += FUN_00a78c80(pitch)*a; otherwise x += sin(phase)cos(pitch)*b, y += cos(phase)cos(pitch)*b, z += sin(pitch)*a. The helpers are __declspec(noinline) so nothing is folded in (inlining FastSinCos gave 597 vs 303 B). Differences: register choice and the order of the two FastSinCos argument setups (ours 296 B vs original 303 B). difftest verdict PASS (400/400 valid inputs, 100.0% coverage, 294 inline calls tolerated).
+
+00a79430 116 EA::Swarm::cRWState::Init: complete; `SphericalDir(dir, &phase, &pitch); frame = 0;` then either `f0 = 0; Update(d)` or `f0 = random(aLo..aHi); v = random(bLo..bHi)` with the same 0.5 weight split as Update. Differences: the x87 argument shuffling around the two cConfigManagerUnnamedB90 calls and the placement of the !instant block (ours 191 B vs original 195 B). difftest verdict PASS (393 valid inputs, 100.0% coverage).
+
+00a79500 221 ApplyDirectedImpulse: complete; `len2 = (z*z + y*y) + x*x`; when `0 < len2`: `len = sqrt(len2)`, `false` when `len < tbl->threshold`, else `inv = 1/len`, `u = min(len / tbl->speed, 1)`, `n = (end - begin) - 1` with the unsigned int->float conversion the original uses (fild + 2^32 correction), `s = begin[i]` or the lerp to `begin[i+1]`, `s *= magnitude`, force += normalized dir * s. Differences: our run reuses a different accumulator register pair for the normalisation and reorders the table load/store block (ours 311 B vs original 340 B). difftest verdict PASS (383 valid inputs, 97.8% coverage) - the earlier mismatch was ImpulseTable padding: speed is at +0x14 / threshold at +0x18 (12 bytes of padding, not 16).
+
+00a79660 85 ReadState: complete; `false` when the key list is empty or `begin->f[6] != 0`, otherwise a = f[0..2], b = f[3..5] and `g` refreshed only when the last record's f[6] is positive. Differences: the original keeps both `return false` exits in one epilogue at the end, our run hoists the first one. difftest verdict PASS (400/400 valid inputs, 100.0% coverage).
+
+00a797f0 39 Xform::TransformDir: complete; when `flags & 2`, `t.x = (m[3]*y + m[6]*z) + m[0]*x`, `t.y = (m[1]*x + m[4]*y) + m[7]*z`, `t.z = (m[2]*x + m[5]*y) + m[8]*z` through a stack temporary, then the whole vector is scaled by `scale`. Differences: y/z land in the swapped xmm0/xmm1 pair and the three scale multiplications are interleaved with their stores instead of batched; 221 B in both versions. difftest verdict PASS (400/400 valid inputs, 100.0% coverage).

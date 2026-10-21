@@ -1,0 +1,17 @@
+; slice s00a78ce0 = 0x00a78ce0..0x00a798cb (EA::Swarm steering math, slice spelling)
+00a78ce0 ?FastSinCos@@YAXMPAM0@Z  # FastSinCos(float angle, float* outSin, float* outCos) - 16-entry table reduction
+00a78d90 ?FastAtan2@@YAOMM@Z  # EA::Swarm::FastAtan2(float y, float x) - polynomial atan2, returns through st0
+00a78e30 ?CopyRec7@@YAPAURec7@@PAU1@00@Z  # CopyRec7(Rec7* first, Rec7* last, Rec7* dst) - returns the advanced dst
+00a78e90 ?InverseTransformDir@Xform@@QBEXPAUVec3@@@Z  # Xform::InverseTransformDir(Vec3*) const - transpose rotate + 1/scale
+00a78f80 ?RandomSymmetric@@YANM@Z  # RandomSymmetric(float range) - clamped uniform double in [-range, range]
+00a78fd0 ?SphericalDir@@YAXPBUVec3@@PAM1@Z  # SphericalDir(const Vec3*, float* yaw, float* pitch)
+00a790a0 ?Update@cRWState@@QAEXPBUKeyDesc@@@Z  # EA::Swarm::cRWState::Update(const KeyDesc*)
+00a79300 ?AccumulateForce@cRWState@@QAEXPAUVec3@@@Z  # EA::Swarm::cRWState::AccumulateForce(Vec3*)
+00a79430 ?Init@cRWState@@QAEXPBUKeyDesc@@PBUVec3@@_N@Z  # EA::Swarm::cRWState::Init(const KeyDesc*, const Vec3*, bool)
+00a79500 ?ApplyDirectedImpulse@@YA_NPBUImpulseTable@@PBUVec3@@MPAU2@@Z  # ApplyDirectedImpulse(const ImpulseTable*, const Vec3*, float, Vec3*)
+00a79660 ?ReadState@@YA_NPAUState@@PBUKeyList@@@Z  # ReadState(State*, const KeyList*)
+00a796d0 ?ReadRec@@YAXPAUIStream@@PAUKeyRec@@@Z  # ReadRec(IStream*, KeyRec*)
+00a79710 ?WriteRec@@YAXPAUIStream@@PAUKeyRec@@@Z  # WriteRec(IStream*, KeyRec*)
+00a79760 ?ReadRecB@@YAXPAUIStream@@PAUKeyRecB@@@Z  # ReadRecB(IStream*, KeyRecB*)
+00a797a0 ?WriteRecB@@YAXPAUIStream@@PAUKeyRecB@@@Z  # WriteRecB(IStream*, KeyRecB*)
+00a797f0 ?TransformDir@Xform@@QBEXPAUVec3@@@Z  # Xform::TransformDir(Vec3*) const - rotate + scale
