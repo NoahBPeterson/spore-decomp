@@ -191,7 +191,8 @@ struct hkShape
     void removeReference()
     {
         if (m_memSizeAndFlags != 0) {
-            if (--m_referenceCount == 0)
+            --m_referenceCount;
+            if (m_referenceCount == 0)
                 (*(void(__fastcall**)(void*, int))(*(void**)this))(this, 1);
         }
     }
@@ -242,16 +243,18 @@ void hkTransformShape::getAabb(const hkTransform& transform, float radius, hkAab
 // @ 0x010c5560
 float hkTransformShape::getMaximumProjection(const hkVector4& dir) const
 {
-    hkVector4 d;
-    d.x = dir.x * m_transform.m[0] + (dir.y * m_transform.m[1] + dir.z * m_transform.m[2]);
-    d.y = dir.x * m_transform.m[4] + (dir.y * m_transform.m[5] + dir.z * m_transform.m[6]);
-    d.z = dir.x * m_transform.m[8] + (dir.y * m_transform.m[9] + dir.z * m_transform.m[10]);
-    d.w = 0.0f;
-
-    float p = m_shape->getMaximumProjection(d);
-    float a = d.y * p;
-    float b = d.x * p;
-    float c = d.z * p;
+    float proj;
+    {
+        hkVector4 d;
+        d.x = dir.x * m_transform.m[0] + (dir.y * m_transform.m[1] + dir.z * m_transform.m[2]);
+        d.y = dir.x * m_transform.m[4] + (dir.y * m_transform.m[5] + dir.z * m_transform.m[6]);
+        d.z = dir.x * m_transform.m[8] + (dir.y * m_transform.m[9] + dir.z * m_transform.m[10]);
+        d.w = 0.0f;
+        proj = m_shape->getMaximumProjection(d);
+    }
+    float a = dir.y * proj;
+    float b = dir.x * proj;
+    float c = dir.z * proj;
     float tx = (a * m_transform.m[1] + (b * m_transform.m[5] + c * m_transform.m[9])) + m_transform.m[13];
     float ty = (a * m_transform.m[0] + (b * m_transform.m[4] + c * m_transform.m[8])) + m_transform.m[12];
     float tz = (a * m_transform.m[2] + (b * m_transform.m[6] + c * m_transform.m[10])) + m_transform.m[14];
@@ -538,6 +541,7 @@ struct hkStorageMeshShape : hkMeshShape
 
     hkStorageMeshShape* finish(hkFinishLoadedObjectFlag f);  // 0x010c5ee0
     void addSubpart(const hkMeshShapeSubpart& subpart);      // 0x010c5f50
+    void hkStorageMeshShape_addSubpartElements(hkMeshShapeSubpart* dst, hkStorageMeshShapeSubpartStorage* sp, const hkMeshShapeSubpart& p);
 };
 
 extern hkUchar g_emptyMaterialTable[];   // 0x016e42d0
@@ -564,8 +568,9 @@ hkStorageMeshShapeSubpartStorage::~hkStorageMeshShapeSubpartStorage()
                                                        (m_materials.m_capacityAndFlags & 0x3fffffff) << 2,
                                                        HK_MEMORY_CLASS_ARRAY);
     if (!(m_materialIndices8.m_capacityAndFlags & 0x80000000))
+    if (!(m_materialIndices8.m_capacityAndFlags & 0x80000000))
         hkThreadMemory::getInstance()->deallocateChunk(m_materialIndices8.m_data,
-                                                       (m_materialIndices8.m_capacityAndFlags & 0x3fffffff),
+                                                       (int)(m_materialIndices8.m_capacityAndFlags & 0x3fffffff),
                                                        HK_MEMORY_CLASS_ARRAY);
     if (!(m_indices32.m_capacityAndFlags & 0x80000000))
         hkThreadMemory::getInstance()->deallocateChunk(m_indices32.m_data,
@@ -622,28 +627,6 @@ void hkStorageMeshShape::addSubpart(const hkMeshShapeSubpart& p)
 
     hkStorageMeshShapeSubpartStorage* st = (hkStorageMeshShapeSubpartStorage*)
         hkMemory::getInstance()->allocate(0x48, HK_MEMORY_CLASS_MESH);
-    if (st == 0) {
-        st = 0;
-    } else {
-        st->m_vertices.m_data = 0;
-        st->m_vertices.m_size = 0;
-        st->m_vertices.m_capacityAndFlags = 0x80000000;
-        st->m_indices16.m_data = 0;
-        st->m_indices16.m_size = 0;
-        st->m_indices16.m_capacityAndFlags = 0x80000000;
-        st->m_indices32.m_data = 0;
-        st->m_indices32.m_size = 0;
-        st->m_indices32.m_capacityAndFlags = 0x80000000;
-        st->m_materialIndices8.m_data = 0;
-        st->m_materialIndices8.m_size = 0;
-        st->m_materialIndices8.m_capacityAndFlags = 0x80000000;
-        st->m_materials.m_data = 0;
-        st->m_materials.m_size = 0;
-        st->m_materials.m_capacityAndFlags = 0x80000000;
-        st->m_materialIndices16.m_data = 0;
-        st->m_materialIndices16.m_size = 0;
-        st->m_materialIndices16.m_capacityAndFlags = 0x80000000;
-    }
 
     if (m_storage.m_size == (int)(m_storage.m_capacityAndFlags & 0x3fffffff))
         hkArrayUtil::_reserveMore(&m_storage, 4);
@@ -652,6 +635,12 @@ void hkStorageMeshShape::addSubpart(const hkMeshShapeSubpart& p)
     m_storage.m_size = n;
     hkStorageMeshShapeSubpartStorage* sp = m_storage.m_data[n - 1];
 
+    hkStorageMeshShape_addSubpartElements(dst, sp, p);
+}
+
+void hkStorageMeshShape::hkStorageMeshShape_addSubpartElements(hkMeshShapeSubpart* dst, hkStorageMeshShapeSubpartStorage* sp,
+                                            const hkMeshShapeSubpart& p)
+{
     // ---- vertices ----
     int vOld = sp->m_vertices.m_size;
     int vTotal = vOld + p.m_numVertices * 3;

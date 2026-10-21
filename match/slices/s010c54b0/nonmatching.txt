@@ -1,20 +1,10 @@
-# va  diff-bytes  reason
-# Build flags (all rows): /O2 /MD /Gy /EHsc /TP /vc71   (Havok 3.1.0 = VC7.1 / cl 13.10)
-#
-# Slice s010c54b0 = Havok 3.1 shape wrappers: the hkTransformShape virtuals (aabb, maximum
-# projection, ray cast, ray cast with collector), the sampled height-field queries and the
-# hkStorageMeshShape subpart storage / destructor family.  3/13 byte-exact.  The other 10 are
-# complete C++ that reproduces the original control flow and Havok field layout; they miss
-# byte-exactness because VC7.1's scheduler and register allocator differ from the VC8+ output
-# our compiler run produces (the size deltas are the loop/branch layout and the SSE staging).
-
-010c54b0 38 destroy: complete; the refcount release and the hkMemory vtable call pair match, difference is the epilogue and the base-vtable store placement, 78 vs 74 B.
-010c5520 51 getAabb: complete; the transformed-AABB expansion matches, difference is the SSE register staging, 54 vs 57 B.
-010c5560 220 getMaximumProjection: complete; the max-projection walk over the child shape matches, difference is the x87/SSE mix, 231 vs 230 B.
-010c5650 374 castRay: complete; the inverse-transform + child ray cast and the result repack match, difference is the stack slot layout, 451 vs 475 B.
-010c5830 334 castRayWithCollector: complete; the same ray path with the collector fan-out, difference is the callee-saved register set, 444 B.
-010c5a20 619 collideSpheres: complete; the height-field sphere collision walk matches, difference is the vector staging and the loop layout, 737 vs 619 B.
-010c5da0 1 hkSubpartBuilder dtor: complete, 1 differing byte (one jump displacement).
-010c5de0 171 hkStorageMeshShapeSubpartStorage dtor: complete; frees the subpart arrays in the original order, difference is the loop tail, 235 vs 250 B.
-010c5ee0 98 finish: complete; the finish/flag handling matches, difference is the branch layout, 124 vs 112 B.
-010c5f50 1172 addSubpart: complete; appends the subpart arrays and grows the storage exactly as the original, difference is the inlined grow loop and the SSE copy staging, 1317 vs 1311 B.
+010c54b0  71  hkTransformShape deleting dtor: complete (release child shape ref, vptr 0x014a3d14 then 0x013ef094, conditional free via hkMemory slot 5). cl 13.10 emits the refcount decrement as a mov/add pair rather than a single `dec word ptr`, and materialises the hkMemory virtual slot into a register (`call edx`) instead of `call dword ptr [edx+0x14]`; also 11 padding bytes of slack. Eq PENDING.
+010c5520  34  hkTransformShape::getAabb: complete (aligned local hkTransform, setMul(localToWorld, m_transform), tail call child->getAabb). Original keeps the whole sequence flat (`call setMul` then a direct `call dword ptr [edx+0xc]`); ours inlines setMul's result handling with an extra fld/fstp round-trip and 5 bytes of slack. Eq PENDING.
+010c5560  321  hkTransformShape::getMaximumProjection: complete (R^T*d into local, child max-projection, R*local+translation, dot with dir). Differs by x87 scheduling and a larger frame (287 vs 230). Eq PENDING.
+010c5650  366  hkTransformShape::castRay: complete (monitor TtrcTransform enter, transform ray endpoints into shape-local space, child->castRay, rotate hit normal back, monitor leave). Instruction scheduling and frame layout differ (464 vs 475). Eq PENDING.
+010c5830  388  hkTransformShape::castRayWithCollector: complete (monitor enter, to-local, world = setMul(body.m_transform, m_transform), build sub hkCdBody, child->castRayWithCollector, monitor leave). Scheduling/frame differ (473 vs 444). Eq PENDING.
+010c5a20  797  hkStorageSampledHeightFieldShape::collideSpheres: complete (per-sphere grid lookup, triangle height interpolation, scaled+normalised normal, w = (sy*cy - h)*m_sy2 - s->w). cl 13.10 x87 scheduling and register allocation differ throughout (819 vs 737). Eq PENDING.
+010c5da0  37  hkSubpartBuilder dtor: complete (frees the 0x30-stride array at +0x24, resets vptr to 0x013ef094). vptr now immediate; the remaining diff is the hkThreadMemory virtual call materialised into a register plus 2 bytes of slack. Eq PENDING.
+010c5de0  166  hkStorageMeshShapeSubpartStorage dtor: complete (frees materialIndices16, materials, materialIndices8, indices32, indices16, vertices in that order). The six-branch cascade is structured differently by cl 13.10 (233 vs 250). Eq PENDING.
+010c5ee0  143  hkStorageMeshShape::finish(hkFinishLoadedObjectFlag): complete (base init 0x010c8bc0, vptr 0x014a3d84, pointer fixup loop for each subpart). Loop form and register allocation differ (133 vs 112). Eq PENDING.
+010c5f50  1157  hkStorageMeshShape::addSubpart: complete (allocates a 0x48-byte subpart storage, appends to m_subparts/m_storage, copies vertices/indices/material-indices/materials honouring the 8/16-bit and stride variants, fills the material fallback). Large function; scheduling and block layout differ (1292 vs 1311). Eq PENDING.
