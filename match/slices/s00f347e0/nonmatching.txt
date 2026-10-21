@@ -1,0 +1,7 @@
+00f347e0 - complete source; CLayoutObj::Refresh, NOT byte-exact (86 vs 1219 bytes; body beyond vector clear not reconstructed); equiv FAIL (memory mismatch)
+00f34d40 - complete source; CopySelectedInfo, NOT byte-exact (122 vs 136; bit-test/multiply shape differs); equiv WEAK
+00f34dd0 - complete source; vec<cSPTransform,0x38>::insert, NOT byte-exact (11-byte diff; allocator string push + cmp operand order); equiv UNSUPPORTED
+00f34ef0 - complete source; vec<V4,0x10>::erase(first,last), NOT byte-exact (75 vs 81 bytes; cached-end loop shape); equiv WEAK
+00f34f50 - complete source; vec<V4,0x10>::insert, NOT byte-exact (310 vs 354 bytes; value-cache register allocation); equiv WEAK
+00f350c0 - complete source; vec<cSPTransform,0x38>::insert_n, NOT byte-exact (400 vs 499 bytes); equiv WEAK
+00f352e0 - complete source; CLayoutObj::Remove, NOT byte-exact (596 vs 627 bytes; noun-vtable reload shape); equiv FAIL (write fault at 00b225d6)
