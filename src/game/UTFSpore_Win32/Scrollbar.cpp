@@ -79,7 +79,7 @@ static inline void Quad(Canvas* c, float ax, float ay, float bx, float by,
 }
 namespace EA {
 namespace UTFWinControls {
-struct ScrollbarDrawable {
+class ScrollbarDrawable { public:
     char pad[0x10];
     Image_s0098_2780* mComponentImage[7];
 
