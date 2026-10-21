@@ -1,0 +1,4 @@
+00d9cf70 SP::cTribeGameBehaviorFeedBaby::AddAgent  # PDB candidate (caller-scored)
+00d9d5b0 SP::TRIBE_RESET_TOOL_Tick  # PDB candidate (caller-scored)
+00d9dba0 SP::SOCIAL_RESPOND_memory_block::Start  # bootstrap of the SOCIAL_RESPOND memory block
+00d9dc80 SP::SOCIAL_RESPOND_memory_block::Stop  # shutdown of the SOCIAL_RESPOND memory block

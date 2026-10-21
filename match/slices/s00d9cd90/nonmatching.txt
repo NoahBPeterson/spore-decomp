@@ -1,0 +1,18 @@
+00d9cd90 386 SWARM tick: averages per-member weights into +0x3c/+0x40, walks the +0x64..+0x68 member vector querying IID 0x4f176642 for cSPCreatureCitizen, bumps +0x48/+0x4c and calls 0x00d9ccc0; 458 vs 477 bytes (the original folds the GetSpeciesProfile/IsLeader probe into the loop tail)
+00d9cf70 240 SP::cTribeGameBehaviorFeedBaby::AddAgent: NounManager/GetPlayerEmpireOrMinus1 -> relationship query, cTribeModeStrategy gate, cCommunity GetLeader, two 0x00bc97f0 weight loops, TRG_TotemPole_Social trigger + cActionTarget post; 339 vs 358 bytes
+00d9d0e0 15 predicate: !FUN_00a75010(*(*(this+0xb4c)+0x600)); 27 vs 27 bytes but the original loads +0x600 through two indirections with the call result in eax, ours folds the test
+00d9d100 291 slot assignment: FindClosestFreeSlot on the target's +0x3c position, SlotAt/Reserve on the +0x178 circle, MoveToPointAndFacingAtSpeed with the negated facing vector and an OR 2 on the +0x70 flags; 276 vs 212 bytes
+00d9d1e0 444 SWARM member state machine (switch on +0x14: 0 approach, 1 IsNearGoal, 2 InterruptAnimation, 3 AnimationFinished countdown); 376 vs 562 bytes (the original keeps each case's cold block out of line)
+00d9d420 363 idle-animation proximity check: PlayIdleAnimation(0x1000), WatchMemoryBlock->0x00d994c0, the +0x600 array guard and the squared-distance scan over the +0x20/+0xc slots; 371 vs 335 bytes
+00d9d570 138 detach helper: clears +0x1ac if it aliases this, releases the +0x600 manager object via vtable slot 8, calls 0x00bcafe0 and stores -1 to +0x604; 98 vs 49 bytes because the original inlines the whole 0x00bcb430 tail
+00d9d5b0 592 SP::TRIBE_RESET_TOOL_Tick: PlayIdleAnimation(0x1000) + resolve, notify 0x5a8, clear the other members' agent orders and behavior stimuli, then either PlayAnimation(0x2c39200)/PlayAnimation(0x4ffb325) or the targeted move at the summed facing speed; 633 vs 588 bytes
+00d9d800 51 detach+clear helper: same +0x1ac guard then vtable 0x84(0,0,0); 57 vs 55 bytes
+00d9d840 73 free-slot search over a 0x210-stride array (bit30 tag -> 0x3fffffff, walks until a non-negative tag); 61 vs 77 bytes (original emits two different tag tests: shr 0x1e vs shr 0x1f)
+00d9d890 37 destroy range over 0x210-stride records calling vtable slot 0 with 0 for non-negative tags; 49 vs 52 bytes
+00d9d8d0 104 uninitialized_copy_n of 0x20-byte elements writing the advanced dst back through the out-param; 91 vs 109 bytes
+00d9d940 45 uninitialized_fill_n of n 0x20-byte elements from one source; 85 vs 83 bytes
+00d9d9a0 346 SiftDown over a 0x20-stride array with a comparator callback, taking the 7 float keys and the callback through the stack; 286 vs 216 bytes (our parameter marshalling through the 0x00d9b950 tail differs)
+00d9da80 116 SiftDown over a pointer array with the FUN_00ac0730 comparator and the +0xc0 sub-object projection; 152 vs 164 bytes
+00d9db30 94 uninitialized_copy of 0x20-byte elements between two ranges; 103 vs 100 bytes
+00d9dba0 194 SP::SOCIAL_RESPOND_memory_block bootstrap: zeroes the block, PlayIdleAnimation(0x10000), resolves the target via 0x00d99470 + AddRef/Release swap, CalculateGroupContribution, sets state 0, ClearAll and sets the +0xb58 bit 0x20; 226 vs 222 bytes
+00d9dc80 90 SP::SOCIAL_RESPOND_memory_block shutdown: conditionally vtable 0x84(0,0,0), ClearAll(0x10000000), 0x00c0ba10, clears +0xb58 bit 0x20 and releases the block's target; 101 vs 95 bytes
