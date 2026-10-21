@@ -1,0 +1,10 @@
+010c6490  73  ~hkStorageMeshShape: complete (subpart loop, TLS/alloc frees, vptr reset); instruction scheduling differs. Eq UNSUPPORTED (unresolved hkMemory::deallocateChunk).
+010c6570  358  hkSimpleMeshShape::getAabb: complete (4-comp min/max + radius expand, constants 0x7f7fffee/0xff7fffee); /O2 scheduling differs. Eq PASS.
+010c6700  135  hkSimpleMeshShape::getChildShape: complete triangle-shim fill; scheduling/registers differ. Eq WEAK (132/400 valid, 98.2% coverage).
+010c67d0  98  hkSimpleMeshShape::calcStatistics: complete beginObject/addArray/endObject; masking/schedule differ. Eq UNSUPPORTED (harness fake-arity).
+010c6890  57  hkSimpleMeshShape ctor: complete member init via base ctor; differs only in reconstructed vtable address (0x014a3e1c vs 0x014a3dbc). Eq FAIL (vtable-address artifact).
+010c6900  101  ~hkSimpleMeshShape: complete 3-array frees + vptr reset; scheduling differs. Eq UNSUPPORTED (all inputs fault(read)).
+010c69e0  69  hkPlaneShape::castRayWithCollector: complete ray test + collector call; shape/schedule differ. Eq UNSUPPORTED (harness ABI).
+010c6a40  417  hkPlaneShape::castSphere: complete sphere-cast math + collector; x87 order differs. Eq PASS.
+010c6c20  393  hkPlaneShape::collideSpheres: complete sphere loop; branch/register shape differs. Eq PASS (100% coverage).
+010c6d90  479  hkPlaneShape::castRay: complete monitor markers + plane test + hit fill; schedule differs. Eq UNSUPPORTED (unresolved __rdtsc).

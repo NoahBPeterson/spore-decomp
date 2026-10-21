@@ -1,0 +1,7 @@
+slices/s010c6490/s010c6490.cpp  ?getNextKey@hkSimpleMeshShape@@QBEII@Z  010c67b0  /O2 /MD /Gy /EHsc /TP /vc71
+slices/s010c6490/s010c6490.cpp  ?calcStatistics@hkPlaneShape@@QBEXPAUhkStatisticsCollector@@@Z  010c69a0  /O2 /MD /Gy /EHsc /TP /vc71
+slices/s010c6490/s010c6490.cpp  ?getAabb@hkPlaneShape@@QBEXABUhkTransform@@MAAUhkAabb@@@Z  010c6d60  /O2 /MD /Gy /EHsc /TP /vc71
+slices/s010c6490/s010c6490.cpp  ??1hkCollisionFilterSub@@UAE@XZ  010c7010  /O2 /MD /Gy /EHsc /TP /vc71
+slices/s010c6490/s010c6490.cpp  ?getCollisionSpheresInfo@hkMultiSphereShape@@QBEXAAUhkCollisionSpheresInfo@@@Z  010c70a0  /O2 /MD /Gy /EHsc /TP /vc71
+slices/s010c6490/s010c6490.cpp  ?getShape@hkShapeContainer@@QBEPAXI@Z  010c70b0  /O2 /MD /Gy /EHsc /TP /vc71
+slices/s010c6490/s010c6490.cpp  ?calcStatistics@hkMultiSphereShape@@QBEXPAUhkStatisticsCollector@@@Z  010c70c0  /O2 /MD /Gy /EHsc /TP /vc71

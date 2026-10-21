@@ -1,0 +1,17 @@
+010c6490 ??1hkStorageMeshShape@@UAE@XZ  # frees each subpart (0x010c5de0) + (p,0x48,0x22) via g_hkMemory slot 0x14, then TLS-frees m_storage/m_subparts; vptr reset 0x013ef094
+010c6570 ?getAabb@hkSimpleMeshShape@@UBEXABVhkTransform@@MAAVhkAabb@@@Z  # transforms each vertex, min/max, expands by tolerance+radius; large floats 0x7f7fffee / 0xff7fffee
+010c6700 ?getChildShape@hkSimpleMeshShape@@UBEPBVhkShape@@IAAY0CAA@D@Z  # fills a triangle shim (vtable 0x014a3bfc) from m_triangles/m_vertices
+010c67b0 ?getNextKey@hkSimpleMeshShape@@QBEII@Z  # key+1, or 0xffffffff when >= m_triangles.m_size
+010c67d0 ?calcStatistics@hkSimpleMeshShape@@UBEXPAVhkStatisticsCollector@@@Z  # beginObject "StorageMesh", addArray Vertices/Triangles/MaterialIds
+010c6890 ??0hkSimpleMeshShape@@QAE@M@Z  # ctor: base ctor 0x010e7fd0, empty arrays, m_radius
+010c6900 ??1hkSimpleMeshShape@@UAE@XZ  # frees materialIndices/triangles/vertices, vptr reset 0x013ef094
+010c69a0 ?calcStatistics@hkPlaneShape@@UBEXPAVhkStatisticsCollector@@@Z  # beginObject "PlaneShape"
+010c69e0 ?castRayWithCollector@hkPlaneShape@@UBEXABUhkShapeRayCastInput@@ABVhkCdBody@@AAVhkRayHitCollector@@@Z  # castRay then collector->addHit(body, rotated dir)
+010c6a40 ?castSphere@hkPlaneShape@@UBEXABUhkSphereCastInput@hkHeightFieldShape@@ABVhkCdBody@@AAVhkRayHitCollector@@@Z  # plane/sphere cast; adds a hit when AABB-in-range
+010c6c20 ?collideSpheres@hkPlaneShape@@UBEXABUCollideSpheresInput@hkHeightFieldShape@@PAVhkVector4@@@Z  # per-sphere |pos-aabbMin| extent test, writes plane normal or HUGE
+010c6d60 ?getAabb@hkPlaneShape@@UBEXABVhkTransform@@MAAVhkAabb@@@Z  # hkAabbUtil::calcAabb(t, m_aabbExt, m_aabbMin, tol, aabb)
+010c6d90 ?castRay@hkPlaneShape@@UBE?AVhkBool@@ABUhkShapeRayCastInput@@AAUhkShapeRayCastOutput@@@Z  # monitor "TtrcPlane", plane intersection, AABB extent test
+010c7010 ??1hkCollisionFilterSub@@UAE@XZ  # stores 5 secondary-vtable pointers then tail-jumps 0x005efd40
+010c70a0 ?getCollisionSpheresInfo@hkMultiSphereShape@@QBEXAAUhkCollisionSpheresInfo@@@Z  # writes m_n at +0xc
+010c70b0 ?getShape@hkShapeContainer@@QBEPAXI@Z  # returns this+0x10 (first subpart pointer)
+010c70c0 ?calcStatistics@hkMultiSphereShape@@QBEXPAVhkStatisticsCollector@@@Z  # beginObject "MultiSphere"
