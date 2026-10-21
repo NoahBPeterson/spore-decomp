@@ -559,8 +559,7 @@ float TerrainFace::GetDepth()
     void* o = *(void**)(p + 0x74);
     if (!o)
         return g_half_1471064;
-    void** vt = *(void***)o;
-    void* r = ((void*(__thiscall*)(void*))vt[0x10 / 4])(o);
+    void* r = ((void*(__thiscall*)(void*))((void**)*(void***)o)[0x10 / 4])(o);
     return ((DepthCtx*)r)->Read();
 }
 

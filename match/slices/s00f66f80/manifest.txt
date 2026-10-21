@@ -5,3 +5,4 @@ slices/s00f66f80/s00f66f80.cpp  ?SetDepth@TerrainFace@@QAEXM@Z  00f67540  /O2 /M
 slices/s00f66f80/s00f66f80.cpp  ?ClearDepth@TerrainFace@@QAEXXZ  00f67560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00f66f80/s00f66f80.cpp  ?SetLodByte@TerrainFace@@QAEXHE@Z  00f67580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00f66f80/s00f66f80.cpp  ?SelectLod@@YAHPAM@Z  00f676f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f66f80/s00f66f80.cpp  ?GetDepth@TerrainFace@@QAEMXZ  00f678d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
