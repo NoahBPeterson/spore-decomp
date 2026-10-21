@@ -1,0 +1,4 @@
+slices/s010caa30/s010caa30.cpp  ?FUN_010cb210@@YAXPAX@Z  010cb210  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s010caa30/s010caa30.cpp  ?getNextKey@hkConvexPieceMeshShape@@QAEII@Z  010cb230  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s010caa30/s010caa30.cpp  ?scalarDeletingDtor@hkConvexPieceMeshShape@@QAEPAXI@Z  010cb630  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s010caa30/s010caa30.cpp  ?scalarDeletingDtor@hkConvexListShape@@QAEPAXI@Z  010cb760  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
