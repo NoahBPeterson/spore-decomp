@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+#
+# (empty) every target VA of s010d6420 has a complete definition in
+# s010d6420.cpp: 010d6420, 010d6530, 010d6680, 010d66e0, 010d6a80, 010d6e00,
+# 010d7190, 010d7300, 010d7470, 010d74f0.

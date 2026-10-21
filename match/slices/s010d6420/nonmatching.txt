@@ -1,0 +1,13 @@
+# va  diff-bytes  reason   (compile with /vc71 /O2 /MD /Gy /TP)
+#
+# Complete behaviourally-equivalent source for the sphere/triangle collision
+# agent and the sphere/box symmetric flip wrapper; none of these six are
+# byte-exact yet (x87 schedule, register allocation and frame size differ, the
+# same class of difference that blocks the equivalent agent paths in slices
+# s010d37d0 and s010d4730).
+010d6420  42  hkSymmetricAgent<hkSphereBoxAgent>::processCollision; complete (saves the free contact cursor and TOI time, runs the wrapped agent with the bodies swapped, flips every appended hkProcessCdPoint and the TOI separating normal when the TOI time changed); size 111 vs 113; difftest blocked because the wrapped hkSphereBoxAgent::processCollision (010d53d0) is outside the slice so the checker cannot run it; logic verified against the decompilation
+010d66e0  809  hkSphereTriangleAgent::processCollision; complete (monitor scope, three world-space triangle vertices, closestPointTriangle, drop the cached contact when rA+rB+tolerance <= distance else build the manifold point and create/refresh the contact); size 759 vs 922; x87 schedule and frame 0x64 vs 0x84 differ; difftest 131/134 valid inputs identical with --no-fake-calls, the 3 residual mismatches fault in the out-of-slice closestPointTriangle fake
+010d6a80  771  hkSphereTriangleAgent::getClosestPoints; complete (same query using the agent's cached triangle, addCdPoint when distance < rA+rB+tolerance); size 682 vs 885; x87 schedule/register allocation differ; equiv PASS 267 valid inputs, 89.5% coverage
+010d6e00  767  hkSphereTriangleAgent::staticGetClosestPoints; complete (rebuilds the triangle cache with setupClosestPointTriangleCache then queries); size 716 vs 907; same schedule difference; equiv PASS 216 valid inputs, 89.7% coverage
+010d7190  207  hkSphereTriangleAgent::getPenetrations; complete (sphere centre into the triangle's local frame by basis rows, closestPointTriangle against the shape's local vertices, addCdBodyPair when distance < rA+rB); size 351 vs 353; remaining diff is register allocation (esi/edi/ebx) and the monitor slot; equiv PASS 250 valid inputs, 77.8% coverage
+010d7300  283  hkSphereTriangleAgent::staticGetPenetrations; complete (cache rebuilt each call); size 386 vs 360; same schedule difference; equiv PASS 248 valid inputs, 78.5% coverage

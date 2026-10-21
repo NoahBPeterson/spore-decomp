@@ -1,0 +1,4 @@
+slices/s010d6420/s010d6420.cpp  ?createSphereTriangleAgent@hkSphereTriangleAgent@@SAPAVhkCollisionAgent@@ABUhkCdBody@@0ABUhkCollisionInput@@PAVhkContactMgr@@@Z  010d6530  /vc71 /O2 /MD /Gy /TP
+slices/s010d6420/s010d6420.cpp  ?createTriangleSphereAgent@hkSphereTriangleAgent@@SAPAVhkCollisionAgent@@ABUhkCdBody@@0ABUhkCollisionInput@@PAVhkContactMgr@@@Z  010d6680  /vc71 /O2 /MD /Gy /TP
+slices/s010d6420/s010d6420.cpp  ?getPenetrations@hkSymmetricSphereTriangleAgent@@QAEXABUhkCdBody@@0ABUhkCollisionInput@@AAVhkCdBodyPairCollector@@@Z  010d7470  /vc71 /O2 /MD /Gy /TP
+slices/s010d6420/s010d6420.cpp  ?getClosestPoints@hkSymmetricSphereTriangleAgent@@QAEXABUhkCdBody@@0ABUhkCollisionInput@@AAVhkCdPointCollector@@@Z  010d74f0  /vc71 /O2 /MD /Gy /TP
