@@ -1,12 +1,13 @@
-00f955f0
-00f95ac0
-00f95b70
-00f95dd0
-00f96110
-00f962b0
-00f96310
-00f96390
-00f964b0
-00f964f0
-00f96520
-00f967d0
+# va  diff-bytes  reason
+00f955f0   87  RegisterTerrainOverlays: complete; reads ecx at entry (entry-context dependent), cl cannot reproduce the register-only prologue (equivalence UNSUPPORTED)
+00f95ac0  142  UnpackColor: complete; x87 fild + unsigned fixup ported, cl orders the int-to-float conversions differently
+00f95b70  196  DrawTerrainOverlay: complete; the overlay draw loop matches but cl lays out the per-cell stores differently (no equivalence verdict)
+00f95dd0  158  cTerrainOverlay::Start: complete; unresolved `?fabs_f@SP@@YAMM@Z` at link time so equivalence is UNSUPPORTED
+00f96110  113  HashTerrainDesc: complete (equivalence PASS); cl reorders the mixing multiply/shift chain
+00f962b0   74  cTerrainOverlay scalar deleting dtor: complete (equivalence PASS); cl orders the dtor/vtbl-store/vfree sequence differently
+00f96310   92  cTerrainOverlay::Start: complete (equivalence PASS); the flag/latch writes match, cl reorders the branch blocks
+00f96390  129  DrawTerrainGrid: complete; the grid-emit loop matches but cl reorders the vertex stores
+00f964b0  102  ReleaseRef: complete but unresolved `InterlockedExchangeAdd` at link time (equivalence UNSUPPORTED)
+00f964f0  118  cDynCast::Cast: complete; the type-id walk matches, cl orders the return-path compares differently
+00f96520   95  cTerrainSphere::RemoveFromEffectsSystem: complete but the harness faults (read=400) on the fully-unrolled 5/22/3-call sequence (equivalence UNSUPPORTED)
+00f967d0  151  cGridTool::GetExtents: complete; the three extent clamps match, cl reassociates the min/max selection
