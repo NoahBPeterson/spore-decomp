@@ -74,6 +74,7 @@ static const char kNullStr[] = "(null)";
 //
 // Returns the advanced destination cursor.
 // ---------------------------------------------------------------------------
+// @ 0x011e94f0
 char* __cdecl EmitStrPadded(char* dst, const void* src, int width, int* pWidth,
                             int* pCount, char bWide, char zeroPad)
 {
@@ -132,6 +133,7 @@ char* __cdecl EmitStrPadded(char* dst, const void* src, int width, int* pWidth,
 // 011e9630  EmitStr  --  write a string with no width/padding handling.
 //   dst = dest cursor, src = string, pCount = running count.  Returns dest cursor.
 // ---------------------------------------------------------------------------
+// @ 0x011e9630
 char* __cdecl EmitStr(char* dst, const void* src, int* pCount, char bWide)
 {
     if (bWide) {
@@ -163,6 +165,7 @@ char* __cdecl EmitStr(char* dst, const void* src, int* pCount, char bWide)
 // 011e96d0  EmitStrPadRight  --  write a string, then pad on the right with spaces to width.
 //   width = field width, dst/src/pCount as EmitStr.  Returns dest cursor.
 // ---------------------------------------------------------------------------
+// @ 0x011e96d0
 char* __cdecl EmitStrPadRight(char* dst, const void* src, int width, int* pCount, char bWide)
 {
     int len;
@@ -206,6 +209,7 @@ char* __cdecl EmitStrPadRight(char* dst, const void* src, int width, int* pCount
 //   zeroPad and the padding honours *pWidth.  (Signature mirrors EmitStrPadded; the
 //   difference is only in which register carries each value on entry.)
 // ---------------------------------------------------------------------------
+// @ 0x011e97a0
 char* __cdecl EmitStrZeroPad(char* dst, const void* src, int width, int* pWidth,
                              int* pCount, char bWide, char zeroPad)
 {
@@ -253,6 +257,7 @@ char* __cdecl EmitStrZeroPad(char* dst, const void* src, int width, int* pWidth,
 // 011e98b0  UIntToADigits  --  recursive base-10 digit emitter.
 //   Emits the digits of (hi:lo) most-significant first; returns the advanced cursor.
 // ---------------------------------------------------------------------------
+// @ 0x011e98b0
 static char* __cdecl UIntToADigits(char* dst, u32 lo, u32 hi)
 {
     if (hi == 0 && lo == 0)
@@ -271,6 +276,7 @@ static char* __cdecl UIntToADigits(char* dst, u32 lo, u32 hi)
 // 011e9900  UInt64ToA  --  write (hi:lo) as a decimal string, NUL terminated.
 //   Returns dst.
 // ---------------------------------------------------------------------------
+// @ 0x011e9900
 char* __cdecl UInt64ToA(char* dst, u32 lo, u32 hi)
 {
     if (hi == 0 && lo == 0) {
@@ -291,6 +297,7 @@ char* __cdecl UInt64ToA(char* dst, u32 lo, u32 hi)
 // 011e9950  UInt64ToHexUp  --  write (hi:lo) as uppercase hex, no NUL terminator.
 //   Returns the advanced cursor.
 // ---------------------------------------------------------------------------
+// @ 0x011e9950
 char* __cdecl UInt64ToHexUp(char* dst, u32 lo, u32 hi)
 {
     if (hi == 0 && lo == 0)
@@ -308,6 +315,7 @@ char* __cdecl UInt64ToHexUp(char* dst, u32 lo, u32 hi)
 // ---------------------------------------------------------------------------
 // 011e99b0  UInt64ToHexLow  --  as UInt64ToHexUp but lowercase (a-f).
 // ---------------------------------------------------------------------------
+// @ 0x011e99b0
 char* __cdecl UInt64ToHexLow(char* dst, u32 lo, u32 hi)
 {
     if (hi == 0 && lo == 0)
@@ -334,6 +342,7 @@ char* __cdecl UInt64ToHexLow(char* dst, u32 lo, u32 hi)
 // reference advances it by 4 bytes for a 32-bit argument and 8 for a 64-bit
 // one, with the %S / %(wide) cases stepping the character-argument cursor.
 // ===========================================================================
+// @ 0x011e9a10
 int __cdecl VsnprintfCore(char* dst, const char* fmt, u32* fpargs)
 {
     // Argument-stream cursors: `slots` is the 32/64-bit value stream, `cslot`
