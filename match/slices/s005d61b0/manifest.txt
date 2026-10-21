@@ -3,9 +3,9 @@ slices/s005d61b0/s005d61b0.cpp  ?Update@cEditorSystem@SP@@QAEXH@Z  005d65d0  /O2
 slices/s005d61b0/s005d61b0.cpp  ??0cEditorSystem@SP@@QAE@XZ  005d67f0  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s005d61b0/s005d61b0.cpp  ?DoFindNode@?$hashtable@PB_WPB_W@eastl@@  005d6a90  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s005d61b0/s005d61b0.cpp  ??0hkDefaultError@@QAE@P6AXPBDPAX@Z1@Z  005d6ae0  /O2 /MD /Gy /TP /arch:SSE /GS-
-slices/s005d61b0/s005d61b0.cpp  ?setEnabled@hkDefaultError@@UAEXHUhkBool@@@Z  005d6b20  /O2 /MD /Gy /TP /arch:SSE /GS-
-slices/s005d61b0/s005d61b0.cpp  ?isEnabled@hkDefaultError@@UAE?AUhkBool@@H@Z  005d6b50  /O2 /MD /Gy /TP /arch:SSE /GS-
-slices/s005d61b0/s005d61b0.cpp  ?showMessage@hkDefaultError@@QAEXPBDH00HUhkBool@@@Z  005d6b80  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s005d61b0/s005d61b0.cpp  ?setEnabled@hkDefaultError@@UAEXHVhkBool@@@Z  005d6b20  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s005d61b0/s005d61b0.cpp  ?isEnabled@hkDefaultError@@UAE?AVhkBool@@H@Z  005d6b50  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s005d61b0/s005d61b0.cpp  ?showMessage@hkDefaultError@@QAEXPBDH00HVhkBool@@@Z  005d6b80  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s005d61b0/s005d61b0.cpp  ?message@hkDefaultError@@UAEXW4Message@hkError@@HPBD1H@Z  005d6ce0  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s005d61b0/s005d61b0.cpp  ?sectionBegin@hkDefaultError@@UAEXHPBD@Z  005d6d90  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s005d61b0/s005d61b0.cpp  ?message@cSPHavokError@@UAEXW4Message@hkError@@HPBD1H@Z  005d6dc0  /O2 /MD /Gy /TP /arch:SSE /GS-

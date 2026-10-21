@@ -21,15 +21,15 @@ void operator delete[](void* p) throw(); // 0x00F47380
 namespace EA {
 namespace Messaging {
 void RemoveHandler(void* pServer, void* pHandler, uint32_t* pIdArray, uint32_t nIdCount, int nPriority);   // 0x00571DB0
-struct IHandler {
+class IHandler { public:
     virtual ~IHandler() {}
     virtual bool HandleMessage(uint32_t messageID, void* pMessage) = 0;
     virtual int AddRef() = 0;
     virtual int Release() = 0;
 };
-struct IHandlerRC : public IHandler {};
+class IHandlerRC : public IHandler { public:};
 // Retail layout (the 2008 PDB has a 4-field version).
-struct AutoHandler {
+class AutoHandler { public:
     void* mpServer;          // +0x0
     void* mpHandler;         // +0x4
     uint32_t* mpIdArray;     // +0x8
@@ -47,14 +47,14 @@ struct AutoHandler {
 };
 }
 namespace Thread {
-template <class T> struct AtomicInt {
+template <class T> class AtomicInt { public:
     volatile long mValue;
     T GetValue() const { return mValue; }
     T SetValue(T n) { return _InterlockedExchange(&mValue, n); }
     T Decrement() { return _InterlockedDecrement(&mValue); }
 };
 }
-template <class T> struct RefCountTemplate {
+template <class T> class RefCountTemplate { public:
     T mRefCount;
     RefCountTemplate() : mRefCount(0) {}
     virtual ~RefCountTemplate() {}
@@ -70,7 +70,7 @@ template <class T> struct RefCountTemplate {
         return mRefCount;
     }
 };
-template <class T> struct AutoRefCount {
+template <class T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount() : mpObject(0) {}
     ~AutoRefCount() {
@@ -96,31 +96,31 @@ template <class T> struct AutoRefCount {
 // ---------------------------------------------------------------------------------------------
 // Editor subsystems held by cEditorSystem (only the vtable slots used here are named).
 namespace SP {
-struct cISPCreatureAnimManager {   // IRefCount
+class cISPCreatureAnimManager { public:   // IRefCount
     virtual int AddRef();
     virtual int Release();
     virtual void v2();
     virtual void v3();
     virtual void Shutdown();
 };
-struct cSPSwatchManager : public EA::RefCountTemplate<int> {
+class cSPSwatchManager : public EA::RefCountTemplate<int> { public:
     void Shutdown();               // 0x005F0850
     void Update(int deltaTime);    // 0x005F0940
 };
-struct cSPUIAssetBrowser : public EA::Messaging::IHandlerRC {
+class cSPUIAssetBrowser : public EA::Messaging::IHandlerRC { public:
     char pad04[0x1c - 4];
     bool mbVisible;                // +0x1c
     void Shutdown();               // 0x0064A220
     void Update(int deltaTime);    // 0x0064C400
     static void Launch(uint32_t layoutID, uint32_t param, int flags);   // 0x0064BC50
 };
-struct cSPEditorEffects {          // RefCountVTemplate
+class cSPEditorEffects { public:          // RefCountVTemplate
     virtual ~cSPEditorEffects();
     virtual int AddRef();
     virtual int Release();
     void Shutdown();               // 0x0045AB30
 };
-struct cIEditorBaker {
+class cIEditorBaker { public:
     virtual int AddRef();
     virtual int Release();
     virtual void v2();
@@ -129,7 +129,7 @@ struct cIEditorBaker {
     virtual void Update();
 };
 namespace Pollen {
-struct CookieHandler {
+class CookieHandler { public:
     EA::Thread::AtomicInt<int> mRefCount;   // +0x4
     virtual ~CookieHandler();
     int AddRef() { return _InterlockedExchangeAdd(&mRefCount.mValue, 1) + 1; }
@@ -145,7 +145,7 @@ struct CookieHandler {
 };
 }
 namespace Achievements {
-struct Controller {
+class Controller { public:
     virtual ~Controller();
     virtual int AddRef();
     virtual int Release();
@@ -216,7 +216,7 @@ struct cObjectTemplateDB {
 cObjectTemplateDB* ObjectTemplateDB();   // 0x0067CB40
 void SetObjectTemplateDB(void*);         // 0x0067CC40
 namespace Thumbnail {
-struct cImportExport { virtual ~cImportExport(); void Shutdown(); };   // 0x005FAE40
+class cImportExport { public: virtual ~cImportExport(); void Shutdown(); };   // 0x005FAE40
 }
 Thumbnail::cImportExport* ThumbnailImportExport(bool bCreate);   // 0x005F7920
 int IsEditorGameDataInitialized();      // 0x00401000
@@ -253,13 +253,13 @@ cSPUIAssetBrowser* SporeGuide();        // 0x00401040
 IEditorUpdatable* EditorAnimWorld();    // 0x0067CB20
 }
 namespace nSPSkinner {
-struct cPaintSystem : public EA::Messaging::IHandlerRC {
+class cPaintSystem : public EA::Messaging::IHandlerRC { public:
     void Shutdown();               // 0x0051EC70
     void Update(int deltaTime);    // 0x00521BA0
 };
 }
 namespace EA { namespace XHTML { namespace Resource {
-struct IResourceProvider {
+class IResourceProvider { public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void Shutdown();
 };
@@ -477,7 +477,7 @@ bool cEditorSystem::PreInit(int)
 // ---------------------------------------------------------------------------------------------
 // eastl::hash_map<const wchar_t*, const wchar_t*, hash<const wchar_t*>, str_equal_to<...>>
 namespace eastl {
-struct allocator {
+class allocator { public:
     allocator() {}
     void* allocate(uint32_t n, int flags = 0) {
         return new ("Editor", flags, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 209) char[n];
@@ -633,7 +633,7 @@ template <class T> struct basic_string {
             mAllocator.deallocate(p, n * sizeof(T));
     }
 };
-template <class T, int nodeCount> struct fixed_string {
+template <class T, int nodeCount> class fixed_string { public:
     T* mpBegin;          // +0x0
     T* mpEnd;            // +0x4
     T* mpCapacity;       // +0x8
@@ -657,30 +657,30 @@ template <class T, int nodeCount> struct fixed_string {
 // ---------------------------------------------------------------------------------------------
 // Havok base system
 typedef void (*hkErrorReportFunction)(const char* s, void* errorReportObject);
-struct hkBool {
+class hkBool { public:
     char m_bool;
     hkBool() {}
     hkBool(bool b) : m_bool((char)b) {}
     operator bool() const { return m_bool != 0; }
 };
-struct hkMemory {
+class hkMemory { public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void* allocateChunk(int nbytes, int cl);
     virtual void deallocateChunk(void* p, int nbytes, int cl);
     static hkMemory* s_instance;   // 0x016E4178
     static hkMemory& getInstance() { return *s_instance; }
 };
-struct hkThreadMemory {
+class hkThreadMemory { public:
     void deallocateChunk(void* p, int nbytes, int cl);   // 0x0107DB10
     static unsigned long s_threadMemoryTls;   // 0x016E4174
     static hkThreadMemory& getInstance();
 };
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long dwTlsIndex);
 inline hkThreadMemory& hkThreadMemory::getInstance() { return *(hkThreadMemory*)TlsGetValue(s_threadMemoryTls); }
-struct hkBaseObject {
+class hkBaseObject { public:
     virtual ~hkBaseObject() {}
 };
-struct hkReferencedObject : public hkBaseObject {
+class hkReferencedObject : public hkBaseObject { public:
     uint16_t m_memSizeAndFlags;   // +0x4
     int16_t m_referenceCount;     // +0x6
     hkReferencedObject() : m_referenceCount(1) {}
@@ -701,7 +701,7 @@ struct hkReferencedObject : public hkBaseObject {
         hkMemory::getInstance().deallocateChunk(p, b->m_memSizeAndFlags, 0x15);
     }
 };
-template <class T> struct hkSingleton : public hkReferencedObject {
+template <class T> class hkSingleton : public hkReferencedObject { public:
     static T* s_instance;
     static T& getInstance() { return *s_instance; }
     static void replaceInstance(T* p) {
@@ -714,7 +714,7 @@ template <class T> inline void hkDeallocateChunk(T* p, int numberOfObjects, int 
 {
     hkThreadMemory::getInstance().deallocateChunk(p, numberOfObjects * sizeof(T), cl);
 }
-template <class T> struct hkArray {
+template <class T> class hkArray { public:
     T* m_data;
     int m_size;
     int m_capacityAndFlags;
@@ -737,7 +737,7 @@ template <class T> struct hkArray {
     }
     static void hkArrayUtil_reserveMore(void* array, int elemSize);   // 0x0107F530
 };
-template <class K, class V> struct hkPointerMap {
+template <class K, class V> class hkPointerMap { public:
     uint32_t m_map[3];
     hkPointerMap();                      // 0x0107DE00
     ~hkPointerMap();                     // 0x0107DE50
@@ -757,7 +757,7 @@ public:
     virtual void sectionBegin(int id, const char* sectionName) = 0;
     virtual void sectionEnd() = 0;
 };
-struct hkOstream {
+class hkOstream { public:
     hkOstream(void* mem, int memSize, hkBool isString);   // 0x0107EF80
     ~hkOstream();                                         // 0x0107EFD0
     hkOstream& operator<<(const char* s);                 // 0x0107EE30
@@ -765,14 +765,14 @@ struct hkOstream {
     hkOstream& operator<<(int i);                         // 0x0107EE80
     uint32_t m_impl[3];
 };
-struct hkStackTracer {
+class hkStackTracer { public:
     hkStackTracer();                                      // 0x0107F250
     ~hkStackTracer();                                     // 0x0107F050
     int getStackTrace(unsigned long* trace, int maxtrace);   // 0x01097300
     void dumpStackTrace(const unsigned long* trace, int numtrace, hkErrorReportFunction pfunc, void* context);   // 0x0107F0C0
     uint32_t m_impl[2];
 };
-struct hkString { static int sprintf(char* buf, const char* fmt, ...); };   // 0x0107F3B0
+class hkString { public: static int sprintf(char* buf, const char* fmt, ...); };   // 0x0107F3B0
 
 class hkDefaultError : public hkError {
 public:
@@ -889,7 +889,7 @@ void HavokFree(void* p);                  // 0x00F47410
 extern void* (*hkSystemMalloc)(int, int); // 0x015B9A34
 extern void (*hkSystemFree)(void*);       // 0x015B9A38
 void HavokErrorReport(const char* s, void* obj);   // 0x00C2E4E0
-struct hkPoolMemory {
+class hkPoolMemory { public:
     hkPoolMemory();   // 0x0107F910
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
     virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
@@ -939,7 +939,7 @@ void InitHavokBaseSystem()
 // ---------------------------------------------------------------------------------------------
 // XHTML resource protocol handlers
 namespace EA { namespace XHTML { namespace Resource {
-struct IProtocolHandler {
+class IProtocolHandler { public:
     virtual ~IProtocolHandler() {}
     int mRefCount;   // +0x4
     int mUnknown8;   // +0x8
