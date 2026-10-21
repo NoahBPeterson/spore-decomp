@@ -133,7 +133,7 @@ struct cDescription_s0052_e1f0 : RefCountTemplate_s0052_e1f0<int> {
 }
 namespace EA {
 namespace Swarm {
-struct cEffectsParser;
+class cEffectsParser;
 }
 }
 struct cSPSkinPaintDistributeDescription : EA::Swarm::cDescription_s0052_e1f0 {   // 0x54
@@ -254,12 +254,12 @@ struct cCommandBase_s0052_e1f0 : cICommand_s0052_e1f0 {
 }
 namespace EA {
 namespace ArgScript {
-struct cIMetaCommand : cICommand_s0052_e1f0 {};
+class cIMetaCommand : public cICommand_s0052_e1f0 { public:};
 }
 }
 namespace EA {
 namespace ArgScript {
-struct cMetaCommandBase : cIMetaCommand {
+class cMetaCommandBase : public cIMetaCommand { public:
     cIParser_s0052_e1f0* mParser;
     int mRefCount;
     cMetaCommandBase();                         // 0x0083c840
@@ -273,7 +273,7 @@ struct cIBlockCommand_s0052_e1f0 : cICommand_s0052_e1f0 {};
 }
 namespace EA {
 namespace ArgScript {
-struct cBlockCommandBase : cIBlockCommand_s0052_e1f0 {
+class cBlockCommandBase : public cIBlockCommand_s0052_e1f0 { public:
     cIParser_s0052_e1f0* mParser;                          // +0x04
     int mRefCount;                              // +0x08
     cState_s0052_e1f0* mChildState;                        // +0x0c
@@ -298,28 +298,28 @@ template <typename T, typename Base> struct cCommandStateT_s0052_e1f0 : Base {
 }
 namespace EA {
 namespace ArgScript {
-template <typename T> struct cCommandT : cCommandStateT_s0052_e1f0<T, cCommandBase_s0052_e1f0> {
+template <typename T> class cCommandT : public cCommandStateT_s0052_e1f0<T, cCommandBase_s0052_e1f0> { public:
     cCommandT() {}
 };
 }
 }
 namespace EA {
 namespace ArgScript {
-template <typename T> struct cMetaCommandT : cCommandStateT_s0052_e1f0<T, cMetaCommandBase> {
+template <typename T> class cMetaCommandT : public cCommandStateT_s0052_e1f0<T, cMetaCommandBase> { public:
     cMetaCommandT() {}
 };
 }
 }
 namespace EA {
 namespace ArgScript {
-template <typename T> struct cBlockCommandT : cCommandStateT_s0052_e1f0<T, cBlockCommandBase> {
+template <typename T> class cBlockCommandT : public cCommandStateT_s0052_e1f0<T, cBlockCommandBase> { public:
     cBlockCommandT() {}
 };
 }
 }
 namespace EA {
 namespace Swarm {
-struct cEffectsParser : RefCountTemplate_s0052_e1f0<int> {
+class cEffectsParser : public RefCountTemplate_s0052_e1f0<int> { public:
     int FindComponent(const char* name, int type);  // 0x00a6eb60
 };
 }
