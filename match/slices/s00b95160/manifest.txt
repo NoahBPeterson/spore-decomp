@@ -1,0 +1,3 @@
+slices/s00b95160/s00b95160.cpp  ?UpperBound16@@YAPAUElem16@@PAU1@0PBI@Z  00b95340  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s00b95160/s00b95160.cpp  ?Realloc@Vec16@@QAEXI@Z  00b95ef0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s00b95160/s00b95160.cpp  ?Shuffle4@@YAXPAPAX0PAURandomLCG@@@Z  00b96130  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
