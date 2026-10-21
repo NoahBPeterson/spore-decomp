@@ -52,7 +52,7 @@ struct SubObj {
 }
 namespace SP {
 namespace Audio {
-struct cSound {
+class cSound { public:
     VP VP VP VP VP VP VP
     virtual char Slot7(int a, int b, float c, int d);  // +0x1c
     virtual char Slot8(int a, int b);                  // +0x20
