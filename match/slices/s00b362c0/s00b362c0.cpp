@@ -70,6 +70,7 @@ struct RefPair {
 // ---------------------------------------------------------------------------
 // 0x00b362c0  destroy a range of RefPair (returns the advanced out pointer)
 // ---------------------------------------------------------------------------
+// @ 0x00b362c0
 RefPair* RefPair_DestroyRange(RefPair* first, RefPair* last, RefPair* out)
 {
     while (first != last) {
@@ -84,6 +85,7 @@ RefPair* RefPair_DestroyRange(RefPair* first, RefPair* last, RefPair* out)
 // ---------------------------------------------------------------------------
 // 0x00b364c0  copy-assign a range of RefPair (dst <- src)
 // ---------------------------------------------------------------------------
+// @ 0x00b364c0
 void RefPair_CopyAssign(RefPair* dst, RefPair* last, const RefPair* src)
 {
     for (; dst != last; dst += 1) {
@@ -101,6 +103,7 @@ void RefPair_CopyAssign(RefPair* dst, RefPair* last, const RefPair* src)
 // ---------------------------------------------------------------------------
 // 0x00b36530  copy a range of RefPair into out, returning the advanced out
 // ---------------------------------------------------------------------------
+// @ 0x00b36530
 RefPair* RefPair_CopyConstruct(RefPair* first, RefPair* last, RefPair* out)
 {
     while (first != last) {
@@ -121,6 +124,7 @@ RefPair* RefPair_CopyConstruct(RefPair* first, RefPair* last, RefPair* out)
 // ---------------------------------------------------------------------------
 // 0x00b365a0  copy a range of RefPair backwards, returning the new out
 // ---------------------------------------------------------------------------
+// @ 0x00b365a0
 RefPair* RefPair_CopyConstructBackward(RefPair* first, RefPair* last, RefPair* out)
 {
     while (last != first) {
