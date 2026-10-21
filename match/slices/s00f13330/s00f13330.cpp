@@ -384,6 +384,7 @@ void RewardUI::FUN_00f139f0()
     *(void**)(s + 0x00) = (void*)0x148c114;
     *(void**)(s + 0x04) = (void*)0x148c10c;
     *(void**)(s + 0x08) = (void*)0x148c0fc;
+    _ReadWriteBarrier();
 
     uint32_t h = *(uint32_t*)(s + 0xe4);
     if (h) {
