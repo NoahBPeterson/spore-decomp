@@ -1,4 +1,4 @@
 slices/s010d8520/s010d8520.cpp  ?cleanup@hkSphereSphereAgent@@UAEXXZ  010d89d0  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s010d8520/s010d8520.cpp  ?getClosestPoints@hkSymmetricAgent_hkSphereCapsuleAgent@@UAEXABVhkCdBody@@0ABUhkCollisionInput@@AAVhkCdPointCollector@@@Z  010d8840  /vc71 /O2 /MD /Gy /EHsc /TP
-slices/s010d8520/s010d8520.cpp  ?registerAgent@hkSphereSphereAgent@@SAXPAUhkCollisionDispatcher@@@Z  010d92a0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s010d8520/s010d8520.cpp  ?registerAgent@hkSphereSphereAgent@@SAXPAVhkCollisionDispatcher@@@Z  010d92a0  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s010d8520/s010d8520.cpp  ?cleanup@hkBoxBoxAgent@@UAEXXZ  010d92f0  /vc71 /O2 /MD /Gy /EHsc /TP

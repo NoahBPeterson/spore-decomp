@@ -65,8 +65,8 @@ class hkCollisionFilter : public hkReferencedObject, public hkCollidableCollidab
 class hkMatrix3 { public: hkVector4 m_col0, m_col1, m_col2; };   // 0x30 bytes
 typedef hkVector4 hkQuaternion;                           // x,y,z,w
 
-struct hkMotionState                                      // 0xb0 bytes
-{
+class hkMotionState                                      // 0xb0 bytes
+{ public:
 	hkTransform m_transform;                              // +0
 	struct hkSweptTransform
 	{
@@ -388,8 +388,8 @@ struct hkAgentFuncs                            // hkCollisionDispatcher::AgentFu
 	hkBool m_isPredictive;                                  // +0x11
 	hkAgentFuncs() : m_createFunc(0), m_getPenetrationsFunc(0), m_getClosestPointFunc(0), m_linearCastFunc(0), m_isFlipped(false), m_isPredictive(false) {}
 };
-struct hkCollisionDispatcher                   // size 0x1c28 (32-bit layout); spelled out up to the quality table
-{
+class hkCollisionDispatcher                   // size 0x1c28 (32-bit layout); spelled out up to the quality table
+{ public:
 	void* m_vptr_and_refcount[2];              // +0
 	void* m_defaultCollisionAgent;             // +8 (hkCollisionDispatcher is an hkReferencedObject; first 8 bytes)
 	uint8_t m_pad0c[0x190 - 0xc];
