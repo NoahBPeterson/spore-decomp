@@ -1,0 +1,14 @@
+; slice s01204d00 = 0x01204d00..0x01205a90 (culling sweep / oriented-box segment build) - exact names
+; manifest.txt rows are byte-exact; the rest are the nonmatching.txt entries
+01204d00 ?Generate@SweepCtx@@QAEHPAHPAM@Z  # complete, non-exact
+012051f0 ?GeneratePre@SweepCtx2@@QAEHHPAM@Z  # complete, non-exact
+012055f0 _FUN_012055f0  # complete, non-exact (unnamed in the image)
+01205670 ?Size@VolPoolSizer@@QAEIXZ  # byte-exact
+012056a0 ?FUN_012056a0@@YAXHH@Z  # complete, non-exact
+012056f0 ?FUN_012056f0@@YAXHHH@Z  # complete, non-exact
+01205740 ?FUN_01205740@@YAHHHH@Z  # complete, non-exact
+012057a0 ?FUN_012057a0@@YAHXZ  # byte-exact
+01205820 ?FUN_01205820@@YAXPAM00@Z  # complete, non-exact
+012058e0 ?FUN_012058e0@@YAXPAMHH0@Z  # complete, non-exact
+012059b0 ?BuildSegment@OrientedBox@@QAEXHHH@Z  # complete, non-exact
+01205a30 _FUN_01205a30  # complete, non-exact (unnamed in the image)
