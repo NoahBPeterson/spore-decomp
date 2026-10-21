@@ -12,7 +12,7 @@ other keyword):
     follow, because MSVC mangles with the keyword of the first declaration it sees;
   * the class-key also appears in mangled parameter types (PAU = struct, PAV = class), so manifest rows and
     symbols/slices/<id>.txt names are re-bound: chk.py recompiles, binds each VA by its // @ marker, and a row is
-    rewritten only when the new symbol is the old one with exactly those U<->V swaps.
+    rewritten only when the new symbol differs from the old one in U<->V letters alone.
 The slice must be clean in git and fully MATCH before; the edit is kept only if run_all still matches every row,
 otherwise every file is restored. Committing is left to work/claude/commit_slice.sh.
 """
@@ -84,7 +84,7 @@ def swap(sym, changed):
     for nm, new in changed.items():
         a, b = ("U", "V") if new == "class" else ("V", "U")
         # pointer/reference (PAU, ABU, ...), by-value parameter (HUname@@), by-value return (?AUname@)
-        sym = re.sub(r"(?<=[A-Z0-9_@?$])%s(%s@)" % (a, re.escape(nm)), b + r"\1", sym)
+        sym = re.sub(r"(?<=[A-Z0-9_@?$])%s((?:\?\$)?%s@)" % (a, re.escape(nm)), b + r"\1", sym)
     return sym
 
 
@@ -123,9 +123,9 @@ def fix_slice(sid, dry):
     for i, l in enumerate(lines):
         p = l.split()
         if len(p) >= 3 and l.startswith("slices/"):
-            exp = swap(p[1], changed)
-            if exp != p[1]:
-                need[" ".join(p[3:])].append((i, p[2], p[1], exp))
+            # every row is re-checked: MSVC writes a repeated name as a digit back-reference (PAU12@) and a
+            # template as U?$Name@, so the U/V positions cannot all be predicted from the name
+            need[" ".join(p[3:])].append((i, p[2], p[1], None))
     for flags, items in need.items():
         cmd = [PY, W("tools/matching/chk.py"), os.path.join(d, sid + ".cpp")] + [it[1] for it in items]
         if flags:
@@ -133,9 +133,11 @@ def fix_slice(sid, dry):
         out = sh(*cmd).stdout
         got = {l.split()[0].lstrip("0"): l.split()[5] for l in out.splitlines()
                if re.match(r"^[0-9a-f]{8} ", l) and len(l.split()) > 5 and l.split()[2] == "0"}
-        for i, va, old, exp in items:
-            if got.get(va.lower().replace("0x", "").lstrip("0")) == exp:
-                lines[i] = lines[i].replace(old, exp, 1)
+        for i, va, old, _ in items:
+            new = got.get(va.lower().replace("0x", "").lstrip("0"))
+            # accept only a class-key change: same length, every differing character a U/V swap
+            if new and new != old and len(new) == len(old) and all(a == b or {a, b} == {"U", "V"} for a, b in zip(old, new)):
+                lines[i] = lines[i].replace(old, new, 1)
     open(mf, "w").write("\n".join(lines))
     sf = W("symbols/slices", sid + ".txt")
     if os.path.exists(sf):
