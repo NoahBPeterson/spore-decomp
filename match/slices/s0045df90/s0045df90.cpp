@@ -88,7 +88,7 @@ void FUN_0045ec30()
 namespace rw { namespace math { namespace fpu {
 
 template <class T, int A>
-struct Vector4Template {
+class Vector4Template { public:
     T mX, mY, mZ, mW;
     Vector4Template() {}
     Vector4Template(T x, T y, T z, T w) : mX(x), mY(y), mZ(z), mW(w) {}
@@ -96,7 +96,7 @@ struct Vector4Template {
 };
 
 template <class T, int A>
-struct Matrix44Template {
+class Matrix44Template { public:
     Vector4Template<T, A> xAxis, yAxis, zAxis, wAxis;
     Matrix44Template() {}
     Matrix44Template(T m00, T m01, T m02, T m03,

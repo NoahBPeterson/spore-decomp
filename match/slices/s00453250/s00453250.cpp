@@ -13,11 +13,11 @@ void EASTL_allocator_deallocate(void* p);                       // 0xf47380
 extern unsigned long g_threadMemoryTls;                         // hkThreadMemory TLS slot 0x16e4174
 
 // ---------------------------------------------------------------- Havok
-struct hkThreadMemory {
+class hkThreadMemory { public:
     void deallocateChunk(void* p, int nbytes, int cls);         // 0x107db10
     static hkThreadMemory& getInstance() { return *(hkThreadMemory*)TlsGetValue(g_threadMemoryTls); }
 };
-template<class T> struct hkArray {
+template<class T> class hkArray { public:
     T* m_data; int m_size; int m_capacityAndFlags;
     hkArray() : m_data(0), m_size(0), m_capacityAndFlags(0x80000000) {}
     __forceinline ~hkArray() {
@@ -36,14 +36,14 @@ template<class T> struct hkArray {
         }
     }
 };
-struct hkVector4 {
+class hkVector4 { public:
     union { __m128 m_quad; struct { float x, y, z, w; }; };
     void setZero4() { w = 0.0f; z = 0.0f; y = 0.0f; x = 0.0f; }
     hkVector4& operator=(const hkVector4& v) { x = v.x; y = v.y; z = v.z; w = v.w; return *this; }
 };
 extern const float kZero;    // 0x1485378
 extern const float kOne;     // 0x1485720
-struct hkRotation {
+class hkRotation { public:
     hkVector4 m_col[3];
     hkVector4& getColumn(int i) { return *(hkVector4*)((char*)m_col + (i << 4)); }
     void setAll(float x, float y, float z, float w) {
@@ -261,7 +261,7 @@ void BoundsVector::resize(uint32_t n)
 
 namespace SP { struct cSPEditorBlock { virtual void v0(); virtual int AddRef(); virtual int Release(); }; }
 namespace EA {
-template<class T> struct AutoRefCount {
+template<class T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount(const AutoRefCount& x) : mpObject(x.mpObject) { if (mpObject) mpObject->AddRef(); }
     ~AutoRefCount() { if (mpObject) mpObject->Release(); }

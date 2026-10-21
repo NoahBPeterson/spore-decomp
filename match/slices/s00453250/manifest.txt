@@ -9,5 +9,5 @@ slices/s00453250/s00453250.cpp  ??K@YA?AUVector3@@ABU0@ABM@Z  00453880  /Od /Ob1
 slices/s00453250/s00453250.cpp  ?Matrix33FromAxisAngle@@YA?AUMatrix33@@ABUVector3@@M@Z  00453b20  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
 slices/s00453250/s00453250.cpp  ??1BoundsVector@eastl@@QAE@XZ  00453dc0  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
 slices/s00453250/s00453250.cpp  ??1BlockVector@eastl@@QAE@XZ  00453eb0  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
-slices/s00453250/s00453250.cpp  ?push_back@BlockVector@eastl@@QAEXABU?$AutoRefCount@UcSPEditorBlock@SP@@@EA@@@Z  004541f0  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
-slices/s00453250/s00453250.cpp  ?erase@BlockVector@eastl@@QAEPAU?$AutoRefCount@UcSPEditorBlock@SP@@@EA@@PAU34@0@Z  00454280  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
+slices/s00453250/s00453250.cpp  ?push_back@BlockVector@eastl@@QAEXABV?$AutoRefCount@UcSPEditorBlock@SP@@@EA@@@Z  004541f0  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
+slices/s00453250/s00453250.cpp  ?erase@BlockVector@eastl@@QAEPAV?$AutoRefCount@UcSPEditorBlock@SP@@@EA@@PAV34@0@Z  00454280  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy

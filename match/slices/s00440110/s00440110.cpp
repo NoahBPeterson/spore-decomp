@@ -83,7 +83,7 @@ __forceinline float Clamp(float value, float minValue, float maxValue)
 // Fraction of value between lo and hi.
 inline float InverseLerp(float value, float lo, float hi) { return (value - lo) / (hi - lo); }
 
-class cMWModel;
+struct cMWModel;
 class IModelWorld {
 public:
     virtual int AddRef(); virtual int Release();
@@ -110,7 +110,7 @@ public:
     virtual void ApplyModel(cMWModel* model, int arg);                    // 0x110
 };
 
-class cMWModel {
+struct cMWModel { private:
 public:
     IModelWorld* mpWorld;   // +0x00
     uint32_t mFlags;        // +0x04
@@ -165,7 +165,7 @@ struct TransMap {
     TransB* Index(const int* key);                 // 0x00454420 (ret 4)
 };
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     char        pad00[0xC];
     AutoRefCount<IPropList> mPropList;  // +0x0C
     union {
