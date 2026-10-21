@@ -204,7 +204,7 @@ void hkSphereCapsuleAgent::processCollision(const hkCdBody& bodyA, const hkCdBod
 	{
 		float n[4];
 		float distance;
-		if (distSq <= 0.0f)
+		if (!(distSq > 0.0f))
 		{
 			// sphere centre coincides with the segment: build an axis-aligned direction from the
 			// segment direction by zeroing its smallest component and swapping the other two.
