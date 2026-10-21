@@ -1,0 +1,5 @@
+slices/s00bbaa80/s00bbaa80.cpp  ?StarSortCmp@@YAHPBX0@Z  00bbace0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bbaa80/s00bbaa80.cpp  ?StarGridRow2@@YAXPAI@Z  00bbad00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bbaa80/s00bbaa80.cpp  ?StarGridRow3@@YAXPAI@Z  00bbad50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bbaa80/s00bbaa80.cpp  ?StarGridResetFields@@YAXPAI@Z  00bbb0e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bbaa80/s00bbaa80.cpp  ?StarGridCount@@YAHPAI@Z  00bbb110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

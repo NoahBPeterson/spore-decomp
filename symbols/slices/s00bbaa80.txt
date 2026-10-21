@@ -1,0 +1,22 @@
+# slice s00bbaa80 (SPStarManager/SPStarSearch.obj) - confident symbol names
+# VA        name                              note
+00bbace0    StarSortCmp                       qsort comparator for star records
+00bbad00    StarGridRow2                      grid row helper, 2-column
+00bbad50    StarGridRow3                      grid row helper, 3-column
+00bbafa0    StarGridSlotCmp0                  compare two measure records, 2-slot form
+00bbb000    StarGridSlotCmp1                  compare two measure records, 3-slot form
+00bbb060    StarIndex_Remove                  remove (lo,hi) pair from star index table
+00bbb0e0    StarGridResetFields               zero grid counters/pointers
+00bbb110    StarGridCount                     active-count getter (self[2]-1)
+00bbb120    StarGridInsert                    insert record + 4 edge entries
+00bbb210    StarGridErase                     erase record + free 4 edges
+00bbb2e0    StarGridMeasure                   measure pass over all slots (calls qsort)
+00bbb400    StarGridAlloc2                    2-sub-vector grid allocation
+00bbb500    StarGridAlloc3                    3-sub-vector grid allocation
+00bbb600    StarGridSiftDownEq1               sift record down its measure list
+00bbb710    StarGridSiftUpEq0                 sift record up its measure list
+00bbb820    StarGridResolveEq1                merge freeing slot into freeing list
+00bbb900    StarGridResolveEq0                merge freeing slot into creating list
+00bbaa80    cStarManager::Measure              star record measure entry
+00bbac80    cStarManager::SetStar              store star into manager table
+00bbada0    StarGridMerge                      merge measure lists, emit pairs
