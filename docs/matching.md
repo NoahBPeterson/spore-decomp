@@ -383,6 +383,11 @@ P3. The corpus is a lagging log: several tool bugs it reports are already fixed,
   `setge` where `>` gives `setg`, and `if (x <= lo) x = lo` vs `if (x < lo) x = lo` pick opposite `comiss`/branch
   polarity. Read the original's `setcc`/`jcc` and mirror the relational; keep the result in a named `bool`, or the
   `setcc` folds into a `test`/`sbb` normalize (gold4; `codegen.md` §17).
+- A virtual call must stay **one expression**. The bare inline cast
+  `((void(__thiscall*)(void*,int))((void**)*(void***)self)[N/4])(self,arg)` and a typed call
+  `((Iface*)self)->Method(arg)` are both byte-exact; naming the pointer first
+  (`void*(__thiscall*fn)(void*)=…; fn(self);`) moves the callee from `edx` to `eax` (2 diff bytes, 00b8fb70).
+  Prefer the typed vcall when the interface is recoverable; keep the cast only when the type genuinely is not.
 
 **Layouts & padding:**
 - Retail layouts drift from the 2008 dev PDB — read sizes off stack-slot spacing: `SP::cString` 0x14 (not 0x1c),
