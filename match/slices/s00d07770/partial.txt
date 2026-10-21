@@ -1,0 +1,4 @@
+00d078d0 220 equivalence FAIL: 5/5 valid inputs mismatched; first: memory pool @424e00f0
+00d07bb0 116 equivalence FAIL: 5/221 valid inputs mismatched; first: execution
+00d07d00 1 equivalence FAIL: 5/46 valid inputs mismatched; first: eax&0xffff
+00d07e40 823 equivalence FAIL: 5/5 valid inputs mismatched; first: execution

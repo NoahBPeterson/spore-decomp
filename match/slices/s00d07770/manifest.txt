@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00d07770/s00d07770.cpp  ?Init@C103@@QAEPAXPAX@Z  00d07a40  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00d07770/s00d07770.cpp  ?SetFlag@C103@@QAEXHH@Z  00d07d20  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00d07770/s00d07770.cpp  ?SetTribeValue@C103@@QAEXHH@Z  00d07e10  /O2 /MD /Gy /EHsc /TP /arch:SSE
