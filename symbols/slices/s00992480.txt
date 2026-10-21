@@ -1,0 +1,21 @@
+00992480 EA::UTFWinControls::WatchGraph::OnTick  # sample each history node (vt+4) into mRing[+0x224], advance ring, repaint via IWindow vt+0x90
+00992550 EA::UTFWinControls::WatchGraph::`scalar deleting destructor'  # vptr 0x1446078/0x1445f58, Clear, intrusive-list dtor, base dtor, conditional operator delete
+00992600 EA::UTFWinControls::WatchWindow::Clear  # unlink+release every node of the intrusive list at +0x20c (node vt+0)
+00992650 EA::UTFWinControls::WatchWindow::WatchWindow  # base ctor, vtbl 0x14462b0/0x1446190, sentinel +0x20c, two layouts (0x890f50), Trebuchet-Montserrat? TextStyle, styles 0x6fb342b7/0x6fb342b8, SetFlag(8,1)
+00992830 WatchWindow teardown helper  # vptr reset, Clear, GetStyle 0x6fb342b7 + style unregister, base dtor 0x962740
+009928c0 EA::UTFWinControls::WatchWindow::UpdateSize  # rect via vt+0x34, metrics -> +0x214, widest string -> +0x218, ceil size, SetSize via vt+0x60
+00992aa0 EA::UTFWinControls::WatchWindow::OnRebuild  # Begin2D, batch draws (0x91c/0x920), per-node text draw (vt+0x28) + node vt+4, End2D
+00992d10 EA::UTFWinControls::WatchWindow::OnTick  # if byte +0x220, UpdateSize and clear it; repaint via IWindow vt+0x90
+00992dc0 WinXHTML set/clear a bit in flags word +0xa84c
+00992e00 WinXHTML set selection range +0xa858/+0xa85c and repaint  # Page::SetSelectionRange + vt+0x90
+00992e60 WinXHTML set horizontal scroll value +0xa8dc via IWindow vt+0x24/0x78
+00992ea0 WinXHTML set vertical scroll value +0xa8e0 via IWindow vt+0x24/0x78
+00992ee0 WinXHTML show/hide helper  # dispatch message tag 0x051a1a2e through IWindow vt+0x114, update byte +0xa8e4
+00993000 EA::UTFWinExtras::WinXHTML::~WinXHTML  # vptr reset, DestroyFormControls, release lists below +0xa8b4/+0xa888/+0xa878, Page::~Page, GmeEditorResBase vptr, base dtor
+00993130 EA::UTFWinExtras::WinXHTML::DoMessage  # tag 0x8ef0c8dd, two vt+0x28 queries, update +0xa8b4/+0xa8b8, negated-float vt+0x64, repaint
+00993200 WinXHTML vertical-scroll helper  # vt+0x28 range minus lineOffset/4 into vt+0x24 (ret 0x10)
+00993240 EA::UTFWinExtras::WinXHTML::OnCtrlValueChanged  # id 0x344a712 / 0xcf454afa..b -> resolved control vt+0x24
+009932c0 WinXHTML control-click handler  # resolve via vt+0xb4/0xc, 0x344a710/0x344a711 debounce (+0xa84c/+0xa8d8/+0xa8c0), forward vt+0x24
+00993390 WinXHTML drop all children + abandon images  # Document::RemoveAllChildren + Page::NotifyImagesAbandoned
+009933b0 EA::UTFWinExtras::WinXHTML::OnRebuild  # Begin2D, two rects from local xform and -scroll, Page::Render, End2D
+00993490 EA::UTFWinExtras::WinXHTML::SetScrollPosition  # compare/update +0xa8b4/+0xa8b8, push ints to scrollbar vt+0x24, repaint
