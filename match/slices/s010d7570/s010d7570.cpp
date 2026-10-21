@@ -4,19 +4,24 @@
 //  0x010d7680  cleanup (shared by hkSphereTriangleAgent and hkSphereCapsuleAgent; one COMDAT body)
 //  0x010d76b0  hkSphereCapsuleAgent::create
 //  0x010d76e0  hkSymmetricAgent<hkSphereCapsuleAgent>::create
-//  0x010d7710  hkSphereCapsuleAgent::processCollision
+//  0x010d7710  hkSphereCapsuleAgent::processCollision (bodyA = sphere, bodyB = capsule)
 //  0x010d7be0  hkSphereCapsuleAgent::getClosestPoints
 //  0x010d8080  hkSphereCapsuleAgent::staticGetClosestPoints
 //
+// All three geometry entry points share the same shape: transform the capsule's two endpoints to world
+// space, find the closest point on that segment to the sphere centre, and (when the distance is inside
+// radiusSum + tolerance) build a contact whose position is the sphere centre offset to the capsule
+// surface and whose separating normal is the unit direction from the segment to the sphere centre.
+// processCollision registers/refreshes an hkContactMgr contact point; the two getClosestPoints variants
+// report an hkCdPoint to the collector.
+//
 // Havok 3.1.0 was built by VC .NET 2003 (x87 floats, 16-byte aligned frames): /vc71 /O2 /MD /Gy /TP.
-// Layouts/member names come from the shared Havok headers (hkVector4, hkTransform, hkContactPoint,
-// hkProcessCollisionOutput ...); the geometry follows the binary exactly.
 #include "../s010d8520/hk31_sphere.h"
 #include <math.h>
 
 // ---------------------------------------------------------------------------------------------------------
 // hkSphereTriangleAgent: only the slots this slice references.  Its vtable (0x014a4740) is
-//   dtor, calcStatistics, getPenetrations(0x10d7190), getClosestPoints(0x10d6a80), linearCast,
+//   dtor(0x10d93b0), calcStatistics, getPenetrations(0x10d7190), getClosestPoints(0x10d6a80), linearCast,
 //   processCollision(0x10d66e0), cleanup(0x10d7680), removePoint, commitPotential, createZombie.
 // ---------------------------------------------------------------------------------------------------------
 class hkSphereTriangleAgent : public hkCollisionAgent
@@ -35,7 +40,8 @@ protected:
 
 // ---------------------------------------------------------------------------------------------------------
 // hkSphereCapsuleAgent: hkCollisionAgent (0xc) + the contact-point id at +0xc (0x10-byte object).
-// vtable 0x014a47d8.
+// vtable 0x014a47d8: getPenetrations(0x10d87a0), getClosestPoints(0x10d7be0), linearCast(0x10ec0a0),
+// processCollision(0x10d7710), cleanup(0x10d7680).
 // ---------------------------------------------------------------------------------------------------------
 class hkSphereCapsuleAgent : public hkCollisionAgent
 {
@@ -91,8 +97,15 @@ struct hkSphereShapeViewA
 	float m_radius;          // +0xc
 };
 
-// "|v| < c" test the x87 compiler emits for ABS(x) comparisons
 static __forceinline float hkAbsf(float x) { return x < 0.0f ? -x : x; }
+
+// out = R * in + t (column-major transform: basis columns at +0x10*c, translation at +0x30).
+#define HK_XFORM_COL(O, I, T) { \
+	const float inx = (I).x, iny = (I).y, inz = (I).z; \
+	(O).x = (T)[0] * inx + ((T)[4] * iny + (T)[8]  * inz) + (T)[0xc]; \
+	(O).y = (T)[1] * inx + ((T)[5] * iny + (T)[9]  * inz) + (T)[0xd]; \
+	(O).z = (T)[2] * inx + ((T)[6] * iny + (T)[10] * inz) + (T)[0xe]; \
+	(O).w = 0.0f; }
 
 // ---------------------------------------------------------------------------------------------------------
 // @ 0x010d7570
@@ -149,13 +162,7 @@ hkCollisionAgent* HK_CALL hkSymmetricAgent_hkSphereCapsuleAgent::create(const hk
 }
 
 // ---------------------------------------------------------------------------------------------------------
-// @ 0x010d7710  hkSphereCapsuleAgent::processCollision (bodyA = sphere, bodyB = capsule)
-//
-// Transform the capsule's two endpoints to world space, find the closest point on that segment to the
-// sphere centre, and (when the distance is inside radiusSum + tolerance) emit a contact point whose
-// position is the sphere centre offset to the capsule surface and whose separating normal is the
-// unit direction from the segment to the sphere centre.  A previously registered contact point is
-// removed when the shapes separate.
+// @ 0x010d7710  hkSphereCapsuleAgent::processCollision
 // ---------------------------------------------------------------------------------------------------------
 void hkSphereCapsuleAgent::processCollision(const hkCdBody& bodyA, const hkCdBody& bodyB,
                                             const hkProcessCollisionInput& input, hkProcessCollisionOutput& output)
@@ -167,28 +174,23 @@ void hkSphereCapsuleAgent::processCollision(const hkCdBody& bodyA, const hkCdBod
 	const float* capsuleTrans = (const float*)bodyB.m_motion;
 	const hkCapsuleShapeViewA* capsuleShape = (const hkCapsuleShapeViewA*)bodyB.m_shape;
 
-	float* point = (float*)output.m_firstFreeContactPoint;
+	hkProcessCdPoint* contact = output.m_firstFreeContactPoint;
 
-	// world-space capsule endpoints
-	float pAx = capsuleTrans[0] * capsuleShape->m_vertexA.x + (capsuleTrans[4] * capsuleShape->m_vertexA.y + capsuleTrans[8]  * capsuleShape->m_vertexA.z) + capsuleTrans[0xc];
-	float pAy = capsuleTrans[1] * capsuleShape->m_vertexA.x + (capsuleTrans[5] * capsuleShape->m_vertexA.y + capsuleTrans[9]  * capsuleShape->m_vertexA.z) + capsuleTrans[0xd];
-	float pAz = capsuleTrans[2] * capsuleShape->m_vertexA.x + (capsuleTrans[6] * capsuleShape->m_vertexA.y + capsuleTrans[10] * capsuleShape->m_vertexA.z) + capsuleTrans[0xe];
-	float pBx = capsuleTrans[0] * capsuleShape->m_vertexB.x + (capsuleTrans[4] * capsuleShape->m_vertexB.y + capsuleTrans[8]  * capsuleShape->m_vertexB.z) + capsuleTrans[0xc];
-	float pBy = capsuleTrans[1] * capsuleShape->m_vertexB.x + (capsuleTrans[5] * capsuleShape->m_vertexB.y + capsuleTrans[9]  * capsuleShape->m_vertexB.z) + capsuleTrans[0xd];
-	float pBz = capsuleTrans[2] * capsuleShape->m_vertexB.x + (capsuleTrans[6] * capsuleShape->m_vertexB.y + capsuleTrans[10] * capsuleShape->m_vertexB.z) + capsuleTrans[0xe];
+	hkVector4 pA, pB;
+	HK_XFORM_COL(pA, capsuleShape->m_vertexA, capsuleTrans)
+	HK_XFORM_COL(pB, capsuleShape->m_vertexB, capsuleTrans)
 
 	ClosestPointLineSegResult closest;
-	hkCollideTriangleUtil::closestPointLineSeg(*(const hkVector4*)(sphereTrans + 0xc),
-	                                           *(const hkVector4*)&pAx, *(const hkVector4*)&pBx, closest);
+	hkCollideTriangleUtil::closestPointLineSeg(*(const hkVector4*)(sphereTrans + 0xc), pA, pB, closest);
 
-	float dx = (sphereTrans + 0xc)[0] - closest.m_point.x;
-	float dy = (sphereTrans + 0xc)[1] - closest.m_point.y;
-	float dz = (sphereTrans + 0xc)[2] - closest.m_point.z;
-	float dw = (sphereTrans + 0xc)[3] - closest.m_point.w;
+	const float dx = (sphereTrans + 0xc)[0] - closest.m_point.x;
+	const float dy = (sphereTrans + 0xc)[1] - closest.m_point.y;
+	const float dz = (sphereTrans + 0xc)[2] - closest.m_point.z;
+	const float dw = (sphereTrans + 0xc)[3] - closest.m_point.w;
 
 	const float radiusSum = sphereShape->m_radius + capsuleShape->m_radius;
 	const float radius = radiusSum + input.m_tolerance;
-	float distSq = dx * dx + dy * dy + dz * dz;
+	const float distSq = dx * dx + dy * dy + dz * dz;
 
 	if (radius * radius <= distSq)
 	{
@@ -200,55 +202,57 @@ void hkSphereCapsuleAgent::processCollision(const hkCdBody& bodyA, const hkCdBod
 	}
 	else
 	{
+		float n[4];
 		float distance;
 		if (distSq <= 0.0f)
 		{
 			// sphere centre coincides with the segment: build an axis-aligned direction from the
 			// segment direction by zeroing its smallest component and swapping the other two.
-			float segx = pBx - pAx, segy = pBy - pAy, segz = pBz - pAz;
-			float ax = hkAbsf(segx), ay = hkAbsf(segy);
-			bool bx = ax <= ay;
-			float small = bx ? ax : ay;
+			n[0] = pB.x - pA.x;
+			n[1] = pB.y - pA.y;
+			n[2] = pB.z - pA.z;
+			n[3] = pB.w - pA.w;
+			const float ax = hkAbsf(n[0]);
+			const float ay = hkAbsf(n[1]);
+			const bool bx = ax <= ay;                          // "smallest of x/y"
+			const float small = bx ? ax : ay;
 			unsigned zero = bx ? 0u : 1u;
 			unsigned other = 2u;
-			unsigned keep = bx ? 0u : 1u;
-			if (small <= hkAbsf(segz)) { other = 2u; keep = zero; zero = 2u; }
-			float segFrom = bx ? segx : segy;
-			float segOther = (other == 2u) ? segz : (other == 0u ? segx : segy);
-			point[zero + 4] = 0.0f;
-			point[7] = 0.0f;
-			point[bx + 4] = segOther;
-			point[other + 4] = -segFrom;
+			if (small <= hkAbsf(n[2])) { other = bx ? 0u : 1u; zero = 2u; }
+			const float from = bx ? (pB.x - pA.x) : (pB.y - pA.y);
+			const float oth  = (other == 2u) ? (pB.z - pA.z) : (other == 0u ? (pB.x - pA.x) : (pB.y - pA.y));
+			((float*)&n)[zero] = 0.0f;
+			n[3] = 0.0f;
+			((float*)&n)[bx] = oth;
+			((float*)&n)[other] = -from;
 			distance = 0.0f;
 		}
 		else
 		{
 			distance = sqrtf(distSq);
-			point[4] = dx; point[5] = dy; point[6] = dz; point[7] = dw;
+			n[0] = dx; n[1] = dy; n[2] = dz; n[3] = dw;
 		}
 
-		float lenSq = point[4] * point[4] + point[5] * point[5] + point[6] * point[6];
-		float invLen = (lenSq == 0.0f) ? 0.0f : 1.0f / sqrtf(lenSq);
-		point[4] *= invLen; point[5] *= invLen; point[6] *= invLen; point[7] *= invLen;
+		const float lenSq = n[0] * n[0] + n[1] * n[1] + n[2] * n[2];
+		const float invLen = (lenSq == 0.0f) ? 0.0f : 1.0f / sqrtf(lenSq);
+		n[0] *= invLen; n[1] *= invLen; n[2] *= invLen; n[3] *= invLen;
 
 		const float k = capsuleShape->m_radius - distance;
-		point[0] = (sphereTrans + 0xc)[0];
-		point[1] = (sphereTrans + 0xc)[1];
-		point[2] = (sphereTrans + 0xc)[2];
-		point[3] = (sphereTrans + 0xc)[3];
-		point[0] = k * point[4] + point[0];
-		point[1] = k * point[5] + point[1];
-		point[2] = k * point[6] + point[2];
-		point[3] = k * point[7] + point[3];
-		point[7] = distance - radiusSum;
+		contact->m_contact.m_position.x = n[0] * k + (sphereTrans + 0xc)[0];
+		contact->m_contact.m_position.y = n[1] * k + (sphereTrans + 0xc)[1];
+		contact->m_contact.m_position.z = n[2] * k + (sphereTrans + 0xc)[2];
+		contact->m_contact.m_position.w = n[3] * k + (sphereTrans + 0xc)[3];
+		contact->m_contact.m_separatingNormal.x = n[0];
+		contact->m_contact.m_separatingNormal.y = n[1];
+		contact->m_contact.m_separatingNormal.z = n[2];
+		contact->m_contact.m_separatingNormal.w = distance - radiusSum;
 
 		if (m_contactPointId == 0xffff)
-			m_contactPointId = m_contactMgr->addContactPoint(bodyA, bodyB, input,
-			                                                 *(hkProcessCdPoint*)point);
+			m_contactPointId = m_contactMgr->addContactPoint(bodyA, bodyB, input, *contact);
 		if (m_contactPointId != 0xffff)
 		{
-			*(unsigned short*)(point + 8) = m_contactPointId;
-			output.m_firstFreeContactPoint = (hkProcessCdPoint*)(point + 0xc);
+			contact->m_extra[0] = m_contactPointId;
+			output.m_firstFreeContactPoint = contact + 1;
 		}
 	}
 
@@ -256,7 +260,7 @@ void hkSphereCapsuleAgent::processCollision(const hkCdBody& bodyA, const hkCdBod
 }
 
 // ---------------------------------------------------------------------------------------------------------
-// @ 0x010d7be0  hkSphereCapsuleAgent::getClosestPoints (bodyA = sphere, bodyB = capsule)
+// @ 0x010d7be0  hkSphereCapsuleAgent::getClosestPoints
 // ---------------------------------------------------------------------------------------------------------
 void hkSphereCapsuleAgent::getClosestPoints(const hkCdBody& bodyA, const hkCdBody& bodyB,
                                             const hkCollisionInput& input, hkCdPointCollector& collector)
@@ -268,66 +272,66 @@ void hkSphereCapsuleAgent::getClosestPoints(const hkCdBody& bodyA, const hkCdBod
 	const float* capsuleTrans = (const float*)bodyB.m_motion;
 	const hkCapsuleShapeViewA* capsuleShape = (const hkCapsuleShapeViewA*)bodyB.m_shape;
 
-	float pAx = capsuleTrans[0] * capsuleShape->m_vertexA.x + (capsuleTrans[4] * capsuleShape->m_vertexA.y + capsuleTrans[8]  * capsuleShape->m_vertexA.z) + capsuleTrans[0xc];
-	float pAy = capsuleTrans[1] * capsuleShape->m_vertexA.x + (capsuleTrans[5] * capsuleShape->m_vertexA.y + capsuleTrans[9]  * capsuleShape->m_vertexA.z) + capsuleTrans[0xd];
-	float pAz = capsuleTrans[2] * capsuleShape->m_vertexA.x + (capsuleTrans[6] * capsuleShape->m_vertexA.y + capsuleTrans[10] * capsuleShape->m_vertexA.z) + capsuleTrans[0xe];
-	float pBx = capsuleTrans[0] * capsuleShape->m_vertexB.x + (capsuleTrans[4] * capsuleShape->m_vertexB.y + capsuleTrans[8]  * capsuleShape->m_vertexB.z) + capsuleTrans[0xc];
-	float pBy = capsuleTrans[1] * capsuleShape->m_vertexB.x + (capsuleTrans[5] * capsuleShape->m_vertexB.y + capsuleTrans[9]  * capsuleShape->m_vertexB.z) + capsuleTrans[0xd];
-	float pBz = capsuleTrans[2] * capsuleShape->m_vertexB.x + (capsuleTrans[6] * capsuleShape->m_vertexB.y + capsuleTrans[10] * capsuleShape->m_vertexB.z) + capsuleTrans[0xe];
+	hkVector4 pA, pB;
+	HK_XFORM_COL(pA, capsuleShape->m_vertexA, capsuleTrans)
+	HK_XFORM_COL(pB, capsuleShape->m_vertexB, capsuleTrans)
 
 	ClosestPointLineSegResult closest;
-	hkCollideTriangleUtil::closestPointLineSeg(*(const hkVector4*)(sphereTrans + 0xc),
-	                                           *(const hkVector4*)&pAx, *(const hkVector4*)&pBx, closest);
+	hkCollideTriangleUtil::closestPointLineSeg(*(const hkVector4*)(sphereTrans + 0xc), pA, pB, closest);
 
-	float dx = (sphereTrans + 0xc)[0] - closest.m_point.x;
-	float dy = (sphereTrans + 0xc)[1] - closest.m_point.y;
-	float dz = (sphereTrans + 0xc)[2] - closest.m_point.z;
-	float dw = (sphereTrans + 0xc)[3] - closest.m_point.w;
+	const float dx = (sphereTrans + 0xc)[0] - closest.m_point.x;
+	const float dy = (sphereTrans + 0xc)[1] - closest.m_point.y;
+	const float dz = (sphereTrans + 0xc)[2] - closest.m_point.z;
+	const float dw = (sphereTrans + 0xc)[3] - closest.m_point.w;
 
 	const float radiusSum = sphereShape->m_radius + capsuleShape->m_radius;
 	const float radius = radiusSum + input.m_tolerance;
-	float distSq = dx * dx + dy * dy + dz * dz;
+	const float distSq = dx * dx + dy * dy + dz * dz;
 
 	if (distSq < radius * radius)
 	{
-		float n[4];
+		hkVector4 n;
 		float distance;
 		if (distSq <= 0.0f)
 		{
-			float segx = pBx - pAx, segy = pBy - pAy, segz = pBz - pAz;
-			float ax = hkAbsf(segx), ay = hkAbsf(segy);
-			bool bx = ax <= ay;
-			float small = bx ? ax : ay;
+			n.x = pB.x - pA.x;
+			n.y = pB.y - pA.y;
+			n.z = pB.z - pA.z;
+			n.w = pB.w - pA.w;
+			const float ax = hkAbsf(n.x);
+			const float ay = hkAbsf(n.y);
+			const bool bx = ax <= ay;
+			const float small = bx ? ax : ay;
 			unsigned keep = 2u;
 			unsigned other = bx ? 0u : 1u;
-			if (hkAbsf(segz) < small) { keep = bx ? 0u : 1u; other = 2u; }
-			float segFrom = bx ? segx : segy;
-			float segOther = (keep == 2u) ? segz : (keep == 0u ? segx : segy);
-			n[other] = 0.0f;
-			n[3] = 0.0f;
-			n[bx] = segOther;
-			n[keep] = -segFrom;
+			if (hkAbsf(n.z) < small) { keep = bx ? 0u : 1u; other = 2u; }
+			const float from = bx ? (pB.x - pA.x) : (pB.y - pA.y);
+			const float oth  = (keep == 2u) ? (pB.z - pA.z) : (keep == 0u ? (pB.x - pA.x) : (pB.y - pA.y));
+			((float*)&n)[other] = 0.0f;
+			n.w = 0.0f;
+			((float*)&n)[bx] = oth;
+			((float*)&n)[keep] = -from;
 			distance = 0.0f;
 		}
 		else
 		{
 			distance = sqrtf(distSq);
-			n[0] = dx; n[1] = dy; n[2] = dz; n[3] = dw;
+			n.x = dx; n.y = dy; n.z = dz; n.w = dw;
 		}
 
-		float lenSq = n[0] * n[0] + n[1] * n[1] + n[2] * n[2];
-		float invLen = (lenSq == 0.0f) ? 0.0f : 1.0f / sqrtf(lenSq);
-		n[0] *= invLen; n[1] *= invLen; n[2] *= invLen;
+		const float lenSq = n.x * n.x + n.y * n.y + n.z * n.z;
+		const float invLen = (lenSq == 0.0f) ? 0.0f : 1.0f / sqrtf(lenSq);
+		n.x *= invLen; n.y *= invLen; n.z *= invLen;
 
 		const float k = capsuleShape->m_radius - distance;
 		hkCdPoint point;
-		point.m_contact.m_position.x = n[0] * k + (sphereTrans + 0xc)[0];
-		point.m_contact.m_position.y = n[1] * k + (sphereTrans + 0xc)[1];
-		point.m_contact.m_position.z = n[2] * k + (sphereTrans + 0xc)[2];
-		point.m_contact.m_position.w = (n[3] * invLen) * k + (sphereTrans + 0xc)[3];
-		point.m_contact.m_separatingNormal.x = n[0];
-		point.m_contact.m_separatingNormal.y = n[1];
-		point.m_contact.m_separatingNormal.z = n[2];
+		point.m_contact.m_position.x = n.x * k + (sphereTrans + 0xc)[0];
+		point.m_contact.m_position.y = n.y * k + (sphereTrans + 0xc)[1];
+		point.m_contact.m_position.z = n.z * k + (sphereTrans + 0xc)[2];
+		point.m_contact.m_position.w = (n.w * invLen) * k + (sphereTrans + 0xc)[3];
+		point.m_contact.m_separatingNormal.x = n.x;
+		point.m_contact.m_separatingNormal.y = n.y;
+		point.m_contact.m_separatingNormal.z = n.z;
 		point.m_contact.m_separatingNormal.w = distance - radiusSum;
 		point.m_cdBodyA = &bodyA;
 		point.m_cdBodyB = &bodyB;
@@ -338,79 +342,83 @@ void hkSphereCapsuleAgent::getClosestPoints(const hkCdBody& bodyA, const hkCdBod
 }
 
 // ---------------------------------------------------------------------------------------------------------
-// @ 0x010d8080  hkSphereCapsuleAgent::staticGetClosestPoints (same body as getClosestPoints, no timers)
+// @ 0x010d8080  hkSphereCapsuleAgent::staticGetClosestPoints (same body as getClosestPoints)
 // ---------------------------------------------------------------------------------------------------------
 void hkSphereCapsuleAgent::staticGetClosestPoints(const hkCdBody& bodyA, const hkCdBody& bodyB,
                                                   const hkCollisionInput& input, hkCdPointCollector& collector)
 {
+	HK_TIMER_BEGIN("TtSphereCapsule");
+
 	const float* sphereTrans = (const float*)bodyA.m_motion;
 	const hkSphereShapeViewA* sphereShape = (const hkSphereShapeViewA*)bodyA.m_shape;
 	const float* capsuleTrans = (const float*)bodyB.m_motion;
 	const hkCapsuleShapeViewA* capsuleShape = (const hkCapsuleShapeViewA*)bodyB.m_shape;
 
-	float pAx = capsuleTrans[0] * capsuleShape->m_vertexA.x + (capsuleTrans[4] * capsuleShape->m_vertexA.y + capsuleTrans[8]  * capsuleShape->m_vertexA.z) + capsuleTrans[0xc];
-	float pAy = capsuleTrans[1] * capsuleShape->m_vertexA.x + (capsuleTrans[5] * capsuleShape->m_vertexA.y + capsuleTrans[9]  * capsuleShape->m_vertexA.z) + capsuleTrans[0xd];
-	float pAz = capsuleTrans[2] * capsuleShape->m_vertexA.x + (capsuleTrans[6] * capsuleShape->m_vertexA.y + capsuleTrans[10] * capsuleShape->m_vertexA.z) + capsuleTrans[0xe];
-	float pBx = capsuleTrans[0] * capsuleShape->m_vertexB.x + (capsuleTrans[4] * capsuleShape->m_vertexB.y + capsuleTrans[8]  * capsuleShape->m_vertexB.z) + capsuleTrans[0xc];
-	float pBy = capsuleTrans[1] * capsuleShape->m_vertexB.x + (capsuleTrans[5] * capsuleShape->m_vertexB.y + capsuleTrans[9]  * capsuleShape->m_vertexB.z) + capsuleTrans[0xd];
-	float pBz = capsuleTrans[2] * capsuleShape->m_vertexB.x + (capsuleTrans[6] * capsuleShape->m_vertexB.y + capsuleTrans[10] * capsuleShape->m_vertexB.z) + capsuleTrans[0xe];
+	hkVector4 pA, pB;
+	HK_XFORM_COL(pA, capsuleShape->m_vertexA, capsuleTrans)
+	HK_XFORM_COL(pB, capsuleShape->m_vertexB, capsuleTrans)
 
 	ClosestPointLineSegResult closest;
-	hkCollideTriangleUtil::closestPointLineSeg(*(const hkVector4*)(sphereTrans + 0xc),
-	                                           *(const hkVector4*)&pAx, *(const hkVector4*)&pBx, closest);
+	hkCollideTriangleUtil::closestPointLineSeg(*(const hkVector4*)(sphereTrans + 0xc), pA, pB, closest);
 
-	float dx = (sphereTrans + 0xc)[0] - closest.m_point.x;
-	float dy = (sphereTrans + 0xc)[1] - closest.m_point.y;
-	float dz = (sphereTrans + 0xc)[2] - closest.m_point.z;
-	float dw = (sphereTrans + 0xc)[3] - closest.m_point.w;
+	const float dx = (sphereTrans + 0xc)[0] - closest.m_point.x;
+	const float dy = (sphereTrans + 0xc)[1] - closest.m_point.y;
+	const float dz = (sphereTrans + 0xc)[2] - closest.m_point.z;
+	const float dw = (sphereTrans + 0xc)[3] - closest.m_point.w;
 
 	const float radiusSum = sphereShape->m_radius + capsuleShape->m_radius;
 	const float radius = radiusSum + input.m_tolerance;
-	float distSq = dx * dx + dy * dy + dz * dz;
+	const float distSq = dx * dx + dy * dy + dz * dz;
 
 	if (distSq < radius * radius)
 	{
-		float n[4];
+		hkVector4 n;
 		float distance;
 		if (distSq <= 0.0f)
 		{
-			float segx = pBx - pAx, segy = pBy - pAy, segz = pBz - pAz;
-			float ax = hkAbsf(segx), ay = hkAbsf(segy);
-			bool bx = ax <= ay;
-			float small = bx ? ax : ay;
+			n.x = pB.x - pA.x;
+			n.y = pB.y - pA.y;
+			n.z = pB.z - pA.z;
+			n.w = pB.w - pA.w;
+			const float ax = hkAbsf(n.x);
+			const float ay = hkAbsf(n.y);
+			const bool bx = ax <= ay;
+			const float small = bx ? ax : ay;
 			unsigned keep = 2u;
 			unsigned other = bx ? 0u : 1u;
-			if (hkAbsf(segz) < small) { keep = bx ? 0u : 1u; other = 2u; }
-			float segFrom = bx ? segx : segy;
-			float segOther = (keep == 2u) ? segz : (keep == 0u ? segx : segy);
-			n[other] = 0.0f;
-			n[3] = 0.0f;
-			n[bx] = segOther;
-			n[keep] = -segFrom;
+			if (hkAbsf(n.z) < small) { keep = bx ? 0u : 1u; other = 2u; }
+			const float from = bx ? (pB.x - pA.x) : (pB.y - pA.y);
+			const float oth  = (keep == 2u) ? (pB.z - pA.z) : (keep == 0u ? (pB.x - pA.x) : (pB.y - pA.y));
+			((float*)&n)[other] = 0.0f;
+			n.w = 0.0f;
+			((float*)&n)[bx] = oth;
+			((float*)&n)[keep] = -from;
 			distance = 0.0f;
 		}
 		else
 		{
 			distance = sqrtf(distSq);
-			n[0] = dx; n[1] = dy; n[2] = dz; n[3] = dw;
+			n.x = dx; n.y = dy; n.z = dz; n.w = dw;
 		}
 
-		float lenSq = n[0] * n[0] + n[1] * n[1] + n[2] * n[2];
-		float invLen = (lenSq == 0.0f) ? 0.0f : 1.0f / sqrtf(lenSq);
-		n[0] *= invLen; n[1] *= invLen; n[2] *= invLen;
+		const float lenSq = n.x * n.x + n.y * n.y + n.z * n.z;
+		const float invLen = (lenSq == 0.0f) ? 0.0f : 1.0f / sqrtf(lenSq);
+		n.x *= invLen; n.y *= invLen; n.z *= invLen;
 
 		const float k = capsuleShape->m_radius - distance;
 		hkCdPoint point;
-		point.m_contact.m_position.x = n[0] * k + (sphereTrans + 0xc)[0];
-		point.m_contact.m_position.y = n[1] * k + (sphereTrans + 0xc)[1];
-		point.m_contact.m_position.z = n[2] * k + (sphereTrans + 0xc)[2];
-		point.m_contact.m_position.w = (n[3] * invLen) * k + (sphereTrans + 0xc)[3];
-		point.m_contact.m_separatingNormal.x = n[0];
-		point.m_contact.m_separatingNormal.y = n[1];
-		point.m_contact.m_separatingNormal.z = n[2];
+		point.m_contact.m_position.x = n.x * k + (sphereTrans + 0xc)[0];
+		point.m_contact.m_position.y = n.y * k + (sphereTrans + 0xc)[1];
+		point.m_contact.m_position.z = n.z * k + (sphereTrans + 0xc)[2];
+		point.m_contact.m_position.w = (n.w * invLen) * k + (sphereTrans + 0xc)[3];
+		point.m_contact.m_separatingNormal.x = n.x;
+		point.m_contact.m_separatingNormal.y = n.y;
+		point.m_contact.m_separatingNormal.z = n.z;
 		point.m_contact.m_separatingNormal.w = distance - radiusSum;
 		point.m_cdBodyA = &bodyA;
 		point.m_cdBodyB = &bodyB;
 		collector.addCdPoint(point);
 	}
+
+	HK_TIMER_END();
 }
