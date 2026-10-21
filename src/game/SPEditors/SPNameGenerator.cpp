@@ -137,7 +137,7 @@ template <typename T1, typename T2> struct pair_s005e_9440 {
 };
 }
 namespace eastl {
-template <typename It> struct generic_iterator {
+template <typename It> class generic_iterator { public:
   It mIterator;
   generic_iterator() : mIterator(0) {}
   explicit generic_iterator(It p) : mIterator(p) {}
