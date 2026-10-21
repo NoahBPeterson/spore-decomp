@@ -1,0 +1,24 @@
+# slice s00ee6880 (gold4 #86) — reconstructed in full, not byte-exact.
+# One VA per row. Equivalence-gate verdict after the VA.
+#   00ee6880  PASS        400/400 valid, 100.0% coverage
+#   00ee68b0  FAIL        5/5 valid mismatched; first: execution
+#   00ee6b10  PASS        355/355 valid, 100.0% coverage
+#   00ee6b40  UNSUPPORTED only 0/400 inputs valid (fake-arity=196, fault(read)=180, orig-abi-broken=21)
+#   00ee6bd0  FAIL        5/5 valid mismatched; first: execution
+#   00ee6ef0  UNSUPPORTED 3 unresolved references (??1RefCountBlob/??1GmeEditorResBase/??1IMsgHandler, base dtors left implicit)
+#   00ee6f90  FAIL        5/5 valid mismatched; first: execution
+#   00ee70e0  FAIL        5/28 valid mismatched; first: execution
+#   00ee7240  FAIL        5/6 valid mismatched; first: eax
+#   00ee7810  PASS        400/400 valid, 100.0% coverage
+#   00ee7850  PASS        247/247 valid, 100.0% coverage
+00ee6880
+00ee68b0
+00ee6b10
+00ee6b40
+00ee6bd0
+00ee6ef0
+00ee6f90
+00ee70e0
+00ee7240
+00ee7810
+00ee7850
