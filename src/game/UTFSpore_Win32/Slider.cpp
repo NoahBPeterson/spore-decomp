@@ -80,7 +80,7 @@ struct DrawState { uint32_t flags; int imageIndex; };
 }
 namespace EA {
 namespace UTFWinControls {
-struct SliderDrawable {
+class SliderDrawable { public:
     uint32_t pad[5];                        // +0x00 (vptrs, refcount, ...)
     UTFWin::Image_s0098_4a70* mImages[3];              // +0x14 (indexed by imageIndex - 1)
     void __thiscall Paint(UTFWin::RenderContext_s0098_4a70* ctx, const float* rc, const DrawState* st);
