@@ -633,6 +633,8 @@ def plot_history(path):
         ax.tick_params(colors=MUTED, labelsize=9, length=0)
         ax.xaxis.set_major_locator(mdates.DayLocator())
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %d"))
+        ax.tick_params(axis="x", labelrotation=45)   # one label per day overlaps when horizontal
+        plt.setp(ax.get_xticklabels(), ha="right", rotation_mode="anchor")
         ax.margins(x=0.08)
     axes[0].legend(loc="upper left", frameon=False, fontsize=9, labelcolor=INK)
     fig.suptitle("Spore decompilation progress (game functions; third-party libraries excluded)",
