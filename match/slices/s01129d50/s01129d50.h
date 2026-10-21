@@ -49,13 +49,13 @@ struct hkArrayPOD
     }
 };
 
-struct hkQuaternion
-{
+class hkQuaternion
+{ public:
     float x, y, z, w;
     void setMul(const hkQuaternion& a, const hkQuaternion& b);   // 0x01082210: this = a * b
 };
 
-struct hkStepInfo { float m_startTime; float m_endTime; float m_deltaTime; float m_invDeltaTime; };   // deltaTime @+8
+class hkStepInfo { public: float m_startTime; float m_endTime; float m_deltaTime; float m_invDeltaTime; };   // deltaTime @+8
 
 // ---- bodies ---------------------------------------------------------------------------------------------------
 class hkMotion

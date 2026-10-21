@@ -2,13 +2,13 @@
 // (".\collide\mopp\machine\hkMoppAabbCastVirtualMachine.cpp").
 #include "types.h"
 
-struct hkBool {
+class hkBool { public:
     char m_bool;
     hkBool() {}
     hkBool(bool b) : m_bool((char)b) {}
     operator bool() const { return m_bool != 0; }
 };
-struct hkOstream {
+class hkOstream { public:
     hkOstream(void* mem, int memSize, hkBool isString);   // 0x0107EF80
     ~hkOstream();                                         // 0x0107EFD0
     hkOstream& operator<<(const char* s);                 // 0x0107EE30

@@ -6,10 +6,10 @@ typedef unsigned short hkUint16;
 typedef unsigned int   hkUint32;
 
 class __declspec(align(16)) hkVector4 { public: float x, y, z, w; };
-struct hkTransform { float col0[4]; float col1[4]; float col2[4]; float trans[4]; };   // 0x40 bytes
+class hkTransform { public: float col0[4]; float col1[4]; float col2[4]; float trans[4]; };   // 0x40 bytes
 
-struct hkShape
-{
+class hkShape
+{ public:
     // vtable slot 10 (+0x28): hkConvexShape::getSupportingVertices
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
     virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
@@ -18,8 +18,8 @@ struct hkShape
 };
 struct hkMotionWithTransform { hkTransform* m_dummy; };
 
-struct hkCdBody
-{
+class hkCdBody
+{ public:
     const hkShape*        m_shape;       // +0x0
     hkUint32              m_shapeKey;    // +0x4
     const hkTransform*    m_motion;      // +0x8
@@ -60,8 +60,8 @@ struct hkProcessCollisionInput
 struct hkProcessCdPoint;
 struct hkAgentEntry { hkUchar m_streamCommand, m_agentType, m_numContactPoints, m_size; hkUint32 m_userData; };
 
-struct hkContactMgr
-{
+class hkContactMgr
+{ public:
     virtual void v0();
     virtual void v1();
     virtual hkUint16 addContactPoint(const hkCdBody* a, const hkCdBody* b, const hkProcessCollisionInput* in, hkProcessCdPoint* cp);   // +0x8

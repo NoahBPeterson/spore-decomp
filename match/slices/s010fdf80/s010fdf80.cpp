@@ -20,7 +20,7 @@ typedef unsigned short hkUint16;
 typedef unsigned int   hkUint32;
 typedef signed char    hkInt8;
 
-struct hkRotation { float col0[4]; float col1[4]; float col2[4]; };
+class hkRotation { public: float col0[4]; float col1[4]; float col2[4]; };
 
 class __declspec(align(16)) hkVector4
 {
@@ -28,7 +28,7 @@ public:
     float x, y, z, w;
     void setRotatedDir(const hkRotation& r, const hkVector4& v);   // 0x010814a0 (out of line)
 };
-struct hkTransform { float col0[4]; float col1[4]; float col2[4]; float trans[4]; };   // 0x40 bytes
+class hkTransform { public: float col0[4]; float col1[4]; float col2[4]; float trans[4]; };   // 0x40 bytes
 
 // hkMemory::getInstance() singleton; vtable slot 4 (+0x10) = allocateChunk(nbytes, memoryClass)
 class hkMemory
@@ -65,8 +65,7 @@ public:
     }
 };
 
-struct hkShape : public hkReferencedObject
-{
+class hkShape : public hkReferencedObject { public:
     // vtable slot 10 (+0x28): hkConvexShape::getSupportingVertices
     virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
     virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
@@ -75,8 +74,7 @@ struct hkShape : public hkReferencedObject
     float    m_radius;      // +0xc (hkConvexShape::m_radius)
 };
 
-struct hkCylinderShape : public hkShape
-{
+class hkCylinderShape : public hkShape { public:
     float     m_cylRadius;          // +0x10
     hkVector4 m_vertexA;            // +0x20
     hkVector4 m_vertexB;            // +0x30
@@ -85,16 +83,15 @@ struct hkCylinderShape : public hkShape
     float getCylinderRadius() const;   // 0x00a0ab60 (out of line)
 };
 
-struct hkCapsuleShape : public hkShape
-{
+class hkCapsuleShape : public hkShape { public:
     hkVector4 m_vertexA;            // +0x10
     hkVector4 m_vertexB;            // +0x20
     // Havok is built without C++ exceptions: no cleanup of the new-expression is emitted
     hkCapsuleShape(const hkVector4& vertexA, const hkVector4& vertexB, float radius) throw();   // 0x010c2730
 };
 
-struct hkCdBody
-{
+class hkCdBody
+{ public:
     const hkShape*      m_shape;     // +0x0
     hkUint32            m_shapeKey;  // +0x4
     const hkTransform*  m_motion;    // +0x8
@@ -149,8 +146,8 @@ enum
     CAPSULE_MODE_B    = 8
 };
 
-struct hkContactMgr
-{
+class hkContactMgr
+{ public:
     virtual void v0();
     virtual void v1();
     virtual hkUint16 addContactPoint(const hkCdBody* a, const hkCdBody* b, const hkProcessCollisionInput* in, hkProcessCdPoint* cp);   // +0x8

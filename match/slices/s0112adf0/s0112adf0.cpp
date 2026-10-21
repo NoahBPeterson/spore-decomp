@@ -10,11 +10,11 @@ typedef unsigned int hkUlong32;   // pointer-sized key in the 32-bit binary (hkP
 
 enum hkResult { HK_SUCCESS = 0, HK_FAILURE = 1 };
 
-struct hkClass { const char* getName() const; };
-struct hkTypeInfo { const char* m_name; void (*m_finishLoadedObject)(void*); const void* m_vtable; };
+class hkClass { public: const char* getName() const; };
+class hkTypeInfo { public: const char* m_name; void (*m_finishLoadedObject)(void*); const void* m_vtable; };
 
 // ---------------------------------------------------------------- memory
-struct hkMemory {
+class hkMemory { public:
     virtual void* allocateChunk(int nbytes, int memClass);          // slot 0
     virtual void  s1();
     virtual void  s2();
@@ -23,7 +23,7 @@ struct hkMemory {
     virtual void  deallocateObject(void* p, int nbytes, int memClass); // slot 5 (+0x14)
 };
 extern hkMemory* g_hkMemory;            // hkMemory::s_instance // 0x016e4178
-struct hkThreadMemory { void deallocateChunk(void* p, int nbytes, int memClass); };
+class hkThreadMemory { public: void deallocateChunk(void* p, int nbytes, int memClass); };
 extern unsigned long g_hkThreadMemoryTlsIndex; // 0x016e4174
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 static inline hkThreadMemory* getThreadMemory() { return (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTlsIndex); }
@@ -37,7 +37,7 @@ namespace hkString { int strCmp(const char* a, const char* b); }
 enum { HK_ARRAY_FLAG_MASK = 0x3fffffff, HK_ARRAY_DONT_DEALLOCATE = (int)0x80000000 };
 
 template <typename T>
-struct hkArray {
+class hkArray { public:
     T* m_data; int m_size; int m_capacityAndFlags;
     void pushBack(const T& t) {
         if (m_size == (m_capacityAndFlags & HK_ARRAY_FLAG_MASK)) hkArrayUtil::_reserveMore(this, (int)sizeof(T));
@@ -51,14 +51,14 @@ struct hkArray {
 };
 
 // hkPointerMapBase<unsigned long>: keys then values in one allocation
-struct hkPointerMapBase {
+class hkPointerMapBase { public:
     hkUlong32* m_elem; int m_numElems; int m_hashMod;
     hkPointerMapBase();   // 0x0107de00 (equiv t2)
     ~hkPointerMapBase();   // 0x0107de50 (equiv t2)
     hkUlong32 getWithDefault(hkUlong32 key, hkUlong32 def) const;   // 0x0107e540 (equiv t2)
     void insert(hkUlong32 key, hkUlong32 value);   // 0x0107de70 (equiv t2)
 };
-struct hkStringMapBase {
+class hkStringMapBase { public:
     hkStringMapBase();
     ~hkStringMapBase();
     void* getIterator() const;
@@ -72,7 +72,7 @@ struct hkStringMapBase {
 
 // ---------------------------------------------------------------- referenced object base
 // +0 vtbl, +4 memSizeAndFlags, +6 referenceCount.  Base vtable slot 1 is a no-op (0x52e650).
-struct hkReferencedObject {
+class hkReferencedObject { public:
     uint16_t m_memSizeAndFlags;
     uint16_t m_referenceCount;
     hkReferencedObject() : m_referenceCount(1) {}
@@ -100,7 +100,7 @@ struct hkClassNameRegistry : hkReferencedObject {
     virtual void merge(const hkClassNameRegistry& from);                               // 5
 };
 
-struct hkFinishLoadedObjectRegistry : hkReferencedObject {
+class hkFinishLoadedObjectRegistry : public hkReferencedObject { public:
     hkStringMapBase m_map;     // +8
     virtual void registerTypeInfo(const hkTypeInfo* info);                              // 2
     virtual void finishLoadedObject(void* obj, const char* className) const;           // 3
@@ -108,7 +108,7 @@ struct hkFinishLoadedObjectRegistry : hkReferencedObject {
     void deletingDtor(unsigned flags);   // 0x0112bc30, this in ECX
 };
 
-struct hkVtableClassRegistry : hkReferencedObject {
+class hkVtableClassRegistry : public hkReferencedObject { public:
     hkPointerMapBase m_map;    // +8
     virtual void registerVtable(const void* vtable, const hkClass* klass);              // 2
     virtual const hkClass* getClassFromVirtualInstance(const void* obj) const;          // 3
@@ -117,7 +117,7 @@ struct hkVtableClassRegistry : hkReferencedObject {
     void deletingDtor(unsigned flags);   // 0x0112bbf0, this in ECX
 };
 
-struct hkBuiltinTypeRegistry : hkReferencedObject {
+class hkBuiltinTypeRegistry : public hkReferencedObject { public:
     virtual hkFinishLoadedObjectRegistry* getLoadedObjectRegistry() = 0;   // 2
     virtual hkClassNameRegistry* getClassNameRegistry() = 0;               // 3
     virtual hkVtableClassRegistry* getVtableClassRegistry() = 0;           // 4
@@ -153,7 +153,7 @@ struct hkPackfileData : hkReferencedObject {                 // "AllocatedData",
 };
 
 // ---------------------------------------------------------------- update tracker
-struct hkObjectUpdateTracker : hkReferencedObject {
+class hkObjectUpdateTracker : public hkReferencedObject { public:
     virtual void addAllocation(void* p) = 0;                 // 2
     virtual void addChunk(void* p, int n, int memClass) = 0; // 3
     virtual void objectPointedBy(void* object, void* fromWhere) = 0;   // 4
@@ -197,7 +197,7 @@ struct hkPackfileObjectUpdateTracker : hkObjectUpdateTracker {
 };
 
 // ---------------------------------------------------------------- packfile reader
-struct hkStreamReader {
+class hkStreamReader { public:
     virtual void d0(); virtual void d1(); virtual void d2();
     virtual int read(void* buf, int nbytes);     // +0xc
 };
@@ -223,14 +223,14 @@ struct hkPackfileSectionHeader {             // stride 0x30
     int m_pad2c;
 };
 struct hkVariant { void* m_object; const hkClass* m_class; };
-struct hkStructureLayout {
+class hkStructureLayout { public:
     uint8_t m_rules[4];
     hkStructureLayout();
     void computeMemberOffsetsInplace(const hkClass* k, hkPointerMapBase& done);   // FUN_0112c4c0
 };
 void hkPackfileReader_convertClassVersion1Inplace(hkClass* k);   // hkPackfileReader::convertClassVersion1Inplace
 
-struct hkBinaryPackfileReader : hkReferencedObject {
+class hkBinaryPackfileReader : public hkReferencedObject { public:
     hkPackfileData*          m_packfileData;     // +8
     hkPackfileHeader*        m_header;           // +0xc
     hkPackfileSectionHeader* m_sections;         // +0x10

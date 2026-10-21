@@ -12,7 +12,7 @@ struct __declspec(align(16)) hkVector4 {
     hkReal x, y, z, w;
 };
 
-struct hkMatrix3 {
+class hkMatrix3 { public:
     hkVector4 c0, c1, c2;   // columns
     void setTranspose(const hkMatrix3& m);   // 01081550
 };

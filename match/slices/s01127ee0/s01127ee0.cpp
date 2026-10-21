@@ -6,11 +6,11 @@
 #define HK_CALL __cdecl
 
 // ---------------------------------------------------------------- base types
-struct hkBaseObject {
+class hkBaseObject { public:
     virtual ~hkBaseObject();
 };
 
-struct hkReferencedObject : hkBaseObject {
+class hkReferencedObject : public hkBaseObject { public:
     unsigned short m_memSizeAndFlags;  // +0x4
     short          m_referenceCount;   // +0x6
 
@@ -18,16 +18,16 @@ struct hkReferencedObject : hkBaseObject {
     void addReference();
 };
 
-struct hkVector4 { float x, y, z, w; };
+class hkVector4 { public: float x, y, z, w; };
 
-struct hkQuaternion {
+class hkQuaternion { public:
     hkVector4 m_vec;  // +0x0
     void setMulInverse(const hkQuaternion& q0, const hkQuaternion& q1);  // 0x01091970
     void normalize();                                                     // 0x010821a0
     void getAxis(hkVector4& axis) const;                                  // 0x01127dc0
 };
 
-struct hkMotion {
+class hkMotion { public:
     char           pad00[0x40];
     hkVector4      m_centreOfMassLocal;   // +0x40
     char           pad50[0x30];
@@ -63,7 +63,7 @@ struct hkMotion {
 
 struct hkEntity;
 
-struct hkRigidBody {
+class hkRigidBody { public:
     char      pad00[0x58];
     hkMotion* m_motion;  // +0x58
 
@@ -75,7 +75,7 @@ struct hkRigidBody {
 struct hkpRigidBody : hkRigidBody {};
 
 // Thread memory helpers (used by hkArray destructors).
-struct hkThreadMemory {
+class hkThreadMemory { public:
     void deallocateChunk(void* p, int size, int memClass);
 };
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long index);
@@ -283,7 +283,7 @@ struct hkBinaryActionBase {
     hkBinaryActionBase(hkEntity* a, hkEntity* b, unsigned int ud);
 };
 
-struct hkSpringAction : hkBinaryActionBase {
+class hkSpringAction : public hkBinaryActionBase { public:
     hkVector4 m_lastForce;       // +0x20
     hkVector4 m_positionAinA;    // +0x30
     hkVector4 m_positionBinB;    // +0x40
@@ -298,7 +298,7 @@ struct hkSpringAction : hkBinaryActionBase {
     hkSpringAction* clone(const void* newEntities, const void* newPhantoms) const;
 };
 
-struct hkStepInfo { float m_startTime, m_endTime, m_deltaTime, m_invDeltaTime; };
+class hkStepInfo { public: float m_startTime, m_endTime, m_deltaTime, m_invDeltaTime; };
 
 struct hkMemoryVtbl {
     virtual void s0();

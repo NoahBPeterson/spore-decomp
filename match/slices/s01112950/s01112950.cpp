@@ -67,7 +67,7 @@ namespace hkSweptTransformUtil {
 void lerp2Ha(const hkSweptTransform& sweptTrans, hkReal t, hkReal deltaTime, hkTransform& out);   // 0x01209f50
 }
 
-struct hkSphere { hkVector4 m_pos; };
+class hkSphere { public: hkVector4 m_pos; };
 
 class hkConvexShape
 {
@@ -83,16 +83,16 @@ public:
     float m_radius;      // +0xc
 };
 
-struct hkCdBody
-{
+class hkCdBody
+{ public:
     const hkConvexShape* m_shape;   // +0x0
     hkUint32             m_shapeKey;
     const hkMotionState* m_motion;  // +0x8
     const hkCdBody*      m_parent;  // +0xc
 };
 
-struct hkStepInfo
-{
+class hkStepInfo
+{ public:
     hkTime m_startTime;      // +0x0
     hkTime m_endTime;        // +0x4
     hkReal m_deltaTime;      // +0x8
@@ -136,7 +136,7 @@ public:
     hkVector4 m_separatingNormal;   // +0x10 (w: distance)
 };
 
-struct hkContactPointMaterial { void* m_userData; hkUint16 m_friction; hkUchar m_restitution; hkUchar m_flags; };
+class hkContactPointMaterial { public: void* m_userData; hkUint16 m_friction; hkUchar m_restitution; hkUchar m_flags; };
 
 class hkContactMgr
 {

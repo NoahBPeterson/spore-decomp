@@ -263,8 +263,8 @@ void ReChannelGainWrite(float** ppDst, float** ppSrc, float gain,
 namespace rw { namespace audio { namespace core {
 
 // ---- ListDNode / Collection -------------------------------------------------------
-struct ListDNode
-{
+class ListDNode
+{ public:
     ListDNode* pnext; // +0x0
     ListDNode* pprev; // +0x4
 };
@@ -299,8 +299,8 @@ public:
 };
 
 // ---- TimerHandle / TimerManager ---------------------------------------------------
-struct TimerHandle
-{
+class TimerHandle
+{ public:
     void* mpItemHandleNode;         // +0x0  ItemHandle::pNode
     void* mpCallback;               // +0x4
     void* mpContext;                // +0x8
@@ -310,8 +310,8 @@ struct TimerHandle
     unsigned char mTimerVisibility; // +0x15
 };
 
-struct TimerManager
-{
+class TimerManager
+{ public:
     Collection maCollections[2]; // +0x0
     float mfCallbackTime;        // +0x38
     TimerHandle* mpCurrentHandle;// +0x3c

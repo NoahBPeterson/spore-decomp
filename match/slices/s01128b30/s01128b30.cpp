@@ -8,27 +8,27 @@
 extern "C" float hkSqrt(float x);
 
 // ---------------------------------------------------------------- base types
-struct hkBaseObject { virtual ~hkBaseObject(); };
+class hkBaseObject { public: virtual ~hkBaseObject(); };
 
-struct hkReferencedObject : hkBaseObject {
+class hkReferencedObject : public hkBaseObject { public:
     unsigned short m_memSizeAndFlags;  // +0x4
     short          m_referenceCount;   // +0x6
     void removeReference();
 };
 
-struct hkVector4 { float x, y, z, w; };
+class hkVector4 { public: float x, y, z, w; };
 struct hkRotation;
-struct hkQuaternion { hkVector4 m_vec; };
+class hkQuaternion { public: hkVector4 m_vec; };
 
 // hkThreadMemory deallocation (used by hkArray dtors).
-struct hkThreadMemory { void deallocateChunk(void* p, int size, int memClass); };
+class hkThreadMemory { public: void deallocateChunk(void* p, int size, int memClass); };
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long index);
 extern unsigned long g_hkTlsIndex;
 
 struct hkEntity;
 
 // hkMotion / hkRigidBody minimal layout.
-struct hkMotion {
+class hkMotion { public:
     char pad00[0x40];
     hkVector4 m_centreOfMassLocal;  // +0x40
     char pad50[0x90];
@@ -48,17 +48,17 @@ struct hkMotion {
     virtual void vslot24();
     virtual void vgetTransform();   // +0x2c
 };
-struct hkRigidBody { char pad00[0x58]; hkMotion* m_motion; void activate(); };
+class hkRigidBody { public: char pad00[0x58]; hkMotion* m_motion; void activate(); };
 struct hkpRigidBody : hkRigidBody {};
 
 // ---------------------------------------------------------------- collision filter vtables
-struct hkBool {
+class hkBool { public:
     char m_bool;
     hkBool() {}
     hkBool(bool b) : m_bool(b ? 1 : 0) {}
 };
 
-struct hkCollidable { char pad00[0x40]; };
+class hkCollidable { public: char pad00[0x40]; };
 
 struct hkPair { uint32_t first; uint32_t second; };
 
@@ -171,7 +171,7 @@ hkPoweredChainMapper::~hkPoweredChainMapper()
 }
 
 // ---------------------------------------------------------------- 01129290
-struct hkPhysicsData : hkReferencedObject {
+class hkPhysicsData : public hkReferencedObject { public:
     hkReferencedObject* m_obj;  // +0x8
     hkReferencedObject** m_arr; // +0xc
     int m_n;                    // +0x10
@@ -332,8 +332,8 @@ void hkMultiFilter::ctor(unsigned int flag)
 
 // ---------------------------------------------------------------- 01129af0
 struct hkCollisionInput { char pad[0x40]; };
-struct hkCdBody { char pad[0x40]; };
-struct hkShapeCollection { char pad[0x40]; };
+class hkCdBody { public: char pad[0x40]; };
+class hkShapeCollection { public: char pad[0x40]; };
 
 // @ 0x01129af0
 hkBool isCollisionEnabledGroup(int* self, const hkCollisionInput& input, const hkCdBody& bodyA,

@@ -6,12 +6,12 @@ typedef float hkReal;
 typedef uint32_t hkShapeKey;
 typedef uint16_t hkContactPointId;
 
-struct hkVector4 { float x, y, z, w; };
-struct hkTransform {
+class hkVector4 { public: float x, y, z, w; };
+class hkTransform { public:
     hkVector4 m_rot[3];
     hkVector4 m_trans;
 };
-struct hkMotionState { hkTransform m_transform; };
+class hkMotionState { public: hkTransform m_transform; };
 
 class hkShape {
 public:
@@ -26,7 +26,7 @@ public:
     hkReal m_radius;                          // +0xc
 };
 
-struct hkCdBody {
+class hkCdBody { public:
     const hkShape* m_shape;                   // +0
     hkShapeKey m_shapeKey;                    // +4
     const hkMotionState* m_motion;            // +8
@@ -47,14 +47,14 @@ public:
 struct hkCollisionAgentConfig {
     hkReal m_weldFactor;                      // +0 (scaled by 0.05 for point-vs-edge welding)
 };
-struct hkCollisionDispatcher;
+class hkCollisionDispatcher;
 struct hkCollisionInput {
     hkCollisionDispatcher* m_dispatcher;      // +0
     uint32_t m_pad[9];
     hkCollisionAgentConfig* m_config;         // +0x28
 };
 
-struct hkContactPoint {
+class hkContactPoint { public:
     hkVector4 m_position;
     hkVector4 m_separatingNormal;             // w = distance
 };
@@ -83,7 +83,7 @@ struct hkAgent3Funcs {                        // 0x34 bytes
     hkAgent3EntryFunc m_createZombieFunc;     // +0x14
     void* m_other[6];
 };
-struct hkCollisionDispatcher {
+class hkCollisionDispatcher { public:
     uint8_t m_pad0[0x10c];
     uint32_t m_shapeTypeFlags[(0x1694 - 0x10c) / 4];   // +0x10c, indexed by shape type; bit 1 = convex
     hkAgent3Funcs m_agent3Func[1];            // +0x1694

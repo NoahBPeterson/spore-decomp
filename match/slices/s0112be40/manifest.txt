@@ -1,7 +1,7 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s0112be40/s0112be40.cpp  ??1AllocatedData@hkPackfileReader@@QAE@XZ  0112bec0  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s0112be40/s0112be40.cpp  ??0hkStructureLayout@@QAE@XZ  0112bf90  /O2 /MD /Gy /EHsc /TP /arch:SSE
-slices/s0112be40/s0112be40.cpp  ?registerClass@hkVtableClassRegistry@@QAEXPAUhkClass@@PAUhkPointerMap@@@Z  0112c4c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0112be40/s0112be40.cpp  ?registerClass@hkVtableClassRegistry@@QAEXPAVhkClass@@PAVhkPointerMap@@@Z  0112c4c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s0112be40/s0112be40.cpp  ?lockVoiceList@System@@QAEXXZ  0112c560  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s0112be40/s0112be40.cpp  ?setValue@System@@QAEXPAI@Z  0112c5f0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s0112be40/s0112be40.cpp  ?Lock@System@@QAEXXZ  0112c600  /O2 /MD /Gy /EHsc /TP /arch:SSE

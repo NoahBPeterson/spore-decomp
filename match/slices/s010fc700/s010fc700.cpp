@@ -16,25 +16,25 @@ typedef unsigned int   hkUint32;
 
 #define HK_REAL_MAX 3.40282e+38f      // 0x7f7fffee in this build (not FLT_MAX)
 
-template <typename T> struct hkArray { T* m_data; int m_size; int m_capacityAndFlags; };
+template <typename T> class hkArray { public: T* m_data; int m_size; int m_capacityAndFlags; };
 
 class __declspec(align(16)) hkVector4 { public: float x, y, z, w; };
-struct hkTransform
-{
+class hkTransform
+{ public:
     float col0[4]; float col1[4]; float col2[4]; float trans[4];
     void setMulInverseMul(const hkTransform& a, const hkTransform& b);     // 0x010810f0 (thiscall)
 };
 
-struct hkSweptTransform
-{
+class hkSweptTransform
+{ public:
     hkVector4 m_centerOfMass0;     // +0x00 (w = start time)
     hkVector4 m_centerOfMass1;     // +0x10 (w = inverse delta time)
     hkVector4 m_rotation0;         // +0x20
     hkVector4 m_rotation1;         // +0x30
     hkVector4 m_centerOfMassLocal; // +0x40
 };
-struct hkMotionState
-{
+class hkMotionState
+{ public:
     hkTransform      m_transform;       // +0x00
     hkSweptTransform m_sweptTransform;  // +0x40
     hkVector4        m_deltaAngle;      // +0x90 (w = max angular movement)
@@ -75,8 +75,8 @@ static __forceinline void hkMonitorAddValue(const char* name, float value)
 }
 
 // ---- memory watchdog --------------------------------------------------------------------------------------
-struct hkMemory
-{
+class hkMemory
+{ public:
     void** vftable;                    // +0x00
     int m_memoryState;                 // +0x04 (1 = out of memory)
     int m_criticalMemoryLimit;         // +0x08
@@ -88,23 +88,23 @@ struct hkMemory
 extern hkMemory* g_hkMemoryInstance;   // 0x016e4178
 
 // ---- collision types --------------------------------------------------------------------------------------
-struct hkStepInfo { float m_startTime, m_endTime, m_deltaTime, m_invDeltaTime; };
+class hkStepInfo { public: float m_startTime, m_endTime, m_deltaTime, m_invDeltaTime; };
 struct hkCollisionQualityInfo { char pad[0x10]; char m_useContinuousPhysics; char pad2[0x3c - 0x11]; };
 
-typedef void (__cdecl* Func08Fn)(struct hkAgentNnEntry* entry, void* agentData, struct hkContactMgr* mgr);
+typedef void (__cdecl* Func08Fn)(struct hkAgentNnEntry* entry, void* agentData, class hkContactMgr* mgr);
 typedef void (__cdecl* SepNormalFn)(const struct hkAgent3ProcessInput* in, void* agentData, hkVector4* out);
 typedef void (__cdecl* ProcessFn)(const struct hkAgent3ProcessInput* in, struct hkAgentNnEntry* entry,
                                   void* agentData, hkVector4* sepNormal, struct hkProcessCollisionOutput* out);
 struct hkAgent3Func                    // 0x34 bytes per agent type, table at dispatcher + 0x1694
 {
     char pad00[8];
-    void (__cdecl* m_func08)(struct hkAgentNnEntry* entry, void* agentData, struct hkContactMgr* mgr);   // +0x08
+    void (__cdecl* m_func08)(struct hkAgentNnEntry* entry, void* agentData, class hkContactMgr* mgr);   // +0x08
     char pad0c[0x24 - 0x0c];
     void (__cdecl* m_sepNormal)(const struct hkAgent3ProcessInput* in, void* agentData, hkVector4* out);  // +0x24
     void (__cdecl* m_process)(const struct hkAgent3ProcessInput* in, struct hkAgentNnEntry* entry,
                               void* agentData, hkVector4* sepNormal, struct hkProcessCollisionOutput* out); // +0x28
 };
-struct hkCollisionDispatcher { char pad[0x1694]; hkAgent3Func m_agent3Func[1]; };
+class hkCollisionDispatcher { public: char pad[0x1694]; hkAgent3Func m_agent3Func[1]; };
 
 struct hkProcessCollisionInput
 {
@@ -119,14 +119,14 @@ struct hkProcessCollisionInput
     hkCollisionQualityInfo*  m_collisionQualityInfo;  // +0x28
 };
 
-struct hkCdBody
-{
+class hkCdBody
+{ public:
     const void*        m_shape;     // +0x0
     hkUint32           m_shapeKey;  // +0x4
     const hkTransform* m_motion;    // +0x8 (hkMotionState*, whose first member is the transform)
     const hkCdBody*    m_parent;    // +0xc
 };
-struct hkCollidable : public hkCdBody { };
+class hkCollidable : public hkCdBody { public: };
 
 struct hkProcessCdPoint { hkUint32 m_data[12]; };
 struct hkProcessCollisionOutput
@@ -142,15 +142,15 @@ struct hkProcessCollisionOutput
     hkProcessCollisionOutput() { *(hkUint32*)&m_toi = 0x7f7fffee; }
 };
 
-struct hkContactMgr
-{
+class hkContactMgr
+{ public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
     virtual void processContact(const hkCdBody* a, const hkCdBody* b, const hkProcessCollisionInput* input,
                                 hkProcessCollisionOutput* output);       // +0x14
 };
 
-struct hkCollisionAgent
-{
+class hkCollisionAgent
+{ public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
     virtual void processCollision(const hkCdBody* a, const hkCdBody* b, const hkProcessCollisionInput* input,
                                   hkProcessCollisionOutput* output);     // +0x14

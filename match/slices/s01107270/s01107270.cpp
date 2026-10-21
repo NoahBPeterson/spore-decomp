@@ -2,7 +2,7 @@
 #include "../../include/types.h"
 #include <math.h>
 
-struct hkVector4 { float v[4]; };
+class hkVector4 { public: float v[4]; };
 
 struct hkContactPointF {
     float pos[4];

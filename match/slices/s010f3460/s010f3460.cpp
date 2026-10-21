@@ -19,7 +19,7 @@
 typedef float hkReal;
 #define HK_REAL_MAX 3.40282e+38f      // 0x7f7fffee in this build (not FLT_MAX)
 
-template <typename T> struct hkArray { T* m_data; int32_t m_size; int32_t m_capacityAndFlags; };
+template <typename T> class hkArray { public: T* m_data; int32_t m_size; int32_t m_capacityAndFlags; };
 
 // ---------------------------------------------------------------------------------------------
 // monitor stream timers (HK_TIMER_BEGIN / SPLIT / END): inlined TLS monitor-stream appends
@@ -61,7 +61,7 @@ static inline void hkMonitorStampList(const char* listName, const char* firstSpl
 // ---------------------------------------------------------------------------------------------
 // hkMemory / hkThreadMemory (stack allocator used by hkAllocateStack / hkDeallocateStack)
 // ---------------------------------------------------------------------------------------------
-struct hkMemory {
+class hkMemory { public:
     void** vftable;                    // +0x00
     int m_memoryState;                 // +0x04 (1 = MEMORY_STATE_OUT_OF_MEMORY)
     int m_criticalMemoryLimit;         // +0x08
@@ -123,7 +123,7 @@ extern const float hkRealOne;      // 0x01485720 (1.0f)
 
 __declspec(align(16)) struct hkVector4 { float x, y, z, w; };
 
-struct hkStepInfo {
+class hkStepInfo { public:
     float m_startTime;      // +0x0
     float m_endTime;        // +0x4
     float m_deltaTime;      // +0x8
@@ -157,7 +157,7 @@ HK_OFFSET_CHECK(hkSolverInfo_size, sizeof(hkSolverInfo) == 0x140);
 struct hkConstraintSolverResources { char m_data[0x30]; };               // layout owned by hkConstraintSolverSetup
 void hkConstraintSolverResources_destruct(hkConstraintSolverResources*); // 0x00C2E4E0 (empty body, `ret`)
 
-struct hkConstraintQueryIn {
+class hkConstraintQueryIn { public:
     float m_substepDeltaTime;            // +0x00
     float m_substepInvDeltaTime;         // +0x04
     float m_frameDeltaTime;              // +0x08
@@ -182,8 +182,8 @@ struct hkConstraintSolverSetup {
 // ---------------------------------------------------------------------------------------------
 // collision / world types
 // ---------------------------------------------------------------------------------------------
-struct hkContactPoint { hkVector4 m_position; hkVector4 m_separatingNormal; };      // 0x20
-struct hkContactPointMaterial { void* m_userData; uint16_t m_friction; uint8_t m_restitution; uint8_t m_flags; };   // 8
+class hkContactPoint { public: hkVector4 m_position; hkVector4 m_separatingNormal; };      // 0x20
+class hkContactPointMaterial { public: void* m_userData; uint16_t m_friction; uint8_t m_restitution; uint8_t m_flags; };   // 8
 struct hkProcessCdPoint { hkContactPoint m_contact; uint16_t m_contactPointId; char pad[14]; };                   // 0x30
 
 struct hkProcessCollisionOutput {                    // hkProcessCollisionData + m_potentialContacts, 0x3050
@@ -203,7 +203,7 @@ struct hkCollisionQualityInfo {                      // 0x3c
     bool m_useContinuousPhysics;                     // +0x10
     char pad11[0x3c - 0x11];
 };
-struct hkCollisionDispatcher {
+class hkCollisionDispatcher { public:
     char pad[0x1a14];
     hkCollisionQualityInfo m_collisionQualityInfo[8];   // +0x1a14
 };
@@ -218,15 +218,15 @@ struct hkProcessCollisionInput {
     hkCollisionQualityInfo* m_collisionQualityInfo;  // +0x28
 };
 
-struct hkEntity;
-struct hkSimulationIsland;
-struct hkWorld;
-struct hkContactMgr;
-struct hkLinkedCollidable;
+class hkEntity;
+class hkSimulationIsland;
+class hkWorld;
+class hkContactMgr;
+class hkLinkedCollidable;
 
 struct hkCollisionEntry { struct hkAgentNnEntry* m_agentEntry; hkLinkedCollidable* m_partner; };
 
-struct hkLinkedCollidable {                          // hkCollidable (0x24) + entries
+class hkLinkedCollidable { public:                          // hkCollidable (0x24) + entries
     char pad00[0x10];
     int m_ownerOffset;                               // +0x10
     char pad14[0x24 - 0x14];
@@ -244,7 +244,7 @@ struct hkAgentNnEntry {
     hkLinkedCollidable* m_collidable[2];             // +0x14
 };
 
-struct hkContactMgr {
+class hkContactMgr { public:
     virtual void vslot0();
     virtual void vslot1();
     virtual void vslot2();
@@ -255,14 +255,14 @@ struct hkContactMgr {
 };
 
 struct hkMotionState;
-struct hkMotion {
+class hkMotion { public:
     virtual void vslot0();
     virtual void vslot1();
     virtual void vslot2();
     virtual void step(const hkStepInfo& stepInfo);                      // +0x0c (hkRigidMotion::step, 0x01088570)
 };
 
-struct hkEntity {
+class hkEntity { public:
     char pad00[0x08];
     hkWorld* m_world;                                // +0x08
     char pad0c[0x1c - 0x0c];
@@ -279,7 +279,7 @@ struct hkEntity {
 };
 HK_OFFSET_CHECK(hkEntity_collidable, sizeof(hkLinkedCollidable) == 0x30);
 
-struct hkSimulationIsland {
+class hkSimulationIsland { public:
     char pad00[0x3c];
     hkArray<hkEntity*> m_entities;                   // +0x3c (hkInplaceArray<hkEntity*,1>)
 };
@@ -334,7 +334,7 @@ struct hkEntityCallbackUtil {
     static void fireContactPointRemovedInternal(hkEntity* entity, hkContactPointRemovedEvent& event);                 // 0x0109E8E0
 };
 
-struct hkWorld {
+class hkWorld { public:
     char pad0[0xc];
     float m_currentTime;                             // +0x0c
     char pad10[0x08];

@@ -11,14 +11,14 @@ typedef float hkReal;
 
 // ---- hkMemory -------------------------------------------------------------------------------------------
 // hkMemory::s_instance @0x016e4178 (only the two slots this slice uses).
-struct hkMemory {
+class hkMemory { public:
     virtual void* allocate(int nbytes, int memClass);   // slot 0
     virtual void  deallocate(void* p);                  // slot 1
     static hkMemory* s_instance;
 };
 
 // ---- hkVector4 ------------------------------------------------------------------------------------------
-struct hkVector4 { float x, y, z, w; };
+class hkVector4 { public: float x, y, z, w; };
 // ---- MOPP compiler --------------------------------------------------------------------------------------
 // The compiler object (this == ecx for 0x0111ffc0 / 0x011202d0). Field offsets recovered from the binary:
 //   +8 source array, +0xc scratch pointer, +0x10/+0x14 free-list A (head/count), +0x18/+0x1c free-list B,

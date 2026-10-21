@@ -24,7 +24,7 @@ public:
     char m_bool;
 };
 
-struct hkString { static void __cdecl memCpy(void* dst, const void* src, int n); };   // 0x0107f440
+class hkString { public: static void __cdecl memCpy(void* dst, const void* src, int n); };   // 0x0107f440
 
 struct hkMotionState;
 class hkShape {
@@ -34,7 +34,7 @@ public:
     virtual int getType() const;                                             // +0x08
 };
 
-struct hkCdBody {
+class hkCdBody { public:
     const hkShape* m_shape;                   // +0
     hkShapeKey m_shapeKey;                    // +4
     const hkMotionState* m_motion;            // +8
@@ -68,7 +68,7 @@ struct hkCollisionAgentConfig {
     hkReal m_defaultTimDistance;              // +0x14
 };
 
-struct hkCollisionDispatcher;
+class hkCollisionDispatcher;
 struct hkCollisionInput {
     hkCollisionDispatcher* m_dispatcher;      // +0
     hkCollisionFilter* m_filter;              // +4
@@ -103,7 +103,7 @@ struct hkAgent3InputAtT0Scratch {
     hkTransform m_transformB;                 // +0x60
 };
 
-struct hkContactPoint {
+class hkContactPoint { public:
     hkVector4 m_position;
     hkVector4 m_separatingNormal;             // w = distance
     void setFlipped(const hkContactPoint& cp);                                // 0x010cecf0
@@ -170,7 +170,7 @@ struct hkAgent3Funcs {                        // 0x34 bytes
     void* m_other1;                           // +0x2c
     int m_symmetric;                          // +0x30 (2 = agent is written for (B,A): flip the input)
 };
-struct hkCollisionDispatcher {
+class hkCollisionDispatcher { public:
     uint8_t m_pad[0xe94];
     uint8_t m_agent3Types[32][32];            // +0xe94
     uint8_t m_agent3TypesPred[32][32];        // +0x1294
@@ -194,13 +194,13 @@ struct hkAgent1nTrack {
 struct hkArrayUtil { static void __cdecl _reserveExactly(void* array, int numElem, int elemSize); };   // 0x0107f4a0
 
 // Memory
-struct hkMemory {
+class hkMemory { public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
     virtual void* allocateChunkFromSizeClass(int sizeIndex, int memClass);           // +0x18
     virtual void deallocateChunkToSizeClass(void* p, int sizeIndex, int memClass);  // +0x1c
     static hkMemory* s_instance;                                                      // 0x016e4178
 };
-struct hkThreadMemory {
+class hkThreadMemory { public:
     uint8_t m_pad0[0x34];
     int m_maxNumElemsOnFreeList;              // +0x34
     uint8_t m_pad1[0x68 - 0x38];

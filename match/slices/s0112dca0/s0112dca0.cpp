@@ -19,10 +19,10 @@ typedef unsigned int   u32;
 // =====================================================================================
 namespace rw { namespace audio { namespace core {
 
-struct ListDNode { ListDNode* pnext; ListDNode* pprev; };
+class ListDNode { public: ListDNode* pnext; ListDNode* pprev; };
 
-struct System;
-struct StreamPool;
+class System;
+class StreamPool;
 
 // The registry list head used by StreamPool::GetInstance / Release (0x016e61ac).
 extern ListDNode* g_pStreamPoolList; // 0x016e61ac
@@ -40,8 +40,8 @@ struct StreamDesc
     char   pad[1];
 };
 
-struct StreamPool
-{
+class StreamPool
+{ public:
     System*      mpSystem;       // +0x0
     StreamDesc*  mpStreamDesc;   // +0x4
     u8           mTimerHandle[0x18]; // +0x8
@@ -56,11 +56,11 @@ struct StreamPool
 };
 
 // ---- Voice (x86, size 0x50) -------------------------------------------------------
-struct PlugIn;
+class PlugIn;
 struct PlugInLocationDesc;
 
-struct Voice
-{
+class Voice
+{ public:
     float mAverager[4];          // +0x0  rw::audio::core::CpuCycleAverager
     System* mpSystem;            // +0x10
     char* mpName;                // +0x14
@@ -90,8 +90,8 @@ struct Voice
 };
 
 // ---- System (subset of the 0x100-byte layout) --------------------------------------
-struct System
-{
+class System
+{ public:
     void*  mpStackAllocator;     // +0x0
     void*  mpAssertImplementation;// +0x4
     double mSystemTime;          // +0x8
@@ -200,7 +200,7 @@ void* FUN_011373b0(); void* FUN_01137120(); void* FUN_011370c0(); void* FUN_0113
 
 // StreamPool / Voice / System callees.
 // Decoder registry (FUN_0112cd60 is a __thiscall method: `mov ecx,esi; call`).
-struct DecoderRegistry { void* Register(void* desc); };                        // 0x0112cd60
+class DecoderRegistry { public: void* Register(void* desc); };                        // 0x0112cd60
 
 void* FUN_0112c580(System* s);                                                 // 0x0112c580
 int __fastcall FUN_011e6c40(void* p);                                          // 0x011e6c40
@@ -210,7 +210,7 @@ void  FUN_011e7c70(void* p);                                                   /
 // Stream::ReleaseChunk is a __thiscall method (ecx = stream, one stack arg).
 struct Stream { void ReleaseChunk(void* chunk); };                             // 0x011e7c70
 void* FUN_0112cc10(void*, void*, void*, void*, unsigned char);                 // 0x0112cc10
-struct PlugIn { void Initialize(); };  // 0x0112dbb0 (thiscall: ecx = plug-in)
+class PlugIn { public: void Initialize(); };  // 0x0112dbb0 (thiscall: ecx = plug-in)
 void  FUN_0112dbb0(void* plugIn);                                              // 0x0112dbb0
 void __fastcall FUN_011e7b70(void* p);                                         // 0x011e7b70
 void  FUN_0112e380(void);                                                      // 0x0112e380

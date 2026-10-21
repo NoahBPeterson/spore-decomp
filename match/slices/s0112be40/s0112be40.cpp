@@ -19,12 +19,12 @@ __declspec(dllimport) void  __stdcall GetSystemInfo(void* info);
 // Havok packfile / structure layout stubs (x86 layouts recovered from the disassembly)
 // =====================================================================================
 
-struct hkClass;
-struct hkClassMember;
+class hkClass;
+class hkClassMember;
 struct hkTypeInfo;
 
-struct hkClassMember
-{
+class hkClassMember
+{ public:
     u8  pad0[4];
     hkClass* mpClass;          // +0x4
     u8  pad1[4];
@@ -39,8 +39,8 @@ struct hkClassMember
     u32      getAlignment();               // @ 0x1080db0
 };
 
-struct hkClass
-{
+class hkClass
+{ public:
     u8  pad0[4];
     hkClass* mpParent;         // +0x4
     u8  pad1[4];
@@ -60,8 +60,8 @@ struct hkClass
     void     setSize(u32 size);            // @ 0xfcc140
 };
 
-struct hkPointerMap
-{
+class hkPointerMap
+{ public:
     u8  pad0[8];
     int m_threshold;           // +0x8
 
@@ -78,16 +78,16 @@ struct hkArrayClass
     void insertAt(int index, const hkArrayClass* value); // @ 0x10fbb80
 };
 
-struct hkThreadMemory
-{
+class hkThreadMemory
+{ public:
     void deallocateChunk(void* ptr, u32 size, int align); // @ 0x107db10
 };
 
 extern u32 g_hkThreadMemoryTls;   // @ 0x16e4174
 extern u32 g_hkStructureLayoutVtbl; // @ 0x15ba42c
 
-struct hkMemory
-{
+class hkMemory
+{ public:
     virtual void v0();
     virtual void freePtr(void* p);                                // +0x4
     virtual void v2();
@@ -100,8 +100,8 @@ extern hkMemory* g_hkMemory;                              // @ 0x16e4178
 extern char      g_vtbl_hkPackfileAllocatedData[];        // @ 0x14a710c
 extern char      g_vtbl_hkPackfileAllocatedDataBase[];    // @ 0x13ef094
 
-struct hkOstream
-{
+class hkOstream
+{ public:
     void ctor(void* buffer, int size, int flag);      // @ 0x107ef80
     hkOstream& operator<<(const char* text);          // @ 0x107ee30
     void dtor();                                      // @ 0x107efd0
@@ -117,19 +117,19 @@ struct hkErrorHandler
 
 extern hkErrorHandler* g_hkErrorHandler;     // @ 0x16e4184
 
-struct hkStructureLayout
-{
+class hkStructureLayout
+{ public:
     u32 m_flags;               // +0x0
 
     hkStructureLayout();       // @ 0x112bf90
 };
 
-struct hkPackfileReader
-{
+class hkPackfileReader
+{ public:
     static void convertClassVersion1Inplace(hkClass* cls); // @ 0x112be40
 
-    struct AllocatedData
-    {
+    class AllocatedData
+    { public:
         void*  mpVtbl;         // +0x0
         u8     pad0[4];
         void** m_ptrs;         // +0x8
@@ -318,8 +318,8 @@ struct System
     TimerManager* timer() { return (TimerManager*)m_timer; }
 };
 
-struct hkVtableClassRegistry
-{
+class hkVtableClassRegistry
+{ public:
     virtual void v0();                                            // +0x0
     virtual void v1();                                            // +0x4
     virtual void registerOne(void* typeInfo, const hkClass* cls); // +0x8

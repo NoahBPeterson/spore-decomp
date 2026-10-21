@@ -57,7 +57,7 @@ public:
     const hkCdBody*    m_parent;    // +0xc
 };
 
-class hkCollisionInput {
+struct hkCollisionInput { private:
 public:
     void*   m_dispatcher;             // +0x0
     void*   m_filter;                 // +0x4
@@ -85,7 +85,7 @@ struct hkProcessCollisionOutput {
     hkPendingContact* m_potentialContacts;       // +0x3040
 };
 
-class hkCollisionInput;
+struct hkCollisionInput;
 
 class hkContactMgr {
 public:
@@ -97,7 +97,7 @@ public:
     virtual void removeContactPoint(hkContactPointId id);                                          // +0x10
 };
 
-class hkProcessCollisionInput {
+struct hkProcessCollisionInput { private:
 public:
     void*       m_dispatcher;             // +0x0
     void*       m_filter;                 // +0x4

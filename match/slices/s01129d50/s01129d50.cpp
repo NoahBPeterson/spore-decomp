@@ -111,7 +111,7 @@ protected:
     hkCollisionFilter() {}
 };
 
-struct hkFinishLoadedObjectFlag { int m_finishing; };
+class hkFinishLoadedObjectFlag { public: int m_finishing; };
 
 class hkDisableEntityCollisionFilter : public hkCollisionFilter, public hkEntityListener
 {

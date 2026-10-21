@@ -2,7 +2,7 @@
 // Flags: /O2 /MD /Gy /EHsc /TP
 #include "types.h"
 
-struct hkBool {
+class hkBool { public:
     char m_b;
     hkBool() {}
     hkBool(bool b) : m_b(b) {}
@@ -10,38 +10,38 @@ struct hkBool {
 };
 
 struct hkShapeRayCastOutput { float m_pad[4]; int m_shapeKey; float m_hitFraction; };   // +0x10 key, +0x14 fraction
-struct hkRayShapeCollectionFilter;
+class hkRayShapeCollectionFilter;
 struct hkShapeRayCastInput {
     float m_from[4];                  // +0
     float m_to[4];                    // +0x10
     uint32_t m_filterInfo;            // +0x20
     hkRayShapeCollectionFilter* m_rayShapeCollectionFilter;   // +0x24
 };
-struct hkRayHitCollector { virtual void v0(); float m_earlyOutHitFraction; };
-struct hkCdBody { const void* m_shape; uint32_t m_shapeKey; const void* m_motion; const hkCdBody* m_parent; };
+class hkRayHitCollector { public: virtual void v0(); float m_earlyOutHitFraction; };
+class hkCdBody { public: const void* m_shape; uint32_t m_shapeKey; const void* m_motion; const hkCdBody* m_parent; };
 struct hkCdBodyMotionHolder { uint8_t pad[8]; const void* m_motion; };
 
-struct hkShape {
+class hkShape { public:
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
     virtual hkBool castRay(const hkShapeRayCastInput& input, hkShapeRayCastOutput& output) const;          // slot 5 (+0x14)
     virtual void castRayWithCollector(const hkShapeRayCastInput& input, const hkCdBody& body, hkRayHitCollector& collector) const;   // slot 6 (+0x18)
 };
-struct hkShapeCollection {
+class hkShapeCollection { public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
     virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
     virtual const hkShape* getChildShape(uint32_t key, void* buffer) const;                                // slot 10 (+0x28)
 };
-struct hkRayShapeCollectionFilter {
+class hkRayShapeCollectionFilter { public:
     virtual hkBool isCollisionEnabled(const hkShapeRayCastInput& input, const hkShapeCollection& collection, uint32_t key) const;   // slot 0
 };
 struct hkMoppCodeRef { uint8_t pad[0x10]; float m_offset[4]; };
 
-struct hkOstream {
+class hkOstream { public:
     hkOstream(char* buf, int size, bool flag);
     ~hkOstream();
     hkOstream& operator<<(const char* s);
 };
-struct hkError {
+class hkError { public:
     virtual void v0(); virtual void v1();
     virtual int message(int level, int id, const char* desc, const char* file, int line);   // slot 2
     static hkError* s_instance;      // 0x016e4184
