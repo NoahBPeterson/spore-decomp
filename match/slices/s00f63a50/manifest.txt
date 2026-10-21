@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f63a50/s00f63a50.cpp  ??4cTerrainDistributeDescription@SP@@QAEAAU01@ABU01@@Z  00f63a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f63a50/s00f63a50.cpp  ?resize@EffectVector@SP@@QAEXI@Z  00f63ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f63a50/s00f63a50.cpp  ?SetIsVisible@cTerrainDistributeEffect@SP@@QAEXD@Z  00f64270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f63a50/s00f63a50.cpp  ?SP_ReadDescription@@YAXPAXHPAUcTerrainDistributeDescription@SP@@@Z  00f63d00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f63a50/s00f63a50.cpp  ?ReleaseSlots@cDistGrid@SP@@QAEXXZ  00f64230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

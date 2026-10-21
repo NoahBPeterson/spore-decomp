@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00f63b40  107  cEffectCommand::Execute: complete; frame 0xd8 exact, but cl keeps `count` in ebx/edi and folds `sub eax,edi; add eax,ecx` differently from the strlen+assign idiom; source byte-size 165 vs 170
+00f63bf0  112  SP_ReadLevel: complete and same 257-byte size; cl assigns `level` to ebx instead of edi, shifting the whole register allocation
+00f63da0  56  cDistGrid::CellIndex: complete; cl reassociates the final `((t<<7)|B)*2|C` into `shl ...,8` and reuses ecx as a swizzle temp (original leaves ecx = this untouched); return value verified equal
+00f63e10  63  SP_AngleToCos: complete, `double` return in st0; only x87/xmm operand order and the constant-load form of the 1/(s+|a|) blend differ
+00f63eb0  630  cDistGrid::Init: complete 6x5x2^n nested-loop port (writes directions and min/max heights from the terrain map set); cl hoists the x87 sqrt/div chain and reassociates the cell-index swizzle into different temporaries, source byte-size 755 vs 717
+00f64180  71  cDistGrid::SetTerrainMapSet: complete and same 97-byte size; the open-coded cRefCounted AddRef/Release block (refcount at +4, vtbl slot 0 with push 1) is shaped differently
