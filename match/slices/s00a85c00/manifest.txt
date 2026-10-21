@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a85c00/s00a85c00.cpp  ?OnMessage@cDistributeSimulator@@QAE_NHPAHH@Z  00a85ed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a85c00/s00a85c00.cpp  ?ReleaseEmitter@cDistributeSimulator@@QAEXXZ  00a85fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a85c00/s00a85c00.cpp  ?Deactivate@cDistributeSimulator@@QAEXH@Z  00a86010  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a85c00/s00a85c00.cpp  ?SetEmitterFlags@cDistributeSimulator@@QAEX_N@Z  00a860e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

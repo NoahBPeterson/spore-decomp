@@ -1,0 +1,8 @@
+00a85c00 365 cDistributeDescInit ctor: MSVC reloads extern const floats per store (no CSE), ordering of int stores differs from retail schedule; equiv PASS
+00a85dd0 210 ReadDesc: vtable/curve dispatch structure reconstructed but call/scheduling pattern differs from retail; equiv UNSUPPORTED (fake-arity: extern "C" void*(void*,void*) signature not inferable)
+00a86120 90 cDistributeSimulator ctor: instruction multiset matches, register-int store scheduling order differs from retail; equiv PASS
+00a85f30 9 EnumGroupOverrides: one stack slot / arg spill layout differs and and-operand register order differs (near-miss schedule); equiv FAIL
+00a86050 28 SetParams case 0xc: SSE register allocation of numerator/denominator swapped (near-miss); equiv PASS
+00a86210 10 Destroy: load of mpRef8c scheduled before the two vptr stores instead of after (near-miss schedule); equiv PASS
+00a86270 643 Initialize: LTCG register-arg ABI (ecx/edx args) plus large scheduling difference; equivalence-only, equiv UNSUPPORTED (unresolved RandomDoubleUniform@RandomLCG)
+00a86590 1326 Update: large per-frame update reconstructed functionally but approximate; retail uses LTCG inlining/scheduling; equivalence-only, equiv FAIL
