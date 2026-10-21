@@ -1,3 +1,13 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+#
+# Slice s00a52080 = EAPD sound-unit / group setup stubs (the card constructor family, the acoustics
+# and control setup entries, the group-size and pair-vector helpers and the GroupHelp init).
+# 4/29 byte-exact.  The remaining 25 are complete C++ that reproduces the original control flow;
+# the first six rows are additionally hit by an over-measured original region (each card ctor is
+# 46-60 B but the disassembler region runs into the following perform body, 185-233 B), so their
+# byte counts are not comparable - the gate and the source are still the meaningful checks.
+
 00a52080 199 non-byte-exact; EAPD mtof_new ctor (46 bytes) vs card region 233 (the following perform body 0xa520b0 is unlisted, so the oracle over-measures the region; our ctor emits correctly then the perform body follows); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (0/400 valid: fault(read) on unresolved pd globals)
 00a52170 151 non-byte-exact; EAPD ftom_new ctor, same over-measured-region artifact as 00a52080; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (0/400 valid: fault(read))
 00a52230 151 non-byte-exact; EAPD rmstodb_new ctor, same over-measured-region artifact; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (0/400 valid: fault(read))
