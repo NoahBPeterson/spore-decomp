@@ -642,11 +642,11 @@ void hkStorageMeshShape::addSubpart(const hkMeshShapeSubpart& p)
 
     st_hi = (hkUint32*)hkMemory::getInstance()->allocate(0x48, 0x22);
     st = (hkStorageMeshSubpartStorage*)st_hi;
-    if (st == 0) {
-        st_hi = (hkUint32*)st;
+    if (st_hi == 0) {
         st = (hkStorageMeshSubpartStorage*)st_hi;
-    } else if (st != 0) {
-        hkStorageMeshShapeSubpartStorage::init((hkStorageMeshShapeSubpartStorage*)st);
+    } else {
+        st_hi = (hkUint32*)hkStorageMeshShapeSubpartStorage::init((hkStorageMeshShapeSubpartStorage*)st_hi);
+        st = (hkStorageMeshSubpartStorage*)st_hi;
     }
 
     if (m_storage.m_size == (int)(m_storage.m_capacityAndFlags & 0x3fffffff))
