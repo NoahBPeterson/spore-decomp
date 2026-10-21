@@ -53,7 +53,7 @@ void  ThreadObj_condSignal(void* t, int a);                  // 0x011ec4e0
 int   ThreadObj_condWait(void* t, void* m, void* t2);        // 0x011ec410
 u32   GetThreadTime(void);                                   // 0x011ec7f0
 void  SleepEx1(u32 ms);                                      // 0x011ec7e0  SleepEx(*p,1)
-u32   CreateThreadHelper(void* a, void* b, void* c);         // 0x011ecc20
+u32   CreateThreadHelper(void* a, void* b, void* c, void* d); // 0x011ecc20
 void* RefCounted_ctor(void* p);                              // 0x011ec800
 u32   RefCounted_tag(void);                                  // 0x011ec820
 u32   SubObject_ctor(void* p);                               // 0x011ec830
@@ -71,7 +71,7 @@ u32   FUN_011e58f0(void);                                    // global filesys c
 void* FUN_011e8770(void);                                    // async open
 u64   AsyncOp_GetSize(void* op);                             // 0x011ea7c0
 void  FUN_011e8a40(void* a, void* b, void* cb, void* c, void* d); // 0x011e8a40
-void  FUN_011e8bd0(void* a, void* b);                        // 0x011e8bd0
+u32   FUN_011e8bd0(void* a, void* b);                        // 0x011e8bd0
 char* FUN_011e8c60(const char* s, int c);                    // 0x011e8c60  strchr
 void  StringCopy(void* dst, const void* src);                // 0x011e8b20
 void  StringnCopy(void* dst, const void* src, u32 n);        // 0x011eba20
@@ -440,7 +440,7 @@ void* __fastcall StreamImpl_insertRequest(void* self, int, void* node)
         return node;
 
     void* alloc = (void*)ld32(self, 0x120);
-    u64 wndBase = ((u64(*)(u32))(*(void***)alloc)[10])(ld32(ld32(node, 0x10), 8));
+    u64 wndBase = ((u64(*)(u32))(*(void***)alloc)[10])(ld32((void*)ld32(node, 0x10), 8));
     u64 reqKey = wndBase + *(u64*)((char*)node + 0x20);
 
     u64 limit = *(u64*)((char*)self + 0x128);
@@ -450,7 +450,7 @@ void* __fastcall StreamImpl_insertRequest(void* self, int, void* node)
         while (cur != 0) {
             if (ld8(cur, 9) == 0 || ld32(cur, 0xc) != ld32(node, 0xc))
                 break;
-            u64 base2 = ((u64(*)(u32))(*(void***)alloc)[10])(ld32(ld32(cur, 0x10), 8));
+            u64 base2 = ((u64(*)(u32))(*(void***)alloc)[10])(ld32((void*)ld32(cur, 0x10), 8));
             u64 key2 = base2 + *(u64*)((char*)cur + 0x20);
             if (key2 > *(u64*)((char*)self + 0x128))
                 break;
@@ -556,7 +556,7 @@ void __fastcall StreamImpl_queueRequest(void* self, int, void* node)
     void* prev = 0;
     if (ld8(node, 9)) {
         void* alloc = (void*)ld32(self, 0x120);
-        base = ((u64(*)(u32))(*(void***)alloc)[10])(ld32(ld32(node, 0x10), 8));
+        base = ((u64(*)(u32))(*(void***)alloc)[10])(ld32((void*)ld32(node, 0x10), 8));
         base += *(u64*)((char*)node + 0x20);
     }
 
@@ -570,7 +570,7 @@ void __fastcall StreamImpl_queueRequest(void* self, int, void* node)
                 if (*(u32*)((char*)FUN_011e58f0() + 0x28) == 1 &&
                     ld8(node, 9) && ld8(last, 9)) {
                     void* alloc = (void*)ld32(self, 0x120);
-                    u64 b2 = ((u64(*)(u32))(*(void***)alloc)[10])(ld32(ld32(last, 0x10), 8));
+                    u64 b2 = ((u64(*)(u32))(*(void***)alloc)[10])(ld32((void*)ld32(last, 0x10), 8));
                     u64 k2 = b2 + *(u64*)((char*)last + 0x20);
                     if (base > k2)
                         break;
@@ -769,7 +769,7 @@ void __fastcall queuerequest(void* self, int, void* request)
     st32(request, 8, prev);
     st32(request, 0xc, 0);
     if (prev != 0)
-        st32(prev, 0xc, (u32)request);
+        st32((void*)prev, 0xc, (u32)request);
     st32(self, 0x8c, (u32)request);
     if (ld32(self, 0x88) == 0)
         st32(self, 0x88, (u32)request);
@@ -786,12 +786,12 @@ void __fastcall freerequest(void* self, int, void* request)
     if (request == (void*)ld32(self, 0x8c)) {
         st32(self, 0x8c, ld32(request, 0xc));
     } else {
-        st32(ld32(request, 8), 0xc, ld32(request, 0xc));
+        st32((void*)ld32(request, 8), 0xc, ld32(request, 0xc));
     }
     if (request == (void*)ld32(self, 0x94)) {
         st32(self, 0x94, ld32(request, 8));
     } else {
-        st32(ld32(request, 0xc), 8, ld32(request, 8));
+        st32((void*)ld32(request, 0xc), 8, ld32(request, 8));
     }
     if (request == (void*)ld32(self, 0x90)) {
         u32 n = ld32(request, 0xc);

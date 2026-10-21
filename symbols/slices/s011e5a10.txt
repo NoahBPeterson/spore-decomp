@@ -1,30 +1,30 @@
 ; slice s011e5a10 = 0x011e5a10..0x011e6890 (RenderWare 4 core filesystem: device + request queue)
-; module Native Release filesys -- VC .NET 2003 (cl 13.10) /GL + /LTCG
-; POLICY: no source reconstructed yet; all 25 targets are listed in partial.txt as incomplete.
-; flags when built: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-011e5a10 FUN_011e5a10  ; incomplete
-011e5af0 FUN_011e5af0  ; incomplete
-011e5cd0 FUN_011e5cd0  ; incomplete
-011e5d30 FUN_011e5d30  ; incomplete
-011e5d80 rw::core::filesys::DeviceDriver::DeviceDriver  ; incomplete
-011e5da0 FUN_011e5da0  ; incomplete
-011e5e00 FUN_011e5e00  ; incomplete
-011e5e90 FUN_011e5e90  ; incomplete
-011e5f20 FUN_011e5f20  ; incomplete
-011e5ff0 FUN_011e5ff0  ; incomplete
-011e60b0 FUN_011e60b0  ; incomplete
-011e61d0 FUN_011e61d0  ; incomplete
-011e62b0 FUN_011e62b0  ; incomplete
-011e6340 FUN_011e6340  ; incomplete
-011e6450 FUN_011e6450  ; incomplete
-011e64a0 FUN_011e64a0  ; incomplete
-011e64c0 FUN_011e64c0  ; incomplete
-011e64d0 FUN_011e64d0  ; incomplete
-011e64f0 FUN_011e64f0  ; incomplete
-011e65e0 FUN_011e65e0  ; incomplete
-011e6600 rw::core::filesys::decbufferusage  ; incomplete
-011e6660 rw::core::filesys::getfreerequest  ; incomplete
-011e66d0 rw::core::filesys::queuerequest  ; incomplete
-011e6730 rw::core::filesys::freerequest  ; incomplete
-011e67a0 FUN_011e67a0  ; incomplete
-011e6840 FUN_011e6840  ; incomplete
+; module RenderWare 4 core -- VC .NET 2003 (cl 13.10) /GL + /LTCG
+; POLICY: equivalence-only (see symbols/renderware4_core.txt).  Source is complete for all 25 VAs.
+; flags: /vc71 /O2 /MD /Gy /EHsc /TP
+011e5a10 filesys_init  # query allocator for the two path buffers, alloc the root stream, enumerate drives
+011e5af0 filesys_reset  # rebuild the device list and split the CWD into the arena path holder
+011e5cd0 filesys_create  # build the root StreamImpl from the descriptor, publish g_rwFsStream, reset
+011e5d30 filesys_destroy  # teardown + return the descriptor to the allocator + clear singletons
+011e5d80 rw::core::filesys::DeviceDriver::DeviceDriver  # vftable 0x14529a8 + StringCopy(name)
+011e5da0 StreamImpl_waitForOp  # wait on the condvar until slot[4] != 0 or deadline passes
+011e5e00 request_list_unlink  # unlink a request from an intrusive singly-linked list
+011e5e90 StreamImpl_ctorSub  # sub-object ctor: mutex/condvar/list anchors/ctx/allocs
+011e5f20 StreamImpl_shutdown  # signal worker, release the async window and 5 sub-objects, drain lists
+011e5ff0 filesys_resolvePath  # "drive:path" -> device by name, else root/current device
+011e60b0 StreamImpl_insertRequest  # insert by priority in the active list + window accounting
+011e61d0 StreamImpl_worker  # worker loop: drain active list, run request, condvar wait
+011e62b0 StreamImpl_startWorker  # start the worker thread (or mark started)
+011e6340 StreamImpl_queueRequest  # insert by priority under lock, then signal the worker
+011e6450 StreamImpl_cancelRequest  # unlink under lock and requeue with a reason
+011e64a0 RequestDesc_init  # fill a request descriptor with fixed window defaults
+011e64c0 ListHead_clear  # zero an intrusive list head (4 dwords)
+011e64d0 StreamImpl_resetLock  # enter the per-impl critical section + clear counter
+011e64f0 StreamImpl_ctorFull  # full ctor: name, flags, 16-slot request table
+011e65e0 StreamImpl_validateSize  # >= 0x800 bytes allowed, writes 0x800 to *out
+011e6600 rw::core::filesys::decbufferusage  # release bytes from the async window, wake waiter
+011e6660 rw::core::filesys::getfreerequest  # pop a free request, stamp fresh id in low byte
+011e66d0 rw::core::filesys::queuerequest  # push a request onto the pending list, mark queued
+011e6730 rw::core::filesys::freerequest  # unlink a pending request, push it onto the free list
+011e67a0 opencallback  # open-completion: install AsyncOp size then restart or free+schedule
+011e6840 openstream  # issue the async open for the stream's current target
