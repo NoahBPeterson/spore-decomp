@@ -109,7 +109,7 @@ struct TexMgr {
 };
 
 // ---------------------------------------------------------------- UTFWin cSPUITextWin
-struct cSPUITextWin {
+class cSPUITextWin { public:
     void* vptr0;        // +0x000
     void* vptr4;        // +0x004
     char  pad8[0x204];

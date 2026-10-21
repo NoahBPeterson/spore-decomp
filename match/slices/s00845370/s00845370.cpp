@@ -11,10 +11,10 @@ inline void operator delete(void*, const char*, int, unsigned, const char*, int)
 namespace EA { namespace ArgScript {
 
 struct cArguments;
-struct cICommand { virtual void ParseLine(const cArguments&) {} };
+class cICommand { public: virtual void ParseLine(const cArguments&) {} };
 
 // cCommandBase: vtable, mParser, mRefCount, mState (0x10 bytes)
-struct cCommandBase : public cICommand {
+class cCommandBase : public cICommand { public:
     void* mParser;
     int mRefCount;
     int mState;
@@ -29,7 +29,7 @@ struct cCommandBase2 : public cICommand {
     cCommandBase2();                      // @ 0x83c840
 };
 // Block command base (0x83cdd0), 0x34 bytes
-struct cBlockCommandBase : public cICommand {
+class cBlockCommandBase : public cICommand { public:
     char pad[0x30];
     cBlockCommandBase();                  // @ 0x83cdd0
 };
@@ -54,9 +54,9 @@ struct cDefine : public cCommandBase2 {
     void ParseLine(const cArguments&) {}
 };
 
-struct cParser;
+class cParser;
 // expression functions: vtable, refcount, [parser]
-struct cExprFunction {
+class cExprFunction { public:
     virtual void Eval() {}
     int mRefCount;
     cExprFunction() : mRefCount(0) {}
@@ -69,11 +69,11 @@ struct cMatch : public cExprFunction { void Eval(int) {} };
 struct cMinVersion : public cExprFunction { cParser* mParser; cMinVersion(cParser* p) { mParser = p; } void Eval() {} };
 struct cMaxVersion : public cExprFunction { cParser* mParser; cMaxVersion(cParser* p) { mParser = p; } void Eval() {} };
 
-struct cExpression {
+class cExpression { public:
     void AddFunction(const char* name, cExprFunction* fn);   // @ 0x83df90, ret 8
 };
 
-struct cParser {
+class cParser { public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
     virtual void AddCommand(const char* name, cICommand* cmd);   // slot 5 (+0x14)
 #define PV(n) virtual void v##n();

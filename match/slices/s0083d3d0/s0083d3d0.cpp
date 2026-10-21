@@ -20,7 +20,7 @@ static const char g_allocName[] = "ArgScript";
 extern char gEmptyString[];
 
 namespace eastl {
-struct allocator { unsigned char pad[4]; };
+class allocator { public: unsigned char pad[4]; };
 struct sp_vector_allocator : allocator {};
 struct string8 {
     char* mpBegin; char* mpEnd; char* mpCapacity; allocator mAllocator;
@@ -73,13 +73,13 @@ float  __cdecl CeilF(float x);                                  // 0x0083ce70
 float  __cdecl ExpF(float x);                                   // 0x00571cc0
 
 namespace EA { namespace ArgScript {
-struct cExprFunction { virtual float Eval(const char** p, void* expr) = 0; };
-struct cError {
+class cExprFunction { public: virtual float Eval(const char** p, void* expr) = 0; };
+class cError { public:
     char mMessage[16];
     cError(const char* fmt, ...);                               // 0x0052df30
     cError(const cError& o);
 };
-struct cExpression {
+class cExpression { public:
     struct Node { eastl::string8 key; cExprFunction* fn; Node* next; };
     void* mAlloc;                                               // +0
     Node** mpBucketArray;                                       // +4

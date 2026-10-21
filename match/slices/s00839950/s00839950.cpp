@@ -22,7 +22,7 @@ static const char g_allocFile[] =
 static const char g_allocName[] = "ArgScript";
 
 namespace eastl {
-struct allocator { unsigned char pad[4]; };
+class allocator { public: unsigned char pad[4]; };
 struct sp_vector_allocator : allocator {};
 
 // ---- basic_string<char, allocator> (0x10) ----

@@ -26,7 +26,7 @@ static const char g_allocName[] = "ArgScript";
 extern char gEmptyString[];
 
 namespace eastl {
-struct allocator { unsigned char pad[4]; };
+class allocator { public: unsigned char pad[4]; };
 struct sp_vector_allocator : allocator {};
 
 struct string8 {

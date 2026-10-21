@@ -25,7 +25,7 @@ extern void* gAppPropsBuckets[];
 extern void* vtbl_AppProps;   // 0x0141b5e4 (equiv t3)
 
 namespace eastl {
-struct allocator { unsigned char pad[4]; };
+class allocator { public: unsigned char pad[4]; };
 struct sp_vector_allocator : allocator {};
 struct string8 {
     char* mpBegin; char* mpEnd; char* mpCapacity; allocator mAllocator;

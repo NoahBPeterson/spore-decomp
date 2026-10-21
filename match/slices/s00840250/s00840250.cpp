@@ -36,7 +36,7 @@ struct cError {
 };
 
 namespace eastl {
-struct allocator { unsigned char pad[4]; };
+class allocator { public: unsigned char pad[4]; };
 struct string8 {
     char* mpBegin; char* mpEnd; char* mpCapacity; allocator mAllocator;
     string8() { mpBegin = gEmptyString; mpEnd = mpBegin; mpCapacity = mpBegin + 1; }

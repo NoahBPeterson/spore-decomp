@@ -40,7 +40,7 @@ void  __cdecl HashFindFileNotify(void* self, void* out, void* key);   // 0x007e2
 int   __cdecl HashFindNode(const void* key, void* node);                   // 0x00554fb0
 
 namespace eastl {
-struct allocator { unsigned char pad[4]; };
+class allocator { public: unsigned char pad[4]; };
 struct sp_vector_allocator : allocator {};
 struct string8 {
     char* mpBegin; char* mpEnd; char* mpCapacity; allocator mAllocator;
@@ -123,7 +123,7 @@ int __cdecl EvalBoolExpression(const char** p) {
 }
 
 namespace EA { namespace ArgScript {
-struct cExpression { int EvalChar(const char** p); };   // 0x0083f480 (stub receiver)
+class cExpression { public: int EvalChar(const char** p); };   // 0x0083f480 (stub receiver)
 }}
 
 // ===========================================================================

@@ -39,7 +39,7 @@ extern float gTwo;                      // 0x01470f1c
 extern char __TI1_AVcError_ArgScript_EA__[];   // 0x014f9174
 
 namespace eastl {
-struct allocator { unsigned char pad[4]; };
+class allocator { public: unsigned char pad[4]; };
 struct string8 {
     char* mpBegin; char* mpEnd; char* mpCapacity; allocator mAllocator;
     string8() { mpBegin = gEmptyString; mpEnd = mpBegin; mpCapacity = mpBegin + 1; }

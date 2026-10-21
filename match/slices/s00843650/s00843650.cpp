@@ -184,7 +184,7 @@ typedef string8_s0084_3650 string8;
 namespace EA {
 namespace ArgScript {
 
-struct cError {
+class cError { public:
     cError(const char* fmt, ...);   // 0x0052df30
     const char* mMessage;
     unsigned char pad[12];

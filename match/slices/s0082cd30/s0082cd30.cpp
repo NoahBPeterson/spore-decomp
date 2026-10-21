@@ -678,7 +678,7 @@ struct XmlDeserializer {
     virtual uint32_t Read(IStream* stream, int a1, void* output, int a3, int a4, int a5);   // @ 0x99BE60
 };
 
-struct cSPUIDeserializer : XmlDeserializer {
+class cSPUIDeserializer : public XmlDeserializer { public:
     virtual uint32_t Read(IStream* stream, int a1, void* output, int a3, int a4, int a5);
 };
 

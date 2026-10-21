@@ -114,7 +114,7 @@ struct SubtitlesMsg {
 };
 
 // ---------------------------------------------------------------- UTFWin swarm effect
-struct cSPUISwarmEffect {
+class cSPUISwarmEffect { public:
     void*    vptr0;         // +0x00
     void*    vptr4;         // +0x04
     uint32_t f8;            // +0x08

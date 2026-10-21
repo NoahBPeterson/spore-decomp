@@ -105,7 +105,7 @@ Rect2* FUN_00808370(Rect2* out, UIObj* w, int flag);   // 0x00808370 (cdecl)
 typedef UIObj IWindow;
 
 // ---- layout / window helpers --------------------------------------------
-struct cSPUILayout {
+class cSPUILayout { public:
   cSPUILayout();                              // 0x00810000
   ~cSPUILayout();                             // 0x00811fe0
   void Shutdown(int);                         // 0x00811ad0 (callee pops)
@@ -140,7 +140,7 @@ struct AppX { char pad[0x54]; int v54; };
 extern DirPropList2* g_AppProperties;     // 0x015fd918
 
 namespace SP {
-struct cPropertyUI {
+class cPropertyUI { public:
   virtual int vslot0();
   char pad4[8];               // +0x4 .. +0xb
   unsigned mCurrentGroupID;   // +0xc

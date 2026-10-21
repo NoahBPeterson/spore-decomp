@@ -92,7 +92,7 @@ extern char gEmptyStr[4];          // 0x01667bac: shared empty string storage
 extern void* gEmptyBucketArray[1]; // 0x0154df28
 
 namespace eastl {
-struct allocator { unsigned char pad[4]; };
+class allocator { public: unsigned char pad[4]; };
 
 struct string8 {
     char* mpBegin;
@@ -150,9 +150,9 @@ using eastl::vec;
 
 namespace EA { namespace ArgScript {
 
-struct cArguments { unsigned char pad[0x44]; cArguments(); ~cArguments(); };
+class cArguments { public: unsigned char pad[0x44]; cArguments(); ~cArguments(); };
 
-struct cExpression { Hashtable mFunctions; cExpression(); ~cExpression() {} };
+class cExpression { public: Hashtable mFunctions; cExpression(); ~cExpression() {} };
 
 struct IStream { virtual void v0(); virtual void v1(); virtual void Release(); };
 
@@ -167,12 +167,12 @@ struct AutoRefCount {
     ~AutoRefCount() { Release(); }
 };
 
-struct cIGlobalVariableSet { virtual void v0(); virtual void Release(); };
+class cIGlobalVariableSet { public: virtual void v0(); virtual void Release(); };
 
 struct cMetaEntry { void* mCommand; int mLine; };
 
 // cParser (retail layout, 0x1b8 bytes)
-struct cParser {
+class cParser { public:
     void**   mvftable;          // +0x000
     unsigned mStateID;          // +0x004
     int      mRefCount;         // +0x008

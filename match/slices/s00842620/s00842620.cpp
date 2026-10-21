@@ -192,7 +192,7 @@ struct cICommand_s0084_2620 {
     virtual void OnEndBlock(bool bEnd);                                  // +0x14
 };
 
-struct cIBlockCommand {
+class cIBlockCommand { public:
     virtual void Execute(cArguments_s0084_2620* pArgs);                 // +0x00
     virtual const char* Description(int helpType) const;                 // +0x04
     virtual void OnRegister(void* pParser, cState* pState);              // +0x08

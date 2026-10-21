@@ -65,7 +65,7 @@ struct H {
 
 // ---------------------------------------------------------------- class stubs
 struct SPUIShader2D;
-struct cSPUIShaderProxy;
+class cSPUIShaderProxy;
 
 struct u32vector {
     uint32_t *mpBegin;   // +0x00
@@ -111,7 +111,7 @@ struct SPUIShader2D {
     void Cleanup();                            // 0x0082f020
 };
 
-struct cSPUIShaderProxy {
+class cSPUIShaderProxy { public:
     void     *vptr;             // +0x000
     char      map[0x118];       // +0x004
     char      name[0x54];       // +0x11c
@@ -127,7 +127,7 @@ struct cSPUIShaderProxy {
     bool GetParam(uint32_t, uint32_t *, uint32_t *, uint32_t *); // 0x0082f5c0
 };
 
-struct cSPUIMaterialWinProc {
+class cSPUIMaterialWinProc { public:
     void     *vptr;             // +0x00
     void     *vptrSec;          // +0x04
     int32_t   refCount;         // +0x08

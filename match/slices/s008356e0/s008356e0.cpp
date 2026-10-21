@@ -66,7 +66,7 @@ struct Point2D {
     Point2D& operator=(const Point2D& o) { mX = o.mX; mY = o.mY; return *this; }
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     cSPUILayout* Construct();                          // 0x810000
     void* FindWindowByID(uint32_t id, int recurse);    // 0x8105b0
     void  Init(const void* key, int a, int b);         // 0x8120d0
@@ -76,7 +76,7 @@ struct cSPUILayout {
 // ---------------------------------------------------------------------------
 // cSPUITooltipManager (retail layout; differs from the dev PDB)
 // ---------------------------------------------------------------------------
-struct cSPUITooltipManager {
+class cSPUITooltipManager { public:
     uint32_t pad0[2];         // +0x0
     void*    mpTooltipLayout; // +0x8
     void*    mpTooltipWindow; // +0xc
@@ -117,7 +117,7 @@ struct CustomWinProc : IWinProc, ISerializable, MultiHeapObject {
     ~CustomWinProc() {}
 };
 
-struct cSPUITooltipWinProc : CustomWinProc {
+class cSPUITooltipWinProc : public CustomWinProc { public:
     WString  mLayoutName;            // +0xc
     uint32_t mWindowID;              // +0x1c
     uint32_t mDetailWindowID;        // +0x20
@@ -421,7 +421,7 @@ struct RenderContext {
     void* Begin2D(int);
     void  End2D();
 };
-struct cSPUIVariableWidthDrawable : CustomDrawable {
+class cSPUIVariableWidthDrawable : public CustomDrawable { public:
     void* mpImage;       // +0xc
     uint32_t mFillColor; // +0x10
     cSPUIVariableWidthDrawable();

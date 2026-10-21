@@ -23,7 +23,7 @@ static const char kAllocFile[] =
     "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
 
 namespace eastl {
-struct allocator { unsigned char pad[4]; };
+class allocator { public: unsigned char pad[4]; };
 
 // basic_string<char, allocator> (0x10)
 struct string8 {
@@ -91,7 +91,7 @@ struct vec {
 using eastl::string8;
 
 namespace EA { namespace ArgScript {
-struct cArguments {
+class cArguments { public:
     int NumArguments();                      // 0x00837f30
     const char* operator[](int i);           // 0x00837f20
     const char** MainArguments(int i);       // 0x00838320
@@ -100,7 +100,7 @@ struct cArguments {
     unsigned char pad[0x44];
 };
 
-struct cError {
+class cError { public:
     cError(const char* fmt, ...);            // 0x0052df30
     const char* mMessage;
     unsigned char pad[12];
@@ -142,12 +142,12 @@ struct AutoRefCount {
     ~AutoRefCount() { Release(); }
 };
 
-struct cICommand {
+class cICommand { public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
     virtual void EndBlock(bool b);   // +0x14
     virtual void EndMeta(bool b);    // +0x18
 };
-struct cIParser {
+class cIParser { public:
     virtual void v0();
 };
 }}  // namespace EA::ArgScript
