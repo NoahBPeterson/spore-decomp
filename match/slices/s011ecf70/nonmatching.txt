@@ -7,11 +7,11 @@
 
 011ecfa0  stdc::ConvertI64ToA_rec   size 78 vs 70, 75 diff. Equivalence FAIL (execution; ours writes outside the harness pool). The 64-bit remainder helper register usage cannot be reproduced in portable C (the remainder lands in ecx, a third return register), so the recursive decomposition differs.
 
-011ed020  stdc::ConvertU64ToBase    size 87 vs 80, 82 diff. Equivalence FAIL (uc_err_exception inside the shared lib_crt::aulldvrm helper). Same root cause as 011ecfa0: the original reads the 64-bit remainder out of ecx after lib_crt::aulldvrm(lo,hi,base,0), which cannot be expressed without asm or a bespoke struct-return ABI.
+011ed020  stdc::ConvertU64ToBase    size 87 vs 80, 82 diff. Equivalence FAIL (uc_err_exception inside the shared lib_crt::aulldvrm helper). Same root cause as ConvertI64ToA_rec above: the original reads the 64-bit remainder out of ecx after lib_crt::aulldvrm(lo,hi,base,0), which cannot be expressed without asm or a bespoke struct-return ABI.
 
 011ed070  stdc::ConvertU32ToHexUpper size 60 vs 63, 34 diff. Equivalence PASS (400 valid, 100% coverage). The original computes the low nibble as a 32-bit `mov edx,ebx; and edx,0xf` (so it can `cmp dl,0xa`) and keeps a second byte copy in bl for the `add bl,0x30`; MSVC narrows ours to `mov cl,bl; and cl,0xf`, costing 3 bytes. Semantically identical.
 
-011ed0b0  stdc::ConvertU32ToHexLower size 60 vs 63, 34 diff. Equivalence PASS (400 valid, 100% coverage). Identical cause to 011ed070.
+011ed0b0  stdc::ConvertU32ToHexLower size 60 vs 63, 34 diff. Equivalence PASS (400 valid, 100% coverage). Identical cause to ConvertU32ToHexUpper above.
 
 011ed0f0  stdc::ConvertIToA          size 189 vs 153, 195 diff. Equivalence FAIL (memory pool @40030000). The signed/64-bit path through ConvertI64ToA_rec differs because of the 64-bit helper issue above.
 
