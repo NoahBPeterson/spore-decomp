@@ -108,7 +108,7 @@ struct UIObjVec {
     UIWin** mpEnd;
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     uint32_t pad[6];
     cSPUILayout();                                   // 0x00810000
     UIWin* FindWindowByID(uint32_t id, bool recurse);   // 0x008105b0
@@ -174,8 +174,8 @@ struct cSPPlayModeUI : IWinProcU, RefCountBaseU {
     void SetEditorUIEnabled(uint32_t id, bool v);
     void SetHideOut(uint32_t id, bool v);
     void SetEditorText(uint32_t id, const wchar_t** text);
-    void ShowToolTip(uint32_t id, uint32_t a, uint32_t b, struct cSPUITooltipWinProc* existing, float* pos);
-    void ShowEditorUIToolTip(uint32_t id, uint32_t a, uint32_t b, struct cSPUITooltipWinProc* existing, float* pos);
+    void ShowToolTip(uint32_t id, uint32_t a, uint32_t b, class cSPUITooltipWinProc* existing, float* pos);
+    void ShowEditorUIToolTip(uint32_t id, uint32_t a, uint32_t b, class cSPUITooltipWinProc* existing, float* pos);
     void RemoveTooltip(uint32_t id, void* tip);
     void DoCommand103();
     void DoCommand102();
@@ -211,7 +211,7 @@ struct cString {
     const wchar_t* Format(float* pos, int a, const wchar_t* fmt, int b);   // 0x006b55c0
     const wchar_t* Format2(int len, int flag);                   // 0x006b55c0
 };
-struct cSPUITooltipWinProc : IRefCountU {
+class cSPUITooltipWinProc : public IRefCountU { public:
     uint32_t pad[0x68 / 4 - 1];
     cSPUITooltipWinProc(const wchar_t* cls, uint32_t id, const wchar_t* text);   // 0x00835e30
     void SetText(const wchar_t* t);                              // 0x00835ed0

@@ -11,26 +11,26 @@ extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(void* cs);
 #endif
 
 // ---- shared class stubs ---------------------------------------------------------------------------------------
-struct hkWorld;
-struct hkCollidable;
-struct hkPhantom;
+class hkWorld;
+class hkCollidable;
+class hkPhantom;
 
-struct hkTypedBroadPhaseHandle
-{
+class hkTypedBroadPhaseHandle
+{ public:
 	uint32_t m_id;                    // +0
 	char m_type;                      // +4
 	char m_ownerOffset;               // +5
 	uint16_t m_objectQualityType;     // +6
 	uint32_t m_collisionFilterInfo;   // +8
 };
-struct hkCollidable : hkCdBody       // size 0x24
-{
+class hkCollidable : public hkCdBody { public:  // size 0x24
+
 	int m_ownerOffset;                      // +0x10
 	hkTypedBroadPhaseHandle m_broadPhaseHandle;   // +0x14
 	hkReal m_allowedPenetrationDepth;       // +0x20
 };
-struct hkLinkedCollidable : hkCollidable   // size 0x30
-{
+class hkLinkedCollidable : public hkCollidable { public:  // size 0x30
+
 	hkArray<int> m_collisionEntries;        // +0x24 (element type not needed here)
 };
 
@@ -41,13 +41,13 @@ struct hkCollidableRemovedEvent
 	const hkCollidable* m_collidable;       // +4
 	hkBool m_collidableRemoved;             // +8
 };
-struct hkPhantomOverlapListener
-{
+class hkPhantomOverlapListener
+{ public:
 	virtual void collidableAddedCallback(void* event);                              // 0
 	virtual void collidableRemovedCallback(const hkCollidableRemovedEvent& event);  // 1
 };
-struct hkStatisticsCollector
-{
+class hkStatisticsCollector
+{ public:
 	virtual void sc0();
 	virtual void beginObject(const char* name, int memClass, const void* object);                     // 1
 	virtual void addArray(const char* name, int memClass, const void* data, int usedBytes, int allocBytes);   // 2
@@ -55,10 +55,10 @@ struct hkStatisticsCollector
 	virtual void endObject();                                                                        // 6
 };
 
-struct hkFinishLoadedObjectFlag { int m_finishing; };   // passed by value (one stack dword)
+class hkFinishLoadedObjectFlag { public: int m_finishing; };   // passed by value (one stack dword)
 
-struct hkWorldObject : hkReferencedObject    // size 0x58
-{
+class hkWorldObject : public hkReferencedObject { public:  // size 0x58
+
 	hkWorld* m_world;                       // +8
 	void* m_userData;                       // +0xc
 	char* m_name;                           // +0x10
@@ -69,8 +69,8 @@ struct hkWorldObject : hkReferencedObject    // size 0x58
 	hkWorldObject() {}
 	void copyProperties(const hkWorldObject* other);   // 0x01087CA0
 };
-struct hkPhantom : hkWorldObject             // size 0x70
-{
+class hkPhantom : public hkWorldObject { public:  // size 0x70
+
 	hkArray<hkPhantomOverlapListener*> m_overlapListeners;   // +0x58
 	hkArray<void*> m_phantomListeners;                       // +0x64
 	hkPhantom() {}
@@ -85,8 +85,8 @@ struct hkPhantom : hkWorldObject             // size 0x70
 	void updateBroadPhase(const hkAabb& aabb);                                      // 0x0108E680
 	void calcContentStatistics(hkStatisticsCollector* c) const;                     // 0x0108E4E0
 };
-struct hkShapePhantom : hkPhantom            // size 0x120
-{
+class hkShapePhantom : public hkPhantom { public:  // size 0x120
+
 	hkMotionState m_motionState;            // +0x70
 	hkShapePhantom(const hkShape* shape, const hkTransform& transform);   // 0x0108DD40
 	hkShapePhantom(hkFinishLoadedObjectFlag f) : hkPhantom(f) {}
@@ -99,8 +99,8 @@ struct hkLinearCastInput
 	hkReal m_startPointTolerance;           // +0x14
 };
 
-struct hkCriticalSection
-{
+class hkCriticalSection
+{ public:
 	char m_cs[24];            // CRITICAL_SECTION
 	hkUint64 m_owner;         // +0x18: thread id while locked, -1 otherwise
 	void enter();             // 0x0107F820
@@ -114,8 +114,7 @@ struct hkCriticalSection
 };
 
 // The world as far as these functions see it (offsets from the dev PDB; 32-bit pointer layout).
-struct hkWorld : hkReferencedObject
-{
+class hkWorld : public hkReferencedObject { public:
 	char m_pad08[0x78 - 8];                        // +0x8..+0x77 (simulation .. broadphase listeners)
 	hkProcessCollisionInput* m_collisionInput;     // +0x78
 	void* m_collisionFilter;                       // +0x7c
@@ -125,8 +124,8 @@ struct hkWorld : hkReferencedObject
 };
 
 // ---- hkSimpleShapePhantom ---------------------------------------------------------------------------------------
-struct hkSimpleShapePhantom : hkShapePhantom    // size 0x130
-{
+class hkSimpleShapePhantom : public hkShapePhantom { public:  // size 0x130
+
 	struct hkCollisionDetail { hkCollidable* m_collidable; };
 	hkArray<hkCollisionDetail> m_collisionDetails;   // +0x120
 
@@ -434,8 +433,8 @@ void hkSimpleShapePhantom::deallocateInternalArrays()
 }
 
 // ---- hkResponseModifier ---------------------------------------------------------------------------------------------
-struct hkRigidBody;
-struct hkEntity;
+class hkRigidBody;
+class hkEntity;
 struct hkConstraintInfo
 {
 	int m_maxSizeOfJacobians;    // +0
@@ -443,22 +442,22 @@ struct hkConstraintInfo
 	int m_sizeOfSchemas;         // +8
 	int m_numSolverResults;      // +0xc
 };
-struct hkConstraintInstance;
-struct hkConstraintOwner
-{
+class hkConstraintInstance;
+class hkConstraintOwner
+{ public:
 	virtual void co0(); virtual void co1(); virtual void co2();
 	virtual void addConstraintInfo(hkConstraintInstance* c, hkConstraintInfo& delta);   // 3 (0xc) (name guessed)
 	char m_pad[0x1c - 2 * sizeof(void*)];
 	hkWorld* m_world;            // +0x1c (32-bit offset)
 };
-struct hkConstraintInstance : hkReferencedObject    // size 0x28
-{
+class hkConstraintInstance : public hkReferencedObject { public:  // size 0x28
+
 	hkConstraintOwner* m_owner;      // +8
 	void* m_data;                    // +0xc
 	hkEntity* m_entities[2];         // +0x10
 };
-struct hkDynamicsContactMgr : hkReferencedObject    // size 0xc (hkContactMgr is 8)
-{
+class hkDynamicsContactMgr : public hkReferencedObject { public:  // size 0xc (hkContactMgr is 8)
+
 	hkWorld* m_world;                // +8
 };
 // Contact manager "type" values live in two globals (names guessed): the manager is switched from the first state to
@@ -480,8 +479,8 @@ struct hkSimpleConstraintContactMgr : hkDynamicsContactMgr
 	virtual hkResult reserveContactPoints(int numPoints);   // 0x0108D070
 };
 
-struct hkResponseModifier
-{
+class hkResponseModifier
+{ public:
 	static void setInvMassScalingForContact(hkDynamicsContactMgr* manager, hkRigidBody* bodyA, hkRigidBody* bodyB,
 	                                        hkReal factorA, hkReal factorB);   // 0x0108CA40
 };
@@ -538,18 +537,17 @@ hkResult hkSimpleConstraintContactMgr::reserveContactPoints(int numPoints)
 }
 
 // ---- hkSimpleContactConstraintData / hkMovingSurfaceConstraintData ---------------------------------------------------------
-struct hkConstraintData : hkReferencedObject
-{
+class hkConstraintData : public hkReferencedObject { public:
 	hkUint32 m_userData;    // +8
 };
 struct hkConstraintQueryOut;
-struct hkVelocityAccumulator
-{
+class hkVelocityAccumulator
+{ public:
 	char m_pad[0x10];
 	hkVector4 m_linearVelocity;   // +0x10 (the 4 floats the callbacks update)
 };
-struct hkConstraintQueryIn
-{
+class hkConstraintQueryIn
+{ public:
 	char m_pad[0x28];                   // hkConstraintQueryStepInfo (0x20) + buffer roots (0x20..0x27)
 	hkVelocityAccumulator* m_bodyA;     // +0x28 (32-bit offset)
 };
@@ -695,9 +693,9 @@ void hkMovingSurfaceConstraintData::buildJacobian(const hkConstraintQueryIn& in,
 }
 
 // ---- hkRigidBody / hkContactPointConfirmedEvent -----------------------------------------------------------------------------
-struct hkMotion : hkReferencedObject { int m_solverData; };     // +8
-struct hkRigidMotion : hkMotion                                  // size 0xf0
-{
+class hkMotion : public hkReferencedObject { public: int m_solverData; };     // +8
+class hkRigidMotion : public hkMotion { public:  // size 0xf0
+
 	int m_pad0c;
 	hkMotionState m_motionState;     // +0x10
 	hkReal m_massInv;                // +0xc0
@@ -707,12 +705,11 @@ struct hkRigidMotion : hkMotion                                  // size 0xf0
 	hkVector4 m_linearVelocity;      // +0xd0
 	hkVector4 m_angularVelocity;     // +0xe0
 };
-struct hkEntity : hkWorldObject            // size 0xd0
-{
+class hkEntity : public hkWorldObject { public:  // size 0xd0
+
 	hkMotion* m_motion;                     // +0x58
 };
-struct hkRigidBody : hkEntity
-{
+class hkRigidBody : public hkEntity { public:
 	void getPointVelocity(const hkVector4& p, hkVector4& out) const;   // 0x0108CF90
 };
 

@@ -18,10 +18,10 @@ class hkEntity;
 class hkCdPointCollector { public: virtual ~hkCdPointCollector() {} float m_earlyOutDistance; };           // 8 bytes
 class hkCdBodyPairCollector { public: virtual ~hkCdBodyPairCollector() {} bool m_earlyOut; };               // 8 bytes (+4)
 
-struct hkAabb { hkVector4 m_min; hkVector4 m_max; };
-struct hkCdBody { hkShape* m_shape; hkUint32 m_shapeKey; void* m_motion; hkCdBody* m_parent; };    // 0x10
-struct hkCollidable : public hkCdBody                                                              // 0x24
-{
+class hkAabb { public: hkVector4 m_min; hkVector4 m_max; };
+class hkCdBody { public: hkShape* m_shape; hkUint32 m_shapeKey; void* m_motion; hkCdBody* m_parent; };    // 0x10
+class hkCollidable : public hkCdBody { public:  // 0x24
+
     int m_ownerOffset;                    // +0x10
     hkUint32 m_handleId;                  // +0x14
     int8_t m_handleType;                  // +0x18
@@ -30,7 +30,7 @@ struct hkCollidable : public hkCdBody                                           
     hkUint32 m_collisionFilterInfo;       // +0x1c
     float m_allowedPenetrationDepth;      // +0x20
 };
-struct hkLinkedCollidable : public hkCollidable { hkUint32 m_collisionEntries[3]; };                // 0x30
+class hkLinkedCollidable : public hkCollidable { public: hkUint32 m_collisionEntries[3]; };                // 0x30
 
 struct hkCollisionInput                                                                             // 0x10
 {
@@ -107,7 +107,7 @@ public:
 };
 
 struct hkMultiThreadLockStub { hkUint32 m_threadId; int32_t m_lockCount; };
-struct hkProperty { hkUint32 m_key; hkUint32 m_pad; hkUint32 m_value[2]; };
+class hkProperty { public: hkUint32 m_key; hkUint32 m_pad; hkUint32 m_value[2]; };
 
 class hkWorld : public hkReferencedObject
 {
@@ -251,7 +251,7 @@ public:
     virtual void v0(); virtual void v1();
     virtual void removeConstraintImmediately(void* constraintInstance);           // 2 (+8; name unverified)
 };
-struct hkConstraintInstance { uint32_t m_vptr; hkInt16 m_memSize; hkInt16 m_refCount; hkConstraintOwner* m_owner; };   // +0x08 owner
+class hkConstraintInstance { public: uint32_t m_vptr; hkInt16 m_memSize; hkInt16 m_refCount; hkConstraintOwner* m_owner; };   // +0x08 owner
 class hkEntity;
 struct hkConstraintQueryIn                                                        // 0x48 bytes (32-bit)
 {
@@ -264,8 +264,8 @@ struct hkConstraintQueryIn                                                      
 };
 struct hkConstraintQueryOut { uint32_t m_pad[2]; };
 struct hkConstraintRuntimeInfo { int m_sizeOfExternalRuntime; int m_numSolverResults; };   // hkConstraintData::RuntimeInfo
-struct hkBreakableConstraintEvent
-{
+class hkBreakableConstraintEvent
+{ public:
     hkConstraintInstance* m_constraintInstance;       // +0x00
     class hkBreakableConstraintData* m_breakableConstraintData;   // +0x04
     float m_breakingImpulse;                          // +0x08
@@ -316,8 +316,8 @@ public:
     virtual void v2(); virtual void getEntities(hkArray<hkEntity*>& out);         // 3
     void* m_world; void* m_island; hkUint32 m_userData; const char* m_name;       // +0x08..+0x17
 };
-struct hkConstraintChainInstance
-{
+class hkConstraintChainInstance
+{ public:
     uint32_t m_pad[10];                                   // +0x00..+0x27
     hkArrayRaw<hkEntity*> m_chainedEntities;              // +0x28
     uint32_t m_pad34;                                     // +0x34 (m_action)

@@ -17,8 +17,8 @@ slices/s00634490/s00634490.cpp  ?SetEnabled@cSPPlayModeUI@@QAEXI_N@Z  00634ef0  
 slices/s00634490/s00634490.cpp  ?SetEditorUIEnabled@cSPPlayModeUI@@QAEXI_N@Z  00634f20  /O2 /MD /Gy /TP /GS-
 slices/s00634490/s00634490.cpp  ?SetHideOut@cSPPlayModeUI@@QAEXI_N@Z  00634f50  /O2 /MD /Gy /TP /GS-
 slices/s00634490/s00634490.cpp  ?SetEditorText@cSPPlayModeUI@@QAEXIPAPB_W@Z  00635010  /O2 /MD /Gy /TP /GS-
-slices/s00634490/s00634490b.cpp  ?ShowToolTip@cSPPlayModeUI@@QAEXIIIPAUcSPUITooltipWinProc@@PAM@Z  00635040  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
-slices/s00634490/s00634490b.cpp  ?ShowEditorUIToolTip@cSPPlayModeUI@@QAEXIIIPAUcSPUITooltipWinProc@@PAM@Z  00635160  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00634490/s00634490b.cpp  ?ShowToolTip@cSPPlayModeUI@@QAEXIIIPAVcSPUITooltipWinProc@@PAM@Z  00635040  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00634490/s00634490b.cpp  ?ShowEditorUIToolTip@cSPPlayModeUI@@QAEXIIIPAVcSPUITooltipWinProc@@PAM@Z  00635160  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s00634490/s00634490.cpp  ?RemoveTooltip@cSPPlayModeUI@@QAEXIPAX@Z  00635290  /O2 /MD /Gy /TP /GS-
 slices/s00634490/s00634490.cpp  ?DoCommand103@cSPPlayModeUI@@QAEXXZ  006352d0  /O2 /MD /Gy /TP /GS-
 slices/s00634490/s00634490.cpp  ?DoCommand102@cSPPlayModeUI@@QAEXXZ  006352f0  /O2 /MD /Gy /TP /GS-
