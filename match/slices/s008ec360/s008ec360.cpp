@@ -511,7 +511,7 @@ void* Page::GetTextStyle(const StyleState* s)
     const void* key = (const char*)s + 0xc;
     pCache->Find(local, key);
     if (local[0] == ((void**)pCache->mpBuckets)[pCache->mnBucketCount]) {
-        ((unsigned char*)&s)[0] = 0;
+        ((unsigned char*)&s)[0] = 0;                 // s = (StyleState*)((u32)s & 0xffffff00)
         pCache->DoInsertValue(local, key, (const void*)s);
     }
     return local[0];
