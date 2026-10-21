@@ -18,7 +18,7 @@ struct Command_s00a3_3ee0 {
 }
 namespace SP {
 namespace Audio {
-struct cEapdMessage {
+class cEapdMessage { public:
     EA::Audio::Command_s00a3_3ee0* mpCommand;      // +0
     uint32_t mValue;                    // +4
     uint32_t mOffset;                   // +8
