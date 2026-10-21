@@ -6,6 +6,8 @@
 // No PDB names exist for the three helpers that have no exported symbol; they are coined below and marked.
 #include "types.h"
 #include <math.h>
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 
 typedef unsigned char  hkUchar;
 typedef unsigned short hkUint16;
@@ -622,33 +624,26 @@ void hkStorageMeshShape::addSubpart(const hkMeshShapeSubpart& p)
 {
     if (m_subparts.m_size == (int)(m_subparts.m_capacityAndFlags & 0x3fffffff))
         hkArrayUtil::_reserveMore(&m_subparts, 0x30);
-    hkMeshShapeSubpart* dst = (hkMeshShapeSubpart*)((char*)m_subparts.m_data + m_subparts.m_size * 0x30);
-    m_subparts.m_size = m_subparts.m_size + 1;
-
+    hkMemory* mem = hkMemory::getInstance();
     hkStorageMeshShapeSubpartStorage* st = (hkStorageMeshShapeSubpartStorage*)
-        hkMemory::getInstance()->allocate(0x48, 0x22);
+        mem->allocate(0x48, 0x22);
     if (st == 0) {
         st = 0;
     } else {
-        st->m_vertices.m_data = 0;
-        st->m_vertices.m_size = 0;
-        st->m_vertices.m_capacityAndFlags = 0x80000000;
-        st->m_indices16.m_data = 0;
-        st->m_indices16.m_size = 0;
-        st->m_indices16.m_capacityAndFlags = 0x80000000;
-        st->m_indices32.m_data = 0;
-        st->m_indices32.m_size = 0;
-        st->m_indices32.m_capacityAndFlags = 0x80000000;
-        st->m_materialIndices8.m_data = 0;
-        st->m_materialIndices8.m_size = 0;
-        st->m_materialIndices8.m_capacityAndFlags = 0x80000000;
-        st->m_materials.m_data = 0;
-        st->m_materials.m_size = 0;
-        st->m_materials.m_capacityAndFlags = 0x80000000;
-        st->m_materialIndices16.m_data = 0;
-        st->m_materialIndices16.m_size = 0;
-        st->m_materialIndices16.m_capacityAndFlags = 0x80000000;
+        st = (hkStorageMeshShapeSubpartStorage*)hkMemory::getInstance();
+        hkUint32 zero = 0;
+        hkUint32 neg = 0x80000000;
+        hkUint32* f = (hkUint32*)st;
+        f[0] = zero; f[1] = zero; f[2] = neg;
+        f[3] = zero; f[4] = zero; f[5] = neg;
+        f[6] = zero; f[7] = zero; f[8] = neg;
+        f[9] = zero; f[10] = zero; f[11] = neg;
+        f[12] = zero; f[13] = zero; f[14] = neg;
+        f[15] = zero; f[16] = zero; f[17] = neg;
     }
+
+    hkMeshShapeSubpart* dst = (hkMeshShapeSubpart*)((char*)m_subparts.m_data + m_subparts.m_size * 0x30);
+    m_subparts.m_size = m_subparts.m_size + 1;
 
     if (m_storage.m_size == (int)(m_storage.m_capacityAndFlags & 0x3fffffff))
         hkArrayUtil::_reserveMore(&m_storage, 4);
