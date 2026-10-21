@@ -1,0 +1,3 @@
+00eabba0  218  Construct (ctor): every store group now lands in the original order (barrier-separated), only the constant-pool loads are sunk to their use sites instead of being hoisted into xmm1/xmm2/xmm3 up front
+00eabf30  853  Update: complete state machine (selection/tutorial/scenario-distance/recorder start) but redone source shape differs heavily from the original scheduling
+00eac360  10  Write: complete and identical except the constant `id` stack store is scheduled after the v18 call instead of just before it

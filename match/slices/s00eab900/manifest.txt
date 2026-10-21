@@ -1,0 +1,8 @@
+slices/s00eab900/s00eab900.cpp  ?CommitAllProperties@cPlaceableSound@@QAEXXZ  00eab900  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00eab900/s00eab900.cpp  ?SetVolume@cPlaceableSound@@QAEXM@Z  00eaba90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00eab900/s00eab900.cpp  ?SetPitch@cPlaceableSound@@QAEXM@Z  00eabb10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00eab900/s00eab900.cpp  ?GetVolumeScaled@cPlaceableSound@@QAEMXZ  00eabb50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00eab900/s00eab900.cpp  ?Shutdown@cPlaceableSound@@QAEXXZ  00eabe10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00eab900/s00eab900.cpp  ?LoadModel@cSpatialObject@@QAE_NH@Z  00eabe90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00eab900/s00eab900.cpp  ?SetPosition@cPlaceableSound@@QAEXPBUVec3@@@Z  00eac310  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00eab900/s00eab900.cpp  ?Destroy@cPlaceableSound@@QAEPAU1@E@Z  00eac4c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

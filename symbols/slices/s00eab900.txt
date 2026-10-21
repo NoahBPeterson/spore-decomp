@@ -1,0 +1,11 @@
+00eabba0 Simulator::cPlaceableSound::cPlaceableSound  # vtable 0x14883a0 (symbols/vtable_names.txt), noun id 0x74e0069
+00eab900 cPlaceableSound::CommitAllProperties  # writes m114 recorder handle + PlayEditorSound group; called from Update when close/selected
+00eaba90 cPlaceableSound::SetVolume  # stores +0x64/+0x7c, records 0xc57f4567 (volume event)
+00eabb10 cPlaceableSound::SetPitch  # stores +0x164, records 0x25df0108 (pitch event)
+00eabb50 cPlaceableSound::GetVolumeScaled  # +0x154 * +0x60
+00eabe10 cPlaceableSound::Shutdown  # releases recorder, clears 0x129/0x126/0x2c
+00eabe90 cSpatialObject::LoadModel(name)  # this is the +0x34 sub-object, model at +0x9c
+00eabf30 cPlaceableSound::Update  # per-frame sound state machine (state from 0x16c7aa4+0xcc)
+00eac310 cPlaceableSound::SetPosition  # calls cCommunity::func54h then AudioSetListener3
+00eac360 cPlaceableSound::Write  # writes type id 0x74e0069 then base/spatial/cVarListSerializer
+00eac4c0 cPlaceableSound::~cPlaceableSound  # vtables, release 0x1a8/0x11c, ~cSpatialObject, ~cGameData, delete
