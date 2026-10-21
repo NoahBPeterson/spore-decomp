@@ -1,0 +1,31 @@
+# va  size  reason
+01217850 660 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into operator_delete + __ehhandler thunk, funcinfo 0x1505958); orphaned - enclosing fn EH prolog outside slice; no standalone C++ source
+01217b10 247 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into eastl hash_map/basic_string dtors + __ehhandler thunk, funcinfo 0x1505a78); orphaned
+01217c10 219 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into dtors + __ehhandler thunk, funcinfo 0x1505b2c); orphaned
+01217d50 58 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into dtors + __ehhandler thunk, funcinfo 0x1505cac); orphaned
+01217df0 130 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into dtors + __ehhandler thunk, funcinfo 0x1505d88); orphaned
+01217e80 102 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into dtors + __ehhandler thunk, funcinfo 0x1505df4); orphaned
+01217f70 41 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into dtors + __ehhandler thunk, funcinfo 0x1505f30); orphaned
+01217fa0 41 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into dtors + __ehhandler thunk, funcinfo 0x1505f6c); orphaned
+012181a0 26 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into dtors + __ehhandler thunk, funcinfo 0x15061e4); orphaned
+01218200 44 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into dtors + __ehhandler thunk, funcinfo 0x1506278); orphaned
+01218290 222 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into dtors + __ehhandler thunk, funcinfo 0x1506320); orphaned
+01218370 25 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into dtors + __ehhandler thunk, funcinfo 0x15063cc); orphaned
+01218390 345 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into dtors + __ehhandler thunk, funcinfo 0x15063f0); orphaned
+012186c0 78 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into MutexLock dtor/operator_delete + __ehhandler thunk, funcinfo 0x1506784); orphaned
+01218810 58 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01218870 42 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+012188a0 34 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01218950 34 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+012189c0 42 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+012189f0 44 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01218a20 44 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01218b60 56 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01218c10 34 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01218c40 88 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01218ce0 33 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01218d10 49 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01218d90 68 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01218de0 120 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01218ea0 74 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01218f10 50 compiler-generated EH cleanup funclet; enclosing source is outside the slice
