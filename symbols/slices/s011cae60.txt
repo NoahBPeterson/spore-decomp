@@ -1,0 +1,17 @@
+# Generated for slice s011cae60: OpenSSL 0.9.8g bignum / EC TUs, lib_cblock copy.
+# Names are the upstream OpenSSL 0.9.8g symbol names, proven by
+# third_party/cblock_resolution.csv (all twelve rows "exact-unique").  The same
+# code exists as named lib_openssl in some cases; these addresses are the
+# unnamed lib_cblock duplicate.  All byte-exact.
+011cae60  BN_mod_exp2_mont                 # crypto/bn/bn_exp2.c: two-base sliding-window (rr = a1^p1 * a2^p2 mod m); window sizes from the modulus bit length (0x17/0x4f/0xef/0x29f -> 1..6), BN_MONT_CTX_set into an optional in_mont, interleaved table passes over p1 then p2, BN_from_montgomery + BN_mod_mul_montgomery; BN_R_NOT_ODD error path; byte-exact
+011cb950  ec_GF2m_montgomery_point_multiply # crypto/ec/ec2_mult.c: GF(2^m) Montgomery-ladder scalar multiply (XZ coords), file-static gf2m_Mdouble/gf2m_Madd/gf2m_Mxy helpers, EC_POINT_is_at_infinity / EC_POINT_set_Jprojective_coordinates_GF2m setter via the group's method table; byte-exact
+011cc4d0  BN_GF2m_mod                     # crypto/bn/bn_gf2m.c: order = BN_num_bits(p); CRYPTO_malloc(order*4,".\crypto\bn\bn_gf2m.c",0x1a8); BN_GF2m_poly2arr then BN_GF2m_mod_arr(r,a,arr); error path returns poly2arr's count (no forced 0); byte-exact
+011cc7b0  BN_GF2m_mod_mul                 # crypto/bn/bn_gf2m.c: same setup as BN_GF2m_mod, then BN_GF2m_mod_mul_arr(r,a,b,arr,ctx); line 0x1f7; byte-exact
+011ccc00  ec_GFp_mont_group_set_curve     # crypto/ec/ecp_mont.c: build the BN_MONT_CTX for the new prime into group->field_data, precompute one and a scratch BIGNUM (data+0x9c / +0xa0), install the six field_* wrappers + point ops; byte-exact
+011ccd50  ec_GFp_mont_field_mul           # crypto/ec/ecp_mont.c: BN_mod_mul_montgomery(r,a,b,field_data->mont,ctx), ERR_put_error(BN,0x83) if mont is NULL; byte-exact
+011ccda0  ec_GFp_mont_field_sqr           # crypto/ec/ecp_mont.c: BN_mod_mul_montgomery(r,a,a,mont,ctx), ERR_put_error(BN,0x84) if mont is NULL; byte-exact
+011ccde0  ec_GFp_mont_field_encode        # crypto/ec/ecp_mont.c: montgomery % BN_mod_mul_montgomery(r,a,mont->RR,mont,ctx), ERR_put_error(BN,0x85) if mont is NULL; byte-exact
+011cce30  ec_GFp_mont_field_decode        # crypto/ec/ecp_mont.c: BN_from_montgomery(r,a,mont,ctx), ERR_put_error(BN,0x85) if mont is NULL; byte-exact
+011cce70  ec_GFp_mont_field_set_to_one    # crypto/ec/ecp_mont.c: BN_copy(r, mont->one) != 0, ERR_put_error(BN,0xd1) if mont is NULL; byte-exact
+011ccef0  ec_GFp_nist_group_set_curve    # crypto/ec/ecp_nist.c: BN_ucmp the curve prime against BN_get0_nist_prime_192/224/256/384/521, install the matching BN_nist_mod_* as group->field_mod_func (EC_R_NOT_A_NIST_PRIME otherwise), then ec_GFp_simple_group_set_curve; byte-exact
+011cd030  ec_GFp_nist_field_mul          # crypto/ec/ecp_nist.c: optional BN_CTX_new, BN_mul(r,a,b,ctx) then group->field_mod_func(r,r,&group->field,ctx); byte-exact
