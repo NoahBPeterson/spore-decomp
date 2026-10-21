@@ -1,3 +1,14 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+#
+# Slice s00ba6750 = star-search and banner support (the heap sift helpers, the star scoring loop
+# and criteria block, the bitset rank helpers, the banner list accessors, the StarSearchSelf
+# eligibility test and the star-manager call stubs).  4/29 byte-exact.  The remaining 25 are
+# complete C++ that reproduces the original control flow and container semantics; the local loop
+# shapes (sift-down/sift-up, the per-bit rank walks, the unrolled scoring loop) are scheduled
+# differently by our compiler run, and three rows measure larger than the original because the
+# region includes the following stub body.
+
 00ba6750 162 non-byte-exact; heap sift-down over IRefObj**, loop shape and index scaling differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (0/400 valid: fault(read) on unresolved ctor callee)
 00ba6800 115 non-byte-exact; heap sift-up with a 4-arg predicate function pointer; call-shape and predicate-hoisting differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (0/400 valid: fault(read))
 00ba6880 52 non-byte-exact; cStarManager::tStarSearchCriteria ctor (a 9-float 0x24-byte block); the original zeroes/initialises it with 7 repeated xmm stores, our struct copy collapses them; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (0/400 valid: fault(read))

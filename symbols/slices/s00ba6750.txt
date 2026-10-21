@@ -1,0 +1,31 @@
+; slice s00ba6750 = 0x00ba6750..0x00ba7660 (star search / banner + heap helpers) - exact decorated names
+; (manifest.txt rows are byte-exact; the rest are the nonmatching.txt entries)
+00ba6750 ?FUN_00ba6750@@YAXPAPAUIRefObj@@HHPAU1@@Z  # complete, non-exact
+00ba6800 ?FUN_00ba6800@@YAXPAXHHHHHP6AD00@Z@Z  # complete, non-exact
+00ba6880 ??0StarSearchCriteria@@QAE@XZ  # complete, non-exact
+00ba68f0 ?FUN_00ba68f0@@YAXPAMHHM@Z  # complete, non-exact
+00ba6a40 ?FUN_00ba6a40@@YAXIPAI@Z  # complete, non-exact
+00ba6ab0 ?FUN_00ba6ab0@@YAHPAI@Z  # complete, non-exact
+00ba6b40 ?FUN_00ba6b40@@YAHPAHHPAXM@Z  # complete, non-exact
+00ba6bb0 ?FUN_00ba6bb0@@YAHPAUGameObj@@PAXPAIPAM@Z  # complete, non-exact
+00ba6cf0 ?FUN_00ba6cf0@@YAXPAUBannerList@@@Z  # complete, non-exact
+00ba6d80 ?FUN_00ba6d80@@YAHPAUBannerList@@I@Z  # complete, non-exact
+00ba6dc0 ?FUN_00ba6dc0@@YAHPAUBannerList@@I@Z  # complete, non-exact
+00ba6e00 ?FUN_00ba6e00@@YAHPAUBannerList@@PAX@Z  # complete, non-exact
+00ba6e80 ?FUN_00ba6e80@@YGHPAHPAXMH@Z  # complete, non-exact
+00ba6f20 ?FUN_00ba6f20@@YAHPAUBannerList@@H@Z  # complete, non-exact
+00ba6fc0 ?Eligible@StarSearchSelf@@QAEHHPAI@Z  # complete, non-exact
+00ba7050 ?M50@GMStub@@QAEXHH@Z  # byte-exact
+00ba7080 ?M80@GMStub@@QAEXHH@Z  # byte-exact
+00ba70d0 ?Erase@Vec50Obj@@QAEXH@Z  # byte-exact
+00ba7100 ?FUN_00ba7100@@YAXPAMPAH1@Z  # complete, non-exact
+00ba71b0 ?FUN_00ba71b0@@YAPAXPAXPAH@Z  # complete, non-exact
+00ba7220 ?FUN_00ba7220@@YAXPAUStarManagerCore@@PAH@Z  # complete, non-exact
+00ba72c0 ?FUN_00ba72c0@@YAPAXPAXPAH@Z  # complete, non-exact
+00ba7320 ?FUN_00ba7320@@YAHPAH@Z  # complete, non-exact
+00ba73b0 ?FUN_00ba73b0@@YAXPAXPAH@Z  # complete, non-exact
+00ba7450 ?FUN_00ba7450@@YADHPAD@Z  # byte-exact
+00ba7490 ?FUN_00ba7490@@YAXPAXPAH@Z  # complete, non-exact
+00ba7510 ?FUN_00ba7510@@YAXPAXPAH@Z  # complete, non-exact
+00ba7590 ?FUN_00ba7590@@YAXPAXPAD@Z  # complete, non-exact
+00ba7660 ?FUN_00ba7660@@YAXPAPAUIRefObj@@0@Z  # complete, non-exact
