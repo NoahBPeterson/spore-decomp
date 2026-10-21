@@ -926,7 +926,7 @@ struct PackVec {
   PackInfo_s005c_4500** mpBegin;
   PackInfo_s005c_4500** mpEnd;
 };
-struct cSPUIStdDrawable {
+class cSPUIStdDrawable { public:
   void SetImageIcon(int a, void* image);  // 0x831760
 };
 struct cSPUITooltipWinProc_s005c_4500 {
@@ -1381,7 +1381,7 @@ struct cSPSwatch_s005c_53c0 {
 };
 }
 namespace SP {
-struct cSPSwatchManager {
+class cSPSwatchManager { public:
   cSPSwatch_s005c_53c0* CreateSwatch();  // 0x005f0ca0
 };
 }
