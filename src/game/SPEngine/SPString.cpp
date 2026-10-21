@@ -137,10 +137,10 @@ namespace SP {
 struct cString_s006b_47a0;
 }
 namespace SP {
-struct cStringDetokenizer;
+class cStringDetokenizer;
 }
 namespace SP {
-struct cStringManager;
+class cStringManager;
 }
 namespace SP {
 struct IRefCounted;
@@ -189,7 +189,7 @@ struct ResourceKey {
 };
 }
 namespace SP {
-struct cStringDetokenizer {
+class cStringDetokenizer { public:
     virtual void v0();                                          // +0x00
     virtual void v1();                                          // +0x04
     virtual void v2();                                          // +0x08
@@ -209,7 +209,7 @@ struct cStringDetokenizer {
 };
 }
 namespace SP {
-struct cStringManager {
+class cStringManager { public:
     virtual ~cStringManager();                                  // +0x00
     virtual void AddString(cString_s006b_47a0*);                           // +0x04
     virtual void RemoveString(cString_s006b_47a0*);                        // +0x08
