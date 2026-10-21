@@ -1,0 +1,11 @@
+00ec0a40 73 scenario-goal callback (8-arg); reordered ctx accessor calls and flag-store shape
+00ec0ae0 136 scenario-goal callback (early-out variant, 8-arg); deep vtable chain reorders
+00ec0b90 21 weapon-pickup entry; failure block placement and float-global reloc form differ
+00ec0c90 86 nested object/key lookup; combined success/failure tail layout differs
+00ec0d00 370 9-way stimulus dispatch; jump-table body layout, inline vector walks and leftover-stack-arg c7d090 call diverge
+00ec0f70 732 target-acquire stimulus; 16-byte key frame, nested loops and vtable chain reorder heavily
+00ec11c0 337 mount/stimulus match; loop body and vtable-chain ordering diverge
+00ec1320 246 rider/target match; key frames and predicate ladder reordered
+00ec1500 86 pickup stimulus; key frame correct, branch orientation and c7d090 arg order differ
+00ec1610 37 cooldown check; single shared fldz tail block not reproduced by MSVC
+00ec1670 453 multi-kind stimulus; loop plus 0x10000000 flag path reorders heavily

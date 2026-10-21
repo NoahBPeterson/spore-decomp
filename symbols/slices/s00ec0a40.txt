@@ -1,0 +1,70 @@
+slice s00ec0a40  (frozen batch gold4, slice 101)  — 17 functions, 6 byte-exact
+flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+
+Shape
+  Near-duplicate "behavior-tree stimulus evaluator" family.  All return double via x87
+  (fld1 / fldz, MSVC returns in st0).  Common prologue:
+     p = *(uint*)(s + 0x674) + *(ushort*)(evt + 0x12) * 0x20
+  i.e. a 0x20-byte record indexed by the stimulus id from the event object.  On success
+  the 8-dword record is copied to `s + 0x688` (the "saved stimulus state" block).
+
+Arity
+  7-arg family: (self, a2, a3, a5, stimuli, out, evt)
+       stimuli = arg5, out = arg6, evt = arg7   (Ghidra in_stack_00000014/00000018)
+  8-arg family (00ec0a40, 00ec0ae0): (self, a2, a3, a4, stimuli, out, a7, evt)
+       stimuli = arg5, out = arg6, evt = arg8
+  Getting these wrong makes the equivalence harness read garbage stack slots.
+  All are __cdecl (plain `ret`).
+
+Objects / offsets
+  this+0xb4c -> subsystem; +8 = animation target; +0x1c8 = flag word; +0x1d0 = anim list
+  this+0x674 -> pointer to the 0x20-byte descriptor array
+  this+0x688 -> 8-dword saved-state block (copied with `rep movsd` in the original)
+  this+0x670 -> object vector (begin/end pair)
+  this+0x5a8 -> caster object; vtable slots 0x10 and 0x58 (0x58 returns a float)
+  this+0xe58 / +0xe5c / +0xe8c / +0xe40 / +0xe44, +0x1648, +0x164 / +0x168
+
+Vtable slots used
+  0x0c (get by key)   0x10   0x20   0x2c (bool query)   0x4c (int)
+  0x58 (float)        0xb8   0xd4 (bool)
+
+Helpers (thiscall ones modelled as structs whose *name embeds the VA* so the
+difftest resolver can bind the relocation; a `// @ 0x...` marker alone on a
+single-line struct body does not register — the struct must be multi-line)
+  0x00c04590  Get()          -> *(this + 0x1674)
+  0x00c04750  Get()          -> owner of *(this + 0x4b8)
+  0x00c7d070  Beg()          -> this + 0x68  (vector begin/end)
+  0x00c7d080  Beg()          -> this + 0x68
+  0x00c7d090  key compare, cdecl (key, obj)  — dereferences arg2 as the key
+  0x00c7da70  Has(v)         -> bool (ret 4)
+  0x00c70110  Assign(src)    -> cGameObjectPtr::operator= (ret 4)
+  0x00c0f780  Count()        -> int (ret 0)
+  0x00c0f8a0  At(idx)        -> void* (ret 4)
+  0x00bc96a0  Play(a,flags)  -> void* (ret 8); this = *(obj+0xb4c)+8
+  0x008e7f80  GetFileCount() -> int (ret 0)
+  0x00ec0110  cdecl(self)    -> animation/anchor object
+  0x00ec0250  cdecl(rock)    -> object whose +0x38 is a type tag
+  0x00ec0d00  cdecl(s, p)    -> u8, the shared 9-way stimulus dispatch
+  0x00ec0f50  cdecl(s, a2, e)-> u8, `*e == 4` gate then FUN_00ec0c90(a2, e+1)
+
+00ec0d00 dispatch (switch on *e, jump table at 0x00ec0f20, 9 entries)
+  0,4,6 -> 0xec0f17 = return 1        (also the `ja` out-of-range target!)
+  1 -> 0xec0d1b  2 -> 0xec0d7e  3 -> 0xec0dcb  5 -> 0xec0eb8
+  7 -> 0xec0de1  8 -> 0xec0e6d
+  The *default* is the out-of-range jump-table target = return 1, NOT the shared
+  `xor al,al` tail.  Cases 7 and 8 share the tail at 0xec0e3e:
+      e[1]==5 -> pct >  (int)e[2]   (setg)
+      e[1]==6 -> pct <  (int)e[2]   (setl)
+      else    -> 0
+  where pct = (a == b) ? 100 : (int)((a / b) * 100.0f)
+
+Float constants
+  0x01470f1c = 2.0f   0x01486110 = 5.0f   0x01488900 = 1.0f   0x013ec4d0 = 100.0f
+  0x016c74a0 / 0x016c74a4 / 0x016c74a8 (three adjacent floats)
+  0x016c7aa4 = singleton; +0x78 -> manager; +0xb8 -> int limit
+
+Key constants
+  0x0d0036e08  0x017f243b  0x013f94d4  0x01186577
+  0x018c84a9 / 0x03a2511e / 0x018c88e4   (object-kind triple)
+  0x018eb45e / 0x070703b3 / 0x018c6de8
+  anim flags 0x40000 / 0x10000000

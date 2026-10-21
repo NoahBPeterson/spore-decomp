@@ -1,0 +1,6 @@
+slices/s00ec0a40/s00ec0a40.cpp  ?FUN_00ec0c40@@YANPAX@Z  00ec0c40  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ec0a40/s00ec0a40.cpp  ?FUN_00ec0f50@@YAEPAX0PAI@Z  00ec0f50  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ec0a40/s00ec0a40.cpp  ?FUN_00ec14c0@@YANPAX0000PAEH@Z  00ec14c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ec0a40/s00ec0a40.cpp  ?FUN_00ec15b0@@YANPAX0000PAEH@Z  00ec15b0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ec0a40/s00ec0a40.cpp  ?FUN_00ec17a0@@YANPAX0000PAEH@Z  00ec17a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ec0a40/s00ec0a40.cpp  ?FUN_00ec17f0@@YANPAX@Z  00ec17f0  /O2 /MD /Gy /EHsc /TP /arch:SSE
