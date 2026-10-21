@@ -1,0 +1,10 @@
+00b36360 57 Map erase helper; RbtreeErase/operator_delete sequence and register allocation differ (mine 73 vs 77). equiv: FAIL (5/5 mismatched, execution)
+00b36440 87 Map insert helper; EASTL RBTreeInsert ArgError/alloc-slot handling and register allocation differ (mine 106 vs 121).
+00b365a0 4 Reverse copy range; only encoding tie (add reg,-8 vs sub reg,8), logic byte-identical.
+00b36610 115 Swap two RefPairs; original allocates a stack frame for the saved float and schedules calls differently (mine 115 vs 124).
+00b36690 347 cGalaxyGameEntryImpl::SetGameToEnter; large message-dispatch with MessageBasicRC layout and push order differ (mine 265 vs 391).
+00b36820 875 Planet placement distance; complex float/quaternion math with custom register convention (mine 128 vs 909).
+00b36bb0 122 Effects-manager drive; node kept in a register (edi) vs spilled, store scheduling differs (mine 141 vs 143).
+00b36c40 720 Push orientation (matrix from two points); RegisterAlloc + rw::math inline expansions not reproducible from source (mine 131 vs 741).
+00b36f30 428 Push orientation (planet normal); rw::math inline expansions + register allocation not reproducible (mine 131 vs 447).
+00b370f0 103 Sort helper; no-prologue custom convention and x87 compare scheduling differ (mine 124 vs 129).

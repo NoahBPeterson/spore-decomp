@@ -1,0 +1,4 @@
+slices/s00b362c0/s00b362c0.cpp  ?RefPair_DestroyRange@@YAPAURefPair@@PAU1@00@Z  00b362c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s00b362c0/s00b362c0.cpp  ?Lookup@MapHolder@@QAE_NH@Z  00b36320  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s00b362c0/s00b362c0.cpp  ?RefPair_CopyAssign@@YAXPAURefPair@@0PBU1@@Z  00b364c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s00b362c0/s00b362c0.cpp  ?RefPair_CopyConstruct@@YAPAURefPair@@PAU1@00@Z  00b36530  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
