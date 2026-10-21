@@ -1,0 +1,13 @@
+# Slice s00a76cf0 (EA::Swarm::MapInfo, grid-kind 6) — complete but not byte-exact.
+# Format: <va> <diff> <reason>
+00a76cf0  112  ctor: size 221 vs 230; original stores the two vtable placeholder words and zero-inits the 4x Vec4 tuple region with a different store order/broadcast than ours. Semantically correct. [equiv FAIL 5/5 (memory pool @40010000 — the ctor writes a heap-pool word our version does not model)]
+00a76df0   18  Update: AND-operand load order (m28/m2c in eax/edx) differs from ours; instruction stream otherwise identical. [equiv PASS 215 valid, 94.0% cov]
+00a76fb0  111  GetRect: original builds a 6-float stack temp then copies out (sub esp,0x18); MSVC coalesces our array-into-array copy and emits direct stores (and touches xmm1..3 vs the original's xmm0-only). Semantically correct. [equiv FAIL 5/5 (xmm1 clobber)]
+00a77020  104  ContainsPoint: null/Test() short-circuit layout differs (branch polarity/inline epilogue); semantics identical. [equiv PASS 388 valid, 100.0% cov]
+00a770a0   63  IsEmpty: all-null early-out && chain laid out with different branch polarity; semantics identical. [equiv PASS 388 valid, 100.0% cov]
+00a77100  381  Eval: original keeps the three values on the x87 stack and holds the float arg in edi across the three virtual calls; ours reloads from memory / uses SSE. Semantics identical. [equiv FAIL 5/5 (xmm1 clobber — SSE vs x87)]
+00a77250  726  EvalVec3: original copies the returned triples through integer registers and reuses one stack temp; ours allocates per-block temps and touches extra xmm regs. Semantics identical. [equiv FAIL 5/5 (xmm3 clobber)]
+00a775a0  538  EvalVec4: same integer-copy/layout difference as EvalVec3. Semantics identical. [equiv FAIL 5/5 (xmm3 clobber)]
+00a77830  706  EvalVec4b: same integer-copy/layout difference as EvalVec3. Semantics identical. [equiv FAIL 5/5 (xmm4 clobber)]
+00a77b70   18  Set: float rect copy uses fld/fstp in the original vs movss in ours; refcount swap matches. [equiv PASS 392 valid, 100.0% cov]
+00a77bd0   91  MapInfo_DefaultRect44: same stack-temp-copy pattern as GetRect; MSVC coalesces ours. Semantically correct. [equiv PASS 400 valid, 100.0% cov]

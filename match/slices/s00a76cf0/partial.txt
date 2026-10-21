@@ -1,0 +1,3 @@
+# Slice s00a76cf0 (EA::Swarm::MapInfo, grid-kind 6) — functions with no complete implementation.
+# Format: <va> <diff> <reason>
+# (empty — all 14 functions have complete implementations)
