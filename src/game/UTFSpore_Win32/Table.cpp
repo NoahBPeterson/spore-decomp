@@ -119,7 +119,7 @@ public:
 namespace EA {
 namespace XHTML {
 namespace Style {
-struct FontMetrics {
+class FontMetrics { public:
     float mfFontSize, mfEmSize, mfExSize, mfAscent, mfDescent;
 };
 }
