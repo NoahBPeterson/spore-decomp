@@ -7,11 +7,11 @@
 #ifndef GAME_RW_MATH_FPU_VECTORTEMPLATES_H
 #define GAME_RW_MATH_FPU_VECTORTEMPLATES_H
 namespace rw { namespace math { namespace fpu {
-template <class T, int Aligned> struct Vector2Template { T x, y; };
-template <class T, int Aligned> struct Vector3Template { T x, y, z; };
-template <class T, int Aligned> struct Vector4Template { T x, y, z, w; };
-template <class T, int Aligned> struct Matrix33Template { Vector3Template<T, Aligned> xAxis, yAxis, zAxis; };
-template <class T, int Aligned> struct Matrix44Template { Vector4Template<T, Aligned> xAxis, yAxis, zAxis, wAxis; };
-template <class T, int Aligned> struct QuaternionTemplate { T x, y, z, w; };
+template <class T, int Aligned> class Vector2Template { public: T x, y; };
+template <class T, int Aligned> class Vector3Template { public: T x, y, z; };
+template <class T, int Aligned> class Vector4Template { public: T x, y, z, w; };
+template <class T, int Aligned> class Matrix33Template { public: Vector3Template<T, Aligned> xAxis, yAxis, zAxis; };
+template <class T, int Aligned> class Matrix44Template { public: Vector4Template<T, Aligned> xAxis, yAxis, zAxis, wAxis; };
+template <class T, int Aligned> class QuaternionTemplate { public: T x, y, z, w; };
 } } }
 #endif

@@ -12,7 +12,7 @@ template <typename A, int N> struct vector_allocator_slot { A mAllocator; unsign
 template <typename A> struct vector_allocator_slot<A, 8> { A mAllocator; };
 
 template <typename T, typename A = allocator>
-class VectorBase {
+struct VectorBase { private:
  public:
   T* mpBegin;
   T* mpEnd;

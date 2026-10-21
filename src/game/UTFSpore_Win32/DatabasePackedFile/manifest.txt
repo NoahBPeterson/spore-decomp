@@ -13,8 +13,8 @@
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?AllocateSpace@DatabasePackedFile@ResourceMan@EA@@QAE_NAAJI@Z  008d84a0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?SetHoleUse@DatabasePackedFile@ResourceMan@EA@@QAE_NHM@Z  008d8530  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?ShouldRecordBeCompressed@DatabasePackedFile@ResourceMan@EA@@QAEHABVKey@23@I@Z  008d8570  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
-../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?GetKeyList@DatabasePackedFile@ResourceMan@EA@@UAEIPAV?$vector@VKey@ResourceMan@EA@@Vsp_vector_allocator@eastl@@@eastl@@PAVKeyFilter@23@@Z  008d8710  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
-../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?GetKeyListSortedByPosition@DatabasePackedFile@ResourceMan@EA@@QAEIPAV?$vector@VKey@ResourceMan@EA@@Vsp_vector_allocator@eastl@@@eastl@@@Z  008d8770  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?GetKeyList@DatabasePackedFile@ResourceMan@EA@@UAEIPAV?$vector@VKey@ResourceMan@EA@@Usp_vector_allocator@eastl@@@eastl@@PAVKeyFilter@23@@Z  008d8710  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?GetKeyListSortedByPosition@DatabasePackedFile@ResourceMan@EA@@QAEIPAV?$vector@VKey@ResourceMan@EA@@Usp_vector_allocator@eastl@@@eastl@@@Z  008d8770  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?DecompressData@DatabasePackedFile@ResourceMan@EA@@QAE_NGPBEIIPAE@Z  008d8820  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?InternalSetPosition@DatabasePackedFile@ResourceMan@EA@@QAE_NJ@Z  008d8890  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?InternalGetSize@DatabasePackedFile@ResourceMan@EA@@QAEIXZ  008d8930  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include

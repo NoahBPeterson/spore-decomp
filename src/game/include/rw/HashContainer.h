@@ -8,13 +8,13 @@
 namespace rw {
 #pragma pack(push, 8)
 template <class K, class D>
-class SeparateKeyAndDatumContained {
+struct SeparateKeyAndDatumContained { private:
  public:
   K key;
   D data;
 };
 template <class Traits>
-class PreallocatedBufferPolicy {
+struct PreallocatedBufferPolicy { private:
  public:
   void* contents;      // SeparateKeyAndDatumContained<..>* (the element type comes from Traits in RenderWare)
   unsigned int capacity;

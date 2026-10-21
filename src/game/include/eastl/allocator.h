@@ -15,7 +15,7 @@ class allocator {
   const char* mpName;
 };
 
-class sp_vector_allocator : public allocator {};
+struct sp_vector_allocator : public allocator { private:};
 
 }  // namespace eastl
 
