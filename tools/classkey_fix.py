@@ -26,7 +26,7 @@ from run_all import DEFAULT_FLAGS  # noqa: E402
 KEEP = False
 OBJGATE = False
 DEF = re.compile(r"(?m)^([ \t]*(?:template\s*<[^;{]*?>\s*)?)(struct|class)(\s+(?:__declspec\([^)]*\)\s*)?)"
-                 r"((?:[A-Za-z_]\w*::)*[A-Za-z_]\w*)(\s*(?:final\s*)?)(:[^;{]*)?\{")
+                 r"((?:[A-Za-z_]\w*::)*[A-Za-z_]\w*)((?:\s|//[^\n]*)*(?:final\s*)?)(:[^;{]*)?\{")   # a `// note` may sit before a brace on the next line
 
 
 def sh(*a):
@@ -105,8 +105,12 @@ def unit(u):
                     paths=["match/slices/" + u, "symbols/slices/%s.txt" % u], symfile=W("symbols/slices", u + ".txt"))
     m = re.sub(r"^src/game/", "", u).rstrip("/").removesuffix(".cpp")
     main = W("src/game", m + ".cpp")   # only the object's own TU: shared headers in src/game/include are left alone
-    return dict(name=m, bk=W("src/game", m), srcs=[main] if os.path.exists(main) else [], main=main, row="../src/game/",
-                paths=["src/game/%s.cpp" % m, "src/game/%s/manifest.txt" % m], symfile=None)
+    bk = W("src/game", m)
+    if os.path.isdir(main):   # an object named x.cpp: bookkeeping in src/game/<dir>/x.cpp/, source in x.cpp.cpp
+        bk, m = main, m + ".cpp"
+        main = W("src/game", m + ".cpp")
+    return dict(name=m, bk=bk, srcs=[main] if os.path.isfile(main) else [], main=main, row="../src/game/",
+                paths=["src/game/%s.cpp" % m, os.path.relpath(os.path.join(bk, "manifest.txt"), ROOT)], symfile=None)
 
 
 def restore(U):
@@ -153,9 +157,12 @@ def unit_flags(U):
     for f in ("nonmatching.txt", "partial.txt"):
         p = os.path.join(U["bk"], f)
         if os.path.exists(p):
-            m = re.search(r"(/O[d12x](?:\s+/[A-Za-z][\w:=.-]*)+)", open(p, errors="replace").read())
+            m = re.search(r"((?:/vc\d+\s+)?/O[d12x](?:\s+/[A-Za-z][\w:=.-]*)+)", open(p, errors="replace").read())
             if m:
-                return m.group(1)
+                fl = m.group(1).rstrip(".,;")
+                if U["row"] != "slices/" and "/Isrc/game/include" not in fl:   # a module's headers live there
+                    fl += " /Isrc/game/include"
+                return fl
     return " ".join(DEFAULT_FLAGS)
 
 
@@ -171,6 +178,9 @@ def fix_by_object(U, rows):
     changed = {}
     for f, t in by_file.items():
         changed.update(edit_file(W(f), t))
+    if len(changed) < len({r[3].split('::')[-1] for r in rows}):   # the editor missed a definition
+        restore(U)
+        return "skip (edited %d of %d definitions)" % (len(changed), len(rows))
     after = compile_sections(U["main"], flags)
     if after != before:
         if not KEEP:
@@ -206,7 +216,9 @@ def fix_slice(sid, dry):
     U = unit(sid); d = U["bk"]
     if not U["srcs"] or not os.path.exists(U["main"]):
         return "skip (no source)"
-    nomanifest = not os.path.exists(os.path.join(d, "manifest.txt"))
+    mf = os.path.join(d, "manifest.txt")
+    # a manifest without rows checks nothing (run_all 0/0): such a unit goes through the object gate too
+    nomanifest = not os.path.exists(mf) or not any(l.strip() and not l.startswith("#") for l in open(mf))
     if nomanifest and not OBJGATE:
         return "skip (no manifest)"
     if sh("git", "ls-files", "--", U["paths"][0]).stdout.strip() == "":
@@ -231,6 +243,9 @@ def fix_slice(sid, dry):
     changed = {}
     for f, t in by_file.items():
         changed.update(edit_file(W(f), t))
+    if len(changed) < len({r[3].split('::')[-1] for r in rows}):   # the editor missed a definition
+        restore(U)
+        return "skip (edited %d of %d definitions)" % (len(changed), len(rows))
     # re-bind manifest rows whose mangled names carry a changed class-key
     mf = os.path.join(d, "manifest.txt")
     lines = open(mf).read().split("\n")
