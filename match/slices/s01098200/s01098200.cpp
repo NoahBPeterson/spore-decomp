@@ -453,7 +453,7 @@ void hkBoxMotion::applyForcesAndStep(const hkStepInfo& stepInfo, const hkVector4
     if (maxAngle > 0.9f)
         maxAngle = 0.9f;
     float maxAngleSq = maxAngle * maxAngle;
-    if (!(angleSq < maxAngleSq))
+    if (angleSq > maxAngleSq)
     {
         float s = maxAngle / (float)sqrt((double)angleSq);
         m_angularVelocity.x = s * m_angularVelocity.x;
