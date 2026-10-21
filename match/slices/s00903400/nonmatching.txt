@@ -1,0 +1,38 @@
+# slice s00903400 (expat XML parser internals: xmlparse.c / xmltok hashing)
+# -- functions that are NOT byte-exact.
+
+# Flags: /O2 /MD /Gy /EHsc /TP /arch=SSE /fp:fast
+
+# Many of the helpers in this slice are expat *internal statics* whose caller
+# passes the parser state in a specific register (esi/edi/ebx/eax) rather than on
+# the stack.  Those cannot be reproduced from an ordinary C declaration, so the
+# reconstructed bodies use cdecl and match the original instruction-for-
+# instruction except for the prologue/epilogue; they are recorded here.
+
+00903400  XmlBufferGrow   size 323 vs 331, 309 diff. Equivalence WEAK (282 valid, 40% coverage). The mode check lowers differently: the original does `sub eax,2; je; sub eax,1; je` (a two-case switch on mode-2) where MSVC emits our `test/jne/cmp`. Remaining body matches structurally.
+
+009036b0  storeRawNames   size 165 vs 152, 177 diff. Equivalence FAIL (eax: the function returns the bool in al, ours in eax, and the eastl DoInsertValue call is indirect in ours). Body is the correct walker.
+
+009037a0  addBinding      size 43 vs 325, 324 diff. Equivalence WEAK (237 valid, 8.9% coverage). Only the name-length prefix is transcribed; the parser state arrives in ebx, and the pool-alloc / rehash tail could not be reproduced.
+
+009038f0  handleUnknownEncoding size 246 vs 281, 248 diff. Equivalence UNSUPPORTED (all inputs fault(read) -- the state arrives in esi). Body follows the Ghidra control flow (handler call, decoder alloc, init dispatch) but the register-passed state and the 0x414 stack buffer prologue differ.
+
+00903a10  processInternalEntity size 45 vs 289, 289 diff. Equivalence UNSUPPORTED (inputs fault(read)). Only the entity-pool pop is transcribed; the full 289-byte body needs the esi/edi register state and the expat buffer manager.
+
+00903b50  normalizeLines  size 98 vs 83, 109 diff. Equivalence UNSUPPORTED ("original reads eax at entry" -- custom register ABI). The pointer arrives in eax; the body matches the original after the missing prologue.
+
+00903bb0  reportDefault   size 1 vs 165, 165 diff. Equivalence UNSUPPORTED (register ABI). The original is a 165-byte default-handler driver reading its args from eax/esi; left as a stub.
+
+00903c60  XmlStoreAttsTableInsert size 6 vs 193, 192 diff. Equivalence UNSUPPORTED (inputs fault(read)). Reads the parser state from esi; body left as a stub.
+
+00903d30  collapseWhitespace size 100 vs 104, 97 diff. Equivalence UNSUPPORTED (all inputs fault(read) -- pointer arrives in edi). The body (collapse runs of LWS to a single space, trim a trailing space) is instruction-for-instruction identical to the original after the prologue.
+
+00903dd0  XmlHashTableLookup size 3 vs 735, 735 diff. Equivalence UNSUPPORTED (inputs fault(read)). Large hash-table lookup/insert; reads the table from edi. Left as a stub.
+
+009040b0  XmlHashTableClear size 64 vs 54, 72 diff. Equivalence UNSUPPORTED (inputs fault(read)). The loop body is identical to the original; only the prologue differs (the table arrives in esi there, from the stack here).
+
+00904130  XmlPoolDestroy  size 61 vs 56, 62 diff. Equivalence UNSUPPORTED (inputs fault(read)). The two free-list walks are identical to the original; the pool arrives in edi there and the __fastcall form we tried is 5 bytes longer.
+
+00904170  XmlPoolGrow     size 1 vs 355, 355 diff. Equivalence UNSUPPORTED (inputs fault(read)). Large pool-growth routine reading the pool from esi; left as a stub.
+
+00903750  externalEntityContentProcessor size 80 vs 80 (equal!), 47 diff. Equivalence UNSUPPORTED (args fault(write)). Byte-equal size and identical call shape, but the last argument (`*(char*)(state+0x1e4) == '\0'`) is materialised as `sete al; movzx ecx,al` in the original and as `xor eax,eax; sete al; push eax` in ours, and the first two arguments are loaded in a different order, so the instruction stream shifts.

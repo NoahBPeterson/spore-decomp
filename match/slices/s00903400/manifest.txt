@@ -1,0 +1,6 @@
+slices/s00903400/s00903400.cpp  ?XmlGetParsingStatus@@YAXPADPAH@Z  009035d0  /O2 /MD /Gy /EHsc /TP
+slices/s00903400/s00903400.cpp  ?XmlGetByteIndex@@YAHPAD@Z  009035f0  /O2 /MD /Gy /EHsc /TP
+slices/s00903400/s00903400.cpp  ?XmlFlushTailA@@YAHPAD@Z  00903610  /O2 /MD /Gy /EHsc /TP
+slices/s00903400/s00903400.cpp  ?XmlFlushTailB@@YAHPAD@Z  00903660  /O2 /MD /Gy /EHsc /TP
+slices/s00903400/s00903400.cpp  ?XmlHash@@YIIIPAG@Z  00903da0  /O2 /MD /Gy /EHsc /TP
+slices/s00903400/s00903400.cpp  ?XmlPoolClear@@YIXPAH@Z  009040f0  /O2 /MD /Gy /EHsc /TP

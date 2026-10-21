@@ -1,0 +1,18 @@
+# slice s00903400 (expat XML parser internals: xmlparse.c / xmltok hashing)
+# -- PARTIAL functions.
+
+# Flags: /O2 /MD /Gy /EHsc /TP /arch=SSE /fp:fast
+
+# A function is listed here when it is not byte-exact but the emitted code is a
+# verified near-match (identical size, or an instruction-for-instruction body with
+# only a prologue/epilogue or a single scheduling difference).
+
+# (note; row is in nonmatching.txt) 00903750  externalEntityContentProcessor  SAME SIZE (80 vs 80). The whole body is identical including the 7-argument doContent call, the storeRawNames fallback and the `lea eax,[edi+1]` tail; only the argument-load order and the `sete al; movzx ecx,al` vs `xor eax,eax; sete al` of the last boolean argument differ.
+
+# (note; row is in nonmatching.txt) 00903d30  collapseWhitespace  Body 98 of 104 bytes identical: the whitespace collapse loop, the `cmp [eax-2],0x20` look-behind and the three exit tails all match; only the prologue (the pointer arrives in edi in the original, from the stack in ours) differs.
+
+# (note; row is in nonmatching.txt) 009040b0  XmlHashTableClear   Body identical from the loop head onward (`mov ecx,[esi]; mov eax,[esi+0x10]; mov edx,[ecx+edi*4] ... inc edi; add esp,4; cmp edi,[esi+8]; jb`); the 10-byte difference is the prologue that materialises the table pointer.
+
+# (note; row is in nonmatching.txt) 00904130  XmlPoolDestroy      Both free-list walks (`mov esi,[eax]; push eax; call edx; add esp,4; mov eax,esi; test esi,esi; jne`) are byte-identical to the original; the difference is the 5-byte prologue.
+
+# (note; row is in nonmatching.txt) 00903b50  normalizeLines      Body identical after the prologue: the CR-run detection loop and the CRLF->LF compaction loop with the `cmp [eax],dx` peephole all match.
