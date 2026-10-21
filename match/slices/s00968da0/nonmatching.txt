@@ -1,0 +1,15 @@
+00968da0 448 complete (((int*)this)[i+5] renderable dispatch + DrawStdButton/UV-quad paths) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (312 valid, 18.3% cov); size 548 vs 600, structural: MSVC vectorized the switch into a jump table the decompiler cannot reproduce from plain C
+00969000 4 complete (ComboBoxDrawable ctor; only base-vptr store interleaving differs) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (400 valid, 100% cov); residual 4 bytes are store-scheduling (docs §15/§16)
+00969060 35 complete (BasicFactory_ComboBoxDrawable::CreateInstance) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (unresolved ?g_szComboBoxDrawable@@3QBDB); size 74 vs 94
+009690c0 568 complete (WinComboBox::OnRebuild) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid; _decode_pointer + read faults on fabricated ctx); size 573 vs 666
+00969360 271 complete (WinComboBox::FindValue) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (309 valid, 94.3% cov); size 261 vs 239, structural loop-shape mismatch in the specialized string compare
+00969450 220 complete (WinComboBox ctor) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (unresolved ?Ctor@CustomWindowBase@@QAEXXZ, ?SetMode@DropShadowDesc@@QAEXH@Z); size 234 vs 298; base-vptr store coalescing
+009695d0 69 complete (WinComboBox dtor) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/340 valid; read/write faults, VirtualFree import); size 125 vs 121
+00969650 373 complete (WinComboBox::CalcSize) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (223 valid, 26.4% cov); size 436 vs 526, LayoutParagraph result plumbing simplified
+00969870 59 complete (WinComboBox::SetValue) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (230 valid, 89.3% cov); register/expression scheduling only
+00969920 47 complete (WinComboBox::RemoveValue) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (285 valid, 100% cov); signed/unsigned compare + branch polarity only
+00969950 4 complete (WinComboBox::AddValue) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (252 valid, 100% cov); residual 4 bytes are stack-frame size (0x10 vs 0xc), not source-controllable
+009699d0 88 complete (WinComboBox::InsertValue) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (232 valid, 88.9% cov); frame size + signed-vs-unsigned compare
+00969b90 70 complete (ConsoleWindow::Shutdown) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/207 valid; read faults/pool-limit on fabricated ConsoleWindow); size 91 vs 83
+00969bf0 281 complete (ConsoleWindow::LayoutLine) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (312 valid, 18.3% cov); size 333 vs 336, early-return guards cap coverage
+00969d40 194 complete (ConsoleWindow::Draw) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (260 valid, 12.1% cov); size 184 vs 225, inline vtable-call/struct plumbing differs
