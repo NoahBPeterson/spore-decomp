@@ -1,4 +1,5 @@
 // Slice s00f0cad0: SporeApp/Simulator SP palette-item UI + placeable-effect.
+#include <intrin.h>
 // Functions 00f0cad0..00f0d8b0 of utl/SP*.obj.
 //
 //  00f0cad0  SP::cSPPaletteItemUIOneClickPaint::Init
