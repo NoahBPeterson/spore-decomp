@@ -1,0 +1,7 @@
+010a22b0  379  size 485 vs 501; statistics-collector block layout/regalloc; equiv UNSUPPORTED (unresolved ?hkNullName@@3QBDB)
+010a24f0  3  island dtor; cl 13.10.3052 emits js instead of the original jl (4 sites); equiv WEAK (127 valid inputs, 33% coverage, no mismatch)
+010a2590  279  size 634 vs 632; cl 13.10.3052 rotates the action-link scan loop; equiv WEAK (268 valid, 29.8% coverage, no mismatch)
+010a2810  150  size 173 vs 172; vptr/refcount store scheduling and 16-bit load narrowing; equiv PASS 400 valid inputs 100% coverage
+010a2960  4  spill slot [esp+0x18] vs [esp+0x14] for the stepInfo argument; equiv WEAK (164 valid, 100% coverage, no mismatch)
+010a2ac0  195  size 362 vs 374; monitor-stream timer tail-call/regalloc layout; equiv FAIL 5/5: leaves ecx where original tail-calls out of it
+010a2db0  748  size 875 vs 941; original keeps a frame pointer for the aabb local; equiv UNSUPPORTED (0/400 valid inputs)

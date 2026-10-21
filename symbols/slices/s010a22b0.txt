@@ -1,0 +1,18 @@
+010a22b0 hkSimulationIsland::calcStatistics  # reports the island to hkStatisticsCollector: addArray "EntityPtrs" + per-entity "ConMstPtr"/"ConSlvPtr" groups; byte-diff is collector-block regalloc (equiv UNSUPPORTED)
+010a24b0 hkSimulationIsland::addAction  # m_actions.pushBack(action) then `*(hkSimulationIsland**)((char*)action + 0xc) = this`
+010a24f0 hkSimulationIsland::~hkSimulationIsland  # island teardown (vptr + array release); 3-byte diff, cl emits js for the original jl
+010a2590 hkSimulationIsland::isFullyConnected  # union-find over entity collision links; hkBool returned through a hidden pointer
+010a2810 hkSimulationIsland::hkSimulationIsland  # ctor(world): m_world, m_dirtyListIndex = 0xffff, deactivation counters, m_multiThreadLock.m_threadId = 0xffffffd1
+010a28f0 hkDefaultWorldMaintenanceMgr::init  # sets world->m_currentTime/m_timeOfNextFrame/m_timeOfLastPsi/m_timeOfNextPsi from m_worldTimeOffset
+010a2910 hkDefaultWorldMaintenanceMgr::hkDefaultWorldMaintenanceMgr  # ctor: m_worldTimeOffset = 33.0f, m_worldTimeResetDelay = 63.0f
+010a2960 hkDefaultWorldMaintenanceMgr::resetWorldTime  # rebuilds world->m_dynamicsStepInfo.m_stepInfo from the step argument; 4-byte spill-slot diff
+010a2a70 hkDefaultWorldMaintenanceMgr::checkDeactivation  # deactivation tick + per-island check; hkBool result
+010a2ac0 hkDefaultWorldMaintenanceMgr::performMaintenance  # per-frame monitor maintenance: applies gravity/timer updates then checkDeactivation
+010a2c60 hkBroadPhaseBorder::~hkBroadPhaseBorder  # releases the six m_phantoms entries
+010a2cb0 hkBroadPhaseBorder::maxPositionExceededCallback  # switch (m_behaviour): fixes the entity's motion type, or m_world->removeEntity for REMOVE_ENTITY
+010a2cf0 hkBroadPhaseBorder::worldDeletedCallback  # m_world->removeWorldDeletionListener(this) + removeReference()
+010a2d30 hkBroadPhaseBorder::deactivate  # removePhantomBatch(m_phantoms, 6), drop overlap listeners/refs, then clear m_world
+010a2db0 hkBroadPhaseBorder::hkBroadPhaseBorder  # ctor(world, behaviour): addReference, addWorldDeletionListener, builds the six border phantoms from world->m_broadPhaseBorder
+010a3190 hkBroadPhaseBorder::collidableAddedCallback  # if collidable->m_type == 1 forward its entity to maxPositionExceededCallback
+010a31c0 hkHalfstepSimulation::recoverFromStepFailure  # memory failure -> stepDeltaTime; HK_STEP_RESULT_BUSY when hkMemory::s_instance->m_numUsedChunks == 1; else restartFromStepFailure + mid-time step
+010a32a0 hkHalfstepSimulation::hkHalfstepSimulation  # ctor: m_simulationStep = 0
