@@ -328,7 +328,7 @@ inline size_t CharStrlen(const char* p)
     while (*pCurrent++) {}
     return (size_t)(pCurrent - p - 1);
 }
-struct allocator {
+class allocator { public:
     void deallocate(void* p, size_t) { delete[] (char*)p; }
 };
 struct basic_string {
@@ -428,7 +428,7 @@ struct FieldReport {
 };
 
 namespace SP {
-struct cVarListSerializer {
+class cVarListSerializer { public:
     cDataSerializationInfo mDataSerializationInfos[128];   // +0x0
     int mSerializableVarCount;                              // +0xa00
     int mSerializedVarCount;                                // +0xa04

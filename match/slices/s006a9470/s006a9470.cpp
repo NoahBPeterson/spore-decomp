@@ -87,7 +87,7 @@ struct PropObj {                       // property entry (flags at +0x10)
 struct cError { eastl::string mMessage; cError(const char* fmt, ...); cError(const cError&); };
 
 namespace EA { namespace ArgScript {
-struct cArguments {
+class cArguments { public:
     const char** MainArguments(int* pCount, int min, int max);   // 0x00838020
     const char** OptionArguments(const char* name, int n);       // 0x00838330
     bool HasFlag(const char* name);                              // 0x008380b0

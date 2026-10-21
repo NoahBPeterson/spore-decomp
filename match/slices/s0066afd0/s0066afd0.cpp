@@ -25,7 +25,7 @@ struct IWindow {
     virtual IWindow* FindWindow(unsigned id);  // 0x0c
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     virtual void s0();
     virtual void s1();
     virtual int  Release();

@@ -156,7 +156,7 @@ struct IResourceManager {
                              int a, int b, int c, int d);   // 0x0C
 };
 
-struct cPropertyList {
+class cPropertyList { public:
     virtual int AddRef();
     virtual int Release();
 };
@@ -180,7 +180,7 @@ struct cDirectValues {
     int mOfflineMode;                                       // +0x118
 };
 
-struct cDirectPropertyList {
+class cDirectPropertyList { public:
     uint32_t pad[0x3c / 4];
     cDirectValues* mpValues;                                // +0x3C
     bool GetDescription(uint32_t propertyID);               // 006A25A0
@@ -189,7 +189,7 @@ struct cDirectPropertyList {
 extern cDirectPropertyList* gAppProperties;                 // 015FD918
 
 // --------------------------------------------------------------- owned objects
-struct cSPUIAssetComments {
+class cSPUIAssetComments { public:
     virtual int AddRef();
     virtual int Release();
     cSPUIAssetComments();                                   // 0064E170
@@ -197,7 +197,7 @@ struct cSPUIAssetComments {
     uint32_t pad04[(0x78 - 4) / 4];
 };
 
-struct cSPUIMissingExpansionPackPage {
+class cSPUIMissingExpansionPackPage { public:
     virtual int AddRef();
     virtual int Release();
     cSPUIMissingExpansionPackPage();                        // 006715D0
@@ -226,7 +226,7 @@ struct cSPCardStats {
     uint32_t pad04[(0xd0 - 4) / 4];
 };
 
-struct cSPUIAssetVerbs {
+class cSPUIAssetVerbs { public:
     virtual int AddRef();
     virtual int Release();
     cSPUIAssetVerbs();                                      // 00656B00
@@ -271,7 +271,7 @@ struct cSwatchModel {
     int GetModel();                                         // 005F2770
 };
 
-struct cSPSwatch {
+class cSPSwatch { public:
     virtual int AddRef();
     virtual int Release();
     virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
@@ -288,7 +288,7 @@ struct cSPSwatch {
     void SetEditorCameraController(int value);              // 005F6500
 };
 
-struct cSPSwatchManager {
+class cSPSwatchManager { public:
     cSPSwatch* CreateSwatch(int flags);                     // 005F0CA0
 };
 
@@ -414,7 +414,7 @@ extern uint32_t gCardInventoryParam;                                      // 015
 extern uint32_t gEditorConfigGroupID;                                     // 01527DA4
 
 // ------------------------------------------------------------------- the view
-struct cSPUILargeAssetView {
+class cSPUILargeAssetView { public:
     uint32_t pad00[6];
     cSPUILayout* mLayout;                                   // +0x18
     AutoRefCount<IWindow> mWinParent;                       // +0x1C

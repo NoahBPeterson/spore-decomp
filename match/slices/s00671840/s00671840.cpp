@@ -26,7 +26,7 @@ void QueryPerformanceCounter(BigInt* out);
 
 // ---- external callees -------------------------------------------------
 void FUN_0092ddc0(void* a, void* out);
-struct cSPUILayout {
+class cSPUILayout { public:
   void Shutdown(int a);
   bool Init(void* arr, int a, unsigned key);
   void SetParentWin(void* w, int a, unsigned key);

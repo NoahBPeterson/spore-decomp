@@ -249,7 +249,7 @@ struct HintVec {                      // eastl::vector<AutoRefCount<cHint>> at t
 };
 cHint** __cdecl HintCopy(cHint** last, cHint** end, cHint** first);   // 0x00d3b3c0
 
-struct cUIHints {
+class cUIHints { public:
     uint32_t pad0[3];
     uint32_t* mCondBegin;   // +0x0c  (vector of condition processors)
     uint32_t* mCondEnd;     // +0x10

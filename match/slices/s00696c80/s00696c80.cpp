@@ -16,7 +16,7 @@ namespace SP {
 // cLocalInputState layout: 0 mKeys[8], 0x20 mModifiers, 0x24 mMouseButtons[5],
 // 0x2c mMouseX, 0x30 mMouseY, 0x34 mDragButton, 0x38 mMouseStartX, 0x3c mMouseStartY,
 // 0x40 mMouseDownModifiers, 0x44 mScrollDelta. Size 0x48.
-class cLocalInputState {
+struct cLocalInputState { private:
  public:
   unsigned int mKeys[8];         // +0x00
   unsigned int mModifiers;       // +0x20

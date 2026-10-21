@@ -102,7 +102,7 @@ struct IButton {
 };
 
 // cSPUILayout (0x18 bytes retail).
-struct cSPUILayout {
+class cSPUILayout { public:
     virtual void s0();
     virtual void s1();
     virtual int  Release();                                       // +0x08
@@ -770,7 +770,7 @@ struct AnimTarget {    // temporary animation target; its inlined dtor resets tw
     IWindow* pWin;
     ~AnimTarget() { vtbl = g_animTargetVtbl; vtbl2 = g_animTargetVtbl2; if (pWin) pWin->Release(); }
 };
-struct cSPUIAnimator {
+class cSPUIAnimator { public:
     void __thiscall RemoveAnimation(IWindow* win, int channel);                  // 0x007f6210
     void __thiscall AddAnimation(AnimTarget* t, IWindow* win, int channel);      // 0x007f8d10
 };

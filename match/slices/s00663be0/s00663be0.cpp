@@ -186,7 +186,7 @@ struct AudioAT {
     virtual void* Slot20();                           // 0x20
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     virtual void s0();
     virtual void s1();
     virtual int  Release();                           // 0x08

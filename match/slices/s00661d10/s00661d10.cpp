@@ -33,7 +33,7 @@ struct IWindow {
     virtual void      SetReloadCallback(void*); virtual void AttachProc(void*);
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     virtual void s0(); virtual void s1(); virtual int Release();
     void Shutdown(bool);                                   // 0x00811ad0
     IWindow* FindWindowByID(uint32_t, bool);               // 0x008105b0

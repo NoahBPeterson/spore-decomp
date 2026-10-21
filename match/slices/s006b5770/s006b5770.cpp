@@ -298,7 +298,7 @@ struct Factory {
     virtual void f11();
 };
 
-struct cStringTableResourceFactory : Factory {
+class cStringTableResourceFactory : public Factory { public:
     virtual int GetSupportedTypes(uint32_t* pTypes, int count);
 };
 
@@ -377,7 +377,7 @@ void App::TranslatorVector::DoInsertValue(App::intrusive_ptr* pos, const App::in
 
 // @ 0x006b5770
 namespace SP {
-struct cString {
+class cString { public:
     cString();
 };
 }

@@ -28,7 +28,7 @@ void  __cdecl SlotMessage_Destruct(void* self);               // 0x00421cf0
 void  __stdcall WString_Assign(void* a, void* b);             // 0x00423650
 float __cdecl FUN_004e1c70(void* a, unsigned key, float v);   // 0x004e1c70 GetPropertyT<float>
 
-struct cSPUILayout {
+class cSPUILayout { public:
     virtual void s0();
     virtual void s1();
     virtual int  Release();                        // +0x08

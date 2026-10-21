@@ -44,7 +44,7 @@ public:
 };
 }  // namespace Thread
 namespace ResourceMan {
-struct Key {
+class Key { public:
   uint32_t mInstance;
   uint32_t mType;
   uint32_t mGroup;

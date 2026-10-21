@@ -114,7 +114,7 @@ void __fastcall FUN_006ae020(void** p)
 // 006ae060  void* SP::cAsyncResourceRequest::AsInterface(int iid)
 // ---------------------------------------------------------------------------
 namespace SP {
-struct cAsyncResourceRequest {
+class cAsyncResourceRequest { public:
     void* AsInterface(int iid);
 };
 }

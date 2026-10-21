@@ -26,7 +26,7 @@ void* operator new[](size_t size, const char* pName, int flags, unsigned debugFl
                      const char* file, int line);
 
 namespace eastl {
-struct allocator;
+class allocator;
 struct basic_string8;
 struct basic_string16;
 }  // namespace eastl
@@ -57,7 +57,7 @@ public:
 }  // namespace Thread
 
 namespace ResourceMan {
-struct Key {
+class Key { public:
   uint32_t mInstance;  // +0x0
   uint32_t mType;      // +0x4
   uint32_t mGroup;     // +0x8
@@ -88,7 +88,7 @@ struct Variant {
 }  // namespace EA
 
 namespace eastl {
-struct allocator {};
+class allocator { public:};
 struct basic_string8 {
   char* mpBegin;                // +0x0
   char* mpEnd;                  // +0x4

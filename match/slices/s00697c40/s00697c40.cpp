@@ -79,7 +79,7 @@ void Server::SetNames(const wchar_t* a, const wchar_t* b, const wchar_t* c) {
 // EA::Trace::Server default filter/formatter bootstrap.
 namespace EA {
 template <class T>
-struct AutoRefCount {
+class AutoRefCount { public:
   T* mpObject;
   AutoRefCount() : mpObject(0) {}
   AutoRefCount(T* p) : mpObject(p) {
@@ -111,26 +111,26 @@ struct IObj {
   virtual void v2();
   virtual void* Cast(unsigned id);
 };
-struct ILogFilter : IObj {
+class ILogFilter : public IObj { public:
   virtual void v4();
   virtual void v5();
   virtual void v6();
 };
-struct ILogFormatter : IObj {
+class ILogFormatter : public IObj { public:
   virtual void v4();
   virtual void v5();
   virtual void v6();
 };
-struct LogFilterGroupLevels : ILogFilter {
+class LogFilterGroupLevels : public ILogFilter { public:
   char pad[0x3c - 4];
   LogFilterGroupLevels(const char* name);   // 0x00923f30
 };
-struct LogFormatterFancy : ILogFormatter {
+class LogFormatterFancy : public ILogFormatter { public:
   char pad[0xa58 - 4];
   LogFormatterFancy(const char* name);      // 0x009244d0
   void SetFlags(unsigned short flags);      // 0x009233e0
 };
-struct ILogReporter : IObj {
+class ILogReporter : public IObj { public:
   virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8();
   virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
   virtual ILogFormatter* GetFormatter();    // +0x38
@@ -184,7 +184,7 @@ void* operator new(size_t n, const char* pName, int flags, unsigned debugFlags, 
 struct ILogManager;
 
 // The real EA::Trace::Server base is 0x68 bytes with two vtables (IServer, ITracer).
-struct IServer {
+class IServer { public:
   virtual int AddRef();          // +0x00
   virtual int Release();         // +0x04
   virtual void s2();
@@ -194,7 +194,7 @@ struct IServer {
   virtual void s6();
   virtual void s7();
 };
-struct ITracer {
+class ITracer { public:
   virtual int AddRef();
   virtual int Release();
   virtual void t2();
@@ -209,7 +209,7 @@ struct ServerBase : IServer, ITracer {
 };
 
 // TempTraceHelperMap: 0x58 bytes (mutex + hash map + enable byte).
-struct TempTraceHelperMap {
+class TempTraceHelperMap { public:
   char pad[0x58];
   TempTraceHelperMap* Init();   // 0x009259d0
   void Destroy();               // 0x009257a0

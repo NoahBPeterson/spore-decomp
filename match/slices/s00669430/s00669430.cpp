@@ -52,7 +52,7 @@ struct RefObj {                                      // vtable-refcounted helper
     void Cancel();                                  // 0x00829d30
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     IWin* FindWindowByID(unsigned id, int flag);    // 0x008105b0
 };
 

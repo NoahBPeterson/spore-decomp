@@ -9,7 +9,7 @@ void operator delete(void* p);
 
 namespace eastl {
 
-struct allocator {
+class allocator { public:
   void deallocate(void* p) { ::operator delete(p); }
   void* allocate(size_t n, const char* pName, int flags, unsigned debugFlags, const char* file, int line) {
     return ::operator new(n, pName, flags, debugFlags, file, line);
@@ -96,13 +96,13 @@ struct AtomicInt {
   AtomicInt() { _InterlockedExchange((long*)&mValue, 0); }
 };
 template <typename T>
-struct RefCountVTemplate {
+class RefCountVTemplate { public:
   virtual ~RefCountVTemplate() {}
   T mRefCount;
   RefCountVTemplate() : mRefCount() {}
 };
 namespace Messaging {
-struct IMessageRC {
+class IMessageRC { public:
   virtual ~IMessageRC() {}
 };
 }  // namespace Messaging

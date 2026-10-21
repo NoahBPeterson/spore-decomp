@@ -31,7 +31,7 @@ void  __cdecl KillSetiEffects(int state, unsigned id);
 void* __cdecl FUN_0054ea20(void* self, int a, int b);
 void* __cdecl FUN_0054eac0(void* self, int a);
 
-struct cSPUILayout {
+class cSPUILayout { public:
     virtual void s0(); virtual void s1(); virtual int Release();
     void Shutdown(bool);
     void* FindWindowByID(unsigned id, int flag);   // 0x008105b0

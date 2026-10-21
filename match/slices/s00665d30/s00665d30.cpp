@@ -16,7 +16,7 @@ struct Obj184 {
   void GetKey(float* out);
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
   virtual void v0();
   virtual void v1();
   virtual void v2();
