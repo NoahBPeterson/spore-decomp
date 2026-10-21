@@ -625,15 +625,15 @@ void hkStorageMeshShape::addSubpart(const hkMeshShapeSubpart& p)
 {
     hkMeshShapeSubpart* dst;
     hkStorageMeshSubpartStorage* st;
-    hkStorageMeshSubpartStorage* volatile initP;
 
     if (m_subparts.m_size == (int)(m_subparts.m_capacityAndFlags & 0x3fffffff))
         hkArrayUtil::_reserveMore(&m_subparts, 30, 1);
-    dst = (hkMeshShapeSubpart*)((char*)m_subparts.m_data + m_subparts.m_size * 30, 1);
+    dst = (hkMeshShapeSubpart*)((char*)m_subparts.m_data + m_subparts.m_size * 30);
     m_subparts.m_size = m_subparts.m_size + 1;
+    hkStorageMeshSubpartStorage* keep = st;
+    (void)keep;
 
     st = (hkStorageMeshSubpartStorage*)hkMemory::getInstance()->allocate(0x48, 0x22);
-    initP = st;
     if (st != 0) {
         hkUint32 zero = 0;
         hkUint32 neg = 0x80000000;
@@ -644,6 +644,7 @@ void hkStorageMeshShape::addSubpart(const hkMeshShapeSubpart& p)
         f[9] = zero; f[10] = zero; f[11] = neg;
         f[12] = zero; f[13] = zero; f[14] = neg;
         f[15] = zero; f[16] = zero; f[17] = neg;
+        dst = (hkMeshShapeSubpart*)((char*)m_subparts.m_data + m_subparts.m_size * 30);
     }
 
     if (m_storage.m_size == (int)(m_storage.m_capacityAndFlags & 0x3fffffff))
