@@ -487,9 +487,9 @@ void hkBoxMotion::applyForcesAndStep(const hkStepInfo& stepInfo, const hkVector4
     const float cx = m_motionState.m_sweptTransform.m_centerOfMass1.x;
     const float cy = m_motionState.m_sweptTransform.m_centerOfMass1.y;
     const float cz = m_motionState.m_sweptTransform.m_centerOfMass1.z;
-    const float lx = m_motionState.m_deltaAngle.x;
-    const float ly = m_motionState.m_deltaAngle.y;
-    const float lz = m_motionState.m_deltaAngle.z;
+    const float lx = m_motionState.m_sweptTransform.m_centerOfMassLocal.x;
+    const float ly = m_motionState.m_sweptTransform.m_centerOfMassLocal.y;
+    const float lz = m_motionState.m_sweptTransform.m_centerOfMassLocal.z;
     m_motionState.m_transform.m_translation.x = cx - (lx * r0.x + (ly * r1.x + lz * r2.x));
     m_motionState.m_transform.m_translation.y = cy - (lx * r0.y + (ly * r1.y + lz * r2.y));
     m_motionState.m_transform.m_translation.z = cz - (lx * r0.z + (ly * r1.z + lz * r2.z));
@@ -526,8 +526,8 @@ hkVelocityAccumulator* hkBoxMotion::applyForcesAndBuildAccumulator(const hkStepI
     acc->m_linearVelocity.z = m_linearVelocity.z;
     acc->m_linearVelocity.w = m_linearVelocity.w;
 
-    float f = (stepInfo.m_startTime - m_motionState.m_sweptTransform.m_centerOfMass1.w) *
-              m_motionState.m_sweptTransform.m_centerOfMassLocal.w;
+    float f = (stepInfo.m_startTime - m_motionState.m_sweptTransform.m_centerOfMass0.w) *
+              m_motionState.m_sweptTransform.m_centerOfMass1.w;
     float g = 1.0f - f;
     acc->m_linearVelocity2.x = g * m_motionState.m_sweptTransform.m_centerOfMass0.x + f * m_motionState.m_sweptTransform.m_centerOfMass1.x;
     acc->m_linearVelocity2.y = f * m_motionState.m_sweptTransform.m_centerOfMass1.y + g * m_motionState.m_sweptTransform.m_centerOfMass0.y;
