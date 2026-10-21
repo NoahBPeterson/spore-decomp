@@ -55,7 +55,7 @@ struct VolumeCorner {
 
 namespace EA {
 namespace Swarm {
-struct cDescription {
+class cDescription { public:
   virtual ~cDescription();
   int mRefCount;
   cDescription() : mRefCount(0) {}
@@ -347,7 +347,7 @@ void* MapDescription::Copy(int src) {
 // ArgScript command base + per-command vtables used by cVolumeEffectCommand::OnRegister (0x007EEA90).
 namespace EA {
 namespace ArgScript {
-struct cCommandBase {
+class cCommandBase { public:
   void* mVtbl;    // +0x00
   void* mParser;  // +0x04
   void* mF8;      // +0x08

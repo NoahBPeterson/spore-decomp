@@ -102,7 +102,7 @@ struct TDataVec {
   ~TDataVec();                  // 0x007EB3F0
 };  // size 0x14
 
-struct cTelemetryItem {
+class cTelemetryItem { public:
   EA::DateTime::DateTime mSystemTime;  // +0x0
   uint32_t mType;                      // +0x8
   TDataVec mData;                      // +0xc

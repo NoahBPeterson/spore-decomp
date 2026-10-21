@@ -314,15 +314,15 @@ extern void  CopyBack24(void* first, void* last, void* dst);     // 0x00cc8b50
 // call site back to the original function.
 namespace EA { namespace ArgScript {
   int ParseEnum(void* s, const char* name);                      // 0x00840bb0
-  struct cArguments {
+  class cArguments { public:
     void* MainArguments(int* out, int a, int b);                 // 0x00838020
   };
-  struct cCommandBase {
+  class cCommandBase { public:
     cCommandBase();                                              // 0x0083c800
   };
 }}
 namespace EA { namespace Swarm {
-  struct cEffectsParser {
+  class cEffectsParser { public:
     void* GetInheritedDescription(void* args, int n, int size);  // 0x00a6f090
   };
 }}

@@ -13,7 +13,7 @@ struct cError { cError(const char*); };
 // ---------------------------------------------------------------- framework
 namespace EA {
 namespace Random {
-struct RandomLinearCongruential {
+class RandomLinearCongruential { public:
     unsigned mState;
     void   SetSeed(unsigned seed);        // 0x00936090
     double RandomDoubleUniform();         // 0x009360d0
@@ -23,23 +23,23 @@ namespace IO {
 bool WriteUint32(void* stream, const void* value, unsigned count, int endian);  // 0x0093aa70
 }
 namespace Text {
-struct Font {
+class Font { public:
     char mPad[0x34];
     void SetUserData(void* p);            // 0x00fd9450
 };
 }
 namespace ArgScript {
-struct cArguments {
+class cArguments { public:
     const char** MainArguments(int* count, int lo, int hi);   // 0x00838020
 };
-struct cCommandBase {
+class cCommandBase { public:
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
     virtual void v04(); virtual void v05(); virtual void v06();
     void Init();                          // 0x0083c800
 };
 }
 namespace Swarm {
-struct cEffectsParser {
+class cEffectsParser { public:
     void AddDescription(void* args, const char* name, int type, int flag);   // 0x00a6fc30
     void AddAnonDescription(void* args, int type, void* desc, int flag);     // 0x00a6fd40
 };

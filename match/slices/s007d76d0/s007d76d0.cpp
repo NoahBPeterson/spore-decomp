@@ -63,14 +63,14 @@ struct cAppModeInfo {                 // size 0x18
     int      mNameAlloc;              // +0x14
 };
 
-struct cApp;
+class cApp;
 
 struct IHandlerRC {
     void** vftable;                   // +0x00
     bool HandleMessage(int msg, void* data);
 };
 
-struct cApp {
+class cApp { public:
     void** mIAppVtbl;                 // +0x00
     void** mHandlerVtbl;              // +0x04 (IHandlerRC vtable)
     char   pad08[8];                  // +0x08

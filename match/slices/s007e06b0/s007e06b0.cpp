@@ -52,7 +52,7 @@ public:
 
 typedef cSPVector3 Vec3;
 
-struct cIParser {
+class cIParser { public:
     virtual void  v00(); virtual void  v01(); virtual void  v02(); virtual void  v03();
     virtual void  v04(); virtual void  v05(); virtual void  v06(); virtual void  v07();
     virtual void  v08(); virtual void  v09(); virtual void  v10(); virtual void  v11();
@@ -72,7 +72,7 @@ struct cIParser {
     virtual void  v43();                                            // +0xac
 };
 
-struct cCommandBase {
+class cCommandBase { public:
     virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3();
     virtual void c4();
     virtual void AddCommand(void* key, void* cmd);                  // +0x18
@@ -80,7 +80,7 @@ struct cCommandBase {
     int       mRefCount;    // +0x8
 };
 
-struct cBlockCommandBase : cCommandBase {
+class cBlockCommandBase : public cCommandBase { public:
     void* mChildState;      // +0xc
     char  mCommands[0x20];  // +0x10
 };
@@ -91,7 +91,7 @@ uint32_t ParseEnum(const char* value, const char** table);          // 0x00840bb
 
 namespace IO {
 
-struct IStream {
+class IStream { public:
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
     virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
     virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
@@ -105,13 +105,13 @@ bool ReadInt32(IStream* s, int32_t* p, unsigned n, int endian);     // 0x0093a78
 namespace Swarm {
 
 // EA::Swarm::cDescription : EA::RefCountTemplate<int> (vtable +0, refcount +4)
-struct cDescription {
+class cDescription { public:
     virtual void d0();
     virtual void d1();
     int mRefCount;      // +0x4
 };
 
-struct cEffectsParser {
+class cEffectsParser { public:
     void* GetInheritedDescription(void* argv, int count, int type); // 0x00a6f0d0
 };
 

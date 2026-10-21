@@ -669,7 +669,7 @@ struct TextureVector {
     void DoInsertValue(int** position, const TextureRef& value);   // 0x00425a80
 };
 
-struct cTextRenderer {
+class cTextRenderer { public:
     unsigned char* mGlyphRuns;      // +0x0000
     unsigned int*  mColors;         // +0x0004
     int            mNumRuns;        // +0x0008

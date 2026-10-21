@@ -94,7 +94,7 @@ struct VecPtr {
   VecPtr() : b(0), e(0), c(0) {}
 };
 
-struct cArithmeticaProgram : Resource {
+class cArithmeticaProgram : public Resource { public:
   VecPtr mTokens;        // +0x18
   int pad24;             // +0x24
   int pad28;

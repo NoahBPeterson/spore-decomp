@@ -18,7 +18,7 @@
 #include "types.h"
 
 namespace rw { namespace graphics {
-struct Raster {
+class Raster { public:
     uint32_t pad0[3];
     unsigned short m_width;   // +0xc
     unsigned short m_height;  // +0xe

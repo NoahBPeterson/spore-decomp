@@ -11,7 +11,7 @@
 // ---------------------------------------------------------------------------
 namespace EA {
     namespace Thread {
-        struct AtomicInt {
+        class AtomicInt { public:
             volatile long mValue;
             long GetValue() const { return _InterlockedExchangeAdd((long*)&mValue, 0); }
             long Increment() { return _InterlockedIncrement((long*)&mValue); }
@@ -19,14 +19,14 @@ namespace EA {
         };
     }
 
-    template <typename T> struct RefCountTemplate {
+    template <typename T> class RefCountTemplate { public:
         virtual ~RefCountTemplate() {}
         virtual int AddRef() { return mRefCount++ + 1; }
         virtual int Release() { int n = mRefCount - 1; mRefCount = n; if (n == 0) { mRefCount = 1; delete this; } return n; }
         T mRefCount;
     };
 
-    template <typename T> struct AutoRefCount {
+    template <typename T> class AutoRefCount { public:
         T* mpObject;
         AutoRefCount(T* p = 0) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
         ~AutoRefCount() { if (mpObject) mpObject->Release(); }

@@ -21,11 +21,11 @@ public:
     const char** OptionArgumentsPtr(const void* name, int n);
     bool HasFlag(const char* name);
 };
-struct cICommand {
+class cICommand { public:
     virtual void i0(); virtual void i1(); virtual void i2(); virtual void i3();
     virtual void i4(); virtual void i5();
 };
-struct cCommandBase : cICommand {
+class cCommandBase : public cICommand { public:
     virtual void AddCommand(void* key, void* cmd);
     void* mParser;
     int   mRefCount;

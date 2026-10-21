@@ -15,10 +15,10 @@ typedef void* FARPROC;
 // Swarm math types (layouts from the 2008 dev-build PDB).
 // ---------------------------------------------------------------------------
 namespace rw { namespace math { namespace fpu {
-struct Vector3Template {
+class Vector3Template { public:
     float x, y, z;
 };
-struct Matrix33Template {
+class Matrix33Template { public:
     float m[9];
     void Assign(const Matrix33Template&);   // 0x0041cb40
 };
@@ -569,7 +569,7 @@ extern "C" long _InterlockedExchange(volatile long* Target, long Value);  // 0x0
 // EASTL string (the shared empty buffer lives at 0x01667bac); bodies out of line.
 extern char gEmptyString[];                  // 0x01667bac
 namespace eastl {
-struct allocator {
+class allocator { public:
     void deallocate(void* p, unsigned int) { delete[] (char*)p; }
 };
 struct basic_string {

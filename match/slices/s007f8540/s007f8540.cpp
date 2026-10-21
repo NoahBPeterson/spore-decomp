@@ -315,7 +315,7 @@ void Vec8c::reserve(uint32_t n) {
 // ---------------------------------------------------------------------------
 // cSPUIAnimator
 // ---------------------------------------------------------------------------
-struct cSPUIAnimator {
+class cSPUIAnimator { public:
     // vptr at +0 (virtual destructor, slot 0)
     Vec88    mAnimationInfos;    // +4 (begin, end, capacity, allocator)
     float    mLastUpdate;        // +0x14

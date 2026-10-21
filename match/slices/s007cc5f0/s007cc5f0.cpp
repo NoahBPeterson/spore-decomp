@@ -4,7 +4,7 @@
 #include "../s007ca950/s007ca950.h"
 
 namespace EA { namespace ArgScript {
-struct cArguments {
+class cArguments { public:
     void** MainArguments(int n);
     void** OptionArguments(const char* pName, int n);
 };

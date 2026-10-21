@@ -39,7 +39,7 @@ public:
     const char** OptionArguments(const char* name, int n);          // 0x00838330
 };
 
-struct cIParser {
+class cIParser { public:
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
     virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
     virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
@@ -56,19 +56,19 @@ struct cIParser {
     virtual int   v40(const char* s);                              // +0xa0
 };
 
-struct cICommand {
+class cICommand { public:
     virtual void i0(); virtual void i1(); virtual void i2(); virtual void i3();
     virtual void i4(); virtual void i5();
 };
 
-struct cCommandBase : cICommand {
+class cCommandBase : public cICommand { public:
     cCommandBase();                                                 // 0x0083c800
     virtual void AddCommand(void* key, void* cmd);                  // +0x18
     cIParser* mParser;      // +0x4
     int       mRefCount;    // +0x8
 };
 
-struct cBlockCommandBase : cCommandBase {
+class cBlockCommandBase : public cCommandBase { public:
     void* mChildState;      // +0xc
     char  mCommands[0x20];  // +0x10
 };

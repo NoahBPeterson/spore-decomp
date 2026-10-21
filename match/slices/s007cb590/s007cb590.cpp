@@ -5,7 +5,7 @@
 
 // ---------------------------------------------------------------- masked callees
 namespace EA { namespace ArgScript {
-struct cArguments {
+class cArguments { public:
     void** MainArguments(int n);
     void** OptionArguments(const char* pName, int n);
 };
@@ -292,7 +292,7 @@ struct IConfigUnknown {
     virtual void Release();
 };
 
-struct cConfigManager {
+class cConfigManager { public:
     void* mpVtable0;                      // +0x00
     void* mpVtable1;                      // +0x04
     unsigned int mRefCount;               // +0x08

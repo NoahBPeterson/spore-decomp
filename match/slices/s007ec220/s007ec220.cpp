@@ -61,7 +61,7 @@ static void WriteBytes(void* writer, void* p, int n) {
 
 // ---------------------------------------------------------------------------
 namespace SP {
-struct cTelemetryItem {
+class cTelemetryItem { public:
   EA::DateTime::DateTime mSystemTime;  // +0x0
   uint32_t mType;                      // +0x8
   float* mDataBegin;                   // +0xc

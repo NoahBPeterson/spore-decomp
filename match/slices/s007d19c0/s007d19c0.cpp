@@ -20,7 +20,7 @@ namespace eastl {
 extern wchar_t gEmptyString16[2];
 template <typename T> struct EmptyStr;
 template <> struct EmptyStr<wchar_t> { static wchar_t* Get() { return gEmptyString16; } };
-struct allocator { void deallocate(void* p) { operator delete[](p); } };
+class allocator { public: void deallocate(void* p) { operator delete[](p); } };
 template <typename T, typename Allocator = allocator>
 class basic_string {
 public:
@@ -47,7 +47,7 @@ public:
     const char** OptionArguments(const char* name, int n);      // 0x838330
     bool HasFlag(const char* name);                             // 0x8380b0
 };
-struct cIParser {
+class cIParser { public:
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
     virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
     virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
@@ -64,14 +64,14 @@ struct cIParser {
     virtual char  v40(const char* s);   // +0xa0
 };
 uint32_t ParseEnum(const char* value, const char** table);                  // 0x840bb0
-struct cCommandBase {
+class cCommandBase { public:
     virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3();
     virtual void c4();
     virtual void AddCommand(void* key, void* cmd);   // +0x18
     cIParser* mParser;   // +0x4
     int mRefCount;       // +0x8
 };
-struct cBlockCommandBase : cCommandBase {
+class cBlockCommandBase : public cCommandBase { public:
     void* mChildState;         // +0xc
     char  mCommands[0x20];     // +0x10 (hash_map)
 };
