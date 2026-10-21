@@ -9,7 +9,7 @@ namespace rw {
 
 // ---- node interface ----------------------------------------------------
 // A list node heap block: [vptr @0][pad @4][element data @8 ..].
-struct IListNode {
+class IListNode { public:
     virtual void*        GetData();              // +0x00
     virtual int          SetData(void* p);       // +0x04
     virtual void*        v08();                  // +0x08
@@ -17,7 +17,7 @@ struct IListNode {
     virtual void         SetNext(IListNode* n);  // +0x10
     int pad4;                                    // +4
 };
-struct SNode : public IListNode {
+class SNode : public IListNode { public:
     char data[1];                                // +8
 };
 
@@ -53,7 +53,7 @@ struct SrcVtbl {
     unsigned (*GetCount)(void*);                 // +0x3c
 };
 
-struct SList {
+class SList { public:
     void*           vftable;                // +0x00
     SNode*          mHead;                  // +0x04
     SNode*          mTail;                  // +0x08

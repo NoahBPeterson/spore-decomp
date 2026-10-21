@@ -22,9 +22,9 @@ template <typename T> struct has_trivial_relocate : false_type {};
 template <> struct has_trivial_relocate<uint32_t> : true_type {};
 template <typename T> struct has_trivial_assign : false_type {};
 
-struct allocator { allocator() {} };
+class allocator { public: allocator() {} };
 
-template <typename Iterator> struct generic_iterator {
+template <typename Iterator> class generic_iterator { public:
     Iterator mIterator;
     generic_iterator(const Iterator& x) : mIterator(x) {}
     Iterator base() const { return mIterator; }

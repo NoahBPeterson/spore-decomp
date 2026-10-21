@@ -15,8 +15,8 @@ typedef int            int32_t;
 // ===========================================================================
 namespace rw { namespace core { namespace timer {
 
-struct Stopwatch
-{
+class Stopwatch
+{ public:
     void*   vftable;     // +0x00
     void*   mCallback;   // +0x04
     int32_t mUnits;      // +0x08
@@ -43,8 +43,8 @@ using rw::core::timer::Stopwatch;
 // ===========================================================================
 namespace rw { namespace core { namespace filesys {
 
-struct Stream
-{
+class Stream
+{ public:
     int32_t field00;
     int32_t field04;
     int32_t field08;
@@ -81,16 +81,16 @@ struct ICoreAllocator
 // ===========================================================================
 namespace rw {
 
-struct IListNode
-{
+class IListNode
+{ public:
     virtual void   v00();   // +0x00
     virtual void   v04();   // +0x04
     virtual void   v08();   // +0x08
     virtual void*  Next();  // +0x0c  (returns the following node)
 };
 
-struct SList
-{
+class SList
+{ public:
     uint32_t pad_00;   // +0x00
     void*    mHead;    // +0x04
     void*    mTail;    // +0x08
@@ -105,8 +105,8 @@ struct SList
 // rw::movie interfaces / objects
 // ===========================================================================
 namespace rw { namespace movie {
-struct IVideoRenderer
-{
+class IVideoRenderer
+{ public:
     virtual void v00();                       // +0x00
     virtual void v04(void* a);                // +0x04
     virtual int  v08();                       // +0x08
@@ -122,8 +122,8 @@ struct IVideoRenderer
     virtual void v3c(int a);                  // +0x3c
 };
 
-struct IAudioRenderer
-{
+class IAudioRenderer
+{ public:
     virtual void v00();                       // +0x00
     virtual void v04(int a, int b, int c);    // +0x04
     virtual int  v08();                       // +0x08
@@ -145,8 +145,8 @@ struct IAudioRenderer
 // ---------------------------------------------------------------------------
 // MovieDecoder (owned by the decoder slice; only the called methods here)
 // ---------------------------------------------------------------------------
-struct MovieDecoder
-{
+class MovieDecoder
+{ public:
     void*   vftable;      // +0x00
     int32_t field04;
     int32_t mStatus;      // +0x08
@@ -172,8 +172,8 @@ struct MovieDecoder
 // ---------------------------------------------------------------------------
 // MovieRenderer
 // ---------------------------------------------------------------------------
-struct MovieRenderer
-{
+class MovieRenderer
+{ public:
     ICoreAllocator* mAllocator;       // +0x00
     void*           mVideoRenderer;   // +0x04
     IAudioRenderer* mAudioRenderer;   // +0x08
@@ -225,8 +225,8 @@ struct IMovieTimerCallback
     virtual float v3();          // +0x0c  (returns elapsed seconds)
 };
 
-struct MovieTimer
-{
+class MovieTimer
+{ public:
     ICoreAllocator* mAllocator;   // +0x00
     Stopwatch*      mStopwatch;   // +0x04
     IMovieTimerCallback* mCallback; // +0x08
@@ -321,8 +321,8 @@ extern uint32_t g_fcc_auds;   // 0x015b17d0
 // ---------------------------------------------------------------------------
 struct IVideoDecoder;   // opaque
 
-struct MoviePlayer
-{
+class MoviePlayer
+{ public:
     ICoreAllocator* mAllocator;                 // +0x00
     void* mStreamerParseFunc;                   // +0x04
     void* mStreamerVideoFilterFunc;             // +0x08

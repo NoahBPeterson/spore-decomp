@@ -18,7 +18,7 @@ struct true_type {};
 struct false_type {};
 struct iterator_tag { iterator_tag() {} };
 
-struct allocator {
+class allocator { public:
   allocator() {}
   allocator(const allocator&) {}
   void* allocate(size_t n) {
@@ -112,7 +112,7 @@ template <typename T1, typename T2> struct pair {
 };
 
 // ---- generic iterator helpers ----
-template <typename It> struct generic_iterator {
+template <typename It> class generic_iterator { public:
   It mIterator;
   generic_iterator() : mIterator(0) {}
   explicit generic_iterator(It p) : mIterator(p) {}

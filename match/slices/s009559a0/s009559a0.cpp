@@ -18,7 +18,7 @@
 namespace EA {
 
 template <typename T>
-struct RectT {
+class RectT { public:
   T mLeft, mTop, mRight, mBottom;
   template <typename P>
   __forceinline bool Contains(const P& p) const {
@@ -104,7 +104,7 @@ struct Point2D {
   float x, y;
 };
 
-struct Image {
+class Image { public:
   virtual void AddRef();
   virtual void Release();
 };
@@ -185,7 +185,7 @@ struct GlyphInfoVector : VectorT<Renderable2DTextGlyphInfo, GlyphInfoVector> {
   void resize(unsigned int n);  // 0x009557e0
 };
 
-struct Renderable2DBuilder {
+class Renderable2DBuilder { public:
   Vertex2DVector mVerts;  // +0x0 (fixed_vector<Vertex2D,600>)
   uint32_t pad0[(0x2ef8 - 0xc) / 4];
   PartVector mParts;  // +0x2ef8 (fixed_vector<Renderable2DPart,16>)

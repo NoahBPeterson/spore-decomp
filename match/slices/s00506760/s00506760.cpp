@@ -66,7 +66,7 @@ TextureSet::TextureSet(const TextureSet& x) : TextureSetData(x) {}
 
 namespace eastl {
 
-struct allocator {};
+class allocator { public:};
 struct true_type {};
 
 template <typename T1, typename T2>
@@ -97,7 +97,7 @@ struct fixed_pool_base {
 };
 
 // fixed_pool_with_overflow: 0x14 bytes
-struct fixed_pool_with_overflow : fixed_pool_base {
+class fixed_pool_with_overflow : public fixed_pool_base { public:
     void* mpPoolBegin;     // +8
     void* mpPoolEnd;       // +0xc
     uint32_t mnNodeSize;   // +0x10
@@ -121,7 +121,7 @@ struct fixed_pool_with_overflow : fixed_pool_base {
     static void overflow_deallocate(void* p, uint32_t /*n*/) { delete[] (char*)p; }
 };
 
-struct fixed_hashtable_allocator {
+class fixed_hashtable_allocator { public:
     fixed_pool_with_overflow mPool;   // +0
     void* mpBucketBuffer;             // +0x14
 
@@ -186,14 +186,14 @@ struct insert_return_type {
     insert_return_type() : mpNode(0), mpBucket(0), second(false) {}
 };
 
-struct hashtable;
+class hashtable;
 
 template <typename Hashtable>
 struct rehash_base {
     void set_max_load_factor(float fMaxLoadFactor);
 };
 
-struct hashtable : rehash_base<hashtable> {
+class hashtable : public rehash_base<hashtable> { public:
     uint32_t mHashCodeBase;                  // +0
     node_type** mpBucketArray;               // +4
     uint32_t mnBucketCount;                  // +8
@@ -349,7 +349,7 @@ hash_map_base::hash_map_base(uint32_t nBucketCount, const hash<uint32_t>& hashFu
 }
 
 // fixed_hash_map<uint32_t, TextureSet, 0x20>: buckets at +0x34, node buffer at +0xbc (0x280 bytes)
-struct fixed_hash_map : hash_map_base {
+class fixed_hash_map : public hash_map_base { public:
     void* mBucketBuffer[0x22];        // +0x34
     uint8_t mNodeBuffer[0x280];       // +0xbc
 

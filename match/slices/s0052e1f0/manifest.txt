@@ -12,8 +12,8 @@ slices/s0052e1f0/s0052e1f0.cpp  ??1cSPSkinPaintDistributeDescription@@QAE@XZ  00
 slices/s0052e1f0/s0052e1f0.cpp  ??1?$RefCountTemplate@H@EA@@QAE@XZ  0052ec00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
 slices/s0052e1f0/s0052e1f0.cpp  ?ReadDistributeDescriptionCommand@@YAPAUcSPSkinPaintDistributeDescription@@PAUIStream@IO@EA@@H@Z  0052e9d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
 slices/s0052e1f0/s0052e1f0.cpp  ?WriteDistributeDescriptionCommand@@YAXPAUcSPSkinPaintDistributeDescription@@PAUIStream@IO@EA@@@Z  0052ec20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
-slices/s0052e1f0/s0052e1f0.cpp  ?OnRegister@?$cCommandStateT@UcEffectsParser@Swarm@EA@@UcCommandBase@ArgScript@3@@ArgScript@EA@@QAEXPAUcIParser@23@PAUcState@23@@Z  0052e520  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
-slices/s0052e1f0/s0052e1f0.cpp  ?OnRegister@cSPSkinPaintDistributeEffectCommand@?A0xc23ec0bd@@QAEXPAUcIParser@ArgScript@EA@@PAUcState@45@@Z  0052ec40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
-slices/s0052e1f0/s0052e1f0.cpp  ?Execute@cSPSkinPaintDistributeParticleCommand@?A0xc23ec0bd@@UAEXAAUcArguments@ArgScript@EA@@@Z  0052ef40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
-slices/s0052e1f0/s0052e1f0.cpp  ?Execute@cSPSkinPaintDistributeParticlesCommand@?A0xc23ec0bd@@UAEXAAUcArguments@ArgScript@EA@@@Z  0052efc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ?OnRegister@?$cCommandStateT@VcEffectsParser@Swarm@EA@@VcCommandBase@ArgScript@3@@ArgScript@EA@@QAEXPAVcIParser@23@PAUcState@23@@Z  0052e520  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ?OnRegister@cSPSkinPaintDistributeEffectCommand@?A0xc23ec0bd@@QAEXPAVcIParser@ArgScript@EA@@PAUcState@45@@Z  0052ec40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ?Execute@cSPSkinPaintDistributeParticleCommand@?A0xc23ec0bd@@UAEXAAVcArguments@ArgScript@EA@@@Z  0052ef40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ?Execute@cSPSkinPaintDistributeParticlesCommand@?A0xc23ec0bd@@UAEXAAVcArguments@ArgScript@EA@@@Z  0052efc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
 slices/s0052e1f0/s0052e1f0.cpp  ?Parse@cSPSkinPaintDistributeParticlesCommand@?A0xc23ec0bd@@UAE_NABULine@ArgScript@EA@@@Z  0052f040  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc

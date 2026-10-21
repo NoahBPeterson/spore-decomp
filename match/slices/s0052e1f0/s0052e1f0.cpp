@@ -17,7 +17,7 @@ extern "C" __declspec(dllimport) int __cdecl sscanf(const char* buffer, const ch
 
 // ---------------------------------------------------------------- math
 namespace rw { namespace math { namespace fpu {
-template <typename T, int N> struct Vector3Template {
+template <typename T, int N> class Vector3Template { public:
     T x, y, z;
     T& operator[](int i) { return (&x)[i]; }
 };
@@ -55,7 +55,7 @@ template <typename T1, typename T2> struct pair {
 };
 
 extern char gEmptyString;           // 0x01667bac
-struct allocator {
+class allocator { public:
     uint32_t mFlags;
     allocator() {}
 };
@@ -97,7 +97,7 @@ template <typename T> struct VectorBase {
     VectorBase() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
     ~VectorBase();                  // 0x0045daf0 (declined inline)
 };
-template <typename T> struct vector : VectorBase<T> {
+template <typename T> class vector : public VectorBase<T> { public:
     vector() {}
     ~vector()
     {
@@ -117,7 +117,7 @@ template <typename T> struct vector : VectorBase<T> {
 
 // ---------------------------------------------------------------- ref counting / swarm bases
 namespace EA {
-template <typename T> struct RefCountTemplate {
+template <typename T> class RefCountTemplate { public:
     RefCountTemplate() : mRefCount(0) {}
     ~RefCountTemplate() {}
     virtual int AddRef();
@@ -139,23 +139,23 @@ bool WriteBool8(IStream* s, const bool* v, uint32_t count);                    /
 }  // namespace IO
 
 namespace Swarm {
-struct cIComponent {
+class cIComponent { public:
     cIComponent() {}
     virtual void v00();
     virtual void v01();
     virtual void v02();
     virtual void Stop(int immediate);       // +0x0c
 };
-struct cComponentBase : cIComponent, RefCountTemplate<int> {
+class cComponentBase : public cIComponent, public RefCountTemplate<int> { public:
     cComponentBase() {}
     virtual ~cComponentBase() {}
     virtual int AddRef();
     virtual int Release();
 };
-struct cDescription : RefCountTemplate<int> {
+class cDescription : public RefCountTemplate<int> { public:
     cDescription() {}
 };
-struct cEffectsParser;
+class cEffectsParser;
 }  // namespace Swarm
 }  // namespace EA
 using EA::IO::IStream;
@@ -219,12 +219,12 @@ void WriteClearDescription(IStream* s, cSPSkinPaintClearDescription* d)
 }
 
 namespace nSPSkinner {
-struct cRTTBuffer {
+class cRTTBuffer { public:
     bool Begin();                                   // 0x00528e90
     void SetClearColor(const cSPVector3& color, float alpha);   // 0x005292d0
     void BeginDraw();                               // 0x00529bf0
 };
-struct cPaintMaterial : EA::RefCountTemplate<int> {
+class cPaintMaterial : public EA::RefCountTemplate<int> { public:
     uint32_t pad08[2];
     cRTTBuffer* mComponents[3];     // +0x10
     uint32_t mDimension;            // +0x1c
@@ -238,7 +238,7 @@ template <typename T> struct AutoRefCount {
     T* mpObject;
     operator T*() const { return mpObject; }
 };
-struct cPaintSystem {
+class cPaintSystem { public:
     uint32_t pad00[3];
     AutoRefCount<cPaintMaterial> mpMaterial;    // +0x0c
     cPaintMaterial* GetMaterial() { return mpMaterial; }
@@ -252,7 +252,7 @@ inline ColorRGB GetUserColor(int index) { return ColorRGB(kSkinPaintUserColors[i
 void SetHairTexture(uint32_t instance);     // 0x0052a3e0
 void SetHairPrintGeom(uint32_t instance);   // 0x0052a3f0
 
-struct cSPSkinPaintClearEffect : EA::Swarm::cComponentBase {   // 0x14
+class cSPSkinPaintClearEffect : public EA::Swarm::cComponentBase { public:   // 0x14
     cSPSkinPaintClearDescription* mDesc;    // +0x0c
     bool mActive;                           // +0x10
     cSPSkinPaintClearEffect(cSPSkinPaintClearDescription* desc);
@@ -379,7 +379,7 @@ void WriteDistributeDescriptionCommand(cSPSkinPaintDistributeDescription* d, ISt
 
 // ---------------------------------------------------------------- ArgScript commands
 namespace EA { namespace ArgScript {
-struct cIParser {
+class cIParser { public:
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
     virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
     virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
@@ -401,35 +401,35 @@ struct Line {
     } mText;
     const char* GetText() const { return mText.c_str(); }
 };
-struct cArguments {
+class cArguments { public:
     const char** MainArguments(int count);      // 0x00838320
     bool HasFlag(const char* flag);             // 0x008380b0
 };
-struct cError {
+class cError { public:
     uint32_t mMessage[4];   // eastl::basic_string<char>
     cError(const char* fmt, ...);               // 0x0052df30
     cError(const cError& x);
     ~cError();
 };
-struct cICommand {
+class cICommand { public:
     virtual void AddRef();
     virtual void Release();
     virtual void Cast();
 };
-struct cCommandBase : cICommand {
+class cCommandBase : public cICommand { public:
     cIParser* mParser;
     int mRefCount;
     cCommandBase();                             // 0x0083c800
     void OnRegister(cIParser* parser, cState* state);   // 0x0083c7f0
 };
-struct cIMetaCommand : cICommand {};
-struct cMetaCommandBase : cIMetaCommand {
+class cIMetaCommand : public cICommand { public:};
+class cMetaCommandBase : public cIMetaCommand { public:
     cIParser* mParser;
     int mRefCount;
     cMetaCommandBase();                         // 0x0083c840
 };
-struct cIBlockCommand : cICommand {};
-struct cBlockCommandBase : cIBlockCommand {
+class cIBlockCommand : public cICommand { public:};
+class cBlockCommandBase : public cIBlockCommand { public:
     cIParser* mParser;                          // +0x04
     int mRefCount;                              // +0x08
     cState* mChildState;                        // +0x0c
@@ -445,19 +445,19 @@ template <typename T, typename Base> struct cCommandStateT : Base {
     cCommandStateT() {}
     void OnRegister(cIParser* parser, cState* state);
 };
-template <typename T> struct cCommandT : cCommandStateT<T, cCommandBase> {
+template <typename T> class cCommandT : public cCommandStateT<T, cCommandBase> { public:
     cCommandT() {}
 };
-template <typename T> struct cMetaCommandT : cCommandStateT<T, cMetaCommandBase> {
+template <typename T> class cMetaCommandT : public cCommandStateT<T, cMetaCommandBase> { public:
     cMetaCommandT() {}
 };
-template <typename T> struct cBlockCommandT : cCommandStateT<T, cBlockCommandBase> {
+template <typename T> class cBlockCommandT : public cCommandStateT<T, cBlockCommandBase> { public:
     cBlockCommandT() {}
 };
 }}  // namespace EA::ArgScript
 
 namespace EA { namespace Swarm {
-struct cEffectsParser : RefCountTemplate<int> {
+class cEffectsParser : public RefCountTemplate<int> { public:
     int FindComponent(const char* name, int type);  // 0x00a6eb60
 };
 }}

@@ -25,7 +25,7 @@ struct Vec4 { float x, y, z, w; };
 // ---------------------------------------------------------------------------
 // vector<T>: only what these instantiations need
 // ---------------------------------------------------------------------------
-template <class T> struct vector {
+template <class T> class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
@@ -281,7 +281,7 @@ struct fixed_pool_base {
     void init(void* pMemory, uint32_t memorySize, uint32_t nodeSize, uint32_t alignment, uint32_t alignmentOffset); // 0x00921260
 };
 
-struct fixed_pool_with_overflow : public fixed_pool_base {
+class fixed_pool_with_overflow : public fixed_pool_base { public:
     void* mpPoolBegin;
     void* mpCapacity;
     uint32_t mnNodeSize;
@@ -302,7 +302,7 @@ struct fixed_pool_with_overflow : public fixed_pool_base {
     static void OverflowFree(void* p, uint32_t n) { (void)&n; void* const pMemory = p; EASTLFree(pMemory); }
 };
 
-struct fixed_hashtable_allocator {
+class fixed_hashtable_allocator { public:
     fixed_pool_with_overflow mPool;
     void* mpBucketBuffer;
     fixed_hashtable_allocator(void* pNodeBuffer, void* pBucketBuffer) : mPool(pNodeBuffer), mpBucketBuffer(pBucketBuffer) {}

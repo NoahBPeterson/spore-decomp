@@ -127,7 +127,7 @@ template <class T> struct VectorBase {
     ~VectorBase();                                   // 0x00425990
 };
 
-template <class T> struct vector : public VectorBase<T> {
+template <class T> class vector : public VectorBase<T> { public:
     vector() {}
     ~vector() { destruct(this->mpBegin, this->mpEnd); ScratchSlots<3>(); }
     T* begin() { return this->mpBegin; }
@@ -137,7 +137,7 @@ template <class T> struct vector : public VectorBase<T> {
     T& operator[](uint32_t i) { return this->mpBegin[i]; }
 };
 
-template <int N> struct bitset {
+template <int N> class bitset { public:
     uint32_t mWord[(N + 31) / 32];
     uint32_t& DoGetWord(uint32_t i) { return mWord[i >> 5]; }
     __forceinline bitset& set(uint32_t i, bool value) {  // /Ob1 refuses this size otherwise
@@ -165,7 +165,7 @@ template <> inline uint32_t& bitset<32>::DoGetWord(uint32_t) { return mWord[0]; 
 
 namespace SP {
 
-class cMWModel;
+struct cMWModel;
 class cIModelWorldImpl {
 public:
     void* vtbl_placeholder_never_used();
@@ -183,7 +183,7 @@ public:
     virtual void RemoveModel(cMWModel* model, int flags);   // vtable +0x16C
 };
 
-class cMWModel {
+struct cMWModel { private:
 public:
     void AddRef() { mnRefCount++; }
     void Release();                                  // 0x0040F360

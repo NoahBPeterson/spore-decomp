@@ -24,7 +24,7 @@ struct ResourceKey {
 
 namespace EA {
 template <typename T>
-struct AutoRefCount {
+class AutoRefCount { public:
     T* mpObject;
     AutoRefCount() : mpObject(0) {}
     AutoRefCount(const AutoRefCount& x) : mpObject(x.mpObject) { if (mpObject) mpObject->AddRef(); }
@@ -46,7 +46,7 @@ struct AutoRefCount {
 };
 
 // EA::RefCountTemplate: vptr, then the count; Release deletes through the virtual dtor.
-struct RefCountTemplate {
+class RefCountTemplate { public:
     virtual ~RefCountTemplate();
     int mnRefCount;
     int Release()
@@ -65,7 +65,7 @@ struct RefCountTemplate {
 namespace eastl {
 template <typename T> inline const T& min(const T& a, const T& b) { return (b < a) ? b : a; }
 
-struct allocator {
+class allocator { public:
     allocator(const char* = 0) {}
 };
 extern char gEmptyString[2];                                                // 0x01667bac
@@ -145,7 +145,7 @@ struct cOwnedObjectPtr {
 
 // Atomically reference-counted object (count at +8).
 namespace EA { namespace Thread {
-struct AtomicInt {
+class AtomicInt { public:
     volatile long mValue;
     long GetValue() const { return _InterlockedExchangeAdd((long*)&mValue, 0); }
     long Increment() { return _InterlockedIncrement((long*)&mValue); }

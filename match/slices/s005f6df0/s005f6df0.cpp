@@ -16,7 +16,7 @@ inline void* operator new(size_t, void* p) throw() { return p; }
 
 namespace EA {
 namespace ResourceMan {
-struct Key {
+class Key { public:
   uint32_t instanceID;
   uint32_t typeID;
   uint32_t groupID;
@@ -145,7 +145,7 @@ class cSPUIRenderTarget {
 };
 
 namespace SP {
-class cMWModel;
+struct cMWModel;
 
 class cMWWorld {
  public:
@@ -156,7 +156,7 @@ class cMWWorld {
   virtual void DestroyModel(cMWModel* model, bool flag);  // +0x170
 };
 
-class cMWModel {
+struct cMWModel { private:
  public:
   cMWWorld* mpWorld;   // +0x00
   union {
@@ -183,7 +183,7 @@ class cMWModel {
   }
 };
 
-class cAnimatingCreature {
+struct cAnimatingCreature { private:
  public:
   int Release();  // 0x00a05270
 };
@@ -629,7 +629,7 @@ struct hashtable_iterator {
   }
 };
 
-struct allocator {
+class allocator { public:
   void* allocate(size_t n) { return operator new[](n, "Editor", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1); }
   void deallocate(void* p) { operator delete[](p); }
 };
