@@ -121,10 +121,10 @@ public:
     }
 };
 
-struct cMesh : RefCounted {
+class cMesh : public RefCounted { public:
     cMesh* Clone();                                       // 0x00523570
 };
-struct cMeshAORender {
+class cMeshAORender { public:
     void Rebuild();                                       // 0x00516eb0
 };
 

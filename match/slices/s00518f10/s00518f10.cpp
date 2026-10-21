@@ -21,7 +21,7 @@ extern float g_1485378;    // 0x01485378
 
 // ---------------------------------------------------------------- minimal layouts
 namespace nSPSkinner {
-struct cRTTBuffer {                 // size 0x64
+class cRTTBuffer { public:                 // size 0x64
     uint32_t mCamera;               // +0x00
     uint32_t material;              // +0x04
     uint32_t writemask;             // +0x08
@@ -35,7 +35,7 @@ struct cRTTBuffer {                 // size 0x64
     uint32_t mHeight;               // +0x5c
     void*    mTexture;              // +0x60
 };
-struct cPaintAmbOccJob {
+class cPaintAmbOccJob { public:
     virtual bool Render();          // +0x00
 };
 }  // namespace nSPSkinner

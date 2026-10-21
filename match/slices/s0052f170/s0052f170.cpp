@@ -9,12 +9,12 @@ void  operator delete(void* p);
 
 // ---------------------------------------------------------------- ArgScript
 namespace EA { namespace ArgScript {
-struct cArguments {
+class cArguments { public:
     static void* MainArguments(cArguments* self, ...);
     static void* OptionArguments(cArguments* self, const char* name, int count);
     static unsigned char HasFlag(cArguments* self, const char* name);
 };
-struct cBlockCommandBase { virtual ~cBlockCommandBase(); };
+class cBlockCommandBase { public: virtual ~cBlockCommandBase(); };
 struct cEffectsParser;
 }}
 

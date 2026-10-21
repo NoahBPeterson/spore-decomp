@@ -17,7 +17,7 @@ inline void* operator new(unsigned int, void* p) { return p; }
 
 namespace eastl {
 
-struct allocator {
+class allocator { public:
     allocator() {}
     allocator(const allocator&) {}
 };
@@ -45,7 +45,7 @@ struct sp_vector_allocator {
 };
 
 template <typename T>
-struct vector {
+class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
@@ -69,7 +69,7 @@ struct cSPVector2 {
 
 namespace SP {
 
-struct cPropertyList {
+class cPropertyList { public:
     virtual int AddRef();
     virtual int Release();
 };
@@ -79,7 +79,7 @@ struct cPropertyList {
 namespace EA {
 
 template <typename T>
-struct AutoRefCount {
+class AutoRefCount { public:
     T* mpObject;
     AutoRefCount(const AutoRefCount& x) : mpObject(x.mpObject)
     {

@@ -39,7 +39,7 @@ template<int N> struct bitset {
 typedef bitset<128> ValidityBits;
 
 namespace EA { namespace ResourceMan {
-struct Key {
+class Key { public:
     uint32_t instanceID;   // +0
     uint32_t typeID;       // +4
     uint32_t groupID;      // +8
@@ -73,12 +73,12 @@ template<class T> struct AutoRefCount {
 
 namespace SP {
 
-struct cPropertyList : RefCounted {
+class cPropertyList : public RefCounted { public:
     bool HasProperty(uint32_t propID);                       // @ 0x6a25a0
 };
 
 // SP::PropertyManager(): vtable slot 11 (+0x2c) = GetPropertyList(id, group, &out).
-struct cPropertyManager {
+class cPropertyManager { public:
     virtual void _v00(); virtual void _v01(); virtual void _v02(); virtual void _v03();
     virtual void _v04(); virtual void _v05(); virtual void _v06(); virtual void _v07();
     virtual void _v08(); virtual void _v09(); virtual void _v10();
@@ -129,7 +129,7 @@ extern uint32_t kEditorConfigGroup;                          // 0x15daa00
 extern uint32_t kMinBlockCount;                              // 0x15da6e0
 
 namespace SP {
-struct cSPEditorModelValidity {
+class cSPEditorModelValidity { public:
     enum eValidityTests {
         kValidityTooComplex = 0,
         kValidityOverBudget = 1,

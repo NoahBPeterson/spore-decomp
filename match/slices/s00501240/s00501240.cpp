@@ -17,10 +17,10 @@ typedef int ptrdiff_t;
 
 void* __cdecl allocate_memory(void* allocator, size_t n, size_t alignment, size_t alignmentOffset); // 0x0042dee0
 
-struct allocator {};
+class allocator { public:};
 
 // fixed_vector_allocator: overflow allocator + pool begin (8 bytes)
-struct fixed_vector_allocator {
+class fixed_vector_allocator { public:
     allocator mOverflowAllocator;
     void* mpPoolBegin;
     fixed_vector_allocator(void* pNodeBuffer) : mpPoolBegin(pNodeBuffer) {}

@@ -175,7 +175,7 @@ public:
 };
 
 namespace ResourceMan {
-struct Key {
+class Key { public:
     uint32_t mnInstanceID;
     uint32_t mnTypeID;
     uint32_t mnGroupID;

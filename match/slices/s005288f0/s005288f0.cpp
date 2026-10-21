@@ -115,7 +115,7 @@ inline void SetWindow(RwCamera* c, float cx, float cy, float sx, float sy) {
 
 namespace nSPSkinner {
 
-struct cRTTBuffer {                     // size 0x64
+class cRTTBuffer { public:                     // size 0x64
     RwCamera* mCamera;                  // +0x00
     uint32_t material;                  // +0x04
     uint32_t writemask;                 // +0x08

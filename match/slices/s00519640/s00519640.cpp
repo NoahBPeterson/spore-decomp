@@ -44,7 +44,7 @@ struct TexFactory {
 };
 
 namespace nSPSkinner {
-struct cRTTBuffer {                 // size 0x64
+class cRTTBuffer { public:                 // size 0x64
     uint32_t mCamera;               // +0x00
     uint32_t material;              // +0x04
     uint32_t writemask;             // +0x08
@@ -58,7 +58,7 @@ struct cRTTBuffer {                 // size 0x64
     uint32_t mHeight;               // +0x5c
     void*    mTexture;              // +0x60
 };
-struct cPaintSplatJob {             // size 0x18
+class cPaintSplatJob { public:             // size 0x18
     uint32_t pad00[3];
     bool     mComplete;             // +0x0c
     uint8_t  pad0d[3];

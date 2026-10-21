@@ -186,7 +186,7 @@ void ProjectToTangentPlane(const Vector3& normal, const Vector3& dir, Vector3& o
 
 namespace nSPSkinner {
 
-struct cPaintSystem {
+class cPaintSystem { public:
     uint32_t pad0[3];
     uint32_t mpMaterial;            // +0x0c
     cMeshPtr mpBakedMesh;           // +0x10

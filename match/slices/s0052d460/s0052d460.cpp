@@ -44,8 +44,8 @@ inline float Clamp01(float value)
 }
 
 namespace rw { namespace math { namespace fpu {
-template <class T, int N> struct Vector3Template
-{
+template <class T, int N> class Vector3Template
+{ public:
     T x, y, z;
     Vector3Template() {}
     Vector3Template(T x_, T y_, T z_) { x = x_; y = y_; z = z_; }

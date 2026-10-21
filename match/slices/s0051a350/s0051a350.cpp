@@ -45,7 +45,7 @@ struct Factory {
 };
 
 namespace nSPSkinner {
-struct cRTTBuffer {                 // size 0x64
+class cRTTBuffer { public:                 // size 0x64
     uint32_t mCamera; uint32_t material; uint32_t writemask;
     float    params[12];
     void*    textures[2];
@@ -54,7 +54,7 @@ struct cRTTBuffer {                 // size 0x64
     uint32_t vtxcount; uint32_t pad50;
     uint32_t mWidth; uint32_t mHeight; void* mTexture;
 };
-struct cPaintSplatAlphaJob {        // size 0x18
+class cPaintSplatAlphaJob { public:        // size 0x18
     uint32_t pad00[3];
     bool     mComplete;
     uint8_t  pad0d[3];

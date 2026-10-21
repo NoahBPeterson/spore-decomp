@@ -13,21 +13,21 @@ struct cSpeciesCheat {
     void GetFullPath(void* key, void* out); // @ 0x004dc660
 };
 
-struct cPlantSummarizer {
+class cPlantSummarizer { public:
     char pad[0x10];
     int GetStaticType();                    // @ 0x004dc730
     int GetResType(int);                    // @ 0x004dc740
     bool ExtractParameters(int* desc, void* out); // @ 0x004dc760
 };
 
-struct cSpeciesSummarizer {
+class cSpeciesSummarizer { public:
     char pad[0x10];
     int GetStaticType();                    // @ 0x004dc920
     int GetResType(int);                    // @ 0x004dc930
     bool ExtractParameters(int* desc, void* out); // @ 0x004dc950
 };
 
-struct cSPEditorSpeciesManager {
+class cSPEditorSpeciesManager { public:
     char pad[0x100];
     void Teardown();                        // @ 0x004dcaa0
     bool HandleMessage(int msgId, void* payload); // @ 0x004dcee0

@@ -35,7 +35,7 @@ public:
     T* mpObject;
 };
 namespace ResourceMan {
-struct Key {
+class Key { public:
     uint32_t mInstance;
     uint32_t mType;
     uint32_t mGroup;
@@ -65,7 +65,7 @@ template <class T> inline T* uninitialized_copy_ptr(T* first, T* last, T* result
     return p;
 }
 
-template <class T> struct vector {
+template <class T> class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
@@ -125,7 +125,7 @@ template <class Node> struct insert_return_type {
     bool second;
 };
 
-struct allocator {
+class allocator { public:
     void deallocate(void* p, uint32_t) { void* const pMemory = p; EASTLFree(pMemory); }
 };
 
@@ -137,13 +137,13 @@ struct fixed_pool_base {
     Link* mpNext;
     void init(void* pMemory, uint32_t memorySize, uint32_t nodeSize, uint32_t alignment, uint32_t alignmentOffset); // 0x00921260
 };
-struct fixed_pool_with_overflow : public fixed_pool_base {
+class fixed_pool_with_overflow : public fixed_pool_base { public:
     void* mpPoolBegin;
     void* mpCapacity;
     uint32_t mnNodeSize;
     static void OverflowFree(void* p, uint32_t n) { (void)&n; void* const pMemory = p; EASTLFree(pMemory); }
 };
-struct fixed_hashtable_allocator {
+class fixed_hashtable_allocator { public:
     fixed_pool_with_overflow mPool;
     void* mpBucketBuffer;
     fixed_hashtable_allocator(void* pNodeBuffer, uint32_t nodeBufferSize, uint32_t nodeSize, void* pBucketBuffer) {
@@ -365,7 +365,7 @@ struct PartLayout {   // 0x14-byte value of a fixed_hash_map<uint32_t, PartLayou
 
 namespace SP {
 class cSpeciesProfile;
-class cSpeciesArchetype {
+struct cSpeciesArchetype { private:
 public:
     cSpeciesArchetype();                               // 0x004DA440
     cSpeciesArchetype(const cSpeciesArchetype& x);     // 0x004E1CB0

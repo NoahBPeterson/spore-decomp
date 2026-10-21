@@ -74,8 +74,8 @@ struct AutoRefCount
 	AutoRefCount() : mpObject(0) {}
 };
 
-class cSpeciesArchetype
-{
+struct cSpeciesArchetype
+{ private:
 public:
 	cSpeciesArchetype();
 

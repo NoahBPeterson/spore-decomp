@@ -218,7 +218,7 @@ void ProjectToTangentPlane(const Vector3& normal, const Vector3& dir, Vector3& o
 
 namespace nSPSkinner {
 
-struct cPaintSystem {
+class cPaintSystem { public:
     uint32_t pad0[3];
     AutoRefCount<cPaintMaterial> mpMaterial;    // +0x0c
     AutoRefCount<cMesh> mpBakedMesh;            // +0x10

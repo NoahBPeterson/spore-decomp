@@ -134,7 +134,7 @@ template <typename T, T v> struct integral_constant { static const T value = v; 
 typedef integral_constant<bool, true> true_type;
 typedef integral_constant<bool, false> false_type;
 
-struct allocator { allocator() {} };
+class allocator { public: allocator() {} };
 
 // ---- copy / copy_backward for trivially copyable pointers (memcpy / memmove paths)
 template <bool bHasTrivialCopy> struct copy_impl_chooser;
@@ -210,7 +210,7 @@ struct Elem18 { uint32_t d[6]; Elem18() {} };
 struct Elem0C { uint32_t d[3]; Elem0C() {} };
 
 template <typename T>
-struct vector {
+class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
@@ -378,7 +378,7 @@ struct DequeBase {
 };
 
 template <typename T>
-struct deque : DequeBase<T> {
+class deque : public DequeBase<T> { public:
     deque(const allocator& a);
     ~deque();
     T& back();
@@ -452,6 +452,6 @@ void deque<T>::DoPushBack(const T& value)
     this->mItEnd.mpCurrent = this->mItEnd.mpBegin;
 }
 
-template struct deque<Elem48>;
+template class deque<Elem48>;
 
 } // namespace eastl

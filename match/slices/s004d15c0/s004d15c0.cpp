@@ -9,7 +9,7 @@
 template <int N> inline void ScratchSlots() { uint32_t s[N]; }
 
 namespace EA { namespace ResourceMan {
-struct Key { uint32_t instance; uint32_t type; uint32_t group; };
+class Key { public: uint32_t instance; uint32_t type; uint32_t group; };
 
 struct ResourceObject {
     virtual int AddRef();   // +0
@@ -118,7 +118,7 @@ template <class Node> inline bool operator!=(const hashtable_iterator_base<Node>
     return a.mpNode != b.mpNode;
 }
 
-template <class Node> struct hashtable {
+template <class Node> class hashtable { public:
     uint32_t mHashCodeBase;  // empty functor members
     Node** mpBucketArray;
     uint32_t mnBucketCount;

@@ -15,7 +15,7 @@ typedef unsigned int uint;
 template <int N> inline void ScratchSlots() { uint s[N]; }
 
 namespace eastl {
-struct allocator {};
+class allocator { public:};
 template <typename T, typename A = allocator>
 struct basic_string {
     T* mpBegin;

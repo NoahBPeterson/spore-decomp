@@ -82,7 +82,7 @@ extern float kSPMaxFloat;                                                // 0x01
 
 namespace eastl {
 struct sp_vector_allocator { uint32_t a, b; };
-template <typename T> struct vector {
+template <typename T> class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
@@ -117,7 +117,7 @@ struct cCreatureBone {
     float mLimbPosEnd;      // +0x3c
 };
 
-struct cMesh {
+class cMesh { public:
     uint32_t pad0[0x14c / 4];
     cSPBoundingBox mBounds;                                // +0x14c
     uint32_t pad164[(0x1a4 - 0x164) / 4];
