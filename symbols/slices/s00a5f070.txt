@@ -1,0 +1,26 @@
+00a5f070 delay_doaddfloat  # PD delay_doAddFloat; clamped value 0x2c, clock 0x28
+00a5f0e0 delay_pause  # PD delay_pause (f!=0 -> clock_pause, else clock_unpause)
+00a5f120 delay_new  # class_new("delay") allocator; clock_new(x,0xa59db0), out "bang", in "ft1"/"float"
+00a5f1e0 delay_setup  # gensym("delay")+class_new("del"), bang->spin_bang, "stop", "ft1", addfloat, "pause"
+00a5f300 metro_tick  # PD metro_tick (bang out, reschedule while x+0x30==0)
+00a5f340 metro_float  # PD metro_float
+00a5f3c0 metro_bang  # PD metro_bang
+00a5f3f0 metro_stop  # PD metro_stop
+00a5f420 metro_ft1  # PD metro_ft1 (interval clamp >=1.0)
+00a5f460 metro_free  # PD metro_free (clock_free at x+0x28); merged with metro_new by the analyser (nonmatching)
+00a5f470 metro_new  # class_new("metro") allocator; interval clamp >=1.0, out "bang", in "ft1"/"float"
+00a5f540 metro_setup  # gensym("metro")+class_new, bang/stop/ft1/addfloat/pause
+00a5f630 line_tick  # PD line_tick (immediate vs interpolated outlet fan-out, then clock_delay)
+00a5f750 line_float  # PD line_float (start a new ramp segment or jump)
+00a5f8b0 line_ft1  # PD line_ft1 (set ramp time, mark dirty)
+00a5f8e0 line_stop  # PD line_stop (freeze current value)
+00a5f910 line_set  # PD line_set (jump to value)
+00a5f950 line_pause  # PD line_pause (shift the two clock timestamps)
+00a5f9f0 line_new  # class_new("line") allocator; out "float"/"bang", in "ft1"/"float", floatinlet on 0x58
+00a5fae0 line_setup  # gensym("line")+class_new, ft1/stop/set/addfloat/pause
+00a5fc10 timer_bang  # PD timer_bang (elapsed-time float fan-out)
+00a5fc80 timer_pause  # PD timer_pause (accumulate/suspend elapsed time)
+00a5fce0 timer_new  # class_new("timer") allocator; out "float", in "bang2"/"bang"
+00a5fd70 timer_setup  # gensym("timer")+class_new, bang/bang2->timer_start/pause
+00a5fe20 pipe_list  # PD pipe_list (queue a new row into the pipe's ring)
+00a5ff10 pipe_tick  # PD pipe_tick (drain one row of the pipe, dispatching float/symbol)

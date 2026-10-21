@@ -1,0 +1,16 @@
+slices/s00a5f070/s00a5f070.cpp  ?delay_doaddfloat@Eapd@Audio@EA@@YAXPADM@Z  00a5f070  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5f070/s00a5f070.cpp  ?delay_pause@Eapd@Audio@EA@@YAXPADM@Z  00a5f0e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5f070/s00a5f070.cpp  ?delay_new@Eapd@Audio@EA@@YAPAXM@Z  00a5f120  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5f070/s00a5f070.cpp  ?metro_tick@Eapd@Audio@EA@@YAXPAD@Z  00a5f300  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5f070/s00a5f070.cpp  ?metro_float@Eapd@Audio@EA@@YAXPADM@Z  00a5f340  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5f070/s00a5f070.cpp  ?metro_bang@Eapd@Audio@EA@@YAXPAD@Z  00a5f3c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5f070/s00a5f070.cpp  ?metro_stop@Eapd@Audio@EA@@YAXPAD@Z  00a5f3f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5f070/s00a5f070.cpp  ?metro_ft1@Eapd@Audio@EA@@YAXPADM@Z  00a5f420  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5f070/s00a5f070.cpp  ?line_ft1@Eapd@Audio@EA@@YAXPADM@Z  00a5f8b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5f070/s00a5f070.cpp  ?line_stop@Eapd@Audio@EA@@YAXPAD@Z  00a5f8e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5f070/s00a5f070.cpp  ?line_set@Eapd@Audio@EA@@YAXPADM@Z  00a5f910  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5f070/s00a5f070.cpp  ?line_pause@Eapd@Audio@EA@@YAXPADM@Z  00a5f950  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5f070/s00a5f070.cpp  ?line_new@Eapd@Audio@EA@@YAPAXMM@Z  00a5f9f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5f070/s00a5f070.cpp  ?timer_bang@Eapd@Audio@EA@@YAXPAD@Z  00a5fc10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5f070/s00a5f070.cpp  ?timer_pause@Eapd@Audio@EA@@YAXPADM@Z  00a5fc80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5f070/s00a5f070.cpp  ?timer_new@Eapd@Audio@EA@@YAPAXXZ  00a5fce0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

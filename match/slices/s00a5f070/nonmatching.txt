@@ -1,0 +1,8 @@
+# Slice s00a5f070 -- metadata merges and structurally-homeless VAs.
+# Rows: bare 8-hex VA, one per line.
+
+# 00a5f460: the analysis merges metro_free (6 bytes, 0xa5f460:
+#   mov eax,[esp+4]; mov ecx,[eax+0x28]; mov [esp+4],ecx; jmp clock_free)
+#   with metro_new (starts 0xa5f470) into one 216-byte region.  chk.py compares
+#   that whole region against a single symbol, so no single symbol can match.
+00a5f460
