@@ -125,7 +125,8 @@ Tools (from repo root):
   <symbol>`: the symbol is the VA's manifest row (`manif`), else the definition after its `// @ 0x<va>`
   marker (`marker`), else the nearest size (`~size`, unreliable). `other` means a byte-identical symbol of
   another name, which the manifest row must then name. `(size N vs M)` is your function's size against
-  the original's. Put scratch files only under `work/match/scratch_<id>_*`
+  the original's. For each MATCH not yet in manifest.txt it prints the finished manifest row, flags
+  included (run_all.py reads flags per row, not from chk's `--flags`): copy it as printed. Put scratch files only under `work/match/scratch_<id>_*`
   (the session scratchpad is shared between concurrent agents and gets clobbered).
 - `.venv/bin/python tools/matching/try_variants.py <scratch.cpp> <va>`: rank candidate spellings
   (use `work/match/scratch_<id>_N.cpp` files; every function symbol in the file is compared)

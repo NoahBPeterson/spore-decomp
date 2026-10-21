@@ -241,6 +241,8 @@ def _svc_sessions():
         return None
 
 _slice_log = None
+# a manifest row ("slices/<id>/<id>.cpp sym va ...") or a nonmatching row ("<va> ..."), not a note line
+ROW_RE = re.compile(r"^(?:slices/\S+\s+\S+\s+(?:0x)?[0-9a-fA-F]{6,8}\b|[0-9a-fA-F]{6,8}(?:\s|$))")
 
 
 def commit_row_deltas(tag):
@@ -249,23 +251,27 @@ def commit_row_deltas(tag):
     global _slice_log
     if _slice_log is None:
         try:
-            _slice_log = subprocess.run(["git", "-C", ROOT, "log", "--format=@%s", "--numstat", "--", "match/slices"],
+            _slice_log = subprocess.run(["git", "-C", ROOT, "log", "--format=@%s", "-p", "-U0", "--no-renames", "--",
+                                         "match/slices/*/manifest.txt", "match/slices/*/nonmatching.txt"],
                                         capture_output=True, text=True, check=True).stdout
         except (OSError, subprocess.CalledProcessError):
             _slice_log = ""
     out = _slice_log
-    ex = eq = 0; mine = seen = False
+    ex = eq = 0; mine = seen = False; cur = None
     for l in out.splitlines():
-        if l.startswith("@"):
+        if l.startswith("@") and not l.startswith("@@"):
             mine = l[1:].startswith(tag + ":"); seen |= mine
             continue
-        p = l.split("\t")
-        if not mine or len(p) != 3 or p[0] == "-":
+        if l.startswith("+++ ") or l.startswith("--- "):
+            if l.startswith("+++ "):
+                cur = "ex" if l.endswith("/manifest.txt") else "eq"
             continue
-        n = int(p[0]) - int(p[1])
-        if p[2].endswith("/manifest.txt"):
+        if not mine or l[:1] not in "+-" or not ROW_RE.match(l[1:]):
+            continue
+        n = 1 if l[0] == "+" else -1
+        if cur == "ex":
             ex += n
-        elif p[2].endswith("/nonmatching.txt"):
+        else:
             eq += n
     return (ex, eq) if seen else None
 
@@ -335,7 +341,7 @@ def model_table():
                 for fname, is_exact in (("manifest.txt", True), ("nonmatching.txt", False)):
                     p = W("match/slices", rec["id"], fname)
                     if os.path.exists(p):
-                        n = sum(1 for l in open(p) if l.strip() and not l.lstrip().startswith("#"))
+                        n = sum(1 for l in open(p) if ROW_RE.match(l))   # wrapped notes are not rows
                         if is_exact:
                             ex += n
                         else:

@@ -43,21 +43,9 @@ existing entry already covers it; if so, don't duplicate it (you may append "+1 
   `_def_name_after` bind the marker to the helper, so equivalence tests the wrong code (0x74a920,
   0x5820a0). Workaround: keep helpers above all markers. Fix idea: skip helpers whose own marker-less
   definition precedes the marked one, or make the commit check refuse it.
-- [gold3] bookkeeping — **`nonmatching.txt` row format is not enforced.** A note wrapped onto a second
-  line becomes a phantom row (s00976f90 read back 41 rows instead of 9), and VA spellings vary (bare
-  6-hex digits against `0x` plus 8 digits). Fix idea: a lint in commit_slice.sh: one VA per line, first
-  token 8 hex digits.
 - [gold3] tooling — **`cmpdis.py` display.** It renders float-constant loads as `dword ptr [0]`
   (indistinguishable from a null dereference) and renders calls to later functions in the same section
   oddly (s009b95d0, s00a52ff0). Fix idea: print the relocation's target symbol.
-- [gold3] process — **sessions write stray files into the repo root.** A shell redirect is not checked
-  by the broker: a gold3 session wrote `>工作` (Chinese for "work") on 2026-10-20, and older probes left
-  `probe_*.obj`, `scratch_*.obj` and a file named `--help` there. Fix idea: have the broker reject shell
-  redirections outside `work/match/` and the session's slice directories.
-- [gold3] tooling — **`chk.py --flags` does not reach `run_all.py`.** Every manifest row needs its own
-  flags column, and chk's default flags omit `/arch:SSE /fp:fast`, so sessions copy flags by hand and
-  sometimes record the wrong ones (s00aa0ed0, s00f96840). Fix idea: chk prints a ready manifest row
-  (path, symbol, VA, flags) for each MATCH.
 - [orchestrator, subagent-corpus review 2026-10-13] tooling — re-mining the ~2,000 subagent transcripts (931
   structured `lessons`) and 226 `work/match/scratch_*_papercut.md` produced the codegen levers in
   docs/matching.md "Re-mined levers", plus these tooling items. Two widely-reported ones are **already fixed** —
@@ -109,6 +97,20 @@ existing entry already covers it; if so, don't duplicate it (you may append "+1 
   (e) parallel equiv.py runs on the same slice can share a compile output path and crash with empty-object errors.
 
 ## Resolved
+- [orchestrator 2026-10-20] process: the broker judged a compound shell command by its first word, and read only
+  the first line of anything containing a heredoc. `cd ... && python - <<'PY' ... PY` followed by
+  `chk.py ... >工作` was approved whole, so a gold3 session wrote `工作` ("work") into the repo root and edited a
+  slice through inline Python. The broker now splits every command on newlines, `&&`, `||`, `;`, `|` and
+  `$( ... )`, keeps each heredoc body with its own command, and judges each piece. A replay of 19,312 real
+  session commands: 1,223 that used to pass are now refused (inline-Python file writes, bare `python`,
+  `git`, `chmod`, `sed -i`), and 807 would be held, which autonomous mode turns into a refusal with the
+  reason (mostly scratch scripts that write files).
+- [orchestrator 2026-10-20] bookkeeping: `commit_slice.sh` refuses a slice whose nonmatching.txt or partial.txt
+  gains a line that is not a bare-VA row (a wrapped note, a 0x prefix), or a VA that sits in two of
+  manifest/partial/nonmatching. Existing malformed lines (about 730 in nonmatching, 251 in partial) do not
+  block a commit. progress.py now counts only real rows, so wrapped notes no longer count as functions.
+- [orchestrator 2026-10-20] tooling: chk.py prints the finished manifest row (path, symbol, VA, flags) for
+  every MATCH not yet in manifest.txt, so flags no longer get lost between chk.py and run_all.py.
 - [orchestrator 2026-10-20] tooling: `chk.py` symbol association (spcg1 2026-10-14, and about 12 of the 45
   dec2/gold2/gold3 papercut notes). chk.py now scores the symbol named by the VA's manifest row (column
   `manif`), else the definition after its `// @ 0x<va>` marker (`marker`), and falls back to the nearest

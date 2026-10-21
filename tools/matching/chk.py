@@ -144,6 +144,13 @@ def main():
         print("---- per symbol")
         for name, (d, va) in sorted(sym_best.items(), key=lambda x: x[1][1]):
             print("%08x %4d  %s" % (va, d, name[:110]))
+    new_rows = [va for va in vas if best.get(va, (1,))[0] == 0 and manifest.get(va) != best[va][2]]
+    if new_rows:
+        # copy these into manifest.txt as they are: run_all.py reads the flags per row, not from chk's --flags
+        print("---- manifest rows for MATCHes not yet in manifest.txt")
+        rel = os.path.relpath(src, os.path.join(ROOT, "match"))
+        for va in new_rows:
+            print("%s  %s  %08x  %s" % (rel, best[va][2], va, a.flags.strip()))
     m = sum(1 for va in vas if best.get(va, (1,))[0] == 0)
     print("%d / %d target functions MATCH" % (m, len(vas)))
     return 0 if m == len(vas) else 1

@@ -67,6 +67,76 @@ def call(method, path, body=None):
         return json.loads(r.read() or b"{}")
 
 
+# leading `VAR=value ` assignments (quoted values may contain spaces)
+ASSIGN_PREFIX = re.compile(r"^(?:[A-Za-z_][A-Za-z0-9_]*=(?:'[^']*'|\"(?:[^\"\\]|\\.)*\"|[^\s'\"])*\s+)+")
+HEREDOC = re.compile(r"<<-?\s*(['\"]?)([A-Za-z_][A-Za-z0-9_]*)\1")
+
+
+def split_shell(cmd):
+    """Every simple command in a shell string, split on newlines, && || ; | & outside quotes. `2>&1`, `>&2` and
+    `&>` stay intact. A heredoc body stays attached (after a newline) to the command that reads it, and the text
+    after its terminator line is split like the rest. The text of every $( ... ) and `...` is returned as extra
+    commands, since it runs too."""
+    out, inner, cur, q, i, pending = [], [], "", None, 0, []
+    n = len(cmd)
+    while i < n:
+        c = cmd[i]
+        if q:
+            cur += c
+            if c == q:
+                q = None
+            elif c == "\\" and q == '"' and i + 1 < n:
+                cur += cmd[i + 1]; i += 1
+            i += 1; continue
+        if c in "'\"":
+            q = c; cur += c
+        elif c == "$" and cmd[i + 1:i + 2] == "(":
+            depth, j = 1, i + 2
+            while j < n and depth:
+                depth += {"(": 1, ")": -1}.get(cmd[j], 0); j += 1
+            inner.append(cmd[i + 2:j - 1]); cur += "$_"; i = j; continue
+        elif c == "`":
+            j = cmd.find("`", i + 1); j = n if j < 0 else j
+            inner.append(cmd[i + 1:j]); cur += "$_"; i = j + 1; continue
+        elif c == "<" and cmd[i + 1:i + 2] == "<" and cmd[i + 2:i + 3] != "<":
+            m = HEREDOC.match(cmd, i)
+            if m:
+                pending.append((len(out), m.group(2))); cur += m.group(0); i = m.end(); continue
+            cur += c
+        elif c == "\n" or (c in ";|&" and not (c == "&" and (cur.endswith(">") or cmd[i + 1:i + 2] == ">"))
+                                and not (c == "|" and cur.endswith(">"))):
+            out.append(cur); cur = ""
+            if c != "\n" and cmd[i + 1:i + 2] == c:
+                i += 1
+            if c == "\n" and pending:
+                # heredoc bodies start on the next line: attach them to the commands that opened them
+                for k, delim in pending:
+                    body = []
+                    i += 1
+                    while i < n:
+                        e = cmd.find("\n", i); e = n if e < 0 else e
+                        line = cmd[i:e]
+                        if line.strip() == delim:
+                            i = e; break
+                        body.append(line); i = e + 1
+                    k = min(k, len(out) - 1)
+                    out[k] = out[k] + "\n" + "\n".join(body) + "\n" + delim
+                pending = []
+        else:
+            cur += c
+        i += 1
+    out.append(cur)
+    res = []
+    for p in out:
+        head = p.split("\n", 1)
+        h = head[0].strip().lstrip("({ ").rstrip(")} ").strip()
+        if h.strip(" (){}"):
+            res.append(h + ("\n" + head[1] if len(head) > 1 else ""))
+    for t in inner:
+        res += split_shell(t)
+    return res
+
+
 def paths_in(seg):
     """Write targets in a shell segment: output redirects (not 2>&1 / >/dev/null) and tee/mkdir/rm/cp/mv/touch args."""
     if "<<" in seg:  # heredoc: only the command line can redirect; the body is data (C++ `->` etc.)
@@ -147,9 +217,11 @@ def inline_python(seg):
     m = re.match(r"^\.venv/bin/python3? -c (['\"])(.*)\1\s*$", seg, re.S)
     if m:
         return m.group(2)
-    m = re.match(r"^\.venv/bin/python3? - <<'?(\w+)'?\n(.*)\n\1\s*$", seg, re.S)
+    # `python - [args] <<'EOF' [> out]`: script arguments and an output redirect (checked by paths_in) may sit on the line
+    m = re.match(r"^\.venv/bin/python3? -(?:\s+(?:\"[^\"]*\"|'[^']*'|[^\s<>|;&]+))*\s*<<-?\s*(['\"]?)(\w+)\1"
+                 r"(?:\s*[0-9]?>>?\s*\S+)*[ \t]*\n(.*)\n\2\s*$", seg, re.S)
     if m:
-        return m.group(2)
+        return m.group(3)
     return None
 
 
@@ -197,9 +269,11 @@ def decide(r):
         bad = [p for p in res if not ok_path(os.path.relpath(p, ROOT) if os.path.isabs(p) else p)]
         return ("once", "edit inside batch slice paths") if not bad else ("reject", "edit outside allowed paths: %s" % bad[:3])
     if act in ("shell", "bash"):
-        for seg in res:
+        # opencode sometimes passes a whole compound command as one resource: judge every simple command in it,
+        # not just the first word (a `cd ... && python - <<'PY' ... PY` line hid a write to `>工作`, 2026-10-20)
+        for seg in [s for r in res for s in split_shell(r)]:
             s = re.sub(r"\s*2>&1\s*", " ", seg).strip()
-            s = re.sub(r"^(?:[A-Za-z_][A-Za-z0-9_]*=\S*\s+)+", "", s)  # leading VAR=value
+            s = re.sub(ASSIGN_PREFIX, "", s)  # leading VAR=value
             s = re.sub(r"^(?:timeout|gtimeout)\s+(?:-\S+\s+)*\d+[smh]?\s+", "", s)  # `timeout N cmd` wrapper
             s = re.sub(r"^(?:time|/usr/bin/time)\s+", "", s)  # `time cmd` wrapper
             s = re.sub(r"^(?:nohup|setsid)\s+", "", s)       # `nohup cmd` wrapper
@@ -213,6 +287,14 @@ def decide(r):
                     return "hold", "unrecognized path argument: %s" % p
             if s.startswith(("rm", "mkdir", "touch", "cp", "mv", "tee")):
                 continue  # all targets checked above
+            # loop/branch syntax: `for x in ...`, `do cmd`, `then cmd`, `done`; a bare `VAR=value` assignment.
+            # The commands inside $( ... ) were split out and are judged as their own segments.
+            while re.match(r"^(?:do|then|else|elif|if|while|until|!)\s+", s):
+                s = re.sub(r"^(?:do|then|else|elif|if|while|until|!)\s+", "", s)
+                s = re.sub(ASSIGN_PREFIX, "", s)
+            if (not s or s.startswith("#") or re.match(r"^(?:done|fi|esac)\s*(?:<<|<\s*\S)", s) or re.match(r"^(?:for\s+[A-Za-z_]\w*(?:\s+in\b.*)?|done|fi|esac|do|then|else|\{|\}|break|continue)(?:\s*[0-9&]?>>?\s*\S+)*$", s, re.S)
+                    or re.match(r"^(?:[A-Za-z_][A-Za-z0-9_]*=(?:'[^']*'|\"(?:[^\"\\]|\\.)*\"|[^\s;|&<>]*)\s*)+$", s)):
+                continue
             m = re.match(r"^\.venv/bin/python3? (work/match/scratch_%s\S*\.py)(?:\s|$)" % IDS, s)
             if m and os.path.exists(os.path.join(ROOT, m.group(1))):
                 if safe_python(open(os.path.join(ROOT, m.group(1))).read()):
