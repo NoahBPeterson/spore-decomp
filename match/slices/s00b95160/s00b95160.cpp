@@ -1,4 +1,5 @@
 // Slice s00b95160 — SP terrain/heap container algorithms + cContentValidationSummarizer
+#include <intrin.h>
 // (EASTL heap/partition/binary-search helpers, RB-tree node walk, ref-counted pointers).
 // Rebuilt from the retail disassembly.
 // flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
@@ -240,6 +241,7 @@ void* ContentValidationSummarizer::Destroy(unsigned char freeFlag)
 {
     void** pv = (void**)this;
     *pv = &g_vtbl_1465a58;
+    _ReadWriteBarrier();
     void* p1 = *(void**)((char*)this + 0x1c);
     if (p1 && *(int*)((char*)p1 - 4) != 0) operator_delete(p1);
     void* p2 = *(void**)((char*)this + 8);
