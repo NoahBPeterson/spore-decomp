@@ -118,7 +118,7 @@ struct cSPUILayout_s0083_56e0 {
     void  Init(const void* key, int a, int b);         // 0x8120d0
     void  SetVisibility(int v);                         // 0x810590
 };
-struct cSPUITooltipManager {
+class cSPUITooltipManager { public:
     uint32_t pad0[2];         // +0x0
     void*    mpTooltipLayout; // +0x8
     void*    mpTooltipWindow; // +0xc
