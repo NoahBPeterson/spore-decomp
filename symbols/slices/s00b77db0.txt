@@ -1,0 +1,14 @@
+# va  name  # evidence
+# Slice s00b77db0 (gold4 #127) -- the Spore "Simulator" object and its helpers.  The Simulator is
+# the big engine object that owns the two spawner hash tables (+0x38/+0x2094, the same class seen
+# in slices s00b76f10 / s00b78880), an eastl vector<AutoRefCount<cMWModel>> (+0x55a8), a
+# vector<Vertex3D> (+0x4908), a hashtable (+0x49e0), a bucket table (+0x4f30), a noun list
+# (+0x40f0), a cHierGrid (+0x55a4), the search/service table reached via 0xb3d3b0 and an
+# environment/flags word at +0x20.  Names are reconstructions from the cards.
+00b77db0  Simulator::DispatchEntry   # hash -> spawn/refresh walk over the internal table
+00b78020  Simulator::ctorA           # EAAllocate(0xc74,"Simulator"), copy 3-word desc + sub-object
+00b78080  Simulator::ctorB           # EAAllocate(0xc6c,"Simulator"), copy 1 word + sub-object
+00b780d0  SpVector_UVector3::FitHull # sort + erase + ConvexHull2D over a 0xc-stride vector
+00b781d0  Simulator::Teardown        # release every embedded container and noun
+00b783b0  Simulator::OnMessage       # big per-message property switch (add/apply/refresh)
+00b78860  Simulator::ClearDirty      # clear flag bit 2 and +0x55a0, tail-call base update
