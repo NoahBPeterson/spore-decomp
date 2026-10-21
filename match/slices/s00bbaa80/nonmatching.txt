@@ -1,12 +1,13 @@
-00bbaa80
-00bbac80
-00bbada0
-00bbb000
-00bbb060
-00bbb120
-00bbb210
-00bbb2e0
-00bbb400
-00bbb500
-00bbb820
-00bbb900
+00bbaa80 388 Measure: tail value/string path missing, member offsets differ
+00bbac80 44 SetStar: ret 8 vs ret 4 and shr/test fold (semantics equal)
+00bbada0 489 StarGridMerge: divergent merge loop shape and buffer offsets
+00bbb060 70 StarIndex_Remove: prologue/register schedule (eax SAFE per callerdeps)
+00bbb120 230 StarGridInsert: field offsets and hidden eax result differ
+00bbb210 217 StarGridErase: ecx/eax base-register roles swapped
+00bbb2e0 236 StarGridMeasure: Merge call arg order and local buffer size
+00bbb400 174 StarGridAlloc2: overflow-guarded 64-bit multiply not emitted
+00bbb500 172 StarGridAlloc3: overflow-guarded 64-bit multiply not emitted
+00bbb600 197 StarGridSiftDownEq1: loop shape and register roles
+00bbb710 257 StarGridSiftUpEq0: loop shape and register roles
+00bbb820 218 StarGridResolveEq1: writes ecx the original leaves untouched
+00bbb900 192 StarGridResolveEq0: pool dword store differs

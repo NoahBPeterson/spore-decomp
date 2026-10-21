@@ -15,11 +15,14 @@
 // unnamed callees (address in the comment)
 // ---------------------------------------------------------------------------
 void* GetManager();                                    // 0x67dcd0 EA::ResourceMan::GetManager
-void* FUN_00b3d2a0();                                  // 0xb3d2a0 SP::StarManager
+void* __stdcall FUN_00b3d2a0(void* out, void* key, int one);  // 0xb3d2a0 SP::StarManager
 void  FUN_00b8dd60(void* self, void* out);             // 0xb8dd60 (thiscall)
-void  FUN_00b8dde0(void* self, void* key3);            // 0xb8dde0 (thiscall, ret 8)
+struct Thunk {
+    void  doDde0(void* key3);      // 0xb8dde0 (thiscall)
+    void* do8010();                // 0xba8010 (thiscall)
+};
 void* FUN_00f48a80();                                  // 0xf48a80
-void  FUN_00ba8010(void* self, void* out, int x);      // 0xba8010 (thiscall, ret 8)
+void  FUN_00bba640();                                  // 0xbba640
 void  FUN_00ba6660(void* star);                        // 0xba6660
 void* EAAllocate(unsigned size, const char* pool, int a, int b, int c, int d); // 0xf473a0
 void  __cdecl operator_delete(void* p);                // 0xf47380
@@ -121,8 +124,8 @@ bool cStarManager::Measure(cStarRecord* key)
     (*(void(__thiscall**)(void*, int*, WStr*))(*(uint32_t**)mgr2 + 0x1f))(mgr2, &vals[1], &a);
 
     void* out;
-    FUN_00b3d2a0();
-    FUN_00ba8010(this, &out, measured);
+    int* p = (int*)FUN_00b3d2a0(&out, (void*)measured, 1);
+    void* r = ((Thunk*)p)->do8010();
 
     struct WStr8 {
         uint32_t mpBegin;
@@ -150,8 +153,8 @@ bool cStarManager::Measure(cStarRecord* key)
 
     // refresh the cached star with the freshly measured value
     void* out2;
-    FUN_00b3d2a0();
-    FUN_00ba8010(this, &out2, measured);
+    int* p2 = (int*)FUN_00b3d2a0(&out2, (void*)measured, 1);
+    void* r2 = ((Thunk*)p2)->do8010();
 
     operator_delete(0);
     return equal;
@@ -162,18 +165,19 @@ bool cStarManager::Measure(cStarRecord* key)
 // ===========================================================================
 void cStarManager::SetStar(cStarRecord* key)
 {
-    if (key == mStar)
-        return;
-
-    if (mMeasureFlag != 0 && ((mFlags >> 0xf) & 1) == 0) {
-        FUN_00ba6660(mStar);
-        cStarRecord* cur = *mGrid;
-        void* out;
-        FUN_00b3d2a0();
-        FUN_00ba8010(this, &out, (int)key);
-        FUN_00b8dde0(cur, &out);
+    if (key != mStar) {
+        unsigned flags = mFlags;
+        unsigned bit = (flags >> 0xf) & 1;
+        if (mMeasureFlag != 0 && bit == 0) {
+            cStarRecord* local_c[3];
+            FUN_00bba640();
+            Thunk* cur = (Thunk*)*mGrid;
+            int* p = (int*)FUN_00b3d2a0(local_c, key, 1);
+            void* r = ((Thunk*)p)->do8010();
+            cur->doDde0(r);
+        }
+        mStar = key;
     }
-    mStar = key;
 }
 
 // ===========================================================================
@@ -226,7 +230,7 @@ void StarGridRow3(uint32_t* self)
 // @ 0x00bbada0  merge two sorted star/planet key lists into an output array
 // ===========================================================================
 int StarGridMerge(void* self, int* src, int srcCount, int* sorted, int sortedCount,
-                  int* outRecs, int slot)
+                  int slot)
 {
     qsort(sorted, sortedCount, 8, StarSortCmp);
 
@@ -309,39 +313,46 @@ int StarGridMerge(void* self, int* src, int srcCount, int* sorted, int sortedCou
 }
 
 // ===========================================================================
-// @ 0x00bbafa0  compare two star/planet measures at slot index 0
+// @ 0x00bbafa0  compare two star/planet measures, 2-slot form
+//
+// param_2 (edx) is the slot index to skip.  The two measure records are 0x10
+// bytes; the compared halfwords sit at +8,+10 in `a` and +0xc,+0xe in `b`.
 // ===========================================================================
 bool StarGridSlotCmp0(void* self, unsigned slot, int* a, int* b)
 {
+    (void)self;
     if (a[1] == b[1] && a[1] != 0)
         return false;
 
-    short* pb = (short*)b;
-    short* pa = (short*)a;
-    for (unsigned i = 0; i < 2; ++i) {
-        (void)self;
-        if (i == slot)
+    const short* sb = (const short*)b;
+    const short* sa = (const short*)a;
+    for (int i = 0; i < 2; ++i) {
+        if (i == (int)slot)
             continue;
-        if (!(pb[4 + i] <= pa[6 + i] && pa[4 + i] <= pb[6 + i]))
+        if (sa[6 + i] < sb[4 + i])
+            return false;
+        if (sb[6 + i] < sa[4 + i])
             return false;
     }
     return true;
 }
 // ===========================================================================
-// @ 0x00bbb000  compare two star/planet measures at slot index 1
+// @ 0x00bbb000  compare two star/planet measures, 3-slot form
 // ===========================================================================
 bool StarGridSlotCmp1(void* self, unsigned slot, int* a, int* b)
 {
+    (void)self;
     if (a[1] == b[1] && a[1] != 0)
         return false;
 
-    short* pb = (short*)b;
-    short* pa = (short*)a;
-    for (unsigned i = 0; i < 3; ++i) {
-        (void)self;
-        if (i == slot)
+    const short* sb = (const short*)b;
+    const short* sa = (const short*)a;
+    for (int i = 0; i < 3; ++i) {
+        if (i == (int)slot)
             continue;
-        if (!(pb[4 + i] <= pa[6 + i] && pa[4 + i] <= pb[6 + i]))
+        if (sa[7 + i] < sb[4 + i])
+            return false;
+        if (sb[7 + i] < sa[4 + i])
             return false;
     }
     return true;
@@ -349,13 +360,13 @@ bool StarGridSlotCmp1(void* self, unsigned slot, int* a, int* b)
 // ===========================================================================
 // @ 0x00bbb060  star index table remove(pair)
 // ===========================================================================
-void StarIndex_Remove(int* a, int* b)
+void StarIndex_Remove(void* unused, int* a, int* b, StarIndex* self)
 {
+    (void)unused;
     int lo = *a;
     int hi = *b;
     if (lo >= hi) { int t = lo; lo = hi; hi = t; }
 
-    StarIndex* self = (StarIndex*)0;
     int n = self->mCount;
     if (n <= 0)
         return;
@@ -498,7 +509,7 @@ void StarGridMeasure(void* p)
     int r = 0;
     do {
         r = StarGridMerge(self, (int*)self[9 + i], (int)self[8], (int*)self[9 + i + 3],
-                          (int)self[0xb], (int*)self[0xc], i);
+                          (int)self[0xb], i);
         ++i;
     } while (i < 2);
 
@@ -724,7 +735,7 @@ void StarGridResolveEq1(uint32_t* self, int slot, int index, char doCmp)
             int* other = (int*)(self[5] + (int)(short)*(uint16_t*)((char*)p + 2) * 16);
             if (tag == 1) {
                 if (doCmp && StarGridSlotCmp0(self, slot, a, other))
-                    StarIndex_Remove(a, other);
+                    StarIndex_Remove(0, a, other, (StarIndex*)self);
                 *(uint16_t*)((char*)other + 0xc + slot * 2) =
                     *(uint16_t*)((char*)other + 0xc + slot * 2) - 1;
             } else {
@@ -765,7 +776,7 @@ void StarGridResolveEq0(uint32_t* self, int slot, int index, char doCmp)
             int* other = (int*)(self[5] + (int)(short)*(uint16_t*)((char*)cur + 2) * 16);
             if (tag == 0) {
                 if (doCmp && StarGridSlotCmp0(self, slot, (int*)a, other))
-                    StarIndex_Remove((int*)a, other);
+                    StarIndex_Remove(0, (int*)a, other, (StarIndex*)self);
                 *(uint16_t*)((char*)other + 8 + slot * 2) =
                     *(uint16_t*)((char*)other + 8 + slot * 2) + 1;
             } else {
