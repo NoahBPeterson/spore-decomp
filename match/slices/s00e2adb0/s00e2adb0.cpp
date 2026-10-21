@@ -81,8 +81,8 @@ struct Message
 };
 
 // ---- game objects ------------------------------------------------------------------------------------
-struct cSPUILayout
-{
+class cSPUILayout
+{ public:
     char data[0x9c];
     IWindow* FindWindowByID(uint32_t id, bool recursive);   // 0x008105b0 (thiscall, ret 8)
 };
@@ -177,16 +177,14 @@ int FUN_00c9e6d0(int specialty, int index);            // 0x00c9e6d0 (cdecl): mo
 void FUN_00e3c7c0(uint32_t hash, char* where, void* src, Vector3* offset, uint32_t civValue, int a, int b);
 
 struct IWinProc { virtual void v0(); };
-struct cSPUIPropertyLayout : public IWinProc
-{
+class cSPUIPropertyLayout : public IWinProc { public:
     uint32_t pad04[2];
     cSPUILayout mLayout;                     // +0x0c
     virtual bool DoMessage(IWindow* window, const Message& message);       // 0x00828080
 };
 
 // ---- the rollover ------------------------------------------------------------------------------------
-struct cSPUIRolloverCivCityHall : public cSPUIPropertyLayout
-{
+class cSPUIRolloverCivCityHall : public cSPUIPropertyLayout { public:
     cCity* mpCity;                           // +0xa8
     void SetSpecialtyIcon(int index);        // 0x00e2a7b0 (ret 4)
     virtual bool DoMessage(IWindow* window, const Message& message);

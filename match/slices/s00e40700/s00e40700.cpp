@@ -74,13 +74,13 @@ struct IWindow : Object {
     virtual void RemoveWindow(IWindow* w);             // +0xdc
 };
 
-struct cSPUILayout : Object {
+class cSPUILayout : public Object { public:
     IWindow* FindWindowByID(uint32_t id, bool recursive);
     void     Init(const void* key, int a, uint32_t b);
     void     SetVisibility(int visible);
 };
 
-struct cSPUIPropertyLayout : cSPUILayout {
+class cSPUIPropertyLayout : public cSPUILayout { public:
     IWindow* GetRootWindow();
 };
 

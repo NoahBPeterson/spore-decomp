@@ -189,7 +189,7 @@ struct cCellGfx {
     int field_16258;                          // +0x16258
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     void SetVisibility(bool v);               // 0x00810590
     void* FindWindowByID(uint32 id, bool recursive);   // 0x008105b0
 };

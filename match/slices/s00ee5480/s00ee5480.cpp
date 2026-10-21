@@ -121,7 +121,7 @@ public:
 };
 IMessageManager* MessageServer();                                            // 0x0067dcc0
 
-struct cSPUILayoutManager {
+class cSPUILayoutManager { public:
     IWindow* FindWindowByID(uint32_t id);                                    // 0x00810620
 };
 cSPUILayoutManager* UILayoutManager();                                       // 0x0080fee0

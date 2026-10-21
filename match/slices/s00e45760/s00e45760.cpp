@@ -86,7 +86,7 @@ struct IRectOwner : IWindow {
     // vtable +0x38 is IWindow::GetRealArea
 };
 
-struct cSPUILayout : Object {
+class cSPUILayout : public Object { public:
     IWindow* FindWindowByID(uint32_t id, bool recursive);   // 0x008105b0
     bool     Init();                                        // 0x00828250
     void     FUN_00827fa0(int key, int val);                // 0x00827fa0
@@ -94,7 +94,7 @@ struct cSPUILayout : Object {
     IWindow* GetRootWindow();                               // 0x00828100
 };
 
-struct cSPUIPropertyLayout : cSPUILayout {
+class cSPUIPropertyLayout : public cSPUILayout { public:
     void SetRootWindowId(uint32_t id);                      // 0x00c87bc0
     char InitLayout(int* param);                            // 0x00e462c0
     uint32_t OnLayoutMessage(int a, int* msg);              // 0x00e463d0
@@ -537,7 +537,7 @@ void FUN_00e45e90(int a1, IntVector* out, uint32_t key, int obj)
 // ================================================================== 0x00e45fe0
 // bool __thiscall FUN_00e45fe0(int id)  -- membership test over [this+0xc0..0xc4)
 // @ 0x00e45fe0
-struct hkVector4 { float x, y, z, w; };
+class hkVector4 { public: float x, y, z, w; };
 struct Vector3  { float x, y, z; };
 
 // Helper struct so the __thiscall membership test (ecx = self) is expressible.

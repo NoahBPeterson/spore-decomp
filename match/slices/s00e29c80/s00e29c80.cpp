@@ -32,7 +32,7 @@ struct cSPUIAnimationSequence {
 };
 
 struct IWindow;
-struct cSPUIAnimator {
+class cSPUIAnimator { public:
     void Update();                                                             // 0x007f63b0
     void AddAnimation(cAnimation& anim, IWindow* obj, unsigned int type);      // 0x007f8d10
     void RemoveAnimation(IWindow* obj, unsigned int type);                     // 0x007f6210
@@ -78,7 +78,7 @@ struct IWindow : IRefCount {
     virtual void SetCaption(const wchar_t* text);                 // +0x80
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     IWindow* FindWindowByID(uint32_t id, bool recursive);          // 0x008105b0
 };
 

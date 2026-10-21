@@ -10,7 +10,7 @@
 
 struct Entry;
 struct IWindow;
-struct cSPUILayout;
+class cSPUILayout;
 
 // ---------------------------------------------------------------- interfaces
 // UTFWin::IWindow -- only the slots this slice reaches are named; dummy slots
@@ -63,7 +63,7 @@ struct IWinButton {
 };
 
 // cSPUILayout: 0x04 AddRef, 0x08 Release, then the plain member functions.
-struct cSPUILayout {
+class cSPUILayout { public:
     virtual void V0() {}
     virtual void AddRef() {}                                   // 0x04
     virtual void Release() {}                                  // 0x08

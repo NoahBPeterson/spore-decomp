@@ -91,7 +91,7 @@ void PlayEditorSound(uint32_t handle, uint32_t param, float value, int flag);  /
 void AttachSelectionEffect(class cSpatialObject* obj, void* effect, int flag);  // 0x01043860
 void AttachRolloverEffect(class cSpatialObject* obj, void* effect, int flag);   // 0x01043A50
 
-struct cSPTimer {
+class cSPTimer { public:
     char mData[0x20];
     void Stop();                          // 0x00BC3110
     void Restart();                       // 0x00BC3130
@@ -261,7 +261,7 @@ public:
     int      PopViewEvent();               // 0x00CA6F70
 };
 
-struct cCityTerritory { char _pad[0x80]; class cCivTutorial* mpTutorial; };
+class cCityTerritory { public: char _pad[0x80]; class cCivTutorial* mpTutorial; };
 class cCivTutorial {
 public:
     bool IsActive();                       // 0x00D09660
@@ -275,9 +275,9 @@ public:
 };
 cCivModeStrategy* CivModeStrategy();                   // 0x00CF74C0
 
-struct cGameTimeManager { char _pad[0x48]; uint8_t mPauseFlags; };
+class cGameTimeManager { public: char _pad[0x48]; uint8_t mPauseFlags; };
 cGameTimeManager* GameTimeManager();                   // 0x00B3D380
-struct cPlanetModel { char _pad[0xf0]; bool mbIsRetro; };
+class cPlanetModel { public: char _pad[0xf0]; bool mbIsRetro; };
 cPlanetModel* PlanetModel();                           // 0x00B3D350
 
 class cNounManager {
@@ -341,7 +341,7 @@ uint32_t FNV1_String8(const char* s, uint32_t seed, int lowercase);    // 0x0093
 
 namespace SP {
 
-struct cVehicleAnimator {
+class cVehicleAnimator { public:
     bool mbZoomedOut;   // +0x00
     char _pad[0x17];
     void Update(float deltaTime, float speed, float maxSpeed, IModelWorld* world, cModel* model);  // 0x00E94A10

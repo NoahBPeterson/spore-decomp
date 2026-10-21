@@ -57,8 +57,8 @@ struct IWindow
     virtual void SetFlag(int flag, bool on);        // +0x7c (slot 31)
 };
 
-struct cSPUILayout
-{
+class cSPUILayout
+{ public:
     char data[0x9c];
     IWindow* FindWindowByID(uint32_t id, bool recursive);   // 0x008105b0 (ret 8)
 };
@@ -97,8 +97,8 @@ struct cCivModeStrategy
     bool CanBuildAirVehicles();                             // 0x00cf7600
 };
 
-struct cSPUIRolloverCivCityHall
-{
+class cSPUIRolloverCivCityHall
+{ public:
     char pad000[0xc];
     cSPUILayout mLayout;                                    // +0x0c
     cCity* mpCity;                                          // +0xa8

@@ -21,7 +21,7 @@
 
 // ------------------------------------------------------------------ EA / EASTL pieces
 namespace EA {
-struct Stopwatch {
+class Stopwatch { public:
     uint64_t mnStartTime;                  // +0x00
     uint64_t mnTotalElapsedTime;           // +0x08
     int mnUnits;                           // +0x10
@@ -29,7 +29,7 @@ struct Stopwatch {
     Stopwatch(int units, bool bStartImmediately);  // 0x0093a560
 };
 
-struct LimitStopwatch : public Stopwatch {
+class LimitStopwatch : public Stopwatch { public:
     uint64_t mnEndTime;                    // +0x18
     LimitStopwatch(int units, uint32_t nLimit = 0, bool bStartImmediately = false)
         : Stopwatch(units, false) { SetTimeLimit(nLimit, bStartImmediately); }
@@ -49,7 +49,7 @@ struct rbtree_node_base {
 
 // eastl::map<K,V> layout: rb_base::mCompare, mAnchor, mnSize, mAllocator (0x1c bytes).
 template <typename K>
-struct rbtree {
+class rbtree { public:
     less<K> mCompare;                      // +0x00
     rbtree_node_base mAnchor;              // +0x04
     uint32_t mnSize;                       // +0x14
@@ -156,16 +156,16 @@ struct ITimelineIfc1 {                       // vptr at +4
 };
 
 namespace SP {
-struct cIGonzagoSubsystem { virtual void GonzagoSlot0(); };
+class cIGonzagoSubsystem { public: virtual void GonzagoSlot0(); };
 struct RefCountTemplateInt { virtual void RefSlot0(); int mnRefCount; };
-struct cGonzagoSubsystem : public cIGonzagoSubsystem, public RefCountTemplateInt {
+class cGonzagoSubsystem : public cIGonzagoSubsystem, public RefCountTemplateInt { public:
     int mPreModeTransitionState;
     int mPostModeTransitionState;
     int mCurrentTransition;
     int mCurrentTransitionPhase;
     cGonzagoSubsystem();                     // 0x00b5b960
 };
-struct cStringTokenTranslator {
+class cStringTokenTranslator { public:
     virtual void TokenSlot0();
     int mnRefCount;
     cStringTokenTranslator();                // 0x006b5870

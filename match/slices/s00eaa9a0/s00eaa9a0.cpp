@@ -14,7 +14,7 @@ namespace SP { namespace Audio {
 
 struct ResourceKey { uint32_t instanceID, typeID, groupID; };
 
-struct cMixMode {
+class cMixMode { public:
     virtual void AddRef();                              // +0
     virtual void Release();                             // +4
     uint32_t pad[0x1c];

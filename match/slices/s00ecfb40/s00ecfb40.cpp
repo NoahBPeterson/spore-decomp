@@ -58,7 +58,7 @@ extern float g_unusedFloat;                                               // 0x0
 // ---------------------------------------------------------------- UI stubs
 struct IWindow { void** mpVtbl; };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     void** mpVtbl;                                                      // 0x00
     IWindow* FindWindowByID(unsigned int id, bool recurse);              // 0x008105b0
     bool Init(const void* key, bool a, unsigned int b);                  // 0x008120d0

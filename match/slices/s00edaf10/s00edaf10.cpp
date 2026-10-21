@@ -79,7 +79,7 @@ extern void* cConnectionDialog_ctor();               // 0x00810000
 extern void* FUN_00f38c70();                         // 0x00f38c70
 extern void  FUN_00f47630(void*);                    // 0x00f47630
 extern int   FUN_007f8f00();                         // 0x007f8f00
-struct cSPUIAnimator {
+class cSPUIAnimator { public:
     bool Empty();    // 0x007f6340
     void Update();   // 0x007f63b0
     void ctor();     // 0x007f83e0

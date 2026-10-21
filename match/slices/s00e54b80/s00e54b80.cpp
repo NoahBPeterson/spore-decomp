@@ -137,7 +137,7 @@ void SP_sActivateGfx()
 // @ 0x00e552f0  SP::cCellMode::Activate
 // =====================================================================
 namespace SP {
-struct cCellMode {
+class cCellMode { public:
     char pad0[9];
     char f9, fa;
     int Activate();

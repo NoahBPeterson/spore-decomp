@@ -77,7 +77,7 @@ struct AnimTarget { virtual void a0(); virtual void a1(); virtual void a2(); };
 struct AnimMgr { AnimTarget* PlayIdleAnimation(int a, int b); };    // 0xbc96a0 (ret 8)
 struct AnimOwner { uint8_t pad00[8]; AnimMgr mgr; };               // +8
 
-struct cSPCreatureBase;
+class cSPCreatureBase;
 
 struct InteractableObject { uint8_t pad00[0x71]; uint8_t mb71; };  // +0x71
 
@@ -157,7 +157,7 @@ bool   Vector3_NotEqual(const Vec3* a, const Vec3* b);                    // 0x4
 double __fastcall RandomDoubleUniform(void* rng);                         // 0x9360d0
 float  RandomFloatRange(float lo, float hi);                              // 0x572a10 cdecl
 
-struct cSPCreatureBase {
+class cSPCreatureBase { public:
     uint8_t pad00[0x50];
     uint32_t mFlags50;                                      // +0x50
     uint8_t pad54[0x77 - 0x54];

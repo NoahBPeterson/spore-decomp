@@ -46,7 +46,7 @@ struct cSPUIAnimationSequence {
     void AppendAnimation(cAnimation& anim, IRefCount* obj, unsigned int type);   // 0x007f8fd0
 };
 
-struct cSPUIAnimator {
+class cSPUIAnimator { public:
     void AddAnimation(cAnimation& anim, IRefCount* obj, unsigned int type);   // 0x007f8d10
     void RemoveAnimation(IRefCount* obj, unsigned int type);                  // 0x007f6210
 };
@@ -78,7 +78,7 @@ struct ColorRGB { float r, g, b; };
 
 // The SP material win-proc found through IWindow slot 0x4c -> Cast(0x5234b49).
 // Shader parameters live at +0x188 (16 floats).
-struct cSPUIMaterialWinProc : IRefCount {
+class cSPUIMaterialWinProc : public IRefCount { public:
     bool FindParameter(uint32_t id, unsigned int* pIndex, unsigned int* pType, unsigned int* pCount); // 0x0082f5c0
     void SetParameters(const float* values, unsigned int index, unsigned int count);                  // 0x0082e380
     void SetParameter(float value, unsigned int index);                                               // 0x0082e340
@@ -100,7 +100,7 @@ struct IWindow {
     virtual IWinProcContainer* GetWinProcContainer();             // +0x4c
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     IWindow* FindWindowByID(uint32_t id, bool recursive);           // 0x008105b0
 };
 

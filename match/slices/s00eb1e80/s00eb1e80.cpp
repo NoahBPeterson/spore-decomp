@@ -50,7 +50,7 @@ struct B0 { void FUN_00ad7df0(); };
 struct B1 { void FUN_00b26710(); };
 
 namespace SP {
-struct cGameCinematicsAppMode {
+class cGameCinematicsAppMode { public:
     char pad[0x100];
     bool OnKeyDown(int k, int v);                       // 0x00eb2370
     void HandleSimulationUpdate(float a, float b);      // 0x00eb23d0

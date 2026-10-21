@@ -151,7 +151,7 @@ extern cCellGame*   gspCellGame;   // 0x016b3c04
 extern CellModeObj* g_16b3c0c;     // 0x016b3c0c
 
 // ------------------------------------------------------------------ callees / stubs
-struct cSPUILayout {
+class cSPUILayout { public:
     void* FindWindowByID(unsigned int id, int b);   // 0x8105b0
     void  SetVisibility(int v);                     // 0x810590
 };

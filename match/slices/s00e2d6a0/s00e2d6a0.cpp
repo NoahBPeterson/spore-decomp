@@ -122,7 +122,7 @@ extern wchar_t gEmptyW[2];   // 0x01667bac
 void SetNumberString(long long v, wchar_t* buf, int n);   // 0x00881ae0
 void FUN_00808b20(IWindow* a, IWindow* b, int c);
 
-struct cSPUIPropertyLayout {
+class cSPUIPropertyLayout { public:
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18();
     virtual void Vf1c();
@@ -131,7 +131,7 @@ struct cSPUIPropertyLayout {
     char pad[0x74];
 };
 
-struct cSPUIRolloverCivRelationship : cSPUIPropertyLayout {
+class cSPUIRolloverCivRelationship : public cSPUIPropertyLayout { public:
     cString mTooManyCities;       // +0x78
     cString mTooClose;            // +0x8c
     cString mNemesis;             // +0xa0

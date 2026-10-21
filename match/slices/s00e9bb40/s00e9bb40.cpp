@@ -152,7 +152,7 @@ struct cLocomotiveIface {
 
 namespace SP {
 
-struct cSPGameDataUFO {
+class cSPGameDataUFO { public:
     char pad00[0x34];
     cLocomotiveIface mLoco;                             // +0x34
     char pad38[0x714 - 0x38];
