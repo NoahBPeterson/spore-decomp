@@ -1,0 +1,3 @@
+# Slice s00fcb210: functions that are not complete (no source built / not modeled).
+# (empty: all 27 VAs in this slice are either byte-exact in manifest.txt
+#  or complete-and-recorded in nonmatching.txt)

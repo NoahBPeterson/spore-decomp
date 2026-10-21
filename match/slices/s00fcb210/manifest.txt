@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00fcb210/s00fcb210.cpp	?Ctor@MovieRenderer@movie@rw@@QAEPAU123@PAUICoreAllocator@@@Z	00fcbc70	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fcb210/s00fcb210.cpp	?Configure@MovieRenderer@movie@rw@@QAEXPAX0@Z	00fcbcf0	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fcb210/s00fcb210.cpp	?ConfigureAudio@MovieRenderer@movie@rw@@QAEXPAX0@Z	00fcbd10	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fcb210/s00fcb210.cpp	?GetVideoDelay@MovieRenderer@movie@rw@@QAEMXZ	00fcbe60	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fcb210/s00fcb210.cpp	?ResumeVideo@MovieRenderer@movie@rw@@QAEXXZ	00fcbef0	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fcb210/s00fcb210.cpp	?SetRenderCallback@MovieRenderer@movie@rw@@QAEXPAX0@Z	00fcc010	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fcb210/s00fcb210.cpp	?Stop@MovieRenderer@movie@rw@@QAEXXZ	00fcc060	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fcb210/s00fcb210.cpp	?Destroy@MovieTimer@movie@rw@@QAEXXZ	00fcc100	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fcb210/s00fcb210.cpp	?GetNode@SList@rw@@QBEPAXI@Z	00fcc220	/O2 /MD /Gy /TP /arch:SSE /fp:fast
