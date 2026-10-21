@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f955f0/s00f955f0.cpp  ?SetTerrainToggle@@YGXH@Z  00f959f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f955f0/s00f955f0.cpp  ??0cTerrainOverlay@@QAE@XZ  00f95cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f955f0/s00f955f0.cpp  ?Reset@cTerrainOverlay@@QAEDXZ  00f95d90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f955f0/s00f955f0.cpp  ?ToggleFlag@cTerrainOverlay@@QAEXXZ  00f96370  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f955f0/s00f955f0.cpp  ?ClearSlot@cTerrainOverlay@@QAEDXZ  00f964a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
