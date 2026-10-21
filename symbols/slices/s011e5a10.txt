@@ -1,0 +1,30 @@
+; slice s011e5a10 = 0x011e5a10..0x011e6890 (RenderWare 4 core filesystem: device + request queue)
+; module Native Release filesys -- VC .NET 2003 (cl 13.10) /GL + /LTCG
+; POLICY: no source reconstructed yet; all 25 targets are listed in partial.txt as incomplete.
+; flags when built: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+011e5a10 FUN_011e5a10  ; incomplete
+011e5af0 FUN_011e5af0  ; incomplete
+011e5cd0 FUN_011e5cd0  ; incomplete
+011e5d30 FUN_011e5d30  ; incomplete
+011e5d80 rw::core::filesys::DeviceDriver::DeviceDriver  ; incomplete
+011e5da0 FUN_011e5da0  ; incomplete
+011e5e00 FUN_011e5e00  ; incomplete
+011e5e90 FUN_011e5e90  ; incomplete
+011e5f20 FUN_011e5f20  ; incomplete
+011e5ff0 FUN_011e5ff0  ; incomplete
+011e60b0 FUN_011e60b0  ; incomplete
+011e61d0 FUN_011e61d0  ; incomplete
+011e62b0 FUN_011e62b0  ; incomplete
+011e6340 FUN_011e6340  ; incomplete
+011e6450 FUN_011e6450  ; incomplete
+011e64a0 FUN_011e64a0  ; incomplete
+011e64c0 FUN_011e64c0  ; incomplete
+011e64d0 FUN_011e64d0  ; incomplete
+011e64f0 FUN_011e64f0  ; incomplete
+011e65e0 FUN_011e65e0  ; incomplete
+011e6600 rw::core::filesys::decbufferusage  ; incomplete
+011e6660 rw::core::filesys::getfreerequest  ; incomplete
+011e66d0 rw::core::filesys::queuerequest  ; incomplete
+011e6730 rw::core::filesys::freerequest  ; incomplete
+011e67a0 FUN_011e67a0  ; incomplete
+011e6840 FUN_011e6840  ; incomplete

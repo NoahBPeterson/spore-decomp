@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+#
+# Slice s011e5a10 has no byte-exact target: no reconstructed source exists for this slice yet,
+# so all 25 target functions are recorded as genuinely incomplete in partial.txt.
+# Module: RenderWare 4 core filesystem (rw::core::filesys device/driver/request queue),
+# VC .NET 2003 (cl 13.10) range 0x011e5a10..0x011e6890.  Flags when built:
+# /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+#
+# Slice s011e5a10 = RenderWare 4 core filesystem: the device/driver object (vtable, ctor/dtor,
+# open/close/read/write dispatch), the request queue (queue/dequeue/free/usage accounting) and
+# the async file request helpers.  No function of this slice has been reconstructed yet, so
+# there are no complete-but-non-exact rows here; all 25 targets are listed in partial.txt.

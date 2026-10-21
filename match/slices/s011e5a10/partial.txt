@@ -1,0 +1,30 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+# Genuinely incomplete: no source has been written for this slice yet (RW4 filesystem device
+# and request-queue code).  Each row names the original extent and what the function does.
+011e5a10 219 incomplete -- device teardown: releases both allocator blocks at +0x20/+0x14, then destroys the device object at [this]
+011e5af0 470 incomplete -- device open/query dispatch: resolves the path, calls the driver vtable and fills the stream descriptor
+011e5cd0 93 incomplete -- device close: flushes the pending request and clears the device state word
+011e5d30 80 incomplete -- device read: forwards to the driver read entry with the current offset/length
+011e5d80 32 incomplete -- rw::core::filesys::DeviceDriver ctor: installs the driver vtable and zeroes the counters
+011e5da0 83 incomplete -- device write: forwards to the driver write entry and bumps the byte counter
+011e5e00 138 incomplete -- device request validation: checks the request state and the queue ownership
+011e5e90 130 incomplete -- device seek: clamps the offset to the stream size and stores it
+011e5f20 206 incomplete -- device destroy path: releases the backing buffer and unlinks from the driver list
+011e5ff0 186 incomplete -- request completion: marks the request done and wakes the waiter
+011e60b0 286 incomplete -- request submit: builds the request record, links it into the pending queue and calls the driver
+011e61d0 214 incomplete -- request cancel: removes the record from the queue and returns the buffer to the pool
+011e62b0 131 incomplete -- request lookup: walks the pending queue for a matching handle
+011e6340 261 incomplete -- request queue service: drains completed requests and dispatches callbacks
+011e6450 67 incomplete -- queue push: appends the request to the tail and bumps the count
+011e64a0 32 incomplete -- queue pop: unlinks the head request and decrements the count
+011e64c0 16 incomplete -- queue empty test
+011e64d0 20 incomplete -- queue count accessor
+011e64f0 234 incomplete -- queue grow: reallocates the ring and copies the live entries
+011e65e0 29 incomplete -- request handle allocator: takes the next free slot
+011e6600 84 incomplete -- decbufferusage: decrements the outstanding-buffer counter and clamps at zero
+011e6660 103 incomplete -- getfreerequest: pops a free request record from the pool
+011e66d0 95 incomplete -- queuerequest: links a request into the driver queue
+011e6730 105 incomplete -- freerequest: returns a request record to the pool
+011e67a0 150 incomplete -- async completion callback: transitions the request state and signals the waiting thread
+011e6840 38 incomplete -- request state accessor
