@@ -1,0 +1,20 @@
+# Slice s01206ba0 names (RenderWare 4 collision volumes, sphere family + shared interval helpers).
+# Names follow the 2008 dev-build PDB (work/devbuild/symbols.json); the retail bodies match by
+# size/structure. Addresses are retail VAs.
+01206a60 SphereVolume::GetBBox  # not a slice VA; written as a helper (see source)
+01206b20 SphereVolumeInstance_GetBBox  # GP-instance callback installed at instance+0x90 by 0x01206c10
+01206b50 SphereVolumeInstance_GetInterval  # GP-instance callback installed at instance+0x94
+01206ba0 SphereVolumeInstance_GetIntervals  # GP-instance callback installed at instance+0x98
+01206c10 SphereVolume::CreateGPInstance
+01206cd0 rwcSphereLineSegIntersect  # CastFraction* t, const vpu::Vector4* from, *dir, *center, float radius
+01206e50 SphereVolume::LineSegIntersect
+012070a0 rwcVolumeRelocateReturnSecond  # relocator helper shared with the volume-instance tables
+012070e0 rwcVolumeInstanceInitialize  # plain 2-arg cdecl relocator/initialiser for an instance block
+01207110 rwcVolumeRelocateFixupNoOp
+01207140 rwcVolumeRelocateFixupReturnOne
+01207180 AggregateVolume::GetBBox
+01207310 BoxVolumeInstance_GetInterval
+01207460 BoxVolumeInstance_GetIntervals
+012075f0 SphereVolume::GetInterval
+01207600 SphereVolume::GetMaximumFeature
+01204780 AABB::Transform  # not a slice VA; helper (transform an AABB by an optional affine matrix)
