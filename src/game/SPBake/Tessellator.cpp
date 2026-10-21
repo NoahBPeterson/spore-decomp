@@ -49,7 +49,7 @@ struct AudioProcessContext {
 namespace rw {
 namespace audio {
 namespace core {
-struct Resample;
+class Resample;
 }
 }
 }
@@ -70,7 +70,7 @@ union U32F32 { u32 u; f32 f; };
 namespace rw {
 namespace audio {
 namespace core {
-struct Resample {
+class Resample { public:
     char pad0[0x08];
     void* mpVoice;          // +0x08
     char pad0c[0x18 - 0x0C];
