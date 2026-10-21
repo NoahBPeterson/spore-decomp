@@ -1,0 +1,12 @@
+00ed9f10    535  complete; vtable/interface-heavy message helper (flags /O2 /MD /Gy /TP); equiv UNSUPPORTED ("original reads ecx at entry but our declaration passes nothing there")
+00eda130    312  complete; editor-mode cursor/handler install, heavy EA input vtable dispatch (flags /O2 /MD /Gy /TP); equiv UNSUPPORTED (0/400 valid inputs, fault(read))
+00eda2f0    778  complete; primary IWindow message switch (flags /O2 /MD /Gy /TP); equiv FAIL on leftover eax (47bf0000 vs 0, only 8 valid inputs / 16% coverage) - ABI-undefined dead return-register artifact
+00eda6f0    602  complete; +0x44 sub-object handler (flags /O2 /MD /Gy /TP); equiv UNSUPPORTED (0/400 valid inputs, fault(read))
+00eda9a0    173  complete; shutdown/remove-handler (flags /O2 /MD /Gy /TP); equiv FAIL execution (stub fault inside FUN_00e4b990 due to local eastl-list frame layout)
+00edaa80    110  complete; constructor (flags /O2 /MD /Gy /TP); equiv PASS 400/400 100% coverage; residual is literal-0 register-choice (ecx vs ebx) ordering
+00edab50     26  complete; destructor body (flags /O2 /MD /Gy /TP); residual is a hoisted load + register choice only
+00edabf0     12  complete; resource load helper (flags /O2 /MD /Gy /TP); residual is commutative-xor register choice (xor eax,edx vs xor edx,eax), same length
+00edaca0     61  complete; void menu-item dispatch (flags /O2 /MD /Gy /TP); equiv WEAK 267/400 valid, 20% coverage
+00edad00    170  complete; tutorial-entry rebuild (flags /O2 /MD /Gy /TP); equiv PASS 391/400 100% coverage
+00edadd0     65  complete; tutorial-entry bind (flags /O2 /MD /Gy /TP); equiv FAIL 1/348 on ecx clobber (register allocator difference)
+00edae80     13  complete; naming-widget destructor (flags /O2 /MD /Gy /TP); equiv PASS 218/400 100% coverage; residual is a hoisted load ([esi+0xcc]) scheduling only
