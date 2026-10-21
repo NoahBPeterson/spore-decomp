@@ -1,0 +1,13 @@
+# slice s011ecf70 (rw::core::stdc / rw::core::thread / rw::graphics::EmbeddedState)
+# -- PARTIAL functions.
+
+# Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+
+# A function is listed here when it is not byte-exact but the emitted code is a
+# verified prefix / single-fixup near-match of the original.
+
+# (note; row is in nonmatching.txt) 011eda00  SetMaterialColor   prefix match: 128 of 130 bytes identical; the only two differing bytes are 0x40/0x41 -- `mov dx,[ecx+4]` vs our `movzx edx,word [ecx+4]`. The branch (`jbe`), the arithmetic and every store are byte-identical. PASSES equivalence with 400/400 valid inputs and 100% coverage.
+
+# (note; row is in nonmatching.txt) 011ed3b0  StreamName::set     59 of 60 bytes identical (mangled name and size both correct, `ret 0xc`); the only difference is the position of the single `mov [esi+4],cl` store relative to `test eax,eax`.
+
+# (note; row is in nonmatching.txt) 011eda90  GetMaterialColor    the whole function is 2 bytes short because MSVC folds the byte load into the `test`; the branch and the `mov eax, [eax]` dereference are otherwise identical. PASSES equivalence with 400/400 valid inputs and 100% coverage.

@@ -1,0 +1,50 @@
+# slice s011ecf70 (rw::core::stdc / rw::core::thread / rw::graphics::EmbeddedState)
+# -- functions that are NOT byte-exact.
+
+# Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+
+011ecf70  stdc::ConvertU32ToA       size 70 vs 46, 84 diff. Equivalence PASS (400 valid, 100% coverage). The original divides by the constant 10 with a real `cdq; mov ecx,10; idiv ecx`, but MSVC 2008 /O2 always lowers a literal /10 to a reciprocal multiply regardless of int/uint signature or the order of the guard. Semantically identical.
+
+011ecfa0  stdc::ConvertI64ToA_rec   size 78 vs 70, 75 diff. Equivalence FAIL (execution; ours writes outside the harness pool). The 64-bit remainder helper register usage cannot be reproduced in portable C (the remainder lands in ecx, a third return register), so the recursive decomposition differs.
+
+011ed020  stdc::ConvertU64ToBase    size 87 vs 80, 82 diff. Equivalence FAIL (uc_err_exception inside the shared lib_crt::aulldvrm helper). Same root cause as 011ecfa0: the original reads the 64-bit remainder out of ecx after lib_crt::aulldvrm(lo,hi,base,0), which cannot be expressed without asm or a bespoke struct-return ABI.
+
+011ed070  stdc::ConvertU32ToHexUpper size 60 vs 63, 34 diff. Equivalence PASS (400 valid, 100% coverage). The original computes the low nibble as a 32-bit `mov edx,ebx; and edx,0xf` (so it can `cmp dl,0xa`) and keeps a second byte copy in bl for the `add bl,0x30`; MSVC narrows ours to `mov cl,bl; and cl,0xf`, costing 3 bytes. Semantically identical.
+
+011ed0b0  stdc::ConvertU32ToHexLower size 60 vs 63, 34 diff. Equivalence PASS (400 valid, 100% coverage). Identical cause to 011ed070.
+
+011ed0f0  stdc::ConvertIToA          size 189 vs 153, 195 diff. Equivalence FAIL (memory pool @40030000). The signed/64-bit path through ConvertI64ToA_rec differs because of the 64-bit helper issue above.
+
+011ed190  stdc::ConvertI64ToA        size 192 vs 158, 200 diff. Equivalence WEAK (375 valid, 50.0% coverage). Same 64-bit helper root cause.
+
+011ed230  stdc::ConvertU32ToStr     size 61 vs 63, 6 diff. Equivalence FAIL (eax): the original keeps `buf` in esi (callee-saved) across the hex helper call and returns it; ours is allocated edx and returned from edx, which is only accidentally correct because our own hex helper happens not to clobber edx.
+
+011ed270  stdc::CopyAtoW            size 41 vs 46, 34 diff. Equivalence PASS (400 valid, 100% coverage). The original widens the byte to a full 32-bit value (`movzx ecx,cl; and ecx,0xff`) and stores via `mov [edx],cx`; MSVC folds ours to a 16-bit `movzx ecx,cl`. Semantically identical.
+
+011ed2a0  stdc::Memset32            size 122 vs 127, 116 diff. Equivalence PASS (364 valid, 100% coverage). The original loads the three args in order eax/edx/ecx and keeps the loop counter in ecx; MSVC loads them in reverse and uses esi, and folds the first `n-0x20` test differently. Semantically identical.
+
+011ed350  RwSemaphoreData::UpdateCancelCount  size 88 vs 93, 70 diff. Equivalence UNSUPPORTED (_InterlockedCompareExchange@12, _InterlockedExchangeAdd@8 are not in the harness). Body is the correct compare-exchange retry loop, but the interlocked intrinsic call shapes differ.
+
+011ed3b0  StreamName::set           size 60 vs 60, 5 diff. Equivalence WEAK (171 valid, 56.5% coverage; strncpy resolves to our own symbol so most inputs fault). The original stores m_type ([esi+4]) *after* `test name,name`; MSVC sinks ours to before the test. Otherwise identical.
+
+011ed400  Semaphore::Init           size 92 vs 104, 88 diff. Equivalence FAIL (eax): the original tests `p` before spilling `this` (mov eax,[esp+4]; test eax,eax; push esi; mov esi,ecx) whereas MSVC saves `this` first. Also CreateSemaphoreA is called indirectly through the IAT.
+
+011ed470  Semaphore::Wait           size 159 vs 165, 124 diff. Equivalence UNSUPPORTED (_WaitForSingleObject@8, _InterlockedDecrement@4 unresolved).
+
+011ed520  Semaphore::Post           size 163 vs 167, 106 diff. Equivalence UNSUPPORTED (_InterlockedExchangeAdd@8, _ReleaseSemaphore@12 unresolved).
+
+011ed5d0  Semaphore::ctor0          size 85 vs 182, 111 diff. Equivalence WEAK (81 valid, 65.6% coverage). The original materialises an 8-byte SemaphoreData image in the frame (sub esp,0x18) and calls Init on it; MSVC folded our local array away and merged the two Init call sites.
+
+011ed690  EmbeddedStateFixup        size 309 vs 625, 573 diff. Large fixup walker; the transcription covers the main dispatch but omits several tail branches, so the empty with no relocation. Not attempted for equivalence (size gap).
+
+011ed910  EmbeddedStateCleanupShaders  size 174 vs 182, 85 diff. Equivalence PASS (399 valid, 81.0% coverage). __fastcall form is required (the original reads the state pointer from ecx); the remaining diff is the word-vs-movzx nibble loads and one `xor edi,edi` zero register.
+
+011eda00  EmbeddedState::SetMaterialColor  size equal, 2 diff. Equivalence PASS (400 valid, 100% coverage). Both functions are byte-identical except bytes 0x40/0x41: the original loads the element size with `mov dx,[ecx+4]` (then `test dx,dx; jbe`), MSVC emits `movzx edx,word [ecx+4]`. The `jbe` forces the source to be `unsigned short sz; if (sz > 0)`, which we use, but MSVC still widens the load.
+
+011eda90  EmbeddedState::GetMaterialColor  size 15 vs 17, 16 diff. Equivalence PASS (400 valid, 100% coverage). The original reads the flag byte into dl (`mov dl,[ecx+8]; test dl,2`); MSVC folds ours into `test byte ptr [ecx+8],2`, costing the 2-byte difference.
+
+011edab0  EmbeddedState::GetDeviceState  size 340 vs 349, 156 diff. Equivalence PASS (288 valid, 95.8% coverage). Same word-vs-movzx nibble handling as SetMaterialColor/CleanupShaders, plus branch-orientation diffs.
+
+011edc10  EmbeddedState::D3D9SetTransform  size 136 vs 184, 180 diff. Equivalence FAIL (esp after return: orig +0x10, ours +0xc). The original symbol is declared `(float const*, int)` but the body ends with `ret 0xc`, i.e. the original caller pushed three dwords; that ABI mismatch cannot be reproduced from the declared mangled name.
+
+011edcf0  EmbeddedState::D3D9GetShaderData  size 145 vs 144, 136 diff. Equivalence PASS (400 valid, 100% coverage). The original computes the state pointer first (`lea edx,[ecx+0x2b]`) then loads the flag into ecx then `and`s; MSVC schedules the `and` before the flag load, shifting every subsequent byte. Semantically identical.

@@ -1,0 +1,3 @@
+slices/s011ecf70/s011ecf70.cpp  ?ConvertU32ToBase@stdc@core@rw@@YAPADPADII@Z  011ecff0  /O2 /MD /Gy /EHsc /TP
+slices/s011ecf70/s011ecf70.cpp  ?CloseHandleIfSet@thread@core@rw@@YIXPAPAX@Z  011ed3f0  /O2 /MD /Gy /EHsc /TP
+slices/s011ecf70/s011ecf70.cpp  ?SetVertexDescriptor@EmbeddedState@graphics@rw@@QAEIXZ  011edcd0  /O2 /MD /Gy /EHsc /TP
