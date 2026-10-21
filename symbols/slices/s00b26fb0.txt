@@ -1,0 +1,37 @@
+00b26fb0 FUN_00b26fb0  # cSavedGameHeader assign (thiscall)
+00b27170 FUN_00b27170  # reset default saved-game filename + notify
+00b271b0 FUN_00b271b0  # saved-game dtor (thiscall, ret 4)
+00b271f0 FUN_00b271f0  # load saved game by command string
+00b27360 FUN_00b27360  # saved-game handler (large)
+00b274e0 FUN_00b274e0  # factory: alloc+construct 0x68 saved-game header
+00b27540 FUN_00b27540  # build saved-game path string
+00b275a0 FUN_00b275a0  # validate saved-game file (large)
+00b279e0 FUN_00b279e0  # load saved game from stream (large)
+00f473a0 EAAllocate
+00f47380 operator_delete
+00b3d320 FUN_00b3d320
+00b1e410 FUN_00b1e410
+009a9600 DoNukeSubtree
+00423650 WString_Assign
+006b1f90 SP_GetSaveArea
+00579a90 RangeInitialize
+00b3d300 SP_NounManager
+00f67d90 GetCurrentTerrainSphere
+00c75a20 FUN_00c75a20
+00c75580 FUN_00c75580
+00c75410 FUN_00c75410
+00675250 AchievementsController
+00675590 AchievementsReset
+0057cba0 FUN_0057cba0
+00bad940 FUN_00bad940
+00b3d2a0 SP_StarManager
+0167df50 gDefaultSavedGameFilename
+0167df60 DAT_0167df60
+0167df64 DAT_0167df64
+01654c00 DAT_01654c00
+01654c01 DAT_01654c01
+01654c02 DAT_01654c02
+01654c04 DAT_01654c04
+01654c05 DAT_01654c05
+01654c08 DAT_01654c08
+013ec460 DAT_013ec460
