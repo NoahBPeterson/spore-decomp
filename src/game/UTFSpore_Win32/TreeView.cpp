@@ -71,7 +71,7 @@ struct UTFWindow { bool Initialize(); };                      // 0xb1fbf0
 }
 namespace EA {
 namespace UTFWinControls {
-struct WinTreeView : UTFWindow {
+class WinTreeView : public UTFWindow { public:
     uint32_t pad[0x84];
     bool mInited;                                             // +0x210
     bool Init();
