@@ -1,0 +1,7 @@
+slices/s00967d40/s00967d40.cpp  ?SetColor@WCB@@QAEXII@Z  00967e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00967d40/s00967d40.cpp  ?GetColor@WCB@@QAEII@Z  00967e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00967d40/s00967d40.cpp  ?PickComponent@WC@@QAEHMM@Z  00968350  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00967d40/s00967d40.cpp  ?OnPropValue@WC@@QAEXI@Z  00967d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00967d40/s00967d40.cpp  ?GetComponentImage@CBD@@QAEPAXI@Z  00967f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00967d40/s00967d40.cpp  ?GetDrawable@WCB@@QAEPAXXZ  00968210  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00967d40/s00967d40.cpp  ?SetComponentImage@CBD2@@QAEXIPAUAutoRefCountIface@@@Z  00967f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast

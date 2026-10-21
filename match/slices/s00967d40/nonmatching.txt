@@ -1,0 +1,9 @@
+00967d80 186 OnModalWindowEnd /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest UNSUPPORTED (fake-arity/fault-read, 0/400 valid)
+00967e80 9 SetAlignment /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest UNSUPPORTED (fake-arity, 0/400 valid)
+00967f00 53 GetNaturalSize /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest PASS 400/400
+009680f0 214 WinComboBox_TransformComponent /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest UNSUPPORTED (fault-read, 0/400 valid)
+00968230 103 RenderComponent /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL (5/328; RenderContext_Begin2D ecx ABI not reproducible)
+00968400 591 Refresh /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL (5/285; component-area layout uncertain)
+009686b0 1241 ShowListBox /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest WEAK (317 valid, 4.0% coverage)
+00968c10 28 GetValue /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest PASS 317/317
+00968c50 119 SetCurrentSelection /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest PASS 369/369
