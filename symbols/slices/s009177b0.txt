@@ -1,0 +1,14 @@
+009177b0  Grad::AddX  # horizontal gradient segment append; this=Grad, arg=Rgba5* (ret 4)
+00917ac0  Grad::AddY  # vertical gradient segment append; this=Grad, arg=Rgba5* (ret 4)
+00917d70  Grad::SetColors  # seed gradient from colour array, returns mnCount (ret 8)
+00917e10  SetupGrad  # cdecl: build local Grad over rect+colour array; local this = lea ecx,[esp+8]
+00917e70  HueToByte  # hue (t in [0,6)) -> channel byte, round-to-nearest double
+00917f80  HslToRgb  # float H/S/L -> byte R/G/B (calls HueToByte)
+00918090  RgbToHsl  # byte R/G/B -> float H/S/L; out args: h,l,s order per disasm
+009181e0  ResetFlag  # clears byte at this+0x280, returns 1 (fastcall)
+00918200  EA::IO::MemoryStream::ReadVarU64  # this=stream, out=uint64*, LEB128 7-bit
+00918260  EA::IO::MemoryStream::ReadVarS64  # this=stream, out=int64*, 0x40 sign bit
+009182d0  EA::IO::MemoryStream::InitA  # this=stream, holder: read [holder+0x284..0x288) via holder+4 stream
+00918350  EA::IO::MemoryStream::ScanExtra  # this=stream, holder, out: PNG-style chunk scan (ret 8)
+00918620  EA::IO::MemoryStream::InitB  # this=stream, holder: read [holder+0x2d8+4) at holder+0x2e0+0xb
+009186a0  EA::IO::MemoryStream::ReadFixed  # this=stream, 2 unused args, buf: read [holder+0x2de] bytes

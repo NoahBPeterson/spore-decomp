@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+slices/s009177b0/s009177b0.cpp  ?ResetFlag@@YI_NPAX@Z  009181e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009177b0/s009177b0.cpp  ?ReadVarU64@MemoryStream@@QAE_NPA_K@Z  00918200  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009177b0/s009177b0.cpp  ?ReadVarS64@MemoryStream@@QAE_NPA_J@Z  00918260  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009177b0/s009177b0.cpp  ?InitA@MemoryStream@@QAE_NPAX@Z  009182d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009177b0/s009177b0.cpp  ?InitB@MemoryStream@@QAE_NPAX@Z  00918620  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009177b0/s009177b0.cpp  ?ReadFixed@MemoryStream@@QAE_NPAX00@Z  009186a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,1 @@
+00918350 672 incomplete: thiscall member ScanExtra reconstructed from Ghidra; equiv UNSUPPORTED fake-arity 396/400; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

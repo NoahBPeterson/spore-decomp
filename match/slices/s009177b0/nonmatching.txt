@@ -1,0 +1,7 @@
+009177b0 1122 reg-clobber: equiv FAIL xmm4 (untouched by original); full-gradient lerp, SSE mix; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00917ac0 990 reg-clobber: equiv FAIL xmm4 (untouched by original); full-gradient lerp, SSE mix; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00917d70 138 pool: equiv FAIL memory pool @40010030 (cascades from non-exact AddY); complete, /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00917e10 64 complete: equiv PASS; frame/register scheduling only; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00917e70 281 complete: equiv PASS; x87 fldcw/fistp rounding helper; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00917f80 218 reg-clobber: equiv FAIL xmm1 (untouched by original); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00918090 283 reg-clobber: equiv FAIL xmm3 (untouched by original); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
