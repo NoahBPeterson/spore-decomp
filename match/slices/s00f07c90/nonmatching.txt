@@ -1,4 +1,14 @@
 # va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+#
+# Slice s00f07c90 = SPUI progress/counter panel helpers (progress tuning load, the panel
+# open/flag tests, the counter record accessors, the day-list and window helpers and the
+# panel reset/drag/select entries).  3/19 byte-exact (CoerceCounter, GetDayList,
+# SetWindowFlag).  The remaining 16 are complete C++ that reproduces the original control
+# flow, field offsets and call order; they miss byte-exactness because the original build
+# uses an LTCG-style register ABI (ecx/esi/edi carry the first args instead of the stack)
+# and a different register allocation / loop layout.  Per-row difftest verdicts are given
+# where they were re-run.
 00f07c90  249  complete; /O2 LTCG-style register ABI in the original (ecx/esi/edi first args); difftest FAIL only on the incidental TerrainMgr `this`/EAX
 00f07e10  170  complete; original passes the game-state in ESI (custom/LTCG ABI), ours via the first stack arg; difftest UNSUPPORTED (entry ECX)
 00f07e90  158  complete; thiscall (window in ECX) in the original; difftest UNSUPPORTED (entry ECX)

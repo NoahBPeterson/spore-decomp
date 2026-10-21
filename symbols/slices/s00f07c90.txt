@@ -1,0 +1,21 @@
+; slice s00f07c90 = 0x00f07c90..0x00f08bb0 (SPUI progress/counter panel helpers) - exact decorated names
+; manifest.txt rows are byte-exact; the rest are the nonmatching.txt entries
+00f07c90 ?ReadProgressTuning@@YAXXZ  # complete, non-exact
+00f07e10 ?CanOpenProgressPanel@@YA_NPAUWnd@@@Z  # complete, non-exact
+00f07e90 ?PanelHasFlaggedEntry@@YA_NPAUWnd@@@Z  # complete, non-exact
+00f07f50 ?GetCounterEntry@@YAPAURec@@PAUWnd@@HD@Z  # complete, non-exact
+00f07fd0 ?SetPercentage@@YA_NPAUWnd@@ID@Z  # complete, non-exact
+00f08350 ?ScoreFacing@@YAMPAUWnd@@0@Z  # complete, non-exact
+00f084b0 ?IsCounterValid@@YA_NPAURecDB@@H@Z  # complete, non-exact
+00f08550 ?SameDayEntries@@YA_NPAURecDB@@HH@Z  # complete, non-exact
+00f085b0 ?AdvanceCounter@@YAHPAURecDB@@PAH@Z  # complete, non-exact
+00f08630 ?StepCounter@@YAHPAXPAH@Z  # complete, non-exact
+00f08680 ?CoerceCounter@@YAXPAURecDB@@PAH@Z  # byte-exact
+00f086d0 ?NextValidCounter@@YAHPAXPAH@Z  # complete, non-exact
+00f08750 ?FindBestEntry@@YAPAUWnd@@PAURec@@HPAX11@Z  # complete, non-exact
+00f08850 ?GetDayList@@YAPADHH@Z  # byte-exact
+00f08890 ?SetWindowFlag@@YAXI@Z  # byte-exact
+00f088c0 ?MovePanel@@YAXPAUWnd@@PAM@Z  # complete, non-exact
+00f08920 ?ResetPanels@@YAXXZ  # complete, non-exact
+00f089a0 ?DragPanels@@YAXPAX@Z  # complete, non-exact
+00f08b70 ?SelectPanel@@YA_NPAUWnd@@@Z  # complete, non-exact
