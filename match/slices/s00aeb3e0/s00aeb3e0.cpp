@@ -119,6 +119,10 @@ struct SpaceTool {
     u32   FUN_00aebc10(int msgId, int arg);                      // 0x00aebc10
     void  FUN_00aebcd0(int index);                               // 0x00aebcd0
 
+    // external thiscall neighbours reached with ecx == this
+    void* FUN_00ae9000(void* p);                                 // 0x00ae9000
+    void* FUN_00ae9330(void* p);                                 // 0x00ae9330
+
     // neighbouring / intra-slice callees, thiscall on the same object
     void* FUN_00aeb160(int a1, int a2, int a3, int a4, int a5, int a6, int a7); // 0x00aeb160 AddEntry
     void* FUN_00aeb240(int a1, int a2, int a3, int a4, int a5, int a6);    // 0x00aeb240 CreateEntry
@@ -275,17 +279,18 @@ void SpaceTool::FUN_00aeb680(int newId)
     if (newId == cur)
         return;
 
-    if (cur != 0xdbdba1 && newId != 0xdbdba1) {
-      if (newId >= (int)0x1654c04) {
-        if (newId <= (int)0x1654c05) {
+    if (cur == (int)0xdbdba1) goto L6c5;
+    if (newId == (int)0xdbdba1) goto L6c5;
+    if (newId < (int)0x1654c04) goto L6c5;
+    if (newId > (int)0x1654c05) goto L6c5;
+    {
         int d = cur + (int)0xfe9ab3fc;
         if ((u32)d <= 1)
-            ((Tgt*)this)->FUN_00ae9000((void*)(size_t)newId);
+            FUN_00ae9000((void*)(size_t)newId);
         else
-            ((Tgt*)this)->FUN_00ae9330((void*)(size_t)newId);
-        }
-      }
+            FUN_00ae9330((void*)(size_t)newId);
     }
+L6c5:
 
     if (m38 != 0xdbdba1 && newId != 0xdbdba1 &&
         (u32)(m38 + (int)0xfe9ab3fc) <= 1 &&
