@@ -25,6 +25,9 @@ extern void jinit_memory_mgr(void*);       // 0x008639f0
 extern void FUN_00854e70(void*);           // 0x00854e70
 extern void FUN_00852ff0(void*);           // 0x00852ff0
 extern int  FUN_0084fa60(int);             // 0x0084fa60
+extern int  gwrite(void* out, void* buf, unsigned len);  // 0x0087d510 __stdcall
+extern void* galloc(int size);                           // 0x0087d4a0 __stdcall
+extern int  gfree(void* p);                              // 0x0087d4c0 __stdcall
 // @ 0x011e073e  jpeg per-pass allocation shim (3-arg, cdecl)
 extern void* jpeg_alloc_node(void* cinfo, int n, int size);
 
@@ -215,30 +218,137 @@ int CheckUniformRun(int count, uint8_t* dst, uint8_t* src)
 
 // ===========================================================================
 // @ 0x0084ff00  encode one MCU with the Huffman encoder
+//
+// The retail ABI passes the output stream in the named parameter and the
+// cinfo struct as an extra stack argument (`ret 0x10`); the default argument
+// keeps the one-parameter mangled name while still naming both.
 // ===========================================================================
-void EncodeMcuHuff(int* cinfo)
+void EncodeMcuHuff(int* stream, int* cinfo = 0)
 {
-    int width        = cinfo[4];    // +0x10 image_width
-    int total_rows   = cinfo[6];    // +0x18 ??? (word 6)
-    int num_comps    = cinfo[9];    // +0x24
-    int n = 8;
+    int height    = cinfo[5];        // +0x14
+    int width     = cinfo[4];        // +0x10
+    int num_comps = cinfo[9];        // +0x24
+    int data_prec = cinfo[0x10e];    // +0x438
     int prec;
-    (void)total_rows;
 
-    if (cinfo[7] <= n)
-        prec = n;
-    else if (cinfo[0x10e] <= 1 && cinfo[0x10f] <= n && cinfo[0x110] <= n &&
-             cinfo[0x111] <= n)
+    if (cinfo[7] < 9) {
+        prec = 8;
+    } else if (data_prec < 2 && cinfo[0x10f] < 6 && cinfo[0x110] < 6 &&
+               cinfo[0x111] < 6) {
         prec = 0x10;
-    else if (cinfo[0x10e] == 0)
+    } else if (data_prec == 0) {
         prec = 0x18;
-    else
+    } else {
         prec = 0x20;
+    }
 
-    int stride = (prec * width + 7) / 8;
-    int alpha = (num_comps != 0) ? 1 : 0;
-    (void)stride;
-    (void)alpha;
+    int iVar5 = 0;
+    int iVar1 = 0x20;
+    unsigned char bVar10 = (unsigned char)(((prec > 8) ? 1 : 0) + 1);
+    int ok_flag = (num_comps != 0);
+    int alpha = ok_flag;
+
+    unsigned char buf[0x400];
+    if (prec < 9) {
+        iVar5 = CheckUniformRun(num_comps, buf, (unsigned char*)cinfo + 0x28);
+        if (iVar5 != 0) {
+            bVar10 = 3;
+            alpha = 0;
+        }
+    }
+    if (cinfo[0x10b] != 0)          // +0x42c
+        bVar10 |= 8;
+
+    if (alpha) {
+        if (cinfo[0x10f] == 5 && cinfo[0x110] == 5 && cinfo[0x111] == 5 &&
+            data_prec < 2) {
+            int k = 0;
+            iVar1 = 0x10;
+            if (num_comps > 0) {
+                unsigned char* p = (unsigned char*)(cinfo + 0xa + cinfo[8]);
+                do {
+                    unsigned short uVar4 = 0xff;
+                    if (data_prec != 0)
+                        uVar4 = (unsigned short)(*p >> 7);
+                    *(unsigned short*)(buf + k * 2) =
+                        (unsigned short)((((unsigned short)(*p >> 3) | (uVar4 << 5)) << 5 |
+                                          (unsigned short)(p[-1] >> 3)) << 5 |
+                                         (unsigned short)(p[-2] >> 3));
+                    ++k;
+                    p += 4;
+                } while (k < num_comps);
+            }
+        } else if (data_prec == 8) {
+            int k = 0;
+            iVar1 = 0x20;
+            if (num_comps > 0) {
+                unsigned char* p = (unsigned char*)(cinfo + 0xa + cinfo[8]);
+                do {
+                    buf[k * 4]     = p[-2];
+                    buf[k * 4 + 1] = p[-1];
+                    buf[k * 4 + 2] = p[0];
+                    buf[k * 4 + 3] = p[1];
+                    ++k;
+                    p += 4;
+                } while (k < num_comps);
+            }
+        } else {
+            iVar1 = 0x18;
+            if (num_comps > 0) {
+                unsigned char* q = buf + 1;
+                unsigned char* p = (unsigned char*)(cinfo + 0xa + cinfo[8]);
+                int left = num_comps;
+                do {
+                    q[-1] = p[-2];
+                    q[0]  = p[-1];
+                    q[1]  = p[0];
+                    p += 4;
+                    q += 3;
+                } while (--left != 0);
+            }
+        }
+    }
+
+    // build the 0x12-byte JPEG scan header in a local image of the retail frame
+    unsigned char hdr[0x12];
+    hdr[0]  = 0;
+    hdr[1]  = (unsigned char)alpha;
+    hdr[2]  = bVar10;
+    *(unsigned short*)(hdr + 3) = (unsigned short)prec;
+    *(unsigned short*)(hdr + 5) = (unsigned short)height;
+    *(unsigned short*)(hdr + 7) = (unsigned short)width;
+    *(unsigned short*)(hdr + 9) = (unsigned short)num_comps;
+    hdr[0xb] = (unsigned char)iVar1;
+    *(unsigned short*)(hdr + 0xc) = *(unsigned short*)((char*)cinfo + 0x450);
+    *(unsigned short*)(hdr + 0xe) = (unsigned short)cinfo[8];
+    *(unsigned short*)(hdr + 0x10) = (unsigned short)-(short)*(short*)((char*)cinfo + 0x454);
+
+    int res = gwrite(*(void**)((char*)stream + 0x10), hdr, 0x12);
+    int count = 0;
+
+    if (res != 0 && iVar5 == 0) {
+        int n = (iVar1 * num_comps + ((iVar1 * num_comps >> 0x1f) & 7)) >> 3;
+        if (n != 0)
+            res = gwrite(*(void**)((char*)stream + 0x10), buf, n);
+    }
+
+    void* mem = galloc(((prec * width + ((prec * width) >> 0x1f & 7)) >> 3) * 3 + 0x10);
+    if (mem != 0) {
+        count = 0;
+        while (count < height) {
+            bool stop = (res == 0);
+            res = 0;
+            if (stop)
+                break;
+            unsigned outSize = EmitSamples(mem, width, prec, 0, cinfo[0x10b],
+                                           data_prec, buf);
+            res = gwrite(*(void**)((char*)stream + 0x10), mem, (int)outSize);
+            ++count;
+        }
+        gfree(mem);
+    }
+    (void)iVar1;
+    return;
 }
 
 // ===========================================================================
@@ -280,8 +390,8 @@ void jinit_huff_encoder(int* cinfo, int a2, int a3)
     cinfo[0x1a] = 0;
     cinfo[0x17] = 0;
     cinfo[0x1b] = 0;
-    *(double*)(cinfo + 10) = 1.0;
     cinfo[0x5a] = 1;
+    *(double*)(cinfo + 10) = 1.0;
     cinfo[4] = 100;
 }
 
@@ -332,7 +442,7 @@ void finish_pass_huff(int* cinfo)
     while (*(int*)(cinfo[0x51] + 0x10) == 0) {
         ((void (*)(int*))*(int*)(cinfo[0x51]))(cinfo);
         uint32_t i = 0;
-        if ((uint32_t)cinfo[0x3a] != 0) {
+        if ((uint32_t)cinfo[0x3a] > 0) {
             do {
                 if (cinfo[2] != 0) {
                     *(uint32_t*)(cinfo[2] + 4) = i;
@@ -393,7 +503,7 @@ void jpeg_finish_compress2(int* cinfo, int a2)
 // ===========================================================================
 // @ 0x008505f0  empty_output_buffer / output_iMCU_row accounting
 // ===========================================================================
-void output_pass_setup(int* cinfo, int a2)
+void output_pass_setup(int* cinfo, int a2, uint32_t a3 = 0)
 {
     if (cinfo[4] != 0x65) {
         *(int*)(cinfo[0] + 0x14) = 0x12;
@@ -413,11 +523,10 @@ void output_pass_setup(int* cinfo, int a2)
         ((void (*)(int*))*(int*)(cinfo[0x51] + 4))(cinfo);
 
     uint32_t room = (uint32_t)(cinfo[7] - cinfo[0x36]);
-    uint32_t want = (uint32_t)a2;
-    if (want > room)
-        want = room;
+    if (a3 > room)
+        a3 = room;
     int lines = 0;
-    ((void (*)(int*, int*, int, uint32_t))*(int*)(cinfo[0x52] + 4))(
-        cinfo, &lines, a2, want);
+    ((void (*)(int*, int, int*, uint32_t))*(int*)(cinfo[0x52] + 4))(
+        cinfo, a2, &lines, a3);
     cinfo[0x36] += lines;
 }

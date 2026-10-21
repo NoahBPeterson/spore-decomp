@@ -1,6 +1,5 @@
-0084faf0
-0084feb0
-0084ff00
-008502a0
-008503f0
-008505f0
+0084faf0 919 EmitSamples: register-ABI pack loop, schedule and operand forms differ
+0084feb0 105 CheckUniformRun: retail register ABI (esi/edi/ecx args), cdecl decl differs
+0084ff00 779 EncodeMcuHuff: calls register-ABI CheckUniformRun; extra stack arg (ret 0x10)
+008502a0 25 jinit_huff_encoder: x87 fld1/fstp and stack-cleanup schedule differ
+008505f0 634 output_pass_setup: instruction stream identical; symbol extent covers the adjacent function
