@@ -10,11 +10,11 @@ extern "C" bool __cdecl SPKeyFromName(void* pOutKey, const wchar_t* pName, int a
 int GetPropID(const char* pName);                                                          // 0x007c8bb0
 
 namespace EA { namespace ArgScript {
-struct cArguments {
+class cArguments { public:
     void** MainArguments(int n);
     void** OptionArguments(const char* pName, int n);
 };
-struct cError {
+class cError { public:
     unsigned int mMessage[4];      // eastl::basic_string
     cError(const char* fmt, ...);  // 0x0052df30 (cdecl, `this` pushed)
     cError(const cError&);

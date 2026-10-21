@@ -39,14 +39,14 @@ template <typename T> struct iterator_traits<T*> { typedef T value_type; };
 namespace eastl {
 
 // ---------------------------------------------------------------- allocator
-struct allocator {              // retail: 8 bytes, trivially copyable
+class allocator { public:              // retail: 8 bytes, trivially copyable
     int mPad0;                  // +0
     void* mpPoolBegin;          // +4
     void deallocate(void* p, unsigned int) { if (p && p != mpPoolBegin) EASTL_allocator_deallocate(p); }
 };
 
 template <int NodeSize, int NodeCount, int Alignment, int AlignmentOffset, bool bEnableOverflow>
-struct fixed_vector_allocator { // retail: 12 bytes, mpPoolBegin at +4
+class fixed_vector_allocator { public: // retail: 12 bytes, mpPoolBegin at +4
     int   mOverflowAllocator;   // +0
     void* mpPoolBegin;          // +4
     void* mpPadEnd;             // +8 (uninitialized in retail)
@@ -129,7 +129,7 @@ struct VectorBase {
 };
 
 template <typename T, typename A>
-struct vector : VectorBase<T, A> {
+class vector : public VectorBase<T, A> { public:
     typedef VectorBase<T, A> base_type;
     typedef unsigned int size_type;
     typedef T value_type;
@@ -169,14 +169,14 @@ struct vector : VectorBase<T, A> {
 
 // ---------------------------------------------------------------- map_value_compare / vector_map
 template <typename Key, typename Value, typename Compare>
-struct map_value_compare {
+class map_value_compare { public:
     Compare c;
     bool operator()(const Value& a, const Value& b) const { return c(a.first, b.first); }
     bool operator()(const Key& a, const Value& b) const { return c(a, b.first); }
 };
 
 template <typename Key, typename T, typename Compare, typename Allocator, typename RA>
-struct vector_map : RA {
+class vector_map : public RA { public:
     typedef RA base_type;
     typedef typename RA::value_type value_type;
     typedef typename RA::iterator iterator;
@@ -232,7 +232,7 @@ T& vector_map<Key, T, C, A, RA>::operator[](const key_type& key) {
 template <int N, int Align> struct aligned_buffer { char mBuffer[N]; };
 
 template <typename T, int N, bool B>
-struct fixed_vector : vector<T, fixed_vector_allocator<sizeof(T), N, 4, 0, B> > {
+class fixed_vector : public vector<T, fixed_vector_allocator<sizeof(T), N, 4, 0, B> > { public:
     typedef vector<T, fixed_vector_allocator<sizeof(T), N, 4, 0, B> > base_type;
     typedef typename base_type::size_type size_type;
     aligned_buffer<sizeof(T) * N, 4> mBuffer;
@@ -266,7 +266,7 @@ struct fixed_vector : vector<T, fixed_vector_allocator<sizeof(T), N, 4, 0, B> > 
 
 // ---------------------------------------------------------------- SP / EA support types
 namespace EA {
-template <typename T> struct AutoRefCount {
+template <typename T> class AutoRefCount { public:
     T* mpObject;   // +0
     AutoRefCount(T* p = 0) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
     AutoRefCount(const AutoRefCount& x) : mpObject(x.mpObject) { if (mpObject) mpObject->AddRef(); }
@@ -303,7 +303,7 @@ struct Variant {
 };
 
 namespace ResourceMan {
-struct Key { unsigned int mInstance; unsigned int mType; unsigned int mGroup; };
+class Key { public: unsigned int mInstance; unsigned int mType; unsigned int mGroup; };
 }
 }  // namespace EA
 
