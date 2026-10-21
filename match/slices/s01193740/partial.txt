@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+01193740  771 ssl_ciph.c ssl_cipher_process_rulestr: LTCG register ABI (rule cursor in EAX; not a declared param) plus unresolved externals; difftest UNSUPPORTED (unresolved _strncmp, ssl_cipher_apply_rule)
+01193a90  431 ssl_ciph.c ssl_create_cipher_list: LTCG register ABI (param_1 in EAX, param_2 in EDX) so the call `this` diverges; difftest FAIL (5/5 mismatched, 21.4% cov)
+01194940  372 ssl_cert.c ssl_cert_dup: register allocation plateau (p kept in edi instead of esi; size 567 vs 554); difftest FAIL (1/150 mismatched, degenerate write)
+01194d60  218 ssl_cert.c SSL_get_peer_cert_chain-ish: struct by-value arg size differs (heap 0x174 vs 0x1a4) and guard/branch layout differs; difftest FAIL (5/15 mismatched, 99% cov)
+01195090  329 x_name.c X509_NAME_set/ASN1 pack: LTCG register ABI + byte-copy loop differs; difftest UNSUPPORTED (unresolved BUF_MEM_free, sk_pop_free)
+01195230  227 x509_lu.c ASN1 item pack: LTCG register ABI (context in ESI) + grouping loop differs; difftest UNSUPPORTED (unresolved FUN_01195080, sk_pop_free)

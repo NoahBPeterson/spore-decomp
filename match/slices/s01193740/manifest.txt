@@ -1,0 +1,7 @@
+# source  symbol  original VA  [flags override]
+slices/s01193740/s01193740.cpp  ?FUN_01193d20@@YAHXZ  01193d20  /O2 /MD /Gy /EHsc /TP
+slices/s01193740/s01193740.cpp  ?X509_STORE_CTX_new_0@@YAPAXXZ  011948f0  /O2 /MD /Gy /EHsc /TP
+slices/s01193740/s01193740.cpp  ?FUN_01194c10@@YAHPAH@Z  01194c10  /O2 /MD /Gy /EHsc /TP
+slices/s01193740/s01193740.cpp  ?FUN_01194c60@@YAPAXXZ  01194c60  /O2 /MD /Gy /EHsc /TP
+slices/s01193740/s01193740.cpp  ?FUN_01194e90@@YAIPAI@Z  01194e90  /O2 /MD /Gy /EHsc /TP
+slices/s01193740/s01193740.cpp  ?FUN_01195a40@@YAHHH@Z  01195a40  /O2 /MD /Gy /EHsc /TP
