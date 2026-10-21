@@ -52,7 +52,7 @@ struct PropertyTypeMap {
 };
 namespace EA {
 namespace Audio {
-struct FactoryConfiguration {
+class FactoryConfiguration { public:
     char pad[0x40];
     PropertyTypeMap mLegacyTypes;   // +0x40
     void AddLegacyPropertyTypes();
