@@ -1,0 +1,14 @@
+; slice s00aef610 = 0x00aef610..0x00aefbc0 (SP Havok locomotive controller) - exact decorated names
+; manifest.txt rows are byte-exact; the rest are the nonmatching.txt entries
+00aef610 ?HandleConfirmedContact@cHavokLocomotiveController@SP@@QAEXPAUhkCollidableConfirmedEvent@@@Z  # complete, non-exact
+00aef690 ?FUN_00aef690@cHavokLocomotiveController@SP@@QAEXD@Z  # complete, non-exact
+00aef6b0 ?FUN_00aef6b0@cHavokLocomotiveController@SP@@QAEXHM@Z  # complete, non-exact
+00aef6e0 ?AddToWorld@cHavokLocomotiveController@SP@@QAEXXZ  # byte-exact
+00aef750 ?SetEnabled@cHavokLocomotiveController@SP@@QAEX_N@Z  # byte-exact
+00aef7e0 ?SetPosition@cHavokLocomotiveController@SP@@QAEXABVhkVector4@@@Z  # byte-exact
+00aef8c0 ?FUN_00aef8c0@cHavokLocomotiveController@SP@@QAEXPAVhkWorld@@0@Z  # complete, non-exact
+00aef930 ?AddConfirmedContact@cHavokLocomotiveCollisionListener@SP@@QAEXPAUhkCollidableConfirmedEvent@@@Z  # complete, non-exact
+00aefa40 ?RemoveContact@cHavokLocomotiveCollisionListener@SP@@QAEXPAG@Z  # complete, non-exact
+00aefae0 ?FUN_00aefae0@cHavokLocomotiveController@SP@@QAEXXZ  # byte-exact
+00aefb30 ?FUN_00aefb30@cHavokLocomotiveCollisionListener@SP@@QAEPAXI@Z  # complete, non-exact
+00aefb80 ??0cHavokLocomotiveController@SP@@QAE@PAVhkRigidBody@@@Z  # complete, non-exact
