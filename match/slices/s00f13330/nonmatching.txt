@@ -2,7 +2,6 @@
 00f135b0 448 /O2 /MD /Gy /TP equiv UNSUPPORTED -- incomplete reconstruction (size 188 vs 503); 0/400 valid (fault(read)=310, ours-abi-broken(fake)=65, fake-arity=25)
 00f13810 71 /O2 /MD /Gy /TP equiv PASS -- dead-store elimination: orig keeps the two base-vtable stores ([4],[0xc]) before the derived over-writes, ours folds them away (size 79 vs 93); 400/400 valid, 100% coverage
 00f138f0 164 /O2 /MD /Gy /TP equiv PASS -- ctor; residual 164 on scheduling/spill choices (size 190 vs 217); 400/400 valid, 100% coverage
-00f139f0 18 /O2 /MD /Gy /TP equiv PASS -- dtor; only diff is hoisted [esi+0xe4] load before the vtable stores (size 286 vs 279); 205/400 valid, 100% coverage
 00f13b10 827 /O2 /MD /Gy /TP equiv FAIL -- incomplete reconstruction (size 1000 vs 1095); 5/5 mismatch, first input 103 orig returned normally ours hit fake-arity at 00000000; 11.8% coverage
 00f14060 16 /O2 /MD /Gy /TP equiv FAIL -- complete but not byte-exact; orig takes first arg in ecx, ours in eax (compiler register choice); orig leftover eax=40040038 vs ours 0 (5/5 mismatch); 100% coverage
 00f14090 38 /O2 /MD /Gy /TP equiv UNSUPPORTED -- complete but not byte-exact (size 43 vs 40); 0/400 valid (fault(read)=350, fault(write)=36, pool-limit=14)

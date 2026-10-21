@@ -3,3 +3,4 @@ slices/s00f13330/s00f13330.cpp  @FUN_00f13890@4  00f13890  /O2 /MD /Gy /TP
 slices/s00f13330/s00f13330.cpp  @FUN_00f138c0@4  00f138c0  /O2 /MD /Gy /TP
 slices/s00f13330/s00f13330.cpp  @FUN_00f140c0@12  00f140c0  /O2 /MD /Gy /TP
 slices/s00f13330/s00f13330.cpp  @FUN_00f13370@12  00f13370  /O2 /MD /Gy /TP
+slices/s00f13330/s00f13330.cpp  ?FUN_00f139f0@RewardUI@@QAEXXZ  00f139f0  /O2 /MD /Gy /TP

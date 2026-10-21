@@ -409,6 +409,7 @@ void RewardUI::FUN_00f139f0()
     eastl_vector_dtor(s + 0xa0);
     FUN_00e0a400(s + 0x30);
     *(void**)(s + 0x28) = (void*)0x13ec458;
+    _ReadWriteBarrier();
 
     void** p9 = *(void***)(s + 0x24);
     if (p9)
