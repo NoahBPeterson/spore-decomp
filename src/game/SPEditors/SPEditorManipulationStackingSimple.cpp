@@ -127,7 +127,7 @@ struct Mat3 {                       // 3x3 float matrix, by-value copies go thro
     void Assign(const Mat3& o);     // @ 0x0041cb40
 };
 struct hkVector4_s005b_ccc0 { float x, y, z, w; };
-struct hkMotionState { char pad[0x40]; Vec3 pos; };                 // position at +0x40
+class hkMotionState { public: char pad[0x40]; Vec3 pos; };                 // position at +0x40
 struct hkRigidBody_s005b_ccc0 {
     char pad[0x1c];
     char collidable[0x3c];          // +0x1c
