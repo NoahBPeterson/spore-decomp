@@ -21,6 +21,8 @@ import argparse, collections, csv, json, os, re, subprocess, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 W = lambda *p: os.path.join(ROOT, *p)
 PY = W(".venv/bin/python")
+sys.path.insert(0, W("tools/matching"))
+from run_all import DEFAULT_FLAGS  # noqa: E402
 KEEP = False
 DEF = re.compile(r"(?m)^([ \t]*(?:template\s*<[^;{]*?>\s*)?)(struct|class)(\s+(?:__declspec\([^)]*\)\s*)?)"
                  r"((?:[A-Za-z_]\w*::)*[A-Za-z_]\w*)(\s*(?:final\s*)?)(:[^;{]*)?\{")
@@ -75,7 +77,7 @@ def edit_file(path, targets):
     # forward declarations / elaborated type specifiers of the same names (not definitions: no '{' or ':' follows)
     for nm, new in changed.items():
         old = "struct" if new == "class" else "class"
-        src = re.sub(r"\b%s(\s+)%s\b(?!\s*(?:[:{]|::))" % (old, re.escape(nm)), lambda m: new + m.group(1) + nm, src)
+        src = re.sub(r"\b%s(\s+)%s\b(?!\s*(?:[:{<]|::))" % (old, re.escape(nm)), lambda m: new + m.group(1) + nm, src)
     open(path, "w").write(src)
     return changed
 
@@ -86,6 +88,29 @@ def swap(sym, changed):
         # pointer/reference (PAU, ABU, ...), by-value parameter (HUname@@), by-value return (?AUname@)
         sym = re.sub(r"(?<=[A-Z0-9_@?$])%s((?:\?\$)?%s@)" % (a, re.escape(nm)), b + r"\1", sym)
     return sym
+
+
+def restore(sid):
+    sh("git", "checkout", "--", "match/slices/" + sid)
+    if os.path.exists(W("symbols/slices", sid + ".txt")):
+        sh("git", "checkout", "--", "symbols/slices/%s.txt" % sid)
+
+
+def obj_symbols(src, flags):
+    """Symbol names of the object chk.py just compiled for (src, flags)."""
+    import hashlib
+    sys.path.insert(0, W("tools/matching"))
+    from cmpobj import parse_coff
+    tag = hashlib.md5((os.path.abspath(src) + flags).encode()).hexdigest()[:10]
+    obj = W("work/match/chk", "%s_%s.obj" % (os.path.basename(src).rsplit(".", 1)[0], tag))
+    try:
+        return list(parse_coff(obj)[1])
+    except Exception:
+        return []
+
+
+def uv_only(old, new):
+    return new != old and len(new) == len(old) and all(a == b or {a, b} == {"U", "V"} for a, b in zip(old, new))
 
 
 def run_all(sid):
@@ -133,10 +158,18 @@ def fix_slice(sid, dry):
         out = sh(*cmd).stdout
         got = {l.split()[0].lstrip("0"): l.split()[5] for l in out.splitlines()
                if re.match(r"^[0-9a-f]{8} ", l) and len(l.split()) > 5 and l.split()[2] == "0"}
+        syms = None
         for i, va, old, _ in items:
             new = got.get(va.lower().replace("0x", "").lstrip("0"))
+            if not (new and uv_only(old, new)):
+                # templates and anonymous namespaces defeat the marker binding: take the object's one symbol that
+                # differs from the old name in U<->V letters alone
+                if syms is None:
+                    syms = obj_symbols(os.path.join(d, sid + ".cpp"), flags or " ".join(DEFAULT_FLAGS))
+                c = [x for x in syms if uv_only(old, x)]
+                new = c[0] if len(c) == 1 else None
             # accept only a class-key change: same length, every differing character a U/V swap
-            if new and new != old and len(new) == len(old) and all(a == b or {a, b} == {"U", "V"} for a, b in zip(old, new)):
+            if new and uv_only(old, new):
                 lines[i] = lines[i].replace(old, new, 1)
     open(mf, "w").write("\n".join(lines))
     sf = W("symbols/slices", sid + ".txt")
@@ -146,7 +179,7 @@ def fix_slice(sid, dry):
             open(sf, "w").write(s2)
     ok1, n1 = run_all(sid)
     if (ok1, n1) != (ok0, n0) and not KEEP:
-        sh("git", "checkout", "--", "match/slices/" + sid, "symbols/slices/%s.txt" % sid)
+        restore(sid)
         return "REVERTED (run_all %d/%d after, %d/%d before)" % (ok1, n1, ok0, n0)
     return "fixed %d definitions (%s); run_all %d/%d" % (len(rows), ", ".join("%s->%s" % kv for kv in sorted(changed.items()))[:160], ok1, n1)
 
