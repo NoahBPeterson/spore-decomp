@@ -158,16 +158,16 @@ void S::FUN_00beccf0()
   char* self = (char*)this;
   if (*(int*)(self + 0x10c) != 0) {
     float tmp[3];
-    float* r = ((float* (__thiscall*)(void*, float*, void*))0x00becb10)(self, tmp, self + 0x23c);
-    *(float*)(self + 0x248) = r[0];
-    *(float*)(self + 0x24c) = r[1];
-    *(float*)(self + 0x250) = r[2];
+    int* r = (int*)FUN_00becb10(tmp, (float*)(self + 0x23c));
+    *(int*)(self + 0x248) = r[0];
+    *(int*)(self + 0x24c) = r[1];
+    *(int*)(self + 0x250) = r[2];
     char* p = *(char**)(self + 0x10c);
-    ((void (*)(void*, void*))VFn(p + 0x70, 0x38))(p + 0x70, self + 0x248);
+    ((void (__thiscall*)(void*, void*))VFn(p + 0x70, 0x38))(p + 0x70, self + 0x248);
     char* p2 = *(char**)(self + 0x10c);
-    int edi = *(int*)(p2 + 0x70);
-    void* q = VCall0(self + 0x34, 0x30);
-    ((void (*)(void*, void*))((void**)(edi + 0x3c))[0])((void*)(edi + 0x3c), q);
+    int inner = *(int*)(p2 + 0x70);
+    void* q = ((void* (__thiscall*)(void*))VFn(self + 0x34, 0x30))(self + 0x34);
+    ((void (__thiscall*)(void*, void*))((void**)(inner + 0x3c))[0])(p2 + 0x70, q);
   }
 }
 
