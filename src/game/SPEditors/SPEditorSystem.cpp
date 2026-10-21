@@ -149,7 +149,7 @@ struct cISPCreatureAnimManager_s005d_61b0 {   // IRefCount
 };
 }
 namespace SP {
-struct cSPSwatchManager : public EA::RefCountTemplate_s005d_61b0<int> {
+class cSPSwatchManager : public EA::RefCountTemplate_s005d_61b0<int> { public:
     void Shutdown();               // 0x005F0850
     void Update(int deltaTime);    // 0x005F0940
 };
@@ -164,7 +164,7 @@ struct cSPUIAssetBrowser_s005d_61b0 : public EA::Messaging::IHandlerRC_s005d_61b
 };
 }
 namespace SP {
-struct cSPEditorEffects {          // RefCountVTemplate
+class cSPEditorEffects { public:          // RefCountVTemplate
     virtual ~cSPEditorEffects();
     virtual int AddRef();
     virtual int Release();
@@ -201,7 +201,7 @@ struct CookieHandler_s005d_61b0 {
 }
 namespace SP {
 namespace Achievements {
-struct Controller {
+class Controller { public:
     virtual ~Controller();
     virtual int AddRef();
     virtual int Release();
@@ -375,7 +375,7 @@ void SetObjectTemplateDB(void*);         // 0x0067CC40
 }
 namespace SP {
 namespace Thumbnail {
-struct cImportExport { virtual ~cImportExport(); void Shutdown(); };   // 0x005FAE40
+class cImportExport { public: virtual ~cImportExport(); void Shutdown(); };   // 0x005FAE40
 }
 }
 namespace SP {
@@ -471,7 +471,7 @@ struct cPaintSystem_s005d_61b0 : public EA::Messaging::IHandlerRC_s005d_61b0 {
 namespace EA {
 namespace XHTML {
 namespace Resource {
-struct IResourceProvider {
+class IResourceProvider { public:
 virtual void v0();
 virtual void v1();
 virtual void v2();
@@ -664,7 +664,7 @@ template <class T> struct basic_string_s005d_61b0 {
 };
 }
 namespace eastl {
-template <class T, int nodeCount> struct fixed_string {
+template <class T, int nodeCount> class fixed_string { public:
     T* mpBegin;          // +0x0
     T* mpEnd;            // +0x4
     T* mpCapacity;       // +0x8
@@ -691,7 +691,7 @@ struct hkBool_s005d_61b0 {
     hkBool_s005d_61b0(bool b) : m_bool((char)b) {}
     operator bool() const { return m_bool != 0; }
 };
-struct hkMemory {
+class hkMemory { public:
 virtual void v0();
 virtual void v1();
 virtual void v2();
@@ -701,7 +701,7 @@ virtual void v3();
     static hkMemory* s_instance;   // 0x016E4178
     static hkMemory& getInstance() { return *s_instance; }
 };
-struct hkThreadMemory {
+class hkThreadMemory { public:
     void deallocateChunk(void* p, int nbytes, int cl);   // 0x0107DB10
     static unsigned long s_threadMemoryTls;   // 0x016E4174
     static hkThreadMemory& getInstance();
@@ -731,7 +731,7 @@ struct hkReferencedObject_s005d_61b0 : public hkBaseObject_s005d_61b0 {
         hkMemory::getInstance().deallocateChunk(p, b->m_memSizeAndFlags, 0x15);
     }
 };
-template <class T> struct hkSingleton : public hkReferencedObject_s005d_61b0 {
+template <class T> class hkSingleton : public hkReferencedObject_s005d_61b0 { public:
     static T* s_instance;
     static T& getInstance() { return *s_instance; }
     static void replaceInstance(T* p) {
@@ -740,7 +740,7 @@ template <class T> struct hkSingleton : public hkReferencedObject_s005d_61b0 {
         s_instance = p;
     }
 };
-template <class T> struct hkArray {
+template <class T> class hkArray { public:
     T* m_data;
     int m_size;
     int m_capacityAndFlags;
@@ -763,7 +763,7 @@ template <class T> struct hkArray {
     }
     static void hkArrayUtil_reserveMore(void* array, int elemSize);   // 0x0107F530
 };
-template <class K, class V> struct hkPointerMap {
+template <class K, class V> class hkPointerMap { public:
     uint32_t m_map[3];
     hkPointerMap();                      // 0x0107DE00
     ~hkPointerMap();                     // 0x0107DE50
@@ -791,14 +791,14 @@ struct hkOstream_s005d_61b0 {
     hkOstream_s005d_61b0& operator<<(int i);                         // 0x0107EE80
     uint32_t m_impl[3];
 };
-struct hkStackTracer {
+class hkStackTracer { public:
     hkStackTracer();                                      // 0x0107F250
     ~hkStackTracer();                                     // 0x0107F050
     int getStackTrace(unsigned long* trace, int maxtrace);   // 0x01097300
     void dumpStackTrace(const unsigned long* trace, int numtrace, hkErrorReportFunction pfunc, void* context);   // 0x0107F0C0
     uint32_t m_impl[2];
 };
-struct hkString { static int sprintf(char* buf, const char* fmt, ...); };   // 0x0107F3B0
+class hkString { public: static int sprintf(char* buf, const char* fmt, ...); };   // 0x0107F3B0
 class hkDefaultError : public hkError {
 public:
     hkDefaultError(hkErrorReportFunction errorReportFunction, void* errorReportObject = 0)
@@ -827,7 +827,7 @@ void HavokFree(void* p);                  // 0x00F47410
 extern void* (*hkSystemMalloc)(int, int); // 0x015B9A34
 extern void (*hkSystemFree)(void*);       // 0x015B9A38
 void HavokErrorReport(const char* s, void* obj);   // 0x00C2E4E0
-struct hkPoolMemory {
+class hkPoolMemory { public:
     hkPoolMemory();   // 0x0107F910
 virtual void v00();
 virtual void v01();
@@ -863,7 +863,7 @@ int init(hkPoolMemory* memoryManager, hkThreadMemoryImpl* threadMemory, hkErrorR
 namespace EA {
 namespace XHTML {
 namespace Resource {
-struct IProtocolHandler {
+class IProtocolHandler { public:
     virtual ~IProtocolHandler() {}
     int mRefCount;   // +0x4
     int mUnknown8;   // +0x8
