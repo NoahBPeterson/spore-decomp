@@ -1,0 +1,12 @@
+00b4d220 283 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv UNSUPPORTED (only 0/400 inputs valid: fault(write)=350, import:InitializeCriticalSectionAndSpinCount=30, fault(read)=20) — size 430 vs 419, heavy inlined init path; scheduling/regalloc differs throughout
+00b4d540 16 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv PASS (400/400, 100.0%) — only cl schedules the shared `xor ecx,ecx` zero-constant one instruction earlier than the original (before the +0x10 store instead of after the +0x14 store); behaviourally identical
+00b4d5d0 155 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv FAIL (5/5 mismatched; first: esp) — original has a stack frame + 16-byte-aligned local (`push ebp; and esp,-16`) and reads args via [ebp+..]; ours is frameless ([esp+..]) and also has a param->field mapping bug (0x14/0x18 swapped); needs real fix
+00b4d670 134 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv PASS (400/400, 100.0%) — float expression tree contracts/reorders differently (size 149 vs 168); behaviourally identical
+00b4d7a0 87 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv FAIL (5/5 mismatched; first: execution) — original raises a write fault; our reconstruction mis-modelled the pow()-based path (size 94 vs 127)
+00b4d8e0 58 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv UNSUPPORTED (only 0/400 inputs valid: fault(write)=344, fault(read)=47, fault(pool-limit)=5) — size 82 vs 76, duplicated tag call in both branches not reproduced
+00b4d980 90 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv PASS (400/400, 100.0%) — size 95 vs 97, near-exact but one instruction/scheduling difference
+00b4da40 721 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv FAIL (5/19 valid; first: memory pool @40020070) — LTCG-sized inlined body (802 orig vs 695), reconstruction diverges in a real code path
+00b4dd70 322 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv FAIL (5/6 valid; first: memory pool @4aa301c8) — size 363 vs 338, reconstruction diverges in a real code path
+00b4dee0 313 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv FAIL (5/5 valid; first: memory pool @45b30000) — size 301 vs 255, reconstruction diverges in a real code path
+00b4dfe0 153 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv WEAK (216 valid inputs, 31.7% coverage) — size 208 vs 222
+00b4e0c0 311 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv FAIL (5/5 valid; first: execution) — size 304 vs 269, reconstruction diverges in a real code path

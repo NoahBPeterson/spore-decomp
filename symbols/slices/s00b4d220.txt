@@ -1,0 +1,21 @@
+00b4d220 SP::GB1::GB1  # constructor: base cGonzagoSubsystem + the physics-object vtable family
+00b4d3f0 Blk50::copyFrom  # copy an 0x50-byte block (skipping the two holes at +8/+0xc)
+00b4d470 repack helper  # repack a source object (sparse offsets) into a dense 0x7a-byte record
+00b4d540 record-init helper  # clear/init an 0x74-byte record (scalar 1.0 at +0x10, tag 2 at +0x14, rest zero)
+00b4d5d0 record-init helper (7-arg)  # 7-arg init of a 0x74-byte record (vec3 header + scalars, rest zero)
+00b4d670 plane/direction scaler  # scale a plane/direction by -(param+1); returns scale*param4
+00b4d720 resource-tag releaser  # find resource tag 0x448ae7e2, and if its type is 0x532db75, release it
+00b4d770 chain counter  # walk a linked chain at +0x70, bumping a 16-bit counter on each tagged node
+00b4d7a0 Havok world-property adder  # add three Havok world properties from (radius, ?, solid flag)
+00b4d820 hkSimpleShapePhantom subclass ctor  # base ctor + vtable + flag clear
+00b4d850 overlapping-collidable filter  # forward to hkSimpleShapePhantom::addOverlapping
+00b4d880 SP::Havok::CreateRigidBody  # allocate an hkRigidBody and register the listener
+00b4d8c0 global physics-object clearer  # clear the global physics-object pointer
+00b4d8e0 LOD/id tag-query pusher  # choose an LOD/id from a tag query and push it to the object at +8
+00b4d930 capsule-constant setter  # set the two capsule constants at +0x14e8/+0x14ec
+00b4d980 0x84-record copy helper  # copy a 0x84-byte record (vec3 header, scalars, an 0x50 sub-block, trailing word)
+00b4da40 capsule collision solve  # returns 1 when the impulse is non-zero
+00b4dd70 physics-object sync  # position/orientation sync on a game-data change
+00b4dee0 capsule/sphere contact point  # compute a contact point from the object's position and bounds
+00b4dfe0 position snap (no tag 6)  # snap a position to the object's centre (when no match found for tag 6)
+00b4e0c0 position snap (tag 6)  # same snap as 00b4dfe0 but keyed on tag 6 being present
