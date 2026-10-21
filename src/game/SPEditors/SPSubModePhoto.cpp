@@ -750,7 +750,7 @@ inline uint32_t GetRecorderState()
 }
 void PlayAudio(uint32_t soundID, uint32_t state);                         // 0x00435ED0 (cdecl)
 bool TryGetUIntProperty(void* propList, uint32_t id, uint32_t* out);      // 0x00410370 (cdecl)
-struct cUIHints { void SetEnabled(bool on, bool b); };                    // 0x0067C420
+class cUIHints { public: void SetEnabled(bool on, bool b); };                    // 0x0067C420
 cUIHints* UIHints();                                                      // 0x0067CAC0
 namespace UI {
  void CalloutMessageBox(void* config, void* text);   // 0x00809DB0
