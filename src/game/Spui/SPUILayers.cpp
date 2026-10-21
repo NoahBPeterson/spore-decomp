@@ -111,7 +111,7 @@ struct LayerInfoVec {                 // eastl::vector<cLayerInfo, fixed_vector_
     void* inline_;    // +0x10
     void __thiscall dtor();   // 0x80ea80
 };
-struct cSPUICustomRendererImpl {
+class cSPUICustomRendererImpl { public:
     void** vtbl;         // +0   0x1417df8 / 0x1417e18
     void** vtbl2;        // +4   0x1417df4 / 0x1417e14
     u32    atomic8;      // +8
@@ -219,7 +219,7 @@ struct cSPUILayeredObject_s0080_f7c0 {
     void* __thiscall MethodFAC0(void* a, void* b, void* cb);
     void* __thiscall AddModel(cMWModel_s0080_f7c0* model);  // 0x0080fc50 (cSPUILayeredObject::AddModel)
 };
-struct cSPUILayerManager {
+class cSPUILayerManager { public:
     void** vtbl;        // +0
     void** vtbl2;       // +4
     u8     pad8[4];
