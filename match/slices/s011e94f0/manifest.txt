@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# RenderWare 4 core (0x011e2000-0x0120bc50) is built with cl 13.10 + /GL + /LTCG
+# (symbols/renderware4_core.txt), so a single-object compile cannot reproduce cross-call
+# register allocation; this slice has no byte-exact functions and the manifest is empty.
+# Complete behavioural reconstructions live in nonmatching.txt.
