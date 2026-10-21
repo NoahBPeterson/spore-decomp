@@ -1,0 +1,3 @@
+# source: slices/s010d7570/s010d7570.cpp   flags: /vc71 /O2 /MD /Gy /TP
+# rows: <va>  <diff-bytes>  <reason>
+# (no partially-implemented functions in this slice; all 7 VAs are in manifest.txt or nonmatching.txt)
