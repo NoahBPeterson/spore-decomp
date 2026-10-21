@@ -251,7 +251,7 @@ public:
     void setBroadPhaseWorldSize(hkReal size);                        // 0x010881D0
 };
 class hkCollisionDispatcher_s004b_8af0;
-struct hkAgentRegisterUtil { static void registerAllAgents(hkCollisionDispatcher_s004b_8af0* dis); };  // 0x010C25A0
+class hkAgentRegisterUtil { public: static void registerAllAgents(hkCollisionDispatcher_s004b_8af0* dis); };  // 0x010C25A0
 class hkShape_s004b_8af0 : public hkReferencedObject_s004b_8af0 { public: int m_userData; };
 struct hkTypedBroadPhaseHandle_s004b_8af0 { int m_id; char m_type, m_ownerOffset; unsigned short m_objectQualityType; unsigned int m_collisionFilterInfo; };
 class hkCollidable_s004b_8af0 {
@@ -280,7 +280,7 @@ public:
     hkMaterial_s004b_8af0 m_material;                      // +0x60
     char pad6c[0xd0 - 0x6c];
 };
-struct hkRigidBodyCinfo {
+class hkRigidBodyCinfo { public:
     unsigned int m_collisionFilterInfo;         // +0x0
     hkShape_s004b_8af0* m_shape;                           // +0x4
     char pad08[0x10 - 0x8];
