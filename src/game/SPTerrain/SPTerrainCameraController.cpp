@@ -29,7 +29,7 @@ void* SP_GameInputManager();          // 0xb3d250
 void* FUN_0067cab0(int id);           // 0x67cab0
 struct CCursorAttachmentLayout { void IsSomething(); void SetEnabled(bool); };
 namespace SP {
-struct cTerrainCameraController {
+class cTerrainCameraController { public:
   char pad00[0x11];
   u8   mb11;                                // +0x11
   char pad12[0x54 - 0x12];
