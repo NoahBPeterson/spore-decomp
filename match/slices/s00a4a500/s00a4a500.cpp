@@ -215,9 +215,8 @@ void* canvas_findtext(int* out, void* x)
     while (*(int*)((char*)x + 0x74) == 0)
         x = *(void**)((char*)x + 0x2c);
     int* p = *(int**)((char*)x + 0x74);
-    int b = p[1];
     int a = p[0];
-    out[1] = b;
+    out[1] = p[1];
     out[0] = a;
     return out;
 }

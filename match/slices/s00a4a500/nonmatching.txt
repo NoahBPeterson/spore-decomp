@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-00a4a5d0  11  complete; canvas_findtext - same size; both field loads are now hoisted above both stores as in the original, leaving only the register holding `out` (eax vs ecx) and the resulting return coalescing (mov eax,ecx vs none). difftest PASS (397 inputs, 100% coverage)
+00a4a5d0  11  complete; canvas_findtext - same instruction stream, only the tail coloring differs: the original reads p[0] into edx, hoists `out` into ecx and reuses eax for p[1], then returns via mov eax,ecx; cl emits p[0]->ecx, p[1]->edx, `out`->eax with the return coalesced. Source is the Ghidra-shaped form (a = p[0]; out[1] = p[1]; out[0] = a; return out) and the ordering cannot be forced (declare-first, load-before-store and temp variants all fold to the same 9-byte tail). difftest PASS (397 inputs, 100% coverage)
 00a4a600  9  complete; glist_getname - same size; register coloring only (original reads the glist into ecx, ours into eax). difftest FAIL only on the leftover eax return value: the function is void (Pd's glist_getname), the original's eax happens to hold the out pointer
 00a4a620  25  complete; glist_getindex - same size; the do/while walk shape differs. difftest PASS (380 inputs, 100% coverage)
 00a4a6b0  23  complete; canvas_loadbanghandler - same size; xor eax,eax is scheduled before the +0x80 store. difftest PASS (267 inputs, 100% coverage)
