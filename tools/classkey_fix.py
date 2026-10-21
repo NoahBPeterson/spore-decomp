@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Rewrite struct/class keywords in a slice to the ones the original used (classkey_triage.py MISMATCH rows).
 
-usage: classkey_fix.py <slice-id> [...] [--dry-run]   (prints one result line per slice)
+usage: classkey_fix.py <slice-id | src/game/<dir>/<obj>> [...] [--dry-run]   (one result line per unit)
 
 Per slice, for every definition the triage marks MISMATCH (the PDB type with the same qualified name used the
 other keyword):
@@ -24,6 +24,7 @@ PY = W(".venv/bin/python")
 sys.path.insert(0, W("tools/matching"))
 from run_all import DEFAULT_FLAGS  # noqa: E402
 KEEP = False
+OBJGATE = False
 DEF = re.compile(r"(?m)^([ \t]*(?:template\s*<[^;{]*?>\s*)?)(struct|class)(\s+(?:__declspec\([^)]*\)\s*)?)"
                  r"((?:[A-Za-z_]\w*::)*[A-Za-z_]\w*)(\s*(?:final\s*)?)(:[^;{]*)?\{")
 
@@ -90,10 +91,23 @@ def swap(sym, changed):
     return sym
 
 
-def restore(sid):
-    sh("git", "checkout", "--", "match/slices/" + sid)
-    if os.path.exists(W("symbols/slices", sid + ".txt")):
-        sh("git", "checkout", "--", "symbols/slices/%s.txt" % sid)
+def unit(u):
+    """A slice id (sXXXXXXXX) or a migrated module (src/game/<dir>/<obj> or <dir>/<obj>)."""
+    if re.fullmatch(r"s[0-9a-f]{8}", u):
+        d = W("match/slices", u)
+        srcs = sorted(os.path.join(d, f) for f in os.listdir(d) if f.endswith((".cpp", ".h", ".hpp", ".inl"))) if os.path.isdir(d) else []
+        return dict(name=u, bk=d, srcs=srcs, main=os.path.join(d, u + ".cpp"), row="slices/",
+                    paths=["match/slices/" + u, "symbols/slices/%s.txt" % u], symfile=W("symbols/slices", u + ".txt"))
+    m = re.sub(r"^src/game/", "", u).rstrip("/").removesuffix(".cpp")
+    main = W("src/game", m + ".cpp")   # only the object's own TU: shared headers in src/game/include are left alone
+    return dict(name=m, bk=W("src/game", m), srcs=[main] if os.path.exists(main) else [], main=main, row="../src/game/",
+                paths=["src/game/%s.cpp" % m, "src/game/%s/manifest.txt" % m], symfile=None)
+
+
+def restore(U):
+    for p in U["paths"]:
+        if os.path.exists(W(p)):
+            sh("git", "checkout", "--", p)
 
 
 def obj_symbols(src, flags):
@@ -109,28 +123,89 @@ def obj_symbols(src, flags):
         return []
 
 
+def compile_sections(src, flags):
+    """Compile src to a scratch object; return a sorted list of (code section data, relocation offsets), or None.
+    Symbol names are left out on purpose: a class-key change renames symbols and must change nothing else."""
+    import hashlib
+    from run_all import INCLUDE, winpath, resolve_flags
+    from cmpobj import parse_coff
+    obj = W("work/match/chk", "classkey_%s.obj" % hashlib.md5((src + flags + str(os.getpid())).encode()).hexdigest()[:10])
+    if os.path.exists(obj):
+        os.remove(obj)
+    r = subprocess.run([W("tools/matching/cl.sh"), "/nologo", "/c", *resolve_flags(flags.split()), INCLUDE,
+                        "/Fo" + winpath(obj), winpath(src)], capture_output=True, text=True, cwd=ROOT)
+    if r.returncode or not os.path.exists(obj):
+        return None
+    secs, _ = parse_coff(obj)
+    os.remove(obj)
+    # code only: .drectve, .debug$S and RTTI strings carry mangled names, which legitimately change with the keyword
+    return sorted((bytes(sc["data"]), tuple(sorted(v for v, _s, _t in sc["relocs"])))
+                  for sc in secs if sc and sc.get("name", "").startswith(".text"))
+
+
+def unit_flags(U):
+    """The first flags string found in the unit's bookkeeping (nonmatching/partial notes), else run_all's defaults."""
+    for f in ("nonmatching.txt", "partial.txt"):
+        p = os.path.join(U["bk"], f)
+        if os.path.exists(p):
+            m = re.search(r"(/O[d12x](?:\s+/[A-Za-z][\w:=.-]*)+)", open(p, errors="replace").read())
+            if m:
+                return m.group(1)
+    return " ".join(DEFAULT_FLAGS)
+
+
+def fix_by_object(U, rows):
+    """No manifest to re-run: keep the edit only if every section of the compiled object is byte-identical."""
+    flags = unit_flags(U)
+    before = compile_sections(U["main"], flags)
+    if before is None:
+        return "skip (does not compile before, flags %s)" % flags
+    by_file = collections.defaultdict(dict)
+    for r in rows:
+        by_file[r[0]][int(r[1])] = "class" if r[2] == "struct" else "struct"
+    changed = {}
+    for f, t in by_file.items():
+        changed.update(edit_file(W(f), t))
+    after = compile_sections(U["main"], flags)
+    if after != before:
+        if not KEEP:
+            restore(U)
+        return "REVERTED (object %s after the edit)" % ("does not compile" if after is None else "differs")
+    sf = U["symfile"]
+    if sf and os.path.exists(sf):
+        s = open(sf).read(); s2 = "\n".join(re.sub(r"(\S+)$", lambda m: swap(m.group(1), changed), l) for l in s.split("\n"))
+        if s2 != s:
+            open(sf, "w").write(s2)
+    return "fixed %d definitions (%s); code sections identical" % (len(rows), ", ".join("%s->%s" % kv for kv in sorted(changed.items()))[:160])
+
+
 def uv_only(old, new):
     return new != old and len(new) == len(old) and all(a == b or {a, b} == {"U", "V"} for a, b in zip(old, new))
 
 
-def run_all(sid):
-    r = sh(PY, W("tools/matching/run_all.py"), "--manifest", "match/slices/%s/manifest.txt" % sid)
+def run_all(U):
+    r = sh(PY, W("tools/matching/run_all.py"), "--manifest", os.path.relpath(os.path.join(U["bk"], "manifest.txt"), ROOT))
     last = (r.stdout.strip().splitlines() or [""])[-1]
     m = re.match(r"(\d+) / (\d+)", last)
     return (int(m.group(1)), int(m.group(2))) if m else (0, -1)
 
 
 def fix_slice(sid, dry):
-    d = W("match/slices", sid)
-    if not os.path.isdir(d) or not os.path.exists(os.path.join(d, "manifest.txt")):
+    U = unit(sid); d = U["bk"]
+    if not U["srcs"] or not os.path.exists(U["main"]):
+        return "skip (no source)"
+    nomanifest = not os.path.exists(os.path.join(d, "manifest.txt"))
+    if nomanifest and not OBJGATE:
         return "skip (no manifest)"
-    if sh("git", "status", "--porcelain", "--", "match/slices/" + sid, "symbols/slices/%s.txt" % sid).stdout.strip():
+    if sh("git", "status", "--porcelain", "--", *U["paths"]).stdout.strip():
         return "skip (uncommitted changes)"
-    files = sorted(os.path.relpath(os.path.join(d, f), ROOT) for f in os.listdir(d) if f.endswith((".cpp", ".h", ".hpp", ".inl")))
+    files = [os.path.relpath(f, ROOT) for f in U["srcs"]]
     rows = triage_rows(files)
     if not rows:
         return "nothing to fix"
-    ok0, n0 = run_all(sid)
+    if nomanifest:
+        return ("would fix %d definitions by the object gate" % len(rows)) if dry else fix_by_object(U, rows)
+    ok0, n0 = run_all(U)
     if ok0 != n0:
         return "skip (baseline %d/%d)" % (ok0, n0)
     if dry:
@@ -147,12 +222,12 @@ def fix_slice(sid, dry):
     need = collections.defaultdict(list)   # flags -> [(line index, va, old, expected)]
     for i, l in enumerate(lines):
         p = l.split()
-        if len(p) >= 3 and l.startswith("slices/"):
+        if len(p) >= 3 and l.startswith(U["row"]):
             # every row is re-checked: MSVC writes a repeated name as a digit back-reference (PAU12@) and a
             # template as U?$Name@, so the U/V positions cannot all be predicted from the name
             need[" ".join(p[3:])].append((i, p[2], p[1], None))
     for flags, items in need.items():
-        cmd = [PY, W("tools/matching/chk.py"), os.path.join(d, sid + ".cpp")] + [it[1] for it in items]
+        cmd = [PY, W("tools/matching/chk.py"), U["main"]] + [it[1] for it in items]
         if flags:
             cmd += ["--flags", flags]
         out = sh(*cmd).stdout
@@ -165,21 +240,21 @@ def fix_slice(sid, dry):
                 # templates and anonymous namespaces defeat the marker binding: take the object's one symbol that
                 # differs from the old name in U<->V letters alone
                 if syms is None:
-                    syms = obj_symbols(os.path.join(d, sid + ".cpp"), flags or " ".join(DEFAULT_FLAGS))
+                    syms = obj_symbols(U["main"], flags or " ".join(DEFAULT_FLAGS))
                 c = [x for x in syms if uv_only(old, x)]
                 new = c[0] if len(c) == 1 else None
             # accept only a class-key change: same length, every differing character a U/V swap
             if new and uv_only(old, new):
                 lines[i] = lines[i].replace(old, new, 1)
     open(mf, "w").write("\n".join(lines))
-    sf = W("symbols/slices", sid + ".txt")
-    if os.path.exists(sf):
+    sf = U["symfile"]
+    if sf and os.path.exists(sf):
         s = open(sf).read(); s2 = "\n".join(re.sub(r"(\S+)$", lambda m: swap(m.group(1), changed), l) for l in s.split("\n"))
         if s2 != s:
             open(sf, "w").write(s2)
-    ok1, n1 = run_all(sid)
+    ok1, n1 = run_all(U)
     if (ok1, n1) != (ok0, n0) and not KEEP:
-        restore(sid)
+        restore(U)
         return "REVERTED (run_all %d/%d after, %d/%d before)" % (ok1, n1, ok0, n0)
     return "fixed %d definitions (%s); run_all %d/%d" % (len(rows), ", ".join("%s->%s" % kv for kv in sorted(changed.items()))[:160], ok1, n1)
 
@@ -188,8 +263,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("slices", nargs="+"); ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--keep", action="store_true", help="debug: leave a failed edit in place")
+    ap.add_argument("--object-gate", action="store_true", help="units without a manifest: keep the edit only if "
+                    "the compiled object's code sections are byte-identical before and after")
     a = ap.parse_args()
-    global KEEP; KEEP = a.keep
+    global KEEP, OBJGATE; KEEP = a.keep; OBJGATE = a.object_gate
     for s in a.slices:
         print("%s %s" % (s, fix_slice(s, a.dry_run)), flush=True)
 
