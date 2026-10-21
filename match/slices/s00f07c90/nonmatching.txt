@@ -1,0 +1,17 @@
+# va  diff-bytes  reason
+00f07c90  249  complete; /O2 LTCG-style register ABI in the original (ecx/esi/edi first args); difftest FAIL only on the incidental TerrainMgr `this`/EAX
+00f07e10  170  complete; original passes the game-state in ESI (custom/LTCG ABI), ours via the first stack arg; difftest UNSUPPORTED (entry ECX)
+00f07e90  158  complete; thiscall (window in ECX) in the original; difftest UNSUPPORTED (entry ECX)
+00f07f50  116  complete; original takes the counter in EAX and the panel in ECX (thiscall+register); difftest UNSUPPORTED (entry EAX)
+00f07fd0  726  complete; 5 callee-saved regs vs 4, loop/branch layout and FindWindowByID site differ; difftest UNSUPPORTED (unresolved Layout/Animator/wcscspn references)
+00f08350  303  complete; x87 reciprocal-sqrt normalisation and reg alloc differ
+00f084b0  138  complete; reg alloc (ebx/esi/edi assignment of a/counter) differs; difftest PASS 100% coverage
+00f08550   23  complete; only the two arg->pointer add/lea orderings differ; difftest WEAK 100% coverage (104 valid inputs)
+00f085b0  113  complete; reg alloc (ebx vs ebp for the counter) differs; difftest FAIL 1/211 on the incidental EAX (undefined upper byte propagated from a bool return)
+00f08630  135  complete; original uses idiv for /1000 and %1000, ours uses the magic-multiply sequence; difftest PASS
+00f086d0  225  complete; nested-loop layout + idiv vs magic multiply; difftest FAIL on the incidental EAX return chain
+00f08750  239  complete; list iteration and reg alloc differ
+00f088c0   65  complete; the original forwards p[0]/p[1] as by-value float args (3-arg GetLocalPos); difftest UNSUPPORTED (0 valid inputs)
+00f08920   96  complete; QueryInterface result uses a distinct interface whose slot 0x28 is a 2-arg setter; only reg/global-reload layout differs
+00f089a0  407  complete; cursor-drag maths and reg alloc differ; difftest UNSUPPORTED (import GetCursorPos)
+00f08b70  128  complete; reg alloc + branch layout differ; difftest UNSUPPORTED (0 valid inputs)

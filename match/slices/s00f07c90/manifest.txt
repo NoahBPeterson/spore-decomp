@@ -1,0 +1,4 @@
+# source  symbol  original VA  [flags override]
+slices/s00f07c90/s00f07c90.cpp  ?CoerceCounter@@YAXPAURecDB@@PAH@Z  00f08680  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f07c90/s00f07c90.cpp  ?GetDayList@@YAPADHH@Z  00f08850  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f07c90/s00f07c90.cpp  ?SetWindowFlag@@YAXI@Z  00f08890  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
