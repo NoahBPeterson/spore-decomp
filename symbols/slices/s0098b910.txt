@@ -1,0 +1,17 @@
+# slice s0098b910 -- EA::UTFWinControls WinTextEdit / IWinTextEdit / paragraph & undo helpers
+0098b910  ?FindParagraphByTextIndex@WinTextEdit@UTFWinControls@EA@@QAEPBUParagraph@23@I@Z
+0098b940  ?GetVAlignmentOffset@WinTextEdit@UTFWinControls@EA@@QAEHXZ
+0098bab0  ?reserve@ParagraphVector@UTFWinControls@EA@@QAEXI@Z
+0098bb60  ?push_back@DequeBase@UTFWinControls@EA@@QAEXABQAX@Z
+0098bbd0  ?GetText@IWinTextEdit@UTFWinControls@EA@@QAEHPAXII@Z
+0098bc20  ?scalar_deleting_destructor@UndoAction@UTFWinControls@EA@@QAEPAU123@I@Z
+0098bc80  ?ApplyUndoRedo@WinTextEdit@UTFWinControls@EA@@QAEXPAUUndoAction@23@@Z
+0098bd00  ?ApplyRedoUndo@WinTextEdit@UTFWinControls@EA@@QAEXPAUUndoAction@23@@Z
+0098bd80  ?TrimUndoList@WinTextEdit@UTFWinControls@EA@@QAEXI@Z
+0098bea0  ?TrimRedoList@WinTextEdit@UTFWinControls@EA@@QAEXI@Z
+0098bfc0  ?insert@ParagraphVector@UTFWinControls@EA@@QAEXPAUParagraph@23@ABU423@@Z
+0098c110  ??0WinTextEdit@UTFWinControls@EA@@QAE@XZ
+0098c4b0  ?SerUpdate@WinTextEdit@UTFWinControls@EA@@QAEXXZ
+0098c520  ?Shutdown@WinTextEdit@UTFWinControls@EA@@QAEXXZ
+0098c5a0  ?Replace@WinTextEdit@UTFWinControls@EA@@QAEHPAXIIII@Z
+0098c860  ?SetUndoHistorySize@IWinTextEdit@UTFWinControls@EA@@QAEXI@Z

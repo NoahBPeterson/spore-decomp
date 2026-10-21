@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0098b910/s0098b910.cpp  ?FindParagraphByTextIndex@WinTextEdit@UTFWinControls@EA@@QAEPBUParagraph@23@I@Z  0098b910  /O2 /MD /Gy /TP /EHsc
+slices/s0098b910/s0098b910.cpp  ?scalar_deleting_destructor@UndoAction@UTFWinControls@EA@@QAEPAU123@I@Z  0098bc20  /O2 /MD /Gy /TP /EHsc
+slices/s0098b910/s0098b910.cpp  ?Shutdown@WinTextEdit@UTFWinControls@EA@@QAEXXZ  0098c520  /O2 /MD /Gy /TP /EHsc
+slices/s0098b910/s0098b910.cpp  ?SetUndoHistorySize@IWinTextEdit@UTFWinControls@EA@@QAEXI@Z  0098c860  /O2 /MD /Gy /TP /EHsc

@@ -1,0 +1,42 @@
+# VA      diff bytes  reason (all functions below compile, link and are semantically complete)
+0098b940  341   WinTextEdit::GetVAlignmentOffset: the original hoists the extent accumulation and reorders the areaTop/areaBottom reloads; ours re-emits them in source order
+0098bab0  113   ParagraphVector::reserve (eastl::vector<Paragraph>::reserve): original shares one grow path and recomputes the element count; ours keeps an explicit capacity local (same class of difference as s0098a820 0098b700)
+0098bb60   41   DequeBase::push_back: 2-byte artifact from the debug operator_new string args (the CRT new declaration collapses the "EASTL"/file pushes to 0 project-wide, see s0098a820 0098b700); the remainder is register-reuse ordering
+0098bbd0   63   IWinTextEdit::GetText: one scratch slot differs; the original reuses the arg2 stack slot for the emin() temporary and keeps first/last in eax/ecx instead of ebx/ebp
+0098bc80   85   WinTextEdit::ApplyUndoRedo: original shares the `lea` for both emin() arms and keeps cnt/tail in different registers
+0098bd00   80   WinTextEdit::ApplyRedoUndo: same as ApplyUndoRedo with the new/old strings swapped
+0098bd80  178   WinTextEdit::TrimUndoList: values agree; the diff is register assignment (ebx/ebp) plus the load-then-compare vs compare-with-memory idiom for the deque iterator
+0098bea0  178   WinTextEdit::TrimRedoList: same as TrimUndoList
+0098bfc0  280   ParagraphVector::insert (eastl::vector<Paragraph>::insert): original inlines both relocation copies; ours calls ParagraphRelocate/ParagraphMoveBack
+0098c110  781   WinTextEdit::WinTextEdit ctor: correct field-for-field; the original keeps ebx/edi live across the whole 840-byte body instead of reloading
+0098c4b0   63   WinTextEdit::SerUpdate: complete; the dropShadow SetMode pair and the IWinTextEdit vtable slot 0x84 call are ordered slightly differently
+0098c5a0  587   WinTextEdit::Replace: complete; the undo-record construction and the two min() materialisations are far more compact in the original (shared string assign, shared scratch temps, `sub esp,0x20` frame)
+
+# equivalence run (tools/difftest/equiv.py, default inputs) for the non-byte-exact functions:
+#   0098b940 FAIL  5/5 mismatch on eax: original 0x00000008, ours 0x026803c8. ours returns the
+#                  float `acc` bit-pattern (a denormal ~0.0f) while the original returns the
+#                  integer 8, i.e. the original's paragraph loop/branch takes the other arm on
+#                  these inputs; the empty-paragraph case (first==last, acc==0) is what differs.
+#   0098bab0 PASS  323 valid inputs, 90.9% coverage
+#   0098bb60 PASS  334 valid inputs, 100.0% coverage
+#   0098bbd0 PASS  231 valid inputs, 100.0% coverage
+#   0098bc80 WEAK  131 valid inputs (need 200), 100.0% coverage
+#   0098bd00 WEAK  132 valid inputs (need 200), 100.0% coverage
+#   0098bd80 WEAK  196 valid inputs (need 200), 23.3% coverage
+#   0098bea0 WEAK  203 valid inputs (need 200), 23.3% coverage
+#   0098bfc0 WEAK   40 valid inputs (need 200), 40.0% coverage
+#   0098c110 UNSUPPORTED 5 unresolved __imp_ references to the UTFWinControls float globals
+#                  (g_DefaultSpacing4 / g_StopwatchUnitScale / g_DoubleClickScale /
+#                   g_UIntToFloatBias / g_MillisToSeconds) -- the ctor reads them through the
+#                  IAT and the harness cannot resolve the import slots.
+#   0098c4b0 UNSUPPORTED 0/400 inputs valid (discards: fault(read)=311, fault(write)=64,
+#                  import:VirtualFree=18) -- SerUpdate drives the window through unmodelled
+#                  drawable vtables.
+#   0098c5a0 FAIL  5/5 mismatch on execution: ours faults inside SP::cSPMemPool::LockedAlloc
+#                  (eip=009289f4, `mov esi,[edi+0x4e4]` with edi==0). EAAllocate@0xf473a0 loads the
+#                  process-wide memory pool from the global at 0x16c8b44, which is zero in the
+#                  harness's .data snapshot, while the original reaches EAAllocate only after its
+#                  own pool has been created. Not a source-level semantics difference: both call
+#                  the identical EAAllocate with identical arguments ([0x34, "UTFWin/...",
+#                  0,0,0,0]); the harness simply does not model the SP memory-pool global.
+
