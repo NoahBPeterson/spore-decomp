@@ -1,0 +1,17 @@
+# va  name  # evidence
+# Slice s00fb0100 (gold4 #130) -- SP::cTerrainSphereQuad, the terrain sphere quad
+# (a quadtree cell of the planet terrain mesh).  This slice covers the ribbon-geometry
+# builder, the AABB expander, the two bounds/traversal helpers that walk the quadtree,
+# and the eastl element-copy routines for the 0x28-byte vertex record used by the
+# ribbon builder.  Compiled /O2 /arch:SSE ; the element copies still lower to x87
+# fld/fstp because the vertex is a float-field struct.
+# Class layout: mId +0x1c, mMinX/mMinY +0x20/+0x24, mMaxX/mMaxY +0x28/+0x2c,
+# children +0x08/+0x0c/+0x10, mNext +0x14, mSubdivided +0x6c, mExpandX/Y +0x88/+0x8c.
+# Names are reconstructions from the cards (the class name comes from the PDB).
+00fb0100  cTerrainSphereQuad::BufferDrawRibbonGeometry  # per-vertex lerp of the 0x30-byte ribbon source into a 0x24-byte destination, batched through the caller's lock/flush helpers
+00fb05e0  CopyElems28Guard          # eastl copy-with-out-end for Vertex28: *outEnd=dst; copy range; *outEnd=end
+00fb0650  FillElems28               # uninitialized_fill of a Vertex28 count times from a source
+00fb06b0  CopyElems28               # uninitialized_copy of a Vertex28 range, returning dst
+00fb0730  cTerrainSphereQuad::ExpandBounds   # nine-sample-point AABB expander (4 corners, centre, 4 edge midpoints)
+00fb0bd0  cTerrainSphereQuad::UpdateBoundsAndDraw  # scene range/draw-state, subdivided-bias vs log2-level+span path
+00fb0d20  cTerrainSphereQuad::TraverseSubdivided    # quadtree walk: id match, recompute bounds, centre split tests

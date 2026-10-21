@@ -1,0 +1,4 @@
+# partial.txt -- functions from slice s00fb0100 (gold4 #130) not fully reconstructed.
+# (empty: all 7 VAs are complete reconstructions.  None are byte-exact yet -- they all
+#  differ only in instruction scheduling / register colouring / a couple of hard
+#  compiler-internal forms, and are listed in nonmatching.txt.)
