@@ -1,0 +1,21 @@
+0116b1c0 FilterTransform  # rw::audio synthesis-filter driver: 18 blocks x 17 complex + 1 real leg over Dct32 coefs
+0116b4b0 Reader_Pull_116b4b0  # plain reader pull; bus ReadA on +0x34, then the pair/Write flush
+0116b6a0 Reader_Close_116b6a0  # releases the duplex buffer at +0x34; byte-exact
+0116b6c0 Reader_Init_116b6c0  # installs the plain pull/close pair and allocs the +0x34 decoder object
+0116b740 Reader_Pull_116b740  # fixed-size duplex pull; bus ReadA on +0x28
+0116b7a0 Reader_Close_116b7a0  # releases the bus object at +0x28; byte-exact
+0116b7c0 Reader_Init_116b7c0  # fixed-size duplex init; Get3/Put/Num/Set on the +0x28 bus
+0116b880 Reader_Pull_116b880  # frame-window pull; ReadA on +0x1c then Put{0,0,1}/Write flush
+0116b920 Reader_Init_116b920  # frame-window init; Get3/Put/Set on the +0x1c bus
+0116b9d0 Reader_Pull_116b9d0  # short-block pull; ReadB plus PutF/Write on the +0x1c bus
+0116bb00 Reader_Close_116bb00  # releases the bus object at +0x1c; byte-exact
+0116bb20 Reader_Init_116bb20  # short-block init; byte-exact
+0116bba0 Reader_Pull_116bba0  # mid/side pair pull (mode <=1 stereo path, else plain ReadB loop)
+0116bdb0 Reader_Init_116bdb0  # mid/side pair init; byte-exact
+0116be60 Reader_Pull_116be60  # reverse/duplex pull; ReadB on +0x1c
+0116bed0 Reader_Init_116bed0  # reverse/duplex init; byte-exact
+0116bf40 Reader_Pull_116bf40  # bus-resident pull: F_0113f780 window + 16->float conversion
+0116c010 Reader_Init_116c010  # bus-resident init; byte-exact
+0116c060 Reader_Pull_116c060  # plain output pull; conversion straight into the caller buffer
+0116c0c0 Reader_Init_116c0c0  # plain output init; byte-exact
+0116c0f0 Reader_Pull_116c0f0  # windowed pull used by the neighbouring MPEG slice

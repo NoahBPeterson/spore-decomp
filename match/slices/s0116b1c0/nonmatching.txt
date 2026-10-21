@@ -1,0 +1,13 @@
+0116b1c0 7168 /vc71 /O2 /MD /Gy /TP /arch:SSE UNSUPPORTED - ecx passed at entry (custom /LTCG register ABI) and Dct32 inlined by the original at link time
+0116b4b0 422 /vc71 /O2 /MD /Gy /TP /arch:SSE FAIL - bus ReadA destination is a caller-frame stack slot past the 3 declared args; modelled as a local scratch buffer, so the harness sees a different pool word
+0116b6c0 87 /vc71 /O2 /MD /Gy /TP /arch:SSE FAIL - only harness divergence is the stubbed 0x1175ca0 ctor writing past the toy allocation from FUN_011402c0
+0116b740 78 /vc71 /O2 /MD /Gy /TP /arch:SSE FAIL - same past-the-args scratch slot as 0116b4b0; modelled as a local
+0116b7c0 119 /vc71 /O2 /MD /Gy /TP /arch:SSE UNSUPPORTED - 0/400 inputs valid (fault(write) in the stubbed ctor); no observable comparison possible
+0116b880 122 /vc71 /O2 /MD /Gy /TP /arch:SSE FAIL - past-the-args scratch slot plus the zero/one pair written into the Put argument area
+0116b920 102 /vc71 /O2 /MD /Gy /TP /arch:SSE UNSUPPORTED - 0/400 inputs valid (fault(write) in the stubbed 0x1175ca0 ctor)
+0116b9d0 308 /vc71 /O2 /MD /Gy /TP /arch:SSE FAIL - past-the-args scratch slot; the rest of the push/convert/store sequence matches
+0116bba0 457 /vc71 /O2 /MD /Gy /TP /arch:SSE FAIL - past-the-args scratch slot in the ReadB loop
+0116be60 84 /vc71 /O2 /MD /Gy /TP /arch:SSE FAIL - past-the-args scratch slot in ReadB
+0116bf40 177 /vc71 /O2 /MD /Gy /TP /arch:SSE FAIL - F_0113f780 count out-parameter is a frame local, so the passed pointer differs from the original's
+0116c060 80 /vc71 /O2 /MD /Gy /TP /arch:SSE UNSUPPORTED - harness read from unmapped memory (no valid input)
+0116c0f0 30 /vc71 /O2 /MD /Gy /TP /arch:SSE FAIL - the original converts into the 4th stack argument (the caller passes none), not into buf; not expressible in the 3-argument reader entry-point type

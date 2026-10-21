@@ -1,0 +1,8 @@
+slices/s0116b1c0/s0116b1c0.cpp  ?Reader_Close_116b6a0@@YAXPAUReader@@@Z  0116b6a0  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0116b1c0/s0116b1c0.cpp  ?Reader_Close_116b7a0@@YAXPAUReader@@@Z  0116b7a0  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0116b1c0/s0116b1c0.cpp  ?Reader_Close_116bb00@@YAXPAUReader@@@Z  0116bb00  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0116b1c0/s0116b1c0.cpp  ?Reader_Init_116bb20@@YAXPAUReader@@PAUPatch@@@Z  0116bb20  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0116b1c0/s0116b1c0.cpp  ?Reader_Init_116bdb0@@YAXPAUReader@@PAUPatch@@@Z  0116bdb0  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0116b1c0/s0116b1c0.cpp  ?Reader_Init_116bed0@@YAXPAUReader@@PAUPatch@@@Z  0116bed0  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0116b1c0/s0116b1c0.cpp  ?Reader_Init_116c010@@YAXPAUReader@@PAUPatch@@@Z  0116c010  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0116b1c0/s0116b1c0.cpp  ?Reader_Init_116c0c0@@YAXPAUReader@@PAUPatch@@@Z  0116c0c0  /vc71 /O2 /MD /Gy /TP /arch:SSE
