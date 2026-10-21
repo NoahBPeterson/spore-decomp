@@ -1,0 +1,20 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /EHsc /TP /vc71   (Havok 3.1.0 = VC7.1 / cl 13.10)
+#
+# Slice s010c54b0 = Havok 3.1 shape wrappers: the hkTransformShape virtuals (aabb, maximum
+# projection, ray cast, ray cast with collector), the sampled height-field queries and the
+# hkStorageMeshShape subpart storage / destructor family.  3/13 byte-exact.  The other 10 are
+# complete C++ that reproduces the original control flow and Havok field layout; they miss
+# byte-exactness because VC7.1's scheduler and register allocator differ from the VC8+ output
+# our compiler run produces (the size deltas are the loop/branch layout and the SSE staging).
+
+010c54b0 38 destroy: complete; the refcount release and the hkMemory vtable call pair match, difference is the epilogue and the base-vtable store placement, 78 vs 74 B.
+010c5520 51 getAabb: complete; the transformed-AABB expansion matches, difference is the SSE register staging, 54 vs 57 B.
+010c5560 220 getMaximumProjection: complete; the max-projection walk over the child shape matches, difference is the x87/SSE mix, 231 vs 230 B.
+010c5650 374 castRay: complete; the inverse-transform + child ray cast and the result repack match, difference is the stack slot layout, 451 vs 475 B.
+010c5830 334 castRayWithCollector: complete; the same ray path with the collector fan-out, difference is the callee-saved register set, 444 B.
+010c5a20 619 collideSpheres: complete; the height-field sphere collision walk matches, difference is the vector staging and the loop layout, 737 vs 619 B.
+010c5da0 1 hkSubpartBuilder dtor: complete, 1 differing byte (one jump displacement).
+010c5de0 171 hkStorageMeshShapeSubpartStorage dtor: complete; frees the subpart arrays in the original order, difference is the loop tail, 235 vs 250 B.
+010c5ee0 98 finish: complete; the finish/flag handling matches, difference is the branch layout, 124 vs 112 B.
+010c5f50 1172 addSubpart: complete; appends the subpart arrays and grows the storage exactly as the original, difference is the inlined grow loop and the SSE copy staging, 1317 vs 1311 B.

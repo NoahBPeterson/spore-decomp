@@ -1,0 +1,16 @@
+; slice s010c54b0 = 0x010c54b0..0x010c6560 (Havok 3.1 hkTransformShape / hkStorageMeshShape) - exact names
+; VC7.1 module (Havok 3.1.0 was built with cl 13.10): /O2 /MD /Gy /EHsc /TP /vc71
+; manifest.txt rows are byte-exact; the rest are the nonmatching.txt entries
+010c54b0 ?destroy@hkTransformShape@@UAEPAXI@Z  # complete, non-exact
+010c5520 ?getAabb@hkTransformShape@@UBEXABUhkTransform@@MAAUhkAabb@@@Z  # complete, non-exact
+010c5560 ?getMaximumProjection@hkTransformShape@@UBEMABUhkVector4@@@Z  # complete, non-exact
+010c5650 ?castRay@hkTransformShape@@UBE?AVhkBool@@ABUhkShapeRayCastInput@@AAUhkShapeRayCastOutput@@@Z  # complete, non-exact
+010c5830 ?castRayWithCollector@hkTransformShape@@UBEXABUhkShapeRayCastInput@@ABUhkCdBody@@AAUhkRayHitCollector@@@Z  # complete, non-exact
+010c59f0 ?getTriangleFlip@hkStorageSampledHeightFieldShape@@QBE?AVhkBool@@XZ  # byte-exact
+010c5a00 ?getHeightAt@hkStorageSampledHeightFieldShape@@QBEMHH@Z  # byte-exact
+010c5a20 ?collideSpheres@hkStorageSampledHeightFieldShape@@QBEXABUhkHeightFieldCollideSpheresInput@@PAUhkVector4@@@Z  # complete, non-exact
+010c5da0 ??1hkSubpartBuilder@@QAE@XZ  # complete, non-exact
+010c5de0 ??1hkStorageMeshShapeSubpartStorage@@QAE@XZ  # complete, non-exact
+010c5ee0 ?finish@hkStorageMeshShape@@QAEPAU1@UhkFinishLoadedObjectFlag@@@Z  # complete, non-exact
+010c5f50 ?addSubpart@hkStorageMeshShape@@QAEXABUhkMeshShapeSubpart@@@Z  # complete, non-exact
+010c6470 ?hkStorageMeshShape_finishThunk@@YAPAXPAX@Z  # byte-exact
