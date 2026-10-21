@@ -1,0 +1,8 @@
+00a5a590  196  select_setup: class_new 6-arg + outlet_new/addmethod call-scheduling shape (and card size over-read)
+00a5a730  299  route_list: per-element key/symbol dispatch + outlet fan-out; loops reshaped to the original `while (n-- != 0)` form, equiv PASS 351 inputs
+00a5a980  209  route_new: argument-parse loop with list-of-args expansion
+00a5aae0  262  pack_new: object init + argument-parse loop shape
+00a5ac40  22  pack_bang: memcpy thunk inlining argument/order
+00a5ae10  229  pack_setup: setup source register/scheduling shape (and card size over-read)
+00a5b190  214  trigger_new: object init + argument-parse loop shape
+00a5b330  74  trigger_list: per-element dispatch/outlet chain shape (outlet hoisted; remaining diff is the type==2/else tail ordering)

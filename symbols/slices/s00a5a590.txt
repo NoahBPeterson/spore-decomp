@@ -1,0 +1,22 @@
+00a5a590 select_setup  # registers the "select" class pair (0x3c-byte float/symbol class + 0x38-byte class with route_free) and the "select"/"sel" creators
+00a5a730 route_list  # mode 1 = float key: match argv[0] against the element keys and forward the rest (anything/list); otherwise route bang/float/symbol/list by their symbol
+00a5a960 route_free  # releases the route element array
+00a5a980 route_new  # pd_new(spRouteClass 0x167565c), allocates count 12-byte {key|sym, outlet} elements, parses float/symbol arguments
+00a5aa70 route_setup  # class_new "route" (0x38 bytes, 9 args) + class_addlist / class_addanything
+00a5aae0 pack_new  # pd_new(gPackClass); defaults to two float zero Atoms when no argument is given
+00a5ac40 pack_bang  # sends the packed atoms out the outlet (obj_list with gListSymbol)
+00a5acc0 pack_float  # stores a float atom slot
+00a5ace0 pack_symbol  # stores a symbol atom slot
+00a5ad10 pack_list  # obj_list passthrough (pack_list == obj_list)
+00a5ad40 pack_anything  # stores selector + arguments in the atom array and forwards them
+00a5add0 pack_free  # releases the packed atom storage
+00a5ae10 pack_setup  # class_new "pack" + class_addbang/float/symbol/list/anything bindings; returns completion flag
+00a5afa0 unpack_list  # distributes the list atoms right-to-left to the matching outlets (float via the dest list, symbol); argc is clamped to the outlet count
+00a5b070 unpack_anything  # same right-to-left distribution for an anything message (selector + args)
+00a5b100 unpack_free  # releases the unpack atom array
+00a5b120 unpack_setup  # class_new "unpack" (spUnpackClass 0x167563c, 0x30 bytes, 9 args) + list/anything handlers
+00a5b190 trigger_new  # pd_new(spTriggerClass 0x1675638); per argument builds an 8-byte {type, outlet} entry, selecting anything/bang/float/list/symbol outlets from the argument's first letter
+00a5b330 trigger_list  # fires the outlets right-to-left: float (dest list), bang, symbol (gEmptySymbol when argc==0), else list
+00a5b450 trigger_anything  # fires the bang outlets and the anything outlets (type 4) right-to-left
+00a5b4b0 trigger_bang  # trigger_list with an empty list (only the bang outlets fire)
+00a5b4d0 trigger_float  # fires the float outlets (type 1) with the value

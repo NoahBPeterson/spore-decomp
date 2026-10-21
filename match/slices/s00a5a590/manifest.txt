@@ -1,0 +1,14 @@
+slices/s00a5a590/s00a5a590.cpp  ?route_setup@Eapd@Audio@EA@@YAEXZ  00a5aa70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a5a590/s00a5a590.cpp  ?route_free@Eapd@Audio@EA@@YAXPAURouteObj@123@@Z  00a5a960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a5a590/s00a5a590.cpp  ?pack_float@Eapd@Audio@EA@@YAXPAUPackObj@123@M@Z  00a5acc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a5a590/s00a5a590.cpp  ?pack_symbol@Eapd@Audio@EA@@YAXPAUPackObj@123@Ut_symbol@123@@Z  00a5ace0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a5a590/s00a5a590.cpp  ?pack_list@Eapd@Audio@EA@@YAXPAUPackObj@123@Ut_symbol@123@HPAUAtom@123@@Z  00a5ad10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a5a590/s00a5a590.cpp  ?pack_anything@Eapd@Audio@EA@@YAXPAUPackObj@123@Ut_symbol@123@HPAUAtom@123@@Z  00a5ad40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a5a590/s00a5a590.cpp  ?pack_free@Eapd@Audio@EA@@YAXPAUPackObj@123@@Z  00a5add0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a5a590/s00a5a590.cpp  ?unpack_setup@Eapd@Audio@EA@@YAEXZ  00a5b120  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a5a590/s00a5a590.cpp  ?unpack_list@Eapd@Audio@EA@@YAXPAUUnpackObj@123@Ut_symbol@123@HPAUAtom@123@@Z  00a5afa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a5a590/s00a5a590.cpp  ?unpack_anything@Eapd@Audio@EA@@YAXPAUUnpackObj@123@Ut_symbol@123@HPAUAtom@123@@Z  00a5b070  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a5a590/s00a5a590.cpp  ?unpack_free@Eapd@Audio@EA@@YAXPAUUnpackObj@123@@Z  00a5b100  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a5a590/s00a5a590.cpp  ?trigger_anything@Eapd@Audio@EA@@YAXPAUTriggerObj@123@Ut_symbol@123@HPAUAtom@123@@Z  00a5b450  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a5a590/s00a5a590.cpp  ?trigger_bang@Eapd@Audio@EA@@YAXPAUTriggerObj@123@@Z  00a5b4b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a5a590/s00a5a590.cpp  ?trigger_float@Eapd@Audio@EA@@YAXPAUTriggerObj@123@M@Z  00a5b4d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
