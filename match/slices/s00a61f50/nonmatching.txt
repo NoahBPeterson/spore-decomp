@@ -1,0 +1,20 @@
+00a61f50 295 fx_array_set_range: SSE 4-wide fill loop, memcpy thunk and capacity guard schedule diverge (orig 303 bytes vs 278 emitted) ; equiv FAIL 5/10 valid inputs
+00a62080 47 fx_array_resize_and_set: argument evaluation order of the two self->count/capacity stores differs ; equiv FAIL 5/5 valid inputs (import call divergence)
+00a62120 364 fx_array_max_abs: x87 fabs 4-way unroll and max-select raise/keep scheduling diverges (orig 323 bytes vs 361 emitted) ; equiv FAIL 5/5 valid inputs (x87 depth)
+00a62270 353 fx_array_sum_pos: SSE positive-sum unroll plus fx_normalize()/rate scaling and recursion-guard tail diverge ; equiv FAIL 5/5 valid inputs (x87 depth)
+00a623f0 16 fx_set_accum: original forwards the float from its incoming stack slot; ours round-trips through the x87 stack (thiscall ecx preserve push) ; equiv PASS 334 valid inputs, 100% coverage
+00a62410 315 fx_register_sequence: reflected-class registration (EapdRegisterClass/EapdIntern/EapdAddMethod) prologue and return-code folding differ ; equiv UNSUPPORTED 1 unresolved ref FUN_00a62050
+00a625f0 112 fx_notify_value: index clamp plus element-value load and recursion-guard walk schedule diverge ; equiv UNSUPPORTED 0/400 valid (fault read)
+00a62690 45 fx_dump: 2-instruction divergence in the two global loads vs the EapdDumpTable argument tail ; equiv UNSUPPORTED 0/400 valid (fault read)
+00a626e0 32 fx_alloc_insert: EapdAllocByClass null-test insert sequence register assignment differs ; equiv UNSUPPORTED 0/400 valid (fault read)
+00a62720 103 fx_register_decal: reflected-class registration chain differs from the kFXCmptDecal registration in the original ; equiv UNSUPPORTED 0/400 valid (fault read)
+00a627d0 535 fx_decal_update: early-out count guard plus recursion-guard element walk not laid out as in the original (orig 93 bytes vs 566 emitted) ; equiv UNSUPPORTED 0/400 valid (fault read)
+00a62a10 32 fx_alloc_insert2: same body as 00a626e0 but a distinct COMDAT; register assignment differs ; equiv UNSUPPORTED 0/400 valid (fault read)
+00a62a50 70 fx_register_metaparticles: kFXCmptMetaParticles registration chain differs ; equiv UNSUPPORTED 0/400 valid (fault read)
+00a62ad0 50 fx_sound_notify: double-promoted EapdLog varargs tail not laid out as in the original (orig 64 bytes vs 78 emitted) ; equiv UNSUPPORTED 0/400 valid (fault read)
+00a62b20 29 fx_base_addop: EapdFindByKey lookup plus EapdLog forwarding schedule differs ; equiv UNSUPPORTED 0/400 valid (fault read)
+00a62b60 41 fx_alloc_sound: zero-store and EapdAddToTable call schedule differs ; equiv UNSUPPORTED 0/400 valid (fault read)
+00a62ba0 102 fx_register_sound: kFXCmptSound registration chain differs ; equiv UNSUPPORTED 0/400 valid (fault read)
+00a62c50 71 fx_meta_particles_cb: two EapdIntern calls and the EapdLog varargs frame differ (orig 92 bytes vs 98 emitted) ; equiv UNSUPPORTED 0/400 valid (fault read)
+00a62cc0 322 fx_register_core: longest registration chain; EapdAddMethodBig argument marshalling and globals differ ; equiv UNSUPPORTED 1 unresolved ref FUN_00a62050
+00a62e90 16 fx_register_all: final `and al,bl` accumulator folding differs (movzx widening in ours) ; equiv UNSUPPORTED 0/400 valid (fault read)
