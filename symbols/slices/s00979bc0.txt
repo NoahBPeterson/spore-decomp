@@ -1,0 +1,3 @@
+00979bc0 ?CopyCellData@WinGrid@@QAE_NHHHH_N@Z  # EA::UTFWinControls::WinGrid::CopyCellData (5-arg overload) derived in s00979bc0
+00979db0 ?GetColumnWidthInternal@WinGrid@@QAEMH@Z  # EA::UTFWinControls::WinGrid::GetColumnWidthInternal derived in s00979bc0
+00979f10 ?GetRowHeightInternal@WinGrid@@QAEMH@Z  # EA::UTFWinControls::WinGrid::GetRowHeightInternal derived in s00979bc0
