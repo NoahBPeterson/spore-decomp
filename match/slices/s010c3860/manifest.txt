@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Flags: /vc71 /O2 /MD /Gy /TP (Havok 3.1.0 was built by VC .NET 2003).
+slices/s010c3860/s010c3860.cpp  ?enableCollisionsBetween@hkGroupFilter@@QAEXHH@Z  010c3c20  /vc71 /O2 /MD /Gy /TP
+slices/s010c3860/s010c3860.cpp  ?disableCollisionsBetween@hkGroupFilterBase@@QAEXII@Z  010c3c60  /vc71 /O2 /MD /Gy /TP
+slices/s010c3860/s010c3860.cpp  ?initShape@hkTriangleShape@@QAEXPAX@Z  010c3fc0  /vc71 /O2 /MD /Gy /TP

@@ -1,0 +1,4 @@
+# source: slices/s010c3860/s010c3860.cpp
+# Rows: <va>  <diff-bytes>  <reason>.  Each VA of the slice appears in exactly one of
+# manifest.txt / nonmatching.txt / partial.txt.
+# (no partially-implemented functions in this slice)
