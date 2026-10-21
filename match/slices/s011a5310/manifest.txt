@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s011a5310/ssl_s3_enc.cpp  _ssl3_change_cipher_state  011a5310  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a5310_inc
+slices/s011a5310/ssl_s3_enc.cpp  _ssl3_cleanup_key_block  011a5760  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a5310_inc
+slices/s011a5310/ssl_s3_enc.cpp  _ssl3_enc  011a57c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a5310_inc
+slices/s011a5310/ssl_s3_enc.cpp  _ssl3_init_finished_mac  011a5900  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a5310_inc
+slices/s011a5310/ssl_s3_enc.cpp  _ssl3_finish_mac  011a5950  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a5310_inc
+slices/s011a5310/ssl_s3_enc.cpp  _ssl3_generate_master_secret  011a5ad0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a5310_inc
+slices/s011a5310/ssl_s3_enc.cpp  _ssl3_setup_key_block  011a5d40  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a5310_inc
+slices/s011a5310/ssl_s3_enc.cpp  _ssl3_mac  011a5f20  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a5310_inc
