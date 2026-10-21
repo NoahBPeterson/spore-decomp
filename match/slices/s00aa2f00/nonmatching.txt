@@ -1,0 +1,20 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+#
+# Slice s00aa2f00 = EA::Swarm particle-effect commands (state 5 of Spore's Swarm module).
+# 4/8 byte-exact.  The remaining 4 are complete, compiling C++ that reproduces the original
+# control flow and object layout; MSVC 2008 re-orders the stores of the two large
+# cParticlesDescription ctor/dtor bodies and (for the dtor) re-inserts the most-derived vptr
+# store, so they do not converge within the 5-round budget.  The equivalence gate run at this
+# slice's own flags reports 1 WEAK (ParseParticleState, 206/400 valid inputs, no mismatch) and
+# 3 UNSUPPORTED: the ctor/dtor differ from the original only in the vtable constant they store
+# (ours 0x30001054 vs the image's 0x01458df8, every other dword identical), and CreateEmittedParticle
+# cannot be given a valid stream/evaluator pair (all 400 inputs fault in both binaries).
+
+00aa2f00 110 CreateEmittedParticle: complete; EAAllocate(0x50,"Swarm",0,0,0,0) factory + inline cEmittedParticle ctor + ReadEmittedParticle(stream,flags,p) reproduce the original, including the interleaved int/float initialiser order and the runtime colour globals 0x1679158/5c/60. Differences: MSVC keeps the null pointer in esi instead of ebx and emits `test eax,eax` instead of `cmp eax,ebx` (159 vs 147 B). difftest verdict UNSUPPORTED (0/400 valid inputs: fault(write) 143, fake-arity 135, fault(pool-limit) 86 - the harness cannot build a valid stream/evaluator pair, in both binaries).
+
+00aa3040 406 ParseParticleState: complete; loop/single/sustain/hold/kill branch chain (mode = (argCount > 1) ? Int(argv[1]) : default), flags 4 / 0x10000000 / 0x08000000|flags2 1, then sizeScale(0x100)/areaScale(0x200)/volumeScale(0x400)/speedScale/delay/trigger parsing all reproduce the original. Differences: state/evaluator live in edi/esi swapped relative to the original and MSVC lays the cold `argCount <= 0` single-mode block out inline (599 vs 576 B). difftest verdict WEAK (206/400 valid inputs, 55.3% coverage, no mismatch).
+
+00aa32f0 279 ~cParticlesDescription: complete; frees the 13 curve vectors in the original reverse-declaration order (0x25c, 0x240, 0x21c, 0x1ac via FreeRange, 0x198, 0x184, 0x16c, 0xf4, 0xd4, 0xb8, 0xa0, 0x88, 0x68) and resets the base vptr last. MSVC emits one extra most-derived vptr store in the prologue, which shifts every rel8 (339 vs 358 B); every other instruction matches. difftest verdict UNSUPPORTED (our own copy of the base vtable address vs the image's 0x013ef094 in the memory pool; 5/41 valid inputs, 57.6% coverage, every other stored dword matches).
+
+00aa3460 1219 cParticlesDescription ctor: complete; all 100+ scalar fields, the three gDefaultVector copies and the six initial push_backs (rate 30.0f, colour (1,1,1), alpha/size/aspect 1.0f, rotation 0.0f) are written in the original address order. Differences: the vector member ctors are still emitted in the prologue instead of being interleaved, so the frame is 1507 vs 1456 B. difftest verdict UNSUPPORTED (our own copy of the base vtable address vs the image's 0x01458df8 in the memory pool (memory pool @40010000: 01458df8/30001054); 5/26 valid inputs, 84.9% coverage, every other stored dword matches).

@@ -1,0 +1,10 @@
+; slice s00aa2f00 = 0x00aa2f00..0xaa3460 - exact decorated names for the difftest resolver
+; (manifest rows are byte-exact; the rest are the nonmatching.txt entries)
+00aa2f00 ?CreateEmittedParticle@@YAPAUcEmittedParticle@Swarm@EA@@PAXH@Z  # CreateEmittedParticle
+00aa2fd0 ?SetKeywordName@@YAXHPBD@Z  # byte-exact
+00aa2fe0 ?ParseVector2@@YAPAMPAMPAUcIArgEvaluator@ArgScript@EA@@PAPAPBDH@Z  # byte-exact
+00aa3040 ?ParseParticleState@@YAXPAUcArguments@ArgScript@EA@@PAUcParticleState@Swarm@3@PAUcIArgEvaluator@23@@Z  # ParseParticleState
+00aa3280 ?Execute@cGroupParticlesCommand@Swarm@EA@@QAEXPAUcArguments@ArgScript@3@@Z  # byte-exact
+00aa32b0 ?CreateParticlesEffectCommand@@YAPAXH@Z  # byte-exact
+00aa32f0 ??1cParticlesDescription@Swarm@EA@@UAE@XZ  # ~cParticlesDescription
+00aa3460 ??0cParticlesDescription@Swarm@EA@@QAE@XZ  # cParticlesDescription ctor
