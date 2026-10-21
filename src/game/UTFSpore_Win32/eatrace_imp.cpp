@@ -124,7 +124,7 @@ struct HelperVec {
 }
 namespace EA {
 namespace Trace {
-struct TraceHelperTable : TraceHelperTableBase {
+class TraceHelperTable : public TraceHelperTableBase { public:
     void* mTracer;                                // +0x04
     HelperVec mHelpers;                           // +0x08
     EA::Thread::Mutex_s0092_45b0 mMutex;                     // +0x20
@@ -202,7 +202,7 @@ struct TempNode { int a, b, c; char* mpHelper; TempNode* mpNext; };
 }
 namespace EA {
 namespace Trace {
-struct TempTraceHelperMap {
+class TempTraceHelperMap { public:
     EA::Thread::Mutex_s0092_45b0 mMutex;                // +0
     struct {
         int pad0;
