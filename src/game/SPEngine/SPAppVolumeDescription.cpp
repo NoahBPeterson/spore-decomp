@@ -158,7 +158,7 @@ namespace ArgScript {
 }
 namespace EA {
 namespace Swarm {
-  struct cEffectsParser {
+  class cEffectsParser { public:
     void* GetInheritedDescription(void* args, int n, int size);  // 0x00a6f090
   };
 }
