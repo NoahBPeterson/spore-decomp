@@ -1,0 +1,4 @@
+slices/s00dc0040/s00dc0040.cpp  ?FUN_00dc01c0@@YAXPAD@Z  00dc01c0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00dc0040/s00dc0040.cpp  ?FUN_00dc0720@@YA_NPAD@Z  00dc0720  /O2 /MD /Gy /TP /arch:SSE
+slices/s00dc0040/s00dc0040.cpp  ?FUN_00dc0750@@YA_NPADPAX11111@Z  00dc0750  /O2 /MD /Gy /TP /arch:SSE
+slices/s00dc0040/s00dc0040.cpp  ?FUN_00dc08f0@@YA_NPADPAX111PAUVec3@@@Z  00dc08f0  /O2 /MD /Gy /TP /arch:SSE
