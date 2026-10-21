@@ -367,17 +367,21 @@ char S::FUN_00b8fad0(void* stream)
 // (dtor/AddRef/Release/GetReferenceCount) then the item interface. GetItemID is
 // slot 6 (byte offset 0x18) and returns the item's ResourceKey
 // (EA::ResourceMan::Key, 12 bytes) at this+0x5c.
-struct ResourceKey { unsigned int a, b, c; };
-struct DefaultRefCounted {
-  virtual void  Dtor();
-  virtual void  AddRef();
-  virtual void  Release();
-  virtual int   GetReferenceCount();
+struct ResourceKey { unsigned int a, b, c; };     // plain data (EA::ResourceMan::Key)
+
+class DefaultRefCounted {
+public:
+  virtual ~DefaultRefCounted();
+  virtual void AddRef();
+  virtual void Release();
+  virtual int  GetReferenceCount();
 };
-struct cSpaceInventoryItem : DefaultRefCounted {
-  virtual int   GetType();
-  virtual void  SetItemID(ResourceKey* id);
-  virtual const ResourceKey* GetItemID();     // vftable0 slot 6 (0x18)
+
+class cSpaceInventoryItem : public DefaultRefCounted {
+public:
+  virtual int  GetType();
+  virtual void SetItemID(ResourceKey* id);
+  virtual const ResourceKey* GetItemID();        // vftable0 slot 6 (0x18)
 };
 
 // ===========================================================================
