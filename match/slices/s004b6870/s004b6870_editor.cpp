@@ -20,7 +20,7 @@ struct cSPColorRGB {
 cSPColorRGB __cdecl HSVToRGB(float h, float s, float v);         // 0x67fe30
 
 namespace EA { namespace Random {
-struct RandomLinearCongruential {
+class RandomLinearCongruential { public:
     uint32_t mnSeed;
     uint32_t RandomUint32Uniform(uint32_t nLimit);               // 0xa68fb0
     double RandomDoubleUniform();                                // 0x9360d0
@@ -32,8 +32,8 @@ extern uint32_t gSkinPaintPropGroup;                             // 0x15d71f8
 extern const float kSkinPaintValueMax;                           // 0x13ec4d4
 
 namespace eastl {
-struct allocator { allocator() {} };
-template <typename T> struct vector {
+class allocator { public: allocator() {} };
+template <typename T> class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
@@ -57,11 +57,11 @@ struct SkinPaintEntry {
 
 struct ResourceKey { uint32_t mInstanceID, mTypeID, mGroupID; };
 
-struct cPropertyList {
+class cPropertyList { public:
     virtual int AddRef();
     virtual int Release();
 };
-struct cPropertyManager {
+class cPropertyManager { public:
     virtual void _v0(); virtual void _v1(); virtual void _v2(); virtual void _v3();
     virtual void _v4(); virtual void _v5(); virtual void _v6(); virtual void _v7();
     virtual void _v8(); virtual void _v9(); virtual void _v10();
@@ -107,11 +107,11 @@ struct cThemeReader {
     void Close();                                                // 0xc2e4e0
 };
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     void UpdateSkin();                                           // 0x441080
 };
 
-struct cSPEditorModel {
+class cSPEditorModel { public:
     void Update();                                               // 0x4ae250
     cSPEditorBlock* GetBlock(uint32_t index);                    // 0x4accb0
     int GetBlockCount();                                         // 0x4accf0

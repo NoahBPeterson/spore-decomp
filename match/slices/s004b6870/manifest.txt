@@ -9,7 +9,7 @@ slices/s004b6870/s004b6870.cpp  ?DoCreateNode@?$rbtree@IUPair14@@U?$less@I@eastl
 slices/s004b6870/s004b6870.cpp  ?DoCreateNode@?$rbtree@UElement28@@UPair28@@U?$less@UElement28@@@eastl@@U?$use_first@UPair28@@@4@@eastl@@QAEPAU?$rbtree_node@UPair28@@@2@ABUPair28@@@Z  004b6f30  /Od /Ob1 /MD /Gy /TP
 slices/s004b6870/s004b6870.cpp  ?DoCreateNode@?$rbtree@UKey16@@U1@U?$less@UKey16@@@eastl@@U?$use_self@UKey16@@@3@@eastl@@QAEPAU?$rbtree_node@UKey16@@@2@ABUKey16@@@Z  004b70d0  /Od /Ob1 /MD /Gy /TP
 slices/s004b6870/s004b6870.cpp  ?DoInsertValue@?$rbtree@UKey16@@U1@U?$less@UKey16@@@eastl@@U?$use_self@UKey16@@@3@@eastl@@QAE?AU?$pair@U?$rbtree_iterator@UKey16@@@eastl@@_N@2@ABUKey16@@U?$integral_constant@_N$00@2@@Z  004b7150  /Od /Ob1 /MD /Gy /TP
-slices/s004b6870/s004b6870.cpp  ?DoAssignFromIterator@?$vector@UEntry32@@Ufixed_vector_allocator@eastl@@@eastl@@QAEXPBUEntry32@@0Uinput_iterator_tag@2@@Z  004b7290  /Od /Ob1 /MD /Gy /TP
+slices/s004b6870/s004b6870.cpp  ?DoAssignFromIterator@?$vector@UEntry32@@Vfixed_vector_allocator@eastl@@@eastl@@QAEXPBUEntry32@@0Uinput_iterator_tag@2@@Z  004b7290  /Od /Ob1 /MD /Gy /TP
 slices/s004b6870/s004b6870.cpp  ??$uninitialized_copy_ptr@PBUEntry32@@PBU1@PAU1@@eastl@@YAPAUEntry32@@PBU1@0PAU1@@Z  004b7530  /Od /Ob1 /MD /Gy /TP
 slices/s004b6870/s004b6870_editor.cpp  ?SkinPaintCurve@EditorUtils@SP@@YAMM@Z  004b7600  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
-slices/s004b6870/s004b6870_editor.cpp  ?UpdateModelSkin@EditorUtils@SP@@YAXPAUcSPEditorModel@2@@Z  004b7660  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004b6870/s004b6870_editor.cpp  ?UpdateModelSkin@EditorUtils@SP@@YAXPAVcSPEditorModel@2@@Z  004b7660  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
