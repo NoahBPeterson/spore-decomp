@@ -174,7 +174,7 @@ struct ListNodeBase {
 };
 namespace EA {
 namespace Thread {
-struct AutoFutex {
+class AutoFutex { public:
   void* mpFutex;
   AutoFutex(void* p) : mpFutex(p) { EnterCriticalSection(p); }
   ~AutoFutex() { LeaveCriticalSection(mpFutex); }
