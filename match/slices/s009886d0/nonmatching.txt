@@ -11,24 +11,27 @@
 #
 00988710    15   codegen shape: original keeps the v10() result in whole eax and computes
                  (b ^ 0xff) & 1 in ebx; cl widens through bl/movzx (same value).
-009887b0    40   x87-vs-SSE float compare (`/fp:precise`); plus this-0x208 recomputed with
-                 lea/mov instead of `add ecx,-0x208` at the virtual call.
-009887e0   124   x87-vs-SSE float compares on the descriptor quartet; body otherwise equal.
-00988920   310   full layout/draw routine; large scheduling differences (this-0x208 slot
+009887b0  40/11  default 40; under `/O2 /arch:SSE /fp:fast` only 11 (original `mov eax,
+                 [ecx-0x208]; mov edx,[eax+0x90]; movss [ecx+8]; add ecx,-0x208; call edx`,
+                 cl schedules the vtable-slot load after the store). Same size (48),
+                 identical logic; /fp:fast fixes the whole SSE compare.
+009887e0 134/26  default 134; under /fp:fast 26 — compare chain byte-identical, only the
+                 vtable-slot load placement vs the four stores differs (same size 123).
+00988920   294   full layout/draw routine; large scheduling differences (this-0x208 slot
                  0x14/0x8c/0x23 chain, 9-arg Layout call, shadow-draw call).
-00988ad0   213   Typesetter layout + min/max clamp pair; x87-vs-SSE and scheduling.
-00988cd0   650   large CalcSize variant; heavy scheduling + float-register differences.
-00989000   165   constructor init sequence; store ordering differs throughout.
+00988ad0   236   Typesetter layout + min/max clamp pair; x87-vs-SSE and scheduling.
+00988cd0   596   large CalcSize variant; heavy scheduling + float-register differences.
+00989000   139   constructor init sequence; store ordering differs throughout.
 00989130    58   factory: slot 0x28 / slot 0x10 / slot 0x84 chain; p1 kept in edi vs
                  reloaded from the argument slot, and cold-return placement.
 00989410    38   original branches on the flag byte with a duplicated virtual load;
                  cl folds the two arms.
-00989500   123   JumpTable case dispatch; cl emits a different jump-table layout.
+00989500   115   JumpTable case dispatch; cl emits a different jump-table layout.
 00989660    40   bl-mask computation (`and 1 / neg / sbb` vs `xor bl,bl` arms) and
                  esi/edi choice for `this`.
 009896d0    35   output struct written via p1; allocator virtual on p4. Diff is the copy
                  loop only: cl folds the two pointers into one induction variable.
 00989740    25   parameter->register assignment: original params land in ecx,edx,eax;
                  cl picks eax,edx,ecx (identical body).
-00989790    24   same register-assignment difference as 00989740.
+00989790    24   backwards/forwards copy; same register-assignment difference as 00989740.
 009897d0    24   backwards copy; same register-assignment difference.

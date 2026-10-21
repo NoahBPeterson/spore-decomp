@@ -251,10 +251,9 @@ void __thiscall WinText::m_988780(int v)
 void __thiscall WinText::m_9887b0(float v)
 {
     if (FF(this, 8) != v) {
-        SubWin* s = (SubWin*)((uint8_t*)this - 0x208);
-        void (__thiscall* fn)(void*) = *(void (__thiscall**)(void*))((void**)*(void**)s + (0x90 / 4));
         FF(this, 8) = v;
-        fn(s);
+        void* fn = *(void**)(*(uint32_t*)((uint8_t*)this - 0x208) + 0x90);
+        ((void (__thiscall*)(void*))fn)((uint8_t*)this - 0x208);
     }
 }
 
@@ -262,11 +261,12 @@ void __thiscall WinText::m_9887b0(float v)
 void __thiscall WinText::m_9887e0(float a, float b, float c, float d)
 {
     if (FF(this, 0xc) != a || FF(this, 0x10) != b || FF(this, 0x14) != c || FF(this, 0x18) != d) {
-        void* fn = *(void**)(*(uint32_t*)((uint8_t*)this - 0x208) + 0x90);
+        void* vt = *(void**)((uint8_t*)this - 0x208);
         FF(this, 0xc)  = a;
         FF(this, 0x10) = b;
         FF(this, 0x14) = c;
         FF(this, 0x18) = d;
+        void* fn = *(void**)((uint8_t*)vt + 0x90);
         ((void (__thiscall*)(void*))fn)((uint8_t*)this - 0x208);
     }
 }

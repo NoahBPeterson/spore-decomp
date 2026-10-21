@@ -6,19 +6,19 @@
 00988710   ?m_988710@WinText@@QAEXIE@Z                 m_988710    nonmatching  (15)
 00988760   ?m_988760@WinText@@QAEXPAX@Z                m_988760    MATCH
 00988780   ?m_988780@WinText@@QAEXH@Z                  m_988780    MATCH
-009887b0   ?m_9887b0@WinText@@QAEXM@Z                  m_9887b0    nonmatching  (40)  eq PASS
-009887e0   ?m_9887e0@WinText@@QAEXMMMM@Z               m_9887e0    nonmatching  (124) eq PASS
+009887b0   ?m_9887b0@WinText@@QAEXM@Z                  m_9887b0    nonmatching  (40; 11 under /fp:fast)  eq PASS
+009887e0   ?m_9887e0@WinText@@QAEXMMMM@Z               m_9887e0    nonmatching  (134; 26 under /fp:fast) eq PASS
 00988860   ?m_988860@WinText@@QAEXI@Z                  m_988860    MATCH
 00988890   ?m_988890@WinText@@QAEXXZ                   m_988890    MATCH
 009888c0   ?m_9888c0@WinText@@QAEXI@Z                  m_9888c0    MATCH
-00988920   ?m_988920@WinText@@QAEEPAXPAUIface@@@Z      m_988920    nonmatching  (310)
-00988ad0   ?m_988ad0@WinText@@QAEEIPAM@Z               m_988ad0    nonmatching  (800/CalcSize)
+00988920   ?m_988920@WinText@@QAEEPAXPAUIface@@@Z      m_988920    nonmatching  (294)
+00988ad0   ?m_988ad0@WinText@@QAEEIPAM@Z               m_988ad0    nonmatching  (236)
 00988c40   ?m_988c40@WinText@@QAEXI@Z                  m_988c40    MATCH
 00988c90   ?m_988c90@WinText@@QAEXI@Z                  m_988c90    MATCH
-00988cd0   ?m_988cd0@WinText@@QAEEPAMEE@Z              m_988cd0    nonmatching  (650)
+00988cd0   ?m_988cd0@WinText@@QAEEPAMEE@Z              m_988cd0    nonmatching  (596)
 00988f60   ?m_988f60@WinText@@QAEDIPAM@Z               m_988f60    MATCH
 00988f90   ?m_988f90@WinText@@QAEXXZ                   m_988f90    MATCH  (dtor)
-00989000   ?m_989000@WinText@@QAEPAU1@XZ               m_989000    nonmatching  (165) (ctor/init)
+00989000   ?m_989000@WinText@@QAEPAU1@XZ               m_989000    nonmatching  (139) (ctor/init)
 009890d0   ?m_9890d0@WinText@@QAEPAU1@E@Z              m_9890d0    MATCH  (dtor-this)
 00989130   ?Factory@WinText@@SAPAU1@PAX@Z              Factory     nonmatching  (58)
 00989240   ?m_989240@WinText@@QAEXI@Z                  m_989240    MATCH
@@ -33,7 +33,7 @@
 00989460   ?m_989460@WinText@@QAEXI@Z                  m_989460    MATCH
 009894a0   ?m_9894a0@WinText@@QAEII@Z                  m_9894a0    MATCH
 009894c0   ?m_9894c0@WinText@@QAEDHHHH@Z               m_9894c0    MATCH
-00989500   ?m_989500@WinText@@QAEIII@Z                 m_989500    nonmatching  (123)
+00989500   ?m_989500@WinText@@QAEIII@Z                 m_989500    nonmatching  (115)
 00989660   ?m_989660@WinText@@QAEXE@Z                  m_989660    nonmatching  (40)
 009896d0   _sub_9896d0                                 sub_9896d0   nonmatching  (35)  (cdecl)
 00989740   _sub_989740                                 sub_989740   nonmatching  (25)  eq FAIL(eax-only)
