@@ -240,16 +240,15 @@ void hkSphereCapsuleAgent::processCollision(const hkCdBody& bodyA, const hkCdBod
 		n.x *= invLen; n.y *= invLen; n.z *= invLen;
 
 		const float k = capsuleShape->m_radius - distance;
-		// the original snapshots the sphere centre (4 dwords) before writing any position
-		// component, which matters when the output contact aliases the body transform.
-		const hkVector4 centre = *(const hkVector4*)(sphereTrans + 0xc);
-		contact->m_contact.m_position.x = n.x * k + centre.x;
-		contact->m_contact.m_position.y = n.y * k + centre.y;
-		contact->m_contact.m_position.z = n.z * k + centre.z;
-		contact->m_contact.m_position.w = (float)((double)n.w * (double)invLen * (double)k + (double)centre.w);
+		// the original publishes the normal before it reads the sphere centre, so the store order
+		// is observable when the output contact aliases the body transform
 		contact->m_contact.m_separatingNormal.x = n.x;
 		contact->m_contact.m_separatingNormal.y = n.y;
 		contact->m_contact.m_separatingNormal.z = n.z;
+		contact->m_contact.m_position.x = n.x * k + (sphereTrans + 0xc)[0];
+		contact->m_contact.m_position.y = n.y * k + (sphereTrans + 0xc)[1];
+		contact->m_contact.m_position.z = n.z * k + (sphereTrans + 0xc)[2];
+		contact->m_contact.m_position.w = (n.w * invLen) * k + (sphereTrans + 0xc)[3];
 		contact->m_contact.m_separatingNormal.w = distance - radiusSum;
 
 		if (m_contactPointId == 0xffff)
