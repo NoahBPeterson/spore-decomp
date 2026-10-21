@@ -57,7 +57,7 @@ struct C_THISCALL {
   unsigned char __thiscall FUN_00c8a550(void* arg);              // 0xc8a550 cSpatialObject::LoadModel
   void  __thiscall FUN_00c899a0(void* a);                        // 0xc899a0 cSpatialObject::func7Ch
   void  __thiscall FUN_00bc3130();                               // 0xbc3130 cSPTimer::Restart
-  void* __thiscall FUN_00bc3190();                               // 0xbc3190 cSPTimer::GetElapsedTime
+  long long __thiscall FUN_00bc3190();                           // 0xbc3190 cSPTimer::GetElapsedTime (edx:eax)
   void  __thiscall FUN_00b63890();                               // 0xb63890 cGonzagoTimer ctor
   void  __thiscall FUN_00b638b0();                               // 0xb638b0 cGonzagoTimer dtor
   void  __thiscall FUN_00c8b2e0();                               // 0xc8b2e0
@@ -325,11 +325,11 @@ void cCommunity::SetState(int v) {
 // @ 0x00bfdff0
 // Phase fraction: elapsed ticks / tick budget, clamped into [0, g_13ec4d0].
 float cCommunity::GetProgress() {
-  long long t = (long long)(size_t)((C_THISCALL*)((char*)this + 0x1f0))->FUN_00bc3190();
-  double frac = (double)t / (double)this->m210;
+  unsigned long long t = (unsigned long long)((C_THISCALL*)((char*)this + 0x1f0))->FUN_00bc3190();
+  double frac = (double)t / (double)(unsigned)this->m210;
   float f = (float)(frac * g_13ec4d0);
+  if (!(f > 0.0f)) f = 0.0f;
   if (f > g_13ec4d0) f = g_13ec4d0;
-  if (f < 0.0f) f = 0.0f;
   return f;
 }
 
