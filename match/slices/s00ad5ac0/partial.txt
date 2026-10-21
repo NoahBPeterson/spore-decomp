@@ -1,0 +1,2 @@
+# Slice s00ad5ac0: no function here is a stub or skeleton -- the eight
+# non-byte-exact VAs are complete sources, listed in nonmatching.txt.
