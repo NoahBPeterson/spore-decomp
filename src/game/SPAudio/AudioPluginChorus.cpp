@@ -112,7 +112,7 @@ struct ChorusLine {               // 0x14 bytes per voice at +0x24
 namespace rw {
 namespace audio {
 namespace core {
-struct Chorus {
+class Chorus { public:
     static int Process(Chorus* fx, MixCtx* ctx);   // 0x00a14a60
     char pad00[8];
     EffectOwner* mpOwner;         // +0x08
