@@ -314,7 +314,7 @@ void SpaceTool::FUN_00aeb700()
 // @ 0x00aeb720
 void SpaceTool::FUN_00aeb720(int a1, int a2, int a3, int a4, int a5, int a6)
 {
-    void* dlg = FUN_00aeb160(0, a6, a5, a4, a3, a2, a1);
+    void* dlg = FUN_00aeb160(a1, a2, a3, a4, a5, a6, 0);
     FUN_00aebe90(dlg);
 }
 
