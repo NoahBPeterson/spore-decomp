@@ -1,0 +1,16 @@
+00ba7720 - complete source; eastl::push_heap (refcounted-pointer range), NOT byte-exact (205 vs 183 bytes); equiv WEAK
+00ba77e0 - complete source; eastl::insertion_sort<ElemC*,cmp>, NOT byte-exact (147 vs 145 bytes); equiv UNSUPPORTED (0/193 valid)
+00ba7880 - complete source; eastl::insertion_sort_simple<ElemC*,cmp>, NOT byte-exact (218 vs 157 bytes); equiv UNSUPPORTED (0/218 valid)
+00ba7920 - complete source; uninitialized_move<16-byte>, NOT byte-exact (21 vs 55 bytes); equiv FAIL (eax)
+00ba7960 - complete source; uninitialized_move<12-byte>, NOT byte-exact (19 vs 49 bytes); equiv UNSUPPORTED (0/264 valid)
+00ba79a0 - complete source; eastl::adjust_heap<RefObj**>, NOT byte-exact (84 vs 223 bytes); equiv FAIL (execution)
+00ba7a80 - complete source; eastl::adjust_heap<ElemC*>, NOT byte-exact (177 vs 185 bytes); equiv PASS
+00ba7bd0 - complete source; HashTableCtl::Reset, NOT byte-exact (56 vs 78 bytes); equiv PASS
+00ba7c20 - complete source; LoadAndRegisterPropertyList, NOT byte-exact (296 vs 306 bytes; body approximate); equiv UNSUPPORTED (fake-arity)
+00ba7dc0 - complete source; ModelWorldCheatExecute, NOT byte-exact (285 vs 579 bytes; body approximate); equiv UNSUPPORTED (ecx-only ABI)
+00ba8010 - complete source; GetPropertyTriple, NOT byte-exact (328 vs 334 bytes; body not reconstructed); equiv UNSUPPORTED (fake-arity)
+00ba81b0 - complete source; HashOwner::Lookup, NOT byte-exact (103 vs 105 bytes); equiv FAIL (execution)
+00ba8280 - complete source; SerializeRBTree, NOT byte-exact (182 vs 183 bytes); equiv UNSUPPORTED (0/400 valid)
+00ba8550 - complete source; eastl::make_heap<ElemC*>, NOT byte-exact (102 vs 99 bytes); equiv UNSUPPORTED (ElemCPromoteHeapHelper unresolved)
+00ba85c0 - complete source; eastl::sort_heap<ElemC*>, NOT byte-exact (128 vs 144 bytes); equiv UNSUPPORTED (ElemCPromoteHeapHelper unresolved)
+00ba8650 - complete source; RandomConeDirection, NOT byte-exact (470 vs 479 bytes); equiv FAIL (memory .data @01601760)
