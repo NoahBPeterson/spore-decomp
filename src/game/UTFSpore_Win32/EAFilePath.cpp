@@ -16,7 +16,7 @@ bool EnsureTrailingPathSeparator(unsigned short* path, int length);
 int  ConcatenatePathComponents(unsigned short* dst, const unsigned short* c1, const unsigned short* c2);
 namespace EA {
 namespace IO {
-struct FilePath {
+class FilePath { public:
     unsigned short mPath[520];
     bool SafeReplace(const unsigned short* a, const unsigned short* b,
                      const unsigned short* c, const unsigned short* d,
