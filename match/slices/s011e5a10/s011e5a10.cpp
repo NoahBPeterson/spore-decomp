@@ -70,7 +70,7 @@ void  ArenaPathHolder_Split(const char* path);               // 0x011e5900
 u32   FUN_011e58f0(void);                                    // global filesys context accessor
 void* FUN_011e8770(void);                                    // async open
 u64   AsyncOp_GetSize(void* op);                             // 0x011ea7c0
-void  FUN_011e8a40(void* a, void* b, void* cb, void* c, void* d); // 0x011e8a40
+void  __fastcall FUN_011e8a40(void* self, int, void* a, void* cb, void* b, void* c); // 0x011e8a40
 u32   FUN_011e8bd0(void* a, void* b);                        // 0x011e8bd0
 char* FUN_011e8c60(const char* s, int c);                    // 0x011e8c60  strchr
 void  StringCopy(void* dst, const void* src);                // 0x011e8b20
@@ -618,13 +618,14 @@ void __fastcall StreamImpl_cancelRequest(void* self, int, void* node, u32 reason
 // ===========================================================================
 // 0x011e64a0 -- populate a request descriptor (fixed window/defaults).
 // ===========================================================================
+struct RequestDesc { void init(u32 a, u32 b); };
 // @ 0x011e64a0
-void __stdcall RequestDesc_init(void* self, u32 a, u32 b)
+void RequestDesc::init(u32 a, u32 b)
 {
-    st32(self, 0, a);
-    st32(self, 4, b);
-    st32(self, 8, 2);
-    st32(self, 0xc, 0x400);
+    st32(this, 0, a);
+    st32(this, 4, b);
+    st32(this, 8, 2);
+    st32(this, 0xc, 0x400);
 }
 
 // ===========================================================================
@@ -841,6 +842,6 @@ void opencallback(void* ctx)
 void openstream(void* ctx)
 {
     void* impl = (void*)ld32((char*)ctx, 0x14);
-    FUN_011e8a40((char*)impl + 0xa4, 0, (void*)opencallback, impl,
+    FUN_011e8a40((char*)impl + 0x1b0, 0, (char*)impl + 0xa4, (void*)opencallback, impl,
                  (void*)(size_t)ld32(impl, 0x70));
 }

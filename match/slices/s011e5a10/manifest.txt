@@ -1,7 +1,7 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-#
-# Slice s011e5a10 has no byte-exact target: no reconstructed source exists for this slice yet,
-# so all 25 target functions are recorded as genuinely incomplete in partial.txt.
-# Module: RenderWare 4 core filesystem (rw::core::filesys device/driver/request queue),
-# VC .NET 2003 (cl 13.10) range 0x011e5a10..0x011e6890.  Flags when built:
-# /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+# RenderWare 4 core is equivalence-only (symbols/renderware4_core.txt); only leaf
+# functions with no calls are byte-exact under /vc71.
+slices/s011e5a10/s011e5a10.cpp  ?filesys_create@@YAPAXPAX@Z  011e5cd0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011e5a10/s011e5a10.cpp  ?DeviceDriver_ctor@@YIPAXPAXHPBD@Z  011e5d80  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011e5a10/s011e5a10.cpp  ?StreamImpl_resetLock@@YIXPAX@Z  011e64d0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011e5a10/s011e5a10.cpp  ?StreamImpl_validateSize@@YAIIIIIIIPAI@Z  011e65e0  /vc71 /O2 /MD /Gy /EHsc /TP

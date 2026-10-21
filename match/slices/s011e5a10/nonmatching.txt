@@ -1,7 +1,28 @@
-# va  diff-bytes  reason
-# Build flags (all rows): /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-#
-# Slice s011e5a10 = RenderWare 4 core filesystem: the device/driver object (vtable, ctor/dtor,
-# open/close/read/write dispatch), the request queue (queue/dequeue/free/usage accounting) and
-# the async file request helpers.  No function of this slice has been reconstructed yet, so
-# there are no complete-but-non-exact rows here; all 25 targets are listed in partial.txt.
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+# This whole range is RenderWare 4 core built with VC .NET 2003 (cl 13.10) /GL+/LTCG
+# (symbols/renderware4_core.txt); a single-object /vc71 rebuild cannot reproduce the
+# cross-call register allocation, so only leaf functions are byte-exact.  All rows below
+# compile cleanly with flags /vc71 /O2 /MD /Gy /EHsc /TP and were run through
+# tools/difftest/equiv.py (verdict at the end of each line).
+011e5a10  308  filesys_init: complete (allocator-query for the two path buffers, alloc + link the root stream into the device list, enumerate drives, split CWD). Eq UNSUPPORTED (harness budget/fake-arity + read faults).
+011e5af0  396  filesys_reset: complete (allocator-query, rebuild the device list from g_driveList, split CWD). Eq UNSUPPORTED (executes GetLogicalDrives import).
+011e5d30   43  filesys_destroy: complete (filesys_init teardown, return the descriptor through allocator slot 2, clear g_rwFsStream/g_rwFsAllocator). Eq WEAK (250 valid, 54% coverage).
+011e5da0   61  StreamImpl_waitForOp: complete (lock, poll slot[4] against the deadline via GetThreadTime, condvar wait). Eq UNSUPPORTED (needs `this` in ecx: custom/LTCG register ABI).
+011e5e00  131  request_list_unlink: complete (relink head / predecessor in the intrusive singly-linked request list). Eq WEAK (241 valid, 47% coverage).
+011e5e90  102  StreamImpl_ctorSub: complete (flag-derived byte, mutex + ThreadObj + refcounted subobject + second mutex/ThreadObj, list anchors, ctx). Eq UNSUPPORTED (executes CreateSemaphoreA import).
+011e5f20  163  StreamImpl_shutdown: complete (signal worker, release the async window op + 5 sub-objects, drain the request lists, clear fields). Eq UNSUPPORTED (needs `this` in ecx: custom/LTCG register ABI).
+011e5ff0  258  filesys_resolvePath: complete ("drive:path" -> device by string compare against each device name, else root/current device). Eq PASS (248 valid, 76% coverage).
+011e60b0  261  StreamImpl_insertRequest: complete (priority insert into the active list using the 64-bit window, then re-link). Eq WEAK (249 valid, 17% coverage).
+011e61d0  158  StreamImpl_worker: complete (worker loop draining the active list, running each request's slots 0x44/0x18, condvar wait, shutdown flag). Eq FAIL (harness "execution" mismatch: indirect calls through an unresolved/unknown target).
+011e62b0  116  StreamImpl_startWorker: complete (start the AsyncOp, create the worker thread via the refcounted context, sleep until the started flag is set). Eq UNSUPPORTED (fake-arity + _beginthreadex import + read faults).
+011e6340  263  StreamImpl_queueRequest: complete (priority insert under the lock, start the worker if idle, signal the condvar). Eq FAIL (harness "execution" mismatch).
+011e6450   47  StreamImpl_cancelRequest: complete (unlink the request under the lock and requeue it with the given reason). Eq FAIL (harness "execution" mismatch).
+011e64a0   26  RequestDesc::init: complete (store a, b, constant 2, constant 0x400). Eq FAIL (first mismatch eax, a code-pointer register; all stored values agree).
+011e64c0   15  ListHead_clear: complete (zero the four dwords of an intrusive list head). Eq FAIL (first mismatch eax; only the zero-register choice differs).
+011e64f0  179  StreamImpl_ctorFull: complete (name strncpy, flag-guarded critical section, 16-slot request table, optional extra insert). Eq UNSUPPORTED (writes past the harness-provided object -> fault).
+011e6600  128  rw::core::filesys::decbufferusage: complete (release bytes from the async window, walk the pending list, wake the waiter). Eq UNSUPPORTED (reads fields the harness cannot supply -> fault(read)).
+011e6660   56  rw::core::filesys::getfreerequest: complete (pop a free request, stamp a fresh id into its low byte). Eq UNSUPPORTED (unresolved reference ?g_requestIdCounter).
+011e66d0   70  rw::core::filesys::queuerequest: complete (push the request onto the pending list under the lock, mark it queued). Eq UNSUPPORTED (writes past the harness-provided object -> fault(write)).
+011e6730  115  rw::core::filesys::freerequest: complete (unlink a pending request from both list directions, push it onto the free list). Eq UNSUPPORTED (needs the request in eax: custom/LTCG register ABI).
+011e67a0  106  opencallback: complete (install the AsyncOp size, restart the stream, or free the request and schedule the next one). Eq FAIL (harness "execution" mismatch).
+011e6840   12  openstream: complete (issue the async open for impl+0x70 via FUN_011e8a40). Eq UNSUPPORTED (writes past the harness object -> fault(write)).
