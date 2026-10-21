@@ -184,7 +184,7 @@ struct AutoRefCount {
     explicit AutoRefCount(IRefCounted* p) : mpObject(p) { if (p) p->AddRef(); }
     ~AutoRefCount() { if (mpObject) mpObject->Release(); }
 };
-struct cString {
+class cString { public:
     AutoRefCount   mpTableResource;   // +0x00
     string16*      mpLocalString;     // +0x04
     const wchar16* mpSourceCStr;      // +0x08
@@ -212,7 +212,7 @@ struct WStr16 {            // eastl::basic_string<wchar_t>: begin, end, capacity
         if ((int)(((char*)mpCapacity - (char*)mpBegin) & 0xfffffffe) > 2 && mpBegin) EASTL_dealloc(mpBegin);
     }
 };
-struct DebugMessage : BaseA2 {
+class DebugMessage : public BaseA2 { public:
     WStr16 mText;
     long   mRef;
     DebugMessage() : mRef(0) {}

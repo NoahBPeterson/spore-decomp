@@ -19,7 +19,7 @@ extern Vector3 kYAxis;
 
 namespace rw { namespace graphics {
 
-struct VertexDescriptor {
+class VertexDescriptor { public:
     VertexDescriptor* m_nextParent;
     VertexDescriptor* m_nextSibling;
     void* m_vertexDeclaration;
@@ -28,7 +28,7 @@ struct VertexDescriptor {
     unsigned char m_stride;       // +0xf
 };
 
-struct VertexBuffer;
+class VertexBuffer;
 
 // Generic strided element iterator.
 struct VertexElementIterator {
@@ -44,7 +44,7 @@ struct LockedVertexBuffer {
     void GetElementIterator(VertexElementIterator& out, int element);   // 011f9ae0
 };
 
-struct VertexBuffer {
+class VertexBuffer { public:
     VertexDescriptor* m_desc;
     void* m_d3dVB;
     uint32_t m_base;          // +0x8
@@ -73,7 +73,7 @@ struct LockedIndexBuffer {
     uint32_t mFlags;
 };
 
-struct IndexBuffer {
+class IndexBuffer { public:
     void* m_d3dIB;
     uint32_t m_base;
     uint32_t m_numIndices;    // +0x8
@@ -81,7 +81,7 @@ struct IndexBuffer {
     int Unlock(LockedIndexBuffer* lock);                  // 011f4fd0
 };
 
-struct Mesh {
+class Mesh { public:
     void SetIndexBuffer(IndexBuffer* ib);                 // 011f96e0
     void SetIndexCount(uint32_t n);                       // 011f96b0
     void SetVertexBuffer(int stream, VertexBuffer* vb);   // 011f9670

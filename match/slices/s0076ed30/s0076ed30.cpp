@@ -210,11 +210,11 @@ bool cRTTManager::Shutdown()
 
 // ------------------------------------------------------------------ cRTTCheat
 namespace EA { namespace ArgScript {
-struct cArgumentSpec {
+class cArgumentSpec { public:
     char pad[0x10];
     virtual ~cArgumentSpec();
 };
-struct cCommandBase {
+class cCommandBase { public:
     char pad[0xc];
     virtual ~cCommandBase();
 };
@@ -314,7 +314,7 @@ struct RTTRec3c {
 struct cRTTCheatObj { void Construct(cRTTManager* mgr); };  // 0x0076ea60 thiscall(1)
 
 namespace SP {
-struct cDirectPropertyList {
+class cDirectPropertyList { public:
     virtual bool v0(); virtual bool v1(); virtual bool v2(); virtual bool v3();
     virtual bool v4(); virtual bool v5(); virtual bool v6();
     virtual bool HasProperty(uint32_t prop);      // slot 7 (+0x1c)

@@ -58,7 +58,7 @@ public:
 } }
 
 namespace rw { namespace math { namespace vpu {
-struct Vector3 {
+class Vector3 { public:
     __m128 v;
 };
 } } }

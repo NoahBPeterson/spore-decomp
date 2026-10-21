@@ -28,7 +28,7 @@ namespace EA {
 namespace Thread { void ThreadSleep(const int& relativeTime); }       // 0x00921df0
 
 namespace COM {
-struct IRefCount {
+class IRefCount { public:
     virtual int AddRef() = 0;
     virtual int Release() = 0;
 };

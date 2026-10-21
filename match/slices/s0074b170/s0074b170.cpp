@@ -98,7 +98,7 @@ void heap_loop_b510(void* a, void* b, void* c, void* d)
 struct ListNode { ListNode* prev; ListNode* next; char pad[4]; uint32_t flags; };
 
 namespace SP {
-struct cModelWorld {
+class cModelWorld { public:
     char pad0[0x1c];
     char mWorldType;       // +0x1c
     char pad1[0x1a0 - 0x1d];

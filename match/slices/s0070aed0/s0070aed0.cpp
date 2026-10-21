@@ -45,7 +45,7 @@ inline Vector4 operator*(float s, const Vector4& a) { return Vector4(_mm_mul_ps(
 
 namespace EA {
 namespace ResourceMan {
-struct Key {
+class Key { public:
     uint32_t mInstance;  // +0x0
     uint32_t mType;      // +0x4
     uint32_t mGroup;     // +0x8
@@ -203,7 +203,7 @@ struct cLight {
     Vector3 mDir;      // +0x10
 };
 
-class cLightingConfig {
+struct cLightingConfig { private:
 public:
     cLightingConfig();                                       // 0x00706DD0
     cLightingConfig& operator=(const cLightingConfig& other);  // 0x007089A0

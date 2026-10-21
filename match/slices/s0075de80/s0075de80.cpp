@@ -15,7 +15,7 @@ struct SubObj {
 };
 
 namespace EA { namespace Thread {
-struct Mutex { void Lock(const void*); void Unlock(); char pad[0x28]; };
+class Mutex { public: void Lock(const void*); void Unlock(); char pad[0x28]; };
 }}
 
 struct LayerDrawArg;

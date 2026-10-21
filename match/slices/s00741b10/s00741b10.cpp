@@ -141,7 +141,7 @@ Blender* MakeSingle(Handle* h, uint32_t res, uint32_t flags, int z);            
 int ClassifyItem(Obj* o);                                                            // 0x006c1c30
 void ObjCallback();                                                                  // 0x00798d30
 
-struct cModelInstance {
+class cModelInstance { public:
     uint32_t vt, rc, flags;
     uint32_t pad0c[2];
     Vec<E8> v14;

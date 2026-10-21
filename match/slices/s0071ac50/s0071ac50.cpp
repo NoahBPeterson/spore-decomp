@@ -28,7 +28,7 @@ inline void* operator new(size_t, void* p) { return p; }
 // Ref counting
 // ---------------------------------------------------------------------------
 namespace EA { namespace COM {
-struct IRefCount {
+class IRefCount { public:
     virtual int AddRef() = 0;   // slot 0
     virtual int Release() = 0;  // slot 1
 };

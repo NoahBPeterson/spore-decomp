@@ -158,7 +158,7 @@ template<class T> static inline int IndexOf(T* b, T* e, T v) {
 }
 
 namespace SP {
-struct cGraphicsResourceFactory {
+class cGraphicsResourceFactory { public:
     bool WriteResourceGameModel(Model* m, Stream* s);           // 0x007689a0 (ret 8)
     bool WriteResourceGameMeshes(void* obj, Stream* s);         // 0x00764f60
     bool WriteResourceRaster(void* obj, Stream* s);             // 0x00767ee0

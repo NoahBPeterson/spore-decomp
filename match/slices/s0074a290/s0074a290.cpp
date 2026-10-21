@@ -59,7 +59,7 @@ struct cModelInstance {
 
 namespace SP {
 
-struct cModelWorld {
+class cModelWorld { public:
     char pad[0x800];
 
     void ReleaseTransformedHull(void** pp);              // 0074a650

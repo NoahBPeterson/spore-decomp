@@ -26,7 +26,7 @@ float __cdecl StopwatchElapsed(void* stopwatch);
 unsigned int __cdecl ReadCounter(void* out);
 
 namespace EA { namespace Thread {
-struct Mutex {
+class Mutex { public:
     void Lock(const char* name);   // @ 0x9221b0
     void Lock(const unsigned int* pTimeout);   // @ 0x9221b0 (EA::Thread::Mutex::Lock(const ThreadTime*))
     void Unlock();                 // @ 0x922270
@@ -36,7 +36,7 @@ struct Mutex {
 namespace SP {
 
 // ---------------------------------------------------------------- shared types
-struct cILayer {                       // reference-counted interface
+class cILayer { public:                       // reference-counted interface
     virtual void AddRef();             // +0x0
     virtual void Release();            // +0x4
 };

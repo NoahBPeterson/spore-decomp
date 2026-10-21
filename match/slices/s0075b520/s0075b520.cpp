@@ -25,7 +25,7 @@ struct ControllerVTable {
     void* m_UpdateRemapping; // +0x28
 };
 
-struct Controller {                     // size 0x1c
+class Controller { public:                     // size 0x1c
     void* m_remapDataPtr;               // +0x00
     ControllerVTable* m_vTable;         // +0x04
     char* m_outputPtr;                  // +0x08
@@ -35,13 +35,13 @@ struct Controller {                     // size 0x1c
     unsigned int m_bufferValid;         // +0x18
 };
 
-struct KeyframeAnimation {              // size 0x30 (PDB); only +0x28 is used here
+class KeyframeAnimation { public:              // size 0x30 (PDB); only +0x28 is used here
     char pad00[0x28];
     void* m_interpInfoPtr;              // +0x28
     unsigned int m_firstSequenceHeaderPtr; // +0x2c
 };
 
-struct Interpolator : Controller {      // size 0x38
+class Interpolator : public Controller { public:      // size 0x38
     KeyframeAnimation* m_currentAnimPtr; // +0x1c
     float m_currentTime;                 // +0x20
     float m_timeModifier;                // +0x24

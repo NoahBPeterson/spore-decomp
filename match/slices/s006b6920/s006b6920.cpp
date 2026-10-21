@@ -17,8 +17,8 @@ extern "C" void* __cdecl EA_ZoneObject_new(unsigned int n, const char* name, int
 
 namespace SP {
 
-struct cString { bool Load(int a, int b, int c); };   // 0x006b54b0
-struct cStringDetokenizer {
+class cString { public: bool Load(int a, int b, int c); };   // 0x006b54b0
+class cStringDetokenizer { public:
     cStringDetokenizer();                     // 0x006b6490
     virtual ~cStringDetokenizer();
 };
@@ -338,7 +338,7 @@ struct FactoryBase {
     FactoryBase() { _InterlockedExchange((volatile long*)&mnRefCount, 0); }
 };
 
-struct cStringTableResourceFactory : FactoryBase {
+class cStringTableResourceFactory : public FactoryBase { public:
     // slots 3..8 padding, 9 = ReadResource (see 6b6bf0)
     virtual void f3(); virtual void f4(); virtual void f5(); virtual void f6(); virtual void f7(); virtual void f8();
     virtual bool ReadResource(IKeyStream* pIn, StringTable* pTable, uint32_t arg3, uint32_t type);
@@ -398,7 +398,7 @@ struct AutoRefCount {
     }
 };
 
-struct cStringManager {
+class cStringManager { public:
     virtual ~cStringManager();               // vtable slot 0
     virtual bool AddString(cString* p);      // vtable slot 1
     virtual bool RemoveString(cString* p);   // vtable slot 2 (see 6b5240)

@@ -275,7 +275,7 @@ struct ArenaExportInfo {     // 0x38 bytes
         mPairs[0].b = 1;
     }
 };
-struct Arena {
+class Arena { public:
     int  GetNumExportedObjects();                                   // 0x011e23a0
     void GetExportedObjectByIndex(int index, ArenaExportInfo* out); // 0x011e28e0
 };

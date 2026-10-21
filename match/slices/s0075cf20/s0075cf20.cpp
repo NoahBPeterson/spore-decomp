@@ -8,7 +8,7 @@ struct ControllerVTable {
     void* m_GetNaturalMeter; void* m_SetMeter; void* m_SetOutputFormat;
     void* m_GetMySize; void* m_GetOutputNames; void* m_SetOutputNames; void* m_UpdateRemapping;
 };
-struct Controller {
+class Controller { public:
     void* m_remapDataPtr;         // +0x00
     ControllerVTable* m_vTable;   // +0x04
     char* m_outputPtr;            // +0x08
@@ -17,7 +17,7 @@ struct Controller {
     unsigned int m_numNodes;      // +0x14
     unsigned int m_bufferValid;   // +0x18
 };
-struct Interpolator : Controller {  // size 0x38
+class Interpolator : public Controller { public:  // size 0x38
     void* m_currentAnimPtr;       // +0x1c
     float m_currentTime;          // +0x20
     float m_timeModifier;         // +0x24

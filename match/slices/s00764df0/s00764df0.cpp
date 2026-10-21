@@ -591,7 +591,7 @@ bool AsyncReqA::Start(JobRefL* out) {
 // cGraphicsResourceFactory ctor at 0x007654f0 (base Factory + locked cJobLock at +8)
 namespace EA {
 struct AtomicInt { long mValue; long operator++(int) { volatile long* r = &mValue; return _InterlockedExchangeAdd(r, 1); } };
-struct RefCountTemplate {
+class RefCountTemplate { public:
     RefCountTemplate() { volatile long* r = &mnRefCount.mValue; _InterlockedExchange(r, 0); }
     virtual ~RefCountTemplate() {}
     int AddRef() { return mnRefCount++ + 1; }
@@ -605,7 +605,7 @@ template<class T> struct AutoRefCountX {
     ~AutoRefCountX() { if (mpObject) mpObject->Release(); }
 };
 namespace ResourceMan {
-struct Factory : EA::RefCountTemplate {};
+class Factory : public EA::RefCountTemplate { public:};
 }
 }
 struct cJobLock : EA::RefCountTemplate {          // size 0x40

@@ -228,7 +228,7 @@ struct cIndexArrayRef : public cEltArrayRef {
 };
 
 template <typename T>
-class cEltArrayT : public EA::COM::IRefCount {
+struct cEltArrayT : public EA::COM::IRefCount { private:
  public:
   void* mpInterfaceVtbl;                 // +0x04
   int mRefCount;                         // +0x08
@@ -258,7 +258,7 @@ struct cMDSection {
   eastl::fixed_vector<cIndexArrayRef, 3> mEltIndices;  // +0x44
 };
 
-class cMeshData {
+struct cMeshData { private:
  public:
   void* mpVtbl;                                // +0x00
   int mRefCount;                               // +0x04

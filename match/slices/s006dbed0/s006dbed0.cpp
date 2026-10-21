@@ -416,8 +416,8 @@ struct UVBuffer : public IRefObject
 };
 
 namespace rw { namespace graphics {
-    struct EmbeddedState
-    {
+    class EmbeddedState
+    { public:
         uint32_t mPad[2];
         uint8_t  m_softStateDirty;   // +8
         const char* D3D9GetShaderData(uint32_t id);   // 0x011edcf0
