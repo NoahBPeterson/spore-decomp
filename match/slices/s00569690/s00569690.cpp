@@ -204,7 +204,7 @@ namespace eastl {
     void* allocate(size_t n, size_t alignment, size_t offset) { return EASTL_Allocate(this, n, alignment, offset); }
   };
 
-  template<class T> class DequeBase {
+  template<class T> struct DequeBase { private:
   public:
     typedef T value_type; typedef unsigned size_type; typedef ptrdiff_t difference_type;
     typedef DequeIterator<T> iterator;

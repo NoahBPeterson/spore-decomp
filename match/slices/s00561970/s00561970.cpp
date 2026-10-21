@@ -15,7 +15,7 @@ template<> struct EraseFrame<float> { enum { kSlots = 4 }; };
 
 namespace eastl {
 
-struct allocator { allocator() {} };
+class allocator { public: allocator() {} };
 struct sp_vector_allocator : public allocator {
     sp_vector_allocator() {}
     const char* mpName;
@@ -27,7 +27,7 @@ struct random_access_iterator_tag { random_access_iterator_tag() {} };
 struct false_type { false_type() {} };
 
 template<typename Container>
-struct insert_iterator {
+class insert_iterator { public:
     Container* container;
     typename Container::iterator it;
     insert_iterator(Container& x, typename Container::iterator i) : container(&x), it(i) {}

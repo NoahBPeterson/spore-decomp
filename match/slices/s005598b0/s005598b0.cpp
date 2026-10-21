@@ -21,7 +21,7 @@ void* operator new(unsigned int n, const char* pName, int flags, unsigned int de
 void* operator new(unsigned int n);   // 0x006abeb0
 
 namespace EA { namespace Allocator {
-struct ZoneObject {
+class ZoneObject { public:
     static void* operator new(unsigned int n, const char* pName, int flags, unsigned int debugFlags, const char* pFile, int line);   // 0x00926020
 };
 } }
@@ -254,7 +254,7 @@ struct Constraint {
 
 namespace SP {
 
-struct cISPObjectTemplateDB {
+class cISPObjectTemplateDB { public:
     virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
     virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
     virtual void s08(); virtual void s09(); virtual void s10(); virtual void s11();

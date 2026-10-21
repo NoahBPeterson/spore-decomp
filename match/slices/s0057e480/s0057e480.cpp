@@ -48,7 +48,7 @@ void* cVec16::EraseAfter(void* pos)
 // ---------------------------------------------------------------------------------------------
 // 0x0057eda0 — eastl::basic_string<wchar_t>::trim
 namespace eastl {
-struct allocator {};
+class allocator { public:};
 
 template <typename T, typename Alloc = allocator>
 class basic_string {
@@ -109,7 +109,7 @@ namespace eastl {
 struct false_type {};
 struct EASTLAllocator { const char* mpName; EASTLAllocator() {} };
 
-template <class T> struct generic_iterator {
+template <class T> class generic_iterator { public:
     T mIterator;
     explicit generic_iterator(const T& x) : mIterator(x) {}
     const T& base() const { return mIterator; }
@@ -156,7 +156,7 @@ inline T* copy_backward_inl(T* first, T* last, T* resultEnd)
     return copy_backward_impl(first, last, resultEnd);
 }
 
-template <class T> struct vector {
+template <class T> class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;

@@ -3,7 +3,7 @@ slices/s00573520/s00573520.cpp  ?SetModelLocked@cAppModeEditorBase@SP@@QAEX_N@Z 
 slices/s00573520/s00573520.cpp  ?OnMouseMove@cAppModeEditorBase@SP@@QAE_NMMI@Z  005737d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00573520/s00573520.cpp  ?IsOverLimit@cAppModeEditorBase@SP@@QAE_NXZ  00573950  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00573520/s00573520.cpp  ?UpdateHint@cAppModeEditorBase@SP@@QAEXXZ  00573970  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-slices/s00573520/s00573520.cpp  ?SetRolloverHandle@cAppModeEditorBase@SP@@QAEXPAUcSPEditorHandle@2@H@Z  00573d70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00573520/s00573520.cpp  ?SetRolloverHandle@cAppModeEditorBase@SP@@QAEXPAVcSPEditorHandle@2@H@Z  00573d70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00573520/s00573520.cpp  ?SetAsset@cAppModeEditorBase@SP@@QAEXI@Z  00573f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00573520/s00573520.cpp  ?SetPaletteVisible@cAppModeEditorBase@SP@@QAEX_N@Z  00573f70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00573520/s00573520.cpp  ?OnEnter@cAppModeEditorBase@SP@@QAEXXZ  00573fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

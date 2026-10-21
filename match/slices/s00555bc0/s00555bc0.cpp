@@ -87,7 +87,7 @@ public:
 IServer* GetServer();   // 0x00883860
 }
 namespace ResourceMan {
-struct Key {
+class Key { public:
     uint32_t mInstance;
     uint32_t mType;
     uint32_t mGroup;
@@ -140,7 +140,7 @@ void EASTLFree(void* p);   // 0x00F47380
 }
 void* operator new[](unsigned int n, const char* pName, int flags, unsigned int debugFlags, const char* pFile, int line);   // 0x00F473A0
 namespace eastl {
-struct allocator {
+class allocator { public:
     allocator() {}
     void* allocate(uint32_t n, int flags = 0) {
         return new ("EASTL", flags, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 209) char[n];
@@ -509,7 +509,7 @@ template <class T, class A> struct VectorBase {
 // Moves [first, last) into raw memory at dest and destroys the sources.
 template <class T> T* uninitialized_relocate_ptr(T* first, T* last, T* dest);   // 0x005554E0 (string)
 
-template <class T, class A = sp_vector_allocator> struct vector : public VectorBase<T, A> {
+template <class T, class A = sp_vector_allocator> class vector : public VectorBase<T, A> { public:
     typedef VectorBase<T, A> base_type;
     typedef T* iterator;
     typedef const T* const_iterator;
@@ -588,7 +588,7 @@ template <class ForwardIterator, class T, class Compare>
 ForwardIterator lower_bound(ForwardIterator first, ForwardIterator last, const T& value, Compare compare);   // 0x00555A20
 
 template <class Key, class Compare = less<Key> >
-struct vector_set : public vector<Key, vector_allocator> {
+class vector_set : public vector<Key, vector_allocator> { public:
     typedef vector<Key, vector_allocator> base_type;
     typedef Key* iterator;
     typedef Key value_type;

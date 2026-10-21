@@ -16,7 +16,7 @@ public:
 namespace SP {
 
 // @ 0x0055BEB0
-class cFunctionalTestCheat {
+struct cFunctionalTestCheat { private:
 public:
     const char* Description(int index);
     bool IsEnabled();

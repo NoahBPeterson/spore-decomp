@@ -8,7 +8,7 @@ template<int N> inline void ScratchSlots() { uint32_t s[N]; }
 
 namespace eastl {
 struct allocator_tag { allocator_tag() {} };
-struct allocator {
+class allocator { public:
     allocator() {}
     allocator(const allocator_tag& tag);
     const char* mpName;
@@ -193,7 +193,7 @@ struct ResourceObject {
     virtual int Release();
 };
 
-struct cResourceBase : public ResourceObject {
+class cResourceBase : public ResourceObject { public:
     int mnRefCount;
     ResourceKey mKey;
     cResourceBase();
@@ -279,7 +279,7 @@ bool FUN_004f21e0(cCreationResource* pResource, int32_t value);
 }
 
 namespace EA {
-template<typename T> struct RefCountTemplate { T mnRefCount; int Release(); };
+template<typename T> class RefCountTemplate { public: T mnRefCount; int Release(); };
 }
 struct cSummaryBase { virtual void f(); };
 struct cSummaryData : public cSummaryBase, public EA::RefCountTemplate<int> {};

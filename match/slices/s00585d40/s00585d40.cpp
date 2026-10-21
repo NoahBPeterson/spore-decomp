@@ -230,7 +230,7 @@ public:
 
 // ---- types touched by the undo / limb-rebuild helpers (offsets from the disassembly) ----
 struct cIntVec { void Resize(unsigned n); };                     // 0x00584160
-struct cSPEditorHandle { void* GetEditorBlock(); };              // 0x0047e6c0
+class cSPEditorHandle { public: void* GetEditorBlock(); };              // 0x0047e6c0
 struct cSpine75 { void SetFlag(bool a, int b); };                // 0x005d1600
 
 // eastl::vector<bool> as laid out in this build: begin/end at +0/+4, fill-insert helper at 0x5151b0.
@@ -241,7 +241,7 @@ struct EastlBitVector {
     void DoFillInsert(void* pos, int n, void* value);            // 0x005151b0
 };
 
-struct cSPEditorLimbStructure {
+class cSPEditorLimbStructure { public:
     uint8_t pad[0x54];
     cSPEditorLimbStructure();                                    // 0x00488850
     ~cSPEditorLimbStructure();                                   // 0x00488900

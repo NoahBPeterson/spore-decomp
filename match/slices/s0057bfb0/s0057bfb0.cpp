@@ -13,7 +13,7 @@ inline void operator delete(void*, const char*, int, unsigned, const char*, int)
 
 namespace eastl {
 
-struct allocator {
+class allocator { public:
     void* allocate(size_t n) { return operator new[](n, "Editor", 0, 0, 0, 0); }
     void deallocate(void* p) { operator delete[](p); }
 };
@@ -82,7 +82,7 @@ public:
 typedef basic_string<char> string;
 typedef basic_string<wchar_t> string16;
 
-struct fixed_vector_allocator {
+class fixed_vector_allocator { public:
     allocator mOverflowAllocator;
     void* mpPoolBegin;
     void deallocate(void* p) { if (p != mpPoolBegin) mOverflowAllocator.deallocate(p); }
@@ -146,7 +146,7 @@ namespace EA {
 namespace Thread {
 inline long AtomicFetchAdd(volatile long* p, long v) { return _InterlockedExchangeAdd(p, v); }
 template <typename T>
-struct AtomicInt {
+class AtomicInt { public:
     volatile long mValue;
     T GetValue() { return (T)AtomicFetchAdd(&mValue, 0); }
     void SetValue(T v) { _InterlockedExchange(&mValue, v); }
@@ -190,7 +190,7 @@ public:
 };
 
 namespace ResourceMan {
-struct Key {
+class Key { public:
     uint32_t instanceID;
     uint32_t typeID;
     uint32_t groupID;
@@ -350,7 +350,7 @@ public:
     cEditorLaunchState();
 };
 
-struct cSPEditorModel {
+class cSPEditorModel { public:
     char pad_0[0x18];
     char mBlocks[0x58 - 0x18];            // +0x18
     uint32_t m58;                         // +0x58
@@ -390,7 +390,7 @@ struct cTrayRow { bool* mpStates; char pad_4[0x10]; };   // 0x14 bytes
 
 class cAppModeEditorBase {
 public:
-    struct cSPEditorLocalState {
+    class cSPEditorLocalState { public:
         char pad_0[8];
         int mBudget;                       // +0x8
         int mState;                        // +0xc

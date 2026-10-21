@@ -253,14 +253,14 @@ struct cUIHint {
     struct cString { const wchar_t* GetString(); } mText;        // +0x78, GetString 0x006b55c0
 };
 
-struct cUIHints {
+class cUIHints { public:
     cUIHint* FindByID(uint32_t id);                              // 0x0067aee0
 };
 
 // ---- ArgScript -----------------------------------------------------------------------
 namespace EA { namespace ArgScript {
 struct cIParser;
-struct cArguments {
+class cArguments { public:
     const char** MainArguments(int& count, int start, int max); // 0x00838020
 };
 void Output(cIParser* parser, const char* fmt, ...);             // 0x00841000

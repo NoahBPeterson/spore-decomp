@@ -17,7 +17,7 @@ template<> struct EraseFrame<eastl::pair<uint32_t, float> > { enum { kSlots = 4 
 
 namespace eastl {
 
-struct allocator { allocator() {} };
+class allocator { public: allocator() {} };
 struct sp_vector_allocator;
 void EASTL_allocator_deallocate(void* p); // 0x00f47380
 inline void EASTLFree(void* p) { EASTL_allocator_deallocate(p); }
@@ -37,7 +37,7 @@ struct random_access_iterator_tag { random_access_iterator_tag() {} };
 struct false_type { false_type() {} };
 
 template<typename Container>
-struct insert_iterator {
+class insert_iterator { public:
     Container* container;
     typename Container::iterator it;
     insert_iterator(Container& x, typename Container::iterator i) : container(&x), it(i) {}

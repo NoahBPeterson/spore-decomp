@@ -549,7 +549,7 @@ struct cSporeGuide {
     bool mbActive;     // +0x1c
     void Show();       // 0x64ab20
 };
-struct cSPUIAssetBrowser {
+class cSPUIAssetBrowser { public:
     char pad0[0x1c];
     bool mbVisible;    // +0x1c
     bool CanSporepediaShowSporeGuide();
@@ -596,7 +596,7 @@ IMessageServer* MessageServer();
 IApp* App();
 IFX* FXManager();                               // 0x401060
 
-struct cAppModeEditorBase {
+class cAppModeEditorBase { public:
     char pad0[0x28];
     float mX;                    // +0x28
     float mY;                    // +0x2c

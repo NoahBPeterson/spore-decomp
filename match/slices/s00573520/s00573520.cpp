@@ -111,13 +111,13 @@ struct AutoRefCount {
 namespace SP {
 struct cEditorBlock;
 
-struct cSPEditorAnimatedEventInfo : IObject {
+class cSPEditorAnimatedEventInfo : public IObject { public:
     uint32_t mData[11];
     cSPEditorAnimatedEventInfo();     // 0x59d960
     void MessagePost(uint32_t id, int a, int b, uint32_t target, int c, float scale, int d, int e, float f);
 };
 
-struct cSPEditorVehicleAbilities : IObject {
+class cSPEditorVehicleAbilities : public IObject { public:
     struct Key { uint32_t a, b, c; };
     uint32_t mData[24];
     cSPEditorVehicleAbilities(Key key, uint32_t type, uint32_t id, int a, int b);
@@ -130,7 +130,7 @@ struct cBlockFlags {
 
 struct cEditorBlock : IObject {
     char pad4[0x3ec - 4];
-    struct cSPEditorHandle* mpHandle;     // +0x3ec
+    class cSPEditorHandle* mpHandle;     // +0x3ec
     char pad3f0[0xdc8 - 0x3f0];
     cBlockFlags mFlags;                    // +0xdc8
 
@@ -139,12 +139,12 @@ struct cEditorBlock : IObject {
     const BoundingBox& GetBBox(BoundingBox* tmp, int a, int b, int c); // 0x44ae00
     void SetSelected(int);                 // 0x43a830
     void OnDeselect();                     // 0x43e2b0
-    uint32_t GetHandleIndex(struct cSPEditorHandle* h);   // 0x43c3d0
+    uint32_t GetHandleIndex(class cSPEditorHandle* h);   // 0x43c3d0
     void SetHandleState(uint32_t idx, int a);             // 0x43e7e0
     void SetActiveHandle(uint32_t idx);                   // 0x43e760
 };
 
-struct cSPEditorHandle {
+class cSPEditorHandle { public:
     virtual int AddRef();                         // +0x00
     virtual int Release();                        // +0x04
     PV
@@ -155,7 +155,7 @@ struct cSPEditorHandle {
     cEditorBlock* GetBlock();                     // 0x47e6c0
     int IsLocked();                               // 0x47ec20
 };
-struct cSPEditorHandleDeform : cSPEditorHandle {};
+class cSPEditorHandleDeform : public cSPEditorHandle { public:};
 
 struct cSPUIPropertyLayout {
     void Setup(cSPEditorVehicleAbilities::Key* key, IObject* abilities, struct IOwner* owner, int a, int b, int c);   // 0x5ed750
@@ -176,7 +176,7 @@ struct IWindowManager {
 };
 IWindowManager* WindowManager();
 
-struct cViewer { void ScreenToWorld(float x, float y, Vector3* nearPt, Vector3* farPt); };   // 0x7c4510
+class cViewer { public: void ScreenToWorld(float x, float y, Vector3* nearPt, Vector3* farPt); };   // 0x7c4510
 struct IApp {
     PV16 PV4 PV2
     virtual cViewer* GetViewer();                 // +0x58

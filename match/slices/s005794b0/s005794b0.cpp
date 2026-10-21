@@ -48,7 +48,7 @@ public:
     void SwitchToEditorCamera();                  // 0x5798f0
     void SavePreferenceSomething();               // 0x5799a0
     bool HasSameMask();                           // 0x579a20
-    struct cEditorCameraController* GetCurrentCameraContext();   // 0x574590
+    class cEditorCameraController* GetCurrentCameraContext();   // 0x574590
 };
 }
 
@@ -201,7 +201,7 @@ void CheatCmd::Execute(cArguments* args)
 // Render settings
 // ---------------------------------------------------------------------------
 struct Bits64 { uint32_t w[2]; };
-struct SP::cEditorCameraController {
+class SP::cEditorCameraController { public:
     void SetCenterCameraOffset();                 // 0x5a2370
     void SetPartModeCameraOffset();               // 0x5a2400
     void SetPaintModeCameraOffset();              // 0x5a24c0

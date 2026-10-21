@@ -249,7 +249,7 @@ using namespace FunctionalMatch;
 typedef eastl::vector<ResourceKey, eastl::sp_vector_allocator> KeyVector;
 typedef eastl::vector<Constraint, eastl::sp_vector_allocator> ConstraintVector;
 
-class cFunctionalTestCheat : public EA::ArgScript::cCommandBase {
+struct cFunctionalTestCheat : public EA::ArgScript::cCommandBase { private:
 public:
     virtual void Execute(EA::ArgScript::cArguments& args);
 };

@@ -130,7 +130,7 @@ public:
 };
 extern cDirectPropertyList* sAppProperties;                           // @ 0x15fd918
 
-struct cTestSystem {
+class cTestSystem { public:
     char pad0[0x70];
     struct ListNode { ListNode* mpNext; ListNode* mpPrev; } mTests;  // +0x70
     bool IsTestingInProgress() const { return mTests.mpNext != &mTests; }
@@ -305,7 +305,7 @@ class cSPPaletteUI {
 public:
     void UpdateCategories(int deltaMS);                               // @ 0x5ca980
 };
-class cSpeciesProfile {
+struct cSpeciesProfile { private:
 public:
     uint32_t mData[0xa08 / 4];
     struct cInit { void* mpBegin; void* mpEnd; void* mpCapacity; cInit() : mpBegin(0), mpEnd(0), mpCapacity(0) {} };

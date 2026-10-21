@@ -21,7 +21,7 @@ struct BoundingBox { Vector3 lower; Vector3 upper; };
 
 namespace eastl {
 template <size_t N>
-struct bitset {
+class bitset { public:
     uint32_t mWord[(N + 31) / 32];
     bitset() { for (size_t i = 0; i < (N + 31) / 32; ++i) mWord[i] = 0; }
     bitset& set(size_t i) { if (i < N) mWord[i >> 5] |= (uint32_t)1 << (i & 31); return *this; }
@@ -31,7 +31,7 @@ template <typename T> inline const T& max(const T& a, const T& b) { return (a < 
 
 namespace EA {
 template <typename T>
-struct AutoRefCount {
+class AutoRefCount { public:
     T* mpObject;
     T* operator->() const { return mpObject; }
     operator T*() const { return mpObject; }
@@ -39,7 +39,7 @@ struct AutoRefCount {
 }
 
 namespace EA { namespace Random {
-struct RandomLinearCongruential { uint32_t RandomUint32Uniform(uint32_t limit); };
+class RandomLinearCongruential { public: uint32_t RandomUint32Uniform(uint32_t limit); };
 } }
 extern EA::Random::RandomLinearCongruential sMathRandom;   // 0x01601760
 
@@ -100,7 +100,7 @@ public:
 };
 cPropertyListManager* PropManager();                                     // 0x00401010
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     char pad0[0xc];
     cPropertyList* mpPropList;      // +0x0c
     char pad10[0xc];
@@ -123,7 +123,7 @@ struct cSPEditorBlock {
 };
 float GetPaintScore(cSPEditorBlock* block);                             // 0x004a5c40
 
-struct cSPEditorModel {
+class cSPEditorModel { public:
     char pad0[0xc];
     ResourceKey mKey;               // +0x0c
     int GetBlockCount();                                                // 0x004accf0

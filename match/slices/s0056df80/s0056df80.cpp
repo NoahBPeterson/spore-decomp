@@ -378,7 +378,7 @@ namespace EA {
 namespace SP { namespace Traits {
   using namespace eastl;
 
-  struct cID { unsigned int mnTraitClass; unsigned int mnTraitType; bool operator<(const cID& x) const; }; // 0x5715d0
+  class cID { public: unsigned int mnTraitClass; unsigned int mnTraitType; bool operator<(const cID& x) const; }; // 0x5715d0
   typedef vector<uint32_t> UIntVector;   // copy 0x56b020 (via vector_map<cID, UIntVector>)
 
   class cIClassifier : public EA::RefCountVTemplate<int> {
