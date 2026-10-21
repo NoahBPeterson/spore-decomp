@@ -1,0 +1,9 @@
+00f69a30 Init  # SP::cTerrainEditor::Init
+00f69e50 HandleMessage  # SP::cTerrainEditor::HandleMessage
+00f69f50 ReadTile  # SP::cTerrainEditor::ReadTile (Ghidra: FUN_00f69f50)
+00f6a3a0 DrawBrushLayer  # SP::cTerrainEditor::DrawBrushLayer
+00f6a4b0 Construct  # SP::cTerrainEditor::Construct
+00f6a5d0 Destroy  # SP::cTerrainEditor::Destroy
+00f6a6a0 DrawBrush  # SP::cTerrainEditor::DrawBrush
+00f6a710 SetBrushShaderData  # SP::cTerrainEditor::SetBrushShaderData
+00f6a8d0 TextureMapQuadRTT  # SP::cTerrainEditor::TextureMapQuadRTT
