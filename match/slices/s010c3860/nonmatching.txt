@@ -1,7 +1,7 @@
 # source: slices/s010c3860/s010c3860.cpp   flags: /vc71 /O2 /MD /Gy /TP
 # rows: <va>  <diff-bytes>  <reason>
 010c3860  29  hkSphereShape::getCollisionSpheres; complete and correct; original carries an `and esp,-16` 16-byte-aligned frame with the radius loaded via x87 (fld/fstp) that cl71 only emits for an aligned local/return; our body is otherwise identical; equiv PASS 100.0% coverage (400/400)
-010c3880  800  hkSphereShape::castRay; complete ray-vs-sphere closest approach; larger frame (896 vs 753) and x87 association order differs; equiv FAIL 5/24 valid, 1-ulp float difference (orig c0351301 vs ours c0351300) on the sqrt path; 83.8% insn coverage
+010c3880  854  hkSphereShape::castRay; complete ray-vs-sphere closest approach; larger body (920 vs 753 bytes) and x87 association order differs; equiv FAIL 5/24 valid, 1-ulp float difference (orig c0351301 vs ours c0351300) on the sqrt path; 83.8% insn coverage
 010c3b80  32  hkGroupFilterBase::testEnabled (0x010b3b80 group-pair bit test); logic correct; differs in branch layout (`*out=0` block placement) and `test [mem],reg` vs load-then-test register allocation; equiv FAIL only in the eax return-value (original leaves the out pointer in eax); 55.3% coverage
 010c3bf0  33  hkGroupFilter::testAgainstBody; correct body; differs in instruction scheduling/arg-load order; equiv 0 valid inputs (fake-arity: our 5-arg thiscall signature does not line up with the original's 4-stack-arg + 2-register convention)
 010c3cb0  145  hkGroupFilter::hkGroupFilter ctor; correct initialisation; original writes the +8/+0xc/+0x10/+0x14 slots twice (a base-class ctor inlined then overwritten) and unrolls 32 mask stores with one `or ecx,-1`; equiv PASS 100.0% coverage (46/46)
