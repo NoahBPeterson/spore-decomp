@@ -58,7 +58,7 @@ public:
 };
 cPlanetModel* PlanetModel();   // 00b3d350
 
-struct cSPLivingUniverse { static void* GetUniverseContext(); };   // 01021080
+class cSPLivingUniverse { public: static void* GetUniverseContext(); };   // 01021080
 
 class cSpatialObject {
 public:

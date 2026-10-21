@@ -335,7 +335,7 @@ struct cSimRegistration : cSimRegistrationBase {
 // ---------------------------------------------------------------------------------------
 // Resources
 namespace EA { namespace Allocator {
-struct ZoneObject {
+class ZoneObject { public:
     static void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line); // 0x00926020
     static void  operator delete(void* p, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
 };

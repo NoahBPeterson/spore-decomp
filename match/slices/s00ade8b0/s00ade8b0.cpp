@@ -101,10 +101,10 @@ void __cdecl InitCinematicActions();           // 0xad6f40
 
 // ---- collaborators -------------------------------------------------------------------
 namespace EA { namespace Messaging {
-struct IHandler {
+class IHandler { public:
     virtual bool HandleMessage(u32 messageID, void* msg) = 0;
 };
-struct IHandlerRC : IHandler {
+class IHandlerRC : public IHandler { public:
     virtual int AddRef() = 0;
     virtual int Release() = 0;
     virtual ~IHandlerRC() {}
@@ -266,12 +266,12 @@ struct AutoHandler {
 extern const u32 kCinematicMessages[0x27];   // 0x145b238
 
 namespace SP {
-struct cIGonzagoSubsystem {
+class cIGonzagoSubsystem { public:
     virtual int AddRef() = 0;
     virtual int Release() = 0;
     virtual void Initialize() = 0;
 };
-struct cGonzagoSubsystem : cIGonzagoSubsystem {
+class cGonzagoSubsystem : public cIGonzagoSubsystem { public:
     u32 mBase[6];   // RefCountTemplate vptr, refcount, mode/transition state (size 0x1c)
 };
 

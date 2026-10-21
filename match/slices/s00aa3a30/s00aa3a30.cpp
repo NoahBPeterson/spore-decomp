@@ -22,7 +22,7 @@ typedef unsigned long long uint64_t;
 namespace EA { namespace ArgScript {
 struct cState { int mID; };
 
-struct cIParser {
+class cIParser { public:
     virtual void pv00(); virtual void pv01(); virtual void pv02(); virtual void pv03();
     virtual void pv04(); virtual void pv05(); virtual void pv06(); virtual void pv07();
     virtual void pv08(); virtual void pv09(); virtual void pv10(); virtual void pv11();
@@ -40,7 +40,7 @@ struct cIParser {
     virtual float* ParseVector3(float* out, const char* text);      // +0xa8
 };
 
-struct cArguments {
+class cArguments { public:
     const char** MainArguments(int minCount) const;                                 // 0x838320
     const char** MainArguments(int* pCount, int minCount, int maxCount) const;      // 0x838020
     const char** OptionArguments(const char* name, int count) const;                // 0x838330
@@ -49,12 +49,12 @@ struct cArguments {
     bool HasFlag(const char* flag) const;                                           // 0x8380b0
 };
 
-struct cICommand {
+class cICommand { public:
     virtual void AddRef();
     virtual void Release();
     virtual void Cast();
 };
-struct cCommandBase : cICommand {
+class cCommandBase : public cICommand { public:
     cIParser* mParser;      // +0x04
     int mRefCount;          // +0x08
 };
@@ -78,7 +78,7 @@ float ParseRangedFloat(cIParser* parser, const char* text, float min, float max)
 extern const float gShapeDefault[3];            // 0x016792c4
 
 namespace EA { namespace Swarm {
-struct cEffectsParser {
+class cEffectsParser { public:
     unsigned long long GetResourceInstance(int kind, const char* name);             // 0x00a6ec40
     unsigned long long LookupSurface(const char* name);                             // 0x00a6e600
     void ParseDrawInfoOptions(cArguments& args, cIParser* parser,

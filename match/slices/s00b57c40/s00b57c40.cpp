@@ -108,7 +108,7 @@ static inline const float& Min(const float& a, const float& b) { return (b < a) 
 // Havok (3.1) pieces used here
 // ---------------------------------------------------------------------------
 
-struct hkBool { char m_bool; };
+class hkBool { public: char m_bool; };
 
 struct hkPropertyValue {
     uint32_t lo;          // getInt() / getPtr()
@@ -117,7 +117,7 @@ struct hkPropertyValue {
     hkPropertyValue(int v) : lo((uint32_t)v), hi(0) {}
 };
 
-struct hkProperty {
+class hkProperty { public:
     uint32_t m_key;
     uint32_t m_alignmentPadding;
     hkPropertyValue m_value;
@@ -156,7 +156,7 @@ public:
 
 class hkEntity;
 
-struct hkCollidable {
+class hkCollidable { public:
     uint32_t pad00[4];
     int m_ownerOffset;              // +0x10
     uint32_t pad14;

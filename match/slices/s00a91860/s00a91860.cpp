@@ -168,7 +168,7 @@ struct cDistributeSample {
 
 // cDistributeEffect, offset-addressed view (the original field names are not
 // recovered; the offsets below are what the disassembly touches).
-struct cDistributeEffect {
+class cDistributeEffect { public:
   uint8_t p[0x180];
 
   template <class T> T&    at(unsigned off) { return *(T*)(p + off); }

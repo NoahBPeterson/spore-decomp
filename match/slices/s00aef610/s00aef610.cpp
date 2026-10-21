@@ -51,7 +51,7 @@ static __forceinline hkReal hkSqrtInverse(hkReal r) { return (hkReal)(1.0f / sqr
 // ---- hkThreadMemory --------------------------------------------------------
 extern unsigned long g_hkThreadMemoryTls;       // 0x016E4174
 
-struct hkThreadMemory {
+class hkThreadMemory { public:
     void deallocateChunk(void* p, int numBytes, int memoryClass);          // 0x0107DB10
 };
 

@@ -48,7 +48,7 @@ namespace EA {
 namespace ArgScript {
 
 // Argument list passed to an Execute() method (real decorated names in use).
-struct cArguments {
+class cArguments { public:
   const char** MainArguments(int* countOut, int minArgs, int maxArgs);
   const char** OptionArguments(const char* name, int minArgs);
   const char** OptionArguments(const char* name, int* countOut, int minArgs, int maxArgs);

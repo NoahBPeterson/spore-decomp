@@ -136,7 +136,7 @@ cGameData* Create_cPlaceableEffect();  // 0xb1f8e0
 namespace eastl {
 // Only operator[] is used here; it is out of line in the original (0x00b474c0).
 template <class K, class V>
-struct hash_map {
+class hash_map { public:
     V& operator[](const K& key);
     uint32_t mData[8];
 };

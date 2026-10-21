@@ -10,17 +10,17 @@ namespace EA { namespace ArgScript {
 struct cIParser;
 struct cState;
 struct cArguments;
-struct cICommand {
+class cICommand { public:
     virtual void AddRef();
     virtual void Release();
     virtual void Cast();
 };
-struct cCommandBase : cICommand {
+class cCommandBase : public cICommand { public:
     cIParser* mParser;
     int mRefCount;
     cCommandBase();                                     // 0x0083c800
 };
-struct cBlockCommandBase : cICommand {
+class cBlockCommandBase : public cICommand { public:
     cIParser* mParser;                                  // +0x04
     int mRefCount;                                      // +0x08
     cState* mChildState;                                // +0x0c
@@ -34,10 +34,10 @@ template <typename T, typename Base> struct cCommandStateT : Base {
     T* mState;                                          // +0x30 in a block command
     cCommandStateT() {}
 };
-template <typename T> struct cCommandT : cCommandStateT<T, cCommandBase> {
+template <typename T> class cCommandT : public cCommandStateT<T, cCommandBase> { public:
     cCommandT() {}
 };
-template <typename T> struct cBlockCommandT : cCommandStateT<T, cBlockCommandBase> {
+template <typename T> class cBlockCommandT : public cCommandStateT<T, cBlockCommandBase> { public:
     cBlockCommandT() {}
 };
 }}  // namespace EA::ArgScript

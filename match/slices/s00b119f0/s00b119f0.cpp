@@ -54,7 +54,7 @@ cSPQuaternion HermiteEval(const cSPQuaternion* current, const cSPQuaternion* vel
 
 namespace SP {
 
-template <class T> struct cHermiteSplineInterpolation {   // retail size 0x3c
+template <class T> class cHermiteSplineInterpolation { public:   // retail size 0x3c
     T Evaluate(float t);                                   // 0x0069a5f0 / 0x0069a9a0 / 0x0069aee0
     uint32_t data[15];
 };
@@ -75,7 +75,7 @@ cDistGrid* GetDistGrid();                                  // 0x00f48aa0
 
 class cTerrainCameraController {
 public:
-    template <class T> struct cInterpolationData {
+    template <class T> class cInterpolationData { public:
         bool targetChanged;         // +0x0
         bool targetMoving;          // +0x1
         float currentTime;          // +0x4

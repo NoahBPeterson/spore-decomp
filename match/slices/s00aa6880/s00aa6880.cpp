@@ -19,7 +19,7 @@ static inline float sqrtf(float v) { return _mm_cvtss_f32(_mm_sqrt_ss(_mm_set_ss
 namespace EA {
 namespace ArgScript {
 
-struct cArguments {
+class cArguments { public:
   const char** MainArguments(int* countOut, int minArgs, int maxArgs);
   const char** MainArguments(int minArgs);
   const char** MainArgumentsMin(const char** a, int minArgs);

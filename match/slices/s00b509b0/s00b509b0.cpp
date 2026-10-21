@@ -121,14 +121,14 @@ void TerrainSampler::ProjectPlanes(PlaneList* in, Plane* out)
 // ------------------------------------------------------------------ memory + Havok bits
 typedef short s16;
 // Havok allocator (global pointer at 0x16e4178): slot 4 allocates a chunk, slot 5 frees it.
-struct hkMemory {
+class hkMemory { public:
     VP4
     virtual void* allocateChunk(int size, int type);            // 0x10
     virtual void  deallocateChunk(void* p, int size, int type); // 0x14
 };
 extern hkMemory* g_hkMemory;                                    // 0x16e4178
 
-struct hkReferencedObject {
+class hkReferencedObject { public:
     virtual ~hkReferencedObject() {}
     u16 memSize;                                                // +4
     s16 refCount;                                               // +6
@@ -313,8 +313,8 @@ void* __cdecl FindNear(Cursor* c, float x)
 }
 
 // ------------------------------------------------------------------ Havok packfile shape loader
-struct hkStreamReader : hkReferencedObject {};
-struct hkMemoryStreamReader : hkStreamReader {
+class hkStreamReader : public hkReferencedObject { public:};
+class hkMemoryStreamReader : public hkStreamReader { public:
     char pad[0x1c - 8];
     hkMemoryStreamReader(const void* buf, int size, int mode);  // 0x10801d0
     static void* operator new(unsigned n) {
@@ -326,7 +326,7 @@ struct hkMemoryStreamReader : hkStreamReader {
         g_hkMemory->deallocateChunk(p, ((hkReferencedObject*)p)->memSize, 0x17);
     }
 };
-struct hkBinaryPackfileReader : hkReferencedObject {
+class hkBinaryPackfileReader : public hkReferencedObject { public:
     char pad[0x6c - 8];
     hkBinaryPackfileReader();                                   // 0x112b6c0
     virtual void p1();
@@ -438,7 +438,7 @@ struct hkShape2 : hkReferencedObject {
         return p;
     }
 };
-struct hkRigidBodyCinfo {
+class hkRigidBodyCinfo { public:
     u32 filter;                                                 // 0
     hkShape2* shape;                                            // 4
     u32 pad0[(0x94 - 8) / 4];
@@ -450,11 +450,11 @@ struct hkRigidBodyCinfo {
     u32 pad2[2];
     hkRigidBodyCinfo();                                         // 0x1087ed0
 };
-struct hkRigidBody {
+class hkRigidBody { public:
     void setPosition(const hkVector4& p);                       // 0x1087820
     void addProperty(u32 key, unsigned __int64 value);          // 0x10825a0
 };
-struct hkWorld {
+class hkWorld { public:
     void* addEntity(hkRigidBody* b, int mode);                  // 0x1082ee0
     void updateCollisionFilterOnWorld(int a, int b);            // 0x10869e0
 };

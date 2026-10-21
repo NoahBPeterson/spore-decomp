@@ -11,8 +11,8 @@ namespace EA
 namespace ArgScript
 {
 // cArguments: the ArgScript argument list a command is executed with (0x00838000 range).
-struct cArguments
-{
+class cArguments
+{ public:
     const char** MainArguments(int count);                       // 0x00838320
     const char** OptionArguments(const char* name, int count);    // 0x00838330
     const char** OptionArguments(const char* name, int* pCount, int min, int max);  // 0x00838130
@@ -281,8 +281,8 @@ struct cParticlesDescription : GmeRefCount
 };
 
 // cEffectsParser::AddDescription (0x00a6fc30)
-struct cEffectsParser
-{
+class cEffectsParser
+{ public:
     void AddDescription(EA::ArgScript::cArguments* args, const char* name, int flags, bool append);
 };
 

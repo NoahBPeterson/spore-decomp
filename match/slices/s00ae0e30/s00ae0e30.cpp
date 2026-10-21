@@ -314,7 +314,7 @@ public:
     virtual void SetCaption(const wchar_t* text);                    // +0x80
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     void SetVisibility(bool visible);                                // 0x00810590
 };
 

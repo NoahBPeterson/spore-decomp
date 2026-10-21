@@ -67,7 +67,7 @@ extern char  VT_14426a0[];     // 0x014426a0
 extern char  VT_13ec458[];     // 0x013ec458
 
 // ------------------------------------------------------------------ helper objects
-struct cSPUILayout {
+class cSPUILayout { public:
     void* ctor();                          // 0x00810000
     void  Init(void*, int, void*);         // 0x008120d0
     void* FindWindowByID(int, int);        // 0x008105b0
