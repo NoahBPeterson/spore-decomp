@@ -27,13 +27,13 @@ extern "C" unsigned wcslen(const wchar_t*);
 #pragma intrinsic(wcslen)
 #define VTSLOT(p, off) ((*(void***)(p))[(off) / 4])
 struct LimitStopwatch { void SetTimeLimit(int, int); };
-struct cSPUIPopupMenuItemWin {
+class cSPUIPopupMenuItemWin { public:
   char pad00[0x888];
   int mChildIndex;               // +0x888
   void SomeFunc();               // 0081ae40
   __declspec(noinline) void OnAttach();   // 0081ad50
 };
-struct cSPUIPopupMenuScrollButton {
+class cSPUIPopupMenuScrollButton { public:
   char pad00[0x888];
   LimitStopwatch timer;          // +0x888
   char pad01[0x8a8 - 0x888 - sizeof(LimitStopwatch)];
@@ -47,7 +47,7 @@ struct cSPUIPopupMenuScrollButton {
   void OnMouseWheel(float a1, float a2, int a3, int a4);
   void OnMouseWheelBase(float a1, float a2, int a3, int a4);
 };
-struct cSPUIPopupMenuWin {
+class cSPUIPopupMenuWin { public:
   char pad00[0x8a8];
   int mNumItemChildren;          // +0x8a8
   int mSelectedItemIndex;        // +0x8ac
