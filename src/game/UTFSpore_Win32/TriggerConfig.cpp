@@ -127,7 +127,7 @@ struct CharStream {                                                   // 0x20 by
 }
 namespace EA {
 namespace Input {
-struct TriggerTokenReader : CharStream {                              // 0x30 bytes
+class TriggerTokenReader : public CharStream { public:                              // 0x30 bytes
     int mResult;                                                      // +0x20
     int mToken;                                                       // +0x24
     uint mTokenValue;                                                 // +0x28
@@ -200,7 +200,7 @@ struct Binding {                                                      // 16 byte
 }
 namespace EA {
 namespace Input {
-struct TriggerMap {
+class TriggerMap { public:
     void AddCombo(uint value, const uint* keys, uint count);          // 0x008d4920
     void AddBinding(const Binding& b);                                // 0x008d48d0
     Binding* FindByValue(uint value);                                 // 0x008d3ae0
@@ -230,7 +230,7 @@ static const char* GetAbbreviatedPlatformName(const char* platform)  // 0x008d4a
 }
 namespace EA {
 namespace Input {
-struct TriggerConfigParser {                                          // 0x40 bytes
+class TriggerConfigParser { public:                                          // 0x40 bytes
     TriggerMap* mpTriggerMap;     // +0x0
     TriggerConfigParser* mpParent;// +0x4
     char* mpPlatformName;         // +0x8
