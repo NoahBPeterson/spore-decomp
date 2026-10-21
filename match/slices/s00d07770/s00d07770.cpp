@@ -53,7 +53,7 @@ struct Ext {
     int   AddCivicRadius(float, int);              // 0x00befd80
     int   SpendMoney(float);                       // 0x00bef710
     void  SendChanged();                           // 0x005a7840
-    u8    V_c8e6f0();                              // 0x00c8e6f0
+    int   V_c8e6f0();                              // 0x00c8e6f0
     void  V_c8f660(int);                           // 0x00c8f660
     u8    V_c31a00(int);                           // 0x00c31a00
     int   V_c30cb0();                              // 0x00c30cb0
@@ -87,7 +87,7 @@ struct C103 {
     u8    PickEventId();                   // 0x00d07ab0
     int   GetValue(int which);             // 0x00d07bb0
     void  SetValue(int which, int amount); // 0x00d07ca0
-    u8    GetFlag(int which);              // 0x00d07d00
+    int   GetFlag(int which);              // 0x00d07d00
     void  SetFlag(int which, int v);       // 0x00d07d20
     u8    CanAffordScalar(int v);          // 0x00d07d50
     int   GetTribeValue(int which);        // 0x00d07d70
@@ -308,7 +308,7 @@ void C103::SetValue(int which, int amount) {
 
 // ================================================================ 0x00d07d00
 // @ 0x00d07d00
-u8 C103::GetFlag(int which) {
+int C103::GetFlag(int which) {
     char* p = (char*)this;
     if (which == 0)
         return ((Ext*)*(void**)(p + 8))->V_c8e6f0();
