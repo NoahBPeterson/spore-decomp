@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00d99ff0  304 interaction predicate over the object's tag switch; all tag constants and the 0xc/0x20 vtable lookups are present but MSVC lays the unsigned range tree out differently (size 310 vs 286); difftest UNSUPPORTED (0/400 valid, fake-arity/fault(read))
+00d9a190  302 nearest-point search with x87 SQRT; SSE `sqrtf` + `movss` schedule differs from the original `fsqrt` (size 281 vs 242); difftest UNSUPPORTED (unresolved _sqrtf)
+00d9a290  157 action-slot record resolver: reads the noun table, the per-slot tag and the 0x34-stride vector; difftest FAIL (5/5, 50.0% cov: ours faults in FUN_00f3e8a0 where the original succeeds on degenerate inputs)
+00d9a360  254 camera-relative surface direction: noun-manager/avatar/viewer chain and projection present; register schedule and the 0x59aed0 arg layout differ (size 272 vs 314); difftest FAIL (5/5, 23.1% cov: ours faults in GetAvatar where the original succeeds)
+00d9a4a0  1279 bounds-centre + action-circle reprojection helper; only the head (bounds centre + selection branch) is reconstructed, the 1311-byte body is largely absent (size 235 vs 1311); difftest UNSUPPORTED (0/400 valid, fault(read))
+00d9aa20  1084 action-circle slot enumeration/sort (1084 bytes); body not reconstructed (size 1 vs 1084); difftest WEAK (213/400 valid, 31.1% coverage)
+00d9aea0  41 behaviour stimulus gate: PlayIdleAnimation + WatchMemoryBlock + GetSocialGoal chain is right; the `GoalBlob` thiscall on the 0xb3d4c0 result leaves an extra `add esp,0xc` (size 119 vs 116); difftest WEAK (162/400 valid, 50.0% coverage)

@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00d9a110  121 creature social-object compare: reads eax (the vector argument) at entry with no declared parameter; LTCG register ABI; best of the loop shapes tried; difftest UNSUPPORTED (original reads eax at entry)
+00d9a9c0  84 social-goal validity predicate: body reconstructed through the 0x17f243b lookup and the 0x90 tag check; tail is a single `ret` with two jumps instead of the original's single-exit epilogue; difftest WEAK (250/400 valid, 25.0% coverage)
