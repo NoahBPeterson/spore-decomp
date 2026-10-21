@@ -30,7 +30,6 @@ inline void Copy8(int* d, int* s) {
 struct S {
   void  FUN_00d9cd90();                              // 0x00d9cd90 SWARM tick
   void  FUN_00d9cf70();                              // 0x00d9cf70 AddAgent
-  char  FUN_00d9d0e0();                              // 0x00d9d0e0
   void  FUN_00d9d100(void* creature, int target);    // 0x00d9d100
   char  FUN_00d9d1e0(void* creature);                // 0x00d9d1e0
   float FUN_00d9d420(void* creature);                // 0x00d9d420
@@ -189,13 +188,13 @@ void S::FUN_00d9cf70()
 }
 
 // ===========================================================================
-// @ 0x00d9d0e0
-char S::FUN_00d9d0e0()
+// @ 0x00d9d0e0  (__cdecl: reads its arg from the stack, plain `ret`)
+char __cdecl FUN_00d9d0e0(void* p)
 {
-  char* self = (char*)this;
-  int a = *(int*)(self + 0xb4c);
-  int b = *(int*)(a + 0x600);
-  char c = FUN_00a75010((void*)(b));
+  char* e = (char*)p;
+  int a = *(int*)(e + 0xb4c);
+  int b = *(int*)((char*)a + 0x600);
+  char c = ((char(__thiscall*)(void*))FUN_00a75010)((void*)b);
   return c == 0;
 }
 

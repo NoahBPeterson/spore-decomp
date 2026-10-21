@@ -383,7 +383,7 @@ int S::FUN_00b8fbb0(void* src)
     *(int*)(e + 0x8) = *(int*)((char*)src + 0x8);
     int r = *(int*)((char*)src + 0xc);
     *(int*)(e + 0xc) = r;
-    if (r != 0) ((void (*)(int))VFn((void*)r, 0x04))(r);
+    if (r != 0) (*(void(__thiscall*)(void*))((*(void***)r)[1]))((void*)r);
   }
   return node;
 }

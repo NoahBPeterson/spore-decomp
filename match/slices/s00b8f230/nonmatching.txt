@@ -8,7 +8,6 @@
 00b8fa40 128 cVarListSerializer serialize-to-stream wrapper; 154 vs 141 bytes (0xa14 stack buffer + ctor/serialize call order)
 00b8fad0 169 cVarListSerializer deserialize-from-stream wrapper + GetPlantProfile lookup into +0x94; 178 vs 147 bytes
 00b8fb70 49 cSpaceInventoryItem::IsAvailableInCurrentPlanet: eastl::find over the active planet's 0xbc..0xc0 Key vector; 60 vs 62 bytes
-00b8fbb0 21 rbtree node allocator (0x20 node, copies the 0x10 Key + AddRef the +0x1c value); 86 vs 82 bytes
 00b8fdd0 354 eastl rbtree insert_unique (anchor/root/increment/insert paths); the original's three-way key compare inlines to setb chains, ours reuses stack temporaries so 374 vs 345 bytes
 00b8ff60 43 rbtree clear helper (destroy nodes then reset the anchor/size/color); 43 vs 41 bytes
 00b8ff90 47 Simulator::cGonzagoSubsystem ctor with an intrusive list init at +0x20; 62 vs 56 bytes

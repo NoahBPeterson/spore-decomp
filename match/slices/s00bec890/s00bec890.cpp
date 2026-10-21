@@ -42,9 +42,9 @@ struct S {
   void  FUN_00becc80();                                       // 0x00becc80
   void  FUN_00beccf0();                                       // 0x00beccf0
   void  FUN_00becd70(char param_2);                           // 0x00becd70
-  void* FUN_00bed1c0();                                       // 0x00bed1c0  "City Wall" assign
+  void* FUN_00bed1c0(void* p);                                // 0x00bed1c0  "City Wall" assign
   void  FUN_00bed200(unsigned n, void* pos, void* val);       // 0x00bed200 vector<0xc>::insert
-  void  FUN_00bed3c0();                                       // 0x00bed3c0 Zone::FillPoints
+  void  FUN_00bed3c0(void* p);                                // 0x00bed3c0 Zone::FillPoints
   void  FUN_00bed460();                                       // 0x00bed460 ScriptSetSeedOverride
 };
 
@@ -320,11 +320,10 @@ L_done:
 
 // ===========================================================================
 // @ 0x00bed1c0
-void* S::FUN_00bed1c0()
+void* S::FUN_00bed1c0(void* p)
 {
-  char* self = (char*)this;
-  FUN_00454cb0(self, "City Wall");
-  return self;
+  // __thiscall(this = p, "City Wall", ""); the entry `this` is unused.
+  return ((void*(__thiscall*)(void*, const char*, const char*))FUN_00454cb0)(p, "City Wall", "");
 }
 
 // ===========================================================================
@@ -381,10 +380,12 @@ void S::FUN_00bed200(unsigned n, void* pos, void* val)
 
 // ===========================================================================
 // @ 0x00bed3c0
-void S::FUN_00bed3c0()
+// __thiscall(this = p, arg = this+0x198); cl rejects __thiscall on free
+// functions, so the callee is a member of a file-scope stub class.
+struct Fill145 { void FUN_00473500(void* arg); };  // 0x00473500
+void S::FUN_00bed3c0(void* p)
 {
-  char* self = (char*)this;
-  FUN_00473500(self + 0x198);
+  ((Fill145*)p)->FUN_00473500((char*)this + 0x198);
 }
 
 // ===========================================================================

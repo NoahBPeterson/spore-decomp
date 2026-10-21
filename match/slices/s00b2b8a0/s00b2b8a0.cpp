@@ -19,7 +19,7 @@ extern "C" void  __cdecl EastlDelete(void* p);                                  
 extern "C" void* __cdecl RBTreeIncrement(void* node);                           // 0x00921580
 extern "C" void* __stdcall NounManager(void* noun);                             // 0x00b3d300
 extern "C" void  __stdcall FUN_00f62ea0(int a, int b);                          // 0x00f62ea0
-extern "C" void  __stdcall FUN_010210e0(void* p);                               // 0x010210e0
+extern "C" void  __cdecl FUN_010210e0(void* p);                                 // 0x010210e0
 extern "C" void* __cdecl FUN_01021260(void);                                    // 0x01021260
 extern "C" void* __cdecl FUN_008414c0(void);                                    // 0x008414c0
 extern "C" void* __cdecl FUN_0067de30(void);                                    // 0x0067de30  (PropertyManager)

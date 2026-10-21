@@ -2,7 +2,6 @@
 00b2ba70 124 eastl copy_backward over 0x18-byte elements with refcounted +0x10; the original interleaves the AddRef/Release branch differently (tails into the loop), ours emits the compare first
 00b2bb90 67 vector clear + release loop; original keeps `this` in esi and streams the range with a `lea ecx,[ecx]` padding, ours assigns registers differently
 00b2bbe0 699 SP::cTerrainDistributeInfo::SetInfoFromProps; full port (world scan into the 3-bucket 0x1c-stride table, PropertyManager lookup + FUN_00f62ea0, per-cell rebuild, cTerrainSphere notify) but our stack frame is 757 vs 816 bytes and the FP/integer scheduling differs throughout
-00b2bf10 12 guard then rescan (GetActivePlanet + FUN_010210e0 + FUN_00b2bbe0); only the branch layout and eax sign-extend differ
 00b2bf40 69 rbtree/list node removal; node unlink + obj Release + operator delete reconstructed, register allocation differs
 00b2bf90 50 rbtree lower_bound then FUN_00b2b720 insert; the original keeps the key in edi/ebx/esi with the anchor in edx, ours loads from the stack each iteration
 00b2bfe0 445 vector<0x24-byte>::insert(pos,n,val) growth/capacity paths; two DoInsertValue() calls reconstructed by hand, block order and the capacity arithmetic differ

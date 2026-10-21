@@ -1,6 +1,5 @@
 00d9cd90 386 SWARM tick: averages per-member weights into +0x3c/+0x40, walks the +0x64..+0x68 member vector querying IID 0x4f176642 for cSPCreatureCitizen, bumps +0x48/+0x4c and calls 0x00d9ccc0; 458 vs 477 bytes (the original folds the GetSpeciesProfile/IsLeader probe into the loop tail)
 00d9cf70 240 SP::cTribeGameBehaviorFeedBaby::AddAgent: NounManager/GetPlayerEmpireOrMinus1 -> relationship query, cTribeModeStrategy gate, cCommunity GetLeader, two 0x00bc97f0 weight loops, TRG_TotemPole_Social trigger + cActionTarget post; 339 vs 358 bytes
-00d9d0e0 15 predicate: !FUN_00a75010(*(*(this+0xb4c)+0x600)); 27 vs 27 bytes but the original loads +0x600 through two indirections with the call result in eax, ours folds the test
 00d9d100 291 slot assignment: FindClosestFreeSlot on the target's +0x3c position, SlotAt/Reserve on the +0x178 circle, MoveToPointAndFacingAtSpeed with the negated facing vector and an OR 2 on the +0x70 flags; 276 vs 212 bytes
 00d9d1e0 444 SWARM member state machine (switch on +0x14: 0 approach, 1 IsNearGoal, 2 InterruptAnimation, 3 AnimationFinished countdown); 376 vs 562 bytes (the original keeps each case's cold block out of line)
 00d9d420 363 idle-animation proximity check: PlayIdleAnimation(0x1000), WatchMemoryBlock->0x00d994c0, the +0x600 array guard and the squared-distance scan over the +0x20/+0xc slots; 371 vs 335 bytes
