@@ -1377,7 +1377,7 @@ public:
     virtual void _v70(); virtual void _v74(); virtual void _v78();
     virtual void SetEnabled(bool a, bool b);                              // 7c
 };
-struct cSPUIGlobalUI {
+class cSPUIGlobalUI { public:
     IWindow* FindWindowByID(uint32_t id);                                 // 0x00e012b0
     void SetVisibility(bool visible);                                     // 0x00e01350
 };
