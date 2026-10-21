@@ -70,8 +70,13 @@ def edit_file(path, targets):
         if not new or m.group(2) == new:
             continue
         access = "public" if new == "class" else "private"
-        bases = fix_bases(m.group(6), access) if m.group(6) else ""
-        rep = "%s%s%s%s%s%s{ %s:" % (m.group(1), new, m.group(3), m.group(4), m.group(5) if not bases else "", bases, access)
+        raw, comment = m.group(6) or "", ""
+        if "//" in raw:   # `: Base   // note` with the brace on the next line: keep the note after the new brace
+            raw, comment = raw.split("//", 1)
+            comment = "  //" + comment.rstrip()
+        bases = fix_bases(raw, access) if raw.strip() else ""
+        rep = "%s%s%s%s%s%s{ %s:%s\n" % (m.group(1), new, m.group(3), m.group(4), m.group(5) if not bases else "", bases, access, comment) \
+            if comment else "%s%s%s%s%s%s{ %s:" % (m.group(1), new, m.group(3), m.group(4), m.group(5) if not bases else "", bases, access)
         out.append(src[last:m.start()]); out.append(rep); last = m.end()
         changed[re.sub(r"<.*", "", m.group(4)).split("::")[-1]] = new
     out.append(src[last:]); src = "".join(out)
@@ -117,8 +122,8 @@ def obj_symbols(src, flags):
     from cmpobj import parse_coff
     tag = hashlib.md5((os.path.abspath(src) + flags).encode()).hexdigest()[:10]
     obj = W("work/match/chk", "%s_%s.obj" % (os.path.basename(src).rsplit(".", 1)[0], tag))
-    try:
-        return list(parse_coff(obj)[1])
+    try:   # EH funclets embed their function's name; run_all ignores them too
+        return [n for n in parse_coff(obj)[1] if not n.startswith(("__ehhandler", "__unwindfunclet", "__catch", "__tryend", "$"))]
     except Exception:
         return []
 
@@ -180,7 +185,14 @@ def fix_by_object(U, rows):
 
 
 def uv_only(old, new):
-    return new != old and len(new) == len(old) and all(a == b or {a, b} == {"U", "V"} for a, b in zip(old, new))
+    """new is old with some U<->V letters swapped. Manifests also hold names cut at 100 characters and fragments
+    of long template names (run_all matches a manifest symbol as a substring), so old may sit anywhere in new."""
+    if len(new) < len(old) or old in new:
+        return False
+    for k in range(len(new) - len(old) + 1):
+        if all(a == b or {a, b} == {"U", "V"} for a, b in zip(old, new[k:k + len(old)])):
+            return True
+    return False
 
 
 def run_all(U):
@@ -225,9 +237,9 @@ def fix_slice(sid, dry):
         if len(p) >= 3 and l.startswith(U["row"]):
             # every row is re-checked: MSVC writes a repeated name as a digit back-reference (PAU12@) and a
             # template as U?$Name@, so the U/V positions cannot all be predicted from the name
-            need[" ".join(p[3:])].append((i, p[2], p[1], None))
-    for flags, items in need.items():
-        cmd = [PY, W("tools/matching/chk.py"), U["main"]] + [it[1] for it in items]
+            need[(os.path.normpath(W("match", p[0])), " ".join(p[3:]))].append((i, p[2], p[1], None))
+    for (srcf, flags), items in need.items():   # each row compiles its own source file (slices can have several)
+        cmd = [PY, W("tools/matching/chk.py"), srcf] + [it[1] for it in items]
         if flags:
             cmd += ["--flags", flags]
         out = sh(*cmd).stdout
@@ -240,7 +252,7 @@ def fix_slice(sid, dry):
                 # templates and anonymous namespaces defeat the marker binding: take the object's one symbol that
                 # differs from the old name in U<->V letters alone
                 if syms is None:
-                    syms = obj_symbols(U["main"], flags or " ".join(DEFAULT_FLAGS))
+                    syms = obj_symbols(srcf, flags or " ".join(DEFAULT_FLAGS))
                 c = [x for x in syms if uv_only(old, x)]
                 new = c[0] if len(c) == 1 else None
             # accept only a class-key change: same length, every differing character a U/V swap
