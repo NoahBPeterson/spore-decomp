@@ -876,6 +876,73 @@ The dec1 and mig waves (reports in `work/claude/dec1_reports/`, requests in `wor
 - the property-UI `Modify*` frame of 0x60 against the original's 0x4c (nine functions);
 - a callee's ABI that is custom register arguments.
 
+## 16. Levers found in the 2026-10-20 waves (dec2, gold2, gold3)
+
+Mined from the final-report lessons of 127 DeepSeek sessions and 45 `work/match/scratch_*_papercut.md` notes. Each item made a function byte-exact, removed a named diff, or turned an equivalence FAIL into PASS in at least one slice. Items that sections 1–15 or `matching.md` already cover are left out.
+
+**Read the calling convention off the caller first.** This was the largest single lever of the three waves.
+- `push`es then `call` with no `add esp` afterwards means the callee pops: `__stdcall`, or `__thiscall` if `ecx` was set. `add esp,N` after the call means `__cdecl`. A `ret N` in the target fixes its own argument count exactly (0xa1b440 dropped a phantom first parameter and stopped failing on `esp after return`).
+- A function that uses `ecx` as `this` must be a real member function. A free function taking an explicit `self` pushes the object and gets the wrong cleanup. Converting such functions to members took one slice from 1 to 7 byte-exact (0xa1acd0–0xa1b440) and another from hundreds of diff bytes to zero on eight functions (slice 71).
+- For an absolute-address callee, declare it as a member of a declaration-only placeholder struct (`struct TC_x { void f(int); };`). That gives `call rel32` with `this` in `ecx`. A function-pointer cast to the address gives `mov eax,addr; call eax`, which is 5 bytes longer. The unresolved symbol is fine, because chk masks relocations.
+- A tail call `mov ecx,esi; jmp f` needs `f` to be `__thiscall`. A `__cdecl` callee forces push, call, add and ret.
+- A `static` member defaults to caller-pops. `static void __stdcall f(...)` gives the original's `ret 0xc` (0x74a290).
+- The CRT EH helpers (`_eh_vector_constructor_iterator` and the like) are `__stdcall`, with `YG` in the mangled name. Better still, declare a local array of a class with a constructor and destructor (`RDesc8 desc[4];`), and cl emits both iterator calls and the EH frame itself.
+- A 12-byte struct passed by value through a vtable slot must be a by-value aggregate parameter, which gives one `sub esp,0xc` block; three scalars give three `push`es. Conversely, a "struct" the original pushes as separate dwords (EAPd's `t_symbol` in `trigger_list`) must be declared as separate dword parameters. Count the pushes.
+- Argument order is visible only in the push order, and equivalence reports it as a fault on one middle word (`call #0 arg 3`). `outlet_list(to, argc, a, s, argv)`-style reorderings flipped six EAPd functions from FAIL to MATCH.
+
+**Return types**
+- A `bool` return gives `mov al,1; ret`, and a `void` one gives `jmp edx` (0xa1acd0). A `uint8_t` return must stay `uint8_t`: `mov al,[ecx+0xc0]; shr al,3`, where `uint32_t` gives `movzx eax`. x87 returns must be declared `double` to come back in `st0`.
+- Scalar deleting destructors return `this` in `eax`. Declaring them `void` gives a spurious equivalence mismatch on `eax`.
+- `bool found = x != 0; return found;` gives `test; setne al`. Returning the comparison directly gives the 32-bit `neg; sbb; neg` normalize.
+
+**Statement shape decides block layout**
+- `switch` emits out-of-line case blocks where three `if (id == K) { store; return; }` tests got inlined at each test (gold2 range r26).
+- Two separate early returns, not `a || b`, collapsed DoMessage from 93 to 20 diff bytes. `if (A && B) {...} else {...}` matched OnRebuild.
+- To put a rare case's body out of line after the `ret`, invert the guard: `if (m != 2) { ...; return; } call1;` (0xba6660). `if (table) return call(...); return false;` keeps the false block out of line, while `if (!table) return false;` inverts the `je`/`jne`.
+- cl15 tail-merges a shared `*pValue = value; Advance(); return true;` only from the nested `if (n == 4) ... else { if (n != 3) ... }` shape. Flat `else if` and `goto` versions duplicate the epilogue.
+
+**Expressions and types**
+- `mov eax,0x80; test byte ptr [obj],al; jne; or [obj],eax` comes from the mask held in a local (`uint32_t mask = 0x80;`). An inline literal loads the whole dword and tests `al`.
+- A min/max that the original computes as a pointer-select (`lea`/`ja` over two stack addresses) needs both operands to be addressable locals. With literals or `if (x < y) x = y;`, cl emits conditional moves and the function comes out about 200 bytes smaller.
+- Copying a field pair as one `*(long long*)&dst = *(const long long*)&src` flipped a register swap to the original's allocation (CellList::push_back, 7 diff bytes to 0).
+- A float field the original copies with `mov edx,[ecx+x]; mov [eax+y],edx` must be copied through `uint32_t*`. Through `float*`, MSVC emits `fld`/`fstp`. Likewise a parameter stored with `mov` rather than `movss` is an integer.
+- Declare a pointer parameter `u32**` and dereference `*base` inside the loop to keep the original's pointer-compare loop with its per-iteration reload. With `u32*`, cl computes a trip count and uses `mul` (DestroyValues, 0x104 stride, to byte-exact).
+- Binding a member to a local reference before a branch (`string_type& t = mMatchText;`) makes cl cache its address in a register before the `jne`. That removed about 370 diff bytes from MatchColor.
+- Compute a call's store target before the call (`float* d = ...; *d = fn(...);`) to get `mov edi,[esi+0xc]; add edi,0x1e4; call edx; fstp [edi]`.
+- A guard on the address of a field of a fresh allocation (`lea ecx,[eax+8]; test ecx,ecx; je`) is real: write `if (&pNode->mValueA)`. Removing it shrinks the function.
+- `(*(void***)obj)[n]` emits two loads, and going through a `vftable` member emits three. Write a vtable call as a bare inline cast; an inline helper that returns the function pointer makes cl spill the callee.
+- A declared `float one = ...;` placed between two stores stops cl from reloading an aliasing global twice (SetColor_8 and SetColor_14 to byte-exact).
+
+**Floating point and flags**
+- `(float)sqrt((double)x)` gives the original's x87 `fld; fsqrt; fst`. `sqrtf` gives the SSE form (0xfc2080 to byte-exact).
+- `cvtss2si` in the original is round-to-nearest. A plain C cast compiles to truncating `cvttss2si` and is behaviourally different for fractional inputs, so the equivalence gate fails it. Use the `__asm` helper from `matching.md`.
+- A float compare done as single-precision `ucomiss` needs `/fp:fast`. `/arch:SSE2` alone gives `cvtps2pd; ucomisd` and clobbers `xmm2`, which also fails equivalence (StageCache::Ready).
+- A region comment that says `/arch:SSE2` is wrong when the original uses x87 `fsqrt`/`fdivrp`. Recompile with `/arch:SSE`; this also removed an `xmm4` clobber that had failed equivalence (0x7df780).
+- `/GS` puts a stack cookie on any local whose type contains an array. Spelling a large padding as nested scalar structs removes the cookie and its frame shift (0x9c2ef0 and 0x9c3040 to byte-exact).
+- `#include <math.h>` makes `fabsf` an intrinsic. A hand-declared `fabsf` compiles but stays an unresolved external, so every caller becomes UNSUPPORTED under equivalence.
+- `__declspec(dllimport)` on `wcsstr` gives the original's IAT call where cl would otherwise inline the loop.
+
+**EH frames and object lifetime**
+- A non-trivial destructor on a local is what buys the original's `_ehhandler` prologue. Hand-written cleanup drops the frame (0x60eab0 to byte-exact). `__try/__finally` instead gives a full `ebp` frame: don't.
+- An explicit `p->~T()` with an inline `~T` gives `/Od`'s "dead guarded delete" (`xor r,r; and r,1; je; push p; call ??3`). A `bool`-guarded `delete p;` does not (0x5702c0 to byte-exact).
+- A function with C linkage loses the EH cleanup of a placement `new`. Keep such a function C++, and see `tools/matching/synth_templates/eh_unwind_placement_delete.py` for the declaration pair.
+- `__forceinline` on a value-type copy constructor keeps it from being emitted out of line as `push; call ctor`.
+- Under `/Od`, unused scalars get no stack slot; only arrays do. Frame padding must be real arrays.
+- For a "dead" vptr store the original keeps, make just that store volatile: `*(void* volatile*)&mpVtbl = ...` (0x714260, 0x713f90, and the base-ctor case 0xfc4cd0).
+
+**Signs that an object was built by an older compiler** (stop early; cl15 cannot reproduce them)
+- It materialises the constant 0 as `mov eax,esi; sub eax,esi`.
+- It keeps both null checks of an `if (x && x)` that cl15 merges.
+- It makes per-field struct copies where cl15 emits `rep movsd`.
+
+**Not source-controllable** (confirmed across many slices; record the function as complete and move on after two rounds without a diff drop)
+- Which callee-saved register holds `this` or a loop pointer (`esi`/`edi`/`ebx` swaps), and `edx`/`ecx` swaps in the same instruction stream.
+- MSVC 2008 stores a constructor's `field = 0` before the base vptr, and cl15 does the reverse.
+- The frame sharing around pushed `double` varargs, which costs 12 bytes in `cSetC`/`V2`/`V3`/`V4`.
+- Six `push`es against `sub esp,0x18` plus six stores for a by-value 6-int block (five 0xba5xxx functions).
+- Extended-precision x87 ordering that differs by one ULP.
+- Reordering stores or `lea` temporaries to "match" the disassembly. It made three EAPd functions worse, so revert any experiment that raises the diff.
+
 ## Appendix: where to look
 
 | Need | Tool / doc |

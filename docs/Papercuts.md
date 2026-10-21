@@ -17,11 +17,47 @@ Only log things that cost real time or that the next agent will hit too. Check w
 existing entry already covers it; if so, don't duplicate it (you may append "+1 [<id>]" under it instead).
 
 ## Open
-- [spcg1 2026-10-14] tooling — `chk.py`'s per-VA **symbol association** is unreliable once a compiled size
-  diverges from the original: it can bind a VA to a nearby symbol and report a misleading diff/`MATCH`.
-  Agents fell back to `cmpobj.py` with the exact mangled symbol for trustworthy byte counts. Fix idea:
-  bind by the original VA extent from the symbol table (not by similarity) and print the bound symbol +
-  extent next to the score. Time lost: ~15 min/agent (5 of 6 agents hit it).
+- [orchestrator, dec2/gold2/gold3 review 2026-10-20] tooling — **function extents from `bounds()` / the batch
+  table are sometimes wrong.** They swallow the next function when its start is missing from the index
+  (0x9911e0 is sized 148 bytes, but `ret 4` is at +0x4d; 0xa02d70 includes a linker thunk; s00abd170,
+  s00fc4cd0), or they include an EH `__catch$` funclet that the COFF symbol ends before. chk.py then
+  reports a size gap on an exact function. Fix idea: end the extent at the last `ret`/`jmp` before the
+  next referenced address, and attach `__unwindfunclet`/`__catch` fragments to their enclosing function's
+  slice. Time lost: ~10 min per hit (6 reports).
+- [dec2/gold2/gold3] tooling — **equivalence false FAILs that sessions keep re-diagnosing.**
+  (1) A `void` function whose original leaves a value in `eax` fails on `eax`/`eax&0xffff`, and
+  `--ignore-abi` does not suppress it (s0116c170, s011f8bc0, 0xa02d70). (2) Fake-call arity inference
+  over-counts stack words in functions with large frames (`site_arity`; s008b81a0, OnMouseMove in gold2
+  r11). (3) Narrow returns are compared on the undefined high half. Fix idea: compare only the declared
+  return width, and let `--ignore-abi` drop the void-`eax` check. Time lost: 1-3 rounds per hit.
+- [dec2/gold3] tooling — **equivalence inputs wasted on imports.** `import:iswctype` discards 100+ of 400
+  inputs (s008f85e0), `import:sprintf` and unset class globals fault every `*_new`/`*_setup` (EAPd), and
+  some slices take more than 500 s per VA (s00ed1880). Fix idea: stub the common CRT imports in the
+  harness. Time lost: minutes of wall time per slice.
+- [dec2/gold3] tooling — **callee annotations that `resolve.py` silently ignores.** A `// 0x...` comment
+  resolves only on the declaration's own line: a comment-only line above it, `/* 0x... */`, and a
+  one-line `struct { ...; void f(); }; // 0x...` all resolve nothing, so the function reads UNSUPPORTED
+  (rep 0x7df780, 0x409dd0, s008bdb70). `??A` (member `operator[]`) never resolves because `base_ident`
+  splits at the first `@`. Fix idea: warn when an annotation is not attached, and handle `??A`.
+- [dec2] tooling — **a `static inline` helper between a `// @` marker and its function** makes
+  `_def_name_after` bind the marker to the helper, so equivalence tests the wrong code (0x74a920,
+  0x5820a0). Workaround: keep helpers above all markers. Fix idea: skip helpers whose own marker-less
+  definition precedes the marked one, or make the commit check refuse it.
+- [gold3] bookkeeping — **`nonmatching.txt` row format is not enforced.** A note wrapped onto a second
+  line becomes a phantom row (s00976f90 read back 41 rows instead of 9), and VA spellings vary (bare
+  6-hex digits against `0x` plus 8 digits). Fix idea: a lint in commit_slice.sh: one VA per line, first
+  token 8 hex digits.
+- [gold3] tooling — **`cmpdis.py` display.** It renders float-constant loads as `dword ptr [0]`
+  (indistinguishable from a null dereference) and renders calls to later functions in the same section
+  oddly (s009b95d0, s00a52ff0). Fix idea: print the relocation's target symbol.
+- [gold3] process — **sessions write stray files into the repo root.** A shell redirect is not checked
+  by the broker: a gold3 session wrote `>工作` (Chinese for "work") on 2026-10-20, and older probes left
+  `probe_*.obj`, `scratch_*.obj` and a file named `--help` there. Fix idea: have the broker reject shell
+  redirections outside `work/match/` and the session's slice directories.
+- [gold3] tooling — **`chk.py --flags` does not reach `run_all.py`.** Every manifest row needs its own
+  flags column, and chk's default flags omit `/arch:SSE /fp:fast`, so sessions copy flags by hand and
+  sometimes record the wrong ones (s00aa0ed0, s00f96840). Fix idea: chk prints a ready manifest row
+  (path, symbol, VA, flags) for each MATCH.
 - [orchestrator, subagent-corpus review 2026-10-13] tooling — re-mining the ~2,000 subagent transcripts (931
   structured `lessons`) and 226 `work/match/scratch_*_papercut.md` produced the codegen levers in
   docs/matching.md "Re-mined levers", plus these tooling items. Two widely-reported ones are **already fixed** —
@@ -73,6 +109,13 @@ existing entry already covers it; if so, don't duplicate it (you may append "+1 
   (e) parallel equiv.py runs on the same slice can share a compile output path and crash with empty-object errors.
 
 ## Resolved
+- [orchestrator 2026-10-20] tooling: `chk.py` symbol association (spcg1 2026-10-14, and about 12 of the 45
+  dec2/gold2/gold3 papercut notes). chk.py now scores the symbol named by the VA's manifest row (column
+  `manif`), else the definition after its `// @ 0x<va>` marker (`marker`), and falls back to the nearest
+  size only without either (`~size`). A byte-identical symbol of another name still counts as MATCH
+  (`other`; the manifest row must name it). It prints the full mangled name (no 100-character cut) and
+  `(size N vs M)` when they differ, and it deletes its object before compiling so a failed build cannot
+  be scored from a stale one.
 - [orchestrator] codegen/tooling: the /Od name-hash slot order (s0041dd90, s004248c0, s00426430, s0042d560, s0042a220, s0042f9d0, ~560 agent-minutes in total) is resolved by tools/matching/od_names.py fit K and documented in docs/matching.md "/Od frame layout".
 - [orchestrator] tooling: cmpobj misread section numbers above 32k (signed 16-bit). Fixed in cmpobj/libmatch/libresolve.
 - [orchestrator] tooling: hand-typed workflow args. Agents now resolve slices via slice_info.py / pattern_info.py.
