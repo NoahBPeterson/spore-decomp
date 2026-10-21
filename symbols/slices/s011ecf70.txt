@@ -1,0 +1,28 @@
+; slice s011ecf70 = 0x011ecf70..0x011edd20 (rw::core::stdc / rw::core::thread / rw::graphics::EmbeddedState)
+; manifest.txt rows are byte-exact; the rest are the nonmatching.txt entries
+011ecf70 ?ConvertU32ToA@stdc@core@rw@@YAPADPADH@Z  # complete, non-exact
+011ecfa0 ?ConvertI64ToA_rec@stdc@core@rw@@YAPADPADHH@Z  # complete, non-exact
+011ecff0 ?ConvertU32ToBase@stdc@core@rw@@YAPADPADII@Z  # byte-exact
+011ed020 ?ConvertU64ToBase@stdc@core@rw@@YAPADPADHHII@Z  # complete, non-exact
+011ed070 ?ConvertU32ToHexUpper@stdc@core@rw@@YAPADPADI@Z  # complete, non-exact
+011ed0b0 ?ConvertU32ToHexLower@stdc@core@rw@@YAPADPADI@Z  # complete, non-exact
+011ed0f0 ?ConvertIToA@stdc@core@rw@@YAPADIPADI@Z  # complete, non-exact
+011ed190 ?ConvertI64ToA@stdc@core@rw@@YAPADHHPADHH@Z  # complete, non-exact
+011ed230 ?ConvertU32ToStr@stdc@core@rw@@YAPADIPADH@Z  # complete, non-exact
+011ed270 ?CopyAtoW@stdc@core@rw@@YAPAGPAGPBD@Z  # complete, non-exact
+011ed2a0 ?Memset32@stdc@core@rw@@YAPAIPAIII@Z  # complete, non-exact
+011ed350 ?RwSemaphoreData_UpdateCancelCount@thread@core@rw@@YAXPAURwSemaphoreData@123@H@Z  # complete, non-exact
+011ed3b0 ?set@StreamName@@QAEPAU1@HDPBD@Z  # complete, non-exact
+011ed3f0 ?CloseHandleIfSet@thread@core@rw@@YIXPAPAX@Z  # byte-exact
+011ed400 ?Init@Semaphore@thread@core@rw@@QAEEPBX@Z  # complete, non-exact
+011ed470 ?Wait@Semaphore@thread@core@rw@@QAEIPAI@Z  # complete, non-exact
+011ed520 ?Post@Semaphore@thread@core@rw@@QAEIH@Z  # complete, non-exact
+011ed5d0 ?ctor0@Semaphore@thread@core@rw@@QAEPAU1234@HD@Z  # complete, non-exact
+011ed690 ?EmbeddedStateFixup@@YAXPADPAX@Z  # complete, non-exact
+011ed910 ?EmbeddedStateCleanupShaders@@YIXPAD@Z  # complete, non-exact
+011eda00 ?SetMaterialColor@EmbeddedState@graphics@rw@@QAEXPBX@Z  # complete, non-exact
+011eda90 ?GetMaterialColor@EmbeddedState@graphics@rw@@QAEPAXXZ  # complete, non-exact
+011edab0 ?GetDeviceState@EmbeddedState@graphics@rw@@QAEXII@Z  # complete, non-exact
+011edc10 ?D3D9SetTransform@EmbeddedState@graphics@rw@@QAEXPBMH@Z  # complete, non-exact
+011edcd0 ?SetVertexDescriptor@EmbeddedState@graphics@rw@@QAEIXZ  # byte-exact
+011edcf0 ?D3D9GetShaderData@EmbeddedState@graphics@rw@@QAEHF@Z  # complete, non-exact
