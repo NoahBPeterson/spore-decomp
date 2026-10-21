@@ -630,7 +630,7 @@ struct IStdDrawable {
     virtual void v0c();
     virtual void* GetImage(int index);                                   // +0x10
 };
-struct cSPUIStdDrawable : IStdDrawableBase0, IStdDrawable {   // IStdDrawable at +0xc
+class cSPUIStdDrawable : public IStdDrawableBase0, public IStdDrawable { public:   // IStdDrawable at +0xc
     void SetImageColor(int index, uint32_t color);                     // 0x00831170
 };
 struct IDrawable {
