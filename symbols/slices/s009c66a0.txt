@@ -1,0 +1,10 @@
+009c66a0  CloneMeshInstance  # cdecl (src MeshObj*, mgr, out u32*); clone a mesh slot: read src transform via owner vtable+0x50, alloc a slot via mgr vtable+0x0c, copy transform/flags/ref-counted child, notify, write out = f68-1, return new slot
+009c67e0  ReleaseRange  # cdecl (body_mesh_data* first, last); for each 0x14-byte element drop one ref from its model (decrement +0x40 or virtual release at vtable+0x170)
+009c6860  CopyRangeOut  # cdecl (first, last, dest) -> dest+cnt; copy 0x14-byte body meshes forward, addref src model / release old dest model, copy counter +0x10
+009c68f0  CopyRangeBackward  # cdecl (dst, first, last) -> dst; copy 0x14-byte body meshes backwards with the same addref/release handling
+009c6970  FillRange  # cdecl (first, last, src const*); fill [first,last) with copies of *src, addref src model / release old model
+009c69f0  BoneVector::erase  # thiscall (bone* first, bone* last) -> bone*; shift [last,end) down over [first,last) using a 0x30-byte rep-movsd element copy, then shrink mpEnd
+009c6a60  BoneVector::insert_fill  # thiscall (bone* pos, u32 n, bone const* src); EASTL vector<bone> insert of n copies, growing capacity via EAAllocate + RawCopy30/RawFill30
+009c6c30  MeshHandle::Clear  # thiscall; drop the ref-counted object at +0x00 (virtual release) and clear the embedded bone vector at +0x08
+009c6c90  BoneVector::resize  # thiscall (u32 n); grow via default-constructed bone + insert_fill, or shrink via erase
+009c6d70  BodyMeshVector::insert_fill  # thiscall (body_mesh_data* pos, u32 n, src const*); EASTL vector<body_mesh_data> insert of n copies, growing capacity via EAAllocate + RawCopy14/RawFill14/RawDestroy14
