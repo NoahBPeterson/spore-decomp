@@ -1,0 +1,4 @@
+slices/s00bc4730/s00bc4730.cpp  ?destroy@PropRecord@@QAEXXZ  00bc4730  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc4730/s00bc4730.cpp  ?resetAll@Reg@@QAEXXZ  00bc4d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc4730/s00bc4730.cpp  ?destroy@PropVecA@@QAEXXZ  00bc5210  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc4730/s00bc4730.cpp  ?destroy@PropVecB@@QAEXXZ  00bc5300  /O2 /MD /Gy /TP /arch:SSE /fp:fast
