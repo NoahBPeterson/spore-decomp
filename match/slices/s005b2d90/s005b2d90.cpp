@@ -43,7 +43,7 @@ struct cSPQuaternion {
   }
 };
 
-struct hkAabb {
+class hkAabb { public:
   float mMin[4];
   float mMax[4];
 };

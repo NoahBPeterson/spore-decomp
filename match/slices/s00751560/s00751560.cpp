@@ -56,7 +56,7 @@ struct cSPTransform {
   cSPMatrix3 mRotation;
 };
 
-class cMWObject {
+struct cMWObject { private:
  public:
   void* mWorld;
   uint32_t mFlags;
@@ -69,7 +69,7 @@ struct cModelInfo {
   cSPTransform mLocalTransform;
 };
 
-class cMWGroup {
+struct cMWGroup { private:
  public:
   char pad_0[0x44];
   cModelInfo* mObjectsBegin;
@@ -77,7 +77,7 @@ class cMWGroup {
   cModelInfo* mObjectsCapacity;
 };
 
-class cMWGroupInternal {
+struct cMWGroupInternal { private:
  public:
   void* mNodeNext;
   void* mNodePrev;

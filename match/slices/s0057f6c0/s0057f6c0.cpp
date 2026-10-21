@@ -82,7 +82,7 @@ template <class T> struct sp_vector {
     T& operator[](int i) { return mpBegin[i]; }
 };
 
-template <unsigned int N> struct bitset {
+template <unsigned int N> class bitset { public:
     uint32_t mWord[(N + 31) / 32];
 };
 }

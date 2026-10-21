@@ -269,7 +269,7 @@ struct EditorRig {
 };
 
 namespace SP {
-class cSpeciesProfile;
+struct cSpeciesProfile;
 }
 uint32_t GetCapLevel(SP::cSpeciesProfile* p, uint32_t cap);            // 0x004D35D0
 int CountCap(SP::cSpeciesProfile* p, uint32_t cap);                    // 0x004D3640
@@ -279,7 +279,7 @@ float BlendAttackScore(float food, float social, float cute, float numCute,
                        float eyeAvg, float footAvg, float grasperAvg);  // 0x004D3500
 
 namespace SP {
-class cSpeciesProfile {
+struct cSpeciesProfile { private:
 public:
     bool Update(EditorRig* pRig);
     bool FillInProfileValues(cCreatureAbility* pAbility, PropertyList* pProp);   // 0x004D90A0

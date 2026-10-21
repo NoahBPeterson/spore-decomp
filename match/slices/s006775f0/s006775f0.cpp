@@ -106,7 +106,7 @@ struct LayoutWin {
     virtual void ShowVec2(Vector2 v, void* p);  // +0xc4 = slot 49
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
     virtual void v04(); virtual void v05();
     LayoutWin* FindWindowByID(int id, int b);   // 0x008105B0
@@ -189,7 +189,7 @@ struct IWinProcVt {
 };
 struct RefCountVt { virtual void r00(); };
 
-struct cSPUIPropertyLayout : IWinProcVt, RefCountVt {
+class cSPUIPropertyLayout : public IWinProcVt, public RefCountVt { public:
     char pad8[4];                               // +0x08
     cSPUILayout mLayout;                        // +0x0c
     char pad10[0x14];                           // +0x10..0x24

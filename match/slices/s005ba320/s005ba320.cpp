@@ -59,17 +59,17 @@ struct HK_ALIGN16 hkVector4 {
     hkVector4(const hkVector4& v) : x(v.x), y(v.y), z(v.z), w(v.w) {}
     float& operator()(int i) { return (&x)[i]; }
     const float& operator()(int i) const { return (&x)[i]; }
-    void setTransformedInversePos(const struct hkTransform& t, const hkVector4& v);  // 0x010813d0
+    void setTransformedInversePos(const class hkTransform& t, const hkVector4& v);  // 0x010813d0
 };
 
-struct hkTransform {
+class hkTransform { public:
     hkVector4 m_rotation[3];
     hkVector4 m_translation;
     static const hkTransform& getIdentity() { return s_identity; }
     static const hkTransform s_identity;   // 0x015b9b20
 };
 
-struct hkAabb {
+class hkAabb { public:
     hkVector4 m_min;
     hkVector4 m_max;
 };
@@ -77,7 +77,7 @@ struct hkAabb {
 // ---------------------------------------------------------------------------
 // Havok physics
 // ---------------------------------------------------------------------------
-struct hkThreadMemory {
+class hkThreadMemory { public:
     void deallocateChunk(void* p, int nbytes, int cls);  // 0x0107db10
     static unsigned long s_threadMemoryInstance;          // 0x016e4174 (TLS index)
     static hkThreadMemory& getInstance() { return *static_cast<hkThreadMemory*>(TlsGetValue(s_threadMemoryInstance)); }
@@ -86,7 +86,7 @@ struct hkThreadMemory {
 enum { HK_MEMORY_CLASS_COLLIDE = 0x14 };
 
 template <typename T>
-struct hkArray {
+class hkArray { public:
     enum { CAPACITY_MASK = 0x3fffffff, DONT_DEALLOCATE_FLAG = 0x80000000 };
     T* m_data;
     int m_size;
@@ -102,7 +102,7 @@ struct hkArray {
 };
 
 template <typename T, int N>
-struct hkInplaceArray : hkArray<T> {
+class hkInplaceArray : public hkArray<T> { public:
     T m_storage[N];
     hkInplaceArray()
     {
@@ -112,7 +112,7 @@ struct hkInplaceArray : hkArray<T> {
     }
 };
 
-struct hkShape {
+class hkShape { public:
     virtual ~hkShape();
     virtual void calcStatistics(void* collector) const;
     virtual int getType() const;
@@ -120,7 +120,7 @@ struct hkShape {
     virtual float getMaximumProjection(const hkVector4& direction) const;                     // +0x10
 };
 
-struct hkCdBody {
+class hkCdBody { public:
     const hkShape* m_shape;
     unsigned int m_shapeKey;
     const void* m_motion;
@@ -128,18 +128,18 @@ struct hkCdBody {
     const hkShape* getShape() const { return m_shape; }
 };
 
-struct hkCollidable : hkCdBody {
+class hkCollidable : public hkCdBody { public:
     int m_ownerOffset;               // +0x10
     unsigned int m_broadPhaseHandle[3];
     float m_allowedPenetrationDepth;
     void* getOwner() const { return (void*)((char*)this + m_ownerOffset); }
 };
 
-struct hkMotionState {
+class hkMotionState { public:
     hkTransform m_transform;
 };
 
-struct hkMotion {
+class hkMotion { public:
     void* vtbl_;
     unsigned int m_memSizeAndRefCount;
     int m_solverData;
@@ -147,7 +147,7 @@ struct hkMotion {
     hkMotionState m_motionState;     // +0x10
 };
 
-struct hkRigidBody {
+class hkRigidBody { public:
     void* vtbl_;                     // +0x0
     unsigned int m_memSizeAndRefCount;
     unsigned int m_world;
@@ -165,7 +165,7 @@ struct hkRigidBody {
     void setPosition(const hkVector4& position);  // 0x01087820
 };
 
-struct hkContactPoint {
+class hkContactPoint { public:
     hkVector4 m_position;
     hkVector4 m_separatingNormal;
     const hkVector4& getPosition() const { return m_position; }
@@ -180,14 +180,14 @@ struct hkRootCdPoint {
     unsigned int m_shapeKeyB;
 };
 
-struct hkCdPointCollector {
+class hkCdPointCollector { public:
     hkCdPointCollector() { m_earlyOutDistance = HK_REAL_MAX; }
     virtual ~hkCdPointCollector() {}
     virtual void addCdPoint(const void* point) = 0;
     float m_earlyOutDistance;
 };
 
-struct hkAllCdPointCollector : hkCdPointCollector {
+class hkAllCdPointCollector : public hkCdPointCollector { public:
     hkAllCdPointCollector() {}
     virtual ~hkAllCdPointCollector() {}
     virtual void addCdPoint(const void* point);
@@ -203,7 +203,7 @@ struct hkLinearCastInput {
     hkLinearCastInput() : m_maxExtraPenetration(HK_REAL_EPSILON), m_startPointTolerance(HK_REAL_EPSILON) {}
 };
 
-struct hkWorld {
+class hkWorld { public:
     void linearCast(const hkCollidable* collA, const hkLinearCastInput& input,
                     hkCdPointCollector& castCollector, hkCdPointCollector* startCollector = 0);  // 0x01082b90
 };
@@ -240,7 +240,7 @@ struct VectorBase {
 };
 
 template <typename T, typename Allocator = sp_vector_allocator>
-struct vector : VectorBase<T, Allocator> {
+class vector : public VectorBase<T, Allocator> { public:
     using VectorBase<T, Allocator>::mpBegin;
     using VectorBase<T, Allocator>::mpEnd;
     using VectorBase<T, Allocator>::mpCapacity;
@@ -270,7 +270,7 @@ struct vector : VectorBase<T, Allocator> {
 
 namespace EA {
 template <typename T>
-struct AutoRefCount {
+class AutoRefCount { public:
     T* mpObject;
     ~AutoRefCount()
     {
@@ -298,18 +298,18 @@ struct cSPBoundingBox {
     cSPVector3 mMax;
 };
 
-struct cSPEditorPhysicsWorld {
+class cSPEditorPhysicsWorld { public:
     void SetFloorFilter(bool enable);   // 0x004b9440
     hkWorld* World();                   // 0x004b91c0
 };
 
-struct cSPEditorModel {
+class cSPEditorModel { public:
     cSPEditorPhysicsWorld* GetPhysicsWorld();   // 0x004ad450
     void NumberBlocks();                        // 0x004ad4e0
     float GetGridSize();                        // 0x004adaa0 (returns +0x38)
 };
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     virtual void Dispose();
     virtual int AddRef();
     virtual int Release();
@@ -344,7 +344,7 @@ typedef eastl::vector<EA::AutoRefCount<cSPEditorBlock> > BlockList;
 void GetStackCandidates(cSPEditorBlock* block, int mode, BlockList* out);              // 0x004905d0
 void PrepareBlockForStacking(cSPEditorBlock* block, int mode, int a, int b, int c);   // 0x004a6690
 
-struct cSPEditorManipulationStacking {
+class cSPEditorManipulationStacking { public:
     uint32_t pad00[8];
     EA::AutoRefCount<cSPEditorBlock> mBlock;   // +0x20
     uint32_t pad24[9];

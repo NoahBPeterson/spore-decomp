@@ -68,7 +68,7 @@ bool IsValidDirection(const cSPVector3& v);                       // @ 0x0059ab7
 
 namespace EA {
 template <class T>
-struct AutoRefCount {
+class AutoRefCount { public:
   T* mpObject;
   AutoRefCount(T* p = 0) : mpObject(p) {
     if (mpObject)

@@ -85,7 +85,7 @@ struct string {
 bool operator==(const string& a, const char* b);      // 0x00555020
 
 // ---------------------------------------------------------------- editor types
-struct cSPEditorBlock;
+class cSPEditorBlock;
 
 struct cBlockState {                                  // returned by 0x0043c240
     uint32_t pad0[0x180 / 4];
@@ -97,7 +97,7 @@ struct cBlockModelLink {                              // block +0x28
     void Set4adc20(bool b);                           // 0x004adc20
 };
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     virtual void v0();
     virtual int AddRef();
     virtual int Release();
@@ -157,7 +157,7 @@ template<class T> struct intrusive_ptr {
     operator bool() const { return mpObject != 0; }
 };
 
-struct cSPEditorHandle {
+class cSPEditorHandle { public:
     virtual void v0();
     virtual void v1();
     virtual void v2();
@@ -166,7 +166,7 @@ struct cSPEditorHandle {
     cSPEditorBlock* GetRigblock();                    // 0x0047e6c0
 };
 
-struct cSPEditorModel {
+class cSPEditorModel { public:
     uint32_t pad0[0x58 / 4];
     uint32_t mModelType;                              // +0x58
 };
@@ -183,11 +183,11 @@ struct TorsoFlags {
     bool b;
 };
 
-struct cSPEditorSkinManager {
+class cSPEditorSkinManager { public:
     void UpdateTorso(TorsoFlags flags, int x);        // 0x004c3230
 };
 
-struct cSPEditorLimbStructure {
+class cSPEditorLimbStructure { public:
     uint32_t data[0x44 / 4];
     cSPEditorLimbStructure();                         // 0x00488850
     ~cSPEditorLimbStructure();                        // 0x00488900

@@ -339,7 +339,7 @@ struct VectorAutoRef {
 
 struct cComponentStats;
 
-struct cSPSkinPaintDistributeEffect {
+class cSPSkinPaintDistributeEffect { public:
     void* vftable0;
     void* vftable1;
     int mRefCount;

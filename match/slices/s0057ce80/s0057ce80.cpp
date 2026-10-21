@@ -18,7 +18,7 @@ struct Zf { float    v; Zf() : v(0.0f) {} };         // 0.0f
 // ---- interface bases (retail has seven vptr sub-objects) ----
 struct cIAppMode            { virtual void vIAppMode(); };
 struct cILayer              { virtual void vILayer(); };
-struct cIHintProcessor      { virtual void vIHint(); };
+class cIHintProcessor      { public: virtual void vIHint(); };
 struct cISPEditorNameProvider { virtual void vIName(); };
 struct IHandlerRC           { virtual void vIHandler(); };
 struct RefCountVTemplateInt { virtual void vRef(); int mRefCount; RefCountVTemplateInt() : mRefCount(0) {} };

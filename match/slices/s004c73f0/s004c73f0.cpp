@@ -34,7 +34,7 @@ struct Matrix3 {
 };
 
 namespace rw { namespace math { namespace fpu {
-    template <class T, int A> struct Matrix33Template {
+    template <class T, int A> class Matrix33Template { public:
         T m[3][3];
         Matrix33Template() {}
         Matrix33Template(const Matrix33Template& x);

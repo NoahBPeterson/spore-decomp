@@ -12,7 +12,7 @@ void  eastl_deallocate(void* p);                   // 0x00f47380
 extern "C" wchar_t* wcsncpy(wchar_t* dst, const wchar_t* src, size_t n);
 
 namespace eastl {
-struct allocator {};
+class allocator { public:};
 template <typename T, typename A = allocator>
 struct basic_string {
     T* mpBegin;

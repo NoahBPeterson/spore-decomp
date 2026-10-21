@@ -63,7 +63,7 @@ struct AutoRefCountOOL {
     }
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     IWindow* FindWindowByID(unsigned int id, bool bRecurse);      // 0x008105b0
 };
 

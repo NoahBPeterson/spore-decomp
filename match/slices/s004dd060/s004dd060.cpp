@@ -297,7 +297,7 @@ struct ArchetypeMap {
 
 namespace SP {
 
-struct cSPEditorSpeciesManager {
+class cSPEditorSpeciesManager { public:
     uint32_t pad0[0xb0 / 4];
     ArchetypeMap mArchetypes;       // +0xb0
     void ReloadTuning();            // @ 0x004dd060

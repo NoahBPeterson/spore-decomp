@@ -21,7 +21,7 @@ namespace eastl {
 
 extern char gEmptyString[2];   // 0x01667bac
 
-struct allocator {
+class allocator { public:
     void* allocate(size_t n) { return operator new[](n, "Editor", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1); }
     void deallocate(void* p) { operator delete[](p); }
 };

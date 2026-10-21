@@ -70,23 +70,23 @@ struct HK_ALIGN16 hkVector4 {
     float& operator()(int i) { return (&x)[i]; }
     const float& operator()(int i) const { return (&x)[i]; }
     void set(float a, float b, float c, float d = 0.0f) { x = a; y = b; z = c; w = d; }
-    void setTransformedPos(const struct hkTransform& t, const hkVector4& v);         // 0x01081360
-    void setTransformedInversePos(const struct hkTransform& t, const hkVector4& v);  // 0x010813d0
+    void setTransformedPos(const class hkTransform& t, const hkVector4& v);         // 0x01081360
+    void setTransformedInversePos(const class hkTransform& t, const hkVector4& v);  // 0x010813d0
 };
 
-struct hkTransform {
+class hkTransform { public:
     hkVector4 m_rotation[3];
     hkVector4 m_translation;
     static const hkTransform& getIdentity() { return s_identity; }
     static const hkTransform s_identity;   // 0x015b9b20
 };
 
-struct hkAabb {
+class hkAabb { public:
     hkVector4 m_min;
     hkVector4 m_max;
 };
 
-struct hkBool {
+class hkBool { public:
     char m_bool;
     hkBool(bool b) { m_bool = (char)b; }
     operator bool() const { return m_bool != 0; }
@@ -95,7 +95,7 @@ struct hkBool {
 // ---------------------------------------------------------------------------
 // Havok physics
 // ---------------------------------------------------------------------------
-struct hkThreadMemory {
+class hkThreadMemory { public:
     void deallocateChunk(void* p, int nbytes, int cls);  // 0x0107db10
     static unsigned long s_threadMemoryInstance;          // 0x016e4174 (TLS index)
     static hkThreadMemory& getInstance() { return *static_cast<hkThreadMemory*>(TlsGetValue(s_threadMemoryInstance)); }
@@ -104,7 +104,7 @@ struct hkThreadMemory {
 enum { HK_MEMORY_CLASS_COLLIDE = 0x14 };
 
 template <typename T>
-struct hkArray {
+class hkArray { public:
     enum { CAPACITY_MASK = 0x3fffffff, DONT_DEALLOCATE_FLAG = 0x80000000 };
     T* m_data;
     int m_size;
@@ -120,7 +120,7 @@ struct hkArray {
 };
 
 template <typename T, int N>
-struct hkInplaceArray : hkArray<T> {
+class hkInplaceArray : public hkArray<T> { public:
     T m_storage[N];
     hkInplaceArray()
     {
@@ -130,14 +130,14 @@ struct hkInplaceArray : hkArray<T> {
     }
 };
 
-struct hkShape {
+class hkShape { public:
     virtual ~hkShape();
     virtual void calcStatistics(void* collector) const;
     virtual int getType() const;
     virtual void getAabb(const hkTransform& localToWorld, float tolerance, hkAabb& out) const;  // +0xc
 };
 
-struct hkCdBody {
+class hkCdBody { public:
     const hkShape* m_shape;
     unsigned int m_shapeKey;
     const void* m_motion;
@@ -145,18 +145,18 @@ struct hkCdBody {
     const hkShape* getShape() const { return m_shape; }
 };
 
-struct hkCollidable : hkCdBody {
+class hkCollidable : public hkCdBody { public:
     int m_ownerOffset;               // +0x10
     unsigned int m_broadPhaseHandle[3];
     float m_allowedPenetrationDepth;
     void* getOwner() const { return (void*)((char*)this + m_ownerOffset); }
 };
 
-struct hkMotionState {
+class hkMotionState { public:
     hkTransform m_transform;
 };
 
-struct hkMotion {
+class hkMotion { public:
     void* vtbl_;
     unsigned int m_memSizeAndRefCount;
     int m_solverData;
@@ -164,7 +164,7 @@ struct hkMotion {
     hkMotionState m_motionState;     // +0x10
 };
 
-struct hkRigidBody {
+class hkRigidBody { public:
     void* vtbl_;                     // +0x0
     unsigned int m_memSizeAndRefCount;
     unsigned int m_world;
@@ -182,7 +182,7 @@ struct hkRigidBody {
     void setPosition(const hkVector4& position);  // 0x01087820
 };
 
-struct hkContactPoint {
+class hkContactPoint { public:
     hkVector4 m_position;
     hkVector4 m_separatingNormal;
     const hkVector4& getPosition() const { return m_position; }
@@ -197,14 +197,14 @@ struct hkRootCdPoint {
     unsigned int m_shapeKeyB;
 };
 
-struct hkCdPointCollector {
+class hkCdPointCollector { public:
     hkCdPointCollector() { m_earlyOutDistance = HK_REAL_MAX; }
     virtual ~hkCdPointCollector() {}
     virtual void addCdPoint(const void* point) = 0;
     float m_earlyOutDistance;
 };
 
-struct hkAllCdPointCollector : hkCdPointCollector {
+class hkAllCdPointCollector : public hkCdPointCollector { public:
     hkAllCdPointCollector() {}
     virtual ~hkAllCdPointCollector() {}
     virtual void addCdPoint(const void* point);
@@ -221,7 +221,7 @@ struct hkLinearCastInput {
     hkLinearCastInput() : m_maxExtraPenetration(HK_REAL_EPSILON), m_startPointTolerance(HK_REAL_EPSILON) {}
 };
 
-struct hkWorld {
+class hkWorld { public:
     void linearCast(const hkCollidable* collA, const hkLinearCastInput& input,
                     hkCdPointCollector& castCollector, hkCdPointCollector* startCollector = 0);  // 0x01082b90
 };
@@ -258,7 +258,7 @@ struct VectorBase {
 };
 
 template <typename T, typename Allocator = sp_vector_allocator>
-struct vector : VectorBase<T, Allocator> {
+class vector : public VectorBase<T, Allocator> { public:
     using VectorBase<T, Allocator>::mpBegin;
     using VectorBase<T, Allocator>::mpEnd;
     using VectorBase<T, Allocator>::mpCapacity;
@@ -289,9 +289,9 @@ struct vector : VectorBase<T, Allocator> {
 // ---------------------------------------------------------------------------
 namespace SP {
 
-struct cSPEditorBlock;
+class cSPEditorBlock;
 
-struct cSPEditorPhysicsWorld {
+class cSPEditorPhysicsWorld { public:
     hkWorld* World();                   // 0x004b91c0
     void UpdateCollisionFilters();      // 0x004b9420
     void SetDefaultFloorFilter();       // 0x004b9470
@@ -299,12 +299,12 @@ struct cSPEditorPhysicsWorld {
     hkRigidBody* mpFloorBody;           // +0xc
 };
 
-struct cSPEditorModel {
+class cSPEditorModel { public:
     cSPEditorPhysicsWorld* GetPhysicsWorld();   // 0x004ad450
     void NumberBlocks();                        // 0x004ad4e0
 };
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     virtual void Dispose();
     virtual int AddRef();
     virtual int Release();
@@ -329,7 +329,7 @@ struct cSPEditorBlock {
     void PointAt(cSPVector3 dir, cSPVector3 pos);              // 0x00437b00
 };
 
-struct cViewer {
+class cViewer { public:
     void GetCameraLocationInfo(cSPVector3* pos, cSPVector3* dir, int a, int b);  // 0x007c3d30
 };
 
@@ -362,7 +362,7 @@ struct cSPPlane {
     cSPPlane(const cSPVector3& normal, const cSPVector3& point) : mNormal(normal), mD(-normal.Dot(point)) {}
 };
 
-struct cSPEditorManipulationStacking {
+class cSPEditorManipulationStacking { public:
     uint32_t pad00[8];
     cSPEditorBlock* mStackParent;              // +0x20
     uint32_t pad24[6];

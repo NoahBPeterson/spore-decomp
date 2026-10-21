@@ -34,12 +34,12 @@ inline void destruct(ForwardIterator first, ForwardIterator last)
         (*first).~value_type();
 }
 
-struct allocator {
+class allocator { public:
     void deallocate(void* p, unsigned) { delete[] (char*)p; }
 };
 
 // eastl::fixed_vector_allocator: overflow allocator plus the inline pool pointer.
-struct fixed_vector_allocator {
+class fixed_vector_allocator { public:
     allocator mOverflowAllocator;
     void* mpPoolBegin;
 

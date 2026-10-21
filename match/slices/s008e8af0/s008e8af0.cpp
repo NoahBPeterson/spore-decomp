@@ -13,7 +13,7 @@
 namespace EA {
 
 template <typename T>
-struct RectT {
+class RectT { public:
     T mLeft, mTop, mRight, mBottom;
     RectT() {}
     RectT(T l, T t, T r, T b) : mLeft(l), mTop(t), mRight(r), mBottom(b) {}
@@ -55,7 +55,7 @@ enum Units { kUnitsPixels = 1, kUnitsAuto = 10 };
 enum DisplayType { kDisplayListItem = 5, kDisplayTable = 6 };
 enum EdgeIndex { kEdgeTop = 0, kEdgeRight = 1, kEdgeBottom = 2, kEdgeLeft = 3 };
 
-struct FontMetrics {
+class FontMetrics { public:
     float mfFontSize, mfEmSize, mfExSize, mfAscent, mfDescent;
 };
 

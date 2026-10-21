@@ -183,13 +183,13 @@ bool __cdecl OccluderLess(const cOccluder& a, const cOccluder& b);              
 void __cdecl quick_sort(cOccluder* first, cOccluder* last, OccluderCompare compare);     // 0x0074f3a0
 int __cdecl FUN_00745660(cOccluderSlot* first, cOccluderSlot* last, uint32_t frame);     // 0x00745660
 
-struct cFrustumCull {
+class cFrustumCull { public:
     void Setup(const void* cameraFrustum);              // 0x006ffe00
     void FUN_006ffa80(float f);                         // 0x006ffa80
     uint8_t TestSphere(const Vec3* center, float radius);   // 0x006ffbd0 (bit 0x40: outside)
 };
 
-struct cHierGrid {
+class cHierGrid { public:
     int FrustumQuery(cFrustumCull* cull, int maxCount, cMWModelInternal** out);   // 0x007026d0
 };
 
