@@ -7,3 +7,14 @@
 //
 // Flags: /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a5310_inc  (see manifest.txt)
 #include "../../../work/third_party/build/openssl-0.9.8g-d2110920/ssl/s3_enc.c"
+
+// Per-function VA markers for the verbatim TU above (bodies come from the
+// upstream s3_enc.c include; markers kept here so every slice target is
+// documented at column 0):
+// @ 0x011a5760
+// @ 0x011a57c0
+// @ 0x011a5900
+// @ 0x011a5950
+// @ 0x011a5ad0
+// @ 0x011a5d40
+// @ 0x011a5f20
