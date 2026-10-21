@@ -1,0 +1,6 @@
+00fcc330 15 IsMember(node): scans head chain comparing pointers, returns found flag; tail/return-block layout differs (cmp operand order + alignment padding). flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (336 valid, 95.8% coverage)
+00fcc810 306 InsertAt(src,idx): alloc nodes, splice at idx via IList vtable slot +0x30; frame/regalloc differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (302 valid, 7.4% coverage)
+00fccae0 109 Remove(node,cb): GetPrev unlink + optional data callback + allocator Free; regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (332 valid, 35.2% coverage)
+00fccc40 101 Clear(cb): walk + free nodes with optional callback; branch layout differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (264 valid, 28.3% coverage)
+00fccd00 157 Permute(idx): temp index array + relink; register allocation/branch layout differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (276 valid, 12.9% coverage)
+00fcd170 50 InsertAtOne(a,idx,b): LoadNewNode + splice at idx; regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (288 valid, 13.2% coverage)
