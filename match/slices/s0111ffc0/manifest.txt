@@ -1,0 +1,2 @@
+slices/s0111ffc0/s0111ffc0.cpp  ?costDirect@hkMoppCompilerSettingsBlock@@QAEMPAUMoppChainLeaf@@@Z  01120460  /vc71 /O2 /MD /Gy /TP
+slices/s0111ffc0/s0111ffc0.cpp  ?costRange@hkMoppCompilerSettingsBlock@@QAEMPAUMoppChainLeaf@@@Z  01120470  /vc71 /O2 /MD /Gy /TP

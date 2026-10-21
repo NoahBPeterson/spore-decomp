@@ -1,0 +1,14 @@
+0111ffc0  676  MoppCompiler::buildNode: complete (all 7 MOPP-compiler callees, both recursions, size 0.96x); equiv FAIL 6.7% coverage (fake-arity on the external 0x0111f9e0 call) so equivalence is unproven; frame differs (compiler collapses several temp inits)
+011202d0  1050  MoppCompiler::compile: complete (both free-list loops, 3 vtable calls, hkMemory alloc/dealloc, size 1.96x); equiv UNSUPPORTED (0/400 valid inputs; needs mapped arena memory); allocator/interface argument marshalling not reproduced
+011204d0  83  hkMoppCompilerSettingsBlock::costSpanA: complete and equiv PASS; x87 register allocation differs (f1 stays on the FPU stack in the original vs a memory compare here), size 1.006x
+01120570  83  hkMoppCompilerSettingsBlock::costSpanB: complete and equiv PASS; same x87 allocation difference as costSpanA
+01120610  72  hkMoppCompilerSettingsBlock::construct: complete and correct (vtable + 6-float copy + 0x01103830 init); equiv FAIL is the external 0x01103830 init call it cannot execute (ours faults reading the unmapped fake callee); size 1.10x
+01120660  63  hkMoppCompilerSettingsBlock::costSplitA: complete; equiv FAIL only on the virtual evalCost dispatch (different generated callee for the fake slot); x87 order kept
+011206c0  59  hkMoppCompilerSettingsBlock::costSplitB: complete and equiv PASS; size 0.79x (compiler fuses the separate term scheduling)
+01120710  74  hkMoppCompilerSettingsBlock::costSplitInto: complete and equiv PASS; out-field store order differs, size 0.91x
+01120770  199  hkWingedEdge::findTriangleOnNearestPlane: complete and equiv PASS (100% cov); 4x-unrolled scan reproduced but the min-selection branch shape and pointer walk differ, size 0.99x
+01120850  7  hkWingedEdge::initializeWithTetrahedron: complete and equiv PASS (100% cov); ONLY difference is one hoisted load (`mov ecx,[esp+0x10]` scheduled before the +0x3c store) — a pure scheduler artifact
+01120a00  112  hkConvexPenetrationUtil::addPointToSimplex: complete and equiv PASS (100% cov); the three 16-byte vector copies are done by four dword stores here vs the original's addressing, size 0.96x
+01120a80  419  hkConvexPenetrationUtil::tryToExpandPolytope: complete (01123510 + vector DoAssignValues + hkVector4::setRotatedInverseDir); equiv FAIL is a write into an unmapped fake page reached through the stubbed vector assignee; 62% cov, size 0.75x
+01120c40  512  hkConvexPenetrationUtil::convertResultToFeature: complete and equiv FAIL only because the stubbed calcBarycentricCoordinates leaves the bary array uninitialised (extra findTriangleNearestOrigin call follows); 96.7% cov, size 0.98x
+01120eb0  24  hkConvexPenetrationUtil::randomVector: complete and equiv PASS (100% cov); the LCG/FPU instruction interleave differs (the integer next-seed setup is scheduled earlier in the original), pure scheduler artifact

@@ -1,0 +1,16 @@
+0111ffc0 MoppCompiler::buildNode  # recursive MOPP tree-node builder; leaf path -> 0111f9e0, else pops free list A, copies 6 dwords from parent, registers 3 child shapes with container B, splits via 0111fe30 and recurses (name coined; no symbol in image)
+011202d0 MoppCompiler::compile  # MOPP compile entry: stores 6 pointers, builds two free lists (0x400 x 0xf8 and 0x400 x 0xbc), queries the container ifaces, allocates the entry array, one buildNode pass over the whole range (name coined)
+01120460 hkMoppCompilerSettingsBlock::costDirect  # returns *(float*)(leaf[0x24]+0x10); this unused (name coined)
+01120470 hkMoppCompilerSettingsBlock::costRange  # |i14-i34|*f1c, *(v-0.75)*6 boost when i00<i04, then v^4 * this[0x10] (name coined)
+011204d0 hkMoppCompilerSettingsBlock::costSpanA  # span evaluator using face offset +0x20; x<0 -> 0; 2.9x^2+3x^4+1500x^8 scaled by this[0x14] (name coined)
+01120570 hkMoppCompilerSettingsBlock::costSpanB  # same as costSpanA with face offset +0x38 and guard x>0 -> 0 (name coined)
+01120610 hkMoppCompilerSettingsBlock::construct  # ctor: vtable 0x014a6128, 0x01103830 init, copies six floats
+01120660 hkMoppCompilerSettingsBlock::costSplitA  # costSpanA + virtual evalCost + penalty (this[0x18]*-0.03 when i2c-i28<0x10) (name coined)
+011206c0 hkMoppCompilerSettingsBlock::costSplitB  # costSpanB + costRange + two linear terms (name coined)
+01120710 hkMoppCompilerSettingsBlock::costSplitInto  # fills an 8-float record from costSpanA/B, costRange and leaf fields (name coined)
+01120770 hkWingedEdge::findTriangleOnNearestPlane  # scan of the 0x50-stride triangle array, 4x unrolled, tracks the smallest per-triangle distance
+01120850 hkWingedEdge::initializeWithTetrahedron  # copies three 0x40-byte vertex records into the interleaved tetrahedron slots then calls addTetrahedron (name coined; no symbol)
+01120a00 hkConvexPenetrationUtil::addPointToSimplex  # appends the vertex's w/a/b into the simplex arrays at index *m_num, ++*m_num
+01120a80 hkConvexPenetrationUtil::tryToExpandPolytope  # returns hkResult; dilates the triangle against dir, tests against the three half-space bounds, adds a support point
+01120c40 hkConvexPenetrationUtil::convertResultToFeature  # barycentric projection of the triangle onto the simplex, writes hkGskOut (point, -normal, -m_f10)
+01120eb0 hkConvexPenetrationUtil::randomVector  # LCG seed -> three floats in [lo,hi): ((u*2^-31)+lo)*(hi-lo)
