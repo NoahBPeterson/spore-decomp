@@ -73,7 +73,7 @@ class cStreamBuffer {
   HeapHeader* mpHeap;
   uint32_t mBuffer[0x42b4 / 4];
 };
-class IStream {
+struct IStream { private:
  public:
   ~IStream() {}
   virtual int GetState();                          // +0x0
