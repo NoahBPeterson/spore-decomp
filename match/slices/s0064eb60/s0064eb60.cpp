@@ -13,7 +13,7 @@ static inline void** VT(void* p) { return *(void***)p; }
 namespace EA {
 
 template <typename T>
-struct AutoRefCount {
+class AutoRefCount { public:
     T* mpObject;
     AutoRefCount() : mpObject(0) {}
     AutoRefCount(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
@@ -47,7 +47,7 @@ struct AssetDataRef {
     virtual void AddRef();
     virtual void Release();
 };
-struct cSPAssetData : AssetPrimary, AssetDataRef {};
+class cSPAssetData : public AssetPrimary, public AssetDataRef { public:};
 
 // refcounted object with a primary vtable
 struct cSPAssetView {
@@ -81,7 +81,7 @@ struct TypeGridEntrySort {
 // ---------------------------------------------------------------------------
 // cSPUIAssetGrid stub (retail layout; only fields touched by this slice)
 // ---------------------------------------------------------------------------
-struct cSPUIAssetGrid {
+class cSPUIAssetGrid { public:
     char pad0[0x74];
     void* m74;                                          // +0x74
     void* m78;                                          // +0x78
@@ -176,7 +176,7 @@ namespace eastl {
 struct sp_vector_allocator {};
 
 template <typename T, typename Allocator = sp_vector_allocator>
-struct vector {
+class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;

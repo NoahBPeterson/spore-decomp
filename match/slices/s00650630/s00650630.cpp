@@ -7,7 +7,7 @@ void* operator new(unsigned int n, const char* name, int flags, unsigned int deb
                    const char* file, int line);  // 0x00f473a0
 
 struct IWindow;
-struct cSPUILayout;
+class cSPUILayout;
 
 // Window-ish control returned by IWindow::GetControl (only slot 5 is used here).
 struct IWindowControl {
@@ -124,7 +124,7 @@ struct ResourceKey {
 };
 
 // cSPUILayout: vtable slot 0 = (placeholder), slot 1 = AddRef, slot 2 = Release.
-struct cSPUILayout {
+class cSPUILayout { public:
     char pad[0x18];
     cSPUILayout();                                          // 0x00810000
     virtual void vf0();

@@ -86,7 +86,7 @@ extern char g_vtbl_e740_c[];   // 0x013ff7fc
 // ---------------------------------------------------------------------------
 namespace SP {
 
-struct cSPUIAssetComments : PBase1, PBase2 {
+class cSPUIAssetComments : public PBase1, public PBase2 { public:
     char mFrameSet[0x64];     // +0x0c  (retail size)
     void* mpContentWin;       // +0x70
     void* mpXHTMLWin;         // +0x74
@@ -105,7 +105,7 @@ struct cSPUIAssetComments : PBase1, PBase2 {
 // @ 0x0064DBD0  SP::cSPEditorNaming::DoMessage  (large /O2 message handler)
 // ---------------------------------------------------------------------------
 namespace SP {
-struct cSPEditorNaming {
+class cSPEditorNaming { public:
     char pad0[0x10];
     bool mIsExpanded;          // +0x10
     bool mAllowNameEdit;       // +0x11
@@ -351,7 +351,7 @@ void CellCalc::Compute(int index, float* out)
 // @ 0x0064E680  SP::cSPUIAssetGrid::HandleMessage
 // ---------------------------------------------------------------------------
 namespace SP {
-struct cSPUIAssetGrid {
+class cSPUIAssetGrid { public:
     char pad0[0x1e2];
     bool f1e2;
     bool f1e3;

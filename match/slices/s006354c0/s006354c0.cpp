@@ -23,7 +23,7 @@ public:
 class cSPPlayMode;
 }
 namespace EA {
-struct Stopwatch {
+class Stopwatch { public:
     uint32_t mStart[4];
     void Reset() { mStart[0] = 0; mStart[1] = 0; mStart[2] = 0; mStart[3] = 0; }
     void Restart();                                                                        // 0x00571E80

@@ -15,7 +15,7 @@ extern wchar_t gEmptyString16[2];   // 0x01667BAC
 template <typename T> struct EmptyStr;
 template <> struct EmptyStr<wchar_t> { static wchar_t* Get() { return gEmptyString16; } };
 template <> struct EmptyStr<char>    { static char*    Get() { return (char*)gEmptyString16; } };
-struct allocator {
+class allocator { public:
     void deallocate(void* p) { operator delete[](p); }
 };
 template <typename T, typename Allocator = allocator>
@@ -96,7 +96,7 @@ struct IWindow {   // UTFWin window (slots used by this module)
     virtual void RemoveWinProc(void* proc);                       // +0x108
 };
 
-struct cSPUILayout {   // 0x18 bytes (retail)
+class cSPUILayout { public:   // 0x18 bytes (retail)
     uint32_t pad[6];
     IWindow* FindWindowByID(uint32_t id, bool recurse);   // 0x008105B0
     void Shutdown(bool b);                                // 0x00811AD0

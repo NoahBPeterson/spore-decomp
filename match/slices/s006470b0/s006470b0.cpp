@@ -121,7 +121,7 @@ struct AnimTarget {    // temporary animation target; its inlined dtor resets tw
     IWindowS* pWin;
     ~AnimTarget() { vtbl = g_animTargetVtbl; vtbl2 = g_animTargetVtbl2; if (pWin) pWin->Release(); }
 };
-struct cSPUIAnimator {
+class cSPUIAnimator { public:
     void __thiscall RemoveAnimation(IWindowS* win, int channel);                 // 0x7f6210
     void __thiscall AddAnimation(AnimTarget* t, IWindowS* win, int channel);     // 0x7f8d10
 };

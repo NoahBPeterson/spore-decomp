@@ -47,7 +47,7 @@ inline void AssignLayout(void** slot, void* p) {
 // ---------------------------------------------------------------------------
 // External callees (declarations only; addresses are masked relocations).
 // ---------------------------------------------------------------------------
-struct cSPUILayout {
+class cSPUILayout { public:
     void* vf0;  // +0
     void* vf1;  // +4
     void* vf2;  // +8
@@ -75,7 +75,7 @@ extern "C" void  __cdecl vec_reserve(void* v, void* alloc, void* a, void* b);   
 extern "C" void  __cdecl FUN_004e5410(int, int, int, void*, void*, float);      // 0x004e5410
 
 // Animator helper: __thiscall at 0x7f62c0 (HasAnimation(IWindow*, int)).
-struct cSPUIAnimator {
+class cSPUIAnimator { public:
     bool HasAnimation(void* win, int id);
 };
 

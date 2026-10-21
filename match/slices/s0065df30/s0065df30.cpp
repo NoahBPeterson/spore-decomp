@@ -84,7 +84,7 @@ __declspec(noinline) AssetInfo* AssetVec::DoInsertValue(AssetInfo* position, Ass
 // ---------------------------------------------------------------------------
 // scalar helpers / other classes.
 // ---------------------------------------------------------------------------
-struct cSPUILayout { void* FindWindowByID(uint32_t id, int recursive); };
+class cSPUILayout { public: void* FindWindowByID(uint32_t id, int recursive); };
 struct cXHTMLFrameSet {
     void* GetFrame(const wchar_t* name);
     bool  FUN_009979f0(void* win, uint32_t id);

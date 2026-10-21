@@ -18,7 +18,7 @@ template <typename T> struct EmptyStr;
 template <> struct EmptyStr<wchar_t> { static wchar_t* Get() { return gEmptyString16; } };
 template <> struct EmptyStr<char>    { static char*    Get() { return gEmptyString8; } };
 template <typename T>
-struct allocator {
+class allocator { public:
     void deallocate(void* p) { operator delete(p); }
 };
 template <typename T, typename Allocator = allocator<T> >
@@ -60,7 +60,7 @@ struct cSPEditorUI {
     IWindow* FindWindowByID(uint32_t id);         // 0x005DC310
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     char pad[0x18];
     bool IsVisible();                                         // 0x00810070
     IWindow* FindWindowByID(uint32_t id, bool recurse);       // 0x008105B0

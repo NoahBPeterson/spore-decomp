@@ -147,7 +147,7 @@ extern Key12 gKey15247e0, gKey15247ec, gKey1524810;
 extern void* gCalloutWhere;                                          // 0x0152481C
 
 namespace EA { namespace DateTime {
-struct DateTime {
+class DateTime { public:
     int64_t mnSeconds;
     DateTime(int timeFrame);                                         // 0x0092E3D0
     uint32_t GetParameter(int which);                                // 0x0092DF80

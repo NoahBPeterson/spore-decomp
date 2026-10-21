@@ -52,7 +52,7 @@ bool RayPlaneIntersectZ(const Vector3* start, const Vector3* dir, Vector3* hit, 
 void __stdcall ReleaseCreatureHandler(void* creature, uint32_t id);   // 0x00629D90
 
 namespace EA {
-struct Stopwatch {
+class Stopwatch { public:
     uint64_t mnStartTime;
     uint64_t mnTotalElapsedTime;
     int      mnUnits;
@@ -63,7 +63,7 @@ struct Stopwatch {
     float GetElapsedTimeFloat() const { return (float)(int64_t)GetElapsedTimeCycles() * mfStopwatchCyclesToUnitsCoefficient; }
 };
 namespace Random {
-struct RandomLinearCongruential {
+class RandomLinearCongruential { public:
     uint32_t mnSeed;
     RandomLinearCongruential(uint32_t seed = 0xffffffff) { SetSeed(seed); }
     void SetSeed(uint32_t seed);                               // 0x00936090
@@ -71,7 +71,7 @@ struct RandomLinearCongruential {
     double RandomDoubleUniform();                              // 0x009360D0
 };
 }
-template <typename T> struct AutoRefCount {
+template <typename T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount() : mpObject(0) {}
     ~AutoRefCount() { if (mpObject) mpObject->Release(); }

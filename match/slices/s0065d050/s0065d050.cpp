@@ -79,7 +79,7 @@ struct cSPUIFeedEditAssetView {
   void SetMode(int mode);                  // 0065c840 (defined in slice s0065bf20)
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
   bool Init(ResourceKey* key, int a, uint32_t b);
   void SetParentWin(void* parent, int a, uint32_t b);
   void SetReloadCallback(void* fn, void* self);

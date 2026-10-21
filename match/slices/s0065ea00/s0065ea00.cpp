@@ -50,7 +50,7 @@ struct HashSet {
     void Insert(void* outIt, uint64_t* key, TrueTag tag);        // 0x00553750
 };
 struct HashtableU64 { int count; int* erase(int* out, int* node, int* bucket); };
-struct cSPUILayout {
+class cSPUILayout { public:
     void* FindWindowByID(uint32_t id, int recursive);
     void* Init(const void* key, int a, int id);
     void  SetParentWin(void* parent, int a, int id);

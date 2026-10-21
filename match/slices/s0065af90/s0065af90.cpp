@@ -59,7 +59,7 @@ __declspec(noinline) const char* CharTypeStringRSearch(const char* p1Begin, cons
 
 inline unsigned int CharStrlen(const char* p) { return strlen(p); }
 
-struct allocator {};
+class allocator { public:};
 
 class cstring {
  public:
@@ -172,7 +172,7 @@ extern const wchar_t* g_user;      // 0x152658c
 extern uint32_t g_152685c;
 extern void* g_152657c;
 
-struct cSPUILayout {
+class cSPUILayout { public:
   void** vt;
   void Init(ResourceKey* key, int a, uint32_t b);
   void SetParentWin(void* parent, int a, uint32_t b);

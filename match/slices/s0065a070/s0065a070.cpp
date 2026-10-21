@@ -41,7 +41,7 @@ inline void AssignLayout(void** slot, void* p) {
 // ---------------------------------------------------------------------------
 // External callees / globals (all relocations, only the ABI matters).
 // ---------------------------------------------------------------------------
-struct cSPUILayout {
+class cSPUILayout { public:
     void* vf0;
     void* vf1;
     void* vf2;

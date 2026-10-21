@@ -2,7 +2,7 @@
 // UI module: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include "types.h"
 
-struct cSPUILayout {
+class cSPUILayout { public:
     void SetReloadCallback(void* fn, void* self);   // 0x00810090 (thiscall)
 };
 extern "C" void FUN_00657930(void*, int);           // 0x00657930

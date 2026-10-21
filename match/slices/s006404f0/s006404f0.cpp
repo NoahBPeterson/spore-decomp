@@ -128,12 +128,12 @@ public:
     uint32_t mData[5];
 };
 
-struct cSPPlayMode {
+class cSPPlayMode { public:
     void WakeupCreature();      // 0x0062A760
     void FUN_00628810();        // 0x00628810
 };
 
-struct cSPPlayModeAnimation {
+class cSPPlayModeAnimation { public:
     virtual void a0(); virtual void a1(); virtual void a2();
     virtual float PlayPose(void* shadowViewer, uint32_t animID, int a, int b, int c);   // +0x0C
 };
@@ -156,7 +156,7 @@ struct cSPPlayModeUIPhoto {
     void SetEnableRecordMovieButton(bool on);           // 0x00635680
 };
 
-struct cSPPlayModePhotoBrowser {
+class cSPPlayModePhotoBrowser { public:
     void EnterMoveMode();               // 0x0062FDA0
     void EnterDeleteMode();             // 0x0062FE40
     void FUN_0062ff80(int mode);        // 0x0062FF80
@@ -178,7 +178,7 @@ struct cSPPlayModePhotoBrowser {
 };
 
 namespace Pollen {
-struct cAuthManager {
+class cAuthManager { public:
     virtual void m00(); virtual void m01(); virtual void m02(); virtual void m03(); virtual void m04();
     virtual void m05(); virtual void m06(); virtual void m07(); virtual void m08();
     virtual bool IsRegistrationNeeded();    // +0x24
@@ -196,7 +196,7 @@ struct IMessageServer {
 };
 IMessageServer* MessageServer();                        // 0x0067DCC0
 
-struct cSPPlayModeSubModeBase {
+class cSPPlayModeSubModeBase { public:
     virtual void b00();
     cAppModeEditorBasePhoto* mEditorBaseMode;   // +0x04
     cSPPlayModeAnimation* mAnim;                // +0x08
@@ -248,7 +248,7 @@ void PlayAudio(uint32_t soundID, uint32_t state);                         // 0x0
 bool TryGetUIntProperty(void* propList, uint32_t id, uint32_t* out);      // 0x00410370 (cdecl)
 extern void* g_PhotoPropList;                                             // 0x015FD918
 
-struct cUIHints { void SetEnabled(bool on, bool b); };                    // 0x0067C420
+class cUIHints { public: void SetEnabled(bool on, bool b); };                    // 0x0067C420
 cUIHints* UIHints();                                                      // 0x0067CAC0
 namespace UI { void CalloutMessageBox(void* config, void* text); }        // 0x00809DB0
 extern char g_CalloutConfig[];      // 0x01524C60

@@ -105,7 +105,7 @@ struct cSPPlayMode {
     void FUN_006288d0(int a);                                 // 0x006288D0
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     uint32_t pad[0x18 / 4];
     bool IsVisible();                                         // 0x00810070
 };

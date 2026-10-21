@@ -43,7 +43,7 @@ struct Key12 { int a; int b; int c; };
 // Load virtual slot `off` from object `o`: [o] is the vtable pointer.
 static inline void* Vslot(void* o, int off) { return ((void**)(*(void**)o))[off / 4]; }
 
-struct cSPUILayout {
+class cSPUILayout { public:
   void Shutdown(int a);
   void* FindWindowByID(uint32_t id, bool recursive);
 };
@@ -139,7 +139,7 @@ namespace eastl {
 template <typename T>
 inline const T& min_alt(const T& a, const T& b) { return b < a ? b : a; }
 inline unsigned int CharStrlen(const char* p) { return strlen(p); }
-struct allocator {};
+class allocator { public:};
 class cstring {
  public:
   char* mpBegin; char* mpEnd; char* mpCapacity; allocator mAllocator;
