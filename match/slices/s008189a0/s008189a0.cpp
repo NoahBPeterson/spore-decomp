@@ -83,7 +83,7 @@ static inline void* Vcp1(void* p, int off, int a) {
 extern "C" void SPUIHelpers_UpdateMouseFocus(int);
 extern "C" void FUN_00819880_p();
 
-struct cSPUIPieMenuItem {
+class cSPUIPieMenuItem { public:
     void**   vftable;          // +0x00
     u32      mID;              // +0x04
     IWindow* mpCurrentWindow;  // +0x08
@@ -171,7 +171,7 @@ struct Rect4 { float v[4]; int Contains(const float*); };  // cSPSwatchPlanner::
 struct Vec4f { float v[4]; };
 extern "C" Vec4f* SPUIHelpers_GetMainWindowArea(Vec4f*);   // 0x00805ea0
 
-struct cSPUIPieMenu {
+class cSPUIPieMenu { public:
     char     pad_00[0xc];
     char*    mpBegin;       // +0xc
     char*    mpEnd;         // +0x10

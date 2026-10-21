@@ -37,7 +37,7 @@ struct EString {
     void     Load(u32, u32, const wchar_t*);
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     char  pad_00[0x0c];
     void* FindWindowByID(u32 id, int arg);
     void  Shutdown(int arg);

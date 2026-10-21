@@ -23,7 +23,7 @@ void  __cdecl Vector_DoDestroyValues(void* a, void* b);
 struct RCObj { virtual void r0(); virtual void Release(); };
 
 // cSPUILayout interface (declared only)
-struct cSPUILayout {
+class cSPUILayout { public:
   void* FindWindowByID(uint32_t id, int recursive);
   bool Init();
   void Shutdown(bool recursive);

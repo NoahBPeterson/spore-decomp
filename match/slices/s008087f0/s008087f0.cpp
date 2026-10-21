@@ -48,7 +48,7 @@ struct LayoutTemp {                                  // temporary layout descrip
     ~LayoutTemp();                                   // 0x00811fe0
     int pad[6];
 };
-struct cSPUILayout {
+class cSPUILayout { public:
     cSPUILayout(const LayoutTemp& x);                // 0x00810020
     virtual void lv0();
     int pad[5];

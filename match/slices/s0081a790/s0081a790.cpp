@@ -21,7 +21,7 @@ struct LimitStopwatch { void SetTimeLimit(int, int); };
 // ===========================================================================
 // cSPUIPieMenuItem / cSPUIPieMenu
 // ===========================================================================
-struct cSPUIPieMenuItem {
+class cSPUIPieMenuItem { public:
   char pad00[0x38];
   float mf0;    // +0x38
   float mf1;    // +0x3c
@@ -34,7 +34,7 @@ struct cSPUIPieMenuItem {
   void SetIcon(void*);
 };
 
-struct cSPUIPieMenu {
+class cSPUIPieMenu { public:
   char pad00[0xc];
   cSPUIPieMenuItem* mpBegin;   // +0x0c
   cSPUIPieMenuItem* mpEnd;     // +0x10
@@ -86,7 +86,7 @@ int cSPUIPieMenu::AddItem(int a, int b, int c, int d) {
 // ===========================================================================
 // cSPUIPopupMenuItemWin
 // ===========================================================================
-struct cSPUIPopupMenuItemWin {
+class cSPUIPopupMenuItemWin { public:
   char pad00[0x888];
   int mChildIndex;               // +0x888
   void SomeFunc();               // 0081ae40
@@ -129,7 +129,7 @@ void cSPUIPopupMenuItemWin::OnAttach() {
 // ===========================================================================
 // cSPUIPopupMenuScrollButton
 // ===========================================================================
-struct cSPUIPopupMenuScrollButton {
+class cSPUIPopupMenuScrollButton { public:
   char pad00[0x888];
   LimitStopwatch timer;          // +0x888
   char pad01[0x8a8 - 0x888 - sizeof(LimitStopwatch)];
@@ -176,7 +176,7 @@ void cSPUIPopupMenuScrollButton::OnFocusAcquired(int a, int b) {
 // ===========================================================================
 // cSPUIPopupMenuWin
 // ===========================================================================
-struct cSPUIPopupMenuWin {
+class cSPUIPopupMenuWin { public:
   char pad00[0x8a8];
   int mNumItemChildren;          // +0x8a8
   int mSelectedItemIndex;        // +0x8ac

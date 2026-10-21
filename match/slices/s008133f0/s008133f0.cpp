@@ -519,7 +519,7 @@ void __cdecl FUN_00888480();                                // 0x888480
 uint32_t __cdecl FNV1_String8(const char*, uint32_t, int);  // 0x932e80
 void __cdecl FUN_00889d90(void*);                           // 0x889d90
 extern char kStr_dnt[];                                     // 0x14186a4 "dnt_no_word_break_dictionary"
-struct cSPUITooltipManager { static void Init(); };
+class cSPUITooltipManager { public: static void Init(); };
 
 // @ 0x00813b20
 void cSPUITooltipManager::Init() {

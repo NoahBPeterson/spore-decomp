@@ -493,14 +493,14 @@ void sInitDropShadowQuality() {
 // cSPUILayoutCheat + ArgScript
 // ===========================================================================
 namespace EA { namespace ArgScript {
-struct cArguments {
+class cArguments { public:
     void    MainArguments(int);                                  // 0x00838320
     int     NumArguments();                                      // 0x00837f30
     char**  OptionArguments(const char* name, int* pNum, int a, int b); // 0x00838130
     char**  OptionArguments(const char* name, int a);            // 0x00838330
     bool    HasFlag(const char* name);                           // 0x008380b0
 };
-struct cCommandBase {
+class cCommandBase { public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
     virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
@@ -523,7 +523,7 @@ struct LayoutMap {
 };
 inline LayoutMap::~LayoutMap() { DoNukeSubtree(mRoot); }
 
-struct cSPUILayoutCheat : cCommandBase {
+class cSPUILayoutCheat : public cCommandBase { public:
     LayoutMap mLayouts;                 // +0x10
     cSPUILayoutCheat();
     void Execute(cArguments* args);
@@ -546,7 +546,7 @@ cSPUILayoutCheat::cSPUILayoutCheat() {
 
 // @ 0x008124a0  cSPUILayoutCheat::Execute
 struct LayoutNode;                     // RB node; the payload lives at +0x20
-struct cSPUILayout {
+class cSPUILayout { public:
     void** mpVtbl;                                                   // +0x0
     void*  mp4;                                                      // +0x4
     void*  mp8;                                                      // +0x8

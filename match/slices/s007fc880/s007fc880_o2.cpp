@@ -46,7 +46,7 @@ struct RefCountBase {
     int mRefCount;            // +0x08
 };
 
-struct cSPUIBehaviorTimeFunction : PrimBase, RefCountBase {
+class cSPUIBehaviorTimeFunction : public PrimBase, public RefCountBase { public:
     float mParamDuration;         // +0x0c
     float mParamFrequency;        // +0x10
     float mParamDamping;          // +0x14
@@ -75,19 +75,19 @@ struct cSPUIBehaviorTimeFunction : PrimBase, RefCountBase {
     virtual float v22(float);
 };
 
-struct cSPUIBehaviorTimeFunctionRamp : cSPUIBehaviorTimeFunction {
+class cSPUIBehaviorTimeFunctionRamp : public cSPUIBehaviorTimeFunction { public:
     cSPUIBehaviorTimeFunctionRamp();
     virtual float v22(float t);   // @ 0x007fd4e0
     virtual bool  v24();          // @ 0x007fd540
     void SetParams(float duration, float pre, float post); // @ 0x007fd4a0
 };
 
-struct cSPUIBehaviorTimeFunctionSmoothRamp : cSPUIBehaviorTimeFunctionRamp {
+class cSPUIBehaviorTimeFunctionSmoothRamp : public cSPUIBehaviorTimeFunctionRamp { public:
     cSPUIBehaviorTimeFunctionSmoothRamp(float a, float b);
     virtual float v22(float t);   // @ 0x007fd5c0
 };
 
-struct cSPUIBehaviorTimeFunctionDampedPeriodic : cSPUIBehaviorTimeFunction {
+class cSPUIBehaviorTimeFunctionDampedPeriodic : public cSPUIBehaviorTimeFunction { public:
     bool  mbCeilingMode;          // +0x48
     bool  mbInitialized;          // +0x49
     char  pad4a[2];

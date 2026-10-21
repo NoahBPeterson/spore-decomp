@@ -29,7 +29,7 @@ struct IPropertyManager {
 IPropertyManager* PropertyManager();   // 0x0067de30
 
 // ---- cSPUILayout (+0x44 inside cPropertyUI) ------------------------------
-struct cSPUILayout {
+class cSPUILayout { public:
   virtual int AddRef();       // slot 0
   virtual int Release();      // slot 4
   int pad8;                   // +0x8

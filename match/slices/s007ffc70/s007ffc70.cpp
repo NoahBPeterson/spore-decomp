@@ -49,13 +49,13 @@ struct CanvasObj { virtual void c0();  virtual void c1();  virtual void c2();  v
                    virtual void c24(); virtual void c25(); virtual void c26(); virtual void c27();
                    virtual void c28(); virtual void c29(); virtual void c30(); };
 struct RCBase { virtual void rc0(); virtual void Release(); };
-struct cSPUILayout { void* FindWindowByID(uint32_t id, bool recursive); };
+class cSPUILayout { public: void* FindWindowByID(uint32_t id, bool recursive); };
 
 struct cSPUIFrameSequencer { cSPUIFrameSequencer(); };
-struct cSPUIBehaviorWinEventBase { cSPUIBehaviorWinEventBase(int, int, int); };
-struct cSPUIBehaviorWinBoolStateEvent { cSPUIBehaviorWinBoolStateEvent(int, int, int, int); };
-struct cSPUIBehaviorTimeFunctionSmoothRamp { cSPUIBehaviorTimeFunctionSmoothRamp(float, float); };
-struct cSPUIBehaviorTimeFunctionDampedPeriodic { cSPUIBehaviorTimeFunctionDampedPeriodic(int); };
+class cSPUIBehaviorWinEventBase { public: cSPUIBehaviorWinEventBase(int, int, int); };
+class cSPUIBehaviorWinBoolStateEvent { public: cSPUIBehaviorWinBoolStateEvent(int, int, int, int); };
+class cSPUIBehaviorTimeFunctionSmoothRamp { public: cSPUIBehaviorTimeFunctionSmoothRamp(float, float); };
+class cSPUIBehaviorTimeFunctionDampedPeriodic { public: cSPUIBehaviorTimeFunctionDampedPeriodic(int); };
 
 extern float g_1471064;
 extern bool  g_164bbd8;
@@ -74,7 +74,7 @@ extern char cl_a[], cl_b[], cl_c[], cl_d[];
 // ===========================================================================
 // @ 0x007FFC70  cSPUIBehaviorPredicateWinState::Evaluate (vtable slot 6)
 // ===========================================================================
-struct cSPUIBehaviorPredicateWinState {
+class cSPUIBehaviorPredicateWinState { public:
   char pad0[0x14];
   void* mpQueryWindow;        // +0x14
   uint32_t mWinStateQuery;    // +0x18

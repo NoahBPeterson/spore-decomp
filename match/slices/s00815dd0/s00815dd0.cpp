@@ -192,7 +192,7 @@ void MatEffect::dtor816910() {
 // ===========================================================================
 // UI::CalloutMessageBox
 // ===========================================================================
-struct cSPUILayout {
+class cSPUILayout { public:
     char pad_00[0x0c];
     void* FindWindowByID(u32 id, int arg);     // 0x8105b0
     void  Init(u32 a, int b, int c, const wchar_t* s); // 0x812160
@@ -427,7 +427,7 @@ extern RawObj* g_015fd920;               // command-line object
 extern float g_015451e8, g_015451ec;     // mouse scale
 extern u8 g_0164d211;                    // zh-cn flag
 
-struct cSPUIMainWin {
+class cSPUIMainWin { public:
     char  pad_00[4];
     u32   sub4_vt;
     char  pad_08[0x214 - 8];

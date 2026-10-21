@@ -364,7 +364,7 @@ struct BtnMap : HashMapBase {
   IBtn*& operator[](const unsigned& k);  // 0x00820af0 (same hash_map<unsigned,void*> instantiation as TEMap)
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
   unsigned pad[6];
   ~cSPUILayout();  // 0x00811fe0
 };

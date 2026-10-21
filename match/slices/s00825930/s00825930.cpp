@@ -320,7 +320,7 @@ struct TEMap : HashMapBase {
 };
 struct BtnMap : HashMapBase {};
 
-struct cSPUILayout {
+class cSPUILayout { public:
   unsigned pad[6];
   ~cSPUILayout();  // 0x00811fe0
 };

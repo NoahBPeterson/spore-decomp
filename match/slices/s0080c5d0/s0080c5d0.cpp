@@ -48,7 +48,7 @@ static inline void** VT(void* o) { return *(void***)o; }
 struct cSPUIInfoLine;
 
 // ---- cSPUILayout (external type) ----
-struct cSPUILayout {
+class cSPUILayout { public:
     virtual void v00();
     virtual void AddRef();
     virtual void Release();
@@ -443,7 +443,7 @@ extern int gChildNodeOff;   // 0x1440aec: node-to-object offset of the child lis
 static inline IWin* ChildOf(int* node) { return (IWin*)((char*)node + gChildNodeOff); }
 
 // ================= UTFWin::cSPUILaunchScreenWinProc =================
-struct cSPUILaunchScreenWinProc {
+class cSPUILaunchScreenWinProc { public:
     void** vtbl;   // +0
     void** vtbl2;  // +4
     u32    f8;     // +8

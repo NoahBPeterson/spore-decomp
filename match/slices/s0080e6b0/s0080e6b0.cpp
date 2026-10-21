@@ -29,7 +29,7 @@ static inline void** VT(void* o) { return *(void***)o; }
 
 // ---------------- UI::cSPUILayeredObject ----------------
 struct cMWModel { u8 pad[0x40]; i32 mRefCount; u8 pad44[4]; };
-struct cSPUILayeredObject {
+class cSPUILayeredObject { public:
     void**  vtbl;        // +0
     i32     mRefCount;   // +4 (base RefCount)
     void*   mpViewer;    // +8
@@ -62,7 +62,7 @@ struct LayerInfoVec {                 // eastl::vector<cLayerInfo, fixed_vector_
     void __thiscall dtor();   // 0x80ea80
 };
 
-struct cSPUICustomRendererImpl {
+class cSPUICustomRendererImpl { public:
     void** vtbl;         // +0   0x1417df8 / 0x1417e18
     void** vtbl2;        // +4   0x1417df4 / 0x1417e14
     u32    atomic8;      // +8

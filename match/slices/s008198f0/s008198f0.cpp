@@ -101,7 +101,7 @@ typedef int   (__thiscall *VI0)(void*);
 typedef float* (__thiscall *VF0)(void*);
 #define VT(o, off) ((*(void***)(o))[(off) / 4])
 
-struct cSPUILayout {
+class cSPUILayout { public:
     u32 pad0, pad1, pad2, pad3, pad4, pad5;
     cSPUILayout();
     void Ctor810000();                              // 0x00810000
@@ -116,7 +116,7 @@ struct cSPUILayout {
 void ReloadCb_00c2e4e0(void*, void*, bool);          // 0x00c2e4e0
 void* FUN_008067f0(void* w, int a);                  // 0x008067f0 cdecl
 
-struct cSPUIPieMenuItem {
+class cSPUIPieMenuItem { public:
     void**   vftable;          // +0x00
     u32      mID;              // +0x04
     void*    mpCurrentWindow;  // +0x08
@@ -299,7 +299,7 @@ struct PieBase : IWinProcBase2, RefCountBase {
     PieBase() { vftable = (void**)0x1418fa4; vftable2 = (void**)0x1418f94; }
 };
 
-struct cSPUIPieMenu : PieBase {
+class cSPUIPieMenu : public PieBase { public:
     ItemVec  mItems;       // +0x0c
     char     pad_18[8];
     int      mItemCount;   // +0x20

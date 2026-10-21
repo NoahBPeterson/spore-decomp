@@ -21,7 +21,7 @@ struct RefCountVTemplate {
 };
 
 // cSPUILayout (12 bytes): constructed by SPUIHelpers at 0x00810000 (thiscall, returns this).
-struct cSPUILayout {
+class cSPUILayout { public:
     uint32_t pad[3];
     cSPUILayout() throw();      // 0x00810000
 };

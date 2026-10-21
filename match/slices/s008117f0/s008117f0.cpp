@@ -46,13 +46,13 @@ struct PtrVec {
 };
 // key/value views
 
-struct cSPUILayoutObjectCollection;
+class cSPUILayoutObjectCollection;
 struct CollStub { u8 pad[0x100]; void __thiscall m11330(); };
 
 struct cSPUILayoutObjectCollectionV8;   // view with this = collection+8
 
 // --------------------------------------------------------------- cSPUILayout
-struct cSPUILayout {
+class cSPUILayout { public:
     void** vtbl;            // +0
     i32    mRefCount;       // +4
     u32    f8;              // +8
@@ -71,7 +71,7 @@ struct cSPUILayout {
 struct cSPUILayoutDtor : public cSPUILayout {};
 
 // --------------------------------------------------- object collection base
-struct cSPUILayoutObjectCollection {
+class cSPUILayoutObjectCollection { public:
     void** vtbl;            // +0
     u8     pad4[4];
     void*  p8;              // +8
@@ -111,7 +111,7 @@ struct cSPUILayoutObjectCollectionV8 {
 };
 
 // ------------------------------------------------------- cSPUILayoutManager
-struct cSPUILayoutManager {
+class cSPUILayoutManager { public:
     void** vtbl;            // +0
     void** vtbl2;           // +4
     u8     pad8[0xc - 8];

@@ -41,7 +41,7 @@ extern "C" void SPKeyFromName(void* out, void* name, u32, void*);
 extern "C" void FUN_00817fa0(void*, int);
 
 // cSPUIPieMenuItem layout (PDB, size 0x30)
-struct cSPUIPieMenuItem {
+class cSPUIPieMenuItem { public:
     void**    vftable;          // +0x00
     u32       mID;              // +0x04
     IWindow*  mpCurrentWindow;  // +0x08

@@ -67,7 +67,7 @@ struct RBTree {
 };
 
 // generic resource factory object
-struct cSPUILayoutResourceFactory {
+class cSPUILayoutResourceFactory { public:
     void* __thiscall CreateResource(void* a, void* b, u32 type, void* d);      // 0x8107d0
     void* __thiscall Function8a0(void* a, void* b, u32 type, void* d);         // 0x8108a0
 };
