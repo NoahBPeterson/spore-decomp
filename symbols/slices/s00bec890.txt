@@ -1,0 +1,3 @@
+00bec890 Simulator::cCityWalls::~cCityWalls  # vtable 0x01468fd8 at +0x34, base dtor 0x00bec060
+00bed3c0 Zone::FillPoints  # border/point fill helper; tail-calls 0x00473500
+00bed460 SP::cAppModeTerrainEditor::ScriptSetSeedOverride  # PDB candidate; 1208-byte script jump-table
