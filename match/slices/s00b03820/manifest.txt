@@ -1,0 +1,5 @@
+slices/s00b03820/s00b03820.cpp  ?AllocNode@PoolOwner@@QAEPAUPoolNode@@PBI@Z  00b03820  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b03820/s00b03820.cpp  ?AllocNodeTiny@PoolOwner@@QAEPAUPoolNode@@PBI@Z  00b03880  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b03820/s00b03820.cpp  ?destroy_range_big2@@YAPAXPAX00@Z  00b03f50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b03820/s00b03820.cpp  ?Find@RedBlackTree@@QAEPAXPAI@Z  00b03f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b03820/s00b03820.cpp  ?release_node_chain@PoolOwner@@QAEXPAX@Z  00b04350  /O2 /MD /Gy /TP /arch:SSE /fp:fast

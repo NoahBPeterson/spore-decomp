@@ -1,0 +1,28 @@
+; slice s00b03820 = 0x00b03820..0x00b047b0 (SPGonzago/SPPlanet.obj Simulator pool allocator + quad-tree math)
+00b03820 PoolOwner::AllocNode(const unsigned int*)            ; 0x00b03820
+00b03880 PoolOwner::AllocNodeTiny(const unsigned int*)        ; 0x00b03880
+00b038e0 sort_partition_a(void**, void**, void*, const float*) ; 0x00b038e0
+00b03a20 sort_partition_b(void**, void**, void*, float, float, float) ; 0x00b03a20
+00b03b50 sort_partition_c(void**, void**, const float*, float, float, float) ; 0x00b03b50
+00b03ca0 construct_range_big(void*, void*, void*)            ; 0x00b03ca0  forward 0x80-stride ctor walk
+00b03d70 make_heap_range(void*, void*, float, float, float)   ; 0x00b03d70
+00b03dd0 sort_heap_range(void*, void*, float, float, float)   ; 0x00b03dd0
+00b03e40 make_heap_range2(void*, void*, float, float, float)  ; 0x00b03e40
+00b03ea0 sort_heap_range2(void*, void*, float, float, float)  ; 0x00b03ea0
+00b03f10 destroy_range_big(void*, void*, void*)               ; 0x00b03f10  backward 0x80-stride dtor walk
+00b03f50 destroy_range_big2(void*, void*, void*)              ; 0x00b03f50  byte-exact (MATCH)
+00b03f90 RedBlackTree::Find(unsigned int*)                    ; 0x00b03f90  byte-exact (MATCH)
+00b03fd0 walk_tree_dump(void*, const char*)                   ; 0x00b03fd0
+00b04120 walk_tree_dump2(void*, const char*)                  ; 0x00b04120
+00b04270 pool_owner_ctor(void*)                               ; 0x00b04270
+00b04350 PoolOwner::release_node_chain(void*)                 ; 0x00b04350  byte-exact (MATCH)
+00b043b0 PoolOwner::erase_tree_node(void**, void*)            ; 0x00b043b0
+00b04420 node_free_walk(void*, void*)                         ; 0x00b04420
+00b04520 PoolOwner::rbcontainer_copy(void*)                   ; 0x00b04520
+00b04590 sort_by_distance(void**, void**, const float*)       ; 0x00b04590
+00b04670 sort_and_visit(void**, void**, const float*)         ; 0x00b04670
+; helpers: EAAllocate 0x00f473a0, operator_delete__ 0x00f47380, memcpy thunk 0x011e0744
+;          TinyCopyThunk 0x00b01cb0, BigElem ctor 0x00b03680, BigElem dtor 0x00b03740
+;          sift helpers 0x00b02930 / 0x00b02a40 / 0x00b02830 / 0x00b03ce0 / 0x00b03d20
+;          rbtree 0x00b02750 find, 0x00921580 increment, 0x00921880 erase, payload dtor 0x00b00150
+;          alloc source string 0x013f09b4, allocator table 0x013ebb38, rbtree vtable 0x01411b88
