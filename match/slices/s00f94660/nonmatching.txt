@@ -1,0 +1,12 @@
+00f94660 418 /O2 /MD /Gy /TP /arch:SSE equiv UNSUPPORTED -- reconstruction (size 276 vs 440); 0/400 valid (fake-arity=348, fault(read)=52); DatabasePackedFile IO-driver, codegen not chased
+00f94820 886 /O2 /MD /Gy /TP /arch:SSE equiv UNSUPPORTED -- SP::cTerrainResourceManager::SavePlanetDefinitions (size 791 vs 1059); 0/400 valid (fault(read)=363, budget=31, pool-limit=6)
+00f94d00 14 /O2 /MD /Gy /TP /arch:SSE equiv PASS -- SWARM_TerrainScriptAddCommands (size 85 vs 87); register swap in the null branch (eax/edx vs edx/eax); 350/400 valid, 70.6% coverage
+00f94df0 232 /O2 /MD /Gy /TP /arch:SSE equiv UNSUPPORTED -- cSequenceEffectCommand::Execute (size 355 vs 348); 0/400 valid (import:_CxxThrowException=291, fault(write)=97)
+00f94fa0 230 /O2 /MD /Gy /TP /arch:SSE equiv PASS -- property-array refresh (size 422 vs 425); 297/400 valid, 95.9% coverage; residual is spill/scheduling
+00f95150 112 /O2 /MD /Gy /TP /arch:SSE equiv UNSUPPORTED -- property reload (size 129 vs 132); 0/400 valid (fake-arity=223, fault(read)=173)
+00f951e0 51 /O2 /MD /Gy /TP /arch:SSE equiv PASS -- cSPTransformOps assign (size 75 vs 73); 387/400 valid, 100% coverage; residual is arg-register choices
+00f95230 39 /O2 /MD /Gy /TP /arch:SSE equiv FAIL -- reload-from-desc (size 123 vs 116); 5/5 mismatch first: esp (stack-shape differs); 100% coverage
+00f952b0 247 /O2 /MD /Gy /TP /arch:SSE equiv FAIL -- GmeRefCount-derived component ctor (size 276 vs 320); 5/5 mismatch, first: execution (orig calls into a ctor chain ours does not); incomplete
+00f95430 58 /O2 /MD /Gy /TP /arch:SSE equiv FAIL -- component dtor (size 100 vs 96); 5/5 mismatch, first: execution; vtable teardown order differs
+00f95490 113 /O2 /MD /Gy /TP /arch:SSE equiv WEAK -- attach/notify user-data (size 169 vs 163); 210/400 valid (need 200), 51.6% coverage (need 60%)
+00f95540 158 /O2 /MD /Gy /TP /arch:SSE equiv FAIL -- compact ready list (size 177 vs 175); 5/5 mismatch, first: execution

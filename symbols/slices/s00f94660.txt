@@ -1,0 +1,23 @@
+# Slice s00f94660 -- 0x00f94660 .. 0x00f95540 (17 functions)
+# Swarm / terrain-script cluster: cTerrainResourceManager::SavePlanetDefinitions and
+# its DatabasePackedFile helper, Swarm::MapDescription serialization + the terrain
+# script arg-command, and a GmeRefCount-derived component's ctor/dtor and asset-list
+# helpers. Names from symbols/pdb_names.json dev-anchored entries where available.
+
+00f94660  FUN_00f94660                       # DatabasePackedFile pair writer (transform/merge)
+00f94820  SP::cTerrainResourceManager::SavePlanetDefinitions
+00f94c50  FUN_00f94c50                       # read a Swarm::MapDescription
+00f94cb0  FUN_00f94cb0                       # new + populate Swarm::MapDescription
+00f94d00  SWARM_TerrainScriptAddCommands
+00f94d60  FUN_00f94d60                       # write a Swarm::MapDescription
+00f94df0  `anonymous namespace'::cSequenceEffectCommand::Execute
+00f94f50  FUN_00f94f50                       # set/clear anim flag + optional reset
+00f94f80  FUN_00f94f80                       # has-pending-changes predicate
+00f94fa0  FUN_00f94fa0                       # refresh property-derived arrays
+00f95150  FUN_00f95150                       # reload property list + refresh
+00f951e0  FUN_00f951e0                       # assign transform ops + notify
+00f95230  FUN_00f95230                       # reload-from-desc (opcode 6)
+00f952b0  FUN_00f952b0                       # GmeRefCount-derived component ctor
+00f95430  FUN_00f95430                       # GmeRefCount-derived component dtor
+00f95490  FUN_00f95490                       # attach user-data component + notify list
+00f95540  FUN_00f95540                       # compact asset list (keep ready members)
