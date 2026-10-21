@@ -69,7 +69,7 @@ extern const uint8_t kFaceAxes[3][4];                   // 0x0147bd6c
 
 namespace SP {
 
-struct cPlanetModel {
+class cPlanetModel { public:
     float    GetWaterHeight();                                          // 0x00b7e390
     Vector3* DirectionToSurfacePosition(Vector3* out, Vector3* dir);    // 0x00b815a0 (thiscall, ret 8)
     int      GetContinent(Vector3* pos);                                // 0x00b88590 (thiscall, ret 4)

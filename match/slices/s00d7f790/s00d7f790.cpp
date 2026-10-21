@@ -73,12 +73,12 @@ struct AnimOwner {
 struct InteractableSub {
     void Notify(void* timer);                               // 0xae6690 (ret 4)
 };
-struct cInteractableObject {
+class cInteractableObject { public:
     uint8_t pad00[0x10c];
     InteractableSub mSub;                                   // +0x10c
 };
 
-struct cPlanetModel {
+class cPlanetModel { public:
     void DirectionToSurfacePosition(Vec3* out, const Vec3* pos);    // 0xb815a0 (ret 8)
     float GetRadius();                                              // 0xb7e490
 };
@@ -90,7 +90,7 @@ struct cImpulseSystem {                                             // singleton
     void Follow(Loco* loco, SpatialObj* target, float t);                   // 0xb4c600 (ret 0xc)
 };
 
-struct cSPCreatureBase {
+class cSPCreatureBase { public:
     uint8_t     pad00[0xc0];
     Loco        mLoco;                                      // +0xc0
     uint8_t     pad_c4[0x137 - 0xc4];

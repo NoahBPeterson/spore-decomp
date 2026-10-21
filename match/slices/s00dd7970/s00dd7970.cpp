@@ -56,7 +56,7 @@ struct IWindow : Object {
 
 enum { kWinFlagVisible = 1 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     IWindow* FindWindowByID(uint32_t id, bool recursive);       // 0x008105b0
 };
 
@@ -74,7 +74,7 @@ cSPUIWindowAnimation SPUICreateWindowAnimationTargetShadeAlpha(IWindow* window, 
                                                               float duration, int interpolation);  // 0x007f8290
 cSPUIWindowAnimation SPUICreateWindowAnimationTargetPosition(IWindow* window, Point target, float startTime,
                                                             float duration, int interpolation);    // 0x007f80d0
-struct cSPUIAnimator {
+class cSPUIAnimator { public:
     void AddAnimation(const cSPUIWindowAnimation& anim, Object* owner, uint32_t id);  // 0x007f8d10
 };
 

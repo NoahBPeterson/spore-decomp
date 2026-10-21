@@ -45,7 +45,7 @@ __forceinline float Clamp(float value, float minValue, float maxValue)
 #define PV(n) virtual void pv##n();
 
 struct cSpatialObject;
-struct cSPCreatureCitizen;
+class cSPCreatureCitizen;
 
 // Spatial/locomotive sub-object of a creature (at +0xc0), own vtable.
 struct Loco {
@@ -86,7 +86,7 @@ struct Community {                                                // object retu
     const Vec3* FUN_00c8ef20(Vec3* tmp);                          // 0xc8ef20
 };
 
-struct cTribe {
+class cTribe { public:
     PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a) PV(0b) PV(0c) PV(0d) PV(0e)
     PV(0f) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19) PV(1a) PV(1b) PV(1c) PV(1d)
     PV(1e) PV(1f) PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28) PV(29) PV(2a)
@@ -104,7 +104,7 @@ struct UIController {                                             // object retu
     void FUN_00cc9e20(cSPCreatureCitizen* c);                     // 0xcc9e20
 };
 
-struct cTribeModeStrategy {
+class cTribeModeStrategy { public:
     PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a) PV(0b) PV(0c) PV(0d) PV(0e)
     PV(0f) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19) PV(1a)
     virtual UIController* GetUIController();                      // +0x6c
@@ -129,7 +129,7 @@ struct cSpatialQuery {
     virtual bool QueryRadius(const Vec3* pos, float radius, SpatialObjVector* out, int a, int b, int c);   // +0x48
 };
 
-struct cPlanetModel {
+class cPlanetModel { public:
     void DirectionToSurfacePosition(Vec3* out, const Vec3* in);                          // 0xb815a0
     Quat* BuildSurfaceOrientation(Quat* out, const Vec3* pos, const Vec3* dir);          // 0xb7f250
     Quat* BuildSurfaceOrientation(Quat* out, const Vec3* pos);                           // 0xb7f190
@@ -142,7 +142,7 @@ struct GlobalObj {                                                // FUN_00b3d2b
 
 struct PropertyList;
 
-struct cSPCreatureCitizen {
+class cSPCreatureCitizen { public:
     PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a) PV(0b) PV(0c) PV(0d) PV(0e)
     PV(0f) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19) PV(1a) PV(1b) PV(1c) PV(1d)
     PV(1e) PV(1f) PV(20) PV(21) PV(22) PV(23)

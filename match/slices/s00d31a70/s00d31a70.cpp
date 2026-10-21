@@ -71,8 +71,8 @@ struct cCreatureAnimal {
   bool mbDead;                        // +0xb5e
 };
 
-struct cGameNounManager { cCreatureAnimal* GetAvatar(); };   // 0x00b1fdb0
-struct cGameInputManager {
+class cGameNounManager { public: cCreatureAnimal* GetAvatar(); };   // 0x00b1fdb0
+class cGameInputManager { public:
   bool IsKeyDown(int key) { return ((bool(__thiscall*)(void*, int))VFUNC(this, 0x18))(this, key); }
 };
 
@@ -84,7 +84,7 @@ struct cPosSource {
   Vector3* GetPickPosition(Vector3* out, int n) { return ((Vector3*(__thiscall*)(void*, Vector3*, int))VFUNC(this, 0x3c))(this, out, n); }
   cPickedThing* GetPicked() { return ((cPickedThing*(__thiscall*)(void*))VFUNC(this, 0x30))(this); }
 };
-struct cViewer {
+class cViewer { public:
   void GetCameraRayPoints(Vector3* origin, Vector3* end);   // 0x007c46f0
 };
 struct cRenderThing { cViewer* GetViewer() { return ((cViewer*(__thiscall*)(void*))VFUNC(this, 0x1c))(this); } };
@@ -105,7 +105,7 @@ struct cRaySubobject {          // subobject at +0x34 of the 0x52aa6122 componen
 };
 struct cRayComponent { char pad[0x34]; cRaySubobject sub; };
 
-struct cSPTimer { uint64_t GetElapsedTime(); };   // 0x00bc3190
+class cSPTimer { public: uint64_t GetElapsedTime(); };   // 0x00bc3190
 
 cGameNounManager* NounManager();              // 0x00b3d300
 cGameInputManager* GameInputManager();        // 0x00b3d250

@@ -83,18 +83,18 @@ struct Avatar {                                        // GetAvatar() result
     Loco mLoco;                                        // +0xc0
 };
 
-struct cGameNounManager {
+class cGameNounManager { public:
     Avatar* GetAvatar();                               // 0x00b1fdb0
 };
 
-struct cSPDramaManager {
+class cSPDramaManager { public:
     bool IsDramaEventActive(int type);                 // 0x00d4cb30
 };
 
-struct cViewer {
+class cViewer { public:
     void GetCameraLocationInfo(Vec3* pos, Vec3* dir, Vec3* a, Vec3* b);   // 0x007c3d30
 };
-struct cApp {
+class cApp { public:
     PV8 PV8 PV4 PV2                                    // 0x00 .. 0x54
     virtual cViewer* GetViewer();                      // +0x58
 };

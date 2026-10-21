@@ -74,7 +74,7 @@ struct CreatureTuning {                                // creature + 0xb20
     uint32_t mCanHover;                                // +0x61c
 };
 
-struct cSPCreatureBase {
+class cSPCreatureBase { public:
     char      pad00[0xc0];
     Loco      mLoco;                                   // +0xc0
     char      padC4[0x110 - 0xc4];
@@ -98,12 +98,12 @@ struct cSPCreatureBase {
     void MoveToPointAtSpeed(int mode, const Vec3* p, float speed, float f);     // 0xc1c1d0
 };
 
-struct cGameNounManager { cSPCreatureBase* GetAvatar(); };   // 0xb1fdb0
-struct cPlanetModel {
+class cGameNounManager { public: cSPCreatureBase* GetAvatar(); };   // 0xb1fdb0
+class cPlanetModel { public:
     float GetRadiusAt(const Vec3* p);                            // 0xb7ef70
     const Vec3* FUN_00b82b40(Vec3* out, const Vec3* p, int a);   // 0xb82b40 (surface snap)
 };
-struct cPosseSimulator {
+class cPosseSimulator { public:
     static cPosseSimulator* Instance();                          // 0xd539d0
     void* FUN_00d53b50(cSPCreatureBase* c, Vec3* outPos);         // 0xd53b50
 };

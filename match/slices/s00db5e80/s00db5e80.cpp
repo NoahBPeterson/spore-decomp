@@ -33,9 +33,9 @@ struct Loco {
     virtual const Vec3* GetPosition();                                 // +0x2c
 };
 
-struct cTribe;
+class cTribe;
 
-struct cSPCreatureCitizen {
+class cSPCreatureCitizen { public:
     char pad00[0xc0];
     Loco mLoco;                                                        // +0xc0
     char padc4[0x135 - 0xc4];
@@ -72,7 +72,7 @@ struct TribeMember {
 struct CitizenRange { cSPCreatureCitizen** mpBegin; cSPCreatureCitizen** mpEnd; };
 struct MemberRange  { TribeMember** mpBegin; TribeMember** mpEnd; };
 
-struct cTribe {
+class cTribe { public:
     PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a) PV(0b)
     PV(0c) PV(0d) PV(0e) PV(0f) PV(10) PV(11) PV(12)
     virtual int GetTribeId();                                          // +0x4c

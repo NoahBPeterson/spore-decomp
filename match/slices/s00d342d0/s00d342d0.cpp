@@ -222,7 +222,7 @@ struct cGameDataPtr {
     }
 };
 
-struct cTribe { uint32_t pad[0x60c / 4]; int mToolCount; };   // 0x60c
+class cTribe { public: uint32_t pad[0x60c / 4]; int mToolCount; };   // 0x60c
 
 class cCreatureAnimal : public cGameData {
 public:
@@ -278,7 +278,7 @@ public:
 };
 cApp* App();                            // 0x0067dd10
 
-class cMWModel;
+struct cMWModel;
 class IModelWorld {
 public:
     PV16 PV16 PV16 PV16 PV16 PV8 PV2 PV
@@ -293,7 +293,7 @@ struct Transform {
     Matrix3 mRotation;          // 0x14
 };
 
-class cMWModel {
+struct cMWModel { private:
 public:
     IModelWorld* mpWorld;       // 0x00
     uint32_t mFlags;            // 0x04

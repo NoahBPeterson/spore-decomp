@@ -146,11 +146,11 @@ struct cCreatureAnimal {
   bool mbDead;                        // +0xb5e
 };
 
-struct cGameNounManager { cCreatureAnimal* GetAvatar(); };   // 0x00b1fdb0
-struct cGameInputManager {
+class cGameNounManager { public: cCreatureAnimal* GetAvatar(); };   // 0x00b1fdb0
+class cGameInputManager { public:
   bool IsKeyDown(int key) { return ((bool(__thiscall*)(void*, int))VFUNC(this, 0x18))(this, key); }
 };
-struct cConfigManager {
+class cConfigManager { public:
   void* GetProperty(uint32_t id) { return ((void*(__thiscall*)(void*, uint32_t))VFUNC(this, 0x30))(this, id); }
 };
 struct cWindowInfo {

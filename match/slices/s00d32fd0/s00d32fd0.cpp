@@ -22,7 +22,7 @@ const float kFloatMax = 3.4028234663852886e+38f;   // 0x147a5f0
 
 struct cAnimReq { int p[3]; int mC; int m10; };     // returned by PlayAnimation / Notify
 
-struct cSPTimer {
+class cSPTimer { public:
   bool IsRunning();   // 0x00feba90
   void Start();       // 0x00bc30f0
   uint32_t mData[8];
@@ -78,23 +78,23 @@ struct cObjC {   // object cast with id 0x18ebadc
   char m780[16];
 };
 
-struct cPlanet {
+class cPlanet { public:
   bool Has(void* p);    // 0x00c74400
   void Add(void* p);    // 0x00c74470
 };
-struct cPlanetModel { Vector3* Project(Vector3* out, const Vector3* pos); };   // 0x00b81630
+class cPlanetModel { public: Vector3* Project(Vector3* out, const Vector3* pos); };   // 0x00b81630
 
-struct cGameNounManager { cCreatureAnimal* GetAvatar(); };   // 0x00b1fdb0
+class cGameNounManager { public: cCreatureAnimal* GetAvatar(); };   // 0x00b1fdb0
 struct cTutorial { void Select(void* animal); };             // 0x00ba4f30
-struct cGameTimeManager { uint32_t pad[0x48 / 4]; uint32_t mFlags; };
-struct cCreatureModeStrategy {
+class cGameTimeManager { public: uint32_t pad[0x48 / 4]; uint32_t mFlags; };
+class cCreatureModeStrategy { public:
   static cCreatureModeStrategy* Instance();        // 0x00d38840
   void SignalCreatureEvent(uint32_t id);           // 0x00d3cdc0
 };
 struct cPickHelper { int Pick(cCreatureAnimal* who, void* target, char* outFlag); };   // 0x00f1a320
 struct cPickOwner { char pad[0x78]; cPickHelper* mpHelper; };
 struct cWinTextRef { void Assign(void* p); };      // 0x00b5f950
-struct cViewer {};
+class cViewer { public:};
 struct cRenderThing { cViewer* GetViewer() { return ((cViewer*(__thiscall*)(void*))VFUNC(this, 0x1c))(this); } };
 struct cAppObj { cRenderThing* GetRender() { return ((cRenderThing*(__thiscall*)(void*))VFUNC(this, 0x50))(this); } };
 

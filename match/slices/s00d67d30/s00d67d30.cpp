@@ -43,7 +43,7 @@ struct LocoState {
     const Vec3* GetGoal();                             // 0xc423c0
 };
 
-struct cLocomotiveObject {
+class cLocomotiveObject { public:
     const Vec3& GetVelocity();                         // 0xd20610
 };
 
@@ -101,7 +101,7 @@ struct Ability {
     float GetBound(bool b);                            // TuningObj::GetBound 0x4d3d70
 };
 
-struct cSPCreatureBase;
+class cSPCreatureBase;
 
 struct GroupMember { bool mActive; cSPCreatureBase* mpCreature; int m8; };
 
@@ -137,7 +137,7 @@ struct Herd {
     bool HasMembers() { return mList.next != &mList; }
 };
 
-struct cSPTimer { uint64_t GetElapsedTime(); };       // 0xbc3190
+class cSPTimer { public: uint64_t GetElapsedTime(); };       // 0xbc3190
 
 struct Sim { char pad[0x4c8]; bool mUseOtherTargeting; };     // FUN_00c04750 result
 
@@ -156,7 +156,7 @@ struct Tuning { char pad[0x58c]; float m58c; };
 
 struct AttackEntry { int m0; float mReadiness; int m8, mc; };
 
-struct cSPCreatureBase {
+class cSPCreatureBase { public:
     virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
     virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
     virtual uint32_t GetTypeId();                      // +0x20
@@ -270,7 +270,7 @@ struct FightMem {
 };
 
 struct PropertyList;
-struct cCreatureModeStrategy { char pad[0xb4]; PropertyList* mpProps; };
+class cCreatureModeStrategy { public: char pad[0xb4]; PropertyList* mpProps; };
 extern cCreatureModeStrategy* g_CreatureModeStrategy;  // 0x169e294
 float GetPropertyT_float(PropertyList* p, uint32_t hash, float def);  // SP::GetPropertyT<float> 0x4e1c70
 

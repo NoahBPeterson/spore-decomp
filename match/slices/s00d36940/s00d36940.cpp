@@ -25,7 +25,7 @@ __forceinline T* CharStringUninitializedCopy(const T* pSource, const T* pSourceE
   return pDestination + (pSourceEnd - pSource);
 }
 
-struct allocator {
+class allocator { public:
   allocator() {}
   void* allocate(size_t n, int flags = 0);            // EA operator new[]
   void deallocate(void* p, size_t) { operator delete[](p); }

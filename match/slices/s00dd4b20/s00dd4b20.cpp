@@ -67,10 +67,10 @@ struct IWindow {
     virtual IWindow* FindWindowByID(uint32_t id, bool recursive);  // slot 60 (+0xf0)
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     IWindow* FindWindowByID(uint32_t id, bool recursive);          // 0x008105b0
 };
-struct cSPUIGlobalUI {
+class cSPUIGlobalUI { public:
     IWindow* FindWindowByID(uint32_t id);                          // 0x00e012b0
 };
 struct cTutorialMgr { uint32_t pad[0x89]; cSPUIGlobalUI* mpGlobalUI; };   // +0x224

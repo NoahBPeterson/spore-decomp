@@ -41,7 +41,7 @@ struct ATTACK_memory_block {
 struct cLocomotionGoal { uint32_t pad[0x5c / 4]; int mState; };   // +0x5c
 
 #define PV(n) virtual void pv##n();
-struct cSpatialObject {
+class cSpatialObject { public:
     PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a)
     virtual const Vector3& GetPosition();                         // 0x2c
     PV(0c) PV(0d) PV(0e) PV(0f) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16)
@@ -50,18 +50,18 @@ struct cSpatialObject {
     virtual float GetFootprintRadius();                           // 0x74
 };
 
-struct cLocomotiveObject : cSpatialObject {
+class cLocomotiveObject : public cSpatialObject { public:
     const Vector3& GetVelocity();                                 // 0xd20610
     bool IsNearGoal();                                            // 0xc42e20
     cLocomotionGoal* GetGoal();                                   // 0xc41ec0
 };
 
-struct cCombatant {
+class cCombatant { public:
     PV(00) PV(01)
     virtual cSpatialObject* ToSpatialObject();                    // 0x08
 };
 
-struct cCreatureAbility {
+class cCreatureAbility { public:
     uint32_t pad00[2];
     int   mType;              // +0x08
     uint32_t pad0c[(0xa8 - 0xc) / 4];
@@ -75,9 +75,9 @@ struct BehaviorNode { uint32_t pad[3]; uint32_t mAttackIdx; };  // +0xc
 struct cBehaviorTree { BehaviorNode* PlayIdleAnimation(uint32_t mask, uint32_t b); };   // 0xbc96a0
 struct cBehaviorTreeData { uint32_t pad[2]; cBehaviorTree mTree; };                    // +8
 
-struct cSPTimer { uint64_t GetElapsedTime(); };                   // 0xbc3190
+class cSPTimer { public: uint64_t GetElapsedTime(); };                   // 0xbc3190
 
-struct cSPCreatureBase {
+class cSPCreatureBase { public:
     PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a) PV(0b) PV(0c) PV(0d) PV(0e)
     PV(0f) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19) PV(1a) PV(1b) PV(1c) PV(1d)
     PV(1e) PV(1f) PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28) PV(29) PV(2a) PV(2b) PV(2c)
@@ -109,7 +109,7 @@ struct cSPCreatureBase {
 };
 #undef PV
 
-struct cPlanetModel { Vector3* FUN_00b81630(Vector3* out, const Vector3* p); };   // 0xb81630
+class cPlanetModel { public: Vector3* FUN_00b81630(Vector3* out, const Vector3* p); };   // 0xb81630
 cPlanetModel* PlanetModel();                                      // 0xb3d350
 
 void* FUN_00d99470(cSPCreatureBase* c);                           // 0xd99470

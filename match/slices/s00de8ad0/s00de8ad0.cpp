@@ -62,7 +62,7 @@ public:
     virtual void SetEnabled(bool a, bool b);                              // 7c
 };
 
-struct cSPUIGlobalUI {
+class cSPUIGlobalUI { public:
     IWindow* FindWindowByID(uint32_t id);                                 // 0x00e012b0
     void SetVisibility(bool visible);                                     // 0x00e01350
 };

@@ -56,7 +56,7 @@ inline Transform::Transform(InlineInit)
 cSPMatrix3 RotationFromTo(const cSPVector3& from, const cSPVector3& to);   // 0x0069b1c0
 
 namespace EA { namespace Random {
-struct RandomLinearCongruential {
+class RandomLinearCongruential { public:
     uint32_t RandomUint32Uniform(uint32_t limit);   // 0x00a68fb0
 };
 }}

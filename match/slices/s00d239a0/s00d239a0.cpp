@@ -27,7 +27,7 @@ __declspec(align(16)) struct Tmp { float f[4]; };
 #define TV(t) ((Vector3*)&(t))
 #define TQ(t) ((Quat*)&(t))
 
-struct cLocomotiveObject {
+class cLocomotiveObject { public:
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual void v20(); virtual void v24(); virtual void v28();
@@ -43,12 +43,12 @@ struct cCreatureAnimal {
     char padc4[0xb5e - 0xc4];
     bool mbDead;                                   // +0xb5e
 };
-struct cGameNounManager { cCreatureAnimal* GetAvatar(); };   // 0x00b1fdb0
-struct cGameInputManager {
+class cGameNounManager { public: cCreatureAnimal* GetAvatar(); };   // 0x00b1fdb0
+class cGameInputManager { public:
     bool IsKeyDown(int key) { return ((bool(__thiscall*)(void*, int))VFUNC(this, 0x18))(this, key); }
 };
 
-struct cCreatureModeInputStrategy {
+class cCreatureModeInputStrategy { public:
     bool UpdateAvatarGoal(bool a, bool b);         // 0x00d31a70
     char pad0[0x54];
     bool mbEnabled;                                // +0x54
@@ -57,7 +57,7 @@ template<class T> struct Ref {
     T* mp;
     T* get() const { return mp; }
 };
-struct cCreatureModeStrategy {
+class cCreatureModeStrategy { public:
     static cCreatureModeStrategy* Instance();      // 0x00d38840
     char pad0[0x64];
     Ref<cCreatureModeInputStrategy> mpInput;       // +0x64
