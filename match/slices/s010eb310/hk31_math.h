@@ -30,8 +30,8 @@ private:
 };
 
 // hkMemory::s_instance is the global at 0x016E4178 (slot 4 = allocateChunk, slot 5 = deallocateChunk).
-struct hkMemory
-{
+class hkMemory
+{ public:
 	virtual void* allocate(int nbytes, int cl);
 	virtual void deallocate(void* p);
 	virtual void* alignedAllocate(int alignment, int nbytes, int cl);
@@ -64,24 +64,24 @@ typedef uint16_t hkContactPointId;
 // HK_REAL_MAX in this build is 3.40282e+38f == 0x7f7fffee (NOT FLT_MAX).
 #define HK_REAL_MAX 3.40282e+38f
 
-struct hkRotation;
-struct hkTransform;
-struct hkVector4
-{
+class hkRotation;
+class hkTransform;
+class hkVector4
+{ public:
 	float x, y, z, w;
 	void setTransformedInversePos(const hkTransform& t, const hkVector4& v);   // 0x010813D0
 	void setRotatedInverseDir(const hkRotation& r, const hkVector4& v);        // 0x01081440
 	void setRotatedDir(const hkRotation& r, const hkVector4& v);               // 0x010814A0
 };
 
-struct hkTransform
-{
+class hkTransform
+{ public:
 	hkVector4 m_rot[3];   // columns of the rotation (x,y,z; w unused)
 	hkVector4 m_trans;
 };
 
-struct hkAabb
-{
+class hkAabb
+{ public:
 	hkVector4 m_min;
 	hkVector4 m_max;
 };
@@ -104,17 +104,17 @@ struct hkMotionState   // size 0xb0 (dev PDB)
 	hkMotionState& operator=(const hkMotionState&);   // 0x010DF5D0
 };
 
-struct hkContactPoint
-{
+class hkContactPoint
+{ public:
 	hkVector4 m_position;
 	hkVector4 m_separatingNormal;   // w = distance
 	void setFlipped(const hkContactPoint& other);                                        // 0x010CECF0
 	void setSeparatingNormal(const hkVector4& normal, hkReal dist);                      // 0x010D0040
 };
 
-struct hkShape;
-struct hkCdBody
-{
+class hkShape;
+class hkCdBody
+{ public:
 	const hkShape* m_shape;        // +0
 	hkShapeKey m_shapeKey;         // +4
 	const void* m_motion;          // +8 (hkMotionState* / hkTransform*)
@@ -126,18 +126,18 @@ struct hkCdPoint
 	const hkCdBody* m_cdBodyA;     // +0x20
 	const hkCdBody* m_cdBodyB;     // +0x24
 };
-struct hkCdVertex { float x, y, z; union { float w; uint32_t wBits; }; };
-struct hkSphere { hkVector4 m_pos; };
+class hkCdVertex { public: float x, y, z; union { float w; uint32_t wBits; }; };
+class hkSphere { public: hkVector4 m_pos; };
 
-struct hkCdPointCollector
-{
+class hkCdPointCollector
+{ public:
 	virtual ~hkCdPointCollector() {}                     // 0
 	virtual void addCdPoint(const hkCdPoint& p) = 0;     // 1
 	hkReal m_earlyOutDistance;                           // +4
 	hkCdPointCollector() : m_earlyOutDistance(HK_REAL_MAX) {}
 };
-struct hkCdBodyPairCollector
-{
+class hkCdBodyPairCollector
+{ public:
 	virtual ~hkCdBodyPairCollector() {}                                       // 0
 	virtual void addCdBodyPair(const hkCdBody& a, const hkCdBody& b) = 0;     // 1
 	hkBool m_earlyOut;                                                        // +4
@@ -175,9 +175,9 @@ struct hkShapeRayCastOutput
 	hkReal m_hitFraction;    // +0x14
 	hkShapeRayCastOutput() : m_hitFraction(1.0f) {}
 };
-struct hkShapeCollection;
-struct hkRayShapeCollectionFilter
-{
+class hkShapeCollection;
+class hkRayShapeCollectionFilter
+{ public:
 	virtual hkBool isCollisionEnabled(const hkShapeRayCastInput& input, const hkShapeCollection& collection, hkShapeKey key) const = 0;   // 0
 };
 struct hkShapeRayCastInput
@@ -189,8 +189,7 @@ struct hkShapeRayCastInput
 };
 struct hkCollisionSpheresInfo { int m_numSpheres; hkBool m_useBuffer; };
 
-struct hkShape : hkReferencedObject
-{
+class hkShape : public hkReferencedObject { public:
 	hkUint32 m_userData;   // +8
 	hkShape() : m_userData(0) {}
 	virtual int getType() const;                                                                                  // 2
@@ -199,8 +198,7 @@ struct hkShape : hkReferencedObject
 	virtual hkBool castRay(const hkShapeRayCastInput& input, hkShapeRayCastOutput& output) const = 0;             // 5
 	virtual void castRayWithCollector(const hkShapeRayCastInput& input, const hkCdBody& body, void* collector) const; // 6
 };
-struct hkConvexShape : hkShape
-{
+class hkConvexShape : public hkShape { public:
 	hkReal m_radius;   // +0xc
 	explicit hkConvexShape(hkReal radius) : m_radius(radius) {}
 	virtual void getCollisionSpheresInfo(hkCollisionSpheresInfo& info) const = 0;                                 // 7
@@ -210,8 +208,7 @@ struct hkConvexShape : hkShape
 	virtual void getFirstVertex(hkVector4& v) const = 0;                                                          // 11
 };
 #define HK_SHAPE_BUFFER_SIZE 512
-struct hkShapeCollection : hkShape
-{
+class hkShapeCollection : public hkShape { public:
 	virtual void sc7(); virtual void sc8(); virtual void sc9();                                                   // 7..9
 	virtual const hkShape* getChildShape(hkShapeKey key, void* buffer) const;                                     // 10 (0x28)
 };
@@ -219,8 +216,8 @@ struct hkShapeCollection : hkShape
 // ---- arrays: layout shared by every hkArray<T> (data, size, capacity | flags) -----------------------------------
 struct hkArrayUtil { static void _reserveMore(void* array, int elemSize); };   // 0x0107F530
 template <class T>
-struct hkArray
-{
+class hkArray
+{ public:
 	enum { CAPACITY_MASK = 0x3FFFFFFF, DONT_DEALLOCATE_FLAG = (int)0x80000000 };
 	T* m_data;
 	int m_size;
@@ -235,8 +232,8 @@ struct hkArray
 };
 
 // ---- matrices / quaternions (hkMatrix3 = three hkVector4 columns, m_el[col*4 + row]; the 4th row is written as 0) ---
-struct hkMatrix3
-{
+class hkMatrix3
+{ public:
 	float m_el[12];
 	void transpose();                                                    // 0x01081520
 	hkBool isApproximatelyEqual(const hkMatrix3& m, hkReal eps) const;   // 0x010815A0
@@ -250,13 +247,12 @@ struct hkMatrix3
 	void mul(const hkMatrix3& m);                                        // 0x010820B0
 	void changeBasis(const hkRotation& r);                               // 0x01082130
 };
-struct hkRotation : hkMatrix3
-{
+class hkRotation : public hkMatrix3 { public:
 	void setTranspose(const hkRotation& r);                              // 0x01081550
 	void setMulInverse(const hkMatrix3& a, const hkRotation& b);         // 0x01081F20
 };
-struct hkQuaternion
-{
+class hkQuaternion
+{ public:
 	float m_vec[4];   // x y z w
 	void normalize();                                                    // 0x010821A0 (name guessed from the arithmetic)
 	void setMul(const hkQuaternion& a, const hkQuaternion& b);           // 0x01082210
@@ -269,7 +265,7 @@ struct hkCollisionAgent;
 struct hkShapeCollectionFilter;
 struct hkProcessCollisionInput;
 struct hkProcessCollisionOutput;
-struct hkCollisionDispatcher;
+class hkCollisionDispatcher;
 struct hkCollisionInput
 {
 	hkCollisionDispatcher* m_dispatcher;         // +0
@@ -309,8 +305,8 @@ struct hkAgent2Func
 	hkAgent2LinearCastFunc m_linearCastFunc;               // +0xc
 	void* m_flags;                                         // +0x10
 };
-struct hkCollisionDispatcher
-{
+class hkCollisionDispatcher
+{ public:
 	// 32-bit layout assumption: the byte tables sit at fixed offsets (0x190, 0x590) and the function table at 0x990.
 	char m_pad0[0x190];
 	uint8_t m_agent2TypesDiscrete[32][32];                 // +0x190 [shapeTypeA][shapeTypeB] -> agent type
@@ -323,8 +319,8 @@ struct hkCollisionDispatcher
 // ---- hkThreadMemory (per-thread allocator; TLS slot 0x016E4174) -------------------------------------------------------
 enum { HK_MEMORY_CLASS_ARRAY_T = 0x14, HK_MEMORY_CLASS_PHANTOM_T = 0x2e };
 extern unsigned long g_hkThreadMemoryTlsIndex;   // 0x016E4174
-struct hkThreadMemory
-{
+class hkThreadMemory
+{ public:
 	virtual void tm0(); virtual void tm1(); virtual void tm2();
 	virtual void* allocateStackChunk(int nbytes);       // 3 (0xc)
 	virtual void releaseStackChunk(void* p);            // 4 (0x10)

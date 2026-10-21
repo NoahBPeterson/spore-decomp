@@ -5,17 +5,17 @@
 // ---------------------------------------------------------------------------------------------------
 // flip helpers (hkSymmetricAgent*)
 // ---------------------------------------------------------------------------------------------------
-struct hkSymmetricAgentFlipCollector : hkCdPointCollector {            // vtable 0x014a43a4
+class hkSymmetricAgentFlipCollector : public hkCdPointCollector { public:            // vtable 0x014a43a4
     hkCdPointCollector& m_original;                                     // +8
     hkSymmetricAgentFlipCollector(hkCdPointCollector& c) : m_original(c) { m_earlyOutDistance = HK_REAL_MAX; }
     virtual void addCdPoint(const hkCdPoint& point);
 };
-struct hkSymmetricAgentFlipBodyCollector : hkCdBodyPairCollector {     // vtable 0x014a43b4
+class hkSymmetricAgentFlipBodyCollector : public hkCdBodyPairCollector { public:     // vtable 0x014a43b4
     hkCdBodyPairCollector& m_original;                                  // +8
     hkSymmetricAgentFlipBodyCollector(hkCdBodyPairCollector& c) : m_original(c) { m_earlyOut = 0; }
     virtual void addCdBodyPair(const hkCdBody& a, const hkCdBody& b);
 };
-struct hkSymmetricAgentFlipCastCollector : hkCdPointCollector {        // vtable 0x014a43ac
+class hkSymmetricAgentFlipCastCollector : public hkCdPointCollector { public:        // vtable 0x014a43ac
     uint32_t m_pad[2];
     hkVector4 m_path;                                                   // +0x10
     hkCdPointCollector* m_original;                                     // +0x20
@@ -26,7 +26,7 @@ struct hkSymmetricAgentFlipCastCollector : hkCdPointCollector {        // vtable
 // ---------------------------------------------------------------------------------------------------
 // Object with an hkArray at +0xc (scalar deleting destructor; vptr reset to the hkReferencedObject vtable 0x013ef094)
 // ---------------------------------------------------------------------------------------------------
-struct hkThreadMemory { void deallocateChunk(void* p, int nbytes, int memClass); };      // 0x0107db10
+class hkThreadMemory { public: void deallocateChunk(void* p, int nbytes, int memClass); };      // 0x0107db10
 extern unsigned long g_hkThreadMemoryTls;                                                // 0x016e4174
 struct hkReferencedObjectWithArray : hkReferencedObject {
     uint32_t m_pad8;                           // +8

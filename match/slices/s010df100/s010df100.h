@@ -11,17 +11,17 @@ typedef uint8_t hkBool;
 
 #define HK_REAL_MAX 3.40282e+38f     // 0x7f7fffee in this build
 
-struct hkVector4 { float x, y, z, w; };
-struct hkQuaternion {
+class hkVector4 { public: float x, y, z, w; };
+class hkQuaternion { public:
     hkVector4 m_vec;
     void setMul(const hkQuaternion& a, const hkQuaternion& b);               // this = a * b
 };
-struct hkTransform {
+class hkTransform { public:
     hkVector4 m_rot[3];                                                      // rows
     hkVector4 m_trans;
     void setMul(const hkTransform& a, const hkTransform& b);                 // this = a * b
 };
-struct hkContactPoint {
+class hkContactPoint { public:
     hkVector4 m_position;
     hkVector4 m_separatingNormal;                                            // w = distance
     void setFlipped(const hkContactPoint& other);
@@ -29,7 +29,7 @@ struct hkContactPoint {
 struct hkProcessCdPoint { hkContactPoint m_contact; uint32_t m_extra[4]; };  // 0x30 bytes
 
 // hkMotionState (0xb0 bytes): hkCdBody::m_motion points at one; its first member is the hkTransform.
-struct hkMotionState {
+class hkMotionState { public:
     hkTransform m_transform;                                                 // +0
     hkVector4 m_centerOfMass0;                                               // +0x40
     hkVector4 m_centerOfMass1;                                               // +0x50
@@ -42,14 +42,14 @@ struct hkMotionState {
     hkMotionState& operator=(const hkMotionState& other);                    // 0x010df5d0 (member-wise copy)
 };
 
-struct hkReferencedObject {
+class hkReferencedObject { public:
     virtual void* hkReferencedObject_deletingDtor(unsigned int flags);       // slot 0
     uint16_t m_memSizeAndFlags;
     int16_t  m_referenceCount;
 };
 
 // hkMemory::s_instance @0x016e4178
-struct hkMemory {
+class hkMemory { public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void* allocateChunk(int nbytes, int memClass);                   // slot 4
     virtual void deallocateChunk(void* p, int nbytes, int memClass);         // slot 5
@@ -64,9 +64,9 @@ enum { HK_MEMORY_CLASS_COLLIDE = 0x1c };
 
 // ---- shapes ---------------------------------------------------------------------------------------
 enum { HK_SHAPE_PHANTOM_CALLBACK = 0x1a };
-struct hkCdBody;
+class hkCdBody;
 struct hkCollisionInput;
-struct hkShape : hkReferencedObject {
+class hkShape : public hkReferencedObject { public:
     uint32_t m_userData;                                                     // +8
     virtual void sh1();
     virtual int getType() const;                                             // slot 2 (+8)
@@ -83,14 +83,14 @@ struct hkTransformShape : hkShape {
 };
 
 // ---- bodies / inputs / collectors -----------------------------------------------------------------------
-struct hkCdBody {
+class hkCdBody { public:
     const hkShape* m_shape;                    // +0
     uint32_t m_shapeKey;                       // +4
     const hkMotionState* m_motion;             // +8
     const hkCdBody* m_parent;                  // +0xc
 };
 struct hkContactMgr;
-struct hkCollisionDispatcher;
+class hkCollisionDispatcher;
 struct hkCollisionInput {
     hkCollisionDispatcher* m_dispatcher;       // +0
     uint32_t m_pad[2];
@@ -103,12 +103,12 @@ struct hkLinearCastCollisionInput : hkCollisionInput {
     uint32_t m_pad3[4];                        // total 0x30 bytes
 };
 struct hkCdPoint { hkContactPoint m_contact; const hkCdBody* m_cdBodyA; const hkCdBody* m_cdBodyB; };
-struct hkCdPointCollector {
+class hkCdPointCollector { public:
     virtual void v0();
     virtual void addCdPoint(const hkCdPoint& point);
     float m_earlyOutDistance;                  // +4
 };
-struct hkCdBodyPairCollector {
+class hkCdBodyPairCollector { public:
     virtual void v0();
     virtual void addCdBodyPair(const hkCdBody& a, const hkCdBody& b);       // slot 1 (+4)
     hkBool m_earlyOut;                         // +4
@@ -123,7 +123,7 @@ struct hkProcessCollisionOutput {
 };
 
 // ---- collision agents (vtable slots as used by the transform agent) ------------------------------------
-struct hkCollisionAgent : hkReferencedObject {
+class hkCollisionAgent : public hkReferencedObject { public:
     hkContactMgr* m_contactMgr;                // +8
     virtual void ag1();
     virtual void getPenetrations(const hkCdBody&, const hkCdBody&, const hkCollisionInput&, hkCdBodyPairCollector&);   // +8
@@ -146,7 +146,7 @@ struct hkAgentFuncs {                          // hkCollisionDispatcher::AgentFu
     hkBool m_isFlipped;                        // +0x10
     hkBool m_isPredictive;                     // +0x11
 };
-struct hkCollisionDispatcher {
+class hkCollisionDispatcher { public:
     uint8_t m_pad0[0x190];                     // (32-bit layout)
     uint8_t m_agent2Types[32][32];             // +0x190: [typeA][typeB] -> agent index (non predictive)
     uint8_t m_agent2TypesPredictive[32][32];   // +0x590

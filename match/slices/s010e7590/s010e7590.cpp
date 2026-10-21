@@ -40,8 +40,8 @@ enum hkShapeType
 
 // ---- contact points / collision inputs / collectors (copied from s010df100) ------------------------------------------
 typedef uint16_t hkContactPointId;
-struct hkContactPoint
-{
+class hkContactPoint
+{ public:
 	hkVector4 m_position;
 	hkVector4 m_separatingNormal;   // w = distance
 	void setFlipped(const hkContactPoint& other);   // 0x010CECF0
@@ -49,7 +49,7 @@ struct hkContactPoint
 struct hkProcessCdPoint { hkContactPoint m_contact; uint32_t m_extra[4]; };   // 0x30 bytes
 
 struct hkContactMgr;
-struct hkCollisionDispatcher;
+class hkCollisionDispatcher;
 struct hkCollisionInput
 {
 	hkCollisionDispatcher* m_dispatcher;       // +0
@@ -62,14 +62,14 @@ struct hkLinearCastCollisionInput : hkCollisionInput
 	uint32_t m_pad3[4];                        // total 0x30 bytes
 };
 struct hkCdPoint { hkContactPoint m_contact; const hkCdBody* m_cdBodyA; const hkCdBody* m_cdBodyB; };
-struct hkCdPointCollector
-{
+class hkCdPointCollector
+{ public:
 	virtual void v0();
 	virtual void addCdPoint(const hkCdPoint& point);
 	float m_earlyOutDistance;                  // +4
 };
-struct hkCdBodyPairCollector
-{
+class hkCdBodyPairCollector
+{ public:
 	virtual void v0();
 	virtual void addCdBodyPair(const hkCdBody& a, const hkCdBody& b);   // slot 1 (+4)
 	char m_earlyOut;                           // +4
@@ -92,20 +92,17 @@ struct hkFlagCdBodyPairCollector : hkCdBodyPairCollector
 };
 
 // Flip helpers (hkSymmetricAgent): vtables 0x014a43a4 / 0x014a43b4 / 0x014a43ac.
-struct hkSymmetricAgentFlipCollector : hkCdPointCollector
-{
+class hkSymmetricAgentFlipCollector : public hkCdPointCollector { public:
 	hkCdPointCollector& m_original;                                       // +8
 	hkSymmetricAgentFlipCollector(hkCdPointCollector& c) : m_original(c) { m_earlyOutDistance = HK_REAL_MAX; }
 	virtual void addCdPoint(const hkCdPoint& point);                       // 0x010EBBB0
 };
-struct hkSymmetricAgentFlipBodyCollector : hkCdBodyPairCollector
-{
+class hkSymmetricAgentFlipBodyCollector : public hkCdBodyPairCollector { public:
 	hkCdBodyPairCollector& m_original;                                    // +8
 	hkSymmetricAgentFlipBodyCollector(hkCdBodyPairCollector& c) : m_original(c) { m_earlyOut = 0; }
 	virtual void addCdBodyPair(const hkCdBody& a, const hkCdBody& b);      // 0x010EBC50
 };
-struct hkSymmetricAgentFlipCastCollector : hkCdPointCollector
-{
+class hkSymmetricAgentFlipCastCollector : public hkCdPointCollector { public:
 	uint32_t m_pad[2];
 	hkVector4 m_path;                                                     // +0x10
 	hkCdPointCollector* m_original;                                       // +0x20
@@ -114,7 +111,7 @@ struct hkSymmetricAgentFlipCastCollector : hkCdPointCollector
 };
 
 // ---- collision dispatcher (only what the static agent functions touch; 32-bit offsets) -------------------------------
-struct hkCollisionAgent;
+class hkCollisionAgent;
 typedef hkCollisionAgent* (__cdecl *hkAgentCreateFunc)(const hkCdBody&, const hkCdBody&, const hkCollisionInput&, hkContactMgr*);
 typedef void (__cdecl *hkAgentGetPenetrationsFunc)(const hkCdBody&, const hkCdBody&, const hkCollisionInput&, hkCdBodyPairCollector&);
 typedef void (__cdecl *hkAgentGetClosestPointsFunc)(const hkCdBody&, const hkCdBody&, const hkCollisionInput&, hkCdPointCollector&);
@@ -128,8 +125,8 @@ struct hkAgentFuncs   // hkCollisionDispatcher::AgentFuncs, 0x14 bytes in the 32
 	char m_isFlipped;                                       // +0x10
 	char m_isPredictive;                                    // +0x11
 };
-struct hkCollisionDispatcher
-{
+class hkCollisionDispatcher
+{ public:
 	char m_pad0[0x190];
 	uint8_t m_agent2Types[32][32];             // +0x190: [typeA][typeB] -> agent index
 	uint8_t m_agent2TypesPredictive[32][32];   // +0x590
@@ -138,8 +135,7 @@ struct hkCollisionDispatcher
 };
 
 // ---- collision agents ------------------------------------------------------------------------------------------------
-struct hkCollisionAgent : hkReferencedObject
-{
+class hkCollisionAgent : public hkReferencedObject { public:
 	hkContactMgr* m_contactMgr;                // +8
 	virtual void getPenetrations(const hkCdBody&, const hkCdBody&, const hkCollisionInput&, hkCdBodyPairCollector&);                                  // 2 (+8)
 	virtual void getClosestPoints(const hkCdBody&, const hkCdBody&, const hkCollisionInput&, hkCdPointCollector&);                                    // 3
@@ -189,15 +185,14 @@ __declspec(align(16)) struct hkShapeBuffer { uint32_t m_storage[128]; };
 struct __attribute__((aligned(16))) hkShapeBuffer { uint32_t m_storage[128]; };
 #endif
 
-struct hkShapeCollection;
+class hkShapeCollection;
 // Ray filter: slot 0 isCollisionEnabled returns hkBool through a hidden pointer (hkBool is non-POD here).
-struct hkRayShapeCollectionFilter
-{
+class hkRayShapeCollectionFilter
+{ public:
 	virtual hkBool isCollisionEnabled(const hkShapeRayCastInput& input, const hkShapeCollection& collection, hkShapeKey key) const = 0;
 };
 
-struct hkShapeCollection : hkShape
-{
+class hkShapeCollection : public hkShape { public:
 	char m_disableWelding;                     // +0xc
 	hkShapeCollection();                       // 0x010E7FD0
 	virtual void calcStatistics(hkStatisticsCollector* c) const;                                                   // 1, 0x010E7FB0
@@ -213,8 +208,7 @@ struct hkShapeCollection : hkShape
 	virtual const hkShape* getChildShape(hkShapeKey key, hkShapeBuffer& buffer) const = 0;                         // 10 (pure)
 };
 
-struct hkBvTreeShape : hkShape
-{
+class hkBvTreeShape : public hkShape { public:
 	const hkShapeCollection* m_child;          // +0xc
 	virtual void calcStatistics(hkStatisticsCollector* c) const;                                                   // 1, 0x010E8630
 };
@@ -353,7 +347,7 @@ hkCollisionAgent* hkBvAgent::createShapeBvAgent(const hkCdBody& A, const hkCdBod
 }
 
 // @ 0x010e7d70  (name from the 6.x hkAgentRegisterUtil; a cdecl function taking the dispatcher)
-struct hkAgentRegisterUtil { static void registerAlternateShapeTypes(hkCollisionDispatcher* dispatcher); };
+class hkAgentRegisterUtil { public: static void registerAlternateShapeTypes(hkCollisionDispatcher* dispatcher); };
 void hkAgentRegisterUtil::registerAlternateShapeTypes(hkCollisionDispatcher* dispatcher)
 {
 	dispatcher->registerAlternateShapeType(HK_SHAPE_SPHERE, HK_SHAPE_CONVEX);

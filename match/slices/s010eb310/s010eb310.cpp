@@ -5,8 +5,7 @@
 
 // ---- external declarations --------------------------------------------------------------------------------
 // The agent object a bridge entry points at. Slots from the binary (0x14..0x30 = 5..12).
-struct hkCollisionAgent : hkReferencedObject
-{
+class hkCollisionAgent : public hkReferencedObject { public:
 	hkContactMgr* m_contactMgr;   // +8
 	virtual void s2(); virtual void s3(); virtual void s4();
 	virtual void processCollision(const hkCdBody& a, const hkCdBody& b, const hkProcessCollisionInput& input, hkProcessCollisionOutput& out);   // 5
@@ -368,19 +367,16 @@ void hkAgent3Bridge::registerBridgeAgent3(hkCollisionDispatcher* dispatcher)
 }
 
 // ---- hkSymmetricAgent flip collectors --------------------------------------------------------------------------
-struct hkSymmetricAgentFlipCollector : hkCdPointCollector
-{
+class hkSymmetricAgentFlipCollector : public hkCdPointCollector { public:
 	hkCdPointCollector* m_collector;   // +8
 	virtual void addCdPoint(const hkCdPoint& point);
 };
-struct hkSymmetricAgentFlipCastCollector : hkCdPointCollector
-{
+class hkSymmetricAgentFlipCastCollector : public hkCdPointCollector { public:
 	uint32_t m_pad8[6];                // +8..+0x1f
 	hkCdPointCollector* m_collector;   // +0x20
 	virtual void addCdPoint(const hkCdPoint& point);
 };
-struct hkSymmetricAgentFlipBodyCollector : hkCdBodyPairCollector
-{
+class hkSymmetricAgentFlipBodyCollector : public hkCdBodyPairCollector { public:
 	hkCdBodyPairCollector* m_collector;   // +8
 	virtual void addCdBodyPair(const hkCdBody& a, const hkCdBody& b);
 };

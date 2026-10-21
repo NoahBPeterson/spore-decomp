@@ -5,17 +5,17 @@
 // ---------------------------------------------------------------------------------------------------
 // hkSymmetric* flip helpers (collectors that swap bodies back / negate the path)
 // ---------------------------------------------------------------------------------------------------
-struct hkSymmetricAgentFlipCollector : hkCdPointCollector {            // vtable 0x014a43a4
+class hkSymmetricAgentFlipCollector : public hkCdPointCollector { public:            // vtable 0x014a43a4
     hkCdPointCollector& m_original;                                     // +8
     hkSymmetricAgentFlipCollector(hkCdPointCollector& c) : m_original(c) { m_earlyOutDistance = HK_REAL_MAX; }
     virtual void addCdPoint(const hkCdPoint& point);
 };
-struct hkSymmetricAgentFlipBodyCollector : hkCdBodyPairCollector {     // vtable 0x014a43b4
+class hkSymmetricAgentFlipBodyCollector : public hkCdBodyPairCollector { public:     // vtable 0x014a43b4
     hkCdBodyPairCollector& m_original;                                  // +8
     hkSymmetricAgentFlipBodyCollector(hkCdBodyPairCollector& c) : m_original(c) { m_earlyOut = 0; }
     virtual void addCdBodyPair(const hkCdBody& a, const hkCdBody& b);
 };
-struct hkSymmetricAgentFlipCastCollector : hkCdPointCollector {        // vtable 0x014a43ac
+class hkSymmetricAgentFlipCastCollector : public hkCdPointCollector { public:        // vtable 0x014a43ac
     uint32_t m_pad[2];
     hkVector4 m_path;                                                   // +0x10
     hkCdPointCollector* m_original;                                     // +0x20
@@ -202,7 +202,7 @@ void hkProcessCollisionOutputBackup::restore(hkProcessCollisionOutput& out)
 // ---------------------------------------------------------------------------------------------------
 // hkConvexListAgent
 // ---------------------------------------------------------------------------------------------------
-struct hkClosestCdPointCollector : hkCdPointCollector {                // vtable 0x013ef52c
+class hkClosestCdPointCollector : public hkCdPointCollector { public:                // vtable 0x013ef52c
     uint32_t m_pad[2];
     hkContactPoint m_hitContact;                                        // +0x10 (distance = w @ +0x2c)
     const hkCdBody* m_hitRootA;                                         // +0x30 (null: no hit)

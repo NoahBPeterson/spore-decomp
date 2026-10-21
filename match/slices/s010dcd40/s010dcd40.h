@@ -15,14 +15,14 @@ typedef uint8_t hkBool;
 // HK_REAL_MAX in this build: 3.40282e+38f == 0x7f7fffee (NOT FLT_MAX).
 #define HK_REAL_MAX 3.40282e+38f
 
-struct hkVector4 { float x, y, z, w; };
-struct hkTransform {
+class hkVector4 { public: float x, y, z, w; };
+class hkTransform { public:
     hkVector4 m_rot[3];
     hkVector4 m_trans;
     void setMulInverseMul(const hkTransform& a, const hkTransform& b);   // this = inverse(a) * b
 };
 // hkContactPoint: position (0x00), separating normal xyz + distance w (0x10)
-struct hkContactPoint {
+class hkContactPoint { public:
     hkVector4 m_position;
     hkVector4 m_separatingNormal;   // w = distance
     void setFlipped(const hkContactPoint& other);
@@ -30,14 +30,14 @@ struct hkContactPoint {
 struct hkProcessCdPoint { hkContactPoint m_contact; uint32_t m_extra[4]; };   // 0x30 bytes
 
 // ---- reference counted base --------------------------------------------------------------------
-struct hkReferencedObject {
+class hkReferencedObject { public:
     virtual void* hkReferencedObject_deletingDtor(unsigned int flags);   // vtable slot 0 (scalar deleting destructor)
     uint16_t m_memSizeAndFlags;
     int16_t  m_referenceCount;
 };
 
 // ---- memory manager (hkMemory::s_instance @ 0x016e4178, allocateChunk = vtable slot 4) ---------------
-struct hkMemory {
+class hkMemory { public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void* allocateChunk(int nbytes, int memClass);
     static hkMemory* s_instance;
@@ -51,16 +51,16 @@ enum { HK_MEMORY_CLASS_COLLIDE = 0x1c };
     void operator delete(void*) {}
 
 // ---- shapes ---------------------------------------------------------------------------------------
-struct hkCdVertex { float x, y, z; union { float w; uint32_t wBits; }; };
-struct hkSphere { hkVector4 m_pos; };                                          // 16 bytes
+class hkCdVertex { public: float x, y, z; union { float w; uint32_t wBits; }; };
+class hkSphere { public: hkVector4 m_pos; };                                          // 16 bytes
 struct hkCollisionSpheresInfo { int m_numSpheres; hkBool m_useBuffer; };      // hkSphereRepShape::hkCollisionSpheresInfo
 
-struct hkShape : hkReferencedObject {
+class hkShape : public hkReferencedObject { public:
     uint32_t m_userData;                       // +8
 };
 // vtable slots: 0 dtor .. 6 placeholders; 7 getCollisionSpheresInfo; 8 getCollisionSpheres;
 // hkConvexShape: 9 getSupportingVertex; 10 convertVertexIdsToVertices; 11 getFirstVertex
-struct hkConvexShape : hkShape {
+class hkConvexShape : public hkShape { public:
     float m_radius;                            // +0xc
     virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5(); virtual void s6();
     virtual void getCollisionSpheresInfo(hkCollisionSpheresInfo& info) const;
@@ -96,7 +96,7 @@ inline hkConvexListConvexShape::hkConvexListConvexShape(const hkConvexListShape&
 }
 
 // ---- bodies / inputs / collectors -------------------------------------------------------------------
-struct hkCdBody {
+class hkCdBody { public:
     const hkShape* m_shape;                    // +0
     uint32_t m_shapeKey;                       // +4
     const hkTransform* m_motion;               // +8
@@ -115,12 +115,12 @@ struct hkLinearCastCollisionInput : hkCollisionInput {
 
 struct hkCdPoint { hkContactPoint m_contact; const hkCdBody* m_cdBodyA; const hkCdBody* m_cdBodyB; };
 
-struct hkCdPointCollector {
+class hkCdPointCollector { public:
     virtual void hkCdPointCollector_v0();
     virtual void addCdPoint(const hkCdPoint& point);
     float m_earlyOutDistance;                  // +4
 };
-struct hkCdBodyPairCollector {
+class hkCdBodyPairCollector { public:
     virtual void hkCdBodyPairCollector_v0();
     virtual void addCdBodyPair(const hkCdBody& a, const hkCdBody& b);
     hkBool m_earlyOut;                         // +4
@@ -177,7 +177,7 @@ struct hkGskManifold {
     uint8_t m_padding[32];
 };
 
-struct hkCollisionAgent : hkReferencedObject {
+class hkCollisionAgent : public hkReferencedObject { public:
     hkContactMgr* m_contactMgr;                // +8
     virtual void processCollision(const hkCdBody&, const hkCdBody&, const hkProcessCollisionInput&, hkProcessCollisionOutput&);
     virtual void a1(); virtual void a2(); virtual void a3(); virtual void a4(); virtual void a5(); virtual void a6();
