@@ -146,7 +146,7 @@ struct BinderVec {
 };
 
 // EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState
-struct XmlReaderState {
+class XmlReaderState { public:
     // 0x99a920
     void Allocate(void* param_2, void* param_3);
     // 0x99a940

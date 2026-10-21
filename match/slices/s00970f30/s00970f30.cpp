@@ -184,12 +184,12 @@ struct DropShadowDescriptor {
                       unsigned color, unsigned short ch, char flag); // 0x0096e740
 };
 
-struct WinGrid;
+class WinGrid;
 
 // ---------------------------------------------------------------------------
 // IWinGrid - the grid sub-object embedded at WinGrid+0x20c
 // ---------------------------------------------------------------------------
-struct IWinGrid {
+class IWinGrid { public:
     struct SelNode {
         SelNode* mpNext;                                      // +0x00
         SelNode* mpPrev;                                      // +0x04
@@ -291,7 +291,7 @@ struct IWinGrid {
 // ---------------------------------------------------------------------------
 // WinGrid - the owning window (primary vtable at +0, IWindow vtable at +4)
 // ---------------------------------------------------------------------------
-struct WinGrid : Win, Window {
+class WinGrid : public Win, public Window { public:
     char _pad008[0x88 - 0x08];                        // +0x008
     RectF mArea;                                      // +0x088
     char _pad098[0x20c - 0x098];                      // +0x098

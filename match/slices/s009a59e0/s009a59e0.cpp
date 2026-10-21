@@ -12,7 +12,7 @@
 #define AT(T, p, off) (*(T*)((char*)(p) + (off)))
 
 namespace EA {
-template <typename T> struct RectT {
+template <typename T> class RectT { public:
     T mLeft, mTop, mRight, mBottom;
     RectT& operator=(const RectT& o);                 // 0x00572600
     void RotA(float c, float s);                      // 0x009a4c70 (thiscall, ret 8)

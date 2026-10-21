@@ -13,13 +13,13 @@
 0098f7d0  ?Shutdown@WinTreeView@UTFWinControls@EA@@QAEXXZ
 0098f850  ?SetDefaultIconDrawable@WinTreeView@UTFWinControls@EA@@QAEXPAX@Z
 0098f8b0  ?SetExpanderDrawable@WinTreeView@UTFWinControls@EA@@QAEXPAX@Z
-0098f950  ?FUN_0098f950@UTFWinControls@EA@@YIXPAX00PAUTreeNode@12@PAM@Z
+0098f950  ?FUN_0098f950@UTFWinControls@EA@@YIXPAX00PAVTreeNode@12@PAM@Z
 0098fab0  ?DoMessage@WinTreeView@UTFWinControls@EA@@QAEHPAX@Z
 0098fb80  ?GetScrollbarDrawable@WinTreeView@UTFWinControls@EA@@QAEPAXH@Z
 0098fba0  ?IsScrollbarVisible@WinTreeView@UTFWinControls@EA@@QAEHH@Z
 0098fbe0  ?CalculateVisibleArea@WinTreeView@UTFWinControls@EA@@QAEXXZ
-0098fd20  ?FUN_0098fd20@UTFWinControls@EA@@YIXPAUWinTreeView@12@PAX@Z
+0098fd20  ?FUN_0098fd20@UTFWinControls@EA@@YIXPAVWinTreeView@12@PAX@Z
 00990040  ?InnerChildRemoveAllRecursive@TreeNode@UTFWinControls@EA@@QAEXXZ
 009900b0  ?CreateRenderables@TreeExpanderDrawable@UTFWinControls@EA@@QAGXPAXPAM0@Z
-00990350  ?FUN_00990350@UTFWinControls@EA@@YAXPAUWinTreeView@12@@Z
+00990350  ?FUN_00990350@UTFWinControls@EA@@YAXPAVWinTreeView@12@@Z
 009903a0  ?Write@TreeNodeListMarshaller@UTFWinControls@EA@@SADPAX000@Z

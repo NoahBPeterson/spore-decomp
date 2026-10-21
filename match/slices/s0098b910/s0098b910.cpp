@@ -20,8 +20,8 @@ void operator_delete__(void* p);                                                
 
 namespace EA { namespace UTFWinControls {
 
-struct WinTextEdit;
-struct IWinTextEdit;
+class WinTextEdit;
+class IWinTextEdit;
 
 // ---------------------------------------------------------------- shared helpers
 
@@ -173,7 +173,7 @@ wchar_t g_EmptyString16[2];                          // 0x1667BAC
 //   +0x520         vertical-alignment mode
 //   +0x530         mUndoList deque (0x2c bytes)
 //   +0x55c         mRedoList deque (0x2c bytes)
-struct WinTextEdit {
+class WinTextEdit { public:
     uint8_t  w00[0x0b0];
     wchar_t* textBegin;                         // +0x0b0
     wchar_t* textEnd;                           // +0x0b4
@@ -239,7 +239,7 @@ struct WinTextEdit {
     WinTextEdit();                                                  // 0098C110
 };
 
-struct IWinTextEdit {
+class IWinTextEdit { public:
     uint8_t  i00[0x20c];
     uint32_t flags;                             // +0x20c == window+0x214
     uint32_t dirty;                             // +0x210 == window+0x218

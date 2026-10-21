@@ -61,10 +61,10 @@ struct WindowBase {
 #define WND(self) ((WindowBase*)(self))
 
 // ---------------------------------------------------------------- tree-view layout
-struct TreeNode;
-struct WinTreeView;
+class TreeNode;
+class WinTreeView;
 
-struct TreeNode {                                   // vptr + 2 words = 0x0c
+class TreeNode { public:                                   // vptr + 2 words = 0x0c
     void* vt;                                       // +0x00
     void* pLists;                                   // +0x04
     TreeNode* mpNextSibling;                        // +0x08
@@ -88,7 +88,7 @@ struct ScrollbarState {
     float   mF10;                                    // +0x10
 };
 
-struct WinTreeView {
+class WinTreeView { public:
     void*    vtPrimary;                              // +0x000
     void*    vtIWindow;                              // +0x004
     uint32_t p08[(0x02c - 0x08) / 4];                // +0x008 .. 0x02b
@@ -174,7 +174,7 @@ struct WinTreeView {
 };
 
 // TreeExpanderDrawable -- only CreateRenderables is written here.
-struct TreeExpanderDrawable {
+class TreeExpanderDrawable { public:
     uint32_t p00[(0xd8 - 0x00) / 4];                 // +0x00 .. 0xd7
     void __stdcall CreateRenderables(void* ctx, float* rect, void* state);  // 009900B0
 };

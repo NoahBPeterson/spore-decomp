@@ -15,7 +15,7 @@ struct TextStyle {
     uint32_t d[0x9e];
 };
 
-struct LineLayout {
+class LineLayout { public:
     uint32_t pad0;                  // +0x00
     const wchar_t* mBegin;          // +0x04
     const wchar_t* mEnd;            // +0x08
@@ -24,7 +24,7 @@ struct LineLayout {
     int HitTest(float x, float y, int a, int b, int* out, int c);   // 0x897e00
 };
 
-struct Typesetter {
+class Typesetter { public:
     void Reset(bool b);                                     // 0x89cdf0
     void SetStyle(const void* style);                       // 0x8981f0
     void AddTextRun(const wchar_t* p, uint32_t n);          // 0x89b1e0
@@ -37,7 +37,7 @@ struct Typesetter {
 
 struct TextRunInfo { const wchar_t* text; uint32_t length; };
 
-struct TextRunIterator {
+class TextRunIterator { public:
     uint32_t d[5];                  // +0x00
     uint32_t mnPosition;            // +0x14
     uint32_t mnEndPosition;         // +0x18
@@ -189,9 +189,9 @@ struct Window {
     bool Initialize();                                      // 0x0b1fbf0
 };
 
-struct WinTextEdit;
+class WinTextEdit;
 
-struct IWinTextEdit {
+class IWinTextEdit { public:
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04();
     virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09();
     virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
@@ -266,7 +266,7 @@ struct TextMsg {
     const wchar_t* text;            // +0x18
 };
 
-struct WinTextEdit : Window, Base4 {
+class WinTextEdit : public Window, public Base4 { public:
     uint32_t pad08[(0x80 - 0x08) / 4];
     void* mPtr80;                   // +0x80
     void* mPtr84;                   // +0x84

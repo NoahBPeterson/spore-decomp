@@ -2,7 +2,7 @@
 #include "types.h"
 
 namespace EA { namespace UTFWin {
-struct Image { char pad0[0x1c]; int width; int height; };
+class Image { public: char pad0[0x1c]; int width; int height; };
 struct Vec2 { float x, y; };
 struct Canvas {
     virtual void v0();
@@ -16,7 +16,7 @@ struct Canvas {
     virtual void v20(); virtual void v21();
     virtual void DrawImage(const float* rect, Image* img, const float* uv);            // +0x58
 };
-struct RenderContext { Canvas* Begin2D(int); };
+class RenderContext { public: Canvas* Begin2D(int); };
 namespace Drawing {
 void __cdecl BltEdgeStretch(Canvas*, const float* rect, const float* edge, Image* img,
                             const float* uv, Vec2 scale);
@@ -35,7 +35,7 @@ static inline void Quad(Canvas* c, float ax, float ay, float bx, float by,
     c->FillQuad(&a, &b, &cc, &d);
 }
 
-struct ScrollbarDrawable {
+class ScrollbarDrawable { public:
     char pad[0x10];
     Image* mComponentImage[7];
 

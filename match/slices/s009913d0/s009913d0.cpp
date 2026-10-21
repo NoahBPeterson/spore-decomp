@@ -54,7 +54,7 @@ struct intrusive_list_node {
     intrusive_list_node* mpPrev;
 };
 template <typename T>
-struct intrusive_list {
+class intrusive_list { public:
     intrusive_list_node mAnchor;
     class iterator {
     public:
@@ -99,8 +99,8 @@ Batch2D* Begin2D_batch(RenderCtx* ctx, void* mode);            // 0x0095bc10
 
 namespace EA { namespace UTFWinControls {
 
-struct TreeNode;
-struct WinTreeView;
+class TreeNode;
+class WinTreeView;
 
 struct IDrawable {
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3();
@@ -122,7 +122,7 @@ struct IWinScrollbarExt {
     virtual void e30();
     virtual void e31(int a, int b);                            // +0x7c
 };
-struct IWinScrollbar {
+class IWinScrollbar { public:
     virtual void x0(); virtual void x1(); virtual void x2(); virtual void x3();
     virtual void* x4();                                        // +0x10
     virtual void x5(int mode);                                 // +0x14
@@ -135,7 +135,7 @@ struct IWinScrollbar {
     virtual void x29(); virtual void x30();
     virtual void x31(int a, int v);                            // +0x7c
 };
-struct IScrollbarDrawable {
+class IScrollbarDrawable { public:
     virtual void x0(); virtual void x1();                      // AddRef/Release
     virtual void y2(); virtual void* y3();                     // +0xc
     virtual void* y4(); virtual void* y5();
@@ -173,8 +173,8 @@ struct TreeNodeBase {                                           // vptr + 2 word
     void* pad1;
 };
 
-struct WinTreeView;
-struct TreeNode : TreeNodeBase, eastl::intrusive_list_node {
+class WinTreeView;
+class TreeNode : public TreeNodeBase, public eastl::intrusive_list_node { public:
     WinTreeView* mpTreeView;                                    // +0x14
     TreeNode* mpParent;                                         // +0x18
     eastl::intrusive_list<TreeNode> mChildren;                  // +0x1c
@@ -254,7 +254,7 @@ struct TreeViewExtra {
     void CalculateVisibleArea();                                // 0x0098fbe0
 };
 
-struct WinTreeView : CustomWindowBase {
+class WinTreeView : public CustomWindowBase { public:
     IWindow mWindow;                                            // +0x4
     unsigned int pad0[0x20];                                    // +0x8 .. 0x88
     float mLocalX0;                                             // +0x88
@@ -318,7 +318,7 @@ struct WinTreeView : CustomWindowBase {
     ~WinTreeView();                                             // 0x00991df0
 };
 
-struct BasicFactory_TreeNode {
+class BasicFactory_TreeNode { public:
     void* CreateInstance(void* unused, void* alloc);            // 0x009919e0
 };
 
@@ -328,7 +328,7 @@ struct TreeNodeListMarshaller {
 };
 
 // WatchGraph: a window that plots per-channel history.
-struct WatchGraph : CustomWindowBase {
+class WatchGraph : public CustomWindowBase { public:
     IWindow mWindow;                                            // +0x4
     unsigned int pad0[0x81];                                    // +0x8 .. 0x20c
     eastl::intrusive_list_node mChannels;                       // +0x20c

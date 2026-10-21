@@ -44,7 +44,7 @@ struct CellFormat {
     int   mUnknown38;                                  // +0x38
 };
 
-struct IScrollbarDrawable;
+class IScrollbarDrawable;
 
 // ---------------------------------------------------------------------------
 // Interfaces
@@ -62,7 +62,7 @@ struct IWindowBase {
 
 // A scroll-bar drawable: GetDrawable() returns the concrete drawable, whose
 // GetDrawableByType() hands back the part we want.
-struct IScrollbarDrawable {
+class IScrollbarDrawable { public:
     PV(0); PV(1); PV(2);
     virtual IScrollbarDrawable* GetDrawableByType(unsigned type); // +0x0c slot 3
     PV(4); PV(5); PV(6); PV(7); PV(8); PV(9); PV(10); PV(11); PV(12); PV(13);
@@ -120,7 +120,7 @@ struct WindowBase {
 // ---------------------------------------------------------------------------
 // IWinGrid - the grid sub-object embedded at WinGrid+0x20c
 // ---------------------------------------------------------------------------
-struct IWinGrid {
+class IWinGrid { public:
     struct CellCoordinates {
         int mnColumn;                                     // +0x00
         int mnRow;                                        // +0x04
@@ -242,7 +242,7 @@ struct IWinGrid {
 // The owning window / concrete WinGrid.  WinGrid's Window sub-object sits at
 // +4 (its vptr is at +4), and the IWinGrid sub-object at +0x20c.
 // ---------------------------------------------------------------------------
-struct WinGrid {
+class WinGrid { public:
     int mUnknown000;                                   // +0x000
     WindowBase mWindow;                                // +0x004  (vptr at +4)
     char  _pad008[0x214 - 0x008];                      // +0x008

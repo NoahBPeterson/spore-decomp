@@ -25,7 +25,7 @@ struct intrusive_list_node {
     intrusive_list_node* mpPrev;
 };
 template <typename T>
-struct intrusive_list {
+class intrusive_list { public:
     intrusive_list_node mAnchor;
     class iterator {
     public:
@@ -63,14 +63,14 @@ struct Batch2D {
 
 namespace EA { namespace UTFWinControls {
 
-struct TreeNode;
-struct WinTreeView;
+class TreeNode;
+class WinTreeView;
 
 struct IDrawable {
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3();
     virtual void d4(void* ctx, void* rect, void* state);         // +0x10
 };
-struct IWinScrollbar {
+class IWinScrollbar { public:
     virtual void x0();
     virtual void x1();
     virtual void x2();
@@ -104,7 +104,7 @@ struct IWinScrollbar {
     virtual void x30();
     virtual void x31(int attr, int value);                       // +0x7c
 };
-struct IScrollbarDrawable {
+class IScrollbarDrawable { public:
     virtual void x0();                                           // +0x0  ::AddRef
     virtual void x1();                                           // +0x4  ::Release
     virtual void y2();
@@ -146,7 +146,7 @@ struct TreeNodeBase {                                            // vptr + 2 wor
     void* pad1;
 };
 
-struct TreeNode : TreeNodeBase, eastl::intrusive_list_node {
+class TreeNode : public TreeNodeBase, public eastl::intrusive_list_node { public:
     WinTreeView* mpTreeView;                                     // +0x14
     TreeNode* mpParent;                                          // +0x18
     eastl::intrusive_list<TreeNode> mChildren;                   // +0x1c
@@ -224,7 +224,7 @@ struct CustomWindowBase {
     virtual void c35(void* ctx, TreeNode* node, EA::UTFWin::Point2F* pt);    // +0x8c
 };
 
-struct WinTreeView : CustomWindowBase {
+class WinTreeView : public CustomWindowBase { public:
     IWindow mWindow;                                             // +0x4
     unsigned int pad0[0x20];                                     // +0x8 .. 0x88
     float mLocalX0;                                              // +0x88
@@ -281,7 +281,7 @@ struct TreeViewExtra {
     void FocusChanged();                                         // 0x0098fd20
 };
 
-struct IWinTextEdit {                                            // WinScrollbar's real type
+class IWinTextEdit { public:                                            // WinScrollbar's real type
     unsigned int pad[0x83];
 };
 
@@ -298,7 +298,7 @@ struct RenderCtxShim {
     void End2D();                                                // 0x0095bb20
 };
 
-struct BasicFactory_TreeExpanderDrawable {
+class BasicFactory_TreeExpanderDrawable { public:
     void* CreateInstance(void* unused, void* alloc);             // 0x00991380
 };
 

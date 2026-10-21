@@ -21,13 +21,13 @@ extern "C" double fmod(double, double);
 #pragma intrinsic(fmod)
 
 namespace checkerlib {
-struct vector_3 {
+class vector_3 { public:
     float x, y, z;
     vector_3() {}
     vector_3(const vector_3& o) : x(o.x), y(o.y), z(o.z) {}
     vector_3& operator=(const vector_3& o) { x = o.x; y = o.y; z = o.z; return *this; }
 };
-struct vector_4 { float x, y, z, w; };
+class vector_4 { public: float x, y, z, w; };
 }  // namespace checkerlib
 
 using checkerlib::vector_3;

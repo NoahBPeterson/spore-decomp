@@ -65,7 +65,7 @@ extern void* vt_async_13fa72c[];
 extern void* vt_gme_13eb938[];
 
 // ---------------------------------------------------------------- Navigator (0x980330..0x980b60)
-struct Navigator {
+class Navigator { public:
     void* vt0;                                                         // +0x00
     void* vt4;                                                         // +0x04
     int   f08;                                                         // +0x08
@@ -82,7 +82,7 @@ struct NavIter { virtual void i00(); virtual void i04(); virtual void i08(); vir
                  virtual void* i10(); virtual void i14(); virtual void i18(); virtual void i1c(); };
 
 // ---------------------------------------------------------------- RotateEffect
-struct RotateEffect {
+class RotateEffect { public:
     void* vt0;                                                         // +0x00
     void* vt4;                                                         // +0x04
     int   f08;                                                         // +0x08
@@ -102,18 +102,18 @@ struct RotateEffect {
     void SetRotation(void* unused, XCM* cm, float deg);               // 00980cf0
 };
 
-struct BasicFactory_RelativeNavigator {
+class BasicFactory_RelativeNavigator { public:
     Navigator* CreateInstance(int unused, void* alloc);                // 00980b70
 };
-struct BasicFactory_RotateEffect {
+class BasicFactory_RotateEffect { public:
     RotateEffect* CreateInstance(int unused, void* alloc);             // 00980ea0
 };
 
 // ---------------------------------------------------------------- WinScrollbar
-struct WinScrollbar;
+class WinScrollbar;
 struct SBMsg { int w0, w1; uint32_t type; uint32_t src; int from; int to; int pad; };
 
-struct IWinScrollbar {
+class IWinScrollbar { public:
     void* vt;                                                          // +0x00 (abs 0x20c)
     int current;                                                       // +0x04 (0x210)
     int minVal;                                                        // +0x08 (0x214)
@@ -145,7 +145,7 @@ struct IWinScrollbar {
     void SetPageOverlap(int v);                                        // 00981200
 };
 
-struct WinScrollbar {
+class WinScrollbar { public:
     void* vt0;                                                         // +0x000
     void* vtIW;                                                        // +0x004
     char  pad008[0x34 - 8];
@@ -174,12 +174,12 @@ struct IWinSB2 {
 };
 
 // ---------------------------------------------------------------- ScrollbarDrawable
-struct IScrollbarDrawable {
+class IScrollbarDrawable { public:
     void* vt;                                                          // +0x00
     Image* images[7];                                                  // +0x04
     void SetComponentImage(uint32_t idx, Image* p);                    // 00981860
 };
-struct ScrollbarDrawable {
+class ScrollbarDrawable { public:
     void* vt0;                                                         // +0x00
     void* vt4;                                                         // +0x04
     int   f08;                                                         // +0x08

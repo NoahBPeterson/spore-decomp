@@ -23,7 +23,7 @@ extern HashHookFn g_hashHook;                                                   
 
 namespace EA {
 #pragma pack(push, 4)
-struct Stopwatch {
+class Stopwatch { public:
     uint64_t mnStartTime;
     uint64_t mnTotalElapsedTime;
     int      mnUnits;
@@ -35,15 +35,15 @@ struct Stopwatch {
 
 namespace EA { namespace Text {
 struct TextRun { const wchar_t* text; void* style; };
-struct TextRunIterator {
+class TextRunIterator { public:
     uint32_t pad[7];
     void SetTextRunArray(const TextRun* runs, unsigned count, unsigned a, unsigned b, unsigned c);  // 0088F790
 };
-struct BreakIteratorBase : TextRunIterator {
+class BreakIteratorBase : public TextRunIterator { public:
     uint32_t f1c;
     unsigned SetPosition(unsigned pos);             // 00888220
 };
-struct CharacterBreakIterator : BreakIteratorBase {
+class CharacterBreakIterator : public BreakIteratorBase { public:
     unsigned GetNextCharBreak();                    // 00888240
     unsigned GetPrevCharBreak();                    // 008884B0
 };
@@ -87,7 +87,7 @@ struct TextWindow {
 };
 
 // secondary base at window+0x20c; `this` is the interface pointer
-struct IWinTextEdit {
+class IWinTextEdit { public:
     void* vt;                                         // +0x000
     uint32_t p04;                                     // +0x004
     uint32_t flags;                                   // +0x008
@@ -124,10 +124,10 @@ struct IWinTextEdit {
     void F98A3F0(int a, int b, int c);                // 0098A3F0
 };
 
-struct WinScrollbar { void* Construct(); };           // 00983790
-struct ScrollbarDrawable { void* Construct(); };      // 009838A0
+class WinScrollbar { public: void* Construct(); };           // 00983790
+class ScrollbarDrawable { public: void* Construct(); };      // 009838A0
 
-struct WinTextEdit : TextWindow, IWinTextEdit {
+class WinTextEdit : public TextWindow, public IWinTextEdit { public:
     void ShowCaret(int on);                           // 00989660
     int  DoMessageBase(int msg);                      // 00950BB0
 

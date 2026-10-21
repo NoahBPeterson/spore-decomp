@@ -16,4 +16,4 @@ slices/s0098f400/s0098f400.cpp  ?SetExpanderDrawable@WinTreeView@UTFWinControls@
 slices/s0098f400/s0098f400.cpp  ?GetScrollbarDrawable@WinTreeView@UTFWinControls@EA@@QAEPAXH@Z  0098fb80  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s0098f400/s0098f400.cpp  ?IsScrollbarVisible@WinTreeView@UTFWinControls@EA@@QAEHH@Z  0098fba0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s0098f400/s0098f400.cpp  ?InnerChildRemoveAllRecursive@TreeNode@UTFWinControls@EA@@QAEXXZ  00990040  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
-slices/s0098f400/s0098f400.cpp  ?FUN_00990350@UTFWinControls@EA@@YAXPAUWinTreeView@12@@Z  00990350  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?FUN_00990350@UTFWinControls@EA@@YAXPAVWinTreeView@12@@Z  00990350  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

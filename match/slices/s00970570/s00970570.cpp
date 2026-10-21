@@ -69,12 +69,12 @@ struct DropShadowDescriptor {
     void SetMode2(int mode);                               // 0x00830150
 };
 
-struct WinGrid;
+class WinGrid;
 
 // ---------------------------------------------------------------------------
 // IWinGrid - the grid sub-object embedded at WinGrid+0x20c
 // ---------------------------------------------------------------------------
-struct IWinGrid {
+class IWinGrid { public:
     // --- 135-slot vtable; only the slots exercised by this slice are named ---
     PV(0); PV(1); PV(2); PV(3); PV(4); PV(5); PV(6);
     virtual bool GetGridArea(RectF* pOut);                        // +0x01c  slot 7
@@ -185,7 +185,7 @@ struct IWinGrid {
 // ---------------------------------------------------------------------------
 // WinGrid - the owning window (primary vtable at +0, IWindow vtable at +4)
 // ---------------------------------------------------------------------------
-struct WinGrid : Win, IWindow {
+class WinGrid : public Win, public IWindow { public:
     char _pad008[0x88 - 0x08];                        // +0x008
     RectF mArea;                                      // +0x088
     char _pad098[0x20c - 0x098];                      // +0x098

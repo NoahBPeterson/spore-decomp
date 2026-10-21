@@ -23,7 +23,7 @@ void* GetDefaultAllocator();                                                    
 void* AllocAligned(uint32_t size, uint32_t align, const char* name, void* alloc);  // 009512D0 (cdecl)
 
 namespace EA {
-struct Stopwatch {
+class Stopwatch { public:
     uint32_t pad[6];
     void Init(int a, int b);                // 0093A560 (ctor)
     void SetUnits(int units);               // 0093A1A0
@@ -111,7 +111,7 @@ struct Window : ScrollWinPrim, ScrollWinIWin {
 };
 
 // ---------------------------------------------------------------- scrollbar
-struct IWinScrollbar {
+class IWinScrollbar { public:
     virtual void i00();
     virtual void i04();
     virtual void i08();
@@ -149,7 +149,7 @@ struct IWinScrollbar {
     IWinScrollbar() { hlComp = 0xff; selComp = 0xff; }
 };
 
-struct WinScrollbar : Window, IWinScrollbar {
+class WinScrollbar : public Window, public IWinScrollbar { public:
     EA::Stopwatch timer;                // 0x248
     WinScrollbar();                     // 00983790
     static IWinScrollbar* CreateDefault(int a1, int a2, int a3, int a4);   // 009839B0
@@ -160,7 +160,7 @@ struct AsyncBase {
     AsyncBase() { vt4 = vtbl_Resource_Async; f8 = 0; vtc = vtbl_Resource_Async; }
 };
 struct ObjHead { void* vt; };
-struct ScrollbarDrawable : ObjHead, AsyncBase {
+class ScrollbarDrawable : public ObjHead, public AsyncBase { public:
     int f[7];
     ScrollbarDrawable() {               // 009838A0
         vt = vtbl_ScrollbarDrawable;
@@ -203,7 +203,7 @@ ScrollbarDrawable* ScrollbarDrawable::Construct() {
     return this;
 }
 
-struct BasicFactory_ScrollbarDrawable {
+class BasicFactory_ScrollbarDrawable { public:
     ScrollbarDrawable* CreateInstance(int unused, void* alloc);
 };
 
@@ -410,7 +410,7 @@ struct SliderData : SliderPrim, SliderIWin {
     void OnPaintBase(int g);            // 00960310
 };
 
-struct IWinSlider {
+class IWinSlider { public:
     virtual void i00();
     virtual void i04();
     virtual void i08();
@@ -433,7 +433,7 @@ struct IWinSlider {
     void* GetDrawable();                            // 009842C0
 };
 
-struct WinSlider : SliderData, IWinSlider {
+class WinSlider : public SliderData, public IWinSlider { public:
     void SetHighlighted(uint8_t v) {
         if (hi != v) {
             hi = v;
@@ -603,13 +603,13 @@ struct Image {
     int w, h;                           // +0x1c, +0x20
 };
 
-struct ISliderDrawable {
+class ISliderDrawable { public:
     void* vt;
     Image* img[3];
     void SetComponentImage(uint32_t idx, Image* p);     // 00984040
 };
 
-struct SliderDrawable {
+class SliderDrawable { public:
     void* vt;
     uint32_t p04[3];
     Image* img[3];                      // +0x10

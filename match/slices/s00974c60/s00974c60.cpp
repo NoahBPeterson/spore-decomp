@@ -96,7 +96,7 @@ struct CellList {
 // ---------------------------------------------------------------------------
 // IWinGrid - the grid sub-object embedded at WinGrid+0x20c
 // ---------------------------------------------------------------------------
-struct IWinGrid {
+class IWinGrid { public:
     struct CellCoordinates {
         int mnColumn;
         int mnRow;
@@ -198,7 +198,7 @@ struct CellRbtree {
 // ---------------------------------------------------------------------------
 // WinGrid - Window sub-object vptr at +4, IWinGrid at +0x20c
 // ---------------------------------------------------------------------------
-struct WinGrid {
+class WinGrid { public:
     int mUnknown000;                                   // +0x000
     IWindowBase mWindow;                               // +0x004
     char  _pad008[0x22c - 0x008];                      // +0x008

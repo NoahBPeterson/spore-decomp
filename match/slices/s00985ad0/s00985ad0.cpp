@@ -20,7 +20,7 @@ void* AllocAligned(uint32_t size, uint32_t align, const char* name, void* alloc)
 
 namespace EA {
 #pragma pack(push, 4)
-struct Stopwatch {
+class Stopwatch { public:
     uint64_t mnStartTime;                   // +0x00 (tested as one 64-bit value)
     uint64_t mnTotalElapsedTime;            // +0x08
     int      mnUnits;                       // +0x10
@@ -40,7 +40,7 @@ extern void* vtbl_SliderDrawable[];         // 0x01444c90
 extern void* vtbl_SliderDrawable_1[];       // 0x01444c78
 extern void* vtbl_SliderDrawable_3[];       // 0x01444c60
 
-struct WinSpinner;
+class WinSpinner;
 struct SpinnerPrim;
 struct SpinnerIWin;
 
@@ -135,7 +135,7 @@ struct Window : SpinnerPrim, SpinnerIWin {
 };
 
 // the interface subobject at window+0x20c
-struct IWinSpinner {
+class IWinSpinner { public:
     virtual void i00(); virtual void i04(); virtual void i08(); virtual void i0c();
     virtual void i10();
     virtual void SetValue(int v, char notify);          // 0x14
@@ -173,7 +173,7 @@ struct IWinSpinner {
 
 struct RenderState { uint32_t flags, idx, s1, s0; };
 
-struct WinSpinner : Window, IWinSpinner {
+class WinSpinner : public Window, public IWinSpinner { public:
     bool OnMouseDown(float x, float y, int a3, int button);   // 00985e50
     bool OnMouseUp(float x, float y, int a3, int flags);      // 00985f30
     bool OnMouseMove(float x, float y, int flags);            // 00985fc0
@@ -185,7 +185,7 @@ struct WinSpinner : Window, IWinSpinner {
     int  PickComponent(float x, float y);                     // 00986510 (override)
 };
 
-struct WinSlider : Window, IWinSpinner {
+class WinSlider : public Window, public IWinSpinner { public:
     WinSlider();                                              // 00985ad0
 };
 
@@ -195,7 +195,7 @@ struct AsyncBase {
     void* vt4; int f8; void* vtc;
     AsyncBase() { vt4 = vtbl_Resource_Async; f8 = 0; vtc = vtbl_Resource_Async; }
 };
-struct SliderDrawable : ObjHead, AsyncBase {
+class SliderDrawable : public ObjHead, public AsyncBase { public:
     int f[3];                               // +0x10, +0x14, +0x18
     SliderDrawable() {
         vt = vtbl_SliderDrawable;
@@ -204,12 +204,12 @@ struct SliderDrawable : ObjHead, AsyncBase {
         f[0] = 0; f[1] = 0; f[2] = 0;
     }
 };
-struct BasicFactory_SliderDrawable {
+class BasicFactory_SliderDrawable { public:
     SliderDrawable* CreateInstance(int unused, void* alloc);  // 00985bd0
 };
 
 // ---------------------------------------------------------------- SpinnerDrawable
-struct SpinnerDrawable {
+class SpinnerDrawable { public:
     void* vt;                               // +0x00
     uint32_t p04[3];                        // +0x04
     Image* images[3];                       // +0x10
