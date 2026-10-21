@@ -1,3 +1,3 @@
 # source  symbol  va  flags
 ../src/game/SPBake/SPEditorLauncher.cpp  ?RemapTypeId@@YAHH@Z  00432f10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPBake/SPEditorLauncher.cpp  ?Launch@Editor@SP@@YA_NIABUResourceKey@@IPAVIUnknown32_s005a_8d20@COM@EA@@U?$bitset@$0IA@@eastl@@_N@Z  005a94d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorLauncher.cpp  ?Launch@Editor@SP@@YA_NIABUResourceKey@@IPAVIUnknown32_s005a_8d20@COM@EA@@V?$bitset@$0IA@@eastl@@_N@Z  005a94d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

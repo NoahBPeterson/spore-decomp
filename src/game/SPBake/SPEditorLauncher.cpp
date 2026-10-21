@@ -123,7 +123,7 @@ struct true_type {};
 }
 namespace eastl {
 template <size_t N>
-struct bitset {
+class bitset { public:
     uint32_t mWord[N / 32];
     bitset() { reset(); }
     void reset() { for (size_t i = 0; i < N / 32; i++) mWord[i] = 0; }
