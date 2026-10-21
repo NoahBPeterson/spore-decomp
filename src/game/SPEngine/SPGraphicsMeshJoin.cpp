@@ -1444,7 +1444,7 @@ struct cIndexArrayRef_s0072_6c20 : public cEltArrayRef_s0072_6c20 {
 }
 namespace SP {
 template <typename T>
-class cEltArrayT : public EA::COM::IRefCount_s0072_6c20 {
+struct cEltArrayT : public EA::COM::IRefCount_s0072_6c20 { private:
  public:
   void* mpInterfaceVtbl;                 // +0x04
   int mRefCount;                         // +0x08
