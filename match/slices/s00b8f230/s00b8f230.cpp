@@ -363,6 +363,23 @@ char S::FUN_00b8fad0(void* stream)
   return ok;
 }
 
+// Simulator::cSpaceInventoryItem — vftable0 layout: the DefaultRefCounted base
+// (dtor/AddRef/Release/GetReferenceCount) then the item interface. GetItemID is
+// slot 6 (byte offset 0x18) and returns the item's ResourceKey
+// (EA::ResourceMan::Key, 12 bytes) at this+0x5c.
+struct ResourceKey { unsigned int a, b, c; };
+struct DefaultRefCounted {
+  virtual void  Dtor();
+  virtual void  AddRef();
+  virtual void  Release();
+  virtual int   GetReferenceCount();
+};
+struct cSpaceInventoryItem : DefaultRefCounted {
+  virtual int   GetType();
+  virtual void  SetItemID(ResourceKey* id);
+  virtual const ResourceKey* GetItemID();     // vftable0 slot 6 (0x18)
+};
+
 // ===========================================================================
 // @ 0x00b8fb70
 char S::FUN_00b8fb70()
@@ -373,8 +390,8 @@ char S::FUN_00b8fb70()
   if (p != 0) {
     char* first = *(char**)(p + 0xbc);
     char* last = *(char**)(p + 0xc0);
-    void* id = (void*)((void* (__thiscall*)(char*))((void**)*(void***)self)[6])(self);
-    void* res = FUN_00ac0d80(first, last, id);
+    const ResourceKey* id = ((cSpaceInventoryItem*)self)->GetItemID();
+    void* res = FUN_00ac0d80(first, last, (void*)id);
     result = (last != res);
   }
   return result;
