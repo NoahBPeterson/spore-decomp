@@ -330,7 +330,7 @@ struct DrawState { uint32_t flags; };
 }
 namespace EA {
 namespace UTFWinControls {
-struct ButtonDrawable {
+class ButtonDrawable { public:
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual bool GetSourceRect(uint32_t flags, float* out);   // +0x20
