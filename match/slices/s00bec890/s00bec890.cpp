@@ -139,14 +139,14 @@ void S::FUN_00becc80()
     int cnt = n;
     do {
       float tmp[3];
-      int in = *(int*)(self + 0x184) + off;
-      float* r = ((float* (__thiscall*)(void*, float*, int))0x00becb10)(self, tmp, in);
-      char* dst = (char*)(*(int*)(self + 0x198) + off);
-      *(float*)(dst + 0) = r[0];
-      *(float*)(dst + 4) = r[1];
+      float* in = (float*)(*(int*)(self + 0x184) + off);
+      int* dst = (int*)(*(int*)(self + 0x198) + off);
+      int* r = (int*)FUN_00becb10(tmp, in);
+      dst[0] = r[0];
+      dst[1] = r[1];
       off += 0xc;
       --cnt;
-      *(float*)(dst + 8) = r[2];
+      dst[2] = r[2];
     } while (cnt != 0);
   }
 }

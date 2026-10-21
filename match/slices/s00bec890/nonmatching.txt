@@ -1,6 +1,5 @@
 00bec890 358 Simulator::cCityWalls destructor: vtable stores at +0/+4/+0x34, the base dtor at 0x00bec060, a Release chain over the 0x354/0x264/0x10c members, an unrolled EastlDelete over the twelve +0x110..0x210 sub-vectors and the two tail teardown calls (0x00c8a420 / 0x00b184c0); our loop form collapses the unroll so 158 vs 398 bytes
 00becb10 345 transform helper (Matrix3 assign + quaternion->matrix + vector transform then scale/translate); 364 vs 356 bytes, the FP temporary scheduling in our C++ differs from the original SSE stream
-00becc80 67 per-wall loop applying FUN_00becb10 to each of the +0x184..+0x188 elements; 111 vs 109 bytes
 00beccf0 113 recomputes the +0x248 transform from the +0x10c object and pushes it through the +0x70 sub-object; 126 vs 119 bytes
 00becd70 869 Simulator::cCityWalls::Tick: planet/PropertyManager gate, position + orientation rebuild, terraforming/effects manager state machine and the final transform write; 944 vs 1004 bytes (the original keeps a large stack frame and interleaves the two manager probes differently)
 00bed200 392 vector<0xc>::insert(pos,n,val) with the grow path (EastlNew + uninitialized_copy + uninitialized_fill_n + the old-buffer delete) and the in-place shift paths; 458 vs 447 bytes, the three-way branch layout differs
