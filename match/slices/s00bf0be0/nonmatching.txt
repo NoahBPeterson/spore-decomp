@@ -1,0 +1,12 @@
+00bf0c60 2 /O2 /MD /Gy /TP /arch:SSE equiv=WEAK(244 valid,24.5% cov) 4th arg tested as byte in retail (cmp byte [esp+0x24]) but cl emits cmp dword for an int parameter; residual is the arg width plus an ebp/ebx swap.
+00bf0d10 42 /O2 /MD /Gy /TP /arch:SSE equiv=WEAK(236 valid,37.1% cov) vtable slot-0x08 value is kept in a stack slot in retail; cl here keeps it in a register and spills *it* instead. Call/compare shape otherwise identical.
+00bf0e00 218 /O2 /MD /Gy /TP /arch:SSE equiv=UNSUPPORTED(0/400 valid, fault(read)) retail builds a ~0xa18-byte cVarListSerializer temp and routes Write through 0xb18590 + 0xb6e2d0; the harness cannot resolve the serializer's stack references so no input is valid.
+00bf0f90 146 /O2 /MD /Gy /TP /arch=SSE equiv=WEAK(394 valid,20.9% cov) city-music update walks two lists and calls slot 0x30/0x2c; block ordering and list-load order differ.
+00bf1070 166 /O2 /MD /Gy /TP /arch:SSE equiv=UNSUPPORTED(0/400 valid, fault(read)) retail keeps `this` in a stack slot across the GetCivList calls and reloads it after the loop; cl coalesces it with ebp and reorders the inner list walk.
+00bf1170 204 /O2 /MD /Gy /TP /arch:SSE equiv=WEAK(306 valid,10.1% cov) same list-walk family as 1070; cl splits/reorders the two passes so the block layout diverges early.
+00bf1270 420 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/34 mismatched, execution) 50000ms timer path with RandomUint32Uniform limits 0xc/9/6; the reconstructed branch tree does not reproduce the retail comm-event selection.
+00bf14b0 519 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/11 mismatched, execution) 60000ms near-duplicate of 1270 with limits 0x10/0xc/8 plus FUN_00d01b80 and FUN_00bf0130; same divergence.
+00bf1790 66 /O2 /MD /Gy /TP /arch:SSE equiv=WEAK(170 valid,43.6% cov) body matches except cl picks ebx for `w` (retail uses ebp) and uses lea instead of the shl/add pair.
+00bf17f0 104 /O2 /MD /Gy /TP /arch:SSE equiv=WEAK(165 valid,34.1% cov) u64->float conversion and the fdivr sequence differ: retail keeps the numerator on the x87 stack, cl stores/reloads it.
+00bf1880 478 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/107 mismatched, st0) retail compares the float param against the three 32-bit magic constants (0x0a35d0f5/0x3360727f/0x6aeb96a1) with the param slot reused as the result slot; not reproduced.
+00bf19c0 318 /O2 /MD /Gy /TP /arch:SSE equiv=WEAK(228 valid,9.1% cov) Cast()/slot sequence over the object-ptr array; cl emits a different call/IP shape for the QueryInterface casts.

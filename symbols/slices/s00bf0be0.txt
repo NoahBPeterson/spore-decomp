@@ -1,0 +1,17 @@
+00bf0be0 FUN_00bf0be0
+00bf0c60 FUN_00bf0c60
+00bf0cf0 FUN_00bf0cf0
+00bf0d10 FUN_00bf0d10
+00bf0db0 FUN_00bf0db0
+00bf0e00 Write
+00bf0f10 FUN_00bf0f10
+00bf0f40 FUN_00bf0f40
+00bf0f90 UpdateCityMusicPosition
+00bf1070 FUN_00bf1070
+00bf1170 FUN_00bf1170
+00bf1270 FUN_00bf1270
+00bf14b0 FUN_00bf14b0
+00bf1790 SuperweaponOnCooldown
+00bf17f0 GetSuperweaponCooldown
+00bf1880 FUN_00bf1880
+00bf19c0 FUN_00bf19c0
