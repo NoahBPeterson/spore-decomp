@@ -97,7 +97,7 @@ struct RectT_s005e_e480 {
 };
 }
 namespace EA {
-template <typename T> struct Point2DT {
+template <typename T> class Point2DT { public:
   T x, y;
   Point2DT(T ax, T ay) : x(ax), y(ay) {}
   Point2DT(const Point2DT& p) : x(p.x), y(p.y) {}
