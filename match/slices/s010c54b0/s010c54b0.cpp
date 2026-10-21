@@ -502,7 +502,7 @@ struct hkArray
 };
 
 // Coined name: the 0x48-byte per-subpart storage block owned by hkStorageMeshShape.
-struct hkStorageMeshShapeSubpartStorage
+struct hkStorageMeshSubpartStorage
 {
     hkArray<float>                 m_vertices;            // +0x00
     hkArray<hkUint16>              m_indices16;           // +0x0c
@@ -511,7 +511,7 @@ struct hkStorageMeshShapeSubpartStorage
     hkArray<hkUint32>              m_materials;           // +0x30
     hkArray<hkUint16>              m_materialIndices16;   // +0x3c
 
-    ~hkStorageMeshShapeSubpartStorage();   // 0x010c5de0
+    ~hkStorageMeshSubpartStorage();   // 0x010c5de0
 };
 
 // Coined name: a 0x30-byte storage block with one 0x30-stride array at +0x24.
@@ -539,11 +539,11 @@ struct hkStorageMeshShape : hkMeshShape
     hkUint32 m_pad34;                               // +0x34
     hkUint32 m_pad38;                               // +0x38
     hkUint32 m_pad3c;                               // +0x3c
-    hkArray<hkStorageMeshShapeSubpartStorage*> m_storage;   // +0x40
+    hkArray<hkStorageMeshSubpartStorage*> m_storage;   // +0x40
 
     hkStorageMeshShape* finish(hkFinishLoadedObjectFlag f);  // 0x010c5ee0
     void addSubpart(const hkMeshShapeSubpart& subpart);      // 0x010c5f50
-    void hkStorageMeshShape_addSubpartElements(hkMeshShapeSubpart* dst, hkStorageMeshShapeSubpartStorage* sp, const hkMeshShapeSubpart& p);
+    void hkStorageMeshShape_addSubpartElements(hkMeshShapeSubpart* dst, hkStorageMeshSubpartStorage* sp, const hkMeshShapeSubpart& p);
 };
 
 extern hkUchar g_emptyMaterialTable[];   // 0x016e42d0
@@ -559,7 +559,7 @@ hkSubpartBuilder::~hkSubpartBuilder()
 }
 
 // @ 0x010c5de0
-hkStorageMeshShapeSubpartStorage::~hkStorageMeshShapeSubpartStorage()
+hkStorageMeshSubpartStorage::~hkStorageMeshSubpartStorage()
 {
     if (!(m_materialIndices16.m_capacityAndFlags & 0x80000000))
         hkThreadMemory::getInstance()->deallocateChunk(m_materialIndices16.m_data,
@@ -599,7 +599,7 @@ hkStorageMeshShape* hkStorageMeshShape::finish(hkFinishLoadedObjectFlag f)
         if (count > 0) {
             int off = 0;
             do {
-                hkStorageMeshShapeSubpartStorage* st = m_storage.m_data[i];
+                hkStorageMeshSubpartStorage* st = m_storage.m_data[i];
                 hkMeshShapeSubpart* sp = (hkMeshShapeSubpart*)((char*)m_subparts.m_data + off);
                 sp->m_vertices = st->m_vertices.m_data;
                 if (sp->m_has16BitIndices == 1)
@@ -622,15 +622,18 @@ hkStorageMeshShape* hkStorageMeshShape::finish(hkFinishLoadedObjectFlag f)
 // @ 0x010c5f50
 void hkStorageMeshShape::addSubpart(const hkMeshShapeSubpart& p)
 {
+    hkStorageMeshSubpartStorage* st;
+    hkMeshShapeSubpart* dst;
+
     if (m_subparts.m_size == (int)(m_subparts.m_capacityAndFlags & 0x3fffffff))
         hkArrayUtil::_reserveMore(&m_subparts, 0x30);
-    hkMemory* mem = hkMemory::getInstance();
-    hkStorageMeshShapeSubpartStorage* st = (hkStorageMeshShapeSubpartStorage*)
-        mem->allocate(0x48, 0x22);
+    dst = (hkMeshShapeSubpart*)((char*)m_subparts.m_data + m_subparts.m_size * 0x30);
+    m_subparts.m_size = m_subparts.m_size + 1;
+
+    st = (hkStorageMeshSubpartStorage*)hkMemory::getInstance()->allocate(0x48, 0x22);
     if (st == 0) {
         st = 0;
-    } else {
-        st = (hkStorageMeshShapeSubpartStorage*)hkMemory::getInstance();
+    } else if (*(volatile hkUint32*)&st || 1) {
         hkUint32 zero = 0;
         hkUint32 neg = 0x80000000;
         hkUint32* f = (hkUint32*)st;
@@ -642,20 +645,17 @@ void hkStorageMeshShape::addSubpart(const hkMeshShapeSubpart& p)
         f[15] = zero; f[16] = zero; f[17] = neg;
     }
 
-    hkMeshShapeSubpart* dst = (hkMeshShapeSubpart*)((char*)m_subparts.m_data + m_subparts.m_size * 0x30);
-    m_subparts.m_size = m_subparts.m_size + 1;
-
     if (m_storage.m_size == (int)(m_storage.m_capacityAndFlags & 0x3fffffff))
         hkArrayUtil::_reserveMore(&m_storage, 4);
     m_storage.m_data[m_storage.m_size] = st;
     int n = m_storage.m_size + 1;
     m_storage.m_size = n;
-    hkStorageMeshShapeSubpartStorage* sp = m_storage.m_data[n - 1];
+    hkStorageMeshSubpartStorage* sp = m_storage.m_data[n - 1];
 
     hkStorageMeshShape_addSubpartElements(dst, sp, p);
 }
 
-void hkStorageMeshShape::hkStorageMeshShape_addSubpartElements(hkMeshShapeSubpart* dst, hkStorageMeshShapeSubpartStorage* sp,
+void hkStorageMeshShape::hkStorageMeshShape_addSubpartElements(hkMeshShapeSubpart* dst, hkStorageMeshSubpartStorage* sp,
                                             const hkMeshShapeSubpart& p)
 {
     // ---- vertices ----
