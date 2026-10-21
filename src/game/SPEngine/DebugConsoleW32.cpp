@@ -21,7 +21,7 @@ struct WStr16 {            // eastl::basic_string<wchar_t>: begin, end, capacity
         if ((int)(((char*)mpCapacity - (char*)mpBegin) & 0xfffffffe) > 2 && mpBegin) EASTL_dealloc(mpBegin);
     }
 };
-struct DebugMessage : BaseA2 {
+class DebugMessage : public BaseA2 { public:
     WStr16 mText;
     long   mRef;
     DebugMessage() : mRef(0) {}
