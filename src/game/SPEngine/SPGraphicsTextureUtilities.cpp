@@ -359,7 +359,7 @@ namespace SP {
 class cSpeciesProfile;
 }
 namespace SP {
-class cSpeciesArchetype {
+struct cSpeciesArchetype { private:
 public:
     cSpeciesArchetype();                               // 0x004DA440
     cSpeciesArchetype(const cSpeciesArchetype& x);     // 0x004E1CB0
