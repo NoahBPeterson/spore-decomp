@@ -1,0 +1,5 @@
+00a579d0 63 Find(head,key,h): walks bucket chain comparing type@8 then float/int@0xc; register allocation and branch layout differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (369 valid, 75% coverage)
+00a57a20 117 Lookup(out,key): hash+finds bucket, returns found node or end-sentinel bucket; store scheduling differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (265 valid, 90% coverage)
+00a57b60 88 LookupKey(a0,a1,a2,outA,outB): builds 5-dword key and calls Lookup; frame/register allocation differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (265 valid, 72.5% coverage)
+00a57be0 100 LookupIndex(a0,a1,a2,idx,out): LookupKey + indexed 3-dword fetch; sizing/branch layout differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (244 valid, 52.4% coverage)
+00a58570 314 CollLess::Less(a,b): key comparator (type@8, float/int@0xc, string@0x10) with swap logic; string loop and branch layout differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (200 valid, 58.8% coverage)
