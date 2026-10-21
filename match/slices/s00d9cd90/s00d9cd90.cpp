@@ -419,16 +419,18 @@ void __cdecl FUN_00d9d800(void* owner)
 // @ 0x00d9d840
 int S::FUN_00d9d840(int idx)
 {
-  int* base = *(int**)this;
-  unsigned* p = (unsigned*)(base + idx * 0x84);
-  unsigned v = *p;
-  for (;;) {
-    if ((v >> 0x1e & 1) != 0) return 0x3fffffff;
-    v = p[0x84];
+  unsigned* p = *(unsigned**)this;
+  p += idx * 0x84;
+  bool b30 = ((((unsigned)*p) >> 0x1e) & 1) != 0;
+  if (b30) return 0x3fffffff;
+  do {
     p += 0x84;
     ++idx;
-    if ((int)v >= 0) return idx;
-  }
+    bool b31 = ((((unsigned)*p) >> 0x1f) & 1) != 0;
+    if (!b31) return idx;
+    b30 = ((((unsigned)*p) >> 0x1e) & 1) != 0;
+  } while (!b30);
+  return 0x3fffffff;
 }
 
 // ===========================================================================
