@@ -291,17 +291,17 @@ cPlanetModel* __cdecl PlanetModel();  // 0x00b3d350
 
 namespace SP {
 
-struct cGameData;
+class cGameData;
 
 struct cDefTable {
   unsigned Lookup(unsigned id);  // 0x00f3e8a0 (ret 4)
 };
-struct cApp {
+class cApp { public:
   char pad[0x74];
   cDefTable* mpDefs;
 };
 
-struct cVarListSerializer {
+class cVarListSerializer { public:
   char mBuf[0xa14];
   cVarListSerializer(cGameData* gd, const void* table, unsigned id);  // 0x00692f90 (ret 0xc)
   void Serialize(IStreamB* s);                                       // 0x00692900 (ret 4)
@@ -326,7 +326,7 @@ struct RefCountBase {  // EA::RefCountVTemplate<int> part at +4 (inline ctor sto
   }
 };
 
-struct cGameData {
+class cGameData { public:
   void* vtbl0;     // +0x00
   RefCountBase mRC;  // +0x04
   void* mpNext;    // +0x0c

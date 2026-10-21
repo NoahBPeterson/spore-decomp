@@ -82,7 +82,7 @@ class cInteractionAgent : public EA::IRefCounted {};
 // ---------------------------------------------------------------------------
 class cActionCircle {
  public:
-  struct tSlot {
+  class tSlot { public:
     bool mOccupied;                                 // +0x0
     char _pad0[3];
     EA::AutoRefCount<cGameData> mpReservingNoun;    // +0x4

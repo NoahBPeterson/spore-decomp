@@ -2,9 +2,9 @@ slices/s00af9aa0/s00af9aa0.cpp  ?Detach@cListenerHolder@SP@@QAEXH@Z  00af9aa0  /
 slices/s00af9aa0/s00af9aa0.cpp  ?AddId@cEntityListener@SP@@QAEXI@Z  00af9ac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00af9aa0/s00af9aa0.cpp  ?Destroy@cEntityListener@SP@@QAEXXZ  00af9ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00af9aa0/s00af9aa0.cpp  ?IsNonDefault@cActionCircle@SP@@QBEHXZ  00af9ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
-slices/s00af9aa0/s00af9aa0.cpp  ?FindFreeSlot@cActionCircle@SP@@QAEPAUtSlot@12@XZ  00af9f30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00af9aa0/s00af9aa0.cpp  ?FindFreeSlot@cActionCircle@SP@@QAEPAVtSlot@12@XZ  00af9f30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00af9aa0/s00af9aa0.cpp  ?Reserve@tSlot@cActionCircle@SP@@QAEXPAVcGameData@3@@Z  00afa030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
-slices/s00af9aa0/s00af9aa0.cpp  ?CopyConstruct@tSlot@cActionCircle@SP@@QAEPAU123@PBU123@@Z  00afa110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
-slices/s00af9aa0/s00af9aa0.cpp  ?Assign@tSlot@cActionCircle@SP@@QAEPAU123@PBU123@@Z  00afa230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
-slices/s00af9aa0/s00af9aa0.cpp  ?FUN_00afa430@@YAPAUtSlot@cActionCircle@SP@@PAU123@00@Z  00afa430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
-slices/s00af9aa0/s00af9aa0.cpp  ?FUN_00afa4a0@@YAPAUtSlot@cActionCircle@SP@@PAU123@00@Z  00afa4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00af9aa0/s00af9aa0.cpp  ?CopyConstruct@tSlot@cActionCircle@SP@@QAEPAV123@PBV123@@Z  00afa110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00af9aa0/s00af9aa0.cpp  ?Assign@tSlot@cActionCircle@SP@@QAEPAV123@PBV123@@Z  00afa230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00af9aa0/s00af9aa0.cpp  ?FUN_00afa430@@YAPAVtSlot@cActionCircle@SP@@PAV123@00@Z  00afa430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00af9aa0/s00af9aa0.cpp  ?FUN_00afa4a0@@YAPAVtSlot@cActionCircle@SP@@PAV123@00@Z  00afa4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

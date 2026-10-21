@@ -8,28 +8,28 @@ typedef float hkReal;
 typedef float hkTime;
 typedef uint8_t hkBool;
 
-struct hkVector4 { float x, y, z, w; };
-struct hkTransform {
+class hkVector4 { public: float x, y, z, w; };
+class hkTransform { public:
     hkVector4 m_rot[3];
     hkVector4 m_trans;
     void setMulInverseMul(const hkTransform& a, const hkTransform& b);   // this = inverse(a) * b
     void setInverse(const hkTransform& t);
 };
-struct hkSweptTransform { uint32_t m_data[20]; };                            // 0x50 bytes at hkMotionState+0x40
-struct hkMotionState {                                                       // hkCdBody::m_motion points at one
+class hkSweptTransform { public: uint32_t m_data[20]; };                            // 0x50 bytes at hkMotionState+0x40
+class hkMotionState { public:                                                       // hkCdBody::m_motion points at one
     hkTransform m_transform;                                                 // +0
     hkSweptTransform m_sweptTransform;                                       // +0x40
 };
 struct hkSweptTransformUtil { static void lerp2(const hkSweptTransform& swept, float t, hkTransform& out); };
 
-struct hkReferencedObject {
+class hkReferencedObject { public:
     virtual void* hkReferencedObject_deletingDtor(unsigned int flags);
     uint16_t m_memSizeAndFlags;
     int16_t  m_referenceCount;
 };
 
 // hkMemory::s_instance @0x016e4178 (vtable slots as used in this slice)
-struct hkMemory {
+class hkMemory { public:
     virtual void* allocate(int nbytes, int memClass);                        // slot 0
     virtual void  deallocate(void* p);                                       // slot 1
     virtual void  v2(); virtual void v3();
@@ -39,14 +39,14 @@ struct hkMemory {
     static hkMemory* s_instance;
 };
 
-struct hkCdBody {
+class hkCdBody { public:
     const void* m_shape; uint32_t m_shapeKey; const hkMotionState* m_motion; const hkCdBody* m_parent;
 };
 
 struct hkContactMgr;
 struct hkCollisionDispatcher;
 struct hkCollisionInput;
-struct hkCollisionFilter {
+class hkCollisionFilter { public:
     // vtable slot 0 (returns hkBool through a hidden pointer in the binary)
     virtual hkBool isCollisionEnabled(const hkCollisionInput& input, const hkCdBody& a, const hkCdBody& b, const void* bContainer, uint32_t bKey) const;
 };
@@ -58,7 +58,7 @@ struct hkCollisionInput {
 };
 
 // ---- MOPP ------------------------------------------------------------------------------------------------
-struct hkMoppCode : hkReferencedObject {
+class hkMoppCode : public hkReferencedObject { public:
     uint32_t m_pad0;                          // +8
     uint32_t m_pad1;                          // +0xc
     hkVector4 m_offset;                       // +0x10: xyz = offset, w = scale (CodeInfo::getScale)
@@ -73,7 +73,7 @@ struct hkShapeRayCastInput {                  // 40 bytes
     uint32_t m_userData;                      // +0x24
 };
 struct hkShapeRayCastOutput;
-struct hkRayHitCollector { virtual void v0(); float m_earlyOutHitFraction; };      // fraction at +4
+class hkRayHitCollector { public: virtual void v0(); float m_earlyOutHitFraction; };      // fraction at +4
 struct hkShapeCollection;
 
 struct hkMoppLongRayVirtualMachine {

@@ -8,10 +8,10 @@ slices/s00925770/s00925770.cpp  ?FUN_00926120@Trace@EA@@YAHPAX@Z  00926120
 slices/s00925770/s00925770.cpp  ?FUN_00926140@Trace@EA@@YAHPAX@Z  00926140
 slices/s00925770/s00925770.cpp  ?FUN_00926340@Trace@EA@@YAXPAX@Z  00926340
 slices/s00925770/s00925770.cpp  ?Destroy@TempTraceHelperMap@Trace@EA@@QAEXXZ  009257a0
-slices/s00925770/s00925770.cpp  ?CreateHelperTable@Trace@EA@@YAPAUTraceHelperTable@12@XZ  009258f0
-slices/s00925770/s00925770.cpp  ?UnregisterHelper@TraceHelperTable@Trace@EA@@QAEXPAUTraceHelper@23@@Z  00925960
-slices/s00925770/s00925770.cpp  ?Init@TempTraceHelperMap@Trace@EA@@QAEPAU123@XZ  009259d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
-slices/s00925770/s00925770.cpp  ?RegisterHelper@TraceHelperTable@Trace@EA@@QAEXPAUTraceHelper@23@@Z  00925b50
+slices/s00925770/s00925770.cpp  ?CreateHelperTable@Trace@EA@@YAPAVTraceHelperTable@12@XZ  009258f0
+slices/s00925770/s00925770.cpp  ?UnregisterHelper@TraceHelperTable@Trace@EA@@QAEXPAVTraceHelper@23@@Z  00925960
+slices/s00925770/s00925770.cpp  ?Init@TempTraceHelperMap@Trace@EA@@QAEPAV123@XZ  009259d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00925770/s00925770.cpp  ?RegisterHelper@TraceHelperTable@Trace@EA@@QAEXPAVTraceHelper@23@@Z  00925b50
 slices/s00925770/s00925770.cpp  ?Alloc@ZoneAllocWrap@Trace@EA@@QAEPAXIHH@Z  00925f90
 slices/s00925770/s00925770.cpp  ?ZoneAlloc_Named@Trace@EA@@YAPAXHPAUICoreAlloc@12@H@Z  00925fe0
 slices/s00925770/s00925770.cpp  ?F@C25c40@Trace@EA@@QAEXHHH@Z  00925c40

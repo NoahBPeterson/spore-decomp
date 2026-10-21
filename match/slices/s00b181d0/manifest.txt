@@ -7,7 +7,7 @@ slices/s00b181d0/s00b181d0.cpp  ?DtorBody@cGameData@SP@@QAEXXZ  00b184c0  /O2 /M
 slices/s00b181d0/s00b181d0.cpp  ?GetDefinition@cGameData@SP@@QAEIXZ  00b18530  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00b181d0/s00b181d0.cpp  ?SetOwner@cGameData@SP@@QAEXPAUIRef@@@Z  00b18550  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00b181d0/s00b181d0.cpp  ??0cGameData@SP@@QAE@XZ  00b18660  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
-slices/s00b181d0/s00b181d0.cpp  ?ScalarDeletingDtor@cGameData@SP@@QAEPAU12@E@Z  00b186b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?ScalarDeletingDtor@cGameData@SP@@QAEPAV12@E@Z  00b186b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00b181d0/s00b181d0.cpp  ?KindIsActive@@YAEPAUIObj@@@Z  00b188b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00b181d0/s00b181d0.cpp  ?NotifyRemove@@YIXPAD@Z  00b18960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00b181d0/s00b181d0.cpp  ?CheckSpaceGame@@YG_NH@Z  00b18d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

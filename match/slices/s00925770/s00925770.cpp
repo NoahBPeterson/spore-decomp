@@ -142,7 +142,7 @@ struct Mutex {
     int  Unlock();                            // 0x00922270
 };
 
-struct TraceHelper {
+class TraceHelper { public:
     char pad0;
     bool mIsFiltered;
     bool mIsFilterEvaluated;
@@ -213,7 +213,7 @@ void HelperVec::DoInsertValue(TraceHelper** pos, TraceHelper* const* val) {
     mpCapacity = buf + cap;
 }
 
-struct TraceHelperTable {
+class TraceHelperTable { public:
     virtual void AddRef();
     virtual void Release();
     void* mTracer;
@@ -306,7 +306,7 @@ struct TempMapHT {
         if (mBucketCount > 1) eastl_delete(mpBuckets);
     }
 };
-struct TempTraceHelperMap {
+class TempTraceHelperMap { public:
     Mutex mMutex;
     TempMapHT ht;
     TempTraceHelperMap* Init();                    // 0x009259d0

@@ -14,14 +14,14 @@ namespace SP {
 struct cCubeMapIndex { int mCol; int mRow; int mFace; };
 struct cSPVector3 { float x, y, z; };
 
-struct cTerrainMapBase {
+class cTerrainMapBase { public:
     void* mVftable;        // +0x00
     int mnRefCount;        // +0x04
     unsigned mFaceSize;    // +0x08
     unsigned mModCount;    // +0x0c
 };
 
-template <class T> struct cTerrainMap : cTerrainMapBase {
+template <class T> class cTerrainMap : public cTerrainMapBase { public:
     T* mBegin;             // +0x10 (eastl::vector<T>::mpBegin)
     T* mEnd;
     T* mCap;

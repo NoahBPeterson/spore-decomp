@@ -27,8 +27,8 @@ void FUN_01081c30(float*, int, int);   // hkMatrix6 4x4 block multiply-accumulat
 void hkArrayUtil_reserveMore(void* a, int elemSize);   // 0x0107f530
 
 template <typename T>
-struct hkArray
-{
+class hkArray
+{ public:
     T* m_data;
     int m_size;
     int m_capacityAndFlags;
@@ -42,15 +42,15 @@ struct hkArray
     }
 };
 
-struct hkEntity
-{
+class hkEntity
+{ public:
     virtual ~hkEntity();
     void addReference();      // 0x01082590
     void removeReference();   // 0x0109ae60
 };
 
-struct hkReferencedObject
-{
+class hkReferencedObject
+{ public:
     virtual ~hkReferencedObject() {}
     virtual void calcStatistics(void*) const {}
     short m_memSizeAndFlags;   // +4
@@ -58,8 +58,7 @@ struct hkReferencedObject
     hkReferencedObject() { m_referenceCount = 1; }
 };
 
-struct hkAction : hkReferencedObject
-{
+class hkAction : public hkReferencedObject { public:
     int m_pad8;                // +8
     int m_padc;                // +0xc
     unsigned int m_userData;   // +0x10
@@ -67,8 +66,7 @@ struct hkAction : hkReferencedObject
     virtual void getEntities(hkArray<hkEntity*>&) {}
 };
 
-struct hkUnaryAction : hkAction
-{
+class hkUnaryAction : public hkAction { public:
     hkEntity* m_entity;        // +0x18
     hkUnaryAction(hkEntity* e, unsigned int u);
     ~hkUnaryAction();
@@ -76,8 +74,7 @@ struct hkUnaryAction : hkAction
     void removeFromWorld();
 };
 
-struct hkBinaryAction : hkAction
-{
+class hkBinaryAction : public hkAction { public:
     hkEntity* m_entityA;       // +0x18
     hkEntity* m_entityB;       // +0x1c
     hkBinaryAction(hkEntity* a, hkEntity* b, unsigned int u);

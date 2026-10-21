@@ -17,7 +17,7 @@ typedef signed   int   i32;
 namespace rw { namespace graphics {
 struct Raster;
 struct VertexDescriptor;
-struct VertexBuffer;
+class VertexBuffer;
 struct Palette;
 
 // ---- free helpers (no pdb symbol; resolved by address) ----
@@ -81,7 +81,7 @@ struct VBi { u32  FUN_011f3620(u8, u32, u32); void FUN_011f38f0(int, u32); };
 struct VPi { bool FUN_011f3d40(u32, u32); };
 
 namespace rw { namespace graphics {
-struct VertexBuffer { VertexBuffer* Unlock(); };
+class VertexBuffer { public: VertexBuffer* Unlock(); };
 }}
 
 

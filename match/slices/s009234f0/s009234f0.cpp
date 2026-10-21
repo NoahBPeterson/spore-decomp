@@ -15,7 +15,7 @@ extern unsigned g_timeoutP;  // 0x0143dc78
 // EA::Thread::Mutex
 // ---------------------------------------------------------------------------
 namespace EA { namespace Thread {
-struct Mutex {
+class Mutex { public:
     unsigned __int64 mData[4];  // +0
     int  mnLockCount;           // +0x20
     bool mbIntraProcess;        // +0x24
@@ -74,13 +74,13 @@ struct IUnknown32 {
     virtual void QueryInterface() {}
 };
 
-struct ILogFilter : IUnknown32 {
+class ILogFilter : public IUnknown32 { public:
     virtual void f2() {}
     virtual void f3() {}
     virtual int  IsFiltered(void* rec) { (void)rec; return 0; }  // +0x14
 };
 
-struct ILogFormatter : IUnknown32 {
+class ILogFormatter : public IUnknown32 { public:
     virtual void f2() {}
     virtual void f3() {}
     virtual void f4() {}
@@ -88,7 +88,7 @@ struct ILogFormatter : IUnknown32 {
     virtual void f6() {}
 };
 
-struct ILogReporter : IUnknown32 {
+class ILogReporter : public IUnknown32 { public:
     virtual void r2() {}
     virtual void r3() {}
     virtual void r4() {}
@@ -170,7 +170,7 @@ struct RBTreeMap {
 // ---------------------------------------------------------------------------
 // LogReporter
 // ---------------------------------------------------------------------------
-struct LogReporter : ILogReporter {
+class LogReporter : public ILogReporter { public:
     AutoRefCount<ILogFilter>    mFilter;    // +4
     AutoRefCount<ILogFormatter> mFormatter; // +8
     bool mIsEnabled;                        // +0xc
@@ -196,7 +196,7 @@ struct LogReporter : ILogReporter {
 // ---------------------------------------------------------------------------
 // LogFilterGroupLevels
 // ---------------------------------------------------------------------------
-struct LogFilterGroupLevels : ILogFilter {
+class LogFilterGroupLevels : public ILogFilter { public:
     int      mnRefCount;     // +4
     EaString mName;          // +8
     int      mGlobalLevel;   // +0x18
@@ -214,7 +214,7 @@ struct LogRecordFwd { int pad0[4]; };
 // ---------------------------------------------------------------------------
 // LogFormatterSimple / LogFormatterFancy
 // ---------------------------------------------------------------------------
-struct LogFormatterSimple : ILogFormatter {
+class LogFormatterSimple : public ILogFormatter { public:
     int  mnRefCount;             // +4
     FixedString2048 mName;       // +0x8  (0x814 bytes)
     FixedString2048 mLine;       // +0x81c
@@ -225,7 +225,7 @@ struct LogFormatterSimple : ILogFormatter {
     void* Clone();
 };
 
-struct LogFormatterFancy : ILogFormatter {
+class LogFormatterFancy : public ILogFormatter { public:
     int  mnRefCount;             // +4
     FixedString512 mName;        // +0x8
     unsigned short mnFlags;      // +0x21c
@@ -245,7 +245,7 @@ struct LogFormatterFancy : ILogFormatter {
 // ---------------------------------------------------------------------------
 // Slots declared (not defined) and annotated with the original targets so the checker can map
 // the vtables Server::Server stores (0x143dd20 / 0x143dd04) by content.
-struct IServer {
+class IServer { public:
     virtual void s0();  // 0x009236c0
     virtual void s1();  // 0x009236d0
     virtual void s2();  // 0x00924cf0
@@ -263,7 +263,7 @@ struct IServer {
     virtual void s14();  // 0x009238f0
 };
 
-struct ITracer {
+class ITracer { public:
     virtual void t0();  // 0x00697eb0
     virtual void t1();  // 0x00697ed0
     virtual void t2();  // 0x00923db0
@@ -273,7 +273,7 @@ struct ITracer {
     virtual void t6();  // 0x00923930
 };
 
-struct Server : IServer, ITracer {
+class Server : public IServer, public ITracer { public:
     bool mbIsReporting;      // +0x8
     char pad0[3];
     char* mpHeapBuffer;      // +0xc

@@ -30,8 +30,8 @@ extern const char hkMonitorEndMarker[];             // 0x0149cc34
 
 // ---- Havok thread memory -----------------------------------------------------------------------------------
 extern unsigned long g_hkThreadMemoryTls;           // 0x016e4174
-struct hkThreadMemory
-{
+class hkThreadMemory
+{ public:
     virtual void v0();
     virtual void v1();
     virtual void v2();
@@ -52,9 +52,9 @@ struct __declspec(align(16)) hkAabb    { hkVector4 m_min, m_max; };
 struct __declspec(align(16)) hkTransform { hkVector4 m_rotation[3]; hkVector4 m_translation; };
 struct __declspec(align(16)) hkSphere { hkVector4 m_pos; };
 
-template <typename T> struct hkArray { T* m_data; int m_size; int m_capacityAndFlags; };
+template <typename T> class hkArray { public: T* m_data; int m_size; int m_capacityAndFlags; };
 struct hkRay { hkVector4 m_start; hkVector4 m_end; };
-template <typename T, int N> struct hkInplaceArray { hkArray<T> m_array; T m_storage[N]; };
+template <typename T, int N> class hkInplaceArray { public: hkArray<T> m_array; T m_storage[N]; };
 
 // hkBool is a class with a user copy ctor, so it is returned through a hidden pointer (as the original does).
 class hkBool
@@ -70,22 +70,22 @@ public:
 struct hkShapeRayCastInput  { hkVector4 m_from; hkVector4 m_to; };
 struct hkShapeRayCastOutput { hkVector4 m_hitPoint; hkUint32 m_shapeKey; float m_hitFraction; };
 
-struct hkCdBody
-{
+class hkCdBody
+{ public:
     void*    m_shape;      // +0x0
     hkUint32 m_shapeKey;   // +0x4
     void*    m_motion;     // +0x8
     hkCdBody* m_parent;    // +0xc
 };
 
-struct hkRayHitCollector
-{
+class hkRayHitCollector
+{ public:
     virtual void addHit(const hkCdBody& body, const float* hit);   // slot 0
     float m_earlyOutHitFraction;                                   // +0x4
 };
 
-struct hkStatisticsCollector
-{
+class hkStatisticsCollector
+{ public:
     virtual void slot0();
     virtual void beginObject(const char* name, int id, const void* obj);                          // +0x4
     virtual void addArray(const char* name, int id, const void* ptr, int size, int sizeInMemory);  // +0x8
@@ -324,8 +324,8 @@ public:
 };
 
 struct hkMoppCode;
-struct hkMoppBvTreeShape
-{
+class hkMoppBvTreeShape
+{ public:
     hkUint32 m_pad0[4];      // +0x00 .. +0x0f
     const hkMoppCode* m_code;// +0x10
     void querySphere(const hkSphere& sphere, hkArray<hkUint32>& out) const;

@@ -49,20 +49,20 @@ static inline float hkSqrtScaled(float a, float b, float scale)
     return (float)(sqrt((double)a * (double)b) * (double)scale);
 }
 
-template <typename T> struct hkArray {
+template <typename T> class hkArray { public:
     T* m_data; int32_t m_size; int32_t m_capacityAndFlags;
 };
 
-struct hkVector4 { float m_x, m_y, m_z, m_w; };
-struct hkAabb { hkVector4 m_min, m_max; };
-struct hkTransform { hkVector4 m_rotation[3]; hkVector4 m_translation; };  // 0x40 in later SDKs; layout used only by address here
+class hkVector4 { public: float m_x, m_y, m_z, m_w; };
+class hkAabb { public: hkVector4 m_min, m_max; };
+class hkTransform { public: hkVector4 m_rotation[3]; hkVector4 m_translation; };  // 0x40 in later SDKs; layout used only by address here
 
-struct hkContactPoint {                       // 32 bytes
+class hkContactPoint { public:                       // 32 bytes
     hkVector4 m_position;
     hkVector4 m_separatingNormal;             // xyz = normal, w = distance
 };
 
-struct hkContactPointMaterial {               // 12 bytes (at +8 of hkContactPointProperties)
+class hkContactPointMaterial { public:               // 12 bytes (at +8 of hkContactPointProperties)
     uint32_t m_userData;
     uint16_t m_friction;                      // sqrt(muA*muB) * 256, rounded
     uint8_t  m_restitution;                   // sqrt(rA*rB) * 128, rounded
@@ -70,25 +70,25 @@ struct hkContactPointMaterial {               // 12 bytes (at +8 of hkContactPoi
     uint8_t  m_flags;
     uint8_t  m_pad[3];
 };
-struct hkContactPointProperties {             // 0x14 bytes
+class hkContactPointProperties { public:             // 0x14 bytes
     uint32_t m_impulse[2];
     hkContactPointMaterial m_material;
 };
 HK_OFFSET_CHECK(chk_props_size, sizeof(hkContactPointProperties) == 0x14);
 
-struct hkReferencedObject {
+class hkReferencedObject { public:
     virtual ~hkReferencedObject() {}
     uint16_t m_memSizeAndFlags;               // +4
     uint16_t m_referenceCount;                // +6
 };
 
-struct hkCdBody {
+class hkCdBody { public:
     void*            m_shape;                 // +0x00
     uint32_t         m_shapeKey;              // +0x04
     void*            m_motion;                // +0x08
     const hkCdBody*  m_parent;                // +0x0c
 };
-struct hkCollidable : hkCdBody {
+class hkCollidable : public hkCdBody { public:
     int32_t          m_ownerOffset;           // +0x10
 };
 static inline uint8_t* hkCollidable_getOwner(const hkCollidable* c) { return (uint8_t*)c + c->m_ownerOffset; }
@@ -101,7 +101,7 @@ static inline uint8_t* hkCdBody_getRootOwner(const hkCdBody* b)
 
 struct hkRigidBodyListenerView;
 // The few hkRigidBody (hkEntity) fields touched by this slice.
-struct hkEntity {
+class hkEntity { public:
     void*    m_vptr;
     uint8_t  m_pad0[0x36 - 4];
     int16_t  m_objectQualityType;             // +0x36 (collidable broadphase handle quality type)
@@ -119,7 +119,7 @@ struct hkEntity {
 };
 HK_OFFSET_CHECK(chk_ent_friction, 1);
 
-struct hkCriticalSection {
+class hkCriticalSection { public:
     uint8_t  m_win32CriticalSection[0x18];    // CRITICAL_SECTION
     uint32_t m_owner;                         // +0x18
     int32_t  m_recursion;                     // +0x1c
@@ -135,7 +135,7 @@ struct hkCriticalSection {
     static void hkLeaveCriticalSection(void* cs);   // kernel32 LeaveCriticalSection (IAT call)
 };
 
-struct hkMemory {
+class hkMemory { public:
     virtual ~hkMemory() {}
     virtual void vslot1();
     virtual void vslot2();
@@ -144,7 +144,7 @@ struct hkMemory {
 };
 extern hkMemory* g_hkMemory;      // 0x016e4178 (hkMemory::s_instance)
 
-struct hkStatisticsCollector {
+class hkStatisticsCollector { public:
     virtual ~hkStatisticsCollector();
     virtual void beginObject(const char* name, int flags, const void* obj);                                   // +4
     virtual void addArray(const char* name, int memClass, const void* data, int used, int allocated);        // +8
@@ -156,7 +156,7 @@ struct hkStatisticsCollector {
 
 struct hkCollisionInput { uint8_t m_pad[8]; float m_tolerance; };           // m_tolerance at +8
 
-struct hkCollisionDispatcher {
+class hkCollisionDispatcher { public:
     uint8_t m_pad[0x19d4];
     int8_t  m_collisionQualityMatrix[8][8];             // +0x19d4
     uint8_t m_pad2[0x1a4c - 0x19d4 - 64];
@@ -165,7 +165,7 @@ struct hkCollisionDispatcher {
 
 struct hkWorldOperationQueued { uint8_t m_type; void* m_object; void* m_arg; };
 
-struct hkWorld {
+class hkWorld { public:
     uint8_t m_pad0[0x78];
     hkCollisionInput* m_collisionInput;             // +0x78
     uint8_t m_pad1[4];
@@ -233,7 +233,7 @@ extern void __cdecl hkEntityCallbackUtil_fireContactProcessInternal(hkEntity*, h
 extern void __cdecl hkWorld_addConstraintCritical(hkWorld*, void* constraintInstance, int);
 extern void __cdecl hkWorld_removeConstraintCritical(hkWorld*, void* constraintInstance, int);
 
-struct hkConstraintInstance {
+class hkConstraintInstance { public:
     virtual ~hkConstraintInstance();
     uint16_t m_memSizeAndFlags;     // +4
     uint16_t m_referenceCount;      // +6
@@ -614,25 +614,25 @@ hkSimpleConstraintContactMgr::Factory::createContactMgr(const hkCollidable& a, c
 // ---------------------------------------------------------------------------------------
 // hkShapePhantom / hkAabbPhantom
 // ---------------------------------------------------------------------------------------
-struct hkShape : hkReferencedObject {
+class hkShape : public hkReferencedObject { public:
     virtual void vslot1();
     virtual void vslot2();
     // slot 3 (+0x0c)
     virtual void getAabb(const hkTransform& t, float tolerance, hkAabb& out) const;
 };
 
-struct hkMotionState {
+class hkMotionState { public:
     uint8_t m_pad[0x40];
     // @ 0x01088410
     void setTransform(const hkTransform& t);
 };
 
-struct hkPhantom;
+class hkPhantom;
 extern void __cdecl hkWorldOperationUtil_removePhantomBP(hkWorld*, hkPhantom*);   // @ 0x010a0f20
 extern void __cdecl hkWorldOperationUtil_addPhantomBP(hkWorld*, hkPhantom*);      // @ 0x010a0d10
 extern void __cdecl hkWorldCallbackUtil_firePhantomShapeSet(hkWorld*, hkPhantom*);// @ 0x0109ee90
 
-struct hkPhantom : hkReferencedObject {
+class hkPhantom : public hkReferencedObject { public:
     hkWorld* m_world;                       // +0x08
     uint32_t m_pad0c[4];                    // +0x0c
     hkShape* m_shape;                       // +0x1c (collidable.m_shape)
@@ -659,7 +659,7 @@ struct hkPhantom : hkReferencedObject {
     void calcContentStatistics(hkStatisticsCollector* c) const;
 };
 
-struct hkShapePhantom : hkPhantom {
+class hkShapePhantom : public hkPhantom { public:
     hkTransform m_transform;                // +0x70 (rotation 0x30 + translation at +0xa0)
 
     hkShapePhantom(hkShape* shape, const hkTransform& t);
@@ -751,7 +751,7 @@ int hkShapePhantom::setShape(hkShape* shape)
     return 1;                               // result: done
 }
 
-struct hkAabbPhantom : hkPhantom {
+class hkAabbPhantom : public hkPhantom { public:
     hkAabb m_aabb;                          // +0x70
     hkArray<void*> m_overlappingCollidables;   // +0x90
 

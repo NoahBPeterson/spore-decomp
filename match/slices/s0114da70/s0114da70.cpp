@@ -41,7 +41,7 @@ struct TapContext {
 // ---------------------------------------------------------------------------------------
 // CombFilter / AllPassFilter flat records (slot 0/1 = apply/reset func pointers)
 // ---------------------------------------------------------------------------------------
-struct CombFilter {
+class CombFilter { public:
     void* mpApplyFunc;  // +0x00
     void* mpResetFunc;  // +0x04
     s32   miReadLength; // +0x08
@@ -58,7 +58,7 @@ struct CombFilter {
 // @ 0x0114dca0
 CombFilter* CombFilterReset(CombFilter* self);     // 0x0114dca0
 
-struct AllPassFilter {
+class AllPassFilter { public:
     void* mpApplyFunc;  // +0x00
     void* mpResetFunc;  // +0x04
     s32   miReadLength; // +0x08
@@ -207,7 +207,7 @@ struct AudioProcessContext {
     s32   mChannelCount;             // +0x3002C
 };
 
-struct System {
+class System { public:
     char pad0[0x14];
     void* Alloc(u32 size, const char* tag, int flags, int align);
     void  Free(void* p, int flags);
@@ -218,12 +218,12 @@ extern System* g_pSystem; // DAT_016e61a8
 // FastFirEngine (real x86 layout == the reference's 4-byte X360 offsets)
 // ---------------------------------------------------------------------------------------
 struct VoiceStageConfig;
-struct Resample;
-struct FastFirEngine;
+class Resample;
+class FastFirEngine;
 
 typedef void (*FFT_FreeFunc)(void**);
 
-struct FastFirEngine {
+class FastFirEngine { public:
     void* mpBuffer;    // +0x00
     f32*  mpInput[2];  // +0x04 / +0x08
     f32*  mpFreq;      // +0x0C
@@ -492,7 +492,7 @@ int FastFirEngine::Configure(s32 channels, s32 blockSize, s32 a4, s32 a5, s32 a6
 // ---------------------------------------------------------------------------------------
 // ReverbIR1 -- 0x0114e260 = Process (drives the embedded FastFirEngine).
 // ---------------------------------------------------------------------------------------
-struct ReverbIR1 {
+class ReverbIR1 { public:
     char pad0[4];
     s32  miField04;        // +0x04
     char pad8[0x21 - 0x08];
@@ -573,7 +573,7 @@ PosDst InterpRamp(u32 pos, s32 step, u32 end, const f32* src, f32* dst)
 // ---------------------------------------------------------------------------------------
 // Resample -- descriptor guid 'Rsp0'.  0x0114e860 SetResampleIncrement, 0x0114e8f0 PreProcess.
 // ---------------------------------------------------------------------------------------
-struct Resample {
+class Resample { public:
     char pad0[0x08];
     void* mpVoice;          // +0x08
     char pad0c[0x18 - 0x0C];

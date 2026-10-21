@@ -35,11 +35,11 @@ public:
 } }
 
 namespace EA {
-template <typename T> struct AutoRefCount {
+template <typename T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount& operator=(T* p);
 };
-template struct AutoRefCount<UTFWinControls::IWinText>;
+template class AutoRefCount<UTFWinControls::IWinText>;
 }
 
 EA::AutoRefCount<EA::UTFWinControls::IWinText>&

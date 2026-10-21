@@ -6,11 +6,11 @@
 #pragma intrinsic(__rdtsc)
 
 namespace rw { namespace core { namespace filesys {
-struct Stream; struct AsyncOp;
+class Stream; class AsyncOp;
 }}}
 namespace rw { namespace core { namespace timer {
-struct Stopwatch
-{
+class Stopwatch
+{ public:
     void* vftable;        // +0x00
     void* mCallback;      // +0x04
     int32_t mUnits;       // +0x08
@@ -30,8 +30,8 @@ using rw::core::timer::Stopwatch;
 namespace rw {
 namespace movie {
 
-struct BufferedWriter
-{
+class BufferedWriter
+{ public:
     void*   pc0; void* pc1; void* pbuf; int32_t sz, pos, rpos, rsz, rpos2;
     uint8_t* GetBuffer();          // 0x0093b6c0
     void SetBuffer(void*, int);    // 0x00fc8390
@@ -42,20 +42,18 @@ struct BufferedWriter
     void Flush();                  // 0x00fc83b0
 };
 
-struct IEncoder
-{
+class IEncoder
+{ public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void v4();   // +0x10
     virtual void v5(); virtual void v6();
     virtual void SetOutputBufferCallback(void* fn, void* ctx);   // +0x1c
 };
 
-struct IAudioEncoder : IEncoder
-{
+class IAudioEncoder : public IEncoder { public:
 };
 
-struct IVideoEncoder : IEncoder
-{
+class IVideoEncoder : public IEncoder { public:
     virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
     virtual void v12(); virtual void v13();
     virtual float GetFrameRate();   // +0x38
@@ -77,8 +75,8 @@ struct AviIndexBlock
     AviIndexBlock* next;   // +0x08
 };
 
-struct MovieEncoder_Avi
-{
+class MovieEncoder_Avi
+{ public:
     void* vftable;                        // +0x00
     void* mAllocator;                     // +0x04
     void* mEncodingErrorCallback;         // +0x08
@@ -145,8 +143,8 @@ struct StreamerContext
     void Ctor();            // 0x00fcd3c0
 };
 
-struct MovieRenderer
-{
+class MovieRenderer
+{ public:
     MovieRenderer* Ctor(ICoreAllocator* a);   // 0x00fcbc70
     void SetVideoPositionX(float v);   // 0x00fcbf10
     void SetVideoPositionY(float v);   // 0x00fcbf50
@@ -154,20 +152,20 @@ struct MovieRenderer
     void SetVideoScaleY(float v);      // 0x00fcbfd0
 };
 
-struct MovieTimer
-{
+class MovieTimer
+{ public:
     MovieTimer* Ctor(ICoreAllocator* a);   // 0x00fcc0b0
     void SetCallback(void* fn);            // 0x00fcc140
 };
 
-struct MovieDecoder
-{
+class MovieDecoder
+{ public:
     MovieDecoder* Ctor(ICoreAllocator* a);   // 0x00fc90e0
     void SetCallback(void* fn);              // 0x00fc91d0
 };
 
-struct MoviePlayer
-{
+class MoviePlayer
+{ public:
     ICoreAllocator* mAllocator;                     // +0x00
     void* mStreamerParseFunc;                       // +0x04
     void* mStreamerVideoFilterFunc;                 // +0x08
@@ -288,8 +286,8 @@ extern "C" {
 }
 
 namespace rw { namespace core { namespace filesys {
-struct Stream
-{
+class Stream
+{ public:
     void SetOffset(int off);                               // 0x011e6cd0
     int  GetOffset();                                      // 0x011e69c0
     void SetFilter(int off, void* fn, void* ctx);          // 0x011e7950
@@ -297,8 +295,8 @@ struct Stream
     int  QueueMem(void* buf, int size, void* fn, void* ctx); // 0x011e6aa0
     int  QueueFile(const char* path, int off, int hi, void* fn, void* ctx);  // 0x011e69d0
 };
-struct AsyncOp
-{
+class AsyncOp
+{ public:
     AsyncOp();
     int  OpenPath(const char* path, int, int, int, int);   // 0x011e8a40
     void Run(void* a);                                     // 0x011e8740

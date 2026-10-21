@@ -469,7 +469,7 @@ struct hkAgent3Funcs {                        // 0x34 bytes in the 32-bit binary
     hkAgent3WarpTimeFunc m_warpTimeFunc;             // +0x1c
     void* m_other1[5];
 };
-struct hkCollisionDispatcher {
+class hkCollisionDispatcher { public:
     uint8_t m_pad[0x1698];                    // (32-bit layout)
     hkAgent3Funcs m_agent3Func[1];            // +0x1698, indexed by agent type
 };
@@ -595,7 +595,7 @@ void* __cdecl hkAgent1nMachine_UpdateShapeCollectionFilterVisitor(hkAgent1nMachi
     return (uint8_t*)entry + entry->m_size;
 }
 
-struct hkThreadMemory {
+class hkThreadMemory { public:
     uint8_t m_pad0[0x68];
     void** m_freeListHead;                    // +0x68 (singly linked, first word = next)
     uint8_t m_pad1[0xac - 0x68 - sizeof(void*)];
