@@ -14,8 +14,8 @@ extern uint16_t g_waveFormatTag; // 0x01491838
 // ---- items of slice s00fc9310 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace rw {
 namespace movie {
-struct BufferedWriter
-{
+class BufferedWriter
+{ public:
     void* mEncodedDataCallback;      // +0x00
     void* mEncodedDataCallbackData;  // +0x04
     uint8_t* mBuffer;                // +0x08
@@ -33,8 +33,8 @@ struct BufferedWriter
 }
 namespace rw {
 namespace movie {
-struct IVideoEncoder
-{
+class IVideoEncoder
+{ public:
 virtual void v0();
 virtual void v1();
 virtual void v2();
@@ -64,8 +64,8 @@ virtual void v17();
 }
 namespace rw {
 namespace movie {
-struct IAudioEncoder
-{
+class IAudioEncoder
+{ public:
 virtual void v0();
 virtual void v1();
 virtual void v2();
@@ -89,8 +89,8 @@ virtual void v9();
 }
 namespace rw {
 namespace movie {
-struct MovieEncoder_Avi
-{
+class MovieEncoder_Avi
+{ public:
     void* vftable;                      // +0x00
     void* mAllocator;                   // +0x04
     void* mEncodingErrorCallback;       // +0x08
