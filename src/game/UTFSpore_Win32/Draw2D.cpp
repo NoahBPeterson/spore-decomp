@@ -47,7 +47,7 @@ struct Bounds {
 // ---- items of slice s009515e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace eastl {
 template <typename T>
-struct generic_iterator {
+class generic_iterator { public:
   T* mIterator;
   explicit generic_iterator(T* x) : mIterator(x) {}
   generic_iterator& operator++() { ++mIterator; return *this; }
