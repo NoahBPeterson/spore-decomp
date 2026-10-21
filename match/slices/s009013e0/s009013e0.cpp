@@ -170,7 +170,7 @@ struct HashB : Hashtable {
 };
 
 namespace EA { namespace Allocator {
-struct StackAllocator {
+class StackAllocator { public:
     unsigned int mnDefaultBlockSize;   // +0x00
     void*        mpCurrentBlock;       // +0x04
     char*        mpCurrentBlockEnd;    // +0x08
@@ -195,7 +195,7 @@ struct StackAllocator {
 }}
 
 namespace EA { namespace XML {
-struct TokenIOContext {
+class TokenIOContext { public:
     char _allocCtx[0x8];
     EA::Allocator::StackAllocator mAllocator;  // +0x08
     HashA* mStringsA;    // +0x2c

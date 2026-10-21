@@ -17,7 +17,7 @@ void EASTL_allocator_deallocate(void* p);                             // 0x00f47
 
 namespace eastl {
 
-struct allocator {};
+class allocator { public:};
 int CompareI(const char* a, const char* b, unsigned n);               // 0x00606ea0 (cdecl)
 
 template <class T> inline const T& min_alt(const T& a, const T& b) { return (b < a) ? b : a; }
@@ -119,7 +119,7 @@ struct CharStream {                                                   // 0x20 by
     void SkipLine();                                                  // 0x008950b0
 };
 
-struct TriggerTokenReader : CharStream {                              // 0x30 bytes
+class TriggerTokenReader : public CharStream { public:                              // 0x30 bytes
     int mResult;                                                      // +0x20
     int mToken;                                                       // +0x24
     uint mTokenValue;                                                 // +0x28
@@ -157,7 +157,7 @@ struct Binding {                                                      // 16 byte
     uint link;
 };
 
-struct TriggerMap {
+class TriggerMap { public:
     void AddCombo(uint value, const uint* keys, uint count);          // 0x008d4920
     void AddBinding(const Binding& b);                                // 0x008d48d0
     Binding* FindByValue(uint value);                                 // 0x008d3ae0
@@ -179,7 +179,7 @@ static const char* GetAbbreviatedPlatformName(const char* platform)  // 0x008d4a
     return _stricmp(platform, "Windows") == 0 ? "win32" : "";
 }
 
-struct TriggerConfigParser {                                          // 0x40 bytes
+class TriggerConfigParser { public:                                          // 0x40 bytes
     TriggerMap* mpTriggerMap;     // +0x0
     TriggerConfigParser* mpParent;// +0x4
     char* mpPlatformName;         // +0x8

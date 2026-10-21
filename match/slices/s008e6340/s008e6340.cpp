@@ -21,7 +21,7 @@
 namespace EA {
 
 template <typename T>
-struct RectT {
+class RectT { public:
     T mLeft, mTop, mRight, mBottom;
     RectT() {}
     RectT(T l, T t, T r, T b) : mLeft(l), mTop(t), mRight(r), mBottom(b) {}
@@ -42,7 +42,7 @@ struct SizeT {
 };
 
 template <typename T>
-struct Point2DT {
+class Point2DT { public:
     T mX, mY;
     Point2DT() {}
     Point2DT(T x, T y) : mX(x), mY(y) {}
@@ -75,7 +75,7 @@ enum Units { kUnitsPixels = 1, kUnitsPercentage = 9, kUnitsAuto = 10 };
 enum BackgroundRepeat { kNoRepeat = 0, kRepeatX = 1, kRepeatY = 2, kRepeatXY = 3 };
 enum BackgroundAttachment { kBackgroundScroll = 0, kBackgroundFixed = 1 };
 
-struct FontMetrics {
+class FontMetrics { public:
     float mfFontSize, mfEmSize, mfExSize, mfAscent, mfDescent;
 };
 

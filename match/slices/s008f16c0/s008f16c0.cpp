@@ -12,7 +12,7 @@
 namespace EA {
 
 template <typename T>
-struct RectT {
+class RectT { public:
     T mLeft, mTop, mRight, mBottom;
 };
 
@@ -28,7 +28,7 @@ namespace XHTML {
 
 namespace Style {
 
-struct FontMetrics {
+class FontMetrics { public:
     float mfFontSize, mfEmSize, mfExSize, mfAscent, mfDescent;
 };
 
@@ -127,7 +127,7 @@ public:
     Vector<TableCell*> mCells;             // +0x5c
 };
 
-struct TableColumn {
+class TableColumn { public:
     float mMinWidth;                       // +0x0
     float mMaxWidth;                       // +0x4
     float mPercentWidth;                   // +0x8

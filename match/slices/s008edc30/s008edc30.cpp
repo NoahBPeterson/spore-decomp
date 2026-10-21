@@ -107,7 +107,7 @@ float __cdecl DblToFlt(double v);                                // 0x013cc4bc
 float __cdecl RoundF(double v);                                  // 0x011e0906
 
 // ---- PickingContext ----
-struct PickingContext {                     // 0xb84
+class PickingContext { public:                     // 0xb84
     int      mVtbl0000;                     // +0x0000
     uint32_t mPad04[8];                     // +0x0004
     void*    mpNode24;                      // +0x0024
@@ -154,7 +154,7 @@ struct PickingContext {                     // 0xb84
 };
 
 // ---- RenderingContext (its PickingContext fields share the same offsets) ----
-struct RenderingContext {
+class RenderingContext { public:
     ScrollInfo* mpScroll00;                 // +0x0000
     uint32_t mPad04[8];                     // +0x0004
     void*    mpNode24;                      // +0x0024
@@ -201,7 +201,7 @@ struct RenderingContext {
 };
 
 // ---- Page ----
-struct Page {
+class Page { public:
     uint32_t mPad00[0x24 / 4];
     void*    mpNode24;                      // +0x24
     uint32_t mPad28[(0x3c - 0x28) / 4];

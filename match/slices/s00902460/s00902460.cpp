@@ -12,7 +12,7 @@ extern "C" size_t wcslen(const wchar_t*);
 // ---------------------------------------------------------------------------
 // forward types
 // ---------------------------------------------------------------------------
-namespace EA { namespace XML { struct TokenNode; struct TokenIOContext; } }
+namespace EA { namespace XML { struct TokenNode; class TokenIOContext; } }
 
 // Generic byte stream (EA::IO::IStream). Only the vtable slots actually called
 // by this slice are declared; the gaps are placeholder virtuals so each slot
@@ -41,14 +41,14 @@ struct IStream {
 namespace EA { namespace Allocator {
 struct ICoreAllocator;
 
-struct ContextCoreAllocator {
+class ContextCoreAllocator { public:
     const char* mpName;          // +0x0
     ICoreAllocator* mpAllocator; // +0x4
     ContextCoreAllocator() {}
     ContextCoreAllocator(const char* name, ICoreAllocator* a);
 };
 
-struct StackAllocator {
+class StackAllocator { public:
     unsigned   mnDefaultBlockSize;    // +0x0
     void*      mpCurrentBlock;        // +0x4
     char*      mpCurrentBlockEnd;     // +0x8
@@ -219,7 +219,7 @@ struct HashB : Hashtable {
 // TokenIOContext
 // ---------------------------------------------------------------------------
 namespace EA { namespace XML {
-struct TokenIOContext {
+class TokenIOContext { public:
     EA::Allocator::ContextCoreAllocator mAllocatorContext; // +0x0
     EA::Allocator::StackAllocator       mAllocator;        // +0x8
     HashA*     mStringsA;                                  // +0x2c
@@ -514,7 +514,7 @@ struct MemoryStream : IStream {
     void SetResize(int enable, float factor);                                         // 0x93bb40
     void SetPosition(int a, int b);                                                   // 0x93c0c0
 };
-struct XmlTextReader {
+class XmlTextReader { public:
     unsigned mData[0x22];
     XmlTextReader(EA::Allocator::ICoreAllocator* alloc);                              // 0x900b30
     ~XmlTextReader();                                                                 // 0x900b70
@@ -660,7 +660,7 @@ TokenIOContext::~TokenIOContext()
 // ---------------------------------------------------------------------------
 // XmlReader / XmlTokenReader
 // ---------------------------------------------------------------------------
-struct XmlReader {
+class XmlReader { public:
     virtual void vf0() {}
     virtual void vf1() {}
     char pad[0x68];                                   // +0x4 .. +0x6c
@@ -670,7 +670,7 @@ struct XmlReader {
     bool BeginRead2(const void* a, const void* b, const void* c); // 0x900610
 };
 
-struct XmlTokenReader : XmlReader {
+class XmlTokenReader : public XmlReader { public:
     TokenIOContext mCtx;                              // +0x6c
 
     XmlTokenReader(EA::Allocator::ICoreAllocator* alloc);

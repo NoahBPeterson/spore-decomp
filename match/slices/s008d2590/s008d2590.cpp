@@ -90,13 +90,13 @@ extern bool g_bXInputInitialized;                                               
 
 namespace EA { namespace Input {
 
-struct InputMan;
+class InputMan;
 
-struct Device {
+class Device { public:
     virtual ~Device() {}
 };
 
-struct Controller : Device {
+class Controller : public Device { public:
     InputMan* mpInputMan;
     unsigned mnIndex;
     unsigned short mRepeatCount[24];
@@ -123,7 +123,7 @@ struct Controller : Device {
     bool GetControlStates(float* out, bool bBinary);
 };
 
-struct Keyboard : Device {
+class Keyboard : public Device { public:
     InputMan* mpInputMan;
     unsigned mnIndex;
     bool mbAvailable;
@@ -137,7 +137,7 @@ struct Keyboard : Device {
     bool IsKeyDown(unsigned vk, unsigned modifiers);
 };
 
-struct Mouse : Device {
+class Mouse : public Device { public:
     InputMan* mpInputMan;
     unsigned mnIndex;
     bool mbAvailable;
@@ -154,7 +154,7 @@ struct Mouse : Device {
     bool IsButtonDown(unsigned code);
 };
 
-struct InputMan {
+class InputMan { public:
     virtual ~InputMan();
     virtual void v1();
     virtual void v2();

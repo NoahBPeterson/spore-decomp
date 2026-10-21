@@ -30,7 +30,7 @@ namespace EA {
 
 namespace Thread {
 // thiscall; the callee pops its arguments.
-struct Mutex {
+class Mutex { public:
     char mData[0x30];
     void Lock(const char* pName);   // 0x009221B0
     int  Unlock();                  // 0x00922270
@@ -46,7 +46,7 @@ struct IRefCounted {
 
 namespace ResourceMan {
 
-struct Key {
+class Key { public:
     uint32 mInstance;   // +0x00
     uint32 mType;       // +0x04
     uint32 mGroup;      // +0x08
@@ -85,7 +85,7 @@ struct RehashResult {
 struct CacheRes;
 
 // A ResourceMan factory: reference-counted COM object with the slots this slice uses.
-struct Factory {
+class Factory { public:
     virtual void Slot00();                                                        // +0x00
     virtual void AddRef();                                                        // +0x04
     virtual void Release();                                                       // +0x08
@@ -203,7 +203,7 @@ inline bool ChangeLess(const ChangeInfo* lhs, const ChangeInfo* rhs)
 // ---------------------------------------------------------------------------
 // Manager
 // ---------------------------------------------------------------------------
-struct Manager {
+class Manager { public:
     void** vftable;                 // +0x00
     uint8  mbInitialized;           // +0x04
     char   _pad05[3];

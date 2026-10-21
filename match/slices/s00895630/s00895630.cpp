@@ -125,8 +125,7 @@ static const IStaticDefinition<char, unsigned short> sVariants[] =
 // Retail layout: TokenReader<char,CharStream<char>> occupies 0x00..0x1f in this
 // configuration (its eastl string reserves one more dword than the retail build), four bytes of
 // unsaved state follow, then the reader's own token fields.
-struct TextStyleReader : public StyleReaderBase
-{
+class TextStyleReader : public StyleReaderBase { public:
     typedef StyleReaderBase::string_type     string_type;
     typedef StyleReaderBase::position_type   position_type;
 

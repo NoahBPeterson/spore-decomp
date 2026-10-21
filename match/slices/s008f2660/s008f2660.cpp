@@ -194,7 +194,7 @@ struct PropArg {
 };
 
 // Property linked-list node built by CreatePropertyFunc<T>.
-struct Property {
+class Property { public:
     void*     mpVtable;   // +0
     Property* mpNext;     // +4
     void*     mpSetter;   // +8

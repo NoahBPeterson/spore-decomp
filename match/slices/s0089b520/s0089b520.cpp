@@ -11,7 +11,7 @@ extern "C" void* __cdecl memmove(void*, const void*, unsigned);
 extern wchar_t gEmptyWStr[2];   // 0x01667bac: shared empty-string storage
 
 namespace EA { namespace Allocator {
-struct ICoreAllocator {
+class ICoreAllocator { public:
     virtual void v0(); virtual void v1(); virtual void v2();
     virtual void Free(void* p, unsigned size);   // +0xc
     static ICoreAllocator* GetDefaultAllocator();   // 0x00925cb0
@@ -108,7 +108,7 @@ struct FixedUIntVec {
 };
 
 // ---- LineLayout (retail, 0xb0 bytes) ------------------------------------
-struct LineLayout {
+class LineLayout { public:
     ICoreAllocator* mpCoreAllocator;                // +0x00
     struct WString {
         wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity;
@@ -178,7 +178,7 @@ struct ScheduleVec : cvec<unsigned char> {
             mpAllocator->Free(p, ((mpCapacity - p) / 0x2c) * 0x2c);
     }
 };
-struct Typesetter {
+class Typesetter { public:
     unsigned char pad0[0x14];
     int mDirection;                                 // +0x14
     FontSelectionTree mFontSelection;               // +0x18 (root at +0x24)

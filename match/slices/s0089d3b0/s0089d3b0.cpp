@@ -90,7 +90,7 @@ struct LineLayoutBase {
     void FUN_0089cc00(LineLayoutBase* dst, void* arg);                      // 0x0089cc00
 };
 
-struct LineLayout : LineLayoutBase {
+class LineLayout : public LineLayoutBase { public:
     LineLayout(const LineLayoutBase* src);                                  // 0x0089bf70
     ~LineLayout();                                                          // 0x008323d0
 };
@@ -125,7 +125,7 @@ extern LayoutSettings gDefaultLayoutSettings;       // 0x01549840
 void* GetAllocator();                               // 0x008859d0
 void* GetDefaultAllocator();                        // 0x00925cb0
 
-struct Typesetter {
+class Typesetter { public:
     void* mpCoreAllocator;              // +0x000
     LayoutSettings mLayoutSettings;     // +0x004
     void* mpFontServer;                 // +0x380

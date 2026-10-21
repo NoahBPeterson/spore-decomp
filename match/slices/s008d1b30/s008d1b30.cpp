@@ -124,9 +124,9 @@ struct TsiHashClass {
 
 namespace EA { namespace Input {
 
-struct InputMan;
+class InputMan;
 
-struct Device {
+class Device { public:
     virtual ~Device() {}
     virtual bool GetDeviceState(unsigned long cb, void* data) { return false; }
     virtual void Unacquire() {}
@@ -134,7 +134,7 @@ struct Device {
     virtual bool Poll() { return false; }
 };
 
-struct Controller : Device {
+class Controller : public Device { public:
     InputMan* mpInputMan;               // +0x04
     unsigned mnIndex;                   // +0x08
     unsigned short mRepeatCount[24];    // +0x0c
@@ -152,20 +152,20 @@ struct Controller : Device {
     bool GetControlStates(float* out, bool bBinary);
 };
 
-struct Keyboard : Device {
+class Keyboard : public Device { public:
     InputMan* mpInputMan;               // +0x04
     unsigned mnIndex;                   // +0x08
     bool mbAvailable;                   // +0x0c
 };
 
-struct Mouse : Device {
+class Mouse : public Device { public:
     InputMan* mpInputMan;               // +0x04
     unsigned mnIndex;                   // +0x08
     bool mbAvailable;                   // +0x0c
     int mXMin, mYMin, mXMax, mYMax;     // +0x10
 };
 
-struct InputMan {
+class InputMan { public:
     virtual ~InputMan();                                                  // +0x00
     virtual void v1();
     virtual void v2();

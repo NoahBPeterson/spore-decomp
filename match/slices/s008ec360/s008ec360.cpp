@@ -22,7 +22,7 @@ struct intrusive_list_node {
     intrusive_list_node* mpPrev;
 };
 
-struct allocator {
+class allocator { public:
     allocator() {}
     void deallocate(void* p) { operator delete(p); }
 };
@@ -145,23 +145,23 @@ class Element;
 namespace Style {
 
 class Selector;
-struct Property;
+class Property;
 class Rule;
 
-struct PropertyList {
+class PropertyList { public:
     Property* mpFirst;  // +0x00
 };
 
-struct PropertyCollection {
+class PropertyCollection { public:
     PropertyList mList[2];  // +0x00, +0x04
 };
 
-struct Property {
+class Property { public:
     u32 mKind;         // +0x00
     Property* mpNext;  // +0x04
 };
 
-struct Rule {
+class Rule { public:
     Rule* mpNext;                // +0x00
     Selector* mpSelectors;       // +0x04
     PropertyCollection* mpProperties;  // +0x08
@@ -335,7 +335,7 @@ public:
     TextStyleHashtable mStyleCache;              // +0x27c
 };
 
-struct StackingContext {
+class StackingContext { public:
     u32 mOwner;                        // +0x000
     EA::Text::Typesetter mTypesetter;  // +0x004
     RectF mContextRect;                // +0x534
@@ -358,7 +358,7 @@ struct StackingContext {
     void SetContextRect(const RectF& r);       // 0x008EFC80
 };
 
-struct PickingContext {
+class PickingContext { public:
     PickingContext(const void* screenRect);    // 0x008EE240
     EA::Text::Typesetter mTypesetter;          // +0x000
     u32 mPad530[(0x564 - 0x530) / 4];

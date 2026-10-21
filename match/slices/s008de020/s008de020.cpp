@@ -52,7 +52,7 @@ struct ICoreAllocator {
 };
 
 namespace Thread {
-struct Mutex {
+class Mutex { public:
     char pad[0x30];
     void Lock(const char* pName);   // 0x009221b0
     int Unlock();                   // 0x00922270
@@ -61,7 +61,7 @@ struct Mutex {
 }
 
 namespace IO {
-struct FileChangeNotification {
+class FileChangeNotification { public:
     void** vftable;         // +0x00
     bool mbInitialized;     // +0x04
     bool Init();
@@ -70,7 +70,7 @@ struct FileChangeNotification {
 
 namespace ResourceMan {
 
-struct Key {
+class Key { public:
     uint32 mInstance;   // +0x00
     uint32 mType;       // +0x04
     uint32 mGroup;      // +0x08
@@ -99,7 +99,7 @@ struct ChangeNotificationInfoCompare {
 struct Compression;
 struct CacheRes;
 
-struct Manager {
+class Manager { public:
     void** vftable;                 // +0x00
     bool mbInitialized;             // +0x04
     char pad05[3];

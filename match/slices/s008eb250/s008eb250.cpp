@@ -46,7 +46,7 @@ namespace XHTML {
 
 namespace Style {
 
-struct StyleState {
+class StyleState { public:
     uint32_t pad000[0x37c / 4];
     int mFloat;                      // +0x37c
     uint32_t pad380;

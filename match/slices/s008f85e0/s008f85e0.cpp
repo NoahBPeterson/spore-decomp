@@ -62,7 +62,7 @@ struct String {              // size 0x10
 };
 
 // A compiled CSS declaration (the game's Property): polymorphic, chained through mpNext.
-struct Property {        // size 0x8
+class Property { public:        // size 0x8
     void* mpVptr;        // +0x00
     Property* mpNext;    // +0x04
 };

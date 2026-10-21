@@ -96,7 +96,7 @@ struct String {
 };
 
 // A single property linked-list node (also the head of the list built by the parsers).
-struct Property {
+class Property { public:
     void*     mpVtable;   // +0
     Property* mpNext;     // +4
     void*     mpSetter;   // +8

@@ -90,8 +90,8 @@ namespace EA {
 namespace ResourceMan {
 
 // 12-byte resource key. Comparison order is (type, instance, group) as used by the rbtree.
-struct Key
-{
+class Key
+{ public:
     uint32_t mnTypeID;      // 0x00
     uint32_t mnGroupID;     // 0x04
     uint32_t mnInstanceID;  // 0x08
