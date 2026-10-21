@@ -124,6 +124,9 @@ struct S {
 // Simulator package loader (cdecl, 4 stack args).
 extern "C" char __cdecl FUN_00b8f230(void* param, void* a, void* b, void* c);   // 0x00b8f230
 extern "C" char __cdecl FUN_00b8f470(void* param, void* a, void* b, void* c);   // 0x00b8f470
+extern "C" void FUN_00b8fd90();                                                    // 0x00b8fd90
+extern "C" void FUN_00b5b960();                                                    // 0x00b5b960
+extern "C" void FUN_00b5b9a0();                                                    // 0x00b5b9a0
 
 // ===========================================================================
 // @ 0x00b8f230
@@ -456,7 +459,7 @@ void S::FUN_00b8ff60()
   char* esi = self + 0x1c;
   *(char*)(self + 0x38) = 0;
   char* p = *(char**)(esi + 0xc);
-  ((void (__thiscall*)(void*, char*))0x00b8fd90)(this, p);
+  ((void (__thiscall*)(char*, char*))FUN_00b8fd90)(esi, p);
   char* a = esi + 4;
   *(int*)(esi + 0xc) = 0;
   *(char*)(esi + 0x10) = 0;
@@ -470,7 +473,7 @@ void S::FUN_00b8ff60()
 void* S::FUN_00b8ff90()
 {
   char* self = (char*)this;
-  ((void (*)(void*))0x00b5b960)(self);       // SP::cGonzagoSubsystem ctor
+  ((void (__thiscall*)(void*))FUN_00b5b960)(self);       // SP::cGonzagoSubsystem ctor
   *(void**)(self + 0x00) = (void*)0x01465858;
   *(void**)(self + 0x04) = (void*)0x01465850;
   char* eax = self + 0x20;
@@ -495,8 +498,8 @@ void* S::FUN_00b8ffd0(char del)
   *(void**)(self + 0x00) = (void*)0x01465858;
   *(void**)(self + 0x04) = (void*)0x01465850;
   char* p = *(char**)(ecx + 0xc);
-  ((void (__thiscall*)(void*, char*))0x00b8fd90)(this, p);
-  ((void (*)(void*))0x00b5b9a0)(self);       // SP::cGonzagoSubsystem dtor
+  ((void (__thiscall*)(char*, char*))FUN_00b8fd90)(ecx, p);
+  ((void (__thiscall*)(void*))FUN_00b5b9a0)(self);       // SP::cGonzagoSubsystem dtor
   if (del & 1) EastlDelete(self);
   return self;
 }

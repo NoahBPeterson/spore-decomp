@@ -1,2 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00b8f230/s00b8f230.cpp  ?FUN_00b8fbb0@S@@QAEHPAX@Z  00b8fbb0  /O2 /MD /Gy /EHsc /TP
+slices/s00b8f230/s00b8f230.cpp  ?FUN_00b8ff60@S@@QAEXXZ  00b8ff60  /O2 /MD /Gy /EHsc /TP
+slices/s00b8f230/s00b8f230.cpp  ?FUN_00b8ffd0@S@@QAEPAXD@Z  00b8ffd0  /O2 /MD /Gy /EHsc /TP
