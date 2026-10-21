@@ -1,0 +1,14 @@
+00a93cf0 Simulator::cCreatureAbility::Deserialize      # ability record deserialiser (io, mgr, this)
+00a93ea0 Simulator::cCreatureAbility::Detach           # release owner component binding
+00a93ee0 Simulator::cCreatureAbility::OnKeyEvent       # comm event id==1 handler
+00a94030 Simulator::cCreatureAbility::SetActive        # set active flag, refresh origin, notify
+00a940a0 Simulator::cCreatureAbility::NotifyHook       # dispatch state hook, bump counter
+00a940e0 Simulator::cCreatureAbility::GetParam         # 3-arg cdecl getter via FUN_00a6c7a0
+00a94130 Simulator::cCreatureAbility::Reset            # reset ability state on owner change
+00a94220 Simulator::cCreatureAbility::SetProperty      # property dispatch (jump table on id)
+00a943a0 Simulator::cCreatureAbility::Recalc           # recompute scale/speeds from owner
+00a94470 Simulator::cCreatureAbility::ctor             # constructor
+00a947b0 Simulator::cCreatureAbility::dtor             # destructor / scalar delete
+00a94800 Simulator::cCreatureAbility::Init             # bind to owner, seed fields, register
+00a94940 Simulator::cCreatureAbility::UpdateTransform  # assign transforms, derive world pos
+00a94b70 Simulator::cCreatureAbility::SetDescriptor    # set descriptor and recalc
