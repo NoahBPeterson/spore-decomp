@@ -1,0 +1,31 @@
+# slice s00fb7720 (SP::cTerrainSphereQuad helpers) - confident names
+# VA        name                        note
+00fb7720    QuadFree                    free quad vectors + recurse into 4 children
+00fb77b0    QuadSubdivide               allocate/subdivide the quad's 4 children
+00fb78f0    QuadReset                   reset quad sub-vector (thiscall ret 4)
+00fb7920    QuadAddRibbonPolys          add ribbon polys to quad (thiscall ret 4)
+00fb7960    FreeQuadRange               free each 0x2c-stride element in a range
+00fb79b0    QuadFreeElemVector          free every element of the pointer vector
+00fb7a60    QuadReleaseVec              release first vector then QuadFreeElemVector
+00fb7a90    QuadInitParams              init scalar params and sub-buffers
+00fb7b30    QuadSetSplit                set split parameter (thiscall ret 4)
+00fb7b90    QuadOneMinusSplit           return 1 - quad[0x2c]
+00fb7bd0    QuadSetPair                 store 2-float pair at +0x610 (thiscall ret 4)
+00fb7bf0    QuadSetHeight               set height parameter (thiscall ret 4)
+00fb7c70    SampleTileA                 bilinear sample into 256x256 RGBA tile
+00fb7dc0    SampleTileB                 sample tile variant B
+00fb7f00    SampleTileC                 bilinear sample tile variant C
+00fb8060    ReplicateRows               replicate rows into 3x3 neighbourhood
+00fb8100    BuildQuadTiles              build full quad tile set (large)
+00fb8410    CopySubBuffer               copy source sub-buffer with row alignment
+00fa43e0    SP::cTerrainSphere::Relevel
+00fb6fb0    FUN_00fb6fb0
+00fb65b0    FUN_00fb65b0
+00fb71c0    FUN_00fb71c0
+00fb75b0    FUN_00fb75b0
+00fb7640    FUN_00fb7640
+00fb4c90    FUN_00fb4c90
+00fa2620    FUN_00fa2620
+00ff03c0    FUN_00ff03c0
+011e073e    operator_new_arr
+011e0744    eastl_vector_insert

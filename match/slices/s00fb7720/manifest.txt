@@ -1,0 +1,3 @@
+slices/s00fb7720/s00fb7720.cpp  ?FreeQuadRange@@YGXPAE0@Z  00fb7960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00fb7720/s00fb7720.cpp  ?QuadOneMinusSplit@@YIMH@Z  00fb7b90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00fb7720/s00fb7720.cpp  ?QuadSetPair@TC1@@QAEXPAH@Z  00fb7bd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
