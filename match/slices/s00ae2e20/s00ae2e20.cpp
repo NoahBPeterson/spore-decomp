@@ -1,4 +1,5 @@
 // Slice s00ae2e20 -- Spore "tribe simulator"/city-descriptor cluster (unnamed FUN_* functions):
+#include <intrin.h>
 // stream read/write of a small triple, a per-frame tribe-simulator update, timer control,
 // per-record bookkeeping over a 0x64-stride array, and a couple of descriptor copies.
 //
