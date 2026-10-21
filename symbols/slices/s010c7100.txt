@@ -1,0 +1,16 @@
+# va  name  # evidence
+# Slice s010c7100 (gold4 #131) -- Havok physics shapes: hkMultiSphereShape (a set of
+# spheres tested for AABB/ray), hkMultiRayShape (a set of rays), and two hkMoppBvTreeShape
+# query forwarders.  Compiled with the Havok toolchain flags /vc71 /O2 /MD /Gy /TP;
+# the numeric kernels are x87 with the sphere/ray loops fully unrolled by hand.
+# Layout: hkMultiSphereShape spheres = hkArray at +0xc (count) / +0x18 base? -- the
+# per-sphere record is 0x10 (Vector4 centre + radius); hkShapeRayCastInput/Output and
+# the hkCdBody/hkRayHitCollector plumbing come from the Havok headers.
+# Names are the PDB names (this slice's symbols are real, not reconstructed).
+010c7100  hkMultiSphereShape::getAabb          # transform every sphere centre, seed min/max with HK_REAL_MAX, expand +-radius, add tol
+010c76a0  hkMultiSphereShape::castRay          # multi-sphere ray cast with monitor-stream t0/t1 rdtsc timestamps
+010c79a0  hkMultiSphereShape::castRayWithCollector  # forward the ray cast into the hit collector
+010c7a50  hkMultiRayShape::calcStatistics      # count rays into the statistics collector (BYTE-EXACT)
+010c7b40  hkMultiRayShape::getAabb            # transform every ray endpoint, expand min/max, reserve/dealloc the endpoint buffer
+010c80b0  hkMoppBvTreeShape::querySphere       # forward a sphere query into the uint array (BYTE-EXACT)
+010c80e0  hkMoppBvTreeShape::queryObb          # forward an OBB query into the uint array (BYTE-EXACT)

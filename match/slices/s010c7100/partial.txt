@@ -1,0 +1,4 @@
+# partial.txt -- functions from slice s010c7100 (gold4 #131) not fully reconstructed.
+# (empty: all 7 VAs are complete.  4 are byte-exact in manifest.txt
+#  (010c79a0, 010c7a50, 010c80b0, 010c80e0); the other 3 are complete, behaviourally
+#  equivalent (difftest PASS) and listed in nonmatching.txt.)
