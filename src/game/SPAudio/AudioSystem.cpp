@@ -2019,7 +2019,7 @@ public:
     virtual int Release();              // +0x08
 };
 void* __cdecl ZoneAlloc(unsigned size, const char* name, int a, int b, int c, int d);   // 0x00926020
-class IStream {
+struct IStream { private:
 public:
     virtual void v0(); virtual void v4(); virtual void v8(); virtual void vc();
     virtual void v10(); virtual void v14();
