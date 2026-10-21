@@ -1,0 +1,2 @@
+# byte-exact functions for slice s01156960
+slices/s01156960/s01156960.cpp  ?FUN_01156dd0@Codec@@QAEHXZ  01156dd0  /vc71 /O2 /MD /Gy /TP /arch:SSE
