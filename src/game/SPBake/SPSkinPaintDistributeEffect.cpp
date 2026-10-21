@@ -45,7 +45,7 @@ struct VectorAutoRef {
 };
 void* GetPaintSystem();     // 0x00401080
 struct cPaintSystem { bool IsPaused(); };   // IsPaused @ 0x00525a40 (thiscall)
-struct cSPSkinPaintDistributeEffect : cComponentBase {
+class cSPSkinPaintDistributeEffect : public cComponentBase { public:
     void* mpDesc;                       // +0x0c
     void* mpWorld;                      // +0x10
     int mComponentId;                   // +0x14
