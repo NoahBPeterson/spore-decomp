@@ -1,0 +1,9 @@
+# source  symbol  original VA  [flags override]
+slices/s00fb84e0/s00fb84e0.cpp  ?BuildPaintTexture@@YAXPAX000000@Z  00fb8790  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fb84e0/s00fb84e0.cpp  ?InitPaintMatrix@PlanetColor@@QAEXXZ  00fb8a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fb84e0/s00fb84e0.cpp  ?ReadProperties@PlanetColor@@QAEXXZ  00fb8ae0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fb84e0/s00fb84e0.cpp  ?SetStop3@PlanetColor@@QAEXMMM@Z  00fb91d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fb84e0/s00fb84e0.cpp  ?GetStop2@PlanetColor@@QAEPAXPAXH@Z  00fb92c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fb84e0/s00fb84e0.cpp  ?GetStop3@PlanetColor@@QAEPAXPAXH@Z  00fb9310  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fb84e0/s00fb84e0.cpp  ?GetStop0@PlanetColor@@QAEPAXPAXH@Z  00fb9360  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fb84e0/s00fb84e0.cpp  ?GetStop1@PlanetColor@@QAEPAXPAXH@Z  00fb93b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
