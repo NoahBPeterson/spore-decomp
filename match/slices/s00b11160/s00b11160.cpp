@@ -1,4 +1,5 @@
 // Slice s00b11160 -- Spore terrain-camera / quaternion-hermite cluster (unnamed FUN_* functions):
+#include <intrin.h>
 // a cubic Hermite interpolation of a quaternion, four 0x10-stride copy/fill helpers, a
 // component teardown, a terrain-sphere surface probe, a zoom-program loader, and a big
 // state reset.
@@ -176,6 +177,7 @@ void GmeEditorResBase::Destroy()
     mVtbl0 = 0x0145cf88;
     mVtbl4 = 0x0145cf78;
     mVtbl8 = 0x014667ec;
+    _ReadWriteBarrier();
 
     if (*(void**)(s + 0x30c) != 0) {
         void* p30c = *(void**)(s + 0x30c);
