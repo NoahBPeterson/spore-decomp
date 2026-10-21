@@ -4,7 +4,7 @@
 typedef unsigned int uint;
 
 namespace EA { namespace Audio {
-struct Command {
+class Command { public:
     uint Type();                                   // EA::XHTML::DOM::Node::Type, 0x00fc7e50
     void GetUint32(uint key, uint32_t* out);       // 0x00a0fab0
     void GetBool(uint key, float* out);            // 0x00a0fa70 (the flag lands in a float-typed slot)

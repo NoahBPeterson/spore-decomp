@@ -53,7 +53,7 @@ struct IVertexStream {
   virtual void Commit();                                               // slot 2
 };
 
-struct cDistributeEffect {
+class cDistributeEffect { public:
   uint8_t             pad00[0x64];
   cTransform          mTransform;        // +0x64
   uint8_t             pad_a0[0xa8 - 0x9c];

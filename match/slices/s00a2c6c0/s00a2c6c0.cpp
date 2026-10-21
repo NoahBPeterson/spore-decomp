@@ -32,7 +32,7 @@ struct Mat33 { float m[9]; };
 // ResourceMan-style key: instance, type, group.
 struct Key { u32 instance, type, group; };
 
-struct Command {
+class Command { public:
     u8* mCommandStart; u8* mCommandEnd; u8* mCommandPtr;
     u32 mCommandId; u32 mCommandSize; u32 mNumParameters;
     u32  Type();                                   // 0xfc7e50 (returns mCommandId)
@@ -57,7 +57,7 @@ struct VisualEffectRef {
 
 // Intrusive list of Sounds: the list node sits at +0x10 in the object.
 struct ListNode { ListNode* next; ListNode* prev; };
-struct Sound { void** vftable; u32 pad[3]; ListNode node; };
+class Sound { public: void** vftable; u32 pad[3]; ListNode node; };
 struct SoundIter { Sound* p; SoundIter() : p(0) {} };
 struct SoundList {
     ListNode anchor;
@@ -91,7 +91,7 @@ struct LookupTable {
     Lookup12 Find(const u32& key);                 // 0xa27600
 };
 
-struct System {
+class System { public:
     void** vftable;                                // ISystem
     u32 pad0[(0x3fc - 4) / 4];
     u8  mbFlag3fc;                                 // +0x3fc

@@ -14,12 +14,12 @@
 namespace checkerlib
 {
 
-struct vector_3 { float x, y, z; };
-struct vector_4 { float x, y, z, w; };
+class vector_3 { public: float x, y, z; };
+class vector_4 { public: float x, y, z, w; };
 
 // A 3x3 rotation matrix, row-major: row r = (el[3r], el[3r+1], el[3r+2]).
-struct matrix_3x3
-{
+class matrix_3x3
+{ public:
     float el[9];
     // Rotation about a unit axis built from cos/sin (Rodrigues).
     void SetAxisCosSin(const vector_3& axis, float c, float s);   // 0x009e6cf0

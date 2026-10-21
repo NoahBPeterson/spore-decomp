@@ -20,9 +20,9 @@ extern "C" double sqrt(double);
 void operator delete[](void* p);                                          // 0x00f47380
 
 namespace checkerlib {
-struct vector_3 { float x, y, z; };
-struct vector_4 { float x, y, z, w; };
-struct matrix_3x3 { float m[3][3]; };
+class vector_3 { public: float x, y, z; };
+class vector_4 { public: float x, y, z, w; };
+class matrix_3x3 { public: float m[3][3]; };
 }  // namespace checkerlib
 
 using checkerlib::vector_3;
@@ -45,7 +45,7 @@ template <typename T> struct pair { T first; };
 // eastl::fixed_vector<T, 255, true> as laid out in this build: VectorBase, then the
 // fixed_vector_allocator (overflow allocator + pool begin), then the inline buffer.
 template <typename T, int nodeCount>
-struct fixed_vector {
+class fixed_vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;

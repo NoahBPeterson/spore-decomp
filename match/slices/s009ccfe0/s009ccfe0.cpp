@@ -23,8 +23,8 @@ typedef unsigned int  uint32;
 typedef unsigned long uint32ul;
 
 namespace checkerlib {
-struct vector_3 { float x, y, z; };
-struct vector_4 { float x, y, z, w; };
+class vector_3 { public: float x, y, z; };
+class vector_4 { public: float x, y, z, w; };
 }
 using checkerlib::vector_3;
 using checkerlib::vector_4;

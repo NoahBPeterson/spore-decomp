@@ -75,7 +75,7 @@ struct EString { char* b; char* e; char* c; };
 // ---------------------------------------------------------------------------
 namespace SP { namespace Audio {
 
-struct cAmbienceLayer {
+class cAmbienceLayer { public:
     char pad[0x400];
 
     void  Update();                 // 0xa35d20
@@ -332,7 +332,7 @@ using SP::Audio::cAmbienceLayer;
 // ---------------------------------------------------------------------------
 namespace EA { namespace Audio {
 
-struct PrimitiveAggregate {
+class PrimitiveAggregate { public:
     char pad[0x100];
 
     float CalculateAggregate();     // 0xa367a0

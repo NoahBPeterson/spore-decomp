@@ -31,7 +31,7 @@ struct cIParser;
 struct cState;
 struct cArguments;
 
-struct cICommand {
+class cICommand { public:
     virtual int AddRef();                       // +0x00
     virtual int Release();                      // +0x04
     virtual void* Cast(unsigned long type);     // +0x08
@@ -39,17 +39,17 @@ struct cICommand {
     virtual void Execute(cArguments& args);     // +0x10
 };
 
-struct cCommandBase : cICommand {
+class cCommandBase : public cICommand { public:
     cIParser*   mParser;                // +0x04
     int         mRefCount;              // +0x08
     cCommandBase();                     // 0x0083c800
 };
 
-struct cIBlockCommand : cICommand {
+class cIBlockCommand : public cICommand { public:
     virtual cState* GetChildState();    // +0x14
 };
 
-struct cBlockCommandBase : cIBlockCommand {
+class cBlockCommandBase : public cIBlockCommand { public:
     cIParser*     mParser;              // +0x04
     int           mRefCount;            // +0x08
     cState*       mChildState;          // +0x0c
@@ -62,10 +62,10 @@ template <typename T, typename Base> struct cCommandStateT : Base {
     T* mState;                          // block: +0x30, command: +0x0c
     cCommandStateT() {}
 };
-template <typename T> struct cCommandT : cCommandStateT<T, cCommandBase> {
+template <typename T> class cCommandT : public cCommandStateT<T, cCommandBase> { public:
     cCommandT() {}
 };
-template <typename T> struct cBlockCommandT : cCommandStateT<T, cBlockCommandBase> {
+template <typename T> class cBlockCommandT : public cCommandStateT<T, cBlockCommandBase> { public:
     cBlockCommandT() {}
 };
 

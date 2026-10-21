@@ -24,7 +24,7 @@ class cCommandBase {
     cIParser* mParser;                                          // +0x04
     int mRefCount;                                              // +0x08
 };
-struct cArgumentSpec {
+class cArgumentSpec { public:
     cArgumentSpec(bool);
     ~cArgumentSpec();
     int ConstructSpec(const char* name, ...);                   // 0x0083bcd0
@@ -64,7 +64,7 @@ namespace EA { namespace Swarm {
 class cEffectsManager;
 class cIVisualEffect;
 
-class cEffectCheat : public EA::ArgScript::cCommandBase {
+struct cEffectCheat : public EA::ArgScript::cCommandBase { private:
  public:
     cEffectCheat(cEffectsManager* manager);
     virtual void Execute(EA::ArgScript::cArguments*);
@@ -97,7 +97,7 @@ class cEffectCheat : public EA::ArgScript::cCommandBase {
     vector<int> mIntParams;                                     // +0x190
 };
 
-class cEffectsManagerCheat : public EA::ArgScript::cCommandBase {
+struct cEffectsManagerCheat : public EA::ArgScript::cCommandBase { private:
  public:
     cEffectsManagerCheat();
     virtual void Execute(EA::ArgScript::cArguments*);

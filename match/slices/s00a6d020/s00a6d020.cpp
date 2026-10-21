@@ -175,7 +175,7 @@ struct InitParams {
     int   h;        // +0x1c
 };
 
-struct cEffectsManager {
+class cEffectsManager { public:
     void*      mpVtbl;                 // +0x00
     void*      mpRefVtbl;              // +0x04
     int        m08;                    // +0x08

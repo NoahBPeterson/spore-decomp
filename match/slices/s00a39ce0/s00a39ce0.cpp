@@ -156,12 +156,12 @@ uint32_t FNV1_String8(const char* s, uint32_t seed, int flag);
 RbNode* RBTreeIncrement(RbNode* n);   // 0x00921580
 
 namespace Audio {
-struct Command {
+class Command { public:
     bool GetUint32(uint32_t key, uint32_t* out);
     bool GetFloat(uint32_t key, float* out);   // 0x00a0fa70 (named GetBool in symbols; reads a float)
     void SetFloat(uint32_t key, float v);
 };
-struct ResponseCurve {
+class ResponseCurve { public:
     float GetOutputValue(float x);
 };
 struct AudioSystem {
@@ -233,7 +233,7 @@ struct RefCountBase {
     RefCountBase() : mRefCount(0) {}
 };
 
-struct cEventModifierPrimitive : RefCountBase, IEventModifier {
+class cEventModifierPrimitive : public RefCountBase, public IEventModifier { public:
     ResourceKey mKey;               // +8
     AutoRefConfig mConfiguration;   // +0x14
 
@@ -321,7 +321,7 @@ struct SoundHashTable {
     }
 };
 
-struct cEventModifierPrimitiveMouthType : cEventModifierPrimitive {
+class cEventModifierPrimitiveMouthType : public cEventModifierPrimitive { public:
     SoundHashTable mTable;   // +0x18
     int mPad34;
     __declspec(noinline) cEventModifierPrimitiveMouthType(const char* name);
@@ -333,7 +333,7 @@ cEventModifierPrimitiveMouthType::cEventModifierPrimitiveMouthType(const char* n
 
 // 0xa3a0e0 cEventModifierPrimitiveMouthType::~cEventModifierPrimitiveMouthType (implicit destructor, called by its scalar deleting destructor at 0xa3a160)
 
-struct cEventModifierPrimitiveAlias : cEventModifierPrimitive {
+class cEventModifierPrimitiveAlias : public cEventModifierPrimitive { public:
     StrMap mMap;   // +0x18 (allocator slot) .. +0x2c
     int mPad30;
     cEventModifierPrimitiveAlias() : cEventModifierPrimitive("alias") {}
@@ -408,7 +408,7 @@ bool cEventModifierPrimitiveAlias::ReadTuningValues(const ResourceKey* key) {
     return true;
 }
 
-struct cEventModifierPrimitiveFootTypeBase : cEventModifierPrimitive {
+class cEventModifierPrimitiveFootTypeBase : public cEventModifierPrimitive { public:
     char mCurves[0x2200 - 0x18];
     cEventModifierPrimitiveFootTypeBase(const char* name);   // 0xa39930
     virtual ~cEventModifierPrimitiveFootTypeBase();
@@ -454,12 +454,12 @@ void cEventModifierPrimitiveFootTypeBase::ModifyEventWithFootName(char* footName
     cmd->SetFloat(0xa26a765f, r8 * r7 * r6);
 }
 
-struct cEventModifierPrimitiveFootType : cEventModifierPrimitiveFootTypeBase {
+class cEventModifierPrimitiveFootType : public cEventModifierPrimitiveFootTypeBase { public:
     cEventModifierPrimitiveFootType() : cEventModifierPrimitiveFootTypeBase("footsteps") {}
     virtual void ModifyEvent(Command* cmd, int a, char* dst, int capacity);   // 0xa3aea0
 };
 
-struct cEventModifierPrimitiveEpicFootType : cEventModifierPrimitiveFootTypeBase {
+class cEventModifierPrimitiveEpicFootType : public cEventModifierPrimitiveFootTypeBase { public:
     cEventModifierPrimitiveEpicFootType() : cEventModifierPrimitiveFootTypeBase("epicfootsteps") {}
     virtual void ModifyEvent(Command* cmd, int a, char* dst, int capacity);   // 0xa3af20
     virtual bool ReadTuningValues(const ResourceKey* key);                    // 0xa3af80
@@ -483,7 +483,7 @@ void cEventModifierPrimitiveEpicFootType::ModifyEvent(Command* cmd, int a, char*
         ModifyEventWithFootName(gEpicFootName, cmd, a, dst, capacity);
 }
 
-struct cEventModifierPrimitiveSurfaceType : cEventModifierPrimitive {
+class cEventModifierPrimitiveSurfaceType : public cEventModifierPrimitive { public:
     cEventModifierPrimitiveSurfaceType() : cEventModifierPrimitive("surfacetype") {}
     virtual void ModifyEvent(Command* cmd, int a, char* dst, int capacity);   // 0xa3b9a0
 };
@@ -514,7 +514,7 @@ struct PrimVector {
     void resize(unsigned n);   // 0xa39f30
 };
 
-struct cEventModifier {
+class cEventModifier { public:
     int mPad0, mPad4;
     PrimVector mEventModifiers;   // +8
     int mPad18;

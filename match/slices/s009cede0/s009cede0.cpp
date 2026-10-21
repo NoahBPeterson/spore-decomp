@@ -21,8 +21,8 @@ typedef unsigned char uint8;
 typedef unsigned int  uint32;
 
 namespace checkerlib {
-struct vector_3 { float x, y, z, w; };   // 16 bytes in this build: passed by value as four dwords
-struct vector_4 { float x, y, z, w; };
+class vector_3 { public: float x, y, z, w; };   // 16 bytes in this build: passed by value as four dwords
+class vector_4 { public: float x, y, z, w; };
 }
 using checkerlib::vector_3;
 using checkerlib::vector_4;
@@ -36,7 +36,7 @@ struct creature_instance_data;
 // ------------------------------------------------------------------ external code (resolved by
 // tools/difftest/resolve.py from the hex in the name / the '// 0x...' annotation)
 
-struct dynamics_foot;
+class dynamics_foot;
 
 struct curve_sample_a {                       // the object the [0x64]/[0x68] fields hold
     void* Sample(void* out, float t);         // 0x009dcc50  ret 8   (called at +4)
@@ -106,7 +106,7 @@ struct gait_src {
     float f_dc;                               // 0xdc
 };
 
-struct dynamics_foot {
+class dynamics_foot { public:
     float pos[3];                             // 0x000
     float prev_pos[3];                        // 0x00c
     float unk_18[3];                          // 0x018

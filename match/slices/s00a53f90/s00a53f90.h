@@ -83,7 +83,7 @@ struct PgParamTable {
 
 struct PgCallbackList;
 
-struct Play {                // size 0xb8
+class Play { public:                // size 0xb8
     PgVoiceList   mVoices;        // +0x00
     PgParamTable  mParameters;    // +0x38
     unsigned      mnBusyVoices;   // +0x8c

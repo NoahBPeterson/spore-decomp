@@ -8,8 +8,8 @@ struct PlugInConfig {
     PlugInDescRunTime* plugInHandle;
     uint8_t outputChannels;
 };
-struct Voice { void Release(); };                               // 0x0112e950
-struct PlugIn {
+class Voice { public: void Release(); };                               // 0x0112e950
+class PlugIn { public:
     char pad[0x10];
     PlugInDescRunTime* mpDesc;                                  // +0x10
     void Connect(int slot, void* value);                        // 0x0112ccc0
@@ -17,7 +17,7 @@ struct PlugIn {
     bool SetAttribute(int attr, float value);                   // 0x0112ccf0
 };
 // Global audio lock (DAT_016e61a8)
-struct System {
+class System { public:
     void Enter();                                               // 0x0112c600
     void Leave();                                               // 0x0112c620
     PlugIn* GetMasteringVoice();                                // 0x00ff35d0
@@ -47,7 +47,7 @@ struct tBinding {
     uint32_t mFlags;        // +0x20
 };
 
-struct Submix;
+class Submix;
 template<class T> struct RawVec {
     T* mpBegin; T* mpEnd; T* mpCapacity;
     int size() const { return (int)(mpEnd - mpBegin); }
@@ -209,7 +209,7 @@ struct HashSetRaw {                          // eastl hash set of PlugIn*, reach
     void  Insert(uint32_t* outIter, PlugIn** key, uint32_t flag);          // FUN_00a26be0
 };
 
-struct Submix {
+class Submix { public:
     void**          vtbl;
     char            pad4[0xc];
     VoiceContainer  mVoiceContainer;         // +0x10
@@ -751,12 +751,12 @@ void EA::Audio::VoiceContainer::SetSendId(uint32_t id)
 // ---------------------------------------------------------------------------
 // SP::Audio::cEapdMessage
 namespace EA { namespace Audio {
-struct Command {
+class Command { public:
     uint32_t* EnumParameter(uint32_t* pOffset, uint32_t* pType, void* pUnused, int flags);   // 0x00a0f880
 };
 }}
 namespace SP { namespace Audio {
-struct cEapdMessage {
+class cEapdMessage { public:
     EA::Audio::Command* mpCommand;      // +0
     uint32_t mValue;                    // +4
     uint32_t mOffset;                   // +8

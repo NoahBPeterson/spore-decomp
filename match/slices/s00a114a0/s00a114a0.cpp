@@ -43,7 +43,7 @@ struct BitGetter {
 };
 
 namespace EA { namespace Audio {
-struct ResourceDeviceDriver {
+class ResourceDeviceDriver { public:
     static bool KeyToText(uint8_t* key, char* text, uint32_t* size);   // 0xa10f70
 };
 struct VoiceContainer {

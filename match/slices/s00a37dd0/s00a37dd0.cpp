@@ -35,12 +35,12 @@ struct SysA { void Do439b0(); };                           // 0xa439b0
 struct SysB { void Do466b0(void* c, void* p); };           // 0xa466b0
 
 namespace EA { namespace Audio {
-struct ResponseCurve {
+class ResponseCurve { public:
     ResponseCurve();                                       // 0xa1aa50
     bool  InitFromConfiguration(void* cfg, u32 key);       // 0xa1a9d0
     float GetOutputValue(float x);                         // 0xa1a110
 };
-struct EmitterSndPlayer {
+class EmitterSndPlayer { public:
     EmitterSndPlayer();                                    // 0xa12d80
     char  Create();                                        // 0xa113c0
     bool  SetProperty(int id, float v, u32 b);             // 0xa116f0
@@ -49,7 +49,7 @@ struct EmitterSndPlayer {
 } }
 
 namespace SP { namespace Audio {
-struct cEmitterSndPlayer : public EA::Audio::EmitterSndPlayer {
+class cEmitterSndPlayer : public EA::Audio::EmitterSndPlayer { public:
     cEmitterSndPlayer();                                   // 0xa38d90
     bool Create();                                         // 0xa38dd0
     bool SetProperty(int id, float v, u32 b);              // 0xa38de0
@@ -152,7 +152,7 @@ bool __fastcall FUN_00a37dd0(void* ctx)
 // ---------------------------------------------------------------------------
 // cEmitterModelSound
 // ---------------------------------------------------------------------------
-struct cEmitterModelSound {
+class cEmitterModelSound { public:
     char pad[0x1000];
 
     bool Init();                    // 0xa37f20

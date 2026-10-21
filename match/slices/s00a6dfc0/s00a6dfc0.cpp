@@ -86,7 +86,7 @@ struct EString {
 // ---------------------------------------------------------------------------
 // the parser object; methods below are real members so __thiscall applies
 struct DrawInfoTarget;
-struct cEffectsParser {
+class cEffectsParser { public:
     char      _pad00[0x10];
     unsigned  mFlags;               // +0x10
     char      _pad14[0x0c];
@@ -195,7 +195,7 @@ struct ICollection {
     virtual void Release();     // +0x04
 };
 
-struct cEffectsManager {
+class cEffectsManager { public:
     char      _pad00[0x2c];
     void**    mpCollBegin;          // +0x2c (vector of ICollection*)
     void**    mpCollEnd;            // +0x30

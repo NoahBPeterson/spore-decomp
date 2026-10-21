@@ -3,8 +3,8 @@ slices/s00a39ce0/s00a39ce0.cpp  ?Init@cEventModifierPrimitive@Audio@SP@@UAE_NXZ 
 slices/s00a39ce0/s00a39ce0.cpp  ??0cEventModifierPrimitive@Audio@SP@@QAE@PBD@Z 00a3a530    /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a39ce0/s00a39ce0.cpp  ?ReadTuningValues@cEventModifierPrimitive@Audio@SP@@UAE_NPBUResourceKey@@@Z 00a3a610    /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a39ce0/s00a39ce0.cpp  ?DoCreateNode@StrMap@Audio@SP@@QAEPAUStrNode@23@ABUStrPair@23@@Z 00a3a6d0    /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
-slices/s00a39ce0/s00a39ce0.cpp  ?ModifyEvent@cEventModifierPrimitiveFootType@Audio@SP@@UAEXPAUCommand@2EA@@HPADH@Z 00a3aea0    /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
-slices/s00a39ce0/s00a39ce0.cpp  ?ModifyEvent@cEventModifierPrimitiveEpicFootType@Audio@SP@@UAEXPAUCommand@2EA@@HPADH@Z 00a3af20    /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a39ce0/s00a39ce0.cpp  ?ModifyEvent@cEventModifierPrimitiveFootType@Audio@SP@@UAEXPAVCommand@2EA@@HPADH@Z 00a3aea0    /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a39ce0/s00a39ce0.cpp  ?ModifyEvent@cEventModifierPrimitiveEpicFootType@Audio@SP@@UAEXPAVCommand@2EA@@HPADH@Z 00a3af20    /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a39ce0/s00a39ce0.cpp  ??1cEventModifierPrimitiveAlias@Audio@SP@@UAE@XZ 00a39ff0    /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a39ce0/s00a39ce0.cpp  ??1cEventModifierPrimitiveMouthType@Audio@SP@@UAE@XZ 00a3a0e0    /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a39ce0/s00a39ce0.cpp  ??_GcEventModifierPrimitive@Audio@SP@@UAEPAXI@Z 00a3a5b0    /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
