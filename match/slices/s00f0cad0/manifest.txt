@@ -1,0 +1,7 @@
+slices/s00f0cad0/s00f0cad0.cpp  ?func80h@CBuilding@@QAEMXZ  00f0d3f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f0cad0/s00f0cad0.cpp  ?scale@CBuilding@@QAEOXZ  00f0d400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f0cad0/s00f0cad0.cpp  ?Shutdown@PaletteItemUIOneClickPaint@@QAEXXZ  00f0cc80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f0cad0/s00f0cad0.cpp  ?Dtor@PaletteItemUIOneClickPaint@@QAEPAXI@Z  00f0ce10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f0cad0/s00f0cad0.cpp  ?Shutdown@CPlaceableEffect@@QAEXXZ  00f0d620  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f0cad0/s00f0cad0.cpp  ?SetViewportScale@CPlaceableEffect@@QAEXM@Z  00f0d6a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f0cad0/s00f0cad0.cpp  ?Destroy@CPlaceableEffect@@QAEPAXI@Z  00f0d840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

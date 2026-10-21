@@ -1,0 +1,7 @@
+00f0cad0 314 complete codegen differs: float-rounding/memory-pool store order at 0x44dcfffc orig 80f0cb48 vs ours 80f0cb4c; /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv FAIL (5/5 valid inputs, 49.7% cov, heap-address artifact)
+00f0cce0 183 complete codegen differs: register allocation / branch layout in DoMessage; /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv WEAK
+00f0cdd0 4 complete codegen differs: only xor eax,eax store position reorders; /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv PASS
+00f0ce60 1135 complete codegen differs: large SSE/x87 mixed function, reserve and UpdateEditedScript call scheduling; /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv FAIL (3.2% cov, eax)
+00f0d450 166 complete codegen differs: ctor base-init ordering across GameDataBase/SpatialBase; /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv UNSUPPORTED
+00f0d6e0 132 complete codegen differs: virtual-serializer call sequence and this-offset layout; /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv UNSUPPORTED
+00f0d8b0 505 complete codegen differs: property-read call sequence and inlined helpers; /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv UNSUPPORTED
