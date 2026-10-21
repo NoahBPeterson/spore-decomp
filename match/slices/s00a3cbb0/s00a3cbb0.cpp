@@ -60,7 +60,7 @@ struct EObj;   // entry object destroyed by Mixer::Release (defined below)
 
 namespace EA {
 namespace ArgScript {
-struct cArguments {
+class cArguments { public:
     int* MainArguments(int* outCount, int mn, int mx);   // 0x00838020
 };
 void cCommandBase_ctor(void* p);
@@ -133,7 +133,7 @@ namespace Hash {
 int FNV1_String8(const char* s, unsigned seed, int flag);   // 0x00932e80
 }
 namespace Swarm {
-struct cEffectsParser;
+class cEffectsParser;
 }
 }
 
@@ -148,7 +148,7 @@ struct MapDescription {
 MapDescription::MapDescription() : mRefCount(0), mHash(0), mGain(kMapGain), mField(0.0f) {}
 
 namespace EA { namespace Swarm {
-struct cEffectsParser {
+class cEffectsParser { public:
     void AddAnonDescription(ArgScript::cArguments* args, int id, MapDescription* d, int flags);   // 0x00a6fd40
 };
 }}

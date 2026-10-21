@@ -24,9 +24,9 @@ struct Mat3 {                       // 3x3 float matrix, by-value copies go thro
 };
 
 // ---------------------------------------------------------------- Havok-ish helpers
-struct hkVector4 { float x, y, z, w; };
-struct hkMotionState { char pad[0x40]; Vec3 pos; };                 // position at +0x40
-struct hkRigidBody {
+class hkVector4 { public: float x, y, z, w; };
+class hkMotionState { public: char pad[0x40]; Vec3 pos; };                 // position at +0x40
+class hkRigidBody { public:
     char pad[0x1c];
     char collidable[0x3c];          // +0x1c
     hkMotionState* mpMotion;        // +0x58
@@ -46,7 +46,7 @@ struct CdCollector {                // closest-point collector at +0xd0 of the f
     char pad2[4];
     int* hitBody;                   // +0x38
 };
-struct hkWorld {
+class hkWorld { public:
     void linearCast(void* collidable, hkLinearCastInput* in, CdCollector* collector, void* startCollector);   // @ 0x01082b90
 };
 struct cSPEditorPhysicsWorld {

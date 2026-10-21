@@ -1,0 +1,7 @@
+00a1a9d0 ?InitFromConfiguration@ResponseCurve@Audio@EA@@QAE_NPAVIConfiguration@23@I@Z  # EA::Audio::ResponseCurve::InitFromConfiguration (callee of s00a40cd0, named from the dev publics; slice address comment)
+00a1b730 ?Init@Sound@Audio@EA@@UAE_NXZ  # EA::Audio::Sound::Init (callee of s00a40cd0, named from the dev publics; slice address comment)
+00a1b8a0 ?Start@Sound@Audio@EA@@UAE_NN@Z  # EA::Audio::Sound::Start (callee of s00a40cd0, named from the dev publics; slice address comment)
+00a1c710 ?TickInternal@Sound@Audio@EA@@MAEXMM_N@Z  # EA::Audio::Sound::TickInternal (callee of s00a40cd0, named from the dev publics; slice address comment)
+00a40cd0 ?trixie_use@@YAXHHH@Z  # trixie_use migrated from s00a40cd0 (verbatim, slice spelling)
+00a40dd0 ?trixie_new@@YAHHHHH@Z  # trixie_new migrated from s00a40cd0 (verbatim, slice spelling)
+00a40e80 ?SP_Audio_Trixie_Register@@YAHXZ  # SP_Audio_Trixie_Register migrated from s00a40cd0 (verbatim, slice spelling)

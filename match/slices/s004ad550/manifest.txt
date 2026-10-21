@@ -14,4 +14,4 @@ slices/s004ad550/s004ad550.cpp  ?ClearHighlights@cSPEditorModel@SP@@QAEXXZ  004a
 slices/s004ad550/s004ad550.cpp  ?SetHighlights@cSPEditorModel@SP@@QAEXH@Z  004ae090  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s004ad550/s004ad550.cpp  ?SnapBlocks@cSPEditorModel@SP@@QAE_NXZ  004ae0f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s004ad550/s004ad550.cpp  ?Update@cSPEditorModel@SP@@QAEXXZ  004ae250  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
-slices/s004ad550/s004ad550.cpp  ?LoadBlocks@cSPEditorModel@SP@@QAE_NPAXPAUcSPEditorPhysicsWorld@2@_N2@Z  004ae260  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004ad550/s004ad550.cpp  ?LoadBlocks@cSPEditorModel@SP@@QAE_NPAXPAVcSPEditorPhysicsWorld@2@_N2@Z  004ae260  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-

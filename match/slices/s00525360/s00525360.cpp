@@ -326,7 +326,7 @@ template <typename T> struct vector : VectorBase<T> {
 
 // ---------------------------------------------------------------- mesh building
 namespace nSPSkinner {
-struct cMesh : DefaultRefCounted {          // retail size 0x1d0
+class cMesh : public DefaultRefCounted { public:          // retail size 0x1d0
     uint32_t pad08[0xa];
     vector<cSPVector2> mTextureCoordinates;         // +0x30
     uint32_t pad44[5];

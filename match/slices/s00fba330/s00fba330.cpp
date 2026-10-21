@@ -69,7 +69,7 @@ struct TmpRef {
 };
 
 namespace SP {
-struct cTerrainStateMgr { static void StaticInit(); };
+class cTerrainStateMgr { public: static void StaticInit(); };
 }
 
 // @ 0x00fba330

@@ -1,0 +1,1 @@
+00fba330 ?StaticInit@cTerrainStateMgr@SP@@SAXXZ  # SP::cTerrainStateMgr::StaticInit migrated from s00fba330

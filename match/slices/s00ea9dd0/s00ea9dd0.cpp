@@ -15,7 +15,7 @@
 
 namespace SP { namespace Audio {
 
-struct cMixMode {
+class cMixMode { public:
     void Start();                                       // 0x00ea8f90 (cMixMode::Start)
 };
 

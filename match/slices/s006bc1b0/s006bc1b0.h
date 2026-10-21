@@ -14,7 +14,7 @@ typedef unsigned long long uint64;
 // ---------------------------------------------------------------------------
 namespace EA { namespace Thread {
 
-struct Mutex {
+class Mutex { public:
     int Lock(const void* p);   // 0x9221b0
     int Unlock();              // 0x922270
     char pad00[0x30];
@@ -37,7 +37,7 @@ extern char g_mutexParam;   // 0x0140a088
 // ---------------------------------------------------------------------------
 namespace EA { namespace IO {
 
-struct FileStream {
+class FileStream { public:
     int      FUN_00928f70();                        // 0x928f70
     int      GetLastError();                       // 0x928f70
     void     SetPath(const wchar_t* p);            // 0x928f80

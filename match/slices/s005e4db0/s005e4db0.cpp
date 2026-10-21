@@ -23,7 +23,7 @@ union EmptyString {
 };
 extern EmptyString gEmptyString;
 
-struct allocator {
+class allocator { public:
   allocator() {}
 };
 

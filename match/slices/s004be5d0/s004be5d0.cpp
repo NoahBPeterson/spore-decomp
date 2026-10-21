@@ -290,7 +290,7 @@ bool XmlWriteVector3(IXmlWriter* writer, const wchar_t* name, const Vector3& v)
            writer->EndElement(name);
 }
 
-class IStream {
+struct IStream { private:
 public:
     virtual void Unk0();
     virtual void Unk1();

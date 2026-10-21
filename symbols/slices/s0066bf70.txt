@@ -1,0 +1,9 @@
+0066bf70 ?FUN_0066bf70@@YIXPAX@Z  # FUN_0066bf70 migrated from s0066bf70 (verbatim, slice spelling)
+0066c0c0 ?FUN_0066c0c0@@YIXPAX@Z  # FUN_0066c0c0 migrated from s0066bf70 (verbatim, slice spelling)
+0066c370 ?FUN_0066c370@@YIXPAX@Z  # FUN_0066c370 migrated from s0066bf70 (verbatim, slice spelling)
+0066c490 ?FUN_0066c490@@YIXPAX@Z  # FUN_0066c490 migrated from s0066bf70 (verbatim, slice spelling)
+0066c720 ?FUN_0066c720@@YIXPAX@Z  # FUN_0066c720 migrated from s0066bf70 (verbatim, slice spelling)
+0066c9e0 ?FUN_0066c9e0@@YIXPAX@Z  # FUN_0066c9e0 migrated from s0066bf70 (verbatim, slice spelling)
+0066cb70 ?FUN_0066cb70@Cb70@@QAEPAU1@I@Z  # Cb70::FUN_0066cb70 migrated from s0066bf70 (verbatim, slice spelling)
+0066cbd0 ?FUN_0066cbd0@@YIXPAX@Z  # FUN_0066cbd0 migrated from s0066bf70 (verbatim, slice spelling)
+0066cd20 ?GetVerbIconKeysForLargeCard@SP@@YAXW4eModelType@1@AAVKey@ResourceMan@EA@@1@Z  # SP::GetVerbIconKeysForLargeCard migrated from s0066bf70

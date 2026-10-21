@@ -344,7 +344,7 @@ uint32_t BitGetter::GetBits(uint32_t n) {
 
 // @ 0x00A10F70
 namespace EA { namespace Audio {
-struct ResourceDeviceDriver {
+class ResourceDeviceDriver { public:
     static bool KeyToText(uint8_t* key, char* text, uint32_t* size);
 };
 bool ResourceDeviceDriver::KeyToText(uint8_t* key, char* text, uint32_t* size) {

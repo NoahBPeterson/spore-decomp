@@ -22,7 +22,7 @@ struct RefObj {
     virtual void Release2();
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     virtual void s0();
     virtual void s1();
     virtual int  Release();

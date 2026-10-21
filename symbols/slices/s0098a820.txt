@@ -1,0 +1,5 @@
+0098ab40 ?SelectWordAt@WinTextEdit@UTFWinControls@EA@@QAEXI@Z  # WinTextEdit::SelectWordAt migrated from s0098a820 (verbatim, slice spelling)
+0098acb0 ?SetScrollbar@IWinTextEdit_s0098_a820@UTFWinControls@EA@@QAEXHPAUIUnk@23@@Z  # IWinTextEdit_s0098_a820::SetScrollbar migrated from s0098a820 (verbatim, slice spelling)
+0098ad10 ?SetScrollbarEnabled@IWinTextEdit_s0098_a820@UTFWinControls@EA@@QAEXHH@Z  # IWinTextEdit_s0098_a820::SetScrollbarEnabled migrated from s0098a820 (verbatim, slice spelling)
+0098ad40 ?OnKeyDown@WinTextEdit@UTFWinControls@EA@@QAE_NHHI@Z  # WinTextEdit::OnKeyDown migrated from s0098a820 (verbatim, slice spelling)
+0098b700 ?DoReallocPtrArray@DequeBase_s0098_a820@eastl@@QAEXIW4Side@12@@Z  # DequeBase_s0098_a820::DoReallocPtrArray migrated from s0098a820 (verbatim, slice spelling)

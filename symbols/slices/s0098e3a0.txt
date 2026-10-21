@@ -1,0 +1,3 @@
+0089d9a0 ?FinalizeLine@Typesetter@Text@EA@@QAEXXZ  # EA::Text::Typesetter::FinalizeLine (callee of s0098e3a0, named from the dev publics; slice address comment)
+0098f330 ?RegisterWinTextEditTypes@UTFWinControls@EA@@YAXXZ  # RegisterWinTextEditTypes migrated from s0098e3a0 (verbatim, slice spelling)
+0098f3d0 ?Init@WinTreeView@UTFWinControls@EA@@QAE_NXZ  # WinTreeView::Init migrated from s0098e3a0 (verbatim, slice spelling)

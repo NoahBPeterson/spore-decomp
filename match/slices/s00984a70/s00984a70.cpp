@@ -3,7 +3,7 @@
 #include "types.h"
 
 namespace EA { namespace UTFWin {
-struct Image { uint32_t pad[7]; int mWidth; int mHeight; };   // +0x1c width, +0x20 height
+class Image { public: uint32_t pad[7]; int mWidth; int mHeight; };   // +0x1c width, +0x20 height
 
 struct Point2 { float x, y; };
 
@@ -21,7 +21,7 @@ struct Graphics2D {
     virtual void DrawImageScaled(const float* area, const Image* image, const float* texCoords);
 };
 
-struct RenderContext {
+class RenderContext { public:
     Graphics2D* __thiscall Begin2D(int flags);   // 0x95bc10
 };
 
@@ -49,7 +49,7 @@ namespace EA { namespace UTFWinControls {
 
 struct DrawState { uint32_t flags; int imageIndex; };
 
-struct SliderDrawable {
+class SliderDrawable { public:
     uint32_t pad[5];                        // +0x00 (vptrs, refcount, ...)
     UTFWin::Image* mImages[3];              // +0x14 (indexed by imageIndex - 1)
     void __thiscall Paint(UTFWin::RenderContext* ctx, const float* rc, const DrawState* st);

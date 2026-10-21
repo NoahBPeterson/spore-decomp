@@ -1,4 +1,4 @@
-slices/s005e2470/s005e2470.cpp  ?LayoutInit@cSPEditorVerbIcon@SP@@UAEXUKey@ResourceMan@EA@@@Z  005e2470  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005e2470/s005e2470.cpp  ?LayoutInit@cSPEditorVerbIcon@SP@@UAEXVKey@ResourceMan@EA@@@Z  005e2470  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005e2470/s005e2470.cpp  ?GetLevel@cSPEditorVerbIcon@SP@@QAEM_N@Z  005e2860  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005e2470/s005e2470.cpp  ?GetWidth@cSPEditorVerbIcon@SP@@QAEM_N@Z  005e28c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005e2470/s005e2470.cpp  ?GetHeight@cSPEditorVerbIcon@SP@@QAEM_N@Z  005e2910  /O2 /MD /Gy /TP /arch:SSE /fp:fast
@@ -11,4 +11,4 @@ slices/s005e2470/s005e2470.cpp  ?SetIconData@cSPEditorVerbIcon@SP@@QAEXPAVcSPEdi
 slices/s005e2470/s005e2470.cpp  ?EndCharge@cSPEditorVerbIcon@SP@@QAEXXZ  005e2e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005e2470/s005e2470.cpp  ?SetLevel@cSPEditorVerbIcon@SP@@UAEXM@Z  005e2ec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005e2470/s005e2470.cpp  ?EndFlashing@cSPEditorVerbIcon@SP@@QAEXXZ  005e3180  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s005e2470/s005e2470.cpp  ?Init@cSPEditorVerbIcon@SP@@QAEXPAVIWindow@UTFWin@EA@@UKey@ResourceMan@5@II_NH22@Z  005e31e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005e2470/s005e2470.cpp  ?Init@cSPEditorVerbIcon@SP@@QAEXPAVIWindow@UTFWin@EA@@VKey@ResourceMan@5@II_NH22@Z  005e31e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

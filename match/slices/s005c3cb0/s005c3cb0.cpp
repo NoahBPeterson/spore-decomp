@@ -33,7 +33,7 @@ namespace Messaging {
 class Server;
 class IHandler;
 void RemoveHandler(Server* server, IHandler* handler, const uint32_t* ids, uint32_t count, int priority);  // 0x00571db0 (cdecl)
-struct AutoHandler {
+class AutoHandler { public:
   Server* mpServer;
   IHandler* mpHandler;
   const uint32_t* mpIdArray;
@@ -61,7 +61,7 @@ IAudioSystem* GetSystemAT();  // 0x00a206f0
 
 namespace UTFWin {
 class IWindow;
-struct Message {
+class Message { public:
   IWindow* mpSource;  // +0x0
   uint32_t pad4;
   uint32_t mType;     // +0x8

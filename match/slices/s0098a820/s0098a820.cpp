@@ -16,22 +16,22 @@ void operator_delete__(void* p);                                                
 namespace EA {
 namespace Text {
 struct TextRun { const wchar_t* text; void* style; };
-struct TextRunIterator {
+class TextRunIterator { public:
     uint32_t pad[7];
     void SetTextRunArray(const TextRun* runs, unsigned count, unsigned a, unsigned b, unsigned c);   // 0088F790
 };
-struct BreakIteratorBase : TextRunIterator {
+class BreakIteratorBase : public TextRunIterator { public:
     uint32_t f1c;
     unsigned SetPosition(unsigned pos);                 // 00888220
 };
-struct CharacterBreakIterator : BreakIteratorBase {
+class CharacterBreakIterator : public BreakIteratorBase { public:
     unsigned GetNextCharBreak();                        // 00888240
     unsigned GetPrevCharBreak();                        // 008884B0
 };
 }
 }
 namespace EA { namespace Clipboard {
-struct IData {
+class IData { public:
     virtual void m0(); virtual void m4();
     virtual void Release();                         // 0x08
     virtual void mc();
@@ -39,7 +39,7 @@ struct IData {
     virtual unsigned GetSize();                     // 0x14
 };
 IData* CreateTextData(const wchar_t* text, int len);                        // 0092AB60
-struct Clipboard {
+class Clipboard { public:
     bool SetClipboardData(IData* d, int flag);                              // 0092ABB0
     bool GetClipboardData(int fmt, IData** out);                            // 0092A8D0
 };
@@ -48,7 +48,7 @@ Clipboard* GetClipboard(int which);                                         // 0
 
 namespace EA { namespace UTFWinControls {
 
-struct IWinTextEdit;
+class IWinTextEdit;
 
 struct TextMsg {
     uint32_t w0, w1;
@@ -150,7 +150,7 @@ struct ScrollbarSlot {
     uint32_t p08[3];
 };
 
-struct IWinTextEdit {
+class IWinTextEdit { public:
     virtual void t00();
     virtual void t04();
     virtual void t08();
@@ -218,7 +218,7 @@ struct IWinTextEdit {
     void SetScrollbarEnabled(int idx, int v);   // 0098AD10
 };
 
-struct WinTextEdit : TextWindow, IWinTextEdit {
+class WinTextEdit : public TextWindow, public IWinTextEdit { public:
     unsigned SnapIndex(unsigned pos, int* pOut);        // 0098A430
     unsigned F98A4B0(unsigned pos);                     // 0098A4B0
     unsigned F98A570(unsigned pos);                     // 0098A570

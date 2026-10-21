@@ -1,0 +1,1 @@
+00526430 ?empty@VectorU32@@QBE_NXZ  # VectorU32::empty migrated from s00525360 (verbatim, slice spelling)

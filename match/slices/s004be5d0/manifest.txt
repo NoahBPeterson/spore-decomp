@@ -17,5 +17,5 @@ slices/s004be5d0/s004be5d0.cpp  ?XmlWriteUInt@@YA_NPAVIXmlWriter@@PB_WK@Z  004be
 slices/s004be5d0/s004be5d0.cpp  ?XmlWriteHex@?A0x  004beec0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 slices/s004be5d0/s004be5d0.cpp  ?XmlWriteFloat@@YA_NPAVIXmlWriter@@PB_WM@Z  004bef40  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 slices/s004be5d0/s004be5d0.cpp  ?XmlWriteVector3@@YA_NPAVIXmlWriter@@PB_WABUVector3@@@Z  004bef80  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
-slices/s004be5d0/s004be5d0.cpp  ?WriteRLE@@YA_NPAVIStream@@PBEI@Z  004bf0a0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
-slices/s004be5d0/s004be5d0.cpp  ?ReadRLE@@YA_NPAVIStream@@PAEI@Z  004bf2a0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?WriteRLE@@YA_NPAUIStream@@PBEI@Z  004bf0a0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?ReadRLE@@YA_NPAUIStream@@PAEI@Z  004bf2a0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast

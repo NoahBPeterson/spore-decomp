@@ -101,12 +101,12 @@ uint32_t FNV1_String8(const char* s, uint32_t seed, int flag);
 RbNode* RBTreeIncrement(RbNode* n);   // 0x00921580
 
 namespace XHTML { namespace DOM {
-struct Node {
+class Node { public:
     int Type();   // 0x00fc7e50
 };
 }}
 namespace Audio {
-struct Command : XHTML::DOM::Node {
+class Command : public XHTML::DOM::Node { public:
     bool GetUint32(uint32_t key, uint32_t* out);          // 0x00a0fab0
     void SetUint64(uint32_t key, uint32_t value);         // 0x00a0fcf0
     bool GetString8(uint32_t key, char* out, uint32_t* cap);   // 0x00a0faf0
@@ -114,7 +114,7 @@ struct Command : XHTML::DOM::Node {
 };
 // The real curve object is 0x364 bytes with a heap buffer; GetOutputValue returns long double
 // (x87 st0), so the declared return type must be long double.
-struct ResponseCurve {
+class ResponseCurve { public:
     void* mpData;        // +0
     char pad4[0xc];      // +4..+0xf
     void* mpInline;      // +0x10
@@ -137,7 +137,7 @@ struct AudioSystem {
 };
 AudioSystem* GetSystemAT();   // 0x00a206f0
 
-struct EmitterSndPlayer {
+class EmitterSndPlayer { public:
     char pad0[0x10];
     ResponseCurve mAttenuationCurve;   // +0x10..+0x373
     char pad374[0x18];                 // +0x374..+0x38b
@@ -153,7 +153,7 @@ struct VoiceContainer {
 };
 }}
 namespace rw { namespace audio { namespace core {
-struct System {
+class System { public:
     void IsCommandComplete(int cmd, float v);   // 0x0112ccf0
     void GetLevel(int a, float* out);           // 0x0112cc80
 };
@@ -174,7 +174,7 @@ using namespace EA::Audio;
 // ---------------------------------------------------------------------------
 // @ 0x00a38e40
 // ---------------------------------------------------------------------------
-struct cEmitterSndPlayer : EmitterSndPlayer {
+class cEmitterSndPlayer : public EmitterSndPlayer { public:
     void* mpE00;   // +0xe00
     float mE04;    // +0xe04
 
@@ -264,7 +264,7 @@ struct RefCountBase {
     RefCountBase() : mRefCount(0) {}
 };
 
-struct cEventModifierPrimitive : RefCountBase, IEventModifier {
+class cEventModifierPrimitive : public RefCountBase, public IEventModifier { public:
     ResourceKey mKey;                 // +8
     AutoRefConfig mConfiguration;     // +0x14
     cEventModifierPrimitive(const char* name);   // 0xa3a530
@@ -340,7 +340,7 @@ void SoundHashTable::DoFreeNodes(void** buckets, unsigned count) {
     }
 }
 
-struct cEventModifierPrimitiveFootTypeBase : cEventModifierPrimitive {
+class cEventModifierPrimitiveFootTypeBase : public cEventModifierPrimitive { public:
     ResponseCurve mCurves[10];    // +0x18 .. +0x2200
     cEventModifierPrimitiveFootTypeBase(const char* name);   // 0xa39930
     virtual ~cEventModifierPrimitiveFootTypeBase();          // 0xa39770
@@ -355,7 +355,7 @@ cEventModifierPrimitiveFootTypeBase::~cEventModifierPrimitiveFootTypeBase() {}
 cEventModifierPrimitiveFootTypeBase::cEventModifierPrimitiveFootTypeBase(const char* name)
     : cEventModifierPrimitive(name) {}
 
-struct cEventModifier : RefCountTemplate {
+class cEventModifier : public RefCountTemplate { public:
     PrimVector mEventModifiers;   // +8
     int mPad18;                   // +0x18
     UIntMap mModifierMap;         // +0x1c

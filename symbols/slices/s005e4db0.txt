@@ -1,0 +1,8 @@
+005e4db0 ?GetLevelForType@SP@@YAMPBUCreatureStats@1@H@Z  # GetLevelForType migrated from s005e4db0 (verbatim, slice spelling)
+005e5470 ?Init@cSPEditorVerbIconData@SP@@UAEXPAVcPropertyList@2@@Z  # SP::cSPEditorVerbIconData::Init migrated from s005e4db0
+005e5910 ?ReleaseData@cSPCreatureVerbIconData@SP@@QAEXXZ  # cSPCreatureVerbIconData::ReleaseData migrated from s005e4db0 (verbatim, slice spelling)
+005e5950 ?Init@cSPCreatureVerbIconData@SP@@QAEXIPAV12@@Z  # cSPCreatureVerbIconData::Init migrated from s005e4db0 (verbatim, slice spelling)
+005e5a70 ??0cSPEditorVerbIconData_s005e_4db0@SP@@QAE@XZ  # cSPEditorVerbIconData_s005e_4db0::cSPEditorVerbIconData migrated from s005e4db0 (verbatim, slice spelling)
+005e5b60 ??0cSPCreatureVerbIconData@SP@@QAE@XZ  # cSPCreatureVerbIconData::cSPCreatureVerbIconData migrated from s005e4db0 (verbatim, slice spelling)
+005e5ba0 ??1cSPCreatureVerbIconData@SP@@UAE@XZ  # cSPCreatureVerbIconData::~cSPCreatureVerbIconData migrated from s005e4db0 (verbatim, slice spelling)
+005e5c00 ?SetHotKey@cSPEditorVerbIconData_s005e_4db0@SP@@QAEXI@Z  # cSPEditorVerbIconData_s005e_4db0::SetHotKey migrated from s005e4db0 (verbatim, slice spelling)

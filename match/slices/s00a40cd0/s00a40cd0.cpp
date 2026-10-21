@@ -66,7 +66,7 @@ namespace Audio {
 
 int* GetSystemAT();                                              // 0x00a206f0
 
-struct Sound {
+class Sound { public:
     char ConfigureSound();                                       // 0x00a20060
     void TickInternal(int a, float b, int c);                    // 0x00a1c710
     void SetPropertyInternal(int key, float v, int arg);         // 0x00a1d9c0
@@ -102,7 +102,7 @@ int* GetSingletonPtr();                          // 0x00a67c60
 }
 }
 
-struct ResponseCurve {
+class ResponseCurve { public:
     void InitFromConfiguration(void* ps, unsigned key);   // 0x00a1a9d0
 };
 
@@ -231,7 +231,7 @@ int SP_Audio_Trixie_Register() {
 
 namespace SP { namespace Audio {
 
-struct cAudioPreferences {
+class cAudioPreferences { public:
     static int  Init();                                     // 0x00a41010
     static bool __stdcall GetVolume(unsigned key, float* out);        // 0x00a411b0
     static int  GetSpeakerMode();                           // 0x00a41200
@@ -503,7 +503,7 @@ struct SubObj {
     virtual void Slot3(unsigned a, int b, int c);      // +0x0c
 };
 
-struct cSound {
+class cSound { public:
     VP VP VP VP VP VP VP
     virtual char Slot7(int a, int b, float c, int d);  // +0x1c
     virtual char Slot8(int a, int b);                  // +0x20

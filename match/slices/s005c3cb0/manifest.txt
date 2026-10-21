@@ -1,6 +1,6 @@
 slices/s005c3cb0/s005c3cb0.cpp  ??0cSPPaletteCategoryUI@SP@@QAE@XZ  005c3e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005c3cb0/s005c3cb0.cpp  ??1cSPPaletteCategoryUI@SP@@UAE@XZ  005c3f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s005c3cb0/s005c3cb0.cpp  ?HandleUIMessage@cSPPaletteCategoryUI@SP@@UAE_NPAVIWindow@UTFWin@EA@@ABUMessage@45@@Z  005c40b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c3cb0/s005c3cb0.cpp  ?HandleUIMessage@cSPPaletteCategoryUI@SP@@UAE_NPAVIWindow@UTFWin@EA@@ABVMessage@45@@Z  005c40b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005c3cb0/s005c3cb0.cpp  ?erase@PaintLikeThisVec@SP@@QAEPAV?$AutoRefPtr@VcSPEditorPaintLikeThis@SP@@@EA@@PAV34@0@Z  005c41b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005c3cb0/s005c3cb0.cpp  ?erase@PageUIVec@SP@@QAEPAUPageUIEntry@2@PAU32@0@Z  005c4330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005c3cb0/s005c3cb0.cpp  ?insert@PageUIVec@SP@@QAEXPAUPageUIEntry@2@ABU32@@Z  005c4390  /O2 /MD /Gy /TP /arch:SSE /fp:fast

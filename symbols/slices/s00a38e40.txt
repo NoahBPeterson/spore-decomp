@@ -1,0 +1,6 @@
+00a38e40 ?ComputeGainAttenuation@cEmitterSndPlayer@Audio@SP@@QAEOMMMM@Z  # cEmitterSndPlayer::ComputeGainAttenuation migrated from s00a38e40 (verbatim, slice spelling)
+00a38ea0 ?CreateVoice@cEmitterSndPlayer@Audio@SP@@QAE_NXZ  # cEmitterSndPlayer::CreateVoice migrated from s00a38e40 (verbatim, slice spelling)
+00a38ed0 ?Reset@cEmitterSndPlayer@Audio@SP@@QAEXXZ  # cEmitterSndPlayer::Reset migrated from s00a38e40 (verbatim, slice spelling)
+00a38ee0 ?SetCommandComplete@cEmitterSndPlayer@Audio@SP@@QAEXM@Z  # cEmitterSndPlayer::SetCommandComplete migrated from s00a38e40 (verbatim, slice spelling)
+00a38fe0 ?GetProperty@cEmitterSndPlayer@Audio@SP@@QAE_NIPAM@Z  # cEmitterSndPlayer::GetProperty migrated from s00a38e40 (verbatim, slice spelling)
+00a3a4b0 ?Init@cEventModifierPrimitive@Audio@SP@@UAE_NXZ  # SP::Audio::cEventModifierPrimitive::Init (callee of s00a38e40, named from the dev publics; slice address comment)

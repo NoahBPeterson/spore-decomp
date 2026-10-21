@@ -134,7 +134,7 @@ struct BatchVec {                                   // eastl::vector<Batch> payl
     int size() const { return (int)(mpEnd - mpBegin); }
 };
 
-struct cPaintList {
+class cPaintList { public:
     char* mVerticesBegin;                           // +0 (28-byte vertices)
     char pad4[0x10];
     BatchVec mBatches;                              // +0x14

@@ -14,17 +14,17 @@ struct TextStyle {
     TextStyle();                                             // 0x8941d0
     TextStyle& operator=(const TextStyle&);                  // 0x894280
 };
-struct StyleManager {
+class StyleManager { public:
     const TextStyle* GetStyle(uint32_t id, int flag);        // 0x894670
 };
-struct LineLayout {
+class LineLayout { public:
     uint32_t pad0;
     const wchar_t* mBegin;
     const wchar_t* mEnd;
     float GetXForIndex(int index, int a, int b);             // 0x898090
     int HitTest(float x, float y, int a, int b, int* out, int c);   // 0x897e00
 };
-struct Typesetter {
+class Typesetter { public:
     void Reset(bool b);                                      // 0x89cdf0
     void AddTextRun(const wchar_t* p, uint32_t n);           // 0x89b1e0
     LineLayout* GetLineLayout();                             // 0x8976a0
@@ -34,7 +34,7 @@ struct Typesetter {
     int GetState();                                          // 0x897680
     void SetBounds(float w, float x, float y);               // 0x897640
 };
-struct FontServer {
+class FontServer { public:
     virtual void fs0(); virtual void fs1(); virtual void fs2(); virtual void fs3(); virtual void fs4(); virtual void fs5();
     virtual int GetFonts(const TextStyle* s, void* out, uint32_t a, uint32_t b, uint32_t c, int d); // slot 6 (+0x18)
 };
@@ -93,10 +93,10 @@ template <class T> inline T Reload(const T& v) { return *(const volatile T*)&v; 
 struct Point2 { float x, y; };
 using EA::Text::LineLayout;
 
-struct WinTextEdit;
+class WinTextEdit;
 
 // Secondary interface, embedded at WinTextEdit+0x20c.
-struct IWinTextEdit {
+class IWinTextEdit { public:
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
     virtual int GetTextLength();                              // slot 20 (+0x50)
     virtual void s21(); virtual void s22(); virtual void s23(); virtual void s24(); virtual void s25(); virtual void s26(); virtual void s27(); virtual void s28(); virtual void s29(); virtual void s30(); virtual void s31(); virtual void s32(); virtual void s33(); virtual void s34();
@@ -163,7 +163,7 @@ struct WinTextEditBase4 {
     virtual void OnCursorMoved();                             // slot 36 (+0x90)
 };
 
-struct WinTextEdit {
+class WinTextEdit { public:
     virtual void w0(); virtual void w1(); virtual void w2(); virtual void w3(); virtual void w4(); virtual void w5(); virtual void w6(); virtual void w7(); virtual void w8(); virtual void w9(); virtual void w10(); virtual void w11(); virtual void w12(); virtual void w13(); virtual void w14(); virtual void w15(); virtual void w16(); virtual void w17(); virtual void w18(); virtual void w19(); virtual void w20(); virtual void w21(); virtual void w22(); virtual void w23(); virtual void w24(); virtual void w25(); virtual void w26(); virtual void w27(); virtual void w28(); virtual void w29(); virtual void w30(); virtual void w31(); virtual void w32(); virtual void w33(); virtual void w34(); virtual void w35();
     virtual void OnStyleChanged();                            // slot 36 (+0x90)
     uint32_t pad04[(0xb0 - 4) / 4];
@@ -620,7 +620,7 @@ void RegisterWinTextEditTypes()
 
 // @ 0x98f3d0
 struct UTFWindow { bool Initialize(); };                      // 0xb1fbf0
-struct WinTreeView : UTFWindow {
+class WinTreeView : public UTFWindow { public:
     uint32_t pad[0x84];
     bool mInited;                                             // +0x210
     bool Init();

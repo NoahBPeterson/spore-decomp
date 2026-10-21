@@ -1,0 +1,1 @@
+00984a70 ?Paint@SliderDrawable@UTFWinControls@EA@@QAEXPAURenderContext_s0098_4a70@UTFWin@3@PBMPBUDrawState@23@@Z  # SliderDrawable::Paint migrated from s00984a70 (verbatim, slice spelling)

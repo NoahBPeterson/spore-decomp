@@ -146,9 +146,9 @@ struct cMessageServer {
 cMessageServer* MessageServer();                             // 0x67dcc0
 inline cMessageServer* GetMessageServer() { return MessageServer(); }
 
-struct cSPEditorModel;
+class cSPEditorModel;
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     virtual void _v0();
     virtual int Release();
     char pad0[0x48 - 4];
@@ -173,7 +173,7 @@ struct cSPEditorBlock {
     bool Load(void* source, int group, float bounds, bool a, bool b);   // 0x450f70
 };
 
-struct cSPEditorPhysicsWorld {
+class cSPEditorPhysicsWorld { public:
     virtual void _v0();
     int mRefCount;                              // +0x04
     int AddRef() { return mRefCount++ + 1; }
@@ -182,7 +182,7 @@ struct cSPEditorPhysicsWorld {
     void AttachModel(cSPEditorModel* model);                 // 0x4b94a0
 };
 
-struct cSPEditorModel {
+class cSPEditorModel { public:
     virtual void SetName(const wchar_t* name);               // 0x00
     virtual void _v1();
     virtual void SetDescription(const wchar_t* desc);        // 0x08

@@ -28,7 +28,7 @@ struct Rectangle {
 
 namespace EA {
 namespace ResourceMan {
-struct Key {
+class Key { public:
   uint32_t instanceID;
   uint32_t typeID;
   uint32_t groupID;
@@ -184,7 +184,7 @@ extern const char kEditorAllocName[];  // "Editor"
 
 class cSPEditorVerbIcon : public EA::UTFWin::IWinProc, public EA::RefCountVTemplate<int> {
  public:
-  struct cVerbIconLinearInterpolationValue {
+  class cVerbIconLinearInterpolationValue { public:
     float mTargetValue;
     float mCurrentValue;
     float mElapsedTime;
@@ -205,7 +205,7 @@ class cSPEditorVerbIcon : public EA::UTFWin::IWinProc, public EA::RefCountVTempl
       mElapsedTime = 0.0f;
     }
   };
-  struct cVerbIconInterpolationValue {
+  class cVerbIconInterpolationValue { public:
     float mTargetValue;
     float mCurrentValue;
     float mElapsedTime;
@@ -232,7 +232,7 @@ class cSPEditorVerbIcon : public EA::UTFWin::IWinProc, public EA::RefCountVTempl
       mElapsedTime = 0.0f;
     }
   };
-  struct cVerbIconMiddleInterpolationValue {
+  class cVerbIconMiddleInterpolationValue { public:
     float mEndValue;
     float mMiddleValue;
     float mCurrentValue;
@@ -253,7 +253,7 @@ class cSPEditorVerbIcon : public EA::UTFWin::IWinProc, public EA::RefCountVTempl
       mElapsedTime = 0.0f;
     }
   };
-  struct cVerbIconOscillatingAlpha {
+  class cVerbIconOscillatingAlpha { public:
     float mInitialValue;
     float mEndValue;
     float mCurrentValue;
