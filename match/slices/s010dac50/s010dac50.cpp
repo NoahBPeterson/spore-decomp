@@ -13,18 +13,18 @@ __declspec(align(16)) struct hkVector4 {
 };
 typedef hkVector4 hkSphere;     // xyz = centre, w = radius
 
-struct hkTransform {
+class hkTransform { public:
     hkVector4 m_col0, m_col1, m_col2, m_trans;
     void setMulInverseMul(const hkTransform& a, const hkTransform& b);   // 0x010810F0: this = inverse(a) * b
 };
 
-struct hkContactPoint {
+class hkContactPoint { public:
     hkVector4 m_position;
     hkVector4 m_separatingNormal;   // w = distance
 };
 
-struct hkCdBody {
-    const struct hkShape* m_shape;   // +0
+class hkCdBody { public:
+    const class hkShape* m_shape;   // +0
     uint32_t m_shapeKey;             // +4
     const hkTransform* m_motion;     // +8
     const hkCdBody* m_parent;        // +0xc
@@ -37,12 +37,12 @@ struct hkCollisionInput {
     hkReal m_tolerance;      // +8
 };
 
-struct hkCdPointCollector {
+class hkCdPointCollector { public:
     virtual void hkCdPointCollector_v0();
     virtual void addCdPoint(const hkCdPoint& point);
     float m_earlyOutDistance;
 };
-struct hkCdBodyPairCollector {
+class hkCdBodyPairCollector { public:
     virtual void hkCdBodyPairCollector_v0();
     virtual void addCdBodyPair(const hkCdBody& a, const hkCdBody& b);
     hkBool m_earlyOut;
@@ -50,14 +50,14 @@ struct hkCdBodyPairCollector {
 
 struct hkCollisionSpheresInfo { int m_numSpheres; hkBool m_useBuffer; };
 
-struct hkShape {
+class hkShape { public:
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
     virtual void s5(); virtual void s6();
     // hkSphereRepShape (shape A)
     virtual void getCollisionSpheresInfo(hkCollisionSpheresInfo& info) const;         // slot 7
     virtual const hkSphere* getCollisionSpheres(hkSphere* sphereBuffer) const;        // slot 8
 };
-struct hkHeightFieldShape {
+class hkHeightFieldShape { public:
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
     virtual void s5(); virtual void s6();
     struct CollideSpheresInput { const hkSphere* m_spheres; int m_numSpheres; hkReal m_tolerance; };

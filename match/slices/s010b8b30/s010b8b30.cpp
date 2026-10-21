@@ -62,8 +62,8 @@ struct hkSolverInfo
 };
 
 // ---- velocity accumulator (0x80-byte stride) ----
-struct hkVelocityAccumulator
-{
+class hkVelocityAccumulator
+{ public:
 	enum { HK_RIGID_BODY = 0, HK_KEYFRAMED_RIGID_BODY = 1, HK_END = 2 };
 
 	hkUint8 m_type;                      // +0x00

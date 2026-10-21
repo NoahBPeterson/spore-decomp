@@ -14,7 +14,7 @@ typedef unsigned short hkUint16;
 typedef unsigned int   hkUint32;
 typedef          int   hkInt32;
 
-struct hkFinishLoadedObjectFlag { int m_finishing; };
+class hkFinishLoadedObjectFlag { public: int m_finishing; };
 
 // ---- monitor stream (TLS) ----------------------------------------------------------------------------------
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
@@ -53,8 +53,8 @@ struct hkMonitorTimer
 extern unsigned long g_hkThreadMemoryTls;   // 0x016e4174
 extern unsigned long g_hkMemoryInstance;    // 0x016e4178
 
-struct hkThreadMemory
-{
+class hkThreadMemory
+{ public:
     virtual void v0();
     virtual void v1();
     virtual void v2();
@@ -63,8 +63,8 @@ struct hkThreadMemory
     static hkThreadMemory* getInstance() { return (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls); }
 };
 
-struct hkMemory
-{
+class hkMemory
+{ public:
     virtual void v0();
     virtual void v1();
     virtual void v2();
@@ -89,25 +89,25 @@ enum
 };
 
 // ---- math --------------------------------------------------------------------------------------------------
-struct hkVector4
-{
+class hkVector4
+{ public:
     float x, y, z, w;
-    void setRotatedDir(const struct hkRotation& r, const hkVector4& d);   // 0x010814a0
+    void setRotatedDir(const class hkRotation& r, const hkVector4& d);   // 0x010814a0
 };
 
-struct hkRotation
-{
+class hkRotation
+{ public:
     float m[12];
 };
 
-struct hkTransform
-{
+class hkTransform
+{ public:
     float m[16];           // 3x4 rotation at +0x00, translation at +0x30
     void setMul(const hkTransform& a, const hkTransform& b);              // 0x01080ef0
 };
 
-struct hkAabb
-{
+class hkAabb
+{ public:
     hkVector4 m_min;
     hkVector4 m_max;
 };
@@ -160,23 +160,23 @@ struct hkShapeRayCastOutput
     hkVector4 m_normal;
 };
 
-struct hkRayHitCollector
-{
+class hkRayHitCollector
+{ public:
     virtual void v0();
     virtual void v1();
     unsigned int m_pad[4];
 };
 
-struct hkCdBody
-{
-    const struct hkShape* m_shape;          // +0
+class hkCdBody
+{ public:
+    const class hkShape* m_shape;          // +0
     unsigned int m_shapeKey;                // +4
     const hkTransform* m_transform;         // +8
     const hkCdBody* m_parent;               // +0xc
 };
 
-struct hkShape
-{
+class hkShape
+{ public:
     virtual void* destroy(unsigned int flags);
     virtual void v1();
     virtual void v2();
@@ -493,8 +493,8 @@ struct hkMeshShapeSubpart
 };
 
 template <class T>
-struct hkArray
-{
+class hkArray
+{ public:
     T*     m_data;               // +0
     int    m_size;               // +4
     hkUint32 m_capacityAndFlags; // +8
@@ -524,12 +524,10 @@ struct hkSubpartBuilder
     ~hkSubpartBuilder();               // 0x010c5da0
 };
 
-struct hkShapeCollection : hkShape
-{
+class hkShapeCollection : public hkShape { public:
 };
 
-struct hkMeshShape : hkShapeCollection
-{
+class hkMeshShape : public hkShapeCollection { public:
     hkUint32 m_pad0c[6];   // +0x0c..0x20
     void init(hkFinishLoadedObjectFlag f);   // 0x010c8bc0
 };

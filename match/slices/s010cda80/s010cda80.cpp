@@ -12,7 +12,7 @@ struct hkCollisionInput;                     // opaque
 // hkStatisticsCollector's first slots: slot 1 is addObjectStat(const char*, int, const
 // void*) and slot 2 is addBufferStat(const char*, int, const void*, int, int).  Both are
 // __thiscall (the original loads `this` into ecx before the indirect call).
-struct hkStatisticsCollector {
+class hkStatisticsCollector { public:
     virtual void v00();                                                    // +0x00
     virtual void addObjectStat(const char* name, int id, const void* obj);// +0x04
     virtual void addBufferStat(const char* name, int id, const void* p,

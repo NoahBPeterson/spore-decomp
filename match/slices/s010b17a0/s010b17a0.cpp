@@ -11,7 +11,7 @@ typedef unsigned char hkUint8;
 typedef unsigned short hkUint16;
 typedef unsigned int hkUint32;
 
-struct hkBool {
+class hkBool { public:
     char m_bool;
 };
 

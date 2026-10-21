@@ -27,10 +27,10 @@ void  FUN_0107db10(void* p, int nbytes, int cl); // hkThreadMemory::deallocateCh
 // ---------------------------------------------------------------------------
 struct HK_ALIGN16 hkVector4 { float x, y, z, w; };
 
-struct hkAabb { hkVector4 m_min; hkVector4 m_max; };
-struct hkTransform { hkVector4 m_rot[3]; hkVector4 m_trans; };
-struct hkSphere { hkVector4 m_pos; };          // radius lives in .w in this build
-struct hkCdVertex { hkVector4 m_pos; };
+class hkAabb { public: hkVector4 m_min; hkVector4 m_max; };
+class hkTransform { public: hkVector4 m_rot[3]; hkVector4 m_trans; };
+class hkSphere { public: hkVector4 m_pos; };          // radius lives in .w in this build
+class hkCdVertex { public: hkVector4 m_pos; };
 
 struct hkAabbUtil
 {
@@ -50,8 +50,8 @@ struct hkArrayUtil
 };
 
 template <typename T>
-struct hkArray
-{
+class hkArray
+{ public:
     T* m_data;
     int m_size;
     int m_capacityAndFlags;
@@ -79,8 +79,8 @@ struct hkArray
 // ---------------------------------------------------------------------------
 // referenced objects / shapes
 // ---------------------------------------------------------------------------
-struct hkStatisticsCollector
-{
+class hkStatisticsCollector
+{ public:
     virtual void s0();
     virtual void beginObject(const char* name, int mode, const void* obj);              // +4
     virtual void addArray(const char* name, int elemSize, const void* ptr, int used, int alloc); // +8
@@ -90,29 +90,27 @@ struct hkStatisticsCollector
     virtual void endObject();                                                           // +0x18
 };
 
-struct hkReferencedObject
-{
+class hkReferencedObject
+{ public:
     virtual ~hkReferencedObject(); // 0x013ef094
     virtual void calcStatistics(hkStatisticsCollector* c) const;
     hkInt16 m_memSizeAndFlags;   // +4
     hkInt16 m_referenceCount;    // +6
 };
 
-struct hkShape : hkReferencedObject
-{
+class hkShape : public hkReferencedObject { public:
     int m_userData;              // +8
     virtual int getType() const;
     virtual void getAabb(const hkTransform& t, float tol, hkAabb& out) const;
     virtual float getMaximumProjection(const hkVector4& dir) const;
     virtual void castRay(const void* input, void* output) const;
 };
-struct hkSphereRepShape : hkShape {};
-struct hkConvexShape : hkSphereRepShape { float m_radius; };  // +0xc
+class hkSphereRepShape : public hkShape { public:};
+class hkConvexShape : public hkSphereRepShape { public: float m_radius; };  // +0xc
 
 struct FourVectors { hkVector4 m_x, m_y, m_z; };
 
-struct hkConvexVerticesShape : hkConvexShape
-{
+class hkConvexVerticesShape : public hkConvexShape { public:
     hkVector4 m_aabbHalfExtents;              // +0x10
     hkVector4 m_aabbCenter;                   // +0x20
     hkArray<FourVectors> m_rotatedVertices;   // +0x30
@@ -127,8 +125,7 @@ struct hkConvexVerticesShape : hkConvexShape
     ~hkConvexVerticesShape();
 };
 
-struct hkCapsuleShape : hkConvexShape
-{
+class hkCapsuleShape : public hkConvexShape { public:
     hkVector4 m_vertexA;   // +0x10
     hkVector4 m_vertexB;   // +0x20
 
@@ -139,8 +136,8 @@ struct hkCapsuleShape : hkConvexShape
     void calcStatistics(hkStatisticsCollector* c) const;
 };
 
-struct hkCdBody
-{
+class hkCdBody
+{ public:
     const hkShape* m_shape;   // +0
     hkUint32 m_shapeKey;      // +4
     const void* m_motion;     // +8
@@ -148,8 +145,8 @@ struct hkCdBody
 };
 
 struct hkCdPoint { hkUint32 m[12]; };
-struct hkAllCdPointCollector
-{
+class hkAllCdPointCollector
+{ public:
     virtual void addCdPoint(const hkCdPoint& p);   // slot +?
     char pad[0x10 - 4];
     hkArray<hkCdPoint> m_points;                   // +0x10

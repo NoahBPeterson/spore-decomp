@@ -5,7 +5,7 @@
 #include "hk31_agents.h"
 #include <math.h>
 
-struct hkThreadMemory { void deallocateChunk(void* p, int nbytes, int memClass); };      // 0x0107DB10
+class hkThreadMemory { public: void deallocateChunk(void* p, int nbytes, int memClass); };      // 0x0107DB10
 static inline hkThreadMemory* getThreadMemory() { return (hkThreadMemory*)hkTlsGet(g_hkThreadMemoryTls); }
 
 // ---------------------------------------------------------------------------------------------------------

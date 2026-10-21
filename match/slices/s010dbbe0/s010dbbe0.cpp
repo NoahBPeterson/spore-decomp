@@ -14,12 +14,12 @@ __declspec(align(16)) struct hkVector4 {
 };
 typedef hkVector4 hkSphere;     // xyz = centre, w = radius
 
-struct hkTransform {
+class hkTransform { public:
     hkVector4 m_col0, m_col1, m_col2, m_trans;
     void setMulInverseMul(const hkTransform& a, const hkTransform& b);   // 0x010810F0: this = inverse(a) * b
 };
 
-struct hkContactPoint {
+class hkContactPoint { public:
     hkVector4 m_position;
     hkVector4 m_separatingNormal;   // w = distance
 };

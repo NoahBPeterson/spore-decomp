@@ -59,8 +59,8 @@ struct hkShapeRayCastOutput
     float m_hitFraction;                // +0x14
 };
 
-struct hkAabb
-{
+class hkAabb
+{ public:
     hkVector4 m_min;
     hkVector4 m_max;
 };
@@ -162,7 +162,7 @@ void hkTriangleShape::getSupportingVertex(const hkVector4& dir, void* v) const
 // and two helper pointers at +8/+0xc/+0x10/+0x14.
 // ---------------------------------------------------------------------------
 struct hkCollisionInput;
-struct hkCdBody;
+class hkCdBody;
 struct hkShapeCollection;
 
 class hkGroupFilter
@@ -302,8 +302,8 @@ struct hkShapeFilterVtbl
     void* slots[16];
 };
 
-struct hkCdBody
-{
+class hkCdBody
+{ public:
     void* m_shape;          // +0
     int   m_shapeKey;       // +4
     void* m_motion;         // +8

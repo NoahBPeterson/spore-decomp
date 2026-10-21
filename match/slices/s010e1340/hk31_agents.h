@@ -18,8 +18,8 @@ class hkContactMgr;
 class hkMoppCode;
 
 // ---- collectors ----------------------------------------------------------------------------------------------
-struct hkContactPoint
-{
+class hkContactPoint
+{ public:
 	hkVector4 m_position;                                  // +0
 	hkVector4 m_separatingNormal;                          // +0x10 (w = distance)
 	void setFlipped(const hkContactPoint& other);          // 0x010CECF0

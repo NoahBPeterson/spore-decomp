@@ -44,8 +44,8 @@ struct __declspec(align(16)) hkVector4
     float x, y, z, w;
 };
 
-struct hkCdBody
-{
+class hkCdBody
+{ public:
     const void*     m_shape;        // +0
     unsigned        m_shapeKey;     // +4
     const void*     m_motion;       // +8
@@ -100,14 +100,14 @@ public:
 // ---------------------------------------------------------------------------
 // shapes
 // ---------------------------------------------------------------------------
-struct hkTransform
-{
+class hkTransform
+{ public:
     hkVector4 m_basis[3];           // +0, +0x10, +0x20
     hkVector4 m_translation;        // +0x30
 };
 
-struct hkCapsuleShape
-{
+class hkCapsuleShape
+{ public:
     char      m_pad[0xc];
     float     m_radius;             // +0xc
     hkVector4 m_vertexA;            // +0x10
@@ -129,8 +129,8 @@ struct hkCapsuleShape
         (O).w = 0.0f; }
 
 // capsule-vs-capsule penetration manifold (distance arranged in .w)
-struct hkContactPoint
-{
+class hkContactPoint
+{ public:
     hkVector4 m_position;           // +0
     hkVector4 m_separatingNormal;   // +0x10
 };
@@ -186,8 +186,8 @@ struct hkAgentFuncs
     unsigned                     m_flags;               // +0x14 (0x18-byte struct in the retail build)
 };
 
-struct hkCollisionDispatcher
-{
+class hkCollisionDispatcher
+{ public:
     char          m_pad0[0x190];
     unsigned char m_agent2Types[32][32];               // +0x190
     unsigned char m_agent2TypesPredictive[32][32];     // +0x590

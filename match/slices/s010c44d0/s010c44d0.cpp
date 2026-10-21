@@ -66,8 +66,8 @@ public:
 
 class __declspec(align(16)) hkVector4 { public: float x, y, z, w; };
 
-struct hkTransform { hkVector4 m_rotation[3]; hkVector4 m_translation; };   // 0x40
-struct hkAabb      { hkVector4 m_min, m_max; };                            // 0x20
+class hkTransform { public: hkVector4 m_rotation[3]; hkVector4 m_translation; };   // 0x40
+class hkAabb      { public: hkVector4 m_min, m_max; };                            // 0x20
 
 class hkBool {
 public:

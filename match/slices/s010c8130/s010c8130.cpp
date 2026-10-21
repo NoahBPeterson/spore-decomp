@@ -20,15 +20,15 @@
 #define HK_OFFSET_CHECK(name, cond)
 #endif
 
-template <typename T> struct hkArray { T* m_data; int32_t m_size; int32_t m_capacityAndFlags; };
-struct hkVector4 {
+template <typename T> class hkArray { public: T* m_data; int32_t m_size; int32_t m_capacityAndFlags; };
+class hkVector4 { public:
     float m_x, m_y, m_z, m_w;
     // @ 0x01081360  this = transform * v (position); w is written by the callee
-    void setTransformedPos(const struct hkTransform& t, const hkVector4& v);
+    void setTransformedPos(const class hkTransform& t, const hkVector4& v);
 };
-struct hkTransform { hkVector4 m_rotation[3]; hkVector4 m_translation; };
-struct hkAabb { hkVector4 m_min, m_max; };
-struct hkBool {                                   // non-trivial ctor: returned through a hidden pointer
+class hkTransform { public: hkVector4 m_rotation[3]; hkVector4 m_translation; };
+class hkAabb { public: hkVector4 m_min, m_max; };
+class hkBool { public:                                   // non-trivial ctor: returned through a hidden pointer
     char m_bool;
     hkBool() {}
     hkBool(bool b) : m_bool(b ? 1 : 0) {}
@@ -88,7 +88,7 @@ static inline void hkMonitorStamp(const char* name)
 }
 
 // ---- base classes -----------------------------------------------------------------------
-struct hkReferencedObject {
+class hkReferencedObject { public:
     virtual ~hkReferencedObject() {}
     uint16_t m_memSizeAndFlags;     // +4 (0 = not heap allocated, never deleted)
     uint16_t m_referenceCount;      // +6
@@ -102,7 +102,7 @@ struct hkReferencedObject {
     inline void addReference() { if (m_memSizeAndFlags != 0) m_referenceCount++; }
 };
 
-struct hkStatisticsCollector {
+class hkStatisticsCollector { public:
     virtual ~hkStatisticsCollector();
     virtual void beginObject(const char* name, int flags, const void* obj);                                   // +4
     virtual void addArray(const char* name, int memClass, const void* data, int used, int allocated);        // +8
@@ -117,7 +117,7 @@ struct hkShapeRayCastOutput;
 struct hkCdBody;
 struct hkRayHitCollector;
 
-struct hkShape : hkReferencedObject {
+class hkShape : public hkReferencedObject { public:
     uint32_t m_userData;            // +8
     virtual void vslot1();
     virtual void vslot2();
@@ -131,7 +131,7 @@ struct hkShape : hkReferencedObject {
     virtual const hkShape* getChildShape(uint32_t key, char (&buffer)[512]) const;                // +0x28
 };
 
-struct hkTriangleShape : hkShape {
+class hkTriangleShape : public hkShape { public:
     float     m_radius;             // +0x0c
     hkVector4 m_vertices[3];        // +0x10, +0x20, +0x30
 };
@@ -141,7 +141,7 @@ extern hkBool hkTriangleUtil_isNonDegenerate(const hkVector4& a, const hkVector4
 extern float hkMeshShape_triangleDegeneracyTolerance;        // 0x015ba31c (1.0e-7f at load)
 
 // ---- hkMoppBvTreeShape ------------------------------------------------------------------
-struct hkMoppCode : hkReferencedObject {
+class hkMoppCode : public hkReferencedObject { public:
     uint32_t  m_pad08[2];
     hkVector4 m_info;               // +0x10: xyz = offset, w = scale
     hkArray<uint8_t> m_data;        // +0x20: data, +0x24 size
@@ -164,7 +164,7 @@ struct hkMoppLongRayVirtualMachine {
                       const hkShapeRayCastInput& in, const hkCdBody& body, hkRayHitCollector& collector);
 };
 
-struct hkMoppBvTreeShape : hkShape {
+class hkMoppBvTreeShape : public hkShape { public:
     hkShapeCollection* m_child;     // +0x0c
     hkMoppCode*        m_code;      // +0x10
 
@@ -283,7 +283,7 @@ HK_OFFSET_CHECK(chk_subpart_size, sizeof(hkMeshShapeSubpart) == 0x30 || sizeof(v
 struct hkMeshMaterial;
 extern uint32_t hkMeshShape_defaultMaterial;   // 0x016e42d0 (shared zero material / dummy index byte)
 
-struct hkMeshShape : hkShape {
+class hkMeshShape : public hkShape { public:
     uint32_t  m_pad0c;                     // +0x0c
     hkVector4 m_scaling;                   // +0x10
     int32_t   m_numBitsForSubpartIndex;    // +0x20
@@ -531,7 +531,7 @@ void hkMeshShape_constructFinishLoaded(hkMeshShape* self)
 // ---- hkListShape ------------------------------------------------------------------------
 struct hkListShapeChildInfo { hkShape* m_shape; uint32_t m_collisionFilterInfo; };
 
-struct hkThreadMemory {
+class hkThreadMemory { public:
     // @ 0x0107db10
     void deallocateChunk(void* p, int nbytes, int memoryClass);
 };
@@ -609,7 +609,7 @@ hkListShape::~hkListShape()
 
 // ---- hkFastMeshShape --------------------------------------------------------------------
 // FastMesh keeps its triangles in one float4-vertex, 16-bit-index subpart referenced by +0x24.
-struct hkFastMeshShape : hkMeshShape {
+class hkFastMeshShape : public hkMeshShape { public:
     hkFastMeshShape(int finishLoadedFlag);
     virtual const hkShape* getChildShape(uint32_t key, char (&buffer)[512]) const;
 };

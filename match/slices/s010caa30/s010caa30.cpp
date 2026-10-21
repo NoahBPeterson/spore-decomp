@@ -12,30 +12,30 @@ typedef unsigned int   hkUint32;
 typedef int            hkInt32;
 typedef float          hkReal;
 
-struct hkBool { hkUint8 m_bool; hkBool() {} hkBool(const hkBool& o) : m_bool(o.m_bool) {} };
+class hkBool { public: hkUint8 m_bool; hkBool() {} hkBool(const hkBool& o) : m_bool(o.m_bool) {} };
 
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 extern unsigned long g_hkThreadMemoryTls;                        // 0x016e4174
 
 // ------------------------------------------------------------------ Havok layout stubs
-struct hkReferencedObject {
+class hkReferencedObject { public:
     void**   m_vptr;              // +0x0
     hkUint16 m_memSizeAndFlags;   // +0x4
     hkUint16 m_referenceCount;    // +0x6
 };
 
-struct hkShape : public hkReferencedObject { hkUint32 m_pad08; };  // size 0xc
+class hkShape : public hkReferencedObject { public: hkUint32 m_pad08; };  // size 0xc
 
-struct hkShapeCollection : public hkShape {                      // size 0x10
+class hkShapeCollection : public hkShape { public:                      // size 0x10
     hkUint8 m_disableWelding;     // +0xc
     hkUint8 m_pad0d[3];
 };
 
-struct hkConvexShape : public hkShape { };
+class hkConvexShape : public hkShape { public: };
 
-struct hkVector4 { float x, y, z, w; };
+class hkVector4 { public: float x, y, z, w; };
 
-struct hkTransform {                                             // size 0x40
+class hkTransform { public:                                             // size 0x40
     float m_col[16];              // +0x00  (4 columns of hkVector4)
 };
 
@@ -51,7 +51,7 @@ struct hkConvexTransformShape : public hkConvexShape {           // size 0x60
     int  getCollisionSpheres(void* out);                                        // 0x010cae40
 };
 
-template<class T> struct hkArray {
+template<class T> class hkArray { public:
     T*  m_data;                   // +0x0
     int m_size;                   // +0x4
     int m_capacityAndFlags;       // +0x8
@@ -63,7 +63,7 @@ struct hkConvexPieceStreamData : public hkReferencedObject {     // size 0x2c
     hkArray<hkUint32> m_convexPieceSingleTriangles;     // +0x20
 };
 
-struct hkAabb {                                                  // size 0x20
+class hkAabb { public:                                                  // size 0x20
     hkVector4 m_min;              // +0x0
     hkVector4 m_max;              // +0x10
 };
@@ -81,9 +81,9 @@ struct hkConvexPieceMeshShape : public hkShapeCollection {       // size 0x1c
     void*    scalarDeletingDtor(hkUint32 flags);    // @ 0x010cb630
 };
 
-struct hkCollisionFilter : public hkReferencedObject { hkUint32 m_pad[4]; };   // size 0x18
+class hkCollisionFilter : public hkReferencedObject { public: hkUint32 m_pad[4]; };   // size 0x18
 
-struct hkCollidable; struct hkCollisionInput; struct hkCdBody; struct hkShapeCollection;
+struct hkCollidable; struct hkCollisionInput; struct hkCdBody; class hkShapeCollection;
 struct hkShapeRayCastInput; struct hkWorldRayCastInput;
 
 struct hkCollisionFilterList : public hkCollisionFilter {        // size 0x24

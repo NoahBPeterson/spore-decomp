@@ -7,7 +7,7 @@
 struct hkCollisionInput;
 
 // hkCdBody: shape*, motion*, transform*, radius/translation at +0xc (retail).
-struct hkCdBody {
+class hkCdBody { public:
     void* mShape;                 // +0x00
     void* mMotion;                // +0x04
     void* mTransform;             // +0x08
@@ -18,12 +18,12 @@ struct hkCdPoint {
     int m[8];                     // +0x00 .. +0x1c (raw dwords)
 };
 
-struct hkCdPointCollector {
+class hkCdPointCollector { public:
     virtual void v00() = 0;
     virtual void addCdPoint(const hkCdPoint& p) = 0;   // +0x04
 };
 
-struct hkCdBodyPairCollector {
+class hkCdBodyPairCollector { public:
     virtual void v00() = 0;
     virtual void addCdBodyPair(const hkCdBody& a, const hkCdBody& b) = 0; // +0x04
 };

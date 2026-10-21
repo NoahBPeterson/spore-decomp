@@ -47,7 +47,7 @@ struct hkMonitorListCommand { const char* m_commandAndMonitor; hkUint32 m_time0;
 #define HK_TIMER_END_LIST() HK_TIMER_COMMAND(hkMonitorEndListTag)
 
 // ---- memory ------------------------------------------------------------------------------------------
-struct hkMemory {
+class hkMemory { public:
     void** vftable;                    // +0x00
     int m_memoryState;                 // +0x04 (1 = out of memory)
     int m_criticalMemoryLimit;         // +0x08
@@ -116,10 +116,10 @@ struct __declspec(align(16)) hkVector4 {
     }
 };
 
-struct hkAabb { hkVector4 m_min; hkVector4 m_max; };            // 0x20
+class hkAabb { public: hkVector4 m_min; hkVector4 m_max; };            // 0x20
 
-struct hkBroadPhaseHandle { hkUint32 m_id; };
-struct hkTypedBroadPhaseHandle { hkUint32 m_id; char m_type; char m_ownerOffset; unsigned short m_objectQualityType; hkUint32 m_collisionFilterInfo; };
+class hkBroadPhaseHandle { public: hkUint32 m_id; };
+class hkTypedBroadPhaseHandle { public: hkUint32 m_id; char m_type; char m_ownerOffset; unsigned short m_objectQualityType; hkUint32 m_collisionFilterInfo; };
 struct hkBroadPhaseHandlePair { hkBroadPhaseHandle* m_a; hkBroadPhaseHandle* m_b; };
 
 // hkLocalArray<T>: hkArray + memory taken from the thread-memory stack
@@ -147,23 +147,23 @@ struct hkLocalArray {
 };
 
 // ---- Havok objects ----------------------------------------------------------------------------------------
-struct hkSweptTransform { hkVector4 m_centerOfMass0; hkVector4 m_centerOfMass1; hkVector4 pad[3]; };   // 0x50
+class hkSweptTransform { public: hkVector4 m_centerOfMass0; hkVector4 m_centerOfMass1; hkVector4 pad[3]; };   // 0x50
 
-struct hkMotionState {                  // 0xb0
+class hkMotionState { public:                  // 0xb0
     hkReal m_transform[16];             // +0x00
     hkSweptTransform m_sweptTransform;  // +0x40
     hkVector4 m_deltaAngle;             // +0x90
     hkReal m_objectRadius;              // +0xa0
 };
 
-struct hkShape {
+class hkShape { public:
     virtual void vslot0();
     virtual void vslot1();
     virtual void vslot2();
     virtual void getAabb(const hkReal* localToWorld, hkReal tolerance, hkAabb& out);   // +0x0c
 };
 
-struct hkCollidable {                    // 0x24
+class hkCollidable { public:                    // 0x24
     hkShape* m_shape;                    // +0x00
     hkUint32 m_shapeKey;                 // +0x04
     void* m_motion;                      // +0x08 (hkMotionState*)
@@ -173,7 +173,7 @@ struct hkCollidable {                    // 0x24
     hkReal m_allowedPenetrationDepth;    // +0x20
 };
 
-struct hkEntity {
+class hkEntity { public:
     char pad00[0x1c];
     hkCollidable m_collidable;           // +0x1c (hkLinkedCollidable continues past 0x40)
 };
@@ -186,8 +186,8 @@ struct hkBroadPhase {
                              hkLocalArray<hkBroadPhaseHandlePair>& delPairs);          // +0x1c
 };
 
-struct hkCollidableCollidableFilter { char pad[1]; };
-struct hkCollisionFilter { char pad[8]; hkCollidableCollidableFilter m_ccFilter; };     // MI base at +8
+class hkCollidableCollidableFilter { public: char pad[1]; };
+class hkCollisionFilter { public: char pad[8]; hkCollidableCollidableFilter m_ccFilter; };     // MI base at +8
 
 struct hkProcessCollisionInput {
     void* m_dispatcher;
@@ -201,7 +201,7 @@ struct hkTypedBroadPhaseDispatcher {
     void addPairs(hkBroadPhaseHandlePair* pairs, int n, const hkCollidableCollidableFilter* filter) const;   // 0x010cc410
 };
 
-struct hkCriticalSection {                // 0x20
+class hkCriticalSection { public:                // 0x20
     unsigned char m_section[0x18];
     int m_ownerLo;                        // +0x18
     int m_ownerHi;                        // +0x1c
@@ -214,7 +214,7 @@ struct hkCriticalSection {                // 0x20
     }
 };
 
-struct hkWorld {
+class hkWorld { public:
     char pad00[0x64];
     hkBroadPhase* m_broadPhase;                           // +0x64
     hkTypedBroadPhaseDispatcher* m_broadPhaseDispatcher;  // +0x68

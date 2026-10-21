@@ -48,8 +48,8 @@ struct __declspec(align(16)) hkVector4
     float x, y, z, w;
 };
 
-struct hkCdBody
-{
+class hkCdBody
+{ public:
     const void*     m_shape;        // +0
     unsigned        m_shapeKey;     // +4
     const void*     m_motion;       // +8
@@ -63,22 +63,22 @@ struct hkCollisionInput
     float m_tolerance;              // +8
 };
 
-struct hkTransform
-{
+class hkTransform
+{ public:
     hkVector4 m_basis[3];           // +0, +0x10, +0x20
     hkVector4 m_translation;        // +0x30
 };
 
 // sphere shape: radius at +0xc, center is the motion translation.
-struct hkSphereShape
-{
+class hkSphereShape
+{ public:
     char  m_pad[0xc];
     float m_radius;                 // +0xc
 };
 
 // triangle shape: radius at +0xc, three local vertices at +0x10/+0x20/+0x30.
-struct hkTriangleShape
-{
+class hkTriangleShape
+{ public:
     char      m_pad[0xc];
     float     m_radius;             // +0xc
     hkVector4 m_vertex[3];          // +0x10, +0x20, +0x30
@@ -112,8 +112,8 @@ public:
 };
 
 // hkContactPoint (0x30 with the separating normal at +0x10).
-struct hkContactPoint
-{
+class hkContactPoint
+{ public:
     hkVector4 m_position;           // +0
     hkVector4 m_separatingNormal;   // +0x10 (w = distance)
     hkVector4 m_pad;                // +0x20

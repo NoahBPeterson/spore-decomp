@@ -54,8 +54,8 @@ struct __declspec(align(16)) hkVector4
     float x, y, z, w;
 };
 
-struct hkCdBody
-{
+class hkCdBody
+{ public:
     const void*     m_shape;        // +0
     unsigned        m_shapeKey;     // +4
     const void*     m_motion;       // +8
@@ -69,8 +69,8 @@ struct hkCollisionInput
     float m_tolerance;              // +8
 };
 
-struct hkContactPoint
-{
+class hkContactPoint
+{ public:
     hkVector4 m_position;           // +0
     hkVector4 m_separatingNormal;   // +0x10
     void setFlipped(const hkContactPoint& other);   // 0x010cecf0
@@ -120,8 +120,8 @@ struct hkContactManifold
 
 // hkContactMgr: agent+8; vtable slot 2 = addPoint(bodyA,bodyB,input,contact)->key,
 // slot 4 = removePoint(key).
-struct hkContactMgr
-{
+class hkContactMgr
+{ public:
     virtual void v0();                                                                   // +0x00
     virtual void v1();                                                                   // +0x04
     virtual unsigned short addPoint(const void*, const void*, const void*, const void*); // +0x08
@@ -279,22 +279,22 @@ void* hkCapsuleCapsuleAgent__create(const void* bodyA, const void* bodyB,
 // ---------------------------------------------------------------------------
 // capsule / triangle shapes
 // ---------------------------------------------------------------------------
-struct hkTransform
-{
+class hkTransform
+{ public:
     hkVector4 m_basis[3];           // +0, +0x10, +0x20
     hkVector4 m_translation;        // +0x30
 };
 
-struct hkCapsuleShape
-{
+class hkCapsuleShape
+{ public:
     char      m_pad[0xc];
     float     m_radius;             // +0xc
     hkVector4 m_vertexA;            // +0x10
     hkVector4 m_vertexB;            // +0x20
 };
 
-struct hkTriangleShape
-{
+class hkTriangleShape
+{ public:
     char      m_pad[0xc];
     float     m_radius;             // +0xc
     hkVector4 m_vertexA;            // +0x10

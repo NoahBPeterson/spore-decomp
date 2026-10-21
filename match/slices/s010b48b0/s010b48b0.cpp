@@ -27,7 +27,7 @@
 #include "types.h"
 #include <math.h>
 
-struct hkVector4 { float x, y, z, w; };
+class hkVector4 { public: float x, y, z, w; };
 
 // hkSolverInfo (dev PDB, size 0x140).
 struct hkSolverInfo
@@ -44,8 +44,8 @@ struct hkSolverInfo
 };
 
 // hkVelocityAccumulator (0x80 bytes; Havok 6 header names, Havok 3.1 offsets).
-struct hkVelocityAccumulator
-{
+class hkVelocityAccumulator
+{ public:
     uint8_t m_type;                               // +0x00
     char m_pad01[0xf];
     hkVector4 m_linearVel;                        // +0x10

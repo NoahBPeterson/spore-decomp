@@ -21,8 +21,8 @@ extern const char hkMonitorEndMarker[];             // 0x0149cc34
 // ---- memory ------------------------------------------------------------------------------------------------
 extern unsigned long g_hkThreadMemoryTls;   // 0x016e4174
 
-struct hkThreadMemory
-{
+class hkThreadMemory
+{ public:
     virtual void v0();
     virtual void v1();
     virtual void v2();
@@ -34,8 +34,8 @@ struct hkThreadMemory
 };
 enum { HK_MEMORY_CLASS_ARRAY = 0x14 };
 
-struct hkMemory
-{
+class hkMemory
+{ public:
     virtual void m0();
     virtual void m1();
     virtual void m2();
@@ -45,8 +45,8 @@ struct hkMemory
 };
 extern hkMemory* g_hkMemory;   // 0x016e4178
 
-template <typename T> struct hkArray
-{
+template <typename T> class hkArray
+{ public:
     T* m_data;
     int m_size;
     int m_capacityAndFlags;
@@ -68,8 +68,8 @@ class __declspec(align(16)) hkVector4 { public: float x, y, z, w;
 struct __declspec(align(16)) hkAabb { hkVector4 m_min; hkVector4 m_max; };
 struct __declspec(align(16)) hkTransform { hkUint32 m_rotation[12]; hkVector4 m_translation; };
 
-struct hkCdBody
-{
+class hkCdBody
+{ public:
     void*    m_shape;      // +0x0
     hkUint32 m_shapeKey;   // +0x4
     void*    m_motion;     // +0x8
@@ -77,9 +77,9 @@ struct hkCdBody
 };
 
 // A real vptr (the class is polymorphic) + 4 bytes of bookkeeping = 0x8, then m_userData at +0x8.
-struct hkReferencedObject { virtual void vptrAnchor(); hkUint16 m_memSizeAndFlags; hkUint16 m_referenceCount; };  // 0x8
-struct hkShape : hkReferencedObject { int m_userData; };                                              // 0xc
-struct hkShapeCollection : hkShape { hkUchar m_disableWelding; };                                     // 0x10
+class hkReferencedObject { public: virtual void vptrAnchor(); hkUint16 m_memSizeAndFlags; hkUint16 m_referenceCount; };  // 0x8
+class hkShape : public hkReferencedObject { public: int m_userData; };                                              // 0xc
+class hkShapeCollection : public hkShape { public: hkUchar m_disableWelding; };                                     // 0x10
 
 struct hkShapeRayCastInput
 {
@@ -95,14 +95,14 @@ struct hkShapeRayCastOutput
     float    m_hitFraction;// +0x14
 };
 
-struct hkRayHitCollector
-{
+class hkRayHitCollector
+{ public:
     virtual void addHit(const hkCdBody& body, const float* hit);   // slot 0
     float m_earlyOutHitFraction;   // +0x4
 };
 
-struct hkStatisticsCollector
-{
+class hkStatisticsCollector
+{ public:
     virtual void slot0();
     virtual void beginObject(const char* name, int id, const void* obj);              // +0x4
     virtual void addArray(const char* name, int id, const void* ptr, int size, int sizeInMemory);  // +0x8
@@ -114,8 +114,7 @@ struct hkStatisticsCollector
 
 // hkPlaneShape: hkShape (+0x0), m_plane (+0x10), aabb min (+0x20), aabb ext (+0x30), cosAngle (+0x34).
 // The ray-cast helpers take the plane itself as the shape's "normal" (m_plane.w is its offset).
-struct hkPlaneShape : hkShape
-{
+class hkPlaneShape : public hkShape { public:
     hkUint32  m_pad0c;      // +0xc  (alignment gap before the 16-byte plane)
     hkVector4 m_plane;      // +0x10
     hkVector4 m_aabbMin;    // +0x20
@@ -209,7 +208,7 @@ struct hkStorageMeshShape : hkShapeCollection
 
 // ---- hkMultiSphereShape ------------------------------------------------------------------------------------
 struct hkCollisionSpheresInfo { hkUint32 m_numSpheres; hkUchar m_hasSpheres; };
-struct hkSphereRepShape : hkReferencedObject { int m_userData; };   // 0xc
+class hkSphereRepShape : public hkReferencedObject { public: int m_userData; };   // 0xc
 struct hkMultiSphereShape : hkSphereRepShape
 {
     hkUint32 m_n;           // +0xc (the original reads [this+0xc])
@@ -511,7 +510,7 @@ void* hkShapeContainer::getShape(hkUint32 dummy) const
 }
 
 // @ 0x010c7010
-struct hkCollisionFilter { virtual ~hkCollisionFilter(); };   // 0x005efd40
+class hkCollisionFilter { public: virtual ~hkCollisionFilter(); };   // 0x005efd40
 struct hkCollisionFilterSub : hkCollisionFilter
 {
     virtual ~hkCollisionFilterSub();
