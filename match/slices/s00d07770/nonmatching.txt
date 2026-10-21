@@ -3,6 +3,5 @@
 00d07ab0 197 equivalence UNSUPPORTED (1 unresolved reference)
 00d07ca0 65 equivalence WEAK
 00d07d50 22 equivalence UNSUPPORTED (only 0/400 inputs valid)
-00d07d70 33 equivalence PASS
 00d081f0 144 equivalence WEAK
 00d082a0 490 equivalence UNSUPPORTED (only 0/400 inputs valid)

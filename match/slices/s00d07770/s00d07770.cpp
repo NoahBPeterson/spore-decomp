@@ -89,7 +89,7 @@ struct C103 {
     void  SetValue(int which, int amount); // 0x00d07ca0
     int   GetFlag(int which);              // 0x00d07d00
     void  SetFlag(int which, int v);       // 0x00d07d20
-    u8    CanAffordScalar(int v);          // 0x00d07d50
+    u8    CanAffordScalar(int desc, int amount); // 0x00d07d50
     int   GetTribeValue(int which);        // 0x00d07d70
     void  SetTribeValue(int which, int v); // 0x00d07e10
     int   CanAffordEmpire(int* desc);      // 0x00d07e40
@@ -326,9 +326,9 @@ void C103::SetFlag(int which, int v) {
 
 // ================================================================ 0x00d07d50
 // @ 0x00d07d50
-u8 C103::CanAffordScalar(int v) {
-    int r = (*(int(__thiscall**)(void*, int))((char*)*(int**)this + 4))(this, v);
-    return (u8)(v <= r);
+u8 C103::CanAffordScalar(int desc, int amount) {
+    int r = (*(int(__thiscall**)(void*, int))((char*)*(int**)this + 4))(this, desc);
+    return (u8)(r >= amount);
 }
 
 // ================================================================ 0x00d07d70
@@ -339,6 +339,11 @@ int C103::GetTribeValue(int which) {
     switch (which) {
     case 0:
         return ((Ext*)*(void**)(p + 8))->V_c30cb0();
+    case 7: {
+        int t = ((Ext*)*(void**)(p + 0xc))->V_bd9bb0();
+        t += ((Ext*)*(void**)(p + 0xc))->V_bd9b70();
+        return ((Ext*)*(void**)(p + 0xc))->V_bd8110() - t;
+    }
     case 1: {
         int a = ((Ext*)*(void**)(p + 0xc))->V_bd9bb0();
         int b = ((Ext*)*(void**)(p + 0xc))->V_bd89c0();
@@ -348,11 +353,6 @@ int C103::GetTribeValue(int which) {
         int a = ((Ext*)*(void**)(p + 0xc))->V_bd9b70();
         int b = ((Ext*)*(void**)(p + 0xc))->V_bd8aa0();
         return b - a;
-    }
-    case 7: {
-        int t = ((Ext*)*(void**)(p + 0xc))->V_bd9bb0();
-        t += ((Ext*)*(void**)(p + 0xc))->V_bd9b70();
-        return ((Ext*)*(void**)(p + 0xc))->V_bd8110() - t;
     }
     default:
         return 0;
