@@ -45,7 +45,7 @@ namespace eastl { struct sp_vector_allocator { sp_vector_allocator() {} }; struc
 
 struct cSPEditorBlock;
 namespace EA {
-template <class T> struct AutoRefCount {
+template <class T> class AutoRefCount { public:
     T* mpObject;
     operator T*() const { return mpObject; }
     T* operator->() const { return mpObject; }

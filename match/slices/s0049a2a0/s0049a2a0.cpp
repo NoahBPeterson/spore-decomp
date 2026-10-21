@@ -179,14 +179,14 @@ struct cSPEditorModelBase {
     virtual ~cSPEditorModelBase();
 };
 
-struct cSPEditorModel : cSPEditorModelBase, RefCountTemplate {     // RefCountTemplate at +4
+class cSPEditorModel : public cSPEditorModelBase, public RefCountTemplate { public:     // RefCountTemplate at +4
     float GetGridSize();                                            // 0x004ADAA0
     float GetSize1();                                               // 0x004ADB00
     float GetSize2();                                               // 0x004ADB40
     bool IsUsingSymmetry();                                         // 0x004ADC40
 };
 
-struct cSPEditorSkinManager {
+class cSPEditorSkinManager { public:
     virtual int AddRef();
     virtual int Release();
 };
@@ -202,7 +202,7 @@ template<class T> struct AutoRefCount {
 
 enum eSkinIdentifier {};
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     uint32_t pad00[0x28 / 4];
     cSPEditorModel* mEditorModel;                                   // +0x028
     uint32_t pad2c[(0x48 - 0x2c) / 4];

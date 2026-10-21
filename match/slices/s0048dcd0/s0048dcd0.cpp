@@ -47,7 +47,7 @@ typedef float hkReal;
 extern "C" double __cdecl fabs(double);
 #pragma intrinsic(fabs)
 
-struct hkBool {
+class hkBool { public:
     char m_bool;
     hkBool(bool b) { m_bool = (char)b; }
     operator bool() const { return m_bool != 0; }
@@ -71,19 +71,19 @@ struct __declspec(align(16)) hkVector4 {
     }
 };
 
-struct hkMatrix3 {
+class hkMatrix3 { public:
     hkVector4 m_col0, m_col1, m_col2;
     __forceinline hkMatrix3() {}
     hkMatrix3(const hkMatrix3& m);              // @ 0x48daf0
     void operator=(const hkMatrix3& m);         // @ 0x44a8c0
 };
-struct hkRotation : hkMatrix3 {
+class hkRotation : public hkMatrix3 { public:
     __forceinline hkRotation() {}
     __forceinline hkRotation(const hkRotation& r) : hkMatrix3(r) {}
     hkRotation& operator=(const hkRotation& r);     // @ 0x48daf0
 };
 
-struct hkTransform {
+class hkTransform { public:
     hkRotation m_rotation;
     hkVector4 m_translation;
     __forceinline hkTransform() {}
@@ -94,26 +94,26 @@ struct hkTransform {
     static const hkTransform& getIdentity() { return s_identity; }
 };
 
-struct hkAabb {
+class hkAabb { public:
     hkVector4 m_min;
     hkVector4 m_max;
 };
 
-struct hkShape {
+class hkShape { public:
     virtual void _v0();
     virtual void _v1();
     virtual void _v2();
     virtual void getAabb(const hkTransform& localToWorld, hkReal tolerance, hkAabb& out) const;   // +0xc
 };
 
-struct hkCdBody {
+class hkCdBody { public:
     const hkShape* m_shape;                     // +0x00
     unsigned int m_shapeKey;
     const void* m_motion;
     const hkCdBody* m_parent;
     const hkShape* getShape() const { return m_shape; }
 };
-struct hkCollidable : hkCdBody {
+class hkCollidable : public hkCdBody { public:
     int m_ownerOffset;                          // +0x10
     unsigned int m_bpId;
     char m_bpType, m_bpOwnerOffset;
@@ -123,12 +123,12 @@ struct hkCollidable : hkCdBody {
     void* getOwner() const { return (char*)this + m_ownerOffset; }
 };
 
-struct hkQuaternion {
+class hkQuaternion { public:
     hkReal x, y, z, w;
     __forceinline hkQuaternion() {}
     __forceinline hkQuaternion(const hkQuaternion& q) { x = q.x; y = q.y; z = q.z; w = q.w; }
 };
-struct hkMotion {
+class hkMotion { public:
     char pad[0x10];
     hkTransform m_transform;                    // +0x10 (motion state)
     const hkTransform& getTransform() const { return m_transform; }
@@ -138,7 +138,7 @@ struct hkMotion {
     const hkQuaternion& getRotation() const { return m_rotation; }
 };
 
-struct hkRigidBody {
+class hkRigidBody { public:
     char pad00[0x1c];
     hkCollidable m_collidable;                  // +0x1c
     char pad40[0x58 - 0x1c - sizeof(hkCollidable)];
@@ -155,7 +155,7 @@ inline hkRigidBody* hkGetRigidBody(const hkCollidable* c)
     return body;
 }
 
-struct hkContactPoint {
+class hkContactPoint { public:
     hkVector4 m_position;
     hkVector4 m_separatingNormal;
     const hkVector4& getPosition() const { return m_position; }
@@ -174,14 +174,14 @@ struct hkRootCdPoint {
 extern hkReal HK_REAL_MAX;                      // @ 0x13ef4f8
 extern hkReal HK_REAL_EPSILON;                  // @ 0x13ef4f4
 
-struct hkCdPointCollector {
+class hkCdPointCollector { public:
     hkReal m_earlyOutDistance;
     hkCdPointCollector() { m_earlyOutDistance = HK_REAL_MAX; }
     virtual ~hkCdPointCollector() {}            // vtable 0x13ef534
     virtual void addCdPoint(const void* event) = 0;
     virtual void reset();
 };
-struct hkClosestCdPointCollector : hkCdPointCollector {
+class hkClosestCdPointCollector : public hkCdPointCollector { public:
     hkRootCdPoint m_hitPoint;                   // +0x10
     hkClosestCdPointCollector() { reset(); }
     virtual ~hkClosestCdPointCollector() {}     // vtable 0x13ef52c
@@ -203,7 +203,7 @@ struct hkLinearCastInput {
     hkLinearCastInput() { m_maxExtraPenetration = HK_REAL_EPSILON; m_startPointTolerance = HK_REAL_EPSILON; }
 };
 
-struct hkWorld {
+class hkWorld { public:
     void linearCast(const hkCollidable* collA, const hkLinearCastInput& input,
                     hkCdPointCollector& castCollector, hkCdPointCollector* startCollector);   // @ 0x1082b90
 };

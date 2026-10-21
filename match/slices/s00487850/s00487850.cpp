@@ -55,10 +55,10 @@ template<int N> struct bitset {
 
 namespace SP {
 
-struct cSPEditorBlock;
-struct cSPEditorLimbJoint;
+class cSPEditorBlock;
+class cSPEditorLimbJoint;
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     virtual void _v0();
     virtual int Release();
     char pad0[0x28 - 4];
@@ -75,7 +75,7 @@ struct cSPEditorBlock {
     cSPVector3 F_43e080();                      // @ 0x43e080
 };
 
-struct cSPEditorLimbJoint {
+class cSPEditorLimbJoint { public:
     cSPEditorBlock* mJointBlock;                // +0x00
     cSPEditorLimbJoint* mUpperJoint;            // +0x04
     vector<cSPEditorLimbJoint*> mLowerJoints;   // +0x08

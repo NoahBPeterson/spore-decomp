@@ -187,7 +187,7 @@ struct Property {
     bool* GetValueBool();                                                              // 0x0041e920
 };
 
-struct cPropertyList {
+class cPropertyList { public:
     virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
     virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
     virtual void f20();

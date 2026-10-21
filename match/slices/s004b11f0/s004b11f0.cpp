@@ -74,7 +74,7 @@ struct S24 {                                   // two Vector3, assigned second-h
     S24& operator=(const S24& o) { b = o.b; a = o.a; return *this; }
 };
 
-template <class T> struct generic_iterator {
+template <class T> class generic_iterator { public:
     T mIterator;
     explicit generic_iterator(const T& x) : mIterator(x) {}
     const T& base() const { return mIterator; }
@@ -152,7 +152,7 @@ inline void destruct(T* first, T* last)
 }
 
 template <class T>
-struct vector {
+class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;

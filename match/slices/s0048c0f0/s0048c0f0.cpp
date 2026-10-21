@@ -59,10 +59,10 @@ void vector<T>::eraseOne(T* it)
 
 namespace SP {
 
-struct cSPEditorBlock;
-struct cSPEditorLimbJoint;
+class cSPEditorBlock;
+class cSPEditorLimbJoint;
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     virtual void _v0();
     virtual void AddRef();                      // vtable slot 1
     virtual void Release();                     // vtable slot 2
@@ -81,7 +81,7 @@ struct cSPEditorBlock {
     bool F_44c030();                            // @ 0x44c030
 };
 
-struct cSPEditorLimbJoint {
+class cSPEditorLimbJoint { public:
     cSPEditorBlock* mJointBlock;                // +0x00
     cSPEditorLimbJoint* mUpperJoint;            // +0x04
     vector<cSPEditorLimbJoint*> mLowerJoints;   // +0x08
@@ -93,14 +93,14 @@ struct cSPEditorLimbJoint {
     char pad68[0x6c - 0x68];                    // +0x68
 };
 
-struct cSPEditorModel {
+class cSPEditorModel { public:
     char pad0[0x58];
     int mResourceId;                            // +0x58
     int GetNumParts();                          // @ 0x4accf0
     cSPEditorBlock* GetPart(int i);             // @ 0x4accb0
 };
 
-struct cSPEditorLimbStructure {
+class cSPEditorLimbStructure { public:
     vector<cSPEditorBlock*> mPileList;          // +0x00
     cSPEditorBlock* mBaseBlock;                 // +0x14
     cSPEditorLimbJoint* mBaseJoint;             // +0x18

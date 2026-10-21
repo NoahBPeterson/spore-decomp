@@ -101,7 +101,7 @@ template<int N> struct bitset {
 
 namespace SP {
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     virtual void _v0();
     virtual int Release();
     char pad0[0x33c - 4];
@@ -136,7 +136,7 @@ struct cSPEditorBlock {
 }  // namespace SP
 namespace EA {
 // EA::RefCountTemplate<int>
-template<class T> struct RefCountTemplate {
+template<class T> class RefCountTemplate { public:
     virtual void _v0();
     T mRefCount;                                // +0x04
     int AddRef() { T r = mRefCount + 1; mRefCount = mRefCount + 1; return r; }
@@ -144,10 +144,10 @@ template<class T> struct RefCountTemplate {
 };
 }
 namespace SP {
-struct cSPEditorPhysicsWorld : EA::RefCountTemplate<int> {
+class cSPEditorPhysicsWorld : public EA::RefCountTemplate<int> { public:
     int GetGroup();                                          // @ 0x4b91c0
-    void AttachModel(struct cSPEditorModel* model);          // @ 0x4b94a0
-    void DetachModel(struct cSPEditorModel* model);          // @ 0x4b9570
+    void AttachModel(class cSPEditorModel* model);          // @ 0x4b94a0
+    void DetachModel(class cSPEditorModel* model);          // @ 0x4b9570
 };
 template<class T> struct AutoRefCountP {
     T* mpObject;
@@ -172,7 +172,7 @@ template<class I, class T> inline I find(I first, I last, const T& value)
     return first;
 }
 
-struct cSPEditorModel {
+class cSPEditorModel { public:
     virtual void SetName(const uint32_t* name);              // 0x00
     virtual void _v1();
     virtual void SetDescription(const uint32_t* desc);       // 0x08

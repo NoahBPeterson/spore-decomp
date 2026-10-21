@@ -113,7 +113,7 @@ public:
 };
 
 class hkCollisionDispatcher;
-struct hkAgentRegisterUtil { static void registerAllAgents(hkCollisionDispatcher* dis); };  // 0x010C25A0
+class hkAgentRegisterUtil { public: static void registerAllAgents(hkCollisionDispatcher* dis); };  // 0x010C25A0
 
 class hkShape : public hkReferencedObject { public: int m_userData; };
 class hkConvexShape : public hkShape { public: hkReal m_radius; };           // +0xc
@@ -124,7 +124,7 @@ public:
     hkBoxShape(const hkVector4& halfExtents, hkReal radius);        // 0x010C05D0
 };
 
-struct hkTypedBroadPhaseHandle { int m_id; char m_type, m_ownerOffset; unsigned short m_objectQualityType; unsigned int m_collisionFilterInfo; };
+class hkTypedBroadPhaseHandle { public: int m_id; char m_type, m_ownerOffset; unsigned short m_objectQualityType; unsigned int m_collisionFilterInfo; };
 class hkCollidable {
 public:
     char pad00[0x14];
@@ -132,7 +132,7 @@ public:
     hkReal m_allowedPenetrationDepth;           // +0x20
     void setCollisionFilterInfo(unsigned int info) { m_broadPhaseHandle.m_collisionFilterInfo = info; }
 };
-struct hkMaterial { signed char m_responseType; hkReal m_friction; hkReal m_restitution; };
+class hkMaterial { public: signed char m_responseType; hkReal m_friction; hkReal m_restitution; };
 
 class hkWorld;
 class hkWorldObject : public hkReferencedObject {
@@ -152,7 +152,7 @@ public:
     hkMaterial m_material;                      // +0x60
     char pad6c[0xd0 - 0x6c];
 };
-struct hkRigidBodyCinfo {
+class hkRigidBodyCinfo { public:
     unsigned int m_collisionFilterInfo;         // +0x0
     hkShape* m_shape;                           // +0x4
     char pad08[0x10 - 0x8];

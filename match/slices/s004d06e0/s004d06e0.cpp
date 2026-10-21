@@ -49,7 +49,7 @@ struct Rec14 {                          // 0x14: key + Vec4
 
 struct EASTLAllocator { const char* mpName; EASTLAllocator() {} };
 
-struct fixed_vector_allocator : public EASTLAllocator {
+class fixed_vector_allocator : public EASTLAllocator { public:
     void* mpPoolBegin;
     fixed_vector_allocator(void* pNodeBuffer) : mpPoolBegin(pNodeBuffer) {}
     fixed_vector_allocator(const fixed_vector_allocator& x) { mpPoolBegin = x.mpPoolBegin; }
@@ -295,7 +295,7 @@ template generic_iterator<Word32*> copy(generic_iterator<const Word32*>, generic
 // ---------------------------------------------------------------------------
 // vector<uint8_t>::DoAssignFromIterator
 // ---------------------------------------------------------------------------
-template <class T> struct vector {
+template <class T> class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
@@ -353,7 +353,7 @@ template <> template <> void vector<uint8_t>::DoAssignFromIterator<const uint8_t
 // ---------------------------------------------------------------------------
 struct Link { Link* mpNext; };
 
-struct fixed_pool_with_overflow {
+class fixed_pool_with_overflow { public:
     Link* mpHead;
     Link* mpNext;
     void* mpPoolBegin;
@@ -362,7 +362,7 @@ struct fixed_pool_with_overflow {
     static void OverflowFree(void* p, uint32_t n) { (void)&n; void* const pMemory = p; EASTLFree(pMemory); }
 };
 
-struct fixed_hashtable_allocator {
+class fixed_hashtable_allocator { public:
     fixed_pool_with_overflow mPool;
     void* mpBucketBuffer;
     void deallocate(void* p, uint32_t)

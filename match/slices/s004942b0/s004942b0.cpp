@@ -51,7 +51,7 @@ extern cSPVector3 g_ZAxis;         // 0x015d6324
 extern cSPVector3 g_SymmetryAxis;  // 0x015d63f4
 
 namespace EA {
-template <class T> struct AutoRefCount {
+template <class T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
     ~AutoRefCount() { if (mpObject) mpObject->Release(); }
@@ -75,7 +75,7 @@ struct bitset60 {
 namespace SP {
 class cSPEditorBlock;
 
-struct cSPEditorModel {
+class cSPEditorModel { public:
     bool IsSymmetryEnabled();                                            // 0x004adc40 (byte +0x4f)
 };
 

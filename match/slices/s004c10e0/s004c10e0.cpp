@@ -134,7 +134,7 @@ struct sp_vector_allocator {
 void* eastl_alloc(void* allocator, uint32_t size, uint32_t align, uint32_t offset);
 void eastl_free(void* p);
 
-template <class T> struct vector {
+template <class T> class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;

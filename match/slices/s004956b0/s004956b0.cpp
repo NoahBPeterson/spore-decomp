@@ -182,7 +182,7 @@ struct cSPVector3 : Vector3T {
 Vector3T operator+(const Vector3T& a, const Vector3T& b);           // @ 0x41dc10
 
 typedef float hkReal;
-struct hkBool {
+class hkBool { public:
     char m_bool;
     hkBool(bool b) { m_bool = (char)b; }
     hkBool& operator=(bool b) { m_bool = (char)b; return *this; }
@@ -197,15 +197,15 @@ struct __declspec(align(16)) hkVector4 {
 };
 
 struct hkPropertyValue { uint32_t lo, hi; hkPropertyValue() {} hkPropertyValue(int v) : lo((uint32_t)v), hi(0) {} void* getPtr() const { return (void*)lo; } };
-struct hkProperty { uint32_t m_key; uint32_t pad; hkPropertyValue m_value; };
+class hkProperty { public: uint32_t m_key; uint32_t pad; hkPropertyValue m_value; };
 
-struct hkCollidable {
+class hkCollidable { public:
     char pad[0x10];
     int m_ownerOffset;                          // +0x10
     char pad2[0x24 - 0x14];
     void* getOwner() const { return (char*)this + m_ownerOffset; }
 };
-struct hkRigidBody {
+class hkRigidBody { public:
     char pad00[0x1c];
     hkCollidable m_collidable;                  // +0x1c
     char pad40[0x4c - 0x1c - sizeof(hkCollidable)];
@@ -236,7 +236,7 @@ struct hkCollisionInput;
 extern hkReal HK_REAL_MAX;                      // @ 0x13ef4f8
 extern hkReal HK_REAL_EPSILON;                  // @ 0x13ef4f4
 
-struct hkCdPointCollector {
+class hkCdPointCollector { public:
     hkReal m_earlyOutDistance;
     virtual ~hkCdPointCollector() {}            // vtable 0x13ef534
     virtual void addCdPoint(const void* event) = 0;
@@ -259,7 +259,7 @@ struct hkLinearCastInput {
     hkReal m_startPointTolerance;
     hkLinearCastInput() { m_maxExtraPenetration = HK_REAL_EPSILON; m_startPointTolerance = HK_REAL_EPSILON; }
 };
-struct hkCdBodyPairCollector {
+class hkCdBodyPairCollector { public:
     hkBool m_earlyOut;
     hkCdBodyPairCollector() : m_earlyOut(false) {}
     virtual ~hkCdBodyPairCollector() {}         // vtable 0x13ef534 ?
@@ -271,7 +271,7 @@ struct PenetrationCollector : hkCdBodyPairCollector {   // vtable 0x13ef554
     virtual ~PenetrationCollector() {}
     virtual void addCdBodyPair(const void* a, const void* b);
 };
-struct hkWorld {
+class hkWorld { public:
     char pad[0x78];
     hkCollisionInput* m_collisionInput;         // +0x78
     void linearCast(const hkCollidable* collA, const hkLinearCastInput& input,

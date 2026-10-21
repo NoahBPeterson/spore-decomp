@@ -164,9 +164,9 @@ struct cSPBoundingBox {
 };
 
 namespace SP {
-struct cSPEditorModel;
+class cSPEditorModel;
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     char pad0[0x48];
     Vector3T mPosition;                                                  // +0x48
     char pad1[0x33c - 0x54];
@@ -190,7 +190,7 @@ template<class T> struct vector {
     T& operator[](int n) { return *(mpBegin + n); }
 };
 
-struct cSPEditorModel {
+class cSPEditorModel { public:
     char pad0[0x18];
     vector<AutoRefCount<cSPEditorBlock> > mBlockList;                                  // +0x18
 

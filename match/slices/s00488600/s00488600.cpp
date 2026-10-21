@@ -100,7 +100,7 @@ template<int N> struct bitset {
 
 namespace SP {
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     virtual void _v0();
     virtual int Release();
     char pad0[0x48 - 4];
@@ -130,10 +130,10 @@ struct cMatrix3Init : cSPMatrix3 {
     cMatrix3Init(const cMatrix3Init&);
 };
 
-struct cSPEditorLimbStructure;
+class cSPEditorLimbStructure;
 void BuildPileList(cSPEditorBlock* block, cSPEditorLimbStructure* limb, int depth);       // @ 0x48c790
 
-struct cSPEditorLimbJoint {
+class cSPEditorLimbJoint { public:
     cSPEditorBlock* mJointBlock;                // +0x00
     cSPEditorLimbJoint* mUpperJoint;            // +0x04
     vector<cSPEditorLimbJoint*> mLowerJoints;   // +0x08
@@ -150,7 +150,7 @@ struct cSPEditorLimbJoint {
     cSPEditorLimbJoint* FindInvalidJoint(bool b);            // @ 0x4874c0
 };
 
-struct cSPEditorLimbStructure {
+class cSPEditorLimbStructure { public:
     vector<AutoRefCount<cSPEditorBlock> > mPileList;    // +0x00
     cSPEditorBlock* mBaseBlock;                 // +0x14
     cSPEditorLimbJoint* mBaseJoint;             // +0x18

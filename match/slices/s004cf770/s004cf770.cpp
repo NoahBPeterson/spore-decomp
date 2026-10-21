@@ -39,7 +39,7 @@ struct Word32 { uint32_t mValue; };
 
 struct EASTLAllocator { const char* mpName; EASTLAllocator() {} };
 
-template <class T> struct generic_iterator {
+template <class T> class generic_iterator { public:
     T mIterator;
     explicit generic_iterator(const T& x) : mIterator(x) {}
     const T& base() const { return mIterator; }
@@ -153,7 +153,7 @@ inline void fill(T* first, T* last, const T& value)
         *first = value;
 }
 
-template <class T> struct vector {
+template <class T> class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
