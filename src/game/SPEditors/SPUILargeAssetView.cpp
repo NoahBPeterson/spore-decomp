@@ -519,7 +519,7 @@ struct cSPSwatch_s0066_daf0 {
 };
 }
 namespace SP {
-struct cSPSwatchManager {
+class cSPSwatchManager { public:
     cSPSwatch_s0066_daf0* CreateSwatch(int flags);                     // 005F0CA0
 };
 }
