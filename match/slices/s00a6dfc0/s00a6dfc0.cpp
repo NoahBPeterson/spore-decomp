@@ -495,18 +495,17 @@ void* cEffectsManager::FUN_00a6e4b0()
 // @ 0x00a6e600
 long long cEffectsParser::EffectsMapID(const char* s)
 {
-    cEffectsParser* self = this;
     const char* p = s;
     const char* q = p + 1;
     do { } while (*p++ != 0);
-    char* esi = (char*)self + 0x3c4;
+    char* esi = (char*)this + 0x3c4;
     ((EString*)esi)->assign(s, s + (int)(p - q));
     MakeCaseInsensitive(esi);
     if (strcmp(kTerrain, s) == 0)
         return 0;
     if (strcmp(kWater, s) == 0)
         return 1;
-    void* coll = *(void**)((char*)self + 0x8c);
+    void* coll = *(void**)((char*)this + 0x8c);
     if (coll != 0) {
         long long v = (*(long long(__thiscall**)(void*, const char*))(*((char**)coll) + 0x1c))(coll, s);
         if (v != -1)
@@ -834,21 +833,37 @@ after_type:
 // @ 0x00a6f090
 int cEffectsParser::GetInheritedA(int a, int depth, void* c)
 {
-    int idx;
-    if (depth < 3 || (idx = MapFindB(*(const char**)(a + 8), (int)c)) < 0)
-        return 0;
-    char* coll = *(char**)((char*)this + 0x20);
-    return (*(int(__thiscall**)(char*, int, void*))(*((char**)coll) + 0x20))(coll, idx, c);
+    if (depth < 3)
+        goto zero;
+    {
+        int idx = MapFindB(*(const char**)(a + 8), (int)c);
+        if (idx < 0)
+            goto zero;
+        {
+            char* coll = *(char**)((char*)this + 0x20);
+            return (*(int(__thiscall**)(char*, int, void*))(*((char**)coll) + 0x20))(coll, idx, c);
+        }
+    }
+zero:
+    return 0;
 }
 
 // @ 0x00a6f0d0
 int cEffectsParser::GetInheritedB(int a, int depth, void* c)
 {
-    int idx;
-    if (depth < 3 || (idx = MapFindC(*(const char**)(a + 8), (int)c)) < 0)
-        return 0;
-    char* coll = *(char**)((char*)this + 0x20);
-    return (*(int(__thiscall**)(char*, int, void*))(*((char**)coll) + 0x28))(coll, idx, c);
+    if (depth < 3)
+        goto zero;
+    {
+        int idx = MapFindC(*(const char**)(a + 8), (int)c);
+        if (idx < 0)
+            goto zero;
+        {
+            char* coll = *(char**)((char*)this + 0x20);
+            return (*(int(__thiscall**)(char*, int, void*))(*((char**)coll) + 0x28))(coll, idx, c);
+        }
+    }
+zero:
+    return 0;
 }
 
 }}  // namespace EA::Swarm
