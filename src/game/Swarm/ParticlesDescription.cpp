@@ -84,7 +84,7 @@ struct cCommandBase_s00aa_4a10 : cICommand_s00aa_4a10 {
 }
 namespace EA {
 namespace ArgScript {
-struct cBlockCommandBase : cICommand_s00aa_4a10 {
+class cBlockCommandBase : public cICommand_s00aa_4a10 { public:
     cIParser_s00aa_4a10* mParser;                                  // +0x04
     int mRefCount;                                      // +0x08
     cState_s00aa_4a10* mChildState;                                // +0x0c
@@ -106,14 +106,14 @@ template <typename T, typename Base> struct cCommandStateT_s00aa_4a10 : Base {
 }
 namespace EA {
 namespace ArgScript {
-template <typename T> struct cCommandT : cCommandStateT_s00aa_4a10<T, cCommandBase_s00aa_4a10> {
+template <typename T> class cCommandT : public cCommandStateT_s00aa_4a10<T, cCommandBase_s00aa_4a10> { public:
     cCommandT() {}
 };
 }
 }
 namespace EA {
 namespace ArgScript {
-template <typename T> struct cBlockCommandT : cCommandStateT_s00aa_4a10<T, cBlockCommandBase> {
+template <typename T> class cBlockCommandT : public cCommandStateT_s00aa_4a10<T, cBlockCommandBase> { public:
     cBlockCommandT() {}
 };
 }
