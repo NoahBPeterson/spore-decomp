@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009fca70/s009fca70.cpp  ?copy_backward_elem@@YAPAUElem14@@PAU1@00@Z  009fca70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009fca70/s009fca70.cpp  ?swap_elem@@YAXPAUElem14@@0@Z  009fcac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009fca70/s009fca70.cpp  ?Execute@cDeformSpecBlockCommand@@QAEXPAUArgArgs@@@Z  009fcb30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009fca70/s009fca70.cpp  ?pop_heap_elem@@YAXPAUElem14@@0P6A_NABU1@1@Z@Z  009fd1a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009fca70/s009fca70.cpp  ?sort_heap_elem@@YAXPAUElem14@@0P6A_NABU1@1@Z@Z  009fd4d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009fca70/s009fca70.cpp  ?get_partition_elem@@YAPAUElem14@@PAU1@0U1@P6A_NABU1@2@Z@Z  009fd5a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

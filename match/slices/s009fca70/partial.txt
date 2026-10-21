@@ -1,0 +1,8 @@
+# partial: source exists and compiles, but is not verified complete / not behaviourally
+# equivalent under tools/difftest/equiv.py (default inputs).
+# fields: <va> <realized/orig bytes> <flags> <difftest> <reason>
+009fcdb0 307/317 /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED insertion_sort (eastl, Elem14*): move each element left into place using a comparison predicate. 0/400 valid inputs (fault read/write + memcpy import): the raw-buffer elements make both binaries fault before the sort logic runs.
+009fd620 306/451 /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED partial_sort (eastl, Elem14*): make_heap on [first,middle), scan the tail replacing the top, then sort_heap. 0/400 valid inputs (fault read/write + memcpy import).
+009fd7f0 70/78 /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL Vec4 copy ctor: copy the tag, DoAllocate the 4-byte vector, copy the payload. 5/5 valid inputs mismatched (execution): our allocator dereferences the source allocator at 0xc where the original does not, faulting on zeroish inputs.
+009fd950 106/129 /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL rbtree<u32,...>::operator[] variant A: descend to the lower-bound slot, reuse an equal key's value or call the insert helper with the hint node. 5/14 valid inputs mismatched: the insert helper is called with a different 4th/5th stack operand (retail passes the key/flag object, we pass 0), so the recorded callee arguments differ even though the tree walk is identical.
+009fd9e0 106/125 /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL rbtree<u32,...>::operator[] variant B: as variant A but over the other instantiation's insert helper. 5/5 valid inputs mismatched (memory pool): the inserted node's value slot is left unwritten in our version.

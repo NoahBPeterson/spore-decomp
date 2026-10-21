@@ -1,0 +1,19 @@
+009fca70 copy_backward_elem  # eastl::copy_backward_impl::do_copy<Elem14*>
+009fcac0 swap_elem  # eastl::swap<Elem14> (temp + Assign triple)
+009fcb30 cDeformSpecBlockCommand::Execute  # EA_ARG command body (thiscall ret 4)
+009fcc10 DescVec16::DoInsertValues  # vector<deform_description>::DoInsertValues (thiscall ret 0xc)
+009fcdb0 insertion_sort_elem  # eastl::insertion_sort<capability_name*>
+009fcef0 insertion_sort_simple_elem  # eastl::Internal::insertion_sort_simple<capability_name*>
+009fd040 adjust_heap_elem  # eastl::adjust_heap<capability_name*>
+009fd1a0 pop_heap_elem  # eastl::pop_heap<capability_name*>
+009fd3d0 make_heap_elem  # eastl::make_heap<capability_name*>
+009fd4d0 sort_heap_elem  # eastl::sort_heap<capability_name*>
+009fd5a0 get_partition_elem  # eastl::get_partition<capability_name*> (pivot by value)
+009fd620 partial_sort_elem  # eastl::partial_sort<capability_name*>
+009fd7f0 Vec4::Vec4  # 0x10-byte vector wrapper copy ctor (one source)
+009fd840 cDeformBlockCommand::Execute  # EA_ARG command body (thiscall ret 4)
+009fd950 MapIdxA::insert  # rbtree<u32,vector<deform_description>*>::operator[]
+009fd9e0 MapIdxB::insert  # rbtree<u32,vector<deform_description>*>::operator[] (other instantiation)
+009fdab0 Vec4::Vec4  # 0x10-byte vector wrapper ctor (tag + raw source)
+009fc440 ElemCtor  # capability_name copy construction (out-of-line)
+009fd530 VecDeformResize  # vector<deform_description>::resize (thiscall ret 4)

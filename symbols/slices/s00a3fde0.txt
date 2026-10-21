@@ -1,0 +1,8 @@
+00a3fde0 ?DoInsertValue@VecTE@@QAEXPAUTrackEntry@@ABU2@@Z  # eastl vector<SP::Audio::TrackEntry>::insert at position: in-place backward shift when full==false, else reallocate(grow x2) + uninit-copy + destroy-range
+00a3ffa0 ??4VecTE@@QAEAAU0@ABU0@@Z  # eastl vector<SP::Audio::TrackEntry>::operator=: destroy-and-reallocate when src is longer than capacity, else range-assign then grow/truncate; frame-less
+00a400f0 ?PushBackDefault@VecTE@@QAEXXZ  # eastl vector<SP::Audio::TrackEntry>::push_back(): appends a default TrackEntry (empty-string name, zeroed mItems) or grows
+00a401d0 ?FUN_00a401d0@@YAPAUTrack@@PAU1@00@Z  # eastl copy_backward_impl::do_copy<Track*,Track*>: backward element-wise assign of 0x38 Track elements; frame-less
+00a40230 ?DoInsertValue@VecTrack@@QAEXPAUTrack@@ABU2@@Z  # eastl vector<SP::Audio::Track>::insert at position: in-place backward shift (0x38 stride) or reallocate(grow x2) + uninit-copy + destroy-range
+00a40410 ?PushBackDefault@VecTrack@@QAEXXZ  # eastl vector<SP::Audio::Track>::push_back(): appends a default Track (empty name + two zeroed VecTE) or grows, then destroys the stack temporary
+00a404d0 ?ReadTrack@Trixie@@QAE_NPAUXmlReader@@@Z  # SP::Audio::Trixie::ReadTrack: parses one <track> element (name attr, shuffler/rhythm entries, per-attribute gensym atoms)
+00a40a00 ?Read@Trixie@@QAE_NXZ  # SP::Audio::Trixie::Read: opens the object's "6" resource via a Handle and parses the <tracks> XML into mTracks
