@@ -45,7 +45,7 @@ struct IWindow {
     virtual void AddWinProc(void* proc);                    // slot 65 (+0x104)
 };
 
-struct cSPUILayout {                                        // refcount at +4 / +8
+class cSPUILayout { public:                                        // refcount at +4 / +8
     virtual void v0();
     virtual int AddRef();
     virtual int Release();

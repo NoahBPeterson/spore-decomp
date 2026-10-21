@@ -45,7 +45,7 @@ struct IWinButton {
   virtual void v14(); virtual void v18(); virtual void v1c(); virtual void v20(); virtual void v24();
   virtual int Command(int a, int b);                 // 0x28
 };
-struct cSPUIAnimator {
+class cSPUIAnimator { public:
   void CancelAll();                                   // 0x7f8f00
   void AddAnimation(const struct AnimTmp& anim, IWindow* w, int flags);   // 0x7f8d10
 };
@@ -56,7 +56,7 @@ struct Vec2 { float x, y; Vec2(float a, float b) : x(a), y(b) {} };
 extern "C" float __cdecl SPUIHelpers_GetElapsedSeconds();     // 0x805080
 extern "C" bool  __fastcall cSPUIAnimator_Empty(void* self);  // 0x7f6340
 extern "C" void  __fastcall cSPUIAnimator_Update(void* self); // 0x7f63b0
-struct cSPUILayout {
+class cSPUILayout { public:
   void Shutdown(int);          // 0x811ad0
   void SetVisibility(int);     // 0x810590
 };

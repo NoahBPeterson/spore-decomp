@@ -41,16 +41,16 @@ struct Variant {
 // ---------------------------------------------------------------------------
 struct Model { char pad[0x8c]; float mf8c; };
 
-struct cSpatialObject {
+class cSpatialObject { public:
   const Vector3& GetPosition() { return ((const Vector3&(__thiscall*)(void*))VFUNC(this, 0x2c))(this); }
   Model* GetModel() { return ((Model*(__thiscall*)(void*))VFUNC(this, 0xac))(this); }
 };
 
-struct cGameData {
+class cGameData { public:
   uint32_t GetPoliticalID() { return ((uint32_t(__thiscall*)(void*))VFUNC(this, 0x4c))(this); }
 };
 
-struct cCombatant {
+class cCombatant { public:
   cSpatialObject* ToSpatialObject() { return ((cSpatialObject*(__thiscall*)(void*))VFUNC(this, 0x8))(this); }
   cGameData* ToGameData() { return ((cGameData*(__thiscall*)(void*))VFUNC(this, 0xc))(this); }
   int TakeDamage(float damage, uint32_t attackerPID, int type, const Vector3& dir, cCombatant* attacker) {
@@ -70,7 +70,7 @@ struct MoveGoal {               // locomotion request (ctor 0x00ad29d0 / 0x00ac9
   ~MoveGoal();
 };
 
-struct cLocomotiveObject {
+class cLocomotiveObject { public:
   const Vector3& GetPosition() { return ((const Vector3&(__thiscall*)(void*))VFUNC(this, 0x2c))(this); }
   Vector3 GetDirection() {
     Vector3 r;
@@ -157,7 +157,7 @@ struct TargetSortCompare {   // 0x1c-byte functor, ctor 0x00d2f380
 };
 void SortTargets(cSpatialObject** first, cSpatialObject** last, TargetSortCompare cmp);   // 0x00d34fc0
 
-struct cSPTimer {
+class cSPTimer { public:
   bool IsRunning();             // 0x00feba90
   void Start();                 // 0x00bc30f0
   void Stop();                  // 0x00bc3170
@@ -174,30 +174,30 @@ struct IMessageData {
 };
 struct cGameDataRef { void* GetObject(); };   // 0x00bd6a60
 
-struct cGameInputManager {
+class cGameInputManager { public:
   int GetMode() { return ((int(__thiscall*)(void*))VFUNC(this, 0x34))(this); }
   void SetMode(int m) { ((void(__thiscall*)(void*, int))VFUNC(this, 0x38))(this, m); }
 };
 struct cMessageServer {
   void Post(uint32_t id, int a, int b) { ((void(__thiscall*)(void*, uint32_t, int, int))VFUNC(this, 0x14))(this, id, a, b); }
 };
-struct cViewer {
+class cViewer { public:
   void GetCameraLocationInfo(Vector3* pos, Vector3* right, Vector3* up, Vector3* forward);   // 0x007c3d30
 };
-struct cRenderer { cViewer* GetViewer() { return ((cViewer*(__thiscall*)(void*))VFUNC(this, 0x1c))(this); } };
-struct cApp { cRenderer* GetRenderer() { return ((cRenderer*(__thiscall*)(void*))VFUNC(this, 0x50))(this); } };
+class cRenderer { public: cViewer* GetViewer() { return ((cViewer*(__thiscall*)(void*))VFUNC(this, 0x1c))(this); } };
+class cApp { public: cRenderer* GetRenderer() { return ((cRenderer*(__thiscall*)(void*))VFUNC(this, 0x50))(this); } };
 struct cSpatialQuery {
   void FindObjects(const Vector3& center, float radius, ObjectRefVector* out, int a, int b, int c) {
     ((void(__thiscall*)(void*, const Vector3&, float, ObjectRefVector*, int, int, int))VFUNC(this, 0x48))(
         this, center, radius, out, a, b, c);
   }
 };
-struct cGameNounManager {
+class cGameNounManager { public:
   cCreatureAnimal* GetAvatar();                                                         // 0x00b1fdb0
   cCreatureAnimal* CreateCreature(const Vector3& pos, void* species, int a, int b, int c, int d);  // 0x00b23940
 };
-struct cPlanetModel { Vector3 MakeRandomWorldPosition(const Vector3& pos, float minR, float maxR); };   // 0x00b81780
-struct cPosseSimulator { char pad[0x18]; int mState; void Disband(int v); };  // 0x00d52e40
+class cPlanetModel { public: Vector3 MakeRandomWorldPosition(const Vector3& pos, float minR, float maxR); };   // 0x00b81780
+class cPosseSimulator { public: char pad[0x18]; int mState; void Disband(int v); };  // 0x00d52e40
 struct cSettingsFlags { char pad[0x6c]; uint32_t mFlags; };
 struct cUIRefCounted { void Release() { ((void(__thiscall*)(void*))VFUNC(this, 0xc0))(this); } };
 struct cUIRefPtr { cUIRefCounted* mp; void Assign(void* p); };   // 0x00c70110
@@ -224,11 +224,11 @@ public:
   cSubStrategy* mpSub;   // +0x68
 };
 
-struct cUIBanningContent {
+class cUIBanningContent { public:
   static void EndBanMode(int v);                  // 0x00dd1840
   static void ShowConfirmationDialog(void* obj);  // 0x00dd1aa0
 };
-struct cSPUISpace { static void KillSetiEffects(uint32_t id, int state); };   // 0x00435ed0
+class cSPUISpace { public: static void KillSetiEffects(uint32_t id, int state); };   // 0x00435ed0
 
 cGameInputManager* GameInputManager();        // 0x00b3d250
 cGameNounManager* NounManager();              // 0x00b3d300

@@ -107,7 +107,7 @@ struct RefObject {
     virtual int Release();
 };
 
-struct cPropertyList : RefObject {};
+class cPropertyList : public RefObject { public:};
 struct cSwatch : RefObject {};
 
 class IResource : public RefObject {};
@@ -168,7 +168,7 @@ public:
 };
 
 namespace Editor {
-class cEditorLaunchData : public IMessage {
+struct cEditorLaunchData : public IMessage { private:
 public:
     uint32_t pad04[2];
     uint32_t mConfig;                   // +0x0c

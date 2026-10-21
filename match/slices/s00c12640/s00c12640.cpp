@@ -83,7 +83,7 @@ extern const Vector3 kUpAxis;                // 0x0168db54
 static const uint32_t kGameDataUFO = 0x18ebadc;
 
 namespace EA { namespace Swarm {
-struct cIVisualEffect {
+class cIVisualEffect { public:
     PV2
     virtual void Start(int flags);                   // +0x08
     virtual void Stop(int flags);                    // +0x0c

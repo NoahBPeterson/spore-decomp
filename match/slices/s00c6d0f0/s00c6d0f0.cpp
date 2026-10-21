@@ -33,7 +33,7 @@ struct EggRegistry {
     void FUN_00b45410(void* p);                        // thiscall ret 4
 };
 
-struct cEgg {
+class cEgg { public:
     uint32_t pad[0x34 / 4];
     uint32_t m34[(0x84 - 0x34) / 4];
     uint32_t mFlags;                                   // +0x84
@@ -46,7 +46,7 @@ struct ObjList {
     void** mpEnd;
 };
 
-struct cGameNounManager {
+class cGameNounManager { public:
     uint32_t pad[0x5c / 4];
     ObjList mList;                                     // +0x5c
     ObjList* GetList();                                // 0x00b1f9c0: lea eax,[ecx+0x5c]

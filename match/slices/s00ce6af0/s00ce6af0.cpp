@@ -224,8 +224,8 @@ extern const int kMaxMatingTimers;     // 0x01477a78 (= 15)
 namespace SP {
 
 // Retail layout (size 0x200).
-struct cTribeTuningData
-{
+class cTribeTuningData
+{ public:
     cSPVector2 kSizeLimits;                          // +0x000 sizeLimits
     float    kTribeCreatureScaleMultiplier;          // +0x008 tribeCreatureScaleMultiplier
     float    kChieftainScaleMultiplier;              // +0x00c chieftainScale

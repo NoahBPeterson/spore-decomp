@@ -16,7 +16,7 @@ void* operator new[](unsigned int n, const char* name, int flags, unsigned int d
 namespace eastl {
 extern char gEmptyString[];   // 0x01667bac
 
-struct allocator {
+class allocator { public:
     void deallocate(void* p, unsigned int) { operator delete(p); }
 };
 
@@ -173,7 +173,7 @@ template <class T> struct AutoRefCount {
 };
 
 namespace SP {
-struct cGameEditInputStrategy {
+class cGameEditInputStrategy { public:
     void DoSaveSelectedFile(eastl::string16* pName);          // 0x00d18df0
 };
 }

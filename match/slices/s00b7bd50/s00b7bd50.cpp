@@ -23,7 +23,7 @@ static inline int Vi0(void* p, int slot) {
 // ---------------------------------------------------------------------------
 // cSPUIPieMenuItemWinProc (2008 dev PDB: CustomWinProc, size 0x1c).
 // ---------------------------------------------------------------------------
-struct cSPUIPieMenuItemWinProc {
+class cSPUIPieMenuItemWinProc { public:
     void** vftable;             // +0x00
     char   pad_04[0xc - 0x04];
     int    mButtonId;           // +0x0c

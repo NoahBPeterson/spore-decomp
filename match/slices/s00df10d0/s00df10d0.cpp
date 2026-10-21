@@ -15,7 +15,7 @@
 
 namespace eastl {
 
-struct allocator {
+class allocator { public:
     allocator() {}
 };
 
@@ -28,7 +28,7 @@ template <typename T> struct basic_string {
 };
 typedef basic_string<wchar_t> string16;
 
-template <typename T> struct vector {
+template <typename T> class vector { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
@@ -177,7 +177,7 @@ namespace SP {
 
 enum GameState { kStateNone = 0 };
 
-class tNewGameFlow {
+struct tNewGameFlow { private:
 public:
     void ReadPropList(uint32_t instanceID);
 

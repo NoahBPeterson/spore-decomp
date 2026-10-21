@@ -84,7 +84,7 @@ extern cPlanetModel* __cdecl PlanetModel();                        // 0x00b3d350
 extern Raw3 __cdecl normalized_safe(const Raw3& v);          // 0x00449c20
 
 namespace EA { namespace Random {
-struct RandomLinearCongruential {
+class RandomLinearCongruential { public:
     double RandomDoubleUniform();                                  // 0x009360d0
 };
 }}

@@ -629,7 +629,7 @@ void* MakeCameraTarget(void* p);           // 0x00b18e00
 void* AudioListener();                     // 0x00435e90
 void Start3dSoundByName(uint32_t id, void* listener, float x, float y, float z);   // 0x00571f80
 
-struct cUIHints {
+class cUIHints { public:
     void SetEnabled(int a, int b);         // 0x0067c420
 };
 cUIHints* UIHints();                       // 0x0067cac0
@@ -706,7 +706,7 @@ extern cMissionManager* gCivMissionManager;   // 0x0169d3cc
 
 namespace SP {
 
-struct cCivModeStrategy {
+class cCivModeStrategy { public:
     void* vftable;
     uint32_t pad04[9];
     bool mbReturningFromEditor;            // +0x28

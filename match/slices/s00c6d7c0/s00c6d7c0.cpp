@@ -47,7 +47,7 @@ __forceinline float DistSq(const Vector3* a, const Vector3* b)
 
 namespace SP {
 
-struct cSPTimer {
+class cSPTimer { public:
     bool IsRunning();         // 0x00feba90
     u64  GetElapsedTime();    // 0x00bc3190
     void Stop();              // 0x00bc3110
@@ -147,7 +147,7 @@ inline void AnimalRefOut::reset()
     }
 }
 
-struct cEgg {
+class cEgg { public:
     virtual int AddRef();
     virtual int Release();
     char pad04[0x34 - 0x4];
@@ -158,7 +158,7 @@ struct cEgg {
     ISpatial* Spatial() { return (ISpatial*)((char*)this + 0x34); }
 };
 
-struct cNest {
+class cNest { public:
     char pad0[0x34];
     char mSpatialStorage[4];   // +0x34
     char pad38[0x84 - 0x38];
@@ -173,7 +173,7 @@ struct cEggPtr {
     ~cEggPtr() { if (mpObject) mpObject->Release(); }
 };
 
-struct cGameNounManager {
+class cGameNounManager { public:
     cSPCreatureAnimal* GetAvatar();         // 0x00b1fdb0
     void RemoveNoun(cEgg* egg);             // 0x00b225d0
 };
@@ -190,7 +190,7 @@ struct cAvatarHolder {
 
 struct cGameMode { char pad[0x2c]; int mMode; };
 
-struct cPlanetModel {
+class cPlanetModel { public:
     Vector3* MakeRandomWorldPosition(Vector3* out, const Vector3* center, float minR, float maxR);   // 0x00b81780
 };
 

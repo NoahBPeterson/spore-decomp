@@ -21,7 +21,7 @@ static inline void** Vt(void* p) { return *(void***)p; }
 static inline void* pl(void* p) { return p; }
 
 // ---------------------------------------------------------------- types
-struct cSPUILayout {
+class cSPUILayout { public:
     void* FindWindowByID(int id, int flag);             // 0x008105b0  (ret 8)
     void  SetVisibility(int v);                         // 0x00810590  (ret 4)
     bool  IsVisible();                                  // 0x00810070
@@ -46,13 +46,13 @@ struct cMissionManager { void* GetMissionList(); };      // 0x00fedd50
 struct cSortMissions { bool operator()(int* a, int* b); }; // 0x00e19d30
 
 namespace SP {
-struct cGonzagoSubsystem {
+class cGonzagoSubsystem { public:
     cGonzagoSubsystem();                                // 0x00b5b960
     ~cGonzagoSubsystem();                               // 0x00b5b9a0
     void PreGameModeTransition(int a, int b);           // 0x00b5b930
     void PostGameModeTransition(int a, int b);          // 0x00b5b900
 };
-struct cIGonzagoSubsystem { virtual void v0(); };
+class cIGonzagoSubsystem { public: virtual void v0(); };
 }
 
 struct cMissionLog;   // fwd

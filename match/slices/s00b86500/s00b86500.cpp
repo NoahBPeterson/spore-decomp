@@ -50,7 +50,7 @@ public:
     virtual int Slot4();                                             // +0x10 (result unused)
 };
 
-struct cPlanetModel {
+class cPlanetModel { public:
     uint32_t pad[9];
     cTerrainSource* mpTerrain;                                       // +0x24
 };
@@ -62,7 +62,7 @@ public:
     void Unlock();                                                   // 0x007a4650
 };
 
-struct cStaticBufferDraw {
+class cStaticBufferDraw { public:
     cStaticBuffer* mpBuffer;
 };
 }

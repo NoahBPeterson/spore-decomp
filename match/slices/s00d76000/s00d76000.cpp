@@ -74,7 +74,7 @@ struct Mgr1 {  // returned by 0xB3D2B0
 struct Mgr2 {  // returned by 0xB3D440
     void __thiscall FUN_00b09b80(void* node, int idx, int zero);      // ret 0xC
 };
-namespace SP { struct cSPCreatureCitizen; }
+namespace SP { class cSPCreatureCitizen; }
 using namespace SP;
 struct Mgr3 {  // returned by 0xAF13B0
     bool __thiscall FUN_00af0bd0(cSPCreatureCitizen* c, int a, int b); // ret 0xC
@@ -102,7 +102,7 @@ struct TribeGatherState {
 };
 
 namespace SP {
-struct cSPCreatureCitizen {
+class cSPCreatureCitizen { public:
     cTribe* __thiscall GetTribe();                                     // 0xC22F50
     bool    __thiscall HasSpecializedTool(int tool);                   // 0xC236E0
     int     __thiscall GetToolEffect(int tool);                        // 0xC235E0

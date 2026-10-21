@@ -50,7 +50,7 @@ struct IWindow : Object {
     virtual void AddWinProc(void* pWinProc);                      // +0x104
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     IWindow* FindWindowByID(uint32_t id, bool recursive);         // 0x008105b0
 };
 
@@ -64,7 +64,7 @@ struct cSPUIWindowAnimation : cSPUIAnimBase0, cSPUIAnimBase1 {
 };
 cSPUIWindowAnimation SPUICreateWindowAnimationTargetShadeAlpha(IWindow* window, uint32_t alpha, float startTime,
                                                               float duration, int interpolation);  // 0x007f8290
-struct cSPUIAnimator {
+class cSPUIAnimator { public:
     void AddAnimation(const cSPUIWindowAnimation& anim, Object* owner, uint32_t id);  // 0x007f8d10
 };
 namespace SPUIHelpers {
