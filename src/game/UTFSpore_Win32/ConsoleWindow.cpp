@@ -44,7 +44,7 @@ struct CW {
 inline void* operator new(unsigned int, void* p) { return p; }
 namespace EA {
 namespace Text {
-struct StyleManager;
+class StyleManager;
 }
 }
 namespace EA {
@@ -63,7 +63,7 @@ struct TextStyle_s0096_ad00 {
 }
 namespace EA {
 namespace Text {
-struct StyleManager {
+class StyleManager { public:
     TextStyle_s0096_ad00* GetStyle(uint32_t styleId, int alloc);   // 0x00894670
     void       AddStyle(uint32_t styleId, TextStyle_s0096_ad00* style); // 0x00894970
 };
