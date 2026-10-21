@@ -1,0 +1,2 @@
+slices/s00b8e180/s00b8e180.cpp  ?AssignRange@cPropertyList@@QAEXABUVec4@@@Z  00b8e3f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b8e180/s00b8e180.cpp  ?EraseAllRules@cPropertyList@@QAEXXZ  00b8e830  /O2 /MD /Gy /TP /arch:SSE /fp:fast

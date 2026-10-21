@@ -1,0 +1,3 @@
+# va  reason
+00b8e590  incomplete: cPropertyList property-insert -- the eastl hash node allocation and insertion shape (bucket split, key clone via the 0x1667bae empty string) could not be reconciled with the original's register flow and the emitted body is ~1.1x the original size; difftest FAIL execution (faults where the original returns)
+00b8e860  incomplete: cPropertyList destructor -- the callee chain (element dtor 0x00c2e4e0 via SetSerializer, node release, operator delete 0xf47380) could not be ordered the way the original does; ours reaches the delete with a garbage heap pointer (0x4a800000) and difftest FAILs execution at eip=009276cd
