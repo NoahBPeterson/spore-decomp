@@ -115,7 +115,7 @@ struct IMessageServer {
 // ---------------------------------------------------------------------------
 // cSPUILayout: reference-counted layout object (low vtable slot +0x08 = Release).
 // ---------------------------------------------------------------------------
-struct cSPUILayout {
+class cSPUILayout { public:
     virtual void v00();
     virtual int AddRef();
     virtual int Release();                          // +0x08

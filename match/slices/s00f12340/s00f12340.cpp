@@ -20,7 +20,7 @@
 struct Sub900;   // object at *(host+0x14)+0x10 : has Set(int)
 struct SubUI;    // the UI object living at host+0x1c
 struct SubUI2;   // the UI object living at host+0x20 (IUnknown at +0x10)
-struct cSPUILayout;
+class cSPUILayout;
 struct cSPPalette;
 struct cSPPaletteCategory;
 struct cSPPaletteCategoryUI;
@@ -132,7 +132,7 @@ struct WinObj {                 // a UTFWin IWindow
   virtual void SetVisible(int a, int b);  // +0x7c
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
   virtual void vv0();
   virtual void AddRef();       // +0x04
   virtual void Release();      // +0x08

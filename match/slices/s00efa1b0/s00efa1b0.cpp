@@ -86,7 +86,7 @@ struct cAnimatedCreature {
 cAnimatedCreature* GetAnimatedCreature(cTargetOwner* p);  // 0x00ef73a0 (cdecl)
 
 namespace SP {
-    struct cGameTimeManager { void IncPauseGate(uint32_t id); };  // 0x00b32220
+    class cGameTimeManager { public: void IncPauseGate(uint32_t id); };  // 0x00b32220
     cGameTimeManager* GameTimeManager();                           // 0x00b3d380
 }
 

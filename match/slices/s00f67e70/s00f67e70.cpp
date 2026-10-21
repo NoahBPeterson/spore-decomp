@@ -11,7 +11,7 @@ struct V4 { float x, y, z, w; V4(float a, float b, float c, float d) : x(a), y(b
 namespace SP {
 
 // ---- cViewer (SPEngine/SPGraphicsViewer.obj) ------------------------------------------------
-struct cViewer {
+class cViewer { public:
     cViewer* FUN_007c3f70();                                  // 0x007c3f70
     bool     Init(bool flag);                                 // 0x007c4dd0
     void     SetA(float v);                                   // 0x007c4ba0
@@ -114,7 +114,7 @@ namespace SP {
 u32 __cdecl ColorRGBToU32(const float* rgb);                  // 0x00458a40
 
 // ---- the terrain editor object (layout taken from the slice's own accesses) ------------------
-struct cTerrainEditor {
+class cTerrainEditor { public:
     char       pad0[0x1c];
     cViewer*   mViewer;        // +0x1c
     Raster*    mRaster0;       // +0x20

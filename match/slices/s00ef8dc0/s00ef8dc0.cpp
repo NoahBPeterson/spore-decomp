@@ -171,7 +171,7 @@ struct fixed_pool_base {
     void init(void* pMemory, uint32_t memorySize, uint32_t nodeSize, uint32_t alignment, uint32_t alignmentOffset);   // 0x00921260
 };
 
-struct fixed_pool_with_overflow : fixed_pool_base {
+class fixed_pool_with_overflow : public fixed_pool_base { public:
     void* mpPoolBegin;     // +8
     void* mpPoolEnd;       // +0xc
     uint32_t mnNodeSize;   // +0x10
@@ -186,7 +186,7 @@ struct fixed_pool_with_overflow : fixed_pool_base {
     }
 };
 
-struct fixed_hashtable_allocator {
+class fixed_hashtable_allocator { public:
     fixed_pool_with_overflow mPool;   // +0
     void* mpBucketBuffer;             // +0x14
     fixed_hashtable_allocator() {}

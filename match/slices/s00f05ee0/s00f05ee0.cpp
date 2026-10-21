@@ -87,10 +87,10 @@ struct EStringA { void* mpBegin; void* mpEnd; void* mpCap; void* mpAlloc; };
 struct cSPUILayout { void* FindWindowByID(u32 id, int flag); };   // 0x008105b0
 
 // SP::cString (small string helper with ctor/dtor) -------------------------
-struct cString { char m[0x14]; cString(); ~cString(); };          // 0x006b5060 / 0x006b5240
+class cString { public: char m[0x14]; cString(); ~cString(); };          // 0x006b5060 / 0x006b5240
 
 // SP::cGameTimeManager (only the method this slice calls) ------------------
-struct cGameTimeManager { void IncPauseGate(u32 id); };           // 0x00b32220
+class cGameTimeManager { public: void IncPauseGate(u32 id); };           // 0x00b32220
 
 // intrusive ref-counted pointer vector ------------------------------------
 struct RefVec {
@@ -102,12 +102,12 @@ struct RefVec {
     void  DestroyRange(void* a, void* b);          // 0x0070f520
 };
 
-struct cDirectPropertyList { char m[0x18];           // +0x100
+class cDirectPropertyList { public: char m[0x18];           // +0x100
     void SetBoolProperty();                          // 0x0093a2e0
 };
 
 // cSPPlayModeSubModeMovie (play-mode) --------------------------------------
-struct cSPPlayModeSubModeMovie : VtblPart, MovieHandler {
+class cSPPlayModeSubModeMovie : public VtblPart, public MovieHandler { public:
     char   m08[8];        // +0x0c
     void*  mServer;       // +0x14
     void*  mHandlerObj;   // +0x18

@@ -120,7 +120,7 @@ struct cAssetMetadata {
     uint64_t GetAssetKey();                                        // 0x005508a0
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     IWindow* FindWindowByID(uint32_t id, bool recursive);          // 0x008105b0
 };
 
@@ -171,7 +171,7 @@ struct cRenderViewController : RefCounted {                        // 0x80 bytes
     uint32_t pad[(0x80 - 4) / 4];
 };
 namespace SP {
-struct cSPUIAssetVerbs : RefCounted {                              // 0x5c bytes
+class cSPUIAssetVerbs : public RefCounted { public:                              // 0x5c bytes
     cSPUIAssetVerbs();                                             // 0x00656b00
     void Init(IWindow* w);                                         // 0x00656b80
     uint32_t pad[(0x5c - 4) / 4];

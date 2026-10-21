@@ -16,7 +16,7 @@
 #include <math.h>
 
 namespace EA {
-template <class T> struct AutoRefCount {
+template <class T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount() {}
     AutoRefCount(T* p) : mpObject(p) { if (p) p->AddRef(); }
@@ -144,7 +144,7 @@ struct cArguments;
 
 // cHeightRanges-style view used by CellIndex (offsets differ from cDistGrid: face size at +0,
 // level offsets at +4, the cell base at +0x18).
-struct cHeightRanges {
+class cHeightRanges { public:
     int mFaceSize;                      // +0x00
     int mLevelOffsets[5];               // +0x04
     int* mCellData;                     // +0x18
@@ -158,7 +158,7 @@ struct cTerrainDistributeInfo {
 };
 
 // cTerrainDistributeEffect (spatial layout for SetIsVisible)
-struct cTerrainDistributeEffect {
+class cTerrainDistributeEffect { public:
     int mVtbl;                          // +0x0
     int mPad4;                          // +0x4
     int mPad8;                          // +0x8
@@ -173,7 +173,7 @@ struct cTerrainDistributeEffect {
 };
 
 // cDistGrid (see slice s00f65070 for the full definition of the same object)
-struct cDistGrid {                      // 0x108+
+class cDistGrid { public:                      // 0x108+
     void* mWorld;                       // +0x00
     int   mCollectionIndex;             // +0x04
     int   mFaceSize;                    // +0x08

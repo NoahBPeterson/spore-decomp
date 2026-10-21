@@ -52,7 +52,7 @@ static __forceinline void* ParseVec3 (void* p, void* out, const char* s)  { retu
 // EA::ArgScript::cArguments
 // ---------------------------------------------------------------------------
 namespace EA { namespace ArgScript {
-struct cArguments {
+class cArguments { public:
     const char** MainArguments(int n);                                      // 0x838320
     const char** MainArguments(int* pCount, int lo, int hi);                // 0x838020
     bool         HasFlag(const char* name);                                 // 0x8380b0
@@ -64,7 +64,7 @@ float ParseRangedFloat(void* parser, const char* s, float lo, float hi);    // 0
 }}  // namespace EA::ArgScript
 
 namespace EA { namespace Swarm {
-struct cEffectsParser {
+class cEffectsParser { public:
     // 0xa6ed80
     void ParseDrawInfoOptions(EA::ArgScript::cArguments* args, void* parser, void* out);
 };

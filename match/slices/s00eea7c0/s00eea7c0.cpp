@@ -15,7 +15,7 @@ struct Vec3 { float x, y, z; };
 
 // cSPUILayout: ref-counted layout object; +0x04 Release, +0x08 Shutdown.
 struct IWindow;
-struct cSPUILayout {
+class cSPUILayout { public:
     virtual void V0() {}
     virtual void Release() {}
     virtual void Shutdown() {}

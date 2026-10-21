@@ -76,7 +76,7 @@ struct IWindow {
     virtual IWindow* FindWindowByID(uint32_t id, int recursive);   // +0xf0
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     IWindow* FindWindowByID(uint32_t id, int recursive);           // 0x008105b0
 };
 

@@ -69,14 +69,14 @@ float SplineInterpolation(const float&, const float&, const float&, const float&
 cSPVector3 SplineInterpolation(const cSPVector3&, const cSPVector3&, const cSPVector3&, const cSPVector3&, float, float);   // 0x00B10E50
 cSPQuaternion SplineInterpolation(const cSPQuaternion&, const cSPQuaternion&, const cSPQuaternion&, const cSPQuaternion&, float, float);   // 0x00B11160
 
-template <class T> struct cHermiteSplineInterpolation
-{
+template <class T> class cHermiteSplineInterpolation
+{ public:
 	uint32_t mData[15];   // times / points / slopes vectors (retail size 0x3c)
 	T Evaluate(float t);   // 0x0069A5F0 (float); cSPVector3 0x0069A9A0 and cSPQuaternion 0x0069AEE0 resolve by their symbols names
 };
 
-struct cTerrainMapSet { float GetHeightAt(const cSPVector3& pos); };   // 0x00F927C0
-struct cPlanetModel { virtual void v0(); virtual void v1(); virtual void v2(); virtual cTerrainMapSet* GetTerrain(); };   // +0xc
+class cTerrainMapSet { public: float GetHeightAt(const cSPVector3& pos); };   // 0x00F927C0
+class cPlanetModel { public: virtual void v0(); virtual void v1(); virtual void v2(); virtual cTerrainMapSet* GetTerrain(); };   // +0xc
 cPlanetModel* GetActivePlanetModel();   // 0x00F48AA0 (returns the global at 0x016C8EBC; name guessed)
 
 float CameraApproach(float current, float target, float factor);   // 0x00F4EF40 (name guessed)
@@ -87,8 +87,8 @@ extern float kRestingDamping;         // 0x015B0A7C (= 0.95f; name guessed)
 class cGameCameraController
 {
 public:
-	template <class T> struct cInterpolationData
-	{
+	template <class T> class cInterpolationData
+	{ public:
 		bool targetChanged;    // +0
 		bool targetMoving;     // +1
 		float currentTime;     // +4

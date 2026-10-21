@@ -456,7 +456,7 @@ struct cMouseCameraController {
     cMouseCameraController(int a);                                  // 0x007d9fb0
     char pad[0x124];
 };
-struct cSPUIMainWin : IMainWin {
+class cSPUIMainWin : public IMainWin { public:
     cSPUIMainWin();                                                 // 0x008141b0
     char pad[0x2e0 - 4];
 };

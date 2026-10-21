@@ -42,18 +42,18 @@ void* __cdecl operator new(unsigned int size, const char* name, int flags, unsig
 
 namespace EA {
 namespace COM {
-struct __declspec(novtable) IUnknown32 {
+class __declspec(novtable) IUnknown32 { public:
     virtual int AddRef() = 0;
     virtual int Release() = 0;
     virtual void* AsInterface(uint32_t id) = 0;
 };
 }
-template <class T> struct RefCountTemplate {
+template <class T> class RefCountTemplate { public:
     RefCountTemplate() {}
     virtual ~RefCountTemplate() {}
     T mRefCount;
 };
-template <class T> struct AutoRefCount {
+template <class T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount() {}
     AutoRefCount(T* p) : mpObject(p) { if (p) p->AddRef(); }
@@ -83,7 +83,7 @@ struct cTransform {                  // 0x38
         : mFlags(src.mFlags), mModificationCount(src.mModificationCount),
           mTranslation(src.mTranslation), mScale(src.mScale), mRotation(src.mRotation) {}
 };
-struct cIComponent {
+class cIComponent { public:
     cIComponent() {}
     virtual ~cIComponent() {}
     virtual void v0();
@@ -94,7 +94,7 @@ struct RefCountBase : public RefCountTemplate<int> {
     RefCountBase() { mRefCount = 0; }
     virtual ~RefCountBase() {}
 };
-struct cComponentBase : public cIComponent, public RefCountBase {
+class cComponentBase : public cIComponent, public RefCountBase { public:
     cComponentBase() {}
     virtual ~cComponentBase() {}
 };

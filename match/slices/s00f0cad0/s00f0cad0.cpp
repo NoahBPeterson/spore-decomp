@@ -360,7 +360,7 @@ struct PaletteItemUIOneClickPaint {
     int  HandleMessage(unsigned messageID, void* message);         // 0x00f0ce60
 };
 
-struct cSPUILayout {
+class cSPUILayout { public:
     char pad[0x30];
     char Init(void* key, int a, unsigned b);              // 0x8120d0
     void Shutdown(unsigned a);                            // 0x811ad0

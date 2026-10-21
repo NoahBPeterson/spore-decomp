@@ -81,7 +81,7 @@ struct cIconInfo {                 // 0x24 bytes (cSPUIMinimapWin::AddIcon descr
     u32    mImageID;               // +0x20
 };
 
-struct cSPUIMinimapWin {
+class cSPUIMinimapWin { public:
     void RemoveAllIcons();                                        // 0x00e0fb50
     void FUN_00e0ad00(int);                                       // 0x00e0ad00
     bool AddIcon(u32 id, const cIconInfo* info, int parent, bool flag); // 0x00e10580
@@ -253,7 +253,7 @@ struct cCreatureModeInputStrategy {
 // --- cSPPaletteItemUI / cScenarioUnlockItemUI --------------------------------
 struct Key { u32 a, b, c; };
 
-struct cSPUILayout : CObj {
+class cSPUILayout : public CObj { public:
     void* ctor();                                              // 0x00810000
     bool Init(const Key& key, bool b, u32 id);                 // 0x008120d0
     bool SetParentWin(IWin* parent, bool b, u32 id);           // 0x008121b0
