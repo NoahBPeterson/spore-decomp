@@ -52,7 +52,7 @@ struct Node {
 };
 }
 namespace SP {
-struct cContentValidationSummarizer;
+class cContentValidationSummarizer;
 }
 namespace SP {
 struct LinkRec {
@@ -81,7 +81,7 @@ struct BitSet60 {
 };
 }
 namespace SP {
-struct cContentValidationSummarizer {
+class cContentValidationSummarizer { public:
     virtual void slot0();                // vtable +0x00
     virtual void AddRef();               // vtable +0x04
     virtual void Release();              // vtable +0x08
@@ -284,7 +284,7 @@ template<class T> struct vector_s0043_bbc0 {
 };
 }
 namespace eastl {
-template<int N> struct bitset {
+template<int N> class bitset { public:
     uint32_t mWord[(N + 31) / 32];
     uint32_t& DoGetWord(uint32_t i) { return mWord[i >> 5]; }
     uint32_t DoGetWord(uint32_t i) const { return mWord[i >> 5]; }
