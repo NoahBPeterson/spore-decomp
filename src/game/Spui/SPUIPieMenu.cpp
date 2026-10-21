@@ -47,7 +47,7 @@ static inline void Vv5(void* p, int off, int a, int b, int c, int d, int e) {
     ((void(__thiscall*)(void*, int, int, int, int, int))(*(void***)p)[off / 4])(p, a, b, c, d, e);
 }
 extern "C" void SPKeyFromName(void* out, void* name, u32, void*);
-struct cSPUIPieMenuItem {
+class cSPUIPieMenuItem { public:
     void**    vftable;          // +0x00
     u32       mID;              // +0x04
     IWindow*  mpCurrentWindow;  // +0x08
@@ -323,7 +323,7 @@ struct RenderContext {
 struct Rect4 { float v[4]; int Contains(const float*); };  // cSPSwatchPlanner::Contains 0x005f2350
 struct Vec4f { float v[4]; };
 extern "C" Vec4f* SPUIHelpers_GetMainWindowArea(Vec4f*);   // 0x00805ea0
-struct cSPUIPieMenu {
+class cSPUIPieMenu { public:
     char     pad_00[0xc];
     char*    mpBegin;       // +0xc
     char*    mpEnd;         // +0x10
