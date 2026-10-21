@@ -177,7 +177,7 @@ def fix_by_object(U, rows):
             restore(U)
         return "REVERTED (object %s after the edit)" % ("does not compile" if after is None else "differs")
     sf = U["symfile"]
-    if sf and os.path.exists(sf):
+    if sf and os.path.exists(sf) and sh("git", "ls-files", "--", sf).stdout.strip():   # never an untracked file
         s = open(sf).read(); s2 = "\n".join(re.sub(r"(\S+)$", lambda m: swap(m.group(1), changed), l) for l in s.split("\n"))
         if s2 != s:
             open(sf, "w").write(s2)
@@ -209,7 +209,10 @@ def fix_slice(sid, dry):
     nomanifest = not os.path.exists(os.path.join(d, "manifest.txt"))
     if nomanifest and not OBJGATE:
         return "skip (no manifest)"
-    if sh("git", "status", "--porcelain", "--", *U["paths"]).stdout.strip():
+    if sh("git", "ls-files", "--", U["paths"][0]).stdout.strip() == "":
+        return "skip (not tracked in git)"
+    # an untracked symbols file a session wrote after its commit is not a reason to skip; tracked edits are
+    if sh("git", "status", "--porcelain", "-uno", "--", *U["paths"]).stdout.strip():
         return "skip (uncommitted changes)"
     files = [os.path.relpath(f, ROOT) for f in U["srcs"]]
     rows = triage_rows(files)
@@ -260,7 +263,7 @@ def fix_slice(sid, dry):
                 lines[i] = lines[i].replace(old, new, 1)
     open(mf, "w").write("\n".join(lines))
     sf = U["symfile"]
-    if sf and os.path.exists(sf):
+    if sf and os.path.exists(sf) and sh("git", "ls-files", "--", sf).stdout.strip():   # never an untracked file
         s = open(sf).read(); s2 = "\n".join(re.sub(r"(\S+)$", lambda m: swap(m.group(1), changed), l) for l in s.split("\n"))
         if s2 != s:
             open(sf, "w").write(s2)
