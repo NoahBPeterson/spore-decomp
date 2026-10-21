@@ -633,7 +633,9 @@ void hkStorageMeshShape::addSubpart(const hkMeshShapeSubpart& p)
     st = (hkStorageMeshSubpartStorage*)hkMemory::getInstance()->allocate(0x48, 0x22);
     if (st == 0) {
         st = 0;
-    } else if (*(volatile hkUint32*)&st || 1) {
+    } else if (st != st) {
+        st = st;
+    } else if (st) {
         hkUint32 zero = 0;
         hkUint32 neg = 0x80000000;
         hkUint32* f = (hkUint32*)st;
