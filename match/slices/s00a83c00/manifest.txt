@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a83c00/s00a83c00.cpp  ?WriteTransform@@YAPAXPAUIOStream@@PAX@Z  00a84460  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a83c00/s00a83c00.cpp  ?WriteRec@@YAXPAUIOStream@@PAX@Z  00a84510  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a83c00/s00a83c00.cpp  ?WriteRecList@@YAPAXPAUIOStream@@PAX@Z  00a846c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a83c00/s00a83c00.cpp  ?WriteDescRec@@YAPAXPAUIOStream@@PAX@Z  00a84720  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a83c00/s00a83c00.cpp  ?Destruct@cComponentBaseSub@@QAEXXZ  00a83f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
