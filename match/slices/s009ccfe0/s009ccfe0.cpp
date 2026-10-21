@@ -57,14 +57,14 @@ void* __cdecl EA_RectT_assign(void* dst, const void* src);                      
 void* __cdecl map_node_free(void* node, void* key);                              // 0x009a9600
 void  __cdecl operator_delete(void* p);                                          // 0x00f47380 ??3
 
-extern "C" void* fopen(const char*, const char*);
-extern "C" char* fgets(char*, int, void*);
-extern "C" int   fclose(void*);
-extern "C" char* strrchr(const char*, int);
-extern "C" char* strstr(const char*, const char*);
-extern "C" int   sprintf(char*, const char*, ...);
-extern "C" int   fprintf(void*, const char*, ...);
-extern "C" void* __iob_func(void);
+extern "C" __declspec(dllimport) void* __cdecl fopen(const char*, const char*);
+extern "C" __declspec(dllimport) char* __cdecl fgets(char*, int, void*);
+extern "C" __declspec(dllimport) int   __cdecl fclose(void*);
+extern "C" __declspec(dllimport) char* __cdecl strrchr(const char*, int);
+extern "C" __declspec(dllimport) char* __cdecl strstr(const char*, const char*);
+extern "C" __declspec(dllimport) int   __cdecl sprintf(char*, const char*, ...);
+extern "C" __declspec(dllimport) int   __cdecl fprintf(void*, const char*, ...);
+extern "C" __declspec(dllimport) void* __cdecl __iob_func(void);
 
 extern float DAT_01485720;   // 1.0f
 extern float DAT_013eb1bc;   // -1.0f
@@ -571,7 +571,8 @@ float __cdecl FUN_009cdbe0(float param_1, float param_2, float param_3,
     if (param_1 > param_3) param_1 = param_3;
     param_1 = (float)fabs((double)((param_1 - param_2) / range));
     float res = param_4;
-    if ((float)fabs((double)(range2 * 1e-06f)) > param_1)
+    // 0x9cdc5a: fcompi |t| (st0) vs |range2*1e-06| (st1); jbe skips the hermite blend
+    if (param_1 > (float)fabs((double)(range2 * 1e-06f)))
         res = (((((param_1 * 6.0f - 15.0f) * param_1 + 10.0f) * param_1) * param_1)
                * param_1) * range2 + param_4;
     if (range2 > 0.0f) {

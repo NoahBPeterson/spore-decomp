@@ -1,0 +1,10 @@
+009ccfe0 ?Execute@cParentIndexCommand@nSPCreatureAnim@@UAEXAAUcArguments@2@@Z  # `anonymous namespace'::cParentIndexCommand::Execute derived in s009ccfe0
+009cd040 ?Execute@cBlockBlockCommand@nSPCreatureAnim@@UAEXAAUcArguments@2@@Z  # `anonymous namespace'::cBlockBlockCommand::Execute derived in s009ccfe0
+009cd110 ?FUN_009cd110@@YAHPAUcreature_static_data@nSPCreatureAnim@@PBD@Z  # nSPCreatureAnim::InitCreatureStaticDataFromBlocksFile (body reconstructed in s009ccfe0)
+009cd580 ?FUN_009cd580@@YAXPADPAMPAXH@Z  # unnamed; position/rect accessor derived in s009ccfe0
+009cd930 ?FUN_009cd930@@YAXPADPAM@Z  # unnamed; body-accumulate helper derived in s009ccfe0
+009cda70 ?FUN_009cda70@@YAPAMPAMPBM@Z  # unnamed; quaternion->euler helper derived in s009ccfe0
+009cdb20 ?FUN_009cdb20@@YAMMM@Z  # unnamed; biased-pow clamp derived in s009ccfe0 (approximate)
+009cdbe0 ?FUN_009cdbe0@@YAMMMMMM@Z  # unnamed; hermite blend/clamp derived in s009ccfe0
+009cdce0 ?FUN_009cdce0@@YAMMMMMMM@Z  # nSPCreatureAnim::biasedSigmoid derived in s009ccfe0
+009cddc0 ?FUN_009cddc0@@YAMMM@Z  # unnamed epsilon-sign helper derived in s009ccfe0
