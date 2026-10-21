@@ -16,6 +16,7 @@ extern "C" void* __cdecl EastlNew(unsigned int size, const char* name, int flags
 extern "C" void  __cdecl EastlDelete(void* p);                                    // 0x00f47380
 extern "C" void* __cdecl FUN_00c8a420(void* p);                                   // 0x00c8a420
 extern "C" void* __cdecl FUN_00b184c0(void* p);                                   // 0x00b184c0
+extern "C" void  FUN_00bec790();                                                  // 0x00bec790
 extern "C" void* __cdecl FUN_00454cb0(void* str, const char* s);                  // 0x00454cb0
 extern "C" void* __cdecl FUN_0041cb40(void* m, void* src);                        // 0x0041cb40 Matrix3::Assign
 extern "C" void* __cdecl FUN_0059c190(void* out, void* q);                        // 0x0059c190 Matrix3FromQuaternion
@@ -79,10 +80,11 @@ void S::FUN_00becac0(int idx)
   if (*(int*)(self + 0x254) != idx) {
     void* fn = *(void**)(*(int*)(self + 0x34) + 0x94);
     int base = *(int*)(self + 0x110);
-    *(int*)(self + 0x254) = idx;
-    ((void (*)(void*, void*))fn)(self + 0x34, (void*)(base + idx * 0xc));
+    void* arg = (void*)(base + idx * 0xc);
+    *(volatile int*)(self + 0x254) = idx;
+    ((void (__thiscall*)(void*, void*))fn)(self + 0x34, arg);
     if (idx == 2 || idx == 3) {
-      ((void (*)(void*, int))0x00bec790)(self, idx);
+      ((void (__thiscall*)(void*, int))FUN_00bec790)(self, idx);
     }
   }
 }
