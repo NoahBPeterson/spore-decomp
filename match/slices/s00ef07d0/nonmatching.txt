@@ -1,0 +1,9 @@
+00ef07d0  217 complete u32 Update(bool) entry; register/stack scheduling differs (ours 195 vs 217). difftest WEAK (6.9% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ef0900  226 complete mouse-wheel handler; DF_015acd* dedup block and x87 arg marshalling differ (ours 217 vs 226). difftest WEAK (6.2% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ef09f0  124 complete mouse-move handler; float args must be re-pushed through the x87 temp (ours 136 vs 124). difftest WEAK (9.3% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ef0a70  187 complete Activate; call ordering and the App/message lookup differ slightly (ours 178 vs 187). difftest UNSUPPORTED (0/400 valid). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ef0b30  71  complete Deactivate; the inlined key-check and final vtable tail-jump differ (ours 69 vs 71). difftest UNSUPPORTED (0/400 valid). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ef0b80  252 complete Deactivate variant; the 0x16c7b34/0x16c7b35 global sequencing (window restore + FUN_0067cab0 Set40/Set) is mis-ordered. difftest FAIL (memory pool divergence). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ef0cd0  234 complete camera setup (SP::SetupHatchAtNest); FUN_00f31830 is not resolvable by the gate and the receiver-slot layout differs. difftest UNSUPPORTED (unresolved FUN_00f31830). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ef0de0  255 complete per-frame noun/avatar update; the SP_NounManager this-pointer differs (GetAvatar ecx mismatch). difftest FAIL. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ef1460  509 complete Shutdown/teardown; the long release sequence is only partly faithful (ours 495 vs 509). difftest UNSUPPORTED (0/400 valid). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

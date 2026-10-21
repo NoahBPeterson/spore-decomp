@@ -1,0 +1,11 @@
+# slice s00ef07d0 (gold4 #87) - byte-exact functions
+# format: <source> <symbol> <va> <flags>
+slices/s00ef07d0/s00ef07d0.cpp  ?FUN_00ef08b0@Strategy@@QAEEII@Z  00ef08b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ef07d0/s00ef07d0.cpp  ?FUN_00ef0c80@Strategy@@QAEXXZ  00ef0c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ef07d0/s00ef07d0.cpp  ?FUN_00ef0dc0@Strategy@@QAEIXZ  00ef0dc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ef07d0/s00ef07d0.cpp  ?FUN_00ef12d0@Strategy@@QAEXH@Z  00ef12d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ef07d0/s00ef07d0.cpp  ?FUN_00ef1360@Strategy@@QAEXXZ  00ef1360  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ef07d0/s00ef07d0.cpp  ?FUN_00ef13b0@Strategy@@QAEXH@Z  00ef13b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ef07d0/s00ef07d0.cpp  ?FUN_00ef1400@Strategy@@QAEXXZ  00ef1400  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ef07d0/s00ef07d0.cpp  ?FUN_00ef1430@@YGEII@Z  00ef1430  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ef07d0/s00ef07d0.cpp  ?FUN_00ef1660@Strategy@@QAEXXZ  00ef1660  /O2 /MD /Gy /TP /arch:SSE /fp:fast

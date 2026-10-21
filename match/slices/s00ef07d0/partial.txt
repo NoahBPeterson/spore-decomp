@@ -1,0 +1,4 @@
+# slice s00ef07d0 (gold4 #87) - incomplete reconstructions (large bodies only partly recovered)
+# one VA per line
+00ef0ee0
+00ef10c0
