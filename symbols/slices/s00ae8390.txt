@@ -1,0 +1,21 @@
+# va  name  # evidence
+# Slice s00ae8390 -- the Spore space "comm screen" host object (two parallel display
+# slots: animating-creature containers at +0x24/0x28 with handles at +0x2c/0x30,
+# sprite/effect entries at +0x34/0x38, renderer handles at +0x1c/0x20, per-slot flags
+# at +0x7c..0x92 and environment id at +0x94 where 0x2ccd1d2 == space) plus the
+# neighbouring cSPUICommScreen front-end helpers.  Names are reconstructions from the
+# cards except where a PDB-style identity is clear.
+00ae8390  CommHost::Teardown            # releases both slots' renderers/creatures/sprites/models
+00ae8510  CommHost::Update              # per-frame update of both display slots (dt ms)
+00ae8820  CommHost::SetSlotSprite       # release + allocate + transform a slot's sprite/effect
+00ae8970  CommHost::LayoutSlot          # per-slot scale/offset layout (space vs planet)
+00ae8d00  CommHost::BindSlotCreature    # bind slot's animating creature from its model
+00ae8ea0  CommHost::ResetSlots          # clear both slot objects and flags
+00ae9000  cSPUICommScreen::StaticInit   # descriptor -> cSPUILayout -> Init (0xdd4260)
+00ae9040  CommScreen::CheckStarMission  # star/mission predicate returning two hashed ids
+00ae90d0  CommScreen::SetupAudio       # EA::Audio comm-channel entry setup
+00ae9150  FUN_00ae9150                # cSPUILayout -> 0xdd2780 step
+00ae9170  FUN_00ae9170                # cVarListSerializer save (WriteUint32 + Serialize)
+00ae9330  FUN_00ae9330                # release +0x20 handle then cSPUICommScreen re-init
+00ae9390  CommScreen::IsActive         # "is a comm session active" query
+00ae93f0  CommScreen::FindEntry        # comm-entry vector search by empire/type/planet/flags
