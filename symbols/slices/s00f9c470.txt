@@ -1,0 +1,4 @@
+00f9c470 FUN_00f9c470  # free function; drives the terrain face-record table and viewer basis
+00f9c660 BuildSurfaceOrientation  # SP::cTerrainSphere::BuildSurfaceOrientation
+00f9c960 BuildSurfaceOrientationV  # SP::cTerrainSphere::BuildSurfaceOrientationV
+00f9cc50 BuildPitchedSurfaceOrientation  # SP::cTerrainSphere::BuildPitchedSurfaceOrientation
