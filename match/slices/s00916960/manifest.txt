@@ -1,0 +1,2 @@
+slices/s00916960/s00916960.cpp  ?XmlInitUnknownEncodingNS@@YAPAUencoding_s0091_6960@@PAXPAHP6AH0PBD@Z0@Z  00917280  /O2 /MD /Gy /EHsc /TP
+slices/s00916960/s00916960.cpp  ?Push@SpriteList@@QAEXPBI@Z  00917770  /O2 /MD /Gy /EHsc /TP
