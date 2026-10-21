@@ -1153,7 +1153,7 @@ struct Variant_s0061_1860 {
 };
 }
 namespace EA {
-template <typename T> struct VariantT : Variant_s0061_1860 {
+template <typename T> class VariantT : public Variant_s0061_1860 { public:
     VariantT(const Variant_s0061_1860& x);                                  // 0x0060d990 (int), 0x0060d9c0 (string)
     ~VariantT() { if (mFlags & 4) Destruct(0); }
     T* Get();                                                    // 0x0060d280 (int), 0x0060ebf0 (string)
