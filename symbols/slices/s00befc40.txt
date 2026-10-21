@@ -1,0 +1,23 @@
+00befc40 city_assign_civ  # point each city's civ pointer at `src` and reset the per-city tracked state
+00befd30 sim_singleton  # lazily EAAllocate + construct the 0xc8 SimSingleton, return its +0xac field
+00befd80 civic_radius_accum  # accumulate the building radius over time, scaled by terrain mode and the two flags
+00befee0 city_nearest_to  # nearest non-skipped city to `pos` by Euclidean distance over the [0x9c,0xa0) vector
+00beff90 city_has_continent_specialty  # any city whose position matches `pos`'s continent (and specialty) exists
+00bf00a0 city_on_continent  # is there a city on `continent` with the given vehicle specialty
+00bf0110 city_continent_has_specialty  # look up `city`'s continent then search for the specialty
+00bf0130 cities_share_continent  # do `this` and `other` share any city continent (nested city walk)
+00bf01f0 count_specialty_cities  # count cities with the given specialty (optionally only not-yet-converted)
+00bf0260 find_specialty_city  # index of the first city with the given specialty, or -1
+00bf02b0 city_flags_update  # update the per-city flag/counters from a noun's vtable slot
+00bf0330 city_music_apply  # apply the city's music state via the +0x120 sub-object's vtable slot +0x58
+00bf03e0 civ_radius_add  # add a civ/specialty-scaled amount to the running civic radius
+00bf04c0 civic_specialty_event  # dispatch the civic comm event for a specialty index
+00bf0640 city_music_weight  # vtable +0x4c specialty weighting used by the city music selector
+00bf06d0 city_music_index  # map a specialty to its city-music table index
+00bf0710 comm_event_fields  # update the selected-entry fields and fire the comm event
+00bf07c0 clear_selected_entry  # reset m2a0=-1 and release/clear the two selected RefObj slots
+00bf0810 fire_selected_comm_event  # build the comm context for the selected entry and show the comm event
+00bf08b0 expire_civic_timers  # expire the eight 600000ms civic timers and the best-entry timer
+00bf0a60 clear_tracked_ref  # clear `p` from each of the three tracked slots and reset their timers
+00bf0b00 track_ref_first  # clear `p` everywhere, addref it into the first slot and restart that timer
+00bf0b70 track_ref_second  # clear `p` everywhere, addref it into the second tracked slot and restart the timer

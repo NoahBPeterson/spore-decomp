@@ -1,0 +1,7 @@
+slices/s00befc40/s00befc40.cpp  ?SimSingletonAccessor_00befd30@@YAPAXXZ  00befd30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00befc40/s00befc40.cpp  ?FUN_00beff90@CStub@@QAEEPAMH@Z  00beff90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00befc40/s00befc40.cpp  ?FUN_00bf00a0@CStub@@QAEEHH@Z  00bf00a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00befc40/s00befc40.cpp  ?FUN_00bf0110@CStub@@QAEEPAXH@Z  00bf0110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00befc40/s00befc40.cpp  ?FUN_00bf01f0@CStub@@QAEHHE@Z  00bf01f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00befc40/s00befc40.cpp  ?FUN_00bf0260@CStub@@QAEHH@Z  00bf0260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00befc40/s00befc40.cpp  ?FUN_00bf06d0@CStub@@QAEMH@Z  00bf06d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
