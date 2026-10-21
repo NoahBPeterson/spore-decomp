@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00ae2e20/s00ae2e20.cpp  ?FUN_00ae2ed0@@YAPAXPAXPAD@Z  00ae2ed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ae2e20/s00ae2e20.cpp  ?SetTimer@Sim@@QAEXD@Z  00ae3230  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ae2e20/s00ae2e20.cpp  ?StopTimer@Sim@@QAEXXZ  00ae32e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ae2e20/s00ae2e20.cpp  ?Head@Sim@@QAE_NXZ  00ae3740  /O2 /MD /Gy /TP /arch:SSE /fp:fast
