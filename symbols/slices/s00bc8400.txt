@@ -1,0 +1,27 @@
+slice s00bc8400 -- SP::cHierGrid (hierarchical grid queue) maintenance helpers (EA framework, VS2008 SP1).
+
+VA list (13 functions, 0x00bc8400 .. 0x00bc8fa0)
+  00bc8400  cHierGrid::NewEntry(unsigned a2, unsigned* src, unsigned a4, float radius, IRefCount* p1, IRefCount* p2)  thiscall
+  00bc8550  Grid_AllocThunk(void* self)               __fastcall; wraps operator new[](self,0xff,0x418) (audit allocator 0x011e073e)
+  00bc8570  Grid_Notify(char flag, char* obj, char* rec, unsigned p4, double d5)  cdecl
+  00bc85b0  Grid_WalkInsert(void* a1, double a2, void* a3, char* host, char* obj)  cdecl
+  00bc8690  Grid_Shuffle(unsigned n, unsigned char* buf)  register-ABI helper (n in ebx, buf in edi)
+  00bc86e0  Grid_ResetEntry(double when, char* p1, char* p2, char* p3, unsigned* out, char* p4)  cdecl
+  00bc8750  GridMask::FitsMask(unsigned m1, unsigned m2)  thiscall; receiver = node+0x40
+  00bc87b0  Grid_FlushPending(char flag, unsigned a2, char* obj, unsigned a4, double a5)  cdecl
+  00bc8810  Grid_VisitNode(void* arg, int* counter, unsigned* limit)  cdecl, recursive
+  00bc88e0  Grid_TryNode(char* self, unsigned a2, double a3, cHierGrid* ctx)  cdecl
+  00bc8970  Grid_DispatchNode(char* node, unsigned a2, unsigned a3, cHierGrid* ctx, double a5)  cdecl
+  00bc8a00  Grid_AdvanceLevel(char* host, char* node, unsigned a3, double a4)  cdecl
+  00bc8fa0  Grid_HasValidIndex(cGridQueue* q)  cdecl
+
+Layouts (from machine code; cross-checked with s00703700)
+  cGridQueue: +0x00 beg, +0x04 end, +0x08 cap (0x3c-stride level records), +0x1c entry table;
+              Acquire() at 0x00bc7e80 (thiscall, fills two void* out-params).
+  cGrid:      0x88 stride, CreateEntry at 0x00703d50 (cGrid_s0070_3700::CreateEntry(unsigned,void*,float)).
+  entry rec (as seen by NewEntry/TryNode/WalkInsert): +0x00 token|0x40000000, +0x04 grid index,
+              +0x08 a2, +0x0c..+0x1c src fields, +0x20/+0x24 IRefCount pair, +0x28..+0x34 zeroed.
+  node (cHierGrid wrapper seen by AdvanceLevel): +0x04 mode, +0x78 dispatch mode, +0x7c count,
+              +0x80 chunk vector, +0x11/+0x15 stored slot/index, +0x41 mask, +0x4d/+0x51 time values.
+
+Equivalence: see nonmatching.txt (9 functions), all with difftest verdicts.
