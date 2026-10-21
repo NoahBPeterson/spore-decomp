@@ -7,6 +7,6 @@
 00b4d980 90 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv PASS (400/400, 100.0%) — size 95 vs 97, near-exact but one instruction/scheduling difference
 00b4da40 721 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv FAIL (5/19 valid; first: memory pool @40020070) — LTCG-sized inlined body (802 orig vs 695), reconstruction diverges in a real code path
 00b4dd70 322 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv FAIL (5/6 valid; first: memory pool @4aa301c8) — size 363 vs 338, reconstruction diverges in a real code path
-00b4dee0 313 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv FAIL (5/5 valid; first: memory pool @45b30000) — size 301 vs 255, reconstruction diverges in a real code path
-00b4dfe0 153 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv WEAK (216 valid inputs, 31.7% coverage) — size 208 vs 222
-00b4e0c0 311 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv FAIL (5/5 valid; first: execution) — size 304 vs 269, reconstruction diverges in a real code path
+00b4dee0 300 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv FAIL (5/5 valid; first: memory pool @45b30000) — size 293 vs 255, reconstruction diverges in a real code path
+00b4dfe0 139 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv WEAK (216 valid inputs, 31.7% coverage) — size 214 vs 222; Obj_59aed0 called with a separate dest buffer
+00b4e0c0 308 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv FAIL (5/5 valid; first: execution) — size 307 vs 269, call-routing/inlining differs in a real code path

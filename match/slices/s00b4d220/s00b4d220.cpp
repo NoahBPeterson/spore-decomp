@@ -499,8 +499,9 @@ void __cdecl FUN_00b4dee0(char* self, u8 flag, float* out)
         char* m = (char*)(((HkObj*)self)->*(PMemGetMatrix)slotGetMatrix(*(u32*)self + 0x30))();
         float tmp[3];
         tmp[0] = x; tmp[1] = y; tmp[2] = z;
-        float* tp = Obj_59aed0(&mtx, tmp, m);
-        x = tp[0]; y = tp[1]; z = tp[2];
+        float dst[4];
+        Obj_59aed0(dst, tmp, m);
+        x = dst[0]; y = dst[1]; z = dst[2];
         float* p = (((HkObj*)self)->*(PMemGetVec)slotGetVec(*(u32*)self + 0x2c))();
         x += p[0]; y += p[1]; z += p[2];
     }
@@ -529,10 +530,11 @@ void __cdecl FUN_00b4dfe0(char* self, char* obj, float* pos)
         c[1] = (b[4] + b[1]) * g_halfF;
         c[2] = (b[5] + b[2]) * g_halfF;
         char* m = (char*)(((HkObj*)self)->*(PMemGetMatrix)slotGetMatrix(*(u32*)self + 0x30))();
-        float* tp = Obj_59aed0(c, c, m);
-        pos[0] -= tp[0];
-        pos[1] -= tp[1];
-        pos[2] -= tp[2];
+        float dst[4];
+        Obj_59aed0(dst, c, m);
+        pos[0] -= dst[0];
+        pos[1] -= dst[1];
+        pos[2] -= dst[2];
     }
 }
 
@@ -555,8 +557,9 @@ void __cdecl FUN_00b4e0c0(char* self, char* obj, float* out)
         char* m = (char*)(((HkObj*)self)->*(PMemGetMatrix)slotGetMatrix(*(u32*)self + 0x30))();
         float tmp[3];
         tmp[0] = x; tmp[1] = y; tmp[2] = z;
-        float* tp = Obj_59aed0(tmp, tmp, m);
-        x = tp[0]; y = tp[1]; z = tp[2];
+        float dst[4];
+        Obj_59aed0(dst, tmp, m);
+        x = dst[0]; y = dst[1]; z = dst[2];
         float* p = (((HkObj*)self)->*(PMemGetVec)slotGetVec(*(u32*)self + 0x2c))();
         x += p[0]; y += p[1]; z += p[2];
     }
