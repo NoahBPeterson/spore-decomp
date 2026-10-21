@@ -240,6 +240,36 @@ def _svc_sessions():
     except Exception:
         return None
 
+_slice_log = None
+
+
+def commit_row_deltas(tag):
+    """(exact, equivalent) rows net-added to match/slices/*/manifest.txt and nonmatching.txt by
+    commits whose subject starts with "<tag>:", or None when there are no such commits."""
+    global _slice_log
+    if _slice_log is None:
+        try:
+            _slice_log = subprocess.run(["git", "-C", ROOT, "log", "--format=@%s", "--numstat", "--", "match/slices"],
+                                        capture_output=True, text=True, check=True).stdout
+        except (OSError, subprocess.CalledProcessError):
+            _slice_log = ""
+    out = _slice_log
+    ex = eq = 0; mine = seen = False
+    for l in out.splitlines():
+        if l.startswith("@"):
+            mine = l[1:].startswith(tag + ":"); seen |= mine
+            continue
+        p = l.split("\t")
+        if not mine or len(p) != 3 or p[0] == "-":
+            continue
+        n = int(p[0]) - int(p[1])
+        if p[2].endswith("/manifest.txt"):
+            ex += n
+        elif p[2].endswith("/nonmatching.txt"):
+            eq += n
+    return (ex, eq) if seen else None
+
+
 def model_table():
     ss = _svc_sessions()
     if ss is None:
@@ -251,7 +281,8 @@ def model_table():
             continue
         batch = t.split("-")[1] if "-" in t else t
         m = s.get("model") or {}
-        key = "%s/%s" % (m.get("providerID"), m.get("id"))
+        # cache-namespace aliases (deepseek-v4.1-flash-c06 etc.) are the same model
+        key = "%s/%s" % (m.get("providerID"), re.sub(r"-c\d+$", "", m.get("id") or ""))
         tk = s.get("tokens") or {}; c = tk.get("cache") or {}
         a = bm[(batch, key)]
         a["cost"] += s.get("cost", 0) or 0; a["inp"] += tk.get("input", 0) or 0
@@ -266,9 +297,21 @@ def model_table():
         """(exact, equivalent) function counts from this batch's manifests, minus
         slices that actually belong to a different model's batch."""
         bf = W("work/batches", batch + ".json"); ex = eq = 0
+        gf = W("work/opencode/groups", batch + ".json")
+        if not os.path.exists(bf) and os.path.exists(gf):
+            # opencode_sup titles sessions by group (gold3g0); the group names its batch
+            bf = W("work/batches", json.load(open(gf))["batch"] + ".json")
         exclude = CLAIM_EXCLUDE.get(batch, set())
-        if os.path.exists(bf):
-            for rec in json.load(open(bf)):
+        recs = json.load(open(bf)) if os.path.exists(bf) else []
+        tag = os.path.basename(bf)[:-5]
+        if recs and not any(r.get("module") for r in recs):
+            d = commit_row_deltas(tag)
+            if d is not None:
+                # waves that rework existing slices (dec2, gold3 after gold2): credit only the rows
+                # their own "<tag>:" commits added, not every row the slices hold today
+                return d[0] + EXTRA_EXACT.get(batch, 0), d[1]
+        if recs:
+            for rec in recs:
                 if _slice_batches[rec["id"]] & exclude:
                     continue  # shared slice actually produced by another model's batch
                 if rec["id"] in CLAUDE_BASELINE:
