@@ -120,6 +120,7 @@ struct SpaceTool {
     void  FUN_00aebcd0(int index);                               // 0x00aebcd0
 
     // external thiscall neighbours reached with ecx == this
+    void* FUN_00aebde0();                                        // 0x00aebde0
     void* FUN_00ae9000(void* p);                                 // 0x00ae9000
     void* FUN_00ae9330(void* p);                                 // 0x00ae9330
 
@@ -610,10 +611,10 @@ void SpaceTool::FUN_00aebcd0(int index)
 // 0x00aebde0 -- constructor of the comm-dialog host (ret).
 // ===========================================================================
 // @ 0x00aebde0
-void* FUN_00aebde0(void* self)
+void* SpaceTool::FUN_00aebde0()
 {
-    char* p = (char*)self;
-    FUN_00b5b960();                            // SP::cGonzagoSubsystem::ctor
+    char* p = (char*)this;
+    ((void (__thiscall*)(void*))FUN_00b5b960)(this);   // SP::cGonzagoSubsystem::ctor
 
     *(u32*)(p + 0x1c) = 0x13eb394;
     *(u32*)(p + 0x00) = 0x145bf20;
