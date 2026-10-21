@@ -40,7 +40,10 @@ static const char kAllocFile[] =
 
 // ---- external helpers (masked callees) ------------------------------------
 struct E12 { u32 a; u32 b; void* p; };
-struct E12Vec { E12* b; E12* e; E12* c; };
+struct E12Vec {
+  E12* b; E12* e; E12* c;
+  void FUN_00aeb5b0(void* value);                 // 0x00aeb5b0 (__thiscall on the vector)
+};
 extern "C" bool EA_ReadInt32(void* s, int* p, int n, int flags);        // 0x0093a780
 
 // ---- game singletons ------------------------------------------------------
@@ -104,7 +107,6 @@ struct SpaceTool {
     char   pad61[0x03];
     char   m64[0x14];      // +0x64
 
-    void  FUN_00aeb5b0(void* value);                             // 0x00aeb5b0
     void  FUN_00aeb680(int newId);                               // 0x00aeb680
     void  FUN_00aeb700();                                        // 0x00aeb700
     void  FUN_00aeb720(int a1, int a2, int a3, int a4, int a5, int a6);  // 0x00aeb720
@@ -230,11 +232,11 @@ lab_buildUserData:
 // 0x00aeb5b0 -- vector<Entry12>::push_back of a 0xc-byte element.
 // ===========================================================================
 // @ 0x00aeb5b0
-void SpaceTool::FUN_00aeb5b0(void* value)
+void E12Vec::FUN_00aeb5b0(void* value)
 {
-    E12* end = (E12*)mVec.e;
-    if (end < (E12*)mVec.c) {
-        mVec.e = end + 1;
+    E12* end = e;
+    if (end < c) {
+        e = end + 1;
         if (end) {
             const E12* v = (const E12*)value;
             end->a = v->a;
@@ -246,7 +248,7 @@ void SpaceTool::FUN_00aeb5b0(void* value)
         }
         return;
     }
-    FUN_00aeae90(end, (E12*)value);
+    (*(void(__thiscall*)(E12Vec*, E12*, E12*))FUN_00aeae90)(this, end, (E12*)value);
 }
 
 // ===========================================================================
