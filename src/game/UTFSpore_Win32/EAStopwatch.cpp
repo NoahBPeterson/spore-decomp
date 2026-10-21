@@ -45,7 +45,7 @@ struct Stopwatch {
     int64_t GetElapsedTime();
     void SetElapsedCycles(int64_t cycles);
 };
-struct cSPUILayerManager {
+class cSPUILayerManager { public:
     char    pad00[0x14];
     float   mfCoeff;    // 0x14
     int64_t mnTime;     // 0x18
