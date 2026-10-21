@@ -1,0 +1,6 @@
+# Slice s00b73e70 -- VAs that cannot be attributed to a single symbol.
+# Rows: bare 8-hex VA, one per line.
+
+# (none) -- every one of the 19 target VAs resolves to a distinct, correctly
+# bounds-checked function symbol, so each is either byte-exact (manifest.txt)
+# or a partial match (partial.txt).

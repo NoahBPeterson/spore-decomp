@@ -1,0 +1,19 @@
+00b73e70 FUN_00b73e70  # descriptor fetch: three-way dispatch on self[0x88] (0..3 -> grid record self[0x58]+self[0x5c]*0x4c, ==4 -> self[0x70]+8, else one-shot init of the 0x1688114 global descriptor + Matrix3::Assign); byte-exact except cl block ordering (partial)
+00b73f30 FUN_00b73f30  # obstacle-record serialiser part 1, __fastcall(self,float,int) (partial)
+00b74130 FUN_00b74130  # obstacle-record serialiser part 2, __fastcall(self), 562 bytes original (partial)
+00b74370 FUN_00b74370  # 0x40f4 stack pop helper: pop the top pointer, virtual-call it, shrink the stack; returns the popped object (partial)
+00b74400 FUN_00b74400  # __stdcall per-record check returning unsigned char over the 0x40f4 vector (partial)
+00b74590 FUN_00b74590  # __stdcall 1-arg reset of an obstacle record's dirty/flag word; byte-exact
+00b746a0 Hashtable2::Find  # eastl two-key probe: bucket = begin[k0 % count], walk the +0x10 node chain, emit a 4-dword {node,bucket,end,endBucket} iterator (partial)
+00b74740 Hashtable3::Find  # eastl three-key probe (hash k0^k2, node chain at +0x31c via 0xb72f10) (partial)
+00b749c0 FUN_00b749c0  # __cdecl squared-distance cull over a Vec3 (0xc-stride) range with early break under 0.01; byte-exact
+00b74a60 FUN_00b74a60  # copy a run of 0x4c-stride records through an index list, virtual-calling a hook per element (partial)
+00b74b60 Simulator::cObstacle::AllocNode3  # free-list pop-or-EAAllocate of a 3-word node, deep-copying the source record and add-ref'ing its sub-object; byte-exact except temporary-register naming (partial)
+00b74bc0 Simulator::cObstacle::AllocNode2  # two-word variant of AllocNode3 (no sub-object vtable call slot at +0xc); byte-exact except temporary-register naming (partial)
+00b74c20 FUN_00b74c20  # Vec3 range copy (a[i]=c[i] for a!=b, 3 floats at a time); byte-exact
+00b74c50 FUN_00b74c50  # heapify prologue: n=(end-begin)/0xc, for i=n/2-1..0 sift-down via 0xb737d0 with a by-value Vec3 pivot (partial)
+00b74cc0 FUN_00b74cc0  # second heap-sort pass re-running the sift with a saved pivot Vec3 (partial)
+00b74d60 FUN_00b74d60  # full heap-sort of 0x4c-stride records with a Vec3 key and comparator (partial)
+00b74e90 ObstacleMgr::FindById  # hash-lookup of an obstacle by id: Hashtable2::Find on this+0x38, then walk nodes comparing node->data[0x5c] == id, returning node->data (partial)
+00b74ef0 FUN_00b74ef0  # __stdcall clear the record's dirty bit and, if self[0x54] is set re-emit via 0xa887b0 else poke the +0x70 wrapper's vtable slot 0x16c (partial, 2 bytes)
+00b74f40 ObstacleMgr::Lookup  # this+0x56c0 Hashtable2::Find on a key, return node+0xc or 0; byte-exact

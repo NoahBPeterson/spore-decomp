@@ -1,0 +1,67 @@
+# Slice s00b73e70 -- decompiled and semantically faithful, but not byte-exact
+# (cl 19.x register-allocation / block-ordering residues; see papercut notes).
+# Rows: bare 8-hex VA, one per line.
+
+# 00b74ef0: 74 bytes, 2 bytes differ.  Only the loaded `self[0x54]` value sits in
+# eax here where the original keeps it in ecx (`mov ecx,[esi+0x54]; test ecx,ecx`
+# then reuses the dead ecx as the outgoing float-argument stack slot via
+# `push ecx`).  Every candidate shape I tried (plain load, register-int local,
+# pointer-typed field, value-dependent ternary float arg) reproduces the exact
+# 74-byte layout and the `push ecx` filler but leaves the test in eax.  Pure
+# allocator coin-flip; structurally identical.
+00b74ef0
+
+# 00b74bc0 / 00b74b60: 5 / 7 bytes differ.  Both are the free-list node
+# allocators (AllocNode2/3).  The copies of the source record's words and the
+# subsequent virtual call are byte-identical in shape; only the temporary
+# register names rotate (orig ecx,edx / mine edx,ecx).  Forcing the struct
+# field view (Node2View/Node3View) got the offsets right but not the register
+# order.
+00b74bc0
+00b74b60
+
+# 00b74e90: 37 bytes differ.  FindById now uses the correct 16-byte eastl
+# iterator {cur,bucket,end,endBucket} and the right 0x10 stride walk, and the
+# instruction sequence matches one-for-one; the whole register set is rotated
+# (orig ecx/esi/edx/edi vs mine eax/edx/ecx/esi) and chk counts the alignment
+# padding in the size (98 vs 88).
+00b74e90
+
+# 00b74c50: 35 bytes differ, size matches (99).  The heapify prologue is right;
+# the residual is that the original copies the by-value Vec3 argument into the
+# outgoing stack slot through the x87 stack (fld/fstp), while cl emits integer
+# movs for the same POD copy.  Codegen choice, not a semantic difference.
+00b74c50
+
+# 00b73e70: 63 bytes differ.  The three-way dispatch on self[0x88] is correct;
+# cl lays the "grid lookup" body out first and jumps to the global-descriptor
+# init, while the original emits the global init straight after the range tests
+# and places the two lookup bodies afterwards (block ordering).  Also the
+# one-shot Matrix3::Assign call has the right __thiscall shape.
+00b73e70
+
+# 00b746a0 / 00b74740: 163 / 121 bytes differ.  Both are the eastl two-/three-key
+# hashtable probes.  The bucket scan, duplicate-node walk and empty-result
+# iterator are all correct; cl spills the key words to the frame in the 2-key
+# probe (160 vs 149 bytes) and picks a different bucket/node register set in the
+# 3-key probe.  No structural difference remains.
+00b746a0
+00b74740
+
+# 00b74370 / 00b74400 / 00b74a60 / 00b74cc0 / 00b74d60: the container/streaming
+# helpers (0x40f4 stack pop, serialise-uint32 loop, index-list copy, the
+# two remaining heap-sort bodies).  Each reproduces the original's control flow
+# and callee sequence; the diffs are the 0x4c-record stride arithmetic
+# scheduled differently and callee-saved register rotation.
+00b74370
+00b74400
+00b74a60
+00b74cc0
+00b74d60
+
+# 00b73f30 / 00b74130: largest two (506 / 562 bytes original).  Both are the
+# obstacle-record serialisers.  Reconstructed field-for-field; the residue is
+# the deep argument spill scheduling cl chose versus the original's, so the
+# compiled bodies are ~60-120 bytes shorter.
+00b73f30
+00b74130
