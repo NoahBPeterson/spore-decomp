@@ -1,0 +1,23 @@
+# Generated for slice s0119f820: OpenSSL 0.9.8g ssl TUs, lib_cblock copy.
+# The same code also exists named as lib_openssl (see symbols/lib_names.txt);
+# these 20 addresses are the unnamed lib_cblock duplicate.  All byte-exact.
+0119f820  ssl3_clear                   # s3_lib.c: cleanup_key_block, free rbuf/wbuf/rrec.comp, DH/ECDH free, 2x EVP_MD_CTX_cleanup, memset(sizeof SSL3_STATE=0x39c), restore buffers, ssl_free_wbio_buffer, version=SSL3_VERSION; byte-exact
+0119f950  ssl3_ctrl                    # s3_lib.c: the SSL_CTRL_* dispatcher (want/cipher/session-cache options); byte-exact
+0119fbf0  ssl3_callback_ctrl           # s3_lib.c: SSL_CTRL_SET_*_CALLBACK setter for the gen/tmp-key/DH callbacks; byte-exact
+0119fc80  ssl3_ctx_ctrl                # s3_lib.c: SSL_CTX-level SSL_CTRL_* dispatcher; byte-exact
+0119fee0  ssl3_get_cipher_by_char      # s3_lib.c: id=0x03000000|(p[0]<<8)|p[1], OBJ_bsearch over ssl3_ciphers; byte-exact
+011a0030  ssl3_get_req_cert_type       # s3_lib.c: build the CertificateRequest cert-type list from the cipher algorithm bits; byte-exact
+011a00a0  ssl3_shutdown                # s3_lib.c: orderly close_notify via ssl3_send_alert, waits for peer's alert; byte-exact
+011a0130  ssl3_renegotiate             # s3_lib.c: set s3->renegotiate when a handshake is in progress; byte-exact
+011a0160  ssl3_renegotiate_check       # s3_lib.c: kick off the renegotiation handshake when the flags line up; byte-exact
+011a01d0  ssl3_write                   # s3_lib.c: BIO-backed write path (flush pending record then ssl3_write_bytes); byte-exact
+011a0290  ssl3_read_internal           # s3_lib.c: shared body of ssl3_read/ssl3_peek (peek in EDI at entry); byte-exact
+011a0380  ssl23_get_cipher             # s23_lib.c: u < ssl3_num_ciphers() ? ssl3_get_cipher(u) : NULL (num_ciphers is the folded constant 0x41); byte-exact
+011a03e0  ssl23_read                   # s23_lib.c: SSL23 read entry, drives the handshake then forwards to SSL_read; byte-exact
+011a0450  ssl23_peek                   # s23_lib.c: SSL23 peek entry, ... forwards to SSL_peek; byte-exact
+011a04d0  ssl23_write                  # s23_lib.c: SSL23 write entry, ... forwards to SSL_write; byte-exact
+011a0540  ssl3_read_n                  # s3_pkt.c: buffered record read of n bytes (rbuf refill, memmove of the partial tail); byte-exact
+011a0720  ssl3_do_compress             # s3_pkt.c: COMP_compress_block(wbuf) for the outgoing record; byte-exact
+011a0770  ssl3_write_pending           # s3_pkt.c: retry loop for a partially written record (wpend_tot/buf/ret); byte-exact
+011a0860  ssl3_do_change_cipher_spec   # s3_pkt.c: set up the cipher spec via ssl3_enc/method hooks after ChangeCipherSpec; byte-exact
+011a0930  ssl3_send_alert              # s3_pkt.c: map the alert value, drop the session on a fatal alert, dispatch the alert record; byte-exact
