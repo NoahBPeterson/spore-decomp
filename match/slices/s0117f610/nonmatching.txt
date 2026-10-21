@@ -1,0 +1,8 @@
+0117f610 99 /O2 /MD /Gy /TP PASS - complete/replay-equal; only the shared `return 0` block sits after the body instead of between the checks and the body (je +0x22 / jne +0x27)
+0117f7f0 125 /O2 /MD /Gy /TP PASS - complete/replay-equal; std-table branch uses the same lh_retrieve tail but the inlined ExtKey frame/store order differs
+0117f870 126 /O2 /MD /Gy /TP PASS - complete/replay-equal; same ExtKey frame/store-order residual as 0117f7f0
+01181810 275 /O2 /MD /Gy /TP WEAK - complete/replay-equal on 155 valid inputs; error-path labelling of the reused block differs (size 277 vs 275)
+01181a10 462 /O2 /MD /Gy /TP UNSUPPORTED - harness cannot resolve the original's `import:_time64` thunk (reached only via 01181660); no valid comparison, source is complete and matches the asm's field use
+01181f50 750 /O2 /MD /Gy /TP FAIL - behaviour fixed (the conflation of the "check_error" / "not_resumable" flags was corrected) and replays agree; the residual is only the local-frame/dead-stack layout at __security_check_cookie (frame 760 vs 750 bytes)
+01182260 1031 /O2 /MD /Gy /TP WEAK - complete; 389 valid inputs, 13.1% coverage; SSLv2/SSLv3 ClientHello layout decoded literally (incl. the 0x2a sentinel after the CA list) but the builder's register allocation differs broadly
+01182670 499 /O2 /MD /Gy /TP UNSUPPORTED - takes `s` in ESI (custom /LTCG register ABI); all harness inputs fault, so no comparison is possible

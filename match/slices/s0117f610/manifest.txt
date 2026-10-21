@@ -1,0 +1,6 @@
+slices/s0117f610/s0117f610.cpp  ?Ext_get_nid_117f770@@YAPAUExtMethod@@I@Z  0117f770  /O2 /MD /Gy /TP
+slices/s0117f610/s0117f610.cpp  ?X509_get_ext_count_11801b0@@YAHPAH@Z  011801b0  /O2 /MD /Gy /TP
+slices/s0117f610/s0117f610.cpp  ?X509_get_ext_by_OBJ_11801d0@@YAHPAHPAXH@Z  011801d0  /O2 /MD /Gy /TP
+slices/s0117f610/s0117f610.cpp  ?X509_get_ext_d2i_1180210@@YAPAXPAHH00@Z  01180210  /O2 /MD /Gy /TP
+slices/s0117f610/s0117f610.cpp  ?session_new_1181660@@YAPAUSSL_SESSION@@XZ  01181660  /O2 /MD /Gy /TP
+slices/s0117f610/s0117f610.cpp  ?Method_by_version_1182240@@YAPAUSSL_METHOD@@H@Z  01182240  /O2 /MD /Gy /TP

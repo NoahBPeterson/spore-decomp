@@ -1,0 +1,14 @@
+0117f610 X509V3_EXT_d2i  # decode an extension payload with the method's ASN1 item or legacy d2i fn
+0117f770 X509V3_EXT_get_nid  # extension method for a NID: standard table for <=0x30b, else the EXTABLE hash
+0117f7f0 X509V3_EXT_get_nid_a  # ext_nid field of the extension method for a NID
+0117f870 X509V3_EXT_get_nid_b  # ext_flags field of the extension method for a NID
+011801b0 X509_get_ext_count  # ext count of the extension stack at the cert's +0x24
+011801d0 X509_get_ext_by_OBJ  # search the extension stack by object, starting after lastpos
+01180210 X509_get_ext_d2i  # decode extension `nid` from the cert, returning crit/idx
+01181660 SSL_SESSION_new  # allocates the 0xc8 session, new ex_data, defaults (refs 1, timeout, sid ctx)
+01181810 SSL_set_session  # installs a session on the SSL struct, bumping refs and setting the cipher id
+01181a10 ssl_get_new_session  # captures the current session id (TLS/SSLv3/SSLv2 path) and copies it out
+01181f50 ssl_get_prev_session  # looks the offered session id up in the ctx cache, validates sid_ctx/time
+01182240 ssl_method_by_version  # maps a protocol version constant to SSLv3/TLSv1 method
+01182260 ssl3_client_hello  # builds the SSLv2 (with the 0x2a CA sentinel) or SSLv3 ClientHello and writes it
+01182670 ssl3_get_server_hello  # reads and validates ServerHello, sets the version and session id
