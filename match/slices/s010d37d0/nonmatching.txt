@@ -1,0 +1,7 @@
+# va  diff-bytes  reason   (compile with /vc71 /O2 /MD /Gy /TP)
+#
+# Complete behaviourally-equivalent source for the get/processCollision paths; none byte-exact yet.
+010d37d0  1125  hkCapsuleTriangleAgent::getPenetrations; complete; 3 output contacts written, x87 transform spelling and schedule differ so frame 1078 vs 1219; equiv PASS 395 valid inputs, 91.5% insn coverage
+010d3c10  1405  hkCapsuleTriangleAgent::staticGetPenetrations; complete (same body as getPenetrations but takes the collector and re-reads the shapes); x87 schedule/register allocation differ; equiv PASS 268 valid inputs, 91.6% coverage
+010d4170  25  hkCapsuleTriangleAgent::processCollisionThunk; logic identical; the entire diff is an esi/edi callee-saved swap (not source-controllable); equiv PASS 384 valid inputs, 78.6% coverage
+010d42c0  1069  hkCapsuleCapsuleAgent::processCollision; complete thiscall member (agent keys at this+0xc, contact mgr at this+8, contact stride 0x30, tolerance at input+8, append when w<tol else removePoint); equiv FAIL 5/7 valid inputs -- on adversarial random inputs the differing manifold .w values steer the branch differently (ours 0 fakes vs orig 3) and our append writes past the output buffer (UC_ERR_WRITE_UNMAPPED at eip=30000402); not confirmed fixable

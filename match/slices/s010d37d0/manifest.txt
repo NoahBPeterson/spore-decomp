@@ -1,0 +1,3 @@
+slices/s010d37d0/s010d37d0.cpp  ?getPenetrationsWrapper@hkCapsuleTriangleAgent@@QAEXPBX00PAX@Z  010d4070  /vc71 /O2 /MD /Gy /TP
+slices/s010d37d0/s010d37d0.cpp  ?getClosestPointsWrapper@hkCapsuleTriangleAgent@@QAEXPBX00PAX@Z  010d40f0  /vc71 /O2 /MD /Gy /TP
+slices/s010d37d0/s010d37d0.cpp  _hkCapsuleCapsuleAgent__create  010d4280  /vc71 /O2 /MD /Gy /TP
