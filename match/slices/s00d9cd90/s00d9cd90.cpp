@@ -436,12 +436,10 @@ int S::FUN_00d9d840(int idx)
 void S::FUN_00d9d890(int* first, int* last)
 {
   for (; first < last; first += 0x84) {
-    bool flag = ((unsigned)*first) >> 31;
+    bool flag = (((unsigned)*first) >> 31) & 1;
     if (!flag) {
       void* obj = (void*)(first + 1);
-      void** vt = *(void***)obj;
-      void* fn = vt[0];
-      ((void (__thiscall*)(void*, int))fn)(obj, 0);
+      (*(void (__thiscall***)(void*, int))obj)[0](obj, 0);
     }
   }
 }
