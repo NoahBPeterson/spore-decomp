@@ -1,3 +1,13 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+#
+# Slice s00c045a0 = CreatureBase ability accessors and movement/state callbacks (the ability list
+# lookup, the creature-data helper group, the jump-land and start-swimming entries and the scale
+# calculation).  1/17 byte-exact.  The other 16 are complete C++ that reproduces the original
+# control flow and call order; they miss byte-exactness because the game-mode value is held in ebx
+# across out-of-line helper calls, the indexed ability loads and the guard polarity / inlining
+# shapes differ from the original build.
+
 00c045f0 111 non-byte-exact; game mode held in ebx across out-of-line 0xc0c0e0 Flag388 calls (called twice in original, merged by compiler here) and bit test folded to test [..],0x200; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv PASS (400 valid inputs, 83.7% coverage)
 00c04670 135 non-byte-exact; indexed ability lookup, indexed-load and 0xffffffff guard codegen differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv PASS (393 valid inputs, 80.7% coverage)
 00c04710 51 non-byte-exact; block order and pop esi placement differ from original's out-of-line 0xc0b770 call and esi=this retention; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv PASS (395 valid inputs, 100% coverage)

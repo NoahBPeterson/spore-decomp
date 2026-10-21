@@ -1,0 +1,19 @@
+; slice s00c045a0 = 0x00c045a0..0x00c050b0 - exact decorated names for the difftest resolver
+; (manifest.txt row is byte-exact; the rest are the nonmatching.txt entries)
+00c045a0 ?SetHerd@CreatureBase@@QAEXPAX@Z  # byte-exact
+00c045f0 ?GetAbilitiesCount@CreatureBase@@QAEHXZ  # complete, non-exact
+00c04670 ?GetAbility@CreatureBase@@QAEHI@Z  # complete, non-exact
+00c04710 ?Flag04710@CreatureBase@@QAE_NXZ  # complete, non-exact
+00c04750 ?Sub4750@CreatureBase@@QAEPAXXZ  # complete, non-exact
+00c04790 ?Sub4790@CreatureBase@@QAEHXZ  # complete, non-exact
+00c047d0 ?Sub47d0@CreatureBase@@QAEHXZ  # complete, non-exact
+00c04820 ?FUN_00c04820@@YAPAXPAPAX0P6A_NPAX@Z@Z  # complete, non-exact
+00c04870 ?FUN_00c04870@@YIXPAPAX@Z  # complete, non-exact
+00c048c0 ?FUN_00c048c0@@YIPAXPAXHPBX@Z  # complete, non-exact
+00c04960 ?FUN_00c04960@@YAXPAPAXHHPAX@Z  # complete, non-exact
+00c049f0 ?CalculateScale@CreatureBase@@QAEMDM@Z  # complete, non-exact
+00c04b50 ?OnJumpLand@CreatureBase@@QAEXXZ  # complete, non-exact
+00c04c90 ?OnStartSwimming@CreatureBase@@QAEXXZ  # complete, non-exact
+00c04dd0 ?Sub4dd0@CreatureBase@@QAEXH@Z  # complete, non-exact
+00c04e50 ?Sub4e50@CreatureBase@@QAEXM@Z  # complete, non-exact
+00c050b0 ?Sub50b0@CreatureBase@@QAEXXZ  # complete, non-exact
