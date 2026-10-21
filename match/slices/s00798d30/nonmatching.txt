@@ -7,12 +7,7 @@
 007993a0 10 complete cSplitInstance constructor; first three zero-stores scheduled differently
 007994d0 266 complete switch transcription; case-body layout / jump table ordering differs
 00799640 0 complete switch transcription; compiler layout differs (no same-size symbol)
-007997f0 2 complete vtable+field constructor; returns `this` in eax (2-byte imm reloc)
 00799840 58 complete EASTL vector allocator; call-arg order/register use differs
 007998a0 108 complete plane-intersection (float10/x87); evaluation order differs
-00799940 2 complete vtable+field constructor; returns `this` in eax (2-byte imm reloc)
 007999a0 212 complete ray-sphere (float10/x87); evaluation order differs
-00799b00 2 complete vtable+field constructor; returns `this` in eax (2-byte imm reloc)
 00799b50 177 complete ray-plane (float10/x87); evaluation order differs
-00799c30 2 complete vtable+field constructor; returns `this` in eax (2-byte imm reloc)
-00799c70 2 complete vtable+field constructor; returns `this` in eax (2-byte imm reloc)

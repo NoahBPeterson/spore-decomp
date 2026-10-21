@@ -458,6 +458,7 @@ VCtor *VCtor::c0(int *param_2)
     *(float *)(param_1 + 4) = *(float *)(param_2 + 1);
     *(float *)(param_1 + 5) = *(float *)(param_2 + 2);
     *(float *)(param_1 + 6) = *(float *)(param_2 + 3);
+    _ReadWriteBarrier();
     param_1[0] = (int)&V_140f558;
     param_1[7] = 1;
     return this;
@@ -509,6 +510,7 @@ VCtor *VCtor::c1(int *param_2)
     *(float *)(param_1 + 7) = *(float *)(param_2 + 4);
     *(float *)(param_1 + 8) = *(float *)(param_2 + 5);
     *(float *)(param_1 + 9) = *(float *)(param_2 + 6);
+    _ReadWriteBarrier();
     param_1[0] = (int)&V_140f560;
     param_1[10] = 1;
     return this;
@@ -549,6 +551,7 @@ VCtor *VCtor::c2(int *param_2)
     *(float *)(param_1 + 4) = *(float *)(param_2 + 1);
     *(float *)(param_1 + 5) = *(float *)(param_2 + 2);
     *(float *)(param_1 + 6) = *(float *)(param_2 + 3);
+    _ReadWriteBarrier();
     param_1[0] = (int)&V_140f568;
     param_1[7] = 1;
     return this;
@@ -582,6 +585,7 @@ VCtor *VCtor::c3(int *param_2)
     *(float *)(param_1 + 4) = *(float *)(param_2 + 1);
     *(float *)(param_1 + 5) = *(float *)(param_2 + 2);
     *(float *)(param_1 + 6) = *(float *)(param_2 + 3);
+    _ReadWriteBarrier();
     param_1[0] = (int)&V_140f570;
     return this;
 }
@@ -600,6 +604,7 @@ VCtor *VCtor::c4(int *param_2)
     *(float *)(param_1 + 7) = *(float *)(param_2 + 4);
     *(float *)(param_1 + 8) = *(float *)(param_2 + 5);
     *(float *)(param_1 + 9) = *(float *)(param_2 + 6);
+    _ReadWriteBarrier();
     param_1[0] = (int)&V_140f578;
     return this;
 }

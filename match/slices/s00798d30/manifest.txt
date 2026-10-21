@@ -5,3 +5,8 @@ slices/s00798d30/s00798d30.cpp  ?FUN_00799050@@YAXHMPAH00@Z  00799050  /O2 /MD /
 slices/s00798d30/s00798d30.cpp  ?FUN_00799090@@YAXHMPAH00@Z  00799090  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00798d30/s00798d30.cpp  ?Notify@Mgr@@QAEXH@Z  007990e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00798d30/s00798d30.cpp  ?copy@CSplitCtor@@QAEPAHPAH@Z  00799450  /O2 /MD /Gy /EHsc /TP /fp:fast
+slices/s00798d30/s00798d30.cpp  ?c0@VCtor@@QAEPAU1@PAH@Z  007997f0  /O2 /MD /Gy /EHsc /TP
+slices/s00798d30/s00798d30.cpp  ?c1@VCtor@@QAEPAU1@PAH@Z  00799940  /O2 /MD /Gy /EHsc /TP
+slices/s00798d30/s00798d30.cpp  ?c2@VCtor@@QAEPAU1@PAH@Z  00799b00  /O2 /MD /Gy /EHsc /TP
+slices/s00798d30/s00798d30.cpp  ?c3@VCtor@@QAEPAU1@PAH@Z  00799c30  /O2 /MD /Gy /EHsc /TP
+slices/s00798d30/s00798d30.cpp  ?c4@VCtor@@QAEPAU1@PAH@Z  00799c70  /O2 /MD /Gy /EHsc /TP
