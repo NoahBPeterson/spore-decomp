@@ -29,7 +29,7 @@ struct cAppModeInfo {                 // size 0x18
 };
 }
 namespace SP {
-struct cApp;
+class cApp;
 }
 namespace SP {
 struct IHandlerRC {
@@ -38,7 +38,7 @@ struct IHandlerRC {
 };
 }
 namespace SP {
-struct cApp {
+class cApp { public:
     void** mIAppVtbl;                 // +0x00
     void** mHandlerVtbl;              // +0x04 (IHandlerRC vtable)
     char   pad08[8];                  // +0x08
