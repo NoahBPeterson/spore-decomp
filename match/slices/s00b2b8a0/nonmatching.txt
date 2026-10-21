@@ -4,7 +4,7 @@
 00b2bf40 69 rbtree/list node removal; node unlink + obj Release + operator delete reconstructed, register allocation differs
 00b2bf90 50 rbtree lower_bound then FUN_00b2b720 insert; the original keeps the key in edi/ebx/esi with the anchor in edx, ours loads from the stack each iteration
 00b2bfe0 445 vector<0x24-byte>::insert(pos,n,val) growth/capacity paths; two DoInsertValue() calls reconstructed by hand, block order and the capacity arithmetic differ
-00b2c230 38 constructor: zero the vector header, point it at the inline buffer, cap=buf+0x100, clear +0x120/+0x124; original is a this-only (fastcall) leaf returning this, ours is a one-arg free function
+00b2c230 9 constructor: zero the vector header, point it at the inline buffer, cap=buf+0x100, clear +0x120/+0x124 (volatile stores + _ReadWriteBarrier pin the original store order; only the `lea ecx,[eax+0x20]` placement relative to the zero stores remains)
 00b2c2a0 56 vector<0x24-byte>::erase(first,last); calls FUN_00b2a3b0(last,end,first), destroys the tail with slot 0, then advances mEnd; the quotient/remainder for the shift differ
 00b2c300 258 vector<0x24-byte>::insert(pos,val) in-capacity + grow paths (EastlNew/newCap*0x24, FUN_00b2ad40, FUN_00affd00, FUN_00b2a460); close (359 vs 358 bytes) but register allocation differs
 00b2c470 445 partition-by-distance over Obj* (FUN_00b2c150 prepass, then hoare partition with FUN_00b2af00 swaps, result hi+1, owner Release); reconstructed but the FP scheduling of the four distance temporaries differs

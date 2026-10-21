@@ -9,6 +9,7 @@
 //   * eastl map/list node: { +0 next, +4 prev, +8 value }
 
 #include <stddef.h>
+#include <intrin.h>
 
 #define ALLOC_H "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 
@@ -372,15 +373,17 @@ void S::FUN_00b2bf10(char force)
 void* S::FUN_00b2c230()
 {
   int zero = 0;
-  f0 = zero;
-  f4 = zero;
-  f8 = zero;
   char* buf = (char*)this + 0x20;
-  vecEnd = (void**)buf;
-  vecBegin = (void**)buf;
-  vecCap = (void**)(buf + 0x100);
-  f120 = zero;
-  f124 = zero;
+  *(volatile int*)&f0 = zero;
+  *(volatile int*)&f4 = zero;
+  *(volatile int*)&f8 = zero;
+  _ReadWriteBarrier();
+  *(void** volatile*)&vecEnd = (void**)buf;
+  *(void** volatile*)&vecBegin = (void**)buf;
+  _ReadWriteBarrier();
+  *(void** volatile*)&vecCap = (void**)(buf + 0x100);
+  *(volatile int*)&f120 = zero;
+  *(volatile int*)&f124 = zero;
   return this;
 }
 
