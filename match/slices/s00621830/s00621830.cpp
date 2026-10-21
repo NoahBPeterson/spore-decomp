@@ -213,7 +213,7 @@ cXHTMLControlAppearance::~cXHTMLControlAppearance() {
 }
 
 namespace eastl {
-struct vector {   // stub for vector<ControlDrawable>; receiver arrives in ECX
+class vector { public:   // stub for vector<ControlDrawable>; receiver arrives in ECX
   ControlDrawable* mpBegin; ControlDrawable* mpEnd; ControlDrawable* mpCap;
   ControlDrawable* erase(ControlDrawable* first, ControlDrawable* last);
   void DoInsertValue(ControlDrawable* position, const ControlDrawable& value);

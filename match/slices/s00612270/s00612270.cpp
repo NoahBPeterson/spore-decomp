@@ -48,7 +48,7 @@ struct pair {
     }
 };
 
-struct fixed_vector_allocator {
+class fixed_vector_allocator { public:
     const char* mpName;
     void* mpPoolBegin;
     void deallocate(void* p) {
@@ -296,7 +296,7 @@ extern AppProps* gpAppProps;  // 0x015fd918
 
 namespace SP {
 namespace Pollen {
-struct cAssetDirectory {
+class cAssetDirectory { public:
     void Flush();  // 0x0054efb0
     u64 GetLastRefreshTime(uint32_t key);                         // 0x0054e9a0 (ret 4, edx:eax)
     bool GetServerId(const ResourceKey* pKey, u64* pId, bool b);  // 0x0054e530 (ret 0xc)
@@ -385,7 +385,7 @@ struct cFilterOwner {
     U32Range* GetList();  // 0x006b42e0 (lea eax,[ecx+0x1c])
 };
 
-struct cPollinator {
+class cPollinator { public:
     virtual void v0();
     virtual bool HandleMessage(uint32_t id, void* msg);
     char pad4[4];

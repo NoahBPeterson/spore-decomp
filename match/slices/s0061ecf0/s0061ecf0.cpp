@@ -260,7 +260,7 @@ struct Base0 {
 };
 
 namespace EA { namespace Messaging {
-struct IHandler {
+class IHandler { public:
   virtual ~IHandler();
   virtual bool HandleMessage(uint32_t messageID, void* pMessage);
 };

@@ -143,7 +143,7 @@ typedef SP::Pollen::cAssetDirectory AssetDir;
 
 namespace SP {
 
-struct cPollinator {
+class cPollinator { public:
     virtual void v0();
     virtual void v1();
     uint32_t mField4;                                 // +0x4

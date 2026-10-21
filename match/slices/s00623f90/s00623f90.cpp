@@ -187,7 +187,7 @@ Quaternion* __stdcall w_624e40(Quaternion* out, const Vector3* a, const Vector3*
 namespace EA { namespace Messaging {
 class Server;
 void __cdecl RemoveHandler(Server* srv, void* handler, void* ids, int count, int prio);
-struct AutoHandler {
+class AutoHandler { public:
     Server* mpServer;
     void* mpHandler;
     void* mpIdArray;
@@ -516,14 +516,14 @@ struct IWinContainer {
     virtual void AddWindow(IWinObj* w);
 };
 // Popup-menu window (cSPUIPopupMenuWin).
-struct cSPUIPopupMenuWin {
+class cSPUIPopupMenuWin { public:
     virtual void AddRef();
     virtual void Release();
     char pad[0x8c8 - 4];
     unsigned mField8c8;
     void* AddMenuItem(const unsigned* key, int a, int b, int c);   // 0x81b6a0
 };
-struct cSPUILayout {   // 0x810000 ctor ... (24 bytes of state)
+class cSPUILayout { public:   // 0x810000 ctor ... (24 bytes of state)
     unsigned pad[6];
     cSPUILayout();
     ~cSPUILayout();

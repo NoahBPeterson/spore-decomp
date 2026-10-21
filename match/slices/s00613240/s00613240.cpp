@@ -54,7 +54,7 @@ struct pair {
     }
 };
 
-struct fixed_vector_allocator {
+class fixed_vector_allocator { public:
     const char* mpName;
     void* mpPoolBegin;
     void deallocate(void* p) {

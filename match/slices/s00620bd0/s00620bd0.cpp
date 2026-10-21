@@ -114,7 +114,7 @@ bool RegisterInsecureURL(uint32_t storeKey, uint32_t typeKey, const char* path) 
 // ---------------------------------------------------------------------------------------------
 // cRegistrationDialog and its frame set.  Stub declarations (bodies live elsewhere).
 // ---------------------------------------------------------------------------------------------
-struct cSPUILayout {
+class cSPUILayout { public:
   void* FindWindowByID(uint32_t id, bool recursive);   // 0x8105b0
 };
 struct cXHTMLFrameSet {

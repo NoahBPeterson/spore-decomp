@@ -25,7 +25,7 @@ extern "C" __declspec(dllimport) unsigned long __cdecl strtoul(const char* s, ch
 
 // ---- EASTL / EA bits ----------------------------------------------------------------------
 namespace eastl {
-struct allocator {
+class allocator { public:
     allocator() {}
     void deallocate(void* p, size_t) { operator delete[](p); }
 };
@@ -65,7 +65,7 @@ struct Variant {
     Variant& operator=(const Variant& x);                        // 0x00542b80
     void Destruct(int);                                          // 0x0093db80
 };
-template <typename T> struct VariantT : Variant {
+template <typename T> class VariantT : public Variant { public:
     VariantT(const Variant& x);                                  // 0x0060d990 (int), 0x0060d9c0 (string)
     ~VariantT() { if (mFlags & 4) Destruct(0); }
     T* Get();                                                    // 0x0060d280 (int), 0x0060ebf0 (string)
@@ -159,12 +159,12 @@ struct UploadQueue {
 };
 
 namespace Pollen {
-struct cITransaction {};
-struct cTransactionQueue {
+class cITransaction { public:};
+class cTransactionQueue { public:
     bool Add(cITransaction* p, bool front);                      // 0x0060eaf0
     void Clear();                                                // 0x00610e90
 };
-struct cAssetDirectory {
+class cAssetDirectory { public:
     void Touch(uint64_t assetID, int flags);                     // 0x0054ed50
 };
 
@@ -174,23 +174,23 @@ struct cAssetStatusTransaction : cITransaction {                                
     cAssetStatusTransaction(int type, uint32_t a, uint32_t b, int c);    // 0x00618d40
     cAssetStatusTransaction(int type, const char* id, int c);            // 0x00618da0
 };
-struct cSnapshotUploadTransaction : cITransaction {                              // 0x54 bytes
+class cSnapshotUploadTransaction : public cITransaction { public:                              // 0x54 bytes
     uint32_t mData[0x54 / 4];
     static void* operator new(size_t n);                         // 0x00615a90
     cSnapshotUploadTransaction(const ResourceKey& key, const char* a, const char* b, const char* c, const char* d);  // 0x00619250
 };
-struct cYouTubeAuthenticationTransaction : cITransaction {                       // 0x3c bytes
+class cYouTubeAuthenticationTransaction : public cITransaction { public:                       // 0x3c bytes
     uint32_t mData[0x3c / 4];
     static void* operator new(size_t n);                         // 0x00615af0
     cYouTubeAuthenticationTransaction(const char* a, const char* b, const char* c, bool d);  // 0x00619300
 };
-struct cYouTubeVideoUploadTransaction : cITransaction {                          // 0x74 bytes
+class cYouTubeVideoUploadTransaction : public cITransaction { public:                          // 0x74 bytes
     uint32_t mData[0x74 / 4];
     static void* operator new(size_t n);                         // 0x00615b20
     cYouTubeVideoUploadTransaction(const char* a, const char* b, const char* c, const char* d,
                                    const char* e, ResourceKey key, uint32_t f);  // 0x00619390
 };
-struct cYouTubeVideoURLTransaction : cITransaction {                             // 0x48 bytes
+class cYouTubeVideoURLTransaction : public cITransaction { public:                             // 0x48 bytes
     uint32_t mData[0x48 / 4];
     static void* operator new(size_t n);                         // 0x00615b50
     cYouTubeVideoURLTransaction(const char* a, const char* b, const char* c, const char* d);  // 0x00619470
@@ -239,7 +239,7 @@ struct cAppPropertiesData { uint32_t pad[0x118 / 4]; int mbOffline; };  // +0x11
 struct cAppProperties { uint32_t pad[0x3c / 4]; cAppPropertiesData* mpData; };  // +0x3c
 extern cAppProperties* sAppProperties;                           // 0x015fd918
 
-struct cPollinator {
+class cPollinator { public:
     void* mpHandlerVtbl;                                         // +0x00 (IHandler)
     cHTTPClient* mpHTTPClient;                                   // +0x04
     Pollen::cTransactionQueue mTransactionQueue;                 // +0x08

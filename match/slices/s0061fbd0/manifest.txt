@@ -7,7 +7,7 @@ slices/s0061fbd0/s0061fbd0.cpp  ??1intrusive_list_base@eastl@@QAE@XZ  00620230  
 slices/s0061fbd0/s0061fbd0.cpp  ?End@cRegistrationDialog@Pollen@SP@@QAEXXZ  00620380  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s0061fbd0/s0061fbd0.cpp  ?HandleMessage@cRegistrationDialog@Pollen@SP@@UAE_NIPAX@Z  00620470  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s0061fbd0/s0061fbd0.cpp  ??0cCancelConfirmationDialog@Pollen@SP@@QAE@XZ  006204b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s0061fbd0/s0061fbd0.cpp  ?HandleUIMessage@cCancelConfirmationDialog@Pollen@SP@@UAE_NPAVIWindow@UTFWin@EA@@ABUMessage@56@@Z  006204e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0061fbd0/s0061fbd0.cpp  ?HandleUIMessage@cCancelConfirmationDialog@Pollen@SP@@UAE_NPAVIWindow@UTFWin@EA@@ABVMessage@56@@Z  006204e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s0061fbd0/s0061fbd0.cpp  ?ConfirmLogin@cRegistrationDialog@Pollen@SP@@QAEXXZ  006205f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s0061fbd0/s0061fbd0.cpp  ??_GcCancelConfirmationDialog@Pollen@SP@@UAEPAXI@Z  00620660  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s0061fbd0/s0061fbd0.cpp  ??0cXHTMLRegistrationHandler@Pollen@SP@@QAE@PAX00@Z  006206f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

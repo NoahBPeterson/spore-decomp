@@ -250,7 +250,7 @@ struct intrusive_list_node {
   intrusive_list_node* mpNext;
   intrusive_list_node* mpPrev;
 };
-struct intrusive_list_base {
+class intrusive_list_base { public:
   intrusive_list_node mAnchor;
   ~intrusive_list_base();
 };

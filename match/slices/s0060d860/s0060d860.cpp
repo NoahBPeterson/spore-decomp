@@ -18,7 +18,7 @@ void __cdecl EASTL_allocator_deallocate(void* p);                               
 
 namespace EA {
 namespace ResourceMan {
-struct Key {
+class Key { public:
     uint32_t instanceID, typeID, groupID;
 };
 }
@@ -31,7 +31,7 @@ struct AtomicInt {
     long Decrement() { return _InterlockedDecrement(&mValue); }
     void SetValue(long v) { _InterlockedExchange(&mValue, v); }
 };
-struct RefCounted {
+class RefCounted { public:
     virtual ~RefCounted();
     AtomicInt mRefCount;
     void AddRef() { mRefCount.Increment(); }
@@ -44,7 +44,7 @@ struct RefCounted {
     }
 };
 template <class T>
-struct AutoRefCount {
+class AutoRefCount { public:
     T* mpObject;
     ~AutoRefCount() {
         if (mpObject) mpObject->Release();
@@ -114,7 +114,7 @@ struct QueuedPtr {
 };
 
 namespace eastl {
-struct allocator {
+class allocator { public:
     void* allocate(size_t n) { return EASTL_allocator_allocate(n, "Editor", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1); }
     void deallocate(void* p) { EASTL_allocator_deallocate(p); }
 };
@@ -152,7 +152,7 @@ template <class T>
 inline bool operator!=(const DequeIterator<T>& a, const DequeIterator<T>& b) { return a.mpCurrent != b.mpCurrent; }
 
 template <class T, int kSubarraySize = 64>
-struct deque {
+class deque { public:
     typedef DequeIterator<T, kSubarraySize> iterator;
     T** mpPtrArray;
     uint32_t mnPtrArraySize;
@@ -272,25 +272,25 @@ QueuedIter remove_if(QueuedIter first, QueuedIter last, P pred) {
 // ---------------------------------------------------------------------------------------------
 namespace SP {
 namespace Pollen {
-struct cAssetMetadata {
+class cAssetMetadata { public:
     virtual int AddRef();
     virtual int Release();
     const EA::U64Pair* GetServerId();  // 0x005507a0 (not virtual)
 };
 bool GetAssetMetadata(const Key& key, cAssetMetadata** ppMetadata);  // 0x00552450
-struct cAssetDirectory {
+class cAssetDirectory { public:
     bool GetLocalKey(uint64_t serverId, Key* pKey) const;                       // 0x0054e460
     bool GetServerId(const Key& key, uint64_t* pServerId, bool bLoad) const;    // 0x0054e530
 };
 }  // namespace Pollen
 
-struct cPropertyManager {
+class cPropertyManager { public:
     void SetProperty(uint32_t id, EA::Variant* v);                              // 0x0061fdb0
     void SetProperty2(uint32_t id, uint32_t lo, uint32_t hi, EA::Variant* v);   // 0x0061fee0
 };
 cPropertyManager* GetPropertyManager();  // 0x0061df20
 
-struct cPollinator {
+class cPollinator { public:
     virtual void v0();
     virtual bool HandleMessage(uint32_t id, void* msg);
     char pad[0x54];
@@ -466,7 +466,7 @@ struct SimpleString {
 void __cdecl DescribeKey(const Key* pKey, SimpleString* pOut);  // 0x00563de0
 
 namespace SP {
-struct cPollinatorCheat {
+class cPollinatorCheat { public:
     void* vtbl;
     void* mpOutput;  // +4
     uint32_t pad8, padC;

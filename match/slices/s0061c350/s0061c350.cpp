@@ -79,7 +79,7 @@ struct Key3 { unsigned a; unsigned b; unsigned c; };   // 12-byte resource key (
 struct EStr3 { void* b; void* e; void* c; };           // eastl string begin/end/capacity (allocator word omitted)
 
 // Pollen directory / cache / message-bus objects (offsets into the Pollen manager from FUN_0067cb30).
-struct cAssetDirectory {
+class cAssetDirectory { public:
   bool GetLocalKey(unsigned a, unsigned b, Key3* out);        // 0x54e460
   void AddMapping(unsigned a, unsigned b, Key3* k);           // 0x54e250
   void FUN_0054e7b0(unsigned a, unsigned b, int flag);        // 0x54e7b0
@@ -283,7 +283,7 @@ void FDVec::Assign(FeedDescription* first, FeedDescription* last, int) {
 // ---------------------------------------------------------------------------------------------
 // @ 0x0061c880  RequestAssetsFromFeed(feed, maxCount, queue, flag)
 // ---------------------------------------------------------------------------------------------
-struct cAssetMetadata {
+class cAssetMetadata { public:
   cAssetMetadata();                                                    // 0x550450
   virtual void AddRef();
   virtual void Release();

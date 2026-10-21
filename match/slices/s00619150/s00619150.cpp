@@ -15,7 +15,7 @@ extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int 
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 namespace eastl {
-struct allocator {
+class allocator { public:
   allocator() {}
 };
 template <typename T, typename A = allocator>

@@ -364,7 +364,7 @@ struct IAnimator {   // cSPPlayModeAnimation (vtable at +0)
     void ResetCurAnimWindow();    // 0x62e7a0
     void UpdatePageCount();       // 0x62e600
 };
-struct cSPPlayModeAnimation : IAnimator {
+class cSPPlayModeAnimation : public IAnimator { public:
     char data[0x8c - 4];
 };
 
@@ -400,7 +400,7 @@ struct cEditorCreatureStruct {
     float mHeightOffset;           // +0x74
 };
 
-struct cSPPlayModeUI {
+class cSPPlayModeUI { public:
     void* FindEditorUIWindow(unsigned id);   // 0x634e40
 };
 struct IWindowT {

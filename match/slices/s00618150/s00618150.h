@@ -18,7 +18,7 @@ inline void operator delete(void*, const char*, int, unsigned, const char*, int)
 extern char gEmptyString[];  // 0x01667bac (shared "" for char strings)
 
 namespace eastl {
-struct allocator {
+class allocator { public:
   allocator() {}
 };
 template <typename T, typename A = allocator>

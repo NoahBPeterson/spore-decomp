@@ -20,7 +20,7 @@ void operator delete[](void* p);                                                
 extern char gEmptyString8[];  // 0x01667bac, shared empty string storage
 
 namespace eastl {
-struct allocator {
+class allocator { public:
   allocator() {}
 };
 template <typename T, typename A = allocator>

@@ -9,5 +9,5 @@ slices/s0060d860/s0060d860.cpp  ??$remove_copy_if@UCancelCancelledPred@@@eastl@@
 slices/s0060d860/s0060d860.cpp  ??_GcJobResultMessage@SP@@UAEPAXI@Z  0060df50  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s0060d860/s0060d860.cpp  ?PostBehaviorFloat@@YAXM@Z  0060e540  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s0060d860/s0060d860.cpp  ??1JobHolder@@QAE@XZ  0060e5b0  /O2 /MD /Gy /TP /arch:SSE /GS-
-slices/s0060d860/s0060d860.cpp  ?UpdatePropertyInt@cPollinator@SP@@QAEXIPBUKey@ResourceMan@EA@@II@Z  0060e600  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060d860/s0060d860.cpp  ?UpdatePropertyInt@cPollinator@SP@@QAEXIPBVKey@ResourceMan@EA@@II@Z  0060e600  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s0060d860/s0060d860.cpp  ??1?$deque@UQueuedPtr@@$0EA@@eastl@@QAE@XZ  0060e660  /O2 /MD /Gy /TP /arch:SSE /GS-

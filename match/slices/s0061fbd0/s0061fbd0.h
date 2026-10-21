@@ -22,7 +22,7 @@ extern "C" unsigned int __cdecl strlen(const char*);
 extern char gEmptyString[];  // 0x01667bac (shared "" for char and wchar_t strings)
 
 namespace eastl {
-struct allocator {
+class allocator { public:
   allocator() {}
 };
 
@@ -242,7 +242,7 @@ IMessageServer* GetServer();  // 0x00883860
 }
 namespace UTFWin {
 class IWindow;
-struct Message {
+class Message { public:
   IWindow* mpSource;  // +0x0
   uint32_t pad4;
   uint32_t mEventType;  // +0x8
