@@ -23,7 +23,7 @@ int GetCharacterSize(int encoding);
 
 namespace EA { namespace IO {
 
-struct SharedPointer {
+class SharedPointer { public:
     void* vtable;            // +0
     void* vtable2;           // +4
     long  mnRefCount;        // +8

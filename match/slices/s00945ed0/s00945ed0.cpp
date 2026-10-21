@@ -472,7 +472,7 @@ struct HeaderList {
     bool FindHeader(const char* name, const char** out, int);   // FUN_00942050
 };
 
-struct HTTPResponse {
+class HTTPResponse { public:
     int  pad0[2];
     eastl::StrStub msBody;           // +8   (basic_string head only)
     char pad1[0x21c - 0x18];

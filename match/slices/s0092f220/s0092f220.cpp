@@ -59,7 +59,7 @@ namespace EA { namespace IO {
 // ---------------------------------------------------------------------------------------------
 // EA::IO::FilePath (PDB: wchar_t mPath[520], size 0x410). Only the path helpers are used here.
 // ---------------------------------------------------------------------------------------------
-struct FilePath {
+class FilePath { public:
     unsigned short mPath[520];
     bool SafeReplace(const unsigned short* a, const unsigned short* b,
                      const unsigned short* c, const unsigned short* d,
@@ -72,7 +72,7 @@ using EA::IO::FilePath;
 
 // EA::IO::DirectoryIterator (PDB: size 0x10).
 namespace EA { namespace IO {
-struct DirectoryIterator {
+class DirectoryIterator { public:
     uint32_t mnListSize;            // +0
     int      mnRecursionIndex;      // +4
     unsigned short* mpBaseDirectory;// +8

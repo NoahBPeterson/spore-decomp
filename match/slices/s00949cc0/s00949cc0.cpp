@@ -23,7 +23,7 @@ void  __cdecl GetDriveFreeSpace(wchar_t*);
 // ---------------------------------------------------------------------------
 namespace eastl {
 
-struct allocator { int mAlloc; };
+class allocator { public: int mAlloc; };
 
 template <class T> struct EmptyString { static T s[8]; };
 template <class T> T EmptyString<T>::s[8];

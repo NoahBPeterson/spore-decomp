@@ -42,7 +42,7 @@ extern char gEmptyString[];                                    // 0x01667bac (EA
 
 namespace eastl {
 
-struct allocator {};
+class allocator { public:};
 
 // eastl::basic_string layout: mpBegin, mpEnd, mpCapacity, allocator (16 bytes).
 struct string {
@@ -168,7 +168,7 @@ struct Variant {
 };
 
 template <typename T>
-struct VariantT : public Variant {
+class VariantT : public Variant { public:
     VariantT(const T& value);
 };
 

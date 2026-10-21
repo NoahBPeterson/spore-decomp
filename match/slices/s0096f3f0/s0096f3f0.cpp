@@ -72,7 +72,7 @@ struct WinGridVt {
 // ---------------------------------------------------------------------------
 // 0x0096fe30  EA::UTFWinControls::FrameDrawable::FrameDrawable
 // ---------------------------------------------------------------------------
-struct FrameDrawable {
+class FrameDrawable { public:
     void* vtbl;            // +0x00
     void* vtblSer;         // +0x04
     int   mRefCount;       // +0x08
@@ -132,7 +132,7 @@ int FrameDrawable::CreateRenderables(UTFWin::RenderContext_s0096_f3f0* ctx, void
 // ---------------------------------------------------------------------------
 // GlideEffect (0x970010, 0x970060, 0x9700b0, 0x970100)
 // ---------------------------------------------------------------------------
-struct GlideEffect {
+class GlideEffect { public:
     char  pad00[0x60];
     void* field60;         // +0x60
     float field64;         // +0x64
@@ -175,7 +175,7 @@ void* __fastcall FUN_009700b0(char* param_1)
 }
 
 // @ 0x00970100
-struct BasicFactory_GlideEffect {
+class BasicFactory_GlideEffect { public:
     void* CreateInstance(int param1, void* param2);
 };
 
@@ -294,7 +294,7 @@ CellFormat* CellFormat::InitFrom(const void* src)
 // ---------------------------------------------------------------------------
 // 0x009702b0  EA::UTFWinControls::WinGrid::SetDefaultFormatting
 // ---------------------------------------------------------------------------
-struct WinGrid {
+class WinGrid { public:
     char sub20c[0x20c];
 
     void SetDefaultFormatting();                                    // 0x009702b0

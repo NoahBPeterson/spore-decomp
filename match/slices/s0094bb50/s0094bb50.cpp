@@ -516,7 +516,7 @@ Manager::Manager() {
 // ---------------------------------------------------------------------------
 namespace eastl {
 
-struct allocator { int mAlloc; };
+class allocator { public: int mAlloc; };
 
 template <class T>
 struct basic_string {

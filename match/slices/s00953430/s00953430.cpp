@@ -29,7 +29,7 @@ extern float g_one;        // 0x01485720
 
 namespace EA {
 namespace Thread {
-struct Mutex {
+class Mutex { public:
   uint32_t mData[10];  // 0x28
   Mutex(const void*, bool);  // 0x009222a0
 };
@@ -39,7 +39,7 @@ struct Mutex {
 namespace EA {
 namespace UTFWin {
 
-struct Image {
+class Image { public:
   virtual void AddRef();   // +0x0
   virtual void Release();  // +0x4
 };
@@ -110,7 +110,7 @@ struct PartVector : FixedVector<Renderable2DPart, 16> {
   }
 };
 
-struct Renderable2DBuilder {
+class Renderable2DBuilder { public:
   Vertex2DVector mVerts;  // +0x0000
   PartVector mParts;      // +0x2ef8
 
@@ -143,7 +143,7 @@ struct Rect {  // 0x10
   float m[4];
 };
 
-struct Draw2D {
+class Draw2D { public:
   void* mpVtable;                      // +0x00
   Renderable2DBuilder* mpRenderable;   // +0x04
   void* mpWindowMgr;                   // +0x08
@@ -256,12 +256,12 @@ Renderable2DMemoryManager::Renderable2DMemoryManager()
 // ---------------------------------------------------------------------------------------------
 // 0x009535a0  Renderable2DPool::~Renderable2DPool
 // ---------------------------------------------------------------------------------------------
-struct Renderable2D {
+class Renderable2D { public:
   virtual void AddRef();   // +0x0
   virtual void Release();  // +0x4
 };
 
-struct Renderable2DPool {
+class Renderable2DPool { public:
   Renderable2D** mpBegin;     // +0x0
   Renderable2D** mpEnd;       // +0x4
   Renderable2D** mpCapacity;  // +0x8

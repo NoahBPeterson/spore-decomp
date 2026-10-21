@@ -42,21 +42,21 @@ struct IRefCounted {
 namespace EA {
 namespace UTFWin {
 
-struct Image {
+class Image { public:
     char pad00[0x1c];
     int  mSizeX;                   // +0x1c
     int  mSizeY;                   // +0x20
 };
 
-struct IWindow;
+class IWindow;
 
-struct WindowIterator {
+class WindowIterator { public:
     void* mpNode;                  // +0x00
     void* mpNode2;                 // +0x04
     void* mpNode3;                 // +0x08
 };
 
-struct IWindow {
+class IWindow { public:
     PV(0); PV(1); PV(2); PV(3); PV(4); PV(5); PV(6);
     virtual uint32_t GetId();                              // +0x1c  slot 7
     PV(8); PV(9); PV(10); PV(11); PV(12); PV(13);
@@ -87,7 +87,7 @@ struct Batch2D {
     virtual void DrawImage(const RectF* area, Image* img, const RectF* uv);     // +0x58 slot 22
 };
 
-struct RenderContext {
+class RenderContext { public:
     Batch2D* Begin2D(int mode);                            // 0x0095bc10
 };
 
@@ -234,7 +234,7 @@ struct DrawParam {
     int index;                            // +0x04
 };
 
-struct DialogDrawable {
+class DialogDrawable { public:
     uint32_t pad00[4];                    // +0x00 (vptrs / refcount)
     uint32_t mnBackgroundFillColor;       // +0x10
     uint32_t mnBackImageBlitMode;         // +0x14

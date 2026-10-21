@@ -30,7 +30,7 @@ struct Vec2 {
 };
 
 template <class T>
-struct AutoRefCount {
+class AutoRefCount { public:
     T* mpObject;
 
     AutoRefCount& operator=(T* pObject)
@@ -51,10 +51,10 @@ struct AutoRefCount {
 
 namespace UTFWin {
 
-struct IWindow;
+class IWindow;
 
 // UTFWin message (only the fields this function sets).
-struct Message {
+class Message { public:
     IWindow* source;        // +0x00
     int      field_04;      // +0x04
     int      eventType;     // +0x08
@@ -69,7 +69,7 @@ struct IWindowManager {
     virtual bool SendMsg(IWindow* pTarget, IWindow* pSource, Message* pMsg, int flags); // +0x10
 };
 
-struct IWindow {
+class IWindow { public:
     PV(0); PV(1); PV(2); PV(3); PV(4);
     virtual IWindowManager* GetWindowManager();                       // +0x14
     PV(6); PV(7); PV(8); PV(9); PV(10); PV(11); PV(12); PV(13);
@@ -93,7 +93,7 @@ struct IWindow {
     virtual void DisposeWindowFamily(IWindow* pWindow);               // +0xe0
 };
 
-struct IDrawable {
+class IDrawable { public:
     virtual int   AddRef();
     virtual int   Release();
     PV(2);
@@ -108,9 +108,9 @@ namespace UTFWinControls {
 
 using UTFWin::IWindow;
 
-struct IButtonDrawable { virtual int AddRef(); virtual int Release(); };
+class IButtonDrawable { public: virtual int AddRef(); virtual int Release(); };
 
-struct IWinButton {
+class IWinButton { public:
     virtual int   AddRef();
     virtual int   Release();
     PV(2);
@@ -121,7 +121,7 @@ struct IWinButton {
     virtual void SetButtonDrawable(IButtonDrawable* pDrawable);       // +0x60
 };
 
-struct IWinText {
+class IWinText { public:
     virtual int   AddRef();
     virtual int   Release();
     PV(2); PV(3);

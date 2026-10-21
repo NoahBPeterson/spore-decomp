@@ -319,7 +319,7 @@ done:
 }
 
 // @ 0x0093a510  (complete, near miss: inline fistp vs _ftol2)
-struct cSPUILayerManager {
+class cSPUILayerManager { public:
     char    pad00[0x14];
     float   mfCoeff;    // 0x14
     int64_t mnTime;     // 0x18

@@ -137,7 +137,7 @@ struct FileStreamObj : IStreamV {
     virtual bool Open(int, int, int, int);        // slot 19 (+0x4c)
 };
 
-struct FileStream : FileStreamObj {
+class FileStream : public FileStreamObj { public:
     uint32_t pad[(0x22c - 4) / 4];
     FileStream(const wchar_t* path);   // 0x931e10
     ~FileStream();                     // 0x931e70
@@ -148,7 +148,7 @@ struct FileStream : FileStreamObj {
     void Close();                                             // 0x931a70
 };
 
-struct IniFile {
+class IniFile { public:
     uint32_t pad[0x47c / 4];
     IniFile(const wchar_t* path, int flag);    // 0x935450
     ~IniFile();                                // 0x935040

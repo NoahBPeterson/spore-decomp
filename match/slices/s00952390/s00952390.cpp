@@ -64,7 +64,7 @@ extern MemPool* g_pMemPool;  // 0x0166aac4
 namespace EA {
 namespace UTFWin {
 
-struct Image {
+class Image { public:
   virtual void AddRef();   // +0x0
   virtual void Release();  // +0x4
 };
@@ -184,7 +184,7 @@ struct GlyphInfoVector : FixedVector<Renderable2DTextGlyphInfo, 200> {
   }
 };
 
-struct Renderable2D {
+class Renderable2D { public:
   virtual void AddRef();                     // +0x0
   Renderable2DPart* mpPartsBegin;            // +0x4
   Renderable2DPart* mpPartsEnd;              // +0x8
@@ -211,7 +211,7 @@ struct Renderable2D {
   }
 };
 
-struct Renderable2DPool {
+class Renderable2DPool { public:
   Renderable2D** mpBegin;     // +0x0
   Renderable2D** mpEnd;       // +0x4
   Renderable2D** mpCapacity;  // +0x8
@@ -222,7 +222,7 @@ struct Renderable2DPool {
 };
 extern Renderable2DPool* g_pRenderable2DPool;  // 0x0166aac0
 
-struct Renderable2DBuilder {
+class Renderable2DBuilder { public:
   Vertex2DVector mVerts;                      // +0x0
   PartVector mParts;                          // +0x2ef8
   TextSpanVector mTextSpans;                  // +0x2fd0

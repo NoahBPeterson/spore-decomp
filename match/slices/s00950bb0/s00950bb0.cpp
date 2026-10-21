@@ -12,7 +12,7 @@ extern void* g_pMemPool16c8b44;
 namespace EA { namespace UTFWin {
 
 // vtable at +0, refcount at +0x1c.
-struct CustomWinProc {
+class CustomWinProc { public:
     virtual void slot0();
     virtual void slot1();
     virtual void slot2(int);
@@ -49,7 +49,7 @@ int CustomWinProc::Release() {
     return n;
 }
 
-struct MultiHeapObject {
+class MultiHeapObject { public:
     static void operator_delete(void* p);
 };
 

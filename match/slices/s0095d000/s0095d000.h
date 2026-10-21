@@ -6,7 +6,7 @@
 
 namespace EA { namespace UTFWin {
 
-struct Image { char pad0[0x1c]; int width; int height; };   // +0x1c w, +0x20 h
+class Image { public: char pad0[0x1c]; int width; int height; };   // +0x1c w, +0x20 h
 struct Vec2 { float x, y; };
 
 struct Canvas {

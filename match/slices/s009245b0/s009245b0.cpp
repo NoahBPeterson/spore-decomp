@@ -58,20 +58,20 @@ struct IObj {                       // IRefCount-style: AddRef, Release, ?, Cast
     virtual void v2();              // +0x08
     virtual void* Cast(unsigned id); // +0x0c
 };
-struct ILogFilter : IObj {
+class ILogFilter : public IObj { public:
     virtual void v4();
     virtual void v5();
     virtual void SetName(const char*);   // +0x18
     virtual const char* GetName();       // +0x1c
     virtual ILogFilter* Clone();         // +0x20
 };
-struct ILogFormatter : IObj {
+class ILogFormatter : public IObj { public:
     virtual void v4();
     virtual void SetName(const char*);   // +0x14
     virtual void v6();
     virtual ILogFormatter* Clone();      // +0x1c
 };
-struct ILogReporter : IObj {
+class ILogReporter : public IObj { public:
     virtual void v4();
     virtual void v5();
     virtual void v6();
@@ -111,7 +111,7 @@ struct Stopwatch {
 };
 
 // ------------------------------------------------------------------ LogFormatterFancy / Simple
-struct LogFormatterFancy : ILogFormatter {
+class LogFormatterFancy : public ILogFormatter { public:
     int mnRefCount;
     char mName[0x21c - 8];
     unsigned short mnFlags;              // +0x21c
@@ -133,7 +133,7 @@ ILogFormatter* LogFormatterFancy::Clone() {
     return r;
 }
 
-struct LogFormatterSimple : ILogFormatter {
+class LogFormatterSimple : public ILogFormatter { public:
     char pad[0x81c - 4];
     FString mLine;                       // +0x81c
     LogFormatterSimple(const char* name); // 0x009243d0
@@ -228,7 +228,7 @@ struct GroupLevelMap {                   // eastl::map<const char*, int, KeyLess
 RBNodeBase* __cdecl RBTreeIncrement(RBNodeBase* n);                   // 0x00921580
 struct ICoreAllocator { static ICoreAllocator* GetDefaultAllocator(); };  // 0x00925cb0
 
-struct LogFilterGroupLevels : ILogFilter {
+class LogFilterGroupLevels : public ILogFilter { public:
     int mnRefCount;                      // +0x04
     char* mNameBegin;                    // +0x08
     char* mNameEnd;                      // +0x0c
@@ -315,7 +315,7 @@ struct ILogReporterVec {
     void DoInsertValue(ILogReporter** pos, ILogReporter** v); // 0x00a0a360
     ~ILogReporterVec();                                       // 0x00ae6970
 };
-struct IServer {
+class IServer { public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void v4(); virtual void v5();
     virtual void ApplyReporters();                              // +0x18
@@ -327,7 +327,7 @@ struct IServer {
 };
 struct ITracerBase { virtual void t0(); ~ITracerBase() {} };
 #pragma pack(push, 4)
-struct Server : IServer, ITracerBase {
+class Server : public IServer, public ITracerBase { public:
     int pad8;
     char* mpHeapBuffer;                   // +0x0c
     int pad10, pad14;
@@ -344,7 +344,7 @@ struct Server : IServer, ITracerBase {
     void RemoveAllLogReporters();
 };
 #pragma pack(pop)
-struct LogReporter { LogReporter(const char* name); };      // 0x00924170
+class LogReporter { public: LogReporter(const char* name); };      // 0x00924170
 extern char g_vtbl_ReporterDebugger[], g_vtbl_ReporterDialog[], g_vtbl_Server_b[], g_vtbl_base[];
 
 // @ 0x00924A50
@@ -483,7 +483,7 @@ Server::~Server() {
 
 // ------------------------------------------------------------------ TraceHelper / TraceHelperTable
 struct ITracer;
-struct TraceHelper {
+class TraceHelper { public:
     bool mbActive, mbEnabled, mbDisabled;       // +0, +1, +2
     unsigned mType;                             // +4
     int mField8;                                // +8
@@ -508,7 +508,7 @@ struct HelperVec {
     int pad[3];
     ~HelperVec() { if (mpBegin && ((int*)mpBegin)[-1]) eadelete(mpBegin); }
 };
-struct TraceHelperTable : TraceHelperTableBase {
+class TraceHelperTable : public TraceHelperTableBase { public:
     void* mTracer;                                // +0x04
     HelperVec mHelpers;                           // +0x08
     EA::Thread::Mutex mMutex;                     // +0x20
@@ -689,7 +689,7 @@ void TraceHashtable::DoRehash(unsigned nNewBucketCount) {
 }
 
 struct TempNode { int a, b, c; char* mpHelper; TempNode* mpNext; };
-struct TempTraceHelperMap {
+class TempTraceHelperMap { public:
     EA::Thread::Mutex mMutex;                // +0
     struct {
         int pad0;

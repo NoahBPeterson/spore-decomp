@@ -32,7 +32,7 @@ struct Vec2 {
 };
 
 template <class T>
-struct AutoRefCount {
+class AutoRefCount { public:
     T* mpObject;
     AutoRefCount& operator=(T* p) {
         if (p != mpObject) {
@@ -54,7 +54,7 @@ struct IRefCounted {
 
 namespace Text {
 
-struct StyleManager;
+class StyleManager;
 struct ICoreAllocator;
 
 struct TextStyle {
@@ -68,7 +68,7 @@ struct TextStyle {
     TextStyle();                   // 0x008941d0
 };
 
-struct StyleManager {
+class StyleManager { public:
     TextStyle* GetStyle(uint32_t styleId, int alloc);   // 0x00894670
     void       AddStyle(uint32_t styleId, TextStyle* style); // 0x00894970
 };
@@ -80,10 +80,10 @@ StyleManager* GetStyleManager(bool);
 
 namespace UTFWin {
 
-struct IWindow;
-struct IWindowMgr;
+class IWindow;
+class IWindowMgr;
 
-struct RenderContext {
+class RenderContext { public:
     void* Begin2D(int mode);       // 0x0095bc10
     void  End2D();                 // 0x0095bb20
 
@@ -100,7 +100,7 @@ struct RenderContext {
     virtual void v38(int, int, int, int);          // +0x38
 };
 
-struct Message {
+class Message { public:
     IWindow* source;
     int      field_04;
     int      eventType;
@@ -110,7 +110,7 @@ struct Message {
     void*    pData;
 };
 
-struct IWindowMgr {
+class IWindowMgr { public:
     PV(0); PV(1); PV(2); PV(3); PV(4); PV(5); PV(6); PV(7);
     PV(8); PV(9); PV(10); PV(11); PV(12); PV(13); PV(14);
     virtual void* GetCapture(int);                 // +0x3c
@@ -120,7 +120,7 @@ struct IWindowMgr {
     virtual void  SetCapture2(int, void*);         // +0x5c
 };
 
-struct IWindow {
+class IWindow { public:
     PV(0); PV(1); PV(2); PV(3); PV(4); PV(5); PV(6); PV(7);
     PV(8); PV(9); PV(10); PV(11); PV(12); PV(13); PV(14);
     PV(15); PV(16); PV(17); PV(18); PV(19); PV(20);
@@ -151,7 +151,7 @@ struct WindowVt {
 
 namespace UTFWinControls {
 
-struct IWinText {
+class IWinText { public:
     virtual int   AddRef();
     virtual int   Release();
     PV(2); PV(3);
@@ -162,7 +162,7 @@ struct IWinText {
     virtual void  SetTextBorders(float, float, float, float);     // +0x38
 };
 
-struct IWinButton {
+class IWinButton { public:
     virtual int   AddRef();
     virtual int   Release();
     PV(2);
@@ -290,11 +290,11 @@ struct ConsoleWindow {
 namespace EA {
 namespace Text {
 
-struct Typesetter {
+class Typesetter { public:
     Typesetter(bool unicode);      // 0x0089d820
 };
 
-struct LineLayout {
+class LineLayout { public:
     LineLayout(bool unicode);      // 0x00898bd0
     void Clear(bool arg);          // 0x0089cbc0
 };

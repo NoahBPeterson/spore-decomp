@@ -26,7 +26,7 @@ struct MutexParameters {
     unsigned pad[5];
     MutexParameters(bool intraProcess, const char* name);  // 0x921e00
 };
-struct Mutex {
+class Mutex { public:
     unsigned __int64 data[6];
     Mutex() {}
     Mutex(const MutexParameters* p, bool bDefault);        // 0x9222a0
@@ -44,7 +44,7 @@ struct IRunnable {
     virtual ~IRunnable() {}
     virtual int Run(void* ctx) = 0;
 };
-struct Thread {
+class Thread { public:
     void Wake();                                           // 0x922d10
     void WaitForEnd(unsigned* pTimeout, int a);            // 0x922940
     void Begin(IRunnable* r, void* ctx, ThreadParameters* p, int prio);  // 0x9231a0
@@ -55,13 +55,13 @@ void Thread_Free(Thread* t);                               // 0x923330
 void ThreadSleep(unsigned* pMs);                           // 0x921df0
 }
 
-struct Stopwatch {
+class Stopwatch { public:
     Stopwatch(int units, bool run);                        // 0x93a560
     unsigned __int64 GetElapsedTime();                     // 0x93a5e0
 };
 
 namespace Random {
-struct RandomLinearCongruential {
+class RandomLinearCongruential { public:
     unsigned mnSeed;
     RandomLinearCongruential(unsigned seed) { SetSeed(seed); }
     void SetSeed(unsigned s);                              // 0x936090
@@ -599,13 +599,13 @@ int RefHolder::Release()
 // ---------------------------------------------------------------------------
 namespace EA { namespace Clipboard {
 
-struct IData {
+class IData { public:
     virtual void slot0() = 0;
     virtual void AddRef() = 0;
     virtual void Release() = 0;
 };
 
-struct DataText16 : IData {
+class DataText16 : public IData { public:
     unsigned mnType;       // +4
     unsigned mnRefCount;   // +8
     unsigned mnDataSize;   // +0xc
@@ -626,7 +626,7 @@ struct DataInfo {
     IData* mpData;
 };
 
-struct Clipboard {
+class Clipboard { public:
     bool mbInitialized;       // +0
     unsigned mnId;            // +4
     void* mpOSData;           // +8
@@ -804,7 +804,7 @@ DataText16* CreateTextData(const wchar_t* s, int len)
 // ---------------------------------------------------------------------------
 namespace EA { namespace IO {
 
-struct IStream {
+class IStream { public:
     virtual void s0() = 0;
     virtual void s1() = 0;
     virtual void s2() = 0;
