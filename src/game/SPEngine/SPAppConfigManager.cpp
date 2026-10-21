@@ -571,7 +571,7 @@ struct allocator_s007c_a950 {              // retail: 8 bytes, trivially copyabl
 }
 namespace eastl {
 template <int NodeSize, int NodeCount, int Alignment, int AlignmentOffset, bool bEnableOverflow>
-struct fixed_vector_allocator { // retail: 12 bytes, mpPoolBegin at +4
+class fixed_vector_allocator { public: // retail: 12 bytes, mpPoolBegin at +4
     int   mOverflowAllocator;   // +0
     void* mpPoolBegin;          // +4
     void* mpPadEnd;             // +8 (uninitialized in retail)
@@ -688,7 +688,7 @@ struct vector_s007c_a950 : VectorBase_s007c_a950<T, A> {
 }
 namespace eastl {
 template <typename Key_s007c_a950, typename Value, typename Compare>
-struct map_value_compare {
+class map_value_compare { public:
     Compare c;
     bool operator()(const Value& a, const Value& b) const { return c(a.first, b.first); }
     bool operator()(const Key_s007c_a950& a, const Value& b) const { return c(a, b.first); }
