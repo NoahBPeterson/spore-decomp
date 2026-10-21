@@ -158,7 +158,7 @@ template<class T> inline void destruct(T* first, T* last)
     for (; first < last; ++first)
         first->~T();
 }
-template<class T, class Allocator> struct vector : VectorBase<T, Allocator> {
+template<class T, class Allocator> class vector : public VectorBase<T, Allocator> { public:
     typedef VectorBase<T, Allocator> base_type;
     vector(const Allocator& allocator = Allocator()) : base_type(allocator) {}
     ~vector() { destruct(this->mpBegin, this->mpEnd); }      // @ 0x453eb0
@@ -188,7 +188,7 @@ struct cModelVertexData {
     cModelVertexData() {}
 };
 
-struct cIModelTriangle {
+class cIModelTriangle { public:
     virtual int AddRef();                                                       // 0x00
     virtual int Release();                                                      // 0x04
     PV(2)
@@ -197,7 +197,7 @@ struct cIModelTriangle {
 
 namespace cMWPickInfo { enum tLevel { kLevel4 = 4 }; }
 
-struct cIModelWorld {
+class cIModelWorld { public:
     PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14)
     PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28)
     PV(29) PV(30) PV(31) PV(32) PV(33) PV(34) PV(35) PV(36) PV(37) PV(38) PV(39) PV(40) PV(41) PV(42)
@@ -207,7 +207,7 @@ struct cIModelWorld {
                              AutoRefCount<cIModelTriangle>* triangle, bool useHull);  // 0x114
 };
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     PV(0)
     virtual int AddRef();                                                       // 0x04
     virtual int Release();                                                      // 0x08
@@ -236,14 +236,14 @@ inline bool IsNaN(float f) { return (*(uint32_t*)&f & 0x7fffffff) > 0x7f800000; 
 inline bool IsNAN(const cSPVector3& v) { return IsNaN(v.x) || IsNaN(v.y) || IsNaN(v.z); }  // @ 0x481f00
 extern int kMaxPickAttempts;                                                    // @ 0x150c4d0
 
-struct cSPEditorTrianglePinningInfo {
+class cSPEditorTrianglePinningInfo { public:
     cSPEditorBlock* mTriangleOwner;             // +0x188
     AutoRefCount<cIModelTriangle> mTriangle;    // +0x18c
     cSPVector3 mPositionOffset;                 // +0x190
     cSPVector3 mBarycentricCoordinate;          // +0x19c
 };
 
-struct cSPEditorHandleDeform {
+class cSPEditorHandleDeform { public:
     void* mpVtbl;
     void* mpVtbl2;                              // +0x04
     int mRefCount;                              // +0x08

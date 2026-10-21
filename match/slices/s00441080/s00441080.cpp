@@ -92,7 +92,7 @@ template <int N> inline void ScratchSlots() { uint32_t s[N]; }
 
 struct Elem { void* p; char pad[0x1C]; };   // 0x20-byte element
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     char  pad0[0xC];
     AutoRefCount<cPropertyList> mpPropList;        // +0xC
     char  pad10[0x154 - 0x10];

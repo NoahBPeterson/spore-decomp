@@ -191,7 +191,7 @@ struct AutoRefCount {
     operator T*() const { return mpObject; }
 };
 
-class cMWModel;
+struct cMWModel;
 class IModelWorld {
 public:
     virtual int AddRef(); virtual int Release();
@@ -220,7 +220,7 @@ public:
 };
 
 // Graphics::Model
-class cMWModel {
+struct cMWModel { private:
 public:
     IModelWorld* mpWorld;   // +0x00
     uint32_t mFlags;        // +0x04

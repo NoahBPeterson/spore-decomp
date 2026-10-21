@@ -140,7 +140,7 @@ bool GetArrayBool(cPropertyList* list, uint32_t id, int& cnt, bool*& values);  /
 // ---------------------------------------------------------------- editor types
 namespace SP {
 
-struct cSPEditorHandleDeform {
+class cSPEditorHandleDeform { public:
     uint32_t pad000[0x8c / 4];
     uint32_t mHandleID;                      // +0x8c (cModelDeformationHandle id)
     uint32_t pad090[(0xac - 0x90) / 4];

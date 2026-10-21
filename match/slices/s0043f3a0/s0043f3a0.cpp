@@ -17,7 +17,7 @@ struct BitSet60 {
     }
 };
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     char             pad00[0x28];
     Node*            node;        // +0x28
     char             pad2c[0x33C - 0x2C];

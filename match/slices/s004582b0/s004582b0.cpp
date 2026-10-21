@@ -22,7 +22,7 @@ unsigned int ColorRGBToU32(const float* c) {
     return ((unsigned int)ri << 0x10) | ((unsigned int)gi << 8) | (unsigned int)bi | 0xff000000u;
 }
 
-struct cSPUITooltipWinProc {
+class cSPUITooltipWinProc { public:
     void SetText(void* text, int a, int b);   // 0x00835ed0
 };
 

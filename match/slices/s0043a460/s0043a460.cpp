@@ -25,7 +25,7 @@ struct KeyVec { void* begin; void* end; };
 // Small local object used by the vector-building helper.
 struct TmpKey { void Init(void* p); };
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     char     pad00[0x10];
     void*    mModel;                 // +0x10
     char     pad14[0x38 - 0x14];

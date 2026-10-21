@@ -17,7 +17,7 @@
 template <int N> inline void ScratchSlots() { uint32_t s[N]; }
 
 namespace EA {
-template<class T> struct RectT {
+template<class T> class RectT { public:
     T left, top, right, bottom;
 };
 }

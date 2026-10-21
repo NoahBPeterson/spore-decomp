@@ -24,7 +24,7 @@ struct Node {
     bool Check();                        // 004ADC40
 };
 
-struct cContentValidationSummarizer;
+class cContentValidationSummarizer;
 
 // Inlined intrusive-pointer assignment; taking `dst` by reference reproduces
 // the original's `&member` temporaries.
@@ -64,7 +64,7 @@ struct BitSet60 {
     void Set(int i, bool v);             // 00435A10
 };
 
-struct cContentValidationSummarizer {
+class cContentValidationSummarizer { public:
     virtual void slot0();                // vtable +0x00
     virtual void AddRef();               // vtable +0x04
     virtual void Release();              // vtable +0x08

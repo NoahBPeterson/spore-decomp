@@ -87,7 +87,7 @@ struct __declspec(align(16)) hkVector4 {
     float x, y, z, w;
     hkVector4(float ax, float ay, float az, float aw) : x(ax), y(ay), z(az), w(aw) {}
 };
-struct hkRigidBody { void setPosition(const hkVector4& p); };      // 0x01087820
+class hkRigidBody { public: void setPosition(const hkVector4& p); };      // 0x01087820
 
 // the transform record at +8 of a cMWModel / handle model: flags, version, position
 struct XformRec {

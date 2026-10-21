@@ -133,7 +133,7 @@ struct hkGeometry {
     ~hkGeometry();                                                   // 0x00453460
 };
 
-struct hkGeometryUtility {
+class hkGeometryUtility { public:
     // "LtCreateConvex"/"Hull" timer
     static void createConvexGeometry(const hkStridedVertices& verts, hkGeometry& geometryOut,
                                      hkArray<hkVector4>& planeEquationsOut, int flags);  // 0x010EDF70
@@ -147,7 +147,7 @@ struct hkMassProperties {
     hkMassProperties();                                              // 0x00453250
 };
 
-struct hkInertiaTensorComputer {
+class hkInertiaTensorComputer { public:
     static int computeVertexHullVolumeMassProperties(const hkReal* vertexIn, int striding, int numVertices,
                                                      hkReal mass, hkMassProperties& result);  // 0x011252D0
     static int computeBoxVolumeMassProperties(const hkVector4& halfExtents, hkReal mass,
@@ -186,7 +186,7 @@ struct hkPropertyValue {
 };
 #pragma pack(pop)
 
-struct hkRigidBodyCinfo {
+class hkRigidBodyCinfo { public:
     unsigned int m_collisionFilterInfo;         // +0x0
     hkShape* m_shape;                           // +0x4
     uint32_t pad08[2];
@@ -303,7 +303,7 @@ inline bool GetBool(cPropertyList* pPropList, uint32_t propID, bool& dst)
     return false;
 }
 
-class cMWModel {
+struct cMWModel { private:
 public:
     uint32_t pad00[2];
     cSPTransform mTransform;                    // +0x8

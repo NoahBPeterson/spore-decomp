@@ -12,7 +12,7 @@
 // EASTL pieces (string, vector) as used by the ArgScript option parser.
 // ---------------------------------------------------------------------------
 namespace eastl {
-    struct allocator {
+    class allocator { public:
         inline void deallocate(void* p, unsigned int) { delete[] (char*)p; }
         unsigned int mFlags;
     };
@@ -66,7 +66,7 @@ namespace eastl {
     };
 
     template <typename T>
-    struct vector : VectorBase<T> {
+    class vector : public VectorBase<T> { public:
         inline ~vector() { destruct(this->mpBegin, this->mpEnd); }
     };
 }

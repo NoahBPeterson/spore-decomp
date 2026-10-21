@@ -4,7 +4,7 @@
 #include "types.h"
 
 namespace rw { namespace math { namespace fpu {
-template<class T, int N> struct Vector3Template {
+template<class T, int N> class Vector3Template { public:
     T x, y, z;
     Vector3Template() {}
     Vector3Template(const Vector3Template& v);                               // 0x004098a0
@@ -12,7 +12,7 @@ template<class T, int N> struct Vector3Template {
     // five sites of this function and called it out of line at the other seven).
     void CopyConstructInline(const Vector3Template& v) { x = v.x; y = v.y; z = v.z; }
 };
-template<class T, int N> struct Matrix33Template {
+template<class T, int N> class Matrix33Template { public:
     T m[9];
 };
 }}}

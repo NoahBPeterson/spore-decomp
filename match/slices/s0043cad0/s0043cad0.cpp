@@ -16,7 +16,7 @@ struct Blk {
 
 struct Node { bool Check(); float F3adb80(); float F3adbc0(); };
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     char        pad00[0x10];
     void*       mModel;      // +0x10
     char        pad14[0x18 - 0x14];

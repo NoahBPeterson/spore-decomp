@@ -40,7 +40,7 @@ struct cSPEditorEconomy {                  // refcounted, vptr +0, count +4
     void AddRef() { int r = mRefCount + 1; mRefCount = mRefCount + 1; (void)r; }
     void Release();                        // 0x00453540 (RefCountTemplate<int>::Release)
 };
-struct cSPUILayout {                       // vtable: +4 AddRef, +8 Release
+class cSPUILayout { public:                       // vtable: +4 AddRef, +8 Release
     virtual void v0();
     virtual int AddRef();
     virtual int Release();
@@ -72,7 +72,7 @@ struct IWinX {                             // EA::UTFWin::IWindow slots used her
     virtual void p64();
     virtual void AddWinProc(void* proc);                 // +0x104
 };
-struct cSPUITooltipWinProc {               // 0x68 bytes, vtable: +0 AddRef, +4 Release
+class cSPUITooltipWinProc { public:               // 0x68 bytes, vtable: +0 AddRef, +4 Release
     virtual int AddRef();
     virtual int Release();
     char pad[0x68 - 4];

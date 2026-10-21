@@ -43,7 +43,7 @@ struct State {
     int32_t  type;   // +4
 };                   // size 8
 
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     char        pad00[0x10];
     Model*      mModel;      // +0x10
     char        pad14[0x38 - 0x14];

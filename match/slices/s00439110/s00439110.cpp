@@ -17,7 +17,7 @@ inline void* operator new(size_t, void* p) { return p; }
 
 namespace SP {
 
-struct cSPEditorBlock;
+class cSPEditorBlock;
 
 // ---------------------------------------------------------------- math types
 struct Vector3 {
@@ -69,7 +69,7 @@ template <class T> struct AutoRefCount {
     operator T*() const { return mpObject; }
 };
 
-struct cPropertyList {
+class cPropertyList { public:
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18();
     virtual bool HasProperty(uint32_t propertyID) const;   // +0x1C
@@ -82,7 +82,7 @@ struct cMorphHandle {
     float    mWeight;                  // +0x180
 };
 
-struct cSPEditorModel {
+class cSPEditorModel { public:
     bool F4adc40();                    // 004ADC40 (returns byte +0x4f)
 };
 
@@ -216,7 +216,7 @@ struct BlockVector : BlockVectorBase {
 };
 
 // ------------------------------------------------------------------ the block
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     uint32_t pad0[3];
     AutoRefCount<cPropertyList> mpPropList;        // +0x00C
     uint32_t pad10[3];

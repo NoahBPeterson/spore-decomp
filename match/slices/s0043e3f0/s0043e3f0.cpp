@@ -6,12 +6,12 @@
 #include <xmmintrin.h>   // also switches /arch:SSE scalar float codegen to SSE at /Od
 
 namespace eastl {
-template<class T> struct vector {
+template<class T> class vector { public:
     T* mpBegin; T* mpEnd; T* mpCapacity; int mAllocator;
     int size() const { return (int)(mpEnd - mpBegin); }
     T& operator[](int i) { return mpBegin[i]; }
 };
-template<int N> struct bitset {
+template<int N> class bitset { public:
     uint32_t mWord[(N + 31) / 32];
     uint32_t& DoGetWord(uint32_t i) { return mWord[i >> 5]; }
     uint32_t DoGetWord(uint32_t i) const { return mWord[i >> 5]; }
@@ -28,7 +28,7 @@ template<int N> struct bitset {
 };
 }
 namespace EA {
-template<class T> struct AutoRefCount {
+template<class T> class AutoRefCount { public:
     T* mpObject;
     T* get() const { return mpObject; }
     T* operator->() const { return mpObject; }
@@ -68,30 +68,30 @@ struct cSPBoundingBox {
 };
 
 namespace SP {
-struct cPropertyList {
+class cPropertyList { public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void v4(); virtual void v5(); virtual void v6();
     virtual bool HasProperty(uint32_t id);
 };
 bool GetPropertyAsKey(cPropertyList* p, uint32_t id, uint32_t out);
 struct cMWModel { char pad[0x44]; bitset<64> mGroups; };
-struct cSPEditorModel {
+class cSPEditorModel { public:
     float GetScale();       // 0x4adaa0
     bool Func4adb80();      // 0x4adb80
     bool Func4adbc0();      // 0x4adbc0
     bool Func4adc40();      // 0x4adc40 (symmetry enabled?)
 };
-struct cSPEditorHandle {
+class cSPEditorHandle { public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
     virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10();
     virtual void Update();                 // vtable +0x2c
 };
-struct cSPEditorHandleRotationRing : cSPEditorHandle {
+class cSPEditorHandleRotationRing : public cSPEditorHandle { public:
     char pad[0x92 - 4]; bool mbHidden;     // +0x92
     bool IsHidden() const { return mbHidden; }
 };
-struct cSPEditorHandleRotationBall : cSPEditorHandle {};
-struct cSPEditorHandleDeform : cSPEditorHandle {
+class cSPEditorHandleRotationBall : public cSPEditorHandle { public:};
+class cSPEditorHandleDeform : public cSPEditorHandle { public:
     char pad04[0x8c - 4];
     uint32_t mAnimationID;                 // +0x8c  (mData.mAnimationID)
     cSPVector3 mStartPt;                   // +0x90
@@ -103,7 +103,7 @@ struct cSPEditorHandleDeform : cSPEditorHandle {
     bool mDoNotPlaceHandle;                // +0x1d5
     float GetDelta() const { return mDelta; }
 };
-struct cSPEditorBlock;
+class cSPEditorBlock;
 struct BlockList : vector<AutoRefCount<cSPEditorBlock> > { bool Func526430(); };  // SP::GetResourceTypeFromModelType (folded)
 struct cSPFadeController {               // at +0xdd0
     bool IsActive();                     // FadeController::IsActive 0x4340c0
@@ -124,7 +124,7 @@ extern float g_15d257c;
 namespace SP {
 // Retail layout (much larger than the 2008 PDB's 0x548); names follow the 2008 PDB where the field
 // could be identified, unknown fields are named by offset.
-struct cSPEditorBlock {
+class cSPEditorBlock { public:
     char pad00[0x0c];
     AutoRefCount<cPropertyList> mPropList;                     // +0x0c
     AutoRefCount<cMWModel> mModel;                             // +0x10

@@ -89,7 +89,7 @@ extern float kTwoPi;                     // 0x015d2470
 extern float kHalfPi;                    // 0x015d257c
 
 namespace EA {
-template <class T> struct AutoRefCount {
+template <class T> class AutoRefCount { public:
     T* mpObject;
     AutoRefCount(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
     ~AutoRefCount() { if (mpObject) mpObject->Release(); }
@@ -104,7 +104,7 @@ struct sp_vector_allocator { sp_vector_allocator() {} };
 namespace SP {
 class cSPEditorBlock;
 
-struct cSPEditorTrianglePinningInfo {
+class cSPEditorTrianglePinningInfo { public:
     char pad00[4];
     void* mTriangle;                                                     // +4
     char pad08[0x44];
@@ -161,7 +161,7 @@ struct Property {
     }
 };
 
-struct cPropertyList {
+class cPropertyList { public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void v4(); virtual void v5(); virtual void v6();
     virtual bool HasProperty(uint32_t id);                               // +0x1c
