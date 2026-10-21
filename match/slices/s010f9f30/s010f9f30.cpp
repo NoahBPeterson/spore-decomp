@@ -100,8 +100,8 @@ public:
 
 // ---- arrays -------------------------------------------------------------------------------------------------------
 template <typename T>
-struct hkArray
-{
+class hkArray
+{ public:
 	enum { CAPACITY_MASK = 0x3fffffff };
 	T* m_data;
 	int m_size;

@@ -93,8 +93,8 @@ struct hkProcessCollisionOutput
     hkProcessCdPoint* m_firstFreeContactPoint;   // +0x0
 };
 
-struct hkContactMgr
-{
+class hkContactMgr
+{ public:
     virtual void v0();
     virtual void v1();
     virtual void addContactPoint();

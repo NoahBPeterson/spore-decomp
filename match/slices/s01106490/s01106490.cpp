@@ -29,7 +29,7 @@ struct __declspec(align(16)) hkVector4 {
     float x, y, z, w;
 };
 
-struct hkContactPoint {
+class hkContactPoint { public:
     hkVector4 m_position;
     hkVector4 m_separatingNormal;   // w = distance
 };

@@ -18,14 +18,14 @@ typedef unsigned short hkUint16;
 typedef unsigned int   hkUint32;
 
 class __declspec(align(16)) hkVector4 { public: float x, y, z, w; };
-struct hkTransform
-{
+class hkTransform
+{ public:
     hkVector4 m_col0, m_col1, m_col2, m_translation;   // 0x40 bytes
     void setMulInverseMul(const hkTransform& a, const hkTransform& b);   // 0x010810f0: this = inverse(a) * b
 };
 
-struct hkConvexShape
-{
+class hkConvexShape
+{ public:
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
     virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
     virtual void convertVertexIdsToVertices(const hkUint16* ids, int numIds, hkVector4* verticesOut) const;   // slot 10
@@ -33,8 +33,8 @@ struct hkConvexShape
     float    m_radius;                                  // +0xc
 };
 
-struct hkCdBody
-{
+class hkCdBody
+{ public:
     const hkConvexShape* m_shape;                       // +0x0
     hkUint32             m_shapeKey;                    // +0x4
     const hkTransform*   m_motion;                      // +0x8
@@ -58,8 +58,8 @@ struct hkProcessCollisionInput
 
 struct hkProcessCdPoint { hkVector4 m_position; hkVector4 m_separatingNormal; hkUint16 m_id; hkUint16 m_pad[7]; };   // 0x30
 
-struct hkContactMgr
-{
+class hkContactMgr
+{ public:
     virtual void v0();
     virtual void v1();
     virtual hkUint16 addContactPoint(const hkCdBody* a, const hkCdBody* b, const hkProcessCollisionInput* in,

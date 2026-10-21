@@ -87,15 +87,14 @@ template <typename T> __forceinline void hkDeallocateStack(T* p)
 }
 
 // ---- shapes / bodies --------------------------------------------------------------------------------------
-struct hkReferencedObject
-{
+class hkReferencedObject
+{ public:
     virtual ~hkReferencedObject() {}
     uint16_t m_memSizeAndFlags;
     int16_t  m_referenceCount;
 };
-struct hkShape : hkReferencedObject { uint32_t m_userData; };   // +8
-struct hkConvexShape : hkShape
-{
+class hkShape : public hkReferencedObject { public: uint32_t m_userData; };   // +8
+class hkConvexShape : public hkShape { public:
     float m_radius;                                              // +0xc
     virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5(); virtual void s6();
     virtual void s7(); virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11();
@@ -132,22 +131,22 @@ inline hkConvexListConvexShape::hkConvexListConvexShape(const hkConvexListShape&
     m_subShapesSize = list.m_subShapesSize;
 }
 
-struct hkSweptTransform { hkVector4 m_centerOfMass0, m_centerOfMass1, m_rotation0, m_rotation1, m_centerOfMassLocal; };
-struct hkMotionState
-{
+class hkSweptTransform { public: hkVector4 m_centerOfMass0, m_centerOfMass1, m_rotation0, m_rotation1, m_centerOfMassLocal; };
+class hkMotionState
+{ public:
     hkTransform      m_transform;                       // +0x00
     hkSweptTransform m_sweptTransform;                  // +0x40 (m_centerOfMass1.w = inverse delta time)
     hkVector4        m_deltaAngle;                      // +0x90
     hkReal           m_objectRadius;                    // +0xa0
 };
-struct hkCdBody
-{
+class hkCdBody
+{ public:
     const hkShape*       m_shape;                       // +0
     uint32_t             m_shapeKey;                    // +4
     const hkMotionState* m_motion;                      // +8 (hkMotionState* on a root body)
     const hkCdBody*      m_parent;                      // +0xc
 };
-struct hkStepInfo { hkReal m_startTime, m_endTime, m_deltaTime, m_invDeltaTime; };
+class hkStepInfo { public: hkReal m_startTime, m_endTime, m_deltaTime, m_invDeltaTime; };
 struct hkProcessCollisionInput
 {
     void*      m_dispatcher;                            // +0x0
@@ -156,7 +155,7 @@ struct hkProcessCollisionInput
     bool       m_createPredictiveAgents;                // +0xc
     hkStepInfo m_stepInfo;                              // +0x10
 };
-struct hkContactPoint { hkVector4 m_position; hkVector4 m_separatingNormal; };
+class hkContactPoint { public: hkVector4 m_position; hkVector4 m_separatingNormal; };
 struct hkProcessCdPoint { hkContactPoint m_contact; uint32_t m_extra[4]; };   // 0x30 bytes
 struct hkProcessCollisionOutput
 {
@@ -223,8 +222,8 @@ struct hkAgent1nTrackInit
 };
 
 // ---- the agent ----------------------------------------------------------------------------------------------
-struct hkCollisionAgent
-{
+class hkCollisionAgent
+{ public:
     virtual ~hkCollisionAgent() {}
     virtual void processCollision(const hkCdBody& bodyA, const hkCdBody& bodyB,
                                   const hkProcessCollisionInput& input, hkProcessCollisionOutput& result);

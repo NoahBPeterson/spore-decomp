@@ -4,19 +4,19 @@
 // Flags: /O2 /MD /Gy /TP (no /EHsc: no EH frame in the original)
 #include "types.h"
 
-struct hkBool {
+class hkBool { public:
     char m_b;
     hkBool() {}
     hkBool(bool b) : m_b(b) {}
     operator bool() const { return m_b != 0; }
 };
 
-struct hkOstream {
+class hkOstream { public:
     hkOstream(char* buf, int size, hkBool flag);      // 0x0107EF80
     ~hkOstream();                                      // 0x0107EFD0
     hkOstream& operator<<(const char* s);              // 0x0107EE30
 };
-struct hkError {
+class hkError { public:
     virtual void v0(); virtual void v1();
     virtual int message(int level, int id, const char* desc, const char* file, int line);   // slot 2
     static hkError* s_instance;      // 0x016e4184

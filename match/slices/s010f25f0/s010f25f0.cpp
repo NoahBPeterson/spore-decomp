@@ -42,7 +42,7 @@ static __forceinline void HK_TIMER_SPLIT(const char* name)
 // ---------------------------------------------------------------------------------------------
 extern unsigned long g_hkThreadMemoryTls;      // 0x016e4174
 
-struct hkThreadMemory {
+class hkThreadMemory { public:
     virtual void vslot0();
     virtual void vslot1();
     virtual void vslot2();
@@ -82,7 +82,7 @@ struct hkArrayUtil {
     static void _reserveExactly(void* array, int newCapacity, int elemSize);   // 0x0107F4A0
 };
 
-template <typename T> struct hkArray {
+template <typename T> class hkArray { public:
     enum { CAPACITY_MASK = 0x3fffffff, DONT_DEALLOCATE_FLAG = 0x80000000 };
     T* m_data;
     int m_size;
@@ -113,7 +113,7 @@ template <typename T> struct hkArray {
     void insertAt(int index, const hkArray<T>& a);       // 0x010FBB80 (hkArray<T*> instance)
 };
 
-template <typename T, int N> struct hkInplaceArray : hkArray<T> {
+template <typename T, int N> class hkInplaceArray : public hkArray<T> { public:
     T m_storage[N];
     __forceinline hkInplaceArray() : hkArray<T>(m_storage, 0, N) {}
 };
@@ -131,7 +131,7 @@ template <typename T> struct hkLocalArray : hkArray<T> {
 
 template <typename T> struct hkFixedArray { T* m_data; T& operator[](int i) { return m_data[i]; } };
 
-struct hkBool {
+class hkBool { public:
     char m_bool;
     operator bool() const { return m_bool != 0; }
 };
@@ -143,17 +143,17 @@ struct hkStepInfo;
 struct hkSolverInfo;
 struct hkVelocityAccumulator;
 struct hkConstraintInstance;
-struct hkSimulationIsland;
+class hkSimulationIsland;
 struct hkTransform;
 struct hkSweptTransform;
 struct hkCollidable;
 
-struct hkMotionState {
+class hkMotionState { public:
     char m_transform[0x40];                          // +0x00 hkTransform
     char m_sweptTransform[0x50];                     // +0x40 hkSweptTransform
 };
 
-struct hkMotion {
+class hkMotion { public:
     virtual void vslot0();
     virtual void vslot1();
     virtual int getType();                           // +0x08
@@ -162,7 +162,7 @@ struct hkMotion {
 };
 enum { HK_MOTION_FIXED = 6 };
 
-struct hkEntity {
+class hkEntity { public:
     char pad00[0x1c];
     char m_collidable[0x30];                         // +0x1c hkLinkedCollidable
     char pad4c[0x58 - 0x4c];
@@ -177,14 +177,14 @@ struct hkEntity {
     const hkCollidable* getCollidable() const { return (const hkCollidable*)m_collidable; }
 };
 
-struct hkSimulationIsland {
+class hkSimulationIsland { public:
     char pad00[0x3c];
     hkArray<hkEntity*> m_entities;                   // +0x3c
 };
 
 struct hkProcessCollisionInput;
 
-struct hkWorld {
+class hkWorld { public:
     char pad00[0x78];
     hkProcessCollisionInput* m_collisionInput;       // +0x78
     char pad7c[0xc0 - 0x7c];
@@ -192,7 +192,7 @@ struct hkWorld {
 };
 
 struct hkContactPoint;
-struct hkContactPointMaterial { void* m_userData; uint16_t m_friction; uint8_t m_restitution; uint8_t m_flags; };
+class hkContactPointMaterial { public: void* m_userData; uint16_t m_friction; uint8_t m_restitution; uint8_t m_flags; };
 
 struct hkToiEvent {                                  // 0x40
     hkReal m_time;                                   // +0x00
