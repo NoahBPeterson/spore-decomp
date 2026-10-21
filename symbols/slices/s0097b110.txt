@@ -1,0 +1,7 @@
+0097b110 ?ScrollCellsVertically@WinGrid@@QAEXH@Z  # EA::UTFWinControls::WinGrid::ScrollCellsVertically derived in s0097b110
+0097b230 ?ScrollCellsHorizontally@WinGrid@@QAEXH@Z  # EA::UTFWinControls::WinGrid::ScrollCellsHorizontally derived in s0097b110
+0097b350 ?CopyColumns@WinGrid@@QAEXHHH_N@Z  # EA::UTFWinControls::WinGrid::CopyColumns derived in s0097b110
+0097b630 ?CopyRows@WinGrid@@QAEXHHH_N@Z  # EA::UTFWinControls::WinGrid::CopyRows derived in s0097b110
+0097b910 ?GetCellRect@WinGrid@@QAEXHHAAURectT@Gr@@@Z  # EA::UTFWinControls::WinGrid::GetCellRect derived in s0097b110
+0097ba60 ?ResizeColumnToFitCellWindows@WinGrid@@QAEXHH@Z  # EA::UTFWinControls::WinGrid::ResizeColumnToFitCellWindows derived in s0097b110
+0097bc80 ?RecalculateAll@WinGrid@@QAEXXZ  # EA::UTFWinControls::WinGrid::RecalculateAll derived in s0097b110
