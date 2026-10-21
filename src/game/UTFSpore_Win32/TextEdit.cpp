@@ -26,7 +26,7 @@ struct TextRun { const wchar_t* text; void* style; };
 }
 namespace EA {
 namespace Text {
-struct TextRunIterator {
+class TextRunIterator { public:
     uint32_t pad[7];
     void SetTextRunArray(const TextRun* runs, unsigned count, unsigned a, unsigned b, unsigned c);   // 0088F790
 };
@@ -34,7 +34,7 @@ struct TextRunIterator {
 }
 namespace EA {
 namespace Text {
-struct BreakIteratorBase : TextRunIterator {
+class BreakIteratorBase : public TextRunIterator { public:
     uint32_t f1c;
     unsigned SetPosition(unsigned pos);                 // 00888220
 };
@@ -42,7 +42,7 @@ struct BreakIteratorBase : TextRunIterator {
 }
 namespace EA {
 namespace Text {
-struct CharacterBreakIterator : BreakIteratorBase {
+class CharacterBreakIterator : public BreakIteratorBase { public:
     unsigned GetNextCharBreak();                        // 00888240
     unsigned GetPrevCharBreak();                        // 008884B0
 };
@@ -50,7 +50,7 @@ struct CharacterBreakIterator : BreakIteratorBase {
 }
 namespace EA {
 namespace Clipboard {
-struct IData {
+class IData { public:
 virtual void m0();
 virtual void m4();
     virtual void Release();                         // 0x08
@@ -67,7 +67,7 @@ IData* CreateTextData(const wchar_t* text, int len);                        // 0
 }
 namespace EA {
 namespace Clipboard {
-struct Clipboard {
+class Clipboard { public:
     bool SetClipboardData(IData* d, int flag);                              // 0092ABB0
     bool GetClipboardData(int fmt, IData** out);                            // 0092A8D0
 };
@@ -274,7 +274,7 @@ struct IWinTextEdit_s0098_a820 {
 }
 namespace EA {
 namespace UTFWinControls {
-struct WinTextEdit : TextWindow, IWinTextEdit_s0098_a820 {
+class WinTextEdit : public TextWindow, public IWinTextEdit_s0098_a820 { public:
     unsigned SnapIndex(unsigned pos, int* pOut);        // 0098A430
     unsigned F98A4B0(unsigned pos);                     // 0098A4B0
     unsigned F98A570(unsigned pos);                     // 0098A570
@@ -334,7 +334,7 @@ struct TextStyle_s0098_e3a0 {
 }
 namespace EA {
 namespace Text {
-struct StyleManager {
+class StyleManager { public:
     const TextStyle_s0098_e3a0* GetStyle(uint32_t id, int flag);        // 0x894670
 };
 }
