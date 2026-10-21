@@ -414,7 +414,7 @@ virtual void c3();
 }
 namespace EA {
 namespace ArgScript {
-struct cBlockCommandBase : cCommandBase_s007d_19c0 {
+class cBlockCommandBase : public cCommandBase_s007d_19c0 { public:
     void* mChildState;         // +0xc
     char  mCommands[0x20];     // +0x10 (hash_map)
 };
