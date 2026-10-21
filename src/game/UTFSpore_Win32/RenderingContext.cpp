@@ -22,7 +22,7 @@ struct fixed_pool_base {
 };
 }
 namespace eastl {
-struct fixed_pool_with_overflow : fixed_pool_base {
+class fixed_pool_with_overflow : public fixed_pool_base { public:
     void* mpPoolBegin;     // +8
     void* mpPoolEnd;       // +0xc
     uint32_t mnNodeSize;   // +0x10
@@ -170,14 +170,14 @@ virtual void v11();
 namespace EA {
 namespace XHTML {
 namespace Layout {
-struct RenderingContext;
+class RenderingContext;
 }
 }
 }
 namespace EA {
 namespace XHTML {
 namespace Layout {
-struct Background {
+class Background { public:
     char pad[0x44];
     void Draw(RenderingContext* ctx, const float* pen, const float* rect);   // 0x008e6710
 };
@@ -187,7 +187,7 @@ struct Background {
 namespace EA {
 namespace XHTML {
 namespace Layout {
-struct InlineItem {
+class InlineItem { public:
     char pad0[0x3c];
     unsigned mColor;                // +0x3c
     char pad1[0x44 - 0x40];
@@ -203,7 +203,7 @@ struct InlineItem {
 namespace EA {
 namespace XHTML {
 namespace Layout {
-struct RenderingContext {
+class RenderingContext { public:
     EA::Drawing::IDrawContext_s008e_ebb0* mpDC;       // +0
     char pad0[0x534 - 4];
     float mfOffsetX;                       // +0x534
