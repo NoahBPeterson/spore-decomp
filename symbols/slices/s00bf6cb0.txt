@@ -1,0 +1,20 @@
+# va  name  # evidence
+# Slice s00bf6cb0 (gold4 #128) -- the Spore "AI" behaviour object and its helpers.  This is the
+# per-community AI: it owns the object list (+0x9c/+0xa0), the vehicle list (+0xb0/+0xb4), an
+# embedded SP::cSPTimer at +0x1e8, the tool-page sp_ref_vector at +0x470, a score at +0x98 and two
+# clamp radii at +0x4ac/+0x4b0; flags live at +0x89/+0x8a/+0x94 and a per-frame tick at +0x4b4.
+# Same class/layout as slice s00bf5cb0.  Names are reconstructions from the cards.
+00bf6cb0  AI::InteractionScore      # switch on interaction type -> 4000/16000/9000 constant set
+00bf6e80  Vec24_Assign               # eastl vector<TreeItem> range copy, 0x24-stride, +0x10 rebind
+00bf6ee0  AI::RebuildToolPages       # resize +0x470 to 0xc and recreate tools from 0x1469430
+00bf6fa0  AI::AccumulatePhase        # sum per-entity value + per-community ReadPhase weight
+00bf7050  AI::HasAcceptedObject     # walk +0x9c list, vtable slot 0x17, test via 0xbf5720
+00bf70b0  AI::TestObjectWeight      # weighted object/continent acceptance over the list
+00bf7150  AI::CommunityScoreSum     # sum 0xbf6cb0 over the list + player-community weight
+00bf71d0  AI::Tick                  # per-frame tick, every 6th feeds 0.1*phase to 0xbefd80
+00bf7230  AI::UpdateScoreAndRadii   # decay +0x98 into +0x4ac/+0x4b0, clamp to terrain cap
+00bf7390  AI::DisbandVehicles       # walk +0xb0, disband mode-7 vehicles via 0xcaa610
+00bf74a0  AI::RollInteractionEvent  # budget from phase scores/radii, RNG event, restart timer
+00bf7730  AI::ShouldReact           # 1 if InteractionScore(type) > score  (BYTE-EXACT)
+00bf7760  AI::EnsureElementCount    # grow (0xbf5220) / erase (0xbf51d0) the 0x20-stride vector
+00bf77d0  AI::ReadElements          # truncate, read count, copy cGonzagoTimer elements from stream
