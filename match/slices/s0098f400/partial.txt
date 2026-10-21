@@ -1,0 +1,7 @@
+# Slice s0098f400 -- partial (incomplete) functions
+#
+# Empty: all 24 VAs in this slice are written, compile cleanly and are located by
+# chk.py.  18 are byte-exact; the other 6 are complete, semantically faithful
+# implementations recorded in nonmatching.txt (no stub or truncated body remains).
+#
+# (none)

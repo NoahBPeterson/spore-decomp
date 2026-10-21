@@ -1,0 +1,25 @@
+# slice s0098f400 -- EA::UTFWinControls WinTreeView / TreeNode / drawables / marshaller
+0098f400  ?GetColor@WinTreeView@UTFWinControls@EA@@QAEII@Z
+0098f420  ?SetColor@WinTreeView@UTFWinControls@EA@@QAEXII@Z
+0098f460  ?SetTreeViewFlag@WinTreeView@UTFWinControls@EA@@QAEXID@Z
+0098f490  ?SetItemHeight@WinTreeView@UTFWinControls@EA@@QAEXI@Z
+0098f4d0  ?SetLayoutVar@WinTreeView@UTFWinControls@EA@@QAEXII@Z
+0098f550  ?GetLayoutVar@WinTreeView@UTFWinControls@EA@@QAEII@Z
+0098f5b0  ?OnFocusChange@WinTreeView@UTFWinControls@EA@@QAEDHPAX@Z
+0098f610  ?GetScrollbarEnabled@WinTreeView@UTFWinControls@EA@@QAEIH@Z
+0098f620  ?CalculateRowHeight@WinTreeView@UTFWinControls@EA@@QAEXXZ
+0098f720  ?FUN_0098f720@UTFWinControls@EA@@YIDPAIPAX@Z
+0098f750  ?FUN_0098f750@UTFWinControls@EA@@YGDPAMPAX1@Z
+0098f7d0  ?Shutdown@WinTreeView@UTFWinControls@EA@@QAEXXZ
+0098f850  ?SetDefaultIconDrawable@WinTreeView@UTFWinControls@EA@@QAEXPAX@Z
+0098f8b0  ?SetExpanderDrawable@WinTreeView@UTFWinControls@EA@@QAEXPAX@Z
+0098f950  ?FUN_0098f950@UTFWinControls@EA@@YIXPAX00PAUTreeNode@12@PAM@Z
+0098fab0  ?DoMessage@WinTreeView@UTFWinControls@EA@@QAEHPAX@Z
+0098fb80  ?GetScrollbarDrawable@WinTreeView@UTFWinControls@EA@@QAEPAXH@Z
+0098fba0  ?IsScrollbarVisible@WinTreeView@UTFWinControls@EA@@QAEHH@Z
+0098fbe0  ?CalculateVisibleArea@WinTreeView@UTFWinControls@EA@@QAEXXZ
+0098fd20  ?FUN_0098fd20@UTFWinControls@EA@@YIXPAUWinTreeView@12@PAX@Z
+00990040  ?InnerChildRemoveAllRecursive@TreeNode@UTFWinControls@EA@@QAEXXZ
+009900b0  ?CreateRenderables@TreeExpanderDrawable@UTFWinControls@EA@@QAGXPAXPAM0@Z
+00990350  ?FUN_00990350@UTFWinControls@EA@@YAXPAUWinTreeView@12@@Z
+009903a0  ?Write@TreeNodeListMarshaller@UTFWinControls@EA@@SADPAX000@Z

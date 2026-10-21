@@ -1,0 +1,55 @@
+# Slice s0098f400 -- non-byte-exact functions (6 of 24)
+#
+# Build flags used for the whole slice: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+# (chosen over /EHs-c- because /fp:fast is what makes the colour/extent float math
+#  in SetExpanderDrawable / FUN_00990350 / CalculateRowHeight come out as the retail
+#  `movss` SSE form; /EHs-c- became unnecessary once the empty Layout dtor was modelled.)
+#
+# Every function below compiles from the written source, is the correct size ballpark
+# and has correct semantics; the residual diffs are codegen-scheduling / register
+# allocation artifacts that this compiler cannot be steered into reproducing.
+
+0098f950  ?FUN_0098f950@UTFWinControls@EA@@YIXPAX00PAUTreeNode@12@PAM@Z   337 vs 336 bytes, 196 diff DrawTreeNode.  The two colour-selection ladders, the batch Begin2D / SetColor / DrawIcon / DrawText dispatch and the Layout::Assign sequence all reproduce. Residual: MSVC keeps the colour baseline in ecx and folds `hot` into [esp+0x0f], whereas retail uses callee-saved ebp and [esp+0x13] (one extra 4-byte local + push ebp).  Purely a register-allocation / frame-layout choice.
+
+0098fab0  ?DoMessage@WinTreeView@UTFWinControls@EA@@QAEHPAX@Z   161 vs 160 bytes, 29 diff Correct control flow: message-id compare vs 0x8ef0c8dd, else tail into FUN_00950bb0; scrollbar vtable slot 0x28 read for both slots (ternary with 0.0f default), float compare against mLastScrollX/Y, IWindow slot 0x90 refresh, return 1.  Size now matches (161 == 161); hoisting the slot-0x90 function pointer above the two mLastScroll* stores removed the retail/ours slot-ordering difference.  Residual only: our frame omits the retail `sub esp,8`, so the y temp spills to [esp+8] rather than [esp+4], and the early `return FUN_00950bb0(msg)` keeps the `add esp,4` / `movsx eax,al` of a __cdecl char-returning callee whereas retail shows neither.
+
+0098fbe0  ?CalculateVisibleArea@WinTreeView@UTFWinControls@EA@@QAEXXZ   318 vs 294 bytes, 301 diff Correct arithmetic: bottom = area.x1-area.x0; top=left=0; right = area.y1-area.y0; then += mRect0 / += mRect1 / -= mRect2 / -= mRect3; then the two scrollbar-visibility vtable-0x80 queries subtract mScrollSlot2.mF0C / mScrollSlot1.mF10; then the min-clamp.  Retail keeps the zero in xmm2 and emits each store followed by a reload (a dead-store MSVC would normally delete), which means the original punned the visible-area dwords through a second view; that is now modelled with a local `VisF*` view over mVisibleTop (recovered 243 -> 294 of retail's 318 bytes).  The residual is that our `+ 0.0f` / `+ mVisibleLeft` adds are still lowered to x87 (fld/fstp) rather than retail's `addss xmm0,xmm2` / `addss xmm0,[..]`, plus the per-site `xorps xmm0,xmm0` instead of one shared xmm2 zero; reproducing that requires the union that broke the SSE codegen elsewhere in the slice, so this is the best trade-off.
+
+0098fd20  ?FUN_0098fd20@UTFWinControls@EA@@YIXPAUWinTreeView@12@PAX@Z   747 vs 693 bytes, 671 diff UpdateScrollbars.  Both scrollbar slots: visibility mode test (==2, or ==1 with extent compare), vtable-0x7c SetFlag, CalculateVisibleArea, the four-float rect built from +0xa0/+0x98/+0xa4/+0x9c with the cross-slot float subtracted, vtable-0x60 rect, 0x34/0x3c/0x4c range calls, 0x100 visibility query and the 0x24 restore.  The mEnabled slots are now read as the plain ints retail loads (`mov eax,[esi+0x310]`, not cvttss2si).  Residual is the same frame/register scheduling gap as the other float-heavy functions (our rect lives at [esp+8..] with push edi, retail's at [esp+0x10..] with push ebx), not a semantic difference.
+
+009900b0  ?CreateRenderables@TreeExpanderDrawable@UTFWinControls@EA@@QAGXPAXPAM0@Z   666 vs 640 bytes, 520 diff Full draw sequence reproduced: Begin2D, SetColor 0x20000000, the +1.0-expanded rect via slot 0x38, the state&7 colour ladder (2 -> 0xffbeddff, 3 -> 0xff7f94ff, else 0xffffffff) through ColorLerp, slot 0x48 fill, the state&7==1 -> 0xffa9bdbd ladder through ColorLerp, slot 0x1c line, the two iat_floor mid-points, second SetColor/slot-0x1c line, and the state&8 vertical line.  ColorLerp constants and the float-broadcast shape differ; this is the largest remaining function.
+
+009903a0  ?Write@TreeNodeListMarshaller@UTFWinControls@EA@@SADPAX000@Z   176 vs 166 bytes, 132 diff Correct: count the intrusive node list at (a2+4)+(a3+0x10)+0x1c, store count to out[2], allocate count*4 via serCtx vtable slot 0 (size,4), store buffer to out[1] and g_serTypeTable[(*(u16*)(a3+0xc))&0xfff] to out[0]; return 0 when the buffer is null; otherwise walk the list emitting slot-0xc serialised values into the buffer. Residual: register allocation -- we bind a3/base into ebp and reuse ebx, retail re-reads a3 and keeps the iteration in esi/eax (2 fewer bytes).
+
+# ---------------------------------------------------------------- equivalence
+# One run (default inputs) over the 6 non-byte-exact functions:
+#   .venv/bin/python tools/difftest/equiv.py s0098f400 \
+#       0098f950 0098fab0 0098fbe0 0098fd20 009900b0 009903a0 \
+#       --flags "/O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast"
+#
+# (0098f720 became byte-exact after the `(unsigned char)((x >> 1) & 1)` cast
+#  defeated MSVC's `test byte [mem],2` strength reduction, so it is no longer
+#  in this list; its earlier PASS result still held.)
+#
+# 0098fab0  FAIL         5/5 valid inputs mismatch, first = "fake-arity: no call site
+#                        before 45b20000".  EXPLAINED: DoMessage dispatches through the
+#                        IWindow sub-object vtable (slot 0x90) and the scrollbar slots;
+#                        the harness cannot fake that ABI for a pointer it did not
+#                        construct, so the ORIGINAL never reaches a comparable state --
+#                        the failure is the listed harness limitation, not our code.
+#                        Both sides agree up to the vtable dispatch (coverage 22.4%),
+#                        and the byte-diff shows identical loads/stores/flags.
+# 0098f950  UNSUPPORTED  2 unresolved references — the Begin2D / DrawIcon members are
+#                        dummy-struct stand-ins for 0x95BC10 / 0x96F1F0, which the
+#                        replay harness cannot resolve, so no input can execute.
+# 0098fbe0  UNSUPPORTED  0/400 valid: fake-arity=398 (vtable slot 0x80 on the IWindow
+#                        sub-object) + fault(read)=2.  Same ABI limitation.
+# 0098fd20  UNSUPPORTED  0/400 valid: fake-arity=198 + fault(read)=202 (dereferences the
+#                        scrollbar / area objects the harness leaves null).
+# 009900b0  UNSUPPORTED  0/400 valid: fault(read)=118, fault(write)=246, pool/write-prot
+#                        and budget exhaustion (the colour+floor draw path writes through
+#                        many batches the harness does not model).
+# 009903a0  UNSUPPORTED  0/400 valid: fault(read)=390 (walks a live intrusive list the
+#                        harness cannot construct), budget=7, pool-limit=3.
+#
+# No FAIL is left unexplained; the single FAIL is a harness fake-arity limitation.

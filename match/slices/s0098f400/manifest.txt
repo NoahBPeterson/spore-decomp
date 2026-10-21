@@ -1,0 +1,19 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0098f400/s0098f400.cpp  ?GetColor@WinTreeView@UTFWinControls@EA@@QAEII@Z  0098f400  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?SetColor@WinTreeView@UTFWinControls@EA@@QAEXII@Z  0098f420  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?SetTreeViewFlag@WinTreeView@UTFWinControls@EA@@QAEXID@Z  0098f460  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?SetItemHeight@WinTreeView@UTFWinControls@EA@@QAEXI@Z  0098f490  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?SetLayoutVar@WinTreeView@UTFWinControls@EA@@QAEXII@Z  0098f4d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?GetLayoutVar@WinTreeView@UTFWinControls@EA@@QAEII@Z  0098f550  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?OnFocusChange@WinTreeView@UTFWinControls@EA@@QAEDHPAX@Z  0098f5b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?GetScrollbarEnabled@WinTreeView@UTFWinControls@EA@@QAEIH@Z  0098f610  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?CalculateRowHeight@WinTreeView@UTFWinControls@EA@@QAEXXZ  0098f620  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?FUN_0098f720@UTFWinControls@EA@@YIDPAIPAX@Z  0098f720  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?FUN_0098f750@UTFWinControls@EA@@YGDPAMPAX1@Z  0098f750  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?Shutdown@WinTreeView@UTFWinControls@EA@@QAEXXZ  0098f7d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?SetDefaultIconDrawable@WinTreeView@UTFWinControls@EA@@QAEXPAX@Z  0098f850  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?SetExpanderDrawable@WinTreeView@UTFWinControls@EA@@QAEXPAX@Z  0098f8b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?GetScrollbarDrawable@WinTreeView@UTFWinControls@EA@@QAEPAXH@Z  0098fb80  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?IsScrollbarVisible@WinTreeView@UTFWinControls@EA@@QAEHH@Z  0098fba0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?InnerChildRemoveAllRecursive@TreeNode@UTFWinControls@EA@@QAEXXZ  00990040  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0098f400/s0098f400.cpp  ?FUN_00990350@UTFWinControls@EA@@YAXPAUWinTreeView@12@@Z  00990350  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
