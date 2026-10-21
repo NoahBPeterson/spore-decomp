@@ -1,0 +1,6 @@
+00b11160 878 HermiteEval: cubic Hermite quaternion interpolation reconstructed faithfully from the decompile but approximate; retail precomputes all tangent terms into stack slots (sub esp,0x54) and uses SSE scheduler differently; equiv FAIL
+00b11530 75 FUN_00b11530: forward 0x10-stride copy: retail keeps the `from` induction variable spilled to the stack ([esp+8]) and reloads `to` per iteration; MSVC keeps both in registers; equiv FAIL
+00b115c0 21 FUN_00b115c0: 0x10-stride copy: systematic register assignment differs (retail keeps `from` in ecx and `dest` in eax; MSVC's allocator picks the reverse); equiv FAIL
+00b11600 13 GmeEditorResBase::Destroy: MSVC hoists `mov ecx,[esi+0x30c]` above the three vtable stores; retail emits the stores first (single-instruction scheduling difference); equiv WEAK
+00b11790 59 DirectionToSurfacePosition: retail assigns the three scaled direction components to xmm1/xmm2/xmm3 in field order; MSVC rotates the xmm allocation (xmm3/xmm1/xmm2); equiv PASS
+00b118a0 237 ResetState: retail keeps redundant self-stores (e.g. `movss [esi+0x30], xmm0`) that MSVC elides, and schedules the interleaved byte stores around the mulss differently; equiv PASS
