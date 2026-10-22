@@ -14,6 +14,9 @@ usage: opencode_sup.py <group> <command> [args]
                           aliases are created by tools/opencode_cache_ns.py). Re-prompt to apply to live sessions.
 Group file: work/opencode/groups/<group>.json = {"batch", "provider", "model", "ranges": [[a, b], ...],
             "sessions": {}, "cache_ns": N (optional, per-session prompt-cache namespace count)}
+Queue groups ("queue": true, "workers": N in place of "ranges"): every session takes slices one at a time from the
+batch's shared queue (tools/matching/claim.py); "range" k is then worker k and its progress counts the slices it has
+claimed. The prompt's {W} is the worker index.
 The broker for the group reads work/opencode/sessions_<group>.txt (kept in sync here).
 """
 import base64, glob, json, os, re, subprocess, sys, time, urllib.error, urllib.parse, urllib.request
@@ -47,6 +50,10 @@ GF = W("work/opencode/groups", group + ".json")
 G = json.load(open(GF))
 SESS = G.setdefault("sessions", {})  # range index (str) -> session id
 BATCH = json.load(open(W("work/batches", G["batch"] + ".json")))
+QUEUE = bool(G.get("queue"))
+NK = int(G["workers"]) if QUEUE else len(G["ranges"])   # ranges, or queue workers
+sys.path.insert(0, W("tools/matching"))
+import claim  # noqa: E402
 
 
 def save():
@@ -63,10 +70,16 @@ def model(k=None):
     return {"providerID": G["provider"], "id": mid}
 
 
+NUDGE_QUEUE = ("Continue your task: run .venv/bin/python tools/matching/claim.py %s %s (it prints the slice you hold if "
+               "it is unfinished, else your next slice), finish that slice, and keep claiming until it prints NO SLICE; "
+               "then give the final one-line-per-slice summary.")
 PROMPT = open(W("work/opencode", G.get("prompt") or "wave_prompt.txt")).read()
 
 
 def prompt_for(k):
+    if QUEUE:
+        return (PROMPT.replace("{BATCH}", G["batch"]).replace("{W}", str(k))
+                .replace("{N}", str(sum(len(e["vas"]) for e in BATCH))))
     a, b = G["ranges"][k]
     n = sum(len(BATCH[i]["vas"]) for i in range(a, b + 1))
     # Migration batches (docs/migration-runbook.md s8a): entries carry "module" = "<dir>/<obj stem>";
@@ -91,6 +104,10 @@ def fixlog_vas():
 
 
 def progress(k):
+    if QUEUE:  # the slices worker k has claimed; exact = their manifest rows
+        tot, done, _left = claim.worker_progress(G["batch"], BATCH, k)
+        mans = [W("match/slices", BATCH[i]["id"], "manifest.txt") for i in claim.held(claim.load_claims(G["batch"]), k)]
+        return tot, done, sum(1 for p in mans if os.path.exists(p) for l in open(p) if l.strip() and l[0] != "#")
     a, b = G["ranges"][k]
     tot = done = ok = 0
     for i in range(a, b + 1):
@@ -196,7 +213,7 @@ elif cmd == "status":
     act = api("GET", "/api/session/active").get("data", {})
     allss = {s["id"]: s for s in api("GET", "/api/session?limit=500").get("data", [])}
     T = [0.0, 0, 0, 0, 0]
-    for k in range(len(G["ranges"])):
+    for k in range(NK):
         tot, done, ok = progress(k)
         sid = SESS.get(str(k))
         s = allss.get(sid, {}) if sid else {}
@@ -205,15 +222,17 @@ elif cmd == "status":
         tk = s.get("tokens", {})
         inp, cr = tk.get("input", 0), tk.get("cache", {}).get("read", 0)
         state = "-" if not sid else ("active" if sid in act else "idle")
+        where = "%d slices" % len(claim.held(claim.load_claims(G["batch"]), k)) if QUEUE else G["ranges"][k]
         print("r%-3d %s %-6s funcs %3d/%-3d exact %3d  $%.3f  cache %2.0f%%  %s" % (
-            k, G["ranges"][k], state, done, tot, ok, cost, 100.0 * cr / max(1, inp + cr), sid or ""))
+            k, where, state, done, tot, ok, cost, 100.0 * cr / max(1, inp + cr), sid or ""))
         T = [T[0] + cost, T[1] + done, T[2] + tot, T[3] + ok, T[4] + (1 if state == "active" else 0)]
-    print("TOTAL funcs %d/%d exact %d  $%.2f  active %d  launched %d/%d" % (T[1], T[2], T[3], T[0], T[4], len(SESS),
-                                                                             len(G["ranges"])))
+    print("TOTAL funcs %d/%d exact %d  $%.2f  active %d  launched %d/%d" % (T[1], T[2], T[3], T[0], T[4], len(SESS), NK))
+    if QUEUE:
+        print("queue: %d of %d slices unclaimed" % (len(BATCH) - len(claim.load_claims(G["batch"])["claims"]), len(BATCH)))
 
 elif cmd == "launch":
     n = int(args[0]) if args else 1
-    for k in range(len(G["ranges"])):
+    for k in range(NK):
         if n <= 0:
             break
         if str(k) in SESS:
@@ -255,9 +274,9 @@ elif cmd == "nudge":
     assert sid in SESS.values(), "not a session of this group"
     k = next(kk for kk, s in SESS.items() if s == sid)
     api("POST", "/api/session/%s/model" % sid, {"model": model(int(k))})  # prompt's "model" field doesn't change it
-    api("POST", "/api/session/%s/prompt" % sid, {"text": "Continue your task: check the files already written in your "
-        "slices and finish the remaining slices, then give the final one-line-per-slice summary.",
-        "model": model(int(k))})
+    api("POST", "/api/session/%s/prompt" % sid, {"text": NUDGE_QUEUE % (G["batch"], k) if QUEUE else "Continue your task: "
+        "check the files already written in your slices and finish the remaining slices, then give the final "
+        "one-line-per-slice summary.", "model": model(int(k))})
     print("nudged", sid)
 
 elif cmd == "ns":  # set (or clear) the per-session cache-namespace count for this group

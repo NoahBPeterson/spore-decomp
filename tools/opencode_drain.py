@@ -20,6 +20,10 @@ Each pass:
     one 40-function slice for 7.5 h, so neither the nudge cap nor the per-call hang check fired, the drain never
     completed, and the verify/commit steps queued behind it never ran). 0 disables. The clock starts when the
     drain first sees the range, so a restart grants a fresh window.
+  * queue groups ("queue": true, "workers": N; tools/matching/claim.py): range k is worker k, its progress counts the
+    slices it has claimed, and it is done only once the queue is empty and its claimed slices are settled. A worker
+    that settles more functions after a nudge starts a fresh nudge count (it stops after every few slices; that is
+    not a stuck session).
 Exits 0 ("DRAIN_COMPLETE") once every range is done or abandoned. Safe to kill and restart: its only
 state is work/opencode/drain_<group>.log, from which a restart re-reads the nudge counts and the
 abandoned ranges.
@@ -72,6 +76,15 @@ GF = W("work/opencode/groups", a.group + ".json")
 G = json.load(open(GF))
 SESS = G.get("sessions", {})
 BATCH = json.load(open(W("work/batches", G["batch"] + ".json")))
+QUEUE = bool(G.get("queue"))
+NK = int(G["workers"]) if QUEUE else len(G["ranges"])
+sys.path.insert(0, W("tools/matching"))
+import claim  # noqa: E402
+NUDGE = ("Continue your task: run .venv/bin/python tools/matching/claim.py %s %%s (it prints the slice you hold if it is "
+         "unfinished, else your next slice), finish that slice, and keep claiming until it prints NO SLICE; then give "
+         "the final one-line-per-slice summary." % G["batch"]) if QUEUE else (
+         "Continue your task: check the files already written in your slices and finish the remaining slices, then "
+         "give the final one-line-per-slice summary.")
 LOG = W("work/opencode", "drain_%s.log" % a.group)
 
 
@@ -90,7 +103,11 @@ def model_of(k):
 
 def progress(k, unsettled=None):
     """(functions, settled) of range k; `unsettled` (a list) gets the migration VAs not yet settled, or
-    '<slice>:<n> unrecorded' for a slice entry."""
+    '<slice>:<n> unrecorded' for a slice entry. Queue groups: over worker k's claimed slices, and while the queue still
+    has slices the total is raised by one so the worker never counts as done."""
+    if QUEUE:
+        tot, done, left = claim.worker_progress(G["batch"], BATCH, k, unsettled)
+        return tot + (1 if left else 0), done
     lo, hi = G["ranges"][k]
     tot = done = 0
     for i in range(lo, hi + 1):
@@ -176,6 +193,7 @@ def last_assistant(sid):
 
 
 nudged_at = {}   # sid -> (monotonic time, done-count when nudged)
+nudge_done = {}  # range -> done-count at its last nudge (queue groups reset the nudge count when it grows)
 moved = {}       # range -> (time the settled count last changed, that count)
 nudges = {}      # range -> nudges sent (re-read from the log on restart)
 abandoned = set()
@@ -194,7 +212,7 @@ while True:
     if isinstance(active, list):
         active = {s.get("id", s) if isinstance(s, dict) else s: 1 for s in active}
     finished = busy = 0
-    for k in range(len(G["ranges"])):
+    for k in range(NK):
         sid = SESS.get(str(k))
         if not sid:
             continue
@@ -242,6 +260,8 @@ while True:
             continue
         if since < a.cooldown:
             continue
+        if QUEUE and done > nudge_done.get(k, done):
+            nudges[k] = 0
         if nudges.get(k, 0) >= a.max_nudges:
             uns = []
             progress(k, uns)
@@ -250,16 +270,15 @@ while True:
             finished += 1
             continue
         nudges[k] = nudges.get(k, 0) + 1
+        nudge_done[k] = done
         log("nudge r%d %s (done %d/%d, idle %.0fs, nudge %d of %d)" % (k, sid, done, tot, since, nudges[k], a.max_nudges))
         api("POST", "/api/session/%s/model" % sid, {"model": model_of(k)})
-        r = api("POST", "/api/session/%s/prompt" % sid, {"text": "Continue your task: check the files already "
-            "written in your slices and finish the remaining slices, then give the final one-line-per-slice summary.",
-            "model": model_of(k)})
+        r = api("POST", "/api/session/%s/prompt" % sid, {"text": NUDGE % k if QUEUE else NUDGE, "model": model_of(k)})
         if "error" in r:
             log("  nudge failed r%d: %s" % (k, r))
         nudged_at[sid] = (now, done)
-    log("pass %d: %d/%d ranges done (%d abandoned), %d busy/working" % (loops, finished, len(G["ranges"]), len(abandoned), busy))
-    if finished == len(G["ranges"]):
+    log("pass %d: %d/%d ranges done (%d abandoned), %d busy/working" % (loops, finished, NK, len(abandoned), busy))
+    if finished == NK:
         log("DRAIN_COMPLETE")
         sys.exit(0)
     if a.once:

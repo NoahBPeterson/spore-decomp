@@ -39,7 +39,7 @@ else:
     ALLOWED_PATH = re.compile(r"^(?:%s/)?(?:match/slices/%s/[^/]+|symbols/slices/%s\.txt|work/match/.*)$"
                               % (re.escape(ROOT), IDS, IDS))
     MIGRATE_TOOL = ""
-PY_TOOLS = re.compile(r"^(?:\.venv/bin/python3?\s+)?(?:" + MIGRATE_TOOL + r"tools/matching/(?:slice_info|card|chk|cmpdis|try_variants|run_all|od_names|"
+PY_TOOLS = re.compile(r"^(?:\.venv/bin/python3?\s+)?(?:" + MIGRATE_TOOL + r"tools/matching/(?:slice_info|claim|card|chk|cmpdis|try_variants|run_all|od_names|"
                       r"disasm|pattern_info|cmpobj|patterns|libmatch|asm_audit)\.py|tools/pdb_type\.py|"
                       r"tools/difftest/(?:equiv|batch|slice)\.py)(?:\s|$)")
 SAFE_CMD = re.compile(r"^(?:rg|ls|cat|head|tail|wc|sort|uniq|cut|tr|echo|printf|true|false|test|\[|pwd|file|xxd|od|"

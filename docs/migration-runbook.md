@@ -617,6 +617,15 @@ instantiation `eastl::operator==<char>` 0x555020 stays in s00554c30, `leave_in_s
 - **`opencode_drain.py --stall S`** (default 7200, added 2026-10-16): an unfinished range whose settled-function count has
   not moved for S seconds is interrupted, logged `STALLED` + `ABANDONED`, and counted as done, so one slow session cannot
   hold the drain (and whatever is queued behind it) open all night. Round 5's ealog_imp session did exactly that.
+- **Queue groups** (added 2026-10-21): a group file with `"queue": true, "workers": N` (no `"ranges"`) and
+  `"prompt": "wave_prompt_queue.txt"` gives every session the whole batch as a shared queue: the session runs
+  `tools/matching/claim.py <batch> <worker>`, which re-prints the slice it holds until all its VAs are in
+  manifest/nonmatching/partial and then claims the next unclaimed slice in batch order (claims in
+  `work/opencode/claims_<batch>.json`; `claim.py <batch> --status` lists them). `opencode_sup.py` and `opencode_drain.py`
+  treat range k as worker k; a worker is done once the queue is empty and its slices are settled, and a worker that
+  settles more functions after a nudge gets a fresh nudge count. Why: with fixed ranges gold4 had 28 sessions busy at
+  23:00 and 5 at 03:00, because sessions with easy ranges stopped early. Build queue batches largest slice first, so
+  the long slices start early and the short ones fill the gaps at the end.
 - Hand templates (all "Hand-maintained", layout from the dev PDB, sizes VC9-probed, unverified in retail):
   `rw/math/fpu/VectorTemplates.h` (+`Matrix44Template` 0x40, `QuaternionTemplate` 0x10), `rw/BaseResourceTemplates.h`
   (`BaseResourceDescriptors<4>` 0x20, `BaseResources<4>` 0x10, `BaseResourceDescriptorType<T>`), `rw/math/vpu/VecFloatRef.h` (4),
