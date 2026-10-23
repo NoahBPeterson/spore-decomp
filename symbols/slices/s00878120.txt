@@ -1,0 +1,10 @@
+00878120 png_write_PLTE  # libpng 1.2.25 pngwutil.c; whole-TU include byte-exact with /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast
+00878230 png_write_hIST  # libpng 1.2.25 pngwutil.c; whole-TU include byte-exact
+00878310 png_check_keyword  # libpng 1.2.25 pngwutil.c; whole-TU include byte-exact
+008784f0 png_write_tEXt  # libpng 1.2.25 pngwutil.c; whole-TU include byte-exact
+008785d0 png_write_zTXt  # libpng 1.2.25 pngwutil.c; whole-TU include byte-exact
+00878710 png_write_pCAL  # libpng 1.2.25 pngwutil.c; unnamed in the binary, identified by byte-exact whole-TU compile
+00878e80 png_write_IHDR  # libpng 1.2.25 pngwutil.c; whole-TU include byte-exact
+008792a0 png_write_IDAT  # libpng 1.2.25 pngwutil.c; unnamed in the binary, identified by byte-exact whole-TU compile
+008793d0 png_write_IEND  # libpng 1.2.25 pngwutil.c; whole-TU include byte-exact
+00879440 png_write_gAMA  # libpng 1.2.25 pngwutil.c; whole-TU include byte-exact
