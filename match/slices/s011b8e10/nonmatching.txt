@@ -1,0 +1,2 @@
+# All 13 functions in this slice reproduce byte-exactly from the upstream
+# OpenSSL 0.9.8g translation units; see manifest.txt.

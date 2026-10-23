@@ -1,0 +1,15 @@
+# slice s011b8e10 -- OpenSSL 0.9.8g upstream TUs, lib_cblock copies
+# flags in every row; md5 rows also need the crypto dir on the include path
+slices/s011b8e10/md5_dgst.cpp   _MD5_Update            011b8e10  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011b8e10/md5_dgst.cpp   _MD5_Final             011b90b0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011b8e10/v3_utl.cpp     _X509V3_add_value      011b91f0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011b8e10/v3_utl.cpp     _i2s_ASN1_ENUMERATED   011b9350  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011b8e10/v3_utl.cpp     _i2s_ASN1_INTEGER      011b93a0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011b8e10/v3_utl.cpp     _s2i_ASN1_INTEGER      011b93f0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011b8e10/v3_utl.cpp     _X509V3_get_value_bool 011b9530  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011b8e10/v3_utl.cpp     _hex_to_string         011b9900  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011b8e10/v3_utl.cpp     _string_to_hex         011b9990  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011b8e10/v3_utl.cpp     _X509V3_parse_list     011b9d20  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011b8e10/t_x509.cpp     _X509_NAME_print       011ba540  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011b8e10/a_enum.cpp     _ASN1_ENUMERATED_to_BN 011ba680  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011b8e10/asn1_gen.cpp   _parse_tagging         011bb170  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iscratch_s011b8e10_inc
