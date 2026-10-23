@@ -1,0 +1,9 @@
+00e7bfb0 FUN_00e7bfb0  # cSPCell desired-scale x87 interpolator + animation timer; kills+returns false when scale collapses on a non-avatar; 8-byte schedule diff
+00e7c080 SP_sUpdateCellPosition  # integrate velocity / fluid-advected drift, save prevPos, push collision proxy (0x00e87040), kill out-of-range non-avatar; body not byte-exact
+00e7c3f0 sMarkerActivate  # pick player/enemy resource handle by marker group, dispatch marker type 0/1/2 to sGenDistribute/sGenCluster/sGenPlants with a variadic 0x00e5a9c0 roll
+00e7c500 FUN_00e7c500  # recursive spawn-marker scatter: roll random, walk 0x4c-stride marker list, activate or recurse for group-3 box markers
+00e7c6c0 FUN_00e7c6c0  # scatter one level grid block: world-space box, resolve source level, walk list spawning entries via 0x00e7c500
+00e7c8c0 SP_sUpdateCells  # per-frame update of every cell in mCells (cCellGame+0x1c): avatar path vs NPC path, animation/deformation, scale threshold
+00e7cb90 FUN_00e7cb90  # start goldy cinematic if level flag +0x69 clear; byte-exact
+00e7cbb0 FUN_00e7cbb0  # trigger-mgr stop + level gate: virtual calls at vtable +4/+0xc, LayerCatalog lookups, FNV hashes for allout names
+00e7cd10 FUN_00e7cd10  # validate cell parent chains in mCells and scatter every grid block via 0x00e7c6c0
