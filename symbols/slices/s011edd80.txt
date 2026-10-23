@@ -1,0 +1,8 @@
+# va        symbol
+011edd80    ?D3D9SoftStateDispatch@CompiledState@graphics@rw@@QAEPAMPAM@Z  # rw::graphics::CompiledState::D3D9SoftStateDispatch(float*)
+011ee2f0    ?D3D9RenderStateDispatch@CompiledState@graphics@rw@@QAEPAHPAH@Z  # rw::graphics::CompiledState::D3D9RenderStateDispatch(int*)
+011ee380    ?D3D9Palette_Raster_TSS_Samp_Dispatch@CompiledState@graphics@rw@@QAEPAIPAH@Z  # rw::graphics::CompiledState::D3D9Palette_Raster_TSS_Samp_Dispatch(int*)
+011ee580    ?Dispatch@CompiledState@graphics@rw@@QAEXXZ  # rw::graphics::CompiledState::Dispatch()
+011ee6b0    ?SetRaster@EmbeddedState@graphics@rw@@QAEXHH@Z  # rw::graphics::EmbeddedState::SetRaster(int,int)
+011ee870    ?D3D9GetTextureStageState@EmbeddedState@graphics@rw@@QAEHH@Z  # rw::graphics::EmbeddedState::D3D9GetTextureStageState(int)
+011eea30    ?D3D9HasTextureStageState@EmbeddedState@graphics@rw@@QAEXHHH@Z  # rw::graphics::EmbeddedState::D3D9HasTextureStageState(int,int,int)
