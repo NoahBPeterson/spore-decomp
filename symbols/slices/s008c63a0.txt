@@ -1,0 +1,5 @@
+008c63a0 MergeBits  # PDB name; __fastcall bit-packing helper; naked asm, byte-exact
+008c6500 FUN_008c6500  # byte-run copy helper; naked asm, byte-exact
+008c65d0 FUN_008c65d0  # __fastcall codec helper (7 args); naked asm, byte-exact
+008c6720 ScaleBits  # PDB name; image rescale helper; naked asm, byte-exact
+008c6990 ExtractBitMap  # PDB candidate; packed-bitmap decoder w/ call-through table @0x8c6e5c; naked asm, byte-exact
