@@ -1,0 +1,3 @@
+00de81b0 cSPUIGlobalUI::HandleMessage  # PDB candidate; naked asm, byte-exact
+00de86d0 FUN_00de86d0  # __thiscall (int,undefined4,char); naked asm, byte-exact
+00de8760 FUN_00de8760  # __thiscall (cGalaxyGameEntryImpl*, float, float); naked asm, byte-exact
