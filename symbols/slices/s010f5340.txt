@@ -1,0 +1,11 @@
+010f5340 hk3AxisSweep::getAabbFromNode  # symbols/havok_names.txt (havok identical-code); complete, non-byte-exact (302 vs 313, register-only)
+010f5480 hkAlgorithm::quickSortRecursive<hkBpEndPoint,hkAlgorithm::less<hkBpEndPoint> >  # verbatim hkSort.inl template (work/ext/havok2013); byte-exact
+010f5500 hk3AxisSweep::beginOverlapCheckMarker  # inferred: no symbol on card; marker-insert helper, pairs with endOverlapCheckMarker; byte-exact
+010f5590 hk3AxisSweep::endOverlapCheckMarker  # inferred: no symbol on card; marker-insert helper, pairs with beginOverlapCheckMarker; byte-exact
+010f5620 hk3AxisSweep::hkBpAxis::removeBatch  # inferred: no symbol on card; hkBpAxis marker-removal helper (calls remove 010f50f0); byte-exact
+010f56c0 hk3AxisSweep::hkBpAxis::insert  # inferred: no symbol on card; hkBpAxis endpoint-insert helper; byte-exact
+010f5760 hk3AxisSweep::reQuerySingleObject  # symbols/havok_names.txt (havok identical-code); complete, non-byte-exact (373 vs 375)
+010f58e0 hk3AxisSweep::addObject  # symbols/havok_names.txt (havok identical-code); complete, non-byte-exact (1239 vs 1426)
+010f5e80 hk3AxisSweep::removeObject  # symbols/havok_names.txt (havok identical-code); complete, non-byte-exact (942 vs 967)
+010f6250 hk3AxisSweep::getAllAabbs  # symbols/havok_names.txt (havok identical-code); byte-exact
+010f62c0 hk3AxisSweep::getAabb  # symbols/havok_names.txt (havok identical-code); byte-exact
