@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00871d50/s00871d50.cpp  _png_do_read_transformations  00871d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00871d50/s00871d50.cpp  _png_decompress_chunk  008722c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00871d50/s00871d50.cpp  _png_do_read_interlace  00872970  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00871d50/s00871d50.cpp  _png_handle_IHDR  008733a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00871d50/s00871d50.cpp  _png_handle_gAMA  00873750  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
