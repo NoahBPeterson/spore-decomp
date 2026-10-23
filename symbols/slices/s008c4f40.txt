@@ -1,0 +1,2 @@
+008c4f40 GetFontWideSbitMetrics  # PDB name; naked asm, byte-exact
+008c5320 FindGlyph_blocClass  # PDB candidate; naked asm, byte-exact
