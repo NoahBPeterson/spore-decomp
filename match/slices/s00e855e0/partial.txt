@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00e855e0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 1144 B.  __thiscall float/vector routine (2 args): single internal branch/call at 0xe85a19, otherwise straight-line SSE float math; 3 base relocs (absolute float-constant/data refs) emitted raw.
+00e85a60  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 860 B.  float/vector routine (6 args: int,int,int,int,float*,float*): FUN_00e853c0/FUN_00e85ac0/FUN_00e85bb0, eastl helper (FUN_011e073e), FUN_00e85c20 and FUN_00e855e0; no relocs.

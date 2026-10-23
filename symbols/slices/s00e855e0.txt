@@ -1,0 +1,2 @@
+00e855e0 FUN_00e855e0  # __thiscall float/vector routine; naked asm, byte-exact
+00e85a60 FUN_00e85a60  # float/vector routine (6 args); naked asm, byte-exact
