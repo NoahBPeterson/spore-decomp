@@ -1,0 +1,4 @@
+# slice s00ad3f10 -- SPAppStateManager.obj functions 0x00ad3f10 .. 0x00ad4a10
+# (only the byte-exact ones are listed)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00ad3f10/s00ad3f10.cpp  ?ScalarDtor@cResObj@@QAEPAXI@Z  00ad3f10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

@@ -1,0 +1,3 @@
+00ad3f10  ?ScalarDtor@cResObj@@QAEPAXI@Z  # Simulator vignette-context scalar-deleting destructor (this in ECX, flags in [E+4]; ret 4) -- Claude-coined class name
+00ad4550  ?FUN_00ad4550@@YA_NPAHD@Z  # vignette/actor behaviour callback: cdecl bool(int* param_1, char param_2)
+00ad4a10  ?FUN_00ad4a10@@YAPAHXZ  # GetActionInventory(): cdecl int*(void)
