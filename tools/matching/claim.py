@@ -28,10 +28,22 @@ def load_claims(batch):
 
 
 def unrecorded(entry):
-    """VAs of a slice entry that are in none of its manifest (VA = 3rd column), nonmatching or partial rows."""
+    """VAs of a slice entry that are in none of its manifest (VA = 3rd column), nonmatching or partial rows.
+    A rework entry ("rework": true, batch part1 on: functions that are already partial) is settled per VA once the
+    VA is in manifest.txt or nonmatching.txt, or the session logged "<va> <verdict> <reason>" in
+    work/match/scratch_<id>_fixlog.txt (it could not be completed); a partial.txt row alone does not count."""
     want = {v.lower().lstrip("0") for v in entry["vas"]}
     seen = set()
-    for f, col in (("manifest.txt", 2), ("nonmatching.txt", 0), ("partial.txt", 0)):
+    files = (("manifest.txt", 2), ("nonmatching.txt", 0)) if entry.get("rework") else \
+        (("manifest.txt", 2), ("nonmatching.txt", 0), ("partial.txt", 0))
+    if entry.get("rework"):
+        fl = W("work/match", "scratch_%s_fixlog.txt" % entry["id"])
+        if os.path.exists(fl):
+            for l in open(fl, errors="replace"):
+                p = l.split()
+                if len(p) >= 2 and re.fullmatch(r"(0x)?[0-9a-fA-F]{6,8}", p[0]):
+                    seen.add((p[0][2:] if p[0].lower().startswith("0x") else p[0]).lower().lstrip("0"))
+    for f, col in files:
         p = W("match/slices", entry["id"], f)
         if not os.path.exists(p):
             continue
