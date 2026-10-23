@@ -1,0 +1,41 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+#
+# Slice s0119a2e0 -- OpenSSL 0.9.8g lib_cblock copies (contiguous with slice
+# s01198850, which ends at 0119a180).  Seven upstream translation units compiled
+# verbatim as C (/TC) with the OpenSSL 0.9.8g build flags; every function is
+# byte-exact.
+#
+#   crypto/evp/digest.c       digest.cpp
+#     0119a2e0 EVP_DigestInit_ex      0119a510 EVP_MD_CTX_copy_ex
+#   crypto/asn1/a_int.c       a_int.cpp
+#     0119a850 c2i_ASN1_INTEGER       0119a9c0 ASN1_INTEGER_set
+#     0119ab00 BN_to_ASN1_INTEGER     0119abd0 ASN1_INTEGER_to_BN
+#   crypto/asn1/a_bitstr.c    a_bitstr.cpp
+#     0119acf0 c2i_ASN1_BIT_STRING     0119adf0 ASN1_BIT_STRING_set_bit
+#   crypto/asn1/tasn_utl.c    tasn_utl.cpp
+#     0119b180 asn1_do_adb
+#   crypto/x509v3/v3_pmaps.c  v3_pmaps.cpp
+#     0119b300 v2i_POLICY_MAPPINGS
+#   crypto/x509v3/v3_ncons.c  v3_ncons.cpp
+#     0119b480 v2i_NAME_CONSTRAINTS   0119b610 print_nc_ipadd
+#     0119b6e0 do_i2r_name_constraints
+#   crypto/x509v3/v3_pci.c    v3_pci.cpp
+#     0119b7e0 i2r_pci
+#
+# The include link work/match/scratch_s0119a2e0_inc carries the OpenSSL 0.9.8g
+# headers plus the e_os.h/opensslconf.h the Spore build was configured with
+# (same link as slice s01198850: OPENSSL_EXPORT_VAR_AS_FUNCTION undefined).
+slices/s0119a2e0/digest.cpp  _EVP_DigestInit_ex  0119a2e0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0119a2e0_inc
+slices/s0119a2e0/digest.cpp  _EVP_MD_CTX_copy_ex  0119a510  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0119a2e0_inc
+slices/s0119a2e0/a_int.cpp  _c2i_ASN1_INTEGER  0119a850  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0119a2e0_inc
+slices/s0119a2e0/a_int.cpp  _ASN1_INTEGER_set  0119a9c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0119a2e0_inc
+slices/s0119a2e0/a_int.cpp  _BN_to_ASN1_INTEGER  0119ab00  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0119a2e0_inc
+slices/s0119a2e0/a_int.cpp  _ASN1_INTEGER_to_BN  0119abd0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0119a2e0_inc
+slices/s0119a2e0/a_bitstr.cpp  _c2i_ASN1_BIT_STRING  0119acf0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0119a2e0_inc
+slices/s0119a2e0/a_bitstr.cpp  _ASN1_BIT_STRING_set_bit  0119adf0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0119a2e0_inc
+slices/s0119a2e0/tasn_utl.cpp  _asn1_do_adb  0119b180  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0119a2e0_inc
+slices/s0119a2e0/v3_pmaps.cpp  _v2i_POLICY_MAPPINGS  0119b300  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0119a2e0_inc
+slices/s0119a2e0/v3_ncons.cpp  _v2i_NAME_CONSTRAINTS  0119b480  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0119a2e0_inc
+slices/s0119a2e0/v3_ncons.cpp  _print_nc_ipadd  0119b610  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0119a2e0_inc
+slices/s0119a2e0/v3_ncons.cpp  _do_i2r_name_constraints  0119b6e0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0119a2e0_inc
+slices/s0119a2e0/v3_pci.cpp  _i2r_pci  0119b7e0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0119a2e0_inc
