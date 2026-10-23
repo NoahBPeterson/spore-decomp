@@ -1,0 +1,3 @@
+0135e000 314 property-descriptor dynamic initializer; complete, cl hoists a different constant set into ebp/ebx (immediate layout diff only) flags /O2 /MD /Gy /EHsc /TP difftest PASS 100%
+01361ef0 254 property-descriptor dynamic initializer; complete, extra callee-saved constant hoist (ebx) vs original flags /O2 /MD /Gy /EHsc /TP difftest PASS 100%
+01364240 289 property-descriptor dynamic initializer; complete, cl hoists f0/f1/f5 into regs where original keeps only edx=f0 flags /O2 /MD /Gy /EHsc /TP difftest PASS 100%

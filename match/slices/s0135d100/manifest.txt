@@ -1,0 +1,5 @@
+slices/s0135d100/s0135d100.cpp  ?FUN_0135d100@@YAXXZ  0135d100  /O2 /MD /Gy /EHsc /TP
+slices/s0135d100/s0135d100.cpp  ?FUN_0135d720@@YAXXZ  0135d720  /O2 /MD /Gy /EHsc /TP
+slices/s0135d100/s0135d100.cpp  ?FUN_0135db90@@YAXXZ  0135db90  /O2 /MD /Gy /EHsc /TP
+slices/s0135d100/s0135d100.cpp  ?FUN_013621a0@@YAXXZ  013621a0  /O2 /MD /Gy /EHsc /TP
+slices/s0135d100/s0135d100.cpp  ?FUN_01363fe0@@YAXXZ  01363fe0  /O2 /MD /Gy /EHsc /TP
