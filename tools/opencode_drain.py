@@ -209,6 +209,10 @@ if os.path.exists(LOG):
 loops = 0
 while True:
     loops += 1
+    if QUEUE:  # a supervisor may add workers (replacing an abandoned one) while the drain runs
+        G = json.load(open(GF))
+        SESS = G.get("sessions", {})
+        NK = int(G["workers"])
     now = time.time()
     active = api("GET", "/api/session/active").get("data", {})
     if isinstance(active, list):
