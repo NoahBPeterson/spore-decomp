@@ -1,0 +1,12 @@
+slices/s00eb8340/s00eb8340.cpp  ?Dtor@Obj@@QAIXXZ  00eb8340  /O2 /MD /Gy /TP
+slices/s00eb8340/s00eb8340.cpp  ?Ctor4@Obj@@QAEXPAX000@Z  00eb83f0  /O2 /MD /Gy /TP
+slices/s00eb8340/s00eb8340.cpp  ?GetBlob@Obj@@QAEXPAX@Z  00eb8490  /O2 /MD /Gy /TP
+slices/s00eb8340/s00eb8340.cpp  ?OnMsg@Obj@@QAEXPAX@Z  00eb84b0  /O2 /MD /Gy /TP
+slices/s00eb8340/s00eb8340.cpp  ?ClearAll@Obj@@QAIXXZ  00eb8500  /O2 /MD /Gy /TP
+slices/s00eb8340/s00eb8340.cpp  ?OnShow@Obj@@QAEXPAX@Z  00eb85a0  /O2 /MD /Gy /TP
+slices/s00eb8340/s00eb8340.cpp  ?Activate@Obj@@QAIXXZ  00eb8b30  /O2 /MD /Gy /TP
+slices/s00eb8340/s00eb8340.cpp  ?MakeLayout@Obj@@QAIXXZ  00eb8b90  /O2 /MD /Gy /TP
+slices/s00eb8340/s00eb8340.cpp  ?ReleaseAll@Obj@@QAIXXZ  00eb8e70  /O2 /MD /Gy /TP
+slices/s00eb8340/s00eb8340.cpp  ?OnSetTitle@Obj@@QAEXPAX@Z  00eb8ff0  /O2 /MD /Gy /TP
+slices/s00eb8340/s00eb8340.cpp  ?MakeSmallView@Obj@@QAEXPAX@Z  00eb9170  /O2 /MD /Gy /TP
+slices/s00eb8340/s00eb8340.cpp  ?Ctor2@Obj@@QAIPAXXZ  00eb9200  /O2 /MD /Gy /TP
