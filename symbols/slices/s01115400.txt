@@ -1,0 +1,12 @@
+01115400 hkMoppAabbCastVirtualMachine::aabbCast # set up the AABB cast job: MOPP node offset, inverse tree scale, two scaled query corners
+011155b0 hkAlgorithm::quickSortRecursive<hkVector4> # in-place quicksort of hull vertices with the merge-coordinate predicate
+01115730 hullEdgesLess            # edge-pair comparison used when welding hull triangles (shared end points)
+01115950 hkGeomConvexHullBuilder::vectorLessAndMergeCoordinates # lexicographic x/y/z less-or-equal, equal coordinates merge
+011159c0 hkVector4::Sub           # component wise other - this
+011159f0 sortByY                 # sort predicate on the y coordinate
+01115a20 sortByW                 # sort predicate on the w coordinate
+01115a50 quickSortHullPlane       # quicksort of 20 byte plane records
+01115bf0 hkAlgorithm::quickSortRecursive<WeightedNeighbour> # quicksort of 8 byte weighted neighbour records by y
+01115d00 hkGeomConvexHullBuilder::getAabb # min/max AABB of a vertex array, seeded with the first vertex
+01115e20 recentreVertices         # centre the vertices on the AABB centre and scale by reciprocal extents
+01116050 hkGeomConvexHullBuilder::convertFromUnitCube # scale unit cube vertices and translate them
