@@ -1,0 +1,11 @@
+010433e0 ?FUN_010433e0@@YAOPAVcPathSource@@MH@Z  # path-parameter lookup on a sampled path (x87 return)
+010434c0 ?FUN_010434c0@@YAOPAM0@Z  # 2D squared distance (x87)
+010434e0 ?FUN_010434e0@@YAOPAM0@Z  # 2D distance (x87)
+01043500 ?FUN_01043500@@YA_NIH@Z  # probe an effect id through the effects manager
+01043580 ?FUN_01043580@@YAXPAM000@Z  # orthonormal basis + 4x4 matrix from two points and an up axis
+01043770 ?FUN_01043770@@YAXPAVcTargetObject@@PAU?$AutoRefCount@VIEffect@@@@@Z  # push a target transform into an effect (SetTransform)
+01043860 ?FUN_01043860@@YAXPAVcTargetObject@@PAU?$AutoRefCount@VIEffect@@@@_N@Z  # space-stage "target in air" reticle update
+01043a50 ?FUN_01043a50@@YAXPAVcTargetObject@@PAU?$AutoRefCount@VIEffect@@@@_N@Z  # space-stage "pre-target in air" reticle update
+01043c60 ?FUN_01043c60@@YAXPAVcZooMarkerMgr@@PBUResourceKey@@@Z  # zoo-marker / minimap pin removal
+01043d10 ?FUN_01043d10@@YAXPAM0MPAUFloatVector@@@Z  # sample a segment into an xyz float buffer
+01043fd0 ?SetZooMarker@SP@@YAXPAVcZooMarkerMgr@@PBUResourceKey@@PBUVec3@@PAVcSpaceNoun@@@Z  # SP::SetZooMarker (zoo-marker + minimap pin creation)
