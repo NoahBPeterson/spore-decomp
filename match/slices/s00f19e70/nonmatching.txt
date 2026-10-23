@@ -1,0 +1,7 @@
+00f19e70 398 scenario-progress predicate query; register allocation/FP association differ
+00f1a120 398 dialog-target setup; layout-driven codegen differs
+00f1a320 259 goal/avatar scan; register allocation differs
+00f1a440 430 goal-pair scan; register allocation differs
+00f1a640 256 goal/act scan; register allocation differs
+00f1aa10 161 bbox distance lerp; maxss/minss vs x87 compare
+00f1ad00 198 goal-entry advance; codegen differs

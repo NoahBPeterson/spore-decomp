@@ -1,0 +1,7 @@
+slices/s00f19e70/s00f19e70.cpp  ?FUN_00f1a7a0@cScenarioPlayMode@Simulator@@QAE_NHPAUObjHdr@@@Z  00f1a7a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f19e70/s00f19e70.cpp  ?FUN_00f1a910@@YAXXZ  00f1a910  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f19e70/s00f19e70.cpp  ?SetState@cScenarioPlayMode@Simulator@@QAEXH@Z  00f1aae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f19e70/s00f19e70.cpp  ?FUN_00f1a890@cScenarioPlayMode@Simulator@@QAEXXZ  00f1a890  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f19e70/s00f19e70.cpp  ?FUN_00f1a7f0@cScenarioPlayMode@Simulator@@QAEXPAUObjHdr@@@Z  00f1a7f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f19e70/s00f19e70.cpp  ?FUN_00f1a970@cScenarioPlayMode@Simulator@@QAEXH@Z  00f1a970  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f19e70/s00f19e70.cpp  ?FUN_00f1a070@@YG_NPAUObjHdr@@@Z  00f1a070  /O2 /MD /Gy /TP /arch:SSE /fp:fast
