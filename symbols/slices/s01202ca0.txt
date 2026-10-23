@@ -1,0 +1,3 @@
+01202ca0 FUN_01202ca0  # void __thiscall (float,float*,undefined4) float/vector routine; naked asm, byte-exact
+01202fd0 FUN_01202fd0  # undefined4 __thiscall (undefined4*,undefined4,undefined4,int); naked asm, byte-exact
+012030c0 FUN_012030c0  # void (void) SSE vector routine; naked asm, byte-exact
