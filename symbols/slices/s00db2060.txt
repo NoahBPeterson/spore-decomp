@@ -1,0 +1,10 @@
+# slice s00db2060 - names inferred from call sites, vtables, member layout and call behaviour
+# (these are unnamed/Ghidra-named functions; the real caller-pushed arity is wider than the card's
+#  guessed symbol, so ctx is the 6th dword and pTask the 7th)
+00db2060  FUN_00db2060(cSPCreatureBase* pCreature, TaskCtx* ctx) -> char  # idle-animation init: PlayIdleAnimation(*(creature+0xb4c)+8, 0x10000, 0), sets the ctx animation ids and variant flag, then the 0x169f414 effect descriptor via creature vcall 0xdc
+00db21b0  FUN_00db21b0(cSPCreatureBase* pCreature, ..., TaskCtx* ctx, void* pTask, ...) -> char  # task bind: zero the three ctx AutoRefs, PlayIdleAnimation(*(creature+0xb4c)+8, 0x1000000, 0), bind refs from the 0x116d858/0xee02c7/0x4f396a66 keys and (when pTask) from pTask+8 vtbl slot 0xc, seed ctx+0x10 from the owner transform (slot 0x2c), spot = -1
+00db2410  FUN_00db2410(cSPCreatureBase* pCreature, ..., TaskCtx* ctx)  # task teardown: FUN_00c14750(pCreature,0) + creature vcall 0x84(0,0,0), release the active ref when state==5, re-find the spot when ctx spot >= 0, release ctx+0xc/+8/+4
+00db24c0  SP::TRIBE_REPAIR_Tick(cSPCreatureBase* pCreature, TaskCtx* ctx, float dt) -> char  # per-frame tribe-repair state machine (5 states): approach / find-spot / near-goal+animation / new-goal / re-select, with MoveToPointAtSpeed, MoveToPointAndFacingAtSpeed, cNavigationGoal::InitAt and FUN_00f924e0 speed lerp
+00db2c00  FUN_00db2c00(void* pThis)  # per-species effect emit: walk [pThis+0x14,pThis+0x18), map pObj+0x58 key to an effect id (0x159d564/568/56c), EffectsManager vcall 0x2c, fill the 0x88-byte descriptor and push it via the effect ref vcall 0x18/8
+00db2f10  FUN_00db2f10(void* pObj, ..., TaskCtx* ctx) -> char  # order query: FUN_00bca2c0(*(pObj+0xb4c)), require order->kind == 0x16, decode the sub-kind payload (+0x39) or the 0x15d1164 constant, store the key at ctx+0, return pObj vcall 0xb4(key) != 0
+00db2fa0  FUN_00db2fa0(..., TaskCtx* ctx)  # ctx ActiveRef teardown: clear ctx+0xc then release it (vcall slot 4), re-check and tail-call the release
