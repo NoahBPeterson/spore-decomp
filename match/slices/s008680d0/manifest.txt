@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008680d0/s008680d0.cpp  _png_sig_cmp  0086a8c0  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s008680d0/s008680d0.cpp  _png_default_error  0086aff0  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s008680d0/s008680d0.cpp  _png_default_warning  0086b110  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s008680d0/s008680d0.cpp  _updatewindow  00868db0  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s008680d0/s008680d0.cpp  _inflate_table  0086a3f0  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s008680d0/s008680d0_deflate.c  _deflate_slow  008680d0  /O2 /arch:SSE /MD /Gy /TC
+slices/s008680d0/s008680d0_deflate.c  _deflateInit2_  008685e0  /O2 /arch:SSE /MD /Gy /TC
