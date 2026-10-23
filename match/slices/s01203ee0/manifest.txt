@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Byte-exact matches (leaf functions; identical bytes under /vc71, RenderWare 4 core).
+slices/s01203ee0/s01203ee0.cpp  ?m01204180@@YAPAXPAHHH@Z  01204180  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s01203ee0/s01203ee0.cpp  ?m012045a0@Tree@@QAEHPAI@Z  012045a0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s01203ee0/s01203ee0.cpp  ?m01204620@Tree@@QAEPAXPAXPBU__m128@@@Z  01204620  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s01203ee0/s01203ee0.cpp  ?m012046f0@@YAPAXPAPAUTree@@HIIPBXHH@Z  012046f0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
