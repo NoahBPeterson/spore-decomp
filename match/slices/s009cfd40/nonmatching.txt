@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+009cfd40  98  SP::Host40 bone integrate (dir[]*scale then Bone_IntegrateVelocity(dt,v,a3)); complete (126B expected, ours 121B) but MSVC computes the three dir[i]*c products interleaved with the call-argument pushes and folds c's offset into a [eax+0x70] displacement, where the original batches all three products after the pushes and materialises p04+0x70; semantically equivalent -- equiv PASS (259 valid inputs, 100% coverage).
