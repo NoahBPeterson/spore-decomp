@@ -1,0 +1,2 @@
+slices/s00a7e3b0/s00a7e3b0.cpp  ?FUN_00a7e740@@YGXHHPAUcSPTransform@@0@Z  00a7e740  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a7e3b0/s00a7e3b0.cpp  ?FUN_00a7eb60@@YAHPAH0H@Z  00a7eb60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
