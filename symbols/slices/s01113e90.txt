@@ -1,0 +1,3 @@
+01113e90 FUN_01113e90  # void __thiscall (undefined2*,int*,int*,undefined4) w/ vtable dispatches; naked asm, byte-exact
+01113fd0 FUN_01113fd0  # void __thiscall (undefined2*,int*,int,float*) w/ vtable dispatches; naked asm, byte-exact
+01114310 FUN_01114310  # void __thiscall (undefined4*,undefined4*) field copy; naked asm, byte-exact

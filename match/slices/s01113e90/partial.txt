@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+01113e90  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 317 B.  void __thiscall(undefined2*, int*, int*, undefined4): FUN_01081360/FUN_01081440 plus virtual dispatches `call dword ptr [eax+0x24]`, `[eax+0x2c]`, `[eax+0x30]`, `[edx+0x2c]`, `[edx+0x30]`; no relocs.
+01113fd0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 829 B.  void __thiscall(undefined2*, int*, int, float*): virtual dispatches `call dword ptr [edx+0x24]`, `[edx+0x2c]`, `[eax+0x30]`; 1 base reloc emitted raw.
+01114310  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 85 B.  void __thiscall(undefined4*, undefined4*): straight-line field copy (`*param_1 = *param_2` ...), no calls; no relocs.
