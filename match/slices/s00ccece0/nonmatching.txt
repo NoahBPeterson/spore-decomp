@@ -1,0 +1,10 @@
+# va  diff-bytes  reason  (complete behaviourally-faithful source, not byte-exact)
+# tribe-mode module, cl 13.10, /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc, no /GS-).
+# Diff count is chk.py's, over the original symbol extent, for this build.
+# equiv.py verdicts are appended at the end of this file.
+#
+# ---- tools/difftest/equiv.py verdict (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) ----
+# WEAK: 00ccece0 (272 valid inputs, no mismatch, 17.8% coverage; 400 generated inputs,
+#   discarded 107 fault(read) / 20 fake-arity / 1 fault(write-prot)).  No memory, register or
+#   return-value divergence on any valid input.
+00ccece0  352  ShowSelection (cdecl, 5 stack args (void*, u32, int, float, char); the callers at 0x00cd0910, 0x00cd0e69, 0x00cd106c and 0x00cd11fd push arg5=flag, arg4=float, arg3=0, arg2=id, arg1=cursor and clean 0x14). Complete: the dead null-reset of the cursor smart pointer, the EffectsManager()->vtbl[0x2c](id, arg3, &cursor) gate, PlanetModel()->F_00b81630(&vec, cursor), the SelRecord build (count=0, scale=1.0f, flags=0, x/y/z from 0x169b264/268/26c, Mat33::Ctor(&0x169b240), flags|=4, count++, x/y/z=vec), both facing paths (arg5!=0 -> PlanetModel()->F_00b7e3b0; arg5==0 -> x87 1/sqrt(x*x+y*y+z*z+1e-8f), with the x87 fsqrt/fdivrp reproduced), F_006985b0/F_0069b440 plus the 9-dword matrix copy, flags|=2, count++, the f!=1.0f scale update, then cursor->vtbl[0x18](&rec), cursor->vtbl[8](0) and cursor->Release(). Residuals: (a) cl's stack allocator overlaps the path-A out-vector (original slot E+0x20) with the tail up-vector (original slot E+0x68), so the frame is 0x90 instead of 0x94 and every stack offset shifts by 4; (b) the x87 normalize keeps x/y/z live on the FP stack (fld st(0); fmul st(1)) where the original uses fmul st,st, and the eps is fadd qword (double) where the original has fadd dword; (c) the facing multiply stays in x87 where the original narrows the reciprocal sqrt to float and uses SSE mulss; (d) the path-A copy uses SSE movss where the original uses mov ecx/edx; (e) register renaming in the cursor-method tail.
