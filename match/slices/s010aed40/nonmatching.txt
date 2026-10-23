@@ -1,0 +1,11 @@
+# va  diff-bytes  status VERDICT flags: reason
+# Slice s010aed40 -- Havok 3.1.0 hkPoweredChain solver internals (SporeApp.exe 0x010aed40..0x010af742).
+# All three functions are "identical-code" Havok routines built by the dev toolset
+# (cl 13.10.x, /O2, whole-program optimisation): there are no calls at all (every
+# helper is inlined) and all arithmetic is x87.  The source below reconstructs the
+# input loads, the loop bounds and the stores, but the compiler's x87 register
+# schedule and exact expression nesting are unrecoverable from the disassembly, so
+# none of the three is byte-exact.
+010aed40 453 complete FAIL /vc71 /O2 /MD /Gy /EHsc /TP: _hkPoweredChain_RestoreVelocityValue; straight-line 462-byte x87 block (no branches) combining the two body-pivot displacements, the row rotation, the two reference quaternions and the stored row offset T[4]/T[5]; reconstruction under-codes it (241 bytes) -- difftest 5/5 valid inputs mismatched
+010aef10 1038 complete FAIL /vc71 /O2 /MD /Gy /EHsc /TP: unnamed helper between RestoreVelocityValue and ScanAndDisableMotors (inferred _hkPoweredChain_AccumulateConstraintVelocities): one loop over the chain's constraints (count at +4) that adds each constraint's transformed pivot velocity into two 4-vector accumulators; reconstruction under-codes it (357 bytes) -- difftest 5/5 valid inputs mismatched
+010af330 1016 complete FAIL /vc71 /O2 /MD /Gy /EHsc /TP: _hkPoweredChain_ScanAndDisableMotors; loops constraints last-to-first, accumulates the angular/linear velocity error from the 0x3c0-byte basis blocks, keeps the largest sub-threshold motor error over the three angular motors (status bits 0x03/0x0c/0x30 of flags[i*0x4c]) and rewrites that motor's status byte (1 below threshold / 3 at or above); reconstruction under-codes it (555 bytes) -- difftest 5/42 valid inputs mismatched
