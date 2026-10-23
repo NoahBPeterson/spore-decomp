@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0100e150/s0100e150.cpp  ?TryCreateMission@PirateRaidAllyEvent@@QAEHPAUIMission@@H@Z  0100e3c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0100e150/s0100e150.cpp  ?TryCreateMission@BiosphereCollapseEvent@@QAEHPAUIPlanetMission@@H@Z  0100e690  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0100e150/s0100e150.cpp  ?PickWeightedIndex@@YAHPAUIntVector@@@Z  0100e970  /O2 /MD /Gy /TP /arch:SSE /fp:fast
