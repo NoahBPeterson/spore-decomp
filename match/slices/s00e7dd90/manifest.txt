@@ -1,0 +1,4 @@
+# source  symbol  original VA  [flags override]
+# No byte-exact matches in this slice: every function either forwards its subject
+# through a custom register calling convention (cl's static-helper ABI) or tail-calls
+# such a helper, which cannot be reproduced when the function is compiled alone.

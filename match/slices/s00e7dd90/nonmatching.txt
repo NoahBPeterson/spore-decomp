@@ -1,0 +1,6 @@
+00e7dd90  272  static helper with a custom register ABI: the original keeps its subject and several temporaries in EDI/EBX/EAX across the body (symbol is 361 bytes vs 430), and its callees FUN_00e7d760/FUN_00e7a770 also use register conventions; the call sites cannot be reproduced from C++
+00e7df40  163  calls FUN_00e7d760, a static helper whose subject is passed in a register (custom ABI), and the original keeps its subject pointer in EBX across the body
+00e7e020  199  original passes its subject in ESI (custom register ABI for a same-TU static helper); recompiled alone the subject is a stack parameter, shifting every access
+00e7e130  820  SP::sDoEnd: original passes its subject in EDI and keeps it there across the whole switch (custom register ABI); its case callees FUN_00e7df40/FUN_00e7dd90/FUN_00e7dbd0 also forward register-convention subjects, so none of the calls can be reproduced
+00e7e6c0  161  SP::sUpdateInteraction: original receives its subject in EAX (custom register ABI) and reads it straight from eax at entry; a lone recompilation must take it as a stack parameter
+00e7e7a0   22  iterator loop over manager()->Next; the small residual diff comes from the surrounding register allocation when sUpdateInteraction's subject ABI differs
