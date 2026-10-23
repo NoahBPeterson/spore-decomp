@@ -1,0 +1,4 @@
+# source  symbol  original VA  [flags override]
+# No byte-exact matches in this slice: the destination array of FUN_00e5fa80 arrives in
+# EDI and its sub-calls pass their first argument in EAX (custom register ABI), and the
+# three numeric helpers did not reproduce cl's x87/SSE clamp and switch codegen.
