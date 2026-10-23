@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+0090b310  89  attlist8: complete; code is byte-exact (240 bytes) but chk.py's golden bounds merges the un-indexed element5 at 0090b400 (next index start is 0090b460), so it expects 329 bytes; flags /O2 /MD /Gy /EHsc /TP; difftest PASS (400/400 valid, 100.0% coverage)
+0090b460  149  element7: complete; switch over tok 0xf..0x26 whose jump table MSVC /Gy emits into .rdata while the original keeps it inline in .text right after the code (ours 272 vs orig 421 bytes); flags /O2 /MD /Gy /EHsc /TP; difftest PASS (400/400 valid, 85.2% coverage)
+0090b830  76  element6: complete; jump-table switch (ours 195 vs orig 271 bytes); /Gy emits the table into .rdata vs inline .text in the original, and the golden bounds also absorbs the un-indexed successor at 0090b900; flags /O2 /MD /Gy /EHsc /TP; difftest WEAK (400/400 valid, 47.4% coverage)
+0090baa0  72  attlist3: complete; jump-table switch (ours 119 vs orig 191 bytes); /Gy emits the table into .rdata vs inline .text; flags /O2 /MD /Gy /EHsc /TP; difftest PASS (400/400 valid, 81.8% coverage)
+0090bb60  69  element3: complete; jump-table switch (ours 170 vs orig 239 bytes); /Gy emits the table into .rdata vs inline .text; flags /O2 /MD /Gy /EHsc /TP; difftest PASS (400/400 valid, 71.9% coverage)
+0090bd20  201  element2: complete; jump-table switch (ours 275 vs orig 476 bytes); /Gy emits the table into .rdata vs inline .text; flags /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (1 unresolved reference: ?kStr_PCDATA@@3QB_WB)
+0090c100  81  attlist1: complete; jump-table switch (ours 151 vs orig 232 bytes); /Gy emits the table into .rdata vs inline .text; flags /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (1 unresolved reference: ?S_90c3d0@@YAXXZ [annotation-implausible 0090c3d0])
