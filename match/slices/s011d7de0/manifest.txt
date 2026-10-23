@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s011d7de0/p12_key.cpp  _PKCS12_key_gen_uni  011d7de0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011d7de0_inc
+slices/s011d7de0/p12_key.cpp  _PKCS12_key_gen_asc  011d8190  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011d7de0_inc
+slices/s011d7de0/ui_openssl.cpp  _popsig  011db070  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011d7de0_inc
+slices/s011d7de0/ui_openssl.cpp  _pushsig  011db130  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011d7de0_inc
+slices/s011d7de0/ecp_smpl.cpp  _ec_GFp_simple_group_set_curve  011db540  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011d7de0_inc
+slices/s011d7de0/ecp_smpl.cpp  _ec_GFp_simple_group_check_discriminant  011db7e0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011d7de0_inc
+slices/s011d7de0/ecp_smpl.cpp  _ec_GFp_simple_point_set_affine_coordinates  011dbc80  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011d7de0_inc
+slices/s011d7de0/ecp_smpl.cpp  _ec_GFp_simple_point_get_affine_coordinates  011dbcd0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011d7de0_inc
+slices/s011d7de0/ecp_smpl.cpp  _ec_GFp_simple_set_compressed_coordinates  011dbf60  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011d7de0_inc
