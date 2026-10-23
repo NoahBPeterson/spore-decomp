@@ -1,0 +1,9 @@
+00e65ad0 SP::cPartGfx::Clear  # cPartGfx::Clear - destroy/release every owned resource (PDB name; thiscall ret 4, arg = char destroy)
+00e66010 FUN_00e66010  # cell-part destructor; cell handle in EAX (register ABI); cells()->Get + part pool (gspCellGfx+0x168) Get/Clear/Free + overflow ref recycle via 0xe4ec30
+00e660e0 FUN_00e660e0  # continuous-death effect refresh: byte +0x112 gate + 0xe57340 count 1..2, create "cell_death_continuous" at owner+0xac (CreateEffectSafe 0x628450) then 0xe63480; else 0xe65a00 release
+00e661c0 FUN_00e661c0  # effect-owner reset; record in ECX; inlined eastl do_copy 0x5f4e10 + DoDestroyValues 0x5f3680, 0x6f43e0 + 0x70f520, then vcall 0xc through gspCellGfx+0x58
+00e66280 FUN_00e66280  # recursive effect-event fan-out; EffectsManager vcall 0x6c into a 0x80-entry buffer; switch type 0x12/0/2/0x102 -> 0xe65970 push, 0xe65410, gspCellGfx+0x54 vcall 0xc + 0xe653a0 pushObj
+00e663b0 FUN_00e663b0  # recursive descriptor walk; RbTree find 0xe5c780 + operatorIndex; kinds 0/1/3 -> factory vcall 0xc + pushObj / 0xe66280 / 0xe64980; recurse sat/sub + 0xe4fc20 grants
+00e665c0 FUN_00e665c0  # layer-catalog dispatcher; 0xe4cc40 lookup; 0x4c-byte records, jump-table over selector 0/1->0xe663b0(key), 2->0xe4cce0 group 10..0x12, 3->recurse
+00e666f0 FUN_00e666f0  # whole-cell effect-set builder; local eastl tree seeded via 0xe4ce40 + 0xe663b0, five layer lists via 0xe665c0, fixed entries 1/2/4/8 + 0xe4fc20(7), drain via 0x9a9600
+00e66840 FUN_00e66840  # world-effect spawner; world by owner list, descriptor 0xe619a0 + identity matrix 0x16b3dac + world-centre, CreateEffectSafe, push to gspCellGfx+0x161dc, retarget/release
