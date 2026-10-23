@@ -1,0 +1,3 @@
+010f7100 hk3AxisSweep::_updateAxis<1>  # y-axis sweep-and-prune update over the endpoint array at this+0x58 (hkBpNode + hkArray pair output)
+010f7480 hk3AxisSweep::_updateAxis<2>  # z-axis sweep-and-prune update over the endpoint array at this+0x64 (hkBpNode + hkArray pair output)
+010f7800 ?updateAabbs@hk3AxisSweep@@UAEXQAPAVhkBroadPhaseHandle@@PBVhkAabb@@HAAV?$hkArray@VhkBroadPhaseHandlePair@@@@2@Z  # hk3AxisSweep::updateAabbs; scale/clamp each aabb to [0,65532.0f], quantise corners into 16-bit endpoint keys and drive the x/y/z axis updates
