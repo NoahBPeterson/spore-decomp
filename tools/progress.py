@@ -6,6 +6,8 @@
   .venv/bin/python tools/progress.py --plot [out.png]  # chart of progress over time (default work/progress.png;
                                                        # one point per committed docs/STATUS.md and one per day of
                                                        # --plot runs, kept in docs/progress_history.json; needs matplotlib)
+                                                       # below it, one bar per module (docs/modules.md) split into byte-exact /
+                                                       # equivalent / partial / no source; per-module shares go into the history too
   .venv/bin/python tools/progress.py --no-refresh # reuse docs/STATUS.md-derived cache? (still recomputes)
 
 Coverage is computed with the exact logic of tools/status.py (reused via runpy), so numbers
@@ -567,6 +569,37 @@ def parse_status_md(md):
             "mig": (100.0 * mig / denom) if mig is not None else None, "mig_sz": mig_sz}
 
 
+SOUND_DIRS = ("cmn", "plugins", "mix", "decoders", "ealayer30", "ealayer31")   # EA's sound library: one bar
+
+
+def module_counts():
+    """Top-level module (docs/modules.md) -> Counter of n / exact / equiv / part / none / bytes over game functions.
+    work/migrate/modmap.json assigns each retail function to the dev build's object file; game functions it does not
+    list are counted under "(not in module map)"."""
+    try:
+        mm = json.load(open(W("work", "migrate", "modmap.json")))["functions"]
+    except (OSError, ValueError):
+        return {}
+    out = collections.defaultdict(collections.Counter)
+    seen = set()
+    for v, m in mm.items():
+        a = int(v, 16)
+        if a not in game:
+            continue
+        mod = (m or {}).get("module") or ""
+        top = mod.split("/")[0] if "/" in mod else (mod or "(not in module map)")
+        out["EA sound library" if top in SOUND_DIRS else top].update(_tier_of(a))
+        seen.add(a)
+    for a in game - seen:
+        out["(not in module map)"].update(_tier_of(a))
+    return out
+
+
+def _tier_of(a):
+    k = "exact" if a in byte_exact else "equiv" if a in equiv else "part" if a in part else "none"
+    return {"n": 1, k: 1, "bytes": funcs[a]["size"]}
+
+
 def plot_history(path):
     """PNG of progress over time: one point per committed docs/STATUS.md plus the live numbers."""
     import datetime
@@ -597,7 +630,10 @@ def plot_history(path):
     except (OSError, ValueError):
         hist = {}
     today = now.date().isoformat()
-    hist[today] = dict(live, when=now.isoformat(timespec="seconds"))
+    mods = module_counts()
+    hist[today] = dict(live, when=now.isoformat(timespec="seconds"),
+                       modules={m: {"n": c["n"], "exact": 100.0 * c["exact"] / c["n"],
+                                    "comp": 100.0 * (c["exact"] + c["equiv"]) / c["n"]} for m, c in mods.items()})
     with open(hist_path, "w") as f:
         json.dump(dict(sorted(hist.items())), f, indent=1)
         f.write("\n")
@@ -609,8 +645,14 @@ def plot_history(path):
 
     BLUE, ORANGE, GREEN = "#2a78d6", "#eb6834", "#2e9e5b"   # dataviz reference palette, slots 1-3
     INK, MUTED, GRID = "#1f2328", "#59636e", "#e6e8eb"
-    fig, axes = plt.subplots(1, 2, figsize=(12, 4.6), dpi=150, sharey=True, sharex=True)
+    order = sorted(mods, key=lambda m: (m.startswith("("), -mods[m]["n"]))   # modules by size, "(not in module map)" last
+    H = 4.6 + (0.6 + 0.3 * len(order) if order else 0)
+    fig = plt.figure(figsize=(12, H), dpi=150)
     fig.patch.set_facecolor("white")
+    gs = fig.add_gridspec(2 if order else 1, 2, height_ratios=[4.6, H - 4.6] if order else [1])
+    axes = [fig.add_subplot(gs[0, 0])]
+    axes.append(fig.add_subplot(gs[0, 1], sharey=axes[0], sharex=axes[0]))
+    plt.setp(axes[1].get_yticklabels(), visible=False)
     panels = (("Share of functions", "exact", "comp", "mig"), ("Share of code size", "exact_sz", "comp_sz", "mig_sz"))
     for ax, (title, ke, kc, km) in zip(axes, panels):
         for key, color, label in ((kc, ORANGE, "Compilable (byte-exact + equivalent)"), (ke, BLUE, "Byte-exact"),
@@ -637,12 +679,40 @@ def plot_history(path):
         plt.setp(ax.get_xticklabels(), ha="right", rotation_mode="anchor")
         ax.margins(x=0.08)
     axes[0].legend(loc="upper left", frameon=False, fontsize=9, labelcolor=INK)
+    if order:
+        # per module, now: each bar is 100% of the module's functions, split by tier (docs/modules.md)
+        bx = fig.add_subplot(gs[1, :])
+        PARTIAL, NONE = "#f6c7a9", "#e6e8eb"
+        y = list(range(len(order)))[::-1]
+        left = [0.0] * len(order)
+        for key, color, label in (("exact", BLUE, "Byte-exact"), ("equiv", ORANGE, "Equivalent (compilable, not exact)"),
+                                  ("part", PARTIAL, "Partial"), ("none", NONE, "No source yet")):
+            w = [100.0 * mods[m][key] / mods[m]["n"] for m in order]
+            bx.barh(y, w, left=left, color=color, height=0.7, label=label)
+            left = [l + x for l, x in zip(left, w)]
+        for yy, m in zip(y, order):
+            c = mods[m]
+            bx.text(101, yy, "%s functions, %.1f MB   exact %.0f%%, compilable %.0f%%" % (
+                "{:,}".format(c["n"]), c["bytes"] / 2**20, 100.0 * c["exact"] / c["n"],
+                100.0 * (c["exact"] + c["equiv"]) / c["n"]), va="center", fontsize=8, color=MUTED)
+        bx.set_yticks(y)
+        bx.set_yticklabels(order, fontsize=9, color=INK)
+        bx.set_xlim(0, 140)
+        bx.set_xticks([0, 25, 50, 75, 100])
+        bx.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(decimals=0))
+        bx.set_title("By module, now (share of each module's functions)", loc="left",
+                     fontsize=11, color=INK)
+        for sp in ("top", "right", "left"):
+            bx.spines[sp].set_visible(False)
+        bx.spines["bottom"].set_color(GRID)
+        bx.tick_params(colors=MUTED, labelsize=9, length=0)
+        bx.legend(loc="lower right", bbox_to_anchor=(1.0, 1.0), frameon=False, fontsize=8, labelcolor=INK, ncol=4)
     fig.suptitle("Spore decompilation progress (game functions; third-party libraries excluded)",
                  x=0.01, ha="left", fontsize=12, color=INK)
     fig.text(0.01, 0.01, "One point per committed docs/STATUS.md, one per day of --plot runs (latest run that day), plus now.\nEquivalent = complete compilable source, "
              "not yet byte-identical. Size shares only exist in later snapshots; the migrated line starts with Phase B "
              "(Oct 2026).", fontsize=8, color=MUTED)
-    fig.tight_layout(rect=(0, 0.07, 1, 0.95))
+    fig.tight_layout(rect=(0, 0.32 / H, 1, 1 - 0.23 / H))   # room for the two-line footnote and the title (inches / H)
     fig.savefig(path)
     print("wrote %s (%d snapshots)" % (os.path.relpath(path, ROOT), len(pts)))
 
