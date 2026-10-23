@@ -1,0 +1,3 @@
+slices/s00861450/s00861450.cpp  _jpeg_idct_float  00861450  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast
+slices/s00861450/s00861450.cpp  _jpeg_idct_ifast  008618c0  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast
+slices/s00861450/s00861450.cpp  _jpeg_idct_islow  00861ce0  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast

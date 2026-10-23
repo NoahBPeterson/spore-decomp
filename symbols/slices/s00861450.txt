@@ -1,0 +1,8 @@
+# IJG libjpeg 6a IDCTs in the retail (Spore) image.
+# 00861450 jpeg_idct_float  (jidctflt.c) -- scalar-SSE float IDCT (needs /fp:fast).
+# 008618c0 jpeg_idct_ifast  (jidctfst.c) -- name confirmed by the retail PDB.
+# 00861ce0 jpeg_idct_islow  (jidctint.c) -- the accurate integer IDCT.
+# All three byte-exact with /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast.
+00861450 jpeg_idct_float
+008618c0 jpeg_idct_ifast
+00861ce0 jpeg_idct_islow
