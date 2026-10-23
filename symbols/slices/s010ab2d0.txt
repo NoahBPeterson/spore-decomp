@@ -1,0 +1,9 @@
+# va  name  # evidence
+#
+# Slice s010ab2d0 -- Havok 3.1.0 constraint buildJacobian routines.
+# 010ab5d0 is a dev-build PDB public recorded in symbols/havok_names.txt (line
+# 524).  010ab2d0 is anonymous there (it sits between _hk1dAngularLimitBuildJacobian
+# at 010ab0e0 and _hkPulleyConstraintBuildJacobian at 010ab5d0); the name below is
+# inferred from its data flow and is not a PDB name.
+010ab2d0  _hk3AxisConstraintBuildJacobian  # inferred (not in havok_names.txt); 3-iteration row build over the identity basis at 0x015b9b20
+010ab5d0  _hkPulleyConstraintBuildJacobian  # havok_names.txt:524 (havok identical-code)

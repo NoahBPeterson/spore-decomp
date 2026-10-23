@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Slice s010ab2d0 -- Havok 3.1.0 constraint buildJacobian routines.  Both are
+# whole-program-optimised leaf routines (no calls, every helper inlined) built by
+# the dev toolset (cl 13.10.x) with /vc71 flags.  The source below reconstructs
+# the data flow but neither function could be recovered byte-exact (see
+# nonmatching.txt), so there are no manifest rows.

@@ -1,0 +1,9 @@
+# va  diff-bytes  status VERDICT flags: reason
+# Slice s010ab2d0 -- Havok 3.1.0 constraint buildJacobian routines
+# (SporeApp.exe 0x010ab2d0..0x010abb89).  Both are "identical-code" Havok routines
+# built by the dev toolset (cl 13.10.x, /O2, whole-program optimisation): no calls
+# (every helper inlined) and x87 math throughout.  The source reconstructs the
+# input loads, loop bounds and stores, but the compiler's x87 register schedule and
+# exact expression nesting are unrecoverable from the disassembly.
+010ab2d0 722 complete FAIL /vc71 /O2 /MD /Gy /EHsc /TP: unnamed 3-axis constraint buildJacobian (sits between _hk1dAngularLimitBuildJacobian and _hkPulleyConstraintBuildJacobian): a 3-iteration loop building each row from the identity basis at 0x015b9b20 plus the two body-point offsets, with a sign flag read from data+0x0c; reconstruction under-codes it (423 vs 758 bytes) -- difftest 5/5 valid inputs mismatched (eax)
+010ab5d0 1377 complete FAIL /vc71 /O2 /MD /Gy /EHsc /TP: _hkPulleyConstraintBuildJacobian; two rope segments (pivotA - fixedPivotA) and (pivotB - fixedPivotB) at atoms+0x00/0x10/0x20/0x30, normalized and scaled by the leverage factor, with r x n angular parts per body; reconstruction under-codes it (612 vs 1466 bytes) -- difftest 5/5 valid inputs mismatched (eax)
