@@ -1,0 +1,4 @@
+00baf630 FUN_00baf630  # feedback-event bind: rbtree find at this+0x12c (end this+0x130), FUN_00bb9b00(4,0/4,1) + FUN_00a16a90 on the event, FUN_00dd85c0 slot with AddRef(vtable[0])/Release(vtable[4]), else FUN_00baa110
+00baf700 FUN_00baf700  # global feedback-table lookup: FUN_00c30e80 key -> find in g_0156c61c; on miss clear/release the FUN_00dd85c0 slot, SP::PropertyManager (FUN_0067de30) vtable[0x2c](key, 0x568de14, slot), return the slot value
+00baf790 FUN_00baf790  # cStarRecordRef::GetCommContext -> embassy-data map at this+0x184 (operator[] store of param_4), FUN_00ba7c20 + param_3->FUN_00c33cc0, then rbtree find / RBTreeIncrement / RBTreeErase / operator delete around this+0x188
+00baf880 FUN_00baf880  # copy the this+0x224 source element range into the this+0x228 target: per-element refcounted objects via vtable[0x30/0x34/0x40] and an eastl bool vector via vtable[0x18/0x1c/0x24/0x28/0x30/0x38/0x08]
