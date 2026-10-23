@@ -1,0 +1,8 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e67940  126  eastl rbtree<int,..>::insert helper: complete; our symbol is 138B vs original 160B (size-filtered) and the original hoists *key into EBX and keeps the key ptr in EDX across the search loop; regalloc/PROLOG shape differ
+00e679e0   75  key->cell lookup wrapper: complete; original caches SP::gspCellGame in EBX (push ebx) and reuses it, ours allocates it to EDI with no ebx save; eastl map Find/Insert arg-setup regalloc differs
+00e67d30    8  transform vector (copy-before-rotate): complete; only the first rotation term load/order differs - original loads m[3] then m[6] (m3*n38 + m6*n3c), we emit m[6] into xmm0 first (m6*n3c + m3*n38); FP scheduler
+00e67ec0  117  transform vector + cell translation: complete; shared early-out via tail-merge matches, but the rotation block is re-scheduled (we compute ny before nx) and the +0xc pointer LEA is folded away; FP scheduler
+00e68000  325  transform-to-cell (box lookup + rotate + translate): complete; eastl map lookup, FUN_00e84150 call setup and the two-term rotation/flag update are scheduled/sized differently
+00e68170  587  facing/aim orientation update: complete; large FP block (sqrt/sin/cos, quaternion build, transform composition) scheduled differently; x87/SSE interleave and CALL-arg setup differ
+00e68470  147  cell-mode accessor returning char: complete; SSE compare/select and branch layout differ (original uses x87/SSE mix we cannot steer)
