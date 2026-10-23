@@ -1,0 +1,10 @@
+# slice s01112230 - Havok 4.x GSK: swept collide points of one vertex against another vertex's
+# plane (SporeApp 0x01112230..0x0111294c).
+# All three symbols are named in symbols/havok_names.txt and tagged "# havok identical-code",
+# i.e. they were recognised as identical to the released Havok 4.x library build (cl 13.10.3077 =
+# VC .NET 2003, which is why this slice compiles with /vc71).  The roles below come from the
+# decompilation in work/match/scratch_s01112230/cards.txt.
+# VA        name (descriptive)                    mangled name
+01112230    hk4dGskCollideInitMatrices            ?hk4dGskCollideInitMatrices@@YAXABUhk4dGskVertexCollidePointsInput@@MAAUhk4dGskCollideMatrices@@@Z  # (in, t, out): lerp2Ha (0x01209f50) both vertices' swept transforms into out.m_0x00/out.m_0x40, out.m_0x80 = first^-1 * second (setMulInverseMul 0x010810f0), then setRotatedDir/setTransformedPos/setRotatedInverseDir (0x010814a0/0x01081360/0x01081440) build the collide frame (direction m_0xc0, origin m_0xd0, second vertex m_0xe0/m_0xf0/m_0x100)
+01112490    hk4dGskCollidePointWithPlaneFinal     ?hk4dGskCollidePointWithPlaneFinal@@YAMABUhk4dGskVertexCollidePointsInput@@ABUhk4dGskTolerances@@ABVhkVector4@@MMMMMAAUhk4dGskVertexCollidePointsOutput@@@Z  # (in, tol, point, tA, tB, time, dist, slope, out): at most 10 bisection steps (frac clamped to [0.1, 0.9]) towards the time the point crosses the plane; returns the best time and lowers out.m_0x00 (smallest hit distance)
+01112600    hk4dGskCollidePointsWithPlane         _hk4dGskCollidePointsWithPlane  # (in, plane, out) - extern "C" in the retail build, the symbol is undecorated: walks every collide point over the swept interval, compacts the accepted hits in place (hit[-2..1], hit += 4), narrows the interval via 01112490 and keeps the earliest contact time in out
