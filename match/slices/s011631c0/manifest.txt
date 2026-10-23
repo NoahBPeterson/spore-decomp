@@ -1,0 +1,9 @@
+slices/s011631c0/s011631c0.cpp  ?ResetState@cMixRamp@@QAEXXZ  011633e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s011631c0/s011631c0.cpp  _MixBlockLinear  01163710  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s011631c0/s011631c0.cpp  _MixDispatch  01163b50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s011631c0/s011631c0.cpp  _cMixRamp_ClearFade  01163bc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s011631c0/s011631c0.cpp  _MixCosPoly  01163c30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s011631c0/s011631c0.cpp  _MixSinPoly  01163ce0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s011631c0/s011631c0.cpp  ??1cMixRamp@@QAE@XZ  01163dc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s011631c0/s011631c0.cpp  ?Configure@cMixRamp@@QAEXMMMHH_N@Z  01163380  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s011631c0/s011631c0.cpp  ?SetFade@cMixRamp@@QAEXM@Z  01163be0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

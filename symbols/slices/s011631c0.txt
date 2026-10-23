@@ -1,0 +1,16 @@
+011631c0 cMixRamp::Mix  # Claude-coined; member entry (thiscall, ret 8: cIIRBuffers*, uint); dispatches on the block count through MixDispatch
+01163380 cMixRamp::Configure  # Claude-coined; member (ret 0x18) filling mF30/mF34/mF38/mF3c/mF40/mF4c and mF44=f/n1, mF48=f/n2
+011633e0 cMixRamp::ResetState  # Claude-coined; zeroes the ramp state (mCur/mPrev)
+011633f0 MixRampSin  # Claude-coined; extern "C" sine-window ramp over dst (a,b,start,total)
+01163520 MixRampSqrt  # Claude-coined; extern "C" sqrt-shaped ramp
+01163620 MixRampLinear  # Claude-coined; extern "C" linear ramp, shares the 0x1163700 epilogue with MixRampSin/MixRampSqrt
+01163710 MixBlockLinear  # Claude-coined; extern "C" linear-weight block mix kernel
+01163850 MixBlockCross  # Claude-coined; extern "C" cross/weighted block mix kernel
+01163b50 MixDispatch  # Claude-coined; extern "C" ramp-shape dispatcher (mode table g_014d6fd0, stride 0x3c)
+01163bc0 cMixRamp_ClearFade  # Claude-coined; extern "C"; clears the fade flag (mF4c)
+01163be0 cMixRamp::SetFade  # Claude-coined; member (ret 4: float); clamps |f|>0.99 to +/-0.99 then stores
+01163c30 MixCosPoly  # Claude-coined; extern "C" cosine via the Taylor polynomial (1/24,1/720,... constants)
+01163ce0 MixSinPoly  # Claude-coined; extern "C" sine via the Taylor polynomial
+01163dc0 ~cMixRamp  # Claude-coined; dtor writes the 0x14d75b0 vtable, calls the release proc at g_016f16f4, tail-calls the base dtor 0x01168400 (base vtable 0x14d76fc)
+01163df0 ScaleBlock  # Claude-coined; static helper (custom register ABI p=eax,n=edx,s=xmm0); scales a block by a scalar
+01163f50 cMixRamp::ApplyWeights  # Claude-coined; member (ret 0xc: int,int,float*); applies the filter rows at +0x58 and weight rows at +0xb8, writes through mode table g_014d6fd0 and ScaleBlock
