@@ -1,0 +1,6 @@
+00b3dfa0 957 complete; segment/segment closest-point; /fp:fast reassociation + x87 fsqrt path not reproducible from source (size 966 vs 1076); equiv FAIL on st0 (orig nan, ours finite) for one rounding input
+00b3e3e0 380 complete; sphere/sphere contact; x87 fsqrt and fp reassociation differ (size 450 vs 507); equiv PASS
+00b3e620 369 complete; vtable dispatch + PlanetModel calls; argument/return-vector setup scheduling differs (size 456 vs 465); equiv UNSUPPORTED (self is a fake pointer, no valid inputs)
+00b3e860 77 complete; dot-product addend order (y,z,x numerator / z,y,x denominator under /fp:fast) and out2 tail register scheduling differ; equiv PASS
+00b3e980 469 complete; segment/polygon clip; cross-product fp reassociation and x87 fsqrt differ (size 510 vs 519); equiv PASS
+00b3eb90 1063 complete; polygon/plane clip; sign[] loop codegen and output loop layout differ (size 1037 vs 924); equiv FAIL on eax upper bytes only (original ends `mov al,1` over stale eax; low byte and all memory agree)

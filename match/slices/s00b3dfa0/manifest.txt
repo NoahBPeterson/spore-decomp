@@ -1,0 +1,4 @@
+# source symbol va flags
+slices/s00b3dfa0/s00b3dfa0.cpp  ?FUN_00b3e5e0@@YAXPAX@Z  00b3e5e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b3dfa0/s00b3dfa0.cpp  ?FUN_00b3e800@@YGXHH@Z  00b3e800  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b3dfa0/s00b3dfa0.cpp  ?Refresh@ThisObj@@QAEXPAX@Z  00b3e810  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
