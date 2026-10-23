@@ -1,0 +1,15 @@
+# slice s00b4e1d0 - collide-message -> audio/effects bridge (SporeApp 0x00b4e1d0..0x00b4ed4b)
+# All six functions are unnamed in the DB (no hit in symbols/names.txt, pdb_names.json or
+# vtable_names.txt), so they keep their FUN_<va> mangled placeholder names.  Evidence for the
+# roles below comes from the decompilation in work/match/scratch_s00b4e1d0/cards1.txt.
+# VA        name (descriptive)                        mangled name
+00b4e1d0    cEvent_TransformSync                        ?FUN_00b4e1d0@@YAXPAD0@Z     # (char* a1, char* a2): pushes a1's hkVector4/hkQuaternion (vtable +0x2c/+0x30) into a hkTransform, isApproximatelyEqual (0x10815a0) against a2+0x24, else setTransform (0x108db50) / setPosition (0x108dbb0)
+00b4e620    AudioSys_EmitCollisionTone                  ?FUN_00b4e620@@YAXIMMIMMPAM@Z # (u32 id, float a2, float a3, u32 id2, float a5, float a6, float* pos): positional gate + 10 SetGlobalProperty calls (0x005ca880) driving the audio "collision" patch
+00b4e820    CollideMsg_Type0                            ?FUN_00b4e820@@YAXPADDDPAM@Z  # (char* a1, char a2, char a3, float* a4): type-0 (0x1654c10) game-mode collision event -> Simulator_OnEvent, then AudioSystem_EmitCollisionTone
+00b4e980    CollideMsg_Type1                            ?FUN_00b4e980@@YAXPADIIDDPAM@Z # (char* a1, u32 a2, u32 a3, char a4, char a5, float* a6): same as 00b4e820 but type 1 and additionally broadcasts through g_eventHandler (0x0167eb88)
+00b4ead0    CollideMsg_TypeN                            ?FUN_00b4ead0@@YAXPAD0DPAM@Z  # (char* a1, char* a2, char a3, float* a4): broadcasts BOTH objects (g_eventHandler for a1 and a2), then AudioSystem_EmitCollisionTone
+00b4ec70    AudioFalloffCurve                           ?FUN_00b4ec70@@YAEPAMMMMPBMM@Z # (float* out, float a, float b, float c, const float* in, float scale) -> u8: t = c-(a-b) clamped to [0, 2b], out[0..3] = in[0..3] * -(t^2*b*3 - t^3)*(pi/3)*scale; returns 0 when a<=0 or t<=eps (0x014612dc)
+# Cross-references proven from the code: 0x00b4d470 (cCollisionInfo repack, see slice s00b4d220),
+# 0x00b3d8c0 (cCollisionInfo ctor), 0x00435e90 GetRecorderState, 0x00435ed0 KillSetiEffects,
+# 0x00496140 ?Find@D961-style set lookup, 0x01186577 the collision-dispatch name tag used with the
+# +0x0c vtable slot, 0x01654c10 the in-space game mode id compared by 00b4e820.
