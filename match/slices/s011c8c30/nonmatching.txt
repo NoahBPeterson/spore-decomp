@@ -1,0 +1,19 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011c8c30_inc   (OpenSSL 0.9.8g, compiled as C)
+#
+# Slice s011c8c30 = eight functions of the lib_cblock copy of OpenSSL 0.9.8g:
+# UI_set_result / UI_new (crypto/ui/ui_lib.c), ASN1_GENERALIZEDTIME_check/set
+# (crypto/asn1/a_gentm.c), ASN1_UTCTIME_check/set (crypto/asn1/a_utctm.c) and
+# ec_pre_comp_new / compute_wNAF (crypto/ec/ec_mult.c).  All eight are
+# byte-exact, so there are no rows here.
+#
+# Two notes on the source layout (match/slices/s011c8c30/s011c8c30.cpp):
+#  - 0x011c8e10 is UI_new, not UI_new_method: the original has UI_new_method(NULL)
+#    inlined (no branch on the method argument) with UI_get_default_method folded
+#    into it, so the file carries that folded body.  #line directives reproduce
+#    the __LINE__ immediates CRYPTO_malloc bakes into its call (ui_lib.c:80,
+#    a_utctm.c:206, a_gentm.c:226).
+#  - ec_pre_comp_new and compute_wNAF are file-local statics whose arguments
+#    arrive in EDI -- a per-translation-unit cl 15.00 convention that only
+#    reproduces with the whole ec_mult.c TU present, so the file #includes
+#    crypto/ec/ec_mult.c verbatim (as slice s011cae60 does).

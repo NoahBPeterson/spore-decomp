@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s011c8c30/s011c8c30.cpp  _UI_set_result  011c8c30  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011c8c30_inc
+slices/s011c8c30/s011c8c30.cpp  _UI_new  011c8e10  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011c8c30_inc
+slices/s011c8c30/s011c8c30.cpp  _ASN1_GENERALIZEDTIME_check  011c8e80  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011c8c30_inc
+slices/s011c8c30/s011c8c30.cpp  _ASN1_GENERALIZEDTIME_set  011c8ff0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011c8c30_inc
+slices/s011c8c30/s011c8c30.cpp  _ASN1_UTCTIME_check  011c90e0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011c8c30_inc
+slices/s011c8c30/s011c8c30.cpp  _ASN1_UTCTIME_set  011c9210  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011c8c30_inc
+slices/s011c8c30/s011c8c30.cpp  _ec_pre_comp_new  011c9330  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011c8c30_inc
+slices/s011c8c30/s011c8c30.cpp  _compute_wNAF  011c9490  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011c8c30_inc
