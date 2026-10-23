@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+009d3a20  252  AnimDyn::FUN_009d3a20: complete, equiv PASS (98.9% cov). Original runs the scale-init guard, the sqrt/square chain and the final 1/(q*q) entirely on the x87 stack (sScale never gets a memory home); my source names it and the sum, so cl splits the chain into SSE + x87 with extra spill slots (size 324 vs 294).
+009d3b50  965  AnimDyn::FUN_009d3b50: complete, equiv WEAK (11.8% cov, only 25/212 live insns reachable from random inputs). Large mixed SSE/x87 pose-blend body; block layout and register assignment differ throughout (size 975 vs 1043).
+009d3f70  253  GaitState::FUN_009d3f70: complete, equiv PASS (98.2% cov). Same instruction stream and same switch jump table; differs only in scheduling/register choice (original hoists both constants to entry and keeps t in xmm1, mine computes the count block first and keeps v in xmm3). Removing the named t local killed the extra push ecx frame (size 332 vs 336).
+009d41b0  114  copy30: complete, equiv WEAK (22.2% cov, 28/400 inputs valid - most fault pool-limit on the struct copies). Copy loop/register allocation differs (size 99 vs 121).
+009d42b0  990  AnimDyn::FUN_009d42b0: complete, equiv PASS (74.1% cov). Mixed SSE/x87 pose-blend with vector_3 out and several call results spilled to stack; instruction stream and block order differ (size 1136 vs 1054).
