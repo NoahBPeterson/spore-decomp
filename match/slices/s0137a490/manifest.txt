@@ -1,0 +1,7 @@
+slices/s0137a490/s0137a490.cpp  ?InitPropTable_16b17b4@@YAXXZ  0137a490  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0137a490/s0137a490.cpp  ?InitPropTable_15a674c@@YAXXZ  0137a5e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0137a490/s0137a490.cpp  ?InitPropTable_16b1d04@@YAXXZ  0137a6e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0137a490/s0137a490.cpp  ?InitPropTable_16b3014@@YAXXZ  0137a9c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0137a490/s0137a490.cpp  ?InitPropTable_16b2b3c@@YAXXZ  0137ac90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0137a490/s0137a490.cpp  ?InitPropTable_16b2a24@@YAXXZ  0137af90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0137a490/s0137a490.cpp  ?InitPropTable_16b24d4@@YAXXZ  0137b270  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

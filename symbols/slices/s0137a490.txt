@@ -1,0 +1,18 @@
+# Slice s0137a490 — global property-table initialisers for static descriptor
+# arrays.  Each function is a void(void) __cdecl initialiser (no PDB names; the
+# names below are Claude-coined from the table base address).
+# Descriptors are 0x28 bytes: sHash name, type code, zero, two value words
+# (built through the 4-byte pass-through helper at 0x00e4a9c0), index, default,
+# then three trailing zero words.  The final record leaves +0x24 untouched.
+0137a490  ?InitPropTable_16b17b4@@YAXXZ  void InitPropTable_16b17b4(void) [MATCH]  # fills 0x016b17b4[3]
+0137a5e0  ?InitPropTable_15a674c@@YAXXZ  void InitPropTable_15a674c(void) [MATCH]  # fills 0x015a674c[2], first name "color" (string at 0x013f212c)
+0137a6e0  ?InitPropTable_16b1d04@@YAXXZ  void InitPropTable_16b1d04(void) [MATCH]  # fills 0x016b1d04[7]
+0137a9c0  ?InitPropTable_16b3014@@YAXXZ  void InitPropTable_16b3014(void) [MATCH]  # fills 0x016b3014[7]
+0137ac90  ?InitPropTable_16b2b3c@@YAXXZ  void InitPropTable_16b2b3c(void) [MATCH]  # fills 0x016b2b3c[7]
+0137af90  ?InitPropTable_16b2a24@@YAXXZ  void InitPropTable_16b2a24(void) [MATCH]  # fills 0x016b2a24[7]
+0137b270  ?InitPropTable_16b24d4@@YAXXZ  void InitPropTable_16b24d4(void) [MATCH]  # fills 0x016b24d4[7]
+
+# Callees (outside this slice).
+00e4a9d0  ?sHash@SP@@YAIPBD@Z  unsigned int SP::sHash(const char*)  # PDB name SP::sHash; FNV-1a over the string, returns 0 for NULL (dev VA 0x00a4c190)
+00e4a9c0  ?PropValI@@YAII@Z   unsigned int PropValI(unsigned int)  # 4-byte pass-through (mov eax,[esp+4]; ret)
+00e4a9c0  ?PropValF@@YAIM@Z  unsigned int PropValF(float)  # same VA: the int and float overloads folded together (ICF)
