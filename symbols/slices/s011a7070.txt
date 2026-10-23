@@ -1,0 +1,3 @@
+011a7070  _ssl3_get_cert_verify           # OpenSSL 0.9.8g ssl/s3_srvr.c (third-party C TU, compiled verbatim)
+011a7340  _ssl3_get_client_certificate    # OpenSSL 0.9.8g ssl/s3_srvr.c (third-party C TU, compiled verbatim)
+011a7770  _ssl3_send_server_certificate   # OpenSSL 0.9.8g ssl/s3_srvr.c (third-party C TU, compiled verbatim)

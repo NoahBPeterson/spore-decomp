@@ -1,0 +1,6 @@
+# slice s011a7070 -- OpenSSL 0.9.8g upstream TU compiled verbatim
+# s3_srvr.c: ssl/s3_srvr.c (also supplies ssl3_accept for slice s011a81e0)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s011a7070/s011a7070.cpp  _ssl3_get_cert_verify           011a7070  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a81e0_inc
+slices/s011a7070/s011a7070.cpp  _ssl3_get_client_certificate    011a7340  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a81e0_inc
+slices/s011a7070/s011a7070.cpp  _ssl3_send_server_certificate   011a7770  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a81e0_inc
