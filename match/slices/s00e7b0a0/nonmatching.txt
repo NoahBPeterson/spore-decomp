@@ -1,0 +1,9 @@
+00e7b0a0 177 complete: attach an "eat"/"leak" interaction (pa/pb = GetSafe, both flagged +0x178, age>=3 first); the sGetSourceLevel call has no ECX argument in the original, but a normal C call site spills an `unused` local and reloads it into ECX (frame 0x10 vs 0xc)
+00e7b280 34 complete: message-record variant of 0xe7b0a0; only difference is callee-saved register coloring (original edi=m / esi=pb, ours esi=m / edi=pb) - ~15 source permutations all reproduce the swap
+00e7b470 140 complete: original is a static helper with a register calling convention (self in ESI/EAX, other in EBX, a2 in EBP, a3 on the stack) - not expressible as an ordinary __cdecl function
+00e7b540 50 complete: original is a byte-table switch over (type-1) range 1..0x2e using a custom static convention (plain `ret`, args in ECX/EDX); the enumerated-case version compiles instruction-for-instruction but ends `ret 4` under __fastcall
+00e7b5d0 60 complete: original is a register-convention static helper (arg1 on the stack, cell B in ESI); body is a stack-string guard + FUN_00e4cc40/FUN_00e780a0 sequence
+00e7b630 272 complete: original is a register-convention static helper (self in ESI, other in EBP); builds a type-0x20 cCellMessage and fires it
+00e7b7c0 202 complete: original is a register-convention static helper (occupancy list in EAX, pos in EBX, cell in ESI, t on the stack); claims a list slot, drops pieces, fires the drop event
+00e7b8a0 187 complete: original is an XMM0-convention helper (first float in XMM0, record ptr + second float on the stack); radius query + binary search over the record's key list
+00e7ba30 1166 complete: the cCellMessage action dispatcher (subject in EAX, t on the stack); original is a register-convention switch over m->type with cases 1..50 - ~50 case bodies of differing register/stack shape cannot be reproduced byte-for-byte from ordinary C

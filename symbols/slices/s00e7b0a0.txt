@@ -1,0 +1,12 @@
+00e7b0a0 FUN_00e7b0a0  # attach an eat/leak interaction: GetSafe(pa,pb), flag both +0x178, age>=3 path fires 0xe7a7c0 + 0xe76af0, else nearest test
+00e7b240 FUN_00e7b240  # cells()->GetSafe(h) then FUN_00e7a4a0(c,0,0,1,3,t)
+00e7b280 FUN_00e7b280  # cCellMessage variant of 0xe7b0a0; gates +0x17f/+0x17c, positions from m+0x48, leak pos m+0x54
+00e7b410 FUN_00e7b410  # modal toggle for the avatar cell (setModal 0, UI+0x936=0, +0x51d8/+0x51d9), else FUN_00e780a0
+00e7b470 FUN_00e7b470  # register-ABI helper: spawn/eat interaction (0xe51ee0 + deferred 0xe7b280 + 0xe59560)
+00e7b540 FUN_00e7b540  # byte-table switch over m->type (1..0x2e); case 10 dispatches 0xe7b0a0; custom static convention
+00e7b5d0 FUN_00e7b5d0  # register-ABI helper: guard +0x112/+0x113, format string, FUN_00e4cc40 + FUN_00e780a0
+00e7b630 FUN_00e7b630  # register-ABI helper: build and fire a type-0x20 cCellMessage (drop pieces on a cell)
+00e7b7c0 FUN_00e7b7c0  # register-ABI helper: claim occupancy slot, drop pieces (0xe77ac0), fire drop event (0xe61b90)
+00e7b8a0 FUN_00e7b8a0  # XMM0-ABI helper: radius query (0xe87260) + binary search of a key list, drop each new cell's pieces
+00e7b9b0 FUN_00e7b9b0  # FUN_00e780a0(hB,1,t,0); clear c+0x168 (0xe59200), set +0x220/+0x21c=300.0f
+00e7ba30 FUN_00e7ba30  # cCellMessage action dispatcher: register-ABI switch over m->type, cases 1..50
