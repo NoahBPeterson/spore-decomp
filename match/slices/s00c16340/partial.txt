@@ -1,0 +1,3 @@
+# s00c16340 -- terrain "wave height" helper (1 function).
+# The single function is byte-exact (see manifest.txt); there are no incomplete
+# or approximate rows in this slice.

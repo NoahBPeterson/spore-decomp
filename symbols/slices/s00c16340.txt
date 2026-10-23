@@ -1,0 +1,17 @@
+# s00c16340 -- terrain "wave height" helper
+# Key callee VAs and calling conventions discovered while reconstructing this slice.
+00c16340  FUN_00c16340(float param_1, TerrainObj* param_2) -> double   ; BYTE-EXACT
+
+# --- callees (out of slice) ------------------------------------------------------
+00b5b800  SP::GetCurrentGameMode()               ; cdecl, 0 stack args; thunk:
+                                                 ;   call 0xb3d320; test eax,eax; je -> -1;
+                                                 ;   mov ecx,eax; jmp 0xa42730
+00b3d320  global game-mode getter                ; cdecl, 0 stack args; mov eax,[0x167eaec]; ret
+00a42730  GetCurrentGameMode tail target         ; thiscall (ecx), mov eax,[ecx+0x20]; ret
+00b1daf0  GameModeMgr::Fn1(void* mode, int flag) ; thiscall (ecx = 0xb3d320() result) + 2 stack
+                                                 ;   args, ret 8
+0041ea70  SP::GetPropertyAsFloat(PropObj*)       ; thiscall (ecx), returns float* in eax
+00c15dc0  TerrainObj::ApplyWave(float v)         ; thiscall (ecx = terrain), 1 stack arg, ret 4
+# constant 0x13ec4d0 = 100.0f (__real@42c80000) -- default value of `f`
+# vf9: virtual at vtable+0x24 (slot 9), (int id=0x7422b3b, void** out) -> bool
+# vf9 out-param object: int16 at +0x12 must equal 0xd before GetFloat is used
