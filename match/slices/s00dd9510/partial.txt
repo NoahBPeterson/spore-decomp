@@ -1,3 +1,3 @@
-# va  diff-bytes  reason
-00dd9860  432  Swarm::FUN_00dd9860; complete logic but not behaviourally equivalent: our version keeps mFC in eax and the return bool in dl, so it clobbers edx (the original uses bl and leaves edx untouched; an LTCG caller may hold a live value there) and uses a larger frame (487 vs 430 bytes); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv FAIL (5/5 inputs, first mismatch edx)
-00dd9c10  777  Swarm::FUN_00dd9c10; calls the register-ABI helper 0x00dd91b0 (axis in ecx, vector in eax, out written through esi) that no C signature can reproduce, so the rebuilt rotation matrix differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv FAIL (memory pool mismatch)
+# va  size (ours/orig)  reason
+00dd9860  487/430  Swarm::FUN_00dd9860; complete logic but not behaviourally equivalent: our version keeps mFC in eax and the return bool in dl, so it clobbers edx (the original uses bl and leaves edx untouched; an LTCG caller may hold a live value there) and uses a larger frame; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv FAIL (5/5 inputs, first mismatch edx)
+00dd9c10  1093/1093  Swarm::FUN_00dd9c10; calls the register-ABI helper 0x00dd91b0 (axis in ecx, vector in eax, out written through esi) that no C signature can reproduce, so the rebuilt rotation matrix differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv FAIL (memory pool mismatch)
