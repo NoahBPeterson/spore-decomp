@@ -1,0 +1,11 @@
+00c50300 311 complete: cSPMissionEradicate::GetClosestDiseasedAnimal herd walk; not byte-exact (frame/loop shape) flags /O2 /MD /Gy /EHsc /TP
+00c504a0 191 complete: cSPMissionEradicate::DestroyHerds herd walk; not byte-exact (frame layout) flags /O2 /MD /Gy /EHsc /TP
+00c50600 281 complete: cSPMissionEradicate::OnPlanetActivate; not byte-exact (frame/inline schedule) flags /O2 /MD /Gy /EHsc /TP
+00c50740 468 complete: cSPMissionEradicate::HandleMessage dispatch; not byte-exact (frame/EH layout) flags /O2 /MD /Gy /EHsc /TP
+00c50ad0 22 complete: 0x14-byte move_backward; not byte-exact (cl register tie: src->ecx/dst->eax in retail vs ours) flags /O2 /MD /Gy /EHsc /TP
+00c50ba0 115 complete: serialize one 0x14 record; not byte-exact (movss + reg tie) flags /O2 /MD /Gy /EHsc /TP
+00c50c30 168 complete: cSPMissionExplore::MarkCityVisitedInMiniMap; not byte-exact (frame/inline schedule) flags /O2 /MD /Gy /EHsc /TP
+00c50d20 190 complete: find visited-city record within 100 units; not byte-exact (reg/schedule) flags /O2 /MD /Gy /EHsc /TP
+00c50e00 39 complete: serialize a vector of 0x14 records; not byte-exact (arg-eval schedule of n) flags /O2 /MD /Gy /EHsc /TP
+00c50e70 28 complete: copy 0x14-byte records forwards; not byte-exact (cl register tie: src->ecx/dst->eax in retail vs ours) flags /O2 /MD /Gy /EHsc /TP
+00c50eb0 4 complete: predicate reading a uint property; not byte-exact (retail tail-jmps 0xc4c2b0, ours calls+ret) flags /O2 /MD /Gy /EHsc /TP

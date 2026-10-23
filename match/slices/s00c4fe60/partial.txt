@@ -1,0 +1,1 @@
+00c4fe60 600 partial: cSPMissionEradicate::OnCombatantKilled decoded but the recursive message path passes the wstring local as the gEmptyA/gEmptyB globals (stand-in for a stack eastl::wstring); frame/EH layout not reproduced, not behaviourally verified

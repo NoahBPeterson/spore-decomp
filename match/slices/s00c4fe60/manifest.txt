@@ -1,0 +1,10 @@
+slices/s00c4fe60/s00c4fe60.cpp  ?FUN_00c50190@@YIXPAX00@Z  00c50190  /O2 /MD /Gy /EHsc /TP
+slices/s00c4fe60/s00c4fe60.cpp  ?FUN_00c501e0@@YIDPAX0H0@Z  00c501e0  /O2 /MD /Gy /EHsc /TP
+slices/s00c4fe60/s00c4fe60.cpp  ?FUN_00c50460@@YIXPAX0@Z  00c50460  /O2 /MD /Gy /EHsc /TP
+slices/s00c4fe60/s00c4fe60.cpp  ?FUN_00c50940@@YIXPAX0@Z  00c50940  /O2 /MD /Gy /EHsc /TP
+slices/s00c4fe60/s00c4fe60.cpp  ?FUN_00c50a80@@YIHPAX0@Z  00c50a80  /O2 /MD /Gy /EHsc /TP
+slices/s00c4fe60/s00c4fe60.cpp  ?FUN_00c50aa0@@YIHPAX0@Z  00c50aa0  /O2 /MD /Gy /EHsc /TP
+slices/s00c4fe60/s00c4fe60.cpp  ?FUN_00c50ac0@@YI_NPAX0@Z  00c50ac0  /O2 /MD /Gy /EHsc /TP
+slices/s00c4fe60/s00c4fe60.cpp  ?FUN_00c50dd0@@YIXPAX00@Z  00c50dd0  /O2 /MD /Gy /EHsc /TP
+slices/s00c4fe60/s00c4fe60.cpp  ?FUN_00c505a0@@YIXPAX0@Z  00c505a0  /O2 /MD /Gy /EHsc /TP
+slices/s00c4fe60/s00c4fe60.cpp  ?FUN_00c50b10@@YAPAXPAVIOutStream@@PAD@Z  00c50b10  /O2 /MD /Gy /EHsc /TP
