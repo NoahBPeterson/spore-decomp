@@ -1,0 +1,8 @@
+00ec51f0 117 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 546 WEAK 54.2% (equiv: 349/400 valid, 52/96 insns; MSVC block-reorder puts mState==1 body inline vs original's deferred layout)
+00ec5340 520 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 520 WEAK 21.5% (equiv: 338/400 valid, 62/288 insns; size 810 vs 876)
+00ec56b0 624 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 624 WEAK 24.3% (equiv: 397/400 valid, 55/226 insns; size 686 vs 734)
+00ec5990 121 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 121 WEAK 26.3% (equiv: 325/400 valid, 20/76 insns; this/param register swap edi<->esi)
+00ec5a60 157 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 157 WEAK 52.8% (equiv: 396/400 valid, 38/72 insns; size 147 vs 175)
+00ec5b10 285 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 285 UNSUPPORTED (equiv: unresolved externs EaString_push_back/WStr_Append/WString_Assign/operator_delete)
+00ec5c70 303 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 303 UNSUPPORTED (equiv: unresolved externs EaString_push_back/WStr_Append/WString_Assign/operator_delete)
+00ec5de0 45 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 45 WEAK 23.7% (equiv: 400/400 valid, 14/59 insns; size 150 vs 151; null-check cmp mem vs mov+test)

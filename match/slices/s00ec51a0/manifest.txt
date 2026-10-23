@@ -1,0 +1,2 @@
+slices/s00ec51a0/s00ec51a0.cpp  ?HandlerTeardown@cTestScript@@QAEXXZ  00ec51a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00ec51a0/s00ec51a0.cpp  ?Filter@cTestScriptSlotC@@QAEDPAXPAH@Z  00ec5310  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
