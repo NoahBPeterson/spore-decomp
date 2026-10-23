@@ -1,0 +1,20 @@
+00e58730 SP::sUpdateHealthUIs: resize the health-bar window and tick every registered cell UI  # PDB name SP::sUpdateHealthUIs (dev 00a61820); CellsPool().GetValid(G+0x411c); FindWindowByID(0x18ac46e,1) via *(*g_16b3c0c+0x90); vtbl +0xf0/+0x38/+0x74; UiPool Begin/Next at g_16b3c0c+0x9c, FUN_00e582c0 per cell
+00e58890 cell-pair init: link two cells and arm both for a state change  # GetValid(id1),GetValid(id2); c2[+0x190]=id1; FUN_00e57a10(c2,b); state set {0,1,0x12,0x13,0x14,0x15,0x16,0x1d,0x30}->0x1e on c1 then FUN_00e57a10(c1,b)
+00e58980 cell-pair relation code (0..6)  # two 5-entry jump tables at 0xe58ab0 (0/1->6,2->setne+2,3/4->1) and 0xe58ac4 (0/1->1,2->2,3->3,4->6); 25-int table {0,0,0,0,0,6,2,1,0,0,6,6,2,0,0,6,6,6,2,0,6,6,6,6,2} indexed [i*5+j]; FUN_00e57340(0xe57340) relation
+00e58b60 health-bar interpolation 0..1  # FUN_00e513d0(0xe513d0) lerp; 0x1471064=0.5f; two breakpoints a<0.5 and a>b-0.5
+00e58bf0 apply health-bar scale to a cell  # GetValid(id); guarded by c[+0x248]!=0; writes float +0xa0/+0xa4 from FUN_00e58b60(a,b)
+00e58c50 follow a cell's child link to its root  # loop GetValid(*(p+0x36c)) until 0; returns last non-null
+00e58c90 clip a plane against two cell lines  # GetValid(p[+4]),GetValid(p[+8]); roots via FUN_00e58c50; distance formula on +0x18..+0x38; clamp >=0; FUN_00e560d0 to both lines
+00e58e30 level-entry scalar lookup  # Ref Init 0x743b50 / Release 0xe82130; FUN_00e823a0(0xe4cc40) resolve G+0x4114; LevelEntry on *(G+0x5190)+0x1c; list stride 0x18, field +4==v+1 match, -1 fallback, value +0x14
+00e58ef0 level-entry fill (out params)  # same as 0e58e30 but also stores entry fields 0,8,0xc,0x10 to four out params
+00e59010 cell state transition driven by a direction vector  # GetValid; flags +0x17c/+0x178/+0x188; outer state set {0,1,2,3,4,5,0xb,0xc,0xd,0x12,0x13,0x14,0x15,0x16,0x18,0x19,0x1c,0x1e,0x28,0x2f,0x30,0x31}; inner switch b: 1/2->+0x190=a (if 0.1f>f) then 0xe, 3->0xf return, 4->0x10, 5->0x11; negate v into +0x1a0/+0x1a4/+0x1a8
+00e59150 mark a cell with flag 0x112  # GetValid(id); c[+0x112]=1
+00e59170 reset a cell to state 7  # GetValid(id); c[+0x16c,0x178,0x17c,0x188]=1; *(+0x18c)=7
+00e591c0 reset a cell to state 7 (no 0x188)  # GetValid(id); c[+0x16c,0x178,0x17c]=1; *(+0x18c)=7
+00e59200 remove a cell from the secondary pool  # SecPool (G+0x8c) GetValid then Remove; clears +0x370/+0x36c of the cell at *(+0xc)
+00e59260 reset a cell to state 8  # GetValid; state set {0,1,4,5,0xb,0xc,0xe,0xf,0x10,0x11,0x12,0x15,0x16,0x28,0x2f,0x30}->8; flags +0x178/+0x17b/+0x17c
+00e592f0 enter state 4 with a direction  # GetValid; flags +0x178/+0x17f; state set {0,2,4,5,0x12,0x13,0x14,0x15,0x16,0x21,0x28,0x30,0x32,0x33}->4; +0x1a0..=v; FUN_00e57a10(c,b)
+00e593b0 enter state 0x1c with a direction  # GetValid; flags +0x178/+0x17f; state set {0,0x12,0x13,0x14,0x15,0x16,0x30}->0x1c; +0x1a0..=v; FUN_00e57a10(c,b)
+00e59470 enter state 0x3d unless already flagged 0x112  # GetValid; if c[+0x112] return false; flag +0x178; state set {0,0x12,0x15,0x16,0x1d,0x30}->0x3d
+00e59500 reset a cell to state 9  # GetValid; flags +0x16c/+0x17c/+0x17b/+0x17f/+0x178/+0x179/+0x188; *(+0x18c)=9
+00e59560 enter state 5 and tag a partner cell  # original ABI: id in EAX, direction vector in EDI, stack args (other,b); if c[+0x112] return false; state set {0,4,5,0x12,0x13,0x14,0x15,0x16,0x1c,0x30,0x32,0x33}->5; +0x1a0..=v; FUN_00e57a10(c,b); c[+0x17f,0x178]=1; GetValid(other)[+0x188]=1

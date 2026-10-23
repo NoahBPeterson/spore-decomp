@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00e58980  473-vs-384  complete: cell-pair relation table; original emits two 5-entry jump tables (counted in the target extent) and shared return blocks, ours lays the *b==current switch fallthrough and jump tables differently
+00e58c90  252  complete: clip a plane against two cell lines; same formula and math, but x87/SSE register allocation of the two 3-float vectors (xmm5/6/7, xorps mask) differs
+00e58e30  35   complete: level-entry scan (scalar); same structure, only the v/n/p/i register rotation (edx/esi/eax/ecx) differs
+00e58ef0  183  complete: level-entry scan (fills an entry); same structure and out-param stores, reg-alloc/spills differ
+00e59010  34   complete: state transition; inner switch and state machine match, only the negated vector (load order + xorps schedule) differs
+00e59560  145  complete: original takes the cell id in EAX and the direction vector in EDI (non-standard ABI), ours uses normal parameters

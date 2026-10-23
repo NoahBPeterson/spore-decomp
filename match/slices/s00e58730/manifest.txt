@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e58730/s00e58730.cpp  ?sUpdateHealthUIs@@YAXM@Z      00e58730  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e58730/s00e58730.cpp  ?FUN_00e58890@@YA_NHHH@Z      00e58890  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e58730/s00e58730.cpp  ?FUN_00e58b60@@YAMMM@Z       00e58b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e58730/s00e58730.cpp  ?FUN_00e58bf0@@YA_NHMM@Z      00e58bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e58730/s00e58730.cpp  ?FUN_00e58c50@@YAPADPAD@Z    00e58c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e58730/s00e58730.cpp  ?FUN_00e59150@@YAXH@Z        00e59150  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e58730/s00e58730.cpp  ?FUN_00e59170@@YA_NH@Z       00e59170  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e58730/s00e58730.cpp  ?FUN_00e591c0@@YA_NH@Z       00e591c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e58730/s00e58730.cpp  ?FUN_00e59200@@YAXH@Z        00e59200  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e58730/s00e58730.cpp  ?FUN_00e59260@@YA_NH@Z       00e59260  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e58730/s00e58730.cpp  ?FUN_00e592f0@@YA_NHHHHPAH@Z 00e592f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e58730/s00e58730.cpp  ?FUN_00e593b0@@YA_NHHHPAH@Z  00e593b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e58730/s00e58730.cpp  ?FUN_00e59470@@YA_NH@Z       00e59470  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e58730/s00e58730.cpp  ?FUN_00e59500@@YA_NH@Z       00e59500  /O2 /MD /Gy /TP /arch:SSE /fp:fast
