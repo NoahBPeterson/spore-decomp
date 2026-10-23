@@ -1,0 +1,4 @@
+slices/s00dc0b00/s00dc0b00.cpp  ?FUN_00dc14a0@@YA_NPAXHHHHPAH@Z  00dc14a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dc0b00/s00dc0b00.cpp  ?FUN_00dc1540@@YAXPAXHHHHPAPAH@Z  00dc1540  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dc0b00/s00dc0b00.cpp  ?FUN_00dc1710@@YAXPAH0PAX@Z  00dc1710  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dc0b00/s00dc0b00.cpp  ?FUN_00dc1800@@YAXPAH0PAX@Z  00dc1800  /O2 /MD /Gy /TP /arch:SSE /fp:fast
