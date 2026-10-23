@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+# (none -- the single VA of this slice, 00a9ef80, is byte-exact and booked in manifest.txt)

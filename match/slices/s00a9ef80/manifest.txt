@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a9ef80/s00a9ef80.cpp  ?FUN_00a9ef80@Emitter@@QAEXPAUParticle@@@Z  00a9ef80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
