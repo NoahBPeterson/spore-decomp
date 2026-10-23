@@ -1,0 +1,10 @@
+# slice s00bf78d0 - Simulator cCivilization; DB names (symbols/vtable_names.txt 792-803)
+# VA        name                              mangled name
+00bf78d0    Simulator::cCivilization::cCivilization  ??0cCivilization@@QAE@XZ
+00bf7d80    Simulator::cGameData::RemoveOwner  ?RemoveOwner@cCivilization@@UAEXXZ
+00bf8140    Simulator::cGameData::cGameData_func3Ch  ?cGameData_func3Ch@cCivilization@@UAEDH@Z
+00bf8170    cCivilization::FUN_00bf8170  ?FUN_00bf8170@cCivilization@@QAEXHDHD@Z
+00bf8440    cCivilization::FUN_00bf8440  ?FUN_00bf8440@cCivilization@@QAEXXZ
+# 00bf8170 and 00bf8440 are unnamed in the DB (no vtable slot): 00bf8170 is a non-virtual
+# helper writing the four listener slots (ownerId/playerOwned/key/flag) and 00bf8440 the
+# per-frame political-score/timer update; both use the mangled names from the slice source.
