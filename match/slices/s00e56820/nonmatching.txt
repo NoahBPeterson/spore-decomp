@@ -1,0 +1,14 @@
+# va  diff-bytes  reason
+00e56820  51   complete: 3 calls in original order (curve 0xe56700 + FindWindowByID + apply); call/arg shape differs, size 80 vs 70
+00e56870  4    complete: 3 calls in original order; only the final GridPool().Get arg-push vs this-add scheduling differs (int3 padding)
+00e56b50  155  complete: 7 calls in original order; Ref temp / resource resolve call shape and x87-SSE mix differ, size 195 vs 211
+00e56c30  204  complete: 2 calls in original order; float tile math (cvtss2si/cmovb/clamp) reg-alloc differs, size 231 vs 270
+00e56d40  67   complete: 1 call in original order; idx*3/out reg-alloc (eax vs ecx) and load order differ, size 115 vs 114
+00e56f80  258  complete: 2 calls in original order; long normalize/quaternion path with inlined helper, size 328 vs 488
+00e57170  71   complete: 2 calls in original order; original takes id in EAX by static ABI, ours uses a normal first param
+00e57340  65   complete: 1 call in original order; sGetSourceLevel(fastcall level in EDX) + level-table index reg-alloc differs
+00e573e0  73   complete: 2 calls in original order; two sGetSourceLevel sites; slot-clamp frame/reg-alloc differs, size 97 vs 120
+00e57460  184  complete: 9 calls in original order; Ref temp lifetime + FUN_00e823a0 chains, reg-alloc differs, size 265 vs 251
+00e57560  109  complete: 4 calls in original order; Ref temp + branch shape (cl bool) differs, size 134 vs 143
+00e575f0  211  complete: 6 calls in original order; FUN_00e52910 twice + Ref temp, branch/layout differs, size 242 vs 244
+00e576f0  75   complete: 4 calls in original order; original takes `this` in ESI, ours uses a normal first param

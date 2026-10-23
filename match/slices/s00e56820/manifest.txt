@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e56820/s00e56820.cpp  ?FUN_00e56950@@YAXXZ  00e56950  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e56820/s00e56820.cpp  ?FUN_00e569b0@@YA_NXZ  00e569b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e56820/s00e56820.cpp  ?FUN_00e56a10@@YA_NXZ  00e56a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e56820/s00e56820.cpp  ?FUN_00e56ae0@@YA_NPADM@Z  00e56ae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e56820/s00e56820.cpp  ?FUN_00e56dc0@@YA_NPAHHHD@Z  00e56dc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e56820/s00e56820.cpp  ?FUN_00e56e50@@YAIHHHHM@Z  00e56e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e56820/s00e56820.cpp  ?FUN_00e56f20@@YA_NH@Z  00e56f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e56820/s00e56820.cpp  ?FUN_00e571f0@@YA_NHH@Z  00e571f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e56820/s00e56820.cpp  ?FUN_00e57260@@YAXPAHHM@Z  00e57260  /O2 /MD /Gy /TP /arch:SSE /fp:fast

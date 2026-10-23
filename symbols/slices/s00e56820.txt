@@ -1,0 +1,22 @@
+00e56820 apply curve value to a UI window  # curve_0e56700(&0x1483f08,4,a,b), FindWindowByID(0x5af4ae5,1), apply_0e504b0
+00e56870 fill a default grid-square  # GridPool 0xb72160/0xb72210 at gspCellGame+0x54; globals 0x16b3c28..,0x15a7c4c..; sets 0x16b3c10=id
+00e56950 show CLG opening/progress allouts  # toggle_0e53660(2,1); config FNV "CAllout_CLG_Opening"/"CAllout_CLG_ProgressBar"
+00e569b0 set grid-highlight flags on the current cell  # GetValid(G+0x411c); flags 0x16c,0x178..0x17f,0x188,0x189
+00e56a10 fill a default grid-square (0.75 tile, type 0x31)  # GridPool; then FUN_00e569b0
+00e56ae0 cell "reached target" timer predicate  # dist<1 resets +0x368; 3<=dist && +0x368<=1.5 advances by dt
+00e56b50 cell scale/radius from resource define  # Ref(0x743b50) + FUN_00e4ce40; FUN_00e837c0 / FUN_00e513d0
+00e56c30 world position -> grid cell index  # tile inverse, floor/fract*127.999985, clamp [0,0x80]
+00e56d40 grid cell centre from world position  # index = l8*0x80+l4; table row *3 * grid scale
+00e56dc0 every listed id resolves to block type 5 (unless excluded/flag)  # Get 0xb72210, FUN_00e823a0, +0xb4==5
+00e56e50 find cell id with slot + resource kind  # FUN_00e87260 query; +0x358==slot; +0xb4==want
+00e56f20 in-level-range predicate  # level table 0x1483c14/0x1483c34/0x1483e60; idx in [v-1, v+3]
+00e56f80 face cell toward target  # GetValid(+0x170); normalize; QuaternionFromFacingAndUp(0x69b600)
+00e57170 set cell radius/bounds from tile scale  # Get(+0x1c); sqrt(3)/(G+0x514c / G+0x5150)*scale; FUN_00e4f9d0
+00e571f0 cell state transition  # GetValid; state 2/3/4 -> +0x18c = 2/1/3, guarded by old<=3
+00e57260 build a sub-grid cell  # GridPool; type 0x21, parent id at +0x28, FUN_00e571f0
+00e57340 source level -> 0..4 index for one cell  # SP::sGetSourceLevel(0xe4ee60) fastcall, level table
+00e573e0 source-level delta -> 0..4 index for two cells  # two sGetSourceLevel sites; clamp (lb-la)+2
+00e57460 cells share a block-group predicate  # Ref/FUN_00e823a0; block id +0x2fc; flags +0x300/+0x301/+0x112
+00e57560 cell "selectable" predicate  # level kind +0x7c picks field 0x248 / 0x194 / 0xe0
+00e575f0 set cell selection/animation fields  # FUN_00e52910; +0x208,+0x21c..0x230
+00e576f0 apply FUN_00e575f0 when block kind == 0x1006  # Ref temp + level-kind field select
