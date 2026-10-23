@@ -1,0 +1,5 @@
+01173c10  FUN_01173c10  # hand-written asm (pushal/popal), SSE 4-wide fixed-point kernel
+01173eb0  FUN_01173eb0  # hand-written asm (pushal/popal), 64-bit fixed-point lerp
+01173fa0  FUN_01173fa0  # hand-written asm (pushal/popal)
+011741c0  FUN_011741c0  # Huffman/VLC reflection-coefficient decoder
+01174420  ReflectionToLpc  # 12-order reflection -> LPC (output via EDI)

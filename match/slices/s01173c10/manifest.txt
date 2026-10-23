@@ -1,0 +1,9 @@
+# slice s01173c10 -- rw::audio::core RenderWare 4 audio codec (Huffman reflection decode + LPC)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+#
+# No byte-exact functions in this slice.  The RenderWare audio core (0x0112c500 .. 0x01176a90)
+# was linked with /GL + /LTCG, so the register allocation and constant hoisting of these
+# functions cannot be reproduced from a single-object compile (see s0116dd70 for the same note).
+# 01173c10 / 01173eb0 / 01173fa0 are hand-written assembly (pushal/popal register-save frames)
+# with no compilable C++ source; 011741c0 and 01174420 are complete reconstructions recorded in
+# nonmatching.txt (01174420 also takes its output pointer in EDI - a register-ABI function).

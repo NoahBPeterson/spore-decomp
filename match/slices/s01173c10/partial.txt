@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+01173c10  0  hand-written assembly (pushal/popal register-save frame; 4-wide SSE fixed-point interpolation kernel writing globals 0x15c4a50..0x15c4af0), not decompiled C++
+01173eb0  0  hand-written assembly (pushal/popal register-save frame; 64-bit fixed-point lerp with a global accumulator), not decompiled C++
+01173fa0  0  hand-written assembly (pushal/popal register-save frame), not decompiled C++
