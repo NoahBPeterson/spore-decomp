@@ -1,0 +1,10 @@
+00ef3370 cSPUIAssetView::MessageHandler  # IMsgHandler dispatch, 8 message cases (asset-browser selection, SetAssetData, avatar, object-template query, panel refresh)
+00ef38c0 cSPUIAssetView::Cleanup  # RemoveHandler on the messaging registration, release the AutoRefCount at +0x120, tail-call Cleanup
+00ef3930 FUN_00ef3930  # writes a 3-dword record (0x68715e28, 0x0510a95b, DAT_015acd3c) through the out pointer
+00ef3950 cSPUIAssetView::Dtor  # release the text/layout AutoRefCounts at +0x124..+0x148 (toggle slot 0x7c on +0x12c first), tail-call dtor
+00ef3a60 cSPUIAssetView::Refresh  # query the +0x120 type hash; magic 0x24720859 toggles visibility, otherwise set the image from the layout
+00ef3b40 cSPUIAssetView::Ctor  # base ctor, set the IMsgHandler vtable at +0x108 and the view vtables, zero +0x10c..+0x148
+00ef3bf0 cSPUIAssetView::Dtor2  # set view vtables, release +0x124..+0x148, the AutoRefCount at +0x120 and the messaging registration, tail-call dtor
+00ef3d20 cSPUIAssetView::Init  # base init, resolve +0x90 via slot 3 (0x8d021ce9), swap the +0x120 AutoRefCount, register handler 0x9818ab6c
+00ef3e40 cSPUIAssetView::RefreshDetails  # hide +0x12c, if the type hash is not 0x24720859 read the property bag (float/int/int) and update tray/text/slider
+00ef4050 cSPUIAssetView::Handler  # IMsgHandler for 0x9818ab6c: match server id and message payload, then refresh the details
