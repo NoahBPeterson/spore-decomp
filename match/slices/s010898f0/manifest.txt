@@ -1,0 +1,6 @@
+# slice s010898f0 -- Havok 3.1.0 hkGenericConstraintData scheme command handlers
+# (constrainToAngularW / constrainAllAngularW / linear+angular limits, motors and friction).
+# The handlers are 3.1-era `inline` member functions, so the standalone copies were emitted
+# by VC7.1 (cl 13.10.3052); /vc71 also gives the fld/fstp float copies and the x87
+# comparison idioms the original uses.
+slices/s010898f0/s010898f0.cpp  ?setTwistLimitW@hkGenericConstraintData@@IBEXAAPAHAAPAVhkVector4@@ABVhkGenericConstraintDataScheme@@AAVhkGenericConstraintDataParameters@@ABVhkConstraintQueryIn@@AAVhkConstraintQueryOut@@@Z  01089f10  /vc71 /O2 /MD /Gy /TP
