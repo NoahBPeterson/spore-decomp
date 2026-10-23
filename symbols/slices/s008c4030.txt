@@ -1,0 +1,10 @@
+# va  name  # evidence
+# Spore Adobe T2K (Type2K) font-stream readers from psread.c (SporeApp.exe 0x008c4030..0x008c4f3b).
+# Names come from the PDB-candidate strings printed by tools/matching/card.py (New_ebscClass) and the
+# standard T2K psread.c function names matched by the disassembly; nothing here is byte-exact (the
+# slice uses the retail LTCG register ABI), so manifest.txt has no rows.
+008c4030  New_ebscClass
+008c44d0  ReadBigMetrics
+008c4a00  ReadSmallMetrics
+008c4d50  FintBestSubstitute
+008c4dc0  FindBitmapSizeTable

@@ -1,0 +1,13 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+# Slice s008c4030 is Adobe T2K (Type2K) font-stream decoding from psread.c, linked into SporeApp.exe:
+# New_ebscClass, ReadBigMetrics, ReadSmallMetrics, FintBestSubstitute and FindBitmapSizeTable.
+# The whole slice is built with the retail LTCG / whole-program register ABI: the entry functions
+# read their arguments from eax/esi/ebx (not the cdecl stack), and ReadByte is inlined at every
+# site.  Stock cl cannot reproduce that ABI, so nothing is byte-exact.  Diff counts are the byte
+# difference against the correctly resolved symbol (tools/matching/chk.py, default flags
+# /O2 /MD /Gy /EHsc /TP).  Equiv verdicts from tools/difftest/equiv.py default inputs.
+008c4030  1053  New_ebscClass: complete.  Reads the 0x20000|N tag, allocates the 0x14-byte header and the count*0x1c record table, and fills each record with 0xc+0xc+4 stream bytes.  Same algorithm; the original's argument lives in esi and the inlined ReadByte is arranged differently; size 1085 vs 1179.  Equiv WEAK (335 valid inputs, no mismatch, 5.1% coverage).
+008c44d0  1205  ReadBigMetrics: complete.  Reads the 8 display-metric bytes into the short[8] (two u16 metrics, two signed char bearings, one u16 advance, two signed char italics, one u16 flags).  Original takes (stream, out) in esi/ebx; ours uses the cdecl stack; the inlined ReadByte and the final differently-scheduled 8th read account for the rest; size 1265 vs 1318. Equiv UNSUPPORTED (0/400 valid, synthetic stream inputs fault at read).
+008c4a00   761  ReadSmallMetrics: complete.  Same as ReadBigMetrics but 5 bytes (two u16, two signed char, one u16).  size 810 vs 837.  Equiv UNSUPPORTED (0/400 valid, synthetic inputs fault).
+008c4d50    81  FintBestSubstitute: complete.  Nearest (x,y) match over the 0x38-byte entry table with the asymmetric dx/dy *4 weighting and strict `<` update.  Semantics identical; the original takes self in ecx and x,y on the stack and cleans with `ret` (cdecl-style), modelled as __fastcall(self, dummy, x, y); size 94 vs 99.  Equiv FAIL -- 5/5 valid inputs, 100% instruction coverage, the only difference is esp after return (ret 8 vs ret), an ABI artefact.
+008c4dc0   376  FindBitmapSizeTable: complete.  Bitmap-size lookup with the optional mask at +0xc, the substitute-table fallback, and the FintBestSubstitute fallback when +8 is set; size 391 vs 379. Equiv UNSUPPORTED (original reads eax at entry, the harness cannot feed the retail register ABI).
