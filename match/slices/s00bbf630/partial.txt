@@ -1,0 +1,3 @@
+# s00bbf630: no incomplete functions. Every VA in this slice has a full, compiling
+# implementation in s00bbf630.cpp and is booked either in manifest.txt (byte-exact)
+# or nonmatching.txt (complete / behaviour-equivalent).

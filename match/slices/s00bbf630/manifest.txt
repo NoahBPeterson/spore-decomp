@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00bbf630/s00bbf630.cpp  ?FUN_00bbf730@SimSelf@@QAEHPBHM@Z  00bbf730  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bbf630/s00bbf630.cpp  ?insertion_sort@@YAXPAUElem12@@0UKeyIntern@@PAUAllocNode@@@Z  00bbfa30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bbf630/s00bbf630.cpp  ?median@@YAPAUElem12@@PAU1@00UKeyIntern@@PAUAllocNode@@@Z  00bbfbf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bbf630/s00bbf630.cpp  ?sift_down@@YAXPAUElem12@@HHU1@UKeyIntern@@PAUAllocNode@@@Z  00bbfdc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bbf630/s00bbf630.cpp  ?FUN_00bbfe80@SimSelf@@QAEXXZ  00bbfe80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
