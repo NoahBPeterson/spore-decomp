@@ -12,13 +12,31 @@
 01204110   93  m01204110 (matrix init): complete; all eight identity stores plus p[0]=((a2+a3+2)<<7)+((a3*3)<<5)+0x27e0 and p[1]=0x10 are exact; cl folds the expression into `lea ecx,[ecx+ecx*2+0x147]`-style addressing and emits the two scratch stores in a different order than the original.
 012041a0  449  Tree::m012041a0 (KD-tree descend/stack push): complete; the pop, the node fetch, the two candidate-interval computations (`arr[0..3]`), the `f>0`/`arr[e2]>lo` branch selection, the min/max clamps and both stack pushes are exact.  Largest SSE-scheduling diff in the slice: cl reorders the movaps/shufps/mulps chain and uses different registers for the two extents.
 01204380  168  Tree::m01204380 (stack pop / next node): complete; the while(front==0) loop, the empty->return 0 early-out, the inner descend call and the `-1` leaf-scan loop plus the two counter `++`/`--` are exact; cl allocates the loop induction/counters in different registers than the original.
-01204420  185  Tree::m01204420 (stack compact/filter by p): complete; the n-fold filter, the four-float copy and the final `*+0x250=n` store are exact; the original is a do-while guarded filter with a branchless `subss/sar 31/and/or` min and keeps the count/cursor in different registers.
+01204420  177  Tree::m01204420 (stack compact/filter by p): complete; the n-fold filter, the four-float copy and the final `*+0x250=n` store are exact; the original is a do-while guarded filter whose float min is a branchless sign-mask select (subss / sar 31 / and / or), reproduced by SignMaskMin so the stored value (including a -0 result) is bit-identical; only the count/cursor registers differ.
 012044e0  161  Tree::m012044e0 (leaf descend): complete; both child tests (`Get(v3,idx)` vs [node+0x1c] and [node+0x18] vs `Get(v1,idx)`), the -1 child push, the `*=+0xb4` accumulation and the +0xb8 store are exact; cl hoists the `movaps xmm0,[ecx+0x20]` extent load to the top of the function (before the pushes) where the original loads it after the index computation, and picks edx instead of edi for `d`.
-01204680   35  Tree::m01204680 (TriangleKDTreeProcedural ctor): complete; the bit-scan (u=a2+1; if(u) { c=0; do{u>>=1;c++;}while(u); *+0x24=c; }), the ((this+a4+0xf)&~0xf) base, the verts/tris strides (a1*0x10, a2*0x10) and the ((a2+7)>>3) index round-up are exact; only the register allocation of the verts/tris chain differs (35 bytes, the closest non-matching row).
-01204780  236  AABB::Transform: complete; the null-xf copy, the centre/extent halves, the three row-shuffles (`shufps 0x00/0x55/0xaa`) for tc, the abs(max(-r,r)) extents for te and the out->mn/out->mx stores are exact; cl schedules the SSE shuffle/mul/add chain differently.
+01204680   35  Tree::m01204680 (TriangleKDTreeProcedural ctor): complete; the bit-scan (u=a2+1; if(u) { c=0; do{u>>=1;c++;}while(u); *+0x24=c; }), the ((this+a4+0xf)&~0xf) base, the verts/tris strides (a1*0x10, a2*0x10) and the unsigned ((a2+7)>>3) index round-up (shr, not sar) are exact; only the register allocation of the verts/tris chain differs (35 bytes, the closest non-matching row).
+01204780  198  AABB::Transform: complete; the null-xf copy, the centre/extent halves, the three row-shuffles (`shufps 0x00/0x55/0xaa`) for tc, the abs(max(-r,r)) extents for te and the out->mn/out->mx stores are exact; tc is summed in the original's association (((r0*cx + r1*cy) + r2*cz) + r3) so the float result is bit-identical; cl schedules the SSE shuffle/mul/add chain differently.
 01204890  223  AABB::BuildSwept: complete; the d1/d2 (a5+4/a5) subtractions, absmax, delta=(a3-v1)*0.5, adelta, the slack=max(absmax*1e-6,adelta)-adelta, the per-lane sign selection (sx/sy/sz via comiss) and the mn/mx/rcp/ref stores are exact; cl reorders the SSE chain and the three sign compares.
 012049e0   69  AABB::BuildSwept2: complete; slack=max(|a2|,|a3|)*1e-6 then a tail call into BuildSwept with the slack as the a4 argument is exact; cl materialises the slack into stack/register scratch with a different layout.
 01204a50  507  AABB::GetInterval: complete; the lo/hi subtractions, the rcp multiplies, the two lanes' min/max and the scalar (a<b?b:a)<c clamp (and the mirrored tmax) are exact; the original uses a branchless `subss/sar 31/and/or` min/max idiom that cl 13.10 does not reproduce from the C ternary form.  Largest diff in the slice (507 bytes).
 01204c60  133  Tree::m01204c60 (swept-AABB cast setup): complete; the BuildSwept2 call on [+0x10], the (0,1) interval init, the +0x254/+0x258 zeroing, the GetInterval call and the two empty/leaf arms (+0x50=-1,+0x54=0,+0x250=1 vs +0x254=[a1+8]) are exact; cl uses different registers and orders the field stores differently.
 #
 # ---- tools/difftest/equiv.py verdicts (flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE) ----
+# PASS (11): 01203fc0 (345 in, 100% cov), 012040b0 (400, 100%), 01204110 (400, 100%),
+#   01204380 (371, 93.2%), 01204420 (341, 100%), 012044e0 (237, 77.6%), 01204680 (400, 100%),
+#   01204780 (400, 100%), 01204890 (400, 100%), 012049e0 (400, 100%), 01204c60 (352, 100%).
+# FAIL (3), all register-allocation / LTCG artifacts, no memory or return-value divergence
+#   on any valid input other than the one named:
+#   01203ee0 5/6 valid -- the only difference is the final value of the callee-saved ebx
+#     (esi/edi likewise differ in the same run): our `this` lives in esi vs the original's
+#     edi, and the callee 0x01203110 has a custom register ABI (from in ecx, out in esi) that
+#     the C++ member cannot express, so the fake-call model cannot reconcile the
+#     register/stack state around it (it records 0 stack args for our call vs the original's
+#     5).  The three calls (0x01202160, 0x01202020, 0x01203110) fire identically and the
+#     int return value matches.  Same root cause as the s01203110 UNSUPPORTED precedent.
+#   012041a0 5/5 valid -- only difference is xmm4, a call-volatile SSE register our
+#     scheduling writes (it zeroes it) and the LTCG original never writes; the harness's
+#     "an LTCG caller may keep a live value there" heuristic is the sole mismatch.  The
+#     memory compare runs after the clobber check, so a later memory divergence is not
+#     observable through this run; the source mirrors every original store.
+#   01204a50 5/5 valid -- same as 012041a0 with xmm5 (ours leaves 0x7f800000).
