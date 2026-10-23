@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c947d0/s00c947d0.cpp  ??4cFishingHotSpot@@QAEAAU0@ABU0@@Z  00c95010  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c947d0/s00c947d0.cpp  ?AddPanicBubble@cTribe@@QAEXABUVector3@@MH@Z  00c95540  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c947d0/s00c947d0.cpp  ?FreeBubbleLists@@YGXPAPAUcBubbleNode@@I@Z  00c95930  /O2 /MD /Gy /TP /arch:SSE /fp:fast
