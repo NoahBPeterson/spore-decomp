@@ -1,0 +1,12 @@
+010e4840 ?linearCast@hkBvTreeAgent@@UAEXABVhkCdBody@@0ABUhkLinearCastCollisionInput@@AAVhkCdPointCollector@@PAV4@@Z  # vtable 0x014A4D9C slot 4: monitor-timed walk over m_collisionPartners, each child shape cast through its agent
+010e49c0 ?staticLinearCast@hkBvTreeAgent@@SAXABVhkCdBody@@0ABUhkLinearCastCollisionInput@@AAVhkCdPointCollector@@PAV4@@Z  # dispatcher static entry (shape,BV-tree) pair: collect overlapping child keys, dispatch per (typeA,typeB)
+010e4be0 ?getClosestPoints@hkBvTreeAgent@@UAEXABVhkCdBody@@0ABUhkCollisionInput@@AAVhkCdPointCollector@@@Z  # vtable 0x014A4D9C slot 3: monitor-timed walk over m_collisionPartners
+010e4d50 ?staticGetClosestPoints@hkBvTreeAgent@@SAXABVhkCdBody@@0ABUhkCollisionInput@@AAVhkCdPointCollector@@@Z  # dispatcher static entry: query aabb in bodyB space, collect keys, dispatch closest-point agents
+010e4fb0 ?getPenetrations@hkBvTreeAgent@@UAEXABVhkCdBody@@0ABUhkCollisionInput@@AAVhkCdBodyPairCollector@@@Z  # vtable 0x014A4D9C slot 2: monitor-timed walk, honours collector.m_earlyOut
+010e5130 ?staticGetPenetrations@hkBvTreeAgent@@SAXABVhkCdBody@@0ABUhkCollisionInput@@AAVhkCdBodyPairCollector@@@Z  # dispatcher static entry: as staticGetClosestPoints but via m_getPenetrationsFunc and m_earlyOut
+010e5390 ?getClosestPoints@?$hkSymmetricAgent@VhkMoppAgent@@@@UAEXABVhkCdBody@@0ABUhkCollisionInput@@AAVhkCdPointCollector@@@Z  # vtable 0x014A4E0C slot 3: flip-collector wrapper around hkBvTreeAgent::getClosestPoints with swapped bodies
+010e53d0 ?processCollision@?$hkSymmetricAgent@VhkMoppAgent@@@@UAEXABVhkCdBody@@0ABUhkProcessCollisionInput@@AAUhkProcessCollisionOutput@@@Z  # vtable 0x014A4E0C slot 5: hkBvTreeAgent::processCollision with swapped bodies, flip new contacts and the toi normal
+010e5450 ?createBvTreeShapeAgent@hkBvTreeAgent@@SAPAVhkCollisionAgent@@ABVhkCdBody@@0ABUhkCollisionInput@@PAVhkContactMgr@@@Z  # factory registered for (BV_TREE,-1): builds the hkSymmetricAgent<hkMoppAgent> at vtable 0x014A4E0C
+010e54b0 ?createBvBvAgent@hkBvTreeAgent@@SAPAVhkCollisionAgent@@ABVhkCdBody@@0ABUhkCollisionInput@@PAVhkContactMgr@@@Z  # factory registered for (BV_TREE,BV_TREE): larger-radius body becomes the outer (non-flipped) hkBvTreeAgent
+010e5540 ?hkBvTreeAgent_registerBvTreeAgents@@YAXPAVhkCollisionDispatcher@@@Z  # registers the three BV-tree agent sets ((3,-1),(-1,3),(3,3)); name is descriptive, not a retail symbol
+010e5600 ?cleanup@hkShapeCollectionAgent@@UAEXXZ  # vtable 0x014A4D24 slot 6: cleanup each child agent, then delete this
