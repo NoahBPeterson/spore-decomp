@@ -1,0 +1,16 @@
+# slice s01190840 nonmatching functions (complete semantics, not byte-exact)
+# format: <va>  <diff-bytes>  <reason>  | difftest: <verdict>
+# cl flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast   (default /GS on: 0x1190840 has a stack cookie)
+01190db0  338  PEM header test ("Proc-Type: 4,ENCRYPTED" / "DEK-Info: "). Semantics complete. The original keeps | difftest: UNSUPPORTED - 1 unresolved reference(s): ?OBJ_sn2nid@@YAHPBD@Z the walking pointer in esi and the out-param in ebp, and hoists the dllimport strncmp through the IAT into edi; this build assigns the out-param to edi, hoists strncmp into esi and spills the walking pointer to the frame, so every offset and the whole prologue differ. Load order (param_2 materialised before the pointer copy) was tried both ways with no change.
+01191620  265  EVP_PKEY/EC_KEY copy-by-type (0x74 DSA / 0x198 EC): the BIGNUM triple is duplicated and the old | difftest: WEAK - 400 valid inputs (need 200), 24.8% coverage (need 60%) ones freed, then the group is dup'ed and set. Semantics complete. Diffs are register allocation and block placement only: the original keeps the key-type word in ecx across the whole check sequence (this build uses eax and re-materialises it), pushes edi in the prologue instead of at first use, and places the second ERR_put_error block inline where this build sinks it.
+011918c0  509  X509_PUBKEY_get: cached-pkey fast path (CRYPTO_add_lock + return), else EVP_PKEY_new + | difftest: FAIL - 5/19 valid inputs mismatched; first: memory heap @50000004 (see note below) EVP_PKEY_type, then the DSA (d2i_DSAPublicKey), EC-NamedCurve or EC-SEQUENCE branch, then the outer d2i and the pkey cache store. Semantics complete. The original keeps *algor in esi and the nid in ebp live across the calls and allocates two frame temporaries; this build re-materialises both from the pointer argument and needs fewer callee-saved registers, so the prologue, the frame size and most operand choices differ throughout.
+
+# difftest run: .venv/bin/python tools/difftest/equiv.py s01190840 --time-limit 40
+#   011918c0 FAIL note: the orig and ours call traces are identical (OBJ_obj2nid -> FUN_01191470 ->
+#   EVP_PKEY_type -> FUN_011b34f0 -> ERR_put_error(0xb,0x77,0x66,0,0) -> EVP_PKEY_free(0x50000000) ->
+#   free, same order both sides). The only difference is the fake (pointery) input argument
+#   OBJ_obj2nid received -- 0x47500000 vs 0x45680000 -- i.e. the emulator materialised the input's fake
+#   pointer differently per run, and 0x418d0000 is that run's return value for it. equiv.py also reports a
+#   symbol-resolution conflict for ?FUN_01191b20@@YAPAIH@Z (resolved 01191b20 by hex-name, 'aligned'
+#   01191da0), which is caused by this file listing the functions out of VA order (01191da0 sits before
+#   01191b20 in the object). Reordering the definitions to VA order should clear both effects.

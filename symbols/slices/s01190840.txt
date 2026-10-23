@@ -1,0 +1,10 @@
+01190840 FUN_01190840  # PEM_bytes_read_bio-style BEGIN/END block reader + base64 decode (NOT implemented - partial)
+01190db0 FUN_01190db0  # PEM header test: "Proc-Type: 4,ENCRYPTED" then "DEK-Info: <cipher>,<iv>" (complete)
+01191470 FUN_01191470  # EVP_PKEY_new (0x18 bytes from p_lib.c)
+01191620 FUN_01191620  # EVP_PKEY/EC_KEY copy by type (0x74 DSA / 0x198 EC) (complete)
+011918c0 FUN_011918c0  # X509_PUBKEY_get: cached pkey, else EVP_PKEY_new + type + d2i (complete)
+01191b20 FUN_01191b20  # DSA_new_method (0x44 bytes from dsa_lib.c)
+01191da0 FUN_01191da0  # DSA_new: one-line wrapper `return DSA_new_method(NULL)`
+01191f10 FUN_01191f10  # EC_KEY_new (0x20 bytes from ec_key.c)
+01191fe0 FUN_01191fe0  # EC_KEY_copy: group/point/BIGNUM + ex_data chain
+01192190 FUN_01192190  # EC_KEY_generate_key: BN_rand_range then EC_POINT_mul
