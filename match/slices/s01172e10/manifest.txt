@@ -1,0 +1,3 @@
+# slice s01172e10 -- rw::audio::core MPEG polyphase synthesis helpers
+# Module flags: /vc71 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s01172e10/s01172e10.cpp  ?Clear8@@YAXPAM@Z  01173100  /vc71 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
