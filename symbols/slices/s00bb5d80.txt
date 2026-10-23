@@ -1,0 +1,12 @@
+# Spore (EA) star-manager / star-record helpers, slice s00bb5d80.
+# No retail PDB names survive for these; the decorated names below are the exact
+# spellings the slice TU compiles to (markers in s00bb5d80.cpp), which is what
+# the equivalence harness binds against.  00bb6700 is byte-exact (manifest.txt);
+# the other six are reconstructed in full and non-exact (nonmatching.txt).
+00bb5d80 ?FUN_00bb5d80@@YA_NIPAUStarInput@@H@Z
+00bb6040 ?FUN_00bb6040@@YIXPAUcStarManager@@@Z
+00bb6390 ?FUN_00bb6390@@YIXPAUcStarManager@@@Z
+00bb6650 ?cAppModeEditorBase_Redo@@YI_NPAUcStarManager@@@Z
+00bb6700 ?FUN_00bb6700@cStarManager@@QAEXPAUcStarRecord@@H@Z
+00bb6740 ?resize@VecRows@@QAEXI@Z
+00bb67d0 ?FUN_00bb67d0@@YAXPAUcStarManager@@PAUStarVector@@@Z
