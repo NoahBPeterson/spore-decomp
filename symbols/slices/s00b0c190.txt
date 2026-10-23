@@ -1,0 +1,16 @@
+00b0c190 cPlanetManager::Unload  # descriptive name; the 0x1ba1a8-byte planet data block's unload path
+00b0c520 cPlanetManager::SetCurrentKey  # descriptive name
+00b0c570 cPlanetRecordTable::Insert  # descriptive name; sorted insert position lookup around pPos
+00b0c5d0 cKeyChangeNotifier::Shutdown  # descriptive name; listener sub-object at manager+4, remove handler + shut the world
+00b0c610 cPlanetRecordTable::FindOrCreate  # descriptive name
+00b0c730 LoadPlanetRecords  # free function streaming the record array in
+00b0cbb0 cKeyChangeNotifier::DoMessage  # descriptive name; turns planet-object messages into records
+00b0ce40 CopySlotObjects  # adds refs of a slot-object array into a destination array
+00b0ce80 cObjectIdSet::ContainsId  # id range at +0x24/+0x28 of the owning object
+00b0ceb0 cKeySlotList::NextRun  # walks the sparse key-slot runs (bit 30 = last, bit 31 = empty)
+00b0cef0 WriteObjectList  # streams a slot-object list as count + tagged objects
+00b0cf80 FindSlotRun  # finds the run of slots holding one object
+00b0cfd0 DestroySlots  # releases every non-empty slot in a range
+00b0d010 CountSlots  # counts the runs of a sparse key-slot range
+00b0d050 cKeySlot::operator=  # ref-count aware slot copy
+00b0d250 cPlanetDataBlockSaver::Save  # writes the id then the tracked object list

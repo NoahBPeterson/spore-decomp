@@ -1,0 +1,5 @@
+slices/s00b0c190/s00b0c190.cpp  ?SetCurrentKey@cPlanetManager@@QAEXPBVcObjectKey@@@Z  00b0c520  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00b0c190/s00b0c190.cpp  ?Insert@cPlanetRecordTable@@QAEPAUcPlanetRecord@@PAU2@PBI@Z  00b0c570  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00b0c190/s00b0c190.cpp  ?Shutdown@cKeyChangeNotifier@@QAEXXZ  00b0c5d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00b0c190/s00b0c190.cpp  ?ContainsId@cObjectIdSet@@QBE_NI@Z  00b0ce80  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00b0c190/s00b0c190.cpp  ?DestroySlots@@YGXPAUcKeySlot@@0@Z  00b0cfd0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
