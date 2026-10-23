@@ -1,0 +1,12 @@
+00c72c60 71 cPlanet::AddDebugInfo: structure correct, strlen/sprintf arg schedule and 2-byte size differ
+00c72d70 84 map find + node compare: whole body close, key compare polarity and register roles differ
+00c72e10 791 rebuild vehicle/city data: size 534 vs 910, eastl inlines collapsed differently
+00c731a0 220 build 0x2c vector entry: size 211 vs 174, aggregate copy schedule differs
+00c73310 8 erase vector @0xbc: identical 8 instructions, p kept in eax instead of ecx
+00c73330 8 erase vector @0xd0: identical 8 instructions, p kept in eax instead of ecx
+00c733b0 294 cSpatialObject::Reset: sequence present, size 369 vs 354, inline dtor scheduling differs
+00c73520 98 collect civ cities: correct now, stack slots and out-in-edi vs esi differ
+00c735e0 130 lower_bound lookup: structure present, size 137 vs 131, doubles as an insert probe
+00c73680 200 cPlanet dtor: vtable stores and member dtors present, size 281 vs 282
+00c737a0 912 large load fn: 925 bytes of inlined module code, body left as a stub
+00c73b60 201 rebuild tribe/city data: loop structure present, size 307 vs 294
