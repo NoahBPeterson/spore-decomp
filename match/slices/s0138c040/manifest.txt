@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Slice s0138c040 -- two Spore property-table initializers (0138c040, 0138c5d0).
+# 0138c5d0 is byte-exact; 0138c040 is a faithful reconstruction (see nonmatching.txt).
+slices/s0138c040/s0138c040.cpp  ?f0138c5d0@@YAXXZ  0138c5d0  /O2 /MD /Gy /EHsc /TP

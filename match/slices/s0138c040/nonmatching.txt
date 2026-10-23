@@ -1,0 +1,10 @@
+# va  diff-bytes  status VERDICT flags: reason
+#
+# Slice s0138c040 -- two Spore property-table initializers.  Both fill consecutive
+# 0x3c-byte (15-dword) global records by building the record in a stack buffer and
+# copying it out with `rep movsd` (MSVC codegen for `g[i] = d;`).  Record fields:
+# name,id,size at +0/+4/+8; three unassigned dwords at +0xc/+0x10/+0x14; a,b,c at
+# +0x18/+0x1c/+0x20; function pointers d..i at +0x24..+0x38.  Store order per record
+# is name,id,a,b,c,d,e,f,g,h,i,size.  0138c5d0 (6 records) is byte-exact; 0138c040
+# (14 records) is not.
+0138c040 876 complete PASS /O2 /MD /Gy /EHsc /TP: unnamed property-table initializer, 14 records into g_desc1[0x15aefd0] (stride 0x3c).  The reconstruction writes the identical field values at the identical offsets (difftest 400/400 inputs, 100% coverage) but is not byte-exact: (1) the original CSEs several repeated function-pointer constants into ebx/ebp (0xb1fbf0 from record 3, 0xacbb80 from record 3, 0xc2e4e0 and 0x692fb0 from record 12) where the reconstruction keeps them as immediates, and (2) the original interleaves a one-time-init guard (test byte [0x16c847c],1 / or dword [0x16c847c],1) inside record 4 that no reconstructable source form reproduces.  The guard is reproduced explicitly so the function is observably equivalent; code size 1375 vs 1399.

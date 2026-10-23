@@ -1,0 +1,8 @@
+# va  name  # evidence
+#
+# Slice s0138c040 -- two Spore property-table initializers.  Neither address is a
+# named public in any available symbol source (symbols/names.txt, pdb_names.json,
+# havok_names.txt have no entry for 0138c040 / 0138c5d0); the names below are
+# descriptive labels inferred from the code, not PDB names.
+0138c040  propTable_init_14  # inferred (unnamed); builds 14 records into the global at 0x15aefd0 (stride 0x3c)
+0138c5d0  propTable_init_6   # inferred (unnamed); builds 6 records into the global at 0x15af358 (stride 0x3c)
