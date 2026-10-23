@@ -1,0 +1,4 @@
+slices/s00bdb3b0/s00bdb3b0.cpp  ?FUN_00bdb930@CStub@@QAEEHH@Z  00bdb930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00bdb3b0/s00bdb3b0.cpp  ?FUN_00bdba80@CStub@@QAEMXZ  00bdba80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00bdb3b0/s00bdb3b0.cpp  ?FUN_00bdbbb0@CStub@@QAEXXZ  00bdbbb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00bdb3b0/s00bdb3b0.cpp  ?FUN_00bdbe50@CStub@@QAEXXZ  00bdbe50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
