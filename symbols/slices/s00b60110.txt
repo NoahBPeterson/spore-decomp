@@ -1,0 +1,11 @@
+00b60110 FUN_00b60110  # App ArgScript command Execute body; naked asm, byte-exact
+00b60350 App::cPauseUIVisibleCommand::cPauseUIVisibleCommand  # PDB name; naked asm, byte-exact
+00b603b0 FUN_00b603b0  # __thiscall App command Execute body (UI show/hide); naked asm, byte-exact
+00b604a0 App::cStyleFilter::cStyleFilter  # PDB name; naked asm, byte-exact
+00b60550 FUN_00b60550  # __thiscall App command Execute body (large); naked asm, byte-exact
+00b60830 FUN_00b60830  # __thiscall cStyleFilter scalar-deleting destructor; naked asm, byte-exact
+00b60870 App::cAdventureLook::cAdventureLook  # PDB name; naked asm, byte-exact
+00b60920 FUN_00b60920  # __thiscall App command Execute body; naked asm, byte-exact
+00b60a70 FUN_00b60a70  # __thiscall App command Execute body w/ call-through table @0xb60b3c; naked asm, byte-exact
+00b60bb0 SP::cAppModeSpace::OnKeyDown  # PDB candidate; naked asm, byte-exact
+00b60c70 `anonymous namespace'::cTextureCheat::Execute  # PDB candidate; naked asm, byte-exact
