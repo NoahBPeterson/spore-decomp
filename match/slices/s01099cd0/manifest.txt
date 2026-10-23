@@ -1,0 +1,4 @@
+# slice s01099cd0 -- Havok 3.1 hkDiscreteSimulation collide machinery
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01099cd0/s01099cd0.cpp  ?reintegrateAndRecollideEntities@hkDiscreteSimulation@@UAEXPAPAVhkEntity@@HPAVhkWorld@@@Z  0109a6a0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s01099cd0/s01099cd0.cpp  ?collideEntitiesDiscrete@hkDiscreteSimulation@@UAEXPAPAVhkEntity@@HPAVhkWorld@@ABUhkStepInfo@@@Z  0109a800  /vc71 /O2 /MD /Gy /EHsc /TP

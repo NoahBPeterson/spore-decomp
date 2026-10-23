@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+01099cd0  768  collideEntitiesBroadPhaseDiscrete: complete reconstruction (stack frame 0x1c vs original 0x30; uses raw pointer arrays instead of the inlined hkArray/hkThreadMemory reserve+allocate and the monitor-stream begin/end command writes the original inlines, so the whole body diverges); flags /vc71 /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (2 unresolved references: ?allocTop@hkThreadMemory@@QAEPAXH@Z, ?freeTop@hkThreadMemory@@QAEXPAX@Z)
+0109a200  872  stepCollide: complete reconstruction (ours 1265 vs original 1169 bytes; the inlined hkArray/allocator and monitor-stream codegen differ throughout); flags /vc71 /O2 /MD /Gy /EHsc /TP; difftest FAIL (5/5 valid inputs mismatched; first at memory pool @40010170)
