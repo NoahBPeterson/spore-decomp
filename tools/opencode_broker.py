@@ -381,6 +381,38 @@ def _stream():
                 yield ev["data"]
 
 
+def _sweep():
+    """Answer requests that are already pending. The event stream only delivers requests asked while it is
+    connected: on the Runpod build server (2026-10-23) all 48 sessions asked within a second of launch, before
+    the broker had connected, and then waited forever with no further events. Swept at connect and every 30 s
+    (also covers events lost while the stream reconnects)."""
+    mine = _mine()
+    if not mine:
+        return
+    for sid in mine:
+        try:
+            pend = call("GET", "/api/session/%s/permission" % sid).get("data", [])
+        except Exception:
+            continue
+        for r in pend:
+            r.setdefault("sessionID", sid)
+            _process(r)
+
+
+def _sweeper():
+    while True:
+        time.sleep(30)
+        try:
+            _sweep()
+        except Exception as e:
+            print("ERROR sweeping: %s" % e, flush=True)
+
+
+if "--once" not in sys.argv:
+    import threading
+    _sweep()
+    threading.Thread(target=_sweeper, daemon=True).start()
+
 while True:
     try:
         for r in _stream():
