@@ -1,0 +1,9 @@
+00f74180 cParticlesEffect::GetFrame  # older-layout copy; basis-vector + quaternion frame helper; equiv UNSUPPORTED
+00f74480 GroundCoverAddCommands  # anon-namespace free fn registering the "groundCover" template; complete, 4-byte scheduling diff
+00f744c0 cParticlesEffect::v20  # command handler (0=model,1=texture,2=data); complete, regalloc/scheduling differ
+00f747a0 cEffectObject::RenderStream  # vtable slot 0 of object+0; dispatches gStreamCommands[mCurrentFormat]; byte-exact
+00f747e0 cParticlesEffect::v04  # virtual slot 0x04; stops if started; byte-exact
+00f748c0 cParticlesEffect::v28  # virtual slot 0x28; SetVisible + last emit location; byte-exact
+00f74950 cParticlesEffect::v2c  # virtual slot 0x2c; chain-system link; byte-exact
+00f749d0 cParticlesEffect::v08  # virtual slot 0x08; preroll/reset + attractor; byte-exact
+00f74b40 anon::ApplyLoopBox  # emission-volume wrap + loop-box colour/alpha curves; partial (equiv FAIL on dead eax)

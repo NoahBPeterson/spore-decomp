@@ -1,0 +1,7 @@
+# slice s00f74180 -- older-layout EA::Swarm cParticlesEffect (quad-streamer sibling)
+# Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f74180/s00f74180.cpp  ?RenderStream@cEffectObject@Swarm@EA@@UAEXPAX@Z  00f747a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f74180/s00f74180.cpp  ?v04@cParticlesEffect@Swarm@EA@@UAEXXZ  00f747e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f74180/s00f74180.cpp  ?v28@cParticlesEffect@Swarm@EA@@UAEXE@Z  00f748c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f74180/s00f74180.cpp  ?v2c@cParticlesEffect@Swarm@EA@@UAEXPAV123@@Z  00f74950  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f74180/s00f74180.cpp  ?v08@cParticlesEffect@Swarm@EA@@UAEXH@Z  00f749d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

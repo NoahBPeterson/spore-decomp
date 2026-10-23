@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00f74b40  1085  1171-byte anon::ApplyLoopBox (emission-volume wrap + loop-box colour/alpha curves); full structural port written but equiv FAILs on the dead return register eax (original leaves the last pos.x float in eax via its store schedule; ours does not), and the body's regalloc differs throughout, so it is not confirmed faithful; /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
