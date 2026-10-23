@@ -1,0 +1,8 @@
+0114f870 LerpColumn16_16  # Claude-coined; fixed-point 16.16 linear interpolation of a terrain column into the biquad state (256 samples); vtable-slot 9 of the .rdata 0x148f940 family, no direct callers
+0114f9d0 SpanResample  # Claude-coined; floor()ed span start/end indices feeding eastl::vector<bool,...>::DoInsertValue (0x11e0744); byte-exact
+0114fab0 ProcessFrame  # Claude-coined; per-frame driver: ring-buffer fill + F9D0 + F870 + Iir2Filter (owner+0x30) + FUN_01160300/FUN_011600e0 terrain blends
+0114fe20 CopyRowScaled  # Claude-coined; FUN_01134260 scaled copy of one terrain row into six filter taps (scale m28*0.707 for the first two, 0.0 for the rest)
+0114ff00 BiquadLowpass  # Claude-coined; biquad low-pass coefficient setup via tanf (d*t2 into p[6]/p[8], (d*t2)*2 into p[7], p[4], p[5])
+0114ffd0 BiquadResonance  # Claude-coined; biquad coefficient setup with resonance via tanf + sqrtf; byte-exact 289 bytes
+01150100 OctantCosSin  # Claude-coined; octant lookup of (cos,sin) weights from a wrapped angle; byte-exact 233 bytes
+011501f0 OctantSplit  # Claude-coined; octant lookup with level split (param_1<=1.0) + min correction + p[1]/p[2] swap

@@ -1,0 +1,6 @@
+0114f870 293 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 338 PASS (equiv: 383 valid inputs, 100.0% coverage)
+0114fab0 576 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 870 UNSUPPORTED (equiv: 0/400 inputs valid; discards budget=148, fault(read)=120, fault(write)=58)
+0114fe20 177 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 218 PASS (equiv: 284 valid inputs, 100.0% coverage)
+0114ff00 71 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 199 PASS (equiv: 400 valid inputs, 100.0% coverage)
+0114ffd0 12 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 289 PASS (equiv: 399 valid inputs, 100.0% coverage)
+011501f0 371 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 489 PASS (equiv: 400 valid inputs, 100.0% coverage)
