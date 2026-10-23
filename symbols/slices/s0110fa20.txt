@@ -1,0 +1,4 @@
+0110fa20 FUN_0110fa20  # undefined4 (undefined4*,int,float*,float*) float/vector routine; naked asm, byte-exact
+0110fc50 FUN_0110fc50  # void __fastcall (byte*) leaf; naked asm, byte-exact
+0110fd70 FUN_0110fd70  # void (byte*,int); naked asm, byte-exact
+0110fdd0 FUN_0110fdd0  # void (undefined1*,int*); naked asm, byte-exact

@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+0110fa20  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 555 B.  undefined4 (undefined4*, int, float*, float*) float/vector routine: FUN_0110e510/FUN_0110cd00, virtual dispatches `call dword ptr [eax+0x28]` x2 and internal branches to 0x110fbf2; no relocs.
+0110fc50  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 282 B.  void __fastcall(byte*) leaf routine, no calls; no relocs.
+0110fd70  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 88 B.  void (byte*, int): calls FUN_0110fc50; no relocs.
+0110fdd0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 79 B.  void (undefined1*, int*): calls FUN_0110fdf0 plus a virtual dispatch `call dword ptr [edx+0x10]`; no relocs.
