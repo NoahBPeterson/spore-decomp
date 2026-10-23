@@ -1,0 +1,7 @@
+00b68720 ?FindWindow@@YAHE@Z  # manager-list scan by category bits; difftest PASS, nonmatching (98 d)
+00b687d0 ?FindOrCreate@@YAHPAH@Z  # find-or-create the manager record; complete, nonmatching (283 d)
+00b68910 ?FUN_00b68910@@YAXXZ  # naked asm: Rollover_ScenarioInvulnerableImage layout build/position/anchor; byte-exact
+00b68aa0 ?sFindOrCreateUI@@YAHPAHHM@Z  # PDB SP::sFindOrCreateUI; layout builder + window cache; complete, nonmatching (1029 d)
+00b69010 ?FUN_00b69010@@YAXXZ  # naked asm: health-bar ease/clamp/decay updater; byte-exact
+00b693b0 ?FUN_00b693b0@@YAXXZ  # naked asm: record colour from window rect delta; byte-exact
+00b69460 ?FUN_00b69460@@YAXXZ  # naked asm: incoming esi=object, edi=mode; byte-exact
