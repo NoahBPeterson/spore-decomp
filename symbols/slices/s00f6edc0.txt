@@ -1,0 +1,15 @@
+# slice s00f6edc0 - SP terrain-effect map helpers: anonymous-namespace cTerrainEffectMapNormal
+# (cube-face (u,v) projection of a direction, then sample a terrain map / blend evaluator)
+# VA        name                              mangled name
+00f6edc0    cTerrainEffectMapNormal::GetFloat        ?GetFloat@cTerrainEffectMapNormal@@QAEMPBM@Z
+00f6efa0    cTerrainEffectMapNormal::GetCountShort   ?GetCountShort@cTerrainEffectMapNormal@@QAEHXZ
+00f6efc0    cTerrainEffectMapNormal::Normal          ?Normal@cTerrainEffectMapNormal@@QAE?AUVec3@@PBM@Z
+00f6f190    cTerrainEffectMapNormal::GetCountSum     ?GetCountSum@cTerrainEffectMapNormal@@QAEHXZ
+00f6f1b0    cTerrainEffectMapNormal::Blend           ?Blend@cTerrainEffectMapNormal@@QAEMPBM@Z
+00f6f390    cTerrainEffectMapNormal::GetNormalized   ?GetNormalized@cTerrainEffectMapNormal@@QAEMPBM@Z
+00f6f5a0    cTerrainEffectMapNormal::Test            ?Test@cTerrainEffectMapNormal@@QAEMPBM@Z
+00f6f7d0    cTerrainEffectMapNormal::GetRatio        ?GetRatio@cTerrainEffectMapNormal@@QAEMPBM@Z
+00f6fa00    cTerrainEffectMapNormal::TestRange       ?TestRange@cTerrainEffectMapNormal@@QAEMPBM@Z
+# only 00f6efc0 carries a DB name: symbols/pdb_candidates.json -> "`anonymous namespace'::cTerrainEffectMapNormal::Normal"
+# (caller-single). The other 8 VAs are unnamed in symbols/names.txt and symbols/pdb_names.json; the
+# cTerrainEffectMapNormal::<method> names above are the recovered ones used by this slice's source.
