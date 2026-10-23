@@ -1,0 +1,19 @@
+# va  name  # evidence
+# Spore Swarm SurfaceDecalManager slice: cSurfaceDecalManager::AddDecal/SetSurface, the
+# SurfaceDecal free helpers (sin/cos table, box-point samplers, orthonormal-frame builders)
+# and four cVisualEffect members.  Names come from the object's mangled names in manifest.txt
+# where byte-exact; the rest are reconstructions from the cards (tools/matching/card.py).
+00a81110  cSurfaceDecalManager::AddDecal
+00a81310  cSurfaceDecalManager::SetSurface
+00a81530  FUN_00a81530
+00a81580  FUN_00a81580
+00a816d0  FUN_00a816d0
+00a817c0  FUN_00a817c0
+00a818f0  FUN_00a818f0
+00a81a20  FUN_00a81a20
+00a81b80  FUN_00a81b80
+00a81d80  cVisualEffect::Release
+00a81db0  cVisualEffect::GetEffectID
+00a81de0  EA::Swarm::SmoothStepClamp
+00a81e50  cVisualEffect::Init
+00a82050  cVisualEffect::Stop

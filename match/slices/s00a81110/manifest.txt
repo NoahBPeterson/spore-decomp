@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Byte-exact matches for slice s00a81110 (Swarm SurfaceDecalManager + cVisualEffect helpers).
+# Everything else in the slice is a behavioural reconstruction, see nonmatching.txt.
+slices/s00a81110/s00a81110.cpp  ?Release@cVisualEffect@Swarm@EA@@QAEHXZ  00a81d80  /O2 /MD /Gy /EHsc /TP
+slices/s00a81110/s00a81110.cpp  ?GetEffectID@cVisualEffect@Swarm@EA@@QAE_KXZ  00a81db0  /O2 /MD /Gy /EHsc /TP
