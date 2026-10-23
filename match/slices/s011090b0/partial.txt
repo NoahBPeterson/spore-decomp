@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+011090b0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 943 B.  void __thiscall(undefined4*, int, undefined4, ushort, float) float/vector routine: FUN_01108ac0/FUN_010ec540/FUN_01108a10/FUN_01108b80/FUN_01108c30/FUN_010ec4a0 x2/FUN_01109440 x3, one virtual dispatch `call dword ptr [edx+8]` and internal branches to 0x110917e/0x1109195/0x11091ac/0x11091c3/0x11092bb/0x11093ac/0x1109440; 5 base relocs emitted raw.
