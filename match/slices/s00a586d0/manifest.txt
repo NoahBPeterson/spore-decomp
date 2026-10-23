@@ -1,0 +1,6 @@
+slices/s00a586d0/s00a586d0.cpp  ?FUN_00a58890@Eapd@Audio@EA@@YAXPAXIPBDHPAUAtom@123@@Z  00a58890  /O2 /MD /Gy /EHsc /TP
+slices/s00a586d0/s00a586d0.cpp  ?FUN_00a588c0@Eapd@Audio@EA@@YAXPAX@Z  00a588c0  /O2 /MD /Gy /EHsc /TP
+slices/s00a586d0/s00a586d0.cpp  ?FUN_00a588d0@Eapd@Audio@EA@@YAXPAXIPBDHPAUAtom@123@@Z  00a588d0  /O2 /MD /Gy /EHsc /TP
+slices/s00a586d0/s00a586d0.cpp  ?FUN_00a58920@Eapd@Audio@EA@@YAXPAX@Z  00a58920  /O2 /MD /Gy /EHsc /TP
+slices/s00a586d0/s00a586d0.cpp  ?FUN_00a58e00@Eapd@Audio@EA@@YAXPAXIPBDHPAUAtom@123@@Z  00a58e00  /O2 /MD /Gy /EHsc /TP
+slices/s00a586d0/s00a586d0.cpp  ?FUN_00a58e70@Eapd@Audio@EA@@YAXPAXIPBDHPAUAtom@123@@Z  00a58e70  /O2 /MD /Gy /EHsc /TP
