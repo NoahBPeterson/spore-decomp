@@ -1,0 +1,5 @@
+00e73390  579  calls FUN_00e6d790, a static helper with a custom register ABI (cell in esi, center in edi, radius on stack); the call site cannot be reproduced from C++
+00e73620  618  calls FUN_00e6d790 (custom esi/edi register ABI)
+00e738f0  611  calls FUN_00e6d790 (custom esi/edi register ABI)
+00e73bb0  527  calls FUN_00e6d790 (custom esi/edi register ABI)
+00e73e50  212  calls FUN_00e6db70, a static helper with a custom eax register ABI (vector in eax, float on stack)
