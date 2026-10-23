@@ -1,0 +1,5 @@
+008c7c40 drawLine  # T2K rasterizer: bucket one line into the x or y scanline edge lists (nodes hold coord*2|direction, lists sorted)
+008c8220 drawParabola  # T2K rasterizer: adaptively subdivide a quadratic Bezier (7-int stack frames) and emit drawLine chords
+008c83b0 draw3rdDegreeBezierInner  # T2K rasterizer: adaptive subdivision of one cubic span (9-int stack frames)
+008c8600 draw3rdDegreeBezierOuter  # PDB candidate (caller-single); computes cubic deviations and flattens the two halves via the inner routine
+008c8720 Make3rdDegreeEdgeList  # walks the outline index/flags tables, skips off-curve gaps, dispatches lines vs cubics to the rasterizer
