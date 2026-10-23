@@ -1,0 +1,11 @@
+008cef90 GetNumGlyphs_sfntClass  # PDB name (pdb_names.json 008cef90 dev 0x11c8xxx); T1/T2/PFR NumCharStrings else maxp/loca; byte-exact
+008cefe0 GetGlyphByIndex  # PDB candidate 008cefe0 GetGlyphByIndex (caller-scored); dispatches T1/T2/PFR/glyf; 5-arg sfnt glyph fetch
+008cf330 FF_SetStyleCallbacks  # stores the 6-dword callback block (StyleFunc/StyleMetricsFunc/params) into sfntClass; inverse of the NULL clear path
+008cf390 Get_HMTX_AW  # 1-instruction accessor: returns hmtxClass->aw[i] (hmtx aw array); byte-exact
+008cf3b0 Get_Cached_AW  # PDB name (pdb_names.json 008cf3b0 Get_Cached_AW); 251-slot hash cache (key=code%251) around GetAWFuncPtr2
+008cf450 FF_GetUPEM  # 1-instruction accessor returning sfntClass->upem (units per em); byte-exact
+008cf460 GetFontWideOutlineMetrics  # PDB candidate 008cf460 GetFontWideOutlineMetrics (caller-single); fills two Metrics from T1/CFF/PFR/head/hhea/vhea
+008cf8d0 FF_Delete_sfntClass  # PDB name (pdb_names.json 008cf8d0 FF_Delete_sfntClass); frees all sfnt sub-tables then tsi_DeAllocMem(mem,t)
+008cfac0 FF_SortMapRecords  # shell-gap sort (gap n/2, i/j insertion) over Rec[]; byte-exact, matches FreeType cmap record sort
+008cfb70 cmap2_char_index  # FreeType sfnt/ttcmap.c format-2 char index (derived from ttcmap.c lines 370-470)
+008cfcb0 cmap_char_index  # FreeType cmap_char_index: dispatches to format2/4/6/0x270f sub-table lookups

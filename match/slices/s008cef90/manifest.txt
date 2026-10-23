@@ -1,0 +1,6 @@
+slices/s008cef90/s008cef90.cpp  ?GetNumGlyphs_sfntClass@@YAHPAUsfntClass@@@Z  008cef90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s008cef90/s008cef90.cpp  ?FF_SetStyleCallbacks@@YAXPAUsfntClass@@PAI@Z  008cf330  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s008cef90/s008cef90.cpp  ?Get_HMTX_AW@@YAGPAUhmtxClass@@G@Z  008cf390  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s008cef90/s008cef90.cpp  ?FF_GetUPEM@@YAGPAUsfntClass@@@Z  008cf450  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s008cef90/s008cef90.cpp  ?GetFontWideOutlineMetrics@@YAXPAUsfntClass@@PAUMetrics@@1@Z  008cf460  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s008cef90/s008cef90.cpp  ?FF_SortMapRecords@@YAXPAURec@@H@Z  008cfac0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
