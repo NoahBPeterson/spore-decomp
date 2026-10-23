@@ -1,0 +1,6 @@
+# va  size (ours/orig)  reason
+0085d930  0/588  Stream/decode driver over the global decoder at [param_1+4] and the stream state at [param_1+0x5b0]. Not implemented in this pass: the slice's four small helpers were the focus and this 588-byte function needs a dedicated pass over its disassembly (it inlines several helper calls that the flattened decompile renders as register artefacts).
+0085db80  0/590  Companion driver to 0085d930 (same 0x5b0 stream state, 590 bytes). Not implemented in this pass - left for a dedicated pass.
+0085ddd0  0/254  254-byte helper around the same stream state. Not implemented in this pass - left for a dedicated pass.
+0085ded0  0/1015 Largest function in the slice (1015 bytes). Not implemented in this pass - it needs a dedicated pass over its disassembly rather than the flattened decompile.
+0085e2d0  0/737  737-byte decoder entry point (its address is installed as the descriptor's first entry by FUN_0085e5c0). Not implemented in this pass - left for a dedicated pass.
