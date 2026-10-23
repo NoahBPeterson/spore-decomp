@@ -1,0 +1,9 @@
+slices/s00a84ca0/s00a84ca0.cpp  ?Reserve@Vec84@@QAEXI@Z  00a84ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a84ca0/s00a84ca0.cpp  _FUN_00a84da0  00a84da0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a84ca0/s00a84ca0.cpp  ?Release@Cfg@@QAIXXZ  00a84e50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a84ca0/s00a84ca0.cpp  ?Ctor@Cfg@@QAIPAU1@XZ  00a84f00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a84ca0/s00a84ca0.cpp  _FUN_00a84fb0  00a84fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a84ca0/s00a84ca0.cpp  ?SetCfg@Sim@@QAEXPAX00@Z  00a85070  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a84ca0/s00a84ca0.cpp  ?Apply@Sim@@QAEXPAX0@Z  00a85840  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a84ca0/s00a84ca0.cpp  _FUN_00a85b00  00a85b00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a84ca0/s00a84ca0.cpp  ?Release@Heap5@@QAIXXZ  00a85b80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
