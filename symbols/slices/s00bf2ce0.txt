@@ -1,0 +1,12 @@
+00bf2ce0 ?FUN_00bf2ce0@@YAXPAH0@Z  # stream the civilization's star-record set to an IO stream
+00bf2f00 ?FUN_00bf2f00@@YIHHHH@Z  # number of halved "counts" of the civilization's star records, by mode
+00bf30b0 ?FUN_00bf30b0@@YIXHHHPAUTri@@@Z  # map a communication hash to its embassy-data key, then look the record up
+00bf3180 ?FUN_00bf3180@@YIXPAH@Z  # periodically show the embassy / first-contact communication events
+00bf3420 ?FUN_00bf3420@@YIHPAHHH@Z  # erase one element of an intrusive vector and release it
+00bf34f0 ?FUN_00bf34f0@@YIXPAHH0@Z  # load the id -> world map from the stream
+00bf36f0 ?FUN_00bf36f0@@YIXPAH@Z  # destructor of the civilization object
+00bf3b50 ?FUN_00bf3b50@@YIXHHH@Z  # remove the given element from the two intrusive containers
+00bf3c50 ?FUN_00bf3c50@@YIXHHH@Z  # detach a noun from the civilization and drop it
+00bf3cb0 ?FUN_00bf3cb0@@YIPAXPAHH0@Z  # look the key up in the id map, inserting a default entry when missing
+00bf3d40 ?FUN_00bf3d40@@YAEPAHH0@Z  # write the star-record map to the stream as text keys
+00bf3f80 ?FUN_00bf3f80@@YAXPAH0@Z  # load the star-record map from the stream (keyed by object id)
