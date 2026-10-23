@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0111e2c0 613 MoppCompiler::buildSubTree: complete and equiv PASS (92.2% cov, 357/400 valid); the whole body is rescheduled/renamed by MSVC 13.10 (198/218 instructions differ) -- the merged-flag inner loop is structured differently (precomputed node-relative pointers here vs the original's ebp-relative walk) and size is 678 vs 676
+0111e570 102 MoppCompiler::assembleNode: complete and equiv PASS (75.1% cov, 297/400 valid); frame (0x84), branch layout and instruction sequence are all reproduced (size 777 exact) -- only scratch-register choices differ (54/286 instructions, e.g. the original loads the code writer through edx/eax where this source loads it through ecx/edx)

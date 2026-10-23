@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0111e2c0/s0111e2c0.cpp  ?init@MoppCodeWriter@@QAEPAU1@H@Z  0111eab0  /vc71 /O2 /MD /Gy /TP
+slices/s0111e2c0/s0111e2c0.cpp  ?growBuffer@MoppCodeWriter@@QAEXXZ  0111eb20  /vc71 /O2 /MD /Gy /TP
+slices/s0111e2c0/s0111e2c0.cpp  ?putByte@MoppCodeWriter@@QAEXE@Z  0111eb70  /vc71 /O2 /MD /Gy /TP
+slices/s0111e2c0/s0111e2c0.cpp  ?putByteSum@MoppCodeWriter@@QAEXHH@Z  0111eba0  /vc71 /O2 /MD /Gy /TP
+slices/s0111e2c0/s0111e2c0.cpp  ?putBytePair@MoppCodeWriter@@QAEXEE@Z  0111ebd0  /vc71 /O2 /MD /Gy /TP
+slices/s0111e2c0/s0111e2c0.cpp  ?putU16@MoppCodeWriter@@QAEXEH@Z  0111ec30  /vc71 /O2 /MD /Gy /TP
+slices/s0111e2c0/s0111e2c0.cpp  ?putU24@MoppCodeWriter@@QAEXEH@Z  0111ecc0  /vc71 /O2 /MD /Gy /TP
+slices/s0111e2c0/s0111e2c0.cpp  ?putS24@MoppCodeWriter@@QAEXH@Z  0111ed80  /vc71 /O2 /MD /Gy /TP
+slices/s0111e2c0/s0111e2c0.cpp  ?putU32@MoppCodeWriter@@QAEXEI@Z  0111ee10  /vc71 /O2 /MD /Gy /TP
+slices/s0111e2c0/s0111e2c0.cpp  ?getCode@MoppCodeWriter@@QAEPAUhkMoppCode@@XZ  0111eef0  /vc71 /O2 /MD /Gy /TP
+slices/s0111e2c0/s0111e2c0.cpp  ?reset@MoppChainNode@@QAEXXZ  0111efb0  /vc71 /O2 /MD /Gy /TP
+slices/s0111e2c0/s0111e2c0.cpp  ?insert@MoppPriorityQueue@@QAEXPAUMoppChainNode@@@Z  0111f020  /vc71 /O2 /MD /Gy /TP
+slices/s0111e2c0/s0111e2c0.cpp  ?popAbove@MoppPriorityQueue@@QAEXM@Z  0111f150  /vc71 /O2 /MD /Gy /TP
+slices/s0111e2c0/s0111e2c0.cpp  ?build@MoppCompiler@@QAEXPAXPAUMoppChunk@@1@Z  0111e880  /vc71 /O2 /MD /Gy /TP

@@ -1,0 +1,25 @@
+# Slice s0111e2c0: Havok 3.1.0 MOPP code writer + MoppCompiler tree walk. All names coined here;
+# none of the sixteen slice VAs appears in symbols/havok_names.txt and none is called from .text
+# directly (vtable-only reachability). The four callees marked (out of slice) are named by the
+# semantics recovered in slices/s0111c7f0 and by the call sequences in the nonmatching functions.
+0111e2c0 MoppCompiler::buildSubTree  # recursive per-node sub-tree builder (node scratch flag +0x38 gate; leaf path -> 0111ce00 snapBounds + 0111d7f0; else inlines MoppChunk::initFromParent and recurses over the two children)
+0111e570 MoppCompiler::assembleNode  # assemble one node: leaf when node+4 != 0 or the chunk depth budget is exhausted, else recurse into the two children and merge; returns bytes emitted or -1
+0111e880 MoppCompiler::build        # vtable 0x014a60e8 slot 4: store context/budget, call slot 5 (0x0111de80) to init the subclass, quantise the root box, then buildSubTree + assembleNode over the two half-boxes
+0111eab0 MoppCodeWriter::init       # ctor: refcount 1, vtable 0x014a6100, allocate `nbytes` buffer at +0x10, capacity +0x8 = nbytes, position +0xc = 0
+0111eb20 MoppCodeWriter::growBuffer # double the buffer, move the old capacity bytes to the new buffer's tail, free the old one
+0111eb70 MoppCodeWriter::putByte     # append one byte at m_buffer[cap - pos - 1], grow when pos reaches cap
+0111eba0 MoppCodeWriter::putByteSum  # append (a+b) as one byte (buffer filled backwards)
+0111ebd0 MoppCodeWriter::putBytePair # append two bytes (b then a, buffer filled backwards)
+0111ec30 MoppCodeWriter::putU16      # append the two signed bytes of v (lo first) then the selector byte
+0111ecc0 MoppCodeWriter::putU24      # append the three signed bytes of v then the selector byte
+0111ed80 MoppCodeWriter::putS24      # append the three signed bytes of v
+0111ee10 MoppCodeWriter::putU32      # append the four unsigned bytes of v then the selector byte
+0111eef0 MoppCodeWriter::getCode     # build the hkMoppCode for the bytes written so far (vtable 0x014a59b4, reserve the exact size, copy the buffer, free it, reset the writer)
+0111efb0 MoppChainNode::reset        # clear the 32-dword scratch block (+0x38..+0xb8) with 32 scalar stores
+0111f020 MoppPriorityQueue::insert   # max-heap push: bubble the hole up towards the root while the parent key is smaller (walk unrolled 4-deep by /O2)
+0111f150 MoppPriorityQueue::popAbove # drain every node whose key is below the threshold from the top of the heap, parking each in m_out
+# --- out-of-slice callees (names from slices/s0111c7f0) ---
+0111d7f0 MoppCompiler::func0111d7f0  # buildSubTree leaf path: register the leaf chunk with the code writer (out of slice)
+0111d450 MoppChunk::func0111d450     # out-of-slice helper taking (parent, chunk, out20); called when node+0x3c == 1 (out of slice)
+0111da50 MoppCompiler::func0111da50  # out-of-slice cell-count helper, result used as the merge index (out of slice)
+0111db80 MoppCompiler::func0111db80  # out-of-slice helper returning the two child quantisation values via out params (out of slice)
