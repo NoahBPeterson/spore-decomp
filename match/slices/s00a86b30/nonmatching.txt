@@ -1,0 +1,7 @@
+00a86b30 1204 simulation curve update; SampleCurve/SampleVec3 and transform/notify path recreated with helper calls, size 993 vs 1351 (inlined curve samplers); equiv FAIL (5/6 valid inputs mismatched)
+00a870b0 106 transform apply; register coloring on desc pointer and flag test (shr/test vs test byte) differ; equiv PASS (385 valid)
+00a874f0 213 simulator constructor; field stores complete, MSVC scheduling/register allocation differs; equiv PASS (400 valid)
+00a87920 72 vector assign; helper sequence correct, 2-byte prologue/register-allocation difference; equiv WEAK (95 valid, 100% coverage)
+00a87980 437 vector insert; grow/shrink helper sequence recreated, size 495 vs 521; equiv WEAK (46 valid, 14% coverage)
+00a87b90 259 vector assign/copy; helper sequence recreated, size 278 vs 312; equiv WEAK (64 valid, 44% coverage)
+00a87e60 181 vector resize; default-element init and Insert/EraseRange calls present, size 197 vs 225; equiv FAIL (1/108 valid inputs mismatched)

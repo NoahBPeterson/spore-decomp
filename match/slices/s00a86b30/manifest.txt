@@ -1,0 +1,4 @@
+slices/s00a86b30/s00a86b30.cpp  ?SerializeElems@@YAPAXPAXPAUElemVec@@@Z  00a871e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a86b30/s00a86b30.cpp  ?CopyFrom@Elem@@QAEPAU1@PBU1@@Z  00a87280  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a86b30/s00a86b30.cpp  ?AssignFrom@Elem@@QAEPAU1@PBU1@@Z  00a873c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a86b30/s00a86b30.cpp  ?Sim_Dtor@@YIXPAUSim@@@Z  00a87720  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
