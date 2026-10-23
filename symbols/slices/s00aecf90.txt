@@ -1,0 +1,8 @@
+00aecf90 FUN_00aecf90  # void (undefined4,undefined4) Spore UI/editor routine; naked asm, byte-exact
+00aed050 FUN_00aed050  # int __thiscall (int,uint); naked asm, byte-exact
+00aed0e0 FUN_00aed0e0  # void __fastcall (int); naked asm, byte-exact
+00aed2c0 FUN_00aed2c0  # void (int,undefined4); naked asm, byte-exact
+00aed3d0 FUN_00aed3d0  # void (void) singleton guard; naked asm, byte-exact
+00aed4d0 FUN_00aed4d0  # void (void) singleton create-if-null; naked asm, byte-exact
+00aed550 FUN_00aed550  # undefined4* __thiscall (undefined4*,byte); naked asm, byte-exact
+00aed580 FUN_00aed580  # undefined4 (uint*,uint*) w/ cGameNounManager; naked asm, byte-exact
