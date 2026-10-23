@@ -1,0 +1,22 @@
+00ee8860 ?Setup@C40@@UAEEH@Z  # C40::Setup — builds the Sculpt tool pages (8 EAAllocate/ctor blocks), returns bool
+00ee8cb0 ?SetVisible@C40@@UAEXE@Z  # C40::SetVisible — shows/hides the palette UI and notifies the current page
+00ee8d80 ?Update@OBJ174@@QAEXXZ  # OBJ174::Update — refresh the entry/refcount-driven layout state
+00ee90e0 ?ScalarDeletingDtor@OBJ14@@QAEPAU1@E@Z  # OBJ14 scalar deleting destructor (calls dtor 0xee7990, then operator delete if flags & 1)
+00ee9130 ?SetVisible@OBJ14@@UAEXE@Z  # OBJ14::SetVisible (byte)
+00ee9180 ??0C40@@QAE@XZ  # C40::C40 — default ctor: base refcount + seven AutoRefCount members nulled
+00ee9260 ?Update@C40@@QAEXXZ  # C40::Update — dispatch on mState to the active child page, then notify the message server
+00ee92b0 ?SetVisible@OBJ174@@UAEX_N@Z  # OBJ174::SetVisible (bool) — show layout, vcall V104 on the 15 hint windows + one extra
+00ee9350 ?F7@OBJ28@@UAEXH@Z  # OBJ28::F7 — effect-slot selection / AutoRefCount<EffectsHandle> rebind
+00ee95a0 ?AddEntry@OBJ174@@QAEXPAULayoutRecord@@@Z  # OBJ174::AddEntry — push a LayoutRecord into the +0xbc vector and update m170
+00ee9690 ?SetEntry@OBJ174@@QAEXPAULayoutRecord@@PAUKey@ResourceMan@EA@@@Z  # OBJ174::SetEntry — assign m170 with AddRef/Release, insert/erase the key
+00ee97f0 ?Fn@OBJ174Ifc4@@UAEXPAH@Z  # OBJ174Ifc4::Fn (4th base) — entry writeback + release + ClearPending
+
+# callees / globals the slice resolves
+00f473a0 EAAllocate  # 6-arg operator new used by every page allocation
+00f47380 operator_delete  # scalar operator delete
+0067dcc0 MessageServer  # message-server singleton accessor
+0067ddd0 EffectsManagerPtr  # effects-manager singleton accessor
+00ee7cb0 FUN_00ee7cb0  # cdecl int(uint32 key, int*, int*)
+00ee7b40 C40_Fn7b40  # C40::Fn7b40 — set page visibility by index
+00ee6bd0 FUN_00ee6bd0  # OBJ10 slot target reached through OBJ14+0x10
+00ee7da0 OBJ174_ctor  # OBJ174 constructor (called from C40::Setup)
