@@ -1,0 +1,12 @@
+# va  reason
+00ffc230  not implemented: slice claimed, cSPSimulatorPlayerUFO teardown body not yet written
+00ffc350  not implemented: slice claimed, cSPSimulatorPlayerUFO::SetPlanetDestination not yet written
+00ffc490  not implemented: slice claimed, civ distance helper not yet written
+00ffc4e0  not implemented: slice claimed, travel discount helper not yet written
+00ffc5b0  not implemented: slice claimed, body not yet written
+00ffc6d0  not implemented: slice claimed, cSPSimulatorPlayerUFO::CalcMaxTravelDistance not yet written
+00ffc7f0  not implemented: slice claimed, body not yet written
+00ffc8d0  not implemented: slice claimed, body not yet written
+00ffca20  not implemented: slice claimed, body not yet written
+00ffcab0  not implemented: slice claimed, body not yet written
+00ffd000  not implemented: slice claimed, body not yet written
