@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01164140  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 183 B.  void (void) float routine, leaf; no calls; 1 base reloc (float constant) emitted raw.
