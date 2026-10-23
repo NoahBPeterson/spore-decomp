@@ -1,0 +1,16 @@
+00b328e0 ?FUN_00b328e0@@YAXXZ  # game-mode setup w/ jump table; naked asm, byte-exact
+00b32970 ?FUN_00b32970@@YAXXZ  # two-arg game-mode helper w/ jump table; naked asm, byte-exact
+00b32a10 ?FUN_00b32a10@@YAXXZ  # property-gated singleton setup chain; naked asm, byte-exact
+00b32aa0 ?FUN_00b32aa0@@YAXXZ  # no-arg mode teardown chain; naked asm, byte-exact
+00b32b20 ?FUN_00b32b20@@YAXXZ  # large mode setup (WindowManager gate); naked asm, byte-exact
+00b32c60 ?FUN_00b32c60@@YAXXZ  # one-arg mode helper (0x01654c10 gate); naked asm, byte-exact
+00b32ce0 ?FUN_00b32ce0@@YAXXZ  # no-arg mode setup mirroring 00b32b20; naked asm, byte-exact
+00b32dd0 ?FUN_00b32dd0@@YAXXZ  # one-arg helper (CityVisualizer vignette); naked asm, byte-exact
+00b32e80 ?FUN_00b32e80@@YAXXZ  # one-arg mode helper w/ jump table; naked asm, byte-exact
+00b32f60 ?FUN_00b32f60@@YAXXZ  # one-arg mode switch w/ jump table; naked asm, byte-exact
+00b33030 ?FUN_00b33030@@YAXXZ  # one-arg mode helper (PlanetModel) w/ jump table; naked asm, byte-exact
+00b330e0 ?FUN_00b330e0@@YAXXZ  # one-arg helper (CommManager chain); naked asm, byte-exact
+00b33130 ?FUN_00b33130@@YAXXZ  # one-arg mode dispatch (byte index + 6-entry jump table); naked asm, byte-exact
+00b33350 ?FUN_00b33350@@YAXXZ  # one-arg mode setup w/ two jump tables; naked asm, byte-exact
+00b334e0 ?FUN_00b334e0@@YAXXZ  # no-arg helper; naked asm, byte-exact
+00b33540 ?FUN_00b33540@@YAXXZ  # no-arg helper; naked asm, byte-exact
