@@ -1,0 +1,4 @@
+# slice s00f585b0 -- EA::Swarm particle-field helpers
+# Module flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00f585b0/s00f585b0.cpp  ?Generate@cSwarmField@@QAEXPAX@Z  00f585b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00f585b0/s00f585b0.cpp  ?AddNode@cSwarmField@@QAEXPAUcListLink@@@Z  00f58620  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
