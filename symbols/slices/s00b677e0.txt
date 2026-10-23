@@ -1,0 +1,11 @@
+00b677e0 ?FUN_00b677e0@@YA?AUVec3@@PAUObj@@@Z  # label colour
+00b67b90 ?FUN_00b67b90@@YAHPAUObj@@@Z  # rounded size property
+00b67c70 ?FUN_00b67c70@@YAHPAUObj@@@Z  # label kind
+00b67dc0 ?FUN_00b67dc0@@YA_NPBUVec3@@PAUVec2@@@Z  # project to screen
+00b67ef0 ?FUN_00b67ef0@@YA_NPAUObj@@PAUVec2@@1@Z  # label anchor
+00b68090 ?FUN_00b68090@@YAHPAUObj@@@Z  # ownership relation
+00b681d0 ?FUN_00b681d0@@YAHPAUObj@@@Z  # population cap
+00b68250 ?FUN_00b68250@@YAHPAUObj@@@Z  # adult population
+00b682a0 ?FUN_00b682a0@@YAHPAUObj@@@Z  # player owner
+00b685e0 ?FUN_00b685e0@@YAMPAUObj@@@Z  # vertical offset
+00b686a0 ?FUN_00b686a0@@YAXPAH@@@Z  # close label UI
