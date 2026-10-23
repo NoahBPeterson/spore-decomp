@@ -61,7 +61,7 @@ struct SampleBuffer {
     void* mpSystem;      // +0x00
     u8*   mpStorage;     // +0x04
     u32   mField8;       // +0x08
-    u32   mFieldC;       // +0x0C
+    u16   mFieldC;       // +0x0C
     u16   mMaxSamples;   // +0x0E
     u8    mField10;      // +0x10
 };
@@ -212,7 +212,7 @@ int Mixer::ProcessInputPlugIns(VoiceStageData* stages, void* node, Voice* voice)
             PlugIn* p = *ppPlug;
             typedef s32 (__cdecl* PreProcProc)(PlugIn*, Mixer*, s32, s32);
             PreProcProc proc = (PreProcProc)pStage->mpPreProcess;
-            avail = proc(p, this, (s32)((u32)voice->mDiscontinuityPlugIn < stage), chunk);
+            avail = proc(p, this, (s32)((s32)voice->mDiscontinuityPlugIn < (s32)stage), chunk);
             if (avail > 0xFF)
                 avail = 0x100;
             if (pass == 0)
@@ -227,8 +227,9 @@ int Mixer::ProcessInputPlugIns(VoiceStageData* stages, void* node, Voice* voice)
         s32 i = 0;
         do {
             PlugIn* p = *(PlugIn**)((u8*)voice + 0x4C + i * 4);
-            status = ((s32 (__cdecl*)(PlugIn*, Mixer*, s32))stages[i].mpProcess)
-                        (p, this, (s32)((u32)voice->mDiscontinuityPlugIn < (u32)i));
+            typedef s32 (__cdecl* ProcessProc)(PlugIn*, Mixer*, s32);
+            ProcessProc proc = (ProcessProc)stages[i].mpProcess;
+            status = proc(p, this, (s32)((s32)voice->mDiscontinuityPlugIn < i));
             if (status == 0) {
                 if (i == 0)
                     status = HandleBufferStatusUnavailable(voice, p, chunk);
