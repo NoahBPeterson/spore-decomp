@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0117e620/tasn_dec.cpp  _asn1_find_end  0117e620  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0117e620_inc
+slices/s0117e620/tasn_dec.cpp  _asn1_collect  0117e730  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0117e620_inc
+slices/s0117e620/tasn_dec.cpp  _asn1_d2i_ex_primitive  0117e920  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0117e620_inc
+slices/s0117e620/tasn_dec.cpp  _ASN1_item_ex_d2i  0117ec00  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0117e620_inc
+slices/s0117e620/tasn_dec.cpp  _asn1_template_noexp_d2i  0117f2a0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0117e620_inc
+slices/s0117e620/v3_lib.cpp  _X509V3_EXT_get_nid  0117f580  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0117e620_inc
