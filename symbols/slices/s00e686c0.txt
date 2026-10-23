@@ -1,0 +1,12 @@
+00e686c0 FUN_00e686c0  # candidate/other size ratio for a cell comparison; falls back to 1.0/1.0
+00e68870 FUN_00e68870  # candidate pre-filter against a two-float/six-byte filter record
+00e68910 FUN_00e68910  # secondary candidate filter (range + flag189)
+00e68990 FUN_00e68990  # nearest-candidate scan; picks best match (0xe68870) and best non-match (0xe68910)
+00e68b30 FUN_00e68b30  # build cell filter (2 floats from 0xe686c0, 6 condition bytes from GetLevelHandle)
+00e68cd0 FUN_00e68cd0  # cell has a live effect info object (key -> info+0x1260 != -1.0)
+00e68d20 FUN_00e68d20  # point vs cell/record sphere test; returns index + signed distance
+00e69000 FUN_00e69000  # nearest-cell search (radius query + exclusion list + per-cell sphere test)
+00e69190 FUN_00e69190  # scan shape-6 records, per-record nearest search via 0xe69000
+00e693f0 FUN_00e693f0  # greedy chain of nearest cells (0xe69000), excluding those already picked
+00e69480 FUN_00e69480  # per-stage scale factor (GetLevelHandle + kLevelSize / stage extent)
+00e69580 FUN_00e69580  # player-cell proximity tier from CellInfo counter (+0x1218)
