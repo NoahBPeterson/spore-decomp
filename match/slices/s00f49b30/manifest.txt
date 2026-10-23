@@ -1,0 +1,5 @@
+slices/s00f49b30/s00f49b30.cpp  ?Execute@cBrushVecCommand@@QAEXPAUcArguments@@@Z  00f49c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f49b30/s00f49b30.cpp  ?OnRegister@cBrushEffectCommand@@QAEXPAUcArguments@@PAX@Z  00f49cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f49b30/s00f49b30.cpp  ?Execute@cBrushSizeCommand@@QAEXPAUcArguments@@@Z  00f4a3b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f49b30/s00f49b30.cpp  ?Execute@cBrushVaryCommand@@QAEXPAUcArguments@@@Z  00f4a4c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f49b30/s00f49b30.cpp  ??4BrushState@@QAEAAU0@ABU0@@Z  00f4a5d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
