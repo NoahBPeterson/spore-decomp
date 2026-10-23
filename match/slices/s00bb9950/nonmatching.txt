@@ -1,0 +1,17 @@
+00bb9950  73   complete: star-manager cached inventory-item scan; equiv PASS, register-allocation differences
+00bb99e0 158   complete: eastl::map lookup + banner pick; equiv PASS, register/scheduling differences
+00bb9c90  20   complete: HasRare flag test; equiv PASS, branch layout differs
+00bb9d40  58   complete: planet-object flag scan; equiv PASS, loop register allocation differs
+00bb9d90  55   complete: planet-object flag/artifact scan; equiv PASS, loop register allocation differs
+00bb9de0   7   complete: name-ensure; equiv PASS, instruction scheduling differs
+00bb9eb0 166   complete: UpdateSETI monolith/species-key update; equiv WEAK, property-chain codegen differs
+00bb9fb0  44   complete: HasMonolith flag/UpdateSETI ternaries; equiv PASS, codegen differs
+00bb9ff0 223   complete: ProtectFromBio property/flag decision tree; equiv WEAK, property-chain codegen differs
+00bba130 123   complete: cStarRecord ctor; equiv PASS, unscheduled stores/order differ
+00bba2a0 484   complete: OnBan species-key search loop; equiv WEAK, extensive register/scheduling differences
+00bba4b0  57   complete: SetName string assign path; equiv WEAK, scheduling differs
+00bba500  77   complete: GetCitizenSpecies lazy profile lookup; equiv PASS, scheduling differs
+00bba790 180   complete: GetPlanetRecords filtered copy; equiv WEAK, call encoding and scheduling differ
+00bba870  67   complete: HasActivePlanets iteration; equiv WEAK, call encoding differs
+00bba8c0  49   complete: HasUndiscoveredPlanets iteration; equiv WEAK, call encoding differs
+00bba900  81   complete: HasVisitableObject iteration; equiv WEAK, call encoding differs

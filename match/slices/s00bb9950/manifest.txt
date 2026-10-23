@@ -1,0 +1,8 @@
+slices/s00bb9950/s00bb9950.cpp  ?SetFlags@cStarRecord@@QAEXI_N@Z  00bb9b00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bb9950/s00bb9950.cpp  ?SetNoMonolith@cStarRecord@@QAEXXZ  00bb9b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bb9950/s00bb9950.cpp  ?SetFlagA@cPlanetRecord@@QAEXXZ  00bb9b50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bb9950/s00bb9950.cpp  ?StarRecord_IsOwnedByPlayer@@YA_NXZ  00bb9b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bb9950/s00bb9950.cpp  ?SetBlownUp@cStarRecord@@QAEX_N@Z  00bb9c40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bb9950/s00bb9950.cpp  ?NeedsBioProtect@cPlanetRecord@@QAEHXZ  00bba100  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bb9950/s00bb9950.cpp  ?Dtor@cStarRecord@@QAEXXZ  00bba220  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bb9950/s00bb9950.cpp  ?GetPlanetRecord@cStarRecord@@QAEPAXH@Z  00bbaa60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
