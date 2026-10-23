@@ -1,0 +1,6 @@
+00faf4e0 FUN_00faf4e0   # raster-state dispatch for one ribbon face id (complete, switch register allocation differs)
+00faf890 FUN_00faf890   # (re)allocates and clears the above/below chunk map (byte-exact)
+00faf920 FUN_00faf920   # scans a ribbon polygon for the edge crossing a given v (complete, register allocation differs)
+00fafb50 InterpolateRibbonPoly   # bilinear interpolation of the ribbon patch at a face position (complete, expression layout differs)
+00fafda0 FUN_00fafda0   # vertex bounding box of a ribbon polygon (complete, comiss polarity differs)
+00faff10 FUN_00faff10   # y-extent of a ribbon polygon, fills two patch rows at 30%/60% (byte-exact)
