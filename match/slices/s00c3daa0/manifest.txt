@@ -1,0 +1,11 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00c3daa0/s00c3daa0.cpp  ?func3daa0@UFO@@QAEXM@Z  00c3daa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00c3daa0/s00c3daa0.cpp  ?func3dac0@UFO@@QAEXPAX@Z  00c3dac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00c3daa0/s00c3daa0.cpp  ?func3dae0@UFO@@QAEXPAM@Z  00c3dae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00c3daa0/s00c3daa0.cpp  ?func3e010@UFO@@QAEXPAX@Z  00c3e010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00c3daa0/s00c3daa0.cpp  ?FUN_00c3e350@@YIXPAD@Z  00c3e350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00c3daa0/s00c3daa0.cpp  ?FUN_00c3e460@@YIMPAD@Z  00c3e460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00c3daa0/s00c3daa0.cpp  ?FUN_00c3ea80@@YAPAXXZ  00c3ea80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00c3daa0/s00c3daa0.cpp  ?f@C3ebd0@@QAEXPAH@Z  00c3ebd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00c3daa0/s00c3daa0.cpp  ?f@C3ec00@@QAEXPAH@Z  00c3ec00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00c3daa0/s00c3daa0.cpp  ?f@C3ec40@@QAEXXZ  00c3ec40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

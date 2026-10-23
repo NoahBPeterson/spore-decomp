@@ -1,0 +1,14 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include)
+00c3db50    6  cSPGameDataUFO destination-setter (packed {dword;vec3} arg -> cSpatialObject helper): complete; schedule puts `push &tmp` before `add ecx,0x770` vs original after
+00c3dba0  968  cSPGameDataUFO::InitNPC: complete; jump-table switch on mType714, noun create/cast, weapon enable; register allocation and switch layout differ
+00c3e0b0   84  cSPGameDataUFO::Init: complete; prologue saves ebx/ebp eagerly in original (loop uses them), MSVC sinks them into the player-UFO branch
+00c3e2c0  133  Object::Cast: complete; ordered type-id compares; register/move schedule and shared tail differ
+00c3e3b0  180  cGamePlant::Write: complete; serializer/Write call shape and bool accumulation differ
+00c3e490  137  cGameData::WriteAsText: complete; stacked cVarListSerializer objects and GetFields accumulation differ
+00c3e510  162  cGamePlant::cGamePlant: complete; ctor vtable stores and member init order differ
+00c3e700   73  cGamePlant::~cGamePlant: complete; three pointer leas scheduled before vtable stores in original, 1 extra byte
+00c3e800  132  cGamePlant::SetAnimatingCreature: complete; multi-pointer transform setup (add eax,0x364 reuse) and float packing schedule differ
+00c3e8e0  176  cGamePlant::SetSpeciesKey/setup: complete; profile lookup and buffer sign-flip schedule differ
+00c3e9d0  163  cGamePlant::Read: complete; cVarListSerializer stack object and Serialize/in accumulation differ
+00c3eac0  127  cPlant-like assignment operator: complete; 0x22-dword copy plus sub-object field transfer schedule differs
+00c3ed20  248  cGameplayMarker::Write: complete; serializer + optional-ptr teardown and WriteUint16/Write tail differ
