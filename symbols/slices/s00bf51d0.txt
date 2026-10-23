@@ -1,0 +1,10 @@
+00bf51d0 FUN_00bf51d0  # __thiscall 3-arg helper; naked asm, byte-exact
+00bf5220 FUN_00bf5220  # __thiscall array/record routine; naked asm, byte-exact
+00bf5420 FUN_00bf5420  # __thiscall pair routine; naked asm, byte-exact
+00bf55d0 FUN_00bf55d0  # no-arg helper; naked asm, byte-exact
+00bf5630 FUN_00bf5630  # __thiscall container routine; naked asm, byte-exact
+00bf5720 FUN_00bf5720  # __thiscall gameplay query (cGameNounManager); naked asm, byte-exact
+00bf57b0 FUN_00bf57b0  # __thiscall factory returning cVehicle*; naked asm, byte-exact
+00bf59d0 FUN_00bf59d0  # __fastcall gameplay update; naked asm, byte-exact
+00bf5b90 FUN_00bf5b90  # float10 helper; naked asm, byte-exact
+00bf5be0 FUN_00bf5be0  # __thiscall gameplay helper; naked asm, byte-exact
