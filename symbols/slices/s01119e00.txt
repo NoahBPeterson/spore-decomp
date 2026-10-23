@@ -1,0 +1,6 @@
+0111a060 ?buildPlaneEquations@hkGeomConvexHullBuilder@@SA?AVhkBool@@ABUhkGeomConvexHullTolerances@@AAVhkGeomHull@@ABV?$hkArray@VhkVector4@@@@AAV5@@Z  # havok identical-code
+0111a0f0 ?removeUnusedVertices@hkGeomConvexHullBuilder@@SAXAAVhkGeomHull@@AAV?$hkArray@VhkVector4@@@@@Z  # havok identical-code
+0111a290 ?stitchHulls@hkGeomConvexHullBuilder@@SAXAAVhkGeomHull@@0AAV?$hkArray@UWrappingLine@hkGeomConvexHullBuilder@@@@0@Z  # havok identical-code
+0111a700 ?removeCoPlanarNeighbours@hkGeomConvexHullBuilder@@SAXABUhkGeomConvexHullTolerances@@AAVhkGeomHull@@ABVhkVector4@@PBVhkGeomEdge@@PBV4@4AAV?$hkArray@UWeightedNeighbour@hkGeomConvexHullBuilder@@@@@Z  # havok identical-code
+0111a8a0 ?validateNeighbours@hkGeomConvexHullBuilder@@SAXABUhkGeomConvexHullTolerances@@PBVhkVector4@@ABV3@GPAUWeightedLine@1@11AAV?$hkArray@UWeightedNeighbour@hkGeomConvexHullBuilder@@@@4@Z  # havok identical-code
+0111a9e0 ?isValidEdgeCheck@hkGeomConvexHullBuilder@@SA?AVhkBool@@AAVhkGeomHull@@PAVhkGeomEdge@@H@Z  # havok identical-code
