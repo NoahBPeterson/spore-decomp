@@ -1,0 +1,3 @@
+01399700  703  equiv PASS (400 valid, 100.0% cov); not byte-exact (700 vs 703: one store rescheduled, 3 B short). flags /O2 /MD /Gy /TP /arch:SSE
+0139bde0  502  equiv PASS (400 valid, 100.0% cov); not byte-exact (380 vs 502: SSE register reuse of precomputed in*k subtrahends differs). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+013a0c40  878  equiv PASS (400 valid, 100.0% cov); not byte-exact (869 vs 878: property-table init field/store scheduling differs). flags /O2 /MD /Gy /TP /arch:SSE

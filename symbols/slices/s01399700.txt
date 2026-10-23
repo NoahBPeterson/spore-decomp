@@ -1,0 +1,8 @@
+01399700 ?PropTableInit_99700@@YAXXZ  # $E409 (MSVC static-initialiser thunk; unnamed in PDB)
+0139bde0 ?PosseFlockOffsetsInit@@YAXXZ  # kPosseFlockOffsets init (unnamed in PDB)
+0139bfe0 ?PosseRingTableInit@@YAXXZ  # posse ring unit-circle table init (unnamed in PDB)
+0139c070 ?PosseRingAngleInit@@YAXXZ  # posse ring angle table init (unnamed in PDB)
+0139d420 ?PropTableInit_d420@@YAXXZ  # $E487 (MSVC static-initialiser thunk; unnamed in PDB)
+0139e870 ?PropTableInit_e870@@YAXXZ  # static-initialiser thunk (unnamed in PDB)
+013a0c40 ?PropTableInit_0c40@@YAXXZ  # $E248 (MSVC static-initialiser thunk; unnamed in PDB)
+013a1150 ?PropTableInit_1150@@YAXXZ  # $E225 (MSVC static-initialiser thunk; unnamed in PDB)
