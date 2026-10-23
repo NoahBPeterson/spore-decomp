@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+# (none) -- no non-exact function reached equiv PASS; all 14 are recorded in partial.txt.

@@ -1,0 +1,17 @@
+00b75f70 ?FUN_00b75f70@@YAPAUVec3@@PAU1@0U1@P6A_NPBU1@2@Z@Z  # quicksort Hoare-partition helper (Vec3* first/last, Vec3 pivot by value, bool(*)(const Vec3*,const Vec3*)); introsort support, calls the comparator via a register
+00b76020 ?FUN_00b76020@@YAXPAPAX00UVec3@@@Z  # heap-selection/insertion finish pass over a pointer range with a Vec3 probe; calls 0xb75750/0xb74d60/0xb757b0
+00b76160 ?FUN_00b76160@@YIXPAD@Z  # PDB name SP::cSPSimPlanetHighLOD::InitForPlanet (per-planet Sim high-LOD init); scans self+0x55a8 list, hashtable Find 0xb74860, RandomDouble 0x9360d0 vs g_1464fdc
+00b76400 ?FUN_00b76400@@YIPAMPAUMF@@HABH@Z  # eastl fixed hash_map<u32,float>::find-or-insert (find 0x645ed0, insert 0xc15fd0 with a 0.0f value)
+00b76460 ?FUN_00b76460@@YIPAPAURefVal@@PAUMR@@HABH@Z  # same shape for a ref-counted value type: find, else insert via 0xb752f0 and Release the temporary through its vtable
+00b764e0 ?Advance@C764e0@@QAE?AUIt8@@U2@0@Z  # eastl hashtable iterator advance: while(first.n != last.n) first = Next(first) (Next = 0xb75910); sret It8, ret 0x14
+00b76530 ?Push@C76530@@QAEXABUEl18@@@Z  # fixed-vector push_back of an 0x18-byte element; grow via 0xb75a30 when at capacity; ret 4
+00b76580 ?erase@HT70@@QAE?AUiterator@1@U21@@Z  # eastl fixed hashtable erase(iterator): mpNext @+0xc70, node-owned buffer @+0x58, operator delete + --mnElementCount (+0xc)
+00b76620 ?eraseKey@HT68@@QAEHPBI@Z  # eastl fixed hashtable erase(key): remove every node with the key and return oldCount-newCount; buckets @+4, nb @+8, mpNext @+0xc68, buffer @+0x50
+00b766b0 ?erase@HT68b@@QAE?AUiterator@1@U21@@Z  # erase(iterator) for the second table (mpNext @+0xc68, buffer @+0x50); same shape as 0xb76580
+00b76750 ?FUN_00b76750@@YA_NPAHPBDPAD@Z  # EA::ResourceMan key walk: ConvertToString16 0x93c5a0 (or RangeInitialize 0x579a90), notify **sink, walk table+4 (next @node+0x18), call 0xae5530 with L"EA::ResourceMan::Key"
+00b768d0 ?FUN_00b768d0@@YAXPAX000@Z  # sort a 0xc-byte element range through an EAAllocate("Simulator") scratch buffer; calls 0xb74c20/0xb75c60
+00b76950 ?FUN_00b76950@@YAXPAUVec3@@0HP6A_NPBU1@1@Z@Z  # introsort over 0xc-byte elements: median-of-three pivot, Hoare partition via 0xb75f70, insertion-sort cutoff via 0xb754d0 at depth 0
+00b76a60 ?FUN_00b76a60@@YAXPAPAX0HUVec3@@@Z  # pointer-element introsort: do/while size test (>0x70 bytes), pivot via 0xb734e0, partition via 0xb75620, finish with 0xb76020 at depth 0
+00b76b80 ?FUN_00b76b80@@YAXPBUVec3@@0PAX1@Z  # direction a->b normalized (x87 fsqrt + reciprocal), transformed via SP::PlanetModel 0xb3d350 / 0xb82060, BackTransformPoint 0x4ff6d0, pushed onto the caller's vector, then flattened against the 0x16880e0..e8 basis
+00b76d20 ?FUN_00b76d20@@YIXPADHPAMMHDD@Z  # Sim high-LOD push-vertex onto the fixed vector at self+0x4908 (El18 {x,y,z,w,flag,id}); skips the 0x1687ad4/d8/dc invalid point; ret 0x14
+00b76e00 ?FUN_00b76e00@@YIXPADHMM@Z  # walk the hashtable at self+0x49e4 (buckets @+0x49e4, nb @+0x49e8), Notify 0xb74f80 + store into map self+0x49e0 via 0xb76460, then DoFreeNodes 0xa1b6c0
