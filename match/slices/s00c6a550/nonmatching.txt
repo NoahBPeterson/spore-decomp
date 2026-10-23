@@ -1,0 +1,20 @@
+00c6a550  261  Complete cEgg::Write serialisation; residual is call/stack scheduling + tag-constant setup order.
+00c6a6e0  142  Complete egg state machine; residual is SetState scheduling order (mov eax,[esi+0x1f4] before store).
+00c6a7f0  132  Complete extents setter; residual is fabs/constant-fold ordering and register allocation.
+00c6a870  23  Complete cNest ctor; residual is vtable-store interleaving vs tail stores.
+00c6a970  23  Complete cNest dtor; residual is vtable-store interleaving and release-call ordering.
+00c6aa50  64  Complete cNest::CanSpawn; residual is profile-value register allocation.
+00c6aab0  113  Complete cNest::MoveNest; residual is vector temp scheduling and register allocation.
+00c6ab90  63  Complete cNest::AddFootprint; residual is planet-model reload scheduling + call shapes.
+00c6abf0  64  Complete GetProfileForGeneration; residual is div-by-stride and register allocation.
+00c6ac40  15  Complete UnbrokenEggsInNest; residual is loop-index/pointer induction-variable allocation.
+00c6ac90  23  Complete ClearLocationStatus; residual is bounds-compare register allocation order.
+00c6adc0  60  Complete evolved-key vector serialiser; residual is loop/call scheduling.
+00c6ae70  81  Complete copy_if filter; residual is iterator/refcount register allocation and ordering.
+00c6af40  150  Complete herd-animal screen; residual is compare-tree folding and register allocation.
+00c6b040  603  Complete cEgg::Update hatch path; residual is large scheduling delta across vector/quat temps.
+00c6b390  114  Complete cNest::AsInterface chain; residual is folded compare tree and register allocation (edi vs esi).
+00c6b410  39  Complete cNest::LoadModel; residual is AddFootprint inline-call scheduling.
+00c6b440  232  Complete cHerd::OnAnimalRemoved; residual is refcount/list-loop register allocation.
+00c6b540  83  Complete SpawnAnimalsIfUnderfilled; residual is position-select branch and call setup scheduling.
+00c6b5b0  124  Complete FindWateringHole; residual is float-select and position-select scheduling.

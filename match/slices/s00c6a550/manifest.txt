@@ -1,0 +1,10 @@
+# source symbol va flags
+slices/s00c6a550/s00c6a550.cpp  ?SetState@cEgg@SP@@QAEXW4EggState@12@@Z  00c6a670  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c6a550/s00c6a550.cpp  ?RemoveOwner@cNest@SP@@QAEXXZ  00c6a9c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c6a550/s00c6a550.cpp  ?FUN_00c6aa10@SP@@YIEPAX0@Z  00c6aa10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c6a550/s00c6a550.cpp  ?GetPosition@cNearNoun@SP@@QAEPBUVec3@2@XZ  00c6acc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c6a550/s00c6a550.cpp  ?SetEnabled@cHerd@SP@@QAEXE@Z  00c6ace0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c6a550/s00c6a550.cpp  ?SetEnabled@cNearNoun@SP@@QAEXXZ  00c6ad30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c6a550/s00c6a550.cpp  ?FUN_00c6ad60@SP@@YIXPAX0@Z  00c6ad60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c6a550/s00c6a550.cpp  ?FUN_00c6ae30@SP@@YAXPAX@Z  00c6ae30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c6a550/s00c6a550.cpp  ?FUN_00c6b350@SP@@YIXPAX0HHHHH@Z  00c6b350  /O2 /MD /Gy /TP /arch:SSE /fp:fast
