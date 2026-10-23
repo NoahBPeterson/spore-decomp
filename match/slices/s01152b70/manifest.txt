@@ -1,0 +1,7 @@
+slices/s01152b70/s01152b70.cpp  ?FUN_01152ef0@@YAIHHE@Z  01152ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01152b70/s01152b70.cpp  ?FUN_011536b0@@YAIHH@Z  011536b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01152b70/s01152b70.cpp  ?GetSize@Fir64@core@audio@rw@@SAHHH@Z  01153770  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01152b70/s01152b70.cpp  ?CreateInstance@Fir64@core@audio@rw@@SAPAV1234@HHHPAV1234@@Z  01153790  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01152b70/s01152b70.cpp  ?GetSize@Butterworth@core@audio@rw@@SAIH@Z  011538d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01152b70/s01152b70.cpp  ?FUN_01153a00@@YAIHH@Z  01153a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01152b70/s01152b70.cpp  ?FUN_01153b00@@YIPAXPAX@Z  01153b00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
