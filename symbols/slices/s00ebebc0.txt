@@ -1,0 +1,10 @@
+00ebebc0 ?FUN_00ebebc0@@YAHXZ  # deactivate the active badge window set
+00ebecc0 ?FUN_00ebecc0@@YAXPAMH@Z  # screen rect of a resource, by resource id
+00ebed50 ?FUN_00ebed50@@YAXH@Z  # show/hide the badge creature and notify the badge object
+00ebee10 ?FUN_00ebee10@@YAPAMPAMPAH@Z  # padded bounding box for a list of resources
+00ebefa0 ?FUN_00ebefa0@@YAXPAUVec14@@PAH11PAX@Z  # insert a range into an EASTL vector
+00ebf160 ?FUN_00ebf160@@YAXXZ  # create the badge layout windows
+00ebf290 ?FUN_00ebf290@@YAXHPAH@Z  # place or refresh the badge for one scenario object
+00ebf480 ?FUN_00ebf480@@YAXPAH0@Z  # swap two layout event vectors
+00ebf530 ?FUN_00ebf530@@YAXPAH0@Z  # merge one badge rectangle into another
+00ebf5b0 ?FUN_00ebf5b0@@YAXXZ  # lay out all active badges
