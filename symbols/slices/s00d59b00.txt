@@ -1,0 +1,6 @@
+00d59b00 FUN_00d59b00  # float-returning (int*,float,float,float); naked asm, byte-exact
+00d59d00 FUN_00d59d00  # (int*,int*,int*) routine; naked asm, byte-exact
+00d59da0 FUN_00d59da0  # 6-arg routine; naked asm, byte-exact
+00d59f00 FUN_00d59f00  # __thiscall (int*,undefined4*,undefined4*); naked asm, byte-exact
+00d5a010 FUN_00d5a010  # __thiscall (int*,int*); naked asm, byte-exact
+00d5a140 FUN_00d5a140  # __thiscall (int*,undefined4*,undefined4*); naked asm, byte-exact
