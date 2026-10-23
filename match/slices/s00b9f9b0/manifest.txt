@@ -1,0 +1,4 @@
+# slice s00b9f9b0 -- Simulator star/planet setup helpers (0x00b9f9b0..0x00ba0770)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00b9f9b0/s00b9f9b0.cpp  ?push_back_uninitialised@ElemVec18@@QAEXXZ  00ba0640  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b9f9b0/s00b9f9b0.cpp  ?clear@ElemVec18@@QAEXXZ  00ba06a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

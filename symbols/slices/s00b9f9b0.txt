@@ -1,0 +1,8 @@
+00b9f9b0 ?FUN_00b9f9b0@@YAXPAUSimCtx@@@Z  # Simulator singleton/callback registration; nonmatching (x87 aggregate copy of Vector4)
+00b9fa40 ?FUN_00b9fa40@@YAXXZ  # arithmetic-driven city placement on the current planet; nonmatching (stack-slot vs register allocation)
+00b9ff80 ?FUN_00b9ff80@@YAXPAUStarWorld@@@Z  # star filtering for the local neighbourhood; nonmatching (esi/edi register swap)
+00ba0080 ?FUN_00ba0080@@YAXPAUSimCtx@@@Z  # initial city seeding for a planet; nonmatching (placement record layout)
+00ba0570 ?setup@SimObj@@QAEPAU1@PAX0@Z  # sim object pool + star-position setup; nonmatching (frame/argument order)
+00ba0640 ?push_back_uninitialised@ElemVec18@@QAEXXZ  # 0x18-byte element vector append; byte-exact
+00ba06a0 ?clear@ElemVec18@@QAEXXZ  # 0x18-byte element vector clear; byte-exact
+00ba06f0 ?push_back_uninitialised@ElemVec34@@QAEXXZ  # 0x34-byte element vector append; nonmatching (redundant stores elided by cl)
