@@ -1,0 +1,33 @@
+# Slice s00a75dd0 — EA::Swarm::cMapInfo (MapInfo component), second batch.
+# Same class as neighbouring slice s00a75000 (retail vftable 0x014575d4,
+# class string "Swarm/MapInfo").  Not in the PDB: every name below is either
+# string/vtable-derived or Claude-coined from the sampling family the Init
+# helpers install (palette ids 9/0xb/0xc/0xd).
+# All functions are members of EA::Swarm::cMapInfo unless marked __cdecl free.
+00a75dd0  ?SampleColorClamp@cMapInfo@Swarm@EA@@QAEXPAMPBM@Z       void SampleColorClamp(float*, const float*)   [nonmatching]  # bilinear, 1/254 scale, clamp 0..2
+00a76070  ?Init11@cMapInfo@Swarm@EA@@QAEXPBMHHEPAUIcOwner@23@E@Z  void Init11(const float*,int,int,uint8_t,IcOwner*,uint8_t) [MATCH]  # palette 0xb, fallback table 0x014575d8
+00a76110  ?SampleAlpha@cMapInfo@Swarm@EA@@QAEMPBM@Z               float SampleAlpha(const float*)               [nonmatching]
+00a761d0  ?SampleDir@cMapInfo@Swarm@EA@@QAEXPAMI@Z                void SampleDir(float*, uint32_t)              [MATCH]
+00a76240  ?SampleColor@cMapInfo@Swarm@EA@@QAEXPAMPBM@Z            void SampleColor(float*, const float*)        [nonmatching]  # as SampleColorClamp but 1/255, no clamp
+00a76420  ?Init9@cMapInfo@Swarm@EA@@QAEXPBMHHEPAUIcOwner@23@E@Z    void Init9(const float*,int,int,uint8_t,IcOwner*,uint8_t)  [MATCH]  # palette 9, fallback table 0x014575d4
+00a764c0  ?SampleBit@cMapInfo@Swarm@EA@@QAEMPBM@Z                 float SampleBit(const float*)                 [nonmatching]
+00a765f0  ?SampleNormal@cMapInfo@Swarm@EA@@QAEXPAMPBM@Z           void SampleNormal(float*, const float*)       [nonmatching]
+00a76970  ?SampleTangent@cMapInfo@Swarm@EA@@QAEPAMPAMI@Z          float* SampleTangent(float*, uint32_t)        [MATCH]
+00a76990  ?SampleScalar4@cMapInfo@Swarm@EA@@QAEXPAMI@Z            void SampleScalar4(float*, uint32_t)          [MATCH]
+00a769b0  ?Init12@cMapInfo@Swarm@EA@@QAEXPBMHHEPAUIcOwner@23@@Z   void Init12(const float*,int,int,uint8_t,IcOwner*)         [MATCH]  # palette 0xc
+00a76a50  ?SampleBitOriented@cMapInfo@Swarm@EA@@QAEMPBM@Z         float SampleBitOriented(const float*)         [nonmatching]  # calls free ClassifyOrientation
+00a76b30  ?NormalizeVec3@cMapInfo@Swarm@EA@@QAEXPAMPBM@Z          void NormalizeVec3(float*, const float*)      [nonmatching]
+00a76b80  ?Init13@cMapInfo@Swarm@EA@@QAEXPBMHHEPAUIcOwner@23@@Z   void Init13(const float*,int,int,uint8_t,IcOwner*)         [MATCH]  # palette 0xd
+00a76c20  ?SampleByteOriented@cMapInfo@Swarm@EA@@QAEMPBM@Z        float SampleByteOriented(const float*)        [nonmatching]  # calls free ClassifyOrientation
+00a76cd0  ?SampleVec3@cMapInfo@Swarm@EA@@QAEPAMPAMI@Z             float* SampleVec3(float*, uint32_t)           [MATCH]
+00a75560  ?ClassifyOrientation@Swarm@EA@@YAHPBMPAHPAM2@Z          int __cdecl ClassifyOrientation(const float*, int*, float*, float*)  [nonmatching]  # free fn (declared in s00a75000 as a member; wrong there), bare ret
+#
+# Field map: identical layout to slice s00a75000 (bounds +0x0c..+0x18, counts
+# +0x20/+0x24, scales +0x28/+0x2c, grid src +0x30, owner +0x38, wrap bytes
+# +0x1c/+0x3c, pixels +0x40, stride/m44 +0x44, m48 +0x48, m4c +0x4c).
+# Constants: 0x144717c = 1/254f, 0x13eecd4 = 1/255f, 0x1485720 = 1.0f,
+#            0x1485378 = 0.0f, 0x1470f1c = 2.0f, 0x1471064 = 0.5f,
+#            0x13ec488 = -0.5f, 0x13ec4b8 = 1e-9f.
+# Vtable slots: cMapInfo vftable 0x014575d4; Init helpers read the fallback
+# sampling table at vftable+0x04 (0x014575d8) and install a palette id via the
+# +0x38 owner grid-request slot.

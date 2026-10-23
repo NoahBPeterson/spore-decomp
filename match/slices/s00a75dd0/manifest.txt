@@ -1,0 +1,8 @@
+slices/s00a75dd0/s00a75dd0.cpp  ?Init11@cMapInfo@Swarm@EA@@QAEXPBMHHEPAUIcOwner@23@E@Z  00a76070  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a75dd0/s00a75dd0.cpp  ?SampleDir@cMapInfo@Swarm@EA@@QAEXPAMI@Z  00a761d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a75dd0/s00a75dd0.cpp  ?Init9@cMapInfo@Swarm@EA@@QAEXPBMHHEPAUIcOwner@23@E@Z  00a76420  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a75dd0/s00a75dd0.cpp  ?SampleTangent@cMapInfo@Swarm@EA@@QAEPAMPAMI@Z  00a76970  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a75dd0/s00a75dd0.cpp  ?SampleScalar4@cMapInfo@Swarm@EA@@QAEXPAMI@Z  00a76990  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a75dd0/s00a75dd0.cpp  ?Init12@cMapInfo@Swarm@EA@@QAEXPBMHHEPAUIcOwner@23@@Z  00a769b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a75dd0/s00a75dd0.cpp  ?Init13@cMapInfo@Swarm@EA@@QAEXPBMHHEPAUIcOwner@23@@Z  00a76b80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a75dd0/s00a75dd0.cpp  ?SampleVec3@cMapInfo@Swarm@EA@@QAEPAMPAMI@Z  00a76cd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
