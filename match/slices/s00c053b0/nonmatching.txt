@@ -1,0 +1,15 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include)
+00c053b0   929  Simulator::cSPCreatureBase::func74h: complete; equiv UNSUPPORTED (unresolved vector/rotate callees); retail `this` offsets drift from generated header, local CB stub used; x87 rotate path and flag tests differ
+00c05810   477  Simulator::cSPCreatureBase::func58h: complete; equiv UNSUPPORTED (unresolved timer/eval callees); 64-bit timer compare and vtable slot dispatch schedules differ
+00c05a80   384  Simulator::cSPCreatureBase::func5a8h: complete; equiv WEAK; XformMsg stack object / vtable arg-passing shape differs
+00c05bf0   253  Simulator::cSPCreatureBase::func5bf0: complete; equiv UNSUPPORTED (unresolved cGameData/globals callees); branchy rounding (cvtss2si+cvtsi2ss) and global loads differ
+00c05d40   130  Simulator::cGameData::cGameData_func3Ch: complete; equiv UNSUPPORTED (unresolved GetSetting/GetProfile/species callees); vtable slot 0x3c/0x54 dispatch differs
+00c05df0    84  intrusive pool Free (0x14-byte elements): complete; equiv OK; loop/call schedule around ref-releases differs
+00c05e80    23  intrusive pool Cur: complete; equiv OK; cl loads the two tail fields lazily instead of up-front
+00c05ea0    47  intrusive pool Pop: complete; equiv OK; tail-jmp vs call on final ref release
+00c05ee0   293  intrusive pool Reset: complete; equiv OK; nested release loops reordered relative to original
+00c06070   197  intrusive pool AllocChunk: complete; equiv UNSUPPORTED (unresolved pool allocator call); allocate/append schedule and allocator args differ
+00c06000    44  cLocomotionStrategy_Template singleton accessor: complete; equiv UNSUPPORTED (unresolved eastl operator new); vtable store order and null-path scheduling differ
+00c061b0   268  ~cCreatureAnimal (vtable/wall teardown): complete; equiv UNSUPPORTED (unresolved timer/dtor callees); cGonzagoTimer dtor call shape differs
+00c06340     5  vtable slot 0x3c forwarder: complete; equiv OK; cl tail-calls (jmp) instead of call+ret 4
+00c06500    66  Simulator::cCreatureBase::CreateLocomotionStrategy: complete; equiv UNSUPPORTED (unresolved strategy callees); flag test (test imm vs shr) and m[8] compare differ

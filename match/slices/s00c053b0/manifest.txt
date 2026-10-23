@@ -1,0 +1,2 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00c053b0/s00c053b0.cpp  ?GetRankThunk@CB@@QAEMH@Z  00c06320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
