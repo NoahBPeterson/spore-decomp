@@ -1,0 +1,17 @@
+# s00855490 -- IJG libjpeg 6a: jcparam.c colours defaults + jcphuff.c progressive Huffman helpers
+# All 11 functions byte-exact with /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast.
+00855490  jpeg_set_colorspace
+00855770  jpeg_default_colorspace
+00855a30  jpeg_set_defaults                ; inlines jpeg_set_quality/jpeg_quality_scaling/
+                                          ; jpeg_set_linear_quality/std_huff_tables/add_huff_table
+00855b40  dump_buffer                      (jcphuff.c, TU-local static)
+00855b80  emit_bits                        (jcphuff.c, TU-local static)
+00855cc0  emit_buffered_bits               (jcphuff.c, TU-local static)
+00855cf0  emit_eobrun                      (jcphuff.c, TU-local static)
+00855d70  emit_restart                     (jcphuff.c, TU-local static)
+00855e00  encode_mcu_DC_first              (jcphuff.c, address-taken entry point)
+00855f50  encode_mcu_AC_first              (jcphuff.c, address-taken entry point)
+00856120  encode_mcu_DC_refine             (jcphuff.c, address-taken entry point)
+008550e0  jpeg_set_quality                 ; out of slice; inlined into jpeg_set_defaults here
+00854f00  jpeg_alloc_huff_table            ; out of slice; called by add_huff_table
+00854f30  jpeg_add_quant_table             ; out of slice; called by jpeg_set_linear_quality

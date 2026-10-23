@@ -1,0 +1,13 @@
+# source  symbol  va  flags
+# 11 chk.py-printed MATCH rows for slice s00855490 (same retail libjpeg 6a object).
+slices/s00855490/s00855490.cpp  _jpeg_set_colorspace  00855490  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00855490/s00855490.cpp  _jpeg_default_colorspace  00855770  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00855490/s00855490.cpp  _jpeg_set_defaults  00855a30  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00855490/s00855490.cpp  _dump_buffer  00855b40  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00855490/s00855490.cpp  _emit_bits  00855b80  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00855490/s00855490.cpp  _emit_buffered_bits  00855cc0  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00855490/s00855490.cpp  _emit_eobrun  00855cf0  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00855490/s00855490.cpp  _emit_restart  00855d70  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00855490/s00855490.cpp  _encode_mcu_DC_first  00855e00  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00855490/s00855490.cpp  _encode_mcu_AC_first  00855f50  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00855490/s00855490.cpp  _encode_mcu_DC_refine  00856120  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast

@@ -1,0 +1,1 @@
+# s00855490 -- nothing partial; all 11 functions are byte-exact (manifest.txt).
