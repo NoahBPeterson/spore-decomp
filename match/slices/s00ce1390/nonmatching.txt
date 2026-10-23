@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00ce1390  134  PLANNER_STEAL_CONGREGATE_Activate: same body/instructions, differs in block layout of the shared false return (compiler puts it mid-function, original at the end) and in iterator loop rotation; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast, equiv WEAK (182 valid, 41.3% coverage)
+00ce1510  167  PLANNER_STEAL_CONGREGATE_Tick: same logic, frame 0x18 vs 0xc (two iterator locals vs one reused) plus loop layout; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast, equiv WEAK (313 valid, 32.7% coverage)
+00ce1690  220  PLANNER_STEALING_FOOD_Activate: same body, block layout of the shared false return and register assignment differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast, equiv PASS (215 valid, 69.8% coverage)
+00ce1810  110  PLANNER_STEALING_FOOD_Tick: guard chain and timer identical, only ctx/tribe register choice (ebx vs ebp) and false-block placement differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast, equiv PASS (234 valid, 67.5% coverage)
+00ce18f0  177  PLANNER_GIFTING_Activate: same body, differs in ctx/st register swap and tail layout; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast, equiv WEAK (216 valid, 50.0% coverage)
+00ce1a90  417  PLANNER_HUNTING_Activate: same logic, loop/frame layout differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast, equiv WEAK (184 valid, 24.7% coverage)
+00ce1c90  566  PLANNER_HUNTING_Tick: same logic, state-machine layout differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast, equiv WEAK (321 valid, 15.6% coverage)
+00ce1f60  385  PLANNER_GATHERING_Activate: same logic, loop/frame layout differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast, equiv WEAK (216 valid, 33.1% coverage)
+00ce2140  281  PLANNER_WATERING_Activate: same logic, block layout differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast, equiv WEAK (207 valid, 34.1% coverage)
