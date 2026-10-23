@@ -1,0 +1,11 @@
+00a12f90 ?ConstructVoice@ResourceVoiceTemplate@Audio@EA@@QAE_NHPAX@Z  # EA::Audio::ResourceVoiceTemplate::ConstructVoice
+00a13300 ?CreateVoice@EmitterSndPlayer@Audio@EA@@QAE_NXZ  # EA::Audio::EmitterSndPlayer::CreateVoice
+00a135c0 ?AllocNode@PHTable@@QAEPAUPHNode@@PBUNodePair@@@Z  # PHTable::AllocNode (eastl hash node alloc, unnamed in PDB)
+00a13650 ?Pause@Group@@QAEX_N@Z  # EA::Audio::Group::Pause
+00a137b0 ?GetProperty@Group@@QAE_NIAAM@Z  # EA::Audio::Group::GetProperty
+00a13800 ?HasProperty@Group@@QAE_NI@Z  # EA::Audio::Group::HasProperty
+00a13840 ?DisconnectPrimitive@Group@@QAE_NIPAX@Z  # EA::Audio::Group::DisconnectPrimitive (PDB: unnamed)
+00a138f0 ?Subscribe@Group@@QAE_NPAX@Z  # EA::Audio::Group::Subscribe (PDB: unnamed)
+00a13b40 ?Unsubscribe@Group@@QAE_NPAX@Z  # EA::Audio::Group::Unsubscribe (PDB: unnamed)
+00a13c40 ?Empty@Group@@QAE_NIPAX@Z  # EA::Audio::Group::Empty (PDB: unnamed)
+00a13d50 ?SetProperty@Group@@QAEXIM_N@Z  # EA::Audio::Group::SetProperty (PDB candidate: caller-scored)
