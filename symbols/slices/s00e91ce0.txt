@@ -1,0 +1,15 @@
+00e91ce0 ?GetRingAnimationPercentage@cRotationRingView@@QAEMM@Z  # SP::cRotationRingView::GetRingAnimationPercentage
+00e91e40 ?HandleSimulationUpdate@cRotationRingView@@QAEXHH@Z  # SP::cRotationRingView::HandleSimulationUpdate
+00e923b0 ?MakeView@cRotationRingView@@UAEPAV1@PAX@Z  # SP::cRotationRingView::MakeView (unnamed in PDB; vtable +0x08)
+00e92620 ?SetIsInWorld@cSpatialObjectView@@QAEX_N@Z  # SP::cSpatialObjectView::SetIsInWorld
+00e92660 ??1cSpatialObjectView@@QAE@XZ  # SP::cSpatialObjectView::~cSpatialObjectView
+00e926d0 ?SetModel_926d0@cSpatialObjectView@@QAEXPAX@Z  # cSpatialObjectView::SetModel_926d0 (unnamed in PDB)
+00e92740 ?MakeView_740@cSpatialObjectView@@QAEXPAX000@Z  # cSpatialObjectView::MakeView_740 (unnamed in PDB; vtable +0x28)
+00e92910 ?Init@cSpatialObjectView@@QAEXPAX@Z  # SP::cSpatialObjectView::Init
+00e929b0 ?SetModel@cSpatialObjectView@@QAEPAXXZ  # SP::cSpatialObjectView::SetModel
+00e929f0 ?GetData@cSpatialObjectView@@QAEPAXXZ  # SP::cSpatialObjectView::GetData
+00e92a10 ?UpdateFadeState@cSpatialObjectView@@QAEXXZ  # cSpatialObjectView::UpdateFadeState (unnamed in PDB)
+00e92af0 ??0cSpatialObjectView@@QAE@XZ  # SP::cSpatialObjectView::cSpatialObjectView
+00e92b50 ?MakeView_92b50@@YAPAVcSpatialObjectView@@PAX@Z  # cSpatialObjectView vtable +0x08 factory (unnamed in PDB)
+00e92c60 ?GetIsInWorld@cSpatialObjectView@@QAEEXZ  # SP::cSpatialObjectView::GetIsInWorld
+00e92c80 ?GetIsVisible@cSpatialObjectView@@QAEEXZ  # SP::cSpatialObjectView::GetIsVisible
