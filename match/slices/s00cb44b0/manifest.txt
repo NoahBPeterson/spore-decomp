@@ -1,0 +1,3 @@
+slices/s00cb44b0/s00cb44b0.cpp  ?HasLiveTarget@cLocomotionBase@@QAE_NXZ  00cb4a40  /O2 /MD /Gy /TP /arch:SSE
+slices/s00cb44b0/s00cb44b0.cpp  ?HasLiveTarget14@cLocomotionObj14@@QAE_NXZ  00cb4ca0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00cb44b0/s00cb44b0.cpp  ?HasLiveTargetDC@cLocomotionObjDC@@QAE_NXZ  00cb5560  /O2 /MD /Gy /TP /arch:SSE
