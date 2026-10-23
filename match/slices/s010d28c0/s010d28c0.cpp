@@ -240,7 +240,9 @@ void hkCapsuleTriangleAgent::processCollision(const hkCdBody& bodyA, const hkCdB
 // ===========================================================================
 // @ 0x010d2d80
 // getClosestPoints: same manifold build; report the deeper of the first two
-// contacts through the point collector when it is within tolerance.
+// contacts through the point collector when it is within tolerance.  Both the
+// pick and the tolerance test are strict `<` (retail emits the x87 "!(a<b)"
+// idiom), so a tie or an unordered (NaN) distance falls to contact 0.
 // ===========================================================================
 void hkCapsuleTriangleAgent::getClosestPoints(const hkCdBody& bodyA, const hkCdBody& bodyB,
                                               const hkCollisionInput& input,
