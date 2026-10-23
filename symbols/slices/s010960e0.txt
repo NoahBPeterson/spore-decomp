@@ -1,0 +1,8 @@
+010960e0 ?applyForcesAndStep@hkKeyframedRigidMotion@@UAEXABVhkStepInfo@@ABVhkVector4@@@Z  # hkKeyframedRigidMotion::applyForcesAndStep (the impulse argument is unused by this motion type)
+010964b0 ?isValid@hkHingeLimitsData@@UBE?AVhkBool@@XZ  # 5 perpendicularity/normalisation checks over basisA/basisB, hkMath::equal on A's axle, then the angle range test against 2*pi
+01096640 ?buildJacobian@hkHingeLimitsData@@UAEXABVhkConstraintQueryIn@@AAVhkConstraintQueryOut@@@Z  # begin(8), 2 angular bilateral rows, hinge angle unwrapped from runtime+0x20, angular limit row
+01096b60 ?getRuntimeInfo@hkHingeConstraintData@@UBEXVhkBool@@AAURuntimeInfo@hkConstraintData@@@Z  # 5 solver results, 0x28 bytes of external runtime
+01096b90 ?isValid@hkHingeConstraintData@@UBE?AVhkBool@@XZ  # perpendicularity of basisA.perp1/perp2 plus the three unit-length checks
+01096c70 ?buildJacobian@hkHingeConstraintData@@UAEXABVhkConstraintQueryIn@@AAVhkConstraintQueryOut@@@Z  # begin(8), 2 angular bilateral rows, ball-socket row between the two world pivots
+01097110 ??0hkFixedRigidMotion@@QAE@ABVhkVector4@@ABVhkQuaternion@@@Z  # hkKeyframedRigidMotion ctor then vtable 0x014A1D08
+01097130 _FUN_01097130@8  # returns its second argument + 0x80 (unreferenced elsewhere in this slice)
