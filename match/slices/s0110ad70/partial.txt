@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0110ad70  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 1251 B.  undefined4 __thiscall(int, int, byte*, float*) float/vector routine: FUN_0110a4b0/FUN_01108750/FUN_0110a600/FUN_0110a0d0/FUN_011088b0 (x2)/FUN_0110a2b0 plus internal branches to 0x110ad90/0x110b079/0x110b0ab/0x110b1af/0x110b1e1; no relocs.
+0110b260  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 313 B.  void __thiscall(int, undefined1*, float*) float/vector routine: FUN_010ec500/FUN_010d93e0/FUN_01109460/FUN_0110ad70/FUN_01108a10/FUN_01108b80/FUN_01108c30 and internal branches to 0x110b2fb/0x110b340; no relocs.

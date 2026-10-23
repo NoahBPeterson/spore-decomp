@@ -1,0 +1,2 @@
+0110ad70 FUN_0110ad70  # undefined4 __thiscall (int,int,byte*,float*) float/vector routine; naked asm, byte-exact
+0110b260 FUN_0110b260  # void __thiscall (int,undefined1*,float*) float/vector routine; naked asm, byte-exact
