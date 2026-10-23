@@ -1,0 +1,8 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e59800  138  cell-mode on-key handler: complete; reads gspCellGame fresh around calls, dead [gsp+0x5164] load + loop alignment nop and cmp operand order differ
+00e598e0   37  set cell flags + state on timer: complete; only UCOMISS(d>0) is scheduled after the byte stores instead of before them
+00e59c10  107  conditional callback dispatch: complete; callee FUN_00e50620 takes args in EAX/ESI/EDI (no stack pushes), not expressible without LTCG
+00e59d90  107  queried cell mode via 0xe4cc40 object: complete; jump table emitted, but result temp uses ESI instead of ECX and epilogue return register differs
+00e59ee0  695  SP::sUpdateFluidParticles: complete; loop body SSE schedule, prologue stack-frame shape and xmm4(0.0) placement differ (size mismatch)
+00e5a1a0  115  cell-quality tier + spawn: complete (this in ESI via single-caller static trick); SSE constant load vs memory-operand comiss and dead lea [esi+0x254]/eax=ebx artifacts differ
+00e5a2a0  251  view-vector angle helper: complete; SIMD dot-product evaluation/scheduling of a- and b-vectors differs (size matches)
