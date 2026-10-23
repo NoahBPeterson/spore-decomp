@@ -1,0 +1,7 @@
+# va  size (ours/orig)  reason
+011fc4c0  0/1440  Monster vertex-shader constant setup (1440 bytes, 317-line decompile). Not implemented: it is a long register-allocated sequence over the cached matrix globals and several inlined 4x4 helpers, and reconstructing it needs a dedicated pass over the disassembly rather than the flattened decompile.
+011fca60  0/351   Inverse-transform cache/dispatch (matrix type 3 -> transposed, 4 -> identity constants at &DAT_01718aa0, else cache at &DAT_01718a60/&DAT_01718a20 built through FUN_011fb750/FUN_011fb310/FUN_011fc4c0) ending in D3DXVec3TransformNormal or a 4-component swizzle. Not implemented: it depends on FUN_011fc4c0 and the two matrix helpers, which are outside this slice.
+011fcd10  0/207   Not implemented (no marker emitted this pass; card decompile not transcribed). Left for the next pass over the slice.
+011fcf20  0/401   Not implemented (no marker emitted this pass; card decompile not transcribed). Left for the next pass over the slice.
+011fd0c0  0/304   Not implemented (no marker emitted this pass; card decompile not transcribed). Left for the next pass over the slice.
+011fd1f0  0/430   Not implemented (no marker emitted this pass; card decompile not transcribed). Left for the next pass over the slice.
