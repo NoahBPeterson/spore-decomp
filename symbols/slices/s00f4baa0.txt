@@ -1,0 +1,6 @@
+00f4baa0 FUN_00f4baa0  # __thiscall (int,undefined4,undefined4,undefined4,undefined4*); naked asm, byte-exact
+00f4bcb0 FUN_00f4bcb0  # __thiscall (int,undefined4,undefined4*); naked asm, byte-exact
+00f4bf30 FUN_00f4bf30  # __thiscall (int*,undefined4*,undefined4*); naked asm, byte-exact
+00f4c150 FUN_00f4c150  # __fastcall thunk to FUN_00f4bf30; naked asm, byte-exact
+00f4c180 eastl::vector<SP::cRibbonBrushPoly,eastl::sp_vector_allocator>::DoInsertValue  # PDB name; naked asm, byte-exact
+00f4c2c0 FUN_00f4c2c0  # __fastcall (int); naked asm, byte-exact
