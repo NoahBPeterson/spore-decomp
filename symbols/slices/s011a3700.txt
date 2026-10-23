@@ -1,0 +1,4 @@
+011a3700 ?FUN_011a3700@@YAXH@Z  # ssl3_send_server_key_exchange: build the ServerKeyExchange message
+011a38d0 ?FUN_011a38d0@@YAHPAH@Z  # ssl3_get_client_key_exchange: handle ClientKeyExchange state machine
+011a3a60 ?FUN_011a3a60@@YAHH@Z  # validate received certificate against the negotiated cipher suite
+011a3cf0 ?FUN_011a3cf0@@YAXH@Z  # ssl3_get_server_key_exchange: parse server params and verify signature
