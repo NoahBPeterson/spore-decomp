@@ -1,0 +1,9 @@
+# Spore (EA) EA::XHTML::Layout block-edge tessellation helpers, slice s008e9a10.
+# No retail PDB names survive for these; the decorated names below are the exact
+# spellings the slice TU compiles to (markers in s008e9a10.cpp), which is what the
+# equivalence harness binds against.  008e9a10 / 008e9b10 / 008e9e30 are byte-exact
+# (manifest.txt); 008e9fe0 is reconstructed in full and non-exact (nonmatching.txt).
+008e9a10 ?FUN_008e9a10@@YGXPAVRenderingContext@Layout@XHTML@EA@@PAM1PAHE@Z
+008e9b10 ?FUN_008e9b10@@YGXPAVRenderingContext@Layout@XHTML@EA@@PAM1PAHEM@Z
+008e9e30 ?FUN_008e9e30@BlockMetrics@Layout@XHTML@EA@@QAEXPBDM@Z
+008e9fe0 ?FUN_008e9fe0@@YGXPAVRenderingContext@Layout@XHTML@EA@@PAM1PAHME@Z

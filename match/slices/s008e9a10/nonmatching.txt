@@ -1,0 +1,14 @@
+# slice s008e9a10 — EA::XHTML::Layout block-edge tessellation helpers.
+# 008e9a10 / 008e9b10 / 008e9e30 are byte-exact and live in manifest.txt; not repeated here.
+# One VA per row, no wrapping: va  diff-bytes  reason (difftest verdict; flags).
+# Region flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+#   (Same EA::XHTML module as s008e8af0/s008e7230; no /EHsc, no /Isrc/game/include.)
+#
+# Calling-convention note that drove the reconstruction: 008e9a10/008e9b10/008e9fe0
+# are free __stdcall helpers whose first stack argument is the RenderingContext*
+# that also becomes ecx for the inner __thiscall calls (ReleaseScroll / ScrollViewport
+# / DrawQuad); 008e9e30 is a __thiscall member of the output BlockMetrics struct
+# (ecx = destination).  DrawQuad's odd args are const float* points, even args are
+# the 32-bit colour words; FUN_008e9900 is __cdecl (int colour, float x, float* out,
+# int count) and its float x and colour are moved as raw dwords by the original.
+008e9fe0  319  per-edge gradient-quad emitter (686B, ours 698B): ctx->ReleaseScroll(-1) then, for each set bit of `flags` (8/1/2/4), the guarded FUN_008e9900(c[i], x, grad, 4) gradient build (re-emitted whenever c[i] != last || last == 0) followed by RenderingContext::DrawQuad(point, colour, ...) over the two triangles built from the corner floats a[]/b[] and the gradient floats grad[0..3] are all reproduced in order; the frame-pointer prologue (`push ebp; mov ebp,esp; and esp,-8; sub esp,0x34`), the callee-saved allocation (esi=arg3=b, edi=arg2=a, ebx=last), the `xor ebx,ebx` init and the integer (non-x87) moves of the float bit patterns now match exactly, and only the frame-slot ORDER differs — the original lays the 8 corner floats at the frame base (F+0) with the 8-byte-aligned gradient above them (F+0x20), whereas MSVC puts our aligned gradient at the frame base (F+0) and the corner array at F+0x10, shifting every esp-relative operand by 0x20. difftest UNSUPPORTED (0/400 valid; fault(read)=269, fake-arity=105, orig-abi-broken(fake)=25 — the harness cannot synthesise valid RenderingContext / point-array pointers, so no input executes; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast)

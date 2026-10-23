@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008e9a10/s008e9a10.cpp  ?FUN_008e9a10@@YGXPAVRenderingContext@Layout@XHTML@EA@@PAM1PAHE@Z  008e9a10  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008e9a10/s008e9a10.cpp  ?FUN_008e9b10@@YGXPAVRenderingContext@Layout@XHTML@EA@@PAM1PAHEM@Z  008e9b10  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008e9a10/s008e9a10.cpp  ?FUN_008e9e30@BlockMetrics@Layout@XHTML@EA@@QAEXPBDM@Z  008e9e30  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
