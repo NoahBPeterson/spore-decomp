@@ -1,0 +1,6 @@
+# slice s00fd2a30 -- SporeApp functions 0x00fd2a30 .. 0x00fd3550 (only the byte-exact ones are listed)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00fd2a30/s00fd2a30.cpp  ?FUN_00fd2d60@@YAXHH@Z        00fd2d60  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00fd2a30/s00fd2a30.cpp  ?FUN_00fd2e30@@YAXPAEPAI@Z   00fd2e30  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00fd2a30/s00fd2a30.cpp  ?FUN_00fd2f80@@YAXPAEPAI@Z   00fd2f80  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00fd2a30/s00fd2a30.cpp  ?FUN_00fd34c0@@YAXH@Z        00fd34c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
