@@ -626,6 +626,9 @@ instantiation `eastl::operator==<char>` 0x555020 stays in s00554c30, `leave_in_s
   settles more functions after a nudge gets a fresh nudge count. Why: with fixed ranges gold4 had 28 sessions busy at
   23:00 and 5 at 03:00, because sessions with easy ranges stopped early. Build queue batches largest slice first, so
   the long slices start early and the short ones fill the gaps at the end.
+- **Check every new batch's module make-up** (added 2026-10-23): `tools/module_progress.py --batch <batch>` lists each
+  module's functions in the batch next to its unrecorded functions and marks a module with 100+ unrecorded functions
+  and none offered. A substring filter on "SPGonzago" kept the whole game module out of gold2-gold5 unnoticed.
 - Hand templates (all "Hand-maintained", layout from the dev PDB, sizes VC9-probed, unverified in retail):
   `rw/math/fpu/VectorTemplates.h` (+`Matrix44Template` 0x40, `QuaternionTemplate` 0x10), `rw/BaseResourceTemplates.h`
   (`BaseResourceDescriptors<4>` 0x20, `BaseResources<4>` 0x10, `BaseResourceDescriptorType<T>`), `rw/math/vpu/VecFloatRef.h` (4),

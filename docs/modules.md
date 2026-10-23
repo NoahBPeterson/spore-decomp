@@ -18,28 +18,34 @@ does, how big it is, and how far the decompilation has got in each. It is writte
 
 ## The modules
 
-Sizes and progress below come from the module map joined with every `manifest.txt` (byte-exact), `nonmatching.txt`
-(complete, not byte-exact) and `partial.txt` (incomplete) under `match/slices/` and `src/game/` (2026-10-23).
-"No row" means no bookkeeping file mentions the function yet. What each module does is inferred from its object-file
-names and the dev PDB's class names.
+Sizes and progress below come from the module map joined with every bookkeeping source (2026-10-23):
+`manifest.txt` files under `match/slices/` and `src/game/`, `match/manifest.txt`, the pattern-generated manifests in
+`match/synth/` and `match/clones.txt` (byte-exact), `nonmatching.txt` (complete, not byte-exact) and `partial.txt`
+(incomplete). "Synth" is the part of the byte-exact count that `tools/matching/synth.py` generated from code shapes
+(an `AddRef`, a three-store constructor, and so on): byte-exact, but compiled under placeholder class names such as
+`C_00768530` until migration gives them real ones. "No row" means no bookkeeping source mentions the function yet.
+What each module does is inferred from its object-file names and the dev PDB's class names.
 
-| Module | Functions | Code | Objects | Byte-exact | Complete, not exact | Partial | No row |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| SPGonzago | 13,090 | 2.90 MB | 274 | 494 | 936 | 359 | 11,301 |
-| UTFSpore_Win32 | 5,269 | 1.05 MB | 240 | 1,598 | 1,824 | 236 | 1,611 |
-| SPEditors | 3,368 | 0.84 MB | 118 | 1,257 | 778 | 331 | 1,002 |
-| SPEngine | 3,353 | 0.83 MB | 100 | 764 | 1,272 | 490 | 827 |
-| SPBake | 1,060 | 0.59 MB | 34 | 445 | 394 | 134 | 87 |
-| SPCreatureAnim | 712 | 0.29 MB | 15 | 139 | 304 | 30 | 239 |
-| SPAudio | 1,533 | 0.28 MB | 70 | 489 | 619 | 31 | 394 |
-| SPTerrain | 507 | 0.25 MB | 20 | 103 | 191 | 31 | 182 |
-| Spui | 1,238 | 0.20 MB | 31 | 286 | 375 | 128 | 449 |
-| Swarm | 335 | 0.11 MB | 18 | 76 | 133 | 8 | 118 |
-| Native Release (RenderWare 4) | 429 | 0.07 MB | 48 | 71 | 211 | 30 | 117 |
-| SPMovie | 190 | 0.03 MB | 16 | 49 | 54 | 18 | 69 |
-| EA sound library (`cmn`, `plugins`, `mix`, `decoders`, `ealayer30`, `ealayer31`) | 187 | 0.06 MB | 51 | 22 | 137 | 4 | 24 |
-| SporeApp | 15 | 0.01 MB | 1 | 1 | 7 | 2 | 5 |
-| dll_obj (CRT helpers) | 9 | <0.01 MB | 7 | 1 | 0 | 0 | 8 |
+| Module | Functions | Code | Objects | Byte-exact | of which synth | Complete, not exact | Partial | No row |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| SPGonzago | 13,090 | 3.14 MB | 274 | 5,525 | 4,903 | 935 | 359 | 6,271 |
+| UTFSpore_Win32 | 5,269 | 1.12 MB | 240 | 2,639 | 942 | 1,816 | 235 | 579 |
+| SPEditors | 3,368 | 0.89 MB | 118 | 2,261 | 994 | 776 | 331 | 0 |
+| SPEngine | 3,353 | 0.89 MB | 100 | 1,519 | 748 | 1,271 | 490 | 73 |
+| SPBake | 1,060 | 0.65 MB | 34 | 534 | 84 | 392 | 134 | 0 |
+| SPCreatureAnim | 712 | 0.30 MB | 15 | 262 | 121 | 304 | 29 | 117 |
+| SPAudio | 1,533 | 0.29 MB | 70 | 708 | 216 | 618 | 31 | 176 |
+| SPTerrain | 507 | 0.25 MB | 20 | 188 | 83 | 191 | 31 | 97 |
+| Spui | 1,238 | 0.22 MB | 31 | 737 | 416 | 373 | 128 | 0 |
+| Swarm | 335 | 0.12 MB | 18 | 139 | 63 | 133 | 8 | 55 |
+| Native Release (RenderWare 4) | 429 | 0.07 MB | 48 | 133 | 62 | 211 | 30 | 55 |
+| EA sound library (`cmn`, `plugins`, `mix`, `decoders`, `ealayer30`, `ealayer31`) | 187 | 0.06 MB | 51 | 32 | 10 | 137 | 4 | 14 |
+| SPMovie | 190 | 0.03 MB | 16 | 94 | 44 | 54 | 18 | 24 |
+| SporeApp | 15 | 0.01 MB | 1 | 6 | 4 | 7 | 2 | 0 |
+| dll_obj (CRT helpers) | 9 | <0.01 MB | 7 | 1 | 0 | 0 | 0 | 8 |
+
+Code sizes are the module map's function sizes. `tools/module_progress.py` prints this table; `--batch <name>`
+shows how much of each module's unrecorded code a batch offers.
 
 ### SPGonzago: the game itself
 
@@ -55,11 +61,10 @@ of "Gonzago" is not recorded anywhere we have. Its largest object files, by func
 - Shared: `SPGonzagoSystem`, `SPGonzagoPhysics`, `SPDramaManager`, `SPCinematicActions`, `SPUIPosse` (the
   player's group of followers).
 
-It is the least finished module: 1,789 of 13,090 functions have a row. Batch gold6 (2026-10-23) covers 4,958 of the
-rest. Another 5,074 SPGonzago addresses in the module map are not function starts in `work/slices.json`, so no batch
-can offer them; most were assigned by `interp` or `vtable-vote`, not by a PDB anchor. They need reconciling with the
-slice list (wrong boundaries in one of the two, or functions folded into neighbours) before SPGonzago's real size is
-known.
+It is the least finished module: 6,271 of its 13,090 functions have no row, and most of its 5,525 byte-exact
+functions are pattern-generated (synth) ones still under placeholder names. Of the 6,271, batch gold6 (2026-10-23)
+covers 4,958; 994 sit in slices that an earlier wave created but never recorded, and 328 in slices that were put in a
+batch but never created; a few dozen more have a `// @` marker in some source but no row.
 
 ### UTFSpore_Win32: EA's application framework
 
