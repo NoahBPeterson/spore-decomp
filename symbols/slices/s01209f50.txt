@@ -1,0 +1,12 @@
+01209f50 lerp2Ha  # hkSweptTransformUtil::lerp2Ha: corr/quat slerp + centre-of-mass lerp + transform rebuild; x87
+0120a260 backStepMotionState  # hkSweptTransformUtil::backStepMotionState: invdt/t rewrite, com/quat interpolation, velocity scale
+0120a570 freezeMotionState  # hkSweptTransformUtil::freezeMotionState: time clamp, branch-merge slerp, normalize, com/rotation freeze
+0120a880 warpTo  # hkSweptTransformUtil::warpTo(vector,quat,motionState): zero velocity, quat->rot0/rot1, m_transform rotation, com0/com1
+0120a9a0 warpTo  # hkSweptTransformUtil::warpTo(transform,motionState): hkQuaternion::set + hkTransform_::assign 0x1088410, then com rebuild
+0120aab0 warpToPosition  # hkSweptTransformUtil::warpToPosition: sets transform translation + com0/com1, rot1->rot0 copy
+0120aba0 warpToRotation  # byte-exact; tail-calls warpTo(vector=ms+0x30, quat, ms)
+0120abc0 initSweptTransform  # byte-exact; hkSweptTransform::initSweptTransform
+0120ac30 initMotionState  # hkMotionState::initMotionState: initSweptTransform + hkRotation::set + translation/velocity reset
+0120ac90 hkFloor  # hkMath::hkFloor single-precision bit hack (truncate toward zero)
+0120ad30 hkFloatToInt  # hkMath::hkFloatToInt integer bit hack (two shift stages)
+0120adb0 atan2fApproximation  # byte-exact; polynomial atan2 approx
