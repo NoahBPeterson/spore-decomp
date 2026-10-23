@@ -1,0 +1,3 @@
+# slice s0085e800 nonmatching functions (complete semantics, not byte-exact)
+# format: <va>  <diff-bytes>  <reason>  | difftest: <verdict>
+# All ten functions of this slice are byte-exact; see manifest.txt.

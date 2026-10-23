@@ -1,0 +1,34 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+#
+# Slice s0085e800 -- IJG libjpeg 6a decompression modules (post-processing
+# controller and upsampler), linked into SporeApp.exe.  Vendored upstream
+# translation units compiled verbatim as C (/TC).
+#
+#   jdpostct.c   jdpostct.cpp
+#     0085e800 start_pass_dpost        0085e900 jinit_d_post_controller
+#   jdsample.c   jdsample.cpp
+#     0085e9a0 start_pass_upsample     0085e9c0 sep_upsample
+#     0085eab0 int_upsample            0085eb90 h2v1_upsample
+#     0085ebf0 h2v2_upsample           0085ec60 h2v1_fancy_upsample
+#     0085ed20 h2v2_fancy_upsample     0085ee50 jinit_upsampler
+#
+# The retail build uses a patched jpeglib.h (a 1024-byte comment buffer and a
+# 4-byte flag inserted after CCIR601_sampling, shifting everything from
+# max_h_samp_factor on by +0x404; the error msg_parm union is 80 bytes; a
+# trailing read_dht flag).  The local jpeglib.h carries that layout (the same
+# header shared by slices s008590d0 / s00858190 / s0085bb90) and is
+# force-included before the vendor source.  /GS- is required (with /GS on the
+# fancy-upsample frames grow stack cookies that the retail build does not have).
+#
+# jdpostct.c's post_process_1pass / prepass / 2pass (0085e630 / 0085e6b0 /
+# 0085e760) belong to this translation unit but are claimed by slice s0085d930.
+slices/s0085e800/jdpostct.cpp  _start_pass_dpost  0085e800  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s0085e800/jdpostct.cpp  _jinit_d_post_controller  0085e900  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s0085e800/jdsample.cpp  _start_pass_upsample  0085e9a0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s0085e800/jdsample.cpp  _sep_upsample  0085e9c0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s0085e800/jdsample.cpp  _int_upsample  0085eab0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s0085e800/jdsample.cpp  _h2v1_upsample  0085eb90  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s0085e800/jdsample.cpp  _h2v2_upsample  0085ebf0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s0085e800/jdsample.cpp  _h2v1_fancy_upsample  0085ec60  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s0085e800/jdsample.cpp  _h2v2_fancy_upsample  0085ed20  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s0085e800/jdsample.cpp  _jinit_upsampler  0085ee50  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
