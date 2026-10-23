@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+008c8920  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 772 B.  Make2ndDegreeEdgeList (PDB name): FUN_008c8220 twice, FUN_008c7c40, internal branches to 0x8c8951/0x8c8add/0x8c8ae3/0x8c8af0/0x8c8bb6; no relocs.
+008c8c30  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 630 B.  tsi_NewScanConv (PDB candidate), 15-arg routine: FUN_008d14d0, FUN_008c7be0, FUN_008d1260, FUN_008c77d0, FUN_008c8720, FUN_008c8920 and internal branches to 0x8c8c8a/0x8c8cba/0x8c8d0a/0x8c8d10/0x8c8df6/0x8c8e0a/0x8c8e21/0x8c8e5c; no relocs.
+008c8eb0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 76 B.  CountInterSections (PDB name): __fastcall leaf, straight-line integer loop, no calls; no relocs.
+008c8f00  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 254 B.  IsStub (PDB name): FUN_008c8eb0 called six times plus internal branches to 0x8c8f4e/0x8c8fc3; no relocs.

@@ -1,0 +1,4 @@
+008c8920 Make2ndDegreeEdgeList  # PDB name; naked asm, byte-exact
+008c8c30 tsi_NewScanConv  # PDB candidate (15-arg); naked asm, byte-exact
+008c8eb0 CountInterSections  # PDB name; naked asm, byte-exact
+008c8f00 IsStub  # PDB name; naked asm, byte-exact
