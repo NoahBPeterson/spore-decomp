@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f04140/s00f04140.cpp  ?FUN_00f04140@cScenarioYouTube@Simulator@@QAEXPBU?$basic_string@D@eastl@@@Z  00f04140  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f04140/s00f04140.cpp  ?FUN_00f043d0@cScenarioYouTube@Simulator@@QAEXXZ  00f043d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f04140/s00f04140.cpp  ?FUN_00f044d0@cScenarioYouTube@Simulator@@QAEXXZ  00f044d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f04140/s00f04140.cpp  ?FUN_00f046e0@cScenarioYouTube@Simulator@@QAEPAXI@Z  00f046e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f04140/s00f04140.cpp  ?FUN_00f04910@cScenarioYouTube@Simulator@@QAEXXZ  00f04910  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f04140/s00f04140.cpp  ?FUN_00f04ad0@cScenarioYouTube@Simulator@@QAEXXZ  00f04ad0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f04140/s00f04140.cpp  ?FUN_00f04bd0@cScenarioYouTube@Simulator@@QAEXXZ  00f04bd0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
