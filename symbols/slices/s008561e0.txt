@@ -1,0 +1,18 @@
+# IJG libjpeg 6a (binary carries the string "6a  7-Feb-96"); names from third_party/baseline_matches.csv.
+# All 13 are byte-exact against the retail image with /O2 /arch:SSE /MD /Gy /TC (see manifest.txt).
+# Note: 008561e0's true size is 624 (its index_3.csv size) and 00857040's is 160; the following real
+# functions (00856450 finish_pass_phuff, 008570e0 h2v2_downsample) are missing from work/decomp_all/
+# index_*.csv, so card.bounds() over-measures both. Both are named in baseline_matches.csv.
+008561e0 encode_mcu_AC_refine  # jcphuff.c
+008564a0 finish_pass_gather_phuff  # jcphuff.c
+00856580 start_pass_phuff  # jcphuff.c
+00856750 jinit_phuff_encoder  # jcphuff.c
+00856790 start_pass_prep  # jcprepct.c
+008567e0 pre_process_data  # jcprepct.c
+008569e0 pre_process_context  # jcprepct.c, CONTEXT_ROWS_SUPPORTED
+00856bd0 create_context_buffer  # jcprepct.c, CONTEXT_ROWS_SUPPORTED
+00856cf0 jinit_c_prep_controller  # jcprepct.c
+00856df0 sep_downsample  # jcsample.c
+00856e80 int_downsample  # jcsample.c
+00856ff0 fullsize_downsample  # jcsample.c
+00857040 h2v1_downsample  # jcsample.c

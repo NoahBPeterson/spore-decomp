@@ -1,0 +1,21 @@
+# source  symbol  va  flags
+# 11 rows below are chk.py-printed MATCH rows (flags /O2 /arch:SSE /MD /Gy /TC), copied as printed.
+slices/s008561e0/s008561e0.cpp  _finish_pass_gather_phuff  008564a0  /O2 /arch:SSE /MD /Gy /TC
+slices/s008561e0/s008561e0.cpp  _start_pass_phuff  00856580  /O2 /arch:SSE /MD /Gy /TC
+slices/s008561e0/s008561e0.cpp  _jinit_phuff_encoder  00856750  /O2 /arch:SSE /MD /Gy /TC
+slices/s008561e0/s008561e0.cpp  _start_pass_prep  00856790  /O2 /arch:SSE /MD /Gy /TC
+slices/s008561e0/s008561e0.cpp  _pre_process_data  008567e0  /O2 /arch:SSE /MD /Gy /TC
+slices/s008561e0/s008561e0.cpp  _pre_process_context  008569e0  /O2 /arch:SSE /MD /Gy /TC
+slices/s008561e0/s008561e0.cpp  _create_context_buffer  00856bd0  /O2 /arch:SSE /MD /Gy /TC
+slices/s008561e0/s008561e0.cpp  _jinit_c_prep_controller  00856cf0  /O2 /arch:SSE /MD /Gy /TC
+slices/s008561e0/s008561e0.cpp  _sep_downsample  00856df0  /O2 /arch:SSE /MD /Gy /TC
+slices/s008561e0/s008561e0.cpp  _int_downsample  00856e80  /O2 /arch:SSE /MD /Gy /TC
+slices/s008561e0/s008561e0.cpp  _fullsize_downsample  00856ff0  /O2 /arch:SSE /MD /Gy /TC
+# The two rows below are byte-exact (cmpobj: 0 diff bytes over 624 / 160 bytes) but chk.py cannot print
+# MATCH for them: its size reference comes from bounds(), which ignores the index_*.csv size column and
+# measures up to the next index start; the following real functions (00856450 finish_pass_phuff,
+# 008570e0 h2v2_downsample) are missing from the index, so bounds() reports 700 / 361 instead of the
+# true 624 / 160 (both are the index's own sizes). run_all.py measures the object symbol, so it verifies
+# these rows normally.
+slices/s008561e0/s008561e0.cpp  _encode_mcu_AC_refine  008561e0  /O2 /arch:SSE /MD /Gy /TC
+slices/s008561e0/s008561e0.cpp  _h2v1_downsample  00857040  /O2 /arch:SSE /MD /Gy /TC
