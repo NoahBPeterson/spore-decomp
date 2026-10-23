@@ -1,0 +1,2 @@
+slices/s00da8630/s00da8630.cpp  ?f00da9330@@YAOHHHHHH@Z  00da9330  /O2 /MD /Gy /TP /arch:SSE
+slices/s00da8630/s00da8630.cpp  ?f00da9360@@YAOHHHHHH@Z  00da9360  /O2 /MD /Gy /TP /arch:SSE
