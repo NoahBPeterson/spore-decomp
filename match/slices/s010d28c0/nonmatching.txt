@@ -1,0 +1,19 @@
+# va  diff-bytes  reason   (compile with /vc71 /O2 /MD /Gy /TP)
+#
+# Complete source for the capsule-triangle agent (world-space build of the capsule
+# segment and triangle verts, hkCollideCapsuleUtilManifoldCapsVsTriangle @0x01107270,
+# manifold consumption, timers).  None byte-exact: Havok 3.1.0 is x87 + register
+# allocation heavy, so the whole diff is the x87 schedule / register-file allocation
+# (retail frame 1212/1299/1315 bytes).  All three are equivalence-PASS.
+#
+# Note on the guards (this is the whole point of the agent): the retail comparisons are
+# emitted as the x87 "!(a < b)" idiom (`fld w; fcomp x; fnstsw ax; test ah,5; jp L`) --
+# strict `<`, so an unordered (NaN) separation goes to the *else* arm (skip the add /
+# take the removePoint branch).  Writing the same condition as `if (!(tol <= w))` instead
+# makes NaN fall into the add arm (`test ah,0x41; jnp`) and diverges on ~1-5 fuzz inputs
+# (fault: ours calls the collector/append path where retail returns).  The source now
+# spells every guard as the positive `w < tol` / `c1.w < c0.w` comparison so the NaN
+# behaviour matches, which turned all three FAILs into PASSes.
+010d28c0  1304  hkCapsuleTriangleAgent::processCollision; complete; builds capSeg/triVerts in world space, calls util with singleCheck=1 and cache this+0x14, loops 3 contacts (append to *output when w<tol, else mgr->removePoint); logic and branch structure match retail, diff is x87 schedule/register allocation; equiv PASS 388 valid inputs, 92.5% insn coverage
+010d2d80  1109  hkCapsuleTriangleAgent::getClosestPoints; complete; same world-space build with singleCheck=0, cache this+0x14, picks the contact with the smaller .w (tie/NaN -> contact0) and appends via collector.addCdPoint only when its w<tol; logic matches retail, diff is x87 schedule/register allocation; equiv PASS 393 valid inputs, 88.0% coverage
+010d32a0  1128  hkCapsuleTriangleAgent::staticGetClosestPoints; complete (static variant; local cache buffer filled by hkCollideTriangleUtilSetupCache @0x01105e90 over bodyB.m_shape+0x10); same min-.w pick and w<tol collector append; logic matches retail, diff is x87 schedule/register allocation; equiv PASS 248 valid inputs, 88.1% coverage
