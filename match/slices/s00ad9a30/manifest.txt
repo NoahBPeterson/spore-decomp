@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00ad9a30/s00ad9a30.cpp  ?FUN_00ad9ff0@@YIXPAXHPAVcArguments@@@Z  00ad9ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00ad9a30/s00ad9a30.cpp  ?FUN_00ada070@@YIXPAXHPAVcArguments@@@Z  00ada070  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00ad9a30/s00ad9a30.cpp  ?FUN_00ada110@@YIXPAXHPAVcArguments@@@Z  00ada110  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00ad9a30/s00ad9a30.cpp  ?FUN_00ada250@@YIXPAXHPAVcArguments@@@Z  00ada250  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00ad9a30/s00ad9a30.cpp  ?FUN_00ada360@@YIXPAXHPAVcArguments@@@Z  00ada360  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00ad9a30/s00ad9a30.cpp  ?FUN_00ada7e0@@YIXPAXHPAVcArguments@@@Z  00ada7e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00ad9a30/s00ad9a30.cpp  ?FUN_00ada880@@YIXPAXHPAVcArguments@@@Z  00ada880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00ad9a30/s00ad9a30.cpp  ?FUN_00ada920@@YIXPAXHPAVcArguments@@@Z  00ada920  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

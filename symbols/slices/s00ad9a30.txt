@@ -1,0 +1,13 @@
+00ad9ff0 ?FUN_00ad9ff0@@YIXPAXHPAVcArguments@@@Z  # byte-exact; 127B Simulator command object (Msg tag + AddMessage dispatch)
+00ada070 ?FUN_00ada070@@YIXPAXHPAVcArguments@@@Z  # byte-exact; 152B Simulator command object
+00ada110 ?FUN_00ada110@@YIXPAXHPAVcArguments@@@Z  # byte-exact; 319B Simulator command object
+00ada250 ?FUN_00ada250@@YIXPAXHPAVcArguments@@@Z  # byte-exact; 259B Simulator command object
+00ada360 ?FUN_00ada360@@YIXPAXHPAVcArguments@@@Z  # byte-exact; 137B Simulator command object
+00ada7e0 ?FUN_00ada7e0@@YIXPAXHPAVcArguments@@@Z  # byte-exact; 148B FNV1_String8 tag command
+00ada880 ?FUN_00ada880@@YIXPAXHPAVcArguments@@@Z  # byte-exact; 158B Simulator command object
+00ada920 ?FUN_00ada920@@YIXPAXHPAVcArguments@@@Z  # byte-exact; 166B Simulator command object
+00ada3f0 ?FUN_00ada3f0@@YIXPAXHPAVcArguments@@@Z  # partial; 189B zoomToEnd command, 4-byte AddMessage push/store scheduling diff
+00ada4b0 ?FUN_00ada4b0@@YIXPAXHPAVcArguments@@@Z  # partial; 238B screenEffect/pause command, 9-byte scheduling diff
+00ada620 ?FUN_00ada620@@YIXPAXHPAVcArguments@@@Z  # partial; 167B stop/avatarOnly command, 4-byte scheduling diff
+00ada6d0 ?FUN_00ada6d0@@YIXPAXHPAVcArguments@@@Z  # partial; 260B main-args switch command, ours 285B (register/stack frame shape)
+00ad9a30 ?FUN_00ad9a30@@YIXPAXHPAVcArguments@@@Z  # partial; 1458B editor res command, ours 1451B (ctor this-in-eax + subobject vcall shape)
