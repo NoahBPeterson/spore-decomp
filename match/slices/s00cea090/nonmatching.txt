@@ -1,0 +1,10 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include)
+00cea1a0  1311  cCityDisplayStrategy::Update: complete-ish; reticle/effect creation via EffectsManager vtable slots, mode-state reads; my reconstruction is structurally short (266 vs 1354 bytes) - full control flow not recovered
+00cea6f0   227  helper: complete-ish; mode-state index read + effect create; structurally short (118 vs 265 bytes)
+00cea970   295  Refresh: complete-ish; camera/minimap lookup + civ% update; structurally short (202 vs 333 bytes)
+00ceaac0     3  eastl rbtree erase helper: only 3 bytes differ - MSVC picks a different load order for `*out = next` (loads next into eax then out into ecx, original loads out then next); semantically identical
+00ceab20    30  rbtree find+erase wrapper: complete; original materialises the iterator temp via `push node; mov eax,esp; mov [eax],node` before the call, mine passes `&key` directly (2 pushes), plus node kept in ecx vs my eax
+00ceac50   477  Destruct: complete-ish; AutoHandler/posse/map/effect teardown; control flow and vtable-slot schedule differ
+00ceae70   244  Assign/posse-update: structurally short (32 vs 244 bytes) - full AutoRefCount AddRef/Release + map find + Posse FindItem + minimap RemoveIcon sequence not recovered
+00ceaf70   271  eastl vector push_back helper: structurally short (90 vs 287 bytes) - grow path/relocation not recovered
+00ceb090   282  ctor: near-complete; store sequence matches but MSVC schedules the `[esi+0x60]=arg` store early and the map-reset uses ebx instead of a fresh `xor ecx,ecx`, cascading offset shifts (498 vs 510 bytes)
