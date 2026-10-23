@@ -1,0 +1,2 @@
+slices/s00c289b0/s00c289b0.cpp  ?Init@C_s00c296b0@@QAEPAU1@XZ  00c296b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c289b0/s00c289b0.cpp  ?f_00c29940@@YAXPAUC_s00c289b0@@@Z  00c29940  /O2 /MD /Gy /TP /arch:SSE /fp:fast
