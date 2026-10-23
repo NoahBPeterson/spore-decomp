@@ -1,0 +1,4 @@
+slices/s010c0af0/s010c0af0.cpp  ?castRayWithCollector@hkConvexShape@@UBEXABUhkShapeRayCastInput@@ABVhkCdBody@@AAVhkRayHitCollector@@@Z  010c0fc0  /O2 /MD /Gy /TP /vc71
+slices/s010c0af0/s010c0af0.cpp  ?getCollisionSpheresInfo@hkConvexVerticesShape@@UBEXAAUhkCollisionSpheresInfo@hkSphereRepShape@@@Z  010c1080  /O2 /MD /Gy /TP /vc71
+slices/s010c0af0/s010c0af0.cpp  ?getFirstVertex@hkConvexVerticesShape@@UBEXAAVhkVector4@@@Z  010c1090  /O2 /MD /Gy /TP /vc71
+slices/s010c0af0/s010c0af0.cpp  ?getMaximumProjection@hkConvexShape@@UBEMABVhkVector4@@@Z  010c0f80  /O2 /MD /Gy /TP /vc71

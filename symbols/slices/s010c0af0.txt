@@ -1,0 +1,10 @@
+010c0af0 hkBoxShape::castRay  # vtable slot 5; slab ray/box test vs ±(m_halfExtents+m_radius); HK_TIMER hkMonitorTimerTtrcBox; equiv PASS
+010c0f80 hkConvexShape::getMaximumProjection  # vcall getSupportingVertex then dot3(dir)+m_radius; byte-exact
+010c0fc0 hkConvexShape::castRayWithCollector  # castRay, rotate normal by body transform, collector.addHit; byte-exact
+010c1080 hkConvexVerticesShape::getCollisionSpheresInfo  # m_numSpheres=m_numVertices, m_useBuffer=true; byte-exact
+010c1090 hkConvexVerticesShape::getFirstVertex  # first lane of first FourVectors, w=0; byte-exact
+010c10c0 hkConvexVerticesShape::getCollisionSpheres  # one hkSphere per vertex (centre + m_radius in w); equiv PASS
+010c1250 hkConvexVerticesShape::getSupportingVertex  # vtable slot 9 (no PDB name); vertex maximising dot3(dir), out.w carries the index bits; equiv FAIL on eax only
+010c1520 hkConvexVerticesShape::convertVertexIdsToVertices  # gather vertices by id, out.w = id|0x3f000000; equiv FAIL on ecx only
+010c16b0 hkAabbUtil::calcAabb  # world AABB of a half-extent box under a transform; equiv FAIL (x87 excess precision)
+010c1910 hkConvexVerticesShape::getOriginalVertices  # un-swizzle FourVectors into an hkArray<hkVector4>, w=0; equiv PASS

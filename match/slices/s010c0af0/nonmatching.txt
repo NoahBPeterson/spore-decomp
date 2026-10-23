@@ -1,0 +1,7 @@
+# <va>  <diff-bytes>  <reason>
+010c0af0  1127  hkBoxShape::castRay (/O2 /MD /Gy /TP /vc71): complete slab ray/box test; equiv PASS (87.2% cov). Not byte-exact: x87 schedule + loop register allocation differ (ours 1285 vs orig 1164 bytes)
+010c10c0  390  hkConvexVerticesShape::getCollisionSpheres (/O2 /MD /Gy /TP /vc71): complete per-vertex sphere emit; equiv PASS (100% cov). Not byte-exact: ours 399 vs orig 254 bytes (loop/tail structure differs)
+010c1250  634  hkConvexVerticesShape::getSupportingVertex (/O2 /MD /Gy /TP /vc71): complete argmax-of-dot3 over FourVectors lanes; equiv FAIL on eax only (original leaves eax = m_data+(bestIndex>>2)*48; the compiler folds the element pointer into a flat index). Ours 716 vs orig 576 bytes
+010c1520  990  hkConvexVerticesShape::convertVertexIdsToVertices (/O2 /MD /Gy /TP /vc71): complete id gather; equiv FAIL on ecx only (original never writes ecx, ours does — LTCG-style untouched-register case). Ours 398 vs orig 702 bytes
+010c16b0  569  hkAabbUtil::calcAabb (/O2 /MD /Gy /TP /vc71): complete world-AABB of a half-extent box; equiv FAIL only on float-special overflow inputs (x87 excess precision: we keep cw/extents in extended registers, the original spills them to float, so -inf+inf differs). Ours 379 vs orig 596 bytes
+010c1910  126  hkConvexVerticesShape::getOriginalVertices (/O2 /MD /Gy /TP /vc71): complete un-swizzle into hkArray<hkVector4>; equiv PASS (83.9% cov). Not byte-exact: ours 138 vs orig 153 bytes
