@@ -1,0 +1,6 @@
+# source symbol va flags
+slices/s008752b0/s008752b0.cpp  ?png_handle_tIME@@YAXPAUPngStruct@@PAUPngInfo@@I@Z  008752b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008752b0/s008752b0.cpp  ?png_set_cHRM@@YAXPAUPngStruct@@PAUPngInfo@@NNNNNNNN@Z  00875b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008752b0/s008752b0.cpp  ?png_set_cHRM_fixed@@YAXPAUPngStruct@@PAUPngInfo@@HHHHHHHH@Z  00875e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008752b0/s008752b0.cpp  ?png_set_gamma@@YAXPAUPngStruct@@PAUPngInfo@@N@Z  00876040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008752b0/s008752b0.cpp  ?png_write_sig@@YAXPAUPngStruct@@@Z  00877d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
