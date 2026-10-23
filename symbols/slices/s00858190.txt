@@ -1,0 +1,8 @@
+# slice s00858190 (libjpeg-6a jdcoefct.c, decompression coefficient controller) - confident names
+# VA        name                              note
+00858190    decompress_onepass                single-pass IDCT of one iMCU row (METHODDEF int)
+00858410    consume_data                      multi-pass: fill the virtual block arrays (METHODDEF int)
+00858630    decompress_data                   multi-pass output from the virtual arrays (METHODDEF int)
+008587c0    smoothing_ok                      block-smoothing applicability test (LOCAL boolean, cinfo in EDI)
+00858f30    start_output_pass                 choose decompress_data vs decompress_smooth_data (METHODDEF void)
+00858f80    jinit_d_coef_controller           allocate the controller + coefficient buffer (GLOBAL void)
