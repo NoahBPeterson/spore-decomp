@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00a94b90  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 1046 B.  __thiscall float/vector routine (2 args): FUN_009360d0 called twice, FUN_007cdbe0 twice and internal branches to 0xa94beb/0xa94c83/0xa94ce2; 2 base relocs emitted raw.
+00a94fb0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 1268 B.  float/vector routine (3 args, uses ESI/EDI): internal calls FUN_00a95028/FUN_00a95060 plus internal branches to 0xa950e4/0xa95112/0xa9523a and indirect `call edx`/`call eax`; 14 base relocs emitted raw.
