@@ -1,0 +1,25 @@
+# Slice s00af08e0 — cSPUILayoutManager time-of-day lookup tables (SPUI layout
+# manager): two EASTL hash maps keyed by a u32 time-of-day hash whose values
+# embed a red-black tree of millisecond ranges, plus the SP timer owner and the
+# sweep helpers.  Names are Claude-coined from the structure, except the
+# mangled member names below which come from our own reconstruction.
+00af08e0  ?NewNode@@YGPAUNode@@PBU1@PAX@Z  void* NewNode(const Node*, void*) [MATCH]  # EAAllocate(0x20,"Simulator",..,0xd1), copies key/t0/t1/v, zeroes links, copies colour
+00af0940  ?FindBounds@RBTree@@QAEXPAUHIter@@PBH@Z  void RBTree::FindBounds(HIter*, const int*)  # two descending probes, b=lower a=upper
+00af09a0  ?Clone@RBTree@@QAEPAUNode@@PAU2@PAX@Z  Node* RBTree::Clone(Node*, void*)  # NewNode + left recursion + right-spine loop
+00af0a60  ?Lookup@@YA_NPAXIHHPAM@Z  bool Lookup(void*, u32 hash, int t, int key, float*)  # hash find + in-order range scan
+00af0af0  ?LookupA@LayoutMgr@@QAE_NPAXHPAM@Z  bool LayoutMgr::LookupA(void*, int, float*)  # entity->Get()->GetPosition() seconds, archetype hash override
+00af0bd0  ?LookupB@LayoutMgr@@QAE_NPAXHPAM@Z  bool LayoutMgr::LookupB(void*, int, float*)  # GetAlt()->vtbl[0x58], +0xc0 flag selects hash
+00af0c90  ?LookupC@LayoutMgr@@QAE_NPAXHPAM@Z  bool LayoutMgr::LookupC(void*, int, float*)  # (entity+0x120)->vtbl[0x2c]/vtbl[0x58] flag selects hash
+00af0db0  ?FreeChains@HashTable@@QAEXPAPAUHashNode@@I@Z  void HashTable::FreeChains(HashNode**, u32)  # per bucket: 0x9a9600 value trees, delete inner nodes and bucket node
+00af0f30  ?ClearBucketChains@LayoutMgr@@QAEXXZ  void LayoutMgr::ClearBucketChains() [MATCH]  # mbInit=0, free both tables, sizes=0
+00af0f70  ?GetOrCreate@HashTable@@QAEPAXPBI@Z  void* HashTable::GetOrCreate(const u32*)  # hash_map operator[]: default world + tree copy ctor 0xaf0d40 + DoInsertValue 0xaf0e40
+00af1020  ?BuildTables@LayoutMgr@@QAEXXZ  void LayoutMgr::BuildTables()  # PropertyManager 0x67de30, 7 property keys -> slot trees, *60*60000 ms scaling
+00af13b0  ?CreateLayoutManager@@YAXXZ  void CreateLayoutManager()  # lazy 0x44-byte singleton in 0x0167ad74
+00af1430  ?Dtor@TimerOwner@@QAEXXZ  void TimerOwner::Dtor() [MATCH]  # vtable 0x0145c1bc, GonzagoTimer dtor, list clear
+00af1450  ?Add@TimerOwner@@QAEXPBX@Z  void TimerOwner::Add(const void*) [MATCH]  # timer restart, list reset, 0x18 node + wstring copy
+00af14b0  ?Ctor@TimerOwner@@QAEPAU1@XZ  TimerOwner* TimerOwner::Ctor() [MATCH]  # list head, GonzagoTimer ctor, stopwatch SetUnits(4)/rdtsc/QPC
+00af1540  ?Delete@TimerOwner@@QAEPAU1@I@Z  TimerOwner* TimerOwner::Delete(u32) [MATCH]  # dtor then operator delete
+00af1570  ?InitWorld@@YAXPAUWorld@@IPBUVec3@@1MEPBUBlock@@@Z  void InitWorld(World*, u32, const Vec3*, const Vec3*, float, u8, const Block*) [MATCH]  # fill + 0x20-byte block copy or memset
+00af1610  ?InitWorld2@@YAXPAUWorld@@IPBUVec3@@1111M@Z  void InitWorld2(World*, u32, const Vec3*, const Vec3*, const Vec3*, const Vec3*, const Vec3*, float)  # + route points r5/r6/r7, tree reset
+00af16f0  ?RaySphere@@YA_NPBUVec3@@0M0MPAM@Z  bool RaySphere(const Vec3*, const Vec3*, float, const Vec3*, float, float*)  # quadratic + x87 sqrt
+00af17f0  ?SweepWorld@@YA_NPAUWorld@@IPBUVec3@@11PAU2@MMEPBUBlock@@@Z  bool SweepWorld(World*, u32, const Vec3*, const Vec3*, const Vec3*, Vec3*, float, float, u8, const Block*)  # sweep + 0x40 block copy
