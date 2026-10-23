@@ -1,0 +1,2 @@
+slices/s00fb6630/s00fb6630.cpp  ?RebuildVertices@cTerrainSphereQuad@@QAEXXZ  00fb6630  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fb6630/s00fb6630.cpp  ?SetPolysInRect@@YAXABUPolyVector@@MMMMAAU1@@Z  00fb7530  /O2 /MD /Gy /TP /arch:SSE

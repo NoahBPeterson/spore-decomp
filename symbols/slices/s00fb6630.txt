@@ -1,0 +1,13 @@
+# slice s00fb6630 (SP::cTerrainSphereQuad ribbon geometry) - confident names
+# VA        name                        note
+00fb6630    cTerrainSphereQuad::RebuildVertices        refill vertex cache (atmosphere or height VB + ribbon verts)
+00fb66d0    cTerrainSphereQuad::DispatchA              raster set 0 batch, mNumA primitives
+00fb6850    cTerrainSphereQuad::DispatchB              raster set switch on idx, mNumB primitives
+00fb6cd0    cTerrainSphereQuad::DispatchC              raster set 5, index-buffer batch
+00fb6e00    cTerrainSphereQuad::DispatchD              raster set 1, mNumC primitives
+00fb6fb0    PolyVector::insert                         eastl vector<cRibbonFacePoly>::insert(pos,first,last,tag)
+00fb71c0    PolyVector::operator=                      eastl vector<cRibbonFacePoly>::operator=
+00fb73d0    AddPolysInRect                             append src polys overlapping the rect into dst
+00fb7530    SetPolysInRect                             clear dst then AddPolysInRect
+00fb75b0    cTerrainSphereQuad::SetRibbonGeometryOnChildren   distribute own ribbon polys to the 4 children
+00fb7640    cTerrainSphereQuad::AddRibbonGeometryToChildren   add given polys to the 4 children and recurse
