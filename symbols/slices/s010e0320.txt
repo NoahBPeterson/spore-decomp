@@ -1,0 +1,22 @@
+# va  name  # evidence
+# Havok 3.1.0 collision slice: hkShapeCollectionAgent (the agent wrapping a shape collection such
+# as hkListShape/hkBvTreeShape), its hkSymmetricAgent wrappers, plus hkTransformAgent::
+# createTransformBAgent and hkSymmetricAgent<hkTransformAgent>::linearCast.  Names come from the
+# object's mangled names in the binary vtable/PDB where byte-exact (manifest.txt); the rest are
+# reconstructions from the cards (tools/matching/card.py) and the Havok 3.1 headers.
+010e0320  hkSymmetricAgent<hkTransformAgent>::linearCast
+010e0410  hkTransformAgent::createTransformBAgent
+010e0590  hkShapeCollectionAgent::invalidateTim
+010e05c0  hkShapeCollectionAgent::warpTime
+010e0610  hkShapeCollectionAgent::processCollision
+010e0730  hkShapeCollectionAgent::getClosestPoints
+010e0850  hkShapeCollectionAgent::staticGetClosestPoints
+010e09b0  hkShapeCollectionAgent::linearCast
+010e0ad0  hkShapeCollectionAgent::staticLinearCast
+010e0c30  hkShapeCollectionAgent::getPenetrations
+010e0d50  hkShapeCollectionAgent::staticGetPenetrations
+010e0ec0  hkShapeCollectionAgent::updateShapeCollectionFilter
+010e1090  hkShapeCollectionAgent::hkShapeCollectionAgent
+010e1220  hkSymmetricAgent<hkShapeCollectionAgent>::getPenetrations
+010e1260  hkSymmetricAgent<hkShapeCollectionAgent>::getClosestPoints
+010e12a0  hkSymmetricAgent<hkShapeCollectionAgent>::processCollision

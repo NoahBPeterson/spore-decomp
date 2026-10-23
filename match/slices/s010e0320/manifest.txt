@@ -1,0 +1,5 @@
+slices/s010e0320/s010e0320.cpp  ?invalidateTim@hkShapeCollectionAgent@@UAEXAAUhkCollisionInput@@@Z  010e0590  /vc71 /O2 /MD /Gy /TP
+slices/s010e0320/s010e0320.cpp  ?warpTime@hkShapeCollectionAgent@@UAEXMMAAUhkCollisionInput@@@Z  010e05c0  /vc71 /O2 /MD /Gy /TP
+slices/s010e0320/s010e0320.cpp  ?getPenetrations@hkSymmetricAgent_hkShapeCollectionAgent@@UAEXABVhkCdBody@@0ABUhkCollisionInput@@AAVhkCdBodyPairCollector@@@Z  010e1220  /vc71 /O2 /MD /Gy /TP
+slices/s010e0320/s010e0320.cpp  ?getClosestPoints@hkSymmetricAgent_hkShapeCollectionAgent@@UAEXABVhkCdBody@@0ABUhkCollisionInput@@AAVhkCdPointCollector@@@Z  010e1260  /vc71 /O2 /MD /Gy /TP
+slices/s010e0320/s010e0320.cpp  ?processCollision@hkSymmetricAgent_hkShapeCollectionAgent@@UAEXABVhkCdBody@@0ABUhkProcessCollisionInput@@AAUhkProcessCollisionOutput@@@Z  010e12a0  /vc71 /O2 /MD /Gy /TP
