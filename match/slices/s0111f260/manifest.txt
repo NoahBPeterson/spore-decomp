@@ -1,0 +1,5 @@
+# slice s0111f260 -- Havok MOPP query object (vtable 0x014a6108) and its bucket/split helpers
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0111f260/s0111f260.cpp  ?freeNode@MoppQuery@@QAEXPAUMoppChainNode@@@Z  0111fa60  /vc71 /O2 /MD /Gy /TP
+slices/s0111f260/s0111f260.cpp  ?nodeCount@MoppQuery@@QAEHXZ  0111fa90  /vc71 /O2 /MD /Gy /TP
+slices/s0111f260/s0111f260.cpp  ?ctor@MoppQuery@@QAEPAU1@XZ  0111fbd0  /vc71 /O2 /MD /Gy /TP

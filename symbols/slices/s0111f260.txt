@@ -1,0 +1,12 @@
+0111f260 ?pickBestNode@MoppQuery@@QAEXHPAUMoppBucketState@@PAHPAUMoppBucket@@PAUMoppPrimArray@@@Z  # MOPP bucket best-split search; nonmatching (register/stack-slot assignment)
+0111f400 ?collectBounds@MoppQuery@@QAEXPAUMoppPrimArray@@PAUMoppChainNode@@@Z  # primitive-array bounds accumulation; nonmatching (callee-saved register assignment)
+0111f4c0 ?chooseSplitAxis@MoppQuery@@QAEXPAUMoppChainNode@@PAHPAM@Z  # SAH longest-axis selection; nonmatching (x87 scheduling)
+0111f670 ?processBuckets@MoppQuery@@QAEXPAUMoppBucketState@@PAMPAUMoppPrimArray@@1H@Z  # per-bucket split driver; nonmatching (frame/slot layout)
+0111f7e0 ?bucketPass@MoppQuery@@QAEXHPAUMoppBucketState@@HPAH1PAPAUMoppPrimRec@@222@Z  # 4-way bucket partition step; nonmatching (register assignment)
+0111f9e0 ?newNode@MoppQuery@@QAEPAUMoppChainNode@@PAU2@PAUMoppPrimArray@@@Z  # allocate+init a tree node from the free list; nonmatching (6 bytes, store scheduling only)
+0111fa60 ?freeNode@MoppQuery@@QAEXPAUMoppChainNode@@@Z  # return a node to the free or allocated list; byte-exact
+0111fa90 ?nodeCount@MoppQuery@@QAEHXZ  # live node count; byte-exact
+0111faa0 ?MoppSortRecs@@YAXPAUMoppPrimRec@@HHH@Z  # quicksort of primitive records by key; nonmatching (loop rotation)
+0111fbd0 ?ctor@MoppQuery@@QAEPAU1@XZ  # query object constructor; byte-exact
+0111fc30 ?splitBuckets@MoppQuery@@QAEXPAPAUMoppPrimRec@@00000PAUMoppBucketState@@@Z  # post-sort bucket split/merge; nonmatching (register assignment)
+0111fe30 ?mergeBuckets@MoppQuery@@QAEXPAUMoppPrimArray@@PAUMoppBucketState@@HPAUMoppBucketOut@@2@Z  # bucket classify/merge/emit; nonmatching (register assignment, x87 counts)
