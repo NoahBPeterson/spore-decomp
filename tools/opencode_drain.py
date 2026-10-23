@@ -84,7 +84,8 @@ NUDGE = ("Continue your task. Act through tool calls: call the edit/write tool t
          "compile; do not end your turn with a plan in text. Run .venv/bin/python tools/matching/claim.py %s %%s (it "
          "prints the slice you hold if it is unfinished, else your next slice), finish that slice (source, chk.py, "
          "bookkeeping, run_all), and keep claiming until it prints NO SLICE; then give the final one-line-per-slice "
-         "summary." % G["batch"]) if QUEUE else (
+         "summary. Name every field you touch (docs/matching.md): no raw-offset casts like *(u32*)((char*)p + 0x5fc)."
+         % G["batch"]) if QUEUE else (
          "Continue your task: check the files already written in your slices and finish the remaining slices, then "
          "give the final one-line-per-slice summary.")
 LOG = W("work/opencode", "drain_%s.log" % a.group)

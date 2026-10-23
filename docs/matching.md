@@ -152,6 +152,15 @@ Writing matchable source:
 - Calling conventions are visible in the epilogue: `ret N` with ECX used as `this` = `__thiscall`
   member (declare a local stub class with fields at the right offsets, `char pad[N]` gaps);
   `ret N` without ECX = `__stdcall`; ECX+EDX args = `__fastcall`; plain `ret` = `__cdecl`.
+- **Name every field you touch; no raw-offset casts** (2026-10-23). Declare the members you read or write at their
+  offsets in the class (gaps as `uint32_t padN[...]`) and access them by name: `herd->mpLeader->mFlags &= ~0x400000`,
+  never `*(u32*)((char*)(*(void**)((char*)p + 0xb4c)) + 0x5fc) &= 0xffbfffff`. Same bytes, but the cast chain hides
+  what the code does and every one has to be rewritten when the slice migrates onto canonical headers. Take the name
+  from `tools/pdb_type.py <Class> --exact` only when the dev PDB's member at that offset has the same type as the
+  retail use (retail layouts are often shifted: gold6's `cHerd` +0x164 is a refcounted creature pointer in retail but
+  the enum `mCreaturePersonality` in the dev PDB); otherwise name it by role and offset (`mpLeader_164`). A pointer
+  you only pass through may stay `void*`; a pointer you dereference gets a type. `tools/matching/rawcasts.py`
+  counts the casts, and `commit_slice.sh` reports the count.
 - **Every callee needs the right calling convention, not just the right address.** Callees, globals
   and vtable targets are masked relocations, so the byte diff does not check where a call goes. It also
   barely notices a wrong convention, so a wrong declaration can look nearly matching. The most common
