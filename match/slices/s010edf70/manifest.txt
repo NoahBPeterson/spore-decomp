@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s010edf70/s010edf70.cpp  ?createConvexGeometry@hkGeometryUtility@@SAXABUhkStridedVertices@@AAUhkGeometry@@AAV?$hkArray@VhkVector4@@@@H@Z  010edf70  /vc71 /O2 /MD /Gy /TP
+slices/s010edf70/s010edf70.cpp  ?isValid@hkRagdollLimitsData@@UBE?AVhkBool@@XZ  010ee410  /vc71 /O2 /MD /Gy /TP
+slices/s010edf70/s010edf70.cpp  ?isValid@hkRagdollConstraintData@@UBE?AVhkBool@@XZ  010eecb0  /vc71 /O2 /MD /Gy /TP
+slices/s010edf70/s010edf70.cpp  ??0hkRagdollConstraintData@@QAE@H@Z  010eedd0  /vc71 /O2 /MD /Gy /TP
