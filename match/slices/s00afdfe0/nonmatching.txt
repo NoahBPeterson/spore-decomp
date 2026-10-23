@@ -1,0 +1,13 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+# Slice s00afdfe0 is the EA::Swarm surface-decal emission group in Swarm/SurfaceDecalManager.obj
+# (SporeApp.exe 0x00afdfe0..0x00afef00): the three emitter members (mode 3/4/5/6), the decal
+# push/erase helpers and the sort init.  Module is x87 (sqrt/divs use fsqrt/fdivr) with SSE
+# movss/mulss for the vector maths; built with the default non-Havok flags /O2 /MD /Gy /EHsc /TP.
+# Diff counts are the byte difference against the correctly resolved symbol
+# (tools/matching/chk.py, default flags).  Equiv verdicts from tools/difftest/equiv.py default inputs.
+00afdfe0  1018  cSurfaceDecalManager mode-3 emitter (green-theorem radial ring): complete.  Our reconstruction inlines the shared decalAppend as a call while the original inlines the record store at every site, and the ring sweep / x87 length normalisation is scheduled differently; size 1066 vs 955.  Equiv UNSUPPORTED (RandomUint32Uniform reference unresolved in the harness).
+00afe3a0   945  cSurfaceDecalManager mode-4 emitter (straight sweep): complete.  Same shared-append-vs-inline and register/frame differences; the RNG-free sweep body is otherwise the same algorithm; size 894 vs 710.  Equiv WEAK (400 valid inputs, no mismatch, 5.4% coverage).
+00afe670  1324  cSurfaceDecalManager mode-5 emitter (grid of decals): complete.  The nested edge-walk loops and their offset bases are reproduced, but the per-record append inlining and the x87 row-count computation are laid out differently; size 956 vs 1414.  Equiv WEAK (see note: original reads ecx at entry, our declaration now uses __fastcall).
+00afec00   235  cSurfaceDecalManager mode-6 emitter (copy decals from a vector): complete.  The (last-first)/0xc count, reserve, per-record copy and +0x10 scale store all match; the original inlines the append, ours calls the shared helper; size 132 vs 249.  Equiv WEAK (195 valid inputs, no mismatch, 47.6% coverage).
+00afed00   180  cSurfaceDecalManager push-one-decal helper: complete.  The intrusive addRef/release around push and the 7-dword origin record copy are reproduced; register allocation and the append inlining differ; size 196 vs 225.  Equiv UNSUPPORTED (original reads ecx at entry, harness ABI complaint on the plain declaration).
+00afee20   196  cSurfaceDecalManager sort init (log2 recursion depth): complete.  Same log2((last-first)>>2) pass count, (1<<n)*2-2 depth, cmp 0x1c split at +0x70 and the three quicksort-partition calls; the original builds the 16-byte context with movss and interleaves it with the log2 loop while ours uses integer moves; size 197 vs 233.  Equiv UNSUPPORTED (0/400 valid inputs, synthetic inputs fault at read).

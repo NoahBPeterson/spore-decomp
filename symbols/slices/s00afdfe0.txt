@@ -1,0 +1,13 @@
+# va  name  # evidence
+# Spore Swarm SurfaceDecalManager decal-emission group (SporeApp.exe 0x00afdfe0..0x00afef00).
+# The three emitter members share the +0x24 mode word and the 0x18-byte decal record vector at
+# +0x50; the other helpers push/erase records and run the quicksort init.  Names are
+# reconstructions from the disassembly cards (tools/matching/card.py); only 00afedf0 is byte-exact
+# and named in manifest.txt.  Member offsets are retail.
+00afdfe0  cSurfaceDecalManager::EmitRing
+00afe3a0  cSurfaceDecalManager::EmitSweep
+00afe670  cSurfaceDecalManager::EmitGrid
+00afec00  cSurfaceDecalManager::EmitCopy
+00afed00  cSurfaceDecalManager::PushDecal
+00afedf0  cSurfaceDecalManager::RemoveDecal
+00afee20  cSurfaceDecalManager::SortDecals

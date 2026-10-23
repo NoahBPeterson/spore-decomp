@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Byte-exact matches for slice s00afdfe0 (Swarm SurfaceDecalManager decal-emission helpers).
+# Everything else in the slice is a behavioural reconstruction, see nonmatching.txt.
+slices/s00afdfe0/s00afdfe0.cpp  ?FUN_00afedf0@@YIXPAX00@Z  00afedf0  /O2 /MD /Gy /EHsc /TP
