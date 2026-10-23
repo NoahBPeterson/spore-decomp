@@ -1,0 +1,9 @@
+0115ffe0 FUN_0115ffe0  # radix-2 FFT butterfly stage over param_2 (size=1<<(p[0]+1)) with twiddle tables at p+p[3]/p+p[4]; tail-calls FUN_0115f2a0
+011600e0 FUN_011600e0  # accumulate a linear gain ramp over the first 64 samples of a buffer, then FUN_011342c0(dst,src,start,count)
+01160300 FUN_01160300  # same as 011600e0 but assignment instead of accumulate, then FUN_01134260(dst,src,start,count)
+011604d0 BiquadObj::FUN_011604d0  # scale the first n/2+1 coefficients by a triangular window 0.54-0.46*cos(2pi*i/n)
+01160540 Fir64Obj::FUN_01160540  # byte-exact; operator_new_arr(dst=self+u16[self],0,chans*np)
+01160560 ButterworthObj::FUN_01160560  # banked FIR: fill 4 coefficient banks (+coeffs[32]) then 4x68-tap filter loop
+01160790 ButterworthObj::FUN_01160790  # per-channel FIR bank driver (insert banks, filter twice, swap ctx+0x3000c/+0x30010)
+01160910 ButterworthObj::FUN_01160910  # Butterworth coefficient setup: f[1]=tan or 1/tan(cutoff*2pi/sr*0.5), f[2..4]=f[1]^n, table terms, normalise
+01160dc0 ButterworthObj::FUN_01160dc0  # byte-exact; allocate two order*0x14-byte buffers at this+0x2c / this+0x2e
