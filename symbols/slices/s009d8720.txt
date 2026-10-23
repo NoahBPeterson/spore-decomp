@@ -1,0 +1,12 @@
+009d8720 Gait  # byte-exact; Gait::Gait(const Gait&): scalar member copies + GaitSub copy ctor + inlined Vec32 copy ctor
+009d8980 merge_by_subcount  # merge two Step ranges by StepSub element count, take f1 when c2<=c1
+009d8ab0 merge_by_key  # merge two Step ranges by *(float*)(obj+0x110), take f1 when k2<=k1
+009d8be0 select_median_subcount  # byte-exact; median-of-three over Gait by subcount comparator
+009d8ce0 select_median_key  # byte-exact; median-of-three over Gait by key comparator
+009d8e20 VectorStep::erase  # byte-exact; uninit_copy_step tail + thiscall destroy + `end -= last-first`
+009d8e80 VectorStep::insert  # in-place (copy_backward + operator=) and grow (EAAllocate/uninit_move/destroy_move) paths
+009d8fd0 VectorStep::operator=  # grow/middle/else copy-assign, alloc_n_copy + destroy + uninit_copy_slot
+009d9120 merge_sort_subcount  # recursive merge sort of Step range through a caller buffer, subcount comparator
+009d92a0 merge_sort_key  # recursive merge sort of Step range through a caller buffer, key comparator
+009d9420 stable_sort_subcount  # temp Step buffer (default-constructed), merge_sort, copy_step back, delete
+009d9520 stable_sort_key  # temp Step buffer (default-constructed), merge_sort_key, copy_step back, delete
