@@ -1,0 +1,5 @@
+slices/s011df670/s011df670.cpp  ?BN_mod_sqrt@@YAPAUBIGNUM@@PAU1@PBU1@10@Z  011df670  /O2 /MD /Gy /TP
+slices/s011df670/s011df670.cpp  ?win32_load@@YAHPAUDSO@@@Z  011dfd60  /O2 /MD /Gy /TP
+slices/s011df670/s011df670.cpp  ?win32_unload@@YAHPAUDSO@@@Z  011dfe40  /O2 /MD /Gy /TP
+slices/s011df670/s011df670.cpp  ?win32_bind_func@@YAPAXPAUDSO@@PBD@Z  011dfee0  /O2 /MD /Gy /TP
+slices/s011df670/s011df670.cpp  ?win32_bind_var@@YAPAXPAUDSO@@PBD@Z  011dffa0  /O2 /MD /Gy /TP
