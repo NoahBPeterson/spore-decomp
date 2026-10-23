@@ -1,0 +1,6 @@
+# source symbol va flags
+slices/s00f927c0/s00f927c0.cpp  ?GetHeightRange@cTerrainMapSet@@QAEXHHHHPAM0@Z  00f929c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f927c0/s00f927c0.cpp  ?ReleaseMaps@cTerrainMapSet@@QAEXXZ  00f92b90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f927c0/s00f927c0.cpp  ?RegisterMap@cTerrainMapSet@@QAEXHPAUcTerrainMapBase@@@Z  00f92be0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f927c0/s00f927c0.cpp  ?TerrainMapSetCheck@@YG_NPAX@Z  00f93190  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f927c0/s00f927c0.cpp  ?GetCount@cTerrainResourceManager@@QAEHH@Z  00f933f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
