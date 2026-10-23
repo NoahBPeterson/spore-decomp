@@ -1,0 +1,15 @@
+# slice s00a71a00 - EA::Swarm::cEffectsWorld visual-effect state / level-of-detail update
+# 00a71a00 / 00a71f90 / 00a720b0 carry caller-scored PDB names (symbols/pdb_candidates.json);
+# 00a72010 / 00a72060 are unnamed in the DB and use the names coined in the slice source.
+# VA        name                                   mangled name
+00a71a00    EA::Swarm::cEffectsWorld::UpdateVisualEffect  ?UpdateVisualEffect@cEffectsWorld@@QAEXPAUcVisualEffect@@HH@Z
+00a71f90    EA::Swarm::cEffectsWorld::ResetVisualEffectDescription  ?ResetVisualEffectDescription@cEffectsWorld@@QAEXPAUcVisualEffect@@@Z
+00a72010    cEffectsWorld::ResetVisualEffectDescriptions  ?ResetVisualEffectDescriptions@cEffectsWorld@@QAEXH@Z
+00a72060    cEffectsWorld::FUN_00a72060  ?FUN_00a72060@cEffectsWorld@@QAEXH@Z
+00a720b0    EA::Swarm::cEffectsWorld::SetState  ?SetState@cEffectsWorld@@QAEXH@Z
+# Notes: 00a72010 / 00a72060 walk the world's active-effect index vector (mActive) and, per matching
+# effect component-type, either refresh the description (00a72010) or deactivate-then-refresh it
+# (00a72060), then invalidate with FUN_00a711c0(1); both are byte-exact. 00a71f90 rebuilds one effect's
+# handle from its two name hashes and re-applies its description at LOD 0. 00a720b0 is the state machine
+# (states 1..5) driving the per-effect component activation flags. 00a71a00 re-applies a new LOD to one
+# effect: it prunes the live-component vector, then instantiates the component definitions the LOD wants.
