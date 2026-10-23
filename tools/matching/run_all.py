@@ -12,7 +12,7 @@ work/run_all_m/<key>.lock, work/run_all_m/<key>.json, key = hash of the manifest
 manifests never wait for each other (fix pass 6 F26: mig7 agents waited 20-40 minutes on the shared lock).
 Exit 0 iff every listed function matches.
 """
-import argparse, bisect, fcntl, glob, hashlib, json, os, subprocess, sys
+import re, argparse, bisect, fcntl, glob, hashlib, json, os, subprocess, sys
 from concurrent.futures import ThreadPoolExecutor
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -108,10 +108,21 @@ class Original:
         return data, mask
 
 
+ANON_NS = re.compile(r"\?A0x[0-9a-f]{8}")
+
+
 def resolve(syms, sym):
     if sym in syms:
         return sym
     c = [s for s in syms if sym in s and not s.startswith(("__ehhandler", "__unwindfunclet", "__catch", "__tryend"))]
+    if len(c) == 1:
+        return c[0]
+    if not c and "?A0x" in sym:
+        # MSVC names an anonymous namespace ?A0x<8 hex digits> from a hash that differs between machines (same path,
+        # different Wine: 0xc23ec0bd on the Mac, 0xfcdcff4e on a Linux build server, 2026-10-23). The retail binary has
+        # no such names, so compare with the hash masked; accept only a unique match.
+        n = ANON_NS.sub("?A0x", sym)
+        c = [s for s in syms if ANON_NS.sub("?A0x", s) == n]
     return c[0] if len(c) == 1 else None
 
 
