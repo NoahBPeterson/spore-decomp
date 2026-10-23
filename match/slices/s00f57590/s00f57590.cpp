@@ -143,7 +143,7 @@ struct CmdSink2;
 
 struct CmdSink {                                    // object returned by mOwner->slot8
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-    virtual void v4(char a, void* b);                       // +0x10
+    virtual void v4(unsigned char a, void* b);              // +0x10
     virtual CmdSink3* v5();                                 // +0x14
     virtual char v6(void* a, void* b, void* c);             // +0x18
     virtual void v7(int a);                                 // +0x1c
@@ -196,7 +196,7 @@ struct cCloudCmdState {
     char     pad1e0[0x230 - 0x1e0];
     int      i230;                  // +0x230
     int      i234;                  // +0x234
-    char     b238[8];               // +0x238
+    char     b238[4];               // +0x238
     uint8_t  b23c;                  // +0x23c
 
     bool Process(int mode, int* args, int argc);    // 0x00f58240
@@ -533,19 +533,19 @@ bool cCloudCmdState::Process(int mode, int* args, int argc)
         CmdSink* p = mOwner->o8();
         p->v12(i230);
 
-        char local[0x20];
+        uint32_t local[8];
         memcpy(local, p1c + 0x108, 0x20);
-        local[8] = 9;
-        if (local[9] == 0x0f) {
+        ((uint8_t*)local)[8] = 9;
+        if (((uint8_t*)local)[9] == 0x0f) {
             CmdSink2* q = mOwner->o12();
             CmdSink3* r = q->q5();
-            local[0] = r->r9(*(int*)(local + 0x18), *(int*)(local + 0x1c), 9);
+            ((uint8_t*)local)[8] = (uint8_t)r->r9((int)local[6], (int)local[7], 9);
         }
 
         char* arg = ((char*)this - 8) ? ((char*)this - 4) : 0;
         if (p->v11(arg, local, &i230)) {
-            b23c = (uint8_t)local[8];
-            p->v4((char)local[8], b238);
+            b23c = ((uint8_t*)local)[8];
+            p->v4(b23c, b238);
             if (!b0c)
                 return 1;
             if (!b0e)
@@ -570,19 +570,18 @@ bool cCloudCmdState::Process(int mode, int* args, int argc)
         CmdSink* p = mOwner->o8();
         p->v7(i234);
 
-        char local[0x20];
+        uint32_t local[8];
         memcpy(local, p1c + 0x108, 0x20);
-        local[8] = 0;
-        if (local[9] == 0x0f) {
+        ((uint8_t*)local)[8] = 0;
+        if (((uint8_t*)local)[9] == 0x0f) {
             CmdSink2* q = mOwner->o12();
             CmdSink3* r = q->q5();
-            local[0] = r->r9(*(int*)local, *(int*)(local + 4), 0);
+            ((uint8_t*)local)[8] = (uint8_t)r->r9((int)local[0], (int)local[1], 0);
         }
 
-        char* arg = ((char*)this - 8) ? ((char*)this - 4) : 0;
-        if (p->v6(arg, local, &i234)) {
-            b23c = (uint8_t)local[8];
-            p->v4((char)local[8], b238);
+        if (p->v6((char*)this - 8, local, &i234)) {
+            b23c = ((uint8_t*)local)[8];
+            p->v4(b23c, b238);
             if (!b0c)
                 return 1;
             if (!b0e)
