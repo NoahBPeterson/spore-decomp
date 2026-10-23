@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00dc67d0/s00dc67d0.cpp  ?RemoveVehicles@@YAXXZ  00dc6a20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dc67d0/s00dc67d0.cpp  ?Node6ce0@@YAXPAUcVehicle@@HHHHPAUNodeState6ce0@@@Z  00dc6ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dc67d0/s00dc67d0.cpp  ?Node7080@@YA_NPAUcVehicle@@HHHHPAUNodeState7080@@@Z  00dc7080  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dc67d0/s00dc67d0.cpp  ?Node7130@@YAXHHHHHPAPAUcRefObj@@@Z  00dc7130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dc67d0/s00dc67d0.cpp  ?Node7300@@YAXPAUcVehicle@@HHHHPAUNodeState7300@@@Z  00dc7300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dc67d0/s00dc67d0.cpp  ?Node7350@@YA_NHHHHHPAPAX@Z  00dc7350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dc67d0/s00dc67d0.cpp  ?Node7370@@YAXHHHHHPAPAUcRefBase@@@Z  00dc7370  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dc67d0/s00dc67d0.cpp  ?Node7510@@YAXPAUcVehicle@@HHHHPAPAUcRefObj@@@Z  00dc7510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dc67d0/s00dc67d0.cpp  ?Node76e0@@YAXPAURefHolder76e0@@@Z  00dc76e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dc67d0/s00dc67d0.cpp  ?Node77a0@@YAXPAUcVehicle@@HHHHPAUBufHolder@@@Z  00dc77a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

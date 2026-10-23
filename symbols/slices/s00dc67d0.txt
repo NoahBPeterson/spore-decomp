@@ -1,0 +1,20 @@
+00dc67d0 SP::VehicleTree::IsOpportunityTarget  # behavior-tree node: is target a fire opportunity; 448 vs 461 bytes, marker name
+00dc69a0 SP::VehicleTree::GetBestOpportunityTarget  # behavior-tree node: best opportunity target; 138 vs 120 bytes
+00dc6a20 SP::RemoveVehicles  # byte-exact
+00dc6a70 SP::DefendCityOrder_Tick  # behavior-tree node: defend city order tick; 628 vs 618 bytes
+00dc6ce0 SP::VehicleTree::Node6ce0  # byte-exact (release slot +0x04)
+00dc6d60 SP::VehicleTree::Node6d60  # behavior-tree node: distance test; 198 vs 193 bytes, x87 scheduling
+00dc6e30 SP::VehicleTree::Node6e30  # bounds() over-extends over the unindexed twin at 00dc6eb0 (581 incl.); real body 00dc6e30..00dc6eaf
+00dc7080 SP::VehicleTree::Node7080  # byte-exact
+00dc7130 SP::VehicleTree::Node7130  # byte-exact
+00dc7150 SP::VehicleTree::Node7150  # bounds() over-extends (503); real body ~432
+00dc7300 SP::VehicleTree::Node7300  # byte-exact
+00dc7350 SP::VehicleTree::Node7350  # byte-exact
+00dc7370 SP::VehicleTree::Node7370  # byte-exact
+00dc7390 SP::VehicleTree::Node7390  # behavior-tree node: 386 vs 376 bytes
+00dc7510 SP::VehicleTree::Node7510  # byte-exact
+00dc7540 SP::VehicleTree::Node7540  # fastcall list drain; 62 vs 65, register choice for begin/end
+00dc7590 SP::cVehicle::PopToNearestValidSpot  # cdecl spot scan; 298 vs 324, loop index materialization
+00dc76e0 SP::VehicleTree::Node76e0  # byte-exact
+00dc7780 SP::FindClosestVehicleWrap  # 21 vs 28, bool argument materialization idiom
+00dc77a0 SP::VehicleTree::Node77a0  # byte-exact
