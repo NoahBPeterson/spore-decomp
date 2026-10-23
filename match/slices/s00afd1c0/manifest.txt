@@ -1,0 +1,4 @@
+# slice s00afd1c0 -- SP::cActionCircle slot generators (spiral / ring / fan packings)
+# Module flags: /O2 /MD /Gy /TP /arch:SSE
+# No byte-exact functions: the originals use Spore's inline fsin/fcos (and an inline fsqrt),
+# while any C++ source of these bodies lowers to _CIsin/_CIcos/_CIsqrt calls.
