@@ -1,0 +1,10 @@
+00e7ce10 FUN_00e7ce10  # SP::cCellMode::OnKeyDown - level-time advance, goldy/zoom/death-watch (PDB caller-single; reads 0x1483c2c max-time, level +0x68/+0x7c/+0x1c, 0xe79720 sCinematicGoldy_Start)
+00e7d070 FUN_00e7d070  # cCellMode action dispatcher; handle in EAX, stack args (int action, float dt); drives 0xe7ce10 + 0xe394f0
+00e7d370 FUN_00e7d370  # SP::sUpdateActiveBlocks - prune/insert active grid blocks (PDB caller-single; 0xe5fa80 query, 0xb41ea0 lower_bound, 0xe63d60 insert)
+00e7d660 SP::cCellMode::OnMouseWheel  # cCellMode::OnMouseWheel - thiscall, ret 0x10 (PDB name in card)
+00e7d720 FUN_00e7d720  # small mode toggle: calls 0xe7ce10(0x32,1) then FindWindowByID(0x5af4ae3) + vcall slot 0x7c(1,0)
+00e7d760 SP::sOnEatAI  # sOnEatAI - subject in ESI, mode handle in EDI; 0xe7d070 / 0xe823a0+0xe52910 switch / 0xe79320 sOnEatEater (PDB caller-single)
+00e7d800 FUN_00e7d800  # gated eat-AI forwarder: GetSafe + 0xe7d760 + 0xe4cce0(0x17)/(0x16) check + 0xe72430 ability-activate
+00e7d880 FUN_00e7d880  # SP::sEaten - eaten/death event: avatar respawn vs 0xe5c8e0 spawn + "cell_death_eaten" message
+00e7db80 FUN_00e7db80  # cells()->GetSafe(rec+0x28), GetSafe(rec+0x2c) then 0xe7d880(a, b, rec+0x38)
+00e7dbd0 FUN_00e7dbd0  # SP::sOnEat - eat/ability block driving 0xe7d760, 0xe7a770, 0xe67d30/0xe72530 pos, 0xe62200 ability
