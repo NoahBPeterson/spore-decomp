@@ -1,0 +1,5 @@
+0138b190 InitClassAttributes       # fill the simulator class attribute table (7 records: type, target class ids, requiredCount, visibility, dialog, flags)
+0138b560 InitSimulatorAttributes   # fill the simulator attribute table (11 records: acts, castName, mAsset, deep edit, gfx overrides, deprecated keys)
+0138b9b0 InitVsliderAttributes     # fill the visual-simulator attribute table (7 records: acts, castName, mAsset, gfx overrides)
+0138bc70 InitAssetPartAttributes   # fill the asset-part attribute table (mAsset, isLocked, assetKey/serverID DEPRECATED)
+0138be20 InitPatrolAttributes      # fill the patrol attribute table (wanderRadius, patrol/teleport positions, patrolPath, patrolStyle)

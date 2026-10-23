@@ -1,0 +1,2 @@
+slices/s0138b190/s0138b190.cpp  ?InitVsliderAttributes@@YAXXZ  0138b9b0  /O2 /MD /Gy /TP /GS- /fp:fast
+slices/s0138b190/s0138b190.cpp  ?InitAssetPartAttributes@@YAXXZ  0138bc70  /O2 /MD /Gy /TP /GS- /fp:fast
