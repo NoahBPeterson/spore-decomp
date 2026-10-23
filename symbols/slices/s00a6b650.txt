@@ -1,0 +1,11 @@
+00a6b650 ??1EffectDb@@UAE@XZ  # EffectDb destructor: release the refcounted ptr, free both hash tables, then both slot vectors and the records
+00a6b760 ?FindByWildcard@EffectDb@@UAEXPAURec24Vec@@PBD@Z  # append 0x24-byte (name, object) matches for a '?'/'*' wildcard over the records
+00a6b8a0 ??0EffectDb@@QAE@XZ  # EffectDb constructor: two vptrs, 0x40/0x20 slot vectors, empty record vector, 1/2.0f hash tables
+00a6b9a0 ??4Rec84Vec@@QAEAAU0@ABU0@@Z  # Rec84Vec (0x84-stride) copy assignment: realloc / grow-in-place / copy-and-trim
+00a6baf0 ?resize@SlotVec@@QAEXI@Z  # SlotVec::resize: grow with insert_n, else erase the tail
+00a6bb80 ??4BigRec@@QAEAAU0@ABU0@@Z  # BigRec copy assignment: word-copy the POD heads and assign the two sub-vectors
+00a6bc30 ?MoveBackward58@@YAPAXPAUBigRec@@00@Z  # move 0x58-byte records backwards (overlap safe)
+00a6bd40 ?insert_n@Rec58Vec@@QAEXPAUBigRec@@IPBU2@@Z  # insert `count` copies of a record at a position, growing capacity if needed
+00a6bf30 ?Clear@EffectDb@@UAEXXZ  # vtable slot 4: drop the hash nodes/records and re-seed the two slot vectors
+00a6c030 ?resize@Rec58Vec@@QAEXI@Z  # Rec58Vec::resize: grow with insert_n of a default record, else erase the tail
+00a6c150 ?AppendEffect@EffectDb@@UAEIABUBigRec@@@Z  # append one record to mRecs and return its index
