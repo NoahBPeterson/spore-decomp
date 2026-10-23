@@ -1,0 +1,2 @@
+00e352c0 FUN_00e352c0  # void __fastcall (int); naked asm, byte-exact
+00e35350 FUN_00e35350  # void __fastcall (int) tail-stub; naked asm, byte-exact

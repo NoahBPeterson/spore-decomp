@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00e352c0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 99 B.  void __fastcall(int): FUN_00828100/FUN_00cf74c0/FUN_00cf74f0/FUN_00cf0e10/FUN_00b3d300/FUN_00b25c30/FUN_00bdc4a0 and indirect `call eax` x2; no relocs.
+00e35350  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 17 B.  void __fastcall(int): tail-stub calling FUN_00e352c0 and FUN_00e2a6c0; no relocs.
