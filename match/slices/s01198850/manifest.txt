@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01198850/tasn_fre.cpp  _ASN1_template_free  01198850  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01198850_inc
+slices/s01198850/x509_obj.cpp  _X509_NAME_oneline  01198d60  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01198850_inc
+slices/s01198850/a_dup.cpp  _ASN1_dup  011990c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01198850_inc
+slices/s01198850/a_dup.cpp  _ASN1_item_dup  01199140  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01198850_inc
+slices/s01198850/obj_lib.cpp  _OBJ_dup  011991b0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01198850_inc
+slices/s01198850/a_object.cpp  _a2d_ASN1_OBJECT  01199390  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01198850_inc
+slices/s01198850/a_object.cpp  _ASN1_OBJECT_new  01199870  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01198850_inc
+slices/s01198850/a_object.cpp  _c2i_ASN1_OBJECT  01199930  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01198850_inc
+slices/s01198850/a_object.cpp  _d2i_ASN1_OBJECT  01199a40  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01198850_inc
+slices/s01198850/asn1_lib.cpp  _ASN1_STRING_set  01199cb0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01198850_inc
+slices/s01198850/asn1_lib.cpp  _ASN1_STRING_type_new  01199d70  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01198850_inc
+slices/s01198850/asn1_lib.cpp  _ASN1_get_object  01199e70  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01198850_inc
+slices/s01198850/asn1_lib.cpp  _ASN1_STRING_dup  0119a0e0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01198850_inc
+slices/s01198850/asn1_lib.cpp  _ASN1_STRING_new  0119a180  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01198850_inc
