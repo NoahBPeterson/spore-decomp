@@ -12,7 +12,8 @@ typedef unsigned int uint;
 // ---------------------------------------------------------------- masked externs
 void* __cdecl EAAllocate(uint size, const char* name, int a, int b, const char* file, int line); // 0x00f473a0
 uint  __stdcall FUN_00b72890(uint, int);
-void  __stdcall FUN_00a887b0(int, float);                                                       // 0x00a887b0
+// 0x00a887b0 is a __thiscall member: it reads [ecx+0xbc]/[ecx+0xc0]/[ecx+0xa8]/[ecx+0xac]
+// and takes (int index, float value) on the stack -> modelled as a member call (see cRc54).
 
 // ---------------------------------------------------------------- globals
 extern const float g_one;    // 0x01485720 = 1.0f
@@ -102,10 +103,12 @@ struct HashNode { char pad[0x10]; HashNode* mpNext; };
 struct HIt {
     HashNode*  mpNode;     // +0
     HashNode** mpBucket;   // +4
-    void advance(HIt* out, int);  // 0x00b72d80
+    HIt* advance(HIt* out, int);  // 0x00b72d80
 };
 // @ 0x00b72d80 -- HIt::advance
-void HIt::advance(HIt* out, int) {
+// the original hands `out` back in eax (it is loaded into eax for the two stores and never
+// overwritten), so the callers may use it: declare the return.
+HIt* HIt::advance(HIt* out, int) {
     out->mpNode = mpNode;
     out->mpBucket = mpBucket;
     mpNode = mpNode->mpNext;
@@ -113,6 +116,7 @@ void HIt::advance(HIt* out, int) {
         ++mpBucket;
         mpNode = *mpBucket;
     }
+    return out;
 }
 
 // ================================================================================================
@@ -357,7 +361,9 @@ struct E10 {
     }
 };
 // @ 0x00b73890 -- FUN_00b73890
-void FUN_00b73890(E10** out, E10* first, E10* last, E10* dst) {
+// `out` stays in eax for the whole function (both stores go through it) and the original hands
+// it back, so declare the return.
+E10** FUN_00b73890(E10** out, E10* first, E10* last, E10* dst) {
     *out = dst;
     if (first != last) {
         do {
@@ -368,6 +374,7 @@ void FUN_00b73890(E10** out, E10* first, E10* last, E10* dst) {
         } while (first != last);
         *out = dst;
     }
+    return out;
 }
 
 // ================================================================================================
@@ -390,11 +397,11 @@ void FUN_00b73920(Op** first, int top, int pos, Op* value, float x, float y, flo
         return;
     }
     float dx = x - value->x, dy = y - value->y, dz = z - value->z;
-    float dv = dz * dz + dy * dy + dx * dx;
+    float dv = (dz * dz + dy * dy) + dx * dx;
     for (int parent = (pos - 1) >> 1; pos > top; parent = (pos - 1) >> 1) {
         Op* pv = first[parent];
         float ex = x - pv->x, ey = y - pv->y, ez = z - pv->z;
-        if (dv <= ey * ey + ex * ex + ez * ez)
+        if (!(dv > (ey * ey + ex * ex) + ez * ez))
             break;
         first[pos] = pv;
         pos = parent;
@@ -450,6 +457,12 @@ struct IV {
 };
 #undef VS
 
+// the refcounted object stored at cObstacle::m54 (vtable slot 14 releases it); 0x00a887b0 is
+// its non-virtual setter, a __thiscall member with (int index, float value) on the stack.
+struct cRc54 : IV {
+    void SetValue(int idx, float value);   // 0x00a887b0
+};
+
 struct cObstacle : cGameData {
     int    m34;                          // +0x34
     float  m38, m3c, m40;                // +0x38
@@ -472,7 +485,7 @@ struct cObstacle : cGameData {
     virtual ~cObstacle();                          // 0x00b73b30
     void  Reset0();                                // 0x00b73bc0
     void  Reset1();                                // 0x00b73cd0
-    bool  SetFlag(bool);                           // 0x00b73de0
+    void  SetFlag(bool);                           // 0x00b73de0
 };
 
 // release helper: emulate the inlined refcounted Release() pattern (a two-level "vtable")
@@ -480,19 +493,25 @@ struct RcTbl { void* fn[0x100]; };
 struct RcVt { RcTbl* tbl; };
 struct Rc { RcVt* vt; int f4; char pad[0x40 - 8]; int rc; };
 
+// The call site is entered with ecx = the object's vtable pointer (a leftover of the
+// two-level dereference, not an argument: the callee is __stdcall with the object pushed).
+// Model it as ecx = the vtable pointer so the register state matches the original.
+typedef void (__fastcall* RcFn)(void* vt, int junk, void* obj, unsigned arg);
 static inline void RcCall(void* p, int off, unsigned arg) {
     Rc* o = (Rc*)p;
-    ((void (__stdcall*)(void*, unsigned))(*(void**)((char*)o->vt->tbl + off)))(p, arg);
+    ((RcFn)o->vt->tbl->fn[off / 4])((void*)o->vt, 0, p, arg);
 }
 
 static inline void ReleaseRc(void* p) {
     if (!p)
         return;
     Rc* o = (Rc*)p;
-    if (o->rc < 2)
-        RcCall(p, 0x170, (unsigned)o->f4 >> 31);
-    else
+    if (o->rc <= 1) {
+        unsigned a = ((unsigned)o->f4 >> 31) & 1u;
+        RcCall(p, 0x170, a);
+    } else {
         --o->rc;
+    }
 }
 
 // @ 0x00b73a30 -- Simulator::cObstacle::cObstacle
@@ -565,15 +584,15 @@ void cObstacle::Reset1() {
 }
 
 // @ 0x00b73de0 -- FUN_00b73de0
-bool cObstacle::SetFlag(bool b) {
+void cObstacle::SetFlag(bool b) {
     if (b)
         m34 |= 1;
     else
         m34 &= ~1u;
     if (m54) {
         float f = b ? 0.0f : g_one;
-        FUN_00a887b0(m5c, f);
-        return false;
+        ((cRc54*)m54)->SetValue(m5c, f);
+        return;
     }
     if (m70) {
         if (b) {
@@ -584,5 +603,4 @@ bool cObstacle::SetFlag(bool b) {
             RcCall(m70, 0x16c, 1);
         }
     }
-    return false;
 }
