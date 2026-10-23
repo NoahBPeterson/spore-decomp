@@ -1,0 +1,3 @@
+01117140  ?removeFlaggedVertices@hkGeomConvexHullBuilder@@SAXAAV?$hkArray@VhkVector4@@@@@Z  # Havok 3.1 hkGeomConvexHullBuilder::removeFlaggedVertices(hkArray<hkVector4>&)
+011172b0  ?calculateNewNeighbours@hkGeomConvexHullBuilder@@SAXPBVhkVector4@@ABUhkGeomConvexHullTolerances@@MABV2@PBVhkGeomEdge@@00AAV?$hkArray@UWeightedNeighbour@hkGeomConvexHullBuilder@@@@@Z  # Havok 3.1 hkGeomConvexHullBuilder::calculateNewNeighbours(...)
+01117580  ?addWrappingLines@hkGeomConvexHullBuilder@@SAXABUhkGeomConvexHullConfig@@PAUWeightedLine@1@AAV?$hkArray@UWeightedNeighbour@hkGeomConvexHullBuilder@@@@2AAV?$hkArray@UWeightedLine@hkGeomConvexHullBuilder@@@@@Z  # Havok 3.1 hkGeomConvexHullBuilder::addWrappingLines(...)
