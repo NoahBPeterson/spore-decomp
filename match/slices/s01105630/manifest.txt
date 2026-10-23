@@ -1,0 +1,3 @@
+# slice s01105630 -- Havok 3.1.0 hkCollideTriangleUtil (scalar x87 build)
+# Module flags: /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s01105630/s01105630.cpp  ?setupClosestPointTriangleCache@hkCollideTriangleUtil@@SAXPBUhkVector4@@AAUClosestPointTriangleCache@1@@Z  01105d80  /vc71 /O2 /MD /Gy /EHsc /TP
