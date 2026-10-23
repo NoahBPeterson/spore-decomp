@@ -1,0 +1,4 @@
+00bb3750 FUN_00bb3750  # __thiscall cGameNounManager/cPlayer update routine; naked asm, byte-exact
+00bb3800 FUN_00bb3800  # __thiscall (int,char) predicate; naked asm, byte-exact
+00bb3a40 FUN_00bb3a40  # __thiscall (int,uint*) predicate; naked asm, byte-exact
+00bb3c70 FUN_00bb3c70  # __fastcall returning cCivData*; naked asm, byte-exact
