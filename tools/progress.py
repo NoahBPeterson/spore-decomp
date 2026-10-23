@@ -278,10 +278,73 @@ def commit_row_deltas(tag):
     return (ex, eq) if seen else None
 
 
+def _db_batch_models():
+    """{(batch, "provider/model"): sums} from opencode's database, per assistant message: every session (the HTTP
+    API returns at most 500, so older batches fell out of the table once the shared service held more), and each
+    call billed to the model that served it (a session switched mid-wave, gold5 to OpenRouter at 06:46, kept
+    only its last model at session level). The database is several GB (every message carries its tool output), so
+    per-session sums are cached in work/opencode/model_usage_cache.json and only sessions whose time_updated
+    changed are read again. None when the database cannot be read."""
+    import sqlite3
+    path = os.path.expanduser("~/.local/share/opencode/opencode.db")
+    if not os.path.exists(path):
+        return None
+    cpath = W("work", "opencode", "model_usage_cache.json")
+    try:
+        cache = json.load(open(cpath))
+    except (OSError, ValueError):
+        cache = {}
+    try:
+        db = sqlite3.connect("file:%s?mode=ro" % path, uri=True, timeout=10)
+        sess = db.execute("select id, title, time_updated from session_v2 where title like 'spore-%' and directory = ?",
+                          (ROOT,)).fetchall()
+        stale = [sid for sid, _t, upd in sess if (cache.get(sid) or {}).get("updated") != upd]
+        fresh = {sid: [] for sid in stale}
+        for k in range(0, len(stale), 200):
+            chunk = stale[k:k + 200]
+            for row in db.execute(
+                    "select session_id, json_extract(data,'$.model.providerID'), json_extract(data,'$.model.id'), "
+                    "sum(coalesce(json_extract(data,'$.cost'),0)), sum(coalesce(json_extract(data,'$.tokens.input'),0)), "
+                    "sum(coalesce(json_extract(data,'$.tokens.cache.read'),0)), sum(coalesce(json_extract(data,'$.tokens.output'),0)), "
+                    "sum(coalesce(json_extract(data,'$.tokens.reasoning'),0)), count(*) from session_message "
+                    "where type = 'assistant' and session_id in (%s) group by 1, 2, 3" % ",".join("?" * len(chunk)), chunk):
+                fresh[row[0]].append(list(row[1:]))
+    except sqlite3.Error:
+        return None
+    upd = {sid: (title, u) for sid, title, u in sess}
+    for sid, rows in fresh.items():
+        cache[sid] = {"title": upd[sid][0], "updated": upd[sid][1], "rows": rows}
+    if fresh:
+        tmp = cpath + ".tmp"
+        json.dump(cache, open(tmp, "w"))
+        os.replace(tmp, cpath)
+    bm = collections.defaultdict(lambda: {"cost": 0.0, "inp": 0, "cr": 0, "out": 0, "rea": 0, "n": 0})
+    for sid, (title, _u) in upd.items():
+        batch = title.split("-")[1] if "-" in title else title
+        for prov, mid, cost, inp, cr, out, rea, n in cache[sid]["rows"]:
+            a = bm[(batch, "%s/%s" % (prov, re.sub(r"-c\d+$", "", mid or "")))]
+            a["cost"] += cost; a["inp"] += inp; a["cr"] += cr; a["out"] += out; a["rea"] += rea; a["n"] += n
+    return bm
+
+
 def model_table():
+    bm = _db_batch_models()
+    if bm is None:
+        bm = _api_batch_models()
+        if bm is None:
+            return "(opencode database and service unavailable)"
+    calls = collections.Counter()
+    for (batch, key), a in bm.items():
+        calls[batch] += a["n"]
+
+    return _model_rows(bm, calls)
+
+
+def _api_batch_models():
+    """Fallback: session-level sums from the HTTP API (at most 500 sessions; a session counts under its last model)."""
     ss = _svc_sessions()
     if ss is None:
-        return "(opencode service unavailable - start it and re-run)"
+        return None
     bm = collections.defaultdict(lambda: {"cost": 0.0, "inp": 0, "cr": 0, "out": 0, "rea": 0, "n": 0})
     for s in ss:
         t = s.get("title") or ""
@@ -296,11 +359,10 @@ def model_table():
         a["cost"] += s.get("cost", 0) or 0; a["inp"] += tk.get("input", 0) or 0
         a["cr"] += c.get("read", 0) or 0; a["out"] += tk.get("output", 0) or 0
         a["rea"] += tk.get("reasoning", 0) or 0; a["n"] += 1
-    dominant = {}
-    for (batch, key), a in bm.items():
-        if batch not in dominant or a["cost"] > bm[(batch, dominant[batch])]["cost"]:
-            dominant[batch] = key
+    return bm
 
+
+def _model_rows(bm, calls):
     def batch_counts(batch):
         """(exact, equivalent) function counts from this batch's manifests, minus
         slices that actually belong to a different model's batch."""
@@ -354,17 +416,23 @@ def model_table():
 
     agg = collections.defaultdict(lambda: {"cost": 0.0, "inp": 0, "cr": 0, "out": 0,
                                             "rea": 0, "exact": 0, "equiv": 0, "batches": 0})
-    for batch, key in dominant.items():
-        a = bm[(batch, key)]; g = agg[key]
+    counts = {}
+    for (batch, key), a in bm.items():
+        # a batch served by several models (a mid-wave provider switch) splits its functions by share of model calls
+        if batch not in counts:
+            counts[batch] = batch_counts(batch)
+        ex, eq = counts[batch]
+        share = a["n"] / calls[batch] if calls[batch] else 0
+        g = agg[key]
         for k in ("cost", "inp", "cr", "out", "rea"):
             g[k] += a[k]
-        ex, eq = batch_counts(batch)
-        g["exact"] += ex; g["equiv"] += eq; g["batches"] += 1
+        g["exact"] += ex * share; g["equiv"] += eq * share; g["batches"] += 1
     rows = []
     for key, g in sorted(agg.items(), key=lambda x: -x[1]["cost"]):
         ex, eq = g["exact"], g["equiv"]; comp = ex + eq
         inp = g["inp"] + g["cr"]
         per = lambda d: ("$%.4f" % (g["cost"] / d)) if d else "-"
+        ex, eq = int(round(ex)), int(round(eq)); comp = ex + eq
         rows.append((key, g["batches"], human(ex), human(eq), "$%.2f" % g["cost"],
                      per(ex), per(eq), per(comp),
                      "%.2f" % (inp / ex / 1e6) if ex else "-",
