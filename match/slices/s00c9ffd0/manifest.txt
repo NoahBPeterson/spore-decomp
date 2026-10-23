@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c9ffd0/s00c9ffd0.cpp  ?TimerExpired@Obj@@QAEHXZ  00ca0340  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c9ffd0/s00c9ffd0.cpp  ?GetArrayCount@Obj@@QAEHXZ  00ca0380  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c9ffd0/s00c9ffd0.cpp  ?ClearCreature@Obj@@QAEXXZ  00ca0430  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c9ffd0/s00c9ffd0.cpp  ?CopyCtor@RefOps@@QAEPAXPAX@Z  00ca0900  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c9ffd0/s00c9ffd0.cpp  ?AssignA@RefOps@@QAEPAXPAX@Z  00ca0940  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c9ffd0/s00c9ffd0.cpp  ?AssignB@RefOps@@QAEPAXPAX@Z  00ca09a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c9ffd0/s00c9ffd0.cpp  ?FUN_00ca1010@@YAXPAPAX0@Z  00ca1010  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c9ffd0/s00c9ffd0.cpp  ?FUN_00ca10a0@@YAPAMXZ  00ca10a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c9ffd0/s00c9ffd0.cpp  ?FUN_00ca1130@@YAPAMXZ  00ca1130  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c9ffd0/s00c9ffd0.cpp  ?WrapAngle@@YGMM@Z  00ca11c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

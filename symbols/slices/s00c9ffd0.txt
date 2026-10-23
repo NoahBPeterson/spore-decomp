@@ -1,0 +1,16 @@
+00ca0340 Obj::TimerExpired  # SP timer IsRunning/GetElapsedTime (0xfeba90/0xbc3190) vs limit at +0x7f0; byte-exact thiscall
+00ca0380 Obj::GetArrayCount  # (end-begin)>>2 at +0xbc0; byte-exact
+00ca0430 Obj::ClearCreature  # cAnimatingCreature SetAttachments(0xa04af0)/Release(0xa05270), vtable slot 0x1c, float 1.0 slot 0x40; byte-exact
+00ca0900 RefOps::CopyCtor  # 0x18-byte POD copy-construct, AddRef slot0; byte-exact
+00ca0940 RefOps::AssignA  # 0x18-byte copy-assign, AddRef slot0/Release slot1; byte-exact
+00ca09a0 RefOps::AssignB  # 0x10-byte copy-assign, AddRef slot1/Release slot2; byte-exact
+00ca1010 FUN_00ca1010  # io iff refcount swap (AddRef slot0x18/Release slot0x19); byte-exact
+00ca10a0 FUN_00ca10a0  # cached vector getter (property 0x4529f96f/0x40646200, vec 0x48f5b53); byte-exact
+00ca1130 FUN_00ca1130  # cached vector getter (vec 0x48f5b54); byte-exact
+00ca11c0 PathSolver::WrapAngle  # 2pi wrap against 0x169a280; byte-exact __stdcall
+00ca0040 Obj::GetAltTarget  # locomotion ratio 3-way alt-target select; near-miss
+00ca0170 Obj::BringGoalToAltitude  # 200.0f distance test, 0.6666667f step count, GetAverageRadius bit masks
+00ca03a0 Obj::CreateInteract  # LayerManager slot 0x10 + creature vtable slots 2/3/6/0x10/0xf
+00ca04a0 Obj::ProcessEA  # EA agent list iteration, QI ids 0x73905ae/0x1186577, invsqrt
+00ca0f60 FUN_00ca0f60  # heap sift-up with refcount AddRef slot0x60/Release slot0x64
+00ca1210 FUN_00ca1210  # quarter-sine interpolation table 0x01677840 (2 floats/entry)
