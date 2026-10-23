@@ -1,0 +1,5 @@
+# source symbol va flags
+slices/s00ab9220/s00ab9220.cpp  ?FUN_00ab9e00@@YAPAHH@Z  00ab9e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ab9220/s00ab9220.cpp  ?dtor@Big@@QAEXXZ  00ab9270  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ab9220/s00ab9220.cpp  ?reserve@V12@@QAEXI@Z  00ab9410  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ab9220/s00ab9220.cpp  ?resize@V12@@QAEXIABUV3@@@Z  00ab9fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
