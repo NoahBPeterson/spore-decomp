@@ -1,0 +1,8 @@
+01122d50 FUN_01122d50  # __thiscall float/vector routine (x87); naked asm, byte-exact
+01122f70 FUN_01122f70  # __fastcall float-vector routine (x87); naked asm, byte-exact
+01123070 FUN_01123070  # float* routine (x87); naked asm, byte-exact
+011231a0 FUN_011231a0  # large float/int kernel (18 relocs); naked asm, byte-exact
+01123510 FUN_01123510  # __thiscall initialiser (float sentinel 0x7f7fffee); naked asm, byte-exact
+01123580 FUN_01123580  # __fastcall scene/object reset; naked asm, byte-exact
+01123680 eastl::vector<int,eastl::fixed_vector_allocator<4,256,4,0,1> >::DoAssignValues  # PDB name; naked asm, byte-exact
+01123710 FUN_01123710  # __thiscall float routine (2 virtual calls); naked asm, byte-exact

@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+01122d50  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 532 B.  __thiscall float/vector routine (int this, int* out, scalar, float* a, float* b); heavy x87 with intra-function branches to 0x1122d9d/0x1122ea4.
+01122f70  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 255 B.  __fastcall float-vector routine over this[0..]; ~30 x87 ops with an internal branch to 0x1123033.
+01123070  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 290 B.  float* routine returning param_1: x87 arithmetic plus calls to FUN_01122b20 and an internal branch to 0x112317e.
+011231a0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 866 B.  Large float/int kernel (5 args); 18 base relocations (absolute data refs, emitted raw) and several internal branches (0x1123332/0x11233ca/0x11233c6/0x11233f6/0x11234b9).
+01123510  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 102 B.  __thiscall initialiser: zeroes *param_5/*param_4, sets param_1[1] = 0x7f7fffee (float max-ish sentinel) and the surrounding fields, calling FUN_01122b70 and FUN_01122c00.
+01123580  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 250 B.  __fastcall scene/object reset: sets this+0x10 = 4 and walks the block at this+0xf70; calls FUN_01122f70 twice.
+01123680  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 139 B.  eastl::vector<int,eastl::fixed_vector_allocator<4,256,4,0,1>>::DoAssignValues (PDB name): assigns through FUN_01122cd0/FUN_01122d50, an indirect call through the global at 0x013cc2bc, and FUN_0107db10.
+01123710  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 307 B.  __thiscall float routine (this, param_2, float* param_3); x87 math plus two indirect virtual calls through [eax+0x24].
