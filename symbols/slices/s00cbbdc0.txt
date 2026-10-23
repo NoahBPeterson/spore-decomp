@@ -1,0 +1,7 @@
+00cbbdc0 ?FUN_00cbbdc0@@YIHH@Z  # projectile update: age, target selection, effect spawn
+00cbc200 ?FUN_00cbc200@@YIXPAHHHH0@Z  # vector insert(pos,count,value) for reference-counted elements
+00cbc3c0 ?FUN_00cbc3c0@@YIXHHMMMMMM@Z  # spray blast: scan projectiles, play effects along the ray
+00cbc7f0 ?FUN_00cbc7f0@@YIXHHMMMMMM@Z  # remove projectiles inside the blast cone
+00cbc930 ?FUN_00cbc930@@YIHH@Z  # cDefaultToolProjectile constructor
+00cbcb70 ?FUN_00cbcb70@@YIHH@Z  # cDeepSpaceProjectile constructor
+00cbcc40 ?FUN_00cbcc40@@YAXMMMMMMPAX@Z  # sample 32 points along a segment into a Vector3 vector
