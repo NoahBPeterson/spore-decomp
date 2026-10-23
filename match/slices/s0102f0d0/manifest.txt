@@ -1,0 +1,10 @@
+slices/s0102f0d0/s0102f0d0.cpp  ?f0102f820@@YAHPAUcEmpire@@@Z  0102f820  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0102f0d0/s0102f0d0.cpp  ?f0102f8c0@cSPSpaceEconomyTuning@@QAEMH@Z  0102f8c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0102f0d0/s0102f0d0.cpp  ?GetTradeCaptureOfferPrice@cSPSpaceEconomyTuning@@QAEHH@Z  0102fa30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0102f0d0/s0102f0d0.cpp  ?GetEnergyRechargeDelayMS@cSPSpaceEconomyTuning@@QAEHXZ  0102fbf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0102f0d0/s0102f0d0.cpp  ?GetEnergyRechargePerMS@cSPSpaceEconomyTuning@@QAEMXZ  0102fc60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0102f0d0/s0102f0d0.cpp  ?GetTradeCaptureCostForPlanet@cSPSpaceEconomyTuning@@QAEHH@Z  01030000  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0102f0d0/s0102f0d0.cpp  ?GetPeaceOfferPrice@cSPSpaceEconomyTuning@@QAEHHPAUcEmpire@@@Z  01030930  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0102f0d0/s0102f0d0.cpp  ?GetPeaceBadOfferDelta@cSPSpaceEconomyTuning@@QAEHPAUcEmpire@@@Z  010309c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0102f0d0/s0102f0d0.cpp  ?GetPeaceVeryBadOfferDelta@cSPSpaceEconomyTuning@@QAEHPAUcEmpire@@@Z  01030a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0102f0d0/s0102f0d0.cpp  ?GetPeaceGoodOfferDelta@cSPSpaceEconomyTuning@@QAEHPAUcEmpire@@@Z  01030aa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
