@@ -1,0 +1,5 @@
+# slice s00e972b0 -- cCreatureCameraEffects ctor / effect-list clear / impostor spawner (vtable 0x01486f04)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e972b0/s00e972b0.cpp  ?IsIdInRange@@YA_N_K@Z  00e972b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e972b0/s00e972b0.cpp  ??0cCreatureCameraEffects@@QAE@XZ  00e972e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e972b0/s00e972b0.cpp  ?ClearEffects@cCreatureCameraEffects@@QAEXPAUEffectList@@@Z  00e97310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
