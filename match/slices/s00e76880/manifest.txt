@@ -1,0 +1,5 @@
+# source  symbol  original VA  [flags override]
+# No byte-exact matches in this slice: the two small updaters pass their subject in a
+# custom register (ESI / EAX, the cl static-helper ABI), and the three spawn helpers are
+# large floating-point rotation/attach routines whose register allocation could not be
+# reproduced when each function is recompiled alone.
