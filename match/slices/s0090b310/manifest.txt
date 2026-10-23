@@ -1,0 +1,21 @@
+# slice s0090b310 -- expat 2.0.1 xmlrole.c prolog/content-model state handlers
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0090b310/s0090b310.cpp  ?attlist8@@YAHPAHHHPAX0@Z  0090b310  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?element7@@YAHPAHH@Z  0090b460  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?entity5@@YAHPAHHPAX10@Z  0090b610  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?attlist4@@YAHPAHH@Z  0090b720  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?attlist7@@YAHPAHH@Z  0090b780  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?element4@@YAHPAHH@Z  0090b7e0  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?element6@@YAHPAHH@Z  0090b830  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?entity7@@YAHPAHHPAX10@Z  0090b940  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?notation1@@YAHPAHHPAX10@Z  0090ba00  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?attlist3@@YAHPAHH@Z  0090baa0  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?element3@@YAHPAHH@Z  0090bb60  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?notation0@@YAHPAHH@Z  0090bc90  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?attlist5@@YAHPAHH@Z  0090bce0  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?element2@@YAHPAHHHPAX0@Z  0090bd20  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?attlist2@@YAHPAHHPAX10@Z  0090bf00  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?element1@@YAHPAHHPAX10@Z  0090bfd0  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?attlist1@@YAHPAHH@Z  0090c100  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?entity0@@YAHPAHH@Z  0090c0a0  /O2 /MD /Gy /EHsc /TP
+slices/s0090b310/s0090b310.cpp  ?attlist0@@YAHPAHH@Z  0090c1f0  /O2 /MD /Gy /EHsc /TP
