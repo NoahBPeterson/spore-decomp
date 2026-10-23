@@ -1,0 +1,13 @@
+0117c560 ?SSL_new@@YAPAUssl_st@@PAUssl_ctx_st@@@Z  # SSL_new (OpenSSL 0.9.8 ssl_lib.c)
+0117c8f0 ?SSL_accept@@YAHPAUssl_st@@@Z  # SSL_accept
+0117c940 ?SSL_ctrl@@YAJPAUssl_st@@HJPAX@Z  # SSL_ctrl
+0117ca60 ?SSL_CTX_new@@YAPAUssl_ctx_st@@PAUssl_method_st@@@Z  # SSL_CTX_new
+0117ccd0 ?SSL_get_error@@YAHPAUssl_st@@H@Z  # SSL_get_error
+0117d180 ?X509_NAME_add_entry@@YAHPAUX509_NAME@@PAUX509_NAME_ENTRY@@HH@Z  # X509_NAME_add_entry
+0117d410 ?X509_NAME_ENTRY_create_by_OBJ@@YAPAUX509_NAME_ENTRY@@PAPAU1@PAUASN1_OBJECT@@HPBEH@Z  # X509_NAME_ENTRY_create_by_OBJ
+0117d4d0 ?X509_NAME_ENTRY_create_by_txt@@YAPAUX509_NAME_ENTRY@@PAPAU1@PBDHPBEH@Z  # X509_NAME_ENTRY_create_by_txt
+0117da80 ?X509_check_private_key@@YAHPAUX509@@PAUEVP_PKEY@@@Z  # X509_check_private_key
+0117df20 ?sk_new_null@@YAPAXXZ  # sk_new_null
+0117e0a0 _asn1_ex_c2i  # asn1_ex_c2i
+0117e340 _asn1_check_tlen  # asn1_check_tlen
+0117e4e0 _asn1_d2i_ex_primitive  # asn1_d2i_ex_primitive

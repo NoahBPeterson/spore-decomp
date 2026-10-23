@@ -1,0 +1,5 @@
+slices/s0117c560/s0117c560.cpp  ?SSL_new@@YAPAUssl_st@@PAUssl_ctx_st@@@Z  0117c560  /O2 /MD /Gy /TP
+slices/s0117c560/s0117c560.cpp  ?SSL_accept@@YAHPAUssl_st@@@Z  0117c8f0  /O2 /MD /Gy /TP
+slices/s0117c560/s0117c560.cpp  ?SSL_ctrl@@YAJPAUssl_st@@HJPAX@Z  0117c940  /O2 /MD /Gy /TP
+slices/s0117c560/s0117c560.cpp  ?X509_NAME_ENTRY_create_by_txt@@YAPAUX509_NAME_ENTRY@@PAPAU1@PBDHPBEH@Z  0117d4d0  /O2 /MD /Gy /TP
+slices/s0117c560/s0117c560.cpp  ?sk_new_null@@YAPAXXZ  0117df20  /O2 /MD /Gy /TP

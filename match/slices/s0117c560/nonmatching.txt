@@ -1,0 +1,8 @@
+0117ca60 361 /O2 /MD /Gy /TP; difftest PASS (210 valid, 61.5% cov): ours 600 vs 609 bytes, shared error/tail block layout and cold-block placement differ, semantics agree
+0117ccd0 207 /O2 /MD /Gy /TP; difftest PASS (400 valid, 76.1% cov): ours 286 vs 288 bytes, s/bio register assignment (edi/esi swapped) and one lea/mov differ
+0117d180 143 /O2 /MD /Gy /TP; difftest PASS (262 valid, 80.0% cov): ours 272 vs 275 bytes, name/set register assignment and branch layout of set==-1 / loc<ret differ
+0117d410 91 /O2 /MD /Gy /TP; difftest PASS (274 valid, 95.9% cov): ours 148 vs 159 bytes, missing setne boolean materialization on the OBJ_dup result and argument-load order
+0117da80 90 /O2 /MD /Gy /TP; difftest PASS (227 valid, 73.1% cov): ours 180 vs 176 bytes, setne early and case block order differ
+0117e0a0 503 /O2 /MD /Gy /TP; difftest FAIL (5/42 valid mismatched, first: memory pool @47320004 4 vs 3): first-draft reconstruction, error-path/type dispatch detail wrong
+0117e340 384 /O2 /MD /Gy /TP; difftest FAIL (5/31 valid mismatched, first: value 4414000f vs 0000000f): first-draft reconstruction, tlc caching / pclass-ptag outputs wrong
+0117e4e0 287 /O2 /MD /Gy /TP; difftest UNSUPPORTED (original reads eax at entry, custom/LTCG register ABI): cannot match without forbidden naked asm; first-draft body approximates the semantics
