@@ -1,0 +1,2 @@
+# slice s00906e00 -- expat 2.0.1 xmlparse.c tokenizer / DTD helpers
+# source (relative to match/)   symbol   original VA   [cl flags override]

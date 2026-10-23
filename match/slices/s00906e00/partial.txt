@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00907070  -  incomplete: expat dtdCopy (941 bytes).  Large DTD-copy routine: walks the source element/attribute/entity hash tables (offsets 0x3c/0x44, 0x28/0x30, 0x14/0x1c) via XmlHashTableLookup, string-copies names into the destination pool (poolCopyString), copies entity tables with copyEntityTable (0x906b10), and replicates the scalar DTD fields (0x80..0x83, 0xa0, 0xa4..0xac, 0xb4/0xb8).  Not reconstructed within budget; no `// @ 0x00907070` marker in the slice source.

@@ -1,0 +1,4 @@
+00906e00  epilogProcessor  # expat xmlparse.c epilog processor (inline jump table)
+00907000  storeAttributeValue  # expat xmlparse.c attribute-value pool store
+00907070  dtdCopy  # expat xmlparse.c DTD copier (941 bytes, not reconstructed)
+00907420  externalEntityInitProcessor2  # expat xmlparse.c external-entity init phase 2
