@@ -308,8 +308,8 @@ static void FreePtr(void* p)
 void* StreamImpl_operator_new(u32 size);      // 0x011e6d20
 struct StreamImpl {
     StreamImpl* Init(u32 a1, u32 a2, u32 a3, u32 a4, u32 a5, u32 a6);   // 0x011e7410
+    void FreeRequest(void* rec);                                        // 0x011e6730
 };
-void  FreeRequest(void* impl, void* rec);                                             // 0x011e6730
 void  DecBufferUsage(u32 n);                                                          // 0x011e6600
 void  RestartStream(void* impl, u32 arg);                                             // 0x011e7100
 void* GetFsManager();                                                                 // 0x011e58f0
@@ -587,7 +587,7 @@ void __fastcall Stream_CancelRequest(void* self, int, u32 requestId)
             {
                 if (st == 1)
                 {
-                    FreeRequest(impl, rec);
+                    ((StreamImpl*)impl)->FreeRequest(rec);
                     ((Mutex*)(impl + 4))->Unlock();
                     return;
                 }
@@ -649,7 +649,7 @@ void __fastcall Stream_Kill(void* self, int)
             node = *(char**)(impl + 0x94);
         }
         while (*(char**)(impl + 0x8c) != *(char**)(impl + 0x90))
-            FreeRequest(impl, *(char**)(impl + 0x8c));
+            ((StreamImpl*)impl)->FreeRequest(*(char**)(impl + 0x8c));
         *(u32*)(*(char**)(impl + 0x90) + 4) = 4;
         for (char* w = *(char**)(impl + 0x44); w != 0; w = *(char**)w)
             *(u32*)(w + 0xc) = 0;

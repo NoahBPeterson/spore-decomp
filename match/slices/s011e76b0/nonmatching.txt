@@ -4,12 +4,12 @@
 # register allocation, so only leaf/no-call functions are byte-exact.  All rows below compile
 # cleanly with flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE and were checked with
 # tools/difftest/equiv.py (verdicts at the end of each line).
-011e76b0  546  complete; StreamImpl list teardown (drain lists A/B/C through the filesys allocator, free the request table, reset the embedded AsyncOp, null residual chains, destroy the mutex); codegen diverges (allocator-free call shape + LTCG block layout); equiv PENDING
-011e7910    7  complete; Stream::Create (alloc 0x210, ctor, return [impl+0x44]); only the cold null-return tail block differs (size 58 vs 64); equiv PENDING
-011e7950  133  complete; list-B push reusing the free head node else allocating 0x10; codegen diverges (memory `dec` vs load/dec/store scheduling + block layout); equiv PENDING
-011e7a40  243  complete; Stream::CancelRequest (lock, request lookup, status transitions, buffer-usage accounting, priority rebind); codegen diverges (LTCG register allocation); equiv PENDING
-011e7b70  202  complete; Stream::Kill (cancel pending requests, free queue, reset counters under lock, priority wake, mark buffers); codegen diverges (LTCG register allocation); equiv PENDING
-011e7cf0   75  complete; Stream destructor (Kill, wait for idle, close+reap embedded AsyncOp, clear lists, free impl); codegen diverges (call scheduling); equiv PENDING
-011e7d90  337  complete; GetFrequencies (priority raise, QPC/TSC ratio sampling, QPC-freq fallback with 50ms sleeps, restore priority); codegen diverges (x87 scheduling + LTCG); equiv PENDING
-011e80a0  399  complete; TimerInitialize (derive per-unit scale factors from QPC/CPU freq, measure QPC and TSC read overhead over 8 samples, cpu ratio); codegen diverges (x87 scheduling + LTCG); equiv PENDING
-011e8550  207  complete; AsyncOp read exec callback (seek, clamp to min(amount, max-read), read, advance amount/value/total/data, requeue or finish); codegen diverges (LTCG register allocation); equiv PENDING
+011e76b0  546  complete; StreamImpl list teardown (drain lists A/B/C through the filesys allocator, free the request table, reset the embedded AsyncOp, null residual chains, destroy the mutex); codegen diverges (allocator-free call shape + LTCG block layout); equiv PASS 291 valid / 81.6% coverage
+011e7910    7  complete; Stream::Create (alloc 0x210, ctor, return [impl+0x44]); only the cold null-return tail block differs (size 58 vs 64); equiv UNSUPPORTED (fake-arity 400/400)
+011e7950  133  complete; list-B push reusing the free head node else allocating 0x10; codegen diverges (memory `dec` vs load/dec/store scheduling + block layout); equiv PASS 243 valid / 67.3% coverage
+011e7a40  230  complete; Stream::CancelRequest (lock, request lookup, status transitions, buffer-usage accounting, priority rebind); codegen diverges (LTCG register allocation); equiv WEAK 222 valid / 40.0% coverage
+011e7b70  206  complete; Stream::Kill (cancel pending requests, free queue, reset counters under lock, priority wake, mark buffers); codegen diverges (LTCG register allocation); equiv FAIL 1/279 (ours faults writing in freerequest at eip=011e674a)
+011e7cf0   75  complete; Stream destructor (Kill, wait for idle, close+reap embedded AsyncOp, clear lists, free impl); codegen diverges (call scheduling); equiv WEAK 188 valid / 63.8% coverage
+011e7d90  337  complete; GetFrequencies (priority raise, QPC/TSC ratio sampling, QPC-freq fallback with 50ms sleeps, restore priority); codegen diverges (x87 scheduling + LTCG); equiv UNSUPPORTED (import:GetCurrentProcess 400/400)
+011e80a0  399  complete; TimerInitialize (derive per-unit scale factors from QPC/CPU freq, measure QPC and TSC read overhead over 8 samples, cpu ratio); codegen diverges (x87 scheduling + LTCG); equiv PASS 400 valid / 100.0% coverage
+011e8550  207  complete; AsyncOp read exec callback (seek, clamp to min(amount, max-read), read, advance amount/value/total/data, requeue or finish); codegen diverges (LTCG register allocation); equiv UNSUPPORTED (fake-arity 280 / fault(read) 102)
