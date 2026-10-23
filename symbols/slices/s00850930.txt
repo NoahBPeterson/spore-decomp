@@ -1,0 +1,8 @@
+00850930 compress_output  # IJG libjpeg 6a jccoefct.c (upstream source, byte-exact)
+00850b30 compress_first_pass  # IJG libjpeg 6a jccoefct.c (upstream source, byte-exact)
+00850d40 start_pass_coef  # IJG libjpeg 6a jccoefct.c (upstream source, byte-exact)
+00850e30 jinit_c_coef_controller  # IJG libjpeg 6a jccoefct.c (upstream source, byte-exact)
+00850f30 rgb_ycc_start  # IJG libjpeg 6a jccolor.c (upstream source, byte-exact)
+00851010 rgb_ycc_convert  # IJG libjpeg 6a jccolor.c (upstream source, byte-exact)
+008511d0 cmyk_ycck_convert  # IJG libjpeg 6a jccolor.c (upstream source, byte-exact)
+00851400 jinit_color_converter  # IJG libjpeg 6a jccolor.c (upstream source, byte-exact)

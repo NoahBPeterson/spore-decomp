@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+slices/s00850930/s00850930.cpp  _compress_output  00850930  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00850930/s00850930.cpp  _compress_first_pass  00850b30  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00850930/s00850930.cpp  _start_pass_coef  00850d40  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00850930/s00850930.cpp  _jinit_c_coef_controller  00850e30  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00850930/s00850930.cpp  _rgb_ycc_start  00850f30  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00850930/s00850930.cpp  _rgb_ycc_convert  00851010  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00850930/s00850930.cpp  _cmyk_ycck_convert  008511d0  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00850930/s00850930.cpp  _jinit_color_converter  00851400  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
