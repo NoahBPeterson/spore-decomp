@@ -1,0 +1,11 @@
+00d8a2a0 ?FUN_00d8a2a0@@YA_NPAUCitizen@@PAX111PAUStateReceiveItem@@@Z  # PDB candidate SP::RECEIVE_ITEM_Activate
+00d8a500 ?FUN_00d8a500@@YAXPAUCitizen@@PAX111PAUStateReceiveItem@@@Z  # RECEIVE_ITEM deactivate callback
+00d8a550 ?FUN_00d8a550@@YAXPAUCitizen@@@Z  # stun activate callback (unscored name)
+00d8a660 ?FUN_00d8a660@@YA_NPAUCitizen@@@Z  # stun tick callback (unscored name)
+00d8a750 ?FUN_00d8a750@@YA_NPAUCitizen@@PAX111PAUTickOut@@PAUStateUfoClump@@@Z  # ufo clump-close tick
+00d8a8c0 ?FUN_00d8a8c0@@YA_NPAUCitizen@@PAX111PAUTickOut@@PAUStateUfoClump@@@Z  # PDB candidate SP::CitizenTree::UfoOpenClump_Tick
+00d8aa40 ?FUN_00d8aa40@@YA_NPAUCitizen@@PAX111PAUStateEnterSpot@@@Z  # enter-spot tick
+00d8ab30 ?FUN_00d8ab30@@YA_NPAUCitizen@@PAX111PAUStateSneak@@1M@Z  # sneak tick
+00d8ac30 ?FUN_00d8ac30@@YAXPAUCitizen@@PAX111PAUStateBundle@@@Z  # PDB candidate SP::TRIBE_SAVE_BUNDLE_Activate
+00d8af20 ?FUN_00d8af20@@YA_NPAUCitizen@@PAX111PAUStateBundle@@1M@Z  # TRIBE_SAVE_BUNDLE tick
+00d8b1a0 ?FUN_00d8b1a0@@YAXPAUCitizen@@PAX111PAUStateBundle@@@Z  # TRIBE_SAVE_BUNDLE deactivate
