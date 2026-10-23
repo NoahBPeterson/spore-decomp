@@ -1,0 +1,2 @@
+# va  size  reason (reconstruction; not byte-exact)
+# (none -- all six VAs of this slice are complete reconstructions, booked in nonmatching.txt)
