@@ -643,11 +643,29 @@ SOUND_DIRS = ("cmn", "plugins", "mix", "decoders", "ealayer30", "ealayer31")   #
 def module_counts():
     """Top-level module (docs/modules.md) -> Counter of n / exact / equiv / part / none / bytes over game functions.
     work/migrate/modmap.json assigns each retail function to the dev build's object file; game functions it does not
-    list are counted under "(not in module map)"."""
+    list are split into four rows: globals' initializers/destructors and compiler stubs (status.py's "globals, other
+    code"), and code by what its gap in the module map (modmap "gaps": unassigned runs with the object before and
+    after) says: one object on both sides, one directory on both sides, or between modules."""
+    import bisect
     try:
-        mm = json.load(open(W("work", "migrate", "modmap.json")))["functions"]
+        M = json.load(open(W("work", "migrate", "modmap.json")))
     except (OSError, ValueError):
         return {}
+    mm = M["functions"]
+    gaps = sorted((int(g["lo"], 16), int(g["hi"], 16), g.get("before"), g.get("after")) for g in M.get("gaps", []))
+    los = [g[0] for g in gaps]
+
+    def unassigned_row(a):
+        if a in KG:
+            return "(no module: initializers, stubs)"
+        i = bisect.bisect_right(los, a) - 1
+        if i >= 0 and gaps[i][0] <= a <= gaps[i][1]:
+            b, af = gaps[i][2], gaps[i][3]
+            if b and b == af:
+                return "(no module: code, object known)"
+            if b and af and b.split("/")[0] == af.split("/")[0]:
+                return "(no module: code, directory known)"
+        return "(no module: code between modules)"
     out = collections.defaultdict(collections.Counter)
     seen = set()
     for v, m in mm.items():
@@ -659,7 +677,7 @@ def module_counts():
         out["EA sound library" if top in SOUND_DIRS else top].update(_tier_of(a))
         seen.add(a)
     for a in game - seen:
-        out["(not in module map)"].update(_tier_of(a))
+        out[unassigned_row(a)].update(_tier_of(a))
     return out
 
 
@@ -713,7 +731,7 @@ def plot_history(path):
 
     BLUE, ORANGE, GREEN = "#2a78d6", "#eb6834", "#2e9e5b"   # dataviz reference palette, slots 1-3
     INK, MUTED, GRID = "#1f2328", "#59636e", "#e6e8eb"
-    order = sorted(mods, key=lambda m: (m.startswith("("), -mods[m]["n"]))   # modules by size, "(not in module map)" last
+    order = sorted(mods, key=lambda m: (m.startswith("("), -mods[m]["n"]))   # modules by size, then the "(no module: ...)" rows
     H = 4.6 + (0.6 + 0.3 * len(order) if order else 0)
     fig = plt.figure(figsize=(12, H), dpi=150)
     fig.patch.set_facecolor("white")
@@ -768,7 +786,7 @@ def plot_history(path):
         bx.set_xlim(0, 140)
         bx.set_xticks([0, 25, 50, 75, 100])
         bx.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(decimals=0))
-        bx.set_title("By module, now (share of each module's functions)", loc="left",
+        bx.set_title("By module, now", loc="left",
                      fontsize=11, color=INK)
         for sp in ("top", "right", "left"):
             bx.spines[sp].set_visible(False)
