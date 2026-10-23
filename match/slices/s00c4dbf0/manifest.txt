@@ -1,0 +1,10 @@
+# source symbol va flags
+slices/s00c4dbf0/s00c4dbf0.cpp  ?FUN_00c4dca0@@YIPAXPAX0E@Z  00c4dca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4dbf0/s00c4dbf0.cpp  ?FUN_00c4dce0@@YIDPAX0@Z  00c4dce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4dbf0/s00c4dbf0.cpp  ?FUN_00c4def0@@YIPAXPAX0@Z  00c4def0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4dbf0/s00c4dbf0.cpp  ?FUN_00c4ec90@@YIXPAX0@Z  00c4ec90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4dbf0/s00c4dbf0.cpp  ?FUN_00c4ecc0@@YIXPAX0@Z  00c4ecc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4dbf0/s00c4dbf0.cpp  ?FUN_00c4ecf0@@YIXPAX0@Z  00c4ecf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4dbf0/s00c4dbf0.cpp  ?FUN_00c4ed20@@YIXPAX0@Z  00c4ed20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4dbf0/s00c4dbf0.cpp  ?FUN_00c4ee90@@YIHPAX0HH@Z  00c4ee90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4dbf0/s00c4dbf0.cpp  ?FUN_00c4eec0@@YIXPAX0H@Z  00c4eec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

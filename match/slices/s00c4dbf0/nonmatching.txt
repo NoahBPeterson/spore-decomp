@@ -1,0 +1,16 @@
+00c4dbf0   4  Complete cSPMission ChangeArchetype message handler; residual is branch/scheduling layout only.
+00c4dd10  416  Complete cSPMission message dispatch; residual is call/stack scheduling and register allocation.
+00c4deb0  38  Complete cMissionChangeArchetype GetTagString; residual is tail-call merging vs separate mov/jmp body.
+00c4e0f0  203  Complete mission property reader; residual is property-list walk scheduling and register allocation.
+00c4e1a0  92  Complete mission property writer; residual is boolean/uint branch layout and register allocation.
+00c4e230  31  Complete mission setup helper; residual is initialisation ordering and register allocation.
+00c4e280  174  Complete mission value getter; residual is float/int conversion ordering and register allocation.
+00c4e390  194  Complete mission value setter; residual is argument shuffle and call scheduling.
+00c4e440  248  Complete mission state query; residual is vtable-call scheduling and register allocation.
+00c4e570  923  Complete cSPMission Update/driver; residual is loop scheduling, call ordering, and register pressure.
+00c4e9a0  198  Complete mission event registration; residual is message-id setup ordering and register allocation.
+00c4ea70  253  Complete cMissionColonize init; residual is vtable-call and store interleaving order.
+00c4ed50   5  Complete counter comparison predicate; residual is add-vs-sub encoding of the negative constant (semantically identical).
+00c4edd0  91  Complete register-callback on slot 0x14c; residual is thiscall stub shape and stack setup.
+00c4ee30  91  Complete register-callback on slot 0x150; residual is thiscall stub shape and stack setup.
+00c4eee0  17  Complete duration recompute; residual is imul operand form (msvc folds memory operand into dst).
