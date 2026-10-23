@@ -1,0 +1,3 @@
+011a09c0 ssl3_get_record     # assemble one SSLv3/TLS record: header, length/version checks, MAC/decrypt, decompress, handshake CCS bookkeeping
+011a0d80 do_ssl3_write       # frame one record (header, MAC, encrypt, compression) and hand it to ssl3_write_pending
+011a0ff0 ssl3_read_bytes     # record-layer reader: pull records, verify MAC, uncompress, dispatch handshake/alert/application data to the caller

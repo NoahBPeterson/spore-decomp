@@ -1,0 +1,2 @@
+slices/s011a09c0/s011a09c0.cpp  _ssl3_get_record  011a09c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a09c0_inc
+slices/s011a09c0/s011a09c0.cpp  _do_ssl3_write  011a0d80  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a09c0_inc
