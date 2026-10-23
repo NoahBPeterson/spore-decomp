@@ -1,0 +1,7 @@
+00ac2310 SurfaceSampleDistance  # no PDB name; cdecl (uint a, uint b); two packed cube-face direction codes -> bubble distance, 16x when either cell is occupied (flag 0x98000000)
+00ac2520 SurfaceDistanceByPos  # no PDB name; cdecl (const Vec3Plain* v, uint code); quantises v to a direction code then runs the same bubble test
+00ac28c0 DistanceUnderWater  # no PDB name; cdecl (uint a, uint b); water-height variant, returns FLT_MAX unless under water, scale 1.0/2.0 by depth
+00ac2a20 SurfaceGapByPos  # no PDB name; cdecl (const Vec3Plain* v, uint code); unit-sphere direction gap to the sample under code, scaled by GetWaterHeight (0x00b7e390)
+00ac2b40 DistanceByHeight  # no PDB name; cdecl (uint a, uint b); doubles the point gap when the height under b is below FUN_00c9eb60(); uses GetWaterHeight2 (0x00b7e4d0)
+00ac2d00 SurfaceGapByPos2  # no PDB name; cdecl (const Vec3Plain* v, uint code); SurfaceGapByPos gated on flag 0x20000000 and using GetWaterHeight2
+00ac2e20 SurfaceSampleDistance2  # no PDB name; cdecl (uint a, uint b); two-code bubble distance with flags 0x18000000/0x4000000, a 10x term, and an optional projected-distance term (0x00b81630)
