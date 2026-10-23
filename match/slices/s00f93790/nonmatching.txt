@@ -1,0 +1,4 @@
+# slice s00f93790 nonmatching functions
+# Both implemented functions in this slice compiled byte-exact (see manifest.txt);
+# this file is intentionally empty of VA rows.
+# cl flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast   (default /GS on)
