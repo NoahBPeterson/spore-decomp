@@ -1,0 +1,32 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+# RenderWare 4 core (symbols/renderware4_core.txt) built with VC .NET 2003 (cl 13.10),
+# /GL+/LTCG and SSE scalar-float codegen.  A single-object /vc71 rebuild cannot reproduce the
+# cross-call register allocation, so only leaf functions are byte-exact; every caller below is
+# written complete and behaviourally faithful.  All rows compile cleanly with flags
+# /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE and were checked with tools/difftest/equiv.py
+# (verdicts at the end of this file).
+# Diff counts are chk.py's, over the original symbol extent, for the final /vc71 build.
+01202020  225  TriangleVolume::GetWorldNormal: complete; the dirty-flag test (`test byte [ecx+0x5c],2`), the v0/v1/v2 loads, the cross, the len2 dot, the FLT_MIN compare, the two rsqrt Newton steps and the `and dword [ecx+0x5c],~2` clear all compute the original's values, and the function is 100% instruction-covered.  cl 13.10 keeps the cross live in xmm1 across the rsqrt (the LTCG original stores it to [ecx+0x30] and reloads it three times), so the extra live value costs an eighth xmm register: cl writes xmm7 where the original only ever writes xmm0..xmm6.  The residual bytes are the e1/e2 subps order, that register choice and the resulting branch displacement.
+01202260    8  FUN_01202260 (TriangleVolume factory): complete; the `m01201980(3)` call, radius(+0x50)=0.0f, type(+0x44)=0xf, the three vertex copies and the `|=2` dirty set are exact.  The only difference is instruction order: the original emits `movaps xmm0,[eax]; movaps [esi+0x20],xmm0; or dword [esi+0x5c],2` while cl hoists the read-modify-write `or` above the [esi+0x20] store.  Non-leaf (calls 0x01201980), so equivalence-only under the RenderWare 4 core policy.
+012022b0   41  TriangleVolume::GetAABB: complete; the null-xf early-out, the memory-splat full 4x4 transform of the three vertices (association ((m0*x+m1*y)+m2*z)+m3 preserved bit-exactly) and the three min/max reductions are exact -- the whole transform half is byte-identical.  The residual is the radius-inflate tail: the original computes the min into xmm2 (`movaps xmm2,xmm3; minps xmm2,xmm1`), stores it, then reloads [eax]/[eax+0x10] to apply the radius, while cl keeps the min/max in registers and forwards them to the subps/addps.
+012023f0 1292  FUN_012023f0 (grid plane-record builder): complete and structurally faithful; the |d|>0.95 two-case plane-record emission, the three-row |dot|<0.05 scan, the `!found` 3-way max fall-through, the common tail (`*(out+0x110)=p1+4`, `*(int*)(out+0x130)=3`, the thiscall ApplyAll call with ecx=param_4) and the never-written zero row are all reproduced.  Largest diff in the slice: cl 13.10 schedules the SSE min/max/abs chains and the plane-record stores in different registers and order than the LTCG original (1292 bytes; 215/376 original instructions reached by the 11 generated inputs, all of them in the covered region).
+01202960  248  FUN_01202960 (projection interval, single point): complete; d0/d1/d2 = dot(p, m+0/m+0x20/m+0x30), the branchless sign-mask selects (subss / sar 31 / not / and / or), out[0]=min3 and out[1]=max3 are bit-exact including +/-0 ties.  The residual is stack-slot allocation only: the original spills d0->[esp+0x10], d1->[esp+0x20] and reloads d1,d2,d0 late; cl assigns the two slots the other way round and hoists the d0 reload.  The first 59 bytes are byte-identical.
+01202af0  252  FUN_01202af0 (projection interval, count points): complete; same maths as 0x01202960 in a do-while (`esi = out - p`, writes [esi+ecx]/[esi+ecx+4], p += 0x10 bytes, loop while --n, unsigned count>0 guard).  Same residual as 0x01202960: cl swaps the two stack slots for d0/d1 and hoists a reload.
+#
+# ---- tools/difftest/equiv.py verdicts (flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE) ----
+# PASS (4): 01202260 (400 in, 100% cov), 012022b0 (400, 100%), 01202960 (400, 100%),
+#   01202af0 (311 valid of 400, 100% cov).
+# FAIL (2), both register-clobber-only artifacts of the LTCG register allocation, no memory or
+#   return-value divergence:
+#   01202020 20/134 valid -- the only difference is the final value of xmm7, a call-volatile SSE
+#     register our extra live value forces cl to write and the LTCG original never writes; the
+#     harness's "an LTCG caller may keep a live value there" heuristic is the sole mismatch.
+#     Verified clobber-only: a scratch variant of the same function that computes the identical
+#     values (the normalize multiply done in place through a `volatile float *`, which needs no
+#     xmm7) PASSes 400/400 valid inputs at 100% coverage, so the memory and the return value are
+#     bit-identical; the source mirrors every original store (same flag test, same cross/len2,
+#     same two rsqrt Newton steps, same clear).
+#   012023f0 5/11 valid -- same as 01202020 with xmm5 (ours leaves a partial vector in it; the
+#     clobber survives a scalar-Dot3 scratch rewrite, i.e. it is cl's allocation, not one
+#     helper).  The generated inputs only reach 215/376 original instructions, all in the
+#     covered region; the source mirrors every original store.

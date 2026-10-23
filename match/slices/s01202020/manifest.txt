@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Byte-exact matches (leaf functions; identical bytes under /vc71, RenderWare 4 core).
+slices/s01202020/s01202020.cpp  ?GetWorldVertices@TriangleVolume@@QBEXPAU__m128@@00PBX@Z  01202160  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
