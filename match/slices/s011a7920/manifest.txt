@@ -1,0 +1,4 @@
+# slice s011a7920 -- OpenSSL 0.9.8g upstream TU compiled verbatim
+# s3_srvr.c: ssl/s3_srvr.c (also supplies ssl3_accept for slice s011a81e0)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s011a7920/s011a7920.cpp  _ssl3_send_server_key_exchange  011a7920  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a81e0_inc
