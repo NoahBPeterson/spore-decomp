@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+slices/s00851910/s00851910.cpp  _forward_DCT  00851910  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00851910/s00851910.cpp  _forward_DCT_float  00851c90  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00851910/s00851910.cpp  _jinit_forward_dct  00852260  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00851910/s00851910.cpp  _jpeg_make_c_derived_tbl  00852300  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00851910/s00851910.cpp  _emit_bits  00852400  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00851910/s00851910.cpp  _encode_one_block  008524f0  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00851910/s00851910.cpp  _emit_restart  00852640  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
+slices/s00851910/s00851910.cpp  _encode_mcu_huff  00852700  /O2 /MD /Gy /TC /arch:SSE /GS- /fp:fast
