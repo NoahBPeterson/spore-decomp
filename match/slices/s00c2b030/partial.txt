@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00c2b030  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 75 B.  undefined4* __thiscall(undefined4*, undefined4*, int): two calls to CRT helper FUN_00406540; 2 base relocs emitted raw.
+00c2b080  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 132 B.  int __thiscall(int, undefined4) (Ghidra notes _chkstk replaced with alloca_probe): eastl helper FUN_011e0700/FUN_00cb00d0/FUN_00c296b0/FUN_00c2b030/FUN_00cb1110/FUN_00cadb00 x2; no relocs.
+00c2b110  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 84 B.  int (void): FUN_00cb00d0/FUN_00c2b080/FUN_00cadb50 (near-identical call shape to FUN_00cb1210); 4 base relocs emitted raw.

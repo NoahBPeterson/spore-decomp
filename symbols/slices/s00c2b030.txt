@@ -1,0 +1,3 @@
+00c2b030 FUN_00c2b030  # undefined4* __thiscall (undefined4*,undefined4*,int); naked asm, byte-exact
+00c2b080 FUN_00c2b080  # int __thiscall (int,undefined4); naked asm, byte-exact
+00c2b110 FUN_00c2b110  # int (void); naked asm, byte-exact
