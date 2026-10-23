@@ -1,0 +1,12 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast; diffs are cmpobj exact-symbol byte counts)
+00e695f0  124  cell-value getter (reads +0xac): complete; switch on level-info field and double/branch schedule differ
+00e696a0  103  cell-value getter (reads +0xa8): complete; same switch/return schedule differs
+00e69740  103  cell-value getter (reads +0xb0): complete; same switch/return schedule differs
+00e697e0  112  animation/UI update (float arg): complete; call-site register choice and float-arg schedule differ
+00e699f0  88  transform setup helper: complete; argument/register schedule and member-call ordering differ
+00e69a90  270  effect spawn (5-arg): complete; record build/pool call-site scheduling and register allocation differ
+00e69c10  320  effect spawn variant: complete; record build/pool call-site scheduling and register allocation differ
+00e69e00  263  effect spawn variant: complete; record build/pool call-site scheduling and register allocation differ
+00e69f90  7  per-cell ability-slot lookup: complete; only a callee-saved (esi) load is hoisted above the pool call in the original
+00e6a090  227  effect spawn variant: complete; record build/pool call-site scheduling and register allocation differ
+00e6a250  218  multi-arg effect update: complete; register allocation and pool call-site ordering differ

@@ -1,0 +1,14 @@
+00e695f0  cell value getter (+0xac)  # switch on level-info +0x7c; fallback ref+0x125c
+00e696a0  cell value getter (+0xa8)  # fallback ref+0x1260
+00e69740  cell value getter (+0xb0)  # fallback ref+0x1264
+00e697e0  HUD tooltip update  # clg-move/clg-carnivore/clg-herbivore
+00e699b0  has-ability predicate  # ref+0x1204 + idx*4
+00e699f0  build cell transform from level
+00e69a90  attach ability (spawn link)
+00e69c10  merge/absorb ability
+00e69e00  attach ability variant
+00e69f90  per-ability state-slot lookup  # returns cell+0x390.. slot byte
+00e6a060  ability-slot flag test (==0)
+00e6a090  area-cast ability
+00e6a1f0  has-cast-charge predicate  # ref+0x1270 != 0
+00e6a250  ability record update (compare-and-set)
