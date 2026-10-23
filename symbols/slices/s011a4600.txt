@@ -1,0 +1,5 @@
+# Generated for slice s011a4600: OpenSSL 0.9.8g ssl/s3_clnt.c + ssl/s3_enc.c,
+# lib_cblock copy.  All three functions are byte-exact.
+011a4600  ssl3_get_certificate_request  # s3_clnt.c: read CertificateRequest (ssl_get_message 0x1150/0x1151, s3->tmp.cert_req=0, ServerHelloDone -> reuse_message, llen/clen length checks, d2i_X509_NAME loop into a STACK with ca_dn_cmp); byte-exact
+011a48f0  ssl3_connect                  # s3_clnt.c: client handshake state machine (states 0x1100..0x11d1), dispatch to the ssl3_* message handlers; byte-exact
+011a5120  ssl3_generate_key_block       # s3_enc.c: SSLv3/TLS key-block derivation (iterated EVP_md5/EVP_sha1 over 'A'+ and master_key || server_random || client_random); byte-exact
