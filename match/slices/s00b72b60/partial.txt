@@ -1,0 +1,2 @@
+# va  size (ours/orig)  reason
+00b72b60  174/535  obstacle segment/range query. The normalization math, the plant-type scale pick (mScale[mPlantType] at +0x548c), the two branch thresholds and the tail out-pointer stores are reconstructed from the decompile, but the big 9-argument FUN_00b72890 call is only approximated (the exact argument layout and the second fstp value could not be resolved), so several paths are stubbed.

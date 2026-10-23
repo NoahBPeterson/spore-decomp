@@ -1,0 +1,21 @@
+00b72b60 FUN_00b72b60  # Simulator obstacle segment/range query (x87; scale table at +0x548c)
+00b72d80 advance  # hashtable iterator advance (thiscall, ret 8)
+00b72dc0 FUN_00b72dc0  # eastl::unique over a 0xc-byte element
+00b72f10 FUN_00b72f10  # intrusive linked-list find (stdcall, ret 0xc)
+00b73010 FUN_00b73010  # node allocator, 0x1c bytes (stdcall, ret 4)
+00b73200 FUN_00b73200  # insertion_sort (guarded) over a 0xc-byte element
+00b732a0 FUN_00b732a0  # insertion_sort over a 0xc-byte element
+00b73350 FUN_00b73350  # insertion_sort of Op** by squared distance
+00b73420 FUN_00b73420  # insertion_sort of Op** by squared distance (unguarded)
+00b734e0 FUN_00b734e0  # median-of-three of Op** by squared distance
+00b73780 FUN_00b73780  # copy range of 0x18-byte element, guarded dst
+00b737d0 FUN_00b737d0  # adjust_heap over a 0xc-byte element
+00b73890 FUN_00b73890  # copy range of 0x10-byte element with out-pointer
+00b738e0 FUN_00b738e0  # fill_n of a 0x10-byte element
+00b73920 FUN_00b73920  # promote_heap of Op** by squared distance
+00b739f0 FUN_00b739f0  # copy range of 0x10-byte element, guarded dst
+00b73a30 Simulator::cObstacle::cObstacle  # ctor (PDB name); vtable 0x1465038
+00b73b30 Simulator::cObstacle::~cObstacle  # dtor: resets vtable, releases m78/m70, virtual slot 0x38 on m54, tails to cGameData dtor
+00b73bc0 FUN_00b73bc0  # Simulator::cObstacle reset
+00b73cd0 FUN_00b73cd0  # Simulator::cObstacle reset variant
+00b73de0 FUN_00b73de0  # Simulator::cObstacle set-flag + notify (virtual slot 0x16c)

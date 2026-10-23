@@ -1,0 +1,17 @@
+# slice s00b72b60 nonmatching functions (complete semantics, not byte-exact)
+# format: <va>  <diff-bytes>  <reason>  | difftest: <verdict>
+# cl flags: /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+00b72d80  30   HIt::advance. Complete (out->node/out->bucket saved, node advanced, then the bucket walk). Only register allocation differs: the original keeps the saved node in edx and the out pointer in eax, reuses esi as the constant 4 and emits a `lea ecx,[ecx]` alignment nop.
+00b73200  127  insertion_sort (guarded) over a 0xc element. Complete: same temp element, same backward shift while pred(temp, iNext-1), same placement. Register allocation and the temp-element move differ.
+00b732a0  157  insertion_sort over a 0xc element. Complete: same forward scan, same backward shift loop, same final store. Loop shape and register allocation differ.
+00b73420  293  insertion_sort of Op** by squared distance. Complete: same value/prev/dv and the same `dist(prev) <= dv` break test. Ours is denser (no recompute/spill), so the compare and branch layout differ throughout.
+00b734e0  652  median-of-three of Op** by squared distance. Complete: identical selection logic (d2<=d1 -> {d1<d3?a : d2<d3?c : b}; else {d3<=d2 -> (d3<=d1?a:c) : b}). The original recomputes every distance and spills it; ours CSEs, so almost every byte differs.
+00b737d0  54   adjust_heap over a 0xc element. Complete: same sift-down (child=2*pos+2, pick the earlier child when pred(child,child-1)), same `child==len` tail, same promote_heap tail call. Sole diff is the tail float copy: the original builds the 12-byte argument block with movss, our compiler emits fld/fstp.
+00b73890  53   copy range of a 0x10 element with an out-pointer. Complete: *out=dst, the guarded copy loop, *out=dst again. Register allocation differs (original spills first to [esp+8] because the element copy clobbers edx).
+00b738e0  43   fill_n of a 0x10 element. Complete: same decrementing count and guarded element copy. The original biases the destination base (add eax,8; lea edx, [eax-8]; test edx,edx) where ours tests the plain pointer; registers differ.
+00b73920  169  promote_heap of Op** by squared distance. Complete: same value placement and same sift-up with the same `dv <= dist(parent)` break. /fp:fast schedules the loop body's ex/ey computation differently (the original computes ey before ex).
+00b73a30  53   Simulator::cObstacle::cObstacle. Complete: base ctor then the same store sequence (two vptrs, m34=0, position=defaults, radii=0, -1 fields, m68=1.0f, keys). Store ordering and register use differ.
+00b73b30  115  Simulator::cObstacle::~cObstacle. Complete: vtable reset, the two inlined refcount Releases (m78, m70), the virtual slot 0x38 call on m54, then the tail jump to cGameData's dtor. Register allocation differs.
+00b73bc0  187  Simulator::cObstacle reset. Complete: SetGameDataOwner, counter stamp, the same field resets, the two Released pointers (m70/m78), the virtual slot 0x38 call on m54. Spill/register layout differs.
+00b73cd0  183  Simulator::cObstacle reset variant. Complete: the same reset sequence as 0xb73bc0 but leading with the m2c virtual-slot release. Spill/register layout differs.
+00b73de0  114  Simulator::cObstacle set-flag + notify. Complete: m34 bit update, then either FUN_00a887b0(m5c, b?0:1.0f) when m54, or the m70 refcount-flag update + virtual slot 0x16c call. Branch/register layout differs.
