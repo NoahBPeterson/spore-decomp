@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+#
+# Slice s011c9630 -- OpenSSL 0.9.8g multi-scalar multiplication (the lib_cblock copy).
+# Both functions are from crypto/ec/ec_mult.c, compiled verbatim as C (/TC) with the
+# same defines the rest of the vendored OpenSSL build uses.  The whole-TU wrapper also
+# emits the sibling ec_mult.c functions, including the rows another slice claims
+# (compute_wNAF and friends): harmless, only the two rows below are claimed here.
+slices/s011c9630/ec_mult.cpp  _ec_wNAF_mul  011c9630  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011c9630_inc
+slices/s011c9630/ec_mult.cpp  _ec_wNAF_precompute_mult  011c9fc0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011c9630_inc

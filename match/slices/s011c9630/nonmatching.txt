@@ -1,0 +1,6 @@
+# Every function in slice s011c9630 is byte-exact (see manifest.txt).
+# Both bodies come from the vendored OpenSSL 0.9.8g source tree
+# (work/third_party/build/openssl-0.9.8g-d2110920/crypto/ec/ec_mult.c) and are compiled
+# verbatim, so there is no residual difference to document: 011c9630 ec_wNAF_mul is
+# 2441 bytes with 0 diff bytes (216 masked relocations) and 011c9fc0
+# ec_wNAF_precompute_mult is 1034 bytes with 0 diff bytes (140 masked).
