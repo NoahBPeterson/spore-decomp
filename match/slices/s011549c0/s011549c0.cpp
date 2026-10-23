@@ -165,7 +165,7 @@ struct ProfilerLayout {
     void End();               // 0x01154fb0
 };
 
-extern ProfilerLayout g_profiler;
+extern ProfilerLayout g_profiler;  // 0x016f1680
 
 // Opaque owner of the resonance-coefficient block; both helpers are thiscall members
 // (ecx = this, args on the stack).
@@ -182,9 +182,13 @@ void* FUN_01143430(s32 a, s32 b, s32 c, void* name, void* obj, void* sys);
 void  FUN_0115690(void* self, f32 rate);
 void  FUN_011631c0(void* self, void* mixer, u8 flag);
 void  FUN_011633e0(void* self);
-void  FUN_01163380(void* self, f32 a, f32 b, f32 c, s32 d, s32 e, s32 f);
 void  eastl_vector_insert(void* dst, void* src, u32 size);  // 0x011e0744 (CRT memmove thunk)
 void* operator_new_arr(void* dst, s32 fill, u32 size);      // 0x011e073e (CRT memset thunk)
+
+// The resonance filter living at core+0x50; thiscall (ecx = this, 6 stack args).
+struct ResonanceFilter {
+    void Setup(f32 gain, f32 scaled, f32 d, s32 a, s32 b, s32 c);  // 0x01163380
+};
 
 // ---------------------------------------------------------------------------------------
 // 0x011549c0 -- Mixer::ProcessInputPlugIns: pull one 0x100-frame block through every
@@ -498,28 +502,42 @@ ProfilerLayout* Profiler_Init(void* timeSource)
 // ---------------------------------------------------------------------------------------
 // 0x01155110 -- float -> signed 16-bit scale (x * 32767), block form + scalar tail.
 // ---------------------------------------------------------------------------------------
+// Round-to-nearest-even conversion (SSE cvtss2si), matching the x87 fistp the original
+// uses in the block path.
+#define RoundF32(v) _mm_cvt_ss2si(_mm_set_ss(v))
+
+// `fistp word` semantics: the rounded value is stored only if it fits in 16 bits, otherwise the
+// x87 integer-indefinite pattern 0x8000 is written (the SSE path would wrap to the low word).
+static __forceinline s16 FistpWord(f32 v)
+{
+    s32 iv = _mm_cvt_ss2si(_mm_set_ss(v));
+    return (s16)((iv > 32767 || iv < -32768) ? 0x8000 : iv);
+}
+
 // @ 0x01155110
-void FUN_01155110(s16* dst, const f32* src, u32 count)
+void* FUN_01155110(s16* dst, const f32* src, u32 count)
 {
     if (((((u32)dst | (u32)src) & 0xF) == 0) && ((count & 7) == 0)) {
         const f32* end = src + count;
+        u32 residue = (u32)dst | (u32)src;  // the original leaves this OR in eax
         do {
-            dst[0] = (s16)(src[0] * 32767);
-            dst[1] = (s16)(src[1] * 32767);
-            dst[2] = (s16)(src[2] * 32767);
-            dst[3] = (s16)(src[3] * 32767);
-            dst[4] = (s16)(src[4] * 32767);
-            dst[5] = (s16)(src[5] * 32767);
-            dst[6] = (s16)(src[6] * 32767);
-            dst[7] = (s16)(src[7] * 32767);
+            dst[0] = FistpWord(src[0] * 32767.0f);
+            dst[1] = FistpWord(src[1] * 32767.0f);
+            dst[2] = FistpWord(src[2] * 32767.0f);
+            dst[3] = FistpWord(src[3] * 32767.0f);
+            dst[4] = FistpWord(src[4] * 32767.0f);
+            dst[5] = FistpWord(src[5] * 32767.0f);
+            dst[6] = FistpWord(src[6] * 32767.0f);
+            dst[7] = FistpWord(src[7] * 32767.0f);
             src += 8;
             dst += 8;
         } while (src != end);
-        return;
+        return (void*)(size_t)residue;
     }
     const f32* end = src + count;
     for (; src < end; ++src, ++dst)
         *dst = (s16)(*src * 32767.0f);
+    return (void*)(size_t)src;
 }
 
 // ---------------------------------------------------------------------------------------
@@ -531,14 +549,14 @@ void FUN_011551d0(s32* dst, const f32* src, u32 count)
     if (((((u32)dst | (u32)src) & 0xF) == 0) && ((count & 7) == 0)) {
         const f32* end = src + count;
         do {
-            dst[0] = (s32)(src[0] * kI32Scale);
-            dst[1] = (s32)(src[1] * kI32Scale);
-            dst[2] = (s32)(src[2] * kI32Scale);
-            dst[3] = (s32)(src[3] * kI32Scale);
-            dst[4] = (s32)(src[4] * kI32Scale);
-            dst[5] = (s32)(src[5] * kI32Scale);
-            dst[6] = (s32)(src[6] * kI32Scale);
-            dst[7] = (s32)(src[7] * kI32Scale);
+            dst[0] = RoundF32(src[0] * kI32Scale);
+            dst[1] = RoundF32(src[1] * kI32Scale);
+            dst[2] = RoundF32(src[2] * kI32Scale);
+            dst[3] = RoundF32(src[3] * kI32Scale);
+            dst[4] = RoundF32(src[4] * kI32Scale);
+            dst[5] = RoundF32(src[5] * kI32Scale);
+            dst[6] = RoundF32(src[6] * kI32Scale);
+            dst[7] = RoundF32(src[7] * kI32Scale);
             src += 8;
             dst += 8;
         } while (src != end);
@@ -546,7 +564,7 @@ void FUN_011551d0(s32* dst, const f32* src, u32 count)
     }
     const f32* end = src + count;
     for (; src < end; ++src, ++dst)
-        *dst = (s32)(*src * kI32Scale);
+        *dst = RoundF32(*src * kI32Scale);
 }
 
 // ---------------------------------------------------------------------------------------
@@ -558,18 +576,20 @@ void FUN_011552a0(f32* ptr, f32 lo, f32 hi, s32 count)
     if (count == 0)
         return;
     f32* end = ptr + count;
+    __m128 vlo = _mm_set1_ps(lo);
+    __m128 vhi = _mm_set1_ps(hi);
     if (count >= 0xC) {
         while (((u32)ptr & 0xF) != 0) {
             __m128 v = _mm_load_ss(ptr);
-            v = _mm_max_ss(v, _mm_set1_ps(lo));
-            v = _mm_min_ss(v, _mm_set1_ps(hi));
+            v = _mm_max_ss(v, vlo);
+            v = _mm_min_ss(v, vhi);
             _mm_store_ss(ptr, v);
             ++ptr;
             --count;
         }
         do {
-            _mm_store_ps(ptr, _mm_min_ps(_mm_max_ps(_mm_load_ps(ptr), _mm_set1_ps(lo)), _mm_set1_ps(hi)));
-            _mm_store_ps(ptr + 4, _mm_min_ps(_mm_max_ps(_mm_load_ps(ptr + 4), _mm_set1_ps(lo)), _mm_set1_ps(hi)));
+            _mm_store_ps(ptr, _mm_min_ps(_mm_max_ps(_mm_load_ps(ptr), vlo), vhi));
+            _mm_store_ps(ptr + 4, _mm_min_ps(_mm_max_ps(_mm_load_ps(ptr + 4), vlo), vhi));
             ptr += 8;
             count -= 8;
         } while (ptr <= end - 8);
@@ -578,8 +598,8 @@ void FUN_011552a0(f32* ptr, f32 lo, f32 hi, s32 count)
     }
     do {
         __m128 v = _mm_load_ss(ptr);
-        v = _mm_max_ss(v, _mm_set1_ps(lo));
-        v = _mm_min_ss(v, _mm_set1_ps(hi));
+        v = _mm_max_ss(v, vlo);
+        v = _mm_min_ss(v, vhi);
         _mm_store_ss(ptr, v);
         ++ptr;
         --count;
@@ -670,14 +690,20 @@ void ResonanceCore::Setup(f32 param)
 
     f32 gain = (f32)pow(kTen, (f64)(*(f32*)(self + 0x28) * kDbScale));
 
-    s32 a = (s32)(param * *(f32*)(self + 0x38));
+    f32 af = param * *(f32*)(self + 0x38);
+    f32 bf = param * *(f32*)(self + 0x40);
+    s32 a = RoundF32(af);
     if (a == 0) a = 1;
-    s32 b = (s32)(param * *(f32*)(self + 0x40));
+    s32 b = RoundF32(bf);
     if (b == 0) b = 1;
     s32 c = (*(f32*)(self + 0x48) == kOne) ? 1 : 0;
     f32 d = kOne / *(f32*)(self + 0x30) - kOne;
 
-    FUN_01163380(self + 0x50, gain, gain * kPowScale, d, a, b, c);
+    // The original passes the flag as a single byte patched into a stack slot that still holds
+    // `param * gain2`; the callee reads the whole dword, so reproduce its upper 24 bits.
+    u32 cword = (*(u32*)&bf & 0xFFFFFF00u) | (u32)c;
+
+    ((ResonanceFilter*)(self + 0x50))->Setup(gain, gain * kPowScale, d, a, b, (s32)cword);
 }
 
 // ---------------------------------------------------------------------------------------
