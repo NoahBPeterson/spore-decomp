@@ -1,0 +1,24 @@
+# Slice s00ee7990 — the SPUI asset/palette editor UI object (SpuEd): destructor
+# ladder, mode/category helpers, layout init/shutdown and the three message
+# handlers.  Names are Claude-coined from the disassembly and our reconstruction;
+# the mangled member names come from manifest.txt.  [MATCH] = byte-exact under
+# /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast.
+00ee7990  ?BaseDtor@SpuEd@@QAEXXZ  void SpuEd::BaseDtor() [MATCH]  # resets vtables 0x148abd0/0x148abc8, RemoveHandler on o02c, drops o024/o020 (v01) and o01c..o00c (v02), tail 0x13eb394/0x13ec458
+00ee7a50  ?DtorDerived@SpuEd@@QAEXXZ  void SpuEd::DtorDerived() [MATCH]  # MessageServer m11 handler unregister (0x44ef2b8), then o024 (Shutdown+v01), o020 (Shutdown+v01), o00c (n06+v02), o014/o018/o010 (v05+v02)
+00ee7b40  SetMode  void SpuEd::SetMode(int, u8)  # merged 276-byte region (mode dispatcher + second fn at 0xee7bd0 + jump tables); ours = the 160-byte dispatcher: -1 guard, 5-way mode switch with ToggleHint(0x89,0x8a) case 0, trailing o028 = mode/0xffffffff
+00ee7c60  ?Update@SpuEd@@QAEXPAX@Z  void SpuEd::Update(void*) [MATCH]  # o00c v07(arg), o020 UpdateCategories(arg), and if o010 and o020 FindCategoryIndex()==4 then o010 v07(arg)
+00ee7cb0  FindPlanetSlot  int __cdecl FindPlanetSlot(u32 id, int* outA, int* outB)  # three-threshold key/offset select + linear species scan (GetSpeciesMgr GetAt/GetID vs rec+0xf8 table); only register encodings differ (retail key in eax, ours ecx/edx)
+00ee7da0  ?Ctor@SpuEd@@QAEPAU1@XZ  SpuEd* SpuEd::Ctor()  # intermediate vtables 0x14426a0/0x13eb394/0x140b5a0, derived 0x148ac18/abfc/abf4/abf0, three 0x70 sub-object ctors, nulls o168/o16c/o170, MessageServer m09 hook (0x65ff54a); cl hoists lea ebp,[esi+0xc]/push edi into the prologue
+00ee7e50  Dtor3  void SpuEd::Dtor3()  # four derived vtable stores, m11 unregister, release o170/o16c (v01) and o168 (v02), reverse 0x70 sub-object Dtor loop, tail 0x13eb938/0x13ec458/0x13eb394
+00ee7f00  InitLayout  u8 SpuEd::InitLayout(void* parent)  # EAAllocate(0x18)+XDialog ctor, swap/release pair, Init/Shutdown/FindWindowByID(0x7355a68), SetParentWin+rect+w65, then 3x sub-object Check/CheckKey/Get(3) window-id tagging loop
+00ee8110  ?ShutdownLayout@SpuEd@@QAEXXZ  void SpuEd::ShutdownLayout() [MATCH]  # forward 3x sub-object Reset loop, then SetParentWin/Shutdown(1) and release o168; nested if reproduced by one shared exit edge
+00ee8180  OnMsg2  u8 SpuEd::OnMsg2(u32, void*)  # gate msg==0x65ff54a && *(p+0x10)==0x40464100, four-magic switch (0x7ec9d82e/0x556c486/0x3b0ac2c4/0xd5521361), IsVisible()/GetWin() and hide/show + w00/w01 bracket via this-0xc
+00ee8240  ?Refresh@XCat@@QAEXE@Z  void XCat::Refresh(u8) [MATCH]  # active record +0x160 id, FindCategory, <0xf bound, g_catA/g_catB select, F33bf0/F352c0/F34560/F31ea0
+00ee82c0  UpdateCategory  void SpuEd::UpdateCategory(u32 sel)  # FindCategory on rec+0x160, idx = sel+0xe94e7f70 bounds check, g_catA/g_catB select, universe F33bf0/F352c0/F34560/F31ea0, FindWindowByID(0x16b1858d), flag&&IsInTable -> Fn1350/Fn2fa0
+00ee83a0  SetObject  void SpuEd::SetObject(void*)  # release/addref pair around o170, x07 id, FindPlanetSlot key, three-key tag map (0x29c388a/0x3a8be428/0x6d60a1cc), XLaunchCtx ctor/tag store/+0x10 store/LaunchCtx/dtor
+00ee8460  Select  void SpuEd::Select(void* win)  # x07 id + FindPlanetSlot presence test, WindowManager w18(1) compare, w62 fallback, three w60(0x73272b0/0x4a1cb6d/0x7b6b2cd)/w31 pairs with chained boolean recomputation
+00ee8570  ?Dtor4@SpuEd@@QAEXXZ  void SpuEd::Dtor4() [MATCH]  # vtables 0x148ac3c/0x148ac34, drop o024 (v01) and o020+0xc (v01), RemoveHandler on o00c, tail 0x13eb394/0x13ec458
+00ee85e0  ?Enable2@SpuEd@@QAEXE@Z  void SpuEd::Enable2(u8) [MATCH]  # on: fill o00c..o01c register block, MessageServer m09 hook with key 0x15ac738, F36380 + ToggleHint(0xa5,0xa6); off: F363c0, drop o024 and RemoveHandler
+00ee86c0  ?OnMsg3@SpuEd@@QAEEIPAX@Z  u8 SpuEd::OnMsg3(u32, void*) [MATCH]  # msg==0x73e7eb7: swap o018 with p+0xc refcount, store g_univ18, g_launchObj.Add(0); returns 0
+00ee8720  SetSource  u8 SpuEd::SetSource(void*)  # release/addref around o00c, EAAllocate(0x3c)+XObj3c::Init, o010 swap (v02/n03), w60(0xd68dd230,1) result into o010 slot 0x10 via precomputed vtable address
+00ee87f0  ?Close@SpuEd@@QAEXXZ  void SpuEd::Close() [MATCH]  # v08(0), drop o010 (v05 then n03), drop o00c (v01); nested if reproduced by one shared exit edge
