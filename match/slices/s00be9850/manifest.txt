@@ -1,0 +1,2 @@
+# slice s00be9850 -- Spore Sim manager members (no byte-exact functions; see nonmatching.txt)
+# source (relative to match/)   symbol   original VA   [cl flags override]
