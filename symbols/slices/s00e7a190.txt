@@ -1,0 +1,8 @@
+00e7a190 FUN_00e7a190  # master per-cell dispatch: record selection by controller mode, 0x00e76a80, the 0x112/0x16c/0x51db early-outs, the id switch (0x51b0/0x51d4/avatar) or the 0x1001..0x100e kind switch; original takes this in ECX and a second record in EAX - body not byte-exact
+00e7a4a0 FUN_00e7a4a0  # death handler: acting-cell gather early-out, small/medium/large oneshot, 0x00e71f00, gather bump, 0x358 loot drop, emit the 0x06 command with 0x00e6d200 durations + 0x00e59170 reset; body not byte-exact
+00e7a770 FUN_00e7a770  # guarded wrapper: GetSafe the cell then run the death handler when the 0x244 timer is idle; BYTE-EXACT
+00e7a7c0 FUN_00e7a7c0  # cell-vs-cell eat: 0x00e52960/0x00e57460 gates, 0x00e71ce0 pick, 0x00e58980 pair test, drain 0x244 bites, then the death handler or the 0x00e51ee0 bite command + 0x00e59010; body not byte-exact
+00e7aa20 FUN_00e7aa20  # stage one animated cell: build placement matrix from the camera forward, 0x00e68000, compose onto +0x48, back-transform + scale the 0x4108 points, 0x00e6d6d0 + 0x00e62b80 (cAnimGroup::Place); body not byte-exact
+00e7ad70 FUN_00e7ad70  # iterate the gCellGame+0x8c pool (0x00e31100 front, 0x00b72230 Next) and stage each element; BYTE-EXACT
+00e7add0 FUN_00e7add0  # break handler: layer ctx, clamped 0x358-1 loot level via layer 7 + SP::sDropLoot, then 0x00e72200 (acting cell) or 0x00e780a0; body not byte-exact
+00e7aee0 FUN_00e7aee0  # break/death entry: skip 7/8/9 + 0x17c, "cell_death_break", 0x00e7add0, gather/spawn bumps, emit the 0x05 command + 0x00e59260; body not byte-exact
