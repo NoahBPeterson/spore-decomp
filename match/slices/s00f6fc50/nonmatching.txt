@@ -1,0 +1,6 @@
+00f6fc50 436 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 512 UNSUPPORTED (equiv: 2 unresolved externs cTerrainMapU32::GetFloat, cTerrainMapU16::GetFloat)
+00f6fe50 447 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 550 UNSUPPORTED (equiv: 2 unresolved externs cTerrainMapU32::GetFloat, cTerrainMapU16::GetFloat)
+00f70080 444 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 464 FAIL (equiv: 5/99 valid inputs mismatched, 98.2% coverage; x87 80-bit vs SSE 32-bit rounding in the r*m38<m3c*m38 gate: orig 0.0 vs ours nan)
+00f70250 413 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 495 PASS (equiv: 385 valid inputs, 100.0% coverage)
+00f70470 385 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 481 UNSUPPORTED (equiv: 2 unresolved externs cCubeImage::SampleBilinear, AtlasSampler::Sample)
+00f70660 447 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 528 PASS (equiv: 336 valid inputs, 100.0% coverage)

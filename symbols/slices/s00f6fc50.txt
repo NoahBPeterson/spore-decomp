@@ -1,0 +1,8 @@
+00f6fc50 SampleCubeHeight32  # Claude-coined; vtable-slot 9 of the terrain-map interface family (.rdata 0x148f940); samples the 32-bit cube-map height under a direction (cTerrainMap<unsigned int>::GetFloat 0xf88650)
+00f6fe50 TestCubeHeight32  # Claude-coined; boolean form of 0x00f6fc50 (returns 1.0 when the mask condition holds)
+00f70080 SampleCubeHeight16  # Claude-coined; interpolated 16-bit height, (m3c*m38 - r*m38)/(m3c*m38 + m38) when m3c*m38 > r*m38 (cTerrainMap<unsigned short>::GetFloat 0xf8d620)
+00f70250 TestCubeHeight16  # Claude-coined; boolean form of 0x00f70080
+00f70440 CountSubObjects  # Claude-coined; byte-exact; sums *(inner+8 +0xc) and *(inner+0x14 +0xc)
+00f70470 SampleImageThreshold  # Claude-coined; bilinear cCubeImage sample (0xf8de70) fed through FUN_00fb9e70, thresholded at 0.05
+00f70660 TestEffectPresence  # Claude-coined; terrain-height gate then SP::EffectsManager (0x67ddd0) vtable+0x8c lookup and IEffect vtable+0x20
+00f70870 CountSubObjectsEffect  # Claude-coined; byte-exact; sub-object count + effect vtable+0x10, both via EffectsManager vtable+0x8c

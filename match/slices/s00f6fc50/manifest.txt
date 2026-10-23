@@ -1,0 +1,2 @@
+slices/s00f6fc50/s00f6fc50.cpp  ?CountSubs@CubeOwner@@QAEHXZ  00f70440  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00f6fc50/s00f6fc50.cpp  ?CountSubsEffect@CubeOwner@@QAEHXZ  00f70870  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
