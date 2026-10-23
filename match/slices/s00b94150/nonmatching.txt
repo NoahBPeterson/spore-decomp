@@ -1,0 +1,24 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+#
+# NOTE ON /GS-:  the retail object carries NO __security_cookie in any function (00b94150 keeps a
+# 0x38-byte transform-message local and 00b94be0 a 0x48-byte frame, neither of which /GS would
+# leave cookie-free), so the original build clearly used /GS-, matching every other slice.
+#
+# Slice s00b94150 = one cTribe tool-authoring translation unit (falls in the modmap gap
+# 00b938d0..00b9c5c0, between SPGameEditInputStrategy.obj and SPMission.obj).  FUN_00b94150
+# spawns a tribe and stamps its tools; FUN_00b94420 / FUN_00b94670 are the "is this spot free"
+# tests over the planet's point lists; CA is a small (lo,hi) radius helper object (vtable
+# 0x1465a34) whose three methods emit transform/orientation messages.  CB is a refcounted holder
+# (vtable 0x1465a58, base vtable 0x13ec458).  3/9 byte-exact (00b94a90 / 00b95050 / 00b95070).
+# The six below are complete C++ that reproduces the original control flow, call order and callee
+# ABIs (all indirect calls are vtable slots `call [vt+off]`); they miss byte-exactness mostly
+# because floats are kept in x87/SSE registers across the float-returning rw::math helpers and the
+# register allocator assigns the base/list/accumulator locals to different registers.
+#
+00b94150 711 non-byte-exact; tribe spawn + tool stamping: the tool-type table walk, the property-manager vtable-slot calls (0x2c / 0x20) and the transform-message build schedule differently, and the frame/register plan differs from the original's 711-byte body; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv UNSUPPORTED (0/400 inputs valid: fault(read)=400)
+00b94420 585 non-byte-exact; point-list membership test: the cPlanetModel list accessors and the per-element float compares are scheduled differently and the local float accumulators live in different registers; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv UNSUPPORTED (0/400 inputs valid: fault(read)=313, fault(write-prot)=85, fault(write)=2)
+00b94670 1050 non-byte-exact; same point-list test with the extra radius/height arguments: original keeps the five float params in x87 across the range checks while this build spills them through movss, and the block layout shifts; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv UNSUPPORTED (0/400 inputs valid: fault(read)=320, fault(write-prot)=80)
+00b94ac0 278 non-byte-exact; CA transform-message emitter: the RandomRange clamp, QuaternionFromMatrix33/FUN_0059aed0 argument build and the transform copy are equivalent but the register allocation of the vec3/out locals differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv WEAK (178 valid inputs, 100.0% coverage)
+00b94be0 501 non-byte-exact; CA radius emitter: the rejection loop is equivalent (first test in x87 against mLo, second rounds len to float for the SSE comiss against mHi, as retail's `fst dword` + `comiss` does) but the loop tail and the quaternion/orientation build schedule differently; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv WEAK (133 valid inputs, 97.5% coverage)
+00b94de0 620 non-byte-exact; CA orientation emitter: the sin/cos half-angle quaternion, the two rotate calls, the BuildSurfaceOrientation2 + QuaternionToMatrix chain and the two message writes are all present and in order, but the x87 round-trips and the 0x38-byte local layout differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv WEAK (188 valid inputs, 83.5% coverage)
