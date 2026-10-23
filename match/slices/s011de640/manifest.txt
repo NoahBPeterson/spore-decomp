@@ -1,0 +1,7 @@
+# slice s011de640 -- OpenSSL 0.9.8g upstream TUs, lib_cblock copies
+# crypto/bn BN_nist_mod_384 (bn_nist.c), crypto/asn1 X509_PKEY_new (x_pkey.c),
+# crypto/dso DSO_convert_filename (dso_lib.c), crypto/ecdh ecdh_compute_key (ech_ossl.c).
+slices/s011de640/bn_nist.cpp  _BN_nist_mod_384   011de640  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011de640/x_pkey.cpp   _X509_PKEY_new     011deeb0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011de640/dso_lib.cpp  _DSO_convert_filename  011defb0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011de640/ech_ossl.cpp _ecdh_compute_key  011df080  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc

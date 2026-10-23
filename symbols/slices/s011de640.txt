@@ -1,0 +1,7 @@
+# Slice s011de640: OpenSSL 0.9.8g upstream TUs, lib_cblock copies.
+# All four are byte-exact compiled verbatim from work/third_party/build/openssl-0.9.8g-d2110920/
+# (see manifest.txt). Names come from the upstream sources; ERR codes from the disassembly.
+011de640 BN_nist_mod_384      # crypto/bn/bn_nist.c: P-384 (secp384r1) NIST fast reduction mod p; uses bn_add_words/bn_sub_words (0x11ae100/0x11ae1f0), nist_cp_bn/nist_cp_bn_0 (0x11de5f0/0x11ddc00), BN_ucmp/BN_copy/BN_set_word/bn_expand2 and CRYPTO_lock around the 384 constant table; no ERR_put_error
+011deeb0 X509_PKEY_new        # crypto/asn1/x_pkey.c: allocate/init an X509_PKEY (version, enc_algor/enc_pkey subtrees, cipher iv, refcount=1); on allocation failure M_ASN1_New_Error(ASN1_F_X509_PKEY_NEW) -> ERR 13 (ASN1)/0xad (173)/0x41 ERR_R_MALLOC_FAILURE
+011defb0 DSO_convert_filename # crypto/dso/dso_lib.c: turn a DSO's filename pattern into a concrete path via the method's name converter; ERR 37 (DSO)/0x7e (126 DSO_F_DSO_CONVERT_FILENAME) with 0x43 ERR_R_PASSED_NULL_PARAMETER, 0x6f DSO_R_NO_FILENAME, 0x41 ERR_R_MALLOC_FAILURE
+011df080 ecdh_compute_key     # crypto/ecdh/ech_ossl.c: static method body of ECDH_compute_key - compute K = (priv * peer_pub).x via EC_POINT_mul (0x11b29b0) then X9.63-KDF; ERR 43 (ECDH)/0x64 (100 ECDH_F_ECDH_COMPUTE_KEY) with 0x41 ERR_R_MALLOC_FAILURE, 0x64 ECDH_R_NO_PRIVATE_VALUE, 0x65 ECDH_R_POINT_ARITHMETIC_FAILURE, 0x44/0x03/0x66 map to ERR_R_INTERNAL_ERROR/ERR_R_BN_LIB/ECDH_R_KDF_FAILED
