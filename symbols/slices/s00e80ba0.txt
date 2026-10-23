@@ -1,0 +1,3 @@
+00e80ba0 FUN_00e80ba0  # cell-stage re-initialisation: registers MessageServer handlers, builds two sphere trees + an allocator pool, inits the six Manager containers, swaps in the mode object, constructs Simulator::cCollectableItems, sets the cell-game bounding-box globals
+00e81120 EA::Locale::LocaleFormatter::ParseFormat  # PDB name; ~80-case game-message -> locale/state dispatcher with a nested sGetSourceLevel switch and a shared shutdown/restart block
+00e818f0 FUN_00e818f0  # __stdcall router: FUN_00e82900 pre-hook, optional routing through FUN_00e7f630 and ParseFormat depending on flags bits 2/4
