@@ -1,0 +1,8 @@
+011cd0f0 BN_mod_sqr              # modular squaring: BN_sqr into r then the caller's reduction method, temporary BN_CTX owned and freed
+011cdba0 ASN1_item_digest_alg   # digest the DER encoding of an ASN.1 item with the digest named by the signature algorithm object
+011cdd10 pem_read_bio_ex        # pull one PEM block out of a BIO into a grown BUF_MEM, tracking BEGIN/END nesting
+011ce070 x509_ext_info_new      # CRYPTO_malloc a 0x2c byte extension info record and zero it (ex_flags = 1)
+011ce130 pem_read_bio_x509_aux  # decode a PEM block by name (CERTIFICATE branch) into the extension info record
+011ced70 ui_method_openssl      # fill the "OpenSSL default" UI method descriptor
+011ceda0 ui_method_win32        # fill the WIN32 UI method descriptor
+011cedf0 pem_header_measure     # measure/copy a PEM header honouring the PEM character class table
