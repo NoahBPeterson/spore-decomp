@@ -1,0 +1,8 @@
+00e794f0 FUN_00e794f0  # golden-cinematic teardown: layer-controller exit state, goExit, clear acting-cell flag, visibility -> damage, then flag the source cell or copy the cell position into the gCellUI basis; body not byte-exact
+00e79720 SP::sCinematicGoldy_Start  # start the goldy cinematic: modal layer, zero the gather cell, build the basis, create cells on layers 1/2, emit the 0x24 goldy command and post "goldies_demise"; body not byte-exact
+00e79a00 FUN_00e79a00  # loot callback: resolve source cell, point = cell pos + world-axis*radius (radius 0x58*0.5), level fallback 0x00e4ee60, SP::sDropLoot (0x00e771d0); body not byte-exact
+00e79af0 FUN_00e79af0  # build the 0x32 digestion command: duration via 0x00e6d200, register the 0x00e79a00 loot callback; BYTE-EXACT
+00e79c30 FUN_00e79c30  # per-cell eat/digest step: record selection by controller mode, timer cascade driving 0x00e6f660/0x00e6f800/0x00e6f940/0x00e6ff60 + 0x00e791f0; body not byte-exact
+00e7a0a0 FUN_00e7a0a0  # small cell helper; BYTE-EXACT
+00e7a0d0 FUN_00e7a0d0  # original takes the record pointer in ESI (unaff_ESI); cl cannot emit esi-input - body not byte-exact
+00e7a160 FUN_00e7a160  # object-pool GetSafe helper over gCellGame+0x1c; BYTE-EXACT
