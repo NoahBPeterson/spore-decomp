@@ -1,0 +1,6 @@
+00bea930  ?sub_bea930@Sim@@QAEXXZ
+00beaa30  ?sub_beaa30@Sim@@QAEXXZ
+00beabb0  ?sub_beabb0@Sim@@QAEXXZ
+00beb090  ?sub_beb090@Sim@@QAEXHH@Z
+00beb1c0  ?sub_beb1c0@Sim@@QAEXHH@Z
+00beb5c0  ?sub_beb5c0@Sim@@QAEXXZ

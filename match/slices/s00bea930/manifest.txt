@@ -1,0 +1,3 @@
+# slice s00bea930 -- Spore Sim manager members (only the byte-exact one is listed)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00bea930/s00bea930.cpp  ?sub_bea930@Sim@@QAEXXZ  00bea930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
