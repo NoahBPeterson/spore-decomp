@@ -1,0 +1,5 @@
+slices/s011dc2c0/s011dc2c0.cpp  ?ec_GFp_simple_point2oct@@YAIPBUEC_GROUP@@PBUEC_POINT@@HPAEIPAUBN_CTX@@@Z  011dc2c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s011dc2c0/s011dc2c0.cpp  ?ec_GFp_simple_make_affine@@YAHPBUEC_GROUP@@PAUEC_POINT@@PAUBN_CTX@@@Z  011dd650  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s011dc2c0/s011dc2c0.cpp  ?ec_GFp_simple_points_make_affine@@YAHPBUEC_GROUP@@IPAPAUEC_POINT@@PAUBN_CTX@@@Z  011dd740  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s011dc2c0/s011dc2c0.cpp  ?_init_256_data@@YAXXZ  011de110  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s011dc2c0/s011dc2c0.cpp  ?_init_384_data@@YAXXZ  011de5f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

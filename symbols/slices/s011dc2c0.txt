@@ -1,0 +1,7 @@
+011dc2c0 ?ec_GFp_simple_point2oct@@YAIPBUEC_GROUP@@PBUEC_POINT@@HPAEIPAUBN_CTX@@@Z  # ec_GFp_simple_point2oct (OpenSSL 0.9.8g)
+011dc560 ?ec_GFp_simple_oct2point@@YAHPBUEC_GROUP@@PAUEC_POINT@@PBEIPAUBN_CTX@@@Z  # ec_GFp_simple_oct2point (OpenSSL 0.9.8g)
+011dd650 ?ec_GFp_simple_make_affine@@YAHPBUEC_GROUP@@PAUEC_POINT@@PAUBN_CTX@@@Z  # ec_GFp_simple_make_affine (OpenSSL 0.9.8g)
+011dd740 ?ec_GFp_simple_points_make_affine@@YAHPBUEC_GROUP@@IPAPAUEC_POINT@@PAUBN_CTX@@@Z  # ec_GFp_simple_points_make_affine (OpenSSL 0.9.8g)
+011de110 ?_init_256_data@@YAXXZ  # _init_256_data (OpenSSL 0.9.8g, static in-source)
+011de160 ?BN_nist_mod_256@@YAHPAUBIGNUM@@PBU1@1PAUBN_CTX@@@Z  # BN_nist_mod_256 (OpenSSL 0.9.8g)
+011de5f0 ?_init_384_data@@YAXXZ  # _init_384_data (OpenSSL 0.9.8g, static in-source)
