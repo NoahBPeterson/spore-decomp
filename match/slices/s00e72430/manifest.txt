@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+slices/s00e72430/s00e72430.cpp  ?FUN_00e72ac0@@YAXXZ  00e72ac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
