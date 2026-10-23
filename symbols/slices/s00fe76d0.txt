@@ -1,0 +1,8 @@
+00fe76d0 f76d0  # CBr::RefreshSlotList: FindWindowByID 0x7550880/0x7550881/0x7cf6498/0x755e358/0x7cd1550/0x7cf8048/0x7cc9018; called from f7e60 cases 0x770996a (mode 1) / 0x75dd108 (mode 2)
+00fe7b80 f7b80  # allocates 0x9c bytes ("App"), ctor 0x5a9080 + vtable n04, sets noun id 0xa56567f7, returns vtable+8 reader; called from f7e60 cases 0x7ce1750/0x7ce3cb0
+00fe7d70 f7d70  # byte-exact; clears/updates the slot list state
+00fe7e10 f7e10  # byte-exact; 0-arg state getter-style update
+00fe7e60 f7e60  # CBr message handler: msg[2] 0x287259f6 dispatch on this->f08 + 0x0c stopwatch path; PDB candidate SP::cSPUIAssetBrowser::DoMessage (switch on window ids 0x755e358/0x75dd108/0x7ce1750/...)
+00fe8260 f8260  # float helper: sin/cos sphere-area estimate; called by f8380 with EAX=Brush*
+00fe8380 f8380  # 10-iteration step-size search; custom ABI ESI=float*, EDX=Brush*
+00fe8450 f8450  # Brush::UpdateBoundingSphere-style derivation guarded by byte f00
