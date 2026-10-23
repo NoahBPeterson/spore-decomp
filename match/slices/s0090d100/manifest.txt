@@ -1,0 +1,3 @@
+# slice s0090d100 -- GFx/Scaleform-style XML markup scanner
+# Module flags: /O2 /MD /Gy /TP (whole-program register ABI: cursor in EAX,
+# parser object in EBX/EDX; only FUN_0090d100 is plain cdecl)
