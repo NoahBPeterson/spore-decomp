@@ -1,0 +1,12 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00879520/s00879520.cpp  _png_write_sRGB  00879520  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3
+slices/s00879520/s00879520.cpp  _png_write_iCCP  008795d0  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3
+slices/s00879520/s00879520.cpp  _png_write_sPLT  00879720  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3
+slices/s00879520/s00879520.cpp  _png_write_sBIT  00879920  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3
+slices/s00879520/s00879520.cpp  _png_write_cHRM  00879a00  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3
+slices/s00879520/s00879520.cpp  _png_write_tRNS  00879d80  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3
+slices/s00879520/s00879520.cpp  _png_write_bKGD  00879ee0  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3
+slices/s00879520/s00879520.cpp  _png_write_oFFs  0087a040  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3
+slices/s00879520/s00879520.cpp  _png_write_sCAL  0087a130  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3
+slices/s00879520/s00879520.cpp  _png_write_pHYs  0087a1e0  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3
+slices/s00879520/s00879520.cpp  _png_write_tIME  0087a2d0  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3

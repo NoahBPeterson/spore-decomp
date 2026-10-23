@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+# (none) -- all 11 targets are byte-exact (see manifest.txt).

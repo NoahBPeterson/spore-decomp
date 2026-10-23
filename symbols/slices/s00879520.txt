@@ -1,0 +1,11 @@
+00879520 png_write_sRGB  # libpng 1.2.25 pngwutil.c; whole-TU include byte-exact with /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast
+008795d0 png_write_iCCP  # libpng 1.2.25 pngwutil.c
+00879720 png_write_sPLT  # libpng 1.2.25 pngwutil.c
+00879920 png_write_sBIT  # libpng 1.2.25 pngwutil.c
+00879a00 png_write_cHRM  # libpng 1.2.25 pngwutil.c
+00879d80 png_write_tRNS  # libpng 1.2.25 pngwutil.c
+00879ee0 png_write_bKGD  # libpng 1.2.25 pngwutil.c
+0087a040 png_write_oFFs  # libpng 1.2.25 pngwutil.c
+0087a130 png_write_sCAL  # libpng 1.2.25 pngwutil.c
+0087a1e0 png_write_pHYs  # libpng 1.2.25 pngwutil.c
+0087a2d0 png_write_tIME  # libpng 1.2.25 pngwutil.c
