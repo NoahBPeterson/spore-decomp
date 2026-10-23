@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0100d0d0/s0100d0d0.cpp  ?GameUpdate@cSPSimulatorSpaceGame@@QAEXI@Z  0100d230  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0100d0d0/s0100d0d0.cpp  ?GetTimerSeconds@cSPSimulatorSpaceGame@@QAEMXZ  0100d410  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0100d0d0/s0100d0d0.cpp  ?CompareProtectorDistances@@YA_NPAUcGameNoun@@0@Z  0100d960  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0100d0d0/s0100d0d0.cpp  ?Reset@cGrobShockSelection@@QAEXXZ  0100d9f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0100d0d0/s0100d0d0.cpp  ?Get@cGrobShockSelection@@QAE_NPAI@Z  0100da10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0100d0d0/s0100d0d0.cpp  ?sCompareGrobShockData@@YA_NPAX0@Z  0100da40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0100d0d0/s0100d0d0.cpp  ?DestroyTimerRange@@YAPAXPAX00@Z  0100daa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
