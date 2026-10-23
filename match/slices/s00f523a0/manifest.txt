@@ -1,0 +1,4 @@
+# slice s00f523a0 -- SP camera-controller helpers / ArgScript effect-option parser
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f523a0/s00f523a0.cpp  ?FUN_00f52af0@cGameCameraController@@QAE_NHMMH@Z  00f52af0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f523a0/s00f523a0.cpp  ?FUN_00f52b70@@YAXHPBD@Z  00f52b70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

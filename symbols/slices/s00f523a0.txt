@@ -1,0 +1,5 @@
+00f523a0  FUN_00f523a0  # camera-controller transform update (this in ecx)
+00f526c0  FUN_00f526c0  # SP::cSPSpacePlanetCameraController::SendZoomChangedMessage
+00f52af0  FUN_00f52af0  # cGameCameraController::FUN_00f52af0 (mouse wheel -> move camera)
+00f52b70  FUN_00f52b70  # g_mapEmitColour[index].m_name = name
+00f52b80  FUN_00f52b80  # ArgScript effect-option parser (loop/single/sustain/hold/kill)
