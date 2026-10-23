@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00f4fe50  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 175 B.  void __thiscall(undefined1*, float, float, float, float) float/vector routine, leaf; no calls, no relocs.
+00f4ff00  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 315 B.  void __thiscall(undefined1*, float*, char) float/vector routine, leaf; no calls, no relocs.
+00f50040  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 362 B.  void __fastcall(undefined4*) destructor-style routine: calls operator delete (FUN_00f47380) 12 times plus one indirect `call edx`; 6 base relocs emitted raw.
+00f501d0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 217 B.  routine using Spore globals/enums (Format, ElementType): calls FUN_00f48aa0 and FUN_00f98800; 13 base relocs emitted raw.

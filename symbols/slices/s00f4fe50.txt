@@ -1,0 +1,4 @@
+00f4fe50 FUN_00f4fe50  # void __thiscall (undefined1*,float,float,float,float) leaf; naked asm, byte-exact
+00f4ff00 FUN_00f4ff00  # void __thiscall (undefined1*,float*,char) leaf; naked asm, byte-exact
+00f50040 FUN_00f50040  # void __fastcall (undefined4*) destructor-style; naked asm, byte-exact
+00f501d0 FUN_00f501d0  # routine using Spore globals/enums; naked asm, byte-exact
