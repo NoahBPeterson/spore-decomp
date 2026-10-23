@@ -1,0 +1,24 @@
+# slice s00f29560 — reconstructed in full, not byte-exact.
+# One VA per row, no wrapping: va  diff-bytes  reason (flags; difftest verdict).
+# Region flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (no /EHsc: 0xf10000-0xf30000 has no
+#   `mov eax,fs:[0]` C++-EH prologue at all; /GS-: 0xf29560 keeps a 0xa14-byte serializer local
+#   yet no stack cookie, so this TU was built with the buffer security check off).
+# The ten list/map/set dumpers (0xf29650-0xf2a250) all differ the same way: at each
+# BeginList/EndList site the original evaluates `s.mpBegin == s.mpEnd ? L"label" : s.mpBegin`
+# as a branch between two `push` operands (`cmp ebp,[esp+0x2c]; je .L; push ebp; jmp .M; .L:
+# push <L"list">; .M: call`), while ours folds it to a conditional move (`mov eax,0; cmp; je;
+# mov eax,ebp`) — 4 bytes shorter — and the loop-alignment nop differs (`mov edi,edi` vs
+# `lea ebx,[ebx]`).  The repo's own named sibling `?PopulateScriptList@@YA_NPAUListUI@@PBDPBDPAUCharVec@@@Z`
+# (s0057e480.cpp) is bookkept nonmatching for exactly this register/branch-assignment reason.
+00f29650  85 PopulateAnalysisList: label-ternary branch shape (see header) — original 330B vs ours 326B; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (197 valid, 12.6% cov)
+00f297a0  85 PopulateRec4E0List: label-ternary branch shape (see header); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (180 valid, 12.6% cov)
+00f298f0  85 PopulateRec34List: label-ternary branch shape (see header); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (212 valid, 12.6% cov)
+00f29a40  85 PopulateRec188List: label-ternary branch shape (see header); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (221 valid, 70.6% cov)
+00f29b90  85 PopulateRec38List: label-ternary branch shape (see header); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (184 valid, 12.6% cov)
+00f29ce0  85 PopulateRec27E8Map: label-ternary branch shape (L"map" label; see header); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (201 valid, 71.7% cov)
+00f29e30  85 PopulateRec534List: label-ternary branch shape (see header); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (195 valid, 12.6% cov)
+00f29f80  277 PopulateFragmentedList: guarded 0x3fffffff-count walk over 0x238-byte fragments; the inline label ternary plus the fragment-run inner loop schedule differently (original 383B vs ours 373B, two duplicated returns); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid: fake-arity=197, fault(write)=99, fault(read)=91)
+00f2a100  85 PopulateIntList: label-ternary branch shape (L"set" label + L"int32_t" type arg; see header); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (212 valid, 12.5% cov)
+00f2a250  85 PopulateRec27E0List: label-ternary branch shape (see header); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (196 valid, 12.6% cov)
+00f2a3a0  39 Vec18::insert (0x18-byte element): same instruction sequence and size (131B) but the callee-saved roles are swapped — original keeps this in esi and index in edi, ours keeps this in edi and index in esi (so every [esi+N]/[edi+N] ModRM byte and the two epilogue address computations differ); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (33 valid, 51.9% cov)
+00f2a430  69 CopyElem34Range: the original advances two pointers (ebx = dst, esi = dst+0x10, stores at negative [esi-N] displacements) and leaves dstEnd in memory, while ours advances a single pointer with positive displacements and keeps dstEnd in ebp, so every store displacement, the induction compare and the four pop/rets differ (original 95B vs ours 90B); the do-while spelling beats the for-loop spelling (69 vs 102) but a source-level form that reproduces the biased second pointer was not found; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid: fault(write)=174, fault(pool-limit)=79, fault(read)=71)

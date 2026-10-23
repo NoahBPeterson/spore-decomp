@@ -1,0 +1,32 @@
+00f29560 ?DeserializeAnalysisInfos@@YAXPAUISerialStream@@PAUAnalysisInfoVec@@@Z  # DeserializeAnalysisInfos — read an int32 count, resize the vector, Serialize() count AnalysisInfo (0x20-byte) records, then Stream::Done
+00f29650 ?PopulateAnalysisList@@YA_NPAUListUI@@PBDPAU?$Vec2@UInfo20@@@@@Z  # PopulateAnalysisList — dump a vector<Info20> between BeginList/EndList (label L"list")
+00f297a0 ?PopulateRec4E0List@@YA_NPAUListUI@@PBDPAU?$Vec2@URec4E0@@@@@Z  # PopulateRec4E0List — vector<0x4e0-byte record> dump (label L"list")
+00f298f0 ?PopulateRec34List@@YA_NPAUListUI@@PBDPAU?$Vec2@URec34@@@@@Z  # PopulateRec34List — vector<0x34-byte record> dump (label L"list")
+00f29a40 ?PopulateRec188List@@YA_NPAUListUI@@PBDPAU?$Vec2@URec188@@@@@Z  # PopulateRec188List — vector<0x188-byte record> dump (label L"list")
+00f29b90 ?PopulateRec38List@@YA_NPAUListUI@@PBDPAU?$Vec2@URec38@@@@@Z  # PopulateRec38List — vector<0x38-byte record> dump (label L"list")
+00f29ce0 ?PopulateRec27E8Map@@YA_NPAUListUI@@PBDPAU?$Vec2@URec27E8@@@@@Z  # PopulateRec27E8Map — vector<0x27e8-byte record> dump, element+8 (label L"map")
+00f29e30 ?PopulateRec534List@@YA_NPAUListUI@@PBDPAU?$Vec2@URec534@@@@@Z  # PopulateRec534List — vector<0x534-byte record> dump (label L"list")
+00f29f80 ?PopulateFragmentedList@@YA_NPAUListUI@@PBDPAUFragmentedVec@@@Z  # PopulateFragmentedList — walk a fragmented/rope container of 0x238-byte fragments (count 0x3fffffff = walk to mpEnd)
+00f2a100 ?PopulateIntList@@YA_NPAUListUI@@PBDPAU?$Vec2@H@@@Z  # PopulateIntList — vector<int> dump via WriteTypedValue(L"int32_t") (label L"set")
+00f2a250 ?PopulateRec27E0List@@YA_NPAUListUI@@PBDPAU?$Vec2@URec27E0@@@@@Z  # PopulateRec27E0List — vector<0x27e0-byte record> dump (label L"list")
+00f2a3a0 ?insert@Vec18@@QAEPAUElem18@@PAU2@ABU2@@Z  # Vec18::insert — eastl::vector<0x18-byte element>::insert(pos, value); in-place fast path when pos==mpEnd and there is spare capacity
+00f2a430 ?CopyElem34Range@@YAXPAUElem34@@0PBU1@@Z  # CopyElem34Range — fill [dst, dstEnd) by copy-assigning *src into every 0x34-byte element
+
+# callees / globals the slice resolves
+00692f90 SP::cVarListSerializer::cVarListSerializer  # serializer ctor (thiscall, ecx=this, 3 args: info, generic, id=0x1a80d26)
+00693e10 SP::cVarListSerializer::Serialize  # serializer Serialize(ISerialStream*) (thiscall ret 4)
+0093a780 EA::IO::ReadInt32  # cdecl ReadInt32(stream, unsigned int* dst, unsigned int count, int flag)
+0093c5a0 EA::ConvertToString16  # cdecl->sret ConvertToString16(const char* s, int len) -> eastl::basic_string<wchar_t>
+00899420 AnalysisInfoVec::erase  # erase(first,last) (thiscall ret 8; ICF-folded with eastl::copy_impl)
+00f281f0 AnalysisInfoVec::resize  # resize(int) (thiscall ret 4)
+00c06c30 AnalysisInfoVec::insert  # insert(pos,const T*) (thiscall ret 8)
+00f29170 Vec18::DoInsertSlow  # out-of-line reallocating insert (thiscall ret 8)
+00473500 Vec20B::operator=  # copy-assign the 0x14-byte member (thiscall ret 4)
+00ac8050 FUN_00ac8050  # per-element callback bool(ListUI*, int, void*) for Info20/0x34/0x38/fragment records
+00f28780 FUN_00f28780  # per-element callback for the 0x4e0-byte record
+00f28680 FUN_00f28680  # per-element callback for the 0x188-byte record
+00f28580 FUN_00f28580  # per-element callback for the 0x534-byte record
+00f28480 FUN_00f28480  # per-element callback for the 0x27e8/0x27e0-byte records
+0057c770 FUN_0057c770  # WriteTypedValue(ListUI*, int, void*, const wchar_t* type)
+00f47380 operator_delete_array  # operator delete[]
+015add00 g_cDataSerializerGeneric  # the generic DataSerializer passed as the ctor's 2nd arg
