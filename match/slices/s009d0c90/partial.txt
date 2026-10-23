@@ -1,0 +1,4 @@
+# Incomplete / approximate: none for this slice. All nine functions are fully reconstructed (every one has
+# a body in s009d0c90.cpp under its `// @ 0x...` marker). Eight of them are complete but not byte-exact
+# (frame shape and register/schedule residuals), so they live in nonmatching.txt; destroyLayers is
+# byte-exact and sits in manifest.txt.
