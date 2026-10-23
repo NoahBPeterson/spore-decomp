@@ -620,11 +620,11 @@ bool cScenarioPlayMode::FUN_00f1a440(int idx, ObjHdr* target)
     else
         typeMatch = true;
 
-    int count = (int)(mCurrentGoalsEnd - mCurrentGoalsBegin);
+    unsigned count = (unsigned)(mCurrentGoalsEnd - mCurrentGoalsBegin);
     bool sawTarget = false;
     bool sawPair = false;
     cScenarioPlayModeGoal* goal = mCurrentGoalsBegin;
-    for (int n = 0; n < count; ++n, ++goal)
+    for (unsigned n = 0; n < count; ++n, ++goal)
     {
         if (((goal->mGoal.mType == 9 && !goal->mIsCompleted)
              || (goal->mGoal.mType == 8 && goal->mIsCompleted))
@@ -651,9 +651,9 @@ bool cScenarioPlayMode::FUN_00f1a440(int idx, ObjHdr* target)
         while (actIndex < actCount)
         {
             cScenarioAct* act = data->GetAct(actIndex);
-            int n = (int)(act->mEntriesEnd - act->mEntriesBegin);
+            unsigned n = (unsigned)(act->mEntriesEnd - act->mEntriesBegin);
             cScenarioActEntry* e = act->mEntriesBegin;
-            for (int i = 0; i < n; ++i, ++e)
+            for (unsigned i = 0; i < n; ++i, ++e)
             {
                 if ((e->mType == 9 || e->mType == 8) && e->mTargetID == id1)
                 {
@@ -690,9 +690,9 @@ bool cScenarioPlayMode::FUN_00f1a640(int idx)
     if (holder && ((IScenarioHolder*)holder)->FUN_00f27730())
         return false;
 
-    int count = (int)(mCurrentGoalsEnd - mCurrentGoalsBegin);
+    unsigned count = (unsigned)(mCurrentGoalsEnd - mCurrentGoalsBegin);
     cScenarioPlayModeGoal* goal = mCurrentGoalsBegin;
-    for (int n = 0; n < count; ++n, ++goal)
+    for (unsigned n = 0; n < count; ++n, ++goal)
     {
         if (goal->mGoal.mTargetID != id)
             continue;
@@ -707,9 +707,9 @@ bool cScenarioPlayMode::FUN_00f1a640(int idx)
     while (actIndex < actCount)
     {
         cScenarioAct* act = data->GetAct(actIndex);
-        int n = (int)(act->mEntriesEnd - act->mEntriesBegin);
+        unsigned n = (unsigned)(act->mEntriesEnd - act->mEntriesBegin);
         cScenarioActEntry* e = act->mEntriesBegin;
-        for (int i = 0; i < n; ++i, ++e)
+        for (unsigned i = 0; i < n; ++i, ++e)
         {
             if ((e->mType == 9 || e->mType == 8) && e->mTargetID == id)
             {

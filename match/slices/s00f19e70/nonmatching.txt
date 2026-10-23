@@ -1,7 +1,7 @@
-00f19e70 398 scenario-progress predicate query; register allocation/FP association differ
-00f1a120 398 dialog-target setup; layout-driven codegen differs
-00f1a320 259 goal/avatar scan; register allocation differs
-00f1a440 430 goal-pair scan; register allocation differs
-00f1a640 256 goal/act scan; register allocation differs
-00f1aa10 161 bbox distance lerp; maxss/minss vs x87 compare
-00f1ad00 198 goal-entry advance; codegen differs
+00f19e70 398 scenario-progress predicate query; register allocation/FP association differ; equiv UNSUPPORTED (original faults on all inputs)
+00f1a120 398 dialog-target setup; layout-driven codegen differs; equiv UNSUPPORTED (original faults on all inputs)
+00f1a320 259 goal/avatar scan; register allocation differs; equiv PASS
+00f1a440 430 goal-pair scan; register allocation differs; equiv WEAK (203 valid, 34.7%)
+00f1a640 256 goal/act scan; register allocation differs; equiv WEAK (159 valid, 68.7%)
+00f1aa10 161 bbox distance lerp; maxss/minss vs x87 compare; equiv FAIL xmm1 clobber only
+00f1ad00 198 goal-entry advance; codegen differs; equiv WEAK (458 valid, 24.2%)
