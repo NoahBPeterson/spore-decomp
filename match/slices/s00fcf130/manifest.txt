@@ -1,0 +1,3 @@
+# slice s00fcf130 -- MPEG layer-3 Huffman/scalefactor bitstream decode
+# Module flags: /O2 /MD /Gy /TP (original built by a whole-program optimiser that
+# passes FUN_00fcf230's table base in EAX / table pointer in EBX; no faithful match)
