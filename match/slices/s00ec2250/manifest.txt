@@ -1,0 +1,4 @@
+# slice s00ec2250 -- SP creature behaviour callbacks (pickup / object action)
+# Module flags: /O2 /MD /Gy /TP /arch:SSE
+slices/s00ec2250/s00ec2250.cpp  ?FUN_00ec2f10@@YAXPAXHHHHPAUPickupTimer@@@Z  00ec2f10  /O2 /MD /Gy /TP /arch:SSE
+slices/s00ec2250/s00ec2250.cpp  ?FUN_00ec30b0@@YAMPAX@Z  00ec30b0  /O2 /MD /Gy /TP /arch:SSE
