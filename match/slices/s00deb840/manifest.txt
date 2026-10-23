@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00deb840/s00deb840.cpp  ?CloseAssetBrowserUI@@YAXXZ  00dec360  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00deb840/s00deb840.cpp  ?ShowGlobalUI@@YAXXZ  00dec3b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00deb840/s00deb840.cpp  ?RefreshWhenIdle@cGalaxyGameEntryUIStateMachine@@QAEXH@Z  00dec3f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00deb840/s00deb840.cpp  ?SetDeferredWindow@cGalaxyGameEntryUIStateMachine@@QAEXIPAX@Z  00dec430  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00deb840/s00deb840.cpp  ?ResetGameUI@cGalaxyGameEntryUIStateMachine@@QAEXXZ  00dec460  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00deb840/s00deb840.cpp  ?CanPlay@cGalaxyGameEntryUIStateMachine@@QAE_NXZ  00dec4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00deb840/s00deb840.cpp  ?ResetButtons@cGalaxyGameEntryUIStateMachine@@QAEXXZ  00dec500  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00deb840/s00deb840.cpp  ?IsAssetWindowOn@cGalaxyGameEntryUIStateMachine@@QAE_NI@Z  00dec540  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00deb840/s00deb840.cpp  ?UpdateLocks@cGalaxyGameEntryUIStateMachine@@QAEXXZ  00dec570  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00deb840/s00deb840.cpp  ?ShowSkin@cGalaxyGameEntryUIStateMachine@@QAEXI@Z  00dec6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+slices/s00deb840/s00deb840.cpp  ?QueueEditorLaunch@cGalaxyGameEntryUIStateMachine@@QAEXIPBI@Z  00dec770  /O2 /MD /Gy /TP /arch:SSE /fp:fast
