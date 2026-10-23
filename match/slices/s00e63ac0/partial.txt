@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e63f90  214  cCellGame big dtor: incomplete stub (large vtable/delete tree, ~243 bytes); not reconstructible from current analysis
+00e64090  0  cCellGfx big dtor: incomplete stub (515 bytes delete tree/refcount teardown); not reconstructible
+00e645b0  95  eastl rbtree<unsigned,int>::DoInsertValue: incomplete (only the returned node pointer is known); tree rotations not reproduced
+00e648d0  164  mid-function register-ABI fragment (consumes incoming eax/edi; not a real function entry); no C++ reconstruction
