@@ -1,0 +1,2 @@
+slices/s010a5c20/s010a5c20.cpp  ??1hkJobQueue@@QAE@XZ  010a65e0  /vc71 /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s010a5c20/s010a5c20.cpp  ?getNextJob@hkJobQueue@@QAEHHAAUhkJobQueueEntry@@H@Z  010a6620  /vc71 /O2 /MD /Gy /TP /arch:SSE /fp:fast
