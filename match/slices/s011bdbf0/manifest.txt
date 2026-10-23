@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+#
+# Slice s011bdbf0 -- OpenSSL 0.9.8g lib_cblock copies.  Four upstream translation
+# units compiled verbatim as C (/TC) plus a 16-byte RIPEMD160_Update tail-call
+# thunk.  All five functions are byte-exact; the whole-TU wrappers also emit their
+# sibling OpenSSL functions (harmless: only the rows below are claimed).
+slices/s011bdbf0/rmd_thunk.cpp  _FUN_011bdbf0  011bdbf0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc
+slices/s011bdbf0/p5_crpt.cpp  _PKCS5_PBE_keyivgen  011bdc90  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc
+slices/s011bdbf0/p12_crpt.cpp  _PKCS12_PBE_keyivgen  011be020  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc
+slices/s011bdbf0/sha256.cpp  _SHA256_Final  011c0060  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011bdbf0/des_enc.cpp  _DES_encrypt1  011c4d10  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc
