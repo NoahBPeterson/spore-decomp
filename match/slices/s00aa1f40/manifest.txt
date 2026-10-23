@@ -1,0 +1,10 @@
+slices/s00aa1f40/s00aa1f40.cpp  ?resize@cAnimationCurveVector@@QAEXI@Z  00aa2150  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00aa1f40/s00aa1f40.cpp  ?ReadAnimationCurves@@YAPAUIOStream@@PAU1@PAUcAnimationCurveVector@@@Z  00aa2210  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00aa1f40/s00aa1f40.cpp  ?ReadModelDescription@@YAXPAUIOStream@@HPAUcModelDescription@@@Z  00aa22b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00aa1f40/s00aa1f40.cpp  ?CollectModelRefs@@YAHHPAUcModelDescription@@PAIH@Z  00aa2340  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00aa1f40/s00aa1f40.cpp  ?Shutdown@cModelEffect@@QAEXXZ  00aa2470  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00aa1f40/s00aa1f40.cpp  ?Stop@cModelEffect@@QAEXH@Z  00aa24b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00aa1f40/s00aa1f40.cpp  ?SetIntParams@cModelEffect@@QAE_NHPAHH@Z  00aa24e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00aa1f40/s00aa1f40.cpp  ?SetIsVisible@cModelEffect@@QAEXD@Z  00aa2800  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00aa1f40/s00aa1f40.cpp  ?Destroy@cModelEffect@@QAEPAXI@Z  00aa2c60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00aa1f40/s00aa1f40.cpp  ?SetTransforms@cModelEffect@@QAEXABUcTransform@@0@Z  00aa2cc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

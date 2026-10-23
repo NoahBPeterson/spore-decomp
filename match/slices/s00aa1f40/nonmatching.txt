@@ -1,0 +1,6 @@
+00aa1f40  359  complete; codegen diverges (eastl vector growth + inlined uninitialized_move register allocation/block layout differ); equiv WEAK 169 valid / 13.3% coverage
+00aa23a0  183  complete; register allocation differs (mDesc/renderer held in different regs, BindModel arg order); equiv UNSUPPORTED (harness cannot build valid fake-state inputs)
+00aa25f0  487  complete; codegen diverges (param dispatch block layout and x87 fld/fstp scheduling differ); equiv WEAK 387 valid / 48.1% coverage
+00aa2840  733  complete; large codegen divergence (x87 sqrt/animation-sampling block layout differs, target 790 bytes); equiv FAIL 5/155 (spurious xmm3 clobber)
+00aa2b60  158  complete; store scheduling differs (g_one CSE and mAnimationInfo/LOD store order); equiv PASS 400 valid / 100% coverage
+00aa2d80  401  complete; codegen diverges (target x87 clamp idiom for random curve length, different block layout); equiv UNSUPPORTED (unresolved CRandom::RandomDoubleUniform)
