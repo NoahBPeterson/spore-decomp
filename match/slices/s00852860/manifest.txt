@@ -1,0 +1,8 @@
+slices/s00852860/s00852860.cpp  ?jpeg_gen_optimal_table@@YAXPAUjpeg_compress_struct@@PAUJHUFF_TBL@@PAJ@Z  00852aa0  /O2 /MD /Gy /TP /GS-
+slices/s00852860/s00852860.cpp  ?finish_pass_gather@@YAXPAUjpeg_compress_struct@@@Z  00852cf0  /O2 /MD /Gy /TP /GS-
+slices/s00852860/s00852860.cpp  ?start_pass_huff@@YAXPAUjpeg_compress_struct@@H@Z  00852df0  /O2 /MD /Gy /TP /GS-
+slices/s00852860/s00852860.cpp  ?jinit_huff_encoder@@YAXPAUjpeg_compress_struct@@@Z  00852f90  /O2 /MD /Gy /TP /GS-
+slices/s00852860/s00852860.cpp  ?jinit_compress_master@@YAXPAUjpeg_compress_struct@@@Z  00852ff0  /O2 /MD /Gy /TP /GS-
+slices/s00852860/s00852860.cpp  ?process_data_simple_main@@YAXPAUjpeg_compress_struct@@PAPAEPAII@Z  008530b0  /O2 /MD /Gy /TP /GS-
+slices/s00852860/s00852860.cpp  ?start_pass_main@@YAXPAUjpeg_compress_struct@@W4J_BUF_MODE@@@Z  00853160  /O2 /MD /Gy /TP /GS-
+slices/s00852860/s00852860.cpp  ?jinit_c_main_controller@@YAXPAUjpeg_compress_struct@@H@Z  008531b0  /O2 /MD /Gy /TP /GS-
