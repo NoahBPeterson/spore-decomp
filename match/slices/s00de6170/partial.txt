@@ -1,0 +1,9 @@
+# va  size (ours/orig)  reason
+00de6170  0/572  SP::cTerrainUI destructor (PDB candidate). Not implemented in this pass - the flattened decompile is a long chain of inlined intrusive-list teardown through virtual calls and needs a dedicated pass over its disassembly.
+00de63e0  0/609  Free function over the same container family (no this pointer). Not implemented in this pass - left for a dedicated pass.
+00de6650  0/351  __thiscall helper taking two float arguments, operating on the container at +0x70/+0x74. Not implemented in this pass - left for a dedicated pass.
+00de6840  0/189  eastl rbtree teardown: DoNukeSubtree on the tree at +0x0c, re-initialises the anchor at +0x04, then loops over a virtual count (vtable slots +0x20/+0x1c) reading each key with EA::IO::ReadInt32 and re-inserting it. Not implemented in this pass - the two virtual call chains and the do/while frame need a dedicated pass.
+00de6900  0/345  __thiscall four-argument helper returning a pointer into the rbtree-based container. Not implemented in this pass - left for a dedicated pass.
+00de6be0  0/636  __fastcall container routine (636 bytes, the largest in this region). Not implemented in this pass - left for a dedicated pass.
+00de6f20  0/231  __thiscall three-argument routine: rbtree find at +0x04, then builds a Simulator/GGE object through SP_StarManager / EAAllocate / Simulator::cPlanet::cPlanet and registers it. Not implemented in this pass - the constructor chain needs the exact mangled declarations and a dedicated pass.
+00de7010  0/486  __fastcall container routine that mirrors 00de6be0. Not implemented in this pass - left for a dedicated pass.
