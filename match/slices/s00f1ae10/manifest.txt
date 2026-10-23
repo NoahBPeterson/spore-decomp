@@ -1,0 +1,5 @@
+slices/s00f1ae10/s00f1ae10.cpp  ?TryAdd@PB@@QAEDPAX@Z  00f1b2f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00f1ae10/s00f1ae10.cpp  ?SetKind@PB@@QAEXH@Z  00f1b360  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00f1ae10/s00f1ae10.cpp  ?SetText@PB@@QAEXH@Z  00f1b640  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00f1ae10/s00f1ae10.cpp  ?GetNameC@PB@@QAEXHPAUWString@@@Z  00f1bcb0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00f1ae10/s00f1ae10.cpp  ?GetNameD@PB@@QAEXHPAUWString@@@Z  00f1bcd0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
