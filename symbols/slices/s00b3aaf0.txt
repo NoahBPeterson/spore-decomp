@@ -1,0 +1,2 @@
+00b3aaf0 HandleVec::Resize  # Claude-coined; eastl::vector<Handle>::resize(newSize): grow via insert(end, n, Handle{0,0}) (0xb38690) / shrink via erase(begin+newSize,end) (0xb36530+0xb36130); byte-exact 120 bytes
+00b3ab70 FUN_00b3ab70  # Claude-coined; make_heap-style descending loop calling adjust_heap (0xb39970) over [first,last); 3rd arg is a volatile int context re-read each iteration; byte-exact 83 bytes

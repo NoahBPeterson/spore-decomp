@@ -1,0 +1,2 @@
+slices/s00b3aaf0/s00b3aaf0.cpp  ?Resize@HandleVec@@QAEXI@Z  00b3aaf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00b3aaf0/s00b3aaf0.cpp  ?FUN_00b3ab70@@YAXPAUHandle@@0H@Z  00b3ab70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
