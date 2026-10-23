@@ -1,0 +1,5 @@
+00adf840 1118 VC9 codegen/scheduling differs throughout the SSE-heavy reset path (1231 vs 1306 bytes); equiv UNSUPPORTED (0/400 inputs valid: original itself faults on the generated pointers).
+00adfd60 482 codegen/ordering differs (606 vs 620 bytes); equiv WEAK (331/400 valid, no mismatch).
+00ae00d0 1034 large tick body; inlined Sim calls and float/vector codegen differ (1141 vs 1251 bytes); equiv UNSUPPORTED (unresolved ref _FUN_00ad71f0, annotation-implausible).
+00ae0640 49 original keeps the redundant inlined base-ctor store `[this+8]=&RefCountVTemplate<int> vtbl` before overwriting it with `[this+8]=&PTR_FUN_0145b908`; VC9 dead-store-eliminates it in our source (85 vs 92 bytes); equiv PASS (400/400, 100% coverage).
+00ae0700 277 eastl hashtable iteration and inlined callees differ (415 vs 417 bytes); equiv WEAK (213/400 valid, 16.8% coverage, no mismatch).

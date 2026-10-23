@@ -1,0 +1,2 @@
+slices/s00adf840/s00adf840.cpp  ?start@Sim@@QAEXXZ  00ae0080  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00adf840/s00adf840.cpp  ?resetAll@Sim@@QAEXXZ  00adffd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
