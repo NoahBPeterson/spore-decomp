@@ -1,0 +1,5 @@
+# slice s011a9fe0 -- OpenSSL 0.9.8g upstream TUs, lib_cblock copies
+# flags in every row; each TU needs its own directory on the include path
+slices/s011a9fe0/evp_asn1.cpp  _ASN1_TYPE_get_int_octetstring  011a9fe0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/asn1
+slices/s011a9fe0/rand_win.cpp  _RAND_poll                     011aa2e0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/rand
+slices/s011a9fe0/bn_exp.cpp    _BN_mod_exp_recp               011aa9d0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/bn
