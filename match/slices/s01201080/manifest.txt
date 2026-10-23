@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# 01201080 is VC7.1-built (VC9 always fuses the read-modify-write); the rest of the slice is VC9.
+slices/s01201080/s01201080.cpp  ?FUN_01201080@@YAHPAHH@Z  01201080  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s01201080/s01201080.cpp  ?FUN_012016d0@@YAHPAHHH@Z  012016d0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast

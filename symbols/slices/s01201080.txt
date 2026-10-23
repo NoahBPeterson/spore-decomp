@@ -1,0 +1,15 @@
+; slice s01201080 = 0x01201080..0x01201c70 (Spore/Havok SSE vector & segment math)
+; No PDB names exist for this range (all FUN_ in the image); the names below are ours.
+; 012016f0 is the one name shared with the neighbouring slice s01207630 (SP::Segment::Segment).
+; manifest.txt rows are byte-exact; the rest are the nonmatching.txt / partial.txt entries.
+01201080 ?FUN_01201080@@YAHPAHH@Z  # byte-exact (VC7.1): pointer rebase, *p += (int)p - *(int*)(obj+0x7c); returns 1
+012010e0 ?FUN_012010e0@@YAHPAH0H0@Z  # partial: per-frame box/skinning matrix builder (0x11d4-byte frame, 4x4 identity + ~1200B unrolled float-matrix tail)
+012015f0 ?Setup@SegVolume@@QAEPAU1@HHH@Z  # complete, non-exact: grid sub-buffer layout from the three dimensions; ret 0xc; register colouring only
+01201660 ?FUN_01201660@@YAXPAHHH@Z  # complete, non-exact: grid header init ({0,1,0,1,0,1,0,1} + ptr + size 0x10)
+012016d0 ?FUN_012016d0@@YAHPAHHH@Z  # byte-exact: forwarder into 012015f0 (returns 0 when *flag == 0)
+012016f0 ??0SPSegment@@QAE@ABT__m128@@0@Z  # complete, non-exact: SP::Segment::Segment(a,b), pos/dir/length
+01201810 ?SetCross@SegVolume@@QAEXPBU__m128@@@Z  # complete, non-exact: this+0x20 = normalize(cross(this+0x10, b))
+012018f0 ?ApplyAll@SegVolume@@QAEXHPBU__m128@@@Z  # complete, non-exact: SetCross over count elements, negating when flip == 0
+01201980 ?Init@SegVolume@@QAEXH@Z  # complete, non-exact: identity frame + table[0x0171e598 + 4*idx] + header words
+01201a20 ?FUN_01201a20@@YAHHPAM0000@Z  # partial: segment/triangle intersection (589B, __cdecl 6 args, ret 0x18)
+01201c70 ?FUN_01201c70@@YAHPAM00000@Z  # partial: closest-point-on-triangle (944B, LTCG register ABI: eax/ecx/edx carry the vector pointers)
