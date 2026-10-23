@@ -1,0 +1,8 @@
+# Generated for slice s011a2780: OpenSSL 0.9.8g ssl/s3_clnt.c, lib_cblock copy.
+# The same code also exists named as lib_openssl (see symbols/lib_names.txt);
+# these 5 addresses are the unnamed lib_cblock duplicate.  All byte-exact.
+011a2780  ssl3_client_hello            # s3_clnt.c: build ClientHello (version, client_random via RAND_pseudo_bytes, session_id, ssl_cipher_list_to_bytes, compression list, ssl_add_clienthello_tlsext) then ssl3_do_write; byte-exact
+011a2980  ssl3_get_server_hello       # s3_clnt.c: read ServerHello (ssl_get_message 0x1120/0x1121/20000), check version/server_random/session-id, ssl_get_cipher_by_char + sk_SSL_CIPHER_find, ssl3_comp_find, ssl_parse_serverhello_tlsext; byte-exact
+011a2d60  ssl3_get_server_certificate # s3_clnt.c: read Certificate (ssl_get_message 0x1130/0x1131), d2i_X509 loop into a STACK, ssl_verify_cert_chain, build ssl_sess_cert, pick the EVP_PKEY via X509_get_pubkey/ssl_cert_type; byte-exact
+011a3170  ssl3_get_server_done       # s3_clnt.c: read ServerHelloDone (ssl_get_message 0x1160/0x1161, SSL3_MT_SERVER_DONE, max 30), alert on a non-empty body; byte-exact
+011a31d0  ssl3_send_client_key_exchange # s3_clnt.c: build ClientKeyExchange from the negotiated cipher (RSA_public_encrypt / DH_generate_key+DH_compute_key / ECDH_compute_key of the premaster), ssl3_do_write; byte-exact
