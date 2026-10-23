@@ -1,0 +1,5 @@
+# slice s009e4450 -- gait-key vector family (0xa4-byte Entry), 0x30 gcmdst command
+# object, 0x12c0 gait-sample table and the helpers that build them.
+# Module flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s009e4450/s009e4450.cpp  ?Reset@EntryArr@@QAEXXZ  009e4940  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s009e4450/s009e4450.cpp  ?insert@VecEntry@@QAEPAUEntry@@PAU2@ABU2@@Z  009e4990  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
