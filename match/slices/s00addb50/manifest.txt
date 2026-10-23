@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+# 2 chk.py-printed MATCH rows for slice s00addb50.
+slices/s00addb50/s00addb50.cpp  ?FUN_00addd20@@YIXPAXH@Z  00addd20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00addb50/s00addb50.cpp  ?FUN_00ade190@@YIXPAXHPAPAX@Z  00ade190  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

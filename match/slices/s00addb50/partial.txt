@@ -1,0 +1,4 @@
+# s00addb50 -- two functions are complete reconstructions but could not be
+# verified equivalent by equiv.py.
+00adde90  203  cStringContext / Sub10 map setter: operator new(0x30,"Simulator/cStringContext"), the vtable fields, and the Sub10::GetValue(ecx=v+0x10,&out) write path are all reconstructed. equiv: FAIL -- the call trace matches, but the harness reports a memory-pool difference at an input-dependent pool address (the value written through the Sub10 pointer); this looks like a stack/heap-address-dependent harness artifact rather than a behavioural difference.
+00ade680  370  simulator destructor: the vtable walk, the two hashtable resets, the vector dtor and the EA::Free calls are reconstructed. equiv: UNSUPPORTED -- the harness could not get a single valid input (297 read faults, 14 VirtualFree imports, budget); a free-heavy destructor is not observable through this harness.

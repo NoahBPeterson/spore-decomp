@@ -1,0 +1,43 @@
+# s00addb50 -- EA Simulator ArgScript / config-manager cluster
+# Key callee VAs and calling conventions discovered while reconstructing this slice.
+# All in-slice entry points are __fastcall with a dummy second (edx) parameter,
+# standing in for the original __thiscall receiver in ecx.
+00addb50  cConfigManager::ParseConfigFile          ; this = ecx (config manager)
+00addc60  eastl hashtable erase-for-predicate
+00addd20  eastl hashtable reset                    ; BYTE-EXACT
+00addd90  eastl hashtable reset (variant)
+00adde00  erase entries matching an id
+00adde90  cStringContext map setter
+00addfa0  map find-or-insert (EditorRes payload)   ; key at +0, payload contiguous at +4
+00ade060  map find-or-insert (CamInfo payload)
+00ade190  SpVector push / element-insert helper    ; BYTE-EXACT
+00ade1d0  `anonymous namespace'::cMetaParticleForceCommand::Execute(cArguments*)
+00ade680  simulator destructor
+
+# --- callees (out of slice) ------------------------------------------------------
+00ad91a0  HTbl::Find(out Iter*, key)               ; thiscall on the hashtable
+00adc970  HTbl::erase(out, Iter)                   ; thiscall on the hashtable
+00adc9f0  HTbl::eraseA(out, Iter)                  ; thiscall on the hashtable
+00adb680  HTbl::DoFreeNodes(node array, count)
+00adb250  NameTbl::Find(hash, key)
+00adc890  NameTbl::Insert(hash, obj, key)
+00adb4a0  NameTbl::MapInsert(out, {key,payload}*, bool flag)   ; thiscall; arg2 = key ptr,
+                                                               ; payload read right after key
+00adb590  NameTbl::MapInsertB(out, {key,payload}*, bool flag)  ; thiscall
+00adc900  Sub10::GetValue(out)
+00adca90  eastl vector grow(end, value)            ; thiscall on the vector
+00ad7ca0  EditorRes::copyCtor(src)                 ; thiscall; copies 0x34 bytes
+00ad7f00  CamInfo::assign(src)                     ; thiscall
+0092b690  CmdLineB::ctor
+005d7450  CmdLineB::fini
+0050f740  SpVector<Vector3>::erase(begin, end)     ; thiscall on the vector
+004b5ad0  SpVector<Vector3>::DoInsertValue(pos, value)  ; thiscall on the vector
+00838320  cArguments::MainArguments(int)           ; thiscall
+00838330  cArguments::OptionArguments(name, n)     ; thiscall
+00838130  cArguments::OptionArguments(name, int* count, int min, int max)  ; thiscall
+008380b0  cArguments::HasFlag(name)                ; thiscall
+007e4190  cAppState::AddMessage(cArguments*, RefObj*, char)  ; thiscall on [self+0xc]
+00404f90  ThreadedObject::Release()                ; vtable slot 1 of RefObj
+007ebf20  TelemetryRelease(int*)                   ; vtable slot 1 of the command
+00f473a0  EAAllocate(size, "Simulator", 0,0,0,0)
+00d04e60  AddRef (vtable slot 0: inc [ecx-4])

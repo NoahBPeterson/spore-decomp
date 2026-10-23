@@ -1,0 +1,24 @@
+# s00addb50 -- EA Simulator ArgScript / config-manager cluster (11 functions).
+# No upstream source; hand-written from the Ghidra disassembly/decompile.
+# All of these are complete, faithful reconstructions but not byte-exact.
+#
+# Region layout (verified against the disassembly):
+#   object o (cMetaParticleForceCommand, 0x8c): +0x00 vtable 0x145b38c,
+#     +0x04 refcount (AddRef slot 0 = 0xd04e60 on +0x08), +0x08 vtable 0x145b380
+#     (slots: +0x00 AddRef 0xd04e60, +0x04 TelemetryRelease 0x7ebf20,
+#     +0x08 0xad8950, +0x0c 0xad8960, +0x10 Execute 0xade1d0, +0x14 0x111cce0),
+#     +0x0c cAppState* (AddMessage receiver), +0x10 mode, +0x14/+0x18/+0x1c
+#     Vector3, +0x20/+0x24/+0x28 Vector3, +0x2c/+0x3c/+0x3d/+0x3e/+0x44/+0x5d
+#     bytes, +0x40 int 3, +0x54/+0x58/+0x60/+0x64 floats, +0x6c/+0x70/+0x74
+#     SpVector<Vector3> begin/end/cap, +0x80/+0x84/+0x88 Vector3.
+#   RefObj m (0x40, vtable 0x13eb844): +0x00 vtable, +0x04 refcount, +0x08 = o+8,
+#     +0x0c cAppState*, +0x30 0x04448b81, +0x38 flags.
+#
+# chk.py diffs (mine vs original byte counts); equiv.py verdict in each reason:
+00addb50  144  cConfigManager::ParseConfigFile: the whole command-line token scan (the "Simulator" prefix test, the '/'/'#' separators, the 0x50-char key copy, the value scan) is reconstructed; residual is register allocation and the tokenizer loop shape. equiv: PASS.
+00addc60  155  eastl-hashtable erase-all-for-predicate: iteration + DoFreeNodes(0xadb680) path reconstructed; residual is loop/regalloc shape. equiv: WEAK (244 valid, 33.8% cov).
+00addd90   61  hashtable reset: the 0xadca90 grow call and the DoFreeNodes path reconstructed; residual is the exact node-walk shape. equiv: WEAK (211 valid, 55.3% cov).
+00adde00  116  erase-entries-matching-id: Find/erase (0xadc970) loop reconstructed; residual is regalloc. equiv: PASS.
+00addfa0  111  map find-or-insert with an EditorRes payload: the payload must be contiguous with the key (payload at tmp+0x38, key at tmp+0x34) so MapInsert(0xadb4a0) reads the value right after the key. The original passes a 1-byte bool whose upper three bytes are the reused Find-result slot; reproduced as (local & 0xFFFFFF00u). equiv: WEAK (196 valid, 89.5% cov).
+00ade060  246  map find-or-insert with a CamInfo payload (same key/payload contiguity rule, payload at tmp+0x4c, key at tmp+0x48). equiv: WEAK (189 valid, 92.3% cov).
+00ade1d0  952  cMetaParticleForceCommand::Execute: all calls reconstructed with the correct conventions -- erase (0x50f740, thiscall on o+0x6c), DoInsertValue (0x4b5ad0, thiscall on o+0x6c), OptionArguments(name,&count,min,max) (0x838130, thiscall on args), AddMessage(0x7e4190, thiscall on [self+0xc]). Residual is register allocation across this large function. equiv: WEAK (68 valid, 58.2% cov).
