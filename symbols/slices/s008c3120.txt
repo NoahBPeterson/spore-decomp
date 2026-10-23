@@ -1,0 +1,6 @@
+008c3120 ?FUN_008c3120@@YAXH@Z  # write the 8-bit-CLUT gray pixel output
+008c3570 ?FUN_008c3570@@YAXH@Z  # wrapper: install object pointer and call 8c3120
+008c3580 ?FUN_008c3580@@YAXH@Z  # write the block-scaled gray pixel output
+008c39a0 ?FUN_008c39a0@@YAXHG@Z  # write the external-version LCD pixel output
+008c3ec0 ?memForSubIndexTable@@YAHPAX@Z  # parse a sub-index table, return its memory needs
+008c4000 ?Delete_blocClass@@YAXPAH@Z  # release the sub-tables owned by a bloc class
