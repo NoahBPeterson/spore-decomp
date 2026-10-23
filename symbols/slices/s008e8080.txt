@@ -1,0 +1,42 @@
+# EA::XHTML layout/rendering core. Names from the PDB vtable slots; every function below is a
+# member of the class named by the slot it occupies.
+008e8080 EA::XHTML::Layout::Block::Render  # vtable slot +0x14; placement jump table 0x8e82f4
+008e8310 EA::XHTML::Layout::AnonymousBox::LayoutFlow  # vtable slot +0x0c (two args: RenderingContext&, StyleState&)
+008e84b0 EA::XHTML::Layout::AnonymousBox::Render  # vtable slot +0x14
+008e8520 EA::XHTML::Layout::AnonymousBox::Pick  # vtable slot +0x18
+008e85d0 EA::XHTML::Layout::ContainerItem::PlaceControls  # vtable slot +0x10, child loop
+008e8620 EA::XHTML::Layout::PickingContext::~PickingContext  # frees mpVecBegin when it is not the inline buffer
+008e8650 EA::XHTML::Style::StyleState::~StyleState  # three eastl hashtables in reverse declaration order
+008e8700 EA::XHTML::Layout::Block::Measure  # vtable slot +0x08; intrinsic-size max/min path
+008e8870 EA::XHTML::Layout::Block::Pick  # vtable slot +0x18; placement jump table 0x8e8ad8
+008e69b0 EA::XHTML::Layout::PickEntry::Add  # (DOM::Element*, int, unsigned, const PickBox*) ret 0x10, return ignored
+008e7da0 EA::XHTML::Layout::Block::GetPickBox  # (PickBox* out) ret 4, writes 5 floats
+008e7da0 EA::XHTML::Layout::Item::GetPickBox  # same address reached through the Item base
+008eaa20 EA::XHTML::Layout::Block::SetUpBox  # (SizingContext&, StyleState&) ret 8
+008eae80 EA::XHTML::Style::ComputeStyle  # cdecl (DOM::Element*, Rule**, unsigned, StyleState*)
+008ede40 EA::XHTML::Layout::PickingContext::SetContextRect  # (const float*) ret 4, writes +0x544..+0x550
+008edd30 EA::XHTML::Layout::PickingContext::SetContextRect  # (Item*, const RectT<float>*) ret 8, after GetPickBox
+008edf60 EA::XHTML::Layout::PickingContext::PlaceFloat  # (Item*) ret 4
+008ee010 EA::XHTML::Layout::PickingContext::Flush  # (PickEntry*) -> bool
+008ee4a0 EA::XHTML::Layout::PickingContext::FlushAll  # (PickEntry*) -> bool
+008ee2f0 EA::XHTML::Layout::PickingContext::PickingContext  # copy ctor ret 4
+008ee720 EA::XHTML::Layout::RenderingContext::SetSubStyle  # (Item*, const PickBox*) ret 8
+008ee8c0 EA::XHTML::Layout::RenderingContext::RenderingContext  # copy ctor ret 4
+008eed80 EA::XHTML::Layout::RenderingContext::SetContextRect  # (const RectT<float>&) ret 4
+008eee30 EA::XHTML::Layout::RenderingContext::PlaceFloat  # (Item*) ret 4
+008ef6d0 EA::XHTML::Layout::RenderingContext::Reset  # ret 0
+008ef550 EA::XHTML::Layout::RenderingContext::BeginContent  # ret 0
+008f0010 EA::XHTML::Layout::RenderingContext::EndContent  # ret 0
+008f01b0 EA::XHTML::Layout::RenderingContext::CollapseMargin  # (float) ret 4
+008ef900 EA::XHTML::Layout::SizingContext::Finish  # ret 0
+008fc130 EA::XHTML::Style::StyleState::StyleState  # (StyleState* base) ret 4
+008fc670 EA::XHTML::Style::StyleState::Resolve  # ret 0
+008e6710 EA::XHTML::Layout::Background::Draw  # (RenderingContext&, const RectT<float>*, const RectT<float>*) ret 0xc
+008ea290 EA::XHTML::Layout::Border::Draw  # (RenderingContext&, const RectT<float>*, int) ret 0xc
+008eeac0 EA::XHTML::Layout::RenderingContext::TestRect  # (float, float, float, float) ret 0x10
+008eeb30 EA::XHTML::Layout::RenderingContext::ScrollRect  # (RectT<float> by value) ret 0x10
+00897680 EA::Text::Typesetter::GetType  # thiscall 0-arg -> int; ecx = &mTypesetter = ctx+4
+0089c540 EA::Text::Typesetter::~Typesetter  # ret 0
+00693230 eastl::hashtable::DoFreeBuckets  # (void* buckets, unsigned count) ret 8
+00f47380 operator delete  # ??3@YAXPAX@Z
+00572600 EA::RectT<float>::RectT(const RectT<float>&)  # copy ctor dest=ecx, src=[esp+4], ret 4

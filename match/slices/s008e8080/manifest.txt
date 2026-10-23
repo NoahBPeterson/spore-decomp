@@ -1,0 +1,5 @@
+slices/s008e8080/s008e8080.cpp  ?Render@AnonymousBox@Layout@XHTML@EA@@UAEXAAVRenderingContext@234@@Z  008e84b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008e8080/s008e8080.cpp  ?PlaceControls@ContainerItem@Layout@XHTML@EA@@UAEXI@Z  008e85d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008e8080/s008e8080.cpp  ??1PickingContext@Layout@XHTML@EA@@QAE@XZ  008e8620  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008e8080/s008e8080.cpp  ??1StyleState@Style@XHTML@EA@@QAE@XZ  008e8650  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008e8080/s008e8080.cpp  ?Measure@Block@Layout@XHTML@EA@@UAEXAAVSizingContext@234@AAVStyleState@Style@34@@Z  008e8700  /O2 /MD /Gy /TP /arch:SSE /fp:fast
