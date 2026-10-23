@@ -1,0 +1,23 @@
+01189d60 _dopr  # OpenSSL 0.9.8g crypto/bio/b_print.c printf engine (BIO_vprintf/vsnprintf core)
+0118fec0 SHA1_Final  # OpenSSL 0.9.8g crypto/sha/sha1dgst.c: pad + sha1_block_host_order + HASH_MAKE_STRING
+01190020 PEM_ASN1_read_bio  # OpenSSL 0.9.8g crypto/pem/pem_oth.c: PEM_bytes_read_bio then d2i callback then CRYPTO_free
+011900e0 PEM_def_callback  # OpenSSL 0.9.8g crypto/pem/pem_lib.c: copy userdata or prompt for a >=4-char phrase
+011905e0 PEM_do_header  # OpenSSL 0.9.8g crypto/pem/pem_lib.c: EVP_BytesToKey + EVP_DecryptUpdate/Final over the PEM body
+01190790 load_iv  # OpenSSL 0.9.8g crypto/pem/pem_lib.c (file-static): hex IV string -> bytes
+01190f30 PEM_bytes_read_bio  # OpenSSL 0.9.8g crypto/pem/pem_lib.c
+0118a7d0 sha1_block_host_order  # OpenSSL 0.9.8g crypto/sha/sha1dgst.c block transform
+0119a6f0 EVP_md5  # OpenSSL 0.9.8g crypto/evp/c_allc.c, returns the MD5 EVP_MD (NID 4)
+011e11aa __security_check_cookie  # MSVC /GS stack-cookie check
+011b1a30 EVP_BytesToKey  # OpenSSL 0.9.8g crypto/evp/evp_key.c
+011b1940 EVP_get_pw_prompt  # OpenSSL 0.9.8g crypto/evp/evp_key.c
+011b1960 EVP_read_pw_string  # OpenSSL 0.9.8g crypto/evp/evp_key.c
+011765f0 EVP_CIPHER_CTX_init  # OpenSSL 0.9.8g crypto/evp/evp_enc.c
+01176d80 EVP_DecryptInit_ex  # OpenSSL 0.9.8g crypto/evp/evp_enc.c
+01176820 EVP_DecryptUpdate  # OpenSSL 0.9.8g crypto/evp/evp_enc.c
+01176910 EVP_DecryptFinal_ex  # OpenSSL 0.9.8g crypto/evp/evp_enc.c
+01176a20 EVP_CIPHER_CTX_cleanup  # OpenSSL 0.9.8g crypto/evp/evp_enc.c
+01183810 OPENSSL_cleanse  # OpenSSL 0.9.8g crypto/cryptlib.c
+011835c0 CRYPTO_free  # OpenSSL 0.9.8g crypto/mem.c
+01180d50 ERR_put_error  # OpenSSL 0.9.8g crypto/err/err.c
+011e073e memset  # CRT memset (analyzer mislabels it operator_new_arr)
+011e0744 memcpy  # CRT memcpy (analyzer mislabels it eastl vector insertion)
