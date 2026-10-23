@@ -1,0 +1,6 @@
+010c90a0 ?getSupportingVertex@hkCylinderShape@@UBEXABUhkVector4@@AAUhkCdVertex@@@Z  # supporting-vertex id pack + decode; nonmatching (x87 register allocation, float->int lowering)
+010c9360 ?convertVertexIdsToVertices@hkCylinderShape@@UBEXPBGHPAUhkCdVertex@@@Z  # 16-bit vertex-id loop decoder; nonmatching (register allocation / loop rotation)
+010c9500 ?getFirstVertex@hkCylinderShape@@UBEXAAUhkVector4@@@Z  # copy m_vertexB out; byte-exact
+010c9520 ?getCollisionSpheres@hkCylinderShape@@UBEPBUhkSphere@@PAU2@@Z  # 16 bounding spheres (2 bases x 8 dirs); nonmatching (x87 schedule, 1-ulp)
+010c98e0 ?hkCylinderShape_init@@YAXPAUhkCylinderShape@@@Z  # ctor helper: vtable, refcount, FPU rounding seed; byte-exact
+010c9920 ?getAabb@hkCylinderShape@@UBEXABUhkTransform@@MAAUhkAabb@@@Z  # transform both cap centres, fatten per-axis; nonmatching (x87 evaluation order)
