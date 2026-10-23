@@ -1,0 +1,2 @@
+# slice s00fad550 partial functions: none -- every VA of the slice has a complete
+# body in s00fad550.cpp (three of them are complete-but-inexact, see nonmatching.txt).

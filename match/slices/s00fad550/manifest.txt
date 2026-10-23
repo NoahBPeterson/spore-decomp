@@ -1,0 +1,17 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+#
+# Slice s00fad550 -- SP::cTerrainSphereDecal (static decal runtime) plus the
+# DecalEntry growable array (DecalEntryVector, EASTL-style intrusive growth).
+#
+#   00fad550  SP::cTerrainSphereDecal::DispatchStaticDecal
+#   00fad730  SP::cTerrainSphereDecal ctor
+#   00fad930  DecalEntryVector::DoGrow
+#   00fada70  DecalEntryVector::push_back
+#   00fadac0  SP::cTerrainSphereDecal teardown
+#
+# Flags /O2 /MD /Gy /TP /arch:SSE /GS- reproduce push_back and DoGrow exactly
+# (push_back first try, DoGrow after reworking the slow path into the original's
+# shared-allocator shape and giving the pointer temporaries named locals so the
+# allocator keeps mBegin/mEnd in the retail registers).
+slices/s00fad550/s00fad550.cpp  ?push_back@DecalEntryVector@@QAEXABUDecalEntry@@@Z  00fada70  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00fad550/s00fad550.cpp  ?DoGrow@DecalEntryVector@@QAEXPAUDecalEntry@@PBU2@@Z  00fad930  /O2 /MD /Gy /TP /arch:SSE /GS-
