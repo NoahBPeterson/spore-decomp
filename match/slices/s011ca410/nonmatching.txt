@@ -1,0 +1,4 @@
+# Every function in slice s011ca410 is byte-exact (see manifest.txt); the slice is
+# OpenSSL 0.9.8g crypto/ecdsa (ecdsa_sign_setup / ecdsa_do_sign / ecdsa_do_verify)
+# and crypto/asn1 (i2d_ASN1_SET) code compiled verbatim from upstream, so no function
+# needs the differential gate.

@@ -1,0 +1,7 @@
+# Slice s011ca410: OpenSSL 0.9.8g crypto/ecdsa + crypto/asn1 upstream TUs, lib_cblock copy.
+# All four are byte-exact compiled verbatim from work/third_party/build/openssl-0.9.8g-d2110920/
+# (see manifest.txt). Names come from the upstream sources; ERR codes from the disassembly.
+011ca410 ecdsa_sign_setup      # ecs_ossl.c: static per-signature setup: draw k with BN_rand_range, compute R = (k*G) via EC_POINT_mul, reduce R.x mod n (EC_GROUP_get_order) to get r; ERR 42 (ECDSA)/0x67 (ECDSA_F_ECDSA_SIGN_SETUP) with 0x41 ERR_R_MALLOC_FAILURE and 0x43 (ECDSA_R_NEED_NEW_SETUP_VALUES)
+011ca680 ecdsa_do_sign         # ecs_ossl.c: compute s = k^-1 (e + r*d) mod n from the setup values and the message digest, BN_mod_mul/BN_mod_inverse; ERR 42/0x65 (ECDSA_F_ECDSA_DO_SIGN) with 0x41 ERR_R_MALLOC_FAILURE and 0x43 (ECDSA_R_NEED_NEW_SETUP_VALUES)
+011ca8f0 ecdsa_do_verify       # ecs_ossl.c: verify u1*G + u2*Q with EC_POINT_mul and compare R.x mod n against r; ERR 42/0x66 (ECDSA_F_ECDSA_DO_VERIFY) with 0x03 (ECDSA_R_MISSING_PARAMETERS) and 0x10 (ECDSA_R_BAD_SIGNATURE)
+011cac30 i2d_ASN1_SET          # a_set.c: DER-encode a SET OF (sk_num/sk_value over the stack, ASN1_object_size + ASN1_put_object framing); ERR 13 (ASN1)/0xbc (ASN1_F_I2D_ASN1_SET) with 0x41 ERR_R_MALLOC_FAILURE

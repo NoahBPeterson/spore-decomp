@@ -1,0 +1,7 @@
+# slice s011ca410 -- OpenSSL 0.9.8g upstream TUs, lib_cblock copies
+# crypto/ecdsa ECDSA sign/verify core (ecs_ossl.c) + crypto/asn1 i2d_ASN1_SET (a_set.c).
+# flags in every row; the include link scratch_s011b8e10_inc carries e_os.h/cryptlib.h + openssl/.
+slices/s011ca410/ecs_ossl.cpp  _ecdsa_sign_setup  011ca410  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011ca410/ecs_ossl.cpp  _ecdsa_do_sign     011ca680  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011ca410/ecs_ossl.cpp  _ecdsa_do_verify   011ca8f0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011ca410/a_set.cpp     _i2d_ASN1_SET      011cac30  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
