@@ -1,0 +1,14 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00fd6220/s00fd6220.cpp  ?vp6_scan_init@@YAHPAUScanBufs@@@Z  00fd6220  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fd6220/s00fd6220.cpp  _vp6_scan_destroy  00fd62d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fd6220/s00fd6220.cpp  _vp6_scan_create  00fd6320  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fd6220/s00fd6220.cpp  _vp6_expand  00fd6370  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fd6220/s00fd6220.cpp  _vp6_fill_row  00fd64b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fd6220/s00fd6220.cpp  _vp6_add_pred  00fd6550  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fd6220/s00fd6220.cpp  _vp6_add_rows  00fd6740  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fd6220/s00fd6220.cpp  _vp6_dequant_rows  00fd6880  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fd6220/s00fd6220.cpp  _vp6_ctx_create  00fd69c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fd6220/s00fd6220.cpp  _vp6_frame_info  00fd6a50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fd6220/s00fd6220.cpp  ?vp6_decode_row@@YAHPAUVp6Ctx@@H@Z  00fd6b00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fd6220/s00fd6220.cpp  _vp6_ctx_destroy  00fd6c10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fd6220/s00fd6220.cpp  _vp6_widen  00fd6c60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

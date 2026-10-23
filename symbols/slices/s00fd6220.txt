@@ -1,0 +1,15 @@
+00fd6220 vp6_scan_init  # original symbol ?vp6_scan_init@@YAHPAUScanBufs@@@Z (chk ~size match at this VA); static internal helper, arg ScanBufs* arrives in esi; in-slice caller 00fd6320
+00fd62d0 vp6_scan_destroy  # Claude-coined; frees the ScanBufs created by 00fd6320 (pairs with vp6_scan_create)
+00fd6320 vp6_scan_create  # Claude-coined; allocates/zeroes a 0x60-byte ScanBufs and calls 00fd6220 (vp6_scan_init)
+00fd6370 vp6_expand  # Claude-coined; VP6 frame expand/reconstruct row pass (uses g_vp6_scratch and the Vp6Ctx frame fields)
+00fd64b0 vp6_fill_row  # Claude-coined; fills a prediction row from the DC/edge value
+00fd6550 vp6_add_pred  # Claude-coined; adds the predicted block to the residual (8x8)
+00fd6740 vp6_add_rows  # Claude-coined; adds two byte rows into a 16-bit accumulator row
+00fd6880 vp6_dequant_rows  # Claude-coined; dequantises using the flat table at 0x01493860 (g_vp6_deq)
+00fd69c0 vp6_ctx_create  # Claude-coined; allocates + initialises the Vp6Ctx (writes the 0xf4/0xf8 scan/frame slots, 0x124 br[6], the 0x1bc/0x1c0/0x1c4/0x1c8 chain)
+00fd6a50 vp6_frame_info  # Claude-coined; reads frame dimensions/flags out of the Vp6Ctx
+00fd6b00 vp6_decode_row  # original symbol ?vp6_decode_row@@YAHPAUVp6Ctx@@H@Z (chk ~size match); static internal helper, args ctx in esi and offset in edi
+00fd6c10 vp6_ctx_destroy  # Claude-coined; frees the Vp6Ctx from 00fd69c0
+00fd6c60 vp6_widen  # Claude-coined; widens bytes to 16-bit (movzx/punpck-style scalar pass)
+00fd6cd0 vp6_filter_block  # Claude-coined; 6-tap VP6 block filter: 2 passes over 9x8 / 8x8 using g_vp6_filter rows and g_vp6_scratch; called by 00fd6ed0
+00fd6ed0 vp6_filter_row  # Claude-coined; VP6 row filter dispatcher (diff==1 / diff==stride fast paths) that calls 00fd6cd0 for the general case
