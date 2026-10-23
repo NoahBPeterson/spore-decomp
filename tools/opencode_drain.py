@@ -80,9 +80,11 @@ QUEUE = bool(G.get("queue"))
 NK = int(G["workers"]) if QUEUE else len(G["ranges"])
 sys.path.insert(0, W("tools/matching"))
 import claim  # noqa: E402
-NUDGE = ("Continue your task: run .venv/bin/python tools/matching/claim.py %s %%s (it prints the slice you hold if it is "
-         "unfinished, else your next slice), finish that slice, and keep claiming until it prints NO SLICE; then give "
-         "the final one-line-per-slice summary." % G["batch"]) if QUEUE else (
+NUDGE = ("Continue your task. Act through tool calls: call the edit/write tool to change files and the shell tool to "
+         "compile; do not end your turn with a plan in text. Run .venv/bin/python tools/matching/claim.py %s %%s (it "
+         "prints the slice you hold if it is unfinished, else your next slice), finish that slice (source, chk.py, "
+         "bookkeeping, run_all), and keep claiming until it prints NO SLICE; then give the final one-line-per-slice "
+         "summary." % G["batch"]) if QUEUE else (
          "Continue your task: check the files already written in your slices and finish the remaining slices, then "
          "give the final one-line-per-slice summary.")
 LOG = W("work/opencode", "drain_%s.log" % a.group)
