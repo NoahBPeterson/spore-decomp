@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00f75c10  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 931 B.  undefined4 __thiscall(int, int) routine: FUN_004df2d0/FUN_009360d0/FUN_007cda70 x2, indirect `call eax`/`call edx` and internal branch to 0xf75f41; 1 base reloc emitted raw.
+00f75fc0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 50 B.  undefined4* (void) factory/accessor: single call to FUN_00926650; 3 base relocs emitted raw.

@@ -1,0 +1,2 @@
+00f75c10 FUN_00f75c10  # undefined4 __thiscall (int,int); naked asm, byte-exact
+00f75fc0 FUN_00f75fc0  # undefined4* (void) factory/accessor; naked asm, byte-exact
