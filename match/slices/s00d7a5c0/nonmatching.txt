@@ -1,0 +1,18 @@
+00d7a620 30 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: float return temp goes to a pushed slot instead of the dead parameter slot; equiv PASS
+00d7a700 109 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: cl shrink-wraps the esi push and folds the two return-true blocks into setne; equiv PASS
+00d7a850 74 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: block layout and register allocation around the FUN_00ac80d0 chain; equiv WEAK (27% coverage)
+00d7a920 246 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: distance-call temp slots and register allocation differ; equiv FAIL reg-only ecx (untouched by the original, 5 valid inputs)
+00d7aa50 101 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: first FUN_00d38a30 result kept in the original, dropped as a dead store by ours; equiv PASS
+00d7ab10 194 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: (long long) cast calls __ftol2 while the original inlines fnstcw/fldcw/fistp; equiv WEAK (29% coverage)
+00d7ac90 235 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: register allocation across the Play/GetSpeciesProfile chain differs; equiv FAIL reg-only ecx (untouched by the original, 5 valid inputs)
+00d7adc0 85 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: xmm product spilled differently before the vtable 0x58 float call; equiv UNSUPPORTED (no valid inputs: fake-arity)
+00d7ae20 13 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: lea vs add for the stimulus pointer plus an esi/edi swap; equiv WEAK (53% coverage)
+00d7ae80 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: add esi,0x5a8 where the original keeps lea eax,[esi+0x5a8]; equiv PASS
+00d7aed0 29 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: lea scheduled before push 1 and an edx/eax swap in the proximity vcall; equiv WEAK (31% coverage)
+00d7afb0 47 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: (f>>8)&1 folds to test imm instead of shr/test dl, exit blocks not merged; equiv PASS
+00d7b000 57 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: bit test and epilogue layout differ; equiv PASS
+00d7b060 110 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: block layout and register allocation around the GetSpeciesProfile chain; equiv WEAK (35% coverage)
+00d7b110 88 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: block layout and register allocation; equiv WEAK (42% coverage)
+00d7b1a0 198 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: cl tail-merges both exit blocks (99 vs 226 bytes); equiv PASS
+00d7b290 65 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: cl reorders/renames the two Get() calls; equiv PASS
+00d7b350 42 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: vtable slot loads hoisted and regs renamed; equiv UNSUPPORTED (no valid inputs: fake-arity/fault)
