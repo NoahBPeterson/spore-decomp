@@ -105,9 +105,9 @@ struct HIt {
     HashNode** mpBucket;   // +4
     HIt* advance(HIt* out, int);  // 0x00b72d80
 };
+// advance: the original hands `out` back in eax (it is loaded into eax for the two stores and
+// never overwritten), so the callers may use it: declare the return.
 // @ 0x00b72d80 -- HIt::advance
-// the original hands `out` back in eax (it is loaded into eax for the two stores and never
-// overwritten), so the callers may use it: declare the return.
 HIt* HIt::advance(HIt* out, int) {
     out->mpNode = mpNode;
     out->mpBucket = mpBucket;
@@ -360,9 +360,9 @@ struct E10 {
         return *this;
     }
 };
+// copy-range with out-pointer: `out` stays in eax for the whole function (both stores go through
+// it) and the original hands it back, so declare the return.
 // @ 0x00b73890 -- FUN_00b73890
-// `out` stays in eax for the whole function (both stores go through it) and the original hands
-// it back, so declare the return.
 E10** FUN_00b73890(E10** out, E10* first, E10* last, E10* dst) {
     *out = dst;
     if (first != last) {
