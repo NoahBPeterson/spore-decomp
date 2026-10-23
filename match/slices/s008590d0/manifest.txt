@@ -1,0 +1,32 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+#
+# Slice s008590d0 -- IJG libjpeg 6a decompression modules, linked into
+# SporeApp.exe.  Vendored upstream translation units compiled verbatim as C
+# (/TC); every function is byte-exact.
+#
+#   jdcolor.c    jdcolor.cpp
+#     008590d0 build_ycc_rgb_table     008591a0 ycc_rgb_convert
+#     008592c0 null_convert            00859350 grayscale_convert
+#     00859380 ycck_cmyk_convert       008594d0 jinit_color_deconverter
+#   jdhuff.c     jdhuff.cpp
+#     008599f0 jpeg_make_d_derived_tbl 00859bb0 jpeg_fill_bit_buffer
+#     00859cc0 jpeg_huff_decode        00859db0 process_restart
+#   jddctmgr.c   jddctmgr.cpp
+#     00859980 jinit_inverse_dct
+#
+# The retail build uses a patched jpeglib.h (a 1024-byte comment buffer and a
+# 4-byte flag are inserted after CCIR601_sampling, shifting everything from
+# max_h_samp_factor on by +0x404; the error msg_parm union is 80 bytes; a
+# trailing read_dht flag).  The local jpeglib.h carries that layout (shared with
+# slices s00858190 / s0085bb90) and is force-included before the vendor source.
+slices/s008590d0/jdcolor.cpp  _build_ycc_rgb_table  008590d0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s008590d0/jdcolor.cpp  _ycc_rgb_convert  008591a0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s008590d0/jdcolor.cpp  _null_convert  008592c0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s008590d0/jdcolor.cpp  _grayscale_convert  00859350  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s008590d0/jdcolor.cpp  _ycck_cmyk_convert  00859380  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s008590d0/jdcolor.cpp  _jinit_color_deconverter  008594d0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s008590d0/jdhuff.cpp  _jpeg_make_d_derived_tbl  008599f0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s008590d0/jdhuff.cpp  _jpeg_fill_bit_buffer  00859bb0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s008590d0/jdhuff.cpp  _jpeg_huff_decode  00859cc0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s008590d0/jdhuff.cpp  _process_restart  00859db0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s008590d0/jddctmgr.cpp  _jinit_inverse_dct  00859980  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc

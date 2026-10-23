@@ -1,0 +1,1 @@
+# Nothing partial in slice s008590d0 -- all 11 functions are byte-exact.
