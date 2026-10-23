@@ -1,0 +1,7 @@
+00873a60 png_handle_cHRM  # libpng 1.2.25 pngrutil.c static; whole-TU include byte-exact (SSE float codegen needs /fp:fast)
+008745a0 png_handle_tRNS  # libpng 1.2.25 pngrutil.c static; whole-TU include byte-exact
+00874860 png_handle_bKGD  # libpng 1.2.25 pngrutil.c static; whole-TU include byte-exact
+00874a80 png_handle_hIST  # libpng 1.2.25 pngrutil.c static; whole-TU include byte-exact
+00874c00 png_handle_pHYs  # libpng 1.2.25 pngrutil.c static; whole-TU include byte-exact
+00874d20 png_handle_oFFs  # libpng 1.2.25 pngrutil.c static; whole-TU include byte-exact
+00875100 png_handle_sCAL  # libpng 1.2.25 pngrutil.c static; whole-TU include byte-exact

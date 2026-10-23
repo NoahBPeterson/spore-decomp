@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00873a60/s00873a60.cpp  _png_handle_cHRM  00873a60  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3
+slices/s00873a60/s00873a60.cpp  _png_handle_tRNS  008745a0  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3
+slices/s00873a60/s00873a60.cpp  _png_handle_bKGD  00874860  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3
+slices/s00873a60/s00873a60.cpp  _png_handle_hIST  00874a80  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3
+slices/s00873a60/s00873a60.cpp  _png_handle_pHYs  00874c00  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3
+slices/s00873a60/s00873a60.cpp  _png_handle_oFFs  00874d20  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3
+slices/s00873a60/s00873a60.cpp  _png_handle_sCAL  00875100  /O2 /arch:SSE /MD /Gy /TC /GS- /fp:fast /Iwork/third_party/src/libpng-1.2.25 /Iwork/third_party/src/zlib-1.2.3
