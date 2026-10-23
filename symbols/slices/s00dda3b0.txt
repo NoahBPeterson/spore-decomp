@@ -1,0 +1,11 @@
+00dda3b0  ?m3b0@CB@@QAEXD@Z
+00dda500  ?FUN_00dda500@@YAXPAX@Z
+00dda6d0  ?FUN_00dda6d0@@YGXPAUCObj@@@Z
+00dda810  ?FUN_00dda810@@YG_NPAUCObj@@M@Z
+00dda920  ?FUN_00dda920@ObjA@@QAEPAV1@XZ
+00dda9a0  ?FUN_00dda9a0@ObjA@@QAEXXZ
+00ddaa20  ?FUN_00ddaa20@@YAXPAX0@Z
+00ddab10  ?FUN_00ddab10@@YGDPAUCObj@@M@Z
+00ddada0  ?FUN_00ddada0@@YGHPAUCObj@@M@Z
+00ddaf70  ?FUN_00ddaf70@@YAPAXPAXH@Z
+0041cb40  Matrix3::Assign  # thiscall ret 4: 3x3 float matrix assign (dst=ecx, src=stack)
