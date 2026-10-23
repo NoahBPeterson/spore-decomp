@@ -1,0 +1,21 @@
+# IJG libjpeg 6a (modified / EA) jdmarker.c -- all 9 slice VAs are byte-exact against the retail
+# image with /O2 /arch:SSE /MD /Gy /TC /GS- (see manifest.txt).
+# 0085c960 read_restart_marker is the other LOCAL helper of the same TU; it belongs to no slice. It is
+# missing from work/decomp_all/index_*.csv (which is what card.load_funcs() fills *starts* from -- a
+# symbols-only line names a VA but does not add a start), so card.bounds()/chk.py over-measure
+# 0085c5b0 read_markers: its code+data is 0x85c5b0..0x85c959 = 938 bytes (inline 17-entry jump table
+# at 0x85c818 + 254-byte switch index table at 0x85c85c, then 6 bytes of 0xCC padding), but bounds()
+# runs to the next index start 0x85c9f0 and reports 1086. chk.py then shows a phantom "148 diff" ==
+# abs(938-1086) with zero byte differences; run_all.py --manifest (which compares only the manifest
+# symbol's own length) reports MATCH. Same papercut as symbols/slices/s008561e0.txt; see
+# docs/Papercuts.md "function extents from bounds() are sometimes wrong".
+0085bb90 get_dac                  # jdmarker.c
+0085bd10 get_dht                  # jdmarker.c
+0085bff0 get_dqt                  # jdmarker.c
+0085c230 get_dri                  # jdmarker.c
+0085c330 skip_variable            # jdmarker.c
+0085c3e0 next_marker              # jdmarker.c
+0085c500 first_marker             # jdmarker.c
+0085c5b0 read_markers             # jdmarker.c
+0085c960 read_restart_marker      # jdmarker.c (helper, not a slice VA)
+0085c9f0 jpeg_resync_to_restart   # jdmarker.c

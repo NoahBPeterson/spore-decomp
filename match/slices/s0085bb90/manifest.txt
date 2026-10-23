@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0085bb90/s0085bb90.cpp  _get_dac  0085bb90  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s0085bb90/s0085bb90.cpp  _get_dht  0085bd10  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s0085bb90/s0085bb90.cpp  _get_dqt  0085bff0  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s0085bb90/s0085bb90.cpp  _get_dri  0085c230  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s0085bb90/s0085bb90.cpp  _skip_variable  0085c330  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s0085bb90/s0085bb90.cpp  _next_marker  0085c3e0  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s0085bb90/s0085bb90.cpp  _first_marker  0085c500  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s0085bb90/s0085bb90.cpp  _read_markers  0085c5b0  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s0085bb90/s0085bb90.cpp  _jpeg_resync_to_restart  0085c9f0  /O2 /arch:SSE /MD /Gy /TC /GS-
