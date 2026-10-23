@@ -1,0 +1,12 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# RenderWare 4 core (symbols/renderware4_core.txt): built with VC .NET 2003 (cl 13.10) /GL+/LTCG,
+# so a single-object /vc71 rebuild can only reproduce leaf / no-call functions byte-exactly.
+slices/s011e76b0/s011e76b0.cpp  ?Stream_ListAppend@@YIXPAXH@Z  011e79f0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011e76b0/s011e76b0.cpp  ?Stream_ReleaseChunk@@YIXPAXHPAD@Z  011e7c70  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011e76b0/s011e76b0.cpp  ?SetUnits@Stopwatch@@QAEXH@Z  011e7fe0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011e76b0/s011e76b0.cpp  ?GetStopwatchCycle@@YA_KXZ  011e8080  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011e76b0/s011e76b0.cpp  ??0Stopwatch@@QAE@H_N@Z  011e82d0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011e76b0/s011e76b0.cpp  ?Stop@Stopwatch@@QAEXXZ  011e83a0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011e76b0/s011e76b0.cpp  ?GetElapsedTime@Stopwatch@@QAEMXZ  011e8440  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011e76b0/s011e76b0.cpp  ??0AsyncOp@@QAE@XZ  011e84f0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011e76b0/s011e76b0.cpp  ?Reset@AsyncOp@@QAEXXZ  011e8530  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
