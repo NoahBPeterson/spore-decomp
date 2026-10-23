@@ -1,0 +1,25 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+#
+# Slice s00853750 -- libjpeg 6a marker writer (jcmarker.c) plus the compressor
+# master initial_setup (jcmaster.c).  Both are compiled as C (/TC) with the
+# libjpeg recipe flags against -Iwork/third_party/build/jpeg-6a-inc (jconfig.h)
+# and the upstream source directory, and every function is byte-exact.
+#
+# jcmarker.c is upstream IJG 6a with Spore's one patch: an "AVI1" APP0 block
+# replaces/joins the JFIF one (emit_4bytes, emit_avi1_app0 and the two-way
+# write_file_header; selector word at +0x168 of jpeg_compress_struct).  The
+# whole translation unit also emits emit_byte/emit_marker/emit_2bytes/emit_dqt/
+# emit_dht/write_file_trailer (0x00853240..0x008535d0, 0x00854190) -- those
+# belong to other slices and are not claimed here.
+slices/s00853750/jcmarker.c  _emit_sof  00853750  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/jpeg-6a-inc /Iwork/third_party/src/jpeg-6a
+slices/s00853750/jcmarker.c  _emit_sos  008538c0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/jpeg-6a-inc /Iwork/third_party/src/jpeg-6a
+slices/s00853750/jcmarker.c  _emit_jfif_app0  00853a80  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/jpeg-6a-inc /Iwork/third_party/src/jpeg-6a
+slices/s00853750/jcmarker.c  _emit_avi1_app0  00853c80  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/jpeg-6a-inc /Iwork/third_party/src/jpeg-6a
+slices/s00853750/jcmarker.c  _emit_adobe_app14  00853dc0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/jpeg-6a-inc /Iwork/third_party/src/jpeg-6a
+slices/s00853750/jcmarker.c  _write_any_marker  00853f20  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/jpeg-6a-inc /Iwork/third_party/src/jpeg-6a
+slices/s00853750/jcmarker.c  _write_file_header  00853f90  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/jpeg-6a-inc /Iwork/third_party/src/jpeg-6a
+slices/s00853750/jcmarker.c  _write_frame_header  00853fe0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/jpeg-6a-inc /Iwork/third_party/src/jpeg-6a
+slices/s00853750/jcmarker.c  _write_scan_header  008540c0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/jpeg-6a-inc /Iwork/third_party/src/jpeg-6a
+slices/s00853750/jcmarker.c  _write_tables_only  008541b0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/jpeg-6a-inc /Iwork/third_party/src/jpeg-6a
+slices/s00853750/jcmarker.c  _jinit_marker_writer  00854290  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/jpeg-6a-inc /Iwork/third_party/src/jpeg-6a
+slices/s00853750/jcmaster.c  _initial_setup  00854300  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/jpeg-6a-inc /Iwork/third_party/src/jpeg-6a

@@ -1,0 +1,2 @@
+# Every function in slice s00853750 is byte-exact (see manifest.txt).
+# 12 / 12: jcmarker.c (11) + jcmaster.c initial_setup (1).
