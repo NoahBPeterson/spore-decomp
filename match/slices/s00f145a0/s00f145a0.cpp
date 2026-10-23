@@ -67,6 +67,8 @@ struct VecF {
     VecF* operator=(const VecF& src);     // 0x0050d4e0
 };
 
+struct Tail5 { int v0, v1, v2, v3, v4; };
+
 // ---------------------------------------------------------------------------
 // the 0x70-byte record (vtable 0x147f604).
 // ---------------------------------------------------------------------------
@@ -84,7 +86,7 @@ struct Rec70 {
     VecF  mVec30;   // +0x30  (+0x3c allocator)
     int   mField40; // +0x40
     float mF44, mF48, mF4c, mF50, mF54, mF58;  // +0x44 .. +0x58
-    int   mD5c, mD60, mD64, mD68, mD6c;        // +0x5c .. +0x6c
+    Tail5 mTail;                               // +0x5c .. +0x6c
     Rec70* CopyFrom(const Rec70& src);   // 0x00f14690
     Rec70* operator=(const Rec70& src);  // 0x00f147e0
 };
@@ -159,8 +161,8 @@ Vec12* Vec12::assign(const Vec12* src)
     if (src == this)
         return this;
 
-    int n = (int)((char*)src->mpEnd - (char*)src->mpBegin) >> 2;
-    if (((int)((char*)mpCapacity - (char*)mpBegin) >> 2) < n) {
+    uint32_t n = (uint32_t)(((char*)src->mpEnd - (char*)src->mpBegin) >> 2);
+    if (n > (uint32_t)(((char*)mpCapacity - (char*)mpBegin) >> 2)) {
         void* pNew = DoAllocate(n, src->mpBegin, src->mpEnd);
         DoDestroy(mpBegin, mpEnd);
         if (mpBegin && ((int*)mpBegin)[-1] != 0)
@@ -171,11 +173,14 @@ Vec12* Vec12::assign(const Vec12* src)
         return this;
     }
 
-    int sz = (int)((char*)mpEnd - (char*)mpBegin) >> 2;
-    if (sz < n) {
-        do_copy(src->mpBegin, (char*)src->mpBegin + sz * 4, mpBegin);
-        void* out = 0;
-        uninit_copy(&out, (char*)src->mpBegin + sz * 4, src->mpEnd, mpEnd, (void*)src);
+    if (n > (uint32_t)(((char*)mpEnd - (char*)mpBegin) >> 2)) {
+        do_copy(src->mpBegin,
+                (char*)src->mpBegin + (uint32_t)(((char*)mpEnd - (char*)mpBegin) >> 2) * 4,
+                mpBegin);
+        void* out;
+        uninit_copy(&out,
+                    (char*)src->mpBegin + (uint32_t)(((char*)mpEnd - (char*)mpBegin) >> 2) * 4,
+                    src->mpEnd, mpEnd, (void*)src);
         mpEnd = (char*)mpBegin + n * 4;
         return this;
     }
@@ -205,25 +210,26 @@ Rec70* Rec70::CopyFrom(const Rec70& src)
     mField10 = src.mField10;
     mField14 = src.mField14;
 
-    int n = (int)((char*)src.mVec18.mpEnd - (char*)src.mVec18.mpBegin) >> 2;
-    mVec18.Allocate(n, (void*)&src.mAlloc24);
-    void* out = 0;
-    uninit_copy(&out, src.mVec18.mpBegin, src.mVec18.mpEnd, mVec18.mpBegin, (void*)&src);
-    mVec18.mpEnd = out;
+    Vec12* v18 = &mVec18;
+    uint32_t n = (uint32_t)(((char*)src.mVec18.mpEnd - (char*)src.mVec18.mpBegin) >> 2);
+    v18->Allocate(n, (void*)&src.mAlloc24);
+    void* out;
+    uninit_copy(&out, src.mVec18.mpBegin, src.mVec18.mpEnd, v18->mpBegin, (void*)&src);
+    v18->mpEnd = out;
 
     mField2c = src.mField2c;
 
-    int fn = (int)((char*)src.mVec30.mpEnd - (char*)src.mVec30.mpBegin) >> 2;
-    mVec30.Allocate(fn, (void*)&src.mVec30.mAlloc);
-    void* r = memcpy_(mVec30.mpBegin, src.mVec30.mpBegin,
+    VecF* v30 = &mVec30;
+    uint32_t fn = (uint32_t)(((char*)src.mVec30.mpEnd - (char*)src.mVec30.mpBegin) >> 2);
+    v30->Allocate(fn, (void*)&src.mVec30.mAlloc);
+    void* r = memcpy_(v30->mpBegin, src.mVec30.mpBegin,
                       (uint32_t)((char*)src.mVec30.mpEnd - (char*)src.mVec30.mpBegin));
-    mVec30.mpEnd = (char*)r + fn * 4;
+    v30->mpEnd = (char*)r + fn * 4;
 
     mF44 = src.mF44; mF48 = src.mF48; mF4c = src.mF4c;
     mF50 = src.mF50; mF54 = src.mF54; mF58 = src.mF58;
 
-    mD5c = src.mD5c; mD60 = src.mD60; mD64 = src.mD64;
-    mD68 = src.mD68; mD6c = src.mD6c;
+    mTail = src.mTail;
 
     return this;
 }
@@ -235,20 +241,20 @@ Rec70* Rec70::CopyFrom(const Rec70& src)
 Rec70* Rec70::operator=(const Rec70& src)
 {
     void* s4 = src.mRef4;
-    if (s4 != mRef4) {
+    void* old4 = mRef4;
+    if (s4 != old4) {
         if (s4)
             ((FnV)(*(void***)s4)[0])(s4);
-        void* old4 = mRef4;
         mRef4 = s4;
         if (old4)
             ((FnV)(*(void***)old4)[1])(old4);
     }
 
     void* s8 = src.mRef8;
-    if (s8 != mRef8) {
+    void* old8 = mRef8;
+    if (s8 != old8) {
         if (s8)
             ((FnV)(*(void***)s8)[0])(s8);
-        void* old8 = mRef8;
         mRef8 = s8;
         if (old8)
             ((FnV)(*(void***)old8)[1])(old8);
@@ -265,8 +271,7 @@ Rec70* Rec70::operator=(const Rec70& src)
     mF44 = src.mF44; mF48 = src.mF48; mF4c = src.mF4c;
     mF50 = src.mF50; mF54 = src.mF54; mF58 = src.mF58;
 
-    mD5c = src.mD5c; mD60 = src.mD60; mD64 = src.mD64;
-    mD68 = src.mD68; mD6c = src.mD6c;
+    mTail = src.mTail;
 
     return this;
 }

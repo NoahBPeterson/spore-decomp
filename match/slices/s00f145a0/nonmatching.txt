@@ -1,0 +1,5 @@
+00f145a0 124 /O2 /MD /Gy /TP /GS- /arch:SSE equiv WEAK -- complete but not byte-exact (size 223 vs 234); 162 valid inputs, 41.3% coverage (need 60%); residual register-allocation/scheduling differences only
+00f14690 160 /O2 /MD /Gy /TP /GS- /arch:SSE equiv WEAK -- complete but not byte-exact (size 257 vs 264); 128 valid inputs, 100.0% coverage; residual register-allocation/scheduling differences only
+00f149d0 293 /O2 /MD /Gy /TP /GS- /arch:SSE equiv UNSUPPORTED -- complete but not byte-exact (size 327 vs 350); 0/400 valid (fault(write)=185, fault(read)=163); harness cannot build a valid live object graph
+00f14b30 79 /O2 /MD /Gy /TP /GS- /arch:SSE equiv UNSUPPORTED -- complete but not byte-exact (size 101 vs 100); 0/400 valid (fault(read)=235, fault(write)=156)
+00f14ba0 413 /O2 /MD /Gy /TP /GS- /arch:SSE equiv UNSUPPORTED -- complete but not byte-exact (size 450 vs 493); 0/400 valid (fault(read)=322, fault(write)=64)
