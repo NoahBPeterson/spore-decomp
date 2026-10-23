@@ -1,0 +1,7 @@
+00f05110 Movie::LayoutYouTube     # centre the youtube icon/caption pair inside the share panel and resize both windows
+00f055c0 Movie::SaveUploadSettings # write the credential variant pair into the persistent cPropertyList and flush the save area
+00f05790 Movie::RefreshPanel      # refresh panel captions, size the wrapped text windows and show the dialog modally
+00f05b00 Movie::CloseUpload       # leave the upload flow: mute audio, close tutorial window, hand "<name>.avi" to the share panel
+00f05c40 Movie::SendPublicAuth    # post cEditorYouTubeAuthenticationMessage with the public flag set
+00f05d00 Movie::LoginToYouTube    # post cEditorYouTubeAuthenticationMessage without the public flag
+00f05dc0 BuildYtFeed              # append the YouTube Atom entry XML document to the caller's string
