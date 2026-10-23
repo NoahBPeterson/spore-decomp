@@ -1,0 +1,17 @@
+# Spore (EA) gameplay collision/phantom bookkeeping helpers, slice s00b4b590.
+# No retail PDB names survive for these; the decorated names below are the exact
+# spellings the slice TU compiles to (markers in s00b4b590.cpp), which is what the
+# equivalence harness binds against.  All twelve are reconstructed in full and
+# non-exact; see match/slices/s00b4b590/nonmatching.txt.
+00b4b590 ?FUN_00b4b590@@YIXPAXH0@Z
+00b4b7b0 ?FUN_00b4b7b0@@YIXPAX@Z
+00b4b7f0 ?FUN_00b4b7f0@@YIPAXPAXHPAH@Z
+00b4b880 ?FUN_00b4b880@@YIPAXPAXHPAH@Z
+00b4b910 ?FUN_00b4b910@@YAXI@Z
+00b4bae0 ?FUN_00b4bae0@@YAHII@Z
+00b4bba0 ?FUN_00b4bba0@@YAHII@Z
+00b4bc20 ?FUN_00b4bc20@@YAXPAD0PAM1MM@Z
+00b4bd40 ?FUN_00b4bd40@@YAEPAD0@Z
+00b4be50 ?FUN_00b4be50@@YAXPAD0M@Z
+00b4c0e0 ?FUN_00b4c0e0@@YAXM@Z
+00b4c170 ?FUN_00b4c170@@YIXPAXHH@Z
