@@ -1,0 +1,21 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+#
+# NOTE ON /GS-:  the retail object carries no __security_cookie in any function (none of the five
+# here keeps a transform-message/scratch local large enough that /GS would leave it cookie-free,
+# and 00b172b0's 0x48-byte frame plus 00b17c10's 0x?? frame are cookie-free in retail), so the
+# original build clearly used /GS-, matching every other slice in this batch.
+#
+# Slice s00b172b0 = one ToolShape / tool-picking translation unit (falls in the modmap gap around
+# 00b172b0..00b17xxx).  ToolShape is a 0xe0-byte pick shape: f[0..0x3f] a float block, a 9-corner
+# SpVector of Vec3 at +0x48 (built by FUN_00b172b0), a half-extent radius at +0xcc and two object
+# slots at +0xd0/+0xd4.  1/5 byte-exact (00b17790).  The four below are complete C++ that
+# reproduces the original control flow, call order and callee ABIs; they miss byte-exactness
+# because MSVC's register allocator / x87-SSE expression scheduler picks a different plan for the
+# float-heavy bodies (retail 00b172b0 spills many intermediates through the frame that our builds
+# keep in xmm registers).
+#
+00b172b0 737 non-byte-exact; 9-corner SpVector rebuild: resize(9) at +0x48, then the A=f12/B=f13 axis-scale block, s9/s10/s11 = f9/f10/f11*B*A, u=f14*A, P/Q/R = A*f3+f0 / f1+f4*A / f2+f5*A, and the c*/d* pairs.  All nine corner stores are present in retail's element order (e[6],e[8],e[0], e[2],e[4],e[7],e[1],e[3],e[5]) and the same float values are produced, but retail interleaves the computation with frame spills (movss [esp+0x8/0x14/0x18/0x1c/0x38]) that keep ~6 xmm live values alive; our cleaner temp schedule is 553 bytes vs the original 804.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv PASS (265 valid inputs, 100.0% coverage)
+00b175e0 313 non-byte-exact; nearest-object search over two game-data vectors (0x18c6d19 / 0x18c43e8): per element o=Vt(obj+0x120,0x2c)(obj+0x120) and a squared-distance compare against best (FLT_MAX) writing t->obj1 (+0xd4) / t->obj0 (+0xd0); loop1 sums dx*dx+dz*dz+dy*dy, loop2 dz*dz+dy*dy+dx*dx (matching retail's differing load orders z,x,y and y,x,z).  Same size to within 2 bytes (423 vs 421) but the loop-carried iterator/base registers (retail edi=&range.begin, ebx=iterator) and the best/res frame slots (retail best@0x10, res1@0x14) differ, which shifts the loop-alignment `nop` and cascades through the body.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv UNSUPPORTED (0/400 inputs valid: fault(read)=400 — the GetGameDataVector range pointer is an engine address outside the test memory model)
+00b17810 866 non-byte-exact; contact test vs t->obj1: the `sqrt(x^2+y^2+z^2) < GetRadiusAt(PlanetModel(),t)+cfg` gate, the rebuild/radius/nearest refresh, then the o=Vt(obj1+0x120,0x2c)/sub=Vt(obj1,0x6c) probe with the 0x84 flag bits (0x10 && !0x20), the two length tests and the FUN_00b16520 hit calls that tag *out (1 / 2 / 4), and the scaled-position sweep (t->f[0..2]*1.1) that tags 3.  Same call order and 12-byte HitResult writes, but the x87 length/`comiss` schedule and the register plan differ (1002 vs 1014).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv WEAK (197 valid inputs, 19.6% coverage)
+00b17c10 1232 non-byte-exact; near-duplicate of 00b17810 with the added out->acc[0..2] = g_167bdb4/8/c block, the cTribe::GetMembers (0xc8e810 -> obj1+0x340) and 0xbd8130 (-> obj1+0x308) list walks, the obj0 path (Vt(obj0,0xac) + Vt(obj0,0xbc) list), the FUN_00b16620 hit tests with the PUSH_HIT refcounted push_back, the final GetGameDataVector(...,0xae72d0,...,0x18c6de8) walk, and the tail `return (out && out->begin != out->end) ? 1 : 0`.  All present and in retail order, but the object/list and float schedules differ (1444 vs 1468).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv WEAK (181 valid inputs, 10.4% coverage)

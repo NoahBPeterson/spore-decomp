@@ -1,0 +1,1 @@
+slices/s00b172b0/s00b172b0.cpp  ?FUN_00b17790@ToolShape@@QAEXD@Z  00b17790  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
