@@ -1,15 +1,14 @@
 # va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
 # VS2008-era (cl 15) UI code; a single-object rebuild cannot reproduce the original
 # inlining / register-allocation decisions for these large functions.  All rows compile
-# cleanly with /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast; equivalence verdicts at the
+# cleanly with /O2 /MD /Gy /EHsc /TP /GS- /arch=SSE /fp:fast; equivalence verdicts at the
 # end of each line.
-00f1e020  886  complete; ReadConfig (20 property reads + 4 string-array loads + resize/assign); codegen diverges (property-helper call shape and stack slot reuse)
-00f1e450  170  complete; cScenarioPlayProgressBar ctor (vtables, 15-dword zero run, Stopwatch ctor, float/config init); codegen diverges (call-argument setup hoisted, store scheduling)
-00f1e580   91  complete; cScenarioPlayProgressBar dtor (release f100, RemoveHandler, destroy goals, free string, reset vtables); codegen diverges (register choice on the 5 RemoveHandler args)
-00f1e6a0  224  complete; per-frame scans over three game-data vectors (creature base, creature, space inventory); codegen diverges (loop register allocation)
-00f1e880  130  complete; uninitialised-copy of a goal range (map Construct + act-step Construct incl. inline-buffer vector); codegen diverges (base-pointer folding / loop induction registers)
-00f1e940  143  complete; forward assign of a goal range (inlined field copy with map op= and vector op=); codegen diverges (pointer folding)
-00f1e9f0  155  complete; copy_backward over a goal range; codegen diverges (decrement ordering and pointer folding)
-00f1eaa0  335  complete; eastl::vector<Goal>::insert fast path + grow path (allocate, move uninit, destroy, construct, replace); codegen diverges (division-by-constant and block layout)
-00f1ec50  477  complete; eastl::vector<Goal>::emplace_back (fast path inits list sentinel + act ctor; grow path builds stack temp and inserts); codegen diverges (tail-jump vs fallthrough, stack temp layout)
-00f1ecf0  667  complete; Update (clear/reorder goal vector, reset timers, rebuild goals from act entries, item-id matching, type scan); codegen diverges (large-function register allocation)
+00f1e020  927  complete; ReadConfig (20 property reads + 4 string-array loads + resize/assign); codegen diverges (property-helper call shape and stack slot reuse); equiv WEAK (400/400 valid, no mismatch, original coverage 3.3% - game singletons null under the harness)
+00f1e450  170  complete; cScenarioPlayProgressBar ctor (vtables, 15-dword zero run, Stopwatch ctor, float/config init); codegen diverges (call-argument setup hoisted, store scheduling); equiv PASS (400/400 valid, 100% coverage)
+00f1e6a0  224  complete; per-frame scans over three game-data vectors (creature base, creature, space inventory); codegen diverges (loop register allocation); equiv UNSUPPORTED (0/400 inputs valid - needs live game-data vectors)
+00f1e880  130  complete; uninitialised-copy of a goal range (map Construct + act-step Construct incl. inline-buffer vector); codegen diverges (base-pointer folding / loop induction registers); equiv UNSUPPORTED (0/400 inputs valid - harness cannot fabricate valid Goal ranges)
+00f1e940  143  complete; forward assign of a goal range (inlined field copy with map op= and vector op=); codegen diverges (pointer folding); equiv UNSUPPORTED (0/400 inputs valid)
+00f1e9f0  155  complete; copy_backward over a goal range; codegen diverges (decrement ordering and pointer folding); equiv WEAK (77/400 valid, no mismatch, 13% coverage)
+00f1eaa0  335  complete; eastl::vector<Goal>::insert fast path + grow path (allocate, move uninit, destroy, construct, replace); codegen diverges (division-by-constant and block layout); equiv UNSUPPORTED (0/400 inputs valid)
+00f1ec50  132  complete; eastl::vector<Goal>::emplace_back (fast path inits list sentinel + act ctor; grow path builds stack temp and inserts); codegen diverges (tail-jump vs fallthrough, register allocation); equiv PASS (273/400 valid, 100% coverage)
+00f1ecf0  542  complete; Update (clear/reorder goal vector, reset timers, rebuild goals from act entries, item-id matching, type scan); codegen diverges (large-function register allocation); equiv FAIL (heap-pool pointer differs in the store/clear prologue on synthetic inputs)

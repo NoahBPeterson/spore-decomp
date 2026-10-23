@@ -46,7 +46,31 @@ void* SP_MessageServer();                           // 0x0067dcc0
 void  Messaging__RemoveHandler(void*, void*, void*, void*, void*);   // 0x00571db0
 void* SP_NounManager();                             // 0x00b3d300
 void* SP_TerrainMgr();                              // 0x00b3d320
-void* GetTerrain();                                 // 0x00b1de80 (takes no args; called via TerrainMgr)
+struct TerrainMgr
+{
+    void* GetTerrain();                             // 0x00b1de80
+};
+struct ActHost
+{
+    void* GetAct(void* id);                         // 0x00f3be60
+    void* FindCreature(void* id);                   // 0x00f3e8a0
+    void* BuildGoal(void* a, void* e, void* b, void* g, int, int, int, int);  // 0x00f416b0
+};
+struct CreatureObj
+{
+    int IsMarked();                                 // 0x00f25ed0
+};
+struct Inventory
+{
+    void* GetItemID();                              // 0x00b1f9c0
+};
+struct ItemObj
+{
+    virtual void v0();
+    virtual void v1();
+    virtual void v2();
+    virtual void* v3(int, int);
+};
 void* GetGameDataVector(void*, int, int, int, int, int);   // 0x00b21340
 void* EachChild2(void*);                            // 0x00f196f0
 void* EachChild(void*, uint*, uint);                // 0x00f19660
@@ -113,7 +137,7 @@ struct Goal                                         // 0x1ac bytes
     GoalMap map;                                    // +0x08 (0x1c)
     ActStep act;                                    // +0x24 (0x188)
     Goal();
-    ~Goal();
+    void destroy();                                 // 0x00f1dec0
     Goal& operator=(const Goal&);                   // 0x00f1e810
 };
 
@@ -333,21 +357,12 @@ void GoalVec::emplace_back()
     Goal* t = (Goal*)tmpbuf;
     InitGoal(t);
     Insert(e, *t);
-    t->~Goal();
+    t->destroy();
 }
 
 // ---------------------------------------------------------------------------
 // goal record ctor / dtor
 // ---------------------------------------------------------------------------
-// @ 0x00f1dec0  Goal::~Goal (also the element dtor used by the range helpers)
-__declspec(noinline) Goal::~Goal()
-{
-    DestroyActRange((ActStep*)act.vec.b, (ActStep*)act.vec.e);
-    if (act.vec.b && ((int*)act.vec.b)[-1] != 0)
-        operator_delete__(act.vec.b);
-    DestroyMapList(&map, *(int*)((char*)&map + 0x14));
-}
-
 Goal::Goal()
 {
     char* q = (char*)this;
@@ -416,6 +431,9 @@ struct Bar
     void Update();
     void Scans();
     void Reset();                                   // 0x00f190a0
+    void* EachChild(void* id, int cnt);             // 0x00f19660
+    void AddGoal8(void* g, void* c, int x);         // 0x00f1ae10
+    void AddGoal5(void* g, void* c);                // 0x00f1ae10
 };
 
 extern char gBarVtbl0[];             // 0x0148c2fc
@@ -547,7 +565,7 @@ static inline bool GETPROP(void* obj, int id, void** out)
 // @ 0x00f1e020
 void ReadConfig()
 {
-    void* t = GetTerrain();
+    void* t = ((TerrainMgr*)SP_TerrainMgr())->GetTerrain();
     if (t) {
         void* prop;
         PROP(0x6d95f3cc, 0xd, gT924)
@@ -675,11 +693,11 @@ void Bar::Scans()
 // @ 0x00f1ecf0
 void Bar::Update()
 {
-    Goal* first = goals.b;
-    MoveRangeAssign(goals.e, goals.e, goals.b);
-    goals.destroyRange(first, goals.e);
-    Goal* ne = goals.e + (int)((goals.e - goals.b) / 0x1ac);
-    goals.e = ne;
+    Goal* ob = goals.b;
+    Goal* oe = goals.e;
+    Goal* r = MoveRangeAssign(oe, oe, ob);
+    goals.destroyRange(r, goals.e);
+    goals.e += (oe - ob);
 
     uint8_t* base = (uint8_t*)this;
     base[0x78] = 0;
@@ -694,16 +712,16 @@ void Bar::Update()
         f58 = f54;
     }
 
-    void* act = FUN_00f3be60(fb8);
+    void* host = *(void**)((char*)gStartup + 0x74);
+    void* act = ((ActHost*)host)->GetAct(fb8);
     if (act) {
         uint8_t* a = (uint8_t*)act;
         *(int*)(base + 0xbc) = *(int*)(a + 0x78) * 1000;
         uint8_t* ei = *(uint8_t**)(a + 0x84);
         uint8_t* ee = *(uint8_t**)(a + 0x88);
+        int idx = 0;
+        int goalOff = 0;
         if (ei != ee) {
-            int sawEntry = 0;
-            int idx = 0;
-            int entryOff = 0;
             do {
                 goals.emplace_back();
                 uint8_t* g = (uint8_t*)goals.e - 0x1ac;
@@ -719,43 +737,42 @@ void Bar::Update()
                 *(Vec44*)(g + 0x3c) = *(Vec44*)(ei + 0x18);
                 *(void**)(g + 0x1a8) = *(void**)(ei + 0x184);
                 if (*(int*)(ei + 0x0c) == 0) {
-                    void* p = FUN_00f3e8a0(*(void**)(ei + 0x04), this);
-                    if (p == 0 || FUN_00f25ed0(p) == 0) {
-                        void* r = FUN_00f416b0(fb8, ei + 4, *(void**)(ei + 4), g, 0, 0, 0, 1);
-                        *(void**)(g + 0x30) = r;
+                    void* p = ((ActHost*)host)->FindCreature(*(void**)(ei + 0x04));
+                    if (p == 0 || ((CreatureObj*)p)->IsMarked() == 0) {
+                        void* rr = ((ActHost*)host)->BuildGoal(fb8, ei, *(void**)(ei + 4), g, 0, 0, 0, 1);
+                        *(void**)(g + 0x30) = rr;
                     }
                 }
                 if (*(int*)(g + 0x24) == 8) {
                     if (*(int*)(g + 0x30) != 1)
                         *(int*)(g + 0x30) = 1;
-                    uint cnt = 0;
-                    void* c = EachChild(*(void**)(ei + 4), &cnt, 0);
+                    int cnt = 0;
+                    void* c = EachChild(*(void**)(ei + 4), (int)&cnt);
                     if (c) {
-                        FUN_00f1ae10(this, g, c);
-                        if ((int)cnt > 1)
-                            *(int*)(g + 0x04) += (int)cnt - 1;
+                        AddGoal8(g, c, 0);
+                        if (cnt > 1)
+                            *(int*)(g + 0x04) += cnt - 1;
                     }
                 }
                 if (*(int*)(g + 0x24) == 5) {
-                    uint8_t* inv = (uint8_t*)FUN_00b1f9c0(SP_NounManager());
+                    uint8_t* inv = (uint8_t*)((Inventory*)SP_NounManager())->GetItemID();
                     int cnt = (int)(*(uint8_t**)(inv + 4) - *(uint8_t**)inv) >> 2;
                     for (int j = 0; j < cnt; ++j) {
                         uint8_t* it = *(uint8_t**)(*(uint8_t**)inv + j * 4);
                         if (*(int*)(it + 0x1c) == *(int*)(g + 0x28)) {
-                            void* r = (*(void*(**)(uint8_t*, int))((char*)(*(void**)it) + 0xc))(it, 0x1186577);
-                            FUN_00f1ae10(this, g, r);
+                            void* rv = ((ItemObj*)it)->v3(0x1186577, 0);
+                            AddGoal5(g, rv);
                         }
                     }
                 }
-                int total = (int)((goals.e - goals.b) / 0x1ac);
-                int g24 = *(int*)((char*)goals.b + entryOff + 0x24);
-                if (idx < total && (g24 == 10 || g24 == 11)) {
+                int total = (int)(goals.e - goals.b);
+                int g24 = *(int*)((char*)goals.b + goalOff + 0x24);
+                if (idx < total && (g24 == 10 || g24 == 11))
                     base[0x79] = 1;
-                } else {
+                else
                     base[0x78] = 1;
-                }
                 ++idx;
-                entryOff += 0x1ac;
+                goalOff += 0x1ac;
                 ei += 0x188;
             } while (ei != ee);
         }
