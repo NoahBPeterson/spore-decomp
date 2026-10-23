@@ -341,8 +341,12 @@ bool Parser::Skip(uint64_t id)
     case 0x15:
         ok = ReadVarU64(&q);
         break;
+    default:
+        return false;
     }
-    return ok;
+    if (ok)
+        return true;
+    return false;
 }
 
 // =============================================================================
@@ -513,8 +517,8 @@ unsigned char DWARF2File::Init(void* a1, void* a2)
             && mDbg.Get(".debug_line", &line)
             && mDbg.Get(".debug_str", &str)) {
             mArangesBegin = aranges.begin;
-            mInfoBegin    = info.begin;
             mArangesEnd   = aranges.begin + aranges.size;
+            mInfoBegin    = info.begin;
             mAbbrevBegin  = abbrev.begin;
             mAbbrevEnd    = abbrev.begin + abbrev.size;
             mLineBegin    = line.begin;
@@ -605,10 +609,14 @@ bool Parser::HandleRecord(void* a1, unsigned char tag, uint64_t value)
             return false;
         if (!ReadVarU64(&v))
             return false;
-        return ReadVarU64(&v);
+        if (!ReadVarU64(&v))
+            return false;
+        return true;
     }
     default:
-        return SetPosition((unsigned int)value, 1);
+        if (!SetPosition((unsigned int)value, 1))
+            return false;
+        return true;
     }
 }
 

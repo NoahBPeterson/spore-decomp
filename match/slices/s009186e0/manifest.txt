@@ -2,6 +2,7 @@
 slices/s009186e0/s009186e0.cpp  ?ReadSpecial@Parser@@QAE_N_KPA_J@Z  0x00918990  /O2 /MD /Gy /TP /GS-
 slices/s009186e0/s009186e0.cpp  ?HasFlag@Info@@QAE_NI@Z  0x00918c50  /O2 /MD /Gy /TP /GS-
 slices/s009186e0/s009186e0.cpp  ?LoadFrom@Parser@@QAE_NPAUDWARF2File@@PAU1@@Z  0x00918c70  /O2 /MD /Gy /TP /GS-
+slices/s009186e0/s009186e0.cpp  ?Init@DWARF2File@@QAEEPAX0@Z  0x00919110  /O2 /MD /Gy /TP /GS-
 slices/s009186e0/s009186e0.cpp  ??0Parser@@QAE@XZ  0x00919270  /O2 /MD /Gy /TP /GS-
 slices/s009186e0/s009186e0.cpp  ??0DWARF2File@@QAE@XZ  0x00919510  /O2 /MD /Gy /TP /GS-
 slices/s009186e0/s009186e0.cpp  ??_GDWARF2File@@UAEPAXI@Z  0x009195c0  /O2 /MD /Gy /TP /GS-
