@@ -1,0 +1,2 @@
+# va  size (ours/orig)  reason
+00fb9fc0  0/802  Six-member intrusive-refcount release chain (six unrolled `lock xadd` decrement/pair-check sequences over the members at +0x00/+0x04/+0x08/+0x0c/+0x10/+0x14, each through an inline SPtr-style release) plus a /GS stack cookie. Not implemented: reproducing the unrolled inline release helper needs the exact SPtr template shape, and the card's decompile (line 1561+) renders only the flat refcount arithmetic, so the six unrolled bodies would have to be re-derived from the disasm first. Left for the next pass.
