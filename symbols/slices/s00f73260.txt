@@ -1,0 +1,3 @@
+00f73260 cTerrainSphere::SampleHeight  # no PDB name; vtable 0x01490908 slot 4; local dir -> sphere surface point (+1e-6 z nudge), optional normal + quat basis
+00f73760 cTerrainSphere::SampleOffset  # no PDB name; vtable 0x01490940 slot 2; radial-offset variant: extra distance argument, point written back through arg3
+00f73c10 cTerrainSphere::SampleNormal  # no PDB name; vtable 0x01490940 slot 4; same surface point but the normal comes from the normal cube map (GetVector4), unnormalised direction
