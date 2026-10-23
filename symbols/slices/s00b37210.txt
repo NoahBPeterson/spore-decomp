@@ -1,0 +1,13 @@
+# slice s00b37210 - SporeApp editor resource (cEditorRes) + Gonzago editor layer helpers; no DB names
+# VA        name                              mangled name
+00b37210    EditorConsoleCommand              ?EditorConsoleCommand@@YGXPAUcArguments@ArgScript@EA@@@Z
+00b37440    cEditorRes::~cEditorRes           ?dtor@cEditorRes@@QAEXXZ
+00b375f0    AnalysisVector::operator=         ?assign@AnalysisVector@@QAEAAU1@ABU1@@Z
+00b37720    GlyphVector::insert               ?insert@GlyphVector@@QAEXPAUGlyphInfo@@00H@Z
+00b378d0    cEditorLayer::gv08                ?gv08@cEditorLayer@@UAEXI_N@Z
+00b379f0    cEditorRes::ctor                  ?ctor@cEditorRes@@QAEPAU1@XZ
+00b37b70    cEditorLayer::AddObject           ?AddObject@cEditorLayer@@QAEXPAX@Z
+00b37c60    cEditorLayer::SpawnEffect         ?SpawnEffect@cEditorLayer@@QAEXIPBX0HHH@Z
+00b38140    cEditorRes::SetAnalysis           ?SetAnalysis@cEditorRes@@QAEXPBUAnalysisVector@@_N@Z
+# none of these 9 VAs carries a DB name (absent from symbols/names.txt and symbols/pdb_names.json);
+# the names above are the recovered ones used by this slice's source.
