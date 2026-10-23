@@ -1,0 +1,11 @@
+# slice s00bf8710 - SP civilization superweapon-AI helpers (pick a target, gate and fire a
+# superweapon) plus the EASTL vector<FunctionalMatch::Constraint> operations they lean on
+# (insert / find-or-insert / resize). No VA carries a DB name (symbols/pdb_candidates.json,
+# symbols/pdb_names.json); the names below are the recovered ones used by this slice's source.
+# VA        name                              mangled name
+00bf8710    cCivilization::PickSuperweaponTarget   ?PickSuperweaponTarget@cCivilization@@QAEXXZ
+00bf8a00    cCivilization::CanUseSuperweapon       ?CanUseSuperweapon@cCivilization@@QAE_NH@Z
+00bf8a70    cCivilization::UseSuperweapon          ?UseSuperweapon@cCivilization@@QAEXHPAUVec3@@@Z
+00bf8dd0    ConstraintVector::insert               ?insert@ConstraintVector@@QAEXPAUConstraint@@IPBU2@@Z
+00bf8ff0    ConstraintVectorFindOrInsert           ?ConstraintVectorFindOrInsert@@YAXPAUConstraintVector@@IPAUConstraint@@@Z
+00bf9250    ConstraintVector::resize               ?resize@ConstraintVector@@QAEXI@Z
