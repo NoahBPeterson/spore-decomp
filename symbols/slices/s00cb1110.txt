@@ -1,0 +1,2 @@
+00cb1110 FUN_00cb1110  # void __thiscall (int,int*,uint*); naked asm, byte-exact
+00cb1210 FUN_00cb1210  # int (void); naked asm, byte-exact

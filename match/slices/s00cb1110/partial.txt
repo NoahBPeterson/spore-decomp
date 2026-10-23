@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00cb1110  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 242 B.  void __thiscall(int, int*, uint*) routine: FUN_00921440/FUN_00cb02a0/FUN_00c29710 and operator new (FUN_00f473a0); 2 base relocs emitted raw.
+00cb1210  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 84 B.  int (void) routine: FUN_00cb00d0/FUN_00c2b080/FUN_00cadb50; 4 base relocs emitted raw.
