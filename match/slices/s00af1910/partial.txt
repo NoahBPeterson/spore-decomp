@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00af1910  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 374 B.  undefined4* __thiscall(undefined4*, undefined4*) routine: single call to FUN_00537dc0; no relocs.
