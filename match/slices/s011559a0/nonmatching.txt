@@ -1,0 +1,16 @@
+# va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
+011559a0  379  Pan3D azimuth-update (FUN_011559a0) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv PASS (351 valid, 97.1% coverage). NaN semantics: cl 13.10 jb/jbe treat unordered as taken; source uses negated comparisons (!(x<=c), !(x>c)) to reproduce it.
+01155bb0  153  VoiceStub::FUN_01155bb0 (sinc filter coefficient builder) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv PASS (400 valid, 100.0% coverage). Coeffs via x87 fsin helper X87Sinc (no CRT sin import); volatile spanp blocks the tail call the harness mis-scores.
+01155c80  286  Pan3D azimuth-update, filter variant (FUN_01155c80) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv PASS (251 valid, 100.0% coverage). Same negated-comparison NaN fix as 011559a0.
+01155e10  256  Voice sample-format convert/fold (FUN_01155e10) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv WEAK (333 valid, 56.7% coverage)
+01155f40  655  SNDI_precalcaztospkrvol (azimuth->speaker volume table builder) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv WEAK (196 valid, 57.1% coverage)
+01156310   91  FUN_01156310 (volume-table lookup into float[6]) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv WEAK (400 valid, 28.6% coverage)
+01156380   11  FUN_01156380 (free azimuth table) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv PASS (225 valid, 60.0% coverage)
+011563b0  138  FUN_011563b0 (init speaker angle table) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv PASS (400 valid, 100.0% coverage)
+01156480   37  FUN_01156480 (set module base offsets) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv PASS (400 valid, 100.0% coverage)
+01156530  287  FUN_01156530 (CPU feature probe, uint64) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv UNSUPPORTED (callee imports GetVersionExA, no handler)
+01156660   99  FUN_01156660 (find next free voice slot) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv WEAK (179 valid, 63.6% coverage)
+011566f0   69  MIX_createFxglobals complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv PASS (210 valid, 100.0% coverage)
+01156780   77  FUN_01156780 (free FX globals, walk bucket lists) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv WEAK (400 valid, 7.5% coverage)
+01156800  117  FUN_01156800 (CPU feature probe, alt) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv UNSUPPORTED (callee imports GetVersionExA, no handler)
+011568a0  114  MIX_setpitch complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv PASS (205 valid, 98.0% coverage)
