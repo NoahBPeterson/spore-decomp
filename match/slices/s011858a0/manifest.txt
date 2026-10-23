@@ -1,0 +1,7 @@
+# slice s011858a0 -- OpenSSL 0.9.8g upstream TUs compiled verbatim
+# md_rand.c: crypto/rand/md_rand.c; rsa_eay.c: crypto/rsa/rsa_eay.c
+slices/s011858a0/md_rand.cpp   _ssleay_rand_add        011858a0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/rand
+slices/s011858a0/md_rand.cpp   _ssleay_rand_bytes      01185c10  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/rand
+slices/s011858a0/md_rand.cpp   _ssleay_rand_status     01186080  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/rand
+slices/s011858a0/rsa_eay.cpp   _RSA_eay_public_encrypt  011861b0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/rsa
+slices/s011858a0/rsa_eay.cpp   _RSA_eay_private_encrypt 01186640  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/rsa
