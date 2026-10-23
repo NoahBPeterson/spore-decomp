@@ -1,0 +1,37 @@
+00adaad0 ?FUN_00adaad0@@YIXPAXHPAVcArguments@@@Z  # byte-exact; 148B Simulator command object: Msg tag 0x0476ad30 + FNV1_String8(args[0]) + AddMessage
+00adac70 ?FUN_00adac70@@YIXPAXHPAVcArguments@@@Z  # byte-exact; 248B Simulator command object: tag 0x04cea5ff, FNV1_String8(args[0]), ParseF(args[1]) into f10, 4 option flags into f18
+00adad70 ?FUN_00adad70@@YIXPAXH@@Z  # nonmatching; 822B Sim:: camera/sky command (this only): early-out on flag +0x2a, vcall slots 0x3c/0x38 of +0x13c, SetRef of +0x168, EMat transform/quaternion update, Sim::sendXform, then cViewer::GetFieldOfView into vcall slot 4
+00adb0b0 ?FUN_00adb0b0@@YIXPAXHI@Z  # nonmatching; 245B walk the eastl audio hashtable at +0xf0/+0xf4/+0xf8, for the matching key fire the two EA::Audio::GetSystemAT() event calls
+00adb1b0 ?FUN_00adb1b0@@YIDPAXHIPAI@Z  # nonmatching; 146B two-hashtable lookup (+0x90 then +0xb0) returning 1 when the first hits, writes payload+0x10
+00adb250 ?FUN_00adb250@@YIHPAXHII@Z  # byte-exact; 78B Sim:: hashtable equal_range + bucket-chain walk at this+0x5c, returns the matched value pointer
+00adb2a0 ?FUN_00adb2a0@@YIDPAXHII@Z  # nonmatching; 178B two-key Sim::Lookup + vcall slot 3 + hashtable find, then a member callback at +0x20
+00adb360 ?FUN_00adb360@@YIDPAXHI@Z  # byte-exact; 111B two-key Sim::Lookup + vcall slot 3 + Cursor::Method at +0x10
+00adb3d0 ?FUN_00adb3d0@@YIDPAXHIPAI@Z  # nonmatching; 155B two-key Sim::Lookup + vcall slot 3 + hashtable find copying 3 dwords payload+4/8/0xc out
+00adb680 ?FUN_00adb680@@YGXPAXI@Z  # nonmatching; 114B destroy a vector of intrusive lists: rewrite 4 vptrs, Release the +0x10 object, operator delete[], null the slot
+00adb700 ?FUN_00adb700@@YIXPAXHPAVcArguments@@@Z  # nonmatching; 461B "hide" ribbon command: tag 0x04448b85/0x05b70e8b, string8 copy + ConvertToString16, SPKeyFromName -> f08/f10
+00adb8d0 ?FUN_00adb8d0@@YIXPAXHPAVcArguments@@@Z  # nonmatching; 461B ribbon command: tag 0x0798207d/0x07982226, same string/SPKeyFromName path
+00adbaa0 ?FUN_00adbaa0@@YIXPAXHPAVcArguments@@@Z  # nonmatching; 497B ribbon command tag 0x067a195b with a "duration" option (ParseF) stored at f18
+
+# callees / globals the slice resolves
+00f473a0 ?EAAllocate@@YAPAXIPBDHHHH@Z  # operator new(size, name, a, b, file, line) used by every command object (0x40 Msg)
+00f47380 operator delete[]  # __cdecl operator_delete_array, ICF-folded with ??3@YAXPAX@Z; frees the string8 buffer and the list nodes
+007e4190 EA::ArgScript::cArguments::AddMessage  # cAppState::AddMessage(args, msg, char) thiscall (ecx = *(self+0xc))
+00838320 EA::ArgScript::cArguments::MainArguments  # MainArguments(int n) -> const char** (thiscall ret 4)
+00838020 EA::ArgScript::cArguments::MainArguments  # MainArguments(int* count, int min, int max) (thiscall ret 0xc)
+00838330 EA::ArgScript::cArguments::OptionArguments  # OptionArguments(const char* name, int n) (thiscall ret 8)
+008380b0 EA::ArgScript::cArguments::HasFlag  # HasFlag(const char* name) -> bool (thiscall ret 4)
+00932e80 FNV1_String8  # FNV-1 32-bit string hash, cdecl(const char*, unsigned seed, int flag)
+00b3d230 FUN_00b3d230  # stdcall hash lookup (1 arg) returning this for the EA audio system
+00b5cde0 FUN_00b5cde0  # fastcall (ecx = object) audio system tick/attach
+00ad9010 FUN_00ad9010  # stdcall (1 arg) audio entry release helper
+00a206f0 EA::Audio::GetSystemAT  # cdecl () -> EA::Audio:: system singleton
+011e0744 eastl::vector<bool,...>::DoInsertValue  # byte-range copy helper (cdecl, 3 args) used for the string8 buffer
+0093c6d0 EA::ConvertToString16  # cdecl (out, in) -> string16
+0068d5a0 SPKeyFromName  # SPKeyFromName(ResKey* out, const char* name, unsigned, unsigned)
+0041cb40 rw::math::fpu::Matrix33Template<float,0>::Matrix33Template<float,0>  # matrix assign/copy (thiscall ret 4)
+00472b80 rw::math::fpu::QuaternionFromMatrix33<float,0>  # sret QuaternionFromMatrix33(Quat* out, const Mat3*)
+00ad91a0 eastl::hashtable<...Audio::Eapd...>::find  # thiscall (out, key) ret 8, this = table at +0x90/+0xb0
+00ad9310 eastl::hashtable<...Audio::Eapd...>::find  # key-find variant (out, key) ret 8, this = payload+0x10
+009a6dd0 eastl::hashtable<...Audio::Eapd...>::equal_range  # thiscall (out, key) ret 8
+00db4780 eastl::hashtable<...ImageCursorProvider...>::find  # thiscall (out, key) ret 8, this = payload+0x10
+006859b0 eastl hashtable iterator advance  # stdcall (out, node, bucket) -> iterator pair
