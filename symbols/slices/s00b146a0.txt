@@ -1,0 +1,6 @@
+# va  name  # evidence
+#
+# Slice s00b146a0.  The address has no entry in any available symbol source
+# (symbols/names.txt, pdb_names.json, havok_names.txt), so the name below is a
+# descriptive placeholder for the invented owning class, not a PDB name.
+00b146a0  SubObject::f00b146a0  # unnamed in the PDB; placeholder class for the retail member function at 0x00b146a0

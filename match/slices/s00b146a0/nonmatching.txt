@@ -1,0 +1,16 @@
+# va  diff-bytes  status VERDICT flags: reason
+#
+# Slice s00b146a0 -- one unnamed Spore member function at 0x00b146a0 (retail
+# 0x00b146a0..0x00b148b9, 538 bytes; __thiscall, this in ecx, `ret 0xc` = three
+# stack arguments float3* arg1 / bool arg2 / int arg3).  It early-outs on two
+# state bytes, refreshes the transform at self+0x144 when arg2 is set, then drives
+# an object from the global factory sub_f48aa0 through a virtual call plus the
+# helpers sub_f987f0/sub_f927c0/sub_b0fa70/sub_b0fae0/sub_f9c660/sub_f4ff00, and
+# finally tears the object down (sub_b118a0) setting self[0x304] = 1.
+#
+# The reconstruction reproduces the control flow, the calling convention, the
+# receiver offsets and the full call sequence, but the routine interleaves x87
+# (fsqrt/fdivrp/fcompi) with SSE and the exact expression nesting that produced
+# that schedule -- and the byte layout of the two transform outputs that feed the
+# second normalisation -- could not be recovered.  Code size 333 vs 538.
+00b146a0 417 complete WEAK /O2 /MD /Gy /EHsc /TP: unnamed transform/drive update; structural reconstruction reaches only the shallow paths (difftest 400/400 inputs valid but 28.1% coverage, 43/153 insns) because the x87/SSE expression schedule and the transform-output locals cannot be reconstructed from the disassembly.
