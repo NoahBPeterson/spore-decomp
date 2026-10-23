@@ -512,7 +512,7 @@ realistic camera setups plus corners:
 - Compare **aligned instructions**, not differing-byte counts. A positional byte count balloons when one
   instruction shifts the rest; align the two instruction streams (difflib over normalised instructions,
   relocated operands masked, optionally stack-slot numbers masked) and count identical / operand-only /
-  missing / extra instructions. On `screen_to_world` the byte count ranked the escaping-pointer variant
+  missing / extra instructions (M&B `tools/matching/insn_align.py <src.cpp> <va> [--show]`). On `screen_to_world` the byte count ranked the escaping-pointer variant
   worst (417 bytes) while the alignment showed it among the closest (52 identical, 13 extra instructions).
 - Grade float-only differences with a **floating-point tolerance mode** (M&B `equiv.py --fp-tol`): on a
   mismatch, re-run the *original* at 64-bit precision (control word `0x037F`) as the reference; a differing
