@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+0115de20  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 1290 B.  __thiscall(int, int, int, undefined4, int*) routine: eastl helpers FUN_011e073e/FUN_011e0744, FUN_0115f190/FUN_0115ddd0/FUN_0115dc10/FUN_0115ffe0 and internal branches to 0x115e06f/0x115e072/0x115e0a0/0x115e11b/0x115e156/0x115e260/0x115e2b7/0x115e2d2; no relocs.
+0115e330  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 138 B.  rw::audio::core::FFT_Alloc (PDB name): allocates the FFT scratch tables via FUN_0112c820 (System::Alloc); 2 base relocs emitted raw.
+0115e3c0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 38 B.  rw::audio::core::FFT_Free (PDB name): System::Free(FUN_0112c850) on the scratch pointer then clears it; 1 base reloc emitted raw.
+0115e3f0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 197 B.  routine (int*) returning undefined4: straight-line integer/float math with no calls; 1 base reloc emitted raw.

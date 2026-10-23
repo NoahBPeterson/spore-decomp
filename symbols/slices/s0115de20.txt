@@ -1,0 +1,4 @@
+0115de20 FUN_0115de20  # __thiscall (int,int,int,undefined4,int*); naked asm, byte-exact
+0115e330 rw::audio::core::FFT_Alloc  # PDB name; naked asm, byte-exact
+0115e3c0 rw::audio::core::FFT_Free  # PDB name; naked asm, byte-exact
+0115e3f0 FUN_0115e3f0  # (int*) returning undefined4; naked asm, byte-exact
