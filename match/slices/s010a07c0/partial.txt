@@ -1,0 +1,4 @@
+# s010a07c0: no incomplete functions.  Every VA in this slice has a full, compiling implementation in
+# s010a07c0.cpp: 0x010A0970, 0x010A0BE0, 0x010A0D10, 0x010A0E20, 0x010A0F20 and 0x010A1170 are byte-exact
+# (manifest.txt) and 0x010A07C0, 0x010A08B0, 0x010A1010 and 0x010A11D0 are complete but not byte-exact
+# (nonmatching.txt, with the equivalence verdict recorded per function).

@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+#
+# Six of the ten VAs in this slice are byte-exact; the other four are complete, compiling
+# reconstructions and are booked in nonmatching.txt.
+#
+# The slice is Havok 3.1.0 code compiled with the VC7.1 toolset (/vc71 => cl 13.10.3052); the
+# six matches below fix the flag set for the whole object.  The four nonmatching functions fail
+# for source-shape reasons (inlined hkArray::setSize / hkBool promotion, an unrecoverable
+# member-wise 64-byte element copy), not for a toolchain mismatch.
+slices/s010a07c0/s010a07c0.cpp  ?updateEntityBP@hkWorldOperationUtil@@SAXPAVhkWorld@@PAVhkEntity@@@Z  010a0970  /vc71 /O2 /MD /Gy /TP
+slices/s010a07c0/s010a07c0.cpp  ?addEntityBP@hkWorldOperationUtil@@SAXPAVhkWorld@@PAVhkEntity@@@Z  010a0be0  /vc71 /O2 /MD /Gy /TP
+slices/s010a07c0/s010a07c0.cpp  ?addPhantomBP@hkWorldOperationUtil@@SAXPAVhkWorld@@PAVhkPhantom@@@Z  010a0d10  /vc71 /O2 /MD /Gy /TP
+slices/s010a07c0/s010a07c0.cpp  ?removeEntityBP@hkWorldOperationUtil@@SAXPAVhkWorld@@PAVhkEntity@@@Z  010a0e20  /vc71 /O2 /MD /Gy /TP
+slices/s010a07c0/s010a07c0.cpp  ?removePhantomBP@hkWorldOperationUtil@@SAXPAVhkWorld@@PAVhkPhantom@@@Z  010a0f20  /vc71 /O2 /MD /Gy /TP
+slices/s010a07c0/s010a07c0.cpp  ?mergeIslands@hkWorldOperationUtil@@SAXPAVhkWorld@@PAVhkEntity@@1@Z  010a1170  /vc71 /O2 /MD /Gy /TP
