@@ -1,0 +1,16 @@
+# s00ed6720 -- SP::cSPUIBadges scenario-editor panel (6 functions)
+# All functions are complete, faithful reconstructions but not byte-exact.
+# Panel layout verified against the disassembly: +0x00 vtable, +0x04 game,
+# +0x0c mode int, +0x14/+0x18 cEditorPage*, +0x1c layout (also int sentinel),
+# +0x20 sel, +0x24 layout, +0x28 menu, +0x30/+0x34/+0x38/+0x3c pages,
+# +0x40 list, +0x44 global options, +0x48 state, +0x4c key12, +0x58 mode,
+# +0x5c/+0x60/+0x64 msg server/target/handler, +0x68 msg mode, +0x6c flags,
+# +0x84 owned, +0x94 ready. PanelBase (DoBadgeMessage's `this`) is at +0x10.
+#
+# chk.py diffs (mine vs original byte counts):
+00ed7490  23  3 bytes over: the tail call FUN_00f3d8c0 is emitted as `call; pop esi; ret 4` where the original tail-jumps (`pop esi; mov edx,[g]; mov ecx,[edx+0x74]; jmp`). Body is otherwise instruction-identical; MSVC 2008 will not tail-call here because `push esi` forces an epilogue. Tried __fastcall/__cdecl/reordered/ nested/return forms -- all failed or worsened. equiv: WEAK (399/399 valid).
+00ed6a10 152  Activate2: vtable message-loop unrolled differently, but every panel offset (+0x14/+0x18/+0x20/+0x24/+0x30/+0x34/+0x38/+0x3c/+0x40/+0x44/+0x5c..+0x6c/+0x94) now matches the original. Residual is register allocation and the GetUITextManager vtable-slot call shape. equiv: UNSUPPORTED (unmapped reads).
+00ed6b00 165  Deactivate2: same class of residual as Activate2 (call shapes + regalloc); all field offsets match. equiv: UNSUPPORTED (unmapped reads).
+00ed6bf0 788  DoBadgeMessage: all 11 handled keys (0x30c11c7, 0x462c656, 0x6202731/0x5d1536c, 0x65ff54a, 0x72bdb11, 0x774e2dc, 0x7d8af04, 0x7ec5866, 0x14051500, 0xcc0bf723, 0xfd7a08d0) reconstructed with correct data offsets ([pb+0x10]/[pb+0x18]/[pb+0x44]) and panel offsets. Residual is the dispatch chain shape (MSVC emits a different compare tree). equiv: UNSUPPORTED (synthetic cMenu/cPage helper symbols unresolved).
+00ed7060 1069 BadgeAutoTest: full achievement scan reconstructed (badge-type / sub-key counting, the 0x27e8 record stride, 0x4e0 inner stride, 0x9fa pointer stride, SetAssetData/Panel_Match flag folding, all 13 achievement keys, __stdcall AchievementsController accessor). Residual is stack-frame layout (0x2c vs 0x28 for the spilled `this`) and register allocation. equiv: UNSUPPORTED (unmapped reads + budget).
+00ed6720 620  Rebuild: which=0/1/2 branches, the 0x7105378/0x7104132/0x7104130 window lookups, the FindWindowByID -> [3] -> [0x28] vcall chain, and the IWindow release calls all reconstructed. Residual is the vcall double-deref shape and register allocation.

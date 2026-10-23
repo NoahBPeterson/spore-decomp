@@ -1,0 +1,40 @@
+# s00ed6720 -- SP::cSPUIBadges scenario-editor panel
+# Key callee VAs discovered while reconstructing this slice.
+00ed6720  Panel::Rebuild(int)                                     ; panel object (ecx = Panel*)
+00ed6a10  Panel::Activate2()
+00ed6b00  Panel::Deactivate2()
+00ed6bf0  PanelBase::DoBadgeMessage(int,void*,int)                ; this = Panel+0x10
+00ed7060  Panel::BadgeAutoTest()
+00ed7490  Panel::SelectionChanged(int)
+00ed0260  cEditorPage::AsInterface                                   ; ecx = page
+00ed1fe0  page SetActive (panel+0x14)
+00ee3e40  page SetActiveB (panel+0x18)
+00ef8550  page Vis (panel+0x38/+0x3c)
+00ed5890  page Hook
+00e018c0  cSPUIGlobalOptions::Enable (panel+0x44)
+00e02430  cSPUIGlobalOptions::CreateDialog
+00ff0420  Resource::DatabasePackedFile::GetAccessFlags (panel+0x44)
+008105b0  cSPUILayout::FindWindowByID
+00810070  cSPUILayout::IsVisible
+00810590  cSPUILayout::SetVisibility
+00675250  Achievements::Controller accessor (__stdcall)
+00676e90  Achievements::Controller::AutoTest
+00a1ad60  cSPSimulatorSpaceGame::GetPlayerInventory (panel+0x14)
+005cb380  cSPPaletteUI::ToggleExpanded
+00f41270  sim method -- "should auto-test" predicate (ecx = sim)
+00f3d8c0  sim method -- post-selection update (ecx = sim)
+004bbe20  SetAssetData
+00ed29b0  record list find (records stride 0x27e8)
+00ed4f50  Panel_Find
+00ed5580  Panel_Match
+00ed4e30  Panel::GetKey
+00ed4c70  Panel::Select
+00ed5640  Panel::Refresh
+00ed5910  Panel::ShowCallout
+00ed5330  Panel::SetMode
+00ed63a0  Panel::UpdateModes
+00ed5d70  Panel::SyncState
+00ed4b70  Panel::DropSelection
+01489fa0  badge message-handler table
+0148b2184 g_15ac184 callout key (Key12)
+016c7aa4  globals object (sim at +0x74)
