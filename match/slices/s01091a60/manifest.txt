@@ -1,0 +1,2 @@
+slices/s01091a60/s01091a60.cpp  ?isValid@hkPulleyConstraintData@@QBE?AVhkBool@@XZ  01091ff0  /O2 /MD /Gy /TP /vc71
+slices/s01091a60/s01091a60.cpp  ?scalarDeletingDtor@hkConstraintAtomBase@@QAEPAXE@Z  010921f0  /O2 /MD /Gy /TP /vc71

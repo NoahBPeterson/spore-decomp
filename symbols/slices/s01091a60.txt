@@ -1,0 +1,5 @@
+01091ff0 ?isValid@hkPulleyConstraintData@@QBE?AVhkBool@@XZ  # hkPulleyConstraintData::isValid (byte-exact, 52 bytes)
+01092090 ?buildJacobian@hkPulleyConstraintData@@QBEXABVhkConstraintQueryIn@@AAVhkConstraintQueryOut@@@Z  # hkPulleyConstraintData::buildJacobian; packs both world pivots (this+0x40..0x5c) and the axis/offset (this+0xc, this+0x10) then calls _hkPulleyConstraintBuildJacobian (FUN_010ab5d0)
+010921f0 ?scalarDeletingDtor@hkConstraintAtomBase@@QAEPAXE@Z  # hkConstraintAtomBase::scalarDeletingDtor (byte-exact, 78 bytes)
+01092270 ?isValid@hkPrismaticConstraintData@@QBE?AVhkBool@@XZ  # hkPrismaticConstraintData::isValid; unit-length + orthogonality test on this+0x70..0x94
+01091a60 ?buildJacobian@hkRelativeOrientationConstraintData@@UAEXABVhkConstraintQueryIn@@AAVhkConstraintQueryOut@@@Z  # hkRelativeOrientationConstraintData::buildJacobian (virtual); builds the relative rotation qA*(this+0x10) and emits one 1-DOF angular bilateral constraint per identity-basis row via hk1dAngularBilateralJacobian (FUN_010aa1e0)
