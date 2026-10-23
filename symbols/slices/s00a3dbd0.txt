@@ -1,0 +1,8 @@
+00a3dbd0 pixie_read  # EAPd SP::Audio::Pixie "read" method: slot lookup by index/name, fraction interpolation of tItem atoms, outlet_list/outlet_bang
+00a3dfa0 PixieSlot::PixieSlot  # PixieSlot copy ctor (vector<tItem> copy + TeString copy), EH frame
+00a3e0d0 FUN_00a3e0d0  # pixie_free: destroys Pixie@[self+0x28] (mSlots then mResourceName) and freebytes(.,0x34)
+00a3e130 VecTItem::AssignItems  # eastl vector<tItem> operator= from another vector (grow / copy-into-room / two-piece copy)
+00a3e220 FUN_00a3e220  # eastl copy_backward_impl::do_copy over 0x28-stride PixieSlot (AssignItems + number + string assign)
+00a3e280 VecPixieSlot::DoInsertValue  # eastl vector<PixieSlot> insert-at-position: in-place move-up or grow-and-copy, EH cleanup
+00a3e4c0 Pixie::ReadSlot  # XML <pattr> slot reader: number/name attrs, pattr name/value into gensym atoms, space-tokenized value list
+00a3e930 Pixie::Read  # SP::Audio::Pixie::Read: object resource name, XML source from Slot13/Slot6, pattrstorage/slot walk via ReadSlot

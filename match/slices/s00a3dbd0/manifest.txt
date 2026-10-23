@@ -1,0 +1,2 @@
+slices/s00a3dbd0/s00a3dbd0.cpp  ?FUN_00a3e0d0@@YAXH@Z  00a3e0d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00a3dbd0/s00a3dbd0.cpp  ?FUN_00a3e220@@YAPAUPixieSlot@@PAU1@00@Z  00a3e220  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
