@@ -1,0 +1,30 @@
+# slice s01192400 -- statically linked OpenSSL 0.9.8g, reproduced by compiling the
+# upstream translation units verbatim from work/third_party/build/openssl-0.9.8g-d2110920
+# (same route as s0117e620 / s011b8e10 / s011b34f0).  All 9 targets are byte-exact.
+#
+#   ec_asn1.cpp   crypto/ec/ec_asn1.c
+#     01192400  ec_asn1_parameters2group
+#     01192990  ec_asn1_pkparameters2group
+#     01192a40  d2i_ECPKParameters
+#     01192ae0  d2i_ECPrivateKey
+#     01192cb0  d2i_ECParameters
+#     01192d40  o2i_ECPublicKey
+#
+#   ssl_ciph.cpp  ssl/ssl_ciph.c
+#     01192e90  ssl_load_ciphers
+#     01193270  ssl_cipher_get_disabled
+#     01193670  ssl_cipher_strength_sort
+#
+# /Iscratch_s01192400_inc = work/match/scratch_s01192400_inc (the pinned build's
+# include/openssl/*.h + cryptlib.h + e_os.h; short path, the full build path overflows
+# cl's 260-char object-file name).
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01192400/ec_asn1.cpp  _ec_asn1_parameters2group  01192400  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01192400_inc
+slices/s01192400/ec_asn1.cpp  _ec_asn1_pkparameters2group  01192990  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01192400_inc
+slices/s01192400/ec_asn1.cpp  _d2i_ECPKParameters  01192a40  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01192400_inc
+slices/s01192400/ec_asn1.cpp  _d2i_ECPrivateKey  01192ae0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01192400_inc
+slices/s01192400/ec_asn1.cpp  _d2i_ECParameters  01192cb0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01192400_inc
+slices/s01192400/ec_asn1.cpp  _o2i_ECPublicKey  01192d40  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01192400_inc
+slices/s01192400/ssl_ciph.cpp  _ssl_load_ciphers  01192e90  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01192400_inc
+slices/s01192400/ssl_ciph.cpp  _ssl_cipher_get_disabled  01193270  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01192400_inc
+slices/s01192400/ssl_ciph.cpp  _ssl_cipher_strength_sort  01193670  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01192400_inc
