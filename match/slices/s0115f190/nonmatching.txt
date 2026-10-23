@@ -1,0 +1,13 @@
+# slice s0115f190 — rw::audio::core real-FFT finishing stage (companion of ComplexFFTForward).
+# No manifest.txt: the single VA is reconstructed in full but not byte-exact.
+# One VA per row, no wrapping: va  diff-bytes  reason (difftest verdict; flags).
+# Region flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+#   (Same rw::audio::core module as s0115e4c0 / s0115f2a0.)
+#
+# FftTable layout: +0x00 log2n, +0x04 unk04, +0x08 unk08, +0x0c cosOffset,
+# +0x10 sinOffset, +0x14 bitrevOffset.  FUN_0115f190 is __cdecl(FftTable*, float*)
+# (bare ret; the table pointer is passed as ecx to the inner __cdecl ComplexFFTForward
+# at 0x0115e4c0).  n = 1 << (log2n + 1); the DC bin is mirrored to data[n] / data[n+1],
+# q = data + n walks backwards 2 floats per iteration, and the two twiddle tables are
+# walked forwards 1 float per iteration while i (over data) advances by 2.
+0115f190  183  real-FFT finishing stage (267B, ours 261B): the forward FFT call, the n = 1 << (log2n+1) computation, the data[n] = data[0] / data[n+1] = data[1] DC mirror, q = data + n, half = n >> 1, the guarded do/while (i <= half) and the full complex-multiply-by-e^-j*pi*k/half body with the four 0.5f-scaled stores are all reproduced in order and the loop-carried live ranges match; the residual 183 bytes are register allocation / instruction scheduling, not missing work: the original folds the cos pointer into the sin pointer (edx = sinT, ebp = cosT - sinT, reading [edx+ebp] then [edx]) so the cos pointer does not survive the loop and ebx is free for log2n (ebx = log2n, ebp = cosT, edi = sinT, eax = table, esi = data), whereas MSVC here keeps cosT and sinT as two live pointers (ebx = sinT, edi = cosT) which forces ebp = log2n and a different callee-saved assignment and, in turn, a different xmm schedule (ours loads q[1] before the twiddles; the original groups q[0]/data[i]/cos/sin first) and a `mov ecx,0` instead of `xor ecx,ecx`; seven variants (log2n hoisted to a local, loop-body read reorder, const pointers, swapped cos/sin declaration order, for-loop with in-clause increments, explicit a0/d0/c/s/d1/a1 temporaries) left the diff in the 182-222 band and never produced the pointer fold. difftest UNSUPPORTED (0/400 valid; fault(read)=369, fault(pool-limit)=23, fault(write)=8 — the harness cannot synthesise a valid FftTable with in-range cos/sin tables, so no input executes; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)

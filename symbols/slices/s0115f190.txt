@@ -1,0 +1,6 @@
+# Spore (EA) rw::audio::core real-FFT finishing stage, slice s0115f190.
+# No retail PDB name survives for this helper; the decorated name below is the exact
+# spelling the slice TU compiles to (the marker in s0115f190.cpp), which is what the
+# equivalence harness binds against.  0115f190 is reconstructed in full and non-exact
+# (nonmatching.txt); there is no manifest.txt.
+0115f190 ?FUN_0115f190@@YAXPAUFftTable@@PAM@Z
