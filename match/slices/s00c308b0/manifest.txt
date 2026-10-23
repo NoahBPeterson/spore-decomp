@@ -1,0 +1,23 @@
+# source  symbol  original VA  [flags override]
+slices/s00c308b0/s00c308b0.cpp  ?cEmpireIsPlayerCurrentStar@@YI_NPAUcEmpire@@@Z  00c308b0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?FUN_00c308e0@cEmpire@@QAEHPAUObj@@@Z  00c308e0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?cEmpireFUN_00c30910@@YIXPAUcEmpire@@@Z  00c30910  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?cEmpireFUN_00c30930@@YIXPAUcEmpire@@@Z  00c30930  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?cEmpireFUN_00c30970@@YIXPAUcEmpire@@@Z  00c30970  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?cEmpireFUN_00c30990@@YIXPAUcEmpire@@@Z  00c30990  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?FUN_00c309b0@cEmpire@@QAEXI@Z  00c309b0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?cEmpireFUN_00c30bb0@@YIXPAUcEmpire@@@Z  00c30bb0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?cEmpireFUN_00c30bd0@@YIPAXPAUcEmpire@@@Z  00c30bd0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?FUN_00c30c10@cEmpire@@QAEXPAUObj@@@Z  00c30c10  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?cEmpireFUN_00c30c60@@YIHPAUcEmpire@@@Z  00c30c60  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?cEmpireFUN_00c30c80@@YIPAXPAUcEmpire@@@Z  00c30c80  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?cEmpireFUN_00c30e80@@YIIPAUcEmpire@@@Z  00c30e80  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?cEmpireDebugArchetype@@YIPBDPAUcEmpire@@@Z  00c30eb0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?FUN_00c30fa0@cEmpire@@QAEXPBUVec3@@@Z  00c30fa0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?FUN_00c31470@cEmpire@@QAE_NPAUcCivData@@@Z  00c31470  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?SetHomePlanet@cEmpire@@QAEXPAUObj@@@Z  00c316c0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?cEmpireGetHomePlanet@@YIPAUObj@@PAUcEmpire@@@Z  00c31730  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?cEmpireGetBackgroundFighterDPS@@YIMPAUcEmpire@@@Z  00c31890  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?cEmpireGetBackgroundBomberDPS@@YIMPAUcEmpire@@@Z  00c318c0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?cEmpireGetBackgroundTurretDPS@@YIMPAUcEmpire@@@Z  00c318f0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00c308b0/s00c308b0.cpp  ?GetUFOHealth@cEmpire@@QAEMH@Z  00c31920  /O2 /MD /Gy /TP /arch:SSE

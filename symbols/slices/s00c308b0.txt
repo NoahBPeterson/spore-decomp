@@ -1,0 +1,33 @@
+00c308b0 cEmpire::IsPlayerCurrentStar  # byte-exact
+00c308e0 cEmpire::FUN_00c308e0  # byte-exact
+00c30910 FUN_00c30910  # byte-exact
+00c30930 FUN_00c30930  # byte-exact
+00c30970 FUN_00c30970  # byte-exact
+00c30990 FUN_00c30990  # byte-exact
+00c309b0 cEmpire::FUN_00c309b0  # byte-exact
+00c309e0 cEmpire::IsHostileToPlayer  # not byte-exact
+00c30b40 cEmpire::HasDemandForTributeExpired  # not byte-exact
+00c30bb0 FUN_00c30bb0  # byte-exact
+00c30bd0 FUN_00c30bd0  # byte-exact
+00c30c10 cEmpire::FUN_00c30c10  # byte-exact
+00c30c60 FUN_00c30c60  # byte-exact
+00c30c80 FUN_00c30c80  # byte-exact
+00c30cc0 FUN_00c30cc0  # not byte-exact
+00c30e80 FUN_00c30e80  # byte-exact
+00c30eb0 cEmpire::DebugArchetype  # byte-exact
+00c30fa0 cEmpire::FUN_00c30fa0  # byte-exact
+00c31080 FUN_00c31080  # not byte-exact
+00c31150 cEmpire::Write  # not byte-exact
+00c31240 cEmpire::Read  # not byte-exact
+00c313d0 cEmpire::FindNearestCity  # not byte-exact
+00c31470 cEmpire::FUN_00c31470  # byte-exact
+00c314a0 cEmpire::WarnPlayer  # not byte-exact
+00c31550 cEmpire::WelcomePlayer  # not byte-exact
+00c31640 FUN_00c31640  # not byte-exact
+00c316c0 cEmpire::SetHomePlanet  # byte-exact
+00c31730 cEmpire::GetHomePlanet  # byte-exact
+00c317a0 cEmpire::GetWeaponryLevel  # not byte-exact
+00c31890 cEmpire::GetBackgroundFighterDPS  # byte-exact
+00c318c0 cEmpire::GetBackgroundBomberDPS  # byte-exact
+00c318f0 cEmpire::GetBackgroundTurretDPS  # byte-exact
+00c31920 cEmpire::GetUFOHealth  # byte-exact
