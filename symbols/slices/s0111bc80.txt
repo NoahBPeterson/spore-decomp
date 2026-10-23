@@ -1,0 +1,13 @@
+# slice s0111bc80 - Havok 3.1.0 hkGeomConvexHullBuilder / hkGeomHull convex-hull builder core
+# DB name only for 0111c160 (symbols/havok_names.txt:1081); the rest are unnamed in the DB and use the
+# names coined in match/slices/s0111bc80/s0111bc80.cpp.
+# VA        name                              mangled name
+0111bc80    hkGeomConvexHullBuilder::buildHullRecursive  ?buildHullRecursive@@YAXABUhkGeomConvexHullTolerances@@PAV?$hkArray@UhkVector4@@@@HHAAVhkGeomHull@@@Z
+0111c160    hkGeomConvexHullBuilder::buildConvexHull  ?buildConvexHull@hkGeomConvexHullBuilder@@SAXABUhkGeomConvexHullTolerances@@PBUhkVector4@@HAAVhkGeomHull@@AAV?$hkArray@UhkVector4@@@@@Z
+0111c2e0    hkGeomConvexHullBuilder::createConvexHull  ?createConvexHull@hkGeomConvexHullBuilder@@SAXPBUhkVector4@@HAAVhkGeomHull@@AAV?$hkArray@UhkVector4@@@@H@Z
+0111c6e0    hkGeomHull::initializeWithVertex  ?initializeWithVertex@hkGeomHull@@QAEXG@Z
+0111c740    hkGeomHull::initializeWithLine  ?initializeWithLine@hkGeomHull@@QAEXGG@Z
+# Notes: 0111c160 is the DB-named static hkGeomConvexHullBuilder::buildConvexHull; 0111bc80 is the
+# recursive divide-and-conquer hull builder it drives; 0111c2e0 is the public entry that copies the input
+# vertices, sorts/welds them, calls buildConvexHull and retries with loosened tolerances. 0111c6e0 /
+# 0111c740 are the 1- and 2-vertex degenerate-hull initialisers of hkGeomHull (byte-exact matches).
