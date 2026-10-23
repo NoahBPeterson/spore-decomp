@@ -1,0 +1,3 @@
+# Every function in slice s0119cbf0 is byte-exact (see manifest.txt); the slice is
+# OpenSSL 0.9.8g crypto/x509v3 code compiled verbatim from upstream, so no function
+# needs the differential gate.

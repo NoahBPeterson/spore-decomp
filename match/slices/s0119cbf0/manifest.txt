@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# OpenSSL 0.9.8g upstream, compiled verbatim from work/third_party/build/openssl-0.9.8g-d2110920
+# (the include link scratch_s011b8e10_inc carries e_os.h/cryptlib.h + openssl/, as in the
+#  other OpenSSL slices; v3_*.c also needs its own crypto/x509v3 dir for opensslconf.h).
+slices/s0119cbf0/openssl_v3_akey.cpp  _v2i_AUTHORITY_KEYID  0119cbf0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/x509v3
+slices/s0119cbf0/openssl_v3_cpols.cpp  _nref_nos  0119cf10  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/x509v3
+slices/s0119cbf0/openssl_v3_cpols.cpp  _print_notice  0119cf90  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/x509v3
+slices/s0119cbf0/openssl_v3_cpols.cpp  _notice_section  0119d090  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/x509v3
+slices/s0119cbf0/openssl_v3_cpols.cpp  _print_qualifiers  0119d350  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/x509v3
+slices/s0119cbf0/openssl_v3_cpols.cpp  _policy_section  0119d420  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/x509v3
+slices/s0119cbf0/openssl_v3_cpols.cpp  _i2r_certpol  0119d670  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/x509v3
+slices/s0119cbf0/openssl_v3_cpols.cpp  _r2i_certpol  0119d700  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/x509v3
+slices/s0119cbf0/openssl_v3_bcons.cpp  _v2i_BASIC_CONSTRAINTS  0119d970  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/x509v3

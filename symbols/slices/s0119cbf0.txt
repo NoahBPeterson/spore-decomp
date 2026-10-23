@@ -1,0 +1,14 @@
+# Slice s0119cbf0: OpenSSL 0.9.8g X.509v3 extension code, lib_cblock copy.
+# These nine addresses are the unnamed second copy of the crypto/x509v3 TUs that
+# the same VAs also appear as in symbols/lib_names.txt; all names come from the
+# upstream 0.9.8g sources (work/third_party/build/openssl-0.9.8g-d2110920/) via
+# work/oss/openssl_resolved.csv, and every function is byte-exact.
+0119cbf0 v2i_AUTHORITY_KEYID        # v3_akey.c: parse the "keyid"/"issuer:always" cnf section into an AUTHORITY_KEYID (keyid -> ASN1_BIT_STRING via a2i_ASN1_INTEGER-ish, issuer{keyid,always}); strcmp chain then ASN1_STRING_dup + sk_push
+0119cf10 nref_nos                 # v3_cpols.c: convert a NOTICEREF's numbers stack into the display string (i2s_ASN1_INTEGER per entry, joined by ".", ERR_put_error 0x22/0x85 on failure)
+0119cf90 print_notice             # v3_cpols.c: print one NOTICEREF (Organization line through the "%*s..." format, then the numbers)
+0119d090 notice_section           # v3_cpols.c: print USERNOTICE (explicitText via ASN1_STRING_print_ex/UTF8 handling plus the optional noticeRef)
+0119d350 print_qualifiers         # v3_cpols.c: walk a POLICYQUALINFO stack, dispatching CPS / userNotice
+0119d420 policy_section           # v3_cpols.c: print a CERTIFICATEPOLICIES stack (policy id + qualifiers + explicit policy text)
+0119d670 i2r_certpol              # v3_cpols.c: EXTENSION i2r for certificatePolicies — print each policy_section into the BIO
+0119d700 r2i_certpol              # v3_cpols.c: EXTENSION r2i for certificatePolicies — parse the config value into a CERTIFICATEPOLICIES stack
+0119d970 v2i_BASIC_CONSTRAINTS    # v3_bcons.c: parse the "CA"/"pathlen" cnf pair into a BASIC_CONSTRAINTS
