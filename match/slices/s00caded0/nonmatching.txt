@@ -1,0 +1,27 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s00caded0 = three functions of the Simulator::cFlyingLocomotion flight-locomotion
+# translation unit.  0x00caded0 Simulator::cFlyingLocomotion::cFlyingLocomotion is byte-exact
+# (manifest.txt): MSVC stamps an inlined EA::RefCountVTemplate<int> base ctor vtable at +0x08,
+# zeroes the refcount at +0x0c, then the derived primary vtable at +0x00 and the refcount
+# sub-object vtable at +0x08 before the member-init stores -- which reproduces only with a real
+# two-base hierarchy (polymorphic primary base + polymorphic refcount base), not with explicit
+# vfptr members.
+#
+# The two free helpers below are structurally complete (same instruction sequence: pos.Normalized
+# via x87 fsqrt/fdivrp + 1e-8, fmodf -> call _CIfmod, rotate/div, the dir*(hit.Length()+5.0f)
+# path, the pFlyer?&pFlyer->mLocomotion:0 select), but MSVC's x87-vs-SSE scheduling and register
+# allocation differ: the original keeps the wrapped angle, fabsf(angle) and turnRate*dt live in
+# x87 (fcompi) and keeps nx/ny/nz in xmm6/xmm1/xmm7, while this source makes the compiler spill
+# them to SSE (comiss) and use a smaller xmm set.  All reconstruction attempts stay in that
+# class of failure (register pressure / spill slot reuse); no source shape reproduced the exact
+# allocation.
+#
+# Equivalence (tools/difftest/equiv.py s00caded0 00cadf50 00cae0e0 --flags "/O2 /MD /Gy /TP /arch:SSE /fp:fast"):
+#   00cadf50  PASS         400/400 valid inputs, 81.1% original coverage, no mismatch
+#   00cae0e0  UNSUPPORTED  0/400 valid inputs (cCreatureFlyer* is a real object; the random
+#                          pointer faults inside GetGroundRadius / SweepTest before the path is
+#                          exercised) -- harness limitation, not a mismatch
+00cadf50  244  TurnTowards (/O2 /MD /Gy /TP /arch:SSE /fp:fast): complete; x87 fcompi vs our comiss for the wrap and the turnRate*dt<|angle| test, plus a 0xc-byte larger frame (axis slot not reused for the RotateTowards result)
+00cae0e0  260  ProjectToFlightSurface (/O2 /MD /Gy /TP /arch:SSE /fp:fast): complete; original keeps dir in xmm6/xmm1/xmm7 across the SweepTest call and multiplies the final scale in SSE (fstp/mulss), ours keeps it in x87 (fmul st(1)); 0x30-byte frame vs 0x34
