@@ -1,0 +1,23 @@
+; slice s00f08c20 = 0x00f08c20..0x00f09cf0 (Spore scenario task panel / EASTL hashtable helpers)
+; No PDB names exist for this range (all FUN_ in the image); the decorated names below are ours.
+; manifest.txt rows are byte-exact; the rest are the nonmatching.txt entries.
+00f08c20 ?IsScenarioEntryOpen@@YADXZ  # byte-exact
+00f08cc0 ?TaskNodeAlloc@@YGPAPAUIWin@@PAH@Z  # byte-exact (__stdcall, ret 4)
+00f08d10 ?SiftDownTaskHeap@@YAXPAHPAXHH11@Z  # complete, non-exact
+00f08db0 ?SetupTaskPanels@@YAXPAUUIState@@H@Z  # complete, non-exact
+00f08ef0 ?CreateMarkerTextDialogs@@YAXXZ  # complete, non-exact
+00f09090 ?clearBuckets@HashTbl@@QAEXPAPAUIWin@@I@Z  # complete, non-exact
+00f09170 ?erase@HashTbl@@QAEPAXPAX00@Z  # complete, non-exact
+00f092b0 ?insert@HashTbl@@QAEXPAXPBXI@Z  # complete, non-exact
+00f093a0 ?PartitionTasks@@YAPAHPAH00PAX@Z  # complete, non-exact
+00f09430 ?ReorderTasks@@YAXPAH00PAX@Z  # complete, non-exact
+00f094d0 ?ShutdownTaskPanels@@YAXXZ  # complete, non-exact
+00f09580 ?CreateBubblePanels@@YAXXZ  # complete, non-exact
+00f096c0 ?ShutdownBubblePanels@@YAXXZ  # complete, non-exact
+00f09770 ?SortTasks@@YAXPAH0HPAX@Z  # complete, non-exact
+00f09800 ?CopyTaskRange@@YAXPAD00@Z  # complete, non-exact
+00f09880 ?CopyTaskRangeBack@@YAPADPAD00@Z  # byte-exact
+00f09910 ?AttachTaskRecord@@YAXHHI@Z  # complete, non-exact
+00f09960 ?TaskHudAction@@YAXHHID@Z  # complete, non-exact
+00f09bf0 ?FindOrInsertTextStyle@HashTbl@@QAEPAHPAH@Z  # complete, non-exact
+00f09c90 ?TaskGroupLookup@HashTbl@@QAEHPAH@Z  # complete, non-exact

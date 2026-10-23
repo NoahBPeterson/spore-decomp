@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+# The three rows below are chk.py-printed MATCH rows (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast),
+# copied exactly as printed.
+slices/s00f08c20/s00f08c20.cpp  ?IsScenarioEntryOpen@@YADXZ  00f08c20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f08c20/s00f08c20.cpp  ?TaskNodeAlloc@@YGPAPAUIWin@@PAH@Z  00f08cc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f08c20/s00f08c20.cpp  ?CopyTaskRangeBack@@YAPADPAD00@Z  00f09880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

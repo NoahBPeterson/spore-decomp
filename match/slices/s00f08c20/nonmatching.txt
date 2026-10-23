@@ -1,0 +1,32 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+#
+# Slice s00f08c20 = Spore "scenario task panel" module (the g_16c7d88 / g_16c7d90 UI state
+# blocks, the 0x16c7df0 panel-slot array and the two EASTL hashtables at 0x15ad538 / 0x15ad558),
+# same module as the neighbouring slice s00f07c90.  No PDB names exist for this range, so every
+# function is named by hand (see symbols/slices/s00f08c20.txt).  3/20 byte-exact
+# (IsScenarioEntryOpen, TaskNodeAlloc, CopyTaskRangeBack).
+#
+# The remaining 17 are complete C++ that reproduces the original control flow, field offsets,
+# argument order and call order; they miss byte-exactness because the original build uses an
+# LTCG-style register ABI in this module (first args arrive in ecx/esi/edi instead of on the
+# stack) plus a different register allocation / basic-block layout.  Per-row difftest verdicts
+# below come from tools/difftest/equiv.py on the 17 non-byte-exact VAs (one gate run; 00f09c90
+# originally FAILed on a real bug - the third insert argument - and was fixed and re-checked).
+00f08d10  134  complete; size 146 vs 152; loop/branch layout and callee-saved reg assignment differ; difftest PASS 347 valid, 100% coverage
+00f08db0  267  complete; size 302 vs 306; reg alloc + the FindWindowByID/CreditsTabInit call sites differ; difftest UNSUPPORTED (0/400 valid inputs)
+00f08ef0  259  complete; size 420 vs 415; reg alloc + the sret Init overload handling differ; difftest UNSUPPORTED (2 unresolved refs: Layout::Init / Layout::SetVisibility)
+00f09090    2  complete; identical except the `mov ecx,[edi]; mov edi,esi` copy is scheduled one slot later in ours; difftest WEAK 162 valid, 100% coverage
+00f09170  109  complete; size 116 vs 123; node-chain walk reg alloc differs; difftest UNSUPPORTED (0/400 valid inputs)
+00f092b0  203  complete; size 232 vs 238; rehash/insert argument setup and reg alloc differ; difftest UNSUPPORTED (2 unresolved refs: NodeAlloc::alloc / EAAllocate)
+00f093a0  147  complete; size 151 vs 136; TaskRank inline expansion + pivot reg alloc differ; difftest UNSUPPORTED (0/400 valid inputs)
+00f09430   52  complete; same size; register allocation is swapped (base in edi vs our esi) and the two TaskRank evaluations are scheduled in the other order; difftest WEAK 145 valid, 37.5% coverage
+00f094d0   97  complete; size 164 vs 161; reg alloc + panel-slot walk differ; difftest UNSUPPORTED (2 unresolved refs: Animator::ClearAll / Layout::Shutdown)
+00f09580  196  complete; size 321 vs 306; 10-slot panel build loop and call sites differ; difftest UNSUPPORTED (4 unresolved refs)
+00f096c0   95  complete; size 184 vs 169; slot teardown loop layout + reg alloc differ; difftest UNSUPPORTED (2 unresolved refs: Animator::ClearAll / Layout::SetVisibility)
+00f09770  107  complete; size 134 vs 138; quicksort recursion/depth layout differs; difftest WEAK 238 valid, 34.4% coverage
+00f09800    8  complete; same size; only three operand encodings ([eax+4] vs [edi+0x18], [eax+4] vs [edi+0x30]) and one lea pair order differ; difftest UNSUPPORTED (0/400 valid, import:memcpy)
+00f09910   42  complete; size 74 vs 75; a/rec callee-saved assignment is swapped (esi/edi) so the `rec & 0xffffff00` mask is emitted as an `and` instead of a byte store; difftest UNSUPPORTED (2 unresolved refs: GameData::Get / RecOwner::slot)
+00f09960  504  complete; size 636 vs 652; 11-case jump table and the per-case AttachTaskRecord chains differ; difftest UNSUPPORTED (2 unresolved refs: Day78::slot / NounMgr::GetAvatar)
+00f09bf0  117  complete; size 117 vs 147; the pair<int*,float> temp and the insertOther argument setup differ; difftest WEAK 160 valid, 100% coverage
+00f09c90   59  complete; size 92 vs 96; the insert-argument setup differs; third arg fixed to (uint)key & 0xffffff00 after the difftest FAIL; difftest WEAK 167 valid, 100% coverage
