@@ -1,0 +1,11 @@
+00e5b2e0 FUN_00e5b2e0  # move the avatar cell toward the camera-follow direction built from the four directional key states; normalise, push through 0x00e5b0a0, offset the cell 20 units; body not byte-exact
+00e5b6b0 SP::sUpdateZoomButtons  # read +/- button state chars, compute f*dt*1000 as a whole zoom-step count, tail-call 0x00e51060(int); body not byte-exact
+00e5b790 FUN_00e5b790  # level-gate, then cast the camera forward ray onto the up-plane through the avatar and rebuild the facing quaternion via 0x0069b600; body not byte-exact
+00e5ba10 FUN_00e5ba10  # copy src to out and clamp each component into the AABB (min0..min2, max0..max2); near-exact (scheduling only)
+00e5ba90 FUN_00e5ba90  # step p1 toward p2 by speed*dt, snap to p2 when the remaining distance is smaller; body not byte-exact
+00e5bbc0 FUN_00e5bbc0  # project a point onto the world extent ellipse (half-extent scaling) and keep it if not farther from the centre; returns the planar distance; body not byte-exact
+00e5bd30 FUN_00e5bd30  # snap a placed-object record onto the extent ellipse, bump dirty counter, store the facing matrix from 0x0069b440; body not byte-exact
+00e5be80 FUN_00e5be80  # camera-follow distance: near/far lerp of the avatar-to-tracked-cell gap, selected against a second lerp; body not byte-exact
+00e5bfa0 FUN_00e5bfa0  # level-tier 0..1 progress, piecewise-normalised over 200-step bands via 0x01041cd0; body not byte-exact
+00e5c0f0 SP::cCellMode::OnMouseUp  # forward to the local input state (0x00697af0) then pick the cell under the cursor (0x00e87200) and store its handle + zeroed timeout; byte-exact
+00e5c1a0 FUN_00e5c1a0  # query the two zoom bounds (0x00e836f0) and enable/disable the +/- buttons (vtable +0x7c) against gCellUI+0xf8; body not byte-exact
