@@ -1,0 +1,23 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TC /GS-   (T2K / Font Fusion "EA-UTF", compiled as C)
+#
+# Slice s008caba0 = T2K/Font Fusion glyph-stroking + hint + cmap helpers.  The module was built
+# with LTCG, so most of these routines take arguments in caller-saved registers instead of on the
+# stack; a standalone /O2 TU cannot reproduce that, and the inlined T2K byte-reader macro expands
+# with a different addressing form under our build.  Byte-exact: 2/10 (0x008cb6b0, 0x008cb790).
+
+008caba0 572 diff; complete; stroke one contour of a glyph; the source glyph arrives in EDI in the retail (LTCG) build, so the standalone form carries it as a trailing cdecl parameter and every load re-allocates registers (size 636 vs 647); the tail also calls lineJoin/FUN_008ca5b0/FUN_008ca980, which take st/dst in ESI/EBX and joinType/width off the stack in the original; equiv UNSUPPORTED (1 unresolved reference: _lineJoin)
+
+008cae30 425 diff; complete; snap the stroke glyph's y then x coordinates to the pixel grid; the 5th argument (the stroke width) is passed in EAX by the retail caller and the routine has only four stack parameters, so the standalone five-parameter form shifts the frame and re-schedules the used[128] clear plus both passes (size 528 vs 567); equiv UNSUPPORTED (original reads eax at entry but our declaration passes nothing there -- custom/LTCG register ABI)
+
+008cb070 261 diff; complete; stroke a whole glyph into a freshly allocated GlyphClass; the internal call to glyph_StrokeCtr needs the source glyph in EDI, which the standalone form cannot arrange, and the contourCount*2 / spBuffer-vs-alloc block is materialised with a different 16-bit/32-bit split (size 312 vs 311); equiv UNSUPPORTED (0/400 inputs valid: fault=215, import:longjmp=109, fault(write)=73)
+
+008cb1b0 232 diff; complete; bit-packed two-number stream decoder; the inlined T2K byte-reader macro expands with a different addressing form -- ours folds base-posZero into the index register, the original keeps pos-posZero and indexes by base -- and MSVC 2008 zeroes the four loop registers in a different order (size 299 vs 297); equiv PASS (353 valid of 400 inputs, 93.3% coverage, 97/104 insns)
+
+008cb2e0 189 diff; complete; bit-packed four-number stream decoder; the same byte-reader macro addressing difference, plus a different loop rotation (our build jumps into the loop head where the original falls through) and register-zeroing order (size 382 vs 359); equiv PASS (356 valid of 400 inputs, 94.3% coverage, 116/123 insns)
+
+008cb450 197 diff; complete; 0xf0-prefixed variable-length unsigned-number reader; the stream arrives in ESI in the retail build, so the standalone cdecl form shifts the frame and the byte-reader macro expands differently (size 207 vs 196); equiv UNSUPPORTED (0/400 inputs valid, all fault(read))
+
+008cb520 192 diff; complete; grow the point arrays and copy the old points; the glyph arrives in ECX and the count in EAX in the retail build, so the standalone form materialises both as stack arguments and the copy loop re-allocates registers (size 191 vs 178); equiv UNSUPPORTED (original reads eax at entry but our declaration passes nothing there -- custom/LTCG register ABI)
+
+008cb5e0 170 diff; complete; open a sub-stream over one glyph's 'glyf' data; the font arrives in ESI in the retail build, so the standalone cdecl form shifts the frame and re-materialises the font/in/sloc fields (size 195 vs 193); equiv UNSUPPORTED (0/400 inputs valid, all fault(read))
