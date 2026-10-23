@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e64a00/s00e64a00.cpp  ?insertAt@KeyMap@@QAEPAUKPair@@PAU2@0@Z      00e650c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e64a00/s00e64a00.cpp  ?insertAt@SoundMap@@QAEPAUKPair@@PAU2@0@Z    00e65120  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e64a00/s00e64a00.cpp  ?FUN_00e655c0@@YAPAHIH@Z                     00e655c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e64a00/s00e64a00.cpp  ?operatorIndex@KeyMap@@QAEPAHPAUKPair@@@Z    00e65730  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e64a00/s00e64a00.cpp  ?operatorIndex@KeyMap4@@QAEPAIPAI@Z          00e65840  /O2 /MD /Gy /TP /arch:SSE /fp:fast
