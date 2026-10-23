@@ -1,0 +1,10 @@
+00aa83b0 FUN_00aa83b0  # ballistic particle step: integrate velocity by accel*dt with damping, integrate position by midpoint; returns 1 while alive, 0 past the +0xc lifetime
+00aa84c0 FUN_00aa84c0  # build box-min/box-max midpoints scaled by the +0x44 size and snap the particle to a keyed path via EA::Swarm::SnapParticleToPath
+00aa85c0 FUN_00aa85c0  # teardown: virtual dtor slot 0xc when flag +0xc, release handle ids +0x228/+0x22c and the intrusive ptrs +0x1a8/+0x1ac/+0x1b0, zero +0x1c/+0x24
+00aa86a0 SwarmObj::FUN_00aa86a0  # rebind/seed state from the +0x1c object: reset vectors, copy transforms (+0xc4..+0xcc -> +0x130.., obj+0x13c.. -> +0x5c..), optional cRWState::Init (+0x200 key), +0x94 via FUN_007cdb90, dispatch +0x22c/+0x228
+00aa8840 HandleObj::FUN_00aa8840  # reassign the handle at this+0x220 with AddRef (vtable[0x34]) / Release (vtable[0x38]) and +0x22c flag
+00aa88c0 SwarmEmitter::FUN_00aa88c0  # emit a particle sample: scale this+0x198 by param_2+0x28, lerp the +0x88 list by (count-1)*(param_2[2]/param_2[3]), then FUN_00a7f5a0(...this+0x110*scale...)
+00aa89d0 SwarmPath::FUN_00aa89d0  # project a point into the path frame (scale +0x110/+0xd8, optional +0x114../+0xdc.. rotations, normal offset +0x64..+0x6c), normalise, FUN_00a81a20 basis -> +0xdc, set +0x160
+00aa8d30 FUN_00aa8d30  # collision contact collector: FUN_00a6c7a0 + walk the 0x58-byte cells at +0x1ac..+0x1b0 and the +0x1e8/+0x1f0/+0x1f8 axis pairs, emitting {mask0,mask1,type}
+00aa8ea0 FUN_00aa8ea0  # intrusive-list node transfer (splice/unlink, hand first node back through *param_1)
+00aa8ed0 SwarmEd0::FUN_00aa8ed0  # transform-slot update: assign +0xc0/+0xf8 cSPTransform slots, re-project when the +0xfa/+0xc2 counts change, FUN_007cdee0, accumulate +0x98../+0xac
