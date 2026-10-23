@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a9dc00  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 463 B.  uint __thiscall(int, int, float) float routine: FUN_00a79f60/FUN_00a9b120/FUN_00a9b780/FUN_00a9d640 and internal branch to 0xa9dc68; 5 base relocs emitted raw.

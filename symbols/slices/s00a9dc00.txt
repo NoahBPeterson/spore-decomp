@@ -1,0 +1,1 @@
+00a9dc00 FUN_00a9dc00  # uint __thiscall (int,int,float) float routine; naked asm, byte-exact
