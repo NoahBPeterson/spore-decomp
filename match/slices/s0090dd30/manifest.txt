@@ -1,0 +1,3 @@
+# slice s0090dd30 -- XML/text tokeniser helpers (Scaleform-style reader)
+# Module flags: /O2 /MD /Gy /TP (original uses a whole-program register ABI:
+# cursor in EAX, reader object in EBX/ECX; no faithful byte match)
