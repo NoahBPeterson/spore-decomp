@@ -1,0 +1,10 @@
+00eba650 advance_test  # normalise b-a, scene query, degenerate/nearest guards
+00eba790 mask_dispatch  # byte-exact; mask 0x400 probe, 0x100 advance_test, 0x200 probe
+00eba7f0 advance_dispatch  # byte-exact; switch mode 2/3 -> true, 0/1 -> probe/mask, default -> flag
+00eba860 advance_radial  # step p along its own direction while the probe reports a new position
+00ebaa20 ray_sphere  # ray/sphere quadratic; nearest positive parameter
+00ebab30 camera_project  # project a ray onto the view plane, return A+B*t-ray
+00ebacb0 advance_to_surface  # next-surface advance + orient (object in ESI via LTCG)
+00ebafe0 init_tracked  # initialise dir/quat/dir2/speed/offset/dir3/radius/mode
+00ebb0b0 track_camera_ray  # camera-ray/sphere tracking (object in ESI via LTCG)
+00ebb2e0 follow_steering  # follow the steering helper target (target in EDI, delta in ESI)
