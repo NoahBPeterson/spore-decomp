@@ -1,0 +1,4 @@
+# Slice s011afe20: OpenSSL 0.9.8g crypto/bn/bn_asm.c (C comba multiply), lib_cblock copy.
+# Byte-exact compiled verbatim from work/third_party/build/openssl-0.9.8g-d2110920/
+# (see manifest.txt). Name from the upstream source.
+011afe20 bn_mul_comba4  # crypto/bn/bn_asm.c: 4x4 "comba" (product-scanning) bignum multiply r = a*b for four BN_ULONG limbs; the C macros split each 32-bit limb into 16-bit halves (Lw/Hw) so the code is movzx/imul/add with cmp/jae/inc carry fixups; no calls, no relocs

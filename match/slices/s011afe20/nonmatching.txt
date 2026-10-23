@@ -1,0 +1,3 @@
+# The single function in slice s011afe20 is byte-exact (see manifest.txt); the slice is
+# OpenSSL 0.9.8g crypto/bn/bn_asm.c (bn_mul_comba4) compiled verbatim from upstream, so
+# it does not need the differential gate.

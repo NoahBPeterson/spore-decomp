@@ -1,0 +1,3 @@
+# slice s011afe20 -- OpenSSL 0.9.8g upstream TU, lib_cblock copy
+# crypto/bn/bn_asm.c bn_mul_comba4 (C comba 4x4 bignum multiply).
+slices/s011afe20/bn_asm.cpp  _bn_mul_comba4  011afe20  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
