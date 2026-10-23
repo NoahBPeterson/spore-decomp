@@ -122,7 +122,9 @@ public:
 };
 
 // hk3AxisSweep node / axis layouts (see slice s010f5340)
-static const int s_memberOffsets[6] = { 8, 0xa, 0, 4, 2, 6 };   // 0x015ba374
+// 0x015ba374. mergeBatch indexes this with (value & 1) + axis * 2; the retail caller only
+// passes axis 0..2, but the original reads the surrounding image words for other axis values.
+static const int* const s_memberOffsets = (const int*)0x015ba374;
 
 struct hkBpEndPoint
 {
@@ -588,22 +590,23 @@ void hk3AxisSweep::updateNodesAfterDelete(hkBpNode* nodes, int numNodes, hkBpNod
 // @ 0x010f4e10
 void __cdecl FUN_010f4e10(unsigned short* begin, unsigned short* end, unsigned short value)
 {
-    unsigned int diff = (unsigned int)((char*)end - (char*)begin);
+    unsigned short* p = begin;
+    unsigned int diff = (unsigned int)((char*)end - (char*)p);
     while ((int)(diff & 0xfffffffc) > 0x40)
     {
-        unsigned short* mid = begin + ((int)diff >> 3) * 2;
-        if (begin[((int)diff >> 3) * 2] < value)
+        unsigned short* mid = p + ((int)diff >> 3) * 2;
+        if (*mid < value)
         {
-            begin = mid;
+            p = mid;
         }
         else
         {
             end = mid;
         }
-        diff = (unsigned int)((char*)end - (char*)begin);
+        diff = (unsigned int)((char*)end - (char*)p);
     }
-    while (*begin < value)
-        begin += 2;
+    while (*p < value)
+        p += 2;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -651,59 +654,57 @@ void hk3AxisSweep::hkBpAxis::mergeBatch(hkBpNode* nodes, int split, int numNew, 
     hkBpEndPoint* b = out + 1;
     hkBpEndPoint* bEnd = out + split - 1;
     hkBpEndPoint* a = base + split;
-    hkBpEndPoint* aEnd = a + numNew;
+    hkBpEndPoint* aEnd = base + split + numNew;
     hkBpEndPoint* o = base + 1;
     const int axis2 = axis * 2;
 
-    while (b < bEnd && b->m_value < a->m_value)
+    while (b->m_value < a->m_value)
     {
         b++;
         o++;
     }
 
-    if (b >= bEnd)
-        goto copyA;
-    if (a >= aEnd)
-        goto copyB;
-
-    for (;;)
+    if (b < bEnd)
     {
-        if (b->m_value >= a->m_value)
+        for (; a < aEnd; a++)
+        {
+            while (b->m_value < a->m_value)
+            {
+                *o = *b;
+                const int index = (int)(o - base);
+                *(BpInt*)((char*)&nodes[o->m_nodeIndex] + s_memberOffsets[(o->m_value & 1) + axis2]) = BpInt(index);
+                b++;
+                o++;
+                if (b >= bEnd)
+                    goto copyA;
+            }
+            *o = *a;
+            const int index = (int)(o - base);
+            *(BpInt*)((char*)&nodes[o->m_nodeIndex] + s_memberOffsets[(o->m_value & 1) + axis2]) = BpInt(index);
+            o++;
+        }
+    }
+    else
+    {
+copyA:
+        for (; a < aEnd; a++, o++)
         {
             *o = *a;
             const int index = (int)(o - base);
             *(BpInt*)((char*)&nodes[o->m_nodeIndex] + s_memberOffsets[(o->m_value & 1) + axis2]) = BpInt(index);
-            a++;
-            o++;
-            if (a >= aEnd)
-                goto copyB;
         }
-        else
+    }
+
+    if (b <= bEnd)
+    {
+        do
         {
             *o = *b;
             const int index = (int)(o - base);
             *(BpInt*)((char*)&nodes[o->m_nodeIndex] + s_memberOffsets[(o->m_value & 1) + axis2]) = BpInt(index);
             b++;
             o++;
-            if (b >= bEnd)
-                goto copyA;
-        }
-    }
-
-copyA:
-    for (; a < aEnd; a++, o++)
-    {
-        *o = *a;
-        const int index = (int)(o - base);
-        *(BpInt*)((char*)&nodes[o->m_nodeIndex] + s_memberOffsets[(o->m_value & 1) + axis2]) = BpInt(index);
-    }
-
-copyB:
-    for (; b <= bEnd; b++, o++)
-    {
-        *o = *b;
-        const int index = (int)(o - base);
-        *(BpInt*)((char*)&nodes[o->m_nodeIndex] + s_memberOffsets[(o->m_value & 1) + axis2]) = BpInt(index);
+        } while (b <= bEnd);
     }
 }
 
@@ -743,13 +744,14 @@ static __forceinline void hkToggleBit(hkUint32* bitField, hkUint32 index)
 void hk3AxisSweep::FUN_010f5150(int numNodes, int xValue, const hkBpNode& queryNode,
                                 int queryNodeIndex, hkUint32* bitField) const
 {
+    hkUint32* clear = bitField;
     for (int i = 0; i <= (numNodes >> 7); i++)
     {
-        bitField[0] = 0;
-        bitField[1] = 0;
-        bitField[2] = 0;
-        bitField[3] = 0;
-        bitField += 4;
+        clear[0] = 0;
+        clear[1] = 0;
+        clear[2] = 0;
+        clear[3] = 0;
+        clear += 4;
     }
 
     hkBpEndPoint* p = m_axis[0].m_endPoints.m_data + 1;
