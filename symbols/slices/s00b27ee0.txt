@@ -1,0 +1,40 @@
+00b27ee0 GameModeSave::FUN_00b27ee0  # add-path: store name into DAT_0167df60, merge via PathPick, set gDefaultSavedGameFilename + poke mode on success
+00b28070 GameModeSave::FUN_00b28070  # saved-state probe: three "<path>.old\\"[complete|valid] existence checks -> 0/1/2
+00b282e0 GameModeSave::FUN_00b282e0  # backup-to-old: recreate ".old\\", copy the pkp/pld/db/dat set + every "*.spo", touch "valid"
+00b28750 GameModeSave::FUN_00b28750  # complete-mark: touch "<path>.old\\complete"
+00b28850 GameModeSave::FUN_00b28850  # delete-named: PathJoin(name,"*.spo"), PathPick, notify star manager, remove file
+00b28990 GameModeSave::FUN_00b28990  # reset saved-game state: clear default filename, rebind mode object, zero mPad[0x44]
+00b289e0 GameModeSave::FUN_00b289e0  # restore-from-old: copy the ".old\\" tree back, drop dbread markers, complete-mark
+00b28c20 GameModeSave::FUN_00b28c20  # load-or-restore dispatcher over FUN_00b28070 state -> 0/1/2
+00b27540 GameModeSave::GetPath  # fills a WStr with the current saved-game directory (thiscall, ret 4)
+00b279e0 GameModeSave::FUN_00b279e0  # thiscall ret 4: assign a wide name into the manager
+0167df50 gDefaultSavedGameFilename  # eastl::wstring (16 bytes), default saved-game file name
+015689ac DAT_015689ac  # u8 latch set to 1 by FUN_00b27ee0
+015689a8 DAT_015689a8  # const wchar_t* L"*.spo"
+01654c08 DAT_01654c08  # 4-byte token handed to FUN_00b1e410
+013ec468 DAT_013ec468  # eastl::wstring cleared by FUN_00b28990
+0167df60 DAT_0167df60  # eastl::wstring: current saved-game name
+057cba0 PathJoin  # cdecl WStr* (dst, const WStr*, const wchar_t*); returns dst
+0688f00 PathPick  # cdecl WStr* (dst, const WStr*, const WStr*); returns dst
+0453d20 eastl::wstring::substr  # thiscall ret 0xc (WStr* out, pos, count) on the source string
+056e2d0 eastl::wstring::basic_string(const this_type&)  # copy ctor (ret 4)
+0423650 eastl::wstring::assign(first,last)  # ret 8
+0429760 eastl::wstring::AllocateSelf(n)  # ret 4
+0579a90 eastl::wstring::range_initialize  # RangeInitialize(const wchar_t*) ret 4
+0931fa0 EA::IO::File::Exists  # cdecl bool(const wchar_t*)
+0931fd0 EA::IO::File::Remove  # cdecl bool(const wchar_t*)
+0932030 EA::IO::File::Copy  # cdecl bool(const wchar_t* src, const wchar_t* dst, bool)
+0932b20 EA::IO::Directory::CopyTree  # cdecl bool(src, dst, int, int)
+0931f20 EA::IO::File::Touch  # cdecl bool(const wchar_t*, bool)
+09322b0 EA::IO::Directory::Exists  # cdecl bool(const wchar_t*)
+0932890 EA::IO::Directory::RemoveRecursive  # cdecl (const wchar_t*, bool)
+0932960 EA::IO::Directory::CreatePath  # cdecl (const wchar_t*)
+092e730 EA::IO::DirectoryIterator::FindFirst  # cdecl (dir, pattern, int, int)
+092e8e0 EA::IO::DirectoryIterator::FindNext  # cdecl (handle, int)
+092e9b0 EA::IO::DirectoryIterator::FindFinish  # cdecl (handle)
+0b3d2a0 SP_StarManager  # cdecl 0-arg getter
+0b3d320 FUN_00b3d320  # ret-4 form. ICF-split overloads of the same address (a 0-arg cdecl and a 1-arg ret-4 stdcall)
+0b1e410 FUN_00b1e410  # fastcall/ret-4 callback on the mode object
+0b5b800 SP_GetCurrentGameMode  # cdecl 0-arg getter
+0ba9bc0 StarManager::FUN_00ba9bc0  # thiscall bool 0-arg
+0bb5640 StarManager::FUN_00bb5640  # thiscall void, ret 4
