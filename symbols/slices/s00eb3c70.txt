@@ -1,0 +1,4 @@
+00eb3c70 FUN_00eb3c70  # __thiscall (int,undefined4) w/ switch call-table @0xeb4028; naked asm, byte-exact
+00eb4040 FUN_00eb4040  # __fastcall (int) returning undefined1; naked asm, byte-exact
+00eb4130 FUN_00eb4130  # __fastcall (undefined4*) initializer; naked asm, byte-exact
+00eb41f0 FUN_00eb41f0  # __fastcall (int*); naked asm, byte-exact

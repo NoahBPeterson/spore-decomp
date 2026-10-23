@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00eb3c70  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 972 B.  __thiscall(int, undefined4) routine: FUN_00eb3d20, FUN_00472b80 (twice), FUN_00572600 and a switch dispatch through the relocated function-pointer table at 0xeb4028 (5 entries, 6 base relocs); table dwords are emitted raw and decoded linearly (the 5 trailing bytes 0xeb4037..0xeb403c are appended as data).
+00eb4040  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 228 B.  __fastcall(int) returning undefined1: SSE float math with internal branches to 0xeb408a/0xeb40ac/0xeb4102; 3 base relocs emitted raw.
+00eb4130  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 178 B.  __fastcall(undefined4*) initializer: zeroes fields this[4], this[8], this[9], ... no calls; 5 base relocs emitted raw.
+00eb41f0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 518 B.  __fastcall(int*) routine: FUN_00eb2eb0 twice, FUN_00eb4130, FUN_0069d100/FUN_0069d090 twice each, FUN_0069d150 and an indirect `call edx`; 8 base relocs emitted raw.
