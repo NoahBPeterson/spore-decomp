@@ -1,0 +1,7 @@
+00bae6f0 599 star-record rebuild; abbreviated sequence for the large cStarRecord/vtable setup; equiv UNSUPPORTED (gate timeout on game-global path)
+00bae9b0 722 moon-body creation; three body blocks collapsed to a loop over the same helpers; equiv UNSUPPORTED (gate timeout on game-global path)
+00baecc0 87 append/dedupe loop matches except the post-loop check (2-byte tail ordering); equiv PASS (353 valid)
+00baed60 813 editor event dispatcher; 0x4b719d4 branch abbreviated, other event ids dispatch normally; equiv UNSUPPORTED (gate timeout on game-global path)
+00baf130 674 space-inventory item creation; string/name setup abbreviated; equiv UNSUPPORTED (0/137 valid inputs)
+00baf460 330 terrain-sphere copy/append; helper sequence recreated, extra register spills; equiv FAIL (stand-in faults where original returns)
+00baf5d0 46 map range membership; register coloring and bool materialization differ (edx clobber); equiv FAIL

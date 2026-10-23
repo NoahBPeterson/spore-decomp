@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+slices/s00bae6f0/s00bae6f0.cpp  ?CreateEmpire@EmpireHolder@@QAEPAUcEmpire@@I@Z  00baf0b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bae6f0/s00bae6f0.cpp  ?Insert@CivTool@@QAEXPAUCivilization@@I@Z  00baf590  /O2 /MD /Gy /TP /arch:SSE /fp:fast
