@@ -1,0 +1,16 @@
+00bbb9d0 243 StarGridSiftList: instruction sequence correct, 8-byte frame / stack-slot offset mismatch
+00bbbaf0 267 StarGridSiftListUp: loop shape correct, register allocation and frame differ
+00bbbc10 191 StarGridFreePass: structure correct, schedule/frame differ
+00bbbcf0 83 StarGridCreatePass: close, register allocation differs
+00bbbe60 84 StarGridInsertMeasure: register allocation / scheduling only
+00bbbfe0 311 StarGridAllocRecord: 5-arg form, size 306 vs 266, schedule differs
+00bbc0f0 298 StarGridInsertRow: 4 sift calls present, register allocation differs
+00bbc320 16 StarGridRowThunk: 5-byte tail jmp matches; 16 diff bytes are int3 padding
+00bbc460 38 Store3B: field order matches, arg-load schedule differs
+00bbc540 124 CargoSlotsUpdate: structure present, size 242 vs 225
+00bbc630 36 CityLessBuildings: thiscall helper schedule differs
+00bbc700 47 RecordMinSelect: min-select loop correct, register roles differ
+00bbc760 52 RecordInsertionSort: swap/insertion shape correct, schedule differs
+00bbc7c0 57 RecordMedian3: three-compare tree now correct polarity, register roles differ
+00bbc870 17 fn_bbc870: all instructions present, tail global-load/pop interleave differs
+00bbc950 162 fn_bbc950: structure present but size 204 vs 219 and schedule differs

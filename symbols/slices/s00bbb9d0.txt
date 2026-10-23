@@ -1,0 +1,29 @@
+# slice s00bbb9d0 - confident symbol names
+# VA        name                              note
+00bbb9d0    StarGridSiftList                  sift record down its own measure list
+00bbbaf0    StarGridSiftListUp                sift record up its own measure list
+00bbbc10    StarGridFreePass                  merge freeing measure entry into creating list
+00bbbcf0    StarGridCreatePass                merge creating measure entry into freeing list
+00bbbe20    StarGridNextFree                  next free grid slot pointer (self[2] vs self[0])
+00bbbe60    StarGridInsertMeasure             insert measure pair into a grid record
+00bbbfe0    StarGridAllocRecord               allocate grid record + measure pair (5-arg)
+00bbc0f0    StarGridInsertRow                 publish measure pair to 3 lists, run 4 sift passes
+00bbc300    StarGridAllocRecord2              allocate grid record (no measure pair)
+00bbc320    StarGridRowThunk                  tail-call thunk onto StarGridInsertRow
+00bbc340    TerraAccum1                       add float to active planet's +0x1fd4 accumulator
+00bbc370    TerraObj::ZeroField               zero +0x64 when active planet matches and no universe ctx
+00bbc3c0    TerraAccum2                       add float to active planet's +0x1fd4 accumulator (variant)
+00bbc400    TerraFlushDbg                     debug flush of terraform accumulators
+00bbc410    KeySink::Store3                   store three caller keys then the empty key
+00bbc460    KeySink::Store3B                  store the empty key then three caller keys
+00bbc4a0    KeySink::StoreEmpty               store the shared empty key into both key slots
+00bbc540    CargoSlotsUpdate                  publish stored keys to active planet's cargo slots
+00bbc630    CityLessBuildings                 order two city objects by building count
+00bbc670    PlanetTerraformDist               terraform distance for a planet record
+00bbc6a0    PlanetTerraformAtLeast            planet terraform level >= threshold
+00bbc700    RecordMinSelect                   select record pointer with lowest key in range
+00bbc760    RecordInsertionSort               insertion sort of record pointers (callback compare)
+00bbc7c0    RecordMedian3                     median-of-three record pointer selection (callback compare)
+00bbc840    TerraVectorCount                  record count of this object's two vector pairs
+00bbc870    fn_bbc870                         resource key at n-th entry with given emblem type
+00bbc950    fn_bbc950                         resource key at k-th entry with no emblem

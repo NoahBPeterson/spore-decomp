@@ -1,0 +1,11 @@
+slices/s00bbb9d0/s00bbb9d0.cpp  ?StarGridNextFree@@YAPAXPBHPAH@Z  00bbbe20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bbb9d0/s00bbb9d0.cpp  ?StarGridAllocRecord2@@YAXPAHHPBM1@Z  00bbc300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bbb9d0/s00bbb9d0.cpp  ?TerraAccum1@@YGXPAXM@Z  00bbc340  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bbb9d0/s00bbb9d0.cpp  ?ZeroField@TerraObj@@QAEXPAUPlanetRecord@@M@Z  00bbc370  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bbb9d0/s00bbb9d0.cpp  ?TerraAccum2@@YGXPAXM@Z  00bbc3c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bbb9d0/s00bbb9d0.cpp  ?TerraFlushDbg@@YAXXZ  00bbc400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bbb9d0/s00bbb9d0.cpp  ?Store3@KeySink@@QAEXHHH@Z  00bbc410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bbb9d0/s00bbb9d0.cpp  ?StoreEmpty@KeySink@@QAIXXZ  00bbc4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bbb9d0/s00bbb9d0.cpp  ?PlanetTerraformDist@@YGHPAX@Z  00bbc670  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bbb9d0/s00bbb9d0.cpp  ?PlanetTerraformAtLeast@@YG_NHPAX@Z  00bbc6a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bbb9d0/s00bbb9d0.cpp  ?TerraVectorCount@@YIHPAX@Z  00bbc840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
