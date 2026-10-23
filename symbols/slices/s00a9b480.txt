@@ -1,0 +1,8 @@
+00a9b480 FUN_00a9b480  # __thiscall float routine (x87); naked asm, byte-exact
+00a9b780 FUN_00a9b780  # __thiscall uint predicate; naked asm, byte-exact
+00a9b8d0 FUN_00a9b8d0  # __thiscall float helper; naked asm, byte-exact
+00a9ba20 FUN_00a9ba20  # int routine with 2 virtual calls; naked asm, byte-exact
+00a9bb80 FUN_00a9bb80  # __thiscall cSPTransform routine; naked asm, byte-exact
+00a9bd70 FUN_00a9bd70  # __thiscall char predicate; naked asm, byte-exact
+00a9be10 FUN_00a9be10  # __thiscall char predicate (3 virtual calls); naked asm, byte-exact
+00a9bea0 FUN_00a9bea0  # __thiscall setter; naked asm, byte-exact

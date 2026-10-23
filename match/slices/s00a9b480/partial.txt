@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+00a9b480  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 762 B.  __thiscall float routine (this, float* param_2): long x87 sequence over the object's vectors calling FUN_00a81a20; 4 base relocs emitted raw.
+00a9b780  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 329 B.  __thiscall uint predicate (this, int, float): x87 compares plus a call to FUN_00a9b120; 3 base relocs emitted raw.
+00a9b8d0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 329 B.  __thiscall float helper (this, int, arg): x87 math with calls to FUN_00a7f8d0 and internal branches at 0xa9b978/0xa9b9a6/0xa9b9c3; 2 base relocs emitted raw.
+00a9ba20  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 349 B.  int routine (int* this, int, uint*, int): two indirect virtual calls (`call edx`/`call eax`) with integer loop logic; no relocs.
+00a9bb80  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 494 B.  __thiscall cSPTransform routine (this, arg, arg): float/x87 work plus FUN_00537dc0 (x2), an indirect `call eax` and an internal branch at 0xa9bba8; 2 base relocs emitted raw.
+00a9bd70  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 146 B.  __thiscall char predicate (this, int, void*, arg): compares fields and an indirect `call edx`, internal branch at 0xa9bdbb; no relocs.
+00a9be10  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 137 B.  __thiscall char predicate (this, int, int*): three indirect `call eax` virtual dispatches; no relocs.
+00a9bea0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 124 B.  __thiscall setter (this, arg): stores *(this+0x22) = (char)arg and walks the list at this+0x24 with an indirect `call edx`, internal branch at 0xa9bef0; no relocs.
