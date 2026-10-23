@@ -488,6 +488,73 @@ version:
   `(a<b)` and `test ah,0x41; je` is `(a>b)`; `if (!(x >= -r))` avoids a
   canonicalised operand swap when the original did not swap (extends §9.1).
 
+### 9.6 Lessons from Mount & Blade 1.011 (cl 13.10.3052, all x87) **[13]**
+
+The sister project `../mountandblade-decomp` is built by the same cl 13.10 at `/O2 /MT /Gy /TP`, x87 only.
+Its x87 findings (2026-10-22), with the function that showed each:
+
+**Precision decides what a difference means.** M&B also creates its D3D9 device without
+`D3DCREATE_FPU_PRESERVE` (the stock DirectX SDK sample framework), so the render thread runs the x87 at
+24-bit precision. Then every x87 result is already rounded to a 24-bit mantissa: keeping a value in a
+register or storing it to a `float` gives the **same value**; only the exponent range differs (a register
+can hold magnitudes a `float` overflows). Measured on `camera_ray::screen_to_world` (0x4bd2f0) over 2,000
+realistic camera setups plus corners:
+- 84% of output floats were bit-identical between the original and a non-byte-exact rebuild; the rest
+  differed by 1-2 ulp, with large ulp counts only under cancellation (a result near 0 from terms ~5,000).
+- Both builds had the **same** error against an exact double reference (max 14.8, mean 0.46 ulp of the
+  largest term). At 53-bit precision the rebuild was slightly *more* accurate.
+- The remaining differences came from **summation/association order** (`((z·u + py·f) + px·s) + o` vs
+  `((px·s + z·u) + py·f) + o`), not from which values were spilled.
+- The harness FAILs that started the investigation came from absurd random inputs whose intermediates
+  overflow `float` range in one build but stay finite in the other's 80-bit register.
+
+**Measure, don't eyeball.** Two practices that changed conclusions:
+- Compare **aligned instructions**, not differing-byte counts. A positional byte count balloons when one
+  instruction shifts the rest; align the two instruction streams (difflib over normalised instructions,
+  relocated operands masked, optionally stack-slot numbers masked) and count identical / operand-only /
+  missing / extra instructions. On `screen_to_world` the byte count ranked the escaping-pointer variant
+  worst (417 bytes) while the alignment showed it among the closest (52 identical, 13 extra instructions).
+- Grade float-only differences with a **floating-point tolerance mode** (M&B `equiv.py --fp-tol`): on a
+  mismatch, re-run the *original* at 64-bit precision (control word `0x037F`) as the reference; a differing
+  finite float is tolerable when `err_ours <= max(2·err_orig, 4 ulp)`; inputs where the original itself
+  produces Inf/NaN/>1e30/denormals are set aside as out-of-range; any integer, pointer, call-trace,
+  register, x87-depth or status difference stays a real mismatch. Verdict `PASS-FP`. Three FAILs that
+  agents had "justified" by reading the mismatches turned out to be real bugs under this mode (a code
+  address written where the original writes a float, a skipped `normalize` call, 7 values left on the x87
+  stack at return). Hand justifications of float FAILs are not reliable; measure them.
+
+**Source levers that worked:**
+- *Store-and-reload of one value* (original: `fstp [esp]` right after a divide, then `fmul [esp]`):
+  `volatile float v = expr;` at the **first** computation only. `volatile` on every access of the variable
+  is worse (extra loads the original lacks). (`screen_to_world`: identical instructions 43 → 51, extra
+  instructions 34 → 7.)
+- *Two halves of a 2-D value evaluated together* (`fld a; fsub b; fld c; fsub d; fxch; fdiv`): one aggregate
+  initializer, `struct V2 { float x, y; } d = { a - b, c - e };`, then the divides.
+- *Which operand is the unrounded x87 value in a compare*: `dist > radius` vs `radius < dist` picks it;
+  that alone fixed a denormal mismatch (`polygon_sphere_contact` 0x40a000).
+- *x87 spills to float memory* the original performs: `volatile float` temporaries reproduce them (fine in
+  equivalent code; never claims byte-exactness).
+- *Uninitialised lanes the original copies* (a `vector4`'s never-written `w`, a `mat4` from a 12-float
+  identity): the harness compares stack garbage at absolute offsets, so reproduce the frame with a POD
+  `struct Frame` holding the locals at the original's offsets; objects whose lifetimes cl would overlay into
+  one slot go into one local struct.
+- *Round-to-nearest via floor*: `float fl = (float)floor(v); int i = (int)fl; if (!(v - fl <= 0.5f)) i++;`
+  gives the `fst / call floor / fld / call _ftol2` pattern; pass the limit and delta as `const float&` so `v`
+  is not spilled first. `if (frac <= 0.5f) n = base; else n = base + 1;` gave the `jnp` form.
+- *Clamps*: write `E < 0 ? 0 : (E >= 1 ? 1 : E)` as a repeated expression (a macro), not via a named float.
+- *Constants*: read them from the binary. The last byte of one function was the far plane, `501.0f`, not 500.
+- *Vector algebra*: cross-product operand order is semantic (`f×s` vs `s×f` flipped signs in `psys::emit`);
+  build products through the class's `operator*` temporaries when the original keeps a temporary structure.
+
+**Walls (not reachable from source shape):**
+- Keeping several values unrounded on the x87 stack across a branch while others live in memory
+  (`screen_to_world`: `sy`, `py`, `oy` in registers, `px`, `z`, `ox` in memory). Twelve source shapes and
+  four `volatile`/pointer variants moved the first statements into line but not this. Accept it as
+  `PASS-FP` when the tolerance mode agrees.
+- cl 13.10 stops sharing stack slots between block-local temporaries once a function passes roughly 600
+  switch cases (the 70 KB script interpreter: frame 0x2630 vs the original's 0x1ec0); every stack offset then
+  differs.
+
 ---
 
 ## 10. Instruction selection
