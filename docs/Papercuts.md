@@ -1042,3 +1042,153 @@ existing entry already covers it; if so, don't duplicate it (you may append "+1 
   Fix idea: none needed. Time lost: ~30 minutes.
 - [fix pass 2, round-2 modules] toolchain — a callee that the slice only declared gets inlined once the module TU defines it earlier (Expression 0x83e9d0: DiscardWhiteSpace 0x83ce90 inlined, DIFF 86). `#pragma inline_depth(0)` around that one function (renames `manual.pragmas`) restores the retail calls.
   Fix idea: none needed. Time lost: ~20 minutes.
+
+- [s00ee8860] toolchain — **/EHsc silently adds an SEH+GS prologue to constructors whose region has no C++ exceptions at all, hiding a byte-exact match.** C40::C40 (0xee9180) was stuck at ~30 diff bytes because /EHsc emitted `push -1; push 0; mov eax,fs:[0]; push eax; push ecx; ...`; the original has none, and no other function's score changed when /EHsc was dropped. Isolated by scratch experiments: with /EHsc a ctor of a class whose *base* has a destructor and whose body contains any call gets the frame (a base with virtuals but no dtor does not); `throw()`/`__declspec(nothrow)` on the ctor also removes it, and so does omitting /EHsc. The whole 0xee0000-0xf10000 region has **zero** `mov eax,fs:[0]` prologues (2,006 such prologues exist elsewhere in the image), so those TUs were built without C++ EH — the sibling slice s00ee6880 already manifests `/O2 /MD /Gy /TP /arch:SSE /fp:fast` for the same region. Fix idea: docs/matching.md "flags by region" should call out `mov eax,fs:[0]` presence/absence as a per-region discriminator (a 4-byte `grep` on the disassembly), since a wrong /EHsc costs a whole round and looks like a codegen bug. Time lost: ~40 min.
+- [s00ee8860] codegen — **three MSVC /O2 register-scheduler artifacts that no source spelling reproduces.** (1) 0xee9260 (C40::Update, 2 bytes): the original reuses ecx down a two-step member chain (`mov ecx,[ecx+0xc]; mov ecx,[ecx+0x10]`) where ours keeps `this` in ecx and uses eax for the temp; chained single expression, two locals, an accessor, `operator->`, case reorder and an if-chain all score 2 or worse. (2) 0xee92b0 (OBJ174::SetVisible, 45 bytes): the original loads the vtable into edx but the callee into **eax** late, and the TutorialsUI chain reuses ecx; all three vcall spellings (helper/vcall, bare inline vtable cast, named `void* fn` local) score exactly 45. (3) 0xee8cb0 (C40::SetVisible, 54 bytes): the original keeps the shared tail (FindCategoryIndex + Fn7b40 + `pop esi; ret 4`) as the then-block fall-through and jumps back from the else block, while ours emits `jmp tail` and lays the else block first; every branch-order variant scores 54. Fix idea: these look like the documented "/O2 scheduling, not reachable from C" class — worth a line in docs/matching.md that a sub-5-byte ModRM-only diff with all spellings equal is a stop signal, so agents freeze the slice instead of burning the round budget. Time lost: ~30 min.
+- [s00f29560 gold5] tooling — `equiv.py` spends 40 s - 4.5 min per VA pair on UI-walking functions (0xf29560's 12 non-exact
+  VAs would need ~20 min serially), and the batch form `equiv.py <slice> <va> <va> ...` runs them sequentially, so a single
+  call times out (900 s hit twice) while printing nothing (output is per-VA at completion and `| tail` buffers to EOF).
+  Shell-level parallelism is not available either: `printf ... | xargs -P 6 -I{} sh -c '...'` is rejected by the autonomous
+  broker ("unrecognized command: 6 -I{} sh -c ..."). The workable shape is one `shell` tool call per VA in a single parallel
+  block (~6 at a time took 10 min wall for 12). Fix idea: give equiv.py a `--jobs N` (fork/thread per VA) and a per-VA
+  progress line, or document the "one tool call per VA" recipe in docs/matching.md next to the run-once rule.
+  Time lost: ~35 minutes.
+- [s00adaad0] tooling — two reading traps in `cmpobj.py` and one false FAIL in `equiv.py`, all three of which
+  look like real codegen differences at first glance:
+  (1) `cmpobj.py` builds the `..` mask as the UNION of our object's relocations and the original's,
+  then applies the same offsets to both rows. A call or `push imm32` that sits a few bytes earlier in one
+  side therefore prints four or five `..` bytes in the *other* row at an offset where that row has real
+  instructions, so the "diff@" columns cannot be read as instruction boundaries; decoding a 7-byte
+  difference in 0xadb3d0 needed a hand-rolled alignment pass before the two sequences (identical except
+  for where MSVC put the two epilogue pops) became visible.
+  (2) the same union means a relocated `push` operand can hide an instruction-size change: 0xadb3d0's
+  `lea ecx,[esp+0x20]; push ecx` vs ours `lea ecx,...; push ecx` is invisible, while the unrelated
+  `mov` after it is not.
+  (3) `equiv.py` reported `FAIL 1/308` for 0xadad70 whose only mismatch is the harness's own fake
+  "memory pool @491f0130": both sides wrote the same 16 bytes (0, -2, 4, 1.0f) but in a rotated order,
+  i.e. the *order* in which the two 0x38-byte XForm temporaries were spilled. Nothing observable
+  differs; a 1/308 pool-order mismatch is reported exactly like a real divergence in the first output
+  line, so a slice looks broken until you read the dword rows.
+  Fix idea: print the mask *per side* in cmpobj (or dump instruction-aligned rows for the two sides on
+  a separate line), and have equiv.py label a lone pool-order mismatch as its own verdict/note.
+  Time lost: ~35 minutes.
+- [s00b4c270] codegen — **`__thiscall` is rejected by this toolchain on free functions** (C3865: "can only be
+  used on native member functions"), and a `__fastcall` declaration with a dummy 2nd `int edx` parameter makes
+  MSVC 2008 materialise `xor edx,edx` at every call site where a literal is passed, so neither spelling can
+  reproduce the original's plain `mov ecx,receiver / push args / call`. Fix idea: document the working model —
+  declare the callee as a member of an opaque receiver struct with the real stack parameters and call it through
+  a cast (`((Recv*)p)->f(a,b)`); MSVC then emits exactly the original sequence, and `slice.py::marker_names`
+  already resolves `Class::method` markers. Time lost: ~40 min.
+- [s00b4c270] codegen — **an original vcall (`mov eax,[obj]; mov edx,[eax+off]; call edx`) cannot be reproduced
+  by a function pointer stored in an array.** `((FnPtr)slot[i])(...)` emits `mov eax,[eax+off]; call eax` plus an
+  edx setup and is never byte-exact. Fix idea: define a class with N dummy `virtual void vXX();` so the wanted
+  slot lands at the right byte offset, then call it as a real virtual method; also note a class cannot host two
+  different arities at the same slot — use two sibling structs with identical prefixes. Time lost: ~30 min.
+- [s00b4c270] tooling — **`equiv.py` reports UNSUPPORTED `annotation-implausible` for address literals with no
+  relocation in the original.** The original pushes an absolute address as a bare immediate (`push 0x018c43e8`),
+  which is exactly `(void*)0x018c43e8`; writing it as `&extern_global` yields a reloc, masks differently under
+  `chk.py`, and makes `equiv.py` bail before running any input. Fix idea: when a `push imm32` inside the image has
+  no base relocation on the original side, spell it as a cast literal, not `&symbol`. Time lost: ~15 min.
+- [s011ad110] codegen — **non-LTCG static helpers in lib_cblock use the custom register ABI and are unreachable from reconstructed source.** bnrand (0x011ad810) takes pseudorand in eax and bits in ecx; BN_rand_range (0x011ada00) takes range in edi and rnd in esi. docs/codegen.md §6.3 says keep the helper `static` and add a same-TU stand-in caller, but with /O2 /MD /Gy cl 15 that still emitted the ordinary stack form for both (and for BN_div_consttime, which faults when called with a fresh register state). `__thiscall` on a free function is C3865, and `__fastcall` with a dummy 2nd `int edx` adds a `xor edx,edx` at the callee we cannot remove. Fix idea: document that §6.3 only applies to this game's own statics, not to the statically-linked OpenSSL object's internal statics, and mark such functions non-achievable by convention instead of by body. Time lost: ~40 min.
+- [s011ad110] codegen — **MSVC does not auto-unroll these 16x16 word loops.** bn_mul_words/bn_mul_add_words/bn_sqr_words/bn_add_words are each a hand-written 4x unroll in the original (one body per 32-bit word, `if (--n == 0) return ...;` after each, `ap/rp += 4` at the block end). Writing them as a plain `while (n-- > 0)` loop under /O2 produces a rolled loop and a large diff; the unroll must be written out in source. Time lost: ~20 min (re-discovered from the bn_add_words/bn_sqr_words rows).
+- [s011ad110] codegen — **the mul_add carry is a two-step chain, not the bn_lcl.h macro's one-liner.** The emitted bn_mul_add_words body is `t = l + carry; h += (t < carry); t2 = rp[i] + t; h += (t2 < t); rp[i] = t2`, whereas bn_mul_words uses the single step `t = l + carry; h += (t < carry); rp[i] = t`. Transcribing the macro literally as `rp[i] += l + carry; if (rp[i] < carry) h++` gives a wrong return carry (equiv FAIL, eax 4 vs 3) even though the size is close. Time lost: ~15 min.
+- [s011ad110] tooling — **BN_div's equivalence FAIL is entirely at an out-of-slice callee boundary and is misattributed.** All five mismatches are `fault(read) at eip=011acd0a` inside BN_div_consttime (0x011acd00), entered from BN_div's consttime branch; the non-consttime long-division body is never exercised (25.1% coverage). After correcting the call to the original's four arguments (rm,num,dv,divisor — the fifth `ctx` push was wrong and shifted the callee's frame) the args match the original exactly and the fault remains, purely from the callee's register entry state. Fix idea: when the first mismatching insn is in a different symbol, report "fault in callee <sym>, not this function" so agents don't chase a body bug. Time lost: ~20 min.
+- [s00ed6720] docs — **`this` offset of a multiple-inheritance sub-object is not documented, and it
+  differs per slice.** In this slice `PanelBase::DoBadgeMessage`'s `this` is `Panel+0x10` (the vtable
+  slot for it is at Panel+0x10, i.e. PanelBase is the *second* base after an 8-byte first base plus
+  4 bytes of padding), while `Panel::Activate2`/`Rebuild`/`Deactivate2`/`SelectionChanged` all take
+  the plain `Panel*` in ecx. I coded `panel()` as `this-8` first, which shifted *every* field read in
+  `DoBadgeMessage` by 8 and made four of six functions look wildly wrong. The disassembly gave it
+  away: `add esi,-0x10` before calling a Panel method. Fix idea: when a handler body subtracts a
+  constant from its `this` to reach the outer object, that constant *is* the base offset — grep the
+  body for `add ecx/esi/edi,-0xNN` first. Time lost: ~35 min.
+- [s00ed6720] codegen — **an empty class (methods only, no data members) is 1 byte in MSVC 2008, and
+  embedding one silently shifts every later struct field by 4 (alignment).** `cPage`/`cEmbedGame`
+  with only non-virtual methods occupy 1 byte when used by value, so `Panel`'s `mMenu`/`mList40`/
+  `mPage*` fields all moved by 4 and I chased a phantom "offsets are all off by 8" for several
+  rounds. The emitted store offsets (`[esi+0x50]` where the original had `[esi+0x58]`) are the only
+  symptom. Fix idea: never embed a method-only class by value in a reconstructed struct; either
+  declare the field as a pointer or give it an explicit `char pad[4]`. Time lost: ~25 min.
+- [s00ed6720] tooling — **`try_variants.py` requires a VA argument but the usage line does not show
+  it**, so calling `try_variants.py <file.cpp>` dies with an `IndexError` traceback instead of a usage
+  message. Fix idea: print `usage:` and exit 2 when `len(sys.argv) < 3`. Time lost: ~2 min.
+- [s00855490] codegen — **a slice whose entry points do not reference its TU-local statics gets them
+  dropped entirely by `/Gy` + DCE, and the object silently contains only the public functions**
+  (chk.py printed "no marker symbol and no symbol of similar size" for 8 of 11 VAs, which reads like
+  a naming problem but is really "the function was never emitted"). The sibling slice worked only
+  because `jinit_phuff_encoder` takes the helpers' addresses. Fix idea: give the slice an anchor that
+  references every static; and note the two flavours are NOT interchangeable — a helper that is
+  *called* by the anchor gets cl 15's same-TU register convention (`eax`/`edx`/`ecx`, codegen.md 6.3),
+  while one whose address is only *taken* keeps the standard convention (`[esp+..]` cdecl). Calling
+  all eight broke the three `encode_mcu_*` entries (they regressed from MATCH to 154 diff bytes);
+  address-taking all eight broke the five small helpers. The correct anchor calls the five small
+  helpers and only takes the addresses of the three encode_mcu entries. Time lost: ~40 min.
+- [s00855490] codegen — **`jpeg_set_defaults` matches only once you reproduce the inlining of the
+  out-of-slice `jpeg_set_quality` chain.** The original has no `call` to it: quality=75 is folded at
+  compile time into two `jpeg_add_quant_table` calls with literal `push 0x32` scaling, and the
+  `std_huff_tables`/`add_huff_table` pair is inlined too. Declaring them `extern` (the obvious move)
+  leaves the call out-of-line and costs ~200 diff bytes plus a register-allocation difference
+  (`esi` instead of `ebx` for cinfo). Fix idea: when a slice's function calls a same-object function
+  that is LOCAL/an inlined-only helper, paste that helper's upstream body into the slice as a
+  file-scope `static` and call the inlined expansion directly (here: `jpeg_set_linear_quality(cinfo,
+  jpeg_quality_scaling(75), TRUE)`). Time lost: ~25 min.
+- [s00addb50] docs/codegen — **many "cdecl" callees in the decompile are really `__thiscall` on a receiver.**
+  Ghidra prints them as plain calls and drops the `this`, so a first cut that passes the receiver as arg1 (or as
+  `[obj+off]` read from the wrong object) compiles but faults/mismatches. The disasm always shows the receiver
+  loaded into `ecx` right before the `call`. Concrete set for this region: `0x50f740` and `0x4b5ad0` are thiscall on
+  the `SpVector<Vector3>` at `o+0x6c`; `0x838130` `cArguments::OptionArguments(name,&count,min,max)` is thiscall on
+  `args`; `0x7e4190` `cAppState::AddMessage` is thiscall on `[self+0xc]`. Fix idea: when a callee's first decompiled
+  arg is an object pointer and the disasm has a `mov ecx,<that>` immediately before the call, treat it as thiscall.
+  Time lost: ~2 compile/equiv rounds.
+- [s00addb50] codegen — **`eastl` map-insert reads the payload from memory *contiguous with the key*.**
+  `0xadb4a0`/`0xadb590` take `(out, keyptr, flag)` where `keyptr` points at a `{key, payload}` pair and the value is
+  read at `keyptr+4` (for `0xadb4a0`, `keyptr+0x38` for the big EditorRes payload). A separate local for the payload
+  compiles and runs but the callee reads garbage. Fix idea: declare the key and payload as adjacent fields of one
+  struct/buffer. Time lost: ~1 round each on 0xaddfa0/0xade060.
+- [s00addb50] codegen — **the original passes a 1-byte `bool` whose upper three bytes are the stale reused slot.**
+  `0xaddfa0`/`0xade060` do `mov byte [esp+8],0; mov edx,[esp+8]`, i.e. the flag dword's high bytes come from the
+  `Find` result slot that was just overwritten. equiv compares the raw dword, so a clean `bool` mismatches. Fix idea:
+  pass `(local & 0xFFFFFF00u)` through a `unsigned int flag` parameter. Time lost: ~1 round.
+- [s00addb50] tooling — **equiv.py can't observe free-heavy destructors.** `0xade680` discards 100% of inputs
+  (297 read faults, 14 `VirtualFree` imports, budget), so it is UNSUPPORTED, not a real FAIL. Likewise `0xadde90`
+  reports a FAIL that is only a memory-pool address difference (call trace matches). Fix idea: a `--lenient-pool`
+  mode that ignores pool-address-valued diffs, and a stubbed `VirtualFree`. Time lost: ~10 min of triage.
+- [s008cd6f0] codegen — **TU-local helpers with a custom register ABI need a `static` decl plus a same-TU
+  stand-in caller to pin cl's convention.** The TSI font-scaler cluster has six helpers cl passes in
+  callee-saved registers (mem->ebx/stream->edi for hhea/head/maxp, mem->eax/stream->ebx for ttcf,
+  mem->eax/stream-on-stack for kern/hmtx). Declaring them `static` and adding a stand-in caller that
+  calls each one made cl15 reproduce the *original* convention for New_hheaClass/New_headClass/
+  New_maxpClass/New_ttcfClass (byte-exact); a helper only *address-taken* keeps standard cdecl. Where
+  cl15 still disagreed (New_kernClass, New_hmtxClass) the function is unmatchable. Fix idea: none needed
+  beyond the technique — but it is worth calling out in docs/codegen.md §6.3 as a first-line move.
+  Time lost: ~40 min.
+- [s008cd6f0] tooling — **equiv.py reports UNSUPPORTED for custom-register-ABI originals.** For
+  New_kernClass (mem in eax) and New_hmtxClass (count in eax) the harness prints "original reads eax at
+  entry but our declaration passes nothing there (custom/LTCG register ABI?)" and gives no verdict at
+  all, so a complete reconstruction ends up in partial.txt rather than nonmatching.txt. Fix idea: allow
+  the harness to seed eax/edx from a caller-supplied convention, or report these as "equivalent,
+  ABI-unverifiable". Time lost: ~10 min.
+- [s008cd6f0] codegen — **cl14 vs cl15 pick different callee-saved registers for the same live ranges.**
+  For New_sfnt_OffsetTable cl14 gives mem->esi/stream->edi/result->ebx and cl15 mem->ebx/stream->esi/
+  result->edi; for FF_New_slocClass cl14 gives mem->ebx/stream->edi and cl15 mem->edi/stream->ebx. No
+  source reordering (declaration order, indexing vs walker, swap of the zero stores) changed the
+  assignment, so those two are stuck as near-matches. GetSfntClassKernValue *did* drop from 68 to 34
+  diff bytes by swapping the two `*out = 0` stores (cl then keeps out2 in edx like the original).
+  Time lost: ~35 min.
+- [s008cd6f0] tooling — **cmpdis.py renders masked relocations as `call <ext>` vs `call <+0xNN>`, and
+  chk.py counts them as diff bytes.** New_maxpClass showed 51 "diff" bytes that were exactly 17 calls x 3
+  reloc bytes; once the real body matched the count stayed at 51 until the relocations were resolved by
+  the function's own layout. Fix idea: mask call rel32 operands the same way equiv.py does before
+  counting. Time lost: ~15 min.
+- [s00c16340] codegen — **a `__fastcall`+dummy-`edx` declaration adds a stray `xor edx,edx` at every call.**
+  Replacing `extern "C" float* __fastcall F(void* self, int edx)` / `extern "C" void __fastcall G(T* self, int edx, float v)`
+  with plain member declarations (`struct PropObj { float* GetFloat(); }`, `struct TerrainObj { void ApplyWave(float); }`)
+  removed both `xor edx,edx` instructions and made the function byte-exact. Fix idea: note in docs/matching.md that
+  member methods are the preferred stand-in for `__thiscall` callees when the dummy-`edx` form leaks an extra instruction.
+  Time lost: ~15 min.
+- [s00c16340] docs — **consecutive `push`es can serve double duty across zero-cleanup callees, which makes the "real"
+  source look wrong.** The sequence `push 1; call GetCurrentGameMode; push eax; call getter; mov ecx,eax; call Fn1`
+  looks like `GetCurrentGameMode(1)` + `getter(eax)`, but the two pushed values are really Fn1's two stack args
+  (ret 8) — GetCurrentGameMode and the getter take no stack args and never clean, so the pushes survive. Reading it as
+  nested calls produces the wrong source shape (and an extra callee-saved register). Fix idea: when a callee is a
+  0-stack-arg thunk (`ret`/tail-jmp) note that the pending `push`es belong to a later call. Time lost: ~25 min.
