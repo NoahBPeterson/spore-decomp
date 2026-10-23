@@ -187,6 +187,28 @@ def pending(sid):
     return bool(r.get("data"))
 
 
+_DB = os.path.expanduser("~/.local/share/opencode/opencode.db")
+
+
+def last_activity(sid):
+    """Seconds-since-epoch of the session's newest write (any message row's time_updated), from opencode's
+    database; None when it cannot be read. opencode 2.1's message API gives only a turn's start time ("assistant"
+    = the turn, which spans every model call and tool run until the session goes idle) and no completion time, so
+    "created more than --hang ago" fired on every session that had worked for 15 minutes in one turn: on the Runpod
+    wave (2026-10-23) the drain interrupted 18 healthy sessions at 22:29:39 and again at 22:44:40, aborting their
+    current calls and burning their nudges."""
+    if not os.path.exists(_DB):
+        return None
+    try:
+        import sqlite3
+        db = sqlite3.connect("file:%s?mode=ro" % _DB, uri=True, timeout=5)
+        r = db.execute("select max(time_updated) from session_message where session_id = ?", (sid,)).fetchone()
+        db.close()
+        return r[0] / 1000 if r and r[0] else None
+    except Exception:
+        return None
+
+
 def last_assistant(sid):
     m = api("GET", "/api/session/%s/message?limit=3" % sid).get("data", [])
     for x in m:
@@ -248,10 +270,12 @@ while True:
         t = (last or {}).get("time", {})
         created = (t.get("created") or 0) / 1000
         completed = (t.get("completed") or 0) / 1000
+        act = last_activity(sid)
         is_active = sid in active
         if is_active:
-            if created and not completed and now - created > a.hang:
-                log("unhang r%d %s (open %.0fs)" % (k, sid, now - created))
+            quiet = (now - act) if act else ((now - created) if created and not completed else 0)
+            if quiet > a.hang:
+                log("unhang r%d %s (no activity for %.0fs)" % (k, sid, quiet))
                 api("POST", "/api/session/%s/interrupt" % sid, {})
                 api("POST", "/api/session/%s/prompt" % sid, {"text": "Your previous model call hung and was "
                     "interrupted. Continue your task from the files already written in your slices.",
@@ -261,7 +285,7 @@ while True:
                 busy += 1
             continue
         # idle and unfinished
-        since = now - (completed or created or 0)
+        since = now - (act or completed or created or 0)
         prev = nudged_at.get(sid)
         if prev and prev[1] == done and now - prev[0] < a.cooldown:
             continue
