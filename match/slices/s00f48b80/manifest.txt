@@ -1,7 +1,10 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f48b80/s00f48b80.cpp  ?WriteTerrainBrushDesc@@YAXPAUStream@@PAUcTerrainBrushDescription@@@Z  00f48b80  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s00f48b80/s00f48b80.cpp  ?OnRegister@cBrushCommandBase@@QAEXPAX0@Z  00f49250  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s00f48b80/s00f48b80.cpp  ?Ribbon@cBrushCommand@@QAEXPAUcArguments@@@Z  00f49260  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s00f48b80/s00f48b80.cpp  ?Life@cBrushCommand@@QAEXPAUcArguments@@@Z  00f49350  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s00f48b80/s00f48b80.cpp  ?Rate@cBrushCommand@@QAEXPAUcArguments@@@Z  00f49390  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00f48b80/s00f48b80.cpp  ?Texture@cBrushCommand@@QAEXPAUcArguments@@@Z  00f493d0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00f48b80/s00f48b80.cpp  ?Filter@cBrushCommand@@QAEXPAUcArguments@@@Z  00f49660  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s00f48b80/s00f48b80.cpp  ?Cond@cBrushCommand@@QAEXPAUcArguments@@@Z  00f49780  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s00f48b80/s00f48b80.cpp  ?Cond2@cBrushCommand@@QAEXPAUcArguments@@@Z  00f499a0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast

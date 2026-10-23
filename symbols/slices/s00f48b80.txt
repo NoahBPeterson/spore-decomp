@@ -1,0 +1,17 @@
+# va  name  # evidence
+# Slice s00f48b80 (gold5 #5) -- the Terrain brush command set: the cTerrainBrushDescription
+# serializer/ctor plus the ArgScript command objects that register and execute the brush
+# sub-commands (ribbon, life, rate, texture, filter, condition ops).  Region is /O2
+# (no frame pointer) with /arch:SSE float moves.  Class layouts follow the 2008 dev PDB
+# with the retail eastl::vector growth applied, matching the neighbouring slices
+# s00f4aaf0 / s00f4c300 / s00f4d9c0.
+00f48b80  WriteTerrainBrushDesc                     # MAJOR: stream writer for every cTerrainBrushDescription field
+00f49040  cTerrainBrushDescription::cTerrainBrushDescription  # MAJOR: ctor, vtbl + field defaults + two curve-buffer EAAllocate(4,...)
+00f49250  cBrushCommandBase::OnRegister              # MAJOR: thin wrapper storing the command's ArgScript descriptor
+00f49260  cBrushCommand::Ribbon                     # MAJOR: ArgScript "ribbon" sub-command (tiles/steps/strips/skip/cap)
+00f49350  cBrushCommand::Life                       # MAJOR: ArgScript "life" sub-command (lifetime)
+00f49390  cBrushCommand::Rate                       # MAJOR: ArgScript "rate" sub-command (imprints per second)
+00f493d0  cBrushCommand::Texture                    # MAJOR: ArgScript "texture" sub-command (draw mode/gaussian/offset)
+00f49660  cBrushCommand::Filter                     # MAJOR: ArgScript "filter" sub-command (kernel/op/delta/global)
+00f49780  cBrushCommand::Cond                       # MAJOR: ArgScript "cond" sub-command (height condition operator + operands)
+00f499a0  cBrushCommand::Cond2                      # MAJOR: ArgScript "cond2" sub-command (falloff condition operator + operands)

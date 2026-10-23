@@ -27,6 +27,7 @@ typedef unsigned int       uint32;
 typedef unsigned __int64   uint64;
 
 // ---------------------------------------------------------------- math types
+struct Vector2 { float x, y; };
 struct Vector3 { float x, y, z; };
 
 // ------------------------------------------- eastl::vector<float, sp_vector_allocator> (retail 0x14)
@@ -44,25 +45,25 @@ struct cTerrainBrushDescription {
     uint32 pad14;                     // +0x14
     uint64 mTexture;                  // +0x18
     uint8  mDrawMode;                 // +0x20
-    bool   mDoGaussian;               // +0x21
+    uint8  mDoGaussian;               // +0x21
     char   pad22[2];
     float  mGaussianSlope;            // +0x24
     float  mLifetime;                 // +0x28
     FloatVector mSizeCurve;           // +0x2c
     FloatVector mIntensityCurve;      // +0x40
-    bool   mWaterLevelIsZero;         // +0x54
+    uint8  mWaterLevelIsZero;         // +0x54
     char   pad55[3];
     float  mIntensityVary;            // +0x58
     float  mSizeVary;                 // +0x5c
     float  mRotationVary;             // +0x60
-    uint32 mTextureOffset[2];         // +0x64
+    Vector2 mTextureOffset;           // +0x64
     float  mLevelValue;               // +0x6c
     float  mLevelVary;                // +0x70
     float  mLevelRangeValue1;         // +0x74
     float  mLevelRangeValue2;         // +0x78
     float  mImprintsPerSecond;        // +0x7c
-    bool   mDoFiltering;              // +0x80
-    bool   mFilterGlobal;             // +0x81
+    uint8  mDoFiltering;              // +0x80
+    uint8  mFilterGlobal;             // +0x81
     uint8  mKernelType;               // +0x82
     uint8  mKernelOp;                 // +0x83
     float  mDeltaAmount;              // +0x84
@@ -84,11 +85,11 @@ struct cTerrainBrushDescription {
     char   padC5[3];
     float  mGradientFallOffN1;        // +0xc8
     float  mGradientFallOffN2;        // +0xcc
-    bool   mDoCubeMap;                // +0xd0
+    uint8  mDoCubeMap;                // +0xd0
     char   padD1[3];
     Vector3 mRot;                     // +0xd4
     Vector3 mRotVary;                 // +0xe0
-    bool   mRibbonBrush;              // +0xec
+    uint8  mRibbonBrush;              // +0xec
     char   padEd[3];
     uint32 mRibbonNumTiles;           // +0xf0
     uint32 mRibbonNumSteps;           // +0xf4
@@ -218,52 +219,55 @@ extern const char kCondOpTable[];        // 0x0148de50
 // @ 0x00f48b80
 void WriteTerrainBrushDesc(Stream* s, cTerrainBrushDescription* d)
 {
+    uint32 u;
+    uint64 u64;
+
     s->Write(&d->mLocation, 0x0c);
-    WriteUint64(s, &d->mTexture, 1, 0);
-    StreamWrite(s, &d->mDrawMode, 1);
-    StreamWrite(s, &d->mDoGaussian, 1);
-    WriteUint32(s, &d->mGaussianSlope, 1, 0);
-    WriteUint32(s, &d->mLifetime, 1, 0);
+    u64 = d->mTexture;                  WriteUint64(s, &u64, 1, 0);
+    *(uint8*)&u = d->mDrawMode;         StreamWrite(s, &u, 1);
+    *(uint8*)&u = d->mDoGaussian != 0;  StreamWrite(s, &u, 1);
+    *(float*)&u = d->mGaussianSlope;    WriteUint32(s, &u, 1, 0);
+    *(float*)&u = d->mLifetime;         WriteUint32(s, &u, 1, 0);
     WriteFloatVector(s, &d->mSizeCurve);
     WriteFloatVector(s, &d->mIntensityCurve);
-    StreamWrite(s, &d->mWaterLevelIsZero, 1);
-    WriteUint32(s, &d->mIntensityVary, 1, 0);
-    WriteUint32(s, &d->mSizeVary, 1, 0);
-    WriteUint32(s, &d->mRotationVary, 1, 0);
+    *(uint8*)&u = d->mWaterLevelIsZero != 0; StreamWrite(s, &u, 1);
+    *(float*)&u = d->mIntensityVary;    WriteUint32(s, &u, 1, 0);
+    *(float*)&u = d->mSizeVary;         WriteUint32(s, &u, 1, 0);
+    *(float*)&u = d->mRotationVary;     WriteUint32(s, &u, 1, 0);
     s->Write(&d->mTextureOffset, 8);
-    WriteUint32(s, &d->mLevelValue, 1, 0);
-    WriteUint32(s, &d->mLevelVary, 1, 0);
-    WriteUint32(s, &d->mLevelRangeValue1, 1, 0);
-    WriteUint32(s, &d->mLevelRangeValue2, 1, 0);
-    WriteUint32(s, &d->mImprintsPerSecond, 1, 0);
-    StreamWrite(s, &d->mDoFiltering, 1);
-    StreamWrite(s, &d->mFilterGlobal, 1);
-    StreamWrite(s, &d->mKernelType, 1);
-    StreamWrite(s, &d->mKernelOp, 1);
-    WriteUint32(s, &d->mDeltaAmount, 1, 0);
+    *(float*)&u = d->mLevelValue;       WriteUint32(s, &u, 1, 0);
+    *(float*)&u = d->mLevelVary;        WriteUint32(s, &u, 1, 0);
+    *(float*)&u = d->mLevelRangeValue1; WriteUint32(s, &u, 1, 0);
+    *(float*)&u = d->mLevelRangeValue2; WriteUint32(s, &u, 1, 0);
+    *(float*)&u = d->mImprintsPerSecond; WriteUint32(s, &u, 1, 0);
+    *(uint8*)&u = d->mDoFiltering != 0; StreamWrite(s, &u, 1);
+    *(uint8*)&u = d->mFilterGlobal != 0; StreamWrite(s, &u, 1);
+    *(uint8*)&u = d->mKernelType;       StreamWrite(s, &u, 1);
+    *(uint8*)&u = d->mKernelOp;         StreamWrite(s, &u, 1);
+    *(float*)&u = d->mDeltaAmount;      WriteUint32(s, &u, 1, 0);
     WriteFloatVector(s, &d->mSpacingCurve);
-    WriteUint32(s, &d->mSpacingVary, 1, 0);
-    StreamWrite(s, &d->mCondOp, 1);
-    WriteUint32(s, &d->mCondN1, 1, 0);
-    WriteUint32(s, &d->mCondN2, 1, 0);
-    StreamWrite(s, &d->mFallOffOp, 1);
-    WriteUint32(s, &d->mFallOffN1, 1, 0);
-    WriteUint32(s, &d->mFallOffN2, 1, 0);
-    StreamWrite(s, &d->mGradientCondOp, 1);
-    WriteUint32(s, &d->mGradientCondN1, 1, 0);
-    WriteUint32(s, &d->mGradientCondN2, 1, 0);
-    StreamWrite(s, &d->mGradientFallOffOp, 1);
-    WriteUint32(s, &d->mGradientFallOffN1, 1, 0);
-    WriteUint32(s, &d->mGradientFallOffN2, 1, 0);
-    StreamWrite(s, &d->mDoCubeMap, 1);
+    *(float*)&u = d->mSpacingVary;      WriteUint32(s, &u, 1, 0);
+    *(uint8*)&u = d->mCondOp;           StreamWrite(s, &u, 1);
+    *(float*)&u = d->mCondN1;           WriteUint32(s, &u, 1, 0);
+    *(float*)&u = d->mCondN2;           WriteUint32(s, &u, 1, 0);
+    *(uint8*)&u = d->mFallOffOp;        StreamWrite(s, &u, 1);
+    *(float*)&u = d->mFallOffN1;        WriteUint32(s, &u, 1, 0);
+    *(float*)&u = d->mFallOffN2;        WriteUint32(s, &u, 1, 0);
+    *(uint8*)&u = d->mGradientCondOp;   StreamWrite(s, &u, 1);
+    *(float*)&u = d->mGradientCondN1;   WriteUint32(s, &u, 1, 0);
+    *(float*)&u = d->mGradientCondN2;   WriteUint32(s, &u, 1, 0);
+    *(uint8*)&u = d->mGradientFallOffOp; StreamWrite(s, &u, 1);
+    *(float*)&u = d->mGradientFallOffN1; WriteUint32(s, &u, 1, 0);
+    *(float*)&u = d->mGradientFallOffN2; WriteUint32(s, &u, 1, 0);
+    *(uint8*)&u = d->mDoCubeMap != 0;   StreamWrite(s, &u, 1);
     s->Write(&d->mRot, 0x0c);
     s->Write(&d->mRotVary, 0x0c);
-    StreamWrite(s, &d->mRibbonBrush, 1);
-    WriteUint32(s, &d->mRibbonNumTiles, 1, 0);
-    WriteUint32(s, &d->mRibbonNumSteps, 1, 0);
-    WriteUint32(s, &d->mRibbonNumTextureStrips, 1, 0);
-    WriteUint32(s, &d->mRibbonNumSkip, 1, 0);
-    StreamWrite(s, &d->mRibbonCap, 1);
+    *(uint8*)&u = d->mRibbonBrush != 0; StreamWrite(s, &u, 1);
+    u = d->mRibbonNumTiles;             WriteUint32(s, &u, 1, 0);
+    u = d->mRibbonNumSteps;             WriteUint32(s, &u, 1, 0);
+    u = d->mRibbonNumTextureStrips;     WriteUint32(s, &u, 1, 0);
+    u = d->mRibbonNumSkip;              WriteUint32(s, &u, 1, 0);
+    *(uint8*)&u = d->mRibbonCap != 0;   StreamWrite(s, &u, 1);
 }
 
 // @ 0x00f49040
@@ -294,8 +298,8 @@ cTerrainBrushDescription::cTerrainBrushDescription()
     mIntensityVary = 0.0f;
     mSizeVary = 0.0f;
     mRotationVary = 0.0f;
-    mTextureOffset[0] = 0.0f;
-    mTextureOffset[1] = 0.0f;
+    mTextureOffset.x = 0.0f;
+    mTextureOffset.y = 0.0f;
     mLevelValue = 0.0f;
     mLevelVary = 0.0f;
     mLevelRangeValue1 = 0.0f;
@@ -411,9 +415,7 @@ void cBrushCommand::Texture(cArguments* args)
     a = args->OptionArguments("offset", 1);
     if (a != 0) {
         uint32 v[2];
-        uint32* p = (uint32*)mParser->ParseVec2(v, a[0]);
-        mDesc->mDesc.mTextureOffset[0] = p[0];
-        mDesc->mDesc.mTextureOffset[1] = p[1];
+        mDesc->mDesc.mTextureOffset = *(Vector2*)mParser->ParseVec2(v, a[0]);
     }
 
     a = args->OptionArguments("gaussian", &count, 0, 1);
