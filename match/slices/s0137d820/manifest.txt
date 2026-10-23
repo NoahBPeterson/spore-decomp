@@ -1,0 +1,12 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0137d820/s0137d820.cpp  ??__EFIELDS_DT_ATTACHMENT_STRUCTURE@SP@@YAXXZ       0137d820  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0137d820/s0137d820.cpp  ??__EFIELDS_DT_ATTACHMENT_EFFECT@SP@@YAXXZ          0137d9d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0137d820/s0137d820.cpp  ??__EFIELDS_DT_ATTACHMENT_MODEL@SP@@YAXXZ           0137dc50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0137d820/s0137d820.cpp  ??__EFIELDS_DT_ATTACHMENT_CREATURE@SP@@YAXXZ        0137de60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0137d820/s0137d820.cpp  ??__EFIELDS_DT_ATTACHMENT_RANDOM_CREATURE@SP@@YAXXZ 0137dfb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0137d820/s0137d820.cpp  ?FUN_0137ec20@@YAXXZ  0137ec20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0137d820/s0137d820.cpp  ?FUN_0137ec40@@YAXXZ  0137ec40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0137d820/s0137d820.cpp  ?FUN_0137ec60@@YAXXZ  0137ec60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0137d820/s0137d820.cpp  ?FUN_0137ed40@@YAXXZ  0137ed40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0137d820/s0137d820.cpp  ?FUN_0137edc0@@YAXXZ  0137edc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0137d820/s0137d820.cpp  ?FUN_0137ee40@@YAXXZ  0137ee40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
