@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01090a70/s01090a70.cpp  ?applyAngularImpulse@hkSphereMotionEx@@UAEXABUhkVector4@@@Z  01090b50  /vc71 /O2 /MD /Gy /TP
+slices/s01090a70/s01090a70.cpp  ?applyAngularImpulseScaled@hkSphereMotionEx@@UAEXMABUhkVector4@@@Z  01090ba0  /vc71 /O2 /MD /Gy /TP
+slices/s01090a70/s01090a70.cpp  ?clone@hkSphereMotionEx@@UBEPAVhkMotion@@XZ  01090dc0  /vc71 /O2 /MD /Gy /TP
+slices/s01090a70/s01090a70.cpp  ?shouldDeactivateHighFrequency@hkSpatialRigidBodyDeactivator@@UBE?AVhkBool@@PBVhkEntity@@@Z  010916e0  /vc71 /O2 /MD /Gy /TP
+slices/s01090a70/s01090a70.cpp  ?shouldDeactivateLowFrequency@hkSpatialRigidBodyDeactivator@@UBE?AVhkBool@@PBVhkEntity@@@Z  010917e0  /vc71 /O2 /MD /Gy /TP

@@ -1,0 +1,3 @@
+# Incomplete / approximate: none for this slice. All eleven functions are fully reconstructed and
+# equivalence-clean; the six bodies above are complete but not byte-exact (x87 schedule / frame
+# differences), so they live in nonmatching.txt instead.
