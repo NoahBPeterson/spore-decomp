@@ -1,0 +1,32 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+#
+# NOTE ON /GS-:  the original object carries NO __security_cookie in any function, including
+# Write (00c04220), which keeps a 0xa10-byte cVarListSerializer local.  The default /GS adds a
+# cookie there and shifts the whole frame, which alone accounted for ~166 of Write's diff bytes.
+# Rebuilding the slice with /GS- drops Write to 15 differing bytes and leaves every other target
+# unchanged, so the retail build clearly used /GS- (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-).
+#
+# Slice s00c035f0 = SPGonzago/SPCreatureBase.obj: colour/HSL tint application, two locomotion
+# orientation tests (funcC0h/funcACh), the ability dispatch (func3C20/SetCreatureTarget/func70h),
+# the animation/mesh submit path (func3EC0/func3F90), the hit-point accessors
+# (GetBaseMaxHitPoints/func4140), the cVarListSerializer Write override and the animation-string
+# selector (func42E0).  1/13 byte-exact (00c03c20).  The other 12 are complete C++ that reproduces
+# the original control flow, call order and callee ABIs (all indirect calls are vtable slots
+# `call [vt+off]`); they miss byte-exactness mostly because the original keeps float values in the
+# x87 register stack across the float-returning helpers (so it emits fld/fmul/fstp/fcompi where
+# this build emits SSE movss/mulss/comiss), and because MSVC's register allocator assigns the
+# base/offset/accumulator locals to different registers on the second compile.
+#
+00c035f0 351 non-byte-exact; RGB load/Clamp01/HSLToRGB argument build differs (original passes the profile floats with movss straight from memory and keeps the x87 round-trips on the Clamp01/HSLToRGB calls, this build spills them through fld/fstp) and the result buffer is one 3-float local, not two; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv PASS (399 valid inputs, 98.3% coverage)
+00c037c0 299 non-byte-exact; game-profile count compare and the 0x590/0x594 float-equality guards are reassociated, register allocation of the stream/flag locals differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv UNSUPPORTED (0/400 inputs valid: fault(read)=336, fake-arity=49, fault(pool-limit)=8)
+00c03950 418 non-byte-exact; x87 fsqrt/fabs distance sequence and the two subobject vtable-slot calls (offset 0x2c/0x74/0x5c on the cLocomotion base) load the slot pointer differently; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv WEAK (238 valid inputs, 8.6% coverage)
+00c03b70 138 non-byte-exact; the float argument enters through mov eax,[esp+4]/push rather than fld/fstp, and the max/min select is built with the original's lea-address-select + fld/fstp store instead of SSE comiss/movss; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv WEAK (285 valid inputs, 21.4% coverage)
+00c03c90 171 non-byte-exact; the target/unref vtable-slot calls (this+0x60/0x64) and the game-mode notify call load the slot pointer with add reg,off;call reg instead of mov reg,[..];call reg; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv PASS (392 valid inputs, 90.2% coverage)
+00c03d60 271 non-byte-exact; the same vtable-slot load shape (offsets 0x8/0xc/0x2c/0x58/0x84), and the 0xb58 bit-9 test is folded to test [..],0x200 shifting the block layout; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv WEAK (289 valid inputs, 57.4% coverage)
+00c03ec0 155 non-byte-exact; the 0x2000/0x100000 flag word OR-chain and the FUN_00d995f0 cdecl argument build (float, double, then 6 stacked words) are scheduled differently; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv PASS (374 valid inputs, 100.0% coverage)
+00c03f90 107 non-byte-exact; only register allocation differs - original keeps the array base in esi, the byte offset in edi and the accumulator in ebx, this build uses eax/ebx/ebp with a different push order; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv PASS (260 valid inputs, 82.2% coverage)
+00c04010 126 non-byte-exact; the avatar/herd/egg hit-point source selection is reassociated and the 0xd8 id vtable call plus FUN_004d12a0/FUN_004df420 argument shapes differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv UNSUPPORTED (0/400 inputs valid: fault(read)=400)
+00c04140 168 non-byte-exact; extra 4-byte frame slot and the FUN_00c03440/FUN_004e0050 call shapes differ; the max(x*mult,1.0) tail is the same; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv PASS (247 valid inputs, 66.1% coverage)
+00c04220 15 non-byte-exact; frame, serializer object size (0xa14) and both cVarListSerializer vtable ABIs now match; the only difference left is the scheduling of the `unsigned tmp = 0xd0036e08` constant store, which the original sinks into the load shadow just before the call through [p+0x18] and this build emits one instruction earlier; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv UNSUPPORTED (0/400 inputs valid: fault(read)=400)
+00c042e0 537 non-byte-exact; animation-string switch (herd+0x15c cases 1/7/9/0xb, 0xb58 bit 8/9 and bit 0x4000 paths) and the per-game-mode flag-OR writes to [b4c+0x5fc] differ in block order and vtable-slot load shape; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv UNSUPPORTED (0/400 inputs valid: fault(read)=247, fault(write)=72, fault(pool-limit)=67)
