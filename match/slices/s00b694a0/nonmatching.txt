@@ -1,0 +1,7 @@
+00b694a0  685  complete; register allocation/float scheduling (size 995 vs 1005); equiv UNSUPPORTED (no valid inputs)
+00b69890  58  complete; redundant widget null test folded; result-register choice differs; equiv WEAK (281 valid, 30% cov)
+00b69930  12  complete; else-branch float copy emitted as fld/fstp not movss; equiv UNSUPPORTED (fake-arity)
+00b69b30  49  complete; widget cache reload ordered before the outer null test; equiv PASS
+00b69bd0  242  complete; static helper register args (EAX/ECX/ESI); equiv UNSUPPORTED (reads eax at entry)
+00b69cf0  868  complete; static helper register args (EAX=ctx); equiv UNSUPPORTED (reads eax at entry)
+00b6a200  363  complete; game-mode/universe split and call-argument scheduling; equiv UNSUPPORTED (no valid inputs)
