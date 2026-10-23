@@ -1,0 +1,8 @@
+00fd36c0 ?FUN_00fd36c0@@YAEHPAFHPAE1@Z  # decode one band of quantised coefficients
+00fd3c10 ?FUN_00fd3c10@@YAXH@Z  # start a frame: reset tables and prepare the band map
+00fd3e90 ?FUN_00fd3e90@@YAXH@Z  # normalise band energies into the scale tables
+00fd4090 ?FUN_00fd4090@@YAHH@Z  # scale factor of one subband
+00fd4170 ?FUN_00fd4170@@YAXH@Z  # read the scale-factor band tables and adjust them
+00fd4340 ?FUN_00fd4340@@YAXHE@Z  # read the Huffman/code-length tables
+00fd4520 ?FUN_00fd4520@@YAXPAHPAE@Z  # read a 32-bit big-endian value into a bitstream record
+00fd4560 ?FUN_00fd4560@@YAIPAHI@Z  # consume n bits from the big-endian bitstream

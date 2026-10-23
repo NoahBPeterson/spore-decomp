@@ -1,0 +1,3 @@
+slices/s00fd36c0/s00fd36c0.cpp  ?FUN_00fd4520@@YAXPAHPAE@Z  00fd4520  /O2 /MD /Gy /TP
+slices/s00fd36c0/s00fd36c0.cpp  ?FUN_00fd4090@@YAHH@Z  00fd4090  /O2 /MD /Gy /TP
+slices/s00fd36c0/s00fd36c0.cpp  ?FUN_00fd4560@@YAIPAHI@Z  00fd4560  /O2 /MD /Gy /TP
