@@ -1,0 +1,20 @@
+00a6a2f0 ??0Rec84@@QAE@ABU0@@Z  # Rec84 copy ctor (byte-exact); no PDB name
+00a6a400 ?CopySlots20@@YAPAPAUSlot20@@PAPAU1@PAU1@111@Z  # nonmatching (declared name)
+00a6a4c0 ?DestroyRecs24@@YAPAHPAH00@Z  # byte-exact; no PDB name
+00a6a530 ?FillSlots20@@YAPAUSlot20@@PAU1@00@Z  # byte-exact; no PDB name
+00a6a610 ?FreeRecs58@@YAPADPAD00@Z  # byte-exact; no PDB name
+00a6a6a0 ?assign@Vec12@@QAEAAU1@ABU1@@Z  # nonmatching (declared name)
+00a6a810 ?insert_node@HashTable@@QAEPAU1@PAUHTInsertOut@@PBUEString@@I@Z  # nonmatching (declared name)
+00a6a940 ?FreeRecs58Std@@YGXII@Z  # byte-exact; no PDB name
+00a6aa00 ?FillSlots20N@@YAXPAUSlot20@@IPBU1@0@Z  # nonmatching (declared name)
+00a6aaa0 ?insert_n@Vec8@@QAEXPAUT8@@IPBU2@@Z  # nonmatching (declared name)
+00a6ac70 ??0Rec84B@@QAE@ABU0@@Z  # Rec84B copy ctor (byte-exact); no PDB name
+00a6ad00 ?InsertAt@ListOwner0c@@QAEHHPAURefObject@@@Z  # nonmatching (declared name)
+00a6ad80 ?InsertAt@ListOwner20@@QAEHHPAURefObject@@@Z  # nonmatching (declared name)
+00a6ae00 ?HasKey@HashKeyMap@@QAE_NPAUEString@@I@Z  # nonmatching (declared name)
+00a6ae70 ?resize@RefVec@@QAEXI@Z  # nonmatching (declared name)
+00a6af10 ?assign@VecRec84@@QAEAAU1@ABU1@@Z  # nonmatching (declared name)
+00a6afe0 ?init@SlotVec@@QAEPAU1@II@Z  # nonmatching (declared name)
+00a6b080 ?resize@Vec8@@QAEXI@Z  # nonmatching (declared name)
+00a6b290 ??0BigRec@@QAE@ABU0@@Z  # BigRec copy ctor, nonmatching (declared name)
+00a6b400 ?insert_n@SlotVec@@QAEXPAUSlot20@@IPBU2@@Z  # nonmatching (declared name)
