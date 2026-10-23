@@ -1,0 +1,18 @@
+# Slice s009186e0: EA::Callstack DWARF2 debug-info reader. Only 00919110 has a PDB name
+# (EA::Callstack::DWARF2File::Init, symbols/pdb_names.json); the other names are coined here from
+# the recovered semantics and from the sibling slice s00919620 (same TU: MemStream/Parser/Seg/Info).
+009186e0 Parser::ReadTyped     # read one fixed/variable-size form value: 64-bit switch on the form id, cases data2/data4/data8/data1/sdata/udata, sign-extends sub-8-byte values into the int64 out param
+00918830 Parser::ReadTypedAdd  # like ReadTyped but adds to *out; form 0x10 (block1) takes its length from the byte at data+0x2de and delegates to the stream Read
+00918990 Parser::ReadSpecial   # forms the plain readers cannot do: 0x08 (inline string, returns the string-section base + 0xb after scanning to NUL) and 0x0e (strp: read u32 offset, add the .debug_str begin)
+00918a40 Parser::Skip          # skip one form payload: SetPosition past it for the fixed forms, varint readers for 9/0xd/0xf/0x15, NUL scan for 0x08
+00918c50 Info::HasFlag        # abbrev flag predicate: (flags & 6) != 0 && f18 < a1 && f10 >= a1
+00918c70 Parser::LoadFrom      # position the doc's stream at a section (doc->f24 begin + info size), read the u32 prefix into mSectionSize, allocate the buffer at mBuf (0x28) and read it
+00918cf0 Parser::Scan          # walk the abbrev table looking for the record with the requested id, dispatch the form's reader with the matching Info flag, return whether the record was found
+00918ff0 Parser::LoadSection   # load one debug section described by Info (flag bit 4 gates it): SetPosition(doc->f298 + info->size, 0), read the u32 length, allocate, read, SetData
+00919090 Parser::F919090       # keep the current segment in sync with the stream position; set f88 when the address lands inside it, else copy mCur into mSeg
+00919110 EA::Callstack::DWARF2File::Init  # PDB name; lazy init: bind the file stream, load the debug directory and the five .debug_* sections, then initialise the memory-stream subobject (0x2a8)
+00919270 Parser::Parser        # ctor: zero the WCHAR name buffer at 0x4, store the vtable, clear f34/f36/f38 and the segment records at 0x48/0x68
+009192c0 Parser::SetField      # resolve one abbrev field: below the fixed threshold seek to tag+0xa and skip the varint block, else derive the segment offset from tag-f40 / f3f (quotient/remainder) and advance mCur
+009193d0 Parser::HandleRecord  # abbrev record handler: tag 1 begins a segment, tag 2 reads a 4/8-byte base address (value-1 selects), tag 3 scans the name then reads three varints, anything else is a plain reposition
+00919510 DWARF2File::DWARF2File  # ctor: base B + FileStream subobject at +4, clear the section begin/end dwords at 0x284..0x2a4 and the 4 subobject dwords at 0x2d8..0x2e4, mbInit = 0
+009195c0 DWARF2File::~DWARF2File  # scalar deleting destructor ??_GDWARF2File@@UAEPAXI@Z (base vptr stores inlined; the plain ??1 is not a slice VA)

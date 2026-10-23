@@ -1,0 +1,9 @@
+009186e0 212 complete; 64-bit switch dispatch matches; MSVC tail-duplicates the per-case "store + return true" tails where the original cross-jumps them (case 7/15 u64 store tail merges the other way) and stores the u64 hi/lo dwords in the opposite order
+00918830 305 complete; same tail-merge/tail-duplication divergence on the per-case SetPosition(2,1) returns (ours duplicates the shared exit, original merges it); size 352 vs 328
+00918a40 408 complete; MSVC tail-duplicates every "return SetPosition(...)" epilogue in ours while the original cross-jumps them into one shared "test al,al / mov al,1" true block and one shared fail block (probe-verified: no source shape reproduces the merge with cl 15.00.30729.01); size 580 vs 524
+00918cf0 555 complete; loop/switch register allocation differs and the shared SetPosition/return tails are duplicated in ours; size 733 vs 761
+00918ff0 137 complete; original keeps (info->flags >> 4 & 1) unfolded (shr/test) and allocates args in edx/ecx where ours folds to a bit test and uses eax; Read-failure blocks are shared in the original, duplicated in ours
+00919090 23 complete; identical logic, but original pushes edi in the prologue (and pops it on the else-if return path) while ours sinks the push into the struct-copy block: 1 byte larger
+00919110 296 complete; SectionDesc locals are spilled in a different order and the Get(..)-failure blocks are duplicated in ours; size 364 vs 338
+009192c0 8 complete; inlined F919090 tail: ours takes ebp for `this` (original edi) so the copy block is `lea edi,[ebp+0x48]`; mov ecx,8 / add edi,0x48 order differs
+009193d0 233 complete; case-2 (n==4 / n==8) reads are emitted in the opposite order and the shared "return true" epilogue is duplicated in ours; size 301 vs 315
