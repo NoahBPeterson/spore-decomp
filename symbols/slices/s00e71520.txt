@@ -1,0 +1,8 @@
+00e71520 FUN_00e71520  # build the gather-cell command: layer-catalog entry, entity search (0x00e693f0), leader + per-cell follower commands, 0x244 timer update; body not byte-exact
+00e71980 FUN_00e71980  # cell step/announce timer state machine (0x158/0x15c) with the 0x00e507d0 predicate and the 0x00e71520 follow-up; body not byte-exact
+00e71c00 FUN_00e71c00  # announce one cell: pick the reachable record by controller mode, face it at the avatar (0x00e56f80), step it (0x00e6eec0); body not byte-exact
+00e71ce0 FUN_00e71ce0  # split cells within the scaled pick radius into near (0x00e70950) / far (0x00e70bc0) announce paths; body not byte-exact
+00e71f00 FUN_00e71f00  # same-layer cells within the scaled radius, far announce path only; body not byte-exact
+00e72060 FUN_00e72060  # enter the gather scene: modal, UI spawn, 0x1d command emit, source-cell flags; body not byte-exact
+00e72200 FUN_00e72200  # set/clear the gather flag or emit the 0x07 cancel command and release the gather (0x00e59500); body not byte-exact
+00e72360 FUN_00e72360  # place the selected gather cell: 0x0a command via the variadic 0x00e51ee0, 0x0c scale 0.001f, run 0x00e592f0; body not byte-exact
