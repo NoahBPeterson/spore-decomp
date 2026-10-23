@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+# 8 chk.py-printed MATCH rows for slice s008cd6f0 (TSI/T2K font scaler).
+slices/s008cd6f0/s008cd6f0.cpp  ?Delete_kernClass@@YAXPAUkernClass@@@Z  008cd790  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s008cd6f0/s008cd6f0.cpp  ?Delete_sfnt_OffsetTable@@YAXPAUsfnt_OffsetTable@@@Z  008cd910  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s008cd6f0/s008cd6f0.cpp  ?New_hheaClass@@YAPAUhheaClass@@PAUtsiMemObject@@PAUInputStream@@@Z  008cd940  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s008cd6f0/s008cd6f0.cpp  ?New_hmtxEmptyClass@@YAPAUhmtxClass@@PAUtsiMemObject@@HH@Z  008cda00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s008cd6f0/s008cd6f0.cpp  ?New_ttcfClass@@YAPAUttcfClass@@PAUtsiMemObject@@PAUInputStream@@@Z  008cdb00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s008cd6f0/s008cd6f0.cpp  ?New_headClass@@YAPAUheadClass@@PAUtsiMemObject@@PAUInputStream@@@Z  008cdb80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s008cd6f0/s008cd6f0.cpp  ?New_maxpClass@@YAPAUmaxpClass@@PAUtsiMemObject@@PAUInputStream@@@Z  008cdc50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s008cd6f0/s008cd6f0.cpp  ?New_locaClass@@YAPAUlocaClass@@PAUtsiMemObject@@PAUInputStream@@FH@Z  008cdd60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

@@ -1,0 +1,5 @@
+# s008cd6f0 -- TSI/T2K font scaler (14 functions).
+# Every function that is not byte-exact is a complete reconstruction whose
+# equivalence could not be verified by equiv.py (UNSUPPORTED / FAIL), so this
+# slice has no verified-nonmatching rows; see partial.txt for the six that
+# remain.  The eight byte-exact functions are in manifest.txt.

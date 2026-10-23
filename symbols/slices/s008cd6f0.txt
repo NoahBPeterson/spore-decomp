@@ -1,0 +1,34 @@
+# s008cd6f0 -- TSI/T2K font scaler (kern / sfnt / hhea / hmtx / ttcf / head / maxp / loca / sloc)
+# Key callee VAs and calling conventions discovered while reconstructing this slice.
+# In-slice entry points: the byte-exact ones use the TU-local (static) convention
+# where cl passes the leading pointer args in callee-saved registers; the rest are
+# cdecl on the stack.
+008cd6f0  New_kernClass(mem, in)                  ; static: mem in eax, stream on stack
+008cd790  Delete_kernClass(kern)                  ; BYTE-EXACT
+008cd810  GetSfntClassKernValue(sfnt, a2, a3, out1, out2)
+008cd860  New_sfnt_OffsetTable(mem, in)
+008cd910  Delete_sfnt_OffsetTable(t)              ; BYTE-EXACT
+008cd940  New_hheaClass(mem, in)                  ; BYTE-EXACT (static: mem->ebx, stream->edi)
+008cda00  New_hmtxEmptyClass(mem, count, count2)  ; BYTE-EXACT
+008cda70  New_hmtxClass(mem, in, count, count2)   ; static: count in eax, stream/mem on stack
+008cdb00  New_ttcfClass(mem, in)                  ; BYTE-EXACT (static: mem->eax, stream->ebx)
+008cdb80  New_headClass(mem, in)                  ; BYTE-EXACT (static: mem->ebx, stream->edi)
+008cdc50  New_maxpClass(mem, in)                  ; BYTE-EXACT (static: mem->ebx, stream->edi)
+008cdd60  New_locaClass(mem, in, format, n)       ; BYTE-EXACT
+008cde20  FF_New_slocClass(mem, in)
+008cdec0  FF_SLOC_MapIndexToOffset(s, in, index)
+
+# --- callees (out of slice) ------------------------------------------------------
+008cc0f0  ReadInt32(in)                           ; cdecl
+008cc190  ReadInt16(in)                           ; cdecl
+008cc550  Rewind_InputStream(in)                  ; custom: stream in ebx
+008cd610  GetKernSubTable0Value(sub10, keyHi, keyLo)  ; fastcall: this=ecx, keyHi=dx, keyLo=stack
+008cd660  New_kernSubTable(mem, flag)             ; custom: mem in eax, flag on stack
+008d1260  tsi_AllocMem(mem, size)                 ; cdecl
+008d13a0  tsi_DeAllocMem(mem, p)                  ; cdecl
+008d1a00  tsi_Error(mem, code)                    ; cdecl
+008ceb60  Seek_InputStream(in, off)               ; cdecl
+008cec60  Tell_InputStream(in)                    ; cdecl
+008cef90  GetUPEM(sfnt-ish)                       ; cdecl, returns units-per-em in eax
+# error codes: 0x2729 (hmtx/loca malformed), 0x2728 (sloc read failure)
+# ttcf magic: 0x74746366 ("ttcf")

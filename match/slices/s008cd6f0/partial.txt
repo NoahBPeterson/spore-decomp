@@ -1,0 +1,27 @@
+# s008cd6f0 -- TSI/T2K font scaler (14 functions).
+# No upstream source; hand-written from the Ghidra disassembly/decompile.
+# Every function below is a complete reconstruction of the original behaviour,
+# but equiv.py could not confirm equivalence (UNSUPPORTED / FAIL), so none of
+# them can be claimed as verified-nonmatching.
+#
+# Region layout (verified against the disassembly):
+#   InputStream (from the sibling slice s008ce020): +0x000 privateBase,
+#     +0x004 ReadToRamFunc, +0x008 nonRamID, +0x00c tmp_ch[0x208],
+#     +0x214 cacheCount, +0x218 posZero, +0x21c pos, +0x220 f220, +0x22c mem.
+#   kernClass:  +0x00 mem, +0x04 version(int16), +0x08 nTables(int32), +0x0c tables.
+#   kernSubTable: +0x00 mem, +0x04 version, +0x10 f10 (kernSub10*) -- the 8 bytes
+#     at +0x08..+0x0f are padding; Delete_kernClass reads f10 at +0x10.
+#   sfnt_OffsetTable (0x14): +0x00 mem, +0x04 version, +0x08 numOffsets,
+#     +0x0a searchRange, +0x0c entrySelector, +0x0e rangeShift, +0x10 table.
+#   hheaClass 0x28, hmtxClass 0x14, ttcfClass 0x10, headClass 0x3c (glyphDataFormat
+#     at +0x38), maxpClass 0x24, locaClass 0x10 (mem/offsets/n/format@+0x0c).
+#   slocClass 0x18 (mem, f04, count, records, f10, f14); slocRecord 8 bytes
+#     { uint16 first; uint16 f2; int32 offset; }.
+#
+# chk.py diff bytes (mine vs original) and equiv.py verdict in each reason:
+008cd6f0  122  New_kernClass: mem arrives in eax and the stream on the stack (a TU-local convention: the real call site at 0x8d0803 does "mov eax,[esi+0xe8]" then "push edi").  cl15 instead allocates mem->ebx and the stream to a register, so the whole body is register-renamed.  Logic (version/count/ReadInt32-of-nTables/tables alloc/entry loop) is reconstructed.  equiv: UNSUPPORTED -- the original reads eax at entry but our declaration passes nothing there (custom register ABI).
+008cd810   34  GetSfntClassKernValue: reads sfnt->kern (+0x74), checks nTables>0 && tables[0]->version==0, then calls GetKernSubTable0Value(ecx=tables[0]->f10, dx=keyHi, stack=keyLo); *out1/*out2 are zeroed first and *out1 gets the result.  Residual is register allocation: cl14 keeps out2 in edx (loaded before the prologue push) and shares ecx for the zero, cl15 keeps it in eax.  equiv: FAIL (5/38 valid) -- the harness reports "fake-arity: no call site before 7efff000", i.e. the fake for the 0x8cd610 callee is not wired up; the residual is not behavioural.
+008cd860   72  New_sfnt_OffsetTable: allocates 0x14, copies mem, reads version/numOffsets/searchRange/entrySelector/rangeShift, allocates numOffsets<<4 and fills the directory entries (tag/checkSum/offset/length x4).  Residual is register allocation (cl14 mem->esi/stream->edi/result->ebx, cl15 mem->ebx/stream->esi/result->edi) and loop scheduling (cl14 interleaves "add esi,4" between the four stores, cl15 emits one "add ebx,0x10").  equiv: UNSUPPORTED -- 0/400 valid inputs (all fault; the allocator/stream are not observable through this harness).
+008cda70   82  New_hmtxClass: n=min(count,count2); calls New_hmtxEmptyClass(mem,count2,n) then reads f10 (uint16) and f0c (int16) per glyph, padding f10 with the last value for i in [n,count2).  The original passes the count in eax (the call site 0x8d06c5 does "mov eax,edx" with the stream/mem/UPEM on the stack), a TU-local convention cl15 does not reproduce.  equiv: UNSUPPORTED -- the original reads eax at entry but our declaration passes nothing there (custom register ABI).
+008cde20   40  FF_New_slocClass: allocates 0x18, reads f04 (int32) and count (int16), allocates count*8 bytes of records, fills each 8-byte record (first/f2/offset), then reads f10 (int32) and f14 (Tell).  Residual is register allocation (cl14 mem->ebx/stream->edi, cl15 mem->edi/stream->ebx) and address formation (cl14 bases the walker at &rec.offset, cl15 at the record start).  equiv: UNSUPPORTED -- 0/400 valid inputs (all fault).
+008cdec0  316  FF_SLOC_MapIndexToOffset: seeks to f14+index, reads one byte through the three InputStream paths (privateBase direct / privateBase via cache with PrimeT2KInputStream / ReadToRamFunc callback with tsi_Error 0x2728), then binary-searches records[0..count-2] on rec[mid].first/rec[mid+1].first and returns ((index-a)*rec[mid].f2)/((uint16)(c-1)-a) + rec[mid].offset - b.  The disassembly also carries the redundant third "cmp index,a" that the original emits.  Residual is register allocation and the if/else layout (cl14 lays out the b=0xff arm inline, cl15 at the end).  equiv: FAIL (5/5 valid) -- ours writes ecx (b) where the original leaves it untouched; a register-clobber difference, not an observable-behaviour difference (coverage 51.3%).
