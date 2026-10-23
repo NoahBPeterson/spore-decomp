@@ -1,0 +1,7 @@
+0111d560 FUN_0111d560  # MoppCompiler::FUN_0111d560 - recursive MOPP cell build over node+0xec/+0xf0 children; probe via FUN_0111d410/FUN_0111d450, leaf writes node+0x40 cell bytes and returns bit-count(minCell*sat*0.9)+6 else param_4[2]
+0111d7f0 FUN_0111d7f0  # MoppCompiler::FUN_0111d7f0 - per-axis cell clamp: limit=(1<<p3[0x24])/sat clamped by scan[i] and minCell, out[i]=src[i]+1+hkFloatToInt(sat*limit), out[i-3]=base-hkFloatToInt
+0111d8e0 FUN_0111d8e0  # MoppCompiler::FUN_0111d8e0 - emit a compressed MOPP cell delta (writer cursor deltas) via MoppCodeWriter::putByte
+0111da50 FUN_0111da50  # direction classification (0..0xc) of a normal from its 3 components vs the +-0.1f globals at 0x1488874/0x13eb964
+0111db80 FUN_0111db80  # MoppCompiler::FUN_0111db80 - node cell range along the plane normal: single-axis path when one non-zero component, else plane-distance form scaled by 1/sat, 1/(1<<shift)
+0111de80 FUN_0111de80  # bounds of a box into 4 dwords + reciprocal of the largest extent (254/maxExtent*65536)
+0111df20 FUN_0111df20  # MoppBuilder ctor: vtable 0x014a60e8, basis-table init/normalise at 0x16e5ad0..0x16e5c60, copy caller transform (param_2[0..2],[4..8]) to this+0x40..+0x60, return this
