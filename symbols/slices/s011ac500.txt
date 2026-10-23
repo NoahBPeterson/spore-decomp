@@ -1,0 +1,12 @@
+# Slice s011ac500: OpenSSL 0.9.8g crypto/rsa + crypto/bn upstream TUs, lib_cblock copy.
+# All nine are byte-exact compiled verbatim from work/third_party/build/openssl-0.9.8g-d2110920/
+# (see manifest.txt). Names come from the upstream sources; ERR codes from the disassembly.
+011ac500 RSA_padding_add_PKCS1_OAEP      # rsa_oaep.c:34   EMSA-PKCS1-v1_5-OAEP encode: SHA1(empty label) lHash, DB = lHash||PS||0x01||msg, MGF1 mask XOR, EM = 0x00||maskedDB||maskedSeed; ERR 4/0x79 with 0x6e (DATA_TOO_LARGE_FOR_KEY_SIZE), 0x78 (KEY_SIZE_TOO_SMALL), 0x41 (ERR_R_MALLOC_FAILURE)
+011ac710 RSA_padding_check_PKCS1_OAEP    # rsa_oaep.c:91   reverse of the above: MGF1-unmask seed/db, check lHash and the 0x01 separator; ERR 4/0x7a with 0x41 (MALLOC_FAILURE), 0x6d (DATA_TOO_LARGE), 0x79 (OAEP_DECODING_ERROR)
+011ac910 RSA_padding_add_PKCS1_type_1    # rsa_pk1.c:65    EM = 0x00||0x01||0xFF..||0x00||msg; ERR 4/0x6c/0x6e (ADD_PKCS1_TYPE_1, DATA_TOO_LARGE_FOR_KEY_SIZE)
+011ac980 RSA_padding_check_PKCS1_type_1  # rsa_pk1.c:91    verify 0x00||0x01, scan the 0xFF run to the 0x00 separator; ERR 4/0x70/0x6a (CHECK_PKCS1_TYPE_1, BLOCK_TYPE_IS_NOT_01)
+011aca60 RSA_padding_add_PKCS1_type_2    # rsa_pk1.c:143   EM = 0x00||0x02||RAND_bytes(non-zero)||0x00||msg; ERR 4/0x6d/0x6e (ADD_PKCS1_TYPE_2, DATA_TOO_LARGE_FOR_KEY_SIZE); RAND_bytes retry loop over zero bytes
+011acb00 RSA_padding_check_PKCS1_type_2  # rsa_pk1.c:181   verify 0x00||0x02, scan to the 0x00 separator; ERR 4/0x71/0x6b (CHECK_PKCS1_TYPE_2, BLOCK_TYPE_IS_NOT_02)
+011acbc0 RSA_padding_add_X931            # rsa_x931.c:66   EMSA-X9.31 encode: 0x6B||...||0xBA with 0x6A padding; ERR 4/0x7f/0x6e (ADD_X931, DATA_TOO_LARGE_FOR_KEY_SIZE)
+011acc40 RSA_padding_check_X931          # rsa_x931.c:105  reverse: strip the 0x6B/0xBA framing; ERR 4/0x80 with 0x89 (INVALID_HEADER), 0x8a (INVALID_PADDING), 0x8b (INVALID_TRAILER)
+011acd00 BN_div_no_branch                # bn_div.c:411    constant-time BN division (dv/rm = num/divisor); ERR 3/0x8a/0x67 (BN_DIV_NO_BRANCH, DIV_BY_ZERO); BN_CTX_start/get + BN_lshift normalisation

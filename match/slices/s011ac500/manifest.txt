@@ -1,0 +1,12 @@
+# slice s011ac500 -- OpenSSL 0.9.8g upstream TUs, lib_cblock copies
+# crypto/rsa padding primitives (PKCS#1 v1.5, X9.31) + crypto/bn BN_div_no_branch.
+# flags in every row; the include link scratch_s011b8e10_inc carries e_os.h/cryptlib.h + openssl/.
+slices/s011ac500/rsa_oaep.cpp  _RSA_padding_add_PKCS1_OAEP    011ac500  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011ac500/rsa_oaep.cpp  _RSA_padding_check_PKCS1_OAEP  011ac710  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011ac500/rsa_pk1.cpp   _RSA_padding_add_PKCS1_type_1   011ac910  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011ac500/rsa_pk1.cpp   _RSA_padding_check_PKCS1_type_1 011ac980  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011ac500/rsa_pk1.cpp   _RSA_padding_add_PKCS1_type_2   011aca60  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011ac500/rsa_pk1.cpp   _RSA_padding_check_PKCS1_type_2 011acb00  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011ac500/rsa_x931.cpp  _RSA_padding_add_X931           011acbc0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011ac500/rsa_x931.cpp  _RSA_padding_check_X931         011acc40  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
+slices/s011ac500/bn_div.cpp    _BN_div_no_branch               011acd00  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc
