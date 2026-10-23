@@ -1,0 +1,13 @@
+# va  size (ours/orig)  reason
+008571b0  0/634  Not implemented in this pass. 634-byte stream writer over the same 0x5ac/0x5b0 state as the implemented helpers (gwrite-backed block emission); needs a dedicated pass over its disassembly.
+00857430  0/375  Not implemented in this pass (375 bytes, same gwrite stream family). Left for a dedicated pass.
+008575b0  0/381  Not implemented in this pass (381 bytes, same gwrite stream family). Left for a dedicated pass.
+00857730  0/237  Not implemented in this pass (237 bytes). Left for a dedicated pass.
+00857880  0/456  Not implemented in this pass (456 bytes). Left for a dedicated pass.
+00857a50  0/195  Not implemented in this pass (195 bytes). Left for a dedicated pass.
+00857b20  0/203  Not implemented in this pass (203 bytes). Left for a dedicated pass.
+00857bf0  0/146  Not implemented in this pass (146 bytes). Left for a dedicated pass.
+00857c90  0/210  Not implemented in this pass (210 bytes). Left for a dedicated pass.
+00857d70  0/158  Not implemented in this pass (158 bytes). Left for a dedicated pass.
+00857e10  0/216  Not implemented in this pass (216 bytes). Left for a dedicated pass.
+00858000  0/119  Not implemented in this pass (119 bytes). Left for a dedicated pass.
