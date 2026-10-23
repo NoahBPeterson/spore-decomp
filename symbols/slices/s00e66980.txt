@@ -1,0 +1,11 @@
+00e66980 FUN_00e66980  # SP::sShutdownGfx - tear down the cell renderer: drain the part pool, erase the object vector + per-slot gfx, release every managed sub-system
+00e66dd0 FUN_00e66dd0  # alloc a cell-pair record from pool+0xc4 and claim its slot in the pair KeyMap (keyed by MakeKey)
+00e66e50 FUN_00e66e50  # look up the cell-pair record for (a,b); return it iff it matches, else erase the map entry
+00e66f30 FUN_00e66f30  # register/refresh a collision sound for cell pair (a,b) at pos with direction (p4,p5,p6) and scalars (p7,p8)
+00e67100 FUN_00e67100  # gate a cell pair (flags +0x179/+0x36c/+0x184/+0x114) and forward to 0xe66f30; cell A on the stack, B in a register
+00e671c0 FUN_00e671c0  # SP::sBomb_Start - spawn the bomb object (operator_new ring buffer, 0xe65840) and post its type-0x10 message (0xe61b90)
+00e67330 FUN_00e67330  # SP::sAddSoundEvent - record a collision sound for cell pair (a,b) at pos: extent bounds, SoundMap lookup/insert, radius gate
+00e67510 FUN_00e67510  # create/refresh (or destroy) the "cell_eyegoo_flow" effect on a cell part (CreateEffectSafe + Mat3::Assign + 0xe84150/0xe63480)
+00e675f0 FUN_00e675f0  # GetSafe(player handle at GG+0x411c) then sBomb_Start
+00e67610 FUN_00e67610  # ref (0xe4cc40) + list loop calling 0xe66280(elem, 0)
+00e67670 FUN_00e67670  # 21x FNV1_String8(name, 0x811c9dc5, 1) then 0xe66280(h, 0) (effect-name unload)

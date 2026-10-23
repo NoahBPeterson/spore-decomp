@@ -1,0 +1,8 @@
+00e66980 174 complete: cell-gfx teardown; ABI/loop-shape differences - FUN_007c3ba0 is a bare ecx ctor call, the pool-drain loop calls cPartGfx::Clear directly (not virtually), and the managed-slot vcalls / inlined manager lookups schedule differently (ours 926 vs orig 1100 bytes)
+00e66dd0 97 complete: pair-record alloc + KeyMap claim; the MakeKey/operator[] call setup and the pool-get scheduling differ
+00e66e50 155 complete: pair lookup via lower_bound then GetSafe match-check else map->erase; inlined comparator and loop scheduling differ
+00e66f30 351 complete: collision-sound record fill; the low/high pair derivation, the FUN_00e58c50 handle follows and the x87 dot-product / reciprocal ordering differ
+00e67100 161 complete: gate wrapper - the original takes cell A on the stack and cell B in a register (not ordinary cdecl); the GetSafe pair + flag-gated forwarding cannot be reproduced byte-for-byte
+00e671c0 238 complete: SP::sBomb_Start - operator_new ring-buffer init plus the FUN_00e65840 / FUN_00e61b90 custom-ABI call shapes differ
+00e67330 272 complete: sAddSoundEvent - the extent-bounds predicate, the SoundMap lower_bound/insertAt path and the FUN_00e4ce40 ref-count pairing schedule differently
+00e675f0 5 complete: GetSafe(player) + sBomb_Start; the first argument is loaded to ecx instead of edx (compiler coin-flip; 5 source variants all reproduce the swap)
