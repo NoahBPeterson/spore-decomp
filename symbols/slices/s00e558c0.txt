@@ -1,0 +1,14 @@
+00e558c0  fluid-sample + reflect force
+00e55c40  fluid-sample force (wide)
+00e55f60  fluid-sample push-out force
+00e560d0  apply impulse to fluid cell + accumulate
+00e56200  cell population getter (x100)
+00e56300  cell growth getter (x20)
+00e563e0  level-relative scale  # kLevelSize table / source level
+00e56450  level-relative multiplier curve
+00e56510  cell size/capacity getter
+00e56560  cell gravity/velocity vector
+00e56690  reset gfx-state byte + init level+0x80
+00e566e0  clear gfx-state byte + call
+00e56700  keyframe-interp table lookup
+00e567c0  hide UI window + init level+0x80

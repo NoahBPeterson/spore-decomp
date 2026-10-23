@@ -1,0 +1,11 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast; diffs are chk.py best-symbol estimates)
+00e558c0  176  fluid-sample + reflect force: complete; x87 sqrt/SSE shuffle schedule differs
+00e55c40  145  fluid-sample force (wide): complete; operand/eval order and helper-arg slots differ
+00e55f60  71  fluid-sample push-out force: complete; x87 sqrt/pick schedule differs
+00e560d0  55  apply impulse to fluid cell + accumulate: complete; index/loop register allocation differs
+00e56200  90  cell "population" getter (x100): complete; fld/fstp value forwarding schedule differs
+00e56300  85  cell "growth" getter (x20): complete; fld/fstp value forwarding schedule differs
+00e563e0  34  level-relative scale (SQRT/table): complete; call/const schedule differs
+00e56450  104  level-relative multiplier curve: complete; x87 branch/const schedule differs
+00e56560  56  cell gravity/velocity vector: complete; register allocation (esi/edx) differs
+00e56700  63  keyframe-interp table lookup: complete; clamps and x87 schedule differ
