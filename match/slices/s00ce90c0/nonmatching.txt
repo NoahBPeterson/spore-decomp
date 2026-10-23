@@ -1,0 +1,9 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include)
+00ce90c0   646  GodModeUpdateReticles: complete-ish logic but structurally short (620 vs 697 bytes); the four-posse reticle-layout loop and the trailing enable pass do not match MSVC's stack layout. equiv: UNSUPPORTED (0/400 valid inputs, all fault(read))
+00ce9380   150  AccumulatePosseArea: complete and equivalence-PASS (247 valid, 98.6% coverage); not byte-exact because MSVC emits x87 fld/fcompp for the min/max compares where the original uses SSE comiss, and the two scoped Vec4 temporaries collapse into one slot
+00ce9460    47  SetVehicleTask: complete; task-ID switch table matches, but MSVC keeps the first arg in esi and reloads it from the stack at the tail call where the original spills it. equiv: UNSUPPORTED (0/400 valid, import:_decode_pointer)
+00ce9920   485  HandleMessage: complete-ish reconstruction of the 3 message branches; structurally short (574 vs 581 bytes) and the branch bodies differ. equiv: FAIL (5/5 valid inputs mismatch on eax)
+00ce9b70   137  SelectVehicle: complete-ish (rbtree lower_bound over 4 maps + FindItem + SetVehicleTask); caller-visible call schedule differs. equiv: FAIL (call #4 differs, cAgentOrder)
+00ce9c30   188  RefreshVehicleIcons: complete-ish; per-map rbtree walk + FindItem + continent check present but codegen short (236 vs 253 bytes). equiv: WEAK (180/400 valid, 13.9% coverage)
+00ce9d30   212  UpdateVehicleContinent: complete-ish; continent-flag decode + 4-map walk present but larger than original (245 vs 231 bytes). equiv: WEAK (400 valid, 16.2% coverage)
+00ce9e20   456  BuildEffectDesc: descriptor build via EffectsManager factory vtable slots 0x10/0x18/0x20/0x24 implemented; SSE colour clamp differs and full call schedule not recovered (382 vs 519 bytes). equiv: FAIL (fake call arg mismatch)

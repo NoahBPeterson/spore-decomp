@@ -1,0 +1,5 @@
+slices/s00ce90c0/s00ce90c0.cpp	?ResetPosses@CDS@@QAEXXZ	00ce9560	/O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00ce90c0/s00ce90c0.cpp	?UpdateUI@CDS@@QAEXH@Z	00ce9590	/O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00ce90c0/s00ce90c0.cpp	?SetReticlesVisible@CDS@@QAEXE@Z	00ce96b0	/O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00ce90c0/s00ce90c0.cpp	?ShutdownAll@CDS@@QAEXXZ	00ce97e0	/O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00ce90c0/s00ce90c0.cpp	?FUN_00cea030@@YIPAXPAX0PAPAX@Z	00cea030	/O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
