@@ -1,0 +1,10 @@
+011b34f0 d2i_PublicKey  # openssl 0.9.8g crypto/asn1/d2i_pu.c; verbatim TU include byte-exact
+011b35d0 ec_group_new_from_data  # openssl 0.9.8g crypto/ec/ec_curve.c; verbatim TU include byte-exact
+011b3870 EC_GROUP_new_by_curve_name  # openssl 0.9.8g crypto/ec/ec_curve.c; verbatim TU include byte-exact
+011b38f0 dsa_do_sign  # openssl 0.9.8g crypto/dsa/dsa_ossl.c; verbatim TU include byte-exact
+011b3af0 dsa_sign_setup  # openssl 0.9.8g crypto/dsa/dsa_ossl.c; verbatim TU include byte-exact
+011b3d60 dsa_do_verify  # openssl 0.9.8g crypto/dsa/dsa_ossl.c; verbatim TU include byte-exact
+011b41d0 ec_GF2m_simple_group_set_curve  # openssl 0.9.8g crypto/ec/ec2_smpl.c; verbatim TU include byte-exact
+011b4370 ec_GF2m_simple_group_check_discriminant  # openssl 0.9.8g crypto/ec/ec2_smpl.c; verbatim TU include byte-exact
+011b44e0 ec_GF2m_simple_point_set_affine_coordinates  # openssl 0.9.8g crypto/ec/ec2_smpl.c; verbatim TU include byte-exact
+011b4580 ec_GF2m_simple_point_get_affine_coordinates  # openssl 0.9.8g crypto/ec/ec2_smpl.c; verbatim TU include byte-exact

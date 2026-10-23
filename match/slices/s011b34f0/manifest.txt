@@ -1,0 +1,15 @@
+# slice s011b34f0 -- OpenSSL 0.9.8g upstream TUs, lib_cblock copies
+# /Iscratch_s011b34f0_inc = work/match/scratch_s011b34f0_inc: the pinned build's
+# include/openssl/*.h + crypto/{cryptlib.h,opensslconf.h} + e_os.h (short path, the
+# full build path overflows cl's 260-char object-file name).
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s011b34f0/d2i_pu.cpp  _d2i_PublicKey  011b34f0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b34f0_inc
+slices/s011b34f0/ec_curve.cpp  _ec_group_new_from_data  011b35d0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b34f0_inc
+slices/s011b34f0/ec_curve.cpp  _EC_GROUP_new_by_curve_name  011b3870  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b34f0_inc
+slices/s011b34f0/dsa_ossl.cpp  _dsa_do_sign  011b38f0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b34f0_inc
+slices/s011b34f0/dsa_ossl.cpp  _dsa_sign_setup  011b3af0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b34f0_inc
+slices/s011b34f0/dsa_ossl.cpp  _dsa_do_verify  011b3d60  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b34f0_inc
+slices/s011b34f0/ec2_smpl.cpp  _ec_GF2m_simple_group_set_curve  011b41d0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b34f0_inc
+slices/s011b34f0/ec2_smpl.cpp  _ec_GF2m_simple_group_check_discriminant  011b4370  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b34f0_inc
+slices/s011b34f0/ec2_smpl.cpp  _ec_GF2m_simple_point_set_affine_coordinates  011b44e0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b34f0_inc
+slices/s011b34f0/ec2_smpl.cpp  _ec_GF2m_simple_point_get_affine_coordinates  011b4580  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b34f0_inc
