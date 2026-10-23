@@ -1,0 +1,2 @@
+00c080b0 Simulator::cCreatureBase::func8Ch  # naked asm, byte-exact
+00c08270 Simulator::cGameData::RemoveOwner  # naked asm, byte-exact

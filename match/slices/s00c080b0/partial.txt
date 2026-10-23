@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00c080b0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 438 B.  Simulator::cCreatureBase::func8Ch(cCreatureBase*): FUN_00c0cff0/FUN_00c41d60/eastl helper FUN_011e0744/FUN_00c0d240/FUN_00bc9de0/FUN_00c17350/FUN_00b3d310 x2/FUN_00b45410, operator delete (FUN_00f47380) and indirect `call edx` x3; 8 base relocs emitted raw.
+00c08270  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 220 B.  Simulator::cGameData::RemoveOwner(cGameData*): FUN_00c0d3a0/FUN_00bc9de0/FUN_00b3d300 x2/FUN_00b1fdb0/FUN_00b1fd50/FUN_00d539d0/FUN_00d53490/FUN_00b3d260/FUN_00acca00/FUN_00c1c8e0 and indirect `call eax`; no relocs.
