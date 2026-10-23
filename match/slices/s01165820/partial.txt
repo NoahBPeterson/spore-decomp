@@ -1,0 +1,4 @@
+# s01165820: no incomplete functions.  Every VA in this slice has a full, compiling
+# implementation in s01165820.cpp and is booked in nonmatching.txt (complete, with the
+# equivalence verdict recorded per function).  manifest.txt is empty because none of the
+# four functions is reachable byte-for-byte under a single-object compile.

@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+#
+# No byte-exact functions in this slice.  All four VAs are complete, compiling reconstructions
+# and are booked in nonmatching.txt.
+#
+# Why nothing matches: the object holding 0x01165820 is compiled /GL + /LTCG (011661B0 takes its
+# `out` pointer in EAX and `in` on the stack with caller-cleanup, an ABI only /GL emits and which
+# has no C spelling).  /GL produces an IL object that cmpobj/parse_coff rejects, so the retail
+# codegen cannot be reproduced by a single-object /c compile.  Sibling slice s0116dd70 reached the
+# same verdict for the byte-identical twins of 0x01165820 / 0x01165D00, and s01145d10 for the
+# RenderWare audio core.  The caller object (slice s011586f0, which calls ours) does verify 5 / 5
+# byte-exact with the flag set used here, which is why the flag set is trusted even though the
+# four functions below are not reachable byte-for-byte.
