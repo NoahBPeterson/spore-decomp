@@ -1,0 +1,5 @@
+# source symbol va flags
+slices/s008544e0/s008544e0.cpp  ?FUN_00854d10@@YAXPAUcTerrainExport@@@Z  00854d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008544e0/s008544e0.cpp  ?FUN_00854d40@@YAXPAUcTerrainExport@@@Z  00854d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008544e0/s008544e0.cpp  ?FUN_00854e70@@YAXPAUcTerrainExport@@@Z  00854e70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008544e0/s008544e0.cpp  ?FUN_008552d0@@YAXPAUcTerrainExport@@@Z  008552d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
