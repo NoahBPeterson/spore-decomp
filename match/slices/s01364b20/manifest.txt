@@ -1,0 +1,9 @@
+# source  symbol  original VA  [flags override]
+# 7 of the 15 static initializers in this slice reproduce byte-for-byte; the other 8 are in nonmatching.txt.
+slices/s01364b20/s01364b20.cpp  ?init_169f0f0@@YAXXZ  013674d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01364b20/s01364b20.cpp  ?init_16a0dc4@@YAXXZ  0136bfb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01364b20/s01364b20.cpp  ?init_15a3078@@YAXXZ  0136cfb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01364b20/s01364b20.cpp  ?init_15a51bc@@YAXXZ  01370490  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01364b20/s01364b20.cpp  ?init_16ac5e0@@YAXXZ  013716e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01364b20/s01364b20.cpp  ?init_16ace34@@YAXXZ  01373000  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01364b20/s01364b20.cpp  ?init_16ace50@@YAXXZ  01373090  /O2 /MD /Gy /TP /arch:SSE /fp:fast
