@@ -1,0 +1,2 @@
+slices/s00bbd730/s00bbd730.cpp  ?check_requirements@TerraformingManager@@QAE_NH@Z  00bbe370  /O2 /MD /Gy /TP /arch:SSE
+slices/s00bbd730/s00bbd730.cpp  ?has_unlocks@TerraformingManager@@QAE_NH@Z  00bbe5c0  /O2 /MD /Gy /TP /arch:SSE
