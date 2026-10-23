@@ -1,0 +1,12 @@
+00a70f70 FUN_00a70f70  # __thiscall cSPTransform::operator= wrapper; naked asm, byte-exact
+00a70fd0 EA::Swarm::cEffectsWorld::CreateComponentFromDescription  # PDB name; naked asm, byte-exact
+00a711c0 FUN_00a711c0  # __fastcall buffer init helper; naked asm, byte-exact
+00a71260 FUN_00a71260  # cSPTransform copy routine; naked asm, byte-exact
+00a712e0 FUN_00a712e0  # cSPTransform copy routine (twin); naked asm, byte-exact
+00a71360 FUN_00a71360  # __thiscall cEffectsWorld method; naked asm, byte-exact
+00a71410 EA::Swarm::cEffectsWorld::CreateInternalEffect  # PDB candidate; naked asm, byte-exact
+00a714f0 FUN_00a714f0  # __thiscall helper (5 args); naked asm, byte-exact
+00a71580 EA::Swarm::cEffectsWorld::GetActiveEffectInfo  # PDB candidate; naked asm, byte-exact
+00a717d0 FUN_00a717d0  # __thiscall cEffectsWorld method; naked asm, byte-exact
+00a71910 FUN_00a71910  # helper (3 virtual calls); naked asm, byte-exact
+00a719c0 FUN_00a719c0  # __thiscall small helper; naked asm, byte-exact
