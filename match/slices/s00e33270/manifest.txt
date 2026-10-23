@@ -1,0 +1,7 @@
+slices/s00e33270/s00e33270.cpp  ?ReleaseResources@cSPUISocialRainbow@@QAE_NXZ  00e33a00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00e33270/s00e33270.cpp  ?Reset@cSPUISocialRainbow@@QAEXXZ  00e33ce0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00e33270/s00e33270.cpp  ?SetSporepediaLargeAssetValue@@YGXPAX@Z  00e33d40  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00e33270/s00e33270.cpp  ?AddConfiguredModelKey@cSPUISwatchView@@QAEXXZ  00e33d60  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00e33270/s00e33270.cpp  ?ShutdownView@cSPUISwatchView@@QAEXXZ  00e33d70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00e33270/s00e33270.cpp  ?Destroy@cUISporepediaPlanetLargeAssetView@@QAEXXZ  00e33f30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00e33270/s00e33270.cpp  ??0cSPUISwatchView@@QAE@XZ  00e34220  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
