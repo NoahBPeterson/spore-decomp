@@ -1,0 +1,14 @@
+00d0b090  391  equiv PASS (245 valid, 98.6% cov); not byte-exact: city/tribe guard reload (mov ecx/test vs cmp mem,0), smallDist kept on x87 (orig fst, ours fstp). flags /O2 /MD /Gy /TP /arch:SSE
+00d0b220  391  equiv PASS (259 valid, 98.6% cov); not byte-exact: same as 00d0b090 (guard reload + x87 smallDist store width). flags /O2 /MD /Gy /TP /arch:SSE
+00d0b3b0  283  equiv WEAK (255 valid, 30.7% cov); camera-ctl setup, GetAnglesB output slot + float arg staging order differ. flags /O2 /MD /Gy /TP /arch:SSE
+00d0b4d0  103  equiv PASS (208 valid, 90.3% cov); not byte-exact: center copied with integer movs not movss, dist spilled qword not dword, branch polarity jb vs jbe. flags /O2 /MD /Gy /TP /arch:SSE
+00d0b540  458  equiv WEAK (219 valid, 20.5% cov); SSE/x87 grouping of normalize/scale chain and center reload count differ. flags /O2 /MD /Gy /TP /arch:SSE
+00d0b710  877  equiv FAIL (forces/reads pointers random inputs cannot supply); body written from card, inlined snap-point scoring loop not reproduced. flags /O2 /MD /Gy /TP /arch:SSE
+00d0ba80  333  equiv FAIL (fake-call: EffectsManager/PlanetModel stubs); orientation-transform staging not reproduced. flags /O2 /MD /Gy /TP /arch:SSE
+00d0bbd0  280  equiv FAIL (faults in BuildSurfaceOrientation stub); same transform staging as 00d0ba80. flags /O2 /MD /Gy /TP /arch:SSE
+00d0bcf0  99  equiv FAIL (Cast+vtable dispatch on random objects); register staging of 0xe89adf71 cast + slot-5 call differs. flags /O2 /MD /Gy /TP /arch:SSE
+00d0bd60  97  equiv FAIL (writes via tree pointers random inputs cannot supply); register allocation differs only. flags /O2 /MD /Gy /TP /arch:SSE
+00d0bdd0  139  equiv FAIL (esp: ours tail-calls where orig returns); 13-byte epilogue diff: orig call edx; pop esi; pop ebx; ret 8 vs ours pop esi; pop ebx; jmp edx. flags /O2 /MD /Gy /TP /arch:SSE
+00d0be60  139  equiv FAIL (esp: tail-call epilogue); same 13-byte AutoRefCount sibling-call diff as 00d0bdd0. flags /O2 /MD /Gy /TP /arch:SSE
+00d0bef0  139  equiv FAIL (esp: tail-call epilogue); same 13-byte AutoRefCount sibling-call diff as 00d0bdd0. flags /O2 /MD /Gy /TP /arch:SSE
+00d0bf80  134  equiv FAIL (fake call: budget/economy teardown stubs); member teardown staging for refcount chain differs. flags /O2 /MD /Gy /TP /arch:SSE
