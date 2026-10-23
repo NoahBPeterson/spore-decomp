@@ -1,0 +1,11 @@
+00b45170 ?FUN_00b45170@@YAXXZ  # destructor cleanup (delete this+0x90/+0x78, hashtable DoAllocateBuckets); naked asm, byte-exact
+00b451f0 ?FUN_00b451f0@@YAXXZ  # MessageServer notification helper; naked asm, byte-exact
+00b452b0 ?FUN_00b452b0@@YAXXZ  # reset + EASTL DoFreeNodes; naked asm, byte-exact
+00b452f0 ?FUN_00b452f0@@YAXXZ  # __thiscall mode dispatcher (this+0x20); naked asm, byte-exact
+00b453a0 ?FUN_00b453a0@@YAXXZ  # __thiscall mode dispatcher; naked asm, byte-exact
+00b45410 ?FUN_00b45410@@YAXXZ  # __thiscall mode dispatcher (twin of 00b453a0); naked asm, byte-exact
+00b45480 ?FUN_00b45480@@YAXXZ  # __thiscall mode dispatcher returning uint; naked asm, byte-exact
+00b45540 ?FUN_00b45540@@YAXXZ  # large float/vector kernel (x87); naked asm, byte-exact
+00b45ab0 ?FUN_00b45ab0@@YAXXZ  # EASTL hashtable find; naked asm, byte-exact
+00b45b50 ?FUN_00b45b50@@YAXXZ  # EASTL hashtable insert/rehash; naked asm, byte-exact
+00b45c10 ?FUN_00b45c10@@YAXXZ  # growable-array (stride 0x3c) copy; naked asm, byte-exact
