@@ -1,0 +1,1 @@
+00ab3300 ?StreamRibbon@cRibbonEffect@Swarm@EA@@QAEXPAX@Z  # EA::Swarm ribbon/trail effect: pick the quad-streamer for the effect's vertex format (two 32-entry tables 0x01679690/0x01679710 selected by description flag 12) and run it on the vertex buffer; byte-exact

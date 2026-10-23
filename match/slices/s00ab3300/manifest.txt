@@ -1,0 +1,3 @@
+# slice s00ab3300 -- EA::Swarm ribbon/trail effect: dispatch the vertex-format quad streamer
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00ab3300/s00ab3300.cpp  ?StreamRibbon@cRibbonEffect@Swarm@EA@@QAEXPAX@Z  00ab3300  /O2 /MD /Gy /TP /arch:SSE /fp:fast

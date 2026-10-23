@@ -1,0 +1,2 @@
+# va  size  reason (faithful structural reconstruction; not byte-exact)
+# (none) -- the one target is byte-exact (see manifest.txt).
