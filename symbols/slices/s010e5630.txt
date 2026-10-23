@@ -1,0 +1,7 @@
+010e5630 hkMultiSphereAgent::processCollision # forward processCollision for every sphere child of the shape, with each sphere's world transform
+010e5850 hkMultiSphereAgent::getClosestPoints # forward getClosestPoints per sphere child
+010e5a00 hkMultiSphereAgent::staticGetClosestPoints # walk the shape's own sphere list and dispatch through the collision dispatcher table
+010e5bf0 hkMultiSphereAgent::linearCast # forward linearCast per sphere child, second collector carried along
+010e5dd0 hkMultiSphereAgent::staticLinearCast # walk the shape's sphere list for the linear cast
+010e5fd0 hkMultiSphereAgent::getPenetrations # forward getPenetrations per sphere child
+010e61a0 hkMultiSphereAgent::staticGetPenetrations # walk the shape's sphere list for penetration queries
