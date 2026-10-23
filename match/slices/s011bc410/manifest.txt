@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s011bc410/s011bc410.cpp  _tls1_change_cipher_state  011bc410  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bc410_inc
+slices/s011bc410/s011bc410.cpp  _tls1_setup_key_block  011bc920  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bc410_inc
+slices/s011bc410/s011bc410.cpp  _tls1_enc  011bcac0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bc410_inc
+slices/s011bc410/s011bc410.cpp  _tls1_mac  011bcef0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bc410_inc
+slices/s011bc410/s011bc410.cpp  _ssl_set_pkey  011bd580  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bc410_inc
+slices/s011bc410/s011bc410.cpp  _SSL_use_PrivateKey  011bd660  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bc410_inc
+slices/s011bc410/s011bc410.cpp  _ssl_set_cert  011bd6c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bc410_inc
+slices/s011bc410/s011bc410.cpp  _SSL_use_certificate  011bd7d0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bc410_inc
+slices/s011bc410/s011bc410.cpp  _EVP_VerifyFinal  011bd900  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bc410_inc
+slices/s011bc410/s011bc410.cpp  _EVP_SignFinal  011bdaf0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bc410_inc

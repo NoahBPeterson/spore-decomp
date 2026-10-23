@@ -1,0 +1,10 @@
+011bc410 tls1_change_cipher_state  # OpenSSL 0.9.8g ssl/t1_enc.c; string ".\ssl\t1_enc.c" in CRYPTO_malloc calls; whole-TU include byte-exact
+011bc920 tls1_setup_key_block  # OpenSSL 0.9.8g ssl/t1_enc.c; third_party/cblock_resolution.csv exact-unique
+011bcac0 tls1_enc  # OpenSSL 0.9.8g ssl/t1_enc.c; csv exact-unique
+011bcef0 tls1_mac  # OpenSSL 0.9.8g ssl/t1_enc.c; csv exact-unique
+011bd580 ssl_set_pkey  # OpenSSL 0.9.8g ssl/ssl_rsa.c static; csv exact-unique
+011bd660 SSL_use_PrivateKey  # OpenSSL 0.9.8g ssl/ssl_rsa.c; csv exact-unique
+011bd6c0 ssl_set_cert  # OpenSSL 0.9.8g ssl/ssl_rsa.c static; csv exact-unique
+011bd7d0 SSL_use_certificate  # OpenSSL 0.9.8g ssl/ssl_rsa.c; csv exact-unique
+011bd900 EVP_VerifyFinal  # OpenSSL 0.9.8g crypto/evp/p_verify.c; csv exact-unique
+011bdaf0 EVP_SignFinal  # OpenSSL 0.9.8g crypto/evp/p_sign.c; csv exact-unique
