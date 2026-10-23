@@ -1,0 +1,20 @@
+# va  name  # evidence
+#
+# Slice s01108460 -- Havok 3.1.0 hkBoxBoxUtils / hkBoxBoxCollisionDetection.
+# Names for the eight public symbols are the dev-build PDB publics recorded in
+# symbols/havok_names.txt (lines 1028-1035).  The other six functions are
+# anonymous inline helpers of the same two classes (whole-program register ABI).
+01108460  hkBoxBoxUtils::buildSectionBits  # anonymous LTCG helper: test-and-set the free bit of one of three 10-bit sections (args: value in eax, bits in ebx)
+011084f0  hkBoxBoxUtils::buildSelectedBit  # anonymous LTCG helper: test-and-set the free bit selected by value&0xf (args: value in eax, bits in edi)
+01108550  hkBoxBoxUtils::hkFeatureBits  # anonymous LTCG helper: walk a 4-byte-record table, fill two bitsets, set the valid byte at +0x22
+01108660  ?cmpAllGT3@hkBoxBoxUtils@@SAXABVhkVector4@@ABMAAH@Z  # havok_names.txt:1028 (matched)
+011086a0  ?rsqrtAll3@hkBoxBoxUtils@@SAXAAVhkVector4@@@Z  # havok_names.txt:1029
+011086f0  ?selectIfGT3@hkBoxBoxUtils@@SAXAAVhkVector4@@ABMABV2@1@Z  # havok_names.txt:1030 (matched)
+01108750  hkBoxBoxUtils::hkPackSigns2  # anonymous LTCG helper: pack signs of two hkVector4 + two nibbles into two bytes
+011088b0  hkBoxBoxUtils::hkPackSigns1  # anonymous LTCG helper: pack signs of one hkVector4 into an int
+01108940  ?faceAVertexBValidationDataFromFeatureId@hkBoxBoxCollisionDetection@@IBEXAAVhkFeaturePointCache@1@ABVhkFeatureContactPoint@@@Z  # havok_names.txt:1031
+01108a10  ?faceAVertexBContactPointFromFeaturePointCache@hkBoxBoxCollisionDetection@@IBEXAAUhkProcessCdPoint@@ABVhkFeatureContactPoint@@ABVhkFeaturePointCache@1@@Z  # havok_names.txt:1032
+01108ac0  hkBoxBoxCollisionDetection::faceBVertexAValidationDataFromFeatureId  # anonymous (not in havok_names.txt); inverse of 01108940, uses m_radiusA(0x60)/m_aTb(0x50)
+01108b80  ?faceBVertexAContactPointFromFeaturePointCache@hkBoxBoxCollisionDetection@@IBEXAAUhkProcessCdPoint@@ABVhkFeatureContactPoint@@ABVhkFeaturePointCache@1@@Z  # havok_names.txt:1033
+01108c30  ?edgeEdgeContactPointFromFeaturePointCache@hkBoxBoxCollisionDetection@@IBEXAAUhkProcessCdPoint@@ABVhkFeatureContactPoint@@ABVhkFeaturePointCache@1@@Z  # havok_names.txt:1034
+01108d00  ?tryToAddPointFaceA@hkBoxBoxCollisionDetection@@IBEXAAVhkBoxBoxManifold@@VhkFeatureContactPoint@@GM@Z  # havok_names.txt:1035
