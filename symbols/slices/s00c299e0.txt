@@ -1,0 +1,10 @@
+# slice s00c299e0 - SP orientation / superweapon-aim helpers: a keyed ConstraintTable remove,
+# cOrientation float copy, and two aim-step functions (clamp / acos / exp / Slerp) that lean on
+# the +0xc0 sub-object's vtable. No VA carries a DB name (symbols/pdb_names.json,
+# symbols/pdb_candidates.json); the names below are the recovered ones used by this slice's source.
+# VA        name                              mangled name
+00c299e0    ConstraintTable::remove           ?remove@ConstraintTable@@QAEHPAI@Z
+00c29ab0    cOrientation::CopyFrom            ?CopyFrom@cOrientation@@QAEPAXPBU1@@Z
+00c29b00    FUN_00c29b00                      ?FUN_00c29b00@@YAHI@Z
+00c29b10    FUN_00c29b10                      ?FUN_00c29b10@@YAMPAUcOrientation@@PAMHMMMD@Z
+00c29d80    FUN_00c29d80                      ?FUN_00c29d80@@YAXPAUcOrientation@@PAMMMM@Z
