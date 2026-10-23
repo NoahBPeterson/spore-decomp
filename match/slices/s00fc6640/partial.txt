@@ -1,0 +1,4 @@
+# Incomplete / approximate: none for this slice. All four functions are fully reconstructed (every one has
+# a body in s00fc6640.cpp under its `// @ 0x...` marker). Both of the large bodies are complete but not
+# byte-exact (frame shape, register/schedule and x87-vs-SSE residuals), so they live in nonmatching.txt;
+# the constructor and ResetEffects are byte-exact and sit in manifest.txt.
