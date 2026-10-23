@@ -1,0 +1,4 @@
+# va  size  reason (reconstruction; not byte-exact)
+# (none -- all seven VAs of this slice carry a complete reconstruction;
+#  00994a40 / 00994c30 are byte-exact and booked in manifest.txt,
+#  the remaining five are complete but not byte-exact and booked in nonmatching.txt)
