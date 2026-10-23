@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+# (none -- every function in this slice compiles from the full upstream TU)

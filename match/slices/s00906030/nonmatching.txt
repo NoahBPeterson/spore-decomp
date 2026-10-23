@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (complete source, not byte-exact)
+00906890  467  setContext: complete and verbatim upstream; the only divergence is MSVC's internal static-function register ABI -- the original passes parser in ecx and context in eax, our /O2 build passes parser on the stack (callee then keeps parser in ebp instead of ebx, costing one push ebx at the addBinding call site); 624 vs 630 bytes, all control flow and memory effects identical.  equiv UNSUPPORTED (TU-static function reached only through expat's internal register convention, no callable symbol)

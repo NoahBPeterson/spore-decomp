@@ -1,0 +1,8 @@
+00906030 storeEntityValue  # expat 2.0.1 lib/xmlparse.c; verbatim TU include byte-exact
+009064c0 reportProcessingInstruction  # expat 2.0.1 lib/xmlparse.c; verbatim TU include byte-exact
+009065e0 reportComment  # expat 2.0.1 lib/xmlparse.c; verbatim TU include byte-exact
+00906680 getAttributeId  # expat 2.0.1 lib/xmlparse.c; verbatim TU include byte-exact
+00906b10 copyEntityTable  # expat 2.0.1 lib/xmlparse.c; verbatim TU include byte-exact
+00906c60 externalEntityInitProcessor3  # expat 2.0.1 lib/xmlparse.c; verbatim TU include byte-exact
+00906d60 entityValueProcessor  # expat 2.0.1 lib/xmlparse.c; verbatim TU include byte-exact
+00906890 setContext  # expat 2.0.1 lib/xmlparse.c; verbatim TU include, not byte-exact (static-function register ABI)
