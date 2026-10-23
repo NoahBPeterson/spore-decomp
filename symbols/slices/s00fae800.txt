@@ -1,0 +1,12 @@
+00fae800 ?UpdateDecalUV@cTerrainSphereDecal@SP@@QAEXXZ  # cube-map face selection + projective texture transform + change detect
+00faec70 ?SetupDecal@cTerrainSphereDecal@SP@@QAEXHIPAVcTerrainSphere@2@PBUcSPTransform@2@M_N@Z  # bind texture/sphere/transform, then refresh UV and merge face boxes
+00faed90 ??0cTerrainMeshListHolder@SP@@QAE@XZ  # zero-initialise the holder (constructor ABI returns this in eax)
+00faeda0 ?Create@cTerrainMeshListHolder@SP@@QAEXPAXH@Z  # build one vertex/index buffer pair per chunk-resolution slot and link the slot list
+00faeec0 ?Destroy@cTerrainMeshListHolder@SP@@QAEXXZ  # free every slot's buffers and clear the holder
+00faef10 ?SetupTerrainMesh@SP@@YGXPAVVertexBuffer@graphics@rw@@PAVIndexBuffer@34@II@Z  # __stdcall (ret 0x10): rebind the global atmosphere mesh to a buffer pair
+00faef90 ?InitTerrainAtmosphereMesh@SP@@YAXXZ  # lazily build the global one-triangle atmosphere mesh
+00faf070 ?ClearAboveBelowRange@cTerrainSphereQuad@SP@@QAEXHHH@Z  # clear one run of the above/below-water bit map
+00faf100 ?ShiftTerrainRecords@SP@@YAXPAX00@Z  # move 200-byte terrain records backwards (overlap-safe)
+00faf140 ?MarkVerticesDirty@cTerrainSphereQuad@SP@@QAEXHPBM@Z  # descend the quad tree, flagging quads whose face box overlaps
+00faf220 ?BuildAtmosphereVertices@cTerrainSphereQuad@SP@@QAE_NXZ  # fill the atmosphere vertex buffer with the cube-map grid
+00faf400 ?MarkIndicesDirty@cTerrainSphereQuad@SP@@QAEXHPBM@Z  # as MarkVerticesDirty but gated on the atmosphere-built byte
