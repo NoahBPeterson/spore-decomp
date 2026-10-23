@@ -1,0 +1,5 @@
+# slice s00a9a630 -- EA::Swarm emitter element storage + field helpers
+# Module flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a9a630/s00a9a630.cpp  ?push_back@cElemVec@@QAEXPBUcElem@@@Z  00a9a7a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a9a630/s00a9a630.cpp  ?Advance@cTimedState@@QAEXM@Z  00a9ae00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a9a630/s00a9a630.cpp  ?Destroy@cField@@QAEXXZ  00a9b1d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
