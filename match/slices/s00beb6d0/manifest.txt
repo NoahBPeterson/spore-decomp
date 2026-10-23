@@ -1,0 +1,14 @@
+slices/s00beb6d0/s00beb6d0.cpp  ?ctor@cCityTerritory@@QAEPAU1@XZ  00beb950  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beb6d0/s00beb6d0.cpp  ?InitFromDefinition@cCityTerritory@@QAE_NPAX@Z  00beb9f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beb6d0/s00beb6d0.cpp  ?UpdateRadius@cCityTerritory@@QAEXXZ  00beba70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beb6d0/s00beb6d0.cpp  ?Write@cCityTerritory@@QAE_NPAX@Z  00beba90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beb6d0/s00beb6d0.cpp  ?Read@cCityTerritory@@QAE_NPAX@Z  00bebad0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beb6d0/s00beb6d0.cpp  ?Shutdown@cCityTerritory@@QAEXXZ  00bebbd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beb6d0/s00beb6d0.cpp  ?Overlaps@cCityTerritory@@QAEIPAU1@@Z  00bebc10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beb6d0/s00beb6d0.cpp  ?GetClassId@@YAIHH@Z  00bebc90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beb6d0/s00beb6d0.cpp  ?SetPoliticalID@cCityTerritory@@QAEII@Z  00bebd70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beb6d0/s00beb6d0.cpp  ?SetRadius@cCityTerritory@@QAEXXZ  00bebd90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beb6d0/s00beb6d0.cpp  ?FUN_00bec060@cCityWalls@@QAEXXZ  00bec060  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beb6d0/s00beb6d0.cpp  ?PointInsideWall@cCityWalls@@QAEIABUVector3@@@Z  00bec0f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beb6d0/s00beb6d0.cpp  ?PointInsideInnerWall@cCityWalls@@QAEIABUVector3@@@Z  00bec140  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beb6d0/s00beb6d0.cpp  ?GetCenter@cCityWalls@@QAE?AUVector3@@XZ  00bec190  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
