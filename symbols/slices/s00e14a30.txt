@@ -1,0 +1,16 @@
+00e14a30 ?OnEvent@cUIMissionCardPanel@@QAE_NHPAUEventMsg@@@Z  # bool cUIMissionCardPanel::OnEvent(int, EventMsg*)
+00e14b30 ??1cUIMissionCardPanel@@QAE@XZ  # cUIMissionCardPanel::~cUIMissionCardPanel
+00e14b70 ?UpdateCardPositions@cUIMissionCardPanel@@QAEXXZ  # void cUIMissionCardPanel::UpdateCardPositions
+00e14c10 ?SetCardsVisibility@cUIMissionCardPanel@@QAEX_N@Z  # void cUIMissionCardPanel::SetCardsVisibility(bool)
+00e14c70 ?GetPanelLayout@cUIMissionCardPanel@@QAEPAVcSPUILayout@@XZ  # cSPUILayout* cUIMissionCardPanel::GetPanelLayout
+00e14d00 ?SetPanelArea@cUIMissionCardPanel@@QAEXU?$RectT@M@EA@@@Z  # void cUIMissionCardPanel::SetPanelArea(EA::RectT<float>)
+00e14d90 ?InsertionSortSubrange@cUIMissionCardPanel@@SAXPAU?$AutoRefCount@VcUICard@@@@0@Z  # static insertion sort over a card subrange
+00e14e60 ?InsertionSort@cUIMissionCardPanel@@SAXPAU?$AutoRefCount@VcUICard@@@@0@Z  # static insertion sort over a card range
+00e15060 ?Init@cUICard@@QAE_N_N@Z  # bool cUICard::Init(bool)
+00e154d0 ?UpdateProgressWindows@cUIMissionCardPanel@@QAEXXZ  # void cUIMissionCardPanel::UpdateProgressWindows
+00e15620 ?UpdateScenarioWindows@cUIMissionCardPanel@@QAEXXZ  # void cUIMissionCardPanel::UpdateScenarioWindows
+00e15780 ?InitCard@cUICardMissionCard@@QAE_N_N@Z  # bool cUICardMissionCard::InitCard(bool)
+00e15910 ??1cUICardMissionCard@@QAE@XZ  # cUICardMissionCard::~cUICardMissionCard
+00e15a10 ??0cUIMissionCardPanel@@QAE@XZ  # cUIMissionCardPanel::cUIMissionCardPanel
+00e15b70 ?ShowAllCards@cUIMissionCardPanel@@QAEXXZ  # void cUIMissionCardPanel::ShowAllCards
+00e15b90 ?ExpandMissionCard@cUIMissionCardPanel@@QAEXH@Z  # void cUIMissionCardPanel::ExpandMissionCard(int)
