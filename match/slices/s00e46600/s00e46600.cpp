@@ -32,7 +32,9 @@ void  __cdecl operator_delete(void* p);                                      // 
 struct CPL { void dtor(); };                                                 // 0x828670  ??1CPL
 struct Helper4b { void dtor(); };                                            // 0x4b5440
 struct EaVector { int dtor(); };                                             // 0xae6970
-struct PropObj { u8* GetBool(); };                                           // 0x41e920  Property::GetBool
+struct PropObj {
+    u8* GetBool();      // 0x41e920  Property::GetBool
+};
 struct LayoutObj {                                                           // 0x167eb28 instance
     float* GetF1(void* a, void* b);   // 0xe40010
     float* GetF2(void* a);            // 0xe40080
@@ -63,7 +65,7 @@ void* __cdecl cSPUILayout_FindWindowByID(void* layout, u32 id, int b);       // 
 
 struct Vec2 { float x, y; };
 
-extern "C" double __cdecl ceil(double x);
+extern "C" __declspec(dllimport) double __cdecl ceil(double x);
 
 // vtable / global data referenced directly
 extern "C" void* PTR_AddRef_01482370;   // 0x1482370
@@ -602,10 +604,11 @@ void* SPUIPropertyLayout::FUN_00e47180(u8 flags)
 }
 
 // @ 0x00e471e0
-void SPUIPropertyLayout::FUN_00e471e0()
+void* SPUIPropertyLayout::FUN_00e471e0()
 {
     u32 z = 0;
-    *(void**)((char*)this + 4) = &PTR_AddRef_013ec458;
+    *(volatile void**)((char*)this + 4) = &PTR_AddRef_013ec458;
+    _ReadWriteBarrier();
     *(u32*)((char*)this + 8) = z;
     *(void**)((char*)this + 0) = &PTR_AddRef_014823a8;
     *(void**)((char*)this + 4) = &PTR_FUN_01482398;
@@ -631,9 +634,9 @@ void SPUIPropertyLayout::FUN_00e471e0()
     *(u8*)((char*)this + 0x6d) = 0;
     *(float*)((char*)this + 0x70) = 0.0f;
     *(float*)((char*)this + 0x74) = 0.0f;
+    *(u32*)((char*)this + 0x90) = (u32)&DAT_01667bae;
     *(void**)((char*)this + 0x88) = &gEmptyString16;
     *(void**)((char*)this + 0x8c) = &gEmptyString16;
-    *(u32*)((char*)this + 0x90) = (u32)&DAT_01667bae;
     *(u32*)((char*)this + 0x98) = z;
     *(u32*)((char*)this + 0x9c) = z;
     *(u32*)((char*)this + 0xa0) = z;
@@ -656,6 +659,7 @@ void SPUIPropertyLayout::FUN_00e471e0()
     *(u8*)((char*)this + 0xf4) = 0;
     *(u8*)((char*)this + 0x108) = 0;
     *(u8*)((char*)this + 0x109) = 0;
+    return this;
 }
 
 // @ 0x00e47300
