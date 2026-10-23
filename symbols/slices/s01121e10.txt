@@ -1,0 +1,12 @@
+# slice s01121e10 - Havok 3.1 hkGeomConvexHullTester / hkWingedEdge / GSK penetration; DB names (symbols/havok_names.txt 1098-1106)
+# VA        name                              mangled name
+01121e10    hkCalculatePenetrationDepth       ?hkCalculatePenetrationDepth@@YA?AW4hkGskStatus@@PBVhkConvexShape@@0ABVhkTransform@@MPAVhkCdVertex@@2PAVhkVector4@@PAHAAUhkGskOut@@@Z
+01121f30    hkCalcMultiPenetrationDepth       ?hkCalcMultiPenetrationDepth@@YA?AW4hkResult@@ABVhkTransform@@PBVhkConvexShape@@PAPBV3@H0PAPAVhkContactPoint@@@Z
+011223b0    hkGeomConvexHullTester::findSameEdges  ?findSameEdges@hkGeomConvexHullTester@@SA?AVhkBool@@ABVPlaneAndPoints@hkGeomConvexHullBuilder@@0AAV2@11@Z
+01122480    hkGeomConvexHullTester::checkPlaneEquations  ?checkPlaneEquations@hkGeomConvexHullTester@@SA?AVhkBool@@AAV?$hkArray@VhkVector4@@@@00M@Z
+01122680    hkGeomConvexHullTester::isValidNonPlanarHull  ?isValidNonPlanarHull@hkGeomConvexHullTester@@SA?AVhkBool@@AAV?$hkArray@VhkVector4@@@@AAVhkGeomHull@@00AAV?$hkArray@VPlaneAndPoints@hkGeomConvexHullBuilder@@@@M@Z
+011228f0    hkGeomConvexHullTester::isValidHull  ?isValidHull@hkGeomConvexHullTester@@SA?AVhkBool@@ABUhkGeomConvexHullTolerances@@PBVhkVector4@@HAAVhkGeomHull@@AAV?$hkArray@VhkVector4@@@@@Z
+01122b70    hkWingedEdge::Triangle::calcStateAndUpdateTolerance  ?calcStateAndUpdateTolerance@Triangle@hkWingedEdge@@QBE?BW4TriangleState@12@ABVhkVector4@@AAM1@Z
+01122c00    hkWingedEdge::findVisibleTriangles  ?findVisibleTriangles@hkWingedEdge@@IAE?AW4WingedEdgeStatus@1@PAUTriangle@1@ABVhkVector4@@AAHAAPAUEdge@1@@Z
+01122cd0    hkWingedEdge::allocateTriangles    ?allocateTriangles@hkWingedEdge@@IAEXAAV?$hkArray@PAUTriangle@hkWingedEdge@@@@H@Z
+# 01122580 has no DB name (FUN_01122580, hkGeomConvexHullTester::SA?AVhkBool@@...); 01122b20 is unnamed in the DB (resetVertexEdgesAndStates per the hkWingedEdge class).
