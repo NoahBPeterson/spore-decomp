@@ -1,0 +1,12 @@
+00dea870 FUN_00dea870  # cGalaxyGameEntryImpl message handler (ret 8, this in ecx); not byte-exact
+00deaad0 cGalaxyGameEntryImpl::PlayOpeningMovie  # PDB candidate (this in ecx); not byte-exact
+00deac20 FUN_00deac20  # cSPUILayout helper (this in ecx); not byte-exact
+00deacd0 FUN_00deacd0  # panel-id jump table over kGUI_PanelIDs +0x204 array (this in ecx, float); not byte-exact
+00deafc0 FUN_00deafc0  # +0x204 entry float helper (this in ecx, float); not byte-exact
+00deb0b0 FUN_00deb0b0  # wide-string formatting/append helper (this in ecx); not byte-exact
+00deb4a0 FUN_00deb4a0  # byte-exact
+00deb5d0 FUN_00deb5d0  # PostTriggerSimple wrapper (void*); not byte-exact
+00deb670 FUN_00deb670  # byte-exact
+00deb6a0 FUN_00deb6a0  # scalar deleting destructor; not byte-exact
+00deb6d0 FUN_00deb6d0  # trigger-gate helper (void*); not byte-exact
+00deb770 FUN_00deb770  # CollectItems unlock helper (void*,void*); not byte-exact

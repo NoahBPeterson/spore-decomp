@@ -1,0 +1,3 @@
+# source  symbol  original VA  [flags override]
+slices/s00dea870/s00dea870.cpp  ?FUN_00deb4a0@@YIXPAUcGalaxyGameEntryImpl@@@Z  00deb4a0  /O2 /MD /Gy /EHsc /TP
+slices/s00dea870/s00dea870.cpp  ?FUN_00deb670@@YIPAXPAX@Z  00deb670  /O2 /MD /Gy /EHsc /TP
