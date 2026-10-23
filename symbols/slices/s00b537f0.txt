@@ -1,0 +1,16 @@
+00b537f0 _FUN_00b537f0  # Sim high-LOD per-tick update; GetVelocity 0xd20610 -> SetPosition 0xaef7e0 / 0xaef530, test self+0x50 &0x2000, vfn[0xb8](0x1186577) -> 0xb521f0 notify; 323B, ours 325B (partial)
+00b53940 _FUN_00b53940  # lookup: if p && p->vfn[0xb8](0x116dd1b) then HT_167ed58.find(p)->node+4 (tail jmp 0xaef2e0) else HT_16801a8.find(p)->node+4; 154B (partial)
+00b539e0 _FUN_00b539e0  # HT_1682a48.find -> 0xb4e1d0, vfn[0xb8] style lookup, HT_167ed58.find -> FUN_00b537f0(self,val,1,1); 183B (partial)
+00b53aa0 _FUN_00b53aa0  # build 16-char wide name from a per-id table (s?/id cases) then _fcvt format into a stack buffer; 124B (partial)
+00b53b20 _FUN_00b53b20  # wide-string append via an EASTL basic_string temporary (sprintf 0x645ed0-style); 157B (partial)
+00b53bc0 _FUN_00b53bc0  # large sim routine (self+0x4908 fixed-vector walk / notify fan-out); 1083B -- stub only
+00b54000 _FUN_00b54000  # hkAabbPhantom build+registration: hkMemory::s_instance alloc 0xa0, ctor 0x108dfe0, hkWorld::addPhantom 0x1083320, walk self+0x90 children; 506B -- stub only
+00b54200 _FUN_00b54200  # HT_16852e8.find(key) == end -> bool (byte-exact)
+00b54230 _FUN_00b54230  # HT find + setPosition + d7e0 update path; 201B (partial)
+00b54300 _FUN_00b54300  # HT_167ed58 find -> node+4 wrapper (byte-exact)
+00b54340 _FUN_00b54340  # locomotion update: getMass, setMotionType, HT find, d2e0, d570; 378B (partial)
+00b544c0 _FUN_00b544c0  # 45B getter wrapper (byte-exact)
+00b544f0 _FUN_00b544f0  # 45B getter wrapper (byte-exact)
+00b54520 _FUN_00b54520  # bool: e && e->isActive().b && (dir^2 > 1.52587890625e-05f); 139B (byte-exact)
+00b545b0 _FUN_00b545b0@4  # __stdcall (ret 4): HT_1569cb8 find-or-insert, key {p->key,0,p->c}, 1.0f payload; 139B (byte-exact)
+00b54640 ?FUN_00b54640@C54640@@QAEHH@Z  # __thiscall member returning int; 259B -- stub only
