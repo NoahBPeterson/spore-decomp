@@ -1,0 +1,9 @@
+00e46600 ?FUN_00e46600@Timeline@@QAEXPAXHII@Z  # Timeline::FUN_00e46600 (property load / initialize)
+00e46880 ?FUN_00e46880@Timeline@@QAEXH@Z  # Timeline::FUN_00e46880 (recursive layout update)
+00e46d80 ?FUN_00e46d80@Timeline@@QAEXMM_NMM0@Z  # Timeline::FUN_00e46d80 (scrub / advance, recursive)
+00e470a0 ?FUN_00e470a0@Timeline@@QAEPAXPAX@Z  # Timeline::FUN_00e470a0 (fetch normalised position)
+00e47100 ?FUN_00e47100@Timeline@@QAE_NPAX@Z  # Timeline::FUN_00e47100 (query a named rect)
+00e47180 ?FUN_00e47180@SPUIPropertyLayout@@QAEPAXE@Z  # cSPUIPropertyLayout deleting destructor
+00e471e0 ?FUN_00e471e0@SPUIPropertyLayout@@QAEXXZ  # cSPUIPropertyLayout constructor body
+00e47300 ?FUN_00e47300@SPUIPropertyLayout@@QAEXXZ  # cSPUIPropertyLayout destructor body
+00e47460 ?FUN_00e47460@Timeline@@QAEXXZ  # Timeline::FUN_00e47460 (recursive string helper)
