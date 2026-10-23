@@ -1,0 +1,6 @@
+011511f0 cRibbonEmitter::AddSegmentOffset  # insert/accumulate one angle-row segment record; complete, equivalence PASS, x87 sin/cos + regalloc differ
+01151570 cRibbonEmitter::BuildSegments  # walk segment records, recompute normals, append; complete, equivalence PASS
+01151720 cRibbonEmitter::BuildVertexBuffers  # fill a vertex buffer from segment records; complete, equiv UNSUPPORTED (external Emit60300/Emit600e0)
+01151a40 cRibbonEmitter::EmitSegments  # dispatch two vertex buffers through the render path; complete, equiv UNSUPPORTED (external Emit34260/Emit342c0)
+01151c30 cRibbonEmitter::Update  # per-frame advance: spawn segments, swap buffers, emit; complete, equiv UNSUPPORTED (external SegmentBaseXY)
+01151e10 cRibbonEmitter::ComputeCurve  # inverse-path curve constants from mField38/mField74/mField78; complete, equivalence PASS, x87/×2.0f codegen differ
