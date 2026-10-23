@@ -1,0 +1,20 @@
+01176210 sub_01176210          # 15-byte block header + 4 x 14 stereo samples decoder
+011763b0 dec_block_a           # mono block decoder (hand-vectorised, register-level asm style)
+011764b0 dec_block_b           # stereo block decoder (hand-vectorised, register-level asm style)
+011765b0 cblock_ctx_init       # CBlockCtx constructor
+01176770 EVP_EncryptFinal_ex   # OpenSSL 0.9.8 EVP final block encrypt
+01176910 EVP_DecryptFinal_ex   # OpenSSL 0.9.8 EVP final block decrypt + pad check
+01176a90 EVP_CIPHER_CTX_ctrl   # OpenSSL 0.9.8 EVP cipher ctrl dispatch
+01176b00 EVP_CipherInit_ex     # OpenSSL 0.9.8 EVP cipher init (engine/cipher/keys)
+01176db0 EVP_CIPHER_CTX_set_key_length
+01176fc0 BIO_read              # OpenSSL 0.9.8 BIO method dispatch read
+01177070 BIO_write             # OpenSSL 0.9.8 BIO method dispatch write
+01177120 BIO_puts
+011771c0 BIO_gets
+01177260 BIO_ctrl               # BIO ctrl dispatch + callback helper
+011772f0 BIO_callback_ctrl
+01177470 BIO_new                # BIO allocation
+01177500 BIO_new_mem_buf        # memory BIO over caller buffer
+01177680 mem_write              # memory BIO bwrite
+011778c0 mem_gets               # memory BIO bgets (line read)
+01177940 cb_write_str           # memory BIO bputs helper

@@ -1,0 +1,6 @@
+011763b0 1184 FAIL: complete impl of dec_block_a; register allocation differs throughout (790 vs 245 bytes, original is a hand-vectorised/asm-style block decoder); equiv FAIL on untouched ecx only
+011764b0 1026 FAIL: complete impl of dec_block_b; register allocation differs throughout (693 vs 245 bytes); equiv FAIL on untouched eax only
+01176b00 426 UNSUPPORTED: complete impl of EVP_CipherInit_ex; 9 unresolved externals (ERR_put_error, EVP_CIPHER_CTX_cleanup, ENGINE_init, ENGINE_get_cipher_engine, ENGINE_get_cipher); codegen differs (596 vs 592 bytes)
+01177500 1 PASS: BIO_new_mem_buf; only difference is the base register of one lea (original [eax+1] vs ours [edi+1]); equiv PASS 400/400 valid
+011778c0 101 UNSUPPORTED: complete impl of mem_gets; 3 unresolved externals (BIO_clear_flags, BIO_set_flags, mem_read); callee-saved/register allocation differs (111 vs 113 bytes)
+01177940 4 PASS: cb_write_str; two-instruction scheduling difference in the inlined strlen (mov eax,edx vs push esi order); equiv PASS 335/335 valid, 100% coverage
