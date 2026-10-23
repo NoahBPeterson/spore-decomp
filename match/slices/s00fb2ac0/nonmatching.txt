@@ -1,0 +1,11 @@
+00fb2ac0 420 FAIL: complete impl; memberwise copy body matches field-for-field, only loop register allocation/prologue differs (470 vs 474 bytes); equiv FAIL on eax register only
+00fb2ca0 357 FAIL: complete impl; memberwise fill body matches, pointer/register allocation differs (451 vs 450 bytes); equiv FAIL on eax only
+00fb2e70 242 FAIL: complete impl; memberwise copy body matches, prologue/register allocation differs (463 vs 459 bytes); equiv FAIL on eax only
+00fb3040 375 UNSUPPORTED: complete impl of render walk (0/400 valid fuzz inputs: needs live viewer/panel state)
+00fb3240 96 FAIL: complete impl; identical loop shape, callee-saved/spill allocation differs (95 vs 104 bytes); equiv FAIL on untouched ecx only
+00fb32b0 96 FAIL: complete impl; identical loop shape, callee-saved/spill allocation differs (96 vs 102 bytes); equiv FAIL on untouched ecx only
+00fb3320 112 WEAK: complete impl (15/400 valid inputs, 41.3% insn coverage; growth/alloc path needs live allocator)
+00fb3430 491 UNSUPPORTED: complete impl; 4 unresolved externals (EAAllocate/CopyElems28/FillElems28/MoveElems28 variants)
+00fb3660 327 WEAK: complete impl; equiv not gated (batch timed out in fuzzing, recursive child walk)
+00fb37d0 125 WEAK: complete impl of reserve(); equiv not gated (batch timed out)
+00fb3880 201 WEAK: complete impl of insert(); equiv not gated (batch timed out)
