@@ -1,7 +1,5 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-00c64a70   67   cArrowMorphHandle::ContainsId: complete; loop guard (& 0xfffffffc) form
-00c64ad0   109  quaternion normalise: complete; x87 vs SSE sqrt/reciprocal mixing
-00c64b50   57   cArrowMorphHandle::EnableFlag: complete; bit test/set register allocation
-00c653e0   80   cSimpleRotationRing dtor: complete; vptr/dtor store schedule. difftest FAIL (ours: UC_ERR_READ_UNMAPPED at eip=00b76624; original returned normally)
-00c65540   80   cSimpleRotationBall dtor: complete; vptr/dtor store schedule. difftest FAIL (ours: UC_ERR_READ_UNMAPPED at eip=00b76624; original returned normally)
-00c658e0   78   set position + dirty: complete; call/reload schedule
+00c64a70   64   cArrowMorphHandle::ContainsId: complete; loop guard recomputed from the members, willing-pointer walk. difftest PASS
+00c653e0   29   cSimpleRotationRing dtor: complete; vptr/dtor store schedule differs (cl 15 vs 14), vtable + 0x118 stores kept by volatile. difftest PASS
+00c65540   29   cSimpleRotationBall dtor: complete; same vptr/dtor store schedule difference. difftest PASS
+00c658e0   9    set position + dirty: complete; only the trailing call to the in-TU empty stub 0xc64db0 is folded away. difftest PASS
