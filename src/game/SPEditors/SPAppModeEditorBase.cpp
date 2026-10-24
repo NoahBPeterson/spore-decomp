@@ -12,6 +12,9 @@ extern uint32_t g_value74, g_value78, g_value7c, g_value80, g_value84, g_value88
 #include <string.h>
 #include <math.h>
 #include <intrin.h>
+// Retail computes this sqrt with an inline x87 fsqrt, not a _CIsqrt call.
+#pragma intrinsic(sqrt)
+static inline float InlineSqrt(float x) { return (float)sqrt((double)x); }
 #include "EA/Audio/FactoryBinarySampleData.h"
 #include <ctype.h>
 #include "SP/cIModelWorld.h"
@@ -3966,6 +3969,7 @@ struct Vector3_s0058_2250 {
 }
 namespace SP {
 extern char gEmptyString_s0058_2250[1];                          // 0x01667bac
+extern char sz_13ec47c[];                                        // 0x013ec47c (shared empty string)
 }
 namespace SP {
 template<class T> struct vector {
@@ -4381,13 +4385,13 @@ public:
 // ---- items of slice s00582fe0 end
 
 // ---- items of slice s00583c50 begin (TODO(rewrite): local stubs, replace by canonical classes)
-void __stdcall VecGrow(int* at, uint32_t count, const int* value);   // 0x0057f220
-void __stdcall VecErase(int* first, int* last);                      // 0x005c2170
 struct cIntVec {
     int* mpBegin;
     int* mpEnd;
     int* mpCapacity;
     void Resize(uint32_t n);
+    int* Insert(int* at, uint32_t count, const int* value);   // @ 0x0057f220
+    int* Erase(int* first, int* last);                       // @ 0x005c2170
 };
 // ---- items of slice s00583c50 end
 
@@ -7768,7 +7772,7 @@ float __cdecl EditorGroundSampler(cEditorGround* editor, uint32_t unused, const 
                 return 0.0f;
             }
         }
-        const float inv = 1.0f / sqrtf(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
+        const float inv = 1.0f / InlineSqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
         normal.x *= inv;
         normal.y *= inv;
         normal.z *= inv;
@@ -11063,7 +11067,7 @@ bool cAppModeEditorBase_s0058_2250::OnBlockWheel(cSPEditorBlock_s0058_2250* bloc
     if (block) {
         SnapBlock(block, 0, 0, 0, 0, 0, 1, 1);
         string name(block->mpName);
-        if (!(name == "")) {
+        if (!(name == sz_13ec47c)) {
             SetSoundSymbol(0xb07c3bbf, 0x1e8bda2a, name.c_str());
             PlayEditorSound(0xb07c3bbf, 0xfdedb725, soundValue, 0);
         }
@@ -11246,10 +11250,10 @@ void cIntVec::Resize(uint32_t n)
     uint32_t cur = (uint32_t)(end - begin);
     if (n > cur) {
         int zero = 0;
-        VecGrow(end, n - cur, &zero);
+        Insert(end, n - cur, &zero);
         return;
     }
-    VecErase(begin + n, end);
+    Erase(begin + n, end);
 }
 
 // @ 0x005841b0
