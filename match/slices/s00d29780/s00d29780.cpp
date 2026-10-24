@@ -123,19 +123,23 @@ struct cOccluder {
     virtual void AddRef();                        // slot 47 (+0xbc)
     virtual void Release();                       // slot 48 (+0xc0)
 };
-struct RBNode {
-    RBNode* right;                                // +0
-    RBNode* left;                                 // +4
-    RBNode* parent;                               // +8
-    u32 color;                                    // +0xc
+struct RBNodeBase {                               // eastl rbtree_node_base, 0x10 bytes
+    RBNodeBase* right;                            // +0x00
+    RBNodeBase* left;                             // +0x04
+    RBNodeBase* parent;                           // +0x08
+    u32 color;                                    // +0x0c
+};
+struct RBNode : RBNodeBase {
     cOccluder* value;                             // +0x10
 };
 RBNode* RBTreeIncrement(RBNode* n);               // 0x00921580 (cdecl)
 void RBTreeErase(RBNode* n, RBNode* anchor);      // 0x00921880 (cdecl)
 struct RBTree {
-    RBNode mAnchor;                               // +0x00 (value slot unused)
-    int mnSize;
-    void DoNukeSubtree(RBNode* n);                // 0x00cbae20
+    RBNodeBase mAnchor;                           // +0x00 header node (its value slot is the size)
+    int mnSize;                                   // +0x10
+    void DoNukeSubtree(RBNodeBase* n);            // 0x00cbae20
+    __forceinline RBNode* begin() { return (RBNode*)mAnchor.left; }
+    __forceinline RBNode* end() { return (RBNode*)&mAnchor; }
 };
 struct cOccluderSet {
     u32 mAllocator;                               // +0
@@ -149,21 +153,21 @@ struct cOccluderSet {
     __forceinline ~cOccluderSet() { mTree.DoNukeSubtree(mTree.mAnchor.parent); }
     void insert(RBNode* first, RBNode* last);     // 0x00d28e10 (ret 8)
     void Insert(void* out, const void* key, int color); // 0x00cbae70 (ret 0xc)
-    __forceinline RBNode* begin() { return mTree.mAnchor.left; }
-    __forceinline RBNode* end() { return &mTree.mAnchor; }
+    __forceinline RBNode* begin() { return mTree.begin(); }
+    __forceinline RBNode* end() { return mTree.end(); }
     __forceinline RBNode* find(cOccluder* key)
     {
-        RBNode* cand = &mTree.mAnchor;
-        for (RBNode* n = mTree.mAnchor.parent; n; ) {
+        RBNode* cand = mTree.end();
+        for (RBNode* n = (RBNode*)mTree.mAnchor.parent; n; ) {
             if (n->value < key) {
-                n = n->right;
+                n = (RBNode*)n->right;
             } else {
                 cand = n;
-                n = n->left;
+                n = (RBNode*)n->left;
             }
         }
-        if (cand == &mTree.mAnchor || key < cand->value)
-            return &mTree.mAnchor;
+        if (cand == mTree.end() || key < cand->value)
+            return mTree.end();
         return cand;
     }
 };
@@ -328,8 +332,8 @@ skip:
         }
     }
 
-    RBNode* it = mFaded.mTree.mAnchor.left;
-    while (it != &mFaded.mTree.mAnchor) {
+    RBNode* it = mFaded.begin();
+    while (it != mFaded.end()) {
         cOccluder* o = it->value;
         cMaterialFade* m = o->GetMaterial();
         if (m) {
@@ -345,7 +349,7 @@ skip:
                     m->mFlags &= ~2u;
                     --mFaded.mTree.mnSize;
                     RBNode* next = RBTreeIncrement(it);
-                    RBTreeErase(it, &mFaded.mTree.mAnchor);
+                    RBTreeErase(it, mFaded.end());
                     if (it->value)
                         it->value->Release();
                     operator delete(it);
