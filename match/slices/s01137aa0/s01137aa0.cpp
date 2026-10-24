@@ -270,9 +270,12 @@ void SndPlayer1::FreeRequest(int index)
     RequestExternal* re = &mpRequestExternal[index];
     Decoder* dec = ri->pDecoder;
     if (dec) {
-        void (*cb)(Decoder*) = *(void (**)(Decoder*))((char*)dec + 0xc);
+        // The original invokes this callback with the player still in ecx (its register-ABI
+        // "this"), so model it as a fastcall taking the player in ecx and the decoder on the stack.
+        void (__fastcall *cb)(SndPlayer1*, int, Decoder*) =
+            *(void (__fastcall **)(SndPlayer1*, int, Decoder*))((char*)dec + 0xc);
         if (cb)
-            cb(dec);
+            cb(this, 0, dec);
         void* buf = *(void**)((char*)dec + 0x10);
         if (buf)
             g_pSystem->Free(buf, 0);

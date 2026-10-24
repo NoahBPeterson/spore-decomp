@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-01137aa0  146  complete FreeRequest; LTCG register allocation across System::Free/Lock calls; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (144 valid, 97.8% coverage, no mismatch)
+01137aa0  187  complete FreeRequest; LTCG register allocation across System::Free/Lock calls; the decoder callback is called with the player in ecx in the original, modelled as a __fastcall(this, 0, dec) cast so the fake-call `this` matches; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (169 valid, 100% coverage, no mismatch)
 01137bc0  83  complete FreeFinishedRequests; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (400 valid, 37.9% coverage, no mismatch)
 01137c30  68  complete FreeAllRequests; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (293 valid, 100% coverage)
 01137c90  40  complete Shutdown; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (302 valid, 80% coverage)
