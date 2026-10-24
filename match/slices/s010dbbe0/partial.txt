@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+010dcd00    4  HkHeightFieldArray dtor; equiv WEAK 212 inputs / 43% coverage (deallocateChunk + TlsGetValue are unmapped externs); only the table-store scheduling and jl-vs-js mnemonic differ
+010dcb80    4  HkHeightFieldArray scalar deleting dtor; equiv PASS 218 inputs / 61% coverage; identical to the dtor difference

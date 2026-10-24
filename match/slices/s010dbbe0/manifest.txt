@@ -1,1 +1,2 @@
-# no byte-exact functions in this slice (see nonmatching.txt)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s010dbbe0/s010dbbe0.cpp  ?createHeightFieldBAgent@hkHeightFieldAgent@@SAPAVhkCollisionAgent@@ABVhkCdBody@@0ABUhkCollisionInput@@PAVhkContactMgr@@@Z  010dcc80  /vc71 /O2 /MD /Gy /EHsc /TP

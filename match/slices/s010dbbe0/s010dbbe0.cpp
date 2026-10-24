@@ -111,6 +111,7 @@ public:
     virtual void s0(); virtual void s1(); virtual void s2();
     virtual void* allocateStackSlow(int size);          // slot 3
     virtual void deallocateStackSlow(void* p);          // slot 4
+    void deallocateChunk(void* p, int size, int align); // 0x0107db10 (non-virtual)
     char pad[0x1c];
     char* m_stackCurrent;     // +0x20
     char* m_stackPrev;        // +0x24
@@ -169,6 +170,15 @@ static __forceinline void transformSpheres(const hkTransform& tr, const hkSphere
         HK_XFORM_ONE(out[i], in[i])
 }
 
+class hkCollisionAgent {
+public:
+    virtual void s0();
+};
+
+struct hkCollisionInput {
+    uint32_t m_pad[0x14];
+};
+
 class hkHeightFieldAgent
 {
 public:
@@ -179,6 +189,9 @@ public:
     hkContactMgr* m_contactMgr;           // +8
     hkContactPointId* m_contactPointId;   // +0xc  (hkArray data)
     int m_numContactPointIds;             // +0x10 (hkArray size) == number of spheres
+
+    static hkCollisionAgent* createHeightFieldBAgent(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                                     const hkCollisionInput& input, hkContactMgr* mgr);
 };
 
 // @ 0x010DC300
@@ -259,4 +272,68 @@ void hkHeightFieldAgent::processCollision(const hkCdBody& bodyA, const hkCdBody&
     hkDeallocateStackSpheres(results);
     hkDeallocateStackSpheres(sphereBuffer);
     HK_TIMER_END_LIST();
+}
+
+// ---- hkHeightFieldBvTree agent array (hkArray<unsigned short> with a BvTree vtable) ----------------------
+// The two stores of a vtable address are the class' own table followed by the hkArray base table
+// (retail inlines the trivial base destructor).
+extern char g_hkHeightFieldBvTreeVtbl[];    // 0x014a4a2c
+extern char g_hkArrayBaseVtbl[];            // 0x013ef094
+
+struct hkMemoryInstance {
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
+    virtual void* allocate(int size, int align);                    // +0x10
+    virtual void  deallocate(void* p, int size, int align);         // +0x14
+};
+extern hkMemoryInstance* g_hkMemoryInstance;    // 0x016e4178
+
+// The two stores of a vtable address are the class' own table followed by the hkArray base table
+// (retail inlines the trivial base destructor); the member is named so no raw cast is needed.
+struct HkHeightFieldArray {
+    void*    mpVptr;        // +0x00
+    uint16_t mAllocSize;    // +0x04 (byte size handed to the hk memory manager)
+    uint16_t mField06;      // +0x06 (flags, 1 = owned)
+    void*    mpField08;     // +0x08
+    void*    mpData;        // +0x0c (element buffer)
+    int      mSize;         // +0x10
+    int      mCapacity;     // +0x14 (high bit = "not allocated from a heap")
+
+    void  Destroy();                                // 0x010dcd00
+    void* DestroyDeleting(unsigned int flags);      // 0x010dcb80 (ret 4)
+    HkHeightFieldArray* Init(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                             const hkCollisionInput& input, hkContactMgr* mgr);   // 0x010dcbe0
+};
+
+// @ 0x010dcd00
+void HkHeightFieldArray::Destroy()
+{
+    mpVptr = g_hkHeightFieldBvTreeVtbl;
+    if (mCapacity < 0)
+    {
+        mpVptr = g_hkArrayBaseVtbl;
+        return;
+    }
+    hkThreadMemoryGet()->deallocateChunk(mpData, (mCapacity & 0x3fffffff) << 1, 0x14);
+    mpVptr = g_hkArrayBaseVtbl;
+}
+
+// @ 0x010dcb80
+void* HkHeightFieldArray::DestroyDeleting(unsigned int flags)
+{
+    mpVptr = g_hkHeightFieldBvTreeVtbl;
+    if (mCapacity >= 0)
+        hkThreadMemoryGet()->deallocateChunk(mpData, (mCapacity & 0x3fffffff) << 1, 0x14);
+    mpVptr = g_hkArrayBaseVtbl;
+    if (flags & 1)
+        g_hkMemoryInstance->deallocate(this, mAllocSize, 0x1c);
+    return this;
+}
+
+// @ 0x010dcc80
+hkCollisionAgent* hkHeightFieldAgent::createHeightFieldBAgent(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                                             const hkCollisionInput& input, hkContactMgr* mgr)
+{
+    HkHeightFieldArray* a = (HkHeightFieldArray*)g_hkMemoryInstance->allocate(0x18, 0x1c);
+    a->mAllocSize = 0x18;
+    return (hkCollisionAgent*)a->Init(bodyA, bodyB, input, mgr);
 }
