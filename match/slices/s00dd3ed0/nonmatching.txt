@@ -1,0 +1,2 @@
+00dd3ed0 634 complete (clear + rebuild response-button list loop); size 616 vs 634, diff 505; EQUIV UNSUPPORTED 0/400 valid (fault(read)=341, fault(write)=47, VirtualFree import); loop rotation, hoisted float globals and vcall scheduling differ
+00dd4950 453 complete (pick response text from empire/star/relationship state); size 376 vs 453, diff 347; EQUIV WEAK 189/400 valid, 41.9% coverage; argument-save frame, inlined vcall sequence and game-data walk differ
