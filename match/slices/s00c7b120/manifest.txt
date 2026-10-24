@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c7b120/s00c7b120.cpp  ?SetWarFlag1@cPlayer@SP@@QAEXH@Z  00c7bb60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c7b120/s00c7b120.cpp  ?SetWarFlag2@cPlayer@SP@@QAEXH@Z  00c7bb80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c7b120/s00c7b120.cpp  ?SetWarFlag4@cPlayer@SP@@QAEXH@Z  00c7bba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c7b120/s00c7b120.cpp  ?SetWarFlag8@cPlayer@SP@@QAEXHD@Z  00c7bbc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c7b120/s00c7b120.cpp  ?SetWarFlag10@cPlayer@SP@@QAEXHD@Z  00c7bbf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c7b120/s00c7b120.cpp  ?SetWarFlag20@cPlayer@SP@@QAEXHD@Z  00c7bc20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c7b120/s00c7b120.cpp  ?ResetWarDataWithPlayer@cPlayer@SP@@QAEXH@Z  00c7be30  /O2 /MD /Gy /TP /arch:SSE /fp:fast

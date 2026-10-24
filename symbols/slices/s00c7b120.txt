@@ -1,0 +1,16 @@
+00c7b120 ?FUN_00c7b120@SP@@YAXXZ  # cPlayer war-data read
+00c7b390 ?FUN_00c7b390@SP@@YAXXZ  # cPlayer war-data vector/allocator helper
+00c7b510 ?FUN_00c7b510@SP@@YAXXZ  # cPlayer war-map key helper
+00c7b670 ?FUN_00c7b670@SP@@YAXXZ  # cPlayer war-data helper
+00c7b790 ?FUN_00c7b790@SP@@YAXXZ  # SP::Simulator::cPlayer::cPlayer
+00c7ba90 ?FUN_00c7ba90@cPlayer@SP@@QAEXH@Z  # SP::cPlayer::FUN_00c7ba90
+00c7bb60 ?SetWarFlag1@cPlayer@SP@@QAEXH@Z  # SP::cPlayer::SetWarFlag1
+00c7bb80 ?SetWarFlag2@cPlayer@SP@@QAEXH@Z  # SP::cPlayer::SetWarFlag2
+00c7bba0 ?SetWarFlag4@cPlayer@SP@@QAEXH@Z  # SP::cPlayer::SetWarFlag4
+00c7bbc0 ?SetWarFlag8@cPlayer@SP@@QAEXHD@Z  # SP::cPlayer::SetWarFlag8
+00c7bbf0 ?SetWarFlag10@cPlayer@SP@@QAEXHD@Z  # SP::cPlayer::SetWarFlag10
+00c7bc20 ?SetWarFlag20@cPlayer@SP@@QAEXHD@Z  # SP::cPlayer::SetWarFlag20
+00c7bc50 ?WarDataAt@cPlayer@SP@@QAEPAUcSpacePlayerWarData@2@PBI@Z  # SP::cPlayer::WarDataAt (map operator[])
+00c7bd40 ?NoteWarStartedWithPlayer@cPlayer@SP@@QAEXH@Z  # SP::cPlayer::NoteWarStartedWithPlayer
+00c7be30 ?ResetWarDataWithPlayer@cPlayer@SP@@QAEXH@Z  # SP::cPlayer::ResetWarDataWithPlayer
+00c7bea0 ?FUN_00c7bea0@SP@@YAXXZ  # cPlayer war-data helper
