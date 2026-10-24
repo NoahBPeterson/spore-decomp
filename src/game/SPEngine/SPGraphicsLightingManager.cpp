@@ -385,10 +385,17 @@ struct Vec32 {
 // ---- items of slice s007070d0 end
 
 // ---- items of slice s00708100 begin (TODO(rewrite): local stubs, replace by canonical classes)
-void PushPtr(void* pos, void* val);                   // 0x006C1570
 void ReleaseElem(void* p);                            // 0x007610F0
+
+// free-list vector at cLightingWorld + 0x478 (fixed_vector<int,128>)
+struct LightFreeVec {
+    void** mpBegin;
+    void** mpEnd;
+    void** mpCapacity;
+    void DoInsertValue(void** position, void* const& value);  // 0x006C1570
+};
 struct CellInfo_s0070_8100 { int x, y; };
-struct V32_s0070_8100 { float f[8]; };
+struct V32_s0070_8100 { union { float f[8]; uint32_t u[8]; }; };
 struct VecCell {
     CellInfo_s0070_8100* mpBegin;      // +0x00
     CellInfo_s0070_8100* mpEnd;        // +0x04
@@ -424,18 +431,22 @@ struct ClearVec {
     void* mpExtra;      // +0x60
     void clear();
 };
+struct IdVec_s0070_8100 {
+    uint32_t* mpBegin;       // +0x00
+    uint32_t* mpEnd;         // +0x04
+    uint32_t* mpCapacity;    // +0x08
+    void DoInsertValue(uint32_t* position, const uint32_t& value);  // 0x4558a0
+};
+
 struct SampleVec {
     V32_s0070_8100* mpBegin;            // +0x00
     V32_s0070_8100* mpEnd;              // +0x04
     V32_s0070_8100* mpCapacity;         // +0x08
     char pad0c[8];
-    uint32_t* mpIdsBegin;    // +0x14
-    uint32_t* mpIdsEnd;      // +0x18
-    uint32_t* mpIdsCapacity; // +0x1c
+    IdVec_s0070_8100 mIds;              // +0x14
     char pad20[8];
     int mCount;              // +0x28
     void DoInsertValue(V32_s0070_8100* position, const V32_s0070_8100* value);   // 0x707a50
-    void PushIdRange(uint32_t* first, uint32_t* last, uint32_t* dst);  // 0x4558a0
 };
 struct cLightingWorld_s0070_8100 {
     void RemoveLight(uint32_t id);  // 0x007085a0 (cLightingWorld::RemoveLight)
@@ -2431,16 +2442,16 @@ void cLightingWorld_s0070_8100::DestroyLightingInfo(void* e)
     *(int**)(prev + 4) = next;
     *(int*)((char*)e + 4) = 0;
     *(int*)((char*)e + 8) = 0;
-    char* v = (char*)this + 0x478;
-    int* p = *(int**)(v + 4);
-    if (p < *(int**)(v + 8)) {
-        *(int**)(v + 4) = p + 1;
+    LightFreeVec* freeList = (LightFreeVec*)((char*)this + 0x478);
+    void** p = freeList->mpEnd;
+    if (p < freeList->mpCapacity) {
+        freeList->mpEnd = p + 1;
         if (p) {
-            *p = (int)e;
+            *p = e;
             return;
         }
     } else {
-        PushPtr(p, e);
+        freeList->DoInsertValue(p, e);
     }
 }
 
@@ -2461,9 +2472,10 @@ void ClearVec::clear()
 // @ 0x00708810
 void cLightingWorld_s0070_8100::AddLocalSample(uint32_t id, int index, SampleVec* vec)
 {
-    char* entry = (char*)(*(int*)((char*)this + 0x428) + ((uint32_t)id >> 7) * 4)
+    char* entry = (char*)(*(int*)(*(int*)((char*)this + 0x428) + ((uint32_t)id >> 7) * 4))
                   + 4 + (id & 0x7f) * 0xc4;
-    *(int*)(*(int*)(entry + 0x28) + 4 + index * 8) = (int)((vec->mpEnd - vec->mpBegin) >> 5);
+    *(int*)(*(int*)(entry + 0x28) + 4 + index * 8) =
+        (int)(((char*)vec->mpEnd - (char*)vec->mpBegin) >> 5);
     V32_s0070_8100* p = vec->mpEnd;
     if (p < vec->mpCapacity) {
         vec->mpEnd = p + 1;
@@ -2472,23 +2484,23 @@ void cLightingWorld_s0070_8100::AddLocalSample(uint32_t id, int index, SampleVec
         vec->DoInsertValue(p, &tmp);
     }
     V32_s0070_8100* dst = (V32_s0070_8100*)((char*)vec->mpEnd - 0x20);
-    const float* src = (const float*)entry;
-    dst->f[0] = src[0];
-    dst->f[1] = src[1];
-    dst->f[2] = src[2];
-    dst->f[3] = src[3];
-    dst->f[4] = src[4];
-    dst->f[5] = src[5];
-    dst->f[6] = src[6];
-    dst->f[7] = src[7];
-    uint32_t* ip = vec->mpIdsEnd;
-    if (ip < vec->mpIdsCapacity) {
-        vec->mpIdsEnd = ip + 1;
+    const V32_s0070_8100* src = (const V32_s0070_8100*)entry;
+    dst->u[0] = src->u[0];
+    dst->u[1] = src->u[1];
+    dst->u[2] = src->u[2];
+    dst->u[3] = src->u[7];
+    dst->u[4] = src->u[4];
+    dst->u[5] = src->u[5];
+    dst->u[6] = src->u[6];
+    dst->u[7] = src->u[3];
+    uint32_t* ip = vec->mIds.mpEnd;
+    if (ip < vec->mIds.mpCapacity) {
+        vec->mIds.mpEnd = ip + 1;
         if (ip)
             *ip = id;
     } else {
         uint32_t local = id;
-        vec->PushIdRange(&local, &local + 1, ip);
+        vec->mIds.DoInsertValue(ip, local);
     }
     ++vec->mCount;
 }
@@ -2521,7 +2533,7 @@ void Vec8b::resize(uint32_t n)
         uint64_t z = 0;
         DoInsertValues(mpEnd, n - size, &z);
     } else {
-        Erase(mpBegin + n, mpEnd);
+        Erase(mpBegin + n * 8, mpEnd);
     }
 }
 
@@ -2544,7 +2556,7 @@ void Vec16::resize(uint32_t n)
     }
     char* mid = mpBegin + n * 0x10;
     Copy16(mpEnd, mpEnd, mid);
-    mpEnd = (char*)(mpEnd - (mpEnd - mid));
+    mpEnd -= ((uint32_t)(mpEnd - mid) >> 4) * 0x10;
 }
 
 // @ 0x007094c0
@@ -3713,7 +3725,7 @@ int cLightingManager_HandleMessage(void* self, int msg, void* data)
 bool SP::cLightingManager::Init()
 {
     void* self = this;
-    ReloadLightingStates(self);
+    ((void(__thiscall*)(void*))ReloadLightingStates)(self);
     void* ms = MessageServer();
     if (ms != 0)
     {
