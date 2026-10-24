@@ -8,3 +8,4 @@ slices/s00edbfc0/s00edbfc0.cpp  ?f@ObjCB10@@QAEXXZ        00edcb10  /O2 /MD /Gy 
 slices/s00edbfc0/s00edbfc0.cpp  ?FUN_00edcc80@@YIXPAD@Z   00edcc80  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00edbfc0/s00edbfc0.cpp  ?FUN_00edce00@@YA_NH@Z    00edce00  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00edbfc0/s00edbfc0.cpp  ?f@ObjCF10@@QAEPAXD@Z     00edcf10  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00edbfc0/s00edbfc0.cpp  ?f@ObjCE20@@QAEXH@Z        00edce20  /O2 /MD /Gy /EHsc /TP /arch:SSE

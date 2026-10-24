@@ -18,6 +18,7 @@ void  __cdecl FUN_00ed8690(void);                       // 0x00ed8690
 void  __cdecl EA_RemoveHandler(int, int, int, int, int);    // 0x00571db0
 void  __fastcall FUN_00ece300(char*);                   // 0x00ece300
 void* __cdecl FUN_00e7f54d0(void*);                     // 0x007f54d0
+typedef void* (__thiscall *FGetAllocator)(void*);
 void  __cdecl EA_Free(void*);                           // 0x00f47380
 void  __cdecl FUN_00f3bcb0(void);                       // 0x00f3bcb0
 
@@ -138,6 +139,7 @@ bool FUN_00edce00(int p)
 struct ObjCE20 {
     char pad[0x14];
     char* p14;      // +0x14
+    char  pad18[8]; // +0x18
     int   p20;      // +0x20
     void f(int);
 };
@@ -146,7 +148,7 @@ void ObjCE20::f(int arg)
 {
     if (p14 != 0) {
         int saved = p20;
-        if (saved != (int)FUN_00e7f54d0(p14))
+        if (saved != (int)((FGetAllocator)FUN_00e7f54d0)(p14))
             ((FV_i)(*(void***)p14)[0x1c / 4])(p14, saved);
         ((FV_i)(*(void***)(p14 + 0x24))[0x18 / 4])(p14 + 0x24, arg);
         FUN_00ece300(p14);
@@ -184,15 +186,15 @@ void* ObjCF10::f(char param)
 
 // ---------------------------------------------------------------- 0x00edcf30
 // @ 0x00edcf30
-int FUN_00edcf30(int* p)
+bool FUN_00edcf30(int* p)
 {
     if (p == 0)
-        return 0;
+        return false;
     char* q = (char*)((FV_i)(*(void***)p)[0xc / 4])(p, 0x8ed27e7a);
     if (q == 0)
-        return 0;
+        return false;
     unsigned v = (unsigned)((FI_1)(*(void***)q)[0x20 / 4])(q);
-    return (v >> 2) & 1;
+    return ((v >> 2) & 1) != 0;
 }
 
 // ---------------------------------------------------------------- 0x00edcf60
@@ -212,7 +214,7 @@ void FUN_00edcf60(int* p, float f)
 
 // ---------------------------------------------------------------- 0x00edcbc0
 // @ 0x00edcbc0
-int FUN_00edcbc0(int a, int* p)
+bool __stdcall FUN_00edcbc0(int a, int* p)
 {
     (void)a;
     unsigned v = *(unsigned*)((char*)p + 0x14);
