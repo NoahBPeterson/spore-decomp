@@ -208,4 +208,43 @@ void InitUFOAttributes()
     ADD(16, "mTimeOfArrivalMS", 0x0684a115, 0x220, UINT_ATTR(UInt_mTimeOfArrivalMS))
 }
 
+// --- Trade-offer and egg tables -------------------------------------------------------------
+
+class cHerd;
+class cTradeItem;
+class cCreatureEgg;
+
+bool Read_00b20540(ISerializerReadStream* pStream, void* pData);
+bool Read_00ae3470(ISerializerReadStream* pStream, void* pData);
+bool Read_00b02540(ISerializerReadStream* pStream, void* pData);
+bool Write_00ae3490(ISerializerWriteStream* pStream, void* pData);
+bool Validate_00ae3310();
+
+extern AttrSlot cTradeOffer_sAttributes[5];   // 0x015773b8
+extern AttrSlot cEgg_sAttributes[6];         // 0x015778f0
+
+#define ADD_TRADE(IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&cTradeOffer_sAttributes[IDX] = a; }
+#define ADD_EGG(IDX, ...)   { Attribute a(__VA_ARGS__); *(Attribute*)&cEgg_sAttributes[IDX] = a; }
+
+// @ 0x0134b6b0  $E207: dynamic initializer of the trade-offer serializer attribute table.
+void InitTradeOfferAttributes()
+{
+    ADD_TRADE(0, "mTradeState",    0xf38538ad, 0x1f0, INT_ATTR)
+    ADD_TRADE(1, "mTradeItemType", 0xf38538ae, 0x1f4, INT_ATTR)
+    ADD_TRADE(2, "mTradeKind",     0xf38538af, 0x1f8, INT_ATTR)
+    ADD_TRADE(3, "mBoughtItem",    0xf38538b0, 0x1fc, BOOL_ATTR)
+    ADD_TRADE(4, "mSoldItem",      0xf38538b1, 0x1fd, BOOL_ATTR)
+}
+
+// @ 0x0134cf40  $E211: dynamic initializer of the creature-egg serializer attribute table.
+void InitEggAttributes()
+{
+    ADD_EGG(0, "mState",       0x5268a36e, 0x1e8, INT_ATTR)
+    ADD_EGG(1, "mpHerd",       0xd2afa598, 0x1f4, PTR_ATTR(cHerd, Read_00b20540, Write_00bca960, Validate_00b6f550))
+    ADD_EGG(2, "mTimeToHatch", 0xf301c18b, 0x1f0, INT_ATTR)
+    ADD_EGG(3, "mBrokenTimer", 0xd301c1ab, 0x1f8, PTR_ATTR(cTradeItem, Read_00ae3470, Write_00ae3490, Validate_00ae3310))
+    ADD_EGG(4, "mpToHatch",    0x5301c42e, 0x218, PTR_ATTR(cCreatureEgg, Read_00b02540, Write_00bca960, Validate_00b6f550))
+    ADD_EGG(5, "mEffectScale", 0x7301c22a, 0x220, FLOAT_ATTR)
+}
+
 }  // namespace Simulator

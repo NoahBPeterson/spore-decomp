@@ -1,0 +1,28 @@
+01347b70 Simulator::InitUFOAttributes  # dynamic initializer of the 17-record UFO attribute table at 0x01576bc8
+0134b6b0 Simulator::InitTradeOfferAttributes  # $E207: dynamic initializer of the 5-record trade-offer attribute table at 0x015773b8 (mTradeState/mTradeItemType/mTradeKind/mBoughtItem/mSoldItem)
+0134cf40 Simulator::InitEggAttributes  # $E211: dynamic initializer of the 6-record egg attribute table at 0x015778f0 (mState/mpHerd/mTimeToHatch/mBrokenTimer/mpToHatch/mEffectScale)
+00692ca0 Simulator::Attribute::DefaultOffset  # thiscall; pCurrentObject + offset
+00572810 Simulator::Read4<int>  # 4-byte raw read (template instance shared by every plain-value row)
+00572840 Simulator::Write4  # 4-byte integer write
+00692ff0 ParseLong  # read-text for signed integers
+00693090 ParseULong  # read-text for bool rows (ReadTextInt<bool>)
+006930b0 ParseFloat  # read-text for float rows
+00694ee0 WriteText_00694ee0  # integer-to-text
+00694fa0 WriteText_00694fa0  # bool-to-text
+00694fc0 WriteText_00694fc0  # float-to-text
+00692fb0 WriteText_00692fb0  # pointer-to-text
+00c2e4e0 ReadText_00c2e4e0  # read-text for object-pointer rows
+00b1fbf0 AlwaysValid  # validate callback returning true
+00b6f550 Validate_00b6f550  # object-pointer validate callback
+00ae3310 Validate_00ae3310  # timer validate callback
+00b20540 Read_00b20540  # herd pointer read
+00b02540 Read_00b02540  # hatch-target pointer read
+00ae3470 Read_00ae3470  # broken-timer read
+00ae3490 Write_00ae3490  # broken-timer write
+00bca960 Write_00bca960  # object-pointer write
+00ac8750 Read_00ac8750  # bool read
+00ac8780 Write_00ac8780  # bool write
+0057cde0 ToXml_0057cde0  # integer rows
+0057ce00 ToXml_0057ce00  # bool rows
+00ac8050 ToXml_00ac8050  # object-pointer rows
+00acbb80 ToXml_00acbb80  # float rows
