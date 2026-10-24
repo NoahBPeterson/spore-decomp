@@ -1,2 +1,4 @@
 # source  symbol  va  [flags]
 slices/s004553b0/s004553b0.cpp  Dot3  00455cc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004553b0/s004553b0.cpp  ?VectorPushBack3@SPVecFloat_s004553b0@@QAEXPAMABM@Z  00455660  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004553b0/s004553b0.cpp  ?VectorInsertU32@SPVecU32_s004553b0@@QAEXPAIABI@Z  004558a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

@@ -22,6 +22,15 @@ extern void  FUN_00456650(void* out, int s, float f);
 extern void* FUN_11e0744_alloc(unsigned int n);
 extern void  FUN_11e0744_copy(void* dst, void* src, int n);
 
+// eastl::vector<T, sp_vector_allocator> element moves: this module calls a statically linked
+// memcpy directly (0x011e0744) but memmove through the import table (call [__imp__memmove]).
+extern "C" void* __cdecl FUN_11e0744_memcpy(void*, const void*, unsigned int);   // 0x011e0744
+__declspec(dllimport) void __cdecl memmove(void*, const void*, unsigned int);
+void __cdecl FUN_00f47380_dealloc(void* block);                                  // 0x00f47380
+
+// Placement new, as the retail eastl code uses it (`::new(p) T(v)`).
+inline void* operator new(unsigned int, void* p) { return p; }
+
 // @ 0x00455cc0
 float Dot3(const Vec3* a, const Vec3* b) {
     return a->x * b->x + a->y * b->y + a->z * b->z;
@@ -253,18 +262,151 @@ void* VecInsert32(int* self, void* position, unsigned int count, void* value) {
     return position;
 }
 
-// @ 0x00455660 -- eastl::vector<Vector3>::push_back (approximation)
-void* VectorPushBack3(int* self, Vec3* value) {
-    if (self[1] == self[2]) {
-        // grow and append; outlined
-    }
-    return 0;
+// ---------------------------------------------------------------------------------------------
+// eastl::vector<T, sp_vector_allocator> plus the eastl helpers its DoInsertValue expands.
+// The helper text below mirrors the retail eastl headers (eastl/vector.h, algorithm.h, memory.h);
+// they are `inline`, so /Ob1 expands them into the two instantiations exactly as the retail did.
+// { T* mpBegin; T* mpEnd; T* mpCapacity; Allocator mAllocator; } with a 4-byte element type.
+// ---------------------------------------------------------------------------------------------
+
+template <typename T>
+inline T* eastl_copy(const T* first, const T* last, T* result) // copy_impl<true,RA>::do_copy (memcpy path)
+{
+    return (T*)FUN_11e0744_memcpy(result, first, (unsigned)last - (unsigned)first) + (last - first);
 }
 
-// @ 0x004558a0 -- eastl::vector<unsigned int>::DoInsertValue (approximation)
-void* VectorInsertU32(int* self, void* position, unsigned int value) {
-    (void)self; (void)position; (void)value;
-    return 0;
+template <typename T>
+inline T* eastl_uninitialized_copy_ptr(const T* first, const T* last, T* result)
+{
+    const bool bA = true;
+    T* p = eastl_copy(first, last, result);
+    const bool bB = true;
+    return p;
+}
+
+template <typename T>
+inline void eastl_copy_backward_impl(const T* first, const T* last, T* result) // copy_backward_impl<true,RA>
+{
+    memmove((T*)result - (last - first), first, (unsigned)last - (unsigned)first);
+}
+
+template <typename T>
+inline void eastl_copy_backward_chooser(const T* first, const T* last, T* result)
+{
+    const bool bHasTrivialCopy = true;
+    eastl_copy_backward_impl(first, last, result);
+}
+
+template <typename T>
+inline void eastl_copy_backward(const T* first, const T* last, T* result)
+{
+    const bool bInputIsGenericIterator  = false;
+    const bool bOutputIsGenericIterator = false;
+    eastl_copy_backward_chooser(first, last, result);
+}
+
+inline unsigned eastl_GetNewCapacity(unsigned currentCapacity) // VectorBase::GetNewCapacity
+{
+    // This needs to return a value of at least currentCapacity and at least 1.
+    return (currentCapacity > 0) ? (2 * currentCapacity) : 1;
+}
+
+template <typename T>
+inline T* eastl_DoAllocate(void* allocator, unsigned n) // VectorBase::DoAllocate
+{
+    // If n is zero, then we allocate no memory and just return NULL.
+    return n ? (T*)FUN_0042dee0(allocator, n * sizeof(T), 4, 0) : 0;
+}
+
+inline void eastl_sp_deallocate(void* p, unsigned n) // sp_vector_allocator::deallocate
+{
+    if (((int*)p)[-1]) { void* q = p; FUN_00f47380_dealloc(q); }
+}
+
+template <typename T>
+inline void eastl_DoFree(T* p, unsigned n) // VectorBase::DoFree
+{
+    if (p) eastl_sp_deallocate(p, n * sizeof(T));
+}
+
+struct SPVecFloat_s004553b0 {
+    float* mBegin;        // +0x00
+    float* mEnd;          // +0x04
+    float* mCapacity;     // +0x08
+    void*  mAllocator;    // +0x0c
+    void VectorPushBack3(float* position, const float& value);
+};
+
+struct SPVecU32_s004553b0 {
+    unsigned* mBegin;     // +0x00
+    unsigned* mEnd;       // +0x04
+    unsigned* mCapacity;  // +0x08
+    void*     mAllocator; // +0x0c
+    void VectorInsertU32(unsigned* position, const unsigned& value);
+};
+
+// @ 0x00455660
+void SPVecFloat_s004553b0::VectorPushBack3(float* position, const float& value)
+{
+    if (mEnd != mCapacity) // If size < capacity ...
+    {
+        // We need to take into account the possibility that value may come from within the vector itself.
+        const float* pValue = &value;
+        if ((pValue >= position) && (pValue < mEnd)) // If value comes from within the range to be moved...
+            ++pValue;
+        ::new(mEnd) float(*(mEnd - 1));
+        eastl_copy_backward(position, mEnd - 1, mEnd); // We need copy_backward because of potential overlap issues.
+        *position = *pValue;
+        ++mEnd;
+    }
+    else // else (size == capacity)
+    {
+        const unsigned nPrevSize = (unsigned)(mEnd - mBegin);
+        const unsigned nNewSize  = eastl_GetNewCapacity(nPrevSize);
+        float* const   pNewData  = eastl_DoAllocate<float>(&mAllocator, nNewSize);
+
+        float* pNewEnd = eastl_uninitialized_copy_ptr(mBegin, position, pNewData);
+        ::new(pNewEnd) float(value);
+        pNewEnd = eastl_uninitialized_copy_ptr(position, mEnd, ++pNewEnd);
+
+        eastl_DoFree(mBegin, (unsigned)(mCapacity - mBegin));
+
+        mBegin    = pNewData;
+        mEnd      = pNewEnd;
+        mCapacity = pNewData + nNewSize;
+    }
+}
+
+// @ 0x004558a0
+void SPVecU32_s004553b0::VectorInsertU32(unsigned* position, const unsigned& value)
+{
+    if (mEnd != mCapacity) // If size < capacity ...
+    {
+        // We need to take into account the possibility that value may come from within the vector itself.
+        const unsigned* pValue = &value;
+        if ((pValue >= position) && (pValue < mEnd)) // If value comes from within the range to be moved...
+            ++pValue;
+        ::new(mEnd) unsigned(*(mEnd - 1));
+        eastl_copy_backward(position, mEnd - 1, mEnd); // We need copy_backward because of potential overlap issues.
+        *position = *pValue;
+        ++mEnd;
+    }
+    else // else (size == capacity)
+    {
+        const unsigned nPrevSize = (unsigned)(mEnd - mBegin);
+        const unsigned nNewSize  = eastl_GetNewCapacity(nPrevSize);
+        unsigned* const pNewData = eastl_DoAllocate<unsigned>(&mAllocator, nNewSize);
+
+        unsigned* pNewEnd = eastl_uninitialized_copy_ptr(mBegin, position, pNewData);
+        ::new(pNewEnd) unsigned(value);
+        pNewEnd = eastl_uninitialized_copy_ptr(position, mEnd, ++pNewEnd);
+
+        eastl_DoFree(mBegin, (unsigned)(mCapacity - mBegin));
+
+        mBegin    = pNewData;
+        mEnd      = pNewEnd;
+        mCapacity = pNewData + nNewSize;
+    }
 }
 // --- equivalence checker address annotations
     void EASTL_allocator_deallocate(...); // 0x00f47380
