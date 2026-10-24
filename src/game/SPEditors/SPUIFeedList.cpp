@@ -248,15 +248,16 @@ void* FeedList::FUN_00662a20(uint32_t idx)
     uint32_t i = idx;
     void* result = 0;
     if (i < (uint32_t)(((int)m3c - (int)m38) >> 2))
-        result = m38[i];
+        result = (*(ElemA** volatile*)&m38)[i];
     return result;
 }
 
 // @ 0x00662a40
 void* FeedList::FUN_00662a40(int id)
 {
-    for (uint32_t i = 0; i < (uint32_t)(((int)m3c - (int)m38) >> 2); ++i)
-        if (*(int*)((char*)m38[i] + 0xb4) == id) return m38[i];
+    ElemA** begin = m38;
+    for (uint32_t i = 0; i < (uint32_t)(((int)(*(ElemA** volatile*)&m3c) - (int)begin) >> 2); ++i)
+        if (*(int*)((char*)begin[i] + 0xb4) == id) return begin[i];
     return 0;
 }
 
@@ -295,8 +296,8 @@ void FeedList::FUN_00662b40(void* objp)
         *(float*)&m14 = sum - fh;
     }
     float v = *(float*)&m14;
-    if (v < 0.0f) v = 0.0f;
-    if (v > m1c) v = m1c;
+    v = (v > 0.0f) ? v : 0.0f;
+    v = (v < m1c) ? v : m1c;
     *(float*)&m14 = v;
     m11 = true;
     SPUIHelpers_UpdateMouseFocus(1);
@@ -325,7 +326,7 @@ void FeedList::FUN_00662c70(void* objp)
     void* px = *(void**)((char*)objp + 0x90);
     if (!px) return;
     float r = *(float*)((char*)px + 0x2c);
-    float tmp[2];
+    float tmp[4];
     float* q = ((ObjX*)objp)->FUN_006665e0(tmp);
     float t = q[1] + r;
     float br = ((ObjX*)objp)->FUN_00c37480();
@@ -339,8 +340,8 @@ void FeedList::FUN_00662c70(void* objp)
         *(float*)&m14 = sum - fh;
     }
     float v = *(float*)&m14;
-    if (v < 0.0f) v = 0.0f;
-    if (v > m1c) v = m1c;
+    v = (v > 0.0f) ? v : 0.0f;
+    v = (v < m1c) ? v : m1c;
     *(float*)&m14 = v;
     m11 = true;
     SPUIHelpers_UpdateMouseFocus(1);
