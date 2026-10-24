@@ -2,9 +2,10 @@
 // Elements are pointers to nodes whose +0x24 dword is a priority kind
 // (rank: 2 -> 0, 9 -> 1, anything else -> 2).  /O2.
 //
-// Flags: /O2 /MD /Gy /TP
+// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 
 #include <math.h>
+#include <xmmintrin.h>
 
 typedef unsigned int   uint32_t;
 typedef unsigned char  uint8_t;
@@ -87,15 +88,21 @@ int FUN_00f078a0()
 int FUN_00f078b0(float* p, float scale)
 {
     float v = p[1];
-    if ((-scale <= v) && (v <= scale * 4.5f) && (-100.0f <= p[0]) && (p[0] <= 100.0f)) {
-        float n = (float)(int)(v / scale);
-        if (n < 0.0f)
-            n = 0.0f;
-        if (n > 4.0f)
-            n = 4.0f;
-        return (int)n;
-    }
-    return -1;
+    if (-scale > v)
+        return -1;
+    if (v > scale * 4.5f)
+        return -1;
+    if (-100.0f > p[0])
+        return -1;
+    if (p[0] > 100.0f)
+        return -1;
+    __m128 q = _mm_set_ss(v / scale);
+    q = _mm_cvtsi32_ss(q, _mm_cvtss_si32(q));
+    __m128 lo = _mm_setzero_ps();
+    __m128 hi = _mm_set_ss(4.0f);
+    q = _mm_max_ss(q, lo);
+    q = _mm_min_ss(q, hi);
+    return _mm_cvttss_si32(q);
 }
 
 // ---------------------------------------------------------------------------
@@ -119,25 +126,25 @@ float FUN_00f07960(float a, float b)
 // @ 0x00f079e0
 void FUN_00f079e0(Node** first, Node** last)
 {
-    if (first != last) {
-        Node** it = first + 1;
-        if (it != last) {
-            do {
-                Node* v = *it;
-                Node** q = it;
-                while (q != first) {
-                    int rv = Rank(v);
-                    int rp = Rank(q[-1]);
-                    if (rv > rp)
-                        break;
-                    *q = q[-1];
-                    --q;
-                }
-                *q = v;
-                ++it;
-            } while (it != last);
+    if (last == first)
+        return;
+    Node** it = first + 1;
+    if (last == it)
+        return;
+    do {
+        Node* v = *it;
+        Node** q = it;
+        while (q != first) {
+            int rv = Rank(v);
+            int rp = Rank(q[-1]);
+            if (rp < rv)
+                break;
+            *q = q[-1];
+            --q;
         }
-    }
+        *q = v;
+        ++it;
+    } while (it != last);
 }
 
 // ---------------------------------------------------------------------------
@@ -177,11 +184,11 @@ Node** FUN_00f07ae0(Node** a, Node** b, Node** c)
             return c;
     } else {
         Node* z = *c;
-        if (Rank(z) < Rank(y)) {
-            if (FUN_00f07770(x, z))
-                return a;
+        if (Rank(y) <= Rank(z))
+            return b;
+        if (FUN_00f07770(x, z))
             return c;
-        }
+        return a;
     }
     return b;
 }
@@ -209,7 +216,7 @@ char* FUN_00f07bd0(char* first, char* last, char* out)
 // 0x00f07c10  sift-up
 // ---------------------------------------------------------------------------
 // @ 0x00f07c10
-void FUN_00f07c10(Node** heap, int idx, int top, Node* v)
+void FUN_00f07c10(Node** heap, int top, int idx, Node* v)
 {
     if (idx <= top) {
         heap[idx] = v;
@@ -219,11 +226,10 @@ void FUN_00f07c10(Node** heap, int idx, int top, Node* v)
         int parent = (idx - 1) >> 1;
         Node* p = heap[parent];
         if (Rank(p) > Rank(v))
-            heap[idx] = p;
-        if (Rank(p) <= Rank(v))
             break;
+        heap[idx] = p;
         idx = parent;
-        if (top >= parent)
+        if (idx <= top)
             break;
     }
     heap[idx] = v;

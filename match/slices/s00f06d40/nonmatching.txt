@@ -1,8 +1,7 @@
-00f077c0  99  table lookup + kind switch; jump table differs. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (0 valid inputs)
-00f078b0  123  float->bucket; clamping/branch shape differs. flags /O2 /MD /Gy /TP; difftest FAIL (eax differs on some inputs)
-00f07960  77  x87 blend helper; x87 operand order differs. flags /O2 /MD /Gy /TP; difftest FAIL (st0 rounding)
-00f079e0  94  insertion sort; cl register allocation differs. flags /O2 /MD /Gy /TP; difftest WEAK
-00f07a60  115  insertion sort (forward shift); codegen differs. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (0 valid inputs)
-00f07ae0  215  choose-min-of-three; codegen differs. flags /O2 /MD /Gy /TP; difftest FAIL (return value)
-00f07c10  118  sift-up; codegen differs. flags /O2 /MD /Gy /TP; difftest FAIL (memory)
-
+# va  diff-bytes  reason   [flags + difftest verdict]
+00f077c0  99  table lookup + kind switch; jump table differs. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0 valid inputs)
+00f078b0  109  float->bucket; rewritten with SSE intrinsics to match the original's rounding: _mm_cvtss_si32 (cvtss2si, round-to-nearest), _mm_cvtsi32_ss (cvtsi2ss), _mm_max_ss with 0, _mm_min_ss with 4, _mm_cvttss_si32. Remaining diff: the original spills the __m128 through its 16-byte frame ([esp+8]/[esp+0xc]/[esp+0x10]) and keeps a frame pointer, ours keeps the value in xmm registers (169 vs 142 bytes). equiv PASS on replay. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00f079e0  96  insertion sort; behaviour now matches (the guard is written `last == first` / `last == it` so the early-out leaves eax = last, as the original does; the inner test is `Rank(q[-1]) < Rank(v)` = the original's `Rank(prev) < Rank(v)`). Remaining diff is register allocation (first in edx, original in ecx; it in ebx vs ebp). difftest WEAK (88/400 valid, 19.2% cov, no mismatch; most generated pointers fault). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00f07a60  115  insertion sort (forward shift); codegen differs. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0 valid inputs)
+00f07ae0  215  choose-min-of-three; branch 2 was wrong and is fixed: when Rank(y) >= Rank(x) it is `if (Rank(y) <= Rank(*c)) return b; if (FUN_00f07770(x,*c)) return c; return a;` (we previously compared Rank(*c) < Rank(y) and returned a/c swapped), branch 1 is unchanged. Codegen still differs (196 vs 231 bytes). equiv PASS on replay. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00f07c10  118  sift-up; parameter order corrected to (heap, top, idx, v) - the original tests idx <= top and writes heap[idx] = v on both exits; the loop now tests Rank(p) > Rank(v) and breaks before the store (it previously stored and then broke) and re-tests idx <= top after moving to the parent. Codegen still differs (109 vs 121 bytes). equiv PASS on replay. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
