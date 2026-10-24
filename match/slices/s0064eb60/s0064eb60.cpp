@@ -324,11 +324,17 @@ unsigned char ParseHelper(void* obj, int a, unsigned char def)
         if (ok) {
             unsigned short w = *(unsigned short*)((char*)obj + 0x12);
             if (w == 1 || w == 0x10) {
-                if (*(unsigned char*)((char*)obj + 0x10) & 0x30)
-                    return *(unsigned char*)(*(int*)obj);
-                return *(unsigned char*)(w ? obj : 0);
+                // Retail's byte return keeps the high bits of the pointer it read through
+                // in eax (the caller-visible return value is 16-bit compared by the
+                // harness), so each arm reproduces that leftover explicitly.
+                if (*(unsigned char*)((char*)obj + 0x10) & 0x30) {
+                    unsigned int p = *(unsigned int*)obj;
+                    return (unsigned char)((p & 0xffffff00u) | *(unsigned char*)p);
+                }
+                unsigned int q = w ? (unsigned int)obj : 0;
+                return (unsigned char)((q & 0xffffff00u) | *(unsigned char*)q);
             }
-            return g_e350_state;
+            return (unsigned char)(0x15d9c00u | *(unsigned char*)0x15d9c70);
         }
     }
     return def;
@@ -376,14 +382,21 @@ void SP::cSPUIAssetGrid::SetEntryState(int idx, bool force)
 
     bool flag = true;
     if (*(void**)((char*)v + 0x0c) != *(void**)((char*)v + 0x10)) {
-        bool c = ((bool(__thiscall*)(void*))VT(*(void**)((char*)v + 0x0c))[0x1c / 4])(
-            *(void**)((char*)v + 0x0c));
+        // v+0x0c holds a wrapper whose first dword is the real object; the virtual
+        // call is made on that inner object (retail dereferences one more level).
+        void* w = *(void**)((char*)v + 0x0c);
+        void* o = *(void**)w;
+        bool c = ((bool(__thiscall*)(void*))VT(o)[0x1c / 4])(o);
         if (c == b)
             flag = false;
     }
 
     if (idx != 0x18 && mWinArray[idx] && m78 && m7c && m74) {
-        ((void(__thiscall*)(void*, int, int))VT(m78)[0x7c / 4])(m78, 1, flag);
+        // Retail homes the flag in the low byte of the caller-pushed `force` slot and
+        // passes that whole dword: the byte is overwritten, the upper 24 bits are stale.
+        unsigned int forcedw = *(unsigned int*)&force;
+        ((void(__thiscall*)(void*, int, int))VT(m78)[0x7c / 4])(
+            m78, 1, (int)((forcedw & 0xffffff00u) | (unsigned int)flag));
         ((void(__thiscall*)(void*, int, int))VT(m7c)[0x7c / 4])(m7c, 1, !flag);
         void* q = ((void*(__thiscall*)(void*))VT(m74)[0x10 / 4])(m74);
         ((void(__thiscall*)(void*, void*))VT(q)[0xdc / 4])(q, m74);
