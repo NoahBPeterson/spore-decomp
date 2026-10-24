@@ -2019,7 +2019,7 @@ void C20::grow(T20* pos, const T20& v)
 {
     T20* e = end;
     if (e != cap) {
-        T20* src = pos;
+        T20* src = (T20*)&v;
         if (pos <= &v && &v < e)
             src = (T20*)((char*)&v + 0x20);
         if (e) {
@@ -2027,7 +2027,7 @@ void C20::grow(T20* pos, const T20& v)
             e->e = e[-1].e; e->f = e[-1].f; e->g = e[-1].g; e->h = e[-1].h;
         }
         MoveNodes2(pos, (char*)e - 0x20, e);
-        *pos = v;
+        *pos = *src;
         end = (T20*)((char*)e + 0x20);
         return;
     }
@@ -2171,14 +2171,14 @@ void C20::AddNode(int a, int b)
 // @ 0x007b1040
 void C20::resize(int n)
 {
-    int cnt = (int)(end - begin);
-    if (n > cnt) {
+    unsigned cnt = (unsigned)(end - begin);
+    if ((unsigned)n > cnt) {
         T20 tmp;
-        InsertN(end, n - cnt, &tmp);
+        InsertN(end, (unsigned)(n - cnt), &tmp);
     } else {
         T20* ne = begin + n;
         RemoveIf(end, end, ne);
-        end = (T20*)((char*)end - ((char*)end - (char*)ne));
+        end -= (end - ne);
     }
 }
 
