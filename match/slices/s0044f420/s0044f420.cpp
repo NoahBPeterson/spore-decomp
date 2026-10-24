@@ -1,20 +1,20 @@
 // slice s0044f420 -- cSPEditorBlock split / rebuild driver.
-// /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast module.  Not byte-exact.
+// Flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- module.  Not byte-exact.
 #include "types.h"
 
-struct AutoRefBlockVec { unsigned int w[15]; };   // 0x3c-byte local
+struct Vector3 { float v[3]; };
+
+struct AutoRefBlockVec {
+    unsigned int w[15];            // 0x3c-byte local
+    void Ctor(const char* name);   // 0x00540470
+    void Func();                   // 0x00453770
+    void Dtor();                   // 0x00453eb0
+};
 
 struct cSPEditorBlock;
-extern void VecCtor(AutoRefBlockVec* v, const char* name);   // 0x00540470
-extern void VecFunc(AutoRefBlockVec* v);                     // 0x00453770
-extern void VecDtor(AutoRefBlockVec* v);                     // 0x00453eb0
-extern void FUN_0043f230(cSPEditorBlock* block, cSPEditorBlock* self);
-extern bool FUN_004adc40(void* p);
-extern void FUN_004388b0(void* p, cSPEditorBlock* block);
-extern char FUN_004a7e60(void* p);
-extern void TrackerGetOffsetA(cSPEditorBlock* self, float* out, int one);  // 0x00438120
-extern void TrackerGetOffsetB(cSPEditorBlock* self, float* out, int one);  // 0x004381e0
-extern void TrackerPlace(cSPEditorBlock* self, float* a, float* b);        // 0x00437b00
+struct ModelObj {
+    bool FUN_004adc40();           // 0x004adc40
+};
 extern const float g_negOne;   // 0x013eb1bc = -1.0f
 
 struct cSPEditorBlock {
@@ -41,7 +41,13 @@ struct cSPEditorBlock {
 
     int  CalculateSymmetrySign();                 // 0x0044f240
     void SetFlag(int id, int value);              // 0x00435a10
-    cSPEditorBlock* BuildBlock(int type, AutoRefBlockVec& a, AutoRefBlockVec& b); // 0x0044f7c0
+    void FUN_0043f230(cSPEditorBlock* self);      // 0x0043f230
+    void FUN_004388b0(cSPEditorBlock* block);     // 0x004388b0
+    char FUN_004a7e60(cSPEditorBlock* self);      // 0x004a7e60
+    void TrackerGetOffsetA(float* out, int one);  // 0x00438120
+    void TrackerGetOffsetB(float* out, int one);  // 0x004381e0
+    void TrackerPlace(Vector3 a, Vector3 b);      // 0x00437b00
+    cSPEditorBlock* BuildBlock(int type, cSPEditorBlock* src, AutoRefBlockVec& a, AutoRefBlockVec& b); // 0x0044f7c0
     void FUN_00448e90(void* p, int a);            // 0x00448e90
     void FUN_00449420(void* p, int a);            // 0x00449420
 
@@ -56,15 +62,15 @@ cSPEditorBlock* cSPEditorBlock::Split(int type) {
     nameB[0] = 0;
 
     AutoRefBlockVec vA;
-    VecCtor(&vA, nameA);
-    VecFunc(&vA);
+    vA.Ctor(nameA);
+    vA.Func();
     AutoRefBlockVec vB;
-    VecCtor(&vB, nameB);
-    VecFunc(&vB);
+    vB.Ctor(nameB);
+    vB.Func();
 
-    cSPEditorBlock* nb = BuildBlock(type, vA, vB);
+    cSPEditorBlock* nb = BuildBlock(type, this, vA, vB);
     if (nb != 0) {
-        FUN_0043f230(nb, this);
+        nb->FUN_0043f230(this);
         if (type == 2 || type == 3) {
             FUN_00448e90((char*)this + 0x48, 0);
             FUN_00449420((char*)this + 0xa8, 0);
@@ -73,36 +79,36 @@ cSPEditorBlock* cSPEditorBlock::Split(int type) {
                 cSPEditorBlock* sc = mSocket;
                 if (sc != 0) {
                     cSPEditorBlock* linked = sc->mLinked;
-                    if (linked != 0 && FUN_004adc40(mModel)) {
-                        FUN_004388b0(sc->mLinked, nb);
+                    if (linked != 0 && ((ModelObj*)mModel)->FUN_004adc40()) {
+                        sc->mLinked->FUN_004388b0(nb);
                     } else {
-                        if (FUN_004a7e60(mSocket))
-                            FUN_004388b0(mSocket, nb);
+                        if (mSocket->FUN_004a7e60(mSocket))
+                            mSocket->FUN_004388b0(nb);
                         else
-                            FUN_004388b0(mSocket, nb);
+                            mSocket->FUN_004388b0(nb);
                     }
                 }
             }
             bool f = GetFlag(0xc);
             nb->SetFlag(0xc, f ? 1 : 0);
             if (type == 3) {
-                float a[3];
-                float b[3];
-                TrackerGetOffsetA(this, a, 1);
-                a[0] = a[0] * g_negOne;
-                TrackerGetOffsetB(this, b, 1);
-                b[0] = b[0] * g_negOne;
-                TrackerPlace(nb, b, a);
+                Vector3 a;
+                Vector3 b;
+                TrackerGetOffsetA(a.v, 1);
+                a.v[0] = a.v[0] * g_negOne;
+                TrackerGetOffsetB(b.v, 1);
+                b.v[0] = b.v[0] * g_negOne;
+                nb->TrackerPlace(b, a);
             } else {
-                float b[3];
-                float a[3];
-                TrackerGetOffsetB(this, b, 1);
-                TrackerGetOffsetA(this, a, 1);
-                TrackerPlace(nb, a, b);
+                Vector3 b;
+                Vector3 a;
+                TrackerGetOffsetB(b.v, 1);
+                TrackerGetOffsetA(a.v, 1);
+                nb->TrackerPlace(a, b);
             }
         }
     }
-    VecDtor(&vB);
-    VecDtor(&vA);
+    vB.Dtor();
+    vA.Dtor();
     return nb;
 }

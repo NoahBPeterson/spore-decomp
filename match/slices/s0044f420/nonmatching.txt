@@ -1,1 +1,1 @@
-0044f420  746  Split: /Od local frames, inlined eastl::vector<> ctor/dtor and the refcount socket handling not reproduced
+0044f420  744  Split: fixed all call ABIs (vector Ctor/Func/Dtor as thiscall members, CloneBlock(type,this,&vA,&vB) with the missing root arg, FUN_0043f230/FUN_004388b0/FUN_004a7e60/Tracker*/Model calls as thiscall); replay None; fresh equiv WEAK 242/400 valid (slice) and 257/400 (--src), 17.8% coverage, 0 mismatches (post-CloneBlock body not reached when random CloneBlock returns null); residual /Od frame/inlining schedule (860 vs 925 B)
