@@ -1,0 +1,14 @@
+slices/s009c8a90/s009c8a90.cpp  ?FUN_009c90d0@cEffectBlockCommand@@QAEXPAVcArguments@ArgScript@EA@@@Z  009c90d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s009c8a90/s009c8a90.cpp  ?FUN_009c9130@cEffectBlockCommand@@QAEXPAVcArguments@ArgScript@EA@@@Z  009c9130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s009c8a90/s009c8a90.cpp  ?FUN_009c9170@cEffectBlockCommand@@QAEXPAVcArguments@ArgScript@EA@@@Z  009c9170  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s009c8a90/s009c8a90.cpp  ?FUN_009c9200@cEffectBlockCommand@@QAEXPAVcArguments@ArgScript@EA@@@Z  009c9200  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s009c8a90/s009c8a90.cpp  ?FUN_009c9230@cEffectBlockCommand@@QAEXPAVcArguments@ArgScript@EA@@@Z  009c9230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s009c8a90/s009c8a90.cpp  ?FUN_009c9260@cEffectBlockCommand@@QAEXPAVcArguments@ArgScript@EA@@@Z  009c9260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s009c8a90/s009c8a90.cpp  ?FUN_009c92e0@cEffectBlockCommand@@QAEXPAVcArguments@ArgScript@EA@@@Z  009c92e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s009c8a90/s009c8a90.cpp  ?FUN_009c9340@cEffectBlockCommand@@QAEXPAVcArguments@ArgScript@EA@@@Z  009c9340  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s009c8a90/s009c8a90.cpp  ?FUN_009c93c0@cEffectBlockCommand@@QAEXPAVcArguments@ArgScript@EA@@@Z  009c93c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s009c8a90/s009c8a90.cpp  ?FUN_009c9460@cEffectBlockCommand@@QAEXPAVcArguments@ArgScript@EA@@@Z  009c9460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s009c8a90/s009c8a90.cpp  ?FUN_009c94c0@cEffectBlockCommand@@QAEXPAVcArguments@ArgScript@EA@@@Z  009c94c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s009c8a90/s009c8a90.cpp  ?FUN_009c95e0@cEffectBlockCommand@@QAEXPAVcArguments@ArgScript@EA@@@Z  009c95e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s009c8a90/s009c8a90.cpp  ?FUN_009c9650@cEffectBlockCommand@@QAEXPAVcArguments@ArgScript@EA@@@Z  009c9650  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s009c8a90/s009c8a90.cpp  ??1creature_effect@nSPCreatureAnim@@QAE@XZ  009c9870  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
