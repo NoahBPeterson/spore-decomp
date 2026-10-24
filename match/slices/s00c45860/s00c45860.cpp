@@ -63,7 +63,9 @@ struct MissionPropList {
 // cEmpire / cPlanet-ish surfaces.
 // ---------------------------------------------------------------------------
 struct cEntity {
-    u32 pad000[0x21];        // 0x00
+    u32 pad000[0x15];        // 0x00
+    u32 mRelation;           // 0x54
+    u32 pad058[0xb];         // 0x58
     u32 mEmpireID;           // 0x84
     u32 GetWeaponryLevel();  // 0x00c317a0
     u8  EmpireCommAllowed(void* planetClue);  // 0x00c308e0
@@ -182,7 +184,7 @@ class cSPMission {
     void  UpdateStarMapEffects(u8 useZero);// 0x00c45e10
     u8    IsTutorialMission();              // 0x00c45f80
     void  UpdateHints(u8 param);            // 0x00c45f90
-    u8    CanShowOnMap();                   // 0x00c460f0
+    bool  CanShowOnMap();                   // 0x00c460f0
     u32   HasValidDescription();            // 0x00c46120
     void  RemoveToolVector194();            // 0x00c46160
     void  RemoveToolVector1bc();            // 0x00c461d0
@@ -292,20 +294,17 @@ f32 cSPMission::GetRewardRelation()
     u32 relation = 0;
     cEntity* owner = (cEntity*)GetOwnerEmpire();
     if (owner != 0)
-        relation = owner->mEmpireID;
+        relation = owner->mRelation;
     f32 result = 0.0f;
     if (mpMissionPropList == 0)
         return result;
     u32 key = 0x6fa6f0f4;
-    if (relation == 1)
-        key = 0x5cf5e5e0;
-    else if (relation == 2)
-        key = 0xaef74c9a;
-    else if (relation == 3)
-        key = 0xe3833365;
     MissionPropList* list = (MissionPropList*)mpMissionPropList;
-    if (list->HasProperty(key))
-        key = key;
+    if (relation >= 1 && relation <= 3) {
+        u32 alt = relation == 1 ? 0x5cf5e5e0 : (relation == 2 ? 0xaef74c9a : 0xe3833365);
+        if (list->HasProperty(alt))
+            key = alt;
+    }
     if (list->HasProperty(key) && mpMissionPropList != 0) {
         cProperty* prop = 0;
         if (list->GetProperty(key, &prop) && prop->mType == 0xd) {
@@ -386,7 +385,7 @@ u32 cSPMission::ReadTargetAnimalSpeciesType()
 u8 cSPMission::ReadPickClosestStar()
 {
     if (mpMissionPropList != 0) {
-        cProperty* prop = 0;
+        cProperty* prop;
         if (((MissionPropList*)mpMissionPropList)->GetProperty(0x1f707857, &prop) &&
             prop->mType == 1)
             return *prop->GetBool();
@@ -435,8 +434,7 @@ void cSPMission::SetOwnerEmpire(cEntity* empire)
 // @ 0x00c45d80
 u32 cSPMission::IsTargetPlanetClue(u32 clue)
 {
-    if (mpTargetPlanet != 0 &&
-        *(u32*)((char*)mpTargetPlanet->mpPlanetClue + 0x13c) == clue)
+    if (mpTargetPlanet != 0 && (u32)mpTargetPlanet->mpPlanetClue == clue)
         return 1;
     return 0;
 }
@@ -478,8 +476,7 @@ void cSPMission::UpdateStarMapEffects(u8 useZero)
     cGameTimeManager* gt = GameTimeManager();
     u64 time = gt->GetTime();
     u64 rem = aullrem(time, 1000);
-    f32 frac = (f32)(i64)(rem & 0x7fffffffffffffffULL);
-    frac = frac * g_oneHalf;
+    f32 frac = (f32)((double)rem * g_oneHalf);
 
     if (mStarMapIconEffect != 0xffffffff) {
         f32 v = useZero != 0 ? g_defaultHintValue : frac;
@@ -527,7 +524,7 @@ u8 cSPMission::IsTutorialMission()
 void cSPMission::UpdateHints(u8 param)
 {
     if (mpMissionPropList != 0) {
-        cProperty* prop = 0;
+        cProperty* prop;
         if (((MissionPropList*)mpMissionPropList)->GetProperty(0x5590946, &prop)) {
             if (prop->mType == 1 && *prop->GetBool() == 0)
                 return;
@@ -568,7 +565,7 @@ void cSPMission::UpdateHints(u8 param)
         } else {
             e3 = 0xffffffff;
         }
-        u32 key = param != 0 ? 0xa789391d : (0x88d110f9 + 0xa789391d);
+        u32 key = (param != 0 ? 0x88d110f9 : 0) + 0xa789391d;
         void* ctx3 = mpSourcePlanet->mpPlanetClue->GetCommContext();
         CommManager()->Add(e3, (u32)ctx3, 0xc8fbf7d7, key, 0, 1, 0x493e0);
     }
@@ -578,14 +575,14 @@ void cSPMission::UpdateHints(u8 param)
 // 0x00c460f0 - SP::cSPMission::CanShowOnMap
 // ---------------------------------------------------------------------------
 // @ 0x00c460f0
-u8 cSPMission::CanShowOnMap()
+bool cSPMission::CanShowOnMap()
 {
     u32 flags = mFlags130;
     u32 bit5 = flags >> 5;
     if ((bit5 & 1) != 0) {
         u32 bit6 = flags >> 6;
         if ((bit6 & 1) == 0)
-            return 0;
+            return false;
     }
     u8 r = (*(u8(__thiscall**)(void*))((char*)*(void**)this + 0xf8))(this);
     bool b = (r == 0);
