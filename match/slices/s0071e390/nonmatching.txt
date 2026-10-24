@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-0071e7a0  17   FillN(first,n,value) with a null guard: complete; cl hoists the n test before the first-pointer load and uses sub/jne instead of dec/ja
+0071e7a0  8    FillN(first,n,value) with a null guard: complete; writing the null check first made cl test n before touching first, so retail's leftover eax (=first) did not match on the n==0 exit; hoisting `int* p = first;` above an `if (n == 0) return;` makes cl load first into eax before the test like the original. Remaining 8 bytes: jbe vs je on the initial test and dec/test/ja vs sub/jne in the loop. flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast [equiv: PASS 326/400 valid, 100% coverage]
 0071e390  370  SP::WriteMesh: complete stream writer; frame/local layout (byte buffer slot) differs from original
 0071e600  338  budget walk over primitives with inline AutoRefCount assign: complete; type range test compiles to unsigned-range trick and regalloc differs
 0071e7d0  143  Rec20 range assignment with refcounted member: complete; original strength-reduces src/dest pointers and spills the old pointer; difftest still UNSUPPORTED: 0 valid inputs (random first/last never form a 0x20-stride range, every input faults or loops); added the // @ 0x0071e7d0 marker so the symbol is found
