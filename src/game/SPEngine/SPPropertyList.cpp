@@ -97,6 +97,9 @@ struct Variant_s006a_11b0 {
   eastl::basic_string8* GetString8();
   eastl::basic_string16* GetString16();
 };
+EA::Variant_s006a_11b0& __fastcall VariantAssignCopy_s006a_11b0(
+    EA::Variant_s006a_11b0* self, int reserved,
+    const EA::Variant_s006a_11b0& o);  // 0x00542b80
 }
 namespace eastl {
 struct allocator_s006a_11b0 {};
@@ -195,8 +198,12 @@ bool WriteUint32(IStream* stream, const void* pData, unsigned int count, int fla
 }
 }
 bool WriteVariant(EA::IO::IStream* stream, EA::Variant_s006a_11b0* value, int flags);
-VariantPair* PairsRealloc(unsigned int n, VariantPair* first, VariantPair* last);
-void PairsDestroy(VariantPair* first, VariantPair* last);
+VariantPair* __fastcall PairsRealloc(void* self, int reserved, unsigned int n,
+                                     VariantPair* first, VariantPair* last);  // 0x006a1d80
+void __fastcall PairsDestroy(void* self, int reserved, VariantPair* first,
+                            VariantPair* last);  // 0x00685a30
+VariantPair* UninitializedCopyPairs(VariantPair* first, VariantPair* last,
+                                    VariantPair* dest);  // 0x00612b20
 VariantPair* PairsUninitMoveStart(VariantPair** dest, VariantPair* first,
                                   VariantPair* last, VariantPair* out);
 VariantPair* PairsFillN(VariantPair* dest, unsigned int n, const VariantPair& value);
@@ -735,15 +742,17 @@ VariantPair* PairsUninitMoveStart(VariantPair** dest, VariantPair* first, Varian
 // @ 0x006a1b00
 VariantPair* PairsFillN(VariantPair* dest, unsigned int n, const VariantPair& value)
 {
+  uint32_t result = 0xffffffffu;
   for (; n != 0; --n, ++dest) {
     if (dest) {
       dest->first = value.first;
       dest->second.mFlags = 0;
       dest->second.mTypeId = 0;
-      dest->second = value.second;
+      VariantAssignCopy_s006a_11b0(&dest->second, 0, value.second);
+      result = (uint32_t)&dest->second;
     }
   }
-  return dest;
+  return (VariantPair*)result;
 }
 
 // @ 0x006a1b90
@@ -806,11 +815,10 @@ eastl::pvector& eastl::pvector::operator=(const eastl::pvector& x)
   if (this == &x) return *this;
 
   const unsigned int n = x.size();
-  const unsigned int cur = size();
 
   if (n > capacity()) {
-    VariantPair* p = PairsRealloc(n, x.mpBegin, x.mpEnd);
-    PairsDestroy(mpBegin, mpEnd);
+    VariantPair* p = PairsRealloc(this, 0, n, x.mpBegin, x.mpEnd);
+    PairsDestroy(this, 0, mpBegin, mpEnd);
     if (mpBegin) EA::Allocator::ZoneObject::operator delete(mpBegin);
     mpCapacity = p + n;
     mpBegin = p;
@@ -818,18 +826,17 @@ eastl::pvector& eastl::pvector::operator=(const eastl::pvector& x)
     return *this;
   }
 
-  if (cur < n) {
-    for (unsigned int i = 0; i < cur; ++i)
-      mpBegin[i] = x.mpBegin[i];
+  const unsigned int cur = size();
+  if (n > cur) {
+    UninitializedCopyPairs(x.mpBegin, x.mpBegin + cur, mpBegin);
     VariantPair* dest = mpEnd;
     PairsUninitMoveStart(&dest, x.mpBegin + cur, x.mpEnd, mpEnd);
     mpEnd = mpBegin + n;
     return *this;
   }
 
-  for (unsigned int i = 0; i < n; ++i)
-    mpBegin[i] = x.mpBegin[i];
-  PairsDestroy(mpBegin + n, mpEnd);
+  UninitializedCopyPairs(x.mpBegin, x.mpEnd, mpBegin);
+  PairsDestroy(this, 0, mpBegin + n, mpEnd);
   mpEnd = mpBegin + n;
   return *this;
 }
@@ -844,13 +851,13 @@ void eastl::pvector::DoInsertValues(VariantPair* position, unsigned int n, const
 
   // Complete (reallocating) insertion: build the new sequence in a fresh buffer.
   const unsigned int newCap = cur + n;
-  VariantPair* p = PairsRealloc(newCap, mpBegin, mpEnd);
+  VariantPair* p = PairsRealloc(this, 0, newCap, mpBegin, mpEnd);
   VariantPair* dest = p;
   PairsUninitMoveStart(&dest, mpBegin, mpBegin + idx, p);
   PairsFillN(p + idx, n, value);
   VariantPair* dest2 = p + idx + n;
   PairsUninitMoveStart(&dest2, mpBegin + idx, mpEnd, p + idx + n);
-  PairsDestroy(mpBegin, mpEnd);
+  PairsDestroy(this, 0, mpBegin, mpEnd);
   if (mpBegin) EA::Allocator::ZoneObject::operator delete(mpBegin);
   mpBegin = p;
   mpEnd = p + cur + n;
