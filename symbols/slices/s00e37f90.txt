@@ -1,0 +1,7 @@
+00e37f90 ?GetKeyPair@Timeline@@QAE?AUVector2@@IH@Z  # UI::Vector2 Timeline::GetKeyPair(uint, int)
+00e38020 ?ClipTracks@Timeline@@QAE_NPAUVector2@@000_N@Z  # bool Timeline::ClipTracks(Vector2*, Vector2*, Vector2*, Vector2*, bool)
+00e38240 ?UpdateCard@TimelineCards@@QAEXXZ  # void Timeline::UpdateSporepediaCard()
+00e38450 ?Layout@TimelineCards@@QAEXXZ  # void Timeline::Layout()
+00e389e0 ?AnimateIcon@TimelineCards@@QAEXXZ  # void Timeline::AnimateIcon()
+00e38bb0 ?StepBack@Timeline@@QAE_NXZ  # bool Timeline::StepBack()
+00e38c90 ?Step@Timeline@@QAE_NXZ  # bool Timeline::Step()
