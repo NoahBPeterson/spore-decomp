@@ -3,4 +3,4 @@
 007a6870 ?GetBufferTexture@cGraphicsSystem@@QAEPAXHD@Z  # cGraphicsSystem::GetBufferTexture migrated from s007a62c0 (verbatim, slice spelling)
 007a68c0 ?GetBufferRectID@cGraphicsSystem@@QAEXHPAUBufferRect@@D@Z  # cGraphicsSystem::GetBufferRectID migrated from s007a62c0 (verbatim, slice spelling)
 007a6910 ?InsertAt@ModelVector@@QAEXPAX0@Z  # ModelVector::InsertAt migrated from s007a62c0 (verbatim, slice spelling)
-007a6b40 ?Shutdown@cGraphicsSystem@@QAEPAXXZ  # cGraphicsSystem::Shutdown migrated from s007a62c0 (verbatim, slice spelling)
+007a6b40 ?Shutdown@cGraphicsSystem@@QAE_NXZ  # cGraphicsSystem::Shutdown migrated from s007a62c0 (returns bool: the original ends with mov al,1)
