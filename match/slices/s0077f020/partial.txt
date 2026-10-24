@@ -7,5 +7,5 @@
 0077f980  -  stub only; global raster-stage dirty flags setup not reproduced
 0077fa70  -  skeleton only; body not reproduced
 0077fb10  -  skeleton only; body not reproduced
-0077fbb0  -  skeleton only; body not reproduced
+0077fbb0  439  shadow gradient builder reconstructed: manager create/release handle, refcount validation, Raster::Lock/Unlock and the 64x2 sin/cos gradient; equiv WEAK (247 valid, 43.1% coverage, 0 mismatches) because random inputs make Lock return 0; remaining byte diff is the SEH frame, x87/SSE schedule and 131-byte size difference
 0077fde0  -  skeleton only; body not reproduced
