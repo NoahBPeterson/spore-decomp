@@ -1,2 +1,3 @@
 00599c40 SP::cSPEditorVerbIcon::SetupTooltip  # PDB caller-scored candidate cSPEditorVerbIcon::DoMessage; fills the verb tooltip (name, title, category, description) from property lists
+0059a230 ?ScalarDelete@cSPUIWindowAnimation@@QAEPAXI@Z  # retail's compiler-generated ??_G (virtual dtor 0059a1e0); reconstructed as a named member so the two vtable stores can be modelled
 0059ac00 WrapAngle  # fmod(a, 2*pi) wrapped into [-pi, pi], byte-exact

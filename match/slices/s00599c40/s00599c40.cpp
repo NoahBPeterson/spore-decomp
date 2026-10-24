@@ -200,8 +200,13 @@ public:
     int mType;
     cSPUIAnimTarget mTarget;
     uint32_t mParams[(0x80 - 0x10) / 4];
+
+    void* ScalarDelete(unsigned int flags);  // the compiler-generated ??_G body, modelled by hand
 };
-cSPUIWindowAnimation SPUICreateWindowAnimationTargetSize(IWindow* window, const Vector2& size, float duration);   // 0x007f8230
+// Retail builds the animation into an out-parameter and returns it: (target, window, size,
+// startTime, duration, flags); the mangled name is ...YAPAUAnimRaw@@PAU1@PAXIMMH@Z.
+void* SPUICreateWindowAnimationTargetSize(void* target, IWindow* window, const Vector2* size,
+                                          float startTime, float duration, int flags);   // 0x007f8230
 
 class cSPUIAnimator {
 public:
@@ -213,7 +218,7 @@ public:
     void Update();                                                          // 0x007f63b0
 };
 
-namespace SPUIHelpers { float GetElapsedSeconds(float seconds, int flags); }   // 0x00805080
+namespace SPUIHelpers { float GetElapsedSeconds(); }   // 0x00805080
 
 class cString {
 public:
@@ -299,6 +304,9 @@ public:
 };
 
 extern const wchar_t kVerbTitleSeparator[];                                 // 0x013f639c
+// The two vtables MSVC writes into the animation object (cSPUIWindowAnimation / cSPUIAnimTarget).
+extern char g_animTargetVtbl[];                                             // 0x013f6400
+extern char g_animTargetVtbl2[];                                            // 0x013f63fc
 
 // ---------------------------------------------------------------------------------------------
 class cEditorPanelBase0 {
@@ -490,8 +498,20 @@ cSPUIWindowAnimation::~cSPUIWindowAnimation()
 {
 }
 
+// Retail emits the next function as the compiler-generated scalar deleting destructor ??_G of the
+// virtual dtor above; it is written out as a named member so the vtable addresses it stores can be
+// modelled.
 // @ 0x0059a230
-// (scalar deleting destructor of cSPUIWindowAnimation, generated from the virtual dtor above)
+void* cSPUIWindowAnimation::ScalarDelete(unsigned int flags)
+{
+    *(void**)this = (void*)g_animTargetVtbl;
+    *(void**)((char*)this + 8) = (void*)g_animTargetVtbl2;
+    if (mTarget.mpWindow)
+        mTarget.mpWindow->Release();
+    if (flags & 1)
+        operator delete(this);
+    return this;
+}
 
 // @ 0x0059a270
 cEditorBudgetPanel::cEditorBudgetPanel()
@@ -555,7 +575,9 @@ void cEditorBudgetPanel::Update(float deltaTime)
         size.x = mValue / (mMaxValue + kBarEpsilon) * mBarWidth;
         size.y = mBarHeight;
         mbReset = false;
-        cSPUIWindowAnimation anim = SPUICreateWindowAnimationTargetSize(bar, size, SPUIHelpers::GetElapsedSeconds(kBarResetSeconds, 0));
+        cSPUIWindowAnimation anim;
+        SPUICreateWindowAnimationTargetSize(&anim, bar, &size, SPUIHelpers::GetElapsedSeconds(),
+                                            kBarResetSeconds, 0);
         mAnimator.AddAnimation(&anim, bar, 1);
     } else if (!mAnimator.HasAnimation(bar, 1)) {
         if (mValue < mMaxValue) {
