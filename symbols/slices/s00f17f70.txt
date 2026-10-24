@@ -1,0 +1,6 @@
+00f18660 ?Show@cSPUIProgress@@QAEXPAUPanelIface@@@Z  # reconstructed, nonmatching
+00f18970 ?HandleMessage@PanelHandlerBase@@UAE_NIPAX@Z  # reconstructed, nonmatching
+00f18a00 ?SetValue@cScenarioPlayProgressBar@UI@@QAEXM@Z  # reconstructed, nonmatching
+00f18a50 ?SetWindow@cScenarioPlayProgressBar@UI@@QAEXPAUIWinContainer@@@Z  # reconstructed, nonmatching
+00f18d60 ?Clear@cScenarioPlayProgressBar@UI@@QAEXXZ  # byte-exact
+00f18dc0 ?Update@cScenarioPlayProgressBar@UI@@QAEXI@Z  # reconstructed, nonmatching
