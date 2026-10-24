@@ -600,21 +600,27 @@ void DistributeParticles_OnEndParse(int param_1)
 void cDistributeCmd::SpacingExecute(cArguments_s0052_f170* args)
 {
     int param_1 = (int)this;
-    void** p = (void**)cArguments_s0052_f170::MainArguments(args, 1);
-    VFnI fn = *(VFnI*)(*(int*)(param_1 + 4) + 0x98);
-    float v = (float)fn((void*)*(int*)(param_1 + 4), *p);
+    typedef void* (__thiscall *MainArgsFn)(void*, int);
+    typedef unsigned char (__thiscall *HasFlagFn)(void*, const char*);
+    void** p = (void**)((MainArgsFn)0x00838320)(args, 1);
+    void* obj = *(void**)(param_1 + 4);
+    typedef float (__thiscall *VFnF)(void*, void*);
+    VFnF fn = (VFnF)(*(void***)obj)[0x98 / 4];
+    float v = fn(obj, *p);
     *(float*)(*(int*)(param_1 + 0xc) + 0x54) = v;
-    *(unsigned char*)(*(int*)(param_1 + 0xc) + 0x72) = cArguments_s0052_f170::HasFlag(args, "cover");
-    *(unsigned char*)(*(int*)(param_1 + 0xc) + 0x73) = cArguments_s0052_f170::HasFlag(args, "ordered");
+    *(unsigned char*)(*(int*)(param_1 + 0xc) + 0x72) = ((HasFlagFn)0x008380b0)(args, "cover");
+    *(unsigned char*)(*(int*)(param_1 + 0xc) + 0x73) = ((HasFlagFn)0x008380b0)(args, "ordered");
 }
 
 // @ 0x0052f3a0
 void cDistributeCmd::LimitExecute(cArguments_s0052_f170* args)
 {
     int param_1 = (int)this;
-    void** p = (void**)cArguments_s0052_f170::MainArguments(args, 1);
-    VFnI fn = *(VFnI*)(*(int*)(param_1 + 4) + 0x9c);
-    int v = fn((void*)*(int*)(param_1 + 4), *p);
+    typedef void* (__thiscall *MainArgsFn)(void*, int);
+    void** p = (void**)((MainArgsFn)0x00838320)(args, 1);
+    void* obj = *(void**)(param_1 + 4);
+    VFnI fn = (VFnI)(*(void***)obj)[0x9c / 4];
+    int v = fn(obj, *p);
     *(int*)(*(int*)(param_1 + 0xc) + 0x58) = v;
 }
 
@@ -734,7 +740,8 @@ void cDistributeCmd::AddEffect(char param_2)
 // @ 0x0052fb00
 void __fastcall BlockCmdBaseDerivedDtor(cBlockCommandBase_s0052_f170* p)
 {
-    p->~cBlockCommandBase_s0052_f170();
+    typedef void (__thiscall *VoidFn)(void*);
+    ((VoidFn)0x0083cd90)(p);
 }
 
 // @ 0x0052fb20
@@ -769,7 +776,8 @@ void* cSwarmEffect::Ctor(int src)
     *(uint32_t*)((char*)self + 8) = 0;
     *(uint32_t*)((char*)self + 0xc) = 0;
     *(uint32_t*)((char*)self + 0x10) = 0;
-    FUN_0047d390(*(void**)(src + 8), *(void**)(src + 0xc));
+    typedef void (__thiscall *AssignFn)(void*, void*, void*);
+    ((AssignFn)0x0047d390)((char*)self + 8, *(void**)(src + 8), *(void**)(src + 0xc));
     *(uint32_t*)((char*)self + 0x18) = *(uint32_t*)(src + 0x18);
     *(uint32_t*)((char*)self + 0x1c) = *(uint32_t*)(src + 0x1c);
     *(uint32_t*)((char*)self + 0x20) = *(uint32_t*)(src + 0x20);
@@ -782,7 +790,8 @@ void* cSwarmEffect::Ctor(int src)
     *(unsigned char*)((char*)self + 0x39) = *(unsigned char*)(src + 0x39);
     *(unsigned char*)((char*)self + 0x3a) = *(unsigned char*)(src + 0x3a);
     *(unsigned char*)((char*)self + 0x3b) = *(unsigned char*)(src + 0x3b);
-    FUN_00530770((void*)(src + 0x3c));
+    typedef void (__thiscall *CopyCtorFn)(void*, void*);
+    ((CopyCtorFn)0x00530770)((char*)self + 0x3c, (void*)(src + 0x3c));
     *(unsigned char*)((char*)self + 0x50) = *(unsigned char*)(src + 0x50);
     return self;
 }
@@ -790,15 +799,16 @@ void* cSwarmEffect::Ctor(int src)
 // @ 0x0052fd80
 void __fastcall Distribute_CommandDtor(cBlockCommandBase_s0052_f170* p)
 {
-    char* s = *(char**)((char*)p + 0x34);
-    if (1 < (int)(*(int*)((char*)p + 0x38) - (int)s)) {
+    char* s = *(char**)((char*)p + 0x8c);
+    if (1 < (int)(*(int*)((char*)p + 0x94) - (int)s)) {
         if (s) {
             void* q = s;
             operator delete(q);
         }
     }
-    FUN_0052eb40();
-    p->~cBlockCommandBase_s0052_f170();
+    typedef void (__thiscall *VoidFn)(void*);
+    ((VoidFn)0x0052eb40)((char*)p + 0x38);
+    ((VoidFn)0x0083cd90)(p);
 }
 
 // @ 0x0052fe20

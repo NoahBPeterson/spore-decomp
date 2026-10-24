@@ -1,11 +1,11 @@
 0052f170 373 OnEndParse; complete but /Od layout/EH frame differs
-0052f330 87 spacing command Execute; complete but byte layout differs; equiv: FAIL (ecx fixed; 5/5 mismatched)
-0052f3a0 68 limit command Execute; complete but byte layout differs; equiv: FAIL (ecx fixed; 5/5 mismatched)
+0052f330 82 spacing command Execute; complete; thiscall cArguments helpers and vtable+0x98 float vcall; equiv: WEAK (31 valid, 100% coverage)
+0052f3a0 60 limit command Execute; complete; thiscall cArguments helper and vtable+0x9c int vcall; equiv: WEAK (80 valid, 100% coverage)
 0052f6b0 210 AddCommands; complete but EH frame/layout differs
 0052f7c0 211 distribute effect ctor; complete but byte layout differs
 0052f890 289 block parse; complete but byte layout differs
 0052f9f0 213 add-effect helper; complete but EH frame/layout differs; equiv: WEAK (ecx fixed; 48.5% coverage)
-0052fb00 24 derived dtor thunk; complete but byte layout differs
+0052fb00 15 derived dtor thunk; complete; direct CmdDtor::Dtor call at 0x0083cd90; equiv: PASS (242 valid, 100% coverage)
 0052fb20 215 copy params; complete but byte layout differs; equiv: UNSUPPORTED (ecx fixed; 0/1200 inputs valid, fault(read))
-0052fc10 200 swarm effect ctor; complete but byte layout differs; equiv: FAIL (ecx fixed; 5/5 mismatched)
-0052fd80 120 command dtor; complete but byte layout differs
+0052fc10 342 swarm effect ctor; complete; thiscall string assign (ecx=self+8) and VectorIF copy ctor (ecx=self+0x3c); equiv: WEAK (70 valid, 100% coverage)
+0052fd80 130 command dtor; complete; 0x8c/0x94 buffer range, thiscall +0x38 description dtor, direct CmdDtor; equiv: PASS (217 valid, 87% coverage)

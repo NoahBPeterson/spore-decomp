@@ -39,6 +39,16 @@ struct cDistributeCmd {
     void LimitExecute(cArguments* args);     // 0x0052f3a0
     void AddEffect(char param_2);            // 0x0052f9f0
 };
+// The original cArguments helpers are thiscall members, not static functions.
+struct cArgumentsThis {
+    void*         MainArguments(int count);       // 0x00838320
+    unsigned char HasFlag(const char* name);      // 0x008380b0
+};
+// Direct thiscall targets used by the destructor/copy helpers.
+struct CmdDtor { void Dtor(); };                                  // 0x0083cd90
+struct DistributeDescription { void Dtor(); };                    // 0x0052eb40
+struct cVectorIF { void CopyCtor(void* src); };                   // 0x00530770
+struct cStringAssign { void Assign(void* first, void* last); };   // 0x0047d390
 void  FUN_00530870(void*);
 void  FUN_00530770(void*);
 void  FUN_00a6f9c0(void*, int, void*);
@@ -95,21 +105,26 @@ void DistributeParticles_OnEndParse(int param_1)
 void cDistributeCmd::SpacingExecute(cArguments* args)
 {
     int param_1 = (int)this;
-    void** p = (void**)cArguments::MainArguments(args, 1);
-    VFnI fn = *(VFnI*)(*(int*)(param_1 + 4) + 0x98);
-    float v = (float)fn((void*)*(int*)(param_1 + 4), *p);
+    cArgumentsThis* ca = (cArgumentsThis*)args;
+    void** p = (void**)ca->MainArguments(1);
+    void* obj = *(void**)(param_1 + 4);
+    typedef float (__thiscall *VFnF)(void*, void*);
+    VFnF fn = (VFnF)(*(void***)obj)[0x98 / 4];
+    float v = fn(obj, *p);
     *(float*)(*(int*)(param_1 + 0xc) + 0x54) = v;
-    *(unsigned char*)(*(int*)(param_1 + 0xc) + 0x72) = cArguments::HasFlag(args, "cover");
-    *(unsigned char*)(*(int*)(param_1 + 0xc) + 0x73) = cArguments::HasFlag(args, "ordered");
+    *(unsigned char*)(*(int*)(param_1 + 0xc) + 0x72) = ca->HasFlag("cover");
+    *(unsigned char*)(*(int*)(param_1 + 0xc) + 0x73) = ca->HasFlag("ordered");
 }
 
 // @ 0x0052f3a0  distribute <limit> command
 void cDistributeCmd::LimitExecute(cArguments* args)
 {
     int param_1 = (int)this;
-    void** p = (void**)cArguments::MainArguments(args, 1);
-    VFnI fn = *(VFnI*)(*(int*)(param_1 + 4) + 0x9c);
-    int v = fn((void*)*(int*)(param_1 + 4), *p);
+    cArgumentsThis* ca = (cArgumentsThis*)args;
+    void** p = (void**)ca->MainArguments(1);
+    void* obj = *(void**)(param_1 + 4);
+    VFnI fn = (VFnI)(*(void***)obj)[0x9c / 4];
+    int v = fn(obj, *p);
     *(int*)(*(int*)(param_1 + 0xc) + 0x58) = v;
 }
 
@@ -229,7 +244,7 @@ void cDistributeCmd::AddEffect(char param_2)
 // @ 0x0052fb00
 void __fastcall BlockCmdBaseDerivedDtor(cBlockCommandBase* p)
 {
-    p->~cBlockCommandBase();
+    ((CmdDtor*)p)->Dtor();
 }
 
 // @ 0x0052fb20  copy effect params
@@ -264,7 +279,8 @@ void* cSwarmEffect::Ctor(int src)
     *(uint32_t*)((char*)self + 8) = 0;
     *(uint32_t*)((char*)self + 0xc) = 0;
     *(uint32_t*)((char*)self + 0x10) = 0;
-    FUN_0047d390(*(void**)(src + 8), *(void**)(src + 0xc));
+    typedef void (__thiscall *AssignFn)(void*, void*, void*);
+    ((AssignFn)0x0047d390)((char*)self + 8, *(void**)(src + 8), *(void**)(src + 0xc));
     *(uint32_t*)((char*)self + 0x18) = *(uint32_t*)(src + 0x18);
     *(uint32_t*)((char*)self + 0x1c) = *(uint32_t*)(src + 0x1c);
     *(uint32_t*)((char*)self + 0x20) = *(uint32_t*)(src + 0x20);
@@ -277,7 +293,8 @@ void* cSwarmEffect::Ctor(int src)
     *(unsigned char*)((char*)self + 0x39) = *(unsigned char*)(src + 0x39);
     *(unsigned char*)((char*)self + 0x3a) = *(unsigned char*)(src + 0x3a);
     *(unsigned char*)((char*)self + 0x3b) = *(unsigned char*)(src + 0x3b);
-    FUN_00530770((void*)(src + 0x3c));
+    typedef void (__thiscall *CopyCtorFn)(void*, void*);
+    ((CopyCtorFn)0x00530770)((char*)self + 0x3c, (void*)(src + 0x3c));
     *(unsigned char*)((char*)self + 0x50) = *(unsigned char*)(src + 0x50);
     return self;
 }
@@ -285,15 +302,15 @@ void* cSwarmEffect::Ctor(int src)
 // @ 0x0052fd80
 void __fastcall Distribute_CommandDtor(cBlockCommandBase* p)
 {
-    char* s = *(char**)((char*)p + 0x34);
-    if (1 < (int)(*(int*)((char*)p + 0x38) - (int)s)) {
+    char* s = *(char**)((char*)p + 0x8c);
+    if (1 < (int)(*(int*)((char*)p + 0x94) - (int)s)) {
         if (s) {
             void* q = s;
             operator delete(q);
         }
     }
-    FUN_0052eb40();
-    p->~cBlockCommandBase();
+    ((DistributeDescription*)((char*)p + 0x38))->Dtor();
+    ((CmdDtor*)p)->Dtor();
 }
 
 // @ 0x0052fe20  cSPSkinPaintDistributeInlineCommand::Execute
