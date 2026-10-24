@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e9d300/s00e9d300.cpp  ?Enable@cAmbienceLayerManager@@UAEX_N@Z  00e9da00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e9d300/s00e9d300.cpp  ?GetAmbientSphereRadius@cAmbienceLayerManager@@QAEMXZ  00e9da20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e9d300/s00e9d300.cpp  ?SetSamplePosition@cAmbienceLayerManager@@QAEXPBUVector3@@@Z  00e9da50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e9d300/s00e9d300.cpp  ?StopLayerForMode@cAmbienceLayerManager@@QAE_NH@Z  00e9dac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e9d300/s00e9d300.cpp  ?RemoveObject@cAmbienceLayerManager@@QAE_NPAUcAmbienceObject@@@Z  00e9dcc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e9d300/s00e9d300.cpp  ?FindLayerForMode@cAmbienceLayerManager@@QAEPAUcAmbienceLayer@@H@Z  00e9dd20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e9d300/s00e9d300.cpp  ?GenerateDynamicAmbienceTagsBegin@cAmbienceLayerManager@@QAEXXZ  00e9dd80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e9d300/s00e9d300.cpp  ?ClearAndFree@cLayerVector@@QAEXXZ  00e9ddc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e9d300/s00e9d300.cpp  ?DestroyLayers@cAmbienceLayerManager@@QAEXXZ  00e9e220  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

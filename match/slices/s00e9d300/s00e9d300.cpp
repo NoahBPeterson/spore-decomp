@@ -402,3 +402,544 @@ void cSPUFOGfx::Update(int dt, int unused)
             mpAudio->Stop(0);
     }
 }
+
+// ===========================================================================
+// SP::Audio::cAmbienceLayerManager -- cube-face lookup, layer bookkeeping and
+// the "ambience" cheat command (0x00e9da00 .. 0x00e9e220).
+//
+// HandleMessage (0x00e9dfa0) is entered with this == manager + 4: the manager
+// derives from cMessageSource (vptr at +0x00) and cAmbienceMessageHandler
+// (vptr at +0x04), so the handler down-casts back to the manager.
+// ===========================================================================
+#include <new>
+
+#define VIRT4(n) virtual void n##0(); virtual void n##1(); virtual void n##2(); virtual void n##3();
+typedef unsigned int size_t;
+void* operator new[](size_t size, const char* name, int flags, unsigned debugFlags,
+                     const char* file, int line);                     // 0x00f473a0
+void operator delete[](void* p);                                      // 0x00f47380
+
+extern const float    kHalfF;                     // 0x01471064 (0.5f)
+extern const float    kOneF;                      // 0x01485720 (1.0f)
+extern const float    kZeroF;                     // 0x01485378 (0.0f)
+extern const uint32_t kAmbienceMsgIds[14];        // 0x01487100
+extern void*          g_015a8b70;                 // audio parameter source handle
+extern void*          g_015a8b6c;                 // audio parameter expected id
+extern void*          g_015a8b74;                 // audio parameter source handle 2
+
+struct cAmbienceTag { uint32_t mFlags; };         // +0x00
+
+struct cAmbienceLayer                              // element of the +0xb0 layer array
+{
+    virtual void v00();
+    virtual void v01();
+    virtual void Deactivate();                     // +0x08
+    virtual void Release();                        // +0x0c
+    virtual void v04();
+    virtual void v05();
+    int  GetGameMode();                            // 0x00a42730
+    void Stop();                                   // 0x00a34eb0
+    bool Shutdown();                               // 0x00a35f70
+};
+
+struct cAmbienceObject                             // per-cube-face entry (direction at +0x08)
+{
+    void*     mpVtbl;                              // +0x00
+    uint32_t  mId;                                 // +0x04
+    Vector3   mDirection;                          // +0x08
+};
+
+struct cObjectVector { cAmbienceObject** mpBegin; cAmbienceObject** mpEnd; };
+struct cLayerVector
+{
+    cAmbienceLayer** mpBegin;                      // +0x00
+    cAmbienceLayer** mpEnd;                        // +0x04
+    void ClearAndFree();                           // 0x00e9ddc0
+};
+
+struct ResponseCurve { float GetOutputValue(float in) const; };   // 0x00a1a110 (ret 4)
+
+struct cAudioParamInterface
+{
+    virtual void v00();
+    virtual void Release();                        // +0x04
+    virtual void v02(); virtual void v03(); virtual void v04(); virtual void v05();
+    virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09();
+    virtual void v0a();
+    virtual bool GetSourceValue(void* handle, void* out);   // +0x2c
+    virtual void v0c(); virtual void v0d();
+    virtual bool GetMixValue(void* handle, void* out);      // +0x34
+};
+
+struct cPTypeParam;                                // audio type-parameter wrapper
+struct cAutoRefSlot
+{
+    cAudioParamInterface* mpObject;                // +0x00
+    cPTypeParam* AsPPTypeParam(uint32_t typeId);   // 0x00a16f40 (ret 4)
+};
+
+struct cAudioSystemBase
+{
+    VIRT4(a) VIRT4(b) VIRT4(c) VIRT4(d) VIRT4(e)
+    virtual bool ResolveParam(void* source, cPTypeParam* param);   // +0x14
+};
+cAudioSystemBase* GetSystemAT();                   // 0x00a206f0
+
+class cAmbienceLayerManager;
+
+struct cAudioSystem
+{
+    VIRT4(a) VIRT4(b) virtual void v20();
+    virtual cAmbienceLayerManager* GetAmbienceLayerManager();      // +0x24 (ret 0)
+};
+cAudioSystem* AudioSystem();                       // 0x0067cb00
+
+struct cMessageServer
+{
+    VIRT4(a) VIRT4(b) virtual void v20();
+    virtual void Subscribe(void* target, uint32_t id);             // +0x24 (ret 8)
+};
+namespace EA { namespace Messaging { cMessageServer* GetServer(); } }   // 0x00883860
+
+struct cCheatManager;
+cCheatManager* CheatManager();                     // 0x0067de20
+
+class cArguments
+{
+public:
+    bool HasFlag(const char* name);                                    // 0x008380b0 (ret 4)
+    bool HasArgument(const char* name);                                // 0x00837ee0 (ret 4)
+    void** OptionArguments(const char* name, void* out, int a, int b); // 0x00838130 (ret 0x10)
+};
+uint32_t FNVHash(const char* text, uint32_t seed, int count);          // 0x00932e80 (ret 0xc)
+
+class cCommandBase
+{
+public:
+    cCommandBase();                                // 0x0083c800
+    virtual void Execute(cArguments* args);        // +0x00
+};
+class cAmbienceCheat : public cCommandBase
+{
+public:
+    void Execute(cArguments* args);                // 0x00e9de00
+};
+
+class cMessageSource
+{
+public:
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+};
+
+class cAmbienceMessageHandler
+{
+public:
+    virtual bool HandleMessage(uint32_t msgId, void* msg);            // 0x00e9dfa0 (ret 8)
+};
+
+class cAmbienceLayerManager : public cMessageSource, public cAmbienceMessageHandler
+{
+public:
+    virtual void Enable(bool enabled);                                // +0x10 (0x00e9da00)
+    virtual void OnStartup();                                         // +0x14
+    virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09();
+    virtual bool ShowPosition(void* obj, float x, float y, float z, void* owner);   // +0x28
+    virtual bool SetTagValue(int value);                              // +0x2c
+
+    uint32_t pad08[3];
+    cMessageServer*  mpMsgServer;                 // +0x14
+    void*            mpMsgTarget;                 // +0x18  the +0x04 handler sub-object
+    const uint32_t*  mpMsgIds;                    // +0x1c
+    int              mnMsgIdCount;                // +0x20
+    int              mnMsgPriority;               // +0x24
+    int              mNumSamplePoints;            // +0x28
+    cObjectVector**  mpFaceLists;                 // +0x2c
+    uint32_t pad30[0x38 / 4];
+    cAmbienceTag**   mTagArrayBegin;              // +0x68
+    cAmbienceTag**   mTagArrayEnd;                // +0x6c
+    uint32_t pad70[3];
+    cAmbienceTag**   mTagIterator;                // +0x7c
+    uint32_t pad80[7];
+    Vector3          mSamplePosition;             // +0x9c
+    uint32_t padA8[1];
+    bool             mbPositionChanged;           // +0xac
+    uint8_t padAD[3];
+    cAmbienceLayer** mLayersBegin;                // +0xb0
+    cAmbienceLayer** mLayersEnd;                  // +0xb4
+    uint32_t padB8[3];
+    cAmbienceTag**   mActiveTagsBegin;            // +0xc4
+    cAmbienceTag**   mActiveTagsEnd;              // +0xc8
+    uint32_t padCC[3];
+    float            mfSampleRadius;              // +0xd8
+    uint32_t padDC[4];
+    ResponseCurve    mRadiusCurve;                // +0xec
+    uint32_t padF0[0x1b2];
+    bool             mbDebugDraw;                 // +0x7b8
+    uint8_t pad7B9[0x10];
+    uint32_t         mEnableFlags;                // +0x7cc
+    uint32_t pad7D0[1];
+    cAmbienceTag**   mTagRangeBegin;              // +0x7d4
+    cAmbienceTag**   mTagRangeEnd;                // +0x7d8
+
+    float GetAmbientSphereRadius();               // 0x00e9da20
+    void  SetSamplePosition(const Vector3* p);    // 0x00e9da50
+    bool  StopLayerForMode(int mode);             // 0x00e9dac0
+    int   GetCubeFace(const Vector3* dir);        // 0x00e9db10
+    bool  RemoveObject(cAmbienceObject* obj);     // 0x00e9dcc0
+    cAmbienceLayer* FindLayerForMode(int mode);   // 0x00e9dd20
+    void  GenerateDynamicAmbienceTagsBegin();     // 0x00e9dd80
+    void  DestroyLayers();                        // 0x00e9e220
+    bool  Startup();                              // 0x00e9df00
+};
+
+struct cPlanetModel
+{
+    bool IsReady();                                                    // 0x00b7ec40
+    void DirectionToSurfacePosition(Vector3* out, const Vector3* dir); // 0x00b815a0 (ret 8)
+};
+cPlanetModel* PlanetModel();                       // 0x00b3d350
+
+struct cAudioParamPair { void* mpFirst; void* mpSecond; void* mpThird; };
+struct cAmbienceMessage                                 // message payload
+{
+    uint32_t pad00[4];
+    void*    mpSource;                             // +0x10
+    uint32_t pad14;
+    void*    mpOwner;                              // +0x18
+    uint32_t pad1c[5];
+    float    mfX;                                  // +0x30
+    uint32_t pad34;
+    float    mfY;                                  // +0x38
+    uint32_t pad3c;
+    float    mfZ;                                  // +0x40
+    uint32_t pad44[(0x88 - 0x44) / 4];
+    uint32_t mFlags;                               // +0x88
+};
+
+// @ 0x00e9da00
+void cAmbienceLayerManager::Enable(bool enabled)
+{
+    if (enabled)
+        mEnableFlags &= ~8u;
+    else
+        mEnableFlags |= 8u;
+}
+
+// @ 0x00e9da20
+float cAmbienceLayerManager::GetAmbientSphereRadius()
+{
+    return mRadiusCurve.GetOutputValue(mfSampleRadius);
+}
+
+// @ 0x00e9da50
+void cAmbienceLayerManager::SetSamplePosition(const Vector3* p)
+{
+    mbPositionChanged = mSamplePosition.x != p->x
+                     || mSamplePosition.y != p->y
+                     || mSamplePosition.z != p->z;
+    mSamplePosition = *p;
+}
+
+// @ 0x00e9dac0
+bool cAmbienceLayerManager::StopLayerForMode(int mode)
+{
+    cAmbienceLayer** end = mLayersEnd;
+    for (cAmbienceLayer** it = mLayersBegin; it != end; ++it)
+    {
+        cAmbienceLayer* layer = *it;
+        if (layer->GetGameMode() == mode)
+        {
+            layer->Stop();
+            return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x00e9db10
+int cAmbienceLayerManager::GetCubeFace(const Vector3* dir)
+{
+    int n = mNumSamplePoints;
+    float half = (float)n * kHalfF;
+    float ax = (float)fabs(dir->x);
+    float ay = (float)fabs(dir->y);
+    float az = (float)fabs(dir->z);
+    int i;
+    int j;
+    int face;
+
+    if (az < ax || az < ay)
+    {
+        if (ay < ax)
+        {
+            i = (int)((dir->y / ax + kOneF) * half);
+            j = (int)((dir->z / ax + kOneF) * half);
+            face = (dir->x < kZeroF) ? 3 : 2;
+        }
+        else
+        {
+            i = (int)((dir->z / ay + kOneF) * half);
+            j = (int)((dir->x / ay + kOneF) * half);
+            face = (dir->y < kZeroF) ? 5 : 4;
+        }
+    }
+    else
+    {
+        i = (int)((dir->x / az + kOneF) * half);
+        j = (int)((dir->y / az + kOneF) * half);
+        face = (dir->z < kZeroF) ? 1 : 0;
+    }
+
+    if (i == n)
+        i = n - 1;
+    if (j == n)
+        j = n - 1;
+    return (mNumSamplePoints * face + j) * mNumSamplePoints + i;
+}
+
+// @ 0x00e9dcc0
+bool cAmbienceLayerManager::RemoveObject(cAmbienceObject* obj)
+{
+    if (obj == 0)
+        return false;
+
+    cObjectVector* list = mpFaceLists[GetCubeFace(&obj->mDirection)];
+    int count = (int)(list->mpEnd - list->mpBegin);
+    for (int i = 0; i < count; i++)
+    {
+        if (list->mpBegin[i] == obj)
+        {
+            list->mpBegin[i] = 0;
+            return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x00e9dd20
+cAmbienceLayer* cAmbienceLayerManager::FindLayerForMode(int mode)
+{
+    cAmbienceLayer** end = mLayersEnd;
+    for (cAmbienceLayer** it = mLayersBegin; it != end; ++it)
+    {
+        cAmbienceLayer* layer = *it;
+        if (layer->GetGameMode() == mode)
+            return layer;
+    }
+    return 0;
+}
+
+// @ 0x00e9dd80
+void cAmbienceLayerManager::GenerateDynamicAmbienceTagsBegin()
+{
+    cAmbienceTag** it = mTagArrayBegin;
+    cAmbienceTag** end = mTagArrayEnd;
+    mTagIterator = it;
+    while (it != end)
+    {
+        (*it)->mFlags &= ~1u;
+        ++it;
+    }
+    mTagRangeBegin = mActiveTagsBegin;
+    mTagRangeEnd = mActiveTagsEnd;
+}
+
+// @ 0x00e9ddc0
+void cLayerVector::ClearAndFree()
+{
+    cAmbienceLayer** end = mpEnd;
+    for (cAmbienceLayer** it = mpBegin; it < end; ++it)
+    {
+        if (*it != 0)
+            (*it)->Release();
+    }
+    if (mpBegin != 0)
+        operator delete[](mpBegin);
+}
+
+// @ 0x00e9de00
+void cAmbienceCheat::Execute(cArguments* args)
+{
+    if (args->HasFlag("help"))
+        return;
+
+    if (args->HasFlag("dbg"))
+    {
+        cAmbienceLayerManager* mgr = AudioSystem()->GetAmbienceLayerManager();
+        mgr->mbDebugDraw = !mgr->mbDebugDraw;
+        return;
+    }
+
+    if (args->HasArgument("dbglayer"))
+    {
+        const char* text = *(const char**)args->OptionArguments("dbglayer", &args, 1, 0x7fffffff);
+        uint32_t key = FNVHash(text, 0x811c9dc5, 1);
+        AudioSystem()->GetAmbienceLayerManager()->StopLayerForMode(key);
+        return;
+    }
+
+    if (args->HasArgument("enable"))
+        AudioSystem()->GetAmbienceLayerManager()->Enable(true);
+
+    if (args->HasArgument("disable"))
+        return AudioSystem()->GetAmbienceLayerManager()->Enable(false);
+}
+
+// @ 0x00e9df00
+bool cAmbienceLayerManager::Startup()
+{
+    OnStartup();
+
+    cAmbienceMessageHandler* target = static_cast<cAmbienceMessageHandler*>(this);
+    cMessageServer* server = EA::Messaging::GetServer();
+
+    mpMsgServer = server;
+    mpMsgTarget = target;
+    mpMsgIds = kAmbienceMsgIds;
+    mnMsgIdCount = 14;
+    mnMsgPriority = 0;
+
+    if (server != 0 && target != 0)
+    {
+        const uint32_t* pId = kAmbienceMsgIds;
+        const uint32_t* pEnd = kAmbienceMsgIds + 14;
+        while (pId != pEnd)
+        {
+            server->Subscribe(target, *pId);
+            ++pId;
+        }
+    }
+
+    if (CheatManager() != 0)
+    {
+        cAmbienceCheat* cheat = (cAmbienceCheat*)operator new[](0x10, "Audio", 0, 0, 0, 0);
+        if (cheat != 0)
+            new (cheat) cAmbienceCheat();
+    }
+    return false;
+}
+
+// @ 0x00e9e220
+void cAmbienceLayerManager::DestroyLayers()
+{
+    while (mLayersBegin != mLayersEnd)
+    {
+        cAmbienceLayer* layer = mLayersEnd[-1];
+        if (layer != 0)
+            layer->Deactivate();
+        --mLayersEnd;
+        cAmbienceLayer* prev = *mLayersEnd;
+        if (prev != 0)
+            prev->Release();
+        layer->Shutdown();
+        if (layer != 0)
+            layer->Release();
+    }
+}
+
+// @ 0x00e9dfa0
+bool cAmbienceMessageHandler::HandleMessage(uint32_t msgId, void* msg)
+{
+    cAmbienceLayerManager* mgr = static_cast<cAmbienceLayerManager*>(this);
+    cAmbienceMessage* m = (cAmbienceMessage*)msg;
+
+    if (msgId < 0x279a67d)
+    {
+        if (msgId != 0x279a67c)
+        {
+            if (msgId > 0x20c089c)
+            {
+                if (msgId != 0x279a5da)
+                    return false;
+                mgr->mEnableFlags &= ~4u;
+                return false;
+            }
+            if (msgId == 0x20c089c)
+            {
+                cPlanetModel* planet = PlanetModel();
+                if (planet == 0)
+                    return false;
+                if (!planet->IsReady())
+                    return false;
+                Vector3 dir;
+                dir.x = m->mfX;
+                dir.y = m->mfY;
+                dir.z = m->mfZ;
+                Vector3 out;
+                planet->DirectionToSurfacePosition(&out, &dir);
+                mgr->SetSamplePosition(&out);
+                return false;
+            }
+            if (msgId == 0xff0ec1)
+            {
+                if (((m->mFlags >> 1) & 1) == 0)
+                    return false;
+
+                void* source = m->mpSource;
+                if (source == 0)
+                    return false;
+
+                cAutoRefSlot slot;
+                slot.mpObject = 0;
+                cPTypeParam* param = slot.AsPPTypeParam(0x21407ee);
+                if (!GetSystemAT()->ResolveParam(source, param))
+                {
+                    if (slot.mpObject != 0)
+                        slot.mpObject->Release();
+                    return false;
+                }
+
+                cAudioParamInterface* iface = slot.mpObject;
+                cAudioParamPair pair;
+                pair.mpFirst = 0;
+                pair.mpSecond = 0;
+                pair.mpThird = 0;
+                if (!iface->GetMixValue(g_015a8b70, &pair))
+                {
+                    if (iface != 0)
+                        iface->Release();
+                    return false;
+                }
+                if (pair.mpFirst != g_015a8b6c)
+                {
+                    if (iface != 0)
+                        iface->Release();
+                    return false;
+                }
+
+                void* value = 0;
+                if (!iface->GetSourceValue(g_015a8b74, &value))
+                {
+                    if (iface != 0)
+                        iface->Release();
+                    return false;
+                }
+
+                bool shown = mgr->ShowPosition(value, m->mfX, m->mfY, m->mfZ, m->mpOwner);
+                if (iface != 0)
+                    iface->Release();
+                return shown;
+            }
+            if (msgId != 0xff0ed1)
+                return false;
+            return mgr->SetTagValue(((int*)msg)[2]);
+        }
+        mgr->mEnableFlags |= 4u;
+        return false;
+    }
+
+    if (msgId == 0x279a680 || msgId == 0x281d424)
+    {
+        mgr->mEnableFlags |= 4u;
+        return false;
+    }
+    if (msgId != 0x60e4e46e)
+        return false;
+
+    uint32_t mode = SP::GetCurrentGameMode();
+    if (mode == 0x1654c01 || mode == 0x1654c10)
+        mgr->mfSampleRadius = 0.0f;
+    else
+        mgr->mfSampleRadius = ((float*)msg)[2] / ((float*)msg)[4];
+    return false;
+}
