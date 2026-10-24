@@ -3,3 +3,4 @@ slices/s00440110/s00440110.cpp  ?F40b90@cSPEditorBlock@SP@@QAEPAUVec3@2@PAU32@@Z
 slices/s00440110/s00440110.cpp  ?F40e00@cSPEditorBlock@SP@@QAEXPAV12@@Z          00440e00  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00440110/s00440110.cpp  ?SetUniformScale@cSPEditorBlock@SP@@QAEXM_N0@Z  00440520  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00440110/s00440110.cpp  ?F40110@cSPEditorBlock@SP@@QAEXM@Z  00440110  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00440110/s00440110.cpp  ?F40bc0@cSPEditorBlock@SP@@QAEXPBUVec3@2@@Z  00440bc0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

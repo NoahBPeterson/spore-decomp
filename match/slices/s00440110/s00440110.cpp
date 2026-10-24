@@ -247,7 +247,8 @@ Vec3* cSPEditorBlock::F40b90(Vec3* out)
 // @ 0x00440BC0
 void cSPEditorBlock::F40bc0(const Vec3* v)
 {
-    if (mModel != 0) {
+    void* model = mModel;
+    if (model != 0) {
         void* m = mModel;
         *(Vec3*)((char*)m + 0x4C) = *v;
     }
@@ -267,8 +268,8 @@ void cSPEditorBlock::F40390(float f)
 {
     float lo = 0.0f, hi = 1.0f;
     float v = f;
-    if (v < lo) v = lo;
-    if (v > hi) v = hi;
+    v = v > lo ? v : lo;
+    v = v < hi ? v : hi;
     if (v != *(float*)((char*)this + 0x1D0)) {
         *(float*)((char*)this + 0x1D0) = v;
         SetFlag(9, 1);
