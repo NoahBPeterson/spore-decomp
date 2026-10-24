@@ -1,0 +1,3 @@
+00d63560 FUN_00d63560  # herd follow-the-leader tick (pre-existing)
+00d63c90 FUN_00d63c90  # picks a herd-follow destination from leader/water/planet model
+00d63ea0 FUN_00d63ea0  # creature follow-up action: animation or locomotion update, then FinishAction

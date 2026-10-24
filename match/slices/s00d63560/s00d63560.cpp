@@ -7,6 +7,15 @@
 #include "types.h"
 #include <math.h>
 
+#define CAT2_(a, b) a##b
+#define CAT_(a, b) CAT2_(a, b)
+#define PV virtual void CAT_(_pv, __COUNTER__)();
+#define PV2 PV PV
+#define PV4 PV2 PV2
+#define PV8 PV4 PV4
+#define PV16 PV8 PV8
+#define PV32 PV16 PV16
+
 namespace SP {
 
 struct Vec3 { float x, y, z; };
@@ -50,7 +59,11 @@ public:
 class CreatureHead {                                   // bytes 0x00..0xbf of the creature
 public:
     virtual void h00();
-    uint32_t pad04[(0xc0 - 4) / 4];
+    PV4 PV8 PV16 PV4                       // slots 1..32
+    virtual void FinishAction(int, int, int); // +0x84 (slot 33)
+    uint8_t pad04[0xad6];
+    uint8_t mFieldB5e;                     // +0xb5e
+    uint8_t padB5f[0x61];
 };
 
 struct Herd;
@@ -62,6 +75,7 @@ public:
     void FUN_00c14750(int a);                          // 0x00c14750 (thiscall, ret 4)
     void MoveToPointAtSpeed(int mode, const Vec3* p, float s0, float s1);                        // 0x00c1c1d0
     void MoveToPointAndFacingAtSpeed(int mode, const Vec3* p, const Vec3* facing, float s0, float s1);   // 0x00c1c5c0
+    int PlayAnimationWithTarget(int anim, void* target, int flags); // 0x00c14910 (thiscall, ret 0xc)
 
     uint32_t padc4[(0x330 - 0xc4) / 4];
     uint32_t mFlags330;
@@ -101,8 +115,13 @@ Vec3* normalized_safe(Vec3* out, const Vec3* in);      // 0x00449c20 (cdecl)
 class cPlanetModel {
 public:
     Vec3* DirectionToSurfacePosition(Vec3* out, const Vec3* dir);   // 0x00b815a0
+    void MakeRandomWorldPosition();                                // 0x00b81780
+    void FindClosestWater();                                       // 0x00b8bb70
+    void PrepareSurface();                                         // 0x00b81630
 };
-cPlanetModel* PlanetModel();                           // 0x00b3d350
+cPlanetModel* PlanetModel();                                   // 0x00b3d350
+cPlanetModel* PlanetModel(Vec3* out, const Vec3* pos);          // 0x00b3d350 (two-pointer form)
+cPlanetModel* PlanetModel(Vec3* out, float radius, const Vec3* pos); // 0x00b3d350 (radius form)
 
 extern float DAT_01582e04;                             // follow distance (10.0)
 
@@ -248,6 +267,107 @@ stopped:
 done:
     self->GetState()->mMoveFlags |= 1;
     return true;
+}
+
+}  // namespace SP
+
+namespace SP {
+
+struct NavOutput {
+    Vec3     mPosition;      // +0x00
+    uint32_t mField0c;       // +0x0c
+};
+
+struct RefCounted {
+    virtual void r00();
+    virtual void Release();  // +0x04
+};
+
+struct CreatureActionArgs {
+    int         mState;      // +0x00
+    int         mPad04;      // +0x04
+    int         mPad08;      // +0x08
+    RefCounted* mpObject;    // +0x0c
+};
+
+// @ 0x00d63c90
+bool FUN_00d63c90(cSPCreatureBase* self, int, int, int, int, NavOutput* out)
+{
+    if (out != 0)
+        out->mField0c = 0;
+
+    Herd* herd = self->GetHerd();
+    cSPCreatureBase* leader = herd->mpLeader;
+    Loco* loco = leader;                       // Loco sub-object at leader+0xc0
+
+    out->mPosition.x = 0.0f;
+    out->mPosition.y = 0.0f;
+    out->mPosition.z = 0.0f;
+
+    float baseRadius = loco->GetRadius();
+    float searchRadius = baseRadius + 3.0f;
+    float radius = loco->GetRadius();
+    Vec3* leaderPos = loco->GetPosition();
+
+    Vec3 randomPos = *leaderPos;
+    cPlanetModel* planet = PlanetModel(&randomPos, leaderPos);
+    planet->MakeRandomWorldPosition();
+
+    Vec3 water = randomPos;
+    planet = PlanetModel(&water, 20.0f, &randomPos);
+    planet->FindClosestWater();
+
+    Vec3* selfPos = self->GetPosition();
+    float dx = water.x - selfPos->x;
+    float dy = water.y - selfPos->y;
+    float dz = water.z - selfPos->z;
+    float inv = 1.0f / sqrtf(dx * dx + dy * dy + dz * dz + 1e-8f);
+
+    Vec3 target;
+    target.x = water.x + dx * inv * radius;
+    target.y = water.y + dy * inv * radius;
+    target.z = water.z + dz * inv * radius;
+
+    Vec3 surf = target;
+    planet = PlanetModel(&surf, &target);
+    Vec3* dest = planet->DirectionToSurfacePosition(&surf, &target);
+    Vec3 moveTo = *dest;
+    self->MoveToPointAtSpeed(2, &moveTo, 1.0f, 2.0f);
+    self->FUN_00c14750(0);
+
+    (void)searchRadius;
+    return true;
+}
+
+// @ 0x00d63ea0
+void FUN_00d63ea0(cSPCreatureBase* self, int, int, int, int, CreatureActionArgs* args)
+{
+    if (self->mFieldB5e == 0) {
+        int state = args->mState;
+        if (state == 1 || state == 2) {
+            Loco* loco = self;
+            float radius = loco->GetRadius();
+            Vec3 facing;
+            Vec3* f = loco->GetFacing(&facing);
+            Vec3* pos = loco->GetPosition();
+
+            Vec3 target;
+            target.x = pos->x + f->x * radius;
+            target.y = pos->y + f->y * radius;
+            target.z = pos->z + f->z * radius;
+
+            Vec3 surface = target;
+            cPlanetModel* planet = PlanetModel(&surface, &target);
+            planet->PrepareSurface();
+            self->PlayAnimationWithTarget(0x27079c3, &surface, -1);
+        } else {
+            self->FUN_00c14750(0);
+        }
+        self->FinishAction(0, 0, 0);
+    }
+
+    if (args != 0 && args->mpObject != 0)
+        args->mpObject->Release();
 }
 
 }  // namespace SP
