@@ -183,11 +183,23 @@ struct Variant {                    // EA::Variant-ish, 16 bytes
 // cSpaceInventory
 // ---------------------------------------------------------------------------
 struct IWinProcVt {
-    virtual void w00(); virtual void w01(); virtual void w02(); virtual void w03();
-    virtual void w04(); virtual void w05(); virtual void w06(); virtual void w07();
-    virtual void Refresh();         // +0x20 = slot 8 on the inventory vtable
+    virtual void w00();   // 0x00c6a960
+    virtual void w01();   // 0x007b86e0
+    virtual void w02();   // 0x006776e0
+    virtual void w03();   // 0x008280d0
+    virtual void w04();   // 0x00e31100
+    virtual void w05();   // 0x00cc89e0
+    virtual void w06();   // 0x006774c0
+    virtual void w07();   // 0x00828250
+    virtual void Refresh();         // +0x20 = slot 8 on the inventory vtable, 0x00828740
+    virtual void w08();   // 0x00677380
 };
-struct RefCountVt { virtual void r00(); };
+struct RefCountVt {
+    virtual void r00();   // 0x00677660
+    virtual void r01();   // 0x00c6fb40
+    virtual void r02();   // 0x0076ded0
+    virtual void r03();   // 0x004535b0
+};
 
 class cSPUIPropertyLayout : public IWinProcVt, public RefCountVt { public:
     char pad8[4];                               // +0x08
@@ -241,7 +253,8 @@ extern "C" bool __stdcall ShowThing(uint32_t a, uint32_t b, uint32_t c);   // 0x
 cSpaceInventory::cSpaceInventory()
 {
     m9c = 0;
-    SetCargoKey((mb98 = 1, 0x646739ac), *(uint32_t*)0x0152976c);
+    mb98 = 1;
+    SetCargoKey(0x646739ac, *(uint32_t*)0x0152976c);
     SetMaxCargoAmount(0x125f2c4f);
 }
 
@@ -465,9 +478,9 @@ bool __cdecl FindCB(RefObj* pWin, FindCtx* pCtx)
     RefObj* found = pCtx->mpFound;
     if (pWin->GetSelf() != (int)found)
     {
-        pWin->SetData(0x64e5a6a, found);
+        pWin->SetData(0x64e5a6a, pCtx->mpFound);
         pWin->SetData(0x64e5a6b, (void*)pWin->GetSelf());
-        pWin->SetSel(found);
+        pWin->SetSel(pCtx->mpFound);
     }
     pWin->Refresh();
     return pCtx->mFlag;
@@ -583,7 +596,7 @@ struct DequeBaseB4 {
     DequeIt      mItEnd;          // +0x18
     char         mAllocator[4];   // +0x28
 
-    void** DoAllocatePtrArray(uint32_t n) { return (void**)EAAllocate(n * 4, "Editor", 0, 0, ALLOC_FILE, 0xd1); }
+    void** DoAllocatePtrArray(uint32_t n) { uint32_t bytes = n * 4; return (void**)EAAllocate(bytes, "Editor", 0, 0, ALLOC_FILE, 0xd1); }
     Block308* DoAllocateSubarray() { return (Block308*)EAAllocate(0x4d0, "Editor", 0, 0, ALLOC_FILE, 0xd1); }
 
     void DoReallocPtrArray(uint32_t nAdditionalCapacity, int allocationSide);  // 0x006780A0

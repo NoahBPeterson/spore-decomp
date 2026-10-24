@@ -1,0 +1,16 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# flags: /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s006775f0/s006775f0.cpp  ??1cSpaceInventory@@QAE@XZ  00677670  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s006775f0/s006775f0.cpp  ?HandleMsgA@cSpaceInventory@@QAE_NIIII@Z  00677d90  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s006775f0/s006775f0.cpp  ?HandleMsgB@cSpaceInventory@@QAE_NIII@Z  00677df0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s006775f0/s006775f0.cpp  ?Contains@RectF@@QAEHMM@Z  00677e80  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s006775f0/s006775f0.cpp  ?FindCB@@YA_NPAURefObj@@PAUFindCtx@@@Z  00677ec0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s006775f0/s006775f0.cpp  ?FindAllCB@@YA_NPAURefObj@@PAUFindCtx@@@Z  00677f30  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s006775f0/s006775f0.cpp  ?SelectCB@@YA_NPAURefObj@@PBQAX@Z  00677fe0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s006775f0/s006775f0.cpp  ?AcquireSlot@@YA_NPAURefObj@@PAUSlot@@@Z  00678000  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s006775f0/s006775f0.cpp  ?AcquireSlotIf@@YA_NPAURefObj@@PAUSlot@@@Z  00678050  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s006775f0/s006775f0.cpp  ?DoReallocPtrArray@DequeBaseB4@@QAEXIH@Z  006780a0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s006775f0/s006775f0.cpp  ?DoInit@DequeBaseB4@@QAEXI@Z  006781d0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s006775f0/s006775f0.cpp  ?do_copy@CopyImpl@@SAPAUAutoRef@@PBU2@0PAU2@@Z  006782c0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s006775f0/s006775f0.cpp  ?FindWindowShow@@YAXPAURefObj@@PAX_N@Z  00678310  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s006775f0/s006775f0.cpp  ?SelectWindow@@YAXPAURefObj@@PAX@Z  00678370  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast

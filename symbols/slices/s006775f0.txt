@@ -1,0 +1,16 @@
+006775f0 cSpaceInventory::cSpaceInventory  # ctor: base ctor 0x008286d0, two vtable pointers, empty-string and cargo-key init
+00677670 cSpaceInventory::~cSpaceInventory  # dtor (byte-exact)
+00677700 cSpaceInventory::Update  # per-frame inventory refresh: slot/icon/selection updates, cargo/stat text
+00677d90 cSpaceInventory::HandleMsgA  # message handler; show inventory and refresh
+00677df0 cSpaceInventory::HandleMsgB  # message handler; show thing and update
+00677e80 RectF::Contains  # point-in-rect test (byte-exact)
+00677ec0 FindCB  # window-tree find callback; set found item, data and selection, refresh
+00677f30 FindAllCB  # window-tree find-all callback; collect matches into the result vector
+00677fe0 SelectCB  # window-tree select callback; select the matching window
+00678000 AcquireSlot  # bind a slot to a ref object
+00678050 AcquireSlotIf  # bind a slot when the callback matches
+006780a0 DequeBaseB4::DoReallocPtrArray  # deque pointer-array growth (EAAllocate)
+006781d0 DequeBaseB4::DoInit  # deque init: pointer array + first subarray
+006782c0 CopyImpl::do_copy  # AutoRef copy-construct helper
+00678310 FindWindowShow  # find-window visitor; show the matched window
+00678370 SelectWindow  # find-window visitor; select the matched window

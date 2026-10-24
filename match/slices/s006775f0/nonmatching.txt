@@ -1,1 +1,2 @@
-00677700 1313 complete; scheduling and stack-slot reuse differ (frame 0x48 vs 0x58)
+00677700 1313 complete; scheduling and stack-slot reuse differ (frame 0x48 vs 0x58); difftest WEAK (334 valid, 32.9% cov, need 60%; no mismatch)
+006775f0 16 cSpaceInventory::cSpaceInventory complete (base ctor 0x008286d0, vtable pointers 0x140133c/0x140132c, +0x78..+0x80 zeroed, +0x84/+0x88 empty-string ptrs, +0x8c string ptr, +0x9c zero, mb98=1, SetCargoKey/SetMaxCargoAmount); only the cl schedule of the mb98 byte store differs (ours before the argument pushes, original after); difftest PASS (400 valid, 100.0% cov)
