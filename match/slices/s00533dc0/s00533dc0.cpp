@@ -11,6 +11,7 @@ typedef unsigned int size_t;
 void* EASTL_Allocate(void* allocator, size_t size, int align, int flags);   // 0x0042dee0
 extern "C" void EASTL_allocator_deallocate(void* p);                        // 0x00f47380
 extern "C" void* memmove(void* dst, const void* src, size_t n);             // 0x13cc480
+extern "C" void* memcpy(void* dst, const void* src, size_t n);              // 0x011e0744
 
 // ---------------------------------------------------------------- @ 0x005348e0
 inline uint8_t PackComponent(float v)
@@ -21,7 +22,12 @@ inline uint8_t PackComponent(float v)
     f = f * 255.0f;
     if (255.0f <= f)
         f = 255.0f;
-    return (uint8_t)(int)f;
+    int r;
+    __asm {
+        cvtss2si eax, f
+        mov r, eax
+    }
+    return (uint8_t)r;
 }
 
 // @ 0x005348e0
@@ -67,11 +73,13 @@ struct VectorSample {
 // @ 0x005349f0
 void VectorSample::push_back(const Sample& value)
 {
+    Sample* pEnd = mpEnd;
     if (mpEnd < mpCapacity) {
-        *mpEnd = value;
-        mpEnd = mpEnd + 1;
+        mpEnd = pEnd + 1;
+        if (pEnd != 0)
+            *pEnd = value;
     } else {
-        DoInsertValue(mpEnd, value);
+        DoInsertValue(pEnd, value);
     }
 }
 
@@ -79,29 +87,34 @@ void VectorSample::push_back(const Sample& value)
 void VectorSample::DoInsertValue(Sample* position, const Sample& value)
 {
     if (mpEnd != mpCapacity) {
-        // shift [position, end) right by one
-        for (Sample* p = mpEnd; p != position; --p)
-            *(p) = *(p - 1);
-        *position = value;
+        const Sample* pValue = &value;
+        if ((const Sample*)position <= &value && &value < (const Sample*)mpEnd)
+            pValue = &value + 1;
+        if (mpEnd != 0)
+            *mpEnd = *(mpEnd - 1);
+        uint32_t sz = (uint32_t)((char*)(mpEnd - 1) - (char*)position);
+        memmove((char*)mpEnd - (sz / 0x1c) * 0x1c, position, sz);
+        *position = *pValue;
         mpEnd = mpEnd + 1;
         return;
     }
-    uint32_t nOld = (uint32_t)(mpEnd - mpBegin);
+    uint32_t nOld = (uint32_t)((char*)mpEnd - (char*)mpBegin) / 0x1c;
     uint32_t nNewCapacity = (nOld > 0) ? nOld * 2 : 1;
     Sample* pNew = (nNewCapacity == 0)
                        ? 0
                        : (Sample*)EASTL_Allocate(mAlloc, nNewCapacity * 0x1c, 4, 0);
-    Sample* p = pNew;
-    uint32_t nIndex = (uint32_t)(position - mpBegin);
-    for (uint32_t i = 0; i < nIndex; ++i)
-        *p++ = mpBegin[i];
-    *p++ = value;
-    for (uint32_t i = nIndex; i < nOld; ++i)
-        *p++ = mpBegin[i];
+    uint32_t nHead = (uint32_t)((char*)position - (char*)mpBegin);
+    memcpy(pNew, mpBegin, nHead);
+    Sample* pCur = (Sample*)((char*)pNew + (nHead / 0x1c) * 0x1c);
+    *pCur = value;
+    ++pCur;
+    uint32_t nTail = (uint32_t)((char*)mpEnd - (char*)position);
+    memcpy(pCur, position, nTail);
+    pCur = (Sample*)((char*)pCur + (nTail / 0x1c) * 0x1c);
     if (mpBegin != 0 && ((uint32_t*)mpBegin)[-1] != 0)
         EASTL_allocator_deallocate(mpBegin);
     mpBegin = pNew;
-    mpEnd = p;
+    mpEnd = pCur;
     mpCapacity = pNew + nNewCapacity;
 }
 

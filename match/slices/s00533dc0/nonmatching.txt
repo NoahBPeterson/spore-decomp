@@ -1,5 +1,5 @@
-00534860  61   PackColor wrapper: /Od local layout and SSE frame differ
-005348e0  327  PackColor: clamp/pack schedule differs (mine 452 vs orig 266)
-005349f0  76   vector<Sample>::push_back: /Od slot schedule differs
-00534a70  404  vector<Sample>::DoInsertValue: reimplemented with plain loops (orig uses memmove + helpers)
-00533dc0  2132  complete; /Od name-hash slot order and 16-byte aligned frame differ; needs /EHsc (remap vector unwind)
+00534860  61   PackColor wrapper: /Od local layout and SSE frame differ (not an equivalence FAIL, left as-is)
+005348e0  327  PackColor: /Od clamp/pack schedule differs; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /EHsc [equiv: PASS]
+005349f0  105  vector<Sample>::push_back: /Od slot schedule differs (saves old end, bumps mpEnd, rep-movsd copy, tail-call DoInsertValue); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /EHsc [equiv: WEAK 197 valid, 100% cov]
+00534a70  536  vector<Sample>::DoInsertValue: memmove shift-right + memcpy head/tail + rep-movsd value + refcounted free; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /EHsc [equiv: WEAK 52 valid, 62% cov]
+00533dc0  2499  complete; /Od name-hash slot order and 16-byte aligned frame differ; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /EHsc [equiv: WEAK 304 valid, 27.8% cov]
