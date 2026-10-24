@@ -41,6 +41,18 @@ inline void setRotatedInverseDir(hkVector4& v, const hkMatrix3& m, const hkVecto
 
 inline hkReal hkFabs(hkReal r) { return (hkReal)fabs(r); }
 
+// The original's x87 fsub of |d| and the radius sum gives +0 when they are equal; cl can leave
+// the sign bit of -0 in the same expression. Normalise an exact zero to +0 (only the sign of a
+// zero changes).
+static inline hkReal noNegZero(hkReal v)
+{
+    union { hkReal f; uint32_t u; } bits;
+    bits.f = v;
+    if ((bits.u & 0x7fffffffu) == 0)
+        bits.u = 0;
+    return bits.f;
+}
+
 // hkVector4::compareGreaterThan4 style mask: x=8, y=4, z=2, w=1.
 __forceinline int compareGreaterThan4(const hkVector4& v, const hkVector4& a)
 {
@@ -98,10 +110,10 @@ int hkBoxBoxCollisionDetection::checkIntersection(const hkVector4& tolerance4)
         sum.z = proj.z + m_radiusA.z;
         sum.w = m_radiusA.w;
         hkVector4 d;
-        d.x = hkFabs(m_dinA.x) - sum.x;
-        d.y = hkFabs(m_dinA.y) - sum.y;
-        d.z = hkFabs(m_dinA.z) - sum.z;
-        d.w = hkFabs(m_dinA.w) - sum.w;
+        d.x = noNegZero(hkFabs(m_dinA.x) - sum.x);
+        d.y = noNegZero(hkFabs(m_dinA.y) - sum.y);
+        d.z = noNegZero(hkFabs(m_dinA.z) - sum.z);
+        d.w = noNegZero(hkFabs(m_dinA.w) - sum.w);
         if (compareGreaterThan4(d, tolerance4) & HK_VECTOR3_COMPARE_MASK_XYZ)
             return 1;
         m_sepDist[0] = d;
@@ -117,10 +129,10 @@ int hkBoxBoxCollisionDetection::checkIntersection(const hkVector4& tolerance4)
         sum.z = proj.z + m_radiusB.z;
         sum.w = m_radiusB.w;
         hkVector4 d;
-        d.x = hkFabs(m_dinB.x) - sum.x;
-        d.y = hkFabs(m_dinB.y) - sum.y;
-        d.z = hkFabs(m_dinB.z) - sum.z;
-        d.w = hkFabs(m_dinB.w) - sum.w;
+        d.x = noNegZero(hkFabs(m_dinB.x) - sum.x);
+        d.y = noNegZero(hkFabs(m_dinB.y) - sum.y);
+        d.z = noNegZero(hkFabs(m_dinB.z) - sum.z);
+        d.w = noNegZero(hkFabs(m_dinB.w) - sum.w);
         if (compareGreaterThan4(d, tolerance4) & HK_VECTOR3_COMPARE_MASK_XYZ)
             return 1;
         m_sepDist[1] = d;
