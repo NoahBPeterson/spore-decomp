@@ -1,2 +1,3 @@
 # va  diff-bytes  reason
 01121610  1373  hkConvexPenetrationUtil simplex evolve step: complete (all 5 callees, 5/5 calls, size 0.95x); frame/x87 schedule differs (stack slots, fucompp-vs-ftst against 0.0)
+01120f40  32  hkConvexPenetrationUtil::init: flags /vc71 /O2 /MD /Gy /TP; difftest PASS (400 valid, 100.0% cov); size 97 vs 97; complete (transform assign, shapes, the four k copies, k*k into m_eps, simplex count 0, the four pointer/simplex args); cl hoists the m_eps `fstp` to right after +0x54 and picks a different register for the four k-copy stores, so the store order/scheduling of +0x40/+0x4c/+0x44/+0x48/+0x50 differs from retail
