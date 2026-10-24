@@ -1,1 +1,5 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00d18df0/s00d18df0_b.cpp  ?Copy@cGameEditInputStrategy@SP@@QAEXXZ  00d19460  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d18df0/s00d18df0_b.cpp  ?PopulateLoadPlanetDialogGrid@cGameEditInputStrategy@SP@@QAEXXZ  00d194c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d18df0/s00d18df0_b.cpp  ?partial_sort@eastl@@YAXPAI00UcPropertyListNameSort@SP@@@Z  00d19610  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d18df0/s00d18df0_b.cpp  ??0cPropertyListNameSort@SP@@QAE@I@Z  00d196f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
