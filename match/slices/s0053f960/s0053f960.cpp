@@ -34,6 +34,18 @@ void     FUN_0050e690(void* a, void* b);              // @ 0x50e690
 void     FUN_0053f300(void* self, int key, int* out); // @ 0x53f300
 void     Vector3_Add(void* dst, void* src);           // @ 0x41ddb0 reuse
 
+// __thiscall casts for the container/evaluator helpers above (ecx carries the object).
+typedef unsigned int (__thiscall *FnHash850)(void* self, int a, int b);    // 0x50e850
+typedef char         (__thiscall *FnEq850)(void* self, int a, int b);      // 0x509850
+typedef void         (__thiscall *Fn53f300)(void* self, int key, int* out);// 0x53f300
+typedef void         (__thiscall *Fn4098a0)(void* dst, const void* src);   // 0x4098a0
+typedef void*        (__thiscall *Fn4739d0)(void* self, void* v);          // 0x4739d0
+typedef void         (__thiscall *Fn4cef00)(void* self, void* a, int b, void* c); // 0x4cef00
+typedef void*        (__thiscall *Fn530c80)(void* self, void* begin, void* end);  // 0x530c80
+typedef void*        (__thiscall *Fn4fc100)(void* self, void* out, const void* a, const void* b, int mode); // 0x4fc100
+void*    FUN_004fc100();                              // @ 0x4fc100
+void*    FUN_00530c80();                              // @ 0x530c80
+
 extern uint32_t gMxcsrBits;        // @ 0x15db058
 
 // default-refcounted object header used at context +0x90 / +0x94
@@ -46,7 +58,7 @@ struct RefCounted { void* vptr; int mRef; };
 struct Obj {
     char mPad[0x200];
 
-    int          FUN_0053f960(int* out, int a, int b, int c, int d);
+    bool         FUN_0053f960(int* out, int a, int b, int c, int d);
     unsigned int FUN_0053fe30(int entry, unsigned char mask);
     int          FUN_005400a0(int param_2, int param_3, float param_4);
     void         FUN_00540210();
@@ -221,11 +233,11 @@ void Obj::FUN_005407a0(unsigned int n)
 {
     int* v = (int*)this;
     if ((unsigned int)(v[1] - *v >> 3) < n) {
-        FUN_004cef00((void*)v[1], n - (v[1] - *v >> 3), &n);
+        int value[2];   // uninitialized pair passed through by the original caller
+        ((Fn4cef00)FUN_004cef00)(this, (void*)v[1], n - (v[1] - *v >> 3), value);
     } else {
         // vector<pair<int,float>>::erase(begin + n, end) @ 0x530c80
-        extern void VectorErasePair(void* begin, void* end);
-        VectorErasePair((void*)(*v + n * 8), (void*)v[1]);
+        ((Fn530c80)FUN_00530c80)(this, (void*)(*v + n * 8), (void*)v[1]);
     }
 }
 
@@ -315,7 +327,7 @@ unsigned int Obj::FUN_0053fe30(int entry, unsigned char mask)
 }
 
 // @ 0x0053f960
-int Obj::FUN_0053f960(int* out, int a, int b, int c, int d)
+bool Obj::FUN_0053f960(int* out, int a, int b, int c, int d)
 {
     char* self = (char*)this;
     int local_60 = a;
@@ -323,13 +335,13 @@ int Obj::FUN_0053f960(int* out, int a, int b, int c, int d)
     int local_b0 = a;
     int local_ac = b;
     int* local_a8 = (int*)(self + 0x7c);
-    unsigned int local_a0 = FUN_0050e850(a, b);
+    unsigned int local_a0 = ((FnHash850)FUN_0050e850)(self + 0x7c, a, b);
     unsigned int local_8 = local_a0;
     int local_24 = 0;
     char flag;
     if (local_a0 < 0x8000) {
         int local_a4 = local_a0 * 0xc + *local_a8;
-        if (FUN_00509850(local_b0, local_ac) != 0) {
+        if (((FnEq850)FUN_00509850)((void*)local_a4, local_b0, local_ac) != 0) {
             *out = *(int*)(*local_a8 + 8 + local_a0 * 0xc);
             flag = 1;
             goto LAB;
@@ -342,15 +354,15 @@ LAB:
         *(unsigned int*)(self + 0x1c) = local_8 & 0xffff8000 | *(unsigned int*)(self + 0x1c);
         int local_3c[4];
         int local_50[4];
-        FUN_0053f300(self, c, local_3c);
-        FUN_0053f300(self, d, local_50);
+        ((Fn53f300)FUN_0053f300)(self, c, local_3c);
+        ((Fn53f300)FUN_0053f300)(self, d, local_50);
         if (*(int*)(self + 0x1c) != 0)
             return 0;
         int e0 = local_3c[1];
         int e1 = local_50[1];
         cSPVector3 v0, v1;
-        FUN_004098a0(&v0, (cSPVector3*)(*(int*)(self + 0x50) + 0xc + e0 * 0x18));
-        FUN_004098a0(&v1, (cSPVector3*)(*(int*)(self + 0x50) + 0xc + e1 * 0x18));
+        ((Fn4098a0)FUN_004098a0)(&v0, (const void*)(*(int*)(self + 0x50) + 0xc + e0 * 0x18));
+        ((Fn4098a0)FUN_004098a0)(&v1, (const void*)(*(int*)(self + 0x50) + 0xc + e1 * 0x18));
         float half = 0.5f;
         cSPVector3 cross;
         void* pc = FUN_0041dc10(&cross, &v0, &v1);
@@ -369,11 +381,13 @@ LAB:
         fn(evaluator, &local_10, &blend);
         int local_18;
         if (blend < 0.0f) {
-            void* p = FUN_0041de40(&cross, (void*)(self + 0x14), &local_10);
+            cSPVector3 lerped;
+            void* p = ((Fn4fc100)FUN_004fc100)(evaluator, &lerped, &v0, &local_10, 0);
             local_10 = *(cSPVector3*)p;
             local_18 = e0;
         } else {
-            void* p = FUN_0041de40(&cross, &local_10, (void*)(*(int*)(self + 0x50) + 0xc + e1 * 0x18));
+            cSPVector3 lerped;
+            void* p = ((Fn4fc100)FUN_004fc100)(evaluator, &lerped, &local_10, &v1, 0);
             local_10 = *(cSPVector3*)p;
             local_18 = e1;
         }
@@ -382,7 +396,7 @@ LAB:
             *out = (*(int*)((char*)eval2 + 0xc) - *(int*)((char*)eval2 + 8)) / 0xc;
             *(int*)(*(int*)(self + 0x50) + 4 + local_18 * 0x18) = *out;
             *(int*)(*(int*)(self + 0x50) + 8 + local_18 * 0x18) = e0;
-            FUN_004739d0((char*)eval2 + 8);
+            ((Fn4739d0)FUN_004739d0)((char*)eval2 + 8, &local_10);
             int pair[2];
             pair[1] = 1;
             pair[0] = local_18;

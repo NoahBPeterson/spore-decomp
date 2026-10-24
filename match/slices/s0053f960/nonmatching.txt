@@ -1,9 +1,9 @@
-0053f960  178  complete; /Od frame/slot layout differs (1052 vs 1230 bytes)
+0053f960  1156 complete; /Od frame/slot layout differs (ours 678 vs 1230 bytes). Wrong calling conventions fixed (0x50e850/0x509850/0x53f300/0x4098a0/0x4739d0 are __thiscall; the blend branches call evaluator->Lerp 0x4fc100, not FUN_0041de40) and the return is bool (orig only sets al). equiv: WEAK (208 valid, 23.0% cov, no mismatch) -- most fuzz inputs fault on the map/entry pointers so the long cache-miss path is rarely reached.
 0053fe30  464  complete; /Od slot layout + modifier flush schedule differs
 005400a0  363  complete; /Od refcount/init schedule differs
 00540210  187  complete; /Od refcount-release schedule differs (129 vs 170 bytes)
 005402c0  84   complete; /Od container push_back schedule differs
 00540340  259  complete; /Od hash-probe schedule differs
 00540560  555  complete; /Od container grow/insert schedule differs
-005407a0  96   complete; /Od container resize schedule differs
+005407a0  105  container resize: FUN_004cef00 and 0x530c80 are __thiscall (ecx=this); the third insert arg is the original's uninitialized pair local. equiv: PASS (297 valid, 100% cov)
 00540820  248  complete; /Od hash-probe schedule differs
