@@ -130,7 +130,10 @@ struct HInsertResult {
     HInsertResult(const HIter& it, bool b) : mIter(it), mInserted(b) {}
 };
 struct RehashResult { bool doRehash; uint newBucketCount; };
-void RehashPolicyNeeded(void* policy, RehashResult* out, uint buckets, uint elems, uint add);  // 0x00921440
+struct RehashPolicy {
+    uint mData[4];
+    void Needed(RehashResult* out, uint buckets, uint elems, uint add);  // 0x00921440
+};
 
 __forceinline bool KeyEq(const Key64& a, const Key64& b)
 {
@@ -142,7 +145,7 @@ struct HashTable {
     HNode** mBuckets;                   // +0x04
     uint mBucketCount;                  // +0x08
     uint mElemCount;                    // +0x0c
-    uint mPolicy[4];                    // +0x10 rehash policy object
+    RehashPolicy mPolicy;               // +0x10 rehash policy object
 
     void ClearBuckets(HNode** b, uint n);                                       // 0x0042a7b0
     void Rehash(uint n);                                                        // 0x004252b0
@@ -157,13 +160,14 @@ struct HashTable {
     HIter Find(const Key64& k);                                                 // 0x0041fb20
     void Destroy();                                                             // 0x0041fac0
 };
+struct InsertTag { uint mUnused; };
 struct HashTableA : HashTable {
     HNode* AllocNode(const Key64& k);                                           // 0x004251b0
-    HInsertResult Insert(const Key64& k);                                       // 0x0041fc40
+    HInsertResult Insert(const Key64& k, InsertTag tag);                        // 0x0041fc40
 };
 struct HashTableB : HashTable {
     HNode* AllocNode(const Key64& k);                                           // 0x00425240
-    HInsertResult Insert(const Key64& k);                                       // 0x0041fe00
+    HInsertResult Insert(const Key64& k, InsertTag tag);                        // 0x0041fe00
 };
 
 __forceinline void FreeMem(void* p) { void* q = p; operator delete(q); }
@@ -194,14 +198,14 @@ HIter HashTable::Find(const Key64& k)
 
 // @ 0x0041fc40
 // Not byte-exact (same inlined-predicate spill issue as Find, plus extra frame slots).
-HInsertResult HashTableA::Insert(const Key64& k)
+HInsertResult HashTableA::Insert(const Key64& k, InsertTag tag)
 {
     uint c = HashCode(k);
     uint n = c % mBucketCount;
     HNode* pNode = DoFindNode(mBuckets[n], k);
     if (!pNode) {
         RehashResult rr;
-        RehashPolicyNeeded(mPolicy, &rr, mBucketCount, mElemCount, 1);
+        mPolicy.Needed(&rr, mBucketCount, mElemCount, 1);
         HNode* node = AllocNode(k);
         if (rr.doRehash) {
             n = c % rr.newBucketCount;
@@ -216,14 +220,14 @@ HInsertResult HashTableA::Insert(const Key64& k)
 }
 
 // @ 0x0041fe00
-HInsertResult HashTableB::Insert(const Key64& k)
+HInsertResult HashTableB::Insert(const Key64& k, InsertTag tag)
 {
     uint c = HashCode(k);
     uint n = c % mBucketCount;
     HNode* pNode = DoFindNode(mBuckets[n], k);
     if (!pNode) {
         RehashResult rr;
-        RehashPolicyNeeded(mPolicy, &rr, mBucketCount, mElemCount, 1);
+        mPolicy.Needed(&rr, mBucketCount, mElemCount, 1);
         HNode* node = AllocNode(k);
         if (rr.doRehash) {
             n = c % rr.newBucketCount;
