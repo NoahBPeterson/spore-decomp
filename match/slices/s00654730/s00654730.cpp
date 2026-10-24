@@ -1,5 +1,6 @@
 // slice s00654730: SP::cSPUIAssetGrid focus/scroll/filter update methods (UI
 // module, /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc).
+// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 #include <new>
 
@@ -10,8 +11,6 @@ extern "C" void* FUN_0066a800(int);                    // 0x0066a800
 extern "C" void  FUN_0066b0c0(void*);                  // 0x0066b0c0
 extern "C" void  FUN_00653ee0(void*, void*, void*);    // 0x00653ee0
 extern "C" void  FUN_00650470(void*);                  // 0x00650470
-extern "C" void* FUN_006505d0(void*);                  // 0x006505d0
-extern "C" void  FUN_006553b0(void*);                  // 0x006553b0
 extern "C" char  FUN_00666420(void*);                  // 0x00666420
 extern "C" void  cTribeTool_GetTutorialToolPrice(void*, int, int);  // 0x004e1c30
 extern "C" void  Stopwatch_GetElapsedTime(void*, void*);  // 0x0093a5e0
@@ -105,44 +104,87 @@ void FUN_00654d00(void* self) {
         (*(void(__thiscall**)(void*))((char*)*(void**)item + 8))(item);
 }
 
+struct GridEntry {
+    char pad[0x18];
+    float mPosition;   // +0x18
+};
+
+struct ItemSizeProvider {
+    virtual void V00();
+    virtual void V04();
+    virtual void V08();
+    virtual void V0c();
+    virtual void V10();
+    virtual void V14();
+    virtual void V18();
+    virtual void V1c();
+    virtual void V20();
+    virtual void V24();
+    virtual void V28();
+    virtual void V2c();
+    virtual void V30();
+    virtual void V34();
+    virtual void V38();
+    virtual void V3c();
+    virtual int GetSize();   // +0x40
+};
+
+struct GridSource {
+    char pad[0x20];
+    ItemSizeProvider* mSizeProvider;   // +0x20
+};
+
 struct cSPUIAssetGrid {
-    void ScrollTo(void* item);
+    char pad108[0x108];
+    float mItemWidth;         // +0x108
+    char pad10c[0x1c];
+    float mViewWidth;         // +0x128
+    char pad12c[0x54];
+    float mScroll;            // +0x180
+    char pad184[4];
+    float mMaxScroll;         // +0x188
+    GridSource* mGridSource;  // +0x18c
+    bool mFocusFlag;          // +0x190
+    char pad191[0x55];
+    bool mNeedsRebuild;       // +0x1e6
+    char pad1e7[1];
+    bool mNeedsReset;         // +0x1e8
+    void* Find(uint32_t id);  // 0x006505d0
+    void Rebuild();           // 0x006553b0
+    void Refresh();           // 0x00654d00
+    void ScrollTo(void* item); // 0x00654e20
 };
 
 // @ 0x00654e20  SP::cSPUIAssetGrid::ScrollTo(item)
 void cSPUIAssetGrid::ScrollTo(void* item) {
-    void* self = this;
-    char* s = (char*)self;
     if (!item)
         return;
-    if (s[0x1e6])
-        FUN_006553b0(self);
-    if (s[0x1e8])
-        FUN_00654d00(self);
-    void* found = FUN_006505d0(item);
+    if (mNeedsRebuild)
+        Rebuild();
+    if (mNeedsReset)
+        Refresh();
+    GridEntry* found = (GridEntry*)Find((uint32_t)(uintptr_t)item);
     if (!found)
         return;
-    float itemPos = *(float*)((char*)found + 0x18);
-    float cur = *(float*)(s + 0x180);
-    int size = (*(int(__thiscall**)(void*))((char*)*(void**)(*(void**)(s + 0x18c)) +
-                                            0x20))(0);
-    float limit = ((float)size + cur) - *(float*)(s + 0x128);
+    float itemPos = found->mPosition;
+    float cur = mScroll;
+    int size = mGridSource->mSizeProvider->GetSize();
+    float limit = ((float)size + cur) - mViewWidth;
     if (limit < cur)
         limit = cur;
     if (cur <= itemPos) {
-        if (limit < *(float*)(s + 0x108) + itemPos)
-            *(float*)(s + 0x180) = (*(float*)(s + 0x108) + itemPos - (float)size) +
-                                   *(float*)(s + 0x128);
+        if (limit < mItemWidth + itemPos)
+            mScroll = (mItemWidth + itemPos - (float)size) + mViewWidth;
     } else {
-        *(float*)(s + 0x180) = itemPos;
+        mScroll = itemPos;
     }
-    float v = *(float*)(s + 0x180);
+    float v = mScroll;
     if (v <= 0.0f)
         v = 0.0f;
-    if (*(float*)(s + 0x188) <= v)
-        v = *(float*)(s + 0x188);
-    *(float*)(s + 0x180) = v;
-    s[0x190] = 1;
+    if (mMaxScroll <= v)
+        v = mMaxScroll;
+    mScroll = v;
+    mFocusFlag = true;
     SPUIHelpers_UpdateMouseFocus(1);
 }
 
