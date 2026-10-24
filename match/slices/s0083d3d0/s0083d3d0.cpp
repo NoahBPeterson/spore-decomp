@@ -36,7 +36,7 @@ struct string8 {
 
 void  __cdecl DiscardWhiteSpace(const char** p);            // 0x0083ce90
 void  __cdecl ThrowCError(void* out, const char* fmt, ...); // 0x0052df30
-void  __cdecl DoFreeNodesExpr(void* bucketArray, int n);    // 0x0083dd00
+void  __stdcall DoFreeNodesExpr(void* bucketArray, int n);  // 0x0083dd00
 void* __cdecl HashFindExprNode(const void* key, void* node);// 0x007e2ea0
 int   __cdecl ExprFind(int* out, const void* key);          // 0x007e2ea0
 int   __cdecl EvalIntExpression(void* self, const char** p); // 0x0083eb00
@@ -217,7 +217,7 @@ void EA::ArgScript::cExpression::EvalString(const char** p, eastl::string8* out)
 // 0x0083dd00  hashtable<...cExprFunction...>::DoFreeNodes
 // ===========================================================================
 // @ 0x0083dd00
-void __cdecl DoFreeNodesExpr(void* bucketArray, int bucketCount) {
+void __stdcall DoFreeNodesExpr(void* bucketArray, int bucketCount) {
     for (int i = 0; i < bucketCount; ++i) {
         char* node = *(char**)((char*)bucketArray + i * 4);
         while (node) {
