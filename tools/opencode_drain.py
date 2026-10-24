@@ -273,6 +273,9 @@ while True:
         G = json.load(open(GF))
         SESS = G.get("sessions", {})
         NK = int(G["workers"])
+        # entries may be appended to a running queue batch (part1's 3 late FAILs, 2026-10-24: a claim of index 902
+        # against the 901 entries read at start crashed the drain)
+        BATCH = json.load(open(W("work/batches", G["batch"] + ".json")))
     now = time.time()
     active = api("GET", "/api/session/active").get("data", {})
     if isinstance(active, list):
