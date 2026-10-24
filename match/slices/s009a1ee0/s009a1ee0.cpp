@@ -1,4 +1,4 @@
-// @ 0x009a1ee0  nSPCreatureAnim::CreateAnimationBindRecords
+// nSPCreatureAnim::CreateAnimationBindRecords
 // (name from the dev-build PDB: its local classes bind_record_helper / variant_helper and their
 // members 0x0099c7b0 InitChannel, 0x009a0f10, 0x009a1c60, 0x009a1a60 are called from here only).
 //
