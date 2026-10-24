@@ -4,6 +4,7 @@
 #include "types.h"
 #include <new>
 #include <math.h>
+#include <string.h>
 
 // Generic object with a serialization virtual at slot 14 (byte offset +0x38).
 struct SerObj {
@@ -117,13 +118,18 @@ void SerializeHelper::ReadProperty() {
 Value20* SerializeHelper::NewArrayValue(int count) {
   if (count == 0) return 0;
   uint32_t size = count * 0x20;
-  if ((int)(mTemp.mLimit - mTemp.mCur) - (int)size < 0) {
-    if (!mTemp.Grow(size)) return 0;
+  uint32_t aligned = (size + 7) & 0xfffffff8u;
+  if ((int)(mTemp.mLimit - mTemp.mCur) - (int)aligned < 0) {
+    if (!mTemp.Grow(aligned)) {
+      memset((void*)0, 0, size);
+      return 0;
+    }
   }
   Value20* p = (Value20*)mTemp.mCur;
-  uint32_t nxt = (uint32_t)p + size;
+  uint32_t nxt = (uint32_t)p + aligned;
   mTemp.mCur = nxt;
   mTemp.mCur2 = nxt;
+  memset(p, 0, size);
   return p;
 }
 
@@ -191,14 +197,14 @@ void StackAlloc::AllocateNewBlock(Bookmark* b) {
   mpTop = (void*)p;
 }
 
-// @ 0x0082AFE0 : binary search of a static wide-string table, returns a 16-bit code.
+// binary search of a static wide-string table, returns a 16-bit code (0x0082AFE0).
 extern const unsigned char g_strTable[];   // 0x141a1c0 pairs {char16* name; ushort code;}
 static int CmpW(const unsigned short* a, const unsigned short* b) {
   while (*a == *b) { if (!*a) return 0; ++a; ++b; }
   return *a < *b ? -1 : 1;
 }
 // @ 0x0082AFE0
-int LookupCode(const unsigned short* key) {
+int __stdcall LookupCode(const unsigned short* key) {
   int lo = 0, hi = 0x16;
   while (lo < hi) {
     int mid = (lo + hi) / 2;

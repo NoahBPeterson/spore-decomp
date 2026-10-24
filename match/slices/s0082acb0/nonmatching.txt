@@ -1,5 +1,5 @@
-0082afe0 104 complete translation; inlined wide-string compare not identical
-0082b060 94  complete translation; EASTL array zero-fill schedule differs
+0082afe0  286  FIXED wide-string table lookup: the binary ends with `ret 4`, so it must be `int __stdcall LookupCode(const unsigned short*)`; the cdecl declaration left the pointer on the stack (esp +0x4 vs +0x8). A stray `// @ 0x0082AFE0` on the static CmpW helper also made the checker resolve CmpW; removed. equiv PASS 400/400 valid inputs, 76.0% coverage. Not byte-exact (diff 286 B, size 210 vs 117) because cl keeps CmpW out of line (two calls) where the binary inlines it
+0082b060  93   FIXED NewArrayValue: must zero-fill the allocated block with `memset(p, 0, size)`, and on the Grow failure path call `memset(0, 0, size)` before returning 0 (the binary does both); the block size is aligned to 8 (`(size + 7) & ~7`) as the binary computes. equiv WEAK 123 valid (need 200), 76.6% coverage, no mismatch; the discards are inputs where the ORIGINAL's allocator/memset path reaches an import the harness does not fake (`import:memset` 67, `import:memcpy` 21) plus original faults. diff 93 B, size 107 vs 105
 0082b7f0 69  complete translation; allocator fast-path register allocation differs
 0082b920 49  complete translation; nested allocator subobject register allocation differs
 0082b970 61  complete translation; nested allocator subobject register allocation differs
