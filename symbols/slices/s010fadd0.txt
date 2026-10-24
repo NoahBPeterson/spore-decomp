@@ -1,1 +1,37 @@
-010fadd0 hk3AxisSweep::addObjectBatch  # Havok 3.1 broadphase batch insert; callees mergeBatch 010f4f50, queryBatchAabbSub 010f9ac0, quickSort 010f5480
+010fadd0 ?addObjectBatch@hk3AxisSweep@@UAEXAAV?$hkArray@PAVhkBroadPhaseHandle@@@@AAV?$hkArray@VhkAabb@@@@AAV?$hkArray@VhkBroadPhaseHandlePair@@@@@Z  # nonmatching (pre-existing body in this slice)
+010fb590 ?removeObjectBatch@hk3AxisSweep@@UAEXAAV?$hkArray@PAVhkBroadPhaseHandle@@@@AAV?$hkArray@VhkBroadPhaseHandlePair@@@@@Z  # nonmatching (707; complete)
+010fb8f0 _hkAgentNnMachine_GetAgentType                     # nonmatching (180; complete)
+010fb9c0 _hkAgentNnMachine_UpdateShapeCollectionFilter      # nonmatching (3; complete, only the pop edi / test order)
+010fba10 _hkAgentNnMachine_InvalidateTimInAgent            # nonmatching (41; complete)
+010fba90 _hkAgentNnMachine_WarpTimeInAgent                 # nonmatching (143; complete)
+010fbb30 ?hkPairTableFindPeer@@YAPAXPAUhkPairTable@@0@Z    # nonmatching (23; complete, register assignment only)
+010fbb80 ?insertAt@?$hkArray@PAVhkClass@@@@QAEXHABV1@@Z    # nonmatching (180; complete, mangled name identical to retail)
+010fbc50 ?hkRecordBlockArrayRemove@@YAXPAUhkRecordBlockArray@@PAUhkPairRecord@@@Z  # nonmatching (131; complete; retail has no PDB name)
+
+# Invented views (only retail offsets / slots are meaningful).
+#   hk3AxisSweep::hkBpAxis::removeBatch(hkBpNode*, int axis, const hkArray<int>& relocations) is the out-of-line
+#   0x010f5620 helper already reconstructed in s010f5340; removeObjectBatch passes an hkArray<int> whose m_data is a
+#   hkThreadMemory::allocateStack block of numNodes ints (capacity | 0x80000000 so its dtor does not free it).
+#   hkAgentNnAgent      : 3-slot vtable; slot +0x08 returns the agent's grid row/column index.
+#   hkAgentNnMachineWorld (data block reached through the context's +0x00):
+#       +0x190 m_cellState[0x400]      per-cell state byte (index into the filter table)
+#       +0x9a0 m_filterFlags[0x4f4]    0x14-byte-stride filter entries
+#       +0xe94 m_cellsPlain[0x400]     32x32 grid of agent type bytes
+#       +0x1294 m_cellsFiltered[0x400] 32x32 filtered grid
+#       +0x16ac m_agentTypes[0x34]     +0x00 shape-collection-filter, +0x04 invalidateTim, +0x08 warpTime callbacks,
+#                                      +0x18 type id (2 == solid)
+#   hkAgentNnMachineContext : +0x00 world, +0x0c use-filtered-grid byte.
+#   hkAgentNnAgentEntry     : +0x00 kind byte (2/4/6), +0x01 agent type byte, +0x14/+0x18 user data,
+#       +0x1c m_time (-1.0f == invalid), +0x20 m_position, +0x30 m_positionFiltered.
+#   hkPairTable (+0x24 refs, +0x28 count), hkPairRef (+0x00 record, +0x04 peer);
+#   hkPairRecord (+0x0c/+0x0e ref indices, +0x14/+0x18 owning pair tables);
+#   hkRecordBlockArray (+0x00 data, +0x04 size, +0x08 capacityAndFlags, +0x0c inplace storage, +0x10 usedBytes,
+#       +0x14 recordSize, +0x16 chunkSize).
+
+# Other externs: 0x0107f440 hkString::memCpy(dst, src, n); 0x0107f5d0 hkArrayUtil::_reduce(array, elemSize,
+#   inplaceStorage, inplaceCapacity); 0x0107f4a0 hkArrayUtil::_reserveExactly; 0x0107db10 hkThreadMemory::
+#   deallocateChunk(p, nbytes, class 0x24); 0x010f9ac0 hk3AxisSweep::queryBatchAabbSub.
+
+# Flags: checked with /O2 /MD /Gy /TP /fp:fast (the file header flags without /fp:fast give the same structure;
+#   /fp:fast shrinks the call-scheduler noise of the AI functions). -1.0f / 0.0f stores stay x87 in cl 15 while
+#   retail stores the integer bit patterns, which is the main reason 0x010fba10 / 0x010fba90 cannot match.
