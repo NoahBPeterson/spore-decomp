@@ -12,9 +12,6 @@ void  __cdecl operator_delete_(void* p);
 void* __cdecl FUN_00928a30(void* a, void* b, int c, int d, int e, int f, int g, int h);
 void* __cdecl FUN_011fb220(void* p);
 void* __cdecl FUN_011f3220(void* p);
-void* __cdecl FUN_011f3580(void* p);
-void* __cdecl FUN_011f4e90(void* p);
-void* __cdecl FUN_011f3130(void* p);
 void* __cdecl FUN_011f1120();
 void* __cdecl FUN_011f51d0(void* p, ...);
 void* __cdecl FUN_011f36d0(void* p, int a, int b, int c);
@@ -24,6 +21,11 @@ void* __cdecl FUN_006ddd10(int a, void* b);
 unsigned int __cdecl SP_ColorRGBAToU32(int a);
 void* __cdecl VectorDescr(int n);   // @ 0x761650
 }
+
+// Release helpers the original invokes with the pointer in ecx (__fastcall first arg).
+void __fastcall FUN_011f3580(void* p);  // 0x011f3580
+void __fastcall FUN_011f4e90(void* p);  // 0x011f4e90
+void __fastcall FUN_011f3130(void* p);  // 0x011f3130
 
 namespace SP {
 struct RefCountedAt8 {
@@ -167,31 +169,25 @@ struct Map2380 {
 int Map2380::find()
 {
     if (cached >= 0) return cached;
-    unsigned int* a = *(unsigned int**)((char*)base + 0x34);
-    int n = *(int*)(*(int*)((char*)base + 0x3c) + 8);
-    unsigned int best = 0;
+    void* b = base;
+    int n = *(int*)(*(int*)((char*)b + 0x3c) + 8);
+    unsigned int* a = *(unsigned int**)((char*)b + 0x34);
     unsigned int local = 0;
+    unsigned int* pl = &local;
     if (n > 0) {
         do {
-            unsigned int* p = a;
-            unsigned int v = *p;
-            if (v <= best) { local = v; p = &local; }
-            else { local = v; }
-            unsigned int v1 = p[1];
-            unsigned int b;
-            if (v1 <= local) { b = local; }
-            else { b = v1; }
-            local = b;
-            unsigned int v2 = p[2];
-            if (v2 <= b) { best = b; }
-            else { best = v2; }
-            local = best;
+            unsigned int* p;
+            if (*pl < a[0]) p = &a[0]; else p = pl;
+            *pl = *p;
+            if (*pl < a[1]) p = &a[1]; else p = pl;
+            *pl = *p;
+            if (*pl < a[2]) p = &a[2]; else p = pl;
+            *pl = *p;
             a += 4;
-            n--;
-        } while (n != 0);
+        } while (--n != 0);
     }
-    cached = (int)(best + 1);
-    return (int)(best + 1);
+    cached = (int)(*pl + 1);
+    return cached;
 }
 
 // ------------------------------------------------------------------- 0x7623f0
@@ -314,11 +310,12 @@ struct Map262900 {
     unsigned int* buckets;       // +0x4
     unsigned int bucketCount;    // +0x8
     unsigned int count;          // +0xc
-    void insert(void* outIter, unsigned int* key);   // @ 0x762900
+    void insert(void* outIter, unsigned int* key, unsigned int* keyPtr);   // @ 0x762900
 };
 // @ 0x762900
-void Map262900::insert(void* outIter, unsigned int* key)
+void Map262900::insert(void* outIter, unsigned int* key, unsigned int* keyPtr)
 {
+    (void)keyPtr;
     unsigned int k = *key;
     unsigned int b = k % bucketCount;
     unsigned int* slot = (unsigned int*)((char*)buckets + b * 4);
@@ -387,24 +384,25 @@ void __cdecl FUN_00762a60(void* p, int n)
 }
 
 // ------------------------------------------------------------------- 0x762b00
+struct Iter { void* node; void* bucket; unsigned char inserted; char pad[3]; };   // eastl hashtable iterator
 struct Hash262b00 {
     char pad0[4];
-    void* buckets;
-    unsigned int bucketCount;
-    int findInsert(unsigned int* key);   // @ 0x762b00
+    void* buckets;               // +0x04
+    unsigned int bucketCount;    // +0x08
+    void find(Iter* out, const void* key);   // 0x00db4780
+    int findInsert(unsigned int* key);       // @ 0x762b00
 };
 // @ 0x762b00
 int Hash262b00::findInsert(unsigned int* key)
 {
-    int it[3];
-    // eastl hashtable find (external) - write a local sentinel
-    it[0] = 0;
-    if (it[0] == *(int*)((char*)buckets + bucketCount * 4)) {
-        unsigned int k = *key;
-        unsigned int loc[4] = { k, 0, 0, 0 };
-        ((Map262900*)((char*)this + 4))->insert(it, loc);
+    Iter it;
+    find(&it, key);
+    if (it.node == *(void**)((char*)buckets + bucketCount * 4)) {
+        unsigned int pair[4] = { 0, 0, 0, 0 };
+        pair[0] = *key;
+        ((Map262900*)this)->insert(&it, pair, key);
     }
-    return it[0] + 4;
+    return (int)(char*)it.node + 4;
 }
 
 // ------------------------------------------------------------------- 0x762b70 / 0x762c60
