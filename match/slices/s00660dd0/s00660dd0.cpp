@@ -41,7 +41,36 @@ struct E34 {
     Blob14   e;          // 0x20
 };
 struct Vec34 { E34* begin; E34* end; E34* cap; void FUN_00661670(); void FUN_00661700(); void DestroyRange(E34* first, E34* last); };   // DestroyRange: 0x00646d70
-struct MapRoot34 { void* FUN_006612b0(void* key); };
+
+// 0x24-byte map entry: unsigned key followed by the 0x20-byte value.
+struct MapVal20 {
+    void*   mp0;        // +0x00  refcounted object
+    uint8_t mb4;        // +0x04
+    uint8_t mb5;        // +0x05
+    char    pad06[2];
+    float   mf8;        // +0x08
+    float   mfC;        // +0x0c
+    float   mf10;       // +0x10
+    float   mf14;       // +0x14
+    void*   mp18;       // +0x18
+    void*   mp1C;       // +0x1c
+};
+struct MapEntry24 { uint32_t mKey; MapVal20 mVal; };
+struct MapNode24 {
+    MapNode24* pLeft;   // +0x00
+    MapNode24* pRight;  // +0x04
+    uint32_t   pad08;   // +0x08
+    uint32_t   pad0C;   // +0x0c
+    uint32_t   mKey;    // +0x10
+    MapVal20   mVal;    // +0x14
+};
+struct MapRoot34 {
+    void*      pAlloc;  // +0x00
+    MapNode24* pHead;   // +0x04  sentinel/anchor node
+    MapNode24* pHead2;  // +0x08
+    MapNode24* pRoot;   // +0x0c
+    void* FUN_006612b0(void* key);
+};
 struct SubD8 { void FUN_0065f9e0(); };
 
 // @ 0x00660dd0  eastl::copy_backward over 0x34-byte elements.
@@ -119,7 +148,8 @@ void* cSPUIFeedFilter::ctor() {
     *(char*)(p + 0x10) = 0;
     *(void**)(p + 0x1c) = 0; *(void**)(p + 0x20) = 0; *(void**)(p + 0x24) = 0;
     *(void**)(p + 0x30) = 0; *(void**)(p + 0x34) = 0; *(void**)(p + 0x38) = 0;
-    FUN_0066a5e0(p + 0x44, 1, *(int*)0x140042c);
+    { typedef void (__thiscall *FCtor2)(void*, int, int);
+      ((FCtor2)&FUN_0066a5e0)(p + 0x44, 1, *(int*)0x140042c); }
     *(void**)(p + 0x64) = 0; *(void**)(p + 0x68) = 0; *(void**)(p + 0x6c) = 0;
     *(void**)(p + 0x70) = 0; *(void**)(p + 0x74) = 0; *(void**)(p + 0x78) = 0;
     *(void**)(p + 0x7c) = 0; *(void**)(p + 0x80) = 0; *(void**)(p + 0x84) = 0;
@@ -153,10 +183,12 @@ void cSPUIFeedFilter::dtor() {
     void* v = *(void**)(p + 0xf4);
     if (v) EASTL_allocator_deallocate(v);
     ((SubD8*)(p + 0xd8))->FUN_0065f9e0();
-    FUN_00660720(*(void**)(p + 0xbc), *(void**)(p + 0xc0));
+    { typedef void* (__thiscall *FVec2)(void*, void*, void*);
+      ((FVec2)&FUN_00660720)(p + 0xb8, *(void**)(p + 0xbc), *(void**)(p + 0xc0)); }
     *(void**)(p + 0xc4) = 0;
     if (*(uint32_t*)(p + 0xc0) > 1) EASTL_allocator_deallocate(*(void**)(p + 0xbc));
-    FUN_00d0c930(*(void**)(p + 0xa8));
+    { typedef void (__thiscall *FTree1)(void*, void*);
+      ((FTree1)&FUN_00d0c930)(p + 0x9c, *(void**)(p + 0xa8)); }
     void* h = *(void**)(p + 0x7c);
     if (h) { *(void**)(p + 0x7c) = 0; EA_Messaging_RemoveHandler(h, *(void**)(p + 0x80), *(void**)(p + 0x84), *(void**)(p + 0x88), *(void**)(p + 0x8c)); }
     void* a = *(void**)(p + 0x78); if (a) (*(FnP)Vslot(a, 4))(a);
@@ -165,11 +197,13 @@ void cSPUIFeedFilter::dtor() {
     a = *(void**)(p + 0x6c); if (a) (*(FnP)Vslot(a, 4))(a);
     a = *(void**)(p + 0x68); if (a) (*(FnP)Vslot(a, 4))(a);
     a = *(void**)(p + 0x64); if (a) (*(FnP)Vslot(a, 8))(a);
-    { Vec34* w = (Vec34*)(p + 0x30);
-      FUN_00646d70(w->begin, w->end);
+    { typedef void (__thiscall *FRange2)(void*, void*, void*);
+      Vec34* w = (Vec34*)(p + 0x30);
+      ((FRange2)&FUN_00646d70)(w, w->begin, w->end);
       if (w->begin && *(int*)((char*)w->begin - 4) != 0) EASTL_allocator_deallocate(w->begin); }
-    { Vec34* w = (Vec34*)(p + 0x1c);
-      FUN_00646d70(w->begin, w->end);
+    { typedef void (__thiscall *FRange2)(void*, void*, void*);
+      Vec34* w = (Vec34*)(p + 0x1c);
+      ((FRange2)&FUN_00646d70)(w, w->begin, w->end);
       if (w->begin && *(int*)((char*)w->begin - 4) != 0) EASTL_allocator_deallocate(w->begin); }
     *(void**)(p + 8) = (void*)0x13ec458;
     *(void**)(p + 4) = (void*)0x13eb394;
@@ -185,7 +219,8 @@ extern "C" void  Fun0066_0510(void* a, void* b, void* c);   // 0x00660510 (equiv
 extern "C" void* Fun0066_0d70(void* a, void* b, void* c);   // 0x00660d70 (equiv t1)
 extern "C" void* Fun0066_0fc0(unsigned n, void* a, void* b);
 struct Key3 { uint32_t a, b, c; };
-extern "C" void* FUN_006603d0(void* key, void* out);
+extern "C" void* FUN_006603d0();   // 0x006603d0  AreaRec::AssignChecked (__thiscall dst,key,src; ret 8)
+extern "C" void  FUN_00660ca0();   // 0x00660ca0  map node insert (__thiscall map,out,node,value,key; ret 0x10)
 extern "C" char  FUN_006a12a0(void* obj, int k, void* out);
 uint32_t* __cdecl LowerBoundU32(uint32_t* first, uint32_t* last, const uint32_t* val, unsigned char flag);   // 0x00555a20
 
@@ -205,22 +240,30 @@ char FUN_00661180(void* vec, void* key) {
     return r;
 }
 
-// @ 0x006612b0  eastl::map<unsigned,E34>::find-or-insert
+// @ 0x006612b0  eastl::map<unsigned, 0x20-byte value>::find-or-insert
 void* MapRoot34::FUN_006612b0(void* key) {
     char* p = (char*)this;
     uint32_t k = *(uint32_t*)key;
-    E34* node = *(E34**)(p + 0xc);
-    E34* found = (E34*)(p + 4);
+    MapNode24* head = (MapNode24*)(p + 4);
+    MapNode24* node = *(MapNode24**)(p + 0xc);
+    MapNode24* found = head;
     while (node) {
-        if (node->a < k) node = *(E34**)node;
-        else { found = node; node = *(E34**)((char*)node + 4); }
+        if (node->mKey < k) node = node->pLeft;
+        else { found = node; node = node->pRight; }
     }
-    if (found == (E34*)(p + 4) || k < found->a) {
-        E34* newn = (E34*)FUN_006603d0(key, 0);
-        Fun0066_0b30(*(void**)p, found, newn);
-        found = newn;
+    if (found == head || k < found->mKey) {
+        MapVal20 src = {};                       // zero-initialised value source
+        MapEntry24 tmp;                          // key + value built by AssignChecked
+        typedef void* (__thiscall *FAssign)(void*, const void*, const void*);
+        ((FAssign)&FUN_006603d0)(&tmp, key, &src);
+        uint32_t masked = (uint32_t)(uintptr_t)key & 0xffffff00u;
+        typedef void (__thiscall *FInsert)(void*, void**, MapNode24*, MapEntry24*, uint32_t);
+        ((FInsert)&FUN_00660ca0)(p, &key, found, &tmp, masked);
+        found = (MapNode24*)key;                 // the insert writes the new node back through arg0
+        if (tmp.mVal.mp0) ((FnP)Vslot(tmp.mVal.mp0, 4))(tmp.mVal.mp0);
+        if (src.mp0) ((FnP)Vslot(src.mp0, 4))(src.mp0);
     }
-    return found;
+    return &found->mVal;
 }
 
 // @ 0x00661390  vector<E34>::operator=
@@ -301,20 +344,32 @@ void Vec34::FUN_00661670() {
         }
         return;
     }
-    E34 tmp;
-    *(uint32_t*)(tmp.c.x + 0) = 0; *(uint32_t*)(tmp.c.x + 4) = 0; *(uint32_t*)(tmp.c.x + 8) = 0;
-    *(uint32_t*)(tmp.e.x + 0) = 0; *(uint32_t*)(tmp.e.x + 4) = 0; *(uint32_t*)(tmp.e.x + 8) = 0;
-    FUN_006614d0(self, e, &tmp);
+    // scalar-only 0x34 temp: a struct containing arrays would pull in a /GS cookie
+    // (the original has none) and clobber ecx on return.
+    struct Tmp34 {
+        uint32_t w00, w04, w08, w0c, w10, w14, w18, w1c, w20, w24, w28, w2c, w30;
+    };
+    Tmp34 tmp;
+    tmp.w08 = 0; tmp.w0c = 0; tmp.w10 = 0;
+    tmp.w20 = 0; tmp.w24 = 0; tmp.w28 = 0;
+    { typedef void* (__thiscall *FInsert)(void*, E34*, E34*);
+      ((FInsert)&FUN_006614d0)(self, e, (E34*)&tmp); }
+    void* pe = (void*)tmp.w20;
+    if (pe && *(int*)((char*)pe - 4) != 0) EASTL_allocator_deallocate(pe);
+    void* pc = (void*)tmp.w08;
+    if (pc && *(int*)((char*)pc - 4) != 0) EASTL_allocator_deallocate(pc);
 }
 
-// @ 0x00661700  vector<E34>::pop_back()
+// @ 0x00661700  vector<E34> range assign + destroy, then end -= (end-begin)/0x34*0x34
 void Vec34::FUN_00661700() {
     Vec34* v = this;
     E34* begin = v->begin;
     E34* end = v->end;
-    Fun0066_0d70(end, end, begin);
-    FUN_00646d70(begin, end);
-    v->end = (E34*)((char*)v->end - 0x34);
+    E34* u = (E34*)Fun0066_0d70(end, end, begin);
+    { typedef void (__thiscall *FRange2)(void*, void*, void*);
+      ((FRange2)&FUN_00646d70)(v, u, v->end); }
+    int n = (int)((char*)end - (char*)begin);
+    v->end = (E34*)((char*)v->end - (n / 0x34) * 0x34);
 }
 
 // ---------------------------------------------------------------------------
