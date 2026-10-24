@@ -1,9 +1,9 @@
 0074b170  287  complete cLoadQueue reset/clear; EH-scoped 0x1c temp elided by /O2 (original keeps EH frame + scratch), regalloc differs
-0074b310  93  complete vector DoInsertValue(0x1c) with throwing copy ctor; EH state layout differs
+0074b310  101  complete vector DoInsertValue(0x1c): copy ctor and grow path are bound to the retail 0x743b60/0x747980 thiscall entries; cl keeps the grow path as a tail call and elides the retail EH scratch frame, so code shape differs. | difftest: PASS - 391 valid inputs, 90.3% coverage (28/31), 0 mismatches
 0074b390  233  complete eastl::partial_sort<cOccluder*>; temp staged on stack not xmm, regalloc differs
 0074b490  100  complete heap-swap loop; register/scheduling differs (original keeps loop bound in memory)
 0074b510  101  complete heap-swap loop (reversed comparator); same scheduling mismatch
-0074b690  125  complete SetInWorld intrusive-list move; list anchor/register layout differs
+0074b690  124  complete SetInWorld intrusive-list move: the caller passes the node tail (+8), flags live at +4, and the anchors are 8-byte links at 0x19c/0x1a4; layout now matches, register/order differences remain. | difftest: PASS - 301 valid inputs, 80.0% coverage (36/45), 0 mismatches
 0074b760  1321  complete UpdateFromPropList; frame/regalloc differs (original keeps 0x20000 flag const in edi, pl reloaded from stack; flags merged to 0x30000 here)
 0074bda0   72  complete slot-list find; ChunkFind 16B quad copy register/scheduling order differs
 0074be40  193  complete slot-list erase-by-key; EH frame + local scratch elided, regalloc differs

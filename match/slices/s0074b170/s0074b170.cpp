@@ -16,14 +16,15 @@ extern "C" void* __cdecl eastl_alloc(uint32_t size, const char* name, int a, int
 struct T1c {
     uint32_t b[7];                 // 0x1c bytes
     T1c(const T1c&);
+    void CopyFrom(const T1c& v);   // @ 0x743b60 retail copy constructor
 };
-extern "C" void __cdecl FUN_00747980(const T1c* v);   // grow path
 
 struct Vec1c {
     char pad[0x18];
     T1c* end;      // +0x18
     char pad2[4];
     T1c* cap;      // +0x20
+    void Grow(const T1c* v);       // @ 0x747980 reallocate/grow path
     void DoInsert(const T1c* v);
 };
 
@@ -31,11 +32,14 @@ void Vec1c::DoInsert(const T1c* val)
 {
     T1c* e = end;
     if ((char*)e + 0x1c == (char*)cap) {
-        FUN_00747980(val);
+        Grow(val);
+        volatile int done = 1;     // keep the call non-tail (matches retail call site)
     } else {
         end = (T1c*)((char*)e + 0x1c);
-        if (e)
-            new (e) T1c(*val);
+        if (e) {
+            e->CopyFrom(*val);
+            volatile int done = 1; // keep the call non-tail (matches retail call site)
+        }
     }
 }
 
@@ -95,53 +99,64 @@ void heap_loop_b510(void* a, void* b, void* c, void* d)
 // ---------------------------------------------------------------------------
 // @ 0x0074B690  SP::cModelWorld::SetInWorld
 // ---------------------------------------------------------------------------
-struct ListNode { ListNode* prev; ListNode* next; char pad[4]; uint32_t flags; };
+struct ListLink {                    // intrusive list head / node link (8 bytes)
+    ListLink* mPrev;                 // +0x00
+    ListLink* mNext;                 // +0x04
+};
+struct ListNode {                    // embedded node
+    ListLink  mLink;                 // +0x00
+    uint32_t  mPad;                  // +0x08
+    uint32_t  mFlags;                // +0x0c
+};
+struct ListNodeTail {                // what the caller passes: 8 bytes into the node
+    uint32_t  mPad;                  // +0x00 (node +0x08)
+    uint32_t  mFlags;                // +0x04 (node +0x0c)
+};
 
 namespace SP {
 class cModelWorld { public:
     char pad0[0x1c];
-    char mWorldType;       // +0x1c
-    char pad1[0x1a0 - 0x1d];
-    ListNode  mListA;      // +0x19c anchor area
-    char pad2[4];
-    ListNode  mListB;      // +0x1a4 anchor area
-    void AddAttachments(ListNode* n);
-    void ShutdownModel(ListNode* n);
-    void SetInWorld(ListNode* n, bool b);
+    char mWorldType;                 // +0x1c
+    char pad1[0x19c - 0x1d];
+    ListLink  mListA;                // +0x19c
+    ListLink  mListB;                // +0x1a4
+    void AddAttachments(ListNode* n);      // @ 0x74ac80
+    void ShutdownModel(ListNode* n);       // @ 0x746b90
+    void SetInWorld(ListNodeTail* n, bool b);
     void UpdateFromPropList(IPropList* pl, void* mdl, uint32_t flags, int unused);
 };
 }
 
-void SP::cModelWorld::SetInWorld(ListNode* n, bool b)
+void SP::cModelWorld::SetInWorld(ListNodeTail* n, bool b)
 {
     if (mWorldType == 0)
         return;
-    if (((n->flags >> 0xf) & 1) == (uint32_t)b)
+    if (((n->mFlags >> 0xf) & 1) == (uint32_t)b)
         return;
     ListNode* node = (ListNode*)((char*)n - 8);
-    ListNode* prev = node->prev;
-    ListNode* next = node->next;
-    next->prev = prev;
-    prev->next = next;
-    node->prev = 0;
-    node->next = 0;
+    ListLink* prev = node->mLink.mPrev;
+    ListLink* next = node->mLink.mNext;
+    next->mPrev = prev;
+    prev->mNext = next;
+    node->mLink.mPrev = 0;
+    node->mLink.mNext = 0;
     if (b) {
-        node->next = mListA.next;
-        node->prev = &mListA;
-        mListA.next = node;
-        node->next->prev = node;
+        node->mLink.mNext = mListA.mNext;
+        node->mLink.mPrev = &mListA;
+        mListA.mNext = &node->mLink;
+        node->mLink.mNext->mPrev = &node->mLink;
         AddAttachments(node);
     } else {
-        node->next = mListB.next;
-        node->prev = &mListB;
-        mListB.next = node;
-        node->next->prev = node;
+        node->mLink.mNext = mListB.mNext;
+        node->mLink.mPrev = &mListB;
+        mListB.mNext = &node->mLink;
+        node->mLink.mNext->mPrev = &node->mLink;
         ShutdownModel(node);
     }
     if (b)
-        node->flags |= 0x8000;
+        n->mFlags |= 0x8000;
     else
-        node->flags &= 0xffff7fff;
+        n->mFlags &= 0xffff7fff;
 }
 
 // ---------------------------------------------------------------------------
