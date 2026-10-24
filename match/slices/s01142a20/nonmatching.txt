@@ -10,7 +10,7 @@
 01143310  111  iSNDdetunetolinear: cents<->linear detune conversion leaf; complete; difftest PASS 95.8% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 011433b0   71  iSNDcalcpitch: compute pitch word from detune table; complete; difftest WEAK 100% cov, 146 valid. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 01143430   27  init a small 0x14-byte descriptor struct; complete; difftest PASS 100% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
-01143460  375  FUN_01143460: 16-byte -> 64-coefficient filter decode, two-stage scalar/MMX+SSE; complete (stdcall, ret 8); scalar lowering of the punpck/cvtpi2ps nibble-lattice stage; difftest PASS 400 valid, 100% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01143460  700  FUN_01143460: 16-byte -> 64-coefficient filter decode, two-stage scalar/MMX+SSE; complete (stdcall, ret 8); scalar lowering of the punpck/cvtpi2ps nibble-lattice stage, with the new lattice state and the two nibble operands held in volatile locals so the lane loop needs only two live xmm temporaries -- the original (MMX/SSE) never writes xmm2 and an LTCG caller may keep a live value there; difftest PASS 400 valid, 100% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 01143600  250  streamed MMX coefficient decode into an output ring (calls FUN_01143460 + memmove); complete; difftest PASS 264 valid, 97.7% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 011436e0  318  streamed signed-byte sample convert (0.0078125) into an output ring; complete; difftest PASS 98.1% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 01143830  292  streamed unsigned-byte sample convert (0.0078125) into an output ring; complete; difftest PASS 98.0% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
