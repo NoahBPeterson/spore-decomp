@@ -128,26 +128,25 @@ namespace EA { namespace Swarm {
 bool cParticlesEffect::ApplyForceMap(cParticle* particle, float dt)
 {
     Vector3 P(particle->mPosition.x, particle->mPosition.y, particle->mPosition.z);
+    // Rotation scratch.  The branch-local result below is copy-initialised, so cl
+    // hands its address to Velocity as the hidden return buffer; the stack allocator
+    // then reuses this dead rotation slot for it, which is what the retail build did.
+    Vector3 rot;
 
     if (mForceMapInWorldSpace)
     {
-        float x = P.x;
-        float y = P.y;
-        float z = P.z;
         if (mRigidTransform.mFlags & 2)
         {
-            const float (&R)[3][3] = mRigidTransform.mRotation;
-            float rx = (R[2][0] * P.z + R[1][0] * P.y) + R[0][0] * P.x;
-            float ry = (R[0][1] * P.x + R[2][1] * P.z) + R[1][1] * P.y;
-            float rz = (R[0][2] * P.x + R[2][2] * P.z) + R[1][2] * P.y;
-            x = rx;
-            y = ry;
-            z = rz;
+            const float (&Rm)[3][3] = mRigidTransform.mRotation;
+            rot.x = (Rm[2][0] * P.z + Rm[1][0] * P.y) + Rm[0][0] * P.x;
+            rot.y = (Rm[0][1] * P.x + Rm[2][1] * P.z) + Rm[1][1] * P.y;
+            rot.z = (Rm[0][2] * P.x + Rm[2][2] * P.z) + Rm[1][2] * P.y;
+            P = rot;
         }
         float s = mRigidTransform.mScale;
-        P.x = mRigidTransform.mTranslation.x + s * x;
-        P.y = mRigidTransform.mTranslation.y + y * s;
-        P.z = mRigidTransform.mTranslation.z + z * s;
+        P.x = mRigidTransform.mTranslation.x + s * P.x;
+        P.y = mRigidTransform.mTranslation.y + P.y * s;
+        P.z = mRigidTransform.mTranslation.z + P.z * s;
     }
 
     if (!mForceMap->PointInMap(P))
