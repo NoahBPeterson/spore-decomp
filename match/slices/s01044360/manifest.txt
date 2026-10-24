@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01044360/s01044360.cpp  ?IsSlotSet@cStarMap@SP@@QAE_NH@Z  010449e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01044360/s01044360.cpp  ?Notify@cStarMap@SP@@QAEXHD@Z  01044a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01044360/s01044360.cpp  ?UpdateDesiredCamera@cStarMap@SP@@QAEXXZ  01044b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01044360/s01044360.cpp  ?SetNodeFlag@cStarMap@SP@@QAEXHD@Z  01044d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01044360/s01044360.cpp  ?SetNodeFlag2@cStarMap@SP@@QAEXHD@Z  01044db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01044360/s01044360.cpp  ?AllocSharedRef@SP@@YGPAUSharedRefBlock@1@PBUSharedRefSrc@1@@Z  010450b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
