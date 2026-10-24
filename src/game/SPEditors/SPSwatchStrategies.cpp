@@ -921,7 +921,12 @@ namespace SP {
 class cUILayeredObject { public: void SetVisible(bool visible); };  // 0x0080d7c0
 }
 namespace SP {
-class cSwatchTexture { public: void* GetTexture(); };                // 0x0080d610
+class cRefCountedModel2;
+class cSwatchTexture {
+ public:
+  void* GetTexture();                              // 0x0080d610
+  cRefCountedModel2* GetModelManager();            // 0x0080db70
+};
 }
 namespace SP {
 class cSwatchRenderer {
@@ -1685,6 +1690,7 @@ bool cSPEditorPaintTheme_Apply(const Key_s005f_36d0* key, void* theme);  // 0x00
 }
 namespace SP {
 void* cSPBoundingBox_AddBoundingBox(int, int, int);         // 0x0067cad0
+void* cSPBoundingBox_AddBoundingBox();                      // 0x0067cad0
 }
 namespace SP {
 void* FUN_0046bfd0(void* out, int v);                       // 0x0046bfd0
@@ -2129,6 +2135,10 @@ class cRefCountedModel2 {
   PV_s005f_5080(0) PV_s005f_5080(1) PV_s005f_5080(2)
   virtual cMWModel_s005f_5080* MakeModel(uint32_t a, uint32_t b, int c);  // +0xc
 };
+class cSPBoundingBox {
+ public:
+  cRefCountedModel2* GetModelManager();  // 0x006c10e0
+};
 }
 namespace SP {
 struct KeyVec {
@@ -2146,6 +2156,7 @@ struct RefVec {
   AutoRefCount_s005f_5080<cMWModel_s005f_5080>* mpEnd;
   AutoRefCount_s005f_5080<cMWModel_s005f_5080>* mpCapacity;
   void clear();  // 0x005f5970
+  void DoDestroyValues(AutoRefCount_s005f_5080<cMWModel_s005f_5080>* first, AutoRefCount_s005f_5080<cMWModel_s005f_5080>* last);  // 0x5f3680
   void DoInsertValue(AutoRefCount_s005f_5080<cMWModel_s005f_5080>* pos, cMWModel_s005f_5080** value);  // 0x423c40
 };
 }
@@ -4098,7 +4109,7 @@ void RefVec::clear()
   AutoRefCount_s005f_5080<cMWModel_s005f_5080>* begin = mpBegin;
   AutoRefCount_s005f_5080<cMWModel_s005f_5080>* end = mpEnd;
   AutoRefCount_s005f_5080<cMWModel_s005f_5080>* p = copy_refs(end, end, begin);
-  DoDestroyValues_ref(p, mpEnd);
+  DoDestroyValues(p, mpEnd);
   char* e = (char*)mpEnd;
   int n = (int)(e - (char*)begin);
   mpEnd = (AutoRefCount_s005f_5080<cMWModel_s005f_5080>*)(e + (-(n >> 2)) * 4);
@@ -4111,33 +4122,32 @@ namespace SP {
 cMWModel_s005f_5080* cSwatch3DView_s005f_5080::AddModel(uint32_t a, uint32_t b)
 {
   if (mLayeredObject) {
-    void* box = cSPBoundingBox_AddBoundingBox(0, 0, 0);
-    (void)box;
-    cRefCountedModel2* mgr = (cRefCountedModel2*)FUN_006c10e0();
+    void* box = cSPBoundingBox_AddBoundingBox();
+    cRefCountedModel2* mgr = ((cSPBoundingBox*)box)->GetModelManager();
     cMWModel_s005f_5080* m = mgr->MakeModel(a, b, 0x26);
-    *(uint32_t*)((char*)m + 4) |= 0x2000;
+    m->mFlags |= 0x2000;
     mLayeredObject->AddModel(m);
-    FUN_0080d7c0(mVisible);
+    mLayeredObject->SetVisible(mVisible);
     return m;
   }
   if (mTexture) {
-    cRefCountedModel2* mgr = (cRefCountedModel2*)FUN_0080db70();
+    cRefCountedModel2* mgr = mTexture->GetModelManager();
     cMWModel_s005f_5080* m = mgr->MakeModel(a, b, 0x22);
-    *(uint32_t*)((char*)m + 4) |= 0x2000;
-    ++*(uint32_t*)((char*)m + 0x40);
+    m->mFlags |= 0x2000;
+    ++m->mRefCount;
     AutoRefCount_s005f_5080<cMWModel_s005f_5080>* p = mModels.mpEnd;
     if (p < mModels.mpCapacity) {
       mModels.mpEnd = p + 1;
       if (p) {
         p->mpObject = m;
-        ++*(uint32_t*)((char*)m + 0x40);
+        ++m->mRefCount;
       }
     } else {
       ((RefVec*)&mModels)->DoInsertValue(p, &m);
     }
     if (m) {
-      if (*(uint32_t*)((char*)m + 0x40) > 1) {
-        --*(uint32_t*)((char*)m + 0x40);
+      if (m->mRefCount > 1) {
+        --m->mRefCount;
         return m;
       }
       m->Release();

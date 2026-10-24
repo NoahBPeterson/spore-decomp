@@ -389,7 +389,12 @@ class cUILayeredObject {
   void RemoveModel(void* model);   // 0x0080e980
   void AddModel(void* model);      // 0x0080fc50
 };
-class cSwatchTexture { public: void* GetTexture(); };                // 0x0080d610
+class cRefCountedModel2;
+class cSwatchTexture {
+ public:
+  void* GetTexture();                              // 0x0080d610
+  cRefCountedModel2* GetModelManager();            // 0x0080db70
+};
 
 namespace eastl {
 template <typename T>
@@ -596,20 +601,21 @@ class cSPPaletteSwatch : public cSPSwatch {
 // ---- helper decls ----
 AutoRefCount<cMWModel>* copy_refs(AutoRefCount<cMWModel>* first, AutoRefCount<cMWModel>* last,
                                   AutoRefCount<cMWModel>* out);  // 0x5f4e10
-void* cSPBoundingBox_AddBoundingBox(int, int, int);  // 0x0067cad0
-void* FUN_006c10e0();                          // 0x006c10e0
-void* FUN_0080db70();                          // 0x0080db70
+void* cSPBoundingBox_AddBoundingBox();          // 0x0067cad0
 void FUN_0080ea50(void* self);                 // 0x0080ea50
 void FUN_008eb830(void* self, int v);          // 0x008eb830
 void FUN_005f0380();                           // 0x005f0380
-int  FUN_0080d7c0(int visible);                // 0x0080d7c0
-void DoDestroyValues_ref(AutoRefCount<cMWModel>* first, AutoRefCount<cMWModel>* last);  // 0x5f3680
 void* FUN_00807880(void* p, int, int);         // 0x00807880
 
 class cRefCountedModel2 {
  public:
   PV(0) PV(1) PV(2)
   virtual cMWModel* MakeModel(uint32_t a, uint32_t b, int c);  // +0xc
+};
+
+class cSPBoundingBox {
+ public:
+  cRefCountedModel2* GetModelManager();  // 0x006c10e0
 };
 
 struct KeyVec {
@@ -626,6 +632,7 @@ struct RefVec {
   AutoRefCount<cMWModel>* mpEnd;
   AutoRefCount<cMWModel>* mpCapacity;
   void clear();  // 0x005f5970
+  void DoDestroyValues(AutoRefCount<cMWModel>* first, AutoRefCount<cMWModel>* last);  // 0x005f3680
   void DoInsertValue(AutoRefCount<cMWModel>* pos, cMWModel** value);  // 0x423c40
 };
 
@@ -669,42 +676,40 @@ void RefVec::clear() {
   AutoRefCount<cMWModel>* begin = mpBegin;
   AutoRefCount<cMWModel>* end = mpEnd;
   AutoRefCount<cMWModel>* p = copy_refs(end, end, begin);
-  DoDestroyValues_ref(p, mpEnd);
-  char* e = (char*)mpEnd;
-  int n = (int)(e - (char*)begin);
-  mpEnd = (AutoRefCount<cMWModel>*)(e + (-(n >> 2)) * 4);
+  DoDestroyValues(p, mpEnd);
+  int n = (int)((char*)mpEnd - (char*)begin);
+  mpEnd = (AutoRefCount<cMWModel>*)((char*)mpEnd - ((n >> 2) << 2));
 }
 
 // @ 0x005F59B0
 cMWModel* cSwatch3DView::AddModel(uint32_t a, uint32_t b) {
   if (mLayeredObject) {
-    void* box = cSPBoundingBox_AddBoundingBox(0, 0, 0);
-    (void)box;
-    cRefCountedModel2* mgr = (cRefCountedModel2*)FUN_006c10e0();
+    void* box = cSPBoundingBox_AddBoundingBox();
+    cRefCountedModel2* mgr = ((cSPBoundingBox*)box)->GetModelManager();
     cMWModel* m = mgr->MakeModel(a, b, 0x26);
-    *(uint32_t*)((char*)m + 4) |= 0x2000;
+    m->mFlags |= 0x2000;
     mLayeredObject->AddModel(m);
-    FUN_0080d7c0(mVisible);
+    mLayeredObject->SetVisible(mVisible);
     return m;
   }
   if (mTexture) {
-    cRefCountedModel2* mgr = (cRefCountedModel2*)FUN_0080db70();
+    cRefCountedModel2* mgr = mTexture->GetModelManager();
     cMWModel* m = mgr->MakeModel(a, b, 0x22);
-    *(uint32_t*)((char*)m + 4) |= 0x2000;
-    ++*(uint32_t*)((char*)m + 0x40);
+    m->mFlags |= 0x2000;
+    ++m->mRefCount;
     AutoRefCount<cMWModel>* p = mModels.mpEnd;
     if (p < mModels.mpCapacity) {
       mModels.mpEnd = p + 1;
       if (p) {
         p->mpObject = m;
-        ++*(uint32_t*)((char*)m + 0x40);
+        ++m->mRefCount;
       }
     } else {
       ((RefVec*)&mModels)->DoInsertValue(p, &m);
     }
     if (m) {
-      if (*(uint32_t*)((char*)m + 0x40) > 1) {
-        --*(uint32_t*)((char*)m + 0x40);
+      if (m->mRefCount > 1) {
+        --m->mRefCount;
         return m;
       }
       m->Release();
