@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+slices/s00cbb020/s00cbb020.cpp  ?FUN_00cbb6f0@cGameData@Simulator@@QAEXXZ  00cbb6f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
