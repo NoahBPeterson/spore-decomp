@@ -1,1 +1,15 @@
 00e87db0 SP::cCityTerritoryView::UpdateSelection  # PDB name; refreshes centre/state/radius and rebuilds the two territory ring effects (ids 0x243a1dc/0x243a1dd)
+00e87cf0 ?StopEffects4@cCityTerritoryViewRetail@@QAEXI@Z  # reconstructed (retail layout mirror of cCityTerritoryView, vtable word at +0x00): clears effect ids [id, id+4) through cSpatialObjectView::GetEffect (0x00c88910, bool) and StopEffect (0x00c8ad30)
+00e87d30 ??0cCityTerritoryViewRetail@@QAE@XZ  # reconstructed ctor of the same layout: base ctor 0x00e92af0, vtable 0x01486208, mRadius(+0x44)=0
+00e87d50 ?MakeCityTerritoryView@@YGPAVcCityTerritoryViewRetail@@PAX@Z  # __stdcall factory (ret 4): operator new(0x48,"Simulator/cCityTerritoryView",0,0,0,0) then virtual slot +0x24(owner); name string at 0x01460d48-adjacent
+00e88620 ?MakeCitySoundLoopView@@YGPAVcCitySoundLoopView@@PAX@Z  # __stdcall factory: operator new(0x38,"Simulator/cCitySoundLoopView",...), vtable 0x0148625c, +0x34=0 (inlined ctor has no standalone symbol), virtual +0x24(owner)
+00e88680 ??0cCityWallsView@@QAE@XZ  # ctor: base ctor 0x00e92af0, vtable 0x01486290, mpCity(+0x34)=0 and bytes +0x38/+0x39/+0x3a=0
+00e88720 ?Init@cCityWallsView@@QAEXPAX@Z  # base Init 0x00e92910, Cast(0xed7fc07) via owner vtable +0x0c, AddRef/Release swap into +0x34, then SetExpanded(slot +0x10) with [city+0x108]==0
+00e88790 ?MakeCityWallsView@@YGPAVcCityWallsView@@PAX@Z  # __stdcall factory: operator new(0x3c,"Simulator/cCityWallsView",...), virtual +0x24(owner), mLastPos(+0x18)=*cCity::GetPosition(0x00bec830), slot +0x2c then flags |=0x20 unless game mode 0x1654c10
+00e88820 ?HandleSimulationUpdate@cCityWallsView@@QAEXPAX0@Z  # base 0x00e92ca0; position from GetCivilization (0x00bd9bf0) or GetPosition (0x00bec830); +0x4c/50/54 and 0x800 style bit via [city+0x264]+0x120 slot+0x58; 0x2000 latch -> GonzagoModelWorld (0x00b3d520) slot +0x70(0x40969046,0,0.0f,0); CheckEffectMode 0x00c8b220 / SetEffectFloat 0x00c88a00 (0x013ef574) / SetEffectFloat2 0x00c8a020 ([city+0x25c])
+00e889f0 ?SetIsVisible@cSpatialObjectView@@QAEX_N@Z  # PDB name (SP::cSpatialObjectView): virtual slot +0x2c result, then bit 0 at +0x04 set/cleared
+00e88a10 ?IsVisible@cSpatialObjectView@@QAE_NXZ  # PDB-adjacent name (reconstructed; pairs with SetIsVisible): virtual slot +0x2c result, returns bit 0 of +0x04
+00e88a30 ??1cCityEffectView@@QAE@XZ  # reconstructed class name (vtable 0x014608ec, not in vtable_names.txt): vtable store, FreeViewBuffer(0x00572020) of +0x44, Detach(0)/Release of +0x48/+0x4c twice, tail jmp 0x00e92660 (cSpatialObjectView dtor)
+00e88ac0 ??0cCityFeedbackView@@QAE@XZ  # ctor: +0x08/+0x04 zero, vtable 0x014862c4, +0x0c/+0x10/+0x14/+0x18 zero
+00e88ae0 ??1cCityFeedbackView@@QAE@XZ  # dtor: vtable 0x014862c4, release +0x0c, Shutdown(1)+release the three meters (+0x10/+0x14/+0x18), second release pass, base vtable 0x01455648
+00e88ba0 ?MakeCityFeedbackView@@YGPAVcCityFeedbackView@@PAX@Z  # __stdcall factory: owner vtable +0x0c Cast(0xee9b2232) (both null paths share one `ret 0` block), operator new(0x1c,"Simulator/cCityFeedbackView",...), inlined ctor, AddRef/Release swap into +0x0c

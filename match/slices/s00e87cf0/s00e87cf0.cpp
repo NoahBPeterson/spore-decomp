@@ -11,6 +11,7 @@
 // radius 100 tilted by the quaternion that takes +Z to the centre direction; both are projected onto the
 // planet and pushed outward by the tuning's ring height offset. Finally both effects get their points.
 typedef unsigned int u32;
+typedef unsigned char u8;
 
 extern "C" double __cdecl cos(double);
 extern "C" double __cdecl sin(double);
@@ -68,16 +69,29 @@ struct cTerritoryObject {
 struct cSpatialObjectView {
     // vtable slot 46 (+0xb8)
     PAD_VIRT(0); PAD_VIRT(1); PAD_VIRT(2); PAD_VIRT(3); PAD_VIRT(4); PAD_VIRT(5); PAD_VIRT(6);
-    PAD_VIRT(7); PAD_VIRT(8); PAD_VIRT(9); PAD_VIRT(10); PAD_VIRT(11); PAD_VIRT(12); PAD_VIRT(13);
+    PAD_VIRT(7); PAD_VIRT(8); PAD_VIRT(9); PAD_VIRT(10);
+    virtual void* GetVisible();                                 // +0x2c
+    PAD_VIRT(12); PAD_VIRT(13);
     PAD_VIRT(14); PAD_VIRT(15); PAD_VIRT(16); PAD_VIRT(17); PAD_VIRT(18); PAD_VIRT(19); PAD_VIRT(20);
     PAD_VIRT(21); PAD_VIRT(22); PAD_VIRT(23); PAD_VIRT(24); PAD_VIRT(25); PAD_VIRT(26); PAD_VIRT(27);
     PAD_VIRT(28); PAD_VIRT(29); PAD_VIRT(30); PAD_VIRT(31); PAD_VIRT(32); PAD_VIRT(33); PAD_VIRT(34);
     PAD_VIRT(35); PAD_VIRT(36); PAD_VIRT(37); PAD_VIRT(38); PAD_VIRT(39); PAD_VIRT(40); PAD_VIRT(41);
     PAD_VIRT(42); PAD_VIRT(43); PAD_VIRT(44); PAD_VIRT(45);
     virtual cTerritoryObject* Cast(u32 typeId);                 // +0xb8
+    cSpatialObjectView();                                       // 0x00e92af0 (not defined here)
+    void Construct();                                           // out-of-line base constructor, 0x00e92af0
+    ~cSpatialObjectView();                                      // 0x00e92660 (not defined here)
+    void Init(void* owner);                                     // 0x00e92910
+    void HandleSimulationUpdate(void* a, void* b);              // 0x00e92ca0
     void StopEffect(u32 id, bool bImmediate);                   // 0x00c8ad30
     IEffect* GetEffect(u32 id);                                 // 0x00c888e0
+    bool HasEffect(u32 id);                                     // 0x00c88910 (PDB: GetEffect)
     IEffect* CreateEffect(u32 key, int flags, u32 id);          // 0x00c8b060
+    bool CheckEffectMode(u32 a, u32 b, int c, int d);           // 0x00c8b220
+    void SetEffectFloat(u32 id, float v);                       // 0x00c88a00
+    void SetEffectFloat2(u32 id, float v);                      // 0x00c8a020
+    void SetIsVisible(bool b);                                  // 0x00e889f0
+    bool IsVisible();                                           // 0x00e88a10
 };
 
 struct cPlanetModel {
@@ -290,4 +304,430 @@ void cCityTerritoryView::UpdateSelection()
         second.mp->Release();
     }
     ring->Release();
+}
+
+// ---------------------------------------------------------------------------------------------
+// The rest of the city view family (0x00e87cf0 .. 0x00e88ba0).  These are the small per-view
+// constructors, the __stdcall registration factories, the walls view init/update pair and the
+// feedback view's construct/destruct pair.  The retail factory epilogue is `ret 4`, so they are
+// declared __stdcall; every factory allocates through the named operator new at 0x00f473a0.
+// ---------------------------------------------------------------------------------------------
+
+// Placement new, inlined away: lets a factory construct an object in the block it just allocated
+// without MSVC looking for a two-argument operator new.
+inline void* operator new(unsigned int, void* p) { return p; }
+
+void* __cdecl ViewAlloc(unsigned int size, const char* name, int a, int b, int c, int d);     // 0x00f473a0
+void __cdecl FreeViewBuffer(void* p, int flags);                                             // 0x00572020
+
+// Slot-3 virtual lookup used by the views to find the game object they are attached to.
+struct IObjectCast {
+    PAD_VIRT(0); PAD_VIRT(1); PAD_VIRT(2);
+    virtual void* Cast(u32 typeId);                     // +0x0c
+};
+
+// Reference counted effect/city handle: AddRef at +0x00, Release at +0x04, detach at +0x0c.
+struct IRefCounted {
+    virtual void AddRef();                              // +0x00
+    virtual void Release();                             // +0x04
+    PAD_VIRT(2);
+    virtual void Detach(int force);                     // +0x0c
+};
+
+// The view vtable slots the factories drive after construction.
+struct IViewVtbl {
+    PAD_VIRT(0); PAD_VIRT(1); PAD_VIRT(2); PAD_VIRT(3);
+    virtual void SetExpanded(bool b);                   // +0x10
+    PAD_VIRT(5); PAD_VIRT(6); PAD_VIRT(7); PAD_VIRT(8);
+    virtual void Init(void* owner);                     // +0x24
+    PAD_VIRT(10);
+    virtual void* GetVisible();                         // +0x2c
+};
+
+// The drawable returned by slot 0x2c: +0x04 is its state/visibility word.
+struct IRenderable {
+    PAD_VIRT(0);
+    u32 mFlags;                                         // +0x04
+    u32 pad08[0x11];                                    // +0x08
+    float mPos4c;                                       // +0x4c
+    float mPos50;                                       // +0x50
+    float mPos54;                                       // +0x54
+};
+
+// One-bit view of IRenderable::mFlags (bit 0), so the reader stays a byte load.
+struct IRenderableBits {
+    PAD_VIRT(0);
+    u8 mVisible : 1;                                    // +0x04 bit 0
+    u8 mRest : 7;
+};
+
+// Gonzago's world object: the effect spawn call sits at vtable +0x70.
+struct IGonzagoWorld {
+    PAD_VIRT(0); PAD_VIRT(1); PAD_VIRT(2); PAD_VIRT(3); PAD_VIRT(4); PAD_VIRT(5); PAD_VIRT(6);
+    PAD_VIRT(7); PAD_VIRT(8); PAD_VIRT(9); PAD_VIRT(10); PAD_VIRT(11); PAD_VIRT(12); PAD_VIRT(13);
+    PAD_VIRT(14); PAD_VIRT(15); PAD_VIRT(16); PAD_VIRT(17); PAD_VIRT(18); PAD_VIRT(19); PAD_VIRT(20);
+    PAD_VIRT(21); PAD_VIRT(22); PAD_VIRT(23); PAD_VIRT(24); PAD_VIRT(25); PAD_VIRT(26); PAD_VIRT(27);
+    virtual void SpawnEffect(void* obj, u32 effectId, int a, float b, int c);   // +0x70
+};
+IGonzagoWorld* __cdecl GonzagoModelWorld();                                  // 0x00b3d520
+extern float g_cityEffectScale;                                              // 0x013ef574
+
+struct cCivilization {
+    u32 pad00[0xc4 / 4];                                // +0x000
+    Vector3 mPos;                                       // +0x0c4
+};
+
+// The drawable/style block reached through cCityInfo::+0x120 (its flag word is at +0x50).
+struct cCityVisual {
+    PAD_VIRT(0); PAD_VIRT(1); PAD_VIRT(2); PAD_VIRT(3); PAD_VIRT(4); PAD_VIRT(5); PAD_VIRT(6);
+    PAD_VIRT(7); PAD_VIRT(8); PAD_VIRT(9); PAD_VIRT(10); PAD_VIRT(11); PAD_VIRT(12); PAD_VIRT(13);
+    PAD_VIRT(14); PAD_VIRT(15); PAD_VIRT(16); PAD_VIRT(17); PAD_VIRT(18); PAD_VIRT(19); PAD_VIRT(20);
+    PAD_VIRT(21);
+    virtual bool IsFlagged();                           // +0x58
+    u32 pad04[(0x50 - 4) / 4];                          // +0x04
+    u32 mFlags;                                         // +0x50
+};
+
+// The object the city exposes at +0x264.
+struct cCityInfo {
+    u32 pad00[0x120 / 4];                               // +0x000
+    cCityVisual mVisual;                                // +0x120
+    cCivilization* GetCivilization();                   // 0x00bd9bf0
+};
+
+struct cCity : IRefCounted {
+    u32 pad04;                                          // +0x004
+    u8 pad08[0x108 - 0x08];                             // +0x008
+    u8 mbFlag108;                                       // +0x108
+    u8 pad109[0x25c - 0x109];                           // +0x109
+    float mField25c;                                    // +0x25c
+    u32 pad260;                                         // +0x260
+    cCityInfo* mpInfo;                                  // +0x264
+    Vector3* GetPosition(Vector3* out);                 // 0x00bec830
+};
+
+struct cSPUIMeter {
+    void Shutdown(int force);                           // 0x00e06940
+};
+
+// The feedback view is a plain object whose +0 line is a data vtable word.
+class cCityFeedbackView {
+public:
+    void** mpVtbl;                                      // +0x00
+    u32 m04;                                            // +0x04
+    u32 m08;                                            // +0x08
+    IRefCounted* mp0c;                                  // +0x0c
+    cSPUIMeter* mp10;                                   // +0x10
+    cSPUIMeter* mp14;                                   // +0x14
+    cSPUIMeter* mp18;                                   // +0x18
+
+    cCityFeedbackView();                                // 0x00e88ac0
+    ~cCityFeedbackView();                               // 0x00e88ae0
+};
+extern void* cCityFeedbackView_vtbl[];                  // 0x014862c4
+extern void* cGameDataView_vtbl[];                      // 0x01455648
+
+// Destructor-only class at 0x00e88a30 (its vtable word is 0x014608ec).
+class cCityEffectView : public cSpatialObjectView {
+public:
+    u32 pad04[16];                                      // +0x04
+    void* mp44;                                         // +0x44
+    IRefCounted* mp48;                                  // +0x48
+    IRefCounted* mp4c;                                  // +0x4c
+
+    ~cCityEffectView();                                 // 0x00e88a30
+};
+
+class cCitySoundLoopView : public cSpatialObjectView {
+public:
+    u32 pad04[12];                                      // +0x04
+    u32 mSoundHandle;                                   // +0x34
+    u32 pad38;                                          // +0x38
+
+    cCitySoundLoopView();                               // factory-inlined (no standalone symbol)
+};
+
+class cCityWallsView : public cSpatialObjectView {
+public:
+    u32 pad04[2];                                       // +0x04
+    cSpatialObjectView* mpObject;                       // +0x0c
+    u32 pad10[2];                                       // +0x10
+    Vector3 mLastPos;                                   // +0x18
+    u32 pad24[4];                                       // +0x24
+    cCity* mpCity;                                      // +0x34
+    bool mbFlag38;                                      // +0x38
+    bool mbFlag39;                                      // +0x39
+    bool mbFlag3a;                                      // +0x3a
+    u8 pad3b;                                           // +0x3b
+
+    cCityWallsView();                                   // 0x00e88680
+    void Init(void* owner);                             // 0x00e88720
+    void HandleSimulationUpdate(void* a, void* b);      // 0x00e88820
+};
+
+extern void* cCityTerritoryView_vtbl[];                 // 0x01486208
+
+// Retail layout of the territory view, mirrored for the new entries: the vtable word sits at +0x00,
+// the object view at +0x0c and the smoothed radius at +0x44.  (The committed UpdateSelection above
+// was compiled against the older declaration, which reserves one extra word at the front.)
+class cCityTerritoryViewRetail {
+public:
+    void** mpVtbl;                                      // +0x00
+    u32 pad04[2];                                       // +0x04
+    cSpatialObjectView* mpObject;                       // +0x0c
+    u32 pad10[(0x34 - 0x10) / 4];                       // +0x10
+    int mPlacementState;                                // +0x34
+    Vector3 mCenter;                                    // +0x38
+    float mRadius;                                      // +0x44
+    u32 pad48[3];                                       // +0x48
+
+    cCityTerritoryViewRetail();                         // 0x00e87d30
+    void StopEffects4(u32 id);                          // 0x00e87cf0
+};
+
+// @ 0x00e87cf0
+void cCityTerritoryViewRetail::StopEffects4(u32 id)
+{
+    for (int i = 0; i < 4; ++i, ++id) {
+        if (mpObject->HasEffect(id))
+            mpObject->StopEffect(id, false);
+    }
+}
+
+// @ 0x00e87d30
+cCityTerritoryViewRetail::cCityTerritoryViewRetail()
+{
+    ((cSpatialObjectView*)this)->Construct();
+    mpVtbl = cCityTerritoryView_vtbl;
+    mRadius = 0.0f;
+}
+
+// @ 0x00e87d50
+cCityTerritoryViewRetail* __stdcall MakeCityTerritoryView(void* owner)
+{
+    void* mem = ViewAlloc(0x48, "Simulator/cCityTerritoryView", 0, 0, 0, 0);
+    cCityTerritoryViewRetail* p = mem ? new (mem) cCityTerritoryViewRetail() : 0;
+    ((IViewVtbl*)p)->Init(owner);
+    return p;
+}
+
+// Inlined into the factory at 0x00e88620; there is no standalone sound-loop constructor.
+cCitySoundLoopView::cCitySoundLoopView()
+{
+    mSoundHandle = 0;
+}
+
+// @ 0x00e88620
+cCitySoundLoopView* __stdcall MakeCitySoundLoopView(void* owner)
+{
+    void* mem = ViewAlloc(0x38, "Simulator/cCitySoundLoopView", 0, 0, 0, 0);
+    cCitySoundLoopView* p = mem ? new (mem) cCitySoundLoopView() : 0;
+    ((IViewVtbl*)p)->Init(owner);
+    return p;
+}
+
+// @ 0x00e88680
+cCityWallsView::cCityWallsView()
+{
+    mpCity = 0;
+    mbFlag38 = false;
+    mbFlag39 = false;
+    mbFlag3a = false;
+}
+
+// @ 0x00e88720
+void cCityWallsView::Init(void* owner)
+{
+    cSpatialObjectView::Init(owner);
+    cCity* p = owner ? (cCity*)((IObjectCast*)owner)->Cast(0xed7fc07) : 0;
+    cCity* old = mpCity;
+    if (p != old) {
+        if (p)
+            p->AddRef();
+        mpCity = p;
+        if (old)
+            old->Release();
+    }
+    ((IViewVtbl*)this)->SetExpanded(mpCity->mbFlag108 == 0);
+}
+
+// @ 0x00e88790
+cCityWallsView* __stdcall MakeCityWallsView(void* owner)
+{
+    void* mem = ViewAlloc(0x3c, "Simulator/cCityWallsView", 0, 0, 0, 0);
+    cCityWallsView* p = mem ? new (mem) cCityWallsView() : 0;
+    ((IViewVtbl*)p)->Init(owner);
+    Vector3 pos;
+    p->mLastPos = *p->mpCity->GetPosition(&pos);
+    void* r = ((IViewVtbl*)p)->GetVisible();
+    if (GetCurrentGameMode() != 0x1654c10)
+        ((IRenderable*)r)->mFlags |= 0x20;
+    return p;
+}
+
+// @ 0x00e88820
+void cCityWallsView::HandleSimulationUpdate(void* a, void* b)
+{
+    cSpatialObjectView::HandleSimulationUpdate(a, b);
+    IRenderable* r = (IRenderable*)((IViewVtbl*)this)->GetVisible();
+    if (r) {
+        Vector3 v;
+        if (GetCurrentGameMode() == 0x1654c05) {
+            cCivilization* civ = mpCity->mpInfo->GetCivilization();
+            v = civ->mPos;
+        } else {
+            Vector3 pos;
+            Vector3* q = mpCity->GetPosition(&pos);
+            v = *q;
+        }
+        if (v.x != mLastPos.x || v.y != mLastPos.y || v.z != mLastPos.z) {
+            mLastPos = v;
+            IRenderable* r2 = (IRenderable*)((IViewVtbl*)this)->GetVisible();
+            if (r2) {
+                r2->mPos4c = v.x;
+                r2->mPos50 = v.y;
+                r2->mPos54 = v.z;
+                cCityVisual* vis = &mpCity->mpInfo->mVisual;
+                if (vis->IsFlagged())
+                    r2->mFlags &= ~0x800u;
+                else
+                    r2->mFlags |= 0x800;
+            }
+        }
+        u32 bit = (r->mFlags >> 0xe) & 1;
+        if (bit && !mbFlag3a)
+            GonzagoModelWorld()->SpawnEffect(r, 0x40969046, 0, 0.0f, 0);
+        mbFlag3a = bit != 0;
+    }
+
+    bool flagged = (mpCity->mpInfo->mVisual.mFlags & 0x800) == 0x800;
+    if (mpObject->CheckEffectMode(0x7d2bf7a3, 0x30e8811, flagged, 0)) {
+        mpObject->SetEffectFloat(0x30e8811, g_cityEffectScale);
+        mpObject->SetEffectFloat2(0x30e8811, mpCity->mField25c);
+    }
+    cCityVisual* vis = &mpCity->mpInfo->mVisual;
+    vis->mFlags &= ~0x800u;
+}
+
+// @ 0x00e889f0
+void cSpatialObjectView::SetIsVisible(bool b)
+{
+    IRenderable* p = (IRenderable*)GetVisible();
+    if (!p)
+        return;
+    if (b) {
+        p->mFlags |= 1;
+        return;
+    }
+    p->mFlags &= ~1u;
+}
+
+// @ 0x00e88a10
+bool cSpatialObjectView::IsVisible()
+{
+    IRenderableBits* p = (IRenderableBits*)GetVisible();
+    if (p)
+        return p->mVisible;
+    return false;
+}
+
+// @ 0x00e88a30
+cCityEffectView::~cCityEffectView()
+{
+    if (mp44)
+        FreeViewBuffer(mp44, 0);
+    if (mp48) {
+        mp48->Detach(0);
+        IRefCounted* p = mp48;
+        if (p) {
+            mp48 = 0;
+            p->Release();
+        }
+    }
+    if (mp4c) {
+        mp4c->Detach(0);
+        IRefCounted* p = mp4c;
+        if (p) {
+            mp4c = 0;
+            p->Release();
+        }
+    }
+    if (mp4c)
+        mp4c->Release();
+    if (mp48)
+        mp48->Release();
+}
+
+// @ 0x00e88ac0
+cCityFeedbackView::cCityFeedbackView()
+{
+    m08 = 0;
+    m04 = 0;
+    mpVtbl = cCityFeedbackView_vtbl;
+    mp0c = 0;
+    mp10 = 0;
+    mp14 = 0;
+    mp18 = 0;
+}
+
+// @ 0x00e88ae0
+cCityFeedbackView::~cCityFeedbackView()
+{
+    mpVtbl = cCityFeedbackView_vtbl;
+    if (mp0c) {
+        IRefCounted* p = mp0c;
+        mp0c = 0;
+        p->Release();
+    }
+    if (mp10) {
+        mp10->Shutdown(1);
+        cSPUIMeter* p = mp10;
+        if (p) {
+            mp10 = 0;
+            ((IRefCounted*)p)->Release();
+        }
+    }
+    if (mp14) {
+        mp14->Shutdown(1);
+        cSPUIMeter* p = mp14;
+        if (p) {
+            mp14 = 0;
+            ((IRefCounted*)p)->Release();
+        }
+    }
+    if (mp18) {
+        mp18->Shutdown(1);
+        cSPUIMeter* p = mp18;
+        if (p) {
+            mp18 = 0;
+            ((IRefCounted*)p)->Release();
+        }
+    }
+    if (mp18)
+        ((IRefCounted*)mp18)->Release();
+    if (mp14)
+        ((IRefCounted*)mp14)->Release();
+    if (mp10)
+        ((IRefCounted*)mp10)->Release();
+    if (mp0c)
+        mp0c->Release();
+    mpVtbl = cGameDataView_vtbl;
+}
+
+// @ 0x00e88ba0
+cCityFeedbackView* __stdcall MakeCityFeedbackView(void* owner)
+{
+    IRefCounted* src;
+    if (owner == 0 || (src = (IRefCounted*)((IObjectCast*)owner)->Cast(0xee9b2232)) == 0)
+        return 0;
+    void* mem = ViewAlloc(0x1c, "Simulator/cCityFeedbackView", 0, 0, 0, 0);
+    cCityFeedbackView* p = mem ? new (mem) cCityFeedbackView() : 0;
+    IRefCounted* old = p->mp0c;
+    if (src != old) {
+        src->AddRef();
+        p->mp0c = src;
+        if (old)
+            old->Release();
+    }
+    return p;
 }
