@@ -13,3 +13,5 @@ slices/s00c87be0/s00c87be0.cpp  StartEffect@Effects@@QAEXHH@Z  00c88980  /O2 /MD
 slices/s00c87be0/s00c87be0.cpp  StopEffect@Effects@@QAEXHH@Z  00c889c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00c87be0/s00c87be0.cpp  F00@Effects@@QAEXHM@Z  00c88a00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00c87be0/s00c87be0.cpp  F30@Effects@@QAEXHPAH@Z  00c88a30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  ?Set3@VecThing@@QAEXPAM@Z  00c88670  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  ?Set4@VecThing@@QAEXPAM@Z  00c886d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

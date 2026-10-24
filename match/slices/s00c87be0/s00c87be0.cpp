@@ -323,15 +323,10 @@ struct VecThing {
     void Set4(float* v);
 };
 // @ 0x00c88670  (complete, near miss: float compare operand order)
+extern "C" void* memcpy(void*, const void*, unsigned int);
 void VecThing::Set3(float* v) {
-    bool changed;
-    if (x == v[0] && y == v[1] && z == v[2])
-        changed = false;
-    else
-        changed = true;
-    x = v[0];
-    y = v[1];
-    z = v[2];
+    bool changed = !(x == v[0] && y == v[1] && z == v[2]);
+    memcpy(&x, v, 12);
     if (changed) {
         f50 |= 1;
         b74 = 1;
@@ -339,15 +334,8 @@ void VecThing::Set3(float* v) {
 }
 // @ 0x00c886d0  (complete, near miss)
 void VecThing::Set4(float* v) {
-    bool changed;
-    if (w == v[0] && x2 == v[1] && y2 == v[2] && z2 == v[3])
-        changed = false;
-    else
-        changed = true;
-    w = v[0];
-    x2 = v[1];
-    y2 = v[2];
-    z2 = v[3];
+    bool changed = !(w == v[0] && x2 == v[1] && y2 == v[2] && z2 == v[3]);
+    memcpy(&w, v, 16);
     if (changed) {
         f50 |= 1;
         b74 = 1;
