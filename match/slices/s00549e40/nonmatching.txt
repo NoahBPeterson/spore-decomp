@@ -4,6 +4,6 @@
 0054a2d0  252  complete; /Od lower_bound (8-byte element) compare differs
 0054a470  75   complete; /Od pair<key,string> copy ctor slot layout differs
 0054a670  629  complete; /Od vector<pair>::assign schedule differs
-0054a920  588  complete; /Od vector<pair>::DoInsertValue schedule differs
-0054aba0  173  complete; /Od vector<string>::copy-ctor schedule differs
+0054a920  594  complete; /Od vector<pair>::DoInsertValue schedule differs; equivalence WEAK (1200 inputs, 130 valid, 54.7% coverage, no mismatch). Fixed the two Pair20 copy-ctor calls to pass the destination slot as `this` (mpEnd on the shift path, the Sub_54b350 result on the grow path) and returned the new end pointer (mpEnd/new mid) instead of `this`
+0054aba0  173  complete; /Od vector<string>::copy-ctor schedule differs; equivalence WEAK (400 inputs, 171 valid, 83.3% coverage, no mismatch). The 5th uninitialized_copy tag is an uninitialized byte in the original ([ebp-0xa]), reproduced with an uninitialized `unsigned char tag` (the harness stack is 0xcc-filled, so the value matches)
 0054ac70  813  complete; /Od vector<string>::assign schedule differs

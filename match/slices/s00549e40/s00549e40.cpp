@@ -201,26 +201,26 @@ void* V::FUN_0054a920(Pair20* position, const Pair20* value)
         if ((char*)position <= (char*)value && (char*)value < mpEnd) {
             pv = const_cast<Pair20*>(value) + 1;
         }
-        if (mpEnd != 0) FUN_0054a470((const Pair20*)(mpEnd - 0x14));
+        if (mpEnd != 0) ((V*)mpEnd)->FUN_0054a470((const Pair20*)(mpEnd - 0x14));
         Sub_54b630(position, mpEnd - 0x14, mpEnd);
         position->key = pv->key;
         if (&pv->str != &position->str) {
             AString_Assign(&position->str, pv->str.mpBegin, pv->str.mpEnd);
         }
         mpEnd += 0x14;
-        return this;
+        return mpEnd;
     }
     int n = (int)(mpEnd - mpBegin) / 0x14;
     int cnt = (n == 0) ? 1 : (n << 1);
     void* buf = (cnt == 0) ? 0 : EAAlloc(&mAlloc, cnt * 0x14, 4, 0);
     void* mid = Sub_54b350(mpBegin, position, buf);
-    if (mid != 0) FUN_0054a470((const Pair20*)value);
+    if (mid != 0) ((V*)mid)->FUN_0054a470((const Pair20*)value);
     void* e2 = Sub_54b350(position, mpEnd, (char*)mid + 0x14);
     if (mpBegin != 0) EADealloc(mpBegin);
     mpBegin = (char*)buf;
     mpEnd = (char*)e2;
     mpCapacity = (char*)buf + cnt * 0x14;
-    return this;
+    return e2;
 }
 
 // @ 0x0054aba0
@@ -233,7 +233,8 @@ void* V::FUN_0054aba0(char* otherp)
     mpEnd = (char*)buf;
     mpCapacity = (char*)buf + n * 0x10;
     void* out;
-    Sub_54b510(&out, other->mpBegin, other->mpEnd, buf, 0);
+    unsigned char tag;
+    Sub_54b510(&out, other->mpBegin, other->mpEnd, buf, tag);
     mpEnd = (char*)out;
     return this;
 }
