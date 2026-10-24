@@ -1,0 +1,9 @@
+# va diff flags difftest
+00ce8160 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED 0/400 inputs valid (unresolved-import faults)
+00ce8370 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL execution (ours faults at 0x00ad92d4; helper ABI/loop reconstruction)
+00ce87c0 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED 0/400 inputs valid (unresolved-import faults)
+00ce8ab0 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK 18.1% coverage, equivalence-only
+00ce8d00 regs /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED 0/400 inputs valid (fake-arity, unresolved imports)
+00ce8de0 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK 14.1% coverage, equivalence-only
+00ce8ee0 regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL call #3 leaf differs (vector-size branch scheduling)
+00ce8f70 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED 0/400 inputs valid (unresolved-import faults)
