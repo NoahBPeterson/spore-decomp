@@ -29,13 +29,13 @@ void WString::assign(const wchar_t* p, unsigned n)
 }
 
 // @ 0x006ab800
-void FUN_006ab800(WString* s, int idx, unsigned count)
+void __fastcall FUN_006ab800(WString* self, int /*edx unused*/, WString* src, int idx, unsigned count)
 {
-    unsigned size = (unsigned)(s->mpEnd - s->mpBegin);
+    unsigned size = (unsigned)(src->mpEnd - src->mpBegin);
     unsigned n = size - idx;
     if (n > count)
         n = count;
-    s->assign(s->mpBegin + idx, s->mpBegin + idx + n);
+    self->assign(src->mpBegin + idx, src->mpBegin + idx + n);
 }
 
 // ===========================================================================
@@ -94,16 +94,18 @@ void* FixedAlloc::AllocateChunk(uint32_t size, int flags)
 // ===========================================================================
 
 // @ 0x006ac440
-void FUN_006ac440(uint32_t* dst, uint32_t count, const uint32_t* src)
+uint32_t* FUN_006ac440(uint32_t* dst, uint32_t count, const uint32_t* src)
 {
+    uint32_t* p = dst;
     while (count != 0) {
-        if (dst) {
-            dst[0] = src[0];
-            dst[1] = src[1];
+        if (p) {
+            p[0] = src[0];
+            p[1] = src[1];
         }
-        dst += 2;
+        p += 2;
         --count;
     }
+    return p;
 }
 
 // @ 0x006ac470
@@ -155,13 +157,13 @@ inline int CacheHolder_Find(CacheHolder* o, int id)
 }
 
 // @ 0x006ac0a0
-uint32_t FUN_006ac0a0(uint32_t type, CacheHolder* obj)
+bool FUN_006ac0a0(uint32_t type, CacheHolder* obj)
 {
     if (!obj)
-        return 0;
+        return false;
     int v = CacheHolder_Find(obj, 0x355d6f5);
     if (!v)
-        return 0;
+        return false;
     return SetCachingType(type, (void*)v);
 }
 
