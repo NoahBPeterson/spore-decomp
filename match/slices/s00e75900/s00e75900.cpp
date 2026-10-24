@@ -42,6 +42,7 @@ struct Cell {
     float f_a4;          // +0xa4
     char  padA8[0x110 - 0xa8];
     bool  f_110;         // +0x110
+    char  pad111[0x112 - 0x111];
     bool  f_112;         // +0x112
     bool  f_113;         // +0x113
     char  pad114[0x16c - 0x114];
@@ -188,6 +189,7 @@ struct Pool {
 void  __fastcall f743b50(void* p);                  // 0x00743b50
 void  __fastcall f82130(void* p);                   // 0x00e82130
 int*  __cdecl    f823a0(void* a, void* b);          // 0x00e823a0
+int*  __cdecl    f_e4cc40(void* a, void* b);        // 0x00e4cc40
 bool  __cdecl    f5d410(Cell* c, Vec3* v, float f); // 0x00e5d410
 int   __cdecl    f87260(Cell* c, Vec3* v, float f, void* buf, int n, int b); // 0x00e87260
 void  __cdecl    f86f70(Cell* c);                   // 0x00e86f70
@@ -197,7 +199,7 @@ int   __cdecl    f74a20_4(int a, Vec3* v, float f, int b);    // 0x00e74a20 (4-a
 void  __cdecl    f4cce0_src(int a);                 // helper not used
 int   __cdecl    f4cce0_8(int a, int b, int c, int d, int e, int f, int g, int h); // 0x00e4cce0
 int   __cdecl    f4cce0_2(int a, int b);            // 0x00e4cce0
-int   __cdecl    f6d200(Cell* c, int a, int b, int d); // 0x00e6d200
+float __cdecl    f6d200(Cell* c, int a, int b, int d); // 0x00e6d200 (returns in ST0)
 float __cdecl    f58b60(int a, int b);              // 0x00e58b60
 void  __cdecl    f82690(int a, float f);            // 0x00e82690
 void  __cdecl    f68170(Cell* c, int a);            // 0x00e68170
@@ -323,7 +325,7 @@ void FUN_00e75ea0(void)
     f4f660(1);
 
     Cell* p = (Cell*)((Pool*)((char*)gspCellGame + 0x1c))->Get(gspCellGame->field_51d4);
-    float f = (float)f6d200(p, 0, 0x41, p->f_1b0);
+    float f = f6d200(p, 0, 0x41, p->f_1b0);
     Cell* q = (Cell*)((Pool*)((char*)gspCellGame + 0x1c))->Get(gspCellGame->field_411c);
     f6d200(q, 0, 0x42, q->f_1b0);
 
@@ -365,7 +367,7 @@ void FUN_00e760f0(void)
     }
 
     Cell* q = (Cell*)((Pool*)((char*)gspCellGame + 0x1c))->Get(gspCellGame->field_411c);
-    float fv = (float)f6d200(q, 0, 0x43, q->f_1b0);
+    float fv = f6d200(q, 0, 0x43, q->f_1b0);
 
     int id = ((Pool*)((char*)gspCellGame + 0x54))->New();
     Rec* c = (Rec*)((Pool*)((char*)gspCellGame + 0x54))->Get(id);
@@ -378,8 +380,8 @@ void FUN_00e760f0(void)
     c->f60 = *(int*)&g_15a7c4c; c->f64 = *(int*)&g_15a7c50;
     c->f68 = *(int*)&g_15a7c54; c->f6c = *(int*)&g_15a7c58;
     c->f70 = 0; c->f74 = 0; c->f78 = 0; c->f04 = 0; c->f08 = 0;
-    c->f0c = fv;
-    gspCellGame->field_5194 = id;
+    Rec* c2 = (Rec*)((Pool*)((char*)gspCellGame + 0x54))->Get(id);
+    c2->f0c = fv;
     f_e53d50(0, fv);
 }
 
@@ -544,22 +546,20 @@ void sGenDistribute(int param_1, float* param_2, float param_3, float param_4,
     float curY = g_16b3c30;
 
     f743b50(&work);
-    int iVar2 = *f823a0((void*)param_6, &work);
+    int* iVar2 = f_e4cc40((void*)param_6, &work);
     float step = *(float*)((char*)iVar2 + 0x308);
     f82130(&work);
     step = (kLevelSize[param_7] / *(float*)((char*)gspCellGame + 0x514c)) *
            step * 0.033333335f;
 
     float budget = param_5;
-    for (;;) {
-        if (budget <= 0.0f)
-            return;
+    while (budget > g_1485378) {
         double r = sMathRandom.RandomDoubleUniform();
         if ((float)r <= budget) {
             int attempts = 0;
             int placed = 1;
             float maxv = param_3;
-            if (param_4 != 0.0f)
+            if (param_4 != g_1485378)
                 maxv = param_4;
             float r2 = (float)sMathRandom.RandomDoubleUniform() * (maxv - param_3) + param_3;
             curY = r2;
