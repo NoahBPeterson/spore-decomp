@@ -471,3 +471,89 @@ fail:
 }
 
 }}
+
+// ---------------------------------------------------------------------------
+// Flee-to-closest-city vehicle-tree callbacks (0x00dcb660 / 0x00dcb6e0).
+// The vehicle's spatial object is embedded at +0x34 and the path flags are at
+// +0x2a4.  The timer is a stack argument (arg 6); the frame delta is arg 8.
+// ---------------------------------------------------------------------------
+
+struct FleeVehicle;
+
+struct FleeSpatial {
+    PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a)
+    virtual const Vector3& GetPosition();                          // +0x2c
+    PV(0c) PV(0d) PV(0e)
+    virtual void SetOrientation(const Quaternion& q);              // +0x3c
+    virtual void SetScale(float s);                                // +0x40
+    PV(11) PV(12) PV(13)
+    virtual bool Vf50();                                           // +0x50
+    PV(15)
+    virtual bool IsPlayerControlled();                             // +0x58
+    virtual Vector3 GetVelocity();                                 // +0x5c
+    PV(18) PV(19) PV(1a) PV(1b) PV(1c) PV(1d) PV(1e) PV(1f)
+    PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28) PV(29) PV(2a) PV(2b) PV(2c) PV(2d) PV(2e) PV(2f)
+    PV(30) PV(31) PV(32) PV(33) PV(34) PV(35) PV(36) PV(37) PV(38)
+    virtual void MoveTo(const Vector3& dst, float speed, FleeSpatial* self);   // +0xe4
+
+    bool IsNearGoal();                                             // 0x00c42e20
+};
+
+struct FleeVehicle {
+    char        pad0[0x34];                                        // +0x000
+    FleeSpatial mLoco;                                             // +0x034
+    char        pad38[0x2a4 - 0x38];                               // +0x038
+    uint32_t    mFlags2a4;                                         // +0x2a4
+
+    void Fca7250(const char* msg);                                 // 0x00ca7250
+    void Fcacbe0();                                                // 0x00cacbe0
+};
+
+extern void __cdecl AttemptRepark(FleeVehicle* self);              // 0x00dc9430
+extern bool __cdecl FUN_00dc8f30(FleeVehicle* self, Vector3* out); // 0x00dc8f30
+extern const float g_fleeNearDistance;                             // 0x0147c368
+extern const float g_fleeFarDistance;                              // 0x01473c70
+extern const char g_fleeNormalEnd[];                               // 0x0147c698
+
+namespace SP { namespace VehicleTree {
+
+// @ 0x00dcb660
+bool FleeToClosestCity_Tick(FleeVehicle* self, int, int, int, int,
+                            float* timer, int, float dt)
+{
+    if (self->mFlags2a4 & 2)
+        AttemptRepark(self);
+    else if (self->mFlags2a4 & 4)
+        self->Fcacbe0();
+
+    *timer += dt;
+
+    if (self->mLoco.IsNearGoal() && *timer > g_fleeNearDistance) {
+        self->Fca7250(g_fleeNormalEnd);
+        return false;
+    }
+
+    if ((self->mFlags2a4 & 6) != 0 && *timer > g_fleeFarDistance)
+        return false;
+
+    return true;
+}
+
+// @ 0x00dcb6e0
+bool FleeToClosestCity_Init(FleeVehicle* self, int, int, int, int,
+                            int* timer, int, int)
+{
+    if (--*timer > 0)
+        return true;
+
+    Vector3 local;
+    if (FUN_00dc8f30(self, &local)) {
+        self->mLoco.MoveTo(local, 1.0f, &self->mLoco);
+        return false;
+    }
+
+    *timer = (int)g_MathRandom.RandomUint32Uniform(6) + 2;
+    return true;
+}
+
+}} // namespace SP::VehicleTree
