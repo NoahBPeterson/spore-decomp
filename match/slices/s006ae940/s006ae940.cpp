@@ -89,53 +89,72 @@ void __fastcall FUN_006af8a0(void* self)
     *(void**)self = &vtbl_14095f4;
     void* p = *(void**)((char*)self + 0x10);
     if (p)
-        (*(void(__thiscall**)(void*))(*(void***)p)[2])(p);
+        ((void(__thiscall*)(void*))(*(void***)p)[2])(p);
     void* q = *(void**)((char*)self + 0xc);
     if (q) {
         void* r = (char*)q + 4;
-        (*(void(__thiscall**)(void*))(*(void***)r)[1])(r);
+        ((void(__thiscall*)(void*))(*(void***)r)[1])(r);
     }
     *(void**)self = &vtbl_13effb8;
 }
 
 // ---------------------------------------------------------------------------
-// 006af960  ResourceBundle-ish ctor
+// 006af960  resource handle ctor  (__thiscall, 2 stack args)
 // ---------------------------------------------------------------------------
+struct C_006af960 {
+    void* mpVtbl0;     // +0x00
+    void* mpVtbl1;     // +0x04
+    long  mRefs;       // +0x08
+    void* mpOwner;     // +0x0c
+    void* mpPayload;   // +0x10
+    void* mpExtra;     // +0x14
+    C_006af960* ctor(void* a, void* b);
+};
+
 // @ 0x006af960
-void* __fastcall FUN_006af960(void* self, void* a, void* b)
+C_006af960* C_006af960::ctor(void* a, void* b)
 {
-    *(void**)((char*)self + 4) = &vtbl_13f1ab0;
-    *(void**)self = &vtbl_1408500;
-    *(void**)((char*)self + 4) = &vtbl_14084f0;
-    *(void**)((char*)self + 8) = 0;
-    *(void**)self = &vtbl_1409630;
-    *(void**)((char*)self + 4) = &vtbl_140961c;
-    *(void**)((char*)self + 0xc) = a;
+    mpVtbl1 = (void*)&vtbl_13f1ab0;
+    mpVtbl0 = (void*)&vtbl_1408500;
+    mpVtbl1 = (void*)&vtbl_14084f0;
+    _InterlockedExchange(&mRefs, 0);
+    mpVtbl0 = (void*)&vtbl_1409630;
+    mpVtbl1 = (void*)&vtbl_140961c;
+    mpOwner = a;
     if (a) {
         void* r = (char*)a + 4;
-        (*(void(__thiscall**)(void*))(*(void***)r))(r);
+        ((void(__thiscall*)(void*))(*(void***)r)[0])(r);
     }
-    *(void**)((char*)self + 0x10) = b;
+    mpPayload = b;
     if (b)
-        (*(void(__thiscall**)(void*))(*(void***)b))(b);
-    *(void**)((char*)self + 0x14) = 0;
-    return self;
+        ((void(__thiscall*)(void*))(*(void***)b)[0])(b);
+    mpExtra = 0;
+    return this;
 }
 
 // ---------------------------------------------------------------------------
-// 006af670  serialize a vector of 0x10-byte records  (complete)
+// 006af670  serialize a vector of 0x10-byte records  (__thiscall, 1 arg)
 // ---------------------------------------------------------------------------
+struct C_006af670 {
+    void* mpVtbl0;     // +0x00
+    void* mpVtbl1;     // +0x04
+    int   mFlags;      // +0x08
+    int   mKind;       // +0x0c
+    char* mpBegin;     // +0x10
+    char* mpEnd;       // +0x14
+    void serialize(void* stream);
+};
+
 // @ 0x006af670
-void __fastcall FUN_006af670(void* self, void* stream)
+void C_006af670::serialize(void* stream)
 {
-    int a = *(int*)((char*)self + 8);
-    int b = *(int*)((char*)self + 0xc);
-    FUN_0093ab10(stream, &a, 1, 0);
-    int count = (*(int*)((char*)self + 0x14) - *(int*)((char*)self + 0x10)) >> 4;
+    int header[2];
+    header[0] = mFlags;
+    header[1] = mKind;
+    FUN_0093ab10(stream, header, 1, 0);
+    int count = (int)(mpEnd - mpBegin) >> 4;
     IO_WriteUint32(stream, &count, 1, 0);
-    char* p = *(char**)((char*)self + 0x10);
-    char* e = *(char**)((char*)self + 0x14);
-    for (; p != e; p += 0x10) {
+    for (char* p = mpBegin; p != mpEnd; p += 0x10) {
         int v8 = *(int*)(p + 8);
         IO_WriteUint32(stream, &v8, 1, 0);
         int v4 = *(int*)(p + 4);
@@ -161,13 +180,13 @@ bool V5d0::f(bool a, void* b, bool c)
     if (a) {
         void* x = m14;
         if (x && b != x)
-            (*(bool(__thiscall**)(void*, int, void*, bool))(*(void***)this)[17])(this, 0, x, c);
+            ((bool(__thiscall*)(void*, int, void*, bool))(*(void***)this)[17])(this, 0, x, c);
         if (b) {
             if (c) {
                 m14 = b;
                 return true;
             }
-            return (*(bool(__thiscall**)(void*, int, void*, int))(*(void***)b)[20])(b, 1, this, 0);
+            return ((bool(__thiscall*)(void*, int, void*, int))(*(void***)b)[20])(b, 1, this, 0);
         }
     } else {
         if (b) {
@@ -178,7 +197,7 @@ bool V5d0::f(bool a, void* b, bool c)
                 return true;
             }
             void* old = m14;
-            return (*(bool(__thiscall**)(void*, int, void*, int))(*(void***)old)[20])(old, 0, this, 0);
+            return ((bool(__thiscall*)(void*, int, void*, int))(*(void***)old)[20])(old, 0, this, 0);
         }
     }
     return result;
