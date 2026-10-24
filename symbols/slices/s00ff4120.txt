@@ -1,0 +1,11 @@
+00ff4120  RemoveItem            # Simulator::cSpaceInventory::RemoveItem - release the item and clear any tool-slot AutoRefs that reference it
+00ff4200  func7Ch               # cSPPlayerInventory::func7Ch (candidate TakeFromInventory) - remove the inventory item and drop tool refs
+00ff4310  FUN_00ff4310          # rebuild the tool list from the property-manager FillEntry container (candidate cSPUITools::BuildToolList)
+00ff4470  FUN_00ff4470          # activate the inventory tool referenced by the item key
+00ff4540  FUN_00ff4540          # deactivate the inventory tool referenced by the item key
+00ff45e0  FUN_00ff45e0          # create a tool from a FillEntry and register it (candidate cSPAbductToolStrategy::DoToolAction)
+00ff46e0  FUN_00ff46e0          # enable the starting tool set from the property-manager FillEntry container
+00ff4840  FUN_00ff4840          # remove the tool-set entry whose key matches and release it
+00ff48d0  AddToInventory        # cSPPlayerInventory::AddToInventory (vtable alias Simulator::cSpaceInventory::AddItem)
+00ff4b10  FUN_00ff4b10          # add an item to the tool set if not already present
+00ff4b90  UseToolSet            # cSPPlayerInventory::UseToolSet - clear the inventory and build the tool set for the named set
