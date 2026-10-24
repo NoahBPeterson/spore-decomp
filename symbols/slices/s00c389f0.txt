@@ -1,0 +1,6 @@
+00c389f0 ?FUN_00c389f0@UFOThing@@QAEMM@Z  # UFOThing::FUN_00c389f0(float) -- clamped accumulator, 265 bytes, ret 4 (decomp index)
+00c38b10 ?FUN_00c38b10@UFOThing@@QAEXXZ  # UFOThing::FUN_00c38b10 -- hash lookup + refcount-- + Release, 111 bytes (decomp index)
+00c38b90 ?FUN_00c38b90@UFOThing@@QAEXXZ  # UFOThing::FUN_00c38b90 -- hash lookup + gated refcount-- + Release, 143 bytes (decomp index)
+00c38c20 ?GetPos@OffsetHolder@@QAEXPAUVec3@@@Z  # OffsetHolder::GetPos(Vec3*) -- 3-float copy from this-0x4d0, 33 bytes, ret 4 (decomp index)
+00c38c50 ??0PaintSystemExt@@QAE@XZ  # PaintSystemExt::PaintSystemExt, 57 bytes (decomp index)
+00c38c90 ??1PaintSystemExt@@UAE@XZ  # PaintSystemExt::~PaintSystemExt, 109 bytes (decomp index)
