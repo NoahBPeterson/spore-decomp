@@ -261,3 +261,373 @@ void Rollover::Update(ArgSource* src, void* ctx, Query* q)
     }
     ForceVisibleLocation();
 }
+
+// ===========================================================================
+// 00eccaf0 / 00eccb20 -- palette-item rollover ctor / scalar deleting dtor
+// ===========================================================================
+extern "C" char g_vtblRolloverIWinProc[];                     // 0x014894c0
+extern "C" char g_vtblRolloverRefCount[];                      // 0x014894b0
+
+struct CPLBase {
+    void Dtor();                                               // 0x00828670  ??1CPL
+};
+
+// Object whose vtable releases at +0x08.
+struct IObj3 {
+    virtual void f0();                                         // +0x00
+    virtual void f4();                                         // +0x04
+    virtual void Release();                                    // +0x08
+};
+
+struct RolloverBase {
+    void Ctor(bool flag);                                      // 0x005ed360
+};
+
+struct RolloverItem {
+    void** volatile mVtblIWinProc;                             // +0x00
+    void** volatile mVtblRefCount;                             // +0x04
+    char pad08[0xa8];                                          // +0x08 .. +0xaf
+    IObj3* mObjB0;                                             // +0xb0
+    IObj3* mObjB4;                                             // +0xb4
+    char padB8[0x10];                                          // +0xb8 .. +0xc7
+    void* mTray;                                               // +0xc8
+
+    RolloverItem();
+    RolloverItem* Delete(int flags);
+};
+
+// @ 0x00eccaf0
+RolloverItem::RolloverItem()
+{
+    ((RolloverBase*)this)->Ctor(false);
+    mVtblIWinProc = (void**)&g_vtblRolloverIWinProc;
+    mVtblRefCount = (void**)&g_vtblRolloverRefCount;
+    mTray = 0;
+}
+
+// @ 0x00eccb20
+RolloverItem* RolloverItem::Delete(int flags)
+{
+    mVtblIWinProc = (void**)&g_vtblRolloverIWinProc;
+    mVtblRefCount = (void**)&g_vtblRolloverRefCount;
+    if (mObjB4)
+        mObjB4->Release();
+    if (mObjB0)
+        mObjB0->Release();
+    ((CPLBase*)this)->Dtor();
+    if (flags & 1)
+        operator delete(this);
+    return this;
+}
+
+// ===========================================================================
+// 00eccb70 / 00eccbf0 -- Variant getters of the palette item info line
+// ===========================================================================
+namespace EA {
+struct Variant {
+    char mData[0x10];                                          // +0x00 storage
+    uint16_t mFlags;                                           // +0x10
+    uint16_t mTypeId;                                          // +0x12
+
+    Variant() : mFlags(0), mTypeId(0) {}
+    Variant& operator=(const Variant& x);                      // 0x00542b80
+    void Destruct(bool bReconstruct);                          // 0x0093db80
+    void Construct(unsigned short typeId, unsigned short flags, const void* pData, unsigned int nSize,
+                   unsigned int nCount);                       // 0x0093dd80
+};
+}
+
+// In-place filler of a Variant (0x00ecc8b0: thiscall, one value argument).
+struct VariantFill {
+    void Set(uint32_t value);                                  // 0x00ecc8b0
+};
+
+// Property record: the dispatch key word lives at +0x0c.
+struct PropKey {
+    char pad00[0xc];                                           // +0x00 .. +0x0b
+    uint32_t mKind;                                            // +0x0c
+};
+
+// @ 0x00eccb70
+EA::Variant* __cdecl FUN_00eccb70(EA::Variant* ret, const PropKey* prop, const uint32_t* args)
+{
+    EA::Variant tmp;
+    if (prop->mKind != 0x440b6b8) {
+        if (prop->mKind != 0x64a8a82)
+            goto after;
+        ((VariantFill*)&tmp)->Set(args[0]);
+    } else {
+        ((VariantFill*)&tmp)->Set(args[1]);
+    }
+after:
+    ret->mFlags = 0;
+    ret->mTypeId = 0;
+    *ret = tmp;
+    if (tmp.mFlags & 4)
+        tmp.Destruct(false);
+    return ret;
+}
+
+namespace SP {
+// EA::EString (0x54 bytes): begin/end/capacity, an owning stack buffer at +0x14.
+struct EString {
+    wchar_t* mpBegin;                                          // +0x00
+    wchar_t* mpEnd;                                            // +0x04
+    wchar_t* mpCapacity;                                       // +0x08
+    char pad0c[4];                                             // +0x0c
+    wchar_t* mpStack;                                          // +0x10
+    wchar_t mStack[0x20];                                      // +0x14
+
+    EString* Construct(const wchar_t* text);                   // 0x006743f0
+    EString* AssignFrom(EString* other);                       // 0x00672880
+    void InitEmpty() {
+        mpStack = mStack;
+        mpBegin = mStack;
+        mpEnd = mStack;
+        mpCapacity = mStack + 0x20;
+        mStack[0] = 0;
+    }
+    ~EString() {
+        if ((((char*)mpEnd - (char*)mpBegin) & ~1) > 2 && mpBegin && mpBegin != mpStack)
+            operator delete(mpBegin);
+    }
+};
+
+// 3-argument cString ctor variant (same 0x14-byte layout as cString).
+struct cString3 {
+    uint32_t pad[5];
+    cString3(uint32_t id, uint32_t textId, const wchar_t* text);   // 0x006b5770
+    const wchar_t* GetText();                                      // 0x006b55c0
+    ~cString3();                                                   // 0x006b5240
+};
+}
+
+struct IValueSet {
+    virtual void f0();                                         // +0x00
+    virtual void Release();                                    // +0x04
+};
+
+// One property record of the manager's value list (12 bytes).
+struct PropEntry {
+    uint32_t mId;                                              // +0x00
+    uint32_t mPad04;                                           // +0x04
+    uint32_t mTextId;                                          // +0x08
+};
+
+struct PropManager {
+    virtual bool GetRange(uint32_t a, uint32_t b, IValueSet** out);   // vtable +0x2c
+};
+
+extern "C" PropManager* __cdecl GetPropertyManager();          // 0x0067de30
+extern "C" uint32_t g_propKeyA;                                // 0x015abed8
+extern "C" uint32_t g_propKeyB;                                // 0x015abee0
+extern "C" bool __cdecl CollectValues(IValueSet* set, uint32_t key, uint32_t* count, PropEntry** entries);   // 0x006a0ae0
+
+// @ 0x00eccbf0
+SP::EString* __cdecl FUN_00eccbf0(SP::EString* ret, uint32_t key, uint32_t index)
+{
+    IValueSet* set = 0;
+    bool built = false;
+    PropManager* mgr = GetPropertyManager();
+    if (set) {
+        set = 0;
+        set->Release();
+    }
+    if (mgr->GetRange(g_propKeyA, g_propKeyB, &set) && set) {
+        PropEntry* entries;
+        uint32_t count;
+        CollectValues(set, key, &count, &entries);
+        if (index < count) {
+            SP::cString3 text(entries[index].mId, entries[index].mTextId, 0);
+            ret->Construct(text.GetText());
+            text.~cString3();
+            built = true;
+        }
+    }
+    if (!built)
+        ret->InitEmpty();
+    if (set)
+        set->Release();
+    return ret;
+}
+
+// ===========================================================================
+// 00eccce0 -- Variant getter of the palette item info line (kind dispatch)
+// ===========================================================================
+struct IObject {
+    virtual void AddRef();                                     // +0x00
+    virtual void Release();                                    // +0x04
+    virtual void _pv08();                                      // +0x08
+    virtual void* GetByKey(uint32_t key);                      // +0x0c
+};
+
+// Data tail of the object reachable from the getter (extent in grid units).
+struct ObjExtent {
+    char pad00[0x1c];                                          // +0x00 .. +0x1b
+    int mWidth;                                                // +0x1c
+    int mHeight;                                               // +0x20
+};
+
+struct IWindow {
+    virtual void AddRef();                                     // +0x00
+    virtual void Release();                                    // +0x04
+    virtual void _pv08();                                      // +0x08
+    virtual void* GetByKey(uint32_t key);                      // +0x0c
+    virtual void _pv10(); virtual void _pv14(); virtual void _pv18(); virtual void _pv1c();
+    virtual void _pv20(); virtual void _pv24(); virtual void _pv28(); virtual void _pv2c();
+    virtual void _pv30(); virtual void _pv34(); virtual void _pv38(); virtual void _pv3c();
+    virtual void _pv40(); virtual void _pv44(); virtual void _pv48(); virtual void _pv4c();
+    virtual void _pv50(); virtual void _pv54(); virtual void _pv58();
+    virtual void SetImage(uint32_t image);                     // +0x5c
+    virtual void _pv60(); virtual void _pv64(); virtual void _pv68(); virtual void _pv6c();
+    virtual void SetRange(float a, float b);                   // +0x70
+    virtual void SetSize(float w, float h);                    // +0x74
+};
+
+struct WindowCtor {
+    void Init();                                               // 0x00962a10
+};
+
+extern "C" void* __cdecl GetWindowFactory();                                                       // 0x009512c0
+extern "C" void* __cdecl AllocWindow(int size, int align, const char* name, void* factory);          // 0x009512d0
+extern "C" char g_vtblWindowAddRef[];                                                              // 0x01414b10
+extern "C" char g_vtblWindowIWindow[];                                                             // 0x014431f8
+extern "C" char __cdecl FUN_008068d0(void* wnd, void* obj, int arg);                              // 0x008068d0
+extern "C" void* __cdecl FUN_00ecca30(uint32_t key, uint32_t value);                              // 0x00ecca30
+extern "C" IObject** __cdecl FUN_00ecc960(IObject** ret, uint32_t key, uint32_t value);           // 0x00ecc960
+extern "C" void* __cdecl FUN_00ac9480(void* value);                                               // 0x00ac9480
+extern "C" void* __cdecl FUN_00b199c0(void* value);                                               // 0x00b199c0
+
+// @ 0x00eccce0
+EA::Variant* __cdecl FUN_00eccce0(EA::Variant* ret, const PropKey* prop, const uint32_t* args)
+{
+    SP::EString line;
+    EA::Variant result;
+    IObject* obj = 0;
+    IWindow* win = 0;
+    bool haveResult = false;
+
+    switch (prop->mKind) {
+    case 0x7971b38: {
+        IObject** tmp = FUN_00ecc960(0, 0xcbe904b9, args[0]);
+        FUN_00ac9480(tmp);
+        IObject* o = *tmp;
+        if (o) {
+            o->AddRef();
+            obj = o;
+        }
+        (void)FUN_00b199c0(obj ? obj->GetByKey(0xee3f516e) : 0);
+        break;
+    }
+    case 0x64a8a82: {
+        SP::EString tmp;
+        line.AssignFrom(FUN_00eccbf0(&tmp, 0x63a708f3, args[0]));
+        tmp.~EString();
+        EA::Variant v;
+        ((VariantFill*)&v)->Set((uint32_t)line.mpBegin);
+        result = v;
+        haveResult = true;
+        if (v.mFlags & 4)
+            v.Destruct(false);
+        break;
+    }
+    case 0x7a02ed0: {
+        SP::EString tmp;
+        SP::EString* src = FUN_00eccbf0(&tmp, 0x34862a2e, args[1]);
+        if (&line != src) {
+            if (line.mpBegin != line.mpEnd) {
+                *line.mpBegin = 0;
+                line.mpEnd = line.mpBegin;
+            }
+            line.AssignFrom(src);
+        }
+        tmp.~EString();
+        EA::Variant v;
+        ((VariantFill*)&v)->Set((uint32_t)line.mpBegin);
+        result = v;
+        haveResult = true;
+        if (v.mFlags & 4)
+            v.Destruct(false);
+        break;
+    }
+    case 0x7a02ee0: {
+        IObject** tmp = FUN_00ecc960(0, 0x60df46a8, args[1]);
+        IObject* o = *tmp;
+        if (o) {
+            o->AddRef();
+            obj = o;
+        }
+        void* icon = FUN_00ecca30(0xdd13cc12, args[1]);
+        WindowCtor* w = (WindowCtor*)AllocWindow(0x20c, 4, "CastROTeamIcon", GetWindowFactory());
+        uint32_t built = 0;
+        if (w) {
+            w->Init();
+            *(void**)w = (void*)&g_vtblWindowAddRef;
+            IWindow* iw = (IWindow*)((char*)w + 4);
+            *(void**)iw = (void*)&g_vtblWindowIWindow;
+            iw->AddRef();
+            if (obj) {
+                iw->SetRange(0.0f, 0.0f);
+                iw->SetSize((float)((ObjExtent*)obj)->mWidth, (float)((ObjExtent*)obj)->mHeight);
+                iw->SetImage((uint32_t)icon);
+                FUN_008068d0(iw, obj, -1);
+            }
+            built = (uint32_t)iw->GetByKey(0xee3f516e);
+            win = iw;
+        }
+        if (result.mFlags & 4)
+            result.Destruct(true);
+        result.Construct(0x11, 0x29, (const void*)built, 4, 1);
+        haveResult = true;
+        break;
+    }
+    default:
+        break;
+    }
+    (void)haveResult;
+
+    ret->mFlags = 0;
+    ret->mTypeId = 0;
+    *ret = result;
+    if (win)
+        win->Release();
+    if (obj)
+        obj->Release();
+    if (result.mFlags & 4)
+        result.Destruct(false);
+    return ret;
+}
+
+// ===========================================================================
+// 00ecda00 -- palette item kind classifier
+// ===========================================================================
+struct VariantTyped {
+    char pad00[0x18];                                          // +0x00 .. +0x17
+    uint32_t mTypeId;                                          // +0x18
+
+    int Classify() const;
+};
+
+// @ 0x00ecda00
+int VariantTyped::Classify() const
+{
+    switch (mTypeId) {
+    case 0x1a4e0708:
+    case 0x2090a11b:
+    case 0x441cd3e6:
+    case 0x449c040f:
+        return 1;
+    case 0x1f2a25b6:
+    case 0x2a5147a9:
+    case 0x8f963dcb:
+    case 0xc15695da:
+        return 2;
+    case 0x7d433fad:
+    case 0x9ad7d4aa:
+    case 0xbc1041e6:
+    case 0xf670aa43:
+        return 3;
+    default:
+        return 0;
+    }
+}

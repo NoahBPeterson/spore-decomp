@@ -1,0 +1,7 @@
+00eccaf0 ??0RolloverItem@@QAE@XZ  # MATCH - cSPPaletteItemRollover-style ctor: base ctor 0x5ed360(this, false), vtable images 0x14894c0 / 0x14894b0, +0xc8 = 0
+00eccb20 ?Delete@RolloverItem@@QAEPAU1@H@Z  # nonmatching (5) - scalar deleting dtor of the palette item (retail deleting dtor, ret 4)
+00eccb70 ?FUN_00eccb70@@YAPAUVariant@EA@@PAU12@PBUPropKey@@PBI@Z  # MATCH - Variant getter: kind +0x0c 0x440b6b8 -> args[1], 0x64a8a82 -> args[0], fill 0xecc8b0, copy into the return slot
+00eccbf0 ?FUN_00eccbf0@@YAPAUEString@SP@@PAU12@II@Z  # nonmatching (173) - property value -> localised text (SP::EString)
+00eccce0 ?FUN_00eccce0@@YAPAUVariant@EA@@PAU12@PBUPropKey@@PBI@Z  # nonmatching (992) - info-line Variant getter by kind (text / team icon)
+00ecda00 ?Classify@VariantTyped@@QBEHXZ  # nonmatching (1) - palette kind classifier; original receives the record pointer in eax
+00ecd0c0 ?Update@Rollover@@QAEXPAUArgSource@@PAXPAUQuery@@@Z  # nonmatching (1752) - rollover info-line update (pre-existing committed body, kept)
