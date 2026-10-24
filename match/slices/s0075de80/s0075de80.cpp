@@ -20,10 +20,18 @@ class Mutex { public: void Lock(const void*); void Unlock(); char pad[0x28]; };
 
 struct LayerDrawArg;
 
+struct RenderLayerArray {
+    char* mpBegin;                 // +0
+    char* mpEnd;                   // +4
+};
+
 struct cRenderer {
     char pad00[0x28];              // +0x00
     EA::Thread::Mutex mMutex;      // +0x28
     char pad50[0x3c];              // +0x50
+    char pad8c[0x33c - 0x8c];      // +0x8c
+    char mExtra[0x34c - 0x33c];    // +0x33c
+    RenderLayerArray mLayers;      // +0x34c
     // layers: begin pointer at +0x8c, end pointer at +0x90 (stride 0x14)
     int NumLayers();               // @ 0x0075e330
     void* LayerInfoAt(int idx);    // @ 0x0075e370
@@ -161,12 +169,12 @@ unsigned cRenderer::GetInfoFlags(unsigned id)
 // @ 0x0075dff0
 void cRenderer::SubRender(int a, int lo, int hi, void* extra, char flag, unsigned orbits)
 {
+    cRenderer* self = this;
     if (extra == 0)
-        extra = (char*)this + 0x33c;
+        extra = self->mExtra;
     unsigned skip = flag ? 0x10000u : 0u;
-    char* p = LayerBegin(this);
-    char* e = LayerEnd(this);
-    if (p != e) {
+    char* p = self->mLayers.mpBegin;
+    if (p != self->mLayers.mpEnd) {
         do {
             int n = *(int*)(p + 4);
             if ((lo < 0 || lo <= n) && (hi < 0 || n <= hi) && (*(unsigned char*)(p + 0xc) & 1)) {
@@ -177,7 +185,7 @@ void cRenderer::SubRender(int a, int lo, int hi, void* extra, char flag, unsigne
                 *(unsigned*)(p + 0xc) |= skip;
             }
             p += 0x14;
-        } while (p != e);
+        } while (p != self->mLayers.mpEnd);
     }
 }
 
@@ -194,7 +202,7 @@ void cRenderer::RenderSettings(char useProps)
     int* props = g_sAppProperties;
     if (useProps) {
         if (props != 0) {
-            void* prop = 0;
+            void* prop;
             bool ok = ((bool (__thiscall*)(void*, int, void**))*(void**)(*props + 0x24))(props, 0xc3b4b152, &prop);
             if (ok && *(short*)((char*)prop + 0x12) == 0xd) {
                 float f = *Property_GetFloat();
@@ -208,7 +216,7 @@ void cRenderer::RenderSettings(char useProps)
     }
 tail:
     if (props != 0) {
-        void* prop = 0;
+        void* prop;
         bool ok = ((bool (__thiscall*)(void*, int, void**))*(void**)(*props + 0x24))(props, 0x54d9bc3, &prop);
         if (ok && *(short*)((char*)prop + 0x12) == 1) {
             if (Property_GetBool() && *(char*)((char*)self + 0x6c) != 0 &&

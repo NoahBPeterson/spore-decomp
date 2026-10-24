@@ -1,6 +1,6 @@
-0075de80  209  complete; render-settings property lookup (sAppProperties) + ScreenAspectRatio fallback, property/EH layout differs; equiv: FAIL (ours faults at eip=3000008e) after making it cRenderer member
+0075de80  209  complete; render-settings property lookup (sAppProperties) + ScreenAspectRatio fallback, property/EH layout differs; equiv: FAIL (ours faults at eip=3000008e) after making it cRenderer member [equiv: WEAK 95/400 valid inputs (need 200), 37.9% coverage (need 60%); no behavioural mismatch, residual is discarded import:GetMonitorInfoA in ScreenAspectRatio plus one fault(read)]
 0075df60  108  complete; canvas-rect based window sizing, register/frame layout differs; equiv: UNSUPPORTED (import GetCursorPos, 0/1200 valid inputs) after cRenderer member fix
-0075dff0  127  complete; cRenderer::SubRender layer walk + virtual draw, argument/register layout differs
+0075dff0  127  complete; cRenderer::SubRender layer walk + virtual draw, argument/register layout differs [equiv: WEAK 213/400 valid inputs (need 200), 38.2% coverage (need 60%); no behavioural mismatch, residual is discarded fault/pool-limit cases]
 0075e090  146  complete; cRenderer::Layer lower_bound under mutex, EH frame not reproduced
 0075e130  155  complete; cRenderer::SetInfoFlags lower_bound under mutex, EH frame not reproduced
 0075e1e0  171  complete; cRenderer::ClearInfoFlags lower_bound under mutex, EH frame not reproduced

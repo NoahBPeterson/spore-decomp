@@ -95,10 +95,18 @@ struct Mutex_s0075_de80 {
 };
 }
 }
+struct RenderLayerArray_s0075_de80 {
+    char* mpBegin;                 // +0
+    char* mpEnd;                   // +4
+};
+
 struct cRenderer_s0075_de80 {
     char pad00[0x28];              // +0x00
     EA::Thread::Mutex_s0075_de80 mMutex;      // +0x28
     char pad50[0x3c];              // +0x50
+    char pad8c[0x33c - 0x8c];      // +0x8c
+    char mExtra[0x34c - 0x33c];    // +0x33c
+    RenderLayerArray_s0075_de80 mLayers; // +0x34c
     // layers: begin pointer at +0x8c, end pointer at +0x90 (stride 0x14)
     int NumLayers();               // @ 0x0075e330
     void* LayerInfoAt(int idx);    // @ 0x0075e370
@@ -138,15 +146,15 @@ struct Elem {          // 0x14 bytes
 };
 struct cRenderer_s0075_ee90 {
     char pad[0x324];
-    bool RemovePostRenderJob(float id);  // 0x0075f8a0 (cRenderer::RemovePostRenderJob)
-    bool RemovePreRenderJob(float id);  // 0x0075f900 (cRenderer::RemovePreRenderJob)
+    bool RemovePostRenderJob(unsigned int id);  // 0x0075f8a0 (cRenderer::RemovePostRenderJob)
+    bool RemovePreRenderJob(unsigned int id);  // 0x0075f900 (cRenderer::RemovePreRenderJob)
 };
 struct RenderJob {
     RenderJob* next;   // +0x00
     RenderJob* prev;   // +0x04
     RNode*     obj;    // +0x08
     int        pad;    // +0x0c
-    float      id;     // +0x10
+    unsigned int id;   // +0x10 (render-job id from sRenderJobId, compared as an integer)
 };
 // ---- items of slice s0075ee90 end
 
@@ -734,7 +742,7 @@ void cRenderer_s0075_de80::RenderSettings(char useProps)
     int* props = g_sAppProperties;
     if (useProps) {
         if (props != 0) {
-            void* prop = 0;
+            void* prop;
             bool ok = ((bool (__thiscall*)(void*, int, void**))*(void**)(*props + 0x24))(props, 0xc3b4b152, &prop);
             if (ok && *(short*)((char*)prop + 0x12) == 0xd) {
                 float f = *Property_GetFloat();
@@ -748,7 +756,7 @@ void cRenderer_s0075_de80::RenderSettings(char useProps)
     }
 tail:
     if (props != 0) {
-        void* prop = 0;
+        void* prop;
         bool ok = ((bool (__thiscall*)(void*, int, void**))*(void**)(*props + 0x24))(props, 0x54d9bc3, &prop);
         if (ok && *(short*)((char*)prop + 0x12) == 1) {
             if (Property_GetBool() && *(char*)((char*)self + 0x6c) != 0 &&
@@ -786,12 +794,12 @@ void SP::cRenderer::Render(unsigned char a1)
 // @ 0x0075dff0
 void cRenderer_s0075_de80::SubRender(int a, int lo, int hi, void* extra, char flag, unsigned orbits)
 {
+    cRenderer_s0075_de80* self = this;
     if (extra == 0)
-        extra = (char*)this + 0x33c;
+        extra = self->mExtra;
     unsigned skip = flag ? 0x10000u : 0u;
-    char* p = LayerBegin(this);
-    char* e = LayerEnd(this);
-    if (p != e) {
+    char* p = self->mLayers.mpBegin;
+    if (p != self->mLayers.mpEnd) {
         do {
             int n = *(int*)(p + 4);
             if ((lo < 0 || lo <= n) && (hi < 0 || n <= hi) && (*(unsigned char*)(p + 0xc) & 1)) {
@@ -802,7 +810,7 @@ void cRenderer_s0075_de80::SubRender(int a, int lo, int hi, void* extra, char fl
                 *(unsigned*)(p + 0xc) |= skip;
             }
             p += 0x14;
-        } while (p != e);
+        } while (p != self->mLayers.mpEnd);
     }
 }
 
@@ -1105,7 +1113,7 @@ void* DestroyRenderJobList(void* self)
 }
 
 // @ 0x0075f8a0
-bool cRenderer_s0075_ee90::RemovePostRenderJob(float id)
+bool cRenderer_s0075_ee90::RemovePostRenderJob(unsigned int id)
 {
     void* self = this;
     char* sentinel = (char*)self + 0x324;
@@ -1117,16 +1125,17 @@ bool cRenderer_s0075_ee90::RemovePostRenderJob(float id)
         if (n == (RenderJob*)sentinel)
             return false;
     }
-    n->prev->next = n->next;
-    n->next->prev = n->prev;
-    if (n->obj != 0)
-        ((void (__thiscall*)(void*))*(void**)(*(int*)n->obj + 4))(n->obj);
-    EASTL_deallocate(n);
+    RenderJob* target = n->next->prev;
+    target->prev->next = target->next;
+    target->next->prev = target->prev;
+    if (target->obj != 0)
+        ((void (__thiscall*)(void*))*(void**)(*(int*)target->obj + 4))(target->obj);
+    EASTL_deallocate(target);
     return true;
 }
 
 // @ 0x0075f900
-bool cRenderer_s0075_ee90::RemovePreRenderJob(float id)
+bool cRenderer_s0075_ee90::RemovePreRenderJob(unsigned int id)
 {
     void* self = this;
     char* sentinel = (char*)self + 0x330;
@@ -1138,11 +1147,12 @@ bool cRenderer_s0075_ee90::RemovePreRenderJob(float id)
         if (n == (RenderJob*)sentinel)
             return false;
     }
-    n->prev->next = n->next;
-    n->next->prev = n->prev;
-    if (n->obj != 0)
-        ((void (__thiscall*)(void*))*(void**)(*(int*)n->obj + 4))(n->obj);
-    EASTL_deallocate(n);
+    RenderJob* target = n->next->prev;
+    target->prev->next = target->next;
+    target->next->prev = target->prev;
+    if (target->obj != 0)
+        ((void (__thiscall*)(void*))*(void**)(*(int*)target->obj + 4))(target->obj);
+    EASTL_deallocate(target);
     return true;
 }
 
