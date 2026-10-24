@@ -1,2 +1,3 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /GS-)
 005dbc70  24  UTFInternet::HTTPRequest ctor: complete; cl loads the 0.2f constant late in the zero-fill where the original hoisted it after the +0x1c store
+005db650  1140  TactileOwner::Add reconstructed; remaining equivalence diff is the original's uninitialized stack local (mValue) and allocator free-list soup (mID); full call trace identical

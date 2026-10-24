@@ -7,4 +7,4 @@
 005db270  -  editor settings-tab registration (variant); not reconstructed
 005db390  -  editor subsystem registration (485-byte inlined rbtree/vector); not reconstructed
 005db580  -  editor subsystem registration (193-byte); not reconstructed
-005db650  -  editor subsystem registration (1276-byte inlined rbtree/vector/Eastl); not reconstructed
+005db650  -  TactileOwner::Add reconstructed (map find, temp vector copy/scan, component update/allocate+append, temp free, ref-count release); remaining equivalence diff is the original's uninitialized stack local (mValue) and allocator free-list soup (mID), not a source field
