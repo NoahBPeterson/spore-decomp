@@ -1,0 +1,28 @@
+# slice s00b85380 - names inferred from the cards, the PDB candidates and behaviour
+# Modelled types (retail member offsets):
+#   Vertex3D  0x24-byte vertex (4 floats, dword @0x10, 3 floats, dword @0x20)
+#   Vertex2D  0x18-byte ragged vertex (6 dwords)
+#   Vec20B    0x14-byte element (2 dwords + Vec20B payload via operator= @0x473500)
+#   Vec3f     0x0c-byte float3 element
+#   SpVector3/Vertex3DVec/Vertex2DVec/ByteVec/SpVector20B eastl vector<...> headers (begin@end@4 cap@8)
+#   PaintSystem/cGonzagoListener  the TileMap owner object
+00b85380  Vertex3DVec::GrowAndInsert(Vertex3D* pos, const Vertex3D* pVal) -> void  # eastl vector<Vertex3D> insert-one: shift tail right or grow (max(2*size,1)) via FUN_00b7f710
+00b85500  Vertex3DVec::CopyUninit(Vertex3D* pSrc, Vertex3D* pDst) -> Vertex3D*  # eastl uninitialised_copy of 0x24-byte elements (rep movsd); advances end
+00b85570  Vec3f_ReverseSwap(Vec3f* begin, Vec3f* end) -> void  # in-place reversal of a float3 array (swap both ends inward)
+00b855e0  Vertex2DVec::Assign(const Vertex2DVec* src) -> Vertex2D*  # eastl vector<Vertex2D> operator=(const Vec&) (self-guard + grow/copy)
+00b85710  Vertex3DVec::InsertFillN(Vertex3D* pos, u32 n, const Vertex3D* pVal) -> void  # eastl vector<Vertex3D>::insert(pos,n,value)
+00b85930  AllocAndCopy(u32 n, const void* first, const void* last) -> void*  # __stdcall alloc + memcpy of [first,last)
+00b859c0  TileMapLookup::LookupAssign(u32 key, Vec20B* out) -> char  # find key in the +0x34 vector; assign the +0x0c[index] 0x14-byte record
+00b85a30  PaintSystem::~PaintSystem() -> void  # dtor: free the 7 byte vectors, the +0x38 bitvector, the +0x20 object; destroy cGonzagoSubsystem at +4
+00b85bc0  PaintSystem::InitPool(void* a, void* b) -> void*  # eastl fixed_pool init (0x12000/0x24) + node bookkeeping + bounds
+00b85ca0  TileMap::operator[](void* key) -> void*  # HashMap::Find / create a 0x14-byte record; returns record+0xc
+00b85d40  SpVector3::insert(Vec3f* pos, const Vec3f* pVal) -> Vec3f*  # eastl vector<Vec3f> insert-one (fast append or DoInsertValue @0x4b5ad0)
+00b85db0  Vertex3DVec::push_back(const Vertex3D* pVal) -> void  # eastl vector<Vertex3D> push_back fast path (copy 9 dwords)
+00b85e10  SpVector20B::AssignN(u32 n) -> void*  # alloc n 0x14-byte elements, construct each (FUN_00b84ba0), set begin/end/cap
+00b85f30  Vertex2DVec_Resize(u32 n) -> void  # eastl vector<Vertex2D> resize (append defaults or erase tail)
+00b85fb0  ByteVec::CopyCtor(const ByteVec* src) -> void*  # eastl vector<byte> copy-ctor (alloc + memcpy)
+00b86010  ByteVec::AssignFrom(const ByteVec* src) -> void*  # eastl vector<byte>::operator=(const Vec&)
+00b860d0  ByteVec::InsertFill(u8* pos, u32 n, const u8* pVal) -> void*  # eastl vector<byte>::insert(pos,n,value)
+00b86350  CopyVec20BForward(u32* first, u32* last, u32* dst) -> u32*  # forward copy of 0x1c-byte {u32,u32,Vec20B} elements
+00b86390  CopyVec20BBackward(u32* first, u32* last, u32* dst) -> u32*  # backward copy of 0x1c-byte {u32,u32,Vec20B} elements
+00b863e0  cGonzagoListener::Ctor() -> void  # construct cGonzagoSubsystem at +4, install vtables, zero fields, init fixed pool at +0xf4
