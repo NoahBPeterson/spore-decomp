@@ -9,7 +9,16 @@ typedef unsigned char  uint8_t;
 
 struct Sub { void assign(Sub* other); };          // 0x00473500
 struct Elem34 { float f; int d[12]; };            // 0x34
-struct BuildData { char d[0x38]; };               // 0x38
+struct BuildData {                                 // 0x38, scalar fields (no /GS buffer)
+    int  f00, f04, f08, f0c;
+    int  f10, f14, f18;
+    bool f1c;
+    bool pad1d, pad1e, pad1f;
+    bool f20;
+    bool pad21, pad22, pad23;
+    int  f24, f28, f2c;
+    int  f30, f34;
+};
 struct WideVec { char d[0x20]; };                 // 0x20
 
 // ---------------------------------------------------------------------------
@@ -31,190 +40,262 @@ Elem34* FUN_00f2a490(Elem34* first, Elem34* last, Elem34* out)
 // ---------------------------------------------------------------------------
 // 0x00f2a510  property lookup
 // ---------------------------------------------------------------------------
-extern void* EA_ConvertToString16(void*, int, int);   // 0x0093c5a0
-extern void  FUN_00f28b30_();                          // unused
-extern void  eastl_wstring_ctor(void*);               // 0x0056e2d0
-extern void  operator_delete(void*);                  // 0x00f47380
-extern int   FUN_005954f0(int*, void*, void*, void*); // 0x005954f0
-extern int   FUN_00ae5530(int*, void*, int, void*);   // 0x00ae5530
+// eastl::basic_string<wchar_t> layout: {begin, end, capacity}.
+struct WStr {
+    wchar_t* b;
+    wchar_t* e;
+    wchar_t* c;
+    void CopyCtor(const WStr* src);            // 0x0056e2d0
+};
+
+extern wchar_t gEmptyString16[];               // 0x01667bac eastl::gEmptyString16
+
+extern "C" {
+void* __cdecl FUN_0093c5a0(WStr* out, int name, int n);                              // 0x0093c5a0 EA::ConvertToString16
+void  __cdecl FUN_00f47380(void* p);                                                 // 0x00f47380 operator delete
+char  __cdecl FUN_00ae5530(int* a, const char* name, void* key, const wchar_t* cls); // 0x00ae5530 write Key
+char  __cdecl FUN_005954f0(int* a, const char* id, void* val, const wchar_t* type);  // 0x005954f0 write int64
+}
 
 // @ 0x00f2a510
-uint8_t FUN_00f2a510(int* a, int b, int* c)
+bool FUN_00f2a510(int* a, int b, int* c)
 {
-    wchar_t buf[10];
     if (c == 0)
         return 1;
     if ((c[4] & c[5]) == -1 && *c == 0)
         return 1;
-    wchar_t* p = (wchar_t*)buf;
-    bool empty;
+
+    WStr N;
     if (b == 0) {
-        buf[0] = 0;
-        p = buf;
-        empty = true;
+        N.b = gEmptyString16;
+        N.e = gEmptyString16;
+        N.c = gEmptyString16 + 1;
     } else {
-        p = (wchar_t*)EA_ConvertToString16(buf, b, -1);
-        empty = false;
+        FUN_0093c5a0(&N, b, -1);
     }
-    eastl_wstring_ctor(p);
-    (void)empty;
-    char ok = (*(int(__thiscall**)(int*, wchar_t*))(*a))(a, p);
-    bool r;
+
+    WStr C;
+    C.CopyCtor(&N);
+
+    if ((((char*)N.c - (char*)N.b) & ~1) > 2 && N.b)
+        FUN_00f47380(N.b);
+
+    const wchar_t* str = (C.b == C.e) ? L"asset" : C.b;
+    char ok = ((char(__thiscall*)(int*, const wchar_t*))(*(void***)a)[0])(a, str);
+
     if ((c[4] & c[5]) == -1)
-        r = ok ? (FUN_00ae5530(a, 0, b, 0), true) : false;
+        ok = ok ? (FUN_00ae5530(a, "key", c, L"EA::ResourceMan::Key") != 0) : 0;
     else
-        r = ok ? (FUN_005954f0(a, 0, c + 4, 0) != 0) : false;
-    if (!r)
-        return 0;
-    return (*(int(__thiscall**)(int*, wchar_t*))(*(int*)a + 4))(a, p) != 0;
+        ok = ok ? (FUN_005954f0(a, "ID", c + 4, L"uint64_t") != 0) : 0;
+
+    char result = 0;
+    if (ok)
+        result = ((char(__thiscall*)(int*, const wchar_t*))(*(void***)a)[1])(a, str) != 0;
+
+    if ((((char*)C.c - (char*)C.b) & ~1) > 2 && C.b)
+        FUN_00f47380(C.b);
+    return result;
 }
 
 // ---------------------------------------------------------------------------
 // 0x00f2a6a0  build tutorial command list
 // ---------------------------------------------------------------------------
-typedef int(__thiscall* PushFn)(void*, int*);
-extern void FUN_00c06c30();        // 0x00c06c30
-inline void push8(void* vec, int* rec)
+extern int FUN_00ec6e70(int);     // 0x00ec6e70
+
+struct Rec { int d[8]; };         // 0x20
+
+struct RecVec {
+    Rec* mpBegin;   // +0
+    Rec* mpEnd;     // +4
+    Rec* mpCap;     // +8
+    void erase(Rec* first, Rec* last);        // 0x00899420
+    void push_back(const Rec& v);             // 0x00c072b0
+    Rec* insert(Rec* pos, const Rec* v);      // 0x00c06c30
+};
+
+inline void push8(RecVec* v, Rec* rec)
 {
-    uint32_t* p = (uint32_t*)vec;
-    if (p[1] < p[2]) {
-        uint32_t* q = (uint32_t*)p[1];
-        p[1] = (uint32_t)(q + 8);
+    if (v->mpEnd < v->mpCap) {
+        Rec* q = v->mpEnd;
+        v->mpEnd = q + 1;
         if (q)
-            for (int i = 0; i < 8; ++i)
-                q[i] = rec[i];
+            *q = *rec;
     } else {
-        FUN_00c06c30();
+        v->insert(v->mpEnd, rec);
     }
 }
-extern void FUN_00c06c30();        // 0x00c06c30
-extern int  FUN_00ec6e70(int);     // 0x00ec6e70
-extern int  FUN_00c072b0(int*);    // 0x00c072b0
-extern int  ScenarioTutorials_GetActive();
 
-struct TutCmds { void Build_00f2a6a0(); void Build_00f2aac0(); };
+struct TutCmds { void Build_00f2a6a0(); TutCmds* Build_00f2aac0(); };
 
 // @ 0x00f2a6a0
 void TutCmds::Build_00f2a6a0()
 {
     char* self = (char*)this;
-    int rec[8];
-    int v = *(int*)(self + 0x4ac);
-    if (v == 1 || v == 2 || v == 3) {
-        rec[0] = 1;
-        rec[1] = -1;
-        rec[2] = -1;
-        rec[3] = (v == 1) ? 5 : 0;
-        if (*(int*)(self + 0x4ac) == 4)
-            rec[3] = 8;
-        int kind = *(int*)(self + 0x4a8);
-        if (kind != 1 && kind != 0) {
-            for (unsigned i = 1; i < 5; ++i) {
-                if (i != (unsigned)(kind - 1) && FUN_00ec6e70(i)) {
-                    rec[4] = 1;
-                    rec[5] = i;
-                    FUN_00c072b0(rec);
+    RecVec* v = (RecVec*)(self + 0x4cc);
+    Rec rec;
+
+    v->erase(v->mpBegin, v->mpEnd);
+
+    bool flag = *(int*)(self + 0x4b8) == 1;
+    int mode = *(int*)(self + 0x4ac);
+    rec.d[6] = -1;
+    rec.d[7] = -1;
+
+    if (mode == 1) {
+        rec.d[0] = 2; rec.d[1] = 0; rec.d[2] = -1; rec.d[3] = 9;
+        rec.d[4] = -1; rec.d[5] = -1;
+        v->push_back(rec);
+    } else if (mode == 2 || mode == 4 || mode == 5) {
+        rec.d[0] = 2; rec.d[1] = 0; rec.d[2] = -1; rec.d[3] = 0;
+        rec.d[4] = 0; rec.d[5] = -1; rec.d[6] = -1; rec.d[7] = -1;
+        push8(v, &rec);
+
+        if (mode != 2) {
+            rec.d[0] = 0; rec.d[1] = -1; rec.d[2] = -1; rec.d[3] = 0;
+            if (flag)
+                rec.d[3] = 5;
+            if (mode == 4)
+                rec.d[3] = 8;
+            int kind = *(int*)(self + 0x4a8);
+            if (kind != 1 && kind != 0) {
+                for (unsigned i = 1; i < 5; ++i) {
+                    if (i != (unsigned)(kind - 1) && FUN_00ec6e70(i)) {
+                        rec.d[4] = 1;
+                        rec.d[5] = i;
+                        v->push_back(rec);
+                    }
                 }
+                rec.d[4] = 0;
+                rec.d[5] = -1;
+                v->push_back(rec);
+            } else {
+                rec.d[4] = 0;
+                rec.d[5] = -1;
+                v->push_back(rec);
             }
-            rec[4] = 0;
-        } else {
-            rec[4] = 0;
-            rec[5] = -1;
-            FUN_00c072b0(rec);
         }
     }
-    rec[0] = 0; rec[1] = -1; rec[2] = -1;
-    if (*(int*)(self + 0x4ac) == 2 || *(int*)(self + 0x4ac) == 1) {
-        rec[3] = 0xb; rec[4] = -1; rec[5] = -1;
-        push8(self + 0x4d0, rec);
+
+    rec.d[0] = 0; rec.d[1] = -1; rec.d[2] = -1;
+    if (mode == 2 || mode == 1) {
+        rec.d[3] = 0xb; rec.d[4] = -1; rec.d[5] = -1;
+        push8(v, &rec);
     }
-    rec[3] = 0xc; rec[4] = 0; rec[5] = -1;
-    push8(self + 0x4d0, rec);
+    rec.d[3] = 0xc; rec.d[4] = 0; rec.d[5] = -1;
+    push8(v, &rec);
     if (*(int*)(self + 0x4b0) == 2) {
-        rec[4] = -1; rec[5] = -1;
-        rec[3] = 3; rec[2] = -1; rec[1] = -1; rec[0] = 0;
-        push8(self + 0x4d0, rec);
+        rec.d[4] = -1; rec.d[5] = -1;
+        rec.d[3] = 3; rec.d[2] = -1; rec.d[1] = -1; rec.d[0] = 0;
+        push8(v, &rec);
     } else if (*(int*)(self + 0x4b0) == 3) {
-        rec[4] = 2; rec[5] = *(int*)(self + 0x4bc);
-        rec[3] = 3; rec[2] = -1; rec[1] = -1; rec[0] = 0;
-        push8(self + 0x4d0, rec);
+        rec.d[4] = 2; rec.d[5] = *(int*)(self + 0x4bc);
+        rec.d[3] = 3; rec.d[2] = -1; rec.d[1] = -1; rec.d[0] = 0;
+        push8(v, &rec);
     }
     if (*(int*)(self + 0x4b4) == 2) {
-        rec[3] = 4; rec[4] = 0; rec[5] = -1; rec[6] = 0; rec[7] = -1;
+        rec.d[3] = 4; rec.d[4] = 0; rec.d[5] = -1; rec.d[6] = 0; rec.d[7] = -1;
     } else if (*(int*)(self + 0x4b0) == 3) {
-        rec[3] = 3; rec[4] = 2; rec[5] = *(int*)(self + 0x4bc);
-        rec[6] = 2; rec[7] = *(int*)(self + 0x4c0);
+        rec.d[3] = 3; rec.d[4] = 2; rec.d[5] = *(int*)(self + 0x4bc);
+        rec.d[6] = 2; rec.d[7] = *(int*)(self + 0x4c0);
     } else {
         goto tail;
     }
-    rec[2] = -1; rec[1] = -1; rec[0] = 0;
-    push8(self + 0x4d0, rec);
+    rec.d[2] = -1; rec.d[1] = -1; rec.d[0] = 0;
+    push8(v, &rec);
 tail:
-    rec[4] = -1; rec[5] = -1; rec[6] = -1; rec[7] = -1;
-    rec[0] = 0; rec[1] = -1; rec[2] = -1;
+    rec.d[4] = -1; rec.d[5] = -1; rec.d[6] = -1; rec.d[7] = -1;
+    rec.d[0] = 0; rec.d[1] = -1; rec.d[2] = -1;
     switch (*(int*)(self + 0x4b8)) {
-    case 1:  rec[3] = 1; break;
-    case 4:  rec[3] = 2; break;
-    case 5:  rec[3] = 7; rec[4] = 2; rec[5] = *(int*)(self + 0x4c4); break;
-    case 6:  rec[3] = 10; break;
-    default: rec[3] = 6; rec[4] = -1; rec[5] = -1; break;
+    case 1:  rec.d[3] = 1; break;
+    case 4:  rec.d[3] = 2; break;
+    case 5:  rec.d[3] = 7; rec.d[4] = 2; rec.d[5] = *(int*)(self + 0x4c4); break;
+    case 6:  rec.d[3] = 10; break;
+    default: rec.d[3] = 6; rec.d[4] = -1; rec.d[5] = -1; break;
     }
-    push8(self + 0x4d0, rec);
+    push8(v, &rec);
 }
 
 // ---------------------------------------------------------------------------
-// 0x00f2aac0
+// 0x00f2aac0  initialise the tutorial-command object (size 0x234)
 // ---------------------------------------------------------------------------
-extern int FUN_00f08850(int, int);
-
 // @ 0x00f2aac0
-void TutCmds::Build_00f2aac0()
+TutCmds* TutCmds::Build_00f2aac0()
 {
     char* self = (char*)this;
-    int rec[8];
-    rec[0] = 0; rec[1] = -1; rec[2] = -1;
-    if (*(int*)(self + 0x4ac) == 4) {
-        rec[3] = 8; rec[4] = 0; rec[5] = -1;
-    } else {
-        rec[3] = 0xc; rec[4] = 0; rec[5] = -1;
-    }
-    push8(self + 0x4d0, rec);
+    *(volatile int*)(self + 0x00) = -1;
+    *(volatile float*)(self + 0x04) = 0.0f;
+    *(volatile float*)(self + 0x08) = 0.0f;
+    *(volatile float*)(self + 0x0c) = 0.0f;
+    *(volatile float*)(self + 0x10) = 0.0f;
+    *(volatile float*)(self + 0x14) = 0.0f;
+    *(volatile float*)(self + 0x18) = 0.0f;
+    *(volatile float*)(self + 0x1c) = 1.0f;
+    *(volatile float*)(self + 0x20) = 1.0f;
+    *(volatile float*)(self + 0x24) = 0.5f;
+    *(volatile char**)(self + 0x28) = self + 0x40;
+    *(volatile char**)(self + 0x2c) = self + 0x40;
+    *(volatile char**)(self + 0x30) = self + 0x1e0;
+    *(volatile int*)(self + 0x3c) = 0;
+    *(volatile float*)(self + 0x1e0) = 1.0f;
+    *(volatile float*)(self + 0x1e4) = 1.0f;
+    *(volatile float*)(self + 0x1e8) = 0.0f;
+    *(volatile float*)(self + 0x1ec) = 0.0f;
+    *(volatile float*)(self + 0x1f0) = 0.0f;
+    *(volatile float*)(self + 0x1f4) = 0.0f;
+    *(volatile float*)(self + 0x1f8) = 0.0f;
+    *(volatile float*)(self + 0x1fc) = 0.0f;
+    *(volatile float*)(self + 0x200) = 1.0f;
+    *(volatile float*)(self + 0x204) = 1.0f;
+    *(volatile uint8_t*)(self + 0x208) = 0;
+    *(volatile uint8_t*)(self + 0x209) = 0;
+    *(volatile int*)(self + 0x20c) = 0;
+    *(volatile int*)(self + 0x210) = 0;
+    *(volatile int*)(self + 0x214) = 0;
+    *(volatile float*)(self + 0x220) = 0.0f;
+    *(volatile int*)(self + 0x224) = 0;
+    *(volatile int*)(self + 0x228) = -1;
+    *(volatile int*)(self + 0x22c) = -1;
+    *(volatile int*)(self + 0x230) = -1;
+    return this;
 }
 
 // ---------------------------------------------------------------------------
 // 0x00f2ac30
 // ---------------------------------------------------------------------------
 // @ 0x00f2ac30
-int FUN_00f2ac30(void* self, int* a, int b, int c)
+__declspec(noinline) bool FUN_00f2ac30(void* self, int* a, int b)
 {
-    (void)self; (void)a; (void)b; (void)c;
+    (void)self; (void)a; (void)b;
     return 0;
 }
 
 // ---------------------------------------------------------------------------
 // 0x00f2ada0  resize vector<BuildData> (stride 0x38)
 // ---------------------------------------------------------------------------
-extern BuildData* FUN_00f28dd0();   // eastl vector erase
-extern void FUN_00f28e40();         // 0x00f28e40
-
-struct Vec38 { BuildData* mpBegin; BuildData* mpEnd; BuildData* mpCapacity; void resize(uint32_t n); };
+struct Vec38 {
+    BuildData* mpBegin;
+    BuildData* mpEnd;
+    BuildData* mpCapacity;
+    void resize(uint32_t n);
+    void insert(BuildData* pos, uint32_t count, BuildData* val);   // 0x00f28e40
+    BuildData* erase(BuildData* first, BuildData* last);           // 0x00f28dd0
+};
 
 // @ 0x00f2ada0
 void Vec38::resize(uint32_t n)
 {
-    uint32_t have = (uint32_t)(mpEnd - mpBegin) / 0x38;
+    uint32_t have = (uint32_t)(mpEnd - mpBegin);
     if (have < n) {
         BuildData tmp;
-        for (uint32_t i = 0; i < sizeof(BuildData); ++i)
-            ((char*)&tmp)[i] = 0;
-        *(int*)((char*)&tmp + 0x10) = -1;
-        *(int*)((char*)&tmp + 0x14) = -1;
-        *(int*)((char*)&tmp + 0x18) = -1;
-        *(int*)((char*)&tmp + 0x2c) = -1;
-        *(int*)((char*)&tmp + 0x30) = -1;
-        FUN_00f28e40();
+        tmp.f00 = 0;  tmp.f04 = 0;  tmp.f08 = 0;  tmp.f0c = 0;
+        tmp.f10 = -1; tmp.f14 = -1; tmp.f18 = -1;
+        tmp.f1c = 0;
+        tmp.f20 = 0;
+        tmp.f24 = 0;  tmp.f28 = 0;  tmp.f2c = 0;
+        tmp.f30 = -1; tmp.f34 = -1;
+        insert(mpEnd, n - have, &tmp);
     } else {
-        FUN_00f28dd0();
+        erase(mpBegin + n, mpEnd);
     }
 }
 
@@ -229,7 +310,8 @@ extern void FUN_00f29030(void*, void*);              // 0x00f29030
 // @ 0x00f2ae60
 void FUN_00f2ae60(char* self, int* vec)
 {
-    FUN_00f28dd0();
+    Vec38* v = (Vec38*)vec;
+    v->erase(v->mpBegin, v->mpEnd);
     int n = 0;
     int* io = (int*)(*(int(__thiscall**)(char*))(*(int*)self + 0x20))(self);
     void* stream = (void*)(*(int(__thiscall**)(int*))(*(int*)io + 0x18))(io);
@@ -262,25 +344,32 @@ void FUN_00f2ae60(char* self, int* vec)
 // 0x00f2af60  push-if-match
 // ---------------------------------------------------------------------------
 extern bool FUN_00f27990(int, int);      // 0x00f27990
-extern void FUN_00b96600();              // 0x00b96600
+
+struct IntVec {
+    uint32_t* mpBegin;
+    uint32_t* mpEnd;
+    uint32_t* mpCapacity;
+    void reserve(int n);                                       // 0x00d01790
+    void DoInsertKey4(uint32_t* pos, const uint32_t& value);   // 0x00b96600
+};
 
 // @ 0x00f2af60
 void FUN_00f2af60(int vec, int key, int* count, int arg4, char arg5)
 {
     if ((*count <= 0 || arg5 == 0) && FUN_00f27990(key, arg4)) {
         if (vec) {
-            int* end = *(int**)(vec + 4);
-            if (end < *(int**)(vec + 8)) {
-                *(int**)(vec + 4) = end + 1;
+            IntVec* v = (IntVec*)vec;
+            uint32_t* end = v->mpEnd;
+            if (end < v->mpCapacity) {
+                v->mpEnd = end + 1;
                 if (end) {
-                    *end = key;
+                    *end = (uint32_t)key;
                     ++*count;
                     return;
                 }
             } else {
-                int v = key;
-                FUN_00b96600();
-                (void)v;
+                uint32_t value = (uint32_t)key;
+                v->DoInsertKey4(end, value);
             }
         }
         ++*count;
@@ -291,7 +380,11 @@ void FUN_00f2af60(int vec, int key, int* count, int arg4, char arg5)
 // 0x00f2afc0  ordered insert
 // ---------------------------------------------------------------------------
 extern int* FUN_00f27fc0(int, int, int*, int);   // 0x00f27fc0
-extern void FUN_00f2a3a0(void*, void*);           // 0x00f2a3a0
+
+struct Elem18 { int d[6]; };                      // 0x18
+struct Vec18 {
+    Elem18* insert(Elem18* pos, const Elem18& val);    // 0x00f2a3a0
+};
 
 struct TreeLike {
     int* mpBegin;   // +0
@@ -311,7 +404,7 @@ void TreeLike::insert(uint* key, uint* val)
         if (*val == *key && (less = val[2] < key[2], val[2] == key[2]))
             less = val[1] < key[1];
         if (less) {
-            pos = (int*)FUN_00f27fc0((int)mpBegin, (int)end, (int*)val, mFlag);
+            pos = (int*)FUN_00f27fc0((int)mpBegin, (int)key, (int*)val, mFlag);
             goto check;
         }
     }
@@ -324,25 +417,25 @@ check:
         if (!less)
             return;
     }
-    FUN_00f2a3a0(pos, val);
+    ((Vec18*)this)->insert((Elem18*)pos, *(const Elem18*)val);
 }
 
 // ---------------------------------------------------------------------------
 // 0x00f2b040  collect matching building data
 // ---------------------------------------------------------------------------
-extern void FUN_00d01790(int);   // 0x00d01790
-extern int  FUN_00f259b0();       // 0x00f259b0
+extern bool FUN_00f259b0(void*, int*);       // 0x00f259b0
 
 struct BigObj {
     char pad0[0x130];
     int  mKey130;            // +0x130
-    char pad1[0x48];
+    char pad1[0x44];
     BuildData* begin178;     // +0x178
     BuildData* end17c;       // +0x17c
-    char pad2[0x2674];
+    char pad2[0x2a74];
     char* begin2bf4;         // +0x2bf4
     char* end2bf8;           // +0x2bf8
     int collect(int vec, int key, int arg4);
+    bool check();            // 0x00f2b340
 };
 
 // @ 0x00f2b040
@@ -350,19 +443,21 @@ int BigObj::collect(int vec, int key, int arg4)
 {
     int count = 0;
     if (vec)
-        FUN_00d01790((int)((end2bf8 - begin2bf4) / 0x27e8) * 3 +
-                     (int)((char*)end17c - (char*)begin178) / 0x38 + 1);
+        ((IntVec*)vec)->reserve((int)((end2bf8 - begin2bf4) / 0x27e8) * 3 +
+                                (int)((char*)end17c - (char*)begin178) / 0x38 + 1);
     FUN_00f2af60(vec, (int)&mKey130, &count, key, (char)arg4);
     int* p = (int*)begin178;
     while (p != (int*)end17c) {
         if ((count < 1 || (char)arg4 == 0) && FUN_00f27990((int)p, key)) {
             if (vec) {
-                int* e = *(int**)(vec + 4);
-                if (e < *(int**)(vec + 8)) {
-                    *(int**)(vec + 4) = e + 1;
-                    if (e) *e = (int)p;
+                IntVec* v = (IntVec*)vec;
+                uint32_t* e = v->mpEnd;
+                if (e < v->mpCapacity) {
+                    v->mpEnd = e + 1;
+                    if (e) *e = (uint32_t)(int)p;
                 } else {
-                    FUN_00b96600();
+                    uint32_t value = (uint32_t)(int)p;
+                    v->DoInsertKey4(e, value);
                 }
             }
             ++count;
@@ -376,9 +471,15 @@ int BigObj::collect(int vec, int key, int arg4)
             if (count < 1 || (char)arg4 == 0) {
                 if (FUN_00f27990((int)(e - 0x50), key)) {
                     if (vec) {
-                        int* q = *(int**)(vec + 4);
-                        if (q < *(int**)(vec + 8)) { *(int**)(vec + 4) = q + 1; if (q) *q = (int)(e - 0x50); }
-                        else FUN_00b96600();
+                        IntVec* v = (IntVec*)vec;
+                        uint32_t* q = v->mpEnd;
+                        if (q < v->mpCapacity) {
+                            v->mpEnd = q + 1;
+                            if (q) *q = (uint32_t)(int)(e - 0x50);
+                        } else {
+                            uint32_t value = (uint32_t)(int)(e - 0x50);
+                            v->DoInsertKey4(q, value);
+                        }
                     }
                     ++count;
                 }
@@ -386,9 +487,15 @@ int BigObj::collect(int vec, int key, int arg4)
             if (count < 1 || (char)arg4 == 0) {
                 if (FUN_00f27990((int)(e - 0x28), key)) {
                     if (vec) {
-                        int* q = *(int**)(vec + 4);
-                        if (q < *(int**)(vec + 8)) { *(int**)(vec + 4) = q + 1; if (q) *q = (int)(e - 0x28); }
-                        else FUN_00b96600();
+                        IntVec* v = (IntVec*)vec;
+                        uint32_t* q = v->mpEnd;
+                        if (q < v->mpCapacity) {
+                            v->mpEnd = q + 1;
+                            if (q) *q = (uint32_t)(int)(e - 0x28);
+                        } else {
+                            uint32_t value = (uint32_t)(int)(e - 0x28);
+                            v->DoInsertKey4(q, value);
+                        }
                     }
                     ++count;
                 }
@@ -397,9 +504,15 @@ int BigObj::collect(int vec, int key, int arg4)
             if (count < 1 || (char)arg4 == 0) {
                 if (FUN_00f27990((int)e, key)) {
                     if (vec) {
-                        int* q = *(int**)(vec + 4);
-                        if (q < *(int**)(vec + 8)) { *(int**)(vec + 4) = q + 1; if (q) *q = (int)e; }
-                        else FUN_00b96600();
+                        IntVec* v = (IntVec*)vec;
+                        uint32_t* q = v->mpEnd;
+                        if (q < v->mpCapacity) {
+                            v->mpEnd = q + 1;
+                            if (q) *q = (uint32_t)(int)e;
+                        } else {
+                            uint32_t value = (uint32_t)(int)e;
+                            v->DoInsertKey4(q, value);
+                        }
                     }
                     ++cc;
                     count = cc;
@@ -421,7 +534,7 @@ struct MatchObj {
     char pad1[0x48];
     char* begin178;   // +0x178
     char* end17c;     // +0x17c
-    char pad2[0x2674];
+    char pad2[0x2a74];
     char* begin2bf4;  // +0x2bf4
     char* end2bf8;    // +0x2bf8
     bool any(void* key);
@@ -459,23 +572,21 @@ bool MatchObj::any(void* key)
 // 0x00f2b340  check all collected entries
 // ---------------------------------------------------------------------------
 // @ 0x00f2b340
-bool FUN_00f2b340(BigObj* self)
+bool BigObj::check()
 {
-    int begin = 0, end = 0, cap = 0;
-    self->collect((int)&begin, 0x30f0f, 0);
-    int* p = &begin;
-    int n = end - begin;
-    n >>= 2;
+    int* vec[3] = { 0, 0, 0 };
+    collect((int)vec, 0x30f0f, 0);
+    int* p = vec[0];
+    uint32_t n = (uint32_t)(vec[1] - vec[0]);
     bool ok = true;
-    for (int i = 0; i < n; ++i) {
+    for (uint32_t i = 0; i < n; ++i) {
         int e = p[i];
-        if (!FUN_00f2ac30((void*)e, (int*)(e + 0x10), 0, 0)) {
-            if (!FUN_00f259b0())
+        if (!FUN_00f2ac30((void*)e, (int*)(e + 0x10), 0)) {
+            if (!FUN_00f259b0((void*)e, (int*)(e + 0xc)))
                 ok = false;
         }
     }
-    if (begin && ((int*)(begin))[-1] != 0)
-        operator_delete((void*)begin);
+    if (p && ((int*)p)[-1] != 0)
+        FUN_00f47380((void*)p);
     return ok;
 }
-extern int FUN_00f259b0();   // 0x00f259b0
