@@ -1,0 +1,7 @@
+# va  name  # evidence
+01318c70  ?InitFruitManagerAttributes@Simulator@@YAXXZ  # dynamic init of SP::cFruitManager serializer table, 10*0x3c @0x01567a80; SerializeMgr 0x00b0a040 serializes it, SUBSYSN(cFruitManager) in s00b60d80
+013194a0  ?InitGameDataAttributes@Simulator@@YAXXZ  # dynamic init of Simulator::cGameData table, 5*0x3c @0x01567e48; registered L"cGameData" by 0x00beb6d0
+0131aa90  ?InitGlobal_167c988@@YAXXZ  # dynamic init of global object @0x0167c988: ctor 0x00b63bd0, vtable 0x0145e9a8, clear 0x0167dae0, atexit(0x013c1ff0)
+0131aac0  ?InitGameNounManagerAttributes@Simulator@@YAXXZ  # dynamic init of SP::cGameNounManager table, 7*0x3c @0x015685a8; member offsets mAvatar 0x54..mPoliticalMap 0xd0 match cGameNounManager.h
+0131ad80  ?InitGameNounManagerExAttributes@Simulator@@YAXXZ  # variant of the cGameNounManager table, 8*0x3c @0x01568788: same records plus mNouns (0x78) as record 0
+0131b210  ?InitGameSnapshotAttributes@Simulator@@YAXXZ  # dynamic init of game-data save/version table, 7*0x3c @0x01568b08, plus globals 0x0167e064 (name ptr) and 0x0167e068 (flag)

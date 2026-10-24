@@ -1,0 +1,6 @@
+slices/s01318c70/s01318c70.cpp  ?InitFruitManagerAttributes@Simulator@@YAXXZ  01318c70  /O2 /MD /Gy /EHsc /TP
+slices/s01318c70/s01318c70.cpp  ?InitGameDataAttributes@Simulator@@YAXXZ  013194a0  /O2 /MD /Gy /EHsc /TP
+slices/s01318c70/s01318c70.cpp  ?InitGlobal_167c988@@YAXXZ  0131aa90  /O2 /MD /Gy /EHsc /TP
+slices/s01318c70/s01318c70.cpp  ?InitGameNounManagerAttributes@Simulator@@YAXXZ  0131aac0  /O2 /MD /Gy /EHsc /TP
+slices/s01318c70/s01318c70.cpp  ?InitGameNounManagerExAttributes@Simulator@@YAXXZ  0131ad80  /O2 /MD /Gy /EHsc /TP
+slices/s01318c70/s01318c70.cpp  ?InitGameSnapshotAttributes@Simulator@@YAXXZ  0131b210  /O2 /MD /Gy /EHsc /TP
