@@ -8,8 +8,9 @@
 void __cdecl EastlFree(void* p);                     // 0xF47380
 void* __cdecl EastlNew(uint32_t n, const char* name, int flags, int dbg, const char* file, int line); // 0xF473A0
 void __cdecl DoFreeNodesStr(void* pBegin, uint32_t n); // 0x6A85B0
-void __cdecl AssignRange(void* first, void* last, const void* tag); // 0x7106D0
-void __cdecl DestroyRange(void* first, void* last);     // 0x70F520
+struct VecBase24 {
+    void DestroyRange(void** first, void** last);       // 0x70F520 (thiscall, pops 8)
+};
 
 // Thread mutex (EA::Thread::Mutex): lock/unlock are out-of-line in the image.
 struct Mutex {
@@ -116,8 +117,10 @@ struct TailVec {
     void* mpCapacity;      // +0x08
     char pad0[4];          // +0x0c
     void* mpPoolBegin;     // +0x10
-    char mBuffer[16];      // +0x14 inline elements (4 x 4 bytes)
-    TailVec(const TailVec& src);
+    char pad1[4];          // +0x14
+    char mBuffer[16];      // +0x18 inline elements (4 x 4 bytes)
+    __declspec(noinline) TailVec(const TailVec& src);
+    void assign(void* first, void* last, const TailVec* src);  // 0x7106D0 (thiscall, ret 0xc)
 };
 
 // @ 0x00712760
@@ -128,7 +131,7 @@ TailVec::TailVec(const TailVec& src)
     mpEnd = buf;
     mpCapacity = (char*)buf + 16;
     mpPoolBegin = buf;
-    AssignRange(*(void**)&src.mpBegin, *(void**)&src.mpEnd, 0);
+    assign(src.mpBegin, src.mpEnd, &src);
 }
 
 // @ 0x007127D0
@@ -158,7 +161,9 @@ State2850* State2850::CopyFrom2(const State2850& a, const State2850& b)
     m0[0] = a.m0[0];
     for (int i = 1; i < 9; ++i)
         m0[i] = b.m0[i - 1];
-    ::new (&mVec) TailVec(b.mVec);
+    // the original hands the ctor the address of b.m0[8] (one word before b.mVec)
+    const TailVec* srcVec = (const TailVec*)&b.m0[8];
+    ::new (&mVec) TailVec(*srcVec);
     return this;
 }
 
@@ -474,11 +479,11 @@ void MaterialManagerBig2::Update()
     ((ShaderSetFn)0x00777AE0)(0x204, self + 0x22c, 0);
 
     // walk the registered materials, refresh the rasters of the live ones and compact the vector
-    int n = (int)((*(uint32_t*)(self + 0x248) - *(uint32_t*)(self + 0x244)) >> 2);
+    int n = (*(int32_t*)(self + 0x248) - *(int32_t*)(self + 0x244)) >> 2;
     int keep = 0;
     for (int i = 0; i < n; ++i) {
         char* mat = (char*)(*(void***)(self + 0x244))[i];
-        int nTex = (int)((*(uint32_t*)(mat + 0x24) - *(uint32_t*)(mat + 0x20)) >> 2);
+        int nTex = (*(int32_t*)(mat + 0x24) - *(int32_t*)(mat + 0x20)) >> 2;
         bool stale = false;
         for (int j = 0; j < nTex; ++j) {
             char* tex = (char*)(*(void***)(mat + 0x20))[j];
@@ -580,18 +585,25 @@ struct FreeNode24 {
 // @ 0x00712320
 void __stdcall DoFreeNodes24(FreeNode24** pArray, uint32_t n)
 {
-    for (uint32_t i = 0; i < n; ++i) {
-        FreeNode24* node = pArray[i];
-        while (node) {
-            FreeNode24* next = node->mpNext;
-            DestroyRange(node->mpBegin, node->mpEnd);
-            if (node->mpBegin != 0 && node->mpBegin != node->mpCapacity)
-                EastlFree(node->mpBegin);
-            EastlFree(node);
-            node = next;
+    uint32_t result;
+    __asm { mov result, eax }          // the empty-range path returns the caller's eax unchanged
+    if (n != 0) {
+        for (uint32_t i = 0; i < n; ++i) {
+            FreeNode24* node = pArray[i];
+            while (node) {
+                FreeNode24* next = node->mpNext;
+                VecBase24* vec = (VecBase24*)((char*)node + 0x24);
+                vec->DestroyRange((void**)node->mpBegin, (void**)node->mpEnd);
+                if (node->mpBegin != 0 && node->mpBegin != node->mpCapacity)
+                    EastlFree(node->mpBegin);
+                EastlFree(node);
+                node = next;
+            }
+            pArray[i] = 0;
         }
-        pArray[i] = 0;
+        result = (uint32_t)pArray;     // the original's final store leaves pArray in eax
     }
+    __asm { mov eax, result }
 }
 
 // A hashtable<string,...> object embedded in a node; its node/bucket free helper is out-of-line.
