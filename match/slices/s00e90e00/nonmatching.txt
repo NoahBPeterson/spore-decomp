@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00e915f0    7  complete; callee-saved push placement of the release-flag bool (push edi) differs from the prologue; equiv UNSUPPORTED (fake-arity)
+00e91c30    7  complete; same body as the cViewA dtor, push edi placement differs; equiv UNSUPPORTED (fake-arity)
+00e91190   37  complete; flag test folded to test dword vs shr/test cl and the comiss operand order is reversed; equiv PASS
+00e91060  201  complete; MakeView factory, size 312 vs 296, colour materialisation and vtable-store scheduling differ; equiv FAIL memory pool @4d460014
+00e91410  155  complete; GetPropertyV3a, same-size reconstruction, guard/vtable-call register allocation differs throughout; equiv WEAK (no mismatch)
+00e914f0  155  complete; GetPropertyV3b, same-size reconstruction, guard/vtable-call register allocation differs throughout; equiv WEAK (no mismatch)

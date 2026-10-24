@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00e90e00  462  under-built; view update (distance-scaled colour) reconstructed only structurally, 516 vs 604 bytes; equiv UNSUPPORTED (fake-arity / read faults)
+00e911f0  457  under-built; MakeView factory reconstructed only structurally, 421 vs 523 bytes; equiv FAIL memory pool @45e80018
+00e916a0  610  under-built; model fade update reduced to the flag/store prologue, 278 vs 744 bytes; equiv FAIL execution
+00e91990  453  under-built; cViewA factory reduced to alloc + ref-assignments, 208 vs 486 bytes; equiv FAIL call #0 (depth 1)
