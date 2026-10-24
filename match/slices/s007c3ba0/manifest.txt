@@ -13,3 +13,5 @@ slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c4ad0@cViewer@@QAEXMM@Z  007c4ad0  /O2 /
 slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c4b00@cViewer@@QAEXMM@Z  007c4b00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c4ba0@cViewer@@QAEXM@Z  007c4ba0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c4bc0@cViewer@@QAEXM@Z  007c4bc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c46f0@cViewer@@QAEXPAX0@Z  007c46f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c4900@cViewer@@QAEXPAX0@Z  007c4900  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
