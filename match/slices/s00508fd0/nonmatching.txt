@@ -1,5 +1,7 @@
+# va  diff-bytes  reason
 00509850   42  two-key equality: complete behaviour (int result + short-circuit &&); /Od bool materialisation differs
 00509b20  209  table teardown: complete behaviour (three-vector erase + element delete loop); /Od schedule differs
 00509c80  218  slot-table insert: complete behaviour; /Od schedule and frame differ
 00509da0  273  range expand: complete behaviour; /Od pointer-local min/max flavour differs
 00509ec0   86  two-dword pair builder: complete behaviour; /Od index arithmetic schedule differs
+005098a0  574  complete; lookup-vector rebuild (LookupTable::Rebuild): for every live id in the +0xbc SimpleVector<unsigned>, walk the closed +0x94 link chain (do/while until it returns to the start) pushing {node, tag} pairs into a scratch VSet, where tag = (weights[node] < weights[node + gTriOffset[node % 3]]) off the +0x58 weight vector (gTriOffset being the 3-byte step table at 0x13f18d0); then while the set still holds 2+ pairs, take the head, scan forward for the first differently tagged member, write the pair into +0x94 both ways and erase both elements; finally self-link (+0x94[node] = node) and pop every remaining element; then erase the whole id vector through its own SimpleVector<unsigned>::erase, run the (body-less) element sweep over the scratch set and destroy it; /Od frame layout, loop shape and register schedule differ from the retail body; equiv: WEAK (228 valid inputs, 22.5% coverage -- every sampled input agrees, but the emulator's generated inputs only reach the early-exit paths)

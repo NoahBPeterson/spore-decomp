@@ -14,6 +14,8 @@ void Func5470(void* p);                        // 0x00540470
 void Func73f30(void* p);                       // 0x00473f30
 void CleanupElement(void* p);                  // 0x00507b30
 
+extern const signed char gTriOffset[3];        // @ 0x013f18d0 (triangle step table)
+
 // ---------------------------------------------------------------------------
 // @ 0x00509850  (two-integer key equality)
 // ---------------------------------------------------------------------------
@@ -127,24 +129,121 @@ void __fastcall TableTeardown(int self)
 
 // ---------------------------------------------------------------------------
 // @ 0x005098a0  (rebuild the lookup vectors)
+//
+// Walks the +0xbc id vector; for each id it collects the closed chain
+// reachable through +0x94 into a scratch set of {node, light-tag} pairs
+// (tag = whether the node's +0x58 weight is below its triangle-step
+// neighbour), then repeatedly pairs the head with the first differently
+// tagged member, relinking +0x94 and erasing both, and finally self-links
+// whatever remains.  The id vector and the scratch set are emptied last.
 // ---------------------------------------------------------------------------
-void __fastcall RebuildLookup(int self)
+
+// Scratch-set element: a node id plus a one-byte tag.
+struct PairIF {
+    int  mNode;      // +0x00
+    char mTag;       // +0x04
+    char pad05[3];   // +0x05
+};
+
+// Allocator blob handed to the scratch vector's constructor (never written
+// by the retail body, so it is left uninitialised here too).
+struct Alloc {
+    char mState;
+};
+
+// Intrusive vector of PairIF (the original SP::VectorIF).
+struct VSet {
+    PairIF* mBegin;      // +0x00
+    PairIF* mEnd;        // +0x04
+    PairIF* mCap;        // +0x08
+    void Ctor(const Alloc& alloc);                  // va 00540470
+    void Erase(PairIF* first, PairIF* last);        // va 00530c80
+    void PushBack(const PairIF& value);             // va 005402c0
+    void EraseAt(PairIF* where);                    // va 0050e200
+    bool Empty();                                   // va 00526430
+    void Dtor();                                    // va 0045daf0
+};
+
+// Intrusive vector of unsigned (the original SP::SimpleVector<unsigned>).
+struct SimpleVecU32 {
+    uint32_t* mBegin;   // +0x00
+    uint32_t* mEnd;     // +0x04
+    uint32_t* mCap;     // +0x08
+    uint32_t* Erase(uint32_t* first, uint32_t* last);   // va 004769b0
+};
+
+// The entity this helper rebuilds; only the touched members are named.
+struct LookupTable {
+    char         pad00[0x58];   // +0x00
+    uint32_t*    mWeights;      // +0x58
+    char         pad5c[0x38];   // +0x5c
+    int*         mLink;         // +0x94
+    char         pad98[0x24];   // +0x98
+    SimpleVecU32 mIds;          // +0xbc
+
+    void Rebuild();
+};
+
+// @ 0x005098a0
+void LookupTable::Rebuild()
 {
-    uint8_t tag;
-    Func5470(&tag);
-    uint32_t i = 0;
-    do {
-        if ((uint32_t)((*(int*)(self + 0xc0) - *(int*)(self + 0xbc)) >> 2) <= i) {
-            rangeErase((void*)(self + 0xbc), (void*)(self + 0xc0));
-            Func5daf0();
+    Alloc alloc;
+    VSet set;
+    set.Ctor(alloc);
+
+    for (uint32_t i = 0; ; ++i) {
+        if ((uint32_t)(mIds.mEnd - mIds.mBegin) <= i)
             break;
+
+        uint32_t node = mIds.mBegin[i];
+        uint32_t start = node;
+
+        set.Erase(set.mBegin, set.mEnd);
+        do {
+            PairIF pair;
+            pair.mNode = (int)node;
+            pair.mTag = (char)(mWeights[node] <
+                               mWeights[node + (int)gTriOffset[node % 3]]);
+            set.PushBack(pair);
+            node = (uint32_t)mLink[node];
+        } while (node != start);
+
+        while ((uint32_t)((set.mEnd - set.mBegin) >> 3) >= 2) {
+            int a = set.mBegin[0].mNode;
+            int b = -1;
+            char tag = set.mBegin[0].mTag;
+
+            uint32_t count = (uint32_t)(set.mEnd - set.mBegin) >> 3;
+            uint32_t j = 1;
+            for (; j < count; ++j) {
+                if (tag != set.mBegin[j].mTag) {
+                    b = set.mBegin[j].mNode;
+                    break;
+                }
+            }
+            if (j == count)
+                break;
+
+            mLink[a] = b;
+            mLink[b] = a;
+            set.EraseAt(&set.mBegin[j]);
+            set.EraseAt(set.mBegin);
         }
-        ++i;
-    } while (true);
+
+        while (!set.Empty()) {
+            int last = set.mEnd[-1].mNode;
+            set.mEnd -= 1;
+            mLink[last] = last;
+        }
+    }
+
+    mIds.Erase(mIds.mBegin, mIds.mEnd);
+    for (PairIF* it = set.mBegin; it < set.mEnd; ++it) {
+    }
+    set.Dtor();
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00508fd0 / 0x00509450  (PARTIAL skeletons: 1.1 KB / 1.0 KB table builders)
+// 0x00508fd0 / 0x00509450 -- the two table builders remain PARTIAL; see
+// partial.txt and work/match/scratch_s00508fd0_fixlog.txt.
 // ---------------------------------------------------------------------------
-void __fastcall BuildTableA(int self) { (void)self; }
-void __fastcall BuildTableB(int self) { (void)self; }
