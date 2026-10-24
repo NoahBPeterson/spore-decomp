@@ -146,8 +146,8 @@ struct cCmdArgs {
     cConfigScriptState* mState;     // +0x0c
     void Do(int);                   // 0x007c7eb0
 };
-struct CmdBase  { CmdBase();  char pad[0x0c]; };   // 0x10 with vptr
-struct BlockBase { BlockBase(); char pad[0x30]; }; // 0x34 with vptr
+struct CmdBase  { CmdBase();  virtual void Execute(); char pad[0x0c]; };   // 0x10 with vptr
+struct BlockBase { BlockBase(); virtual void Execute(); char pad[0x30]; }; // 0x34 with vptr
 struct CmdOptionSetting       : CmdBase { virtual void Execute(); };
 struct CmdOptionBoolProperty  : CmdBase { virtual void Execute(); };
 struct CmdOptionIntProperty   : CmdBase { virtual void Execute(); };
@@ -165,7 +165,8 @@ struct CmdFloatProperty       : CmdBase { virtual void Execute(); };
 struct CmdKeyProperty         : CmdBase { virtual void Execute(); };
 struct CmdOptionBlock         : BlockBase { virtual void Execute(); };
 struct CmdVendor              : BlockBase { virtual void Execute(); };
-void __cdecl FUN_0083c780(void* a, void* b);   // 0x0083c780
+typedef void (__thiscall* Fn_0083c780)(void* self, void* a, void* b);   // 0x0083c780 cCommandBase::OnRegister
+void __cdecl FUN_0083c780();
 // ---- items of slice s007c77e0 end
 
 // ---- items of slice s007c8940 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -2419,7 +2420,7 @@ uint32_t* LowerBoundPair(uint32_t* first, uint32_t* last, uint32_t* key)
 void cOptionBlockCommand::OnRegister(void* a, void* b)
 {
     mState = (cConfigScriptState*)b;
-    FUN_0083c780(a, b);
+    ((Fn_0083c780)FUN_0083c780)(this, a, b);
     void* c;
     c = new ("ArgScript/OptionSetting", 0, 0, 0, 0) CmdOptionSetting();
     ((VFn2P)VSLOT(this, 0x18))(this, g_CmdKey_setting, c);
@@ -2439,7 +2440,7 @@ void cOptionBlockCommand::OnRegister(void* a, void* b)
 void cVendorCommand::OnRegister(void* a, void* b)
 {
     mState = (cConfigScriptState*)b;
-    FUN_0083c780(a, b);
+    ((Fn_0083c780)FUN_0083c780)(this, a, b);
     void* c = new ("ArgScript/Card", 0, 0, 0, 0) CmdCard();
     ((VFn2P)VSLOT(this, 0x18))(this, g_CmdKey_card, c);
 }
