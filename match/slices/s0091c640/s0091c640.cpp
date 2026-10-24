@@ -28,6 +28,7 @@ struct FileStream {
     bool Open(int access, int create, int sharing, int usage);  // 0x009318f0
     unsigned GetSize();                                       // 0x00931b70
     bool Close();                                             // 0x00931a70
+    void AddRef();                                            // 0x009317b0
     char pad[0x228];
 };
 
@@ -46,6 +47,15 @@ struct String {
     char* mpCapacity;
     unsigned mAlloc;
     String& assign(const char* s);  // 0x006a4380
+};
+
+// ---- eastl::basic_string<wchar_t, allocator> (3 pointers + allocator).
+struct StringW {
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    unsigned mAlloc;
+    StringW& assign(const wchar_t* first, const wchar_t* last);  // 0x00423650
 };
 
 // ---- eastl::fixed_string<char, 256> (0x114 bytes: begin, end, cap, alloc, pool, buffer).
@@ -72,6 +82,7 @@ struct FixedString {
             operator delete(mpBegin);
     }
     void assign(const char* first, const char* last);               // 0x00942e50
+    FixedString* assignCStr(const char* s);                         // 0x00943570
     int compare(unsigned pos, unsigned n, const char* s) const;     // 0x008417c0
     unsigned find_last_of(const char* set, unsigned pos) const;     // 0x0091bec0
     void erase(unsigned pos, unsigned n);                           // 0x0061e200
@@ -113,20 +124,40 @@ struct InsertResult {  // pair<iterator, bool>
     bool inserted;
 };
 
+// eastl::rbtree_node_base: right, left, parent, colour.
+struct RBNodeBase {
+    RBNodeBase* mpNodeRight;   // +0x00
+    RBNodeBase* mpNodeLeft;    // +0x04
+    RBNodeBase* mpNodeParent;  // +0x08
+    char mColor;               // +0x0c
+};
+
+struct SymbolNode;  // rbtree_node<pair<const unsigned, Symbol>> (0x40 bytes)
+
 struct SymbolMap {  // eastl::map<unsigned, Symbol>
-    char pad0[0x14];
-    unsigned mnSize;
-    char pad1[4];
+    unsigned mCompareAlloc;   // +0x00 empty comparator/allocator
+    RBNodeBase mAnchor;       // +0x04
+    unsigned mnSize;          // +0x14
+    unsigned mAlloc;          // +0x18
     InsertResult* insert(InsertResult* out, const SymbolPair& v);  // 0x0091cc30
+    void DoNukeSubtree(SymbolNode* node);                          // 0x0091ca40
 };
 
 struct FileLineEntry {
     String* mpFile;
     int mLine;
 };
+struct FileLineNode;  // rbtree_node<pair<const unsigned, FileLineEntry>> (0x1c bytes)
+
 struct FileLineMap {  // eastl::map<unsigned, pair<String*, int>>
-    char pad[0x1c];
+    unsigned mCompareAlloc;   // +0x00
+    RBNodeBase mAnchor;       // +0x04
+    unsigned mnSize;          // +0x14
+    unsigned mAlloc;          // +0x18
     FileLineEntry& operator[](const unsigned& key);  // 0x0091c9b0
+    FileLineEntry& insertNode(RBNodeBase* position, unsigned key,
+                              const FileLineEntry& value);  // 0x0091c3c0
+    void DoNukeSubtree(FileLineNode* node);          // 0x009a9600 (different instantiation)
 };
 
 struct StringNode {
@@ -138,6 +169,7 @@ struct StringList {  // eastl::list<String>
     StringNode* mpNext;
     StringNode* mpPrev;
     unsigned mnSize;
+    void Destroy();                   // 0x0091c380 (eastl::list<String> destructor)
     void push_back(const String& s);  // 0x0091c330
 };
 
@@ -159,11 +191,76 @@ struct UIntVector {
     void resize(unsigned n, const unsigned& value);  // 0x004746c0
 };
 
+// ---- caller-owned destination for a resolved address representation.
+//      mFileName/mSymbol are eastl::fixed_string<char, 256> buffers (0x114 each).
+struct AddressRepText {
+    FixedString mFileName;   // +0x000
+    FixedString mSymbol;     // +0x114
+};
+struct AddressRep {
+    unsigned mFileLine;      // +0x00
+    unsigned mRVA;           // +0x04
+};
+// MapFileGCC3's destination record: offset at +0x04, symbol text at +0x114.
+struct GccAddressRep {
+    unsigned mFlags;         // +0x000
+    int mOffset;             // +0x004
+    char mReserved[0x10c];   // +0x008 (caller-owned, untouched here)
+    FixedString mSymbol;     // +0x114
+};
+
+// ---- EA::Callstack::MapFileGCC3::EntryPair
+struct EntryPair {
+    unsigned __int64 mAddress;   // +0x00
+    char* mpSymbol;              // +0x08
+};
+// ---- eastl::vector<EntryPair, sp_vector_allocator> (0x14 bytes)
+struct EntryPairVector {
+    EntryPair* mpBegin;      // +0x00
+    EntryPair* mpEnd;        // +0x04
+    EntryPair* mpCapacity;   // +0x08
+    unsigned mAlloc;         // +0x0c
+    unsigned mPad;           // +0x10
+    void clear();
+    EntryPair* insert(EntryPair* pos, const EntryPair& value);  // 0x0091c4d0
+};
+
+// ---- EA::Allocator::StackAllocator (0x24 bytes)
+struct StackAllocator {
+    unsigned mnDefaultBlockSize;      // +0x00
+    void* mpCurrentBlock;             // +0x04
+    char* mpCurrentBlockEnd;          // +0x08
+    char* mpCurrentObjectBegin;       // +0x0c
+    char* mpCurrentObjectEnd;         // +0x10
+    void* mpCoreAllocationFunction;   // +0x14
+    void* mpCoreFreeFunction;         // +0x18
+    void* mpCoreFunctionContext;      // +0x1c
+    void* mpTopBookmark;              // +0x20
+    void Reset(void* p);              // 0x00928c40
+    bool AllocateNewBlock(unsigned n);  // 0x00928ba0
+    void Destroy();                   // 0x00928dc0
+};
+
+struct MapFileGCC3 {
+    void* vtable;                     // +0x00
+    bool mbLoadAttempted;             // +0x04
+    StringW msMapFilePath;            // +0x08
+    EntryPairVector mEntryPairArray;  // +0x18
+    StackAllocator mStackAllocator;   // +0x2c
+    unsigned __int64 mBaseAddress;    // +0x50
+
+    bool Load();                      // 0x0091c640
+    int Init(const wchar_t* path, bool deferLoad);  // 0x0091cbd0
+    bool Shutdown();                  // 0x0091c8b0
+    int GetAddressRep(unsigned flags, unsigned address, GccAddressRep* out,
+                      unsigned unused);  // 0x0091c900
+    ~MapFileGCC3();                   // 0x0091cb40
+};
+
 struct MapFileMSVC {
-    void* vtable;                 // +0x00
-    bool mbLoadAttempted;         // +0x04
-    wchar_t* mpPathBegin;         // +0x08
-    char pad0[0xc];
+    void* vtable;                   // +0x00
+    bool mbLoadAttempted;           // +0x04
+    StringW msMapFilePath;          // +0x08
     unsigned __int64 mBaseAddress;  // +0x18
     SymbolMap mAddressToSymbolMap;  // +0x20
     StringList mLineFilenameList;   // +0x3c
@@ -171,7 +268,12 @@ struct MapFileMSVC {
     UIntVector mSectionArray;       // +0x64
     GroupVector mGroupArray;        // +0x78
 
-    bool Load();
+    MapFileMSVC();                  // 0x0091d480
+    ~MapFileMSVC();                 // 0x0091cc60
+    bool Load();                    // 0x0091ccf0
+    int Init(const wchar_t* path, bool deferLoad);  // 0x0091d520
+    int GetAddressRep(unsigned flags, unsigned address, AddressRepText* text,
+                      AddressRep* out);  // 0x0091d580
 };
 
 inline unsigned strlen_(const char* s)
@@ -187,7 +289,7 @@ bool MapFileMSVC::Load()
 {
     if (!mbLoadAttempted) {
         mbLoadAttempted = true;
-        FileStream file(mpPathBegin);
+        FileStream file(msMapFilePath.mpBegin);
         if (file.Open(1, 6, 1, 0)) {
             int mode = 0;               // 0 none, 1 segment table, 2 address table, 3 line numbers
             String* currentFile = 0;
@@ -342,4 +444,364 @@ bool MapFileMSVC::Load()
     if (mAddressToSymbolMap.mnSize != 0 && mBaseAddress == 0)
         mBaseAddress = GetModuleBase(0);
     return mAddressToSymbolMap.mnSize != 0;
+}
+
+// ======================================================================
+// gold7 batch additions (slice id s0091c640 is shared with function 0091ccf0)
+// ======================================================================
+
+extern wchar_t gEmptyString16;  // 0x01667bac (eastl wide empty-string sentinel)
+
+// Global-scope declarations: the retail symbols are namespace-scope functions, so these must be
+// declared at global scope as well (the anonymous namespace would change their mangled names).
+unsigned __int64 __cdecl ParseAddress(const char* text, char** rest, unsigned base);  // 0x0092d6f0
+unsigned __cdecl AppendNarrow(void* dst, const char* src, unsigned maxLen);          // 0x0092cb30
+
+namespace {
+
+// ---- rbtree node instantiations: the 0x10-byte node base is followed by the
+//      key and then the mapped value.
+struct SymbolNode : RBNodeBase {
+    unsigned mKey;      // +0x10
+    Symbol mValue;      // +0x14
+};
+struct FileLineNode : RBNodeBase {
+    unsigned mKey;          // +0x10
+    FileLineEntry mValue;   // +0x14
+};
+
+// ---- key record used by the EntryPair binary searches
+struct EntryPairKey {
+    unsigned __int64 mAddress;  // +0x00
+    unsigned mPad;              // +0x08
+};
+
+// ---- EA::IO::StreamBuffer (0x34 bytes)
+struct StreamBuffer {
+    StreamBuffer(unsigned readSize, unsigned writeSize, void* stream);  // 0x0093b530
+    ~StreamBuffer();                                                    // 0x0093b5a0
+    void* vtable;                          // +0x00
+    void* mpStream;                        // +0x04
+    int mnRefCount;                        // +0x08
+    unsigned mnPositionExternal;           // +0x0c
+    unsigned mnPositionInternal;           // +0x10
+    char* mpReadBuffer;                    // +0x14
+    unsigned mnReadBufferSize;             // +0x18
+    unsigned mnReadBufferStartPosition;    // +0x1c
+    unsigned mnReadBufferUsed;             // +0x20
+    char* mpWriteBuffer;                   // +0x24
+    unsigned mnWriteBufferSize;            // +0x28
+    unsigned mnWriteBufferStartPosition;   // +0x2c
+    unsigned mnWriteBufferUsed;            // +0x30
+};
+
+unsigned __cdecl ReadLine(void* stream, char* buffer, unsigned size);          // 0x0093a8b0
+EntryPair* __cdecl LowerBoundPair(EntryPair* first, EntryPair* last,
+                                  const EntryPair* value, unsigned pad);       // 0x007c8160
+EntryPair* __cdecl LowerBoundKey(EntryPair* first, EntryPair* last,
+                                 const void* key, unsigned pad);               // 0x0091bf30
+void* __cdecl MovePairs(const EntryPair* first, const EntryPair* last,
+                        EntryPair* dst);                                       // 0x00705250
+RBNodeBase* __cdecl RBTreeDecrement(const RBNodeBase* node);                   // 0x009215c0
+
+extern "C" __declspec(dllimport) char* __cdecl strstr(const char* s, const char* find);
+
+// eastl vector/sp-vector buffer release: the allocation flag precedes the block.
+inline void FreeVectorBuffer(void* p)
+{
+    if (p && ((unsigned*)p)[-1] != 0)
+        operator delete(p);
+}
+
+// eastl::CharStrlen: length of a null-terminated character string.
+inline unsigned CharStrlen(const wchar_t* p)
+{
+    const wchar_t* current = p;
+    while (*current)
+        ++current;
+    return (unsigned)(current - p);
+}
+
+void EntryPairVector::clear()
+{
+    EntryPair* first = mpBegin;
+    EntryPair* last = mpEnd;
+    MovePairs(last, mpEnd, first);
+    mpEnd -= last - first;
+}
+
+}  // namespace
+
+// @ 0x0091c8b0
+bool MapFileGCC3::Shutdown()
+{
+    mbLoadAttempted = false;
+    mEntryPairArray.clear();
+    mStackAllocator.Reset(0);
+    mBaseAddress = 0;
+    return true;
+}
+
+// @ 0x0091c900
+int MapFileGCC3::GetAddressRep(unsigned flags, unsigned address, GccAddressRep* out, unsigned)
+{
+    if (!mbLoadAttempted)
+        Load();
+    if ((flags & 2) == 0)
+        return 0;
+    EntryPairKey key;
+    key.mAddress = address;
+    key.mPad = 0;
+    EntryPair* begin = mEntryPairArray.mpBegin;
+    EntryPair* it = LowerBoundKey(begin, mEntryPairArray.mpEnd, &key, 0);
+    if (it == begin)
+        return 0;
+    EntryPair* found = it - 1;
+    out->mSymbol.assignCStr(found->mpSymbol);
+    out->mOffset = (int)(address - (unsigned)found->mAddress);
+    return 2;
+}
+
+// @ 0x0091c9b0
+FileLineEntry& FileLineMap::operator[](const unsigned& key)
+{
+    RBNodeBase* node = mAnchor.mpNodeParent;
+    RBNodeBase* lower = &mAnchor;
+    while (node) {
+        if (((FileLineNode*)node)->mKey < key) {
+            node = node->mpNodeRight;
+        } else {
+            lower = node;
+            node = node->mpNodeLeft;
+        }
+    }
+    if (lower != &mAnchor && key <= ((FileLineNode*)lower)->mKey)
+        return ((FileLineNode*)lower)->mValue;
+    FileLineEntry value;
+    value.mpFile = 0;
+    value.mLine = 0;
+    return insertNode(lower, key, value);
+}
+
+// @ 0x0091ca40
+void SymbolMap::DoNukeSubtree(SymbolNode* node)
+{
+    while (node) {
+        DoNukeSubtree((SymbolNode*)node->mpNodeRight);
+        SymbolNode* next = (SymbolNode*)node->mpNodeLeft;
+        if (node->mValue.mSourceObj.mpCapacity - node->mValue.mSourceObj.mpBegin > 1 &&
+            node->mValue.mSourceObj.mpBegin)
+            operator delete(node->mValue.mSourceObj.mpBegin);
+        if (node->mValue.mSymbol.mpCapacity - node->mValue.mSymbol.mpBegin > 1 &&
+            node->mValue.mSymbol.mpBegin)
+            operator delete(node->mValue.mSymbol.mpBegin);
+        operator delete(node);
+        node = next;
+    }
+}
+
+// @ 0x0091cb40
+MapFileGCC3::~MapFileGCC3()
+{
+    vtable = (void*)0x0143ce60;
+    mbLoadAttempted = false;
+    mEntryPairArray.clear();
+    mStackAllocator.Reset(0);
+    mBaseAddress = 0;
+    mStackAllocator.Destroy();
+    FreeVectorBuffer(mEntryPairArray.mpBegin);
+    if ((((int)msMapFilePath.mpCapacity - (int)msMapFilePath.mpBegin) & ~1) > 2 &&
+        msMapFilePath.mpBegin)
+        operator delete(msMapFilePath.mpBegin);
+    vtable = (void*)0x013f68c4;
+}
+
+// @ 0x0091cbd0
+int MapFileGCC3::Init(const wchar_t* path, bool deferLoad)
+{
+    if (path)
+        msMapFilePath.assign(path, path + CharStrlen(path));
+    if (!deferLoad) {
+        Load();
+        if (mEntryPairArray.mpBegin == mEntryPairArray.mpEnd)
+            return 0;
+    }
+    return 1;
+}
+
+// @ 0x0091c640
+bool MapFileGCC3::Load()
+{
+    if (!mbLoadAttempted) {
+        mbLoadAttempted = true;
+        FileStream file(msMapFilePath.mpBegin);
+        if (file.Open(1, 6, 1, 0)) {
+            file.AddRef();
+            StreamBuffer stream(0x2000, 0, &file);
+            char line[0x200];
+            char name[0x200];
+            bool inText = false;
+            unsigned n = ReadLine(&stream, line, sizeof line);
+            while (n < 0xfffffffeu) {
+                if (line[0] == ' ' && line[1] == '.') {
+                    if (strstr(line, " .text") == line || strstr(line, " .gnu.linkonce") == line) {
+                        if (line[2] == 'g')
+                            ReadLine(&stream, line, sizeof line);
+                        inText = true;
+                    } else {
+                        inText = false;
+                    }
+                } else if (inText) {
+                    char* rest;
+                    unsigned __int64 address = ParseAddress(line, &rest, 0x10);
+                    while (*rest == ' ')
+                        ++rest;
+                    unsigned len = AppendNarrow(name, rest, 0x100);
+                    if (len >= 0x100)
+                        len = 0xff;
+                    if (address != 0 && len != 0) {
+                        unsigned need = (len + 8) & ~7u;
+                        char* p;
+                        if ((int)(mStackAllocator.mpCurrentBlockEnd -
+                                  mStackAllocator.mpCurrentObjectBegin) - (int)need < 0 &&
+                            !mStackAllocator.AllocateNewBlock(need)) {
+                            p = 0;
+                        } else {
+                            p = mStackAllocator.mpCurrentObjectBegin;
+                            mStackAllocator.mpCurrentObjectBegin = p + need;
+                            mStackAllocator.mpCurrentObjectEnd = p + need;
+                        }
+                        char* dst = p;
+                        const char* src = name;
+                        while ((*dst++ = *src++) != 0)
+                            ;
+                        EntryPair value;
+                        value.mAddress = address;
+                        value.mpSymbol = p;
+                        mEntryPairArray.insert(
+                            LowerBoundPair(mEntryPairArray.mpBegin, mEntryPairArray.mpEnd, &value, 0),
+                            value);
+                    }
+                }
+                n = ReadLine(&stream, line, sizeof line);
+            }
+        }
+    }
+    if (mEntryPairArray.mpBegin != mEntryPairArray.mpEnd && mBaseAddress == 0)
+        mBaseAddress = GetModuleBase(0);
+    return mEntryPairArray.mpBegin != mEntryPairArray.mpEnd;
+}
+
+// @ 0x0091cc60
+MapFileMSVC::~MapFileMSVC()
+{
+    vtable = (void*)0x0143ce8c;
+    mbLoadAttempted = false;
+    mBaseAddress = 0;
+    if (mGroupArray.mpBegin != 0 && ((unsigned*)mGroupArray.mpBegin)[-1] != 0)
+        operator delete(mGroupArray.mpBegin);
+    FreeVectorBuffer(mSectionArray.mpBegin);
+    mAddressToFileLineMap.DoNukeSubtree(
+        (FileLineNode*)mAddressToFileLineMap.mAnchor.mpNodeParent);
+    mLineFilenameList.Destroy();
+    mAddressToSymbolMap.DoNukeSubtree((SymbolNode*)mAddressToSymbolMap.mAnchor.mpNodeParent);
+    if ((((int)msMapFilePath.mpCapacity - (int)msMapFilePath.mpBegin) & ~1) > 2 &&
+        msMapFilePath.mpBegin)
+        operator delete(msMapFilePath.mpBegin);
+    vtable = (void*)0x013f68c4;
+}
+
+// @ 0x0091d480
+MapFileMSVC::MapFileMSVC()
+{
+    vtable = (void*)0x0143ce8c;
+    mbLoadAttempted = false;
+    msMapFilePath.mpCapacity = &gEmptyString16 + 1;
+    msMapFilePath.mpBegin = &gEmptyString16;
+    msMapFilePath.mpEnd = &gEmptyString16;
+    mBaseAddress = 0;
+    mAddressToSymbolMap.mAnchor.mpNodeRight = &mAddressToSymbolMap.mAnchor;
+    mAddressToSymbolMap.mAnchor.mpNodeLeft = &mAddressToSymbolMap.mAnchor;
+    mAddressToSymbolMap.mAnchor.mpNodeParent = 0;
+    mAddressToSymbolMap.mAnchor.mColor = 0;
+    mAddressToSymbolMap.mnSize = 0;
+    mLineFilenameList.mpNext = (StringNode*)&mLineFilenameList;
+    mLineFilenameList.mpPrev = (StringNode*)&mLineFilenameList;
+    mAddressToFileLineMap.mAnchor.mpNodeRight = &mAddressToFileLineMap.mAnchor;
+    mAddressToFileLineMap.mAnchor.mpNodeLeft = &mAddressToFileLineMap.mAnchor;
+    mAddressToFileLineMap.mAnchor.mpNodeParent = 0;
+    mAddressToFileLineMap.mAnchor.mColor = 0;
+    mAddressToFileLineMap.mnSize = 0;
+    mSectionArray.mpBegin = 0;
+    mSectionArray.mpEnd = 0;
+    mSectionArray.mpCapacity = 0;
+    mGroupArray.mpBegin = 0;
+    mGroupArray.mpEnd = 0;
+    mGroupArray.mpCapacity = 0;
+}
+
+// @ 0x0091d520
+int MapFileMSVC::Init(const wchar_t* path, bool deferLoad)
+{
+    ((void(__thiscall*)(MapFileMSVC*))((void**)vtable)[2])(this);
+    if (path)
+        msMapFilePath.assign(path, path + CharStrlen(path));
+    if (!deferLoad) {
+        Load();
+        if (mAddressToSymbolMap.mnSize == 0)
+            return 0;
+    }
+    return 1;
+}
+
+// @ 0x0091d580
+int MapFileMSVC::GetAddressRep(unsigned flags, unsigned address, AddressRepText* text,
+                               AddressRep* out)
+{
+    if (!mbLoadAttempted)
+        Load();
+    int result = 0;
+    if (flags & 1) {
+        RBNodeBase* node = mAddressToFileLineMap.mAnchor.mpNodeParent;
+        RBNodeBase* lower = &mAddressToFileLineMap.mAnchor;
+        while (node) {
+            if (address < ((FileLineNode*)node)->mKey) {
+                lower = node;
+                node = node->mpNodeLeft;
+            } else {
+                node = node->mpNodeRight;
+            }
+        }
+        if (lower != mAddressToFileLineMap.mAnchor.mpNodeLeft) {
+            FileLineNode* found = (FileLineNode*)RBTreeDecrement(lower);
+            text->mFileName.assignCStr(found->mValue.mpFile->mpBegin);
+            out->mFileLine = found->mValue.mLine;
+            result = 1;
+        }
+    }
+    if ((flags & 2) != 0 && (unsigned)(mBaseAddress >> 32) == 0 &&
+        (unsigned)mBaseAddress <= address) {
+        RBNodeBase* node = mAddressToSymbolMap.mAnchor.mpNodeParent;
+        RBNodeBase* lower = &mAddressToSymbolMap.mAnchor;
+        while (node) {
+            if (address < ((SymbolNode*)node)->mKey) {
+                lower = node;
+                node = node->mpNodeLeft;
+            } else {
+                node = node->mpNodeRight;
+            }
+        }
+        if (lower != mAddressToSymbolMap.mAnchor.mpNodeLeft) {
+            SymbolNode* found = (SymbolNode*)RBTreeDecrement(lower);
+            for (Group* g = mGroupArray.mpBegin; g != mGroupArray.mpEnd; ++g) {
+                if (g->mSegment == found->mValue.mSegment &&
+                    (unsigned)(found->mValue.mOffset - g->mOffset) < g->mLength) {
+                    text->mSymbol.assignCStr(found->mValue.mSymbol.mpBegin);
+                    out->mRVA = found->mValue.mRVA;
+                    return result | 2;
+                }
+            }
+        }
+    }
+    return result;
 }

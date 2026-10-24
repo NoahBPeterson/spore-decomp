@@ -1,1 +1,14 @@
 0091ccf0 ?Load@MapFileMSVC@?A0x5a21b097@@QAE_NXZ  # Load migrated from s0091c640 (verbatim, slice spelling)
+
+# ------------------------------------------------------------------ gold7 batch id "s0091c640"
+0091c640 EA::Callstack::MapFileGCC3::Load  # bool: FileStream + StreamBuffer(0x2000,0) + ReadLine loop over " .text"/" .gnu.linkonce" sections, ParseAddress base 16, AppendNarrow name clamp 0xff, StackAllocator copy, LowerBoundPair insert
+0091c8b0 EA::Callstack::MapFileGCC3::Shutdown  # clears the attempted flag, empties the entry vector, resets/destroys the stack allocator, zeroes the base address
+0091c900 EA::Callstack::MapFileGCC3::GetAddressRep  # load-on-demand, needs flag 2, LowerBoundKey on the 12-byte key, symbol into out+0x114, offset into out+4, returns 2
+0091c9b0 FileLineMap::operator[]  # eastl::map<unsigned,FileLineEntry>::operator[]: lower_bound walk, return the mapped value or insert a zeroed entry
+0091ca40 ea::Callstack::SymbolMap::DoNukeSubtree  # recursive symbol-node free (left, right, then the node)
+0091cb40 EA::Callstack::MapFileGCC3::~MapFileGCC3  # entry-vector free, stack allocator reset/destroy, wide-path free, base vtable restore
+0091cbd0 EA::Callstack::MapFileGCC3::Init  # wide path assign, optional Load, returns whether the entry vector is non-empty
+0091cc60 EA::Callstack::MapFileMSVC::~MapFileMSVC  # group/section frees, file-line and symbol subtree nukes, filename list destroy, path free, base vtable restore
+0091d480 EA::Callstack::MapFileMSVC::MapFileMSVC  # vptr, flag, wide empty-string sentinel, base address, two map anchors, filename list head, two empty vectors
+0091d520 EA::Callstack::MapFileMSVC::Init  # virtual reset at slot 2, wide path assign, optional Load, returns whether the symbol map is non-empty
+0091d580 EA::Callstack::MapFileMSVC::GetAddressRep  # file-line search (flag 1) + symbol search (flag 2), group check, fills AddressRepText and the out record, returns result|2
