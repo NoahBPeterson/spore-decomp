@@ -48,7 +48,10 @@ struct FixedVec {
     FixedVec& operator=(const FixedVec& o) {
         if (this != &o) {
             erase(mpBegin, mpEnd);
-            assign(o.mpBegin, o.mpEnd, false);
+            // The original pushes an uninitialised bool byte as the third argument (the /Od frame
+            // leaves it as 0xCC), so keep a genuine uninitialised stack slot instead of `false`.
+            bool bCopyUninitialised;
+            assign(o.mpBegin, o.mpEnd, bCopyUninitialised);
         }
         return *this;
     }
@@ -150,7 +153,7 @@ inline E48* copy_backward_impl(E48* first, E48* last, E48* resultEnd)
 // @ 0x00503180
 E48* copy_backward_E48(E48* first, E48* last, E48* resultEnd)
 {
-    ScratchSlots<7>();
+    ScratchSlots<6>();
     const bool bOutputIsPointer = false;
     const bool bInputIsPointer = false;
     const bool bHasTrivialCopy = false;

@@ -1,6 +1,6 @@
 00502f60  204  Ed8 copy-ctor: complete; /Od frame + inlined element-copy slot layout differ
 005031d0   80  relocate (uninitialised_move) for E48: complete; loop-temporary slot order differs
 005033f0   19  destroy range for Ed8: complete; inlined conditional-delete slot order differs
-00503930   46  E48 operator=: complete; inlined fixed-vector assign argument spill + frame differ; equiv: FAIL (callee 0x42c750 stack arg differs; 100% cov)
-00503a50  189  Ed8 operator=: complete; matrix trivial-copy and frame layout differ; equiv: FAIL (callee 0x42c750 stack arg differs; 100% cov)
+00503930   50  E48 operator=: complete; the inlined fixed-vector assign now passes the original's uninitialised bool byte (third stack arg 0xCC in the /Od frame) instead of `false`; only the /Od frame size (0x28 vs 0x10) and temp-slot register picks differ [equiv PASS 521 valid, 100% cov]
+00503a50  190  Ed8 operator=: complete; same uninitialised-bool fix for the inlined fixed-vector assign (third stack arg 0xCC); the matrix blocks are the original's (three VecA copies + two 9-dword rep movsd); only the /Od frame size (0x28 vs 0x10) and register picks differ [equiv PASS 332 valid, 100% cov]
 00503be0    8  destroy range for E48: complete; only the two local slots are swapped
