@@ -11,6 +11,6 @@
 010cc2c0 0 havok-equivalent
 010cc410 0 havok-equivalent
 010cc480 0 havok-equivalent
-010cc560 0 havok-equivalent
+010cc560 604 hkTypedBroadPhaseDispatcher::removeDuplicates: complete (small quadratic case and the big hkPointerMap case both translated; VC7.1 build matches the original's block/scheduling shape, register allocation differs: the original keeps newPairs in ebx / delPairs in edi and spills the outer index, we keep delPairs in ebp) -- difftest WEAK (730 valid, 37.7% coverage, no mismatch). Coverage stalls at the small case (84/223 insns) because the big case needs two hkArrays with >= 32 coherent pairs, which the pointer-soup generator cannot build; the fixed behavioral bug was reading delPairs.m_data[j] before the newPairs.m_size bound test (the original loads it only inside the inner loop, so an empty newPairs never dereferences the deleted-pair data)
 010cc7d0 0 havok-equivalent
 010cc860 0 havok-equivalent

@@ -562,10 +562,14 @@ void hkTypedBroadPhaseDispatcher::removeDuplicates(hkArray<hkBroadPhaseHandlePai
 		// small case: quadratic search
 		for (int j = 0; j < delPairs.m_size; ++j)
 		{
-			const void* delA = delPairs.m_data[j].m_a;
-			const hkBroadPhaseHandlePair* del = &delPairs.m_data[j];
 			for (int i = 0; i < newPairs.m_size; ++i)
 			{
+				// Read the pair under test inside the inner loop: cl hoists it into the inner
+				// preheader, i.e. after the newPairs.m_size bound test, exactly as the original
+				// does. Reading it before the loop dereferences delPairs.m_data[j] even when
+				// newPairs is empty (the original never touches it then).
+				const hkBroadPhaseHandlePair* del = &delPairs.m_data[j];
+				const void* delA = del->m_a;
 				const hkBroadPhaseHandlePair& np = newPairs.m_data[i];
 				if ((np.m_a == delA && np.m_b == del->m_b) || (np.m_b == delA && np.m_a == del->m_b))
 				{
