@@ -1,1 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0115a5b0/s0115a5b0.cpp  ?Decode@HELPER_CEALayer3@core@audio@rw@@QAEXXZ  0115b3b0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0115a5b0/s0115a5b0.cpp  ?Destroy@HELPER_CEALayer3@core@audio@rw@@QAEPAXI@Z  0115b400  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0115a5b0/s0115a5b0.cpp  ?GetFrameLength@EALayer3Header@core@audio@rw@@QAEHXZ  0115b440  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-

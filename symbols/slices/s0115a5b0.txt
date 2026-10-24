@@ -1,1 +1,10 @@
 0115a710 ?DecodeHuffman@HELPER_CEALayer3_s0115_a5b0@core@audio@rw@@QAEXHHPAMH@Z  # HELPER_CEALayer3_s0115_a5b0::DecodeHuffman migrated from s0115a5b0 (verbatim, slice spelling)
+0115a5b0 ?UnpackTableSet@HELPER_CEALayer3@core@audio@rw@@QAEXHH@Z  # HELPER_CEALayer3::UnpackTableSet: expand Huffman table set into the per-channel band offsets (mixed / non-mixed window-switching layouts)
+0115aeb0 ?ProcessHeader@HELPER_CEALayer3@core@audio@rw@@QAEII@Z  # HELPER_CEALayer3::ProcessHeader: decode version/layer/sfreq/mode bits, set MPEG25/LSF/sfreq/realsampfreq and return 0
+0115af60 ?Open@HELPER_CEALayer3@core@audio@rw@@QAEHPBXI@Z  # HELPER_CEALayer3::Open: reset synth, validate header through vtable slot 1, OpenSynth, allocate mChannels*0x900 decoded frames
+0115aff0 ?DecodeMono@HELPER_CEALayer3@core@audio@rw@@QAEHPAM@Z  # HELPER_CEALayer3::DecodeMono: mono granule decode -> huffman/dequantize/reorder/synth into 18 subbands
+0115b180 ?DecodeStereo@HELPER_CEALayer3@core@audio@rw@@QAEHPAM@Z  # HELPER_CEALayer3::DecodeStereo: per-channel decode, III_stereo, dequantize/reorder/synth both channels
+0115b3b0 ?Decode@HELPER_CEALayer3@core@audio@rw@@QAEXXZ  # HELPER_CEALayer3::Decode: reset bit cursor, consume next 8-bit header, dispatch to DecodeMono/DecodeStereo
+0115b400 ?Destroy@HELPER_CEALayer3@core@audio@rw@@QAEPAXI@Z  # HELPER_CEALayer3::Destroy: restore vtable, free mpDecodedFrame, run base dtor, optional delete
+0115b440 ?GetFrameLength@EALayer3Header@core@audio@rw@@QAEHXZ  # EALayer3Header::GetFrameLength: per-mode (0/1/2) frame byte length from mSamples/mFrameSize/mFlags
+0115b470 ?Parse@EALayer3Header@core@audio@rw@@QAEIPBE@Z  # EALayer3Header::Parse: big-endian 16/32-bit header into channels/mode/samples/frameSize/bitrate, return payload length
