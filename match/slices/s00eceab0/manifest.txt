@@ -1,1 +1,2 @@
-# no byte-exact functions in this slice (see nonmatching.txt and partial.txt)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00eceab0/s00eceab0.cpp  ?M_00ecf910@SwatchRecvUI@@QAEXHH@Z  00ecf910  /O2 /MD /Gy /EHsc /TP
