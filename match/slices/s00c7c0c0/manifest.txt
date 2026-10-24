@@ -1,1 +1,5 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c7c0c0/s00c7c0c0.cpp  ?InitFromDefinition@cRock@@QAE_NHHH@Z  00c7cce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c7c0c0/s00c7c0c0.cpp  ?FUN_00c7cfc0@cRock@@QAE_NPAX@Z  00c7cfc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c7c0c0/s00c7c0c0.cpp  ?SetLocalExtents@cSpatialObject@@QAEXHM@Z  00c7d020  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c7c0c0/s00c7c0c0.cpp  ?FUN_00c7d090@@YA_NPAXPAH@Z  00c7d090  /O2 /MD /Gy /TP /arch:SSE /fp:fast
