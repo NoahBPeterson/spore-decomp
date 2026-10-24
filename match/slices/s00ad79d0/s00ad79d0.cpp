@@ -44,7 +44,7 @@ extern "C" void  __cdecl SPUIHelpers_EndModal(void*, void*, void*); // 0x00809c5
 extern "C" void* __cdecl spore_new(int, const char*, int, int, int, int); // 0x00f473a0
 extern "C" void  __cdecl spore_del(void*);                    // 0x00f47380
 extern "C" void* __cdecl Matrix33_Convert(void*, void*);      // 0x0041ded0
-extern "C" void* __cdecl QuaternionFromMatrix33(void*, void*); // 0x00472b80
+extern "C" void* __cdecl QuaternionFromMatrix33(void*, void*, float); // 0x00472b80
 
 // ------------------------------------------------------------------ literals / vtables
 extern char  S_Simulator[];    // 0x013f09b4 "Simulator"
@@ -671,10 +671,9 @@ void Sim::sendXform(int* p, uchar flags)
         float m1[9];
         Matrix33_Convert(m1, (char*)p + 0x14);
         float m2[9];
-        for (int i = 0; i < 9; i++)
-            m2[i] = m1[i];
+        memcpy(m2, m1, sizeof(m2));
         float quat[4];
-        QuaternionFromMatrix33(quat, m2);
+        QuaternionFromMatrix33(quat, m2, 0.0f);
         if (flags & 0x10)
             VFN(this->f13c, 4, TC_v2)(this->f13c, (void*)0x101d51f, quat);
         else
