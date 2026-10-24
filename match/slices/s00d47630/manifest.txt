@@ -1,0 +1,2 @@
+slices/s00d47630/s00d47630.cpp  ?FUN_00d47850@cContentValidationSummarizer@@QAEXXZ  00d47850  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00d47630/s00d47630.cpp  ?EvaluateEvent@cCreatureTriggerSystem@@QAE_NIPAUcTriggerEvent@@@Z  00d478b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
