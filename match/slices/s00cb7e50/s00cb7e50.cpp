@@ -43,7 +43,8 @@ struct cSpatial {
 };
 
 struct cLocomotive : cSpatial {
-    virtual void v30(); virtual void SetOrientation(const Quaternion* q);   // +0x3c
+    virtual void v30(); virtual void v34(); virtual void v38();
+    virtual void SetOrientation(const Quaternion* q);                       // +0x3c
     virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
     virtual void v50(); virtual void v54(); virtual void v58();
     virtual void GetForward(Vector3* out);                                  // +0x5c
