@@ -28,6 +28,12 @@
 
 #include <EABase/EABase.h>
 #include <EAText/EAText.h>
+// The vendored EATextBreak.h declares ParagraphBreakIterator without the retail
+// GetNextParagraphBreak member. Rename that declaration aside so the retail-layout
+// class below can provide the method (and its exact retail symbol).
+#define ParagraphBreakIterator EATextVendorParagraphBreakIterator
+#include <EAText/EATextBreak.h>
+#undef ParagraphBreakIterator
 #include <EAText/EATextStyle.h>
 #include <EASTL/utility.h>
 #include <EASTL/hash_map.h>
@@ -339,3 +345,117 @@ bool RBmpFont::ReadBmpFontInfo(EA::IO::IStream* pStream)
 }
 
 }  // namespace RT2
+
+// ---------------------------------------------------------------------------------------------
+// EATextBreak retail-only additions (0x008881e0, 0x008883a0, 0x00888480).
+//
+// The retail EATextBreak.cpp is newer than the vendored EAWebKit 1.21 source: it keeps the
+// word-break additions in a global hash map and implements ParagraphBreakIterator. The two
+// iterator helpers are declared with their retail addresses so the equivalence checker can
+// redirect them to the original out-of-line functions.
+// ---------------------------------------------------------------------------------------------
+namespace RT2
+{
+    void __fastcall IncrementTextRunIterator(EA::Text::TextRunIterator* pIterator);              // 0x00888160
+    EA::Text::Char __fastcall DerefTextRunIterator(const EA::Text::TextRunIterator* pIterator);  // 0x008880c0
+
+    // The retail word-break dictionary keeps its additions in an EASTL hash map; the second
+    // container is the vector of entries that is keyed by the string hash. Only the allocator
+    // fields are touched by InitWordBreakDictionary.
+    struct RWordBreakDictionary
+    {
+        void*                         mpBucketArray;   // +0x00
+        uint32_t                      mnBucketCount;   // +0x04
+        uint32_t                      mnElementCount;  // +0x08
+        float                         mfLoadFactor;    // +0x0c
+        float                         mfGrowthFactor;  // +0x10
+        uint32_t                      mnReserved14;    // +0x14
+        EA::Allocator::ICoreAllocator* mpAllocator;    // +0x18
+        uint32_t                      mnReserved1c;    // +0x1c
+    };
+    RWordBreakDictionary gWordBreakDictionary;             // 0x016519ac
+
+    struct RWordBreakEntryArray
+    {
+        uint32_t                      mnBegin;          // +0x00
+        uint32_t                      mnEnd;            // +0x04
+        uint32_t                      mnCapacity;       // +0x08
+        EA::Allocator::ICoreAllocator* mpAllocator;      // +0x0c
+        uint32_t                      mnReserved10;     // +0x10
+    };
+    RWordBreakEntryArray gWordBreakDictionaryEntries;       // 0x01651994
+
+// @ 0x008881e0
+    uint32_t HashWordBreakString(const Char* pString, uint32_t nLength, uint32_t nHash)
+    {
+        const Char* const pEnd = pString + nLength;
+
+        while((pString < pEnd) && *pString)
+        {
+            nHash = nHash * 33 + *pString;
+            ++pString;
+        }
+
+        return nHash;
+    }
+}  // namespace RT2
+
+namespace EA
+{
+    namespace Text
+    {
+        class ParagraphBreakIterator : public CharacterBreakIterator
+        {
+        public:
+            ParagraphBreakIterator() { }
+
+            ParagraphBreakIterator(const TextRun* pTextRunArray, uint32_t nTextRunArraySize,
+                                   const LayoutContext* pLayoutContext = NULL)
+                : CharacterBreakIterator(pTextRunArray, nTextRunArraySize, pLayoutContext) { }
+
+            ParagraphBreakIterator(const TextRunIterator& tri, const LayoutContext* pLayoutContext = NULL)
+                : CharacterBreakIterator(tri, pLayoutContext) { }
+
+            uint32_t GetNextParagraphBreak();
+        };
+
+// @ 0x008883a0
+        uint32_t ParagraphBreakIterator::GetNextParagraphBreak()
+        {
+            if(!mIterator.AtEnd())
+            {
+                Char cCurrent = *mIterator;
+
+                RT2::IncrementTextRunIterator(&mIterator);
+                Char cNext = *mIterator;
+
+                while(!mIterator.AtEnd())
+                {
+                    if(cCurrent == kCharCR)
+                    {
+                        if(cNext != kCharLF)
+                            break;
+                    }
+                    else if(cCurrent == kCharPSEP)
+                        break;
+
+                    cCurrent = cNext;
+                    RT2::IncrementTextRunIterator(&mIterator);
+                    cNext = RT2::DerefTextRunIterator(&mIterator);
+                }
+            }
+
+            return mIterator.GetPosition();
+        }
+
+// @ 0x00888480
+        void InitWordBreakDictionary()
+        {
+            if(RT2::gWordBreakDictionary.mnElementCount == 0)
+                RT2::gWordBreakDictionary.mpAllocator = GetAllocator();
+
+            if(RT2::gWordBreakDictionaryEntries.mnBegin == RT2::gWordBreakDictionaryEntries.mnEnd)
+                RT2::gWordBreakDictionaryEntries.mpAllocator = GetAllocator();
+        }
+    }  // namespace Text
+}  // namespace EA
