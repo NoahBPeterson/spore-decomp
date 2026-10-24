@@ -59,8 +59,9 @@ Vec4& Vec4::operator=(const Vec4& x)
 void Vec4::DoInsertValues(Vector4* position, Vector4* source)
 {
     Vector4* pEnd = mpEnd;
-    for (; source != pEnd; ++source, ++position)
-        *(__m128*)position = *(const __m128*)source;
+    Vector4* p = position;
+    for (Vector4* s = source; s != pEnd; ++s, ++p)
+        *(__m128*)p = *(__m128*)s;
     mpEnd += position - source;
 }
 
@@ -483,7 +484,7 @@ void cLightingWorld::UpdateLightPosition(uint32_t id, const cSPVector3* pos)
     }
     int* p20 = *(int**)(entry + 0x20);
     if (p20) {
-        if (*(int*)(*(int*)((char*)this + 0x428) + 0x20) == 0) {
+        if (*(void**)((char*)this + 0x448) == 0) {
             *(int*)(entry + 0x20) = 0;
         } else {
             p20[1] = *(int*)&pos->x;
@@ -517,7 +518,7 @@ void cLightingWorld::RemoveLightFromList(uint32_t id, int index, int* list)
             if (*(int*)(*(int*)(other + 0x28) + i * 8) == iVar5)
                 *(int*)(*(int*)(other + 0x28) + i * 8 + 4) = iVar6;
         }
-        int* dst = (int*)(*(int*)(list[0]) + iVar6 * 0x20);
+        int* dst = (int*)(list[0] + iVar6 * 0x20);
         int* src = (int*)(list[1] - 0x20);
         dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; dst[3] = src[3];
         dst[4] = src[4]; dst[5] = src[5]; dst[6] = src[6]; dst[7] = src[7];
@@ -530,7 +531,8 @@ void cLightingWorld::RemoveLightFromList(uint32_t id, int index, int* list)
     *(int*)(*(int*)(entry + 0x28) + index * 8 + 4) = -1;
 }
 
-void __cdecl AddSphereLighting(Vector4* dst, void* base, int count, Vector4 value); // 0x7961d0
+void __cdecl AddSphereLighting(float x, float y, float z, float w, int count, int base,
+                               int dst); // 0x7961d0
 
 // @ 0x00707370
 void cLightingWorld::UpdateLocalLightSample(int* info)
@@ -560,8 +562,9 @@ void cLightingWorld::UpdateLocalLightSample(int* info)
             val.f[1] = *(float*)&info[4];
             val.f[2] = *(float*)&info[5];
             val.f[3] = fVar7;
-            AddSphereLighting((Vector4*)(pfVar1 + 3), (void*)uVar3,
-                              (*(int*)((char*)this + 0x5d8) - uVar3) >> 5, val);
+            AddSphereLighting(val.f[0], val.f[1], val.f[2], val.f[3],
+                              (*(int*)((char*)this + 0x5d8) - uVar3) >> 5, uVar3,
+                              (int)(pfVar1 + 0xc));
         }
         int li = info[8];
         if (li >= 0) {
@@ -573,7 +576,8 @@ void cLightingWorld::UpdateLocalLightSample(int* info)
             val.f[1] = *(float*)&info[4];
             val.f[2] = *(float*)&info[5];
             val.f[3] = fVar7;
-            AddSphereLighting((Vector4*)(pfVar1 + 3), (void*)base, (piVar2[1] - base) >> 5, val);
+            AddSphereLighting(val.f[0], val.f[1], val.f[2], val.f[3],
+                              (piVar2[1] - base) >> 5, base, (int)(pfVar1 + 0xc));
         }
     }
     *info = (int)pfVar1;

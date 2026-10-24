@@ -1,10 +1,10 @@
-007070d0 342 cLightingWorld::UpdateLightPosition: complete reconstruction; vector RMW lane writes collapse to integer stores, register/frame schedule diverges
-00707270 238 cLightingWorld::RemoveLightFromList: complete reconstruction; list-array element moves and index bookkeeping differ in schedule
-00707370 283 cLightingWorld::UpdateLocalLightSample: complete reconstruction; copy loop and shader-data cache addressing diverge
+007070d0 401 cLightingWorld::UpdateLightPosition: complete reconstruction; p20 guard is this->0x448 == 0 (was [[this+0x428]+0x20], which read through a null list and skipped the vtable[5] notify); equiv PASS 323 valid 100% cov (--inputs 700); byte diffs remain frame-prologue/inlined-handle schedule
+00707270 276 cLightingWorld::RemoveLightFromList: complete reconstruction; dst element is the buffer itself, list[0] + iVar6*0x20 (an extra deref was dropping the move); equiv PASS 305 valid 85% cov (--inputs 1200); element-move schedule still differs
+00707370 373 cLightingWorld::UpdateLocalLightSample: complete reconstruction; AddSphereLighting is __cdecl(float x,y,z,w,int count,int base,int dst) at 0x7961d0 and dst is pfVar1+0xc (float units = +0x30 bytes); equiv PASS 275 valid 100% cov (--inputs 800); copy-loop schedule still differs
 00707540 7 SlotVec28::Release: complete; accumulator register for slot state word differs (edi vs edx)
 00707590 7 SlotVec28::ReleaseDestroy: complete; same slot-state accumulator register difference
 007077f0 179 Vec4::operator=(DoAssignFromIterator): complete; register allocation of this/x/locals differs; equiv WEAK (462 valid, 41.8% cov)
-00707a00 60 Vec4::DoInsertValues(position,source): complete; cursor vs parameter register allocation and frame slot differ
+00707a00 51 Vec4::DoInsertValues(position,source): complete; FAIL-KEPT on eax: the original leaves eax = position (arg1) at ret while cl15 hoists the (position-source) delta and leaves the loop cursor / mpEnd in eax; 0 semantic diffs at 100% coverage (default corpus discards every input as fault(pool-limit), --alias 1.0 yields the valid ones)
 00707a50 259 Vec32::DoInsertValue: complete eastl DoInsertValue; 32-byte element copy/realloc schedule diverges
 00707b70 374 Vec4::InsertValuesAt: complete eastl DoInsertValues(position,n,value); fill/copy scheduling diverges
 00707d10 377 Vec8::DoInsertValues: complete reconstruction; helper split and register schedule diverge
