@@ -1,2 +1,27 @@
-00e44d20 SP::cEditorValidity::AddCellUpgradeParts  # PDB candidate SP::EditorValidity::AddCellUpgradeParts (caller-scored); switch on 0x1654c00..05
-004e38d0 ??0?$vector@UConstraintNode@FunctionalMatch@SP@@@eastl@@QAE@ABV01@@Z  # eastl::vector<ConstraintNode> copy ctor (/Od instance, PDB name eastl::vector<SP::FunctionalMatch::Constraint>::vector(const vector&))
+00e45460 EditorValidity::Tick  # 12-state timed-tooltip sequence tick: stopwatch thresholds (0.5 s / 0.8 s) on the parts at +0x4f0/+0x510/+0x530/+0x548, SetBoolProperty pulses, the state 5..11 search/upgrade hand-off (PushUpgrade, UpdateA/B/C, StepBack/Step), gPendingUpgrade flush, and the "fewer than 15 upgrade slots" re-entry into AddCellUpgradeParts
+00e44d20 EditorValidity::AddCellUpgradeParts  # PDB candidate SP::EditorValidity::AddCellUpgradeParts; switch on the cell key 0x1654c00..0x1654c05, per-cell slot collectors, then top the +0x460 constraint list up to 15 with one to three template-DB query rounds; thiscall, one stack argument, callee cleans
+00558960 FunctionalMatch::Constraint::Constraint(int,int,int)  # key / EqualConstraint / value triple, 0x0c bytes
+006066f0 FunctionalMatch::Constraint::~Constraint
+00606880 FunctionalMatch::ConstraintNode::ConstraintNode(const Constraint&)  # 0x24-byte node
+004e18e0 eastl::vector<Constraint,sp_vector_allocator>::push_back
+004e38d0 eastl::vector<ConstraintNode>::vector(const vector&)
+004e39d0 eastl::vector<ConstraintNode>::DoInsertValue
+004e39a0 eastl::vector<Constraint>::DoDestroyValues
+004f6b70 slot range commit helper (start)
+004f6830 slot range commit helper (end)
+00e434a0 CollectUpgradeHead  # per-cell slot collector, cdecl, takes the slot vector
+00e435c0 CollectUpgradeBody
+00e3ede0 CollectUpgradeLimb
+00e43710 CollectUpgradeCreature
+00e36cd0 EditorValidity::UpdateA
+00e36d30 EditorValidity::UpdateB
+00e36d80 EditorValidity::UpdateC
+00e38bb0 EditorValidity::StepBack
+00e38c90 EditorValidity::Step
+00e390d0 EditorValidity::StartFadeOut
+00e39200 EditorValidity::ShowValidity
+00e3b0b0 EditorValidity::PushUpgrade
+00e40420 EditorValidity::RefreshLayout
+005ff1a0 EA::Stopwatch::GetElapsedTimeFloat
+00571e80 EA::Stopwatch::Restart
+0093a2e0 cDirectPropertyList::SetBoolProperty
