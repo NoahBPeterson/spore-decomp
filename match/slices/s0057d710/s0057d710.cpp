@@ -105,6 +105,7 @@ struct cSPEditorBlock {
     void Rebuild(void* modelWorld, void* physicsWorld, float scale, bool a, bool b);  // 0x00450f70
     int GetSymmetryIndex();                                       // 0x0044f220
     void FUN_0043e2b0();                                          // 0x0043e2b0
+    void F3cfc0(int a, char b);                                   // 0x0043CFC0
     bool TestFlagDC8(int bit) const { return ((mFlagsDC8 >> bit) & 1) != 0; }
     bool TestFlagDCC(int bit) const { return ((mFlagsDCC >> bit) & 1) != 0; }
 };
@@ -244,7 +245,7 @@ struct cAppModeEditorBase {
     char pad94[0x98 - 0x94];
     cEditorModel* mEditorSaveModel;     // +0x98
     char pad9c[0xd4 - 0x9c];
-    void* mD4;                          // +0xd4
+    cSPEditorBlock* mD4;                // +0xd4
     char padD8[0xe9 - 0xd8];
     bool mTorsoSelected;                // +0xe9
     char padEA[0x14c - 0xea];
@@ -392,7 +393,7 @@ void cAppModeEditorBase::FUN_0057e340(bool active)
     if (!active) {
         m70 = 0.0f;
     } else if (mD4) {
-        FUN_0043cfc0(0, 1);
+        mD4->F3cfc0(0, 1);
     }
     cEditorModel* model = mEditorSaveModel;
     int* modelBegin = *(int**)((char*)model + 0x18);

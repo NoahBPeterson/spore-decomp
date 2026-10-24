@@ -1,2 +1,2 @@
-0057e340 204 complete but not byte-exact (loop shape / register scheduling of the two effect-mask update loops)
+0057e340 202 complete but not byte-exact (loop shape / register scheduling of the two effect-mask update loops); F3cfc0 is a thiscall member of cSPEditorBlock (ecx=mD4), not a free cdecl call; equiv replay PASS + fuzz PASS 227/227 (seed 3) + 236/236 (seed 7), 69.3% coverage
 0057d710 2112 complete, not byte-exact (register allocation/stack layout of the camera-plane math and ray hit; needs /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc)
