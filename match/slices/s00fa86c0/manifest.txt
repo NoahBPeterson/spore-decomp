@@ -1,0 +1,2 @@
+# source  symbol  original VA
+slices/s00fa86c0/s00fa86c0.cpp  ?CreateDecal@cTerrainSphere@@QAEHHHHM@Z  00fa9140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
