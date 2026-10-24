@@ -13,3 +13,6 @@ vc90.pdb
 _off.cod
 *.cpp.new
 *-this-session-is-being-continued-*.txt
+
+# compiled objects (our own builds; they embed local absolute paths)
+*.obj
