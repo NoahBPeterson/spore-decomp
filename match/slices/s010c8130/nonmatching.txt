@@ -1,6 +1,6 @@
 010c8130 66 havok-equivalent
 010c8180 77 havok-equivalent
-010c81d0 334 havok-equivalent
+010c81d0 334 havok-equivalent; equiv PASS 279/400 (100% coverage); replay PASS; not byte-exact (301 bytes differ: size 289 vs 334; VM scratch object sized/aligned to 0x40 so the outgoing-argument area matches; box built with direct member writes)
 010c83a0 236 havok-equivalent
 010c8490 205 havok-equivalent
 010c8560 89 havok-equivalent
@@ -18,6 +18,6 @@
 010c8da0 122 havok-equivalent
 010c8e40 111 havok-equivalent
 010c8ee0 202 havok-equivalent
-010c8fe0 30 havok-equivalent
+010c8fe0 30 havok-equivalent; equiv PASS 280/400 (100% coverage); replay PASS; not byte-exact (15 bytes differ: size 26 vs 30; wrapper now placement-news the base hkMeshShape(1) and stores the derived vptr)
 010c9030 31 havok-equivalent
-010c9050 73 havok-equivalent
+010c9050 73 havok-equivalent; equiv PASS 400/400 (85.7% coverage); replay PASS; not byte-exact (68 bytes differ: size 90 vs 73; nearest-rounding threshold + volatile x/rounded locals replace x87 fistp so ecx/xmm stay untouched)

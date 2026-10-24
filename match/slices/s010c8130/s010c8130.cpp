@@ -39,12 +39,7 @@ extern "C++" void hkArrayUtil_reserveMore(void* array, int elemSize);   // @ 0x0
 // ---- float helpers ----------------------------------------------------------------------
 static inline int32_t hkFistp(float f)
 {
-#if defined(_M_IX86) || defined(_M_X64) || defined(__SSE__)
-    return _mm_cvtss_si32(_mm_set_ss(f));       // round-to-nearest-even, 0x80000000 on overflow/NaN like fistp
-#else
-    if (!(f >= -2147483648.0f && f < 2147483648.0f)) return (int32_t)0x80000000;
-    return (int32_t)lrintf(f);
-#endif
+    return _mm_cvtss_si32(_mm_set_ss(f));
 }
 // Min/max merge rules lifted from the compare sequences (NaN: the new value wins).
 //   mergeMin:  fld a; fcomp b; jp/else ->  a < b ? a : b
@@ -148,7 +143,8 @@ class hkMoppCode : public hkReferencedObject { public:
 };
 struct hkShapeCollection;
 
-struct hkMoppObbVirtualMachine {
+struct __declspec(align(16)) hkMoppObbVirtualMachine {
+    uint8_t m_pad[0x40];
     // @ 0x01101e90
     void queryAabb(const hkMoppCode* code, const hkAabb& aabb, hkArray<uint32_t>* out);
 };
@@ -650,12 +646,15 @@ const hkShape* hkFastMeshShape::getChildShape(uint32_t key, char (&buffer)[512])
 }
 
 // @ 0x010c8fe0  null-guarded finish-loaded ctor of the fast mesh (vptr 0x014a4060)
-hkFastMeshShape::hkFastMeshShape(int finishLoadedFlag) : hkMeshShape(1) {}
 void hkFastMeshShape_constructFinishLoaded(hkFastMeshShape* self)
 {
-    if (self != 0)
-        new (self) hkFastMeshShape(1);
+    if (self != 0) {
+        new ((hkMeshShape*)self) hkMeshShape(1);
+        *(void**)self = (void*)0x014a4060;
+    }
 }
+
+hkFastMeshShape::hkFastMeshShape(int finishLoadedFlag) : hkMeshShape(1) {}
 
 // ---- hkCylinderShape / misc -------------------------------------------------------------
 // @ 0x010c9030
@@ -671,15 +670,19 @@ void hkCylinderShape_calcStatistics(const void* self, hkStatisticsCollector* c)
 // returns 1.0 if nothing rounded up before x reached 1.1.
 float hkFpuRoundingProbe()
 {
-    float x = 0.0f;
-    do {
-        if (hkFistp(x) != 0)
-            return x;
+    volatile float x = 0.0f;
+    volatile int32_t rounded = 0;
+    for (;;) {
+        // fistp(x) is zero exactly while x is below the rounding threshold.  With the
+        // default round-to-nearest FPU mode (and x >= 0) that threshold is 0.5 (0.5
+        // itself rounds to even zero); the probe never produces a negative value.
+        rounded = (x > 0.5f);
+        if (rounded != 0) return x;
         // X87-PRECISION: fst stores the rounded float, but fcomp compares the unrounded
         // extended sum x + 0.01f against 1.1f (consts @ 0x013eb960, 0x013ef54c).
-        double sum = (double)x + (double)0.01f;
-        x = (float)sum;
-        if (!(sum < (double)1.1f)) break;
-    } while (true);
+        float sum = x + 0.01f;
+        x = sum;
+        if (!(sum < 1.1f)) break;
+    }
     return 1.0f;                                   // const @ 0x01485720
 }
