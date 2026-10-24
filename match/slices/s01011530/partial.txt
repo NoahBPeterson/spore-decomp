@@ -1,1 +1,6 @@
-# va  size (ours/orig)  reason
+# va  diff-bytes  reason
+01011530  497  eastl::partial_sort<AutoRefCount<cPlanetRecord>*, BioProtectorSort>: stub only; 1 vs 497 B - the partial-sort heap build (make_heap over the [first, middle) range) plus the extraction loop that pop_heap-s the remaining elements into (middle, last) with a comparator object passed by value and the AutoRefCount refcount fixups not reconstructed
+010117c0  309  partial_sort sibling over the AutoRefCount list: stub only; 1 vs 309 B - the second partial-sort instantiation (same heap build / extraction shape as 01011530 but a different element type and comparator) not reconstructed
+01011b50  314  SP::cSimulatorUniverse::~cSimulatorUniverse: stub only; 1 vs 314 B - clearing _sInstance (0x016dc798), the rbtree teardown probes, the operator_delete_ frees and the cGonzagoTimer array destructor at this+0x128 (stride 0x28, vtables 0x013ec458 / 0x013eb938) not reconstructed
+01011db0  326  list serialiser (ConvertToString16 + wstring node walk): stub only; 1 vs 326 B - the linked-list walk that appends each node's payload through the ConvertToString16 (0x0093c5a0) string helper into the growing wstring not reconstructed
+01012030  453  eastl vector grow + range copy: stub only; 1 vs 453 B - the vector DoResize/grow path (capacity check, FUN_00b95280 / FUN_00b007f0 element buffer realloc, operator_delete_ on the old buffer) plus the element range copy and the trailing size-store not reconstructed
