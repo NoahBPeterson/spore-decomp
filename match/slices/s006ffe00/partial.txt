@@ -6,4 +6,3 @@
 007004d0  0  cPropertyList destructor: stub only.
 007006d0  0  cell vector release/reset: stub only (three vector clear loops + DoInsertValue, EH frames).
 00700a30  0  spatial cell pack: stub only.
-00700c80  0  float cell query: stub only (SSE distance computation).
