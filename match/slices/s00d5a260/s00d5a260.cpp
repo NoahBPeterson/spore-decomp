@@ -2,6 +2,7 @@
 // (path of waypoints, stop distances, gait switch walk/run). Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-.
 #include "types.h"
 #include <math.h>
+#include <string.h>
 #pragma intrinsic(sqrt)
 
 void __cdecl operator delete[](void* p);                   // 0x00f47380
@@ -308,6 +309,360 @@ void cFollowBehavior::Update(cSteerCtx* ctx)
             goal.mDst.y = pos.y;
             goal.mDst.z = pos.z;
             ctx->obj->SetRequest(goal);
+        }
+    }
+}
+
+// ===========================================================================
+// Container helpers and tribe trail update in the same translation unit.
+// ===========================================================================
+
+void __cdecl operator delete(void* p);                     // 0x00f47380
+typedef uint32_t u32;
+
+// ---------------------------------------------------------------------------
+// 0x00d5aae0 -- erase every element equal to *ppValue from a vector of
+// reference-counted pointers, keeping the remaining elements in order.
+// ---------------------------------------------------------------------------
+struct RefCounted
+{
+    virtual void AddRef();                                 // slot 0
+    virtual void Release();                                // slot 1
+};
+
+struct RefPtr
+{
+    RefCounted* mpObject;                                  // +0x00
+
+    RefPtr& operator=(const RefPtr& other)
+    {
+        if (mpObject != other.mpObject)
+        {
+            if (other.mpObject != 0)
+                other.mpObject->AddRef();
+            RefCounted* old = mpObject;
+            mpObject = other.mpObject;
+            if (old != 0)
+                old->Release();
+        }
+        return *this;
+    }
+};
+
+struct RefPtrVector
+{
+    RefPtr* mpBegin;                                       // +0x00
+    RefPtr* mpEnd;                                         // +0x04
+    RefPtr* mpCapacity;                                    // +0x08
+
+    void erase(RefPtr* first, RefPtr* last);               // 0x00e25bd0
+};
+
+int __cdecl EraseRefValue(RefPtrVector* vec, const RefPtr* pValue);
+
+// @ 0x00d5aae0
+int __cdecl EraseRefValue(RefPtrVector* vec, const RefPtr* pValue)
+{
+    RefPtr* first = vec->mpBegin;
+    RefPtr* last = vec->mpEnd;
+    RefCounted* target = pValue->mpObject;
+    if (first != last)
+    {
+        do
+        {
+            if (first->mpObject == target)
+                break;
+            ++first;
+        } while (first != last);
+    }
+
+    RefPtr* newEnd = first;
+    if (first != last)
+    {
+        do
+        {
+            if (first->mpObject != pValue->mpObject)
+                *newEnd++ = *first;
+            ++first;
+        } while (first != last);
+
+        if (newEnd != last)
+        {
+            vec->erase(newEnd, last);
+            return (int)(last - newEnd);
+        }
+    }
+    return 0;
+}
+
+// ---------------------------------------------------------------------------
+// 0x00d5acc0 -- swap two fixed-capacity Vector3 vectors.  Equal allocator
+// tags allow a straight pointer swap; otherwise copy through a temporary.
+// ---------------------------------------------------------------------------
+struct Vec3AllocVector
+{
+    Vec3* mpBegin;                                         // +0x00
+    Vec3* mpEnd;                                           // +0x04
+    Vec3* mpCapacity;                                      // +0x08
+    uint32_t mAllocTag;                                    // +0x0c
+    Vec3* mpInlineBuffer;                                  // +0x10
+    uint32_t mAllocField14;                                // +0x14
+
+    void CopyConstruct(const Vec3AllocVector& src);        // 0x00d59750
+    Vec3AllocVector& operator=(const Vec3AllocVector& src);// 0x00d5a010
+    void swap(Vec3AllocVector& other);                     // 0x00d5acc0
+};
+
+// @ 0x00d5acc0
+void Vec3AllocVector::swap(Vec3AllocVector& other)
+{
+    if (&mAllocTag == &other.mAllocTag)
+    {
+        Vec3* ob = other.mpBegin;
+        Vec3* tb = mpBegin;
+        mpBegin = ob;
+        other.mpBegin = tb;
+        Vec3* te = mpEnd;
+        Vec3* oe = other.mpEnd;
+        mpEnd = oe;
+        other.mpEnd = te;
+        Vec3* oc = other.mpCapacity;
+        Vec3* tc = mpCapacity;
+        mpCapacity = oc;
+        other.mpCapacity = tc;
+        return;
+    }
+
+    Vec3AllocVector tmp;
+    tmp.CopyConstruct(*this);
+    *this = other;
+    other = tmp;
+    if (tmp.mpBegin != 0 && tmp.mpBegin != tmp.mpInlineBuffer)
+        operator delete(tmp.mpBegin);
+}
+
+// ---------------------------------------------------------------------------
+// 0x00d5ad40 -- insert a 16-byte value at the end in place when capacity is
+// available, otherwise delegate to the growing insert.
+// ---------------------------------------------------------------------------
+struct Vec4
+{
+    uint32_t mKey;                                         // +0x00
+    float y, z, w;                                         // +0x04
+};
+
+struct Vec4Vector
+{
+    Vec4* mpBegin;                                         // +0x00
+    Vec4* mpEnd;                                           // +0x04
+    Vec4* mpCapacity;                                      // +0x08
+
+    void InsertGrow(Vec4* pos, const Vec4* value);         // 0x00d5a140
+    Vec4* insert(Vec4* pos, const Vec4& value);            // 0x00d5ad40
+};
+
+// @ 0x00d5ad40
+Vec4* Vec4Vector::insert(Vec4* pos, const Vec4& value)
+{
+    int index = (int)(pos - mpBegin);
+    Vec4* end = mpEnd;
+    if (pos == end && end != mpCapacity)
+    {
+        mpEnd = end + 1;
+        if (end != 0)
+        {
+            end->mKey = value.mKey;
+            end->y = value.y;
+            end->z = value.z;
+            end->w = value.w;
+        }
+    }
+    else
+    {
+        InsertGrow(pos, &value);
+    }
+    return mpBegin + index;
+}
+
+// ---------------------------------------------------------------------------
+// 0x00d5adf0 -- stop every pending sound handle and empty the handle list.
+// ---------------------------------------------------------------------------
+struct AudioSystem
+{
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual u32  Create();                                 // 0x20
+    virtual void v24();
+    virtual bool IsPlaying(u32 h);                         // 0x28
+    virtual void v2c(); virtual void v30(); virtual void v34();
+    virtual void Begin(u32 id);                            // 0x38
+    virtual void v3c();
+    virtual void SetParam(u32 id, u32 value);              // 0x40
+    virtual void v44(); virtual void v48(); virtual void v4c(); virtual void v50(); virtual void v54();
+    virtual void Commit();                                 // 0x58
+};
+
+AudioSystem* GetSystemAT();                                // 0x00a206f0
+
+struct SoundHandleList
+{
+    int mBegin;                                            // +0x00
+    int mEnd;                                              // +0x04
+};
+
+namespace SP
+{
+    void StopAndClearSoundList(SoundHandleList* handles);  // 0x00d5adf0
+}
+
+// @ 0x00d5adf0
+void SP::StopAndClearSoundList(SoundHandleList* handles)
+{
+    int i = 0;
+    u32 handle;
+    if (((handles->mEnd - handles->mBegin) & ~3) > 0)
+    {
+        do
+        {
+            handle = ((u32*)handles->mBegin)[i];
+            AudioSystem* audio = GetSystemAT();
+            if (audio)
+            {
+                audio->Begin(0x347536b);
+                audio->SetParam(0x3475385, handle);
+                audio->SetParam(0x34753a0, 0);
+                audio->Commit();
+            }
+            i++;
+        } while (i < (handles->mEnd - handles->mBegin) >> 2);
+    }
+
+    u32* last = (u32*)handles->mEnd;
+    u32* first = (u32*)handles->mBegin;
+    memcpy(first, last, (char*)last - (char*)last);
+    handles->mEnd += -((((int)last - (int)first) >> 2)) * 4;
+}
+
+// ---------------------------------------------------------------------------
+// 0x00d5ae80 -- tribe trail (surface positions of nearby members) update.
+// ---------------------------------------------------------------------------
+struct TribeVirtualCreature
+{
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual Vec3* GetPosition();                           // +0x2c
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
+    virtual float GetSpeed();                              // +0x70
+};
+
+struct TribeCreature
+{
+    char mPad00[0x34];                                     // +0x00
+    TribeVirtualCreature mVirtual;                         // +0x34
+};
+
+struct TribeMemberList
+{
+    TribeCreature** mpBegin;                               // +0x00
+    TribeCreature** mpEnd;                                 // +0x04
+    int Size() const { return (int)(mpEnd - mpBegin); }
+    TribeCreature* operator[](int i) const { return mpBegin[i]; }
+};
+
+struct TribeObject
+{
+    TribeMemberList* GetMembers();                         // 0x00c8e810
+};
+
+struct Vec3TrailVector
+{
+    Vec3* mpBegin;                                         // +0x00
+    Vec3* mpEnd;                                           // +0x04
+    Vec3* mpCapacity;                                      // +0x08
+    uint32_t mAllocTag;                                    // +0x0c
+    Vec3* mpInlineBuffer;                                  // +0x10
+
+    void erase(Vec3* first, Vec3* last);                   // 0x0050f740
+    void DoInsertValue(Vec3* pos, const Vec3* value);      // 0x004b5ad0
+    void push_back(const Vec3& value)
+    {
+        Vec3* end = mpEnd;
+        if (end < mpCapacity)
+        {
+            mpEnd = end + 1;
+            if (end != 0)
+            {
+                end->x = value.x;
+                end->y = value.y;
+                end->z = value.z;
+            }
+        }
+        else
+        {
+            DoInsertValue(end, &value);
+        }
+    }
+};
+
+struct TribeTrailOwner
+{
+    char mPad00[0x138];                                    // +0x000
+    Vec3 mCurrentPosition;                                 // +0x138
+    Vec3TrailVector mTrail;                                // +0x144
+    Vec3 mPreviousPosition;                                // +0x158
+    char mPad164[0xaf0 - 0x164];                           // +0x164
+    TribeObject* mpTribe;                                  // +0xaf0
+
+    void UpdateTrail();                                    // 0x00d5ae80
+};
+
+extern const float kTrailMoveThreshold;                    // 0x014853e0
+extern const float kTrailNormalizeEpsilon;                 // 0x013ec4b8
+
+// @ 0x00d5ae80
+void TribeTrailOwner::UpdateTrail()
+{
+    float dz = mPreviousPosition.z - mCurrentPosition.z;
+    float dy = mPreviousPosition.y - mCurrentPosition.y;
+    float dx = mPreviousPosition.x - mCurrentPosition.x;
+    if (dz * dz + dy * dy + dx * dx > kTrailMoveThreshold)
+    {
+        mPreviousPosition = mCurrentPosition;
+
+        mTrail.erase(mTrail.mpBegin, mTrail.mpEnd);
+
+        Vec3 ground;
+        PlanetModel()->DirectionToSurfacePosition(&ground, &mCurrentPosition);
+
+        TribeMemberList* members = mpTribe->GetMembers();
+        for (uint32_t i = 0; i < (uint32_t)members->Size(); ++i)
+        {
+            TribeCreature* creature = (*members)[i];
+            float speed = creature->mVirtual.GetSpeed();
+            const Vec3* pos = creature->mVirtual.GetPosition();
+
+            float mdz = pos->z - ground.z;
+            float mdy = pos->y - ground.y;
+            float mdx = pos->x - ground.x;
+            float inv = 1.0f / (float)sqrt(mdz * mdz + mdy * mdy + mdx * mdx + kTrailNormalizeEpsilon);
+
+            float vx = (inv * mdx) * speed;
+            float vy = (mdy * inv) * speed;
+            float vz = (mdz * inv) * speed;
+
+            const Vec3* pos2 = creature->mVirtual.GetPosition();
+            Vec3 target;
+            target.x = pos2->x + vx;
+            target.y = pos2->y + vy;
+            target.z = pos2->z + vz;
+
+            Vec3 tmp;
+            Vec3 surface = *PlanetModel()->DirectionToSurfacePosition(&tmp, &target);
+            mTrail.push_back(surface);
         }
     }
 }

@@ -1,2 +1,7 @@
 00d5a260 cFollowBehavior::Update  # locomotion steering: cLocomotionRequest waypoint consume, stop distances, walk/run gait, InterruptAnimation
 00d59b00 cFollowBehavior::Approach  # called from the steering update with (obj, target, dt, speed, turnRate), ret 0x14, returns float
+00d5aae0 SP::EraseRefValue  # erase-value over a vector of RefPtr (AutoRefCount) elements
+00d5acc0 Vec3AllocVector::swap  # swap two fixed-capacity Vec3 vectors; equal allocator tags -> pointer swap
+00d5ad40 Vec4Vector::insert  # append a 16-byte {u32,float,float,float} in place when capacity allows
+00d5adf0 SP::StopAndClearSoundList  # stop every pending sound handle and clear the handle list
+00d5ae80 TribeTrailOwner::UpdateTrail  # tribe trail: surface positions of nearby members
