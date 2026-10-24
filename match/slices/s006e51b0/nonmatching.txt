@@ -3,6 +3,6 @@
 006e5520  98  SP::DirectShaderDispatchCallback complete; register allocation and if/else branch order of the texture-bind loop differ; difftest PASS (g_spriteDispatch mapped to 0x16fa604)
 006e56b0  84  ShaderState dtor complete; original reloads vs[i]/ps[i] after the null test (cmp mem,0) where mine keeps it in a register
 006e5870  311  Float3 vector fill-insert complete (EASTL DoInsertValues); copy-helper arg scheduling differs
-006e5a30  170  uint8 fixed_vector fill-insert complete; register/branch layout differs
+006e5a30  342  flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS-; uint8 fixed_vector fill-insert complete; only ecx differs (original preserves the incoming ecx via an extra push/pop stack slot, ours clobbers it); difftest FAIL-KEPT register ecx, all calls/memory match; chk size 339 vs 408 with remaining branch/spill layout differences
 006e5bd0  87  ShaderState::Reset complete; erase loop is strength-reduced in mine, original keeps separate src/dst increments
 006e5d50  523  ShaderState::Read complete (shader blob reader); EH frame and local slot layout differ
