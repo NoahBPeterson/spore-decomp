@@ -2,3 +2,6 @@
 0055fed0    0  complete clear/free-list reset; /Od frame differs; equiv FAIL (ecx receiver fixed)
 00560880   63  complete asset-subtype query; /Od frame differs; equiv FAIL (ecx receiver fixed)
 005608d0    0  complete asset-key membership scan; /Od frame differs; equiv FAIL (ecx receiver fixed)
+0055fc10  535  complete asset key-list builder (bounded top-N by mnTimeStamp); /Od frame differs (our 420 vs 591 bytes); equiv WEAK (135 valid inputs, 31.6% coverage)
+0055ff10  1258  complete save-database load driver (version/count, per-key rebuild of mPopulation/mRefill, mnTimeStamp); /Od frame differs (our 1194 vs 1366 bytes); equiv UNSUPPORTED (input generator discards all 400, import:_time64)
+00560470  984  complete save-data apply driver (per-key fills of mPopulation/mRefill asset fields); /Od frame differs (our 728 vs 1026 bytes); equiv WEAK (400 valid inputs, 7.0% coverage)
