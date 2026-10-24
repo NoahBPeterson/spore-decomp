@@ -288,7 +288,7 @@ struct FeedbackNode : RbNode {                      // node of map<ResourceMan::
 struct KeyRbTree {                                  // RbTree_00a21dc0 at +0x70
     void*  mpRoot;                                  // +0x00
     RbNode mAnchor;                                 // +0x04  (end = &mAnchor)
-    void* Find(const void* pKey, void** ppOut);     // 0x00a21dc0
+    void* Find(void** ppOut, void* pKey);           // 0x00a21dc0
 };
 struct FeedbackMap {
     uint32_t  mPad00;                               // +0x00
@@ -296,12 +296,12 @@ struct FeedbackMap {
     uint32_t  mCount;                               // +0x14
     uint8_t   mPad18[0x70 - 0x18];
     KeyRbTree mKeyTree;                             // +0x70
-    void  FindUintKey(FeedbackNode** ppNode, uint32_t nKey);         // 0x00e5c780 (eastl rbtree find)
+    void  FindUintKey(FeedbackNode** ppNode, const uint32_t* pKey);  // 0x00e5c780 (eastl rbtree find)
     void  FindKey(FeedbackNode** ppNode, const Key* pKey);           // 0x00c7f560
     void* FindOrInsertKey(const Key* pKey);                          // 0x00de7590
-    void  EraseUintKey(uint32_t nKey);                               // 0x00de74c0
+    void  EraseUintKey(const uint32_t* pKey);                        // 0x00de74c0
     void  RemoveKeyEntry(uint32_t nKey, void* pValue);               // 0x00de6f20
-    void  InsertKey(FeedbackNode** ppNode, RbNode* pWhere, const Key* pKey, char bFlag);  // 0x00de6900
+    void  InsertKey(FeedbackNode** ppNode, RbNode* pWhere, const Key* pKey, RbNode* pWhere2);  // 0x00de6900
 };
 struct FeedbackWriter {
     virtual void Begin(const wchar_t* pName);       // +0x00
@@ -493,10 +493,10 @@ bool SerializeFeedback(FeedbackWriter* pWriter, const wchar_t* pName, FeedbackMa
 }
 
 // @ 0x00de74c0
-void FeedbackMap::EraseUintKey(uint32_t nKey)
+void FeedbackMap::EraseUintKey(const uint32_t* pKey)
 {
     FeedbackNode* pNode = 0;
-    FindUintKey(&pNode, nKey);
+    FindUintKey(&pNode, pKey);
     if (pNode != (FeedbackNode*)&mAnchor) {
         --mCount;
         RbNode* pNext = RBTreeIncrement(pNode);
@@ -505,9 +505,11 @@ void FeedbackMap::EraseUintKey(uint32_t nKey)
         operator_delete__(pNode);
     }
 
-    void* pFound = mKeyTree.Find(&nKey, 0);
-    if (pFound && pFound != &mKeyTree.mAnchor)
-        RemoveKeyEntry(nKey, &((FeedbackNode*)pFound)->mpValue);
+    FeedbackNode* pFound = 0;
+    mKeyTree.Find((void**)&pFound, (void*)pKey);
+    if ((void*)pFound == (void*)&mKeyTree.mAnchor)
+        return;
+    RemoveKeyEntry(*pKey, &pFound->mpValue);
 }
 
 // @ 0x00de7530
@@ -545,9 +547,10 @@ void* FeedbackMap::FindOrInsertKey(const Key* pKey)
     }
 
     if (bInsert) {
-        FeedbackNode* pNew = 0;
-        InsertKey(&pNew, pNode, pKey, 0);
-        pNode = pNew;
+        Key keyCopy = *pKey;
+        FeedbackNode* pOut = 0;
+        InsertKey(&pOut, pNode, &keyCopy, pNode);
+        pNode = pOut;
     }
     return &pNode->mpValue;
 }
@@ -556,7 +559,6 @@ void* FeedbackMap::FindOrInsertKey(const Key* pKey)
 Handler** IntMap::Slot(int* pKey)
 {
     RbNode* pHeader = &mAnchor;
-    InsertResult res;
     RbNode* pCandidate = pHeader;
     RbNode* pNode = mAnchor.mpParent;
     int nKey = *pKey;
@@ -573,11 +575,13 @@ Handler** IntMap::Slot(int* pKey)
     if (pCandidate != pHeader && nKey >= ((IntNode*)pCandidate)->mKey)
         return &((IntNode*)pCandidate)->mpValue;
 
-    res.mpNode = pNode;
+    InsertResult res;
+    res.mpNode = 0;
     res.mFlag = 0;
-    Insert(&res.mpNode, pCandidate, &nKey, &res.mFlag);
+    Insert(&res.mpNode, pCandidate, &nKey, (char*)((uint32_t)pKey & 0xffffff00u));
     return &((IntNode*)res.mpNode)->mpValue;
 }
+
 
 // @ 0x00de7eb0
 void SimTeardown::Teardown()

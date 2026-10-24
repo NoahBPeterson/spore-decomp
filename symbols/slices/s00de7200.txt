@@ -1,6 +1,6 @@
 00de7200 ReadWorldMap  # cSPUILayoutManager::cWorld map deserializer: nuke+reset the tree, read a count, then each entry is (Key, cWorld) read as two triples with a NextKey between; inserts and stores the value at node+0x1c (names Claude-coined)
 00de7330 SerializeFeedback  # writes a FeedbackMap through a writer: empty-map early-out, Begin(name), one WriteKeyValue(ResourceMan::Key) per node, End(name)
-00de74c0 FeedbackMap::EraseUintKey  # erase a uint-keyed feedback entry (count--, RBTreeIncrement/Erase/delete) and drop the matching record from the +0x70 key tree
+00de74c0 FeedbackMap::EraseUintKey  # erase a uint-keyed feedback entry (count--, RBTreeIncrement/Erase/delete) and drop the matching record from the +0x70 key tree; takes the key by pointer
 00de7530 KeyCollector::CollectKeys  # copy every 3-dword key from the +0x3c tree into an sp_vector (in-place append, DoInsertKey on overflow)
 00de7590 FeedbackMap::FindOrInsertKey  # find-or-insert on the 3-dword ResourceMan key (ordered a,c,b); returns the payload slot at node+0x1c
 00de7630 IntMap::Slot  # map<int,Handler*>::operator[]: lower-bound search on node+0x10, insert on miss, returns &node->mpValue
