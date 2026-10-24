@@ -83,6 +83,15 @@ struct UFO_Sample {
     };
 };
 
+// The same vector seen as an object: 0x00b534c0 is its thiscall grow/append helper, called with
+// ecx = the vector base (UFO+0x48) and the old end pointer plus the sample pushed on the stack.
+struct UFO_SampleVec {
+    UFO_Sample* begin;
+    UFO_Sample* end;
+    UFO_Sample* cap;
+    void FUN_00B534C0(UFO_Sample* e, UFO_Sample* s);   // 0x00b534c0
+};
+
 struct UFO {
     u8 raw[0x300];
     void  aea0(float delta);   // UpdateMouseWheel
@@ -113,11 +122,15 @@ void UFO::aea0(float delta) {
     UFO_Sample* end = *(UFO_Sample**)(s + 0x4c);
     if (begin != end) {
         char dl = ((char*)end)[-4];
-        UFO_Sample* mark = end;
+        UFO_Sample* mark = begin;
+        bool found = false;
         for (UFO_Sample* it = begin; it != end; ++it) {
-            if (it->keep != dl || (fVar12 - it->t) > DAT_015b6da4) mark = it + 1;
+            if (it->keep != dl || (fVar12 - it->t) > DAT_015b6da4) {
+                mark = it + 1;
+                found = true;
+            }
         }
-        if (mark != end) {
+        if (found) {
             UFO_Sample* dst = begin;
             for (UFO_Sample* src = mark; src != end; ++src) *dst++ = *src;
             *(UFO_Sample**)(s + 0x4c) = end - (mark - begin);
@@ -129,9 +142,11 @@ void UFO::aea0(float delta) {
         float k = (mode == 1) ? DAT_01485720 : DAT_013eb1bc;
         int n = *(int*)(s + 0x4c) - *(int*)(s + 0x48);
         n >>= 3;
-        float t = (float)(unsigned)n / DAT_015b6da0 * delta * DAT_013fdf1c;
+        float q = (float)(unsigned)n / DAT_015b6da0;
+        q = q * delta;
+        q = q * DAT_013fdf1c;
         float z = *(float*)(s + 0x60);
-        *(float*)(s + 0x60) = z + (expf(t) - 1.0f) * (k - z);
+        *(float*)(s + 0x60) = z + (1.0f - expf(q)) * (k - z);
     } else {
         bool run = true;
         if (*(int*)(s + 0x48) != *(int*)(s + 0x4c)) {
@@ -141,7 +156,9 @@ void UFO::aea0(float delta) {
         if (run) {
             if (DAT_015b6d98 != 0) {
                 float z = *(float*)(s + 0x60);
-                *(float*)(s + 0x60) = z - (expf(delta / DAT_015b6d94 * DAT_013fdf1c) - 1.0f) * z;
+                float q = delta / DAT_015b6d94;
+                q = q * DAT_013fdf1c;
+                *(float*)(s + 0x60) = z - (1.0f - expf(q)) * z;
             } else {
                 *(float*)(s + 0x60) = 0.0f;
             }
@@ -369,7 +386,7 @@ char UFO::bb10(int a, int b, int c, int d) {
         *(UFO_Sample**)(s + 0x4c) = end + 1;
         if (end) *end = smp;
     } else {
-        FUN_00b534c0(end, &smp);
+        ((UFO_SampleVec*)(s + 0x48))->FUN_00B534C0(end, &smp);
     }
     *(int*)(s + 0x5c) = (a < 1) + 1;
     return 0;

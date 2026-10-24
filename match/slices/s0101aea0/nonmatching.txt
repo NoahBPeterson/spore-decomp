@@ -1,9 +1,5 @@
 # va  diff-bytes  reason  (complete behaviorally-equivalent source, not byte-exact)
-0101b530  253  snap camera distance to a keyframe table: complete, equivalence
-               PASSes (399 valid, 61.8% coverage); the forward/backward scans
-               and the two global table loads schedule differently.
-               flags /O2 /MD /Gy /TP /arch:SSE
-0101ba10  size  camera fly-in/fly-out: complete, equivalence WEAK (288 valid,
-          209/181 44.6% coverage). Compiled 209 B vs the original's 181 B - the
-               two GetRadiusAt/PlanetModel branches were not CSE'd the same way.
-               flags /O2 /MD /Gy /TP /arch:SSE
+0101b530  253  snap camera distance to a keyframe table: complete, equivalence PASSes (399 valid, 61.8% coverage); the forward/backward scans and the two global table loads schedule differently. flags /O2 /MD /Gy /TP /arch:SSE
+0101ba10  size  camera fly-in/fly-out: complete, equivalence WEAK (288 valid, 209/181 44.6% coverage). Compiled 209 B vs the original's 181 B - the two GetRadiusAt/PlanetModel branches were not CSE'd the same way. flags /O2 /MD /Gy /TP /arch:SSE
+0101aea0  453  cDefaultCameraController::UpdateMouseWheel: complete, equivalence PASSes (259 valid, 73.7% coverage). Prunes the stale sample prefix (keep byte vs end[-1].keep, fVar12 - last time vs DAT_015b6da4), then the +0x5c mode switch and both expf zoom paths (f2xm1/fscale). The erase drops the marked element itself, so a match on the last sample still rewrites the +0x4c end pointer. Compiled 594 B vs the original's 712 B - x87 scheduling and register order differ. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0101bb10   94  push camera sample: complete, equivalence PASSes (353 valid, 100.0% coverage). The sample's own storage is reused for the stopwatch's int64 spill (so the copied padding matches the original), and 0x00b534c0 is modelled as the sample vector's thiscall append with ecx = UFO+0x48 taking (old end, sample*). Compiled 122 B - the copy block loads/stores its two dwords in the opposite order and ebx/edi/ esi are assigned differently. flags /O2 /MD /Gy /TP /arch:SSE
