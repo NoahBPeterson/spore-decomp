@@ -1,0 +1,2 @@
+00cd9da0 ?FUN_00cd9da0@@YAXXZ  # FUN_00cd9da0 (global tribe-mode setup)
+00cda370 ?UpgradePlayerTribe@cTribeModeStrategy@@QAEXXZ  # SP::cTribeModeStrategy::UpgradePlayerTribe
