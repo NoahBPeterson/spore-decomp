@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Slice s00ff7530: 8 functions. The legacy SP::cSPSimPlanetHighLOD::UpdateGenesisDevice
+# (00ff7530) plus 7 compiler-generated Simulator helpers in the same /O2 /MD /Gy /TP
+# /arch:SSE /fp:fast translation unit. 4 byte-exact here, 4 nonmatching (see nonmatching.txt).
+slices/s00ff7530/s00ff7530.cpp  ?Destroy@SimPool34@@QAEXXZ  00ff80b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ff7530/s00ff7530.cpp  ?SimPartialSort@@YAXPAH00@Z  00ff81b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ff7530/s00ff7530.cpp  ?PopFront@SimPool34@@QAEXXZ  00ff8210  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ff7530/s00ff7530.cpp  ?SimQuickSortImpl@@YAXPAH0H@Z  00ff8260  /O2 /MD /Gy /TP /arch:SSE /fp:fast
