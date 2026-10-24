@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 008137f0  200 complete: MainWin::InitStringFactories; thiscall StringMan/refcount call shapes differ
 008138e0  114 complete: MainWin::ShutdownStringFactories; thiscall release + refcount store schedule differ
-00813c20  104 complete: LowerBoundUShort; the batch region also contains a second unlisted function at 0x813c60
 00813ca0  318 complete: cSPUIMainWin destructor; field-release order/registers differ [equiv: UNSUPPORTED, 0/1012 valid inputs (read faults)]
 00813550  8  complete: MainWin::FocusInput; f17 call schedule (vptr load, lea this+4, slot load) differs [equiv: PASS]
 00813e70  59  complete: MainWin::DoMessage; reg alloc (eax/edx/ecx) + zero-store sharing + stack-arg bool spill order [equiv: WEAK, 0 mismatches over 1925 valid inputs, 33% coverage]

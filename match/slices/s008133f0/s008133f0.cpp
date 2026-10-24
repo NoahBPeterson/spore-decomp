@@ -600,7 +600,7 @@ int LowerBoundUShort(int a, int b, unsigned short* key) {
         int step;
         do {
             step = n >> 1;
-            if (*(unsigned short*)(a + step * 2) <= *key) {
+            if (!(*key < *(unsigned short*)(a + step * 2))) {
                 a = a + 2 + step * 2;
                 n = n + (-1 - step);
             } else {
@@ -608,7 +608,7 @@ int LowerBoundUShort(int a, int b, unsigned short* key) {
             }
         } while (n > 0);
     }
-    return 0;
+    return a;
 }
 
 // ---------------------------------------------------------------------------
