@@ -155,10 +155,10 @@ int CircleLineIntersection(Vector2 p1, Vector2 p2, Vector2 center, float radius,
   float root = (float)sqrt(disc);
   float absTerm = (float)(fabs(dy) * root);
   float signTerm = root * sign * dx;
-  result[2] = (det * dy - signTerm) / dr2;
-  result[0] = (det * dy + signTerm) / dr2 + center.x;
-  result[1] = (absTerm - det * dx) / dr2 + center.y;
-  result[3] = (-(det * dx) - absTerm) / dr2;
+  result[2] = (det * dy - signTerm) / (dr * dr);
+  result[0] = (det * dy + signTerm) / (dr * dr) + center.x;
+  result[1] = (absTerm - det * dx) / (dr * dr) + center.y;
+  result[3] = (-(det * dx) - absTerm) / (dr * dr);
   result[2] = result[2] + center.x;
   result[3] = center.y + result[3];
   if (disc < 0.0f)
