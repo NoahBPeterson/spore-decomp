@@ -1,1 +1,2 @@
-# byte-exact functions for slice s00ab0590 (none)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00ab0590/s00ab0590.cpp  ?Stop@IStoppable@Swarm@EA@@UAEXH@Z  00ab0cf0  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast

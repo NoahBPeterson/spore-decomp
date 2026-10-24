@@ -1,1 +1,6 @@
 00ab0d90 EA::Swarm::cParticlesEffect::Update  # Claude-coined method name on the PDB class: same body as 00f60f00 (emit + age particles for dt); callees InitParticle 00aaeb90, DestroyParticle 00aaf670, UpdatePhysicsTimeStep 00aae900, update table 015655dc
+00ab0590 EA::Swarm::cParticlesEffect::Emit  # rate-curve clock + ceil(rate*scale)-count spawns from the global free list/pool, InitParticle/StepParticle, link + bounds; original inlines ceilf as SSE cvtss2si/cvtsi2ss/ucomiss/cmovb (callees 00926650, 00aaeb90, 00aaeb20, 00aaf670)
+00ab0720 EA::Swarm::cParticlesEffect::StepFrame  # empties the live particle list (unlink, zero links, --count, DestroyParticle 00aaf670), second pass re-zeroes, sentinel self-loop
+00ab0790 EA::Swarm::cParticlesEffect::cParticlesEffect  # constructor (description at +0x24, owner at +0x28); vptrs, list head, -1.0 rate-curve inverse, default vectors/matrices, sound indices -1
+00ab0c30 EA::Swarm::cParticlesEffect::~cParticlesEffect  # destructor: stop-sink release (vt +0x38), counted buffers 0x1fc/0x214, SpVector<RefVertex> 0x1e4 (00a8c440), IntrusiveList 0x18 (00620230), segments 0x1b0/0x1b4/0x1b8
+00ab0cf0 EA::Swarm::IStoppable::Stop  # flush the particles (StepFrame) + stop the looped sounds; IStoppable sub-object at +0x08 of cParticlesEffect; MATCH
