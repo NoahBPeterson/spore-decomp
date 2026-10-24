@@ -123,7 +123,8 @@ void FUN_00c0d3a0(cCreature* c);
 struct cTerrainCursor {
     VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6) VSLOT(7) VSLOT(8) VSLOT(9) VSLOT(10)
     VSLOT(11) VSLOT(12) VSLOT(13) VSLOT(14) VSLOT(15) VSLOT(16) VSLOT(17) VSLOT(18) VSLOT(19) VSLOT(20)
-    VSLOT(21) VSLOT(22)
+    VSLOT(21)
+    virtual void SetSelectionTarget(uint32_t target);                        // +0x58
     virtual void GetSelection(SPVector<cGameObjectPtr>& out);                // +0x5c
 };
 cTerrainCursor* GetGameTerrainCursor();                                      // 0x00b30d70
@@ -140,12 +141,16 @@ struct cHutBase0 { virtual void _h0(); uint32_t pad[12]; };
 struct cHut : cHutBase0, cGameObject {};
 
 struct cTribe {
-    VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6) VSLOT(7) VSLOT(8) VSLOT(9) VSLOT(10)
+    virtual int AddRef();                                                    // +0x00
+    virtual int Release();                                                   // +0x04
+    VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6) VSLOT(7) VSLOT(8) VSLOT(9) VSLOT(10)
     VSLOT(11) VSLOT(12) VSLOT(13) VSLOT(14) VSLOT(15) VSLOT(16) VSLOT(17) VSLOT(18) VSLOT(19) VSLOT(20)
     VSLOT(21) VSLOT(22) VSLOT(23) VSLOT(24)
     virtual const Vector3& GetPosition();                                    // +0x64
     VSLOT(26) VSLOT(27) VSLOT(28) VSLOT(29) VSLOT(30) VSLOT(31) VSLOT(32) VSLOT(33) VSLOT(34) VSLOT(35)
-    VSLOT(36) VSLOT(37) VSLOT(38) VSLOT(39) VSLOT(40)
+    VSLOT(36)
+    virtual uint32_t GetSelectedThing();                                     // +0x94
+    VSLOT(38) VSLOT(39) VSLOT(40)
     virtual int GetFoodAmount();                                             // +0xa4
     VSLOT(42)
     virtual cHut* GetTribeHut();                                             // +0xac
@@ -166,6 +171,45 @@ struct cTribe {
     void AddFood_00c94b50(float amount);
 };
 
+// Minimal vtable views for the singletons touched by 0x00cdbb10.
+struct ISimBase {
+    VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6)
+    virtual void v7();                                                       // +0x1c
+};
+struct ISimTicker {
+    VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6) VSLOT(7) VSLOT(8) VSLOT(9)
+    VSLOT(10) VSLOT(11) VSLOT(12) VSLOT(13) VSLOT(14) VSLOT(15) VSLOT(16) VSLOT(17) VSLOT(18) VSLOT(19)
+    virtual void v20(void* obj);                                             // +0x50
+};
+struct IStrategyVtbl {
+    VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6) VSLOT(7) VSLOT(8) VSLOT(9)
+    VSLOT(10) VSLOT(11) VSLOT(12) VSLOT(13) VSLOT(14) VSLOT(15) VSLOT(16) VSLOT(17) VSLOT(18) VSLOT(19)
+    VSLOT(20)
+    virtual void DispatchTribe(cTribe* tribe);                               // +0x54
+};
+
+namespace Simulator {
+class SimSingleton100 {                                                      // 0x100-byte simulator singleton
+public:
+    SimSingleton100();                                                       // 0x00cc5a70
+    char mData[0x100];
+};
+}
+
+class cCitySimulator {
+public:
+    cCitySimulator();                                                        // 0x00ae6a70
+    void AttachSubsystems();                                                 // 0x00ae7350
+    char mData[0x40];
+};
+
+void* operator new(size_t, const char*, int, int, int, int);                 // 0x00f473a0
+
+extern Simulator::SimSingleton100* g_pSimSingleton_0169b054;                 // 0x0169b054
+extern cCitySimulator*             g_pCitySimulator_0167a690;               // 0x0167a690
+
+ISimBase* FUN_00d51660();                                                    // 0x00d51660
+
 struct cTerrainSphere {
     uint32_t pad[0x10f0 / 4];
     float mf10f0;
@@ -176,10 +220,27 @@ struct cTerrainSphere {
     int GetState_00c75420();
 };
 
+// Game-data vector returned by NounManager::GetGameDataVector: begin/end at +0x04/+0x08
+// of the returned object, so the vector itself starts four bytes in.
+struct NounVector {
+    cTribe** mpBegin;                                                        // +0x00
+    cTribe** mpEnd;                                                          // +0x04
+    cTribe** mpCapacity;                                                     // +0x08
+};
+struct NounManagerData {
+    void*       mpUnused;                                                    // +0x00
+    NounVector  mVector;                                                     // +0x04
+};
+
 struct cGameNounManager {
     cTerrainSphere* GetCurrentTerrainSphere();                               // 0x00f67d90
     cTribe* GetPlayerTribe();                                                // 0x00bfc5f0
+    NounManagerData* GetGameDataVector(uint32_t, uint32_t, uint32_t,
+                                       uint32_t, uint32_t);                  // 0x00b21340
 };
+
+cTribe* FindClosestNPC(NounVector* vec, uint32_t param,
+                       bool (__cdecl* filter)(cTribe*));                     // 0x00cd5810
 cGameNounManager* NounManager();                                             // 0x00b3d300
 
 class cUIHints { public:
@@ -340,7 +401,12 @@ public:
     void SetMode_00cd6390(int);
     bool IsToolActive_00cd4460(uint32_t id);
     bool HandleUIMessage(void* window, const UTFWinMessage& message);
+    int FUN_00cdbb10();
+    cHut* FindClosestNPCHut(uint32_t param);
 };
+
+ISimTicker* SimTicker();                                                     // 0x00b3d330
+bool IsNonEmptyNPCTribe(cTribe* tribe);                                      // 0x00cd40c0
 }
 using SP::cTribeModeStrategy;
 
@@ -560,4 +626,79 @@ bool cTribeModeStrategy::HandleUIMessage(void* window, const UTFWinMessage& mess
         break;
     }
     return false;
+}
+
+// @ 0x00cdbcc0
+cHut* cTribeModeStrategy::FindClosestNPCHut(uint32_t param)
+{
+    NounManagerData* data = NounManager()->GetGameDataVector(
+        0xcd7d10, 0xd3d420, 0xaccbb0, 0xb1e500, 0x18c6d19);
+    cTribe* tribe = FindClosestNPC(&data->mVector, param, SP::IsNonEmptyNPCTribe);
+    if (tribe)
+        return tribe->GetTribeHut();
+    return 0;
+}
+
+// @ 0x00cdbb10
+int cTribeModeStrategy::FUN_00cdbb10()
+{
+    ISimTicker* ticker = SP::SimTicker();
+
+    Simulator::SimSingleton100* sim = g_pSimSingleton_0169b054;
+    if (!sim)
+    {
+        sim = new ("Simulator/SimSingleton", 0, 0, 0, 0) Simulator::SimSingleton100();
+        g_pSimSingleton_0169b054 = sim;
+    }
+    ((ISimBase*)sim)->v7();
+
+    sim = g_pSimSingleton_0169b054;
+    if (!sim)
+    {
+        sim = new ("Simulator/SimSingleton", 0, 0, 0, 0) Simulator::SimSingleton100();
+        g_pSimSingleton_0169b054 = sim;
+    }
+    ticker->v20(sim);
+
+    cCitySimulator* city = g_pCitySimulator_0167a690;
+    if (!city)
+    {
+        city = new ("Simulator/SimSingleton", 0, 0, 0, 0) cCitySimulator();
+        g_pCitySimulator_0167a690 = city;
+    }
+    city->AttachSubsystems();
+
+    city = g_pCitySimulator_0167a690;
+    if (!city)
+    {
+        city = new ("Simulator/SimSingleton", 0, 0, 0, 0) cCitySimulator();
+        g_pCitySimulator_0167a690 = city;
+    }
+    ticker->v20(city);
+
+    ((ISimBase*)FUN_00d51660())->v7();
+    ticker->v20(FUN_00d51660());
+
+    cTribe* tribe = NounManager()->GetPlayerTribe();
+    if (tribe)
+    {
+        tribe->AddRef();
+
+        NounManagerData* data = NounManager()->GetGameDataVector(
+            0xcd7d10, 0xd3d420, 0xaccbb0, 0xb1e500, 0x18c6d19);
+        NounVector* vec = &data->mVector;
+        cTribe** begin = vec->mpBegin;
+        cTribe** end = vec->mpEnd;
+        for (cTribe** it = begin; it != end; ++it)
+        {
+            if (*it != tribe)
+                ((IStrategyVtbl*)this)->DispatchTribe(*it);
+        }
+
+        cTerrainCursor* cursor = GetGameTerrainCursor();
+        uint32_t arg = tribe->GetSelectedThing();
+        cursor->SetSelectionTarget(arg);
+        return tribe->Release();
+    }
+    return 0;
 }
