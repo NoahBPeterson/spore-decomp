@@ -24,6 +24,7 @@ struct Sub {
     void fn2(Vector3);
     void fn3(Vector3);
     void fn4(Vector3);
+    void setUV(float a, float b);          // 0x00FBD880
 };
 
 struct Msg {
@@ -62,6 +63,8 @@ struct Obj {
 
     float lerp();
     void  set104(int v);
+    void  setE0(unsigned v);
+    void  setE4(unsigned v);
     void  setEC(int v);
     void  setF0(int v);
     void  set148(const Vector3& v);
@@ -162,8 +165,23 @@ void SelectPlanetRecord()
 // ---------------------------------------------------------------- not yet matching
 void FUN_00f318e0(void* self) { (void)self; }     // @ 0x00F318E0 (0x2cb0 ctor helper)
 void FUN_00f31b90() { }                            // @ 0x00F31B90
-void FUN_00f31c40(void* self, int v) { (void)self; (void)v; }  // @ 0x00F31C40
-void FUN_00f31cb0(void* self, int v) { (void)self; (void)v; }  // @ 0x00F31CB0
+// @ 0x00F31C40
+void Obj::setE0(unsigned v) {
+    if (v - 1 <= 0x3f) {
+        float f = (float)v;
+        mE0 = f;
+        m194->setUV((f - 0.5f) * 0.015625f, (mE4 - 0.5f) * 0.015625f);
+    }
+}
+
+// @ 0x00F31CB0
+void Obj::setE4(unsigned v) {
+    if (v - 1 <= 0x3f) {
+        float f = (float)v;
+        mE4 = f;
+        m194->setUV((mE0 - 0.5f) * 0.015625f, (f - 0.5f) * 0.015625f);
+    }
+}
 void FUN_00f31d80(void* self, int v) { (void)self; (void)v; }  // @ 0x00F31D80
 void FUN_00f31de0(void* self, int v) { (void)self; (void)v; }  // @ 0x00F31DE0
 void FUN_00f31e60(void* self) { (void)self; }      // @ 0x00F31E60

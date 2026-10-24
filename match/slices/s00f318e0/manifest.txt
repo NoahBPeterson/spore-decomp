@@ -14,3 +14,5 @@ slices/s00f318e0/s00f318e0.cpp  ?ReleaseGlobal@@YAXXZ  00f32410  /O2 /MD /Gy /EH
 slices/s00f318e0/s00f318e0.cpp  ?below@C@@QAEHH@Z  00f326d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00f318e0/s00f318e0.cpp  ?onMsg@Obj@@QAEDHH@Z  00f326f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00f318e0/s00f318e0.cpp  ?release100@Obj@@QAEXXZ  00f323c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f318e0/s00f318e0.cpp  ?setE0@Obj@@QAEXI@Z  00f31c40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f318e0/s00f318e0.cpp  ?setE4@Obj@@QAEXI@Z  00f31cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
