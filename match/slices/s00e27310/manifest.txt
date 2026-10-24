@@ -1,0 +1,16 @@
+slices/s00e27310/s00e27310.cpp  ?FUN_00e27be0@COps@@QAEEIPAX@Z  00e27be0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e27310/s00e27310.cpp  ?FUN_00e27c30@cSPUIPosseItem@@QAEXII@Z  00e27c30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e27310/s00e27310.cpp  ?SetCaptionText@cSPUIPosse@@QAEXPBG@Z  00e27c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e27310/s00e27310.cpp  ?init@cSPUIPosseItemTribeBaby@@QAEEPAVcSPUIPosse@@@Z  00e27c90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e27310/s00e27310.cpp  ?SetState_BlinkGuard@cSPUIPosseItem@@QAEXI@Z  00e27df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e27310/s00e27310.cpp  ?init@cSPUIPosseItemTribe@@QAEEPAVcSPUIPosse@@@Z  00e27e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e27310/s00e27310.cpp  ?init@cSPUIPosseItemSpace@@QAEEPAVcSPUIPosse@@@Z  00e27ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e27310/s00e27310.cpp  ?SetState_SpaceGuard@cSPUIPosseItem@@QAEXI@Z  00e27f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e27310/s00e27310.cpp  ?SetState_Skip24@cSPUIPosseItem@@QAEXI@Z  00e27fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e27310/s00e27310.cpp  ?init@cSPUIPosseItemCreature@@QAEEPAVcSPUIPosse@@@Z  00e27fc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e27310/s00e27310.cpp  ?SetState_Only1@cSPUIPosseItem@@QAEXI@Z  00e28010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e27310/s00e27310.cpp  ?SetState_Skip234@cSPUIPosseItem@@QAEXI@Z  00e28030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e27310/s00e27310.cpp  ?init@cSPUIPosseItemPlot@@QAEEPAVcSPUIPosse@@@Z  00e28050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e27310/s00e27310.cpp  ?FUN_00e28230@cSPUIPosseItem@@QAEXXZ  00e28230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e27310/s00e27310.cpp  ?push_back@cVec8@@QAEXPAUcRefPair@@@Z  00e280e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e27310/s00e27310.cpp  ?resize@cVec8@@QAEXI@Z  00e28250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
