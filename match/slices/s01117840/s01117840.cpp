@@ -111,7 +111,7 @@ struct __declspec(align(16)) hkVector4
 	__forceinline void normalize3()
 	{
 		const float len2 = lengthSquared3();
-		const float inv = (len2 == kZero) ? kZero : kOne / hkMath_sqrt(len2);
+		const float inv = (len2 != kZero) ? kOne / hkMath_sqrt(len2) : kZero;
 		mul4(inv);
 	}
 	// Plane through p with this (unit) normal: w = -n.p
@@ -123,6 +123,8 @@ class hkGeomConvexHullBuilder
 public:
 	static void generateHullFromPlanarPoints(const hkVector4& normal, const hkVector4* points, int numPoints,
 		hkArray<hkVector4>& usedPoints, hkArray<hkVector4>& planeEquations);
+	static void removeCollinearVertices(hkArray<hkVector4>& verts, float tolerance);   // 0x01118340
+	static void removeFlaggedVertices(hkArray<hkVector4>& verts);                      // 0x01117140
 };
 
 // Turns the edge (inside a plane with the given in-plane normal) into an outward unit side plane through p.
@@ -271,4 +273,61 @@ void hkGeomConvexHullBuilder::generateHullFromPlanarPoints(const hkVector4& norm
 		plane.setCross(edgeIn, planeEquations[0]);
 		makeSidePlane(plane, edgeOut, next);
 	}
+}
+
+// @ 0x01118340
+// Drops vertices that are collinear with two later ones: for every triple i<j<k it compares the
+// normalized edge directions Vi->Vj, Vi->Vk and Vk->Vj; when an edge pair is (nearly) parallel and
+// points the opposite way, the middle vertex is flagged (w = 1.0f) and finally removed.
+void hkGeomConvexHullBuilder::removeCollinearVertices(hkArray<hkVector4>& verts, float tolerance)
+{
+	for (int i = 0; i < verts.getSize(); i++)
+		verts[i].w = 0.0f;
+
+	for (int i = 0; i < verts.getSize(); i++)
+	{
+		for (int j = i + 1; j < verts.getSize(); j++)
+		{
+			for (int k = j + 1; k < verts.getSize(); k++)
+			{
+				if (verts[i].w == 1.0f || verts[j].w == 1.0f || verts[k].w == 1.0f)
+					continue;
+
+				hkVector4 a;  a.setSub4(verts[i], verts[j]);  a.normalize3();
+				hkVector4 na; na.setNeg4(a);
+				hkVector4 b;  b.setSub4(verts[i], verts[k]);  b.normalize3();
+				hkVector4 nb; nb.setNeg4(b);
+				hkVector4 c;  c.setSub4(verts[k], verts[j]);  c.normalize3();
+				hkVector4 nc; nc.setNeg4(c);
+
+				hkVector4 cross1; cross1.setCross(a, b);
+				const float len1 = cross1.lengthSquared3();
+				const float dot1 = a.dot3(b);
+				if (len1 >= tolerance || dot1 >= 0.0f)
+				{
+					hkVector4 cross2; cross2.setCross(c, nb);
+					const float len2 = cross2.lengthSquared3();
+					const float dot2 = c.dot3(nb);
+					if (len2 >= tolerance || dot2 >= 0.0f)
+					{
+						hkVector4 cross3; cross3.setCross(na, nc);
+						const float len3 = cross3.lengthSquared3();
+						const float dot3 = nc.dot3(na);
+						if (len3 < tolerance && dot3 < 0.0f)
+							verts[j].w = 1.0f;
+					}
+					else
+					{
+						verts[k].w = 1.0f;
+					}
+				}
+				else
+				{
+					verts[i].w = 1.0f;
+				}
+			}
+		}
+	}
+
+	removeFlaggedVertices(verts);
 }
