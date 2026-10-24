@@ -1,4 +1,12 @@
-011f2480 rw::graphics::GlobalState::D3D9Initialize  # dev-PDB name; resets the D3D9 state mirror (render/texture-stage/sampler state, dirty+valid masks) then Dispatch + D3D9ClearDirtyFlags
-011f1c20 rw::graphics::GlobalState::Dispatch  # callee, pdb
-011f1b20 rw::graphics::GlobalState::D3D9ClearDirtyFlags  # callee: zeroes the dirty masks
-011f8af0 rw::graphics::DevCapsManager::GetD3DCAPS9  # returns the cached D3DCAPS9*
+011f21a0 ?GlobalState_D3D9Sync@@YAXXZ  # d3d9 state-bank flush; calls the 0x011f1400/0x011f1810/0x011f18b0/0x011f1950/0x011f1a10 dispatch helpers (partial)
+011f2bb0 ?GlobalState_D3D9Start@@YAHXZ  # pdb_names GlobalState::D3D9Start; calls D3D9InitializeBitShiftTable then D3D9Initialize
+011f2bc0 ?GlobalState_D3D9SetActiveVertexDescriptor@@YIXPAUVertexDescriptor@@@Z  # pdb_candidates GlobalState::D3D9SetActiveVertexDescriptor; device vtable +0x15c = SetVertexDeclaration
+011f2bf0 ?GlobalState_D3D9ClearActiveVertexDescriptor@@YAXXZ  # pdb_candidates GlobalState::D3D9ClearActiveVertexDescriptor; clears 0x016fa55c and 0x016fa558
+011f2c00 ?Create@VertexDescriptor@@SAHPAU1@@Z  # VertexDescriptor::Create; AreEqual cache walk + device vtable +0x158
+011f2d20 ?Destroy@VertexDescriptor@@SAXPAU1@@Z  # VertexDescriptor::Destroy; declaration Release (vtable +0x08) then unlink and free
+011f2e10 ?VertexDescriptor_CreateWrapper@@YA_NPAUVertexDescriptor@@@Z  # thin wrapper: push pDesc, call VertexDescriptor::Create at 0x011f2c00
+011f2e40 ?FindElement@VertexDescriptor@@QAEII@Z  # VertexDescriptor::FindElement; thiscall ret 4
+011f2e70 ?AreEqual@VertexDescriptor@@SA_NABU1@0@Z  # VertexDescriptor::AreEqual; compares mHash/mbFlags/mu16Count then the element array
+011f2f10 ?SetElement@VertexDescriptor@@QAEXIPBX@Z  # VertexDescriptor::SetElement; thiscall ret 8; uses g_declUsageTable/g_declTypeTable/g_elemHashTable
+011f2fd0 ?ElementHashFunction@VertexDescriptor@@SAIEE@Z  # VertexDescriptor::ElementHashFunction; 8-case switch jump table
+011f3070 ?rwg_D3D9FindBestDeclType@@YAHI@Z  # rwg::D3D9FindBestDeclType; argument arrives in EAX from the /LTCG caller

@@ -1,0 +1,4 @@
+slices/s011f21a0/s011f21a0.cpp  ?GlobalState_D3D9Start@@YAHXZ  011f2bb0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s011f21a0/s011f21a0.cpp  ?GlobalState_D3D9ClearActiveVertexDescriptor@@YAXXZ  011f2bf0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s011f21a0/s011f21a0.cpp  ?VertexDescriptor_CreateWrapper@@YA_NPAUVertexDescriptor@@@Z  011f2e10  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s011f21a0/s011f21a0.cpp  ?ElementHashFunction@VertexDescriptor@@SAIEE@Z  011f2fd0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
