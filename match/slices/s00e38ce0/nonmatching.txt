@@ -1,0 +1,7 @@
+# Slice s00e38ce0 nonmatching functions (compiled; behaviourally faithful but not byte-exact).
+# Format: <va> <difftest-verdict> <reason>
+00e38ce0 WEAK coverage below 60%; 597/749 bytes differ: stack frame 0xbc vs 0x70 (compiler-generated cRef/IRef temporaries around AddAnimation not reproduced) and x87/SSE scheduling of the two animation target computations
+00e38fd0 WEAK coverage below 60%; 192/241 bytes differ: frame 0x98 vs 0x70 (missing cRef temp locals) and x87 scheduling; f4c0/arg order otherwise matches
+00e390d0 WEAK coverage below 60%; 231/299 bytes differ: frame 0x98 vs 0x78 (missing cRef temp locals) plus x87/SSE ordering of the GetRect/GetMainWindowArea results
+00e39200 WEAK coverage below 60%; 129/245 bytes differ: frame 0xa8 vs 0x80 (missing cRef temp locals); original keeps the window area in an SSE register while ours uses x87
+00e393b0 PASS 400 valid inputs, 100% coverage; only 17/37 bytes differ: original widens the IsVisible() bool with movzx eax,al and places the ret0 block before ret1, ours tests al directly with the epilogues swapped; al-value identical
