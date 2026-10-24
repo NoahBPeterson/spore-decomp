@@ -1,0 +1,3 @@
+00d239a0 ?F_d239a0@Ctl@SP@@QAEXXZ  # Ctl::F_d239a0 (camera/avatar facing update: snap-projected axis from locomotion)
+00d24070 ?F_d24070@Ctl@SP@@QAEXXZ  # Ctl::F_d24070 (facing update: projection + acos snap vs key-angle rotate)
+00d24550 ?F_d24550@Ctl@SP@@QAEXXZ  # Ctl::F_d24550 (facing-update dispatcher: modifier keys, gating, calls d239a0/d24070)

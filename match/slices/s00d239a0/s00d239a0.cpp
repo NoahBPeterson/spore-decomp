@@ -13,11 +13,8 @@ namespace SP {
 
 struct Vector3 {
     float x, y, z;
-    Vector3() {}
-    Vector3(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
-    Vector3(const Vector3& v) : x(v.x), y(v.y), z(v.z) {}
 };
-__declspec(align(16)) struct Quat { float x, y, z, w; };
+struct Quat { float x, y, z, w; };
 
 Vector3* __cdecl normalized_safe(Vector3* out, const Vector3* in);          // 0x00449c20
 Vector3* __cdecl F_59aed0(Vector3* out, const Vector3* v, const Quat* q);   // 0x0059aed0 rotate v by q
@@ -79,6 +76,10 @@ cGameNounManager* NounManager();                   // 0x00b3d300
 cGameInputManager* GameInputManager();             // 0x00b3d250
 uint32_t GetCurrentGameMode();                     // 0x00b5b800
 extern const Vector3 g_c;                          // 0x0169df44
+extern float g15827f4;                             // 0x015827f4
+extern float g15827f8;                             // 0x015827f8
+bool IsModifierKeyDown(int key);                   // 0x008d2fb0
+bool FUN_00d20970();                               // 0x00d20970
 
 struct Ctl {
     char pad0[0x38];
@@ -87,9 +88,26 @@ struct Ctl {
     Vector3 v48;                                   // +0x48
     char pad2[0x60 - 0x54];
     Quat q60;                                      // +0x60
-    char pad3[0x114 - 0x70];
+    Vector3 v70;                                   // +0x70
+    char pad3[0xb8 - 0x7c];
+    Vector3 vB8;                                   // +0xb8
+    char pad4[0xf8 - 0xc4];
+    float fF8;                                     // +0xf8
+    char pad5[0x114 - 0xfc];
     Vector3 v114;                                  // +0x114
+    char pad6[0x174 - 0x120];
+    float f174;                                    // +0x174
+    char pad7[0x1ec - 0x178];
+    int m1ec;                                      // +0x1ec
+    int m1f0;                                      // +0x1f0
+    bool m1f4;                                     // +0x1f4
+    char pad8[0x2b2 - 0x1f5];
+    bool m2b2;                                     // +0x2b2
+    char pad9[1];
+    bool m2b4;                                     // +0x2b4
     void F_d239a0();
+    void F_d24070();
+    void F_d24550();
 };
 
 // @ 0x00d239a0
@@ -192,6 +210,153 @@ void Ctl::F_d239a0()
             *(float*)((char*)this + 0xf8) = f;
             *((uint8_t*)this + 0x2b2) = 0;
             *(int*)((char*)this + 0x1ec) = 1;
+        }
+    }
+}
+
+// @ 0x00d24070
+void Ctl::F_d24070()
+{
+    cGameInputManager* input = GameInputManager();
+    cCreatureAnimal* av = NounManager()->GetAvatar();
+    bool enabled = false;
+    if (GetCurrentGameMode() == 0x1654c05) {
+        enabled = true;
+    } else if (cCreatureModeStrategy::Instance()->mpInput.get()) {
+        enabled = cCreatureModeStrategy::Instance()->mpInput.get()->mbEnabled;
+    } else if (g_other->mpStrat) {
+        enabled = g_other->mpStrat->mbEnabled;
+    }
+    if (!av) return;
+    if (av->mbDead) return;
+    if (!input) return;
+    if (!enabled) return;
+
+    // 16-byte scratch slots (used as both Vector3 and Quat); plain 4-byte alignment.
+    Quat U, V, W;
+    Vector3 g;
+    av->mLoco.F_5c(&g);
+    Vector3 a;
+    a.x = v70.x; a.y = v70.y; a.z = v70.z;
+    Vector3* n = normalized_safe(TV(W), &v48);
+    float d = (a.y * n->y + a.z * n->z) + a.x * n->x;
+    n->x = a.x - d * n->x;
+    n->y = a.y - d * n->y;
+    n->z = a.z - d * n->z;
+    normalized_safe(&a, TV(W));
+
+    Vector3* m = normalized_safe(TV(V), &v114);
+    float d2 = (m->z * g.z + m->y * g.y) + m->x * g.x;
+    n->x = g.x - d2 * m->x;
+    n->y = g.y - d2 * m->y;
+    n->z = g.z - d2 * m->z;
+    Vector3* u = normalized_safe(TV(U), TV(W));
+
+    Vector3 uu = *u;
+    CamState* cam = F_d2e340();
+    cam->v18 = uu;
+    cam = F_d2e340();
+    float c = (cam->v18.y * a.y + cam->v18.z * a.z) + cam->v18.x * a.x;
+    if (c > 0.99f) {
+        cam = F_d2e340();
+        float cc = (cam->v18.y * a.y + cam->v18.z * a.z) + cam->v18.x * a.x;
+        float lo = -1.0f, hi = 1.0f;
+        __asm {
+            movss xmm0, cc
+            maxss xmm0, lo
+            minss xmm0, hi
+            movss cc, xmm0
+        }
+        float ang = acosf(cc);
+        Vector3* p = normalized_safe(TV(U), &v114);
+        float s = ((p->z * g.y - p->y * g.z) * a.x
+                 + (p->x * g.z - p->z * g.x) * a.y)
+                 + (p->y * g.x - p->x * g.y) * a.z;
+        if (s > 0.0f) ang = ang * -1.0f;
+        f38 = vB8.x;
+        f3c = vB8.y;
+        f40 = vB8.z;
+        f174 = ang;
+        fF8 = ang;
+        m2b4 = 0;
+        m1ec = 1;
+        return;
+    }
+
+    float ang = 0.0f;
+    if (GameInputManager()->IsKeyDown(3)) {
+        ang = (GetCurrentGameMode() == 0x1654c05 ? g15827f8 : g15827f4) * 0.017453292f;
+    } else if (GameInputManager()->IsKeyDown(4)) {
+        ang = (GetCurrentGameMode() == 0x1654c05 ? g15827f8 : g15827f4) * -0.017453292f;
+    }
+    if (fabsf(ang) > 1.5258789e-05f) {
+        Vector3* v = normalized_safe(TV(U), av->mLoco.F_2c());
+        Quat* q = F_c64ad0(TQ(V), F_59b060(TQ(W), v, ang));
+        Vector3* r = F_59aed0(TV(U), &F_d2e340()->v18, q);
+        F_d2e340()->v18 = *r;
+        Vector3* nn = normalized_safe(TV(U), &F_d2e340()->v18);
+        Vector3 nc = *nn;
+        F_d2e340()->v18 = nc;
+        F_d2e340()->b11 = 1;
+        F_d2e340()->b0f = 1;
+        cCreatureModeInputStrategy* p2 = cCreatureModeStrategy::Instance()->mpInput.get();
+        if (p2 && p2->mbEnabled)
+            p2->UpdateAvatarGoal(false, true);
+    }
+}
+
+// @ 0x00d24550
+void Ctl::F_d24550()
+{
+    if (IsModifierKeyDown(0x3ea) || IsModifierKeyDown(0x3e9)) {
+        m1ec = 0;
+        m1f0 = 0;
+    }
+    if (m1ec == 0 && m1f0 == 1) {
+        bool ok = FUN_00d20970();
+        cCreatureAnimal* av = NounManager()->GetAvatar();
+        if (av && ok) {
+            if (m1f4) {
+                F_d239a0();
+                return;
+            }
+            F_d24070();
+            return;
+        }
+        m1ec = 1;
+        return;
+    }
+    if (m1ec == 1 && m1f0 == 0) {
+        bool ok = FUN_00d20970();
+        cCreatureAnimal* av = NounManager()->GetAvatar();
+        if (av && ok) {
+            Vector3 w;
+            Vector3* r = F_59aed0(&w, &g_c, &q60);
+            Vector3 a;
+            a.x = r->x; a.y = r->y; a.z = r->z;
+            Vector3* n = normalized_safe(&w, &v48);
+            float d = (a.y * n->y + a.z * n->z) + a.x * n->x;
+            w.x = a.x - d * n->x;
+            w.y = a.y - d * n->y;
+            w.z = a.z - d * n->z;
+            normalized_safe(&a, &w);
+            w.x = (f40 * a.z + f3c * a.y) + f38 * a.x;
+            float lo = -1.0f, hi = 1.0f;
+            __asm {
+                movss xmm0, w.x
+                maxss xmm0, lo
+                minss xmm0, hi
+                movss w.x, xmm0
+            }
+            float ang = acosf(w.x);
+            Vector3* p = normalized_safe(&w, &v114);
+            float s = ((f38 * p->y - p->x * f3c) * a.z
+                     + (p->x * f40 - f38 * p->z) * a.y)
+                     + (p->z * f3c - p->y * f40) * a.x;
+            if (s > 0.0f) ang = ang * -1.0f;
+            f174 = ang;
+            fF8 = ang;
+            m1ec = 0;
         }
     }
 }
