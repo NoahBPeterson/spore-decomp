@@ -4,7 +4,7 @@
 
 extern "C" void FUN_0045d790(void*);              // 0x45d790 (vector assign, masked)
 extern "C" void* FUN_0045da80(void* dst, void* src); // 0x45da80
-extern "C" void* _Unchecked_idl0(void* dst, void* a, void* b);
+extern "C" void* _Unchecked_idl0(void* dst, void* a, void* b); // 0x0045daa0
 
 // =====================================================================
 // @ 0x45bc20  free-list unlink (reverse the free chain from `index`)
@@ -105,52 +105,61 @@ void Skel::Compact()
 // =====================================================================
 // @ 0x45c0f0  rebuild skinning arrays into local copies + remap indices
 // =====================================================================
-struct Skin {
-    char      pad0[0x100];
-    char      vec100[0x28];   // +0x100
-    char      vec128[0x28];   // +0x128
-    char      pad2[0x0c];
-    char*     geomA;          // +0x114
-    char*     geomAEnd;       // +0x118
-    char      pad3[0x20];
-    char*     geomB;          // +0x13c
-    char*     geomBEnd;       // +0x140
-    char      pad4[0x0c];
-    char*     geomC;          // +0x128? (see code)
-    void      Rebuild();
+// 0x14-byte vector slot holding 0x40-byte elements (three pointers + allocator).
+struct SkinVec {
+    char*  mpBegin;                        // +0x00
+    char*  mpEnd;                          // +0x04
+    char*  mpCapacity;                     // +0x08
+    void*  mpAlloc;                        // +0x0c
+
+    void Assign(const SkinVec& src);       // 0x0045d790
 };
 
+struct Skin {
+    char     pad00[0xec];   // +0x000
+    int*     pIdx;          // +0x0ec  element -> source element index (-1 = keep)
+    char     padF0[0x10];   // +0x0f0
+    SkinVec  v100;          // +0x100
+    SkinVec  v114;          // +0x114  live position array
+    SkinVec  v128;          // +0x128
+    SkinVec  v13c;          // +0x13c  live normal array
+
+    void Rebuild();
+};
+
+// @ 0x45c0f0
 void Skin::Rebuild()
 {
     char pad_d4[64];
     char pad_94[64];
     char pad_54[64];
 
-    FUN_0045d790(vec100);
-    FUN_0045d790(vec128);
+    v114.Assign(v100);
+    v13c.Assign(v128);
 
-    unsigned int i = 0;
-    unsigned int n = (unsigned int)((geomAEnd - geomA) >> 6);
+    int i = 0;
+    int n = (int)((v114.mpEnd - v114.mpBegin) >> 6);
     for (; i < n; i = i + 1) {
-        char* src = (char*)FUN_0045da80(pad_54, geomA + i * 0x40);
-        char* dst = geomA + i * 0x40;
+        char* src = (char*)FUN_0045da80(pad_54, v114.mpBegin + i * 0x40);
+        char* dst = v114.mpBegin + i * 0x40;
         for (int k = 0; k < 0x10; k = k + 1) {
             ((uint32_t*)dst)[k] = ((uint32_t*)src)[k];
         }
-        char* src2 = (char*)FUN_0045da80(pad_94, geomB + i * 0x40);
-        char* dst2 = geomB + i * 0x40;
+        char* src2 = (char*)FUN_0045da80(pad_94, v13c.mpBegin + i * 0x40);
+        char* dst2 = v13c.mpBegin + i * 0x40;
         for (int k = 0; k < 0x10; k = k + 1) {
             ((uint32_t*)dst2)[k] = ((uint32_t*)src2)[k];
         }
     }
 
-    unsigned int j = 0;
-    unsigned int m = (unsigned int)((geomAEnd - geomA) >> 6);
+    int j = 0;
+    int m = (int)((v128.mpEnd - v128.mpBegin) >> 6);
     for (; j < m; j = j + 1) {
-        if (*(int*)((char*)this + 0xec + j * 4) >= 0) {
-            int idx = *(int*)((char*)this + 0xec + j * 4);
-            char* src = (char*)_Unchecked_idl0(pad_d4, geomA + j * 0x40, geomB + idx * 0x40);
-            char* dst = geomA + j * 0x40;
+        if (pIdx[j] >= 0) {
+            int idx = pIdx[j];
+            char* src = (char*)_Unchecked_idl0(pad_d4, v128.mpBegin + j * 0x40,
+                                               v13c.mpBegin + idx * 0x40);
+            char* dst = v128.mpBegin + j * 0x40;
             for (int k = 0; k < 0x10; k = k + 1) {
                 ((uint32_t*)dst)[k] = ((uint32_t*)src)[k];
             }
