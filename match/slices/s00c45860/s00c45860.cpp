@@ -475,7 +475,7 @@ void cSPMission::UpdateStarMapEffects(u8 useZero)
 {
     cGameTimeManager* gt = GameTimeManager();
     u64 time = gt->GetTime();
-    u64 rem = aullrem(time, 1000);
+    u64 rem = time % 1000;
     f32 frac = (f32)((double)rem * g_oneHalf);
 
     if (mStarMapIconEffect != 0xffffffff) {

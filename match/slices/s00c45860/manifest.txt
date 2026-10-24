@@ -11,3 +11,4 @@ slices/s00c45860/s00c45860.cpp  ?QueueConversation@cSPMission@@QAEIXZ  00c46800 
 slices/s00c45860/s00c45860.cpp  ?CanAccept@cSPMission@@QAEIXZ  00c46840  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 slices/s00c45860/s00c45860.cpp  ?ctor@cGenericPressureEvent@@QAEPAV1@XZ  00c46500  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 slices/s00c45860/s00c45860.cpp  ?PostLoad@cSPMission@@QAEXXZ  00c466d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c45860/s00c45860.cpp  ?IsTargetPlanetClue@cSPMission@@QAEII@Z  00c45d80  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
