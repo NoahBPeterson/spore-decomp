@@ -23,7 +23,6 @@ extern "C" void  __cdecl FUN_011f2bc0(void* p);
 extern "C" void  __cdecl FUN_011f9710(void* p);
 extern "C" void  __cdecl SetShaderData(void* p);
 extern "C" void  __cdecl FUN_00759420(void* p);
-extern "C" void  __cdecl FUN_007594f0(void* a, void* b);
 extern "C" int   __cdecl FUN_00b41ea0(void* a, void* b, void* c, unsigned char d);
 extern "C" void  __cdecl M3Assign(void* dst, const void* src);
 extern float g_f140da1c, g_f13f51ac;
@@ -37,7 +36,8 @@ struct Elem14 { int* begin; int* end; int* cap; int a, b; };
 struct Elem14Vec {
     Elem14* mBegin; Elem14* mEnd; Elem14* mCap;
     void InsertN(void* pos, unsigned n, void* val);
-    void ResizeN(unsigned n, void* val);
+    void ResizeN(unsigned n);
+    void EraseN(void* first, void* last);   // 0x007594F0 (ecx=vector, ret 8)
     int* RangeAssign(int* first, int* last);
     void F59950(void* first, void* last, void* out);
     void F59ba0(void* first, void* last);
@@ -69,12 +69,14 @@ void Elem14Vec::InsertN(void* pos, unsigned n, void* val) {
 // ---------------------------------------------------------------------------
 // @ 0x007597d0
 // ---------------------------------------------------------------------------
-void Elem14Vec::ResizeN(unsigned n, void* val) {
-    unsigned have = (unsigned)(((char*)mEnd - (char*)mBegin) / 0x14);
-    if (have > n)
-        FUN_007594f0((char*)mBegin + n * 0x14, mEnd);
-    else
-        InsertN(mEnd, n - have, val);
+void Elem14Vec::ResizeN(unsigned n) {
+    unsigned have = (unsigned)((int32_t)((char*)mEnd - (char*)mBegin) / 0x14);
+    if (have > n) {
+        EraseN((char*)mBegin + n * 0x14, mEnd);
+    } else {
+        Elem14 value = {};
+        InsertN(mEnd, n - have, &value);
+    }
 }
 
 // ---------------------------------------------------------------------------
