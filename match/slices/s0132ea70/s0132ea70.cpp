@@ -11,7 +11,7 @@ typedef int                i32;
 // ---------------------------------------------------------------------------------------------
 // Globals
 // ---------------------------------------------------------------------------------------------
-extern "C" void* g_rbtreeSentinels;     // 0x168caf4
+struct cRbtreeSentinel;
 
 // The global serializer-list block populated by InitSerializerList (0x156fa30, 0x3c bytes).
 struct cSerializerInit {
@@ -54,9 +54,11 @@ struct cRbtreeSentinel {
     u8    mPad14[0x1c - 0x14];          // 0x14
 };
 
+extern "C" cRbtreeSentinel g_rbtreeSentinels[3]; // 0x168caf4
+
 void __cdecl InitRbtreeSentinels()
 {
-    cRbtreeSentinel* node = (cRbtreeSentinel*)g_rbtreeSentinels;
+    cRbtreeSentinel* node = (cRbtreeSentinel*)0x0168caf4;
     i32 i = 2;
     do {
         node->mField0c = 0;
@@ -180,30 +182,32 @@ extern "C" char e7_f30[];   // 0x00b1fbf0
 extern "C" char e7_f34[];   // 0x0057cde0
 extern "C" char e7_f38[];   // 0x00572810
 
+#include <string.h>
+
 #define DESC_ENTRY(idx, name, tag, size, f20, f24, f28, f2c, f30, f34, f38)  \
     {                                                                        \
-        cSerializerDesc d;                                                   \
-        d.mpName = (const char*)(name);                                      \
-        d.mTag = (tag);                                                      \
-        d.mpField18 = 0;                                                     \
-        d.mpField1c = 0;                                                     \
-        d.mpFn20 = (void*)(f20);                                             \
-        d.mpFn24 = (void*)(f24);                                             \
-        d.mpFn28 = (void*)(f28);                                             \
-        d.mpFn2c = (void*)(f2c);                                             \
-        d.mpFn30 = (void*)(f30);                                             \
-        d.mpFn34 = (void*)(f34);                                             \
-        d.mpFn38 = (void*)(f38);                                             \
-        d.mSize = (size);                                                    \
-        g_serializerDescs[idx] = d;                                          \
+        u32 local[15];                                                       \
+        local[0] = (u32)(name);                                              \
+        local[1] = (tag);                                                    \
+        local[6] = 0;                                                        \
+        local[7] = 0;                                                        \
+        local[8] = defaultOffset;                                            \
+        local[9] = (u32)(f24);                                               \
+        local[10] = (u32)(f28);                                              \
+        local[11] = (u32)(f2c);                                              \
+        local[12] = (u32)(f30);                                              \
+        local[13] = (u32)(f34);                                              \
+        local[14] = (u32)(f38);                                              \
+        local[2] = (size);                                                   \
+        memcpy(&g_serializerDescs[idx], local, 0x3c);                        \
     }
 
 void __cdecl InitSerializerDescs()
 {
-    void* fn20 = (void*)g_fn692ca0;
-    DESC_ENTRY(0, g_name_mCenterAxis, 0x02f1a511, 0x338, fn20, e0_f24, e0_f28, e0_f2c, e0_f30, e0_f34, e0_f38)
-    DESC_ENTRY(1, g_name_mpCity, 0x02f1a512, 0x264, fn20, e1_f24, e1_f28, e1_f2c, e1_f30, e1_f34, e1_f38)
-    DESC_ENTRY(2, g_name_mpDock, 0x06567f8d, 0x10c, fn20, e2_f24, e2_f28, e2_f2c, e2_f30, e2_f34, e2_f38)
+    u32 defaultOffset = (u32)g_fn692ca0;
+    DESC_ENTRY(0, g_name_mCenterAxis, 0x02f1a511, 0x338, g_fn692ca0, e0_f24, e0_f28, e0_f2c, e0_f30, e0_f34, e0_f38)
+    DESC_ENTRY(1, g_name_mpCity, 0x02f1a512, 0x264, g_fn692ca0, e1_f24, e1_f28, e1_f2c, e1_f30, e1_f34, e1_f38)
+    DESC_ENTRY(2, g_name_mpDock, 0x06567f8d, 0x10c, g_fn692ca0, e2_f24, e2_f28, e2_f2c, e2_f30, e2_f34, e2_f38)
     DESC_ENTRY(3, g_name_mWallSize, 0x0474ea17, 0x254, e3_f20, e3_f24, e3_f28, e3_f2c, e3_f30, e3_f34, e3_f38)
     DESC_ENTRY(4, g_name_mStyle, 0x0474ea18, 0x344, e4_f20, e4_f24, e4_f28, e4_f2c, e4_f30, e4_f34, e4_f38)
     DESC_ENTRY(5, g_name_mLevel, 0x0474ea19, 0x348, e5_f20, e5_f24, e5_f28, e5_f2c, e5_f30, e5_f34, e5_f38)
