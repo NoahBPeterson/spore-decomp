@@ -64,33 +64,66 @@ static const int kGroupTypeCameraConfig = 0;
 // ---- items of slice s007c5a90 end
 
 // ---- items of slice s007c6750 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct HTStub {                     // 0x20-byte EASTL hashtable head
+    u8    mEmpty[4];                // +0x00
+    int   mpBucketArray;            // +0x04
+    u32   mnBucketCount;            // +0x08
+    u32   mnElementCount;           // +0x0c
+    float mfLoadFactor;             // +0x10 (1.0f)
+    float mfGrowthFactor;           // +0x14 (2.0f)
+    int   mnUnk18;                  // +0x18 (0)
+    int   mnUnk1c;                  // +0x1c (ctor leaves it alone)
+    void DoFreeNodes(int bucketArray, u32 bucketCount) throw();   // 0x00693230 (thiscall, ret 8)
+};
+struct VecStub {                    // EASTL vector head (only erase is used here)
+    void** mpBegin;                 // +0x00
+    void** mpEnd;                   // +0x04
+    void** mpCapacity;              // +0x08
+    void erase(void** first, void** last);   // 0x00e25bd0 (thiscall, ret 8)
+};
+struct IMessageServer {             // 0x67dcc0 result
+    virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3();
+    virtual void m4(); virtual void m5(); virtual void m6(); virtual void m7();
+    virtual void m8(void*, unsigned int);
+    virtual void m9(); virtual void m10();
+    virtual void m11(void* owner, unsigned int id, unsigned int arg);   // offset 0x2c
+};
+struct ICheatManager {              // 0x67de20 result; slot 7 (offset 0x1c) takes the cheat name
+    virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3();
+    virtual void c4(); virtual void c5(); virtual void c6();
+    virtual void Unregister(char* name);
+};
+void* SP_CheatManager();            // 0x0067de20
+void* SP_MessageServer();           // 0x0067dcc0
+
 struct cCameraManager_s007c_6750 {
     void* vftable;                  // +0x00
-    u32   mRefCount;                // +0x04
-    u8    pad08[4];
+    void* vftable2;                 // +0x04
+    u32   mRefCount;                // +0x08
     bool  mInitialized;             // +0x0c
     u8    pad0d[3];
     char* mCheatBegin;              // +0x10
     char* mCheatEnd;                // +0x14
     char* mCheatCap;                // +0x18
     void* mCheatAlloc;              // +0x1c
-    u8    mapNameID[0x20];          // +0x20
-    u8    mapTypeID[0x20];          // +0x40
-    u8    mapID[0x20];              // +0x60
+    HTStub mapNameID;               // +0x20
+    HTStub mapTypeID;               // +0x40
+    HTStub mapID;                   // +0x60
     void** mControllersBegin;       // +0x80
     void** mControllersEnd;         // +0x84
     void** mControllersCap;         // +0x88
-    u8    pad8c[4];
-    void* mNamesBegin;              // +0x90
-    void* mNamesEnd;                // +0x94
-    void* mNamesCap;                // +0x98
-    u8    pad9c[4];
-    int   mActiveControllerIndex;   // +0xa0
-    u32   mPropModCount;            // +0xa4
+    u8    pad8c[8];                 // +0x8c
+    void* mNamesBegin;              // +0x94
+    void* mNamesEnd;                // +0x98
+    void* mNamesCap;                // +0x9c
+    u8    padA0[4];                 // +0xa0
+    int   mActiveControllerIndex;   // +0xa4 (ClearControllers only; ctor leaves it alone)
     int   mIndexA8;                 // +0xa8
+    int   mUnkAC;                   // +0xac
+    u32   mPropModCount;            // +0xb0
 
     void Init(void* cmd);           // 0x7c70b0
-    void Shutdown();                // 0x7c6db0
+    bool Shutdown();                // 0x7c6db0
     void ClearControllers();        // 0x7c6eb0
     void LoadControllers();         // 0x7c6b80
     ~cCameraManager_s007c_6750();              // 0x7c74a0
@@ -254,18 +287,28 @@ void SP::cCameraManager::LoadControllers()
 }
 
 // @ 0x007c6db0
-void cCameraManager_s007c_6750::Shutdown()
+bool cCameraManager_s007c_6750::Shutdown()
 {
-    if (!mInitialized) return;
+    if (!mInitialized) return true;
     mInitialized = false;
+    IMessageServer* ms = (IMessageServer*)SP_MessageServer();
+    if (ms != 0)
+        ms->m11(this, 0xf62def, 0xffffd8f1u);
+    ICheatManager* cheat = (ICheatManager*)SP_CheatManager();
+    if (cheat != 0 && mCheatBegin != mCheatEnd)
+        cheat->Unregister(mCheatBegin);
     if (mCheatBegin != mCheatEnd) { *mCheatBegin = 0; mCheatEnd = mCheatBegin; }
+    mapID.DoFreeNodes(mapID.mpBucketArray, mapID.mnBucketCount);
+    mapID.mnElementCount = 0;
     int n = (int)((char*)mControllersEnd - (char*)mControllersBegin) >> 2;
     for (int i = 0; i < n; i++) {
         void* c = mControllersBegin[i];
         if (c) ((void(__thiscall*)(void*))((void**)*(void**)c)[0x14 / 4])(c);
     }
-    mControllersEnd = mControllersBegin;
+    ((VecStub*)(void*)&mControllersBegin)->erase(mControllersBegin, mControllersEnd);
     mIndexA8 = 0;
+    ((VecStub*)(void*)&mControllersBegin)->erase(mControllersBegin, mControllersEnd);
+    return true;
 }
 
 // @ 0x007c6eb0
@@ -300,13 +343,39 @@ void RegisterController(cCameraManager_s007c_6750* m, int id, void* controller, 
 // @ 0x007c75e0
 cCameraManager_s007c_6750::cCameraManager_s007c_6750()
 {
+    *(void**)((char*)this + 4) = (void*)0x13ef094;      // refcount base vftable during construction
+    mRefCount = 0;
+    *(void**)this = (void*)0x14106a8;                   // final vftables
+    *(void**)((char*)this + 4) = (void*)0x14106a4;
     mInitialized = false;
-    mCheatBegin = (char*)1;
-    mCheatEnd = (char*)1;
-    mCheatCap = (char*)2;
+    mCheatBegin = (char*)0x1667bac;                     // empty string sentinel
+    mCheatEnd = (char*)0x1667bac;
+    mCheatCap = (char*)0x1667bad;
+
+    mapNameID.mfLoadFactor = 1.0f;
+    mapNameID.mfGrowthFactor = 2.0f;
+    mapNameID.mpBucketArray = (int)0x154df28;           // empty bucket array
+    mapNameID.mnBucketCount = 1;
+    mapNameID.mnElementCount = 0;
+    mapNameID.mnUnk18 = 0;
+
+    mapTypeID.mfLoadFactor = 1.0f;
+    mapTypeID.mfGrowthFactor = 2.0f;
+    mapTypeID.mpBucketArray = (int)0x154df28;
+    mapTypeID.mnBucketCount = 1;
+    mapTypeID.mnElementCount = 0;
+    mapTypeID.mnUnk18 = 0;
+
+    mapID.mfLoadFactor = 1.0f;
+    mapID.mfGrowthFactor = 2.0f;
+    mapID.mpBucketArray = (int)0x154df28;
+    mapID.mnBucketCount = 1;
+    mapID.mnElementCount = 0;
+    mapID.mnUnk18 = 0;
+
     mControllersBegin = 0; mControllersEnd = 0; mControllersCap = 0;
     mNamesBegin = 0; mNamesEnd = 0; mNamesCap = 0;
-    mActiveControllerIndex = 0;
+    mUnkAC = 0;
     mPropModCount = 0;
     mIndexA8 = -1;
 }

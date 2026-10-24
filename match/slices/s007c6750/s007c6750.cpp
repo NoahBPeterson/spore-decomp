@@ -32,7 +32,10 @@ struct HTStr {                      // hashtable<basic_string<wchar_t>, ...>: no
     int   mpBucketArray;            // +0x04
     u32   mnBucketCount;            // +0x08
     u32   mnElementCount;           // +0x0c
-    u8    mPolicy[0x10];
+    float mfLoadFactor;             // +0x10 (1.0f)
+    float mfGrowthFactor;           // +0x14 (2.0f)
+    int   mnUnk18;                  // +0x18 (0)
+    int   mnUnk1c;                  // +0x1c (ctor leaves it alone)
     void DoFreeNodes(int bucketArray, u32 bucketCount) throw();   // 0x007c7050 (thiscall, ret 8)
     ~HTStr() {
         DoFreeNodes(mpBucketArray, mnBucketCount);
@@ -45,7 +48,10 @@ struct HTPlain {                    // hashtable with trivially destructible nod
     int   mpBucketArray;            // +0x04
     u32   mnBucketCount;            // +0x08
     u32   mnElementCount;           // +0x0c
-    u8    mPolicy[0x10];
+    float mfLoadFactor;             // +0x10 (1.0f)
+    float mfGrowthFactor;           // +0x14 (2.0f)
+    int   mnUnk18;                  // +0x18 (0)
+    int   mnUnk1c;                  // +0x1c (ctor leaves it alone)
     void DoFreeNodes(int bucketArray, u32 bucketCount) throw();   // 0x00693230 (thiscall, ret 8)
     ~HTPlain() {
         DoFreeNodes(mpBucketArray, mnBucketCount);
@@ -59,7 +65,10 @@ struct HTKeyMap {                   // same layout, exposed for hashtable::find 
     int   mpBucketArray;            // +0x04
     u32   mnBucketCount;            // +0x08
     u32   mnElementCount;           // +0x0c
-    u8    mPolicy[0x10];
+    float mfLoadFactor;             // +0x10 (1.0f)
+    float mfGrowthFactor;           // +0x14 (2.0f)
+    int   mnUnk18;                  // +0x18 (0)
+    int   mnUnk1c;                  // +0x1c (ctor leaves it alone)
     int*  Find(void* out, const void* key);   // 0x00645ed0 (thiscall, ret 8)
     int*  OperatorIndex(const void* key);     // 0x007c3a90 (thiscall, ret 4)
 };
@@ -70,6 +79,7 @@ struct RefVecS {                    // vector<AutoRefCount<cICameraController>, 
     u8     mAlloc[8];
     void Destroy();                 // 0x00a23920 (thiscall)
     void AddControllerRef(void** controller);   // 0x007e9350 (thiscall, ret 4)
+    void Erase(void** first, void** last);      // 0x00e25bd0 (thiscall, ret 8)
 };
 struct NamesVec {                   // vector<basic_string<wchar_t>, sp_vector_allocator>
     int* mpBegin;                   // +0x00 (allocation has a count word at [-1])
@@ -89,12 +99,13 @@ struct cCameraManager : public IMsgHandlerBase, public GmeRefCountBase {   // vp
     HTPlain  mControllerIDMap;      // +0x60
     RefVecS  mControllers;          // +0x80
     NamesVec mControllerNames;      // +0x94
-    int   mActiveControllerIndex;   // +0xa4 (approximate; ctor stub only)
-    u32   mPropModCount;
-    int   mIndexA8;
+    int   mUnkA4;                   // +0xa4 (ctor leaves it alone)
+    int   mIndexA8;                 // +0xa8 (ctor -1, Shutdown/ClearControllers 0)
+    int   mUnkAC;                   // +0xac (ctor 0)
+    u32   mPropModCount;            // +0xb0 (ctor 0)
 
     void Init(void* cmd);           // 0x7c70b0
-    void Shutdown();                // 0x7c6db0
+    bool Shutdown();                // 0x7c6db0
     void ClearControllers();        // 0x7c6eb0
     void LoadControllers();         // 0x7c6b80
     void RegisterController(int id, void* controller, const wchar_t* name);   // 0x7c7270
@@ -121,6 +132,13 @@ struct IMessageServer {           // 0x67dcc0 result; slot 8 (offset 0x20) takes
     virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3();
     virtual void m4(); virtual void m5(); virtual void m6(); virtual void m7();
     virtual void m8(void*, unsigned int);
+    virtual void m9(); virtual void m10();
+    virtual void m11(void* owner, unsigned int id, unsigned int arg);   // offset 0x2c
+};
+struct ICheatManager {            // 0x67de20 result; slot 7 (offset 0x1c) takes the cheat name
+    virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3();
+    virtual void c4(); virtual void c5(); virtual void c6();
+    virtual void Unregister(char* name);
 };
 struct cWString {                 // eastl::basic_string<wchar_t>
     void* mpBegin;
@@ -237,17 +255,31 @@ void cCameraManager::LoadControllers() {
 
 // ===========================================================================
 // @ 0x007c6db0
-void cCameraManager::Shutdown() {
-    if (!mInitialized) return;
+bool cCameraManager::Shutdown() {
+    if (!mInitialized)
+        return true;
     mInitialized = false;
-    if (mCheatName.mpBegin != mCheatName.mpEnd) { *mCheatName.mpBegin = 0; mCheatName.mpEnd = mCheatName.mpBegin; }
+    IMessageServer* ms = (IMessageServer*)SP_MessageServer();
+    if (ms != 0)
+        ms->m11(this, 0xf62def, 0xffffd8f1u);
+    ICheatManager* cheat = (ICheatManager*)SP_CheatManager();
+    if (cheat != 0 && mCheatName.mpBegin != mCheatName.mpEnd)
+        cheat->Unregister(mCheatName.mpBegin);
+    if (mCheatName.mpBegin != mCheatName.mpEnd) {
+        *mCheatName.mpBegin = 0;
+        mCheatName.mpEnd = mCheatName.mpBegin;
+    }
+    mControllerIDMap.DoFreeNodes(mControllerIDMap.mpBucketArray, mControllerIDMap.mnBucketCount);
+    mControllerIDMap.mnElementCount = 0;
     int n = (int)((char*)mControllers.mpEnd - (char*)mControllers.mpBegin) >> 2;
     for (int i = 0; i < n; i++) {
         void* c = mControllers.mpBegin[i];
         if (c) ((void(__thiscall*)(void*))((void**)*(void**)c)[0x14 / 4])(c);
     }
-    mControllers.mpEnd = mControllers.mpBegin;
+    mControllers.Erase(mControllers.mpBegin, mControllers.mpEnd);
     mIndexA8 = 0;
+    mControllers.Erase(mControllers.mpBegin, mControllers.mpEnd);
+    return true;
 }
 
 // ===========================================================================
@@ -398,13 +430,39 @@ cCameraManager::~cCameraManager() {
 // ===========================================================================
 // @ 0x007c75e0
 cCameraManager::cCameraManager() {
+    *(void**)((char*)this + 4) = (void*)0x13ef094;      // GmeRefCountBase vftable during construction
+    mRefCount = 0;
+    *(void**)this = (void*)0x14106a8;                   // final vftables
+    *(void**)((char*)this + 4) = (void*)0x14106a4;
     mInitialized = false;
-    mCheatName.mpBegin = (char*)1;
-    mCheatName.mpEnd = (char*)1;
-    mCheatName.mpCapacity = (char*)2;
+    mCheatName.mpBegin = (char*)0x1667bac;              // empty string sentinel
+    mCheatName.mpEnd = (char*)0x1667bac;
+    mCheatName.mpCapacity = (char*)0x1667bad;
+
+    mControllerNameIDMap.mfLoadFactor = 1.0f;
+    mControllerNameIDMap.mfGrowthFactor = 2.0f;
+    mControllerNameIDMap.mpBucketArray = (int)0x154df28;   // empty bucket array
+    mControllerNameIDMap.mnBucketCount = 1;
+    mControllerNameIDMap.mnElementCount = 0;
+    mControllerNameIDMap.mnUnk18 = 0;
+
+    mControllerTypeIDMap.mfLoadFactor = 1.0f;
+    mControllerTypeIDMap.mfGrowthFactor = 2.0f;
+    mControllerTypeIDMap.mpBucketArray = (int)0x154df28;
+    mControllerTypeIDMap.mnBucketCount = 1;
+    mControllerTypeIDMap.mnElementCount = 0;
+    mControllerTypeIDMap.mnUnk18 = 0;
+
+    mControllerIDMap.mfLoadFactor = 1.0f;
+    mControllerIDMap.mfGrowthFactor = 2.0f;
+    mControllerIDMap.mpBucketArray = (int)0x154df28;
+    mControllerIDMap.mnBucketCount = 1;
+    mControllerIDMap.mnElementCount = 0;
+    mControllerIDMap.mnUnk18 = 0;
+
     mControllers.mpBegin = 0; mControllers.mpEnd = 0; mControllers.mpCapacity = 0;
     mControllerNames.mpBegin = 0; mControllerNames.mpEnd = 0; mControllerNames.mpCapacity = 0;
-    mActiveControllerIndex = 0;
+    mUnkAC = 0;
     mPropModCount = 0;
     mIndexA8 = -1;
 }
@@ -427,8 +485,8 @@ void cBitLength::BitLengthInit(int value, u32 mask) {
     int bits = 0;
     if (mask & 0xffff0000) { bits = 0x10; mask >>= 16; }
     if (mask & 0xff00)     { bits += 8;  mask >>= 8; }
-    if (mask & 0xf0)       { bits += 4; }
-    if (mask & 0xc)        { bits += 2; }
+    if (mask & 0xf0)       { bits += 4;  mask >>= 4; }
+    if (mask & 0xc)        { bits += 2;  mask >>= 2; }
     if (mask & 2)          { bits += 1; }
     u32 v = *(u32*)(UNK_01410e24 + bits * 4);
     mTableA = v;

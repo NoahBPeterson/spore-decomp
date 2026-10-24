@@ -58,8 +58,8 @@ void cBitLength::BitLengthInit(int value, u32 mask)
     int bits = 0;
     if (mask & 0xffff0000) { bits = 0x10; mask >>= 16; }
     if (mask & 0xff00)     { bits += 8;  mask >>= 8; }
-    if (mask & 0xf0)       { bits += 4; }
-    if (mask & 0xc)        { bits += 2; }
+    if (mask & 0xf0)       { bits += 4;  mask >>= 4; }
+    if (mask & 0xc)        { bits += 2;  mask >>= 2; }
     if (mask & 2)          { bits += 1; }
     u32 v = *(u32*)(UNK_01410e24 + bits * 4);
     mTableA = v;
