@@ -4,6 +4,7 @@
 
 #include "game/types.h"
 #include <string.h>
+#include <intrin.h>
 #include "SP/cTerrainSphere.h"
 
 // ---- items of slice s00f6a960 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -284,6 +285,7 @@ bool cTerrainEditor::UpdateCPUFromGPU(float elapsed)
     for (int i = 0; i < 5; i++) {
         Rect_s00f6_b9a0& r = mDirty[i];
         if (r.l != r.r && r.t != r.b) {
+            _ReadWriteBarrier();
             if (r.Width() < eps || r.Height() < eps)
                 ClearRect(r);
             else
@@ -293,6 +295,7 @@ bool cTerrainEditor::UpdateCPUFromGPU(float elapsed)
     {
         Rect_s00f6_b9a0& r = mDirty[5];
         if (r.l != r.r && r.t != r.b) {
+            _ReadWriteBarrier();
             if (r.Width() < eps || r.Height() < eps)
                 ClearRect(r);
             else
@@ -320,7 +323,11 @@ relevel:
                 uint16_t mn = 0xffff;
                 uint16_t mx = 0;
                 uint16_t* src = heights->mSamples + heights->mSide * heights->mSide * face;
-                if (sFullFraction <= r.Width() || sFullFraction <= r.Height()) {
+                _ReadWriteBarrier();
+                const bool wFull = r.Width() >= sFullFraction;
+                _ReadWriteBarrier();
+                const bool hFull = r.Height() >= sFullFraction;
+                if (wFull || hFull) {
                     // large dirty area: read the whole face back
                     const uint32_t count = height * width;
                     mTemp.resize(count);
