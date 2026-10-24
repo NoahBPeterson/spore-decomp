@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+01046e40   57  complete; ctor: the cSub1 zeroing reproduces exactly, but cl coalesces the list-header store triple ([eax+4]/[eax+8]/[eax+0xc]) with the later sentinel-linking stores and schedules the push for mSub1.Init(0) and the [esi+0x54] store earlier than retail; 99 vs 105 bytes; equiv PASS
+01046160  429  complete; property pump rebuilt end to end (request struct, container walk, per-item handle/property assign) but register allocation and block layout differ throughout; 552 vs 587 bytes; equiv WEAK (no mismatch, coverage limited)
+010463b0 1727  complete; property pump (colour/vertex variant) rebuilt as a vector<float> vertex push + handle assign; reconstruction is larger than retail (1654 vs 1335) because the inlined float pushes and the refactor differ; equiv FAIL call #1 (GetPlayerInventory arg differs)
+010468f0 1199  complete; two-phase property pump rebuilt (candidate scan + request-driven phase) with the property-assign block shared through a Bind() helper member, so it is emitted once instead of twice (748 vs 1359); equiv UNSUPPORTED (inputs need _decode_pointer)

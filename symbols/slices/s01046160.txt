@@ -1,0 +1,2 @@
+01046eb0 ??1cPropView@@QAE@XZ  # cPropView destructor; byte-exact MATCH, class name from the retail-mangled symbol
+01046f30 ?Fill_01046f30@cPropView@@QAEXPAX@Z  # cPropView member taking one pointer arg; byte-exact MATCH (symbol spelling confirmed by the match)
