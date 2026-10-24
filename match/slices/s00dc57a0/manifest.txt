@@ -1,1 +1,20 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+# (build flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+# 18 VAs claimed for s00dc57a0 live in s00dc57a0_b.cpp (the older s00dc57a0.cpp holds
+# only 00dc59d0, which is in no batch entry and is left untouched).
+# 13 byte-exact (00dc5b50 / 00dc6420 verified byte-for-byte by run_all; the analysis
+# merges the following unstarted helper into their extent, so chk.py's size penalty
+# keeps them off its MATCH list). 5 nonmatching -> nonmatching.txt.
+slices/s00dc57a0/s00dc57a0_b.cpp  ?FUN_00dc5b50@@YADPAUObj@@PAX111PAUOutB50@@@Z  00dc5b50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc57a0/s00dc57a0_b.cpp  ?FUN_00dc5bf0@@YADPAUObj@@PAX111PAUOutBF0@@@Z  00dc5bf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc57a0/s00dc57a0_b.cpp  ?FUN_00dc5c90@@YAMPAUObj@@@Z  00dc5c90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc57a0/s00dc57a0_b.cpp  ?FUN_00dc5ce0@@YADPAUObj@@PAX111PAUOutCE0@@@Z  00dc5ce0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc57a0/s00dc57a0_b.cpp  ?FUN_00dc5fe0@@YAMPAUObj@@PAX11PAUBehaviorStim@@PAE@Z  00dc5fe0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc57a0/s00dc57a0_b.cpp  ?FUN_00dc6140@@YAXPAUObj@@PAX111PAUOut6140@@@Z  00dc6140  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc57a0/s00dc57a0_b.cpp  ?FUN_00dc6250@@YAMPAUObj@@PAX1111@Z  00dc6250  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc57a0/s00dc57a0_b.cpp  ?FUN_00dc6300@@YAMPAUObj@@@Z  00dc6300  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc57a0/s00dc57a0_b.cpp  ?Cdc6420@Obj@@QAE_NPAX@Z  00dc6420  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc57a0/s00dc57a0_b.cpp  ?FUN_00dc6370@@YAXPAUObj@@@Z  00dc6370  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc57a0/s00dc57a0_b.cpp  ?Cdc6530@Obj@@QAEXXZ  00dc6530  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc57a0/s00dc57a0_b.cpp  ?Cdc65b0@Obj@@QAEXXZ  00dc65b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc57a0/s00dc57a0_b.cpp  ?FUN_00dc6640@@YA_NPAUPtrVec@@PAPAUObj@@@Z  00dc6640  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
