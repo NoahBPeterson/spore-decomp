@@ -7,3 +7,4 @@ slices/s006f9250/s006f9250.cpp  GenerateInputStruct                  006f9f00  /
 slices/s006f9250/s006f9250.cpp  GenerateCurrentStruct                006fa010  /O2 /MD /Gy /EHsc /TP /arch:SSE2
 slices/s006f9250/s006f9250.cpp  GenerateOutputStruct                 006fa0a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
 slices/s006f9250/s006f9250.cpp  GenerateFillOutputStruct             006fa130  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s006f9250/s006f9250.cpp  ShaderNameMatches                    006fa250  /O2 /MD /Gy /EHsc /TP /arch:SSE2
