@@ -1,0 +1,1 @@
+slices/s00ca3030/s00ca3030.cpp  ?FUN_00ca3350@cGameData@@QAEXD@Z  00ca3350  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,1 +1,7 @@
 00ca3770 cSurfaceSearcher::FindNearestSurfacePoint  # Claude-coined: spiral ring search around a ray for the nearest same-continent surface point to the camera (calls cPlanetModel 00b88590/00b7e840/00b81630)
+00ca3030 cGameDataSub::GetGameDataOwner  # Claude-coined: transforms the clamped point-array entry (GetPropertyAsTransformArray 0xf1fae963) into the object at base+0x34's local/world frame
+00ca31f0 cGameData::FUN_00ca31f0  # Claude-coined: pushes the spatial object's ground-layer interpolation (00ac7680) when the world-desc +0x20 gate and the position flag tests pass
+00ca3350 cGameData::FUN_00ca3350  # Claude-coined: civ-mode tutorial gate/store; tests the civ strategy's +0x148 flag and tutorial id 0x64e6678, then refreshes and stores the +0xa0 mode byte
+00ca33b0 cGameData::FUN_00ca33b0  # Claude-coined: stores the marker position at +0xb80 and pushes a radius-scaled tutorial marker (00c9fb40)
+00ca3410 cSpatialObject::FUN_00ca3410  # Claude-coined: builds and submits a navigation goal toward p (camera-relative direction or a direct 0x78-byte block) and applies the game-mode camera scale as radius
+00ca3660 cGameData::FUN_00ca3660  # Claude-coined: reads the object from a stream (nested ReadInt32, base Read, 0xbfc540/0xc43c10, cVarListSerializer) and restores the +0x5fc flag bits from the +0xb24 mode
