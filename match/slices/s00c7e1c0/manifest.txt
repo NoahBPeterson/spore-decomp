@@ -1,3 +1,10 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00c7e1c0/s00c7e1c0.cpp  ?FUN_00c7e530@@YGXHHHHPAH@Z  00c7e530  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00c7e1c0/s00c7e1c0.cpp  ?FUN_00c7ead0@CS@@QAEXPAH@Z  00c7ead0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c7e1c0/s00c7e1c0.cpp  ?FUN_00c7e280@CS@@QAEXPAX@Z  00c7e280  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c7e1c0/s00c7e1c0.cpp  ?FUN_00c7e2f0@CS@@QAEXD@Z  00c7e2f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c7e1c0/s00c7e1c0.cpp  ?FUN_00c7e490@@YGXHHHHPAD@Z  00c7e490  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c7e1c0/s00c7e1c0.cpp  ?FUN_00c7e9b0@CS@@QAE_NHH@Z  00c7e9b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c7e1c0/s00c7e1c0.cpp  ?FUN_00c7e9f0@@YA_NPAXPAPAX@Z  00c7e9f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c7e1c0/s00c7e1c0.cpp  ?ctor_00c7ea70@CS@@QAEPAXXZ  00c7ea70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c7e1c0/s00c7e1c0.cpp  ?FUN_00c7ed50@@YGXHHHHPAH@Z  00c7ed50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
