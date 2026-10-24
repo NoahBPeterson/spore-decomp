@@ -23,19 +23,31 @@ float* __cdecl Scale2(float* out, float* s)
 // ---------------------------------------------------------------------------
 // @ 0x0050cec0  (fixed_vector<float,400> constructor)
 // ---------------------------------------------------------------------------
-void FixedVecInit(void* p);   // 0x0050e310
+struct FixedVector400 {
+    int* mBegin;                            // +0x00
+    int* mEnd;                              // +0x04
+    int* mCapacity;                         // +0x08
+    int* mField0c;                          // +0x0c
+    int* mField10;                          // +0x10
+    int* mField14;                          // +0x14
+    int  mStorage[400];                     // +0x18
 
-int* __fastcall VecConstruct(int* p, int param)
+    void Resize(int count);                 // 0x0050e310
+    FixedVector400* Construct(int count);   // 0x0050cec0
+};
+
+// @ 0x0050cec0
+FixedVector400* FixedVector400::Construct(int count)
 {
-    p[0] = 0;
-    p[1] = 0;
-    p[2] = 0;
-    p[4] = (int)(p + 6);
-    p[1] = (int)(p + 6);
-    p[0] = p[1];
-    p[2] = p[0] + 0x640;
-    FixedVecInit(&param);
-    return p;
+    mBegin = 0;
+    mEnd = 0;
+    mCapacity = 0;
+    mField10 = mStorage;
+    mEnd = mStorage;
+    mBegin = mEnd;
+    mCapacity = mBegin + 400;
+    Resize(count);
+    return this;
 }
 
 // ---------------------------------------------------------------------------
