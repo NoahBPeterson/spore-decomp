@@ -1,0 +1,5 @@
+slices/s00d160c0/s00d160c0.cpp  ?cStrCmp_Destroy@@YIXPAUcStrCmp@@@Z  00d167e0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00d160c0/s00d160c0.cpp  ?SetPlanet@cGameEditInputStrategy@@QAEXPBUcVec3i@@@Z  00d16b90  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00d160c0/s00d160c0.cpp  ?SortInsertBounded@@YAXPAI0UcStrCmp@@@Z  00d16c30  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00d160c0/s00d160c0.cpp  ?SortInsert@@YAXPAI0UcStrCmp@@@Z  00d16cc0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00d160c0/s00d160c0.cpp  ?SiftUp@@YAXPAIHHIUcStrCmp@@@Z  00d16eb0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
