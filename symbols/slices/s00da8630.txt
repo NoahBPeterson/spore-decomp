@@ -1,0 +1,6 @@
+00da9160 ?InitNearHutForReaction@@YAXH@Z  # InitNearHutForReaction migrated from s00da8630 (verbatim, slice spelling)
+00da9220 ?FUN_00da9220@@YA_NHPAXPADHH@Z  # FUN_00da9220 migrated from s00da8630 (verbatim, slice spelling)
+00da9330 ?f00da9330@@YAOHHHHHH@Z  # f00da9330 migrated from s00da8630 (verbatim, slice spelling)
+00da9360 ?f00da9360@@YAOHHHHHH@Z  # f00da9360 migrated from s00da8630 (verbatim, slice spelling)
+00da9390 ?f00da9390@@YAOHH@Z  # f00da9390 migrated from s00da8630 (verbatim, slice spelling)
+00da94c0 ?f00da94c0@@YAXH@Z  # f00da94c0 migrated from s00da8630 (verbatim, slice spelling)

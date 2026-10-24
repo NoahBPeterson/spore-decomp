@@ -1,0 +1,3 @@
+00dafc00 ?FUN_00dafc00@@YAXPAVcCreature@@PAX111PAUGetState@@@Z  # FUN_00dafc00 migrated from s00daf820 (verbatim, slice spelling)
+00dafc80 ?FUN_00dafc80@@YADPAVcCreature@@PAX111PAUCharState@@PAUA7Obj@@@Z  # FUN_00dafc80 migrated from s00daf820 (verbatim, slice spelling)
+00dafd90 ?FUN_00dafd90@@YAXPAVcCreature@@PAX111PAUDeactState@@@Z  # FUN_00dafd90 migrated from s00daf820 (verbatim, slice spelling)

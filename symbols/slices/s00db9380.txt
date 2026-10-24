@@ -1,7 +1,7 @@
 00db9380 HealToolStepTick  # descriptive name; seven-step heal animation/effect state machine over cHealActionState
-00db97f0 cHealOtherData::Copy  # descriptive name; copy constructor of the 0x24c-byte payload
-00db99a0 cHealEntryRangeCopy  # descriptive name; copies a range of 0x250-byte heal entries into raw storage
+00db97f0 ??0cHealOtherData@SP@@QAE@ABV01@@Z  # cHealOtherData::cHealOtherData migrated from s00db9380 (verbatim, slice spelling)
+00db99a0 ?FUN_00db99a0@SP@@YAPAUcHealOtherEntry@1@PAU21@00@Z  # FUN_00db99a0 migrated from s00db9380 (verbatim, slice spelling)
 00db9a00 HealFindNearestNoun  # descriptive name; nearest injured noun within the heal radius
-00db9b30 TRIBE_HEAL_OTHER_Tick  # PDB name
-00dba000 HealAnimationTick  # descriptive name; two-step heal animation tick
-00dba120 cHealOtherData::operator=  # copy assignment
+00db9b30 ?TRIBE_HEAL_OTHER_Tick@SP@@YA_NPAVcSPCreatureCitizen_s00db_9380@1@HHHHPAUcHealActionState@1@M@Z  # TRIBE_HEAL_OTHER_Tick migrated from s00db9380 (verbatim, slice spelling)
+00dba000 ?FUN_00dba000@SP@@YA_NPAVcSPCreatureCitizen_s00db_9380@1@HHHHPAUcHealActionState@1@@Z  # FUN_00dba000 migrated from s00db9380 (verbatim, slice spelling)
+00dba120 ??4cHealOtherData@SP@@QAEAAV01@ABV01@@Z  # cHealOtherData::operator= migrated from s00db9380 (verbatim, slice spelling)

@@ -1,0 +1,6 @@
+00dacd40 ?FUN_00dacd40@SP@@YAXPAVcSPCreatureCitizen_s00da_cd40@1@@Z  # FUN_00dacd40 migrated from s00dacd40 (verbatim, slice spelling)
+00dace20 ?CHIEFTAIN_TOOL_INSPECT_Tick@SP@@YA_NPAVcSPCreatureCitizen_s00da_cd40@1@HHHHPAUToolState@1@@Z  # CHIEFTAIN_TOOL_INSPECT_Tick migrated from s00dacd40 (verbatim, slice spelling)
+00dad0c0 ?IDLE_VIGNETTE_Activate@SP@@YA_NPAVcSPCreatureCitizen_s00da_cd40@1@HHHHHPAUVignetteMem@1@@Z  # IDLE_VIGNETTE_Activate migrated from s00dacd40 (verbatim, slice spelling)
+00dad260 ?FUN_00dad260@SP@@YAXPAVcSPCreatureCitizen_s00da_cd40@1@@Z  # FUN_00dad260 migrated from s00dacd40 (verbatim, slice spelling)
+00dad320 ?FUN_00dad320@SP@@YA_NPAVcSPCreatureCitizen_s00da_cd40@1@HHHHHHM@Z  # FUN_00dad320 migrated from s00dacd40 (verbatim, slice spelling)
+00dad390 ?TRIBE_DOMESTICATE_Tick@SP@@YAIPAVcSPCreatureCitizen_s00da_cd40@1@HHHHPAUDomesticateState@1@@Z  # TRIBE_DOMESTICATE_Tick migrated from s00dacd40 (verbatim, slice spelling)

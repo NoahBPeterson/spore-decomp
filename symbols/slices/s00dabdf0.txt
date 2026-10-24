@@ -1,0 +1,6 @@
+00dabdf0 ?FUN_00dabdf0@@YA_NPAUCitizen_s00da_bdf0@@HHHHPAUEatTickState@@@Z  # FUN_00dabdf0 migrated from s00dabdf0 (verbatim, slice spelling)
+00dac580 ?FUN_00dac580@C580@@QAEXXZ  # C580::FUN_00dac580 migrated from s00dabdf0 (verbatim, slice spelling)
+00dac5d0 ?FUN_00dac5d0@@YA_NPAUC5d0Obj@@@Z  # FUN_00dac5d0 migrated from s00dabdf0 (verbatim, slice spelling)
+00dac630 ?FUN_00dac630@@YA_NPAUCitizen_s00da_bdf0@@HHHHPAUSt630@@@Z  # FUN_00dac630 migrated from s00dabdf0 (verbatim, slice spelling)
+00dac730 ?FUN_00dac730@@YAXPAUCitizen_s00da_bdf0@@HHHHPAUSt730@@@Z  # FUN_00dac730 migrated from s00dabdf0 (verbatim, slice spelling)
+00dac7e0 ?FUN_00dac7e0@@YA_NPAUCitizen_s00da_bdf0@@HHHHPAUHiveState@@@Z  # FUN_00dac7e0 migrated from s00dabdf0 (verbatim, slice spelling)

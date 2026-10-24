@@ -1,6 +1,6 @@
 00d9dce0 ?RunCombatBehavior@@YADPAVcSimCreature@@PAX111PAUcBehaviorTask@@@Z  # char RunCombatBehavior(cSimCreature*, void*, void*, void*, void*, cBehaviorTask*)
 00d9e420 ?FinishBehaviorTask@@YAXPAVcSimCreature@@PAX111PAUcBehaviorCallback@@@Z  # void FinishBehaviorTask(cSimCreature*, void*, void*, void*, void*, cBehaviorCallback*)
-00d9e460 ?PickLeader@cGroupMovement@@QAEDPAVcSimCreature@@PAX111PAUcLeaderChoice@@@Z  # char cGroupMovement::PickLeader(cSimCreature*, void*, void*, void*, void*, cLeaderChoice*)
+00d9e460 ?PickLeader@cGroupMovement@@QAEDPAVcSimCreature@@PAX111PAUcLeaderChoice@@@Z  # cGroupMovement::PickLeader migrated from s00d9dce0 (verbatim, slice spelling)
 00d9e570 ?RunTargetBehavior@@YADPAVcSimCreature@@PAX111PAUcBehaviorTask@@@Z  # char RunTargetBehavior(cSimCreature*, void*, void*, void*, void*, cBehaviorTask*)
 00d9ea30 ?StartFindTargetBehavior@@YADPAVcSimCreature@@PAX11PAUcFoundTarget@@@Z  # char StartFindTargetBehavior(cSimCreature*, void*, void*, void*, cFoundTarget*)
 00d9eb20 ?CancelBehaviorTask@@YAXPAVcSimCreature@@PAX111PAUcBehaviorCallback@@@Z  # void CancelBehaviorTask(cSimCreature*, void*, void*, void*, void*, cBehaviorCallback*)

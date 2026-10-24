@@ -1,0 +1,7 @@
+00db2fd0 ?FUN_00db2fd0@@YADPAVcSPCreatureBase@@PAX111PAUREACT_State@@@Z  # FUN_00db2fd0 migrated from s00db2fd0 (verbatim, slice spelling)
+00db3390 ?FUN_00db3390@@YAXPAVcSPCreatureBase@@PAX111PAUSimuState@@@Z  # FUN_00db3390 migrated from s00db2fd0 (verbatim, slice spelling)
+00db33d0 ?FUN_00db33d0@@YADPAVcSPCreatureBase@@PAX111PAUSimuState@@@Z  # FUN_00db33d0 migrated from s00db2fd0 (verbatim, slice spelling)
+00db3c40 ?GetObject@cResizableObjectPoolT@@QAEPAVcGroupMovement_s00db_2fd0@@I@Z  # cResizableObjectPoolT::GetObject migrated from s00db2fd0 (verbatim, slice spelling)
+00db3c90 ?ReleaseSlot@cResizableObjectPoolT@@QAEXI@Z  # cResizableObjectPoolT::ReleaseSlot migrated from s00db2fd0 (verbatim, slice spelling)
+00db3da0 ?FindFreeSlot@cResizableObjectPoolT@@QAEPAUcPoolFind@@PAU2@PAUcPoolNode@@PAPAU3@@Z  # cResizableObjectPoolT::FindFreeSlot migrated from s00db2fd0 (verbatim, slice spelling)
+00db3e30 ?AllocNode@cResizableObjectPoolT@@QAEXPAUcPoolNode@@@Z  # cResizableObjectPoolT::AllocNode migrated from s00db2fd0 (verbatim, slice spelling)
