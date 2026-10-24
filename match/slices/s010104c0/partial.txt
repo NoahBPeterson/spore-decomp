@@ -1,0 +1,14 @@
+# va  diff-bytes  reason
+010104c0  386  SP::PirateRaidEvent::TryCreateMission: stub only; 1 vs 386 B - mission-selection logic (SpaceGameGet, rbtree probes, RandomDoubleUniform / RandomUint32Uniform, timer construction) not reconstructed
+01010650  199  SP::GenericDisaster::TryCreateMission: stub only; 1 vs 199 B - mission spawn path not reconstructed
+01010730  122  artifact roll / insert helper: stub only; 1 vs 122 B - x87 roll (fldz/fcompi/fst) against RandomDoubleUniform plus virtual +0x8 / +0x4 calls on [this+0xd0] not reconstructed
+010107b0  181  rbtree probe + reward-tier classify: stub only; 1 vs 181 B - rbtree find (this+0x17c, sentinel +0x180) and getter calls not reconstructed
+010108c0  298  eastl::insertion_sort: stub only; 1 vs 298 B - 0x28-byte element move/construct loop with comparator callback not reconstructed
+010109f0  305  eastl::insertion_sort_simple: stub only; 1 vs 305 B - element timer construct/destruct loop with comparator callback not reconstructed
+01010b30  127  range copy (vtable storing): stub only; 1 vs 127 B - element-constructing copy that rewrites both vtables (0x1465d54 / 0x1464450) not reconstructed
+01010c20  73  heapify: stub only; 1 vs 73 B - down-heap loop with a virtual vtable[0] call and FUN_0100fee0 not reconstructed
+01010ea0  195  eastl::promote_heap: stub only; 1 vs 195 B - heap sift-up with comparator callback not reconstructed
+01010f70  188  tGrobShockData::operator= (swap): stub only; 1 vs 188 B - timer swap through a cGonzagoTimer temporary plus ~cGonzagoTimer not reconstructed
+01011030  237  reward-timer tick: stub only; 1 vs 237 B - timer update / reward-tier path not reconstructed
+01011120  346  SP::ArtifactEvent::TryCreateMission: stub only; 1 vs 346 B - artifact mission creation path not reconstructed
+01011350  468  city-distance partition: stub only; 1 vs 468 B - n^2 city-distance float loop / partition not reconstructed
