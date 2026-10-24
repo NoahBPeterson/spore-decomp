@@ -212,7 +212,7 @@ struct cSPUISearchBox {
   void OnSearchChanged();
   void EmptySearch();
   void SetParentWindow(void* w);
-  void ReloadCallback(void* layout, char reload);
+  void ReloadCallback(void* selfArg, char layoutSlot);   // really cdecl (self, layout, reload)
   void Update_(int unused);
   bool DoMessage(int unused, int* msg);
   bool Execute(int* p);
@@ -243,41 +243,61 @@ void cSPUISearchBox::OnSearchChanged() {
   }
 }
 
-// @ 0x00671ca0
-void cSPUISearchBox::ReloadCallback(void* layout, char reload) {
+// cSPUILayout::SetReloadCallback (0x00810090) registers a
+// void (*)(void* self, cSPUILayout* layout, bool reload) and invokes it that way (0x00671E6F:
+// push 1; push layout; push self).  The mangled prototype carries only two of the three slots, so the
+// callback body takes the block as the caller lays it out.
+void SetWindowAreaToParent(void* w);   // 0x00806bf0 (SPUIHelpers)
+static void __declspec(noinline) ReloadCallback_s0067_1840(void* selfArg, void* layout, char reload);
+void __declspec(noinline) ReloadCallback_layout(void* self, void* layout, char reload);   // 0x00671ca0
+
+// The body: (search box, layout, reload) as cSPUILayout passes them.
+static void __declspec(noinline) ReloadCallback_s0067_1840(void* selfArg, void* layout, char reload) {
+  (void)layout;                                        // the layout argument is unused here
+  cSPUISearchBox* self = (cSPUISearchBox*)selfArg;
   if (!reload) {
-    if (mWinRoot) {
-      ((FnV1)((VObj*)mWinRoot)->vt[0x108 / 4])(mWinRoot);
+    if (self->mWinRoot) {
+      ((FnV1)((VObj*)self->mWinRoot)->vt[0x108 / 4])(self);
     }
-    if (mWinRoot) {
-      void* p = mWinRoot; mWinRoot = 0; ReleaseObj(p);
+    if (self->mWinRoot) {
+      void* p = self->mWinRoot; self->mWinRoot = 0; ReleaseObj(p);
     }
-    if (mWinSearchBox) {
-      void* p = mWinSearchBox; mWinSearchBox = 0; ReleaseObj(p);
+    if (self->mWinSearchBox) {
+      void* p = self->mWinSearchBox; self->mWinSearchBox = 0; ReleaseObj(p);
     }
     return;
   }
-  void* w = ((cSPUILayout*)mLayout)->FindWindowByID( 0x149371c4, 1);
-  if (w != mWinRoot) {
+  void* w = ((cSPUILayout*)self->mLayout)->FindWindowByID( 0x149371c4, 1);
+  if (w != self->mWinRoot) {
     if (w) AddRefObj(w);
-    void* old = mWinRoot;
-    mWinRoot = w;
+    void* old = self->mWinRoot;
+    self->mWinRoot = w;
     ReleaseObj(old);
   }
-  w = ((cSPUILayout*)mLayout)->FindWindowByID( 0xd4935a8f, 1);
-  if (w != mWinSearchBox) {
+  w = ((cSPUILayout*)self->mLayout)->FindWindowByID( 0xd4935a8f, 1);
+  if (w != self->mWinSearchBox) {
     if (w) AddRefObj(w);
-    void* old = mWinSearchBox;
-    mWinSearchBox = w;
+    void* old = self->mWinSearchBox;
+    self->mWinSearchBox = w;
     ReleaseObj(old);
   }
-  w = ((cSPUILayout*)mLayout)->FindWindowByID( 0xb4935a77, 1);
+  w = ((cSPUILayout*)self->mLayout)->FindWindowByID( 0xb4935a77, 1);
   if (w) ((FnV2ii)((VObj*)w)->vt[0x7c / 4])(w, 1, 0);
-  if (mWinRoot) {
-    ((FnV1)((VObj*)mWinRoot)->vt[0x104 / 4])(mWinRoot);
-    void* p = mWinRoot;
-    ((FnV1)((VObj*)p)->vt[0x104 / 4])(p);
+  if (self->mWinRoot) {
+    ((FnV1)((VObj*)self->mWinRoot)->vt[0x104 / 4])(self);
+    SetWindowAreaToParent(self->mWinRoot);
   }
+}
+
+// The layout calls it as a plain cdecl function (self, layout, reload).
+void __declspec(noinline) ReloadCallback_layout(void* self, void* layout, char reload) {
+  ReloadCallback_s0067_1840(self, layout, reload);
+}
+
+// @ 0x00671ca0
+void cSPUISearchBox::ReloadCallback(void* selfArg, char layoutSlot) {
+  // the callback is cdecl: enter the body without a `ret 8` epilogue (retail ends in a plain ret)
+  __asm { jmp ReloadCallback_s0067_1840 }
 }
 
 // @ 0x00671da0
@@ -301,7 +321,7 @@ void cSPUISearchBox::SetParentWindow(void* w) {
   ((cSPUILayout*)this->mLayout)->Init(arr, 1, 0x5b598fa);
   ((cSPUILayout*)this->mLayout)->SetParentWin(this->mWinParent, 1, 0x5b598fa);
   ((cSPUILayout*)this->mLayout)->SetReloadCallback((void*)0x671ca0, this);
-  this->ReloadCallback(this->mLayout, 1);
+  ReloadCallback_layout(this, this->mLayout, 1);   // retail: push 1; push layout; push self; call 0x00671CA0
   if (*(int*)((char*)this + 0x28) == 1) {
     unsigned long long t = __rdtsc();
     *(int*)((char*)this + 0x24) = 0;
