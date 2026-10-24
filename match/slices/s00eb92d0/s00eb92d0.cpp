@@ -325,3 +325,286 @@ char View::Activate(int a, Event* e, int b, int c, int d)
     }
     return ok;
 }
+
+// =====================================================================================
+// Slice s00eb92d0 -- the large-view destructor (0x00EB92D0) and the creature/planet
+// surface probes at 0x00EBA0E0 .. 0x00EBA540.  Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
+// The probes live in the adventure-creature module and query the planet collision world
+// (0x0167ecd0) through the 0xB65xxx/0xB66xxx surface-query helpers.
+//
+// 0x00EBA290 (165 bytes) is NOT implemented: it reads live-in esi (the out Vector3*) and edi
+// in addition to its stack arguments, an incoming register convention that plain C++ cannot
+// declare (see partial.txt).
+// =====================================================================================
+#include <math.h>
+
+struct Vector3 { float x, y, z; };
+
+// Havok vector: 16-byte aligned, so any function with one as a local gets the
+// `push ebp / and esp,-16` framed prologue.
+struct __declspec(align(16)) hkVector4 { float x, y, z, w; };
+
+struct cPlanetModel {
+    float GetWaterHeight();                                  // 0x00b7e390, ret 0
+    float GetRadiusAt(const Vector3* p);                     // 0x00b7ef70, ret 4
+};
+cPlanetModel* __cdecl PlanetModel();                         // 0x00b3d350
+
+extern void* g_167ecd0;                                      // 0x0167ecd0 collision world
+extern int   g_16c7334;                                      // 0x016c7334
+extern volatile int g_16c7338;                               // 0x016c7338
+extern float g_16c733c;                                      // 0x016c733c last projected point
+extern float g_16c7340;                                      // 0x016c7340
+extern float g_16c7344;                                      // 0x016c7344
+
+// Radial ray used by the 4-argument surface query (from + normalised direction * length).
+struct __declspec(align(16)) RayIn {                          // sizeof 0x30
+    hkVector4 mFrom;                                          // +0x00
+    hkVector4 mDir;                                           // +0x10
+    float     mLen;                                           // +0x20
+    uint32_t  mPad24;                                         // +0x24
+};
+
+// Result record shared by both surface queries.
+struct __declspec(align(16)) RayHitResult {                   // 0x30 bytes
+    int       mStatus;                                        // +0x00
+    uint32_t  pad04[3];                                       // +0x04
+    hkVector4 mPos;                                           // +0x10
+    hkVector4* mpNormalOut;                                   // +0x20
+    float*    mpDistOut;                                      // +0x24
+    void*     mpUserData;                                     // +0x28
+    void*     mpEntity;                                       // +0x2c
+};
+
+// Radial ray of the 6-argument Havok ray cast (position + two height values).
+struct __declspec(align(16)) RadialRay {                      // sizeof 0x20
+    hkVector4 mPos;                                           // +0x00
+    float     mH0;                                            // +0x10
+    float     mH1;                                            // +0x14
+};
+
+void __cdecl FUN_00b66ed0(const RayIn* ray, void* world, int kind, RayHitResult* out);   // 0x00b66ed0
+void __cdecl FUN_00b65b10(const RadialRay* ray, void* world, void* obj, int useWorld,
+                          uint32_t filterInfo, RayHitResult* out);                       // 0x00b65b10
+char __cdecl FUN_008d3200(int id, int a);                                                // 0x008d3200
+void __cdecl RemoveHandler(uint32_t id, uint32_t a, uint32_t b, uint32_t c, uint32_t d);
+
+// Object whose ref-counted sub-object sits at +0x04.
+struct cSubRef { uint32_t pad00; IRefCount2 mRef; };
+
+// Outer large-view object (View is its sub-object at +0x0c).
+struct cLargeViewOuter {
+    volatile void* mpVt00;                                     // +0x00
+    volatile void* mpVt04;                                     // +0x04
+    volatile void* mpVt08;                                     // +0x08
+    volatile void* mpVt0c;                                     // +0x0c
+    volatile void* mpVt10;                                     // +0x10
+    uint32_t  pad14[(0xd0 - 0x14) / 4];
+    volatile void* mpVtD0;                                     // +0xd0
+    uint32_t  padD4[(0xe8 - 0xd4) / 4];
+    Target*   mpTarget;                                        // +0xe8
+    cSubRef*  mpSubEc;                                         // +0xec
+    IRefCount2* mpRefF0;                                       // +0xf0
+    Helper*   mpHelper;                                        // +0xf4
+    Sporepedia* mpSporepedia;                                  // +0xf8
+    TextZoomName* mpZoomF0;                                    // +0xfc
+    ZoomHolder mZoomF4;                                        // +0x100
+    ZoomHolder mZoomF8;                                        // +0x104
+    volatile uint32_t mHandlerId;                              // +0x108 (read after the vtable stores)
+    uint32_t  mHandlerArg0;                                    // +0x10c
+    uint32_t  mHandlerArg1;                                    // +0x110
+    uint32_t  mHandlerArg2;                                    // +0x114
+    uint32_t  mHandlerArg3;                                    // +0x118
+
+    void Destroy();
+    void FUN_0066c0c0();                                       // 0x0066c0c0 base destructor
+};
+
+// @ 0x00eb92d0
+void cLargeViewOuter::Destroy()
+{
+    mpVt00 = (void*)0x01488828;
+    mpVt04 = (void*)0x01488818;
+    mpVt08 = (void*)0x0148880c;
+    mpVt0c = (void*)0x014887f4;
+    mpVt10 = (void*)0x014887e4;
+    mpVtD0 = (void*)0x0140085c;
+
+    uint32_t id = mHandlerId;
+    if (id != 0) {
+        mHandlerId = 0;
+        RemoveHandler(id, mHandlerArg0, mHandlerArg1, mHandlerArg2, mHandlerArg3);
+    }
+
+    if (mZoomF8.mp)
+        ((IRefCount2*)mZoomF8.mp)->Release();
+    if (mZoomF4.mp)
+        ((IRefCount2*)mZoomF4.mp)->Release();
+    if (mpZoomF0)
+        ((IRefCount2*)mpZoomF0)->Release();
+    if (mpSporepedia)
+        ((IRefCount*)mpSporepedia)->Release();
+    if (mpHelper)
+        ((IRefCount*)mpHelper)->Release();
+    if (mpRefF0)
+        mpRefF0->Release();
+    if (mpSubEc)
+        mpSubEc->mRef.Release();
+    if (mpTarget)
+        mpTarget->mRef.Release();
+    FUN_0066c0c0();
+}
+
+// @ 0x00eba0e0
+bool FUN_00eba0e0(const Vector3* a, const Vector3* b)
+{
+    float wh = PlanetModel()->GetWaterHeight();
+    float la = sqrtf(a->x * a->x + a->y * a->y + a->z * a->z);
+    float lb = sqrtf(b->x * b->x + b->y * b->y + b->z * b->z);
+    if (!(wh < la || lb <= wh))
+        return true;
+    if (la > wh && wh >= lb)
+        return true;
+    return false;
+}
+
+struct cFlagSrc {
+    uint32_t mFlags;                                           // +0x00
+    uint32_t pad04[0xf];                                       // +0x04
+    uint8_t  mByte40;                                          // +0x40
+};
+
+// @ 0x00eba170
+int FUN_00eba170(const cFlagSrc* src, int* out)
+{
+    if (src->mFlags & 0x1000) {
+        *out = 1;
+        return 1;
+    }
+    char c16 = FUN_008d3200(0x10, 0x3ff);
+    char c17 = FUN_008d3200(0x11, 0x3ff);
+    if (c17 == 0 && c16 == 0) {
+        *out = 1;
+        g_16c7338 = 1;
+        return src->mByte40 ? 3 : 1;
+    } else if (c17 == 1 && c16 == 0) {
+        *out = 2;
+        g_16c7338 = 2;
+        return 2;
+    } else if (c16 == 1) {
+        *out = 3;
+        g_16c7338 = 3;
+        return 3;
+    }
+    int v = g_16c7338;
+    if (v == 0) {
+        v = g_16c7334;
+        g_16c7338 = v;
+    }
+    switch (v) {
+    case 0:
+    case 1:
+    case 3:
+        *out = 2;
+        return 2;
+    case 2:
+        *out = 3;
+        return 3;
+    default:
+        *out = 1;
+        return 1;
+    }
+}
+
+// @ 0x00eba340
+bool FUN_00eba340(const Vector3* a, const Vector3* b, Vector3* out)
+{
+    Vector3 dir;
+    dir.x = b->x - a->x;
+    dir.y = b->y - a->y;
+    dir.z = b->z - a->z;
+    float len = sqrtf(dir.x * dir.x + (dir.y * dir.y + dir.z * dir.z));
+
+    if (len > 0.0f) {
+        float inv = 1.0f / len;
+        dir.x *= inv;
+        dir.y *= inv;
+        dir.z *= inv;
+    }
+
+    RayIn in;
+    in.mFrom.x = a->x;
+    in.mFrom.y = a->y;
+    in.mFrom.z = a->z;
+    in.mFrom.w = 0.0f;
+    in.mDir.x = dir.x;
+    in.mDir.y = dir.y;
+    in.mDir.z = dir.z;
+    in.mDir.w = 0.0f;
+    in.mLen = len;
+    in.mPad24 = 0;
+
+    RayHitResult res;
+    res.mpNormalOut = 0;
+    res.mpDistOut = 0;
+    res.mpUserData = 0;
+    res.mpEntity = 0;
+    FUN_00b66ed0(&in, g_167ecd0, 5, &res);
+    if (res.mStatus != 0) {
+        if (out) {
+            out->x = res.mPos.x;
+            out->y = res.mPos.y;
+            out->z = res.mPos.z;
+        }
+        return true;
+    }
+    return false;
+}
+
+// @ 0x00eba480
+float FUN_00eba480(const Vector3* p, int* hit)
+{
+    float h0 = sqrtf(p->x * p->x + (p->y * p->y + p->z * p->z));
+
+    RadialRay ray;
+    ray.mPos.x = p->x;
+    ray.mPos.y = p->y;
+    ray.mPos.z = p->z;
+    ray.mPos.w = 0.0f;
+    ray.mH0 = h0;
+    ray.mH1 = 0.0f;
+
+    RayHitResult res;
+    res.mpNormalOut = 0;
+    res.mpDistOut = 0;
+    res.mpUserData = 0;
+    res.mpEntity = 0;
+    FUN_00b65b10(&ray, g_167ecd0, 0, 1, 6, &res);
+    *hit = res.mStatus;
+    if (res.mStatus != 0)
+        return sqrtf(res.mPos.x * res.mPos.x + (res.mPos.y * res.mPos.y + res.mPos.z * res.mPos.z));
+    return 0.0f;
+}
+
+// @ 0x00eba540
+bool FUN_00eba540(const Vector3* p, uint32_t flags)
+{
+    float len = sqrtf(p->x * p->x + p->y * p->y + p->z * p->z);
+    int hit = 0;
+    float surf = 0.0f;
+
+    if (flags & 0x400) {
+        float d = FUN_00eba480(p, &hit);
+        if (hit != 0)
+            surf = (d > 0.0f) ? d : surf;
+    }
+    if (flags & 0x100) {
+        float r = PlanetModel()->GetRadiusAt(p);
+        surf = (r > surf) ? r : surf;
+    }
+    if (flags & 0x200) {
+        float wh = PlanetModel()->GetWaterHeight();
+        surf = (wh > surf) ? wh : surf;
+    }
+    return fabs(len - surf) < 0.1f;
+}
