@@ -1,4 +1,8 @@
 // Slice s01092e10: hkPoweredHingeConstraintData::buildJacobian (Havok 3.1.0, 0x01092e10, 2110 bytes).
+// Also the neighbouring hkPoweredChainData bookkeeping methods (getConstraintInfo 0x01093660,
+// getRuntimeInfo 0x010936a0, destructor 0x01093810), the SP::cSPToolStrategy::AdjustCost stub
+// (0x010937e0, returns its argument) and the TU-local quaternion-error helper (0x010936c0, which
+// uses cl's custom register ABI and is therefore not byte-exact; see nonmatching.txt).
 // Flags: /vc71 /O2 /MD /Gy /TP /fp:fast. Layout (hkReflectedClasses.h): hkLimitedHingeConstraintData fields up to
 // +0x90, then m_motorActive +0x90, m_ignoreLimits +0x91, m_targetAngle +0x94, m_motor +0x98.
 // Runtime (0x48 bytes): initialized flag +0, initial position +4, solver results +8.., previous angle +0x40,
@@ -104,9 +108,16 @@ struct hkConstraintMotorOutput
 class hkConstraintMotor
 {
 public:
-	virtual void vslot0();
-	virtual void vslot1();
+	virtual ~hkConstraintMotor();          // +0 deleting-destructor slot
+	virtual void vslot1();                 // +4
 	virtual void motor(const hkConstraintMotorInput& input, hkConstraintMotorOutput& output) const = 0;   // +8
+	unsigned short m_memSizeAndFlags;      // +0x04
+	unsigned short m_referenceCount;       // +0x06
+	void removeReference()
+	{
+		if (m_memSizeAndFlags != 0 && --m_referenceCount == 0)
+			delete this;
+	}
 };
 
 extern "C" void hk1dAngularVelocityMotorBeginJacobian(const hkVector4& axis, const hkConstraintQueryIn& in,
@@ -172,11 +183,27 @@ struct hkLimitedHingeBasisB
 	hkVector4 m_perp2FreeAxis;  // +0x20
 };
 
-class hkConstraintData
+class hkBaseObject
+{
+};
+
+class hkReferencedObject : public hkBaseObject
 {
 public:
-	virtual ~hkConstraintData();
-	int m_memSizeAndFlags_userData[2];  // +0x04
+	unsigned short m_memSizeAndFlags;   // +0x04
+	unsigned short m_referenceCount;    // +0x06
+	virtual ~hkReferencedObject() {}
+};
+
+class hkConstraintData : public hkReferencedObject
+{
+public:
+	unsigned int m_userData;            // +0x08
+	struct RuntimeInfo
+	{
+		int m_sizeOfExternalRuntime;    // +0x00
+		int m_numSolverResults;         // +0x04
+	};
 };
 
 class hkPoweredHingeConstraintData : public hkConstraintData
@@ -318,4 +345,183 @@ void hkPoweredHingeConstraintData::buildJacobian(const hkConstraintQueryIn& in, 
 		hk1dAngularLimitBuildJacobian(limit, in, out);
 	}
 	runtime->m_initialPosition = m_targetAngle;
+}
+
+// ---------------------------------------------------------------------------------------------------------
+// hkPoweredChainData: chain bookkeeping methods and destructor (Havok 3.1.0, same /vc71 translation unit).
+// ---------------------------------------------------------------------------------------------------------
+class __declspec(align(16)) hkQuaternion
+{
+public:
+	float x, y, z, w;
+};
+
+class hkBool
+{
+public:
+	hkBool() {}
+	hkBool(bool b) : m_bool(b ? 1 : 0) {}
+	unsigned char m_bool;
+};
+
+extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
+extern unsigned long g_threadMemoryTls;   // 0x016e4174: hkThreadMemory TLS slot
+
+class hkThreadMemory
+{
+public:
+	void deallocateChunk(void* data, int numBytes, int alignment);   // 0x0107db10
+};
+
+template <class T> class hkArray
+{
+public:
+	enum { CAPACITY_MASK = 0x3fffffff, DONT_DEALLOCATE_FLAG = (int)0x80000000 };
+	T* m_data;              // +0x00
+	int m_size;             // +0x04
+	int m_capacityAndFlags; // +0x08
+	int getCapacity() const { return m_capacityAndFlags & CAPACITY_MASK; }
+	~hkArray()
+	{
+		if ((m_capacityAndFlags & DONT_DEALLOCATE_FLAG) == 0)
+		{
+			hkThreadMemory* mem = (hkThreadMemory*)TlsGetValue(g_threadMemoryTls);
+			mem->deallocateChunk(m_data, getCapacity() * sizeof(T), 0x14);
+		}
+	}
+};
+
+struct hkConstraintInfo
+{
+	int m_maxSizeOfJacobians;   // +0x00
+	int m_sizeOfJacobians;      // +0x04
+	int m_sizeOfSchemas;        // +0x08
+	int m_numSolverResults;     // +0x0c
+};
+
+class hkPoweredChainDataConstraintInfo
+{
+public:
+	hkVector4 m_pivotInA;            // +0x00
+	hkVector4 m_pivotInB;            // +0x10
+	hkQuaternion m_aTc;              // +0x20
+	hkQuaternion m_bTc;              // +0x30
+	hkConstraintMotor* m_motors[3];  // +0x40
+	bool m_switchBodies;             // +0x4c
+};
+
+class hkConstraintChainData : public hkConstraintData
+{
+};
+
+class hkPoweredChainData : public hkConstraintChainData
+{
+public:
+	hkArray<hkPoweredChainDataConstraintInfo> m_infos;   // +0x0c
+	hkReal m_tau;                                        // +0x18
+	hkReal m_damping;                                    // +0x1c
+	hkReal m_cfmLinAdd;                                  // +0x20
+	hkReal m_cfmLinMul;                                  // +0x24
+	hkReal m_cfmAngAdd;                                  // +0x28
+	hkReal m_cfmAngMul;                                  // +0x2c
+	hkReal m_maxErrorDistance;                           // +0x30
+
+	virtual void getConstraintInfo(hkConstraintInfo& info) const;
+	virtual void getRuntimeInfo(hkBool wantRuntime, hkConstraintData::RuntimeInfo& info) const;
+	virtual void buildJacobian(const hkConstraintQueryIn& in, hkConstraintQueryOut& out);
+	~hkPoweredChainData();
+};
+
+// @ 0x01093660
+void hkPoweredChainData::getConstraintInfo(hkConstraintInfo& info) const
+{
+	info.m_sizeOfJacobians = 0;
+	info.m_numSolverResults = 0;
+	info.m_maxSizeOfJacobians = 0;
+	info.m_sizeOfSchemas = 0x18;
+
+	int n = m_infos.m_size;
+	info.m_sizeOfSchemas = n * 0x50 + 0x34;
+	info.m_sizeOfJacobians = n * 0x4f0 + 0x20;
+	info.m_numSolverResults = n * 6;
+}
+
+// @ 0x010936a0
+void hkPoweredChainData::getRuntimeInfo(hkBool, hkConstraintData::RuntimeInfo& info) const
+{
+	int n = m_infos.m_size;
+	int numSolverResults = n * 6;
+	info.m_numSolverResults = numSolverResults;
+	info.m_sizeOfExternalRuntime = ((n + 3) & ~3) + (numSolverResults + n * 2) * 8;
+}
+
+// @ 0x010936c0
+static void quaternionError(hkVector4& out, const hkQuaternion& a, const hkQuaternion& b)
+{
+	out.w = 0.0f;
+	out.x = a.z * b.y - a.y * b.z;
+	out.y = a.x * b.z - a.z * b.x;
+	out.z = b.x * a.y - b.y * a.x;
+	const float aw = a.w;
+	out.x = aw * b.x + out.x;
+	out.y = aw * b.y + out.y;
+	out.z = aw * b.z + out.z;
+	out.w = aw * b.w;
+	const float bw = b.w;
+	out.x = out.x - bw * a.x;
+	out.y = out.y - bw * a.y;
+	out.z = out.z - bw * a.z;
+	out.w = out.w - bw * a.w;
+	const float x2 = out.x + out.x;
+	const float y2 = out.y + out.y;
+	const float z2 = out.z + out.z;
+	const float w2 = out.w + out.w;
+	out.x = x2;
+	out.y = y2;
+	out.z = z2;
+	out.w = w2;
+	const float dot = b.x * a.x + b.y * a.y + b.w * a.w + a.z * b.z;
+	if (dot < kZero) {
+		out.x = -x2;
+		out.y = -y2;
+		out.z = -z2;
+		out.w = -w2;
+	}
+}
+
+namespace SP
+{
+	class cSPToolStrategy
+	{
+	public:
+		int AdjustCost(int cost);
+	};
+}
+
+// @ 0x010937e0
+int SP::cSPToolStrategy::AdjustCost(int cost)
+{
+	return cost;
+}
+
+// @ 0x01093810
+hkPoweredChainData::~hkPoweredChainData()
+{
+	for (int i = 0; i < m_infos.m_size; ++i)
+	{
+		for (int j = 0; j < 3; ++j)
+		{
+			hkConstraintMotor* motor = m_infos.m_data[i].m_motors[j];
+			if (motor)
+				motor->removeReference();
+		}
+	}
+}
+
+// Stand-in callers: keep the TU-local quaternion helper referenced so the compiler emits it out of line
+// (the hinge buildJacobian calls it twice in the original TU). Not part of the slice.
+void slice_s01092e10_quaternionError(hkVector4& out, const hkQuaternion& a, const hkQuaternion& b)
+{
+	quaternionError(out, a, b);
+	quaternionError(out, b, a);
 }
