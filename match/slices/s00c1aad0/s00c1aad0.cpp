@@ -33,6 +33,27 @@ struct cLocomotionRequest {
     }
 };
 
+// A 3x3 rotation block plus the frame that wraps a location:
+// { uint16 kind; uint16 pad; Vector3 pos; float scale; cSPMatrix3 basis; } = 0x38 bytes.
+struct cSPMatrix3 {
+    float mRows[9];
+    void Assign(const float* src);                                  // 0x0041cb40 (ret 4)
+};
+
+struct cSPLocalFrame {
+    uint16_t kind;            // +0x0  (0)
+    uint16_t pad0;            // +0x2  (0)
+    Vector3 pos;              // +0x4  (kZeroVec)
+    float scale;              // +0x10 (1.0f)
+    cSPMatrix3 basis;         // +0x14 (source 0x0168db30)
+};
+
+// Object returned by Body::FUN_00c41ec0(); only +0x5c is read.
+struct cAnimState {
+    char pad[0x5c];
+    int field5c;              // +0x5c
+};
+
 // Secondary base at +0xc0 of a creature.
 class Body {
 public:
@@ -56,6 +77,8 @@ public:
     virtual void Submit(const cLocomotionRequest& req);             // 0xdc
     const Vector3* GetVelocity();                                   // 0x00d20610 (lea eax,[ecx+0x1c8])
     void FUN_00c446d0(const Vector3* v, bool flag);                 // 0x00c446d0 (ret 8)
+    void LocalToWorldTransform(cSPLocalFrame* frame);               // 0x00c897e0 (ret 4)
+    cAnimState* FUN_00c41ec0();                                     // 0x00c41ec0
 };
 
 // Species data.
@@ -64,12 +87,18 @@ struct SpeciesData {
     float mLeapRangeAir;       // +0x548
     char pad54c[4];
     float mLeapRange;          // +0x550
-    char pad554[0x610 - 0x554];
+    char pad554[0x5c8 - 0x554];
+    uint32_t mSprintTime;      // +0x5c8 (sprint duration, ms)
+    float mSprintScale;        // +0x5cc (countdown ms per tick)
+    int mSprintRate;           // +0x5d0 (added/subtracted from +0xfa0)
+    char pad5d4[0x610 - 0x5d4];
     uint32_t m610;             // +0x610
     char pad614[8];
     uint32_t m61c;             // +0x61c
     char pad620[0x698 - 0x620];
     uint32_t m698;             // +0x698
+    char pad69c[0x6b0 - 0x69c];
+    float mSprintPitch;        // +0x6b0 (pitch applied while sprinting; <= 0 disables)
 };
 
 class PlanetModel {
@@ -100,19 +129,49 @@ public:
     uint32_t mFlags;                 // +0x110
     char pad114[0x137 - 0x114];
     bool mbLeaping;                  // +0x137
-    char pad138[0x2b0 - 0x138];
+    char pad138[0x2a0 - 0x138];
+    float mTurnRate;                 // +0x2a0 (FUN_00c0ce80 result)
+    char pad2a4[0x2b0 - 0x2a4];
     int mState;                      // +0x2b0
     char pad2b4[0xb20 - 0x2b4];
     SpeciesData* mpSpecies;          // +0xb20
-    char padb24[0xbb0 - 0xb24];
-    bool mbBB0;                      // +0xbb0
-    char padbb1[0xe7c - 0xbb1];
+    char padb24[0xb58 - 0xb24];
+    unsigned int mMovePad0 : 8;      // +0xb58 bits 0..7
+    unsigned int mbFlagB8 : 1;       // +0xb58 bit 8
+    unsigned int mbFlagB9 : 1;       // +0xb58 bit 9
+    unsigned int mMovePad1 : 22;     // +0xb58 bits 10..31
+    char padb5c[0xb80 - 0xb5c];
+    float mStealthRate;              // +0xb80
+    char padb84[0xbb0 - 0xb84];
+    bool mbBB0;                      // +0xbb0 (sprinting)
+    bool mbBB1;                      // +0xbb1 (stealthed)
+    char padbb2[0xbb4 - 0xbb2];
+    uint32_t mBB4;                   // +0xbb4 (sprint countdown)
+    char padbb8[0xe58 - 0xbb8];
+    float mE58;                      // +0xe58
+    char pade5c[0xe7c - 0xe5c];
     IQueryTarget* mpTargetHolder;    // +0xe7c
+    char pade80[0xf98 - 0xe80];
+    int mF98;                        // +0xf98
+    char padf9c[4];
+    int mFA0;                        // +0xfa0
+    unsigned int mFA4Pad0 : 5;       // +0xfa4 bits 0..4
+    unsigned int mbSpeedBoost : 1;   // +0xfa4 bit 5
+    unsigned int mFA4Pad1 : 26;      // +0xfa4 bits 6..31
 
     float FUN_00c0ce80(int a, int b);                               // 0x00c0ce80 (ret 8)
     void FUN_00c15dc0(float f);                                     // 0x00c15dc0 (ret 4)
     void FUN_00c18b40(int arg);                                     // 0x00c18b40 (ret 4)
     void InterruptAnimation(uint32_t id, int a, int b);             // 0x00c12310 (ret 0xc)
+    int  FUN_00c0c080(int name);                                    // 0x00c0c080 (FindIndex, ret 4)
+    void FUN_00c197a0(int index);                                   // 0x00c197a0 (ret 4)
+    void FUN_00c0cff0(int a);                                       // 0x00c0cff0 (ret 4)
+    void FUN_00c1aad0(unsigned int ms);
+    void FUN_00c1ac70(int a, int b, int c, int d, int e, float f);
+    void CanReachPointWithBodyPart(const cSPLocalFrame* frame, int a, int b, int c, int d,
+                                   int e, float f);                 // 0x00c175d0 (ret 0x1c)
+    void SetSprinting(bool sprint);
+    void SetStealthed(bool enable, bool force);
     void FUN_00c1b020(int arg);
 };
 
@@ -270,4 +329,284 @@ void cSPCreatureBase::FUN_00c1b020(int arg)
         }
     }
     FUN_00c18b40(arg);
+}
+
+// ---------------------------------------------------------------------------
+// Movement-mode bookkeeping (sprint / stealth), body-part reachability and the
+// two container helpers behind the creature goal vector / a 16-byte record vector.
+// ---------------------------------------------------------------------------
+
+class IMessageServer {
+public:
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void Send(uint32_t id, int a, int b);                   // slot 5 (+0x14)
+};
+IMessageServer* MessageServer();                                    // 0x0067dcc0
+
+struct cGameMode { int mUnused; };
+struct cGameModeMgr {
+    cGameMode* GetCurrentGameMode();                                // 0x00a42730
+};
+cGameModeMgr* FUN_00b3d320();                                       // 0x00b3d320
+extern cGameMode kGameModeScenario;                                 // 0x01654c10
+extern cGameMode kGameModeEditor;                                   // 0x01654c01
+extern bool gFlag169e37c;                                           // 0x0169e37c
+extern const float kSprintBonus;                                    // 0x0150c900
+extern const float kStealthRateDefault;                             // 0x0150c8c0
+extern const float kMatrix3Source[3];                               // 0x0168db30
+
+class IAudioSystem {
+public:
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void* GetListener();                                    // slot 8 (+0x20)
+};
+IAudioSystem* GetSystemAT();                                        // 0x00a206f0
+void Start3dSoundByName(uint32_t id, void* listener, float x, float y, float z);  // 0x00571f80
+
+// @ 0x00c1aad0
+void cSPCreatureBase::FUN_00c1aad0(unsigned int ms)
+{
+    char mode9 = (char)mbFlagB9;
+    char mode8 = (char)mbFlagB8;
+    if (mode9 || mode8) {
+        unsigned int timer = mBB4;
+        if (mbBB0) {
+            SpeciesData* sp = mpSpecies;
+            float pitch = sp->mSprintPitch;
+            if (timer <= sp->mSprintTime && (pitch <= 0.0f || mE58 > 0.0f)) {
+                FUN_00c15dc0((ms * 0.001f) * pitch);
+                mBB4 = timer + ms;
+                return;
+            }
+            mbBB0 = false;
+            mBB4 = sp->mSprintTime;
+            if (mbSpeedBoost) {
+                mbSpeedBoost = false;
+                mFA0 -= sp->mSprintRate;
+                float speed;
+                if (mbBB0)
+                    speed = FUN_00c0ce80(2, 1) + kSprintBonus;
+                else
+                    speed = FUN_00c0ce80(mF98, 0);
+                mTurnRate = speed;
+            }
+            int idx = FUN_00c0c080(0x27);
+            if (idx == -1)
+                idx = FUN_00c0c080(0x50);
+            FUN_00c197a0(idx);
+            return;
+        }
+        if (timer != 0) {
+            unsigned int dec = (unsigned int)((float)ms * mpSpecies->mSprintScale);
+            if (timer >= dec)
+                mBB4 = timer - dec;
+            else
+                mBB4 = 0;
+        }
+    }
+}
+
+// @ 0x00c1ac70
+void cSPCreatureBase::FUN_00c1ac70(int a, int b, int c, int d, int e, float f)
+{
+    cSPLocalFrame frame;
+    frame.kind = 0;
+    frame.pad0 = 0;
+    frame.pos.x = kZeroVec.x;
+    frame.pos.y = kZeroVec.y;
+    frame.pos.z = kZeroVec.z;
+    frame.scale = 1.0f;
+    frame.basis.Assign(kMatrix3Source);
+    mBody.LocalToWorldTransform(&frame);
+    CanReachPointWithBodyPart(&frame, a, b, c, d, e, f);
+}
+
+// @ 0x00c1ad10
+void cSPCreatureBase::SetSprinting(bool sprint)
+{
+    bool bBusy = mBody.FUN_00c41ec0()->field5c != 0;
+
+    if (sprint) {
+        if ((char)mbFlagB9) {
+            if (FUN_00b3d320()->GetCurrentGameMode() == &kGameModeScenario)
+                MessageServer()->Send(0x7c772b7, 0, 0);
+        }
+        uint8_t boosted = (uint8_t)mbSpeedBoost;
+        mbBB0 = true;
+        mbSpeedBoost = true;
+        if (boosted != 1) {
+            mFA0 += mpSpecies->mSprintRate * (boosted == 0 ? 1 : -1);
+            float speed;
+            if (mbBB0)
+                speed = FUN_00c0ce80(2, 1) + kSprintBonus;
+            else
+                speed = FUN_00c0ce80(mF98, 0);
+            mTurnRate = speed;
+        }
+        if (((char)mbFlagB9) && FUN_00b3d320()->GetCurrentGameMode() == &kGameModeEditor) {
+            if (!bBusy) {
+                gFlag169e37c = true;
+                return;
+            }
+            FUN_00c0cff0(mF98);
+            return;
+        }
+    } else {
+        if ((char)mbFlagB9) {
+            int idx = FUN_00c0c080(0x27);
+            if (idx == -1)
+                idx = FUN_00c0c080(0x50);
+            FUN_00c197a0(idx);
+        }
+        mbBB0 = false;
+        if (mbSpeedBoost) {
+            mbSpeedBoost = false;
+            mFA0 -= mpSpecies->mSprintRate;
+            float speed;
+            if (mbBB0)
+                speed = FUN_00c0ce80(2, 1) + kSprintBonus;
+            else
+                speed = FUN_00c0ce80(mF98, 0);
+            mTurnRate = speed;
+        }
+    }
+
+    if (bBusy)
+        FUN_00c0cff0(mF98);
+}
+
+// @ 0x00c1aed0
+void cSPCreatureBase::SetStealthed(bool enable, bool force)
+{
+    if (enable) {
+        if (!force && FUN_00c0c080(0xd) == -1 && FUN_00c0c080(0x52) == -1)
+            return;
+        mStealthRate = 0.0f;
+        if (mbBB1)
+            return;
+        mbBB1 = true;
+        const Vector3* pos = mBody.GetPos();
+        IAudioSystem* sys = GetSystemAT();
+        void* listener = sys ? sys->GetListener() : 0;
+        Start3dSoundByName(0xc881120e, listener, pos->x, pos->y, pos->z);
+    } else {
+        if (!mbBB1)
+            return;
+        char mode9 = (char)mbFlagB9;
+        if (mode9) {
+            int idx = FUN_00c0c080(0xd);
+            if (idx == -1)
+                idx = FUN_00c0c080(0x52);
+            FUN_00c197a0(idx);
+        } else {
+            mStealthRate = kStealthRateDefault;
+        }
+        mbBB1 = false;
+        const Vector3* pos = mBody.GetPos();
+        IAudioSystem* sys = GetSystemAT();
+        void* listener = sys ? sys->GetListener() : 0;
+        Start3dSoundByName(0x529fec69, listener, pos->x, pos->y, pos->z);
+    }
+}
+
+// ----- creature goal vector (60-byte records) ------------------------------
+
+struct cGoalRecord {                 // 0x3c bytes
+    uint32_t mWords[15];
+};
+
+// Raw byte pointers (EASTL-style storage); one record is 0x3c bytes.
+struct cGoalVector {
+    char* mpBegin;                   // +0x0
+    char* mpEnd;                     // +0x4
+    char* mpCapacity;                // +0x8
+    cGoalVector& Assign(const cGoalVector& src);        // 0x00c1b790 (ret 4)
+};
+
+char* FUN_00c19cb0(int n, const char* first, const char* last);             // 0x00c19cb0
+char* FUN_00ac4360(const char* first, const char* last, char* dest);        // 0x00ac4360
+cGoalRecord FUN_00b3f260(const char* first, const char* last, char* dest,
+                         const char* extra);                            // 0x00b3f260
+
+// @ 0x00c1b790
+cGoalVector& cGoalVector::Assign(const cGoalVector& other)
+{
+    if (&other != this) {
+        int n = (other.mpEnd - other.mpBegin) / 60;
+        if ((uint32_t)((mpCapacity - mpBegin) / 60) < (uint32_t)n) {
+            char* p = FUN_00c19cb0(n, other.mpBegin, other.mpEnd);
+            // EASTL allocation header: the element count lives 4 bytes before the block.
+            if (mpBegin != 0 && ((int*)mpBegin)[-1] != 0)
+                operator_delete__(mpBegin);
+            mpBegin = p;
+            mpCapacity = p + n * 60;
+        } else {
+            int m = (mpEnd - mpBegin) / 60;
+            if ((uint32_t)m >= (uint32_t)n) {
+                FUN_00ac4360(other.mpBegin, other.mpEnd, mpBegin);
+            } else {
+                FUN_00ac4360(other.mpBegin, other.mpBegin + m * 60, mpBegin);
+                FUN_00b3f260(other.mpBegin + m * 60, other.mpEnd, mpEnd, other.mpEnd);
+            }
+        }
+        mpEnd = mpBegin + n * 60;
+    }
+    return *this;
+}
+
+// ----- 16-byte record vector loaded from a stream ---------------------------
+
+struct Quad16 {                      // 0x10 bytes
+    uint32_t mWords[4];
+};
+
+struct cQuad16Vector {
+    Quad16* mpBegin;                 // +0x0
+    Quad16* mpEnd;                   // +0x4
+    Quad16* mpCapacity;              // +0x8
+    void reserve(int n);             // 0x00c53690 (ret 4)
+    void PushBackSlow(Quad16* pos, const Quad16* value);   // 0x00c19d10 (ret 8)
+};
+
+class IStreamNode {
+public:
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5();
+    virtual IStreamNode* GetReader();    // +0x18
+    virtual void EndChunk();             // +0x1c
+    virtual IStreamNode* GetSubNode();   // +0x20
+};
+
+Quad16* copy_705250(const Quad16* first, const Quad16* last, Quad16* dest);   // 0x00705250
+void* ReadInt32(void* reader, int* out, int count, int flags);                 // 0x0093a780
+void FUN_00c0b100(IStreamNode* s, Quad16* out);                                // 0x00c0b100
+
+
+// @ 0x00c1b8c0
+void FUN_00c1b8c0(IStreamNode* s, cQuad16Vector* v)
+{
+    Quad16* first = v->mpBegin;
+    Quad16* last = v->mpEnd;
+    copy_705250(last, last, first);
+    v->mpEnd -= (last - first);
+
+    int count = 0;
+    IStreamNode* sub = s->GetSubNode();
+    void* reader = sub->GetReader();
+    ReadInt32(reader, &count, 1, 0);
+    v->reserve(count);
+    for (unsigned int i = 0; i < (unsigned int)count; ++i) {
+        Quad16 e;
+        FUN_00c0b100(s, &e);
+        if (v->mpEnd < v->mpCapacity) {
+            Quad16* p = v->mpEnd;
+            v->mpEnd = p + 1;
+            if (p)
+                *p = e;
+        } else {
+            v->PushBackSlow(v->mpEnd, &e);
+        }
+    }
+    s->EndChunk();
 }

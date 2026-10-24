@@ -1,0 +1,4 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00c1aad0/s00c1aad0.cpp  ?FUN_00c1ac70@cSPCreatureBase@@QAEXHHHHHM@Z  00c1ac70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c1aad0/s00c1aad0.cpp  ?SetStealthed@cSPCreatureBase@@QAEX_N0@Z  00c1aed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c1aad0/s00c1aad0.cpp  ?FUN_00c1b8c0@@YAXPAVIStreamNode@@PAUcQuad16Vector@@@Z  00c1b8c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
