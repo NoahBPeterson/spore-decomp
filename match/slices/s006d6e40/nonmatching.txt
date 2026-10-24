@@ -1,5 +1,4 @@
-# va  diff-bytes  reason
-006d6e40 741  bake evaluator (uv4x8/colour2f/pos3f, core FUN_006c3780, acos tail); /O2 frame + scheduling differ; equiv now FAIL: 5/67 valid inputs mismatched; first: import call #0
-006d7190 690  bake evaluator (uv2x16/colour2f/pos3f, core FUN_006c3780, acos tail); /O2 frame + scheduling differ; equiv now FAIL: 5/5 valid inputs mismatched; first: import call #0
-006d74b0 741  bake evaluator (uv4x16/colour2f/pos3f, core FUN_006c3780, acos tail); /O2 frame + scheduling differ; equiv now FAIL: 5/22 valid inputs mismatched; first: memory pool @40020000
-006d7800 724  bake evaluator (uv4x8/colour2f/pos3f, core FUN_006c3b90, acos tail); /O2 frame + scheduling differ; equiv now FAIL: 5/5 valid inputs mismatched; first: import call #0
+006d6e40  813  complete source via shared DEFINE_BAKE (core FUN_006c3780, uv4 u8, colour2f, acos2 tail); equivalence PASS 568 valid / 100% cov at --inputs 1200; byte diff is cl15 codegen (/GS EH frame vs the original's, x87 for the copied s/colour/pos arrays, stack-slot layout)
+006d7190  783  complete source via shared DEFINE_BAKE (core FUN_006c3780, uv2 u16, colour2f, acos2 tail); equivalence PASS 451 valid / 100% cov at --inputs 1200; byte diff is cl15 codegen only
+006d74b0  814  complete source via shared DEFINE_BAKE (core FUN_006c3780, uv4 u16, colour2f, acos2 tail); equivalence PASS 529 valid / 100% cov at --inputs 1200; byte diff is cl15 codegen only
+006d7800  824  complete source via shared DEFINE_BAKE (core FUN_006c3b90, uv4 u8, colour2f, acos2 tail); equivalence PASS 246 valid / 100% cov at --inputs 600; at --inputs 1200 3 of 508 degenerate float-special inputs still differ in the acos2 o[0] lane (original yields the x87 indefinite NaN, ours 0) and the original budget-exhausts when the saved input is replayed; byte diff is cl15 codegen only

@@ -1,4 +1,6 @@
 // Slice s006d6e40: bake evaluators (acos2 tail).
+// The core body lives in the shared ../s006ccf50/s006ccf50.h (DEFINE_BAKE); any
+// edit there must bump this line so the harness rebuilds: rev 6.
 #include "../s006ccf50/s006ccf50.h"
 
 DEFINE_BAKE(Bake_6d6e40, 3, 4, 0, 2, 2)   // @ 0x006d6e40  uv4u8  / colour2f / acos2
