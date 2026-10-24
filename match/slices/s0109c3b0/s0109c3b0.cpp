@@ -5,7 +5,9 @@
 typedef unsigned int uint;
 
 void* FUN_010fc180(void* a, void* b, void* c);        // 0x010fc180
-void* FUN_0107f820(void* cs);                          // 0x0107f820 hkCriticalSection::enter
+struct CritSec {                                       // hkCriticalSection, __thiscall (this = the CS)
+    void enter();                                      // 0x0107f820, no stack arguments, returns via ret
+};
 void* FUN_010f0b00(void* a, void* b);                  // 0x010f0b00
 void* FUN_010f19b0(int a);                             // 0x010f19b0
 void* FUN_010f1a10(void* self);                        // 0x010f1a10
@@ -19,7 +21,7 @@ void* FUN_010a65e0();                                  // 0x010a65e0 hkJobQueue 
 void* FUN_0107db10(void* mem, int a, int b, int c);    // 0x0107db10 hkThreadMemory::deallocateChunk
 void* FUN_0109c4f0();                                  // 0x0109c4f0
 void* TlsGetValue(void* idx);                          // kernel32
-void  LeaveCriticalSection(void* cs);                  // kernel32
+extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(void* cs);   // kernel32, IAT 0x013cc2dc
 void  DeleteCriticalSection(void* cs);                 // kernel32
 void  InitializeCriticalSectionAndSpinCount(void* cs, uint spin);  // kernel32
 extern void* g_hkMemory;             // 0x016e4178
@@ -92,7 +94,7 @@ struct MtEntityEntityBroadPhaseListener { void addCollisionPair(int* pair); void
 // @ 0x0109c6d0  hkMultiThreadedSimulation::prepareMultithreadStep
 int hkMultiThreadedSimulation::prepareMultithreadStep() {
     char* s = (char*)this;
-    FUN_0107f820(s + 0x100);
+    ((CritSec*)(s + 0x100))->enter();
     int v = *(int*)(s + 0xc0) + 1;
     *(int*)(s + 0xc0) = v;
     if (v == 1) return 0;
@@ -134,7 +136,7 @@ void MtEntityEntityBroadPhaseListener::addCollisionPair(int* pair) {
     char* e2 = (char*)(pair[1] + *(char*)(pair[1] + 5));
     char* a = e1 + *(int*)(e1 + 0x10);
     char* b = e2 + *(int*)(e2 + 0x10);
-    if (listener[0x54/4] && !a[0x99] && !b[0x99] && *(int*)(a + 0x5c) != *(int*)(b + 0x5c)) {
+    if (((char*)listener)[0x54] && !a[0x99] && !b[0x99] && *(int*)(a + 0x5c) != *(int*)(b + 0x5c)) {
         if ((uint)*(int*)((char*)listener + 0x5c) == (*(uint*)((char*)listener + 0x60) & 0x3fffffff))
             FUN_0107f530((char*)listener + 0x58, 8);
         int idx = *(int*)((char*)listener + 0x5c);
@@ -144,8 +146,16 @@ void MtEntityEntityBroadPhaseListener::addCollisionPair(int* pair) {
         *(int*)((char*)listener + 0x5c) = *(int*)((char*)listener + 0x5c) + 1;
         return;
     }
-    int* t = *(int**)(*(int*)((char*)listener + 0x2c) + 0x78);
-    (void)t;
+    // no collision pair to report: classify the agent pair in the simulation's pair table
+    char* table = *(char**)(*(int*)((char*)listener + 0x2c) + 0x78);
+    int   base = *(int*)table;
+    int   i1 = *(unsigned short*)(e1 + 0x1a);
+    int   i2 = *(unsigned short*)(e2 + 0x1a);
+    char  cls = *(char*)(base + i2 + i1 * 8 + 0x19d4);
+    if (cls) {
+        table[0xc] = *(char*)(base + (int)cls * 0x3c + 0x1a24);
+        FUN_010a3920(e1, e2, table);
+    }
 }
 
 // @ 0x0109c890
@@ -156,7 +166,7 @@ void MtEntityEntityBroadPhaseListener::removeCollisionPair(int* pair) {
     char* e2 = (char*)(pair[1] + *(char*)(pair[1] + 5));
     char* a = e1 + *(int*)(e1 + 0x10);
     char* b = e2 + *(int*)(e2 + 0x10);
-    if (listener[0x54/4] && !a[0x99] && !b[0x99] && *(int*)(a + 0x5c) != *(int*)(b + 0x5c)) {
+    if (((char*)listener)[0x54] && !a[0x99] && !b[0x99] && *(int*)(a + 0x5c) != *(int*)(b + 0x5c)) {
         if ((uint)*(int*)((char*)listener + 0x8c) == (*(uint*)((char*)listener + 0x90) & 0x3fffffff))
             FUN_0107f530((char*)listener + 0x88, 8);
         int idx = *(int*)((char*)listener + 0x8c);
