@@ -6,9 +6,9 @@
 00714260 109 CollectMaterials: complete; looks up each id through the material manager (vt+0x28), and when it yields a non-null item with an empty *out slot, allocates a 0x20 adapter (EastlNew), writes the two vtables/zeros (the +4 store needs the volatile trick as in 00713f90), publishes it, calls vtable slot 0, and Remove()s the item. 141/147 bytes. The diff is register allocation (our zero-const lands in edi, the original's in esi; element in edi) plus store order. difftest verdict UNSUPPORTED (2/4 valid, 15.8% coverage). Flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast.
 007146c0 50 resource-adapter teardown (AdapterTeardown::Destroy): complete body (guarded EastlFree of +0xbc and +0xa8, VectorDtorRange(+0x80,0x14,2), VectorDtorRange(+0x30,0x14,4), guarded frees of +0x1c and +8). The original carries the 4-frame C++ EH prologue/epilogue with handler 0x121025c and the two-vector destructor try levels (state 2 then 1) that our plain body (141 bytes) does not reproduce; the modelled member-destructor form over-generates EH states (217 bytes). Original 191 bytes. difftest verdict UNSUPPORTED (0/4 valid). Flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast.
 007143e0 195 resource-adapter virtual dispatch on a bitmask; call/push schedule differs
-007144f0  98 record comparator (4 key dwords then 2 more); early-exit form not reproduced
+007144f0  98  record comparator (4 key dwords then 2 more); mpBase is a pointer-to-pointer and the second 2-dword loop was missing; [equiv: PASS]
 00714560  36 pair-table key lookup + value store; loop register assignment differs
 007145b0 114 matrix table store; only 12 floats are written and the copy schedule differs
-00714910  24 6-dword fill loop; dec/test/ja loop shape vs sub/jne
-00714bc0  45 pair copy with out-pointer; loop register assignment differs
+00714910  24 6-dword fill loop; return the advanced dst pointer so eax matches the original's leftover iter [equiv: PASS]
+00714bc0  45 pair copy with out-pointer; return `out` so eax matches the original's leftover out pointer [equiv: PASS]
 00714ec0  38 allocate-and-copy; loop register assignment differs

@@ -337,18 +337,23 @@ void AdapterTeardown::Destroy()
     EastlFreeGuarded(m8);
 }
 
-// comparator used by the sort below (callee 0x7144F0): 0x18-byte records, 4 key dwords
+// comparator used by the sort below (callee 0x7144F0): 0x18-byte records, 4 key dwords then 2 more
 struct RecordCmp {
-    const char* mpBase;                     // +0x00
+    const uint32_t** mpBase;                // +0x00  pointer to the record-array base pointer
     bool less(uint32_t a, uint32_t b) const;
 };
 
 // @ 0x007144F0
 __declspec(noinline) bool RecordCmp::less(uint32_t a, uint32_t b) const
 {
-    const uint32_t* pa = (const uint32_t*)(mpBase + a * 0x18);
-    const uint32_t* pb = (const uint32_t*)(mpBase + b * 0x18);
+    const uint32_t* base = *mpBase;
+    const uint32_t* pa = base + a * 6;
+    const uint32_t* pb = base + b * 6;
     for (int i = 0; i < 4; ++i) {
+        if (pa[i] < pb[i]) return true;
+        if (pa[i] != pb[i]) return false;
+    }
+    for (int i = 4; i < 6; ++i) {
         if (pa[i] < pb[i]) return true;
         if (pa[i] != pb[i]) return false;
     }
@@ -390,7 +395,7 @@ void __cdecl Copy24(uint32_t* dst, uint32_t* end, const uint32_t* src)
 
 // @ 0x00714910  fill n 6-dword elements (null dest tolerated)
 // ---------------------------------------------------------------------------------------------
-void __cdecl Fill24(uint32_t* dst, uint32_t n, const uint32_t* src)
+void* __cdecl Fill24(uint32_t* dst, uint32_t n, const uint32_t* src)
 {
     for (; n != 0; --n) {
         if (dst != 0) {
@@ -399,12 +404,13 @@ void __cdecl Fill24(uint32_t* dst, uint32_t n, const uint32_t* src)
         }
         dst += 6;
     }
+    return dst;
 }
 
 // ---------------------------------------------------------------------------------------------
 // @ 0x00714BC0  copy 2-dword pairs, storing the new end through the out pointer
 // ---------------------------------------------------------------------------------------------
-void __cdecl CopyPairs(uint32_t* out, uint32_t* first, uint32_t* last, uint32_t* dst)
+void* __cdecl CopyPairs(uint32_t* out, uint32_t* first, uint32_t* last, uint32_t* dst)
 {
     *out = (uint32_t)dst;
     if (first != last) {
@@ -415,6 +421,7 @@ void __cdecl CopyPairs(uint32_t* out, uint32_t* first, uint32_t* last, uint32_t*
         } while (first != last);
         *out = (uint32_t)dst;
     }
+    return out;
 }
 
 // ---------------------------------------------------------------------------------------------
