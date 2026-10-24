@@ -1,1 +1,28 @@
-00d83370 SP::FIND_STUFF_Tick  # PDB candidate name; creature BT tick handler
+00d83230 SP::AVATAR_IDLE_Tick  # avatar idle-state tick: accumulate the timer, bail on state!=0, query the animation provider (vtable+0x58) for the current guid/duration, then either restart the idle animation (RandomUint32Uniform(10)+5 second duration) or drive locomotion through UpdateLocomotion
+00d83370 SP::FIND_STUFF_Tick  # "find stuff" behaviour tick: pFind = agent manager +0x600; if the agent-order target is another creature, walk/steer toward pFind+0x1a4 via PlanetModel+MoveToPointAtSpeed and pulse the state 2->3 gesture near the goal; otherwise manage the search state machine (state>1 reset, QueueOrder hand-off, countdown in pState[1], watched-idle proximity gate, behaviour-node handle scan with AcceptTarget, 30 s timeout, FindForageDestination fallback, destination store and the final MoveToPointAtSpeed + InterruptAnimation)
+00a75010 FindStuffState::IsFinished
+00bc9b10 FindStuffState::CurrentId
+00bc96a0 AgentManager::OrderQueue::Play
+00bc97f0 AgentManager::OrderQueue::PlayEx
+00bc98f0 AgentManager::OrderQueue::ClearAll
+00bca2a0 AgentManager::IsSourceEmpty
+00bcb510 AgentManager::QueueOrder
+00c41ec0 Spatial::GetContext
+00c421f0 Spatial::GetApproachPoint
+00c423c0 ContextInfo::GetFallbackPoint
+00c42e20 Spatial::IsNearGoal
+00c04590 Creature::Get
+00c0b750 Creature::SpeedClass
+00c0b7c0 Creature::AcceptTarget
+00c0c130 Creature::CheckState
+00c1aed0 Creature::SetStealthed
+00c1c1d0 Creature::MoveToPointAtSpeed
+00c122c0 Creature::PlayGesture
+00c12310 Creature::InterruptAnimation
+00c14750 Creature::UpdateLocomotion
+00c6acc0 CreatureTuning::GetPosition
+00b3d350 SP::PlanetModel
+00b81630 PlanetModelResult::GetPoint
+00d998d0 Find
+00d999d0 WatchMemoryBlock
+00d7cfb0 FindForageDestination
