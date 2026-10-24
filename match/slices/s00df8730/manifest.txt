@@ -1,0 +1,2 @@
+slices/s00df8730/s00df8730.cpp  ?FUN_00df9190@@YAXPAUcGameUIDataBlock@@@Z  00df9190  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00df8730/s00df8730.cpp  ?ResetGames@cGalaxyGameEntryScreen@@QAEXXZ  00df95d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

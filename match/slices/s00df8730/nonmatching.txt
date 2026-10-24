@@ -1,2 +1,4 @@
 # <va>  <diff-bytes>  <reason>
 00df8730  1833  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; complete; same 62 calls/vslots in order, x87 clamp shape + stack-slot/xmm scheduling differ
+00df9230  229  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; complete, size-exact 732/732; only the inlined UI-data ctor store order (cl hoists the inline-buffer leas above the vptr/zero stores) and the cString GetText cleanup (`add esp,0x10` = caller-clean args with this in ecx, unreachable from a C++ member decl) differ
+00df9510  132  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; size 148 vs 188; live part matches, but retail keeps a provably-dead erase move loop (`cmp edi,edi; je`) that cl deletes when the source is written as a normal loop; tail (DestroyRange call + mpEnd -= last-first) matches
