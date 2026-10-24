@@ -1,14 +1,14 @@
 0092cb30  87  narrow string append (EASTL); inlined DoInsertValue scheduling differs
-0092cb90  91  wide string append (EASTL); inlined DoInsertValue scheduling differs
+0092cb90  91  wide string append (EASTL); inlined DoInsertValue scheduling differs. Length is the wide-element count (p - src - 1); the extra >>1 was wrong. [equiv: PASS 205 valid inputs, 84.4% coverage]
 0092cc00  118  case-insensitive strstr (char); complete; register/loop shape differs (original caches tolower in ebp and spills the first result via a push-ecx frame). callerdeps preserve DEPENDS ecx (read at 0x006b8956 after the call at 0x006b8932 in 006b8680); now satisfied by holding the scanned char in an `int` so cl keeps it in a callee-saved register instead of zero-extending into ecx for the second tolower argument. difftest PASS (/O2 /MD /Gy /EHsc /TP /GS-, --require-all, 400 valid, 100% coverage)
-0092cc90  126  case-insensitive wstrstr; register/loop shape differs
+0092cc90  126  case-insensitive wstrstr; register/loop shape differs. Characters are zero-extended into towlower (unsigned short) and the two 16-bit results compared, like the original's movzx/test/cmp cx,ax. [equiv: PASS 400 valid inputs, 82.8% coverage]
 0092ce80  85  _ecvt result widened to UTF-16; local buffer layout differs
 0092cef0  85  _fcvt result widened to UTF-16; local buffer layout differs
-0092cf60  137  unsigned-64 -> string; base arrives in eax (static-helper convention) not reproduced
-0092cff0  94  base-10 signed formatter wrapper; static-helper eax convention differs
-0092d040  16  base-N unsigned formatter wrapper; static-helper eax convention differs
-0092d060  96  signed formatter to UTF-16; static-helper eax convention differs
-0092d0d0  79  unsigned formatter to UTF-16; static-helper eax convention differs
+0092cf60  137  unsigned-64 -> string; the base arrives in eax (the original's TU-static helper convention). The VA is an external cdecl shim (four stack slots + `__asm { mov base, eax }`) over static UInt64ToStrImpl, which the wrappers call; the divisor is sign-extended like the original's cdq/__aulldvrm. [equiv: PASS 341 valid inputs, 100.0% coverage]
+0092cff0  94  base-10 signed formatter wrapper; static-helper eax convention differs. Calls UInt64ToStrImpl, which sign-extends the base like the original's cdq. [equiv: PASS 378 valid inputs, 93.5% coverage]
+0092d040  16  base-N unsigned formatter wrapper; static-helper eax convention differs. Calls UInt64ToStrImpl, which sign-extends the base like the original's cdq. [equiv: PASS 367 valid inputs, 100.0% coverage]
+0092d060  96  signed formatter to UTF-16; static-helper eax convention differs. Calls UInt64ToStrImpl, which sign-extends the base like the original's cdq. [equiv: PASS 375 valid inputs, 100.0% coverage]
+0092d0d0  79  unsigned formatter to UTF-16; static-helper eax convention differs. Calls UInt64ToStrImpl, which sign-extends the base like the original's cdq. [equiv: PASS 374 valid inputs, 100.0% coverage]
 0092cd20  171  BitmaskFind bitmask tokenizer complete; compiler rotates our leading-delimiter skip loop to a bottom-test do-while where the original keeps the top-test form; flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: PASS]
 0092d120  586  ParseInt64 strtoull-style parser complete (isspace/isdigit/isalpha/toupper via IAT, aulldvrm/allmul overflow logic, clamp + ERANGE); register allocation and loop/branch shape differ; flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: PASS]
 0092c510  936  EA::Refpack::iCompress LZ77/refpack compressor complete: all paths (pending-literal flush, match search with hash-chain walk, 2/3/4-byte match encoding, hash insert), calls memset 0x11e073e + memcpy 0x11e0744 present; frame/regalloc and instruction scheduling differ (/O2); flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: UNSUPPORTED (0/400 valid, fault=400: pointer args hash/link are not set up by the harness)]
