@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00b8bba0  1346  SP::cCityDisplayStrategy::AddResourceNodes -- checks mField_24, FUN_00b87bb0, GetCurrentGameMode() == 0x1654c04, then a growable-array fill loop with SimSingleton construction (operator_new 0xc8) and per-node placement; not emitted
+00b8c0f0  573  FUN_00b8c0f0 -- large formation/platoon helper reached from the same strategy; not emitted
