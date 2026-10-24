@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+#
+# Slice s0103dee0 = two SP::cSPSpaceTrading selling decisions.  0/2 byte-exact.
+# Every function below is a complete C++ reconstruction with the retail call sequence, all of it reached
+# through named fields (cSPSpaceTrading: mppStores +0x48, mSelling +0x74, mStoreIndex +0x9c;
+# ItemStore: mTimer +0x2c, mInventory +0x34 (begin/end/capacity at +0x34/+0x38/+0x3c), mAgesHandle +0x48;
+# AutoRefCount slot = one pointer, AddRef at vtable +4, Release at +8).
+# The per-row verdict is the equivalence-gate result measured with default inputs
+# (tools/difftest/equiv.py s0103dee0 ...).
+#
+0103e6e0  424  cSPSpaceTrading::ConsiderSellingSpice: reject when the player inventory lacks k_interplanetarydrive (v+0x74), require the incoming 3-word key to match FUN_00b8dad0(object), look the spice property up through FUN_00c705c0(object, 0), take the price from the empire comparison FUN_00b8de30(this)->GetAvatar() vs GetPlayerEmpireID() (non-player empire: property 0x34f1a4a read into the float local, released immediately), CreateCommodityFromID twice (spice property, then null), push the first result into mppStores[mStoreIndex]->mInventory, refresh FUN_0103de00 on store+0x48 and Restart the store timer at store+0x2c, push the second into mSelling, release both.  Complete (434 vs 505 bytes); the original allocates the 4-byte float local with the entry `push ecx`, keeps `this` in esi and the object argument in edi/ebx, hoists the property-manager pointer, and re-reads mppStores[mStoreIndex] for each of the three accesses instead of caching it.  equiv FAIL: 5/5 valid inputs, 9.0% coverage - ours leaves ecx modified where the original returns with it intact (the insert/show paths diverge early).
