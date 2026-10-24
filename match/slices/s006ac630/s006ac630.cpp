@@ -276,7 +276,9 @@ bool Registry::Lookup(const uint32_t* key, IObj** out)
 
 struct IFilter { virtual void S0(); virtual bool Accept(RegNode* n); };
 struct ListNode { ListNode* next; ListNode* prev; IObj* value; };
-ListNode* AllocListNode(void* list, IObj** tmp);      // 0x006ac3c0 (thiscall on list)
+struct ListNodeList {
+    ListNode* allocListNode(IObj** tmp);   // 0x006ac3c0 (thiscall on the list sentinel)
+};
 
 // @ 0x006ac8d0
 int Registry::Enumerate(void* list, IFilter* f)
@@ -295,7 +297,7 @@ int Registry::Enumerate(void* list, IFilter* f)
             if (list) {
                 IObj* tmp = 0;
                 ListNode* head = (ListNode*)list;
-                ListNode* nn = AllocListNode(list, &tmp);
+                ListNode* nn = ((ListNodeList*)list)->allocListNode(&tmp);
                 nn->next = head;
                 nn->prev = head->prev;
                 head->prev->next = nn;

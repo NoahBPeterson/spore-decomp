@@ -2,7 +2,7 @@
 006ac630  92  OnRegister: refcount add/release arm and callback-loop scheduling differ
 006ac7d0  88  Registry::ClearAll: complete; hashtable iterator loop peeling differs
 006ac840  91  Registry::Lookup: complete; EH state/guard layout differs; difftest WEAK after fixing the spin-lock this pointer (AcquireShared/Exclusive are methods of the lock at Registry+0x48, not of Registry)
-006ac8d0  276  Registry::Enumerate: complete; list-node smartptr assign shape differs
+006ac8d0  277  Registry::Enumerate: list-node allocation was called as a cdecl free function; modeled as thiscall (list sentinel in ecx, &tmp on stack); replay matches, fresh WEAK 195 valid/69.4% no mismatch; remaining list-node smartptr assign/register shape differs
 006aca20  82  RegTable::erase: complete; register allocation differs
 006acaa0  328  vector<8B>::insert n copies: complete; register allocation differs; difftest WEAK (38% coverage, grow path rarely reached by random inputs) after mapping AllocBytes/operator delete and passing eastl::copy's by-value tag argument (an uninitialised dword) like the original
 006acc60  452  Registry::Register: complete; EH unwind states/inlined smartptr differ
