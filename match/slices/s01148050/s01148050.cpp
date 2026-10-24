@@ -629,13 +629,13 @@ int CMpegBase::ReadHeader()
 int CMpegBase::PeekHeader()
 {
     if (mBufPtr == 0)
-        return (ParseHeader(mHeader) != -1) - 1;
+        return ParseHeader(mHeader) == -1 ? -1 : 0;
     unsigned char* p = mBufPtr;
     unsigned int header = p[0];
     header = (header << 8) | p[1];
     header = (header << 8) | p[2];
     header = (header << 8) | p[3];
-    return (ParseHeader(header) != -1) - 1;
+    return ParseHeader(header) == -1 ? -1 : 0;
 }
 
 // @ 0x01148cb0
