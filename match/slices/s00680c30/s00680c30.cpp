@@ -142,6 +142,9 @@ struct RNode {
 // out params for InsertUnique (pair of ptr + bool)
 struct PairOut { RNode* first; bool second; };
 
+// empty allocator parameter the original template carries on the stack (ret 0xc)
+struct AllocArg { };
+
 struct RAnchor {
     uint32_t pad;
     RNode* mpBegin;                         // +8 from map start
@@ -154,8 +157,8 @@ struct MapV {
     RAnchor mAnchor;                        // +4
     int mnSize;                             // +0x14
     RNode* CreateNode(const int* key);      // 0x006811d0
-    void InsertPair(RNode** pOut, RNode* pos, int* key, bool bAllowEquiv); // 0x00681590 (below)
-    void InsertUnique(PairOut* pOut, const int* key);                     // 0x006815f0 (below)
+    RNode** InsertPair(RNode** pOut, RNode* pos, int* key, bool bAllowEquiv); // 0x00681590 (below)
+    void InsertUnique(PairOut* pOut, const int* key, AllocArg alloc);     // 0x006815f0 (below)
 };
 
 // stream interfaces (vtable slots)
@@ -274,6 +277,7 @@ struct Obj1800 {
 // object copied by 0x00681700
 struct Obj1700 {
     S8 mStr;                                // +0x00
+    char pad[4];                            // +0x0c: vector block starts at +0x10 in the original
     VF mF0;                                 // +0x10
     VF mF1;                                 // +0x24
     Obj1700(const Obj1700& other);          // 0x00681700 (below)
@@ -342,8 +346,8 @@ void V48::insert(N48* pos, const N48& x) {
         if (nNew)
             pNew = (N48*)EASTL_alloc6((uint32_t)(nNew * 72), g_allocTag, 0, 0, g_fileEASTL, 0xd1);
         N48* begin = mpBegin;
-        N48* pMid = (N48*)CopyN_1a0(begin, xAdj, pNew);
-        CopyN_230(begin, xAdj, pNew);
+        N48* pMid = (N48*)CopyN_1a0(begin, pos, pNew);
+        CopyN_230(begin, pos, pNew);
         if (pMid)
             ((NC0*)pMid)->Fix((NC0*)&x);
         N48* const end = mpEnd;
@@ -482,7 +486,7 @@ void MapC0::FreeChain2(Node15* p) {
 }
 
 // @ 0x00681590
-void MapV::InsertPair(RNode** pOut, RNode* pos, int* key, bool bAllowEquiv) {
+RNode** MapV::InsertPair(RNode** pOut, RNode* pos, int* key, bool bAllowEquiv) {
     int bIns;
     if (!bAllowEquiv && pos != (RNode*)&mAnchor && *key >= pos->mKey)
         bIns = 1;
@@ -490,14 +494,15 @@ void MapV::InsertPair(RNode** pOut, RNode* pos, int* key, bool bAllowEquiv) {
         bIns = 0;
     RNode* nNew = CreateNode(key);
     RBTreeInsert(nNew, pos, &mAnchor, bIns);
-    *pOut = nNew;
     ++mnSize;
+    *pOut = nNew;
+    return pOut;
 }
 
 // @ 0x006815f0
-void MapV::InsertUnique(PairOut* pOut, const int* key) {
+void MapV::InsertUnique(PairOut* pOut, const int* key, AllocArg alloc) {
     RNode* pos = (RNode*)&mAnchor;
-    int bLess = 1;
+    bool bLess = true;
     RNode* n = mAnchor.mpRoot;
     if (n) {
         do {
@@ -508,10 +513,10 @@ void MapV::InsertUnique(PairOut* pOut, const int* key) {
     }
     RNode* found = pos;
     if (bLess) {
-        if (pos == mAnchor.mpBegin) {
-            int bIns = 0;
-            if (pos != (RNode*)&mAnchor && *key >= pos->mKey)
-                bIns = 1;
+        if (pos != mAnchor.mpBegin) {
+            pos = (RNode*)RBTreeDecrement(pos);
+        } else {
+            int bIns = (pos != (RNode*)&mAnchor && *key >= pos->mKey);
             RNode* nNew = CreateNode(key);
             RBTreeInsert(nNew, pos, &mAnchor, bIns);
             ++mnSize;
@@ -519,23 +524,17 @@ void MapV::InsertUnique(PairOut* pOut, const int* key) {
             pOut->second = true;
             return;
         }
-        pos = (RNode*)RBTreeDecrement(pos);
     }
-    if (pos->mKey >= *key) {
-        pOut->first = pos;
-        pOut->second = false;
-        return;
-    }
-    {
-        int bIns = 0;
-        if (found != (RNode*)&mAnchor && *key >= found->mKey)
-            bIns = 1;
+    if (pos->mKey < *key) {
+        int bIns = (found != (RNode*)&mAnchor && *key >= found->mKey);
         RNode* nNew = CreateNode(key);
         RBTreeInsert(nNew, found, &mAnchor, bIns);
         ++mnSize;
         pOut->first = nNew;
         pOut->second = true;
-        return;
+    } else {
+        pOut->first = pos;
+        pOut->second = false;
     }
 }
 

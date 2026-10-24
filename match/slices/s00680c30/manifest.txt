@@ -1,3 +1,4 @@
 slices/s00680c30/s00680c30.cpp  ?ReadVecU32@@YGXPAUVU32@@PAUIRd12@@@Z  00681250  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00680c30/s00680c30.cpp  ??1Cls1400@@QAE@XZ  00681400  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00680c30/s00680c30.cpp  ?FreeNodes@MapC2@@QAEXPAUNode1480@@@Z  00681480  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00680c30/s00680c30.cpp  ?InsertUnique@MapV@@QAEXPAUPairOut@@PBHUAllocArg@@@Z  006815f0  /O2 /MD /Gy /EHsc /TP /GS-

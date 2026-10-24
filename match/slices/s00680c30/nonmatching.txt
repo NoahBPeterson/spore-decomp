@@ -1,12 +1,11 @@
 00680c30  87   S8/M5a0 copy ctor via init-lists; cl homes the source param to a register and schedules the frame differently (orig spills xEnd early, sub-esp-8 frame)
-00680cc0  250  vector<N48>::insert: same size, all call shapes right; EH state slots and arg-eval scheduling differ
+00680cc0  354  vector<N48>::insert: full-capacity prefix now copies [begin,pos) to the new buffer (was [begin,xAdj), which walked off the vector and faulted); original is 417 bytes vs our 323 (it inlines more of the element copy) and homes EH-state/argument slots differently
 00680e70  302  vector<N48>::operator=: source ref not homed to ebp like the original; realloc/assign branch scheduling differs; equiv: WEAK (462 valid, 44.4% cov)
 00680fc0  220  serializer loop: this-homing to ebp happens later than original; WriteUint32 slot reuse pattern not reproduced
 006812c0  224  loader loop: count/value locals homed into dead arg slots by the original; my locals land in different slots
 00681500  63   free-chain variant: original has an EH frame with states around the member dtor call that plain member dtor calls cannot induce
-00681590  9    map insert: only arg-eval scheduling (pOut loaded into eax before size increment vs after)
-006815f0  223  insert_unique: complete, three duplicated insert paths present; register/scheduling differences throughout
-00681700  189  Obj1700 copy ctor: vec-copy bodies match shape; per-copy scheduling and state-store placement differ
+00681590  7    map insert: now returns pOut so eax matches at return; only the pOut load (before vs after the size increment) is scheduled differently
+00681700  197  Obj1700 copy ctor: 4-byte gap added after the 12-byte S8 so the vector block starts at +0x10 (the copied-from this/Reserve were off by 4); original reserves an 8-byte locals frame (ours 4) and homes the string length/end in different slots
 00681800  310  Obj1800 copy ctor: 0x60 plain copy emitted with different register rotation; same size, all copies present
 00681a10  80   ObjA copy ctor: vec copies match except lea/push scheduling and first arg register choice
 00681b50  87   ObjB50 operator=: struct-copy register rotation differs; all six member assignments in order; equiv: UNSUPPORTED (0 valid inputs, faults)
