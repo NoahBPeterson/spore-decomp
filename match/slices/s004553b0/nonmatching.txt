@@ -1,9 +1,9 @@
 004553b0  98   HT_Find: inlined hashtable bucket_index/find and /Od frame not reproduced [equiv PASS]
-004554a0  28   FreeTree: recursive node teardown; inlined allocator deallocate signature/frame not exact
+004554a0  29   FreeTree: recursive node teardown; the node free is the 1-arg cdecl operator delete thunk 0x00f47380 (was called with a bogus 2nd argument 0, so the replay differed on the callee stack args); /Od frame and register allocation still differ; equiv: PASS (338/1200 valid, 100% coverage)
 004554f0  102  DoFreeNodes: uninitialized_copy + destroy loop shape not reproduced
-00455590  133  HT_Insert: inlined hashtable insert (FUN_005701b0/FUN_00533740) not reproduced [equiv FAIL: callee FUN_005701b0 last arg differs; original reads HT+0x98 not +0x118]
+00455590  163  HT_Insert: inlined hashtable insert (FUN_005701b0/FUN_00533740) not reproduced byte-for-byte; fixed the branch field (this+0x98 for insert, this+0x118 is find's copy), the comparisons are UNSIGNED (*value <u *pos / *value <u *node), and FUN_00533740 is a thiscall member of HT (ecx = this); /Od frame/scheduling still differ; equiv: PASS (341/500 valid, 100% coverage)
 00455ae0  169  Move14: eastl 0x14-stride move-down loop and trailing erase not reproduced [equiv WEAK: 62 valid inputs, 65% coverage]
-00455c00  75   ParseVec3: string parse helpers (FUN_004565f0/FUN_00456650) not reproduced
+00455c00  79   ParseVec3: string-to-Vec3 parser; the 3rd arg of FUN_00456650 is the float returned by FUN_004565f0(s) (retail leaves it in the outgoing arg slot via fstp [esp]), then the 3 floats are copied out with movss; /Od float-copy scheduling still differs; equiv: PASS (300/300 valid, 100% coverage)
 00455c50  36   ClampDot: extra jmp per arm from the nested if/else layout not reproduced
 00455cf0  87   InitFixed: fixed-vector init; /Od locals and this-relative stores not exact
 00455d60  310  StringAppend: literal EASTL basic_string::append not fully reproduced
