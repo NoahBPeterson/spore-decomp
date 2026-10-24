@@ -1,0 +1,31 @@
+00abe110 cNoiseSource::Init  # global noise lattice init; 64 pairs x2, RNG seed 0x58, sinf ramp
+00abe2f0 EA::Swarm::cShakeDescription::create  # operator_new 0x4c; vtbl/hash/floats; FUN_00abd9c0
+00abe370 InitializeSwarmFactories  # registers cShakeDescription/MapDescription/cAbilityEventModifier factories
+00abe3a0 EA::Swarm::MapDescription::read  # EA_IO: flags&0x1f, vector at +0x10, ints at +0x18..+0x24
+00abe420 cAbility::SetParam  # bool SetParam(int, void const*, void*)
+00abe440 ScoreEffect  # (a & b) != -1 gate; writes {a,b,3} when count > 0
+00abe480 cAbilityFeedback::Start  # message 0xff0ec1 via server vtable +0x14
+00abe540 cAbilityFeedback::Stop  # message(s) 0xff0ed1/0xff0f31
+00abe5c0 cAbilityFeedback::Update  # message 0xff0f2c + owner polling
+00abe700 cAbilityEventModifier::create  # operator_new 0x34; vtbls 0x1459a88/0x14599e8; two 1.0f
+00abe770 EA::Swarm::MapDescription::create  # operator_new 0x28; vtbl 0x1453948; calls read
+00abe800 TransformThing::SetTransform  # local transform copy + Matrix3::assign + preTransformBy
+00abe8a0 SlotVector::nextAllocated  # scan free chain for first used entry, sentinel 0x3fffffff
+00abe8f0 SlotVector::freeTarget  # release target (v+0x14), fold slot into free chain
+00abe950 SlotVector::freeAgent  # release agent (v+0x5c), fold slot into free chain
+00abe9b0 SlotIter::increment  # step over logical slots; end sentinel bit30, free bit31
+00abea00 SlotDistance  # count increments until iterator sums match
+00abea40 cInteraction::IsAgentDefault  # eastl map find; state==0 && sleepTimeout==0
+00abea90 IsAgentActive::evaluate  # predicate: agent owner/type/state check
+00abeaf0 SlotVector::begin  # SlotIter by value: mBeginIndex or endIndex when empty
+00abeb20 AgentFilterRange::advance  # skip inactive agents
+00abec00 SlotVector::destroyTargets  # pop tail entries, release target, free block at slot 0
+00abec70 SlotVector::destroyAgents  # pop tail entries, release agent, free block at slot 0
+00abece0 SlotVectorInsert  # FUN_00ac03f0 insert; true when begin moved
+00abed40 cInteraction::SetTarget  # drain slots via RemoveTarget (v+0x50), then AddTarget (v+0x4c)
+00abedb0 cInteraction::RemoveAgent  # by-value AgentFilterRange; remove matching map entries
+00abee20 cInteraction::HasAgent  # linear slot scan comparing entry data pointer
+00abeeb0 cInteraction::HasTarget  # linear slot scan comparing entry data pointer
+00abef40 cInteraction::RemoveTarget  # virtual RemoveTarget(out, vec, index) -> iterator
+00abefd0 SlotVector::size  # SlotDistance(begin,end); returns count (callers ignore it)
+00abf010 AgentFilterRange::AgentFilterRange  # begin/end + predicate; advance when inactive

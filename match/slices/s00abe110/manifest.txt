@@ -1,0 +1,8 @@
+slices/s00abe110/s00abe110.cpp  ?InitializeSwarmFactories@@YAXXZ  00abe370  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abe110/s00abe110.cpp  ?read@MapDescription@Swarm@EA@@SAXPAX0PAU123@@Z  00abe3a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abe110/s00abe110.cpp  ?SetParam@cAbility@@QAE_NHPBMPAX@Z  00abe420  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abe110/s00abe110.cpp  ?create@cAbilityEventModifier@@SAPAU1@PAX@Z  00abe700  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abe110/s00abe110.cpp  ?SetTransform@TransformThing@@QAEXPAXPBUShapeTransform@@@Z  00abe800  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abe110/s00abe110.cpp  ?begin@SlotVector@@QAE?AUSlotIter@@XZ  00abeaf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abe110/s00abe110.cpp  ?destroyTargets@SlotVector@@QAEXH@Z  00abec00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abe110/s00abe110.cpp  ?destroyAgents@SlotVector@@QAEXH@Z  00abec70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

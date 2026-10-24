@@ -1,0 +1,19 @@
+00abe2f0 45 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid, fake-call faults); constructor field-store order
+00abe440 7 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS; and-operand register order only
+00abe770 5 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS; vtbl/frequency store ordering
+00abe8a0 63 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS; free/end bit tests compile as cmp/jl
+00abe8f0 38 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS; free-chain expression load order
+00abe950 38 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS; free-chain expression load order
+00abe9b0 64 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest FAIL (stale eax; void return); free-bit test/register allocation
+00abea00 8 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (138 valid, 62.5% cov); cmp operand order
+00abea40 58 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest FAIL (rbtree::find arg model); map lookup register allocation
+00abea90 71 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest FAIL (rbtree::find arg model); predicate register allocation
+00abeb20 197 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest FAIL (fault on synthetic input); range advance loop layout
+00abece0 80 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest not run (equiv time limit); begin/end cmov + stack layout
+00abed40 89 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest not run (equiv time limit); this in esi vs edi
+00abedb0 101 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest not run (equiv time limit); by-value range ABI + loop layout
+00abee20 135 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest not run (equiv time limit); begin/end cmov + register allocation
+00abeeb0 135 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest not run (equiv time limit); begin/end cmov + register allocation
+00abef40 126 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest not run (equiv time limit); virtual call/iterator layout
+00abefd0 53 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest not run (equiv time limit); cmov vs branch, extra callee-saved pushes
+00abf010 125 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest not run (equiv time limit); inline range setup/register allocation
