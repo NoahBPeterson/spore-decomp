@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00fee3d0/s00fee3d0.cpp  ?GetMissionByID@cSPMissionManager@@QAEPAUcSPMission@@H@Z  00fee480  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fee3d0/s00fee3d0.cpp  ?GetActiveMissionForEmpireAndPlanet@cSPMissionManager@@QAEPAUcSPMission@@PAX0@Z  00fee4f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fee3d0/s00fee3d0.cpp  ?IsPlanetARaidTarget@cSPMissionManager@@QAEDPAXPAI@Z  00fee590  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fee3d0/s00fee3d0.cpp  ?HasMissionConversationWithEmpireAndPlanet@cSPMissionManager@@QAEHPAX0@Z  00fee6b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fee3d0/s00fee3d0.cpp  ?FUN_00fee820@cSPMissionManager@@QAEDXZ  00fee820  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fee3d0/s00fee3d0.cpp  ?DebugDraw@cSPMissionManager@@QAEXXZ  00fee8d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fee3d0/s00fee3d0.cpp  ?FUN_00feebb0@cSPMissionManager@@QAEDXZ  00feebb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fee3d0/s00fee3d0.cpp  ?FUN_00feec30@cSPMissionManager@@QAEDXZ  00feec30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fee3d0/s00fee3d0.cpp  ?FUN_00feecb0@cSPMissionManager@@QAEDXZ  00feecb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
