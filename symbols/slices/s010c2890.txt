@@ -1,2 +1,4 @@
 # Slice s010c2890 names.
+010c2890 ?closestInfLineSegInfLineSeg@hkCapsuleShape@@SAXABUhkVector4@@000PAM11PAU2@2@Z  # havok_names.txt: static HK_CALL copy (ICF) at this VA
+010c2ad0 ?closestPointLineSeg@hkCapsuleShape@@SAXABUhkVector4@@00AAU2@@Z  # havok_names.txt: static HK_CALL copy (ICF) at this VA
 010c2e30 ?castRay@hkCapsuleShape@@UBE?AVhkBool@@ABUhkShapeRayCastInput@@AAUhkShapeRayCastOutput@@@Z  # havok_names.txt

@@ -1,2 +1,9 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-# (no byte-exact functions in this slice yet; see nonmatching.txt) flags: /vc71 /O2 /MD /Gy /TP
+# flags: /vc71 /O2 /MD /Gy /TP
+slices/s010c2890/s010c2890.cpp  ?addCdBodyPair@hkAllCdBodyPairCollector@@UAEXABUhkCdBody@@0@Z  010c3690  /vc71 /O2 /MD /Gy /TP
+slices/s010c2890/s010c2890.cpp  ?setTypeInfo@hkShape@@QAEXPAX@Z  010c3730  /vc71 /O2 /MD /Gy /TP
+slices/s010c2890/s010c2890.cpp  ??0hkSphereShape@@QAE@M@Z  010c3770  /vc71 /O2 /MD /Gy /TP
+slices/s010c2890/s010c2890.cpp  ?getSupportingVertex@hkSphereShape@@UBEXABUhkVector4@@AAU2@@Z  010c3790  /vc71 /O2 /MD /Gy /TP
+slices/s010c2890/s010c2890.cpp  ?convertVertexIdsToVertices@hkSphereShape@@UBEXPBGHPAUhkVector4@@@Z  010c37b0  /vc71 /O2 /MD /Gy /TP
+slices/s010c2890/s010c2890.cpp  ?getFirstVertex@hkSphereShape@@UBEXAAUhkVector4@@@Z  010c37e0  /vc71 /O2 /MD /Gy /TP
+slices/s010c2890/s010c2890.cpp  ?getAabb@hkSphereShape@@UBEXABUhkTransform@@MAAUhkAabb@@@Z  010c3800  /vc71 /O2 /MD /Gy /TP
