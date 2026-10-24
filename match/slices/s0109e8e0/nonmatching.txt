@@ -14,10 +14,10 @@
 0109f040 130 havok-equivalent
 0109f0d0 130 havok-equivalent
 0109f160 130 havok-equivalent
-0109f1f0 130 havok-equivalent
+0109f1f0 120  fireContactProcess: complete havok-equivalent (ev.m_callbackFiredFrom = 0 at +8, then the contact listener list at world+0x15c backwards, virtual slot +0xc, then the null sweep). FAIL-KEPT: 1 of 311 valid inputs differs, and only in the recorded depth-1 call log (#1: ours logs the callback, the original logs nothing extra). The two sides reach the same fake-call count (6 vs 6) and the same final status/registers, i.e. the invocations themselves agree (the first one is even logged with the same target and args); the harness records a call only when it can evaluate the target, and the retail code reads the vtable slot inside the call instruction (`call *0xc(edx)`) while cl hoists it into a register (`mov 0xc(edx),eax; call *eax`), so on these junk-vtable inputs the original's slot read needs a fault repair and is not logged. Cannot be expressed at source level
 0109f280 113 havok-equivalent
-0109f300 323 havok-equivalent
-0109f450 323 havok-equivalent
+0109f300 312  fireIslandActivated: complete havok-equivalent (lock count +0x8c, island activation list at +0x114 slot +4 with the island as arg, entity loop over island+0x3c/+0x40 firing entity+0xa8 slot +8, then unlockAndFlush -> 0x01082bf0 as a tail jump). FAIL-KEPT: 1 of 237 valid inputs differs, only in the recorded depth-1 call log (#1 exists on our side only); coverage is 100% (118/118 instructions), fake-call counts match (2 vs 2) and esp/registers match, i.e. both sides make the same two invocations on that junk-vtable input. Same harness cause as 0109f1f0: the retail `call *0x4(edx)` reads the slot as part of the call, cl loads it into a register first, and the recorder cannot evaluate a slot that needs fault repair
+0109f450 312  fireIslandDeactivated: complete havok-equivalent (same shape as 0109f300 with the deactivated callbacks: island list slot +8, entity+0xa8 slot +4). FAIL-KEPT for the same single input and the same reason as 0109f300: 1 of 231 valid inputs, only the recorded call log length differs while coverage, fake-call counts and registers agree
 0109f5a0 129 havok-equivalent
 0109f630 129 havok-equivalent
 0109f6c0 129 havok-equivalent
