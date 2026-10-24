@@ -1,30 +1,28 @@
 # va  diff-bytes  reason
-0107d740  42  hkThreadMemory::releaseCachedMemory
+0107d740  64  hkThreadMemory::releaseCachedMemory ; equiv PASS (317 valid, 100% cov, no mismatch); /Os size fold emits the original memory-indirect call [edx+0x1c] (55B vs 69B)
 0107d790  18  hkThreadMemory::removeReference
-0107d7a0  29  hkThreadMemory::setStackArea
 0107daa0  89  hkThreadMemory::allocateChunk
 0107db10  70  hkThreadMemory::deallocateChunk
 0107db90  47  hkThreadMemory::onStackUnderflow
 0107dbd0  21  hkThreadMemory::replaceInstance (static)
 0107dc10  96  hkThreadMemory::onStackOverflow
-0107dc90  36  FUN_0107dc90 small object vtable/field init ; equiv PASS (now a member of stub hkSmallObj so this arrives in ECX)
 0107dd30  30  hkMemory::replaceInstance (static)
 0107dd70  28  hkMemory::allocateChunkByRow
 0107dda0  28  hkMemory::deallocateChunkByRow
 0107de00  54  hkPointerMapBase<unsigned long> constructor ; equiv UNSUPPORTED: 0/1200 valid inputs (fault(write)/fake-arity); symbol via symbols file
 0107de50  15  hkPointerMapBase<unsigned long> destructor ; equiv UNSUPPORTED: symbol not found (K/_K template dtors indistinguishable to lookup; closest-size would pick wrong one)
 0107de70  102  hkPointerMapBase<unsigned long>::insert
-0107df90  179  hkPointerMapBase<unsigned long>::remove(Dummy*)
+0107df90  -  hkPointerMapBase<unsigned long>::remove(Dummy*) ; equiv PASS (271 valid, 100% cov, no mismatch); cluster-shift deletion with unsigned 32-bit indices (158B vs 183B); chk marker binds the sibling remove overload
 0107e050  113  hkPointerMapBase<unsigned long>::resizeTable
 0107e0f0  54  hkPointerMapBase<unsigned __int64> constructor ; equiv UNSUPPORTED: symbol not found (K/_K template ctors indistinguishable to lookup; tie picks K)
 0107e140  19  hkPointerMapBase<unsigned __int64> destructor ; equiv UNSUPPORTED: 0/1200 valid inputs (fake-arity); symbol via symbols file
 0107e160  222  hkPointerMapBase<unsigned __int64>::insert
 0107e240  130  hkPointerMapBase<unsigned __int64>::findKey
-0107e2d0  456  hkPointerMapBase<unsigned __int64>::remove(Dummy*)
+0107e2d0  417  hkPointerMapBase<unsigned __int64>::remove(Dummy*) ; equiv PASS (207 valid, 100% cov, no mismatch); cluster-shift deletion with unsigned 64-bit indices and lib_crt::allmul (428B vs 456B)
 0107e4a0  113  hkPointerMapBase<unsigned __int64>::resizeTable
 0107e540  3  hkPointerMapBase<unsigned long>::getWithDefault
 0107e560  14  hkPointerMapBase<unsigned long>::remove(KEY) -> hkResult
 0107e5b0  19  grow-to helper (tail-calls resizeTable, K)
 0107e5d0  19  grow-to helper (tail-calls resizeTable, _K) ; equiv UNSUPPORTED: 0/1200 valid inputs (fault/fake-arity); marker added
-0107e5f0  38  hkSingleton<hkStreambufFactory>::replaceInstance ; equiv FAIL: 5/5 valid mismatched (memory .data @016e42b4, ms_instance global); explicit instantiation added
-0107e640  19  small singleton/vtable allocator
+0107e5f0  -  hkSingleton<hkStreambufFactory>::replaceInstance ; equiv WEAK: 400 valid, 27.3% cov (coverage-limited, no mismatch); global 0x016e42b4 resolves; chk ~size binds hkThreadMemory::replaceInstance
+0107e640  24  small singleton/vtable allocator ; equiv PASS (232 valid, 100% cov, no mismatch)

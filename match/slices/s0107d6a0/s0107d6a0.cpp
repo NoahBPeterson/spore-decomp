@@ -15,6 +15,7 @@ void FUN_00e4b990(void*);
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 extern "C" __declspec(dllimport) int   __stdcall TlsSetValue(unsigned long, void*);
 void* hkMemSet(void* dst, int c, int n);          // 0x0107f470 hkString::memSet
+extern "C" __int64 __stdcall _allmul(int lo, int hi, int mlo, int mhi); // lib_crt::allmul
 
 extern unsigned long g_tlsThreadMemory;           // 0x016e4174
 extern unsigned long g_tlsThreadMemory2;          // unused placeholder
@@ -33,6 +34,20 @@ public:
     static void replaceInstance(hkMemory* p);             // 0x0107dd30
     void* allocateChunkByRow(int row, int memClass);      // 0x0107dd70
     void deallocateChunkByRow(void* p, int row, int memClass); // 0x0107dda0
+};
+
+// vtable view for the deallocate2 slot at +0x1c; calling it through a virtual
+// method makes cl emit the original memory-indirect `call [edx+0x1c]`.
+class hkMemoryVt {
+public:
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void deallocate2(void* p, int row, int one);
 };
 
 extern hkMemory* g_hkMemory;      // 0x016e4178
@@ -137,23 +152,56 @@ template<class KEY> hkResult hkPointerMapBase<KEY>::get(KEY k, KEY* out) const
     return HK_FAILURE;
 }
 
-// @ 0x0107df90 (K) / 0x0107e2d0 (_K)
-template<class KEY> void hkPointerMapBase<KEY>::remove(Dummy* d)
+// Cluster-shift deletion.  The original has two distinct instantiations:
+// K uses unsigned 32-bit indices, _K unsigned 64-bit (cdq/adc pairs).
+
+// @ 0x0107df90
+template<>
+void hkPointerMapBase<unsigned long>::remove(Dummy* d)
 {
-    int i = (int)d;
+    unsigned int i = (unsigned int)(int)d;
     --mCount;
     mTable[i] = 0;
-    int mask = mMask;
-    for (int j = (i + 1) & mask; mTable[j] != 0; j = (j + 1) & mask) {
-        KEY h = (KEY)((mTable[j] >> 4) * (KEY)0x9e3779b1ul);
-        int k = (int)(h & (KEY)mask);
-        bool move;
-        if (j > i)
-            move = (k <= i || k > j);
-        else
-            move = (k <= i && k > j);
-        if (move) {
-            mTable[i] = mTable[j];
+    unsigned int mask = (unsigned int)mMask;
+    unsigned int p = (mask + i) & mask;
+    while (mTable[p] != 0)
+        p = (p + mask) & mask;
+    unsigned int s = (p + 1) & mask;
+    for (unsigned int j = (i + 1) & mask; mTable[j] != 0; j = (j + 1) & mask) {
+        unsigned long v = mTable[j];
+        unsigned int k = ((unsigned int)(v >> 4) * 0x9e3779b1u) & mask;
+        if (((j < s) || (k <= i)) &&
+            ((i <= j) || (k <= i && j < k)) &&
+            ((k <= i) || (s <= k))) {
+            mTable[i] = v;
+            mTable[mask + 1 + i] = mTable[mask + 1 + j];
+            mTable[j] = 0;
+            i = j;
+        }
+    }
+}
+
+// @ 0x0107e2d0
+template<>
+void hkPointerMapBase<unsigned __int64>::remove(Dummy* d)
+{
+    unsigned __int64 i = (unsigned __int64)(int)d;
+    --mCount;
+    mTable[i] = 0;
+    unsigned __int64 mask = (unsigned __int64)mMask;
+    unsigned __int64 p = (mask + i) & mask;
+    while (mTable[p] != 0)
+        p = (p + mask) & mask;
+    unsigned __int64 s = (p + 1) & mask;
+    for (unsigned __int64 j = (i + 1) & mask; mTable[j] != 0; j = (j + 1) & mask) {
+        unsigned __int64 v = mTable[j];
+        unsigned __int64 sh = v >> 4;
+        __int64 prod = _allmul((int)sh, (int)(sh >> 32), (int)0x9e3779b1u, 0);
+        unsigned __int64 k = (unsigned __int64)prod & mask;
+        if (((j < s) || (k <= i)) &&
+            ((i <= j) || (k <= i && j < k)) &&
+            ((k <= i) || (s <= k))) {
+            mTable[i] = v;
             mTable[mask + 1 + i] = mTable[mask + 1 + j];
             mTable[j] = 0;
             i = j;
@@ -227,6 +275,9 @@ void FUN_0107e5d0(hkPointerMapBase<unsigned __int64>* self, int n)
 }
 
 // ---- hkSingleton --------------------------------------------------------
+extern void* g_hkStreambufFactorySingleton;   // 0x016e42b4
+
+class hkStreambufFactory;
 template<class T> class hkSingleton {
 public:
     static T* ms_instance;
@@ -235,11 +286,11 @@ public:
 template<class T> T* hkSingleton<T>::ms_instance = 0;
 
 // @ 0x0107e5f0
-template<class T> void hkSingleton<T>::replaceInstance(T* p)
+template<> void hkSingleton<hkStreambufFactory>::replaceInstance(hkStreambufFactory* p)
 {
-    T* old = ms_instance;
+    void* old = g_hkStreambufFactorySingleton;
     if (old == 0) {
-        ms_instance = p;
+        g_hkStreambufFactorySingleton = p;
         return;
     }
     if (*(short*)((char*)old + 4) != 0) {
@@ -247,21 +298,17 @@ template<class T> void hkSingleton<T>::replaceInstance(T* p)
         --*rc;
         if (*rc == 0)
             ((void(__thiscall*)(void*, int))VFN(old, 0))(old, 1);
-        ms_instance = p;
+        g_hkStreambufFactorySingleton = p;
         return;
     }
-    ms_instance = p;
+    g_hkStreambufFactorySingleton = p;
 }
-
-class hkStreambufFactory;
-template class hkSingleton<hkStreambufFactory>;
 
 // @ 0x0107e640
 void FUN_0107e640()
 {
     unsigned char* p = (unsigned char*)hkAlloc(8, 0x15);
-    *(unsigned short*)(p + 4) = 8;
-    *(unsigned short*)(p + 6) = 1;
+    *(unsigned int*)(p + 4) = 0x00010008u;
     *(void**)p = (void*)0x149c894;
 }
 
@@ -332,6 +379,9 @@ public:
     void* onStackOverflow(int size);     // 0x0107dc10
 };
 
+// The original release build favours size here; that is what makes cl fold the
+// vtable slot into the call (`call [edx+0x1c]`) instead of loading it first.
+#pragma optimize("s", on)
 // @ 0x0107d740
 void hkThreadMemory::releaseCachedMemory()
 {
@@ -340,13 +390,13 @@ void hkThreadMemory::releaseCachedMemory()
         while (*head != 0) {
             int* node = (int*)*head;
             *head = *node;
-            ((void(__thiscall*)(void*, int*, int, int))VFN(mMemory, 0x1c))
-                (mMemory, node, cls, 1);
+            ((hkMemoryVt*)mMemory)->deallocate2(node, cls, 1);
         }
         *head = 0;
         mRowCounts[cls] = 0;
     }
 }
+#pragma optimize("", on)
 
 // @ 0x0107d790
 void hkThreadMemory::removeReference()
@@ -363,8 +413,9 @@ void hkThreadMemory::setStackArea(void* p, int n)
     mStackCurrent = -1;
     mStackSize = n;
     if (rem != 0) {
-        mStackBase = (a - rem) + 0x10;
-        mStackEnd = (a - rem) + n;
+        int base = (a - rem) + 0x10;
+        mStackBase = base;
+        mStackEnd = (base - rem) + n;
     } else {
         mStackBase = a;
         mStackEnd = a + n;
@@ -459,8 +510,8 @@ void* hkThreadMemory::onStackOverflow(int size)
 }
 
 // @ 0x0107dc90 (hkThreadMemory-like vtable init, separate small object)
-struct hkSmallObj { void FUN_0107dc90(); };
-void hkSmallObj::FUN_0107dc90()
+struct hkSmallObj { void* FUN_0107dc90(); };
+void* hkSmallObj::FUN_0107dc90()
 {
     void* self = this;
     char* p = (char*)self;
@@ -475,6 +526,7 @@ void hkSmallObj::FUN_0107dc90()
     *(int*)(p + 0x28) = 0;
     *(int*)(p + 4) = 0;
     *(int*)(p + 8) = 0x7fffffff;
+    return self;
 }
 
 // @ 0x0107d7e0: hkThreadMemory constructor (size->class table build)
