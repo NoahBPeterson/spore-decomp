@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+#
+# Slice s00e3eca0.  All seven functions have complete reconstructions (no stubs inside the slice bodies,
+# no naked/asm functions) and one is byte-exact.  The caveats below are the parts of each body that are
+# approximations of the original source shape rather than exact codegen.
+#
+00e3eca0  128  The tree search, the hint check and the return value are exact; the insert call sequence is approximated: retail reuses the dead incoming parameter slot for the hint scratch, the result pointer and the 1-byte insert flag (push ecx + mov [esp],edx, mov byte [esp+0x1c],0), and it keeps the key in ebx so that ecx still holds `this` at the call - we pass the same four arguments from ordinary locals instead.
+00e3ed30  149  Same caveat as 00e3eca0 for the second cache (0x14-byte value_type: key + four rect floats), plus the value fields are all seeded from the key dword exactly as retail does (union views of the same key word).
+00e3f010  502  Model-key list, cache reset, layout Init/FindWindowByID/GetBoundingScreenRect/Shutdown and the storage release all follow the retail call order; approximations: the ResourceMan list key is built as a 3-word struct literal, the property holder is a raw Property* (retail drops it without a release here), and the model-vector walk is a plain for loop where retail keeps the counter in a stack slot.
+00e3f2a0  1184 Only the model-iteration body is approximate in shape: the bucket set at this+0x560 is probed through the model's own +0x04 chain (our version walks the bucket chain and inserts through 0x00b41b90 only when absent) and the accepted-model vector append goes through 0x00b96600; retail inlines the div-based bucket probe and carries a dozen values in fixed stack slots.  Property block, both vector queries, the pre-pass and the reporting calls match the retail order.
+00e3f7a0  390  The bounds-string find at +0x250 and the float cache at 0x00be0790 are modelled through declared imports (FindInBoundsTree / FUN_00be0790); the hash walk reuses the model +0x04 chain and the +/-g_flHeightLimit clamp is a pair of explicit compares (retail uses maxss/minss from the same clamp idiom).
