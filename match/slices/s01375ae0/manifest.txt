@@ -1,2 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01375ae0/s01375ae0.cpp  ??__EFIELDS_DT_EAT_DATA@SP@@YAXXZ  01375ae0  /O2 /MD /Gy /EHsc /TP
+slices/s01375ae0/s01375ae0.cpp  ??__EFIELDS_DT_LOCALIZED_STRING@SP@@YAXXZ  01375cf0  /O2 /MD /Gy /EHsc /TP
 slices/s01375ae0/s01375ae0.cpp  ??__EFIELDS_DT_CELL@SP@@YAXXZ  01375e30
