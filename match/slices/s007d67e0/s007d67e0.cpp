@@ -29,13 +29,12 @@ void ea_free(void* p);                                   // 0x00f47380
 // ---------------------------------------------------------------------------
 struct cElement;
 cElement* AllocElementArray(size_type n, cElement* first, cElement* last);          // 0x007d61f0
-cElement* AssignElements(cElement* dest, cElement* destEnd, const cElement* src);   // 0x007d6250
-cElement* UninitCopyElements(cElement* first, cElement* last, cElement* dest, void* alloc); // 0x007d5aa0
+cElement* AssignElements(cElement* first, cElement* last, cElement* dest);           // 0x007d6250 (src, srcEnd, dest)
+cElement** UninitCopyElements(cElement** out, cElement* first, cElement* last, cElement* dest); // 0x007d5aa0 (*out = dest, *out advances)
 void      DestroyElementRange(cElement* first, cElement* last);                     // 0x007d4940
 void      ResizeFloatVector(void* vec, int n);                                      // 0x007d65a0
 void      Sub_7d5e60(void* self);                                                   // 0x007d5e60
 int       Sub_79ff40(void* list, const void* value);                                // 0x0079ff40 (cSplitInstanceList::insert)
-void      Sub_7d7280(void* first, void* last);                                      // 0x007d7280 (erase)
 void      Sub_478db0(int value);                                                    // 0x00478db0
 int       Sub_79ac10(int a, int b, int c);                                          // 0x0079ac10
 void      Sub_007d4a40(void* out, int a, void* xform, int b);                       // 0x007d4a40
@@ -101,8 +100,9 @@ __forceinline cSplitInstanceList::cSplitInstanceList(const cSplitInstanceList& x
     mDataArray.mpBegin = buf;
     mDataArray.mpEnd = buf;
     mDataArray.mpCapacity = buf + nCount;
-    mDataArray.mpEnd = UninitCopyElements(x.mDataArray.mpBegin, x.mDataArray.mpEnd, buf,
-                                          (void*)((char*)x.mDataArray.mpBegin + 0xc));
+    cElement* cur = buf;
+    UninitCopyElements(&cur, x.mDataArray.mpBegin, x.mDataArray.mpEnd, buf);
+    mDataArray.mpEnd = cur;
     mExtra = x.mExtra;
 }
 
@@ -121,6 +121,7 @@ struct ListVector {
     cSplitInstanceList* mpCapacity;
     void DoInsertValues(cSplitInstanceList* position, size_type n, const cSplitInstanceList& value); // @ 0x007d72e0
     void resize(size_type n);                                                                         // @ 0x007d7560
+    void erase(cSplitInstanceList* first, cSplitInstanceList* last);                                  // @ 0x007d7280 (ecx=this)
 };
 
 // ---------------------------------------------------------------------------
@@ -138,10 +139,11 @@ CElementVector& CElementVector::operator=(const CElementVector& x) {
             mpCapacity = pNew + n;
         } else if ((size_type)(mpEnd - mpBegin) < n) {
             size_type nOld = (size_type)(mpEnd - mpBegin);
-            AssignElements(mpBegin, mpBegin + nOld, x.mpBegin);
-            UninitCopyElements(x.mpBegin + nOld, x.mpEnd, mpEnd, mpEnd);
+            AssignElements(x.mpBegin, x.mpBegin + nOld, mpBegin);
+            cElement* cur = mpEnd;
+            UninitCopyElements(&cur, x.mpBegin + nOld, x.mpEnd, mpEnd);
         } else {
-            AssignElements(mpBegin, x.mpEnd, x.mpBegin);
+            AssignElements(x.mpBegin, x.mpEnd, mpBegin);
         }
         mpEnd = mpBegin + n;
     }
@@ -329,7 +331,7 @@ void ListVector::resize(size_type n) {
         cSplitInstanceList value;
         DoInsertValues(mpEnd, n - nSize, value);
     } else {
-        Sub_7d7280(mpBegin + n, mpEnd);
+        erase(mpBegin + n, mpEnd);
     }
 }
 

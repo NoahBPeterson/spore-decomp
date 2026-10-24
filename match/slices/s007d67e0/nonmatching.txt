@@ -1,9 +1,9 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /GS-)
 007d67e0  231  eastl uninitialized_copy of cSplitInstanceList (out-pointer form); complete, EH prologue and inlined deep-copy allocation differ
-007d68f0  223  eastl uninitialized_fill_n of cSplitInstanceList; complete, EH prologue/codegen differ
+007d68f0  225  eastl uninitialized_fill_n of cSplitInstanceList; complete, EH prologue/codegen differ; equiv: PASS (201 valid, 82.6% coverage; saved failing input replays clean). Fixed the inlined deep-copy call: `UninitCopyElements` is `(cElement** outCursor, first, last, dest)` (it stores `dest` through `outCursor` and advances it per element), so the copy ctor keeps a local cursor and stores the final `mpEnd` from it
 007d69f0  237  eastl uninitialized_copy of cSplitInstanceList; complete, EH prologue/codegen differ
 007d6b00  216  EA::Swarm::cEffectParams::operator=; complete memberwise assignment, 25/9-element array copy loop register shape differs; equiv: PASS (1200 inputs, 100% coverage; 341 valid)
 007d6c10  910  Swarm effect random-sample setup (10+ virtual calls + x87 clamp math); complete, offsets/register allocation/codegen differ
-007d7080  258  eastl::vector<cElement,sp_vector_allocator>::operator=; complete grow/copy/assign paths, inlining and EH differ; equiv: FAIL (5/33 valid inputs mismatched)
+007d7080  253  eastl::vector<cElement,sp_vector_allocator>::operator=; complete grow/copy/assign paths, inlining and EH differ; equiv: WEAK (109 valid, 50.4% coverage; heap-heavy paths discard most random inputs; saved failing input replays clean). `AssignElements` is `(src, srcEnd, dest)` (retail returns dest), so the two assign calls now pass `(x.mpBegin, x.mpBegin+nOld, mpBegin)` / `(x.mpBegin, x.mpEnd, mpBegin)`; the `UninitCopyElements` call uses the new cursor-out form
 007d72e0  593  eastl::vector<cSplitInstanceList>::DoInsertValues; complete grow + in-place insert paths, call/inlining schedule differs
-007d7560  n/a  eastl::vector<cSplitInstanceList>::resize; complete (erase on shrink, DoInsertValues default value on grow), EH prologue/register allocation differ
+007d7560  155  eastl::vector<cSplitInstanceList>::resize; complete (erase on shrink, DoInsertValues default value on grow), EH prologue/register allocation differ; equiv: PASS (266 valid, 82.9% coverage; saved failing input replays clean). The shrink path calls 0x007d7280 as a thiscall member (`ecx` = the vector, two stack args), modelled as `ListVector::erase(first, last)`
