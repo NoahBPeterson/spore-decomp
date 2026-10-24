@@ -1,0 +1,6 @@
+slices/s00e033d0/s00e033d0.cpp  ?SetText@BanContent@@QAEXHPB_WPBX@Z  00e03590  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e033d0/s00e033d0.cpp  ?OnMessage@CivPauseUI@@QAE_NHH@Z  00e03a90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e033d0/s00e033d0.cpp  ?Format@BanTranslator@@QAE_NPB_WPA_W@Z  00e03b80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e033d0/s00e033d0.cpp  ?EraseLast@BanVec@@QAEPAUBanEntry@@PAU2@@Z  00e03c30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e033d0/s00e033d0.cpp  ?AnyCivSlotUsed@cSPUIGlobalUI@@QAE_NXZ  00e042b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e033d0/s00e033d0.cpp  ?FUN_00e04330@@YAHH@Z  00e04330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
