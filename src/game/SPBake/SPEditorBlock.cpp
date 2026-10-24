@@ -1137,7 +1137,11 @@ inline float Clamp(float x, float lo, float hi)
 
 // ---- items of slice s0043f3a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace SP {
-struct Matrix3_s0043_f3a0 { float m[9]; Matrix3_s0043_f3a0() {} Matrix3_s0043_f3a0(const Matrix3_s0043_f3a0&); };
+struct Matrix3_s0043_f3a0 {
+    float m[9];
+    Matrix3_s0043_f3a0() {}
+    Matrix3_s0043_f3a0(const Matrix3_s0043_f3a0&);          // 0041CB40
+};
 }
 namespace SP {
 struct DefaultRefCounted { void Release(); };
@@ -1173,9 +1177,8 @@ struct cSPEditorBlock_s0043_f3a0 {
 
     float F3eed0();                            // 0043EED0
     float F3f250();                            // 0043F250
-    void  F3eef0(Vec3* out);                   // 0043EEF0
-    void* F3f290(Vec3* out, int flag);         // 0043F290
-    void  F404f0();                            // 004404F0
+    cSPBoundingBox_s0043_e3f0 F3eef0();        // 0043EEF0
+    void  F404f0(Matrix3_s0043_f3a0 m);         // 004404F0
     void  F40420(float v, uint8_t b);          // 00440420
     void  F40520(float v, uint8_t b, int c);   // 00440520
     void  F3a5e0(int type, uint8_t a, uint8_t b, char c);  // 0043A5E0
@@ -1196,7 +1199,7 @@ namespace SP {
 void  Matrix3_Assign(Matrix3_s0043_f3a0* dst, const Matrix3_s0043_f3a0* src);       // 0041CB40
 }
 namespace SP {
-void  Sub_4A8E10(Matrix3_s0043_f3a0* out, const void* a, int b);
+Matrix3_s0043_f3a0 Sub_4A8E10(const void* a, int b);                                // 004A8E10
 }
 namespace SP {
 int   Sub_493640(void* v, float f);
@@ -4848,19 +4851,18 @@ float cSPEditorBlock_s0043_f3a0::F4d0()
 namespace SP {
 void cSPEditorBlock_s0043_f3a0::F5b0(Vec3* out, float a, float b, float c, int flag)
 {
-    Vec3 base;
-    F3eef0(&base);
+    cSPBoundingBox_s0043_e3f0 base = F3eef0();
     if (flag > 0) {
-        Vec3* p = (Vec3*)F3f290(&base, 0);
-        if (0.0f > a + p->x) {
-            Vec3* q = (Vec3*)F3f290(&base, 0);
-            a = -q->x;
+        cSPVector3_s0043_e3f0 p = base.GetCorner(0);
+        if (0.0f > a + p.x) {
+            cSPVector3_s0043_e3f0 q = base.GetCorner(0);
+            a = -q.x;
         }
     } else {
-        Vec3* p = (Vec3*)F3f290(&base, 1);
-        if (a + p->x >= 0.0f) {
-            Vec3* q = (Vec3*)F3f290(&base, 1);
-            a = -q->x;
+        cSPVector3_s0043_e3f0 p = base.GetCorner(1);
+        if (a + p.x >= 0.0f) {
+            cSPVector3_s0043_e3f0 q = base.GetCorner(1);
+            a = -q.x;
         }
     }
     out->x = a;
@@ -4920,13 +4922,9 @@ bool cSPEditorBlock_s0043_f3a0::F3fc20(void* pos)
 namespace SP {
 void cSPEditorBlock_s0043_f3a0::FFa0(Matrix3_s0043_f3a0 m)
 {
-    Matrix3_s0043_f3a0 tmp;
-    Matrix3_Assign(&tmp, &m);
-    F404f0();
+    F404f0(m);
     if (node != 0 && node->Check() && link3e0 != 0) {
-        Matrix3_s0043_f3a0 tmp2;
-        Sub_4A8E10(&tmp2, &m, 0);
-        link3e0->F404f0();
+        link3e0->F404f0(Sub_4A8E10(&m, 0));
     }
 }
 }  // namespace SP
