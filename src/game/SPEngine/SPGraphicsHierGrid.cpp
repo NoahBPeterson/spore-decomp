@@ -1310,21 +1310,23 @@ cGrid_s0070_2980* __thiscall cGrid_s0070_2980::CopyConstruct(const cGrid_s0070_2
 }
 
 // @ 0x007030a0
-cGrid_s0070_2980* __cdecl grid_uninit_copy(cGrid_s0070_2980* first, cGrid_s0070_2980* last, cGrid_s0070_2980* dst)
+cGrid_s0070_2980* __cdecl grid_uninit_copy(cGrid_s0070_2980** out, cGrid_s0070_2980* first, cGrid_s0070_2980* last, cGrid_s0070_2980* dst)
 {
-    cGrid_s0070_2980* out = dst;
+    *out = dst;
     for (; first != last; first += 1) {
-        out->CopyConstruct(*first);
-        out += 1;
+        if (*out)
+            (*out)->CopyConstruct(*first);
+        *out += 1;
     }
-    return out;
+    return (cGrid_s0070_2980*)out;
 }
 
 // @ 0x00703160
-void __cdecl grid_fill_n(unsigned n, cGrid_s0070_2980* dst, const cGrid_s0070_2980* value)
+void __cdecl grid_fill_n(cGrid_s0070_2980* dst, unsigned n, const cGrid_s0070_2980* value)
 {
     for (; n != 0; n--) {
-        dst->CopyConstruct(*value);
+        if (dst)
+            dst->CopyConstruct(*value);
         dst += 1;
     }
 }
