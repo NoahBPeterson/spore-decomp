@@ -551,8 +551,8 @@ void Voice::Release(char param_2)
             if (*pp != 0)
             {
                 int plug = *pp;
-                ((void(*)(void))(*(int*)plug))();
-                ((void(*)(int))(*(int*)(*(int*)plug + 0xc)))(0);
+                ((void(__fastcall*)(void*, void*))(*(void***)plug)[0])((void*)plug, 0);
+                ((void(__fastcall*)(void*, void*, int))(*(int*)(*(int*)plug + 0xc)))((void*)plug, 0, 0);
             }
             ++i;
             ++pp;
@@ -591,6 +591,7 @@ void Voice::Stop(u8 param_2)
             int* pp = (int*)(v + 0x4c);
             do { *(int*)(*pp + 0x1c) = 0; ++k; ++pp; } while (k < *(u8*)(v + 0x44));
         }
+        RemoveFromActive();
         int s = *(int*)(v + 0x10);
         int* node = (int*)(v + 0x1c);
         int* head = (int*)(s + 0x10);
