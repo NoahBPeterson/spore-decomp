@@ -1,0 +1,4 @@
+00c21090 306 codegen: `this` callee-saved reg (ebx vs edi), branch/compare ordering; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv=FAIL (5/52 valid mismatched)
+00c21260 15 scheduler reordered nCount=0 zeroing vs stream vtable slot load (same insns, different order); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv=UNSUPPORTED (0/400 valid)
+00c214a0 1674 behavioral approximation of the eastl-hashtable effect sync (size 1244 vs 1866); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv=FAIL (5/185 valid mismatched)
+00c21bf0 907 behavioral approximation of the animation-model rebuild (size 758 vs 1052); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv=WEAK (253/400 valid, 20.9% coverage)
