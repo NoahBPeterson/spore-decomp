@@ -168,6 +168,7 @@ class hkMotion
 	virtual hkVelocityAccumulator* buildAccumulator(const hkStepInfo& stepInfo, hkVelocityAccumulator* acc);   // slot 5 (inferred)
 	virtual void integrateFromAccumulator(const hkStepInfo& stepInfo, hkVelocityAccumulator* acc);              // slot 6 (inferred)
 	virtual int getSizeOfAccumulators();                                                                         // slot 7 (inferred)
+	int m_pad4;                        // +4 (non-virtual field slot before the accumulator offset)
 	int m_accumulatorOffset;           // +8
 	char m_pad[0xc0 - 0xc];
 	float m_inverseMass;               // +0xc0
@@ -291,13 +292,13 @@ public:
 	virtual void buildJacobian(const hkConstraintQueryIn& in, hkConstraintQueryOut& out);   // 0x010A4680
 	virtual void toiCollisionResponseEndCallback(const hkContactPoint& cp, float m, hkSimpleConstraintInfoInitInput& inA,
 	                                             hkBodyVelocity& velA, hkSimpleConstraintInfoInitInput& inB, hkBodyVelocity& velB);   // 0x010A46F0
-	virtual void toiCollisionResponseBeginCallback(const hkContactPoint& cp, hkSimpleConstraintInfoInitInput& inA,
+	virtual hkBodyVelocity* toiCollisionResponseBeginCallback(const hkContactPoint& cp, hkSimpleConstraintInfoInitInput& inA,
 	                                               hkBodyVelocity& velA, hkSimpleConstraintInfoInitInput& inB, hkBodyVelocity& velB);   // 0x010A4850
 
 	// File-scope statics at 0x016E5090 (A), 0x016E50B0 (B), 0x016E50D0 (flag); names inferred.
-	static hkBodyVelocity s_toiVelocityA;
-	static hkBodyVelocity s_toiVelocityB;
-	static hkUint8 s_toiActive;
+	static hkBodyVelocity s_toiVelocityA;   // 0x016e5090
+	static hkBodyVelocity s_toiVelocityB;   // 0x016e50b0
+	static hkUint8 s_toiActive;             // 0x016e50d0
 };
 
 hkBodyVelocity hkSoftContactConstraintData::s_toiVelocityA;
@@ -628,13 +629,14 @@ void hkSoftContactConstraintData::toiCollisionResponseEndCallback(const hkContac
 }
 
 // @ 0x010a4850
-void hkSoftContactConstraintData::toiCollisionResponseBeginCallback(const hkContactPoint&, hkSimpleConstraintInfoInitInput&,
+hkBodyVelocity* hkSoftContactConstraintData::toiCollisionResponseBeginCallback(const hkContactPoint&, hkSimpleConstraintInfoInitInput&,
                                                                     hkBodyVelocity& velA, hkSimpleConstraintInfoInitInput&,
                                                                     hkBodyVelocity& velB)
 {
 	s_toiActive = 1;
 	s_toiVelocityA = velA;   // 8 dwords
 	s_toiVelocityB = velB;
+	return &velB;            // the original leaves velB's address in EAX (void_hides_eax)
 }
 
 // ---- hkConstraintSolverSetup -----------------------------------------------------------------------------------------

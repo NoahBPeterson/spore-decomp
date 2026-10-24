@@ -3,3 +3,4 @@
 010a4a70 hkConstraintSolverSetup_layoutBuffer  # computes 6 buffer pointers/sizes into a 0x20-byte struct, writes fixed accumulator + end marker (type 2)
 010a4b30 hkConstraintSolverSetup_calcBufferSize  # layoutBuffer(info, 0, 0, &tmp): size query
 010a4c60 hkConstraintSolverSetup_integrateBatch  # per entity motion->vtbl[6](step, base+accOffset), no pre-copy (cf. oneStepIntegrate)
+010a45b0 ??0hkSimpleContactConstraintData@@QAE@PAVhkConstraintInstance@@@Z  # exact overload (1-arg ctor); the 0-arg ctor shares the demangled name

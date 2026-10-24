@@ -2,18 +2,17 @@
 010a4290 0 havok-equivalent
 010a42f0 0 havok-equivalent
 010a4420 0 havok-equivalent
-010a45b0 0 havok-equivalent
+010a45b0 0 havok-equivalent; equiv PASS (400 valid, 100% cov): 1-arg ctor; symbols/slices/s010a3ed0.txt pins the decorated overload because the 0-arg ctor shares the demangled name and was the closer-size candidate
 010a4620 0 havok-equivalent
 010a4680 0 havok-equivalent
 010a46f0 0 havok-equivalent
-010a4850 0 havok-equivalent
+010a4850 0 havok-equivalent; equiv PASS (400 valid, 100% cov): declared hkBodyVelocity* and returns &velB (the original leaves velB's pointer in EAX: void_hides_eax), and the three s_toiVelocity globals are annotated with their 0x016e5090/0x016e50b0/0x016e50d0 addresses
 010a48f0 0 havok-equivalent
 010a49e0 0 havok-equivalent
 010a4a70 0 havok-equivalent flags /O2 /MD /Gy /EHsc /TP; equiv PASS (213 valid, 100% cov): void_hides_eax — the original leaves out->m_end in EAX and 0 in EDX; layoutBuffer now returns uint64_t so cl leaves m_end in EAX and zero-extends into EDX
-010a4b30 0 havok-equivalent; difftest PASS (1200 inputs; layoutBuffer made noinline so ours is not empty); equiv PASS (400 valid, 100% cov) flags /O2 /MD /Gy /EHsc /TP: callerdeps preserve DEPENDS edx satisfied via layoutBuffer's 64-bit return (EDX=0); eax propagates m_end (inline-calls tolerated)
-010a4b50 0 havok-equivalent
+010a4b50 0 havok-equivalent; equiv PASS (305 valid, 100% cov): hkMotion::m_accumulatorOffset is at +8 (4-byte pad at +4 after the vptr); before the pad it compiled at +4 and every accumulator offset was read from the wrong field
 010a4bb0 0 havok-equivalent
-010a4c60 0 havok-equivalent
-010a4ca0 0 havok-equivalent
-010a4d10 0 havok-equivalent
-010a4de0 0 havok-equivalent
+010a4c60 0 havok-equivalent flags /O1 /MD /Gy /EHsc /TP; equiv PASS (310 valid, 100% cov): cl 15 folds a virtual-call target into a register (call edx), but the depth-1 call hook only evaluates memory-indirect call sites (the original is call dword ptr [edx+0x18]), so register-form calls are recorded where the original's unmapped slot reads are not; /O1 keeps the memory-indirect form (call dword ptr [eax+0x18])
+010a4ca0 0 havok-equivalent; equiv PASS (245 valid, 100% cov): hkMotion::m_accumulatorOffset at +8 (pad dword at +4) so the stored-velocity accumulator address is right
+010a4d10 0 havok-equivalent flags /O1 /MD /Gy /EHsc /TP; equiv WEAK (190 valid < 200, 56.6% cov < 60%, 0 mismatches): same virtual-call form issue as 010a4c60 (cl 15 hoists [edx+0x14] into a register); /O1 uses call dword ptr [eax+0x14]. Coverage caps below 60% because the acc==res[3] fixed-accumulator arm is never reached by the generated inputs (43/76 original insns)
+010a4de0 0 havok-equivalent; equiv PASS (317 valid, 100% cov): hkMotion::m_accumulatorOffset at +8 (pad dword at +4); hkBool hidden-return ABI already matched
