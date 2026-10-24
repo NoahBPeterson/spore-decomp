@@ -1,2 +1,8 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
 0066c370  214  shutdown: all owned-object releases, RemoveHandler and the final vtable 0x78(0x1002) call are present; cl's register/schedule differs
+0066c0c0  102  destructor: all 5 vtable stores, the exact AppSystem vtbl+0x40(0) gate on mb8, FUN_00571db0(handler+4 args), the descending member releases and the inline refcount at +0x80 are reconstructed; equiv PASS (208 valid, 97.8% cov); cl's register/stack-slot schedule differs
+0066c490  579  DoMessage: all 4 message arms (0x1dd7bda9/0x4aca143/0x695e243/0x7a43c598) reconstructed incl. typed vtable calls; equiv WEAK (399 valid, 31.5% cov); cl scheduling/inlining differs
+0066c720  480  UnloadLayout: full body reconstructed; equiv WEAK (309 valid, 3.4% cov); cl's register/schedule differs
+0066c9e0  303  layout image pick: full body reconstructed; equiv WEAK (294 valid, 7.8% cov); cl's register/schedule differs
+0066cbd0  228  constructor: stores the 5 vtable pointers and returns this; equiv PASS (400 valid, 100% cov); cl scheduling differs
+0066cd20  175  SP::GetVerbIconKeysForLargeCard: RemapTypeId + PropertyManager GetKeys + 3 GetPropertyAsKey lookups reconstructed; equiv WEAK (400 valid, 15.6% cov)

@@ -1,2 +1,3 @@
 # source  symbol  va  flags
 slices/s0066bf70/s0066bf70.cpp  FUN_0066cb70  0066cb70  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0066bf70/s0066bf70.cpp  ?FUN_0066bf70@@YIXPAUViewCtx@@@Z  0066bf70  /O2 /MD /Gy /TP /arch:SSE /GS-
