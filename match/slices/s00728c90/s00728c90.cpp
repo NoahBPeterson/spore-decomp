@@ -190,21 +190,32 @@ void C29a70::Free()
     }
 }
 
-// @ 0x007296e0 — copy `rows` rows of dword data from src to dst with independent strides.
-void FUN_007296e0(int* dst, int* src, int rows)
+// Retail is declared void, but its eax is live at both exits: the word stride of the
+// source struct (src word at +0xa, already shifted by 2) until a row with a non-empty
+// copy runs, then the dword cursor just past the last copied dword.
+// @ 0x007296e0
+int FUN_007296e0(int* dst, int* src, int rows)
 {
     int      srcBase   = src[1];
     int*     d         = (int*)dst[0];
-    unsigned dstStride = (unsigned)dst[1];
-    unsigned srcStride = *(unsigned short*)((char*)src + 10);
+    unsigned dstStride = (unsigned)dst[1] & 0xfffffffc;
+    unsigned wordStride = *(unsigned short*)((char*)src + 10) >> 2;
     unsigned count     = *(unsigned short*)((char*)src + 8) >> 2;
+    int      last      = (int)wordStride;
+    if (rows > 0)
+        last = (int)(wordStride * 4);
     for (; rows > 0; --rows) {
-        int* s = (int*)srcBase;
-        for (unsigned i = 0; i < count; ++i)
-            d[i] = s[i];
-        srcBase += (int)(srcStride >> 2) * 4;
-        d = (int*)((char*)d + (dstStride & 0xfffffffc));
+        int*      s = (int*)srcBase;
+        int*      p = d;
+        if (count) {
+            for (unsigned i = 0; i < count; ++i)
+                p[i] = s[i];
+            last = (int)(size_t)(p + count);
+        }
+        srcBase += (int)(wordStride * 4);
+        d = (int*)((char*)d + dstStride);
     }
+    return last;
 }
 
 // @ 0x00729760 — like FUN_007296e0 but the source row is selected through a mask table.
@@ -474,11 +485,24 @@ int FUN_00729300(int a, int b, int* c, int d, int e, int f)
     return 0;
 }
 
-// @ 0x007298b0  (PARTIAL: x87 area/size helper)
+// x87 area helper.  `b` is really a pointer to a struct holding two unsigned
+// weights at +8/+0xc and four Vec3s at +0x10/+0x1c/+0x28/+0x34; the three
+// edges used are p1-p0 (u), p3-p2 (v) and a1-a0 (w).  The only non-obvious
+// part is the scalar built from one edge: (z*y + z*x + x*y), weighted by the
+// matching unsigned weight and doubled, over the doubled w scalar times the
+// integer weight sum -- i.e. a barycentric-style ratio.
+// @ 0x007298b0
 double FUN_007298b0(float* a, int b)
 {
-    (void)a; (void)b;
-    return 0.0;
+    float* p = (float*)b;
+    float ux = p[7] - p[4], uy = p[8] - p[5], uz = p[9] - p[6];
+    float vx = p[13] - p[10], vy = p[14] - p[11], vz = p[15] - p[12];
+    float wx = a[3] - a[0], wy = a[4] - a[1], wz = a[5] - a[2];
+    unsigned int t0 = *(unsigned int*)(p + 2);
+    unsigned int t1 = *(unsigned int*)(p + 3);
+    return ((vz * vy + vz * vx + vx * vy) * 2.0f * (float)t1 +
+            (uz * uy + uz * ux + ux * uy) * 2.0f * (float)t0) /
+           (2.0f * (wz * wy + wz * wx + wx * wy) * (float)(t0 + t1));
 }
 
 // @ 0x00729990  (PARTIAL)
