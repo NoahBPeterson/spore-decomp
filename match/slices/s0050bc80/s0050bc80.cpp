@@ -38,85 +38,141 @@ void __fastcall Advance(int self, int peer, float amount)
 // ---------------------------------------------------------------------------
 // Helpers (masked relocations).
 // ---------------------------------------------------------------------------
-void BuildSomethingA(int a);                          // 0x0041bd50
-void BuildSomethingC();                               // 0x004fde90
-void* TriInterp3(void* out, void* w, void* v);        // 0x0041de40
-void* VecAdd(void* out, void* a);                     // 0x0041dc10
-void CopyV3(void* out, void* v);                      // 0x00436ce0
+void* __cdecl TriInterp3(void* out, void* w, void* v);        // 0x0041de40
+void* __cdecl VecAdd(void* out, void* a, void* b);            // 0x0041dc10
+void* __cdecl CopyV3(void* out, void* v);                     // 0x00436ce0
+
+// thiscall helpers: ecx carries the base pointer, stack args are callee-popped.
+struct Thiscall {
+    void BuildSomethingC(int a, int b);   // 0x004fde90
+    void BuildSomethingA(void* v);        // 0x0041bd50
+    void Reset409c00();                   // 0x00409c00
+    char IsReady();                       // 0x00526430
+};
+
+struct PeerVec {
+    void push_back(const int& v);         // 0x00422380
+};
 
 // ---------------------------------------------------------------------------
-// @ 0x0050c230  (bbox query)
+// @ 0x0050bd10  (append peer, advance value, clamp against the peer extent)
 // ---------------------------------------------------------------------------
-int* __fastcall BBoxQuery(int* self, int a, int* out, uint32_t* count, int* out2)
+void __fastcall Advance(char* self, int unused, int peer, float amount)
 {
-    self[0x11] = 0x7f7fffff;
-    BuildSomethingC();
-    if (out != 0) *out = self[0x11];
-    if (count != 0) *count = (uint32_t)self[0x12] / 3;
-    if (out2 != 0) *out2 = self[0x13];
-    return self;
+    ((PeerVec*)self)->push_back(peer);
+    *(float*)(self + 0x58) = *(float*)(self + 0x58) + amount;
+    float lim = *(float*)(peer + 0x64) - *(float*)(peer + 0x60);
+    float* p = (float*)(self + 0x5c);
+    float* q;
+    if (*p > lim)
+        q = p;
+    else
+        q = &lim;
+    *(float*)(self + 0x5c) = *q;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x0050c230  (bbox/weights + barycentric interpolation, table at self+0xc)
+// ---------------------------------------------------------------------------
+float* __fastcall BBoxQuery(char* self, int unused, float* out, int tri,
+                            float* outBox, uint32_t* count, int* out2)
+{
+    *(float*)(self + 0x44) = 3.4028234663852886e+38f;
+    ((Thiscall*)self)->BuildSomethingC(*(int*)self, tri);
+    if (outBox != 0)
+        *outBox = *(float*)(self + 0x44);
+    if (count != 0)
+        *count = *(uint32_t*)(self + 0x48) / 3;
+    if (out2 != 0) {
+        out2[0] = *(int*)(self + 0x4c);
+        out2[1] = *(int*)(self + 0x50);
+    }
+    int i = *(int*)(self + 0x48);
+    int* table = *(int**)(self + 0xc);
+    char* base = *(char**)(self + 8);
+    float w1 = *(float*)(self + 0x4c);
+    float w2 = *(float*)(self + 0x50);
+    float w0 = (1.0f - w1) - w2;
+    float t1[3], t2[3], t3[3], t4[3], t5[3];
+    float* r = (float*)VecAdd(t5,
+                     VecAdd(t4,
+                         TriInterp3(t3, &w0, base + table[i + 0] * 0xc),
+                         TriInterp3(t2, &w1, base + table[i + 1] * 0xc)),
+                     TriInterp3(t1, &w2, base + table[i + 2] * 0xc));
+    out[0] = r[0];
+    out[1] = r[1];
+    out[2] = r[2];
+    return out;
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x0050c3b0  (ensure normals)
 // ---------------------------------------------------------------------------
-int __fastcall EnsureNormals(int self)
+int __fastcall EnsureNormals(char* self)
 {
-    int* p = *(int**)(self + 8);
-    *(int*)(self + 0x14c) = p[0];
-    *(int*)(self + 0x150) = p[1];
-    *(int*)(self + 0x154) = p[2];
-    *(int*)(self + 0x158) = p[0];
-    *(int*)(self + 0x15c) = p[1];
-    *(int*)(self + 0x160) = p[2];
+    if (((Thiscall*)(self + 8))->IsReady()) {
+        ((Thiscall*)(self + 0x14c))->Reset409c00();
+        return (int)(self + 0x14c);
+    }
+    float* p = *(float**)(self + 8);
+    float* dst = (float*)(self + 0x14c);
+    dst[0] = p[0];
+    dst[1] = p[1];
+    dst[2] = p[2];
+    dst[3] = p[0];
+    dst[4] = p[1];
+    dst[5] = p[2];
+    int n = (*(int*)(self + 0xc) - *(int*)(self + 8)) / 0xc;
     uint32_t i = 1;
-    int n = *(int*)(self + 0xc);
-    while (i < (uint32_t)((n - p[0]) / 0xc)) {
-        BuildSomethingA((int)(i * 0xc + *(int*)(self + 8)));
+    while (i < (uint32_t)n) {
+        ((Thiscall*)(self + 0x14c))->BuildSomethingA((char*)*(void**)(self + 8) + i * 0xc);
         ++i;
     }
-    return self + 0x14c;
+    return (int)(self + 0x14c);
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0050c490  (barycentric interpolation, one table)
+// @ 0x0050c490  (barycentric interpolation, table at self+0x58)
 // ---------------------------------------------------------------------------
-void* __fastcall InterpA(int self, void* out, int tri, float u, float v)
+float* __fastcall InterpA(char* self, int unused, float* out, int tri, float u, float v)
 {
-    int base = *(int*)(self + 8);
+    char* base = *(char**)(self + 8);
     int* idx = (int*)(*(int*)(self + 0x58) + tri * 0xc);
-    float w2 = v;
     float w1 = u;
+    float w2 = v;
     float w0 = (1.0f - u) - v;
-    char t1[12], t2[12], t3[12], t4[12], t5[12];
-    TriInterp3(t1, &w2, (void*)(idx[2] * 0xc + base));
-    TriInterp3(t2, &w1, (void*)(idx[1] * 0xc + base));
-    TriInterp3(t3, &w0, (void*)(idx[0] * 0xc + base));
-    VecAdd(t4, t3);
-    void* r = VecAdd(t5, t4);
-    *(uint32_t*)out = *(uint32_t*)r;
-    *((uint32_t*)out + 1) = *((uint32_t*)r + 1);
-    *((uint32_t*)out + 2) = *((uint32_t*)r + 2);
+    float t1[3], t2[3], t3[3], t4[3], t5[3];
+    float* r = (float*)VecAdd(t5,
+                     VecAdd(t4,
+                         TriInterp3(t3, &w0, base + idx[0] * 0xc),
+                         TriInterp3(t2, &w1, base + idx[1] * 0xc)),
+                     TriInterp3(t1, &w2, base + idx[2] * 0xc));
+    out[0] = r[0];
+    out[1] = r[1];
+    out[2] = r[2];
     return out;
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0050c5a0  (barycentric interpolation, second table)
+// @ 0x0050c5a0  (barycentric interpolation, table at self+0x6c)
 // ---------------------------------------------------------------------------
-void* __fastcall InterpB(int self, void* out, int tri, float u, float v)
+float* __fastcall InterpB(char* self, int unused, float* out, int tri, float u, float v)
 {
-    int base = *(int*)(self + 0x1c);
+    char* base = *(char**)(self + 0x1c);
     int* idx = (int*)(*(int*)(self + 0x6c) + tri * 0xc);
-    float w2 = v;
     float w1 = u;
+    float w2 = v;
     float w0 = (1.0f - u) - v;
-    char t1[12], t2[12], t3[12], t4[12], t5[12];
-    TriInterp3(t1, &w2, (void*)(idx[2] * 0xc + base));
-    TriInterp3(t2, &w1, (void*)(idx[1] * 0xc + base));
-    TriInterp3(t3, &w0, (void*)(idx[0] * 0xc + base));
-    VecAdd(t4, t3);
-    void* r = VecAdd(t5, t4);
-    uint32_t tmp[3] = { *(uint32_t*)r, *((uint32_t*)r + 1), *((uint32_t*)r + 2) };
+    float t1[3], t2[3], t3[3], t4[3], t5[3];
+    float* r = (float*)VecAdd(t5,
+                     VecAdd(t4,
+                         TriInterp3(t3, &w0, base + idx[0] * 0xc),
+                         TriInterp3(t2, &w1, base + idx[1] * 0xc)),
+                     TriInterp3(t1, &w2, base + idx[2] * 0xc));
+    float tmp[3];
+    tmp[0] = r[0];
+    tmp[1] = r[1];
+    tmp[2] = r[2];
     CopyV3(out, tmp);
     return out;
 }

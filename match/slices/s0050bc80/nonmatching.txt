@@ -1,6 +1,6 @@
-0050bc80   67  ToggleSwap: complete; returns &f58 in eax (caller-visible void_hides_eax); /Od schedule differs; equiv PASS (400 valid, 100% coverage); flags /Od /Ob1 /MD /Gy /TP /arch:SSE
-0050bd10   78  advance value + clamp against peer extent: complete behaviour; /Od float temp/order differs
-0050c230   80  bbox query: complete behaviour; /Od schedule differs
-0050c3b0  163  normals-init: complete behaviour (copy first vertex, rebuild rest); /Od schedule differs
-0050c490  207  barycentric interpolation (one table): complete behaviour; /Od schedule differs
-0050c5a0  241  barycentric interpolation (second table): complete behaviour; /Od schedule differs
+0050bc80  132  ToggleSwap: complete; returns &f58 in eax (caller-visible void_hides_eax); /Od schedule differs; equiv PASS (400 valid, 100% cov); flags /Od /Ob1 /MD /Gy /TP /arch:SSE
+0050bd10  116  advance: appends peer via eastl::fixed_vector<int,16>::push_back(self, &peer), adds amount to f58, then f5c = (*p > lim ? *p : lim), lim = peer->f64 - peer->f60; difftest PASS (276 valid, 100% cov)
+0050c230  330  bbox/weights + barycentric interp (table f0c, base f8): f44=FLT_MAX, BuildSomethingC(self, f0, tri), optional f44 / count=f48/3 / f4c,f50 outs, then 3x TriInterp3 (f50,f4c,w0) + nested 3-arg VecAdd chain into out; difftest PASS (229 valid, 100% cov)
+0050c3b0  196  ensure normals: if Check526430(self+8) then Reset409c00(self+14c), else copy vertex0 to +14c/+158 and BuildSomethingA(self+14c, base+i*0xc) for i in 1..(f_c-f_8)/0xc; difftest WEAK, no mismatch (221+ valid, 26.4% cov: the else path always walks a soup-sized range and hits the instruction budget; its remaining insns are unreachable with generated inputs)
+0050c490  232  barycentric interp (table f58, base f8): 3x TriInterp3 + nested 3-arg VecAdd, out[0..2] = r; difftest PASS at --inputs 800 (386 valid, 100% cov; at the default 400 inputs WEAK only because 53% of random inputs fault in the original on soup base/table pointers)
+0050c5a0  249  barycentric interp (table f6c, base f1c): same TriInterp3/VecAdd chain then CopyV3(out, tmp); difftest PASS at --inputs 800 (331 valid, 100% cov; default-400 WEAK for the same soup-pointer fault rate)
