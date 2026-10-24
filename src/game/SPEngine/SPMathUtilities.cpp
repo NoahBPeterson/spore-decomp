@@ -636,8 +636,10 @@ float HermiteTrack::Evaluate(float t)
   m[0] = mpTangents[seg] * h;
   m[1] = mpTangents[seg + 1] * h;
   float s2 = s * s;
-  return ((s * 2.0f - 3.0f) * s2 + 1.0f) * mpValues[seg] + ((3.0f - s * 2.0f) * s2) * mpValues[seg + 1] +
-         (((s - 2.0f) * s + 1.0f) * s) * m[0] + ((s - 1.0f) * s2) * m[1];
+  float sum = ((s * 2.0f - 3.0f) * s2 + 1.0f) * mpValues[seg] + ((3.0f - s * 2.0f) * s2) * mpValues[seg + 1];
+  sum = sum + (((s - 2.0f) * s + 1.0f) * s) * m[0];
+  sum = sum + ((s - 1.0f) * s2) * m[1];
+  return sum;
 }
 
 // @ 0x0069a750
