@@ -1,0 +1,4 @@
+0049b460  966  basis rebuild: whole zAxis row sign-flipped vs original (call trace identical except final operator* dest: orig writes STK then identity-ctor+copy to out, ours writes out directly); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv FAIL 5/6 valid, cov 64.3% (artifact)
+0049b8b0  870  full body; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv PASS 388 valid, 99.6% cov
+0049bcc0  964  full body; 2/190 inputs: plane-hit path orig uses 41de40 (Vector3*float*) where ours uses 41dca0 (Vector3*float&), same value; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv FAIL 2/190, cov 89.4% (artifact)
+0049c140  193  full body; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv PASS 371 valid, 100% cov
