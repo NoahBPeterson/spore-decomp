@@ -1,0 +1,2 @@
+# slice s00aa9050: one function (00aa97f0), logged in nonmatching.txt. The reconstruction is
+# complete and compiles; the residual is register-allocation/scheduling only.

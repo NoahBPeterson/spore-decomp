@@ -1,207 +1,133 @@
-// Slice s00aa9050: Swarm particle collider, "collide one particle against the surface for one
-// step" (__thiscall(cParticle*, float dt) -> bool keep-alive). The collider owns a transform
-// (this+0x100, used when mbLocal is set to bring the particle into the surface's space), a
-// surface object (this+0x1b0: Contains / HeightAt / NormalAt / v28) and a description
-// (this+0x24) whose flags (+8) select the response:
-//   bit 15: replace the velocity by the surface vector, scaled     bit 16: add it to the velocity
-//   bit 14: look one step ahead along the velocity and push away from the surface (soft wall)
-//   none  : hard reflection off the surface height (bounce factor desc+0x1C0, 0 = slide)
-// Returns false to kill the particle. Class/field names are Claude-coined from usage; the
-// transform layout matches s00a9ddd0's Xform and the helpers are s007cd6d0's / s00a7ca50's.
-// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
-#include "types.h"
-#include <math.h>
+// s00aa9050 -- beam/attachment point update (0x00aa97f0).
+//
+// The function pushes a point through two optional 3x3 transforms, asks the attach target
+// whether the point is valid (two virtual calls, the second returning a range that is then
+// compared against the configured min/max or a random roll), optionally offsets the point
+// along z, and finally maps the point back into local space of both transforms before
+// writing it back into the caller's structure.
 
 struct Vec3 {
-    float x, y, z;
-    __forceinline Vec3() {}
-    __forceinline Vec3(const Vec3& o) : x(o.x), y(o.y), z(o.z) {}
-    __forceinline Vec3(float x_, float y_, float z_) : x(x_), y(y_), z(z_) {}
+    float x;
+    float y;
+    float z;
 };
 
-static inline bool Bit(uint32_t v, int n) { return (v >> n) & 1; }
-
-struct RandomLinearCongruential { double RandomDoubleUniform(); };   // 0x009360D0
-extern RandomLinearCongruential g_Random;                            // 0x016778DC (sRandom_Swarm)
-
+// 0x38-byte transform: flags, translation, uniform scale, row-major 3x3.
 struct Xform {
-    uint32_t flags;      // +0x00 (bit 1: has rotation)
-    Vec3 t;              // +0x04
-    float scale;         // +0x10
-    float m[9];          // +0x14
-    void Transform(Vec3* v);                // 0x007CDEE0
-    void InverseTransformPoint(Vec3* v);    // 0x007CDA70
-    void InverseTransformDir(Vec3* v);      // 0x00A78E90
-    void InverseRotate(Vec3* v);            // 0x00A7CA50
-
+    unsigned mFlags;                                        // +0x00
+    Vec3     mPosition;                                     // +0x04
+    float    mScale;                                        // +0x10
+    float    mMatrix[9];                                    // +0x14
+    void InverseTransformPoint(Vec3* point);                // 0x007cda70 (thiscall, ret 4)
 };
 
-#define V(n) virtual void v##n()
-struct cSurface {
-    V(00); V(04); V(08); V(0c); V(10); V(14);
-    virtual bool Contains(const Vec3* pos);                          // +0x18
-    V(1c);
-    virtual float HeightAt(const Vec3* pos);                         // +0x20
-    virtual void NormalAt(Vec3* out, const Vec3* pos);               // +0x24
-    virtual void DirectionAt(Vec3* out, const Vec3* pos);            // +0x28
+struct AttachConfig {                                       // pointed to by owner+0x24
+    char     pad00[8];
+    unsigned mFlags;                                        // +0x08
 };
 
-struct cParticleDesc {
-    uint32_t pad_00[2];
-    uint32_t mFlags;                                                 // +0x08
-    uint8_t pad_0c[0x1C0 - 0x0C];
-    float mBounce;                                                   // +0x1C0
-    float mFloorMin;                                                 // +0x1C4
-    float mStrength;                                                 // +0x1C8
-    float mLookAhead;                                                // +0x1CC
-    float mScaleZ;                                                   // +0x1D0
-    float mKillBelow;                                                // +0x1D4
-    float mKillChance;                                               // +0x1D8
+struct AttachTarget {                                       // pointed to by owner+0x1b4
+    virtual void t00(); virtual void t04(); virtual void t08(); virtual void t0c();
+    virtual void t10(); virtual void t14();
+    virtual bool  Accept(Vec3* point);                      // +0x18
+    virtual void  t1cdummy();
+    virtual float GetRange(Vec3* point);                    // +0x20
 };
 
-struct cParticle {
-    uint8_t pad_00[0x10];
-    Vec3 mPos;                                                       // +0x10
-    Vec3 mVel;                                                       // +0x1C
+struct RandomGlobal {
+    double RandomDouble();                                  // 0x009360d0
+};
+extern RandomGlobal _sRandomGlobal;                         // 0x016778dc
+
+double cConfigManagerUnnamedB90(float* values);             // 0x007cdb90
+
+// Caller structure: the point lives at +0x10.
+struct AttachPoint {
+    char pad00[0x10];
+    Vec3 mPosition;                                         // +0x10
 };
 
-struct cCollider {
-    uint8_t pad_00[0x24];
-    cParticleDesc* mpDesc;                                           // +0x24
-    uint8_t pad_28[0x100 - 0x28];
-    Xform mXform;                                                    // +0x100
-    uint8_t pad_138[0x180 - 0x138];
-    float mDamping;                                                  // +0x180
-    uint8_t pad_184[0x1B0 - 0x184];
-    cSurface* mpSurface;                                             // +0x1B0
-    uint8_t pad_1b4[0x1BC - 0x1B4];
-    bool mbLocal;                                                    // +0x1BC
-
-    bool Collide(cParticle* p, float dt);                            // 0x00AA9050
+struct BeamAttachUpdater {
+    char          pad00[0x24];
+    AttachConfig* mpConfig;                                 // +0x24
+    char          pad28[0xc8 - 0x28];
+    Xform         mWorldXform;                              // +0xc8
+    Xform         mLocalXform;                              // +0x100
+    char          pad138[0x188 - 0x138];
+    float         mMinRange;                                // +0x188
+    float         mMaxRange;                                // +0x18c
+    char          pad190[0x1b4 - 0x190];
+    AttachTarget* mpTarget;                                 // +0x1b4
+    char          pad1b8[0x1bd - 0x1b8];
+    bool          mEnabled;                                 // +0x1bd
+    char          pad1be[0x1c8 - 0x1be];
+    float         mField1c8;                                // +0x1c8
+    char          pad1cc[0x1d4 - 0x1cc];
+    float         mField1d4;                                // +0x1d4
+    bool UpdateAttachPoint(AttachPoint* io);                // 0x00aa97f0
 };
 
-// @ 0x00AA9050
-bool cCollider::Collide(cParticle* p, float dt)
+// @ 0x00aa97f0
+bool BeamAttachUpdater::UpdateAttachPoint(AttachPoint* io)
 {
-    Vec3 N;   // surface normal
-    Vec3 W;   // shared scratch: rotation temp, then the surface vector / probe point
-    Vec3 P(p->mPos.x, p->mPos.y, p->mPos.z);
-    if (mbLocal) {
-        // inlined point transform: rotation by m, then scale and translate
-        if (mXform.flags & 2) {
-            P = Vec3((mXform.m[6] * P.z + mXform.m[3] * P.y) + mXform.m[0] * P.x,
-                     (mXform.m[7] * P.z + mXform.m[4] * P.y) + mXform.m[1] * P.x,
-                     (mXform.m[8] * P.z + mXform.m[5] * P.y) + mXform.m[2] * P.x);
+    Vec3 pos;
+    pos.x = io->mPosition.x;
+    pos.y = io->mPosition.y;
+    pos.z = io->mPosition.z;
+    if (mEnabled) {
+        if (mWorldXform.mFlags & 2) {
+            Vec3 transformed;
+            transformed.x = (mWorldXform.mMatrix[3] * pos.y + mWorldXform.mMatrix[6] * pos.z)
+                            + mWorldXform.mMatrix[0] * pos.x;
+            transformed.y = (mWorldXform.mMatrix[4] * pos.y + mWorldXform.mMatrix[7] * pos.z)
+                            + mWorldXform.mMatrix[1] * pos.x;
+            transformed.z = (mWorldXform.mMatrix[5] * pos.y + mWorldXform.mMatrix[8] * pos.z)
+                            + mWorldXform.mMatrix[2] * pos.x;
+            pos = transformed;
         }
-        P.x = mXform.t.x + mXform.scale * P.x;
-        P.y = mXform.t.y + mXform.scale * P.y;
-        P.z = mXform.t.z + mXform.scale * P.z;
-    }
-    if (!mpSurface->Contains(&P))
-        return !Bit(mpDesc->mFlags, 17);
-
-    cParticleDesc* desc = mpDesc;
-    uint32_t flags = desc->mFlags;
-    if (Bit(flags, 15)) {
-        mpSurface->DirectionAt(&W, &P);
-        if (mbLocal)
-            mXform.InverseTransformDir(&W);
-        float s = mpDesc->mStrength;
-        float d = mDamping;
-        p->mVel.x = (W.x * s) * d;
-        p->mVel.y = (W.y * s) * d;
-        p->mVel.z = (W.z * s) * d;
-        return true;
-    }
-    if (Bit(flags, 16)) {
-        mpSurface->DirectionAt(&W, &P);
-        if (mbLocal)
-            mXform.InverseTransformDir(&W);
-        float s = mpDesc->mStrength;
-        float d = mDamping;
-        p->mVel.x = p->mVel.x + ((W.x * s) * dt) * d;
-        p->mVel.y = p->mVel.y + ((W.y * s) * dt) * d;
-        p->mVel.z = p->mVel.z + ((W.z * s) * dt) * d;
-        return true;
-    }
-    if (Bit(flags, 14)) {
-        float s = desc->mLookAhead;
-        float vx = p->mVel.x, vy = p->mVel.y, vz = p->mVel.z;
-        float len = sqrtf((vx * vx + vy * vy) + vz * vz);
-        if (len > 10.0f) {
-            float inv = 1.0f / len;
-            W = Vec3(inv * (vx * s), inv * (vy * s), inv * (vz * s));
-        } else {
-            W = Vec3((vx * s) * 0.1f, (vy * s) * 0.1f, (vz * s) * 0.1f);
+        pos.x = mWorldXform.mPosition.x + mWorldXform.mScale * pos.x;
+        pos.y = mWorldXform.mPosition.y + mWorldXform.mScale * pos.y;
+        pos.z = mWorldXform.mPosition.z + mWorldXform.mScale * pos.z;
+        if (mLocalXform.mFlags & 2) {
+            Vec3 transformed;
+            transformed.x = (mLocalXform.mMatrix[3] * pos.y + mLocalXform.mMatrix[6] * pos.z)
+                            + mLocalXform.mMatrix[0] * pos.x;
+            transformed.y = (mLocalXform.mMatrix[4] * pos.y + mLocalXform.mMatrix[7] * pos.z)
+                            + mLocalXform.mMatrix[1] * pos.x;
+            transformed.z = (mLocalXform.mMatrix[5] * pos.y + mLocalXform.mMatrix[8] * pos.z)
+                            + mLocalXform.mMatrix[2] * pos.x;
+            pos = transformed;
         }
-        if (mbLocal)
-            mXform.Transform(&W);
-        W = Vec3(W.x + P.x, W.y + P.y, W.z + P.z);
-        if (mpSurface->Contains(&W)) {
-            float depth = W.z - mpSurface->HeightAt(&W);
-            cParticleDesc* d = mpDesc;
-            if (depth < d->mKillBelow)
-                return false;
-            if (depth < d->mFloorMin) {
-                mpSurface->NormalAt(&N, &W);
-                if (mbLocal)
-                    mXform.InverseRotate(&N);
-                d = mpDesc;
-                float t = d->mFloorMin - depth;
-                t = t * t;
-                float k = (d->mStrength * mDamping) * dt;
-                p->mVel.x = p->mVel.x + (N.x * t) * k;
-                p->mVel.y = p->mVel.y + (N.y * t) * k;
-                p->mVel.z = p->mVel.z + (d->mScaleZ * (N.z * t)) * k;
-                return true;
-            }
-        }
-        return true;
+        pos.x = mLocalXform.mPosition.x + mLocalXform.mScale * pos.x;
+        pos.y = mLocalXform.mPosition.y + mLocalXform.mScale * pos.y;
+        pos.z = mLocalXform.mPosition.z + mLocalXform.mScale * pos.z;
     }
-
-    if (desc->mBounce == 0.0f) {
-        float h = mpSurface->HeightAt(&P);
-        if (!Bit(mpDesc->mFlags, 18) && !(h > P.z))
-            return true;
-        p->mPos.x = P.x;
-        p->mPos.y = P.y;
-        p->mPos.z = h;
-        mpSurface->NormalAt(&N, &P);
-        if (mbLocal) {
-            mXform.InverseTransformPoint(&p->mPos);
-            mXform.InverseRotate(&N);
-        }
-        float d = -((p->mVel.x * N.x + p->mVel.z * N.z) + p->mVel.y * N.y);
-        if (d > 0.0f) {
-            p->mVel.x = p->mVel.x + N.x * d;
-            p->mVel.y = p->mVel.y + N.y * d;
-            p->mVel.z = p->mVel.z + N.z * d;
-        }
-        return true;
-    }
-
-    float h = mpSurface->HeightAt(&P);
-    if (!(h > P.z))
-        return true;
-    float chance = mpDesc->mKillChance;
-    if (chance != 0.0f) {
-        if (chance == 1.0f)
+    AttachTarget* target = mpTarget;
+    if (!target)
+        return false;
+    if (!target->Accept(&pos))
+        return false;
+    float range = mpTarget->GetRange(&pos);
+    if ((mpConfig->mFlags >> 6) & 1) {
+        if (range < mMinRange)
             return false;
-        if (!(mpDesc->mKillChance < g_Random.RandomDoubleUniform()))
+        if (range > mMaxRange)
+            return false;
+    } else if ((mpConfig->mFlags >> 7) & 1) {
+        if (_sRandomGlobal.RandomDouble() >= range)
             return false;
     }
-    p->mPos.x = P.x;
-    p->mPos.y = P.y;
-    p->mPos.z = h;
-    mpSurface->NormalAt(&N, &P);
-    if (mbLocal) {
-        mXform.InverseTransformPoint(&p->mPos);
-        mXform.InverseRotate(&N);
+    if ((mpConfig->mFlags >> 5) & 1) {
+        pos.z = range;
+        float offset[2];
+        offset[0] = mField1c8;
+        offset[1] = mField1d4;
+        pos.z = pos.z + cConfigManagerUnnamedB90(offset);
     }
-    float d = (p->mVel.x * N.x + p->mVel.z * N.z) + p->mVel.y * N.y;
-    d = d * (mpDesc->mBounce + 1.0f);
-    p->mVel.x = p->mVel.x - N.x * d;
-    p->mVel.y = p->mVel.y - N.y * d;
-    p->mVel.z = p->mVel.z - N.z * d;
+    if (mEnabled) {
+        mLocalXform.InverseTransformPoint(&pos);
+        mWorldXform.InverseTransformPoint(&pos);
+    }
+    io->mPosition = pos;
     return true;
 }
