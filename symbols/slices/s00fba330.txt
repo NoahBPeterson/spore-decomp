@@ -1,1 +1,7 @@
 00fba330 ?StaticInit@cTerrainStateMgr@SP@@SAXXZ  # SP::cTerrainStateMgr::StaticInit migrated from s00fba330
+00fbab70 SP::TerrainRecord::Assign  # __thiscall copy-assign; floats +0x00..+0x13, refs +0x14/+0x18/+0x1c/+0x20, blob +0x24..+0x5c and tail +0x60..+0x68
+00fbacb0 SP::TerrainMgr::SetPosition  # __thiscall; store Vec3 into +0x34 then rebuild basis +0x40 from a cSPTransform
+00fbad70 SP::TerrainMgr::SetFromQuaternion  # __thiscall; build cSPTransform, invert, normalise axis into +0x34, rebuild basis +0x40
+00fbaf10 SP::TerrainMgr::Select5c0  # __thiscall; range-checked index store into +0x5c0 then tail-call +0x20c helper
+00fbaf50 SP::TerrainMgr::Select5c4  # __thiscall; store index into +0x5c4 and swap the +0x1f4 ref from table 0x16d6d70
+00fbafa0 SP::TerrainMgr::BuildCounts  # __thiscall; zero 0x10000-dword buffer then 6x4x4 histogram / min-max reduction (nonmatching)
