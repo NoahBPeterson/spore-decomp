@@ -1,1 +1,0 @@
-0045d060  -  inverse-bind-pose matrix array writer; only skeleton reproduced

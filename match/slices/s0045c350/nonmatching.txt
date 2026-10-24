@@ -2,3 +2,4 @@
 0045cd90  103  varargs sink writer; BigStr local layout differs
 0045ce80  103  Vector3 float-array writer; x87 arg promotion/scheduling differs
 0045cf40  73   Vector2 float-array writer; x87 arg promotion/scheduling differs
+0045d060  593  inverse-bind-pose float4x4 array writer (header WriterFmt 0x45cd90 with 0x13eea70, then per-matrix 16 %f args read column-major mat[r][c] in /Od shift form, footer 0x13ee958 with stride="16"); /Od 2-D index codegen differs (342 vs 593); equiv WEAK (187 valid inputs, 0 mismatches, 21.0% coverage)

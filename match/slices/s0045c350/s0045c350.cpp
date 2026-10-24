@@ -132,11 +132,27 @@ void WriteNameArray(int out, const char* name, const int* data, unsigned int cou
 }
 
 // =====================================================================
-// @ 0x45d060  write the inverse-bind-pose matrix array  (PARTIAL)
+// @ 0x45d060  write the inverse-bind-pose matrix array  (float4x4 accessor)
 // =====================================================================
 void WriteInvBindPose(int out, const char* name, const void* mats, unsigned int count)
 {
-    (void)out; (void)name; (void)mats; (void)count;
+    struct Mat4 { float m[4][4]; };
+    Mat4 mat;
+    float (*mp)[4] = mat.m;
+    WriterFmt(out,
+        "    <source id=\"%s\">\n      <float_array id=\"%s-array\" count=\"%d\">\n        ",
+        name, name, count * 16);
+    for (unsigned int i = 0; i < count; i = i + 1) {
+        *(Mat4*)mp = *(const Mat4*)((const char*)mats + (i << 6));
+        WriterFmt(out, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f ",
+                  mp[0][0], mp[1][0], mp[2][0], mp[3][0],
+                  mp[0][1], mp[1][1], mp[2][1], mp[3][1],
+                  mp[0][2], mp[1][2], mp[2][2], mp[3][2],
+                  mp[0][3], mp[1][3], mp[2][3], mp[3][3]);
+    }
+    WriterFmt(out,
+        "\n      </float_array>\n      <technique_common>\n        <accessor source=\"#%s-array\" count=\"%d\" stride=\"16\">\n          <param name=\"TRANSFORM\" type=\"float4x4\"/>\n        </accessor>\n      </technique_common>\n    </source>\n",
+        name, count);
     return;
 }
 
