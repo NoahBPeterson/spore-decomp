@@ -16,6 +16,7 @@
 #include <xmmintrin.h>
 
 typedef unsigned int uint32_t;
+typedef unsigned char uint8_t;
 
 struct Vec3 { float x, y, z; };
 
@@ -91,6 +92,254 @@ __forceinline float Clamp(float x, float lo, float hi)
         movss x, xmm0
     }
     return x;
+}
+
+// ---------------------------------------------------------------------------------------
+// Graph-editor helpers at 0x00b86500..0x00b86909.
+// ---------------------------------------------------------------------------------------
+struct GraphNodeValue {
+    uint32_t mValue[3];
+};
+
+struct GraphNode {
+    int mID;                                // +00
+    GraphNodeValue mValue;                  // +04
+    uint8_t mFlag10;                        // +10
+    uint8_t mFlag11;                        // +11
+    unsigned short pad12;
+    uint32_t mField14;                      // +14
+};
+
+struct GraphNodeVector {
+    GraphNode* mpBegin;
+    GraphNode* mpEnd;
+    GraphNode* mpCapacity;
+    uint32_t mAllocator;
+    void InsertAt(GraphNode* position, const GraphNodeValue* value); // 0x00b85220
+};
+
+struct GraphEdge {
+    uint32_t mLow;
+    uint32_t mHigh;
+};
+
+struct GraphEdgeVector {
+    GraphEdge* mpBegin;
+    GraphEdge* mpEnd;
+    GraphEdge* mpCapacity;
+    uint32_t mAllocator;
+    void InsertAt(GraphEdge* position, const GraphEdge* value);      // 0x00b534c0
+};
+
+struct GraphExtra {
+    uint32_t mLow;                          // +00
+    uint32_t mHigh;                         // +04
+    void* mpPayload;                        // +08
+    uint8_t mData[0x10];                    // +0c
+    void DestroyPayload();                  // 0x00473500
+};
+
+struct GraphExtraVector {
+    GraphExtra* mpBegin;
+    GraphExtra* mpEnd;
+    GraphExtra* mpCapacity;
+    uint32_t mAllocator;
+};
+
+class cGraphCallback {
+public:
+    void Invoke(void* list, int value);     // 0x00b859c0
+};
+
+class cGraphA8 {
+public:
+    uint8_t mData[0x24];
+    cGraphCallback* mpCallback;             // +24
+};
+
+class cGraphList {
+public:
+    GraphNode* mpBegin;
+    GraphNode* mpEnd;
+    void DestroyRange(GraphNode* first, GraphNode* last); // 0x0050f740
+};
+
+class IGraphObject {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48();
+    virtual uint32_t GetID();               // +0x4c
+};
+
+class cGraphEditor {
+public:
+    uint8_t mData00[0x80];
+    GraphNodeVector mNodes;                 // +80
+    uint8_t mData8c[0x18];
+    cGraphA8* mpA8;                         // +a8
+    GraphEdgeVector mEdgesA;                // +ac
+    uint8_t mPadBC[4];
+    GraphEdgeVector mEdgesB;                // +c0
+    uint8_t mPadD0[4];
+    GraphExtraVector mExtras;               // +d4
+    uint8_t mPadE4[4];
+    uint8_t mDirtyA;                        // +e8
+    uint8_t mDirtyB;                        // +e9
+    uint8_t mDirtyC;                        // +ea
+    uint8_t padEB;
+
+    int AddNode(const GraphNodeValue* value, bool flag);       // 0x00b86500
+    int SelectNode(void* object, cGraphList* list, int index); // 0x00b86590
+    void AddEdgeA(uint32_t a, uint32_t b);                     // 0x00b86650
+    void AddEdgeB(uint32_t a, uint32_t b);                     // 0x00b866f0
+    void RemoveEdge(uint32_t a, uint32_t b);                   // 0x00b86790
+};
+
+extern "C" void __cdecl FreeAllocation(void* p);                 // 0x00f47380
+
+// @ 0x00b86500
+int cGraphEditor::AddNode(const GraphNodeValue* value, bool flag)
+{
+    GraphNode* end = mNodes.mpEnd;
+    if (end < mNodes.mpCapacity)
+        mNodes.mpEnd = end + 1;
+    else
+        mNodes.InsertAt(end, value);
+
+    GraphNode* node = mNodes.mpEnd - 1;
+    node->mID = -1;
+    node->mValue.mValue[0] = value->mValue[0];
+    node->mValue.mValue[1] = value->mValue[1];
+    node->mValue.mValue[2] = value->mValue[2];
+    node->mFlag10 = flag;
+    node->mFlag11 = 0;
+    node->mField14 = 0;
+    return (int)(mNodes.mpEnd - mNodes.mpBegin) - 1;
+}
+
+// @ 0x00b86590
+int cGraphEditor::SelectNode(void* object, cGraphList* list, int index)
+{
+    uint32_t id = ((IGraphObject*)object)->GetID();
+    list->DestroyRange(list->mpBegin, list->mpEnd);
+
+    int found = 0;
+    int count = (int)(mNodes.mpEnd - mNodes.mpBegin);
+    for (int i = 0; i < count; ++i) {
+        GraphNode* node = mNodes.mpBegin + i;
+        if (node->mID == (int)id) {
+            if (found == index) {
+                cGraphA8* a8 = mpA8;
+                if (a8->mpCallback)
+                    a8->mpCallback->Invoke(list, 0);
+            }
+            ++found;
+        }
+    }
+    return found;
+}
+
+// @ 0x00b86650
+void cGraphEditor::AddEdgeA(uint32_t a, uint32_t b)
+{
+    uint32_t lo = a < b ? a : b;
+    uint32_t hi = a < b ? b : a;
+    int count = (int)(mEdgesA.mpEnd - mEdgesA.mpBegin);
+    for (int i = 0; i < count; ++i) {
+        GraphEdge* e = mEdgesA.mpBegin + i;
+        if (e->mLow == lo && e->mHigh == hi)
+            return;
+    }
+
+    GraphEdge value;
+    value.mLow = lo;
+    value.mHigh = hi;
+    if (mEdgesA.mpEnd < mEdgesA.mpCapacity) {
+        mEdgesA.mpEnd->mHigh = hi;
+        mEdgesA.mpEnd->mLow = lo;
+        ++mEdgesA.mpEnd;
+    } else {
+        mEdgesA.InsertAt(mEdgesA.mpEnd, &value);
+    }
+    mDirtyA = 1;
+}
+
+// @ 0x00b866f0
+void cGraphEditor::AddEdgeB(uint32_t a, uint32_t b)
+{
+    uint32_t lo = a < b ? a : b;
+    uint32_t hi = a < b ? b : a;
+    int count = (int)(mEdgesB.mpEnd - mEdgesB.mpBegin);
+    for (int i = 0; i < count; ++i) {
+        GraphEdge* e = mEdgesB.mpBegin + i;
+        if (e->mLow == lo && e->mHigh == hi)
+            return;
+    }
+
+    GraphEdge value;
+    value.mLow = lo;
+    value.mHigh = hi;
+    if (mEdgesB.mpEnd < mEdgesB.mpCapacity) {
+        mEdgesB.mpEnd->mHigh = hi;
+        mEdgesB.mpEnd->mLow = lo;
+        ++mEdgesB.mpEnd;
+    } else {
+        mEdgesB.InsertAt(mEdgesB.mpEnd, &value);
+    }
+    mDirtyB = 1;
+}
+
+// @ 0x00b86790
+void cGraphEditor::RemoveEdge(uint32_t a, uint32_t b)
+{
+    uint32_t lo = a < b ? a : b;
+    uint32_t hi = a < b ? b : a;
+
+    int countA = (int)(mEdgesA.mpEnd - mEdgesA.mpBegin);
+    for (int i = 0; i < countA; ++i) {
+        GraphEdge* e = mEdgesA.mpBegin + i;
+        if (e->mLow == lo && e->mHigh == hi) {
+            GraphEdge* last = mEdgesA.mpEnd - 1;
+            e->mLow = last->mLow;
+            e->mHigh = last->mHigh;
+            --mEdgesA.mpEnd;
+            mDirtyA = 1;
+            break;
+        }
+    }
+
+    int countB = (int)(mEdgesB.mpEnd - mEdgesB.mpBegin);
+    for (int i = 0; i < countB; ++i) {
+        GraphEdge* e = mEdgesB.mpBegin + i;
+        if (e->mLow == lo && e->mHigh == hi) {
+            GraphEdge* last = mEdgesB.mpEnd - 1;
+            e->mLow = last->mLow;
+            e->mHigh = last->mHigh;
+            --mEdgesB.mpEnd;
+            mDirtyB = 1;
+            break;
+        }
+    }
+
+    int countE = (int)(mExtras.mpEnd - mExtras.mpBegin);
+    for (int i = 0; i < countE; ++i) {
+        GraphExtra* e = mExtras.mpBegin + i;
+        if (e->mLow == lo && e->mHigh == hi) {
+            GraphExtra* last = mExtras.mpEnd - 1;
+            e->mLow = last->mLow;
+            e->mHigh = last->mHigh;
+            e->DestroyPayload();
+            --mExtras.mpEnd;
+            if (mExtras.mpEnd->mpPayload &&
+                *((uint32_t*)mExtras.mpEnd->mpPayload - 1) != 0)
+                FreeAllocation(mExtras.mpEnd->mpPayload);
+            mDirtyC = 1;
+            break;
+        }
+    }
 }
 
 // @ 0x00b86a10

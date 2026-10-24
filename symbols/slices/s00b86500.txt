@@ -1,1 +1,6 @@
-00b86a10 BuildPathRibbonOnShell  # __stdcall(vector<Vec3>*, color) ret 8: same miter-quad ribbon as 0x00b872c0 but points are projected onto a constant-radius shell (PlanetModel()+0x24 terrain source params + 2.0), no per-point height lookup
+00b86500 SP::cGraphEditor::AddNode  # newly claimed; partial: insert 0x18-byte node at +0x80
+00b86590 SP::cGraphEditor::SelectNode  # newly claimed; partial: select node by object ID and invoke +0xa8 callback
+00b86650 SP::cGraphEditor::AddEdgeA  # newly claimed; partial: add sorted pair to +0xac edge vector
+00b866f0 SP::cGraphEditor::AddEdgeB  # newly claimed; partial: add sorted pair to +0xc0 edge vector
+00b86790 SP::cGraphEditor::RemoveEdge  # newly claimed; nonmatching: remove pair from +0xac/+0xc0 and matching +0xd4 record
+00b86a10 SP::BuildPathRibbonOnShell  # preserved; constant-radius path ribbon builder

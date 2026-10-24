@@ -1,1 +1,2 @@
 00b86a10  -  complete: constant-radius path ribbon builder (sibling of 0x00b872c0); /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast; register allocation, frame layout and scheduling differ
+00b86790  318  cGraphEditor::RemoveEdge: complete removal of an edge from the +0xac and +0xc0 pair vectors plus the matching 0x1c-byte record in +0xd4 (last-element replacement, payload destruction/free, +0xe8/+0xe9/+0xea dirty flags); 337 vs 377 B; residual register allocation/branch scheduling; equiv PASS (308 valid, 66.9% coverage)
