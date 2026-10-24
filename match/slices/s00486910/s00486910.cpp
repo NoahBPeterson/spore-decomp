@@ -75,7 +75,7 @@ class cSPEditorModel { public:
     float F_7f9410();                           // @ 0x7f9410
     float F_4adb00();                           // @ 0x4adb00
     float F_4adb40();                           // @ 0x4adb40
-    cSPEditorBlock* FindNearestFlag7Block(const cSPVector3& pos);   // @ 0x4ac480
+    cSPEditorBlock* FindNearestFlag7Block(cSPVector3 pos);          // @ 0x4ac480
 };
 
 class cSPEditorBlock { public:
@@ -95,14 +95,14 @@ class cSPEditorBlock { public:
     float GetRadius();                                                   // @ 0x43f250
     void RefreshLinks(cSPEditorBlock* e);                                // @ 0x438700
     void RefreshLinked(cSPEditorBlock* e);                               // @ 0x438a40
-    bool Check(cSPEditorBlock* self, cSPVector3 pos, cSPVector3* out,
-               bool* flag, float f, int i);                              // @ 0x4974e0
     void F_43f5b0(cSPVector3* out, cSPVector3 pos, cSPEditorLimbJoint* invalid); // @ 0x43f5b0
 };
 
 float GetExactSkinRadius(cSPEditorBlock* block);                 // @ 0x4a5bd0
 cSPVector3 GetSkinTip(cSPEditorBlock* block);                    // @ 0x4a5d10
 int F_493640(cSPVector3* pos, float f0, float fa, float fb, int i);  // @ 0x493640
+bool FUN_004974e0(cSPEditorBlock* self, cSPVector3 pos, cSPVector3* out,
+                  bool* flag, float f, int i);                   // @ 0x4974e0
 
 class cSPEditorLimbJoint { public:
     cSPEditorBlock* mJointBlock;                // +0x00
@@ -178,7 +178,7 @@ bool cSPEditorLimbJoint::IsValid()
     float len = GetLength();
     cSPVector3 out;
     bool flag;
-    if (mJointBlock->Check(mJointBlock, mTargetPosition, &out, &flag, 1.0f, 0)) {
+    if (FUN_004974e0(mJointBlock, mTargetPosition, &out, &flag, 1.0f, 0)) {
         if (mUpperJoint == 0 || mUpperJoint->GetLength() == 0.0f) {
             mTargetPosition = out;
             mJointBlock->SetFlag(0xf, true);
