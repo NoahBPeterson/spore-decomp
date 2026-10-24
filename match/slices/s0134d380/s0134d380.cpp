@@ -1,4 +1,4 @@
-// @ 0x0134d380  $E223: dynamic initializer of the herd/nest serializer attribute table
+// 0x0134d380  $E223: dynamic initializer of the herd/nest serializer attribute table
 // (43 Simulator::Attribute records, 0x3c bytes each, at 0x01577bc8..0x015785db).
 //
 // Same record layout as the cCivilization table (see s01330060): name, id, member offset,
@@ -72,16 +72,14 @@ struct Attribute
 };
 
 struct Vec3Default { float x, y, z; };
-struct Vec3Static { float x, y, z; Vec3Static() {} };   // empty ctor: guard set, value assigned on every call
-
-// Stores a default vec3 {0,0,0} into a guarded function-local static, returns the callback.
-inline SetDefaultFunction_t InitDefaultVec3(SetDefaultFunction_t pSetDefault)
-{
-    static Vec3Default sDefault = { 0.0f, 0.0f, 0.0f };
-    return pSetDefault;
-}
 
 extern float sDNAEvolutionThresholdDefault;   // 0x01693e3c
+// The guarded function-local vec3 static of the mInitialPosition default (retail: 12 zeroed
+// bytes at 0x01693e40, MSVC init-guard byte at 0x01693e4c). MSVC keeps the guard even though
+// the ctor is empty; clang folds such a static into its own private section, so both the
+// storage and the first-call guard bit are named directly here.
+extern float sHerdDefaultVec3[3];             // 0x01693e40
+extern unsigned char sHerdDefaultVec3Guard;   // 0x01693e4c
 inline SetDefaultFunction_t InitDefaultFloat(float& var, float value, SetDefaultFunction_t pSetDefault)
 {
     var = value;
@@ -391,10 +389,11 @@ void InitHerdAttributes()
     }
     {
         Vec3Default tmp = { 0.0f, 0.0f, 0.0f };
-        static Vec3Static sDefault;   // 0x01693e40, guard bit 0x01693e4c
-        sDefault.x = tmp.x;
-        sDefault.y = tmp.y;
-        sDefault.z = tmp.z;
+        sHerdDefaultVec3[0] = tmp.x;
+        sHerdDefaultVec3[1] = tmp.y;
+        sHerdDefaultVec3[2] = tmp.z;
+        if (sHerdDefaultVec3Guard == 0)
+            sHerdDefaultVec3Guard = 1;
         Attribute a("mInitialPosition", 0x1368374d, 0x034,
                   Read_00b6e3a0, Write_00ac88c0, ReadText_006930f0, WriteText_00695010,
                   Validate_00b1fbf0, ToXml_00acbba0,
