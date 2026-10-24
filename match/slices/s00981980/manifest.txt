@@ -1,0 +1,4 @@
+slices/s00981980/s00981980.cpp  ?GetDrawable@IWinScrollbar@@QAEPAVIScrollbarDrawable@@XZ  00981b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00981980/s00981980.cpp  ?OnRebuild@WinScrollbar@@QAE_NPAX@Z  00981cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00981980/s00981980.cpp  ?RenderComponent@WinScrollbar@@QAEXPAXI@Z  00981d50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00981980/s00981980.cpp  ?PickComponent@WinScrollbar@@QAEHMM@Z  00981e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast

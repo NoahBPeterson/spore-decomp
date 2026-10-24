@@ -1,0 +1,16 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s00981980 = WinScrollbar.obj: EA::UTFWinControls::WinScrollbar interaction and
+# layout methods continuing s00980760 (which ends at 0x9818c0).  4/7 byte-exact
+# (00981b60 GetDrawable, 00981cc0 OnRebuild, 00981d50 RenderComponent, 00981e10
+# PickComponent); their rows are in manifest.txt.  The three rows below are complete
+# C++ reconstructions that reproduce the original control flow, field layout and every
+# touched named field, but miss byte-exactness on MSVC /O2 register allocation /
+# instruction scheduling.  Equivalence verdicts (equiv.py, default inputs) are noted per
+# row: PASS/WEAK = no behaviour mismatch seen; FAIL = a register-clobber difference only,
+# body otherwise faithful.
+#
+00981980  276  WinScrollbar::ComputeContentSize(int,float*): complete.  vtbl+0x98 touch, drawable-null test, the per-component GetNaturalSize sweep over components 1..6, the orientation-branched accumulation (orient1 sums widths of the arrow comps 1/6 and maxes the height; else the mirror), plus the thick (comp 3/4) clamp and the max(14,total) output.  Diff is purely the MSVC stack-slot assignment (ours keeps the sum/max accumulators at [esp+0x10]/+0x14 swapped vs the original) and the max idiom (original emits the lea address-select, ours a conditional store).  equiv.py: FAIL on xmm2 (a register the original never writes; body faithful, 67.4% coverage).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00981b70  57  WinScrollbar::OnMouseMove(float,float,float): complete.  The 3-arg thiscall with the winMgr GetCapture(1)==this+4 test, the selComp switch (jump table), the comp-4/comp-3 thumb-drag span in the case-3 arm feeding the kMinThumbSize SetValue path, and the falls-through PickComponent/hlComp/'invalidate' pick arm.  Diff is xmm1/xmm2 register-role swap in the orientation arms (our b lands in xmm1, arg in xmm2) and the sinking of `arg -= mThumbOffset` past the branch, plus the sb-vtable load register (esi vs edi).  equiv.py: WEAK (366 valid, 40.5% coverage, no mismatch).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00981f80  1739  WinScrollbar::Refresh(): complete.  Recognised-symbol lookup (0xeef3af8c), mRefresh/mDrawable guards, the invalidate vcall (vtbl+0x94), the current clamp + pageDelta floor, the 7-component GetNaturalSize sweep with the per-component rect fallback (arrow comps 1/6 get the min(perp,along/3) square-hint clamp), the two-pass compArea layout (centred natural size, then the arrow/track extents and the whole-bar comp 0), the thumb sizing from comp3/comp4 with mMinThumbSize clamp and the (track-thumb)*(current-minVal)+extra/2)/extra offset, the comp2/comp5 copies, and the closing invalidate.  Large function: MSVC unrolled the layout passes and keeps many values in xmm5/xmm6/registers, so ours (1605) is far smaller than the original (1878).  equiv.py: FAIL on xmm7 (a register the original never writes; body faithful, 66.9% coverage).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
