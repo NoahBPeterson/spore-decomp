@@ -1,10 +1,10 @@
 00745ac0 199 insertion-merge sort shape differs (register/scheduling)
 00745bb0  63 copy-20 shape differs (dead address guard)
-00745c20  38 rbtree-node allocation/EH frame shape differs
-00745cf0  62 adjust_heap<cOccluder*,...> value-pass copy flavour differs
-00745e00  59 adjust_heap pair (greater) value-copy/schedule differs
-00745e80  59 adjust_heap pair (less) value-copy/schedule differs
+00745c20  98 FIXED CreateNode18 is __stdcall (original `ret 4`); the refcounted AddRef is a vtable call through the stored pointer (single deref); equiv PASS (332 valid, 100% coverage). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00745cf0  86 FIXED PromoteOccluder is the adjust_heap wrapper (sift-down loop, then the out-of-line promote half 0x00743e50); equiv PASS (323 valid, 100% coverage). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00745e00 113 FIXED PromotePairGt is the adjust_heap wrapper for the greater comparator (no comparator argument; out-of-line promote half 0x00743f00); equiv PASS (358 valid, 88.1% coverage). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00745e80 113 FIXED PromotePairLt is the adjust_heap wrapper for the less comparator (out-of-line promote half 0x00743f60); equiv PASS (353 valid, 100% coverage). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00745f90 181 0x94-byte render/cull record ctor shape differs
-007460b0 352 FilterModelFrustum register allocation differs
+007460b0 336 FIXED FilterModelFrustum returns bool; the frustum callback is __thiscall (ECX=ctx); the local transform starts from the identity at 0x162ec4c; box copy/transform and point/sphere tests are thiscall members; equiv PASS (400 valid, 75.4% coverage). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00746250  69 cModelWorld::SetMaterialInfo register/arg shape differs
-00746910 120 model-group assignment shape differs; now a GroupWorld member (ECX this); difftest FAIL (5/5 valid mismatched, 68.5% cov)
+00746910 102 FIXED AssignGroup dereferences the slot vtable once for slot +0x20 and releases through the old object's vtable +4; added the 0x14-byte gap after mCount; equiv PASS (347 valid, 68.5% coverage). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

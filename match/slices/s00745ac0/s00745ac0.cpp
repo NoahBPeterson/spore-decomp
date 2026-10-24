@@ -14,6 +14,7 @@ struct cSPBoundingBox {
     Vec3 mMin;   // +0x00
     Vec3 mMax;   // +0x0c
     void Transform(const cSPTransform& xf);   // 0x00409dd0
+    void CopyFrom(const void* src);           // 0x00511140
 };
 
 struct cSPTransform {
@@ -22,6 +23,18 @@ struct cSPTransform {
     Vec3 mTranslation;                 // +0x04
     float mScale;                      // +0x10
     float mRotation[9];                // +0x14
+    void AssignFrom(const cSPTransform* src); // 0x00537dc0
+};
+
+// Thiscall-only callees (MSVC rejects __thiscall on free functions).
+struct Matrix33 {
+    void Assign(const void* src);              // 0x0041cb40
+};
+struct VertexCtx {
+    int TestPoint(const void* pos, float r);   // 0x006ffbd0
+};
+struct FrustumCull {
+    int TestSphere(const void* box, const void* p, unsigned flags); // 0x00700120
 };
 
 inline void cSPBoundingBox_Transform(cSPBoundingBox* b, const cSPTransform& xf)
@@ -65,6 +78,7 @@ void* __cdecl EASTL_allocator_allocate(uint32_t size, const char* name, int flag
 void  __cdecl EASTL_allocator_deallocate(void* p);                    // 0x00f47380
 extern float g_f162eb0c, g_f162eb10, g_f162eb14, g_f162ec38, g_f1485720; // 0x0162eb0c
 extern float g_f1537ab0, g_f1537ab4, g_f1537ab8, g_f13eb1bc, g_f140d674;
+extern float g_m162ec4c;                                             // 0x0162ec4c
 
 void Matrix3_Assign(void* dst, const void* src);                      // 0x0041cb40
 void cSPTransform_Assign(cSPTransform* dst, const cSPTransform* src); // 0x00537dc0
@@ -168,7 +182,7 @@ struct Node18 {
     void*    mRef;    // +0x14
 };
 
-Node18* CreateNode18(const uint32_t* value)
+Node18* __stdcall CreateNode18(const uint32_t* value)
 {
     Node18* p = (Node18*)EASTL_allocator_allocate(0x18, "Graphics", 0, 0,
                   "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
@@ -176,25 +190,17 @@ Node18* CreateNode18(const uint32_t* value)
         p->mKey = *value;
         p->mRef = (void*)value[1];
         if (p->mRef)
-            (*(void(__thiscall**)(void*))p->mRef)(p->mRef);
+            (*(void(__thiscall**)(void*))(*(void**)p->mRef))(p->mRef);
     }
     return p;
 }
 
 // @ 0x00745cf0 : eastl::adjust_heap<cOccluder*, int, cOccluder, Compare>.
-void PromoteOccluder(cOccluder* first, int topPosition, int position, cOccluder value, cOccluderCompare compare)
-{
-    int parentPosition = (position - 1) >> 1;
-    for (; position > topPosition && compare(first[parentPosition], value);
-         parentPosition = (position - 1) >> 1) {
-        first[position] = first[parentPosition];
-        position = parentPosition;
-    }
-    first[position] = value;
-}
-
-void AdjustHeapOccluder(cOccluder* first, int topPosition, int heapSize, int position,
-                        cOccluder value, cOccluderCompare compare)
+// The final sift-up half lives in a separate out-of-line function (0x00743e50).
+void FUN_00743e50(cOccluder* first, int topPosition, int position,
+                  cOccluder value, cOccluderCompare compare);
+void PromoteOccluder(cOccluder* first, int topPosition, int heapSize, int position,
+                     cOccluder value, cOccluderCompare compare)
 {
     int childPosition = (2 * position) + 2;
     for (; childPosition < heapSize; childPosition = (2 * childPosition) + 2) {
@@ -207,27 +213,17 @@ void AdjustHeapOccluder(cOccluder* first, int topPosition, int heapSize, int pos
         first[position] = first[childPosition - 1];
         position = childPosition - 1;
     }
-    PromoteOccluder(first, topPosition, position, value, compare);
+    FUN_00743e50(first, topPosition, position, value, compare);
 }
 
 // @ 0x00745e00 : adjust_heap for the 8-byte pair with the greater comparator.
-void PromotePairGt(FloatKeyPair* first, int topPosition, int position, FloatKeyPair value, FloatKeyGreater compare)
-{
-    int parentPosition = (position - 1) >> 1;
-    for (; position > topPosition && compare(first[parentPosition], value);
-         parentPosition = (position - 1) >> 1) {
-        first[position] = first[parentPosition];
-        position = parentPosition;
-    }
-    first[position] = value;
-}
-
-void AdjustPairGt(FloatKeyPair* first, int topPosition, int heapSize, int position,
-                  FloatKeyPair value, FloatKeyGreater compare)
+void FUN_00743f00(FloatKeyPair* first, int topPosition, int position, FloatKeyPair value);
+void PromotePairGt(FloatKeyPair* first, int topPosition, int heapSize, int position,
+                   FloatKeyPair value)
 {
     int childPosition = (2 * position) + 2;
     for (; childPosition < heapSize; childPosition = (2 * childPosition) + 2) {
-        if (compare(first[childPosition], first[childPosition - 1]))
+        if (FloatKeyGreater()(first[childPosition], first[childPosition - 1]))
             --childPosition;
         first[position] = first[childPosition];
         position = childPosition;
@@ -236,27 +232,17 @@ void AdjustPairGt(FloatKeyPair* first, int topPosition, int heapSize, int positi
         first[position] = first[childPosition - 1];
         position = childPosition - 1;
     }
-    PromotePairGt(first, topPosition, position, value, compare);
+    FUN_00743f00(first, topPosition, position, value);
 }
 
 // @ 0x00745e80 : adjust_heap for the 8-byte pair with the less comparator.
-void PromotePairLt(FloatKeyPair* first, int topPosition, int position, FloatKeyPair value, FloatKeyLess compare)
-{
-    int parentPosition = (position - 1) >> 1;
-    for (; position > topPosition && compare(first[parentPosition], value);
-         parentPosition = (position - 1) >> 1) {
-        first[position] = first[parentPosition];
-        position = parentPosition;
-    }
-    first[position] = value;
-}
-
-void AdjustPairLt(FloatKeyPair* first, int topPosition, int heapSize, int position,
-                  FloatKeyPair value, FloatKeyLess compare)
+void FUN_00743f60(FloatKeyPair* first, int topPosition, int position, FloatKeyPair value);
+void PromotePairLt(FloatKeyPair* first, int topPosition, int heapSize, int position,
+                   FloatKeyPair value)
 {
     int childPosition = (2 * position) + 2;
     for (; childPosition < heapSize; childPosition = (2 * childPosition) + 2) {
-        if (compare(first[childPosition], first[childPosition - 1]))
+        if (FloatKeyLess()(first[childPosition], first[childPosition - 1]))
             --childPosition;
         first[position] = first[childPosition];
         position = childPosition;
@@ -265,7 +251,7 @@ void AdjustPairLt(FloatKeyPair* first, int topPosition, int heapSize, int positi
         first[position] = first[childPosition - 1];
         position = childPosition - 1;
     }
-    PromotePairLt(first, topPosition, position, value, compare);
+    FUN_00743f60(first, topPosition, position, value);
 }
 
 // ===========================================================================
@@ -341,7 +327,9 @@ struct FrustumFilterArg {
     uint32_t mB;       // +0x04
     uint32_t mC;       // +0x08
     uint32_t mD;       // +0x0c
-    int (__cdecl* mCallback)(void*); // +0x10
+    // The original leaves the context pointer in ECX at the callback (the fakes comparator
+    // hashes ECX), so model the indirect callback as __thiscall(ctx, arg).
+    bool (__thiscall* mCallback)(void* self, void* arg); // +0x10
     unsigned char mE;  // +0x14
     unsigned char mF;  // +0x15
 };
@@ -359,16 +347,16 @@ struct CullModel {
     cSPBoundingBox mBox;    // +0x78
     unsigned char pad90[0x94 - 0x90];
 };
-int FilterModelFrustum(CullModel* model, void* culler, FrustumFilterArg* arg)
+bool FilterModelFrustum(CullModel* model, void* culler, FrustumFilterArg* arg)
 {
     cSPTransform local;
     local.mTranslation.x = g_f162eb0c;
     local.mTranslation.y = g_f162eb10;
-    local.mTranslation.z = g_f162eb14;
     local.mModificationCount = 0;
+    local.mTranslation.z = g_f162eb14;
     local.mFlags = 0;
     local.mScale = g_f1485720;
-    Matrix3_Assign(local.mRotation, &g_f162ec38);
+    ((Matrix33*)local.mRotation)->Assign(&g_m162ec4c);
 
     if (!(model->mFlags & 1))
         return 1;
@@ -377,8 +365,11 @@ int FilterModelFrustum(CullModel* model, void* culler, FrustumFilterArg* arg)
         return 1;
     if ((model->mMaskA & arg->mC) != 0 || (model->mMaskB & arg->mD) != 0)
         return 1;
-    if (arg->mCallback != 0 && !arg->mCallback((char*)model + 8))
-        return 1;
+    if (arg->mCallback != 0) {
+        void* ctx = (char*)model + 8;
+        if (!arg->mCallback(ctx, ctx))
+            return 1;
+    }
 
     unsigned char b;
     if ((arg->mF & 1) && ((model->mFlags >> 8) & 1))
@@ -386,7 +377,7 @@ int FilterModelFrustum(CullModel* model, void* culler, FrustumFilterArg* arg)
     else
         b = arg->mE;
 
-    cSPTransform_Assign(&local, &model->mTransform);
+    local.AssignFrom(&model->mTransform);
     if (((model->mFlags >> 7) & 1) || (arg->mF & 2)) {
         local.mModificationCount = local.mModificationCount + 1;
         local.mScale = g_f1485720;
@@ -396,15 +387,15 @@ int FilterModelFrustum(CullModel* model, void* culler, FrustumFilterArg* arg)
     pos[0] = local.mTranslation.x;
     pos[1] = local.mTranslation.y;
     pos[2] = local.mTranslation.z;
-    int r = FUN_006ffbd0(pos, model->mRadius * local.mScale);
+    int r = ((VertexCtx*)culler)->TestPoint(pos, model->mRadius * local.mScale);
     if (r & 0x40)
         return 1;
 
     if (b != 0 && model->mBox.mMin.x <= model->mBox.mMax.x) {
         cSPBoundingBox box;
-        FUN_00511140(&model->mBox);
-        BoundingBox_TransformBy(&box, &local);
-        if (cFrustumCull_FrustumTestSphere(culler, &box, 0x200) & 0x40)
+        box.CopyFrom(&model->mBox);
+        box.Transform(local);
+        if (((FrustumCull*)culler)->TestSphere(&box, &box.mMax, 0x200) & 0x40)
             return 1;
     }
     return 0;
@@ -634,6 +625,7 @@ struct GroupRef {
 struct GroupSlot {
     unsigned char pad0[0x1b4];
     int mCount;              // +0x1b4
+    unsigned char pad1b8[0x1cc - 0x1b8];
     void* mSlotObj;          // +0x1cc
     bool mFlag;              // +0x1d0
 };
@@ -657,7 +649,7 @@ void GroupWorld::AssignGroup(void* newObj, int idx, bool flag)
         for (ListNode* n = w->mGroupList.pNext; n != (ListNode*)&w->mGroupList; n = n->pNext) {
             GroupInternal* g = (GroupInternal*)n;
             if (g->mObj != 0)
-                (*(void(__thiscall**)(void*, void*))((char*)(**(void***)w->mSlotObj) + 0x20))(w->mSlotObj, g->mObj);
+                (*(void(__thiscall**)(void*, void*))((char*)(*(void**)w->mSlotObj) + 0x20))(w->mSlotObj, g->mObj);
             g->mObj = 0;
         }
     }
@@ -666,7 +658,7 @@ void GroupWorld::AssignGroup(void* newObj, int idx, bool flag)
     if (newObj != s->mSlotObj) {
         if (newObj) (*(void(__thiscall**)(void*))(*(void**)newObj))(newObj);
         s->mSlotObj = newObj;
-        if (old) (*(void(__thiscall**)(void*, int))((char*)old + 4));
+        if (old) (*(void(__thiscall**)(void*))((char*)(*(void**)old) + 4))(old);
     }
     s->mFlag = flag;
     if (s->mCount < 0)
@@ -679,6 +671,7 @@ void GroupWorld::AssignGroup(void* newObj, int idx, bool flag)
     extern float g_f162eb10; // 0x0162eb10
     extern float g_f162eb14; // 0x0162eb14
     extern float g_f162ec38; // 0x0162ec38
+    extern float g_m162ec4c; // 0x0162ec4c
 
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
