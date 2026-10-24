@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+008b3ae0 3941 complete behavioral reconstruction; flags /O2 /MD /Gy /EHsc /TP; difftest FAIL (5/107 valid, coverage 35.7%): its module-local callees SetupTrans (esi=pfr, eax, ecx + stack), TransformPoint (esi=pfr, eax + stack) and FUN_008b3680 (ecx=pts, eax=st, edi=out + stack) use the LTCG register ABI, which plain C++ declarations cannot reproduce, so ours calls the real callees with wrong registers and faults at eip=008b36c9; byte-exact also impossible at 3941 diff
