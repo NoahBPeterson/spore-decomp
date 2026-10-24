@@ -845,6 +845,8 @@ void V16::DoInsertValue(E16* pos, const E16& v)
     }
 }
 
+extern "C" const char g_newline_1401b70[];   // original "\n" literal at 0x1401b70
+
 // @ 0x00839c00
 void cArgumentSpec::AddArgDocs(eastl::string8_s0083_9950* out, VecArgInfo* args, int style)
 {
@@ -879,7 +881,7 @@ void cArgumentSpec::AddArgDocs(eastl::string8_s0083_9950* out, VecArgInfo* args,
     }
     if (style == 2)
         out->append("</i>", "</i>" + 4);
-    out->append("\n", "\n" + 1);
+    out->append(g_newline_1401b70, g_newline_1401b70 + 1);
 }
 
 // @ 0x00839d80
