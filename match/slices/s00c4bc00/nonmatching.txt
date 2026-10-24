@@ -1,0 +1,17 @@
+00c4bc00 151 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 151 bytes - eradicate-target predicate; needs the star manager / relationship manager calls plus the mission object's avatar and target-list fields, body not reconstructed.
+00c4bca0 81 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 81 bytes - float helper over the mission object; body not reconstructed.
+00c4bdc0 212 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 212 bytes - disease-effect application body not reconstructed.
+00c4bea0 110 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 110 bytes - mission helper body not reconstructed.
+00c4bf10 110 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 110 bytes - mission helper body not reconstructed.
+00c4bf80 261 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 261 bytes - cSPMissionBiosphere::GetPlanetCount walks the planet list; body not reconstructed.
+00c4c090 152 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 152 bytes - biosphere helper body not reconstructed.
+00c4c130 378 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 378 bytes - biosphere event handler body not reconstructed.
+00c4c2f0 156 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 156 bytes - Simulator::cMissionBiosphere constructor; the retail vtable stores and member-initialiser sequence are not reproduced.
+00c4c3f0 85 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 85 bytes - biosphere helper body not reconstructed.
+00c4c450 89 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 89 bytes - biosphere helper body not reconstructed.
+00c4c4b0 350 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 350 bytes - cSPMissionBiosphere::UpdateEventLog body not reconstructed.
+00c4c610 126 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 126 bytes - biosphere helper body not reconstructed.
+00c4c690 244 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 244 bytes - biosphere helper body not reconstructed.
+00c4c790 179 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 179 bytes - biosphere helper body not reconstructed.
+00c4c850 191 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 191 bytes - biosphere helper body not reconstructed.
+00c4c910 630 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 630 bytes - biosphere mission update body not reconstructed.
