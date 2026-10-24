@@ -1,0 +1,4 @@
+slices/s00cc9e20/s00cc9e20.cpp  ?FUN_00cca060@cTribeDisplayStrategy@@QAEXXZ  00cca060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cc9e20/s00cc9e20.cpp  ?FUN_00cca090@cTribeDisplayStrategy@@QAEDXZ  00cca090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cc9e20/s00cc9e20.cpp  ?FUN_00cca0a0@cTribeDisplayStrategy@@QAEXXZ  00cca0a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cc9e20/s00cc9e20.cpp  ?FUN_00cca170@CPool@@QAEPAXPAX@Z  00cca170  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
