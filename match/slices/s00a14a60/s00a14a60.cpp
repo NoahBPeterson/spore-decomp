@@ -31,6 +31,21 @@ extern const int gSineTable[];                   // 0x01449558, 16.16 fixed poin
 
 struct EffectOwner { char pad[0x28]; float mTailTime; };   // accumulated tail length of all effects
 
+// --- the four small helpers of this slice ------------------------------------------------------
+// owner+4 is the head of the destructor list built by 0x00a149b0 and walked by 0x00a151a0; both
+// helpers are real functions here so the relocation resolves to the original's address.
+extern "C" void FUN_00a149b0(void* node);                 // 0x00a149b0, takes `this` in ecx
+#pragma inline_depth(0)
+extern "C" int FUN_00a150e0(void* node, int size);        // 0x00a150e0
+extern "C" char FUN_00a15150(void* obj, int count);       // 0x00a15150
+extern "C" void __fastcall FUN_00a151a0(void* ecx_p, void* edx_unused);   // 0x00a151a0
+extern "C" void* __fastcall FUN_00a151d0(void* p, void*);         // 0x00a151d0
+extern "C" char FUN_00a15890(void* obj, int count);       // 0x00a15890
+extern "C" void FUN_00a15c80(void* obj, int count);       // 0x00a15c80
+#pragma inline_depth()
+extern "C" void _eh_vector_destructor_iterator_(void* first, unsigned stride, int count,
+                                                void (__fastcall* dtor)(void*, void*));
+
 // ---------------------------------------------------------------------------------------------
 struct ChorusVoice {              // 0x28 bytes per voice at +0xa0
     float mMix;                   // +0x00 wet/dry
@@ -355,6 +370,77 @@ int MultiDelay::Process(MultiDelay* fx, MixCtx* ctx)
         ctx->bufB = ctx->bufA;
         ctx->bufA = t;
     }
+    return 1;
+}
+
+// @ 0x00a150e0
+// Initialises the node in place (0x00a149b0 takes `this`=node in ecx and installs the vftable +
+// destructor vector at +0x24) and, when `size` is set, records the block end `node + size` at
+// node+0xc. The original additionally wraps the body in a C++ try/catch whose scope-table EH frame
+// (/Oy, no framepointer) this toolchain cannot emit from source at /O2 -- see nonmatching.txt.
+// `optimize("g", off)` disables global optimizations here so 0x00a15150 will not inline the call,
+// as the original keeps it out of line.
+#pragma optimize("g", off)
+extern "C" int FUN_00a150e0(void* node, int size)
+{
+    if (node != 0) {
+        FUN_00a149b0(node);
+    }
+    if (size != 0)
+        *(void**)((char*)node + 0xc) = (char*)node + size;
+    return 0;
+}
+#pragma optimize("g", on)
+
+// @ 0x00a15150
+// Same shape as 0x00a15890 with the 0xa0-byte sub-object and 0x1e slots.
+extern "C" char FUN_00a15150(void* obj, int)
+{
+    FUN_00a150e0(obj, 0xa0);
+    float* e = (float*)((char*)obj + 0xa0);
+    int n = 0x1e;
+    do {
+        *e = 0.0f;
+        e += 2;
+    } while (--n != 0);
+    return 1;
+}
+
+// @ 0x00a151a0
+// The entry destructor of a line vector: frees the delay buffer through the audio allocator
+// singleton (0x016e61a8), whose address the original loads into ecx for the Free call. The vector
+// element pointer arrives in ecx (the __thiscall-like register the iterator's dtor call uses).
+extern "C" void __fastcall FUN_00a151a0(void* ecx_p, void* edx_unused)
+{
+    int v = *(int*)ecx_p;
+    if (v != 0)
+        gSystem->Free((void*)v, 0);
+}
+
+// @ 0x00a151d0
+// Destroys the 6-entry vector of Chorus lines (+0x24, stride 0xc) and installs the vftable. `p`
+// arrives in ecx (__thiscall). The original's C++ EH scope-table frame (push -1; push <table>;
+// fs-registration; push ecx; push esi) is not reproducible at /O2 -- see nonmatching.txt.
+extern "C" void* __fastcall FUN_00a151d0(void* p, void*)
+{
+    _eh_vector_destructor_iterator_((char*)p + 0x24, 0xc, 6, FUN_00a151a0);
+    *(void**)p = (void*)0x14bc0fc;
+    return p;
+}
+
+// @ 0x00a15890
+// Constructs the in-object 0x70-byte sub-object then zeroes 0xd floats-interleaved slots at +0x70.
+// The helper's second argument is the constant size, so the frame keeps esi live across the call
+// exactly like the original (eax is not materialised before `push esi`).
+extern "C" char FUN_00a15890(void* obj, int)
+{
+    FUN_00a15c80(obj, 0x70);
+    float* e = (float*)((char*)obj + 0x70);
+    int n = 0xd;
+    do {
+        *e = 0.0f;
+        e += 2;
+    } while (--n != 0);
     return 1;
 }
 

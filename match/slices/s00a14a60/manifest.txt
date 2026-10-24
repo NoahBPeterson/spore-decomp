@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a14a60/s00a14a60.cpp  _FUN_00a15150  00a15150  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a14a60/s00a14a60.cpp  @FUN_00a151a0@8  00a151a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a14a60/s00a14a60.cpp  _FUN_00a15890  00a15890  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+# 2 reconstructed functions not byte-exact (00a150e0, 00a151d0) and 2 pre-existing (00a14a60, 00a15220); see nonmatching.txt
