@@ -1,0 +1,19 @@
+008ea290 ?Draw@Border@Layout@XHTML@EA@@QAEXAAVRenderingContext@234@PBV?$RectT@M@4@E@Z  # Border::Draw (partial)
+008ea9d0 ?RenderingContext_EndContentThunk@@YGXPAVRenderingContext@Layout@XHTML@EA@@PAX@Z  # thunk
+008ea9e0 ?SizingContext_FinishThunk@@YGXPAVSizingContext@Layout@XHTML@EA@@PAX@Z  # thunk
+008ea9f0 ?RenderingContext_ResetThunk@@YGXPAVRenderingContext@Layout@XHTML@EA@@@Z  # thunk
+008eaa00 ?PickingContext_FlushAllThunk@@YG_NPAVPickingContext@Layout@XHTML@EA@@PAVPickEntry@234@@Z  # thunk
+008eaa20 ?SetUpBox@Block@Layout@XHTML@EA@@QAEXAAVSizingContext@234@AAVStyleState@Style@34@@Z  # Block::SetUpBox (sizing)
+008eaa90 ?MeasureContent@ContainerItem@Layout@XHTML@EA@@UAEXAAVSizingContext@234@AAVStyleState@Style@34@@Z  # ContainerItem::MeasureContent
+008eaaf0 ?LayoutFlow@ContainerItem@Layout@XHTML@EA@@UAEXAAVRenderingContext@234@AAVStyleState@Style@34@@Z  # ContainerItem::LayoutFlow
+008eab50 ?Render@ContainerItem@Layout@XHTML@EA@@UAEXAAVRenderingContext@234@@Z  # ContainerItem::Render
+008eaba0 ?Pick@ContainerItem@Layout@XHTML@EA@@UAE_NAAVPickingContext@234@PAVPickEntry@234@@Z  # ContainerItem::Pick
+008eac20 ?SetUpBox@Block@Layout@XHTML@EA@@QAEXAAVRenderingContext@234@AAVStyleState@Style@34@@Z  # Block::SetUpBox (render)
+008ead40 ?PlaceControls@Block@Layout@XHTML@EA@@QAEXAAVRenderingContext@234@@Z  # Block::PlaceControls
+008eadb0 ?SetStyle@Block@Layout@XHTML@EA@@QAEXAAVRenderingContext@234@ABVStyleState@Style@34@@Z  # Block::SetStyle
+008eae40 ??0Item@Layout@XHTML@EA@@QAE@PAVPage@123@H@Z  # Item::Item
+008eae70 ?Dispose@Item@Layout@XHTML@EA@@QAEXXZ  # Item::Dispose
+008eae80 ?ComputeStyle@Style@XHTML@EA@@YAXPAXPAPAVRule@123@IPAVStyleState@123@@Z  # Style::ComputeStyle
+008eaf30 ?IntersectSelection@Item@Layout@XHTML@EA@@QAE_NPAI0I@Z  # Item::IntersectSelection
+008eafa0 ?Place@ListItem@Layout@XHTML@EA@@QAEXAAVRenderingContext@234@AAVStyleState@Style@34@@Z  # ListItem::Place (partial)
+008eb000 ?DrawContent@ListItem@Layout@XHTML@EA@@QAEXAAVRenderingContext@234@@Z  # ListItem::DrawContent

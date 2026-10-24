@@ -1,0 +1,12 @@
+slices/s008ea290/s008ea290.cpp  ?RenderingContext_EndContentThunk@@YGXPAVRenderingContext@Layout@XHTML@EA@@PAX@Z  008ea9d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008ea290/s008ea290.cpp  ?SizingContext_FinishThunk@@YGXPAVSizingContext@Layout@XHTML@EA@@PAX@Z  008ea9e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008ea290/s008ea290.cpp  ?RenderingContext_ResetThunk@@YGXPAVRenderingContext@Layout@XHTML@EA@@@Z  008ea9f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008ea290/s008ea290.cpp  ?PickingContext_FlushAllThunk@@YG_NPAVPickingContext@Layout@XHTML@EA@@PAVPickEntry@234@@Z  008eaa00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008ea290/s008ea290.cpp  ?MeasureContent@ContainerItem@Layout@XHTML@EA@@UAEXAAVSizingContext@234@AAVStyleState@Style@34@@Z  008eaa90  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008ea290/s008ea290.cpp  ?LayoutFlow@ContainerItem@Layout@XHTML@EA@@UAEXAAVRenderingContext@234@AAVStyleState@Style@34@@Z  008eaaf0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008ea290/s008ea290.cpp  ?Render@ContainerItem@Layout@XHTML@EA@@UAEXAAVRenderingContext@234@@Z  008eab50  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008ea290/s008ea290.cpp  ?Pick@ContainerItem@Layout@XHTML@EA@@UAE_NAAVPickingContext@234@PAVPickEntry@234@@Z  008eaba0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008ea290/s008ea290.cpp  ?PlaceControls@Block@Layout@XHTML@EA@@QAEXAAVRenderingContext@234@@Z  008ead40  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008ea290/s008ea290.cpp  ?SetStyle@Block@Layout@XHTML@EA@@QAEXAAVRenderingContext@234@ABVStyleState@Style@34@@Z  008eadb0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008ea290/s008ea290.cpp  ??0Item@Layout@XHTML@EA@@QAE@PAVPage@123@H@Z  008eae40  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008ea290/s008ea290.cpp  ?Dispose@Item@Layout@XHTML@EA@@QAEXXZ  008eae70  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
