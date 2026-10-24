@@ -241,7 +241,11 @@ void VecV3::Free()
 struct FillTag { uint32_t c; };
 struct TempBuf
 {
-    float* mpData;
+    float* mpData;       // +0
+    float* mEnd;         // +4
+    float* mCapacity;    // +8
+    Allocator mAllocator;// +0xc
+    float* mInline;      // +0x10 inline-buffer pointer checked by Free
     TempBuf* Init(uint32_t n, Allocator* alloc);    // FUN_0042f2e0
     void Free();                                    // FUN_004c0b80
 };
@@ -270,6 +274,7 @@ struct VecFloat
     float* mEnd;
     float* mCapacity;
     Allocator mAllocator;
+    float* mInline;
 
     void SwapIn(TempBuf* buf);                      // FUN_004c2100
     void Erase(float* first, float* last);          // FUN_004769b0
@@ -289,6 +294,7 @@ void VecFloat::DoAssign(uint32_t n, const float* value)
         FillTag t;
         UninitFill(&t, c, n, value);
         float* newEnd = tmp.mpData + n;
+        tmp.mEnd = newEnd;          // retail stores this in TempBuf+4 before the swap
         SwapIn(&tmp);
         for (float* p = tmp.mpData; p < newEnd; ++p) {}
         tmp.Free();
