@@ -57,8 +57,11 @@ char     FUN_00e69580(int* cell);                                  // 0x00e69580
 void     FUN_00e68000(int cell, int arg, cSPTransform* xf);        // 0x00e68000
 void     FUN_00e76660(int* cell, int arg, void* xf);               // 0x00e76660
 void     FUN_00e71980(float dt);                                   // 0x00e71980
-void     FUN_00e82130(void* iter);                                 // 0x00e82130
-void     FUN_00743b50(void* iter);                                 // 0x00743b50
+struct IterObj {                       // resource-iterator handle (first dword is the owned node)
+    void* mpNode;                      // +0x0
+    void Init();                       // 0x00743b50: mpNode = 0
+    void Release();                    // 0x00e82130: if (mpNode) --mpNode->refcount (+0xc)
+};
 void*    FUN_00e4cc40(int id, void* iter);                         // 0x00e4cc40 (thunk)
 int      FUN_00e4cce0(int id);                                     // 0x00e4cce0
 void     FUN_00e61b90(int a, int b);                               // 0x00e61b90
@@ -275,8 +278,9 @@ void sDropLoot(int a1, void* key, int a3, float* pos, float radius, int lvl,
     if (B(gspCellGame, 0x518c) != 0 && a1 != FUN_00e4cce0(1))
         return;
 
-    int it[4];
-    FUN_00743b50(it);
+    IterObj itbuf[2];
+    IterObj* const it = itbuf;
+    it->Init();
     int* tbl = (int*)FUN_00e4cc40(a7, it);
     if (tbl[6] != 0)
         FUN_00e61b90(a3 != I(gspCellGame, 0x40fc) ? 1 : 0, 0);
@@ -293,15 +297,16 @@ void sDropLoot(int a1, void* key, int a3, float* pos, float radius, int lvl,
             if (*e != 1) {
                 skip = true;
             } else {
-                int it2[4];
-                FUN_00743b50(it2);
+                IterObj it2buf[2];
+                IterObj* const it2 = it2buf;
+                it2->Init();
                 int* slot = (int*)FUN_00e4cc40(e[1], it2);
                 if (I(slot, 0xb4) != 6) {
-                    FUN_00e82130(it2);
+                    it2->Release();
                     skip = true;
                 } else {
                     int sub = I(slot, 0xb8);
-                    FUN_00e82130(it2);
+                    it2->Release();
                     if (sub == 0) {
                         skip = true;
                     } else if (I(I(gspCellGame, 0x5190), 0x34 + sub * 4) == 0) {
@@ -353,7 +358,7 @@ void sDropLoot(int a1, void* key, int a3, float* pos, float radius, int lvl,
                     sDropLoot(a1, key, a3, pos, radius, lvl, I(base, 8), a8, out, outCount);
                     num--;
                 } while (num != 0);
-                FUN_00e82130(it);
+                it->Release();
                 return;
             }
         } else if (kind == 1) {
@@ -410,5 +415,5 @@ void sDropLoot(int a1, void* key, int a3, float* pos, float radius, int lvl,
                 B(c3, 0x354) = 1;
         }
     }
-    FUN_00e82130(it);
+    it->Release();
 }
