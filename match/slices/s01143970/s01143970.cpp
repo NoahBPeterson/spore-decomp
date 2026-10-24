@@ -140,7 +140,7 @@ public:
     void ComputePow43(int n, const int16_t* in, float* out);   // 0x01143e70 (ret 0xc)
 };
 
-static __forceinline const float* Pow43Coeffs(int v)
+static __forceinline int Pow43Seg(int v)
 {
     int msb = 0;                        // bsr leaves the destination unchanged for a zero source
     if (v != 0) {
@@ -152,7 +152,12 @@ static __forceinline const float* Pow43Coeffs(int v)
     int seg = 13 - msb;
     if (seg > 8)
         seg = 8;
-    return &g_pow43Cubic[seg * 4];
+    return seg;
+}
+
+static __forceinline const float* Pow43Coeffs(int v)
+{
+    return &g_pow43Cubic[Pow43Seg(v) * 4];
 }
 
 // @ 0x01143e70
@@ -177,6 +182,21 @@ void HELPER_CMpegLayer3B::ComputePow43(int n, const int16_t* in, float* out)
         float x2 = x * x;
         float x3 = x * x2;
         out[i] = ((c[0] + c[3] * x3) + c[2] * x2) + c[1] * x;
+    }
+    // The original leaves scratch values behind: eax is the last segment's byte offset
+    // (bsr / 13-seg / shl 4) and edx is either the tail pointer or, when only whole
+    // 4-blocks ran, the coefficient-gather index 16.  Nothing in C++ pins those, so
+    // restore them explicitly (n <= 0 with no tail leaves eax = n & ~3 and edx alone).
+    int count = (n4 > 0 ? n4 : 0) + (int)(un & 3u);
+    if (count > 0) {
+        int seg16 = Pow43Seg(in[count - 1]) << 4;
+        int endp = (int)(in + count);
+        if ((un & 3u) == 0)
+            endp = 16;
+        __asm { mov eax, seg16 }
+        __asm { mov edx, endp }
+    } else {
+        __asm { mov eax, n4 }
     }
 }
 
