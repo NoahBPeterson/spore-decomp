@@ -1,2 +1,7 @@
 # va  diff-bytes  reason
 010414c0  1  complete; one operand-order difference (mov eax,[eax+ecx] vs [ecx+eax]) in the first key-array switch loop
+01041bc0  24  complete; the explicit `self != 0` test of the original is folded away (4 bytes) by this cl version; equivalence PASS
+01041c50  74  complete; view-state guard/return shape differs (shared zero in ebx vs rematerialised 0), PostTrigger result returned directly; equivalence PASS
+01041cd0  29  complete; x87 float division is recomputed with fnstcw/fldcw guard instead of the original's naked fdivp; equivalence PASS
+01041d30  19  complete; integer compare/and chain emitted with a branch instead of sbb; equivalence PASS
+010422e0  64  complete; canEnter || chain and the final gate branch to inline mov al,1 blocks instead of one shared label; equivalence PASS

@@ -1,1 +1,5 @@
 # va  diff-bytes  reason
+01041d50  336  WEAK (162/400 valid inputs, 12.7% coverage); city minimap icon: record init/store order and colour packing (x87 guard vs fistp) differ
+01041f00  308  WEAK (168/400 valid inputs, 14.3% coverage); planet minimap icon: x87 colour packing computed per channel instead of the original's stacked fld/fmul chain
+01042080  251  UNSUPPORTED (StarMgr::GetEmpireByID / Empire::GetColor / RemoveIcon / AddIcon unresolved); empire-colour icon: by-value colour copy and frame packing differ
+010421c0  222  UNSUPPORTED (RemoveIcon / AddIcon unresolved); player-empire icon: FUN_01021300 out-buffer and colour temp stack slots do not overlap like the original

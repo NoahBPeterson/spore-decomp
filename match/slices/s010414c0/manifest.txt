@@ -1,1 +1,6 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s010414c0/s010414c0.cpp  ?OnMessage@ShaderMsgHandler@@QAE_NHPAX@Z  01041b90  /O2 /MD /Gy /EHsc /TP
+slices/s010414c0/s010414c0.cpp  ?FUN_01041c30@@YAXPAXPAUMinimapWin@@@Z  01041c30  /O2 /MD /Gy /EHsc /TP
+slices/s010414c0/s010414c0.cpp  ?FUN_01041cf0@@YAXXZ  01041cf0  /O2 /MD /Gy /EHsc /TP
+slices/s010414c0/s010414c0.cpp  ?FUN_01041d10@@YAXXZ  01041d10  /O2 /MD /Gy /EHsc /TP
+slices/s010414c0/s010414c0.cpp  ?FUN_010423d0@@YA_NXZ  010423d0  /O2 /MD /Gy /EHsc /TP
