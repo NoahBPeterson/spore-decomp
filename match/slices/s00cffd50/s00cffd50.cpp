@@ -1,292 +1,497 @@
-// Slice s00cffd50 -- SP::cCivTokenTranslator::TranslateToken.
-// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+// 0x00cffd50: SP mission-manager family (Gonzago subsystem cloners, cSPCivMissionManager
+// save/load, relationship manager classification + clamping, empire relation scoring) plus the
+// property-driven threshold loader.  All field offsets are retail layout.
 #include "types.h"
 
-namespace eastl {
-class string16 {
- public:
-  wchar_t* mpBegin;
-  wchar_t* mpEnd;
-  wchar_t* mpCapacity;
-  int mAllocator;
-  string16& operator=(const wchar_t* p);                        // 0x005c3d90
-  string16& assign(const wchar_t* first, const wchar_t* last);  // 0x00423650
-  string16& assign(const wchar_t* p) {
-    const wchar_t* end = p;
-    while (*end)
-      ++end;
-    return assign(p, p + (end - p));
-  }
+#define PV(n) virtual void s##n();
+
+// ------------------------------------------------------------------ externs
+extern char g_vtbl_01478c10[];
+extern char g_vtbl_01478c08[];
+extern char g_vtbl_01478cc4[];
+extern char g_vtbl_01478ca0[];
+extern char g_vtbl_01478c90[];
+extern char g_str_01581ec8[];
+extern char g_str_01582008[];
+extern const wchar_t g_wstr_01478d94[];
+extern void* g_169d3cc;
+extern float g_1470f1c;                 // 2.0f
+
+void __cdecl op_delete(void* p);
+void __fastcall base_ctor_00b70820(void* p);
+void __fastcall base_dtor_00b705a0(void* p);
+void __fastcall gonzago_dtor(void* p);
+void* __cdecl RBTreeIncrement(void* node);
+
+// ------------------------------------------------------------------ classes
+class cStarRecordVector {
+public:
+    void* mpBegin;                    // +0x00
+    void* mpEnd;                      // +0x04
+    void* mpCap;                      // +0x08
+    ~cStarRecordVector();
+    void* erase(void* first, void* last);
 };
 
-struct UIntNameNode {
-  char pad[0x10];
-  uint32_t mKey;          // +0x10
-  const wchar_t* mValue;  // +0x14
-};
-struct UIntNameIterator {
-  UIntNameNode* mpNode;
-  UIntNameIterator() {}
-  UIntNameIterator(const UIntNameIterator& x) : mpNode(x.mpNode) {}
-  UIntNameNode& operator*() const { return *mpNode; }
-};
-struct UIntNameMap {
-  UIntNameIterator find(const uint32_t& key);  // 0x00e5c780
-};
-}  // namespace eastl
-
-namespace EA {
-namespace Hash {
-uint32_t FNV1_String16(const wchar_t* s, uint32_t seed, int caseMode);  // 0x00932f30
-}
-namespace Locale {
-int SetNumberString(double value, wchar_t* buffer, int bufferSize, int flags);  // 0x00881ea0
-int SetNumberString(int64_t value, wchar_t* buffer, int bufferSize);            // 0x00881ae0
-}
-}  // namespace EA
-
-namespace SP {
-
-class cISPEditorNameProvider {
- public:
-  virtual void pv0();
-  virtual const wchar_t* GetName();  // +0x4
+class cGonzagoMissionSubsystem {
+public:
+    void* mVtbl0;                     // +0x00
+    void* mVtbl1;                     // +0x04
+    unsigned char mPad0[0x14];        // +0x08
+    cStarRecordVector mVec;           // +0x1c
+    cGonzagoMissionSubsystem* Destroy(unsigned char flags);
 };
 
-struct cPlanetLookup {
-  int GetType();  // 0x00801920 ([ecx+0x48])
-};
-struct cPlanetRecordEntry {
-  char pad[0x3c];
-  int* mpBegin;  // +0x3c
-  int* mpEnd;    // +0x40
-};
-class cPlanetRecord { public:
-  char pad[0x15c];
-  int* mpEntriesBegin;  // +0x15c
-  int* mpEntriesEnd;    // +0x160
-  cPlanetLookup* GetLookup();               // 0x00b8de30
-  cPlanetRecordEntry* GetEntry(int index);  // 0x00b8dec0
-};
-class cEmpire { public:
-  cPlanetRecord* GetHomePlanet();  // 0x00c31730
-};
-class cPlanet { public:
-  char pad[0x13c];
-  cPlanetRecord* mpRecord;  // +0x13c
-  cEmpire* GetEmpire();     // 0x00c71e30
-};
-struct cTuning {
-  float GetValue(int index);  // 0x0102f8c0
-};
-cTuning* GetTuning();         // 0x0102f810
-int MapPlanetType(int type);  // 0x00c6fe00
-
-class cCity { public:
-  char pad[0x34];
-  cISPEditorNameProvider mNameProviderObj;  // +0x34
-  cISPEditorNameProvider* NameProvider() { return &mNameProviderObj; }
-  int GetPopulation();                   // 0x00bd8b80 (planet-mode population)
-};
-class cCivilization { public:
-  char pad[0x34];
-  cISPEditorNameProvider mNameProviderObj;  // +0x34
-  cISPEditorNameProvider* NameProvider() { return &mNameProviderObj; }
-  char pad38[0x44 - 0x38];
-  eastl::UIntNameMap mNames;             // +0x44 (rbtree)
-  char pad44[0x2ac - 0x44 - 0x14];
-  cCity* mpCityFromPlayer;               // +0x2ac
-  char pad2b0[0x2d0 - 0x2b0];
-  cCity* mpCityFromNPC;                  // +0x2d0
-  char pad2d4[0x2f8 - 0x2d4];
-  cCity* mpCityByPlayer;                 // +0x2f8
-  float GetTradeValue(int a);            // 0x00bf6fa0
+class cMissionManagerFactory {
+public:
+    void* mVtbl0;                     // +0x00
+    void* mVtbl1;                     // +0x04
+    void* mVtbl2;                     // +0x08
+    void* mVtbl3;                     // +0x0c
+    void* mVtbl4;                     // +0x10
+    cMissionManagerFactory* Construct();
+    cMissionManagerFactory* Destroy(unsigned char flags);
 };
 
-class cGameData { public:
-  virtual void* pv0();
-  virtual void* pv1();
-  virtual void* pv2();
-  virtual void* QueryInterface(uint32_t typeId);  // +0xc
+class cSPCreatureMissionManager {
+public:
+    void* AsInterface(unsigned id);
 };
 
-class cStringTokenTranslator {
- public:
-  virtual ~cStringTokenTranslator();
-  virtual int AddRef();
-  virtual int Release();
-  virtual bool TranslateToken(const wchar_t* token, eastl::string16& result);
-  int mRefCount;
-};
-class cGameTokenTranslator : public cStringTokenTranslator {
- public:
-  virtual bool TranslateToken(const wchar_t* token, eastl::string16& result);  // 0x00b324f0
-  void* mPropList;                                                              // +0x8
+class cMissionTicker {
+public:
+    unsigned char mPad0[0x70];
+    bool mFlag70;                     // +0x70
+    void OnTick();                    // 0xb6f7d0
+    void Apply(void* a, void* b);     // 0xb6f650
+    void FUN_00d00560(void* a, void* b);
 };
 
-int GetCurrentGameMode();  // 0x00b5b800
-class cSPLivingUniverse { public:
-  static cPlanet* GetActivePlanet();   // 0x01021260
-  static cEmpire* GetPlayerEmpire();   // 0x01021300
-};
-void ResolveSource(cGameData* source, cCivilization** ppCiv, cCity** ppCity);  // 0x00cfe9c0
-cCity* FindTargetCity(int mode, cCivilization* civ);  // 0x00cfee00
-float GetPlanetValue(cCivilization* civ);  // 0x00c72030
-float ComputeScore(float a, float b, float c, bool d, bool e, int f, float g, int h, bool i);  // 0x00c71f00
-
-class cCivTokenTranslator : public cGameTokenTranslator {
- public:
-  virtual bool TranslateToken(const wchar_t* token, eastl::string16& result);  // 0x00cffd50
-  cGameData* mpSource;  // +0xc
-  cCity* mpTargetCity;  // +0x10
-  int mOffers[5];       // +0x14
-  int mCurrencyNumber;  // +0x28
+class cSaveStreamObject {
+public:
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5)
+    virtual void* GetStream();        // +0x18
 };
 
-#define TARGET_CITY_CASE(hash, mode)                                    \
-  case hash: {                                                          \
-    cCivilization* civ = 0;                                             \
-    cCity* city = 0;                                                    \
-    ResolveSource(mpSource, &civ, &city);                               \
-    cCity* target = FindTargetCity(mode, civ);                          \
-    if (target)                                                         \
-      result = target->NameProvider()->GetName();                       \
-    return true;                                                        \
-  }
+class cSaveStream {
+public:
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7)
+    virtual cSaveStreamObject* GetWriter();   // +0x20
+};
 
-// @ 0x00cffd50
-bool cCivTokenTranslator::TranslateToken(const wchar_t* token, eastl::string16& result) {
-  wchar_t buffer[64];
-  float value;
-  int number;
-  const wchar_t* name;
-  switch (EA::Hash::FNV1_String16(token, 0x811c9dc5, 1)) {
-    case 0x41d1ce62:
-      if (mpTargetCity) {
-        name = mpTargetCity->NameProvider()->GetName();
-      nameString:
-        result = name;
-      }
-      return true;
-    case 0x3dd91065: {
-      cCivilization* civ = 0;
-      cCity* city = 0;
-      ResolveSource(mpSource, &civ, &city);
-      name = civ->mpCityFromPlayer->NameProvider()->GetName();
-      goto nameString;
+namespace EA { namespace IO {
+    bool WriteUint32(void* stream, const void* value, int count, int flags);
+    bool ReadInt32(void* stream, void* value, int count, int flags);
+}}
+
+class cVarListSerializer {
+public:
+    int mData[0xa14 / 4];
+    cVarListSerializer(void* object, const char* fieldName, unsigned id);
+    bool Serialize(void* stream);
+    bool Read(void* stream);
+    void SerializeNode(void* data, const char* fieldName, const wchar_t* typeName);
+};
+
+class cSPMissionManagerBase {
+public:
+    virtual bool Write(void* stream);      // 0xb6f570
+    virtual bool Read(void* stream);       // 0xb6f5e0
+};
+
+class cSPCivMissionManager : public cSPMissionManagerBase {
+public:
+    bool Write(void* stream);
+    bool Read(void* stream);
+};
+
+class cTerrainSphere {
+public:
+    int GetType();                    // 0xc75420
+};
+
+class cNounManager {
+public:
+    cTerrainSphere* GetCurrentTerrainSphere();   // 0xf67d90
+    int GetPlayerEmpireOrMinus1();               // 0xb1f9d0
+};
+
+cNounManager* NounManager();                    // 0xb3d300
+int GetCurrentGameMode();                       // 0xb5b800
+int GetPlayerEmpireID();                        // 0x1021090
+bool IsPlayerEmpire(int empire);                // 0xba6650
+
+class cEmpire {
+public:
+    unsigned char mPad0[0x89];
+    bool mFlag89;                     // +0x89
+    bool mFlag8a;                     // +0x8a
+    unsigned char mPad1[0x46c - 0x8b];
+    int mId46c;                       // +0x46c
+    int GetIndex();                   // 0xbf01e0
+    int GetCommunityScore();          // 0xbf7150
+    int GetStance();                  // 0xbf0f40
+};
+
+class cInterface;
+
+class cRelationshipManager {
+public:
+    unsigned char mPad0[0x10];
+    float mMin;                       // +0x10
+    float mLow;                       // +0x14
+    float mMid;                       // +0x18
+    float mHigh;                      // +0x1c
+    float CalculateRelationshipAbsolute(void* a, void* b, void* c);  // 0xd05a20
+    int Classify(float x);
+    float ClampRelationship(void* a, void* b, void* c);
+    int ClampClassify(void* a, void* b, void* c);
+    float RelationshipBetween(cInterface* a, cInterface* b, void* c);
+    void LoadProperties();
+};
+
+cRelationshipManager* SP_RelationshipManager();   // 0xb3d2c0
+
+class cInterface {
+public:
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
+    PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17) PV(18)
+    virtual unsigned GetId();          // +0x4c
+};
+
+class cRBMap {
+public:
+    void* mpUnk0;                      // +0x00
+    void* mpHead;                      // +0x04
+    void* mpRoot;                      // +0x08
+};
+
+class Property {
+public:
+    unsigned char mPad0[0x12];         // +0x04..+0x11
+    short mType;                       // +0x12
+    float* GetFloat();                 // 0x41ea70
+};
+
+class cPropertySet {
+public:
+    PV(0)
+    virtual void Release();            // +0x04
+    PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8)
+    virtual bool GetProperty(unsigned id, Property** out);   // +0x24
+};
+
+class cPropertyManager {
+public:
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11)
+    virtual bool FindSet(unsigned id, cPropertySet** out);   // +0x30
+};
+
+cPropertyManager* PropertyManager();   // 0x67de30
+
+class cPropRef {
+public:
+    cPropertySet* mp;                  // +0x00
+    cPropRef() { mp = 0; }
+    cPropRef& operator=(cPropertySet* p) {
+        cPropertySet* old = mp;
+        mp = p;
+        if (old)
+            old->Release();
+        return *this;
     }
-    case 0x29f73bf5: {
-      cCivilization* civ = 0;
-      cCity* city = 0;
-      ResolveSource(mpSource, &civ, &city);
-      uint32_t key = 1;
-      name = (*civ->mNames.find(key)).mValue;
-      goto nameString;
+};
+
+// ------------------------------------------------------------------ code
+// @ 0x00d00460
+cGonzagoMissionSubsystem* cGonzagoMissionSubsystem::Destroy(unsigned char flags)
+{
+    cStarRecordVector* v = &mVec;
+    mVtbl0 = g_vtbl_01478c10;
+    mVtbl1 = g_vtbl_01478c08;
+    v->erase(v->mpBegin, v->mpEnd);
+    v->~cStarRecordVector();
+    gonzago_dtor(this);
+    if (flags & 1)
+        op_delete(this);
+    return this;
+}
+
+// @ 0x00d004c0
+cMissionManagerFactory* cMissionManagerFactory::Construct()
+{
+    base_ctor_00b70820(this);
+    mVtbl0 = g_vtbl_01478cc4;
+    mVtbl2 = g_vtbl_01478ca0;
+    mVtbl4 = g_vtbl_01478c90;
+    g_169d3cc = this;
+    return this;
+}
+
+// @ 0x00d00510
+void* cSPCreatureMissionManager::AsInterface(unsigned id)
+{
+    switch (id) {
+    case 0x179c807:
+        return ((char*)this - 8) != 0 ? (void*)this : 0;
+    case 0x54361546:
+    case 0x11416b8:
+        return (char*)this - 8;
+    case 0xee3f516e:
+        return ((char*)this - 8) != 0 ? (void*)this : 0;
+    default:
+        return 0;
     }
-    case 0x4b8bb638:
-      number = mOffers[3];
-    numberString:
-      EA::Locale::SetNumberString((int64_t)number, buffer, 64);
-      buffer[63] = 0;
-      result.assign(buffer);
-      return true;
-    case 0x4b8bb63d:
-      number = mOffers[0];
-      goto numberString;
-    case 0x4b8bb639:
-      number = mOffers[4];
-      goto numberString;
-    case 0x4b8bb63e:
-      number = mOffers[1];
-      goto numberString;
-    case 0x6d2ddc32: {
-      cCivilization* civ = 0;
-      cCity* city = 0;
-      ResolveSource(mpSource, &civ, &city);
-      if (!city)
+}
+
+// @ 0x00d00560
+void cMissionTicker::FUN_00d00560(void* a, void* b)
+{
+    OnTick();
+    if (mFlag70) {
+        Apply(a, b);
+        mFlag70 = 0;
+    }
+}
+
+// @ 0x00d005c0
+cMissionManagerFactory* cMissionManagerFactory::Destroy(unsigned char flags)
+{
+    mVtbl0 = g_vtbl_01478cc4;
+    mVtbl2 = g_vtbl_01478ca0;
+    mVtbl4 = g_vtbl_01478c90;
+    g_169d3cc = 0;
+    base_dtor_00b705a0(this);
+    if (flags & 1)
+        op_delete(this);
+    return this;
+}
+
+// @ 0x00d00600
+bool cSPCivMissionManager::Write(void* stream)
+{
+    cSaveStreamObject* w = ((cSaveStream*)stream)->GetWriter();
+    unsigned value = 0x58b3212;
+    void* s = w->GetStream();
+    EA::IO::WriteUint32(s, &value, 1, 0);
+    bool ok = cSPMissionManagerBase::Write(stream);
+    cVarListSerializer ser((char*)this - 8, g_str_01581ec8, 0x1a80d26);
+    if (ok && ser.Serialize(stream))
         return true;
-      if (GetCurrentGameMode() == 0x1654c05) {
-        cPlanet* planet = cSPLivingUniverse::GetActivePlanet();
-        float tuning = GetTuning()->GetValue(MapPlanetType(planet->mpRecord->GetLookup()->GetType()));
-        cEmpire* empire = planet->GetEmpire();
-        bool bIsPlayer = empire == cSPLivingUniverse::GetPlayerEmpire();
-        bool bIsHome;
-        if (bIsPlayer)
-          bIsHome = planet->mpRecord == empire->GetHomePlanet();
-        else
-          bIsHome = false;
-        cPlanetRecord* rec = planet->mpRecord;
-        int count = 1;
-        if (rec->mpEntriesBegin != rec->mpEntriesEnd) {
-          cPlanetRecordEntry* entry = rec->GetEntry(0);
-          count = entry->mpEnd - entry->mpBegin;
+    return false;
+}
+
+// @ 0x00d00690
+bool cSPCivMissionManager::Read(void* stream)
+{
+    cSaveStreamObject* w = ((cSaveStream*)stream)->GetWriter();
+    void* s = w->GetStream();
+    int value;
+    EA::IO::ReadInt32(s, &value, 1, 0);
+    bool ok = cSPMissionManagerBase::Read(stream);
+    cVarListSerializer ser((char*)this - 8, g_str_01581ec8, 0x1a80d26);
+    if (ok && ser.Read(stream))
+        return true;
+    return false;
+}
+
+// @ 0x00d00780
+int cRelationshipManager::Classify(float x)
+{
+    if (x > mLow && mMid > x)
+        return 2;
+    if (x >= mMid && mHigh > x)
+        return 3;
+    if (x >= mHigh)
+        return 4;
+    if (mLow >= x && x > mMin)
+        return 1;
+    return 0;
+}
+
+// @ 0x00d007f0
+float __stdcall FUN_00d007f0(cEmpire* a, cEmpire* b)
+{
+    if (a->mFlag8a || b->mFlag8a)
+        return 0.0f;
+    float v = -((float)(b->GetIndex() - 1) * 0.4f);
+    if (b->GetIndex() > 1)
+        v = v - (float)b->GetCommunityScore() * 0.2f;
+    if (!a->mFlag89 && !b->mFlag89)
+        v = v - 3.0f;
+    if (!b->mFlag89)
+        return v;
+    cTerrainSphere* sph = NounManager()->GetCurrentTerrainSphere();
+    switch (sph->GetType()) {
+    case 2:
+        v = v * 1.5f;
+        break;
+    case 0:
+        v = v * 0.33f;
+        break;
+    }
+    return v;
+}
+
+// @ 0x00d009a0
+void FUN_00d009a0(int* a, int* b)
+{
+    switch (GetCurrentGameMode()) {
+    case 0x1654c05: {
+        int e = GetPlayerEmpireID();
+        if (*a == e && IsPlayerEmpire(*a) && IsPlayerEmpire(*b)) {
+            int t = *a;
+            *a = *b;
+            *b = t;
         }
-        value = ComputeScore((float)city->GetPopulation(), 0.0f, 3600.0f, bIsHome, bIsPlayer, 0, tuning, count, true);
-        result = L"";
-        EA::Locale::SetNumberString((double)value, buffer, 64, 0);
-        buffer[63] = 0;
-        result = buffer;
-        return true;
-      }
-      number = city->GetPopulation();
-      goto numberString;
+        break;
     }
-    case 0x4b8bb63f:
-      number = mOffers[2];
-      goto numberString;
-    case 0x807555b7: {
-      cCivilization* civ = 0;
-      cCity* city = 0;
-      ResolveSource(mpSource, &civ, &city);
-      name = civ->mpCityByPlayer->NameProvider()->GetName();
-      goto nameString;
+    case 0x1654c02: {
+        int e = NounManager()->GetPlayerEmpireOrMinus1();
+        if (*a == e) {
+            int t = *a;
+            *a = *b;
+            *b = t;
+        }
+        break;
     }
-    case 0xb0554dd4:
-      number = mCurrencyNumber;
-      goto numberString;
-    case 0xa36d8feb: {
-      cCivilization* civ = 0;
-      cCity* city = 0;
-      ResolveSource(mpSource, &civ, &city);
-      name = civ->mpCityFromNPC->NameProvider()->GetName();
-      goto nameString;
     }
-    TARGET_CITY_CASE(0xb7c9a880, 2)
-    TARGET_CITY_CASE(0xb7c9a881, 1)
-    TARGET_CITY_CASE(0xb7c9a882, 0)
-    TARGET_CITY_CASE(0xb7c9a887, 3)
-    TARGET_CITY_CASE(0xb7c9a886, 4)
-    TARGET_CITY_CASE(0xb7c9a885, 5)
-    TARGET_CITY_CASE(0xb7c9a884, 6)
-    TARGET_CITY_CASE(0xb7c9a88b, 7)
-    TARGET_CITY_CASE(0xb7c9a88a, 8)
-    TARGET_CITY_CASE(0xd4744496, 9)
-    case 0xf314632d: {
-      cCivilization* civ = 0;
-      cCity* city = 0;
-      ResolveSource(mpSource, &civ, &city);
-      if (!civ)
-        return true;
-      if (GetCurrentGameMode() == 0x1654c05) {
-        value = GetPlanetValue(civ);
-        result = L"";
-        EA::Locale::SetNumberString((double)value, buffer, 64, 0);
-        buffer[63] = 0;
-        result = buffer;
-        return true;
-      }
-      value = civ->GetTradeValue(0);
-      number = (int)value;
-      goto numberString;
-    }
-    case 0xee3981ea: {
-      cCivilization* civ = 0;
-      cCity* city = 0;
-      ResolveSource(mpSource, &civ, &city);
-      name = city->NameProvider()->GetName();
-      goto nameString;
-    }
-  }
-  return cGameTokenTranslator::TranslateToken(token, result);
 }
-}  // namespace SP
+
+// @ 0x00d00a10
+float cRelationshipManager::ClampRelationship(void* a, void* b, void* c)
+{
+    float v = CalculateRelationshipAbsolute(a, b, c);
+    float lo = -10.0f;
+    float hi = 10.0f;
+    __asm {
+        movss xmm0, v
+        maxss xmm0, lo
+        minss xmm0, hi
+        movss v, xmm0
+    }
+    return v;
+}
+
+// @ 0x00d00a70
+int cRelationshipManager::ClampClassify(void* a, void* b, void* c)
+{
+    float v = CalculateRelationshipAbsolute(a, b, c);
+    float lo = -10.0f;
+    float hi = 10.0f;
+    __asm {
+        movss xmm0, v
+        maxss xmm0, lo
+        minss xmm0, hi
+        movss v, xmm0
+    }
+    if (v > mLow && mMid > v)
+        return 2;
+    if (v >= mMid && mHigh > v)
+        return 3;
+    if (v >= mHigh)
+        return 4;
+    if (mLow >= v && v > mMin)
+        return 1;
+    return 0;
+}
+
+// @ 0x00d00b40
+float __stdcall FUN_00d00b40(int id, cEmpire* p)
+{
+    float v = 0.0f;
+    if (p->mId46c == id) {
+        switch (p->GetStance()) {
+        case 2:
+            v = -3.0f;
+            break;
+        case 1:
+            v = -2.0f;
+            break;
+        case 0:
+            v = -4.0f;
+            break;
+        }
+    }
+    if (p->mFlag89) {
+        cTerrainSphere* sph = NounManager()->GetCurrentTerrainSphere();
+        if (sph->GetType() >= 2) {
+            v = v * 2.0f;
+        } else {
+            sph = NounManager()->GetCurrentTerrainSphere();
+            if (sph->GetType() >= 1)
+                v = v * 1.5f;
+        }
+    }
+    return v;
+}
+
+// @ 0x00d00c00
+bool FUN_00d00c00(cVarListSerializer* ser, cRBMap* map)
+{
+    for (void* node = map->mpRoot; node != &map->mpHead; node = RBTreeIncrement(node)) {
+        char* data = (char*)node + 0x18;
+        if (data)
+            ser->SerializeNode(data, g_str_01582008, g_wstr_01478d94);
+    }
+    return true;
+}
+
+// @ 0x00d00d00
+float FUN_00d00d00(void* a, void* b)
+{
+    switch (SP_RelationshipManager()->ClampClassify(a, b, (void*)1)) {
+    case 0:
+        return 10.0f;
+    case 1:
+        return 30.0f;
+    case 3:
+        return 50.0f;
+    case 4:
+        return 80.0f;
+    default:
+        return 100.0f;
+    }
+}
+
+// @ 0x00d00d60
+float cRelationshipManager::RelationshipBetween(cInterface* a, cInterface* b, void* c)
+{
+    if (a == 0 || b == 0)
+        return 0.0f;
+    unsigned ia = a->GetId();
+    unsigned ib = b->GetId();
+    return ClampRelationship((void*)ia, (void*)ib, c);
+}
+
+// @ 0x00d00db0
+void cRelationshipManager::LoadProperties()
+{
+    cPropRef ref;
+    cPropertyManager* pm = PropertyManager();
+    ref = 0;
+    if (!pm->FindSet(0x5c770db7, &ref.mp))
+        goto release;
+    {
+        Property* p;
+        if (!ref.mp)
+            return;
+        if (ref.mp->GetProperty(0x1d379fa, &p) && p->mType == 0xd)
+            mMin = *p->GetFloat();
+        if (!ref.mp)
+            return;
+        if (ref.mp->GetProperty(0x1d37be0, &p) && p->mType == 0xd)
+            mLow = *p->GetFloat();
+        if (!ref.mp)
+            return;
+        if (ref.mp->GetProperty(0x1d37a06, &p) && p->mType == 0xd)
+            mMid = *p->GetFloat();
+        if (!ref.mp)
+            return;
+        if (ref.mp->GetProperty(0x1d37a0c, &p) && p->mType == 0xd)
+            mHigh = *p->GetFloat();
+    }
+release:
+    if (ref.mp)
+        ref.mp->Release();
+}

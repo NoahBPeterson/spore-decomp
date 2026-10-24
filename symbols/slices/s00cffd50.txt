@@ -1,1 +1,18 @@
 00cffd50 SP::cCivTokenTranslator::TranslateToken  # PDB name; FNV-1 token hash dispatch
+00d00460 ?Destroy@cGonzagoMissionSubsystem@@QAEPAV1@E@Z  # cGonzagoMissionSubsystem::Destroy (subsystem clone teardown)
+00d004c0 ?Construct@cMissionManagerFactory@@QAEPAV1@XZ  # cMissionManagerFactory::Construct (factory placement-new)
+00d00510 ?AsInterface@cSPCreatureMissionManager@@QAEPAXI@Z  # cSPCreatureMissionManager::AsInterface (interface-id switch)
+00d00560 ?FUN_00d00560@cMissionTicker@@QAEXPAX0@Z  # cMissionTicker::FUN_00d00560 (ticker callback pair)
+00d005c0 ?Destroy@cMissionManagerFactory@@QAEPAV1@E@Z  # cMissionManagerFactory::Destroy (factory teardown)
+00d00600 ?Write@cSPCivMissionManager@@UAE_NPAX@Z  # cSPCivMissionManager::Write (save stream)
+00d00690 ?Read@cSPCivMissionManager@@UAE_NPAX@Z  # cSPCivMissionManager::Read (load stream)
+00d00780 ?Classify@cRelationshipManager@@QAEHM@Z  # cRelationshipManager::Classify (relationship band)
+00d007f0 ?FUN_00d007f0@@YGMPAVcEmpire@@0@Z  # empire-to-empire relationship score
+00d009a0 ?FUN_00d009a0@@YAXPAH0@Z  # relationship score pair normaliser
+00d00a10 ?ClampRelationship@cRelationshipManager@@QAEMPAX00@Z  # cRelationshipManager::ClampRelationship (clamp to [-10,10])
+00d00a70 ?ClampClassify@cRelationshipManager@@QAEHPAX00@Z  # cRelationshipManager::ClampClassify (clamp + band classify)
+00d00b40 ?FUN_00d00b40@@YGMHPAVcEmpire@@@Z  # empire stance/terrain relationship modifier
+00d00c00 ?FUN_00d00c00@@YA_NPAVcVarListSerializer@@PAVcRBMap@@@Z  # prop-map serialise helper
+00d00d00 ?FUN_00d00d00@@YAMPAX0@Z  # relationship score to display value
+00d00d60 ?RelationshipBetween@cRelationshipManager@@QAEMPAVcInterface@@0PAX@Z  # cRelationshipManager::RelationshipBetween (interface pair score)
+00d00db0 ?LoadProperties@cRelationshipManager@@QAEXXZ  # cRelationshipManager::LoadProperties (thresholds from prop store)

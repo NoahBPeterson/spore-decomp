@@ -1,0 +1,15 @@
+slices/s00cffd50/s00cffd50.cpp  ?Destroy@cGonzagoMissionSubsystem@@QAEPAV1@E@Z  00d00460  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cffd50/s00cffd50.cpp  ?Construct@cMissionManagerFactory@@QAEPAV1@XZ  00d004c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cffd50/s00cffd50.cpp  ?AsInterface@cSPCreatureMissionManager@@QAEPAXI@Z  00d00510  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cffd50/s00cffd50.cpp  ?FUN_00d00560@cMissionTicker@@QAEXPAX0@Z  00d00560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cffd50/s00cffd50.cpp  ?Destroy@cMissionManagerFactory@@QAEPAV1@E@Z  00d005c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cffd50/s00cffd50.cpp  ?Read@cSPCivMissionManager@@UAE_NPAX@Z  00d00690  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cffd50/s00cffd50.cpp  ?Classify@cRelationshipManager@@QAEHM@Z  00d00780  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cffd50/s00cffd50.cpp  ?FUN_00d007f0@@YGMPAVcEmpire@@0@Z  00d007f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cffd50/s00cffd50.cpp  ?FUN_00d009a0@@YAXPAH0@Z  00d009a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cffd50/s00cffd50.cpp  ?ClampRelationship@cRelationshipManager@@QAEMPAX00@Z  00d00a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cffd50/s00cffd50.cpp  ?ClampClassify@cRelationshipManager@@QAEHPAX00@Z  00d00a70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cffd50/s00cffd50.cpp  ?FUN_00d00b40@@YGMHPAVcEmpire@@@Z  00d00b40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cffd50/s00cffd50.cpp  ?FUN_00d00c00@@YA_NPAVcVarListSerializer@@PAVcRBMap@@@Z  00d00c00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cffd50/s00cffd50.cpp  ?FUN_00d00d00@@YAMPAX0@Z  00d00d00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cffd50/s00cffd50.cpp  ?RelationshipBetween@cRelationshipManager@@QAEMPAVcInterface@@0PAX@Z  00d00d60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
