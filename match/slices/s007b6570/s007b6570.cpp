@@ -755,7 +755,8 @@ char FitJob::Fit6d50(SphereVec* v, cViewer* vw, const float* c, const float* off
             return 0;
         }
     }
-    vw->SetViewAngleY(fv * g_13ec4b4);
+    float scaled = fv * g_13ec4b4;
+    vw->SetViewAngleY(scaled);
     cFrustumCull cull2;
     Mat16 vp2 = *(Mat16*)vw->viewProj;
     cull2.Setup(vp2.m);
