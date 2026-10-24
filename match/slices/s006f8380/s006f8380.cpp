@@ -229,9 +229,9 @@ cFilterChain::cFilterChain() {
   mTexCap = 0;
   m14c = g1477fbc;
   m150 = g13f1160;
-  m154 = 0.5f;
-  m158 = 1.0f;
-  m15c = 0.5f;
+  m154 = 0.5f;      // orig reads [0x1471064] (0.5f)
+  m158 = 2.0f;      // orig reads [0x1470f1c] (2.0f), not 1.0f
+  m15c = 0.5f;      // orig reads [0x1471064] (0.5f)
   m160 = g1477fbc;
   m170 = g1485720;
   mViewer = 0;
@@ -244,7 +244,7 @@ cFilterChain::cFilterChain() {
   m19c = g1619500;
   m1a0 = 0.0f;
   m1a4 = 0;
-  m1a8 = g13f1160;
+  m1a8 = 0.5f;      // orig keeps xmm1 = [0x1471064] (0.5f) alive and stores it here
   m1ac = 0.0f;
   m1b0 = g1485544;
   m1f8 = 0;
