@@ -1,3 +1,3 @@
-01101c00 FUN_01101c00  # void __thiscall (undefined4*,int,float*,float*,float,undefined4) float/vector routine; naked asm, byte-exact
-01101e90 FUN_01101e90  # void __thiscall (undefined4*,int,float*,undefined4) float/vector routine; naked asm, byte-exact
-01101fd0 FUN_01101fd0  # void __thiscall (undefined4*,undefined4*) field copy; naked asm, byte-exact
+01101c00 hkMoppObbVirtualMachine::queryObb  # void __thiscall (const hkMoppCode*, const hkTransform&, const hkVector4&, float, hkArray<hkMoppPrimitiveInfo>*); bounds a transformed box and walks the MOPP code; complete (nonmatching, difftest FAIL: xmm0 clobber from the round-nearest conversion intrinsic)
+01101e90 hkMoppObbVirtualMachine::queryAabb  # void __thiscall (const hkMoppCode*, const hkAabb&, hkArray<hkMoppPrimitiveInfo>*); bounds an AABB and walks the MOPP code; complete (nonmatching, difftest FAIL: xmm0 clobber from the round-nearest conversion intrinsic)
+01101fd0 FUN_01101fd0  # void __thiscall (undefined4*,undefined4*) field copy; naked asm, byte-exact (row belongs to another part's slice, untouched)
