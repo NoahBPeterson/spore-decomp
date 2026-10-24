@@ -1,0 +1,9 @@
+01016540  237  cSPSimulatorWalkAround::RemoveHighLODPlant: complete behaviour; vector-erase loop and obstacle bookkeeping reconstructed, register/schedule and inlined-copy layout differ
+01016630  132  cSPSimulatorWalkAround::ClearOldestPlant: complete behaviour; front-erase of both plant/obstacle vectors differs in layout
+010166c0  499  cSPSimulatorWalkAround::SetHighLODPlant: complete behaviour (8-plant cap, desc copy, species lookup, obstacle relink); stack/register layout and inlined helper boundaries differ
+01016950  376  SP::cSPSimulatorWalkAround teardown/FUN_01016950: complete call sequence reconstructed; differs in stack-slot layout and vcall scheduling
+01016ad0  885  SP::cSPSimulatorWalkAround beaming tick / FUN_01016ad0: complete behaviour; large inlined blocks differ in layout and register allocation
+01016e50  339  SP::cSPSimulatorWalkAround FUN_01016e50: complete behaviour; goal/Avatar trait handling reconstructed, differs in register/schedule and inlined callee boundaries
+01017290  102  SP::cSPCameraControllerSolarSystem::Write: complete behaviour; writer vcall/WriteUint32 scheduling and register choice differ (cVarListSerializer construction identical)
+01017300  139  SP::cSPCameraControllerSolarSystem::Read: complete behaviour; reader vcall + version gate + vector copy identical in shape; version-vcall register choice (eax vs edx) differs
+01017410  409  SP::cSPCameraControllerSolarSystem::FUN_01017410: complete behaviour; property-driven float ramp reconstructed, differs in layout/register/schedule

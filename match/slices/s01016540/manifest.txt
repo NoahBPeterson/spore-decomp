@@ -1,0 +1,14 @@
+slices/s01016540/s01016540.cpp  ?ShutdownForGame@cSPSimulatorWalkAround@@QAEXXZ  010168c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s01016540/s01016540.cpp  ?FUN_01017010@@YAMH@Z  01017010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s01016540/s01016540.cpp  ?FUN_01017030@@YAMH@Z  01017030  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s01016540/s01016540.cpp  ?FUN_01017070@@YAMH@Z  01017070  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s01016540/s01016540.cpp  ?FUN_010170e0@cSPCameraControllerSolarSystem@@QAEXXZ  010170e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s01016540/s01016540.cpp  ?FUN_01017150@@YAXXZ  01017150  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s01016540/s01016540.cpp  ?FUN_01017170@cSPCameraControllerSolarSystem@@QAEXM@Z  01017170  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s01016540/s01016540.cpp  ?FUN_010171b0@cSPCameraControllerSolarSystem@@QAEXM@Z  010171b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s01016540/s01016540.cpp  ?FUN_01017200@cSPCameraControllerSolarSystem@@QAEXPAX@Z  01017200  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s01016540/s01016540.cpp  ?FUN_01017220@@YAMXZ  01017220  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s01016540/s01016540.cpp  ?FUN_01017240@@YAMXZ  01017240  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s01016540/s01016540.cpp  ?FUN_01017260@cSPCameraControllerSolarSystem@@QAEIXZ  01017260  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s01016540/s01016540.cpp  ?FUN_01017270@cSPCameraControllerSolarSystem@@QAEXD@Z  01017270  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s01016540/s01016540.cpp  ?FUN_01017390@@YAXXZ  01017390  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
