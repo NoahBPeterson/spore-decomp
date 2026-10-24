@@ -1,0 +1,18 @@
+00d038a0 51 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 13 bytes - same lookup as 00d03860; retail extracts the flag with and al,1 while MSVC emits and eax,1.
+00d038e0 186 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 186 bytes - cRelationshipManager::StartPeace body not reconstructed.
+00d039a0 148 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 148 bytes - relationship helper body not reconstructed.
+00d03a40 206 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 206 bytes - relationship helper body not reconstructed.
+00d03b10 103 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 11 bytes - subtree release; only the hoisting of the node's sub-object address (lea before the child test instead of inside the loop) differs.
+00d03b80 186 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 186 bytes - GetPropertyListForPersonality body not reconstructed.
+00d03c40 303 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 303 bytes - relationship recalc body not reconstructed.
+00d03d70 135 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 135 bytes - cRelationshipManager::CalculateRelationshipEvent body not reconstructed.
+00d03e00 133 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 132 bytes - pairwise relationship update body not reconstructed; only a non-elidable stub keeps the call from 00d04080.
+00d03e90 83 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 82 bytes - relationship node allocation; the 16-byte value copy uses x87 loads in retail which /fp:fast replaces with SSE moves.
+00d03ef0 97 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 97 bytes - tree insert with eastl comparator; body not reconstructed.
+00d03fd0 166 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 166 bytes - relationship helper body not reconstructed.
+00d040a0 302 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 302 bytes - relationship helper body not reconstructed.
+00d041d0 54 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 50 bytes - element-wise subtree release copy; retail places the equal-range return after the loop, MSVC hoists it before.
+00d04210 126 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 126 bytes - message-listener registration body not reconstructed.
+00d04290 144 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 144 bytes - relationship helper body not reconstructed.
+00d04320 834 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 834 bytes - cRelationshipManager::CalculateRelationshipCityProximity body not reconstructed.
+00d04670 216 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 216 bytes - relationship helper body not reconstructed.
