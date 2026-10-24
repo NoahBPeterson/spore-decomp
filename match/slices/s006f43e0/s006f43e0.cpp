@@ -7,9 +7,6 @@
 // ---- external callees -------------------------------------------------------------------
 void* __cdecl FUN_0067dd60();          // +0x20 dispatcher (graphics manager)
 void* __cdecl FUN_0067dd40();          // +0x74/0x78/0x7c dispatcher
-void  __cdecl FUN_0070f520(void* b, void* e);
-void  __cdecl Hashtable_DoFreeNodes1(void* b, void* e);
-void  __cdecl Hashtable_DoFreeNodes2(void* b, void* e);
 void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 void  __cdecl operator_delete_(void* p);
 void  __cdecl FUN_007c40f0(void* p);
@@ -31,6 +28,32 @@ static inline void* CallSlot0(void* p, int slot) {
 
 struct cImageHost {
     void GetImageResource(void* r);      // 0x576650
+};
+
+// ---- eastl containers touched by the 0x6f51b0 owner destructor --------------------------
+// Vector head: the range call (this = &vector) that precedes the heap block free.
+struct VecBase {
+    void*  mpBegin;        // +0x00
+    void*  mpEnd;          // +0x04
+    void*  mpCapacityEnd;  // +0x08
+    void*  mnSize;         // +0x0c
+    void DestroyRange(void** first, void** last);   // 0x0070f520
+};
+
+// Hashtable head: bucket array and bucket count at +4/+8 (count <= 1 means the array is not
+// heap allocated), element count at +0xc.  The two tables in the owner are different template
+// instantiations, so each has its own DoFreeNodes.
+struct HashtableHead {
+    char     mHead[4];        // +0x00  bucket bookkeeping the destructor does not touch
+    void**   mpBucketArray;   // +0x04
+    unsigned mnBucketCount;   // +0x08
+    unsigned mnElementCount;  // +0x0c
+};
+struct WideHashtable : HashtableHead {
+    void DoFreeNodes(void** array, unsigned count);   // 0x00693230
+};
+struct ResourceHashtable : HashtableHead {
+    void DoFreeNodes(void** array, unsigned count);   // 0x007611f0
 };
 
 // @ 0x006f44c0
@@ -89,8 +112,9 @@ void FUN_006f43e0(void** first, void** last, void** dest) {
     }
 }
 
-// @ 0x006f4450  (intrusive_ptr copy_backward + release)
-void FUN_006f4450(void** first, void** last, void** destEnd) {
+// @ 0x006f4450  (intrusive_ptr copy_backward + release; returns the new destination begin, kept
+// in eax by the original loop)
+void** FUN_006f4450(void** first, void** last, void** destEnd) {
     while (last != first) {
         void* s = *--last;
         void* d = *--destEnd;
@@ -100,23 +124,27 @@ void FUN_006f4450(void** first, void** last, void** destEnd) {
             if (d) Release(d);
         }
     }
+    return destEnd;
 }
 
 // @ 0x006f51b0
 void __fastcall FUN_006f51b0(char* self) {
-    FUN_0070f520(*(void**)(self + 0x78), *(void**)(self + 0x7c));
-    void* p = *(void**)(self + 0x78);
+    VecBase* vec = (VecBase*)(self + 0x78);
+    vec->DestroyRange((void**)vec->mpBegin, (void**)vec->mpEnd);
+    void* p = vec->mpBegin;
     if (p && ((int*)p)[-1]) EASTL_allocator_deallocate(p);
     p = *(void**)(self + 0x60);
     if (p && ((int*)p)[-1]) EASTL_allocator_deallocate(p);
     p = *(void**)(self + 0x4c);
     if (p && ((int*)p)[-1]) EASTL_allocator_deallocate(p);
-    Hashtable_DoFreeNodes1(*(void**)(self + 0x30), *(void**)(self + 0x34));
-    *(void**)(self + 0x38) = 0;
-    if (*(unsigned int*)(self + 0x34) > 1) EASTL_allocator_deallocate(*(void**)(self + 0x30));
-    Hashtable_DoFreeNodes2(*(void**)(self + 0x10), *(void**)(self + 0x14));
-    *(void**)(self + 0x18) = 0;
-    if (*(unsigned int*)(self + 0x14) > 1) EASTL_allocator_deallocate(*(void**)(self + 0x10));
+    ResourceHashtable* res = (ResourceHashtable*)(self + 0x2c);
+    res->DoFreeNodes(res->mpBucketArray, res->mnBucketCount);
+    res->mnElementCount = 0;
+    if (res->mnBucketCount > 1) EASTL_allocator_deallocate((void*)res->mpBucketArray);
+    WideHashtable* wide = (WideHashtable*)(self + 0xc);
+    wide->DoFreeNodes(wide->mpBucketArray, wide->mnBucketCount);
+    wide->mnElementCount = 0;
+    if (wide->mnBucketCount > 1) EASTL_allocator_deallocate((void*)wide->mpBucketArray);
 }
 
 // ---- complex camera/lighting + hashtable routines: skeletons (see partial.txt) ----------
