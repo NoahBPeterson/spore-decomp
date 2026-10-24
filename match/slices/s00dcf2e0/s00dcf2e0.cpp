@@ -83,17 +83,31 @@ public:
     cMoveRequest* GetMoveRequest();        // 0x00c41ec0
 };
 
+class cCity;
+struct HostileVec;
+
 class cCombatant {
 public:
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
-    virtual void v10(); virtual float GetRadius();   // +0x14
+    virtual void v00(); virtual void v04();
+    virtual cSpatialObject* GetSpatialObject();       // +0x08
+    virtual void v0c();
+    virtual void v10(); virtual float GetRadius();    // +0x14
+    virtual void v18(); virtual void v1c(); virtual void v20(); virtual void v24();
+    virtual void v28(); virtual void v2c(); virtual void v30(); virtual void v34();
+    virtual void v38(); virtual void v3c(); virtual void v40(); virtual void v44();
+    virtual void v48(); virtual void v4c(); virtual void v50(); virtual void v54();
+    virtual void v58();
+    virtual void* Cast(uint32_t type);                 // +0x5c
+    virtual void AddRef();                             // +0x60
+    virtual void Release();                            // +0x64
     char pad[0xb1c - 0x508 - 4];
     float GetStat();                       // 0x00bfc400 (returns 0 when the +0x14 virtual returns 0)
 };
 
 class cVehicle {
 public:
-    char pad0[0x34];
+    void* mpVtable;                        // +0x00
+    char pad04[0x30];
     cLocomotive mLoco;                     // +0x34
     cCombatant mCombatant;                 // +0x508
     int mLocomotion;                       // +0xb1c
@@ -101,6 +115,19 @@ public:
     void SetAcceptableCenter(cSPVector3 center);   // 0x00c9fb40
     const cSPVector3* GetDestinationOut(cSPVector3* out);   // 0x00c9fdc0
     void FUN_00cacbe0();
+    cCity* GetCurrentCity();               // 0x00c9f3d0
+    struct HostileVec* GetHostiles();      // 0x00c9e860
+
+    bool CanAttack(cCombatant* pTarget)
+    {
+        typedef bool (__thiscall *Fn)(cVehicle*, cCombatant*);
+        return ((Fn)((void**)mpVtable)[0x40 / 4])(this, pTarget);
+    }
+    void Release()
+    {
+        typedef void (__thiscall *Fn)(cVehicle*);
+        ((Fn)((void**)mpVtable)[4 / 4])(this);
+    }
 };
 static const uint32_t kVehicleType = 0x137e8e0;
 
@@ -173,6 +200,7 @@ struct FormationVec {
     Formation* mpEnd;
     Formation* mpCapacity;
     void DoInsertValue(Formation* pos, const Formation& value);   // 0x00dcf180
+    void erase(Formation* first, Formation* last);                // 0x00dcf110
 
     __forceinline int size() const { return (int)(mpEnd - mpBegin); }
     __forceinline void push_back()
@@ -237,15 +265,67 @@ template<class T> inline void AssignRef(T*& slot, T* p)
 
 inline cVehicle* AsVehicle(cSpatialObject* p) { return p ? (cVehicle*)p->Cast(kVehicleType) : 0; }
 
+struct InvitedVehicles {
+    char pad00[4];               // +0x34
+    void* mpHead;                // +0x38
+    void* mpTail;                // +0x3c
+    uint32_t mAllocator;         // +0x40
+    uint32_t mSize;              // +0x44
+    uint32_t mFlags;             // +0x48
+    void Clear(uint32_t allocator);   // 0x00eb6280
+
+    void Reset()
+    {
+        mpHead = &mpHead;
+        mpTail = &mpHead;
+        mAllocator = 0;
+        mSize = 0;
+        mFlags = 0;
+    }
+};
+
+struct VehiclePtrVec {
+    cVehicle** mpBegin;          // +0x50
+    cVehicle** mpEnd;            // +0x54
+    cVehicle** mpCapacity;       // +0x58
+    void erase(cVehicle** first, cVehicle** last);   // 0x00e25bd0
+};
+
 class cVehicleGroupOrder {
 public:
-    char pad0[0x50];
+    char pad0[0x34];
+    InvitedVehicles mInvitedVehicles;   // +0x34
+    char pad4c[0x50 - 0x4c];
     cVehicle** mpVehiclesBegin;  // +0x50
     cVehicle** mpVehiclesEnd;    // +0x54
-    char pad58[0x7c - 0x58];
+    cVehicle** mpVehiclesCapacity;   // +0x58
+    char pad5c[0x78 - 0x5c];
+    uint32_t mGroupMoveId;       // +0x78
     FormationVec mFormations;    // +0x7c
 
     void FormationMoveToTargets(int);   // 0x00dcf2e0
+    void Clear();                       // 0x00dcfc40
+
+    __forceinline void ClearBaseMembers()
+    {
+        cVehicle** pVehicleEnd = mpVehiclesEnd;
+        cVehicle** pVehicleBegin = mpVehiclesBegin;
+        ((VehiclePtrVec*)&mpVehiclesBegin)->erase(pVehicleBegin, pVehicleEnd);
+
+        InvitedVehicles* pInvited = &mInvitedVehicles;
+        pInvited->Clear(pInvited->mAllocator);
+        FormationVec* pFormations = &mFormations;
+        void** pHead = &pInvited->mpHead;
+        *pHead = pHead;
+        pInvited->mpTail = pHead;
+        pInvited->mAllocator = 0;
+        *(uint8_t*)&pInvited->mSize = 0;
+        pInvited->mFlags = 0;
+
+        Formation* pFormBegin = pFormations->mpBegin;
+        Formation* pFormEnd = pFormations->mpEnd;
+        pFormations->erase(pFormBegin, pFormEnd);
+    }
 };
 
 // @ 0x00dcf2e0
@@ -401,6 +481,295 @@ void cVehicleGroupOrder::FormationMoveToTargets(int)
         }
         pCircle->FUN_00c2e4e0();
     }
+}
+
+// ---------------------------------------------------------------------------------------------------
+// The order classes below share the cVehicleGroupOrder prefix.  The extra members are at the
+// retail offsets; the 2008 PDB layout is 0x10 bytes smaller.
+// ---------------------------------------------------------------------------------------------------
+
+static const uint32_t kBuildingType = 0xe9cb8ba;
+static const uint32_t kProtectBuildingFlag = 0x1007ae63;
+
+class cLocomotiveView {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual const cSPVector3& GetPosition();      // +0x2c
+};
+
+class cBuilding {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual int HasFlag(uint32_t flag);            // +0x0c
+    char pad04[0x120 - 0x04];
+    cCombatant mCombatant;                         // +0x120
+};
+
+class cCityMemberView {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual int HasFlag(uint32_t flag);            // +0x0c
+    char pad04[0x34 - 0x04];
+    cLocomotiveView mLoco;                         // +0x34
+    char padLoco[0x120 - 0x34 - sizeof(cLocomotiveView)];
+    cCombatant mCombatant;                         // +0x120
+};
+
+struct cTargetProviderView {
+    char pad00[0x588];
+    cCombatant mCombatant;                         // +0x588
+};
+
+struct MemberVec {
+    cCityMemberView** mpBegin;
+    cCityMemberView** mpEnd;
+    cCityMemberView** mpCapacity;
+};
+
+struct HostileVec {
+    cCombatant** mpBegin;
+    cCombatant** mpEnd;
+    cCombatant** mpCapacity;
+};
+
+typedef SpFixedVec<cTargetProviderView*, 16> TargetVec;
+
+class cCivilization {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48();
+    virtual uint32_t GetOwnerId();                 // +0x4c
+};
+
+class cCity {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual bool IsDestroyed();                    // +0x2c
+
+    cCivilization* GetCivilization();              // 0x00bd9bf0
+    cBuilding* GetCityHall();                      // 0x00bd9b40
+    int DefenseLevel();                            // 0x00bd9bb0
+    int Population();                              // 0x00bd9b70
+    MemberVec* GetMembers();                       // 0x00c8e810
+    void CollectTargets(TargetVec* out);           // 0x00be5700
+    cCombatant* GetBestOpportunityTarget(cVehicle* pVehicle, cCivilization* pCiv,
+                                         int a, int b, int c);   // 0x00dc69a0
+};
+
+struct CombatantRef {
+    cCombatant* mpObject;                          // +0x00
+    void Release();                                // 0x00ae6670
+    void Set(cCombatant* pObject);                 // 0x00ae6690
+};
+
+struct CombatantRefVec {
+    CombatantRef* mpBegin;
+    CombatantRef* mpEnd;
+    CombatantRef* mpCapacity;
+};
+
+class cMilitaryAttackCityOrder : public cVehicleGroupOrder {
+public:
+    char pad88[0x94 - 0x88];
+    cCity* mpCity;                                 // +0x94
+    uint32_t mAttackerId;                          // +0x98
+    CombatantRefVec mCurrentBestTarget;            // +0x9c
+    char padA8[0xb0 - 0xa8];
+    CombatantRefVec mNextBuildingTarget;           // +0xb0
+
+    cCombatant* GetCurrentTarget(cVehicle* pVehicle);   // 0x00dcfc90
+};
+
+class cCulturalTarget {
+public:
+    virtual void v00();
+    virtual void Release();                        // +0x04
+    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
+    virtual void v18(); virtual void v1c(); virtual void v20(); virtual void v24();
+    virtual void v28();
+    virtual bool IsDestroyed();                    // +0x2c
+
+    void RemoveVehicleGroup(uint32_t groupId);     // 0x00be3230
+};
+
+class cCulturalConvertCityOrder : public cVehicleGroupOrder {
+public:
+    char pad88[0x94 - 0x88];
+    cCulturalTarget* mpCulturalTarget;             // +0x94
+    uint32_t mAttackerId;                          // +0x98
+    void* mpHologram;                              // +0x9c
+    cVehicle* mpHoloVehicle;                       // +0xa0
+    void* mpHoloEffect;                            // +0xa4
+
+    ~cCulturalConvertCityOrder();                  // 0x00dd0180
+    void ClearHologramEffects();                   // 0x00dc6530
+};
+
+bool __cdecl IsValidFireTarget(cCombatant* pSelf, cCombatant* pTarget);   // 0x00dc4e20
+cBuilding* __cdecl InterfaceCastBuilding(CombatantRef* pRef);             // 0x00cb4630
+
+// @ 0x00dcfc40
+void cVehicleGroupOrder::Clear()
+{
+    ClearBaseMembers();
+}
+
+// @ 0x00dcfc90
+cCombatant* cMilitaryAttackCityOrder::GetCurrentTarget(cVehicle* pVehicle)
+{
+    if (mpCity->IsDestroyed())
+        return 0;
+    if (mpVehiclesBegin == mpVehiclesEnd)
+        return 0;
+    if (mpCity->GetCivilization()->GetOwnerId() == mAttackerId)
+        return 0;
+
+    int locomotion = pVehicle->mLocomotion;
+    CombatantRef* pCurrent = &mCurrentBestTarget.mpBegin[locomotion];
+    CombatantRef* pNext = &mNextBuildingTarget.mpBegin[locomotion];
+
+    if (pCurrent->mpObject && IsValidFireTarget(&pVehicle->mCombatant, pCurrent->mpObject)) {
+        cBuilding* pBuilding = (cBuilding*)pCurrent->mpObject->Cast(kBuildingType);
+        cVehicle* pTargetVehicle = (cVehicle*)pCurrent->mpObject->Cast(kVehicleType);
+        if (pBuilding) {
+            if (pBuilding->HasFlag(kProtectBuildingFlag) && mpCity->DefenseLevel() > 1)
+                goto clear_current;
+            if (mpCity->Population() > 0)
+                goto clear_current;
+            {
+                HostileVec* pHostiles = pVehicle->GetHostiles();
+                if (pHostiles->mpBegin != pHostiles->mpEnd)
+                    goto clear_current;
+            }
+            return pCurrent->mpObject;
+        }
+        if (pTargetVehicle) {
+            if (pVehicle->CanAttack(&pTargetVehicle->mCombatant))
+                return pCurrent->mpObject;
+        }
+    }
+
+clear_current:
+    {
+        cCombatant* pOld = pCurrent->mpObject;
+        pCurrent->mpObject = 0;
+        if (pOld)
+            pOld->Release();
+    }
+    mFormations.erase(mFormations.mpBegin, mFormations.mpEnd);
+
+    if (pNext->mpObject && IsValidFireTarget(&pVehicle->mCombatant, pNext->mpObject)) {
+        cBuilding* pNextBuilding = InterfaceCastBuilding(pNext);
+        if (pNextBuilding) {
+            if (pNextBuilding->HasFlag(kProtectBuildingFlag) && mpCity->DefenseLevel() > 1) {
+                // protected building: fall through to the member scan
+            } else if (mpCity->Population() > 0) {
+                // city still has inhabitants: fall through to the member scan
+            } else {
+                goto choose_city_target;
+            }
+        } else {
+            goto choose_city_target;
+        }
+    }
+
+    pNext->Release();
+    {
+        float bestDist = FLT_MAX;
+        MemberVec* pMembers = mpCity->GetMembers();
+        for (cCityMemberView** ppMember = pMembers->mpBegin; ppMember != pMembers->mpEnd; ++ppMember) {
+            cCityMemberView* pMember = *ppMember;
+            if (pMember->HasFlag(kProtectBuildingFlag))
+                continue;
+            cCombatant* pTarget = &pMember->mCombatant;
+            if (!IsValidFireTarget(&pVehicle->mCombatant, pTarget))
+                continue;
+            const cSPVector3& a = pVehicle->mLoco.GetPosition();
+            const cSPVector3& b = pMember->mLoco.GetPosition();
+            cSPVector3 d = b - a;
+            float dist = sqrtf(d.x * d.x + d.y * d.y + d.z * d.z);
+            if (bestDist > dist) {
+                pNext->Set(pTarget);
+                bestDist = dist;
+            }
+        }
+        if (!pNext->mpObject) {
+            cBuilding* pHall = mpCity->GetCityHall();
+            pNext->Set(pHall ? &pHall->mCombatant : 0);
+        }
+    }
+
+choose_city_target:
+    {
+        float bestDist = FLT_MAX;
+        cTargetProviderView* pBest = 0;
+        TargetVec targets;
+        mpCity->CollectTargets(&targets);
+        for (int i = 0; i < targets.size(); ++i) {
+            cTargetProviderView* pCandidate = targets.mpBegin[i];
+            if (!pCandidate)
+                continue;
+            cCombatant* pTarget = &pCandidate->mCombatant;
+            if (!IsValidFireTarget(&pVehicle->mCombatant, pTarget))
+                continue;
+            const cSPVector3& a = pVehicle->mLoco.GetPosition();
+            cSpatialObject* pSpatial = pTarget->GetSpatialObject();
+            const cSPVector3& b = pSpatial->GetPosition();
+            cSPVector3 d = b - a;
+            float dist = sqrtf(d.x * d.x + d.y * d.y + d.z * d.z);
+            float reach = pTarget->GetStat() + 5.0f;
+            if (dist >= reach)
+                continue;
+            if (bestDist > dist) {
+                pBest = pCandidate;
+                bestDist = dist;
+            }
+        }
+        if (pBest)
+            pCurrent->Set(&pBest->mCombatant);
+    }
+
+    if (!pCurrent->mpObject) {
+        if (pVehicle->GetCurrentCity() == mpCity) {
+            cCombatant* pOpportunity =
+                mpCity->GetBestOpportunityTarget(pVehicle, mpCity->GetCivilization(), 1, 1, 1);
+            if (pOpportunity) {
+                cVehicle* pOpportunityVehicle = (cVehicle*)pOpportunity->Cast(kVehicleType);
+                if (pOpportunityVehicle)
+                    pCurrent->Set(&pOpportunityVehicle->mCombatant);
+            }
+        }
+    }
+    if (!pCurrent->mpObject && pNext->mpObject)
+        pCurrent->Set(pNext->mpObject);
+    return pCurrent->mpObject;
+}
+
+// @ 0x00dd0180
+cCulturalConvertCityOrder::~cCulturalConvertCityOrder()
+{
+    ClearBaseMembers();
+    if (mpCulturalTarget) {
+        if (!mpCulturalTarget->IsDestroyed())
+            mpCulturalTarget->RemoveVehicleGroup(mGroupMoveId);
+    }
+    if (mpCulturalTarget) {
+        cCulturalTarget* pOldTarget = mpCulturalTarget;
+        *(cCulturalTarget* volatile*)&mpCulturalTarget = 0;
+        pOldTarget->Release();
+    }
+    ClearHologramEffects();
+    cVehicle* pOldHolo = mpHoloVehicle;
+    *(cVehicle* volatile*)&mpHoloVehicle = 0;
+    if (pOldHolo)
+        pOldHolo->Release();
 }
 
 }  // namespace SP
