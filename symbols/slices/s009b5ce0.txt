@@ -1,1 +1,7 @@
 009b6450 ?RayCastParts@@YA_NPBM0PAUOwner@RC@@PAIPAM33@Z  # RayCastParts migrated from s009b5ce0 (verbatim, slice spelling)
+009b5ce0 ?FUN_009b5ce0@@YAXPAUCreature@CA@@@Z  # FUN_009b5ce0 (slice spelling)
+009b5f90 ?FUN_009b5f90@@YAXIPAUCreature@CA@@@Z  # Creature::AddExtraBonesAsNecessary (slice spelling; retail first arg in eax)
+009b61f0 ?get_workspace_origin@Creature@CA@@QAEPAUVec3@2@PAU32@I@Z  # Creature::get_workspace_origin
+009b6220 ?set_workspace_dir@Creature@CA@@QAEMPBUVec3@2@PAU32@@Z  # Creature::set_workspace_dir
+009b62c0 ?workspace_origin_for@Creature@CA@@QAEPAUVec3@2@PAU32@PBU32@@Z  # Creature::workspace_origin_for
+009b6360 ?update_part_states@Creature@CA@@QAEXXZ  # Creature::update_part_states
