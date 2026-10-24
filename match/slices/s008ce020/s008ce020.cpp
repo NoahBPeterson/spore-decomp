@@ -64,6 +64,9 @@ void* tsi_AllocMem(tsiMemObject* mem, int32 size);
 void* tsi_ReAllocMem(tsiMemObject* mem, void* p, int32 size);
 void tsi_Error(tsiMemObject* mem, int32 code);
 int16 ReadInt16(InputStream* in);
+InputStream* New_InputStream2(tsiMemObject* mem, int32 fileID, int32 offset, int32 length, int32 refArg,
+                             int32 closeFile);                  // 0x008cc330
+void Delete_InputStream(InputStream* in, int32 closeFile);      // 0x008cc5d0
 void ReadSegment(InputStream* in, uint8* dest, int32 numBytes); // 0x008cc220 (card names it PeekInt16)
 uint32 Tell_InputStream(InputStream* in);
 void Seek_InputStream(InputStream* in, uint32 pos);
@@ -304,6 +307,129 @@ static GlyphClass* New_GlyphClass(tsiMemObject* mem, InputStream* in, char readH
     }
     t->pointCount = (int16)pointCount;
     return t;
+}
+
+// ---------------------------------------------------------------------------------------------
+// 0x008cec20: read one 'name' table entry out of the font file. The wanted name is selected by
+// the face's platform/encoding ids plus the caller's language and name ids; an even-length entry
+// is treated as UTF-16 unless its first 10 bytes contain a zero byte, the odd-length one as bytes.
+// ---------------------------------------------------------------------------------------------
+#define TT_TAG_name 0x6e616d65u
+
+struct TTSfntRecord {
+    uint32 tag;              // +0x00
+    uint32 checksum;         // +0x04
+    uint32 offset;           // +0x08
+    uint32 length;           // +0x0c
+};
+
+struct TTSfntTable {
+    uint32 pad00[2];         // +0x00
+    uint16 numTables;        // +0x08
+    uint16 pad0a;            // +0x0a
+    uint32 pad0c;            // +0x0c
+    TTSfntRecord* records;   // +0x10
+};
+
+struct TTFont {
+    TTSfntTable* mpSfnt;     // +0x00
+    uint32 pad04[(0x88 - 0x04) / 4];
+    uint16 mPlatformID;      // +0x88
+    uint16 mEncodingID;      // +0x8a
+    uint32 pad8c[(0xdc - 0x8c) / 4];
+    int32 mFileID;           // +0xdc
+    uint32 padE0[(0xe8 - 0xe0) / 4];
+    tsiMemObject* mpMem;     // +0xe8
+};
+
+// @ 0x008CEC20
+void GetTTNameProperty(TTFont* font, int16 languageID, int16 nameID, char** outAscii, char** outUnicode)
+{
+    int16 platformID = (int16)font->mPlatformID;
+    int16 encodingID = (int16)font->mEncodingID;
+    int32 fileID = font->mFileID;
+    TTSfntTable* sfnt = font->mpSfnt;
+    int32 index;
+
+    *outAscii = 0;
+    *outUnicode = 0;
+
+    int32 tableCount = sfnt->numTables;
+    for (index = 0; index < tableCount; ++index) {
+        if (sfnt->records[index].tag == TT_TAG_name)
+            break;
+    }
+    if (index >= tableCount)
+        return;
+    TTSfntRecord* rec = &sfnt->records[index];
+    if (rec == 0)
+        return;
+
+    int32 namedShort = 0;
+    InputStream* in = New_InputStream2(font->mpMem, fileID, rec->offset, rec->length, 0, 0);
+
+    ReadInt16(in);                                    // format
+    int32 nameCount = (uint16)ReadInt16(in);
+    uint16 stringOffset = (uint16)ReadInt16(in);
+
+    uint32 recordPos;
+    int32 r;
+    for (r = 0; r < nameCount; ++r) {
+        recordPos = Tell_InputStream(in);
+        if (ReadInt16(in) == platformID && ReadInt16(in) == encodingID && ReadInt16(in) == languageID &&
+            ReadInt16(in) == nameID)
+            break;
+        Seek_InputStream(in, recordPos + 0xc);
+    }
+    if (r == nameCount) {
+        Delete_InputStream(in, 0);
+        return;
+    }
+
+    uint16 nameLength = (uint16)ReadInt16(in);
+    uint16 nameOffset = (uint16)ReadInt16(in);
+    Seek_InputStream(in, stringOffset + nameOffset);
+    uint8* buffer = (uint8*)tsi_AllocMem(font->mpMem, nameLength + 2);
+
+    if ((nameLength & 1) == 0) {
+        // even length: an entry that terminates within 10 bytes is plain text, not UTF-16
+        int32 n = nameLength > 10 ? 10 : (int32)nameLength;
+        while (n > 0) {
+            --n;
+            if (ReadUnsignedByteMacro(in) == 0) {
+                namedShort = 1;
+                break;
+            }
+        }
+        Seek_InputStream(in, nameLength);
+    }
+
+    int32 len;
+    if (namedShort) {
+        *outUnicode = (char*)buffer;
+        len = 0;
+        if (nameLength > 0) {
+            int32 chars = (((int32)nameLength - 1) >> 1) + 1;
+            len = chars * 2;
+            int16* p = (int16*)buffer;
+            do {
+                *p++ = ReadInt16(in);
+            } while (--chars != 0);
+        }
+    } else {
+        *outAscii = (char*)buffer;
+        len = 0;
+        if (nameLength > 0) {
+            do {
+                buffer[len] = ReadUnsignedByteMacro(in);
+                ++len;
+            } while (len < (int32)nameLength);
+        }
+    }
+    buffer[len] = 0;
+    buffer[len + 1] = 0;
+
+    Delete_InputStream(in, 0);
 }
 
 // Stand-in for the only caller, GetGlyphByIndex (0x008cefe0), so cl emits New_GlyphClass with the

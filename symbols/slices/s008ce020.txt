@@ -1,1 +1,2 @@
 008ce020 New_GlyphClass  # card/component symbol; T2K glyph.c structure (glyf simple/composite parse + 4 phantom points), byte-exact
+008cec20 ?GetTTNameProperty@@YAXPAUTTFont@@FFPAPAD1@Z  # nonmatching (609) - read a 'name' table entry: pick the name record matching the face's platform/encoding and the requested language/name ids, then copy the string out (UTF-16 when the length is even and no zero byte shows up in the first 10 bytes, single bytes otherwise)
