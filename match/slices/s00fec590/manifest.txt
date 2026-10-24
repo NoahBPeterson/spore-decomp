@@ -1,0 +1,5 @@
+slices/s00fec590/s00fec590.cpp  ?FUN_00fec8a0@cSPMissionManager@@QAE_NPAX@Z  00fec8a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fec590/s00fec590.cpp  ?FUN_00fec900@cSPMissionManager@@QAE_NPAX@Z  00fec900  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fec590/s00fec590.cpp  ?FUN_00feca20@cSPMissionManager@@QAEXPAVcSPMission@@@Z  00feca20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fec590/s00fec590.cpp  ?FUN_00fecc40@tRecVec@@QAEXPAUtRec38@@0@Z  00fecc40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fec590/s00fec590.cpp  ?FUN_00fecfc0@cTimerList@@QAEXABUtTimerValue@@@Z  00fecfc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
