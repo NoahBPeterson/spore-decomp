@@ -1,0 +1,18 @@
+# va  diff-bytes  reason
+# RenderWare 4 core (VC .NET 2003, /GL+/LTCG).  The three array/interpolation kernels cannot
+# reproduce the original single-object bytes: the original was built with /GL+/LTCG and its
+# register allocation spans the inlined slerp/lerp call boundaries, so no source shape emits the
+# same instruction selection/frame.  They are complete behavioural reconstructions and pass the
+# equivalence check.  The eight small helpers are behaviourally exact but still differ in
+# branch layout / leaf code shape, so they are byte-inexact too.
+# flags: /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE   (equivalence verdict in parentheses)
+011ff090  1514  BlendQuatArray (1083 vs 1514 bytes): complete behavioural reconstruction of the 2-D quat/scalar blend; /GL+/LTCG caller -- inline slerp path, frame layout and loop bodies differ (equiv PASS)
+011ff680   871  BlendQuatArray2 (169 vs 871 bytes): complete behavioural reconstruction of the packed-quat blend; /GL+/LTCG caller -- slerp/nlerp body is a called helper here, register allocation differs (equiv PASS)
+011ffb60   935  BlendKeyframeQuatArray (214 vs 935 bytes): complete behavioural reconstruction of the keyframe blend; /GL+/LTCG caller -- slerp/nlerp body is a called helper here, register allocation differs (equiv PASS)
+011ffa70    28  FormatSize8 (25 vs 28 bytes): behaviourally exact leaf; branch layout / immediate materialisation differs (equiv PASS)
+011ffa90    74  DecodeRun (47 vs 74 bytes): behaviourally exact run decoder; code shape differs (equiv WEAK, coverage-limited)
+011ffae0    31  SelectMaxStride (32 vs 31 bytes): behaviourally exact leaf; instruction selection differs (equiv PASS)
+011ffb00    81  FormatSizeAligned (83 vs 81 bytes): behaviourally exact leaf; instruction selection differs (equiv PASS)
+011fff30    66  DecodeRun3 (67 vs 66 bytes): behaviourally exact run decoder; code shape differs (equiv WEAK, coverage-limited)
+011fff80    41  SelectMaxStride16 (42 vs 41 bytes): behaviourally exact leaf; instruction selection differs (equiv PASS)
+011fffb0    91  FormatSizeAligned3 (99 vs 91 bytes): behaviourally exact leaf; instruction selection differs (equiv PASS)

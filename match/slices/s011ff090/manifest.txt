@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# RenderWare 4 core (VC .NET 2003, /GL+/LTCG); only the leaf functions reproduce the
+# original single-object bytes.  See nonmatching.txt for the callers.
+slices/s011ff090/s011ff090.cpp  ?RegisterState@@YAHPAX@Z  011ff9f0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011ff090/s011ff090.cpp  ?FindState@@YAPAXH@Z  011ffa40  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011ff090/s011ff090.cpp  ?FormatSize24@@YAIIPBUFormatDesc@@@Z  011fff10  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
