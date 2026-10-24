@@ -133,16 +133,16 @@ struct FoodwebSlotVector {                             // eastl::vector<cFoodweb
 struct Key12 { uint32_t a, b, c; };
 
 struct WindowSet {                                     // UI window set at cSPUISpace+0x620
-    void F0a5c0();                                     // 0x00e0a5c0
-    void F0a4c0(UIWindow* w, const Key12* desc);       // 0x00e0a4c0 (ret 8)
-    void F0a780(const Key12* key, int count);          // 0x00e0a780 (ret 8)
-    void* F09c90(int i);                               // 0x00e09c90 (ret 4)
+    void RefreshWindows();                                     // 0x00e0a5c0
+    void AttachWindow(UIWindow* w, const Key12* desc);       // 0x00e0a4c0 (ret 8)
+    void SetFlags(const Key12* key, int count);          // 0x00e0a780 (ret 8)
+    void* GetSlotLayout(int i);                               // 0x00e09c90 (ret 4)
 };
 
 struct FlagVector {                                    // vector<uint32_t> at cSPUISpace+0x5d8
     uint32_t* mpBegin;                                 // +0x00
     uint32_t* mpEnd;                                   // +0x04
-    void F4746c0(int arg, const int* value);           // 0x004746c0 (ret 8)
+    void SetValues(int arg, const int* value);           // 0x004746c0 (ret 8)
     void erase(uint32_t* first, uint32_t* last) {
         // The retail inline counts the moved tail in elements (the only caller passes an empty range).
         rt_memcpy(first, last, (unsigned)((char*)mpEnd - (char*)last));
@@ -173,7 +173,7 @@ struct UfoList : UfoNode {                             // sentinel node embedded
 };
 
 struct Ufo {
-    UfoList* F0108db30();                              // 0x0108db30
+    UfoList* GetList();                              // 0x0108db30
 };
 
 struct PosseItemSpace {
@@ -257,7 +257,7 @@ public:
     void SetupFoodwebWindows(int arg);                 // 0x01071c20 (ret 4)
     void RefreshPosseItems();                          // 0x01072680
     void SetSlot(uint32_t id, bool locked, const Key* key, bool scanned, bool flagA, bool same);   // 0x01068d30 (ret 0x18)
-    void F0106dd10(int index, uint32_t value);         // 0x0106dd10 (ret 8)
+    void SetSlotValue(int index, uint32_t value);         // 0x0106dd10 (ret 8)
     char pad[0x224];
     GlobalUI* mGlobalLayout;                           // +0x224
     char pad228[0x258 - 0x228];
@@ -468,21 +468,21 @@ void SP::cSPUISpace::SetupFoodwebWindows(int arg)
     int count = FUN_0106b860(arg);
     mFlags.erase(mFlags.mpBegin, mFlags.mpEnd);
     int empire = GetPlayerEmpireID();
-    mFlags.F4746c0(count, &empire);
-    mWindowSet.F0a5c0();
+    mFlags.SetValues(count, &empire);
+    mWindowSet.RefreshWindows();
     UIWindow* w = mpLayout->FindWindowByID(0x755f9b8, 1);
     Key12 desc;
     desc.a = 0;
     desc.b = 0;
     desc.c = 0;
-    mWindowSet.F0a4c0(w, &desc);
+    mWindowSet.AttachWindow(w, &desc);
     Key12 key;
     key.a = 0x1879822f;
     key.b = 0x510a95b;
     key.c = 0x40464100;
-    mWindowSet.F0a780(&key, 3);
+    mWindowSet.SetFlags(&key, 3);
     Ufo* ufo = GetUFOSimulator();
-    UfoList* list = ufo->F0108db30();
+    UfoList* list = ufo->GetList();
     UfoNode* it = list->mpNext;
     for (int i = 0; i < 3; i++) {
         if (i < count) {
@@ -490,9 +490,9 @@ void SP::cSPUISpace::SetupFoodwebWindows(int arg)
                 mFlags.mpBegin[i] = (uint32_t)it->mValue;
                 it = it->mpNext;
             }
-            F0106dd10(i, mFlags.mpBegin[i]);
+            SetSlotValue(i, mFlags.mpBegin[i]);
         } else {
-            void* p = mWindowSet.F09c90(i);
+            void* p = mWindowSet.GetSlotLayout(i);
             if (p == 0)
                 return;
             UIWindow* w2 = ((UILayout*)p)->FindWindowByID(0x7eb2ea0, 1);
