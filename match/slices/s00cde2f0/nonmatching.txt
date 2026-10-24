@@ -1,0 +1,5 @@
+00cde2f0 466 FUN_00cde2f0: size 704 vs 693; equiv UNSUPPORTED (only 0/400 inputs valid; fault(read)=178, fault(write)=115, fake-arity=90)
+00cde5b0 56 cMode::FUN_00cde5b0: size 72 vs 75; equiv UNSUPPORTED (only 0/400 inputs valid; fault(read)=209, fault(write)=107, fake-arity=57)
+00cde600 47 cMode::FUN_00cde600: size 85 vs 84; equiv UNSUPPORTED (only 0/400 inputs valid; fault(read)=189, fault(write)=123, fake-arity=64)
+00cde660 1072 cMode::FUN_00cde660: size 1560 vs 1540; equiv UNSUPPORTED (only 0/400 inputs valid; fault(read)=395, fault(pool-limit)=2, fault(write)=2)
+00cdec80 473 cModeSub::FUN_00cdec80: size 632 vs 623; equiv UNSUPPORTED (only 0/400 inputs valid; fake-arity=398, fault=1, fault(write)=1)
