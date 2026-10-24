@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+# No approximated or stubbed function in this slice: all six gold7 targets are complete
+# implementations, and the four recheck_shard7 targets were complete as well.
