@@ -1,2 +1,7 @@
 # va  diff-bytes  reason
 00e8ffa0  1738  complete; HandleSimulationUpdate, register allocation/ordering differs (orig keeps this in ebp); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00e90820  813  complete structurally; cTotemPoleView::HandleSimulationUpdate, effect/transform setup reconstructed from helper calls, register allocation/layout differs; ours 862 / orig 807; equiv FAIL (5/5, fault read); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00e90b50  26  complete; placeholder ctor body (emitted as Construct), only temp/register scheduling differs; ours 95 / orig 95; equiv UNSUPPORTED (equivalence harness could not select the alias); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00e90c40  13  complete; placeholder update, only one color-store scheduling difference; ours 179 / orig 179; equiv WEAK (359 valid, 29.4% coverage); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00e90d00  5  complete; cToolObject ctor, vtable store scheduled one slot earlier; ours 71 / orig 71; equiv PASS (400 valid, 100%); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00e90d80  5  complete; cPlanetaryArtifact ctor, vtable store scheduled one slot earlier; ours 71 / orig 71; equiv PASS (400 valid, 100%); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

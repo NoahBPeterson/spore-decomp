@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e8ffa0/s00e8ffa0.cpp  ?MakeView@cPlaceholderColonyEditorCursorAttachment@SP@@QAEPAV12@PAX@Z  00e90be0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
