@@ -134,7 +134,7 @@ class cSPPalettePageUI : public cUIVtblA, public cUIVtblB {
   int mField8;                            // +0x8
   AutoRefCount<cSPUILayout> mLayout;      // +0xc
   IWindow* mSwatch;                       // +0x10
-  AutoRefCount<cRefObj> mField14;         // +0x14
+  AutoRefCount<cSPUILayout> mField14;     // +0x14 (virtual Release at primary vtable +8, like mLayout)
   float mFloat18;                         // +0x18
   float mFloat1c;                         // +0x1c
   eastl::sp_vector<cRefNode*> mNodes20;   // +0x20
