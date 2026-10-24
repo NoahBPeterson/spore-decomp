@@ -420,8 +420,12 @@ struct VecResize {
     void* mpEnd;         // +0x04
     void* mpCapacity;    // +0x08
     uint32_t mAllocator[2];
-    uint32_t size() const { return (uint32_t)((char*)mpEnd - (char*)mpBegin) >> 2; }
+    uint32_t size() const {
+        return (uint32_t)(((int32_t)((char*)mpEnd - (char*)mpBegin)) >> 2);
+    }
     void resize(uint32_t n);
+    void DestroyRange(void** first, void** last);   // 0x0070F520 (thiscall, ret 8)
+    void DoInsertValuesRef(void* position, uint32_t n, const void* value); // 0x0070FFA0 (ecx=vector, ret 0xc)
 };
 struct FreeNode {
     int32_t m0;            // +0x00
@@ -2122,8 +2126,10 @@ void VecResize::resize(uint32_t n)
     } else {
         void* first = (char*)mpBegin + n * 4;
         void* pNewEnd = AssignCopyRef(mpEnd, mpEnd, first);
-        DestroyRange(pNewEnd, mpEnd);
-        mpEnd = (char*)mpEnd - (uint32_t)((char*)mpEnd - (char*)first);
+        DestroyRange((void**)pNewEnd, (void**)mpEnd);
+        void** pEnd = (void**)mpEnd;
+        void** pFirst = (void**)first;
+        mpEnd = (void*)(pEnd - (pEnd - pFirst));
     }
 }
 
@@ -2783,6 +2789,9 @@ uint32_t cMaterialManager_s0071_2e10::GetIDFromCompiledState(uint32_t state, uin
 }
 
 // @ 0x00712f50
+// eastl intrusive-pointer copy dispatch (first,last,dest); AddRefs each copied handle.
+void FUN_006f43e0(void** first, void** last, void** dest);   // 0x006f43e0
+
 void cMaterialManager_s0071_2e10::RegisterMaterial(uint32_t key, int nFlags, const uint32_t* flags, uint32_t nTex, void** texRes)
 {
     mMutex.Lock(gMutexParams);
@@ -2794,9 +2803,7 @@ void cMaterialManager_s0071_2e10::RegisterMaterial(uint32_t key, int nFlags, con
     e->mnId = key;
     e->mTextures.resize(nTex);
     // eastl::copy of the texture resources into the (just resized) texture vector
-    for (uint32_t i = 0; i < nTex; i++)
-        e->mTextures.mpBegin[i].SetFromResource(texRes[i]);
-    e->mnRefCount++;
+    FUN_006f43e0((void**)texRes, (void**)(texRes + nTex), (void**)e->mTextures.mpBegin);
     {
         EntryRef ref(e);
         mRegistered.push_back(ref);
