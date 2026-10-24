@@ -76,8 +76,18 @@ struct HTable {
     Iter* erase(Iter* out, Iter it);                    // @0x45b3e0
     void  clearBuckets(Node** b, uint32_t n);           // @0x45b750
     Node** at(int* key);                                // @0x45b290
+    void  FUN_0045b4c0(Iter* out, void* pair, int unused); // @0x45b4c0 insert (thiscall, 3 args)
     Node* allocNode(void* pair);                        // @0x45b660
     void  freeNode(Node* n);                            // @0x45b6f0
+};
+
+// The base-object helpers operate on the +8 table sub-object: this (ecx) is &table and there is no
+// hidden self argument.  Hex-named members keep the relocation resolver exact.
+struct TableCtorApi {
+    void FUN_005640f0(char* tag);   // 0x5640f0
+};
+struct TableDtorApi {
+    void FUN_0045b380();            // 0x45b380
 };
 
 struct cContentValidationSummarizer {
@@ -112,14 +122,14 @@ cContentValidationSummarizer::cContentValidationSummarizer()
     f4 = 0;
     vtbl = (void*)0x13ecc8c;
     char tag;
-    ThisBase_Ctor(&table, &tag);
+    ((TableCtorApi*)&table)->FUN_005640f0(&tag);
 }
 
 // @ 0x45ab00
 cContentValidationSummarizer::~cContentValidationSummarizer()
 {
     vtbl = (void*)0x13ecc8c;
-    ThisBase_Dtor(&table);
+    ((TableDtorApi*)&table)->FUN_0045b380();
     vtbl = (void*)0x13ec458;
 }
 
@@ -284,8 +294,7 @@ Node** HTable::at(int* key)
     if (it.node == *(&buckets[nbuckets])) {
         struct { int key; IRefObj* a; IRefObj* b; } pair = { *key, 0, 0 };
         Iter r;
-        extern void HTable_Insert(HTable*, Iter*, void*, int);   // @0x45b4c0
-        HTable_Insert(this, &r, &pair, 0);
+        FUN_0045b4c0(&r, &pair, 0);
         Node** slot = (Node**)((char*)r.node + 4);
         if (pair.b) pair.b->Release();
         if (pair.a) pair.a->Release();
@@ -322,7 +331,7 @@ Node* HTable::allocNode(void* pairv)
 {
     struct P { int key; IRefObj* val; };
     P* pr = (P*)pairv;
-    Node* n = (Node*)Alloc((char*)this + 0x14, 0xc, 4, 0);
+    Node* n = (Node*)Alloc((char*)this + 0x1c, 0xc, 4, 0);
     if (n) {
         n->key = pr->key;
         n->value = (IEffect*)pr->val;

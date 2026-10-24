@@ -1,5 +1,5 @@
-0045aa70 0 complete; module is /Od, compiled /O2 here, not byte-exact (not tuned)
-0045ab00 0 complete; module is /Od, compiled /O2 here, not byte-exact (not tuned)
+0045aa70 7 complete; base-table ctor is a thiscall member (ecx=&table, tag pointer on the stack); frame 0xc vs 8
+0045ab00 25 complete; base-table dtor is a 0-arg thiscall member; frame/schedule
 0045ac20 0 complete; module is /Od, compiled /O2 here, not byte-exact (not tuned)
 0045ae10 0 complete; module is /Od, compiled /O2 here, not byte-exact (not tuned)
 0045ae40 0 complete; module is /Od, compiled /O2 here, not byte-exact (not tuned)
@@ -12,8 +12,8 @@
 0045b110 0 complete; module is /Od, compiled /O2 here, not byte-exact (not tuned)
 0045b150 0 complete; module is /Od, compiled /O2 here, not byte-exact (not tuned)
 0045b210 0 complete; module is /Od, compiled /O2 here, not byte-exact (not tuned)
-0045b290 0 complete; module is /Od, compiled /O2 here, not byte-exact (not tuned)
+0045b290 109 complete; insert is a thiscall member on this with 3 stack args; /Od frame differs
 0045b3e0 0 complete; module is /Od, compiled /O2 here, not byte-exact (not tuned)
-0045b660 0 complete; module is /Od, compiled /O2 here, not byte-exact (not tuned)
+0045b660 86 complete; allocator selector is this+0x1c (not +0x14); /Od frame differs
 0045b6f0 0 complete; module is /Od, compiled /O2 here, not byte-exact (not tuned)
 0045b750 0 complete; module is /Od, compiled /O2 here, not byte-exact (not tuned)
