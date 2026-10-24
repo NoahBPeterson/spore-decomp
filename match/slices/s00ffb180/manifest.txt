@@ -1,0 +1,5 @@
+slices/s00ffb180/s00ffb180.cpp  ?FUN_00ffb180@cSPSimPlanetHighLOD@@QAEXXZ  00ffb180  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ffb180/s00ffb180.cpp  ?Init@cSPSimPlanetHighLOD@@QAEXXZ  00ffbf60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ffb180/s00ffb180.cpp  ?FUN_00ffbfe0@cSPSimPlanetHighLOD@@QAE_NXZ  00ffbfe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ffb180/s00ffb180.cpp  ?FUN_00ffc030@cSPSimPlanetHighLOD@@QAEXXZ  00ffc030  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ffb180/s00ffb180.cpp  ?CheckAndReplaceData@cSPSimPlanetHighLOD@@QAE_NPAX00@Z  00ffc160  /O2 /MD /Gy /TP /arch:SSE /fp:fast
