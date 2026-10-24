@@ -10,6 +10,8 @@
 // Matrices are row-major 3x3; points are row vectors multiplied on the left.
 #include "types.h"
 #include <string.h>
+#include <stdlib.h>
+#include <math.h>
 
 struct Vector3 {
   float x, y, z;
@@ -72,4 +74,263 @@ void ComputeShapeMatchGoals(int n, const Vector3* restOffsets, const float* mass
 
   for (int i = 0; i < n; i++)
     goals[i] = (restOffsets[i] * scale) * T + center;
+}
+
+// ---------------------------------------------------------------------------
+// Sphere-tree slab allocator and helpers (0x00e86880 .. 0x00e86bb0).
+// ---------------------------------------------------------------------------
+void* __cdecl FUN_00f473a0(size_t size, const char* name, int a, int b, int c, int d); // 0xf473a0
+void __cdecl FUN_00f47380(void* p);                                                     // 0xf47380
+
+struct NodePos {
+  int x, y, z;
+};
+
+struct Node {
+  union {
+    NodePos pos;              // +0x00
+    Node* freeNext;
+  };
+  float f;                    // +0x0c
+  Node* parent;               // +0x10
+  Node* next;                 // +0x14
+  union {
+    Node* right;              // +0x18
+    int data;
+  };
+};
+
+struct SpherePool {
+  int count;                  // +0x00
+  int end;                    // +0x04
+  Node* freeHead;             // +0x08
+  char* base;                 // +0x0c
+  int stride;                 // +0x10
+  int capacity;               // +0x14
+};
+
+struct SphereTree {
+  int field00;                // +0x00
+  SpherePool* pool;           // +0x04
+  Node* root;                 // +0x08
+  Node* head;                 // +0x0c
+};
+
+struct SimEntry {
+  int key;                    // +0x00
+  void* value;                // +0x04
+  int field08;                // +0x08
+  int field0c;                // +0x0c
+};
+
+struct SimulatorGlobal {
+  int FUN_00b72160();
+  SphereTree* FUN_00b72210(int);
+  void FUN_00b72080(int a, int b);
+  SimEntry* FUN_00b72230(int* key);
+  void FUN_00b72260(int key);
+  void FUN_00b720e0();
+  int FUN_00e31100();
+};
+
+static __forceinline void FreeSphereNode(SphereTree* tree, Node* node)
+{
+  SpherePool* pool = tree->pool;
+  pool->count--;
+  node->freeNext = pool->freeHead;
+  pool->freeHead = node;
+}
+
+// @ 0x00e86880
+Node* FUN_00e86880(SphereTree* tree, const Vector3* pos, float f, int data)
+{
+  SpherePool* pool = tree->pool;
+  int index = pool->count;
+  Node* node;
+  if (index == pool->capacity) {
+    node = 0;
+  } else {
+    if (index == pool->end) {
+      node = (Node*)(pool->base + pool->stride * index);
+      pool->end++;
+    } else {
+      node = pool->freeHead;
+      pool->freeHead = node->freeNext;
+    }
+    pool->count = index + 1;
+  }
+  node->pos = *(const NodePos*)pos;
+  node->f = f;
+  node->next = 0;
+  node->data = data;
+  return node;
+}
+
+// @ 0x00e868f0
+void FUN_00e868f0(SphereTree* tree, const Vector3* pos, float f, int data)
+{
+  Node* node = FUN_00e86880(tree, pos, f, data);
+  node->parent = 0;
+  node->next = tree->head;
+  tree->head = node;
+}
+
+// @ 0x00e86930
+void FUN_00e86930(SphereTree* tree, Node* node)
+{
+  Node* parent = node->parent;
+  Node* sibling = parent->next;
+  if (sibling == node)
+    sibling = parent->right;
+  Node* grand = parent->parent;
+  Node** link = (grand->next == parent) ? &grand->next : &grand->right;
+  FreeSphereNode(tree, parent);
+  *link = sibling;
+  sibling->parent = grand;
+  node->parent = 0;
+}
+
+// @ 0x00e86980
+void FUN_00e86980(SphereTree* tree, Node* node)
+{
+  if (tree->root == node) {
+    SpherePool* pool = tree->pool;
+    tree->root = 0;
+    pool->count--;
+    node->freeNext = pool->freeHead;
+    pool->freeHead = node;
+    return;
+  }
+
+  Node* parent = node->parent;
+  if (parent == 0) {
+    Node* cur = tree->head;
+    Node* prev = 0;
+    while (cur != 0) {
+      if (cur == node)
+        break;
+      prev = cur;
+      cur = cur->next;
+    }
+    if (prev != 0)
+      prev->next = cur->next;
+    else
+      tree->head = cur->next;
+    FreeSphereNode(tree, node);
+    return;
+  }
+
+  if (parent == tree->root) {
+    Node* sibling = parent->next;
+    if (sibling == node)
+      sibling = parent->right;
+    tree->root = sibling;
+    sibling->parent = 0;
+    FreeSphereNode(tree, node->parent);
+    FreeSphereNode(tree, node);
+    return;
+  }
+
+  FUN_00e86930(tree, node);
+  FreeSphereNode(tree, node);
+}
+
+// @ 0x00e86a50
+namespace SP {
+SphereTree* SphereTreeCreate()
+{
+  int handle = ((SimulatorGlobal*)0x016c45b4)->FUN_00b72160();
+  SphereTree* tree = ((SimulatorGlobal*)0x016c45b4)->FUN_00b72210(handle);
+  SpherePool* pool = (SpherePool*)FUN_00f473a0(0x18, "Simulator", 0, 0, 0, 0);
+  if (pool != 0) {
+    pool->stride = 0x1c;
+    pool->capacity = 0x2000;
+    pool->base = (char*)malloc(0x38000);
+    pool->count = 0;
+    pool->end = 0;
+    pool->freeHead = 0;
+    tree->pool = pool;
+    return tree;
+  }
+  tree->pool = pool;
+  return tree;
+}
+}
+
+// @ 0x00e86ad0
+void FUN_00e86ad0()
+{
+  ((SimulatorGlobal*)0x016c45b4)->FUN_00b72080(0x10, 2);
+}
+
+// @ 0x00e86ae0
+void FUN_00e86ae0()
+{
+  int priority = ((SimulatorGlobal*)0x016c45b4)->FUN_00e31100();
+  SimEntry* e = ((SimulatorGlobal*)0x016c45b4)->FUN_00b72230(&priority);
+  while (e != 0) {
+    SpherePool* pool = (SpherePool*)e->value;
+    if (pool != 0) {
+      free(pool->base);
+      FUN_00f47380(pool);
+    }
+    ((SimulatorGlobal*)0x016c45b4)->FUN_00b72260(e->key);
+    e = ((SimulatorGlobal*)0x016c45b4)->FUN_00b72230(&priority);
+  }
+  ((SimulatorGlobal*)0x016c45b4)->FUN_00b720e0();
+}
+
+// @ 0x00e86b60
+void FUN_00e86b60()
+{
+  int priority = ((SimulatorGlobal*)0x016c45b4)->FUN_00e31100();
+  SimEntry* e = ((SimulatorGlobal*)0x016c45b4)->FUN_00b72230(&priority);
+  while (e != 0) {
+    Node* node = (Node*)e->value;
+    node->pos.x = 0;
+    node->pos.y = 0;
+    node->pos.z = 0;
+    e->field08 = 0;
+    e->field0c = 0;
+    e = ((SimulatorGlobal*)0x016c45b4)->FUN_00b72230(&priority);
+  }
+}
+
+// @ 0x00e86bb0
+void FUN_00e86bb0(const Vector3* a, float ra, const Vector3* b, float rb,
+                  Vector3* out, float* outRadius)
+{
+  float dx = b->x - a->x;
+  float dy = b->y - a->y;
+  float dz = b->z - a->z;
+  float dist = sqrtf(dx * dx + dy * dy + dz * dz);
+
+  if (dist + ra < rb) {
+    out->x = b->x;
+    out->y = b->y;
+    out->z = b->z;
+    *outRadius = rb;
+    return;
+  }
+  if (dist + rb < ra) {
+    out->x = a->x;
+    out->y = a->y;
+    out->z = a->z;
+    *outRadius = ra;
+    return;
+  }
+
+  *outRadius = (dist + ra + rb) * 0.5f;
+  if (dist < 1.5258789e-05f) {
+    out->x = (a->x + b->x) * 0.5f;
+    out->y = (a->y + b->y) * 0.5f;
+    out->z = (a->z + b->z) * 0.5f;
+    return;
+  }
+
+  float inv = 1.0f / dist;
+  float d = rb - ra;
+  out->x = (a->x + b->x + (inv * dx) * d) * 0.5f;
+  out->y = (a->y + b->y + (inv * dy) * d) * 0.5f;
+  out->z = (a->z + b->z + (inv * dz) * d) * 0.5f;
 }

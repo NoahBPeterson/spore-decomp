@@ -1,0 +1,5 @@
+# byte-exact functions for slice s00e85dc0
+slices/s00e85dc0/s00e85dc0.cpp  ?FUN_00e868f0@@YAXPAUSphereTree@@PBUVector3@@MH@Z  00e868f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e85dc0/s00e85dc0.cpp  ?FUN_00e86ad0@@YAXXZ  00e86ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e85dc0/s00e85dc0.cpp  ?FUN_00e86ae0@@YAXXZ  00e86ae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e85dc0/s00e85dc0.cpp  ?FUN_00e86b60@@YAXXZ  00e86b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
