@@ -116,7 +116,7 @@ struct MapY {
     uint32_t size; uint32_t alloc;
     NodeY* CreateNode(const int* key);          // 0x0683480 (out-of-slice)
     void InsertPair(NodeY** out, NodeY* pos, int* key, char b);
-    void InsertUnique(void* pair, const int* key);
+    void InsertUnique(void* pair, const int* key, int flag);
 };
 
 // value: S8 + M5a0 (0x24) node 0x38  -- Map1 from slice 16
@@ -149,8 +149,10 @@ struct Node2v { Node2v* r; Node2v* l; Node2v* p; uint32_t col; int key; Obj1700 
 struct Map2 {
     uint32_t pad0; Node2v* anchor; Node2v* begin; Node2v* root; uint32_t col;
     uint32_t size; uint32_t alloc;
-    void InsertHint(Node2v** out, Node2v* hint, int* key, char flag);
-    void InsertUnique(void* pair, const int* key);
+    Node2v* CreateNode(const int* key);                                       // 0x06826c0 (out-of-slice)
+    void InsertPair(Node2v** out, Node2v* pos, int* key, char flag);          // 0x06828a0 (out-of-slice)
+    void InsertUnique(void* pair, const int* key, int flag);                  // 0x0682900 (out-of-slice)
+    Node2v** InsertHint(Node2v** out, Node2v* hint, int* key, char flag);
     Obj1700* operator[](int key);
 };
 
@@ -232,7 +234,7 @@ void VecAInsert(VecA* self, ObjA* pos, const ObjA& x) {
 // =====================================================================
 // @ 0x00683390  Map2 insert-with-hint (value Obj1700)
 // =====================================================================
-void Map2::InsertHint(Node2v** out, Node2v* hint, int* key, char flag) {
+Node2v** Map2::InsertHint(Node2v** out, Node2v* hint, int* key, char flag) {
     (void)flag;
     Node2v* hdr = (Node2v*)&anchor;
     if (hint == begin || hint == hdr) {
@@ -240,37 +242,39 @@ void Map2::InsertHint(Node2v** out, Node2v* hint, int* key, char flag) {
             goto UNIQUE;
         {
             int bIns = (begin == hdr || *key < begin->key) ? 0 : 1;
-            Node2v* n = (Node2v*)CreateNode1700(key);
+            Node2v* n = CreateNode(key);
             RBTreeInsert(n, begin, hdr, bIns);
             ++size;
             *out = n;
-            return;
+            return out;
         }
     } else {
         Node2v* next = (Node2v*)RBTreeIncrement(hint);
         if (*key <= hint->key || next->key <= *key)
             goto UNIQUE;
         if (hint->r == 0) {
-            void* n = CreateNode1700(key);
-            RBTreeInsert(n, hint, hdr, 0);
-            ++size;
-            *out = (Node2v*)n;
-            return;
+            InsertPair(out, hint, key, 0);
+            return out;
         }
         {
-            Node2v* n = (Node2v*)CreateNode1700(key);
-            RBTreeInsert(n, next, hdr, 1);
+            Node2v* n = CreateNode(key);
+            RBTreeInsert(n, next, hdr, 0);
             ++size;
             *out = n;
-            return;
+            return out;
         }
     }
 UNIQUE:
     {
         void* pair[2];
         pair[0] = 0;
-        InsertUnique(pair, key);
+        // The 3rd argument is a dead int scratch that the original keeps in the key's argument home:
+        // only its low byte is zeroed, so the value is `key & ~0xff`. The callee ignores it; it is
+        // passed because the callee pops three argument dwords (`ret 0xc`).
+        uint32_t dead = (uint32_t)(uintptr_t)key & 0xFFFFFF00u;
+        InsertUnique(pair, key, (int)dead);
         *out = (Node2v*)pair[0];
+        return out;
     }
 }
 
@@ -291,19 +295,20 @@ void MapY::InsertPair(NodeY** out, NodeY* pos, int* key, char flag) {
 // =====================================================================
 // @ 0x00683560  MapY insert_unique (create 0x683480)
 // =====================================================================
-void MapY::InsertUnique(void* pairOut, const int* key) {
+void MapY::InsertUnique(void* pairOut, const int* key, int flag) {
+    (void)flag;
     NodeY* hdr = (NodeY*)&anchor;
     NodeY* pos = hdr;
     int bLess = 1;
     NodeY* n = root;
     if (n) {
-        do { pos = n; bLess = (*key < n->key); n = bLess ? n->r : n->l; } while (n);
+        do { pos = n; bLess = (*key < n->key); n = bLess ? n->l : n->r; } while (n);
     }
     NodeY* found = pos;
     if (bLess) {
         if (pos == begin) {
             int bIns = (pos != hdr && *key >= pos->key) ? 1 : 0;
-            NodeY* nn = (NodeY*)CreateNodeZ(key);
+            NodeY* nn = CreateNode(key);
             RBTreeInsert(nn, pos, hdr, bIns);
             ++size;
             ((void**)pairOut)[0] = nn;
@@ -319,7 +324,7 @@ void MapY::InsertUnique(void* pairOut, const int* key) {
     }
     {
         int bIns = (found != hdr && *key >= found->key) ? 1 : 0;
-        NodeY* nn = (NodeY*)CreateNodeZ(key);
+        NodeY* nn = CreateNode(key);
         RBTreeInsert(nn, found, hdr, bIns);
         ++size;
         ((void**)pairOut)[0] = nn;

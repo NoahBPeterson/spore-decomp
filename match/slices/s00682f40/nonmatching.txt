@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
 00683160  106  complete: node-chain free (MapC2 free + guarded buffer); EH frame present, node/this register roles and frame slots differ
-00683390  202  complete: Map2 insert-with-hint (value Obj1700); register allocation / scheduling differs
+00683390  204  Map2 insert-with-hint (value Obj1700); register allocation / scheduling differs (fixed: return the out pointer in eax on every path, hint->r==0 goes through InsertPair(0x6828a0), the create/insert helpers are thiscalls and InsertUnique takes the dead 3rd word the original pushes from the key argument home (`key & ~0xff`)); difftest PASS 243 valid / 66.7% coverage
 00683500  8    complete: MapY InsertPair; the out-pointer load is scheduled after the size increment (mov eax/inc order)
-00683560  237  complete: MapY insert_unique returning pair<iter,bool>; register allocations differ
+00683560  237  MapY insert_unique returning pair<iter,bool>; register allocations differ (fixed: key traversal descends to +0x4 on "less" (left) and +0x0 otherwise, and the third (unused) argument word is part of the signature: the callee pops `ret 0xc`); difftest WEAK 260 valid / 44.9% coverage, no mismatch
 00683670  91   complete: ObjY copy ctor (S8 + MY at +0x10); frame/register relief differs
 00683f30  24   complete: Release; n==0 arm returns via xor eax instead of mov eax,esi and tests the member in a register
