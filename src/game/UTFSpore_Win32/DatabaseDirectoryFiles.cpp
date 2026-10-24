@@ -59,7 +59,6 @@ bool  ConcatenatePathComponents(wchar_t* pDst, const wchar_t* pDir, const wchar_
 }
 }
 void  EAOperatorDelete(void* p);                                                                        // 0x00f47380
-void WStringAssign(void* pThis, const wchar_t* pBegin, const wchar_t* pEnd); // 0x00423650
 void WStringFreeSelf(void* pThis);                                           // 0x00931770
 namespace EA {
 namespace ResourceMan {
@@ -100,6 +99,26 @@ struct DDFRecordListData
 };
 }
 }
+// The retail image's static empty wchar_t string, used as the default record name.
+extern const wchar_t gRecordValueEmptyName[];   // 0x01667bac
+namespace EA {
+namespace ResourceMan {
+// The record map's value as retail lays it out: the string16 name first, one more dword, the two
+// file-time words and the record list anchor at +0x18.  Its copy constructor lives outside this TU.
+struct RecordValue
+{
+    const wchar_t* mpNameBegin;     // +0x00
+    const wchar_t* mpNameEnd;       // +0x04
+    const wchar_t* mpNameCapacity;  // +0x08
+    uint32_t       mnUnknown0c;     // +0x0c
+    uint32_t       mnTimeHigh;      // +0x10
+    uint32_t       mnTimeLow;       // +0x14
+    ListAnchor     mRecords;        // +0x18
+
+    void CopyFrom(const RecordValue* pSrc);   // 0x008d6970
+};
+}
+}
 namespace EA {
 namespace ResourceMan {
 struct RBNode
@@ -124,6 +143,10 @@ struct RBTree
     uint32_t mnUnknown10; // +0x10
     uint32_t mnCount;     // +0x14
     uint32_t mPad18[2];   // +0x18
+
+    void Find(RBNode** ppOut, const Key_s008d_7220* pKey);                    // 0x00a21dc0
+    void EraseRecord(void* pArg, RBNode* pNode);                              // 0x008d7200
+    void InsertValue(RBNode** ppOut, const void* pValue, const void* pKey);   // 0x008d7220
 };
 }
 }
@@ -134,6 +157,8 @@ struct String16
     const wchar_t* mpBegin;     // +0x00
     const wchar_t* mpEnd;       // +0x04
     const wchar_t* mpCapacity;  // +0x08
+
+    void assign(const wchar_t* pFirst, const wchar_t* pLast);   // 0x00423650
 };
 }
 }
@@ -203,9 +228,11 @@ public:
     struct RecordMapOps
     {
         static RBNode* DoInsertValue(RBTree* pTree, RBNode** ppOutNode, const Key_s008d_7220* pKey); // 0x008d7220
-        RBNode* DoCreateNode(const Key_s008d_7220* pKey, const wchar_t* pName,
-                             uint32_t nHighTime, uint32_t nLowTime,
-                             ListAnchor* pList);                                // 0x008d7610
+        // All three retail call sites ignore the result (the value left in EAX is the string
+        // destructor's leftover), so the node-creation helper is void.
+        void DoCreateNode(const Key_s008d_7220* pKey, const wchar_t* pName,
+                          uint32_t nHighTime, uint32_t nLowTime,
+                          ListAnchor* pList);                                // 0x008d7610
     };
 
 private:
@@ -324,7 +351,8 @@ bool DatabaseDirectoryFiles::DeleteRecord(const Key_s008d_7220& key)
 
     if (mbInitialized && (mnAccessFlags & 2))
     {
-        RBNode* pNode = RBTreeFindNode(&mRecordDataMap, key);
+        RBNode* pNode = 0;
+        mRecordDataMap.Find(&pNode, &key);
         RBNode* pEnd  = reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mRecordDataMap) + 4);
         if (pNode != pEnd)
         {
@@ -335,8 +363,7 @@ bool DatabaseDirectoryFiles::DeleteRecord(const Key_s008d_7220& key)
                 EA::IO::ConcatenatePathComponents(path, msDirectory.mpBegin, pValue->mpNameBegin);
                 if (EA::IO::Remove(path))
                 {
-                    extern void DatabaseDirectoryFiles_EraseRecord(DatabaseDirectoryFiles*, RBNode*); // 0x008d7200
-                    DatabaseDirectoryFiles_EraseRecord(this, pNode);
+                    mRecordDataMap.EraseRecord(&pNode, pNode);
                     bRemoved = true;
                 }
             }
@@ -403,7 +430,7 @@ DatabaseDirectoryFiles::DatabaseDirectoryFiles(const wchar_t* pLocation, EA::All
         const wchar_t* pEnd = pLocation;
         while (*pEnd != 0)
             ++pEnd;
-        WStringAssign(&msDirectory, pLocation, pEnd);
+        msDirectory.assign(pLocation, pEnd);
         WStringFreeSelf(&msDirectory);
     }
 
@@ -450,44 +477,56 @@ DatabaseDirectoryFiles::~DatabaseDirectoryFiles()
 
 // @ 0x008d7610
 namespace EA { namespace ResourceMan {
-RBNode* DatabaseDirectoryFiles::RecordMapOps::DoCreateNode(const Key_s008d_7220* pKey, const wchar_t* pName, uint32_t nHighTime, uint32_t nLowTime, ListAnchor* pList)
+void DatabaseDirectoryFiles::RecordMapOps::DoCreateNode(const Key_s008d_7220* pKey, const wchar_t* pName, uint32_t nHighTime, uint32_t nLowTime, ListAnchor* pList)
 {
-    // The tree arrives in ECX (this).
-    RBTree* pTree = reinterpret_cast<RBTree*>(this);
+    // ECX holds the owning DatabaseDirectoryFiles; the record map is embedded at +0x8c.
+    RBTree* pTree = reinterpret_cast<RBTree*>(reinterpret_cast<uint8_t*>(this) + 0x8c);
 
-    DDFRecordListData value;
-    value.mnUnknown00    = 0;
-    value.mpNameBegin    = pName;
-    value.mpNameEnd      = 0;
-    value.mpNameCapacity = 0;
-    value.mnUnknown10    = 0;
-    value.mnTimeLow      = nLowTime;
-    value.mnTimeHigh     = nHighTime;
-    value.mRecords.mpNext = &value.mRecords;
-    value.mRecords.mpPrev = &value.mRecords;
+    // Mark the record's group in the 0xb8 hash bitmap (key word 1 = the group id).
+    uint32_t  nGroup = pKey->mnGroupID;
+    uint32_t* pHash  = reinterpret_cast<uint32_t*>(reinterpret_cast<uint8_t*>(this) + 0xb8);
+    pHash[(nGroup >> 5) & 0x1f] |= 1u << (nGroup & 0x1f);
 
-    RBNode* pOut = 0;
-    RBNode* pNode = 0;
-
-    // The retail builds a pair<const Key,DDFRecordListData> on the stack and calls DoInsertValue
-    // with a freshly created node. Reproduce that shape.
-    DatabaseDirectoryFiles* pRaw = 0; (void)pRaw;
+    // The retail builds a pair<const Key,DDFRecordListData> on the stack and inserts it through the
+    // rbtree (ECX = tree). The insert writes its iterator (the new node) followed by a bool into the
+    // out slot; the third argument re-uses the dead pKey argument slot, whose low byte was zeroed.
+    struct InsertResult { RBNode* pNode; uint32_t bInserted; };
+    InsertResult result;
+    result.pNode    = 0;
+    result.bInserted = 0;
     {
-        struct Pair { Key_s008d_7220 first; DDFRecordListData second; } pair;
-        pair.first  = *pKey;
-        pair.second = value;
-        pNode = DoInsertValue(pTree, &pOut, &pair.first);
+        // Retail pair: the 12-byte key is followed by four bytes of padding, so the value starts
+        // at +0x10 (the node keeps the same layout after its 0x10 header).
+        struct Pair { Key_s008d_7220 first; uint32_t mnPadKey; DDFRecordListData second; } pair;
+        pair.first   = *pKey;
+        pair.mnPadKey = 0;
+
+        // Retail copies a default (empty-named) record value into the pair's value slot.
+        RecordValue raw;
+        raw.mpNameBegin     = gRecordValueEmptyName;
+        raw.mpNameEnd       = gRecordValueEmptyName;
+        raw.mpNameCapacity  = gRecordValueEmptyName + 2;
+        raw.mnUnknown0c     = 0;
+        raw.mnTimeHigh      = nHighTime;
+        raw.mnTimeLow       = nLowTime;
+        raw.mRecords.mpNext = &raw.mRecords;
+        raw.mRecords.mpPrev = &raw.mRecords;
+        reinterpret_cast<RecordValue*>(&pair.second)->CopyFrom(&raw);
+
+        pTree->InsertValue(&result.pNode, &pair,
+                           reinterpret_cast<const void*>(reinterpret_cast<uintptr_t>(pKey) & ~(uintptr_t)0xFF));
     }
+    RBNode* pNode = result.pNode;
 
     if (pNode != 0)
     {
         DDFRecordListData* pValue = NodeValue(pNode);
-        if (pValue->mpNameBegin == 0 && pName != 0)
+        if (pValue->mpNameBegin == pValue->mpNameEnd)
         {
             const wchar_t* pEnd = pName;
             while (*pEnd != 0)
                 ++pEnd;
-            WStringAssign(&pValue->mpNameBegin, pName, pEnd);
+            reinterpret_cast<String16*>(&pValue->mpNameBegin)->assign(pName, pEnd);
         }
     }
 
@@ -504,8 +543,6 @@ RBNode* DatabaseDirectoryFiles::RecordMapOps::DoCreateNode(const Key_s008d_7220*
         }
         (void)pRecord;
     }
-
-    return pNode;
 }
 }}  // namespace EA::ResourceMan
 
@@ -551,7 +588,7 @@ bool DatabaseDirectoryFiles::AddFileRecord(const Key_s008d_7220& key, const wcha
     bool bChanged = false;
     if (pFound == pEnd)
     {
-        reinterpret_cast<RecordMapOps*>(&mRecordDataMap)->DoCreateNode(&mapKey, 0, 0, 0, 0);
+        reinterpret_cast<RecordMapOps*>(this)->DoCreateNode(&mapKey, 0, 0, 0, 0);
         if (mpManager != 0)
         {
             typedef void (*NotifyFn)(void*, const Key_s008d_7220*);
