@@ -15,7 +15,8 @@ Each pass:
   * a range that would get a nudge after --max-nudges nudges is logged "ABANDONED r<k> <unsettled VAs>"
     and counted as done (round 3: the Manager session sat idle with 0x8de8e0/0x8de940 neither landed
     nor in leave_in_slice and was nudged for four hours; those VAs go to the fix pass instead).
-  * a range whose settled-function count has not moved for --stall seconds while unfinished is interrupted and
+  * a range whose settled-function count and chk.py byte difference (work/match/chk_scores/) have not moved for --stall
+    seconds while unfinished is interrupted and
     logged "STALLED r<k> ..." + ABANDONED (round 5, 2026-10-16: the ealog_imp session kept making model calls on
     one 40-function slice for 7.5 h, so neither the nudge cap nor the per-call hang check fired, the drain never
     completed, and the verify/commit steps queued behind it never ran). 0 disables. The clock starts when the
@@ -106,6 +107,28 @@ def model_of(k):
     if G.get("cache_ns") and G.get("provider") == "cheaperinference":
         mid = "%s-c%02d" % (mid, int(k) % int(G["cache_ns"]))
     return {"providerID": G["provider"], "id": mid}
+
+
+def chk_scores(k):
+    """Last chk.py score line (work/match/chk_scores/<slice>.log: time, matched, total differing bytes, functions)
+    of each slice range k works on, minus the time: a change means the session is still closing the byte
+    difference, so the stall check does not fire although nothing has been recorded yet."""
+    if QUEUE:
+        ids = [BATCH[i]["id"] for i in claim.held(claim.load_claims(G["batch"]), k)]
+    else:
+        lo, hi = G["ranges"][k]
+        ids = [BATCH[i]["id"] for i in range(lo, hi + 1)]
+    out = []
+    for sid in ids:
+        try:
+            with open(W("work/match/chk_scores", sid + ".log"), "rb") as f:
+                f.seek(0, 2)
+                f.seek(max(0, f.tell() - 200))
+                last = f.read().decode(errors="replace").strip().splitlines()[-1].split()[1:]
+        except (OSError, IndexError):
+            last = None
+        out.append((sid, tuple(last) if last else None))
+    return tuple(out)
 
 
 def progress(k, unsettled=None):
@@ -263,8 +286,9 @@ while True:
         if done >= tot:
             finished += 1
             continue
-        if moved.get(k, (0, -1))[1] != done:
-            moved[k] = (now, done)
+        sig = (done, chk_scores(k))
+        if moved.get(k, (0, None))[1] != sig:
+            moved[k] = (now, sig)
         if a.stall and now - moved[k][0] > a.stall:
             uns = []
             progress(k, uns)

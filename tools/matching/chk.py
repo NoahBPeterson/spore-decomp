@@ -10,7 +10,7 @@ slice is checked with a single wine compile.
 A slice id (sXXXXXXXX) is looked up in work/batches/*.json. -a also lists every symbol's best VA.
 Exit 0 iff every target VA has a MATCH. Final verification is still run_all.py --manifest.
 """
-import argparse, glob, hashlib, json, os, subprocess, sys
+import argparse, glob, hashlib, json, os, subprocess, sys, time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from cmpobj import parse_coff, REL_SIZES
@@ -153,6 +153,16 @@ def main():
             print("%s  %s  %08x  %s" % (rel, best[va][2], va, a.flags.strip()))
     m = sum(1 for va in vas if best.get(va, (1,))[0] == 0)
     print("%d / %d target functions MATCH" % (m, len(vas)))
+    # score log for opencode_drain.py's stall check: a worker whose byte difference keeps moving is not stalled
+    # even when no function has been recorded yet (gold6's 40-function slices, 2026-10-24)
+    try:
+        tot = sum(best[va][0] if va in best else len(bounds(va, fstarts)) for va in vas)
+        d = os.path.join(ROOT, "work", "match", "chk_scores")
+        os.makedirs(d, exist_ok=True)
+        with open(os.path.join(d, os.path.basename(os.path.dirname(src)) + ".log"), "a") as f:
+            f.write("%d %d %d %d\n" % (time.time(), m, tot, len(vas)))
+    except OSError:
+        pass
     return 0 if m == len(vas) else 1
 
 
