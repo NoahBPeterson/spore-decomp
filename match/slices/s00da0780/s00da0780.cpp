@@ -254,3 +254,149 @@ bool __cdecl Tick_Avoid(Creature* c, void* a2, void* a3, void* a4, void* a5, Sta
         return false;
     }
 }
+
+// =================================================================================================
+// EASTL instantiations emitted into this same translation unit: the ref-counted reporter vector's
+// resize, the introsort loop over 0x20-byte layout records, and the 12-byte analysis-info vector's
+// assign.  Everything they call lives in other objects and is referenced by address only.
+// =================================================================================================
+
+struct ILogReporter;                        // EA::Trace::ILogReporter (only used behind the pointer)
+
+// EA::AutoRefCount<EA::Trace::ILogReporter>: one owning pointer, default-constructed to null.
+struct LogReporterRef {
+    ILogReporter* mpObject;                 // +0x00
+    LogReporterRef() : mpObject(0) {}
+};
+
+// eastl::vector<EA::AutoRefCount<EA::Trace::ILogReporter>, eastl::sp_vector_allocator>
+struct LogReporterVector {
+    LogReporterRef* mpBegin;                // +0x00
+    LogReporterRef* mpEnd;                  // +0x04
+    LogReporterRef* mpCapacity;             // +0x08
+
+    void DoInsertValues(LogReporterRef* position, unsigned n, const LogReporterRef& value); // 0x00cbc200
+    void erase(LogReporterRef* first, LogReporterRef* last);                               // 0x00e25bd0
+    void resize(unsigned n);
+};
+
+// @ 0x00da1010
+void LogReporterVector::resize(unsigned n)
+{
+    if (n > (unsigned)(mpEnd - mpBegin))
+        DoInsertValues(mpEnd, n - (unsigned)(mpEnd - mpBegin), LogReporterRef());
+    else
+        erase(mpBegin + n, mpEnd);
+}
+
+// -------------------------------------------------------------------------------------------------
+// eastl::sort over EA::Text::GlyphLayoutInfo (0x20 bytes: one flags word + seven floats).
+// -------------------------------------------------------------------------------------------------
+struct GlyphLayoutInfo {
+    int   miFlags;                          // +0x00
+    float mf04, mf08, mf0c, mf10, mf14, mf18, mf1c;
+
+    GlyphLayoutInfo() {}
+    GlyphLayoutInfo(const GlyphLayoutInfo& o)
+        : miFlags(o.miFlags), mf04(o.mf04), mf08(o.mf08), mf0c(o.mf0c),
+          mf10(o.mf10), mf14(o.mf14), mf18(o.mf18), mf1c(o.mf1c) {}
+};
+
+typedef bool (__cdecl* GlyphSortPred)(const GlyphLayoutInfo& a, const GlyphLayoutInfo& b);
+
+// eastl::get_partition(first, last, pivot, less) @ 0x00d9fe20
+GlyphLayoutInfo* __cdecl get_partition(GlyphLayoutInfo* first, GlyphLayoutInfo* last,
+                                      GlyphLayoutInfo pivot, GlyphSortPred less);            // 0x00d9fe20
+// eastl::partial_sort(first, middle, last, less) @ 0x00d9f580
+void __cdecl partial_sort(GlyphLayoutInfo* first, GlyphLayoutInfo* middle, GlyphLayoutInfo* last,
+                          GlyphSortPred less);                                              // 0x00d9f580
+
+const int kQuickSortLimit = 28;
+
+// eastl::median(a, b, c, less): the middle of three elements, returned by reference.
+inline const GlyphLayoutInfo& median(const GlyphLayoutInfo& a, const GlyphLayoutInfo& b,
+                                     const GlyphLayoutInfo& c, GlyphSortPred less)
+{
+    if (less(a, b)) {
+        if (less(b, c))
+            return b;
+        if (less(a, c))
+            return c;
+        return a;
+    }
+    if (less(a, c))
+        return a;
+    if (less(b, c))
+        return c;
+    return b;
+}
+
+// @ 0x00da1140
+void __cdecl quick_sort_impl(GlyphLayoutInfo* first, GlyphLayoutInfo* last, int depth,
+                             GlyphSortPred less)
+{
+    while ((last - first) > kQuickSortLimit && depth > 0) {
+        GlyphLayoutInfo* position = get_partition(first, last,
+            median(*first, *(first + (last - first) / 2), *(last - 1), less), less);
+        --depth;
+        quick_sort_impl(position, last, depth, less);
+        last = position;
+    }
+    if (depth == 0)
+        partial_sort(first, last, last, less);
+}
+
+// -------------------------------------------------------------------------------------------------
+// eastl::vector<EA::Text::AnalysisInfo, ...> (12-byte elements) range assign.
+// -------------------------------------------------------------------------------------------------
+struct AnalysisInfo {
+    unsigned mnKey;                         // +0x00
+    unsigned mnValue;                       // +0x04
+    unsigned mnFlags;                       // +0x08
+};
+
+// eastl::do_copy<EA::Text::AnalysisInfo*> @ 0x00b84c80: copy [first,last) to result, return the
+// advanced destination.
+AnalysisInfo* __cdecl do_copy(AnalysisInfo* first, AnalysisInfo* last, AnalysisInfo* result); // 0x00b84c80
+
+// eastl::uninitialized_copy_impl for the 12-byte element; the advanced destination is handed back
+// through the first parameter.
+void __cdecl uninitialized_copy_impl(AnalysisInfo** out, AnalysisInfo* first, AnalysisInfo* last,
+                                     AnalysisInfo* result, AnalysisInfo* position);         // 0x00951740
+
+struct AnalysisInfoVector {
+    AnalysisInfo* mpBegin;                  // +0x00
+    AnalysisInfo* mpEnd;                    // +0x04
+    AnalysisInfo* mpCapacity;               // +0x08
+
+    void assign(AnalysisInfo* first, AnalysisInfo* last, int tag);
+};
+
+// @ 0x00da1250
+void AnalysisInfoVector::assign(AnalysisInfo* first, AnalysisInfo* last, int tag)
+{
+    unsigned n = (unsigned)(last - first);
+
+    if (n > (unsigned)(mpCapacity - mpBegin)) {
+        // This instantiation's storage is not growable through the allocator: the original's
+        // reallocation path hands uninitialized_copy_impl a null destination and then only fixes
+        // up the (empty) range.
+        AnalysisInfo* pNewData = 0;
+        uninitialized_copy_impl(&last, first, last, pNewData, last);
+        mpBegin = pNewData;
+        mpEnd = pNewData + n;
+        mpCapacity = pNewData + n;
+        return;
+    }
+
+    unsigned size = (unsigned)(mpEnd - mpBegin);
+    if (n <= size) {
+        mpEnd = do_copy(first, last, mpBegin);
+        return;
+    }
+
+    AnalysisInfo* position = first + size;
+    do_copy(first, position, mpBegin);
+    uninitialized_copy_impl(&last, position, last, mpEnd, last);
+    mpEnd = last;
+}

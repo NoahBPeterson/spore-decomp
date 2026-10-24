@@ -1,1 +1,3 @@
-# byte-exact functions for slice s00da0780 (none)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00da0780/s00da0780.cpp  ?resize@LogReporterVector@@QAEXI@Z  00da1010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00da0780/s00da0780.cpp  ?quick_sort_impl@@YAXPAUGlyphLayoutInfo@@0HP6A_NABU1@1@Z@Z  00da1140  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
