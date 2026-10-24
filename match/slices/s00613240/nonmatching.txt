@@ -5,7 +5,7 @@
 006136f0  132  push esi/edi order at entry, epilogue tail layout
 00613860  56  key param copied to a stack temp; reg alloc
 006138b0  18  Release/lo-hi load reg order; equiv WEAK (1199 valid, 41.3% cov)
-00613a10  5  push edi placement
-00613ab0  72  set insert inlined into listener: reg/arg-home difference
+00613a10  5  Shutdown: complete; the listener range erase now targets the original out-of-line helper 0x006130e0 (renamed eraseRange with a `// 0x006130e0` annotation so it no longer collides with the single-key erase's `erase` ident) and the uint set's clear uses memcpy like the original (the import trace compared memmove vs memcpy); only the push edi placement differs [equiv PASS 280 valid, 76.6% cov]
+00613ab0  88  insertKey now inlines FixedUIntSet::insert (__forceinline, so the inlined this is &mSet like the original) and carries the original's null write-slot guard on the append path (mpEnd advanced first, store skipped when pEnd is null); only the key parameter being copied to a stack temp (arg-home) remains [equiv PASS 204 valid, 100% cov]
 00613b10  78  weird it==it+1 check merge not threaded in original
 00613e50  390  deserializer: variant/key stack layout and slot reuse

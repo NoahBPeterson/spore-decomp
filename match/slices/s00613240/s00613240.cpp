@@ -12,6 +12,7 @@ inline void* operator new(unsigned int, void* p) { return p; }
 void* __cdecl EASTL_allocator_allocate(uint32_t size, const char* name, int flags, int debugFlags, const char* file, int line);  // 0x00f473a0
 void __cdecl EASTL_allocator_deallocate(void* p);                                                                                  // 0x00f47380
 extern "C" void* __cdecl memmove(void*, const void*, size_t);
+extern "C" void* __cdecl memcpy(void*, const void*, size_t);
 
 #define EASTL_ALLOCATOR_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 
@@ -198,12 +199,7 @@ struct Elem16Vector {
     Elem16* insert(Elem16* position, const Elem16& value);           // 0x006139a0
     Elem16* insertHint(Elem16* hint, const Elem16& value);           // 0x00613bf0
     size_t erase(const uint64_t& key);                                // 0x00613b10
-    Elem16* erase(Elem16* first, Elem16* last) {
-        Elem16* const pNewEnd = CopyElem16(last, mpEnd, first);
-        for (Elem16* p = pNewEnd; p < mpEnd; ++p) p->~Elem16();
-        mpEnd -= (last - first);
-        return first;
-    }
+    Elem16* eraseRange(Elem16* first, Elem16* last);                  // 0x006130e0
     IRefObj** FindOrInsert(const uint64_t& key);                     // 0x00613dd0
 };
 
@@ -229,6 +225,13 @@ void Elem16Vector::DoInsertValue(Elem16* position, const Elem16& value) {
         mpBegin = pNewData;
         mpCapacity = pNewData + nNewSize;
     }
+}
+
+Elem16* Elem16Vector::eraseRange(Elem16* first, Elem16* last) {
+    Elem16* const pNewEnd = CopyElem16(last, mpEnd, first);
+    for (Elem16* p = pNewEnd; p < mpEnd; ++p) p->~Elem16();
+    mpEnd -= (last - first);
+    return first;
 }
 
 // @ 0x006139a0
@@ -460,18 +463,20 @@ struct FixedUIntSet {
         else if (it == it + 1) it = itEnd;
         return it != itEnd;
     }
-    void insert(uint32_t key) {
+    __forceinline void insert(uint32_t key) {
         uint32_t* const pEnd = mpEnd;
         const uint32_t* it = LowerBoundSet(mpBegin, pEnd, &key, mCompare);
         if (it != pEnd && !(key < *it)) return;
         if (it == pEnd && pEnd != mpCapacity) {
-            *mpEnd++ = key;
+            uint32_t* const p = mpEnd;
+            mpEnd = p + 1;
+            if (p) *p = key;      // the original skips the store when the (null) begin is the write slot
         } else {
             DoInsertValue((uint32_t*)it, key);
         }
     }
     void erase(uint32_t* pFirst, uint32_t* pLast) {
-        memmove(pFirst, pLast, (size_t)((char*)mpEnd - (char*)pLast));
+        memcpy(pFirst, pLast, (size_t)((char*)mpEnd - (char*)pLast));
         mpEnd -= (pLast - pFirst);
     }
     void clear() { erase(mpBegin, mpEnd); }
@@ -553,19 +558,12 @@ bool cListenerSet::contains(uint32_t key) {
 
 // @ 0x00613ab0
 void cListenerSet::insertKey(uint32_t key) {
-    uint32_t* const pEnd = mSet.mpEnd;
-    const uint32_t* it = LowerBoundSet(mSet.mpBegin, pEnd, &key, mSet.mCompare);
-    if (it != pEnd && !(key < *it)) return;
-    if (it == pEnd && pEnd != mSet.mpCapacity) {
-        *mSet.mpEnd++ = key;
-    } else {
-        mSet.DoInsertValue((uint32_t*)it, key);
-    }
+    mSet.insert(key);
 }
 
 // @ 0x00613a10
 void cListenerSet::Shutdown() {
-    mListeners.erase(mListeners.mpBegin, mListeners.mpEnd);
+    mListeners.eraseRange(mListeners.mpBegin, mListeners.mpEnd);
     mSet.clear();
     mHandle.Reset();
     if (cManager* pMgr = GetManager()) {
