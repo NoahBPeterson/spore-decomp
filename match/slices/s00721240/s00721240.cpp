@@ -1,17 +1,21 @@
 // cTextureChart hash containers and chart helpers (retail offsets from disasm).
 #include "types.h"
+#include <string.h>
+#include <math.h>
+#include <xmmintrin.h>
 
 extern "C" void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* __cdecl EASTL_allocator_allocate(uint32_t size, const char* name, int a, int b,
                                                   const char* file, int line);
 extern "C" void  __cdecl op_new_array(void* dst, int zero, uint32_t size);
 extern "C" void  __cdecl qsort(void* base, uint32_t n, uint32_t sz, int (__cdecl* cmp)(const void*, const void*));
-extern "C" uint32_t __cdecl HashVec(const float* v);
+extern "C" uint32_t __stdcall HashVec(const float* v);   // 0x00720590 (callee pops its arg: ret 4)
 extern "C" int   __cdecl ComparePairs(const void* a, const void* b);
 extern float g_chartMinX, g_chartMinY;
 
 struct FChartNode { float kx, ky, kz; int f0c; FChartNode* next; };  // 0x14
 struct IChartNode { int k0, k1, k2; int f0c; IChartNode* next; };    // 0x14
+struct HashFind { void* pNode; void* pSlot; };                       // out pair written by Find*
 
 struct ChartHash {
     char      pad00[4];
@@ -103,12 +107,108 @@ void __cdecl SortFloatsByDist(void* v)
     qsort((char*)*(float**)v + 8, n - 1, 8, ComparePairs);
 }
 
-// @ 0x00721340  (chart UV/normal solve; normalisation loop omitted)
-void __cdecl ChartSolve(int n, int stride, int* a, int* b, float* out)
+// @ 0x00721340
+void __cdecl ChartSolve(int verts, int n, int* a, int* b, float* out)
 {
-    (void)n; (void)stride; (void)a; (void)b;
+    float* v = (float*)verts;
     out[0] = 1.0f;
     out[1] = 0.0f;
+    int idx[4];
+    float d[8];
+    idx[0] = a[0];
+    idx[1] = b[0];
+    idx[2] = a[1];
+    idx[3] = b[1];
+    for (int k = 0; k < 4; k++) {
+        int j = (idx[k] + 1) % n;
+        d[k * 2]     = v[j * 2]     - v[idx[k] * 2];
+        d[k * 2 + 1] = v[j * 2 + 1] - v[idx[k] * 2 + 1];
+    }
+    float ax = 0.0f, ay = 1.0f;
+    float bx = 1.0f, by = 0.0f;
+    float best = 3.4028234663852886e+38f;
+    float dy23 = v[idx[3] * 2 + 1] - v[idx[2] * 2 + 1];
+    float dx01 = v[idx[1] * 2]     - v[idx[0] * 2];
+    float maxd = dy23 > dx01 ? dy23 : dx01;
+    for (;;) {
+        if (!(ay > 0.0f)) {
+            int* volatile keep = &idx[0];
+            (void)keep;
+            return;
+        }
+        int i;
+        for (i = 0; i < 4; i++) {
+            double len = sqrt((double)d[i * 2] * d[i * 2] + (double)d[i * 2 + 1] * d[i * 2 + 1]);
+            if (len <= maxd * 0.0001)
+                break;
+            volatile float flen = (float)len;
+            float finv;
+            _mm_store_ss(&finv, _mm_div_ss(_mm_set_ss(1.0f), _mm_load_ss((const float*)&flen)));
+            float inv = finv;
+            d[i * 2]     *= inv;
+            d[i * 2 + 1] *= inv;
+        }
+        if (i == 4) {
+            float v0 = -(d[0] * ax + d[1] * ay);
+            float v1 =   d[2] * ax + d[3] * ay;
+            float v2 =   d[4] * bx + d[5] * by;
+            float v3 = -(d[6] * bx + d[7] * by);
+            int m;
+            if (v0 > v1) {
+                if (v0 > v2)
+                    m = (v0 > v3) ? 0 : 3;
+                else
+                    m = (v2 > v3) ? 2 : 3;
+            } else {
+                if (v1 > v2)
+                    m = (v1 > v3) ? 1 : 3;
+                else
+                    m = (v2 > v3) ? 2 : 3;
+            }
+            switch (m) {
+            case 0:
+                ax = -d[0]; ay = -d[1];
+                bx = -d[1]; by =  d[0];
+                break;
+            case 1:
+                ax =  d[2]; ay =  d[3];
+                bx =  d[3]; by = -d[2];
+                break;
+            case 2:
+                ax = -d[5]; ay =  d[4];
+                bx =  d[4]; by =  d[5];
+                break;
+            default:
+                ax =  d[7]; ay = -d[6];
+                bx = -d[6]; by = -d[7];
+                break;
+            }
+            float p1 = (v[idx[1] * 2] - v[idx[0] * 2]) * bx
+                     + (v[idx[1] * 2 + 1] - v[idx[0] * 2 + 1]) * by;
+            float p2 = (v[idx[3] * 2] - v[idx[2] * 2]) * ax
+                     + (v[idx[3] * 2 + 1] - v[idx[2] * 2 + 1]) * ay;
+            float prod = p1 * p2;
+            if (prod < best) {
+                best = prod;
+                if (p1 < p2) {
+                    out[0] = bx; out[1] = by;
+                } else {
+                    out[0] = ax; out[1] = ay;
+                }
+            }
+            i = m;
+        }
+        int j = (idx[i] + 1) % n;
+        int j2 = (j + 1) % n;
+        d[i * 2]     = v[j2 * 2]     - v[j * 2];
+        d[i * 2 + 1] = v[j2 * 2 + 1] - v[j * 2 + 1];
+        idx[i] = j;
+        if (!(bx > 0.0f)) {
+            int* volatile keep = &idx[i];
+            (void)keep;
+            return;
+        }
+    }
 }
 
 // @ 0x007217c0
@@ -183,17 +283,18 @@ void ChartHash::FindF(int* out, float* key)
     FChartNode* n = *slot;
     if (n != 0) {
         do {
-            if (key[0] == n->kx && key[1] == n->ky && key[2] == n->kz) {
-                out[0] = (int)n;
-                out[1] = (int)slot;
-                return;
-            }
+            if (key[0] == n->kx && key[1] == n->ky && key[2] == n->kz)
+                goto found;
             n = n->next;
         } while (n != 0);
     }
     slot = (FChartNode**)&mBuckets[mCapacity];
-    out[0] = (int)*slot;
-    out[1] = (int)slot;
+    n = *slot;
+found:
+    HashFind r;
+    r.pNode = n;
+    r.pSlot = slot;
+    *(HashFind*)out = r;
 }
 
 // @ 0x00721a80
@@ -236,16 +337,18 @@ void ChartHash::FindI(int* out, int* key)
     IChartNode** slot = (IChartNode**)&mBuckets[h];
     IChartNode* n = *slot;
     while (n != 0) {
-        if (n->k0 == key[0] && n->k1 == key[1] && n->k2 == key[2]) {
-            out[0] = (int)n;
-            out[1] = (int)slot;
-            return;
-        }
+        if (n->k0 == key[0] && n->k1 == key[1] && n->k2 == key[2])
+            goto found;
         n = n->next;
     }
     slot = (IChartNode**)&mBuckets[mCapacity];
-    out[0] = (int)*slot;
-    out[1] = (int)slot;
+    n = *slot;
+found:
+    HashFind r;
+    r.pNode = n;
+    r.pSlot = slot;
+    void* volatile keep = memcpy(out, &r, sizeof(r));   // pair copy; keeps memcpy's destination (out) in eax
+    (void)keep;
 }
 
 // @ 0x00721c30

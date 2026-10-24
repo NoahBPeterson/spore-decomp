@@ -1,9 +1,10 @@
 # va  diff-bytes  reason
 00721240  228  SortFloatsByDist: complete; min-scan unroll and qsort call schedule differ
+00721340  1049  ChartSolve: complete; equivalence PASS (216 valid, 100.0% coverage); x87/SSE schedule differs (988 vs 1152 bytes)
 007217c0  0  MakeChartRef: complete; source shape differs (compiler inlined/removed; no same-size symbol); equiv: UNSUPPORTED (only 0/1200 valid inputs, fake-arity discards) after ecx member fix
 00721850  97  ChartHash::GrowF: complete; allocation/placement-new and loop shape differ
-007219f0  0  ChartHash::FindF: complete; float-key compare sequence differs
+007219f0  135  ChartHash::FindF: complete; equivalence PASS (230 valid, 96.2% coverage); pair-store/register shape differs
 00721a80  0  ChartHash::InsertF: complete; grow/alloc sequence differs
-00721bb0  86  ChartHash::FindI: complete; register allocation differs
+00721bb0  92  ChartHash::FindI: complete; equivalence PASS (228 valid, 93.9% coverage); pair-store/register shape differs
 00721c30  0  ChartHash::InsertI: complete; grow/alloc sequence differs
 007221c0  0  cMeshClusterer::CollapseEdges: complete; heap/offset schedule differs
