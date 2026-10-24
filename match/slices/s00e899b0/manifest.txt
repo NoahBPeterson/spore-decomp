@@ -1,4 +1,7 @@
 slices/s00e899b0/s00e899b0.cpp  ?HandleSimulationUpdate@cCitySoundLoopView@SP@@QAEXII@Z  00e899b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e899b0/s00e899b0.cpp  ?scalar_deleting_destructor@cCityWallsView@SP@@QAEPAV12@E@Z  00e89c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e899b0/s00e899b0.cpp  ?FUN_00e89c60@@YGPAVcTurretView@SP@@I@Z  00e89c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e899b0/s00e899b0.cpp  ?FUN_00e89d10@@YGPAVcBuildingView@SP@@I@Z  00e89d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e899b0/s00e899b0.cpp  ??0cCulturalTargetView@SP@@QAE@XZ  00e89d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e899b0/s00e899b0.cpp  ?FUN_00e89e50@cCulturalTargetView@SP@@QAEIIIPAUFloat3@@@Z  00e89e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e899b0/s00e899b0.cpp  ??1cCulturalTargetView@SP@@QAE@XZ  00e89f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -415,9 +415,10 @@ void SP::cCitySoundLoopView::HandleSimulationUpdate(u32, u32) {
 
 // @ 0x00e89c20 SP::cCityWallsView::scalar_deleting_destructor
 SP::cCityWallsView* SP::cCityWallsView::scalar_deleting_destructor(u8 f) {
-    mpVtbl = vtbl_citywalls;
-    if (mEffect != 0)
-        ((IObj*)mEffect)->v04();
+    *(void* volatile*)&mpVtbl = (void*)vtbl_citywalls;
+    void* eff = *(void* volatile*)&mEffect;
+    if (eff != 0)
+        ((IObj*)eff)->v04();
     BaseDtor();
     if (f & 1)
         operator delete(this);
@@ -432,11 +433,11 @@ SP::cTurretView* __stdcall FUN_00e89c60(u32 param) {
     v->m34 = 0.0f;
     v->m38 = 0.0f;
     v->m3c = 0.0f;
-    v->m40 = g_1485720;
-    if (v->m48 != 0) {
-        void* o = v->m48;
+    *(volatile float*)&v->m40 = g_1485720;
+    void* o48 = *(void* volatile*)&v->m48;
+    if (o48 != 0) {
         v->m48 = 0;
-        ((IObj*)o)->v04();
+        ((IObj*)o48)->v04();
     }
     if (v->m4c != 0) {
         void* o = v->m4c;
@@ -456,14 +457,15 @@ SP::cBuildingView* __stdcall FUN_00e89d10(u32 param) {
 // @ 0x00e89d60 SP::cCulturalTargetView::cCulturalTargetView
 SP::cCulturalTargetView::cCulturalTargetView() {
     BaseCtor();
-    m44 = g_1485720;
-    mpVtbl = vtbl_cultural;
-    m48 = g_1470f1c;
+    float f44 = g_1485720;
+    *(void* volatile*)&mpVtbl = (void*)vtbl_cultural;
+    *(volatile float*)&m44 = f44;
+    *(volatile float*)&m48 = g_1470f1c;
     u32 zero = 0;
-    mSoundMap.mnElementCount = zero;
-    m4c = zero;
-    mSoundMap.mnBucketCount = 1;
-    mSoundMap.mpBucketArray = (void**)&g_bucketSentinel;
+    *(volatile u32*)&mSoundMap.mnElementCount = zero;
+    *(volatile u32*)&m4c = zero;
+    *(volatile u32*)&mSoundMap.mnBucketCount = 1;
+    *(void* volatile*)&mSoundMap.mpBucketArray = (void*)&g_bucketSentinel;
 }
 
 // @ 0x00e89db0 FUN_00e89db0
