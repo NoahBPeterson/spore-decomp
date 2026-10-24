@@ -1,6 +1,7 @@
 // slice s007a8a50  --  SP::cTextureManager and text/deque helpers.
 // Reconstructed C++ (MSVC x86, cl 15.00 /O2 /MD /Gy /EHsc /TP).
 #include "types.h"
+#include <intrin.h>
 
 extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags,
                                           unsigned debugFlags, const char* file, int line);
@@ -47,21 +48,21 @@ struct cTextureManager {
 
     void GetTexture(int a, int b, int c);        // 007a93c0
     void HasTexture(int a, int b);               // 007a93f0
-    void GetKeyFromTexture(int* out, int tex);   // 007a9420
+    int* GetKeyFromTexture(int* out, int tex);   // 007a9420
     void* GetResourceForTexture(void* tex);      // 007a9450
     void CreateTexture();                        // 007a9470
     void CreateTextureEx(int a,int b,int c,int d,int e,unsigned int flags,int f,int g); // 007a94f0
     void RegisterGameTexture(int a, int b);      // 007a9540
     void ReloadTexture(int a, int b);            // 007a95e0
     void CleanupJob();                           // 007a9620
-    char WriteTexture(int tex, char async);      // 007a9730
+    char WriteTexture(int tex, int extra, char async);  // 007a9730
 };
 
 // @ 0x007a93b0
 void FUN_007a93b0()
 {
     void* d = g_D3D9Device;
-    ((void(__thiscall*)(void*))((void**)d)[0x14 / 4])(d);
+    ((void(__stdcall*)(void*))(*(void***)d)[0x14 / 4])(d);
 }
 
 // @ 0x007a93c0
@@ -85,12 +86,13 @@ void cTextureManager::HasTexture(int a, int b)
 }
 
 // @ 0x007a9420
-void cTextureManager::GetKeyFromTexture(int* out, int tex)
+int* cTextureManager::GetKeyFromTexture(int* out, int tex)
 {
     int base = tex ? tex - 8 : 0;
     out[0] = *(int*)(base + 0x18);
     out[1] = *(int*)(base + 0x1c);
     out[2] = *(int*)(base + 0x20);
+    return out;
 }
 
 // @ 0x007a9450
@@ -140,7 +142,7 @@ void cTextureManager::RegisterGameTexture(int a, int b)
 }
 
 // @ 0x007a95b0
-void FUN_007a95b0(int tex, char flag)
+void __stdcall FUN_007a95b0(int tex, char flag)
 {
     int base = tex ? tex - 8 : 0;
     if (flag)
@@ -163,9 +165,12 @@ void cTextureManager::ReloadTexture(int a, int b)
 void cTextureManager::CleanupJob()
 {
     if (this->mJob2)
-        FUN_00690_120_GetStatus(this->mJob2);
-    if (this->mJob)
-        ((void(__thiscall*)(void*))((void**)this->mJob)[1])(this->mJob);
+        ((int(__thiscall*)(void*))FUN_00690_120_GetStatus)(this->mJob2);
+    if (this->mJob) {
+        void* job = this->mJob;
+        ((void(__thiscall*)(void*))(*(void***)job)[1])(job);
+        _ReadWriteBarrier();
+    }
 }
 
 // @ 0x007a9680  deque range copy
@@ -195,20 +200,25 @@ void FUN_007a9680(int** out, int* begin, int* end, int** map, int** mapFirst, in
 }
 
 // @ 0x007a9730
-char cTextureManager::WriteTexture(int tex, char async)
+char cTextureManager::WriteTexture(int tex, int extra, char async)
 {
     int base = tex ? tex - 8 : 0;
     if ((*(unsigned char*)(base + 0xc) & 8) == 0)
         return 1;
-    ((void(__thiscall*)(void*, int))((void**)this->vtbl)[0x34 / 4])(this, base + 8);
+    ((void(__thiscall*)(void*, int))(*(void***)this)[0x34 / 4])(this, base + 8);
+    TextureKey key;
+    key.mKey = *(int*)(base + 0x18);
+    key.mType = 0x2f4e681c;
+    key.mExtra = *(int*)(base + 0x20);
     char ok;
-    if (async == 0) {
-        void* rm = FUN_0067dcd0_GetManager();
-        ok = ((char(__thiscall*)(void*, int, int, int, int, void*))((void**)rm)[0x20 / 4])
-            (rm, *(int*)(base + 0x24), 0, tex, 0, 0);
+    if (async != 0) {
+        ok = ((char(__cdecl*)(int, int, int, TextureKey*))FUN_006b4b60)
+            (*(int*)(base + 0x24), extra, 0, &key);
     }
     else {
-        ok = FUN_006b4b60();
+        void* rm = FUN_0067dcd0_GetManager();
+        ok = ((char(__thiscall*)(void*, int, int, int, int, TextureKey*))(*(void***)rm)[0x20 / 4])
+            (rm, *(int*)(base + 0x24), 0, (int)async, 0, &key);
     }
     if (ok && ((*(unsigned char*)(*(int*)(base + 8) + 4) & 0xf) == 8))
         *(unsigned char*)(base + 0xc) &= 0xf7;
@@ -217,12 +227,12 @@ char cTextureManager::WriteTexture(int tex, char async)
 
 struct RefPtrSlot {
     int* mPtr;
-    void Assign(int* value);   // 007a97e0
+    RefPtrSlot* Assign(int* value);   // 007a97e0
     void Clear();              // 007a9880
 };
 
 // @ 0x007a97e0  refptr assignment
-void RefPtrSlot::Assign(int* value)
+RefPtrSlot* RefPtrSlot::Assign(int* value)
 {
     RefPtrSlot* self = this;
     int* old = self->mPtr;
@@ -240,6 +250,7 @@ void RefPtrSlot::Assign(int* value)
                 _InterlockedExchangeAdd(rc, 0);
         }
     }
+    return self;
 }
 
 // @ 0x007a9880  refptr clear
@@ -285,47 +296,49 @@ void DequeOwner::RemoveMatching(int* value)
 }
 
 // @ 0x007a98b0  cLoadQueue<...>::StallUntilLoaded
-void StallUntilLoaded(int** out, int* begin, int* first, int* end, int** map, int* mapEnd)
+int** StallUntilLoaded(int** out, int* begin, int* first, int* end, int** map, int* stop,
+                       int reserved7, int reserved8, int reserved9, int value)
 {
     int* cur = begin;
     int* chunk = first;
     int** m = map;
-    while (cur != mapEnd && *cur != (int)end) {
+    int* last = end;
+    while (cur != stop && *cur != value) {
         ++cur;
-        if (cur == end) {
+        if (cur == last) {
             ++m;
             cur = *m;
-            end = cur + 0x40;
+            last = cur + 0x40;
             chunk = cur;
         }
     }
-    out[2] = end;
+    out[2] = last;
     out[3] = (int*)m;
     out[0] = cur;
     out[1] = chunk;
+    return out;
 }
 
-// @ 0x007a9a80  DequeIterator::operator+=
 struct DequeIter2 {
     int* cur; int* first; int* last; int** map;
     DequeIter2& operator+=(int n);   // 007a9a80
 };
+// @ 0x007a9a80  DequeIterator::operator+=
 DequeIter2& DequeIter2::operator+=(int n)
 {
-    DequeIter2* it = this;
-    unsigned int off = (unsigned int)(it->cur - it->first) + n;
+    unsigned int off = (unsigned int)(this->cur - this->first) + n;
     if (off < 0x40) {
-        it->cur = it->cur + n;
-        return *it;
+        this->cur = this->cur + n;
+    } else {
+        int chunkIndex = (int)((off + 0x1000000 + ((int)(off + 0x1000000) >> 0x1f & 0x3f)) >> 6) - 0x40000;
+        int** slot = this->map + chunkIndex;
+        this->map = slot;
+        int* base = *slot;
+        this->first = base;
+        this->last = base + 0x40;
+        this->cur = this->first + (off + chunkIndex * -0x40);
     }
-    int chunkIndex = (int)((off + 0x1000000 + ((int)(off + 0x1000000) >> 0x1f & 0x3f)) >> 6) - 0x40000;
-    int** slot = (int**)((char*)it->map + chunkIndex * 4);
-    it->map = slot;
-    int* base = *slot;
-    it->first = base;
-    it->last = base + 0x40;
-    it->cur = it->first + (off + chunkIndex * -0x40);
-    return *it;
+    return *this;
 }
 
 // (see SP::cTextRenderer::AddGlyphRun at the end of this file)
@@ -344,24 +357,31 @@ struct cTextRendererCtx {
 };
 
 // @ 0x007a9130
-int FUN_007a9130(int param_1, int param_2)
+struct TextureListOwner {
+    uint32_t pad000[0x190 / 4];   // +0x000
+    int**    mpItems;             // +0x190
+    int**    mpItemsEnd;          // +0x194
+    bool FindAndErase(int* obj);  // 007a9130
+};
+
+bool TextureListOwner::FindAndErase(int* obj)
 {
-    int key = *(int*)(param_2 + 0x34);
+    int key = *(int*)((char*)obj + 0x34);
     if (key == 0)
-        return 0;
-    int count = (int)(*(int*)(param_1 + 0x194) - *(int*)(param_1 + 0x190)) >> 2;
+        return false;
+    int count = (int)(mpItemsEnd - mpItems);
     for (int i = 0; i < count; ++i) {
-        int* p = *(int**)(*(int*)(param_1 + 0x190) + i * 4);
-        if ((*(unsigned char*)(p + 1) & 1) == 0) {
-            int* mgr = (int*)FUN_0067dd60();
-            ((void(__thiscall*)(void*, void*))((void**)mgr)[0x34 / 4])(mgr, p);
+        int* p = mpItems[i];
+        if ((*(unsigned char*)((char*)p + 4) & 1) == 0) {
+            void* mgr = FUN_0067dd60();
+            ((void(__thiscall*)(void*, void*))(*(void***)mgr)[0x34 / 4])(mgr, p);
         }
         if (*p == key) {
-            FUN_00760c40((char*)(*(void**)(param_1 + 0x190)) + i * 4);
-            return 1;
+            FUN_00760c40(&mpItems[i]);
+            return true;
         }
     }
-    return 0;
+    return false;
 }
 
 // (see SP::cTextRenderer::DrawString at the end of this file)

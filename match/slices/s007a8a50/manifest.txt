@@ -4,3 +4,6 @@ slices/s007a8a50/s007a8a50.cpp  ?HasTexture@cTextureManager@@QAEXHH@Z  007a93f0 
 slices/s007a8a50/s007a8a50.cpp  ?CreateTextureEx@cTextureManager@@QAEXHHHHHIHH@Z  007a94f0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s007a8a50/s007a8a50.cpp  ?ReloadTexture@cTextureManager@@QAEXHH@Z  007a95e0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s007a8a50/s007a8a50.cpp  ?AddGlyphRun@cTextRenderer@SP@@QAEXPBGIMM@Z  007a9080  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007a8a50/s007a8a50.cpp  ?RegisterGameTexture@cTextureManager@@QAEXHH@Z  007a9540  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007a8a50/s007a8a50.cpp  ?FUN_007a95b0@@YGXHD@Z  007a95b0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007a8a50/s007a8a50.cpp  ?FUN_007a93b0@@YAXXZ  007a93b0  /O2 /MD /Gy /EHsc /TP /GS-

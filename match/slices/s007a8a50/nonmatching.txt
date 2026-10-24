@@ -1,18 +1,18 @@
-007a9130  108  find-and-erase by key: register/layout schedule differs
-007a93b0  9    wrapper: register choice + tail-call vs call
-007a9420  14  GetKeyFromTexture: base pointer register/lea shape differs
-007a9450  5    GetResourceForTexture: null path folds to absolute [0x24]
-007a9470  109  CreateTexture: IDGenerator + vtable forwarding schedule; fixed 2026-10-12: generator call now goes through its vtable slot 1 (was the object field at +4)
-007a9540  52  RegisterGameTexture: IDGenerator schedule; equiv: PASS (virtual call now forwards buf[0], buf[2], a, b; was a, b, 0, 0: hybrid crash 2026-10-12); generator call now through vtable slot 1
-007a95b0  11  set/clear flag bit: epilogue merge differs
-007a9620  77  CleanupJob: EH frame + virtual-release shape
-007a9680  146  deque range copy loop
-007a9730  158  WriteTexture: async/sync path + key packing
-007a97e0  79  refptr assignment (lock xadd + release); equiv: PASS (fixed ECX receiver: member of RefPtrSlot)
-007a9840  77  remove-first-matching in deque; equiv: WEAK 43 valid inputs, 32% coverage (member of DequeOwner, ECX fixed)
-007a9880  46  refptr clear (lock xadd release); equiv: PASS (fixed ECX receiver: member of RefPtrSlot)
-007a98b0  90  cLoadQueue<...>::StallUntilLoaded deque scan
-007a9a80  90  DequeIterator::operator+=; equiv: FAIL 5/100 mismatched, memory pool (member operator+=, ECX fixed, symbol entry ?YDequeIter2)
-007a8a50  1429  EA::Text::Render_RenderWare::DrawGlyphs: complete (all paths and calls, 20/20 call/vcall/const events in order), 1583 vs 1569 B; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; matrix-row shuffles, ctor store order and prologue register choices differ
+007a9130  110  find-and-erase by key (member of TextureListOwner, thiscall): register/layout schedule differs; equiv: WEAK 362 valid, 44% cov
+007a93b0  0  byte-exact MATCH, moved to manifest.txt; D3D9 device vt[5] is a __stdcall (callee-pop) thunk; equiv: PASS
+007a9420  6  GetKeyFromTexture: returns the out buffer; base-pointer register/lea shape differs; equiv: PASS 205 valid, 92.9% cov
+007a9450  5    GetResourceForTexture: null path folds to absolute [0x24]; equiv: PASS 400 valid, 62.5% cov
+007a9470  48  CreateTexture: IDGenerator + vtable forwarding schedule; fixed 2026-10-12: generator call now goes through its vtable slot 1 (was the object field at +4)
+007a9540  0  byte-exact MATCH (manifest row); equiv: PASS (virtual call now forwards buf[0], buf[2], a, b; was a, b, 0, 0: hybrid crash 2026-10-12); generator call through vtable slot 1
+007a95b0  0  byte-exact MATCH (manifest row); set/clear flag helper declared __stdcall (original ret 8); equiv: PASS
+007a9620  78  CleanupJob: no EH frame (31 vs 87 B) and virtual-release shape differs; equiv: PASS 366 valid, 100% cov (release is a normal call, _ReadWriteBarrier blocks TCO)
+007a9680  152  deque range copy loop
+007a9730  107  WriteTexture: (tex, extra, async) 3-arg ABI; sync path manager vt[0x20] + packed key, async path cdecl FUN_006b4b60(mJob, extra, 0, &key); equiv: WEAK 211 valid, 19.7% cov
+007a97e0  40  refptr assignment (lock xadd + release); equiv: PASS (member of RefPtrSlot, returns self)
+007a9840  46  remove-first-matching in deque; equiv: WEAK 43 valid inputs, 32% coverage (member of DequeOwner, ECX fixed)
+007a9880  36  refptr clear (lock xadd release); equiv: PASS (fixed ECX receiver: member of RefPtrSlot)
+007a98b0  83  StallUntilLoaded: ten-dword arg list (value is arg10 at E+0x28), returns the out buffer; equiv: PASS 348 valid, 100% cov
+007a9a80  90  DequeIterator::operator+=: behaviourally correct, but MSVC relocates `this` ecx->eax so ours clobbers ecx; equiv: FAIL-KEPT (register-ABI non-lever, callers in other objects)
+007a8a50  1464  EA::Text::Render_RenderWare::DrawGlyphs: complete (all paths and calls, 20/20 call/vcall/const events in order), 1583 vs 1569 B; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; matrix-row shuffles, ctor store order and prologue register choices differ
 007a91b0  198  complete: cTextRenderer::DrawString - lazy Init, style Reset when dirty, then either AddGlyphRun(str,len,x,y) or (numRuns<0) MakeGlyphRun into renderer+0xa000 + DrawGlyphs(renderer,num,mStyle+0x224,false); strlen loop and run emitter fully reconstructed but MSVC allocated `this` to esi (original: edi) with 3 callee-saved regs vs 2, so the whole body shifts (107 diff bytes) [flags /GS-]
 007a9280  303  complete: cTextRenderer::CreateGlyphCacheTexture - sets [p+0x44]=3, FNV1_String8("GlyphCache") + id-generator seed, virtual CreateTexture (vslot 0x3c) with 8 args, AutoRefCount AddRef, vector push_back at +0x190 (inline fast path / DoInsertValue 0x425a80 slow path), release, then vt[0x34] release-notify; only register assignment (this in ebx vs ebp) and the `inc [0x1634c78]` / push_back store order differ (203 diff bytes) [flags /GS-]
