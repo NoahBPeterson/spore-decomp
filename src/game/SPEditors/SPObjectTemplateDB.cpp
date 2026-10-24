@@ -1430,8 +1430,11 @@ struct PaintStub {
     char FUN_0055eb70(int* p);
     void* FUN_0055ec10(unsigned flags);
 };
+struct VecRangeStub {                                      // object at PaintStub+4
+    int* mpBegin; int* mpEnd; int* mpCapacity;
+    void FUN_00568740(int* first, int* last, unsigned char flag);   // 0x568740 (thiscall, ret 0xc)
+};
 void FUN_0050f0d0(void* p, void* q);
-void FUN_00568740(int* dst, int* first, int* last, uint32_t flag);
 // ---- items of slice s0055dce0 end
 
 // ---- items of slice s0055ec70 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -4215,8 +4218,8 @@ void* PaintStub::FUN_0055eae0(int* first, int count)
     ((int*)this_)[1] = 0;
     ((int*)this_)[2] = 0;
     ((int*)this_)[3] = 0;
-    uint32_t flag;
-    FUN_00568740((int*)this_ + 1, first, first + count, flag);
+    unsigned char flag = 0xcc;   // the original reads an unwritten frame byte (the 0xcc stack fill)
+    ((VecRangeStub*)((char*)this_ + 4))->FUN_00568740(first, first + count, flag);
     FUN_0050f0d0((void*)((int*)this_)[1], (void*)((int*)this_)[2]);
     return this_;
 }
