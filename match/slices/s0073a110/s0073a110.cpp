@@ -82,7 +82,9 @@ bool MatOwner::GetMat(Mat24* out)
 // ---------------------------------------------------------------------------
 struct Mat43In {
     int f0;             // +0
-    float tx, ty, tz;   // +4
+    union { float tx; int txBits; };    // +4
+    union { float ty; int tyBits; };    // +8
+    union { float tz; int tzBits; };    // +0xc
     float scale;        // +0x10
     float r[3][3];      // +0x14 (packed, stride 3)
     // +0x38 ...
@@ -93,7 +95,7 @@ struct Mat44Out {
     float tx, ty, tz;   // +0x30
 };
 
-void ScaleMat(const Mat43In* src, Mat44Out* dst)
+int ScaleMat(const Mat43In* src, Mat44Out* dst)
 {
     const float s = src->scale;
     dst->r[0][0] = src->r[0][0] * s;
@@ -107,7 +109,9 @@ void ScaleMat(const Mat43In* src, Mat44Out* dst)
     dst->r[2][2] = src->r[2][2] * s;
     dst->tx = src->tx;
     dst->ty = src->ty;
+    const int tz = src->tzBits;     // eax is left holding the last copied word
     dst->tz = src->tz;
+    return tz;
 }
 
 // ---------------------------------------------------------------------------
@@ -190,7 +194,6 @@ public:
     int* mControllers;              // +0x78
     char pad7c[0x154 - 0x7c];
 public:
-    // @ 0x0073ABB0
     int GetAnimationMoveToTimes(int animID, int* dst, char bEnd);
     bool SetActive(int key, int groupIdx, bool animating, float t, bool loop);
     bool AdvanceBinding(cBinding* b, float dt);
@@ -199,6 +202,7 @@ public:
     }
 };
 
+// @ 0x0073ABB0
 int cModelInstance::GetAnimationMoveToTimes(int animID, int* dst, char bEnd)
 {
     if (!IsValidGroup(animID))
@@ -211,12 +215,11 @@ int cModelInstance::GetAnimationMoveToTimes(int animID, int* dst, char bEnd)
         n -= e->mAnimFirstDeform;
     }
     if (dst != 0 && n > 0) {
-        const char* p = (const char*)mControllers + start * 8;
         int i = 0;
         do {
-            dst[i] = *(const int*)p;
+            // the controller table is re-read every step: the store through dst may alias it
+            dst[i] = *(const int*)((const char*)mControllers + start * 8 + i * 8);
             ++i;
-            p += 8;
         } while (i < n);
     }
     return n;

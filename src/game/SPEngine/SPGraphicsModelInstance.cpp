@@ -275,14 +275,10 @@ public:
     void SetWeight(int key, int grp, float w);  // 0x0073b530 (SP::cModelInstance::SetWeight)
     bool GetAnimationRange(int key, int grp, float* pMin, float* pMax);  // 0x0073b6d0 (SP::cModelInstance::GetAnimationRange)
     void Notify(struct cNotifyOther* other);
-    // @ 0x0073B7E0
-    int GetNumBones();  // 0x0073b7e0 (SP::cModelInstance::GetNumBones)
-    // @ 0x0073B800
-    void SetBoneTable(int a, void* b);  // 0x0073b800 (SP::cModelInstance::SetBoneTable)
-    // @ 0x0073B840
-    void SetBoneCallback(int boneIndex, void* a2, void* a3, void* a4);  // 0x0073b840 (SP::cModelInstance::SetBoneCallback)
-    // @ 0x0073B8E0
-    void SetDynamicDraw(void* p, bool flag);  // 0x0073b8e0 (SP::cModelInstance::SetDynamicDraw)
+    int GetNumBones();  // @ 0x0073B7E0 (SP::cModelInstance::GetNumBones)
+    void SetBoneTable(int a, void* b);  // @ 0x0073B800 (SP::cModelInstance::SetBoneTable)
+    cMaterial_s0073_afb0* SetBoneCallback(int boneIndex, void* a2, void* a3, void* a4);  // @ 0x0073B840 (SP::cModelInstance::SetBoneCallback)
+    void SetDynamicDraw(void* p, bool flag);  // @ 0x0073B8E0 (SP::cModelInstance::SetDynamicDraw)
 };
 }
 namespace SP {
@@ -1656,12 +1652,11 @@ int cModelInstance_s0073_a110::GetAnimationMoveToTimes(int animID, int* dst, cha
         n -= e->mAnimFirstDeform;
     }
     if (dst != 0 && n > 0) {
-        const char* p = (const char*)mControllers + start * 8;
         int i = 0;
         do {
-            dst[i] = *(const int*)p;
+            // the controller table is re-read every step: the store through dst may alias it
+            dst[i] = *(const int*)((const char*)mControllers + start * 8 + i * 8);
             ++i;
-            p += 8;
         } while (i < n);
     }
     return n;
@@ -1940,37 +1935,46 @@ void cModelInstance_s0073_afb0::SetBoneTable(int a, void* b)
 }
 }  // namespace SP
 
-// @ 0x0073b840
+// @ 0x0073b840 — the original leaves eax live at every ret (equiv's void_hides_eax): the material
+// record on the store paths, the bone index on the early-outs, and the low-byte-substituted group
+// pointer when a binding index is negative.  Return those values.
 namespace SP {
-void cModelInstance_s0073_afb0::SetBoneCallback(int boneIndex, void* a2, void* a3, void* a4)
+cMaterial_s0073_afb0* cModelInstance_s0073_afb0::SetBoneCallback(int boneIndex, void* a2, void* a3, void* a4)
 {
+    unsigned ret = (unsigned)boneIndex;
     if (boneIndex == -1) {
         if (mGroupBegin == mGroupEnd)
-            return;
+            return (cMaterial_s0073_afb0*)ret;
         cAnimGroupInfo_s0073_afb0* p = mGroupBegin;
         do {
-            char idx = p->mBindingIdx;
-            if (idx >= 0) {
+            int idx = (unsigned char)p->mBindingIdx;
+            ret = (ret & 0xFFFFFF00u) | (unsigned)idx;   // mov al, byte ptr [edx]
+            if ((signed char)idx >= 0) {
                 cMaterial_s0073_afb0* m = &mMaterials[idx];
                 m->f_b8 = a3;
                 m->f_c0 = a4;
                 m->f_bc = a2;
+                ret = (unsigned)m;
             }
             p = (cAnimGroupInfo_s0073_afb0*)((char*)p + 8);
         } while (p != mGroupEnd);
-        return;
+        return (cMaterial_s0073_afb0*)ret;
     }
     if (boneIndex < 0)
-        return;
+        return (cMaterial_s0073_afb0*)ret;
     if (boneIndex >= (int)(mGroupEnd - mGroupBegin))
-        return;
-    char idx = mGroupBegin[boneIndex].mBindingIdx;
-    if (idx < 0)
-        return;
+        return (cMaterial_s0073_afb0*)ret;
+    int idx = (unsigned char)mGroupBegin[boneIndex].mBindingIdx;
+    if ((signed char)idx < 0) {
+        unsigned gp = (unsigned)(void*)&mGroupBegin[boneIndex];
+        unsigned v = (gp & ~0xFFu) | (unsigned)(unsigned char)idx;
+        return (cMaterial_s0073_afb0*)v;
+    }
     cMaterial_s0073_afb0* m = &mMaterials[idx];
     m->f_b8 = a3;
     m->f_c0 = a4;
     m->f_bc = a2;
+    return m;
 }
 }  // namespace SP
 

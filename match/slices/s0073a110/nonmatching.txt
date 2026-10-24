@@ -1,5 +1,5 @@
 0073a6e0  n/a  BigObj::Ctor: complete reconstruction; 16-byte-aligned frame not reproduced [equiv: PASS 1200 inputs 100% cov, after marker fix]
 0073a7a0  24   MatOwner::GetMat: complete; copy addressing/schedule differs
-0073a850  113  ScaleMat: complete; register scheduling of the 3x3 scale differs
-0073abb0  37   cModelInstance::GetAnimationMoveToTimes: complete; regalloc/schedule differs
+0073a850  157  ScaleMat: returns int (the original leaves the last copied word, src->tzBits, in eax) and keeps tx/ty/tz as float/int unions; schedule of the 3x3 scale differs [equiv: PASS 600 inputs 100% cov, flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast]
+0073abb0  8  GetAnimationMoveToTimes: the controller-table load stays inside the copy loop (dst may alias mControllers), so ecx is never clobbered; the '// @ 0x0073abb0' marker sits on the out-of-class definition (above the in-class declaration it bound to the IsValidGroup inline below) [equiv: PASS 600 inputs 100% cov slice + hybrid]
 0073af20  127  AdvanceBinding: complete; original keeps a zero in ebx (xor ebx,ebx) that cannot be reproduced [equiv: PASS 395 inputs 100% cov]
