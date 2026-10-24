@@ -1,0 +1,2 @@
+# SP::Audio::cPlayerCityMusic (city music track) -- Read path (names inferred).
+00eb0a60  ?Read@cPlayerCityMusic@@QAE_NH@Z  # cPlayerCityMusic::Read: clears 3 PtrRange + event list, then a cVarListSerializer read
