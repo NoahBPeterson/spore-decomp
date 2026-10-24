@@ -1,0 +1,4 @@
+00aed700 cSPSimulatorSpaceGame::BuildPlanetFlags  # fills the 5-dword planet/mission interaction condition bitset (pre-existing)
+00aee0e0 RegisterPFRecordRead  # allocates and initializes the 0x2c PFRecordRead and registers it with ResourceManager
+00aee290 RelationBuilder::FUN_00aee290  # selects a matching 0x48-byte sub-entry from embedded masks and dispatches vtable +0x28
+00aee4c0 RelationBuilder::FUN_00aee4c0  # gathers matching 0xc4-byte entries and appends name/data/flag outputs

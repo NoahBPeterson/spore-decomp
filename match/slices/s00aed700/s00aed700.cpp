@@ -1,6 +1,7 @@
 // Slice s00aed700: planet/empire interaction flag builder (fills a 5-dword condition bitset).
 // Flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast (gives the fcompi float compare).
 #include "types.h"
+#include <intrin.h>
 
 typedef unsigned int uint;
 
@@ -508,4 +509,261 @@ uint* __stdcall BuildPlanetFlags(uint* out, cEmpire* a, cEmpire* b, cPlanetRef* 
     if (NounManager()->GetCurrentTerrainSphere()->HasFlag(0x4ed001a))
         out[4] |= 0x800;
     return out;
+}
+
+// ---------------------------------------------------------------- resource record registration
+struct PFRecordRead {
+    void* vptr;         // +0x00
+    int   ref;          // +0x04
+    int   field08;      // +0x08
+    int   field0c;      // +0x0c
+    int   field10;      // +0x10
+    int   field14;      // +0x14
+    int   field18;      // +0x18
+    int   field1c;      // +0x1c
+    int   field20;      // +0x20
+    int   field24;      // +0x24
+    int   field28;      // +0x28
+};
+
+void* ZoneObject_new(int size, const char* name, int a, int b, int c, int d); // 0x00926020
+
+struct ResourceManager {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16();
+    virtual void Register(int mode, PFRecordRead* record, int arg); // +0x44
+};
+ResourceManager* GetManager();                     // 0x0067dcd0
+
+// @ 0x00aee0e0
+void RegisterPFRecordRead()
+{
+    PFRecordRead* rec = (PFRecordRead*)ZoneObject_new(0x2c, "App", 0, 0, 0, 0);
+    if (rec != 0) {
+        rec->vptr = (void*)0x13effa8;
+        _InterlockedExchange((volatile long*)&rec->ref, 0);
+        rec->vptr = (void*)0x145c0e4;
+        rec->field08 = 0;
+        rec->field0c = 0x186ca75;
+        rec->field10 = 0;
+        rec->field14 = 0;
+        rec->field18 = 0;
+        rec->field20 = 0;
+        rec->field24 = 0;
+        rec->field28 = 0;
+    }
+    GetManager()->Register(1, rec, 0);
+}
+
+// ---------------------------------------------------------------- relation selection helpers
+struct cString {
+    char mBytes[0x14];
+    cString() { for (int i = 0; i < 0x14; i++) mBytes[i] = 0; }
+    cString(const cString& other) { for (int i = 0; i < 0x14; i++) mBytes[i] = other.mBytes[i]; }
+    cString& operator=(const cString& other) {
+        for (int i = 0; i < 0x14; i++) mBytes[i] = other.mBytes[i];
+        return *this;
+    }
+    ~cString() {}
+};
+
+struct SubEntry {
+    uint        mMaskLo[5];     // +0x00
+    uint        mMaskHi[5];     // +0x14
+    cString     mName;          // +0x28
+    uint        mField3c;       // +0x3c
+    uint        mField40;       // +0x40
+    uint        mField44;       // +0x44
+};
+
+struct SubEntryVec {
+    SubEntry*   mpBegin;
+    SubEntry*   mpEnd;
+    SubEntry*   mpCap;
+};
+
+struct OuterEntry {
+    char        mPad00[0x28];
+    uint        mMaskA[5];      // +0x28
+    uint        mMaskB[5];      // +0x3c
+    uint        mData[4];       // +0x50
+    SubEntryVec mSubs;          // +0x60
+    char        mPad6c[0xc4 - 0x6c];
+};
+
+struct OuterEntryVec {
+    OuterEntry* mpBegin;
+    OuterEntry* mpEnd;
+    OuterEntry* mpCap;
+};
+
+struct CStringVec {
+    cString*    mpBegin;
+    cString*    mpEnd;
+    cString*    mpCap;
+};
+
+struct Dword4Vec {
+    uint*       mpBegin;
+    uint*       mpEnd;
+    uint*       mpCap;
+};
+
+struct ByteVec {
+    uint8_t*    mpBegin;
+    uint8_t*    mpEnd;
+    uint8_t*    mpCap;
+};
+
+struct RandomGlobal {
+    uint RandomUint32Uniform(uint count);        // 0x00a68fb0
+};
+RandomGlobal g_Random;                            // 0x01601760
+
+struct RelationBuilder {
+    virtual bool v0(); virtual bool v1(); virtual bool v2(); virtual bool v3();
+    virtual bool v4(); virtual bool v5(); virtual bool v6(); virtual bool v7();
+    virtual bool v8(); virtual bool v9();
+    virtual bool Select(uint entryData, int category, void* arg3, void* arg4); // +0x28
+
+    bool FUN_00aed580(OuterEntry* entry, uint* mask);                 // 0x00aed580
+    bool FUN_00aee290(SubEntryVec* entries, uint* mask, void* arg3,
+                      void* arg4, cString* outName, void* arg6);
+    void FUN_00aee4c0(OuterEntryVec* entries, uint* mask, CStringVec* names,
+                      Dword4Vec* datas, ByteVec* flags);
+};
+
+bool RelationBuilder::FUN_00aed580(OuterEntry* entry, uint* mask)
+{
+    (void)entry;
+    (void)mask;
+    return true;
+}
+
+// @ 0x00aee290
+bool RelationBuilder::FUN_00aee290(SubEntryVec* entries, uint* mask, void* arg3,
+                                   void* arg4, cString* outName, void* arg6)
+{
+    SubEntry* found[64];
+    SubEntry** foundEnd = found;
+
+    for (SubEntry* e = entries->mpBegin; e != entries->mpEnd; e++) {
+        uint hi[5];
+        hi[0] = mask[0] & e->mMaskHi[0];
+        hi[1] = mask[1] & e->mMaskHi[1];
+        hi[2] = mask[2] & e->mMaskHi[2];
+        hi[3] = mask[3] & e->mMaskHi[3];
+        hi[4] = mask[4] & e->mMaskHi[4];
+        bool reject = false;
+        for (int i = 0; i < 5; i++) {
+            if (hi[i] != 0) {
+                reject = true;
+                break;
+            }
+        }
+        if (reject)
+            continue;
+
+        uint lo[5];
+        lo[0] = e->mMaskLo[0] ^ (mask[0] & e->mMaskLo[0]);
+        lo[1] = e->mMaskLo[1] ^ (mask[1] & e->mMaskLo[1]);
+        lo[2] = e->mMaskLo[2] ^ (mask[2] & e->mMaskLo[2]);
+        lo[3] = e->mMaskLo[3] ^ (mask[3] & e->mMaskLo[3]);
+        lo[4] = e->mMaskLo[4] ^ (mask[4] & e->mMaskLo[4]);
+        for (int i = 0; i < 5; i++) {
+            if (lo[i] != 0) {
+                reject = true;
+                break;
+            }
+        }
+        if (reject)
+            continue;
+
+        if (foundEnd != found + 64)
+            *foundEnd++ = e;
+    }
+
+    uint count = (uint)(foundEnd - found);
+    if (count == 0)
+        return false;
+
+    uint index = g_Random.RandomUint32Uniform(count);
+    SubEntry* chosen = found[index];
+    *outName = chosen->mName;
+
+    if (arg3 != 0 && arg4 != 0) {
+        int category;
+        if (GetCurrentGameMode() == 0x1654c04 || arg6 == 0)
+            category = 6;
+        else
+            category = *(int*)((char*)arg6 + 0x58);
+
+        Select(chosen->mField44, category, arg3, arg4);
+        if (*(uint*)arg3 == 0)
+            Select(0x27f8b66a, category, arg3, arg4);
+    }
+    return true;
+}
+
+// @ 0x00aee4c0
+void RelationBuilder::FUN_00aee4c0(OuterEntryVec* entries, uint* mask,
+                                   CStringVec* names, Dword4Vec* datas, ByteVec* flags)
+{
+    for (OuterEntry* e = entries->mpBegin; e != entries->mpEnd; e++) {
+        if (!FUN_00aed580(e, mask))
+            continue;
+
+        cString name;
+        FUN_00aee290(&e->mSubs, mask, 0, 0, &name, 0);
+
+        bool flag = true;
+        if (e->mMaskA[0] != 0 || e->mMaskA[1] != 0 || e->mMaskA[2] != 0 ||
+            e->mMaskA[3] != 0 || e->mMaskA[4] != 0) {
+            uint test[5];
+            test[0] = mask[0] & e->mMaskA[0];
+            test[1] = mask[1] & e->mMaskA[1];
+            test[2] = mask[2] & e->mMaskA[2];
+            test[3] = mask[3] & e->mMaskA[3];
+            test[4] = mask[4] & e->mMaskA[4];
+            for (int i = 0; i < 5; i++) {
+                if (test[i] != e->mMaskA[i]) {
+                    flag = false;
+                    break;
+                }
+            }
+        }
+        if (flag) {
+            uint b[5];
+            b[0] = mask[0] & e->mMaskB[0];
+            b[1] = mask[1] & e->mMaskB[1];
+            b[2] = mask[2] & e->mMaskB[2];
+            b[3] = mask[3] & e->mMaskB[3];
+            b[4] = mask[4] & e->mMaskB[4];
+            for (int i = 0; i < 5; i++) {
+                if (b[i] != 0) {
+                    flag = false;
+                    break;
+                }
+            }
+        }
+
+        if (names->mpEnd < names->mpCap) {
+            *names->mpEnd = name;
+            names->mpEnd++;
+        }
+
+        if (datas->mpEnd + 4 <= datas->mpCap) {
+            datas->mpEnd[0] = e->mData[0];
+            datas->mpEnd[1] = e->mData[1];
+            datas->mpEnd[2] = e->mData[2];
+            datas->mpEnd[3] = e->mData[3];
+            datas->mpEnd += 4;
+        }
+
+        if (flags->mpEnd < flags->mpCap)
+            *flags->mpEnd++ = flag ? 1 : 0;
+    }
 }
