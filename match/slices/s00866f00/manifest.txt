@@ -1,1 +1,5 @@
 slices/s00866f00/s00866f00.cpp  _deflate  00866f00  /O2 /arch:SSE /MD /Gy /TC
+slices/s00866f00/s00866f00.cpp  _lm_init  008677b0  /O2 /arch:SSE /MD /Gy /TC
+slices/s00866f00/s00866f00.cpp  _fill_window  00867a40  /O2 /arch:SSE /MD /Gy /TC
+slices/s00866f00/s00866f00.cpp  _deflate_stored  00867b90  /O2 /arch:SSE /MD /Gy /TC
+slices/s00866f00/s00866f00.cpp  _deflate_fast  00867d60  /O2 /arch:SSE /MD /Gy /TC

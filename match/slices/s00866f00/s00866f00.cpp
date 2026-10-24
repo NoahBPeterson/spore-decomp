@@ -983,6 +983,7 @@ local int read_buf(strm, buf, size)
 /* ===========================================================================
  * Initialize the "longest match" routines for a new zlib stream
  */
+// @ 0x008677b0
 local void lm_init (s)
     deflate_state *s;
 {
@@ -1263,6 +1264,7 @@ local void check_match(s, start, match, length)
  *    performed for at least two bytes (required for the zip translate_eol
  *    option -- not supported here).
  */
+// @ 0x00867a40
 local void fill_window(s)
     deflate_state *s;
 {
@@ -1387,6 +1389,7 @@ local void fill_window(s)
  * NOTE: this function should be optimized to avoid extra copying from
  * window to pending_buf.
  */
+// @ 0x00867b90
 local block_state deflate_stored(s, flush)
     deflate_state *s;
     int flush;
@@ -1445,6 +1448,7 @@ local block_state deflate_stored(s, flush)
  * new strings in the dictionary only for unmatched strings or for short
  * matches. It is used only for the fast compression options.
  */
+// @ 0x00867d60
 local block_state deflate_fast(s, flush)
     deflate_state *s;
     int flush;
