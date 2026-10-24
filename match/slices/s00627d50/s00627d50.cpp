@@ -52,9 +52,11 @@ struct cSPBoundingBox {
     cSPVector3 mMax;
 };
 
-extern float gCameraTurnRate;   // 0x15219dc
-extern float kZoomRate;   // 0x13fdfb4 = 30.30303
-extern float kZoomScale;  // 0x13f9324 = 0.015
+// Retail tuning globals at fixed addresses. They must be read through their absolute
+// addresses: as plain externs the emulated object resolves them to zero trap stubs.
+#define gCameraTurnRate (*(float*)0x015219dc)   // 1.5707964 (pi/2)
+#define kZoomRate       (*(float*)0x013fdfb4)   // 30.30303
+#define kZoomScale      (*(float*)0x013f9324)   // 0.015
 
 namespace SP {
 
@@ -272,9 +274,22 @@ public:
 };
 
 // @ 0x00627d50
+// The retail build caches the turn rate in .data at 0x15f65cc behind a one-time
+// initialisation guard at 0x15f65d0. Model both at their fixed addresses so the
+// cached write lands where the original puts it.
+extern float sRotateRateCache;      // 0x15f65cc
+extern unsigned int sRotateRateGuard; // 0x15f65d0
+
 void cCreatureCameraBase::UpdateCamera(float dt)
 {
-    static float sRotateRate = gCameraTurnRate;
+    float sRotateRate;
+    if ((sRotateRateGuard & 1) == 0) {
+        sRotateRate = gCameraTurnRate;
+        sRotateRateGuard |= 1;
+        sRotateRateCache = sRotateRate;
+    } else {
+        sRotateRate = sRotateRateCache;
+    }
     switch (mCameraInputState) {
     case 1:
         mCameraData.desiredPlayerTheta = mCameraData.desiredPlayerTheta - sRotateRate * dt;
@@ -284,14 +299,16 @@ void cCreatureCameraBase::UpdateCamera(float dt)
         break;
     case 4:
         {
-            float z = dt * kZoomRate;
+            float d = dt;
+            float z = d * kZoomRate;
             z = z * kZoomScale;
             mCameraData.desiredPlayerDistance = (1.0f - z) * mCameraData.desiredPlayerDistance;
         }
         break;
     case 5:
         {
-            float z = dt * kZoomRate;
+            float d = dt;
+            float z = d * kZoomRate;
             z = z * kZoomScale;
             mCameraData.desiredPlayerDistance = (z + 1.0f) * mCameraData.desiredPlayerDistance;
         }
@@ -318,9 +335,13 @@ void cCreatureCameraBase::Update(unsigned ticks, ICameraHelper* pHelper)
         pDep->mAvatar.mPosition = pDep->mAnimCreature->mPos;
     if (mCameraData.bTransitioning) {
         float t = Clamp(dt, 0.01f, 0.1f);
-        mCameraData.currentPreTranslate.y = (mCameraData.desiredPreTranslate.y - mCameraData.currentPreTranslate.y) * t * 3.0f + mCameraData.currentPreTranslate.y;
-        mCameraData.currentPreTranslate.z = (mCameraData.desiredPreTranslate.z - mCameraData.currentPreTranslate.z) * t * 3.0f + mCameraData.currentPreTranslate.z;
-        mCameraData.currentPreTranslate.x = mCameraData.currentPreTranslate.x + (mCameraData.desiredPreTranslate.x - mCameraData.currentPreTranslate.x) * t * 3.0f;
+        cSPVector3 delta = MakeVec(
+            mCameraData.desiredPreTranslate.x - mCameraData.currentPreTranslate.x,
+            mCameraData.desiredPreTranslate.y - mCameraData.currentPreTranslate.y,
+            mCameraData.desiredPreTranslate.z - mCameraData.currentPreTranslate.z);
+        mCameraData.currentPreTranslate.y = delta.y * t * 3.0f + mCameraData.currentPreTranslate.y;
+        mCameraData.currentPreTranslate.z = delta.z * t * 3.0f + mCameraData.currentPreTranslate.z;
+        mCameraData.currentPreTranslate.x = delta.x * t * 3.0f + mCameraData.currentPreTranslate.x;
         float dx = mCameraData.desiredPreTranslate.x - mCameraData.currentPreTranslate.x;
         float dy = mCameraData.desiredPreTranslate.y - mCameraData.currentPreTranslate.y;
         float dz = mCameraData.desiredPreTranslate.z - mCameraData.currentPreTranslate.z;
@@ -644,7 +665,8 @@ float cSPPlayMode::GetHeightOffset()
     tEditorState* st = mpState;
     cCreatureManager* mgr = st->mpManager;
     mgr->GetCreature(st->mCreatureId);
-    cEditorCreatureStruct* s = (cEditorCreatureStruct*)mgr->GetCreatureStructure(mpState->mCreatureId);
+    unsigned id = mpState->mCreatureId;
+    cEditorCreatureStruct* s = (cEditorCreatureStruct*)mgr->GetCreatureStructure(id);
     if (s)
         return s->mHeightOffset;
     return 0.0f;
@@ -654,18 +676,18 @@ float cSPPlayMode::GetHeightOffset()
 int cSPPlayMode::GetMouthPartIdx()
 {
     struct PartQuery {
-        int a;
-        unsigned name;
-        int c;
-        int outIndex;
+        int a;          // +0x0
+        char name[8];   // +0x4  ("mout")
+        int c;          // +0xc
+        int outIndex;   // +0x10, written by QueryPart
     };
     char buf[0x3fc];
     PartQuery q;
     ICreatureT* creature = mpState->mpManager->GetCreature(mpState->mCreatureId);
     q.a = 0;
-    q.name = 0x74756f6d;
+    *(unsigned int*)&q.name[0] = 0x74756f6d;
+    *(unsigned int*)&q.name[4] = 0;
     q.c = 0;
-    q.outIndex = 0;
     if (creature->QueryPart(buf, 0xff, *creature->mp17c, &q, 0))
         return q.outIndex;
     return -1;

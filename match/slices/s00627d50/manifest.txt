@@ -17,3 +17,4 @@ slices/s00627d50/s00627d50.cpp  ?W628910@SP@@YAXXZ  00628910  /O2 /MD /Gy /EHsc 
 slices/s00627d50/s00627d50.cpp  ?W628940@cSPPlayMode@SP@@QAE_NXZ  00628940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00627d50/s00627d50.cpp  ??0Quat4@SP@@QAE@MMMM@Z  00628970  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00627d50/s00627d50.cpp  ?EnsurePreload@cPreloadOwner@SP@@QAEXXZ  006289a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00627d50/s00627d50.cpp  ?GetHeightOffset@cSPPlayMode@SP@@QAEMXZ  00628a40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
