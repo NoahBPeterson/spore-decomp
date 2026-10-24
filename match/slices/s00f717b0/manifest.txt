@@ -1,1 +1,2 @@
 slices/s00f717b0/s00f717b0.cpp  RegisterTerrainEffectMaps  00f717b0
+slices/s00f717b0/s00f717b0.cpp  ?distance@cTerrainProbe@@QAEMPBMHH@Z  00f71f30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

@@ -4,6 +4,7 @@
 // namespace in the original; class names/layouts come from the 2008 PDB.
 // Flags: /O2 /MD /Gy /EHsc /TP
 #include "types.h"
+#include <math.h>
 
 void* operator new(unsigned int size, const char* pName, int flags, int debugFlags, int file, int line);  // 0x00f473a0
 
@@ -200,3 +201,73 @@ void RegisterTerrainEffectMaps(cTerrainMapSet* set, cTerrainStateMgr* mgr, cView
     em->RegisterMap(0x2e831a1, 0, new("Terrain/EffectMap/WaterColor", 0, 0, 0, 0) cTerrainEffectMapWaterColor(mgr));
     em->RegisterMap(0x2e831af, 0, new("Terrain/EffectMap/DeadColor", 0, 0, 0, 0) cTerrainEffectMapDeadColor(mgr));
 }
+
+// --------------------------------------------------------------------------------------------------------
+// 0x00f71f30 / 0x00f71f90 : helpers used by the terrain effect-map objects above.
+// --------------------------------------------------------------------------------------------------------
+
+// Probe object whose vtable slot +0x10 casts against the terrain and writes a 3-float hit point.
+// Slots +0x00..+0x0c are other queries; only slot 4 is called here.
+class cTerrainProbe {
+public:
+    virtual bool query0();
+    virtual bool query1();
+    virtual bool query2();
+    virtual bool query3();
+    virtual bool castPoint(const float* pos, float* hit, int a, int b, int c, int d);  // +0x10
+    float distance(const float* pos, int a, int b);                                      // 0x00f71f30
+};
+
+// @ 0x00f71f30
+float cTerrainProbe::distance(const float* pos, int a, int b)
+{
+    float hit[3];
+    if (castPoint(pos, hit, 0, 0, a, b)) {
+        float dx = pos[0] - hit[0];
+        float dy = pos[1] - hit[1];
+        float dz = pos[2] - hit[2];
+        return sqrtf(dx * dx + dy * dy + dz * dz);
+    }
+    return 0.0f;
+}
+
+// cSPTransformOps::Assign(const void*): copies a transform blob into this object (0x00537dc0).
+struct cSPTransformOps {
+    char pad00[0x38];
+    float mHeight;                      // +0x38
+    cSPTransformOps* Assign(const void* src);
+};
+
+// Height source: two float pointers bounding the per-cell height samples.
+struct cTerrainHeightSource {
+    char pad00[0x40];
+    const float* mBegin;                // +0x40
+    const float* mEnd;                  // +0x44
+};
+
+// @ 0x00f71f90
+void __stdcall SetTransformHeight(cTerrainHeightSource* src, const void* unused, const void* blob,
+                                  cSPTransformOps* xf)
+{
+    xf->Assign(blob);
+    xf->mHeight = 0;
+    const float* p = src->mBegin;
+    if (p != src->mEnd)
+        xf->mHeight = *p;
+}
+
+// Terrain cast probes that share the 0x00f71f30 distance query. Both are thiscall with 6 stack
+// arguments (ret 0x18); declared here for the slice bookkeeping, not reproduced byte-exactly.
+// 0x00f71fc0 : cell blob at arg5 (+0 flag word, +0x02/+0x04/+0x06 offsets, +0x08 scale,
+//              +0x14..+0x34 3x3 basis, +0x1c extra), radius in arg1, in/out position arg3,
+//              out normal arg4.
+// 0x00f72290 : capsule blob at arg5 (+0 flags, +0x04/+0x08/+0x10 offsets, +0x10 scale,
+//              +0x14..+0x34 3x3 basis, +0x38 radius), direction arg1, out position arg2,
+//              out normal arg3, user data arg4.
+class cTerrainCastProbe {
+public:
+    int sweepSphere(float radius, int flags, float* pos, float* normal,
+                    const unsigned char* cell, int user);
+    int sweepCapsule(const float* dir, float* pos, float* normal, void* user,
+                     const unsigned char* shape, int flags);
+};
