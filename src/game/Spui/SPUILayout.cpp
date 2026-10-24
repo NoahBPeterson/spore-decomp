@@ -177,8 +177,9 @@ struct PtrVec {
 };
 struct RBNode { RBNode* left; RBNode* right; RBNode* parent; void* key; };
 struct RBTree {
-    RBNode  anchor;          // +0
-    i32     count;           // +0x10
+    RBNode  anchor;          // +0x00
+    void*   mpHead;          // +0x10 (not touched by insertNode)
+    i32     count;           // +0x14
     void __thiscall insertNode(void** out, RBNode* hint, u32* key, bool right); // 0x810af0
 };
 struct cSPUILayoutResourceFactory_s0081_07d0 {
@@ -192,7 +193,8 @@ struct cSPUILayerManagerLike {
     bool  __thiscall InitMessaging();                     // 0x8115a0
     void  __thiscall ShutdownMessaging();                 // 0x8116e0
 };
-extern int __stdcall FUN_00810d30(u32 msg, u8* p);
+extern bool __stdcall FUN_00810d30(u32 msg, u8* p);
+extern void  __cdecl FUN_011e0744(void*, void*, u32);                // 0x11e0744 (memmove)
 // ---- items of slice s008107d0 end
 
 // ---- items of slice s008117f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -897,9 +899,9 @@ void __thiscall RBTree::insertNode(void** out, RBNode* hint, u32* key, bool righ
 }
 
 // @ 0x00810d30
-int __stdcall FUN_00810d30(u32 msg, u8* p)
+bool __stdcall FUN_00810d30(u32 msg, u8* p)
 {
-    if (msg != 0xf62ade) return 1;
+    if (msg != 0xf62ade) return true;
     u32 t = *(u32*)(p + 8);
     if (t == 0x050f4731 || t == 0x250fe9a2 || t == 0xefbda3ff) {
         FlushCache(6);
@@ -921,7 +923,7 @@ int __stdcall FUN_00810d30(u32 msg, u8* p)
         ((void(__thiscall*)(void*, u32, void*, int, int))VT(sv)[0x18 / 4])(sv, 0x065ff54a, node, 0, 0);
         ((void(__thiscall*)(void*))VT(node)[2])(node);
     }
-    return 1;
+    return true;
 }
 
 // @ 0x00810e30
@@ -1024,13 +1026,14 @@ PtrVec* __thiscall PtrVec::operator=(const PtrVec& rhs)
         mEnd = nb + n;
         return this;
     }
-    if ((u32)(mEnd - mBegin) < n) {
-        FUN_005c1dc0(mBegin, rb, (u8*)(mEnd - mBegin));
-        FUN_005c1dc0(mEnd, (void**)((u8*)rb + ((u8*)mEnd - (u8*)mBegin)), (u8*)(re - rb));
+    u32 cur = (u32)(mEnd - mBegin);
+    if (cur < n) {
+        FUN_011e0744(mBegin, rb, cur * 4);
+        FUN_011e0744(mEnd, (void**)((u8*)rb + cur * 4), (u32)((u8*)re - ((u8*)rb + cur * 4)));
         mEnd = mBegin + n;
         return this;
     }
-    FUN_005c1dc0(mBegin, rb, (u8*)((u8*)re - (u8*)rb));
+    FUN_011e0744(mBegin, rb, (u32)((u8*)re - (u8*)rb));
     mEnd = mBegin + n;
     return this;
 }
