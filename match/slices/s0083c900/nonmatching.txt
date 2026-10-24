@@ -1,4 +1,4 @@
-0083c900  233  complete: hashtable<cICommand>::insert; hash walk/EH and helper call shapes differ; equiv: UNSUPPORTED (0/1200 valid inputs)
+0083c900  224  complete: HashCmdTable::Insert(outIt, keyPtr, bool tag); hash walk/EH and helper call shapes differ; equiv: UNSUPPORTED (0/1200 valid inputs)
 0083cd90  37   complete: cBlockCommandBase::~cBlockCommandBase; vtable store and free scheduling differ
 0083cdd0  34   complete: AppProps ctor; movss constant loads and member store order differ
 0083ce20  54   complete: AppProps deleting dtor; scheduling differs
@@ -12,3 +12,7 @@
 0083d290  95   complete: EvalContinueChar (expect char + throw)
 0083d2f0  209  complete: EvalRealParentheses; float returns and throw frames differ; equiv: UNSUPPORTED (0/1200 valid: _CxxThrowException discards)
 0083d140  53  hashtable<string, pair<string,AutoRefCount<cExprFunction>>>::insert(value, true_type): complete, EASTL-shaped; div operand form (mov ecx,[esi+8] first) and node-link store scheduling differ [equiv: UNSUPPORTED, 0/400 valid: pointer-chasing inputs fault]
+0083ca00  153  complete: cExpression::FindExprValue (thiscall); inline string8 key copy + hashtable::find; alloc/memcpy call shapes and key-copy register allocation differ; equiv: WEAK (173/400 valid, 100% coverage)
+0083cad0  141  complete: hashtable<cICommand>::DoFreeNodes (ret 8/ecx unused); node release+free loop; destructor cleanup EH frame not reproduced; equiv: WEAK (171/400 valid, 100% coverage)
+0083cb70  115  complete: hash_map<string,AutoRefCount<cICommand>>::operator[] (thiscall); find + insert-with-default; EH state store width and bool tag materialisation differ; equiv: UNSUPPORTED (0/400 valid: pointer-chasing inputs fault)
+0083cc30  213  complete: cExpression::SetCommand (thiscall); case-insensitive key + map slot refcount swap + vtable slot 8 call; key-copy allocation and EH frame layout differ; equiv: UNSUPPORTED (0/400 valid: pointer-chasing inputs fault)

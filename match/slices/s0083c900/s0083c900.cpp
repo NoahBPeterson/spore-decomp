@@ -10,6 +10,7 @@ void* __cdecl EASTL_allocator_allocate(unsigned n, const char* name, int, int, c
 void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 int   __cdecl isspace(int);
 double __cdecl ceil(double);
+void* __cdecl memcpy(void*, const void*, unsigned);
 }
 inline void* operator new(unsigned, void* p) { return p; }
 inline void  operator delete(void*, void*) {}
@@ -18,7 +19,7 @@ static const char g_allocFile[] =
     "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
 static const char g_allocName[] = "ArgScript";
 
-extern char gEmptyString[];
+extern char gEmptyString[];    // 0x01667bac (eastl::gEmptyString16)
 extern float gAppPropsMin;
 extern float gAppPropsMax;
 extern void* gAppPropsBuckets[];
@@ -42,22 +43,109 @@ template <typename T> struct vec {
 };
 }  // namespace eastl
 
+// The inlined key-copy ctor used by the hashtable lookups in this slice. It has
+// no destructor (the original deallocates the buffer explicitly), so building
+// one does not create an exception frame.
+struct KeyStr {
+    char* mpBegin; char* mpEnd; char* mpCapacity; unsigned mAlloc;
+    __forceinline KeyStr(const char* s) {
+        const char* p = s;
+        while (*p) ++p;
+        unsigned n = (unsigned)(p - s) + 1;
+        if (n > 1) {
+            mpBegin = (char*)EASTL_allocator_allocate(n, g_allocName, 0, 0, g_allocFile, 0xd1);
+            mpCapacity = mpBegin + n;
+        } else {
+            mpBegin = gEmptyString;
+            mpCapacity = gEmptyString + 1;
+        }
+        memcpy(mpBegin, s, (unsigned)(p - s));
+        mpEnd = mpBegin + (unsigned)(p - s);
+        *mpEnd = 0;
+    }
+};
+// Same key buffer but with a destructor, for call sites where the original keeps
+// the buffer alive across a throwing call and so registers an exception cleanup.
+struct KeyGuard {
+    char* mpBegin; char* mpEnd; char* mpCapacity; unsigned mAlloc;
+    __forceinline KeyGuard(const char* s) {
+        const char* p = s;
+        while (*p) ++p;
+        unsigned n = (unsigned)(p - s) + 1;
+        if (n > 1) {
+            mpBegin = (char*)EASTL_allocator_allocate(n, g_allocName, 0, 0, g_allocFile, 0xd1);
+            mpCapacity = mpBegin + n;
+        } else {
+            mpBegin = gEmptyString;
+            mpCapacity = gEmptyString + 1;
+        }
+        memcpy(mpBegin, s, (unsigned)(p - s));
+        mpEnd = mpBegin + (unsigned)(p - s);
+        *mpEnd = 0;
+    }
+    ~KeyGuard() {
+        if ((mpCapacity - mpBegin) > 1 && mpBegin)
+            EASTL_allocator_deallocate(mpBegin);
+    }
+};
+
 // helpers from neighbouring slices
-void  __cdecl DoFreeNodesTable(void* bucketArray, int bucketCount);       // 0x0083cad0 (this)
+void  __stdcall DoFreeNodesTable(void* bucketArray, int bucketCount);     // 0x0083cad0 (this)
 void  __cdecl HashNodeAlloc(void* out, int nBuckets, int nElem, int flag); // 0x00921440
 void* __cdecl NewHashCommandNode(const void** key);                        // 0x0083c880
 void  __cdecl HashDoRehash(void* self, int n);                             // 0x0083cf50
 int   __cdecl StrEqInsensitive(const char* a, const char* b);              // 0x00554fb0
-void  __cdecl MakeCaseInsensitive(void* p);
+void  __cdecl MakeCaseInsensitive(eastl::string8* s);                     // 0x008409b0
 void  __cdecl ThrowCError(void* out, const char* fmt, ...);                // 0x0052df30
 float __cdecl EvalRealExpression(void* self, const char** p);              // 0x0083e470
+
+// The hashtable inside cExpression: find() returns the bucket pair through a
+// hidden pointer and the node pointer through outIt.
+struct ExprFindIt { void* mpNode; void* mpBucket; };
+// eastl::hashtable<...>::find(outIt, key): thiscall (table in ecx).
+struct ExprHashTable {
+    void find(ExprFindIt* outIt, const void* key);          // 0x007e2ea0
+};
+struct CmdNode {
+    eastl::string8 mKey;                    // +0x00
+    void*          mpValue;                 // +0x10
+    CmdNode*       mpNext;                  // +0x14
+};
+// The hash_map object: mpBucketArray @+0x04, mnBucketCount @+0x08.
+struct HashCmdMap {
+    void*        mpAlloc;                   // +0x00
+    CmdNode**    mpBucketArray;             // +0x04
+    unsigned     mnBucketCount;             // +0x08
+    unsigned     mnElementCount;            // +0x0c
+    void* Lookup(const void* key);          // 0x0083cb70 (thiscall)
+};
+// Destructs one hashtable node in place: releases the AutoRefCount<cICommand>
+// (vtable slot +0x10), frees the key buffer, then the node itself.
+inline void FreeCmdNode(CmdNode* p) {
+    int* ref = (int*)p->mpValue;
+    if (ref)
+        (*(void(__fastcall**)(int*))(*(int*)ref + 0x10))(ref);
+    if ((p->mKey.mpCapacity - p->mKey.mpBegin) > 1 && p->mKey.mpBegin)
+        EASTL_allocator_deallocate(p->mKey.mpBegin);
+    EASTL_allocator_deallocate(p);
+}
+// 0x0067ee60  pair<const string8, AutoRefCount<cICommand>>::pair(const string8&)
+// Layout: string8 @0x0, AutoRefCount<cICommand> ptr @0x10. The destructor is
+// out of line (0x67e830); having it on a local is what gives the caller an
+// exception-cleanup state for the insert path.
+struct CmdPair {
+    char* mpBegin; char* mpEnd; char* mpCapacity; unsigned mAlloc; void* mpRef;
+    CmdPair* ctor(const eastl::string8* key, int** ref);    // 0x0067ee60
+    ~CmdPair();                                            // 0x0067e830
+};
 
 // ===========================================================================
 // 0x0083c900  hashtable<...cICommand...>::insert(key)
 // ===========================================================================
 // @ 0x0083c900
-struct HashCmdTable { void* Insert(void* outIt, const void** keyPtr); };
-void* HashCmdTable::Insert(void* outIt, const void** keyPtr) {
+struct HashCmdTable { void* Insert(void* outIt, const void** keyPtr, bool tag); };
+void* HashCmdTable::Insert(void* outIt, const void** keyPtr, bool tag) {
+    (void)tag;
     void* self = this;
     const unsigned char* p = (const unsigned char*)*keyPtr;
     uint32 h = 0x811c9dc5;
@@ -96,22 +184,22 @@ void* HashCmdTable::Insert(void* outIt, const void** keyPtr) {
 // ===========================================================================
 // 0x0083ca00  hashtable<...cExprFunction...>::find(key) -> value ptr or 0
 // ===========================================================================
+// The expression object: its function hash_map starts at +0x10.
+struct CmdExprTable {
+    char        pad00[0x10];                // +0x00
+    HashCmdMap  mFunctions;                 // +0x10
+    void* FindExprValue(const char* key);   // 0x0083ca00 (thiscall)
+};
 // @ 0x0083ca00
-void* HashFindExprValue(void* self, const char* key) {
-    const char* p = key;
-    while (*p) ++p;
-    unsigned len = (unsigned)(p - key) + 1;
-    char* buf; char* cap;
-    if (len < 2) { buf = gEmptyString; cap = gEmptyString + 1; }
-    else { buf = (char*)EASTL_allocator_allocate(len, g_allocName, 0, 0, g_allocFile, 0xd1); cap = buf + len; }
-    char* end = buf + (p - key);
-    for (const char* s = key; s < p; ++s) *buf++ = *s;
-    *end = 0;
-    buf = end - (p - key);
-    int keycopy[2];
-    (void)keycopy;
-    if ((cap - buf) > 1 && buf) EASTL_allocator_deallocate(buf);
-    (void)self;
+void* CmdExprTable::FindExprValue(const char* key) {
+    KeyStr s(key);
+    ExprFindIt it;
+    ((ExprHashTable*)&mFunctions)->find(&it, &s);
+    if ((s.mpCapacity - s.mpBegin) > 1 && s.mpBegin)
+        EASTL_allocator_deallocate(s.mpBegin);
+    CmdNode* node = (CmdNode*)it.mpNode;
+    if (node != mFunctions.mpBucketArray[mFunctions.mnBucketCount])
+        return node->mpValue;
     return 0;
 }
 
@@ -119,18 +207,20 @@ void* HashFindExprValue(void* self, const char* key) {
 // 0x0083cad0  hashtable<...cICommand...>::DoFreeNodes
 // ===========================================================================
 // @ 0x0083cad0
-void __cdecl DoFreeNodesTable(void* bucketArray, int bucketCount) {
-    if (bucketCount > 1) {
-        for (int i = 0; i < bucketCount; ++i) {
-            char* node = *(char**)((char*)bucketArray + i * 4);
+void __stdcall DoFreeNodesTable(void* bucketArray, int bucketCount) {
+    CmdNode** buckets = (CmdNode**)bucketArray;
+    unsigned i = 0;
+    if ((unsigned)bucketCount > 0) {
+        do {
+            CmdNode* node = buckets[i];
             while (node) {
-                char* next = *(char**)(node + 0x14);
-                // node dtor + free is a separate helper; caller frees the array below
-                *(void**)(node + 0x14) = 0;
+                CmdNode* next = node->mpNext;
+                FreeCmdNode(node);
                 node = next;
             }
-        }
-        (void)bucketArray;
+            buckets[i] = 0;
+            ++i;
+        } while (i < (unsigned)bucketCount);
     }
 }
 
@@ -138,21 +228,50 @@ void __cdecl DoFreeNodesTable(void* bucketArray, int bucketCount) {
 // 0x0083cb70  hash_map<string, AutoRefCount<cICommand>>::operator[]
 // ===========================================================================
 // @ 0x0083cb70
-void* HashmapCommandLookup(void* self, const void* key) {
-    (void)self; (void)key; return 0;
+void* HashCmdMap::Lookup(const void* key) {
+    ExprFindIt it;
+    ((ExprHashTable*)this)->find(&it, key);
+    CmdNode* node = (CmdNode*)it.mpNode;
+    if (node != mpBucketArray[mnBucketCount])
+        return (char*)node + 0x10;
+    int* dflt = 0;
+    {
+        CmdPair pair;
+        CmdPair* pv = pair.ctor((const eastl::string8*)key, &dflt);
+        ExprFindIt inserted;
+        ((HashCmdTable*)this)->Insert(&inserted, (const void**)pv, false);
+        return (char*)inserted.mpNode + 0x10;
+    }
 }
 
 // ===========================================================================
 // 0x0083cc30  install a command under (case-insensitive) name
 // ===========================================================================
+// The command installer object: the two values handed to each command's vtable
+// slot +0x08 live at +0x04 and +0x0c; the command hash_map starts at +0x10.
+struct CmdInstaller {
+    void*       pad00;                      // +0x00
+    void*       mpCommands;                 // +0x04
+    void*       pad08;                      // +0x08
+    int         mnCommandCount;             // +0x0c
+    HashCmdMap  mCommandMap;                // +0x10
+    void SetCommand(const char* name, int* cmd);   // 0x0083cc30 (thiscall)
+};
 // @ 0x0083cc30
-void HashmapSetCommand(void* self, const char* name, int* cmd) {
-    eastl::string8 s;
-    s.assign(name, name + 0);
-    MakeCaseInsensitive(&s);
-    int** slot = (int**)HashmapCommandLookup(0, &s);
-    (void)slot;
-    (void)self; (void)cmd;
+void CmdInstaller::SetCommand(const char* name, int* cmd) {
+    KeyGuard s(name);
+    MakeCaseInsensitive((eastl::string8*)&s);
+    int** slot = (int**)mCommandMap.Lookup(&s);
+    int* old = *slot;
+    if (cmd != old) {
+        if (cmd)
+            (*(void(__fastcall**)(int*))(*(int*)cmd + 0xc))(cmd);
+        *slot = cmd;
+        if (old)
+            (*(void(__fastcall**)(int*))(*(int*)old + 0x10))(old);
+    }
+    (*(void(__fastcall**)(int*, void*, int))(*(int*)cmd + 8))(
+        cmd, mpCommands, mnCommandCount);
 }
 
 // ===========================================================================
