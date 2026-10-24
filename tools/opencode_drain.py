@@ -338,7 +338,7 @@ while True:
         if last and last.get("id") not in toolfixed and TOOL_TEXT.search(txt):
             toolfixed.add(last.get("id"))
             toolfix_n[k] = toolfix_n.get(k, 0) + 1
-            if toolfix_n[k] > 2 and model_of(k).get("providerID") == "cheaperinference":
+            if toolfix_n[k] > 2 and model_of(k).get("providerID") == "cheaperinference" and G.get("fallback", True):
                 # the session keeps copying the leaked markup from its own history: move it to OpenRouter (0 leaks
                 # in 2,079 responses of the same model), via the group's worker_model override
                 Gm = json.load(open(GF))
