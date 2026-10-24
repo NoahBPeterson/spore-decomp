@@ -10,6 +10,14 @@ static const char kAllocPath[] =
 extern "C" void* EA_Alloc(unsigned size, const char* name, int a, int b, const char* file, int line); // 0x00f473a0
 extern "C" void  EA_Dealloc(void* p);                                                                 // 0x00f47380
 
+// The key the name-keyed hashtables look up with: an eastl string object, only
+// its {begin, end, capacity} triple being built by this slice.
+struct NameString {
+    const char* mpBegin;    // +0x00
+    const char* mpEnd;      // +0x04
+    const char* mpCapacity; // +0x08
+};
+
 struct Variant {
     uint32_t d0, d1, d2, d3;
     uint16_t mFlags;    // +0x10
@@ -26,7 +34,9 @@ struct String {
 };
 
 namespace EA { namespace ArgScript {
-void MakeCaseInsensitive(const char* src, char* dst);   // 0x00840cc0
+// Fills *pDst (a name-string member of the manager) with the case-insensitive
+// spelling of src, allocating a buffer the first time.
+void MakeCaseInsensitive(const char* src, NameString* pDst);    // 0x00840cc0
 }}
 
 // hashtable / hash_map helpers (external, thiscall)
@@ -43,6 +53,194 @@ extern "C" void UninitFillN16(void* dst, int n, const void* value, const void* m
 extern "C" void Matrix3Assign(void* dst, const void* src);                  // 0x0041cb40
 extern "C" void VariantRelease(int* p);                                     // 0x006ad050
 extern "C" void VariantHold(int* p);                                        // 0x006ad010
+
+// ---------------------------------------------------------------------------
+//  Shared layout of the EA::ArgScript expression manager.
+// ---------------------------------------------------------------------------
+
+// The manager's opaque expression-function object; slots are named by their
+// vtable byte offset (only the ones this slice calls are given parameters).
+class cExprMgr {
+public:
+    virtual void* v000();                                                   // +0x00
+    virtual void* v004();                                                   // +0x04
+    virtual void* v008();                                                   // +0x08
+    virtual char  v00c(const void* pValue, void* pOut, uint32_t a, uint32_t b,
+                       uint32_t c, uint32_t d);                             // +0x0c
+    virtual void* v010();                                                   // +0x10
+    virtual char  v014(const void* pKey, void** ppHeld);                    // +0x14
+};
+
+// SP::MessageServer(); only vtable slots 0x14 and 0x18 are called here.
+class cMessageServer {
+public:
+    virtual void* v000();
+    virtual void* v004();
+    virtual void* v008();
+    virtual void* v00c();
+    virtual void* v010();
+    virtual void  v014(uint32_t id, const void* pValue, uint32_t a);        // +0x14
+    virtual void  v018(uint32_t id, const void* pValue, uint32_t a, uint32_t b);  // +0x18
+};
+
+// Reference-counted object: slot 0 holds, slot 1 releases.  mField04 keeps the
+// data members of the derived objects at the offsets the game uses (the vtable
+// pointer occupies the first four bytes).
+class cRefObj {
+public:
+    uint32_t mField04;                                                      // +0x04
+    virtual void Hold();                                                    // +0x00
+    virtual void Release();                                                 // +0x04
+};
+
+// A reference-counted expression function; only the {id, type, key} triple at
+// +0x08..+0x10 is touched by this slice.
+struct cExprFunction : cRefObj {
+    uint32_t mId;                                                           // +0x08
+    uint32_t mTypeId;                                                       // +0x0c
+    uint32_t mKey;                                                          // +0x10
+};
+
+// The 12-byte {id, type, key} triple copied onto the stack for the manager.
+struct ArgKey12 {
+    uint32_t mId;                                                           // +0x00
+    uint32_t mTypeId;                                                       // +0x04
+    uint32_t mKey;                                                          // +0x08
+};
+
+// The command-variant argument block handed to the message handler.
+struct ArgScriptValue {
+    uint32_t mField00;                                                      // +0x00
+    uint32_t mField04;                                                      // +0x04
+    uint32_t mTypeId;                                                       // +0x08
+    uint32_t mField0c;                                                      // +0x0c
+    uint32_t mField10;                                                      // +0x10
+    uint32_t mField14;                                                      // +0x14
+    uint32_t mField18;                                                      // +0x18
+};
+
+// 64-bit composite key of the manager's hash_map.
+struct Key8 {
+    uint32_t mA;                                                            // +0x00
+    uint32_t mB;                                                            // +0x04
+};
+
+// The iterator handed back by the map lookups (node + bucket slot).
+struct MapIter {
+    void* mpNode;                                                           // +0x00
+    void* mpBucket;                                                         // +0x04
+};
+
+// A node of the Key8 hash_map: only the mapped handle at +0x08 is read.
+struct Key8Node {
+    uint8_t  pad00[8];
+    uint32_t mHandle;                                                       // +0x08
+};
+
+// A node of the name-keyed hashtable: id at +0x10, chain link at +0x14.
+struct NameNode {
+    uint8_t  pad00[0x10];
+    uint32_t mId;                                                           // +0x10
+    void*    mpNext;                                                        // +0x14
+};
+
+// Result slot written by hashtable::DoInsertValue.
+struct InsertResult {
+    void*    mpNode;                                                        // +0x00
+    void*    mpBucket;                                                      // +0x04
+    uint8_t  mInserted;                                                     // +0x08
+};
+
+// Result of the rehash policy query.
+struct RehashInfo {
+    uint8_t  mRehash;                                                       // +0x00
+    uint8_t  pad01[3];
+    uint32_t mNewBucketCount;                                               // +0x04
+};
+
+// eastl::hash_map<Key8, H>.  end() is the slot just past the bucket array.
+struct HashKey8 {
+    uint32_t mField00;                                                      // +0x00
+    void**   mpBucket;                                                      // +0x04
+    uint32_t mnBucket;                                                      // +0x08
+    void     find(MapIter* pIter, const Key8* pKey);                        // 0x0041fb20
+    void**   operator[](const Key8* pKey);                                  // 0x0041cd60
+    void     Insert(const Key8* pKey);                                      // 0x006a43b0
+    void*    end() const { return mpBucket[mnBucket]; }
+};
+
+// Rehash policy sub-object of the name hashtable (four bytes, at +0x10).
+struct HashPolicy {
+    uint32_t mField00;                                                      // +0x00
+    void GetNextBucketCount(void* pOut, uint32_t a, uint32_t b, int c);     // 0x00921440
+};
+
+// eastl hashtable keyed by a NUL-terminated name.
+struct HashName {
+    uint32_t   mField00;                                                    // +0x00
+    void**     mpBucket;                                                    // +0x04
+    uint32_t   mnBucket;                                                    // +0x08
+    uint32_t   mnElement;                                                   // +0x0c
+    HashPolicy mPolicy;                                                     // +0x10
+    void       find(MapIter* pIter, const NameString* pKey);                // 0x007e2ea0
+    void       DoInsertValue(InsertResult* pOut, const char* const* ppKey); // 0x006a5c50
+    void       DoRehash(uint32_t n);                                        // 0x006a3fd0
+    void*      AllocNode(const char* pKey);                                 // 0x006a4850
+    void*      end() const { return mpBucket[mnBucket]; }
+};
+
+struct ArgMgr;
+
+// ---------------------------------------------------------------------------
+//  ArgMgr: the property-list manager that owns the maps.  Every method below
+//  receives the manager itself; 006a58a0 instead receives the manager's
+//  registered +0x0c view, modelled by ArgMgrView.
+// ---------------------------------------------------------------------------
+struct ArgMgr {
+    uint8_t   pad00[0x18];                                                  // +0x00
+    cExprMgr* mpExprMgr;                                                    // +0x18
+    uint8_t   pad1c[0x58];                                                  // +0x1c .. +0x73
+    HashKey8  mMap;                                                         // +0x74
+    uint8_t   pad80[0x14];                                                  // +0x80 .. +0x93
+    HashName  mExprMap;                                                     // +0x94
+    uint8_t   padA8[0x2c];                                                  // +0xa8 .. +0xd3
+    HashName  mPropMap;                                                     // +0xd4
+    uint8_t   padE8[0x40];                                                  // +0xe8 .. +0x127
+    HashName  mEnumMap;                                                     // +0x128
+    uint8_t   pad13c[0x2c];                                                 // +0x13c .. +0x167
+    NameString mNameBuf;                                                    // +0x168 (case-insensitive name)
+
+    void RemoveHandle(int handle);                                          // 0x006a3dd0
+
+    void FUN_006a59f0(ArgScriptValue* v);                                   // 0x006a59f0
+    void FUN_006a5a90(int unused, int count, int* p);                       // 0x006a5a90
+    void FUN_006a5b80(int count, int* p);                                   // 0x006a5b80
+    bool FUN_006a5f70(const char* name, uint32_t* out);                     // 0x006a5f70
+    bool FUN_006a5fd0(const char* name, uint32_t* out);                     // 0x006a5fd0
+    bool FUN_006a60b0(int a, int b, void** out);                            // 0x006a60b0
+    void SetArgument(cExprFunction* pValue, int a, int b);                   // 0x006a61c0
+    bool FUN_006a6240(const char* name, uint32_t* out);                     // 0x006a6240
+};
+
+// The +0x0c view of ArgMgr that carries the message handler 006a58a0: its hash
+// map is at +0x68 of this view (== ArgMgr + 0x74).
+struct ArgMgrView {
+    uint8_t  pad00[0x0c];                                                   // +0x00
+    uint8_t  pad0c[0x5c];                                                   // +0x0c .. +0x67
+    HashKey8 mMap;                                                          // +0x68
+
+    bool OnMessage(int msg, ArgScriptValue* v);                             // 0x006a58a0
+    ArgMgr* owner() const;                                                  // the enclosing manager
+};
+
+inline ArgMgr* ArgMgrView::owner() const
+{
+    return (ArgMgr*)((char*)this - 0x0c);
+}
+
+extern "C" void* __cdecl SP_MessageServer();                                // 0x0067dcc0
+extern "C" char  __cdecl FUN_00554fb0(const char* pKey, const void* pNode); // 0x00554fb0
+extern "C" void  __cdecl FUN_006a4450(void* a, void* b, void* c);           // 0x006a4450
 
 // ---------------------------------------------------------------------------
 // 006a5690  void GetVariantTypeDescription(const Variant& v, String& out)
@@ -90,242 +288,308 @@ append_array:
 }
 
 // ---------------------------------------------------------------------------
-// ArgMgr: the property-list manager object that owns the hashtables.
+// @ 0x006a58a0
 // ---------------------------------------------------------------------------
-struct ArgMgr {
-    bool FUN_006a58a0(int msg, int* v);            // ret 8
-    void FUN_006a59f0(int* v);                     // ret 4
-    void FUN_006a5a90(int a, int count, int* p);   // ret 0xc
-    void FUN_006a5b80(int count, int* p);          // ret 8
-    void FUN_006a5c50(int* out, void* key);        // ret 0xc
-    bool FUN_006a5f70(const char* name, uint32_t* out);
-    bool FUN_006a5fd0(const char* name, uint32_t* out);
-    bool FUN_006a60b0(int a, int b, int* out);
-    void FUN_006a61c0(int a, int b);
-    bool FUN_006a6240(const char* name, uint32_t* out);
-};
-
-// ---------------------------------------------------------------------------
-// 006a58a0
-// ---------------------------------------------------------------------------
-bool ArgMgr::FUN_006a58a0(int msg, int* v)
+bool ArgMgrView::OnMessage(int msg, ArgScriptValue* v)
 {
-    void* server = (void*)0;    // SP::MessageServer(); (masked call)
-    if (msg != 0xf62ade)
+    cMessageServer* server = (cMessageServer*)SP_MessageServer();
+
+    if (msg != 0x0f62ade)
         return false;
-    if (v[2] == 0xb1b104) {
-        char key[0x10];
-        *(uint32_t*)key = v[6];
-        *(uint32_t*)(key + 4) = v[4];
-        void* iter = 0;
-        ((HashTable*)((char*)this + 0x74))->Find2(&iter, key);
-        if (*(void**)&iter != *(void**)(*(int*)((char*)this + 0x78) + *(int*)((char*)this + 0x7c) * 4)) {
-            if (*(int*)(*(int*)&iter + 8))
-                FUN_006a60b0(0, 0, 0);
+
+    if (v->mTypeId == 0x00b1b104) {
+        Key8 key;
+        key.mA = v->mField18;
+        key.mB = v->mField10;
+
+        MapIter iter;                       // the original leaves this unset too
+        mMap.find(&iter, &key);
+        if (iter.mpNode != mMap.end()) {
+            uint32_t handle = ((Key8Node*)iter.mpNode)->mHandle;
+            if (handle != 0)
+                owner()->RemoveHandle((int)handle);
+            else
+                FUN_006a4450(&iter, iter.mpNode, iter.mpBucket);
         }
-        (*(void (__thiscall**)(void*, int, int*, int))(*(int*)server + 0x14))(server, 0xf62def, v, 0);
-        (*(void (__thiscall**)(void*, void*, int*, int, int))(*(int*)server + 0x18))(server, server, v, 0, 0);
+        server->v014(0x00f62def, v, 0);
+        server->v018(0x016af8d8, v, 0, 0);
     }
     return true;
 }
 
 // ---------------------------------------------------------------------------
-// 006a59f0
+// @ 0x006a59f0
 // ---------------------------------------------------------------------------
-void ArgMgr::FUN_006a59f0(int* v)
+void ArgMgr::FUN_006a59f0(ArgScriptValue* v)
 {
-    int tmp = 0;
-    char ok = (*(char (__thiscall**)(void*, int, int*))(**(int**)((char*)this + 0x18) + 0x14))(
-        *(void**)((char*)this + 0x18), (int)v + 8, &tmp);
-    if (ok)
-        VariantRelease(&tmp);
-    char key[0x10];
-    *(uint32_t*)key = *(uint32_t*)((char*)v + 0x10);
-    *(uint32_t*)(key + 4) = *(uint32_t*)((char*)v + 0x18);
-    ((HashTable*)((char*)this + 0x74))->Find2(&key[0], key);
-    VariantRelease(&tmp);
+    void*     held = 0;
+    uint32_t* pv   = &v->mTypeId;
+    if (mpExprMgr->v014(pv, &held))
+        VariantRelease((int*)held);
+
+    Key8 key;
+    key.mA = pv[0];
+    key.mB = pv[2];
+    mMap.Insert(&key);
+
+    if (held)
+        ((cRefObj*)held)->Release();
 }
 
 // ---------------------------------------------------------------------------
-// 006a5a90
+// @ 0x006a5a90
 // ---------------------------------------------------------------------------
-void ArgMgr::FUN_006a5a90(int a, int count, int* p)
+void ArgMgr::FUN_006a5a90(int unused, int count, int* p)
 {
-    (void)a;
-    int* held = 0;
+    (void)unused;
+    void* held = 0;
     if (count > 0) {
         for (int i = 0; i < count; i++) {
             int val = p[i];
             if (held) {
-                int* h = held;
+                void* h = held;
                 held = 0;
-                (*(void (__thiscall**)(int*))(*h + 4))(h);
+                ((cRefObj*)h)->Release();
             }
-            char ok = (*(char (__thiscall**)(void*, int*, int**))(**(int**)((char*)this + 0x18) + 0x14))(
-                *(void**)((char*)this + 0x18), &val, &held);
+            char ok = mpExprMgr->v014(&val, &held);
             if (ok)
-                VariantRelease(held);
-            char key[0x10];
-            *(uint32_t*)key = val;
-            *(uint32_t*)(key + 4) = 0xb1b104;
-            ((HashTable*)((char*)this + 0x74))->Find2(&key[0], key);
+                VariantRelease((int*)held);
+
+            Key8 key;
+            key.mA = (uint32_t)val;
+            key.mB = 0x00b1b104;
+            mMap.Insert(&key);
         }
     }
-    if (held) {
-        int* h = held;
-        (*(void (__thiscall**)(int*))(*h + 4))(h);
-    }
+    if (held)
+        ((cRefObj*)held)->Release();
 }
 
 // ---------------------------------------------------------------------------
-// 006a5b80
+// @ 0x006a5b80
 // ---------------------------------------------------------------------------
 void ArgMgr::FUN_006a5b80(int count, int* p)
 {
-    int* held = 0;
+    void* held = 0;
     if (count > 0) {
         do {
             if (held) {
-                int* h = held;
+                void* h = held;
                 held = 0;
-                (*(void (__thiscall**)(int*))(*h + 4))(h);
+                ((cRefObj*)h)->Release();
             }
-            char ok = (*(char (__thiscall**)(void*, int*, int**))(**(int**)((char*)this + 0x18) + 0x14))(
-                *(void**)((char*)this + 0x18), p, &held);
+            char ok = mpExprMgr->v014(p, &held);
             if (ok)
-                VariantRelease(held);
-            char key[0x10];
-            *(uint32_t*)key = p[0];
-            *(uint32_t*)(key + 4) = p[2];
-            ((HashTable*)((char*)this + 0x74))->Find2(&key[0], key);
+                VariantRelease((int*)held);
+
+            Key8 key;
+            key.mA = (uint32_t)p[0];
+            key.mB = (uint32_t)p[2];
+            mMap.Insert(&key);
+
             p += 3;
         } while (--count);
     }
-    if (held) {
-        int* h = held;
-        (*(void (__thiscall**)(int*))(*h + 4))(h);
-    }
+    if (held)
+        ((cRefObj*)held)->Release();
 }
 
 // ---------------------------------------------------------------------------
-// 006a5c50
+// 006a5c50  hashtable<basic_string, ...>::DoInsertValue
 // ---------------------------------------------------------------------------
-void ArgMgr::FUN_006a5c50(int* out, void* key)
+// @ 0x006a5c50
+void HashName::DoInsertValue(InsertResult* pOut, const char* const* ppKey)
 {
-    (void)key;
-    out[0] = 0;
-    out[1] = 0;
-    *((uint8_t*)(out + 2)) = 0;
+    uint32_t hash = 0x811c9dc5;
+    const char* p = *ppKey;
+    uint8_t c = (uint8_t)*p;
+    while (c != 0) {
+        p++;
+        hash = hash * 0x1000193 ^ c;
+        c = (uint8_t)*p;
+    }
+
+    uint32_t idx  = hash % mnBucket;
+    void*    node = mpBucket[idx];
+    void**   slot = &mpBucket[idx];
+
+    while (node != 0) {
+        if (FUN_00554fb0(*ppKey, node)) {
+            if (node != 0) {
+                pOut->mpNode     = node;
+                pOut->mpBucket   = slot;
+                pOut->mInserted  = 0;
+                return;
+            }
+            break;
+        }
+        node = ((NameNode*)node)->mpNext;
+    }
+
+    RehashInfo info;
+    mPolicy.GetNextBucketCount(&info, mnBucket, mnElement, 1);
+    node = AllocNode(*ppKey);
+    if (info.mRehash) {
+        idx = hash % info.mNewBucketCount;
+        DoRehash(info.mNewBucketCount);
+    }
+
+    ((NameNode*)node)->mpNext = mpBucket[idx];
+    mpBucket[idx]             = node;
+    mnElement++;
+
+    pOut->mpNode    = node;
+    pOut->mpBucket  = &mpBucket[idx];
+    pOut->mInserted = 1;
 }
 
 // ---------------------------------------------------------------------------
-// 006a5f70
+// @ 0x006a5f70
 // ---------------------------------------------------------------------------
 bool ArgMgr::FUN_006a5f70(const char* name, uint32_t* out)
 {
-    char buf[0x10];
-    EA::ArgScript::MakeCaseInsensitive(name, (char*)this + 0x168);
-    ((HashTable*)((char*)this + 0x94))->Find(buf, (char*)this + 0x168);
-    if (*(void**)buf != *(void**)(*(int*)((char*)this + 0x98) + *(int*)((char*)this + 0x9c) * 4)) {
-        *out = *(uint32_t*)(*(int*)buf + 0x10);
+    EA::ArgScript::MakeCaseInsensitive(name, &mNameBuf);
+
+    MapIter iter;
+    mExprMap.find(&iter, &mNameBuf);
+    if (iter.mpNode != mExprMap.end()) {
+        *out = ((NameNode*)iter.mpNode)->mId;
         return true;
     }
     return false;
 }
 
 // ---------------------------------------------------------------------------
-// 006a5fd0
+// @ 0x006a5fd0
 // ---------------------------------------------------------------------------
 bool ArgMgr::FUN_006a5fd0(const char* name, uint32_t* out)
 {
     unsigned n = (unsigned)(strlen(name) + 1);
-    char* p;
-    unsigned cap;
+    char*    p;
+    char*    end;
     if (n < 2) {
-        p = (char*)0x01667bac;
-        cap = 0x01667bad;
+        p   = (char*)0x01667bac;
+        end = (char*)0x01667bad;
     } else {
-        p = (char*)EA_Alloc(n, "App", 0, 0, kAllocPath, 0xd1);
-        cap = (unsigned)(p + n);
+        p   = (char*)EA_Alloc(n, "App", 0, 0, kAllocPath, 0xd1);
+        end = p + n;
     }
-    char* first = p;
+    NameString key;
+    key.mpBegin    = p;
+    key.mpEnd      = p + strlen(name);
+    key.mpCapacity = end;
+
     DoInsertValue(p, name, (int)strlen(name));
     p[strlen(name)] = 0;
-    char buf[0x10];
-    buf[0] = 0;
-    ((HashTable*)((char*)this + 0xd4))->Find(buf, p);
-    if (1 < (int)(cap - (unsigned)first) && first)
-        EA_Dealloc(first);
-    if (*(void**)buf != *(void**)(*(int*)((char*)this + 0xd8) + *(int*)((char*)this + 0xdc) * 4)) {
-        *out = *(uint32_t*)(*(int*)buf + 0x10);
+
+    MapIter iter;
+    mPropMap.find(&iter, &key);
+    if (1 < (int)(end - p) && p != 0)
+        EA_Dealloc(p);
+
+    if (iter.mpNode != mPropMap.end()) {
+        *out = ((NameNode*)iter.mpNode)->mId;
         return true;
     }
     return false;
 }
 
 // ---------------------------------------------------------------------------
-// 006a60b0
+// @ 0x006a60b0
 // ---------------------------------------------------------------------------
-bool ArgMgr::FUN_006a60b0(int a, int b, int* out)
+bool ArgMgr::FUN_006a60b0(int a, int b, void** out)
 {
-    char key[0x10];
-    *(uint32_t*)key = a;
-    *(uint32_t*)(key + 4) = b;
-    *(uint32_t*)(key + 8) = 0xb1b104;
-    void* iter = 0;
-    ((HashTable*)((char*)this + 0x74))->Find2(&iter, key);
-    if (*(void**)&iter == *(void**)(*(int*)((char*)this + 0x78) + *(int*)((char*)this + 0x7c) * 4)) {
-        char ok = (*(char (__thiscall**)(void*, void*, int*, int, int))(**(int**)((char*)this + 0x18) + 0xc))(
-            *(void**)((char*)this + 0x18), key, out, 0, 0);
-        return ok != 0;
+    Key8 key;
+    key.mA = (uint32_t)a;
+    key.mB = (uint32_t)b;
+
+    ArgKey12 value;
+    value.mId     = (uint32_t)a;
+    value.mTypeId = 0x00b1b104;
+    value.mKey    = (uint32_t)b;
+
+    MapIter iter;
+    mMap.find(&iter, &key);
+
+    char ok = 0;
+    if (iter.mpNode == mMap.end()) {
+        ok = mpExprMgr->v00c(&value, out, 0, 0, 0, 0);
+        if (ok) {
+            RemoveHandle((int)*out);
+            cExprFunction* fresh = (cExprFunction*)*out;
+            void**          slot  = mMap[&key];
+            cExprFunction*  old   = (cExprFunction*)*slot;
+            if (fresh != old) {
+                if (fresh)
+                    fresh->Hold();
+                *slot = fresh;
+                if (old)
+                    old->Release();
+            }
+        } else {
+            void**          slot = mMap[&key];
+            cExprFunction*  old  = (cExprFunction*)*slot;
+            if (old) {
+                *slot = 0;
+                old->Release();
+            }
+        }
+    } else {
+        uint32_t handle = ((Key8Node*)iter.mpNode)->mHandle;
+        if (handle != 0) {
+            *out = (void*)handle;
+            ((cRefObj*)handle)->Hold();
+            ok = 1;
+        }
     }
-    *out = *(int*)(*(int*)&iter + 8);
-    return true;
+    return ok != 0;
 }
 
 // ---------------------------------------------------------------------------
-// 006a61c0
+// @ 0x006a61c0
 // ---------------------------------------------------------------------------
-void ArgMgr::FUN_006a61c0(int a, int b)
+void ArgMgr::SetArgument(cExprFunction* pValue, int a, int b)
 {
-    char* self = (char*)this;
-    *(uint32_t*)(self + 8) = a;
-    *(uint32_t*)(self + 0xc) = 0xb1b104;
-    *(uint32_t*)(self + 0x10) = b;
-    VariantHold((int*)self);
-    char key[0x10];
-    *(uint32_t*)key = a;
-    *(uint32_t*)(key + 4) = b;
-    void** slot = (void**)((HashMapKey8*)(self + 0x74))->operator[](key);
-    void* old = *slot;
-    if (self != old) {
-        (*(void (__thiscall**)(char*))(*(int*)self))(self);
-        *slot = self;
+    pValue->mId     = (uint32_t)a;
+    pValue->mTypeId = 0x00b1b104;
+    pValue->mKey    = (uint32_t)b;
+    VariantHold((int*)pValue);
+
+    Key8 key;
+    key.mA = (uint32_t)a;
+    key.mB = (uint32_t)b;
+    void**          slot = mMap[&key];
+    cExprFunction*  old  = (cExprFunction*)*slot;
+    if (pValue != old) {
+        pValue->Hold();
+        *slot = pValue;
         if (old)
-            (*(void (__thiscall**)(void*))(*(int*)old + 4))(old);
+            old->Release();
     }
 }
 
 // ---------------------------------------------------------------------------
-// 006a6240
+// @ 0x006a6240
 // ---------------------------------------------------------------------------
 bool ArgMgr::FUN_006a6240(const char* name, uint32_t* out)
 {
-    char* self = (char*)this;
-    EA::ArgScript::MakeCaseInsensitive(name, self + 0x168);
+    EA::ArgScript::MakeCaseInsensitive(name, &mNameBuf);
+
     if (isdigit((unsigned char)*name)) {
         *out = (uint32_t)strtoul(name, 0, 0);
         return true;
     }
-    char buf[0x10];
-    ((HashTable*)(self + 0x128))->Find(buf, self + 0x168);
-    if (*(void**)buf != *(void**)(*(int*)(self + 0x12c) + *(int*)(self + 0x130) * 4)) {
-        *out = *(uint32_t*)(*(int*)buf + 0x10);
+
+    MapIter iter;
+    mEnumMap.find(&iter, &mNameBuf);
+    if (iter.mpNode != mEnumMap.end()) {
+        *out = ((NameNode*)iter.mpNode)->mId;
         return true;
     }
-    ((HashTable*)(self + 0x94))->Find(buf, self + 0x168);
-    if (*(void**)buf != *(void**)(*(int*)(self + 0x98) + *(int*)(self + 0x9c) * 4)) {
-        *out = *(uint32_t*)(*(int*)buf + 0x10);
+
+    mExprMap.find(&iter, &mNameBuf);
+    if (iter.mpNode != mExprMap.end()) {
+        *out = ((NameNode*)iter.mpNode)->mId;
         return true;
     }
     return false;
@@ -349,7 +613,7 @@ Vec10s* Vec10s::Init(unsigned n, const void* value)
     tmp[2] = 0x01667bad;
     tmp[3] = 0;
     UninitFillN16(begin, n, tmp, value);
-    *(void**)((char*)this + 4) = (char*)begin + n * 0x10;
+    end = (char*)begin + n * 0x10;
     return this;
 }
 
@@ -369,7 +633,7 @@ Vec38b* Vec38b::Init(unsigned n, const void* value)
     uint32_t m[4];
     Matrix3Assign(m, 0);
     UninitFillN56(begin, n, tmp, value);
-    *(void**)((char*)this + 4) = (char*)begin + n * 0x38;
+    end = (char*)begin + n * 0x38;
     return this;
 }
 
