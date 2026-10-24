@@ -410,7 +410,7 @@ void EaLayer3DecBase::SkipBlocks()
 }
 
 // @ 0x01149760
-void __stdcall ConvertSamples(int* param_1, unsigned char* param_2, int param_3, unsigned int param_4)
+int __stdcall ConvertSamples(int* param_1, unsigned char* param_2, int param_3, unsigned int param_4)
 {
     unsigned int uVar4 = param_4;
     if (param_3 == 2) {
@@ -463,6 +463,7 @@ void __stdcall ConvertSamples(int* param_1, unsigned char* param_2, int param_3,
             ++pf3; p += 2;
         }
     }
+    return 0;
 }
 
 // @ 0x01149a00
