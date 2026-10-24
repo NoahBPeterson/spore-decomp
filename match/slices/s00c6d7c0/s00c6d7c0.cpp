@@ -6,11 +6,22 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 #include <new>
+#include <string.h>
+#include <xmmintrin.h>
+
+// float -> int via SSE cvtss2si: returns INT_MIN for NaN/out-of-range, matching
+// the original. Read from a memory temporary to avoid a scratch xmm register.
+__forceinline int FloatToIntSSE(const float& f)
+{
+    volatile float tmp = f;
+    return _mm_cvtss_si32(_mm_load_ss((const float*)&tmp));
+}
 
 #pragma warning(disable: 4100)
 
 typedef unsigned int u32;
 typedef unsigned long long u64;
+typedef unsigned char u8;
 
 // float -> int rounding up (the module's asm helper; cvtss2si + cmovb)
 __forceinline int CeilToInt(float f)
@@ -52,6 +63,7 @@ class cSPTimer { public:
     u64  GetElapsedTime();    // 0x00bc3190
     void Stop();              // 0x00bc3110
     void Restart();           // 0x00bc3130
+    void Init();              // 0x00bc3170
 };
 
 // sub-object interface found at +0x34 (nests/eggs) and +0xc0 (animals)
@@ -180,6 +192,7 @@ class cGameNounManager { public:
 
 struct cEditorSpeciesManager {
     cSpeciesProfile* GetAvatarProfile();    // 0x004df420
+    cSpeciesProfile* GetProfile(const void* key);   // 0x004df550
     struct cArchetype { char pad[0x364]; float mFactor; };
     cArchetype* GetSpeciesArchetype(u32 key, u32 generation);   // 0x004e0050
 };
@@ -216,6 +229,12 @@ extern "C" {
                                   SP::cHerd* herd);                                  // 0x00c09fa0
     void __cdecl FUN_00c099e0(const Vector3* pos, SP::cSpeciesProfile* species, int flag, SP::cHerd* herd,
                               int a, int b);                                         // 0x00c099e0
+    float __cdecl RandomFloatRange(float lo, float hi);                              // 0x00572a10
+    void* __cdecl GetCurrentGameMode();                                              // 0x00b5b800
+    bool  __cdecl IsWorldLayoutFlagSet(int flag);                                    // 0x00685520
+    void* __cdecl FUN_01021300();                                                    // 0x01021300
+    int   __cdecl FUN_00c30f90();                                                    // 0x00c30f90
+    bool  __cdecl ResourceKeyNE(const void* key, int val);                           // 0x005f78f0
 }
 
 namespace SP {
@@ -244,6 +263,58 @@ struct cAnimalVector {
 
 void __cdecl CopyEggs(cEggPtr* first, cEggPtr* last, cEggPtr* dest);   // 0x006782c0
 
+struct cIntVector {
+    int* mpBegin;
+    int* mpEnd;
+    int* mpCapacity;
+    u32 mAllocator[2];
+    void PushN(int count, const int* val);   // 0x00c6e0c0
+};
+struct cByteVector {
+    u8* mpBegin;
+    u8* mpEnd;
+    u8* mpCapacity;
+    u32 mAllocator[2];
+    void Insert(u8* end, int n, const u8* val);   // 0x005151b0
+};
+
+struct Vector2 {
+    float x, y;
+};
+
+// RandomInRange<Vector2> — 0x004df2d0
+float __cdecl RandomInRange(const Vector2* range);
+
+// Species archetype blob (the per-species tuning record passed to UpdateFromArchetype).
+struct cHerdArchetype {
+    char pad0[0x2f0];
+    float mTargetSizeMin;      // +0x2f0
+    float mTargetSizeMax;      // +0x2f4
+    float mBabyMin;            // +0x2f8
+    float mBabyMax;            // +0x2fc
+    char pad300[0x314 - 0x300];
+    float mRespawnValue;       // +0x314
+    Vector2 mSpeedRange;       // +0x318
+    char pad320[0x338 - 0x320];
+    float mSizeScale;          // +0x338
+    char pad33c[0x344 - 0x33c];
+    float mScaleValue;         // +0x344
+    char pad348[0x35c - 0x348];
+    float mCallTimerDefault;   // +0x35c
+    float mBabyFrac;           // +0x360
+    char pad364[0x36c - 0x364];
+    int   mSizeTarget;         // +0x36c
+    int   mMaxSize;            // +0x370
+    float mScaleA;             // +0x374
+    float mScaleB;             // +0x378
+    char pad37c[0x38c - 0x37c];
+    int   mPersonality;        // +0x38c
+    char pad390[0x3d8 - 0x390];
+    int   mRespawnSpecies;     // +0x3d8
+    int   mMinCount;           // +0x3dc
+    int   mMaxCount;           // +0x3e0
+};
+
 class cHerd {
 public:
     virtual int AddRef();                      // +0x00
@@ -255,21 +326,36 @@ public:
     cVector3Vector mFeedingGrounds;            // +0x68
     char pad7c[0x80 - 0x7c];
     u32 mCurrentFeedingGrounds;                // +0x80
-    char pad84[0x88 - 0x84];
+    u8  mbHasAvatarLink;                       // +0x84
+    char pad85[0x88 - 0x85];
     u32 mArchetype;                            // +0x88
-    char pad8c[0xa4 - 0x8c];
+    char pad8c[0x90 - 0x8c];
+    int   mArchetypeVariance;                  // +0x90
+    float mMovementSpeed;                      // +0x94
+    u8  mKey98[0xc];                           // +0x98 (species key passed to GetProfile)
     cSpeciesProfile* mpSpeciesProfile;         // +0xa4
-    char pada8[0xf0 - 0xa8];
+    u8* mpKeyBegin;                            // +0xa8 (array of 0xc-stride species keys)
+    u8* mpKeyEnd;                              // +0xac
+    char pada8[0xf0 - 0xb0];
     u32 mGeneration;                           // +0xf0
     int mTargetHerdSize;                       // +0xf4
-    char padf8[0x100 - 0xf8];
+    int mEggGoal;                              // +0xf8
+    char padf8[0x100 - 0xfc];
     u32 mEggStatus;                            // +0x100
     int mNumGuards;                            // +0x104
-    char pad108[0x11c - 0x108];
+    float mCallTimer;                          // +0x108
+    int mSizeTarget;                           // +0x10c
+    u32 mMaxSize;                              // +0x110
+    float mScaleMultiplierA;                   // +0x114
+    float mScaleMultiplierB;                   // +0x118
     u32 mRespawnRate;                          // +0x11c
     char pad120[0x128 - 0x120];
     bool mbOkayToRespawn;                      // +0x128
-    char pad129[0x15c - 0x129];
+    int mRespawnSpecies;                       // +0x12c (-1 = unset)
+    char pad129[0x150 - 0x130];
+    float mHerdSizeScale;                      // +0x150
+    char pad154[0x158 - 0x154];
+    float mScaleMultiplierC;                   // +0x158
     int mCreaturePersonality;                  // +0x15c
     cNest* mpNest;                             // +0x160
     AutoRefCount<cSPCreatureAnimal> mpHerdMom; // +0x164
@@ -283,9 +369,18 @@ public:
     cSPTimer mEggTimer;                        // +0x1a0
     char pad1a1[0x1c0 - 0x1a1];
     cSPTimer mRespawnTimer;                    // +0x1c0
+    char pad1c1[0x1e0 - 0x1c1];
+    cIntVector mEmotionVector;                 // +0x1e0 (eastl vector<int>)
+    cByteVector mGenderVector;                 // +0x1f4 (eastl vector<u8>)
 
     void Update(int ms);
     const Vector3* GetPosition();              // 0x00c6acc0
+    void FUN_00c6e4f0();                       // 0x00c6e4f0
+    void UpdateFromArchetype(int pArchetype, char bForce);   // 0x00c6e200
+    u8   vtableSlot40(u32 arg);                // 0x00b183f0
+    u8   EnsureProfiles(u32 arg);              // 0x00c6e120
+    void FUN_00c6ad60();                       // 0x00c6ad60
+    void FUN_00c6b540();                       // 0x00c6b540
     __forceinline const Vector3* HomePos() { return mpNest ? mpNest->Spatial()->GetPosition() : &mInitialPosition; }
     float FUN_00c69f80();                      // 0x00c69f80 (baby fraction)
     void FUN_00c6cbf0();                       // 0x00c6cbf0
@@ -297,6 +392,12 @@ extern float g_minRadius;                      // 0x01470f1c
 extern float g_maxRadius;                      // 0x0147b9f0
 extern float g_adultFrac;                      // 0x01582f58
 extern int   g_maxEggs;                        // 0x01582f34
+extern int   gHerdRespawnDelay;                // 0x0150c8c4
+extern int   gHerdSizeSmall;                   // 0x01582e58
+extern int   gHerdSizeLarge;                   // 0x01582e5c
+extern int   gAppNameTag;                      // 0x01654c05 (game-mode identity tag)
+extern u8*   g_speciesKeyBegin;                // 0x015d96fc
+extern u8*   g_speciesKeyEnd;                  // 0x015d9700
 
 // @ 0x00c6d7c0
 void cHerd::Update(int ms)
@@ -498,6 +599,168 @@ afterSpawn:
     rt->Restart();
     if (mFeedingGrounds.mpBegin != mFeedingGrounds.mpEnd)
         mCurrentFeedingGrounds = g_mathRandom.RandomUint32Uniform((u32)mFeedingGrounds.size());
+}
+
+// @ 0x00c6e200
+void cHerd::UpdateFromArchetype(int pArchetype, char bForce)
+{
+    if (pArchetype == 0)
+        return;
+    cHerdArchetype* arch = (cHerdArchetype*)pArchetype;
+
+    if (bForce || mTargetHerdSize == 0) {
+        float roll = RandomFloatRange(arch->mTargetSizeMin, arch->mTargetSizeMax);
+        mTargetHerdSize = FloatToIntSSE(roll);
+    }
+    if (bForce || mHerdSizeScale == 0.0f)
+        mHerdSizeScale = arch->mSizeScale;
+    if (bForce || mScaleMultiplierC == 0.0f)
+        mScaleMultiplierC = arch->mScaleValue;
+    if (bForce || mCallTimer == 0.0f)
+        mCallTimer = arch->mCallTimerDefault;
+
+    mMovementSpeed = RandomInRange(&arch->mSpeedRange);
+
+    mRespawnSpecies = arch->mRespawnSpecies;
+    if (mRespawnSpecies == -1)
+        mRespawnSpecies = g_mathRandom.RandomUint32Uniform((u32)((g_speciesKeyEnd - g_speciesKeyBegin) / 0xc));
+
+    mSizeTarget = arch->mSizeTarget;
+    mMaxSize = arch->mMaxSize;
+    mScaleMultiplierA = arch->mScaleA;
+    mScaleMultiplierB = arch->mScaleB;
+
+    if (bForce || mCallTimer > 0.0f) {
+        const float* pa = &mCallTimer;
+        if (mScaleMultiplierA <= mCallTimer)
+            pa = &mScaleMultiplierA;
+        mScaleMultiplierA = *pa;
+        const float* pb = &mCallTimer;
+        if (mScaleMultiplierB <= mCallTimer)
+            pb = &mScaleMultiplierB;
+        mScaleMultiplierB = *pb;
+    }
+
+    if (bForce || mCreaturePersonality == 0) {
+        mCreaturePersonality = arch->mPersonality;
+        FUN_00c6ad60();
+    }
+
+    mArchetypeVariance = (int)g_mathRandom.RandomUint32Uniform((arch->mMaxCount - arch->mMinCount) >> 2);
+    mEggStatus = (u32)(int)((float)mTargetHerdSize * arch->mBabyFrac);
+
+    float babyRoll = RandomFloatRange(arch->mBabyMin, arch->mBabyMax);
+    int lo = FloatToIntSSE(babyRoll);
+    int hi = mTargetHerdSize - 1;
+    mEggGoal = lo;
+    int floorVal = (hi < 0) ? 0 : hi;
+    if (floorVal < mEggGoal)
+        mEggGoal = floorVal;
+
+    float respawnRoll = arch->mRespawnValue * 0.5f;
+    mRespawnRate = (u32)FloatToIntSSE(respawnRoll);
+
+    {
+        u32 count = (u32)mSizeTarget;
+        u8* begin = mGenderVector.mpBegin;
+        u8* end = mGenderVector.mpEnd;
+        if (count > (u32)(end - begin)) {
+            u8 zero = 0;
+            mGenderVector.Insert(end, (int)((end - begin) + count), &zero);
+        } else {
+            memcpy(begin + count, end, 0);
+            mGenderVector.mpEnd = begin + count;
+        }
+    }
+
+    int one = 1;
+    mEmotionVector.PushN(mSizeTarget, &one);
+}
+
+// @ 0x00c6e4f0
+void cHerd::FUN_00c6e4f0()
+{
+    if (mTargetHerdSize == 0) {
+        bool bDo = false;
+        cSpeciesProfile* sp = mpSpeciesProfile;
+        if (sp != 0) {
+            if (sp != FUN_00401090()->GetAvatarProfile())
+                bDo = true;
+        }
+        if (GetCurrentGameMode() == (void*)0x01654c05 && IsWorldLayoutFlagSet(2)) {
+            if (bDo && ResourceKeyNE((char*)sp + 0x504, FUN_00c30f90()))
+                mTargetHerdSize = gHerdRespawnDelay;
+        } else if (bDo) {
+            mTargetHerdSize = gHerdRespawnDelay;
+        }
+    }
+
+    if (mHerdSizeScale == 0.0f)
+        mHerdSizeScale = 1.0f;
+    if (mScaleMultiplierC == 0.0f)
+        mScaleMultiplierC = 1.0f;
+
+    if (mRespawnSpecies == -1)
+        mRespawnSpecies = g_mathRandom.RandomUint32Uniform((u32)((g_speciesKeyEnd - g_speciesKeyBegin) / 0xc));
+
+    if (mSizeTarget > 0 && mMaxSize == 0)
+        mMaxSize = 1;
+
+    {
+        u32 count = (u32)mSizeTarget;
+        u8* begin = mGenderVector.mpBegin;
+        u8* end = mGenderVector.mpEnd;
+        if (count > (u32)(end - begin)) {
+            u8 zero = 0;
+            mGenderVector.Insert(end, (int)((end - begin) + count), &zero);
+        } else {
+            memcpy(begin + count, end, 0);
+            mGenderVector.mpEnd = begin + count;
+        }
+    }
+
+    int one = 1;
+    mEmotionVector.PushN(mSizeTarget, &one);
+    mEggTimer.Init();
+    mRespawnTimer.Init();
+
+    if (mbHasAvatarLink && NounManager()->GetAvatar() == 0) {
+        const Vector3* pos = mpNest ? mpNest->Spatial()->GetPosition() : (const Vector3*)((char*)this + 0x34);
+        FUN_00c099e0(pos, mpSpeciesProfile, 1, this, 1, 0);
+        FUN_00c6b540();
+    }
+
+    if (mRespawnRate == 0 && mCreaturePersonality != 2) {
+        mRespawnRate = (mpSpeciesProfile == FUN_00401090()->GetAvatarProfile()) ? gHerdSizeSmall : gHerdSizeLarge;
+    }
+}
+
+// @ 0x00c6e120
+u8 cHerd::EnsureProfiles(u32 arg)
+{
+    u8 ret = 1;
+    if (mpSpeciesProfile == 0) {
+        ret = vtableSlot40(arg);
+        cSpeciesProfile* profile = FUN_00401090()->GetProfile(mKey98);
+        mpSpeciesProfile = profile;
+        ret = (u8)(ret & (profile != 0));
+    }
+
+    int n = (int)((mpKeyEnd - mpKeyBegin) / 0xc);
+    for (int i = 0; i < n; ++i)
+        FUN_00401090()->GetProfile(mpKeyBegin + i * 0xc);
+
+    u32 count = (u32)mSizeTarget;
+    u8* begin = mGenderVector.mpBegin;
+    u8* end = mGenderVector.mpEnd;
+    if (count > (u32)(end - begin)) {
+        u8 zero = 0;
+        mGenderVector.Insert(end, (int)((end - begin) + count), &zero);
+    } else {
+        memcpy(begin + count, end, 0);
+        mGenderVector.mpEnd = begin + count;
+    }
+    return ret;
 }
 
 } // namespace SP
