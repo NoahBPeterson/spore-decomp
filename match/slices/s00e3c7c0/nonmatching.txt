@@ -1,0 +1,4 @@
+00e3c7c0 723 not reconstructed in this pass (723-byte editor/asset helper); not byte-exact; size 0 vs 723; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e3caa0 307 not reconstructed in this pass (307-byte helper); not byte-exact; size 0 vs 307; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e3cbe0 625 not reconstructed in this pass (625-byte helper); not byte-exact; size 0 vs 625; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e3ce60 242 not reconstructed in this pass (metadata lookup/string assign helper: GetManager 0x0067dcd0, virtual slot +0xc producing an asset, GetName 0x00414e10, wcslen loop, eastl::basic_string<wchar_t>::assign 0x00423650, then copies three dwords and writes 0x2f7d0004); not byte-exact; size 0 vs 242; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
