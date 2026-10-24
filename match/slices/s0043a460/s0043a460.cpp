@@ -10,6 +10,47 @@ struct Vec4 {
     Vec4(const Vec4& o) : x(o.x), y(o.y), z(o.z), w(o.w) {}
 };
 
+class cSPEditorBlock;
+
+// eBlockUIState — the states SetUIState (0x0043A5E0) dispatches on. 3 is not a case.
+enum eBlockUIState { kUIState0 = 0, kUIState1, kUIState2, kUIState3, kUIState4, kUIState5 };
+
+// EA::AutoRefCount<cSPEditorBlock> — a 4-byte reference-counted block handle.
+struct BlockRef {
+    cSPEditorBlock* mBlock;
+    BlockRef(cSPEditorBlock* p) : mBlock(p) {}
+    cSPEditorBlock* operator->() const { return mBlock; }
+    bool operator==(const BlockRef& o) const { return mBlock == o.mBlock; }
+};
+
+// eastl::sp_vector_allocator is empty; only its out-of-line copy ctor is left (0x00429360).
+struct EmptyAllocator {
+    EmptyAllocator() {}
+    EmptyAllocator(const EmptyAllocator& x);          // 0x00429360
+};
+
+// eastl::vector<BlockRef, EmptyAllocator> (the "BlockVector" destroyed at 0x00453EB0):
+// begin/end/capacity followed by the (empty) allocator.
+struct BlockVector {
+    BlockRef*      mBegin;      // +0x00
+    BlockRef*      mEnd;        // +0x04
+    BlockRef*      mCapacity;   // +0x08
+    EmptyAllocator mAllocator;  // +0x0C
+
+    BlockVector(const EmptyAllocator& a = EmptyAllocator())
+        : mBegin(0), mEnd(0), mCapacity(0), mAllocator(a) {}
+    BlockRef* begin() const { return mBegin; }
+    BlockRef* end() const { return mEnd; }
+    int size() const { return (int)(mEnd - mBegin); }
+    BlockRef& operator[](int i) const { return mBegin[i]; }
+    void erase(BlockRef* first, BlockRef* last);      // 0x00454280
+    ~BlockVector();                                   // 0x00453EB0
+};
+
+// eastl::remove over an intrusive-pointer range (0x004549B0): compacts out the elements equal
+// to value and returns the new end.
+BlockRef* Remove(BlockRef* first, BlockRef* last, const BlockRef& value);   // 0x004549B0
+
 // Intrusive 60-bit flag set reached through +0xDC8.
 struct BitSet60 {
     uint32_t data[2];
@@ -21,9 +62,6 @@ struct BitSet60 {
 
 // A 12-byte key element vector (begin/end at the head of the field).
 struct KeyVec { void* begin; void* end; };
-
-// Small local object used by the vector-building helper.
-struct TmpKey { void Init(void* p); };
 
 class cSPEditorBlock { public:
     char     pad00[0x10];
@@ -57,7 +95,7 @@ class cSPEditorBlock { public:
     Vec3* GetVec1(Vec3* out);                             // 0043A490
     float Length2();                                      // 0043A500
     Vec3* GetVec2(Vec3* out);                             // 0043A530
-    bool F5e0(int type, uint8_t a, uint8_t b, char c);    // 0043A5E0
+    bool SetUIState(eBlockUIState state, bool b1, bool b2, bool b3);   // 0x0043A5E0
     void F830(uint8_t p);                                 // 0043A830
     int  GetSkinIdentifierForPicking();                   // 0043A870
     void F9a0(uint8_t a, uint8_t b);                      // 0043A9A0
@@ -67,17 +105,14 @@ class cSPEditorBlock { public:
     void F448a80();                                       // 00448A80
     void F448690(Vec4 v);                                 // 00448690
     void F3cad0();                                        // 0043CAD0
-    void F48C790(void* out, int flag);                    // 0048C790
 };
+
+void BuildPileList(cSPEditorBlock* block, BlockVector* piles, int flag);   // 0x0048C790
 
 float VectorLength(const Vec3* v);                        // 0040AE50
 void* Sub_41DCA0(void* out, void* table, const float* key);  // 0041DCA0
 bool  ModelKey_HasResourceType(void* modelKey);           // 00526430 (thiscall)
 bool  Sub_43AC40_2(void* self, int type, uint8_t a, uint8_t b);  // 0043AC40 helper
-void  Sub_429360(TmpKey* self, void* out);                // 00429360
-void  Sub_4549B0(void* a, void* b, void* c, void* d);     // 004549B0
-void  Sub_454280(void* p, int n);                         // 00454280
-void  Sub_453EB0(void* v);                                // 00453EB0
 
 extern const Vec4 g_v4_a;   // 015D21B8
 extern const Vec4 g_v4_b;   // 015D21D4
@@ -125,42 +160,46 @@ Vec3* cSPEditorBlock::GetVec2(Vec3* out)
 }
 
 // @ 0x0043A5E0
-bool cSPEditorBlock::F5e0(int type, uint8_t a, uint8_t b, char c)
+// Ask this block's pile list whether it accepts `state`. F3AC40 runs the query on this block,
+// then every pile in the list is asked the same question and the answers are ANDed; the list
+// is built first, so the block itself is removed from it. Runs only when forced and only
+// while the "piles built" bit (bit 7 of the flag set) is clear.
+bool cSPEditorBlock::SetUIState(eBlockUIState state, bool b1, bool b2, bool b3)
 {
-    uint8_t result = F3AC40(type, a, b) ? 1 : 0;
-    if (c != 0 && !bits.Get(7)) {
-        KeyVec list;
-        list.begin = 0;
-        list.end = 0;
-        TmpKey tmp;
-        Sub_429360(&tmp, &tmp);
-        F48C790(&list, 0);
-        void* end = list.end;
-        void* begin = list.begin;
-        Sub_4549B0(begin, list.begin, this, end);
-        Sub_454280(list.begin, (int)((char*)list.end - (char*)list.begin));
-        int count = (int)(((char*)list.end - (char*)list.begin) >> 2);
-        for (int i = 0; i < count; i++) {
-            uint8_t r = result;
-            if (type == 0) {
-                bool t = !F5a0() && !F5c0();
-                uint8_t x = F3AC40(t ? 0 : 2, a, b) ? 1 : 0;
-                result = r & x;
-            } else if (type != 5) {
-                uint8_t x = F3AC40(type, a, b) ? 1 : 0;
-                result = r & x;
+    bool changed = F3AC40(state, b1, b2);
+    if (b3 && !bits.Get(7)) {
+        BlockVector piles;
+        BuildPileList(this, &piles, 0);
+        piles.erase(Remove(piles.begin(), piles.end(), BlockRef(this)), piles.end());
+        for (int i = 0, n = piles.size(); i < n; i++) {
+            switch (state) {
+            case kUIState0:
+                // A block with no settled child asks 2 (the child state), one without asks 0.
+                if (F5a0() || F5c0()) {
+                    changed = changed & piles[i]->F3AC40(kUIState2, b1, b2);
+                } else {
+                    changed = changed & piles[i]->F3AC40(kUIState0, b1, b2);
+                }
+                break;
+            case kUIState1:
+            case kUIState2:
+            case kUIState4:
+            case kUIState5:
+                changed = changed & piles[i]->F3AC40(state, b1, b2);
+                break;
+            default:
+                break;
             }
         }
-        Sub_453EB0(&list);
     }
-    return result != 0;
+    return changed;
 }
 
 // @ 0x0043A830
 void cSPEditorBlock::F830(uint8_t p)
 {
     if (Fb90(p)) {
-        F5e0((int)f3c, 1, 0, 1);
+        SetUIState((eBlockUIState)f3c, true, false, true);
     }
 }
 
@@ -194,7 +233,7 @@ int cSPEditorBlock::GetSkinIdentifierForPicking()
 void cSPEditorBlock::F9a0(uint8_t a, uint8_t b)
 {
     if (F9e0(a, b)) {
-        F5e0((int)f3c, 1, 0, 1);
+        SetUIState((eBlockUIState)f3c, true, false, true);
     }
 }
 

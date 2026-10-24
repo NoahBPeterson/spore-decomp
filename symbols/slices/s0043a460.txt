@@ -2,3 +2,4 @@
 0043a9a0 ?F9a0@cSPEditorBlock_s0043_a460@SP@@QAEXEE@Z  # cSPEditorBlock_s0043_a460::F9a0 migrated from s0043a460 (verbatim, slice spelling)
 0043a9e0 ?F9e0@cSPEditorBlock_s0043_a460@SP@@QAE_NEE@Z  # cSPEditorBlock_s0043_a460::F9e0 migrated from s0043a460 (verbatim, slice spelling)
 0043ab90 ?Fb90@cSPEditorBlock_s0043_a460@SP@@QAE_NE@Z  # cSPEditorBlock_s0043_a460::Fb90 migrated from s0043a460 (verbatim, slice spelling)
+0043a5e0 ?SetUIState@cSPEditorBlock@SP@@QAE_NW4eBlockUIState@2@_N11@Z  # SP::cSPEditorBlock::SetUIState (real dev name; slice class spelling is cSPEditorBlock_s0043_a460): rebuilds the pile list and ANDs F3AC40 over the piles; complete (nonmatching, difftest WEAK: 0 mismatches, 54.1% coverage)
