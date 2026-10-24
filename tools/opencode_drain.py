@@ -91,7 +91,8 @@ NUDGE = ("Continue your task. Act through tool calls: call the edit/write tool t
          "bookkeeping, run_all), and keep claiming until it prints NO SLICE; then give the final one-line-per-slice "
          "summary. Name every field you touch (docs/matching.md): no raw-offset casts like *(u32*)((char*)p + 0x5fc). "
          "If the slice already has committed functions, keep every one of them and its rows: add yours to the same "
-         "file, never rewrite it from scratch (a gold7 rewrite dropped an exact function, 2026-10-24)."
+         "file, never rewrite it from scratch (a gold7 rewrite dropped an exact function, 2026-10-24). Never add __asm "
+         "to save/restore registers or transcribe a function: log FAIL-KEPT naming the register instead."
          % G["batch"]) if QUEUE else (
          "Continue your task: check the files already written in your slices and finish the remaining slices, then "
          "give the final one-line-per-slice summary.")

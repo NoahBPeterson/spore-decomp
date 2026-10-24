@@ -79,7 +79,7 @@ def transcribed(src, review=False):
     key = (src, review)
     if key not in _cache:
         out = {}
-        if os.path.exists(src):
+        if os.path.isfile(src):   # some src/game "<obj>.cpp" names are directories of a split object
             parts = _MARK.split(open(src, errors="ignore").read())
             for i in range(1, len(parts), 2):
                 r = why(parts[i + 1], review)
@@ -109,7 +109,14 @@ def main(argv):
         args = sorted(os.path.basename(d) for d in glob.glob(os.path.join(ROOT, "match/slices/*")))
         args += sorted(os.path.relpath(f, ROOT) for f in glob.glob(os.path.join(ROOT, "src/game/**/*.cpp"), recursive=True))
     for a in args:
-        if a.endswith(".cpp"):
+        if a.endswith((".cpp", ".c")) and os.path.basename(os.path.dirname(os.path.abspath(os.path.join(ROOT, a)))).startswith("s") \
+                and os.path.abspath(os.path.join(ROOT, a)).startswith(os.path.join(ROOT, "match", "slices") + os.sep):
+            # a slice source: its bookkeeping is the slice directory. commit_slice.sh passes the .cpp path, which the
+            # branch below took for a src/game TU (bookkeeping in <file minus .cpp>/), found no rows and always
+            # passed: s00b0f270 committed two whole-function x87 transcriptions (fix24, 2026-10-24)
+            f = os.path.abspath(os.path.join(ROOT, a))
+            units.append((a, [f], os.path.dirname(f)))
+        elif a.endswith(".cpp"):
             f = os.path.join(ROOT, a)
             units.append((a, [f], f[:-4]))
         else:
