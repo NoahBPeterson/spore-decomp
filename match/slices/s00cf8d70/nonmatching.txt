@@ -1,0 +1,16 @@
+00cf8d70 140 not reconstructed in this pass (SP::cCivModeStrategy::SetCameraTrackObject); not byte-exact; size 0 vs 140; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00cf8e20 150 not reconstructed in this pass (player-civ population count / SimSingleton lazy init); not byte-exact; size 0 vs 150; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00cf8ec0 270 not reconstructed in this pass (civ-mode helper); not byte-exact; size 0 vs 270; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00cf8fd0 103 not reconstructed in this pass (civ-mode helper); not byte-exact; size 0 vs 103; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00cf9040 83 not reconstructed in this pass (civ-mode helper); not byte-exact; size 0 vs 83; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00cf90a0 103 not reconstructed in this pass (civ-mode helper); not byte-exact; size 0 vs 103; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00cf9110 127 not reconstructed in this pass (civ-mode helper); not byte-exact; size 0 vs 127; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00cf9190 377 not reconstructed in this pass (civ-mode helper); not byte-exact; size 0 vs 377; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00cf9310 149 not reconstructed in this pass (civ-mode helper); not byte-exact; size 0 vs 149; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00cf93b0 243 not reconstructed in this pass (civ-mode helper); not byte-exact; size 0 vs 243; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00cf94b0 40 reconstructed as HasActiveTrack (null test on this+0xe8 and its +0x80 member, then 0x00d09660 predicate); not byte-exact: the two early exits let the compiler merge the final `test al/je` with the null exits differently - 39 vs 40 bytes; equiv: not run (no definition for 0x00d09660); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00cf94e0 53 reconstructed as ForEachNode (walk a uint32 range, __fastcall callback on element+extra, then echo callback/arg into the out struct); not byte-exact: the __fastcall function-pointer call and out-struct stores changed the frame/register use - 71 vs 53 bytes; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00cf9520 841 not reconstructed in this pass (SP::cCivModeStrategy::Shutdown); not byte-exact; size 0 vs 841; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00cf9870 54 not reconstructed in this pass (small civ-mode helper); not byte-exact; size 0 vs 54; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00cf98b0 319 not reconstructed in this pass (civ-mode helper); not byte-exact; size 0 vs 319; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00cf9a80 280 not reconstructed in this pass (SP::cCivModeStrategy::~cCivModeStrategy); not byte-exact; size 0 vs 280; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
