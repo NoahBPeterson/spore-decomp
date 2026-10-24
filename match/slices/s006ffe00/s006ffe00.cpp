@@ -1,6 +1,7 @@
 // Slice s006ffe00: frustum/spatial-cell helpers (bit-pack/unpack) and small vector/accessor
 // routines. Region 0x6ffe00-0x700d80. Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-.
 #include "types.h"
+#include <xmmintrin.h>
 
 // ---- external callees -------------------------------------------------------------------
 void* __cdecl FUN_011e073e(void* p, int a, unsigned size);
@@ -18,8 +19,31 @@ void __cdecl FUN_006ffe00(void* a, void* b, void* c) { (void)a; (void)b; (void)c
 // @ 0x00700120  -- SP::cFrustumCull::FrustumTestSphere (stub, see partial.txt)
 int __cdecl FUN_00700120(void* a, void* b, void* c) { (void)a; (void)b; (void)c; return 0; }
 
-// @ 0x00700290  -- cell record copy (stub, see partial.txt)
-void __cdecl FUN_00700290(void* dst, void* src) { (void)dst; (void)src; }
+// cell record copy (a POD 0xa0-byte record memcpy)
+struct SpCellRecord {
+    int     m00[3];     // +0x00
+    __m128  m10;        // +0x10  (16-byte aligned -> 4-byte hole at +0x0c)
+    int     m20[6];     // +0x20
+    uint8_t m38[4];     // +0x38
+    int     m3c[3];     // +0x3c  (8-byte hole at +0x48)
+    __m128  m50;        // +0x50
+    __m128  m60;        // +0x60
+    __m128  m70;        // +0x70
+    __m128  m80;        // +0x80
+    int     m90[3];     // +0x90  (4-byte tail pad to +0xa0)
+    SpCellRecord(const SpCellRecord& o);
+};
+// @ 0x00700290
+SpCellRecord::SpCellRecord(const SpCellRecord& o) {
+    m00[0] = o.m00[0]; m00[1] = o.m00[1]; m00[2] = o.m00[2];
+    m10 = o.m10;
+    m20[0] = o.m20[0]; m20[1] = o.m20[1]; m20[2] = o.m20[2];
+    m20[3] = o.m20[3]; m20[4] = o.m20[4]; m20[5] = o.m20[5];
+    m38[0] = o.m38[0]; m38[1] = o.m38[1]; m38[2] = o.m38[2]; m38[3] = o.m38[3];
+    m3c[0] = o.m3c[0]; m3c[1] = o.m3c[1]; m3c[2] = o.m3c[2];
+    m50 = o.m50; m60 = o.m60; m70 = o.m70; m80 = o.m80;
+    m90[0] = o.m90[0]; m90[1] = o.m90[1]; m90[2] = o.m90[2];
+}
 
 // @ 0x00700360
 struct CellAccessor {
