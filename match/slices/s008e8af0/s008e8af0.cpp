@@ -29,6 +29,7 @@ class RectT { public:
     {
         mLeft -= l; mTop -= t; mRight += r; mBottom += b;
     }
+    void Bounds(const RectT& a, const RectT& b);   // 0x00805530
 };
 
 template <typename T>
@@ -84,9 +85,13 @@ public:
 
     StyleState(StyleState* pBase);   // 0x008fc130
     ~StyleState();                   // 0x008e8650
+    void Update();                   // 0x008fc670
 
     StyleState* mpBase;           // +0x0
-    uint32_t pad004[(0x2ec - 0x4) / 4];
+    uint32_t pad004[(0x2d4 - 0x4) / 4];
+    Length mVerticalAlignLength;  // +0x2d4
+    int mVerticalAlign;           // +0x2dc
+    uint32_t pad2e0[(0x2ec - 0x2e0) / 4];
     Edge mEdges[4];               // +0x2ec
     Length mBoxWidth;             // +0x36c
     Length mBoxHeight;            // +0x374
@@ -110,6 +115,9 @@ class Element {
 public:
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
     virtual void GetIntrinsicSize(SizeT<float>* pSize);   // +0x10
+    virtual void v05();                                   // +0x14
+    virtual bool v06();                                   // +0x18
+    virtual void v07(Style::StyleState* pStyle);          // +0x1c
 };
 }  // namespace DOM
 
@@ -126,6 +134,7 @@ public:
 };
 
 class Block;
+class Page;
 
 class StackingContext {
 public:
@@ -133,6 +142,12 @@ public:
     void SetParagraphStyle(const Style::ParagraphStyle& ps);   // 0x008ee740
     void SetContextRect(const RectT<float>& rect);             // 0x008efc80
     float ClampWidth(float width);                             // 0x008f0240
+    void RemoveFloat(int value);                               // 0x008efcd0
+    void BeginContent(int value);                              // 0x008efe80
+    void EndContent();                                         // 0x008f0010
+    void GetParagraphStyle(Style::ParagraphStyle* ps);         // 0x008ee770
+    void AddOutOfFlow(Block* block);                           // 0x008f0280
+    void AddLineBreak(Item* item, const RectT<float>& pick, void* textStyle);  // 0x008efa90
 
     Item* mpContextRoot;                   // +0x0
     Text::Typesetter mTypesetter;          // +0x4
@@ -160,11 +175,18 @@ public:
     virtual void v09(); virtual void v0a(); virtual void v0b(); virtual void v0c();
     virtual void Layout(StackingContext& sc, Style::StyleState& style);         // +0x34
 
+    void GetPickBox(RectT<float>* pOut);   // 0x008e7da0
+
     void* mpNext;                          // +0x4
     void* mpPrev;                          // +0x8
-    void* mpPage;                          // +0xc
+    Page* mpPage;                          // +0xc
     int mItemType;                         // +0x10
     unsigned int mSelectableIndex;         // +0x14
+};
+
+class Page {
+public:
+    void* GetTextStyle(Style::StyleState* pStyle);   // 0x008ec580
 };
 
 class ContainerItem : public Item {
@@ -175,12 +197,15 @@ public:
     unsigned int mnRuleCount;              // +0x28
     int mDisplay;                          // +0x2c
     int mPosition;                         // +0x30
-    uint32_t pad34[(0x48 - 0x34) / 4];
+    int mLayoutType;                       // +0x34
+    uint32_t pad38[(0x48 - 0x38) / 4];
     Style::ParagraphStyle mParaStyle;      // +0x48
 };
 
 class Block : public ContainerItem {
 public:
+    void SetUpBox(StackingContext& sc, Style::StyleState& style);                   // 0x008eac20
+    virtual void Layout(StackingContext& sc, Style::StyleState& style);            // +0x34
     virtual void SetMargins(StackingContext& sc, Style::StyleState& style);        // +0x38
     virtual void PlaceOutOfFlow(StackingContext& sc, Style::StyleState& style);    // +0x3c
 
@@ -337,6 +362,128 @@ void Block::PlaceOutOfFlow(StackingContext& sc, Style::StyleState& parentStyle)
     mBorderWidth.mBottom = border.mBottom;
 }
 
+// @ 0x008e95c0
+void Block::Layout(StackingContext& sc, Style::StyleState& parentStyle)
+{
+    using namespace Style;
+
+    StyleState style(&parentStyle);
+    ParagraphStyle ps;
+    RectT<float> pick;
+    ComputeStyle(mpElement, mStyleRules, mnRuleCount, &style);
+
+    if (style.mDisplay == 0)
+        return;
+
+    style.Update();
+    SetUpBox(sc, style);
+    mFloat = style.mFloat;
+
+    if (mpElement != 0) {
+        if (mpElement->v06())
+            mpElement->v07(&style);
+    }
+
+    switch (mLayoutType) {
+    case 1: {
+        if (style.mClearFloat != 0)
+            sc.RemoveFloat(style.mClearFloat);
+
+        StackingContext context(this, sc, style);
+        SetMargins(context, style);
+
+        mVerticalOffset = 0.0f;
+        float f = style.mFontMetrics.mfAscent - style.mFontMetrics.mfDescent;
+        switch (style.mVerticalAlign) {
+        case 1:
+            mVerticalOffset = f * -0.5f;
+            break;
+        case 3:
+            f -= mBorderRect.mBottom - mBorderRect.mTop;
+        case 2:
+            mVerticalOffset = f * 0.5f;
+            break;
+        case 8:
+            mVerticalOffset = style.mVerticalAlignLength.ToPixels(mBorderRect.mBottom - mBorderRect.mTop, style.mFontMetrics);
+            break;
+        default:
+            break;
+        }
+
+        Layout(context, style);
+
+        void* textStyle = mpPage->GetTextStyle(&style);
+        GetPickBox(&pick);
+        sc.AddLineBreak(this, pick, textStyle);
+        return;
+    }
+
+    case 2:
+    case 3: {
+        sc.EndContent();
+        sc.GetParagraphStyle(&ps);
+        sc.SetParagraphStyle(mParaStyle);
+        if (style.mClearFloat != 0)
+            sc.RemoveFloat(style.mClearFloat);
+        SetMargins(sc, style);
+        Layout(sc, style);
+        sc.SetParagraphStyle(ps);
+        return;
+    }
+
+    case 4: {
+        sc.mPendingCollapse = 0.0f;
+        sc.BeginContent(-1);
+        if (style.mClearFloat != 0)
+            sc.RemoveFloat(style.mClearFloat);
+        StackingContext context(this, sc, style);
+        context.SetParagraphStyle(mParaStyle);
+        SetMargins(context, style);
+        Layout(context, style);
+        sc.AddOutOfFlow(this);
+        sc.mBoundsRect.Bounds(sc.mBoundsRect, mPickRect);
+        return;
+    }
+
+    case 5:
+        mpNextOOF = sc.mpOutOfFlowList;
+        sc.mpOutOfFlowList = this;
+        return;
+
+    default:
+        return;
+    }
+}
+
 }  // namespace Layout
 }  // namespace XHTML
 }  // namespace EA
+
+// ---- colour helpers (EA colour utilities; external to this translation unit) ----
+void __cdecl RgbToHsl(int r, int g, int b, float* h, float* l, float* s);              // 0x00918090
+void __cdecl HslToRgb(float h, float l, float s, unsigned char* r, unsigned char* g, unsigned char* b); // 0x00917f80
+
+// @ 0x008e9900
+void __cdecl AdjustColors(unsigned int color, const float* src, unsigned int* dst, int count)
+{
+    float h, l, s;
+    RgbToHsl((int)(color >> 16), (int)(color >> 8), (int)color, &h, &l, &s);
+
+    if (l > 0.8f)
+        l = 0.8f;
+    else if (l < 0.2f)
+        l = 0.2f;
+
+    for (int i = 0; i < count; ++i)
+    {
+        float nl = src[i] + l;
+        if (nl < 0.0f)
+            nl = 0.0f;
+        else if (nl > 1.0f)
+            nl = 1.0f;
+
+        unsigned char r, g, b;
+        HslToRgb(h, nl, s, &r, &g, &b);
+        dst[i] = 0xFF000000u | ((unsigned int)r << 16) | ((unsigned int)g << 8) | b;
+    }
+}
