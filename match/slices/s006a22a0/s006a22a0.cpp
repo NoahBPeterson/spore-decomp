@@ -6,6 +6,9 @@
 
 extern EA::Variant g_sNullVariant;  // 0x016027d0
 void* PropertyManager();            // 0x0067de30
+// PropertyManager vtable slot +0x50 (PropertyManager::GetPropertyByID): `this` in ecx, the
+// key on the stack, one stack dword -- a thiscall member, declared as a __fastcall shim.
+typedef void* (__fastcall* PropertyLookup)(void* mgr, int unused, unsigned int key);
 void* Property_GetBool(void* prop); // 0x0041e920
 void* Property_GetInt(void* prop);
 void* Property_GetFloat(void* prop);
@@ -47,15 +50,28 @@ static VariantPair* PairsAllocate(unsigned int n) {
   if (n == 0) return 0;
   return new ("App/cDirectPropertyList", 0, 0, 0, 0) VariantPair[n];
 }
+void PairsCopyRange(VariantPair* first, VariantPair* last, VariantPair* dst);  // 0x00612b20
+void __stdcall PairsDestroyRange(VariantPair* first, VariantPair* last);      // 0x00685a30
+void PairsCopyBytes(void* dst, const void* src, unsigned int size);           // 0x011e0744
 static void PairsDestroy(VariantPair* first, VariantPair* last) {
-  for (; first != last; ++first) first->~VariantPair();
+  PairsDestroyRange(first, last);
 }
 static void PairsCopy(VariantPair* dst, VariantPair* first, VariantPair* last) {
-  for (; first != last; ++first, ++dst) *dst = *first;
+  PairsCopyRange(first, last, dst);
 }
 static void PairsMoveBack(VariantPair* dstEnd, VariantPair* first, VariantPair* last) {
   for (; last != first;) *--dstEnd = *--last;
 }
+
+// eastl::vector<unsigned int> stub used by GetPropertyIDs (the retail argument is a vector).
+struct UIntVector {
+  unsigned int* mpBegin;     // +0x00
+  unsigned int* mpEnd;       // +0x04
+  unsigned int* mpCapacity;  // +0x08
+  void resize(unsigned int n);                                            // 0x004cd3c0
+  void DoInsertValue(unsigned int* position, const unsigned int& value);  // 0x004558a0
+  void DoInsertValues(unsigned int* position, unsigned int n, const unsigned int& value);  // 0x004cea40
+};
 
 // ---------------------------------------------------------------------------
 // SP::cPropertyList / cDirectPropertyList accessors
@@ -113,14 +129,32 @@ bool SP::cDirectPropertyList::GetProperty(unsigned int key, EA::Variant** out) c
 
 // @ 0x006A27D0
 bool SP::cDirectPropertyList::HasProperty(unsigned int key) const {
-  if (key < mNumDirectProps) return mDirectProps[key] != 0;
-  return cPropertyList::HasProperty(key);
+  if (key != 0 && key < mNumDirectProps) return true;
+  // The original keeps the inherited lookup as a real call (never a tail call) and returns a
+  // full-width 0/1 (`mov eax,1` / `xor eax,eax`), not just a normalized `al`; widening the
+  // callee's bool through a volatile int reproduces that.
+  volatile int bInherited = cPropertyList::HasProperty(key);
+  return bInherited != 0;
 }
 
 // @ 0x006A2800
-EA::Variant* SP::cDirectPropertyList::GetPropertyValue(unsigned int key) const {
-  if (key < mNumDirectProps) return (EA::Variant*)(mDirectProps + key);
-  return cPropertyList::GetPropertyValue(key);
+EA::Variant const& SP::cDirectPropertyList::GetProperty(unsigned int key) const {
+  if (key < mNumDirectProps) {
+    EA::Variant* out = const_cast<EA::Variant*>(&mTempDirectVariant);
+    void* mgr = PropertyManager();
+    void* entry = (*(PropertyLookup*)(*(int*)mgr + 0x50))(mgr, 0, key);
+    VariantCopyAssign(out, 0, (EA::Variant*)entry);
+    if (!(out->mFlags & 0x10)) {
+      if (out->mTypeId == 1)
+        *out = (bool)(mDirectProps[key] != 0);
+      else if (out->mTypeId == 9)
+        *out = mDirectProps[key];
+      else if (out->mTypeId == 0xd)
+        *out = ((float*)mDirectProps)[key];
+    }
+    return mTempDirectVariant;
+  }
+  return *cPropertyList::GetPropertyValue(key);
 }
 
 // @ 0x006A25A0
@@ -250,17 +284,27 @@ VariantPair* SP::VariantMap::InsertOrGet(const unsigned int& key, const EA::Vari
   return insert_pos(it, v);
 }
 
+// The original shrinks by the signed byte distance rounded to whole 0x18 elements
+// (truncating division), which only equals `mpEnd = mpBegin` for a consistent range.
+static VariantPair* ShrinkEnd(VariantPair* begin, VariantPair* end) {
+  int diff = (int)((char*)end - (char*)begin);
+  return (VariantPair*)((char*)end - diff / 0x18 * 0x18);
+}
+
 // @ 0x006A2A80
 void SP::cPropertyList::Clear() {
-  PairsDestroy(mPropertyMap.mpBegin, mPropertyMap.mpEnd);
-  mPropertyMap.mpEnd = mPropertyMap.mpBegin;
+  VariantMap* map = &mPropertyMap;
+  PairsCopy(map->mpBegin, map->mpEnd, map->mpEnd);
+  PairsDestroy(map->mpBegin, map->mpEnd);
+  map->mpEnd = ShrinkEnd(map->mpBegin, map->mpEnd);
   mModificationCount++;
 }
 
 // @ 0x006A28F0
-void SP::cPropertyList::ClearMapOnly() {
-  PairsDestroy(mPropertyMap.mpBegin, mPropertyMap.mpEnd);
-  mPropertyMap.mpEnd = mPropertyMap.mpBegin;
+void SP::VariantMap::ClearMapOnly() {
+  PairsCopy(mpBegin, mpEnd, mpEnd);
+  PairsDestroy(mpBegin, mpEnd);
+  mpEnd = ShrinkEnd(mpBegin, mpEnd);
 }
 
 // @ 0x006A2A40
@@ -277,11 +321,11 @@ void SP::cPropertyList::Copy(cPropertyList* src) {
 // @ 0x006A2AD0
 void SP::cDirectPropertyList::Copy(cPropertyList* src) {
   if (this == src) return;
-  ClearMapOnly();
+  mPropertyMap.ClearMapOnly();
   VariantPair* it = src->mPropertyMap.mpBegin;
   VariantPair* end = src->mPropertyMap.mpEnd;
   for (; it != end; ++it) SetProperty(it->first, &it->second);
-  SetParent(src->mParent);
+  SetParent(mParent);
 }
 
 // @ 0x006A2B20
@@ -319,8 +363,18 @@ void eastl::pvector::DoInsertValue(VariantPair* position, const VariantPair& val
 // @ 0x006A2940
 VariantPair* eastl::pvector::insert(VariantPair* position, const VariantPair& value) {
   VariantPair* beg = mpBegin;
-  DoInsertValue(position, value);
-  return beg + (position - beg);
+  unsigned int idx = (unsigned int)(position - beg);
+  if (position == mpEnd && mpEnd != mpCapacity) {
+    VariantPair* e = mpEnd;
+    mpEnd = e + 1;
+    if (e) {
+      e->first = value.first;
+      e->second = value.second;
+    }
+  } else {
+    DoInsertValue(position, value);
+  }
+  return mpBegin + idx;
 }
 
 VariantPair* eastl::pvector::erase(VariantPair* first, VariantPair* last) {
@@ -399,11 +453,15 @@ void SP::cPropertyList::v12(cPropertyList* src) {
 
 // @ 0x006A3070
 unsigned int SP::cPropertyList::GetPropertyIDs(unsigned int* ids) {
+  UIntVector* v = (UIntVector*)ids;
   unsigned int n = (unsigned int)(mPropertyMap.mpEnd - mPropertyMap.mpBegin);
+  v->resize(n);
   unsigned int i = 0;
-  for (VariantPair* it = mPropertyMap.mpBegin; it != mPropertyMap.mpEnd; ++it)
-    ids[i++] = it->first;
-  return n;
+  for (VariantPair* it = mPropertyMap.mpBegin; it != mPropertyMap.mpEnd; ++it) {
+    v->mpBegin[i] = it->first;
+    i++;
+  }
+  return (unsigned int)(size_t)mPropertyMap.mpEnd;
 }
 
 // @ 0x006A30C0
@@ -428,19 +486,48 @@ void SP::cDirectPropertyList::SetProperty(unsigned int index, EA::Variant* value
   cPropertyList::SetProperty(index, value);
 }
 
+// The original trims an unsigned-int vector end by the signed byte distance rounded down
+// (arithmetic shift) to whole 4-byte elements.
+static unsigned int* ShrinkUIntEnd(unsigned int* base, unsigned int* end) {
+  int diff = (int)((char*)end - (char*)base);
+  return (unsigned int*)((char*)end - (diff >> 2) * 4);
+}
+
 // @ 0x006A3180
 unsigned int SP::cDirectPropertyList::GetPropertyIDs(unsigned int* ids) {
-  unsigned int out = 0;
-  unsigned int i = 1;
-  while (i < mNumDirectProps) {
-    void* mgr = PropertyManager();
-    void* entry = (*(void*(**)(void*, unsigned int))(*(int*)mgr + 0x50))(mgr, i);
-    if (*(short*)((char*)entry + 0x12) != 0) ids[out++] = i;
-    i++;
+  UIntVector* v = (UIntVector*)ids;
+  PairsCopyBytes(v->mpBegin, v->mpEnd, 0);
+  v->mpEnd = ShrinkUIntEnd(v->mpBegin, v->mpEnd);
+  void* mgr = PropertyManager();
+  for (unsigned int i = 1; i < mNumDirectProps; i++) {
+    void* entry = (*(PropertyLookup*)(*(int*)mgr + 0x50))(mgr, 0, i);
+    if (*(short*)((char*)entry + 0x12) != 0) {
+      unsigned int* e = v->mpEnd;
+      if (e < v->mpCapacity) {
+        v->mpEnd = e + 1;
+        if (e) *e = i;
+      } else {
+        v->DoInsertValue(e, i);
+      }
+    }
   }
-  for (VariantPair* it = mPropertyMap.mpBegin; it != mPropertyMap.mpEnd; ++it)
-    ids[out++] = it->first;
-  return out;
+  unsigned int mapN = (unsigned int)(mPropertyMap.mpEnd - mPropertyMap.mpBegin);
+  unsigned int oldN = (unsigned int)(v->mpEnd - v->mpBegin);
+  unsigned int total = oldN + mapN;
+  if (total > oldN) {
+    unsigned int zero = 0;
+    v->DoInsertValues(v->mpEnd, total - oldN, zero);
+  } else {
+    unsigned int* dst = v->mpBegin + total;
+    PairsCopyBytes(dst, v->mpEnd, 0);
+    v->mpEnd = ShrinkUIntEnd(dst, v->mpEnd);
+  }
+  unsigned int k = oldN;
+  for (VariantPair* it = mPropertyMap.mpBegin; it != mPropertyMap.mpEnd; ++it) {
+    v->mpBegin[k] = it->first;
+    k++;
+  }
+  return (unsigned int)(size_t)mPropertyMap.mpEnd;
 }
 
 // ---------------------------------------------------------------------------

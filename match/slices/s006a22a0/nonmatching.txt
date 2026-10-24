@@ -2,12 +2,11 @@
 006a2470  40   SP::cPropertyList::HasProperty - complete; cl folds it=end/if(it!=end) that the original keeps
 006a24d0  40   SP::cPropertyList::GetPropertyValue - complete; same fold difference
 006a2530  57   SP::cPropertyList::GetProperty (const, bool) - complete; same fold difference; equiv: PASS (lower_bound annotated 0x612db0 after the hybrid crashed on a wrong instantiation, 2026-10-11)
-006a27d0  27   SP::cDirectPropertyList::HasProperty - complete
-006a2800  158  SP::cDirectPropertyList::GetPropertyValue - complete
-006a28f0  70   SP::cPropertyList::ClearMapOnly - complete; _Destroy helper schedule differs
-006a2940  124  eastl::vector<pair>::insert(iterator,value) - complete; DoInsertValue call schedule differs
-006a2a80  63   SP::cPropertyList::Clear - complete; _Destroy helper schedule differs
-006a2ad0  28   SP::cDirectPropertyList::Copy - complete
+006a27d0  38   SP::cDirectPropertyList::HasProperty - complete; 0<key<num returns true, otherwise the inherited lookup is called (no tail call) and its bool widened to a full-width 0/1 [equiv: PASS]
+006a2800  140  SP::cDirectPropertyList::GetPropertyValue - complete; PropertyManager slot +0x50 lookup copied into mTempDirectVariant, then bool/int/float re-assigned from the direct slot when flag 0x10 is clear [equiv: WEAK: those type branches are unreachable with generated inputs]
+006a28f0  62   SP::cPropertyList::ClearMapOnly - complete; empty-range copy + __stdcall destroy + truncating end shrink, body works on the map in ecx [equiv: PASS]
+006a2940  150  eastl::vector<pair>::insert(iterator,value) - complete; append fast path inlined, DoInsertValue only when growing [equiv: PASS]
+006a2a80  64   SP::cPropertyList::Clear - complete; same copy/destroy/shrink sequence plus the modification count [equiv: PASS]
 006a2b20  75   SP::cDirectPropertyList::Clear - complete
 006a2b80  136  eastl::vector<pair>::resize - complete
 006a2c50  72   eastl::vector_map::insert(value) - complete
@@ -15,9 +14,9 @@
 006a2d30  237  eastl::vector_map::InsertOrGet - complete; pair-return EH frame differs
 006a2e20  145  SP::cPropertyList::SetProperty - complete
 006a2f10  66   SP::cPropertyList::v12 (merge/add) - complete
-006a3070  62   SP::cPropertyList::GetPropertyIDs - complete
+006a3070  11   SP::cPropertyList::GetPropertyIDs - complete; vector resize to the map size, then an indexed key copy [equiv: PASS]
 006a30c0  123  SP::cDirectPropertyList::SetProperty - complete
-006a3180  246  SP::cDirectPropertyList::GetPropertyIDs - complete
+006a3180  283  SP::cDirectPropertyList::GetPropertyIDs - complete; vector argument is an eastl::vector<unsigned int> (empty-copy shrink, per-property appends, grow/trim to oldN+mapN, map keys at the tail) [equiv: PASS]
 006a2a40  2  complete; eax vs ecx for the SetParent arg load [equiv: WEAK]
 006a25a0  136  SP::cDirectPropertyList::GetDescription - complete; inlined lower_bound + string-Variant accessor (hashtable find 0x6a19b0, Destruct 0x93db80); register allocation and block layout differ [equiv: PASS]
 006a2660  129  SP::cDirectPropertyList::GetIntProperty - complete; inlined lower_bound + VariantT<int> conversion (0x60d990); register allocation differs [equiv: WEAK]

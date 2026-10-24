@@ -53,12 +53,12 @@ class Key { public:
 
 struct Variant {
   Variant() : mFlags(0), mTypeId(0) {}
-  Variant(const int& v);
-  Variant(const float& v);
-  Variant(const bool& v);
+  Variant& operator=(const bool& v);   // 0x00422e20
+  Variant& operator=(const int& v);    // 0x00422eb0
+  Variant& operator=(const float& v);  // 0x00428060
   Variant& operator=(const Variant& o);
   Variant& operator=(const ResourceMan::Key& k);
-  void Destruct(int flags);
+  void Destruct(bool flags);           // 0x0093db80
   ~Variant() {
     if (mFlags & 4) Destruct(0);
   }
@@ -71,6 +71,8 @@ struct Variant {
 }  // namespace EA
 
 void Memset32(void* dest, int value, int count); // 0x0092cb00
+void __fastcall VariantCopyAssign(EA::Variant* dst, int unused,
+                                  const EA::Variant* src); // 0x00542b80
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags,
                      const char* file, int line); // 0x00f473a0
 
@@ -115,6 +117,7 @@ struct VariantMap {
   VariantPair* insert(VariantPair* out, const VariantPair& value);
   VariantPair* InsertOrGet(const unsigned int& key, const EA::Variant& value);
   VariantPair* insert_pos(VariantPair* position, const VariantPair& value);
+  void ClearMapOnly();
 };
 
 class cPropertyList : public cResourceBase {
@@ -141,7 +144,6 @@ public:
   cPropertyList(const char* name);
   cPropertyList();
   void SetParent(cPropertyList* parent);
-  void ClearMapOnly();
 };
 
 class cDirectPropertyList : public cPropertyList {
@@ -154,7 +156,7 @@ public:
   virtual bool HasProperty(unsigned int index) const;                       // 7
   virtual bool GetPropertyA(unsigned int index, EA::Variant** out);         // 8
   virtual bool GetProperty(unsigned int index, EA::Variant** out) const;    // 9
-  virtual EA::Variant* GetPropertyValue(unsigned int index) const;          // 10
+  EA::Variant const& GetProperty(unsigned int key) const;
   virtual void Copy(cPropertyList* src);                                    // 11
   virtual void Add(cPropertyList* src);                                     // 12
   virtual unsigned int GetPropertyIDs(unsigned int* ids);                   // 17
