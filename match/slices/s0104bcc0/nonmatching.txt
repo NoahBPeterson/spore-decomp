@@ -1,0 +1,4 @@
+0104bcc0 15 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid, fault(read)); Write: tag constant stored in the shadow of the vfunc-0x18 call rather than ahead of it (instruction scheduling only)
+0104bfa0 44 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest FAIL (5/5 valid mismatch; ecx clobbered by helper); float->__int64 uses the _ftol2 helper instead of the inlined x87 fnstcw/or/fldcw/fistp sequence
+0104cb70 22 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (400 valid, 52.0% cov); IsInContext bool result codegen: original keeps the false value in bl and shares a single mov al,1 epilogue
+0104cc40 23 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (397 valid, 90.6% cov); IsDeselectedAfterUse flags bit-15 test strength-reduced to test dword,0x8000 instead of shr ecx,0xf/test cl,1

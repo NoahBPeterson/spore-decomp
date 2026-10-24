@@ -1,0 +1,6 @@
+0104c120 183 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest FAIL (5/5 valid mismatch; esp +0x4 vs +0xc); UpdateTuning approximated: property int-array decode + 11-case switch ordering/stack balance differ
+0104c220 530 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid, fault(read)); Register approximated: event record + 26 cString Loads populated but argument/register layout differs
+0104c510 77 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid, fake-arity); Dispatch approximated: original uses an unusual argument/[esp] layout
+0104c570 662 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (400 valid, 97.1% cov); constructor approximated: float-constant hoisting and store interleaving differ from the retail sequence
+0104ca20 196 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest FAIL (5/6 valid mismatch; eax&0xffff); func48h approximated: item-id tail dispatch and bool return-width codegen differ
+0104cdb0 388 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest FAIL (5/8 valid mismatch; eax&0xffff); FUN_0104cdb0 approximated: strategy-class target dispatch over many vtable slots

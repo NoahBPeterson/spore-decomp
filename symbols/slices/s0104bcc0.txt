@@ -1,0 +1,21 @@
+0104bcc0 SP::cSPSpaceToolData::Write  # serialize the tool through the var-list serializer and a 0x707459f0 tag
+0104bd50 SP::cSPSpaceToolData::FUN_0104bd50  # true unless the auto-handler flag is clear and the auto-fire timer is stopped
+0104bde0 SP::cSPSpaceToolData::FUN_0104bde0  # mField1c0 scaled by 1000, clamped to -1
+0104be00 SP::cSPSpaceToolData::FUN_0104be00  # mField1c4 scaled by 1000, clamped to -1
+0104be30 SP::cSPSpaceToolData::FUN_0104be30  # mField1cc * mField148 (x87 product)
+0104bfa0 SP::cSPSpaceToolData::FUN_0104bfa0  # mField1f0 scaled by 1000, truncated to int
+0104bff0 SP::cSPSpaceToolData::FUN_0104bff0  # strategy-class flag: true when class id 0, else bit 8
+0104c010 SP::cSPSpaceToolData::FUN_0104c010  # strategy-class flag: true when class id 0, else bit 7
+0104c120 SP::cSPSpaceInventoryItem::UpdateTuning  # decode a tuning int-array into the ability bitmask
+0104c220 SP::cSPEditorVerbIconTray::Register  # register verb events with the messaging server and load 26 label strings
+0104c4f0 SP::cSPEditorVerbIconTray::GetTextAt  # label string for one verb index
+0104c510 SP::cSPEditorVerbIconTray::Dispatch  # per-event verb-icon dispatch
+0104c570 SP::cSPSpaceToolData::cSPSpaceToolData  # constructor: three vtables, four timers, tuning defaults
+0104c910 SP::cSPSpaceToolData::~cSPSpaceToolData  # destructor: release effects and the tail AutoRefCounts
+0104ca20 SP::cSPSpaceToolData::func48h  # item-id dispatch: shield / cloak / rally-call / soothing-song behaviours
+0104cb70 SP::cSPSpaceToolData::IsInContext  # true when the tool is usable in the current game mode/universe context
+0104cbd0 SP::cSPSpaceToolData::FUN_0104cbd0  # set the ammo counter
+0104cc00 SP::cSPSpaceToolData::FUN_0104cc00  # set the auto-handler flag byte
+0104cc40 SP::cSPSpaceToolData::IsDeselectedAfterUse  # property-driven deselect test with a +0x174 bit-15 fallback
+0104cc90 SP::cSPSpaceToolData::FUN_0104cc90  # property-driven bool result
+0104cdb0 SP::cSPSpaceToolData::FUN_0104cdb0  # targeting dispatch over the strategy class / empire relationships

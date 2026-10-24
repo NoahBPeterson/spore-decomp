@@ -1,0 +1,11 @@
+slices/s0104bcc0/s0104bcc0.cpp  ?FUN_0104bd50@cSPSpaceToolData@SP@@QAEIXZ  0104bd50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0104bcc0/s0104bcc0.cpp  ?FUN_0104bde0@cSPSpaceToolData@SP@@QAEHXZ  0104bde0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0104bcc0/s0104bcc0.cpp  ?FUN_0104be00@cSPSpaceToolData@SP@@QAEHXZ  0104be00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0104bcc0/s0104bcc0.cpp  ?FUN_0104be30@cSPSpaceToolData@SP@@QAENXZ  0104be30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0104bcc0/s0104bcc0.cpp  ?FUN_0104bff0@cSPSpaceToolData@SP@@QAEEXZ  0104bff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0104bcc0/s0104bcc0.cpp  ?FUN_0104c010@cSPSpaceToolData@SP@@QAEEXZ  0104c010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0104bcc0/s0104bcc0.cpp  ?GetTextAt@cSPEditorVerbIconTray@SP@@QAEXI@Z  0104c4f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0104bcc0/s0104bcc0.cpp  ??1cSPSpaceToolData@SP@@QAE@XZ  0104c910  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0104bcc0/s0104bcc0.cpp  ?FUN_0104cbd0@cSPSpaceToolData@SP@@QAEXH@Z  0104cbd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0104bcc0/s0104bcc0.cpp  ?FUN_0104cc00@cSPSpaceToolData@SP@@QAEXH@Z  0104cc00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0104bcc0/s0104bcc0.cpp  ?FUN_0104cc90@cSPSpaceToolData@SP@@QAEEXZ  0104cc90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
