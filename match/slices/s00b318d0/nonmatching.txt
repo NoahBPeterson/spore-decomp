@@ -1,7 +1,7 @@
 00b318d0 315 complete; vcall order/arg scheduling differs (loads of d[i] before the stream vcalls)
 00b31a90 43 complete; (__int64)float emitted as _ftol2 call, original inline fistp qword + and-esp frame
 00b31ae0 97 complete; same (int64)float cast as _ftol2 vs inline fistp; frame alignment
-00b31c60 57 complete; register choice (edx vs eax) for the 100 clamp and cvtss2si helper asm
+00b31c60 59 complete; clamp written as a pointer ternary (v >= lim ? &lim : &v) so cl keeps 100 in eax like the original instead of edx (retail never writes edx, so difftest saw the edx clobber as a mismatch); remaining diff is the lea order around the clamp test and the hoisted mTimeFlowRate fld (fmulp vs fmul [ecx+0x40])
 00b31cc0 321 complete; "settime" ParseLine, locals/frame layout and float clamp ordering differ; difftest FAIL is a checker artifact: it resolved our OptionArguments(const char*,int) call by qualified name to the 4-argument overload 0x838130 instead of the 2-argument wrapper 0x838330 the original calls; with the address put in the callee's name it is WEAK (115 valid, 21% coverage, most inputs throw)
 00b31ea0 66 complete; store ordering of member inits (vptr stores earlier in original)
 00b31fa0 198 complete; old pause bits kept in a stack slot in original, bitset byte ops

@@ -227,9 +227,7 @@ unsigned cGameTimeManager::CeilScaledTime(unsigned v)
     unsigned lim = 100;
     if (mCachedPauseState & 1)
         return 0;
-    const unsigned* p = &v;
-    if (v >= lim)
-        p = &lim;
+    const unsigned* p = v >= lim ? &lim : &v;
     v = *p;
     float f = (float)v * mTimeFlowRate;
     return CeilToInt(f);
