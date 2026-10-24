@@ -1,2 +1,1 @@
-004be100  25  expat EndElement hash lookup: partial skeleton (FNV hash + type-table dispatch loop not reproduced)
-004be420  2  cEditorModelParser array-grow: partial skeleton (model block growth loop not reproduced)
+# <va>  <diff-bytes>  <reason>

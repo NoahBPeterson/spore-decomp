@@ -196,16 +196,117 @@ void cEditorModelParser_StartElement(void* userData, const wchar_t* name, const 
     }
 }
 
-// 004be100  (PARTIAL skeleton)
-bool FUN_004be100(void* self, const uint16_t* name) {
+// ---------------------------------------------------------------------------
+// 004be100  expat end-element callback: FNV1 hash -> handler lookup in the
+// 36-entry static table at 0x150c518 (element stride 0x18).
+// ---------------------------------------------------------------------------
+struct EditorModelElem {
+    uint32_t        mHash;      // +0x00  FNV1 hash of the element name
+    const wchar_t*  mpName;     // +0x04
+    int             mKind;      // +0x08  0 = index-based target
+    bool (__cdecl*  mpFn)(void* self, void* target, void* arg);   // +0x0c
+    int             mOffset;    // +0x10  added to the resolved target
+    void*           mpArg;      // +0x14
+};
+
+extern EditorModelElem g_editorModelElems[];    // 0x150c518, 36 entries
+extern EditorModelElem* FUN_004c0600(EditorModelElem* first, EditorModelElem* last,
+                                     const uint32_t* value, uint8_t ordered);  // 0x4c0600
+
+// @ 0x004be100
+// Semantics are complete and verified by the equivalence gate; the /Od slot layout is
+// not byte-exact. The original frame is:
+//   self -4, end -8, data -0xc, hash -0x10, item -0x14,
+//   target -0x18, ok -0x19, ordered -0x1a,
+// with `ordered` materialised as `xor eax,eax; mov [slot],al` (a 5-byte form this
+// toolchain did not produce for any `bool` spelling tried), while the original's three
+// tail slots are target -0x18, ok -0x19, ordered -0x1a. cl 15's /Od local order is
+// driven by a hash of the local identifiers (docs/codegen.md §6.4); the identifiers
+// that reproduce this frame were not found within budget, so the names here are the
+// readable ones.
+void FUN_004be100(void* userData, const wchar_t* name) {
+    cEditorModelParser* self = (cEditorModelParser*)userData;
     uint32_t hash = EA_Hash_FNV1_String16(name, 0x811c9dc5, 0);
-    (void)self; (void)hash;
-    return false;
+
+    EditorModelElem* data = g_editorModelElems;
+    EditorModelElem* end  = data + 36;
+    bool ordered = false;
+    bool ok;
+    int  target;
+    EditorModelElem* item = FUN_004c0600(data, end, &hash, ordered);
+
+    for (; item != end && item->mHash == hash; ++item) {
+        if (wcscmp(item->mpName, name) == 0) {
+            target = 0;
+            if (item->mKind == 0) {
+                if (self->m3aa4 == -1)
+                    target = self->m3aa0 + 0x18;
+            } else {
+                if (self->m3aa4 != -1)
+                    target = self->m3aa4 * 0x1d8 + *(int*)(self->m3aa0 + 0x98);
+            }
+            ok = (target != 0) && (item->mpFn(self, (char*)target + item->mOffset, item->mpArg) != 0);
+            if (!ok) {
+                FUN_00903550(self->mpXMLParser, 0);
+                return;
+            }
+            break;
+        }
+    }
+    self->mBuffer[0] = 0;
+    self->mLength = 0;
+    self->mCursor = 0;
 }
 
-// 004be420  (PARTIAL skeleton)
-void FUN_004be420(void* self, int index) {
-    (void)self; (void)index;
+// ---------------------------------------------------------------------------
+// 004be420  cEditorModelParser::AddBlock(index): grow the model block vector
+// at (m3aa0 + 0x98) to index+1 elements, then initialise the new tail blocks.
+// ---------------------------------------------------------------------------
+struct ModelBlock {                  // 0x1d8 bytes
+    int   mField00;                  // +0x00
+    int   mField04;                  // +0x04
+    int   mField08;                  // +0x08
+    int   mField0C;                  // +0x0c
+    uint8_t mPad10[0x5c - 0x10];
+    float mMatrix[3][3];             // +0x5c  (diagonal set to 1.0f)
+    uint8_t mPad80[0x84 - 0x80];
+    int   mField84;                  // +0x84
+    uint8_t mPad88[0x1d8 - 0x88];
+};
+
+struct ModelBlockVec {
+    int mpBegin;                     // +0x00  (first block address)
+    int mpEnd;                       // +0x04
+    int mpCapacity;                  // +0x08
+    uint8_t mPad0C[0x14 - 0x0c];
+    void Reserve(uint32_t count);    // 0x004afd00 (thiscall, ret 4)
+};
+
+extern "C" void* __cdecl memset_impl(void* dst, int value, uint32_t n);   // 0x11e073e
+
+extern float HK_REAL_ONE;   // 0x1485720  (_HK_REAL_ONE, Havok's 1.0f)
+
+// @ 0x004be420
+void ParserBlockOps::AddBlock(int index) {
+    ModelBlockVec* pVec = (ModelBlockVec*)(((cEditorModelParser*)this)->m3aa0 + 0x98);
+    int count = (pVec->mpEnd - pVec->mpBegin) / 0x1d8;
+    if (count <= index) {
+        int newCount = index + 1;
+        pVec->Reserve(newCount);
+        ModelBlock* base = (ModelBlock*)pVec->mpBegin;
+        memset_impl((char*)base + count * 0x1d8, 0, (newCount - count) * 0x1d8);
+        for (int i = count; i < newCount; ++i) {
+            ModelBlock* e = &base[i];
+            e->mField00 = -1;
+            e->mField04 = -1;
+            e->mField08 = -1;
+            e->mField0C = -1;
+            e->mMatrix[0][0] = HK_REAL_ONE;
+            e->mMatrix[1][1] = HK_REAL_ONE;
+            e->mMatrix[2][2] = HK_REAL_ONE;
+            e->mField84 = 3;
+        }
+    }
 }
 
 // 004bd9f0
