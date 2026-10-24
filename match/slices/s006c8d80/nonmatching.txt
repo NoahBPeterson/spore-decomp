@@ -1,4 +1,4 @@
-006c8d80  839  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006c90d0  853  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006c9430  799  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006c9750  853  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
+006c8d80  773  complete via local BakeCore; slice consumes transform result rotated (1-cos=outA[1], dy=outA[2], dz=outA[0]) with SSE-scalar arithmetic; byte diff only
+006c90d0  765  complete via local BakeCore; weighted-x2 + byte colours; rotated result consumption and SSE-scalar arithmetic; byte diff only
+006c9430  722  complete via local BakeCore; weighted-x2 + 2-lane 16-bit colours; rotated result consumption and SSE-scalar arithmetic; byte diff only
+006c9750  766  complete via local BakeCore; weighted-x2 + 4-lane 16-bit colours; rotated result consumption and SSE-scalar arithmetic; byte diff only

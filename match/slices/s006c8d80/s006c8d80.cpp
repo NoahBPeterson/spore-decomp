@@ -1,5 +1,5 @@
-// Slice s006c8d80: per-vertex bake helpers (see ../s006c5940/bake.h).
-#include "../s006c5940/bake.h"
+// Slice s006c8d80: per-vertex bake helpers (local bake.h, rotated transform result).
+#include "bake.h"
 
 // @ 0x006c8d80
 bool FUN_006c8d80(float* out, int count, int res, int* data, int vtx, const float* scalePair,
