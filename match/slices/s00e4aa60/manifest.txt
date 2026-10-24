@@ -1,0 +1,4 @@
+slices/s00e4aa60/s00e4aa60.cpp  ?Load@cLoadHook@@QAE_NPAXPAUIIdentifiable@@II@Z  00e4b030  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e4aa60/s00e4aa60.cpp  ?FUN_00e4b6c0@@YAPAUcResManager@@PAX0@Z  00e4b6c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e4aa60/s00e4aa60.cpp  ?FUN_00e4b910@@YAXPB_W@Z  00e4b910  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e4aa60/s00e4aa60.cpp  ?Free@cDescTree@@QAEXPAUcDescNode@@@Z  00e4b990  /O2 /MD /Gy /TP /arch:SSE /fp:fast
