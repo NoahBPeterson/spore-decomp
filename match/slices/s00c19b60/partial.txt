@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00c1a3c0  1405  complete TakeDamage override (see nonmatching.txt); equiv was not run on it in this pass (previous pass documented the ordering/register differences)
+00c19b60  326  not reconstructed; equiv not run (no symbol)
+00c19cb0  67  row-table allocation; equiv FAIL - 5/5 valid inputs mismatched, the first mismatch is our call into 0x00B3F260 faulting on an unmapped write where the original returned normally (the faked row fill receives the same (count, a2, a3, rows, count) tuple, so the remaining diff is the count in esi vs retail's stack reload)
+00c19e30  131  body-effect spawn; equiv WEAK - 210 valid inputs, 19.4% coverage (prefaulted pool data ends the runs early)
+00c1a110  303  animation event dispatch; equiv WEAK - 396 valid inputs, 23.0% coverage (the part table lookups stop at the first unmapped +0xb54 dereference)
+00c19ee0  556  not reconstructed; equiv not run (no symbol)
+00c1a270  327  not reconstructed; equiv not run (no symbol)

@@ -272,3 +272,167 @@ void cCreatureCombatant::TakeDamage(float damage, uint32_t attackerPID, int dama
         *(int*)((char*)this - 0x2f8) = 3;
     }
 }
+
+// ---- animation-row table allocation ------------------------------------------------------------
+// One 0x3c-byte row of the animation event table.
+struct AnimRow {
+    uint8_t mData[0x3c];
+};
+// 0x00b3f260: fills a freshly allocated row buffer (count, a2, a3, buffer, count).
+void __cdecl FillAnimRows(int count, int a2, int a3, void* rows, int count2);
+
+struct CAnimTable {
+    AnimRow* AllocRows(int count, int a2, int a3);     // 0x00c19cb0
+};
+
+// @ 0x00c19cb0
+AnimRow* CAnimTable::AllocRows(int count, int a2, int a3)
+{
+    AnimRow* rows = count
+        ? (AnimRow*)operator new(count * (int)sizeof(AnimRow), "Simulator", 0, 0,
+              "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+              0xd1)
+        : 0;
+    FillAnimRows(count, a2, a3, rows, count);
+    return rows;
+}
+
+// ---- body-effect spawn helper ------------------------------------------------------------------
+// Message posted to the spawned effect (constructor 0x00434040, 0x2c bytes).
+struct XformMsg {
+    XformMsg();                                 // 0x00434040
+    uint8_t  mKind;                             // +0x00
+    uint8_t  mPad01;                            // +0x01
+    uint16_t mCount;                            // +0x02
+    uint8_t  pad04[0x10 - 4];
+    float    mValue;                            // +0x10
+    uint8_t  pad14[0x2c - 0x14];
+};
+
+// Animation sub-object inlined at owner+0xc0; slot 0x74 returns the current animation time.
+struct CAnimClock {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
+    virtual void v70();
+    virtual float GetTime();                    // 0x74
+};
+
+// Object spawned by cCreatureBase::CreateBodyEffect; it accepts the XformMsg through slots 0x18/0x20.
+struct CBodyEffect {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14();
+    virtual void v18(XformMsg* msg);            // 0x18
+    virtual void v1c();
+    virtual void v20(XformMsg* msg);            // 0x20
+};
+
+// Result of the 0xce9f6639 lookup on the owner's reference slot.
+struct CBodyRef {
+    virtual void v00();
+    uint8_t  pad04[0xc0 - 4];
+    CAnimClock mClock;                          // +0xc0
+    uint8_t  padC4[0xeac - 0xc0 - 4];
+    int      mState;                            // +0xeac (needs >= 2)
+    CBodyEffect* CreateBodyEffect(int a, void* b, void* c);   // 0x00c17c80 (ret 0xc)
+};
+
+// Reference node held at owner+0x3c; slot 0x0c looks up an object by hash.
+struct CRefNode {
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual void* v0c(uint32_t id);             // 0x0c
+};
+
+struct CAnimOwner {
+    uint8_t   pad00[0x3c];
+    CRefNode* mpRef;                            // +0x3c
+};
+
+extern char* g_pAnimBase;                       // 0x015716D0
+
+// @ 0x00c19e30
+bool __cdecl SpawnAnimEffect(CAnimOwner* self)
+{
+    bool result = false;
+    CRefNode* node = self->mpRef;
+    if (!node)
+        return result;
+    CBodyRef* ref = (CBodyRef*)node->v0c(0xce9f6639);
+    if (!ref)
+        return result;
+    if (!self)
+        return result;
+    if (ref->mState < 2)
+        return result;
+    char* base = g_pAnimBase;
+    CBodyEffect* eff = ref->CreateBodyEffect(0, base, base + (int)self);
+    if (!eff)
+        return result;
+    XformMsg msg;
+    eff->v20(&msg);
+    msg.mValue = ref->mClock.GetTime();
+    msg.mCount++;
+    eff->v18(&msg);
+    return true;
+}
+
+// ---- animation event dispatch ------------------------------------------------------------------
+// Per-part table hanging off the creature's rig data (owner+0xb54 -> +0x17c).
+struct CPartTable {
+    uint8_t pad000[0x2e4];
+    int32_t* mpOffsets;                         // +0x2e4 (0x2bc-byte stride per body part)
+    void* FindEffect(void* key);                // 0x009cab60 (thiscall, ret 4)
+};
+struct CRigData {
+    uint8_t    pad000[0x17c];
+    CPartTable* mpTable;                        // +0x17c
+};
+// Creature side of the animation event API (SP::cSPCreatureBase and friends).
+struct CCreatureEvents {
+    uint8_t pad000[0xb54];
+    CRigData* mpRig;                            // +0xb54
+    int  GetBodyPartIndex(int kind, int arg);   // 0x00c17580 (ret 8)
+    bool CreateBodyEffect(int part, void* a5, void* a4, void* eff);   // 0x00c11f50 (ret 0x10)
+    bool DetachBodyEffectById(void* eff, int arg);                    // 0x00c15150 (ret 8)
+    void SetGraspedEffectOffsets(void* a, void* b);                   // 0x00c0de60 (ret 8)
+};
+
+// @ 0x00c1a110
+bool HandleAnimEvent(uint32_t id, int part, CCreatureEvents* self, void* a4, void* a5)
+{
+    if (!self)
+        return false;
+    void* eff = a4 ? a4 : a5;
+    bool ok = false;
+    if (id == 0x25932861) {
+        if (part == -1) {
+            part = self->GetBodyPartIndex(0xb, 0);
+            if (part != -1)
+                ok = self->CreateBodyEffect(part, a5, a4, eff);
+        } else {
+            ok = self->CreateBodyEffect(part, a5, a4, eff);
+        }
+        void* v = self->mpRig ? self->mpRig->mpTable->FindEffect(eff) : 0;
+        self->SetGraspedEffectOffsets(*(void**)((char*)self->mpRig->mpTable->mpOffsets + part * 0x2bc), v);
+        return ok;
+    }
+    if (id == 0x291b2d3b) {
+        if (part == -1) {
+            part = self->GetBodyPartIndex(2, 0);
+            if (part != -1)
+                ok = self->CreateBodyEffect(part, a5, a4, eff);
+        } else {
+            ok = self->CreateBodyEffect(part, a5, a4, eff);
+        }
+        void* v = self->mpRig ? self->mpRig->mpTable->FindEffect(eff) : 0;
+        self->SetGraspedEffectOffsets(*(void**)((char*)self->mpRig->mpTable->mpOffsets + part * 0x2bc), v);
+        return ok;
+    }
+    if (id == 0x81d12704)
+        return self->DetachBodyEffectById(eff, 1);
+    return ok;
+}
