@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# RenderWare 4 core: built with VC .NET 2003 (/vc71) + /GL /LTCG.  Two small GlobalState helpers
+# are byte-exact; the rest are complete behavioural reconstructions (see nonmatching.txt).
+slices/s011f0840/s011f0840.cpp  ?SetBlendMode@GlobalState@graphics@rw@@SAXI@Z  011f1340  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f0840/s011f0840.cpp  ?GetBlendMode@GlobalState@graphics@rw@@SAIXZ  011f13a0  /vc71 /O2 /MD /Gy /EHsc /TP
