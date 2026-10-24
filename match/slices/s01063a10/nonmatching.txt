@@ -1,0 +1,8 @@
+# Slice s01063a10 nonmatching functions (compiled; behaviourally faithful but not byte-exact).
+# Format: <va> <difftest-verdict> <reason>
+01063a10 UNSUPPORTED 0/400 inputs valid (all fault(read)); badge-detail refresh; prologue vtable-store scheduling differs (932 vs 887 bytes)
+01063dc0 FAIL 5/6 valid inputs mismatched (first: eax return value); DoMessage; thiscall helper ABI + tag-branch structure diverges (423 vs 434 bytes)
+01064000 FAIL 5/5 valid inputs mismatched (first: execution); OnMessage; register-allocation tie - original keeps self in esi + temp in edi, ours swaps (123 vs 131 bytes)
+01064080 FAIL 5/5 valid inputs mismatched (first: call #1 depth 1 arg order); RefreshFeed; large reconstruction, feed ctor arg/ecx ordering differs (1240 vs 1196 bytes)
+01064560 FAIL 5/64 valid inputs mismatched (first: execution); Show; tail float-constant call sequence to FUN_0067caf0/0067aaf0 diverges (330 vs 365 bytes)
+01064760 UNSUPPORTED 0/400 inputs valid (fault(write)/fault(read)); OnCreate; frame size + FindWindowByID overload + wiring differs (551 vs 497 bytes)
