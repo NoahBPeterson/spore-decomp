@@ -1,0 +1,2 @@
+00da80f0  eastl::list<EA::COM::AutoRefCount<SP::Pollen::cCookie>,eastl::allocator>::erase  # symbols/pdb_names.json key 0060a5a0, dev 00da80f0, how gap-align
+00da8580  SP::Pollen::CookieHandler::Filter  # symbols/pdb_names.json key 0060aa40, dev 00da8580, how anchor
