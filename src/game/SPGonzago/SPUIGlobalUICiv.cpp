@@ -1,8 +1,12 @@
-// src/game/SPGonzago/SPUIGlobalUICiv.cpp -- migrated from slice(s) s00baa930, s00ba9810 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPUIGlobalUICiv.cpp -- migrated from slice(s) s00bad7a0, s00bac830, s00baa930, s00ba9810 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPUIGlobalUICiv.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "SP/cGameNounManager.h"
+#include "SP/cGonzagoSubsystem.h"
+#include "SP/cStarManager.h"
+#include <string.h>
 
 // ---- items of slice s00ba9810 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct cSortTriple {                                                    // 12-byte sort / run key
@@ -132,6 +136,273 @@ struct WriterVT {
 void __cdecl wstr_RangeInitialize(void* self, int n);                // 0x00579a90
 void __cdecl wstr_Ctor(void* self, const void* other);               // 0x0056e2d0
 // ---- items of slice s00baa930 end
+
+// ---- items of slice s00bac830 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Key { uint32_t a, b, c; };                       // EA::ResourceMan::Key, 12 bytes
+void __cdecl FreeBlock(void* p);                        // 0xf47380  operator_delete_array
+struct KeyVec_s00ba_c830 {                                         // eastl::vector<Key, sp_vector_allocator>
+    Key* mBegin;                                        // +0x00
+    Key* mEnd;                                          // +0x04
+    Key* mCap;                                          // +0x08
+    Key* erase(Key* first, Key* last);                  // 0x50f740
+    void DoInsertValue(Key* pos, const Key& v);         // 0x4e3e10
+    void push_back(const Key& v) {
+        if (mEnd < mCap) { Key* p = mEnd; mEnd = p + 1; if (p) *p = v; }
+        else DoInsertValue(mEnd, v);
+    }
+    void clear() { erase(mBegin, mEnd); }
+    ~KeyVec_s00ba_c830() { if (mBegin && ((int*)mBegin)[-1] != 0) FreeBlock(mBegin); }
+};
+struct Species { uint32_t FUN_00b8f860(); };            // 0xb8f860 (this = species)
+struct SpeciesManager { Species* FUN_00b90410(const Key& id); };       // 0xb90410
+SpeciesManager* FUN_00b3d420();                         // 0xb3d420
+struct Random { uint32_t FUN_00a68fb0(uint32_t max); }; // 0xa68fb0
+extern Random g_mathRandom;                             // 0x1601760
+static inline uint32_t Rnd(uint32_t max) { return g_mathRandom.FUN_00a68fb0(max); }
+struct Profile { char pad[0x608]; int m608; };          // cSpeciesProfile, flag at +0x608
+struct ProfileMgr { Profile* FUN_004df550(const Key& k); };            // 0x4df550
+ProfileMgr* FUN_00401090();                             // 0x401090
+struct Obj10a0 { char pad[0x504]; Key mKey; };          // key at +0x504
+struct Obj3d450 { Obj10a0* FUN_00ac10a0(); };           // 0xac10a0 (this = b3d450 result)
+Obj3d450* FUN_00b3d450(uint32_t k);                     // 0xb3d450
+static inline uint32_t DrawIndex(Key* begin, Key* end)
+{
+    uint32_t n = (uint32_t)(end - begin);
+    return (n < 2) ? 0 : Rnd(n);
+}
+struct IntVec {                                         // eastl::vector<int, sp_vector_allocator>
+    int* mBegin;                                        // +0x00
+    int* mEnd;                                          // +0x04
+    int* mCap;                                          // +0x08
+    void DoInsertValue(int* pos, const int& v);         // 0xb96600
+    void push_back(const int& v) {
+        if (mEnd < mCap) { int* p = mEnd; mEnd = p + 1; if (p) *p = v; }
+        else DoInsertValue(mEnd, v);
+    }
+    void erase(int* pos) {
+        int* end = mEnd;
+        for (int* p = pos; p + 1 != end; ++p) *p = *(p + 1);
+        mEnd = end - 1;
+    }
+    ~IntVec() { if (mBegin && ((int*)mBegin)[-1] != 0) FreeBlock(mBegin); }
+};
+struct RefCount { virtual void v00(); virtual void Release(); };       // +0x04
+struct PropMgr {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual bool Lookup(uint32_t a, uint32_t b, RefCount** out);       // slot 0x2c
+    virtual void LookupRefs(uint32_t a, uint32_t b, KeyVec_s00ba_c830* out);      // slot (used by bad080)
+};
+PropMgr* PropertyManager();                             // 0x67de30
+struct Obj080 { virtual Key* GetKey(); };               // vtable +0x18 -> Key*
+struct RBTree { char pad[4]; void* mHead; void* mRoot; };// +0x04 header, +0x08 root
+RBTree* FUN_006b42e0();                                 // 0x6b42e0
+Key* FUN_00b8d8e0();                                    // 0xb8d8e0
+void FUN_00baa080(KeyVec_s00ba_c830* v);                           // 0xbaa080
+int FUN_00ba6ab0(int* p);                               // 0xba6ab0
+struct Obj440 {
+    char pad0[0x28];
+    int  m28;                                           // +0x28 (3/4/5)
+    char pad2c[0xbc - 0x2c];
+    KeyVec_s00ba_c830 mBc;                                         // +0xbc
+    char padC8[0xd0 - 0xc8];
+    KeyVec_s00ba_c830 mD0;                                         // +0xd0
+};
+struct Cfg440 {
+    char    pad0c[0x0c];
+    uint8_t m0c;                                        // +0x0c
+    char    pad0d[3];
+    int     m10;                                        // +0x10 bitmask / value
+    int     m14;                                        // +0x14
+    int     m18;                                        // +0x18
+    int     m1c;                                        // +0x1c
+    KeyVec_s00ba_c830  m20;                                        // +0x20
+    KeyVec_s00ba_c830  m34;                                        // +0x34
+};
+static inline int ClampHi(int v, int hi) { return (v > hi) ? hi : v; }
+struct Self440 {                            // incoming ecx: unused `this` (thiscall)
+    void FUN_00bad440(Obj440* param_1, Cfg440* param_2);
+};
+// ---- items of slice s00bac830 end
+
+// ---- items of slice s00bad7a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern int32_t gCheatStarCount;                 // 0x0168964c
+#define nullptr 0
+class IGameObject {
+public:
+    virtual void* Slot00();                         // +0x000
+    virtual void Release();                         // +0x004
+    virtual void Release2();                        // +0x008
+    virtual void* Slot0c();
+    virtual void* Slot10();                         // +0x010
+    virtual void* Slot14();
+    virtual void* Slot18();
+    virtual void* Slot1c();
+    virtual void* Slot20();
+};
+class IRefCounted {
+public:
+    virtual void* Slot00();                         // +0x000
+    virtual void Release();                         // +0x004
+    virtual void Release2();                        // +0x008
+};
+class cGonzagoSubsystem {
+public:
+    cGonzagoSubsystem();                            // 0x00b5b960
+    virtual void Slot00();
+    virtual void Slot04();
+    uint8_t mPad00[0x18];       // +0x004
+};
+class cCivilization;
+class cGameNounManager {
+public:
+    void RemoveNounsOfType(int32_t nType);          // 0x00b22650
+};
+class cSPBackgroundSimManager {
+public:
+    uint8_t mPad00[0x08];       // +0x00
+    IRefCounted* mpIdleState;   // +0x08
+};
+extern cSPBackgroundSimManager* gspBackgroundSimManager;    // 0x016dda8c
+struct Vector3 {
+    float x;
+    float y;
+    float z;
+};
+class WString {
+public:
+    void Assign(const wchar_t* pFirst, const wchar_t* pLast);   // 0x00423650
+    wchar_t* mpBegin;       // +0x00
+    wchar_t* mpEnd;         // +0x04
+    wchar_t* mpCapacity;    // +0x08
+};
+class FeedbackNode {
+public:
+    FeedbackNode* mpLeft;       // +0x00
+    FeedbackNode* mpRight;      // +0x04
+    FeedbackNode* mpParent;     // +0x08
+    bool mbRed;                 // +0x0c
+    uint8_t mPad0d[0x03];       // +0x0d
+    uint32_t mnKey;             // +0x10
+    IRefCounted* mpValue;       // +0x14
+};
+struct MapIterator {
+    FeedbackNode* mpNode;       // +0x00
+};
+class RbTree {
+public:
+    uint8_t mPad00[0x04];       // +0x00  (allocator word)
+    FeedbackNode* mpAnchor;     // +0x04  (self-referencing end node)
+    uint8_t mPad08[0x04];       // +0x08
+    FeedbackNode* mpRoot;       // +0x0c
+    uint32_t mnSize;            // +0x10
+};
+class CivCounterMap {
+public:
+    uint32_t& GetCounter(cCivilization* pKey);      // 0x00badea0
+    void DoInsertValue(FeedbackNode* pParent, const uint32_t* pKey,
+                       uint32_t nValue);            // 0x00baa660
+
+    RbTree mTree;               // +0x00
+};
+class FeedbackMap {
+public:
+    MapIterator Find(const uint32_t& rKey);         // 0x00e5c780
+
+    RbTree mTree;               // +0x00
+};
+class cStarAgentRecord {
+public:
+    uint8_t mPad00[0x3c];       // +0x000
+    bool mbActive;              // +0x03c
+    IRefCounted* mpEffect;      // +0x040
+    uint8_t mPad44[0x1c];       // +0x044
+    WString mName;              // +0x060
+};
+class cBanner {
+public:
+    uint8_t mPad00[0x40];       // +0x000
+    IGameObject* mpOwner;       // +0x040
+};
+void __cdecl operator_delete(void* pBlock);                             // 0x00f47380
+cGameNounManager* __cdecl NounManager();                                // 0x00b3d300
+IGameObject* __cdecl SaveLoadManager();                                 // 0x00fd9c60
+void* __cdecl ChildGetSomething(uint32_t nPrompt);                      // 0x00401090
+void* __cdecl FUN_006b42e0(void* pObject);                              // 0x006b42e0
+uint32_t __cdecl FUN_00b8d8f0(void);                                    // 0x00b8d8f0
+void* __cdecl FUN_00ba6d80(uint32_t nA);                                // 0x00ba6d80
+uint32_t __cdecl GetItemInstanceID(void* pItem);                        // 0x00c87040
+int32_t __cdecl FUN_00b8dab0(void);                                     // 0x00b8dab0
+void __cdecl FUN_00ba7bd0(void* pCfg);                                  // 0x00ba7bd0
+void __cdecl FUN_00bab010(void* pCfg, void* pArg);                      // 0x00bab010
+bool __cdecl FUN_00bb9af0(void* pItem, int32_t nFlags);                 // 0x00bb9af0
+void __cdecl FUN_00bad440(void* pSelf, void* pObject, void* pCfg);      // 0x00bad440
+void __cdecl FUN_00ba8220(void* pCfg);                                  // 0x00ba8220
+void __cdecl FUN_00bb9b90(void* pA);                                    // 0x00bb9b90
+void __cdecl FUN_00bb9ad0(int32_t nA);                                  // 0x00bb9ad0
+void __cdecl FUN_00bb9b00(int32_t nA, int32_t nB);                      // 0x00bb9b00
+void* __cdecl FUN_00bbaa60(int32_t nA);                                 // 0x00bbaa60
+void __cdecl FUN_00c86e50();                                            // 0x00c86e50
+void __cdecl FUN_004df3e0(void* pObject);                               // 0x004df3e0
+void __cdecl CopyImpl_0(void* pFirst, void* pLast, void* pOut);         // 0x006782c0
+void __cdecl RBTreeErase(FeedbackNode* pNode, void* pAnchor);           // 0x00921880
+template <class T>
+static int32_t EraseAllPointers(T** pBegin, T** pLast, T** pEnd)
+{
+    memcpy(pBegin, pLast, (size_t)((char*)pEnd - (char*)pLast));
+    return (int32_t)(pBegin - pEnd);
+}
+class cStarManager : public cGonzagoSubsystem {
+public:
+    cStarManager();                                         // 0x00bae490
+    void EraseFeedback(void* pEvent);                       // 0x00bad7a0
+    void Reset();                                           // 0x00bad810
+    void Shutdown();                                        // 0x00bad8d0
+    void LoadFromObject(void* pObject);                     // 0x00bad940
+    void UpdateVisibility(void* pStar, void* pPlanet, float fNear, float fFar,
+                          const Vector3* pOffset);          // 0x00badae0
+    void UpdateItem(void* pItem, void* pConfig);            // 0x00badd10
+    void Cheat(void* pArguments);                           // 0x00bae130
+
+    uint8_t mPad1c[0x08];           // +0x01c
+    cStarManager* mpListSelf;       // +0x024
+    int32_t mnState;                // +0x028
+    uint32_t mnFlags;               // +0x02c
+    bool mbLoaded;                  // +0x030
+    uint8_t mPad31[0x03];           // +0x031
+    IRefCounted* mpPending;         // +0x034
+    uint8_t mPad38[0x04];           // +0x038
+    cBanner** mppBanners;           // +0x03c
+    cBanner** mppBannersEnd;        // +0x040
+    Vector3 mOffset;                // +0x044
+    cStarAgentRecord** mppAgents;   // +0x050
+    cStarAgentRecord** mppAgentsEnd;// +0x054
+    uint8_t mPad58[0x0c];           // +0x058
+    bool mbVisible;                 // +0x064
+    uint8_t mPad65[0x07];           // +0x065
+    WString mWorldName;             // +0x06c
+    uint8_t mPad78[0x64];           // +0x078
+    IRefCounted** mppThreats;       // +0x0dc
+    IRefCounted** mppThreatsEnd;    // +0x0e0
+    uint8_t mPadE4[0x68];           // +0x0e4
+    uint8_t* mpHandleTable;         // +0x14c
+    FeedbackMap mFeedback;          // +0x150
+    uint8_t mPad168[0x74];          // +0x168
+    IRefCounted* mpCurrentItem;     // +0x1dc
+    uint8_t mPad1e0[0x08];          // +0x1e0
+    int32_t mnItemCount;            // +0x1e8
+    uint8_t mPad1ec[0x30];          // +0x1ec
+};
+// ---- items of slice s00bad7a0 end
 
 // @ 0x00baa810
 cSortTriple* PartitionTriples(cSortTriple* pFirst, cSortTriple* pLast, cSortTriple value, char (*pPredicate)(const cSortTriple*, const cSortTriple*))
@@ -646,4 +917,500 @@ u8 FUN_00bab740(char* self, int* tree)
         operator_delete_array((void*)tmpB.mpBegin);
     }
     return ok;
+}
+
+// @ 0x00bac830
+void __stdcall FUN_00bac830(KeyVec_s00ba_c830* inList, int param_2, int param_3, int mode, char flag, KeyVec_s00ba_c830* out)
+{
+    out->clear();
+    SpeciesManager* mgr = FUN_00b3d420();
+
+    KeyVec_s00ba_c830 vA = { 0, 0, 0 };        // hash 0x6d60a1cc
+    KeyVec_s00ba_c830 vB = { 0, 0, 0 };        // hash 0x29c388a
+    KeyVec_s00ba_c830 vC = { 0, 0, 0 };        // hash 0x3a8be428
+
+    for (Key* it = inList->mBegin; it != inList->mEnd; ++it) {
+        Species* sp = mgr->FUN_00b90410(*it);
+        if (sp) {
+            uint32_t h = sp->FUN_00b8f860();
+            if (h == 0x29c388a) vB.push_back(*it);
+            else if (h == 0x3a8be428) vC.push_back(*it);
+            else if (h == 0x6d60a1cc) vA.push_back(*it);
+        }
+    }
+
+    uint32_t r = Rnd(3);
+    bool b3 = (mode == 3) || (mode == 2 && r != 0) || (mode == 1 && r == 0);
+    bool b2 = (mode == 3) || (mode == 2 && r != 1) || (mode == 1 && r == 1);
+    bool b1 = (mode == 3) || (mode == 2 && r != 2) || (mode == 1 && r == 2);
+
+    int n1 = param_2;
+    if (flag == 0 && !b1 && (b2 || b3)) n1 = param_3;
+
+    int c1 = 0;
+    for (; c1 < n1; ++c1) {                     // phase 1: vC
+        if (vC.mBegin == vC.mEnd) break;
+        Key* chosen = vC.mBegin + Rnd((uint32_t)(int)(vC.mEnd - vC.mBegin));
+        out->push_back(*chosen);
+        Key* end = vC.mEnd;
+        for (Key* p = chosen; p + 1 != end; ++p) *p = *(p + 1);
+        vC.mEnd = end - 1;
+    }
+
+    int n2 = param_2;
+    if (flag == 0 && !b2 && (c1 == param_2 || b3)) n2 = param_3;
+
+    int c2 = 0;
+    for (; c2 < n2; ++c2) {                     // phase 2: vB
+        if (vB.mBegin == vB.mEnd) break;
+        Key* chosen = vB.mBegin + Rnd((uint32_t)(int)(vB.mEnd - vB.mBegin));
+        out->push_back(*chosen);
+        Key* end = vB.mEnd;
+        for (Key* p = chosen; p + 1 != end; ++p) *p = *(p + 1);
+        vB.mEnd = end - 1;
+    }
+
+    int n3 = param_2;
+    if (flag == 0 && !b3 && (c2 == param_2 || c1 == param_2)) n3 = param_3;
+
+    for (int c3 = 0; c3 < n3; ++c3) {           // phase 3: vA
+        if (vA.mBegin == vA.mEnd) break;
+        Key* chosen = vA.mBegin + Rnd((uint32_t)(int)(vA.mEnd - vA.mBegin));
+        out->push_back(*chosen);
+        Key* end = vA.mEnd;
+        for (Key* p = chosen; p + 1 != end; ++p) *p = *(p + 1);
+        vA.mEnd = end - 1;
+    }
+}
+
+// @ 0x00baccd0
+void __stdcall FUN_00baccd0(KeyVec_s00ba_c830* inList, int p2, int p3, int p4, int p5, KeyVec_s00ba_c830* out)
+{
+    out->clear();
+    ProfileMgr* mgr = FUN_00401090();
+
+    int bound;
+    if (p3 < p2) { bound = p4 + p3 * 2; p2 = (bound / 2 - p3) * p5 + p3; }
+    else { bound = p2 * 2; }
+
+    KeyVec_s00ba_c830 vZero = { 0, 0, 0 };     // profile +0x608 == 0
+    KeyVec_s00ba_c830 vNon = { 0, 0, 0 };      // profile +0x608 != 0
+
+    for (Key* it = inList->mBegin; it != inList->mEnd; ++it) {
+        Profile* pr = mgr->FUN_004df550(*it);
+        if (!pr) continue;
+        if (pr->m608 == 0) vZero.push_back(*it);
+        else vNon.push_back(*it);
+    }
+
+    int done1 = 0;
+    for (; done1 < bound; ++done1) {
+        Key tmp;
+        if (vZero.mBegin == vZero.mEnd) {
+            Obj10a0* r = FUN_00b3d450(0xef2601ca)->FUN_00ac10a0();
+            if (!r) break;
+            tmp = r->mKey;
+        } else {
+            Key* chosen = vZero.mBegin + DrawIndex(vZero.mBegin, vZero.mEnd);
+            tmp = *chosen;
+            Key* end = vZero.mEnd;
+            for (Key* p = chosen; p + 1 != end; ++p) *p = *(p + 1);
+            vZero.mEnd = end - 1;
+        }
+        out->push_back(tmp);
+    }
+
+    int bound2 = p2;
+    if (done1 / 2 < p2) bound2 = done1 / 2;
+
+    int done2 = 0;
+    for (; done2 < bound2; ++done2) {
+        Key tmp;
+        if (vNon.mBegin == vNon.mEnd) {
+            Obj10a0* r = FUN_00b3d450(0x5029da65)->FUN_00ac10a0();
+            if (!r) break;
+            tmp = r->mKey;
+        } else {
+            Key* chosen = vNon.mBegin + DrawIndex(vNon.mBegin, vNon.mEnd);
+            tmp = *chosen;
+            Key* end = vNon.mEnd;
+            for (Key* p = chosen; p + 1 != end; ++p) *p = *(p + 1);
+            vNon.mEnd = end - 1;
+        }
+        out->push_back(tmp);
+    }
+
+    for (Key* it = out->mBegin; it != out->mEnd; ++it) mgr->FUN_004df550(*it);
+}
+
+// @ 0x00bad080
+void __stdcall FUN_00bad080(Key* base, KeyVec_s00ba_c830* out)
+{
+    PropMgr* pm = PropertyManager();
+    RefCount* local = 0;
+    if (local) { RefCount* t = local; local = 0; t->Release(); }
+
+    KeyVec_s00ba_c830 ml = { 0, 0, 0 };
+    pm->LookupRefs(base->a, base->c, &ml);
+
+    if ((int)(ml.mEnd - ml.mBegin) > 0) {
+        for (Key* p = ml.mBegin; p != ml.mEnd; ++p) out->push_back(*p);
+        if (ml.mBegin && ((int*)ml.mBegin)[-1] != 0) FreeBlock(ml.mBegin);
+        return;
+    }
+
+    IntVec vZ = { 0, 0, 0 };        // hash 0x6d60a1cc
+    IntVec vX = { 0, 0, 0 };        // hash 0x29c388a
+    IntVec vY = { 0, 0, 0 };        // hash 0x3a8be428
+
+    RBTree* tree = FUN_006b42e0();
+    void* head = (char*)tree + 4;
+    for (void* n = *(void**)((char*)tree + 8); n != head; n = RBTreeIncrement(n)) {
+        uint32_t id = *(uint32_t*)((char*)n + 0x1c);
+        uint32_t h = ((Species*)id)->FUN_00b8f860();
+        if (h == 0x29c388a) vX.push_back((int)id);
+        else if (h == 0x3a8be428) vY.push_back((int)id);
+        else if (h == 0x6d60a1cc) vZ.push_back((int)id);
+    }
+
+    for (int round = 0; round < 3; ++round) {
+        if (vZ.mBegin != vZ.mEnd) {
+            int* chosen = vZ.mBegin + Rnd((uint32_t)(vZ.mEnd - vZ.mBegin));
+            Obj080* o = (Obj080*)*chosen;
+            Key* k = o->GetKey();
+            out->push_back(*k);
+            vZ.erase(chosen);
+        }
+        if (vX.mBegin != vX.mEnd) {
+            int* chosen = vX.mBegin + Rnd((uint32_t)(vX.mEnd - vX.mBegin));
+            Obj080* o = (Obj080*)*chosen;
+            Key* k = o->GetKey();
+            out->push_back(*k);
+            vX.erase(chosen);
+        }
+        if (vY.mBegin != vY.mEnd) {
+            int* chosen = vY.mBegin + Rnd((uint32_t)(vY.mEnd - vY.mBegin));
+            Obj080* o = (Obj080*)*chosen;
+            Key* k = o->GetKey();
+            out->push_back(*k);
+            vY.erase(chosen);
+        }
+    }
+    if (ml.mBegin && ((int*)ml.mBegin)[-1] != 0) FreeBlock(ml.mBegin);
+}
+
+// @ 0x00bad440
+void Self440::FUN_00bad440(Obj440* param_1, Cfg440* param_2)
+{
+    int m28 = param_1->m28;
+    int mode;
+    if (m28 == 3) mode = 1;
+    else if (m28 == 4) mode = 2;
+    else if (m28 == 5) mode = 3;
+    else return;
+
+    if (param_2) {
+        if (mode < 3) param_2->m10 &= 0xfffffff7;
+        if (mode < 2) param_2->m10 &= 0xfffffffb;
+        if (mode < 1) param_2->m10 &= 0xfffffffd;
+        if (mode > 1) param_2->m10 &= 0xfffffffe;
+        if (mode > 2) param_2->m10 &= 0xfffffffd;
+        if (param_2->m10 == 0) {
+            if (mode == 1) param_2->m10 |= 1;
+            else if (mode == 2) param_2->m10 |= 2;
+            else if (mode == 3) param_2->m10 |= 4;
+        }
+    }
+
+    KeyVec_s00ba_c830 vout = { 0, 0, 0 };
+    if (!param_2 || param_2->m20.mBegin == param_2->m20.mEnd) {
+        Key base = *FUN_00b8d8e0();
+        Key tmp = base;
+        PropMgr* pm = PropertyManager();
+        RefCount* ref = 0;
+        bool ok = pm->Lookup(base.a, base.c, &ref);
+        if (!ok) {
+            tmp.c = 0x4184a100;
+            if (ref) { RefCount* r = ref; ref = 0; r->Release(); }
+            ok = pm->Lookup(base.a, 0x4184a100, &ref);
+            if (!ok) tmp.c = 0x4184ac00;
+        }
+        FUN_00bad080(&tmp, &vout);
+        if (ref) ref->Release();
+    } else {
+        FUN_00baa080(&param_2->m20);
+    }
+
+    int flagVar;
+    int arg3;
+    int iVar10;
+    int roll = 6;
+    bool haveRoll = false;
+
+    if (param_2 == 0) {
+        flagVar = 0;
+        arg3 = (mode == 0) ? 0 : mode - 1;
+    } else {
+        flagVar = param_2->m0c;
+        if (flagVar != 0) {
+            iVar10 = 3;
+            arg3 = mode;
+            haveRoll = true;
+        } else {
+            arg3 = FUN_00ba6ab0(&param_2->m10);
+        }
+    }
+
+    if (!haveRoll) {
+        roll = (int)Rnd(6) + 1;
+        if (param_2 == 0) iVar10 = (2 < roll) ? 3 : roll;
+        else iVar10 = FUN_00ba6ab0(&param_2->m14);
+    }
+
+    FUN_00bac830(&vout, mode, arg3, iVar10, (char)flagVar, &param_1->mBc);
+
+    KeyVec_s00ba_c830 v2 = { 0, 0, 0 };
+    if (param_2 && param_2->m34.mBegin != param_2->m34.mEnd) FUN_00baa080(&param_2->m34);
+
+    int iv9 = 0;
+    if (2 < iVar10) {
+        if (flagVar == 0) {
+            if (param_2 == 0) {
+                int a = roll - 3;
+                int v = (1 < a) ? 2 : a;
+                if (v < 1) v = 0;
+                iv9 = v;
+            } else iv9 = FUN_00ba6ab0(&param_2->m18);
+        } else iv9 = 2;
+    }
+
+    if (iVar10 < 3) iVar10 = 0;
+    else if (flagVar == 0) {
+        if (param_2 == 0) {
+            int c = roll - 5;
+            int v = ClampHi(c, 1);
+            if (v < 1) v = 0;
+            iVar10 = v;
+        } else iVar10 = FUN_00ba6ab0(&param_2->m1c);
+    } else iVar10 = 1;
+
+    FUN_00baccd0(&v2, mode, arg3, iv9, iVar10, &param_1->mD0);
+}
+
+// @ 0x00bad7a0
+void cStarManager::EraseFeedback(void* pEvent)
+{
+    uint32_t nKey = *(uint32_t*)((uint8_t*)pEvent + 0x84);
+    MapIterator it = mFeedback.Find(nKey);
+    if (it.mpNode != mFeedback.mTree.mpAnchor) {
+        --mFeedback.mTree.mnSize;
+        RBTreeIncrement(it.mpNode);
+        RBTreeErase(it.mpNode, mFeedback.mTree.mpAnchor);
+        if (it.mpNode->mpValue != nullptr)
+            it.mpNode->mpValue->Release();
+        operator_delete(it.mpNode);
+    }
+}
+
+// @ 0x00bad810
+void cStarManager::Reset()
+{
+    for (int32_t i = 0; i < (int32_t)(mppBannersEnd - mppBanners); ++i)
+        mppBanners[i]->mpOwner->Slot10();
+
+    for (int32_t i = 0; i < (int32_t)(mppAgentsEnd - mppAgents); ++i) {
+        cStarAgentRecord* pAgent = mppAgents[i];
+        pAgent->mbActive = false;
+        if (pAgent->mpEffect != nullptr) {
+            FUN_00c86e50();
+            if (pAgent->mpEffect != nullptr) {
+                IRefCounted* pOld = pAgent->mpEffect;
+                pAgent->mpEffect = nullptr;
+                pOld->Release2();
+            }
+        }
+    }
+
+    if (mpCurrentItem != nullptr) {
+        IRefCounted* pOld = mpCurrentItem;
+        mpCurrentItem = nullptr;
+        pOld->Release();
+    }
+
+    mppAgentsEnd += EraseAllPointers(mppAgents, mppAgentsEnd, mppAgentsEnd);
+}
+
+// @ 0x00bad8d0
+void cStarManager::Shutdown()
+{
+    IRefCounted* pOld = gspBackgroundSimManager->mpIdleState;
+    if (pOld != nullptr) {
+        gspBackgroundSimManager->mpIdleState = nullptr;
+        pOld->Release();
+    }
+
+    mppAgentsEnd += EraseAllPointers(mppAgents, mppAgentsEnd, mppAgentsEnd);
+
+    NounManager()->RemoveNounsOfType(0x18eb9d2);
+    gCheatStarCount = 0;
+}
+
+// @ 0x00bad940
+void cStarManager::LoadFromObject(void* pObject)
+{
+    uint32_t nHandle = *(uint32_t*)((uint8_t*)pObject + 0x7c);
+    cStarAgentRecord* pAgent;
+    if (nHandle == 0) {
+        pAgent = (cStarAgentRecord*)mpPending;
+    } else if (nHandle == 0xffffffff) {
+        pAgent = nullptr;
+    } else {
+        uint8_t* pBlock = *(uint8_t**)(mpHandleTable + (nHandle >> 12) * 0x14);
+        pAgent = *(cStarAgentRecord**)(pBlock + (nHandle & 0xfff) * 4);
+    }
+
+    WString* pName = (WString*)((uint8_t*)pObject + 0x10);
+    if (pName != &pAgent->mName)
+        pAgent->mName.Assign(pName->mpBegin, pName->mpEnd);
+
+    void* pConfig = *(void**)((uint8_t*)pObject + 0x48);
+    if (pConfig != nullptr) {
+        FUN_00bb9b90((uint8_t*)pConfig + 0x504);
+        FUN_004df3e0(ChildGetSomething((uint32_t)(size_t)pConfig));
+    }
+
+    FUN_00bb9ad0(*(int32_t*)((uint8_t*)pObject + 0xa4));
+    FUN_00bb9b00(2, 0);
+    uint8_t* pSlot = (uint8_t*)FUN_00bbaa60(0);
+    *(int32_t*)(pSlot + 0x194) = *(int32_t*)((uint8_t*)pObject + 0xa4);
+
+    IRefCounted** ppThreats = mppThreats;
+    IRefCounted** ppThreatsEnd = mppThreatsEnd;
+    IRefCounted* pExisting = (IRefCounted*)pAgent;
+    if (ppThreats != ppThreatsEnd) {
+        while (*ppThreats != pExisting) {
+            ++ppThreats;
+            if (ppThreats == ppThreatsEnd)
+                break;
+        }
+        if (ppThreats != ppThreatsEnd) {
+            if (ppThreats + 1 < ppThreatsEnd)
+                CopyImpl_0(ppThreats + 1, ppThreatsEnd, ppThreats);
+            IRefCounted** ppNewEnd = ppThreatsEnd - 1;
+            mppThreatsEnd = ppNewEnd;
+            if (*ppNewEnd != nullptr)
+                (*ppNewEnd)->Release();
+        }
+    }
+
+    IRefCounted* pOld = mpCurrentItem;
+    if (pExisting != pOld) {
+        if (pExisting != nullptr)
+            pExisting->Slot00();
+        mpCurrentItem = pExisting;
+        if (pOld != nullptr)
+            pOld->Release();
+    }
+
+    WString* pWorld = (WString*)pObject;
+    if (pWorld != &mWorldName)
+        mWorldName.Assign(pWorld->mpBegin, pWorld->mpEnd);
+
+    IGameObject* pSave = SaveLoadManager();
+    IGameObject* pStar = *(IGameObject**)((uint8_t*)pSave + 0x188);
+    *(float*)((uint8_t*)pStar + 0x58) = *(float*)((uint8_t*)pStar + 0x54);
+
+    pSave = SaveLoadManager();
+    pStar = *(IGameObject**)((uint8_t*)pSave + 0x188);
+    *(bool*)((uint8_t*)pStar + 0x48) = true;
+
+    pSave = SaveLoadManager();
+    pStar = *(IGameObject**)((uint8_t*)pSave + 0x188);
+    *(bool*)((uint8_t*)pStar + 0x49) = true;
+}
+
+// @ 0x00badd10
+void cStarManager::UpdateItem(void* pItem, void* pConfig)
+{
+    FUN_00b3d420();
+    if (FUN_00b3d420(), *(int32_t*)((uint8_t*)FUN_006b42e0(nullptr) + 0x14) == 0)
+        return;
+
+    uint32_t nFlags = mnFlags;
+    if ((nFlags & 8) != 0)
+        return;
+    mnFlags = nFlags | 8;
+
+    uint8_t* pObject = (uint8_t*)pItem;
+    void* pSlot = FUN_00ba6d80(FUN_00b8d8f0());
+    uint32_t nId = GetItemInstanceID(pSlot);
+
+    if ((nId & 1) != 0) {
+        FUN_00ba7bd0(pObject);
+        if (pConfig != nullptr)
+            FUN_00bab010(pObject, pConfig);
+        switch (mnState) {
+        case 3:
+            pObject[0x0c] = 0;
+            pObject[0x10] = 1;
+            pObject[0x14] = 4;
+            pObject[0x18] = 1;
+            break;
+        case 4:
+            pObject[0x0c] = 0;
+            pObject[0x10] = 2;
+            pObject[0x14] = 8;
+            pObject[0x18] = 4;
+            break;
+        case 5:
+            pObject[0x0c] = 1;
+            pObject[0x10] = 8;
+            pObject[0x14] = 8;
+            pObject[0x18] = 4;
+            pObject[0x1c] = 2;
+            break;
+        }
+    } else {
+        if (FUN_00b8dab0() < 2) {
+            FUN_00bad440(this, pItem, pConfig);
+            return;
+        }
+        FUN_00ba7bd0(pObject);
+        if (pConfig != nullptr)
+            FUN_00bab010(pObject, pConfig);
+        if (FUN_00b8dab0() < 5) {
+            pObject[0x0c] = 1;
+        } else {
+            uint32_t nValue = *(uint32_t*)(pObject + 0x10) & 0xfffffffe;
+            if (nValue == 0)
+                nValue |= 2;
+            *(uint32_t*)(pObject + 0x10) = nValue;
+            if (!FUN_00bb9af0(pSlot, 0x100))
+                pObject[0x0c] = 1;
+        }
+    }
+
+    FUN_00bad440(this, pItem, pObject);
+    FUN_00ba8220(pObject);
+}
+
+// @ 0x00badea0
+uint32_t& CivCounterMap::GetCounter(cCivilization* pKey)
+{
+    FeedbackNode* pAnchor = mTree.mpAnchor;
+    FeedbackNode* pParent = pAnchor;
+    FeedbackNode* pNode = mTree.mpRoot;
+    while (pNode != nullptr) {
+        if (pNode->mnKey < (uint32_t)(size_t)pKey) {
+            pNode = pNode->mpLeft;
+        } else {
+            pParent = pNode;
+            pNode = pNode->mpRight;
+        }
+    }
+    if (pParent != pAnchor && (uint32_t)(size_t)pParent->mnKey >= (uint32_t)(size_t)pKey)
+        return *(uint32_t*)&pParent->mpValue;
+
+    DoInsertValue(pParent, (const uint32_t*)&pKey, 0);
+    return *(uint32_t*)&pParent->mpValue;
 }
