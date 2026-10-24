@@ -19,6 +19,9 @@ namespace checkerlib
 class vector_3 { public: float x, y, z; };
 class vector_4 { public: float x, y, z, w; };
 vector_4 Normalize(const vector_4& q, float* pLength);    // 0x0099cae0 (out of line, sret)
+vector_3 QuaternionVectorTransform(const vector_4& q, const vector_3& v); // 0x0099c1a0 (sret)
+void Normalize(vector_4* out, const vector_4& q, float* pLength);          // out-pointer form
+void QuaternionVectorTransform(vector_3* out, const vector_4& q, const vector_3& v); // out-pointer form
 }
 using namespace checkerlib;
 
@@ -47,7 +50,16 @@ struct creature_body_instance_data                    // size 0x2bc (retail)
     creature_instance_data*      creature;                     // +0x004
     creature_body_instance_data* parent;                       // +0x008
     creature_body_instance_data* first_child;                  // +0x00c
-    uint32_t                     pad_010[(0x190 - 0x10) / 4];
+    uint32_t                     pad_010[(0x58 - 0x10) / 4];
+    vector_3                     ik_blend_pos;                 // +0x58
+    float                        ik_blend_pos_weight;          // +0x64
+    vector_4                     ik_blend_rot;                 // +0x68
+    float                        ik_blend_rot_weight;          // +0x78
+    vector_3                     ik_in_pos;                    // +0x7c
+    float                        ik_in_pos_weight;             // +0x88
+    vector_4                     ik_in_rot;                    // +0x8c
+    float                        ik_in_rot_weight;             // +0x9c
+    uint32_t                     pad_0a0[(0x190 - 0xa0) / 4];
     vector_3                     ik_goal_pos;                  // +0x190 (name guessed)
     vector_4                     ik_goal_orientation;          // +0x19c (name guessed)
     ik_goals_data                ik_goals;                     // +0x1ac
@@ -55,7 +67,9 @@ struct creature_body_instance_data                    // size 0x2bc (retail)
     vector_3                     ik_particle_rest;             // +0x1bc
     vector_3                     ik_particle_goal;             // +0x1c8
     vector_3                     ik_particle_goal_prev;        // +0x1d4 (name guessed)
-    uint32_t                     pad_1e0[(0x2bc - 0x1e0) / 4];
+    uint32_t                     pad_1e0[(0x200 - 0x1e0) / 4];
+    vector_4                     ik_cached_rot;                // +0x200
+    uint32_t                     pad_210[(0x2bc - 0x210) / 4];
 };
 
 extern float g_IKGoalBlend;                           // 0x01550a60
@@ -174,5 +188,127 @@ void IKFinishGoals(creature_instance_data* creature, creature_body_instance_data
     body->ik_particle_goal_prev.x = px;
     body->ik_particle_goal_prev.y = py;
     body->ik_particle_goal_prev.z = pz;
+}
+
+// @ 0x009e90a0
+void FUN_009e90a0(creature_body_instance_data* body, const vector_3* fallbackPos,
+                  const vector_3* vec, vector_3* outPos, vector_4* outRot)
+{
+    body->ik_blend_pos.x = body->ik_in_pos.x + body->ik_blend_pos.x;
+    body->ik_blend_pos.y = body->ik_in_pos.y + body->ik_blend_pos.y;
+    body->ik_blend_pos.z = body->ik_in_pos.z + body->ik_blend_pos.z;
+    body->ik_blend_pos_weight = body->ik_in_pos_weight + body->ik_blend_pos_weight;
+
+    float dot = ((body->ik_blend_rot.x * body->ik_in_rot.x + body->ik_blend_rot.y * body->ik_in_rot.y)
+                 + body->ik_blend_rot.z * body->ik_in_rot.z) + body->ik_blend_rot.w * body->ik_in_rot.w;
+    float rx, ry, rz, rw;
+    if (0.0f <= dot)
+    {
+        rx = body->ik_blend_rot.x + body->ik_in_rot.x;
+        ry = body->ik_blend_rot.y + body->ik_in_rot.y;
+        rz = body->ik_blend_rot.z + body->ik_in_rot.z;
+        rw = body->ik_blend_rot.w + body->ik_in_rot.w;
+    }
+    else
+    {
+        rx = body->ik_blend_rot.x - body->ik_in_rot.x;
+        ry = body->ik_blend_rot.y - body->ik_in_rot.y;
+        rz = body->ik_blend_rot.z - body->ik_in_rot.z;
+        rw = body->ik_blend_rot.w - body->ik_in_rot.w;
+    }
+    body->ik_blend_rot.x = rx;
+    body->ik_blend_rot.y = ry;
+    body->ik_blend_rot.z = rz;
+    body->ik_blend_rot.w = rw;
+    body->ik_blend_rot_weight = body->ik_in_rot_weight + body->ik_blend_rot_weight;
+
+    if (body->ik_blend_rot_weight > 0.0f)
+    {
+        vector_4 r;
+        Normalize(&r, body->ik_blend_rot, 0);
+        body->ik_blend_rot.x = r.x;
+        body->ik_blend_rot.y = r.y;
+        body->ik_blend_rot.z = r.z;
+        body->ik_blend_rot.w = r.w;
+        body->ik_blend_rot_weight = 1.0f;
+        outRot->x = body->ik_blend_rot.x;
+        outRot->y = body->ik_blend_rot.y;
+        outRot->z = body->ik_blend_rot.z;
+        outRot->w = body->ik_blend_rot.w;
+    }
+    else
+    {
+        outRot->x = body->ik_cached_rot.x;
+        outRot->y = body->ik_cached_rot.y;
+        outRot->z = body->ik_cached_rot.z;
+        outRot->w = body->ik_cached_rot.w;
+    }
+
+    if (body->ik_blend_pos_weight > 0.0f)
+    {
+        float invN = 1.0f / body->ik_blend_pos_weight;
+        body->ik_blend_pos.x = invN * body->ik_blend_pos.x;
+        body->ik_blend_pos.y = body->ik_blend_pos.y * invN;
+        body->ik_blend_pos.z = body->ik_blend_pos.z * invN;
+        body->ik_blend_pos_weight = 1.0f;
+        vector_3 t;
+        QuaternionVectorTransform(&t, *outRot, *vec);
+        outPos->x = body->ik_blend_pos.x + t.x;
+        outPos->y = t.y + body->ik_blend_pos.y;
+        outPos->z = t.z + body->ik_blend_pos.z;
+    }
+    else
+    {
+        outPos->x = fallbackPos->x;
+        outPos->y = fallbackPos->y;
+        outPos->z = fallbackPos->z;
+    }
+}
+
+// @ 0x009e92f0
+void FUN_009e92f0(creature_body_instance_data* body, const vector_3* fallbackPos,
+                  const vector_3* vec, vector_3* outPos, vector_4* outRot)
+{
+    if (body->ik_blend_rot_weight > 0.0f)
+    {
+        vector_4 r;
+        Normalize(&r, body->ik_blend_rot, 0);
+        body->ik_blend_rot.x = r.x;
+        body->ik_blend_rot.y = r.y;
+        body->ik_blend_rot.z = r.z;
+        body->ik_blend_rot.w = r.w;
+        body->ik_blend_rot_weight = 1.0f;
+        outRot->x = body->ik_blend_rot.x;
+        outRot->y = body->ik_blend_rot.y;
+        outRot->z = body->ik_blend_rot.z;
+        outRot->w = body->ik_blend_rot.w;
+    }
+    else
+    {
+        outRot->x = body->ik_cached_rot.x;
+        outRot->y = body->ik_cached_rot.y;
+        outRot->z = body->ik_cached_rot.z;
+        outRot->w = body->ik_cached_rot.w;
+    }
+
+    if (body->ik_blend_pos_weight > 0.0f)
+    {
+        float invN = 1.0f / body->ik_blend_pos_weight;
+        body->ik_blend_pos.x = body->ik_blend_pos.x * invN;
+        body->ik_blend_pos.y = body->ik_blend_pos.y * invN;
+        body->ik_blend_pos.z = invN * body->ik_blend_pos.z;
+        body->ik_blend_pos_weight = 1.0f;
+        vector_3 t;
+        QuaternionVectorTransform(&t, *outRot, *vec);
+        outPos->x = body->ik_blend_pos.x + t.x;
+        outPos->y = t.y + body->ik_blend_pos.y;
+        outPos->z = t.z + body->ik_blend_pos.z;
+    }
+    else
+    {
+        outPos->x = fallbackPos->x;
+        outPos->y = fallbackPos->y;
+        outPos->z = fallbackPos->z;
+    }
 }
 } // namespace nSPCreatureAnim
