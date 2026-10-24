@@ -1,0 +1,7 @@
+00ae7ce0 SP::GDVExtractCallback  # __stdcall 3 dword args; returns a 4-char tag from the object's +0x58 type id or from the null-arg fallback
+00ae7de0 SP::cGonzagoSubsystem::SelIdxReset  # __thiscall; writes -1 to +0x94
+00ae7df0 SP::cGonzagoSubsystem::SelIdxSet  # __thiscall; stores the arg at +0x94 when changed
+00ae7e10 SP::cGonzagoSubsystem::SwapSlotObjects  # __thiscall; slots +0x2c/+0x3c/+0x44 by index
+00ae7f00 SP::cGonzagoSubsystem::Init  # __thiscall ctor; installs vptrs 0x145bde0/0x145bdd8
+00ae7f90 SP::cGonzagoSubsystem::Destroy  # __thiscall; releases all owned objects then the base dtor
+00ae8070 SP::cGonzagoSubsystem::InitCommScreen  # __thiscall; one-shot comm-screen renderer setup, gated on +0x92

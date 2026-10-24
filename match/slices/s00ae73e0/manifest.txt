@@ -1,0 +1,4 @@
+# source  symbol  original VA  [flags override]
+slices/s00ae73e0/guicomm.cpp  ?FUN_00ae7ce0@@YGHPAUGDVCallbackArg@@II@Z  00ae7ce0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ae73e0/guicomm.cpp  ?Reset@SelIdxObjA@@QAEXXZ  00ae7de0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ae73e0/guicomm.cpp  ?Set@SelIdxObjA@@QAEXH@Z  00ae7df0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
