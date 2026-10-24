@@ -156,7 +156,7 @@ static __forceinline void transformSpheres(const hkTransform& tr, const hkSphere
         HK_XFORM_ONE(out[i], in[i])
 }
 
-namespace hkHeightFieldAgent
+namespace hkHeightFieldAgentFns
 {
 
 // @ 0x010DAC90
@@ -269,4 +269,44 @@ void __cdecl staticGetClosestPoints(const hkCdBody& bodyA, const hkCdBody& bodyB
     HK_TIMER_END_LIST();
 }
 
+}
+
+// ---------------------------------------------------------------------------
+// hkHeightFieldAgent::cleanup (0x010DAC50).  The agent owns a shape object at
+// +0x08, a uint16 shape-key array at +0x0c and its count at +0x10; every key
+// other than 0xffff is released through the object's virtual slot +0x10, then
+// the agent's own virtual slot 0 is called with 1.
+// ---------------------------------------------------------------------------
+
+struct hkHeightFieldAgentObject {
+    virtual void v0();
+    virtual void v1();
+    virtual void v2();
+    virtual void v3();
+    virtual void releaseShapeKey(uint16_t key);        // +0x10
+};
+
+class hkHeightFieldAgent {
+public:
+    virtual void s0(int value);                        // +0x00
+    virtual void cleanup();                            // 0x010DAC50
+
+    uint32_t mPad4;                                    // +0x04
+    hkHeightFieldAgentObject* mObject8;                // +0x08
+    uint16_t* mShapeKeysC;                             // +0x0c
+    int mShapeKeyCount10;                              // +0x10
+};
+
+// @ 0x010DAC50
+void hkHeightFieldAgent::cleanup()
+{
+    if (mObject8 != 0) {
+        for (int i = 0; i < mShapeKeyCount10; ++i) {
+            const uint16_t key = mShapeKeysC[i];
+            if (key == (uint16_t)0xffff)
+                continue;
+            mObject8->releaseShapeKey(key);
+        }
+    }
+    s0(1);
 }
