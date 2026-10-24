@@ -28,32 +28,6 @@ void __fastcall FUN_0062ca80(void* self) {
   }
 }
 
-// @ 0x0062cb20
-extern "C" void* __cdecl EA_Allocate(unsigned size, const char* name, int a, int b, int c, int d);
-struct ThemeMusic { int pad[16]; };
-void* __stdcall FUN_0062cb20(void* src, float a, char b, float c) {
-  char* o = (char*)EA_Allocate(0x2c, "Casual", 0, 0, 0, 0);
-  if (o != 0) {
-    *(void**)(o + 4) = 0;
-    *(void**)o = (void*)&gThemeMusicVt;
-  } else {
-    o = 0;
-  }
-  int s0 = ((int*)src)[0];
-  int s1 = ((int*)src)[1];
-  int s2 = ((int*)src)[2];
-  *(int*)(o + 8) = s0;
-  *(int*)(o + 0xc) = s1;
-  *(int*)(o + 0x10) = s2;
-  *(float*)(o + 0x20) = a;
-  *(unsigned char*)(o + 0x2a) = 0;
-  *(unsigned char*)(o + 0x29) = 0;
-  *(unsigned char*)(o + 0x2b) = 0;
-  *(unsigned char*)(o + 0x28) = b;
-  *(float*)(o + 0x24) = c;
-  return o;
-}
-
 // @ 0x0062cb90
 void __fastcall FUN_0062cb90(void* self) {
   char* s = (char*)self;
@@ -70,18 +44,6 @@ void __fastcall FUN_0062cb90(void* self) {
     } while (n != 0);
   }
 }
-
-// @ 0x0062cbc0
-int __fastcall FUN_0062cbc0(void* self, float* p) {
-  int obj = **(int**)((char*)self + 0x3c);
-  if (fabsf(*(float*)(obj + 8) - p[0]) < 1.52587890625e-05f &&
-      fabsf(*(float*)(obj + 0xc) - p[1]) < 1.52587890625e-05f)
-    return 1;
-  return 0;
-}
-
-// @ 0x0062cc20
-void __fastcall FUN_0062cc20(void* self, float* p) { (void)self; (void)p; }
 
 // @ 0x0062cd30
 void* __fastcall FUN_0062cd30(void* self) {
@@ -127,9 +89,6 @@ void* __fastcall FUN_0062cdb0(void* self, char flag) {
 
 // @ 0x0062ce00
 void __fastcall FUN_0062ce00(void* self, void*, char) { (void)self; }
-
-// @ 0x0062cef0
-void __fastcall FUN_0062cef0(void* self) { (void)self; }
 
 // ---- 0x0062d0f0 (cSPPlayMode_Creature: walk / dodge-around-other-creature controller) ----
 
@@ -181,14 +140,16 @@ template <class T> struct ARC {
 };
 
 struct PlayModeCreature;
-struct AnimCreature { char pad[0x10]; Quat mRotation; };
+struct AnimCreature { char pad0[4]; Vec3 mPosition; Quat mRotation; };
 struct AnimData {
-  char pad0[0x38];
-  Vec3 mActualPosition;
-  char pad1[0x4c - 0x44];
-  float mMovementSpeed;
-  float mRotationSpeed;
+  char pad0[0x2c];                 // +0x00
+  Vec3 mTargetPosition;            // +0x2c
+  Vec3 mActualPosition;            // +0x38
+  char pad1[0x4c - 0x44];          // +0x44
+  float mMovementSpeed;            // +0x4c
+  float mRotationSpeed;            // +0x50
   void SetTargetPosition(const Vec3* p, int a, int b);  // 0x59b0f0
+  void SetTargetAngle(float angle, int b);              // 0x59b2f0
 };
 struct PlayMode {
   char pad[0x7c];
@@ -201,7 +162,7 @@ struct CasualPath {
   void StartPath();                                              // 0x62dbf0
   bool GetNextPathPoint(Vec3* out);                              // 0x62de30
 };
-struct PathVec { ARC<PathT>* mpBegin; ARC<PathT>* mpEnd; ARC<PathT>* mpCap; };
+struct PathVec { ARC<PathT>* mpBegin; ARC<PathT>* mpEnd; ARC<PathT>* mpCap; void EraseFirst(ARC<PathT>* it); /* 0x6b5990 */ };
 
 struct PlayModeCreature : RefCountObj {
   AnimCreature* mAnimCreature;   // +8
@@ -220,6 +181,7 @@ struct PlayModeCreature : RefCountObj {
   PathVec mPathList;             // +0x3c
 
   PathT* NewPath(const Vec3* pos, float speed, char type, float reached);  // 0x62cb20
+  bool AtFirstTarget(const Vec3* p);                                      // 0x62cbc0
   void BlockOthers();                                                      // 0x62ca80
   void AddPathTarget(PathT* p, int replace);                               // 0x62ce00
 
@@ -238,6 +200,109 @@ static __forceinline void ClearList(PathVec& v) {
       --n;
     } while (n != 0);
   }
+}
+
+// @ 0x0062cb20  SP::cSPPlayMode_Creature::NewPath
+PathT* __stdcall FUN_0062cb20(const Vec3* pos, float speed, char type, float reached) {
+  PathT* o = (PathT*)operator new(0x2c, "Casual", 0, 0, 0, 0);
+  if (o != 0) {
+    o->mnRefCount = 0;
+    *(void**)o = (void*)&gThemeMusicVt;
+  } else {
+    o = 0;
+  }
+  o->mTarget = *pos;
+  o->mSpeed = speed;
+  o->mType = type;
+  o->mReached = reached;
+  o->mCount = 0;
+  o->mPriority = 0;
+  o->mRoom = 0;
+  return o;
+}
+
+// @ 0x0062cbc0  SP::cSPPlayMode_Creature::AtFirstTarget
+bool PlayModeCreature::AtFirstTarget(const Vec3* p) {
+  PathT* t = mPathList.mpBegin[0].p;
+  float d[2];
+  d[0] = t->mTarget.x - p->x;
+  d[1] = t->mTarget.y - p->y;
+  if (fabsf(d[0]) < 1.52587890625e-05f &&
+      fabsf(d[1]) < 1.52587890625e-05f)
+    return true;
+  return false;
+}
+
+// @ 0x0062cc20  SP::cSPPlayMode_Creature::SetTarget
+void __fastcall FUN_0062cc20(void* self, int unused, const Vec3* p, int unused2) {
+  PlayModeCreature* c = (PlayModeCreature*)self;
+  AnimData* d = c->mData;
+  d->SetTargetPosition(p, 0, 1);
+  Vec3 pos = d->mActualPosition;
+  if (p->x == pos.x && p->y == pos.y && p->z == pos.z) return;
+  Vec3 fwd;
+  fwd.x = -kFwd.x;
+  fwd.y = -kFwd.y;
+  fwd.z = -kFwd.z;
+  Vec3 dir;
+  dir.x = p->x - pos.x;
+  dir.y = p->y - pos.y;
+  dir.z = p->z - pos.z;
+  float angle = -SignedDot(&dir, &fwd, &kUp);
+  d->SetTargetAngle(angle, 0);
+}
+
+// @ 0x0062cef0  SP::cSPPlayMode_Creature::UpdateMovement
+void __fastcall FUN_0062cef0(void* self, int unused, unsigned int dtMs) {
+  PlayModeCreature* c = (PlayModeCreature*)self;
+  if (!c->mAnimCreature) return;
+  float dt = dtMs * 0.001f;
+  if (c->mWaitAfter > 0.0f) {
+    c->mWaitAfter -= dt;
+    if (c->mWaitAfter < 0.0f) c->mWaitAfter = 0.0f;
+  }
+  if (Empty(c->mPathList)) {
+    PathT* w = c->mPathInWaiting.p;
+    if (!w) return;
+    c->mPathWaitTime -= dt;
+    if (c->mPathWaitTime > 0.0f) return;
+    w->mReached = (float)w->mCount * 0.3f + w->mReached + 0.6f;
+    float ax = c->mAnimCreature->mPosition.x;
+    float ay = c->mAnimCreature->mPosition.y;
+    float az = c->mAnimCreature->mPosition.z;
+    float dx = ax - w->mTarget.x;
+    float dy = ay - w->mTarget.y;
+    float dz = az - w->mTarget.z;
+    if (w->mReached < sqrtf(dx * dx + dy * dy + dz * dz)) {
+      w->mCount = w->mCount + 1;
+      c->AddPathTarget(c->mPathInWaiting.p, 0);
+      c->mPathWaitTime = 0.5f;
+      return;
+    }
+    if (w->mType == 1) c->mWaitAfter = 2.0f;
+    c->mPlayMode->StopWalk(c->mAnimCreature, c->mCreatureID);
+    c->mPathInWaiting.Reset();
+    return;
+  }
+  PathT* first = c->mPathList.mpBegin[0].p;
+  float ax = c->mAnimCreature->mPosition.x;
+  float ay = c->mAnimCreature->mPosition.y;
+  float az = c->mAnimCreature->mPosition.z;
+  float dx = ax - first->mTarget.x;
+  float dy = ay - first->mTarget.y;
+  float dz = az - first->mTarget.z;
+  if (first->mReached < sqrtf(dx * dx + dy * dy + dz * dz)) return;
+  unsigned count = (unsigned)(c->mPathList.mpEnd - c->mPathList.mpBegin);
+  if (count > 1) {
+    FUN_0062cc20(c, 0, &c->mPathList.mpBegin[1].p->mTarget, 0);
+    c->mPathList.mpBegin[1].p->mTarget = c->mData->mTargetPosition;
+    c->mPathList.EraseFirst(c->mPathList.mpBegin);
+    return;
+  }
+  if (first->mType == 1) c->mWaitAfter = 2.0f;
+  c->mPlayMode->StopWalk(c->mAnimCreature, c->mCreatureID);
+  c->mPathInWaiting.Reset();
+  c->mPathList.EraseFirst(c->mPathList.mpBegin);
 }
 
 // @ 0x0062d0f0
