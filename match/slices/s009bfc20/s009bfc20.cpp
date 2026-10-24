@@ -100,7 +100,16 @@ struct creature_body_static_data {
     vector_4 rest_orientation_q;         // +0x118
     uint32_t pad_128[(0x138 - 0x128) / 4];
     vector_3 extent;                     // +0x138 (half size, unscaled)
+    uint32_t pad_144[(0x150 - 0x144) / 4];
+    uint32_t ground_flags;               // +0x150 (bit 2: store placement, bit 4: alternate)
+    uint32_t pad_154[(0x468 - 0x154) / 4];
+
+    void SetFromBuilt(uint32_t value);   // 0x009b3e40
+    uint32_t Build();                    // 0x009b3cd0
 };
+
+struct creature_body_instance_data;
+struct creature_body_ref;
 
 struct creature_instance_data {
     uint32_t pad_000[0x18 / 4];
@@ -111,14 +120,24 @@ struct creature_instance_data {
     float    requested_scale;            // +0x070
     uint32_t pad_074[(0x100 - 0x74) / 4];
     vector_3 ground_up;                  // +0x100
+    uint32_t pad_10c[(0x260 - 0x10c) / 4];
+    bool     ground_placement_valid;     // +0x260
+    uint8_t  pad_261[0x2e4 - 0x261];
+    creature_body_instance_data* body_begin;      // +0x2e4
+    creature_body_instance_data* body_end;        // +0x2e8
+    creature_body_instance_data* body_capacity;   // +0x2ec
 
     float GetGroundHeight(const vector_3* pos, vector_3* normal);   // 0x009b6220
     vector_3* GetGroundUp(vector_3* out, const vector_3* pos);      // 0x009b62c0
+    void FUN_009b8fd0(float* pBase, float* pRate);                  // 0x009b8fd0
+    void UpdateGoalGrounds();                                       // 0x009c0680
+    void UpdateGoalGround(creature_body_ref* pRef);                 // 0x009c0860
 };
 
 struct creature_body_instance_data {
     creature_body_static_data* static_data;  // +0x000
-    uint32_t pad_004[(0x7c - 0x4) / 4];
+    uint32_t pad_004[(0x58 - 0x4) / 4];
+    goal_pos_rot goal_a;                     // +0x058
     goal_pos_rot goal_b;                     // +0x07c
     uint32_t pad_0a0[(0x2a0 - 0xa0) / 4];
     bool     known_ground_pos;               // +0x2a0
@@ -128,6 +147,47 @@ struct creature_body_instance_data {
 
     void GroundGoal(vector_3* outPos, vector_4* outRot, creature_instance_data* c,
                     float baseHeight, float rate, bool storeGround);
+};
+
+// Entry that carries the body a goal belongs to (0x009c0860 takes one of these).
+struct creature_body_ref {
+    uint32_t pad_000;                        // +0x000
+    creature_body_instance_data* body;       // +0x004
+};
+
+// EASTL debug allocator entry points (see eastl/allocator.h): the 6 argument form
+// operator new[](size, pName, flags, debugFlags, file, line).
+void* __cdecl EastlAllocDebug(size_t size, const char* pName, int flags, int debugFlags,
+                              const char* file, int line);          // 0x00f473a0
+void  __cdecl EastlFreeDebug(void* p);                              // 0x00f47380
+void  __cdecl MoveRange(void* first, void* last, void* dest);        // 0x009b4290
+void  __cdecl CopyRange(void* pResultSlot, void* first, void* last,
+                        void* dest, void* pSourceVector);            // 0x009be710
+#define EASTL_ALLOC_NAME ((const char*)0x013f2150)   // "EASTL"
+#define EASTL_ALLOC_FILE ((const char*)0x013ebb38)   // .../EASTL/allocator.h
+#define EASTL_ALLOC_LINE 0xd1
+
+// eastl::vector of 0x30-byte goal entries: the pushed-back goal list.
+struct goal_entry {
+    uint32_t pad_000[0x30 / 4];
+};
+
+struct sp_goal_vector {
+    goal_entry* mpBegin;                     // +0x00
+    goal_entry* mpEnd;                       // +0x04
+    goal_entry* mpEndCapacity;               // +0x08
+
+    void reserve(uint32_t n);                // 0x009c0b00
+};
+
+// eastl::vector<creature_body_static_data>: the per-body static tables.
+struct sp_body_static_vector {
+    creature_body_static_data* mpBegin;       // +0x00
+    creature_body_static_data* mpEnd;         // +0x04
+    creature_body_static_data* mpEndCapacity; // +0x08
+
+    sp_body_static_vector* Ctor(size_t n, const void* allocator);   // 0x009c0bb0
+    sp_body_static_vector* CtorCopy(sp_body_static_vector* pSrc);   // 0x009c0c50
 };
 
 // @ 0x009bfc20
@@ -238,6 +298,179 @@ void creature_body_instance_data::GroundGoal(vector_3* outPos, vector_4* outRot,
     delta.z = gpos.z - c->position.z;
     *outPos = InvRotate(c->orientation, delta);
     *outRot = QuatConjMul(c->orientation, grot);
+}
+
+// Run GroundGoal for every body whose goals are still active.
+// @ 0x009c0680
+void creature_instance_data::UpdateGoalGrounds()
+{
+    vector_4 rot;
+    vector_3 pos;
+    float baseHeight;
+    bool storeGround;
+    float rate;
+
+    FUN_009b8fd0(&baseHeight, &rate);
+    if (!(rate > 1.0e-6f))
+        return;
+    int32_t count = (int32_t)(body_end - body_begin);
+    if (count <= 0)
+        return;
+    for (int32_t i = 0; i < count; ++i) {
+        creature_body_instance_data* pBody = &body_begin[i];
+        if (pBody->goal_b.pos_weight != 0.0f || pBody->goal_b.rot_weight != 0.0f ||
+            pBody->goal_a.pos_weight != 0.0f || pBody->goal_a.rot_weight != 0.0f) {
+            uint32_t flags = pBody->static_data->ground_flags;
+            uint32_t alt = flags >> 4;
+            storeGround = ((flags >> 2) & 1) != 0;
+            if (ground_placement_valid && (storeGround || (alt & 1) != 0)) {
+                pos.z = 0.0f;
+                pos.y = 0.0f;
+                pos.x = 0.0f;
+                rot.z = 0.0f;
+                rot.y = 0.0f;
+                rot.x = 0.0f;
+                rot.w = 1.0f;
+                pBody->GroundGoal(&pos, &rot, this, baseHeight, rate, storeGround);
+                float w = pBody->goal_b.pos_weight;
+                if (w > 0.0f) {
+                    float x = w * pos.x;
+                    float y = w * pos.y;
+                    float z = w * pos.z;
+                    pBody->goal_b.pos.x = x;
+                    pBody->goal_b.pos.y = y;
+                    pBody->goal_b.pos.z = z;
+                }
+                w = pBody->goal_b.rot_weight;
+                if (w > 0.0f) {
+                    float x = w * rot.x;
+                    float y = w * rot.y;
+                    float z = w * rot.z;
+                    float qw = w * rot.w;
+                    pBody->goal_b.rot.x = x;
+                    pBody->goal_b.rot.y = y;
+                    pBody->goal_b.rot.z = z;
+                    pBody->goal_b.rot.w = qw;
+                }
+            }
+        }
+    }
+}
+
+// Run GroundGoal for the body referenced by pRef.
+// @ 0x009c0860
+void creature_instance_data::UpdateGoalGround(creature_body_ref* pRef)
+{
+    vector_4 rot;
+    vector_3 pos;
+    float baseHeight;
+    float rate;
+
+    FUN_009b8fd0(&baseHeight, &rate);
+    if (!(rate > 1.0e-6f))
+        return;
+    creature_body_instance_data* pBody = pRef->body;
+    if (pBody->goal_b.pos_weight == 0.0f && pBody->goal_b.rot_weight == 0.0f)
+        return;
+    if (!ground_placement_valid)
+        return;
+    pos.z = 0.0f;
+    pos.y = 0.0f;
+    pos.x = 0.0f;
+    rot.z = 0.0f;
+    rot.y = 0.0f;
+    rot.x = 0.0f;
+    rot.w = 1.0f;
+    pBody->GroundGoal(&pos, &rot, this, baseHeight, rate, false);
+    float w = pBody->goal_b.pos_weight;
+    if (w > 0.0f) {
+        float x = w * pos.x;
+        float y = w * pos.y;
+        float z = w * pos.z;
+        pBody->goal_b.pos.x = x;
+        pBody->goal_b.pos.y = y;
+        pBody->goal_b.pos.z = z;
+    }
+    w = pBody->goal_b.rot_weight;
+    if (w > 0.0f) {
+        float x = w * rot.x;
+        float y = w * rot.y;
+        float z = w * rot.z;
+        float qw = w * rot.w;
+        pBody->goal_b.rot.x = x;
+        pBody->goal_b.rot.y = y;
+        pBody->goal_b.rot.z = z;
+        pBody->goal_b.rot.w = qw;
+    }
+}
+
+// eastl::vector<goal_entry>::reserve
+// @ 0x009c0b00
+void sp_goal_vector::reserve(uint32_t n)
+{
+    int32_t capacityBytes = (int32_t)mpEndCapacity - (int32_t)mpBegin;
+    if (n <= (uint32_t)(capacityBytes / 0x30))
+        return;
+    goal_entry* pNew = (n != 0)
+        ? (goal_entry*)EastlAllocDebug(n * sizeof(goal_entry), EASTL_ALLOC_NAME, 0, 0,
+                                       EASTL_ALLOC_FILE, EASTL_ALLOC_LINE)
+        : 0;
+    MoveRange(mpBegin, mpEnd, pNew);
+    goal_entry* pOld = mpBegin;
+    if (pOld != 0 && ((int32_t*)pOld)[-1] != 0)
+        EastlFreeDebug(pOld);
+    int32_t usedBytes = (int32_t)mpEnd - (int32_t)mpBegin;
+    int32_t count = usedBytes / 0x30;
+    mpBegin = pNew;
+    mpEnd = (goal_entry*)((int32_t)pNew + count * 0x30);
+    mpEndCapacity = (goal_entry*)((int32_t)pNew + (int32_t)n * 0x30);
+}
+
+// eastl::vector<creature_body_static_data>::vector(n, allocator)
+// @ 0x009c0bb0
+sp_body_static_vector* sp_body_static_vector::Ctor(size_t n, const void* allocator)
+{
+    (void)allocator;
+    creature_body_static_data builder;
+    uint32_t value;
+    creature_body_static_data* pNew = (n != 0)
+        ? (creature_body_static_data*)EastlAllocDebug(
+              n * sizeof(creature_body_static_data), EASTL_ALLOC_NAME, 0, 0,
+              EASTL_ALLOC_FILE, EASTL_ALLOC_LINE)
+        : 0;
+    int32_t bytes = (int32_t)n * 0x468;
+    mpEndCapacity = (creature_body_static_data*)((int32_t)pNew + bytes);
+    mpBegin = pNew;
+    mpEnd = pNew;
+    value = builder.Build();
+    creature_body_static_data* p = mpBegin;
+    while (n != 0) {
+        if (p != 0)
+            p->SetFromBuilt(value);
+        p = (creature_body_static_data*)((int32_t)p + 0x468);
+        --n;
+    }
+    mpEnd = (creature_body_static_data*)((int32_t)mpBegin + bytes);
+    return this;
+}
+
+// eastl::vector<creature_body_static_data>::vector(const vector&)
+// @ 0x009c0c50
+sp_body_static_vector* sp_body_static_vector::CtorCopy(sp_body_static_vector* pSrc)
+{
+    int32_t count = ((int32_t)pSrc->mpEnd - (int32_t)pSrc->mpBegin) / 0x468;
+    creature_body_static_data* pNew = (count != 0)
+        ? (creature_body_static_data*)EastlAllocDebug(
+              count * 0x468, EASTL_ALLOC_NAME, 0, 0, EASTL_ALLOC_FILE, EASTL_ALLOC_LINE)
+        : 0;
+    int32_t bytes = count * 0x468;
+    mpEndCapacity = (creature_body_static_data*)((int32_t)pNew + bytes);
+    mpBegin = pNew;
+    mpEnd = pNew;
+    creature_body_static_data* pEnd;
+    CopyRange(&pEnd, pSrc->mpBegin, pSrc->mpEnd, pNew, (void*)pSrc);
+    mpEnd = pEnd;
+    return this;
 }
 
 }  // namespace nSPCreatureAnim

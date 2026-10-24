@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009bfc20/s009bfc20.cpp  ?reserve@sp_goal_vector@nSPCreatureAnim@@QAEXI@Z  009c0b00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
