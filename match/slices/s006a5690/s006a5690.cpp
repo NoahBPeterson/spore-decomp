@@ -223,7 +223,10 @@ struct ArgMgr {
 };
 
 // The +0x0c view of ArgMgr that carries the message handler 006a58a0: its hash
-// map is at +0x68 of this view (== ArgMgr + 0x74).
+// map is at +0x68 of this view (== ArgMgr + 0x74).  The handler re-derives the
+// enclosing manager with the same -0x0c adjustment the original emits.
+static const unsigned kArgMgrViewOffset = 0x0c;
+
 struct ArgMgrView {
     uint8_t  pad00[0x0c];                                                   // +0x00
     uint8_t  pad0c[0x5c];                                                   // +0x0c .. +0x67
@@ -235,7 +238,7 @@ struct ArgMgrView {
 
 inline ArgMgr* ArgMgrView::owner() const
 {
-    return (ArgMgr*)((char*)this - 0x0c);
+    return (ArgMgr*)((char*)this - kArgMgrViewOffset);
 }
 
 extern "C" void* __cdecl SP_MessageServer();                                // 0x0067dcc0
@@ -651,6 +654,6 @@ VecU32* VecU32::Init(unsigned n, const void* alloc)
     uint32_t* p = (uint32_t*)begin;
     for (unsigned i = 0; i < n; i++)
         p[i] = 0;
-    *(uint32_t*)((char*)this + 4) = (uint32_t)begin + n * 4;
+    end = (void*)((uint32_t)begin + n * 4);
     return this;
 }
