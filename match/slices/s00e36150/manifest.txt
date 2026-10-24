@@ -1,0 +1,6 @@
+slices/s00e36150/s00e36150.cpp  ?Shutdown@cUITimedTooltip@@QAEXXZ  00e36500  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e36150/s00e36150.cpp  ?Hide@cUITimedTooltip@@QAEXXZ  00e36620  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e36150/s00e36150.cpp  ?GetGameModeHash@@YAIXZ  00e36c80  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e36150/s00e36150.cpp  ?ResetState@cUITimedTooltip@@QAEXXZ  00e36de0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e36150/s00e36150.cpp  ?GetSlot@cUITimedTooltip@@QAEPAUcTooltipSlot@@H@Z  00e36fb0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e36150/s00e36150.cpp  ?SetEditorState@@YAXXZ  00e36fd0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
