@@ -87,7 +87,7 @@ struct cDataSerializerGeneric {
     int mId;                    // +0x04
     char mPad08[0x10];
     void* mpBinderContext;      // +0x18
-    char mPad1c[4];
+    void (*mpUnloadFunc)(void*); // +0x1c (cdecl: ser -> void)
     void* mpAccessFunc;         // +0x20 (cdecl: ser -> value)
     void* mpWriteFunc;          // +0x24
     void* mpReadFunc;           // +0x28
@@ -335,15 +335,12 @@ bool cVarListSerializer::Serialize(cOutStream* stream) {
 void cVarListSerializer::Unload() {
     for (int i = 0; i < mSerializableVarCount; ++i) {
         cDataSerializationInfo& info = mDataSerializationInfos[i];
-        if (!info.mbSerialized) {
-            cDataSerializerGeneric* p = (cDataSerializerGeneric*)info.mpSerializer;
-            if (p != 0) {
-                void* save = p->mpBinderContext;
-                if (save == 0) p->mpBinderContext = mpObject;
-                ((void(*)(void*))p->mpBinderContext)(save);
-                p->mpBinderContext = info.mpBinderContext;
-            }
-        }
+        if (info.mbSerialized) continue;
+        cDataSerializerGeneric* p = (cDataSerializerGeneric*)info.mpSerializer;
+        if (p->mpUnloadFunc == 0) continue;
+        if (p->mpBinderContext == 0) p->mpBinderContext = mpObject;
+        p->mpUnloadFunc(p);
+        p->mpBinderContext = info.mpBinderContext;
     }
 }
 
@@ -357,20 +354,25 @@ int Info_AddOffset(void* p) {
 // ===========================================================================
 // 0x00692cb0  insertion sort (0x3c-byte records)
 // ===========================================================================
+struct SortRec { unsigned int f[15]; };
 // @ 0x00692cb0
 void SortRecords_A(void* first, void* last) {
-    char tmp[0x3c];
-    for (char* i = (char*)first; i != last; i += 0x3c) {
-        __movsb((unsigned char*)tmp, (unsigned char*)i, 0x3c);
-        char* j = i;
-        while (j != first && ((int*)tmp)[1] < *(int*)(j - 0x38)) {
-            __movsb((unsigned char*)j, (unsigned char*)(j - 0x3c), 0x3c);
-            j -= 0x3c;
+    SortRec* f = (SortRec*)first;
+    SortRec* l = (SortRec*)last;
+    if (f == l) return;
+    SortRec* i = f + 1;
+    if (i == l) return;
+    do {
+        SortRec val = *i;
+        SortRec* next = i;
+        while (next != f && val.f[1] < next[-1].f[1]) {
+            *next = next[-1];
+            --next;
         }
-        __movsb((unsigned char*)j, (unsigned char*)tmp, 0x3c);
-    }
+        *next = val;
+        ++i;
+    } while (i != l);
 }
-struct SortRec { unsigned int f[15]; };
 // @ 0x00692d20
 void SortRecords_B(SortRec* first, SortRec* last) {
     for (SortRec* i = first; i != last; ++i) {
@@ -466,10 +468,14 @@ cRegNode* cRegNode::Construct(void* data) {
 // ===========================================================================
 // @ 0x00692f90  SP::cVarListSerializer::cVarListSerializer
 // ===========================================================================
-cVarListSerializer* cVarListSerializer_Construct(cVarListSerializer* self, void* obj,
+// @ 0x00692f90
+struct VarListCtorHost : cVarListSerializer {
+    cVarListSerializer* cVarListSerializer_Construct(void* obj, cDataSerializerGeneric* list, unsigned int sig);
+};
+cVarListSerializer* VarListCtorHost::cVarListSerializer_Construct(void* obj,
                                                  cDataSerializerGeneric* list, unsigned int sig) {
-    self->Init(obj, list, sig);
-    return self;
+    Init(obj, list, sig);
+    return this;
 }
 
 // ===========================================================================

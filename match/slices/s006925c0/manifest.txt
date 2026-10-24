@@ -20,3 +20,6 @@ slices/s006925c0/s006925c0.cpp  ?ParseVector3@@YAXPAPBDPAM@Z  006930f0  /O2 /MD 
 slices/s006925c0/s006925c0.cpp  ?ParseVector4@@YAXPAPBDPAM@Z  00693120  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s006925c0/s006925c0.cpp  ?ParseColorRGB@@YAXPAPBDPAI@Z  00693150  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s006925c0/s006925c0.cpp  ?SortRecords_C@@YAXPAUSortRec@@HHU1@@Z  00692d90  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006925c0/s006925c0.cpp  ?Unload@cVarListSerializer@@QAEXXZ  00692c50  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006925c0/s006925c0.cpp  ?SortRecords_A@@YAXPAX0@Z  00692cb0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006925c0/s006925c0.cpp  ?cVarListSerializer_Construct@VarListCtorHost@@QAEPAVcVarListSerializer@@PAXPAUcDataSerializerGeneric@@I@Z  00692f90  /O2 /MD /Gy /EHsc /TP /GS-

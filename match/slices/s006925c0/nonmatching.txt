@@ -2,17 +2,17 @@
 00692640  61   complete; WaitForJob scoped-lock/helper near-miss
 006926b0  18   complete; cJob::Wait two-step manager load near-miss
 00692800  15   complete; ready predicate register near-miss; equiv PASS (1200 inputs, 100% cov)
-00692820  36   complete; dispatch callback near-miss; equiv FAIL (return value eax differs, 5/65 inputs)
+00692820  36   complete; dispatch callback: byte-identical except the return-zero instruction (orig `xor al,al` vs ours `xor eax,eax`); FAIL-KEPT because the `QAEI` (unsigned int) symbol forces a full-width zero, and `xor al,al` cannot be emitted for an unsigned-int free-standing return without changing the return type; equiv FAIL (return value eax upper bits differ, 5/65 inputs)
 00692850  33   complete; lazy resolve near-miss; equiv WEAK (52.6% cov)
 00692880  90   complete; Init serializer-record layout near-miss
-00692c50  56   complete; Unload near-miss
-00692cb0  86   complete; record insertion sort near-miss
+00692c50  56   MOVED TO manifest.txt (byte-exact); Unload: record stride 0x14 from +0x10, fields mpSerializer@+0x10 / mpBinderContext@+0x0c / mbSerialized@+0x08, serializer unload callback at +0x1c, saved context at +0x18; equiv PASS (341 inputs, 72.7% cov)
+00692cb0  86   MOVED TO manifest.txt (byte-exact); SortRecords_A: peeled first-iteration insertion sort, single cursor `next` + `next != first` bound; equiv WEAK (299 valid inputs, 27.9% cov)
 00692e00  2    complete; WriteBlob32 one-register near-miss
 00692e50  2    complete; WriteBlob16 one-register near-miss; equiv FAIL (eax&0xffff return value)
 00692ee0  14   complete; registry resolve walk near-miss
 00692f20  28   complete; registry release walk near-miss; equiv WEAK (25% cov)
 00692f60  25   complete; registry node constructor near-miss; equiv WEAK (92.3% cov; now cRegNode::Construct member)
-00692f90  15   complete; cVarListSerializer constructor near-miss
+00692f90  15   MOVED TO manifest.txt (byte-exact); cVarListSerializer constructor is `__thiscall` (ecx=self, 3 stack args, `ret 0xc`, returns ecx); this compiler rejects `__thiscall` on free functions (C3865), so it is modelled as a non-static member `VarListCtorHost::cVarListSerializer_Construct`; equiv PASS (222 inputs, 100% cov)
 006930b0  14   complete; ParseFloat stack-slot reuse near-miss
 00692900  371  complete; Serialize: tmp/ok stack-slot assignment and store scheduling differ (bool flag wants the dead param slot); equiv: UNSUPPORTED (0/400 valid inputs)
 00692d20  64  complete; unguarded insertion sort: induction-variable choice (src derived from dst + constant offset) differs; equiv: WEAK (19% cov)
