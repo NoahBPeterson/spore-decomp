@@ -92,6 +92,7 @@ struct PtrVector {
         return position;
     }
     void clear() { erase(mpBegin, mpEnd); }
+    void FUN_004558a0(T* position, const T& value);   // 0x004558a0 SPVector::DoInsertValue
 };
 
 // eastl::string16 (begin/end/capacity + allocator), only what this function needs.
@@ -185,7 +186,9 @@ struct cMarkerManager {                                            // 0x00b3d480
 cMarkerManager* MarkerManager();                                   // 0x00b3d480
 
 struct cGameNoun {
-    PV16 PV2 PV
+    virtual void v0();
+    virtual void v1();
+    PV16 PV
     virtual int GetPoliticalID();                                  // +0x4c
     void* GetCityTarget();                                         // 0x00c8e7e0
     void* GetTribe();                                              // 0x00bef8e0
@@ -594,4 +597,197 @@ void cSPSimPlanetHighLOD::ActivatePlanet(cPlanet* planet)
         }
     }
     mpHelper->UpdateHelper();
+}
+
+// ---------------------------------------------------------------------------
+// Category/relationship refresh helpers (0x00ff9390, 0x00ff9520, 0x00ff95a0).
+// ---------------------------------------------------------------------------
+struct cCategoryCtxBuilder {
+    void* FUN_01067e60();                                          // 0x01067e60
+};
+cCategoryCtxBuilder* FUN_010666a0();                               // 0x010666a0
+void FUN_01041d50(cGameNoun* noun, void* ctx);                     // 0x01041d50
+void FUN_01041f00(cGameNoun* noun, void* ctx);                     // 0x01041f00
+void FUN_01041c30(cGameNoun* noun, void* ctx);                     // 0x01041c30
+void FUN_00ce8f70(cGameNoun* noun, void* ctx);                     // 0x00ce8f70
+void FUN_00ff84f0(int* begin, int* end);                           // 0x00ff84f0
+
+struct cCategoryObj {
+    char pad00[0x340];                                             // +0x000
+    PtrVector<void*> m340;                                         // +0x340
+    char pad34c[0x354 - 0x34c];                                    // +0x34c
+    PtrVector<void*> m354;                                         // +0x354
+};
+PtrVector<cCategoryObj*>* FUN_00bef6c0();                          // 0x00bef6c0
+
+struct cCategoryNoun {
+    virtual void v0();
+    virtual void v1();
+    PV16 PV
+    char pad04[0x89 - 0x04];                                       // vptr at +0, data at +4
+    uint8_t flag89;                                                // +0x89
+    uint8_t flag8a;                                                // +0x8a
+};
+
+static __forceinline int CategoryCount(cCategoryObj* obj)
+{
+    return obj->m340.size() + obj->m354.size();
+}
+
+// @ 0x00ff9390
+void FUN_00ff9390()
+{
+    cGameNounManager* nouns = NounManager();
+    PtrVector<cGameNoun*>* cities = &nouns->GetGameDataVector(GameData_cd7d10, GameData_d3d420,
+                                                              GameData_acdff0, GameData_b1e500,
+                                                              0x18c43e8)->mData;
+    void* ctx = FUN_010666a0()->FUN_01067e60();
+
+    uint32_t cityCount = (uint32_t)(cities->mpEnd - cities->mpBegin);
+    for (uint32_t i = 0; i < cityCount; i++)
+        FUN_01041d50((*cities)[i], ctx);
+
+    PtrVector<cGameNoun*>* tribes = &nouns->GetGameDataVector(GameData_cd7d10, GameData_d3d420,
+                                                              GameData_accbb0, GameData_b1e500,
+                                                              0x18c6d19)->mData;
+    uint32_t tribeCount = (uint32_t)(tribes->mpEnd - tribes->mpBegin);
+    for (uint32_t i = 0; i < tribeCount; i++)
+        FUN_01041f00((*tribes)[i], ctx);
+
+    PtrVector<cGameNoun*>* others = &nouns->GetGameDataVector(GameData_b21080, GameData_d3d420,
+                                                              GameData_b236c0, GameData_b1e500,
+                                                              0x18c816a)->mData;
+    uint32_t count = (uint32_t)(others->mpEnd - others->mpBegin);
+    cGameNoun** temp;
+    if (count != 0) {
+        temp = (cGameNoun**)operator new(count * 4, "Simulator", 0, 0,
+                                         (const char*)0x013ebb38, 0xd1);
+    } else {
+        temp = 0;
+    }
+
+    cGameNoun** end = others->mpEnd;
+    cGameNoun** dst = temp;
+    cGameNoun** src = others->mpBegin;
+    while (src != end) {
+        if (dst != 0) {
+            cGameNoun* noun = *src;
+            *dst = noun;
+            if (noun != 0)
+                noun->v0();
+        }
+        ++src;
+        ++dst;
+    }
+    for (cGameNoun** p = temp; p != dst; ++p)
+        FUN_00ce8f70(*p, ctx);
+    for (cGameNoun** p = temp; p < dst; ++p) {
+        if (*p != 0)
+            (*p)->v1();
+    }
+    if (temp != 0 && ((int*)temp)[-1] != 0)
+        operator delete[](temp);
+}
+
+// @ 0x00ff9520
+void FUN_00ff9520()
+{
+    cGameNounManager* nouns = NounManager();
+    PtrVector<cGameNoun*>* cities = &nouns->GetGameDataVector(GameData_cd7d10, GameData_d3d420,
+                                                              GameData_acdff0, GameData_b1e500,
+                                                              0x18c43e8)->mData;
+    void* ctx = FUN_010666a0()->FUN_01067e60();
+
+    register uint32_t i;
+    uint32_t count = (uint32_t)(cities->mpEnd - cities->mpBegin);
+    i = 0;
+    for (; i < count; i++) {
+        FUN_01041c30((*cities)[i], ctx);
+        FUN_01041d50((*cities)[i], ctx);
+    }
+}
+
+// @ 0x00ff95a0
+void FUN_00ff95a0()
+{
+    cGameNounManager* nouns = NounManager();
+    PtrVector<cGameNoun*>* others = &nouns->GetGameDataVector(GameData_b21080, GameData_d3d420,
+                                                              GameData_b236c0, GameData_b1e500,
+                                                              0x18c816a)->mData;
+    int count = (int)(others->mpEnd - others->mpBegin);
+    if (count <= 1)
+        return;
+
+    PtrVector<int> totals;
+    totals.mpBegin = 0;
+    totals.mpEnd = 0;
+    totals.mpCapacity = 0;
+
+    if (count > 0) {
+        int i = 0;
+        do {
+            cCategoryNoun* noun = (cCategoryNoun*)(*others)[i];
+            if (noun->flag89 == 0) {
+                int total = 0;
+                PtrVector<cCategoryObj*>* objs = FUN_00bef6c0();
+                int objCount = objs->size();
+                if (objCount > 0) {
+                    cCategoryObj** p = objs->mpBegin;
+                    int remaining = objCount;
+                    do {
+                        total += CategoryCount(*p);
+                        p++;
+                        remaining--;
+                    } while (remaining != 0);
+                }
+
+                int* end = totals.mpEnd;
+                if (end < totals.mpCapacity) {
+                    totals.mpEnd = end + 1;
+                    if (end != 0)
+                        *end = total;
+                } else {
+                    totals.FUN_004558a0(end, total);
+                }
+            }
+            i++;
+        } while (i < count);
+    }
+
+    FUN_00ff84f0(totals.mpBegin, totals.mpEnd);
+    int median = totals.mpBegin[(totals.mpEnd - totals.mpBegin) >> 1];
+
+    if (count > 0) {
+        int i = 0;
+        do {
+            int sumA = 0;
+            int sumB = 0;
+            int extra = 0;
+            PtrVector<cCategoryObj*>* objs = FUN_00bef6c0();
+            int objCount = objs->size();
+            int pairs = 0;
+            int skip = 0;
+            if (objCount >= 2) {
+                pairs = ((objCount - 2) >> 1) + 1;
+                skip = pairs * 2;
+                int remaining = pairs;
+                cCategoryObj** p = objs->mpBegin;
+                do {
+                    sumA += CategoryCount(p[0]);
+                    sumB += CategoryCount(p[1]);
+                    p += 2;
+                    remaining--;
+                } while (remaining != 0);
+            }
+            if (skip < objCount)
+                extra = CategoryCount((*objs)[skip]);
+
+            ((cCategoryNoun*)(*others)[i])->flag8a =
+                (uint8_t)(sumA + sumB + extra < median);
+            i++;
+        } while (i < count);
+    }
+
+    if (totals.mpBegin != 0 && ((int*)totals.mpBegin)[-1] != 0)
+        operator delete[](totals.mpBegin);
 }
