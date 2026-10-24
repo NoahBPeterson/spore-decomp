@@ -22,11 +22,13 @@ T24::T24(const T24& o) : a(o.a), b(o.b)
 // ---------------------------------------------------------------------------
 struct Keyed { char pad[0x60]; float k60; float k64; };
 inline float KeyOf(Keyed* p) { return p->k64 - p->k60; }
+// Retail predicate: comiss key(second), key(first); jbe -> false, so it is strict
+// "greater" and, with desc, the key roles are swapped (descending order).
 inline bool Le(Keyed* a, Keyed* b, uint8_t desc)
 {
     const float x = KeyOf(a);
     const float y = KeyOf(b);
-    return desc ? (y <= x) : (x <= y);
+    return desc ? (y > x) : (x > y);
 }
 
 // @ 0x005111b0  median(a, b, c) with the keyed compare
@@ -50,10 +52,10 @@ Keyed** MedianCmp(Keyed** a, Keyed** b, Keyed** c, uint8_t desc)
 Keyed** GetPartitionCmp(Keyed** first, Keyed** last, Keyed* pivot, uint8_t desc)
 {
     for (;;) {
-        while (!Le(pivot, *first, desc))
+        while (Le(*first, pivot, desc))
             ++first;
         --last;
-        while (!Le(*last, pivot, desc))
+        while (Le(pivot, *last, desc))
             --last;
         if (first >= last)
             return first;
