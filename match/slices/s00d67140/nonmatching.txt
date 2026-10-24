@@ -1,0 +1,95 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+#
+# Slice s00d67140 = SPFight / FIGHT module: the tribe FIGHT slot pool (a 0x18-byte
+# Slot record vector with a 30-bit-indexed free list: reserve / insert_impl / alloc),
+# the fight-slot payload acquirer, the two fight-action reset helpers, the fight-group
+# finder, the fight-group refresh helper and SP::FIGHT_Activate.  0/9 byte-exact.
+# Every row is a complete C++ reconstruction of the original control flow, container
+# semantics and vtable/helper calls; the byte-exact budget is missed because
+# cl 15.00.30729.01 at /O2 allocates the callee-saved registers and shrink-wraps the
+# pool grow paths differently (details per row).  The per-row verdict is the
+# equivalence-gate result measured with default inputs.
+#
+00d67140   12  SlotPool::reserve(uint): eastl-style vector reserve for the 0x18-byte slot
+#                records -- early-out on (mpCapacity - mpBegin), null-safe operator_new,
+#                copy the live records with the std::copy helper, then conditionally
+#                delete the old buffer, recompute the moved-record count and store the
+#                new begin/end/capacity.  Exactly the same size as the original (161 vs
+#                161 bytes) and the same instruction sequence; the 12 remaining bytes
+#                are two register-allocation choices: the copy helper's arguments are
+#                loaded into edx/eax instead of the original's eax/ecx, and the trailing
+#                newEnd / newCapacity `lea`s land in ecx/edx instead of edx/eax.
+#                equiv PASS: 350/400 inputs valid, 93.8% coverage.
+00d671f0  336  SlotPool::insert_impl(Slot*, Slot*): the in-place vector insert -- aliasing
+#                fix for a value that lives inside the array, construct-last,
+#                move_backward the tail, assign the value and bump mpEnd; the full branch
+#                doubles the capacity, allocates, copies the head, constructs the slot,
+#                copies the tail and deletes the old buffer (ours 336 vs 268).  The
+#                original shrink-wraps the reallocation branch (it pushes ebx/ebp only
+#                there) and threads the temporary/position through a different register
+#                set.  equiv UNSUPPORTED: 3 unresolved references (operator_new /
+#                operator_delete_array / the slot-move stub are external).
+00d67300  202  FightAction teardown (creature, ..., FightAction*): when the creature is not
+#                "submerged" it clears the behaviour stimuli, tells the subsystem and
+#                clears the spatial target; then resets the fight action, truncates the
+#                two effect vectors, releases the creature's handle, nukes its tree and
+#                re-seeds the sentinel, and finally nukes the action's tree and releases
+#                its group handle.  Complete reconstruction (279 vs 270); the original
+#                orders the tail may-/must-be-null stores and reuses one register across
+#                the tree re-seed differently.  equiv UNSUPPORTED: 5 unresolved references
+#                (behaviour-stimuli ClearAll, the fight-action reset stub, memcpy, the
+#                handle-release stub and the tree-nuke stub are external).
+00d67410  174  FightAction teardown (creature, ..., FightAction*), the stealth/sprint
+#                variant -- clears the stealth flag, conditionally drops the current
+#                ability object, clears the spatial target, clears the sprint flag and the
+#                behaviour-data block, resets the action, truncates the effect vectors,
+#                hands the action's slot to the creature and releases the two action
+#                handles.  Complete reconstruction (266 vs 260).  equiv UNSUPPORTED: 8
+#                unresolved references (the thiscall stubs and the ability-object getter
+#                are external).
+00d67520  288  SlotPool::alloc(const SlotPayload*): recycles the free-list head when it is
+#                not the 0x3fffffff sentinel (returning that head as the slot index),
+#                otherwise appends a fresh record -- growing through insert_impl when the
+#                pool is full -- marks the sentinel bits, clears the previous record's
+#                terminal bit and stamps the payload; finally refreshes mMinFreeIndex.
+#                Same decision tree and same source as the original; ours (211 vs 316)
+#                materialises the payload dwords into registers before the branch rather
+#                than inside each arm, so the original's ebx/ebp shrink-wrap of the append
+#                arm is not reproduced.  equiv WEAK: 323/400 inputs valid, 38.3% coverage.
+00d67660  108  Acquire a fresh fight-slot payload: zero a payload, allocate it from the pool,
+#                and when its token index is in range and the slot is live stamp
+#                token/type/timer into it and return the payload address (else 0).  Ours
+#                (147 vs 159) keeps the zero constant in edi across the allocation call
+#                (so it needs one more callee-saved push and the two zero field stores use
+#                a register instead of the original's immediate stores); the original
+#                rematerialises zero and keeps the pool begin in edi.  equiv UNSUPPORTED:
+#                1 unresolved reference (the global slot pool is external).
+00d67700  381  FindGroup(Creature*): look the "Fight" group up in the B4C object's stimulus
+#                manager and, when the existing group is invalid (or absent), create it --
+#                allocate a slot, store its token, copy the pair's vector, tune it by the
+#                creature's size and register the group with the B4C manager.  Complete
+#                reconstruction (246 vs 455): the original inlines a large part of the
+#                manager's lookup/creation helpers, so the same data flow is emitted with
+#                far fewer instructions.  equiv UNSUPPORTED: 1 unresolved reference (the
+#                B4C manager call stub is external).
+00d678d0  232  FightAction group refresh (FightAction*, flag): reset the action, re-find the
+#                creature's group, fold the caller flag with the group's slot-token test
+#                and, when the action's index has passed the group's threshold (or the flag
+#                is set), refresh the action record, re-target it, update the group's
+#                active byte and, when the target is stealthed, raise the mode strategy.
+#                Complete reconstruction (260 vs 267).  equiv UNSUPPORTED: 3 unresolved
+#                references (GetTargetAsCreature, the mode-strategy singleton and the
+#                strategy stub are external).
+00d679e0  717  SP::FIGHT_Activate(creature, ..., bits, FightAction*, ctx): bind the action to
+#                the creature, seed the "forced" byte, resolve the combatant through the
+#                creature's behaviour stimulus (or the context object), swap the action's
+#                group handle, validate the combatant, hand it to the creature, run the
+#                neighbour-scan branch (interrupt animation, enumerate nearby fightable
+#                neighbours and re-fire on those sharing the species profile) or the idle
+#                branch, then refresh the group, mark the action active and stamp the
+#                effect.  Complete reconstruction (853 vs 839); the nested neighbour scan's
+#                register/scheduling and the special animation ids dominate the remaining
+#                difference.  equiv UNSUPPORTED: 14 unresolved references (all the thiscall
+#                stubs, the stimulus/creature lookups and the interrupt-animation helper
+#                are external).

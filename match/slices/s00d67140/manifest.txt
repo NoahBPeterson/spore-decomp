@@ -1,0 +1,1 @@
+# No chk.py MATCH rows for s00d67140 -- see nonmatching.txt for all 9 complete reconstructions.

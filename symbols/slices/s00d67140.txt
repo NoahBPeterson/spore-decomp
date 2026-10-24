@@ -1,0 +1,13 @@
+# slice s00d67140 = 0x00d67140..0x00d679e0 (SPFight / FIGHT module: the tribe FIGHT slot
+# pool (reserve / insert_impl / alloc), the fight-action reset helpers, the fight-group
+# finder, the fight-group refresh helper and SP::FIGHT_Activate)
+# Exact decorated names so find_symbol resolves each overload-free function unambiguously.
+00d67140 ?reserve@SlotPool@@QAEXI@Z                                       # SlotPool::reserve(uint)  (eastl vector reserve)
+00d671f0 ?insert_impl@SlotPool@@QAEXPAUSlot@@0@Z                          # SlotPool::insert_impl(Slot*, Slot*)
+00d67300 ?FUN_00d67300@@YAXPAUCreature@@HHHHPAUFightAction@@@Z            # fight-action teardown (creature, ... , FightAction*)
+00d67410 ?FUN_00d67410@@YAXPAUCreature@@HHHHPAUFightAction@@@Z            # fight-action teardown (creature, ... , FightAction*)
+00d67520 ?alloc@SlotPool@@QAEIPBUSlotPayload@@@Z                          # SlotPool::alloc(const SlotPayload*)
+00d67660 ?FUN_00d67660@@YAPAUSlotPayload@@XZ                              # acquire a fresh fight slot payload
+00d67700 ?FindGroup@@YAXPAUCreature@@@Z                                   # FindGroup(Creature*)
+00d678d0 ?FUN_00d678d0@@YAHPAUFightAction@@E@Z                            # refresh the FightAction's fight group
+00d679e0 ?FIGHT_Activate@@YADPAUCreature@@HHHIPAUFightAction@@PAX@Z       # SP::FIGHT_Activate(...)
