@@ -1,0 +1,7 @@
+slices/s00c23f80/s00c23f80.cpp  ?FUN_00c24280@@YAXPAUcCreatureBase@@@Z  00c24280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c23f80/s00c23f80.cpp  ?FUN_00c242b0@cCreatureBase@@QAEXI@Z  00c242b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c23f80/s00c23f80.cpp  ?FUN_00c24400@cCreatureBase@@QAEPAXI@Z  00c24400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c23f80/s00c23f80.cpp  ?FUN_00c245e0@cCreatureBase@@QAEIIIMIII@Z  00c245e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c23f80/s00c23f80.cpp  ?FUN_00c24680@cCreatureBase@@QAEIIIMIPAXI@Z  00c24680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c23f80/s00c23f80.cpp  ?FUN_00c24700@cCreatureBase@@QAEXIII@Z  00c24700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c23f80/s00c23f80.cpp  ?FUN_00c24750@cCreatureBase@@QAEHXZ  00c24750  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
