@@ -9,6 +9,7 @@ struct Vector3 {
     Vector3() {}
     Vector3(const Vector3& o) { x = o.x; y = o.y; z = o.z; }
     Vector3(float ax, float ay, float az) throw();
+    void CopyCtor(const Vector3* src);     // 0x004098A0 (thiscall: ecx = this, stack = src)
     Vector3& operator=(const Vector3& o) { x = o.x; y = o.y; z = o.z; return *this; }
 };
 
@@ -36,10 +37,9 @@ Vector3* Vector3_Sub(Vector3* out, const Vector3* a, const Vector3* b);     // 0
 Vector3* Vector3_Add(Vector3* out, const Vector3* a, const Vector3* b);     // 0x0041DC10
 Vector3* Vector3_Mul(Vector3* out, const Vector3* a, const Vector3* b);     // 0x0041DCA0
 Vector3* Vector3_Negate(Vector3* out, const Vector3* v);                    // 0x00422020
-Vector3* Vector3_Combine2(Vector3* out, const Vector3* a, const Vector3* b);// 0x0041DAF0 (_Unchecked_idl0)
-Vector3* Vector3_ToLocal(Vector3* out, const Vector3* a);                   // 0x0041DED0
+Vector3* Vector3_Combine2(Vector3* out, const Vector3* a, const Matrix3* b);// 0x0041DAF0 (_Unchecked_idl0)
+Matrix3* Vector3_ToLocal(Matrix3* out, const Matrix3* a);                   // 0x0041DED0
 Vector3  Vector3_Div(const Vector3& v, const float& s);                     // 0x00453880
-void     Vector3_CopyCtor(Vector3* self, const Vector3* src);               // 0x004098A0 (thiscall)
 void     Matrix_Store(void* a, Matrix3* m);                                  // 0x0049EF80
 RotateResult Rotate(const Vector3 a, const Vector3 b, const Vector3 c);          // 0x00499F10
 Vector3  Combine(const Vector3 a, const Vector3 b, const Vector3 c, const Vector3 d); // 0x00499B40
@@ -65,7 +65,7 @@ Vector3* Vector3_Normalize(Vector3* out, const Vector3* v)
 struct TargetObject {
     uint32_t pad0[0x12];            // 0x00
     Vector3 position;               // 0x48
-    Vector3* GetAxis(Vector3* out); // thiscall, 0x004361C0 (returns out)
+    Matrix3* GetAxis(Matrix3* out); // thiscall, 0x004361C0 (writes a 3x3, returns out)
 };
 
 struct OrientationSource {
@@ -139,19 +139,21 @@ Vector3* DirectionController::ComputeDirection(Vector3* out)
             Vector3 toTarget = *Vector3_Sub(&tmp, &avg, Vector3_Add(&s1, &position, &rot.second));
             if (toTarget.x * rot.second.x + toTarget.y * rot.second.y + toTarget.z * rot.second.z == kZero)
                 toTarget = *Vector3_Sub(&s2, &target->position, &position);
-            Vector3 axis, local, nrm, res;
+            Matrix3 axisM, localM;
+            Vector3 nrm, res;
             *out = *Vector3_Combine2(&res, Vector3_Normalize(&nrm, &toTarget),
-                                     Vector3_ToLocal(&local, target->GetAxis(&axis)));
+                                     Vector3_ToLocal(&localM, target->GetAxis(&axisM)));
             return out;
         }
         Vector3 neg;
         *out = *Vector3_Negate(&neg, &rot.second);
         return out;
     }
-    Vector3 tmp, axis, local, nrm, d;
+    Vector3 tmp, local, nrm, d;
+    Matrix3 axisM, localM;
     d = *Vector3_Sub(&tmp, &target->position, &position);
     d = *Vector3_Combine2(&nrm, Vector3_Normalize(&local, &d),
-                          Vector3_ToLocal(&axis, target->GetAxis(&tmp)));
-    Vector3_CopyCtor(out, &d);
+                          Vector3_ToLocal(&localM, target->GetAxis(&axisM)));
+    out->CopyCtor(&d);
     return out;
 }

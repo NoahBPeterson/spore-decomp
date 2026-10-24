@@ -1,1 +1,1 @@
-004364a0  ~1700  DirectionController::ComputeDirection: behavior-equivalent; original has many more inlined-helper temps (frame 0x2e0 vs 0x238), operator=/copy-ctor inline structure not reproduced
+004364a0  2210  DirectionController::ComputeDirection: behavior-equivalent; original has many more inlined-helper temps (frame 0x2e0 vs 0x2c4), operator=/copy-ctor inline structure not reproduced; equiv=PASS 290/290 (seed 3) + 305/305 (seed 7), 62.5% coverage
