@@ -339,10 +339,10 @@ void CellCalc::Compute(int index, float* out)
     int n = n110;
     if (n > 0) {
         float t = (f118 + f104) * (float)(index % n);
-        int ti = (int)t;
+        int ti = _mm_cvtss_si32(_mm_set_ss(t));
         out[0] = (float)ti + f120;
         float u = (f11c + f108) * (float)(index / n);
-        int ui = (int)u;
+        int ui = _mm_cvtss_si32(_mm_set_ss(u));
         out[1] = (float)ui + f124;
     }
 }
@@ -489,13 +489,13 @@ struct R880 {
     void* w30;   // +0x30
     void* w34;   // +0x34
     void* w38;   // +0x38
-    void Update(bool visible, uint32_t arg);
+    void Update(uint32_t visible, uint32_t arg);
 };
-void R880::Update(bool visible, uint32_t arg)
+void R880::Update(uint32_t visible, uint32_t arg)
 {
     if (w30) {
-        ((void(__thiscall*)(void*, int, int))VT(w30)[0x7c / 4])(w30, 1, visible);
-        if (visible) {
+        ((void(__thiscall*)(void*, int, int))VT(w30)[0x7c / 4])(w30, 1, (int)visible);
+        if ((visible & 0xff) != 0) {
             if (w38) {
                 *(uint32_t*)((char*)g_data15ee298 + 0x3c) = arg;
                 (void)w38;
@@ -509,7 +509,7 @@ void R880::Update(bool visible, uint32_t arg)
         }
     }
     if (w2c)
-        ((void(__thiscall*)(void*, int, int))VT(w2c)[0x7c / 4])(w2c, 1, !visible);
+        ((void(__thiscall*)(void*, int, int))VT(w2c)[0x7c / 4])(w2c, 1, ((visible & 0xff) == 0) ? 1 : 0);
 }
 
 // ---------------------------------------------------------------------------

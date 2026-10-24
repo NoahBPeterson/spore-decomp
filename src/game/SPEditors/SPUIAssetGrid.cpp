@@ -1047,10 +1047,10 @@ void CellCalc::Compute(int index, float* out)
     int n = n110;
     if (n > 0) {
         float t = (f118 + f104) * (float)(index % n);
-        int ti = (int)t;
+        int ti = _mm_cvtss_si32(_mm_set_ss(t));
         out[0] = (float)ti + f120;
         float u = (f11c + f108) * (float)(index / n);
-        int ui = (int)u;
+        int ui = _mm_cvtss_si32(_mm_set_ss(u));
         out[1] = (float)ui + f124;
     }
 }
