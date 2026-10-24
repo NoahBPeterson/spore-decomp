@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00d091c0 861 SP::cCommunityEditor::FUN_00d091c0 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (3.7% coverage). Not exact: large switch/jump-table control flow, frame and register allocation differ (389 vs 915 bytes)
+00d09770 250 SP::cCommunityEditor::FUN_00d09770 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (15.7% coverage). Not exact: x87 quaternion/anchor-direction temp scheduling and stack slot sharing
+00d098b0 158 SP::cCommunityEditor::GetCameraZoomProgramID complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (13.3% coverage). Not exact: vtable cast/GetMode call ordering vs cl scheduling
+00d09960 74 SP::cCommunityEditor::GetCommunityCenter complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (17.9% coverage). Not exact: member-init order and temp spill layout in the Vector3 accumulation
+00d099c0 180 SP::cCommunityEditor::CameraTrackMouse complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (92.9% coverage). Not exact: float temp ordering in the normalize/scale math and duplicated Vector3 store
+00d09ad0 502 SP::cCommunityEditor::SetObjectSpecificData complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (7.6% coverage). Not exact: loop unrolling and repeated cast-call sequences scheduled differently
+00d09d30 398 SP::cCommunityEditor::RemoveObjectFromCommunity complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (19.7% coverage). Not exact: container iteration/erase and cast-call ordering
+00d09f00 23 SP::cCommunityEditor::SnapPointToPlanetIfNecessary complete; equivalent (difftest PASS 100%). Not exact: register assignment of the 5 pointer/float args and pipelined x87/SSE temp order
+00d09f60 7 SP::cCommunityEditor::SetManipulatedObject complete; equivalent (difftest PASS 60.6%). Not exact: one byte-diff cluster, likely a single instruction form/opcode choice
+00d0a040 291 SP::cCommunityEditor::ComputeMouseOffset complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (15.1% coverage). Not exact: float temp scheduling and frame size (322 vs 285 bytes)
