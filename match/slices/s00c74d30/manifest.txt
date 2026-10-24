@@ -1,0 +1,2 @@
+slices/s00c74d30/s00c74d30.cpp  ?Increment@cDepthCounter@@QAEX_N@Z  00c755c0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00c74d30/s00c74d30.cpp  ?Decrement@cDepthCounter@@QAEX_N@Z  00c755f0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
