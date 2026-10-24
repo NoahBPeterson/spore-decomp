@@ -106,33 +106,29 @@ D765f10::D765f10(void* arg) {
 }
 
 // ===========================================================================
-// @ 0x00765580  ~cGraphicsResourceFactory (refcounted cJobLock member at +8)
 struct RefCountedBase { virtual void dtor(int); };
-struct AutoRcT {
-    RefCountedBase* p;
-    ~AutoRcT() {
-        RefCountedBase* q = p;
-        if (q) {
-            int n = _InterlockedExchangeAdd((volatile long*)((char*)q + 4), -1) - 1;
-            if (n == 0) {
-                _InterlockedExchange((volatile long*)((char*)q + 4), 1);
-                if (q)
-                    q->dtor(1);
-            }
-        }
-    }
-};
-struct FactoryBase {
-    virtual void f0();
-    virtual void f1();
-    int f4;
-    ~FactoryBase() {}
-};
+struct AutoRcT { RefCountedBase* p; };          // +8, released by ~D765580
+struct FactoryBase { void* vptr; int f4; };     // +0 vtable, +4
+extern void* g_vtblD765580;                     // 0x140e09c
+extern void* g_vtblFactoryBase;                 // 0x13effb8
 struct D765580 : FactoryBase {
     AutoRcT m8;    // +8
     ~D765580();
 };
-D765580::~D765580() {}
+// @ 0x00765580  ~cGraphicsResourceFactory (refcounted cJobLock member at +8)
+D765580::~D765580() {
+    vptr = &g_vtblD765580;
+    RefCountedBase* q = m8.p;
+    if (q) {
+        int n = _InterlockedExchangeAdd((volatile long*)((char*)q + 4), -1) - 1;
+        if (n == 0) {
+            _InterlockedExchange((volatile long*)((char*)q + 4), 1);
+            if (q)
+                q->dtor(1);
+        }
+    }
+    vptr = &g_vtblFactoryBase;
+}
 
 // ===========================================================================
 // shared stubs for the functions below
