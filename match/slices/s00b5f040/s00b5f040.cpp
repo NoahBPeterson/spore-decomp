@@ -15,13 +15,13 @@ extern "C" int   atoi(const char*);
 // Small exact helpers
 // ---------------------------------------------------------------------------
 
-void FUN_00b5e0b0(int a);                        // 0x00b5e0b0
+void FUN_00b5e0b0();                             // 0x00b5e0b0 (thiscall: ecx=self, stack arg a)
 
 // @ 0x00b5f1b0
 unsigned char FUN_00b5f1b0(int a, int b)
 {
     if (b != 0)
-        FUN_00b5e0b0(a);
+        ((void(__thiscall*)(void*, int))FUN_00b5e0b0)((void*)b, a);
     return 1;
 }
 
