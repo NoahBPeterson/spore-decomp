@@ -1,0 +1,12 @@
+00e84850 97 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 90 bytes - layout-name range init: the zero fill, RangeInitialize(len+1), memcpy(mpBegin,first,len), end pointer, NUL and the +0x10/+0x14 copies all match, but retail spills last and the length into the dead argument slot and a push-ecx scratch slot (and caches first/last in ebx/eax) which this source shape does not reproduce (90 vs 97).
+00e848c0 124 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 124 bytes - UI layout helper not reconstructed.
+00e84940 76 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 76 bytes - eastl rbtree DoNukeSubtree instantiation not reconstructed.
+00e84a20 244 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 244 bytes - UI layout helper not reconstructed.
+00e84b20 193 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 193 bytes - UI layout helper not reconstructed.
+00e84bf0 137 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 137 bytes - UI layout helper not reconstructed.
+00e84c80 262 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 262 bytes - UI layout helper not reconstructed.
+00e84d90 166 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 166 bytes - UI layout helper not reconstructed.
+00e84e40 237 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 237 bytes - UI layout helper not reconstructed.
+00e84f30 593 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 593 bytes - GetPollinatedCell not reconstructed.
+00e851c0 503 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 503 bytes - JacobiDecompose not reconstructed.
+00e853c0 540 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 540 bytes - ComputeCenterOfMass not reconstructed.
