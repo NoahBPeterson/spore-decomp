@@ -191,6 +191,8 @@ struct Checker {
 struct CheckList {
     uint32 Count();         // 0x00662a10
     Checker* At(uint32 i);  // 0x00662a20
+    void Remove(Eff* e);    // 0x00662c10
+    void SetEnabled(bool v); // 0x00662920
 };
 
 struct Target : RC0 {
@@ -450,4 +452,369 @@ void TestWin::Refresh()
         p = nx;
     }
     group->Release();
+}
+
+// ===========================================================================
+// Additional members of the same translation unit (slice s00e1fb20).
+// ===========================================================================
+
+// ---- shared helpers -------------------------------------------------------
+
+TribeStrategy* TribeInstance();                    // 0x00cd40b0 (decl above)
+NounMgr* GetNounManager();                         // 0x00b3d300
+
+Target* __cdecl GetPlayerTribe(NounMgr* mgr);      // 0x00bfc5f0 (cGameNounManager::GetPlayerTribe)
+bool __cdecl IsHerbivoreTribe();                   // 0x00c8e850
+uint32 __cdecl SPIDFromName(const char* name, uint32 a, uint32 b); // 0x00571cf0
+uint32 __cdecl MakeCommunityEditorID(uint32 a);    // 0x00bda3b0
+uint32* __cdecl GetGlobalData();                   // 0x00b3d300 returns noun mgr
+
+// ---- TestWin-facing message handler (this == TestWin+0x0c) ----------------
+
+// View of the TestWin fields reached through the handler subobject at
+// TestWin+0x0c.  Field offsets below are relative to the subobject.
+struct Panel12 {
+    char     pad00[0x08];
+    uint32   id;         // +0x08  (TestWin+0x14)
+    char     pad0c[0x34 - 0x0c];
+    uint32   f34;        // +0x34  (TestWin+0x40, checked against 0)
+    char     pad38[0x3c - 0x38];
+    CheckList* checks;   // +0x3c  (TestWin+0x48)
+    char     pad40[0xd4 - 0x40];
+    uint32   groupId;    // +0xd4  (TestWin+0xe0)
+
+    bool OnMessage(uint32 msg, void* p);  // 0x00e20210
+};
+
+// The two outer handlers are non-virtual helpers of the owning window.
+struct PanelBase {
+    void OpenEditor(uint32* blk, uint32 a, uint32 b);   // 0x00e1e500
+    bool BaseOnMessage(uint32 msg, void* p);            // 0x00e18600
+};
+struct TestWin;
+
+// ---- TestWin slot refresh driven by a string id ---------------------------
+
+struct cString {
+    char pad[0x10];
+    cString();                                                        // 0x006b5060
+    ~cString();                                                       // 0x006b5240
+    void Load(uint32 fmt, uint32 a, const wchar_t* s);                // 0x006b54b0
+    const wchar_t* GetText();                                         // 0x006b55c0
+};
+
+// The Win owns two string-id-driven sub-widgets addressed by this+0x18/0x1c.
+struct SlotWnd {
+    virtual void v00();
+    virtual void v04();
+};
+
+struct TestWinEx : TestWin {
+    void SetVisibleSlot(uint32 v);            // 0x00e18860
+    void SetSlotText(const wchar_t* t);       // 0x00e18890
+    void UpdateSlot(uint32 v);                // 0x00e20360
+};
+
+// ---- UI/GGE/PatchManager (vtable 0x1480498, 0x2080 bytes) ------------------
+
+// eastl container (begin/capacity/end) initialised by 0x00579a90
+struct WBlob {
+    void* mpBegin;      // +0x00
+    void* mpCapacity;   // +0x04
+    void* mpEnd;        // +0x08
+    void  RangeInit(const void* src);  // 0x00579a90 eastl::wstring::range_initialize
+};
+
+extern wchar_t gEmptyWString[];     // 0x013ec468
+
+typedef void* HMODULE;
+extern "C" __declspec(dllimport) int __stdcall FreeLibrary(HMODULE h);
+
+struct PatchElem {
+    uint32* vec0Begin;   // +0x00
+    uint32  pad04;       // +0x04
+    uint32* vec0End;     // +0x08
+    uint32  pad0c;       // +0x0c
+    uint32* vec1Begin;   // +0x10
+    uint32  pad14;       // +0x14
+    uint32* vec1End;     // +0x18
+    char    pad1c[0x2c - 0x1c];
+    uint8_t flag2c;      // +0x2c (cleared per element)
+    char    pad2d[0x38 - 0x2d];
+
+    void* Destroy(unsigned flags);   // 0x00e206b0 (vector deleting dtor, ret 4)
+};
+
+// Base class (vtable 0x13ec458): owns data +0x04..+0x4f including the +0x44
+// container that the base destructor releases.
+struct ContentValidationSummarizer {
+    virtual void b00();
+    virtual void b04();
+    virtual void b08();
+    virtual void b0c();
+    virtual void b10();
+    virtual void b14();
+    virtual void b18();
+    virtual void b1c();
+    // data
+    void*    f04;        // +0x04
+    void*    hModule;    // +0x08 (HMODULE)
+    char     pad0c[0x20 - 0x0c];
+    void (*fn20)(uint32, void*);  // +0x20 callback
+    char     pad24[0x38 - 0x24];
+    void (*fn38)();      // +0x38
+    uint32   f3c;        // +0x3c
+    char     pad40[0x44 - 0x40];
+    WBlob    str44;      // +0x44
+    uint32   f50;        // +0x50
+    ~ContentValidationSummarizer();
+};
+
+struct PatchMgr : ContentValidationSummarizer {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    PatchElem* elems;    // +0x54
+    int      nElems;     // +0x58
+    int      idx5c;      // +0x5c
+    uint32   f60;        // +0x60
+    char     pad64[0x2068 - 0x64];
+    WBlob    str2068;    // +0x2068
+
+    void Apply();                  // 0x00e205e0
+    ~PatchMgr();                   // 0x00e20630 (scalar deleting)
+    PatchMgr();                    // 0x00e20780
+    void Shutdown();               // 0x00e20800
+};
+
+// @ 0x00e20210
+bool Panel12::OnMessage(uint32 msg, void* p)
+{
+    if (msg == 0x1e8c9e0) {
+        if (f34 == 0 && id == 0x6722bd6) {
+            uint32 tribe = *(uint32*)((char*)p + 8);
+            GetPlayerTribe(GetNounManager());
+            if (tribe == (uint32)(uintptr_t)GetPlayerTribe(GetNounManager())) {
+                GetPlayerTribe(GetNounManager());
+                const char* name = IsHerbivoreTribe() ? "PaletteIDTribeHerbivore"
+                                                      : "PaletteIDTribeCarnivore";
+                uint32 a = SPIDFromName(name, 0x41, 0);
+                uint32 b = SPIDFromName("CommunityEditor", 0, a);
+                uint32 c = MakeCommunityEditorID(b);
+                uint32 blk[3];
+                blk[0] = c;
+                blk[1] = 0xb1b104;
+                blk[2] = 0x406b6a00;
+                ((PanelBase*)((char*)this - 0xc))->OpenEditor(blk, 0xffffffff, 0);
+            }
+        }
+        return false;
+    }
+    if (msg != 0x5bf34455)
+        return ((PanelBase*)this)->BaseOnMessage(msg, p);
+
+    uint32 i = 0;
+    uint32 n = checks ? checks->Count() : 0;
+    for (; i < n; ++i) {
+        Eff* e = checks->At(i)->Check(groupId);
+        if (e) {
+            Inner* in = *(Inner**)((char*)e + 0xa0);
+            Dispatcher* d = GetGlobalInfo()->disp;
+            d->Post(0, in->GetId(), 0x2c765c39, 0, 0);
+            break;
+        }
+    }
+    groupId = *(uint32*)((char*)p + 8);
+    ((TestWin*)((char*)this - 0xc))->Refresh();
+    return true;
+}
+
+// @ 0x00e20360
+void TestWinEx::UpdateSlot(uint32 v)
+{
+    SetVisibleSlot(v);
+    cString str;
+    uint32 m = mode;
+    if (m == 0x1654c00) {
+        str.Load(0x8b96f855, 0x60c9906, L"*Cell parts unlocked*");
+    } else if (m == 0x1654c01) {
+        str.Load(0x8b96f855, 0x60c9907, L"*Creature parts unlocked*");
+    } else if (m == 0x1654c02) {
+        if (id == 0x6722bd6)
+            str.Load(0x8b96f855, 0x625b1b1, L"*Tools unlocked*");
+        else
+            str.Load(0x8b96f855, 0x625b1b0, L"*Accessories unlocked*");
+    }
+    SetSlotText(str.GetText());
+    if (checks != 0) {
+        uint32 nNodes = 0;
+        for (LNode* n = headNext; (LNode*)&headNext != n; n = n->next) ++nNodes;
+        if (nNodes != 0) {
+            uint32 nCats = (uint32)(cats->end - cats->begin);
+            for (uint32 i = 0; i < nCats; ++i) {
+                Group* g = cats->At(i);
+                uint32 nPages = (uint32)(g->subsEnd - g->subsBegin);
+                for (uint32 j = 0; j < nPages; ++j) {
+                    Sub* pg = g->At(j);
+                    uint32 nItems = (uint32)(pg->itemsEnd - pg->itemsBegin);
+                    for (uint32 k = 0; k < nItems; ++k) {
+                        Item* it = pg->At(k);
+                        if (!it || it->a == 0) continue;
+                        LNode* f = FindInList((LNode*)&headNext, it->a);
+                        if (f == (LNode*)&headNext) continue;
+                        uint32 cnt = checks->Count();
+                        for (uint32 x = 0; x < cnt; ++x) {
+                            Eff* e = checks->At(x)->Check(g->id);
+                            if (e) {
+                                Inner* in = *(Inner**)((char*)e + 0xa0);
+                                Dispatcher* d = GetGlobalInfo()->disp;
+                                d->Post(in->GetId(), id, 0x2c765c39, 0, 0);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        uint32 cnt = checks->Count();
+        for (uint32 x = 0; x < cnt; ++x) {
+            Eff* e = checks->At(x)->Check(groupId);
+            if (e) { checks->Remove(e); break; }
+        }
+        checks->SetEnabled(true);
+    }
+    Refresh();
+}
+
+// base half of 0x00e20630, reached from ~PatchMgr
+ContentValidationSummarizer::~ContentValidationSummarizer()
+{
+    if ((int)((uint32)((char*)str44.mpEnd - (char*)str44.mpBegin) & 0xfffffffe) > 2 &&
+        str44.mpBegin) {
+        FreeNode(str44.mpBegin);
+    }
+}
+
+// Key-function definitions force MSVC to emit the vftables in this TU.
+void ContentValidationSummarizer::b00() {}
+void ContentValidationSummarizer::b04() {}
+void ContentValidationSummarizer::b08() {}
+void ContentValidationSummarizer::b0c() {}
+void ContentValidationSummarizer::b10() {}
+void ContentValidationSummarizer::b14() {}
+void ContentValidationSummarizer::b18() {}
+void ContentValidationSummarizer::b1c() {}
+void PatchMgr::v00() {}
+void PatchMgr::v04() {}
+void PatchMgr::v08() {}
+void PatchMgr::v0c() {}
+void PatchMgr::v10() {}
+void PatchMgr::v14() {}
+void PatchMgr::v18() {}
+void PatchMgr::v1c() {}
+
+// @ 0x00e205e0
+void PatchMgr::Apply()
+{
+    void* local = this;
+    fn20(*(uint32*)((char*)elems + idx5c * 0x38 + 0x10), &local);
+    for (int i = 0; i < nElems; ++i)
+        ((uint8_t*)elems)[i * 0x38 + 0x2c] = 0;
+    f3c = 8;
+}
+
+// @ 0x00e20630
+PatchMgr::~PatchMgr()
+{
+    if ((int)((uint32)((char*)str2068.mpEnd - (char*)str2068.mpBegin) & 0xfffffffe) > 2 &&
+        str2068.mpBegin) {
+        FreeNode(str2068.mpBegin);
+    }
+}
+
+// @ 0x00e206b0
+void* PatchElem::Destroy(unsigned flags)
+{
+    if (flags & 2) {
+        uint32* base = (uint32*)((char*)this - 4);
+        int n = *(int*)((char*)this - 4);
+        PatchElem* e = (PatchElem*)((char*)this + n * sizeof(PatchElem));
+        for (int i = n - 1; i >= 0; --i) {
+            --e;
+            if ((int)((uint32)((char*)e->vec1End - (char*)e->vec1Begin) & 0xfffffffe) > 2 &&
+                e->vec1Begin)
+                FreeNode(e->vec1Begin);
+            if ((int)((uint32)((char*)e->vec0End - (char*)e->vec0Begin) & 0xfffffffe) > 2 &&
+                e->vec0Begin)
+                FreeNode(e->vec0Begin);
+        }
+        if (flags & 1)
+            FreeNode(base);
+        return base;
+    }
+    if ((int)((uint32)((char*)vec1End - (char*)vec1Begin) & 0xfffffffe) > 2 && vec1Begin)
+        FreeNode(vec1Begin);
+    if ((int)((uint32)((char*)vec0End - (char*)vec0Begin) & 0xfffffffe) > 2 && vec0Begin)
+        FreeNode(vec0Begin);
+    if (flags & 1)
+        FreeNode(this);
+    return this;
+}
+
+// @ 0x00e20780
+PatchMgr::PatchMgr()
+{
+    *(uint32*)((char*)this + 4) = 0;
+    str44.mpBegin = 0; str44.mpCapacity = 0; str44.mpEnd = 0;
+    str44.RangeInit(gEmptyWString);
+    str2068.mpBegin = 0; str2068.mpCapacity = 0; str2068.mpEnd = 0;
+    str2068.RangeInit(gEmptyWString);
+    *(uint32*)((char*)this + 0x08) = 0;
+    *(uint32*)((char*)this + 0x0c) = 0;
+    *(uint32*)((char*)this + 0x38) = 0;
+    *(uint32*)((char*)this + 0x10) = 0;
+    *(uint32*)((char*)this + 0x14) = 0;
+    *(uint32*)((char*)this + 0x18) = 0;
+    *(uint32*)((char*)this + 0x1c) = 0;
+    *(uint32*)((char*)this + 0x24) = 0;
+    *(uint32*)((char*)this + 0x20) = 0;
+    *(uint32*)((char*)this + 0x30) = 0;
+    *(uint32*)((char*)this + 0x28) = 0;
+    *(uint32*)((char*)this + 0x34) = 0;
+    elems = 0;
+    nElems = 0;
+    f3c = 0;
+    idx5c = -1;
+    f60 = 0xffffffff;
+}
+
+// @ 0x00e20800
+void PatchMgr::Shutdown()
+{
+    if (hModule != 0) {
+        fn38();
+        FreeLibrary((HMODULE)hModule);
+        *(uint32*)((char*)this + 0x08) = 0;
+        *(uint32*)((char*)this + 0x0c) = 0;
+        *(uint32*)((char*)this + 0x38) = 0;
+        *(uint32*)((char*)this + 0x10) = 0;
+        *(uint32*)((char*)this + 0x14) = 0;
+        *(uint32*)((char*)this + 0x18) = 0;
+        *(uint32*)((char*)this + 0x1c) = 0;
+        *(uint32*)((char*)this + 0x24) = 0;
+        *(uint32*)((char*)this + 0x20) = 0;
+        *(uint32*)((char*)this + 0x30) = 0;
+        *(uint32*)((char*)this + 0x28) = 0;
+        *(uint32*)((char*)this + 0x34) = 0;
+    }
+    if (elems != 0) {
+        elems->Destroy(3);
+        elems = 0;
+        nElems = 0;
+    }
 }
