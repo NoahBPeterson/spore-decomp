@@ -56,12 +56,14 @@ __forceinline void BackRow(int row, float v, float* A, float* B, const float* m,
 }
 
 // @ 0x010b2890
-void ChainSolve(Solver* solver, char* bodies, Chain* chain, float* mat, float* out)
+void* ChainSolve(Solver* solver, char* bodies, Chain* chain, float* mat, float* out)
 {
     int n = chain->n;
+    char* lastA = 0;
     float* L = (float*)((char*)mat + n * 0x90);      // per-link 3x4 factor blocks
     float* V = (float*)((char*)mat + n * 0x120 + 0x10) - 4; // n+1 vectors, 4 floats each
     V[0] = 0; V[1] = 0; V[2] = 0; V[3] = 0;
+    lastA = (char*)V + 0x10;
     for (int i = 0; i < n; i++) {
         char* A = bodies + chain->off[i];
         char* B = bodies + chain->off[i + 1];
@@ -83,7 +85,9 @@ void ChainSolve(Solver* solver, char* bodies, Chain* chain, float* mat, float* o
 
     float x0 = 0.0f, x1 = 0.0f, x2 = 0.0f;
     for (int i = n - 1; i >= 0; i--) {
-        float* A = (float*)(bodies + chain->off[i]);
+        char* bodyA = bodies + chain->off[i];
+        lastA = bodyA;
+        float* A = (float*)bodyA;
         float* B = (float*)(bodies + chain->off[i + 1]);
         float* m = mat + i * 36;
         float* l = L + i * 36;
@@ -97,4 +101,5 @@ void ChainSolve(Solver* solver, char* bodies, Chain* chain, float* mat, float* o
         BackRow(1, x1, A, B, m, o);
         BackRow(2, x2, A, B, m, o);
     }
+    return lastA;
 }
