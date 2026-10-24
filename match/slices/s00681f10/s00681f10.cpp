@@ -139,9 +139,14 @@ struct Obj2A10 {
     // implicit ~Obj2A10() is generated inline (calls ~VV12, ~M5a0, ~S8)
 };
 
-struct Pod16 { uint32_t w[4]; };
+// 20-byte field written whole by 0x0680500 (POD: no destructor is ever run on it)
+struct Bits20 { uint32_t w[5]; };
+
 struct ObjA {
-    Pod16 m0;                                   // +0x00
+    uint32_t mW0;                               // +0x00
+    uint32_t mW4;                               // +0x04 (never serialized)
+    uint32_t mW8;                               // +0x08
+    uint32_t mWc;                               // +0x0c
     V20 mF0;                                    // +0x10
     V20 mF1;                                    // +0x24
     V20 mF2;                                    // +0x38
@@ -150,9 +155,12 @@ struct ObjA {
 };
 
 struct Obj1800 {
-    uint32_t w0[24];                            // +0x00 (0x60)
-    uint32_t mFlag;                             // +0x60
-    uint8_t pad64[0x74 - 0x64];
+    Bits20 mBits[4];                            // +0x00 (0x50; each written by 0x0680500)
+    uint32_t mW50;                              // +0x50
+    uint32_t mW54;                              // +0x54
+    uint32_t mW58;                              // +0x58
+    uint32_t mW5c;                              // +0x5c
+    M5a0 mM;                                    // +0x60 (written by 0x06805c0)
     V20 mF0;                                    // +0x74
     V20 mF1;                                    // +0x88
     V20 mF2;                                    // +0x9c
@@ -253,6 +261,8 @@ struct Cls60 {
 
 // stub receiver class: the original passes the serializer `this` in ECX
 struct SerCtx {
+    void __thiscall WriteVec1800(VV12* v, IWrt* w);
+    void __thiscall WriteVecA(VV12* v, IWrt* w);
     void __thiscall WriteMap1700(Map2* map, IWrt* w);
     void __thiscall WriteMap2A10(Map3* map, IWrt* w);
     void __thiscall LoadMap1(Map1* map, IRd* r);
@@ -283,42 +293,57 @@ void SerCtx::WriteMap1700(Map2* map, IWrt* w) {
 // =====================================================================
 Cls60::~Cls60() {}
 
+// count (in dwords) then every element; 0x0680390/0x0680500-style vector body, emitted inline
+// for each vector field of the two serializers below.
+static __forceinline void WriteVecU32(IWrt* w, V20* v) {
+    int n = (int)((v->mpEnd - v->mpBegin) / 4);
+    w->Write(&n, 4);
+    for (int i = 0; i < n; ++i) {
+        uint32_t e = ((uint32_t*)v->mpBegin)[i];
+        w->Write(&e, 4);
+    }
+}
+
 // =====================================================================
 // @ 0x006820c0  write vector<Obj1800> (stride 0xc4)
 // =====================================================================
-void WriteVec1800(Obj1800* first, Obj1800* last, IWrt* w, void* self) {
-    int n = (int)((char*)last - (char*)first) / 0xc4;
+void SerCtx::WriteVec1800(VV12* v, IWrt* w) {
+    void* self = this;
+    int n = (int)((v->mpEnd - v->mpBegin) / 0xc4);
     w->Write(&n, 4);
-    for (Obj1800* p = first; p != last; p = (Obj1800*)((char*)p + 0xc4)) {
+    Obj1800* last = (Obj1800*)v->mpEnd;
+    for (Obj1800* p = (Obj1800*)v->mpBegin; p != last; p = (Obj1800*)((char*)p + 0xc4)) {
         Obj1800 tmp(*p);
-        SaveObj500(self, &tmp.w0[0], w);
-        SaveObj500(self, &tmp.w0[4], w);
-        SaveObj500(self, &tmp.w0[8], w);
-        SaveObj500(self, &tmp.w0[12], w);
-        int v = 0;
-        w->Write(&v, 4);
-        WriteUint32(w, &v, 1, 0);
-        WriteUint32(w, &v, 1, 0);
-        WriteUint32(w, &v, 1, 0);
-        SaveObj5c0(self, &tmp.mFlag, w);
+        SaveObj500(self, &tmp.mBits[0], w);
+        SaveObj500(self, &tmp.mBits[1], w);
+        SaveObj500(self, &tmp.mBits[2], w);
+        SaveObj500(self, &tmp.mBits[3], w);
+        w->Write(&tmp.mW50, 4);
+        WriteUint32(w, &tmp.mW5c, 1, 0);
+        WriteUint32(w, &tmp.mW58, 1, 0);
+        WriteUint32(w, &tmp.mW54, 1, 0);
+        SaveObj5c0(self, &tmp.mM, w);
+        WriteVecU32(w, &tmp.mF0);
+        WriteVecU32(w, &tmp.mF1);
+        WriteVecU32(w, &tmp.mF2);
+        WriteVecU32(w, &tmp.mF3);
     }
 }
 
 // =====================================================================
 // @ 0x006823f0  write vector<ObjA> (stride 0x60)
 // =====================================================================
-void WriteVecA(ObjA* first, ObjA* last, IWrt* w, void* self) {
-    int n = (int)((char*)last - (char*)first) / 0x60;
+void SerCtx::WriteVecA(VV12* v, IWrt* w) {
+    int n = (int)((v->mpEnd - v->mpBegin) / 0x60);
     w->Write(&n, 4);
-    for (ObjA* p = first; p != last; p = (ObjA*)((char*)p + 0x60)) {
+    ObjA* last = (ObjA*)v->mpEnd;
+    for (ObjA* p = (ObjA*)v->mpBegin; p != last; p = (ObjA*)((char*)p + 0x60)) {
         ObjA tmp(*p);
-        w->Write(&tmp.m0.w[0], 4);
-        w->Write(&tmp.m0.w[1], 4);
-        w->Write(&tmp.m0.w[2], 4);
-        int len = (int)(tmp.mF0.mpEnd - tmp.mF0.mpBegin);
-        w->Write(&len, 4);
-        for (int i = 0; i < len; ++i)
-            w->Write(tmp.mF0.mpBegin + i * 4, 4);
+        w->Write(&tmp.mW0, 4);
+        w->Write(&tmp.mW8, 4);
+        w->Write(&tmp.mWc, 4);
+        WriteVecU32(w, &tmp.mF0);
+        WriteVecU32(w, &tmp.mF2);
     }
 }
 
@@ -527,7 +552,7 @@ void SerCtx::WriteMap2A10(Map3* map, IWrt* w) {
         WriteUint32(w, &tmp.w18, 1, 0);
         WriteUint32(w, &tmp.w18, 1, 0);
         SaveObj5c0(self, &tmp.mM, w);
-        WriteVec1800((Obj1800*)tmp.mVec.mpBegin, (Obj1800*)tmp.mVec.mpEnd, w, self);
+        WriteVec1800(&tmp.mVec, w);
     }
 }
 

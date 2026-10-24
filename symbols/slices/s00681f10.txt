@@ -1,8 +1,8 @@
 # s00681f10 recovered names (invented stub names; no PDB names for these VAs)
 00681f10 SerCtx::WriteMap1700  # member: write rbtree map<int,Obj1700>; per node 0x681700 copy + string + two 0x680390 vector writes
 00682060 Cls60::~Cls60  # dtor: MapC2 free (0x681480) then guarded buffer free; layout {Buf mVec; MapC2 mMap;} at +0/+0x10
-006820c0 WriteVec1800   # write vector<Obj1800> (stride 0xc4); 4x 0x680500 bitset saves + 0x6805c0 + four u32 vectors
-006823f0 WriteVecA      # write vector<ObjA> (stride 0x60); 0x681a10 copy + 4x 0x680500
+006820c0 SerCtx::WriteVec1800  # member: write vector<Obj1800> (stride 0xc4); 4x 0x680500 field saves + 0x6805c0 + four u32 vectors
+006823f0 SerCtx::WriteVecA  # member: write vector<ObjA> (stride 0x60); 0x681a10 copy + 3 dwords + mF0/mF2 u32 vectors
 006825d0 Map1::InsertHint  # eastl rbtree insert with hint; value ObjC30; anchor +4 begin +8 root +0xc size +0x14
 00682740 VV12::VV12     # vector<Obj1800> copy ctor; EASTL_alloc6 stride 0xc4, UninitCopy 0x681ca0
 00682800 Map3::FreeNodes  # thiscall recursive free; value Obj2A10 (dtor inline w/ EH); node key +0x10 value +0x14
