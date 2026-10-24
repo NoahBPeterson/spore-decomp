@@ -144,10 +144,13 @@ void __fastcall F8a420(Spatial* s)
 // ===========================================================================
 // @ 0x00c8a480
 // ===========================================================================
-void __cdecl F8a480(char* p)
+extern char g_empty13ec47c;   // 0x13ec47c  empty-string sentinel
+struct StrAssigner {
+    void Assign(const void* first, const void* last);   // 0x454cb0
+};
+void __stdcall F8a480(StrAssigner* self)
 {
-    (void)p;
-    Opaque();
+    self->Assign(&g_empty13ec47c, &g_empty13ec47c);
 }
 
 // ===========================================================================

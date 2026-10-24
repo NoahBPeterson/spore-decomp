@@ -1,1 +1,2 @@
 # source symbol va flags
+slices/s00c89d60/s00c89d60.cpp  ?F8a480@@YGXPAUStrAssigner@@@Z  00c8a480  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
