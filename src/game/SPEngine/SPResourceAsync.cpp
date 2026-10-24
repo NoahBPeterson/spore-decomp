@@ -152,18 +152,19 @@ bool __fastcall FUN_006ae280(int self)
 }
 
 // @ 0x006ae2a0
-void* __fastcall FUN_006ae2a0(void* self, void* p)
+void* __fastcall FUN_006ae2a0(void* self, int unused, void* p)
 {
+    (void)unused;
     int* old = *(int**)self;
     if (p != old) {
         if (p)
-            *(int*)((char*)p + 8) = *(int*)((char*)p + 8) + 1;
+            _InterlockedExchangeAdd((volatile long*)((char*)p + 8), 1);
         *(void**)self = p;
         if (old) {
-            int* rc = (int*)((char*)old + 8);
-            int n = *(volatile int*)rc += -1;
+            volatile long* rc = (volatile long*)((char*)old + 8);
+            long n = _InterlockedExchangeAdd(rc, -1);
             if (n == 1) {
-                *(volatile int*)rc = 1;
+                _InterlockedExchange(rc, 1);
                 void* recv = (char*)old + 4;
                 if (*(void**)recv)
                     (*(void(__thiscall**)(void*, int))(*(void***)recv))(recv, 1);
@@ -217,8 +218,9 @@ bool Self::Get(void** out)
 }
 
 // @ 0x006ae510
-void* __fastcall FUN_006ae510(void* self, void* arg)
+void* __fastcall FUN_006ae510(void* self, int unused, void* arg)
 {
+    (void)unused;
     *(void**)self = &vtbl_13fa72c;
     *(void**)((char*)self + 4) = &vtbl_13ef094;
     *(void**)((char*)self + 8) = 0;

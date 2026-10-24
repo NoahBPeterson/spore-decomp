@@ -346,8 +346,9 @@ struct Sub26b0{ void fn(); };               // FUN_006926b0
 // 006ad890  ctor
 // ---------------------------------------------------------------------------
 // @ 0x006ad890
-void __fastcall FUN_006ad890(void* self, void* a)
+void* __fastcall FUN_006ad890(void* self, int unused, void* a)
 {
+    (void)unused;
     *(int*)((char*)self + 8) = 0;
     *(int*)((char*)self + 0xc) = 0;
     *(float*)((char*)self + 0x10) = 1.0f;
@@ -358,20 +359,23 @@ void __fastcall FUN_006ad890(void* self, void* a)
     *(int*)((char*)self + 0x18) = 0;
     *(int*)((char*)self + 8) = 1;
     *(void**)((char*)self + 4) = &vtbl_154df28;
+    return self;
 }
 
 // ---------------------------------------------------------------------------
 // 006adbf0  scalar deleting dtor of the KRMap singleton
 // ---------------------------------------------------------------------------
 // @ 0x006adbf0
-void __fastcall FUN_006adbf0(void* self, unsigned char flag)
+void* __fastcall FUN_006adbf0(void* self, int unused, unsigned char flag)
 {
+    (void)unused;
     *(void**)self = &vtbl_14093cc;
     g_pRegistry = 0;
     ((KRSub*)((char*)self + 0xc))->Destroy();
     *(void**)self = &vtbl_13effb8;
     if (flag & 1)
         ea_zone_delete(self);
+    return self;
 }
 
 // ---------------------------------------------------------------------------
@@ -483,18 +487,19 @@ void __fastcall FUN_006ae210(void* self)
 // 006ae2a0  AutoRefCount::operator=
 // ---------------------------------------------------------------------------
 // @ 0x006ae2a0
-void* __fastcall FUN_006ae2a0(void* self, void* p)
+void* __fastcall FUN_006ae2a0(void* self, int unused, void* p)
 {
+    (void)unused;
     int* old = *(int**)self;
     if (p != old) {
         if (p)
-            *(int*)((char*)p + 8) = *(int*)((char*)p + 8) + 1;
+            _InterlockedExchangeAdd((volatile long*)((char*)p + 8), 1);
         *(void**)self = p;
         if (old) {
-            int* rc = (int*)((char*)old + 8);
-            int n = *(volatile int*)rc += -1;
+            volatile long* rc = (volatile long*)((char*)old + 8);
+            long n = _InterlockedExchangeAdd(rc, -1);
             if (n == 1) {
-                *(volatile int*)rc = 1;
+                _InterlockedExchange(rc, 1);
                 void* recv = (char*)old + 4;
                 if (*(void**)recv)
                     (*(void(__thiscall**)(void*, int))(*(void***)recv))(recv, 1);
@@ -508,8 +513,9 @@ void* __fastcall FUN_006ae2a0(void* self, void* p)
 // 006ae510  Resource::Async ctor
 // ---------------------------------------------------------------------------
 // @ 0x006ae510
-void* __fastcall FUN_006ae510(void* self, void* arg)
+void* __fastcall FUN_006ae510(void* self, int unused, void* arg)
 {
+    (void)unused;
     *(void**)self = &vtbl_13fa72c;
     *(void**)((char*)self + 4) = &vtbl_13ef094;
     *(void**)((char*)self + 8) = 0;
@@ -745,7 +751,7 @@ void* __fastcall FUN_006adb40(void* self)
 
     char tmp[32];
     ((Sub140*)tmp)->Init((void*)"App/cCache/KRMap");
-    FUN_006ad890(s + 0xc, tmp);
+    FUN_006ad890(s + 0xc, 0, tmp);
     ((BufObj*)tmp)->Fn();
 
     _InterlockedExchange((volatile long*)(s + 0x48), 0);

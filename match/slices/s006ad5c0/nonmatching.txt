@@ -12,15 +12,15 @@
 006ae590   85  rbtree::Remove: original spills the call result to the outgoing-arg slot; cl hoists it into ebx (/O1 /O2 /Ox /Oy /Ob1)
 006ae880   88  RequestComplete: iterator erase + EH cleanup frame; skeleton, see partial.txt
 006ad800   10  loop prologue: cl tests the parameter directly in edi instead of eax/shrink-wrapped prologue
-006ad890   89  ctor: EH prologue + /arch:SSE movss constant-pool loads not reproduced
-006adbf0   52  scalar deleting dtor: old-style EH prolog not reproduced
+006ad890   93  ctor: now __fastcall(self, unused, a) so `a` is the 1-stack-arg (ret 4) the original reads at [esp+0x14] and the ctor returns this in eax; EH prologue + /arch:SSE constant-pool (0x1485720/0x1470f1c) loads not reproduced; difftest PASS 1200 valid / 100% cov
+006adbf0   73  scalar deleting dtor: now __fastcall(self, unused, flag) so the delete flag comes from the stack (ret 4) instead of edx (old form read edx=0x13 and called zone_delete on a stack object) and the dtor returns this; old-style EH prolog not reproduced; difftest PASS 812 valid / 100% cov
 006ae060   39  4-IID test: cl 15 emits a linear compare chain instead of the original median tree
 006ae120   51  dtor: EH prologue not reproduced
 006ae190   48  dtor: EH prologue not reproduced
 006ae210   46  rbtree_node dtor: EH prologue not reproduced
 006ae280   21  return (unsigned)(r-7)<=1; cl uses sbb/inc instead of setbe al
-006ae2a0   75  AutoRefCount::operator= : lock xadd / xchg refcount shape not reproduced
+006ae2a0   72  AutoRefCount::operator= : source comes from the stack (ret 4); refcount edits use _InterlockedExchangeAdd(+1 / -1) and _InterlockedExchange(1), so the release fires when the pre-decrement count was 1 (the old `+= -1` tested the new value and released one step early); lock xadd / xchg scheduling still differs; difftest PASS 737 valid / 100% cov
 006ae2f0   13  callback setter: extra pop esi moved to the end of the function
 006ae4c0   31  getter: duplicated tail / xor eax scheduling differs
-006ae510   92  Resource::Async ctor: EH prologue + InterlockedExchange zero store not reproduced
+006ae510   88  Resource::Async ctor: source comes from the stack (ret 4) and the ctor returns this; EH prologue + the xchg zero store at +8 not reproduced; difftest PASS 966 valid / 100% cov
 006ae660    -  pool node alloc from freelist: approximate, see partial.txt

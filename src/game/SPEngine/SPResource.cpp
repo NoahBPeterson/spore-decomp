@@ -846,8 +846,9 @@ void FUN_006ad850(void* p)
 }
 
 // @ 0x006ad890
-void __fastcall FUN_006ad890(void* self, void* a)
+void* __fastcall FUN_006ad890(void* self, int unused, void* a)
 {
+    (void)unused;
     *(int*)((char*)self + 8) = 0;
     *(int*)((char*)self + 0xc) = 0;
     *(float*)((char*)self + 0x10) = 1.0f;
@@ -858,6 +859,7 @@ void __fastcall FUN_006ad890(void* self, void* a)
     *(int*)((char*)self + 0x18) = 0;
     *(int*)((char*)self + 8) = 1;
     *(void**)((char*)self + 4) = &vtbl_154df28;
+    return self;
 }
 
 // @ 0x006ad910
@@ -886,14 +888,16 @@ void FUN_006adb40()
 {}
 
 // @ 0x006adbf0
-void __fastcall FUN_006adbf0(void* self, unsigned char flag)
+void* __fastcall FUN_006adbf0(void* self, int unused, unsigned char flag)
 {
+    (void)unused;
     *(void**)self = &vtbl_14093cc;
     g_pRegistry = 0;
     ((KRSub*)((char*)self + 0xc))->Destroy();
     *(void**)self = &vtbl_13effb8;
     if (flag & 1)
         ea_zone_delete(self);
+    return self;
 }
 
 // @ 0x006adc60
