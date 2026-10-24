@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00cc81f0  347  not implemented (no definition); 347-byte cReservationGrid::GetRClusterByCoord (SP_WrapCubeFace + key packing); reserved for follow-up
+00cc8350  785  not implemented (no definition); 785-byte ReserveSpotsInside (planet model + direction-to-surface helpers); reserved for follow-up
+00cc86a0  335  not implemented (no definition); 335-byte cReservationGrid::RemoveReservedByID; reserved for follow-up
+00cc8be0  740  not implemented (no definition); 740-byte TribeStrategy layout/refresh loop over six Posse children; reserved for follow-up

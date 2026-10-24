@@ -1,0 +1,3 @@
+00cc7fa0 155 FilterRCluster: flags /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; difftest WEAK (202 valid, 17.2% cov); size 165 vs 152, __stdcall ABI corrected; erase path still re-evaluates the lower_bound condition instead of retail's single-call form
+00cc8140 149 cReservationGrid::ReserveRCoord: flags /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; difftest WEAK (196 valid, 100% cov); size 161 vs 166, key/mpEnd register allocation and local-frame layout differ
+00cc8a30 60 TribeStrategy::FUN_00cc8a30: flags /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid; fake-arity=262, fault(read)=138); size 112 vs 110, &mVec is materialized before the first store instead of after the second

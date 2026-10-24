@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00cc7fa0/s00cc7fa0.cpp  ?Get@Map100@@QAEAAUcReservedSpot@@ABI@Z  00cc8040  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc7fa0/s00cc7fa0.cpp  ?Get@Map121@@QAEAAUcReservedSpot@@ABI@Z  00cc80c0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc7fa0/s00cc7fa0.cpp  ?GetRCluster@cReservationGrid@@QAEXPAXPAUMap121@@I@Z  00cc8670  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc7fa0/s00cc7fa0.cpp  ?FUN_00cc87f0@CameraCtl@@QAE_NXZ  00cc87f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc7fa0/s00cc7fa0.cpp  ?FUN_00cc8810@CameraCtl@@QAE_NXZ  00cc8810  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc7fa0/s00cc7fa0.cpp  ?FUN_00cc8830@@YAPAXPAUEntityRef@@@Z  00cc8830  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc7fa0/s00cc7fa0.cpp  ?FUN_00cc88e0@TribeStrategy@@QAEII@Z  00cc88e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc7fa0/s00cc7fa0.cpp  ?FUN_00cc8940@TribeStrategy@@QAEX_N@Z  00cc8940  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc7fa0/s00cc7fa0.cpp  ?FUN_00cc8990@@YAPAXXZ  00cc8990  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc7fa0/s00cc7fa0.cpp  ?FUN_00cc89f0@TribeStrategy@@QAEI_N@Z  00cc89f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc7fa0/s00cc7fa0.cpp  ?FUN_00cc8aa0@TribeStrategy@@QAEX_N@Z  00cc8aa0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc7fa0/s00cc7fa0.cpp  ?FUN_00cc8ba0@TribeStrategy@@QAEXXZ  00cc8ba0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
