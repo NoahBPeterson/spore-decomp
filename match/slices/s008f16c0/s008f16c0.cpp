@@ -71,6 +71,7 @@ public:
     void* mpPage;                          // +0xc
     int mItemType;                         // +0x10
     unsigned int mSelectableIndex;         // +0x14
+    void Dispose();                        // 0x008eae70
 };
 
 class ContainerItem : public Item {
@@ -119,12 +120,30 @@ struct Vector {
     T* mpEnd;
     T* mpCapacity;
     uint32_t mAllocator[2];
+
+    void resize(uint32_t n);               // 0x008f18c0
 };
+
+// non-template view of the same vector layout so the helper's annotation resolves
+struct VectorOps {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    uint32_t mAllocator[2];
+    void F_8f1210(void* pos, int n, void* val);  // 0x008f1210
+};
+
+void FUN_011e0744(void* first, void* last, int zero);   // 0x011e0744
+void FUN_00951bf0(void* first, void* last, void* dst);  // 0x00951bf0
+
+class Table;
 
 class TableRow {
 public:
     uint32_t pad000[0x5c / 4];             // InlineItem base
     Vector<TableCell*> mCells;             // +0x5c
+    void Dispose();                        // 0x008f16c0
+    void Build(Table* pTable);             // 0x008f1700
 };
 
 class TableColumn { public:
@@ -155,7 +174,93 @@ public:
     float mMinWidth;                       // +0x100
     float mMaxWidth;                       // +0x104
     bool mBuilt;                           // +0x108
+    void Dispose();                        // 0x008f1850
 };
+
+// --- property/list helpers (TextItem family) ------------------------------
+
+class PageText {
+public:
+    uint32_t GetTextStyle(void* arg);                       // 0x008ec580
+};
+
+class StyleOwner {
+public:
+    void ApplyStyleA(void* a, int b, uint32_t c);           // 0x008efa50
+    void ApplyStyleB(void* a, int b, uint32_t c);           // 0x008ef8d0
+};
+
+class TextItemX {
+public:
+    uint8_t pad00[0x0c];
+    PageText* mpPage;                      // +0x0c
+    uint8_t pad10[0x08];
+    void* mpStyle;                         // +0x18
+    int mLength;                           // +0x1c
+    uint32_t mTextStyle;                   // +0x20
+
+    void F_8f2350(void* owner, void* styleArg);             // 0x008f2350
+    void F_8f2380(void* owner, void* styleArg);             // 0x008f2380
+    void F_8f23b0(void* owner);                             // 0x008f23b0
+    bool F_8f23d0(void* owner, void* unused);               // 0x008f23d0
+};
+
+class PickCtxX {
+public:
+    void PickTextA(TextItemX* item, uint32_t style);        // 0x008ee400
+    void PickTextB(TextItemX* item, uint32_t style);        // 0x008ee990
+};
+
+class PropNodeX {
+public:
+    uint32_t mVtable;                      // +0x00
+    uint32_t mField04;                     // +0x04
+    uint32_t mField08;                     // +0x08
+    uint32_t mField0c;                     // +0x0c
+    int mLength;                           // +0x10
+
+    PropNodeX* F_8f2440(int a, const uint16_t* str);        // 0x008f2440
+    PropNodeX* F_8f24a0(int a, const uint16_t* str);        // 0x008f24a0
+};
+
+struct ListNodeX {
+    uint32_t mField0;                      // +0x00
+    uint32_t mField4;                      // +0x04
+};
+
+class HeadTailX {
+public:
+    ListNodeX* mpHead;                     // +0x00
+    ListNodeX* mpTail;                     // +0x04
+
+    void F_8f24f0(ListNodeX* node);                         // 0x008f24f0
+};
+
+class PoolX {
+public:
+    uint8_t pad00[0x08];
+    int mField08;                          // +0x08
+    int mField0c;                          // +0x0c
+    int mField10;                          // +0x10
+    uint8_t pad14[0x04];
+
+    bool F_928ba0(uint32_t size);                           // 0x00928ba0
+};
+
+class PoolNodeX {
+public:
+    uint32_t mVtable;                      // +0x00
+    uint32_t mField04;                     // +0x04
+    uint32_t mField08;                     // +0x08
+    uint32_t mField0c;                     // +0x0c
+    uint32_t mField10;                     // +0x10
+    uint32_t mField14;                     // +0x14
+    uint32_t mField18;                     // +0x18
+    uint32_t mField1c;                     // +0x1c
+};
+
+PoolNodeX* FUN_008f2550(PoolX* pool, uint32_t a, uint32_t b, uint32_t c, uint32_t d);
+PoolNodeX* FUN_008f25f0(PoolX* pool, uint32_t a, uint32_t b, uint32_t c, uint32_t d, uint32_t e);
 
 // @ 0x008F1C40
 void Table::MeasureContent(SizingContext& sc, Style::StyleState& style)
@@ -271,6 +376,176 @@ void Table::MeasureContent(SizingContext& sc, Style::StyleState& style)
     mMaxWidth = spacingTotal + mMaxWidth;
     sc.mMinWidth = mMinWidth;
     sc.mMaxWidth = mMaxWidth;
+}
+
+// @ 0x008F16C0
+void TableRow::Dispose()
+{
+    FUN_011e0744(mCells.mpBegin, mCells.mpEnd, 0);
+    const int count = (int)((char*)mCells.mpEnd - (char*)mCells.mpBegin) >> 2;
+    mCells.mpEnd = (TableCell**)((char*)mCells.mpEnd - count * 4);
+    ((Item*)this)->Dispose();
+}
+
+// @ 0x008F1850
+void Table::Dispose()
+{
+    FUN_00951bf0(mCols.mpEnd, mCols.mpEnd, mCols.mpBegin);
+    const int colCount = (int)((char*)mCols.mpEnd - (char*)mCols.mpBegin) / 0x14;
+    mCols.mpEnd = (TableColumn*)((char*)mCols.mpEnd - colCount * 0x14);
+    FUN_011e0744(mRows.mpBegin, mRows.mpEnd, 0);
+    const int rowCount = (int)((char*)mRows.mpEnd - (char*)mRows.mpBegin) >> 2;
+    mRows.mpEnd = (TableRow**)((char*)mRows.mpEnd - rowCount * 4);
+    ((Item*)this)->Dispose();
+}
+
+// @ 0x008F18C0
+template <typename T>
+void Vector<T>::resize(uint32_t n)
+{
+    T* end = mpEnd;
+    const uint32_t count = (uint32_t)(end - mpBegin);
+    if (count < n) {
+        T tmp = T();
+        ((VectorOps*)this)->F_8f1210(mpEnd, (int)(n - count), &tmp);
+        return;
+    }
+    T* newEnd = mpBegin + n;
+    FUN_00951bf0(end, end, newEnd);
+    const int back = (int)((char*)newEnd - (char*)end) / (int)sizeof(T);
+    mpEnd = (T*)((char*)end + back * (int)sizeof(T));
+}
+
+template void Vector<TableColumn>::resize(uint32_t n);
+
+// @ 0x008F2350
+void TextItemX::F_8f2350(void* owner, void* styleArg)
+{
+    if (mLength > 0) {
+        mTextStyle = mpPage->GetTextStyle(styleArg);
+        ((StyleOwner*)owner)->ApplyStyleA(mpStyle, mLength, mTextStyle);
+    }
+}
+
+// @ 0x008F2380
+void TextItemX::F_8f2380(void* owner, void* styleArg)
+{
+    if (mLength > 0) {
+        mTextStyle = mpPage->GetTextStyle(styleArg);
+        ((StyleOwner*)owner)->ApplyStyleB(mpStyle, mLength, mTextStyle);
+    }
+}
+
+// @ 0x008F23B0
+void TextItemX::F_8f23b0(void* owner)
+{
+    if (mLength > 0)
+        ((PickCtxX*)owner)->PickTextB(this, mTextStyle);
+}
+
+// @ 0x008F23D0
+bool TextItemX::F_8f23d0(void* owner, void* unused)
+{
+    if (mLength > 0)
+        ((PickCtxX*)owner)->PickTextA(this, mTextStyle);
+    return false;
+}
+
+// @ 0x008F2440
+PropNodeX* PropNodeX::F_8f2440(int a, const uint16_t* str)
+{
+    mField04 = 0;
+    mVtable = 0x01439a3c;
+    mField08 = (uint32_t)a;
+    mField0c = (uint32_t)str;
+    if (str) {
+        const uint16_t* p = str + 1;
+        uint16_t c;
+        do {
+            c = *str;
+            ++str;
+        } while (c != 0);
+        mLength = (int)(str - p);
+    } else {
+        mLength = -1;
+    }
+    return this;
+}
+
+// @ 0x008F24A0
+PropNodeX* PropNodeX::F_8f24a0(int a, const uint16_t* str)
+{
+    mField04 = 0;
+    mVtable = 0x01439a48;
+    mField08 = (uint32_t)a;
+    mField0c = (uint32_t)str;
+    if (str) {
+        const uint16_t* p = str + 1;
+        uint16_t c;
+        do {
+            c = *str;
+            ++str;
+        } while (c != 0);
+        mLength = (int)(str - p);
+    } else {
+        mLength = -1;
+    }
+    return this;
+}
+
+// @ 0x008F24F0
+void HeadTailX::F_8f24f0(ListNodeX* node)
+{
+    if (mpTail) {
+        mpTail->mField4 = (uint32_t)node;
+        mpTail = node;
+    } else {
+        mpHead = node;
+        mpTail = node;
+    }
+}
+
+// @ 0x008F2550
+PoolNodeX* FUN_008f2550(PoolX* pool, uint32_t a, uint32_t b, uint32_t c, uint32_t d)
+{
+    if ((pool->mField08 - pool->mField0c) - 0x18 < 0) {
+        if (!pool->F_928ba0(0x18))
+            return 0;
+    }
+    PoolNodeX* node = (PoolNodeX*)pool->mField0c;
+    pool->mField0c = (int)((char*)node + 0x18);
+    pool->mField10 = (int)((char*)node + 0x18);
+    if (!node)
+        return 0;
+    node->mField04 = 0;
+    node->mVtable = 0x01439a54;
+    node->mField08 = a;
+    node->mField0c = b;
+    node->mField10 = c;
+    node->mField14 = d;
+    return node;
+}
+
+// @ 0x008F25F0
+PoolNodeX* FUN_008f25f0(PoolX* pool, uint32_t a, uint32_t b, uint32_t c, uint32_t d, uint32_t e)
+{
+    if ((pool->mField08 - pool->mField0c) - 0x20 < 0) {
+        if (!pool->F_928ba0(0x20))
+            return 0;
+    }
+    PoolNodeX* node = (PoolNodeX*)pool->mField0c;
+    pool->mField0c = (int)((char*)node + 0x20);
+    pool->mField10 = (int)((char*)node + 0x20);
+    if (!node)
+        return 0;
+    node->mField04 = 0;
+    node->mVtable = 0x01439a60;
+    node->mField08 = a;
+    node->mField0c = b;
+    node->mField10 = c;
+    node->mField14 = d;
+    node->mField18 = e;
+    return node;
 }
 
 }  // namespace Layout

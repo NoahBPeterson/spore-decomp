@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+008f1700  336  EA::XHTML::Layout::TableRow::Build: incomplete; large DOM/attribute walk that builds the cell vector, not implemented
+008f1960  734  EA::XHTML::Layout::Table::Build: incomplete; builds the column/row structure from the child item list, not implemented
+008f25b0  54  FUN_008f25b0: incomplete; custom-register tail dispatcher (computes a this from pool fields +0x14/+0x10/+0xc, replaces the stack arg with +0x18, then `jmp [this+8]`), not expressible as a C++ call
