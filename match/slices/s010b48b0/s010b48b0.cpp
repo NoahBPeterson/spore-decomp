@@ -243,50 +243,116 @@ static inline float getUserTauAngularVelocity(const hk2AngJacobian& j, const hkV
     return (sx * tauFactor + dx * dampFactor) + (sy * tauFactor + dy * dampFactor) + (sz * tauFactor + dz * dampFactor);
 }
 
+// The original solver keeps the scalar impulse and the running products in x87
+// registers (extended precision) and materialises every per-component velocity
+// delta as a float in its scratch frame before adding it.  Reproducing that –
+// round each delta to float, but never round the intermediate products – matters
+// when the two bodies alias (a == b): the a- and b-side deltas then become the
+// *same* float and the pair cancels exactly to +0 instead of leaving a residual.
 static inline void applyImpulse(const hk1Lin2AngJacobian& j, hkVelocityAccumulator& a, hkVelocityAccumulator& b, float impulse)
 {
-    const float ia = impulse * a.m_invMasses.w;
-    const float ib = impulse * b.m_invMasses.w;
-    a.m_linearVel.x += ia * j.m_linear0.x;
-    a.m_linearVel.y += ia * j.m_linear0.y;
-    a.m_linearVel.z += ia * j.m_linear0.z;
-    b.m_linearVel.x -= ib * j.m_linear0.x;
-    b.m_linearVel.y -= ib * j.m_linear0.y;
-    b.m_linearVel.z -= ib * j.m_linear0.z;
-    a.m_angularVel.x += (impulse * a.m_invMasses.x) * j.m_angular[0].x;
-    a.m_angularVel.y += (impulse * a.m_invMasses.y) * j.m_angular[0].y;
-    a.m_angularVel.z += (impulse * a.m_invMasses.z) * j.m_angular[0].z;
-    b.m_angularVel.x += (impulse * b.m_invMasses.x) * j.m_angular[1].x;
-    b.m_angularVel.y += (impulse * b.m_invMasses.y) * j.m_angular[1].y;
-    b.m_angularVel.z += (impulse * b.m_invMasses.z) * j.m_angular[1].z;
+    const float dax = impulse * a.m_invMasses.w * j.m_linear0.x;
+    const float day = impulse * a.m_invMasses.w * j.m_linear0.y;
+    const float daz = impulse * a.m_invMasses.w * j.m_linear0.z;
+    const float dbx = impulse * b.m_invMasses.w * j.m_linear0.x;
+    const float dby = impulse * b.m_invMasses.w * j.m_linear0.y;
+    const float dbz = impulse * b.m_invMasses.w * j.m_linear0.z;
+    const float wax = impulse * a.m_invMasses.x * j.m_angular[0].x;
+    const float way = impulse * a.m_invMasses.y * j.m_angular[0].y;
+    const float waz = impulse * a.m_invMasses.z * j.m_angular[0].z;
+    const float wbx = impulse * b.m_invMasses.x * j.m_angular[1].x;
+    const float wby = impulse * b.m_invMasses.y * j.m_angular[1].y;
+    const float wbz = impulse * b.m_invMasses.z * j.m_angular[1].z;
+    a.m_linearVel.x += dax;
+    a.m_linearVel.y += day;
+    a.m_linearVel.z += daz;
+    b.m_linearVel.x -= dbx;
+    b.m_linearVel.y -= dby;
+    b.m_linearVel.z -= dbz;
+    a.m_angularVel.x += wax;
+    a.m_angularVel.y += way;
+    a.m_angularVel.z += waz;
+    b.m_angularVel.x += wbx;
+    b.m_angularVel.y += wby;
+    b.m_angularVel.z += wbz;
+}
+
+// Same as applyImpulse, but the caller passes the two factors of the impulse
+// (rhs-delta and inverse jacobian diagonal) separately: the original multiplies
+// them in extended precision and never rounds the impulse itself to a float, so
+// an overflowing product (e.g. FLT_MAX * 1.8e9) stays finite in the x87 register
+// and the subsequent products cancel instead of producing Inf/NaN.
+static inline void applyImpulseL(const hk1Lin2AngJacobian& j, hkVelocityAccumulator& a, hkVelocityAccumulator& b,
+                                 float d, float invJacDiag)
+{
+    const float dax = d * invJacDiag * a.m_invMasses.w * j.m_linear0.x;
+    const float day = d * invJacDiag * a.m_invMasses.w * j.m_linear0.y;
+    const float daz = d * invJacDiag * a.m_invMasses.w * j.m_linear0.z;
+    const float dbx = d * invJacDiag * b.m_invMasses.w * j.m_linear0.x;
+    const float dby = d * invJacDiag * b.m_invMasses.w * j.m_linear0.y;
+    const float dbz = d * invJacDiag * b.m_invMasses.w * j.m_linear0.z;
+    const float wax = d * invJacDiag * a.m_invMasses.x * j.m_angular[0].x;
+    const float way = d * invJacDiag * a.m_invMasses.y * j.m_angular[0].y;
+    const float waz = d * invJacDiag * a.m_invMasses.z * j.m_angular[0].z;
+    const float wbx = d * invJacDiag * b.m_invMasses.x * j.m_angular[1].x;
+    const float wby = d * invJacDiag * b.m_invMasses.y * j.m_angular[1].y;
+    const float wbz = d * invJacDiag * b.m_invMasses.z * j.m_angular[1].z;
+    a.m_linearVel.x += dax;
+    a.m_linearVel.y += day;
+    a.m_linearVel.z += daz;
+    b.m_linearVel.x -= dbx;
+    b.m_linearVel.y -= dby;
+    b.m_linearVel.z -= dbz;
+    a.m_angularVel.x += wax;
+    a.m_angularVel.y += way;
+    a.m_angularVel.z += waz;
+    b.m_angularVel.x += wbx;
+    b.m_angularVel.y += wby;
+    b.m_angularVel.z += wbz;
 }
 
 static inline void applyAngularImpulse(const hk2AngJacobian& j, hkVelocityAccumulator& a, hkVelocityAccumulator& b, float impulse)
 {
-    a.m_angularVel.x += (impulse * a.m_invMasses.x) * j.m_angular[0].x;
-    a.m_angularVel.y += (impulse * a.m_invMasses.y) * j.m_angular[0].y;
-    a.m_angularVel.z += (impulse * a.m_invMasses.z) * j.m_angular[0].z;
-    b.m_angularVel.x += (impulse * b.m_invMasses.x) * j.m_angular[1].x;
-    b.m_angularVel.y += (impulse * b.m_invMasses.y) * j.m_angular[1].y;
-    b.m_angularVel.z += (impulse * b.m_invMasses.z) * j.m_angular[1].z;
+    const float wax = impulse * a.m_invMasses.x * j.m_angular[0].x;
+    const float way = impulse * a.m_invMasses.y * j.m_angular[0].y;
+    const float waz = impulse * a.m_invMasses.z * j.m_angular[0].z;
+    const float wbx = impulse * b.m_invMasses.x * j.m_angular[1].x;
+    const float wby = impulse * b.m_invMasses.y * j.m_angular[1].y;
+    const float wbz = impulse * b.m_invMasses.z * j.m_angular[1].z;
+    a.m_angularVel.x += wax;
+    a.m_angularVel.y += way;
+    a.m_angularVel.z += waz;
+    b.m_angularVel.x += wbx;
+    b.m_angularVel.y += wby;
+    b.m_angularVel.z += wbz;
 }
 
 static inline void applyImpulse(const hk2Lin2AngJacobian& j, hkVelocityAccumulator& a, hkVelocityAccumulator& b, float impulse)
 {
-    const float ia = impulse * a.m_invMasses.w;
-    const float ib = impulse * b.m_invMasses.w;
-    a.m_linearVel.x += ia * j.m_linear[0].x;
-    a.m_linearVel.y += ia * j.m_linear[0].y;
-    a.m_linearVel.z += ia * j.m_linear[0].z;
-    b.m_linearVel.x -= ib * j.m_linear[1].x;
-    b.m_linearVel.y -= ib * j.m_linear[1].y;
-    b.m_linearVel.z -= ib * j.m_linear[1].z;
-    a.m_angularVel.x += (impulse * a.m_invMasses.x) * j.m_angular[0].x;
-    a.m_angularVel.y += (impulse * a.m_invMasses.y) * j.m_angular[0].y;
-    a.m_angularVel.z += (impulse * a.m_invMasses.z) * j.m_angular[0].z;
-    b.m_angularVel.x += (impulse * b.m_invMasses.x) * j.m_angular[1].x;
-    b.m_angularVel.y += (impulse * b.m_invMasses.y) * j.m_angular[1].y;
-    b.m_angularVel.z += (impulse * b.m_invMasses.z) * j.m_angular[1].z;
+    const float dax = impulse * a.m_invMasses.w * j.m_linear[0].x;
+    const float day = impulse * a.m_invMasses.w * j.m_linear[0].y;
+    const float daz = impulse * a.m_invMasses.w * j.m_linear[0].z;
+    const float dbx = impulse * b.m_invMasses.w * j.m_linear[1].x;
+    const float dby = impulse * b.m_invMasses.w * j.m_linear[1].y;
+    const float dbz = impulse * b.m_invMasses.w * j.m_linear[1].z;
+    const float wax = impulse * a.m_invMasses.x * j.m_angular[0].x;
+    const float way = impulse * a.m_invMasses.y * j.m_angular[0].y;
+    const float waz = impulse * a.m_invMasses.z * j.m_angular[0].z;
+    const float wbx = impulse * b.m_invMasses.x * j.m_angular[1].x;
+    const float wby = impulse * b.m_invMasses.y * j.m_angular[1].y;
+    const float wbz = impulse * b.m_invMasses.z * j.m_angular[1].z;
+    a.m_linearVel.x += dax;
+    a.m_linearVel.y += day;
+    a.m_linearVel.z += daz;
+    b.m_linearVel.x -= dbx;
+    b.m_linearVel.y -= dby;
+    b.m_linearVel.z -= dbz;
+    a.m_angularVel.x += wax;
+    a.m_angularVel.y += way;
+    a.m_angularVel.z += waz;
+    b.m_angularVel.x += wbx;
+    b.m_angularVel.y += wby;
+    b.m_angularVel.z += wbz;
 }
 
 // Two contact points sharing one body pair (type 5): solve the 2x2 LCP.  Both
@@ -585,16 +651,14 @@ header:
                 const float dMax = v - ls.m_maxRhs;
                 if (dMax > 0.0f)
                 {
-                    const float impulse = dMax * j.m_angular[0].w;
-                    applyImpulse(j, *a, *b, impulse);
-                    *temp += impulse;
+                    applyImpulseL(j, *a, *b, dMax, j.m_angular[0].w);
+                    *temp += dMax * j.m_angular[0].w;
                 }
                 const float dMin = v - ls.m_minRhs;
                 if (dMin < 0.0f)
                 {
-                    const float impulse = dMin * j.m_angular[0].w;
-                    applyImpulse(j, *a, *b, impulse);
-                    *temp += impulse;
+                    applyImpulseL(j, *a, *b, dMin, j.m_angular[0].w);
+                    *temp += dMin * j.m_angular[0].w;
                 }
                 jac = (char*)j.next(1);
                 temp += 1;
