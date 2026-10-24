@@ -1,4 +1,4 @@
-// @ 0x00ddbe40  Swarm::SpawnOne: pick the next effect key from the resource manager's key tree
+// Swarm::SpawnOne: pick the next effect key from the resource manager's key tree
 // (round-robin through g_nextKey), create two resources for it, wrap the first in a transform
 // description + holder, give the new boid a random orientation and a rejection-sampled start
 // position, and append it to the swarm's boid vector (this+0). Names are Claude-coined from usage.
@@ -225,14 +225,26 @@ static __declspec(noinline) Vec3* RandomOffset(Vec3* out)
     return out;
 }
 
+struct ITimer;                                                         // defined with the gold7 block below
+
 struct Swarm : PtrVec<Boid*>
 {
     uint32_t pad[2];
     MapMgr*  mpMgr;                                                    // +0x14
+    uint32_t pad18[(0x70 - 0x18) / 4];
+    ITimer*  mpTimer;                                                  // +0x70 (slot 0x24 takes the step + a flag)
     float    FindNearest(const Vec3* p, int group);                    // 0x00dda160 (ret 8)
     void     SpawnOne();                                               // 0x00ddbe40
+    void     FUN_00ddb600(Boid* b);                                    // 0x00ddb600 (ret 4)
+    bool     FUN_00ddb0d0(Boid* b, uint32_t ticks);                    // 0x00ddb0d0 (ret 8)
+    Boid*    FUN_00ddc4a0();                                           // 0x00ddc4a0 (ret 0)
+    void     FUN_00ddc820(uint32_t key);                               // 0x00ddc820 (ret 4)
+    void     FUN_00ddc6d0(uint32_t ticks);                             // 0x00ddc6d0 (ret 4)
+    void     FUN_00ddc910(const Vec3* pos, const Vec3* dir, unsigned char a, unsigned char b);  // 0x00ddc910 (ret 0x10)
+    void     FUN_00ddcad0(const Vec3* pos, const Vec3* dir);           // 0x00ddcad0 (ret 8)
 };
 
+// @ 0x00ddbe40
 void Swarm::SpawnOne()
 {
     KeyVec keys = { 0, 0, 0 };
@@ -329,4 +341,187 @@ void Swarm::SpawnOne()
         }
         g_nextKey++;
     }
+}
+
+
+// ===========================================================================
+//  gold7 slice functions (0x00ddc4a0 .. 0x00ddcad0) -- members of the same
+//  swarm manager that owns SpawnOne above.  Toolchain: VC9 SP1 (/O2 /MD /Gy
+//  /EHsc /TP /arch:SSE /fp:fast).
+// ===========================================================================
+
+#define VS1(p)  virtual void p##_a();
+#define VS2(p)  VS1(p##0) VS1(p##1)
+#define VS4(p)  VS2(p##0) VS2(p##1)
+#define VS8(p)  VS4(p##0) VS4(p##1)
+#define VS16(p) VS8(p##0) VS8(p##1)
+#define VS32(p) VS16(p##0) VS16(p##1)
+
+// The object held at Swarm+0x70; only slot 0x24 (the step/flag setter) is resolved here.
+struct ITimer
+{
+    VS8(v0)                                              // +0x00 (slots 0x00..0x1c)
+    VS1(v1)                                              // +0x20
+    virtual void SetStep(float dt, int flag);            // +0x24 (ret 8)
+};
+
+// 4-byte-element SPVector used by the swarm's scratch lists.  Its out-of-line
+// inserter is the one shared with the game's SPVector<unsigned int> instances.
+template <class T> struct SPVec4
+{
+    T* mpBegin;                                          // +0x00
+    T* mpEnd;                                            // +0x04
+    T* mpCapacity;                                       // +0x08
+    void DoInsertKey4(T* pos, const T& v);               // 0x00b96600 (ret 8)
+    void push_back(const T& v)                           // SPVector 4-byte push shape
+    {
+        if (mpEnd < mpCapacity)
+        {
+            T* slot = mpEnd;
+            mpEnd = slot + 1;
+            if (slot != 0)
+                *slot = v;
+        }
+        else
+        {
+            DoInsertKey4(mpEnd, v);
+        }
+    }
+};
+
+extern SPVec4<Boid*> g_scanList;                         // 0x016a0c64 (scratch list rebuilt each step)
+extern uint32_t      g_scanInit;                         // 0x016a0c78 (bit 0 = scratch list initialised)
+extern "C" int   atexit(void (*fn)(void));               // 0x011e07ef (lib_crt)
+extern "C" void* memcpy(void* dst, const void* src, unsigned int n);   // 0x011e0744 (lib_crt)
+void FUN_013c5f50();                                     // 0x013c5f50 (scratch-list teardown)
+
+// The singleton reset by 0x00ddc8d0; its callee's mangled name gives the class name.
+struct ObjA
+{
+    void FUN_00ddb790();                                 // 0x00ddb790 (ret 0)
+    void FUN_00dda9a0();                                 // 0x00dda9a0 (ret 0)
+};
+extern ObjA* g_objA;                                     // [0x016a0b08]
+
+// ------------------------------------------------------------------ 0x00ddc4a0
+// Random-boid factory.  Retries the resource lookup (FUN_00ddaf70 + the manager
+// at this+0x18's slot 0x0c) up to 100 times, bumps the resource's refcount
+// (+0x40), resolves the caller's effect name through the EffectsManager (slots
+// 0x2c/0x00/0x08), builds the 0x100-byte boid (tagged operator new 0x00f473a0 +
+// ctor 0x00dd9510) and wires it up: +0x00 resource, +0x08 effect, +0x18/+0x24/
+// +0x30 = the global origin vector, +0x98 = 5.0f, +0x34 = the audio system's
+// slot 0x20 and +0xb0 stopwatch (SetUnits(5); rdtsc / QueryPerformanceCounter).
+// It then clears +0x04/+0xc8/+0xcc/+0xd0/+0xd4/+0xd5/+0xf8 and appends the boid
+// to this+0.
+// Stub only -- the straight-line initialiser, the allocation and the append are
+// not reconstructed (see partial.txt).
+// @ 0x00ddc4a0
+Boid* Swarm::FUN_00ddc4a0()
+{
+    return 0;
+}
+
+// ------------------------------------------------------------------ 0x00ddc820
+// Calls FUN_00ddb600 on every boid whose key field (+0xfc) equals the argument,
+// walking the matches in reverse order.  The matches are collected in a local
+// scratch list first.
+// @ 0x00ddc820
+void Swarm::FUN_00ddc820(uint32_t key)
+{
+    unsigned count = (unsigned)(mpEnd - mpBegin);
+    SPVec4<Boid*> hits = { 0, 0, 0 };
+    for (unsigned i = 0; i < count; ++i)
+    {
+        if (mpBegin[i]->mFC == key)
+            hits.push_back(mpBegin[i]);
+    }
+    for (Boid** it = hits.mpEnd; it != hits.mpBegin; )
+    {
+        --it;
+        FUN_00ddb600(*it);
+    }
+    if (hits.mpBegin != 0 && hits.mpBegin[-1] != 0)
+        operator delete[](hits.mpBegin);
+}
+
+// ------------------------------------------------------------------ 0x00ddc6d0
+// Advances the swarm one step: converts the caller's millisecond count to
+// seconds, clamps it to 0.2 s and pushes it into the timer at +0x70, then
+// re-spawns every boid of this+0 whose FUN_00ddb0d0 fails into the global
+// scratch list, updates each collected boid (FUN_00ddb600) and empties the list.
+// @ 0x00ddc6d0
+void Swarm::FUN_00ddc6d0(uint32_t ticks)
+{
+    float cap = 0.2f;
+    float secs = ticks * 0.001;
+    float& step = (secs <= cap) ? secs : cap;      // min(secs, cap), taken by reference
+    mpTimer->SetStep(step, 0);
+
+    if ((g_scanInit & 1) == 0)
+    {
+        g_scanInit |= 1;
+        g_scanList.mpBegin = 0;
+        g_scanList.mpEnd = 0;
+        g_scanList.mpCapacity = 0;
+        atexit(FUN_013c5f50);
+    }
+
+    unsigned count = (unsigned)(mpEnd - mpBegin);
+    for (unsigned i = 0; i < count; ++i)
+    {
+        Boid* b = mpBegin[i];
+        if (!FUN_00ddb0d0(b, ticks))
+            g_scanList.push_back(b);
+    }
+
+    count = (unsigned)(g_scanList.mpEnd - g_scanList.mpBegin);
+    for (unsigned i = 0; i < count; ++i)
+        FUN_00ddb600(g_scanList.mpBegin[i]);
+
+    // the scratch list's own erase(mpBegin, mpEnd): nothing shifts, only mpEnd moves back
+    Boid** first = g_scanList.mpBegin;
+    Boid** last  = g_scanList.mpEnd;
+    memcpy(first, last, 0);
+    g_scanList.mpEnd = g_scanList.mpEnd - (last - first);
+}
+
+// ------------------------------------------------------------------ 0x00ddc8d0
+// Releases the global singleton: 0x00ddb790 first, then 0x00dda9a0 (or
+// operator delete[] when the pointer is still set), then clears the global.
+// @ 0x00ddc8d0
+void FUN_00ddc8d0()
+{
+    if (g_objA != 0)
+    {
+        g_objA->FUN_00ddb790();
+        if (g_objA != 0)
+        {
+            ObjA* p = g_objA;
+            g_objA->FUN_00dda9a0();
+            operator delete[](p);
+        }
+        g_objA = 0;
+    }
+}
+
+// ------------------------------------------------------------------ 0x00ddc910
+// Spawns a boid with position/direction: forwards to FUN_00ddc4a0 (the caller's
+// ecx), stores pos -> +0x0c/+0x3c and dir -> +0x30, seeds the stopwatch
+// (+0xb0/+0xc0), flags +0xd6/+0xd7, sets +0xfc = 1, normalises the direction
+// (1/sqrt(d2 + 1e-8)), copies the three quaternion lanes to +0x78/+0x48/+0x88,
+// points +0xf8 at the 0x016a0bb0 object and tail-calls its static vtable slot.
+// Stub only (see partial.txt).
+// @ 0x00ddc910
+void Swarm::FUN_00ddc910(const Vec3* pos, const Vec3* dir, unsigned char a, unsigned char b)
+{
+}
+
+// ------------------------------------------------------------------ 0x00ddcad0
+// Same spawn as 0x00ddc910 but derives the direction from a cross product
+// against the global at 0x016a0ba4 and a random angle (RandomDoubleUniform * the
+// global angle at 0x016a0b58, sin/cos), storing the result as a quaternion.
+// Stub only (see partial.txt).
+// @ 0x00ddcad0
+void Swarm::FUN_00ddcad0(const Vec3* pos, const Vec3* dir)
+{
 }
