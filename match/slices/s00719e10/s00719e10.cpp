@@ -13,7 +13,6 @@ void* SpAlloc(unsigned size, const char* area, int a, int b, const char* file, i
 struct cSPVector2 { float x, y; };
 struct cSPVector3 { float x, y, z; };
 struct tMDUByte4 { unsigned char a, b, c, d; };
-struct Float4 { float x, y, z, w; };
 
 // sp_vector: 3 pointers + a 4-byte allocator (16 bytes total).
 template <typename T>
@@ -56,7 +55,32 @@ struct Vec28 {
     T28* mpBegin; T28* mpEnd; T28* mpCapacity; uint32_t mAlloc[1];
     void insert(T28* position, uint32_t n, const T28& value);   // 0x00719a00
     void erase(T28* first, T28* last);                          // 0x007199b0
-    void resize(uint32_t n);
+    void resize(uint32_t n);                                    // 0x0071a930
+};
+
+// One 0x30-byte record of cMeshBuilder::mV4: a 3x4 row-major float matrix.
+struct Mat34 { float m[12]; };
+
+// cMeshBuilder::mV4's stream (eastl::vector<Mat34, sp_vector_allocator>, 20 bytes at +0x10c).
+struct Mat34Vec {
+    Mat34*   mpBegin;      // +0x00
+    Mat34*   mpEnd;        // +0x04
+    Mat34*   mpCapacity;   // +0x08
+    uint32_t mAlloc[1];    // +0x0c
+    uint32_t mAfter;       // +0x10
+    void erase(void* first, void* last);                     // 0x009c69f0
+    void resize(uint32_t n, const Mat34& value);             // 0x00717820
+};
+
+// The out-of-line eastl erase(first, last) instantiation the image keeps for
+// SpVector<cSPVector3>::erase (thiscall, 2 stack args, ret 8). cMeshBuilder's
+// mPositions/mNormals/mV0/mV1 all call this same address.
+struct Vec3Erase {
+    cSPVector3* mpBegin;   // +0x00
+    cSPVector3* mpEnd;     // +0x04
+    cSPVector3* mpCapacity; // +0x08
+    uint32_t    mAlloc[1]; // +0x0c
+    void erase(void* first, void* last);                     // 0x0050f740
 };
 
 // One index list of the mesh builder (eastl::vector<unsigned,sp_vector_allocator>), 0x14 bytes.
@@ -90,6 +114,7 @@ struct T140 {
     UVec     mUnk;           // +0xa8
     UVec     mIndices;       // +0xbc  triangle/line index list
     T140(); ~T140(); T140(const T140&);
+    void Destroy();          // 0x007146c0
 };
 
 // One draw batch (0x14 bytes) of cMeshBuilder::mV2.
@@ -127,8 +152,8 @@ struct cMeshBuilder {
     spvec1<T140>       mSections;                    // +0xd0
     spvec1<Batch>      mV2;                          // +0xe4   draw batches (0x14-byte element)
     spvec1<uint64_t>   mV3;                          // +0xf8   (8-byte element)
-    spvec1<int>        mV4;                          // +0x10c
-    spvec1<int>        mV5;                          // +0x120
+    Mat34Vec           mV4;                          // +0x10c  0x30-byte transform records
+    spvec1<T28>        mV5;                          // +0x120
     spvec1<int>        mV6;                          // +0x134
     RefCounted*        mMeshData;                    // +0x148
     uint32_t           mKey;                         // +0x14c
@@ -153,10 +178,15 @@ struct cMeshBuilder {
     void BeginMesh();
     void EndPrimitive();
     void ClearMeshInfo();
+    void TransformStreams(uint32_t n);
 };
 
-int  cMeshBuilder_ClearChildVec(cMeshBuilder* self, int a, void* b);   // 0x00717820
-void ClearAnimatedBabyVec(uint32_t a, uint32_t b);                     // 0x009c69f0
+// Range destructors the image keeps out of line for the two composite element types whose
+// clear() has to run element destructors first.  Both take (first, last) on the stack and
+// pop them with ret 8, so they must be declared __stdcall: as __cdecl the compiler would add
+// another 8 bytes of its own after the call and unbalance the frame.
+void __stdcall mV5_DestroyRange(void* first, void* last);    // 0x00714f20
+void __stdcall mV6_DestroyRange(void* first, void* last);    // 0x00714b40
 
 // ===========================================================================
 // @ 0x0071a930
@@ -196,38 +226,69 @@ void cMeshBuilder::BeginMesh()
     m160 = -1;
 }
 
+// The end-pointer adjustment the compiler inlines for erase(begin(), end()) / clear() on these
+// streams: subtract the element count it recovered from the byte size, computed either with a
+// magic-multiply division (arbitrary element size) or with an arithmetic shift (a power-of-two
+// element size).  Reproduced as-is so that a mis-sized end pointer lands where the original's
+// does instead of being snapped back onto the begin pointer.
+template <typename T, int ES>
+static __forceinline void DropTailDiv(T* begin, T*& end)
+{
+    int n = (int)((const char*)end - (const char*)begin);
+    end = (T*)((char*)end - (n / ES) * ES);
+}
+template <typename T, int SH>
+static __forceinline void DropTailShift(T* begin, T*& end)
+{
+    int n = (int)((const char*)end - (const char*)begin);
+    end = (T*)((char*)end - ((n >> SH) << SH));
+}
+
 // @ 0x0071a650
 void cMeshBuilder::ClearMeshInfo()
 {
-    mV0.v.clear();
-    mV1.v.clear();
-    mV2.v.clear();
-    mV3.v.clear();
+    // The four vertex-attribute streams whose erase stays out of line (0x50f740).
+    ((Vec3Erase*)&mPositions.v)->erase(mPositions.v.mpBegin, mPositions.v.mpEnd);
+    ((Vec3Erase*)&mNormals.v)->erase(mNormals.v.mpBegin, mNormals.v.mpEnd);
+    ((Vec3Erase*)&mV0.v)->erase(mV0.v.mpBegin, mV0.v.mpEnd);
+    ((Vec3Erase*)&mV1.v)->erase(mV1.v.mpBegin, mV1.v.mpEnd);
+
     for (int i = 0; i < 4; ++i)
-        mTexCoords[i].v.clear();
+        DropTailShift<cSPVector2, 3>(mTexCoords[i].v.mpBegin, mTexCoords[i].v.mpEnd);
     for (int i = 0; i < 2; ++i)
-        mColors[i].v.clear();
-    ClearAnimatedBabyVec((uint32_t)(size_t)mV4.v.mpEnd, (uint32_t)(size_t)mV5.v.mpEnd);
-    mV5.v.erase(mV5.v.mpBegin, mV5.v.mpEnd);
-    mV6.v.erase(mV6.v.mpBegin, mV6.v.mpEnd);
-    mV2.v.erase(mV2.v.mpBegin, mV2.v.mpEnd);
-    mV6.v.erase(mV6.v.mpBegin, mV6.v.mpEnd);
-    mV2.v.erase(mV2.v.mpBegin, mV2.v.mpEnd);
-    mV3.v.erase(mV3.v.mpBegin, mV3.v.mpEnd);
+        DropTailShift<tMDUByte4, 2>(mColors[i].v.mpBegin, mColors[i].v.mpEnd);
+
+    mV4.erase(mV4.mpBegin, mV4.mpEnd);                       // 0x009c69f0
+
+    // The 0x28-byte records at +0x120 own two sub-vectors: free them, then drop the elements.
+    mV5_DestroyRange(mV5.v.mpBegin, mV5.v.mpEnd);            // 0x00714f20
+    DropTailDiv<T28, 40>(mV5.v.mpBegin, mV5.v.mpEnd);
+
+    // The 0x50-byte records at +0x134 own four sub-buffers each.
+    mV6_DestroyRange(mV6.v.mpBegin, mV6.v.mpEnd);            // 0x00714b40
+    DropTailDiv<int, 80>(mV6.v.mpBegin, mV6.v.mpEnd);
+
+    // Sections own their attribute index streams.
+    for (T140* s = mSections.v.mpBegin; s < mSections.v.mpEnd; ++s)
+        s->Destroy();                                        // 0x007146c0
+    DropTailDiv<T140, 208>(mSections.v.mpBegin, mSections.v.mpEnd);
+
+    DropTailDiv<Batch, 20>(mV2.v.mpBegin, mV2.v.mpEnd);
+    DropTailShift<uint64_t, 3>(mV3.v.mpBegin, mV3.v.mpEnd);
 }
 
 // @ 0x0071ab60
-void cMeshBuilder_Transform(cMeshBuilder* self, uint32_t param)
+// Grow the two per-vertex transform streams to `n` vertices: the 0x28-byte records at +0x120
+// first (0x71a930), then the 0x30-byte transform records at +0x10c, each element initialised
+// with a copy of the identity 3x4 row-major matrix (0x717820).
+void cMeshBuilder::TransformStreams(uint32_t param)
 {
-    self->mV5.v.resize(param);
-    Float4 m[3];
-    float* p = (float*)m;
-    for (int i = 0; i < 12; ++i)
-        p[i] = 0.0f;
-    m[0].x = 1.0f;
-    m[1].y = 1.0f;
-    m[2].z = 1.0f;
-    cMeshBuilder_ClearChildVec(self, param, m);
+    ((Vec28*)&mV5.v)->resize(param);                        // 0x0071a930
+    Mat34 mtx;
+    mtx.m[0]  = 1.0f;  mtx.m[1]  = 0.0f;  mtx.m[2]  = 0.0f;  mtx.m[3]  = 0.0f;
+    mtx.m[4]  = 0.0f;  mtx.m[5]  = 1.0f;  mtx.m[6]  = 0.0f;  mtx.m[7]  = 0.0f;
+    mtx.m[8]  = 0.0f;  mtx.m[9]  = 0.0f;  mtx.m[10] = 1.0f;  mtx.m[11] = 0.0f;
+    mV4.resize(param, mtx);                                 // 0x00717820
 }
 
 // bitset<11>::test(pos): out-of-range positions read as 0.
