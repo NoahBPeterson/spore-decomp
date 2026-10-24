@@ -1,0 +1,5 @@
+00ca3f20 920 not reconstructed in this pass (920-byte managed-object helper); not byte-exact; size 0 vs 920; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ca4320 180 not reconstructed in this pass (managed-object assignment helper); not byte-exact; size 0 vs 180; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ca4420 205 not reconstructed in this pass (managed-object helper); not byte-exact; size 0 vs 205; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ca44f0 264 not reconstructed in this pass (eastl vector smart-pointer insert/replace helper); not byte-exact; size 0 vs 264; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ca4600 179 not reconstructed in this pass (eastl vector smart-pointer insert: releases element at position-1 slot, addrefs/assigns new pointer, constructs a 4-float + smart-pointer temporary on the stack, calls 0x00ca44f0(vector,0,index-1,0), then tail-jumps to release slot 0x64); not byte-exact; size 0 vs 179; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
