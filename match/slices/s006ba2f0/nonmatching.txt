@@ -1,5 +1,11 @@
-006ba620 480 complete; Matrix3 apply, column/row order differs
-006ba870 163 complete; XForm2::Apply transform order
-006ba940 255 complete; pre-rotate wrapper, cTransform layout/schedule; equiv: FAIL (now member, ecx this; ours faults in stubbed callee call)
-006baff0 43 complete; SporeAlert, extra EH state store vs original
-006bb0b0 280 complete; wide alert, cString path not reproduced
+006ba2f0  698  FUN_006ba2f0: complete source, strided 3-vector transform, 4x unrolled loop and per-element flag test schedule differs; equiv PASS 100.0% cov (374 valid) [/O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast]
+006ba620  669  FUN_006ba620: complete source, row-major matrix multiply (dst = dst * other, returns dst); operand/spill schedule differs (597 vs 480 bytes); equiv PASS 100.0% cov (400 valid) [/O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast]
+006ba870  236  XForm2::Apply: complete source, flag-guarded rot copy/in-place update math matches; register schedule differs (ours allocates this in edx, which the original leaves untouched; 226 vs 196 bytes); equiv FAIL 5/5 inputs, first diff edx [/O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast]
+006ba940  262  XForm2::PreRotateX: complete source, cTransform init + cXform::PreRotateX (0x5a2d90) then in-place update; prologue/call/register schedule differs; equiv PASS 100.0% cov (400 valid) [/O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast]
+006baa70  266  XForm2::PreRotateY: complete source, cTransform init + cTransform::PreRotateY then rot copy/BuildMatrix call schedule differs; equiv PASS 100.0% cov (400 valid) [/O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast]
+006baba0  190  XForm2::SetA: complete source, (int,float) temporary matrix build and Matrix3::Assign call schedule differs; equiv PASS 100.0% cov (400 valid) [/O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast]
+006bac90  205  XForm2::SetB: complete source, (int,int) temporary matrix build and Matrix3::Assign call schedule differs; equiv PASS 100.0% cov (400 valid) [/O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast]
+006badd0  115  LogManager::LogManager: complete source, field store order/EStrW insert-elide schedule differs (SEH frame omitted; 72 vs 124 bytes); equiv PASS 90.7% cov (400 valid) [/O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast]
+006baec0  212  FUN_006baec0: complete source, empty wide-string early-out path; SEH frame omitted (204 vs 294 bytes); equiv UNSUPPORTED 0/400 valid (discards: import:GetFileAttributesW=317, fault(write)=75, budget=4, fault(pool-limit)=3, fault(write-prot)=1) [/O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast]
+006baff0  43  SP::SporeAlert: complete source, message-box alert path; extra EH state store vs original; equiv UNSUPPORTED 0/400 valid (discards: import:MessageBoxA=295, fault(write)=92, fault(write-prot)=5, fault(pool-limit)=5, budget=2, fault(read)=1) [/O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast]
+006bb0b0  180  FUN_006bb0b0: complete source, wide alert/cString formatting path not reproduced; equiv UNSUPPORTED 1 unresolved reference (?EStrW_format) [/O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast]
