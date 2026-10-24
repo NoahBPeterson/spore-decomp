@@ -66,6 +66,7 @@ public:
     bool Shutdown();
 };
 
+// @ 0x009440e0  EA::Internet::HTTPClient::Shutdown  (ecx = this)
 bool HTTPClient::Shutdown() {
     if (mbInitialized) {
         mMutex.Lock(&kLockTimeout);
