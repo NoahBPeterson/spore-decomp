@@ -1,1 +1,8 @@
-006505d0  58  cSPUIAssetGrid::Find(id): complete, branch/register layout differs
+0064fa20  453  cSPUIAssetGrid::UpdateScrolling: complete (every call and branch present); equiv PASS (376 valid, 80.0% cov); frame 0x1c vs 0x24 and clamp/interpolation register allocation differ
+0064fc40  135  cSPUIAssetGrid::FUN_64fc40 (reverse-order card walk): complete; equiv WEAK (243 valid, 42.2% cov); no mismatch, loop induction/register layout differs
+0064fd00  201  cSPUIAssetGrid::FUN_64fd00 (pending-entry scan): complete; equiv PASS (245 valid, 100.0% cov); branch layout differs
+0064fde0  343  cSPUIAssetGrid::FUN_64fde0 (visible-index collection): complete; equiv WEAK (284 valid, 29.7% cov); no mismatch, register layout differs
+0064ff90  90  CompareGridKeys (__stdcall entry comparator): complete; equiv PASS (398 valid, 100.0% cov); 16-dword __stdcall, prologue/register allocation differs
+00650020  316  cSPUIAssetGrid::ComputeCardLayoutParameters: complete; equiv PASS (279 valid, 67.7% cov); instruction scheduling differs
+00650190  631  cSPUIAssetGrid::FUN_650190 (DoMessage): complete (all four message arms and their callees present); equiv WEAK (399 valid, 15.0% cov); no mismatch, switch/register layout differs
+00650470  316  cSPUIAssetGrid::FUN_650470: complete; equiv WEAK (195 valid, 52.3% cov); no mismatch, frame/register layout differs

@@ -1,9 +1,9 @@
-0064fa20 ?sub_64fa20@@YIXPAX@Z  # sub_64fa20 migrated from s0064fa20 (verbatim, slice spelling)
-0064fc40 ?sub_64fc40@@YIXPAX@Z  # sub_64fc40 migrated from s0064fa20 (verbatim, slice spelling)
-0064fd00 ?sub_64fd00@@YIXPAX@Z  # sub_64fd00 migrated from s0064fa20 (verbatim, slice spelling)
-0064fde0 ?sub_64fde0@@YIXPAX@Z  # sub_64fde0 migrated from s0064fa20 (verbatim, slice spelling)
-0064ff90 ?sub_64ff90@@YIXPAX@Z  # sub_64ff90 migrated from s0064fa20 (verbatim, slice spelling)
-00650020 ?sub_650020@@YIXPAX@Z  # sub_650020 migrated from s0064fa20 (verbatim, slice spelling)
-00650190 ?sub_650190@@YIXPAX@Z  # sub_650190 migrated from s0064fa20 (verbatim, slice spelling)
-00650470 ?sub_650470@@YIXPAX@Z  # sub_650470 migrated from s0064fa20 (verbatim, slice spelling)
-006505d0 ?Find@Grid@@QAEPAUGridEntry@@I@Z  # Grid::Find migrated from s0064fa20 (verbatim, slice spelling)
+0064fa20 ?UpdateScrolling@cSPUIAssetGrid@@QAEXH@Z  # scroll-target clamp + eased interpolation, updates mfScrollActual/SetRange
+0064fc40 ?FUN_64fc40@cSPUIAssetGrid@@QAEXXZ  # walks card entries back-to-front and posts each card's slot-0x34 event
+0064fd00 ?FUN_64fd00@cSPUIAssetGrid@@QAE_NXZ  # finds first ready card while descending, remembers mpPendingEntry
+0064fde0 ?FUN_64fde0@cSPUIAssetGrid@@QAE_NPAH@Z  # collects visible card indices into the caller's int array
+0064ff90 ?CompareGridKeys@@YG_NIIIPAUHolder10@@PAUIRefDtor@@IIIIII01III@Z  # __stdcall entry comparator: lexicographic (d0,d2,d1) compare then releases four holders
+00650020 ?ComputeCardLayoutParameters@cSPUIAssetGrid@@QAEXXZ  # derives columns/rows/card step from the scroll frame's inner window
+00650190 ?FUN_650190@cSPUIAssetGrid@@QAE_NIPAUGridMessage@@@Z  # message dispatch: 0x287259f6 audio, type 6, type 9 and 0x8ef0c8dd scroll arms
+00650470 ?FUN_650470@cSPUIAssetGrid@@QAEXXZ  # refreshes the layout then recomputes the scroll target
+006505d0 ?Find@Grid@@QAEPAUGridEntry@@I@Z  # Grid::Find by id
