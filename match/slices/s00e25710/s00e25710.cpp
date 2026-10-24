@@ -98,7 +98,7 @@ void* cSPUIPosseItem3::ctor(int a2) {
 // through vtable slot 1 (Release); modelled with an opaque helper.
 typedef void (__thiscall *ReleaseFn)(void*);
 static inline void RefRelease(void* p) {
-  if (p) (*(ReleaseFn**)(*(void**)p))[1](p);
+  if (p) ((ReleaseFn*)*(void**)p)[1](p);
 }
 
 extern "C" {
@@ -117,6 +117,7 @@ extern "C" {
   void* __cdecl FUN_00bbc7c0(void*, void*, void*, void*, void*);
   void* __cdecl FUN_00b95480(void*, void*);
   void* __cdecl FUN_00829110(void*, void*, void*, void*);
+  void* __cdecl FUN_006782c0(void*, void*, void*);
   void* __cdecl operator_new(unsigned, const char*, int, int, const char*, int);
   void  __cdecl operator_delete__(void*);
   void  __cdecl FUN_00e255c0_dlg(void*);
@@ -166,10 +167,10 @@ struct cVec15 { void* f(void** First, void** Last); };
 void* cVec15::f(void** First, void** Last) {
   char* s = (char*)this;
   void** end = *(void***)(s + 4);
-  void** p = First; void** q = Last;
-  while (q != end) { *p = *q; ++p; ++q; }
-  for (void** it = Last; it != end; ++it) RefRelease(*it);
-  *(void***)(s + 4) = (void**)((char*)end - ((char*)Last - (char*)First));
+  void* newEnd = FUN_006782c0(Last, end, First);
+  for (void** it = (void**)newEnd; it < end; ++it) RefRelease(*it);
+  int n = (int)(((char*)Last - (char*)First) >> 2);
+  *(void***)(s + 4) = (void**)((char*)end - n * 4);
   return First;
 }
 
@@ -335,7 +336,7 @@ void __cdecl FUN_00e26530(char* first, char* last, char* end, void* pred) {
   FUN_00e25f40(first, last, pred);
   char* i = last;
   for (; i < end; i += 8) {
-    if (!fn(first, i)) continue;
+    if (!fn(i, first)) continue;
     char* a = *(char**)i;
     char* b = *(char**)(i + 4);
     RefRelease(a); RefRelease(b);
