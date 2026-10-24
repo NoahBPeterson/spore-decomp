@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Byte-exact matches: the two eastl heap-repair helpers that take the cPropertyListNameSort
+# comparator by value (the by-value copy lands in the callee's argument slot, exactly as the
+# original builds it).
+slices/s00d178a0/s00d178a0.cpp  ?AdjustHeapHole@@YAXPAIHHHIUcPropertyListNameSort@@@Z  00d180c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d178a0/s00d178a0.cpp  ?AdjustHeap@@YAXPAI0UcPropertyListNameSort@@@Z  00d18180  /O2 /MD /Gy /TP /arch:SSE /fp:fast
