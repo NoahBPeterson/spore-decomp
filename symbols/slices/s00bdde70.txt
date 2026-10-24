@@ -1,1 +1,7 @@
 00bdde70 SP::cCity::UpdateCityHallRollover  # thiscall (cSPUIRolloverCivCityHall*) ret 4; this offsets (+0x540 specialty, +0x590 civilization, +0x5a4 allegiance map, +0x668/66c happy/unhappy, +0x678 income, +0x698 party, +0x6c0 riot) match the dev PDB cCity members shifted by 0xe0..0xf8
+00bde4a0 SP::cCity::FUN_00bde4a0  # __fastcall this-in-ecx, no stack args; returns int* (selected city or 0); reads civ +0xb0 city vec, +0x298 rank, +0x4b0 float; calls 00bef870/00bc3190/00bc3130/00c75420/00a68fb0/00c004c0/00ca71d0/0041dd30/00bef6c0/00b3d350/00b88590/00b81470/00b7e4d0/00bdb880/00bf2170/00bf2100/00c9e6d0/00bf9770/00b5b800/00bddda0/00cac000
+00bde910 eastl::vector<EmptyBubble>::DoInsertValue  # __thiscall (ecx=vec this, ret 8); copy_backward 00c50ad0 + uninit_copy 00bda850; element 0x14
+00bdeb10 eastl::vector<CityBubble>::CopyBack  # __thiscall (ecx=dst vec, stack src), ret 8; eastl copy_backward of 0x50-byte elements, then end += (dst-src)
+00bdeb80 eastl::vector<CityBubble>::DoInsertValue  # __thiscall (ret 8); copy-ctor 00bda7d0 + uninit_copy 00bdaa00; element 0x50
+00bdecb0 SP::city element destructor  # __cdecl (city elem*, ...); frees owned buffers at +0x40 and +0x50 then operator delete[]; element 0x60; BYTE-EXACT
+00bded00 eastl::vector<RunInfo>::DoInsertValue  # __thiscall (ret 8); uninit_copy 00b115c0 + copy_backward 00edba80; element 0x10
