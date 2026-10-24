@@ -1,1 +1,5 @@
-00de8ad0 ?DoMessage@cSPEditorUI@@UAE_NIPAX@Z  # cSPEditorUI::DoMessage migrated from s00de8ad0 (verbatim, slice spelling)
+00de8ad0 ?DoMessage@cSPEditorUI@@UAE_NIPAX@Z  # cSPEditorUI::DoMessage (preserved from s00de8ad0; nonmatching)
+00de95a0 ?OnExitRequested@cSPEditorUI@@QAEXXZ  # cSPEditorUI::OnExitRequested (newly claimed, byte-exact)
+00de9600 ?OnEditorMessageReceived@cEditorMessageTarget@@QAEXPAX@Z  # cEditorMessageTarget::OnEditorMessageReceived (newly claimed; partial)
+00de97a0 ?MoveTail@cEntryVector@@QAEPAUcPollenEntry@@PAU2@0@Z  # cEntryVector::MoveTail (newly claimed; partial)
+00de97f0 ?insert@cEntryVector@@QAEXPAUcPollenEntry@@IABU2@@Z  # cEntryVector::insert (newly claimed; partial)

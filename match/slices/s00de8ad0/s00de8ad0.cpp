@@ -132,6 +132,7 @@ extern const ResourceKey kCalloutSaveConfirm;                            // 0x01
 extern const ResourceKey kCalloutExit;                                   // 0x015a3884
 extern const ResourceKey kCalloutError;                                  // 0x015a3890
 extern const ResourceKey kCalloutExitConfirm;                            // 0x015a389c
+extern const ResourceKey kCalloutCloseConfirm;                           // 0x015a38a8
 void CalloutMessageBox(cCalloutTarget* target, const ResourceKey* key);  // 0x00809db0
 
 int GetCurrentGameMode();                                                // 0x00b5b800
@@ -145,6 +146,7 @@ struct cEditorDialog {
     uint32_t pad[0x3c / 4];
     int mResult;                                                         // +3c
     bool mbWasPaused;                                                    // +40
+    bool IsReadyToClose();                                               // 0x00e205d0
     void Close();                                                        // 0x00e20860
 };
 
@@ -232,7 +234,169 @@ public:
     void ShowPublish(int a);                 // 0x00de53d0
     void PreparePublish();                   // 0x00de4b00
     void UpdateTitle();                      // 0x00de4850
+    void OnExitRequested();                  // 0x00de95a0
 };
+
+struct cMessageSlot {
+    uint8_t mData[0x1c];
+    void* GetData(void* key);                // 0x00de7590
+};
+
+struct cEditorMessageTarget {
+    uint8_t pad00[0x38];
+    cMessageSlot mSlot38;                    // +38
+    cMessageSlot mSlot54;                    // +54
+    cMessageSlot mSlot70;                    // +70
+    void OnEditorMessageReceived(void* pMessage);  // 0x00de9600
+};
+
+struct IAttachment {
+    virtual void _a00();
+    virtual void Release();                  // +04
+};
+
+struct IMessageReader {
+    virtual void _r00(); virtual void _r04(); virtual void _r08();
+    virtual bool ReadMessage(void* arg, void* out, int a, int b, int c, int d);  // +0c
+};
+IMessageReader* CreateMessageReader();                                    // 0x0067dcd0
+
+struct IEditorNode {
+    virtual void _n00(); virtual void _n04(); virtual void _n08(); virtual void _n0c();
+    virtual void _n10(); virtual void _n14(); virtual void _n18(); virtual void _n1c();
+    virtual void _n20(); virtual void _n24(); virtual void _n28();
+    virtual void SetAttachment(void* p);                                 // +2c
+};
+IEditorNode* CreateEditorNode(void* source);                              // 0x006a1c40
+void SetEditorNodeValue(IEditorNode* node, void* value);                 // 0x006a1710
+void ReleaseEditorNode(IEditorNode* node);                               // 0x006a3dd0
+
+// The 0xbc-byte entry vector also has an insert/move-tail pair in this slice.
+struct cEntryVector {
+    cPollenEntry* mpBegin;                   // +00
+    cPollenEntry* mpEnd;                     // +04
+    cPollenEntry* mpCapacity;                // +08
+    uint32_t mAllocator;                     // +0c
+
+    cPollenEntry* MoveTail(cPollenEntry* first, cPollenEntry* dest);      // 0x00de97a0
+    void insert(cPollenEntry* position, unsigned int count,
+                const cPollenEntry& value);                              // 0x00de97f0
+    void DestroyRange(cPollenEntry* first, cPollenEntry* last);           // 0x00de5ee0
+};
+
+cPollenEntry* CopyConstructEntries(cPollenEntry* first, cPollenEntry* last,
+                                   cPollenEntry* dest);                   // 0x00de6070
+void CopyConstructEntry(cPollenEntry* dest, const cPollenEntry& value);   // 0x00de60f0
+void* __cdecl MessageAllocate(unsigned int size, const char* name, int flags,
+                              int align, const char* file, int line);      // 0x00f473a0
+void __cdecl MessageFree(void* p);                                        // 0x00f47380
+
+// @ 0x00de95a0
+void cSPEditorUI::OnExitRequested()
+{
+    if (mpDialog->IsReadyToClose()) {
+        mDialogState = 1;
+        CalloutMessageBox(&gCalloutTarget, &kCalloutCloseConfirm);
+    } else {
+        MessageServer()->SendMessage(0xce7afa41, 0, 0);
+    }
+    if (mLoginAction != 10)
+        ShowDialog(10, 1);
+}
+
+// @ 0x00de9600
+void cEditorMessageTarget::OnEditorMessageReceived(void* pMessage)
+{
+    IMessageReader* reader = CreateMessageReader();
+    void* attachment = 0;
+    if (!reader || !reader->ReadMessage(pMessage, &attachment, 0, 0, 0, 0))
+        return;
+    if (!attachment)
+        return;
+
+    void* source = reinterpret_cast<char*>(attachment) + 0x18;
+    IEditorNode* node = CreateEditorNode(source);
+    if (!node)
+        return;
+
+    node->SetAttachment(source);
+    SetEditorNodeValue(node, *reinterpret_cast<void**>(reinterpret_cast<char*>(source) + 0x30));
+
+    // The retail code copies three 12-byte payloads into the editor panels at
+    // +38, +54 and +70; the first two come from the attachment/node, the last
+    // is the message's own 12-byte payload.
+    uint32_t* sourceValues = reinterpret_cast<uint32_t*>(source);
+    uint32_t* messageValues = reinterpret_cast<uint32_t*>(pMessage);
+    if (void* data = mSlot38.GetData(pMessage)) {
+        uint32_t* out = reinterpret_cast<uint32_t*>(data);
+        out[0] = sourceValues[0];
+        out[1] = sourceValues[1];
+        out[2] = sourceValues[2];
+    }
+    if (void* data = mSlot54.GetData(pMessage)) {
+        uint32_t* out = reinterpret_cast<uint32_t*>(data);
+        out[0] = sourceValues[0];
+        out[1] = sourceValues[1];
+        out[2] = sourceValues[2];
+    }
+    if (void* data = mSlot70.GetData(pMessage)) {
+        uint32_t* out = reinterpret_cast<uint32_t*>(data);
+        out[0] = messageValues[0];
+        out[1] = messageValues[1];
+        out[2] = messageValues[2];
+    }
+
+    ReleaseEditorNode(node);
+    reinterpret_cast<IAttachment*>(attachment)->Release();
+}
+
+extern "C" void* __cdecl memmove(void*, const void*, unsigned int);
+
+// @ 0x00de97a0
+cPollenEntry* cEntryVector::MoveTail(cPollenEntry* first, cPollenEntry* dest)
+{
+    cPollenEntry* const newEnd = CopyConstructEntries(first, mpEnd, dest);
+    DestroyRange(newEnd, mpEnd);
+    mpEnd += dest - first;
+    return first;
+}
+
+// @ 0x00de97f0
+void cEntryVector::insert(cPollenEntry* position, unsigned int count,
+                          const cPollenEntry& value)
+{
+    if (count == 0)
+        return;
+
+    const unsigned int index = (unsigned int)(position - mpBegin);
+    const unsigned int oldSize = (unsigned int)(mpEnd - mpBegin);
+
+    if (count > (unsigned int)(mpCapacity - mpEnd)) {
+        unsigned int grow = oldSize * 2;
+        if (oldSize == 0)
+            grow = 1;
+        const unsigned int newSize = grow > oldSize + count ? grow : oldSize + count;
+        cPollenEntry* newData = newSize
+            ? (cPollenEntry*)MessageAllocate(newSize * sizeof(cPollenEntry),
+                                             (const char*)0x013f09b4, 0, 0,
+                                             (const char*)0x013ebb38, 0xd1)
+            : 0;
+        if (oldSize)
+            memmove(newData, mpBegin, oldSize * sizeof(cPollenEntry));
+        if (mpBegin != 0 && *((unsigned int*)mpBegin - 1) != 0)
+            MessageFree(mpBegin);
+        mpBegin = newData;
+        mpEnd = newData + oldSize;
+        mpCapacity = newData + newSize;
+    }
+
+    position = mpBegin + index;
+    memmove(position + count, position,
+            (unsigned int)(mpEnd - position) * sizeof(cPollenEntry));
+    for (unsigned int i = 0; i < count; ++i)
+        position[i] = value;
+    mpEnd += count;
+}
 
 bool cSPEditorUI::DoMessage(uint32_t messageID, void* pMessage)
 {
