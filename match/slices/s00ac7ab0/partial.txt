@@ -1,6 +1,4 @@
 # va  diff-bytes  reason
-00ac7ab0  573  approximate; citizen order/spawn loop, control flow + vcall schedule differ (size 593); difftest FAIL
-00ac7d10  170  approximate; recursive float order fill; difftest FAIL
 00ac7de0  169  approximate; order attach, stack/cc mismatch; difftest FAIL (esp)
 00ac7eb0  39   approximate; wrapper calling the two helpers; difftest UNSUPPORTED (0/400 valid)
 00ac7ef0  115  approximate; predicate, sub-object vcalls; difftest FAIL

@@ -75,6 +75,15 @@ extern "C" void* operator_new6(int size, const char* tag, int a, int b, int c, i
 extern "C" void  operator_delete(void* p);                                // 0xf47380
 extern "C" void* SP_NounManager(int id);                                  // 0xb3d300
 extern "C" void* SP_cGameNounManager_CreateNoun(void* mgr, void* id);     // 0xb20c60
+// Retail callees that take their object in ecx (__thiscall); the object differs per call.
+struct CThisThunk {
+    int   FUN_00cee370();                 // 0xcee370
+    float FUN_00cee380();                 // 0xcee380
+    void* FUN_00cee330();                 // 0xcee330
+    void  FUN_00cee820(void* p);          // 0xcee820
+    void  FUN_00c35b20(int a, float b);   // 0xc35b20
+    void* CreateNoun();                   // 0xb20c60
+};
 extern "C" void* SP_BehaviorManager();                                    // 0xb3d260
 extern "C" void  LoadArithmeticaFile(int a, int b, void* p);              // 0x7f2240
 extern "C" void  SP_cDirectPropertyList_GetIntProperty(void* p, int id);  // 0x6a2660
@@ -112,9 +121,13 @@ extern "C" float FUN_00cee380(void* self);                                // 0xc
 extern "C" void* FUN_00cee330(void* self);                                // 0xcee330
 extern "C" void  FUN_00cee820(void* self, void* p);                       // 0xcee820
 extern "C" void  FUN_00cee650(void* self, void* p);                       // 0xcee650
-extern "C" void  FUN_00c35b40(void* self, float v);                       // 0xc35b40
+// The +0x134 node is a refcounted object whose time setter is a __thiscall member.
+struct CTimeNode {
+    void FUN_00c35b40(float v);                                       // 0xc35b40
+};
+extern "C" void FUN_00c35b40(void* self, float v);   // 0xc35b40 (cdecl form used by FUN_00ac7de0)
 extern "C" void  FUN_00c35b20(void* self, int a, float b);                // 0xc35b20
-extern "C" int   FUN_00ac7790(int* self, int a, int b);                   // 0xac7790
+extern "C" int __stdcall FUN_00ac7790(int* self, float amount, int kind); // 0xac7790 (ret 0xc)
 extern "C" void  FUN_00ac79e0(int* self, void* p);                        // 0xac79e0
 
 // ===========================================================================
@@ -124,9 +137,9 @@ int COrder::FUN_00ac7ab0(float amount, COrder* order, int kind)
 {
     int result = 0;
     if (amount == 0.0f) {
-        return FUN_00ac7790((int*)order, 0, kind);
+        return FUN_00ac7790((int*)order, 0.0f, kind);
     }
-    float f0 = FUN_00cee380(order);
+    float f0 = ((CThisThunk*)order)->FUN_00cee380();
     float fmax = order->d40();
     if (fmax < f0 + amount) amount = fmax - f0;
 
@@ -144,7 +157,7 @@ int COrder::FUN_00ac7ab0(float amount, COrder* order, int kind)
             cur -= was;
             if (*(int*)(node + 0x12c) == kind && cur > 1.5258789e-05f) {
                 float take = (cur <= amount) ? cur : amount;
-                FUN_00c35b40((void*)node, take + was);
+                ((CTimeNode*)node)->FUN_00c35b40(take + was);
                 amount -= take;
                 result = node;
             }
@@ -158,11 +171,11 @@ int COrder::FUN_00ac7ab0(float amount, COrder* order, int kind)
         if (n > 0) {
             do {
                 float u = order->d3c();
-                if (FUN_00cee370(order) < order->field1c) {
+                if (((CThisThunk*)order)->FUN_00cee370() < order->field1c) {
                     void* mgr = SP_NounManager(0x18c431c);
-                    int obj = (int)SP_cGameNounManager_CreateNoun(mgr, (void*)0x18c431c);
-                    FUN_00c35b20((void*)obj, kind, u);
-                    FUN_00cee820(order, (void*)obj);
+                    int obj = (int)((CThisThunk*)mgr)->CreateNoun();
+                    ((CThisThunk*)obj)->FUN_00c35b20(kind, u);
+                    ((CThisThunk*)order)->FUN_00cee820((void*)obj);
                     order->d08(obj);
                     result = obj;
                 } else {
@@ -173,11 +186,11 @@ int COrder::FUN_00ac7ab0(float amount, COrder* order, int kind)
         float unit2 = order->d3c();
         amount -= unit2 * n;
         if (amount > 1.5258789e-05f) {
-            if (FUN_00cee370(order) < order->field1c) {
+            if (((CThisThunk*)order)->FUN_00cee370() < order->field1c) {
                 void* mgr = SP_NounManager(0x18c431c);
-                int obj = (int)SP_cGameNounManager_CreateNoun(mgr, (void*)0x18c431c);
-                FUN_00c35b20((void*)obj, kind, amount);
-                FUN_00cee820(order, (void*)obj);
+                int obj = (int)((CThisThunk*)mgr)->CreateNoun();
+                ((CThisThunk*)obj)->FUN_00c35b20(kind, amount);
+                ((CThisThunk*)order)->FUN_00cee820((void*)obj);
                 order->d08(obj);
                 return obj;
             }
@@ -196,7 +209,7 @@ float COrder::FUN_00ac7d10(float amount, int list, int node)
     if (node != 0) {
         float cap = *(float*)(node + 0x134);
         if (amount < cap) {
-            FUN_00c35b40((void*)node, cap - amount);
+            ((CTimeNode*)node)->FUN_00c35b40(cap - amount);
             return amount;
         }
         FUN_00ac79e0((int*)node, *(void**)(node + 0x128));
@@ -204,8 +217,8 @@ float COrder::FUN_00ac7d10(float amount, int list, int node)
     }
     if (list != 0 && amount > 0.0f) {
         for (;;) {
-            if (FUN_00cee330(this) == 0) break;
-            void* n = FUN_00cee330(this);
+            if (((CThisThunk*)list)->FUN_00cee330() == 0) break;
+            void* n = ((CThisThunk*)list)->FUN_00cee330();
             float r = FUN_00ac7d10(amount - done, 0, (int)n) + done;
             done = r;
             if (amount <= r) return r;
