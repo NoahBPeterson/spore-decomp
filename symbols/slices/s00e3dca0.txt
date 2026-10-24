@@ -1,1 +1,6 @@
 00e3dca0 cBigEditorObject::Dtor  # destructor body: vtbl stores 0x1481eb4.., releases ~60 refs, 19 string16, hashtable, then ~cGonzagoSubsystem and base vtbls
+00e3e350 ?Activate@cBigEditorObject@@QAEXDPBXD@Z  # SP::cSPUISpaceTrading::Activate (toggle space-trading panel: window ids 0x762350f/0x76236bc/0x76236be/0x76236bd/0x64db520, key sentinel 0x1654c10)
+00e3e7f0 ?PrepareBuildingMenu@cBigEditorObject@@QAEXXZ  # SP::cCityInputStrategy::PrepareBuildingMenu (title string for window 0xd54aa976 from the current asset name, hash-switched 0x2db6dad3/0xbeb528cb/0xa426730b/0xad56080c/0xf71fa311)
+00e3ea00 ?ForwardTriples@@YAXPAUTriple@@0@Z  # anonymous namespace'::ForwardTriples (pack two triples into SixDwords, FUN_0067de90(0xc) builder then Init)
+00e3ea70 ?RandomKey@cBigEditorObject@@QAEXPAUKeyTriple@@@Z  # SP::cSPUISpaceTrading::RandomKey (pick an untried key from vec460, dedup against vec474, bounded by mn488)
+00e3ec20 ?FindOrInsertKey@KeyMap@@QAEPAUKeyTriple@@PBU2@@Z  # eastl::map<int,KeyTriple> find-or-insert over descending-key rbtree (key +0x10, value +0x14, sentinel +4, root +0xc), insert via FUN_00e3da30
