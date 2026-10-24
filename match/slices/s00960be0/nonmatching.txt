@@ -1,20 +1,20 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
-00960be0  622  geometry rect accumulation: frame size and SSE schedule differ (706 vs 830 bytes); equiv: FAIL (now testable via member Geom; output rect differs)
-00960f20  184  SetUserData: vcall/IID schedule and bit clear order differ
-00960fe0  321  TestHit: float compare and event-block layout differ (misassigned to SerUpdate slot)
+00960be0  781  geometry rect accumulation: frame size and SSE schedule differ (851 vs 830 bytes); equiv: PASS 86.5%
+00960f20  184  SetUserData: vcall/IID schedule and bit clear order differ (175 vs 190 bytes); equiv: PASS 100%
+00960fe0  378  TestHit: rect transform and event-block layout differ (391 vs 364 bytes); equiv: PASS 76.5%
 00961150  213  ScreenToWindow: manager scan / transform schedule differs
-00961260  3    GetId: register order (ecx/eax) around the store differs
-00961280  103  ListRemove: splice helper argument setup and this-adjust differ
-00961300  127  ListInsert: list relink register schedule differs
+00961260  19   GetId: null guard adds test/je (16 vs 12 bytes); equiv: PASS 100%
+00961280  112  ListRemove: splice helper argument setup and this-adjust differ (115 vs 121 bytes); equiv: WEAK 37.5% coverage
+00961300  137  ListInsert: list relink register schedule differs (135 vs 146 bytes); equiv: WEAK 32.8% coverage
 009613a0  25   Find60: loop read/increment order differs
 009613e0  94   RecomputeFlags: list offset/register schedule differs
-009614a0  239  SerUpdate: transform copy and vcall schedule differ
+009614a0  418  SerUpdate: transform copy and vcall schedule differ (365 vs 281 bytes); equiv: PASS 89.0%
 00961680  77   CloneNode: allocator vcall and field-copy order differ
 009616f0  43   serialization table build: list walk and store order differ
-00961760  211  SetFlag: switch tree and event-block layout differ
+00961760  231  SetFlag: switch tree and event-block layout differ (270 vs 252 bytes); equiv: PASS 74.2%
 00961860  86   Show: flag test/event schedule differs
 009618e0  77   Hide: flag clear/event schedule differs
 00961990  116  DestroyProc: winproc list walk and free schedule differ
 00961a50  106  ClearProcs: list purge loop schedule differs
 00961ae0  62   PurgeProcs: list walk and free schedule differ
-00961b40  292  vector-of-lists copy: allocation and node clone schedule differ; equiv: WEAK (member Copy, 28.7% coverage)
+00961b40  280  vector-of-lists copy: allocation and node clone schedule differ (294 vs 309 bytes); equiv: WEAK 28.7% coverage

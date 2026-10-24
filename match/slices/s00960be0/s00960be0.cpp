@@ -66,7 +66,7 @@ struct Win {
     Transform mXform108;                // +0x108
     char   pad_14c[0x40];               // ..0x18c
     Mat44  mMat18c;                     // +0x18c
-    char   pad_1d0[0xc];                // ..0x1dc
+    char   pad_1cc[0x10];               // ..0x1dc
     IUnk*  mpUnk1dc;                    // +0x1dc
     IUnk*  mpUnk1e0;                    // +0x1e0
     char   pad_1e4[0x1c];               // ..0x200
@@ -93,16 +93,20 @@ struct Win {
 };
 
 // ---------------------------------------------------------------- externs
-extern "C" void FUN_008fe6d0(void* a, void* b, void* c);          // 0x8fe6d0
-extern "C" void FUN_0095af00(void* p);                              // 0x95af00
-extern "C" void FUN_009592a0(void* p);                              // 0x9592a0
-extern "C" void FUN_00958110(void* p);                              // 0x958110
-extern "C" void FUN_009580e0(void* p);                              // 0x9580e0
-extern "C" void FUN_009588c0(void* p);                              // 0x9588c0
-extern "C" void FUN_00960b40(void* p);                              // 0x960b40
-extern "C" void FUN_00960ae0(void* p);                              // 0x960ae0
-extern "C" int  FUN_0095fc50(void* p, int arg);                     // 0x95fc50
-extern "C" void FUN_009634b60(void* out, void* a, void* b);         // 0x634b60
+extern "C" void __stdcall FUN_008fe6d0(void* a, void* b, void* c);   // 0x8fe6d0
+extern "C" void __fastcall FUN_0095af00(void* p);                     // 0x95af00
+extern "C" void FUN_009592a0();                                       // 0x9592a0
+extern "C" void __fastcall FUN_00958110(void* p);                     // 0x958110
+extern "C" void FUN_009580e0();                                       // 0x9580e0
+extern "C" void FUN_009588c0();                                       // 0x9588c0
+extern "C" void __fastcall FUN_00960b40(void* p);                     // 0x960b40
+extern "C" void __fastcall FUN_00960ae0(void* p);                     // 0x960ae0
+extern "C" int  FUN_0095fc50();                                       // 0x95fc50
+extern "C" int  FUN_009634b60();                                      // 0x634b60
+typedef void (__thiscall *TC_void_1)(void*, void*);
+typedef void (__thiscall *TC_void_p)(void*, char*);
+typedef int  (__thiscall *TC_int_1)(void*, int);
+typedef int  (__thiscall *TC_int_2)(void*, void*, void*);
 extern "C" unsigned g_SerTypeTable[];                               // 0x154eea0
 
 // ---------------------------------------------------------------- 00960be0 (geometry)
@@ -131,18 +135,19 @@ bool GeomObj::Geom(float* out)
         float f9  = *(float*)(p + 0x88);
         float f10 = *(float*)(p + 0x94);
         float f8  = *(float*)(p + 0x8c);
-        float local_18 = -((*(float*)(p + 0x90) - *(float*)(p + 0x88)) * 0.5f);
-        float local_14 = -((*(float*)(p + 0x94) - *(float*)(p + 0x8c)) * 0.5f);
-        float local_10 = 0.0f;
-        float local_c[3];
-        float* pf = ((Mat44*)(p + 0xc4))->TransformPoint3(local_c, &local_18);
-        local_18 = pf[0] + (f7 + f9) * 0.5f;
-        local_14 = pf[1] + (f10 + f8) * 0.5f;
-        local_10 = pf[2];
+        float pt[3];
+        float tmp[3];
+        pt[0] = -((*(float*)(p + 0x90) - *(float*)(p + 0x88)) * 0.5f);
+        pt[1] = -((*(float*)(p + 0x94) - *(float*)(p + 0x8c)) * 0.5f);
+        pt[2] = 0.0f;
+        float* pf = ((Mat44*)(p + 0xc4))->TransformPoint3(tmp, pt);
+        pt[0] = pf[0] + (f7 + f9) * 0.5f;
+        pt[1] = pf[1] + (f10 + f8) * 0.5f;
+        pt[2] = pf[2];
         for (unsigned i = *(unsigned*)(p + 0x38); i != 0; i = *(unsigned*)(i + 0x38)) {
             if ((*(unsigned*)(i + 0x2c) & 0x400) != 0) {
-                float a = -local_18;
-                float b = -local_14;
+                float a = -pt[0];
+                float b = -pt[1];
                 float c = (*(float*)(i + 0x90) - *(float*)(i + 0x88)) + a;
                 float d = (*(float*)(i + 0x94) - *(float*)(i + 0x8c)) + b;
                 if (!bVar6) {
@@ -174,12 +179,12 @@ bool GeomObj::Geom(float* out)
             float f9b  = *(float*)(i + 0x88);
             float f10b = *(float*)(i + 0x94);
             float f8b  = *(float*)(i + 0x8c);
-            local_18 = local_18 - (*(float*)(i + 0x90) - *(float*)(i + 0x88)) * 0.5f;
-            local_14 = local_14 - (*(float*)(i + 0x94) - *(float*)(i + 0x8c)) * 0.5f;
-            pf = ((Mat44*)(p + 0xc4))->TransformPoint3(local_c, &local_18);
-            local_18 = pf[0] + (f7b + f9b) * 0.5f;
-            local_14 = pf[1] + (f10b + f8b) * 0.5f;
-            local_10 = pf[2];
+            pt[0] = pt[0] - (*(float*)(i + 0x90) - *(float*)(i + 0x88)) * 0.5f;
+            pt[1] = pt[1] - (*(float*)(i + 0x94) - *(float*)(i + 0x8c)) * 0.5f;
+            pf = ((Mat44*)((char*)i + 0xc4))->TransformPoint3(tmp, pt);
+            pt[0] = pf[0] + (f7b + f9b) * 0.5f;
+            pt[1] = pf[1] + (f10b + f8b) * 0.5f;
+            pt[2] = pf[2];
         }
     }
     return bVar6;
@@ -212,15 +217,19 @@ void Win::SetUserData(IUnk* p)
 }
 
 // ---------------------------------------------------------------- 00960fe0 (hit test)
+static inline float AbsF(float v)
+{
+    unsigned u = *(unsigned*)&v & 0x7fffffffu;
+    return *(float*)&u;
+}
+
 // @ 0x00960fe0
 bool Win::TestHit(float x, float y)
 {
     char* p = (char*)this;
     float local_30 = (*(float*)(p + 0x90) - *(float*)(p + 0x88)) * 0.5f;
     float fVar1    = (*(float*)(p + 0x8c) - *(float*)(p + 0x84)) * 0.5f;
-    float dx = x - fVar1;  if (dx < 0) dx = -dx;
-    float dy = y - local_30; if (dy < 0) dy = -dy;
-    if (fVar1 < dx || local_30 < dy)
+    if (local_30 < AbsF(y - local_30) || fVar1 < AbsF(x - fVar1))
         return false;
     float rect[4];
     bool cVar2 = ((GeomObj*)((char*)this - 4))->Geom(rect);
@@ -230,7 +239,7 @@ bool Win::TestHit(float x, float y)
         b[1] = 0.0f;
         b[2] = *(float*)(p + 0x8c) - *(float*)(p + 0x84);
         b[3] = *(float*)(p + 0x90) - *(float*)(p + 0x88);
-        FUN_009634b60(rect, rect, b);
+        ((TC_int_2)FUN_009634b60)(rect, rect, b);
         if (x < rect[0]) return false;
         if (y < rect[1]) return false;
         if (rect[2] <= x) return false;
@@ -290,6 +299,8 @@ bool Win::ScreenToWindow(float x, float y, float* out)
 // @ 0x00961260
 void Win::GetId(void** out)
 {
+    if (!out)
+        return;
     *out = m38;
 }
 
@@ -306,7 +317,7 @@ void Win::ListRemove(void* iface)
     char* ip = (char*)iface;
     if (!iface)
         return;
-    unsigned r = (*(unsigned(__thiscall**)(void*))*(void**)ip)(iface);
+    unsigned r = (*(unsigned(__thiscall**)(void*))((char*)*(void**)ip + 0x10))(iface);
     if (r != (unsigned)((this != (Win*)4) ? (unsigned)this : 0))
         return;
     char* head = (char*)&m38;
@@ -325,7 +336,7 @@ void Win::ListRemove(void* iface)
         }
     }
     if (n != anchor) {
-        FUN_008fe6d0(n, head, anchor);
+        FUN_008fe6d0(n, anchor, head);
         if (*(int*)((char*)this + 0x30) != 0)
             FUN_00958110(mpMgr30);
     }
@@ -338,7 +349,7 @@ void Win::ListInsert(void* iface)
     char* ip = (char*)iface;
     if (!iface)
         return;
-    unsigned r = (*(unsigned(__thiscall**)(void*))*(void**)ip)(iface);
+    unsigned r = (*(unsigned(__thiscall**)(void*))((char*)*(void**)ip + 0x10))(iface);
     if (r != (unsigned)((this != (Win*)4) ? (unsigned)this : 0))
         return;
     char* anchor = ip + 4;
@@ -411,7 +422,7 @@ void Win::RecomputeFlags()
         return;
     if (*(unsigned*)(a + 0x34) == 0)
         return;
-    FUN_009592a0(a);
+    ((TC_void_1)FUN_009592a0)(*(void**)(a + 0x34), a);
 }
 
 // ---------------------------------------------------------------- 00961450 (recursive notify)
@@ -460,8 +471,8 @@ void Win::SerUpdate()
     }
     (*(void(__thiscall**)(char*))((char*)*(void**)(a + 4) + 0x90))(a + 4);
 lab:
-    FUN_009580e0(m34);
-    FUN_009588c0(m34);
+    ((TC_void_p)FUN_009580e0)(m34, a);
+    ((TC_void_p)FUN_009588c0)(m34, a);
     FUN_00958110(m34);
     (*(void(__thiscall**)(char*))((char*)*(void**)(a + 4) + 0x94))(a + 4);
     int local[3];
@@ -535,13 +546,13 @@ void Win::SetFlag(unsigned flag, unsigned char on)
             if ((mBits2d & 1) != 0)
                 goto lab;
             if (mpMgr30 != 0)
-                FUN_009592a0(a);
+                ((TC_void_1)FUN_009592a0)(mpMgr30, a - 4);
             goto lab;
         }
         if (flag == 1) {
             if ((mBits2c & 4) == 0) {
                 FUN_00960b40(a - 4);
-                if (!on) FUN_0095fc50(a - 4, 1);
+                if (!on) ((TC_int_1)FUN_0095fc50)(a - 4, 1);
                 NotifyTree();
                 if (mpMgr30 != 0)
                     FUN_00958110(mpMgr30);
@@ -550,7 +561,7 @@ void Win::SetFlag(unsigned flag, unsigned char on)
         }
         if (flag != 2)
             goto lab;
-        if (!on) FUN_0095fc50(a - 4, 1);
+        if (!on) ((TC_int_1)FUN_0095fc50)(a - 4, 1);
     } else if (flag != 0x400) {
         goto lab;
     }
@@ -558,10 +569,11 @@ void Win::SetFlag(unsigned flag, unsigned char on)
     NotifyTree();
 lab:
     if (mpMgr30 != 0) {
-        int local[3];
+        int local[4];
         local[0] = 0xe;
         local[1] = 1;
         local[2] = (int)old;
+        local[3] = (int)nv;
         int self = (this != (Win*)4) ? (int)this : 0;
         (*(void(__thiscall**)(IMgr*, int, int, int*, int))((char*)*(void**)mpMgr30 + 0x10))(
             mpMgr30, self, self, local, 0);
@@ -729,9 +741,8 @@ unsigned* ListCopy::Copy(unsigned* src)
     dst[8] = src[8];
     if (dst[3] != 0) {
         unsigned size = dst[2] * 4;
-        void* alloc = (void*)dst[7];
-        void* buf = (*(void*(__thiscall**)(void*, unsigned, int, void*))((char*)*(void**)alloc + 8))(
-            alloc, size + 4, 0, (void*)dst[8]);
+        void* buf = (*(void*(__thiscall**)(void*, unsigned, int, void*))((char*)*(void**)dst[7] + 8))(
+            (void*)dst[7], size + 4, 0, (void*)dst[8]);
         *(unsigned*)((char*)buf + size) = 0xffffffff;
         dst[1] = (unsigned)buf;
         unsigned idx = 0;
@@ -741,7 +752,7 @@ unsigned* ListCopy::Copy(unsigned* src)
                 unsigned* node = *(unsigned**)((char*)src[1] + idx * 4);
                 for (; node != 0; node = (unsigned*)node[4]) {
                     unsigned* obj = (unsigned*)(*(void*(__thiscall**)(void*, int, int, void*))(
-                        (char*)*(void**)alloc + 8))(alloc, 0x18, 0, (void*)dst[8]);
+                        (char*)*(void**)dst[7] + 8))((void*)dst[7], 0x18, 0, (void*)dst[8]);
                     if (obj != 0) {
                         obj[0] = node[0];
                         obj[1] = node[1];
