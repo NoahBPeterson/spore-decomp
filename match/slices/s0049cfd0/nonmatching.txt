@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+0049cfd0  406  complete; symmetric-limb creation (flag propagation, block build, position/orientation); /Od frame + by-value arg slots differ
+0049d1f0  366  complete; recursive flag sweep + facing-matrix build; /Od frame slot layout differs
+0049d390  403  complete; mirrored transform compose (Matrix33_Convert/operator*/operator+/SetPosition); /Od frame and float-copy slots differ
+0049d550  174  complete; by-value matrix combine via BuildFacingMatrix; /Od by-value arg temps differ
+0049d6b0  1307  complete; skin pick + repin + orientation resolve path; /Od frame and slot layout differ
+0049dd20  165  complete; recursive child traversal with temp vector; /Od frame differs
