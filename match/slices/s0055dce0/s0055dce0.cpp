@@ -13,14 +13,28 @@ struct PaintStub {
     void* FUN_0055ec10(unsigned flags);
 };
 
-struct V32 { uint32_t* mpBegin; uint32_t* mpEnd; uint32_t* mpCapacity; };
+struct V32 {
+    uint32_t* mpBegin; uint32_t* mpEnd; uint32_t* mpCapacity;
+    void FUN_004769b0(uint32_t* first, uint32_t* last);   // 0x4769b0 (thiscall, ret 8)
+    void FUN_00425990();                                   // 0x425990 (thiscall, no stack args)
+};
+struct UintArray { int* FUN_00572590(); };                 // 0x572590 (thiscall, no stack args)
+struct PaintSet {                                          // eastl::vector<uint32_t> on the stack
+    uint32_t* mpBegin; uint32_t* mpEnd; uint32_t* mpCapacity;
+    void FUN_00540470(char* tag);                          // 0x540470 (thiscall, ret 4)
+    void FUN_00554020(void* out, const void* val);          // 0x554020 (thiscall, ret 8)
+    void FUN_00553fb0();                                    // 0x553fb0 (thiscall, no stack args)
+    void FUN_00548400();                                    // 0x548400 (thiscall, no stack args)
+};
+struct VecRangeStub {                                      // object at PaintStub+4
+    int* mpBegin; int* mpEnd; int* mpCapacity;
+    void FUN_00568740(int* first, int* last, unsigned char flag);   // 0x568740 (thiscall, ret 0xc)
+};
 
 namespace eastl { struct allocator { allocator() {} }; }
 
 // Helpers used by this module (call targets are relocated).
-void FUN_004769b0(void* p, unsigned n);
 void FUN_0050f0d0(void* p, void* q);
-void FUN_00425990();
 void FUN_004e1780(void* p);
 void* FUN_00569980(void* key);
 void* FUN_00569b80(void* key);
@@ -30,14 +44,9 @@ void FUN_005699f0_2();
 void FUN_0056a1a0();
 void FUN_00565920(void* p);
 void FUN_00564470(void* p);
-void FUN_00553fb0(void* p);
-void FUN_00548400(void* p);
 void FUN_00511f70(void* first, void* last, void* dst);
 void* FUN_0042dee0(void* a, int size, int align, int flags);
-void FUN_0067dea0();
-void* FUN_00572590();
-void FUN_00540470(void* p);
-void FUN_00554020(void* out, void* val);
+void* FUN_0067dea0();
 void FUN_0055dce0(void* p);
 void FUN_004f6b70(void* first, void* last);   // eastl::sort<Key*>, cdecl
 void FUN_0055de60(int* p);
@@ -48,7 +57,6 @@ bool EA_IO_ReadInt32(void* stream, void* val, int n, int f);     // 0x93a780
 void* GetManager();                                              // 0x67dcd0
 void* GetSaveArea(uint32_t id);                                  // 0x6b1f90
 void* FUN_00567190(void* a, void* b, void* c);
-void FUN_00568740(int* dst, int* first, int* last, uint32_t flag);
 namespace SP { uint32_t EditorEntityToResourceType(uint32_t modelType, int a); }
 static uint32_t SP_EditorEntityToResourceType(uint32_t a, int b) { return SP::EditorEntityToResourceType(a, b); }
 
@@ -62,8 +70,8 @@ typedef bool (__thiscall *GetRes58Fn)(void* self, void* key);
 
 // @ 0x0055dce0
 void FUN_0055dce0(void* pList) {
-    uint32_t* v = (uint32_t*)pList;
-    FUN_004769b0((void*)*v, v[1]);
+    V32* v = (V32*)pList;
+    v->FUN_004769b0(v->mpBegin, v->mpEnd);
     uint32_t key[3];
     key[0] = 0x727e3e7; key[1] = 0x727e3e7; key[2] = 0x11ac19c;
     void* mgr = GetManager();
@@ -81,8 +89,8 @@ void FUN_0055dce0(void* pList) {
                         uint32_t val = 0;
                         ok = EA_IO_ReadInt32(io, &val, 1, 0);
                         if (ok) {
-                            uint32_t tmp[3];
-                            FUN_00554020(tmp, &val);
+                            uint32_t tmp[2];
+                            ((PaintSet*)pList)->FUN_00554020(tmp, &val);
                         }
                     }
                 }
@@ -126,25 +134,27 @@ void FUN_0055de60(int* pList) {
 // @ 0x0055dfe0
 unsigned char PaintStub::FUN_0055dfe0() {
     void* this_ = this;
-    FUN_0067dea0();
-    int* list = (int*)FUN_00572590();
+    void* mgr = (void*)FUN_0067dea0();
+    int* list = (int*)((UintArray*)mgr)->FUN_00572590();
     int count = (int)(list[1] - *list) >> 2;
+    char tagA;
     uint32_t tmpA[3];
-    FUN_00540470(&tmpA);
+    ((PaintSet*)tmpA)->FUN_00540470(&tagA);
     uint32_t* end = (uint32_t*)list[1];
     for (uint32_t* it = (uint32_t*)*list; it != end; ++it) {
         uint32_t v = *(uint32_t*)*it;
-        FUN_00554020(&count, &v);
+        uint32_t out[2];
+        ((PaintSet*)tmpA)->FUN_00554020(out, &v);
     }
+    char tagB;
     uint32_t tmpB[3];
-    FUN_00540470(&tmpB);
-    int a[3];
-    FUN_0055dce0(a);
-    bool equal = ((a[1] - a[0]) >> 2) == ((int)(tmpA[2] - tmpA[0]) >> 2);
+    ((PaintSet*)tmpB)->FUN_00540470(&tagB);
+    FUN_0055dce0(tmpB);
+    bool equal = ((int)(tmpB[1] - tmpB[0]) >> 2) == ((int)(tmpA[1] - tmpA[0]) >> 2);
     if (equal) {
-        uint32_t* p = (uint32_t*)a[0];
+        uint32_t* p = (uint32_t*)tmpB[0];
         uint32_t* q = (uint32_t*)tmpA[0];
-        for (; p != (uint32_t*)a[1]; ++p, ++q) {
+        for (; p != (uint32_t*)tmpB[1]; ++p, ++q) {
             if (*p != *q) {
                 equal = false;
                 break;
@@ -152,18 +162,18 @@ unsigned char PaintStub::FUN_0055dfe0() {
         }
     }
     if (equal) {
-        FUN_00553fb0(&tmpB);
-        FUN_00553fb0(&tmpA);
+        ((PaintSet*)tmpB)->FUN_00553fb0();
+        ((PaintSet*)tmpA)->FUN_00553fb0();
         return 0;
     }
     FUN_0055de60((int*)&tmpA);
     unsigned char r = 1;
-    for (int* p = (int*)a[0]; p < (int*)a[1]; ++p) {
+    for (int* p = (int*)tmpB[0]; p < (int*)tmpB[1]; ++p) {
     }
-    FUN_00548400(&a);
+    ((PaintSet*)tmpB)->FUN_00548400();
     for (uint32_t* p = (uint32_t*)tmpA[0]; p < (uint32_t*)tmpA[1]; ++p) {
     }
-    FUN_00548400(&tmpA);
+    ((PaintSet*)tmpA)->FUN_00548400();
     return r;
 }
 
@@ -356,8 +366,8 @@ void* PaintStub::FUN_0055eae0(int* first, int count) {
     ((int*)this_)[1] = 0;
     ((int*)this_)[2] = 0;
     ((int*)this_)[3] = 0;
-    uint32_t flag;
-    FUN_00568740((int*)this_ + 1, first, first + count, flag);
+    unsigned char flag = 0xcc;   // the original reads an unwritten frame byte (the 0xcc stack fill)
+    ((VecRangeStub*)((char*)this_ + 4))->FUN_00568740(first, first + count, flag);
     FUN_0050f0d0((void*)((int*)this_)[1], (void*)((int*)this_)[2]);
     return this_;
 }
@@ -365,22 +375,27 @@ void* PaintStub::FUN_0055eae0(int* first, int count) {
 // @ 0x0055eb70
 char PaintStub::FUN_0055eb70(int* p) {
     void* this_ = this;
-    int key = p[1];
-    if (key == 0x1a99b06b)
-        key = (int)SP_EditorEntityToResourceType((uint32_t)p[2] >> 16 & 0xff, 1);
+    uint32_t key = (uint32_t)p[1];
+    if (key == 0x1a99b06bu)
+        key = (uint32_t)SP_EditorEntityToResourceType((uint32_t)p[2] >> 16 & 0xff, 1);
     void* end = (void*)((int*)this_)[2];
     void* it = (void*)FUN_00567190((void*)((int*)this_)[1], end, &key);
-    bool r = (it != end) && (key < *(int*)it);
-    return (char)r;
+    bool r = (it != end) && (key >= *(uint32_t*)it);
+    // The original leaves the returned iterator in eax when the key was not found, the searched key
+    // otherwise, and only replaces al with the boolean result.
+    uint32_t base = (it == end) ? (uint32_t)it : key;
+    uint32_t result = (base & 0xffffff00u) | (uint32_t)(unsigned char)r;
+    __asm { mov eax, result }
+    return (char)result;
 }
 
 // @ 0x0055ec10
 void* PaintStub::FUN_0055ec10(unsigned flags) {
     void* this_ = this;
-    uint32_t* v = (uint32_t*)((char*)this_ + 4);
-    for (uint32_t* p = (uint32_t*)v[0]; p < (uint32_t*)v[1]; ++p) {
+    V32* v = (V32*)((char*)this_ + 4);
+    for (uint32_t* p = v->mpBegin; p < v->mpEnd; ++p) {
     }
-    FUN_00425990();
+    v->FUN_00425990();
     *(void**)this_ = (void*)0x13eb394;
     if (flags & 1)
         EASTL_allocator_deallocate(this_);

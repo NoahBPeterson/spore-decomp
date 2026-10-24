@@ -1,7 +1,7 @@
-0055dce0  291  complete PaintSystem resource-id table load; /Od vtable/temp schedule differs
+0055dce0  287  complete PaintSystem resource-id table load; 0x4769b0 (ret 8) and 0x425990 are thiscall V32 members (ecx=this) and 0x572590 is a thiscall UintArray member; remaining diff is /Od stack-slot/vtable schedule [equiv: WEAK 0 mismatches, 37.6% cov at 4000 inputs; deep path needs a real manager/registry pointer]
 0055de60  312  complete PaintSystem resource-id table save; /Od temp schedule differs
-0055dfe0  389  complete change-detection driver; /Od frame/holes differ; equiv FAIL (ours faults where original returns)
-0055eae0  109  complete vector constructor; vtable/frame schedule differs; equiv FAIL (ours faults where original returns)
-0055eb70  137  complete key-membership query; rbtree helper call shape differs; equiv FAIL (return value differs)
-0055ec10   76  complete scalar deleting destructor; vtable/frame schedule differs; equiv FAIL (callee ecx differs)
-0055e190  1800  complete rebuild/flush driver (stub-class form); /Od temp schedule and inline iterator copies differ
+0055dfe0  365  complete change-detection driver; paint-id sets are stack eastl::vectors (0x540470 ctor ret 4, 0x554020 insert ret 8, 0x553fb0/0x548400 thiscall dtors), the loaded set is destroyed, counts compare as signed (end-begin)>>2 then element-wise; remaining diff is /Od frame holes [equiv: WEAK 0 mismatches, 55.0% cov at 4000 inputs; vtable calls resolve to fakes]
+0055eae0  118  complete vector constructor; 0x568740 is a thiscall member of the range object at this+4 (ecx=this+4, ret 0xc) and the uninitialized flag byte is 0xcc; remaining diff is vtable/frame schedule [equiv: PASS 491 valid, 100% cov]
+0055eb70  143  complete key-membership query; the search is unsigned (it!=end && key>=*it) and the small return keeps the key pointer with only al replaced; remaining diff is rbtree helper call shape [equiv: PASS 985 valid, 100% cov]
+0055ec10   87  complete scalar deleting destructor; 0x425990 is a thiscall V32 member on this+4 with no stack args; remaining diff is vtable/frame schedule [equiv: PASS 730 valid, 100% cov]
+0055e190 2013  complete rebuild/flush driver (stub-class form); /Od temp schedule and inline iterator copies differ
