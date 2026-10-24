@@ -4,4 +4,5 @@
 0081b990  215  GetVisibleIndex: complete; only `mov eax,1` vs `lea eax,[edi+1]` for the "return 1" path differs (shifts later bytes)  [equiv: UNSUPPORTED (0/400 valid)]
 0081bbe0  13  GetItemIndexFromChar: complete; final return-block order (return best before return last) differs  [equiv: UNSUPPORTED (0/400 valid)]
 0081be20  149  OnKeyDown (Escape closes menu): complete; HideMenuItems reuses ecx after Reset in the original (LTCG-style), IWindow null-check/ebx scheduling differs  [equiv: WEAK (400 valid, 25% cov, no mismatch)]
-0081c370  932  DisplayMenuItems: complete; lo/hi spill slots swapped, vtable-load order at the +0xc0 call and float operand order differ (rest shifted)  [equiv: UNSUPPORTED (0/400 valid)]
+0081c370  932  DisplayMenuItems: complete; lo/hi spill slots swapped, vtable-load order at the +0xc0 call and float operand order differ (rest shifted)
+0081c900  9  OnMouseUp: complete; the args.f10 store is scheduled one instruction earlier than the original (scheduler artifact, insensitive to the source ordering of the three field stores)  [equiv: UNSUPPORTED (0/400 valid, fake-arity)]  [equiv: UNSUPPORTED (0/400 valid)]

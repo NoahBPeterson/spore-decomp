@@ -129,7 +129,20 @@ void Menu2::OnMenuItemSelected(Menu2* b, Menu2* a) {
 // ===========================================================================
 // 0081c900  cSPUIPopupMenuItemWin::OnMouseUp  (complete, approx)
 // ===========================================================================
-struct OnMouseUpArg { char pad00[0x14]; int d14; int d18; int d1c; };
+struct OnMouseUpArg {
+  int pad00;   // +0x00
+  int pad04;   // +0x04
+  int f08;     // +0x08
+  int f0c;     // +0x0c
+  int f10;     // +0x10
+  int pad14;   // +0x14
+  int pad18;   // +0x18
+};
+
+extern "C" void FUN_0081bef0(void);   // Menu2::OnMenuItemSelected (__thiscall, 2 args)
+extern "C" char FUN_00964450(void);   // WB::OnMouseUp (__thiscall, 4 args)
+
+// @ 0x0081c900  cSPUIPopupMenuItemWin::OnMouseUp
 struct ItemMouseUp {
   char pad00[0x80];
   int f80;                     // +0x80
@@ -137,25 +150,21 @@ struct ItemMouseUp {
   char pad01[0x888 - 0x88];
   int f888;                    // +0x888
   char OnMouseUp(float a1, float a2, int a3, int a4);
-  char WinButtonOnMouseUp(float, float, int, int);
-  void OnMenuItemSelected2(int, void*);
-  void Call114(void*);
 };
 char ItemMouseUp::OnMouseUp(float a1, float a2, int a3, int a4) {
   ((void (__thiscall*)(void*, int, int))VTSLOT((char*)this + 0x20c, 0x28))((char*)this + 0x20c, 4, 1);
-  int v = f84 != 0 ? f84 : f80;
   OnMouseUpArg args;
-  args.d14 = 0x4cab02d;
-  args.d18 = v;
-  args.d1c = f888;
+  args.f08 = 0x4cab02d;
+  args.f0c = f84 != 0 ? f84 : f80;
+  args.f10 = f888;
   void* self = (char*)this + 4;
   void* p = ((void* (__thiscall*)(void*))VTSLOT(self, 0x10))(self);
   if (p != 0) {
     void* q = ((void* (__thiscall*)(void*, int))VTSLOT(p, 0xc))(p, 0x4c058d5);
-    if (q != 0) ((ItemMouseUp*)q)->OnMenuItemSelected2(0, this);
+    if (q != 0) ((void (__thiscall*)(void*, int, void*))FUN_0081bef0)(q, 0, this);
   }
-  char r = WinButtonOnMouseUp(a1, a2, a3, a4);
-  Call114(&args);
+  char r = ((char (__thiscall*)(void*, float, float, int, int))FUN_00964450)(this, a1, a2, a3, a4);
+  ((void (__thiscall*)(void*, void*))VTSLOT(self, 0x114))(self, &args);
   return r;
 }
 
