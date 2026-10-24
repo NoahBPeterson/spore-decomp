@@ -1,1 +1,7 @@
 # va  diff-bytes  reason
+0110a0d0  905  faceAVertexBValidationDataFromFeatureIndex; equiv: FAIL (5/5 valid inputs mismatched, first eax)
+0110a2b0  1012  faceBVertexAValidationDataFromFeatureIndex; equiv: FAIL (5/5 valid inputs mismatched, first eax)
+0110a4b0  643  edgeEdgeValidationDataFromFeatureIndex; equiv: FAIL (5/5 valid inputs mismatched, first xmm0 clobber)
+0110a600  2466  box-box point/normal solver; equiv: FAIL (5/5 valid inputs mismatched, first xmm0 clobber)
+0110a9c0  1055  addAdditionalEdgeHelper; equiv: FAIL (5/37 valid inputs mismatched, first xmm0 clobber)
+0110ac90  197  additional-edge 4-way dispatcher; equiv: UNSUPPORTED (0/400 valid inputs, all fault(write))
