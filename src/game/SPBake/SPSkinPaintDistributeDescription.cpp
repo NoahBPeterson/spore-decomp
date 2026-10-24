@@ -467,7 +467,9 @@ struct VectorIF {
     PairIF* DoAllocateCopy(uint32_t n, const PairIF* first, const PairIF* last); // @ 0x00530d20
     void DoInsertValues(PairIF* position, uint32_t n, const PairIF& value);      // @ 0x00530db0
 };
-PairIF* uninitialized_copy(const PairIF* first, const PairIF* last, PairIF* dest, bool tag); // @ 0x005311a0
+// The original instantiation returns its output iterator through a hidden return slot: the first
+// (last-pushed) argument is the address of the slot, which receives the advanced dest pointer.
+void uninitialized_copy(PairIF** out, const PairIF* first, const PairIF* last, PairIF* dest, bool tag); // @ 0x005311a0
 struct cDescription {
     void* mVT;
     int mRefCount;
@@ -941,7 +943,10 @@ VectorIF::VectorIF(const VectorIF& x)
     mpBegin = p;
     mpEnd = p;
     mpCapacity = p + n;
-    mpEnd = uninitialized_copy(x.mpBegin, x.mpEnd, mpBegin, false);
+    PairIF* pos;
+    bool tag;                       // the original's dispatch tag is read uninitialized (0xcc stack fill)
+    uninitialized_copy(&pos, x.mpBegin, x.mpEnd, mpBegin, tag);
+    mpEnd = pos;
 }
 
 // @ 0x00530b70
