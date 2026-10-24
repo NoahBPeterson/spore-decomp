@@ -1,1 +1,2 @@
 00d0e0c0 SP::cCommunityEditor::HandleSwatchRolloverOn  # header of s00d130d0 names it; byte-exact
+00d0def0 SP::cCommunityEditor::HandleSwatchRolloverOff  # card/Pdb name; resolves swatch planner/palette item and switches placement mode
