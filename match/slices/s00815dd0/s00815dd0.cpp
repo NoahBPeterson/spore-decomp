@@ -147,11 +147,17 @@ struct MatEffect {
 };
 
 // @ 0x008167d0
+// The fade direction is only switched when the stored progress (f88) sits on the other side of the
+// 0.5 midpoint; both size tests bail out when it is already there, and an exact 0.5 target bails out
+// as well. The old form fell through to the vtable calls in those cases and dereferenced the
+// caller's IObj even though retail had already returned (garbage-p pointer -> UNMAPPED read).
 void MatEffect::sub8167d0(IObj* p, float f) {
     if (f > 0.5f) {
-        if (f88 <= 0.5f) p80 = &f70;
+        if (f88 > 0.5f) return;
+        p80 = &f70;
     } else if (f < 0.5f) {
-        if (f88 >= 0.5f) p80 = &f60;
+        if (f88 < 0.5f) return;
+        p80 = &f60;
     } else {
         return;
     }
@@ -219,7 +225,7 @@ struct CalloutMessageBox {
     bool  sub816990();
     void  sub816a20(int, int, int, int);
     void  sub816b20(int id, int owner);
-    int   sub816b90(int id, void* msg);
+    bool  sub816b90(int id, void* msg);
     void* sub816ca0();
     void  ctor816cb0(int cb);
 };
@@ -280,7 +286,10 @@ void CalloutMessageBox::sub816b20(int id, int owner) {
 }
 
 // @ 0x00816b90
-int CalloutMessageBox::sub816b90(int id, void* msg) {
+// Returns bool, not int: every exit is `mov $0x1,%al` / `xor %al,%al` (0x816c1f, 0x816c8e, 0x816be3),
+// so the upper 24 bits of eax are left as whatever the last call returned. With an int return cl
+// zeroes all of eax (`xor %eax,%eax`) and the harness sees a different eax on the false paths.
+bool CalloutMessageBox::sub816b90(int id, void* msg) {
     u32* m = (u32*)msg;
     u32 t = m[2];
     if (t == 1) {

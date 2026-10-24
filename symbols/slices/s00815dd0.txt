@@ -7,6 +7,6 @@
 00816990 UI::CalloutMessageBox::OnWindowClosed  # closes the callout window, EndModal, Shutdown layout
 00816a20 UI::CalloutMessageBox::Show  # PDB candidate cSPUIMessageBox::Show (0x10 args)
 00816b20 UI::CalloutMessageBox::SetButtonTextFromProperty  # cString + GetPropertyAsText
-00816b90 ?sub816b90@CalloutMessageBox@@QAEHHPAX@Z  # CalloutMessageBox::sub816b90 migrated from s00815dd0 (verbatim, slice spelling)
+00816b90 ?sub816b90@CalloutMessageBox@@QAE_NHPAX@Z  # CalloutMessageBox::sub816b90 -- returns bool (retail exits write only al: mov $1,%al / xor %al,%al)
 00816ca0 UI::CalloutMessageBox::GetWindow  # FindWindowByID(0x6318e78,0)
 00816cb0 UI::CalloutMessageBox::CalloutMessageBox  # ctor, vtable 0x1418dd4
