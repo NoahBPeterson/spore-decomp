@@ -1,0 +1,8 @@
+slices/s00bda190/s00bda190.cpp  ?WriteTextCultureTargetInfo@@YA_NPAUcObjectStream@@PBUcPtrVec@@@Z  00bda590  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bda190/s00bda190.cpp  ?ContainsInt@@YA_NPBUcPtrVec@@PBH@Z  00bda6a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bda190/s00bda190.cpp  ?DestroyRefPairs@@YGXPAUcAutoRef12@@0@Z  00bda6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bda190/s00bda190.cpp  ?DestroyCultureTargetInfo@@YGXPAUtCultureTargetInfo@@0@Z  00bda710  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bda190/s00bda190.cpp  ?AssignRefPairObj@cRefOps@@QAEPAU1@PBUcAutoRef12@@@Z  00bda760  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bda190/s00bda190.cpp  ?CopyRefPairs@@YAPAUcAutoRef12@@PAU1@00@Z  00bda8d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bda190/s00bda190.cpp  ?DestroyRefPairsReturn@@YAPAUcAutoRef12@@PAU1@00@Z  00bda930  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bda190/s00bda190.cpp  ?AssignRefPairRange@@YAPAUcAutoRef12@@PAU1@00@Z  00bda980  /O2 /MD /Gy /TP /arch:SSE /fp:fast

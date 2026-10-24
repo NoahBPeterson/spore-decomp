@@ -1,1 +1,17 @@
-00bdab60  101  complete; base ctor calls and all stores present, but MSVC schedules the 4 vptr stores and the 0x1d4/0x1dc field stores later than the original (vptrs right after the base calls in the original)
+00bda190   76  cCity::CountBuildings; complete, but MSVC spills nCount to the stack and picks ebp for nPoliticalID where the original keeps the count in ebp and political id in edi
+00bda200  199  GetCulturalTargetPosition; complete, but the region kind test, planet lookup and the two GetPosition calls are scheduled differently (frame/SSE-vs-x87 and branch layout)
+00bda2f0  139  IsOnCulturalTarget; complete, but branch layout and planet-lookup scheduling differ
+00bda3b0  161  GetPropertyInt; complete, but the variant kind switch and Release cleanup are laid out differently
+00bda470   31  SerializeTradePartners; complete, only the count computation/WriteUint32 argument store is scheduled later than the original
+00bda500  121  SerializeCultureTargetInfo; complete, but the cVarListSerializer stack object (0x600+ bytes) has no known retail layout so the frame differs
+00bda7d0  127  CopyTransform50; complete, but MSVC emits movss (SSE) for the 18 float fields where the original uses fld/fstp (x87)
+00bda850   23  eastl vector copy helper (0x14 stride); complete, but MSVC assigns arg1 to eax where the original uses ecx
+00bdaa90   32  eastl vector copy helper (0x1c stride); complete, but MSVC assigns arg1 to eax where the original uses ecx
+00bdaae0  129  AssignRefPairRangeBackward; complete, but the backward loop keeps pLast/pDstEnd in memory instead of ebp/esi
+00bdace0   73  cCulturalTarget::~cCulturalTarget; complete, but retail sets 4 vptrs (multiple inheritance) and calls the base dtors as thiscall -- needs the real class hierarchy
+00bdad60  263  cCulturalTarget::RemoveAttacker; complete, but the search and compaction loops differ in register allocation and the tail exception path
+00bdaea0  136  cSimObject::UpdateAggregationRadius; complete, but frame setup and float temp scheduling (sub esp,8 vs push ecx) differ
+00bdaf50  297  cSimObject::FillCulturalTargetPoints; complete, but the unrolled 4-iteration point loop is scheduled differently
+00bdb0b0  271  cSimObject::EmitCulturalEffect; complete, but the effect-id select and the scale/offset math are scheduled differently
+00bdb200  117  cCity::HasTradePartnerCiv; complete, but the count recomputation and thiscall PoliticalID loop use different registers
+00bdb280  262  cCity::FindTradePartnerCity; complete, but the nearest-distance search and Vector3 math are scheduled differently
