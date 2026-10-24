@@ -14,9 +14,7 @@ void* __cdecl VecAllocGrow(int n, void*, void*);     // 0x007c98b0
 void  __cdecl VecDestroyRange16(void*, void*);       // 0x00b007f0
 void* __cdecl VecCopyImpl(void*, void*, void*);      // 0x006782c0
 void  __cdecl VecUninitCopy(void*, void*, void*, void*, void*); // 0x007c7d70
-void  __cdecl VecDestroyRange(void*, void*);         // 0x007c8130
 void* __cdecl VecCopyRange(void*, void*, void*);      // 0x007c7e10
-void* __cdecl VecReserve(int n, void*, void*);       // 0x007c8210
 void  __cdecl UIntVecPushSlow(void*, unsigned*);     // 0x004558a0
 void  __cdecl UIntVecReserve(void*, unsigned);       // 0x004e0880
 
@@ -54,12 +52,14 @@ struct AutoRefVec {
     void InsertOne(AutoRef* pos, AutoRef* value);              // 0x007c9dc0
 };
 
-struct Pair16 { uint64_t key; AutoRef val; };
+struct Pair16 { uint64_t key; uint32_t mRC; uint32_t mPad; };  // 16-byte vector element (retail strides by 0x10)
 struct PairVec {
     Pair16* mpBegin;
     Pair16* mpEnd;
     Pair16* mpCap;
     PairVec& operator=(const PairVec&);                        // 0x007ca060
+    void  DestroyRange(Pair16* first, Pair16* last);           // 0x007c8130
+    void* Reserve(int n, Pair16* first, Pair16* last);         // 0x007c8210
 };
 
 struct Vec4 {
@@ -348,24 +348,25 @@ void AutoRefVec::DoAssignFromIterator(AutoRef* first, AutoRef* last)
 PairVec& PairVec::operator=(const PairVec& x)
 {
     if (&x != this) {
-        int n = (int)(x.mpEnd - x.mpBegin);
-        if (n > (int)(mpCap - mpBegin)) {
-            Pair16* nb = (Pair16*)VecReserve(n, x.mpBegin, x.mpEnd);
-            VecDestroyRange(mpBegin, mpEnd);
+        unsigned n = (unsigned)(x.mpEnd - x.mpBegin);
+        if (n > (unsigned)(mpCap - mpBegin)) {
+            Pair16* nb = (Pair16*)Reserve(n, x.mpBegin, x.mpEnd);
+            DestroyRange(mpBegin, mpEnd);
             if (mpBegin) EA_Free(mpBegin);
             mpBegin = nb;
             mpEnd = nb + n;
             mpCap = nb + n;
             return *this;
         }
-        if (n <= (int)(mpEnd - mpBegin)) {
+        if (n <= (unsigned)(mpEnd - mpBegin)) {
             Pair16* e = (Pair16*)VecCopyRange(x.mpBegin, x.mpEnd, mpBegin);
-            VecDestroyRange(e, mpEnd);
+            DestroyRange(e, mpEnd);
             mpEnd = mpBegin + n;
             return *this;
         }
+        Pair16* it = mpEnd;
         VecCopyRange(x.mpBegin, x.mpBegin + (mpEnd - mpBegin), mpBegin);
-        VecUninitCopy(0, x.mpBegin + (mpEnd - mpBegin), x.mpEnd, mpEnd, 0);
+        VecUninitCopy(&it, x.mpBegin + (mpEnd - mpBegin), x.mpEnd, mpEnd, (void*)&x);
         mpEnd = mpBegin + n;
     }
     return *this;
