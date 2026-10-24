@@ -1,0 +1,7 @@
+# source symbol va flags
+slices/s00fef140/s00fef140.cpp  ?FUN_00fef570@spVecF@@QAEPAXPAX0@Z  00fef570  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fef140/s00fef140.cpp  ?FUN_00fef670@@YAPAXXZ  00fef670  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fef140/s00fef140.cpp  ?FUN_00fef6b0@@YAXXZ  00fef6b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fef140/s00fef140.cpp  ?FUN_00fef6d0@@YAPAUcReqElem@@PAU1@00@Z  00fef6d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fef140/s00fef140.cpp  ?FUN_00fef810@@YAPAXPAUcReqElem@@00@Z  00fef810  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fef140/s00fef140.cpp  ?FUN_00fefe70@@YAXI@Z  00fefe70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
