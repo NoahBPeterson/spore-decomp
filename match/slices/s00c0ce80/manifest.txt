@@ -6,3 +6,6 @@ slices/s00c0ce80/s00c0ce80.cpp  ?d950@CCB@@QAEXD@Z      00c0d950  /O2 /MD /Gy /T
 slices/s00c0ce80/s00c0ce80.cpp  ?db60@CCB@@QAEHXZ       00c0db60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00c0ce80/s00c0ce80.cpp  ?dd40@CCB@@QAEXPAM@Z    00c0dd40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00c0ce80/s00c0ce80.cpp  ?dd70@CCB@@QAEXPAMM@Z   00c0dd70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c0ce80/s00c0ce80.cpp  ?d310@CCB@@QAEPAMPAMH@Z  00c0d310  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c0ce80/s00c0ce80.cpp  ?dac0@CCB@@QAEHXZ  00c0dac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c0ce80/s00c0ce80.cpp  ?db10@CCB@@QAEHXZ  00c0db10  /O2 /MD /Gy /TP /arch:SSE /fp:fast

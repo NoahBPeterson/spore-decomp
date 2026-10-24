@@ -1,20 +1,17 @@
 # va  diff-bytes  equiv-verdict  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-00c0ce80  161  FAIL         animation weight selector; complete; equiv fault at vtable callee (stub not resolved by harness), source faithful
+00c0ce80  169  PASS         animation weight selector; complete; PASS (339 valid, 88.9% cov); vtable-call idiom fixed
 00c0cf50   59  PASS         init animation weight table +0xfac..; complete
 00c0cfa0   62  PASS         get animation weight by index; complete
 00c0d050   83  PASS         pick animation index by threshold; complete
-00c0d0c0  211  FAIL         set/clear fa4 bits + adjust +0xfa0; complete; equiv mismatch at vtable/table callee (harness)
-00c0d240  164  FAIL         IsAnimationQueuedOrCurrent; complete; 1-ulp float differ at pool slot
-00c0d310   34  FAIL         copy orientation vector; complete; equiv fault on virtual callee stub
+00c0d0c0  229  PASS         set/clear fa4 bits + adjust +0xfa0; complete; PASS (368 valid, 100%); param_3 raw-char compare
+00c0d240  172  PASS         IsAnimationQueuedOrCurrent; complete; PASS (381 valid, 100%); Release on contained ptr
 00c0d340   74  UNSUPPORTED  transform + list replace; complete; only 0 valid inputs (fake-arity)
 00c0d3a0  120  WEAK         time-based terrain callback; complete
 00c0d440  214  UNSUPPORTED  UpdateHunger; complete; 0 valid inputs (fake-arity)
-00c0d560  219  FAIL         proximity check (distance vs threshold); complete; equiv eax mismatch
-00c0d660  -    FAIL         target position (between/offset); complete; equiv fault on FUN_004d9030 stub
-00c0d860  196  FAIL         forward-offset position; complete; equiv fault on FUN_00a048a0 stub
-00c0d970   39  PASS         SetIdentityColor; complete
-00c0d9b0  214  UNSUPPORTED  legs/stride vector apply; complete; 0 valid inputs (fake-arity)
-00c0dac0   51  UNSUPPORTED  pick action id (chain); complete; unresolved FUN_00c0c080 stub
-00c0db10   51  UNSUPPORTED  pick action id (chain); complete; unresolved FUN_00c0c080 stub
-00c0db80  252  UNSUPPORTED  size/scale from terrain properties; complete; unresolved stub callees
+00c0d560  225  WEAK         proximity check (distance vs threshold); complete; WEAK (394 valid, 41.5% cov)
+00c0d660  453  WEAK         target position (between/offset); complete; WEAK (175 valid, 38.5% cov); double-deref of variant id
+00c0d860  189  WEAK         forward-offset position; complete; WEAK (191 valid, 100% cov)
+00c0d970   50  PASS         SetIdentityColor; complete; PASS (400 valid, 100%); integer vector copies
+00c0d9b0  225  UNSUPPORTED  legs/stride vector apply; complete; replay matches but harness discards all inputs (fake-arity)
+00c0db80  289  UNSUPPORTED  size/scale from terrain properties; complete; unresolved stub callees
 00c0dcb0  123  UNSUPPORTED  size from terrain property; complete; unresolved stub callees
