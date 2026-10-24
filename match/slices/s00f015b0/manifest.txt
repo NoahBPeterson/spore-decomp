@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f015b0/s00f015b0.cpp  ??1cScenarioTutorialsList@@QAE@XZ  00f01d60  /O2 /MD /Gy /TP /GS-
