@@ -247,3 +247,110 @@ void BuildBoxContactFeature(const ObbFrame* box, int flip, const __m128* pn, Fea
     out->type = 0;
     out->result = 0;
 }
+
+// ---------------------------------------------------------------------------
+// BoxVolume instance construction (0x01207f30).  The source record is a
+// transform (rows +0x00..+0x30, translation in +0x30) plus three half extents
+// at +0x44..+0x4c and a key at +0x50.  The output copies the transform in the
+// instance's row order (translation first, then basis rows, then a duplicate
+// set of basis rows), the half extents, and a small function table.
+// ---------------------------------------------------------------------------
+
+struct BoxVolume {
+    __m128 m_row0;                                      // +0x00
+    __m128 m_row1;                                      // +0x10
+    __m128 m_row2;                                      // +0x20
+    __m128 m_row3;                                      // +0x30
+    unsigned char m_pad40[4];                           // +0x40
+    float m_extent0;                                    // +0x44
+    float m_extent1;                                    // +0x48
+    float m_extent2;                                    // +0x4c
+    uint32_t m_key50;                                   // +0x50
+    int CreateInstance(void* out, const void* transform) const;
+};
+
+struct BoxInstance {
+    __m128 m_translation;                               // +0x00
+    __m128 m_basis0;                                    // +0x10
+    __m128 m_basis1;                                    // +0x20
+    __m128 m_basis2;                                    // +0x30
+    __m128 m_basis0Copy;                                // +0x40
+    __m128 m_basis1Copy;                                // +0x50
+    __m128 m_basis2Copy;                                // +0x60
+    float m_extent0;                                    // +0x70
+    float m_extent1;                                    // +0x74
+    float m_extent2;                                    // +0x78
+    uint32_t m_key50;                                   // +0x7c
+    const BoxVolume* m_source;                          // +0x80
+    uint32_t m_pad84;                                   // +0x84
+    uint32_t m_type88;                                  // +0x88
+    uint32_t m_type8c;                                  // +0x8c
+    uint32_t m_fn90;                                    // +0x90
+    uint32_t m_fn94;                                    // +0x94
+    uint32_t m_fn98;                                    // +0x98
+    uint32_t m_fn9c;                                    // +0x9c
+};
+
+struct BoxTransform {
+    __m128 m_row0;                                      // +0x00
+    __m128 m_row1;                                      // +0x10
+    __m128 m_row2;                                      // +0x20
+    __m128 m_row3;                                      // +0x30
+};
+
+static __forceinline __m128 TransformRow(const __m128& v,
+                                         const BoxTransform& m, float w)
+{
+    __m128 result = _mm_mul_ps(m.m_row0, _mm_shuffle_ps(v, v, 0x00));
+    __m128 next = _mm_mul_ps(m.m_row1, _mm_shuffle_ps(v, v, 0x55));
+    result = _mm_add_ps(result, next);
+    next = _mm_mul_ps(m.m_row2, _mm_shuffle_ps(v, v, 0xaa));
+    result = _mm_add_ps(result, next);
+    if (w != 0.0f)
+        result = _mm_add_ps(result, _mm_mul_ps(m.m_row3, _mm_set1_ps(w)));
+    return result;
+}
+
+// @ 0x01207f30
+int BoxVolume::CreateInstance(void* outv, const void* transformv) const
+{
+    BoxInstance* out = (BoxInstance*)outv;
+    const BoxTransform* transform = (const BoxTransform*)transformv;
+
+    __m128 row0;
+    __m128 row1;
+    __m128 row2;
+    __m128 row3;
+
+    if (transform != 0) {
+        row0 = TransformRow(m_row0, *transform, 0.0f);
+        row1 = TransformRow(m_row1, *transform, 0.0f);
+        row2 = TransformRow(m_row2, *transform, 0.0f);
+        row3 = TransformRow(m_row3, *transform, 1.0f);
+    } else {
+        row0 = m_row0;
+        row1 = m_row1;
+        row2 = m_row2;
+        row3 = m_row3;
+    }
+
+    out->m_translation = row3;
+    out->m_basis0 = row0;
+    out->m_basis1 = row1;
+    out->m_basis2 = row2;
+    out->m_basis0Copy = row0;
+    out->m_basis1Copy = row1;
+    out->m_basis2Copy = row2;
+    out->m_extent0 = m_extent0;
+    out->m_extent1 = m_extent1;
+    out->m_extent2 = m_extent2;
+    out->m_key50 = m_key50;
+    out->m_source = this;
+    out->m_type88 = 3;
+    out->m_type8c = 3;
+    out->m_fn90 = 0x01207630;
+    out->m_fn94 = 0x01207310;
+    out->m_fn98 = 0x01207460;
+    out->m_fn9c = 0x011fb220;
+    return 1;
+}
