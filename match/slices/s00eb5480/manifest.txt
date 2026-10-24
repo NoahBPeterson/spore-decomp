@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00eb5480/s00eb5480.cpp  ?DoInsertValueImpl@AutoRefSet@@QAE?AUrbtree_iterator@@PAURbNodeBase@@PBUIntrusiveObjPtr@@_N@Z  00eb5b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast

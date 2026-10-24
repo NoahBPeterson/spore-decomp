@@ -5,6 +5,7 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (same module family as s00f502b0).
 #include "types.h"
 #include <math.h>
+#include <new>
 #include <xmmintrin.h>
 
 struct cSPVector3
@@ -61,6 +62,7 @@ static inline cSPQuaternion Normalize(const cSPQuaternion& q)
 
 namespace eastl {
 template <class T> inline const T& max(const T& a, const T& b) { return (a < b) ? b : a; }
+template <class T> inline const T& min(const T& a, const T& b) { return (b < a) ? b : a; }
 }
 
 
@@ -253,3 +255,112 @@ cSPQuaternion sCalculateOrientation(const cSPVector3& from, const cSPVector3& to
 }
 
 }   // namespace SP
+
+// ------------------------------------------------------------------------------------------------
+// 0x00EB5B70: eastl::rbtree<IntrusivePtr>::DoInsertValueImpl with the node allocation inlined
+// (one node is 0x14 bytes: the 0x10-byte rbtree_node_base and a 4-byte intrusive pointer value).
+// 0x00EB6350: quaternion blend setter/slerp of the same camera module.
+// ------------------------------------------------------------------------------------------------
+
+// EA's six-argument operator new (EASTL_ALLOC): size, tag, flags, debug flags, file, line.
+void* __cdecl operator new(size_t size, const char* pName, int flags, int debugFlags, const char* file, int line);
+
+struct RefObj {                        // reference-counted object held by the tree
+	virtual void AddRef();             // vtable slot 0
+};
+
+struct IntrusiveObjPtr {               // 4-byte intrusive pointer (the tree's value_type)
+	RefObj* mpObject;                  // +0x00
+	IntrusiveObjPtr() : mpObject(0) {}
+	IntrusiveObjPtr(const IntrusiveObjPtr& o) : mpObject(o.mpObject) { if (mpObject) mpObject->AddRef(); }
+};
+
+struct RbNodeBase {                    // rbtree node header
+	RbNodeBase* mpParent;              // +0x00
+	RbNodeBase* mpLeft;                // +0x04
+	RbNodeBase* mpRight;               // +0x08
+	uint32_t    mColor;                // +0x0c
+};
+struct RbNode : RbNodeBase {
+	IntrusiveObjPtr mValue;            // +0x10
+};
+enum RBTreeSide { kRBTreeSideLeft, kRBTreeSideRight };
+void __cdecl RBTreeInsert(RbNodeBase* pNode, RbNodeBase* pNodeParent, RbNodeBase* pNodeAnchor, RBTreeSide insertionSide);   // 0x009216a0
+
+struct rbtree_iterator {               // 1-word node iterator (returned by value)
+	RbNode* mpNode;                    // +0x00
+	rbtree_iterator(RbNode* pNode) : mpNode(pNode) {}
+	rbtree_iterator(const rbtree_iterator& o) : mpNode(o.mpNode) {}
+};
+
+struct AutoRefSet {                    // eastl::set<IntrusivePtr>, ordered by object address
+	uint32_t    mCompare;              // +0x00 (compressed comparator)
+	RbNodeBase  mAnchor;               // +0x04
+	int         mnSize;                // +0x14
+	rbtree_iterator DoInsertValueImpl(RbNodeBase* pParent, const IntrusiveObjPtr* pValue, bool bForceToLeft);
+};
+
+// @ 0x00eb5b70
+rbtree_iterator AutoRefSet::DoInsertValueImpl(RbNodeBase* pParent, const IntrusiveObjPtr* pValue,
+                                              bool bForceToLeft)
+{
+	RBTreeSide side;
+	if (bForceToLeft || pParent == &mAnchor
+	    || pValue->mpObject < static_cast<RbNode*>(pParent)->mValue.mpObject)
+		side = kRBTreeSideLeft;
+	else
+		side = kRBTreeSideRight;
+
+	RbNode* pNodeNew = static_cast<RbNode*>(operator new(0x14, "Simulator", 0, 0,
+		"c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+		0xd1));
+	::new (&pNodeNew->mValue) IntrusiveObjPtr(*pValue);
+	RBTreeInsert(pNodeNew, pParent, &mAnchor, side);
+	++mnSize;
+	return rbtree_iterator(pNodeNew);
+}
+
+// ---- quaternion blend: clamp t to [0, 1], optionally ease it, then slerp from mFrom to mTo ----
+cSPQuaternion Slerp(const cSPQuaternion& a, const cSPQuaternion& b, float t);   // 0x005b2500
+
+// The retail build folds these two into single maxss/minss instructions; this cl only does that for
+// the SSE intrinsics, and those force the operands through memory (see the papercut), so the plain
+// ternary is kept even though it costs a compare and two branches.  The ternaries are written so
+// that they pick the second operand on equality, exactly like maxss/minss do: that keeps the sign
+// of a zero argument (-0.0f survives the clamp instead of turning into +0.0f).
+static inline float MaxF(float a, float b) { return (a > b) ? a : b; }
+static inline float MinF(float a, float b) { return (a < b) ? a : b; }
+
+class cQuaternionBlend
+{
+public:
+	cSPQuaternion mFrom;               // +0x00
+	cSPQuaternion mCurrent;            // +0x10
+	cSPQuaternion mTo;                 // +0x20
+	float         mBlend;              // +0x30
+	void Set(void* context, float t, bool bSmooth);   // 0x00eb6350 (ret 0xc; `context` is unused)
+};
+
+// @ 0x00eb6350
+void cQuaternionBlend::Set(void* context, float t, bool bSmooth)
+{
+	// order the two clamp ends (the argument may be outside [0, 1])
+	float lo, hi;
+	if (1.0f > t) { lo = t;    hi = 1.0f; }
+	else          { lo = 1.0f; hi = t; }
+	float blend = MaxF(0.0f, lo);
+	blend = MinF(blend, hi);
+	mBlend = blend;
+	if (bSmooth)
+	{
+		// piecewise easing: quadratic ramp in, linear middle, quadratic ramp out
+		if (0.25f > blend)
+			blend = (blend * blend) * 2.6666667f;
+		else if (0.75f > blend)
+			blend = (blend - 0.25f) * 1.3333334f + 0.16666667f;
+		else
+			blend = (1.3333334f - (blend - 0.75f) * 2.6666667f) * (blend - 0.75f) + 0.8333333f;
+		mBlend = blend;
+	}
+	mCurrent = Slerp(mFrom, mTo, mBlend);
+}
