@@ -1,0 +1,15 @@
+# va diff flags difftest
+00e20860 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED unresolved imports (_GetCommandLineA@0, ?EA_ConvertToString16@@YAXPA_WPBD@Z, _GetCurrentProcessId@0)
+00e20d30 ecx-clobber /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL register-ABI external callee, ecx clobbered
+00e20d60 ecx-clobber /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL register-ABI external callee, ecx clobbered
+00e20e00 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast PASS behaviourally equivalent, not byte-exact
+00e20e80 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast PASS behaviourally equivalent, not byte-exact
+00e20f10 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL external callee ABI (0x67cad0 -> 0x6c10e0 register chain)
+00e21040 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast PASS behaviourally equivalent, not byte-exact
+00e210b0 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL external aggregate copy, huge memmove under harness
+00e21260 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL execution mismatch (calling convention of unnamed helper)
+00e213f0 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL xmm1 clobber (register-ABI external callee)
+00e21590 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast PASS behaviourally equivalent, not byte-exact
+00e215d0 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK equivalence weak/discarded inputs
+00e21640 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL execution mismatch (register-ABI external callee)
+00e217c0 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast PASS behaviourally equivalent, not byte-exact
