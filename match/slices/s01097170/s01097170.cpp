@@ -282,6 +282,7 @@ public:
     virtual void v5(); virtual void v6();
     virtual void buildJacobian(const hkConstraintQueryIn& in, hkConstraintQueryOut& out);       // 7 (+0x1c)
     virtual void v8();
+    uint32_t m_userData;                  // +0x08  (shifts every derived member to its retail offset)
 };
 
 class hkBreakableConstraintData : public hkConstraintData
@@ -758,9 +759,20 @@ void hkBoxMotion::getInertiaLocal(hkMatrix3& out) const
     float ix = 1.0f / m_inertiaAndMassInv.x;
     float iy = 1.0f / m_inertiaAndMassInv.y;
     float iz = 1.0f / m_inertiaAndMassInv.z;
-    float* m = &out.m_col[0].x;
-    for (int i = 0; i < 12; ++i)
-        m[i] = 0.0f;
+    // Twelve dword zero-stores through the out pointer (the original keeps it in eax and never
+    // touches edx, which the caller has live).
+    out.m_col[0].x = 0.0f;
+    out.m_col[0].y = 0.0f;
+    out.m_col[0].z = 0.0f;
+    out.m_col[0].w = 0.0f;
+    out.m_col[1].x = 0.0f;
+    out.m_col[1].y = 0.0f;
+    out.m_col[1].z = 0.0f;
+    out.m_col[1].w = 0.0f;
+    out.m_col[2].x = 0.0f;
+    out.m_col[2].y = 0.0f;
+    out.m_col[2].z = 0.0f;
+    out.m_col[2].w = 0.0f;
     out.m_col[0].x = ix;
     out.m_col[1].y = iy;
     out.m_col[2].z = iz;

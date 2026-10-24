@@ -12,8 +12,7 @@
 01097ab0 0 havok-equivalent
 01097b20 0 havok-equivalent
 01097c90 0 havok-equivalent
-01097d40 0 havok-equivalent
-01097d90 0 havok-equivalent
+01097d90 769  complete: constraint math and runtime layout now match (hkConstraintData gained its retail +0x08 m_userData dword so m_constraintData/+0xc, m_childRuntimeSize/+0x10, m_childNumSolverResults/+0x12 and m_removeWhenBroken/+0x1c land on the shipped offsets); only the unrolled sum loop reg-alloc differs [equiv PASS 247 valid, 100% cov; 153 inputs fault(read) in the harness]
 010980d0 0 havok-equivalent
 01098140 0 havok-equivalent
-01098190 0 havok-equivalent
+01098190 92   complete: three 1/m_inv x87 divides, twelve zero dword stores and the diagonal stores in the original order; the zeros are written through named matrix members so the out pointer stays in eax and edx (live in the caller) is untouched [equiv PASS 400 valid, 100% cov]
