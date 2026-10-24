@@ -215,7 +215,9 @@ void hkCollideCapsuleUtilManifoldCapsVsTriangle(const float* cap, float capRadiu
                     const float* q = tri + EDGE_END(e) * 4;
                     seg2[4] = q[0]; seg2[5] = q[1]; seg2[6] = q[2]; seg2[7] = q[3];
                     hkCollideCapsuleUtilManifoldCapsVsCaps(cap, capRadius, seg2, triRadius, out);
-                    if (o[7] <= ((float*)&best)[7])
+                    // NaN (unordered) must take the same arm as out<=best: the retail
+                    // compare is `!(out.w > best.w)` (fcomp; test ah,0x41; jne).
+                    if (!(o[7] > ((float*)&best)[7]))
                         best.assign(*out);
                     else
                         out->assign(best);
