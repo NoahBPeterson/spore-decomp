@@ -118,7 +118,7 @@ struct cDirectPropertyList {
     virtual bool p0(void*); virtual bool p1(void*); virtual bool p2(void*);
     virtual bool p3(void*); virtual bool p4(void*); virtual bool p5(void*);
     virtual bool p6(void*); virtual bool p7(void*); virtual bool p8(void*);
-    virtual bool GetProp(uint32_t id, Property* out);
+    virtual bool GetProp(uint32_t id, Property** out);
 };
 extern cDirectPropertyList* g_AppProperties;             // 0x15fd918
 void __cdecl SetDropShadowQuality(int q, int level);     // 0x96e500
@@ -270,9 +270,9 @@ struct Vec {
     void* mEnd;     // +4
     void* mCap;     // +8
     void erase(void* first, void* last);
+    void Grow(void* pos, void** val);  // 0x814a30
 };
 void __cdecl CopyImpl(void* first, void* last, void* dst);   // 0x6782c0
-void __cdecl FUN_00814a30(void*, void**);                    // 0x814a30
 struct WinSub_s0081_43a0 : WinBase {};
 struct MainWin_s0081_43a0 {
     char pad0[0x4];
@@ -563,13 +563,13 @@ void MainWin::OnMouse(bool active)
 void sInitDropShadowQuality()
 {
     cDirectPropertyList* props = g_AppProperties;
-    Property p;
-    int q = 0;
-    if (props && props->GetProp(0xe30a842c, &p) && p.type == 9)
-        q = *p.GetInt();
+    Property* p;
+    int q;
+    if (props && props->GetProp(0xe30a842c, &p) && p->type == 9)
+        q = *p->GetInt();
     SetDropShadowQuality(q, 0);
-    if (props && props->GetProp(0xa5bbb508, &p) && p.type == 9)
-        q = *p.GetInt();
+    if (props && props->GetProp(0xa5bbb508, &p) && p->type == 9)
+        q = *p->GetInt();
     SetDropShadowQuality(q, 1);
 }
 
@@ -826,7 +826,7 @@ int LowerBoundUShort(int a, int b, unsigned short* key)
         int step;
         do {
             step = n >> 1;
-            if (*(unsigned short*)(a + step * 2) <= *key) {
+            if (!(*key < *(unsigned short*)(a + step * 2))) {
                 a = a + 2 + step * 2;
                 n = n + (-1 - step);
             } else {
@@ -834,7 +834,7 @@ int LowerBoundUShort(int a, int b, unsigned short* key)
             }
         } while (n > 0);
     }
-    return 0;
+    return a;
 }
 
 
@@ -1032,7 +1032,7 @@ void MainWin_s0081_43a0::AddElem(Elem* p)
             if (p) p->e00();
         }
     } else {
-        FUN_00814a30(mVec.mEnd, (void**)&tmp);
+        mVec.Grow(mVec.mEnd, (void**)&tmp);
     }
     if (tmp) tmp->e01();
 }
