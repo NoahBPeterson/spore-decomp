@@ -346,3 +346,360 @@ void Mgr::Update(uint32_t a, uint32_t b)
     if (flags & 0x10)
         base->UpdateBeams();
 }
+
+// =====================================================================================================
+// Second view of the same object, for the constructor/destructor and the scatter-vector helpers that
+// gold7 claims (0x00b0bb50, 0x00b0bd10, 0x00b0bdb0, 0x00b0bfa0, 0x00b0c110).  The cl2 body above keeps
+// its own offsets; nothing here moves a byte of it.
+// =====================================================================================================
+
+inline void* operator new(unsigned int, void* p) { return p; }
+
+void operator delete(void* p);                                              // 0x00f47380
+
+void* __cdecl EaAllocate(unsigned int size, const char* name, int a, int b, int c, int line); // 0x00f473a0
+extern char gAllocatorTag[];                                                // 0x013ebb38
+extern void* gVtablePaintBase[];                                            // 0x013eb384
+extern void* gVtablePaintDtor[];                                            // 0x013eb394
+extern void* gVtablePaintSub[];                                             // 0x0145c828
+extern void* gVtablePaint[];                                                // 0x0145c878
+extern void* gVtablePaint3[];                                               // 0x0145c824
+
+void __cdecl RemoveMessageHandler(void* handler, uint32_t a, uint32_t b, uint32_t c, uint32_t d); // 0x00571db0
+
+struct GonzagoSub {                                      // secondary base at +4
+    void Construct();                                    // 0x00b5b960
+    ~GonzagoSub();                                       // 0x00b5b9a0
+};
+struct HierGrid {
+    HierGrid();                                          // 0x00703ce0
+    ~HierGrid();                                         // 0x00750310
+};
+
+// A pool owner: its ctor only fills the head, the dtor hands the node chain back to the pool.
+struct PaintPool {
+    char   mData[0xc];                                   // +0x00
+    void*  mpChain;                                      // +0x0c
+    void Construct();                                    // 0x00b05a80
+    void ConstructAlt();                                 // 0x00b05ae0
+    void ReleaseChain(void* chain);                      // 0x00b04350 (ret 4)
+    void WalkChain(void* chain);                         // 0x00b04420 (ret 4)
+};
+
+// ---------------------------------------------------------------------------------------------------
+// 0x19a8-byte scatter element: a dword key, 4 bytes of padding, then the heavy payload.
+// ---------------------------------------------------------------------------------------------------
+struct __declspec(align(8)) Scatter {
+    char mData[0x19a0];                                  // +0x0000
+    Scatter();
+    Scatter(const Scatter&);
+    ~Scatter();
+    void AssignFrom(const Scatter&);                     // 0x00b0a3f0 (ret 4)
+};
+struct ScatterE {
+    uint32_t mKey;                                       // +0x0000
+    Scatter  mPayload;                                   // +0x0008 (8-byte aligned)
+};
+
+void* __cdecl ScatterCopyRange(void* first, void* last, void* dest);        // 0x00b096e0
+void* __cdecl ScatterFillRange(void* first, void* last, void* dest);        // 0x00b048f0
+void* __cdecl ScatterCopyBackward(ScatterE* first, ScatterE* last, ScatterE* dest); // 0x00b0a530
+
+struct ScatterVec {                                      // sp_vector<ScatterE, 256>
+    ScatterE* mpBegin;                                   // +0x0000
+    ScatterE* mpEnd;                                     // +0x0004
+    ScatterE* mpCap;                                     // +0x0008
+    void*     mPad0c;                                    // +0x000c
+    ScatterE* mpInline;                                  // +0x0010
+    void*     mPad14;                                    // +0x0014
+    char      mBuf[0x19a800];                            // +0x0018
+    ScatterE* Insert(ScatterE* pos, const ScatterE& v);  // 0x00b0c110 (ret 8)
+    void InsertGrow(ScatterE* pos, const ScatterE& v);   // 0x00b0bfa0 (ret 8)
+    void DestroyElements(ScatterE* first, ScatterE* last);  // 0x00b051f0 (ret 8)
+};
+
+// ---------------------------------------------------------------------------------------------------
+// The 0x24-byte grid element: a small polymorphic base plus 0x20 payload bytes.
+// ---------------------------------------------------------------------------------------------------
+struct ScatterBase {
+    ScatterBase();                                       // 0x007cef40
+    virtual ~ScatterBase();                              // 0x007ced20
+};
+struct Elem24 : ScatterBase {
+    char mRest[0x20];                                    // +0x0004
+};
+struct Elem24Vec {
+    Elem24* mpBegin;                                     // +0x0000
+    Elem24* mpEnd;                                       // +0x0004
+    Elem24* mpCap;                                       // +0x0008
+    void InsertN(Elem24* pos, unsigned int count, const Elem24& v); // 0x00b0af40 (ret 0xc)
+    void DestroyRange(Elem24* first, Elem24* last);      // 0x00b0aee0 (ret 8)
+    void DestroyStorage();                               // 0x00b002a0
+    void Resize(unsigned int n);                         // 0x00b0bd10 (ret 4)
+};
+
+// Inline-buffer vectors of 4-byte references.
+struct RefVec {
+    void* mpBegin; void* mpEnd; void* mpCap; void* mPad0c; void* mpInline; void* mpAlloc;
+    char  mBuf[0x100];                                   // inline buffer
+    void Destroy();                                      // 0x00ae6970
+};
+struct RefVecBig {
+    void* mpBegin; void* mpEnd; void* mpCap; void* mPad0c; void* mpInline; void* mpAlloc;
+    char  mBuf[0x1000];                                  // inline buffer
+    void Destroy();                                      // 0x00ae6970
+};
+
+// Spatial-entry vector: the free path walks the range, then frees a heap block through its [-4] header.
+struct SpatialVec {
+    void*    mpBegin;                                    // +0x00
+    void*    mpEnd;                                      // +0x04
+    void*    mpCap;                                      // +0x08
+    char     mPad0c[8];                                  // +0x0c
+    uint32_t mFlag;                                      // +0x14
+    char     mBuf[0x400];                                // +0x18 inline buffer
+    void ResetRange(void* first, void* last);            // 0x00b006f0 (ret 8)
+};
+
+// Gathered-entity vector: destroys its values, then frees through the [-4] header.
+struct EntVec {
+    void*    mpBegin;                                    // +0x00
+    void*    mpEnd;                                      // +0x04
+    void*    mpCap;                                      // +0x08
+    char     mPad0c[8];                                  // +0x0c
+    void*    mpAlloc;                                    // +0x14
+    char     mBuf[0x80];                                 // +0x18 inline buffer
+    void DestroyValues(void* first, void* last);         // 0x005f3680 (ret 8)
+};
+
+struct PaintMgr {
+    void*    mVtable;                                    // +0x0000
+    void*    mVtableSub;                                 // +0x0004
+    void*    mVtable3;                                   // +0x0008
+    char     mGonzagoRest[0x14];                         // +0x000c
+    uint32_t mHandler;                                   // +0x0020
+    uint32_t mHandlerArg0;                               // +0x0024
+    uint32_t mHandlerArg1;                               // +0x0028
+    uint32_t mHandlerArg2;                               // +0x002c
+    uint32_t mHandlerArg3;                               // +0x0030
+    char     mPoolA[0x0c];                               // +0x0034
+    void*    mpPoolAChain;                               // +0x0040
+    char     mPad044[0x8080 - 0x0044];                   // +0x0044
+    char     mPoolB[0x0c];                               // +0x8080
+    void*    mpPoolBChain;                               // +0x808c
+    char     mPad090[0x160e8 - 0x8090];                  // +0x8090
+    SpatialVec mSpatial;                                 // +0x160e8
+    void*    mpGrid;                                     // +0x16500
+    EntVec   mEnt;                                       // +0x16504
+    uint32_t mObjMask;                                   // +0x1659c
+    char     mPoolC[0x0c];                               // +0x165a0
+    void*    mpPoolCChain;                               // +0x165ac
+    char     mPad165b0[0x1e5f0 - 0x165b0];               // +0x165b0
+    ScatterVec mScatter;                                 // +0x1e5f0
+    char     mPad1b8e08[8];                              // +0x1b8e08
+    uint32_t mUnk1b8e10;                                 // +0x1b8e10
+    RefVec   mVec1;                                      // +0x1b8e14
+    int32_t  mUnk1b8f2c;                                 // +0x1b8f2c
+    Elem24Vec mItems;                                    // +0x1b8f30
+    char     mPad1b8f3c[8];                              // +0x1b8f3c
+    RefVec   mVec3;                                      // +0x1b8f44
+    RefVec   mVec4;                                      // +0x1b905c
+    RefVecBig mVec5;                                     // +0x1b9174
+    uint32_t mFlags1;                                    // +0x1ba18c
+    uint32_t mUnk1ba190;                                 // +0x1ba190
+
+    PaintMgr();                                          // 0x00b0bdb0
+    ~PaintMgr();                                         // 0x00b0bb50
+};
+
+// @ 0x00b0bdb0
+PaintMgr::PaintMgr()
+{
+    mVtable = gVtablePaintBase;
+    ((GonzagoSub*)&mVtableSub)->Construct();
+    mVtableSub = gVtablePaintSub;
+    mVtable = gVtablePaint;
+    mVtable3 = gVtablePaint3;
+
+    mHandler = 0;
+    mHandlerArg0 = 0;
+    mHandlerArg1 = 0;
+    mHandlerArg2 = 0;
+    mHandlerArg3 = 0;
+
+    ((PaintPool*)mPoolA)->Construct();                   // 0x00b05a80
+    ((PaintPool*)mPoolB)->ConstructAlt();                // 0x00b05ae0
+
+    void* p = mSpatial.mBuf;
+    mSpatial.mpBegin = p;
+    mSpatial.mpEnd = p;
+    p = (char*)p + 0x400;
+    mSpatial.mpCap = p;
+    mSpatial.mFlag = 0;
+
+    p = mEnt.mBuf;
+    mEnt.mpBegin = p;
+    mEnt.mpEnd = p;
+    p = (char*)p + 0x80;
+    mEnt.mpAlloc = 0;
+    mEnt.mpCap = p;
+
+    mObjMask = 0;
+    ((PaintPool*)mPoolC)->Construct();                   // 0x00b05a80
+
+    p = mScatter.mBuf;
+    mScatter.mpInline = (ScatterE*)p;
+    mScatter.mpEnd = (ScatterE*)p;
+    mScatter.mpBegin = (ScatterE*)p;
+    p = (char*)p + 0x19a800;
+    mScatter.mpCap = (ScatterE*)p;
+
+    mUnk1b8e10 = 0;
+    mVec1.mpAlloc = 0;
+    p = mVec1.mBuf;
+    mVec1.mpBegin = p;
+    mVec1.mpEnd = p;
+    p = (char*)p + 0x100;
+    mVec1.mpCap = p;
+
+    mUnk1b8f2c = -1;
+    mItems.mpBegin = 0;
+    mItems.mpEnd = 0;
+    mItems.mpCap = 0;
+
+    mVec3.mpAlloc = 0;
+    p = mVec3.mBuf;
+    mVec3.mpBegin = p;
+    mVec3.mpEnd = p;
+    p = (char*)p + 0x100;
+    mVec3.mpCap = p;
+
+    p = mVec4.mBuf;
+    mVec4.mpBegin = p;
+    mVec4.mpEnd = p;
+    p = (char*)p + 0x100;
+    mVec4.mpCap = p;
+    mVec4.mpAlloc = 0;
+
+    p = mVec5.mBuf;
+    mVec5.mpBegin = p;
+    mVec5.mpEnd = p;
+    p = (char*)p + 0x1000;
+    mVec5.mpCap = p;
+    mVec5.mpAlloc = 0;
+
+    mFlags1 = 0;
+    mUnk1ba190 = 0;
+    mFlags1 &= ~3u;
+
+    void* mem = EaAllocate(0x84, "Simulator/HierGrid", 0, 0, 0, 0);
+    mpGrid = mem ? new (mem) HierGrid() : 0;
+
+    mItems.Resize(1);
+}
+
+// @ 0x00b0bb50
+PaintMgr::~PaintMgr()
+{
+    void* grid = mpGrid;
+    mVtable = gVtablePaint;
+    mVtableSub = gVtablePaintSub;
+    mVtable3 = gVtablePaint3;
+
+    if (grid) {
+        ((HierGrid*)grid)->~HierGrid();                  // 0x00750310
+        operator delete(grid);
+    }
+
+    mItems.DestroyRange(mItems.mpBegin, mItems.mpEnd);   // 0x00b0aee0
+    mVec5.Destroy();                                     // 0x00ae6970
+    mVec4.Destroy();
+    mVec3.Destroy();
+    mItems.DestroyStorage();                             // 0x00b002a0
+    mVec1.Destroy();
+
+    mScatter.DestroyElements(mScatter.mpBegin, mScatter.mpEnd);   // 0x00b051f0
+    void* scatterBuf = mScatter.mpBegin;
+    if (scatterBuf && scatterBuf != mScatter.mpInline)
+        operator delete(scatterBuf);
+
+    ((PaintPool*)mPoolC)->ReleaseChain(mpPoolCChain);    // 0x00b04350
+
+    mEnt.DestroyValues(mEnt.mpBegin, mEnt.mpEnd);        // 0x005f3680
+    if (mEnt.mpBegin && ((uint32_t*)mEnt.mpBegin)[-1])
+        operator delete(mEnt.mpBegin);
+
+    mSpatial.ResetRange(mSpatial.mpBegin, mSpatial.mpEnd);     // 0x00b006f0
+    if (mSpatial.mpBegin && ((uint32_t*)mSpatial.mpBegin)[-1])
+        operator delete(mSpatial.mpBegin);
+
+    ((PaintPool*)mPoolB)->WalkChain(mpPoolBChain);       // 0x00b04420
+    ((PaintPool*)mPoolA)->ReleaseChain(mpPoolAChain);    // 0x00b04350
+
+    if (mHandler) {
+        RemoveMessageHandler((void*)mHandler, mHandlerArg0, mHandlerArg1, mHandlerArg2, mHandlerArg3);
+        mHandler = 0;
+    }
+
+    ((GonzagoSub*)&mVtableSub)->~GonzagoSub();           // 0x00b5b9a0
+    mVtable = gVtablePaintDtor;
+}
+
+// @ 0x00b0bd10
+void Elem24Vec::Resize(unsigned int n)
+{
+    if (n > (unsigned int)(mpEnd - mpBegin)) {
+        Elem24 tmp;
+        InsertN(mpEnd, n - (unsigned int)(mpEnd - mpBegin), tmp);
+    } else {
+        DestroyRange(mpBegin + n, mpEnd);
+    }
+}
+
+// @ 0x00b0bfa0
+void ScatterVec::InsertGrow(ScatterE* pos, const ScatterE& v)
+{
+    if (mpEnd != mpCap) {
+        ScatterE* src = (ScatterE*)&v;
+        if (src >= pos && src < mpEnd)
+            src = (ScatterE*)((char*)src + sizeof(ScatterE));
+        new ((void*)mpEnd) ScatterE(*(mpEnd - 1));
+        ScatterCopyBackward(pos, mpEnd - 1, mpEnd);
+        pos->mKey = src->mKey;
+        pos->mPayload.AssignFrom(src->mPayload);
+        ++mpEnd;
+    } else {
+        unsigned int count = (unsigned int)(mpEnd - mpBegin);
+        unsigned int cap = count ? count * 2 : 1;
+        ScatterE* buf = (ScatterE*)EaAllocate(cap * sizeof(ScatterE), "Simulator", 0, 0, 0, 0xd1);
+        if (buf) {
+            ScatterCopyRange(mpBegin, pos, buf);
+            ScatterE* newpos = (ScatterE*)ScatterFillRange(mpBegin, pos, buf);
+            if (newpos) {
+                newpos->mKey = v.mKey;
+                new (newpos) ScatterE(*(ScatterE*)&v);
+            }
+            ScatterCopyRange(pos, mpEnd, newpos + 1);
+            ScatterE* newend = (ScatterE*)ScatterFillRange(pos, mpEnd, newpos + 1);
+            if (mpBegin && mpBegin != mpInline)
+                operator delete(mpBegin);
+            mpBegin = buf;
+            mpEnd = newend;
+            mpCap = buf + cap;
+        }
+    }
+}
+
+// @ 0x00b0c110
+ScatterE* ScatterVec::Insert(ScatterE* pos, const ScatterE& v)
+{
+    unsigned int index = (unsigned int)(pos - mpBegin);
+    if (pos == mpEnd && mpEnd != mpCap) {
+        ScatterE* p = mpEnd;
+        mpEnd = p + 1;
+        new (p) ScatterE(v);
+    } else {
+        InsertGrow(pos, v);
+    }
+    return mpBegin + index;
+}
