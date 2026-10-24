@@ -123,37 +123,35 @@ void HandleThing::SetEnabled(bool v) {
 }
 
 // ------------------------------------------------------------------ morph tgt
-// @ 0x00c63a60  (complete, near miss: register allocation / this-null check)
+// 0x00b18460 is the shared type-id cast helper (this in ecx, id on the stack, ret 4); the original
+// tail-jumps to it from the QueryInterface fallbacks.
+struct MorphCastHelper {
+    void* FUN_00b18460(unsigned id);              // 0x00b18460
+};
+
+// @ 0x00c63a60  (complete, near miss: block layout only - registers match retail)
 struct MorphA {
     void* QueryInterface(unsigned id);
-    void* Fallback(unsigned id);
 };
 void* MorphA::QueryInterface(unsigned id) {
     if (id == 0x7a81824)
         return this;
     if (id == 0x1186577)
         return this ? (char*)this + 0x34 : 0;
-    if (id == 0x7a309fb)
-        return this;
-    return Fallback(id);
+    return (id == 0x7a309fb) ? (void*)this : ((MorphCastHelper*)this)->FUN_00b18460(id);
 }
-void* MorphA::Fallback(unsigned id) { (void)id; return 0; }
 
-// @ 0x00c63aa0  (complete, near miss)
+// @ 0x00c63aa0  (complete, near miss: block layout only - registers match retail)
 struct MorphB {
     void* QueryInterface(unsigned id);
-    void* Fallback(unsigned id);
 };
 void* MorphB::QueryInterface(unsigned id) {
     if (id == 0x7abdd8d)
         return this;
     if (id == 0x1186577)
         return this ? (char*)this + 0x34 : 0;
-    if (id == 0x7a309fb)
-        return this;
-    return Fallback(id);
+    return (id == 0x7a309fb) ? (void*)this : ((MorphCastHelper*)this)->FUN_00b18460(id);
 }
-void* MorphB::Fallback(unsigned id) { (void)id; return 0; }
 
 // @ 0x00c63be0  (complete, near miss: store ordering)
 struct cMorphHandle {
