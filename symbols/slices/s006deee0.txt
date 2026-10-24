@@ -22,4 +22,4 @@
 006dfca0 ?Elem16VecEraseRange@Elem16Vector@@QAEHHH@Z  # Elem16Vector::Elem16VecEraseRange migrated from s006deee0 (verbatim, slice spelling)
 006dfd00 ?QuickSortCR@@YAXPAUcClusterRect_s006d_eee0@SP@@0ABUcRectAreaSort@@@Z  # QuickSortCR migrated from s006deee0 (verbatim, slice spelling)
 006dfd90 ?Elem16VecInsert@Elem16Vector@@QAEXHIPAUElem16@@@Z  # Elem16Vector::Elem16VecInsert migrated from s006deee0 (verbatim, slice spelling)
-006dffc0 ?Init@ClusterMap@@QAEXXZ  # ClusterMap::Init migrated from s006deee0 (verbatim, slice spelling)
+006dffc0 ?Init@ClusterMap@@QAEPAU1@XZ  # ClusterMap::Init migrated from s006deee0 (returns this)

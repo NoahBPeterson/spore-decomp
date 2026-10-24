@@ -11,7 +11,9 @@ extern "C" long _InterlockedDecrement(volatile long*);
 extern "C" long _InterlockedExchange(volatile long*, long);
 extern "C" void  FreeMem(void* p);                                                  // 0xf47380
 extern "C" void* AllocMem(unsigned n, const char* name, int a, int b, const char* file, int line);  // 0xf473a0
-extern "C" void  VecPushBackSlow(void* end, const void* value);                                          // 0x6ec4a0
+struct ClusterPtrVec {
+    void VecPushBackSlow(void* end, const void* value);   // 0x6ec4a0
+};
 
 // ---- items of slice s006deee0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int uint;
@@ -175,7 +177,7 @@ struct ClusterMap {
     void*    mpVec3Begin;  // +0x25c
     void*    mpVec3End;    // +0x260
     void*    mpVec3Cap;    // +0x264
-    void Init();
+    ClusterMap* Init();
 };
 // ---- items of slice s006deee0 end
 
@@ -382,17 +384,18 @@ void QuickSortImplKeyLT(SortKeyObj** first, SortKeyObj** last, int kRecursionCou
 // @ 0x006df8f0
 SP::cClusterRect_s006d_eee0* GetPartitionCR(SP::cClusterRect_s006d_eee0* first, SP::cClusterRect_s006d_eee0* last, SP::cClusterRect_s006d_eee0 pivotValue, const cRectAreaSort& compare)
 {
+    uint pivotArea = *(const uint*)&pivotValue.mArea;
     for (;; ++first) {
-        while (compare(*first, pivotValue))
+        while (*(const uint*)&first->mArea > pivotArea)
             ++first;
         --last;
-        while (compare(pivotValue, *last))
+        while (pivotArea > *(const uint*)&last->mArea)
             --last;
         if (first >= last)
             return first;
-        const SP::cClusterRect_s006d_eee0 temp(*first);
+        pivotValue = *first;
         *first = *last;
-        *last = temp;
+        *last = pivotValue;
     }
 }
 
@@ -435,9 +438,9 @@ void ClusterMapAdder::AddCluster(int* rect)
             if (slot)
                 *slot = (int)rect;
         } else {
-            VecPushBackSlow(*pEnd, &rect);
+            ((ClusterPtrVec*)((char*)self + 0x234))->VecPushBackSlow(*pEnd, &rect);
         }
-        *(float*)((char*)self + 0x230) += (float)rect[2];
+        *(float*)((char*)self + 0x230) += *(float*)(rect + 2);
     }
 }
 
@@ -533,7 +536,7 @@ void Elem16Vector::Elem16VecInsert(int position, uint n, Elem16* value)
 }
 
 // @ 0x006dffc0
-void ClusterMap::Init()
+ClusterMap* ClusterMap::Init()
 {
     void* inlineBuf = (char*)this + 0x30;
     mFlag = false;
@@ -554,6 +557,7 @@ void ClusterMap::Init()
     mpVec3Begin = 0;
     mpVec3End = 0;
     mpVec3Cap = 0;
+    return this;
 }
 
 // @ 0x006e0030
