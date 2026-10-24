@@ -1463,18 +1463,18 @@ void SetBabyPath(cSPPlayMode_s0062_9c50* m, uint32_t id, float x, float y, float
 bool cSPPlayMode_s0062_9c50::HasActivePath(int creatureID)
 {
   cSPPlayMode_s0062_9c50* m = this;
-  char* cm = *(char**)((char*)m + 0x3610);
-  int n = (*(int*)(cm + 0x370) - *(int*)(cm + 0x36c)) / 0x30;
-  char* begin = *(char**)(cm + 0x36c);
-  int i = 0;
-  while (*(int*)(*(char**)(begin + i * 4) + 0x1c) != creatureID) {
+  char** begin = *(char***)((char*)m + 0x7c);                    // mCreaturesBegin
+  unsigned n = (unsigned)(*(char***)((char*)m + 0x80) - begin); // mCreaturesEnd
+  if (n == 0) return false;
+  unsigned i = 0;
+  while (*(int*)(begin[i] + 0x1c) != creatureID) {
     ++i;
-    if ((unsigned)i >= (unsigned)n) return false;
+    if (i >= n) return false;
   }
-  if ((unsigned)i < (unsigned)n) {
-    char* c = *(char**)(begin + i * 4);
+  if (i < n) {
+    char* c = begin[i];
     if (*(float*)(c + 0x34) > 0.0f) return true;
-    char* c0 = *(char**)begin;
+    char* c0 = begin[0];
     if (*(char*)(c0 + 0x24) != 0 && *(char*)(c + 0x24) != 0) return true;
   }
   return false;
@@ -1619,8 +1619,8 @@ void SetBabySitState(cSPPlayMode_s0062_9c50* m, uint32_t index)
 void cSPPlayMode_s0062_9c50::SetAllBabySitState()
 {
   cSPPlayMode_s0062_9c50* m = this;
-  char* cm = *(char**)((char*)m + 0x3610);
-  int n = (*(int*)(cm + 0x370) - *(int*)(cm + 0x36c)) / 0x30;
+  char* ed = *(char**)((char*)m + 0x3614);                       // mEditor
+  int n = (*(int*)(ed + 0x370) - *(int*)(ed + 0x36c)) / 0x30;    // babies
   for (int i = 0; i < n; ++i) SetBabySitState(m, (uint32_t)i);
 }
 
@@ -1767,17 +1767,27 @@ unsigned __fastcall cSPPlayMode_HandleMessage(void* self, unsigned, int)
 
 
 
+// The retail function at 0x0062b980 is __thiscall (ecx = the SPPlayMode owner, one stack argument,
+// ret 4).  The slice-era free `__fastcall(void*, int)` decorated the same name but cleaned no stack
+// argument, so the caller's `push id` left esp 4 bytes off.
+struct SPPlayMode_Lib {
+  char  pad7c[0x7c];
+  void* mBegin;                     // 0x7c
+  void* mEnd;                       // 0x80
+  void  FUN_0062b980(int id);
+};
+
 // @ 0x0062b980
-void __fastcall FUN_0062b980(void* self, int id)
+void SPPlayMode_Lib::FUN_0062b980(int id)
 {
-  char* s = (char*)self;
+  char* s = (char*)this;
   char** end = *(char***)(s + 0x80);
   char** it  = *(char***)(s + 0x7c);
   while (it != end) {
     char* o = *it;
     if (o != 0) {
-      char* v = *(char**)o;
-      ((TF0)(*(void**)(v + 4)))(v);
+      char* vt = *(char**)o;
+      ((TF0)(*(void**)(vt + 4)))(o);       // virtual slot 1: `this` is the element, not its vtable
     }
     if (*(int*)(o + 0x1c) == id) {
       if ((char**)(it + 1) < *(char***)(s + 0x80)) {
@@ -1787,15 +1797,15 @@ void __fastcall FUN_0062b980(void* self, int id)
       char* last = **(char***)(s + 0x80);
       if (last != 0) {
         char* lv = *(char**)last;
-        ((TF0)(*(void**)(lv + 8)))(lv);
+        ((TF0)(*(void**)(lv + 8)))(last);
       }
       char* ov = *(char**)o;
-      ((TF0)(*(void**)(ov + 8)))(ov);
+      ((TF0)(*(void**)(ov + 8)))(o);
       return;
     }
     it = (char**)((char*)it + 4);
     char* ov = *(char**)o;
-    ((TF0)(*(void**)(ov + 8)))(ov);
+    ((TF0)(*(void**)(ov + 8)))(o);
   }
 }
 
