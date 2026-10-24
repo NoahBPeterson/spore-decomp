@@ -1,0 +1,10 @@
+slices/s00c4a850/s00c4a850.cpp  ??0cMissionAdventure@Simulator@@QAE@XZ  00c4af60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4a850/s00c4a850.cpp  ?PickAdventureAsset@cSPMissionAdventureBase@@QAEPAXXZ  00c4b220  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4a850/s00c4a850.cpp  ?RerollAdventureAsset@cSPMissionAdventureBase@@QAE_NXZ  00c4b250  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4a850/s00c4a850.cpp  ??0cMissionBalance@Simulator@@QAE@XZ  00c4b570  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4a850/s00c4a850.cpp  ?ReturnForRewards@cSPMissionMultiDelivery@@QAEXXZ  00c4b760  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4a850/s00c4a850.cpp  ?Update@cSPMissionMultiDelivery@@QAEHPAX@Z  00c4b7a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4a850/s00c4a850.cpp  ?InitWrapper@cSPMissionMultiDelivery@@QAE_NXZ  00c4baa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4a850/s00c4a850.cpp  ?IsAtDeliveryTarget@cSPMissionMultiDelivery@@QAE_NPAXPAUResourceKey@@@Z  00c4bb60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4a850/s00c4a850.cpp  ?GetCountA@cSPMissionMultiDelivery@@QAEHXZ  00c4bba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4a850/s00c4a850.cpp  ?GetCountB@cSPMissionMultiDelivery@@QAEHXZ  00c4bbc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
