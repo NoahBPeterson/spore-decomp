@@ -67,6 +67,9 @@ extern const Matrix3      DAT_016063f8;                             // 0x16063f8
 void* __cdecl FUN_00453b20(Matrix3*, int, float);                   // builds a Matrix3
 void* __cdecl FUN_0069b1c0(void*, int, int);                        // 0x0069b1c0
 Matrix3* __cdecl FUN_006ba620(Matrix3* dst, const float* other);
+// The transform callee sits in another translation unit in the original build, so callers see only
+// its prototype: declared opaque here so the compiler keeps `this`/`other` in callee-saved registers.
+Matrix3* __cdecl FUN_006ba620_ext(Matrix3* dst, const float* other);   // 0x006ba620
 bool  __cdecl FUN_009322b0(const void*);                            // 0x009322b0  EA::IO::Directory::Exists
 int   __cdecl FUN_006a17e0(int, int);
 int   __cdecl FUN_006a1880(int, int, int);
@@ -129,11 +132,12 @@ struct XForm2 {
 };
 void XForm2::Apply(const float* other)
 {
-    if ((flags & 2) == 0) {
-        for (int i = 0; i < 9; ++i) rot.m[i] = other[i];
-        flags |= 2;
+    uint16_t f = flags;
+    if (f & 2) {
+        FUN_006ba620_ext(&rot, other);
     } else {
-        FUN_006ba620(&rot, other);
+        rot = *(const Matrix3*)other;
+        flags = (uint16_t)(f | 2);
     }
     float a = m4, b = m8, c = mc;
     m4 = ((other[3] * b + other[6] * c) + other[0] * a);
