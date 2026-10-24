@@ -1,0 +1,9 @@
+00b6baf0 ResolveVar  # model name; tooltip text-variable resolver (obj->vt[0x38] switch -> cVar), pre-existing nonmatching row
+00b6c180 CleanupUICtx  # model name; gUIMgr->Find(key), shut down and release the record's layout at +0xb8, then erase every cached window (+0xc0..+0xc8)
+00b6c200 RemoveUICtx  # model name; cdecl(int key): RemoveUISlot(key), CleanupUICtx(key), release mRef (+0x120, vt[4]), release mObj (+0x4, vt[4]), gUIMgr->Remove(key)
+00b6c280 RefreshUITooltips  # model name; walk gUIMgr->Next(&key) from CurrentKey() and RemoveUICtx(each record id)
+00b6c2d0 ShowHealthBar  # model name; register-key helper: FindOrCreateKey(key) -> GetSlot, build cSPUILayout("GoalIcons") once, cache 14 windows of "Simulator/HealthBar"
+00b6c710 UpdateUIContexts  # model name; void(float dt): decrement each record's timer (+0x11c), hide expired records, place visible ones with AnchorWindowToScreen
+00b6c870 UpdateSimulatorUI  # model name; void(UICtx*, int, float*, int, float): creature/space mode window visibility + ShowSimulatorText / RemoveUISlot dispatch
+00b686a0 RemoveUISlot  # model name; register-key helper: shut down + release the record's sub-layout at +0x50, notify the sub-window in tribe mode
+00b69460 SetCtxWindow  # model name; show/hide the object's layout window (Cast 0xeeee8218) and select the layout index (-1 keeps the current entry hidden)

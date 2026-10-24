@@ -1,0 +1,3 @@
+slices/s00b6baf0/s00b6baf0.cpp  ?RemoveUICtx@@YAXH@Z  00b6c200  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b6baf0/s00b6baf0.cpp  ?RefreshUITooltips@@YAXXZ  00b6c280  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b6baf0/s00b6baf0.cpp  ?ShowHealthBar@@YAPAUUICtx@@H@Z  00b6c2d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

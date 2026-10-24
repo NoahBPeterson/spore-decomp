@@ -363,3 +363,444 @@ lookup:
 dflt:
     return cVar(gEmptyStr);
 }
+
+// ===========================================================================
+// Simulator tooltip / health-bar UI records (0x00B6C180 - 0x00B6CA0E)
+//
+// 0x01687348 holds the global UI manager.  It maps a 32-bit record key to a
+// UICtx (one per tooltip target), can look records up, and walks the live ones
+// with Next(&key).  A record owns a cSPUILayout, the windows found in it, and
+// the timer that drives the tooltip fade-out.
+// ===========================================================================
+extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);
+
+struct UICtx;
+struct SimState;
+
+// 3D point returned by the position helper (through a hidden return pointer)
+struct Vec3 {
+    float x, y, z;
+};
+
+// ---------------------------------------------------------------------------
+// window / simulator object interface: only the vtable slots this unit calls
+// are named, the rest keep the offsets.
+// ---------------------------------------------------------------------------
+struct SimView {
+    virtual void w00(); virtual void Release(); virtual void w02();
+    virtual SimView* Cast(uint32_t id);                          // +0x0c
+    virtual void w04(); virtual void SetLayoutIndex(int index);  // +0x14
+    virtual void w06(); virtual int GetIndex();                  // +0x1c
+    virtual void w08(); virtual void w09(); virtual void w10(); virtual void w11();
+    virtual void w12(); virtual void w13(); virtual int GetVarID();   // +0x38
+    virtual void w15(); virtual void w16(); virtual void w17(); virtual void w18();
+    virtual void w19(); virtual void w20(); virtual void w21(); virtual void w22();
+    virtual void w23(); virtual void w24(); virtual void w25(); virtual void w26();
+    virtual void w27(); virtual void w28(); virtual void w29(); virtual void w30();
+    virtual void SetVisible(int a, int b);                       // +0x7c
+    virtual void w32(); virtual void w33(); virtual void w34(); virtual void w35();
+    virtual void w36(); virtual void w37(); virtual void w38(); virtual void w39();
+    virtual void w40(); virtual void w41(); virtual void w42(); virtual void w43();
+    virtual void w44(); virtual void w45(); virtual void w46(); virtual void w47();
+    virtual void w48(); virtual void w49(); virtual void w50(); virtual void w51();
+    virtual bool IsBlockedPrimary();                             // +0xd0
+    virtual bool IsBlockedSecondary();                           // +0xd4
+    virtual void w54(); virtual void w55(); virtual void w56(); virtual void w57();
+    virtual void w58(); virtual void w59();
+    virtual SimView* FindWindow(int id, int flags);              // +0xf0
+    virtual void w61(); virtual void w62(); virtual void w63(); virtual void w64();
+    virtual void w65();
+    virtual void OnLayoutChange(void* pData);                    // +0x108
+    virtual void w67();
+
+    char mPad00[0xb58 - 4];
+    uint32_t mFlags;                                             // +0xb58
+
+    bool CheckActive();                                          // 0x00C0B770
+    SimState* GetState();                                        // 0x00C0C1A0
+};
+
+struct SimState {
+    char mPad00[0x32c];
+    int mCount;                                                  // +0x32c
+};
+
+// eastl 3-pointer vector (the only operations this unit performs on it)
+struct UIPtrVector {
+    SimView** mpBegin;                                           // +0x00
+    SimView** mpEnd;                                             // +0x04
+    SimView** mpCapacityEnd;                                     // +0x08
+
+    unsigned int size() const { return (unsigned int)(mpEnd - mpBegin); }
+
+    void push_back(SimView* const& value)
+    {
+        if (mpEnd < mpCapacityEnd)
+        {
+            SimView** pSlot = mpEnd++;
+            if (pSlot)
+                *pSlot = value;
+        }
+        else
+            DoInsertValue(mpEnd, value);
+    }
+
+    void erase(SimView** first, SimView** last)
+    {
+        memcpy(first, last, (unsigned int)((char*)mpEnd - (char*)last));
+        mpEnd -= last - first;
+    }
+
+    void DoInsertValue(SimView** pPosition, SimView* const& value);   // 0x00CD0550
+};
+
+struct RefObj {
+    virtual void r00();
+    virtual void Release();                                      // +0x04
+    virtual void Destroy();                                      // +0x08
+};
+
+struct cSPUILayoutBase {
+    virtual void l00();
+    virtual void AddRef();                                       // +0x04
+    virtual void Release();                                      // +0x08
+};
+
+struct cSPUILayout : cSPUILayoutBase {
+    cSPUILayout* ctor();                                                          // 0x00810000
+    bool Init(const wchar_t* pName, int scale, bool bFlag, unsigned int key);     // 0x00812160
+    SimView* FindWindowByID(int windowID, int flags);                             // 0x008105B0
+    void Shutdown(unsigned int flags);                                            // 0x00811AD0
+};
+
+// cTribeModeStrategy: the +0x04 sub-object is what the tooltip layout wants
+struct TribeStrategyData {
+    int mValue;                                                  // +0x00
+};
+struct TribeModeStrategy {
+    char mPad00[4];
+    TribeStrategyData mData;                                     // +0x04
+};
+TribeModeStrategy* TribeModeStrategyInstance();                  // 0x00CD40B0
+
+// ---------------------------------------------------------------------------
+// one tooltip/health-bar UI record
+// ---------------------------------------------------------------------------
+struct UICtx {
+    int mID;                                                     // +0x000
+    VObj* mObj;                                                  // +0x004
+    bool mVisible;                                               // +0x008
+    char mPad09[3];
+    float mX;                                                    // +0x00c
+    float mY;                                                    // +0x010
+    char mPad14[0x3c];
+    cSPUILayout* mSubLayout;                                     // +0x050
+    char mPad54[0x24];
+    SimView* mMainWindow;                                        // +0x078
+    char mPad7C[0x24];
+    SimView* mStateWindow;                                       // +0x0a0
+    VObj* mOwnerObj;                                             // +0x0a4
+    char mPadA8[4];
+    SimView* mSubWindow;                                         // +0x0ac
+    char mPadB0[8];
+    cSPUILayout* mLayout;                                        // +0x0b8
+    SimView* mWindow;                                            // +0x0bc
+    UIPtrVector mWindows;                                        // +0x0c0
+    char mPadCC[0x4c];
+    int mIndex;                                                  // +0x118
+    float mTimer;                                                // +0x11c
+    RefObj* mRef;                                                // +0x120
+
+    void ClearWindows() { mWindows.erase(mWindows.mpBegin, mWindows.mpEnd); }
+
+    // register-argument helpers of the original TU (record arrives in esi)
+    bool UpdateSimulatorAnim(float value, float elapsed);        // 0x00B69010
+    void ShowSimulatorText(float* pOffset, int a2, const void* pText,
+                           Vec3* pPos, int a4, int a5);          // 0x00B6A720
+};
+
+// ---------------------------------------------------------------------------
+// the UI manager at 0x01687348
+// ---------------------------------------------------------------------------
+struct UIMgr {
+    UICtx* Find(int key);                                        // 0x00B721D0
+    UICtx* GetSlot(int key);                                     // 0x00B72210
+    UICtx* Next(int* pKey);                                      // 0x00B72230
+    void   Remove(int key);                                      // 0x00B72260
+    int    CurrentKey();                                         // 0x00E31100
+};
+extern UIMgr* gUIMgr;                                            // 0x01687348
+
+void* SporeAlloc(int size, const wchar_t* pName, int a, int b, int c, int d);   // 0x00F473A0
+int   FindOrCreateKey(int key);                                                  // 0x00B687D0
+void  AnchorWindowToScreen(float* pRect, SimView* pWindow, int flags, int arg);  // 0x008070D0
+Vec3  GetSimulatorPos(VObj* pObj);                                               // 0x00B677E0
+float GetSimulatorFloat(VObj* pObj);                                             // 0x00B685E0
+int   GetSimulatorInt1(VObj* pObj);                                              // 0x00B682A0
+int   GetSimulatorInt2(VObj* pObj);                                              // 0x00B67B90
+
+static void CleanupUICtx(int key);                               // 0x00B6C180 (key in eax)
+static void RemoveUISlot(int key);                               // 0x00B686A0 (key in eax)
+static void SetCtxWindow(SimView* pObj, int index);              // 0x00B69460
+static UICtx* ShowHealthBar(int key);                            // 0x00B6C2D0 (key in eax)
+
+// 0x00B686A0: shut down and release the layout a record keeps at +0x50
+__declspec(noinline) static void RemoveUISlot(int key)
+{
+    UICtx* pCtx = gUIMgr->Find(key);
+    if (!pCtx || !pCtx->mSubLayout)
+        return;
+
+    if (GetCurrentGameMode() == 0x1654c02 && pCtx->mObj->GetVarID() == 0xee02c7)
+    {
+        TribeModeStrategy* pStrategy = TribeModeStrategyInstance();
+        pCtx->mSubWindow->OnLayoutChange(pStrategy ? &pStrategy->mData : 0);
+    }
+
+    pCtx->mSubLayout->Shutdown(1);
+
+    cSPUILayout* pLayout = pCtx->mSubLayout;
+    if (pLayout)
+    {
+        pCtx->mSubLayout = 0;
+        pLayout->Release();
+    }
+}
+
+// 0x00B69460: show/hide the window the object casts to, and select its entry
+static void SetCtxWindow(SimView* pObj, int index)
+{
+    SimView* pView = pObj ? pObj->Cast(0xeeee8218) : 0;
+
+    if (index == -1)
+    {
+        pView->SetVisible(1, 0);
+        return;
+    }
+
+    pView->SetVisible(1, 1);
+    pObj->SetLayoutIndex(index);
+}
+
+// @ 0x00B6C180
+__declspec(noinline) static void CleanupUICtx(int key)
+{
+    UICtx* pCtx = gUIMgr->Find(key);
+    if (!pCtx)
+        return;
+    if (!pCtx->mLayout)
+        return;
+
+    pCtx->mLayout->Shutdown(1);
+
+    cSPUILayout* pLayout = pCtx->mLayout;
+    if (pLayout)
+    {
+        pCtx->mLayout = 0;
+        pLayout->Release();
+    }
+
+    pCtx->ClearWindows();
+}
+
+// releases a ref-counted slot and clears it (inlined at the call site in the original)
+static void ReleaseRefSlot(RefObj*& pSlot)
+{
+    RefObj* pRef = pSlot;
+    if (pRef)
+    {
+        pSlot = 0;
+        pRef->Release();
+    }
+}
+
+// @ 0x00B6C200
+__declspec(noinline) void RemoveUICtx(int key)
+{
+    UICtx* pCtx = gUIMgr->Find(key);
+    if (!pCtx)
+        return;
+
+    RemoveUISlot(key);
+    CleanupUICtx(key);
+
+    UICtx* pRefCtx = gUIMgr->Find(key);
+    if (pRefCtx && pRefCtx->mRef)
+        ReleaseRefSlot(pRefCtx->mRef);
+
+    if (pCtx->mObj)
+    {
+        VObj* pObj = pCtx->mObj;
+        pCtx->mObj = 0;
+        pObj->s01();
+    }
+
+    gUIMgr->Remove(key);
+}
+
+// @ 0x00B6C280
+void RefreshUITooltips()
+{
+    if (!gUIMgr)
+        return;
+
+    int key = gUIMgr->CurrentKey();
+    UICtx* pCtx = gUIMgr->Next(&key);
+    while (pCtx)
+    {
+        RemoveUICtx(pCtx->mID);
+        pCtx = gUIMgr->Next(&key);
+    }
+}
+
+// @ 0x00B6C2D0
+__declspec(noinline) static UICtx* ShowHealthBar(int key)
+{
+    int slotKey = FindOrCreateKey(key);
+    UICtx* pCtx = gUIMgr->GetSlot(slotKey);
+
+    if (!pCtx->mLayout)
+    {
+        void* pMem = SporeAlloc(0x18, L"Simulator/HealthBar", 0, 0, 0, 0);
+        cSPUILayout* pLayout = pMem ? ((cSPUILayout*)pMem)->ctor() : 0;
+        cSPUILayout* pOld = pCtx->mLayout;
+
+        if (pLayout != pOld)
+        {
+            if (pLayout)
+                pLayout->AddRef();
+            pCtx->mLayout = pLayout;
+            if (pOld)
+                pOld->Release();
+        }
+
+        pCtx->mLayout->Init(L"GoalIcons", 0x40464100, true, 0xe9f70df9);
+
+        pCtx->mWindow = pCtx->mLayout->FindWindowByID(0x75de460, 1);
+
+        pCtx->mWindows.push_back(pCtx->mWindow->FindWindow(0x75f3ea8, 0));
+        pCtx->mWindows.push_back(pCtx->mWindow->FindWindow(0x75de461, 0));
+        pCtx->mWindows.push_back(pCtx->mWindow->FindWindow(0x7c37790, 0));
+        pCtx->mWindows.push_back(pCtx->mWindow->FindWindow(0x7c37793, 0));
+        pCtx->mWindows.push_back(pCtx->mWindow->FindWindow(0x7c37794, 0));
+        pCtx->mWindows.push_back(pCtx->mWindow->FindWindow(0x7c37799, 0));
+        pCtx->mWindows.push_back(pCtx->mWindow->FindWindow(0x7c3779d, 0));
+        pCtx->mWindows.push_back(pCtx->mWindow->FindWindow(0x7c377a1, 0));
+        pCtx->mWindows.push_back(pCtx->mWindow->FindWindow(0x7c377a5, 0));
+        pCtx->mWindows.push_back(pCtx->mWindow->FindWindow(0x7c377a6, 0));
+        pCtx->mWindows.push_back(pCtx->mWindow->FindWindow(0x7c377a9, 0));
+        pCtx->mWindows.push_back(pCtx->mWindow->FindWindow(0x7c377ad, 0));
+        pCtx->mWindows.push_back(pCtx->mWindow->FindWindow(0x7c377b1, 0));
+        pCtx->mWindows.push_back(pCtx->mWindow->FindWindow(0x7c377b6, 0));
+
+        if (!pCtx->mWindow)
+            CleanupUICtx(slotKey);
+    }
+
+    return pCtx;
+}
+
+// stand-in caller: gives ShowHealthBar the register argument convention the
+// original TU used (the record key arrives in eax).
+UICtx* ShowHealthBarFromKey(int key)
+{
+    return ShowHealthBar(key);
+}
+
+// @ 0x00B6C710
+void UpdateUIContexts(float dt)
+{
+    int key = gUIMgr->CurrentKey();
+    UICtx* pCtx = gUIMgr->Next(&key);
+    if (!pCtx)
+        return;
+
+    do
+    {
+        if (pCtx->mLayout)
+        {
+            float timeLeft = pCtx->mTimer - dt;
+            pCtx->mTimer = timeLeft;
+
+            if (timeLeft >= 0)
+            {
+                for (unsigned int i = 0; i < pCtx->mWindows.size(); ++i)
+                {
+                    SimView* pChild = pCtx->mWindows.mpBegin[i];
+                    if (pChild)
+                    {
+                        if (pChild->GetIndex() == pCtx->mIndex)
+                            pChild->SetVisible(1, 1);
+                        else
+                            pChild->SetVisible(1, 0);
+                    }
+                }
+
+                pCtx->mWindow->SetVisible(1, pCtx->mVisible);
+
+                if (pCtx->mVisible)
+                {
+                    float x = pCtx->mX;
+                    float y = pCtx->mY;
+                    float rect[4];
+                    rect[0] = x - 0.5f;
+                    rect[1] = y - 0.5f;
+                    rect[2] = x + 0.5f;
+                    rect[3] = y + 0.5f;
+                    AnchorWindowToScreen(rect, pCtx->mWindow, 0x102, 0);
+                }
+            }
+            else
+                CleanupUICtx(pCtx->mID);
+        }
+
+        pCtx = gUIMgr->Next(&key);
+    } while (pCtx);
+}
+
+// @ 0x00B6C870
+void UpdateSimulatorUI(UICtx* pCtx, int a2, float* pOffset, int a4, float a5)
+{
+    int mode = GetCurrentGameMode();
+
+    if (mode == 0x1654c01)
+    {
+        pCtx->mMainWindow->SetVisible(1, a4);
+
+        VObj* pSimObj = pCtx->mObj;
+        SimView* pSim = pSimObj ? (SimView*)pSimObj->Cast(0xd0036e08) : 0;
+
+        if (pSim->CheckActive() &&
+            (pSim->mFlags & 2) == 0 &&
+            (pSim->mFlags & 1) != 0 &&
+            !pSim->IsBlockedPrimary() &&
+            !pSim->IsBlockedSecondary())
+        {
+            pCtx->mStateWindow->SetVisible(1, 1);
+
+            SimState* pState = pSim->GetState();
+            int index = pState->mCount - 1;
+            if (index < 0)
+                index = 0;
+
+            SetCtxWindow((SimView*)pCtx->mOwnerObj, index);
+        }
+        else
+            pCtx->mStateWindow->SetVisible(1, 0);
+    }
+    else if (mode == 0x1654c10)
+        pCtx->mMainWindow->SetVisible(1, 0);
+
+    VObj* pObj = pCtx->mObj;
+    cVar text = ResolveVar(pObj);
+    int textID = (int)text.mData[0];
+    Vec3 pos = GetSimulatorPos(pObj);
+    float value = GetSimulatorFloat(pObj);
+    int i1 = GetSimulatorInt1(pObj);
+    int i2 = GetSimulatorInt2(pObj);
+
+    if (pCtx->UpdateSimulatorAnim(value, a5))
+        pCtx->ShowSimulatorText(pOffset, a2, (const void*)textID, &pos, i1, i2);
+    else
+        RemoveUISlot(pCtx->mID);
+}
