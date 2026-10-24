@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01317d30/s01317d30.cpp  ?InitTreeFruitAttributes@Simulator@@YAXXZ  013184d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s01317d30/s01317d30.cpp  ?InitFruitAttributes@Simulator@@YAXXZ  01318800  /O2 /MD /Gy /EHsc /TP /arch:SSE2

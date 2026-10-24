@@ -11,6 +11,7 @@
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2.
 
 #include "types.h"
+#include <new>
 
 namespace eastl { struct string8; }
 typedef eastl::string8 string8;
@@ -53,6 +54,30 @@ struct Attribute
         writeTextFunction = pWriteText;
         validateFunction = pValidate;
         toXmlFunction = pToXml;
+        offset = nOffset;
+    }
+
+    // Record with a default value: the store of the default (GetDefaultValue<T>()) is part of the
+    // record's construction and sits just before the offset store.
+    template<typename Store>
+    __forceinline Attribute(const char* pName, uint32_t nID, uint32_t nOffset,
+              ReadFunction_t pRead, WriteFunction_t pWrite,
+              ReadTextFunction_t pReadText, WriteTextFunction_t pWriteText,
+              ValidateFunction_t pValidate, ToXmlFunction_t pToXml,
+              SetDefaultFunction_t pSetDefault, const Store& storeDefault)
+    {
+        name = pName;
+        id = nID;
+        pCurrentObject = 0;
+        setDefaultFunction = pSetDefault;
+        offsetFunction = DefaultOffset;
+        readFunction = pRead;
+        writeFunction = pWrite;
+        readTextFunction = pReadText;
+        writeTextFunction = pWriteText;
+        validateFunction = pValidate;
+        toXmlFunction = pToXml;
+        storeDefault();
         offset = nOffset;
     }
 
@@ -215,6 +240,129 @@ void InitTreeSpawnerAttributes()
     ADD(14, "mDeprecated_LargeTrees", 0x056690eb, 0x158, DEPR_ATTR)
     ADD(15, "mDeprecated_MediumTrees", 0x056690ec, 0x970, DEPR_ATTR)
     ADD(16, "mDeprecated_SmallTrees", 0x056690ed, 0x1188, DEPR_ATTR)
+}
+
+// ---------------------------------------------------------------------------------------------
+// 0x013184d0 ($E245): dynamic initializer of a fruit / tree-spawner attribute table (8 records at
+// 0x01567860: mFlags, mFruitIdx, mElapsedOnGroundTime, tree species / sequence ids, mState and the
+// static sFruitCount). Same record layout and construction as InitTreeSpawnerAttributes above.
+// ---------------------------------------------------------------------------------------------
+
+bool Read_00b00430(ISerializerReadStream*, void*);
+bool Read_00aff7e0(ISerializerReadStream*, void*);
+bool Read_00b02540(ISerializerReadStream*, void*);
+bool Read_00b06e10(ISerializerReadStream*, void*);
+bool Read_00b04e00(ISerializerReadStream*, void*);
+bool Write_00b02570(ISerializerWriteStream*, void*);
+bool Write_00aff810(ISerializerWriteStream*, void*);
+bool Write_00bca960(ISerializerWriteStream*, void*);
+bool Write_00b00450(ISerializerWriteStream*, void*);
+bool Write_00c761c0(ISerializerWriteStream*, void*);
+bool Validate_00b6f550();
+bool ToXml_00ac8050(void*, const char*, int);
+bool ToXml_00f29b90(void*, const char*, int);
+bool ToXml_00eafe40(void*, const char*, int);
+void SetDefault_00b02610(Attribute*);
+
+// The original table was built with one typed Attribute specialization per field, so callbacks that
+// end up at the same address in retail are distinct template instances here unless they share a tag.
+// Tags used by 013184d0:
+struct Tag_mFlags;
+struct Tag_mFruitIdx;
+struct Tag_mElapsedOnGroundTime;
+struct Tag_mTreeSpeciesBracket;
+struct Tag_mTreeSeqID;
+struct Tag_mTreeDistSequenceIdx;
+struct Tag_mState;
+struct Tag_sFruitCount;
+struct Tag_ValidCommon;      // rows 1..7 and the static row share their validate symbol
+// Tags used by 01318800:
+struct Tag_mSeqID;
+struct Tag_mSpeciesBracket2;
+struct Tag_mDistSequenceIdx;
+struct Tag_mSpeciesKey;
+struct Tag_mTransform;
+struct Tag_mFlags2;
+struct Tag_mFruitTransforms;
+struct Tag_mFruitDistEffectIdxs;
+struct Tag_ValidSeq;         // mSeqID + mDistSequenceIdx share their validate symbol
+
+template<typename T> bool Read4(ISerializerReadStream*, void*);
+template<typename T> bool Write4(ISerializerWriteStream*, void*);
+template<typename T> void ReadTextInt(const string8&, void*);
+template<typename T> bool ToXmlUInt(void*, const char*, int);
+template<typename T> bool ToXmlInt(void*, const char*, int);
+template<typename T> bool AlwaysValid();
+
+extern AttrSlot cTreeFruit_sAttributes[8];   // 0x01567860
+extern AttrSlot cFruit_sAttributes[10];      // 0x0167b858
+
+#define ADD_TF(IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&cTreeFruit_sAttributes[IDX] = a; }
+#define ADD_FR(IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&cFruit_sAttributes[IDX] = a; }
+
+#define UINT_ROW(T)   Read4<T>, Write4<T>, ReadTextInt<T>, WriteText_00694f00, AlwaysValid<Tag_ValidCommon>, ToXmlUInt<T>
+#define INT_ROW(T)    Read4<T>, Write4<T>, ReadTextInt<T>, WriteText_00694ee0, AlwaysValid<T>, ToXmlInt<T>
+#define STATIC_ROW(T) Read4<T>, Write4<T>, ReadTextInt<T>, WriteText_00694f00, AlwaysValid<Tag_ValidCommon>
+
+// @ 0x013184d0
+void InitTreeFruitAttributes()
+{
+    ADD_TF(0, "mFlags", 0x3fe7ec0, 0x148, Read_00b00430, Write_00b02570, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<Tag_mFlags>, ToXml_00ac8050)
+    ADD_TF(1, "mFruitIdx", 0x410d8c8, 0x164, UINT_ROW(Tag_mFruitIdx))
+    ADD_TF(2, "mElapsedOnGroundTime", 0x410d8fe, 0x168, UINT_ROW(Tag_mElapsedOnGroundTime))
+    ADD_TF(3, "mTreeSpeciesBracket", 0x67ddca4, 0x158, INT_ROW(Tag_mTreeSpeciesBracket))
+    ADD_TF(4, "mTreeSeqID", 0x67ddca8, 0x15c, UINT_ROW(Tag_mTreeSeqID))
+    ADD_TF(5, "mTreeDistSequenceIdx", 0x67ddcab, 0x160, UINT_ROW(Tag_mTreeDistSequenceIdx))
+    ADD_TF(6, "mState", 0x420798f, 0x16c, INT_ROW(Tag_mState))
+    ADD_TF(7, "sFruitCount", 0x410d9be, (void*)0x167af58, STATIC_ROW(Tag_sFruitCount))
+}
+
+// ---------------------------------------------------------------------------------------------
+// 0x01318800 ($E250): dynamic initializer of the cFruit-style table (10 records at 0x0167b858:
+// mSeqID, mSpeciesBracket, mDistSequenceIdx, mTransform (with a cSPTransform default), mFlags,
+// mSpeciesKey, mpInteractingWith, mFruitTransforms, mFruitDistEffectIdxs and the "field_name"
+// sentinel). Same construction as InitPlantAttributes in s01315a50.
+// ---------------------------------------------------------------------------------------------
+
+struct Vector3 { float x, y, z; Vector3(const Vector3& v) : x(v.x), y(v.y), z(v.z) {} };
+struct Matrix3 {
+    float m[3][3];
+    Matrix3& Assign(const Matrix3& other);        // 0x0041cb40
+};
+extern const Vector3 kDefaultOffset;              // 0x0167af5c (this module's zero vector)
+extern const Matrix3 kDefaultRotation;            // 0x0167b554 (this module's identity)
+
+struct cSPTransform {
+    uint16_t mFlags;
+    uint16_t mModificationCount;
+    Vector3  mOffset;
+    float    mScale;
+    Matrix3  mRotation;
+    cSPTransform() : mFlags(0), mModificationCount(0), mOffset(kDefaultOffset), mScale(1.0f)
+    {
+        mRotation.Assign(kDefaultRotation);
+    }
+    cSPTransform& operator=(const cSPTransform& other);   // 0x00537dc0
+};
+cSPTransform& GetDefaultTransform();              // 0x00b02590 (SP::GetDefaultValue<cSPTransform;79537323>)
+
+struct StoreTransform { const cSPTransform& v; StoreTransform(const cSPTransform& x) : v(x) {} void operator()() const { GetDefaultTransform() = v; } };
+
+// @ 0x01318800
+void InitFruitAttributes()
+{
+    ADD_FR(0, "mSeqID", 0x4bda4a8, 0x4c, Read4<Tag_mSeqID>, Write4<Tag_mSeqID>, ReadTextInt<Tag_mSeqID>, WriteText_00694f00, AlwaysValid<Tag_ValidSeq>, ToXml_00675ca0)
+    ADD_FR(1, "mSpeciesBracket", 0x4bda4af, 0x50, Read4<Tag_mSpeciesBracket2>, Write4<Tag_mSpeciesBracket2>, ReadTextInt<Tag_mSpeciesBracket2>, WriteText_00694ee0, AlwaysValid<Tag_mSpeciesBracket2>, ToXml_0057cde0)
+    ADD_FR(2, "mDistSequenceIdx", 0x4bda4aa, 0x54, Read4<Tag_mDistSequenceIdx>, Write4<Tag_mDistSequenceIdx>, ReadTextInt<Tag_mDistSequenceIdx>, WriteText_00694f00, AlwaysValid<Tag_ValidSeq>, ToXml_00675ca0)
+    cSPTransform defaultTransform;
+    ADD_FR(3, "mTransform", 0x4bda4ab, 0x58, Read_00aff7e0, Write_00aff810, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<Tag_mTransform>, ToXml_00ac8050, SetDefault_00b02610, StoreTransform(defaultTransform))
+    ADD_FR(4, "mFlags", 0x4bda4ac, 0x90, Read_00b00430, Write_00b02570, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<Tag_mFlags2>, ToXml_00ac8050)
+    ADD_FR(5, "mSpeciesKey", 0x4bda4ad, 0x94, Read_00ae3430, Write_00ae3450, ReadText_00693150, WriteText_00695080, AlwaysValid<Tag_mSpeciesKey>, ToXml_00ae5720)
+    ADD_FR(6, "mpInteractingWith", 0x410d913, 0xa0, Read_00b02540, Write_00bca960, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00b6f550, ToXml_00ac8050)
+    ADD_FR(7, "mFruitTransforms", 0x62073d2, 0xa4, Read_00b06e10, Write_00b00450, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<Tag_mFruitTransforms>, ToXml_00f29b90)
+    ADD_FR(8, "mFruitDistEffectIdxs", 0x62073d8, 0x19c, Read_00b04e00, Write_00c761c0, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<Tag_mFruitDistEffectIdxs>, ToXml_00eafe40)
+    // "field_name" sentinel: a static record (id -1, no callbacks) built in place at table slot 9.
+    new (&cFruit_sAttributes[9]) Attribute("field_name", 0xffffffff, (void*)0, 0, 0, 0, 0, 0);
 }
 
 }  // namespace Simulator

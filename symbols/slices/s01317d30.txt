@@ -1,0 +1,3 @@
+01317d30 Simulator::InitTreeSpawnerAttributes  # PDB $E423; nonmatching (complete): tree-spawner serializer attribute table initializer
+013184d0 Simulator::InitTreeFruitAttributes  # Claude-coined (PDB $E245); fruit/tree-spawner attribute table initializer, 8 records at 0x01567860
+01318800 Simulator::InitFruitAttributes  # Claude-coined (PDB $E250); cFruit-style attribute table initializer, 10 records at 0x0167b858, with cSPTransform default
