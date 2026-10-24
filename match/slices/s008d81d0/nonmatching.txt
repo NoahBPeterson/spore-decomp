@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
 008d83b0 41 complete: MakeIndexModifiable (void); matches CreateIndex(3)/serialize/destroy/InitializeHoleTable flow; register + scheduling differences; difftest WEAK (211 valid, 26.8% coverage, mutex path mostly untestable)
 008d84d0 18 complete: FreeSpace; original keeps HoleA as fallthrough and the argument pushes inside each block; ours sinks the shared pushes and toggles the branch sense
-008d85a0 100 complete: Attach; manager/self virtual dispatch and old-stream save/restore scheduling differ (return semantics verified PASS)
+008d85a0 100 complete: Attach; manager/self virtual dispatch and old-stream save/restore scheduling differ. Fixed the vtable+0x44 recursive dispatch to pass the raw 32-bit arg3 stack slot (the original pushes the full dword; the bool-typed source normalized it to 0x3e) [equiv: PASS 397 valid, 100.0% cov (slice); PASS 400 valid, 100.0% cov --src; replay None]
 008d8650 4 complete: Dispose; original loads mpStream only after clearing mpIndex, we hoist the load
 008d86c0 16 complete: SetStream; false-return block placed at the end in the original, ours inverts the branch
 008d87c0 45 complete: Verify; original keeps the mutex in edi and the divisor in ebp with SSE divss, ours swaps regs and (default flags) uses x87

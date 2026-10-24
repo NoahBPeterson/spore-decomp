@@ -444,7 +444,7 @@ bool DatabasePackedFile::Attach(bool attach, uint32_t mgr, bool arg3)
     if (attach) {
         uint32_t old = mpManager;
         if (old != 0 && mgr != old)
-            ((TF3)(*(void***)this)[0x44 / 4])(this, 0, (int)old, (int)arg3);
+            ((TF3)(*(void***)this)[0x44 / 4])(this, 0, (int)old, (int)*(uint32_t*)&arg3);
         if (mgr == 0)
             return r;
         if (arg3) {
