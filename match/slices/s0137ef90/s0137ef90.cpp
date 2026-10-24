@@ -107,21 +107,32 @@ bool Read_00ac8750(ISerializerReadStream* pStream, void* pData);
 bool Read_00ae3430(ISerializerReadStream* pStream, void* pData);
 bool Read_00e5c5d0(ISerializerReadStream* pStream, void* pData);
 bool Read_00e5c6e0(ISerializerReadStream* pStream, void* pData);
+bool Read_00ac87c0(ISerializerReadStream* pStream, void* pData);
+bool Read_00eae8a0(ISerializerReadStream* pStream, void* pData);
+bool Read_00eae9b0(ISerializerReadStream* pStream, void* pData);
+bool Read_00eaea80(ISerializerReadStream* pStream, void* pData);
+bool Read_00c33820(ISerializerReadStream* pStream, void* pData);
 
 bool Write_00ac8780(ISerializerWriteStream* pStream, void* pData);
 bool Write_00ae3450(ISerializerWriteStream* pStream, void* pData);
 bool Write_00e5c660(ISerializerWriteStream* pStream, void* pData);
 bool Write_00e51250(ISerializerWriteStream* pStream, void* pData);
+bool Write_00ac87f0(ISerializerWriteStream* pStream, void* pData);
+bool Write_00f26ca0(ISerializerWriteStream* pStream, void* pData);
+bool Write_00c761c0(ISerializerWriteStream* pStream, void* pData);
+bool Write_00c332a0(ISerializerWriteStream* pStream, void* pData);
 
 void ReadText_00692ff0(const string8& text, void* pData);
 void ReadText_00693150(const string8& text, void* pData);
 void ReadText_00c2e4e0(const string8& text, void* pData);
+void ReadText_00694c80(const string8& text, void* pData);
 
 void WriteText_00692fb0(char* pBuffer, void* pData);
 void WriteText_00694ee0(char* pBuffer, void* pData);
 void WriteText_00694f00(char* pBuffer, void* pData);
 void WriteText_00694fa0(char* pBuffer, void* pData);
 void WriteText_00695080(char* pBuffer, void* pData);
+void WriteText_00694c10(char* pBuffer, void* pData);
 
 bool ToXml_0057cde0(void* pData, const char* pName, int depth);
 bool ToXml_0057ce00(void* pData, const char* pName, int depth);
@@ -129,9 +140,15 @@ bool ToXml_00675ca0(void* pData, const char* pName, int depth);
 bool ToXml_00ac8050(void* pData, const char* pName, int depth);
 bool ToXml_00ae5720(void* pData, const char* pName, int depth);
 bool ToXml_00b1fbf0(void* pData, const char* pName, int depth);
+bool ToXml_00acbbc0(void* pData, const char* pName, int depth);
+bool ToXml_0103c3a0(void* pData, const char* pName, int depth);
+bool ToXml_00eafcf0(void* pData, const char* pName, int depth);
+bool ToXml_00eafe40(void* pData, const char* pName, int depth);
+bool Validate_00c31ca0();
 
 struct AttrSlot { uint32_t d[15]; };
 extern AttrSlot cCellSerialiazibleData_sAttributes[22];   // 0x015a7e38
+extern AttrSlot cMusicData_sAttributes[8];                // 0x015a9198
 
 #define KEY_ATTR   Read_00ae3430, Write_00ae3450, ReadText_00693150, WriteText_00695080, AlwaysValid<ResourceKey>, ToXml_00ae5720
 #define INT_ATTR   Read4<int>, Write4<int>, ReadText_00692ff0, WriteText_00694ee0, AlwaysValid<int>, ToXml_0057cde0
@@ -139,6 +156,7 @@ extern AttrSlot cCellSerialiazibleData_sAttributes[22];   // 0x015a7e38
 #define SHORT_ATTR Read4<short>, Write4<short>, ReadTextInt<short>, WriteText_00694f00, AlwaysValid<short>, ToXml_00675ca0
 
 #define ADD(IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&cCellSerialiazibleData_sAttributes[IDX] = a; }
+#define ADD_MUSIC(IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&cMusicData_sAttributes[IDX] = a; }
 
 // @ 0x0137ef90
 void InitCellDataAttributes()
@@ -165,6 +183,19 @@ void InitCellDataAttributes()
     ADD(19, "mNanovirusActive", 0xabcd0020, 0xe8, BOOL_ATTR)
     ADD(20, "mGameMode", 0xabcd0021, 0xc, INT_ATTR)
     ADD(21, "mAddedStartTelemetry", 0xabcd0022, 0xe9, BOOL_ATTR)
+}
+
+// @ 0x01387660
+void InitMusicDataAttributes()
+{
+    ADD_MUSIC(0, "mName", 0x511dfb9, 0x178, Read_00ac87c0, Write_00ac87f0, ReadText_00694c80, WriteText_00694c10, AlwaysValid<int>, ToXml_00acbbc0)
+    ADD_MUSIC(1, "mDescription", 0x511dfc3, 0x188, Read_00ac87c0, Write_00ac87f0, ReadText_00694c80, WriteText_00694c10, AlwaysValid<int>, ToXml_00acbbc0)
+    ADD_MUSIC(2, "mVolumes", 0x4d81cfe, 0x198, Read_00eae8a0, Write_00f26ca0, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<int>, ToXml_0103c3a0)
+    ADD_MUSIC(3, "mAmbienceHistory", 0x4226180, 0x1b8, Read_00c33820, Write_00c332a0, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00c31ca0, ToXml_00eafcf0)
+    ADD_MUSIC(4, "mRhythm", 0x4226186, 0x1c4, INT_ATTR)
+    ADD_MUSIC(5, "mInstrument", 0x4226189, 0x1c8, INT_ATTR)
+    ADD_MUSIC(6, "mNotePitches", 0x4e551ee, 0x1cc, Read_00eae9b0, Write_00c761c0, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<int>, ToXml_00eafe40)
+    ADD_MUSIC(7, "mNoteDurations", 0x4f7c02d, 0x1e0, Read_00eaea80, Write_00f26ca0, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<int>, ToXml_0103c3a0)
 }
 
 }  // namespace Simulator
