@@ -76,9 +76,10 @@ float* cTerrainCameraController::FUN_00b10260()
     if ((g_167bd7c & 1) == 0)
         g_167bd7c |= 1;
     float s = m30;
-    g_167bd70 = m6c * s;
-    g_167bd74 = m70 * s;
-    g_167bd78 = m74 * s;
+    float x = m6c, y = m70, z = m74;
+    g_167bd70 = x * s;
+    g_167bd74 = y * s;
+    g_167bd78 = z * s;
     return &g_167bd70;
 }
 
