@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+010b22a0  1503  hkGsk SGS contact-solver iteration; 1513-byte pure-x87 routine (no calls, and esp,-0x10 frame): forward pass solves one impulse per contact from the pair's relative velocity against the row's cached velocities and weights, backward pass integrates the impulses into both vertices (linear +0x10, angular +0x20, direction +0x30 x inverse mass +0x3c) and accumulates them; data layout kept, impulse expression written in vector form -> 775 vs 1513 bytes

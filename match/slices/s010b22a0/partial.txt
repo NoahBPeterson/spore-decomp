@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s010b22a0: 0/1 byte-exact.
+010b22a0  1503  GskSolver_Iterate; contact-list solver pass reconstructed from the retail data layout (GskVertex stride 0x40, GskRow stride 0x3c, trailing impulse array at rows+count*0x3c, vertex indices at contactlist+0x10, weights at +0x08/+0x0c scaled by config+0x40); the original is a 1513-byte unrolled x87 body with an and esp,-0x10 frame, the reconstruction keeps the two passes and the vertex updates but computes the impulse in vector form
+010b22a0  equiv  FAIL: 8.9% coverage, the vector reformulation uses SSE registers the x87 original never touches
