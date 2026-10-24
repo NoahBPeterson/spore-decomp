@@ -414,6 +414,11 @@ uint32_t cSPUICredits::GetCreditNameTable(uint16_t index) {
 }
 
 
+// Retail's L" " literal lives at 0x13fa1d4; define the same wide string under an annotated
+// symbol so the calls pass retail's address instead of a byte-identical .rdata copy chosen
+// by content.
+extern const wchar_t gCreditSpace[] = L" ";   // 0x13fa1d4
+
 // @ 0x005fe500
 const wchar_t* cSPUICredits::GetCreditName(uint16_t index) {
   cString unused;
@@ -421,9 +426,11 @@ const wchar_t* cSPUICredits::GetCreditName(uint16_t index) {
     cString text;
     const uint32_t tableID = mCreditNames[index].mTableID;
     if (tableID == 0)
-      mReturnString.assign(L" ");
-    else if (tableID == 1 || (tableID == 0xabe0cc37 && mCreditNames[index].mInstanceID == 0))
-      mReturnString = L" ";
+      mReturnString.assign(gCreditSpace);
+    else if (tableID == 1)
+      mReturnString = gCreditSpace;
+    else if (tableID == 0xabe0cc37 && mCreditNames[index].mInstanceID == 0)
+      mReturnString = gCreditSpace;
     else {
       cStringKey key;
       key.mTableID = mCreditNames[index].mTableID;

@@ -5,6 +5,7 @@ slices/s005fe1d0/s005fe1d0.cpp  ?LoadNamesFromProp@cSPUICredits@SP@@QAEXXZ  005f
 slices/s005fe1d0/s005fe1d0.cpp  ??0cSPUICredits@SP@@QAE@XZ  005fe470  /O2 /MD /Gy /TP /GS-
 slices/s005fe1d0/s005fe1d0.cpp  ??1cSPUICredits@SP@@QAE@XZ  005fe4b0  /O2 /MD /Gy /TP /GS-
 slices/s005fe1d0/s005fe1d0.cpp  ?SetPropertyID@cSPUICredits@SP@@QAEXI@Z  005fe4f0  /O2 /MD /Gy /TP /GS-
+slices/s005fe1d0/s005fe1d0.cpp  ?GetCreditName@cSPUICredits@SP@@QAEPB_WG@Z  005fe500  /O2 /MD /Gy /TP /GS-
 slices/s005fe1d0/s005fe1d0.cpp  ??0cSPUIChoiceDialog@@QAE@PAX@Z  005fe600  /O2 /MD /Gy /TP /GS-
 slices/s005fe1d0/s005fe1d0.cpp  ?Close@cSPUIChoiceDialog@@QAEXXZ  005fe650  /O2 /MD /Gy /TP /GS-
 slices/s005fe1d0/s005fe1d0.cpp  ?Show@cSPUIChoiceDialog@@QAEXXZ  005fe6c0  /O2 /MD /Gy /TP /GS-
