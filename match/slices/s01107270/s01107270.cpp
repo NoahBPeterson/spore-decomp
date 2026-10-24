@@ -34,6 +34,12 @@ void hkCollideCapsuleUtilManifoldCapsVsTriangle(const float* cap, float capRadiu
 {
     float* o = (float*)out;
 
+    {
+        const unsigned* t32 = (const unsigned*)tri;
+        unsigned* d = (unsigned*)&o[0x40];
+        for (int k2 = 0; k2 < 8; ++k2) d[k2] = t32[k2] ^ 1u;
+    }
+
     // triangle edges
     float e12x = tri[8] - tri[4], e12y = tri[9] - tri[5], e12z = tri[10] - tri[6];
     float w = sc[3];
