@@ -3,3 +3,8 @@
 00ed1380 61   float bounds check: local order and comiss operands differ [equiv: UNSUPPORTED import _decode_pointer]
 00ed13e0 87   window lookup + size math: virtual slot args differ [equiv: FAIL esp 5/5]
 00ed1460 13   new-object factory: cl merges the two ctor+tail branches [equiv: UNSUPPORTED 0 valid inputs (faults)]
+00ed0b70 6    handler/field teardown: one store/load pair ordered differently by the scheduler [equiv: UNSUPPORTED 0 valid inputs (every input faults in the release path)]
+00ed0ce0 632  large event dispatcher (838 B): case bodies and register scheduling differ [equiv: WEAK 398 valid 15.1% coverage]
+00ed10b0 47   window value setter: base call + virtual protocol; register allocation differs [equiv: WEAK 175 valid 79.4% coverage]
+00ed1180 120  item-selection toggle: intrusive-list walk loop variable and register allocation differ [equiv: WEAK 188 valid 54.9% coverage]
+00ed1550 651  species/avatar edit update (809 B): register scheduling and pointer arithmetic differ [equiv: UNSUPPORTED 0 valid inputs (profile-manager global faults)]
