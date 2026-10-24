@@ -1,0 +1,14 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00bce1e0/s00bce1e0.cpp  ?FUN_00bce400@@YAXPAX@Z  00bce400  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bce1e0/s00bce1e0.cpp  ?FUN_00bce5d0@cBuilding@@QAEHXZ  00bce5d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bce1e0/s00bce1e0.cpp  ?FUN_00bce5f0@cSpatialObject@@QAE_NI@Z  00bce5f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bce1e0/s00bce1e0.cpp  ?FUN_00bce660@cBuilding@@QAEXPAX@Z  00bce660  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bce1e0/s00bce1e0.cpp  ?FUN_00bce8b0@cCommunity@@QAEXI@Z  00bce8b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bce1e0/s00bce1e0.cpp  ?SetOwnerCity1@cBuilding@@QAEXPAX@Z  00bce8e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bce1e0/s00bce1e0.cpp  ?FUN_00bce970@cBuilding@@QAEXXZ  00bce970  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bce1e0/s00bce1e0.cpp  ?GetCost@cBuilding@@QAEMXZ  00bce9a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bce1e0/s00bce1e0.cpp  ?FUN_00bce9b0@cBuilding@@QAEXXZ  00bce9b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bce1e0/s00bce1e0.cpp  ?FUN_00bcea10@cBuilding@@QAEXI@Z  00bcea10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bce1e0/s00bce1e0.cpp  ?FUN_00bcea30@@YAMIIIM@Z  00bcea30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bce1e0/s00bce1e0.cpp  ?FUN_00bcebc0@@YAPAUVector3@@XZ  00bcebc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bce1e0/s00bce1e0.cpp  ?FUN_00bcec50@@YAPAUVector3@@XZ  00bcec50  /O2 /MD /Gy /TP /arch:SSE /fp:fast

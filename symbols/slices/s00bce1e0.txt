@@ -1,0 +1,6 @@
+00bce1e0 Simulator::cGameData::RemoveOwner  # PDB vtable name via card (483-byte owner teardown)
+00bce740 Simulator::ISimulatorSerializable::Read  # PDB vtable name via card
+00bce8e0 Simulator::cBuilding::SetOwnerCity1  # PDB vtable name via card
+00bce9a0 Simulator::cBuilding::GetCost  # PDB vtable name via card
+00bce9b0 Simulator::cGameData::RemoveOwner  # PDB vtable name via card (spatial sub-object teardown overload)
+00bcea30 SP::GetPropertyT_DO_NOT_USE<float>  # PDB name via card (callee-single)
