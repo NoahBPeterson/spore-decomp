@@ -42,7 +42,7 @@ void* FillN(unsigned short* first, unsigned n, unsigned short value) {
 
 // ---- 0x006741b0 : find text element by wide-string key ---------------
 // @ 0x006741b0
-int FindRange(int* p, unsigned short* key) {
+int __stdcall FindRange(int* p, unsigned short* key) {
     int i = p[0];
     for (;;) {
         if (i == p[1]) return 0;
@@ -68,29 +68,24 @@ int FindRange(int* p, unsigned short* key) {
 }
 
 // ---- 0x00674230 : vector fill-insert --------------------------------
+struct FillVec {
+    unsigned* FillInsert(unsigned count, unsigned value);
+    void append_n_char(unsigned count, unsigned value);  // 0x0042d2e0
+};
 // @ 0x00674230
-struct FillVec { unsigned* FillInsert(unsigned count, unsigned value); };
 unsigned* FillVec::FillInsert(unsigned count, unsigned value) {
     unsigned* p = (unsigned*)this;
     unsigned* begin = (unsigned*)p[0];
     unsigned have = (p[1] - (unsigned)begin) >> 1;
     if (have < count) {
-        unsigned* oldEnd = (unsigned*)((char*)begin + have * 2);
-        for (unsigned* it = begin; it < oldEnd; ) {
-            unsigned cnt = ((unsigned)((char*)oldEnd - (char*)it - 1) >> 1) + 1;
-            unsigned i = cnt >> 1;
-            while (i--) { *it++ = value & 0xffff | value << 0x10; }
-            for (i = cnt & 1; i; --i) { *(unsigned short*)it = (unsigned short)value; it = (unsigned*)((char*)it + 2); }
-        }
-        FillN((unsigned short*)((char*)begin + have * 2), count - have, (unsigned short)value);
+        unsigned short* oldEnd = (unsigned short*)((char*)begin + have * 2);
+        for (unsigned short* it = (unsigned short*)begin; it < oldEnd; ++it) *it = (unsigned short)value;
+        // The binary grows the (wide-string) vector with WString::append_n_char rather than a
+        // plain fill: have < count means the existing buffer can't hold the range.
+        append_n_char(count - have, value);
     } else {
-        unsigned* mid = (unsigned*)((char*)begin + count * 2);
-        for (unsigned* it = begin; it < mid; ) {
-            unsigned cnt = ((unsigned)((char*)mid - (char*)it - 1) >> 1) + 1;
-            unsigned i = cnt >> 1;
-            while (i--) { *it++ = value & 0xffff | value << 0x10; }
-            for (i = cnt & 1; i; --i) { *(unsigned short*)it = (unsigned short)value; it = (unsigned*)((char*)it + 2); }
-        }
+        unsigned short* mid = (unsigned short*)((char*)begin + count * 2);
+        for (unsigned short* it = (unsigned short*)begin; it < mid; ++it) *it = (unsigned short)value;
         void* src = (void*)p[1];
         void* dst = (void*)(p[0] + count * 2);
         if (dst != src) {

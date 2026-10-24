@@ -87,7 +87,10 @@ struct EStrVec {
     void DoInsertValueSkeleton(EStr* pos, const EStr* v);
     void  push_back(const EStr& v);
 };
-struct FillVec { unsigned* FillInsert(unsigned count, unsigned value); };
+struct FillVec {
+    unsigned* FillInsert(unsigned count, unsigned value);
+    void append_n_char(unsigned count, unsigned value);  // 0x0042d2e0
+};
 struct Detokenizer_s0067_3c50 {
     void Ctor();
 };
@@ -369,7 +372,7 @@ void* FillN(unsigned short* first, unsigned n, unsigned short value)
 }
 
 // @ 0x006741b0
-int FindRange(int* p, unsigned short* key)
+int __stdcall FindRange(int* p, unsigned short* key)
 {
     int i = p[0];
     for (;;) {
@@ -409,7 +412,9 @@ unsigned* FillVec::FillInsert(unsigned count, unsigned value)
             while (i--) { *it++ = value & 0xffff | value << 0x10; }
             for (i = cnt & 1; i; --i) { *(unsigned short*)it = (unsigned short)value; it = (unsigned*)((char*)it + 2); }
         }
-        FillN((unsigned short*)((char*)begin + have * 2), count - have, (unsigned short)value);
+        // The binary grows the (wide-string) vector with WString::append_n_char rather than a
+        // plain fill: have < count means the existing buffer can't hold the range.
+        append_n_char(count - have, value);
     } else {
         unsigned* mid = (unsigned*)((char*)begin + count * 2);
         for (unsigned* it = begin; it < mid; ) {
