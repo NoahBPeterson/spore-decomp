@@ -245,3 +245,156 @@ void __stdcall BuildPathRibbon(PathVector* path, unsigned color)
     if (verts.mpBegin != 0 && verts.mpBegin != verts.mpPool)
         EASTL_allocator_deallocate(verts.mpBegin);
 }
+
+// ---------------------------------------------------------------------------------------
+// Planet-ribbon state kept by the graph editor that owns BuildPathRibbon.
+//
+// The editor object has three vftables (offsets 0, 4 and 8, installed by the ctor at
+// 0x00b85a30).  The ribbon state lives in the second base (offset 4): 0x00b87cc0 is one of
+// its virtuals, so its `this` is editor + 4, while the reset helper 0x00b87bb0 is a member of
+// the editor itself and is reached with `this - 4` (the usual second-base idiom).
+// ---------------------------------------------------------------------------------------
+struct Vertex3D {               // 0x18 bytes, copied by 0x00720250
+    float pos[3];
+    float normal[3];
+};
+
+struct GraphNodeValue {         // 0x0c bytes
+    float mValue[3];
+};
+
+struct RefObj {
+    void** m_vtbl;              // +0x00
+};
+
+struct Mode {                   // refcounted layer mode
+    void** m_vtbl;              // +0x00
+    volatile long m_ref;        // +0x04
+};
+
+struct Layer {                  // 0x38 bytes, initialised by 0x00b80630
+    void** m_vtbl;              // +0x00
+    unsigned char mPad04[0x20];
+    Mode* mpMode;               // +0x24
+    unsigned char mFlag28;      // +0x28
+    unsigned char mPad29[0x0f];
+    Layer* Init();                                                   // 0x00b80630
+};
+
+struct ByteVector {             // vector<unsigned char>
+    unsigned char* mpBegin;     // +0x00
+    unsigned char* mpEnd;       // +0x04
+    void InsertFill(unsigned char* p, unsigned count, const unsigned char& value); // 0x00b860d0
+    void resize(unsigned n);                                         // 0x00b87c70
+};
+
+struct RibbonVertexBuffer {     // the editor's vector<Vertex3D>
+    Vertex3D* mpBegin;          // +0x00
+    Vertex3D* mpEnd;            // +0x04
+    Vertex3D* mpCapacity;       // +0x08
+    unsigned  mAllocator;       // +0x0c
+    Vertex3D* mpPool;           // +0x10
+};
+
+struct cGraphEditor {
+    unsigned char mPad00[0x80];
+    RibbonVertexBuffer mVerts;  // +0x80
+    ByteVector mScratch;        // +0x94
+    unsigned char mPad9c[0x0c];
+    Layer* mpLayer;             // +0xa8
+    int AddNode(const GraphNodeValue* value, bool flag);             // 0x00b86500
+    void Reset();                                                    // 0x00b87bb0
+};
+
+struct cPlanetRibbonCore {      // second base of cGraphEditor, this = editor + 4
+    unsigned char mPad00[0x48];
+    void* mpAStarInfo;          // +0x48  (0x60000-byte block)
+    unsigned char mPad4c[0x2c];
+    void* mpObstacles;          // +0x78  (0xc000-byte block)
+    unsigned char mPad7c[0x14];
+    ByteVector mScratch;        // +0x90
+    unsigned char mPad98[0x0c];
+    Layer* mpLayer;             // +0xa4
+    void Init();                                                     // 0x00b87cc0
+};
+
+void* __cdecl EASTL_allocator_allocate(unsigned size, const char* name, int, int, int, int); // 0x00f473a0
+void* __cdecl FUN_0067dd50();                                                                // 0x0067dd50
+void CopyVertex3D(Vertex3D* first, Vertex3D* last, Vertex3D* dst);                           // 0x00720250
+extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
+extern "C" long __cdecl _InterlockedDecrement(volatile long*);
+#pragma intrinsic(_InterlockedExchange, _InterlockedDecrement)
+
+// eastl::copy of a trivially copyable range.
+__forceinline void CopyBytes(unsigned char* dst, const unsigned char* src, unsigned count)
+{
+    memcpy(dst, src, count);
+}
+
+// @ 0x00b87bb0
+void cGraphEditor::Reset()
+{
+    unsigned char* scratchEnd = mScratch.mpEnd;
+    memset(mScratch.mpBegin, 0, (unsigned)(scratchEnd - mScratch.mpBegin));
+
+    // Clear the vertex buffer (EASTL vector::erase(begin, end)): copy the empty
+    // tail [end, end) down to the front, then drop the old count from mpEnd.
+    Vertex3D* begin = mVerts.mpBegin;
+    Vertex3D* end = mVerts.mpEnd;
+    CopyVertex3D(end, end, begin);
+    mVerts.mpEnd -= end - begin;
+
+    GraphNodeValue value;
+    value.mValue[0] = 0.0f;
+    value.mValue[1] = 0.0f;
+    value.mValue[2] = 0.0f;
+    AddNode(&value, false);
+
+    Mode** ppMode = &mpLayer->mpMode;
+    Mode* pMode = *ppMode;
+    if (pMode != 0) {
+        *ppMode = 0;
+        long n = _InterlockedDecrement(&pMode->m_ref);
+        if (n == 0) {
+            _InterlockedExchange(&pMode->m_ref, 1);
+            ((void (__thiscall*)(Mode*, int))((RefObj*)pMode)->m_vtbl[0])(pMode, 1);
+        }
+    }
+}
+
+// @ 0x00b87c70
+void ByteVector::resize(unsigned n)
+{
+    if (n > (unsigned)(mpEnd - mpBegin)) {
+        unsigned char fill = 0;
+        InsertFill(mpEnd, n - (unsigned)(mpEnd - mpBegin), fill);
+    } else {
+        unsigned char* first = mpBegin + n;
+        unsigned char* last = mpEnd;
+        CopyBytes(first, last, (unsigned)(mpEnd - last));
+        mpEnd = mpEnd + (first - last);
+    }
+}
+
+// @ 0x00b87cc0
+void cPlanetRibbonCore::Init()
+{
+    mpAStarInfo = EASTL_allocator_allocate(0x60000, "Simulator/PlanetAStarInfo", 0, 0, 0, 0);
+    mpObstacles = EASTL_allocator_allocate(0xc000, "Simulator/PlanetObstacles", 0, 0, 0, 0);
+
+    Layer* layer = (Layer*)EASTL_allocator_allocate(0x38, "Simulator/PlanetRibbonGfx", 0, 0, 0, 0);
+    layer = layer ? layer->Init() : 0;
+    mpLayer = layer;
+    layer->mFlag28 = 0;
+
+    void* viewer = FUN_0067dd50();
+    ((void (__thiscall*)(void*, int))((RefObj*)viewer)->m_vtbl[0x50 / 4])(viewer, 9);
+    viewer = FUN_0067dd50();
+    ((void (__thiscall*)(void*, int))((RefObj*)viewer)->m_vtbl[0x50 / 4])(viewer, 0x19);
+
+    ((void (__thiscall*)(Layer*))mpLayer->m_vtbl[0])(mpLayer);
+
+    mScratch.resize(0x6000);
+
+    ((cGraphEditor*)((char*)this - 4))->Reset();
+}

@@ -1,2 +1,5 @@
 00b872c0 SP::BuildPathRibbon  # __stdcall(vector<Vec3>*, color): builds a miter-joined terrain ribbon (4 x 0x24-byte vertices per segment) in a fixed_vector<Vertex,128> and uploads it via cStaticBuffer::GetVertexBuffer/memcpy/FUN_007a4650
 00b86910 eastl::fixed_vector<RibbonVertex,128>::resize  # thiscall ret 4: grows via FUN_00b85710 or shrinks via FUN_00b85500 (0x24-byte elements)
+00b87bb0 SP::cGraphEditor::Reset  # zeroes the scratch byte vector, erases the vertex buffer (CopyVertex3D(end,end,begin) + mpEnd -= end - begin), appends a zero GraphNodeValue, releases layer->mpMode at +0xa8
+00b87c70 ByteVector::resize  # grows with InsertFill(end, n - size, 0) or shrinks by dropping the tail (byte vector at editor+0x94)
+00b87cc0 SP::cPlanetRibbonCore::Init  # allocates the AStarInfo (0x60000), obstacle (0xc000) and PlanetRibbonGfx layer (0x38) blocks, inits the layer, clears its flag at +0x28, pushes 9/0x19 at viewer vtbl+0x50, resizes the scratch vector to 0x6000, then tail-jumps cGraphEditor::Reset at this - 4
