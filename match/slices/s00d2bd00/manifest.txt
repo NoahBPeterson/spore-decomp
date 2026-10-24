@@ -1,0 +1,2 @@
+slices/s00d2bd00/s00d2bd00.cpp  ?SetBarPosition@cCreatureTimerBar@@QAEXM@Z  00d2beb0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00d2bd00/s00d2bd00.cpp  ?Advance@cPool@@QAEXXZ  00d2c9b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
