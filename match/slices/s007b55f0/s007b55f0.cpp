@@ -1,6 +1,7 @@
 // Slice s007b55f0 - cThumbnailManager job plumbing (refcounted render-job setup).
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
+#include <intrin.h>
 
 extern "C" long _InterlockedExchangeAdd(volatile long*, long);
 extern "C" long _InterlockedExchange(volatile long*, long);
@@ -614,6 +615,7 @@ void __stdcall FitViewerToBounds(const float* b, FitViewer* v, int target, float
     float ey = b[4] - b[1];
     float ez = b[5] - b[2];
     float r = sqrtf(ey * ey + (ez * ez + ex * ex)) * 0.5f;
+    _ReadWriteBarrier();
     float cx = (b[3] + b[0]) * 0.5f;
     float cy = (b[4] + b[1]) * 0.5f;
     float cz = (b[5] + b[2]) * 0.5f;
