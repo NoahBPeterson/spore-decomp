@@ -1,0 +1,16 @@
+00b930c0 196 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest UNSUPPORTED (0/400 valid inputs); global-array loop end kept in edi/ebp vs original ebp frame, count hoist scheduling differs
+00b931c0 206 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest FAIL (5/5 esp mismatch); LoadScenario noun-slot stores and AutoRefCount assignment path not faithful, size 220 vs 209
+00b932a0 558 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest UNSUPPORTED (unresolved _sqrtf); SSE minimisation loop and PlanetModel/DirectionToSurfacePosition call shapes not reproduced, size 621 vs 679
+00b93550 99 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest FAIL (5/5 execution); parameters are stack objects (original reads [esp+8]), banner/terraform score path wrong, size 134 vs 137
+00b935e0 347 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest FAIL (5/40 execution); closest-pair scan missing the per-pair FUN_00572590 argument order, size 374 vs 366
+00b93750 155 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest FAIL (5/5 execution); GetRandomColor retry loop and FUN_00ff2d50 element-index set not faithful, size 163 vs 186
+00b93870 44 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest FAIL (5/5 execution); register allocation differs (this in edi vs esi), guard emits je vs jbe, size 67 vs 64
+00b938d0 122 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest FAIL (5/5 memory pool); property float3 read path (type 0x31/0x10 tag decode) not faithful, out value differs
+00b939f0 140 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: no difftest row (nested-release scan); bucket rebuild loop shape and bucket-array allocation differ, size 149 vs 159
+00b93a90 241 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest FAIL (5/6 execution); sift-down element reference-count swap sequence and FUN_00b90b10 tail not faithful, size 191 vs 271
+00b93ba0 82 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: no difftest row; +0x34 subobject vcall slot 0x2c argument/leftover-stack shape not reproduced, size 98 vs 77
+00b93bf0 96 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest UNSUPPORTED (0/400 valid inputs); same +0x34 vcall shape wrong, size 121 vs 110
+00b93cc0 162 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest FAIL (5/24 memory pool); slot[-1] reference move plus FUN_00b90b10 re-heapify args differ, size 140 vs 183
+00b93dc0 350 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest UNSUPPORTED (0/400 fault(read)); property-driven stage getter stubbed, modes 0..3 switch and float return not implemented, size 135 vs 380
+00b93f40 308 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest UNSUPPORTED (0/400 fault(read)); Execute/create-noun body stubbed (field init + BuildSurfaceOrientation + LoadScenario not implemented), size 59 vs 331
+00b94090 157 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest UNSUPPORTED (0/400 fault(read)); create-noun + vtable 0x38/0x3c calls and type gating present but size and offsets differ, size 188 vs 190
